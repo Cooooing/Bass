@@ -9,6 +9,7 @@ import (
 
 	"common/pkg/client"
 	"push_hub/internal/biz/model"
+	bizrepo "push_hub/internal/biz/repo"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -35,6 +36,95 @@ func NewNodeRegistryRepo(rdb *client.RedisClient) *NodeRegistryRepo {
 	return &NodeRegistryRepo{rdb: rdb}
 }
 
+func (r *NodeRegistryRepo) RegisterNode(ctx context.Context, req *bizrepo.RegisterNodeReq) (*bizrepo.RegisterNodeResponse, error) {
+	if err := r.registerNode(ctx, req.NodeID, req.Address); err != nil {
+		return nil, err
+	}
+	return &bizrepo.RegisterNodeResponse{}, nil
+}
+
+func (r *NodeRegistryRepo) UpdateHeartbeat(ctx context.Context, req *bizrepo.UpdateHeartbeatReq) (*bizrepo.UpdateHeartbeatResponse, error) {
+	if err := r.updateHeartbeat(ctx, req.NodeID, req.ConnectionCount); err != nil {
+		return nil, err
+	}
+	return &bizrepo.UpdateHeartbeatResponse{}, nil
+}
+
+func (r *NodeRegistryRepo) GetNode(ctx context.Context, req *bizrepo.GetNodeReq) (*bizrepo.GetNodeResponse, error) {
+	row, err := r.getNode(ctx, req.NodeID)
+	if err != nil {
+		return nil, err
+	}
+	return &bizrepo.GetNodeResponse{Row: row}, nil
+}
+
+func (r *NodeRegistryRepo) ListNodes(ctx context.Context, req *bizrepo.ListNodesReq) (*bizrepo.ListNodesResponse, error) {
+	rows, err := r.listNodes(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &bizrepo.ListNodesResponse{Rows: rows}, nil
+}
+
+func (r *NodeRegistryRepo) RemoveNode(ctx context.Context, req *bizrepo.RemoveNodeReq) (*bizrepo.RemoveNodeResponse, error) {
+	if err := r.removeNode(ctx, req.NodeID); err != nil {
+		return nil, err
+	}
+	return &bizrepo.RemoveNodeResponse{}, nil
+}
+
+func (r *NodeRegistryRepo) MapUserToNode(ctx context.Context, req *bizrepo.MapUserToNodeReq) (*bizrepo.MapUserToNodeResponse, error) {
+	if err := r.mapUserToNode(ctx, req.UserID, req.NodeID); err != nil {
+		return nil, err
+	}
+	return &bizrepo.MapUserToNodeResponse{}, nil
+}
+
+func (r *NodeRegistryRepo) UnmapUserFromNode(ctx context.Context, req *bizrepo.UnmapUserFromNodeReq) (*bizrepo.UnmapUserFromNodeResponse, error) {
+	if err := r.unmapUserFromNode(ctx, req.UserID, req.NodeID); err != nil {
+		return nil, err
+	}
+	return &bizrepo.UnmapUserFromNodeResponse{}, nil
+}
+
+func (r *NodeRegistryRepo) GetUserNodes(ctx context.Context, req *bizrepo.GetUserNodesReq) (*bizrepo.GetUserNodesResponse, error) {
+	nodeIDs, err := r.getUserNodes(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return &bizrepo.GetUserNodesResponse{NodeIDs: nodeIDs}, nil
+}
+
+func (r *NodeRegistryRepo) GetAllOnlineNodes(ctx context.Context, req *bizrepo.GetAllOnlineNodesReq) (*bizrepo.GetAllOnlineNodesResponse, error) {
+	rows, err := r.getAllOnlineNodes(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &bizrepo.GetAllOnlineNodesResponse{Rows: rows}, nil
+}
+
+func (r *NodeRegistryRepo) SaveOfflineEvent(ctx context.Context, req *bizrepo.SaveOfflineEventReq) (*bizrepo.SaveOfflineEventResponse, error) {
+	if err := r.saveOfflineEvent(ctx, req.UserID, req.Event); err != nil {
+		return nil, err
+	}
+	return &bizrepo.SaveOfflineEventResponse{}, nil
+}
+
+func (r *NodeRegistryRepo) GetOfflineEvents(ctx context.Context, req *bizrepo.GetOfflineEventsReq) (*bizrepo.GetOfflineEventsResponse, error) {
+	rows, err := r.getOfflineEvents(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return &bizrepo.GetOfflineEventsResponse{Rows: rows}, nil
+}
+
+func (r *NodeRegistryRepo) ClearOfflineEvents(ctx context.Context, req *bizrepo.ClearOfflineEventsReq) (*bizrepo.ClearOfflineEventsResponse, error) {
+	if err := r.clearOfflineEvents(ctx, req.UserID); err != nil {
+		return nil, err
+	}
+	return &bizrepo.ClearOfflineEventsResponse{}, nil
+}
+
 // nodeRecord Redis 中存储的节点 JSON 结构。
 type nodeRecord struct {
 	NodeID          string `json:"node_id"`
@@ -45,7 +135,7 @@ type nodeRecord struct {
 	LastHeartbeatAt string `json:"last_heartbeat_at"`
 }
 
-func (r *NodeRegistryRepo) RegisterNode(ctx context.Context, nodeID, address string) error {
+func (r *NodeRegistryRepo) registerNode(ctx context.Context, nodeID, address string) error {
 	now := time.Now().Format(time.RFC3339)
 	record := nodeRecord{
 		NodeID:          nodeID,
@@ -67,7 +157,7 @@ func (r *NodeRegistryRepo) RegisterNode(ctx context.Context, nodeID, address str
 	return err
 }
 
-func (r *NodeRegistryRepo) UpdateHeartbeat(ctx context.Context, nodeID string, connectionCount int64) error {
+func (r *NodeRegistryRepo) updateHeartbeat(ctx context.Context, nodeID string, connectionCount int64) error {
 	// 获取当前节点信息
 	data, err := r.rdb.Client.HGet(ctx, keyNodeHash, nodeID).Bytes()
 	if err != nil {
@@ -95,7 +185,7 @@ func (r *NodeRegistryRepo) UpdateHeartbeat(ctx context.Context, nodeID string, c
 	return err
 }
 
-func (r *NodeRegistryRepo) GetNode(ctx context.Context, nodeID string) (*model.NodeInfo, error) {
+func (r *NodeRegistryRepo) getNode(ctx context.Context, nodeID string) (*model.NodeInfo, error) {
 	data, err := r.rdb.Client.HGet(ctx, keyNodeHash, nodeID).Bytes()
 	if err != nil {
 		if err == redis.Nil {
@@ -112,7 +202,7 @@ func (r *NodeRegistryRepo) GetNode(ctx context.Context, nodeID string) (*model.N
 	return r.toModel(&record), nil
 }
 
-func (r *NodeRegistryRepo) ListNodes(ctx context.Context) ([]*model.NodeInfo, error) {
+func (r *NodeRegistryRepo) listNodes(ctx context.Context) ([]*model.NodeInfo, error) {
 	results, err := r.rdb.Client.HGetAll(ctx, keyNodeHash).Result()
 	if err != nil {
 		return nil, fmt.Errorf("列出节点: %w", err)
@@ -135,7 +225,7 @@ func (r *NodeRegistryRepo) ListNodes(ctx context.Context) ([]*model.NodeInfo, er
 	return nodes, nil
 }
 
-func (r *NodeRegistryRepo) RemoveNode(ctx context.Context, nodeID string) error {
+func (r *NodeRegistryRepo) removeNode(ctx context.Context, nodeID string) error {
 	pipe := r.rdb.Client.Pipeline()
 	pipe.HDel(ctx, keyNodeHash, nodeID)
 	pipe.SRem(ctx, keyOnlineSet, nodeID)
@@ -143,7 +233,7 @@ func (r *NodeRegistryRepo) RemoveNode(ctx context.Context, nodeID string) error 
 	return err
 }
 
-func (r *NodeRegistryRepo) MapUserToNode(ctx context.Context, userID int64, nodeID string) error {
+func (r *NodeRegistryRepo) mapUserToNode(ctx context.Context, userID int64, nodeID string) error {
 	key := strconv.FormatInt(userID, 10)
 	data, err := r.rdb.Client.HGet(ctx, keyUserNodes, key).Bytes()
 	if err != nil && err != redis.Nil {
@@ -171,7 +261,7 @@ func (r *NodeRegistryRepo) MapUserToNode(ctx context.Context, userID int64, node
 	return r.rdb.Client.HSet(ctx, keyUserNodes, key, updatedData).Err()
 }
 
-func (r *NodeRegistryRepo) UnmapUserFromNode(ctx context.Context, userID int64, nodeID string) error {
+func (r *NodeRegistryRepo) unmapUserFromNode(ctx context.Context, userID int64, nodeID string) error {
 	key := strconv.FormatInt(userID, 10)
 	data, err := r.rdb.Client.HGet(ctx, keyUserNodes, key).Bytes()
 	if err != nil {
@@ -199,7 +289,7 @@ func (r *NodeRegistryRepo) UnmapUserFromNode(ctx context.Context, userID int64, 
 	return r.rdb.Client.HSet(ctx, keyUserNodes, key, updatedData).Err()
 }
 
-func (r *NodeRegistryRepo) GetUserNodes(ctx context.Context, userID int64) ([]string, error) {
+func (r *NodeRegistryRepo) getUserNodes(ctx context.Context, userID int64) ([]string, error) {
 	key := strconv.FormatInt(userID, 10)
 	data, err := r.rdb.Client.HGet(ctx, keyUserNodes, key).Bytes()
 	if err != nil {
@@ -226,7 +316,7 @@ func (r *NodeRegistryRepo) GetUserNodes(ctx context.Context, userID int64) ([]st
 	return onlineIDs, nil
 }
 
-func (r *NodeRegistryRepo) GetAllOnlineNodes(ctx context.Context) ([]*model.NodeInfo, error) {
+func (r *NodeRegistryRepo) getAllOnlineNodes(ctx context.Context) ([]*model.NodeInfo, error) {
 	nodeIDs, err := r.rdb.Client.SMembers(ctx, keyOnlineSet).Result()
 	if err != nil {
 		return nil, fmt.Errorf("获取在线节点集合: %w", err)
@@ -255,7 +345,7 @@ func (r *NodeRegistryRepo) GetAllOnlineNodes(ctx context.Context) ([]*model.Node
 	return nodes, nil
 }
 
-func (r *NodeRegistryRepo) SaveOfflineEvent(ctx context.Context, userID int64, event *model.PushEvent) error {
+func (r *NodeRegistryRepo) saveOfflineEvent(ctx context.Context, userID int64, event *model.PushEvent) error {
 	key := keyOfflineList + strconv.FormatInt(userID, 10)
 	data, err := json.Marshal(event)
 	if err != nil {
@@ -269,7 +359,7 @@ func (r *NodeRegistryRepo) SaveOfflineEvent(ctx context.Context, userID int64, e
 	return err
 }
 
-func (r *NodeRegistryRepo) GetOfflineEvents(ctx context.Context, userID int64) ([]*model.PushEvent, error) {
+func (r *NodeRegistryRepo) getOfflineEvents(ctx context.Context, userID int64) ([]*model.PushEvent, error) {
 	key := keyOfflineList + strconv.FormatInt(userID, 10)
 	results, err := r.rdb.Client.LRange(ctx, key, 0, -1).Result()
 	if err != nil {
@@ -287,7 +377,7 @@ func (r *NodeRegistryRepo) GetOfflineEvents(ctx context.Context, userID int64) (
 	return events, nil
 }
 
-func (r *NodeRegistryRepo) ClearOfflineEvents(ctx context.Context, userID int64) error {
+func (r *NodeRegistryRepo) clearOfflineEvents(ctx context.Context, userID int64) error {
 	key := keyOfflineList + strconv.FormatInt(userID, 10)
 	return r.rdb.Client.Del(ctx, key).Err()
 }

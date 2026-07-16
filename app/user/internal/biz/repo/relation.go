@@ -1,24 +1,30 @@
 package repo
 
 import (
-	"common/proto/gen/common"
-	v1 "common/proto/gen/user/v1"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/enum"
 )
 
 type RelationRepo interface {
-	Create(ctx context.Context, u *model.Relation) (*model.Relation, error)
+	Create(ctx context.Context, req *RelationCreateReq) (*RelationCreateResponse, error)
 
-	Delete(ctx context.Context, req *RelationDeleteReq) (int, error)
+	Delete(ctx context.Context, req *RelationDeleteReq) (*RelationDeleteResponse, error)
 
-	Exists(ctx context.Context, req *RelationGetReq) (bool, error)
-	Get(ctx context.Context, req *RelationGetReq) (*model.Relation, error)
-	List(ctx context.Context, req *RelationGetReq) ([]*model.Relation, error)
-	Map(ctx context.Context, req *RelationGetReq) (map[int64]*model.Relation, error)
-	Count(ctx context.Context, req *RelationGetReq) (int, error)
-	Page(ctx context.Context, page *common.PageRequest, req *RelationGetReq) ([]*model.Relation, *common.PageReply, error)
+	Exists(ctx context.Context, req *RelationGetReq) (*RelationExistsResponse, error)
+	Get(ctx context.Context, req *RelationGetReq) (*RelationGetResponse, error)
+	List(ctx context.Context, req *RelationGetReq) (*RelationListResponse, error)
+	Map(ctx context.Context, req *RelationGetReq) (*RelationMapResponse, error)
+	Count(ctx context.Context, req *RelationGetReq) (*RelationCountResponse, error)
+	Page(ctx context.Context, req *RelationPageReq) (*RelationPageResponse, error)
+}
+
+type RelationCreateReq struct {
+	Relation *model.Relation
+}
+
+type RelationCreateResponse struct {
+	Relation *model.Relation
 }
 
 type RelationDeleteReq struct {
@@ -27,14 +33,48 @@ type RelationDeleteReq struct {
 	Type     enum.RelationType
 }
 
+type RelationDeleteResponse struct {
+	Deleted int
+}
+
 type RelationGetReq struct {
 	ID              *int64
 	IDs             []int64
 	ActorId         *int64
 	TargetId        *int64
 	ActorOrTargetId *int64
-	Type            *v1.RelationType
+	Type            *enum.RelationType
 
 	WithActor  bool
 	WithTarget bool
+}
+
+type RelationExistsResponse struct {
+	Exists bool
+}
+
+type RelationGetResponse struct {
+	Relation *model.Relation
+}
+
+type RelationListResponse struct {
+	Rows []*model.Relation
+}
+
+type RelationMapResponse struct {
+	Rows map[int64]*model.Relation
+}
+
+type RelationCountResponse struct {
+	Count int
+}
+
+type RelationPageReq struct {
+	Page  PageReq
+	Query RelationGetReq
+}
+
+type RelationPageResponse struct {
+	Rows []*model.Relation
+	Page PageResponse
 }

@@ -1,25 +1,66 @@
 package repo
 
 import (
-	"common/proto/gen/common"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/enum"
 )
 
 type AccountRepo interface {
-	Create(ctx context.Context, u *model.Account) (*model.Account, error)
+	Create(ctx context.Context, req *AccountCreateReq) (*AccountCreateResponse, error)
 
-	Update(ctx context.Context, u *model.Account) (*model.Account, error)
-	UpdateProfile(ctx context.Context, req *model.AccountProfileUpdate) (*model.Account, error)
-	AddStat(ctx context.Context, userId int64, statType enum.AccountStatType, num int32) (*model.Account, error)
+	Update(ctx context.Context, req *AccountUpdateReq) (*AccountUpdateResponse, error)
+	UpdateProfile(ctx context.Context, req *AccountUpdateProfileReq) (*AccountUpdateProfileResponse, error)
+	AddStat(ctx context.Context, req *AccountAddStatReq) (*AccountAddStatResponse, error)
 
-	ExistsByAccount(ctx context.Context, account string) (bool, error)
-	Get(ctx context.Context, req *AccountGetReq) (*model.Account, error)
-	List(ctx context.Context, req *AccountGetReq) ([]*model.Account, error)
-	Map(ctx context.Context, req *AccountGetReq) (map[int64]*model.Account, error)
-	Count(ctx context.Context, req *AccountGetReq) (int, error)
-	Page(ctx context.Context, page *common.PageRequest, req *AccountGetReq) ([]*model.Account, *common.PageReply, error)
+	ExistsByAccount(ctx context.Context, req *AccountExistsByAccountReq) (*AccountExistsByAccountResponse, error)
+	Get(ctx context.Context, req *AccountGetReq) (*AccountGetResponse, error)
+	List(ctx context.Context, req *AccountGetReq) (*AccountListResponse, error)
+	Map(ctx context.Context, req *AccountGetReq) (*AccountMapResponse, error)
+	Count(ctx context.Context, req *AccountGetReq) (*AccountCountResponse, error)
+	Page(ctx context.Context, req *AccountPageReq) (*AccountPageResponse, error)
+}
+
+type AccountCreateReq struct {
+	Account *model.Account
+}
+
+type AccountCreateResponse struct {
+	Account *model.Account
+}
+
+type AccountUpdateReq struct {
+	Account *model.Account
+}
+
+type AccountUpdateResponse struct {
+	Account *model.Account
+}
+
+type AccountUpdateProfileReq struct {
+	Profile *model.AccountProfileUpdate
+}
+
+type AccountUpdateProfileResponse struct {
+	Account *model.Account
+}
+
+type AccountAddStatReq struct {
+	UserID   int64
+	StatType enum.AccountStatType
+	Num      int32
+}
+
+type AccountAddStatResponse struct {
+	Account *model.Account
+}
+
+type AccountExistsByAccountReq struct {
+	Account string
+}
+
+type AccountExistsByAccountResponse struct {
+	Exists bool
 }
 
 type AccountGetReq struct {
@@ -34,4 +75,30 @@ type AccountGetReq struct {
 	Phone     *string
 	Phones    []string
 	Account   *string
+}
+
+type AccountGetResponse struct {
+	Account *model.Account
+}
+
+type AccountListResponse struct {
+	Rows []*model.Account
+}
+
+type AccountMapResponse struct {
+	Rows map[int64]*model.Account
+}
+
+type AccountCountResponse struct {
+	Count int
+}
+
+type AccountPageReq struct {
+	Page  PageReq
+	Query AccountGetReq
+}
+
+type AccountPageResponse struct {
+	Rows []*model.Account
+	Page PageResponse
 }

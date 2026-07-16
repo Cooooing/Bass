@@ -56,12 +56,11 @@ func newApp(
 		kratos.Server(servers...),
 		kratos.Registrar(consulClient.Registrar()),
 		kratos.AfterStart(func(ctx context.Context) error {
-			return nodeUc.ConnectHub(ctx)
+			return nodeUc.ConnectHub(ctx, &usecase.ConnectHubReq{})
 		}),
 		kratos.BeforeStop(func(ctx context.Context) error {
-			// 闁圭厧鐡ㄥ濠氬极閵堝纾绘繝濠傚閸撻箖鏌涢幘宕囆ｉ柡灞芥搐椤曪綁鍩€?push_hub
-			nodeUc.Stop()
-			return nil
+			// 关闭心跳循环。
+			return nodeUc.Stop(ctx, &usecase.StopReq{})
 		}),
 	)
 }
@@ -91,7 +90,7 @@ func main() {
 	commonServer := c.Server
 	logger := commonserver.NewLogger(commonServer, bc.GetLog())
 
-	// 闂傚倸鍟抽崺鏍敊?1闂佹寧绋掔喊宥夊极閻愬搫绀冮悘鐐舵閻?push_hub 闂佸吋鍎抽崲鑼躲亹閸ヮ剚鍤嶉柛灞剧矊娴?ID
+	// 向 push_hub 注册节点。
 	hubConn, err := grpc.NewClient(c.PushNode.PushHubAddress,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)

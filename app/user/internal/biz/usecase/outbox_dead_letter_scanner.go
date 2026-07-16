@@ -65,11 +65,11 @@ func (s *OutboxDeadLetterScanner) Stop(_ context.Context) error {
 
 func (s *OutboxDeadLetterScanner) scan(ctx context.Context) error {
 	status := commonenum.OutboxEventStatusDead
-	rows, _, err := s.outboxRepo.Page(ctx, &common.PageRequest{Page: 1, Size: outboxDeadLetterScanLimit}, &repo.OutboxEventGetReq{Status: &status})
+	pageResp, err := s.outboxRepo.Page(ctx, &repo.OutboxEventPageReq{Page: repo.PageReq{Page: 1, Size: outboxDeadLetterScanLimit}, Query: repo.OutboxEventGetReq{Status: &status}})
 	if err != nil {
 		return err
 	}
-	for _, row := range rows {
+	for _, row := range pageResp.Rows {
 		lastError := ""
 		if row.LastError != nil {
 			lastError = *row.LastError

@@ -3,8 +3,6 @@ package data
 import (
 	"bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
-	bbsuserv1 "common/proto/gen/bbs/v1/user"
-	"common/proto/gen/common"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 )
@@ -19,29 +17,25 @@ func NewAccountClient(userClient *rpc.UserClient) repo.AccountClient {
 	return &AccountClient{userClient: userClient}
 }
 
-func (r *AccountClient) GetCurrentAccount(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Request) (*bbsuserv1.GetCurrentAccount_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
-	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Request{UserId: userID})
+func (r *AccountClient) GetCurrentAccount(ctx context.Context, req *repo.GetCurrentAccountReq) (*repo.GetCurrentAccountResponse, error) {
+	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Request{UserId: req.UserID})
 	if err != nil {
 		return nil, err
 	}
 	account := reply.GetAccount()
-	var out *bbsuserv1.Account
+	var out *repo.Account
 	if account != nil {
-		out = &bbsuserv1.Account{}
+		out = &repo.Account{}
 		if basic := account.GetBasic(); basic != nil {
-			out.Profile = &bbsuserv1.AccountProfile{
-				Id:            basic.GetId(),
+			out.Profile = &repo.AccountProfile{
+				ID:            basic.GetId(),
 				Name:          basic.GetName(),
 				Nickname:      basic.Nickname,
-				Url:           basic.Url,
-				AvatarUrl:     basic.AvatarUrl,
+				URL:           basic.Url,
+				AvatarURL:     basic.AvatarUrl,
 				Introduction:  basic.Introduction,
-				Status:        bbsuserv1.AccountStatus(basic.GetStatus()),
-				Mbti:          bbsuserv1.MBTI(basic.GetMbti()),
+				Status:        int32(basic.GetStatus()),
+				MBTI:          int32(basic.GetMbti()),
 				FollowCount:   basic.FollowCount,
 				FollowerCount: basic.FollowerCount,
 				CreatedAt:     formatProtoTime(basic.GetCreatedAt()),
@@ -49,82 +43,83 @@ func (r *AccountClient) GetCurrentAccount(ctx context.Context, req *bbsuserv1.Ge
 			}
 		}
 		if contact := account.GetContact(); contact != nil {
-			out.Contact = &bbsuserv1.AccountContact{
-				UserId: contact.GetUserId(),
+			out.Contact = &repo.AccountContact{
+				UserID: contact.GetUserId(),
 				Email:  contact.Email,
 				Phone:  contact.Phone,
 			}
 		}
 	}
-	return &bbsuserv1.GetCurrentAccount_Reply{Account: out}, nil
+	return &repo.GetCurrentAccountResponse{Account: out}, nil
 }
 
-func (r *AccountClient) GetProfileAccount(ctx context.Context, req *bbsuserv1.GetProfileAccount_Request) (*bbsuserv1.GetProfileAccount_Reply, error) {
-	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Request{UserId: req.GetUserId()})
+func (r *AccountClient) GetProfileAccount(ctx context.Context, req *repo.GetProfileAccountReq) (*repo.GetProfileAccountResponse, error) {
+	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Request{UserId: req.UserID})
 	if err != nil {
 		return nil, err
 	}
 	account := reply.GetAccount().GetBasic()
-	var profile *bbsuserv1.AccountProfile
+	var profile *repo.AccountProfile
 	if account != nil {
-		profile = &bbsuserv1.AccountProfile{
-			Id:            account.GetId(),
+		profile = &repo.AccountProfile{
+			ID:            account.GetId(),
 			Name:          account.GetName(),
 			Nickname:      account.Nickname,
-			Url:           account.Url,
-			AvatarUrl:     account.AvatarUrl,
+			URL:           account.Url,
+			AvatarURL:     account.AvatarUrl,
 			Introduction:  account.Introduction,
-			Status:        bbsuserv1.AccountStatus(account.GetStatus()),
-			Mbti:          bbsuserv1.MBTI(account.GetMbti()),
+			Status:        int32(account.GetStatus()),
+			MBTI:          int32(account.GetMbti()),
 			FollowCount:   account.FollowCount,
 			FollowerCount: account.FollowerCount,
 			CreatedAt:     formatProtoTime(account.GetCreatedAt()),
 			UpdatedAt:     formatProtoTime(account.GetUpdatedAt()),
 		}
 	}
-	return &bbsuserv1.GetProfileAccount_Reply{Profile: profile}, nil
+	return &repo.GetProfileAccountResponse{Profile: profile}, nil
 }
 
-func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Request) (*bbsuserv1.UpdateProfileAccount_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
+func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.UpdateProfileAccountReq) (*repo.UpdateProfileAccountResponse, error) {
 	updateReq := &userv1.UpdateProfileAccount_Request{
-		UserId:       userID,
-		AvatarUrl:    req.AvatarUrl,
+		UserId:       req.UserID,
+		AvatarUrl:    req.AvatarURL,
 		Nickname:     req.Nickname,
-		Url:          req.Url,
+		Url:          req.URL,
 		Introduction: req.Introduction,
 	}
-	if req.Mbti != nil {
-		updateReq.Mbti = new(userv1.MBTI(*req.Mbti))
+	if req.MBTI != nil {
+		mbti := userv1.MBTI(*req.MBTI)
+		updateReq.Mbti = &mbti
 	}
 	reply, err := r.userClient.Account.UpdateProfile(ctx, updateReq)
 	if err != nil {
 		return nil, err
 	}
 	account := reply.GetAccount()
-	var profile *bbsuserv1.AccountProfile
+	var profile *repo.AccountProfile
 	if account != nil {
-		profile = &bbsuserv1.AccountProfile{
-			Id:            account.GetId(),
+		profile = &repo.AccountProfile{
+			ID:            account.GetId(),
 			Name:          account.GetName(),
 			Nickname:      account.Nickname,
-			Url:           account.Url,
-			AvatarUrl:     account.AvatarUrl,
+			URL:           account.Url,
+			AvatarURL:     account.AvatarUrl,
 			Introduction:  account.Introduction,
-			Status:        bbsuserv1.AccountStatus(account.GetStatus()),
-			Mbti:          bbsuserv1.MBTI(account.GetMbti()),
+			Status:        int32(account.GetStatus()),
+			MBTI:          int32(account.GetMbti()),
 			FollowCount:   account.FollowCount,
 			FollowerCount: account.FollowerCount,
 			CreatedAt:     formatProtoTime(account.GetCreatedAt()),
 			UpdatedAt:     formatProtoTime(account.GetUpdatedAt()),
 		}
 	}
-	return &bbsuserv1.UpdateProfileAccount_Reply{Profile: profile}, nil
+	return &repo.UpdateProfileAccountResponse{Profile: profile}, nil
 }
 
-func (r *AccountClient) AvatarAccount(ctx context.Context, req *bbsuserv1.AvatarAccount_Request) (*common.ImageReply, error) {
-	return r.userClient.Account.Avatar(ctx, &userv1.AvatarAccount_Request{Name: req.GetName()})
+func (r *AccountClient) AvatarAccount(ctx context.Context, req *repo.AvatarAccountReq) (*repo.AvatarAccountResponse, error) {
+	reply, err := r.userClient.Account.Avatar(ctx, &userv1.AvatarAccount_Request{Name: req.Name})
+	if err != nil {
+		return nil, err
+	}
+	return &repo.AvatarAccountResponse{Data: reply.GetData(), ContentType: reply.GetContentType()}, nil
 }

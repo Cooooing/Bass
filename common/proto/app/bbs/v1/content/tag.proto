@@ -3,7 +3,6 @@ syntax = "proto3";
 package common.api.app.bbs.v1.content;
 
 import "bbs/v1/content/enum.proto";
-import "bbs/v1/content/model.proto";
 import "common/common.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
@@ -13,7 +12,7 @@ option go_package = "common/proto/gen/bbs/v1/content;content";
 // 标签接口。
 service TagService {
   // 创建标签。
-  rpc Create(CreateTag.Request) returns (CreateTag.Reply) {
+  rpc Create(CreateTag.Request) returns (CreateTag.Response) {
     option (google.api.http) = {
       post: "/v1/content/tag/create"
       body: "*"
@@ -21,7 +20,7 @@ service TagService {
   }
 
   // 更新标签。
-  rpc Update(UpdateTag.Request) returns (UpdateTag.Reply) {
+  rpc Update(UpdateTag.Request) returns (UpdateTag.Response) {
     option (google.api.http) = {
       post: "/v1/content/tag/update"
       body: "*"
@@ -29,7 +28,7 @@ service TagService {
   }
 
   // 分页查询标签列表。
-  rpc List(ListTags.Request) returns (ListTags.Reply) {
+  rpc List(ListTags.Request) returns (ListTags.Response) {
     option (google.api.http) = {
       post: "/v1/content/tag/list"
       body: "*"
@@ -39,89 +38,123 @@ service TagService {
 
 // 创建标签。
 message CreateTag {
-  message Request {
-    // 标签保存内容。
-    Tag tag = 1;
-    option (gnostic.openapi.v3.schema) = {required: "tag"};
+  message Request {      // 标签保存内容。
+      Tag tag = 1;
+      option (gnostic.openapi.v3.schema) = {required: "tag"};
+
+      message Tag {
+        // 标签名称。
+        string name = 1;
+        // 标签描述。
+        optional string description = 2;
+        // 所属板块 ID。
+        optional int64 domain_id = 3;
+        // 标签启停状态。
+        optional TagStatus status = 4;
+        option (gnostic.openapi.v3.schema) = {required: "name"};
+      }
+    }
+  message Response {
 
     message Tag {
-      // 标签名称。
-      string name = 1;
-      // 标签描述。
-      optional string description = 2;
-      // 所属板块 ID。
-      optional int64 domain_id = 3;
-      // 标签启停状态。
-      optional TagStatus status = 4;
-      option (gnostic.openapi.v3.schema) = {required: "name"};
+        int64 id = 1; // 标签 ID
+        string name = 2; // 标签名称
+        optional string description = 3; // 标签描述
+        optional int64 domain_id = 4; // 所属板块 ID
+        optional TagStatus status = 5; // 标签启停状态
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+      // 创建后的标签。
+      Tag tag = 1;
     }
-  }
-
-  message Reply {
-    // 创建后的标签。
-    .common.api.app.bbs.v1.content.Tag tag = 1;
-  }
 }
 
 // 更新标签。
 message UpdateTag {
   message Request {
-    // 标签 ID。
-    int64 tag_id = 1;
-    // 标签保存内容。
-    Tag tag = 2;
-    option (gnostic.openapi.v3.schema) = {
-      required: "tag_id"
-      required: "tag"
-    };
+      // 标签 ID。
+      int64 tag_id = 1;
+      // 标签保存内容。
+      Tag tag = 2;
+      option (gnostic.openapi.v3.schema) = {
+        required: "tag_id"
+        required: "tag"
+      };
+
+      message Tag {
+        // 标签名称。
+        string name = 1;
+        // 标签描述。
+        optional string description = 2;
+        // 所属板块 ID。
+        optional int64 domain_id = 3;
+        // 标签启停状态。
+        optional TagStatus status = 4;
+        option (gnostic.openapi.v3.schema) = {required: "name"};
+      }
+    }
+  message Response {
 
     message Tag {
-      // 标签名称。
-      string name = 1;
-      // 标签描述。
-      optional string description = 2;
-      // 所属板块 ID。
-      optional int64 domain_id = 3;
-      // 标签启停状态。
-      optional TagStatus status = 4;
-      option (gnostic.openapi.v3.schema) = {required: "name"};
+        int64 id = 1; // 标签 ID
+        string name = 2; // 标签名称
+        optional string description = 3; // 标签描述
+        optional int64 domain_id = 4; // 所属板块 ID
+        optional TagStatus status = 5; // 标签启停状态
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+      // 更新后的标签。
+      Tag tag = 1;
     }
-  }
-
-  message Reply {
-    // 更新后的标签。
-    .common.api.app.bbs.v1.content.Tag tag = 1;
-  }
 }
 
 // 标签查询条件。
-message TagQuery {
-  // 标签 ID 列表。
-  repeated int64 ids = 1;
-  // 标签名称。
-  optional string name = 2;
-  // 标签名称列表。
-  repeated string names = 3;
-  // 标签描述。
-  optional string description = 4;
-  // 标签启停状态。
-  optional TagStatus status = 5;
-  // 所属板块 ID。
-  optional int64 domain_id = 6;
-}
 
 // 分页查询标签列表。
 message ListTags {
   message Request {
-    // 分页参数。
-    common.PageRequest page = 1;
-    // 查询条件。
-    TagQuery query = 2;
-  }
-  message Reply {
-    // 分页结果。
-    common.PageReply page = 1;
-    // 标签列表。
-    repeated Tag rows = 2;
-  }
+
+    message TagQuery {
+        // 标签 ID 列表。
+        repeated int64 ids = 1;
+        // 标签名称。
+        optional string name = 2;
+        // 标签名称列表。
+        repeated string names = 3;
+        // 标签描述。
+        optional string description = 4;
+        // 标签启停状态。
+        optional TagStatus status = 5;
+        // 所属板块 ID。
+        optional int64 domain_id = 6;
+      }
+      // 分页参数。
+      .common.api.app.common.PageRequest page = 1;
+      // 查询条件。
+      TagQuery query = 2;
+    }
+  message Response {
+
+    message Tag {
+        int64 id = 1; // 标签 ID
+        string name = 2; // 标签名称
+        optional string description = 3; // 标签描述
+        optional int64 domain_id = 4; // 所属板块 ID
+        optional TagStatus status = 5; // 标签启停状态
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+      // 分页结果。
+      .common.api.app.common.PageResponse page = 1;
+      // 标签列表。
+      repeated Tag rows = 2;
+    }
 }

@@ -26,12 +26,13 @@ func (s *IpResolutionService) RegisterGrpc(gs *grpc.Server) {
 func (s *IpResolutionService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *IpResolutionService) ResolveIp(ctx context.Context, req *v1.ResolveIp_Request) (*v1.ResolveIp_Reply, error) {
-	info, err := s.ipUsecase.Get(ctx, req.GetIp())
+func (s *IpResolutionService) ResolveIp(ctx context.Context, req *v1.ResolveIp_Request) (*v1.ResolveIp_Response, error) {
+	getResponse, err := s.ipUsecase.Get(ctx, &usecase.IpResolutionGetReq{IP: req.GetIp()})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.ResolveIp_Reply{
+	info := getResponse.Info
+	return &v1.ResolveIp_Response{
 		Country:     info.Country,
 		Province:    info.Province,
 		City:        info.City,

@@ -1,13 +1,14 @@
 package usecase
 
 import (
+	"common/proto/gen/common"
 	"context"
 	"fmt"
 	"time"
 
 	commonClient "common/pkg/client"
 	commonenum "common/pkg/enum"
-	"common/proto/gen/common"
+	"content/internal/biz/base"
 	"content/internal/biz/repo"
 	"content/internal/config"
 
@@ -65,11 +66,11 @@ func (s *OutboxDeadLetterScanner) Stop(_ context.Context) error {
 
 func (s *OutboxDeadLetterScanner) scan(ctx context.Context) error {
 	status := commonenum.OutboxEventStatusDead
-	rows, _, err := s.outboxRepo.Page(ctx, &common.PageRequest{Page: 1, Size: outboxDeadLetterScanLimit}, &repo.OutboxEventGetReq{Status: &status})
+	pageResponse, err := s.outboxRepo.Page(ctx, &repo.OutboxEventGetReq{Page: &base.PageRequest{Page: 1, Size: outboxDeadLetterScanLimit}, Status: &status})
 	if err != nil {
 		return err
 	}
-	for _, row := range rows {
+	for _, row := range pageResponse.Rows {
 		lastError := ""
 		if row.LastError != nil {
 			lastError = *row.LastError

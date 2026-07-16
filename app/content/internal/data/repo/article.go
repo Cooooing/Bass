@@ -2,13 +2,12 @@ package repo
 
 import (
 	cerrors "common/proto/gen/common/errors"
+	"content/internal/biz/base"
 	"context"
 	"time"
 
 	"common/pkg/apperror"
-	"common/pkg/server"
 	utilent "common/pkg/util/ent"
-	"common/proto/gen/common"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
@@ -37,7 +36,8 @@ func (r *ArticleRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *ArticleRepo) Save(ctx context.Context, article *model.Article) (*model.Article, error) {
+func (r *ArticleRepo) Save(ctx context.Context, req *repo.ArticleSaveReq) (*repo.ArticleSaveResponse, error) {
+	article := req.Article
 	save, err := r.getClient(ctx).Article.Create().
 		SetTitle(article.Title).
 		SetContent(article.Content).
@@ -59,7 +59,7 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article) (*model.
 	if err != nil {
 		return nil, err
 	}
-	return &model.Article{
+	return &repo.ArticleSaveResponse{Article: &model.Article{
 		ID:               save.ID,
 		Title:            save.Title,
 		Content:          save.Content,
@@ -88,10 +88,11 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article) (*model.
 		CreatedBy:        save.CreatedBy,
 		UpdatedBy:        save.UpdatedBy,
 		DeletedAt:        save.DeletedAt,
-	}, nil
+	}}, nil
 }
 
-func (r *ArticleRepo) Update(ctx context.Context, updateArticle *model.Article) (*model.Article, error) {
+func (r *ArticleRepo) Update(ctx context.Context, req *repo.ArticleUpdateReq) (*repo.ArticleUpdateResponse, error) {
+	updateArticle := req.Article
 	save, err := r.getClient(ctx).Article.UpdateOneID(updateArticle.ID).
 		SetTitle(updateArticle.Title).
 		SetContent(updateArticle.Content).
@@ -112,7 +113,7 @@ func (r *ArticleRepo) Update(ctx context.Context, updateArticle *model.Article) 
 	if err != nil {
 		return nil, err
 	}
-	return &model.Article{
+	return &repo.ArticleUpdateResponse{Article: &model.Article{
 		ID:               save.ID,
 		Title:            save.Title,
 		Content:          save.Content,
@@ -141,16 +142,21 @@ func (r *ArticleRepo) Update(ctx context.Context, updateArticle *model.Article) 
 		CreatedBy:        save.CreatedBy,
 		UpdatedBy:        save.UpdatedBy,
 		DeletedAt:        save.DeletedAt,
-	}, nil
+	}}, nil
 }
 
-func (r *ArticleRepo) UpdatePublishStatus(ctx context.Context, articleId int64, publishStatus enum.ArticlePublishStatus, visibility enum.ArticleVisibility, publishedAt *time.Time, updatedBy int64) error {
+func (r *ArticleRepo) UpdatePublishStatus(ctx context.Context, req *repo.ArticleUpdatePublishStatusReq) (*repo.ArticleUpdatePublishStatusResponse, error) {
+	articleId := req.ArticleID
+	publishStatus := req.PublishStatus
+	visibility := req.Visibility
+	publishedAt := req.PublishedAt
+	updatedBy := req.UpdatedBy
 	_, err := r.getClient(ctx).Article.Get(ctx, articleId)
 	if gen.IsNotFound(err) {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
 	if err != nil {
-		return err
+		return nil, err
 	}
 	update := r.getClient(ctx).Article.UpdateOneID(articleId).
 		SetPublishStatus(articleent.PublishStatus(publishStatus)).
@@ -159,42 +165,69 @@ func (r *ArticleRepo) UpdatePublishStatus(ctx context.Context, articleId int64, 
 	if publishedAt != nil {
 		update.SetPublishedAt(*publishedAt)
 	}
-	return update.Exec(ctx)
+	if err := update.Exec(ctx); err != nil {
+		return nil, err
+	}
+	return &repo.ArticleUpdatePublishStatusResponse{}, nil
 }
 
-func (r *ArticleRepo) UpdateVisibility(ctx context.Context, articleId int64, visibility enum.ArticleVisibility, updatedBy int64) error {
-	return r.getClient(ctx).Article.UpdateOneID(articleId).
+func (r *ArticleRepo) UpdateVisibility(ctx context.Context, req *repo.ArticleUpdateVisibilityReq) (*repo.ArticleUpdateVisibilityResponse, error) {
+	articleId := req.ArticleID
+	visibility := req.Visibility
+	updatedBy := req.UpdatedBy
+	if err := r.getClient(ctx).Article.UpdateOneID(articleId).
 		SetVisibility(articleent.Visibility(visibility)).
 		SetUpdatedBy(updatedBy).
-		Exec(ctx)
+		Exec(ctx); err != nil {
+		return nil, err
+	}
+	return &repo.ArticleUpdateVisibilityResponse{}, nil
 }
 
-func (r *ArticleRepo) UpdateRestriction(ctx context.Context, articleId int64, restriction enum.ContentRestriction, updatedBy int64) error {
+func (r *ArticleRepo) UpdateRestriction(ctx context.Context, req *repo.ArticleUpdateRestrictionReq) (*repo.ArticleUpdateRestrictionResponse, error) {
+	articleId := req.ArticleID
+	restriction := req.Restriction
+	updatedBy := req.UpdatedBy
 	_, err := r.getClient(ctx).Article.Get(ctx, articleId)
 	if gen.IsNotFound(err) {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return r.getClient(ctx).Article.UpdateOneID(articleId).
+	if err := r.getClient(ctx).Article.UpdateOneID(articleId).
 		SetRestriction(articleent.Restriction(restriction)).
 		SetUpdatedBy(updatedBy).
-		Exec(ctx)
+		Exec(ctx); err != nil {
+		return nil, err
+	}
+	return &repo.ArticleUpdateRestrictionResponse{}, nil
 }
 
-func (r *ArticleRepo) DiscardDraft(ctx context.Context, articleId int64) error {
-	return r.getClient(ctx).Article.DeleteOneID(articleId).Exec(ctx)
+func (r *ArticleRepo) DiscardDraft(ctx context.Context, req *repo.ArticleDiscardDraftReq) (*repo.ArticleDiscardDraftResponse, error) {
+	articleId := req.ArticleID
+	if err := r.getClient(ctx).Article.DeleteOneID(articleId).Exec(ctx); err != nil {
+		return nil, err
+	}
+	return &repo.ArticleDiscardDraftResponse{}, nil
 }
 
-func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, articleId int64, hasPostscript bool, updatedBy int64) error {
-	return r.getClient(ctx).Article.UpdateOneID(articleId).
+func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, req *repo.ArticleUpdateHasPostscriptReq) (*repo.ArticleUpdateHasPostscriptResponse, error) {
+	articleId := req.ArticleID
+	hasPostscript := req.HasPostscript
+	updatedBy := req.UpdatedBy
+	if err := r.getClient(ctx).Article.UpdateOneID(articleId).
 		SetHasPostscript(hasPostscript).
 		SetUpdatedBy(updatedBy).
-		Exec(ctx)
+		Exec(ctx); err != nil {
+		return nil, err
+	}
+	return &repo.ArticleUpdateHasPostscriptResponse{}, nil
 }
 
-func (r *ArticleRepo) AddStats(ctx context.Context, articleId int64, stats repo.ArticleStatUpdate, updatedBy *int64) error {
+func (r *ArticleRepo) AddStats(ctx context.Context, req *repo.ArticleAddStatsReq) (*repo.ArticleAddStatsResponse, error) {
+	articleId := req.ArticleID
+	stats := req.Stats
 	updateOne := r.getClient(ctx).Article.UpdateOneID(articleId)
 	if stats.ViewCount != 0 {
 		updateOne.AddViewCount(stats.ViewCount)
@@ -214,10 +247,16 @@ func (r *ArticleRepo) AddStats(ctx context.Context, articleId int64, stats repo.
 	if stats.ReplyCount != 0 {
 		updateOne.AddReplyCount(stats.ReplyCount)
 	}
-	return updateOne.Exec(ctx)
+	if err := updateOne.Exec(ctx); err != nil {
+		return nil, err
+	}
+	return &repo.ArticleAddStatsResponse{}, nil
 }
 
-func (r *ArticleRepo) UpdateAcceptedAnswerID(ctx context.Context, articleId int64, commentId int64, updatedBy int64) (*model.Article, error) {
+func (r *ArticleRepo) UpdateAcceptedAnswerID(ctx context.Context, req *repo.ArticleUpdateAcceptedAnswerIDReq) (*repo.ArticleUpdateAcceptedAnswerIDResponse, error) {
+	articleId := req.ArticleID
+	commentId := req.CommentID
+	updatedBy := req.UpdatedBy
 	a, err := r.getClient(ctx).Article.UpdateOneID(articleId).
 		SetAcceptedAnswerID(commentId).
 		SetUpdatedBy(updatedBy).
@@ -225,7 +264,7 @@ func (r *ArticleRepo) UpdateAcceptedAnswerID(ctx context.Context, articleId int6
 	if err != nil {
 		return nil, err
 	}
-	return &model.Article{
+	return &repo.ArticleUpdateAcceptedAnswerIDResponse{Article: &model.Article{
 		ID:               a.ID,
 		Title:            a.Title,
 		Content:          a.Content,
@@ -254,24 +293,33 @@ func (r *ArticleRepo) UpdateAcceptedAnswerID(ctx context.Context, articleId int6
 		CreatedBy:        a.CreatedBy,
 		UpdatedBy:        a.UpdatedBy,
 		DeletedAt:        a.DeletedAt,
-	}, nil
+	}}, nil
 }
 
-func (r *ArticleRepo) ReplaceTags(ctx context.Context, articleId int64, tagIds []int64) error {
+func (r *ArticleRepo) ReplaceTags(ctx context.Context, req *repo.ArticleReplaceTagsReq) (*repo.ArticleReplaceTagsResponse, error) {
+	articleId := req.ArticleID
+	tagIds := req.TagIDs
 	update := r.getClient(ctx).Article.UpdateOneID(articleId).ClearTags()
 	if len(tagIds) > 0 {
 		update.AddTagIDs(tagIds...)
 	}
-	return update.Exec(ctx)
+	if err := update.Exec(ctx); err != nil {
+		return nil, err
+	}
+	return &repo.ArticleReplaceTagsResponse{}, nil
 }
 
-func (r *ArticleRepo) Exist(ctx context.Context, req *repo.ArticleGetReq) (bool, error) {
+func (r *ArticleRepo) Exist(ctx context.Context, req *repo.ArticleGetReq) (*repo.ArticleExistResponse, error) {
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
-	return query.Exist(ctx)
+	exist, err := query.Exist(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ArticleExistResponse{Exist: exist}, nil
 }
 
-func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.Article, error) {
+func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*repo.ArticleGetResponse, error) {
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
 	a, err := query.First(ctx)
@@ -281,7 +329,7 @@ func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.
 	if err != nil {
 		return nil, err
 	}
-	return &model.Article{
+	return &repo.ArticleGetResponse{Article: &model.Article{
 		ID:               a.ID,
 		Title:            a.Title,
 		Content:          a.Content,
@@ -310,17 +358,17 @@ func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.
 		CreatedBy:        a.CreatedBy,
 		UpdatedBy:        a.UpdatedBy,
 		DeletedAt:        a.DeletedAt,
-	}, nil
+	}}, nil
 }
 
-func (r *ArticleRepo) List(ctx context.Context, req *repo.ArticleGetReq) ([]*model.Article, error) {
+func (r *ArticleRepo) List(ctx context.Context, req *repo.ArticleGetReq) (*repo.ArticleListResponse, error) {
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return lo.Map(list, func(item *gen.Article, _ int) *model.Article {
+	return &repo.ArticleListResponse{Rows: lo.Map(list, func(item *gen.Article, _ int) *model.Article {
 		return &model.Article{
 			ID:               item.ID,
 			Title:            item.Title,
@@ -351,36 +399,40 @@ func (r *ArticleRepo) List(ctx context.Context, req *repo.ArticleGetReq) ([]*mod
 			UpdatedBy:        item.UpdatedBy,
 			DeletedAt:        item.DeletedAt,
 		}
-	}), nil
+	})}, nil
 }
 
-func (r *ArticleRepo) Map(ctx context.Context, req *repo.ArticleGetReq) (map[int64]*model.Article, error) {
-	list, err := r.List(ctx, req)
+func (r *ArticleRepo) Map(ctx context.Context, req *repo.ArticleGetReq) (*repo.ArticleMapResponse, error) {
+	listResponse, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return lo.SliceToMap(list, func(item *model.Article) (int64, *model.Article) {
+	return &repo.ArticleMapResponse{Rows: lo.SliceToMap(listResponse.Rows, func(item *model.Article) (int64, *model.Article) {
 		return item.ID, item
-	}), nil
+	})}, nil
 }
 
-func (r *ArticleRepo) Count(ctx context.Context, req *repo.ArticleGetReq) (int, error) {
+func (r *ArticleRepo) Count(ctx context.Context, req *repo.ArticleGetReq) (*repo.ArticleCountResponse, error) {
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
-	return query.Count(ctx)
+	count, err := query.Count(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ArticleCountResponse{Count: count}, nil
 }
 
-func (r *ArticleRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleGetReq) ([]*model.Article, *common.PageReply, error) {
-	page = server.PageValid(page)
+func (r *ArticleRepo) Page(ctx context.Context, req *repo.ArticleGetReq) (*repo.ArticlePageResponse, error) {
+	page := normalizePage(req.Page)
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	articles := lo.Map(list, func(item *gen.Article, _ int) *model.Article {
 		return &model.Article{
@@ -414,10 +466,13 @@ func (r *ArticleRepo) Page(ctx context.Context, page *common.PageRequest, req *r
 			DeletedAt:        item.DeletedAt,
 		}
 	})
-	return articles, &common.PageReply{
-		Total: uint32(total),
-		Page:  page.Page,
-		Size:  page.Size,
+	return &repo.ArticlePageResponse{
+		Rows: articles,
+		Page: &base.PageResponse{
+			Total: int64(total),
+			Page:  page.Page,
+			Size:  page.Size,
+		},
 	}, nil
 }
 

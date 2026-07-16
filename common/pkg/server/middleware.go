@@ -26,10 +26,10 @@ import (
 )
 
 func HttpResponseEncoder(w http.ResponseWriter, r *http.Request, data any) error {
-	if imageReply, ok := data.(*common.ImageReply); ok {
-		w.Header().Set("Content-Type", imageReply.ContentType)
+	if ImageResponse, ok := data.(*common.ImageResponse); ok {
+		w.Header().Set("Content-Type", ImageResponse.ContentType)
 		w.WriteHeader(http.StatusOK)
-		_, err := w.Write(imageReply.Data)
+		_, err := w.Write(ImageResponse.Data)
 		if err != nil {
 			return err
 		}

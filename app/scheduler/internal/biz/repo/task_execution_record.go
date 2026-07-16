@@ -9,17 +9,17 @@ import (
 )
 
 type TaskExecutionRecordRepo interface {
-	Get(ctx context.Context, req *TaskExecutionRecordGetReq) (*model.TaskExecutionRecord, error)
-	List(ctx context.Context, req *TaskExecutionRecordGetReq) ([]*model.TaskExecutionRecord, error)
-	Map(ctx context.Context, req *TaskExecutionRecordGetReq) (map[int64]*model.TaskExecutionRecord, error)
-	Count(ctx context.Context, req *TaskExecutionRecordGetReq) (int, error)
-	Page(ctx context.Context, page *common.PageRequest, req *TaskExecutionRecordGetReq) ([]*model.TaskExecutionRecord, *common.PageReply, error)
+	Get(ctx context.Context, req *TaskExecutionRecordGetReq) (*TaskExecutionRecordGetResponse, error)
+	List(ctx context.Context, req *TaskExecutionRecordGetReq) (*TaskExecutionRecordListResponse, error)
+	Map(ctx context.Context, req *TaskExecutionRecordGetReq) (*TaskExecutionRecordMapResponse, error)
+	Count(ctx context.Context, req *TaskExecutionRecordGetReq) (*TaskExecutionRecordCountResponse, error)
+	Page(ctx context.Context, req *TaskExecutionRecordPageReq) (*TaskExecutionRecordPageResponse, error)
 
-	ExistsPeriod(ctx context.Context, taskID int64, scheduledAt time.Time) (bool, error)
-	Create(ctx context.Context, record *model.TaskExecutionRecord, status schedulerenum.TaskExecutionStatus) (*model.TaskExecutionRecord, bool, bool, error)
-	HasUnexpiredRunning(ctx context.Context, taskID int64, startedAfter time.Time) (bool, error)
-	MarkUnknown(ctx context.Context, ids []int64, finishedAt time.Time, lastError string) ([]*model.TaskExecutionRecord, error)
-	MarkFinished(ctx context.Context, id int64, status schedulerenum.TaskExecutionStatus, finishedAt time.Time, durationMS int64, lastError string) (*model.TaskExecutionRecord, bool, error)
+	ExistsPeriod(ctx context.Context, req *TaskExecutionRecordExistsPeriodReq) (*TaskExecutionRecordExistsPeriodResponse, error)
+	Create(ctx context.Context, req *TaskExecutionRecordCreateReq) (*TaskExecutionRecordCreateResponse, error)
+	HasUnexpiredRunning(ctx context.Context, req *TaskExecutionRecordHasUnexpiredRunningReq) (*TaskExecutionRecordHasUnexpiredRunningResponse, error)
+	MarkUnknown(ctx context.Context, req *TaskExecutionRecordMarkUnknownReq) (*TaskExecutionRecordMarkUnknownResponse, error)
+	MarkFinished(ctx context.Context, req *TaskExecutionRecordMarkFinishedReq) (*TaskExecutionRecordMarkFinishedResponse, error)
 }
 
 type TaskExecutionRecordGetReq struct {
@@ -29,4 +29,82 @@ type TaskExecutionRecordGetReq struct {
 	ScheduledAt *time.Time
 	Status      *schedulerenum.TaskExecutionStatus
 	TriggerType *schedulerenum.TaskTriggerType
+}
+
+type TaskExecutionRecordGetResponse struct {
+	Row *model.TaskExecutionRecord
+}
+
+type TaskExecutionRecordListResponse struct {
+	Rows []*model.TaskExecutionRecord
+}
+
+type TaskExecutionRecordMapResponse struct {
+	Rows map[int64]*model.TaskExecutionRecord
+}
+
+type TaskExecutionRecordCountResponse struct {
+	Count int
+}
+
+type TaskExecutionRecordPageReq struct {
+	Page *common.PageRequest
+	TaskExecutionRecordGetReq
+}
+
+type TaskExecutionRecordPageResponse struct {
+	Rows []*model.TaskExecutionRecord
+	Page *common.PageResponse
+}
+
+type TaskExecutionRecordExistsPeriodReq struct {
+	TaskID      int64
+	ScheduledAt time.Time
+}
+
+type TaskExecutionRecordExistsPeriodResponse struct {
+	Exists bool
+}
+
+type TaskExecutionRecordCreateReq struct {
+	Record *model.TaskExecutionRecord
+	Status schedulerenum.TaskExecutionStatus
+}
+
+type TaskExecutionRecordCreateResponse struct {
+	Row      *model.TaskExecutionRecord
+	Created  bool
+	Conflict bool
+}
+
+type TaskExecutionRecordHasUnexpiredRunningReq struct {
+	TaskID       int64
+	StartedAfter time.Time
+}
+
+type TaskExecutionRecordHasUnexpiredRunningResponse struct {
+	Exists bool
+}
+
+type TaskExecutionRecordMarkUnknownReq struct {
+	IDs        []int64
+	FinishedAt time.Time
+	LastError  string
+}
+
+type TaskExecutionRecordMarkUnknownResponse struct {
+	Rows []*model.TaskExecutionRecord
+}
+
+type TaskExecutionRecordMarkFinishedReq struct {
+	ID         int64
+	Status     schedulerenum.TaskExecutionStatus
+	FinishedAt time.Time
+	DurationMS int64
+	LastError  string
+}
+
+type TaskExecutionRecordMarkFinishedResponse struct {
+	Row     *model.TaskExecutionRecord
+	Updated bool
 }

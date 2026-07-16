@@ -3,7 +3,7 @@ package data
 import (
 	"bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
-	bbsnotifyv1 "common/proto/gen/bbs/v1/notify"
+	"common/proto/gen/common"
 	notifyv1 "common/proto/gen/notify/v1"
 	"context"
 )
@@ -18,25 +18,22 @@ func NewNotificationClient(notifyClient *rpc.NotifyClient) repo.NotificationClie
 	return &NotificationClient{notifyClient: notifyClient}
 }
 
-func (r *NotificationClient) ListNotifications(ctx context.Context, req *bbsnotifyv1.ListNotifications_Request) (*bbsnotifyv1.ListNotifications_Reply, error) {
-	userID, err := currentUserID(ctx)
+func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.ListNotificationsReq) (*repo.ListNotificationsResponse, error) {
+	listReq := &notifyv1.ListStationMessages_Request{UserId: req.UserID}
+	if req.Page != nil {
+		listReq.Page = &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}
+	}
+	reply, err := r.notifyClient.StationMessage.List(ctx, listReq)
 	if err != nil {
 		return nil, err
 	}
-	reply, err := r.notifyClient.StationMessage.List(ctx, &notifyv1.ListStationMessages_Request{
-		UserId: userID,
-		Page:   req.GetPage(),
-	})
-	if err != nil {
-		return nil, err
-	}
-	rows := make([]*bbsnotifyv1.Notification, 0, len(reply.GetRows()))
+	rows := make([]*repo.Notification, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
-		rows = append(rows, &bbsnotifyv1.Notification{
-			Id:         item.GetId(),
-			EventId:    item.GetEventId(),
-			ReceiverId: item.GetReceiverId(),
-			EventType:  item.GetEventType(),
+		rows = append(rows, &repo.Notification{
+			ID:         item.GetId(),
+			EventID:    item.GetEventId(),
+			ReceiverID: item.GetReceiverId(),
+			EventType:  int32(item.GetEventType()),
 			Title:      item.GetTitle(),
 			Content:    item.GetContent(),
 			ReadAt:     formatProtoTime(item.GetReadAt()),
@@ -44,32 +41,28 @@ func (r *NotificationClient) ListNotifications(ctx context.Context, req *bbsnoti
 			UpdatedAt:  formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
-	return &bbsnotifyv1.ListNotifications_Reply{Page: reply.GetPage(), Rows: rows}, nil
+	var page *repo.PageResponse
+	if reply.GetPage() != nil {
+		page = &repo.PageResponse{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+	}
+	return &repo.ListNotificationsResponse{Page: page, Rows: rows}, nil
 }
 
-func (r *NotificationClient) MarkReadNotification(ctx context.Context, req *bbsnotifyv1.MarkReadNotification_Request) (*bbsnotifyv1.MarkReadNotification_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
+func (r *NotificationClient) MarkReadNotification(ctx context.Context, req *repo.MarkReadNotificationReq) (*repo.MarkReadNotificationResponse, error) {
 	reply, err := r.notifyClient.StationMessage.MarkRead(ctx, &notifyv1.MarkReadStationMessage_Request{
-		UserId: userID,
-		Ids:    req.GetIds(),
+		UserId: req.UserID,
+		Ids:    req.IDs,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsnotifyv1.MarkReadNotification_Reply{Count: reply.GetCount()}, nil
+	return &repo.MarkReadNotificationResponse{Count: reply.GetCount()}, nil
 }
 
-func (r *NotificationClient) CountUnreadNotifications(ctx context.Context, req *bbsnotifyv1.CountUnreadNotifications_Request) (*bbsnotifyv1.CountUnreadNotifications_Reply, error) {
-	userID, err := currentUserID(ctx)
+func (r *NotificationClient) CountUnreadNotifications(ctx context.Context, req *repo.CountUnreadNotificationsReq) (*repo.CountUnreadNotificationsResponse, error) {
+	reply, err := r.notifyClient.StationMessage.CountUnread(ctx, &notifyv1.CountUnreadStationMessages_Request{UserId: req.UserID})
 	if err != nil {
 		return nil, err
 	}
-	reply, err := r.notifyClient.StationMessage.CountUnread(ctx, &notifyv1.CountUnreadStationMessages_Request{UserId: userID})
-	if err != nil {
-		return nil, err
-	}
-	return &bbsnotifyv1.CountUnreadNotifications_Reply{Count: reply.GetCount()}, nil
+	return &repo.CountUnreadNotificationsResponse{Count: reply.GetCount()}, nil
 }

@@ -3,103 +3,130 @@ syntax = "proto3";
 package common.api.app.user.v1;
 
 import "common/enums/language.proto";
-import "user/v1/model.proto";
+import "google/protobuf/timestamp.proto";
+import "user/v1/enum.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
 
 service AuthService {
-  rpc StartEmailRegistration(StartEmailRegistration.Request) returns (StartEmailRegistration.Reply) {} // 使用邮箱发起账号注册，成功后返回验证码令牌。
-  rpc VerifyEmailRegistration(VerifyEmailRegistration.Request) returns (VerifyEmailRegistration.Reply) {} // 校验邮箱注册验证码并创建账号。
-  rpc StartPhoneRegistration(StartPhoneRegistration.Request) returns (StartPhoneRegistration.Reply) {} // 使用手机号发起账号注册，成功后返回验证码令牌。
-  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Request) returns (VerifyPhoneRegistration.Reply) {} // 校验手机号注册验证码并创建账号。
-  rpc LoginByPassword(LoginByPassword.Request) returns (LoginByPassword.Reply) {} // 使用账号名、邮箱或手机号加密码登录。
-  rpc Logout(Logout.Request) returns (Logout.Reply) {} // 登出账号并清理令牌。
-  rpc ParseToken(ParseToken.Request) returns (ParseToken.Reply) {} // 解析登录令牌。
+  rpc StartEmailRegistration(StartEmailRegistration.Request) returns (StartEmailRegistration.Response) {} // 使用邮箱发起账号注册，成功后返回验证码令牌。
+  rpc VerifyEmailRegistration(VerifyEmailRegistration.Request) returns (VerifyEmailRegistration.Response) {} // 校验邮箱注册验证码并创建账号。
+  rpc StartPhoneRegistration(StartPhoneRegistration.Request) returns (StartPhoneRegistration.Response) {} // 使用手机号发起账号注册，成功后返回验证码令牌。
+  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Request) returns (VerifyPhoneRegistration.Response) {} // 校验手机号注册验证码并创建账号。
+  rpc LoginByPassword(LoginByPassword.Request) returns (LoginByPassword.Response) {} // 使用账号名、邮箱或手机号加密码登录。
+  rpc Logout(Logout.Request) returns (Logout.Response) {} // 登出账号并清理令牌。
+  rpc ParseToken(ParseToken.Request) returns (ParseToken.Response) {} // 解析登录令牌。
 }
 
 message StartEmailRegistration {
   message Request {
-    string email = 1;
-    string password = 2;
-    string name = 3;
-    optional string nickname = 4;
-  }
-  message Reply {
-    string code_token = 1;
-    string code = 2;
-  }
+      string email = 1;
+      string password = 2;
+      string name = 3;
+      optional string nickname = 4;
+    }
+  message Response {
+      string code_token = 1;
+      string code = 2;
+    }
 }
 
 message VerifyEmailRegistration {
   message Request {
-    string code = 1;
-    string code_token = 2;
-  }
-  message Reply {}
+      string code = 1;
+      string code_token = 2;
+    }
+  message Response {}
 }
 
 message StartPhoneRegistration {
   message Request {
-    string phone = 1;
-    string password = 2;
-    string name = 3;
-    optional string nickname = 4;
-  }
-  message Reply {
-    string code_token = 1;
-    string code = 2;
-  }
+      string phone = 1;
+      string password = 2;
+      string name = 3;
+      optional string nickname = 4;
+    }
+  message Response {
+      string code_token = 1;
+      string code = 2;
+    }
 }
 
 message VerifyPhoneRegistration {
   message Request {
-    string code = 1;
-    string code_token = 2;
-  }
-  message Reply {}
+      string code = 1;
+      string code_token = 2;
+    }
+  message Response {}
 }
 
 message LoginByPassword {
   message Request {
-    string account = 1;
-    string password = 2;
-    string ip = 3;
-    string country = 4;
-    string country_code = 5;
-    string province = 6;
-    string city = 7;
-    string isp = 8;
-    string user_agent = 9;
-    string device_id = 10;
-    string platform = 11;
-    string request_id = 12;
-  }
-  message Reply {
-    string token = 1;
-    Account account = 2;
-  }
+      string account = 1;
+      string password = 2;
+      string ip = 3;
+      string country = 4;
+      string country_code = 5;
+      string province = 6;
+      string city = 7;
+      string isp = 8;
+      string user_agent = 9;
+      string device_id = 10;
+      string platform = 11;
+      string request_id = 12;
+    }
+  message Response {
+
+    message Account {
+        AccountBasic basic = 1;
+        AccountContact contact = 2;
+      }
+
+    message AccountBasic {
+        int64 id = 1;
+        string name = 2;
+        optional string nickname = 3;
+        optional string url = 4;
+        optional string avatar_url = 5;
+        optional string introduction = 6;
+        MBTI mbti = 7;
+        AccountStatus status = 8;
+        optional int32 follow_count = 10;
+        optional int32 follower_count = 11;
+        google.protobuf.Timestamp created_at = 1000;
+        google.protobuf.Timestamp updated_at = 1001;
+      }
+
+    message AccountContact {
+        int64 user_id = 1;
+        optional string email = 2;
+        optional string phone = 3;
+      }
+      string token = 1;
+      Account account = 2;
+    }
 }
 
 message Logout {
   message Request {
-    string token = 1;
-  }
-  message Reply {}
-}
-
-message TokenUser {
-  int64 id = 1;
-  string name = 2;
-  string nickname = 3;
-  common.enums.Language language = 4;
-  string timezone = 5;
+      string token = 1;
+    }
+  message Response {}
 }
 
 message ParseToken {
   message Request {
-    string token = 1;
-  }
-  message Reply {
-    TokenUser user = 1;
-  }
+      string token = 1;
+    }
+  message Response {
+
+    message TokenUser {
+        int64 id = 1;
+        string name = 2;
+        string nickname = 3;
+        common.enums.Language language = 4;
+        string timezone = 5;
+      }
+      TokenUser user = 1;
+    }
 }

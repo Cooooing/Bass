@@ -62,11 +62,11 @@ func TestTaskLockRepoScheduleExclusiveAndRunningHeartbeat(t *testing.T) {
 		t.Fatalf("expected overlap decision, got %#v", overlapped)
 	}
 
-	ok, err := lockRepo.RegisterRunning(ctx, taskID, executionID, acquired.RunningToken, true, time.Minute)
+	registerResp, err := lockRepo.RegisterRunning(ctx, &bizrepo.TaskRunningLockReq{TaskID: taskID, ExecutionRecordID: executionID, RunningToken: acquired.RunningToken, Exclusive: true, TTL: time.Minute})
 	if err != nil {
 		t.Fatalf("RegisterRunning returned error: %v", err)
 	}
-	if !ok {
+	if !registerResp.OK {
 		t.Fatal("expected running registration to succeed")
 	}
 	value, err := redisClient.HGet(ctx, fmt.Sprintf(lockRepo.taskLockKeyFormat, taskID), "running:100").Result()
@@ -78,14 +78,14 @@ func TestTaskLockRepoScheduleExclusiveAndRunningHeartbeat(t *testing.T) {
 		t.Fatalf("expected exclusive field to keep token, value=%q err=%v", value, err)
 	}
 
-	ok, err = lockRepo.RefreshRunning(ctx, taskID, executionID, "wrong-token", true, time.Minute)
+	refreshResp, err := lockRepo.RefreshRunning(ctx, &bizrepo.TaskRunningLockReq{TaskID: taskID, ExecutionRecordID: executionID, RunningToken: "wrong-token", Exclusive: true, TTL: time.Minute})
 	if err != nil {
 		t.Fatalf("RefreshRunning wrong token returned error: %v", err)
 	}
-	if ok {
+	if refreshResp.OK {
 		t.Fatal("expected wrong running token refresh to fail")
 	}
-	if err = lockRepo.ReleaseRunning(ctx, taskID, executionID, "wrong-token", true); err != nil {
+	if _, err = lockRepo.ReleaseRunning(ctx, &bizrepo.TaskRunningLockReq{TaskID: taskID, ExecutionRecordID: executionID, RunningToken: "wrong-token", Exclusive: true}); err != nil {
 		t.Fatalf("ReleaseRunning wrong token returned error: %v", err)
 	}
 	value, err = redisClient.HGet(ctx, fmt.Sprintf(lockRepo.taskLockKeyFormat, taskID), lockRepo.exclusiveField).Result()
@@ -93,21 +93,21 @@ func TestTaskLockRepoScheduleExclusiveAndRunningHeartbeat(t *testing.T) {
 		t.Fatalf("expected exclusive field to keep original token, value=%q err=%v", value, err)
 	}
 
-	ok, err = lockRepo.RefreshRunning(ctx, taskID, executionID, acquired.RunningToken, true, time.Minute)
+	refreshResp, err = lockRepo.RefreshRunning(ctx, &bizrepo.TaskRunningLockReq{TaskID: taskID, ExecutionRecordID: executionID, RunningToken: acquired.RunningToken, Exclusive: true, TTL: time.Minute})
 	if err != nil {
 		t.Fatalf("RefreshRunning correct token returned error: %v", err)
 	}
-	if !ok {
+	if !refreshResp.OK {
 		t.Fatal("expected correct running token refresh to succeed")
 	}
-	running, err := lockRepo.MapRunning(ctx, taskID, []int64{executionID, 101})
+	runningResp, err := lockRepo.MapRunning(ctx, &bizrepo.TaskRunningMapReq{TaskID: taskID, ExecutionRecordIDs: []int64{executionID, 101}})
 	if err != nil {
 		t.Fatalf("MapRunning returned error: %v", err)
 	}
-	if !running[executionID] || running[101] {
-		t.Fatalf("unexpected running map: %#v", running)
+	if !runningResp.Rows[executionID] || runningResp.Rows[101] {
+		t.Fatalf("unexpected running map: %#v", runningResp.Rows)
 	}
-	if err = lockRepo.ReleaseRunning(ctx, taskID, executionID, acquired.RunningToken, true); err != nil {
+	if _, err = lockRepo.ReleaseRunning(ctx, &bizrepo.TaskRunningLockReq{TaskID: taskID, ExecutionRecordID: executionID, RunningToken: acquired.RunningToken, Exclusive: true}); err != nil {
 		t.Fatalf("ReleaseRunning correct token returned error: %v", err)
 	}
 	if exists, err := redisClient.HExists(ctx, fmt.Sprintf(lockRepo.taskLockKeyFormat, taskID), "running:100").Result(); err != nil || exists {

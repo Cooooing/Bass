@@ -3,7 +3,6 @@ syntax = "proto3";
 package common.api.app.bbs.v1.content;
 
 import "bbs/v1/content/enum.proto";
-import "bbs/v1/content/model.proto";
 import "common/common.proto";
 import "google/api/annotations.proto";
 
@@ -12,7 +11,7 @@ option go_package = "common/proto/gen/bbs/v1/content;content";
 // 内容板块接口。
 service DomainService {
   // 分页查询内容板块列表。
-  rpc List(ListDomains.Request) returns (ListDomains.Reply) {
+  rpc List(ListDomains.Request) returns (ListDomains.Response) {
     option (google.api.http) = {
       post: "/v1/content/domain/list"
       body: "*"
@@ -21,35 +20,50 @@ service DomainService {
 }
 
 // 内容板块查询条件。
-message DomainQuery {
-  // 板块 ID 列表。
-  repeated int64 ids = 1;
-  // 板块名称。
-  optional string name = 2;
-  // 板块描述。
-  optional string description = 3;
-  // 板块启停状态。
-  optional DomainStatus status = 4;
-  // 板块 URL。
-  optional string url = 5;
-  // 板块图标。
-  optional string icon = 6;
-  // 是否在导航中展示。
-  optional bool is_nav = 7;
-}
 
 // 分页查询内容板块列表。
 message ListDomains {
   message Request {
-    // 分页参数。
-    common.PageRequest page = 1;
-    // 查询条件。
-    DomainQuery query = 2;
-  }
-  message Reply {
-    // 分页结果。
-    common.PageReply page = 1;
-    // 内容板块列表。
-    repeated Domain rows = 2;
-  }
+
+    message DomainQuery {
+        // 板块 ID 列表。
+        repeated int64 ids = 1;
+        // 板块名称。
+        optional string name = 2;
+        // 板块描述。
+        optional string description = 3;
+        // 板块启停状态。
+        optional DomainStatus status = 4;
+        // 板块 URL。
+        optional string url = 5;
+        // 板块图标。
+        optional string icon = 6;
+        // 是否在导航中展示。
+        optional bool is_nav = 7;
+      }
+      // 分页参数。
+      .common.api.app.common.PageRequest page = 1;
+      // 查询条件。
+      DomainQuery query = 2;
+    }
+  message Response {
+
+    message Domain {
+        int64 id = 1; // 板块 ID
+        string name = 2; // 板块名称
+        optional string description = 3; // 板块描述
+        DomainStatus status = 4; // 板块启停状态
+        optional string url = 5; // 板块 URL
+        optional string icon = 6; // 板块图标
+        bool is_nav = 7; // 是否在导航中展示
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+      // 分页结果。
+      .common.api.app.common.PageResponse page = 1;
+      // 内容板块列表。
+      repeated Domain rows = 2;
+    }
 }

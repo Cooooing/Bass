@@ -41,21 +41,23 @@ func NewSchedulerRunner(logger *slog.Logger, conf *config.Bootstrap, taskRepo re
 func (r *SchedulerRunner) Start(ctx context.Context) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	r.cancel = cancel
-	tasks, err := r.taskRepo.List(runCtx, &repo.TaskGetReq{Enabled: new(true)})
+	tasksResp, err := r.taskRepo.List(runCtx, &repo.TaskGetReq{Enabled: new(true)})
 	if err != nil {
 		return err
 	}
-	for _, item := range tasks {
+	for _, item := range tasksResp.Rows {
 		r.registerTask(runCtx, item)
 	}
-	changedCh, err := r.taskEventBus.SubscribeTaskChanged(runCtx)
+	changedResp, err := r.taskEventBus.SubscribeTaskChanged(runCtx, &repo.SubscribeTaskChangedReq{})
 	if err != nil {
 		return err
 	}
-	canceledCh, err := r.taskEventBus.SubscribeExecutionCanceled(runCtx)
+	canceledResp, err := r.taskEventBus.SubscribeExecutionCanceled(runCtx, &repo.SubscribeExecutionCanceledReq{})
 	if err != nil {
 		return err
 	}
+	changedCh := changedResp.Messages
+	canceledCh := canceledResp.Messages
 	r.cron.Start()
 	go func() {
 		for {
@@ -66,17 +68,17 @@ func (r *SchedulerRunner) Start(ctx context.Context) error {
 				if !ok {
 					return
 				}
-				task, err := r.taskRepo.Get(runCtx, &repo.TaskGetReq{ID: &msg.TaskID})
+				taskResp, err := r.taskRepo.Get(runCtx, &repo.TaskGetReq{ID: &msg.TaskID})
 				if err != nil {
 					r.unregisterTask(runCtx, msg.TaskID)
 					continue
 				}
-				r.registerTask(runCtx, task)
+				r.registerTask(runCtx, taskResp.Row)
 			case msg, ok := <-canceledCh:
 				if !ok {
 					return
 				}
-				r.taskUsecase.CancelExecutionLocally(msg.ExecutionRecordID)
+				r.taskUsecase.CancelExecutionLocally(runCtx, &TaskCancelExecutionLocallyReq{ID: msg.ExecutionRecordID})
 			}
 		}
 	}()
@@ -93,7 +95,7 @@ func (r *SchedulerRunner) Stop(ctx context.Context) error {
 	}
 	stopRunningCtx, cancel := context.WithTimeout(ctx, 100*time.Millisecond)
 	defer cancel()
-	return r.taskUsecase.StopRunning(stopRunningCtx)
+	return r.taskUsecase.StopRunning(stopRunningCtx, &TaskStopRunningReq{})
 }
 
 func (r *SchedulerRunner) registerTask(ctx context.Context, task *model.Task) {
@@ -110,7 +112,7 @@ func (r *SchedulerRunner) registerTask(ctx context.Context, task *model.Task) {
 	}
 
 	entryID := r.cron.Schedule(schedule, cron.FuncJob(func() {
-		_, _ = r.taskUsecase.ScheduleExecution(ctx, task, time.Now().Truncate(time.Second), schedulerenum.TaskTriggerTypeSchedule)
+		_, _ = r.taskUsecase.ScheduleExecution(ctx, &TaskScheduleExecutionReq{Task: task, ScheduledAt: time.Now().Truncate(time.Second), TriggerType: schedulerenum.TaskTriggerTypeSchedule})
 	}))
 
 	r.mu.Lock()

@@ -28,13 +28,14 @@ func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterAccountServiceServer(gs, s)
 }
 
-func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Request) (*v1.GetAccount_Reply, error) {
+func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Request) (*v1.GetAccount_Response, error) {
 	req = util.OrDefault(req, &v1.GetAccount_Request{})
-	account, err := s.accountUsecase.GetByUserID(ctx, req.GetUserId())
+	res, err := s.accountUsecase.GetByUserID(ctx, &usecase.GetAccountByUserIDReq{UserID: req.GetUserId()})
 	if err != nil {
 		return nil, err
 	}
-	basic := &v1.AccountBasic{
+	account := res.Account
+	basic := &v1.GetAccount_Response_AccountBasic{
 		Id:            account.ID,
 		Name:          account.Name,
 		Nickname:      account.Nickname,
@@ -56,30 +57,31 @@ func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Request) (*
 	if account.UpdatedAt != nil {
 		basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 	}
-	replyAccount := &v1.Account{
+	replyAccount := &v1.GetAccount_Response_Account{
 		Basic: basic,
-		Contact: &v1.AccountContact{
+		Contact: &v1.GetAccount_Response_AccountContact{
 			UserId: account.ID,
 			Email:  account.Email,
 			Phone:  account.Phone,
 		},
 	}
-	return &v1.GetAccount_Reply{Account: replyAccount}, nil
+	return &v1.GetAccount_Response{Account: replyAccount}, nil
 }
 
-func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Request) (*v1.ListAccounts_Reply, error) {
+func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Request) (*v1.ListAccounts_Response, error) {
 	req = util.OrDefault(req, &v1.ListAccounts_Request{})
-	query := util.OrDefault(req.Query, &v1.AccountQuery{})
+	query := util.OrDefault(req.Query, &v1.ListAccounts_Request_AccountQuery{})
 	if len(query.UserIds) == 0 {
-		return &v1.ListAccounts_Reply{Rows: []*v1.Account{}}, nil
+		return &v1.ListAccounts_Response{Rows: []*v1.ListAccounts_Response_Account{}}, nil
 	}
-	accounts, err := s.accountUsecase.ListByUserIDs(ctx, query.UserIds)
+	res, err := s.accountUsecase.ListByUserIDs(ctx, &usecase.ListAccountsByUserIDsReq{UserIDs: query.UserIds})
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*v1.Account, 0, len(accounts))
+	accounts := res.Accounts
+	rows := make([]*v1.ListAccounts_Response_Account, 0, len(accounts))
 	for _, account := range accounts {
-		basic := &v1.AccountBasic{
+		basic := &v1.ListAccounts_Response_AccountBasic{
 			Id:            account.ID,
 			Name:          account.Name,
 			Nickname:      account.Nickname,
@@ -101,9 +103,9 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Request)
 		if account.UpdatedAt != nil {
 			basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 		}
-		replyAccount := &v1.Account{
+		replyAccount := &v1.ListAccounts_Response_Account{
 			Basic: basic,
-			Contact: &v1.AccountContact{
+			Contact: &v1.ListAccounts_Response_AccountContact{
 				UserId: account.ID,
 				Email:  account.Email,
 				Phone:  account.Phone,
@@ -111,22 +113,23 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Request)
 		}
 		rows = append(rows, replyAccount)
 	}
-	return &v1.ListAccounts_Reply{Rows: rows}, nil
+	return &v1.ListAccounts_Response{Rows: rows}, nil
 }
 
-func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Request) (*v1.MapAccounts_Reply, error) {
+func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Request) (*v1.MapAccounts_Response, error) {
 	req = util.OrDefault(req, &v1.MapAccounts_Request{})
-	query := util.OrDefault(req.Query, &v1.AccountQuery{})
+	query := util.OrDefault(req.Query, &v1.MapAccounts_Request_AccountQuery{})
 	if len(query.UserIds) == 0 {
-		return &v1.MapAccounts_Reply{Accounts: map[int64]*v1.Account{}}, nil
+		return &v1.MapAccounts_Response{Accounts: map[int64]*v1.MapAccounts_Response_Account{}}, nil
 	}
-	accounts, err := s.accountUsecase.MapByUserIDs(ctx, query.UserIds)
+	res, err := s.accountUsecase.MapByUserIDs(ctx, &usecase.MapAccountsByUserIDsReq{UserIDs: query.UserIds})
 	if err != nil {
 		return nil, err
 	}
-	rows := make(map[int64]*v1.Account, len(accounts))
+	accounts := res.Accounts
+	rows := make(map[int64]*v1.MapAccounts_Response_Account, len(accounts))
 	for userID, account := range accounts {
-		basic := &v1.AccountBasic{
+		basic := &v1.MapAccounts_Response_AccountBasic{
 			Id:            account.ID,
 			Name:          account.Name,
 			Nickname:      account.Nickname,
@@ -148,9 +151,9 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Request) (
 		if account.UpdatedAt != nil {
 			basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 		}
-		replyAccount := &v1.Account{
+		replyAccount := &v1.MapAccounts_Response_Account{
 			Basic: basic,
-			Contact: &v1.AccountContact{
+			Contact: &v1.MapAccounts_Response_AccountContact{
 				UserId: account.ID,
 				Email:  account.Email,
 				Phone:  account.Phone,
@@ -158,10 +161,10 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Request) (
 		}
 		rows[userID] = replyAccount
 	}
-	return &v1.MapAccounts_Reply{Accounts: rows}, nil
+	return &v1.MapAccounts_Response{Accounts: rows}, nil
 }
 
-func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfileAccount_Request) (*v1.UpdateProfileAccount_Reply, error) {
+func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfileAccount_Request) (*v1.UpdateProfileAccount_Response, error) {
 	req = util.OrDefault(req, &v1.UpdateProfileAccount_Request{})
 	var mbti *enum.MBTI
 	clearMBTI := false
@@ -176,7 +179,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 			mbti = new(value)
 		}
 	}
-	account, err := s.accountUsecase.UpdateProfile(ctx, &model.AccountProfileUpdate{
+	res, err := s.accountUsecase.UpdateProfile(ctx, &usecase.UpdateAccountProfileReq{Profile: &model.AccountProfileUpdate{
 		UserID:       req.GetUserId(),
 		AvatarURL:    req.AvatarUrl,
 		Nickname:     req.Nickname,
@@ -184,11 +187,12 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 		Introduction: req.Introduction,
 		Mbti:         mbti,
 		ClearMBTI:    clearMBTI,
-	})
+	}})
 	if err != nil {
 		return nil, err
 	}
-	basic := &v1.AccountBasic{
+	account := res.Account
+	basic := &v1.UpdateProfileAccount_Response_AccountBasic{
 		Id:            account.ID,
 		Name:          account.Name,
 		Nickname:      account.Nickname,
@@ -210,13 +214,13 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 	if account.UpdatedAt != nil {
 		basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 	}
-	return &v1.UpdateProfileAccount_Reply{Account: basic}, nil
+	return &v1.UpdateProfileAccount_Response{Account: basic}, nil
 }
 
-func (s *AccountService) Avatar(ctx context.Context, req *v1.AvatarAccount_Request) (*common.ImageReply, error) {
-	data, err := s.accountUsecase.Avatar(ctx, req.GetName())
+func (s *AccountService) Avatar(ctx context.Context, req *v1.AvatarAccount_Request) (*common.ImageResponse, error) {
+	res, err := s.accountUsecase.Avatar(ctx, &usecase.AvatarAccountReq{Name: req.GetName()})
 	if err != nil {
 		return nil, err
 	}
-	return &common.ImageReply{Data: data, ContentType: "image/png"}, nil
+	return &common.ImageResponse{Data: res.Data, ContentType: "image/png"}, nil
 }

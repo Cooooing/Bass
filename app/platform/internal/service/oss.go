@@ -6,9 +6,7 @@ import (
 	"common/proto/gen/common"
 	v1 "common/proto/gen/platform/v1"
 	"context"
-	"fmt"
 	"platform/internal/biz/model"
-	"platform/internal/biz/repo"
 	"platform/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -41,35 +39,47 @@ func (s *OssService) RegisterGrpc(gs *grpc.Server) {
 func (s *OssService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *OssService) GetUploadToken(ctx context.Context, req *v1.GetUploadTokenOss_Request) (*v1.GetUploadTokenOss_Reply, error) {
-	tokens, err := s.objectStorageUsecase.UploadToken(ctx, int(req.Num), req.GetUserId(), req.GetUserName())
+func (s *OssService) GetUploadToken(ctx context.Context, req *v1.GetUploadTokenOss_Request) (*v1.GetUploadTokenOss_Response, error) {
+	uploadTokenResponse, err := s.objectStorageUsecase.UploadToken(ctx, &usecase.UploadTokenReq{
+		Num:      int(req.Num),
+		UserID:   req.GetUserId(),
+		UserName: req.GetUserName(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	uploadTokens := make([]*v1.UploadToken, 0, len(tokens))
+	tokens := uploadTokenResponse.Rows
+	uploadTokens := make([]*v1.GetUploadTokenOss_Response_UploadToken, 0, len(tokens))
 	for _, token := range tokens {
-		uploadTokens = append(uploadTokens, &v1.UploadToken{
+		uploadTokens = append(uploadTokens, &v1.GetUploadTokenOss_Response_UploadToken{
 			Key:   token.Key,
 			Token: token.Token,
 		})
 	}
-	return &v1.GetUploadTokenOss_Reply{
+	return &v1.GetUploadTokenOss_Response{
 		UploadToken: uploadTokens,
 	}, nil
 }
 
-func (s *OssService) Audit(ctx context.Context, req *v1.AuditOss_Request) (*v1.AuditOss_Reply, error) {
-	err := s.objectStorageUsecase.UpdateAudit(ctx, req.Key, req.Status, req.Reason, req.GetUserId(), req.GetUserName())
+func (s *OssService) Audit(ctx context.Context, req *v1.AuditOss_Request) (*v1.AuditOss_Response, error) {
+	err := s.objectStorageUsecase.UpdateAudit(ctx, &usecase.UpdateAuditReq{
+		Key:      req.Key,
+		Enable:   req.Status,
+		Reason:   req.Reason,
+		UserID:   req.GetUserId(),
+		UserName: req.GetUserName(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.AuditOss_Reply{}, nil
+	return &v1.AuditOss_Response{}, nil
 }
 
-func (s *OssService) List(ctx context.Context, req *v1.ListOss_Request) (*v1.ListOss_Reply, error) {
+func (s *OssService) List(ctx context.Context, req *v1.ListOss_Request) (*v1.ListOss_Response, error) {
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
-	req.Query = util.OrDefault(req.Query, &v1.OssQueryParams{})
-	items, page, err := s.objectStorageUsecase.Page(ctx, req.Page, &repo.ObjectStorageGetReq{
+	req.Query = util.OrDefault(req.Query, &v1.ListOss_Request_OssQueryParams{})
+	pageResponse, err := s.objectStorageUsecase.Page(ctx, &usecase.ObjectStoragePageReq{
+		Page:          req.Page,
 		Provider:      req.Query.Provider,
 		Bucket:        req.Query.Bucket,
 		Key:           req.Query.Key,
@@ -81,9 +91,10 @@ func (s *OssService) List(ctx context.Context, req *v1.ListOss_Request) (*v1.Lis
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*v1.Oss, 0, len(items))
+	items := pageResponse.Rows
+	rows := make([]*v1.ListOss_Response_Oss, 0, len(items))
 	for _, item := range items {
-		row := &v1.Oss{
+		row := &v1.ListOss_Response_Oss{
 			CreatedAt:          timestamppb.New(*item.CreatedAt),
 			UpdatedAt:          timestamppb.New(*item.UpdatedAt),
 			Id:                 item.ID,
@@ -104,36 +115,36 @@ func (s *OssService) List(ctx context.Context, req *v1.ListOss_Request) (*v1.Lis
 		}
 		rows = append(rows, row)
 	}
-	return &v1.ListOss_Reply{
-		Page: page,
+	return &v1.ListOss_Response{
+		Page: pageResponse.Page,
 		Rows: rows,
 	}, nil
 }
 
-func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploadCallbackOss_Request) (*v1.QiniuUploadCallbackOss_Reply, error) {
-	opts := protojson.MarshalOptions{
-		EmitUnpopulated: true,
-	}
-	bytes, err := opts.Marshal(req)
-	if err != nil {
-		return nil, err
-	}
-	s.log.Info(fmt.Sprintf("qiniu upload callback: %s", string(bytes)))
+func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploadCallbackOss_Request) (*v1.QiniuUploadCallbackOss_Response, error) {
+	s.log.Info("qiniu upload callback",
+		"bucket", req.GetBucket(),
+		"key", req.GetKey(),
+		"mime_type", req.GetMimeType(),
+		"size", req.GetSize(),
+		"upload_by", req.GetUploadBy(),
+	)
 
-	err = s.objectStorageUsecase.QiniuUploadCallback(ctx, &model.ObjectStorage{
-		Provider:     constant.Qiniu.String(),
-		Bucket:       req.Bucket,
-		Key:          req.Key,
-		MimeType:     req.MimeType,
-		Size:         req.Size,
-		Hash:         req.Hash,
-		UploadBy:     req.UploadBy,
-		UploadByName: req.UploadByName,
+	err := s.objectStorageUsecase.QiniuUploadCallback(ctx, &usecase.QiniuUploadCallbackReq{
+		ObjectStorage: &model.ObjectStorage{
+			Provider:     constant.Qiniu.String(),
+			Bucket:       req.Bucket,
+			Key:          req.Key,
+			MimeType:     req.MimeType,
+			Size:         req.Size,
+			Hash:         req.Hash,
+			UploadBy:     req.UploadBy,
+			UploadByName: req.UploadByName,
+		},
 	})
-	return &v1.QiniuUploadCallbackOss_Reply{}, err
+	return &v1.QiniuUploadCallbackOss_Response{}, err
 }
-
-func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.QiniuIncrementAuditCallbackOss_Request) (*v1.QiniuIncrementAuditCallbackOss_Reply, error) {
+func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.QiniuIncrementAuditCallbackOss_Request) (*v1.QiniuIncrementAuditCallbackOss_Response, error) {
 	opts := protojson.MarshalOptions{
 		EmitUnpopulated: true,
 	}
@@ -141,12 +152,24 @@ func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.Qi
 	if err != nil {
 		return nil, err
 	}
-	s.log.Info(fmt.Sprintf("qiniu increment audit callback: %s", string(bytes)))
-
-	suggestion := req.Items[0].Result.Result.Suggestion
-	if suggestion == "block" {
-		err := s.objectStorageUsecase.QiniuIncrementAuditCallback(ctx, req.InputKey, string(bytes), true)
-		return &v1.QiniuIncrementAuditCallbackOss_Reply{}, err
+	itemsCount := len(req.GetItems())
+	suggestion := ""
+	if itemsCount > 0 && req.GetItems()[0].GetResult() != nil && req.GetItems()[0].GetResult().GetResult() != nil {
+		suggestion = req.GetItems()[0].GetResult().GetResult().GetSuggestion()
 	}
-	return &v1.QiniuIncrementAuditCallbackOss_Reply{}, err
+	s.log.Info("qiniu increment audit callback",
+		"input_key", req.GetInputKey(),
+		"items_count", itemsCount,
+		"suggestion", suggestion,
+	)
+
+	if suggestion == "block" {
+		err := s.objectStorageUsecase.QiniuIncrementAuditCallback(ctx, &usecase.QiniuIncrementAuditCallbackReq{
+			Key:     req.InputKey,
+			Reply:   string(bytes),
+			Blocked: true,
+		})
+		return &v1.QiniuIncrementAuditCallbackOss_Response{}, err
+	}
+	return &v1.QiniuIncrementAuditCallbackOss_Response{}, err
 }

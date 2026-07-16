@@ -83,7 +83,7 @@ return 0
 	}
 }
 
-func (r *TaskLockRepo) TryAcquireSchedule(ctx context.Context, req *bizrepo.TaskScheduleAcquireReq) (*bizrepo.TaskScheduleAcquireResult, error) {
+func (r *TaskLockRepo) TryAcquireSchedule(ctx context.Context, req *bizrepo.TaskScheduleAcquireReq) (*bizrepo.TaskScheduleAcquireResponse, error) {
 	if req == nil {
 		return nil, fmt.Errorf("scheduler task schedule acquire request is nil")
 	}
@@ -115,97 +115,100 @@ func (r *TaskLockRepo) TryAcquireSchedule(ctx context.Context, req *bizrepo.Task
 	if decision != schedulerenum.TaskScheduleDecisionRun {
 		runningToken = ""
 	}
-	return &bizrepo.TaskScheduleAcquireResult{
+	return &bizrepo.TaskScheduleAcquireResponse{
 		Decision:     decision,
 		RunningToken: runningToken,
 	}, nil
 }
 
-func (r *TaskLockRepo) RegisterRunning(ctx context.Context, taskID int64, executionRecordID int64, runningToken string, exclusive bool, ttl time.Duration) (bool, error) {
-	if runningToken == "" || executionRecordID == 0 {
-		return false, nil
+func (r *TaskLockRepo) RegisterRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) (*bizrepo.TaskRunningLockResponse, error) {
+	if req.RunningToken == "" || req.ExecutionRecordID == 0 {
+		return &bizrepo.TaskRunningLockResponse{}, nil
 	}
 	exclusiveValue := "0"
-	if exclusive {
+	if req.Exclusive {
 		exclusiveValue = "1"
 	}
 	result, err := r.redisClient.Client.Eval(
 		ctx,
 		r.registerRunningScript,
-		[]string{fmt.Sprintf(r.taskLockKeyFormat, taskID)},
+		[]string{fmt.Sprintf(r.taskLockKeyFormat, req.TaskID)},
 		r.exclusiveField,
-		"running:"+strconv.FormatInt(executionRecordID, 10),
-		runningToken,
-		int64(math.Ceil(ttl.Seconds())),
+		"running:"+strconv.FormatInt(req.ExecutionRecordID, 10),
+		req.RunningToken,
+		int64(math.Ceil(req.TTL.Seconds())),
 		exclusiveValue,
 	).Int64()
 	if err != nil {
-		return false, err
+		return nil, err
 	}
-	return result == 1, nil
+	return &bizrepo.TaskRunningLockResponse{OK: result == 1}, nil
 }
 
-func (r *TaskLockRepo) RefreshRunning(ctx context.Context, taskID int64, executionRecordID int64, runningToken string, exclusive bool, ttl time.Duration) (bool, error) {
-	if runningToken == "" || executionRecordID == 0 {
-		return false, nil
+func (r *TaskLockRepo) RefreshRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) (*bizrepo.TaskRunningLockResponse, error) {
+	if req.RunningToken == "" || req.ExecutionRecordID == 0 {
+		return &bizrepo.TaskRunningLockResponse{}, nil
 	}
 	exclusiveValue := "0"
-	if exclusive {
+	if req.Exclusive {
 		exclusiveValue = "1"
 	}
 	result, err := r.redisClient.Client.Eval(
 		ctx,
 		r.refreshRunningScript,
-		[]string{fmt.Sprintf(r.taskLockKeyFormat, taskID)},
+		[]string{fmt.Sprintf(r.taskLockKeyFormat, req.TaskID)},
 		r.exclusiveField,
-		"running:"+strconv.FormatInt(executionRecordID, 10),
-		runningToken,
-		int64(math.Ceil(ttl.Seconds())),
+		"running:"+strconv.FormatInt(req.ExecutionRecordID, 10),
+		req.RunningToken,
+		int64(math.Ceil(req.TTL.Seconds())),
 		exclusiveValue,
 	).Int64()
 	if err != nil {
-		return false, err
+		return nil, err
 	}
-	return result == 1, nil
+	return &bizrepo.TaskRunningLockResponse{OK: result == 1}, nil
 }
 
-func (r *TaskLockRepo) ReleaseRunning(ctx context.Context, taskID int64, executionRecordID int64, runningToken string, exclusive bool) error {
-	if runningToken == "" {
-		return nil
+func (r *TaskLockRepo) ReleaseRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) (*bizrepo.TaskRunningReleaseResponse, error) {
+	if req.RunningToken == "" {
+		return &bizrepo.TaskRunningReleaseResponse{}, nil
 	}
 	exclusiveValue := "0"
-	if exclusive {
+	if req.Exclusive {
 		exclusiveValue = "1"
 	}
-	return r.redisClient.Client.Eval(
+	if err := r.redisClient.Client.Eval(
 		ctx,
 		r.releaseRunningScript,
-		[]string{fmt.Sprintf(r.taskLockKeyFormat, taskID)},
+		[]string{fmt.Sprintf(r.taskLockKeyFormat, req.TaskID)},
 		r.exclusiveField,
-		"running:"+strconv.FormatInt(executionRecordID, 10),
-		runningToken,
+		"running:"+strconv.FormatInt(req.ExecutionRecordID, 10),
+		req.RunningToken,
 		exclusiveValue,
-	).Err()
+	).Err(); err != nil {
+		return nil, err
+	}
+	return &bizrepo.TaskRunningReleaseResponse{}, nil
 }
 
-func (r *TaskLockRepo) MapRunning(ctx context.Context, taskID int64, executionRecordIDs []int64) (map[int64]bool, error) {
-	result := make(map[int64]bool, len(executionRecordIDs))
-	if len(executionRecordIDs) == 0 {
-		return result, nil
+func (r *TaskLockRepo) MapRunning(ctx context.Context, req *bizrepo.TaskRunningMapReq) (*bizrepo.TaskRunningMapResponse, error) {
+	result := make(map[int64]bool, len(req.ExecutionRecordIDs))
+	if len(req.ExecutionRecordIDs) == 0 {
+		return &bizrepo.TaskRunningMapResponse{Rows: result}, nil
 	}
-	fields := make([]string, 0, len(executionRecordIDs))
-	for _, id := range executionRecordIDs {
+	fields := make([]string, 0, len(req.ExecutionRecordIDs))
+	for _, id := range req.ExecutionRecordIDs {
 		result[id] = false
 		fields = append(fields, "running:"+strconv.FormatInt(id, 10))
 	}
-	values, err := r.redisClient.Client.HMGet(ctx, fmt.Sprintf(r.taskLockKeyFormat, taskID), fields...).Result()
+	values, err := r.redisClient.Client.HMGet(ctx, fmt.Sprintf(r.taskLockKeyFormat, req.TaskID), fields...).Result()
 	if err != nil {
 		return nil, err
 	}
 	for i, value := range values {
 		if value != nil {
-			result[executionRecordIDs[i]] = true
+			result[req.ExecutionRecordIDs[i]] = true
 		}
 	}
-	return result, nil
+	return &bizrepo.TaskRunningMapResponse{Rows: result}, nil
 }

@@ -27,36 +27,39 @@ func (s *RelationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterRelationServiceServer(gs, s)
 }
 
-func (s *RelationService) Follow(ctx context.Context, req *v1.FollowRelation_Request) (*v1.FollowRelation_Reply, error) {
-	err := s.relationUsecase.Follow(ctx, req.GetActorId(), req.GetTargetId())
-	return &v1.FollowRelation_Reply{}, err
+func (s *RelationService) Follow(ctx context.Context, req *v1.FollowRelation_Request) (*v1.FollowRelation_Response, error) {
+	err := s.relationUsecase.Follow(ctx, &usecase.FollowRelationReq{ActorID: req.GetActorId(), TargetID: req.GetTargetId()})
+	return &v1.FollowRelation_Response{}, err
 }
 
-func (s *RelationService) Unfollow(ctx context.Context, req *v1.UnfollowRelation_Request) (*v1.UnfollowRelation_Reply, error) {
-	err := s.relationUsecase.Unfollow(ctx, req.GetActorId(), req.GetTargetId())
-	return &v1.UnfollowRelation_Reply{}, err
+func (s *RelationService) Unfollow(ctx context.Context, req *v1.UnfollowRelation_Request) (*v1.UnfollowRelation_Response, error) {
+	err := s.relationUsecase.Unfollow(ctx, &usecase.UnfollowRelationReq{ActorID: req.GetActorId(), TargetID: req.GetTargetId()})
+	return &v1.UnfollowRelation_Response{}, err
 }
 
-func (s *RelationService) Block(ctx context.Context, req *v1.BlockRelation_Request) (*v1.BlockRelation_Reply, error) {
-	err := s.relationUsecase.Block(ctx, req.GetActorId(), req.GetTargetId())
-	return &v1.BlockRelation_Reply{}, err
+func (s *RelationService) Block(ctx context.Context, req *v1.BlockRelation_Request) (*v1.BlockRelation_Response, error) {
+	err := s.relationUsecase.Block(ctx, &usecase.BlockRelationReq{ActorID: req.GetActorId(), TargetID: req.GetTargetId()})
+	return &v1.BlockRelation_Response{}, err
 }
 
-func (s *RelationService) Unblock(ctx context.Context, req *v1.UnblockRelation_Request) (*v1.UnblockRelation_Reply, error) {
-	err := s.relationUsecase.Unblock(ctx, req.GetActorId(), req.GetTargetId())
-	return &v1.UnblockRelation_Reply{}, err
+func (s *RelationService) Unblock(ctx context.Context, req *v1.UnblockRelation_Request) (*v1.UnblockRelation_Response, error) {
+	err := s.relationUsecase.Unblock(ctx, &usecase.UnblockRelationReq{ActorID: req.GetActorId(), TargetID: req.GetTargetId()})
+	return &v1.UnblockRelation_Response{}, err
 }
 
-func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowingRelations_Request) (*v1.ListFollowingRelations_Reply, error) {
+func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowingRelations_Request) (*v1.ListFollowingRelations_Response, error) {
 	req = util.OrDefault(req, &v1.ListFollowingRelations_Request{})
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
-	rows, page, err := s.relationUsecase.ListFollowing(ctx, req.Page, req.GetUserId())
+	res, err := s.relationUsecase.ListFollowing(ctx, &usecase.ListFollowingRelationsReq{
+		Page:    usecase.RelationPageReq{Page: req.Page.GetPage(), Size: req.Page.GetSize()},
+		ActorID: req.GetUserId(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	replyRows := make([]*v1.Relation, 0, len(rows))
-	for _, row := range rows {
-		reply := &v1.Relation{Id: row.ID, Type: enum.RelationTypeMap.MustToProto(row.Type), ActorId: row.ActorID, TargetId: row.TargetID}
+	replyRows := make([]*v1.ListFollowingRelations_Response_Relation, 0, len(res.Rows))
+	for _, row := range res.Rows {
+		reply := &v1.ListFollowingRelations_Response_Relation{Id: row.ID, Type: enum.RelationTypeMap.MustToProto(row.Type), ActorId: row.ActorID, TargetId: row.TargetID}
 		if row.CreatedAt != nil {
 			reply.CreatedAt = timestamppb.New(*row.CreatedAt)
 		}
@@ -65,20 +68,23 @@ func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowi
 		}
 		replyRows = append(replyRows, reply)
 	}
-	return &v1.ListFollowingRelations_Reply{Page: page, Rows: replyRows}, nil
+	return &v1.ListFollowingRelations_Response{Page: &common.PageResponse{Total: res.Page.Total, Page: res.Page.Page, Size: res.Page.Size}, Rows: replyRows}, nil
 }
 
-func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowersRelations_Request) (*v1.ListFollowersRelations_Reply, error) {
+func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowersRelations_Request) (*v1.ListFollowersRelations_Response, error) {
 	req = util.OrDefault(req, &v1.ListFollowersRelations_Request{})
 	targetID := req.GetUserId()
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
-	rows, page, err := s.relationUsecase.ListFollowers(ctx, req.Page, targetID)
+	res, err := s.relationUsecase.ListFollowers(ctx, &usecase.ListFollowersRelationsReq{
+		Page:     usecase.RelationPageReq{Page: req.Page.GetPage(), Size: req.Page.GetSize()},
+		TargetID: targetID,
+	})
 	if err != nil {
 		return nil, err
 	}
-	replyRows := make([]*v1.Relation, 0, len(rows))
-	for _, row := range rows {
-		reply := &v1.Relation{Id: row.ID, Type: enum.RelationTypeMap.MustToProto(row.Type), ActorId: row.ActorID, TargetId: row.TargetID}
+	replyRows := make([]*v1.ListFollowersRelations_Response_Relation, 0, len(res.Rows))
+	for _, row := range res.Rows {
+		reply := &v1.ListFollowersRelations_Response_Relation{Id: row.ID, Type: enum.RelationTypeMap.MustToProto(row.Type), ActorId: row.ActorID, TargetId: row.TargetID}
 		if row.CreatedAt != nil {
 			reply.CreatedAt = timestamppb.New(*row.CreatedAt)
 		}
@@ -87,19 +93,22 @@ func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowe
 		}
 		replyRows = append(replyRows, reply)
 	}
-	return &v1.ListFollowersRelations_Reply{Page: page, Rows: replyRows}, nil
+	return &v1.ListFollowersRelations_Response{Page: &common.PageResponse{Total: res.Page.Total, Page: res.Page.Page, Size: res.Page.Size}, Rows: replyRows}, nil
 }
 
-func (s *RelationService) ListBlocked(ctx context.Context, req *v1.ListBlockedRelations_Request) (*v1.ListBlockedRelations_Reply, error) {
+func (s *RelationService) ListBlocked(ctx context.Context, req *v1.ListBlockedRelations_Request) (*v1.ListBlockedRelations_Response, error) {
 	req = util.OrDefault(req, &v1.ListBlockedRelations_Request{})
 	req.Page = util.OrDefault(req.Page, &common.PageRequest{})
-	rows, page, err := s.relationUsecase.ListBlocked(ctx, req.Page, req.GetUserId())
+	res, err := s.relationUsecase.ListBlocked(ctx, &usecase.ListBlockedRelationsReq{
+		Page:    usecase.RelationPageReq{Page: req.Page.GetPage(), Size: req.Page.GetSize()},
+		ActorID: req.GetUserId(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	replyRows := make([]*v1.Relation, 0, len(rows))
-	for _, row := range rows {
-		reply := &v1.Relation{Id: row.ID, Type: enum.RelationTypeMap.MustToProto(row.Type), ActorId: row.ActorID, TargetId: row.TargetID}
+	replyRows := make([]*v1.ListBlockedRelations_Response_Relation, 0, len(res.Rows))
+	for _, row := range res.Rows {
+		reply := &v1.ListBlockedRelations_Response_Relation{Id: row.ID, Type: enum.RelationTypeMap.MustToProto(row.Type), ActorId: row.ActorID, TargetId: row.TargetID}
 		if row.CreatedAt != nil {
 			reply.CreatedAt = timestamppb.New(*row.CreatedAt)
 		}
@@ -108,21 +117,21 @@ func (s *RelationService) ListBlocked(ctx context.Context, req *v1.ListBlockedRe
 		}
 		replyRows = append(replyRows, reply)
 	}
-	return &v1.ListBlockedRelations_Reply{Page: page, Rows: replyRows}, nil
+	return &v1.ListBlockedRelations_Response{Page: &common.PageResponse{Total: res.Page.Total, Page: res.Page.Page, Size: res.Page.Size}, Rows: replyRows}, nil
 }
 
-func (s *RelationService) MapStatus(ctx context.Context, req *v1.MapRelationStatuses_Request) (*v1.MapRelationStatuses_Reply, error) {
+func (s *RelationService) MapStatus(ctx context.Context, req *v1.MapRelationStatuses_Request) (*v1.MapRelationStatuses_Response, error) {
 	req = util.OrDefault(req, &v1.MapRelationStatuses_Request{})
-	rows, err := s.relationUsecase.MapStatus(ctx, req.GetActorId(), req.TargetIds)
+	res, err := s.relationUsecase.MapStatus(ctx, &usecase.MapRelationStatusReq{ActorID: req.GetActorId(), TargetIDs: req.TargetIds})
 	if err != nil {
 		return nil, err
 	}
-	statuses := make(map[int64]*v1.RelationStatus, len(rows))
-	for targetID, row := range rows {
+	statuses := make(map[int64]*v1.MapRelationStatuses_Response_RelationStatus, len(res.Statuses))
+	for targetID, row := range res.Statuses {
 		if row == nil {
 			continue
 		}
-		statuses[targetID] = &v1.RelationStatus{
+		statuses[targetID] = &v1.MapRelationStatuses_Response_RelationStatus{
 			TargetId:   row.TargetID,
 			Following:  row.Following,
 			FollowedBy: row.FollowedBy,
@@ -130,5 +139,5 @@ func (s *RelationService) MapStatus(ctx context.Context, req *v1.MapRelationStat
 			BlockedBy:  row.BlockedBy,
 		}
 	}
-	return &v1.MapRelationStatuses_Reply{Statuses: statuses}, nil
+	return &v1.MapRelationStatuses_Response{Statuses: statuses}, nil
 }

@@ -3,7 +3,7 @@ package data
 import (
 	"bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
-	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	"common/proto/gen/common"
 	contentv1 "common/proto/gen/content/v1"
 	"context"
 )
@@ -18,23 +18,19 @@ func NewContentTagClient(contentClient *rpc.ContentClient) repo.ContentTagClient
 	return &ContentTagClient{contentClient: contentClient}
 }
 
-func (r *ContentTagClient) CreateTag(ctx context.Context, req *bbscontentv1.CreateTag_Request) (*bbscontentv1.CreateTag_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
-	tag := req.GetTag()
+func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq) (*repo.CreateTagResponse, error) {
+	tag := req.Tag
 	var status *contentv1.TagStatus
 	if tag.Status != nil {
-		status = new(contentv1.TagStatus(tag.GetStatus()))
+		status = new(contentv1.TagStatus(*tag.Status))
 	}
 	reply, err := r.contentClient.Tag.BatchCreate(ctx, &contentv1.BatchCreateTags_Request{
-		UserId: userID,
+		UserId: req.UserID,
 		Tags: []*contentv1.BatchCreateTags_Request_Tag{
 			{
-				Name:        tag.GetName(),
+				Name:        tag.Name,
 				Description: tag.Description,
-				DomainId:    tag.DomainId,
+				DomainId:    tag.DomainID,
 				Status:      status,
 			},
 		},
@@ -44,15 +40,15 @@ func (r *ContentTagClient) CreateTag(ctx context.Context, req *bbscontentv1.Crea
 	}
 	rows := reply.GetRows()
 	if len(rows) == 0 {
-		return &bbscontentv1.CreateTag_Reply{}, nil
+		return &repo.CreateTagResponse{}, nil
 	}
 	item := rows[0]
-	return &bbscontentv1.CreateTag_Reply{Tag: &bbscontentv1.Tag{
-		Id:          item.GetId(),
+	return &repo.CreateTagResponse{Tag: &repo.Tag{
+		ID:          item.GetId(),
 		Name:        item.GetName(),
 		Description: item.Description,
-		DomainId:    item.DomainId,
-		Status:      new(bbscontentv1.TagStatus(item.GetStatus())),
+		DomainID:    item.DomainId,
+		Status:      new(int32(item.GetStatus())),
 		CreatedBy:   item.CreatedBy,
 		UpdatedBy:   item.UpdatedBy,
 		CreatedAt:   formatProtoTime(item.GetCreatedAt()),
@@ -60,23 +56,19 @@ func (r *ContentTagClient) CreateTag(ctx context.Context, req *bbscontentv1.Crea
 	}}, nil
 }
 
-func (r *ContentTagClient) UpdateTag(ctx context.Context, req *bbscontentv1.UpdateTag_Request) (*bbscontentv1.UpdateTag_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
-	tag := req.GetTag()
+func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq) (*repo.UpdateTagResponse, error) {
+	tag := req.Tag
 	var status *contentv1.TagStatus
 	if tag.Status != nil {
-		status = new(contentv1.TagStatus(tag.GetStatus()))
+		status = new(contentv1.TagStatus(*tag.Status))
 	}
 	reply, err := r.contentClient.Tag.Update(ctx, &contentv1.UpdateTag_Request{
-		TagId:  req.GetTagId(),
-		UserId: userID,
+		TagId:  req.TagID,
+		UserId: req.UserID,
 		Tag: &contentv1.UpdateTag_Request_Tag{
-			Name:        tag.GetName(),
+			Name:        tag.Name,
 			Description: tag.Description,
-			DomainId:    tag.DomainId,
+			DomainId:    tag.DomainID,
 			Status:      status,
 		},
 	})
@@ -84,12 +76,12 @@ func (r *ContentTagClient) UpdateTag(ctx context.Context, req *bbscontentv1.Upda
 		return nil, err
 	}
 	item := reply.GetTag()
-	return &bbscontentv1.UpdateTag_Reply{Tag: &bbscontentv1.Tag{
-		Id:          item.GetId(),
+	return &repo.UpdateTagResponse{Tag: &repo.Tag{
+		ID:          item.GetId(),
 		Name:        item.GetName(),
 		Description: item.Description,
-		DomainId:    item.DomainId,
-		Status:      new(bbscontentv1.TagStatus(item.GetStatus())),
+		DomainID:    item.DomainId,
+		Status:      new(int32(item.GetStatus())),
 		CreatedBy:   item.CreatedBy,
 		UpdatedBy:   item.UpdatedBy,
 		CreatedAt:   formatProtoTime(item.GetCreatedAt()),
@@ -97,41 +89,49 @@ func (r *ContentTagClient) UpdateTag(ctx context.Context, req *bbscontentv1.Upda
 	}}, nil
 }
 
-func (r *ContentTagClient) ListTags(ctx context.Context, req *bbscontentv1.ListTags_Request) (*bbscontentv1.ListTags_Reply, error) {
-	query := req.GetQuery()
+func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) (*repo.ListTagsResponse, error) {
+	query := req.Query
 	if query == nil {
-		query = &bbscontentv1.TagQuery{}
+		query = &repo.TagQuery{}
 	}
-	contentQuery := &contentv1.TagQueryParams{
-		Ids:         query.GetIds(),
+	contentQuery := &contentv1.PageTags_Request_TagQueryParams{
+		Ids:         query.IDs,
 		Name:        query.Name,
-		Names:       query.GetNames(),
+		Names:       query.Names,
 		Description: query.Description,
-		DomainId:    query.DomainId,
+		DomainId:    query.DomainID,
 	}
 	if query.Status != nil {
 		contentQuery.Status = new(contentv1.TagStatus(*query.Status))
 	}
+	var pageReq *common.PageRequest
+	if req.Page != nil {
+		pageReq = &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}
+	}
 	reply, err := r.contentClient.Tag.Page(ctx, &contentv1.PageTags_Request{
-		Page:  req.Page,
+		Page:  pageReq,
 		Query: contentQuery,
 	})
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*bbscontentv1.Tag, 0, len(reply.GetRows()))
+	rows := make([]*repo.Tag, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
-		rows = append(rows, &bbscontentv1.Tag{
-			Id:          item.GetId(),
+		rows = append(rows, &repo.Tag{
+			ID:          item.GetId(),
 			Name:        item.GetName(),
 			Description: item.Description,
-			DomainId:    item.DomainId,
-			Status:      new(bbscontentv1.TagStatus(item.GetStatus())),
+			DomainID:    item.DomainId,
+			Status:      new(int32(item.GetStatus())),
 			CreatedBy:   item.CreatedBy,
 			UpdatedBy:   item.UpdatedBy,
 			CreatedAt:   formatProtoTime(item.GetCreatedAt()),
 			UpdatedAt:   formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
-	return &bbscontentv1.ListTags_Reply{Page: reply.GetPage(), Rows: rows}, nil
+	var page *repo.PageResponse
+	if reply.GetPage() != nil {
+		page = &repo.PageResponse{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+	}
+	return &repo.ListTagsResponse{Page: page, Rows: rows}, nil
 }

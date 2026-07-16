@@ -1,13 +1,14 @@
 package usecase
 
 import (
+	"common/proto/gen/common"
 	"context"
 	"fmt"
 	"time"
 
 	commonClient "common/pkg/client"
 	commonenum "common/pkg/enum"
-	"common/proto/gen/common"
+	"notify/internal/biz/base"
 	"notify/internal/biz/repo"
 	"notify/internal/config"
 
@@ -65,11 +66,11 @@ func (s *InboxDeadLetterScanner) Stop(_ context.Context) error {
 
 func (s *InboxDeadLetterScanner) scan(ctx context.Context) error {
 	status := commonenum.InboxEventStatusDead
-	rows, _, err := s.inboxRepo.Page(ctx, &common.PageRequest{Page: 1, Size: inboxDeadLetterScanLimit}, &repo.InboxEventQuery{Status: &status})
+	pageResponse, err := s.inboxRepo.Page(ctx, &repo.InboxEventPageReq{Query: &repo.InboxEventQuery{Page: &base.PageRequest{Page: 1, Size: inboxDeadLetterScanLimit}, Status: &status}})
 	if err != nil {
 		return err
 	}
-	for _, row := range rows {
+	for _, row := range pageResponse.Rows {
 		lastError := ""
 		if row.LastError != nil {
 			lastError = *row.LastError

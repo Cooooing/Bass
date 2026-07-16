@@ -1,19 +1,18 @@
 package repo
 
 import (
-	"common/proto/gen/common"
 	"context"
 	"user/internal/biz/model"
 )
 
 type TotpRepo interface {
-	Get(ctx context.Context, req *TotpGetReq) (*model.Totp, error)
-	List(ctx context.Context, req *TotpGetReq) ([]*model.Totp, error)
-	Map(ctx context.Context, req *TotpGetReq) (map[int64]*model.Totp, error)
-	Count(ctx context.Context, req *TotpGetReq) (int, error)
-	Page(ctx context.Context, page *common.PageRequest, req *TotpGetReq) ([]*model.Totp, *common.PageReply, error)
-	UpsertEnabledByUserID(ctx context.Context, userID int64, secret string) (*model.Totp, error)
-	DisableByUserID(ctx context.Context, userID int64) (*model.Totp, error)
+	Get(ctx context.Context, req *TotpGetReq) (*TotpGetResponse, error)
+	List(ctx context.Context, req *TotpGetReq) (*TotpListResponse, error)
+	Map(ctx context.Context, req *TotpGetReq) (*TotpMapResponse, error)
+	Count(ctx context.Context, req *TotpGetReq) (*TotpCountResponse, error)
+	Page(ctx context.Context, req *TotpPageReq) (*TotpPageResponse, error)
+	UpsertEnabledByUserID(ctx context.Context, req *TotpUpsertEnabledByUserIDReq) (*TotpUpsertEnabledByUserIDResponse, error)
+	DisableByUserID(ctx context.Context, req *TotpDisableByUserIDReq) (*TotpDisableByUserIDResponse, error)
 }
 
 type TotpGetReq struct {
@@ -22,4 +21,47 @@ type TotpGetReq struct {
 	UserID  *int64
 	UserIDs []int64
 	Enable  *bool
+}
+
+type TotpGetResponse struct {
+	Totp *model.Totp
+}
+
+type TotpListResponse struct {
+	Rows []*model.Totp
+}
+
+type TotpMapResponse struct {
+	Rows map[int64]*model.Totp
+}
+
+type TotpCountResponse struct {
+	Count int
+}
+
+type TotpPageReq struct {
+	Page  PageReq
+	Query TotpGetReq
+}
+
+type TotpPageResponse struct {
+	Rows []*model.Totp
+	Page PageResponse
+}
+
+type TotpUpsertEnabledByUserIDReq struct {
+	UserID int64
+	Secret string
+}
+
+type TotpUpsertEnabledByUserIDResponse struct {
+	Totp *model.Totp
+}
+
+type TotpDisableByUserIDReq struct {
+	UserID int64
+}
+
+type TotpDisableByUserIDResponse struct {
+	Totp *model.Totp
 }

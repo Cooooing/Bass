@@ -2,32 +2,49 @@ syntax = "proto3";
 
 package common.api.app.user.v1;
 
-import "user/v1/model.proto";
+import "common/enums/language.proto";
+import "google/protobuf/timestamp.proto";
+import "user/v1/enum.proto";
+
 
 option go_package = "common/proto/gen/user/v1;v1";
 
 service LocationService {
-  rpc Get(GetLocation.Request) returns (GetLocation.Reply) {} // 获取账号地理资料。
-  rpc Upsert(UpsertLocation.Request) returns (UpsertLocation.Reply) {} // 更新账号地理资料；缺省扩展表使用 upsert 创建。
+  rpc Get(GetLocation.Request) returns (GetLocation.Response) {} // 获取账号地理资料。
+  rpc Upsert(UpsertLocation.Request) returns (UpsertLocation.Response) {} // 更新账号地理资料；缺省扩展表使用 upsert 创建。
 }
 
 message GetLocation {
   message Request {
-    int64 user_id = 1;
-  }
-  message Reply {
-    Location location = 1;
-  }
+      int64 user_id = 1;
+    }
+  message Response {
+
+    message Location {
+        int64 user_id = 1;
+        optional string country = 2;
+        optional string province = 3;
+        optional string city = 4;
+      }
+      Location location = 1;
+    }
 }
 
 message UpsertLocation {
   message Request {
-    int64 user_id = 1;
-    optional string country = 2;
-    optional string province = 3;
-    optional string city = 4;
-  }
-  message Reply {
-    Location location = 1;
-  }
+      int64 user_id = 1;
+      optional string country = 2;
+      optional string province = 3;
+      optional string city = 4;
+    }
+  message Response {
+
+    message Location {
+        int64 user_id = 1;
+        optional string country = 2;
+        optional string province = 3;
+        optional string city = 4;
+      }
+      Location location = 1;
+    }
 }

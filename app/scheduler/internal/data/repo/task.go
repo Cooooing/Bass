@@ -32,7 +32,7 @@ func (r *TaskRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *TaskRepo) Get(ctx context.Context, req *bizrepo.TaskGetReq) (*model.Task, error) {
+func (r *TaskRepo) Get(ctx context.Context, req *bizrepo.TaskGetReq) (*bizrepo.TaskGetResponse, error) {
 	query := r.getClient(ctx).Task.Query().Where(task.DeletedAtIsNil())
 	query = r.getQuery(query, req)
 	row, err := query.Only(ctx)
@@ -42,10 +42,10 @@ func (r *TaskRepo) Get(ctx context.Context, req *bizrepo.TaskGetReq) (*model.Tas
 	if err != nil {
 		return nil, err
 	}
-	return r.model(row), nil
+	return &bizrepo.TaskGetResponse{Row: r.model(row)}, nil
 }
 
-func (r *TaskRepo) List(ctx context.Context, req *bizrepo.TaskGetReq) ([]*model.Task, error) {
+func (r *TaskRepo) List(ctx context.Context, req *bizrepo.TaskGetReq) (*bizrepo.TaskListResponse, error) {
 	query := r.getClient(ctx).Task.Query().Where(task.DeletedAtIsNil())
 	query = r.getQuery(query, req)
 	rows, err := query.Order(task.ByID()).All(ctx)
@@ -56,47 +56,52 @@ func (r *TaskRepo) List(ctx context.Context, req *bizrepo.TaskGetReq) ([]*model.
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return result, nil
+	return &bizrepo.TaskListResponse{Rows: result}, nil
 }
 
-func (r *TaskRepo) Map(ctx context.Context, req *bizrepo.TaskGetReq) (map[int64]*model.Task, error) {
-	rows, err := r.List(ctx, req)
+func (r *TaskRepo) Map(ctx context.Context, req *bizrepo.TaskGetReq) (*bizrepo.TaskMapResponse, error) {
+	resp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[int64]*model.Task, len(rows))
-	for _, row := range rows {
+	result := make(map[int64]*model.Task, len(resp.Rows))
+	for _, row := range resp.Rows {
 		result[row.ID] = row
 	}
-	return result, nil
+	return &bizrepo.TaskMapResponse{Rows: result}, nil
 }
 
-func (r *TaskRepo) Count(ctx context.Context, req *bizrepo.TaskGetReq) (int, error) {
+func (r *TaskRepo) Count(ctx context.Context, req *bizrepo.TaskGetReq) (*bizrepo.TaskCountResponse, error) {
 	query := r.getClient(ctx).Task.Query().Where(task.DeletedAtIsNil())
 	query = r.getQuery(query, req)
-	return query.Count(ctx)
+	count, err := query.Count(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &bizrepo.TaskCountResponse{Count: count}, nil
 }
 
-func (r *TaskRepo) Page(ctx context.Context, page *common.PageRequest, req *bizrepo.TaskGetReq) ([]*model.Task, *common.PageReply, error) {
-	page = server.PageValid(page)
+func (r *TaskRepo) Page(ctx context.Context, req *bizrepo.TaskPageReq) (*bizrepo.TaskPageResponse, error) {
+	page := server.PageValid(req.Page)
 	query := r.getClient(ctx).Task.Query().Where(task.DeletedAtIsNil())
-	query = r.getQuery(query, req)
+	query = r.getQuery(query, &req.TaskGetReq)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	rows, err := query.Order(task.ByID()).Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	result := make([]*model.Task, 0, len(rows))
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return result, &common.PageReply{Total: uint32(total), Page: page.Page, Size: page.Size}, nil
+	return &bizrepo.TaskPageResponse{Rows: result, Page: &common.PageResponse{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
 }
 
-func (r *TaskRepo) Upsert(ctx context.Context, row *model.Task) (*model.Task, error) {
+func (r *TaskRepo) Upsert(ctx context.Context, req *bizrepo.TaskUpsertReq) (*bizrepo.TaskUpsertResponse, error) {
+	row := req.Row
 	var result *model.Task
 	if row.ID > 0 {
 		current, err := r.getClient(ctx).Task.Query().Where(task.ID(row.ID), task.DeletedAtIsNil()).Only(ctx)
@@ -139,13 +144,13 @@ func (r *TaskRepo) Upsert(ctx context.Context, row *model.Task) (*model.Task, er
 		}
 		result = r.model(created)
 	}
-	return result, nil
+	return &bizrepo.TaskUpsertResponse{Row: result}, nil
 }
 
-func (r *TaskRepo) Lock(ctx context.Context, id int64) error {
+func (r *TaskRepo) Lock(ctx context.Context, req *bizrepo.TaskLockReq) (*bizrepo.TaskLockResponse, error) {
 	_, err := r.getClient(ctx).Task.Query().
 		Where(
-			task.ID(id),
+			task.ID(req.ID),
 			task.DeletedAtIsNil(),
 			func(s *sql.Selector) {
 				s.ForUpdate()
@@ -153,9 +158,9 @@ func (r *TaskRepo) Lock(ctx context.Context, id int64) error {
 		).
 		Only(ctx)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return &bizrepo.TaskLockResponse{}, nil
 }
 
 func (r *TaskRepo) getQuery(query *gen.TaskQuery, req *bizrepo.TaskGetReq) *gen.TaskQuery {

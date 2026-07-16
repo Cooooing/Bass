@@ -39,9 +39,15 @@
 ## 契约边界
 
 - 契约分为 BFF HTTP、内部 gRPC、内部事件和外部回调。
-- BFF proto 定义自己的 request、reply 和对外模型，不引用内部服务 message。
+- BFF proto 定义自己的 request、response 和对外结构，不引用内部服务 message。
 - 内部服务 proto 只暴露 gRPC 契约，不写 `google.api.http` 注解。
-- `model.proto` 只放稳定数据模型；枚举放在独立 `enum.proto`。
+- 业务模块 proto 不定义 `model.proto`，也不把领域模型放到独立公共 message 中复用。
+- 每个 RPC 使用一个顶层 message，并且顶层 message 下面只能直接定义 `Request` 和 `Response`。
+- 业务子 message 必须定义在实际使用它的 `Request` 或 `Response` 内；禁止在 RPC 顶层定义 `Account`、`Item`、`Summary` 这类业务模型。
+- 不同 RPC 之间禁止复用业务子 message；即使字段完全一致，也要在各自的 `Request` 或 `Response` 内复制定义。
+- 禁止引用 `OtherRpc.Response.Item`、`OtherRpc.Request.Query` 这类其他 RPC 的内部业务 message。
+- 只有 `common` 中的分页、区间、公共枚举、公共错误数据和事件基础结构可以跨模块复用；业务服务、BFF 和入口层不能复用其他模块的业务 message。
+- 枚举放在独立 `enum.proto`。
 - `List`、`Page` 响应数组字段统一为 `rows`，分页信息字段统一为 `page`。
 
 ## common 封装

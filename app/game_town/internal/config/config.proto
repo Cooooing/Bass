@@ -1,0 +1,37 @@
+syntax = "proto3";
+package kratos.api.config;
+
+import "common/config.proto";
+
+option go_package = "game_town/internal/config;config";
+
+message Bootstrap {
+  common.api.app.common.Server server = 1;
+  common.api.app.common.HTTP http = 2;
+  common.api.app.common.GRPC grpc = 3;
+  common.api.app.common.Consul consul = 4;
+  common.api.app.common.Database database = 5;
+  common.api.app.common.Trace trace = 6;
+  common.api.app.common.Observability observability = 7;
+  GameTown game_town = 21;
+}
+
+message GameTown {
+  Command command = 1;
+  World world = 2;
+  Effect effect = 3;
+}
+
+message Command {
+  uint32 max_content_length = 1;
+}
+
+message World {
+  uint32 max_npc_count = 1;
+  uint32 max_location_count = 2;
+  string default_scale = 3;
+}
+
+message Effect {
+  int32 max_delta = 1;
+}

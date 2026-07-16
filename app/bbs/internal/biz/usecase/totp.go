@@ -16,53 +16,97 @@ func NewTotpUsecase(totpClient repo.TotpClient) *TotpUsecase {
 	return &TotpUsecase{totpClient: totpClient}
 }
 
-func (u *TotpUsecase) BeginEnableTotp(ctx context.Context, req *bbsuserv1.BeginEnableTotp_Request) (*bbsuserv1.BeginEnableTotp_Reply, error) {
-	current, err := u.totpClient.GetCurrentTotp(ctx, &bbsuserv1.GetCurrentTotp_Request{})
+type BeginEnableTotpReq struct {
+	UserID      int64
+	AccountName string
+}
+
+type BeginEnableTotpResponse struct {
+	URL    string
+	QRCode []byte
+}
+
+func (u *TotpUsecase) BeginEnableTotp(ctx context.Context, req *BeginEnableTotpReq) (*BeginEnableTotpResponse, error) {
+	current, err := u.totpClient.GetCurrentTotp(ctx, &repo.GetCurrentTotpReq{UserID: req.UserID})
 	if err != nil {
 		return nil, err
 	}
-	if current.GetTotp().GetEnable() {
+	if current.Totp != nil && current.Totp.Enable {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_ENABLED)
 	}
-	return u.totpClient.BeginEnableTotp(ctx, req)
+	reply, err := u.totpClient.BeginEnableTotp(ctx, &repo.BeginEnableTotpReq{UserID: req.UserID, AccountName: req.AccountName})
+	if err != nil {
+		return nil, err
+	}
+	return &BeginEnableTotpResponse{URL: reply.URL, QRCode: reply.QRCode}, nil
 }
 
-func (u *TotpUsecase) ConfirmEnableTotp(ctx context.Context, req *bbsuserv1.ConfirmEnableTotp_Request) (*bbsuserv1.ConfirmEnableTotp_Reply, error) {
-	current, err := u.totpClient.GetCurrentTotp(ctx, &bbsuserv1.GetCurrentTotp_Request{})
-	if err != nil {
-		return nil, err
-	}
-	if current.GetTotp().GetEnable() {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_ENABLED)
-	}
-	verified, err := u.totpClient.CheckEnableCodeTotp(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	if !verified {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
-	}
-	return u.totpClient.ConfirmEnableTotp(ctx, req)
+type ConfirmEnableTotpReq struct {
+	UserID int64
+	Code   string
 }
 
-func (u *TotpUsecase) DisableTotp(ctx context.Context, req *bbsuserv1.DisableTotp_Request) (*bbsuserv1.DisableTotp_Reply, error) {
-	current, err := u.totpClient.GetCurrentTotp(ctx, &bbsuserv1.GetCurrentTotp_Request{})
+func (u *TotpUsecase) ConfirmEnableTotp(ctx context.Context, req *ConfirmEnableTotpReq) error {
+	current, err := u.totpClient.GetCurrentTotp(ctx, &repo.GetCurrentTotpReq{UserID: req.UserID})
 	if err != nil {
-		return nil, err
+		return err
 	}
-	if !current.GetTotp().GetEnable() {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_DISABLED)
+	if current.Totp != nil && current.Totp.Enable {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_ENABLED)
 	}
-	verified, err := u.totpClient.ValidateTotp(ctx, req)
+	checkReq := &repo.CheckEnableCodeTotpReq{UserID: req.UserID, Code: req.Code}
+	verified, err := u.totpClient.CheckEnableCodeTotp(ctx, checkReq)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	if !verified {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
+	if !verified.Verified {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
 	}
-	return u.totpClient.DisableTotp(ctx, req)
+	_, err = u.totpClient.ConfirmEnableTotp(ctx, &repo.ConfirmEnableTotpReq{UserID: req.UserID, Code: req.Code})
+	return err
 }
 
-func (u *TotpUsecase) GetCurrentTotp(ctx context.Context, req *bbsuserv1.GetCurrentTotp_Request) (*bbsuserv1.GetCurrentTotp_Reply, error) {
-	return u.totpClient.GetCurrentTotp(ctx, req)
+type DisableTotpReq struct {
+	UserID int64
+	Code   string
+}
+
+func (u *TotpUsecase) DisableTotp(ctx context.Context, req *DisableTotpReq) error {
+	current, err := u.totpClient.GetCurrentTotp(ctx, &repo.GetCurrentTotpReq{UserID: req.UserID})
+	if err != nil {
+		return err
+	}
+	if current.Totp == nil || !current.Totp.Enable {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_DISABLED)
+	}
+	disableReq := &repo.ValidateTotpReq{UserID: req.UserID, Code: req.Code}
+	verified, err := u.totpClient.ValidateTotp(ctx, disableReq)
+	if err != nil {
+		return err
+	}
+	if !verified.Verified {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
+	}
+	_, err = u.totpClient.DisableTotp(ctx, &repo.DisableTotpReq{UserID: req.UserID, Code: req.Code})
+	return err
+}
+
+type GetCurrentTotpReq struct {
+	UserID int64
+}
+
+type GetCurrentTotpResponse struct {
+	Totp *bbsuserv1.GetCurrentTotp_Response_Totp
+}
+
+func (u *TotpUsecase) GetCurrentTotp(ctx context.Context, req *GetCurrentTotpReq) (*GetCurrentTotpResponse, error) {
+	reply, err := u.totpClient.GetCurrentTotp(ctx, &repo.GetCurrentTotpReq{UserID: req.UserID})
+	if err != nil {
+		return nil, err
+	}
+	var totp *bbsuserv1.GetCurrentTotp_Response_Totp
+	if row := reply.Totp; row != nil {
+		totp = &bbsuserv1.GetCurrentTotp_Response_Totp{UserId: row.UserID, Enable: row.Enable, EnableTime: row.EnableTime}
+	}
+	return &GetCurrentTotpResponse{Totp: totp}, nil
 }

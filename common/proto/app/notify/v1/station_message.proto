@@ -3,44 +3,65 @@ syntax = "proto3";
 package common.api.app.notify.v1;
 
 import "common/common.proto";
-import "notify/v1/model.proto";
+import "common/enums/event.proto";
+import "google/protobuf/timestamp.proto";
+import "notify/v1/enum.proto";
 
 option go_package = "common/proto/gen/notify/v1;v1";
 
 service NotifyStationMessageService {
-  rpc List(ListStationMessages.Request) returns (ListStationMessages.Reply) {} // 查询账号站内信列表。
-  rpc MarkRead(MarkReadStationMessage.Request) returns (MarkReadStationMessage.Reply) {} // 标记账号站内信为已读。
-  rpc CountUnread(CountUnreadStationMessages.Request) returns (CountUnreadStationMessages.Reply) {} // 查询账号未读站内信数量。
+  rpc List(ListStationMessages.Request) returns (ListStationMessages.Response) {} // 查询账号站内信列表。
+  rpc MarkRead(MarkReadStationMessage.Request) returns (MarkReadStationMessage.Response) {} // 标记账号站内信为已读。
+  rpc CountUnread(CountUnreadStationMessages.Request) returns (CountUnreadStationMessages.Response) {} // 查询账号未读站内信数量。
 }
 
 message ListStationMessages {
   message Request {
-    int64 user_id = 1;
-    common.PageRequest page = 2;
-    NotificationStationMessageQueryParams query = 3;
-  }
-  message Reply {
-    common.PageReply page = 1;
-    repeated NotificationStationMessage rows = 2;
-  }
+
+    message NotificationStationMessageQueryParams {
+        repeated int64 ids = 1;
+        optional common.enums.EventType event_type = 2;
+        optional bool unread = 3;
+      }
+      int64 user_id = 1;
+      .common.api.app.common.PageRequest page = 2;
+      NotificationStationMessageQueryParams query = 3;
+    }
+  message Response {
+
+    message NotificationStationMessage {
+        google.protobuf.Timestamp created_at = 1000;
+        google.protobuf.Timestamp updated_at = 1001;
+        int64 id = 1;
+        string event_id = 2;
+        common.enums.EventType event_type = 3;
+        int64 receiver_id = 4;
+        string title = 5;
+        string content = 6;
+        NotificationChannelStatus status = 7;
+        optional google.protobuf.Timestamp read_at = 8;
+      }
+      .common.api.app.common.PageResponse page = 1;
+      repeated NotificationStationMessage rows = 2;
+    }
 }
 
 message MarkReadStationMessage {
   message Request {
-    int64 user_id = 1;
-    repeated int64 ids = 2;
-    common.TimeRange created_time_range = 3;
-  }
-  message Reply {
-    int32 count = 1;
-  }
+      int64 user_id = 1;
+      repeated int64 ids = 2;
+      .common.api.app.common.TimeRange created_time_range = 3;
+    }
+  message Response {
+      int32 count = 1;
+    }
 }
 
 message CountUnreadStationMessages {
   message Request {
-    int64 user_id = 1;
-  }
-  message Reply {
-    int64 count = 1;
-  }
+      int64 user_id = 1;
+    }
+  message Response {
+      int64 count = 1;
+    }
 }

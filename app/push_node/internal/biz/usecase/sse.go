@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"sync"
 	"time"
@@ -15,7 +16,6 @@ import (
 	"push_node/internal/config"
 
 	"github.com/google/uuid"
-	"log/slog"
 )
 
 type sseToken struct {
@@ -43,30 +43,35 @@ func NewSEEUsecase(conf *config.Bootstrap, logger *slog.Logger, registry repo.Co
 	}
 }
 
-func (uc *SSEUsecase) Connect(ctx context.Context, token string, w http.ResponseWriter) {
-	tokenData, err := uc.tokenGen.Parse(token)
+type ConnectReq struct {
+	Token  string
+	Writer http.ResponseWriter
+}
+
+func (uc *SSEUsecase) Connect(ctx context.Context, req *ConnectReq) error {
+	tokenData, err := uc.tokenGen.Parse(req.Token)
 	if err != nil {
-		uc.log.Warn(fmt.Sprintf("SSE token validation failed: err=%v", err))
-		return
+		uc.log.Warn("SSE token validation failed")
+		return nil
 	}
 	userID := tokenData.Id
 	if userID == 0 {
 		uc.log.Warn("SSE token user id is empty")
-		return
+		return nil
 	}
 
 	connID := uuid.New().String()
 	conn := &model.Connection{ID: connID, UserID: userID, CreatedAt: time.Now()}
-	if err := uc.registry.AddConnection(userID, conn); err != nil {
+	if _, err := uc.registry.AddConnection(ctx, &repo.AddConnectionReq{UserID: userID, Connection: conn}); err != nil {
 		uc.log.Error(fmt.Sprintf("register SSE connection failed: err=%v", err))
-		return
+		return nil
 	}
-	uc.writers.Store(connID, w)
+	uc.writers.Store(connID, req.Writer)
 	uc.log.Info(fmt.Sprintf("SSE connection established: user_id=%d conn_id=%s", userID, connID))
 
 	defer func() {
 		uc.writers.Delete(connID)
-		_ = uc.registry.RemoveConnection(userID, connID)
+		_, _ = uc.registry.RemoveConnection(ctx, &repo.RemoveConnectionReq{UserID: userID, ConnectionID: connID})
 		uc.log.Info(fmt.Sprintf("SSE connection closed: user_id=%d conn_id=%s", userID, connID))
 	}()
 
@@ -75,34 +80,55 @@ func (uc *SSEUsecase) Connect(ctx context.Context, token string, w http.Response
 	for {
 		select {
 		case <-ctx.Done():
-			return
+			return nil
 		case <-heartbeat.C:
-			if _, err := fmt.Fprint(w, ":keepalive\n\n"); err != nil {
+			if _, err := fmt.Fprint(req.Writer, ":keepalive\n\n"); err != nil {
 				uc.log.Debug(fmt.Sprintf("SSE heartbeat write failed: err=%v", err))
-				return
+				return nil
 			}
-			if f, ok := w.(http.Flusher); ok {
+			if f, ok := req.Writer.(http.Flusher); ok {
 				f.Flush()
 			}
 		}
 	}
 }
 
-func (uc *SSEUsecase) GetConnectionCount() int64 {
-	return uc.registry.GetConnectionCount()
+type GetConnectionCountReq struct{}
+
+type GetConnectionCountResponse struct {
+	Count int64
 }
 
-func (uc *SSEUsecase) HandleNATSMessage(msg *client.Message) error {
+func (uc *SSEUsecase) GetConnectionCount(ctx context.Context, req *GetConnectionCountReq) (*GetConnectionCountResponse, error) {
+	_ = ctx
+	_ = req
+	countResp, err := uc.registry.GetConnectionCount(ctx, &repo.GetConnectionCountReq{})
+	if err != nil {
+		return nil, err
+	}
+	return &GetConnectionCountResponse{Count: countResp.Count}, nil
+}
+
+type HandleNATSMessageReq struct {
+	Message *client.Message
+}
+
+func (uc *SSEUsecase) HandleNATSMessage(ctx context.Context, req *HandleNATSMessageReq) error {
+	_ = ctx
 	var event struct {
 		UserID  int64  `json:"user_id"`
 		Type    int32  `json:"type"`
 		Payload string `json:"payload"`
 	}
-	if err := json.Unmarshal(msg.Data, &event); err != nil {
+	if err := json.Unmarshal(req.Message.Data, &event); err != nil {
 		return fmt.Errorf("parse NATS message: %w", err)
 	}
 
-	conns := uc.registry.GetConnections(event.UserID)
+	connResp, err := uc.registry.GetConnections(ctx, &repo.GetConnectionsReq{UserID: event.UserID})
+	if err != nil {
+		return err
+	}
+	conns := connResp.Rows
 	if len(conns) == 0 {
 		uc.log.Debug(fmt.Sprintf("user has no online connection, message ignored: user_id=%d", event.UserID))
 		return nil
@@ -121,7 +147,7 @@ func (uc *SSEUsecase) HandleNATSMessage(msg *client.Message) error {
 		if _, err := fmt.Fprint(w, sseData); err != nil {
 			uc.log.Debug(fmt.Sprintf("SSE write failed: user_id=%d conn_id=%s err=%v", event.UserID, conn.ID, err))
 			uc.writers.Delete(conn.ID)
-			_ = uc.registry.RemoveConnection(event.UserID, conn.ID)
+			_, _ = uc.registry.RemoveConnection(ctx, &repo.RemoveConnectionReq{UserID: event.UserID, ConnectionID: conn.ID})
 			continue
 		}
 		if f, ok := w.(http.Flusher); ok {

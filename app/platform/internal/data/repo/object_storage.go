@@ -48,7 +48,77 @@ func (r *ObjectStorageRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *ObjectStorageRepo) Save(ctx context.Context, u *model.ObjectStorage) (*model.ObjectStorage, error) {
+func (r *ObjectStorageRepo) Save(ctx context.Context, req *repo.ObjectStorageSaveReq) (*repo.ObjectStorageSaveResponse, error) {
+	row, err := r.saveObject(ctx, req.Row)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ObjectStorageSaveResponse{Row: row}, nil
+}
+
+func (r *ObjectStorageRepo) UpdateAudit(ctx context.Context, req *repo.ObjectStorageUpdateAuditReq) (*repo.ObjectStorageUpdateAuditResponse, error) {
+	if err := r.updateAuditObject(ctx, req.Row); err != nil {
+		return nil, err
+	}
+	return &repo.ObjectStorageUpdateAuditResponse{}, nil
+}
+
+func (r *ObjectStorageRepo) Delete(ctx context.Context, req *repo.ObjectStorageDeleteReq) (*repo.ObjectStorageDeleteResponse, error) {
+	count, err := r.deleteObject(ctx, req.Row)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ObjectStorageDeleteResponse{Count: count}, nil
+}
+
+func (r *ObjectStorageRepo) Exist(ctx context.Context, req *repo.ObjectStorageGetReq) (*repo.ObjectStorageExistResponse, error) {
+	exists, err := r.existObject(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ObjectStorageExistResponse{Exists: exists}, nil
+}
+
+func (r *ObjectStorageRepo) Get(ctx context.Context, req *repo.ObjectStorageGetReq) (*repo.ObjectStorageGetResponse, error) {
+	row, err := r.getObject(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ObjectStorageGetResponse{Row: row}, nil
+}
+
+func (r *ObjectStorageRepo) List(ctx context.Context, req *repo.ObjectStorageGetReq) (*repo.ObjectStorageListResponse, error) {
+	rows, err := r.listObjects(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ObjectStorageListResponse{Rows: rows}, nil
+}
+
+func (r *ObjectStorageRepo) Map(ctx context.Context, req *repo.ObjectStorageGetReq) (*repo.ObjectStorageMapResponse, error) {
+	rows, err := r.mapObjects(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ObjectStorageMapResponse{Rows: rows}, nil
+}
+
+func (r *ObjectStorageRepo) Count(ctx context.Context, req *repo.ObjectStorageGetReq) (*repo.ObjectStorageCountResponse, error) {
+	count, err := r.countObjects(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ObjectStorageCountResponse{Count: count}, nil
+}
+
+func (r *ObjectStorageRepo) Page(ctx context.Context, req *repo.ObjectStoragePageReq) (*repo.ObjectStoragePageResponse, error) {
+	rows, page, err := r.pageObjects(ctx, req.Page, &req.ObjectStorageGetReq)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ObjectStoragePageResponse{Rows: rows, Page: page}, nil
+}
+func (r *ObjectStorageRepo) saveObject(ctx context.Context, u *model.ObjectStorage) (*model.ObjectStorage, error) {
 	save, err := r.getClient(ctx).ObjectStorage.Create().
 		SetProvider(u.Provider).
 		SetBucket(u.Bucket).
@@ -83,7 +153,7 @@ func (r *ObjectStorageRepo) Save(ctx context.Context, u *model.ObjectStorage) (*
 	}, nil
 }
 
-func (r *ObjectStorageRepo) UpdateAudit(ctx context.Context, u *model.ObjectStorage) error {
+func (r *ObjectStorageRepo) updateAuditObject(ctx context.Context, u *model.ObjectStorage) error {
 	_, err := r.getClient(ctx).ObjectStorage.Update().
 		Where(objectstorage.KeyEQ(u.Key)).
 		SetNillableAuditCallbackReply(u.AuditCallbackReply).
@@ -96,7 +166,7 @@ func (r *ObjectStorageRepo) UpdateAudit(ctx context.Context, u *model.ObjectStor
 	return err
 }
 
-func (r *ObjectStorageRepo) Delete(ctx context.Context, u *model.ObjectStorage) (int, error) {
+func (r *ObjectStorageRepo) deleteObject(ctx context.Context, u *model.ObjectStorage) (int, error) {
 	if u == nil {
 		return 0, nil
 	}
@@ -108,13 +178,13 @@ func (r *ObjectStorageRepo) Delete(ctx context.Context, u *model.ObjectStorage) 
 		Exec(ctx)
 }
 
-func (r *ObjectStorageRepo) Exist(ctx context.Context, req *repo.ObjectStorageGetReq) (bool, error) {
+func (r *ObjectStorageRepo) existObject(ctx context.Context, req *repo.ObjectStorageGetReq) (bool, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
 	return query.Exist(ctx)
 }
 
-func (r *ObjectStorageRepo) Get(ctx context.Context, req *repo.ObjectStorageGetReq) (*model.ObjectStorage, error) {
+func (r *ObjectStorageRepo) getObject(ctx context.Context, req *repo.ObjectStorageGetReq) (*model.ObjectStorage, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
 	row, err := query.First(ctx)
@@ -145,7 +215,7 @@ func (r *ObjectStorageRepo) Get(ctx context.Context, req *repo.ObjectStorageGetR
 	}, nil
 }
 
-func (r *ObjectStorageRepo) List(ctx context.Context, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, error) {
+func (r *ObjectStorageRepo) listObjects(ctx context.Context, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, error) {
 	var (
 		records []*model.ObjectStorage
 		err     error
@@ -180,8 +250,8 @@ func (r *ObjectStorageRepo) List(ctx context.Context, req *repo.ObjectStorageGet
 	return records, nil
 }
 
-func (r *ObjectStorageRepo) Map(ctx context.Context, req *repo.ObjectStorageGetReq) (map[int64]*model.ObjectStorage, error) {
-	list, err := r.List(ctx, req)
+func (r *ObjectStorageRepo) mapObjects(ctx context.Context, req *repo.ObjectStorageGetReq) (map[int64]*model.ObjectStorage, error) {
+	list, err := r.listObjects(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -192,13 +262,13 @@ func (r *ObjectStorageRepo) Map(ctx context.Context, req *repo.ObjectStorageGetR
 	return result, nil
 }
 
-func (r *ObjectStorageRepo) Count(ctx context.Context, req *repo.ObjectStorageGetReq) (int, error) {
+func (r *ObjectStorageRepo) countObjects(ctx context.Context, req *repo.ObjectStorageGetReq) (int, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
 	return query.Count(ctx)
 }
 
-func (r *ObjectStorageRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageReply, error) {
+func (r *ObjectStorageRepo) pageObjects(ctx context.Context, page *common.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageResponse, error) {
 	var (
 		items []*model.ObjectStorage
 		err   error
@@ -237,7 +307,7 @@ func (r *ObjectStorageRepo) Page(ctx context.Context, page *common.PageRequest, 
 			UpdatedAt:          item.UpdatedAt,
 		})
 	}
-	return items, &common.PageReply{
+	return items, &common.PageResponse{
 		Total: uint32(count),
 		Size:  page.Size,
 		Page:  page.Page,

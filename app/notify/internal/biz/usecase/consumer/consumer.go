@@ -33,7 +33,7 @@ func (c *Consumer) Start(ctx context.Context) error {
 			if msg == nil {
 				return nil
 			}
-			return c.eventUsecase.HandleMessage(ctx, msg.Subject, msg.Data)
+			return c.eventUsecase.HandleMessage(ctx, &usecase.EventHandleMessageReq{SubjectName: msg.Subject, Payload: msg.Data})
 		})
 		if err != nil {
 			c.log.Error(fmt.Sprintf("queue subscribe failed: subject=%s queue=%s err=%v", subjectName, queueGroup, err))

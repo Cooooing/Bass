@@ -1,10 +1,8 @@
 package model
 
 import (
-	"time"
-
-	userv1 "common/proto/gen/user/v1"
 	"im/internal/enum"
+	"time"
 )
 
 type ChatGroup struct {
@@ -23,5 +21,5 @@ type ChatGroup struct {
 	UpdatedBy     *int64
 
 	WithOwner bool
-	Owner     *userv1.AccountBasic
+	Owner     *AccountBasic
 }

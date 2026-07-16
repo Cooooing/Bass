@@ -2,16 +2,16 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.content;
 
-import "bbs/v1/content/model.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
+import "bbs/v1/content/enum.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
 // 文章附言接口。
 service PostscriptService {
   // 添加文章附言。
-  rpc Add(AddPostscript.Request) returns (AddPostscript.Reply) {
+  rpc Add(AddPostscript.Request) returns (AddPostscript.Response) {
     option (google.api.http) = {
       post: "/v1/content/postscript/add"
       body: "*"
@@ -22,17 +22,29 @@ service PostscriptService {
 // 添加文章附言。
 message AddPostscript {
   message Request {
-    // 文章 ID。
-    int64 article_id = 1;
-    // 附言内容。
-    string content = 2;
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-      required: "content"
-    };
-  }
-  message Reply {
-    // 创建后的文章附言。
-    ArticlePostscript postscript = 1;
-  }
+      // 文章 ID。
+      int64 article_id = 1;
+      // 附言内容。
+      string content = 2;
+      option (gnostic.openapi.v3.schema) = {
+        required: "article_id"
+        required: "content"
+      };
+    }
+  message Response {
+
+    message ArticlePostscript {
+        int64 id = 1; // 附言 ID
+        int64 article_id = 2; // 文章 ID
+        string content = 3; // 原始内容
+        string content_render = 4; // 渲染后的内容
+        ContentRestriction restriction = 5; // 管理限制
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+      // 创建后的文章附言。
+      ArticlePostscript postscript = 1;
+    }
 }

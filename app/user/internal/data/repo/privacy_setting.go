@@ -31,7 +31,66 @@ func (r *PrivacySettingRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *PrivacySettingRepo) Get(ctx context.Context, req *repo.PrivacySettingGetReq) (*model.PrivacySetting, error) {
+func (r *PrivacySettingRepo) Get(ctx context.Context, req *repo.PrivacySettingGetReq) (*repo.PrivacySettingGetResponse, error) {
+	setting, err := r.get(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.PrivacySettingGetResponse{PrivacySetting: setting}, nil
+}
+
+func (r *PrivacySettingRepo) List(ctx context.Context, req *repo.PrivacySettingGetReq) (*repo.PrivacySettingListResponse, error) {
+	rows, err := r.list(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.PrivacySettingListResponse{Rows: rows}, nil
+}
+
+func (r *PrivacySettingRepo) Map(ctx context.Context, req *repo.PrivacySettingGetReq) (*repo.PrivacySettingMapResponse, error) {
+	rows, err := r.mapRows(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.PrivacySettingMapResponse{Rows: rows}, nil
+}
+
+func (r *PrivacySettingRepo) Count(ctx context.Context, req *repo.PrivacySettingGetReq) (*repo.PrivacySettingCountResponse, error) {
+	count, err := r.count(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.PrivacySettingCountResponse{Count: count}, nil
+}
+
+func (r *PrivacySettingRepo) Page(ctx context.Context, req *repo.PrivacySettingPageReq) (*repo.PrivacySettingPageResponse, error) {
+	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+	if err != nil {
+		return nil, err
+	}
+	resp := repo.PageResponse{}
+	if page != nil {
+		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+	}
+	return &repo.PrivacySettingPageResponse{Rows: rows, Page: resp}, nil
+}
+
+func (r *PrivacySettingRepo) UpsertByUserID(ctx context.Context, req *repo.PrivacySettingUpsertByUserIDReq) (*repo.PrivacySettingUpsertByUserIDResponse, error) {
+	setting, err := r.upsertByUserID(ctx, req.PrivacySetting)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.PrivacySettingUpsertByUserIDResponse{PrivacySetting: setting}, nil
+}
+
+func (r *PrivacySettingRepo) Update(ctx context.Context, req *repo.PrivacySettingUpdateReq) (*repo.PrivacySettingUpdateResponse, error) {
+	setting, err := r.update(ctx, req.PrivacySetting)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.PrivacySettingUpdateResponse{PrivacySetting: setting}, nil
+}
+func (r *PrivacySettingRepo) get(ctx context.Context, req *repo.PrivacySettingGetReq) (*model.PrivacySetting, error) {
 	tx := r.getClient(ctx)
 	query := tx.PrivacySetting.Query()
 	query = r.getQuery(query, req)
@@ -54,7 +113,7 @@ func (r *PrivacySettingRepo) Get(ctx context.Context, req *repo.PrivacySettingGe
 	}, nil
 }
 
-func (r *PrivacySettingRepo) List(ctx context.Context, req *repo.PrivacySettingGetReq) ([]*model.PrivacySetting, error) {
+func (r *PrivacySettingRepo) list(ctx context.Context, req *repo.PrivacySettingGetReq) ([]*model.PrivacySetting, error) {
 	tx := r.getClient(ctx)
 	query := tx.PrivacySetting.Query()
 	query = r.getQuery(query, req)
@@ -78,8 +137,8 @@ func (r *PrivacySettingRepo) List(ctx context.Context, req *repo.PrivacySettingG
 	return result, nil
 }
 
-func (r *PrivacySettingRepo) Map(ctx context.Context, req *repo.PrivacySettingGetReq) (map[int64]*model.PrivacySetting, error) {
-	list, err := r.List(ctx, req)
+func (r *PrivacySettingRepo) mapRows(ctx context.Context, req *repo.PrivacySettingGetReq) (map[int64]*model.PrivacySetting, error) {
+	list, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -90,14 +149,14 @@ func (r *PrivacySettingRepo) Map(ctx context.Context, req *repo.PrivacySettingGe
 	return result, nil
 }
 
-func (r *PrivacySettingRepo) Count(ctx context.Context, req *repo.PrivacySettingGetReq) (int, error) {
+func (r *PrivacySettingRepo) count(ctx context.Context, req *repo.PrivacySettingGetReq) (int, error) {
 	tx := r.getClient(ctx)
 	query := tx.PrivacySetting.Query()
 	query = r.getQuery(query, req)
 	return query.Count(ctx)
 }
 
-func (r *PrivacySettingRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.PrivacySettingGetReq) ([]*model.PrivacySetting, *common.PageReply, error) {
+func (r *PrivacySettingRepo) page(ctx context.Context, page *common.PageRequest, req *repo.PrivacySettingGetReq) ([]*model.PrivacySetting, *common.PageResponse, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.PrivacySetting.Query()
@@ -126,15 +185,15 @@ func (r *PrivacySettingRepo) Page(ctx context.Context, page *common.PageRequest,
 			PublicLocation:     new(p.PublicLocation),
 		})
 	}
-	return result, &common.PageReply{
+	return result, &common.PageResponse{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,
 	}, nil
 }
 
-func (r *PrivacySettingRepo) UpsertByUserID(ctx context.Context, p *model.PrivacySetting) (*model.PrivacySetting, error) {
-	existing, err := r.Get(ctx, &repo.PrivacySettingGetReq{UserID: &p.UserID})
+func (r *PrivacySettingRepo) upsertByUserID(ctx context.Context, p *model.PrivacySetting) (*model.PrivacySetting, error) {
+	existing, err := r.get(ctx, &repo.PrivacySettingGetReq{UserID: &p.UserID})
 	if err != nil {
 		return nil, err
 	}
@@ -176,10 +235,10 @@ func (r *PrivacySettingRepo) UpsertByUserID(ctx context.Context, p *model.Privac
 		}, nil
 	}
 	p.ID = existing.ID
-	return r.Update(ctx, p)
+	return r.update(ctx, p)
 }
 
-func (r *PrivacySettingRepo) Update(ctx context.Context, p *model.PrivacySetting) (*model.PrivacySetting, error) {
+func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting) (*model.PrivacySetting, error) {
 	tx := r.getClient(ctx)
 	if p.PublicPoints == nil &&
 		p.PublicFollowers == nil &&

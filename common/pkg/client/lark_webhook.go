@@ -75,7 +75,7 @@ func (c *LarkWebhookClient) SendText(ctx context.Context, req *LarkWebhookReques
 	defer reply.Body.Close()
 	responseBody, _ := io.ReadAll(reply.Body)
 	if reply.StatusCode < http.StatusOK || reply.StatusCode >= http.StatusMultipleChoices {
-		return fmt.Errorf("send lark webhook failed: status=%d body=%s", reply.StatusCode, string(responseBody))
+		return fmt.Errorf("send lark webhook failed: status=%d response_summary=%s", reply.StatusCode, responseSummary(responseBody))
 	}
 	return nil
 }
@@ -85,4 +85,13 @@ func (c *LarkWebhookClient) sign(secret string, timestamp int64) string {
 	h := hmac.New(sha256.New, []byte(stringToSign))
 	_, _ = h.Write(nil)
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+}
+func responseSummary(body []byte) string {
+	text := strings.TrimSpace(string(body))
+	text = strings.ReplaceAll(text, "\r", " ")
+	text = strings.ReplaceAll(text, "\n", " ")
+	if len(text) > 120 {
+		text = text[:120] + "..."
+	}
+	return fmt.Sprintf("len=%d text=%q", len(body), text)
 }

@@ -6,6 +6,22 @@ import (
 )
 
 type ContentClient interface {
-	GetArticle(ctx context.Context, articleID int64) (*model.ContentArticle, error)
-	GetComment(ctx context.Context, commentID int64) (*model.ContentComment, error)
+	GetArticle(ctx context.Context, req *ContentGetArticleReq) (*ContentGetArticleResponse, error)
+	GetComment(ctx context.Context, req *ContentGetCommentReq) (*ContentGetCommentResponse, error)
+}
+
+type ContentGetArticleReq struct {
+	ArticleID int64
+}
+
+type ContentGetArticleResponse struct {
+	Article *model.ContentArticle
+}
+
+type ContentGetCommentReq struct {
+	CommentID int64
+}
+
+type ContentGetCommentResponse struct {
+	Comment *model.ContentComment
 }

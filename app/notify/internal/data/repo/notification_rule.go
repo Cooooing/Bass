@@ -2,15 +2,14 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
-	"common/proto/gen/common"
 	"context"
+	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
 	"notify/internal/data/gen"
 	"notify/internal/data/gen/notificationrule"
 	notifyenum "notify/internal/enum"
 
-	"common/pkg/server"
 	utilent "common/pkg/util/ent"
 )
 
@@ -31,17 +30,17 @@ func (r *NotificationRuleRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *NotificationRuleRepo) Get(ctx context.Context, req *bizrepo.NotificationRuleQuery) (*model.NotificationRule, error) {
-	list, err := r.List(ctx, req)
-	if err != nil || len(list) == 0 {
-		return nil, err
+func (r *NotificationRuleRepo) Get(ctx context.Context, req *bizrepo.NotificationRuleGetReq) (*bizrepo.NotificationRuleGetResponse, error) {
+	listResponse, err := r.List(ctx, &bizrepo.NotificationRuleListReq{Query: notificationRuleGetQuery(req)})
+	if err != nil || len(listResponse.Rows) == 0 {
+		return &bizrepo.NotificationRuleGetResponse{}, err
 	}
-	return list[0], nil
+	return &bizrepo.NotificationRuleGetResponse{Item: listResponse.Rows[0]}, nil
 }
 
-func (r *NotificationRuleRepo) List(ctx context.Context, req *bizrepo.NotificationRuleQuery) ([]*model.NotificationRule, error) {
+func (r *NotificationRuleRepo) List(ctx context.Context, req *bizrepo.NotificationRuleListReq) (*bizrepo.NotificationRuleListResponse, error) {
 	query := r.getClient(ctx).NotificationRule.Query()
-	query = r.getQuery(query, req)
+	query = r.getQuery(query, notificationRuleListQuery(req))
 	list, err := query.
 		WithStationTemplate().
 		WithEmailTemplate().
@@ -54,95 +53,45 @@ func (r *NotificationRuleRepo) List(ctx context.Context, req *bizrepo.Notificati
 
 	rules := make([]*model.NotificationRule, 0, len(list))
 	for _, item := range list {
-		rule := &model.NotificationRule{
-			ID:        item.ID,
-			EventType: commonenum.EventType(item.EventType),
-			Channel:   notifyenum.NotificationChannel(item.Channel),
-			Language:  notifyenum.Language(item.Language),
-			Enabled:   item.Enabled,
-			CreatedAt: item.CreatedAt,
-			UpdatedAt: item.UpdatedAt,
-		}
-		if item.Edges.StationTemplate != nil {
-			rule.StationTemplate = &model.NotificationStationTemplate{
-				ID:              item.Edges.StationTemplate.ID,
-				RuleID:          item.Edges.StationTemplate.RuleID,
-				TitleTemplate:   item.Edges.StationTemplate.TitleTemplate,
-				ContentTemplate: item.Edges.StationTemplate.ContentTemplate,
-				CreatedAt:       item.Edges.StationTemplate.CreatedAt,
-				UpdatedAt:       item.Edges.StationTemplate.UpdatedAt,
-			}
-		}
-		if item.Edges.EmailTemplate != nil {
-			rule.EmailTemplate = &model.NotificationEmailTemplate{
-				ID:              item.Edges.EmailTemplate.ID,
-				RuleID:          item.Edges.EmailTemplate.RuleID,
-				SubjectTemplate: item.Edges.EmailTemplate.SubjectTemplate,
-				BodyTemplate:    item.Edges.EmailTemplate.BodyTemplate,
-				ContentType:     item.Edges.EmailTemplate.ContentType,
-				CreatedAt:       item.Edges.EmailTemplate.CreatedAt,
-				UpdatedAt:       item.Edges.EmailTemplate.UpdatedAt,
-			}
-		}
-		if item.Edges.TencentSmsTemplate != nil {
-			rule.TencentSMSTemplate = &model.NotificationTencentSMSTemplate{
-				ID:                 item.Edges.TencentSmsTemplate.ID,
-				RuleID:             item.Edges.TencentSmsTemplate.RuleID,
-				SMSSDKAppID:        item.Edges.TencentSmsTemplate.SmsSdkAppID,
-				SignName:           item.Edges.TencentSmsTemplate.SignName,
-				ProviderTemplateID: item.Edges.TencentSmsTemplate.ProviderTemplateID,
-				ParamTemplates:     item.Edges.TencentSmsTemplate.ParamTemplates,
-				CreatedAt:          item.Edges.TencentSmsTemplate.CreatedAt,
-				UpdatedAt:          item.Edges.TencentSmsTemplate.UpdatedAt,
-			}
-		}
-		if item.Edges.LarkWebhookTemplate != nil {
-			secret := ""
-			if item.Edges.LarkWebhookTemplate.Secret != nil {
-				secret = *item.Edges.LarkWebhookTemplate.Secret
-			}
-			rule.LarkWebhookTemplate = &model.NotificationLarkWebhookTemplate{
-				ID:              item.Edges.LarkWebhookTemplate.ID,
-				RuleID:          item.Edges.LarkWebhookTemplate.RuleID,
-				WebhookID:       item.Edges.LarkWebhookTemplate.WebhookID,
-				Token:           item.Edges.LarkWebhookTemplate.Token,
-				Secret:          secret,
-				MsgType:         item.Edges.LarkWebhookTemplate.MsgType,
-				ContentTemplate: item.Edges.LarkWebhookTemplate.ContentTemplate,
-				CreatedAt:       item.Edges.LarkWebhookTemplate.CreatedAt,
-				UpdatedAt:       item.Edges.LarkWebhookTemplate.UpdatedAt,
-			}
-		}
-		rules = append(rules, rule)
+		rules = append(rules, notificationRuleModel(item))
 	}
-	return rules, nil
+	return &bizrepo.NotificationRuleListResponse{Rows: rules}, nil
 }
 
-func (r *NotificationRuleRepo) Map(ctx context.Context, req *bizrepo.NotificationRuleQuery) (map[int64]*model.NotificationRule, error) {
-	list, err := r.List(ctx, req)
+func (r *NotificationRuleRepo) Map(ctx context.Context, req *bizrepo.NotificationRuleMapReq) (*bizrepo.NotificationRuleMapResponse, error) {
+	listResponse, err := r.List(ctx, &bizrepo.NotificationRuleListReq{Query: notificationRuleMapQuery(req)})
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[int64]*model.NotificationRule, len(list))
-	for _, item := range list {
+	result := make(map[int64]*model.NotificationRule, len(listResponse.Rows))
+	for _, item := range listResponse.Rows {
 		result[item.ID] = item
 	}
-	return result, nil
+	return &bizrepo.NotificationRuleMapResponse{Rows: result}, nil
 }
 
-func (r *NotificationRuleRepo) Count(ctx context.Context, req *bizrepo.NotificationRuleQuery) (int, error) {
+func (r *NotificationRuleRepo) Count(ctx context.Context, req *bizrepo.NotificationRuleCountReq) (*bizrepo.NotificationRuleCountResponse, error) {
 	query := r.getClient(ctx).NotificationRule.Query()
-	query = r.getQuery(query, req)
-	return query.Count(ctx)
+	query = r.getQuery(query, notificationRuleCountQuery(req))
+	count, err := query.Count(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &bizrepo.NotificationRuleCountResponse{Count: count}, nil
 }
 
-func (r *NotificationRuleRepo) Page(ctx context.Context, page *common.PageRequest, req *bizrepo.NotificationRuleQuery) ([]*model.NotificationRule, *common.PageReply, error) {
-	page = server.PageValid(page)
+func (r *NotificationRuleRepo) Page(ctx context.Context, req *bizrepo.NotificationRulePageReq) (*bizrepo.NotificationRulePageResponse, error) {
+	queryReq := notificationRulePageQuery(req)
+	var pageReq *base.PageRequest
+	if queryReq != nil {
+		pageReq = queryReq.Page
+	}
+	page := normalizePage(pageReq)
 	query := r.getClient(ctx).NotificationRule.Query()
-	query = r.getQuery(query, req)
+	query = r.getQuery(query, queryReq)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	list, err := query.
 		WithStationTemplate().
@@ -153,76 +102,20 @@ func (r *NotificationRuleRepo) Page(ctx context.Context, page *common.PageReques
 		Offset(int((page.Page - 1) * page.Size)).
 		All(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	rules := make([]*model.NotificationRule, 0, len(list))
 	for _, item := range list {
-		rule := &model.NotificationRule{
-			ID:        item.ID,
-			EventType: commonenum.EventType(item.EventType),
-			Channel:   notifyenum.NotificationChannel(item.Channel),
-			Language:  notifyenum.Language(item.Language),
-			Enabled:   item.Enabled,
-			CreatedAt: item.CreatedAt,
-			UpdatedAt: item.UpdatedAt,
-		}
-		if item.Edges.StationTemplate != nil {
-			rule.StationTemplate = &model.NotificationStationTemplate{
-				ID:              item.Edges.StationTemplate.ID,
-				RuleID:          item.Edges.StationTemplate.RuleID,
-				TitleTemplate:   item.Edges.StationTemplate.TitleTemplate,
-				ContentTemplate: item.Edges.StationTemplate.ContentTemplate,
-				CreatedAt:       item.Edges.StationTemplate.CreatedAt,
-				UpdatedAt:       item.Edges.StationTemplate.UpdatedAt,
-			}
-		}
-		if item.Edges.EmailTemplate != nil {
-			rule.EmailTemplate = &model.NotificationEmailTemplate{
-				ID:              item.Edges.EmailTemplate.ID,
-				RuleID:          item.Edges.EmailTemplate.RuleID,
-				SubjectTemplate: item.Edges.EmailTemplate.SubjectTemplate,
-				BodyTemplate:    item.Edges.EmailTemplate.BodyTemplate,
-				ContentType:     item.Edges.EmailTemplate.ContentType,
-				CreatedAt:       item.Edges.EmailTemplate.CreatedAt,
-				UpdatedAt:       item.Edges.EmailTemplate.UpdatedAt,
-			}
-		}
-		if item.Edges.TencentSmsTemplate != nil {
-			rule.TencentSMSTemplate = &model.NotificationTencentSMSTemplate{
-				ID:                 item.Edges.TencentSmsTemplate.ID,
-				RuleID:             item.Edges.TencentSmsTemplate.RuleID,
-				SMSSDKAppID:        item.Edges.TencentSmsTemplate.SmsSdkAppID,
-				SignName:           item.Edges.TencentSmsTemplate.SignName,
-				ProviderTemplateID: item.Edges.TencentSmsTemplate.ProviderTemplateID,
-				ParamTemplates:     item.Edges.TencentSmsTemplate.ParamTemplates,
-				CreatedAt:          item.Edges.TencentSmsTemplate.CreatedAt,
-				UpdatedAt:          item.Edges.TencentSmsTemplate.UpdatedAt,
-			}
-		}
-		if item.Edges.LarkWebhookTemplate != nil {
-			secret := ""
-			if item.Edges.LarkWebhookTemplate.Secret != nil {
-				secret = *item.Edges.LarkWebhookTemplate.Secret
-			}
-			rule.LarkWebhookTemplate = &model.NotificationLarkWebhookTemplate{
-				ID:              item.Edges.LarkWebhookTemplate.ID,
-				RuleID:          item.Edges.LarkWebhookTemplate.RuleID,
-				WebhookID:       item.Edges.LarkWebhookTemplate.WebhookID,
-				Token:           item.Edges.LarkWebhookTemplate.Token,
-				Secret:          secret,
-				MsgType:         item.Edges.LarkWebhookTemplate.MsgType,
-				ContentTemplate: item.Edges.LarkWebhookTemplate.ContentTemplate,
-				CreatedAt:       item.Edges.LarkWebhookTemplate.CreatedAt,
-				UpdatedAt:       item.Edges.LarkWebhookTemplate.UpdatedAt,
-			}
-		}
-		rules = append(rules, rule)
+		rules = append(rules, notificationRuleModel(item))
 	}
-	return rules, &common.PageReply{
-		Total: uint32(total),
-		Page:  page.Page,
-		Size:  page.Size,
+	return &bizrepo.NotificationRulePageResponse{
+		Rows: rules,
+		Page: &base.PageResponse{
+			Total: int64(total),
+			Page:  page.Page,
+			Size:  page.Size,
+		},
 	}, nil
 }
 
@@ -249,4 +142,102 @@ func (r *NotificationRuleRepo) getQuery(query *gen.NotificationRuleQuery, req *b
 		query = query.Where(notificationrule.EnabledEQ(*req.Enabled))
 	}
 	return query
+}
+
+func notificationRuleGetQuery(req *bizrepo.NotificationRuleGetReq) *bizrepo.NotificationRuleQuery {
+	if req == nil {
+		return nil
+	}
+	return req.Query
+}
+
+func notificationRuleListQuery(req *bizrepo.NotificationRuleListReq) *bizrepo.NotificationRuleQuery {
+	if req == nil {
+		return nil
+	}
+	return req.Query
+}
+
+func notificationRuleMapQuery(req *bizrepo.NotificationRuleMapReq) *bizrepo.NotificationRuleQuery {
+	if req == nil {
+		return nil
+	}
+	return req.Query
+}
+
+func notificationRuleCountQuery(req *bizrepo.NotificationRuleCountReq) *bizrepo.NotificationRuleQuery {
+	if req == nil {
+		return nil
+	}
+	return req.Query
+}
+
+func notificationRulePageQuery(req *bizrepo.NotificationRulePageReq) *bizrepo.NotificationRuleQuery {
+	if req == nil {
+		return nil
+	}
+	return req.Query
+}
+
+func notificationRuleModel(item *gen.NotificationRule) *model.NotificationRule {
+	rule := &model.NotificationRule{
+		ID:        item.ID,
+		EventType: commonenum.EventType(item.EventType),
+		Channel:   notifyenum.NotificationChannel(item.Channel),
+		Language:  notifyenum.Language(item.Language),
+		Enabled:   item.Enabled,
+		CreatedAt: item.CreatedAt,
+		UpdatedAt: item.UpdatedAt,
+	}
+	if item.Edges.StationTemplate != nil {
+		rule.StationTemplate = &model.NotificationStationTemplate{
+			ID:              item.Edges.StationTemplate.ID,
+			RuleID:          item.Edges.StationTemplate.RuleID,
+			TitleTemplate:   item.Edges.StationTemplate.TitleTemplate,
+			ContentTemplate: item.Edges.StationTemplate.ContentTemplate,
+			CreatedAt:       item.Edges.StationTemplate.CreatedAt,
+			UpdatedAt:       item.Edges.StationTemplate.UpdatedAt,
+		}
+	}
+	if item.Edges.EmailTemplate != nil {
+		rule.EmailTemplate = &model.NotificationEmailTemplate{
+			ID:              item.Edges.EmailTemplate.ID,
+			RuleID:          item.Edges.EmailTemplate.RuleID,
+			SubjectTemplate: item.Edges.EmailTemplate.SubjectTemplate,
+			BodyTemplate:    item.Edges.EmailTemplate.BodyTemplate,
+			ContentType:     item.Edges.EmailTemplate.ContentType,
+			CreatedAt:       item.Edges.EmailTemplate.CreatedAt,
+			UpdatedAt:       item.Edges.EmailTemplate.UpdatedAt,
+		}
+	}
+	if item.Edges.TencentSmsTemplate != nil {
+		rule.TencentSMSTemplate = &model.NotificationTencentSMSTemplate{
+			ID:                 item.Edges.TencentSmsTemplate.ID,
+			RuleID:             item.Edges.TencentSmsTemplate.RuleID,
+			SMSSDKAppID:        item.Edges.TencentSmsTemplate.SmsSdkAppID,
+			SignName:           item.Edges.TencentSmsTemplate.SignName,
+			ProviderTemplateID: item.Edges.TencentSmsTemplate.ProviderTemplateID,
+			ParamTemplates:     item.Edges.TencentSmsTemplate.ParamTemplates,
+			CreatedAt:          item.Edges.TencentSmsTemplate.CreatedAt,
+			UpdatedAt:          item.Edges.TencentSmsTemplate.UpdatedAt,
+		}
+	}
+	if item.Edges.LarkWebhookTemplate != nil {
+		secret := ""
+		if item.Edges.LarkWebhookTemplate.Secret != nil {
+			secret = *item.Edges.LarkWebhookTemplate.Secret
+		}
+		rule.LarkWebhookTemplate = &model.NotificationLarkWebhookTemplate{
+			ID:              item.Edges.LarkWebhookTemplate.ID,
+			RuleID:          item.Edges.LarkWebhookTemplate.RuleID,
+			WebhookID:       item.Edges.LarkWebhookTemplate.WebhookID,
+			Token:           item.Edges.LarkWebhookTemplate.Token,
+			Secret:          secret,
+			MsgType:         item.Edges.LarkWebhookTemplate.MsgType,
+			ContentTemplate: item.Edges.LarkWebhookTemplate.ContentTemplate,
+			CreatedAt:       item.Edges.LarkWebhookTemplate.CreatedAt,
+			UpdatedAt:       item.Edges.LarkWebhookTemplate.UpdatedAt,
+		}
+	}
+	return rule
 }

@@ -1,16 +1,161 @@
 package repo
 
-import (
-	bbscontentv1 "common/proto/gen/bbs/v1/content"
-	"context"
-)
+import "context"
+
+type CommentViewerActionState struct {
+	Liked   bool
+	Thanked bool
+}
+
+type CommentListItem struct {
+	ID                int64
+	ArticleID         int64
+	Content           string
+	ContentRender     string
+	Level             int32
+	ParentID          *int64
+	ReplyID           *int64
+	Restriction       int32
+	DeletedAt         string
+	ThankCount        int32
+	LikeCount         int32
+	ReplyCount        int32
+	ViewerActionState *CommentViewerActionState
+	User              *AccountProfile
+	ReplyUser         *AccountProfile
+	CreatedBy         *int64
+	UpdatedBy         *int64
+	CreatedAt         string
+	UpdatedAt         string
+}
+
+type CommentDetail struct {
+	ID                int64
+	ArticleID         int64
+	Content           string
+	ContentRender     string
+	Level             int32
+	ParentID          *int64
+	ReplyID           *int64
+	Restriction       int32
+	DeletedAt         string
+	ThankCount        int32
+	LikeCount         int32
+	ReplyCount        int32
+	ViewerActionState *CommentViewerActionState
+	User              *AccountProfile
+	ReplyUser         *AccountProfile
+	CreatedBy         *int64
+	UpdatedBy         *int64
+	CreatedAt         string
+	UpdatedAt         string
+}
+
+type CommentThread struct {
+	Root           *CommentListItem
+	PreviewReplies []*CommentListItem
+	ReplyCount     int32
+	HasMoreReplies bool
+}
+
+type CommentQuery struct {
+	CommentID    *int64
+	ArticleID    *int64
+	ParentID     *int64
+	ReplyID      *int64
+	Level        *int32
+	UserID       *int64
+	Restriction  *int32
+	Restrictions []int32
+	Order        *int32
+}
+
+type CreateCommentReq struct {
+	UserID    int64
+	ArticleID int64
+	Content   string
+	ReplyID   int64
+}
+
+type CreateCommentResponse struct {
+	Comment *CommentDetail
+}
+
+type ListCommentsReq struct {
+	UserID int64
+	Page   *PageReq
+	Query  *CommentQuery
+}
+
+type ListCommentsResponse struct {
+	Page *PageResponse
+	Rows []*CommentListItem
+}
+
+type ListCommentThreadsReq struct {
+	UserID            int64
+	Page              *PageReq
+	ArticleID         int64
+	Order             *int32
+	ReplyPreviewLimit *int32
+}
+
+type ListCommentThreadsResponse struct {
+	Page *PageResponse
+	Rows []*CommentThread
+}
+
+type ListCommentRepliesReq struct {
+	UserID    int64
+	Page      *PageReq
+	ArticleID int64
+	ParentID  int64
+	Order     *int32
+}
+
+type ListCommentRepliesResponse struct {
+	Page *PageResponse
+	Rows []*CommentListItem
+}
+
+type ListCommentTimelineReq struct {
+	UserID    int64
+	Page      *PageReq
+	ArticleID int64
+	Order     *int32
+}
+
+type ListCommentTimelineResponse struct {
+	Page *PageResponse
+	Rows []*CommentListItem
+}
+
+type LikeCommentReq struct {
+	UserID int64
+	ID     int64
+	Active bool
+}
+
+type LikeCommentResponse struct {
+	Liked bool
+}
+
+type ThankCommentReq struct {
+	UserID int64
+	ID     int64
+	Active bool
+}
+
+type ThankCommentResponse struct {
+	Thanked bool
+}
 
 type ContentCommentClient interface {
-	CreateComment(ctx context.Context, req *bbscontentv1.CreateComment_Request) (*bbscontentv1.CreateComment_Reply, error)
-	ListComments(ctx context.Context, req *bbscontentv1.ListComments_Request) (*bbscontentv1.ListComments_Reply, error)
-	ListCommentThreads(ctx context.Context, req *bbscontentv1.ListCommentThreads_Request) (*bbscontentv1.ListCommentThreads_Reply, error)
-	ListCommentReplies(ctx context.Context, req *bbscontentv1.ListCommentReplies_Request) (*bbscontentv1.ListCommentReplies_Reply, error)
-	ListCommentTimeline(ctx context.Context, req *bbscontentv1.ListCommentTimeline_Request) (*bbscontentv1.ListCommentTimeline_Reply, error)
-	LikeComment(ctx context.Context, req *bbscontentv1.LikeComment_Request) (*bbscontentv1.LikeComment_Reply, error)
-	ThankComment(ctx context.Context, req *bbscontentv1.ThankComment_Request) (*bbscontentv1.ThankComment_Reply, error)
+	CreateComment(ctx context.Context, req *CreateCommentReq) (*CreateCommentResponse, error)
+	ListComments(ctx context.Context, req *ListCommentsReq) (*ListCommentsResponse, error)
+	ListCommentThreads(ctx context.Context, req *ListCommentThreadsReq) (*ListCommentThreadsResponse, error)
+	ListCommentReplies(ctx context.Context, req *ListCommentRepliesReq) (*ListCommentRepliesResponse, error)
+	ListCommentTimeline(ctx context.Context, req *ListCommentTimelineReq) (*ListCommentTimelineResponse, error)
+	LikeComment(ctx context.Context, req *LikeCommentReq) (*LikeCommentResponse, error)
+	ThankComment(ctx context.Context, req *ThankCommentReq) (*ThankCommentResponse, error)
 }

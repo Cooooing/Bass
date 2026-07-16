@@ -3,46 +3,56 @@ syntax = "proto3";
 package common.api.app.push_hub.v1;
 
 import "common/common.proto";
-import "push_hub/v1/model.proto";
+import "google/protobuf/timestamp.proto";
+import "push_hub/v1/enum.proto";
 
 option go_package = "common/proto/gen/push_hub/v1;v1";
 
 // 节点管理服务（内部 gRPC）
 service PushHubNodeService {
   // 注册推送节点
-  rpc RegisterNode(RegisterNode.Request) returns (RegisterNode.Reply) {}
+  rpc RegisterNode(RegisterNode.Request) returns (RegisterNode.Response) {}
 
   // 节点心跳
-  rpc Heartbeat(Heartbeat.Request) returns (Heartbeat.Reply) {}
+  rpc Heartbeat(Heartbeat.Request) returns (Heartbeat.Response) {}
 
   // 列出所有节点
-  rpc ListNodes(ListNodes.Request) returns (ListNodes.Reply) {}
+  rpc ListNodes(ListNodes.Request) returns (ListNodes.Response) {}
 }
 
 message RegisterNode {
   message Request {
-    // 节点地址
-    string address = 1;
-  }
-  message Reply {
-    // 分配的节点 ID
-    string node_id = 1;
-  }
+      // 节点地址
+      string address = 1;
+    }
+  message Response {
+      // 分配的节点 ID
+      string node_id = 1;
+    }
 }
 
 message Heartbeat {
   message Request {
-    // 节点 ID
-    string node_id = 1;
-    // 当前连接数
-    int64 connection_count = 2;
-  }
-  message Reply {}
+      // 节点 ID
+      string node_id = 1;
+      // 当前连接数
+      int64 connection_count = 2;
+    }
+  message Response {}
 }
 
 message ListNodes {
   message Request {}
-  message Reply {
-    repeated NodeInfo nodes = 1;
-  }
+  message Response {
+
+    message NodeInfo {
+        string node_id = 1;
+        string address = 2;
+        int64 connection_count = 3;
+        NodeStatus status = 4;
+        google.protobuf.Timestamp registered_at = 1000;
+        google.protobuf.Timestamp last_heartbeat_at = 1001;
+      }
+      repeated NodeInfo rows = 1;
+    }
 }

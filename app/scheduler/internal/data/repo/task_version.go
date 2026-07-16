@@ -32,7 +32,7 @@ func (r *TaskVersionRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *TaskVersionRepo) Get(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*model.TaskVersion, error) {
+func (r *TaskVersionRepo) Get(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*bizrepo.TaskVersionGetResponse, error) {
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, req)
 	row, err := query.Only(ctx)
@@ -42,10 +42,10 @@ func (r *TaskVersionRepo) Get(ctx context.Context, req *bizrepo.TaskVersionGetRe
 	if err != nil {
 		return nil, err
 	}
-	return r.model(row), nil
+	return &bizrepo.TaskVersionGetResponse{Row: r.model(row)}, nil
 }
 
-func (r *TaskVersionRepo) List(ctx context.Context, req *bizrepo.TaskVersionGetReq) ([]*model.TaskVersion, error) {
+func (r *TaskVersionRepo) List(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*bizrepo.TaskVersionListResponse, error) {
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, req)
 	rows, err := query.Order(taskversion.ByTaskID(), taskversion.ByVersion(entsql.OrderDesc())).All(ctx)
@@ -56,47 +56,52 @@ func (r *TaskVersionRepo) List(ctx context.Context, req *bizrepo.TaskVersionGetR
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return result, nil
+	return &bizrepo.TaskVersionListResponse{Rows: result}, nil
 }
 
-func (r *TaskVersionRepo) Map(ctx context.Context, req *bizrepo.TaskVersionGetReq) (map[int64]*model.TaskVersion, error) {
-	rows, err := r.List(ctx, req)
+func (r *TaskVersionRepo) Map(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*bizrepo.TaskVersionMapResponse, error) {
+	resp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[int64]*model.TaskVersion, len(rows))
-	for _, row := range rows {
+	result := make(map[int64]*model.TaskVersion, len(resp.Rows))
+	for _, row := range resp.Rows {
 		result[row.ID] = row
 	}
-	return result, nil
+	return &bizrepo.TaskVersionMapResponse{Rows: result}, nil
 }
 
-func (r *TaskVersionRepo) Count(ctx context.Context, req *bizrepo.TaskVersionGetReq) (int, error) {
+func (r *TaskVersionRepo) Count(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*bizrepo.TaskVersionCountResponse, error) {
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, req)
-	return query.Count(ctx)
+	count, err := query.Count(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &bizrepo.TaskVersionCountResponse{Count: count}, nil
 }
 
-func (r *TaskVersionRepo) Page(ctx context.Context, page *common.PageRequest, req *bizrepo.TaskVersionGetReq) ([]*model.TaskVersion, *common.PageReply, error) {
-	page = server.PageValid(page)
+func (r *TaskVersionRepo) Page(ctx context.Context, req *bizrepo.TaskVersionPageReq) (*bizrepo.TaskVersionPageResponse, error) {
+	page := server.PageValid(req.Page)
 	query := r.getClient(ctx).TaskVersion.Query()
-	query = r.getQuery(query, req)
+	query = r.getQuery(query, &req.TaskVersionGetReq)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	rows, err := query.Order(taskversion.ByTaskID(), taskversion.ByVersion(entsql.OrderDesc())).Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	result := make([]*model.TaskVersion, 0, len(rows))
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return result, &common.PageReply{Total: uint32(total), Page: page.Page, Size: page.Size}, nil
+	return &bizrepo.TaskVersionPageResponse{Rows: result, Page: &common.PageResponse{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
 }
 
-func (r *TaskVersionRepo) Create(ctx context.Context, row *model.Task) (*model.TaskVersion, error) {
+func (r *TaskVersionRepo) Create(ctx context.Context, req *bizrepo.TaskVersionCreateReq) (*bizrepo.TaskVersionCreateResponse, error) {
+	row := req.Task
 	created, err := r.getClient(ctx).TaskVersion.Create().
 		SetTaskID(row.ID).
 		SetVersion(row.Version).
@@ -113,7 +118,7 @@ func (r *TaskVersionRepo) Create(ctx context.Context, row *model.Task) (*model.T
 	if err != nil {
 		return nil, err
 	}
-	return r.model(created), nil
+	return &bizrepo.TaskVersionCreateResponse{Row: r.model(created)}, nil
 }
 
 func (r *TaskVersionRepo) getQuery(query *gen.TaskVersionQuery, req *bizrepo.TaskVersionGetReq) *gen.TaskVersionQuery {

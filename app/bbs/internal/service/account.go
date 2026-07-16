@@ -32,15 +32,31 @@ func (s *AccountService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterAccountServiceHTTPServer(hs, s)
 }
 
-func (s *AccountService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Request) (*bbsuserv1.GetCurrentAccount_Reply, error) {
-	return s.accountUsecase.GetCurrentAccount(ctx, req)
+func (s *AccountService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Request) (*bbsuserv1.GetCurrentAccount_Response, error) {
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	response, err := s.accountUsecase.GetCurrentAccount(ctx, &usecase.GetCurrentAccountReq{UserID: userID})
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.GetCurrentAccount_Response{Account: response.Account}, nil
 }
 
-func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfileAccount_Request) (*bbsuserv1.GetProfileAccount_Reply, error) {
-	return s.accountUsecase.GetProfileAccount(ctx, req)
+func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfileAccount_Request) (*bbsuserv1.GetProfileAccount_Response, error) {
+	response, err := s.accountUsecase.GetProfileAccount(ctx, &usecase.GetProfileAccountReq{UserID: req.GetUserId()})
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.GetProfileAccount_Response{Profile: response.Profile}, nil
 }
 
-func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Request) (*bbsuserv1.UpdateProfileAccount_Reply, error) {
+func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Request) (*bbsuserv1.UpdateProfileAccount_Response, error) {
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 	}
@@ -86,9 +102,17 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
 	}
-	return s.accountUsecase.UpdateProfileAccount(ctx, req)
+	response, err := s.accountUsecase.UpdateProfileAccount(ctx, &usecase.UpdateProfileAccountReq{UserID: userID, AvatarURL: req.AvatarUrl, Nickname: req.Nickname, URL: req.Url, Introduction: req.Introduction, Mbti: req.Mbti})
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.UpdateProfileAccount_Response{Profile: response.Profile}, nil
 }
 
-func (s *AccountService) Avatar(ctx context.Context, req *bbsuserv1.AvatarAccount_Request) (*common.ImageReply, error) {
-	return s.accountUsecase.AvatarAccount(ctx, req)
+func (s *AccountService) Avatar(ctx context.Context, req *bbsuserv1.AvatarAccount_Request) (*common.ImageResponse, error) {
+	response, err := s.accountUsecase.AvatarAccount(ctx, &usecase.AvatarAccountReq{Name: req.GetName()})
+	if err != nil {
+		return nil, err
+	}
+	return &common.ImageResponse{Data: response.Data, ContentType: response.ContentType}, nil
 }

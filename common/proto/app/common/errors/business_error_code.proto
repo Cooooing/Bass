@@ -62,4 +62,14 @@ enum BusinessErrorCode {
   BUSINESS_ERROR_CODE_IM_CHAT_GROUP_STATUS_INVALID = 14003 [(errors.code) = 400]; // 即时通信群组状态无效
   BUSINESS_ERROR_CODE_IM_CHAT_SESSION_INVALID = 14004 [(errors.code) = 400]; // 即时通信会话信息无效
   BUSINESS_ERROR_CODE_BBS_CALLBACK_SIGNATURE_INVALID = 15001 [(errors.code) = 403]; // BBS 回调签名无效
+  BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_NOT_FOUND = 16001 [(errors.code) = 404]; // ?????????
+  BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_INVALID = 16002 [(errors.code) = 400]; // ??????????
+  BUSINESS_ERROR_CODE_GAME_TOWN_PLAYER_NOT_FOUND = 16003 [(errors.code) = 404]; // ?????????
+  BUSINESS_ERROR_CODE_GAME_TOWN_PLAYER_NAME_TAKEN = 16004 [(errors.code) = 409]; // ???????????
+  BUSINESS_ERROR_CODE_GAME_TOWN_SESSION_NOT_FOUND = 16005 [(errors.code) = 404]; // ?????????
+  BUSINESS_ERROR_CODE_GAME_TOWN_LOCATION_NOT_FOUND = 16006 [(errors.code) = 404]; // ?????????
+  BUSINESS_ERROR_CODE_GAME_TOWN_NPC_NOT_FOUND = 16007 [(errors.code) = 404]; // ???? NPC ???
+  BUSINESS_ERROR_CODE_GAME_TOWN_COMMAND_INVALID = 16008 [(errors.code) = 400]; // ????????
+  BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_FAILED = 16009 [(errors.code) = 500]; // ???? Agent ????
+  BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_CONFIG_NOT_FOUND = 16010 [(errors.code) = 404]; // ???? Agent ?????
 }

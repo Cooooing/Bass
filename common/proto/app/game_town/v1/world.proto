@@ -1,0 +1,296 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+import "common/common.proto";
+import "game_town/v1/enum.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/game_town/v1;v1";
+
+service GameTownWorldService {
+  rpc Create(CreateGameTownWorld.Request) returns (CreateGameTownWorld.Response) {} // 创建随机世界。
+  rpc Join(JoinGameTownWorld.Request) returns (JoinGameTownWorld.Response) {} // 加入世界。
+  rpc Get(GetGameTownWorld.Request) returns (GetGameTownWorld.Response) {} // 获取世界。
+  rpc Page(PageGameTownWorlds.Request) returns (PageGameTownWorlds.Response) {} // 分页查询世界。
+  rpc GetState(GetGameTownWorldState.Request) returns (GetGameTownWorldState.Response) {} // 获取世界状态。
+  rpc Tick(TickGameTownWorld.Request) returns (TickGameTownWorld.Response) {} // 推动世界演化。
+}
+
+message CreateGameTownWorld {
+  message Request {
+      int64 creator_player_id = 1; // 创建玩家 ID
+      string description = 2; // 世界描述
+      uint32 npc_count = 3; // NPC 数量
+      uint32 location_count = 4; // 地点数量
+      GameTownWorldScale scale = 5; // 世界规模
+      optional int64 seed = 6; // 生成种子
+      repeated string style_tags = 7; // 风格标签
+      optional int64 agent_config_id = 8; // Agent 配置 ID
+    }
+  message Response {
+
+    message GameTownNpc {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        google.protobuf.Timestamp updated_at = 1001; // 更新时间
+        int64 id = 1; // NPC ID
+        int64 world_id = 2; // 世界 ID
+        string code = 3; // NPC 编码
+        string name = 4; // NPC 名称
+        string role = 5; // 角色职责
+        string personality = 6; // 性格
+        string goal = 7; // 目标
+        string background = 8; // 背景
+        int64 current_location_id = 9; // 当前地点 ID
+        GameTownNpcState state = 10; // NPC 状态
+        string system_prompt = 11; // 系统提示词
+        google.protobuf.Struct generated_profile = 12; // 生成画像
+        bool enabled = 13; // 是否启用
+      }
+
+    message GameTownLocation {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        google.protobuf.Timestamp updated_at = 1001; // 更新时间
+        int64 id = 1; // 地点 ID
+        int64 world_id = 2; // 世界 ID
+        string code = 3; // 地点编码
+        string name = 4; // 地点名称
+        string description = 5; // 地点描述
+        google.protobuf.Struct tags = 6; // 标签
+        int32 sort = 7; // 排序
+        bool enabled = 8; // 是否启用
+      }
+
+    message GameTownEvent {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        int64 id = 1; // 事件 ID
+        int64 world_id = 2; // 世界 ID
+        GameTownEventType type = 3; // 事件类型
+        optional int64 actor_player_id = 4; // 玩家 ID
+        optional int64 target_npc_id = 5; // 目标 NPC ID
+        optional int64 location_id = 6; // 地点 ID
+        optional int64 command_id = 7; // 命令 ID
+        string summary = 8; // 事件摘要
+        string content = 9; // 事件内容
+        google.protobuf.Struct effects = 10; // 影响
+        google.protobuf.Struct metadata = 11; // 元数据
+        google.protobuf.Timestamp occurred_at = 12; // 发生时间
+      }
+
+    message GameTownWorld {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        google.protobuf.Timestamp updated_at = 1001; // 更新时间
+        int64 id = 1; // 世界 ID
+        string code = 2; // 世界短码
+        string name = 3; // 世界名称
+        string description = 4; // 创建描述
+        GameTownWorldScale scale = 5; // 世界规模
+        GameTownWorldStatus status = 6; // 世界状态
+        int64 creator_player_id = 7; // 创建玩家 ID
+        optional int64 default_location_id = 8; // 默认地点 ID
+        int64 seed = 9; // 生成种子
+        google.protobuf.Struct generation_params = 10; // 生成参数
+        string generation_summary = 11; // 生成摘要
+        optional int64 agent_config_id = 12; // Agent 配置 ID
+      }
+
+    message GameTownWorldStateSnapshot {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        int64 id = 1; // 快照 ID
+        int64 world_id = 2; // 世界 ID
+        int64 tick_count = 3; // 演化次数
+        string current_arc = 4; // 当前阶段
+        google.protobuf.Struct metrics = 5; // 当前指标值
+        string summary = 6; // 状态摘要
+        optional int64 reason_event_id = 7; // 原因事件 ID
+      }
+      GameTownWorld world = 1; // 世界
+      GameTownLocation default_location = 2; // 默认地点
+      repeated GameTownNpc npcs = 3; // NPC 列表
+      GameTownWorldStateSnapshot state = 4; // 初始状态
+      repeated GameTownEvent events = 5; // 初始事件
+    }
+}
+
+message JoinGameTownWorld {
+  message Request {
+      int64 player_id = 1; // 玩家 ID
+      string world_code = 2; // 世界短码
+    }
+  message Response {
+
+    message GameTownWorld {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        google.protobuf.Timestamp updated_at = 1001; // 更新时间
+        int64 id = 1; // 世界 ID
+        string code = 2; // 世界短码
+        string name = 3; // 世界名称
+        string description = 4; // 创建描述
+        GameTownWorldScale scale = 5; // 世界规模
+        GameTownWorldStatus status = 6; // 世界状态
+        int64 creator_player_id = 7; // 创建玩家 ID
+        optional int64 default_location_id = 8; // 默认地点 ID
+        int64 seed = 9; // 生成种子
+        google.protobuf.Struct generation_params = 10; // 生成参数
+        string generation_summary = 11; // 生成摘要
+        optional int64 agent_config_id = 12; // Agent 配置 ID
+      }
+
+    message GameTownLocation {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        google.protobuf.Timestamp updated_at = 1001; // 更新时间
+        int64 id = 1; // 地点 ID
+        int64 world_id = 2; // 世界 ID
+        string code = 3; // 地点编码
+        string name = 4; // 地点名称
+        string description = 5; // 地点描述
+        google.protobuf.Struct tags = 6; // 标签
+        int32 sort = 7; // 排序
+        bool enabled = 8; // 是否启用
+      }
+
+    message GameTownWorldMember {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        google.protobuf.Timestamp updated_at = 1001; // 更新时间
+        int64 id = 1; // 成员记录 ID
+        int64 world_id = 2; // 世界 ID
+        int64 player_id = 3; // 玩家 ID
+        int64 current_location_id = 4; // 当前地点 ID
+        GameTownWorldMemberRole role = 5; // 成员角色
+        google.protobuf.Timestamp joined_at = 6; // 加入时间
+        google.protobuf.Timestamp last_seen_at = 7; // 最近活跃时间
+      }
+      GameTownWorld world = 1; // 世界
+      GameTownWorldMember member = 2; // 世界成员
+      GameTownLocation location = 3; // 当前地点
+    }
+}
+
+message GetGameTownWorld {
+  message Request {
+      int64 id = 1; // 世界 ID
+    }
+  message Response {
+
+    message GameTownWorld {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        google.protobuf.Timestamp updated_at = 1001; // 更新时间
+        int64 id = 1; // 世界 ID
+        string code = 2; // 世界短码
+        string name = 3; // 世界名称
+        string description = 4; // 创建描述
+        GameTownWorldScale scale = 5; // 世界规模
+        GameTownWorldStatus status = 6; // 世界状态
+        int64 creator_player_id = 7; // 创建玩家 ID
+        optional int64 default_location_id = 8; // 默认地点 ID
+        int64 seed = 9; // 生成种子
+        google.protobuf.Struct generation_params = 10; // 生成参数
+        string generation_summary = 11; // 生成摘要
+        optional int64 agent_config_id = 12; // Agent 配置 ID
+      }
+      GameTownWorld row = 1; // 世界
+    }
+}
+
+message PageGameTownWorlds {
+  message Request {
+      .common.api.app.common.PageRequest page = 1; // 分页参数
+      optional int64 creator_player_id = 2; // 创建玩家 ID
+      optional GameTownWorldStatus status = 3; // 世界状态
+    }
+  message Response {
+
+    message GameTownWorld {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        google.protobuf.Timestamp updated_at = 1001; // 更新时间
+        int64 id = 1; // 世界 ID
+        string code = 2; // 世界短码
+        string name = 3; // 世界名称
+        string description = 4; // 创建描述
+        GameTownWorldScale scale = 5; // 世界规模
+        GameTownWorldStatus status = 6; // 世界状态
+        int64 creator_player_id = 7; // 创建玩家 ID
+        optional int64 default_location_id = 8; // 默认地点 ID
+        int64 seed = 9; // 生成种子
+        google.protobuf.Struct generation_params = 10; // 生成参数
+        string generation_summary = 11; // 生成摘要
+        optional int64 agent_config_id = 12; // Agent 配置 ID
+      }
+      .common.api.app.common.PageResponse page = 1; // 分页结果
+      repeated GameTownWorld rows = 2; // 世界列表
+    }
+}
+
+message GetGameTownWorldState {
+  message Request {
+      int64 world_id = 1; // 世界 ID
+    }
+  message Response {
+
+    message GameTownWorldStateSnapshot {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        int64 id = 1; // 快照 ID
+        int64 world_id = 2; // 世界 ID
+        int64 tick_count = 3; // 演化次数
+        string current_arc = 4; // 当前阶段
+        google.protobuf.Struct metrics = 5; // 当前指标值
+        string summary = 6; // 状态摘要
+        optional int64 reason_event_id = 7; // 原因事件 ID
+      }
+
+    message GameTownWorldMetricDefinition {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        google.protobuf.Timestamp updated_at = 1001; // 更新时间
+        int64 id = 1; // 指标 ID
+        int64 world_id = 2; // 世界 ID
+        string key = 3; // 指标键
+        string name = 4; // 指标名称
+        string description = 5; // 指标说明
+        int32 min_value = 6; // 最小值
+        int32 max_value = 7; // 最大值
+        int32 initial_value = 8; // 初始值
+      }
+      GameTownWorldStateSnapshot row = 1; // 当前状态
+      repeated GameTownWorldMetricDefinition metrics = 2; // 指标定义
+    }
+}
+
+message TickGameTownWorld {
+  message Request {
+      int64 world_id = 1; // 世界 ID
+      int64 operator_player_id = 2; // 操作玩家 ID
+      uint32 recent_event_limit = 3; // 近期事件数量
+    }
+  message Response {
+
+    message GameTownWorldStateSnapshot {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        int64 id = 1; // 快照 ID
+        int64 world_id = 2; // 世界 ID
+        int64 tick_count = 3; // 演化次数
+        string current_arc = 4; // 当前阶段
+        google.protobuf.Struct metrics = 5; // 当前指标值
+        string summary = 6; // 状态摘要
+        optional int64 reason_event_id = 7; // 原因事件 ID
+      }
+
+    message GameTownEvent {
+        google.protobuf.Timestamp created_at = 1000; // 创建时间
+        int64 id = 1; // 事件 ID
+        int64 world_id = 2; // 世界 ID
+        GameTownEventType type = 3; // 事件类型
+        optional int64 actor_player_id = 4; // 玩家 ID
+        optional int64 target_npc_id = 5; // 目标 NPC ID
+        optional int64 location_id = 6; // 地点 ID
+        optional int64 command_id = 7; // 命令 ID
+        string summary = 8; // 事件摘要
+        string content = 9; // 事件内容
+        google.protobuf.Struct effects = 10; // 影响
+        google.protobuf.Struct metadata = 11; // 元数据
+        google.protobuf.Timestamp occurred_at = 12; // 发生时间
+      }
+      GameTownWorldStateSnapshot state = 1; // 新状态
+      repeated GameTownEvent events = 2; // 新事件
+    }
+}

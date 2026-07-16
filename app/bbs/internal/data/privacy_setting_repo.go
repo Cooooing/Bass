@@ -3,7 +3,6 @@ package data
 import (
 	"bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
-	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 )
@@ -18,20 +17,16 @@ func NewPrivacySettingClient(userClient *rpc.UserClient) repo.PrivacySettingClie
 	return &PrivacySettingClient{userClient: userClient}
 }
 
-func (r *PrivacySettingClient) GetCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.GetCurrentPrivacySetting_Request) (*bbsuserv1.GetCurrentPrivacySetting_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
-	reply, err := r.userClient.PrivacySetting.Get(ctx, &userv1.GetPrivacySetting_Request{UserId: userID})
+func (r *PrivacySettingClient) GetCurrentPrivacySetting(ctx context.Context, req *repo.GetCurrentPrivacySettingReq) (*repo.GetCurrentPrivacySettingResponse, error) {
+	reply, err := r.userClient.PrivacySetting.Get(ctx, &userv1.GetPrivacySetting_Request{UserId: req.UserID})
 	if err != nil {
 		return nil, err
 	}
 	setting := reply.GetPrivacySetting()
-	var out *bbsuserv1.PrivacySetting
+	var out *repo.PrivacySetting
 	if setting != nil {
-		out = &bbsuserv1.PrivacySetting{
-			UserId:             setting.GetUserId(),
+		out = &repo.PrivacySetting{
+			UserID:             setting.GetUserId(),
 			PublicPoints:       setting.PublicPoints,
 			PublicFollowers:    setting.PublicFollowers,
 			PublicArticles:     setting.PublicArticles,
@@ -40,16 +35,12 @@ func (r *PrivacySettingClient) GetCurrentPrivacySetting(ctx context.Context, req
 			PublicLocation:     setting.PublicLocation,
 		}
 	}
-	return &bbsuserv1.GetCurrentPrivacySetting_Reply{PrivacySetting: out}, nil
+	return &repo.GetCurrentPrivacySettingResponse{PrivacySetting: out}, nil
 }
 
-func (r *PrivacySettingClient) UpdateCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.UpdateCurrentPrivacySetting_Request) (*bbsuserv1.UpdateCurrentPrivacySetting_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
+func (r *PrivacySettingClient) UpdateCurrentPrivacySetting(ctx context.Context, req *repo.UpdateCurrentPrivacySettingReq) (*repo.UpdateCurrentPrivacySettingResponse, error) {
 	reply, err := r.userClient.PrivacySetting.Update(ctx, &userv1.UpdatePrivacySetting_Request{
-		UserId:             userID,
+		UserId:             req.UserID,
 		PublicPoints:       req.PublicPoints,
 		PublicFollowers:    req.PublicFollowers,
 		PublicArticles:     req.PublicArticles,
@@ -61,10 +52,10 @@ func (r *PrivacySettingClient) UpdateCurrentPrivacySetting(ctx context.Context, 
 		return nil, err
 	}
 	setting := reply.GetPrivacySetting()
-	var out *bbsuserv1.PrivacySetting
+	var out *repo.PrivacySetting
 	if setting != nil {
-		out = &bbsuserv1.PrivacySetting{
-			UserId:             setting.GetUserId(),
+		out = &repo.PrivacySetting{
+			UserID:             setting.GetUserId(),
 			PublicPoints:       setting.PublicPoints,
 			PublicFollowers:    setting.PublicFollowers,
 			PublicArticles:     setting.PublicArticles,
@@ -73,5 +64,5 @@ func (r *PrivacySettingClient) UpdateCurrentPrivacySetting(ctx context.Context, 
 			PublicLocation:     setting.PublicLocation,
 		}
 	}
-	return &bbsuserv1.UpdateCurrentPrivacySetting_Reply{PrivacySetting: out}, nil
+	return &repo.UpdateCurrentPrivacySettingResponse{PrivacySetting: out}, nil
 }

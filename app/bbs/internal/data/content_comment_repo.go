@@ -2,14 +2,9 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
-	"common/pkg/apperror"
 	"common/pkg/client/rpc"
-	"common/pkg/constant"
-	commonModel "common/pkg/model"
 	"common/pkg/util"
-	bbscontentv1 "common/proto/gen/bbs/v1/content"
-	bbsuserv1 "common/proto/gen/bbs/v1/user"
-	cerrors "common/proto/gen/common/errors"
+	"common/proto/gen/common"
 	contentv1 "common/proto/gen/content/v1"
 	userv1 "common/proto/gen/user/v1"
 	"context"
@@ -29,21 +24,17 @@ func NewContentCommentClient(contentClient *rpc.ContentClient, userClient *rpc.U
 	return &ContentCommentClient{contentClient: contentClient, userClient: userClient}
 }
 
-func (r *ContentCommentClient) CreateComment(ctx context.Context, req *bbscontentv1.CreateComment_Request) (*bbscontentv1.CreateComment_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
+func (r *ContentCommentClient) CreateComment(ctx context.Context, req *repo.CreateCommentReq) (*repo.CreateCommentResponse, error) {
 	var replyID *int64
-	if req.GetReplyId() != 0 {
-		replyID = new(req.GetReplyId())
+	if req.ReplyID != 0 {
+		replyID = new(req.ReplyID)
 	}
-	reply, err := r.contentClient.Comment.Create(ctx, &contentv1.CreateComment_Request{ArticleId: req.GetArticleId(), Content: req.GetContent(), ReplyId: replyID, UserId: userID})
+	reply, err := r.contentClient.Comment.Create(ctx, &contentv1.CreateComment_Request{ArticleId: req.ArticleID, Content: req.Content, ReplyId: replyID, UserId: req.UserID})
 	if err != nil {
 		return nil, err
 	}
-	item := reply.GetComment()
-	articles, err := r.loadCommentArticles(ctx, []*contentv1.Comment{item}, userID)
+	item := cloneDataMessage(reply.GetComment(), &contentv1.PageComments_Response_Comment{})
+	articles, err := r.loadCommentArticles(ctx, []*contentv1.PageComments_Response_Comment{item}, req.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -51,31 +42,31 @@ func (r *ContentCommentClient) CreateComment(ctx context.Context, req *bbsconten
 	if err != nil {
 		return nil, err
 	}
-	return &bbscontentv1.CreateComment_Reply{Comment: r.commentDetail(item, articles[item.GetArticleId()], profiles)}, nil
+	return &repo.CreateCommentResponse{Comment: r.commentDetail(item, articles[item.GetArticleId()], profiles)}, nil
 }
 
-func (r *ContentCommentClient) ListComments(ctx context.Context, req *bbscontentv1.ListComments_Request) (*bbscontentv1.ListComments_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
+func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListCommentsReq) (*repo.ListCommentsResponse, error) {
+	var pageReq *common.PageRequest
+	if req.Page != nil {
+		pageReq = &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}
 	}
-	query := req.GetQuery()
+	query := req.Query
 	if query == nil {
-		query = &bbscontentv1.CommentQuery{}
+		query = &repo.CommentQuery{}
 	}
-	contentQuery := &contentv1.CommentQueryParams{
-		CommentId: query.CommentId,
-		ArticleId: query.ArticleId,
-		ParentId:  query.ParentId,
-		ReplyId:   query.ReplyId,
+	contentQuery := &contentv1.PageComments_Request_CommentQueryParams{
+		CommentId: query.CommentID,
+		ArticleId: query.ArticleID,
+		ParentId:  query.ParentID,
+		ReplyId:   query.ReplyID,
 		Level:     query.Level,
-		UserId:    query.UserId,
+		UserId:    query.UserID,
 	}
 	if query.Restriction != nil {
 		contentQuery.Restriction = new(contentv1.ContentRestriction(*query.Restriction))
 	}
 	if len(query.Restrictions) > 0 {
-		contentQuery.Restrictions = lo.Map(query.Restrictions, func(item bbscontentv1.ContentRestriction, _ int) contentv1.ContentRestriction {
+		contentQuery.Restrictions = lo.Map(query.Restrictions, func(item int32, _ int) contentv1.ContentRestriction {
 			return contentv1.ContentRestriction(item)
 		})
 	}
@@ -83,13 +74,13 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *bbscontent
 		contentQuery.Order = new(contentv1.CommentOrder(*query.Order))
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Request{
-		Page:  req.Page,
+		Page:  pageReq,
 		Query: contentQuery,
 	})
 	if err != nil {
 		return nil, err
 	}
-	articles, err := r.loadCommentArticles(ctx, reply.GetRows(), userID)
+	articles, err := r.loadCommentArticles(ctx, reply.GetRows(), req.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -101,36 +92,40 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *bbscontent
 	if err != nil {
 		return nil, err
 	}
-	states, err := r.loadCommentViewerActionStates(ctx, lo.Map(reply.GetRows(), func(item *contentv1.Comment, _ int) int64 {
+	states, err := r.loadCommentViewerActionStates(ctx, req.UserID, lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Response_Comment, _ int) int64 {
 		return item.GetId()
 	}))
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*bbscontentv1.CommentListItem, 0, len(reply.GetRows()))
+	rows := make([]*repo.CommentListItem, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
 		rows = append(rows, r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()]))
 	}
-	return &bbscontentv1.ListComments_Reply{Page: reply.GetPage(), Rows: rows}, nil
+	var page *repo.PageResponse
+	if reply.GetPage() != nil {
+		page = &repo.PageResponse{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+	}
+	return &repo.ListCommentsResponse{Page: page, Rows: rows}, nil
 }
 
-func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *bbscontentv1.ListCommentThreads_Request) (*bbscontentv1.ListCommentThreads_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
+func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo.ListCommentThreadsReq) (*repo.ListCommentThreadsResponse, error) {
+	var pageReq *common.PageRequest
+	if req.Page != nil {
+		pageReq = &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}
 	}
 	normal := contentv1.ContentRestriction_CONTENT_RESTRICTION_NONE
 	locked := contentv1.ContentRestriction_CONTENT_RESTRICTION_LOCKED
 	restrictions := []contentv1.ContentRestriction{normal, locked}
 	order := contentv1.CommentOrder_COMMENT_ORDER_HOTTEST
-	if req.Order != nil && *req.Order != bbscontentv1.CommentOrder_COMMENT_ORDER_UNSPECIFIED {
+	if req.Order != nil && *req.Order != int32(contentv1.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
 		order = contentv1.CommentOrder(*req.Order)
 	}
 	level := int32(1)
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Request{
-		Page: req.Page,
-		Query: &contentv1.CommentQueryParams{
-			ArticleId:    new(req.ArticleId),
+		Page: pageReq,
+		Query: &contentv1.PageComments_Request_CommentQueryParams{
+			ArticleId:    new(req.ArticleID),
 			Level:        &level,
 			Restrictions: restrictions,
 			Order:        &order,
@@ -139,12 +134,15 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *bbsc
 	if err != nil {
 		return nil, err
 	}
-	rootIDs := lo.Map(reply.GetRows(), func(item *contentv1.Comment, _ int) int64 {
+	rootIDs := lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Response_Comment, _ int) int64 {
 		return item.GetId()
 	})
-	previewMap := map[int64][]*contentv1.Comment{}
+	previewMap := map[int64][]*contentv1.PageComments_Response_Comment{}
 	if len(rootIDs) > 0 {
-		previewLimit := req.GetReplyPreviewLimit()
+		previewLimit := int32(0)
+		if req.ReplyPreviewLimit != nil {
+			previewLimit = *req.ReplyPreviewLimit
+		}
 		if previewLimit <= 0 {
 			previewLimit = 3
 		}
@@ -153,7 +151,7 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *bbsc
 		}
 		previewOrder := contentv1.CommentOrder_COMMENT_ORDER_OLDEST
 		previews, err := r.contentClient.Comment.ListReplyPreviews(ctx, &contentv1.ListCommentReplyPreviews_Request{
-			ArticleId:      req.GetArticleId(),
+			ArticleId:      req.ArticleID,
 			ParentIds:      rootIDs,
 			LimitPerParent: previewLimit,
 			Order:          &previewOrder,
@@ -162,19 +160,22 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *bbsc
 		if err != nil {
 			return nil, err
 		}
-		previewMap = lo.SliceToMap(previews.GetRows(), func(item *contentv1.CommentReplyPreview) (int64, []*contentv1.Comment) {
-			return item.GetParentId(), item.GetRows()
+		previewMap = lo.SliceToMap(previews.GetRows(), func(item *contentv1.ListCommentReplyPreviews_Response_CommentReplyPreview) (int64, []*contentv1.PageComments_Response_Comment) {
+			rows := lo.Map(item.GetRows(), func(row *contentv1.ListCommentReplyPreviews_Response_Comment, _ int) *contentv1.PageComments_Response_Comment {
+				return cloneDataMessage(row, &contentv1.PageComments_Response_Comment{})
+			})
+			return item.GetParentId(), rows
 		})
 	}
-	allComments := append([]*contentv1.Comment{}, reply.GetRows()...)
+	allComments := append([]*contentv1.PageComments_Response_Comment{}, reply.GetRows()...)
 	for _, rows := range previewMap {
 		allComments = append(allComments, rows...)
 	}
-	articles, err := r.loadCommentArticles(ctx, allComments, userID)
+	articles, err := r.loadCommentArticles(ctx, allComments, req.UserID)
 	if err != nil {
 		return nil, err
 	}
-	userIDs := lo.FlatMap(reply.GetRows(), func(item *contentv1.Comment, _ int) []int64 {
+	userIDs := lo.FlatMap(reply.GetRows(), func(item *contentv1.PageComments_Response_Comment, _ int) []int64 {
 		return r.commentProfileIDs(item, articles[item.GetArticleId()])
 	})
 	for _, rows := range previewMap {
@@ -192,45 +193,46 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *bbsc
 			commentIDs = append(commentIDs, item.GetId())
 		}
 	}
-	states, err := r.loadCommentViewerActionStates(ctx, commentIDs)
+	states, err := r.loadCommentViewerActionStates(ctx, req.UserID, commentIDs)
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*bbscontentv1.CommentThread, 0, len(reply.GetRows()))
+	rows := make([]*repo.CommentThread, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
-		previewRows := lo.Map(previewMap[item.GetId()], func(preview *contentv1.Comment, _ int) *bbscontentv1.CommentListItem {
+		previewRows := lo.Map(previewMap[item.GetId()], func(preview *contentv1.PageComments_Response_Comment, _ int) *repo.CommentListItem {
 			return r.commentListItem(preview, articles[preview.GetArticleId()], profiles, states[preview.GetId()])
 		})
-		rows = append(rows, &bbscontentv1.CommentThread{
+		rows = append(rows, &repo.CommentThread{
 			Root:           r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()]),
 			PreviewReplies: previewRows,
 			ReplyCount:     item.GetReplyCount(),
 			HasMoreReplies: item.GetReplyCount() > int32(len(previewRows)),
 		})
 	}
-	return &bbscontentv1.ListCommentThreads_Reply{
-		Page: reply.GetPage(),
-		Rows: rows,
-	}, nil
+	var page *repo.PageResponse
+	if reply.GetPage() != nil {
+		page = &repo.PageResponse{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+	}
+	return &repo.ListCommentThreadsResponse{Page: page, Rows: rows}, nil
 }
 
-func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *bbscontentv1.ListCommentReplies_Request) (*bbscontentv1.ListCommentReplies_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
+func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo.ListCommentRepliesReq) (*repo.ListCommentRepliesResponse, error) {
+	var pageReq *common.PageRequest
+	if req.Page != nil {
+		pageReq = &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}
 	}
 	normal := contentv1.ContentRestriction_CONTENT_RESTRICTION_NONE
 	locked := contentv1.ContentRestriction_CONTENT_RESTRICTION_LOCKED
 	restrictions := []contentv1.ContentRestriction{normal, locked}
 	order := contentv1.CommentOrder_COMMENT_ORDER_OLDEST
-	if req.Order != nil && *req.Order != bbscontentv1.CommentOrder_COMMENT_ORDER_UNSPECIFIED {
+	if req.Order != nil && *req.Order != int32(contentv1.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
 		order = contentv1.CommentOrder(*req.Order)
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Request{
-		Page: req.Page,
-		Query: &contentv1.CommentQueryParams{
-			ArticleId:    new(req.ArticleId),
-			ParentId:     new(req.ParentId),
+		Page: pageReq,
+		Query: &contentv1.PageComments_Request_CommentQueryParams{
+			ArticleId:    new(req.ArticleID),
+			ParentId:     new(req.ParentID),
 			Restrictions: restrictions,
 			Order:        &order,
 		},
@@ -238,48 +240,49 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *bbsc
 	if err != nil {
 		return nil, err
 	}
-	articles, err := r.loadCommentArticles(ctx, reply.GetRows(), userID)
+	articles, err := r.loadCommentArticles(ctx, reply.GetRows(), req.UserID)
 	if err != nil {
 		return nil, err
 	}
-	userIDs := lo.FlatMap(reply.GetRows(), func(item *contentv1.Comment, _ int) []int64 {
+	userIDs := lo.FlatMap(reply.GetRows(), func(item *contentv1.PageComments_Response_Comment, _ int) []int64 {
 		return r.commentProfileIDs(item, articles[item.GetArticleId()])
 	})
 	profiles, err := r.loadAccountProfiles(ctx, userIDs...)
 	if err != nil {
 		return nil, err
 	}
-	states, err := r.loadCommentViewerActionStates(ctx, lo.Map(reply.GetRows(), func(item *contentv1.Comment, _ int) int64 {
+	states, err := r.loadCommentViewerActionStates(ctx, req.UserID, lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Response_Comment, _ int) int64 {
 		return item.GetId()
 	}))
 	if err != nil {
 		return nil, err
 	}
-	rows := lo.Map(reply.GetRows(), func(item *contentv1.Comment, _ int) *bbscontentv1.CommentListItem {
+	rows := lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Response_Comment, _ int) *repo.CommentListItem {
 		return r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()])
 	})
-	return &bbscontentv1.ListCommentReplies_Reply{
-		Page: reply.GetPage(),
-		Rows: rows,
-	}, nil
+	var page *repo.PageResponse
+	if reply.GetPage() != nil {
+		page = &repo.PageResponse{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+	}
+	return &repo.ListCommentRepliesResponse{Page: page, Rows: rows}, nil
 }
 
-func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *bbscontentv1.ListCommentTimeline_Request) (*bbscontentv1.ListCommentTimeline_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
+func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *repo.ListCommentTimelineReq) (*repo.ListCommentTimelineResponse, error) {
+	var pageReq *common.PageRequest
+	if req.Page != nil {
+		pageReq = &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}
 	}
 	normal := contentv1.ContentRestriction_CONTENT_RESTRICTION_NONE
 	locked := contentv1.ContentRestriction_CONTENT_RESTRICTION_LOCKED
 	restrictions := []contentv1.ContentRestriction{normal, locked}
 	order := contentv1.CommentOrder_COMMENT_ORDER_NEWEST
-	if req.Order != nil && *req.Order != bbscontentv1.CommentOrder_COMMENT_ORDER_UNSPECIFIED {
+	if req.Order != nil && *req.Order != int32(contentv1.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
 		order = contentv1.CommentOrder(*req.Order)
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Request{
-		Page: req.Page,
-		Query: &contentv1.CommentQueryParams{
-			ArticleId:    new(req.ArticleId),
+		Page: pageReq,
+		Query: &contentv1.PageComments_Request_CommentQueryParams{
+			ArticleId:    new(req.ArticleID),
 			Restrictions: restrictions,
 			Order:        &order,
 		},
@@ -287,78 +290,67 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *bbs
 	if err != nil {
 		return nil, err
 	}
-	articles, err := r.loadCommentArticles(ctx, reply.GetRows(), userID)
+	articles, err := r.loadCommentArticles(ctx, reply.GetRows(), req.UserID)
 	if err != nil {
 		return nil, err
 	}
-	userIDs := lo.FlatMap(reply.GetRows(), func(item *contentv1.Comment, _ int) []int64 {
+	userIDs := lo.FlatMap(reply.GetRows(), func(item *contentv1.PageComments_Response_Comment, _ int) []int64 {
 		return r.commentProfileIDs(item, articles[item.GetArticleId()])
 	})
 	profiles, err := r.loadAccountProfiles(ctx, userIDs...)
 	if err != nil {
 		return nil, err
 	}
-	states, err := r.loadCommentViewerActionStates(ctx, lo.Map(reply.GetRows(), func(item *contentv1.Comment, _ int) int64 {
+	states, err := r.loadCommentViewerActionStates(ctx, req.UserID, lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Response_Comment, _ int) int64 {
 		return item.GetId()
 	}))
 	if err != nil {
 		return nil, err
 	}
-	rows := lo.Map(reply.GetRows(), func(item *contentv1.Comment, _ int) *bbscontentv1.CommentListItem {
+	rows := lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Response_Comment, _ int) *repo.CommentListItem {
 		return r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()])
 	})
-	return &bbscontentv1.ListCommentTimeline_Reply{
-		Page: reply.GetPage(),
-		Rows: rows,
-	}, nil
+	var page *repo.PageResponse
+	if reply.GetPage() != nil {
+		page = &repo.PageResponse{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+	}
+	return &repo.ListCommentTimelineResponse{Page: page, Rows: rows}, nil
 }
 
-func (r *ContentCommentClient) LikeComment(ctx context.Context, req *bbscontentv1.LikeComment_Request) (*bbscontentv1.LikeComment_Reply, error) {
-	userID, err := currentUserID(ctx)
+func (r *ContentCommentClient) LikeComment(ctx context.Context, req *repo.LikeCommentReq) (*repo.LikeCommentResponse, error) {
+	reply, err := r.contentClient.Comment.Like(ctx, &contentv1.LikeComment_Request{Id: req.ID, Liked: req.Active, UserId: req.UserID})
 	if err != nil {
 		return nil, err
 	}
-	reply, err := r.contentClient.Comment.Like(ctx, &contentv1.LikeComment_Request{Id: req.GetId(), Liked: req.GetActive(), UserId: userID})
-	if err != nil {
-		return nil, err
-	}
-	return &bbscontentv1.LikeComment_Reply{Liked: reply.GetLiked()}, nil
+	return &repo.LikeCommentResponse{Liked: reply.GetLiked()}, nil
 }
 
-func (r *ContentCommentClient) ThankComment(ctx context.Context, req *bbscontentv1.ThankComment_Request) (*bbscontentv1.ThankComment_Reply, error) {
-	userID, err := currentUserID(ctx)
+func (r *ContentCommentClient) ThankComment(ctx context.Context, req *repo.ThankCommentReq) (*repo.ThankCommentResponse, error) {
+	reply, err := r.contentClient.Comment.Thank(ctx, &contentv1.ThankComment_Request{Id: req.ID, Thanked: req.Active, UserId: req.UserID})
 	if err != nil {
 		return nil, err
 	}
-	reply, err := r.contentClient.Comment.Thank(ctx, &contentv1.ThankComment_Request{Id: req.GetId(), Thanked: req.GetActive(), UserId: userID})
-	if err != nil {
-		return nil, err
-	}
-	return &bbscontentv1.ThankComment_Reply{Thanked: reply.GetThanked()}, nil
+	return &repo.ThankCommentResponse{Thanked: reply.GetThanked()}, nil
 }
 
-func (r *ContentCommentClient) loadCommentViewerActionStates(ctx context.Context, commentIDs []int64) (map[int64]*bbscontentv1.CommentViewerActionState, error) {
-	user, ok := util.GetContextValue[*commonModel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil || user.ID <= 0 {
-		return map[int64]*bbscontentv1.CommentViewerActionState{}, nil
-	}
+func (r *ContentCommentClient) loadCommentViewerActionStates(ctx context.Context, userID int64, commentIDs []int64) (map[int64]*repo.CommentViewerActionState, error) {
 	commentIDs = lo.Uniq(commentIDs)
 	if len(commentIDs) == 0 {
-		return map[int64]*bbscontentv1.CommentViewerActionState{}, nil
+		return map[int64]*repo.CommentViewerActionState{}, nil
 	}
 	reply, err := r.contentClient.Comment.MapViewerActionStates(ctx, &contentv1.MapCommentViewerActionStates_Request{
 		CommentIds: commentIDs,
-		UserId:     user.ID,
+		UserId:     userID,
 	})
 	if err != nil {
 		return nil, err
 	}
-	states := make(map[int64]*bbscontentv1.CommentViewerActionState, len(reply.GetStates()))
+	states := make(map[int64]*repo.CommentViewerActionState, len(reply.GetStates()))
 	for commentID, state := range reply.GetStates() {
 		if state == nil {
 			continue
 		}
-		states[commentID] = &bbscontentv1.CommentViewerActionState{
+		states[commentID] = &repo.CommentViewerActionState{
 			Liked:   state.GetLiked(),
 			Thanked: state.GetThanked(),
 		}
@@ -366,14 +358,14 @@ func (r *ContentCommentClient) loadCommentViewerActionStates(ctx context.Context
 	return states, nil
 }
 
-func (r *ContentCommentClient) loadCommentArticles(ctx context.Context, comments []*contentv1.Comment, viewerUserID int64) (map[int64]*contentv1.Article, error) {
-	articleIDs := lo.Uniq(lo.FilterMap(comments, func(item *contentv1.Comment, _ int) (int64, bool) {
+func (r *ContentCommentClient) loadCommentArticles(ctx context.Context, comments []*contentv1.PageComments_Response_Comment, viewerUserID int64) (map[int64]*contentv1.GetArticle_Response_Article, error) {
+	articleIDs := lo.Uniq(lo.FilterMap(comments, func(item *contentv1.PageComments_Response_Comment, _ int) (int64, bool) {
 		if item == nil || item.GetArticleId() == 0 {
 			return 0, false
 		}
 		return item.GetArticleId(), true
 	}))
-	articles := make(map[int64]*contentv1.Article, len(articleIDs))
+	articles := make(map[int64]*contentv1.GetArticle_Response_Article, len(articleIDs))
 	for _, articleID := range articleIDs {
 		reply, err := r.contentClient.Article.Get(ctx, &contentv1.GetArticle_Request{
 			ArticleId: articleID,
@@ -382,28 +374,13 @@ func (r *ContentCommentClient) loadCommentArticles(ctx context.Context, comments
 			return nil, err
 		}
 		article := reply.GetArticle()
-		isAuthor := article.CreatedBy != nil && *article.CreatedBy == viewerUserID
-		if article.GetRestriction() == contentv1.ContentRestriction_CONTENT_RESTRICTION_HIDDEN {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
-		}
-		switch article.GetPublishStatus() {
-		case contentv1.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_DRAFT:
-			if !isAuthor {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
-			}
-		case contentv1.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED, contentv1.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_ARCHIVED:
-			if article.GetVisibility() == contentv1.ArticleVisibility_ARTICLE_VISIBILITY_PRIVATE && !isAuthor {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
-			}
-		default:
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-		}
+
 		articles[articleID] = article
 	}
 	return articles, nil
 }
 
-func (r *ContentCommentClient) commentProfileIDs(item *contentv1.Comment, article *contentv1.Article) []int64 {
+func (r *ContentCommentClient) commentProfileIDs(item *contentv1.PageComments_Response_Comment, article *contentv1.GetArticle_Response_Article) []int64 {
 	if item == nil {
 		return nil
 	}
@@ -417,22 +394,22 @@ func (r *ContentCommentClient) commentProfileIDs(item *contentv1.Comment, articl
 	return userIDs
 }
 
-func (r *ContentCommentClient) commentListItem(item *contentv1.Comment, article *contentv1.Article, profiles map[int64]*bbsuserv1.AccountProfile, state *bbscontentv1.CommentViewerActionState) *bbscontentv1.CommentListItem {
+func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Response_Comment, article *contentv1.GetArticle_Response_Article, profiles map[int64]*repo.AccountProfile, state *repo.CommentViewerActionState) *repo.CommentListItem {
 	if item == nil {
 		return nil
 	}
 	if state == nil {
-		state = &bbscontentv1.CommentViewerActionState{}
+		state = &repo.CommentViewerActionState{}
 	}
-	out := &bbscontentv1.CommentListItem{
-		Id:                item.GetId(),
-		ArticleId:         item.GetArticleId(),
+	out := &repo.CommentListItem{
+		ID:                item.GetId(),
+		ArticleID:         item.GetArticleId(),
 		Content:           item.GetContent(),
 		ContentRender:     r.commentContentRender(item.GetId(), item.GetContent()),
 		Level:             item.GetLevel(),
-		ParentId:          item.ParentId,
-		ReplyId:           item.ReplyId,
-		Restriction:       bbscontentv1.ContentRestriction(item.GetRestriction()),
+		ParentID:          item.ParentId,
+		ReplyID:           item.ReplyId,
+		Restriction:       int32(item.GetRestriction()),
 		DeletedAt:         formatProtoTime(item.GetDeletedAt()),
 		ThankCount:        item.GetThankCount(),
 		LikeCount:         item.GetLikeCount(),
@@ -454,24 +431,24 @@ func (r *ContentCommentClient) commentListItem(item *contentv1.Comment, article 
 	return out
 }
 
-func (r *ContentCommentClient) commentDetail(item *contentv1.Comment, article *contentv1.Article, profiles map[int64]*bbsuserv1.AccountProfile) *bbscontentv1.CommentDetail {
+func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Response_Comment, article *contentv1.GetArticle_Response_Article, profiles map[int64]*repo.AccountProfile) *repo.CommentDetail {
 	if item == nil {
 		return nil
 	}
-	out := &bbscontentv1.CommentDetail{
-		Id:                item.GetId(),
-		ArticleId:         item.GetArticleId(),
+	out := &repo.CommentDetail{
+		ID:                item.GetId(),
+		ArticleID:         item.GetArticleId(),
 		Content:           item.GetContent(),
 		ContentRender:     r.commentContentRender(item.GetId(), item.GetContent()),
 		Level:             item.GetLevel(),
-		ParentId:          item.ParentId,
-		ReplyId:           item.ReplyId,
-		Restriction:       bbscontentv1.ContentRestriction(item.GetRestriction()),
+		ParentID:          item.ParentId,
+		ReplyID:           item.ReplyId,
+		Restriction:       int32(item.GetRestriction()),
 		DeletedAt:         formatProtoTime(item.GetDeletedAt()),
 		ThankCount:        item.GetThankCount(),
 		LikeCount:         item.GetLikeCount(),
 		ReplyCount:        item.GetReplyCount(),
-		ViewerActionState: &bbscontentv1.CommentViewerActionState{},
+		ViewerActionState: &repo.CommentViewerActionState{},
 		CreatedAt:         formatProtoTime(item.GetCreatedAt()),
 		UpdatedAt:         formatProtoTime(item.GetUpdatedAt()),
 	}
@@ -488,7 +465,7 @@ func (r *ContentCommentClient) commentDetail(item *contentv1.Comment, article *c
 	return out
 }
 
-func (r *ContentCommentClient) anonymousArticleUser(article *contentv1.Article, userID *int64) bool {
+func (r *ContentCommentClient) anonymousArticleUser(article *contentv1.GetArticle_Response_Article, userID *int64) bool {
 	return article != nil && article.GetAnonymous() && userID != nil && article.CreatedBy != nil && *article.CreatedBy == *userID
 }
 
@@ -496,37 +473,37 @@ func (r *ContentCommentClient) commentContentRender(commentID int64, content str
 	return util.LuteEngine.MarkdownStr(fmt.Sprintf("comment_%d", commentID), content)
 }
 
-func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs ...int64) (map[int64]*bbsuserv1.AccountProfile, error) {
+func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs ...int64) (map[int64]*repo.AccountProfile, error) {
 	if r.userClient == nil {
-		return map[int64]*bbsuserv1.AccountProfile{}, nil
+		return map[int64]*repo.AccountProfile{}, nil
 	}
 	ids := lo.Filter(lo.Uniq(userIDs), func(userID int64, _ int) bool {
 		return userID != 0
 	})
 	if len(ids) == 0 {
-		return map[int64]*bbsuserv1.AccountProfile{}, nil
+		return map[int64]*repo.AccountProfile{}, nil
 	}
 	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Request{
-		Query: &userv1.AccountQuery{UserIds: ids},
+		Query: &userv1.MapAccounts_Request_AccountQuery{UserIds: ids},
 	})
 	if err != nil {
 		return nil, err
 	}
-	out := make(map[int64]*bbsuserv1.AccountProfile, len(reply.GetAccounts()))
+	out := make(map[int64]*repo.AccountProfile, len(reply.GetAccounts()))
 	for userID, account := range reply.GetAccounts() {
 		basic := account.GetBasic()
 		if basic == nil {
 			continue
 		}
-		out[userID] = &bbsuserv1.AccountProfile{
-			Id:            basic.GetId(),
+		out[userID] = &repo.AccountProfile{
+			ID:            basic.GetId(),
 			Name:          basic.GetName(),
 			Nickname:      basic.Nickname,
-			Url:           basic.Url,
-			AvatarUrl:     basic.AvatarUrl,
+			URL:           basic.Url,
+			AvatarURL:     basic.AvatarUrl,
 			Introduction:  basic.Introduction,
-			Mbti:          bbsuserv1.MBTI(basic.GetMbti()),
-			Status:        bbsuserv1.AccountStatus(basic.GetStatus()),
+			MBTI:          int32(basic.GetMbti()),
+			Status:        int32(basic.GetStatus()),
 			FollowCount:   basic.FollowCount,
 			FollowerCount: basic.FollowerCount,
 			CreatedAt:     formatProtoTime(basic.GetCreatedAt()),

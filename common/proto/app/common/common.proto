@@ -13,7 +13,7 @@ message PageRequest {
   uint32 size = 2;
 }
 
-message PageReply {
+message PageResponse {
   // 总数
   uint32 total = 1;
   // 页码
@@ -43,7 +43,7 @@ message Int64Range {
   optional int64 end = 2;
 }
 
-message ImageReply {
+message ImageResponse {
   // 图片数据
   bytes data = 1;
   // 图片类型

@@ -1,10 +1,17 @@
 package repo
 
-import (
-	bbscontentv1 "common/proto/gen/bbs/v1/content"
-	"context"
-)
+import "context"
+
+type AddPostscriptReq struct {
+	UserID    int64
+	ArticleID int64
+	Content   string
+}
+
+type AddPostscriptResponse struct {
+	Postscript *ArticlePostscript
+}
 
 type ContentPostscriptClient interface {
-	AddPostscript(ctx context.Context, req *bbscontentv1.AddPostscript_Request) (*bbscontentv1.AddPostscript_Reply, error)
+	AddPostscript(ctx context.Context, req *AddPostscriptReq) (*AddPostscriptResponse, error)
 }

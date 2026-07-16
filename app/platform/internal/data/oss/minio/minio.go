@@ -4,6 +4,7 @@ import (
 	"common/pkg/constant"
 	"context"
 	"platform/internal/biz/model"
+	"platform/internal/biz/repo"
 	"platform/internal/data/gen"
 )
 
@@ -22,10 +23,10 @@ func (m *Minio) Save(ctx context.Context, tx *gen.Client, o *model.ObjectStorage
 	panic("implement me")
 }
 
-func (m *Minio) UploadToken(ctx context.Context, key string, uploaderID int64, uploaderName string) (string, error) {
+func (m *Minio) UploadToken(ctx context.Context, req *repo.ObjectStorageUploadTokenReq) (*repo.ObjectStorageUploadTokenResponse, error) {
 	panic("implement me")
 }
 
-func (m *Minio) Status(ctx context.Context, key string, enable bool) error {
+func (m *Minio) Status(ctx context.Context, req *repo.ObjectStorageStatusReq) (*repo.ObjectStorageStatusResponse, error) {
 	panic("implement me")
 }

@@ -1,11 +1,34 @@
 package repo
 
-import (
-	bbsuserv1 "common/proto/gen/bbs/v1/user"
-	"context"
-)
+import "context"
 
 type LocationClient interface {
-	GetCurrentLocation(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Request) (*bbsuserv1.GetCurrentLocation_Reply, error)
-	UpsertCurrentLocation(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Request) (*bbsuserv1.UpsertCurrentLocation_Reply, error)
+	GetCurrentLocation(ctx context.Context, req *GetCurrentLocationReq) (*GetCurrentLocationResponse, error)
+	UpsertCurrentLocation(ctx context.Context, req *UpsertCurrentLocationReq) (*UpsertCurrentLocationResponse, error)
+}
+
+type Location struct {
+	UserID   int64
+	Country  *string
+	Province *string
+	City     *string
+}
+
+type GetCurrentLocationReq struct {
+	UserID int64
+}
+
+type GetCurrentLocationResponse struct {
+	Location *Location
+}
+
+type UpsertCurrentLocationReq struct {
+	UserID   int64
+	Country  *string
+	Province *string
+	City     *string
+}
+
+type UpsertCurrentLocationResponse struct {
+	Location *Location
 }

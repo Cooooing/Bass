@@ -39,7 +39,6 @@ message Trace {
 
 message Observability {
   bool enable_metrics = 1; // 是否暴露 Prometheus 指标
-  reserved 2, 3;
 }
 
 message HTTP {

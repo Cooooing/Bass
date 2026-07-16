@@ -32,7 +32,74 @@ func (r *RelationRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *RelationRepo) Create(ctx context.Context, u *model.Relation) (*model.Relation, error) {
+func (r *RelationRepo) Create(ctx context.Context, req *repo.RelationCreateReq) (*repo.RelationCreateResponse, error) {
+	relation, err := r.create(ctx, req.Relation)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.RelationCreateResponse{Relation: relation}, nil
+}
+
+func (r *RelationRepo) Delete(ctx context.Context, req *repo.RelationDeleteReq) (*repo.RelationDeleteResponse, error) {
+	deleted, err := r.delete(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.RelationDeleteResponse{Deleted: deleted}, nil
+}
+
+func (r *RelationRepo) Exists(ctx context.Context, req *repo.RelationGetReq) (*repo.RelationExistsResponse, error) {
+	exists, err := r.exists(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.RelationExistsResponse{Exists: exists}, nil
+}
+
+func (r *RelationRepo) Get(ctx context.Context, req *repo.RelationGetReq) (*repo.RelationGetResponse, error) {
+	relation, err := r.get(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.RelationGetResponse{Relation: relation}, nil
+}
+
+func (r *RelationRepo) List(ctx context.Context, req *repo.RelationGetReq) (*repo.RelationListResponse, error) {
+	rows, err := r.list(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.RelationListResponse{Rows: rows}, nil
+}
+
+func (r *RelationRepo) Map(ctx context.Context, req *repo.RelationGetReq) (*repo.RelationMapResponse, error) {
+	rows, err := r.mapRows(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.RelationMapResponse{Rows: rows}, nil
+}
+
+func (r *RelationRepo) Count(ctx context.Context, req *repo.RelationGetReq) (*repo.RelationCountResponse, error) {
+	count, err := r.count(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.RelationCountResponse{Count: count}, nil
+}
+
+func (r *RelationRepo) Page(ctx context.Context, req *repo.RelationPageReq) (*repo.RelationPageResponse, error) {
+	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+	if err != nil {
+		return nil, err
+	}
+	resp := repo.PageResponse{}
+	if page != nil {
+		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+	}
+	return &repo.RelationPageResponse{Rows: rows, Page: resp}, nil
+}
+func (r *RelationRepo) create(ctx context.Context, u *model.Relation) (*model.Relation, error) {
 	tx := r.getClient(ctx)
 	created, err := tx.Relation.Create().
 		SetActorID(u.ActorID).
@@ -52,7 +119,7 @@ func (r *RelationRepo) Create(ctx context.Context, u *model.Relation) (*model.Re
 	}, nil
 }
 
-func (r *RelationRepo) Delete(ctx context.Context, req *repo.RelationDeleteReq) (int, error) {
+func (r *RelationRepo) delete(ctx context.Context, req *repo.RelationDeleteReq) (int, error) {
 	tx := r.getClient(ctx)
 	return tx.Relation.Delete().
 		Where(relation.ActorIDEQ(req.ActorID)).
@@ -61,14 +128,14 @@ func (r *RelationRepo) Delete(ctx context.Context, req *repo.RelationDeleteReq) 
 		Exec(ctx)
 }
 
-func (r *RelationRepo) Exists(ctx context.Context, req *repo.RelationGetReq) (bool, error) {
+func (r *RelationRepo) exists(ctx context.Context, req *repo.RelationGetReq) (bool, error) {
 	tx := r.getClient(ctx)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
 	return query.Exist(ctx)
 }
 
-func (r *RelationRepo) Get(ctx context.Context, req *repo.RelationGetReq) (*model.Relation, error) {
+func (r *RelationRepo) get(ctx context.Context, req *repo.RelationGetReq) (*model.Relation, error) {
 	tx := r.getClient(ctx)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
@@ -89,7 +156,7 @@ func (r *RelationRepo) Get(ctx context.Context, req *repo.RelationGetReq) (*mode
 	}, nil
 }
 
-func (r *RelationRepo) List(ctx context.Context, req *repo.RelationGetReq) ([]*model.Relation, error) {
+func (r *RelationRepo) list(ctx context.Context, req *repo.RelationGetReq) ([]*model.Relation, error) {
 	tx := r.getClient(ctx)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
@@ -111,8 +178,8 @@ func (r *RelationRepo) List(ctx context.Context, req *repo.RelationGetReq) ([]*m
 	return result, nil
 }
 
-func (r *RelationRepo) Map(ctx context.Context, req *repo.RelationGetReq) (map[int64]*model.Relation, error) {
-	list, err := r.List(ctx, req)
+func (r *RelationRepo) mapRows(ctx context.Context, req *repo.RelationGetReq) (map[int64]*model.Relation, error) {
+	list, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -123,14 +190,14 @@ func (r *RelationRepo) Map(ctx context.Context, req *repo.RelationGetReq) (map[i
 	return result, nil
 }
 
-func (r *RelationRepo) Count(ctx context.Context, req *repo.RelationGetReq) (int, error) {
+func (r *RelationRepo) count(ctx context.Context, req *repo.RelationGetReq) (int, error) {
 	tx := r.getClient(ctx)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
 	return query.Count(ctx)
 }
 
-func (r *RelationRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.RelationGetReq) ([]*model.Relation, *common.PageReply, error) {
+func (r *RelationRepo) page(ctx context.Context, page *common.PageRequest, req *repo.RelationGetReq) ([]*model.Relation, *common.PageResponse, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Relation.Query()
@@ -160,7 +227,7 @@ func (r *RelationRepo) Page(ctx context.Context, page *common.PageRequest, req *
 			UpdatedAt: rel.UpdatedAt,
 		})
 	}
-	return result, &common.PageReply{
+	return result, &common.PageResponse{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,
@@ -190,8 +257,7 @@ func (r *RelationRepo) getQuery(query *gen.RelationQuery, req *repo.RelationGetR
 		))
 	}
 	if req.Type != nil {
-		dbVal, _ := enum.RelationTypeMap.ToEnum(*req.Type)
-		query = query.Where(relation.TypeEQ(relation.Type(dbVal)))
+		query = query.Where(relation.TypeEQ(relation.Type(*req.Type)))
 	}
 	if req.WithActor {
 		query = query.WithActor()

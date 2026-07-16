@@ -22,31 +22,32 @@ func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterLocationServiceServer(gs, s)
 }
 
-func (s *LocationService) Get(ctx context.Context, req *v1.GetLocation_Request) (*v1.GetLocation_Reply, error) {
-	location, err := s.locationUsecase.GetByUserID(ctx, req.GetUserId())
+func (s *LocationService) Get(ctx context.Context, req *v1.GetLocation_Request) (*v1.GetLocation_Response, error) {
+	res, err := s.locationUsecase.GetByUserID(ctx, &usecase.GetLocationByUserIDReq{UserID: req.GetUserId()})
 	if err != nil {
 		return nil, err
 	}
-	reply := &v1.Location{UserId: req.GetUserId()}
-	if location != nil {
-		reply.Country = location.Country
-		reply.Province = location.Province
-		reply.City = location.City
+	reply := &v1.GetLocation_Response_Location{UserId: req.GetUserId()}
+	if res.Location != nil {
+		reply.Country = res.Location.Country
+		reply.Province = res.Location.Province
+		reply.City = res.Location.City
 	}
-	return &v1.GetLocation_Reply{Location: reply}, nil
+	return &v1.GetLocation_Response{Location: reply}, nil
 }
 
-func (s *LocationService) Upsert(ctx context.Context, req *v1.UpsertLocation_Request) (*v1.UpsertLocation_Reply, error) {
-	location, err := s.locationUsecase.UpsertByUserID(ctx, &model.Location{
+func (s *LocationService) Upsert(ctx context.Context, req *v1.UpsertLocation_Request) (*v1.UpsertLocation_Response, error) {
+	res, err := s.locationUsecase.UpsertByUserID(ctx, &usecase.UpsertLocationByUserIDReq{Location: &model.Location{
 		UserID:   req.GetUserId(),
 		Country:  req.Country,
 		Province: req.Province,
 		City:     req.City,
-	})
+	}})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UpsertLocation_Reply{Location: &v1.Location{
+	location := res.Location
+	return &v1.UpsertLocation_Response{Location: &v1.UpsertLocation_Response_Location{
 		UserId:   req.GetUserId(),
 		Country:  location.Country,
 		Province: location.Province,

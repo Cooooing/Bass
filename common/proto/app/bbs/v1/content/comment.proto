@@ -3,17 +3,18 @@ syntax = "proto3";
 package common.api.app.bbs.v1.content;
 
 import "bbs/v1/content/enum.proto";
-import "bbs/v1/content/model.proto";
 import "common/common.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
+import "bbs/v1/user/enum.proto";
+import "common/enums/language.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
 // 评论接口。
 service CommentService {
   // 创建评论。
-  rpc Create(CreateComment.Request) returns (CreateComment.Reply) {
+  rpc Create(CreateComment.Request) returns (CreateComment.Response) {
     option (google.api.http) = {
       post: "/v1/content/comment/create"
       body: "*"
@@ -21,7 +22,7 @@ service CommentService {
   }
 
   // 分页查询评论列表。
-  rpc List(ListComments.Request) returns (ListComments.Reply) {
+  rpc List(ListComments.Request) returns (ListComments.Response) {
     option (google.api.http) = {
       post: "/v1/content/comment/list"
       body: "*"
@@ -29,7 +30,7 @@ service CommentService {
   }
 
   // 分页查询评论楼层。
-  rpc ListThreads(ListCommentThreads.Request) returns (ListCommentThreads.Reply) {
+  rpc ListThreads(ListCommentThreads.Request) returns (ListCommentThreads.Response) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-threads"
       body: "*"
@@ -37,7 +38,7 @@ service CommentService {
   }
 
   // 分页查询评论回复。
-  rpc ListReplies(ListCommentReplies.Request) returns (ListCommentReplies.Reply) {
+  rpc ListReplies(ListCommentReplies.Request) returns (ListCommentReplies.Response) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-replies"
       body: "*"
@@ -45,7 +46,7 @@ service CommentService {
   }
 
   // 分页查询评论时间线。
-  rpc ListTimeline(ListCommentTimeline.Request) returns (ListCommentTimeline.Reply) {
+  rpc ListTimeline(ListCommentTimeline.Request) returns (ListCommentTimeline.Response) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-timeline"
       body: "*"
@@ -53,7 +54,7 @@ service CommentService {
   }
 
   // 点赞或取消点赞评论。
-  rpc Like(LikeComment.Request) returns (LikeComment.Reply) {
+  rpc Like(LikeComment.Request) returns (LikeComment.Response) {
     option (google.api.http) = {
       post: "/v1/content/comment/like"
       body: "*"
@@ -61,7 +62,7 @@ service CommentService {
   }
 
   // 感谢或取消感谢评论。
-  rpc Thank(ThankComment.Request) returns (ThankComment.Reply) {
+  rpc Thank(ThankComment.Request) returns (ThankComment.Response) {
     option (google.api.http) = {
       post: "/v1/content/comment/thank"
       body: "*"
@@ -72,119 +73,491 @@ service CommentService {
 // 分页查询评论楼层。
 message ListCommentThreads {
   message Request {
-    common.PageRequest page = 1; // 分页参数
-    int64 article_id = 2; // 文章 ID
-    optional CommentOrder order = 3; // 顶层评论排序方式
-    optional int32 reply_preview_limit = 4; // 每个楼层返回的回复预览数量
-    option (gnostic.openapi.v3.schema) = {required: "article_id"};
-  }
-  message Reply {
-    common.PageReply page = 1; // 分页结果
-    repeated CommentThread rows = 2; // 评论楼层列表
-  }
+      .common.api.app.common.PageRequest page = 1; // 分页参数
+      int64 article_id = 2; // 文章 ID
+      optional CommentOrder order = 3; // 顶层评论排序方式
+      optional int32 reply_preview_limit = 4; // 每个楼层返回的回复预览数量
+      option (gnostic.openapi.v3.schema) = {required: "article_id"};
+    }
+  message Response {
+
+    message CommentThread {
+        CommentListItem root = 1; // 顶层评论
+        repeated CommentListItem preview_replies = 2; // 回复预览列表
+        int32 reply_count = 3; // 回复数量
+        bool has_more_replies = 4; // 是否还有更多回复
+      }
+
+    message CommentListItem {
+
+        int64 id = 1; // 评论 ID
+        int64 article_id = 2; // 文章 ID
+        string content = 3; // 原始内容
+        string content_render = 4; // 渲染后的内容
+        int32 level = 5; // 评论层级
+        optional int64 parent_id = 6; // 父评论 ID
+        optional int64 reply_id = 7; // 回复的评论 ID
+        int32 reply_count = 9; // 回复数量
+        int32 like_count = 10; // 点赞数量
+        int32 thank_count = 11; // 感谢数量
+        AccountProfile user = 12; // 评论账号展示资料
+        AccountProfile reply_user = 13; // 被回复账号展示资料
+        ArticleBrief article = 14; // 所属文章摘要
+        CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
+        ContentRestriction restriction = 16; // 管理限制
+        string deleted_at = 17; // 逻辑删除时间
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+
+    message AccountProfile {
+        // 账号 ID。
+        int64 id = 1;
+        // 账号名。
+        string name = 2;
+        // 昵称。
+        optional string nickname = 3;
+        // 个人主页 URL。
+        optional string url = 4;
+        // 头像 URL。
+        optional string avatar_url = 5;
+        // 个人简介。
+        optional string introduction = 6;
+        // MBTI 类型。
+        .common.api.app.bbs.v1.user.MBTI mbti = 7;
+        // 账号状态。
+        .common.api.app.bbs.v1.user.AccountStatus status = 8;
+        // 关注数量。
+        optional int32 follow_count = 10;
+        // 粉丝数量。
+        optional int32 follower_count = 11;
+        // 创建时间。
+        string created_at = 1000;
+        // 更新时间。
+        string updated_at = 1001;
+      }
+
+    message CommentViewerActionState {
+        bool liked = 1; // 是否已点赞
+        bool thanked = 2; // 是否已感谢
+      }
+
+    message ArticleBrief {
+
+        int64 id = 1; // 文章 ID
+        string title = 2; // 标题
+        ArticleType type = 4; // 文章类型
+        bool anonymous = 5; // 是否匿名展示
+        AccountProfile author_user = 6; // 作者展示资料
+        optional string cover_image_url = 7; // 封面图片 URL
+        ArticlePublishStatus publish_status = 8; // 发布状态
+        ArticleVisibility visibility = 9; // 可见范围
+        ContentRestriction restriction = 10; // 管理限制
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+      .common.api.app.common.PageResponse page = 1; // 分页结果
+      repeated CommentThread rows = 2; // 评论楼层列表
+    }
 }
 
 // 分页查询评论回复。
 message ListCommentReplies {
   message Request {
-    common.PageRequest page = 1; // 分页参数
-    int64 article_id = 2; // 文章 ID
-    int64 parent_id = 3; // 顶层评论 ID
-    optional CommentOrder order = 4; // 排序方式
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-      required: "parent_id"
-    };
-  }
-  message Reply {
-    common.PageReply page = 1; // 分页结果
-    repeated CommentListItem rows = 2; // 回复列表
-  }
+      .common.api.app.common.PageRequest page = 1; // 分页参数
+      int64 article_id = 2; // 文章 ID
+      int64 parent_id = 3; // 顶层评论 ID
+      optional CommentOrder order = 4; // 排序方式
+      option (gnostic.openapi.v3.schema) = {
+        required: "article_id"
+        required: "parent_id"
+      };
+    }
+  message Response {
+
+    message CommentListItem {
+
+        int64 id = 1; // 评论 ID
+        int64 article_id = 2; // 文章 ID
+        string content = 3; // 原始内容
+        string content_render = 4; // 渲染后的内容
+        int32 level = 5; // 评论层级
+        optional int64 parent_id = 6; // 父评论 ID
+        optional int64 reply_id = 7; // 回复的评论 ID
+        int32 reply_count = 9; // 回复数量
+        int32 like_count = 10; // 点赞数量
+        int32 thank_count = 11; // 感谢数量
+        AccountProfile user = 12; // 评论账号展示资料
+        AccountProfile reply_user = 13; // 被回复账号展示资料
+        ArticleBrief article = 14; // 所属文章摘要
+        CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
+        ContentRestriction restriction = 16; // 管理限制
+        string deleted_at = 17; // 逻辑删除时间
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+
+    message AccountProfile {
+        // 账号 ID。
+        int64 id = 1;
+        // 账号名。
+        string name = 2;
+        // 昵称。
+        optional string nickname = 3;
+        // 个人主页 URL。
+        optional string url = 4;
+        // 头像 URL。
+        optional string avatar_url = 5;
+        // 个人简介。
+        optional string introduction = 6;
+        // MBTI 类型。
+        .common.api.app.bbs.v1.user.MBTI mbti = 7;
+        // 账号状态。
+        .common.api.app.bbs.v1.user.AccountStatus status = 8;
+        // 关注数量。
+        optional int32 follow_count = 10;
+        // 粉丝数量。
+        optional int32 follower_count = 11;
+        // 创建时间。
+        string created_at = 1000;
+        // 更新时间。
+        string updated_at = 1001;
+      }
+
+    message CommentViewerActionState {
+        bool liked = 1; // 是否已点赞
+        bool thanked = 2; // 是否已感谢
+      }
+
+    message ArticleBrief {
+
+        int64 id = 1; // 文章 ID
+        string title = 2; // 标题
+        ArticleType type = 4; // 文章类型
+        bool anonymous = 5; // 是否匿名展示
+        AccountProfile author_user = 6; // 作者展示资料
+        optional string cover_image_url = 7; // 封面图片 URL
+        ArticlePublishStatus publish_status = 8; // 发布状态
+        ArticleVisibility visibility = 9; // 可见范围
+        ContentRestriction restriction = 10; // 管理限制
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+      .common.api.app.common.PageResponse page = 1; // 分页结果
+      repeated CommentListItem rows = 2; // 回复列表
+    }
 }
 
 // 分页查询评论时间线。
 message ListCommentTimeline {
   message Request {
-    common.PageRequest page = 1; // 分页参数
-    int64 article_id = 2; // 文章 ID
-    optional CommentOrder order = 3; // 排序方式
-    option (gnostic.openapi.v3.schema) = {required: "article_id"};
-  }
-  message Reply {
-    common.PageReply page = 1; // 分页结果
-    repeated CommentListItem rows = 2; // 评论列表
-  }
+      .common.api.app.common.PageRequest page = 1; // 分页参数
+      int64 article_id = 2; // 文章 ID
+      optional CommentOrder order = 3; // 排序方式
+      option (gnostic.openapi.v3.schema) = {required: "article_id"};
+    }
+  message Response {
+
+    message CommentListItem {
+
+        int64 id = 1; // 评论 ID
+        int64 article_id = 2; // 文章 ID
+        string content = 3; // 原始内容
+        string content_render = 4; // 渲染后的内容
+        int32 level = 5; // 评论层级
+        optional int64 parent_id = 6; // 父评论 ID
+        optional int64 reply_id = 7; // 回复的评论 ID
+        int32 reply_count = 9; // 回复数量
+        int32 like_count = 10; // 点赞数量
+        int32 thank_count = 11; // 感谢数量
+        AccountProfile user = 12; // 评论账号展示资料
+        AccountProfile reply_user = 13; // 被回复账号展示资料
+        ArticleBrief article = 14; // 所属文章摘要
+        CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
+        ContentRestriction restriction = 16; // 管理限制
+        string deleted_at = 17; // 逻辑删除时间
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+
+    message AccountProfile {
+        // 账号 ID。
+        int64 id = 1;
+        // 账号名。
+        string name = 2;
+        // 昵称。
+        optional string nickname = 3;
+        // 个人主页 URL。
+        optional string url = 4;
+        // 头像 URL。
+        optional string avatar_url = 5;
+        // 个人简介。
+        optional string introduction = 6;
+        // MBTI 类型。
+        .common.api.app.bbs.v1.user.MBTI mbti = 7;
+        // 账号状态。
+        .common.api.app.bbs.v1.user.AccountStatus status = 8;
+        // 关注数量。
+        optional int32 follow_count = 10;
+        // 粉丝数量。
+        optional int32 follower_count = 11;
+        // 创建时间。
+        string created_at = 1000;
+        // 更新时间。
+        string updated_at = 1001;
+      }
+
+    message CommentViewerActionState {
+        bool liked = 1; // 是否已点赞
+        bool thanked = 2; // 是否已感谢
+      }
+
+    message ArticleBrief {
+
+        int64 id = 1; // 文章 ID
+        string title = 2; // 标题
+        ArticleType type = 4; // 文章类型
+        bool anonymous = 5; // 是否匿名展示
+        AccountProfile author_user = 6; // 作者展示资料
+        optional string cover_image_url = 7; // 封面图片 URL
+        ArticlePublishStatus publish_status = 8; // 发布状态
+        ArticleVisibility visibility = 9; // 可见范围
+        ContentRestriction restriction = 10; // 管理限制
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+      .common.api.app.common.PageResponse page = 1; // 分页结果
+      repeated CommentListItem rows = 2; // 评论列表
+    }
 }
 
 // 创建评论。
 message CreateComment {
   message Request {
-    int64 article_id = 1; // 文章 ID
-    string content = 2; // 评论内容
-    int64 reply_id = 3; // 回复的评论 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-      required: "content"
-    };
-  }
-  message Reply {
-    CommentDetail comment = 1; // 创建后的评论
-  }
+      int64 article_id = 1; // 文章 ID
+      string content = 2; // 评论内容
+      int64 reply_id = 3; // 回复的评论 ID
+      option (gnostic.openapi.v3.schema) = {
+        required: "article_id"
+        required: "content"
+      };
+    }
+  message Response {
+
+    message CommentDetail {
+
+        int64 id = 1; // 评论 ID
+        int64 article_id = 2; // 文章 ID
+        string content = 3; // 原始内容
+        string content_render = 4; // 渲染后的内容
+        int32 level = 5; // 评论层级
+        optional int64 parent_id = 6; // 父评论 ID
+        optional int64 reply_id = 7; // 回复的评论 ID
+        int32 reply_count = 9; // 回复数量
+        int32 like_count = 10; // 点赞数量
+        int32 thank_count = 11; // 感谢数量
+        AccountProfile user = 12; // 评论账号展示资料
+        AccountProfile reply_user = 13; // 被回复账号展示资料
+        ArticleBrief article = 14; // 所属文章摘要
+        CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
+        ContentRestriction restriction = 16; // 管理限制
+        string deleted_at = 17; // 逻辑删除时间
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+
+    message AccountProfile {
+        // 账号 ID。
+        int64 id = 1;
+        // 账号名。
+        string name = 2;
+        // 昵称。
+        optional string nickname = 3;
+        // 个人主页 URL。
+        optional string url = 4;
+        // 头像 URL。
+        optional string avatar_url = 5;
+        // 个人简介。
+        optional string introduction = 6;
+        // MBTI 类型。
+        .common.api.app.bbs.v1.user.MBTI mbti = 7;
+        // 账号状态。
+        .common.api.app.bbs.v1.user.AccountStatus status = 8;
+        // 关注数量。
+        optional int32 follow_count = 10;
+        // 粉丝数量。
+        optional int32 follower_count = 11;
+        // 创建时间。
+        string created_at = 1000;
+        // 更新时间。
+        string updated_at = 1001;
+      }
+
+    message ArticleBrief {
+
+        int64 id = 1; // 文章 ID
+        string title = 2; // 标题
+        ArticleType type = 4; // 文章类型
+        bool anonymous = 5; // 是否匿名展示
+        AccountProfile author_user = 6; // 作者展示资料
+        optional string cover_image_url = 7; // 封面图片 URL
+        ArticlePublishStatus publish_status = 8; // 发布状态
+        ArticleVisibility visibility = 9; // 可见范围
+        ContentRestriction restriction = 10; // 管理限制
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+
+    message CommentViewerActionState {
+        bool liked = 1; // 是否已点赞
+        bool thanked = 2; // 是否已感谢
+      }
+      CommentDetail comment = 1; // 创建后的评论
+    }
 }
 
 // 分页查询评论列表。
 message ListComments {
   message Request {
-    common.PageRequest page = 1; // 分页参数
-    CommentQuery query = 2; // 查询条件
-  }
-  message Reply {
-    common.PageReply page = 1; // 分页结果
-    repeated CommentListItem rows = 2; // 评论列表
-  }
+
+    message CommentQuery {
+
+        optional int64 comment_id = 1; // 评论 ID
+        optional int64 article_id = 2; // 文章 ID
+        optional int64 parent_id = 3; // 父评论 ID
+        optional int64 reply_id = 4; // 回复的评论 ID
+        optional CommentOrder order = 5; // 排序方式
+        optional int64 user_id = 6; // 评论账号 ID
+        optional int32 level = 7; // 评论层级
+        optional ContentRestriction restriction = 9; // 管理限制
+        repeated ContentRestriction restrictions = 10; // 管理限制列表
+      }
+      .common.api.app.common.PageRequest page = 1; // 分页参数
+      CommentQuery query = 2; // 查询条件
+    }
+  message Response {
+
+    message CommentListItem {
+
+        int64 id = 1; // 评论 ID
+        int64 article_id = 2; // 文章 ID
+        string content = 3; // 原始内容
+        string content_render = 4; // 渲染后的内容
+        int32 level = 5; // 评论层级
+        optional int64 parent_id = 6; // 父评论 ID
+        optional int64 reply_id = 7; // 回复的评论 ID
+        int32 reply_count = 9; // 回复数量
+        int32 like_count = 10; // 点赞数量
+        int32 thank_count = 11; // 感谢数量
+        AccountProfile user = 12; // 评论账号展示资料
+        AccountProfile reply_user = 13; // 被回复账号展示资料
+        ArticleBrief article = 14; // 所属文章摘要
+        CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
+        ContentRestriction restriction = 16; // 管理限制
+        string deleted_at = 17; // 逻辑删除时间
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+
+    message AccountProfile {
+        // 账号 ID。
+        int64 id = 1;
+        // 账号名。
+        string name = 2;
+        // 昵称。
+        optional string nickname = 3;
+        // 个人主页 URL。
+        optional string url = 4;
+        // 头像 URL。
+        optional string avatar_url = 5;
+        // 个人简介。
+        optional string introduction = 6;
+        // MBTI 类型。
+        .common.api.app.bbs.v1.user.MBTI mbti = 7;
+        // 账号状态。
+        .common.api.app.bbs.v1.user.AccountStatus status = 8;
+        // 关注数量。
+        optional int32 follow_count = 10;
+        // 粉丝数量。
+        optional int32 follower_count = 11;
+        // 创建时间。
+        string created_at = 1000;
+        // 更新时间。
+        string updated_at = 1001;
+      }
+
+    message CommentViewerActionState {
+        bool liked = 1; // 是否已点赞
+        bool thanked = 2; // 是否已感谢
+      }
+
+    message ArticleBrief {
+
+        int64 id = 1; // 文章 ID
+        string title = 2; // 标题
+        ArticleType type = 4; // 文章类型
+        bool anonymous = 5; // 是否匿名展示
+        AccountProfile author_user = 6; // 作者展示资料
+        optional string cover_image_url = 7; // 封面图片 URL
+        ArticlePublishStatus publish_status = 8; // 发布状态
+        ArticleVisibility visibility = 9; // 可见范围
+        ContentRestriction restriction = 10; // 管理限制
+        optional int64 created_by = 1002; // 创建账号 ID
+        optional int64 updated_by = 1003; // 更新账号 ID
+        string created_at = 1000; // 创建时间
+        string updated_at = 1001; // 更新时间
+      }
+      .common.api.app.common.PageResponse page = 1; // 分页结果
+      repeated CommentListItem rows = 2; // 评论列表
+    }
 }
 
 // 点赞或取消点赞评论。
 message LikeComment {
   message Request {
-    int64 id = 1; // 评论 ID
-    bool active = 2; // 是否点赞
-    option (gnostic.openapi.v3.schema) = {
-      required: "id"
-      required: "active"
-    };
-  }
-  message Reply {
-    bool liked = 1; // 是否已点赞
-  }
+      int64 id = 1; // 评论 ID
+      bool active = 2; // 是否点赞
+      option (gnostic.openapi.v3.schema) = {
+        required: "id"
+        required: "active"
+      };
+    }
+  message Response {
+      bool liked = 1; // 是否已点赞
+    }
 }
 
 // 感谢或取消感谢评论。
 message ThankComment {
   message Request {
-    int64 id = 1; // 评论 ID
-    bool active = 2; // 是否感谢
-    option (gnostic.openapi.v3.schema) = {
-      required: "id"
-      required: "active"
-    };
-  }
-  message Reply {
-    bool thanked = 1; // 是否已感谢
-  }
+      int64 id = 1; // 评论 ID
+      bool active = 2; // 是否感谢
+      option (gnostic.openapi.v3.schema) = {
+        required: "id"
+        required: "active"
+      };
+    }
+  message Response {
+      bool thanked = 1; // 是否已感谢
+    }
 }
 
 // 评论查询条件。
-message CommentQuery {
-  reserved 8;
-
-  optional int64 comment_id = 1; // 评论 ID
-  optional int64 article_id = 2; // 文章 ID
-  optional int64 parent_id = 3; // 父评论 ID
-  optional int64 reply_id = 4; // 回复的评论 ID
-  optional CommentOrder order = 5; // 排序方式
-  optional int64 user_id = 6; // 评论账号 ID
-  optional int32 level = 7; // 评论层级
-  optional ContentRestriction restriction = 9; // 管理限制
-  repeated ContentRestriction restrictions = 10; // 管理限制列表
-}

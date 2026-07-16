@@ -7,17 +7,17 @@ import "notify/v1/enum.proto";
 option go_package = "common/proto/gen/notify/v1;v1";
 
 service NotifyRateLimitService {
-  rpc Check(CheckNotificationRateLimit.Request) returns (CheckNotificationRateLimit.Reply) {} // 查询通知通道收件目标是否已被限流。
+  rpc Check(CheckNotificationRateLimit.Request) returns (CheckNotificationRateLimit.Response) {} // 查询通知通道收件目标是否已被限流。
 }
 
 message CheckNotificationRateLimit {
   message Request {
-    NotificationChannel channel = 1;
-    string recipient = 2;
-  }
-  message Reply {
-    bool limited = 1;
-    int64 retry_after_seconds = 2;
-    int64 remaining_count = 3;
-  }
+      NotificationChannel channel = 1;
+      string recipient = 2;
+    }
+  message Response {
+      bool limited = 1;
+      int64 retry_after_seconds = 2;
+      int64 remaining_count = 3;
+    }
 }

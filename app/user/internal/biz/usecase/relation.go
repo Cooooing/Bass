@@ -5,9 +5,7 @@ import (
 	"context"
 
 	"common/pkg/apperror"
-	"common/proto/gen/common"
 	commonenums "common/proto/gen/common/enums"
-	v1 "common/proto/gen/user/v1"
 	base "user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -35,47 +33,64 @@ func NewRelationUsecase(
 	}, nil
 }
 
-func (d *RelationUsecase) Follow(ctx context.Context, actorID int64, targetID int64) error {
+type RelationPageReq struct {
+	Page uint32
+	Size uint32
+}
+
+type RelationPageResponse struct {
+	Total uint32
+	Page  uint32
+	Size  uint32
+}
+
+type FollowRelationReq struct {
+	ActorID  int64
+	TargetID int64
+}
+
+func (d *RelationUsecase) Follow(ctx context.Context, req *FollowRelationReq) error {
 	err := d.tx(ctx, func(ctx context.Context) error {
-		exist, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
-			ActorId:  &actorID,
-			TargetId: &targetID,
-			Type:     new(v1.RelationType_RELATION_TYPE_FOLLOW),
+		existResp, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
+			ActorId:  &req.ActorID,
+			TargetId: &req.TargetID,
+			Type:     new(enum.RelationTypeFollow),
 		})
 		if err != nil {
 			return err
 		}
-		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &actorID}); err != nil {
+		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.ActorID}); err != nil {
 			return err
 		}
-		if exist {
+		if existResp.Exists {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_ALREADY_EXISTS)
 		}
-		if _, err = d.relationRepo.Create(ctx, &model.Relation{
-			ActorID:  actorID,
-			TargetID: targetID,
+		if _, err = d.relationRepo.Create(ctx, &repo.RelationCreateReq{Relation: &model.Relation{
+			ActorID:  req.ActorID,
+			TargetID: req.TargetID,
 			Type:     enum.RelationTypeFollow,
-		}); err != nil {
+		}}); err != nil {
 			return err
 		}
-		if _, err = d.accountRepo.AddStat(ctx, actorID, enum.AccountStatTypeFollow, 1); err != nil {
+		if _, err = d.accountRepo.AddStat(ctx, &repo.AccountAddStatReq{UserID: req.ActorID, StatType: enum.AccountStatTypeFollow, Num: 1}); err != nil {
 			return err
 		}
-		if _, err = d.accountRepo.AddStat(ctx, targetID, enum.AccountStatTypeFollower, 1); err != nil {
+		if _, err = d.accountRepo.AddStat(ctx, &repo.AccountAddStatReq{UserID: req.TargetID, StatType: enum.AccountStatTypeFollower, Num: 1}); err != nil {
 			return err
 		}
-		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		_, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_FOLLOW,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_FOLLOW,
 				Payload: &commonenums.Event_UserFollow{
 					UserFollow: &commonenums.UserFollowPayload{
-						SenderId:   actorID,
-						FollowedId: targetID,
+						SenderId:   req.ActorID,
+						FollowedId: req.TargetID,
 					},
 				},
 			},
 		})
+		return err
 	})
 	if err != nil {
 		return err
@@ -83,48 +98,54 @@ func (d *RelationUsecase) Follow(ctx context.Context, actorID int64, targetID in
 	return nil
 }
 
-func (d *RelationUsecase) Unfollow(ctx context.Context, actorID int64, targetID int64) error {
+type UnfollowRelationReq struct {
+	ActorID  int64
+	TargetID int64
+}
+
+func (d *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowRelationReq) error {
 	err := d.tx(ctx, func(ctx context.Context) error {
-		exist, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
-			ActorId:  &actorID,
-			TargetId: &targetID,
-			Type:     new(v1.RelationType_RELATION_TYPE_FOLLOW),
+		existResp, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
+			ActorId:  &req.ActorID,
+			TargetId: &req.TargetID,
+			Type:     new(enum.RelationTypeFollow),
 		})
 		if err != nil {
 			return err
 		}
-		if !exist {
+		if !existResp.Exists {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_NOT_FOUND)
 		}
-		deleted, err := d.relationRepo.Delete(ctx, &repo.RelationDeleteReq{
-			ActorID:  actorID,
-			TargetID: targetID,
+		deletedResp, err := d.relationRepo.Delete(ctx, &repo.RelationDeleteReq{
+			ActorID:  req.ActorID,
+			TargetID: req.TargetID,
 			Type:     enum.RelationTypeFollow,
 		})
 		if err != nil {
 			return err
 		}
-		if deleted == 0 {
+		if deletedResp.Deleted == 0 {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_NOT_FOUND)
 		}
-		if _, err = d.accountRepo.AddStat(ctx, actorID, enum.AccountStatTypeFollow, -1); err != nil {
+		if _, err = d.accountRepo.AddStat(ctx, &repo.AccountAddStatReq{UserID: req.ActorID, StatType: enum.AccountStatTypeFollow, Num: -1}); err != nil {
 			return err
 		}
-		if _, err = d.accountRepo.AddStat(ctx, targetID, enum.AccountStatTypeFollower, -1); err != nil {
+		if _, err = d.accountRepo.AddStat(ctx, &repo.AccountAddStatReq{UserID: req.TargetID, StatType: enum.AccountStatTypeFollower, Num: -1}); err != nil {
 			return err
 		}
-		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		_, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_UNFOLLOW,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_UNFOLLOW,
 				Payload: &commonenums.Event_UserUnfollow{
 					UserUnfollow: &commonenums.UserUnfollowPayload{
-						SenderId:   actorID,
-						FollowedId: targetID,
+						SenderId:   req.ActorID,
+						FollowedId: req.TargetID,
 					},
 				},
 			},
 		})
+		return err
 	})
 	if err != nil {
 		return err
@@ -132,41 +153,47 @@ func (d *RelationUsecase) Unfollow(ctx context.Context, actorID int64, targetID 
 	return nil
 }
 
-func (d *RelationUsecase) Block(ctx context.Context, actorID int64, targetID int64) error {
+type BlockRelationReq struct {
+	ActorID  int64
+	TargetID int64
+}
+
+func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) error {
 	err := d.tx(ctx, func(ctx context.Context) error {
-		exist, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
-			ActorId:  &actorID,
-			TargetId: &targetID,
-			Type:     new(v1.RelationType_RELATION_TYPE_BLOCK),
+		existResp, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
+			ActorId:  &req.ActorID,
+			TargetId: &req.TargetID,
+			Type:     new(enum.RelationTypeBlock),
 		})
 		if err != nil {
 			return err
 		}
-		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &actorID}); err != nil {
+		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.ActorID}); err != nil {
 			return err
 		}
-		if exist {
+		if existResp.Exists {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_ALREADY_EXISTS)
 		}
-		if _, err = d.relationRepo.Create(ctx, &model.Relation{
-			ActorID:  actorID,
-			TargetID: targetID,
+		if _, err = d.relationRepo.Create(ctx, &repo.RelationCreateReq{Relation: &model.Relation{
+			ActorID:  req.ActorID,
+			TargetID: req.TargetID,
 			Type:     enum.RelationTypeBlock,
-		}); err != nil {
+		}}); err != nil {
 			return err
 		}
-		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		_, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_BLOCK,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_BLOCK,
 				Payload: &commonenums.Event_UserBlock{
 					UserBlock: &commonenums.UserBlockPayload{
-						SenderId:  actorID,
-						BlockedId: targetID,
+						SenderId:  req.ActorID,
+						BlockedId: req.TargetID,
 					},
 				},
 			},
 		})
+		return err
 	})
 	if err != nil {
 		return err
@@ -174,42 +201,48 @@ func (d *RelationUsecase) Block(ctx context.Context, actorID int64, targetID int
 	return nil
 }
 
-func (d *RelationUsecase) Unblock(ctx context.Context, actorID int64, targetID int64) error {
+type UnblockRelationReq struct {
+	ActorID  int64
+	TargetID int64
+}
+
+func (d *RelationUsecase) Unblock(ctx context.Context, req *UnblockRelationReq) error {
 	err := d.tx(ctx, func(ctx context.Context) error {
-		exist, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
-			ActorId:  &actorID,
-			TargetId: &targetID,
-			Type:     new(v1.RelationType_RELATION_TYPE_BLOCK),
+		existResp, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
+			ActorId:  &req.ActorID,
+			TargetId: &req.TargetID,
+			Type:     new(enum.RelationTypeBlock),
 		})
 		if err != nil {
 			return err
 		}
-		if !exist {
+		if !existResp.Exists {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_NOT_FOUND)
 		}
-		deleted, err := d.relationRepo.Delete(ctx, &repo.RelationDeleteReq{
-			ActorID:  actorID,
-			TargetID: targetID,
+		deletedResp, err := d.relationRepo.Delete(ctx, &repo.RelationDeleteReq{
+			ActorID:  req.ActorID,
+			TargetID: req.TargetID,
 			Type:     enum.RelationTypeBlock,
 		})
 		if err != nil {
 			return err
 		}
-		if deleted == 0 {
+		if deletedResp.Deleted == 0 {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_NOT_FOUND)
 		}
-		return d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		_, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_UNBLOCK,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_UNBLOCK,
 				Payload: &commonenums.Event_UserUnblock{
 					UserUnblock: &commonenums.UserUnblockPayload{
-						SenderId:    actorID,
-						UnblockedId: targetID,
+						SenderId:    req.ActorID,
+						UnblockedId: req.TargetID,
 					},
 				},
 			},
 		})
+		return err
 	})
 	if err != nil {
 		return err
@@ -217,28 +250,91 @@ func (d *RelationUsecase) Unblock(ctx context.Context, actorID int64, targetID i
 	return nil
 }
 
-func (d *RelationUsecase) ListFollowing(ctx context.Context, page *common.PageRequest, actorID int64) ([]*model.Relation, *common.PageReply, error) {
-	return d.relationRepo.Page(ctx, page, &repo.RelationGetReq{ActorId: &actorID, Type: new(v1.RelationType_RELATION_TYPE_FOLLOW)})
+type ListFollowingRelationsReq struct {
+	Page    RelationPageReq
+	ActorID int64
 }
 
-func (d *RelationUsecase) ListFollowers(ctx context.Context, page *common.PageRequest, targetID int64) ([]*model.Relation, *common.PageReply, error) {
-	return d.relationRepo.Page(ctx, page, &repo.RelationGetReq{TargetId: &targetID, Type: new(v1.RelationType_RELATION_TYPE_FOLLOW)})
+type ListFollowingRelationsResponse struct {
+	Rows []*model.Relation
+	Page RelationPageResponse
 }
 
-func (d *RelationUsecase) ListBlocked(ctx context.Context, page *common.PageRequest, actorID int64) ([]*model.Relation, *common.PageReply, error) {
-	return d.relationRepo.Page(ctx, page, &repo.RelationGetReq{ActorId: &actorID, Type: new(v1.RelationType_RELATION_TYPE_BLOCK)})
-}
-
-func (d *RelationUsecase) MapStatus(ctx context.Context, actorID int64, targetIDs []int64) (map[int64]*model.RelationStatus, error) {
-	statuses := make(map[int64]*model.RelationStatus, len(targetIDs))
-	for _, targetID := range targetIDs {
-		statuses[targetID] = &model.RelationStatus{TargetID: targetID}
-	}
-	rows, err := d.relationRepo.List(ctx, &repo.RelationGetReq{ActorId: &actorID})
+func (d *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingRelationsReq) (*ListFollowingRelationsResponse, error) {
+	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
+		Page:  repo.PageReq{Page: req.Page.Page, Size: req.Page.Size},
+		Query: repo.RelationGetReq{ActorId: &req.ActorID, Type: new(enum.RelationTypeFollow)},
+	})
 	if err != nil {
 		return nil, err
 	}
-	for _, row := range rows {
+	res := RelationPageResponse{Total: pageResp.Page.Total, Page: pageResp.Page.Page, Size: pageResp.Page.Size}
+	return &ListFollowingRelationsResponse{Rows: pageResp.Rows, Page: res}, nil
+}
+
+type ListFollowersRelationsReq struct {
+	Page     RelationPageReq
+	TargetID int64
+}
+
+type ListFollowersRelationsResponse struct {
+	Rows []*model.Relation
+	Page RelationPageResponse
+}
+
+func (d *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersRelationsReq) (*ListFollowersRelationsResponse, error) {
+	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
+		Page:  repo.PageReq{Page: req.Page.Page, Size: req.Page.Size},
+		Query: repo.RelationGetReq{TargetId: &req.TargetID, Type: new(enum.RelationTypeFollow)},
+	})
+	if err != nil {
+		return nil, err
+	}
+	res := RelationPageResponse{Total: pageResp.Page.Total, Page: pageResp.Page.Page, Size: pageResp.Page.Size}
+	return &ListFollowersRelationsResponse{Rows: pageResp.Rows, Page: res}, nil
+}
+
+type ListBlockedRelationsReq struct {
+	Page    RelationPageReq
+	ActorID int64
+}
+
+type ListBlockedRelationsResponse struct {
+	Rows []*model.Relation
+	Page RelationPageResponse
+}
+
+func (d *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedRelationsReq) (*ListBlockedRelationsResponse, error) {
+	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
+		Page:  repo.PageReq{Page: req.Page.Page, Size: req.Page.Size},
+		Query: repo.RelationGetReq{ActorId: &req.ActorID, Type: new(enum.RelationTypeBlock)},
+	})
+	if err != nil {
+		return nil, err
+	}
+	res := RelationPageResponse{Total: pageResp.Page.Total, Page: pageResp.Page.Page, Size: pageResp.Page.Size}
+	return &ListBlockedRelationsResponse{Rows: pageResp.Rows, Page: res}, nil
+}
+
+type MapRelationStatusReq struct {
+	ActorID   int64
+	TargetIDs []int64
+}
+
+type MapRelationStatusResponse struct {
+	Statuses map[int64]*model.RelationStatus
+}
+
+func (d *RelationUsecase) MapStatus(ctx context.Context, req *MapRelationStatusReq) (*MapRelationStatusResponse, error) {
+	statuses := make(map[int64]*model.RelationStatus, len(req.TargetIDs))
+	for _, targetID := range req.TargetIDs {
+		statuses[targetID] = &model.RelationStatus{TargetID: targetID}
+	}
+	listResp, err := d.relationRepo.List(ctx, &repo.RelationGetReq{ActorId: &req.ActorID})
+	if err != nil {
+		return nil, err
+	}
+	for _, row := range listResp.Rows {
 		if status, ok := statuses[row.TargetID]; ok {
 			switch row.Type {
 			case enum.RelationTypeFollow:
@@ -248,11 +344,11 @@ func (d *RelationUsecase) MapStatus(ctx context.Context, actorID int64, targetID
 			}
 		}
 	}
-	rows, err = d.relationRepo.List(ctx, &repo.RelationGetReq{TargetId: &actorID})
+	listResp, err = d.relationRepo.List(ctx, &repo.RelationGetReq{TargetId: &req.ActorID})
 	if err != nil {
 		return nil, err
 	}
-	for _, row := range rows {
+	for _, row := range listResp.Rows {
 		if status, ok := statuses[row.ActorID]; ok {
 			switch row.Type {
 			case enum.RelationTypeFollow:
@@ -262,5 +358,5 @@ func (d *RelationUsecase) MapStatus(ctx context.Context, actorID int64, targetID
 			}
 		}
 	}
-	return statuses, nil
+	return &MapRelationStatusResponse{Statuses: statuses}, nil
 }

@@ -21,6 +21,22 @@ type NotificationRateLimitState struct {
 }
 
 type NotificationRateLimitCache interface {
-	Allow(ctx context.Context, spec *NotificationRateLimitSpec) (bool, error)
-	Check(ctx context.Context, spec *NotificationRateLimitSpec) (*NotificationRateLimitState, error)
+	Allow(ctx context.Context, req *NotificationRateLimitAllowReq) (*NotificationRateLimitAllowResponse, error)
+	Check(ctx context.Context, req *NotificationRateLimitCheckReq) (*NotificationRateLimitCheckResponse, error)
+}
+
+type NotificationRateLimitAllowReq struct {
+	Spec *NotificationRateLimitSpec
+}
+
+type NotificationRateLimitAllowResponse struct {
+	Allowed bool
+}
+
+type NotificationRateLimitCheckReq struct {
+	Spec *NotificationRateLimitSpec
+}
+
+type NotificationRateLimitCheckResponse struct {
+	State *NotificationRateLimitState
 }

@@ -11,6 +11,7 @@ const (
 	PushNodeServiceName  ServiceName = "push_node"
 	PlatformServiceName  ServiceName = "platform"
 	SchedulerServiceName ServiceName = "scheduler"
+	GameTownServiceName  ServiceName = "game_town"
 )
 
 func (s ServiceName) String() string {
@@ -32,9 +33,15 @@ const (
 	TablePrefixPushNode  TablePrefix = TablePrefix(PushNodeServiceName + "_")
 	TablePrefixPlatform  TablePrefix = TablePrefix(PlatformServiceName + "_")
 	TablePrefixScheduler TablePrefix = TablePrefix(SchedulerServiceName + "_")
+	TablePrefixGameTown  TablePrefix = TablePrefix(GameTownServiceName + "_")
 )
 
 const (
 	SchedulerTaskChangedSubject           = "scheduler.task.changed"
 	SchedulerTaskExecutionCanceledSubject = "scheduler.task.execution.canceled"
+	PushNodeSubjectPrefix                 = "push.node."
 )
+
+func GetPushNodeSubject(nodeID string) string {
+	return PushNodeSubjectPrefix + nodeID
+}

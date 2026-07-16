@@ -32,7 +32,66 @@ func (r *TotpRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *TotpRepo) Get(ctx context.Context, req *repo.TotpGetReq) (*model.Totp, error) {
+func (r *TotpRepo) Get(ctx context.Context, req *repo.TotpGetReq) (*repo.TotpGetResponse, error) {
+	row, err := r.get(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.TotpGetResponse{Totp: row}, nil
+}
+
+func (r *TotpRepo) List(ctx context.Context, req *repo.TotpGetReq) (*repo.TotpListResponse, error) {
+	rows, err := r.list(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.TotpListResponse{Rows: rows}, nil
+}
+
+func (r *TotpRepo) Map(ctx context.Context, req *repo.TotpGetReq) (*repo.TotpMapResponse, error) {
+	rows, err := r.mapRows(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.TotpMapResponse{Rows: rows}, nil
+}
+
+func (r *TotpRepo) Count(ctx context.Context, req *repo.TotpGetReq) (*repo.TotpCountResponse, error) {
+	count, err := r.count(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.TotpCountResponse{Count: count}, nil
+}
+
+func (r *TotpRepo) Page(ctx context.Context, req *repo.TotpPageReq) (*repo.TotpPageResponse, error) {
+	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+	if err != nil {
+		return nil, err
+	}
+	resp := repo.PageResponse{}
+	if page != nil {
+		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+	}
+	return &repo.TotpPageResponse{Rows: rows, Page: resp}, nil
+}
+
+func (r *TotpRepo) UpsertEnabledByUserID(ctx context.Context, req *repo.TotpUpsertEnabledByUserIDReq) (*repo.TotpUpsertEnabledByUserIDResponse, error) {
+	row, err := r.upsertEnabledByUserID(ctx, req.UserID, req.Secret)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.TotpUpsertEnabledByUserIDResponse{Totp: row}, nil
+}
+
+func (r *TotpRepo) DisableByUserID(ctx context.Context, req *repo.TotpDisableByUserIDReq) (*repo.TotpDisableByUserIDResponse, error) {
+	row, err := r.disableByUserID(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.TotpDisableByUserIDResponse{Totp: row}, nil
+}
+func (r *TotpRepo) get(ctx context.Context, req *repo.TotpGetReq) (*model.Totp, error) {
 	tx := r.getClient(ctx)
 	query := tx.Totp.Query()
 	query = r.getQuery(query, req)
@@ -52,7 +111,7 @@ func (r *TotpRepo) Get(ctx context.Context, req *repo.TotpGetReq) (*model.Totp, 
 	}, nil
 }
 
-func (r *TotpRepo) List(ctx context.Context, req *repo.TotpGetReq) ([]*model.Totp, error) {
+func (r *TotpRepo) list(ctx context.Context, req *repo.TotpGetReq) ([]*model.Totp, error) {
 	tx := r.getClient(ctx)
 	query := tx.Totp.Query()
 	query = r.getQuery(query, req)
@@ -73,8 +132,8 @@ func (r *TotpRepo) List(ctx context.Context, req *repo.TotpGetReq) ([]*model.Tot
 	return result, nil
 }
 
-func (r *TotpRepo) Map(ctx context.Context, req *repo.TotpGetReq) (map[int64]*model.Totp, error) {
-	list, err := r.List(ctx, req)
+func (r *TotpRepo) mapRows(ctx context.Context, req *repo.TotpGetReq) (map[int64]*model.Totp, error) {
+	list, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -85,14 +144,14 @@ func (r *TotpRepo) Map(ctx context.Context, req *repo.TotpGetReq) (map[int64]*mo
 	return result, nil
 }
 
-func (r *TotpRepo) Count(ctx context.Context, req *repo.TotpGetReq) (int, error) {
+func (r *TotpRepo) count(ctx context.Context, req *repo.TotpGetReq) (int, error) {
 	tx := r.getClient(ctx)
 	query := tx.Totp.Query()
 	query = r.getQuery(query, req)
 	return query.Count(ctx)
 }
 
-func (r *TotpRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.TotpGetReq) ([]*model.Totp, *common.PageReply, error) {
+func (r *TotpRepo) page(ctx context.Context, page *common.PageRequest, req *repo.TotpGetReq) ([]*model.Totp, *common.PageResponse, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Totp.Query()
@@ -118,16 +177,16 @@ func (r *TotpRepo) Page(ctx context.Context, page *common.PageRequest, req *repo
 			Secret:     row.Secret,
 		})
 	}
-	return result, &common.PageReply{
+	return result, &common.PageResponse{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,
 	}, nil
 }
 
-func (r *TotpRepo) UpsertEnabledByUserID(ctx context.Context, userID int64, secret string) (*model.Totp, error) {
+func (r *TotpRepo) upsertEnabledByUserID(ctx context.Context, userID int64, secret string) (*model.Totp, error) {
 	tx := r.getClient(ctx)
-	existing, err := r.Get(ctx, &repo.TotpGetReq{UserID: &userID})
+	existing, err := r.get(ctx, &repo.TotpGetReq{UserID: &userID})
 	if err != nil {
 		return nil, err
 	}
@@ -166,9 +225,9 @@ func (r *TotpRepo) UpsertEnabledByUserID(ctx context.Context, userID int64, secr
 	}, nil
 }
 
-func (r *TotpRepo) DisableByUserID(ctx context.Context, userID int64) (*model.Totp, error) {
+func (r *TotpRepo) disableByUserID(ctx context.Context, userID int64) (*model.Totp, error) {
 	tx := r.getClient(ctx)
-	existing, err := r.Get(ctx, &repo.TotpGetReq{UserID: &userID})
+	existing, err := r.get(ctx, &repo.TotpGetReq{UserID: &userID})
 	if err != nil {
 		return nil, err
 	}

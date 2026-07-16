@@ -36,14 +36,39 @@ func NewRateLimitUsecase(conf *config.Bootstrap, notificationRateLimitCache repo
 	}
 }
 
-func (u *RateLimitUsecase) Check(ctx context.Context, channel notifyenum.NotificationChannel, recipient string) (*repo.NotificationRateLimitState, error) {
-	if !u.enabled {
-		return &repo.NotificationRateLimitState{RemainingCount: u.maxCount}, nil
+type RateLimitCheckReq struct {
+	Channel   notifyenum.NotificationChannel
+	Recipient string
+}
+
+type RateLimitCheckResponse struct {
+	Limited        bool
+	RetryAfter     time.Duration
+	RemainingCount int64
+}
+
+func (u *RateLimitUsecase) Check(ctx context.Context, req *RateLimitCheckReq) (*RateLimitCheckResponse, error) {
+	if req == nil {
+		req = &RateLimitCheckReq{}
 	}
-	return u.notificationRateLimitCache.Check(ctx, &repo.NotificationRateLimitSpec{
-		Channel:   channel,
-		Recipient: recipient,
+	if !u.enabled {
+		return &RateLimitCheckResponse{RemainingCount: u.maxCount}, nil
+	}
+	checkResponse, err := u.notificationRateLimitCache.Check(ctx, &repo.NotificationRateLimitCheckReq{Spec: &repo.NotificationRateLimitSpec{
+		Channel:   req.Channel,
+		Recipient: req.Recipient,
 		Window:    u.window,
 		MaxCount:  u.maxCount,
-	})
+	}})
+	if err != nil {
+		return nil, err
+	}
+	if checkResponse == nil || checkResponse.State == nil {
+		return &RateLimitCheckResponse{}, nil
+	}
+	return &RateLimitCheckResponse{
+		Limited:        checkResponse.State.Limited,
+		RetryAfter:     checkResponse.State.RetryAfter,
+		RemainingCount: checkResponse.State.RemainingCount,
+	}, nil
 }

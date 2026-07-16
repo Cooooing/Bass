@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
-	"common/proto/gen/common"
 	commonenums "common/proto/gen/common/enums"
+	"content/internal/biz/base"
 	"context"
 	"time"
 )
@@ -27,18 +27,42 @@ type OutboxEvent struct {
 }
 
 type OutboxEventRepo interface {
-	Save(ctx context.Context, req *OutboxEventSave) error
-	Get(ctx context.Context, req *OutboxEventGetReq) (*OutboxEvent, error)
-	List(ctx context.Context, req *OutboxEventGetReq) ([]*OutboxEvent, error)
-	Map(ctx context.Context, req *OutboxEventGetReq) (map[int64]*OutboxEvent, error)
-	Count(ctx context.Context, req *OutboxEventGetReq) (int, error)
-	Page(ctx context.Context, page *common.PageRequest, req *OutboxEventGetReq) ([]*OutboxEvent, *common.PageReply, error)
-	ClaimForPublish(ctx context.Context, limit int, staleBefore time.Time) ([]*OutboxEvent, error)
-	MarkPublished(ctx context.Context, id int64, publishedAt time.Time) error
-	MarkFailed(ctx context.Context, id int64, lastError string, maxRetry int32) error
+	Save(ctx context.Context, req *OutboxEventSave) (*OutboxEventSaveResponse, error)
+	Get(ctx context.Context, req *OutboxEventGetReq) (*OutboxEventGetResponse, error)
+	List(ctx context.Context, req *OutboxEventGetReq) (*OutboxEventListResponse, error)
+	Map(ctx context.Context, req *OutboxEventGetReq) (*OutboxEventMapResponse, error)
+	Count(ctx context.Context, req *OutboxEventGetReq) (*OutboxEventCountResponse, error)
+	Page(ctx context.Context, req *OutboxEventGetReq) (*OutboxEventPageResponse, error)
+	ClaimForPublish(ctx context.Context, req *OutboxEventClaimForPublishReq) (*OutboxEventClaimForPublishResponse, error)
+	MarkPublished(ctx context.Context, req *OutboxEventMarkPublishedReq) (*OutboxEventMarkPublishedResponse, error)
+	MarkFailed(ctx context.Context, req *OutboxEventMarkFailedReq) (*OutboxEventMarkFailedResponse, error)
+}
+
+type OutboxEventSaveResponse struct{}
+
+type OutboxEventGetResponse struct {
+	Event *OutboxEvent
+}
+
+type OutboxEventListResponse struct {
+	Rows []*OutboxEvent
+}
+
+type OutboxEventMapResponse struct {
+	Rows map[int64]*OutboxEvent
+}
+
+type OutboxEventCountResponse struct {
+	Count int
+}
+
+type OutboxEventPageResponse struct {
+	Rows []*OutboxEvent
+	Page *base.PageResponse
 }
 
 type OutboxEventGetReq struct {
+	Page     *base.PageRequest
 	ID       *int64
 	IDs      []int64
 	EventID  *string
@@ -47,6 +71,30 @@ type OutboxEventGetReq struct {
 	Status   *commonenum.OutboxEventStatus
 }
 
+type OutboxEventClaimForPublishReq struct {
+	Limit       int
+	StaleBefore time.Time
+}
+
+type OutboxEventClaimForPublishResponse struct {
+	Rows []*OutboxEvent
+}
+
+type OutboxEventMarkPublishedReq struct {
+	ID          int64
+	PublishedAt time.Time
+}
+
+type OutboxEventMarkPublishedResponse struct{}
+
+type OutboxEventMarkFailedReq struct {
+	ID        int64
+	LastError string
+	MaxRetry  int32
+}
+
+type OutboxEventMarkFailedResponse struct{}
+
 type EventClientMessage struct {
 	Subject string
 	Payload string
@@ -54,5 +102,11 @@ type EventClientMessage struct {
 }
 
 type EventClient interface {
-	Publish(ctx context.Context, msg *EventClientMessage) error
+	Publish(ctx context.Context, req *EventClientPublishReq) (*EventClientPublishResponse, error)
 }
+
+type EventClientPublishReq struct {
+	Message *EventClientMessage
+}
+
+type EventClientPublishResponse struct{}

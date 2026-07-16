@@ -28,10 +28,11 @@ func (h *CommentLikedHandler) Build(ctx context.Context, event *enums.Event) (*u
 	if payload == nil || payload.GetCommentId() == 0 || h.contentClient == nil {
 		return nil, nil
 	}
-	comment, err := h.contentClient.GetComment(ctx, payload.GetCommentId())
+	commentResponse, err := h.contentClient.GetComment(ctx, &repo.ContentGetCommentReq{CommentID: payload.GetCommentId()})
 	if err != nil {
 		return nil, err
 	}
+	comment := commentResponse.Comment
 	users, err := h.loadAccounts(ctx, payload.GetSenderId())
 	if err != nil {
 		return nil, err

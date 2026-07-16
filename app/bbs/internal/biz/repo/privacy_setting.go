@@ -1,11 +1,40 @@
 package repo
 
-import (
-	bbsuserv1 "common/proto/gen/bbs/v1/user"
-	"context"
-)
+import "context"
 
 type PrivacySettingClient interface {
-	GetCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.GetCurrentPrivacySetting_Request) (*bbsuserv1.GetCurrentPrivacySetting_Reply, error)
-	UpdateCurrentPrivacySetting(ctx context.Context, req *bbsuserv1.UpdateCurrentPrivacySetting_Request) (*bbsuserv1.UpdateCurrentPrivacySetting_Reply, error)
+	GetCurrentPrivacySetting(ctx context.Context, req *GetCurrentPrivacySettingReq) (*GetCurrentPrivacySettingResponse, error)
+	UpdateCurrentPrivacySetting(ctx context.Context, req *UpdateCurrentPrivacySettingReq) (*UpdateCurrentPrivacySettingResponse, error)
+}
+
+type PrivacySetting struct {
+	UserID             int64
+	PublicPoints       *bool
+	PublicFollowers    *bool
+	PublicArticles     *bool
+	PublicComments     *bool
+	PublicOnlineStatus *bool
+	PublicLocation     *bool
+}
+
+type GetCurrentPrivacySettingReq struct {
+	UserID int64
+}
+
+type GetCurrentPrivacySettingResponse struct {
+	PrivacySetting *PrivacySetting
+}
+
+type UpdateCurrentPrivacySettingReq struct {
+	UserID             int64
+	PublicPoints       *bool
+	PublicFollowers    *bool
+	PublicArticles     *bool
+	PublicComments     *bool
+	PublicOnlineStatus *bool
+	PublicLocation     *bool
+}
+
+type UpdateCurrentPrivacySettingResponse struct {
+	PrivacySetting *PrivacySetting
 }

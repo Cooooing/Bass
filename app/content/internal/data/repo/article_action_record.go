@@ -2,12 +2,11 @@ package repo
 
 import (
 	cerrors "common/proto/gen/common/errors"
+	"content/internal/biz/base"
 	"context"
 
 	"common/pkg/apperror"
-	"common/pkg/server"
 	utilent "common/pkg/util/ent"
-	"common/proto/gen/common"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
@@ -34,36 +33,48 @@ func (r *ArticleActionRecordRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.ArticleActionRecord) (bool, error) {
+func (r *ArticleActionRecordRepo) Save(ctx context.Context, req *repo.ArticleActionRecordSaveReq) (*repo.ArticleActionRecordSaveResponse, error) {
+	record := req.Record
 	_, err := r.getClient(ctx).ArticleActionRecord.Create().
 		SetArticleID(record.ArticleID).
 		SetUserID(record.UserID).
 		SetType(articleactionrecord.Type(record.Type)).
 		Save(ctx)
 	if gen.IsConstraintError(err) {
-		return false, nil
+		return &repo.ArticleActionRecordSaveResponse{Created: false}, nil
 	}
 	if err != nil {
-		return false, err
+		return nil, err
 	}
-	return true, nil
+	return &repo.ArticleActionRecordSaveResponse{Created: true}, nil
 }
 
-func (r *ArticleActionRecordRepo) Delete(ctx context.Context, articleId int64, userId int64, action enum.ArticleAction) (int, error) {
-	return r.getClient(ctx).ArticleActionRecord.Delete().
+func (r *ArticleActionRecordRepo) Delete(ctx context.Context, req *repo.ArticleActionRecordDeleteReq) (*repo.ArticleActionRecordDeleteResponse, error) {
+	articleId := req.ArticleID
+	userId := req.UserID
+	action := req.Action
+	deleted, err := r.getClient(ctx).ArticleActionRecord.Delete().
 		Where(articleactionrecord.ArticleIDEQ(articleId)).
 		Where(articleactionrecord.UserIDEQ(userId)).
 		Where(articleactionrecord.TypeEQ(articleactionrecord.Type(action))).
 		Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ArticleActionRecordDeleteResponse{Deleted: deleted}, nil
 }
 
-func (r *ArticleActionRecordRepo) Exist(ctx context.Context, req *repo.ArticleActionRecordReq) (bool, error) {
+func (r *ArticleActionRecordRepo) Exist(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordExistResponse, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
-	return query.Exist(ctx)
+	exist, err := query.Exist(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ArticleActionRecordExistResponse{Exist: exist}, nil
 }
 
-func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActionRecordReq) (*model.ArticleActionRecord, error) {
+func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordGetResponse, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
@@ -73,75 +84,82 @@ func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActi
 	if err != nil {
 		return nil, err
 	}
-	return &model.ArticleActionRecord{
+	return &repo.ArticleActionRecordGetResponse{Record: &model.ArticleActionRecord{
 		ID:        c.ID,
 		ArticleID: c.ArticleID,
 		UserID:    c.UserID,
 		Type:      enum.ArticleAction(c.Type),
-	}, nil
+	}}, nil
 }
 
-func (r *ArticleActionRecordRepo) List(ctx context.Context, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, error) {
+func (r *ArticleActionRecordRepo) List(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordListResponse, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	articleActionRecords := make([]*model.ArticleActionRecord, 0, len(list))
+	rows := make([]*model.ArticleActionRecord, 0, len(list))
 	for i := range list {
-		articleActionRecords = append(articleActionRecords, &model.ArticleActionRecord{
+		rows = append(rows, &model.ArticleActionRecord{
 			ID:        list[i].ID,
 			ArticleID: list[i].ArticleID,
 			UserID:    list[i].UserID,
 			Type:      enum.ArticleAction(list[i].Type),
 		})
 	}
-	return articleActionRecords, nil
+	return &repo.ArticleActionRecordListResponse{Rows: rows}, nil
 }
 
-func (r *ArticleActionRecordRepo) Map(ctx context.Context, req *repo.ArticleActionRecordReq) (map[int64]*model.ArticleActionRecord, error) {
-	list, err := r.List(ctx, req)
+func (r *ArticleActionRecordRepo) Map(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordMapResponse, error) {
+	listResponse, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return lo.SliceToMap(list, func(item *model.ArticleActionRecord) (int64, *model.ArticleActionRecord) {
+	return &repo.ArticleActionRecordMapResponse{Rows: lo.SliceToMap(listResponse.Rows, func(item *model.ArticleActionRecord) (int64, *model.ArticleActionRecord) {
 		return item.ID, item
-	}), nil
+	})}, nil
 }
 
-func (r *ArticleActionRecordRepo) Count(ctx context.Context, req *repo.ArticleActionRecordReq) (int, error) {
+func (r *ArticleActionRecordRepo) Count(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordCountResponse, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
-	return query.Count(ctx)
+	count, err := query.Count(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ArticleActionRecordCountResponse{Count: count}, nil
 }
 
-func (r *ArticleActionRecordRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, *common.PageReply, error) {
-	page = server.PageValid(page)
+func (r *ArticleActionRecordRepo) Page(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordPageResponse, error) {
+	page := normalizePage(req.Page)
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
 	total, err := countQuery.Count(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	articleActionRecords := make([]*model.ArticleActionRecord, 0, len(list))
+	rows := make([]*model.ArticleActionRecord, 0, len(list))
 	for i := range list {
-		articleActionRecords = append(articleActionRecords, &model.ArticleActionRecord{
+		rows = append(rows, &model.ArticleActionRecord{
 			ID:        list[i].ID,
 			ArticleID: list[i].ArticleID,
 			UserID:    list[i].UserID,
 			Type:      enum.ArticleAction(list[i].Type),
 		})
 	}
-	return articleActionRecords, &common.PageReply{
-		Total: uint32(total),
-		Page:  page.Page,
-		Size:  page.Size,
+	return &repo.ArticleActionRecordPageResponse{
+		Rows: rows,
+		Page: &base.PageResponse{
+			Total: int64(total),
+			Page:  page.Page,
+			Size:  page.Size,
+		},
 	}, nil
 }
 

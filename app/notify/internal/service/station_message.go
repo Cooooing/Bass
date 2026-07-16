@@ -5,7 +5,7 @@ import (
 	"common/proto/gen/common"
 	v1 "common/proto/gen/notify/v1"
 	"context"
-	"notify/internal/biz/repo"
+	"notify/internal/biz/base"
 	"notify/internal/biz/usecase"
 	notifyenum "notify/internal/enum"
 	"time"
@@ -30,42 +30,40 @@ func (s *StationMessageService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *StationMessageService) RegisterHttp(hs *http.Server) {}
 
-func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMessages_Request) (*v1.ListStationMessages_Reply, error) {
+func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMessages_Request) (*v1.ListStationMessages_Response, error) {
 	if req == nil {
 		req = &v1.ListStationMessages_Request{}
 	}
-	query := &repo.NotificationStationMessageQuery{ReceiverID: new(req.GetUserId())}
+	query := &usecase.StationMessagePageReq{ReceiverID: new(req.GetUserId())}
 	if req != nil && req.Query != nil {
 		query.IDs = req.Query.GetIds()
 		query.EventType = req.Query.EventType
 		query.Unread = req.Query.Unread
 	}
-	var pageReq *common.PageRequest
+	var pageReq *base.PageRequest
 	if req != nil {
-		pageReq = req.GetPage()
+		pageReq = &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())}
 	}
-	rows, page, err := s.stationMessageUsecase.Page(ctx, pageReq, query)
+	query.Page = pageReq
+	pageResponse, err := s.stationMessageUsecase.Page(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-	replyRows := make([]*v1.NotificationStationMessage, 0, len(rows))
+	rows := pageResponse.Rows
+	replyRows := make([]*v1.ListStationMessages_Response_NotificationStationMessage, 0, len(rows))
 	for _, row := range rows {
 		if row == nil {
 			continue
 		}
-		item := &v1.NotificationStationMessage{
+		item := &v1.ListStationMessages_Response_NotificationStationMessage{
 			Id:         row.ID,
 			EventId:    row.EventID,
 			ReceiverId: row.ReceiverID,
 			Title:      row.Title,
 			Content:    row.Content,
 		}
-		if protoEventType, ok := commonenum.EventTypeMap.ToProto(row.EventType); ok {
-			item.EventType = protoEventType
-		}
-		if protoStatus, ok := notifyenum.NotificationChannelStatusMap.ToProto(row.Status); ok {
-			item.Status = protoStatus
-		}
+		item.EventType = commonenum.EventTypeMap.MustToProto(row.EventType)
+		item.Status = notifyenum.NotificationChannelStatusMap.MustToProto(row.Status)
 		if row.CreatedAt != nil {
 			item.CreatedAt = timestamppb.New(*row.CreatedAt)
 		}
@@ -77,10 +75,10 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 		}
 		replyRows = append(replyRows, item)
 	}
-	return &v1.ListStationMessages_Reply{Page: page, Rows: replyRows}, nil
+	return &v1.ListStationMessages_Response{Page: &common.PageResponse{Page: uint32(pageResponse.Page.Page), Size: uint32(pageResponse.Page.Size), Total: uint32(pageResponse.Page.Total)}, Rows: replyRows}, nil
 }
 
-func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadStationMessage_Request) (*v1.MarkReadStationMessage_Reply, error) {
+func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadStationMessage_Request) (*v1.MarkReadStationMessage_Response, error) {
 	if req == nil {
 		req = &v1.MarkReadStationMessage_Request{}
 	}
@@ -98,20 +96,25 @@ func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadSt
 	if req != nil {
 		ids = req.GetIds()
 	}
-	count, err := s.stationMessageUsecase.MarkRead(ctx, req.GetUserId(), ids, startTime, endTime)
+	markReadResponse, err := s.stationMessageUsecase.MarkRead(ctx, &usecase.StationMessageMarkReadReq{
+		ReceiverID: req.GetUserId(),
+		IDs:        ids,
+		StartTime:  startTime,
+		EndTime:    endTime,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.MarkReadStationMessage_Reply{Count: int32(count)}, nil
+	return &v1.MarkReadStationMessage_Response{Count: int32(markReadResponse.Count)}, nil
 }
 
-func (s *StationMessageService) CountUnread(ctx context.Context, req *v1.CountUnreadStationMessages_Request) (*v1.CountUnreadStationMessages_Reply, error) {
+func (s *StationMessageService) CountUnread(ctx context.Context, req *v1.CountUnreadStationMessages_Request) (*v1.CountUnreadStationMessages_Response, error) {
 	if req == nil {
 		req = &v1.CountUnreadStationMessages_Request{}
 	}
-	count, err := s.stationMessageUsecase.CountUnread(ctx, req.GetUserId())
+	countResponse, err := s.stationMessageUsecase.CountUnread(ctx, &usecase.StationMessageCountUnreadReq{ReceiverID: req.GetUserId()})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.CountUnreadStationMessages_Reply{Count: int64(count)}, nil
+	return &v1.CountUnreadStationMessages_Response{Count: int64(countResponse.Count)}, nil
 }

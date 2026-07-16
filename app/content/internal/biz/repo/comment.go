@@ -1,28 +1,50 @@
 package repo
 
 import (
-	"common/proto/gen/common"
+	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/enum"
 	"context"
 )
 
 type CommentRepo interface {
-	Save(ctx context.Context, comment *model.Comment) (*model.Comment, error)
-
-	UpdateRestriction(ctx context.Context, commentId int64, restriction enum.ContentRestriction, updatedBy int64) error
-	AddStats(ctx context.Context, commentId int64, stats CommentStatUpdate, updatedBy *int64) error
-
-	Exist(ctx context.Context, req *CommentGetReq) (bool, error)
-	Get(ctx context.Context, req *CommentGetReq) (*model.Comment, error)
-	List(ctx context.Context, req *CommentGetReq) ([]*model.Comment, error)
-	Map(ctx context.Context, req *CommentGetReq) (map[int64]*model.Comment, error)
-	Count(ctx context.Context, req *CommentGetReq) (int, error)
-	Page(ctx context.Context, page *common.PageRequest, req *CommentGetReq) ([]*model.Comment, *common.PageReply, error)
-	ListReplyPreviews(ctx context.Context, req *CommentReplyPreviewReq) ([]*CommentReplyPreview, error)
-	GetArticleLastComment(ctx context.Context, req *CommentGetReq) (*model.Comment, error)
-	MapArticleLastComments(ctx context.Context, req *CommentGetReq) (map[int64]*model.Comment, error)
+	Save(ctx context.Context, req *CommentSaveReq) (*CommentSaveResponse, error)
+	UpdateRestriction(ctx context.Context, req *CommentUpdateRestrictionReq) (*CommentUpdateRestrictionResponse, error)
+	AddStats(ctx context.Context, req *CommentAddStatsReq) (*CommentAddStatsResponse, error)
+	Exist(ctx context.Context, req *CommentGetReq) (*CommentExistResponse, error)
+	Get(ctx context.Context, req *CommentGetReq) (*CommentGetResponse, error)
+	List(ctx context.Context, req *CommentGetReq) (*CommentListResponse, error)
+	Map(ctx context.Context, req *CommentMapReq) (*CommentMapResponse, error)
+	Count(ctx context.Context, req *CommentGetReq) (*CommentCountResponse, error)
+	Page(ctx context.Context, req *CommentGetReq) (*CommentPageResponse, error)
+	ListReplyPreviews(ctx context.Context, req *CommentReplyPreviewReq) (*CommentReplyPreviewResponse, error)
+	GetArticleLastComment(ctx context.Context, req *CommentGetReq) (*CommentGetResponse, error)
+	MapArticleLastComments(ctx context.Context, req *CommentGetReq) (*CommentArticleLastCommentsResponse, error)
 }
+
+type CommentSaveReq struct {
+	Comment *model.Comment
+}
+
+type CommentSaveResponse struct {
+	Comment *model.Comment
+}
+
+type CommentUpdateRestrictionReq struct {
+	CommentID   int64
+	Restriction enum.ContentRestriction
+	UpdatedBy   int64
+}
+
+type CommentUpdateRestrictionResponse struct{}
+
+type CommentAddStatsReq struct {
+	CommentID int64
+	Stats     CommentStatUpdate
+	UpdatedBy *int64
+}
+
+type CommentAddStatsResponse struct{}
 
 type CommentStatUpdate struct {
 	ThankCount int32
@@ -30,7 +52,37 @@ type CommentStatUpdate struct {
 	ReplyCount int32
 }
 
+type CommentExistResponse struct {
+	Exist bool
+}
+
+type CommentGetResponse struct {
+	Comment *model.Comment
+}
+
+type CommentListResponse struct {
+	Rows []*model.Comment
+}
+
+type CommentMapReq struct {
+	*CommentGetReq
+}
+
+type CommentMapResponse struct {
+	Rows map[int64]*model.Comment
+}
+
+type CommentCountResponse struct {
+	Count int
+}
+
+type CommentPageResponse struct {
+	Rows []*model.Comment
+	Page *base.PageResponse
+}
+
 type CommentGetReq struct {
+	Page         *base.PageRequest
 	CommentId    *int64
 	CommentIds   []int64
 	ParentId     *int64
@@ -53,24 +105,75 @@ type CommentReplyPreviewReq struct {
 	Order          *enum.CommentOrder
 }
 
+type CommentReplyPreviewResponse struct {
+	Rows []*CommentReplyPreview
+}
+
 type CommentReplyPreview struct {
 	ParentId int64
 	Rows     []*model.Comment
 }
 
+type CommentArticleLastCommentsResponse struct {
+	Rows map[int64]*model.Comment
+}
+
 type CommentActionRecordRepo interface {
-	// Save 保存行为记录，返回值表示是否实际写入了新记录；唯一约束冲突表示记录已存在。
-	Save(ctx context.Context, record *model.CommentActionRecord) (bool, error)
-	Delete(ctx context.Context, commentId int64, userId int64, action enum.CommentAction) (int, error)
-	Exist(ctx context.Context, req *CommentActionRecordReq) (bool, error)
-	Get(ctx context.Context, req *CommentActionRecordReq) (*model.CommentActionRecord, error)
-	List(ctx context.Context, req *CommentActionRecordReq) ([]*model.CommentActionRecord, error)
-	Map(ctx context.Context, req *CommentActionRecordReq) (map[int64]*model.CommentActionRecord, error)
-	Count(ctx context.Context, req *CommentActionRecordReq) (int, error)
-	Page(ctx context.Context, page *common.PageRequest, req *CommentActionRecordReq) ([]*model.CommentActionRecord, *common.PageReply, error)
+	Save(ctx context.Context, req *CommentActionRecordSaveReq) (*CommentActionRecordSaveResponse, error)
+	Delete(ctx context.Context, req *CommentActionRecordDeleteReq) (*CommentActionRecordDeleteResponse, error)
+	Exist(ctx context.Context, req *CommentActionRecordReq) (*CommentActionRecordExistResponse, error)
+	Get(ctx context.Context, req *CommentActionRecordReq) (*CommentActionRecordGetResponse, error)
+	List(ctx context.Context, req *CommentActionRecordReq) (*CommentActionRecordListResponse, error)
+	Map(ctx context.Context, req *CommentActionRecordReq) (*CommentActionRecordMapResponse, error)
+	Count(ctx context.Context, req *CommentActionRecordReq) (*CommentActionRecordCountResponse, error)
+	Page(ctx context.Context, req *CommentActionRecordReq) (*CommentActionRecordPageResponse, error)
+}
+
+type CommentActionRecordSaveReq struct {
+	Record *model.CommentActionRecord
+}
+
+type CommentActionRecordSaveResponse struct {
+	Created bool
+}
+
+type CommentActionRecordDeleteReq struct {
+	CommentID int64
+	UserID    int64
+	Action    enum.CommentAction
+}
+
+type CommentActionRecordDeleteResponse struct {
+	Deleted int
+}
+
+type CommentActionRecordExistResponse struct {
+	Exist bool
+}
+
+type CommentActionRecordGetResponse struct {
+	Record *model.CommentActionRecord
+}
+
+type CommentActionRecordListResponse struct {
+	Rows []*model.CommentActionRecord
+}
+
+type CommentActionRecordMapResponse struct {
+	Rows map[int64]*model.CommentActionRecord
+}
+
+type CommentActionRecordCountResponse struct {
+	Count int
+}
+
+type CommentActionRecordPageResponse struct {
+	Rows []*model.CommentActionRecord
+	Page *base.PageResponse
 }
 
 type CommentActionRecordReq struct {
+	Page       *base.PageRequest
 	ID         *int64
 	IDs        []int64
 	CommentId  *int64

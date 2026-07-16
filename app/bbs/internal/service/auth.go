@@ -36,43 +36,72 @@ func (s *AuthService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterAuthServiceHTTPServer(hs, s)
 }
 
-func (s *AuthService) StartEmailRegistration(ctx context.Context, req *bbsuserv1.StartEmailRegistration_Request) (*bbsuserv1.StartEmailRegistration_Reply, error) {
+func (s *AuthService) StartEmailRegistration(ctx context.Context, req *bbsuserv1.StartEmailRegistration_Request) (*bbsuserv1.StartEmailRegistration_Response, error) {
 	if err := s.validateStartEmailRegistration(req); err != nil {
 		return nil, err
 	}
-	return s.authUsecase.StartEmailRegistration(ctx, req)
+	response, err := s.authUsecase.StartEmailRegistration(ctx, &usecase.StartEmailRegistrationReq{Email: req.GetEmail(), Password: req.GetPassword(), Name: req.GetName(), Nickname: req.Nickname})
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.StartEmailRegistration_Response{CodeToken: response.CodeToken, Code: response.Code}, nil
 }
 
-func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *bbsuserv1.VerifyEmailRegistration_Request) (*bbsuserv1.VerifyEmailRegistration_Reply, error) {
+func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *bbsuserv1.VerifyEmailRegistration_Request) (*bbsuserv1.VerifyEmailRegistration_Response, error) {
 	if err := s.validateVerifyEmailRegistration(req); err != nil {
 		return nil, err
 	}
-	return s.authUsecase.VerifyEmailRegistration(ctx, req)
+	err := s.authUsecase.VerifyEmailRegistration(ctx, &usecase.VerifyEmailRegistrationReq{Code: req.GetCode(), CodeToken: req.GetCodeToken()})
+	return &bbsuserv1.VerifyEmailRegistration_Response{}, err
 }
 
-func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *bbsuserv1.StartPhoneRegistration_Request) (*bbsuserv1.StartPhoneRegistration_Reply, error) {
+func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *bbsuserv1.StartPhoneRegistration_Request) (*bbsuserv1.StartPhoneRegistration_Response, error) {
 	if err := s.validateStartPhoneRegistration(req); err != nil {
 		return nil, err
 	}
-	return s.authUsecase.StartPhoneRegistration(ctx, req)
+	response, err := s.authUsecase.StartPhoneRegistration(ctx, &usecase.StartPhoneRegistrationReq{Phone: req.GetPhone(), Password: req.GetPassword(), Name: req.GetName(), Nickname: req.Nickname})
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.StartPhoneRegistration_Response{CodeToken: response.CodeToken, Code: response.Code}, nil
 }
 
-func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *bbsuserv1.VerifyPhoneRegistration_Request) (*bbsuserv1.VerifyPhoneRegistration_Reply, error) {
+func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *bbsuserv1.VerifyPhoneRegistration_Request) (*bbsuserv1.VerifyPhoneRegistration_Response, error) {
 	if err := s.validateVerifyPhoneRegistration(req); err != nil {
 		return nil, err
 	}
-	return s.authUsecase.VerifyPhoneRegistration(ctx, req)
+	err := s.authUsecase.VerifyPhoneRegistration(ctx, &usecase.VerifyPhoneRegistrationReq{Code: req.GetCode(), CodeToken: req.GetCodeToken()})
+	return &bbsuserv1.VerifyPhoneRegistration_Response{}, err
 }
 
-func (s *AuthService) LoginByPassword(ctx context.Context, req *bbsuserv1.LoginByPassword_Request) (*bbsuserv1.LoginByPassword_Reply, error) {
+func (s *AuthService) LoginByPassword(ctx context.Context, req *bbsuserv1.LoginByPassword_Request) (*bbsuserv1.LoginByPassword_Response, error) {
 	if err := s.validateLoginByPassword(req); err != nil {
 		return nil, err
 	}
-	return s.authUsecase.LoginByPassword(ctx, req)
+	response, err := s.authUsecase.LoginByPassword(ctx, &usecase.LoginByPasswordReq{Account: req.GetAccount(), Password: req.GetPassword()})
+	if err != nil {
+		return nil, err
+	}
+	var account *bbsuserv1.LoginByPassword_Response_Account
+	if response.Account != nil {
+		account = &bbsuserv1.LoginByPassword_Response_Account{}
+		if profile := response.Account.Basic; profile != nil {
+			account.Basic = &bbsuserv1.LoginByPassword_Response_AccountBasic{Id: profile.Id, Name: profile.Name, Nickname: profile.Nickname, Url: profile.Url, AvatarUrl: profile.AvatarUrl, Introduction: profile.Introduction, Status: bbsuserv1.AccountStatus(profile.Status), Mbti: bbsuserv1.MBTI(profile.Mbti), FollowCount: profile.FollowCount, FollowerCount: profile.FollowerCount, CreatedAt: profile.CreatedAt, UpdatedAt: profile.UpdatedAt}
+		}
+		if contact := response.Account.Contact; contact != nil {
+			account.Contact = &bbsuserv1.LoginByPassword_Response_AccountContact{UserId: contact.UserId, Email: contact.Email, Phone: contact.Phone}
+		}
+	}
+	return &bbsuserv1.LoginByPassword_Response{Token: response.Token, Account: account}, nil
 }
 
-func (s *AuthService) Logout(ctx context.Context, req *bbsuserv1.Logout_Request) (*bbsuserv1.Logout_Reply, error) {
-	return s.authUsecase.Logout(ctx, req)
+func (s *AuthService) Logout(ctx context.Context, req *bbsuserv1.Logout_Request) (*bbsuserv1.Logout_Response, error) {
+	token, err := currentToken(ctx)
+	if err != nil {
+		return nil, err
+	}
+	err = s.authUsecase.Logout(ctx, &usecase.LogoutReq{Token: token})
+	return &bbsuserv1.Logout_Response{}, err
 }
 
 func (s *AuthService) validateStartEmailRegistration(req *bbsuserv1.StartEmailRegistration_Request) error {

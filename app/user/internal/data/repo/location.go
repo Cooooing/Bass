@@ -31,7 +31,66 @@ func (r *LocationRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *LocationRepo) Get(ctx context.Context, req *repo.LocationGetReq) (*model.Location, error) {
+func (r *LocationRepo) Get(ctx context.Context, req *repo.LocationGetReq) (*repo.LocationGetResponse, error) {
+	location, err := r.get(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.LocationGetResponse{Location: location}, nil
+}
+
+func (r *LocationRepo) List(ctx context.Context, req *repo.LocationGetReq) (*repo.LocationListResponse, error) {
+	rows, err := r.list(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.LocationListResponse{Rows: rows}, nil
+}
+
+func (r *LocationRepo) Map(ctx context.Context, req *repo.LocationGetReq) (*repo.LocationMapResponse, error) {
+	rows, err := r.mapRows(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.LocationMapResponse{Rows: rows}, nil
+}
+
+func (r *LocationRepo) Count(ctx context.Context, req *repo.LocationGetReq) (*repo.LocationCountResponse, error) {
+	count, err := r.count(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.LocationCountResponse{Count: count}, nil
+}
+
+func (r *LocationRepo) Page(ctx context.Context, req *repo.LocationPageReq) (*repo.LocationPageResponse, error) {
+	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+	if err != nil {
+		return nil, err
+	}
+	resp := repo.PageResponse{}
+	if page != nil {
+		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+	}
+	return &repo.LocationPageResponse{Rows: rows, Page: resp}, nil
+}
+
+func (r *LocationRepo) UpsertByUserID(ctx context.Context, req *repo.LocationUpsertByUserIDReq) (*repo.LocationUpsertByUserIDResponse, error) {
+	location, err := r.upsertByUserID(ctx, req.Location)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.LocationUpsertByUserIDResponse{Location: location}, nil
+}
+
+func (r *LocationRepo) Update(ctx context.Context, req *repo.LocationUpdateReq) (*repo.LocationUpdateResponse, error) {
+	location, err := r.update(ctx, req.Location)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.LocationUpdateResponse{Location: location}, nil
+}
+func (r *LocationRepo) get(ctx context.Context, req *repo.LocationGetReq) (*model.Location, error) {
 	tx := r.getClient(ctx)
 	query := tx.Location.Query()
 	query = r.getQuery(query, req)
@@ -51,7 +110,7 @@ func (r *LocationRepo) Get(ctx context.Context, req *repo.LocationGetReq) (*mode
 	}, nil
 }
 
-func (r *LocationRepo) List(ctx context.Context, req *repo.LocationGetReq) ([]*model.Location, error) {
+func (r *LocationRepo) list(ctx context.Context, req *repo.LocationGetReq) ([]*model.Location, error) {
 	tx := r.getClient(ctx)
 	query := tx.Location.Query()
 	query = r.getQuery(query, req)
@@ -72,8 +131,8 @@ func (r *LocationRepo) List(ctx context.Context, req *repo.LocationGetReq) ([]*m
 	return result, nil
 }
 
-func (r *LocationRepo) Map(ctx context.Context, req *repo.LocationGetReq) (map[int64]*model.Location, error) {
-	list, err := r.List(ctx, req)
+func (r *LocationRepo) mapRows(ctx context.Context, req *repo.LocationGetReq) (map[int64]*model.Location, error) {
+	list, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +143,14 @@ func (r *LocationRepo) Map(ctx context.Context, req *repo.LocationGetReq) (map[i
 	return result, nil
 }
 
-func (r *LocationRepo) Count(ctx context.Context, req *repo.LocationGetReq) (int, error) {
+func (r *LocationRepo) count(ctx context.Context, req *repo.LocationGetReq) (int, error) {
 	tx := r.getClient(ctx)
 	query := tx.Location.Query()
 	query = r.getQuery(query, req)
 	return query.Count(ctx)
 }
 
-func (r *LocationRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.LocationGetReq) ([]*model.Location, *common.PageReply, error) {
+func (r *LocationRepo) page(ctx context.Context, page *common.PageRequest, req *repo.LocationGetReq) ([]*model.Location, *common.PageResponse, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Location.Query()
@@ -117,15 +176,15 @@ func (r *LocationRepo) Page(ctx context.Context, page *common.PageRequest, req *
 			City:     l.City,
 		})
 	}
-	return result, &common.PageReply{
+	return result, &common.PageResponse{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,
 	}, nil
 }
 
-func (r *LocationRepo) UpsertByUserID(ctx context.Context, l *model.Location) (*model.Location, error) {
-	existing, err := r.Get(ctx, &repo.LocationGetReq{UserID: &l.UserID})
+func (r *LocationRepo) upsertByUserID(ctx context.Context, l *model.Location) (*model.Location, error) {
+	existing, err := r.get(ctx, &repo.LocationGetReq{UserID: &l.UserID})
 	if err != nil {
 		return nil, err
 	}
@@ -149,10 +208,10 @@ func (r *LocationRepo) UpsertByUserID(ctx context.Context, l *model.Location) (*
 		}, nil
 	}
 	l.ID = existing.ID
-	return r.Update(ctx, l)
+	return r.update(ctx, l)
 }
 
-func (r *LocationRepo) Update(ctx context.Context, l *model.Location) (*model.Location, error) {
+func (r *LocationRepo) update(ctx context.Context, l *model.Location) (*model.Location, error) {
 	tx := r.getClient(ctx)
 	saved, err := tx.Location.UpdateOneID(l.ID).
 		SetNillableCountry(l.Country).

@@ -44,6 +44,78 @@ func (r *OutboxEventRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
+func (r *OutboxEventRepo) Save(ctx context.Context, req *repo.OutboxEventSave) (*repo.OutboxEventSaveResponse, error) {
+	if err := r.save(ctx, req); err != nil {
+		return nil, err
+	}
+	return &repo.OutboxEventSaveResponse{}, nil
+}
+
+func (r *OutboxEventRepo) Get(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventGetResponse, error) {
+	event, err := r.get(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.OutboxEventGetResponse{Event: event}, nil
+}
+
+func (r *OutboxEventRepo) List(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventListResponse, error) {
+	rows, err := r.list(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.OutboxEventListResponse{Rows: rows}, nil
+}
+
+func (r *OutboxEventRepo) Map(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventMapResponse, error) {
+	rows, err := r.mapRows(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.OutboxEventMapResponse{Rows: rows}, nil
+}
+
+func (r *OutboxEventRepo) Count(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventCountResponse, error) {
+	count, err := r.count(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.OutboxEventCountResponse{Count: count}, nil
+}
+
+func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventPageReq) (*repo.OutboxEventPageResponse, error) {
+	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+	if err != nil {
+		return nil, err
+	}
+	resp := repo.PageResponse{}
+	if page != nil {
+		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+	}
+	return &repo.OutboxEventPageResponse{Rows: rows, Page: resp}, nil
+}
+
+func (r *OutboxEventRepo) ClaimForPublish(ctx context.Context, req *repo.OutboxEventClaimForPublishReq) (*repo.OutboxEventClaimForPublishResponse, error) {
+	rows, err := r.claimForPublish(ctx, req.Limit, req.StaleBefore)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.OutboxEventClaimForPublishResponse{Rows: rows}, nil
+}
+
+func (r *OutboxEventRepo) MarkPublished(ctx context.Context, req *repo.OutboxEventMarkPublishedReq) (*repo.OutboxEventMarkPublishedResponse, error) {
+	if err := r.markPublished(ctx, req.ID, req.PublishedAt); err != nil {
+		return nil, err
+	}
+	return &repo.OutboxEventMarkPublishedResponse{}, nil
+}
+
+func (r *OutboxEventRepo) MarkFailed(ctx context.Context, req *repo.OutboxEventMarkFailedReq) (*repo.OutboxEventMarkFailedResponse, error) {
+	if err := r.markFailed(ctx, req.ID, req.LastError, req.MaxRetry); err != nil {
+		return nil, err
+	}
+	return &repo.OutboxEventMarkFailedResponse{}, nil
+}
 func (r *OutboxEventRepo) withTxClient(ctx context.Context, fn func(c *gen.Client) error) error {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return fn(c)
@@ -67,7 +139,7 @@ func (r *OutboxEventRepo) withTxClient(ctx context.Context, fn func(c *gen.Clien
 	return tx.Commit()
 }
 
-func (r *OutboxEventRepo) Save(ctx context.Context, req *repo.OutboxEventSave) error {
+func (r *OutboxEventRepo) save(ctx context.Context, req *repo.OutboxEventSave) error {
 	if req == nil {
 		return fmt.Errorf("outbox event save request is nil")
 	}
@@ -105,7 +177,7 @@ func (r *OutboxEventRepo) Save(ctx context.Context, req *repo.OutboxEventSave) e
 	})
 }
 
-func (r *OutboxEventRepo) Get(ctx context.Context, req *repo.OutboxEventGetReq) (*model.OutboxEvent, error) {
+func (r *OutboxEventRepo) get(ctx context.Context, req *repo.OutboxEventGetReq) (*model.OutboxEvent, error) {
 	tx := r.getClient(ctx)
 	query := tx.OutboxEvent.Query()
 	query = r.getQuery(query, req)
@@ -130,7 +202,7 @@ func (r *OutboxEventRepo) Get(ctx context.Context, req *repo.OutboxEventGetReq) 
 	}, nil
 }
 
-func (r *OutboxEventRepo) List(ctx context.Context, req *repo.OutboxEventGetReq) ([]*model.OutboxEvent, error) {
+func (r *OutboxEventRepo) list(ctx context.Context, req *repo.OutboxEventGetReq) ([]*model.OutboxEvent, error) {
 	tx := r.getClient(ctx)
 	query := tx.OutboxEvent.Query()
 	query = r.getQuery(query, req)
@@ -156,8 +228,8 @@ func (r *OutboxEventRepo) List(ctx context.Context, req *repo.OutboxEventGetReq)
 	return result, nil
 }
 
-func (r *OutboxEventRepo) Map(ctx context.Context, req *repo.OutboxEventGetReq) (map[int64]*model.OutboxEvent, error) {
-	list, err := r.List(ctx, req)
+func (r *OutboxEventRepo) mapRows(ctx context.Context, req *repo.OutboxEventGetReq) (map[int64]*model.OutboxEvent, error) {
+	list, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -168,14 +240,14 @@ func (r *OutboxEventRepo) Map(ctx context.Context, req *repo.OutboxEventGetReq) 
 	return result, nil
 }
 
-func (r *OutboxEventRepo) Count(ctx context.Context, req *repo.OutboxEventGetReq) (int, error) {
+func (r *OutboxEventRepo) count(ctx context.Context, req *repo.OutboxEventGetReq) (int, error) {
 	tx := r.getClient(ctx)
 	query := tx.OutboxEvent.Query()
 	query = r.getQuery(query, req)
 	return query.Count(ctx)
 }
 
-func (r *OutboxEventRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.OutboxEventGetReq) ([]*model.OutboxEvent, *common.PageReply, error) {
+func (r *OutboxEventRepo) page(ctx context.Context, page *common.PageRequest, req *repo.OutboxEventGetReq) ([]*model.OutboxEvent, *common.PageResponse, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.OutboxEvent.Query()
@@ -206,14 +278,14 @@ func (r *OutboxEventRepo) Page(ctx context.Context, page *common.PageRequest, re
 			UpdatedAt:  event.UpdatedAt,
 		})
 	}
-	return result, &common.PageReply{
+	return result, &common.PageResponse{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,
 	}, nil
 }
 
-func (r *OutboxEventRepo) ClaimForPublish(ctx context.Context, limit int, staleBefore time.Time) ([]*model.OutboxEvent, error) {
+func (r *OutboxEventRepo) claimForPublish(ctx context.Context, limit int, staleBefore time.Time) ([]*model.OutboxEvent, error) {
 	var result []*model.OutboxEvent
 	err := r.withTxClient(ctx, func(c *gen.Client) error {
 		events, err := c.OutboxEvent.Query().
@@ -273,7 +345,7 @@ func (r *OutboxEventRepo) ClaimForPublish(ctx context.Context, limit int, staleB
 	return result, nil
 }
 
-func (r *OutboxEventRepo) MarkPublished(ctx context.Context, id int64, publishedAt time.Time) error {
+func (r *OutboxEventRepo) markPublished(ctx context.Context, id int64, publishedAt time.Time) error {
 	return r.withTxClient(ctx, func(c *gen.Client) error {
 		return c.OutboxEvent.UpdateOneID(id).
 			SetStatus(outboxevent.Status(commonenum.OutboxEventStatusPublished)).
@@ -283,7 +355,7 @@ func (r *OutboxEventRepo) MarkPublished(ctx context.Context, id int64, published
 	})
 }
 
-func (r *OutboxEventRepo) MarkFailed(ctx context.Context, id int64, lastError string, maxRetry int32) error {
+func (r *OutboxEventRepo) markFailed(ctx context.Context, id int64, lastError string, maxRetry int32) error {
 	return r.withTxClient(ctx, func(c *gen.Client) error {
 		if maxRetry <= 0 {
 			maxRetry = 1

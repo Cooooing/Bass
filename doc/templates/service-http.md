@@ -1,19 +1,19 @@
-# HTTP Service 模板
+﻿# HTTP Service 模板
 
 HTTP service 用于 BFF 或 OpenAPI，负责入口协议适配、端侧校验和内部 RPC 编排。
 
 ```go
-func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Request) (*v1.PublishArticle_Reply, error) {
+func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Request) (*v1.PublishArticle_Response, error) {
 	if req.ArticleId == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 
-	userID, err := s.auth.CurrentUserID(ctx)
+	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	row, err := s.contentClient.Publish(ctx, &contentv1.PublishArticle_Request{
+	response, err := s.contentClient.Publish(ctx, &contentv1.PublishArticle_Request{
 		ArticleId:  req.ArticleId,
 		OperatorId: userID,
 	})
@@ -21,10 +21,10 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 		return nil, err
 	}
 
-	return &v1.PublishArticle_Reply{
-		Row: &v1.ArticleView{
-			Id:    row.GetRow().GetId(),
-			Title: row.GetRow().GetTitle(),
+	return &v1.PublishArticle_Response{
+		Row: &v1.PublishArticle_Response_ArticleView{
+			Id:    response.GetRow().GetId(),
+			Title: response.GetRow().GetTitle(),
 		},
 	}, nil
 }

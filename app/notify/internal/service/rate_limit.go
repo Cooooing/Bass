@@ -29,7 +29,7 @@ func (s *RateLimitService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *RateLimitService) RegisterHttp(hs *http.Server) {}
 
-func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationRateLimit_Request) (*v1.CheckNotificationRateLimit_Reply, error) {
+func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationRateLimit_Request) (*v1.CheckNotificationRateLimit_Response, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_REQUEST_INVALID)
 	}
@@ -41,7 +41,7 @@ func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationR
 	if recipient == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RECIPIENT_INVALID)
 	}
-	state, err := s.rateLimitUsecase.Check(ctx, channel, recipient)
+	state, err := s.rateLimitUsecase.Check(ctx, &usecase.RateLimitCheckReq{Channel: channel, Recipient: recipient})
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationR
 	if state.RetryAfter > 0 {
 		retryAfterSeconds = int64((state.RetryAfter + time.Second - 1) / time.Second)
 	}
-	return &v1.CheckNotificationRateLimit_Reply{
+	return &v1.CheckNotificationRateLimit_Response{
 		Limited:           state.Limited,
 		RetryAfterSeconds: retryAfterSeconds,
 		RemainingCount:    state.RemainingCount,

@@ -35,86 +35,167 @@ func NewAccountUsecase(
 	}, nil
 }
 
-func (s *AccountUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Account, error) {
-	return s.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &userID})
+type GetAccountByUserIDReq struct {
+	UserID int64
 }
 
-func (s *AccountUsecase) CheckAvailability(ctx context.Context, req *model.AccountAvailability) (*model.AccountAvailability, error) {
-	if req == nil {
-		return &model.AccountAvailability{}, nil
+type GetAccountByUserIDResponse struct {
+	Account *model.Account
+}
+
+func (s *AccountUsecase) GetByUserID(ctx context.Context, req *GetAccountByUserIDReq) (*GetAccountByUserIDResponse, error) {
+	accountResp, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.UserID})
+	if err != nil {
+		return nil, err
 	}
+	return &GetAccountByUserIDResponse{Account: accountResp.Account}, nil
+}
+
+type CheckAccountAvailabilityReq struct {
+	Availability *model.AccountAvailability
+}
+
+type CheckAccountAvailabilityResponse struct {
+	Availability *model.AccountAvailability
+}
+
+func (s *AccountUsecase) CheckAvailability(ctx context.Context, req *CheckAccountAvailabilityReq) (*CheckAccountAvailabilityResponse, error) {
+	if req == nil || req.Availability == nil {
+		return &CheckAccountAvailabilityResponse{Availability: &model.AccountAvailability{}}, nil
+	}
+	availability := req.Availability
 	result := &model.AccountAvailability{
-		Name:  req.Name,
-		Email: req.Email,
-		Phone: req.Phone,
+		Name:  availability.Name,
+		Email: availability.Email,
+		Phone: availability.Phone,
 	}
-	if req.Name != nil {
-		exist, err := s.accountRepo.ExistsByAccount(ctx, *req.Name)
+	var existResp *repo.AccountExistsByAccountResponse
+	var err error
+	if availability.Name != nil {
+		existResp, err = s.accountRepo.ExistsByAccount(ctx, &repo.AccountExistsByAccountReq{Account: *availability.Name})
 		if err != nil {
 			return nil, err
 		}
-		result.NameAvailable = !exist
+		result.NameAvailable = !existResp.Exists
 	}
-	if req.Email != nil {
-		exist, err := s.accountRepo.ExistsByAccount(ctx, *req.Email)
+	if availability.Email != nil {
+		existResp, err = s.accountRepo.ExistsByAccount(ctx, &repo.AccountExistsByAccountReq{Account: *availability.Email})
 		if err != nil {
 			return nil, err
 		}
-		result.EmailAvailable = !exist
+		result.EmailAvailable = !existResp.Exists
 	}
-	if req.Phone != nil {
-		exist, err := s.accountRepo.ExistsByAccount(ctx, *req.Phone)
+	if availability.Phone != nil {
+		existResp, err = s.accountRepo.ExistsByAccount(ctx, &repo.AccountExistsByAccountReq{Account: *availability.Phone})
 		if err != nil {
 			return nil, err
 		}
-		result.PhoneAvailable = !exist
+		result.PhoneAvailable = !existResp.Exists
 	}
-	return result, nil
+	return &CheckAccountAvailabilityResponse{Availability: result}, nil
 }
 
-func (s *AccountUsecase) ListByUserIDs(ctx context.Context, userIDs []int64) ([]*model.Account, error) {
-	return s.accountRepo.List(ctx, &repo.AccountGetReq{UserIds: userIDs})
+type ListAccountsByUserIDsReq struct {
+	UserIDs []int64
 }
 
-func (s *AccountUsecase) MapByUserIDs(ctx context.Context, userIDs []int64) (map[int64]*model.Account, error) {
-	return s.accountRepo.Map(ctx, &repo.AccountGetReq{UserIds: userIDs})
+type ListAccountsByUserIDsResponse struct {
+	Accounts []*model.Account
 }
 
-func (s *AccountUsecase) UpdateProfile(ctx context.Context, req *model.AccountProfileUpdate) (*model.Account, error) {
-	return s.accountRepo.UpdateProfile(ctx, req)
+func (s *AccountUsecase) ListByUserIDs(ctx context.Context, req *ListAccountsByUserIDsReq) (*ListAccountsByUserIDsResponse, error) {
+	accountsResp, err := s.accountRepo.List(ctx, &repo.AccountGetReq{UserIds: req.UserIDs})
+	if err != nil {
+		return nil, err
+	}
+	return &ListAccountsByUserIDsResponse{Accounts: accountsResp.Rows}, nil
+}
+
+type MapAccountsByUserIDsReq struct {
+	UserIDs []int64
+}
+
+type MapAccountsByUserIDsResponse struct {
+	Accounts map[int64]*model.Account
+}
+
+func (s *AccountUsecase) MapByUserIDs(ctx context.Context, req *MapAccountsByUserIDsReq) (*MapAccountsByUserIDsResponse, error) {
+	accountsResp, err := s.accountRepo.Map(ctx, &repo.AccountGetReq{UserIds: req.UserIDs})
+	if err != nil {
+		return nil, err
+	}
+	return &MapAccountsByUserIDsResponse{Accounts: accountsResp.Rows}, nil
+}
+
+type UpdateAccountProfileReq struct {
+	Profile *model.AccountProfileUpdate
+}
+
+type UpdateAccountProfileResponse struct {
+	Account *model.Account
+}
+
+func (s *AccountUsecase) UpdateProfile(ctx context.Context, req *UpdateAccountProfileReq) (*UpdateAccountProfileResponse, error) {
+	accountResp, err := s.accountRepo.UpdateProfile(ctx, &repo.AccountUpdateProfileReq{Profile: req.Profile})
+	if err != nil {
+		return nil, err
+	}
+	return &UpdateAccountProfileResponse{Account: accountResp.Account}, nil
+}
+
+type UpdateAccountSettingReq struct {
+	UserID      int64
+	Account     *model.Account
+	Preferences *model.Preferences
+}
+
+type UpdateAccountSettingResponse struct {
+	Account *model.Account
 }
 
 // UpdateSetting 在同一事务中更新账号资料和偏好设置。
-func (s *AccountUsecase) UpdateSetting(ctx context.Context, userID int64, account *model.Account, prefs *model.Preferences) (*model.Account, error) {
+func (s *AccountUsecase) UpdateSetting(ctx context.Context, req *UpdateAccountSettingReq) (*UpdateAccountSettingResponse, error) {
 	var fullAccount *model.Account
 	err := s.tx(ctx, func(ctx context.Context) error {
-		account.ID = userID
-		if _, err := s.accountRepo.Update(ctx, account); err != nil {
+		req.Account.ID = req.UserID
+		if _, err := s.accountRepo.Update(ctx, &repo.AccountUpdateReq{Account: req.Account}); err != nil {
 			return err
 		}
 
-		prefs.UserID = userID
-		if _, err := s.preferencesRepo.UpsertByUserID(ctx, prefs); err != nil {
+		req.Preferences.UserID = req.UserID
+		if _, err := s.preferencesRepo.UpsertByUserID(ctx, &repo.PreferencesUpsertByUserIDReq{Preferences: req.Preferences}); err != nil {
 			return err
 		}
 
 		var err error
-		fullAccount, err = s.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &userID})
-		return err
+		accountResp, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.UserID})
+		if err != nil {
+			return err
+		}
+		fullAccount = accountResp.Account
+		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
-	return fullAccount, nil
+	return &UpdateAccountSettingResponse{Account: fullAccount}, nil
+}
+
+type AvatarAccountReq struct {
+	Name string
+}
+
+type AvatarAccountResponse struct {
+	Data []byte
 }
 
 // Avatar 生成注册时使用的默认账号头像。
-func (s *AccountUsecase) Avatar(ctx context.Context, name string) ([]byte, error) {
+func (s *AccountUsecase) Avatar(ctx context.Context, req *AvatarAccountReq) (*AvatarAccountResponse, error) {
 	buf := &bytes.Buffer{}
-	avatar := goavatar.Make(name, goavatar.WithSize(512))
+	avatar := goavatar.Make(req.Name, goavatar.WithSize(512))
 	err := png.Encode(buf, avatar)
 	if err != nil {
 		return nil, err
 	}
-	return buf.Bytes(), nil
+	return &AvatarAccountResponse{Data: buf.Bytes()}, nil
 }

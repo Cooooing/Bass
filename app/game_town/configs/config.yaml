@@ -1,0 +1,42 @@
+server:
+  name: game_town
+  version: 1.0.0
+  mode: ${SERVICE_MODE:dev}
+http:
+  network: tcp
+  host: ${HTTP_HOST:0.0.0.0}
+  port: ${HTTP_PORT:8105}
+  timeout: 5s
+grpc:
+  network: tcp
+  host: ${GRPC_HOST:0.0.0.0}
+  port: ${GRPC_PORT:9105}
+  timeout: 5s
+consul:
+  address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
+  datacenter: dc1
+  token: ${CONSUL_ACL_APP_TOKEN:token}
+  dial_timeout: 5s
+database:
+  driver: postgres
+  source: postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable
+  merge: true
+  debug: false
+  slow_sql_threshold: 1s
+  sample_rate: 1
+trace:
+  enable_otel: false
+  endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
+  insecure: true
+  sampler: 1
+observability:
+  enable_metrics: true
+game_town:
+  command:
+    max_content_length: 2000
+  world:
+    max_npc_count: 12
+    max_location_count: 20
+    default_scale: small
+  effect:
+    max_delta: 5

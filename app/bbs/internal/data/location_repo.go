@@ -3,7 +3,6 @@ package data
 import (
 	"bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
-	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 )
@@ -18,35 +17,27 @@ func NewLocationClient(userClient *rpc.UserClient) repo.LocationClient {
 	return &LocationClient{userClient: userClient}
 }
 
-func (r *LocationClient) GetCurrentLocation(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Request) (*bbsuserv1.GetCurrentLocation_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
-	reply, err := r.userClient.Location.Get(ctx, &userv1.GetLocation_Request{UserId: userID})
+func (r *LocationClient) GetCurrentLocation(ctx context.Context, req *repo.GetCurrentLocationReq) (*repo.GetCurrentLocationResponse, error) {
+	reply, err := r.userClient.Location.Get(ctx, &userv1.GetLocation_Request{UserId: req.UserID})
 	if err != nil {
 		return nil, err
 	}
 	location := reply.GetLocation()
-	var out *bbsuserv1.Location
+	var out *repo.Location
 	if location != nil {
-		out = &bbsuserv1.Location{
-			UserId:   location.GetUserId(),
+		out = &repo.Location{
+			UserID:   location.GetUserId(),
 			Country:  location.Country,
 			Province: location.Province,
 			City:     location.City,
 		}
 	}
-	return &bbsuserv1.GetCurrentLocation_Reply{Location: out}, nil
+	return &repo.GetCurrentLocationResponse{Location: out}, nil
 }
 
-func (r *LocationClient) UpsertCurrentLocation(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Request) (*bbsuserv1.UpsertCurrentLocation_Reply, error) {
-	userID, err := currentUserID(ctx)
-	if err != nil {
-		return nil, err
-	}
+func (r *LocationClient) UpsertCurrentLocation(ctx context.Context, req *repo.UpsertCurrentLocationReq) (*repo.UpsertCurrentLocationResponse, error) {
 	reply, err := r.userClient.Location.Upsert(ctx, &userv1.UpsertLocation_Request{
-		UserId:   userID,
+		UserId:   req.UserID,
 		Country:  req.Country,
 		Province: req.Province,
 		City:     req.City,
@@ -55,14 +46,14 @@ func (r *LocationClient) UpsertCurrentLocation(ctx context.Context, req *bbsuser
 		return nil, err
 	}
 	location := reply.GetLocation()
-	var out *bbsuserv1.Location
+	var out *repo.Location
 	if location != nil {
-		out = &bbsuserv1.Location{
-			UserId:   location.GetUserId(),
+		out = &repo.Location{
+			UserID:   location.GetUserId(),
 			Country:  location.Country,
 			Province: location.Province,
 			City:     location.City,
 		}
 	}
-	return &bbsuserv1.UpsertCurrentLocation_Reply{Location: out}, nil
+	return &repo.UpsertCurrentLocationResponse{Location: out}, nil
 }

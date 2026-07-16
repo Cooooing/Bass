@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"time"
 
 	pushhubv1 "common/proto/gen/push_hub/v1"
@@ -10,7 +11,6 @@ import (
 	"push_node/internal/config"
 
 	"google.golang.org/grpc"
-	"log/slog"
 )
 
 type NodeUsecase struct {
@@ -34,7 +34,9 @@ func NewNodeUsecase(conf *config.Bootstrap, logger *slog.Logger, registry repo.C
 	}
 }
 
-func (uc *NodeUsecase) ConnectHub(ctx context.Context) error {
+type ConnectHubReq struct{}
+
+func (uc *NodeUsecase) ConnectHub(ctx context.Context, req *ConnectHubReq) error {
 	uc.log.Info(fmt.Sprintf("start heartbeat loop: node_id=%s", uc.nodeID))
 	loopCtx, cancel := context.WithCancel(ctx)
 	uc.cancelLoop = cancel
@@ -42,11 +44,16 @@ func (uc *NodeUsecase) ConnectHub(ctx context.Context) error {
 	return nil
 }
 
-func (uc *NodeUsecase) Stop() {
+type StopReq struct{}
+
+func (uc *NodeUsecase) Stop(ctx context.Context, req *StopReq) error {
+	_ = ctx
+	_ = req
 	if uc.cancelLoop != nil {
 		uc.cancelLoop()
 	}
 	uc.log.Info(fmt.Sprintf("node stopped: node_id=%s", uc.nodeID))
+	return nil
 }
 
 func (uc *NodeUsecase) heartbeatLoop(ctx context.Context) {
@@ -64,8 +71,13 @@ func (uc *NodeUsecase) heartbeatLoop(ctx context.Context) {
 }
 
 func (uc *NodeUsecase) sendHeartbeat(ctx context.Context) {
-	connectionCount := uc.registry.GetConnectionCount()
-	_, err := uc.hubClient.Heartbeat(ctx, &pushhubv1.Heartbeat_Request{
+	countResp, err := uc.registry.GetConnectionCount(ctx, &repo.GetConnectionCountReq{})
+	if err != nil {
+		uc.log.Warn(fmt.Sprintf("get connection count failed: err=%v", err))
+		return
+	}
+	connectionCount := countResp.Count
+	_, err = uc.hubClient.Heartbeat(ctx, &pushhubv1.Heartbeat_Request{
 		NodeId:          uc.nodeID,
 		ConnectionCount: connectionCount,
 	})

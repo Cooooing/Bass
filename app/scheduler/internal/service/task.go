@@ -6,7 +6,6 @@ import (
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
 	"scheduler/internal/biz/model"
-	"scheduler/internal/biz/repo"
 	"scheduler/internal/biz/usecase"
 	schedulerenum "scheduler/internal/enum"
 
@@ -27,7 +26,7 @@ func (s *SchedulerTaskService) RegisterGrpc(gs *grpc.Server) {
 	schedulerv1.RegisterSchedulerTaskServiceServer(gs, s)
 }
 
-func (s *SchedulerTaskService) Upsert(ctx context.Context, req *schedulerv1.UpsertSchedulerTask_Request) (*schedulerv1.UpsertSchedulerTask_Reply, error) {
+func (s *SchedulerTaskService) Upsert(ctx context.Context, req *schedulerv1.UpsertSchedulerTask_Request) (*schedulerv1.UpsertSchedulerTask_Response, error) {
 	if req.GetName() == "" || req.GetTitle() == "" || req.GetCronSpec() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -35,7 +34,7 @@ func (s *SchedulerTaskService) Upsert(ctx context.Context, req *schedulerv1.Upse
 	if req.AlertEnabled != nil {
 		alertEnabled = req.GetAlertEnabled()
 	}
-	row, err := s.taskUsecase.Upsert(ctx, &model.Task{
+	upsertResponse, err := s.taskUsecase.Upsert(ctx, &usecase.TaskUpsertReq{Row: &model.Task{
 		ID:             req.GetId(),
 		Name:           req.GetName(),
 		Title:          req.GetTitle(),
@@ -46,10 +45,11 @@ func (s *SchedulerTaskService) Upsert(ctx context.Context, req *schedulerv1.Upse
 		TimeoutSeconds: req.GetTimeoutSeconds(),
 		AllowOverlap:   req.GetAllowOverlap(),
 		AlertEnabled:   alertEnabled,
-	})
+	}})
 	if err != nil {
 		return nil, err
 	}
+	row := upsertResponse.Row
 	var createdAt *timestamppb.Timestamp
 	if row.CreatedAt != nil {
 		createdAt = timestamppb.New(*row.CreatedAt)
@@ -58,7 +58,7 @@ func (s *SchedulerTaskService) Upsert(ctx context.Context, req *schedulerv1.Upse
 	if row.UpdatedAt != nil {
 		updatedAt = timestamppb.New(*row.UpdatedAt)
 	}
-	return &schedulerv1.UpsertSchedulerTask_Reply{Row: &schedulerv1.SchedulerTask{
+	return &schedulerv1.UpsertSchedulerTask_Response{Row: &schedulerv1.UpsertSchedulerTask_Response_SchedulerTask{
 		CreatedAt:      createdAt,
 		UpdatedAt:      updatedAt,
 		Id:             row.ID,
@@ -75,11 +75,12 @@ func (s *SchedulerTaskService) Upsert(ctx context.Context, req *schedulerv1.Upse
 	}}, nil
 }
 
-func (s *SchedulerTaskService) Get(ctx context.Context, req *schedulerv1.GetSchedulerTask_Request) (*schedulerv1.GetSchedulerTask_Reply, error) {
-	row, err := s.taskUsecase.Get(ctx, req.GetId())
+func (s *SchedulerTaskService) Get(ctx context.Context, req *schedulerv1.GetSchedulerTask_Request) (*schedulerv1.GetSchedulerTask_Response, error) {
+	getResponse, err := s.taskUsecase.Get(ctx, &usecase.TaskGetReq{ID: req.GetId()})
 	if err != nil {
 		return nil, err
 	}
+	row := getResponse.Row
 	var createdAt *timestamppb.Timestamp
 	if row.CreatedAt != nil {
 		createdAt = timestamppb.New(*row.CreatedAt)
@@ -88,7 +89,7 @@ func (s *SchedulerTaskService) Get(ctx context.Context, req *schedulerv1.GetSche
 	if row.UpdatedAt != nil {
 		updatedAt = timestamppb.New(*row.UpdatedAt)
 	}
-	return &schedulerv1.GetSchedulerTask_Reply{Row: &schedulerv1.SchedulerTask{
+	return &schedulerv1.GetSchedulerTask_Response{Row: &schedulerv1.GetSchedulerTask_Response_SchedulerTask{
 		CreatedAt:      createdAt,
 		UpdatedAt:      updatedAt,
 		Id:             row.ID,
@@ -105,8 +106,8 @@ func (s *SchedulerTaskService) Get(ctx context.Context, req *schedulerv1.GetSche
 	}}, nil
 }
 
-func (s *SchedulerTaskService) Page(ctx context.Context, req *schedulerv1.PageSchedulerTasks_Request) (*schedulerv1.PageSchedulerTasks_Reply, error) {
-	query := &repo.TaskGetReq{}
+func (s *SchedulerTaskService) Page(ctx context.Context, req *schedulerv1.PageSchedulerTasks_Request) (*schedulerv1.PageSchedulerTasks_Response, error) {
+	query := &usecase.TaskPageReq{}
 	if req.GetQuery() != nil {
 		query.IDs = req.GetQuery().GetIds()
 		if req.GetQuery().Name != nil {
@@ -119,11 +120,13 @@ func (s *SchedulerTaskService) Page(ctx context.Context, req *schedulerv1.PageSc
 			query.Enabled = new(req.GetQuery().GetEnabled())
 		}
 	}
-	rows, page, err := s.taskUsecase.Page(ctx, req.GetPage(), query)
+	query.Page = req.GetPage()
+	pageResponse, err := s.taskUsecase.Page(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-	replyRows := make([]*schedulerv1.SchedulerTask, 0, len(rows))
+	rows := pageResponse.Rows
+	replyRows := make([]*schedulerv1.PageSchedulerTasks_Response_SchedulerTask, 0, len(rows))
 	for _, row := range rows {
 		var createdAt *timestamppb.Timestamp
 		if row.CreatedAt != nil {
@@ -133,7 +136,7 @@ func (s *SchedulerTaskService) Page(ctx context.Context, req *schedulerv1.PageSc
 		if row.UpdatedAt != nil {
 			updatedAt = timestamppb.New(*row.UpdatedAt)
 		}
-		replyRows = append(replyRows, &schedulerv1.SchedulerTask{
+		replyRows = append(replyRows, &schedulerv1.PageSchedulerTasks_Response_SchedulerTask{
 			CreatedAt:      createdAt,
 			UpdatedAt:      updatedAt,
 			Id:             row.ID,
@@ -149,28 +152,32 @@ func (s *SchedulerTaskService) Page(ctx context.Context, req *schedulerv1.PageSc
 			Version:        row.Version,
 		})
 	}
-	return &schedulerv1.PageSchedulerTasks_Reply{Page: page, Rows: replyRows}, nil
+	return &schedulerv1.PageSchedulerTasks_Response{Page: pageResponse.Page, Rows: replyRows}, nil
 }
 
-func (s *SchedulerTaskService) ListAvailableTasks(ctx context.Context, req *schedulerv1.ListSchedulerAvailableTasks_Request) (*schedulerv1.ListSchedulerAvailableTasks_Reply, error) {
+func (s *SchedulerTaskService) ListAvailableTasks(ctx context.Context, req *schedulerv1.ListSchedulerAvailableTasks_Request) (*schedulerv1.ListSchedulerAvailableTasks_Response, error) {
 	keyword := ""
 	if req.GetQuery() != nil {
 		keyword = req.GetQuery().GetKeyword()
 	}
-	rows := s.taskUsecase.ListAvailableTasks(keyword)
-	replyRows := make([]*schedulerv1.SchedulerAvailableTask, 0, len(rows))
+	listAvailableResponse, err := s.taskUsecase.ListAvailableTasks(ctx, &usecase.TaskListAvailableTasksReq{Keyword: keyword})
+	if err != nil {
+		return nil, err
+	}
+	rows := listAvailableResponse.Rows
+	replyRows := make([]*schedulerv1.ListSchedulerAvailableTasks_Response_SchedulerAvailableTask, 0, len(rows))
 	for _, row := range rows {
-		replyRows = append(replyRows, &schedulerv1.SchedulerAvailableTask{
+		replyRows = append(replyRows, &schedulerv1.ListSchedulerAvailableTasks_Response_SchedulerAvailableTask{
 			Name:        row.Name,
 			Title:       row.Title,
 			Description: row.Description,
 		})
 	}
-	return &schedulerv1.ListSchedulerAvailableTasks_Reply{Rows: replyRows}, nil
+	return &schedulerv1.ListSchedulerAvailableTasks_Response{Rows: replyRows}, nil
 }
 
-func (s *SchedulerTaskService) PageExecutionRecords(ctx context.Context, req *schedulerv1.PageSchedulerTaskExecutionRecords_Request) (*schedulerv1.PageSchedulerTaskExecutionRecords_Reply, error) {
-	query := &repo.TaskExecutionRecordGetReq{}
+func (s *SchedulerTaskService) PageExecutionRecords(ctx context.Context, req *schedulerv1.PageSchedulerTaskExecutionRecords_Request) (*schedulerv1.PageSchedulerTaskExecutionRecords_Response, error) {
+	query := &usecase.TaskExecutionRecordPageReq{}
 	if req.GetQuery() != nil {
 		query.IDs = req.GetQuery().GetIds()
 		if req.GetQuery().TaskId != nil {
@@ -191,11 +198,13 @@ func (s *SchedulerTaskService) PageExecutionRecords(ctx context.Context, req *sc
 			query.TriggerType = &triggerType
 		}
 	}
-	rows, page, err := s.taskUsecase.PageExecutionRecords(ctx, req.GetPage(), query)
+	query.Page = req.GetPage()
+	pageResponse, err := s.taskUsecase.PageExecutionRecords(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-	replyRows := make([]*schedulerv1.SchedulerTaskExecutionRecord, 0, len(rows))
+	rows := pageResponse.Rows
+	replyRows := make([]*schedulerv1.PageSchedulerTaskExecutionRecords_Response_SchedulerTaskExecutionRecord, 0, len(rows))
 	for _, row := range rows {
 		var createdAt *timestamppb.Timestamp
 		if row.CreatedAt != nil {
@@ -213,15 +222,9 @@ func (s *SchedulerTaskService) PageExecutionRecords(ctx context.Context, req *sc
 		if row.FinishedAt != nil {
 			finishedAt = timestamppb.New(*row.FinishedAt)
 		}
-		statusValue, ok := schedulerenum.TaskExecutionStatusMap.ToProto(row.Status)
-		if !ok {
-			statusValue = schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_UNSPECIFIED
-		}
-		triggerType, ok := schedulerenum.TaskTriggerTypeMap.ToProto(row.TriggerType)
-		if !ok {
-			triggerType = schedulerv1.SchedulerTaskTriggerType_SCHEDULER_TASK_TRIGGER_TYPE_UNSPECIFIED
-		}
-		replyRows = append(replyRows, &schedulerv1.SchedulerTaskExecutionRecord{
+		statusValue := schedulerenum.TaskExecutionStatusMap.MustToProto(row.Status)
+		triggerType := schedulerenum.TaskTriggerTypeMap.MustToProto(row.TriggerType)
+		replyRows = append(replyRows, &schedulerv1.PageSchedulerTaskExecutionRecords_Response_SchedulerTaskExecutionRecord{
 			CreatedAt:   createdAt,
 			UpdatedAt:   updatedAt,
 			Id:          row.ID,
@@ -239,14 +242,15 @@ func (s *SchedulerTaskService) PageExecutionRecords(ctx context.Context, req *sc
 			TraceId:     row.TraceID,
 		})
 	}
-	return &schedulerv1.PageSchedulerTaskExecutionRecords_Reply{Page: page, Rows: replyRows}, nil
+	return &schedulerv1.PageSchedulerTaskExecutionRecords_Response{Page: pageResponse.Page, Rows: replyRows}, nil
 }
 
-func (s *SchedulerTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerTask_Request) (*schedulerv1.TriggerSchedulerTask_Reply, error) {
-	row, err := s.taskUsecase.Trigger(ctx, req.GetId(), req.GetPayload())
+func (s *SchedulerTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerTask_Request) (*schedulerv1.TriggerSchedulerTask_Response, error) {
+	triggerResponse, err := s.taskUsecase.Trigger(ctx, &usecase.TaskTriggerReq{ID: req.GetId(), Payload: req.GetPayload()})
 	if err != nil {
 		return nil, err
 	}
+	row := triggerResponse.Row
 	var createdAt *timestamppb.Timestamp
 	if row.CreatedAt != nil {
 		createdAt = timestamppb.New(*row.CreatedAt)
@@ -263,15 +267,9 @@ func (s *SchedulerTaskService) Trigger(ctx context.Context, req *schedulerv1.Tri
 	if row.FinishedAt != nil {
 		finishedAt = timestamppb.New(*row.FinishedAt)
 	}
-	statusValue, ok := schedulerenum.TaskExecutionStatusMap.ToProto(row.Status)
-	if !ok {
-		statusValue = schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_UNSPECIFIED
-	}
-	triggerType, ok := schedulerenum.TaskTriggerTypeMap.ToProto(row.TriggerType)
-	if !ok {
-		triggerType = schedulerv1.SchedulerTaskTriggerType_SCHEDULER_TASK_TRIGGER_TYPE_UNSPECIFIED
-	}
-	return &schedulerv1.TriggerSchedulerTask_Reply{Row: &schedulerv1.SchedulerTaskExecutionRecord{
+	statusValue := schedulerenum.TaskExecutionStatusMap.MustToProto(row.Status)
+	triggerType := schedulerenum.TaskTriggerTypeMap.MustToProto(row.TriggerType)
+	return &schedulerv1.TriggerSchedulerTask_Response{Row: &schedulerv1.TriggerSchedulerTask_Response_SchedulerTaskExecutionRecord{
 		CreatedAt:   createdAt,
 		UpdatedAt:   updatedAt,
 		Id:          row.ID,
@@ -290,11 +288,12 @@ func (s *SchedulerTaskService) Trigger(ctx context.Context, req *schedulerv1.Tri
 	}}, nil
 }
 
-func (s *SchedulerTaskService) CancelExecution(ctx context.Context, req *schedulerv1.CancelSchedulerTaskExecution_Request) (*schedulerv1.CancelSchedulerTaskExecution_Reply, error) {
-	row, err := s.taskUsecase.CancelExecution(ctx, req.GetId())
+func (s *SchedulerTaskService) CancelExecution(ctx context.Context, req *schedulerv1.CancelSchedulerTaskExecution_Request) (*schedulerv1.CancelSchedulerTaskExecution_Response, error) {
+	cancelResponse, err := s.taskUsecase.CancelExecution(ctx, &usecase.TaskCancelExecutionReq{ID: req.GetId()})
 	if err != nil {
 		return nil, err
 	}
+	row := cancelResponse.Row
 	var createdAt *timestamppb.Timestamp
 	if row.CreatedAt != nil {
 		createdAt = timestamppb.New(*row.CreatedAt)
@@ -311,15 +310,9 @@ func (s *SchedulerTaskService) CancelExecution(ctx context.Context, req *schedul
 	if row.FinishedAt != nil {
 		finishedAt = timestamppb.New(*row.FinishedAt)
 	}
-	statusValue, ok := schedulerenum.TaskExecutionStatusMap.ToProto(row.Status)
-	if !ok {
-		statusValue = schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_UNSPECIFIED
-	}
-	triggerType, ok := schedulerenum.TaskTriggerTypeMap.ToProto(row.TriggerType)
-	if !ok {
-		triggerType = schedulerv1.SchedulerTaskTriggerType_SCHEDULER_TASK_TRIGGER_TYPE_UNSPECIFIED
-	}
-	return &schedulerv1.CancelSchedulerTaskExecution_Reply{Row: &schedulerv1.SchedulerTaskExecutionRecord{
+	statusValue := schedulerenum.TaskExecutionStatusMap.MustToProto(row.Status)
+	triggerType := schedulerenum.TaskTriggerTypeMap.MustToProto(row.TriggerType)
+	return &schedulerv1.CancelSchedulerTaskExecution_Response{Row: &schedulerv1.CancelSchedulerTaskExecution_Response_SchedulerTaskExecutionRecord{
 		CreatedAt:   createdAt,
 		UpdatedAt:   updatedAt,
 		Id:          row.ID,
@@ -338,32 +331,31 @@ func (s *SchedulerTaskService) CancelExecution(ctx context.Context, req *schedul
 	}}, nil
 }
 
-func (s *SchedulerTaskService) CheckExecutionRuntimes(ctx context.Context, req *schedulerv1.CheckSchedulerTaskExecutionRuntimes_Request) (*schedulerv1.CheckSchedulerTaskExecutionRuntimes_Reply, error) {
-	rows, err := s.taskUsecase.CheckExecutionRuntimes(ctx, req.GetIds())
+func (s *SchedulerTaskService) CheckExecutionRuntimes(ctx context.Context, req *schedulerv1.CheckSchedulerTaskExecutionRuntimes_Request) (*schedulerv1.CheckSchedulerTaskExecutionRuntimes_Response, error) {
+	checkResponse, err := s.taskUsecase.CheckExecutionRuntimes(ctx, &usecase.TaskCheckExecutionRuntimesReq{IDs: req.GetIds()})
 	if err != nil {
 		return nil, err
 	}
-	replyRows := make([]*schedulerv1.SchedulerTaskExecutionRuntime, 0, len(rows))
+	rows := checkResponse.Rows
+	replyRows := make([]*schedulerv1.CheckSchedulerTaskExecutionRuntimes_Response_SchedulerTaskExecutionRuntime, 0, len(rows))
 	for _, row := range rows {
-		stateValue, ok := schedulerenum.TaskExecutionRuntimeStateMap.ToProto(row.State)
-		if !ok {
-			stateValue = schedulerv1.SchedulerTaskExecutionRuntimeState_SCHEDULER_TASK_EXECUTION_RUNTIME_STATE_UNSPECIFIED
-		}
-		replyRows = append(replyRows, &schedulerv1.SchedulerTaskExecutionRuntime{
+		stateValue := schedulerenum.TaskExecutionRuntimeStateMap.MustToProto(row.State)
+		replyRows = append(replyRows, &schedulerv1.CheckSchedulerTaskExecutionRuntimes_Response_SchedulerTaskExecutionRuntime{
 			ExecutionRecordId: row.ExecutionRecordID,
 			TaskId:            row.TaskID,
 			State:             stateValue,
 		})
 	}
-	return &schedulerv1.CheckSchedulerTaskExecutionRuntimes_Reply{Rows: replyRows}, nil
+	return &schedulerv1.CheckSchedulerTaskExecutionRuntimes_Response{Rows: replyRows}, nil
 }
 
-func (s *SchedulerTaskService) MarkExecutionsUnknown(ctx context.Context, req *schedulerv1.MarkSchedulerTaskExecutionsUnknown_Request) (*schedulerv1.MarkSchedulerTaskExecutionsUnknown_Reply, error) {
-	rows, err := s.taskUsecase.MarkExecutionsUnknown(ctx, req.GetIds())
+func (s *SchedulerTaskService) MarkExecutionsUnknown(ctx context.Context, req *schedulerv1.MarkSchedulerTaskExecutionsUnknown_Request) (*schedulerv1.MarkSchedulerTaskExecutionsUnknown_Response, error) {
+	markResponse, err := s.taskUsecase.MarkExecutionsUnknown(ctx, &usecase.TaskMarkExecutionsUnknownReq{IDs: req.GetIds()})
 	if err != nil {
 		return nil, err
 	}
-	replyRows := make([]*schedulerv1.SchedulerTaskExecutionRecord, 0, len(rows))
+	rows := markResponse.Rows
+	replyRows := make([]*schedulerv1.MarkSchedulerTaskExecutionsUnknown_Response_SchedulerTaskExecutionRecord, 0, len(rows))
 	for _, row := range rows {
 		var createdAt *timestamppb.Timestamp
 		if row.CreatedAt != nil {
@@ -381,15 +373,9 @@ func (s *SchedulerTaskService) MarkExecutionsUnknown(ctx context.Context, req *s
 		if row.FinishedAt != nil {
 			finishedAt = timestamppb.New(*row.FinishedAt)
 		}
-		statusValue, ok := schedulerenum.TaskExecutionStatusMap.ToProto(row.Status)
-		if !ok {
-			statusValue = schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_UNSPECIFIED
-		}
-		triggerType, ok := schedulerenum.TaskTriggerTypeMap.ToProto(row.TriggerType)
-		if !ok {
-			triggerType = schedulerv1.SchedulerTaskTriggerType_SCHEDULER_TASK_TRIGGER_TYPE_UNSPECIFIED
-		}
-		replyRows = append(replyRows, &schedulerv1.SchedulerTaskExecutionRecord{
+		statusValue := schedulerenum.TaskExecutionStatusMap.MustToProto(row.Status)
+		triggerType := schedulerenum.TaskTriggerTypeMap.MustToProto(row.TriggerType)
+		replyRows = append(replyRows, &schedulerv1.MarkSchedulerTaskExecutionsUnknown_Response_SchedulerTaskExecutionRecord{
 			CreatedAt:   createdAt,
 			UpdatedAt:   updatedAt,
 			Id:          row.ID,
@@ -407,5 +393,5 @@ func (s *SchedulerTaskService) MarkExecutionsUnknown(ctx context.Context, req *s
 			TraceId:     row.TraceID,
 		})
 	}
-	return &schedulerv1.MarkSchedulerTaskExecutionsUnknown_Reply{Rows: replyRows, UpdatedCount: uint32(len(replyRows))}, nil
+	return &schedulerv1.MarkSchedulerTaskExecutionsUnknown_Response{Rows: replyRows, UpdatedCount: uint32(len(replyRows))}, nil
 }

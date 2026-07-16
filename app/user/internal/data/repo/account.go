@@ -41,7 +41,90 @@ func (r *AccountRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *AccountRepo) Create(ctx context.Context, u *model.Account) (*model.Account, error) {
+func (r *AccountRepo) Create(ctx context.Context, req *repo.AccountCreateReq) (*repo.AccountCreateResponse, error) {
+	account, err := r.create(ctx, req.Account)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.AccountCreateResponse{Account: account}, nil
+}
+
+func (r *AccountRepo) Update(ctx context.Context, req *repo.AccountUpdateReq) (*repo.AccountUpdateResponse, error) {
+	account, err := r.update(ctx, req.Account)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.AccountUpdateResponse{Account: account}, nil
+}
+
+func (r *AccountRepo) UpdateProfile(ctx context.Context, req *repo.AccountUpdateProfileReq) (*repo.AccountUpdateProfileResponse, error) {
+	account, err := r.updateProfile(ctx, req.Profile)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.AccountUpdateProfileResponse{Account: account}, nil
+}
+
+func (r *AccountRepo) AddStat(ctx context.Context, req *repo.AccountAddStatReq) (*repo.AccountAddStatResponse, error) {
+	account, err := r.addStat(ctx, req.UserID, req.StatType, req.Num)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.AccountAddStatResponse{Account: account}, nil
+}
+
+func (r *AccountRepo) ExistsByAccount(ctx context.Context, req *repo.AccountExistsByAccountReq) (*repo.AccountExistsByAccountResponse, error) {
+	exists, err := r.existsByAccount(ctx, req.Account)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.AccountExistsByAccountResponse{Exists: exists}, nil
+}
+
+func (r *AccountRepo) Get(ctx context.Context, req *repo.AccountGetReq) (*repo.AccountGetResponse, error) {
+	account, err := r.get(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.AccountGetResponse{Account: account}, nil
+}
+
+func (r *AccountRepo) List(ctx context.Context, req *repo.AccountGetReq) (*repo.AccountListResponse, error) {
+	rows, err := r.list(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.AccountListResponse{Rows: rows}, nil
+}
+
+func (r *AccountRepo) Map(ctx context.Context, req *repo.AccountGetReq) (*repo.AccountMapResponse, error) {
+	rows, err := r.mapRows(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.AccountMapResponse{Rows: rows}, nil
+}
+
+func (r *AccountRepo) Count(ctx context.Context, req *repo.AccountGetReq) (*repo.AccountCountResponse, error) {
+	count, err := r.count(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.AccountCountResponse{Count: count}, nil
+}
+
+func (r *AccountRepo) Page(ctx context.Context, req *repo.AccountPageReq) (*repo.AccountPageResponse, error) {
+	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+	if err != nil {
+		return nil, err
+	}
+	resp := repo.PageResponse{}
+	if page != nil {
+		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+	}
+	return &repo.AccountPageResponse{Rows: rows, Page: resp}, nil
+}
+func (r *AccountRepo) create(ctx context.Context, u *model.Account) (*model.Account, error) {
 	tx := r.getClient(ctx)
 	created, err := tx.Account.Create().
 		SetName(u.Name).
@@ -73,7 +156,7 @@ func (r *AccountRepo) Create(ctx context.Context, u *model.Account) (*model.Acco
 	}, nil
 }
 
-func (r *AccountRepo) Update(ctx context.Context, u *model.Account) (*model.Account, error) {
+func (r *AccountRepo) update(ctx context.Context, u *model.Account) (*model.Account, error) {
 	tx := r.getClient(ctx)
 	updated, err := tx.Account.UpdateOneID(u.ID).
 		SetNillableAvatarURL(u.AvatarURL).
@@ -101,9 +184,9 @@ func (r *AccountRepo) Update(ctx context.Context, u *model.Account) (*model.Acco
 	}, nil
 }
 
-func (r *AccountRepo) UpdateProfile(ctx context.Context, req *model.AccountProfileUpdate) (*model.Account, error) {
+func (r *AccountRepo) updateProfile(ctx context.Context, req *model.AccountProfileUpdate) (*model.Account, error) {
 	if req.AvatarURL == nil && req.Nickname == nil && req.URL == nil && req.Introduction == nil && req.Mbti == nil && !req.ClearMBTI {
-		return r.Get(ctx, &repo.AccountGetReq{UserID: &req.UserID})
+		return r.get(ctx, &repo.AccountGetReq{UserID: &req.UserID})
 	}
 
 	tx := r.getClient(ctx)
@@ -165,10 +248,8 @@ func (r *AccountRepo) UpdateProfile(ctx context.Context, req *model.AccountProfi
 	}, nil
 }
 
-func (r *AccountRepo) AddStat(ctx context.Context, userId int64, statType enum.AccountStatType, num int32) (*model.Account, error) {
-	if _, ok := enum.AccountStatTypeMap.ToProto(statType); !ok {
-		return nil, fmt.Errorf("unknown statType")
-	}
+func (r *AccountRepo) addStat(ctx context.Context, userId int64, statType enum.AccountStatType, num int32) (*model.Account, error) {
+	_ = enum.AccountStatTypeMap.MustToProto(statType)
 
 	tx := r.getClient(ctx)
 	updateOne := tx.Account.UpdateOneID(userId)
@@ -201,7 +282,7 @@ func (r *AccountRepo) AddStat(ctx context.Context, userId int64, statType enum.A
 	}, nil
 }
 
-func (r *AccountRepo) ExistsByAccount(ctx context.Context, accountValue string) (bool, error) {
+func (r *AccountRepo) existsByAccount(ctx context.Context, accountValue string) (bool, error) {
 	tx := r.getClient(ctx)
 	return tx.Account.Query().
 		Where(account.Or(
@@ -212,7 +293,7 @@ func (r *AccountRepo) ExistsByAccount(ctx context.Context, accountValue string) 
 		Exist(ctx)
 }
 
-func (r *AccountRepo) Get(ctx context.Context, req *repo.AccountGetReq) (*model.Account, error) {
+func (r *AccountRepo) get(ctx context.Context, req *repo.AccountGetReq) (*model.Account, error) {
 	tx := r.getClient(ctx)
 	query := tx.Account.Query()
 	query = r.getQuery(query, req)
@@ -242,7 +323,7 @@ func (r *AccountRepo) Get(ctx context.Context, req *repo.AccountGetReq) (*model.
 	}, nil
 }
 
-func (r *AccountRepo) List(ctx context.Context, req *repo.AccountGetReq) ([]*model.Account, error) {
+func (r *AccountRepo) list(ctx context.Context, req *repo.AccountGetReq) ([]*model.Account, error) {
 	tx := r.getClient(ctx)
 	query := tx.Account.Query()
 	query = r.getQuery(query, req)
@@ -273,8 +354,8 @@ func (r *AccountRepo) List(ctx context.Context, req *repo.AccountGetReq) ([]*mod
 	return result, nil
 }
 
-func (r *AccountRepo) Map(ctx context.Context, req *repo.AccountGetReq) (map[int64]*model.Account, error) {
-	list, err := r.List(ctx, req)
+func (r *AccountRepo) mapRows(ctx context.Context, req *repo.AccountGetReq) (map[int64]*model.Account, error) {
+	list, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -285,14 +366,14 @@ func (r *AccountRepo) Map(ctx context.Context, req *repo.AccountGetReq) (map[int
 	return result, nil
 }
 
-func (r *AccountRepo) Count(ctx context.Context, req *repo.AccountGetReq) (int, error) {
+func (r *AccountRepo) count(ctx context.Context, req *repo.AccountGetReq) (int, error) {
 	tx := r.getClient(ctx)
 	query := tx.Account.Query()
 	query = r.getQuery(query, req)
 	return query.Count(ctx)
 }
 
-func (r *AccountRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.AccountGetReq) ([]*model.Account, *common.PageReply, error) {
+func (r *AccountRepo) page(ctx context.Context, page *common.PageRequest, req *repo.AccountGetReq) ([]*model.Account, *common.PageResponse, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Account.Query()
@@ -331,7 +412,7 @@ func (r *AccountRepo) Page(ctx context.Context, page *common.PageRequest, req *r
 			UpdatedAt:     u.UpdatedAt,
 		})
 	}
-	return result, &common.PageReply{
+	return result, &common.PageResponse{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

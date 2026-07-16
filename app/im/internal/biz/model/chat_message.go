@@ -1,10 +1,8 @@
 package model
 
 import (
-	"time"
-
-	userv1 "common/proto/gen/user/v1"
 	"im/internal/enum"
+	"time"
 )
 
 type ChatMessage struct {
@@ -21,6 +19,6 @@ type ChatMessage struct {
 	CreatedBy  *int64
 	UpdatedBy  *int64
 
-	SenderUser   *userv1.AccountBasic
-	ReceiverUser *userv1.AccountBasic
+	SenderUser   *AccountBasic
+	ReceiverUser *AccountBasic
 }

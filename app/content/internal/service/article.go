@@ -2,11 +2,11 @@ package service
 
 import (
 	"common/pkg/apperror"
-	"common/pkg/server"
 	"common/pkg/util"
+	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
+	"content/internal/biz/base"
 	"content/internal/biz/model"
-	"content/internal/biz/repo"
 	"content/internal/biz/usecase"
 	"content/internal/enum"
 	"context"
@@ -38,7 +38,7 @@ func NewArticleService(
 	}
 }
 
-func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Request) (rsp *v1.CreateArticle_Reply, err error) {
+func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Request) (rsp *v1.CreateArticle_Response, err error) {
 	article := req.Article
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -57,7 +57,7 @@ func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Reque
 			bountyPoints = new(qa.GetBountyPoints())
 		}
 	}
-	save, err := s.articleUsecase.Add(ctx, &model.Article{
+	addResponse, err := s.articleUsecase.Add(ctx, &usecase.ArticleAddReq{Article: &model.Article{
 		Title:         article.Title,
 		Content:       article.Content,
 		RewardContent: article.RewardContent,
@@ -69,11 +69,12 @@ func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Reque
 		Anonymous:     util.DerefOrDefault(article.Anonymous, false),
 		CreatedBy:     new(req.UserId),
 		UpdatedBy:     new(req.UserId),
-	}, article.GetTagIds())
+	}})
 	if err != nil {
 		return nil, err
 	}
-	articleReply := &v1.Article{
+	save := addResponse.Article
+	articleReply := &v1.CreateArticle_Response_Article{
 		CreatedAt:     timestamppb.New(*save.CreatedAt),
 		UpdatedAt:     timestamppb.New(*save.UpdatedAt),
 		CreatedBy:     save.CreatedBy,
@@ -101,7 +102,7 @@ func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Reque
 	}
 	switch save.Type {
 	case enum.ArticleTypeQA:
-		articleReply.TypeParams = &v1.Article_Qa{Qa: &v1.Article_QA{
+		articleReply.TypeParams = &v1.CreateArticle_Response_Article_Qa{Qa: &v1.CreateArticle_Response_Article_QA{
 			BountyPoints:     save.BountyPoints,
 			AcceptedAnswerId: save.AcceptedAnswerID,
 		}}
@@ -112,12 +113,12 @@ func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Reque
 	if save.EditedAt != nil {
 		articleReply.EditedAt = timestamppb.New(*save.EditedAt)
 	}
-	return &v1.CreateArticle_Reply{
+	return &v1.CreateArticle_Response{
 		Article: articleReply,
 	}, nil
 }
 
-func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Request) (rsp *v1.PublishArticle_Reply, err error) {
+func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Request) (rsp *v1.PublishArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -125,20 +126,21 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
 	}
-	err = s.articleUsecase.Publish(ctx, req.ArticleId, req.UserId, visibility)
-	return &v1.PublishArticle_Reply{}, err
+	err = s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{ArticleID: req.ArticleId, UserID: req.UserId, Visibility: visibility})
+	return &v1.PublishArticle_Response{}, err
 }
 
-func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticle_Request) (rsp *v1.AddPostscriptArticle_Reply, err error) {
+func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticle_Request) (rsp *v1.AddPostscriptArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	save, err := s.articleUsecase.AddPostscript(ctx, req.ArticleId, req.Content, req.UserId)
+	addPostscriptResponse, err := s.articleUsecase.AddPostscript(ctx, &usecase.ArticleAddPostscriptReq{ArticleID: req.ArticleId, Content: req.Content, UserID: req.UserId})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.AddPostscriptArticle_Reply{
-		ArticlePostscript: &v1.ArticlePostscript{
+	save := addPostscriptResponse.ArticlePostscript
+	return &v1.AddPostscriptArticle_Response{
+		ArticlePostscript: &v1.AddPostscriptArticle_Response_ArticlePostscript{
 			CreatedAt:   timestamppb.New(*save.CreatedAt),
 			UpdatedAt:   timestamppb.New(*save.UpdatedAt),
 			CreatedBy:   save.CreatedBy,
@@ -151,14 +153,15 @@ func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscrip
 	}, err
 }
 
-func (s *ArticleService) ListPostscripts(ctx context.Context, req *v1.ListArticlePostscripts_Request) (rsp *v1.ListArticlePostscripts_Reply, err error) {
-	rows, err := s.articleUsecase.ListPostscripts(ctx, req.ArticleId)
+func (s *ArticleService) ListPostscripts(ctx context.Context, req *v1.ListArticlePostscripts_Request) (rsp *v1.ListArticlePostscripts_Response, err error) {
+	listPostscriptsResponse, err := s.articleUsecase.ListPostscripts(ctx, &usecase.ArticleListPostscriptsReq{ArticleID: req.ArticleId})
 	if err != nil {
 		return nil, err
 	}
-	reply := make([]*v1.ArticlePostscript, 0, len(rows))
+	rows := listPostscriptsResponse.Rows
+	reply := make([]*v1.ListArticlePostscripts_Response_ArticlePostscript, 0, len(rows))
 	for _, item := range rows {
-		reply = append(reply, &v1.ArticlePostscript{
+		reply = append(reply, &v1.ListArticlePostscripts_Response_ArticlePostscript{
 			CreatedAt:   timestamppb.New(*item.CreatedAt),
 			UpdatedAt:   timestamppb.New(*item.UpdatedAt),
 			CreatedBy:   item.CreatedBy,
@@ -169,10 +172,10 @@ func (s *ArticleService) ListPostscripts(ctx context.Context, req *v1.ListArticl
 			Restriction: enum.ContentRestrictionMap.MustToProto(item.Restriction),
 		})
 	}
-	return &v1.ListArticlePostscripts_Reply{Rows: reply}, nil
+	return &v1.ListArticlePostscripts_Response{Rows: reply}, nil
 }
 
-func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticle_Request) (rsp *v1.UpdateArticle_Reply, err error) {
+func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticle_Request) (rsp *v1.UpdateArticle_Response, err error) {
 	article := req.Article
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -191,7 +194,7 @@ func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticle_Reque
 			bountyPoints = new(qa.GetBountyPoints())
 		}
 	}
-	update, err := s.articleUsecase.Update(ctx, &model.Article{
+	updateResponse, err := s.articleUsecase.Update(ctx, &usecase.ArticleUpdateReq{Article: &model.Article{
 		ID:            req.ArticleId,
 		Title:         article.Title,
 		Content:       article.Content,
@@ -203,11 +206,12 @@ func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticle_Reque
 		Commentable:   util.DerefOrDefault(article.Commentable, true),
 		Anonymous:     util.DerefOrDefault(article.Anonymous, false),
 		UpdatedBy:     new(req.UserId),
-	}, article.GetTagIds())
+	}})
 	if err != nil {
 		return nil, err
 	}
-	articleReply := &v1.Article{
+	update := updateResponse.Article
+	articleReply := &v1.UpdateArticle_Response_Article{
 		CreatedAt:     timestamppb.New(*update.CreatedAt),
 		UpdatedAt:     timestamppb.New(*update.UpdatedAt),
 		CreatedBy:     update.CreatedBy,
@@ -235,7 +239,7 @@ func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticle_Reque
 	}
 	switch update.Type {
 	case enum.ArticleTypeQA:
-		articleReply.TypeParams = &v1.Article_Qa{Qa: &v1.Article_QA{
+		articleReply.TypeParams = &v1.UpdateArticle_Response_Article_Qa{Qa: &v1.UpdateArticle_Response_Article_QA{
 			BountyPoints:     update.BountyPoints,
 			AcceptedAnswerId: update.AcceptedAnswerID,
 		}}
@@ -246,85 +250,85 @@ func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticle_Reque
 	if update.EditedAt != nil {
 		articleReply.EditedAt = timestamppb.New(*update.EditedAt)
 	}
-	return &v1.UpdateArticle_Reply{
+	return &v1.UpdateArticle_Response{
 		Article: articleReply,
 	}, nil
 }
 
-func (s *ArticleService) DiscardDraft(ctx context.Context, req *v1.DiscardDraftArticle_Request) (rsp *v1.DiscardDraftArticle_Reply, err error) {
+func (s *ArticleService) DiscardDraft(ctx context.Context, req *v1.DiscardDraftArticle_Request) (rsp *v1.DiscardDraftArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err = s.articleUsecase.DiscardDraft(ctx, req.ArticleId, req.UserId)
-	return &v1.DiscardDraftArticle_Reply{}, err
+	err = s.articleUsecase.DiscardDraft(ctx, &usecase.ArticleDiscardDraftReq{ArticleID: req.ArticleId, UserID: req.UserId})
+	return &v1.DiscardDraftArticle_Response{}, err
 }
 
-func (s *ArticleService) MakePrivate(ctx context.Context, req *v1.MakePrivateArticle_Request) (*v1.MakePrivateArticle_Reply, error) {
+func (s *ArticleService) MakePrivate(ctx context.Context, req *v1.MakePrivateArticle_Request) (*v1.MakePrivateArticle_Response, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err := s.articleUsecase.MakePrivate(ctx, req.ArticleId, req.UserId)
-	return &v1.MakePrivateArticle_Reply{}, err
+	err := s.articleUsecase.MakePrivate(ctx, &usecase.ArticleMakePrivateReq{ArticleID: req.ArticleId, UserID: req.UserId})
+	return &v1.MakePrivateArticle_Response{}, err
 }
 
-func (s *ArticleService) MakePublic(ctx context.Context, req *v1.MakePublicArticle_Request) (*v1.MakePublicArticle_Reply, error) {
+func (s *ArticleService) MakePublic(ctx context.Context, req *v1.MakePublicArticle_Request) (*v1.MakePublicArticle_Response, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err := s.articleUsecase.MakePublic(ctx, req.ArticleId, req.UserId)
-	return &v1.MakePublicArticle_Reply{}, err
+	err := s.articleUsecase.MakePublic(ctx, &usecase.ArticleMakePublicReq{ArticleID: req.ArticleId, UserID: req.UserId})
+	return &v1.MakePublicArticle_Response{}, err
 }
 
-func (s *ArticleService) Archive(ctx context.Context, req *v1.ArchiveArticle_Request) (*v1.ArchiveArticle_Reply, error) {
+func (s *ArticleService) Archive(ctx context.Context, req *v1.ArchiveArticle_Request) (*v1.ArchiveArticle_Response, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err := s.articleUsecase.Archive(ctx, req.ArticleId, req.UserId, req.Reason)
-	return &v1.ArchiveArticle_Reply{}, err
+	err := s.articleUsecase.Archive(ctx, &usecase.ArticleArchiveReq{ArticleID: req.ArticleId, UserID: req.UserId, Reason: req.Reason})
+	return &v1.ArchiveArticle_Response{}, err
 }
 
-func (s *ArticleService) Unarchive(ctx context.Context, req *v1.UnarchiveArticle_Request) (*v1.UnarchiveArticle_Reply, error) {
+func (s *ArticleService) Unarchive(ctx context.Context, req *v1.UnarchiveArticle_Request) (*v1.UnarchiveArticle_Response, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err := s.articleUsecase.Unarchive(ctx, req.ArticleId, req.UserId, req.Reason)
-	return &v1.UnarchiveArticle_Reply{}, err
+	err := s.articleUsecase.Unarchive(ctx, &usecase.ArticleUnarchiveReq{ArticleID: req.ArticleId, UserID: req.UserId, Reason: req.Reason})
+	return &v1.UnarchiveArticle_Response{}, err
 }
 
-func (s *ArticleService) Hide(ctx context.Context, req *v1.HideArticle_Request) (rsp *v1.HideArticle_Reply, err error) {
+func (s *ArticleService) Hide(ctx context.Context, req *v1.HideArticle_Request) (rsp *v1.HideArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err = s.articleUsecase.Hide(ctx, req.ArticleId, req.UserId, req.Reason)
-	return &v1.HideArticle_Reply{}, err
+	err = s.articleUsecase.Hide(ctx, &usecase.ArticleHideReq{ArticleID: req.ArticleId, UserID: req.UserId, Reason: req.Reason})
+	return &v1.HideArticle_Response{}, err
 }
 
-func (s *ArticleService) Unhide(ctx context.Context, req *v1.UnhideArticle_Request) (*v1.UnhideArticle_Reply, error) {
+func (s *ArticleService) Unhide(ctx context.Context, req *v1.UnhideArticle_Request) (*v1.UnhideArticle_Response, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err := s.articleUsecase.Unhide(ctx, req.ArticleId, req.UserId, req.Reason)
-	return &v1.UnhideArticle_Reply{}, err
+	err := s.articleUsecase.Unhide(ctx, &usecase.ArticleUnhideReq{ArticleID: req.ArticleId, UserID: req.UserId, Reason: req.Reason})
+	return &v1.UnhideArticle_Response{}, err
 }
 
-func (s *ArticleService) Lock(ctx context.Context, req *v1.LockArticle_Request) (rsp *v1.LockArticle_Reply, err error) {
+func (s *ArticleService) Lock(ctx context.Context, req *v1.LockArticle_Request) (rsp *v1.LockArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err = s.articleUsecase.Lock(ctx, req.ArticleId, req.UserId, req.Reason)
-	return &v1.LockArticle_Reply{}, err
+	err = s.articleUsecase.Lock(ctx, &usecase.ArticleLockReq{ArticleID: req.ArticleId, UserID: req.UserId, Reason: req.Reason})
+	return &v1.LockArticle_Response{}, err
 }
 
-func (s *ArticleService) Unlock(ctx context.Context, req *v1.UnlockArticle_Request) (rsp *v1.UnlockArticle_Reply, err error) {
+func (s *ArticleService) Unlock(ctx context.Context, req *v1.UnlockArticle_Request) (rsp *v1.UnlockArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err = s.articleUsecase.Unlock(ctx, req.ArticleId, req.UserId, req.Reason)
-	return &v1.UnlockArticle_Reply{}, err
+	err = s.articleUsecase.Unlock(ctx, &usecase.ArticleUnlockReq{ArticleID: req.ArticleId, UserID: req.UserId, Reason: req.Reason})
+	return &v1.UnlockArticle_Response{}, err
 }
 
-func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Request) (rsp *v1.ListArticles_Reply, err error) {
-	req.Query = util.OrDefault(req.Query, &v1.ArticleQueryParams{})
+func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Request) (rsp *v1.ListArticles_Response, err error) {
+	req.Query = util.OrDefault(req.Query, &v1.ListArticles_Request_ArticleQueryParams{})
 	var publishStatus *enum.ArticlePublishStatus
 	if req.Query.PublishStatus != nil {
 		status, ok := enum.ArticlePublishStatusMap.ToEnum(*req.Query.PublishStatus)
@@ -390,27 +394,29 @@ func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Request)
 		dbOrder = new(order)
 	}
 
-	query := &repo.ArticleGetReq{
-		TagId:           req.Query.TagId,
-		DomainId:        req.Query.DomainId,
+	query := &usecase.ArticlePageReq{
+		TagID:           req.Query.TagId,
+		DomainID:        req.Query.DomainId,
 		PublishStatus:   publishStatus,
 		PublishStatuses: publishStatuses,
 		Visibility:      visibility,
 		Visibilities:    visibilities,
 		Restriction:     restriction,
 		Restrictions:    restrictions,
-		AuthorId:        req.Query.AuthorId,
+		AuthorID:        req.Query.AuthorId,
 		Order:           dbOrder,
 		Type:            dbType,
 		Keyword:         req.Query.Keyword,
 	}
-	reply, _, err := s.articleUsecase.Page(ctx, server.GetPageMax(), query)
+	query.Page = &base.PageRequest{Page: 1, Size: 1000}
+	pageResponse, err := s.articleUsecase.Page(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*v1.Article, 0, len(reply))
+	reply := pageResponse.Rows
+	rows := make([]*v1.ListArticles_Response_Article, 0, len(reply))
 	for _, item := range reply {
-		row := &v1.Article{
+		row := &v1.ListArticles_Response_Article{
 			CreatedAt:     timestamppb.New(*item.CreatedAt),
 			UpdatedAt:     timestamppb.New(*item.UpdatedAt),
 			CreatedBy:     item.CreatedBy,
@@ -438,7 +444,7 @@ func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Request)
 		}
 		switch item.Type {
 		case enum.ArticleTypeQA:
-			row.TypeParams = &v1.Article_Qa{Qa: &v1.Article_QA{
+			row.TypeParams = &v1.ListArticles_Response_Article_Qa{Qa: &v1.ListArticles_Response_Article_QA{
 				BountyPoints:     item.BountyPoints,
 				AcceptedAnswerId: item.AcceptedAnswerID,
 			}}
@@ -451,13 +457,13 @@ func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Request)
 		}
 		rows = append(rows, row)
 	}
-	return &v1.ListArticles_Reply{
+	return &v1.ListArticles_Response{
 		Rows: rows,
 	}, err
 }
 
-func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Request) (rsp *v1.PageArticles_Reply, err error) {
-	req.Query = util.OrDefault(req.Query, &v1.ArticleQueryParams{})
+func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Request) (rsp *v1.PageArticles_Response, err error) {
+	req.Query = util.OrDefault(req.Query, &v1.PageArticles_Request_ArticleQueryParams{})
 	var publishStatus *enum.ArticlePublishStatus
 	if req.Query.PublishStatus != nil {
 		status, ok := enum.ArticlePublishStatusMap.ToEnum(*req.Query.PublishStatus)
@@ -523,27 +529,30 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Request)
 		dbOrder = new(order)
 	}
 
-	query := &repo.ArticleGetReq{
-		TagId:           req.Query.TagId,
-		DomainId:        req.Query.DomainId,
+	query := &usecase.ArticlePageReq{
+		TagID:           req.Query.TagId,
+		DomainID:        req.Query.DomainId,
 		PublishStatus:   publishStatus,
 		PublishStatuses: publishStatuses,
 		Visibility:      visibility,
 		Visibilities:    visibilities,
 		Restriction:     restriction,
 		Restrictions:    restrictions,
-		AuthorId:        req.Query.AuthorId,
+		AuthorID:        req.Query.AuthorId,
 		Order:           dbOrder,
 		Type:            dbType,
 		Keyword:         req.Query.Keyword,
 	}
-	reply, page, err := s.articleUsecase.Page(ctx, req.Page, query)
+	query.Page = &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())}
+	pageResponse, err := s.articleUsecase.Page(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*v1.Article, 0, len(reply))
+	reply := pageResponse.Rows
+	page := pageResponse.Page
+	rows := make([]*v1.PageArticles_Response_Article, 0, len(reply))
 	for _, item := range reply {
-		row := &v1.Article{
+		row := &v1.PageArticles_Response_Article{
 			CreatedAt:     timestamppb.New(*item.CreatedAt),
 			UpdatedAt:     timestamppb.New(*item.UpdatedAt),
 			CreatedBy:     item.CreatedBy,
@@ -571,7 +580,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Request)
 		}
 		switch item.Type {
 		case enum.ArticleTypeQA:
-			row.TypeParams = &v1.Article_Qa{Qa: &v1.Article_QA{
+			row.TypeParams = &v1.PageArticles_Response_Article_Qa{Qa: &v1.PageArticles_Response_Article_QA{
 				BountyPoints:     item.BountyPoints,
 				AcceptedAnswerId: item.AcceptedAnswerID,
 			}}
@@ -584,18 +593,19 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Request)
 		}
 		rows = append(rows, row)
 	}
-	return &v1.PageArticles_Reply{
-		Page: page,
+	return &v1.PageArticles_Response{
+		Page: &common.PageResponse{Page: uint32(page.Page), Size: uint32(page.Size), Total: uint32(page.Total)},
 		Rows: rows,
 	}, err
 }
 
-func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Request) (rsp *v1.GetArticle_Reply, err error) {
-	one, err := s.articleUsecase.Get(ctx, req.ArticleId)
+func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Request) (rsp *v1.GetArticle_Response, err error) {
+	getResponse, err := s.articleUsecase.Get(ctx, &usecase.ArticleGetReq{ArticleID: req.ArticleId})
 	if err != nil {
 		return nil, err
 	}
-	article := &v1.Article{
+	one := getResponse.Article
+	article := &v1.GetArticle_Response_Article{
 		CreatedAt:     timestamppb.New(*one.CreatedAt),
 		UpdatedAt:     timestamppb.New(*one.UpdatedAt),
 		CreatedBy:     one.CreatedBy,
@@ -623,7 +633,7 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Request) (r
 	}
 	switch one.Type {
 	case enum.ArticleTypeQA:
-		article.TypeParams = &v1.Article_Qa{Qa: &v1.Article_QA{
+		article.TypeParams = &v1.GetArticle_Response_Article_Qa{Qa: &v1.GetArticle_Response_Article_QA{
 			BountyPoints:     one.BountyPoints,
 			AcceptedAnswerId: one.AcceptedAnswerID,
 		}}
@@ -634,78 +644,79 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Request) (r
 	if one.EditedAt != nil {
 		article.EditedAt = timestamppb.New(*one.EditedAt)
 	}
-	return &v1.GetArticle_Reply{Article: article}, err
+	return &v1.GetArticle_Response{Article: article}, err
 }
 
-func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapArticleViewerActionStates_Request) (rsp *v1.MapArticleViewerActionStates_Reply, err error) {
+func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapArticleViewerActionStates_Request) (rsp *v1.MapArticleViewerActionStates_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	states, err := s.articleUsecase.MapViewerActionStates(ctx, req.GetArticleIds(), req.UserId)
+	statesResponse, err := s.articleUsecase.MapViewerActionStates(ctx, &usecase.ArticleMapViewerActionStatesReq{ArticleIDs: req.GetArticleIds(), UserID: req.UserId})
 	if err != nil {
 		return nil, err
 	}
-	reply := make(map[int64]*v1.ArticleViewerActionState, len(states))
+	states := statesResponse.States
+	reply := make(map[int64]*v1.MapArticleViewerActionStates_Response_ArticleViewerActionState, len(states))
 	for articleID, state := range states {
-		reply[articleID] = &v1.ArticleViewerActionState{
+		reply[articleID] = &v1.MapArticleViewerActionStates_Response_ArticleViewerActionState{
 			Liked:     state.Liked,
 			Thanked:   state.Thanked,
 			Collected: state.Collected,
 			Watched:   state.Watched,
 		}
 	}
-	return &v1.MapArticleViewerActionStates_Reply{States: reply}, nil
+	return &v1.MapArticleViewerActionStates_Response{States: reply}, nil
 }
 
-func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Request) (rsp *v1.RewardArticle_Reply, err error) {
+func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Request) (rsp *v1.RewardArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err = s.articleUsecase.Reward(ctx, req.ArticleId, req.UserId, req.Points)
-	return &v1.RewardArticle_Reply{}, err
+	err = s.articleUsecase.Reward(ctx, &usecase.ArticleRewardReq{ArticleID: req.ArticleId, UserID: req.UserId, Points: req.Points})
+	return &v1.RewardArticle_Response{}, err
 }
 
-func (s *ArticleService) View(ctx context.Context, req *v1.ViewArticle_Request) (rsp *v1.ViewArticle_Reply, err error) {
-	err = s.articleUsecase.View(ctx, req.ArticleId, req.ViewerUserId)
-	return &v1.ViewArticle_Reply{}, err
+func (s *ArticleService) View(ctx context.Context, req *v1.ViewArticle_Request) (rsp *v1.ViewArticle_Response, err error) {
+	err = s.articleUsecase.View(ctx, &usecase.ArticleViewReq{ArticleID: req.ArticleId, ViewerUserID: req.ViewerUserId})
+	return &v1.ViewArticle_Response{}, err
 }
 
-func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticle_Request) (rsp *v1.LikeArticle_Reply, err error) {
+func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticle_Request) (rsp *v1.LikeArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	liked, err := s.articleUsecase.Like(ctx, req.ArticleId, req.UserId, req.Liked)
-	return &v1.LikeArticle_Reply{Liked: liked}, err
+	likeResponse, err := s.articleUsecase.Like(ctx, &usecase.ArticleLikeReq{ArticleID: req.ArticleId, UserID: req.UserId, Active: req.Liked})
+	return &v1.LikeArticle_Response{Liked: likeResponse.Liked}, err
 }
 
-func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Request) (rsp *v1.ThankArticle_Reply, err error) {
+func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Request) (rsp *v1.ThankArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	thanked, err := s.articleUsecase.Thank(ctx, req.ArticleId, req.UserId, req.Thanked)
-	return &v1.ThankArticle_Reply{Thanked: thanked}, err
+	thankResponse, err := s.articleUsecase.Thank(ctx, &usecase.ArticleThankReq{ArticleID: req.ArticleId, UserID: req.UserId, Active: req.Thanked})
+	return &v1.ThankArticle_Response{Thanked: thankResponse.Thanked}, err
 }
 
-func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Request) (rsp *v1.CollectArticle_Reply, err error) {
+func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Request) (rsp *v1.CollectArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	collected, err := s.articleUsecase.Collect(ctx, req.ArticleId, req.UserId, req.Collected)
-	return &v1.CollectArticle_Reply{Collected: collected}, err
+	collectResponse, err := s.articleUsecase.Collect(ctx, &usecase.ArticleCollectReq{ArticleID: req.ArticleId, UserID: req.UserId, Active: req.Collected})
+	return &v1.CollectArticle_Response{Collected: collectResponse.Collected}, err
 }
 
-func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticle_Request) (rsp *v1.WatchArticle_Reply, err error) {
+func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticle_Request) (rsp *v1.WatchArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	watched, err := s.articleUsecase.Watch(ctx, req.ArticleId, req.UserId, req.Watched)
-	return &v1.WatchArticle_Reply{Watched: watched}, err
+	watchResponse, err := s.articleUsecase.Watch(ctx, &usecase.ArticleWatchReq{ArticleID: req.ArticleId, UserID: req.UserId, Active: req.Watched})
+	return &v1.WatchArticle_Response{Watched: watchResponse.Watched}, err
 }
 
-func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerArticle_Request) (rsp *v1.AcceptAnswerArticle_Reply, err error) {
+func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerArticle_Request) (rsp *v1.AcceptAnswerArticle_Response, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err = s.articleUsecase.AcceptAnswer(ctx, req.ArticleId, req.CommentId, req.UserId)
-	return &v1.AcceptAnswerArticle_Reply{}, err
+	err = s.articleUsecase.AcceptAnswer(ctx, &usecase.ArticleAcceptAnswerReq{ArticleID: req.ArticleId, CommentID: req.CommentId, UserID: req.UserId})
+	return &v1.AcceptAnswerArticle_Response{}, err
 }

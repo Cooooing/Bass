@@ -3,7 +3,7 @@ package data
 import (
 	"bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
-	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	"common/proto/gen/common"
 	contentv1 "common/proto/gen/content/v1"
 	"context"
 )
@@ -18,37 +18,41 @@ func NewContentDomainClient(contentClient *rpc.ContentClient) repo.ContentDomain
 	return &ContentDomainClient{contentClient: contentClient}
 }
 
-func (r *ContentDomainClient) ListDomains(ctx context.Context, req *bbscontentv1.ListDomains_Request) (*bbscontentv1.ListDomains_Reply, error) {
-	query := req.GetQuery()
+func (r *ContentDomainClient) ListDomains(ctx context.Context, req *repo.ListDomainsReq) (*repo.ListDomainsResponse, error) {
+	query := req.Query
 	if query == nil {
-		query = &bbscontentv1.DomainQuery{}
+		query = &repo.DomainQuery{}
 	}
-	contentQuery := &contentv1.DomainQueryParams{
-		Ids:         query.GetIds(),
+	contentQuery := &contentv1.PageDomains_Request_DomainQueryParams{
+		Ids:         query.IDs,
 		Name:        query.Name,
 		Description: query.Description,
-		Url:         query.Url,
+		Url:         query.URL,
 		Icon:        query.Icon,
 		IsNav:       query.IsNav,
 	}
 	if query.Status != nil {
 		contentQuery.Status = new(contentv1.DomainStatus(*query.Status))
 	}
+	var pageReq *common.PageRequest
+	if req.Page != nil {
+		pageReq = &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}
+	}
 	reply, err := r.contentClient.Domain.Page(ctx, &contentv1.PageDomains_Request{
-		Page:  req.Page,
+		Page:  pageReq,
 		Query: contentQuery,
 	})
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*bbscontentv1.Domain, 0, len(reply.GetRows()))
+	rows := make([]*repo.Domain, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
-		row := &bbscontentv1.Domain{
-			Id:          item.GetId(),
+		row := &repo.Domain{
+			ID:          item.GetId(),
 			Name:        item.GetName(),
 			Description: item.Description,
-			Status:      bbscontentv1.DomainStatus(item.GetStatus()),
-			Url:         item.Url,
+			Status:      int32(item.GetStatus()),
+			URL:         item.Url,
 			Icon:        item.Icon,
 			IsNav:       item.GetIsNav(),
 			CreatedBy:   item.CreatedBy,
@@ -58,5 +62,9 @@ func (r *ContentDomainClient) ListDomains(ctx context.Context, req *bbscontentv1
 		}
 		rows = append(rows, row)
 	}
-	return &bbscontentv1.ListDomains_Reply{Page: reply.GetPage(), Rows: rows}, nil
+	var page *repo.PageResponse
+	if reply.GetPage() != nil {
+		page = &repo.PageResponse{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+	}
+	return &repo.ListDomainsResponse{Page: page, Rows: rows}, nil
 }

@@ -7,7 +7,6 @@ import (
 	commonmodel "common/pkg/model"
 	"common/pkg/server"
 	"common/pkg/util"
-	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 )
@@ -26,58 +25,58 @@ func NewAuthClient(userClient *rpc.UserClient) repo.AuthRepo {
 	return NewAuthRepo(userClient)
 }
 
-func (r *AuthRepo) StartEmailRegistration(ctx context.Context, req *bbsuserv1.StartEmailRegistration_Request) (*bbsuserv1.StartEmailRegistration_Reply, error) {
+func (r *AuthRepo) StartEmailRegistration(ctx context.Context, req *repo.StartEmailRegistrationReq) (*repo.StartEmailRegistrationResponse, error) {
 	reply, err := r.userClient.Auth.StartEmailRegistration(ctx, &userv1.StartEmailRegistration_Request{
-		Email:    req.GetEmail(),
-		Password: req.GetPassword(),
-		Name:     req.GetName(),
+		Email:    req.Email,
+		Password: req.Password,
+		Name:     req.Name,
 		Nickname: req.Nickname,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.StartEmailRegistration_Reply{CodeToken: reply.GetCodeToken(), Code: reply.GetCode()}, nil
+	return &repo.StartEmailRegistrationResponse{CodeToken: reply.GetCodeToken(), Code: reply.GetCode()}, nil
 }
 
-func (r *AuthRepo) VerifyEmailRegistration(ctx context.Context, req *bbsuserv1.VerifyEmailRegistration_Request) (*bbsuserv1.VerifyEmailRegistration_Reply, error) {
+func (r *AuthRepo) VerifyEmailRegistration(ctx context.Context, req *repo.VerifyEmailRegistrationReq) (*repo.VerifyEmailRegistrationResponse, error) {
 	_, err := r.userClient.Auth.VerifyEmailRegistration(ctx, &userv1.VerifyEmailRegistration_Request{
-		Code:      req.GetCode(),
-		CodeToken: req.GetCodeToken(),
+		Code:      req.Code,
+		CodeToken: req.CodeToken,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.VerifyEmailRegistration_Reply{}, nil
+	return &repo.VerifyEmailRegistrationResponse{}, nil
 }
 
-func (r *AuthRepo) StartPhoneRegistration(ctx context.Context, req *bbsuserv1.StartPhoneRegistration_Request) (*bbsuserv1.StartPhoneRegistration_Reply, error) {
+func (r *AuthRepo) StartPhoneRegistration(ctx context.Context, req *repo.StartPhoneRegistrationReq) (*repo.StartPhoneRegistrationResponse, error) {
 	reply, err := r.userClient.Auth.StartPhoneRegistration(ctx, &userv1.StartPhoneRegistration_Request{
-		Phone:    req.GetPhone(),
-		Password: req.GetPassword(),
-		Name:     req.GetName(),
+		Phone:    req.Phone,
+		Password: req.Password,
+		Name:     req.Name,
 		Nickname: req.Nickname,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.StartPhoneRegistration_Reply{CodeToken: reply.GetCodeToken(), Code: reply.GetCode()}, nil
+	return &repo.StartPhoneRegistrationResponse{CodeToken: reply.GetCodeToken(), Code: reply.GetCode()}, nil
 }
 
-func (r *AuthRepo) VerifyPhoneRegistration(ctx context.Context, req *bbsuserv1.VerifyPhoneRegistration_Request) (*bbsuserv1.VerifyPhoneRegistration_Reply, error) {
+func (r *AuthRepo) VerifyPhoneRegistration(ctx context.Context, req *repo.VerifyPhoneRegistrationReq) (*repo.VerifyPhoneRegistrationResponse, error) {
 	_, err := r.userClient.Auth.VerifyPhoneRegistration(ctx, &userv1.VerifyPhoneRegistration_Request{
-		Code:      req.GetCode(),
-		CodeToken: req.GetCodeToken(),
+		Code:      req.Code,
+		CodeToken: req.CodeToken,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.VerifyPhoneRegistration_Reply{}, nil
+	return &repo.VerifyPhoneRegistrationResponse{}, nil
 }
 
-func (r *AuthRepo) LoginByPassword(ctx context.Context, req *bbsuserv1.LoginByPassword_Request) (*bbsuserv1.LoginByPassword_Reply, error) {
+func (r *AuthRepo) LoginByPassword(ctx context.Context, req *repo.LoginByPasswordReq) (*repo.LoginByPasswordResponse, error) {
 	loginReq := &userv1.LoginByPassword_Request{
-		Account:   req.GetAccount(),
-		Password:  req.GetPassword(),
+		Account:   req.Account,
+		Password:  req.Password,
 		UserAgent: server.GetHeader(ctx, constant.HeaderUserAgent),
 		DeviceId:  server.GetHeader(ctx, constant.HeaderDeviceID),
 		Platform:  server.GetHeader(ctx, constant.HeaderPlatform),
@@ -102,19 +101,19 @@ func (r *AuthRepo) LoginByPassword(ctx context.Context, req *bbsuserv1.LoginByPa
 		return nil, err
 	}
 	account := reply.GetAccount()
-	var out *bbsuserv1.Account
+	var out *repo.Account
 	if account != nil {
-		out = &bbsuserv1.Account{}
+		out = &repo.Account{}
 		if basic := account.GetBasic(); basic != nil {
-			out.Profile = &bbsuserv1.AccountProfile{
-				Id:            basic.GetId(),
+			out.Profile = &repo.AccountProfile{
+				ID:            basic.GetId(),
 				Name:          basic.GetName(),
 				Nickname:      basic.Nickname,
-				Url:           basic.Url,
-				AvatarUrl:     basic.AvatarUrl,
+				URL:           basic.Url,
+				AvatarURL:     basic.AvatarUrl,
 				Introduction:  basic.Introduction,
-				Status:        bbsuserv1.AccountStatus(basic.GetStatus()),
-				Mbti:          bbsuserv1.MBTI(basic.GetMbti()),
+				Status:        int32(basic.GetStatus()),
+				MBTI:          int32(basic.GetMbti()),
 				FollowCount:   basic.FollowCount,
 				FollowerCount: basic.FollowerCount,
 				CreatedAt:     formatProtoTime(basic.GetCreatedAt()),
@@ -122,24 +121,20 @@ func (r *AuthRepo) LoginByPassword(ctx context.Context, req *bbsuserv1.LoginByPa
 			}
 		}
 		if contact := account.GetContact(); contact != nil {
-			out.Contact = &bbsuserv1.AccountContact{
-				UserId: contact.GetUserId(),
+			out.Contact = &repo.AccountContact{
+				UserID: contact.GetUserId(),
 				Email:  contact.Email,
 				Phone:  contact.Phone,
 			}
 		}
 	}
-	return &bbsuserv1.LoginByPassword_Reply{Token: reply.GetToken(), Account: out}, nil
+	return &repo.LoginByPasswordResponse{Token: reply.GetToken(), Account: out}, nil
 }
 
-func (r *AuthRepo) Logout(ctx context.Context, req *bbsuserv1.Logout_Request) (*bbsuserv1.Logout_Reply, error) {
-	token, err := currentToken(ctx)
+func (r *AuthRepo) Logout(ctx context.Context, req *repo.LogoutReq) (*repo.LogoutResponse, error) {
+	_, err := r.userClient.Auth.Logout(ctx, &userv1.Logout_Request{Token: req.Token})
 	if err != nil {
 		return nil, err
 	}
-	_, err = r.userClient.Auth.Logout(ctx, &userv1.Logout_Request{Token: token})
-	if err != nil {
-		return nil, err
-	}
-	return &bbsuserv1.Logout_Reply{}, nil
+	return &repo.LogoutResponse{}, nil
 }

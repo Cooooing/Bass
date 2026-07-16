@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"common/proto/gen/common"
 	"context"
+	"im/internal/biz/base"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 )
@@ -22,10 +22,19 @@ func NewChatSessionUsecase(
 	}, nil
 }
 
-// MarkMuted 设置免打扰状态。
-func (u *ChatSessionUsecase) MarkMuted(ctx context.Context, ids []int64, disturb bool, userId int64) error {
-	for _, id := range ids {
-		_, err := u.chatSessionRepo.UpdateMuted(ctx, id, disturb, userId)
+type MarkMutedReq struct {
+	IDs     []int64
+	Disturb bool
+	UserID  int64
+}
+
+func (u *ChatSessionUsecase) MarkMuted(ctx context.Context, req *MarkMutedReq) error {
+	for _, id := range req.IDs {
+		_, err := u.chatSessionRepo.UpdateMuted(ctx, &repo.ChatSessionUpdateMutedReq{
+			ChatSessionID: id,
+			Muted:         req.Disturb,
+			UpdatedBy:     req.UserID,
+		})
 		if err != nil {
 			return err
 		}
@@ -33,10 +42,19 @@ func (u *ChatSessionUsecase) MarkMuted(ctx context.Context, ids []int64, disturb
 	return nil
 }
 
-// MarkPinned 设置置顶状态。
-func (u *ChatSessionUsecase) MarkPinned(ctx context.Context, ids []int64, top bool, userId int64) error {
-	for _, id := range ids {
-		_, err := u.chatSessionRepo.UpdatePinned(ctx, id, top, userId)
+type MarkPinnedReq struct {
+	IDs    []int64
+	Top    bool
+	UserID int64
+}
+
+func (u *ChatSessionUsecase) MarkPinned(ctx context.Context, req *MarkPinnedReq) error {
+	for _, id := range req.IDs {
+		_, err := u.chatSessionRepo.UpdatePinned(ctx, &repo.ChatSessionUpdatePinnedReq{
+			ChatSessionID: id,
+			Pinned:        req.Top,
+			UpdatedBy:     req.UserID,
+		})
 		if err != nil {
 			return err
 		}
@@ -44,33 +62,36 @@ func (u *ChatSessionUsecase) MarkPinned(ctx context.Context, ids []int64, top bo
 	return nil
 }
 
-// MarkRead 标记已读，将 last_read_message_id 更新为最新消息 ID。
-func (u *ChatSessionUsecase) MarkRead(ctx context.Context, ids []int64, userId int64) error {
-	for _, id := range ids {
-		session, err := u.chatSessionRepo.Get(ctx, &repo.ChatSessionGetReq{
-			IDs: []int64{id},
-		})
+type MarkReadReq struct {
+	IDs    []int64
+	UserID int64
+}
+
+func (u *ChatSessionUsecase) MarkRead(ctx context.Context, req *MarkReadReq) error {
+	for _, id := range req.IDs {
+		sessionResp, err := u.chatSessionRepo.Get(ctx, &repo.ChatSessionGetReq{ChatSessionQuery: repo.ChatSessionQuery{IDs: []int64{id}}})
 		if err != nil {
 			return err
 		}
-		// 获取该会话最新的消息作为已读位置
-		latestMsg, err := u.chatMessageRepo.Get(ctx, &repo.ChatMessageGetReq{
-			SessionID: &id,
-		})
+		latestMsgResp, err := u.chatMessageRepo.Get(ctx, &repo.ChatMessageGetReq{ChatMessageQuery: repo.ChatMessageQuery{SessionID: &id}})
 		if err != nil {
-			continue // 会话无消息则跳过
+			continue
 		}
-		// 计算新增已读数：latestMsg.ID - lastReadMsgID
 		var readDelta int32
-		if session.LastReadMessageID != nil {
-			readDelta = int32(latestMsg.ID - *session.LastReadMessageID)
+		if sessionResp.ChatSession.LastReadMessageID != nil {
+			readDelta = int32(latestMsgResp.ChatMessage.ID - *sessionResp.ChatSession.LastReadMessageID)
 		} else {
-			readDelta = int32(latestMsg.ID)
+			readDelta = int32(latestMsgResp.ChatMessage.ID)
 		}
 		if readDelta <= 0 {
 			continue
 		}
-		_, err = u.chatSessionRepo.UpdateLastReadMessage(ctx, id, latestMsg.ID, readDelta, userId)
+		_, err = u.chatSessionRepo.UpdateLastReadMessage(ctx, &repo.ChatSessionUpdateLastReadMessageReq{
+			ChatSessionID:      id,
+			MessageID:          latestMsgResp.ChatMessage.ID,
+			OperationReadCount: readDelta,
+			UpdatedBy:          req.UserID,
+		})
 		if err != nil {
 			return err
 		}
@@ -78,11 +99,25 @@ func (u *ChatSessionUsecase) MarkRead(ctx context.Context, ids []int64, userId i
 	return nil
 }
 
-// Page 分页查询会话列表。
-func (u *ChatSessionUsecase) Page(ctx context.Context, page *common.PageRequest, queryIds []int64, userId int64) ([]*model.ChatSession, *common.PageReply, error) {
-	getReq := &repo.ChatSessionGetReq{
-		IDs:       queryIds,
-		CreatedBy: &userId,
+type ChatSessionPageReq struct {
+	Page     *base.PageRequest
+	QueryIDs []int64
+	UserID   int64
+}
+
+type ChatSessionPageResponse struct {
+	List []*model.ChatSession
+	Page *base.PageResponse
+}
+
+func (u *ChatSessionUsecase) Page(ctx context.Context, req *ChatSessionPageReq) (*ChatSessionPageResponse, error) {
+	pageResponse, err := u.chatSessionRepo.Page(ctx, &repo.ChatSessionPageReq{ChatSessionQuery: repo.ChatSessionQuery{
+		Page:      req.Page,
+		IDs:       req.QueryIDs,
+		CreatedBy: &req.UserID,
+	}})
+	if err != nil {
+		return nil, err
 	}
-	return u.chatSessionRepo.Page(ctx, page, getReq)
+	return &ChatSessionPageResponse{List: pageResponse.Rows, Page: pageResponse.Page}, nil
 }

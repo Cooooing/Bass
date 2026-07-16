@@ -21,10 +21,26 @@ func (s *LocationService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterLocationServiceHTTPServer(hs, s)
 }
 
-func (s *LocationService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Request) (*bbsuserv1.GetCurrentLocation_Reply, error) {
-	return s.locationUsecase.GetCurrentLocation(ctx, req)
+func (s *LocationService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Request) (*bbsuserv1.GetCurrentLocation_Response, error) {
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	response, err := s.locationUsecase.GetCurrentLocation(ctx, &usecase.GetCurrentLocationReq{UserID: userID})
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.GetCurrentLocation_Response{Location: response.Location}, nil
 }
 
-func (s *LocationService) UpsertCurrent(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Request) (*bbsuserv1.UpsertCurrentLocation_Reply, error) {
-	return s.locationUsecase.UpsertCurrentLocation(ctx, req)
+func (s *LocationService) UpsertCurrent(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Request) (*bbsuserv1.UpsertCurrentLocation_Response, error) {
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	response, err := s.locationUsecase.UpsertCurrentLocation(ctx, &usecase.UpsertCurrentLocationReq{UserID: userID, Country: req.Country, Province: req.Province, City: req.City})
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.UpsertCurrentLocation_Response{Location: response.Location}, nil
 }

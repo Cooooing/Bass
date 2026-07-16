@@ -26,24 +26,24 @@ func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterPreferencesServiceServer(gs, s)
 }
 
-func (s *PreferencesService) Get(ctx context.Context, req *v1.GetPreferences_Request) (*v1.GetPreferences_Reply, error) {
-	preferences, err := s.preferencesUsecase.GetByUserID(ctx, req.GetUserId())
+func (s *PreferencesService) Get(ctx context.Context, req *v1.GetPreferences_Request) (*v1.GetPreferences_Response, error) {
+	res, err := s.preferencesUsecase.GetByUserID(ctx, &usecase.GetPreferencesByUserIDReq{UserID: req.GetUserId()})
 	if err != nil {
 		return nil, err
 	}
-	reply := &v1.Preferences{UserId: req.GetUserId()}
-	if preferences != nil {
-		if preferences.Language != nil {
-			reply.Language = enum.LanguageMap.MustToProto(*preferences.Language)
+	reply := &v1.GetPreferences_Response_Preferences{UserId: req.GetUserId()}
+	if res.Preferences != nil {
+		if res.Preferences.Language != nil {
+			reply.Language = enum.LanguageMap.MustToProto(*res.Preferences.Language)
 		}
-		reply.Timezone = preferences.Timezone
-		reply.Theme = preferences.Theme
-		reply.MobileTheme = preferences.MobileTheme
+		reply.Timezone = res.Preferences.Timezone
+		reply.Theme = res.Preferences.Theme
+		reply.MobileTheme = res.Preferences.MobileTheme
 	}
-	return &v1.GetPreferences_Reply{Preferences: reply}, nil
+	return &v1.GetPreferences_Response{Preferences: reply}, nil
 }
 
-func (s *PreferencesService) Update(ctx context.Context, req *v1.UpdatePreferences_Request) (*v1.UpdatePreferences_Reply, error) {
+func (s *PreferencesService) Update(ctx context.Context, req *v1.UpdatePreferences_Request) (*v1.UpdatePreferences_Response, error) {
 	var language *enum.Language
 	if req.Language != nil {
 		if *req.Language != commonenums.Language_LANGUAGE_UNSPECIFIED {
@@ -54,17 +54,18 @@ func (s *PreferencesService) Update(ctx context.Context, req *v1.UpdatePreferenc
 			language = new(value)
 		}
 	}
-	preferences, err := s.preferencesUsecase.UpsertByUserID(ctx, &model.Preferences{
+	res, err := s.preferencesUsecase.UpsertByUserID(ctx, &usecase.UpsertPreferencesByUserIDReq{Preferences: &model.Preferences{
 		UserID:      req.GetUserId(),
 		Language:    language,
 		Timezone:    req.Timezone,
 		Theme:       req.Theme,
 		MobileTheme: req.MobileTheme,
-	})
+	}})
 	if err != nil {
 		return nil, err
 	}
-	reply := &v1.Preferences{
+	preferences := res.Preferences
+	reply := &v1.UpdatePreferences_Response_Preferences{
 		UserId:      req.GetUserId(),
 		Timezone:    preferences.Timezone,
 		Theme:       preferences.Theme,
@@ -73,5 +74,5 @@ func (s *PreferencesService) Update(ctx context.Context, req *v1.UpdatePreferenc
 	if preferences.Language != nil {
 		reply.Language = enum.LanguageMap.MustToProto(*preferences.Language)
 	}
-	return &v1.UpdatePreferences_Reply{Preferences: reply}, nil
+	return &v1.UpdatePreferences_Response{Preferences: reply}, nil
 }

@@ -3,37 +3,36 @@ syntax = "proto3";
 package common.api.app.push_hub.v1;
 
 import "push_hub/v1/enum.proto";
-import "push_hub/v1/model.proto";
 
 option go_package = "common/proto/gen/push_hub/v1;v1";
 
 // 推送事件服务（内部 gRPC）
 service PushHubEventService {
   // 发布推送事件（单播）
-  rpc PublishEvent(PublishEvent.Request) returns (PublishEvent.Reply) {}
+  rpc PublishEvent(PublishEvent.Request) returns (PublishEvent.Response) {}
 
   // 广播推送事件
-  rpc BroadcastEvent(BroadcastEvent.Request) returns (BroadcastEvent.Reply) {}
+  rpc BroadcastEvent(BroadcastEvent.Request) returns (BroadcastEvent.Response) {}
 }
 
 message PublishEvent {
   message Request {
-    // 推送事件类型
-    PushEventType type = 1;
-    // 目标用户 ID
-    int64 user_id = 2;
-    // 事件负载（JSON）
-    string payload = 3;
-  }
-  message Reply {}
+      // 推送事件类型
+      PushEventType type = 1;
+      // 目标用户 ID
+      int64 user_id = 2;
+      // 事件负载（JSON）
+      string payload = 3;
+    }
+  message Response {}
 }
 
 message BroadcastEvent {
   message Request {
-    // 推送事件类型
-    PushEventType type = 1;
-    // 事件负载（JSON）
-    string payload = 2;
-  }
-  message Reply {}
+      // 推送事件类型
+      PushEventType type = 1;
+      // 事件负载（JSON）
+      string payload = 2;
+    }
+  message Response {}
 }

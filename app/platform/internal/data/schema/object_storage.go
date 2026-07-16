@@ -35,7 +35,7 @@ func (ObjectStorage) Fields() []ent.Field {
 		field.Int64("upload_by").Comment("上传者ID"),
 		field.String("upload_by_name").Comment("上传者名称"),
 
-		field.String("audit_callback_reply").Comment("审核回调响应").Optional().Nillable(),
+		field.String("audit_callback_Response").Comment("审核回调响应").Optional().Nillable(),
 		field.Bool("blocked").Comment("是否违规").Default(false),
 		field.String("blocked_reason").Comment("违规原因").Optional().Nillable(),
 		field.Time("blocked_at").Comment("违规时间").Optional().Nillable(),

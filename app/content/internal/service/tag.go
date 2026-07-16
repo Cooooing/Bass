@@ -2,12 +2,12 @@ package service
 
 import (
 	"common/pkg/apperror"
-	"common/pkg/server"
 	"common/pkg/util"
+	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/content/v1"
+	"content/internal/biz/base"
 	"content/internal/biz/model"
-	"content/internal/biz/repo"
 	"content/internal/biz/usecase"
 	"content/internal/enum"
 	"context"
@@ -34,7 +34,7 @@ func NewTagService(tagUsecase *usecase.TagUsecase) *TagService {
 	}
 }
 
-func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Request) (*v1.BatchCreateTags_Reply, error) {
+func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Request) (*v1.BatchCreateTags_Response, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -53,13 +53,14 @@ func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Re
 			UpdatedBy:   new(req.UserId),
 		})
 	}
-	saves, err := s.tagUsecase.Saves(ctx, tags)
+	savesResponse, err := s.tagUsecase.Saves(ctx, &usecase.TagSavesReq{Tags: tags})
 	if err != nil {
 		return nil, err
 	}
-	reply := make([]*v1.Tag, len(saves))
+	saves := savesResponse.Rows
+	reply := make([]*v1.BatchCreateTags_Response_Tag, len(saves))
 	for i, save := range saves {
-		reply[i] = &v1.Tag{
+		reply[i] = &v1.BatchCreateTags_Response_Tag{
 			CreatedAt:   timestamppb.New(*save.CreatedAt),
 			UpdatedAt:   timestamppb.New(*save.UpdatedAt),
 			CreatedBy:   save.CreatedBy,
@@ -71,12 +72,12 @@ func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Re
 			Status:      new(enum.TagStatusMap.MustToProto(save.Status)),
 		}
 	}
-	return &v1.BatchCreateTags_Reply{
+	return &v1.BatchCreateTags_Response{
 		Rows: reply,
 	}, err
 }
 
-func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Request) (*v1.UpdateTag_Reply, error) {
+func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Request) (*v1.UpdateTag_Response, error) {
 	if req.Tag == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
@@ -86,23 +87,24 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Request) (*v1
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	updateTagStatus, ok := enum.TagStatusMap.ToEnum(util.DerefOrDefault(req.Tag.Status, v1.TagStatus_TAG_STATUS_ENABLED))
+	updateTagStatus, ok := enum.TagStatusMap.ToEnum(req.Tag.GetStatus())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
-	update, err := s.tagUsecase.Update(ctx, &model.Tag{
+	updateResponse, err := s.tagUsecase.Update(ctx, &usecase.TagUpdateReq{Tag: &model.Tag{
 		ID:          req.TagId,
 		Name:        req.Tag.Name,
 		Description: req.Tag.Description,
 		DomainID:    req.Tag.DomainId,
 		Status:      updateTagStatus,
 		UpdatedBy:   new(req.UserId),
-	})
+	}})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.UpdateTag_Reply{
-		Tag: &v1.Tag{
+	update := updateResponse.Tag
+	return &v1.UpdateTag_Response{
+		Tag: &v1.UpdateTag_Response_Tag{
 			CreatedAt:   timestamppb.New(*update.CreatedAt),
 			UpdatedAt:   timestamppb.New(*update.UpdatedAt),
 			CreatedBy:   update.CreatedBy,
@@ -116,8 +118,8 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Request) (*v1
 	}, nil
 }
 
-func (s *TagService) List(ctx context.Context, req *v1.ListTags_Request) (*v1.ListTags_Reply, error) {
-	req.Query = util.OrDefault(req.Query, &v1.TagQueryParams{})
+func (s *TagService) List(ctx context.Context, req *v1.ListTags_Request) (*v1.ListTags_Response, error) {
+	req.Query = util.OrDefault(req.Query, &v1.ListTags_Request_TagQueryParams{})
 	var tagStatus *enum.TagStatus
 	if req.Query.Status != nil {
 		status, ok := enum.TagStatusMap.ToEnum(*req.Query.Status)
@@ -126,18 +128,23 @@ func (s *TagService) List(ctx context.Context, req *v1.ListTags_Request) (*v1.Li
 		}
 		tagStatus = new(status)
 	}
-	getReq := &repo.TagGetReq{
-		TagIds:      req.Query.Ids,
+	getReq := &usecase.TagPageReq{
+		TagIDs:      req.Query.Ids,
 		Name:        req.Query.Name,
 		Names:       req.Query.Names,
 		Description: req.Query.Description,
 		Status:      tagStatus,
-		DomainId:    req.Query.DomainId,
+		DomainID:    req.Query.DomainId,
 	}
-	data, _, err := s.tagUsecase.Page(ctx, server.GetPageMax(), getReq)
-	reply := make([]*v1.Tag, len(data))
+	getReq.Page = &base.PageRequest{Page: 1, Size: 1000}
+	pageResponse, err := s.tagUsecase.Page(ctx, getReq)
+	if err != nil {
+		return nil, err
+	}
+	data := pageResponse.Rows
+	reply := make([]*v1.ListTags_Response_Tag, len(data))
 	for i, datum := range data {
-		reply[i] = &v1.Tag{
+		reply[i] = &v1.ListTags_Response_Tag{
 			CreatedAt:   timestamppb.New(*datum.CreatedAt),
 			UpdatedAt:   timestamppb.New(*datum.UpdatedAt),
 			CreatedBy:   datum.CreatedBy,
@@ -149,13 +156,13 @@ func (s *TagService) List(ctx context.Context, req *v1.ListTags_Request) (*v1.Li
 			Status:      new(enum.TagStatusMap.MustToProto(datum.Status)),
 		}
 	}
-	return &v1.ListTags_Reply{
+	return &v1.ListTags_Response{
 		Rows: reply,
 	}, err
 }
 
-func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Request) (*v1.PageTags_Reply, error) {
-	req.Query = util.OrDefault(req.Query, &v1.TagQueryParams{})
+func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Request) (*v1.PageTags_Response, error) {
+	req.Query = util.OrDefault(req.Query, &v1.PageTags_Request_TagQueryParams{})
 	var tagStatus *enum.TagStatus
 	if req.Query.Status != nil {
 		status, ok := enum.TagStatusMap.ToEnum(*req.Query.Status)
@@ -164,18 +171,24 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Request) (*v1.Pa
 		}
 		tagStatus = new(status)
 	}
-	getReq := &repo.TagGetReq{
-		TagIds:      req.Query.Ids,
+	getReq := &usecase.TagPageReq{
+		TagIDs:      req.Query.Ids,
 		Name:        req.Query.Name,
 		Names:       req.Query.Names,
 		Description: req.Query.Description,
 		Status:      tagStatus,
-		DomainId:    req.Query.DomainId,
+		DomainID:    req.Query.DomainId,
 	}
-	data, page, err := s.tagUsecase.Page(ctx, req.Page, getReq)
-	reply := make([]*v1.Tag, len(data))
+	getReq.Page = &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())}
+	pageResponse, err := s.tagUsecase.Page(ctx, getReq)
+	if err != nil {
+		return nil, err
+	}
+	data := pageResponse.Rows
+	page := pageResponse.Page
+	reply := make([]*v1.PageTags_Response_Tag, len(data))
 	for i, datum := range data {
-		reply[i] = &v1.Tag{
+		reply[i] = &v1.PageTags_Response_Tag{
 			CreatedAt:   timestamppb.New(*datum.CreatedAt),
 			UpdatedAt:   timestamppb.New(*datum.UpdatedAt),
 			CreatedBy:   datum.CreatedBy,
@@ -187,8 +200,8 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Request) (*v1.Pa
 			Status:      new(enum.TagStatusMap.MustToProto(datum.Status)),
 		}
 	}
-	return &v1.PageTags_Reply{
-		Page: page,
+	return &v1.PageTags_Response{
+		Page: &common.PageResponse{Page: uint32(page.Page), Size: uint32(page.Size), Total: uint32(page.Total)},
 		Rows: reply,
 	}, err
 }

@@ -78,6 +78,8 @@ func newSSEHandler(sseUc *usecase.SSEUsecase, logger *slog.Logger) http.HandlerF
 		}
 
 		logger.Info("sse client connecting", constant.LogFieldAddress, r.RemoteAddr)
-		sseUc.Connect(r.Context(), token, w)
+		if err := sseUc.Connect(r.Context(), &usecase.ConnectReq{Token: token, Writer: w}); err != nil {
+			logger.Error("sse connect failed", slog.Any("err", err))
+		}
 	}
 }

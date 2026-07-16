@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"scheduler/internal/biz/model"
 	bizrepo "scheduler/internal/biz/repo"
 	"scheduler/internal/config"
 	"time"
@@ -24,10 +23,13 @@ func NewTaskAlert(logger *slog.Logger, larkClient *commonclient.LarkWebhookClien
 	return &TaskAlert{logger: logger, larkClient: larkClient, conf: conf}
 }
 
-func (a *TaskAlert) Alert(ctx context.Context, task *model.Task, record *model.TaskExecutionRecord, reason string) error {
+func (a *TaskAlert) Alert(ctx context.Context, req *bizrepo.TaskAlertReq) (*bizrepo.TaskAlertResponse, error) {
+	task := req.Task
+	record := req.Record
+	reason := req.Reason
 	a.logger.ErrorContext(ctx, "scheduler task alert", constant.LogFieldTaskID, task.ID, constant.LogFieldTaskName, task.Name, constant.LogFieldExecutionID, record.ID, constant.LogFieldTraceID, record.TraceID, constant.LogFieldStatus, record.Status, constant.LogFieldReason, reason, constant.LogFieldLastError, record.LastError)
 	if a.conf.GetAlert() == nil || a.conf.GetAlert().GetLarkWebhook() == nil || a.conf.GetAlert().GetLarkWebhook().GetToken() == "" {
-		return nil
+		return &bizrepo.TaskAlertResponse{}, nil
 	}
 	lark := a.conf.GetAlert().GetLarkWebhook()
 	timeout := time.Duration(0)
@@ -53,7 +55,7 @@ func (a *TaskAlert) Alert(ctx context.Context, task *model.Task, record *model.T
 	})
 	if err != nil {
 		a.logger.ErrorContext(ctx, "send scheduler task alert failed", constant.LogFieldKind, constant.LogKindLark, constant.LogFieldTaskID, task.ID, constant.LogFieldExecutionID, record.ID, constant.LogFieldReason, reason, constant.LogFieldErr, err)
-		return err
+		return nil, err
 	}
-	return nil
+	return &bizrepo.TaskAlertResponse{}, nil
 }

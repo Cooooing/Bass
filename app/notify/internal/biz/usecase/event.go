@@ -38,7 +38,17 @@ func NewEventUsecase(logger *slog.Logger, conf *config.Bootstrap, tx base.Tx, in
 	return &EventUsecase{log: logger, conf: conf, tx: tx, inboxEventRepo: inboxEventRepo, notifyUsecase: notifyUsecase, eventHandlers: eventHandlers}
 }
 
-func (u *EventUsecase) HandleMessage(ctx context.Context, subjectName string, payload []byte) error {
+type EventHandleMessageReq struct {
+	SubjectName string
+	Payload     []byte
+}
+
+func (u *EventUsecase) HandleMessage(ctx context.Context, req *EventHandleMessageReq) error {
+	if req == nil {
+		return errors.New("event handle message request is required")
+	}
+	subjectName := req.SubjectName
+	payload := req.Payload
 	var event enums.Event
 	if err := protojson.Unmarshal(payload, &event); err != nil {
 		u.log.Error(fmt.Sprintf("unmarshal event failed: subject=%s err=%v", subjectName, err))
@@ -68,51 +78,68 @@ func (u *EventUsecase) HandleMessage(ctx context.Context, subjectName string, pa
 	}
 
 	now := time.Now()
-	inboxEvent, claimed, err := u.inboxEventRepo.SaveProcessing(ctx, &repo.InboxEventSave{EventID: event.EventId, EventType: event.Type, Subject: eventSubject, Payload: string(payload)}, now)
+	saveResponse, err := u.inboxEventRepo.SaveProcessing(ctx, &repo.InboxEventSaveProcessingReq{EventID: event.EventId, EventType: event.Type, Subject: eventSubject, Payload: string(payload), Now: now})
 	if err != nil {
 		return err
 	}
+	inboxEvent := saveResponse.Event
+	claimed := saveResponse.Claimed
 	if inboxEvent.Status == commonenum.InboxEventStatusProcessed || inboxEvent.Status == commonenum.InboxEventStatusDead {
 		return nil
 	}
 	if !claimed {
-		claimed, err = u.inboxEventRepo.ClaimRetry(ctx, event.EventId, now, u.inboxProcessingTimeout(), u.inboxMaxRetry())
+		claimResponse, err := u.inboxEventRepo.ClaimRetry(ctx, &repo.InboxEventClaimRetryReq{EventID: event.EventId, Now: now, ProcessingTimeout: u.inboxProcessingTimeout(), MaxRetry: u.inboxMaxRetry()})
 		if err != nil {
 			return err
 		}
-		if !claimed {
+		if !claimResponse.Claimed {
 			return fmt.Errorf("event is processing: event_id=%s", event.EventId)
 		}
 	}
-	rules, err := u.notifyUsecase.ListEnabledRules(ctx, eventType, notifyenum.LanguageZhCN)
+	rulesResponse, err := u.notifyUsecase.ListEnabledRules(ctx, &NotifyListEnabledRulesReq{
+		EventType: eventType,
+		Language:  notifyenum.LanguageZhCN,
+	})
 	if err != nil {
-		return u.markFailed(ctx, event.EventId, err)
+		return u.markFailed(ctx, &markFailedReq{EventID: event.EventId, Err: err})
 	}
+	rules := rulesResponse.Rules
 	if len(rules) == 0 {
-		return u.inboxEventRepo.MarkProcessed(ctx, event.EventId, now)
+		_, err = u.inboxEventRepo.MarkProcessed(ctx, &repo.InboxEventMarkProcessedReq{EventID: event.EventId, Now: now})
+		return err
 	}
 	eventHandler, ok := u.eventHandlers[eventType]
 	if !ok {
-		return u.inboxEventRepo.MarkProcessed(ctx, event.EventId, now)
+		_, err = u.inboxEventRepo.MarkProcessed(ctx, &repo.InboxEventMarkProcessedReq{EventID: event.EventId, Now: now})
+		return err
 	}
 	notificationContext, err := eventHandler.Build(ctx, &event)
 	if err != nil {
-		return u.markFailed(ctx, event.EventId, err)
+		return u.markFailed(ctx, &markFailedReq{EventID: event.EventId, Err: err})
 	}
 	if notificationContext == nil {
-		return u.inboxEventRepo.MarkProcessed(ctx, event.EventId, now)
+		_, err = u.inboxEventRepo.MarkProcessed(ctx, &repo.InboxEventMarkProcessedReq{EventID: event.EventId, Now: now})
+		return err
 	}
 	notificationContext.EventID = event.EventId
 	notificationContext.EventType = eventType
 	notificationContext.Language = notifyenum.LanguageZhCN
-	if err = u.notifyUsecase.Process(ctx, notificationContext, rules); err != nil {
-		return u.markFailed(ctx, event.EventId, err)
+	if err = u.notifyUsecase.Process(ctx, &NotifyProcessReq{NotificationContext: notificationContext, Rules: rules}); err != nil {
+		return u.markFailed(ctx, &markFailedReq{EventID: event.EventId, Err: err})
 	}
-	return u.inboxEventRepo.MarkProcessed(ctx, event.EventId, now)
+	_, err = u.inboxEventRepo.MarkProcessed(ctx, &repo.InboxEventMarkProcessedReq{EventID: event.EventId, Now: now})
+	return err
 }
 
-func (u *EventUsecase) markFailed(ctx context.Context, eventID string, err error) error {
-	if markErr := u.inboxEventRepo.MarkFailed(ctx, eventID, err.Error(), u.inboxMaxRetry()); markErr != nil {
+type markFailedReq struct {
+	EventID string
+	Err     error
+}
+
+func (u *EventUsecase) markFailed(ctx context.Context, req *markFailedReq) error {
+	eventID := req.EventID
+	err := req.Err
+	if _, markErr := u.inboxEventRepo.MarkFailed(ctx, &repo.InboxEventMarkFailedReq{EventID: eventID, LastError: err.Error(), MaxRetry: u.inboxMaxRetry()}); markErr != nil {
 		u.log.Error(fmt.Sprintf("mark inbox failed status failed: event_id=%s err=%v", eventID, markErr))
 	}
 	return err

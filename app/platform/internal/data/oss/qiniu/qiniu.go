@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"platform/internal/biz/model"
+	"platform/internal/biz/repo"
 	"platform/internal/config"
 	"platform/internal/data/gen"
 
@@ -69,26 +70,29 @@ func (q *Qiniu) Save(ctx context.Context, tx *gen.Client, o *model.ObjectStorage
 	}, nil
 }
 
-func (q *Qiniu) UploadToken(ctx context.Context, key string, uploaderID int64, uploaderName string) (string, error) {
+func (q *Qiniu) UploadToken(ctx context.Context, req *repo.ObjectStorageUploadTokenReq) (*repo.ObjectStorageUploadTokenResponse, error) {
 	mac := auth.New(q.conf.Platform.Oss.Qiniu.AccessKey, q.conf.Platform.Oss.Qiniu.SecretKey)
 	putPolicy := storage.PutPolicy{
-		Scope:            fmt.Sprintf("%s:%s", q.conf.Platform.Oss.Qiniu.Bucket, key),
+		Scope:            fmt.Sprintf("%s:%s", q.conf.Platform.Oss.Qiniu.Bucket, req.Key),
 		CallbackURL:      q.conf.Platform.Oss.Qiniu.CallbackUrl,
-		CallbackBody:     fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, uploaderID, uploaderName),
+		CallbackBody:     fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, req.UploaderID, req.UploaderName),
 		CallbackBodyType: "application/json",
-		ReturnBody:       fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, uploaderID, uploaderName),
+		ReturnBody:       fmt.Sprintf(`{"key":"$(key)","hash":"$(etag)","size":"$(fsize)","bucket":"$(bucket)","name":"$(fname)","mime_type":"${mimeType}","upload_by":%d,"upload_by_name":"%s"}`, req.UploaderID, req.UploaderName),
 		Expires:          uint64(q.conf.Platform.Oss.Qiniu.Timeout.Seconds),
 		InsertOnly:       1,
 		FsizeMin:         1024 * 1024 * q.conf.Platform.Oss.Qiniu.SizeMin,
 		FsizeLimit:       1024 * 1024 * q.conf.Platform.Oss.Qiniu.SizeMax,
 		FileType:         0,
 	}
-	return putPolicy.UploadToken(mac), nil
+	return &repo.ObjectStorageUploadTokenResponse{Token: putPolicy.UploadToken(mac)}, nil
 }
 
-func (q *Qiniu) Status(ctx context.Context, key string, enable bool) error {
+func (q *Qiniu) Status(ctx context.Context, req *repo.ObjectStorageStatusReq) (*repo.ObjectStorageStatusResponse, error) {
 	mac := auth.New(q.conf.Platform.Oss.Qiniu.AccessKey, q.conf.Platform.Oss.Qiniu.SecretKey)
 	bucketManager := storage.NewBucketManager(mac, nil)
-	err := bucketManager.UpdateObjectStatus(q.conf.Platform.Oss.Qiniu.Bucket, key, enable)
-	return err
+	err := bucketManager.UpdateObjectStatus(q.conf.Platform.Oss.Qiniu.Bucket, req.Key, req.Enable)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.ObjectStorageStatusResponse{}, nil
 }

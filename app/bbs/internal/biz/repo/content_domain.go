@@ -1,10 +1,41 @@
 package repo
 
-import (
-	bbscontentv1 "common/proto/gen/bbs/v1/content"
-	"context"
-)
+import "context"
+
+type Domain struct {
+	ID          int64
+	Name        string
+	Description *string
+	Status      int32
+	URL         *string
+	Icon        *string
+	IsNav       bool
+	CreatedBy   *int64
+	UpdatedBy   *int64
+	CreatedAt   string
+	UpdatedAt   string
+}
+
+type DomainQuery struct {
+	IDs         []int64
+	Name        *string
+	Description *string
+	URL         *string
+	Icon        *string
+	IsNav       *bool
+	Status      *int32
+}
+
+type ListDomainsReq struct {
+	Page  *PageReq
+	Query *DomainQuery
+}
+
+type ListDomainsResponse struct {
+	Page *PageResponse
+	Rows []*Domain
+}
 
 type ContentDomainClient interface {
-	ListDomains(ctx context.Context, req *bbscontentv1.ListDomains_Request) (*bbscontentv1.ListDomains_Reply, error)
+	ListDomains(ctx context.Context, req *ListDomainsReq) (*ListDomainsResponse, error)
 }

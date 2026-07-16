@@ -2,16 +2,18 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
-import "bbs/v1/user/model.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
+import "bbs/v1/user/enum.proto";
+import "common/enums/language.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
 // 认证接口。
 service AuthService {
   // 使用邮箱发起账号注册。
-  rpc StartEmailRegistration(StartEmailRegistration.Request) returns (StartEmailRegistration.Reply) {
+  rpc StartEmailRegistration(StartEmailRegistration.Request) returns (StartEmailRegistration.Response) {
     option (google.api.http) = {
       post: "/v1/user/auth/start-email-registration"
       body: "*"
@@ -19,7 +21,7 @@ service AuthService {
   }
 
   // 校验邮箱注册验证码。
-  rpc VerifyEmailRegistration(VerifyEmailRegistration.Request) returns (VerifyEmailRegistration.Reply) {
+  rpc VerifyEmailRegistration(VerifyEmailRegistration.Request) returns (VerifyEmailRegistration.Response) {
     option (google.api.http) = {
       post: "/v1/user/auth/verify-email-registration"
       body: "*"
@@ -27,7 +29,7 @@ service AuthService {
   }
 
   // 使用手机号发起账号注册。
-  rpc StartPhoneRegistration(StartPhoneRegistration.Request) returns (StartPhoneRegistration.Reply) {
+  rpc StartPhoneRegistration(StartPhoneRegistration.Request) returns (StartPhoneRegistration.Response) {
     option (google.api.http) = {
       post: "/v1/user/auth/start-phone-registration"
       body: "*"
@@ -35,7 +37,7 @@ service AuthService {
   }
 
   // 校验手机号注册验证码。
-  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Request) returns (VerifyPhoneRegistration.Reply) {
+  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Request) returns (VerifyPhoneRegistration.Response) {
     option (google.api.http) = {
       post: "/v1/user/auth/verify-phone-registration"
       body: "*"
@@ -43,7 +45,7 @@ service AuthService {
   }
 
   // 使用密码登录账号。
-  rpc LoginByPassword(LoginByPassword.Request) returns (LoginByPassword.Reply) {
+  rpc LoginByPassword(LoginByPassword.Request) returns (LoginByPassword.Response) {
     option (google.api.http) = {
       post: "/v1/user/auth/login-by-password"
       body: "*"
@@ -51,7 +53,7 @@ service AuthService {
   }
 
   // 登出当前账号。
-  rpc Logout(Logout.Request) returns (Logout.Reply) {
+  rpc Logout(Logout.Request) returns (Logout.Response) {
     option (google.api.http) = {
       post: "/v1/user/auth/logout"
       body: "*"
@@ -62,105 +64,131 @@ service AuthService {
 // 使用邮箱发起账号注册。
 message StartEmailRegistration {
   message Request {
-    // 邮箱地址。
-    string email = 1;
-    // 账号密码。
-    string password = 2;
-    // 账号名。
-    string name = 3;
-    // 昵称。
-    optional string nickname = 4;
-    option (gnostic.openapi.v3.schema) = {
-      required: "email"
-      required: "password"
-      required: "name"
-    };
-  }
-  message Reply {
-    // 验证码令牌。
-    string code_token = 1;
-    // 验证码。
-    string code = 2;
-  }
+      // 邮箱地址。
+      string email = 1;
+      // 账号密码。
+      string password = 2;
+      // 账号名。
+      string name = 3;
+      // 昵称。
+      optional string nickname = 4;
+      option (gnostic.openapi.v3.schema) = {
+        required: "email"
+        required: "password"
+        required: "name"
+      };
+    }
+  message Response {
+      // 验证码令牌。
+      string code_token = 1;
+      // 验证码。
+      string code = 2;
+    }
 }
 
 // 校验邮箱注册验证码。
 message VerifyEmailRegistration {
   message Request {
-    // 验证码。
-    string code = 1;
-    // 验证码令牌。
-    string code_token = 2;
-    option (gnostic.openapi.v3.schema) = {
-      required: "code"
-      required: "code_token"
-    };
-  }
-  message Reply {}
+      // 验证码。
+      string code = 1;
+      // 验证码令牌。
+      string code_token = 2;
+      option (gnostic.openapi.v3.schema) = {
+        required: "code"
+        required: "code_token"
+      };
+    }
+  message Response {}
 }
 
 // 使用手机号发起账号注册。
 message StartPhoneRegistration {
   message Request {
-    // 手机号。
-    string phone = 1;
-    // 账号密码。
-    string password = 2;
-    // 账号名。
-    string name = 3;
-    // 昵称。
-    optional string nickname = 4;
-    option (gnostic.openapi.v3.schema) = {
-      required: "phone"
-      required: "password"
-      required: "name"
-    };
-  }
-  message Reply {
-    // 验证码令牌。
-    string code_token = 1;
-    // 验证码。
-    string code = 2;
-  }
+      // 手机号。
+      string phone = 1;
+      // 账号密码。
+      string password = 2;
+      // 账号名。
+      string name = 3;
+      // 昵称。
+      optional string nickname = 4;
+      option (gnostic.openapi.v3.schema) = {
+        required: "phone"
+        required: "password"
+        required: "name"
+      };
+    }
+  message Response {
+      // 验证码令牌。
+      string code_token = 1;
+      // 验证码。
+      string code = 2;
+    }
 }
 
 // 校验手机号注册验证码。
 message VerifyPhoneRegistration {
   message Request {
-    // 验证码。
-    string code = 1;
-    // 验证码令牌。
-    string code_token = 2;
-    option (gnostic.openapi.v3.schema) = {
-      required: "code"
-      required: "code_token"
-    };
-  }
-  message Reply {}
+      // 验证码。
+      string code = 1;
+      // 验证码令牌。
+      string code_token = 2;
+      option (gnostic.openapi.v3.schema) = {
+        required: "code"
+        required: "code_token"
+      };
+    }
+  message Response {}
 }
 
 // 使用密码登录账号。
 message LoginByPassword {
   message Request {
-    // 账号、邮箱或手机号。
-    string account = 1;
-    // 账号密码。
-    string password = 2;
-    option (gnostic.openapi.v3.schema) = {
-      required: "account"
-      required: "password"
-    };
-  }
-  message Reply {
-    // 登录令牌。
-    string token = 1;
-    // 当前账号完整资料。
-    Account account = 2;
-  }
+      // 账号、邮箱或手机号。
+      string account = 1;
+      // 账号密码。
+      string password = 2;
+      option (gnostic.openapi.v3.schema) = {
+        required: "account"
+        required: "password"
+      };
+    }
+  message Response {
+
+    message Account {
+        AccountBasic basic = 1;
+        AccountContact contact = 2;
+      }
+
+    message AccountBasic {
+        int64 id = 1;
+        string name = 2;
+        optional string nickname = 3;
+        optional string url = 4;
+        optional string avatar_url = 5;
+        optional string introduction = 6;
+        MBTI mbti = 7;
+        AccountStatus status = 8;
+        optional int32 follow_count = 10;
+        optional int32 follower_count = 11;
+        google.protobuf.Timestamp created_at = 1000;
+        google.protobuf.Timestamp updated_at = 1001;
+      }
+
+    message AccountContact {
+        int64 user_id = 1;
+        optional string email = 2;
+        optional string phone = 3;
+      }
+      // 登录令牌。
+      string token = 1;
+      // 当前账号完整资料。
+      Account account = 2;
+    }
 }
 
 // 登出当前账号。
 message Logout {
   message Request {}
-  message Reply {}
+  message Response {}
 }

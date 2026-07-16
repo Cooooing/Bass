@@ -1,10 +1,13 @@
 package service
 
 import (
+	"common/proto/gen/common"
+	"context"
+	"im/internal/biz/base"
+
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/im/v1"
-	"context"
 	"im/internal/biz/usecase"
 	"im/internal/enum"
 
@@ -31,7 +34,7 @@ func (s *ChatMessageService) RegisterHttp(hs *http.Server) {
 }
 
 // Send 发送消息。
-func (s *ChatMessageService) Send(ctx context.Context, req *v1.SendChatMessage_Request) (*v1.SendChatMessage_Reply, error) {
+func (s *ChatMessageService) Send(ctx context.Context, req *v1.SendChatMessage_Request) (*v1.SendChatMessage_Response, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -43,27 +46,36 @@ func (s *ChatMessageService) Send(ctx context.Context, req *v1.SendChatMessage_R
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err := s.chatMessageUsecase.Send(ctx, req.GetUserId(), req.GetReceiverId(), receiverType, messageType, req.GetContent())
+	err := s.chatMessageUsecase.Send(ctx, &usecase.SendReq{
+		SenderID:     req.GetUserId(),
+		ReceiverID:   req.GetReceiverId(),
+		ReceiverType: receiverType,
+		MessageType:  messageType,
+		Content:      req.GetContent(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.SendChatMessage_Reply{}, nil
+	return &v1.SendChatMessage_Response{}, nil
 }
 
 // Revoke 撤回消息。
-func (s *ChatMessageService) Revoke(ctx context.Context, req *v1.RevokeChatMessage_Request) (*v1.RevokeChatMessage_Reply, error) {
+func (s *ChatMessageService) Revoke(ctx context.Context, req *v1.RevokeChatMessage_Request) (*v1.RevokeChatMessage_Response, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err := s.chatMessageUsecase.Revoke(ctx, req.GetId(), req.GetUserId())
+	err := s.chatMessageUsecase.Revoke(ctx, &usecase.RevokeReq{
+		MessageID: req.GetId(),
+		SenderID:  req.GetUserId(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.RevokeChatMessage_Reply{}, nil
+	return &v1.RevokeChatMessage_Response{}, nil
 }
 
 // List 查询消息列表。
-func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_Request) (*v1.ListChatMessages_Reply, error) {
+func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_Request) (*v1.ListChatMessages_Response, error) {
 	var ids []int64
 	var sessionID *int64
 	var senderID *int64
@@ -76,16 +88,38 @@ func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_
 			senderID = new(req.GetQuery().SenderId)
 		}
 	}
-	list, page, err := s.chatMessageUsecase.List(ctx, req.GetPage(), ids, sessionID, senderID)
+	resp, err := s.chatMessageUsecase.List(ctx, &usecase.ChatMessageListReq{
+		Page:      &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())},
+		IDs:       ids,
+		SessionID: sessionID,
+		SenderID:  senderID,
+	})
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*v1.ChatMessage, 0, len(list))
-	for _, item := range list {
-		rows = append(rows, toProtoChatMessage(item))
+	rows := make([]*v1.ListChatMessages_Response_ChatMessage, 0, len(resp.List))
+	for _, item := range resp.List {
+		msgType := enum.MessageTypeMap.MustToProto(item.Type)
+		status := enum.MessageStatusMap.MustToProto(item.Status)
+		var receiverUserID int64
+		if item.ReceiverID != nil {
+			receiverUserID = *item.ReceiverID
+		}
+		var receiverGroupID int64
+		if item.GroupID != nil {
+			receiverGroupID = *item.GroupID
+		}
+		rows = append(rows, &v1.ListChatMessages_Response_ChatMessage{
+			Id:              item.ID,
+			ReceiverUserId:  receiverUserID,
+			ReceiverGroupId: receiverGroupID,
+			Type:            msgType,
+			Content:         item.Content,
+			Status:          status,
+		})
 	}
-	return &v1.ListChatMessages_Reply{
-		Page: page,
+	return &v1.ListChatMessages_Response{
+		Page: &common.PageResponse{Page: uint32(resp.Page.Page), Size: uint32(resp.Page.Size), Total: uint32(resp.Page.Total)},
 		Rows: rows,
 	}, nil
 }

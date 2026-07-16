@@ -62,7 +62,35 @@ func NewTaskUsecase(logger *slog.Logger, conf *config.Bootstrap, tx base.Tx, tas
 	}
 }
 
-func (u *TaskUsecase) Upsert(ctx context.Context, row *model.Task) (*model.Task, error) {
+type TaskUpsertReq struct {
+	Row *model.Task
+}
+
+type TaskUpsertResponse struct {
+	Row *model.Task
+}
+
+func (u *TaskUsecase) Upsert(ctx context.Context, req *TaskUpsertReq) (*TaskUpsertResponse, error) {
+	if req == nil || req.Row == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	resp, err := u.upsert(ctx, &taskUpsertReq{Row: req.Row})
+	if err != nil {
+		return nil, err
+	}
+	return &TaskUpsertResponse{Row: resp.Row}, nil
+}
+
+type taskUpsertReq struct {
+	Row *model.Task
+}
+
+type taskUpsertResponse struct {
+	Row *model.Task
+}
+
+func (u *TaskUsecase) upsert(ctx context.Context, req *taskUpsertReq) (*taskUpsertResponse, error) {
+	row := req.Row
 	if strings.TrimSpace(row.Name) == "" || strings.TrimSpace(row.Title) == "" || strings.TrimSpace(row.CronSpec) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -88,34 +116,134 @@ func (u *TaskUsecase) Upsert(ctx context.Context, row *model.Task) (*model.Task,
 	var saved *model.Task
 	err := u.tx(ctx, func(txCtx context.Context) error {
 		var err error
-		saved, err = u.taskRepo.Upsert(txCtx, row)
+		savedResp, err := u.taskRepo.Upsert(txCtx, &repo.TaskUpsertReq{Row: row})
 		if err != nil {
 			return err
 		}
-		_, err = u.taskVersionRepo.Create(txCtx, saved)
+		saved = savedResp.Row
+		_, err = u.taskVersionRepo.Create(txCtx, &repo.TaskVersionCreateReq{Task: saved})
 		return err
 	})
 	if err != nil {
 		return nil, err
 	}
-	_ = u.taskEventBus.PublishTaskChanged(ctx, &repo.TaskChangedMessage{TaskID: saved.ID, Version: saved.Version})
-	return saved, nil
+	_, _ = u.taskEventBus.PublishTaskChanged(ctx, &repo.PublishTaskChangedReq{Message: &repo.TaskChangedMessage{TaskID: saved.ID, Version: saved.Version}})
+	return &taskUpsertResponse{Row: saved}, nil
 }
 
-func (u *TaskUsecase) Get(ctx context.Context, id int64) (*model.Task, error) {
-	return u.taskRepo.Get(ctx, &repo.TaskGetReq{ID: &id})
+type TaskGetReq struct {
+	ID int64
 }
 
-func (u *TaskUsecase) Page(ctx context.Context, page *common.PageRequest, req *repo.TaskGetReq) ([]*model.Task, *common.PageReply, error) {
-	return u.taskRepo.Page(ctx, page, req)
+type TaskGetResponse struct {
+	Row *model.Task
 }
 
-func (u *TaskUsecase) PageExecutionRecords(ctx context.Context, page *common.PageRequest, req *repo.TaskExecutionRecordGetReq) ([]*model.TaskExecutionRecord, *common.PageReply, error) {
-	return u.taskExecutionRecordRepo.Page(ctx, page, req)
+func (u *TaskUsecase) Get(ctx context.Context, req *TaskGetReq) (*TaskGetResponse, error) {
+	if req == nil {
+		req = &TaskGetReq{}
+	}
+	taskResp, err := u.taskRepo.Get(ctx, &repo.TaskGetReq{ID: &req.ID})
+	if err != nil {
+		return nil, err
+	}
+	return &TaskGetResponse{Row: taskResp.Row}, nil
 }
 
-func (u *TaskUsecase) ListAvailableTasks(keyword string) []*model.AvailableTask {
-	keyword = strings.ToLower(strings.TrimSpace(keyword))
+type TaskPageReq struct {
+	Page    *common.PageRequest
+	IDs     []int64
+	Name    *string
+	Title   *string
+	Enabled *bool
+}
+
+type TaskPageResponse struct {
+	Rows []*model.Task
+	Page *common.PageResponse
+}
+
+func (u *TaskUsecase) Page(ctx context.Context, req *TaskPageReq) (*TaskPageResponse, error) {
+	if req == nil {
+		req = &TaskPageReq{}
+	}
+	pageResp, err := u.taskRepo.Page(ctx, &repo.TaskPageReq{
+		Page: req.Page,
+		TaskGetReq: repo.TaskGetReq{
+			IDs:     req.IDs,
+			Name:    req.Name,
+			Title:   req.Title,
+			Enabled: req.Enabled,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &TaskPageResponse{Rows: pageResp.Rows, Page: pageResp.Page}, nil
+}
+
+type TaskExecutionRecordPageReq struct {
+	Page        *common.PageRequest
+	IDs         []int64
+	TaskID      *int64
+	Status      *schedulerenum.TaskExecutionStatus
+	TriggerType *schedulerenum.TaskTriggerType
+}
+
+type TaskExecutionRecordPageResponse struct {
+	Rows []*model.TaskExecutionRecord
+	Page *common.PageResponse
+}
+
+func (u *TaskUsecase) PageExecutionRecords(ctx context.Context, req *TaskExecutionRecordPageReq) (*TaskExecutionRecordPageResponse, error) {
+	if req == nil {
+		req = &TaskExecutionRecordPageReq{}
+	}
+	pageResp, err := u.taskExecutionRecordRepo.Page(ctx, &repo.TaskExecutionRecordPageReq{
+		Page: req.Page,
+		TaskExecutionRecordGetReq: repo.TaskExecutionRecordGetReq{
+			IDs:         req.IDs,
+			TaskID:      req.TaskID,
+			Status:      req.Status,
+			TriggerType: req.TriggerType,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &TaskExecutionRecordPageResponse{Rows: pageResp.Rows, Page: pageResp.Page}, nil
+}
+
+type TaskListAvailableTasksReq struct {
+	Keyword string
+}
+
+type TaskListAvailableTasksResponse struct {
+	Rows []*model.AvailableTask
+}
+
+func (u *TaskUsecase) ListAvailableTasks(ctx context.Context, req *TaskListAvailableTasksReq) (*TaskListAvailableTasksResponse, error) {
+	if req == nil {
+		req = &TaskListAvailableTasksReq{}
+	}
+	resp, err := u.listAvailableTasks(ctx, &taskListAvailableTasksReq{Keyword: req.Keyword})
+	if err != nil {
+		return nil, err
+	}
+	return &TaskListAvailableTasksResponse{Rows: resp.Rows}, nil
+}
+
+type taskListAvailableTasksReq struct {
+	Keyword string
+}
+
+type taskListAvailableTasksResponse struct {
+	Rows []*model.AvailableTask
+}
+
+func (u *TaskUsecase) listAvailableTasks(ctx context.Context, req *taskListAvailableTasksReq) (*taskListAvailableTasksResponse, error) {
+	_ = ctx
+	keyword := strings.ToLower(strings.TrimSpace(req.Keyword))
 	rows := make([]*model.AvailableTask, 0, len(u.tasks))
 	for _, item := range u.tasks {
 		row := &model.AvailableTask{
@@ -133,56 +261,184 @@ func (u *TaskUsecase) ListAvailableTasks(keyword string) []*model.AvailableTask 
 	sort.Slice(rows, func(i, j int) bool {
 		return rows[i].Name < rows[j].Name
 	})
-	return rows
+	return &taskListAvailableTasksResponse{Rows: rows}, nil
 }
 
-func (u *TaskUsecase) Trigger(ctx context.Context, id int64, payload string) (*model.TaskExecutionRecord, error) {
-	if id == 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+type TaskTriggerReq struct {
+	ID      int64
+	Payload string
+}
+
+type TaskTriggerResponse struct {
+	Row *model.TaskExecutionRecord
+}
+
+func (u *TaskUsecase) Trigger(ctx context.Context, req *TaskTriggerReq) (*TaskTriggerResponse, error) {
+	if req == nil {
+		req = &TaskTriggerReq{}
 	}
-	task, err := u.taskRepo.Get(ctx, &repo.TaskGetReq{ID: &id})
+	resp, err := u.trigger(ctx, &taskTriggerReq{ID: req.ID, Payload: req.Payload})
 	if err != nil {
 		return nil, err
 	}
-	if payload != "" {
-		if !json.Valid([]byte(payload)) {
+	return &TaskTriggerResponse{Row: resp.Row}, nil
+}
+
+type taskTriggerReq struct {
+	ID      int64
+	Payload string
+}
+
+type taskTriggerResponse struct {
+	Row *model.TaskExecutionRecord
+}
+
+func (u *TaskUsecase) trigger(ctx context.Context, req *taskTriggerReq) (*taskTriggerResponse, error) {
+	id := req.ID
+	if id == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	taskResp, err := u.taskRepo.Get(ctx, &repo.TaskGetReq{ID: &id})
+	if err != nil {
+		return nil, err
+	}
+	task := taskResp.Row
+	if req.Payload != "" {
+		if !json.Valid([]byte(req.Payload)) {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
-		task.Payload = payload
+		task.Payload = req.Payload
 	}
-	record, err := u.ScheduleExecution(ctx, task, time.Now(), schedulerenum.TaskTriggerTypeManual)
-	if err == nil && record == nil {
+	scheduleResp, err := u.scheduleExecution(ctx, &taskScheduleExecutionReq{Task: task, ScheduledAt: time.Now(), TriggerType: schedulerenum.TaskTriggerTypeManual})
+	if err == nil && (scheduleResp == nil || scheduleResp.Record == nil) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
 	}
-	return record, err
-}
-
-func (u *TaskUsecase) CancelExecution(ctx context.Context, id int64) (*model.TaskExecutionRecord, error) {
-	if id == 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	record, err := u.taskExecutionRecordRepo.Get(ctx, &repo.TaskExecutionRecordGetReq{ID: &id})
 	if err != nil {
 		return nil, err
 	}
+	return &taskTriggerResponse{Row: scheduleResp.Record}, nil
+}
+
+type TaskCancelExecutionReq struct {
+	ID int64
+}
+
+type TaskCancelExecutionResponse struct {
+	Row *model.TaskExecutionRecord
+}
+
+func (u *TaskUsecase) CancelExecution(ctx context.Context, req *TaskCancelExecutionReq) (*TaskCancelExecutionResponse, error) {
+	if req == nil {
+		req = &TaskCancelExecutionReq{}
+	}
+	resp, err := u.cancelExecution(ctx, &taskCancelExecutionReq{ID: req.ID})
+	if err != nil {
+		return nil, err
+	}
+	return &TaskCancelExecutionResponse{Row: resp.Row}, nil
+}
+
+type taskCancelExecutionReq struct {
+	ID int64
+}
+
+type taskCancelExecutionResponse struct {
+	Row *model.TaskExecutionRecord
+}
+
+func (u *TaskUsecase) cancelExecution(ctx context.Context, req *taskCancelExecutionReq) (*taskCancelExecutionResponse, error) {
+	id := req.ID
+	if id == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	recordResp, err := u.taskExecutionRecordRepo.Get(ctx, &repo.TaskExecutionRecordGetReq{ID: &id})
+	if err != nil {
+		return nil, err
+	}
+	record := recordResp.Row
 	if record.Status != schedulerenum.TaskExecutionStatusRunning {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	if err := u.taskEventBus.PublishExecutionCanceled(ctx, &repo.TaskExecutionCanceledMessage{ExecutionRecordID: id}); err != nil {
+	if _, err := u.taskEventBus.PublishExecutionCanceled(ctx, &repo.PublishExecutionCanceledReq{Message: &repo.TaskExecutionCanceledMessage{ExecutionRecordID: id}}); err != nil {
 		return nil, err
 	}
-	return record, nil
+	return &taskCancelExecutionResponse{Row: record}, nil
 }
 
-func (u *TaskUsecase) CancelExecutionLocally(id int64) {
-	if cancelValue, ok := u.runningCancels.Load(id); ok {
+type TaskCancelExecutionLocallyReq struct {
+	ID int64
+}
+
+func (u *TaskUsecase) CancelExecutionLocally(ctx context.Context, req *TaskCancelExecutionLocallyReq) error {
+	if req == nil {
+		return nil
+	}
+	return u.cancelExecutionLocally(ctx, &taskCancelExecutionLocallyReq{ID: req.ID})
+}
+
+type taskCancelExecutionLocallyReq struct {
+	ID int64
+}
+
+func (u *TaskUsecase) cancelExecutionLocally(ctx context.Context, req *taskCancelExecutionLocallyReq) error {
+	_ = ctx
+	if cancelValue, ok := u.runningCancels.Load(req.ID); ok {
 		cancelValue.(context.CancelFunc)()
 	}
+	return nil
 }
 
-func (u *TaskUsecase) ScheduleExecution(ctx context.Context, task *model.Task, scheduledAt time.Time, triggerType schedulerenum.TaskTriggerType) (record *model.TaskExecutionRecord, err error) {
+type TaskScheduleExecutionReq struct {
+	Task        *model.Task
+	ScheduledAt time.Time
+	TriggerType schedulerenum.TaskTriggerType
+}
+
+type TaskScheduleExecutionResponse struct {
+	Record *model.TaskExecutionRecord
+}
+
+func (u *TaskUsecase) ScheduleExecution(ctx context.Context, req *TaskScheduleExecutionReq) (*TaskScheduleExecutionResponse, error) {
+	if req == nil || req.Task == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	resp, err := u.scheduleExecution(ctx, &taskScheduleExecutionReq{Task: req.Task, ScheduledAt: req.ScheduledAt, TriggerType: req.TriggerType})
+	if err != nil {
+		return nil, err
+	}
+	if resp == nil {
+		return &TaskScheduleExecutionResponse{}, nil
+	}
+	return &TaskScheduleExecutionResponse{Record: resp.Record}, nil
+}
+
+type taskScheduleExecutionReq struct {
+	Task        *model.Task
+	ScheduledAt time.Time
+	TriggerType schedulerenum.TaskTriggerType
+}
+
+type taskScheduleExecutionResponse struct {
+	Record *model.TaskExecutionRecord
+}
+
+func (u *TaskUsecase) scheduleExecution(ctx context.Context, req *taskScheduleExecutionReq) (resp *taskScheduleExecutionResponse, err error) {
+	task := req.Task
+	scheduledAt := req.ScheduledAt
+	triggerType := req.TriggerType
 	if ctx.Err() != nil {
 		return nil, ctx.Err()
+	}
+	var record *model.TaskExecutionRecord
+	finish := func(row *model.TaskExecutionRecord, returnErr error) (*taskScheduleExecutionResponse, error) {
+		record = row
+		if returnErr != nil {
+			return nil, returnErr
+		}
+		if row == nil {
+			return nil, nil
+		}
+		return &taskScheduleExecutionResponse{Record: row}, nil
 	}
 	scheduleCtx, span := otel.Tracer("scheduler.task").Start(
 		ctx,
@@ -232,32 +488,35 @@ func (u *TaskUsecase) ScheduleExecution(ctx context.Context, task *model.Task, s
 	if err != nil {
 		u.logger.ErrorContext(ctx, "acquire scheduler redis task lock failed", constant.LogFieldTaskID, task.ID, constant.LogFieldTaskName, task.Name, constant.LogFieldErr, err)
 		if task.AllowOverlap {
-			result, created, conflict, err := u.StartExecution(ctx, task, scheduledAt, triggerType, "")
+			startResp, err := u.startExecution(ctx, &taskStartExecutionReq{Task: task, ScheduledAt: scheduledAt, TriggerType: triggerType})
 			if err != nil {
-				return result, err
+				if startResp != nil {
+					return finish(startResp.Record, err)
+				}
+				return nil, err
 			}
-			if !created || conflict {
-				if conflict {
+			if startResp == nil || !startResp.Created || startResp.Conflict {
+				if startResp != nil && startResp.Conflict {
 					skipReason = "db_unique_conflict"
 				} else {
 					skipReason = "db_create_skipped"
 				}
 				return nil, nil
 			}
-			return result, nil
+			return finish(startResp.Record, nil)
 		}
 		var result *model.TaskExecutionRecord
 		var created bool
 		var conflict bool
 		err = u.tx(ctx, func(txCtx context.Context) error {
-			if err := u.taskRepo.Lock(txCtx, task.ID); err != nil {
+			if _, err := u.taskRepo.Lock(txCtx, &repo.TaskLockReq{ID: task.ID}); err != nil {
 				return err
 			}
-			exists, err := u.taskExecutionRecordRepo.ExistsPeriod(txCtx, task.ID, scheduledAt)
+			existsResp, err := u.taskExecutionRecordRepo.ExistsPeriod(txCtx, &repo.TaskExecutionRecordExistsPeriodReq{TaskID: task.ID, ScheduledAt: scheduledAt})
 			if err != nil {
 				return err
 			}
-			if exists {
+			if existsResp.Exists {
 				conflict = true
 				skipReason = "db_period_exists"
 				return nil
@@ -269,32 +528,37 @@ func (u *TaskUsecase) ScheduleExecution(ctx context.Context, task *model.Task, s
 				}
 				timeout = u.conf.GetScheduler().GetTaskTimeout().AsDuration()
 			}
-			running, err := u.taskExecutionRecordRepo.HasUnexpiredRunning(txCtx, task.ID, time.Now().Add(-(timeout + period)))
+			runningResp, err := u.taskExecutionRecordRepo.HasUnexpiredRunning(txCtx, &repo.TaskExecutionRecordHasUnexpiredRunningReq{TaskID: task.ID, StartedAfter: time.Now().Add(-(timeout + period))})
 			if err != nil {
 				return err
 			}
-			if running {
+			if runningResp.Exists {
 				traceID := ""
 				if oteltrace.SpanContextFromContext(txCtx).IsValid() {
 					traceID = oteltrace.SpanContextFromContext(txCtx).TraceID().String()
 				}
-				record, recordCreated, recordConflict, err := u.taskExecutionRecordRepo.Create(txCtx, &model.TaskExecutionRecord{
-					TaskID:      task.ID,
-					ScheduledAt: scheduledAt,
-					FinishedAt:  new(time.Now()),
-					DurationMS:  new(int64(0)),
-					Status:      schedulerenum.TaskExecutionStatusOverlapSkipped,
-					TriggerType: triggerType,
-					TaskVersion: task.Version,
-					Payload:     task.Payload,
-					TraceID:     traceID,
-					LastError:   "scheduler task has another running execution",
-				}, schedulerenum.TaskExecutionStatusOverlapSkipped)
-				result = record
-				created = recordCreated
-				conflict = recordConflict
-				if recordConflict {
-					skipReason = "db_unique_conflict"
+				createResp, err := u.createExecutionRecord(txCtx, &taskCreateExecutionRecordReq{
+					Record: &model.TaskExecutionRecord{
+						TaskID:      task.ID,
+						ScheduledAt: scheduledAt,
+						FinishedAt:  new(time.Now()),
+						DurationMS:  new(int64(0)),
+						Status:      schedulerenum.TaskExecutionStatusOverlapSkipped,
+						TriggerType: triggerType,
+						TaskVersion: task.Version,
+						Payload:     task.Payload,
+						TraceID:     traceID,
+						LastError:   "scheduler task has another running execution",
+					},
+					Status: schedulerenum.TaskExecutionStatusOverlapSkipped,
+				})
+				if createResp != nil {
+					result = createResp.Record
+					created = createResp.Created
+					conflict = createResp.Conflict
+					if createResp.Conflict {
+						skipReason = "db_unique_conflict"
+					}
 				}
 				return err
 			}
@@ -302,26 +566,31 @@ func (u *TaskUsecase) ScheduleExecution(ctx context.Context, task *model.Task, s
 			if oteltrace.SpanContextFromContext(txCtx).IsValid() {
 				traceID = oteltrace.SpanContextFromContext(txCtx).TraceID().String()
 			}
-			record, recordCreated, recordConflict, err := u.taskExecutionRecordRepo.Create(txCtx, &model.TaskExecutionRecord{
-				TaskID:      task.ID,
-				ScheduledAt: scheduledAt,
-				StartedAt:   new(time.Now()),
-				Status:      schedulerenum.TaskExecutionStatusRunning,
-				TriggerType: triggerType,
-				TaskVersion: task.Version,
-				Payload:     task.Payload,
-				TraceID:     traceID,
-			}, schedulerenum.TaskExecutionStatusRunning)
-			result = record
-			created = recordCreated
-			conflict = recordConflict
-			if recordConflict {
-				skipReason = "db_unique_conflict"
+			createResp, err := u.createExecutionRecord(txCtx, &taskCreateExecutionRecordReq{
+				Record: &model.TaskExecutionRecord{
+					TaskID:      task.ID,
+					ScheduledAt: scheduledAt,
+					StartedAt:   new(time.Now()),
+					Status:      schedulerenum.TaskExecutionStatusRunning,
+					TriggerType: triggerType,
+					TaskVersion: task.Version,
+					Payload:     task.Payload,
+					TraceID:     traceID,
+				},
+				Status: schedulerenum.TaskExecutionStatusRunning,
+			})
+			if createResp != nil {
+				result = createResp.Record
+				created = createResp.Created
+				conflict = createResp.Conflict
+				if createResp.Conflict {
+					skipReason = "db_unique_conflict"
+				}
 			}
 			return err
 		})
 		if err != nil {
-			return result, err
+			return finish(result, err)
 		}
 		if conflict {
 			u.logger.WarnContext(ctx, "scheduler execution record already exists", constant.LogFieldTaskID, task.ID, constant.LogFieldTaskName, task.Name)
@@ -336,12 +605,15 @@ func (u *TaskUsecase) ScheduleExecution(ctx context.Context, task *model.Task, s
 		}
 		if result.Status == schedulerenum.TaskExecutionStatusOverlapSkipped {
 			if task.AlertEnabled {
-				_ = u.alert.Alert(ctx, task, result, "overlap")
+				_, _ = u.alert.Alert(ctx, &repo.TaskAlertReq{Task: task, Record: result, Reason: "overlap"})
 			}
-			return result, nil
+			return finish(result, nil)
 		}
-		result, _, _, err = u.startCreatedExecution(ctx, task, result, scheduledAt, triggerType, "", 0)
-		return result, err
+		startCreatedResp, err := u.startCreatedExecution(ctx, &taskStartCreatedExecutionReq{Task: task, Record: result, ScheduledAt: scheduledAt, TriggerType: triggerType})
+		if startCreatedResp != nil {
+			result = startCreatedResp.Record
+		}
+		return finish(result, err)
 	}
 	if acquired == nil {
 		return nil, fmt.Errorf("scheduler task lock acquire result is nil")
@@ -351,93 +623,186 @@ func (u *TaskUsecase) ScheduleExecution(ctx context.Context, task *model.Task, s
 		skipReason = "redis_schedule_skip"
 		return nil, nil
 	case schedulerenum.TaskScheduleDecisionRun:
-		result, created, conflict, err := u.StartExecution(ctx, task, scheduledAt, triggerType, acquired.RunningToken)
+		startResp, err := u.startExecution(ctx, &taskStartExecutionReq{Task: task, ScheduledAt: scheduledAt, TriggerType: triggerType, RunningToken: acquired.RunningToken})
 		if err != nil {
-			return result, err
+			if startResp != nil {
+				return finish(startResp.Record, err)
+			}
+			return nil, err
 		}
-		if !created || conflict {
-			if conflict {
+		if startResp == nil || !startResp.Created || startResp.Conflict {
+			if startResp != nil && startResp.Conflict {
 				skipReason = "db_unique_conflict"
 			} else {
 				skipReason = "db_create_skipped"
 			}
 			return nil, nil
 		}
-		return result, nil
+		return finish(startResp.Record, nil)
 	case schedulerenum.TaskScheduleDecisionOverlap:
-		result, created, conflict, err := u.CreateOverlapSkipped(ctx, task, scheduledAt, triggerType)
+		overlapResp, err := u.createOverlapSkipped(ctx, &taskCreateOverlapSkippedReq{Task: task, ScheduledAt: scheduledAt, TriggerType: triggerType})
 		if err != nil {
-			return result, err
+			if overlapResp != nil {
+				return finish(overlapResp.Record, err)
+			}
+			return nil, err
 		}
-		if !created || conflict {
-			if conflict {
+		if overlapResp == nil || !overlapResp.Created || overlapResp.Conflict {
+			if overlapResp != nil && overlapResp.Conflict {
 				skipReason = "db_unique_conflict"
 			} else {
 				skipReason = "db_create_skipped"
 			}
 			return nil, nil
 		}
-		return result, nil
+		return finish(overlapResp.Record, nil)
 	default:
 		return nil, fmt.Errorf("unknown scheduler schedule decision: %s", acquired.Decision)
 	}
 }
 
-func (u *TaskUsecase) CreateOverlapSkipped(ctx context.Context, task *model.Task, scheduledAt time.Time, triggerType schedulerenum.TaskTriggerType) (*model.TaskExecutionRecord, bool, bool, error) {
-	traceID := ""
-	if oteltrace.SpanContextFromContext(ctx).IsValid() {
-		traceID = oteltrace.SpanContextFromContext(ctx).TraceID().String()
-	}
-	record, created, conflict, err := u.taskExecutionRecordRepo.Create(ctx, &model.TaskExecutionRecord{
-		TaskID:      task.ID,
-		ScheduledAt: scheduledAt,
-		FinishedAt:  new(time.Now()),
-		DurationMS:  new(int64(0)),
-		Status:      schedulerenum.TaskExecutionStatusOverlapSkipped,
-		TriggerType: triggerType,
-		TaskVersion: task.Version,
-		Payload:     task.Payload,
-		TraceID:     traceID,
-		LastError:   "scheduler task has another running execution",
-	}, schedulerenum.TaskExecutionStatusOverlapSkipped)
-	if conflict {
-		u.logger.WarnContext(ctx, "scheduler execution record already exists", constant.LogFieldTaskID, task.ID, constant.LogFieldTaskName, task.Name)
-	}
-	if err == nil && created && task.AlertEnabled {
-		_ = u.alert.Alert(ctx, task, record, "overlap")
-	}
-	return record, created, conflict, err
+type TaskCreateOverlapSkippedReq struct {
+	Task        *model.Task
+	ScheduledAt time.Time
+	TriggerType schedulerenum.TaskTriggerType
 }
 
-func (u *TaskUsecase) StartExecution(ctx context.Context, task *model.Task, scheduledAt time.Time, triggerType schedulerenum.TaskTriggerType, runningToken string) (*model.TaskExecutionRecord, bool, bool, error) {
+type TaskCreateOverlapSkippedResponse struct {
+	Record   *model.TaskExecutionRecord
+	Created  bool
+	Conflict bool
+}
+
+func (u *TaskUsecase) CreateOverlapSkipped(ctx context.Context, req *TaskCreateOverlapSkippedReq) (*TaskCreateOverlapSkippedResponse, error) {
+	if req == nil || req.Task == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	resp, err := u.createOverlapSkipped(ctx, &taskCreateOverlapSkippedReq{Task: req.Task, ScheduledAt: req.ScheduledAt, TriggerType: req.TriggerType})
+	if err != nil {
+		return nil, err
+	}
+	return &TaskCreateOverlapSkippedResponse{Record: resp.Record, Created: resp.Created, Conflict: resp.Conflict}, nil
+}
+
+type taskCreateOverlapSkippedReq struct {
+	Task        *model.Task
+	ScheduledAt time.Time
+	TriggerType schedulerenum.TaskTriggerType
+}
+
+type taskCreateOverlapSkippedResponse struct {
+	Record   *model.TaskExecutionRecord
+	Created  bool
+	Conflict bool
+}
+
+func (u *TaskUsecase) createOverlapSkipped(ctx context.Context, req *taskCreateOverlapSkippedReq) (*taskCreateOverlapSkippedResponse, error) {
+	task := req.Task
 	traceID := ""
 	if oteltrace.SpanContextFromContext(ctx).IsValid() {
 		traceID = oteltrace.SpanContextFromContext(ctx).TraceID().String()
 	}
-	record, created, conflict, err := u.taskExecutionRecordRepo.Create(ctx, &model.TaskExecutionRecord{
-		TaskID:      task.ID,
-		ScheduledAt: scheduledAt,
-		StartedAt:   new(time.Now()),
-		Status:      schedulerenum.TaskExecutionStatusRunning,
-		TriggerType: triggerType,
-		TaskVersion: task.Version,
-		Payload:     task.Payload,
-		TraceID:     traceID,
-	}, schedulerenum.TaskExecutionStatusRunning)
-	if conflict {
+	createResp, err := u.createExecutionRecord(ctx, &taskCreateExecutionRecordReq{
+		Record: &model.TaskExecutionRecord{
+			TaskID:      task.ID,
+			ScheduledAt: req.ScheduledAt,
+			FinishedAt:  new(time.Now()),
+			DurationMS:  new(int64(0)),
+			Status:      schedulerenum.TaskExecutionStatusOverlapSkipped,
+			TriggerType: req.TriggerType,
+			TaskVersion: task.Version,
+			Payload:     task.Payload,
+			TraceID:     traceID,
+			LastError:   "scheduler task has another running execution",
+		},
+		Status: schedulerenum.TaskExecutionStatusOverlapSkipped,
+	})
+	if createResp != nil && createResp.Conflict {
 		u.logger.WarnContext(ctx, "scheduler execution record already exists", constant.LogFieldTaskID, task.ID, constant.LogFieldTaskName, task.Name)
 	}
-	if err != nil || !created {
-		if releaseErr := u.taskLockRepo.ReleaseRunning(context.WithoutCancel(ctx), task.ID, 0, runningToken, !task.AllowOverlap && runningToken != ""); releaseErr != nil {
+	if err == nil && createResp != nil && createResp.Created && task.AlertEnabled {
+		_, _ = u.alert.Alert(ctx, &repo.TaskAlertReq{Task: task, Record: createResp.Record, Reason: "overlap"})
+	}
+	if createResp == nil {
+		return nil, err
+	}
+	return &taskCreateOverlapSkippedResponse{Record: createResp.Record, Created: createResp.Created, Conflict: createResp.Conflict}, err
+}
+
+type TaskStartExecutionReq struct {
+	Task         *model.Task
+	ScheduledAt  time.Time
+	TriggerType  schedulerenum.TaskTriggerType
+	RunningToken string
+}
+
+type TaskStartExecutionResponse struct {
+	Record   *model.TaskExecutionRecord
+	Created  bool
+	Conflict bool
+}
+
+func (u *TaskUsecase) StartExecution(ctx context.Context, req *TaskStartExecutionReq) (*TaskStartExecutionResponse, error) {
+	if req == nil || req.Task == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	resp, err := u.startExecution(ctx, &taskStartExecutionReq{Task: req.Task, ScheduledAt: req.ScheduledAt, TriggerType: req.TriggerType, RunningToken: req.RunningToken})
+	if err != nil {
+		return nil, err
+	}
+	return &TaskStartExecutionResponse{Record: resp.Record, Created: resp.Created, Conflict: resp.Conflict}, nil
+}
+
+type taskStartExecutionReq struct {
+	Task         *model.Task
+	ScheduledAt  time.Time
+	TriggerType  schedulerenum.TaskTriggerType
+	RunningToken string
+}
+
+type taskStartExecutionResponse struct {
+	Record   *model.TaskExecutionRecord
+	Created  bool
+	Conflict bool
+}
+
+func (u *TaskUsecase) startExecution(ctx context.Context, req *taskStartExecutionReq) (*taskStartExecutionResponse, error) {
+	task := req.Task
+	traceID := ""
+	if oteltrace.SpanContextFromContext(ctx).IsValid() {
+		traceID = oteltrace.SpanContextFromContext(ctx).TraceID().String()
+	}
+	createResp, err := u.createExecutionRecord(ctx, &taskCreateExecutionRecordReq{
+		Record: &model.TaskExecutionRecord{
+			TaskID:      task.ID,
+			ScheduledAt: req.ScheduledAt,
+			StartedAt:   new(time.Now()),
+			Status:      schedulerenum.TaskExecutionStatusRunning,
+			TriggerType: req.TriggerType,
+			TaskVersion: task.Version,
+			Payload:     task.Payload,
+			TraceID:     traceID,
+		},
+		Status: schedulerenum.TaskExecutionStatusRunning,
+	})
+	if createResp != nil && createResp.Conflict {
+		u.logger.WarnContext(ctx, "scheduler execution record already exists", constant.LogFieldTaskID, task.ID, constant.LogFieldTaskName, task.Name)
+	}
+	if err != nil || createResp == nil || !createResp.Created {
+		if releaseErr := u.releaseRunning(context.WithoutCancel(ctx), &taskReleaseRunningReq{TaskID: task.ID, RunningToken: req.RunningToken, Exclusive: !task.AllowOverlap && req.RunningToken != ""}); releaseErr != nil {
 			u.logger.ErrorContext(context.WithoutCancel(ctx), "release scheduler running lock failed", constant.LogFieldTaskID, task.ID, constant.LogFieldErr, releaseErr)
 		}
-		return record, created, conflict, err
+		if createResp == nil {
+			return nil, err
+		}
+		return &taskStartExecutionResponse{Record: createResp.Record, Created: createResp.Created, Conflict: createResp.Conflict}, err
 	}
+	record := createResp.Record
 	runningTTL := time.Duration(0)
-	if runningToken != "" {
+	if req.RunningToken != "" {
 		schedule, parseErr := u.cronParser.Parse(task.CronSpec)
 		if parseErr == nil {
-			next := schedule.Next(scheduledAt)
+			next := schedule.Next(req.ScheduledAt)
 			nextAfter := schedule.Next(next)
 			if next.IsZero() || nextAfter.IsZero() || !nextAfter.After(next) {
 				parseErr = fmt.Errorf("scheduler cron period is invalid")
@@ -454,17 +819,17 @@ func (u *TaskUsecase) StartExecution(ctx context.Context, task *model.Task, sche
 					durationMS = 0
 				}
 			}
-			failed, _, markErr := u.taskExecutionRecordRepo.MarkFinished(context.WithoutCancel(ctx), record.ID, schedulerenum.TaskExecutionStatusFailed, finishedAt, durationMS, parseErr.Error())
-			if releaseErr := u.taskLockRepo.ReleaseRunning(context.WithoutCancel(ctx), task.ID, record.ID, runningToken, !task.AllowOverlap); releaseErr != nil {
+			failedResp, markErr := u.markExecutionFinished(context.WithoutCancel(ctx), &taskMarkExecutionFinishedReq{ID: record.ID, Status: schedulerenum.TaskExecutionStatusFailed, FinishedAt: finishedAt, DurationMS: durationMS, LastError: parseErr.Error()})
+			if releaseErr := u.releaseRunning(context.WithoutCancel(ctx), &taskReleaseRunningReq{TaskID: task.ID, ExecutionRecordID: record.ID, RunningToken: req.RunningToken, Exclusive: !task.AllowOverlap}); releaseErr != nil {
 				u.logger.ErrorContext(context.WithoutCancel(ctx), "release scheduler running lock failed", constant.LogFieldTaskID, task.ID, constant.LogFieldErr, releaseErr)
 			}
 			if markErr != nil {
-				return failed, true, false, markErr
+				return &taskStartExecutionResponse{Record: failedResp.Record, Created: true}, markErr
 			}
-			return failed, true, false, parseErr
+			return &taskStartExecutionResponse{Record: failedResp.Record, Created: true}, parseErr
 		}
-		ok, registerErr := u.taskLockRepo.RegisterRunning(context.WithoutCancel(ctx), task.ID, record.ID, runningToken, !task.AllowOverlap, runningTTL)
-		if registerErr != nil || !ok {
+		registerResp, registerErr := u.registerRunning(context.WithoutCancel(ctx), &taskRegisterRunningReq{TaskID: task.ID, ExecutionRecordID: record.ID, RunningToken: req.RunningToken, Exclusive: !task.AllowOverlap, TTL: runningTTL})
+		if registerErr != nil || registerResp == nil || !registerResp.OK {
 			finishedAt := time.Now()
 			durationMS := int64(0)
 			if record.StartedAt != nil {
@@ -477,23 +842,44 @@ func (u *TaskUsecase) StartExecution(ctx context.Context, task *model.Task, sche
 			if registerErr != nil {
 				lastError = registerErr.Error()
 			}
-			failed, _, markErr := u.taskExecutionRecordRepo.MarkFinished(context.WithoutCancel(ctx), record.ID, schedulerenum.TaskExecutionStatusFailed, finishedAt, durationMS, lastError)
-			if releaseErr := u.taskLockRepo.ReleaseRunning(context.WithoutCancel(ctx), task.ID, record.ID, runningToken, !task.AllowOverlap); releaseErr != nil {
+			failedResp, markErr := u.markExecutionFinished(context.WithoutCancel(ctx), &taskMarkExecutionFinishedReq{ID: record.ID, Status: schedulerenum.TaskExecutionStatusFailed, FinishedAt: finishedAt, DurationMS: durationMS, LastError: lastError})
+			if releaseErr := u.releaseRunning(context.WithoutCancel(ctx), &taskReleaseRunningReq{TaskID: task.ID, ExecutionRecordID: record.ID, RunningToken: req.RunningToken, Exclusive: !task.AllowOverlap}); releaseErr != nil {
 				u.logger.ErrorContext(context.WithoutCancel(ctx), "release scheduler running lock failed", constant.LogFieldTaskID, task.ID, constant.LogFieldErr, releaseErr)
 			}
 			if markErr != nil {
-				return failed, true, false, markErr
+				return &taskStartExecutionResponse{Record: failedResp.Record, Created: true}, markErr
 			}
 			if registerErr != nil {
-				return failed, true, false, registerErr
+				return &taskStartExecutionResponse{Record: failedResp.Record, Created: true}, registerErr
 			}
-			return failed, true, false, fmt.Errorf("scheduler redis running registration failed")
+			return &taskStartExecutionResponse{Record: failedResp.Record, Created: true}, fmt.Errorf("scheduler redis running registration failed")
 		}
 	}
-	return u.startCreatedExecution(ctx, task, record, scheduledAt, triggerType, runningToken, runningTTL)
+	startCreatedResp, err := u.startCreatedExecution(ctx, &taskStartCreatedExecutionReq{Task: task, Record: record, ScheduledAt: req.ScheduledAt, TriggerType: req.TriggerType, RunningToken: req.RunningToken, RunningTTL: runningTTL})
+	if startCreatedResp == nil {
+		return nil, err
+	}
+	return &taskStartExecutionResponse{Record: startCreatedResp.Record, Created: startCreatedResp.Created, Conflict: startCreatedResp.Conflict}, err
 }
 
-func (u *TaskUsecase) startCreatedExecution(ctx context.Context, task *model.Task, record *model.TaskExecutionRecord, scheduledAt time.Time, triggerType schedulerenum.TaskTriggerType, runningToken string, runningTTL time.Duration) (*model.TaskExecutionRecord, bool, bool, error) {
+type taskStartCreatedExecutionReq struct {
+	Task         *model.Task
+	Record       *model.TaskExecutionRecord
+	ScheduledAt  time.Time
+	TriggerType  schedulerenum.TaskTriggerType
+	RunningToken string
+	RunningTTL   time.Duration
+}
+
+type taskStartCreatedExecutionResponse struct {
+	Record   *model.TaskExecutionRecord
+	Created  bool
+	Conflict bool
+}
+
+func (u *TaskUsecase) startCreatedExecution(ctx context.Context, req *taskStartCreatedExecutionReq) (*taskStartCreatedExecutionResponse, error) {
+	task := req.Task
+	record := req.Record
 	runCtx, span := otel.Tracer("scheduler.task").Start(
 		ctx,
 		"scheduler.task "+task.Name,
@@ -502,8 +888,8 @@ func (u *TaskUsecase) startCreatedExecution(ctx context.Context, task *model.Tas
 			attribute.Int64("scheduler.task.id", task.ID),
 			attribute.String("scheduler.task.name", task.Name),
 			attribute.String("scheduler.task.title", task.Title),
-			attribute.String("scheduler.trigger_type", string(triggerType)),
-			attribute.String("scheduler.scheduled_at", scheduledAt.Format(time.RFC3339Nano)),
+			attribute.String("scheduler.trigger_type", string(req.TriggerType)),
+			attribute.String("scheduler.scheduled_at", req.ScheduledAt.Format(time.RFC3339Nano)),
 		),
 	)
 	traceID := ""
@@ -517,7 +903,7 @@ func (u *TaskUsecase) startCreatedExecution(ctx context.Context, task *model.Tas
 	if timeout <= 0 {
 		if u.conf.GetScheduler() == nil || u.conf.GetScheduler().GetTaskTimeout() == nil || u.conf.GetScheduler().GetTaskTimeout().AsDuration() <= 0 {
 			span.End()
-			return nil, false, false, fmt.Errorf("scheduler task_timeout is invalid")
+			return nil, fmt.Errorf("scheduler task_timeout is invalid")
 		}
 		timeout = u.conf.GetScheduler().GetTaskTimeout().AsDuration()
 	}
@@ -525,16 +911,16 @@ func (u *TaskUsecase) startCreatedExecution(ctx context.Context, task *model.Tas
 	callCtx, cancel := context.WithTimeout(context.WithoutCancel(runCtx), timeout)
 	u.runningCancels.Store(record.ID, cancel)
 	heartbeatInterval := time.Duration(0)
-	if runningToken != "" {
+	if req.RunningToken != "" {
 		var configErr error
-		if runningTTL <= 0 {
+		if req.RunningTTL <= 0 {
 			configErr = fmt.Errorf("scheduler cron period is invalid")
 		} else {
-			heartbeatInterval = runningTTL / 3
+			heartbeatInterval = req.RunningTTL / 3
 			if heartbeatInterval < 100*time.Millisecond {
 				heartbeatInterval = 100 * time.Millisecond
 			}
-			if heartbeatInterval >= runningTTL {
+			if heartbeatInterval >= req.RunningTTL {
 				configErr = fmt.Errorf("scheduler running heartbeat interval must be less than cron period")
 			}
 		}
@@ -547,33 +933,51 @@ func (u *TaskUsecase) startCreatedExecution(ctx context.Context, task *model.Tas
 					durationMS = 0
 				}
 			}
-			failed, _, markErr := u.taskExecutionRecordRepo.MarkFinished(context.WithoutCancel(runCtx), record.ID, schedulerenum.TaskExecutionStatusFailed, finishedAt, durationMS, configErr.Error())
+			failedResp, markErr := u.markExecutionFinished(context.WithoutCancel(runCtx), &taskMarkExecutionFinishedReq{ID: record.ID, Status: schedulerenum.TaskExecutionStatusFailed, FinishedAt: finishedAt, DurationMS: durationMS, LastError: configErr.Error()})
 			span.End()
 			cancel()
 			u.runningCancels.Delete(record.ID)
-			if releaseErr := u.taskLockRepo.ReleaseRunning(context.WithoutCancel(runCtx), task.ID, record.ID, runningToken, !task.AllowOverlap); releaseErr != nil {
+			if releaseErr := u.releaseRunning(context.WithoutCancel(runCtx), &taskReleaseRunningReq{TaskID: task.ID, ExecutionRecordID: record.ID, RunningToken: req.RunningToken, Exclusive: !task.AllowOverlap}); releaseErr != nil {
 				u.logger.ErrorContext(context.WithoutCancel(runCtx), "release scheduler running lock failed", constant.LogFieldTaskID, task.ID, constant.LogFieldErr, releaseErr)
 			}
-			if markErr != nil {
-				return failed, true, false, markErr
+			failedRecord := record
+			if failedResp != nil && failedResp.Record != nil {
+				failedRecord = failedResp.Record
 			}
-			return failed, true, false, configErr
+			if markErr != nil {
+				return &taskStartCreatedExecutionResponse{Record: failedRecord, Created: true}, markErr
+			}
+			return &taskStartCreatedExecutionResponse{Record: failedRecord, Created: true}, configErr
 		}
 	}
 	u.runningWG.Add(1)
-	go u.executeRecord(callCtx, cancel, span, task, record, scheduledAt, runningToken, heartbeatInterval, runningTTL)
-	return record, true, false, nil
+	go u.executeRecord(callCtx, &taskExecuteRecordReq{Cancel: cancel, Span: span, Task: task, Record: record, ScheduledAt: req.ScheduledAt, RunningToken: req.RunningToken, HeartbeatInterval: heartbeatInterval, RunningTTL: req.RunningTTL})
+	return &taskStartCreatedExecutionResponse{Record: record, Created: true}, nil
 }
 
-func (u *TaskUsecase) executeRecord(ctx context.Context, cancel context.CancelFunc, span oteltrace.Span, task *model.Task, record *model.TaskExecutionRecord, scheduledAt time.Time, runningToken string, heartbeatInterval time.Duration, runningTTL time.Duration) {
+type taskExecuteRecordReq struct {
+	Cancel            context.CancelFunc
+	Span              oteltrace.Span
+	Task              *model.Task
+	Record            *model.TaskExecutionRecord
+	ScheduledAt       time.Time
+	RunningToken      string
+	HeartbeatInterval time.Duration
+	RunningTTL        time.Duration
+}
+
+func (u *TaskUsecase) executeRecord(ctx context.Context, req *taskExecuteRecordReq) {
+	task := req.Task
+	record := req.Record
+	span := req.Span
 	defer span.End()
-	defer cancel()
+	defer req.Cancel()
 	defer u.runningCancels.Delete(record.ID)
 	defer u.runningWG.Done()
-	if runningToken != "" {
-		go u.heartbeatRunningLock(ctx, cancel, task.ID, record.ID, runningToken, !task.AllowOverlap, heartbeatInterval, runningTTL)
+	if req.RunningToken != "" {
+		go u.heartbeatRunningLock(ctx, &taskHeartbeatRunningLockReq{Cancel: req.Cancel, TaskID: task.ID, ExecutionRecordID: record.ID, RunningToken: req.RunningToken, Exclusive: !task.AllowOverlap, Interval: req.HeartbeatInterval, TTL: req.RunningTTL})
 		defer func() {
-			if err := u.taskLockRepo.ReleaseRunning(context.WithoutCancel(ctx), task.ID, record.ID, runningToken, !task.AllowOverlap); err != nil {
+			if err := u.releaseRunning(context.WithoutCancel(ctx), &taskReleaseRunningReq{TaskID: task.ID, ExecutionRecordID: record.ID, RunningToken: req.RunningToken, Exclusive: !task.AllowOverlap}); err != nil {
 				u.logger.ErrorContext(context.WithoutCancel(ctx), "release scheduler running lock failed", constant.LogFieldTaskID, task.ID, constant.LogFieldErr, err)
 			}
 		}()
@@ -608,56 +1012,95 @@ func (u *TaskUsecase) executeRecord(ctx context.Context, cancel context.CancelFu
 			statusValue = schedulerenum.TaskExecutionStatusTimeout
 		}
 	}
-	finished, updated, markErr := u.taskExecutionRecordRepo.MarkFinished(context.WithoutCancel(ctx), record.ID, statusValue, finishedAt, durationMS, lastError)
-	if markErr != nil || !updated {
+	markResp, markErr := u.markExecutionFinished(context.WithoutCancel(ctx), &taskMarkExecutionFinishedReq{ID: record.ID, Status: statusValue, FinishedAt: finishedAt, DurationMS: durationMS, LastError: lastError})
+	if markErr != nil || markResp == nil || !markResp.Updated {
 		return
 	}
+	finished := markResp.Record
 	if task.AlertEnabled {
 		if statusValue != schedulerenum.TaskExecutionStatusSuccess {
-			_ = u.alert.Alert(ctx, task, finished, statusValue.String())
+			_, _ = u.alert.Alert(ctx, &repo.TaskAlertReq{Task: task, Record: finished, Reason: statusValue.String()})
 		}
 		if statusValue == schedulerenum.TaskExecutionStatusSuccess {
 			schedule, parseErr := u.cronParser.Parse(task.CronSpec)
 			if parseErr == nil {
-				next := schedule.Next(scheduledAt)
-				if record.StartedAt != nil && next.After(scheduledAt) && finishedAt.Sub(*record.StartedAt) > next.Sub(scheduledAt) {
-					_ = u.alert.Alert(ctx, task, finished, "duration_exceeded")
+				next := schedule.Next(req.ScheduledAt)
+				if record.StartedAt != nil && next.After(req.ScheduledAt) && finishedAt.Sub(*record.StartedAt) > next.Sub(req.ScheduledAt) {
+					_, _ = u.alert.Alert(ctx, &repo.TaskAlertReq{Task: task, Record: finished, Reason: "duration_exceeded"})
 				}
 			}
 		}
 	}
 }
 
-func (u *TaskUsecase) heartbeatRunningLock(ctx context.Context, cancel context.CancelFunc, taskID int64, executionRecordID int64, runningToken string, exclusive bool, interval time.Duration, ttl time.Duration) {
-	ticker := time.NewTicker(interval)
+type taskHeartbeatRunningLockReq struct {
+	Cancel            context.CancelFunc
+	TaskID            int64
+	ExecutionRecordID int64
+	RunningToken      string
+	Exclusive         bool
+	Interval          time.Duration
+	TTL               time.Duration
+}
+
+func (u *TaskUsecase) heartbeatRunningLock(ctx context.Context, req *taskHeartbeatRunningLockReq) {
+	ticker := time.NewTicker(req.Interval)
 	defer ticker.Stop()
 	for {
 		select {
 		case <-ctx.Done():
 			return
 		case <-ticker.C:
-			ok, err := u.taskLockRepo.RefreshRunning(context.WithoutCancel(ctx), taskID, executionRecordID, runningToken, exclusive, ttl)
-			if err == nil && ok {
+			refreshResp, err := u.refreshRunning(context.WithoutCancel(ctx), &taskRefreshRunningReq{TaskID: req.TaskID, ExecutionRecordID: req.ExecutionRecordID, RunningToken: req.RunningToken, Exclusive: req.Exclusive, TTL: req.TTL})
+			if err == nil && refreshResp != nil && refreshResp.OK {
 				continue
 			}
 			if err != nil {
-				u.logger.ErrorContext(context.WithoutCancel(ctx), "refresh scheduler running lock failed", constant.LogFieldTaskID, taskID, constant.LogFieldErr, err)
+				u.logger.ErrorContext(context.WithoutCancel(ctx), "refresh scheduler running lock failed", constant.LogFieldTaskID, req.TaskID, constant.LogFieldErr, err)
 			}
-			// 续期失败表示运行互斥所有权已丢失或 Redis 状态不可确认，本地执行必须尽快停止。
-			cancel()
+			// Redis 心跳失败时主动取消执行，避免本地任务继续占用资源。
+			req.Cancel()
 			return
 		}
 	}
 }
 
-func (u *TaskUsecase) CheckExecutionRuntimes(ctx context.Context, ids []int64) ([]*model.TaskExecutionRuntime, error) {
-	if len(ids) == 0 {
-		return nil, nil
+type TaskCheckExecutionRuntimesReq struct {
+	IDs []int64
+}
+
+type TaskCheckExecutionRuntimesResponse struct {
+	Rows []*model.TaskExecutionRuntime
+}
+
+func (u *TaskUsecase) CheckExecutionRuntimes(ctx context.Context, req *TaskCheckExecutionRuntimesReq) (*TaskCheckExecutionRuntimesResponse, error) {
+	if req == nil {
+		req = &TaskCheckExecutionRuntimesReq{}
 	}
-	records, err := u.taskExecutionRecordRepo.List(ctx, &repo.TaskExecutionRecordGetReq{IDs: ids})
+	resp, err := u.checkExecutionRuntimes(ctx, &taskCheckExecutionRuntimesReq{IDs: req.IDs})
 	if err != nil {
 		return nil, err
 	}
+	return &TaskCheckExecutionRuntimesResponse{Rows: resp.Rows}, nil
+}
+
+type taskCheckExecutionRuntimesReq struct {
+	IDs []int64
+}
+
+type taskCheckExecutionRuntimesResponse struct {
+	Rows []*model.TaskExecutionRuntime
+}
+
+func (u *TaskUsecase) checkExecutionRuntimes(ctx context.Context, req *taskCheckExecutionRuntimesReq) (*taskCheckExecutionRuntimesResponse, error) {
+	if len(req.IDs) == 0 {
+		return &taskCheckExecutionRuntimesResponse{}, nil
+	}
+	recordsResp, err := u.listExecutionRecords(ctx, &taskListExecutionRecordsReq{Query: &repo.TaskExecutionRecordGetReq{IDs: req.IDs}})
+	if err != nil {
+		return nil, err
+	}
+	records := recordsResp.Rows
 	recordByID := make(map[int64]*model.TaskExecutionRecord, len(records))
 	runningByTask := make(map[int64][]int64)
 	for _, row := range records {
@@ -669,13 +1112,13 @@ func (u *TaskUsecase) CheckExecutionRuntimes(ctx context.Context, ids []int64) (
 	activeByID := make(map[int64]bool)
 	redisFailedTask := make(map[int64]bool)
 	for taskID, executionIDs := range runningByTask {
-		activeRows, mapErr := u.taskLockRepo.MapRunning(ctx, taskID, executionIDs)
+		mapResp, mapErr := u.mapRunning(ctx, &taskMapRunningReq{TaskID: taskID, ExecutionRecordIDs: executionIDs})
 		if mapErr != nil {
 			redisFailedTask[taskID] = true
 			u.logger.ErrorContext(ctx, "map scheduler running lock failed", constant.LogFieldTaskID, taskID, constant.LogFieldErr, mapErr)
 			continue
 		}
-		for id, active := range activeRows {
+		for id, active := range mapResp.Rows {
 			activeByID[id] = active
 		}
 	}
@@ -700,11 +1143,11 @@ func (u *TaskUsecase) CheckExecutionRuntimes(ctx context.Context, ids []int64) (
 	}
 	versionByKey := make(map[taskVersionKey]*model.TaskVersion, len(needVersion))
 	if len(needVersion) > 0 {
-		versionRows, err := u.taskVersionRepo.List(ctx, &repo.TaskVersionGetReq{TaskIDs: taskIDs, Versions: versions})
+		versionResp, err := u.listTaskVersions(ctx, &taskListTaskVersionsReq{Query: &repo.TaskVersionGetReq{TaskIDs: taskIDs, Versions: versions}})
 		if err != nil {
 			return nil, err
 		}
-		for _, row := range versionRows {
+		for _, row := range versionResp.Rows {
 			key := taskVersionKey{taskID: row.TaskID, version: row.Version}
 			if _, ok := needVersion[key]; ok {
 				versionByKey[key] = row
@@ -712,8 +1155,8 @@ func (u *TaskUsecase) CheckExecutionRuntimes(ctx context.Context, ids []int64) (
 		}
 	}
 	now := time.Now()
-	result := make([]*model.TaskExecutionRuntime, 0, len(ids))
-	for _, id := range ids {
+	result := make([]*model.TaskExecutionRuntime, 0, len(req.IDs))
+	for _, id := range req.IDs {
 		row := recordByID[id]
 		if row == nil {
 			continue
@@ -747,17 +1190,45 @@ func (u *TaskUsecase) CheckExecutionRuntimes(ctx context.Context, ids []int64) (
 			State:             state,
 		})
 	}
-	return result, nil
+	return &taskCheckExecutionRuntimesResponse{Rows: result}, nil
 }
 
-func (u *TaskUsecase) MarkExecutionsUnknown(ctx context.Context, ids []int64) ([]*model.TaskExecutionRecord, error) {
-	if len(ids) == 0 {
-		return nil, nil
+type TaskMarkExecutionsUnknownReq struct {
+	IDs []int64
+}
+
+type TaskMarkExecutionsUnknownResponse struct {
+	Rows []*model.TaskExecutionRecord
+}
+
+func (u *TaskUsecase) MarkExecutionsUnknown(ctx context.Context, req *TaskMarkExecutionsUnknownReq) (*TaskMarkExecutionsUnknownResponse, error) {
+	if req == nil {
+		req = &TaskMarkExecutionsUnknownReq{}
 	}
-	records, err := u.taskExecutionRecordRepo.List(ctx, &repo.TaskExecutionRecordGetReq{IDs: ids})
+	resp, err := u.markExecutionsUnknown(ctx, &taskMarkExecutionsUnknownReq{IDs: req.IDs})
 	if err != nil {
 		return nil, err
 	}
+	return &TaskMarkExecutionsUnknownResponse{Rows: resp.Rows}, nil
+}
+
+type taskMarkExecutionsUnknownReq struct {
+	IDs []int64
+}
+
+type taskMarkExecutionsUnknownResponse struct {
+	Rows []*model.TaskExecutionRecord
+}
+
+func (u *TaskUsecase) markExecutionsUnknown(ctx context.Context, req *taskMarkExecutionsUnknownReq) (*taskMarkExecutionsUnknownResponse, error) {
+	if len(req.IDs) == 0 {
+		return &taskMarkExecutionsUnknownResponse{}, nil
+	}
+	recordsResp, err := u.listExecutionRecords(ctx, &taskListExecutionRecordsReq{Query: &repo.TaskExecutionRecordGetReq{IDs: req.IDs}})
+	if err != nil {
+		return nil, err
+	}
+	records := recordsResp.Rows
 	runningByTask := make(map[int64][]int64)
 	for _, row := range records {
 		if row.Status == schedulerenum.TaskExecutionStatusRunning {
@@ -766,11 +1237,11 @@ func (u *TaskUsecase) MarkExecutionsUnknown(ctx context.Context, ids []int64) ([
 	}
 	activeByID := make(map[int64]bool)
 	for taskID, executionIDs := range runningByTask {
-		activeRows, err := u.taskLockRepo.MapRunning(ctx, taskID, executionIDs)
+		mapResp, err := u.mapRunning(ctx, &taskMapRunningReq{TaskID: taskID, ExecutionRecordIDs: executionIDs})
 		if err != nil {
 			return nil, err
 		}
-		for id, active := range activeRows {
+		for id, active := range mapResp.Rows {
 			activeByID[id] = active
 		}
 	}
@@ -795,11 +1266,11 @@ func (u *TaskUsecase) MarkExecutionsUnknown(ctx context.Context, ids []int64) ([
 	}
 	versionByKey := make(map[taskVersionKey]*model.TaskVersion, len(needVersion))
 	if len(needVersion) > 0 {
-		versionRows, err := u.taskVersionRepo.List(ctx, &repo.TaskVersionGetReq{TaskIDs: taskIDs, Versions: versions})
+		versionResp, err := u.listTaskVersions(ctx, &taskListTaskVersionsReq{Query: &repo.TaskVersionGetReq{TaskIDs: taskIDs, Versions: versions}})
 		if err != nil {
 			return nil, err
 		}
-		for _, row := range versionRows {
+		for _, row := range versionResp.Rows {
 			key := taskVersionKey{taskID: row.TaskID, version: row.Version}
 			if _, ok := needVersion[key]; ok {
 				versionByKey[key] = row
@@ -828,10 +1299,185 @@ func (u *TaskUsecase) MarkExecutionsUnknown(ctx context.Context, ids []int64) ([
 			}
 		}
 	}
-	return u.taskExecutionRecordRepo.MarkUnknown(ctx, unknownIDs, now, "scheduler execution lost redis running heartbeat")
+	unknownResp, err := u.markUnknownExecutionRecords(ctx, &taskMarkUnknownExecutionRecordsReq{IDs: unknownIDs, FinishedAt: now, LastError: "scheduler execution lost redis running heartbeat"})
+	if err != nil {
+		return nil, err
+	}
+	return &taskMarkExecutionsUnknownResponse{Rows: unknownResp.Rows}, nil
 }
 
-func (u *TaskUsecase) StopRunning(ctx context.Context) error {
+type taskCreateExecutionRecordReq struct {
+	Record *model.TaskExecutionRecord
+	Status schedulerenum.TaskExecutionStatus
+}
+
+type taskCreateExecutionRecordResponse struct {
+	Record   *model.TaskExecutionRecord
+	Created  bool
+	Conflict bool
+}
+
+func (u *TaskUsecase) createExecutionRecord(ctx context.Context, req *taskCreateExecutionRecordReq) (*taskCreateExecutionRecordResponse, error) {
+	resp, err := u.taskExecutionRecordRepo.Create(ctx, &repo.TaskExecutionRecordCreateReq{Record: req.Record, Status: req.Status})
+	if err != nil {
+		return nil, err
+	}
+	return &taskCreateExecutionRecordResponse{Record: resp.Row, Created: resp.Created, Conflict: resp.Conflict}, nil
+}
+
+type taskMarkExecutionFinishedReq struct {
+	ID         int64
+	Status     schedulerenum.TaskExecutionStatus
+	FinishedAt time.Time
+	DurationMS int64
+	LastError  string
+}
+
+type taskMarkExecutionFinishedResponse struct {
+	Record  *model.TaskExecutionRecord
+	Updated bool
+}
+
+func (u *TaskUsecase) markExecutionFinished(ctx context.Context, req *taskMarkExecutionFinishedReq) (*taskMarkExecutionFinishedResponse, error) {
+	resp, err := u.taskExecutionRecordRepo.MarkFinished(ctx, &repo.TaskExecutionRecordMarkFinishedReq{ID: req.ID, Status: req.Status, FinishedAt: req.FinishedAt, DurationMS: req.DurationMS, LastError: req.LastError})
+	if err != nil {
+		return nil, err
+	}
+	return &taskMarkExecutionFinishedResponse{Record: resp.Row, Updated: resp.Updated}, nil
+}
+
+type taskReleaseRunningReq struct {
+	TaskID            int64
+	ExecutionRecordID int64
+	RunningToken      string
+	Exclusive         bool
+}
+
+func (u *TaskUsecase) releaseRunning(ctx context.Context, req *taskReleaseRunningReq) error {
+	_, err := u.taskLockRepo.ReleaseRunning(ctx, &repo.TaskRunningLockReq{TaskID: req.TaskID, ExecutionRecordID: req.ExecutionRecordID, RunningToken: req.RunningToken, Exclusive: req.Exclusive})
+	return err
+}
+
+type taskRegisterRunningReq struct {
+	TaskID            int64
+	ExecutionRecordID int64
+	RunningToken      string
+	Exclusive         bool
+	TTL               time.Duration
+}
+
+type taskRegisterRunningResponse struct {
+	OK bool
+}
+
+func (u *TaskUsecase) registerRunning(ctx context.Context, req *taskRegisterRunningReq) (*taskRegisterRunningResponse, error) {
+	resp, err := u.taskLockRepo.RegisterRunning(ctx, &repo.TaskRunningLockReq{TaskID: req.TaskID, ExecutionRecordID: req.ExecutionRecordID, RunningToken: req.RunningToken, Exclusive: req.Exclusive, TTL: req.TTL})
+	if err != nil {
+		return nil, err
+	}
+	return &taskRegisterRunningResponse{OK: resp.OK}, nil
+}
+
+type taskRefreshRunningReq struct {
+	TaskID            int64
+	ExecutionRecordID int64
+	RunningToken      string
+	Exclusive         bool
+	TTL               time.Duration
+}
+
+type taskRefreshRunningResponse struct {
+	OK bool
+}
+
+func (u *TaskUsecase) refreshRunning(ctx context.Context, req *taskRefreshRunningReq) (*taskRefreshRunningResponse, error) {
+	resp, err := u.taskLockRepo.RefreshRunning(ctx, &repo.TaskRunningLockReq{TaskID: req.TaskID, ExecutionRecordID: req.ExecutionRecordID, RunningToken: req.RunningToken, Exclusive: req.Exclusive, TTL: req.TTL})
+	if err != nil {
+		return nil, err
+	}
+	return &taskRefreshRunningResponse{OK: resp.OK}, nil
+}
+
+type taskMapRunningReq struct {
+	TaskID             int64
+	ExecutionRecordIDs []int64
+}
+
+type taskMapRunningResponse struct {
+	Rows map[int64]bool
+}
+
+func (u *TaskUsecase) mapRunning(ctx context.Context, req *taskMapRunningReq) (*taskMapRunningResponse, error) {
+	resp, err := u.taskLockRepo.MapRunning(ctx, &repo.TaskRunningMapReq{TaskID: req.TaskID, ExecutionRecordIDs: req.ExecutionRecordIDs})
+	if err != nil {
+		return nil, err
+	}
+	return &taskMapRunningResponse{Rows: resp.Rows}, nil
+}
+
+type taskListExecutionRecordsReq struct {
+	Query *repo.TaskExecutionRecordGetReq
+}
+
+type taskListExecutionRecordsResponse struct {
+	Rows []*model.TaskExecutionRecord
+}
+
+func (u *TaskUsecase) listExecutionRecords(ctx context.Context, req *taskListExecutionRecordsReq) (*taskListExecutionRecordsResponse, error) {
+	resp, err := u.taskExecutionRecordRepo.List(ctx, req.Query)
+	if err != nil {
+		return nil, err
+	}
+	return &taskListExecutionRecordsResponse{Rows: resp.Rows}, nil
+}
+
+type taskListTaskVersionsReq struct {
+	Query *repo.TaskVersionGetReq
+}
+
+type taskListTaskVersionsResponse struct {
+	Rows []*model.TaskVersion
+}
+
+func (u *TaskUsecase) listTaskVersions(ctx context.Context, req *taskListTaskVersionsReq) (*taskListTaskVersionsResponse, error) {
+	resp, err := u.taskVersionRepo.List(ctx, req.Query)
+	if err != nil {
+		return nil, err
+	}
+	return &taskListTaskVersionsResponse{Rows: resp.Rows}, nil
+}
+
+type taskMarkUnknownExecutionRecordsReq struct {
+	IDs        []int64
+	FinishedAt time.Time
+	LastError  string
+}
+
+type taskMarkUnknownExecutionRecordsResponse struct {
+	Rows []*model.TaskExecutionRecord
+}
+
+func (u *TaskUsecase) markUnknownExecutionRecords(ctx context.Context, req *taskMarkUnknownExecutionRecordsReq) (*taskMarkUnknownExecutionRecordsResponse, error) {
+	resp, err := u.taskExecutionRecordRepo.MarkUnknown(ctx, &repo.TaskExecutionRecordMarkUnknownReq{IDs: req.IDs, FinishedAt: req.FinishedAt, LastError: req.LastError})
+	if err != nil {
+		return nil, err
+	}
+	return &taskMarkUnknownExecutionRecordsResponse{Rows: resp.Rows}, nil
+}
+
+type TaskStopRunningReq struct{}
+
+func (u *TaskUsecase) StopRunning(ctx context.Context, req *TaskStopRunningReq) error {
+	if req == nil {
+		req = &TaskStopRunningReq{}
+	}
+	return u.stopRunning(ctx, &taskStopRunningReq{})
+}
+
+type taskStopRunningReq struct{}
+
+func (u *TaskUsecase) stopRunning(ctx context.Context, req *taskStopRunningReq) error {
+	_ = req
 	u.runningCancels.Range(func(_, value any) bool {
 		value.(context.CancelFunc)()
 		return true

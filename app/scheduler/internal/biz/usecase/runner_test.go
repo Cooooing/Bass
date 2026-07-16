@@ -34,7 +34,7 @@ func TestSchedulerRunnerScheduleFieldSkipsDatabase(t *testing.T) {
 	scheduledAt := time.Date(2026, 7, 4, 10, 0, 0, 0, time.UTC)
 	taskLockRepo.schedules[executionPeriodKey(task.ID, scheduledAt)] = "token"
 
-	if _, err := runner.taskUsecase.ScheduleExecution(context.Background(), task, scheduledAt, schedulerenum.TaskTriggerTypeSchedule); err != nil {
+	if _, err := runner.taskUsecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: scheduledAt, TriggerType: schedulerenum.TaskTriggerTypeSchedule}); err != nil {
 		t.Fatalf("ScheduleExecution returned error: %v", err)
 	}
 
@@ -52,7 +52,7 @@ func TestSchedulerRunnerScheduleConflictSkipsExecution(t *testing.T) {
 	runner := newTestSchedulerRunner(t, &fakeTaskRepo{task: task}, executionRepo, &fakeTask{})
 	scheduledAt := time.Date(2026, 7, 4, 10, 0, 0, 0, time.UTC)
 
-	if _, err := runner.taskUsecase.ScheduleExecution(context.Background(), task, scheduledAt, schedulerenum.TaskTriggerTypeSchedule); err != nil {
+	if _, err := runner.taskUsecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: scheduledAt, TriggerType: schedulerenum.TaskTriggerTypeSchedule}); err != nil {
 		t.Fatalf("ScheduleExecution returned error: %v", err)
 	}
 

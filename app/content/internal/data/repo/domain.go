@@ -2,12 +2,11 @@ package repo
 
 import (
 	cerrors "common/proto/gen/common/errors"
+	"content/internal/biz/base"
 	"context"
 
 	"common/pkg/apperror"
-	"common/pkg/server"
 	utilent "common/pkg/util/ent"
-	"common/proto/gen/common"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
@@ -34,7 +33,8 @@ func (r *DomainRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *DomainRepo) Save(ctx context.Context, domainModel *model.Domain) (*model.Domain, error) {
+func (r *DomainRepo) Save(ctx context.Context, req *repo.DomainSaveReq) (*repo.DomainSaveResponse, error) {
+	domainModel := req.Domain
 	save, err := r.getClient(ctx).Domain.Create().
 		SetName(domainModel.Name).
 		SetNillableDescription(domainModel.Description).
@@ -48,7 +48,7 @@ func (r *DomainRepo) Save(ctx context.Context, domainModel *model.Domain) (*mode
 	if err != nil {
 		return nil, err
 	}
-	return &model.Domain{
+	return &repo.DomainSaveResponse{Domain: &model.Domain{
 		ID:          save.ID,
 		Name:        save.Name,
 		Description: save.Description,
@@ -60,10 +60,11 @@ func (r *DomainRepo) Save(ctx context.Context, domainModel *model.Domain) (*mode
 		UpdatedAt:   save.UpdatedAt,
 		CreatedBy:   save.CreatedBy,
 		UpdatedBy:   save.UpdatedBy,
-	}, nil
+	}}, nil
 }
 
-func (r *DomainRepo) Saves(ctx context.Context, domains []*model.Domain) ([]*model.Domain, error) {
+func (r *DomainRepo) Saves(ctx context.Context, req *repo.DomainSavesReq) (*repo.DomainSavesResponse, error) {
+	domains := req.Domains
 	client := r.getClient(ctx)
 	creates := make([]*gen.DomainCreate, 0, len(domains))
 	for i := range domains {
@@ -100,10 +101,11 @@ func (r *DomainRepo) Saves(ctx context.Context, domains []*model.Domain) ([]*mod
 			UpdatedBy:   save[i].UpdatedBy,
 		}
 	}
-	return res, nil
+	return &repo.DomainSavesResponse{Rows: res}, nil
 }
 
-func (r *DomainRepo) Update(ctx context.Context, domainModel *model.Domain) (*model.Domain, error) {
+func (r *DomainRepo) Update(ctx context.Context, req *repo.DomainUpdateReq) (*repo.DomainUpdateResponse, error) {
+	domainModel := req.Domain
 	save, err := r.getClient(ctx).Domain.UpdateOneID(domainModel.ID).
 		SetName(domainModel.Name).
 		SetNillableDescription(domainModel.Description).
@@ -116,7 +118,7 @@ func (r *DomainRepo) Update(ctx context.Context, domainModel *model.Domain) (*mo
 	if err != nil {
 		return nil, err
 	}
-	return &model.Domain{
+	return &repo.DomainUpdateResponse{Domain: &model.Domain{
 		ID:          save.ID,
 		Name:        save.Name,
 		Description: save.Description,
@@ -128,10 +130,10 @@ func (r *DomainRepo) Update(ctx context.Context, domainModel *model.Domain) (*mo
 		UpdatedAt:   save.UpdatedAt,
 		CreatedBy:   save.CreatedBy,
 		UpdatedBy:   save.UpdatedBy,
-	}, nil
+	}}, nil
 }
 
-func (r *DomainRepo) Get(ctx context.Context, req *repo.DomainGetReq) (*model.Domain, error) {
+func (r *DomainRepo) Get(ctx context.Context, req *repo.DomainGetReq) (*repo.DomainGetResponse, error) {
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	d, err := query.First(ctx)
@@ -141,7 +143,7 @@ func (r *DomainRepo) Get(ctx context.Context, req *repo.DomainGetReq) (*model.Do
 	if err != nil {
 		return nil, err
 	}
-	return &model.Domain{
+	return &repo.DomainGetResponse{Domain: &model.Domain{
 		ID:          d.ID,
 		Name:        d.Name,
 		Description: d.Description,
@@ -153,10 +155,10 @@ func (r *DomainRepo) Get(ctx context.Context, req *repo.DomainGetReq) (*model.Do
 		UpdatedAt:   d.UpdatedAt,
 		CreatedBy:   d.CreatedBy,
 		UpdatedBy:   d.UpdatedBy,
-	}, nil
+	}}, nil
 }
 
-func (r *DomainRepo) List(ctx context.Context, req *repo.DomainGetReq) ([]*model.Domain, error) {
+func (r *DomainRepo) List(ctx context.Context, req *repo.DomainGetReq) (*repo.DomainListResponse, error) {
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -180,37 +182,41 @@ func (r *DomainRepo) List(ctx context.Context, req *repo.DomainGetReq) ([]*model
 		}
 		domains = append(domains, domainItem)
 	}
-	return domains, nil
+	return &repo.DomainListResponse{Rows: domains}, nil
 }
 
-func (r *DomainRepo) Map(ctx context.Context, req *repo.DomainGetReq) (map[int64]*model.Domain, error) {
-	list, err := r.List(ctx, req)
+func (r *DomainRepo) Map(ctx context.Context, req *repo.DomainGetReq) (*repo.DomainMapResponse, error) {
+	listResponse, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return lo.SliceToMap(list, func(item *model.Domain) (int64, *model.Domain) {
+	return &repo.DomainMapResponse{Rows: lo.SliceToMap(listResponse.Rows, func(item *model.Domain) (int64, *model.Domain) {
 		return item.ID, item
-	}), nil
+	})}, nil
 }
 
-func (r *DomainRepo) Count(ctx context.Context, req *repo.DomainGetReq) (int, error) {
+func (r *DomainRepo) Count(ctx context.Context, req *repo.DomainGetReq) (*repo.DomainCountResponse, error) {
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
-	return query.Count(ctx)
+	count, err := query.Count(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.DomainCountResponse{Count: count}, nil
 }
 
-func (r *DomainRepo) Page(ctx context.Context, page *common.PageRequest, req *repo.DomainGetReq) ([]*model.Domain, *common.PageReply, error) {
-	page = server.PageValid(page)
+func (r *DomainRepo) Page(ctx context.Context, req *repo.DomainGetReq) (*repo.DomainPageResponse, error) {
+	page := normalizePage(req.Page)
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
 	total, err := countQuery.Count(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	domains := make([]*model.Domain, 0, len(list))
 	for i := range list {
@@ -229,10 +235,13 @@ func (r *DomainRepo) Page(ctx context.Context, page *common.PageRequest, req *re
 		}
 		domains = append(domains, domainItem)
 	}
-	return domains, &common.PageReply{
-		Total: uint32(total),
-		Page:  page.Page,
-		Size:  page.Size,
+	return &repo.DomainPageResponse{
+		Rows: domains,
+		Page: &base.PageResponse{
+			Total: int64(total),
+			Page:  page.Page,
+			Size:  page.Size,
+		},
 	}, nil
 }
 

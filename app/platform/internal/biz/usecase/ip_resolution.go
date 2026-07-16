@@ -39,10 +39,24 @@ func NewIpResolutionUsecase(conf *config.Bootstrap, logger *slog.Logger) (*IpRes
 	return &IpResolutionUsecase{conf: conf, log: logger, ip2region: ip2region}, cleanup, nil
 }
 
-func (d *IpResolutionUsecase) Get(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
+type IpResolutionGetReq struct {
+	IP string
+}
+
+type IpResolutionGetResponse struct {
+	Info *commonModel.IpInfo
+}
+
+func (d *IpResolutionUsecase) Get(ctx context.Context, req *IpResolutionGetReq) (*IpResolutionGetResponse, error) {
+	if req == nil {
+		req = &IpResolutionGetReq{}
+	}
+	ip := req.IP
 	def := "unknown"
 	if d.ip2region == nil || ip == "" {
-		return &commonModel.IpInfo{Ip: ip, Country: def, Province: def, City: def, ISP: def, CountryCode: def}, nil
+		return &IpResolutionGetResponse{
+			Info: &commonModel.IpInfo{Ip: ip, Country: def, Province: def, City: def, ISP: def, CountryCode: def},
+		}, nil
 	}
 	region, err := d.ip2region.SearchByStr(ip)
 	if err != nil {
@@ -58,5 +72,7 @@ func (d *IpResolutionUsecase) Get(ctx context.Context, ip string) (*commonModel.
 		}
 		return s
 	}
-	return &commonModel.IpInfo{Ip: ip, Country: clean(parts[0]), Province: clean(parts[1]), City: clean(parts[2]), ISP: clean(parts[3]), CountryCode: clean(parts[4])}, nil
+	return &IpResolutionGetResponse{
+		Info: &commonModel.IpInfo{Ip: ip, Country: clean(parts[0]), Province: clean(parts[1]), City: clean(parts[2]), ISP: clean(parts[3]), CountryCode: clean(parts[4])},
+	}, nil
 }

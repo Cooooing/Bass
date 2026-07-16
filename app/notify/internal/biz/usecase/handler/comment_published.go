@@ -24,10 +24,11 @@ func (h *CommentPublishedHandler) Build(ctx context.Context, event *enums.Event)
 	if payload == nil || payload.GetCommentId() == 0 || h.contentClient == nil {
 		return nil, nil
 	}
-	comment, err := h.contentClient.GetComment(ctx, payload.GetCommentId())
+	commentResponse, err := h.contentClient.GetComment(ctx, &repo.ContentGetCommentReq{CommentID: payload.GetCommentId()})
 	if err != nil {
 		return nil, err
 	}
+	comment := commentResponse.Comment
 	templateData := model.CommentPublishedTemplateData{
 		Comment: h.commentTemplateData(comment),
 	}

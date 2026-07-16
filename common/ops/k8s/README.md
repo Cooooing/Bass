@@ -30,12 +30,12 @@ helm repo update
 
 `dev/test/prod/secrets.yaml` 按组件拆分 Secret：
 
-| Secret | key | 使用方 |
-|---|---|---|
-| `bass-postgres-secret` | `password` | PostgreSQL |
-| `bass-redis-secret` | `redis-password` | Redis |
-| `bass-minio-secret` | `rootUser`、`rootPassword` | MinIO |
-| `bass-nats-secret` | `NATS_USER`、`NATS_PASSWORD` | NATS |
+| Secret                 | key                         | 使用方        |
+|------------------------|-----------------------------|------------|
+| `bass-postgres-secret` | `password`                  | PostgreSQL |
+| `bass-redis-secret`    | `redis-password`            | Redis      |
+| `bass-minio-secret`    | `rootUser`、`rootPassword`   | MinIO      |
+| `bass-nats-secret`     | `NATS_USER`、`NATS_PASSWORD` | NATS       |
 
 `monitoring/secrets.yaml` 使用 `monitoring-grafana-secret`，包含 `GRAFANA_ADMIN_USER` 和 `GRAFANA_ADMIN_PASSWORD`。
 
@@ -62,9 +62,9 @@ helm upgrade --install bass-minio minio/minio -n bass-dev --create-namespace -f 
 
 每个业务环境的路由资源仍放在各自命名空间：
 
-| 环境 | HTTP 路由 | TCP 路由 |
-|---|---|---|
-| dev | `dev/ingress.yaml` | `dev/ingress-tcp.yaml` |
+| 环境   | HTTP 路由             | TCP 路由                  |
+|------|---------------------|-------------------------|
+| dev  | `dev/ingress.yaml`  | `dev/ingress-tcp.yaml`  |
 | test | `test/ingress.yaml` | `test/ingress-tcp.yaml` |
 | prod | `prod/ingress.yaml` | `prod/ingress-tcp.yaml` |
 
@@ -99,20 +99,20 @@ helm list -n bass-dev
 192.168.100.10 consul.dev.bass.local minio.dev.bass.local s3.dev.bass.local nats.dev.bass.local
 ```
 
-| 服务 | 地址 |
-|------|------|
-| Consul UI | `http://consul.dev.bass.local` |
-| MinIO Console | `http://minio.dev.bass.local` |
-| MinIO S3 | `http://s3.dev.bass.local` |
-| NATS Monitor | `http://nats.dev.bass.local` |
+| 服务            | 地址                             |
+|---------------|--------------------------------|
+| Consul UI     | `http://consul.dev.bass.local` |
+| MinIO Console | `http://minio.dev.bass.local`  |
+| MinIO S3      | `http://s3.dev.bass.local`     |
+| NATS Monitor  | `http://nats.dev.bass.local`   |
 
 TCP 服务直接使用节点 IP 和标准端口：
 
-| 服务 | 地址 |
-|------|------|
+| 服务         | 地址                    |
+|------------|-----------------------|
 | PostgreSQL | `192.168.100.10:5432` |
-| Redis | `192.168.100.10:6379` |
-| NATS | `192.168.100.10:4222` |
+| Redis      | `192.168.100.10:6379` |
+| NATS       | `192.168.100.10:4222` |
 
 ## 生产环境
 

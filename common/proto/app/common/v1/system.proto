@@ -17,7 +17,7 @@ service CommonSystemService {
 message HealthSystem {
   message Request {}
   message Response {
-      // 响应消息。
-      string message = 1;
-    }
+    // 响应消息。
+    string message = 1;
+  }
 }

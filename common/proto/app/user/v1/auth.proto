@@ -20,113 +20,113 @@ service AuthService {
 
 message StartEmailRegistration {
   message Request {
-      string email = 1;
-      string password = 2;
-      string name = 3;
-      optional string nickname = 4;
-    }
+    string email = 1;
+    string password = 2;
+    string name = 3;
+    optional string nickname = 4;
+  }
   message Response {
-      string code_token = 1;
-      string code = 2;
-    }
+    string code_token = 1;
+    string code = 2;
+  }
 }
 
 message VerifyEmailRegistration {
   message Request {
-      string code = 1;
-      string code_token = 2;
-    }
+    string code = 1;
+    string code_token = 2;
+  }
   message Response {}
 }
 
 message StartPhoneRegistration {
   message Request {
-      string phone = 1;
-      string password = 2;
-      string name = 3;
-      optional string nickname = 4;
-    }
+    string phone = 1;
+    string password = 2;
+    string name = 3;
+    optional string nickname = 4;
+  }
   message Response {
-      string code_token = 1;
-      string code = 2;
-    }
+    string code_token = 1;
+    string code = 2;
+  }
 }
 
 message VerifyPhoneRegistration {
   message Request {
-      string code = 1;
-      string code_token = 2;
-    }
+    string code = 1;
+    string code_token = 2;
+  }
   message Response {}
 }
 
 message LoginByPassword {
   message Request {
-      string account = 1;
-      string password = 2;
-      string ip = 3;
-      string country = 4;
-      string country_code = 5;
-      string province = 6;
-      string city = 7;
-      string isp = 8;
-      string user_agent = 9;
-      string device_id = 10;
-      string platform = 11;
-      string request_id = 12;
-    }
+    string account = 1;
+    string password = 2;
+    string ip = 3;
+    string country = 4;
+    string country_code = 5;
+    string province = 6;
+    string city = 7;
+    string isp = 8;
+    string user_agent = 9;
+    string device_id = 10;
+    string platform = 11;
+    string request_id = 12;
+  }
   message Response {
 
     message Account {
-        AccountBasic basic = 1;
-        AccountContact contact = 2;
-      }
+      AccountBasic basic = 1;
+      AccountContact contact = 2;
+    }
 
     message AccountBasic {
-        int64 id = 1;
-        string name = 2;
-        optional string nickname = 3;
-        optional string url = 4;
-        optional string avatar_url = 5;
-        optional string introduction = 6;
-        MBTI mbti = 7;
-        AccountStatus status = 8;
-        optional int32 follow_count = 10;
-        optional int32 follower_count = 11;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
+      int64 id = 1;
+      string name = 2;
+      optional string nickname = 3;
+      optional string url = 4;
+      optional string avatar_url = 5;
+      optional string introduction = 6;
+      MBTI mbti = 7;
+      AccountStatus status = 8;
+      optional int32 follow_count = 10;
+      optional int32 follower_count = 11;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
+    }
 
     message AccountContact {
-        int64 user_id = 1;
-        optional string email = 2;
-        optional string phone = 3;
-      }
-      string token = 1;
-      Account account = 2;
+      int64 user_id = 1;
+      optional string email = 2;
+      optional string phone = 3;
     }
+    string token = 1;
+    Account account = 2;
+  }
 }
 
 message Logout {
   message Request {
-      string token = 1;
-    }
+    string token = 1;
+  }
   message Response {}
 }
 
 message ParseToken {
   message Request {
-      string token = 1;
-    }
+    string token = 1;
+  }
   message Response {
 
     message TokenUser {
-        int64 id = 1;
-        string name = 2;
-        string nickname = 3;
-        common.enums.Language language = 4;
-        string timezone = 5;
-      }
-      TokenUser user = 1;
+      int64 id = 1;
+      string name = 2;
+      string nickname = 3;
+      common.enums.Language language = 4;
+      string timezone = 5;
     }
+    TokenUser user = 1;
+  }
 }

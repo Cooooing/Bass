@@ -6,8 +6,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/redis/go-redis/v9"
 	"log/slog"
+
+	"github.com/redis/go-redis/v9"
 )
 
 type AsynqCache struct {

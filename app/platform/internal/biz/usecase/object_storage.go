@@ -4,7 +4,7 @@ import (
 	"common/proto/gen/common"
 	"context"
 
-	base "platform/internal/biz/base"
+	"platform/internal/biz/base"
 	"platform/internal/biz/model"
 	"platform/internal/biz/repo"
 	"platform/internal/config"

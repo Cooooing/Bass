@@ -9,14 +9,15 @@ import (
 	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
 	"context"
-	base "user/internal/biz/base"
+	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/config"
 	"user/internal/enum"
 
-	"github.com/sony/sonyflake/v2"
 	"log/slog"
+
+	"github.com/sony/sonyflake/v2"
 )
 
 type AuthUsecase struct {

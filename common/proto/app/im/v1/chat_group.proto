@@ -19,19 +19,19 @@ service IMChatGroupService {
 
 message CreateChatGroup {
   message Request {
-      int64 user_id = 1; // 用户 ID
-      string name = 2; // 群名称
-      optional string avatar = 3; // 群头像
-      optional string introduction = 4; // 群简介
-    }
+    int64 user_id = 1; // 用户 ID
+    string name = 2; // 群名称
+    optional string avatar = 3; // 群头像
+    optional string introduction = 4; // 群简介
+  }
   message Response {}
 }
 
 message DismissChatGroup {
   message Request {
-      int64 id = 1; // 群组ID
-      int64 user_id = 2; // 用户 ID
-    }
+    int64 id = 1; // 群组ID
+    int64 user_id = 2; // 用户 ID
+  }
   message Response {}
 }
 
@@ -39,61 +39,61 @@ message ListChatGroups {
   message Request {
 
     message ChatGroupQueryParams {
-        repeated int64 ids = 2; // 主键
-        repeated string uuids = 3; // UUID 列表
-        optional int32 notification_type = 5; // 通知类型
-        repeated int64 sender_ids = 6; // 发送者ID
-        optional ChatGroupStatus status = 8; // 状态
-      }
-      .common.api.app.common.PageRequest page = 1; // 分页参数
-      ChatGroupQueryParams query = 2; // 查询参数
+      repeated int64 ids = 2; // 主键
+      repeated string uuids = 3; // UUID 列表
+      optional int32 notification_type = 5; // 通知类型
+      repeated int64 sender_ids = 6; // 发送者ID
+      optional ChatGroupStatus status = 8; // 状态
     }
+    .common.api.app.common.PageRequest page = 1; // 分页参数
+    ChatGroupQueryParams query = 2; // 查询参数
+  }
   message Response {
 
     message ChatGroup {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        int64 id = 1; // 主键
-        string name = 2; // 群名称
-        optional string avatar = 3; // 群头像
-        optional string introduction = 4; // 群简介
-        ChatGroupStatus status = 5; // 群状态
-        AccountBasic owner = 6; // 群主信息
-        uint32 member_count = 7; // 群成员数
-        ChatMessage last_message = 9; // 最后一条消息
-      }
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      int64 id = 1; // 主键
+      string name = 2; // 群名称
+      optional string avatar = 3; // 群头像
+      optional string introduction = 4; // 群简介
+      ChatGroupStatus status = 5; // 群状态
+      AccountBasic owner = 6; // 群主信息
+      uint32 member_count = 7; // 群成员数
+      ChatMessage last_message = 9; // 最后一条消息
+    }
 
     message AccountBasic {
-        int64 id = 1;
-        string name = 2;
-        optional string nickname = 3;
-        optional string url = 4;
-        optional string avatar_url = 5;
-        optional string introduction = 6;
-        .common.api.app.user.v1.MBTI mbti = 7;
-        .common.api.app.user.v1.AccountStatus status = 8;
-        optional int32 follow_count = 10;
-        optional int32 follower_count = 11;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
+      int64 id = 1;
+      string name = 2;
+      optional string nickname = 3;
+      optional string url = 4;
+      optional string avatar_url = 5;
+      optional string introduction = 6;
+      .common.api.app.user.v1.MBTI mbti = 7;
+      .common.api.app.user.v1.AccountStatus status = 8;
+      optional int32 follow_count = 10;
+      optional int32 follower_count = 11;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
+    }
 
     message ChatMessage {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
-        int64 id = 1; // 主键
-        AccountBasic sender = 2; // 发送者
-        int64 receiver_user_id = 3; // 接收用户 ID
-        AccountBasic receiver_user = 4; // 接收用户
-        int64 receiver_group_id = 5; // 接收群组 ID
-        ChatGroup receiver_group = 6; // 接收群组
-        MessageType type = 7; // 消息类型
-        string content = 8; // 内容
-        MessageStatus status = 9; // 状态
-      }
-      .common.api.app.common.PageResponse page = 1; // 分页信息
-      repeated ChatGroup rows = 2; // 群组列表
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
+      int64 id = 1; // 主键
+      AccountBasic sender = 2; // 发送者
+      int64 receiver_user_id = 3; // 接收用户 ID
+      AccountBasic receiver_user = 4; // 接收用户
+      int64 receiver_group_id = 5; // 接收群组 ID
+      ChatGroup receiver_group = 6; // 接收群组
+      MessageType type = 7; // 消息类型
+      string content = 8; // 内容
+      MessageStatus status = 9; // 状态
     }
+    .common.api.app.common.PageResponse page = 1; // 分页信息
+    repeated ChatGroup rows = 2; // 群组列表
+  }
 }

@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"context"
 	"image/png"
-	base "user/internal/biz/base"
+	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/config"
 
-	"github.com/MuhammadSaim/goavatar"
 	"log/slog"
+
+	"github.com/MuhammadSaim/goavatar"
 )
 
 type AccountUsecase struct {

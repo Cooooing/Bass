@@ -2,16 +2,16 @@
 -- 当前只初始化验证码模板，其他业务通知模板暂不预置。
 
 WITH rule AS (
-	INSERT INTO notify_notification_rule (event_type, channel, language, enabled, created_at, updated_at)
-	VALUES ('user_email_verification_code', 'email', 'zh_CN', true, NOW(), NOW())
-	ON CONFLICT (event_type, channel, language) DO UPDATE
-	SET enabled = EXCLUDED.enabled, updated_at = NOW()
-	RETURNING id
-)
-INSERT INTO notify_notification_email_template (rule_id, subject_template, body_template, content_type, created_at, updated_at)
+    INSERT INTO notify_notification_rule (event_type, channel, language, enabled, created_at, updated_at)
+        VALUES ('user_email_verification_code', 'email', 'zh_CN', true, NOW(), NOW())
+        ON CONFLICT (event_type, channel, language) DO UPDATE
+            SET enabled = EXCLUDED.enabled, updated_at = NOW()
+        RETURNING id)
+INSERT
+INTO notify_notification_email_template (rule_id, subject_template, body_template, content_type, created_at, updated_at)
 SELECT id,
-	'Bass 验证码',
-	$html$<!doctype html>
+       'Bass 验证码',
+       $html$<!doctype html>
 <html lang="zh-CN">
 <head>
 	<meta charset="utf-8">
@@ -30,43 +30,43 @@ SELECT id,
 	</div>
 </body>
 </html>$html$,
-	'text/html',
-	NOW(),
-	NOW()
+       'text/html',
+       NOW(),
+       NOW()
 FROM rule
 ON CONFLICT (rule_id) DO UPDATE
-SET subject_template = EXCLUDED.subject_template,
-	body_template = EXCLUDED.body_template,
-	content_type = EXCLUDED.content_type,
-	updated_at = NOW();
+    SET subject_template = EXCLUDED.subject_template,
+        body_template    = EXCLUDED.body_template,
+        content_type     = EXCLUDED.content_type,
+        updated_at       = NOW();
 
 WITH rule AS (
-	INSERT INTO notify_notification_rule (event_type, channel, language, enabled, created_at, updated_at)
-	VALUES ('user_phone_verification_code', 'tencent_sms', 'zh_CN', true, NOW(), NOW())
-	ON CONFLICT (event_type, channel, language) DO UPDATE
-	SET enabled = EXCLUDED.enabled, updated_at = NOW()
-	RETURNING id
-)
-INSERT INTO notify_notification_tencent_sms_template (
-	rule_id,
-	sms_sdk_app_id,
-	sign_name,
-	provider_template_id,
-	param_templates,
-	created_at,
-	updated_at
-)
+    INSERT INTO notify_notification_rule (event_type, channel, language, enabled, created_at, updated_at)
+        VALUES ('user_phone_verification_code', 'tencent_sms', 'zh_CN', true, NOW(), NOW())
+        ON CONFLICT (event_type, channel, language) DO UPDATE
+            SET enabled = EXCLUDED.enabled, updated_at = NOW()
+        RETURNING id)
+INSERT
+INTO notify_notification_tencent_sms_template (rule_id,
+                                               sms_sdk_app_id,
+                                               sign_name,
+                                               provider_template_id,
+                                               param_templates,
+                                               created_at,
+                                               updated_at)
 SELECT id,
-	'',
-	'',
-	'',
-	'["{{.Code}}"]'::jsonb,
-	NOW(),
-	NOW()
+       '',
+       '',
+       '',
+       '[
+         "{{.Code}}"
+       ]'::jsonb,
+       NOW(),
+       NOW()
 FROM rule
 ON CONFLICT (rule_id) DO UPDATE
-SET sms_sdk_app_id = EXCLUDED.sms_sdk_app_id,
-	sign_name = EXCLUDED.sign_name,
-	provider_template_id = EXCLUDED.provider_template_id,
-	param_templates = EXCLUDED.param_templates,
-	updated_at = NOW();
+    SET sms_sdk_app_id = EXCLUDED.sms_sdk_app_id,
+        sign_name = EXCLUDED.sign_name,
+        provider_template_id = EXCLUDED.provider_template_id,
+        param_templates = EXCLUDED.param_templates,
+        updated_at = NOW();

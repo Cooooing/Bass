@@ -22,110 +22,110 @@ service RelationService {
 
 message FollowRelation {
   message Request {
-      int64 actor_id = 1;
-      int64 target_id = 2;
-    }
+    int64 actor_id = 1;
+    int64 target_id = 2;
+  }
   message Response {}
 }
 
 message UnfollowRelation {
   message Request {
-      int64 actor_id = 1;
-      int64 target_id = 2;
-    }
+    int64 actor_id = 1;
+    int64 target_id = 2;
+  }
   message Response {}
 }
 
 message BlockRelation {
   message Request {
-      int64 actor_id = 1;
-      int64 target_id = 2;
-    }
+    int64 actor_id = 1;
+    int64 target_id = 2;
+  }
   message Response {}
 }
 
 message UnblockRelation {
   message Request {
-      int64 actor_id = 1;
-      int64 target_id = 2;
-    }
+    int64 actor_id = 1;
+    int64 target_id = 2;
+  }
   message Response {}
 }
 
 message ListFollowingRelations {
   message Request {
-      .common.api.app.common.PageRequest page = 1;
-      int64 user_id = 2;
-    }
+    .common.api.app.common.PageRequest page = 1;
+    int64 user_id = 2;
+  }
   message Response {
 
     message Relation {
-        int64 id = 1;
-        RelationType type = 2;
-        int64 actor_id = 3;
-        int64 target_id = 4;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
-      .common.api.app.common.PageResponse page = 1;
-      repeated Relation rows = 2;
+      int64 id = 1;
+      RelationType type = 2;
+      int64 actor_id = 3;
+      int64 target_id = 4;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
     }
+    .common.api.app.common.PageResponse page = 1;
+    repeated Relation rows = 2;
+  }
 }
 
 message ListFollowersRelations {
   message Request {
-      .common.api.app.common.PageRequest page = 1;
-      int64 user_id = 2;
-    }
+    .common.api.app.common.PageRequest page = 1;
+    int64 user_id = 2;
+  }
   message Response {
 
     message Relation {
-        int64 id = 1;
-        RelationType type = 2;
-        int64 actor_id = 3;
-        int64 target_id = 4;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
-      .common.api.app.common.PageResponse page = 1;
-      repeated Relation rows = 2;
+      int64 id = 1;
+      RelationType type = 2;
+      int64 actor_id = 3;
+      int64 target_id = 4;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
     }
+    .common.api.app.common.PageResponse page = 1;
+    repeated Relation rows = 2;
+  }
 }
 
 message ListBlockedRelations {
   message Request {
-      .common.api.app.common.PageRequest page = 1;
-      int64 user_id = 2;
-    }
+    .common.api.app.common.PageRequest page = 1;
+    int64 user_id = 2;
+  }
   message Response {
 
     message Relation {
-        int64 id = 1;
-        RelationType type = 2;
-        int64 actor_id = 3;
-        int64 target_id = 4;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
-      .common.api.app.common.PageResponse page = 1;
-      repeated Relation rows = 2;
+      int64 id = 1;
+      RelationType type = 2;
+      int64 actor_id = 3;
+      int64 target_id = 4;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
     }
+    .common.api.app.common.PageResponse page = 1;
+    repeated Relation rows = 2;
+  }
 }
 
 message MapRelationStatuses {
   message Request {
-      int64 actor_id = 1;
-      repeated int64 target_ids = 2;
-    }
+    int64 actor_id = 1;
+    repeated int64 target_ids = 2;
+  }
   message Response {
 
     message RelationStatus {
-        int64 target_id = 1;
-        bool following = 2;
-        bool followed_by = 3;
-        bool blocking = 4;
-        bool blocked_by = 5;
-      }
-      map<int64, RelationStatus> statuses = 1;
+      int64 target_id = 1;
+      bool following = 2;
+      bool followed_by = 3;
+      bool blocking = 4;
+      bool blocked_by = 5;
     }
+    map<int64, RelationStatus> statuses = 1;
+  }
 }

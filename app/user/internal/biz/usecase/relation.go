@@ -6,7 +6,7 @@ import (
 
 	"common/pkg/apperror"
 	commonenums "common/proto/gen/common/enums"
-	base "user/internal/biz/base"
+	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/enum"

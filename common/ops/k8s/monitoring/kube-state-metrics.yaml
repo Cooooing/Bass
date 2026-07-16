@@ -9,7 +9,7 @@ kind: ClusterRole
 metadata:
   name: kube-state-metrics
 rules:
-  - apiGroups: [""]
+  - apiGroups: [ "" ]
     resources:
       - nodes
       - pods
@@ -22,40 +22,40 @@ rules:
       - namespaces
       - configmaps
       - secrets
-    verbs: ["list", "watch"]
-  - apiGroups: ["extensions", "apps"]
+    verbs: [ "list", "watch" ]
+  - apiGroups: [ "extensions", "apps" ]
     resources:
       - daemonsets
       - deployments
       - replicasets
       - statefulsets
-    verbs: ["list", "watch"]
-  - apiGroups: ["batch"]
+    verbs: [ "list", "watch" ]
+  - apiGroups: [ "batch" ]
     resources:
       - jobs
       - cronjobs
-    verbs: ["list", "watch"]
-  - apiGroups: ["autoscaling"]
+    verbs: [ "list", "watch" ]
+  - apiGroups: [ "autoscaling" ]
     resources:
       - horizontalpodautoscalers
-    verbs: ["list", "watch"]
-  - apiGroups: ["policy"]
+    verbs: [ "list", "watch" ]
+  - apiGroups: [ "policy" ]
     resources:
       - poddisruptionbudgets
-    verbs: ["list", "watch"]
-  - apiGroups: ["certificates.k8s.io"]
+    verbs: [ "list", "watch" ]
+  - apiGroups: [ "certificates.k8s.io" ]
     resources:
       - certificatesigningrequests
-    verbs: ["list", "watch"]
-  - apiGroups: ["networking.k8s.io"]
+    verbs: [ "list", "watch" ]
+  - apiGroups: [ "networking.k8s.io" ]
     resources:
       - networkpolicies
       - ingresses
-    verbs: ["list", "watch"]
-  - apiGroups: ["coordination.k8s.io"]
+    verbs: [ "list", "watch" ]
+  - apiGroups: [ "coordination.k8s.io" ]
     resources:
       - leases
-    verbs: ["list", "watch"]
+    verbs: [ "list", "watch" ]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding

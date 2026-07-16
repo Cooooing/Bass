@@ -16,81 +16,81 @@ service GameTownAgentConfigService {
 
 message CreateGameTownAgentConfig {
   message Request {
-      int64 player_id = 1; // 玩家 ID
-      string name = 2; // 配置名称
-      string provider = 3; // 供应商
-      string model = 4; // 模型名称
-      string base_url = 5; // 接口地址
-      string api_key = 6; // 接口密钥
-      int32 timeout_seconds = 7; // 超时秒数
-      bool is_default = 8; // 是否默认配置
-    }
+    int64 player_id = 1; // 玩家 ID
+    string name = 2; // 配置名称
+    string provider = 3; // 供应商
+    string model = 4; // 模型名称
+    string base_url = 5; // 接口地址
+    string api_key = 6; // 接口密钥
+    int32 timeout_seconds = 7; // 超时秒数
+    bool is_default = 8; // 是否默认配置
+  }
   message Response {
 
     message GameTownAgentConfig {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        int64 id = 1; // 配置 ID
-        int64 player_id = 2; // 玩家 ID
-        string name = 3; // 配置名称
-        string provider = 4; // 供应商
-        string model = 5; // 模型名称
-        string base_url = 6; // 接口地址
-        bool has_api_key = 7; // 是否已配置密钥
-        int32 timeout_seconds = 8; // 超时秒数
-        bool is_default = 9; // 是否默认配置
-        GameTownAgentConfigStatus status = 10; // 配置状态
-      }
-      GameTownAgentConfig row = 1; // Agent 配置
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      int64 id = 1; // 配置 ID
+      int64 player_id = 2; // 玩家 ID
+      string name = 3; // 配置名称
+      string provider = 4; // 供应商
+      string model = 5; // 模型名称
+      string base_url = 6; // 接口地址
+      bool has_api_key = 7; // 是否已配置密钥
+      int32 timeout_seconds = 8; // 超时秒数
+      bool is_default = 9; // 是否默认配置
+      GameTownAgentConfigStatus status = 10; // 配置状态
     }
+    GameTownAgentConfig row = 1; // Agent 配置
+  }
 }
 
 message GetGameTownAgentConfig {
   message Request {
-      int64 id = 1; // 配置 ID
-      int64 player_id = 2; // 玩家 ID
-    }
+    int64 id = 1; // 配置 ID
+    int64 player_id = 2; // 玩家 ID
+  }
   message Response {
 
     message GameTownAgentConfig {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        int64 id = 1; // 配置 ID
-        int64 player_id = 2; // 玩家 ID
-        string name = 3; // 配置名称
-        string provider = 4; // 供应商
-        string model = 5; // 模型名称
-        string base_url = 6; // 接口地址
-        bool has_api_key = 7; // 是否已配置密钥
-        int32 timeout_seconds = 8; // 超时秒数
-        bool is_default = 9; // 是否默认配置
-        GameTownAgentConfigStatus status = 10; // 配置状态
-      }
-      GameTownAgentConfig row = 1; // Agent 配置
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      int64 id = 1; // 配置 ID
+      int64 player_id = 2; // 玩家 ID
+      string name = 3; // 配置名称
+      string provider = 4; // 供应商
+      string model = 5; // 模型名称
+      string base_url = 6; // 接口地址
+      bool has_api_key = 7; // 是否已配置密钥
+      int32 timeout_seconds = 8; // 超时秒数
+      bool is_default = 9; // 是否默认配置
+      GameTownAgentConfigStatus status = 10; // 配置状态
     }
+    GameTownAgentConfig row = 1; // Agent 配置
+  }
 }
 
 message ListGameTownAgentConfigs {
   message Request {
-      int64 player_id = 1; // 玩家 ID
-      optional GameTownAgentConfigStatus status = 2; // 配置状态
-    }
+    int64 player_id = 1; // 玩家 ID
+    optional GameTownAgentConfigStatus status = 2; // 配置状态
+  }
   message Response {
 
     message GameTownAgentConfig {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        int64 id = 1; // 配置 ID
-        int64 player_id = 2; // 玩家 ID
-        string name = 3; // 配置名称
-        string provider = 4; // 供应商
-        string model = 5; // 模型名称
-        string base_url = 6; // 接口地址
-        bool has_api_key = 7; // 是否已配置密钥
-        int32 timeout_seconds = 8; // 超时秒数
-        bool is_default = 9; // 是否默认配置
-        GameTownAgentConfigStatus status = 10; // 配置状态
-      }
-      repeated GameTownAgentConfig rows = 1; // Agent 配置列表
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      int64 id = 1; // 配置 ID
+      int64 player_id = 2; // 玩家 ID
+      string name = 3; // 配置名称
+      string provider = 4; // 供应商
+      string model = 5; // 模型名称
+      string base_url = 6; // 接口地址
+      bool has_api_key = 7; // 是否已配置密钥
+      int32 timeout_seconds = 8; // 超时秒数
+      bool is_default = 9; // 是否默认配置
+      GameTownAgentConfigStatus status = 10; // 配置状态
     }
+    repeated GameTownAgentConfig rows = 1; // Agent 配置列表
+  }
 }

@@ -16,35 +16,35 @@ service LocationService {
 
 message GetLocation {
   message Request {
-      int64 user_id = 1;
-    }
+    int64 user_id = 1;
+  }
   message Response {
 
     message Location {
-        int64 user_id = 1;
-        optional string country = 2;
-        optional string province = 3;
-        optional string city = 4;
-      }
-      Location location = 1;
-    }
-}
-
-message UpsertLocation {
-  message Request {
       int64 user_id = 1;
       optional string country = 2;
       optional string province = 3;
       optional string city = 4;
     }
+    Location location = 1;
+  }
+}
+
+message UpsertLocation {
+  message Request {
+    int64 user_id = 1;
+    optional string country = 2;
+    optional string province = 3;
+    optional string city = 4;
+  }
   message Response {
 
     message Location {
-        int64 user_id = 1;
-        optional string country = 2;
-        optional string province = 3;
-        optional string city = 4;
-      }
-      Location location = 1;
+      int64 user_id = 1;
+      optional string country = 2;
+      optional string province = 3;
+      optional string city = 4;
     }
+    Location location = 1;
+  }
 }

@@ -8,8 +8,9 @@ import (
 	commonModel "common/pkg/model"
 	"platform/internal/config"
 
-	"github.com/lionsoul2014/ip2region/binding/golang/service"
 	"log/slog"
+
+	"github.com/lionsoul2014/ip2region/binding/golang/service"
 )
 
 type IpResolutionUsecase struct {

@@ -7,7 +7,7 @@ import (
 
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
-	base "content/internal/biz/base"
+	"content/internal/biz/base"
 	"content/internal/biz/repo"
 	"content/internal/config"
 

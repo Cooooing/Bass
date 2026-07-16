@@ -26,7 +26,7 @@ statefulSet:
 promExporter:
   enabled: false
 
-# ClusterIP锛屼粎闆嗙兢鍐呰闂?service:
+  # ClusterIP锛屼粎闆嗙兢鍐呰闂?service:
   enabled: true
 
 container:

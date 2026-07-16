@@ -16,37 +16,37 @@ service GameTownPlayerService {
 
 message RegisterGameTownPlayer {
   message Request {
-      string name = 1; // 玩家登录名
-      string display_name = 2; // 展示名称
-    }
+    string name = 1; // 玩家登录名
+    string display_name = 2; // 展示名称
+  }
   message Response {
 
     message GameTownPlayer {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        int64 id = 1; // 玩家 ID
-        string name = 2; // 玩家登录名
-        string display_name = 3; // 展示名称
-        GameTownPlayerStatus status = 4; // 玩家状态
-      }
-      GameTownPlayer row = 1; // 玩家
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      int64 id = 1; // 玩家 ID
+      string name = 2; // 玩家登录名
+      string display_name = 3; // 展示名称
+      GameTownPlayerStatus status = 4; // 玩家状态
     }
+    GameTownPlayer row = 1; // 玩家
+  }
 }
 
 message GetGameTownPlayer {
   message Request {
-      int64 id = 1; // 玩家 ID
-    }
+    int64 id = 1; // 玩家 ID
+  }
   message Response {
 
     message GameTownPlayer {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        int64 id = 1; // 玩家 ID
-        string name = 2; // 玩家登录名
-        string display_name = 3; // 展示名称
-        GameTownPlayerStatus status = 4; // 玩家状态
-      }
-      GameTownPlayer row = 1; // 玩家
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      int64 id = 1; // 玩家 ID
+      string name = 2; // 玩家登录名
+      string display_name = 3; // 展示名称
+      GameTownPlayerStatus status = 4; // 玩家状态
     }
+    GameTownPlayer row = 1; // 玩家
+  }
 }

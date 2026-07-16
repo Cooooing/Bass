@@ -15,6 +15,7 @@ import (
 	"user/internal/data/gen/outboxevent"
 
 	"common/pkg/server"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel"

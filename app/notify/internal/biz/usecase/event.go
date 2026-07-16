@@ -8,13 +8,14 @@ import (
 
 	commonenum "common/pkg/enum"
 	"common/proto/gen/common/enums"
-	base "notify/internal/biz/base"
+	"notify/internal/biz/base"
 	"notify/internal/biz/repo"
 	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 
-	"google.golang.org/protobuf/encoding/protojson"
 	"log/slog"
+
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type EventHandler interface {

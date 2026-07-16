@@ -8,7 +8,7 @@ import (
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
-	contentmoderationrecord "content/internal/data/gen/contentmoderationrecord"
+	"content/internal/data/gen/contentmoderationrecord"
 	"content/internal/enum"
 
 	"github.com/samber/lo"

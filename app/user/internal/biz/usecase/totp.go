@@ -8,7 +8,7 @@ import (
 	"context"
 	"image/png"
 	"time"
-	base "user/internal/biz/base"
+	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/config"

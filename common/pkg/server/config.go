@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"reflect"
 
+	"log/slog"
+
 	consulconfig "github.com/go-kratos/kratos/contrib/config/consul/v3"
 	"github.com/go-kratos/kratos/v3/config"
 	"github.com/go-kratos/kratos/v3/config/env"
 	"github.com/go-kratos/kratos/v3/config/file"
 	consulapi "github.com/hashicorp/consul/api"
 	"google.golang.org/protobuf/proto"
-	"log/slog"
 )
 
 // LoadConfig 加载配置并保留底层 watcher，用于模块内注册热更新配置。

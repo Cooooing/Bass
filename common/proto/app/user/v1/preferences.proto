@@ -15,38 +15,38 @@ service PreferencesService {
 
 message GetPreferences {
   message Request {
-      int64 user_id = 1;
-    }
+    int64 user_id = 1;
+  }
   message Response {
 
     message Preferences {
-        int64 user_id = 1;
-        optional string timezone = 3;
-        optional string theme = 4;
-        optional string mobile_theme = 5;
-        common.enums.Language language = 8;
-      }
-      Preferences preferences = 1;
+      int64 user_id = 1;
+      optional string timezone = 3;
+      optional string theme = 4;
+      optional string mobile_theme = 5;
+      common.enums.Language language = 8;
     }
+    Preferences preferences = 1;
+  }
 }
 
 message UpdatePreferences {
   message Request {
-      int64 user_id = 1;
-      optional string timezone = 2;
-      optional string theme = 3;
-      optional string mobile_theme = 4;
-      optional common.enums.Language language = 7;
-    }
+    int64 user_id = 1;
+    optional string timezone = 2;
+    optional string theme = 3;
+    optional string mobile_theme = 4;
+    optional common.enums.Language language = 7;
+  }
   message Response {
 
     message Preferences {
-        int64 user_id = 1;
-        optional string timezone = 3;
-        optional string theme = 4;
-        optional string mobile_theme = 5;
-        common.enums.Language language = 8;
-      }
-      Preferences preferences = 1;
+      int64 user_id = 1;
+      optional string timezone = 3;
+      optional string theme = 4;
+      optional string mobile_theme = 5;
+      common.enums.Language language = 8;
     }
+    Preferences preferences = 1;
+  }
 }

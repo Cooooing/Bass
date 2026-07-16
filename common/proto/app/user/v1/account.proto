@@ -19,148 +19,148 @@ service AccountService {
 
 message GetAccount {
   message Request {
-      int64 user_id = 1;
-    }
+    int64 user_id = 1;
+  }
   message Response {
 
     message Account {
-        AccountBasic basic = 1;
-        AccountContact contact = 2;
-      }
+      AccountBasic basic = 1;
+      AccountContact contact = 2;
+    }
 
     message AccountBasic {
-        int64 id = 1;
-        string name = 2;
-        optional string nickname = 3;
-        optional string url = 4;
-        optional string avatar_url = 5;
-        optional string introduction = 6;
-        MBTI mbti = 7;
-        AccountStatus status = 8;
-        optional int32 follow_count = 10;
-        optional int32 follower_count = 11;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
+      int64 id = 1;
+      string name = 2;
+      optional string nickname = 3;
+      optional string url = 4;
+      optional string avatar_url = 5;
+      optional string introduction = 6;
+      MBTI mbti = 7;
+      AccountStatus status = 8;
+      optional int32 follow_count = 10;
+      optional int32 follower_count = 11;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
+    }
 
     message AccountContact {
-        int64 user_id = 1;
-        optional string email = 2;
-        optional string phone = 3;
-      }
-      Account account = 1;
+      int64 user_id = 1;
+      optional string email = 2;
+      optional string phone = 3;
     }
+    Account account = 1;
+  }
 }
 
 message ListAccounts {
   message Request {
 
     message AccountQuery {
-        repeated int64 user_ids = 1;
-      }
-      AccountQuery query = 1;
+      repeated int64 user_ids = 1;
     }
+    AccountQuery query = 1;
+  }
   message Response {
 
     message Account {
-        AccountBasic basic = 1;
-        AccountContact contact = 2;
-      }
+      AccountBasic basic = 1;
+      AccountContact contact = 2;
+    }
 
     message AccountBasic {
-        int64 id = 1;
-        string name = 2;
-        optional string nickname = 3;
-        optional string url = 4;
-        optional string avatar_url = 5;
-        optional string introduction = 6;
-        MBTI mbti = 7;
-        AccountStatus status = 8;
-        optional int32 follow_count = 10;
-        optional int32 follower_count = 11;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
+      int64 id = 1;
+      string name = 2;
+      optional string nickname = 3;
+      optional string url = 4;
+      optional string avatar_url = 5;
+      optional string introduction = 6;
+      MBTI mbti = 7;
+      AccountStatus status = 8;
+      optional int32 follow_count = 10;
+      optional int32 follower_count = 11;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
+    }
 
     message AccountContact {
-        int64 user_id = 1;
-        optional string email = 2;
-        optional string phone = 3;
-      }
-      repeated Account rows = 1;
+      int64 user_id = 1;
+      optional string email = 2;
+      optional string phone = 3;
     }
+    repeated Account rows = 1;
+  }
 }
 
 message MapAccounts {
   message Request {
 
     message AccountQuery {
-        repeated int64 user_ids = 1;
-      }
-      AccountQuery query = 1;
+      repeated int64 user_ids = 1;
     }
+    AccountQuery query = 1;
+  }
   message Response {
 
     message Account {
-        AccountBasic basic = 1;
-        AccountContact contact = 2;
-      }
+      AccountBasic basic = 1;
+      AccountContact contact = 2;
+    }
 
     message AccountBasic {
-        int64 id = 1;
-        string name = 2;
-        optional string nickname = 3;
-        optional string url = 4;
-        optional string avatar_url = 5;
-        optional string introduction = 6;
-        MBTI mbti = 7;
-        AccountStatus status = 8;
-        optional int32 follow_count = 10;
-        optional int32 follower_count = 11;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
+      int64 id = 1;
+      string name = 2;
+      optional string nickname = 3;
+      optional string url = 4;
+      optional string avatar_url = 5;
+      optional string introduction = 6;
+      MBTI mbti = 7;
+      AccountStatus status = 8;
+      optional int32 follow_count = 10;
+      optional int32 follower_count = 11;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
+    }
 
     message AccountContact {
-        int64 user_id = 1;
-        optional string email = 2;
-        optional string phone = 3;
-      }
-      map<int64, Account> accounts = 1;
+      int64 user_id = 1;
+      optional string email = 2;
+      optional string phone = 3;
     }
+    map<int64, Account> accounts = 1;
+  }
 }
 
 message UpdateProfileAccount {
   message Request {
-      int64 user_id = 1;
-      optional string avatar_url = 2;
-      optional string nickname = 3;
-      optional string url = 4;
-      optional string introduction = 5;
-      optional MBTI mbti = 6;
-    }
+    int64 user_id = 1;
+    optional string avatar_url = 2;
+    optional string nickname = 3;
+    optional string url = 4;
+    optional string introduction = 5;
+    optional MBTI mbti = 6;
+  }
   message Response {
 
     message AccountBasic {
-        int64 id = 1;
-        string name = 2;
-        optional string nickname = 3;
-        optional string url = 4;
-        optional string avatar_url = 5;
-        optional string introduction = 6;
-        MBTI mbti = 7;
-        AccountStatus status = 8;
-        optional int32 follow_count = 10;
-        optional int32 follower_count = 11;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
-      AccountBasic account = 1;
+      int64 id = 1;
+      string name = 2;
+      optional string nickname = 3;
+      optional string url = 4;
+      optional string avatar_url = 5;
+      optional string introduction = 6;
+      MBTI mbti = 7;
+      AccountStatus status = 8;
+      optional int32 follow_count = 10;
+      optional int32 follower_count = 11;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
     }
+    AccountBasic account = 1;
+  }
 }
 
 message AvatarAccount {
   message Request {
-      string name = 1;
-    }
+    string name = 1;
+  }
 }

@@ -12,12 +12,12 @@ service NotifyRateLimitService {
 
 message CheckNotificationRateLimit {
   message Request {
-      NotificationChannel channel = 1;
-      string recipient = 2;
-    }
+    NotificationChannel channel = 1;
+    string recipient = 2;
+  }
   message Response {
-      bool limited = 1;
-      int64 retry_after_seconds = 2;
-      int64 remaining_count = 3;
-    }
+    bool limited = 1;
+    int64 retry_after_seconds = 2;
+    int64 remaining_count = 3;
+  }
 }

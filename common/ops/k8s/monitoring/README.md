@@ -30,14 +30,14 @@ Grafana 默认账号来自 `monitoring/secrets.yaml` 中的 `monitoring-grafana-
 
 ## 组件
 
-| 组件 | 镜像 | 用途 |
-|------|------|------|
-| Prometheus | `prom/prometheus:v3.4.1` | 指标采集与存储 |
-| Grafana | `grafana/grafana:11.6.0` | 指标和链路可视化 |
-| Tempo | `grafana/tempo:2.8.1` | 链路数据存储 |
+| 组件                      | 镜像                                             | 用途           |
+|-------------------------|------------------------------------------------|--------------|
+| Prometheus              | `prom/prometheus:v3.4.1`                       | 指标采集与存储      |
+| Grafana                 | `grafana/grafana:11.6.0`                       | 指标和链路可视化     |
+| Tempo                   | `grafana/tempo:2.8.1`                          | 链路数据存储       |
 | OpenTelemetry Collector | `otel/opentelemetry-collector-contrib:0.129.0` | OTLP 链路接收和转发 |
-| kube-state-metrics | `registry.k8s.io/kube-state-metrics:v2.15.0` | K8s 对象指标 |
-| node-exporter | `prom/node-exporter:v1.9.1` | 主机指标 |
+| kube-state-metrics      | `registry.k8s.io/kube-state-metrics:v2.15.0`   | K8s 对象指标     |
+| node-exporter           | `prom/node-exporter:v1.9.1`                    | 主机指标         |
 
 ## 业务服务接入
 

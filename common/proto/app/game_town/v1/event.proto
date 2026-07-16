@@ -15,30 +15,30 @@ service GameTownEventService {
 
 message PageGameTownEvents {
   message Request {
-      .common.api.app.common.PageRequest page = 1; // 分页参数
-      int64 world_id = 2; // 世界 ID
-      optional int64 actor_player_id = 3; // 玩家 ID
-      optional int64 target_npc_id = 4; // NPC ID
-      optional GameTownEventType type = 5; // 事件类型
-    }
+    .common.api.app.common.PageRequest page = 1; // 分页参数
+    int64 world_id = 2; // 世界 ID
+    optional int64 actor_player_id = 3; // 玩家 ID
+    optional int64 target_npc_id = 4; // NPC ID
+    optional GameTownEventType type = 5; // 事件类型
+  }
   message Response {
 
     message GameTownEvent {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        int64 id = 1; // 事件 ID
-        int64 world_id = 2; // 世界 ID
-        GameTownEventType type = 3; // 事件类型
-        optional int64 actor_player_id = 4; // 玩家 ID
-        optional int64 target_npc_id = 5; // 目标 NPC ID
-        optional int64 location_id = 6; // 地点 ID
-        optional int64 command_id = 7; // 命令 ID
-        string summary = 8; // 事件摘要
-        string content = 9; // 事件内容
-        google.protobuf.Struct effects = 10; // 影响
-        google.protobuf.Struct metadata = 11; // 元数据
-        google.protobuf.Timestamp occurred_at = 12; // 发生时间
-      }
-      .common.api.app.common.PageResponse page = 1; // 分页结果
-      repeated GameTownEvent rows = 2; // 事件列表
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      int64 id = 1; // 事件 ID
+      int64 world_id = 2; // 世界 ID
+      GameTownEventType type = 3; // 事件类型
+      optional int64 actor_player_id = 4; // 玩家 ID
+      optional int64 target_npc_id = 5; // 目标 NPC ID
+      optional int64 location_id = 6; // 地点 ID
+      optional int64 command_id = 7; // 命令 ID
+      string summary = 8; // 事件摘要
+      string content = 9; // 事件内容
+      google.protobuf.Struct effects = 10; // 影响
+      google.protobuf.Struct metadata = 11; // 元数据
+      google.protobuf.Timestamp occurred_at = 12; // 发生时间
     }
+    .common.api.app.common.PageResponse page = 1; // 分页结果
+    repeated GameTownEvent rows = 2; // 事件列表
+  }
 }

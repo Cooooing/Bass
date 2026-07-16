@@ -7,9 +7,10 @@ import (
 	"fmt"
 	"time"
 
+	"log/slog"
+
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/protobuf/types/known/durationpb"
-	"log/slog"
 )
 
 type RedisClient struct {

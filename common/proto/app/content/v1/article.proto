@@ -41,427 +41,427 @@ service ContentArticleService {
 }
 
 message CreateArticle {
-  message Request {      Article article = 1; // 文章信息
-      int64 user_id = 2; // 用户 ID
+  message Request {Article article = 1; // 文章信息
+    int64 user_id = 2; // 用户 ID
 
-      message Article {
+    message Article {
 
-        string title = 1; // 标题
-        string content = 2; // 内容
-        ArticleType type = 5; // 类型
+      string title = 1; // 标题
+      string content = 2; // 内容
+      ArticleType type = 5; // 类型
 
-        optional string reward_content = 6; // 打赏内容
-        optional int32 reward_points = 7; // 打赏积分
+      optional string reward_content = 6; // 打赏内容
+      optional int32 reward_points = 7; // 打赏积分
 
-        optional string statement = 10; // 创作声明
-        optional bool commentable = 11; // 是否允许评论
-        optional bool anonymous = 12; // 是否匿名
-        repeated int64 tag_ids = 20; // 绑定标签 ID
+      optional string statement = 10; // 创作声明
+      optional bool commentable = 11; // 是否允许评论
+      optional bool anonymous = 12; // 是否匿名
+      repeated int64 tag_ids = 20; // 绑定标签 ID
 
-        oneof type_params {
-          QA qa = 100; // 问答参数
-        }
+      oneof type_params {
+        QA qa = 100; // 问答参数
+      }
 
-        message QA {
-          int32 bounty_points = 101; // 悬赏积分
-        }
+      message QA {
+        int32 bounty_points = 101; // 悬赏积分
       }
     }
+  }
   message Response {
 
     message Article {
 
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 唯一 ID
-        string title = 2; // 标题
-        string content = 3; // 正文内容
-        ArticleType type = 7; // 类型
+      int64 id = 1; // 唯一 ID
+      string title = 2; // 标题
+      string content = 3; // 正文内容
+      ArticleType type = 7; // 类型
 
-        optional string reward_content = 8; // 打赏区内容
-        optional int32 reward_points = 10; // 打赏积分
+      optional string reward_content = 8; // 打赏区内容
+      optional int32 reward_points = 10; // 打赏积分
 
-        bool has_postscript = 20; // 是否有附言
-        bool has_reward = 21; // 是否有打赏区
-        optional string statement = 22; // 创作声明
-        bool commentable = 23; // 是否允许评论
-        bool anonymous = 24; // 是否匿名
-        google.protobuf.Timestamp published_at = 26; // 发布时间
-        google.protobuf.Timestamp edited_at = 27; // 内容编辑时间
-        ArticlePublishStatus publish_status = 28; // 发布状态
-        ArticleVisibility visibility = 29; // 可见范围
-        ContentRestriction restriction = 30; // 管理限制
+      bool has_postscript = 20; // 是否有附言
+      bool has_reward = 21; // 是否有打赏区
+      optional string statement = 22; // 创作声明
+      bool commentable = 23; // 是否允许评论
+      bool anonymous = 24; // 是否匿名
+      google.protobuf.Timestamp published_at = 26; // 发布时间
+      google.protobuf.Timestamp edited_at = 27; // 内容编辑时间
+      ArticlePublishStatus publish_status = 28; // 发布状态
+      ArticleVisibility visibility = 29; // 可见范围
+      ContentRestriction restriction = 30; // 管理限制
 
-        int32 view_count = 50; // 浏览数
-        int32 thank_count = 51; // 感谢数
-        int32 like_count = 52; // 点赞数
-        int32 collect_count = 53; // 收藏数
-        int32 watch_count = 54; // 关注数
-        int32 reply_count = 55; // 回复数
+      int32 view_count = 50; // 浏览数
+      int32 thank_count = 51; // 感谢数
+      int32 like_count = 52; // 点赞数
+      int32 collect_count = 53; // 收藏数
+      int32 watch_count = 54; // 关注数
+      int32 reply_count = 55; // 回复数
 
-        oneof type_params {
-          QA qa = 100;
-        }
-
-        message QA {
-          optional int32 bounty_points = 101; // 悬赏积分
-          optional int64 accepted_answer_id = 102; // 采纳评论 ID
-        }
+      oneof type_params {
+        QA qa = 100;
       }
-      Article article = 1; // 文章信息
+
+      message QA {
+        optional int32 bounty_points = 101; // 悬赏积分
+        optional int64 accepted_answer_id = 102; // 采纳评论 ID
+      }
     }
+    Article article = 1; // 文章信息
+  }
 }
 
 message AddPostscriptArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      string content = 2; // 附言内容
-      int64 user_id = 3; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    string content = 2; // 附言内容
+    int64 user_id = 3; // 用户 ID
+  }
   message Response {
 
     message ArticlePostscript {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 主键 ID
-        int64 article_id = 2; // 所属文章 ID
-        string content = 3; // 附言内容
-        ContentRestriction restriction = 4; // 管理限制
-      }
-      ArticlePostscript article_postscript = 1; // 附言信息
+      int64 id = 1; // 主键 ID
+      int64 article_id = 2; // 所属文章 ID
+      string content = 3; // 附言内容
+      ContentRestriction restriction = 4; // 管理限制
     }
+    ArticlePostscript article_postscript = 1; // 附言信息
+  }
 }
 
 message ListArticlePostscripts {
   message Request {
 
-      int64 article_id = 1; // 文章 ID
-    }
+    int64 article_id = 1; // 文章 ID
+  }
   message Response {
 
     message ArticlePostscript {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 主键 ID
-        int64 article_id = 2; // 所属文章 ID
-        string content = 3; // 附言内容
-        ContentRestriction restriction = 4; // 管理限制
-      }
-      repeated ArticlePostscript rows = 1; // 附言列表
+      int64 id = 1; // 主键 ID
+      int64 article_id = 2; // 所属文章 ID
+      string content = 3; // 附言内容
+      ContentRestriction restriction = 4; // 管理限制
     }
+    repeated ArticlePostscript rows = 1; // 附言列表
+  }
 }
 
 message PublishArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 user_id = 2; // 用户 ID
-      ArticleVisibility visibility = 3; // 发布后的可见范围
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    ArticleVisibility visibility = 3; // 发布后的可见范围
+  }
   message Response {}
 }
 
 message UpdateArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      Article article = 2; // 文章信息
-      int64 user_id = 3; // 用户 ID
+    int64 article_id = 1; // 文章 ID
+    Article article = 2; // 文章信息
+    int64 user_id = 3; // 用户 ID
 
-      message Article {
+    message Article {
 
-        string title = 1; // 标题
-        string content = 2; // 内容
-        ArticleType type = 5; // 类型
+      string title = 1; // 标题
+      string content = 2; // 内容
+      ArticleType type = 5; // 类型
 
-        optional string reward_content = 6; // 打赏内容
-        optional int32 reward_points = 7; // 打赏积分
+      optional string reward_content = 6; // 打赏内容
+      optional int32 reward_points = 7; // 打赏积分
 
-        optional string statement = 10; // 创作声明
-        optional bool commentable = 11; // 是否允许评论
-        optional bool anonymous = 12; // 是否匿名
-        repeated int64 tag_ids = 20; // 绑定标签 ID
+      optional string statement = 10; // 创作声明
+      optional bool commentable = 11; // 是否允许评论
+      optional bool anonymous = 12; // 是否匿名
+      repeated int64 tag_ids = 20; // 绑定标签 ID
 
-        oneof type_params {
-          QA qa = 100; // 问答参数
-        }
+      oneof type_params {
+        QA qa = 100; // 问答参数
+      }
 
-        message QA {
-          int32 bounty_points = 101; // 悬赏积分
-        }
+      message QA {
+        int32 bounty_points = 101; // 悬赏积分
       }
     }
+  }
   message Response {
 
     message Article {
 
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 唯一 ID
-        string title = 2; // 标题
-        string content = 3; // 正文内容
-        ArticleType type = 7; // 类型
+      int64 id = 1; // 唯一 ID
+      string title = 2; // 标题
+      string content = 3; // 正文内容
+      ArticleType type = 7; // 类型
 
-        optional string reward_content = 8; // 打赏区内容
-        optional int32 reward_points = 10; // 打赏积分
+      optional string reward_content = 8; // 打赏区内容
+      optional int32 reward_points = 10; // 打赏积分
 
-        bool has_postscript = 20; // 是否有附言
-        bool has_reward = 21; // 是否有打赏区
-        optional string statement = 22; // 创作声明
-        bool commentable = 23; // 是否允许评论
-        bool anonymous = 24; // 是否匿名
-        google.protobuf.Timestamp published_at = 26; // 发布时间
-        google.protobuf.Timestamp edited_at = 27; // 内容编辑时间
-        ArticlePublishStatus publish_status = 28; // 发布状态
-        ArticleVisibility visibility = 29; // 可见范围
-        ContentRestriction restriction = 30; // 管理限制
+      bool has_postscript = 20; // 是否有附言
+      bool has_reward = 21; // 是否有打赏区
+      optional string statement = 22; // 创作声明
+      bool commentable = 23; // 是否允许评论
+      bool anonymous = 24; // 是否匿名
+      google.protobuf.Timestamp published_at = 26; // 发布时间
+      google.protobuf.Timestamp edited_at = 27; // 内容编辑时间
+      ArticlePublishStatus publish_status = 28; // 发布状态
+      ArticleVisibility visibility = 29; // 可见范围
+      ContentRestriction restriction = 30; // 管理限制
 
-        int32 view_count = 50; // 浏览数
-        int32 thank_count = 51; // 感谢数
-        int32 like_count = 52; // 点赞数
-        int32 collect_count = 53; // 收藏数
-        int32 watch_count = 54; // 关注数
-        int32 reply_count = 55; // 回复数
+      int32 view_count = 50; // 浏览数
+      int32 thank_count = 51; // 感谢数
+      int32 like_count = 52; // 点赞数
+      int32 collect_count = 53; // 收藏数
+      int32 watch_count = 54; // 关注数
+      int32 reply_count = 55; // 回复数
 
-        oneof type_params {
-          QA qa = 100;
-        }
-
-        message QA {
-          optional int32 bounty_points = 101; // 悬赏积分
-          optional int64 accepted_answer_id = 102; // 采纳评论 ID
-        }
+      oneof type_params {
+        QA qa = 100;
       }
-      Article article = 1; // 文章信息
+
+      message QA {
+        optional int32 bounty_points = 101; // 悬赏积分
+        optional int64 accepted_answer_id = 102; // 采纳评论 ID
+      }
     }
+    Article article = 1; // 文章信息
+  }
 }
 
 message DiscardDraftArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 user_id = 2; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+  }
   message Response {}
 }
 
 message MakePrivateArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 user_id = 2; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+  }
   message Response {}
 }
 
 message MakePublicArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 user_id = 2; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+  }
   message Response {}
 }
 
 message ArchiveArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 user_id = 2; // 用户 ID
-      optional string reason = 3; // 操作原因
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
   message Response {}
 }
 
 message UnarchiveArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 user_id = 2; // 用户 ID
-      optional string reason = 3; // 操作原因
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
   message Response {}
 }
 
 message HideArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 user_id = 2; // 用户 ID
-      optional string reason = 3; // 操作原因
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
   message Response {}
 }
 
 message UnhideArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 user_id = 2; // 用户 ID
-      optional string reason = 3; // 操作原因
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
   message Response {}
 }
 
 message LockArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 user_id = 2; // 用户 ID
-      optional string reason = 3; // 操作原因
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
   message Response {}
 }
 
 message UnlockArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 user_id = 2; // 用户 ID
-      optional string reason = 3; // 操作原因
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 user_id = 2; // 用户 ID
+    optional string reason = 3; // 操作原因
+  }
   message Response {}
 }
 
 message LikeArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      bool liked = 2; // 是否点赞
-      int64 user_id = 3; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    bool liked = 2; // 是否点赞
+    int64 user_id = 3; // 用户 ID
+  }
   message Response {
-      bool liked = 1; // 是否点赞
-    }
+    bool liked = 1; // 是否点赞
+  }
 }
 
 message ThankArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      bool thanked = 2; // 是否感谢
-      int64 user_id = 3; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    bool thanked = 2; // 是否感谢
+    int64 user_id = 3; // 用户 ID
+  }
   message Response {
-      bool thanked = 1; // 是否感谢
-    }
+    bool thanked = 1; // 是否感谢
+  }
 }
 
 message CollectArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      bool collected = 2; // 是否收藏
-      int64 user_id = 3; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    bool collected = 2; // 是否收藏
+    int64 user_id = 3; // 用户 ID
+  }
   message Response {
-      bool collected = 1; // 是否收藏
-    }
+    bool collected = 1; // 是否收藏
+  }
 }
 
 message WatchArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      bool watched = 2; // 是否关注
-      int64 user_id = 3; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    bool watched = 2; // 是否关注
+    int64 user_id = 3; // 用户 ID
+  }
   message Response {
-      bool watched = 1; // 是否关注
-    }
+    bool watched = 1; // 是否关注
+  }
 }
 
 message RewardArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int32 points = 2; // 积分
-      int64 user_id = 3; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    int32 points = 2; // 积分
+    int64 user_id = 3; // 用户 ID
+  }
   message Response {}
 }
 
 message AcceptAnswerArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      int64 comment_id = 2; // 评论 ID
-      int64 user_id = 3; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    int64 comment_id = 2; // 评论 ID
+    int64 user_id = 3; // 用户 ID
+  }
   message Response {}
 }
 
 message ViewArticle {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      optional int64 viewer_user_id = 2; // 查看用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    optional int64 viewer_user_id = 2; // 查看用户 ID
+  }
   message Response {}
 }
 
 message MapArticleViewerActionStates {
   message Request {
-      repeated int64 article_ids = 1; // 文章 ID 列表
-      int64 user_id = 2; // 用户 ID
-    }
+    repeated int64 article_ids = 1; // 文章 ID 列表
+    int64 user_id = 2; // 用户 ID
+  }
   message Response {
 
     message ArticleViewerActionState {
-        bool liked = 1; // 是否已点赞
-        bool thanked = 2; // 是否已感谢
-        bool collected = 3; // 是否已收藏
-        bool watched = 4; // 是否已关注
-      }
-      map<int64, ArticleViewerActionState> states = 1; // 文章行为状态映射
+      bool liked = 1; // 是否已点赞
+      bool thanked = 2; // 是否已感谢
+      bool collected = 3; // 是否已收藏
+      bool watched = 4; // 是否已关注
     }
+    map<int64, ArticleViewerActionState> states = 1; // 文章行为状态映射
+  }
 }
 
 message GetArticle {
   message Request {
 
-      int64 article_id = 1; // 文章 ID
-    }
+    int64 article_id = 1; // 文章 ID
+  }
   message Response {
 
     message Article {
 
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 唯一 ID
-        string title = 2; // 标题
-        string content = 3; // 正文内容
-        ArticleType type = 7; // 类型
+      int64 id = 1; // 唯一 ID
+      string title = 2; // 标题
+      string content = 3; // 正文内容
+      ArticleType type = 7; // 类型
 
-        optional string reward_content = 8; // 打赏区内容
-        optional int32 reward_points = 10; // 打赏积分
+      optional string reward_content = 8; // 打赏区内容
+      optional int32 reward_points = 10; // 打赏积分
 
-        bool has_postscript = 20; // 是否有附言
-        bool has_reward = 21; // 是否有打赏区
-        optional string statement = 22; // 创作声明
-        bool commentable = 23; // 是否允许评论
-        bool anonymous = 24; // 是否匿名
-        google.protobuf.Timestamp published_at = 26; // 发布时间
-        google.protobuf.Timestamp edited_at = 27; // 内容编辑时间
-        ArticlePublishStatus publish_status = 28; // 发布状态
-        ArticleVisibility visibility = 29; // 可见范围
-        ContentRestriction restriction = 30; // 管理限制
+      bool has_postscript = 20; // 是否有附言
+      bool has_reward = 21; // 是否有打赏区
+      optional string statement = 22; // 创作声明
+      bool commentable = 23; // 是否允许评论
+      bool anonymous = 24; // 是否匿名
+      google.protobuf.Timestamp published_at = 26; // 发布时间
+      google.protobuf.Timestamp edited_at = 27; // 内容编辑时间
+      ArticlePublishStatus publish_status = 28; // 发布状态
+      ArticleVisibility visibility = 29; // 可见范围
+      ContentRestriction restriction = 30; // 管理限制
 
-        int32 view_count = 50; // 浏览数
-        int32 thank_count = 51; // 感谢数
-        int32 like_count = 52; // 点赞数
-        int32 collect_count = 53; // 收藏数
-        int32 watch_count = 54; // 关注数
-        int32 reply_count = 55; // 回复数
+      int32 view_count = 50; // 浏览数
+      int32 thank_count = 51; // 感谢数
+      int32 like_count = 52; // 点赞数
+      int32 collect_count = 53; // 收藏数
+      int32 watch_count = 54; // 关注数
+      int32 reply_count = 55; // 回复数
 
-        oneof type_params {
-          QA qa = 100;
-        }
-
-        message QA {
-          optional int32 bounty_points = 101; // 悬赏积分
-          optional int64 accepted_answer_id = 102; // 采纳评论 ID
-        }
+      oneof type_params {
+        QA qa = 100;
       }
-      Article article = 1; // 文章信息
+
+      message QA {
+        optional int32 bounty_points = 101; // 悬赏积分
+        optional int64 accepted_answer_id = 102; // 采纳评论 ID
+      }
     }
+    Article article = 1; // 文章信息
+  }
 }
 
 message ListArticles {
@@ -469,67 +469,67 @@ message ListArticles {
 
     message ArticleQueryParams {
 
-        optional int64 tag_id = 1; // 标签
-        optional int64 domain_id = 2; // 领域
-        optional ArticleType type = 4; // 类型
-        optional ArticleOrder order = 5; // 排序
-        optional string keyword = 6; // 查询关键词
-        optional int64 author_id = 7; // 作者 ID
-        optional ArticlePublishStatus publish_status = 10; // 发布状态
-        repeated ArticlePublishStatus publish_statuses = 11; // 发布状态列表
-        optional ArticleVisibility visibility = 12; // 可见范围
-        repeated ArticleVisibility visibilities = 13; // 可见范围列表
-        optional ContentRestriction restriction = 14; // 管理限制
-        repeated ContentRestriction restrictions = 15; // 管理限制列表
-      }
-      ArticleQueryParams query = 1; // 查询参数
+      optional int64 tag_id = 1; // 标签
+      optional int64 domain_id = 2; // 领域
+      optional ArticleType type = 4; // 类型
+      optional ArticleOrder order = 5; // 排序
+      optional string keyword = 6; // 查询关键词
+      optional int64 author_id = 7; // 作者 ID
+      optional ArticlePublishStatus publish_status = 10; // 发布状态
+      repeated ArticlePublishStatus publish_statuses = 11; // 发布状态列表
+      optional ArticleVisibility visibility = 12; // 可见范围
+      repeated ArticleVisibility visibilities = 13; // 可见范围列表
+      optional ContentRestriction restriction = 14; // 管理限制
+      repeated ContentRestriction restrictions = 15; // 管理限制列表
     }
+    ArticleQueryParams query = 1; // 查询参数
+  }
   message Response {
 
     message Article {
 
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 唯一 ID
-        string title = 2; // 标题
-        string content = 3; // 正文内容
-        ArticleType type = 7; // 类型
+      int64 id = 1; // 唯一 ID
+      string title = 2; // 标题
+      string content = 3; // 正文内容
+      ArticleType type = 7; // 类型
 
-        optional string reward_content = 8; // 打赏区内容
-        optional int32 reward_points = 10; // 打赏积分
+      optional string reward_content = 8; // 打赏区内容
+      optional int32 reward_points = 10; // 打赏积分
 
-        bool has_postscript = 20; // 是否有附言
-        bool has_reward = 21; // 是否有打赏区
-        optional string statement = 22; // 创作声明
-        bool commentable = 23; // 是否允许评论
-        bool anonymous = 24; // 是否匿名
-        google.protobuf.Timestamp published_at = 26; // 发布时间
-        google.protobuf.Timestamp edited_at = 27; // 内容编辑时间
-        ArticlePublishStatus publish_status = 28; // 发布状态
-        ArticleVisibility visibility = 29; // 可见范围
-        ContentRestriction restriction = 30; // 管理限制
+      bool has_postscript = 20; // 是否有附言
+      bool has_reward = 21; // 是否有打赏区
+      optional string statement = 22; // 创作声明
+      bool commentable = 23; // 是否允许评论
+      bool anonymous = 24; // 是否匿名
+      google.protobuf.Timestamp published_at = 26; // 发布时间
+      google.protobuf.Timestamp edited_at = 27; // 内容编辑时间
+      ArticlePublishStatus publish_status = 28; // 发布状态
+      ArticleVisibility visibility = 29; // 可见范围
+      ContentRestriction restriction = 30; // 管理限制
 
-        int32 view_count = 50; // 浏览数
-        int32 thank_count = 51; // 感谢数
-        int32 like_count = 52; // 点赞数
-        int32 collect_count = 53; // 收藏数
-        int32 watch_count = 54; // 关注数
-        int32 reply_count = 55; // 回复数
+      int32 view_count = 50; // 浏览数
+      int32 thank_count = 51; // 感谢数
+      int32 like_count = 52; // 点赞数
+      int32 collect_count = 53; // 收藏数
+      int32 watch_count = 54; // 关注数
+      int32 reply_count = 55; // 回复数
 
-        oneof type_params {
-          QA qa = 100;
-        }
-
-        message QA {
-          optional int32 bounty_points = 101; // 悬赏积分
-          optional int64 accepted_answer_id = 102; // 采纳评论 ID
-        }
+      oneof type_params {
+        QA qa = 100;
       }
-      repeated Article rows = 1; // 文章列表
+
+      message QA {
+        optional int32 bounty_points = 101; // 悬赏积分
+        optional int64 accepted_answer_id = 102; // 采纳评论 ID
+      }
     }
+    repeated Article rows = 1; // 文章列表
+  }
 }
 
 message PageArticles {
@@ -537,67 +537,67 @@ message PageArticles {
 
     message ArticleQueryParams {
 
-        optional int64 tag_id = 1; // 标签
-        optional int64 domain_id = 2; // 领域
-        optional ArticleType type = 4; // 类型
-        optional ArticleOrder order = 5; // 排序
-        optional string keyword = 6; // 查询关键词
-        optional int64 author_id = 7; // 作者 ID
-        optional ArticlePublishStatus publish_status = 10; // 发布状态
-        repeated ArticlePublishStatus publish_statuses = 11; // 发布状态列表
-        optional ArticleVisibility visibility = 12; // 可见范围
-        repeated ArticleVisibility visibilities = 13; // 可见范围列表
-        optional ContentRestriction restriction = 14; // 管理限制
-        repeated ContentRestriction restrictions = 15; // 管理限制列表
-      }
-      ArticleQueryParams query = 1; // 查询参数
-      .common.api.app.common.PageRequest page = 2; // 分页参数
+      optional int64 tag_id = 1; // 标签
+      optional int64 domain_id = 2; // 领域
+      optional ArticleType type = 4; // 类型
+      optional ArticleOrder order = 5; // 排序
+      optional string keyword = 6; // 查询关键词
+      optional int64 author_id = 7; // 作者 ID
+      optional ArticlePublishStatus publish_status = 10; // 发布状态
+      repeated ArticlePublishStatus publish_statuses = 11; // 发布状态列表
+      optional ArticleVisibility visibility = 12; // 可见范围
+      repeated ArticleVisibility visibilities = 13; // 可见范围列表
+      optional ContentRestriction restriction = 14; // 管理限制
+      repeated ContentRestriction restrictions = 15; // 管理限制列表
     }
+    ArticleQueryParams query = 1; // 查询参数
+    .common.api.app.common.PageRequest page = 2; // 分页参数
+  }
   message Response {
 
     message Article {
 
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 唯一 ID
-        string title = 2; // 标题
-        string content = 3; // 正文内容
-        ArticleType type = 7; // 类型
+      int64 id = 1; // 唯一 ID
+      string title = 2; // 标题
+      string content = 3; // 正文内容
+      ArticleType type = 7; // 类型
 
-        optional string reward_content = 8; // 打赏区内容
-        optional int32 reward_points = 10; // 打赏积分
+      optional string reward_content = 8; // 打赏区内容
+      optional int32 reward_points = 10; // 打赏积分
 
-        bool has_postscript = 20; // 是否有附言
-        bool has_reward = 21; // 是否有打赏区
-        optional string statement = 22; // 创作声明
-        bool commentable = 23; // 是否允许评论
-        bool anonymous = 24; // 是否匿名
-        google.protobuf.Timestamp published_at = 26; // 发布时间
-        google.protobuf.Timestamp edited_at = 27; // 内容编辑时间
-        ArticlePublishStatus publish_status = 28; // 发布状态
-        ArticleVisibility visibility = 29; // 可见范围
-        ContentRestriction restriction = 30; // 管理限制
+      bool has_postscript = 20; // 是否有附言
+      bool has_reward = 21; // 是否有打赏区
+      optional string statement = 22; // 创作声明
+      bool commentable = 23; // 是否允许评论
+      bool anonymous = 24; // 是否匿名
+      google.protobuf.Timestamp published_at = 26; // 发布时间
+      google.protobuf.Timestamp edited_at = 27; // 内容编辑时间
+      ArticlePublishStatus publish_status = 28; // 发布状态
+      ArticleVisibility visibility = 29; // 可见范围
+      ContentRestriction restriction = 30; // 管理限制
 
-        int32 view_count = 50; // 浏览数
-        int32 thank_count = 51; // 感谢数
-        int32 like_count = 52; // 点赞数
-        int32 collect_count = 53; // 收藏数
-        int32 watch_count = 54; // 关注数
-        int32 reply_count = 55; // 回复数
+      int32 view_count = 50; // 浏览数
+      int32 thank_count = 51; // 感谢数
+      int32 like_count = 52; // 点赞数
+      int32 collect_count = 53; // 收藏数
+      int32 watch_count = 54; // 关注数
+      int32 reply_count = 55; // 回复数
 
-        oneof type_params {
-          QA qa = 100;
-        }
-
-        message QA {
-          optional int32 bounty_points = 101; // 悬赏积分
-          optional int64 accepted_answer_id = 102; // 采纳评论 ID
-        }
+      oneof type_params {
+        QA qa = 100;
       }
-      repeated Article rows = 1; // 文章列表
-      .common.api.app.common.PageResponse page = 2; // 分页信息
+
+      message QA {
+        optional int32 bounty_points = 101; // 悬赏积分
+        optional int64 accepted_answer_id = 102; // 采纳评论 ID
+      }
     }
+    repeated Article rows = 1; // 文章列表
+    .common.api.app.common.PageResponse page = 2; // 分页信息
+  }
 }

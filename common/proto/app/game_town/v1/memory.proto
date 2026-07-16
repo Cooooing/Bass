@@ -14,27 +14,27 @@ service GameTownMemoryService {
 
 message ListGameTownMemories {
   message Request {
-      int64 world_id = 1; // 世界 ID
-      int64 player_id = 2; // 玩家 ID
-      optional int64 npc_id = 3; // NPC ID
-      optional GameTownMemoryType type = 4; // 记忆类型
-    }
+    int64 world_id = 1; // 世界 ID
+    int64 player_id = 2; // 玩家 ID
+    optional int64 npc_id = 3; // NPC ID
+    optional GameTownMemoryType type = 4; // 记忆类型
+  }
   message Response {
 
     message GameTownMemory {
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        int64 id = 1; // 记忆 ID
-        int64 world_id = 2; // 世界 ID
-        int64 player_id = 3; // 玩家 ID
-        int64 npc_id = 4; // NPC ID
-        GameTownMemoryType type = 5; // 记忆类型
-        string content = 6; // 记忆内容
-        int32 importance = 7; // 重要程度
-        optional int64 source_event_id = 8; // 来源事件 ID
-        optional google.protobuf.Timestamp last_recalled_at = 9; // 最近召回时间
-        optional google.protobuf.Timestamp expires_at = 10; // 过期时间
-      }
-      repeated GameTownMemory rows = 1; // 记忆列表
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      int64 id = 1; // 记忆 ID
+      int64 world_id = 2; // 世界 ID
+      int64 player_id = 3; // 玩家 ID
+      int64 npc_id = 4; // NPC ID
+      GameTownMemoryType type = 5; // 记忆类型
+      string content = 6; // 记忆内容
+      int32 importance = 7; // 重要程度
+      optional int64 source_event_id = 8; // 来源事件 ID
+      optional google.protobuf.Timestamp last_recalled_at = 9; // 最近召回时间
+      optional google.protobuf.Timestamp expires_at = 10; // 过期时间
     }
+    repeated GameTownMemory rows = 1; // 记忆列表
+  }
 }

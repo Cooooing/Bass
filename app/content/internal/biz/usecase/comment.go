@@ -11,8 +11,9 @@ import (
 	"content/internal/biz/repo"
 	"content/internal/enum"
 
-	"github.com/samber/lo"
 	"log/slog"
+
+	"github.com/samber/lo"
 )
 
 type CommentUsecase struct {

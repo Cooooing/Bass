@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.platform.v1;
 
@@ -12,20 +12,20 @@ service PlatformIpResolutionService {
 
 message ResolveIp {
   message Request {
-      // IP 地址。
-      string ip = 1;
-    }
+    // IP 地址。
+    string ip = 1;
+  }
   message Response {
-      // 国家。
-      string country = 1;
-      // 省份。
-      string province = 2;
-      // 城市。
-      string city = 3;
-      // 运营商。
-      string isp = 4;
-      // 国家代码。
-      string country_code = 5;
-    }
+    // 国家。
+    string country = 1;
+    // 省份。
+    string province = 2;
+    // 城市。
+    string city = 3;
+    // 运营商。
+    string isp = 4;
+    // 国家代码。
+    string country_code = 5;
+  }
 }
 

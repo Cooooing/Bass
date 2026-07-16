@@ -48,30 +48,30 @@ service TotpService {
 message BeginEnableTotp {
   message Request {}
   message Response {
-      // TOTP 绑定 URL。
-      string url = 1;
-      // TOTP 二维码图片数据。
-      bytes qr_code = 2;
-    }
+    // TOTP 绑定 URL。
+    string url = 1;
+    // TOTP 二维码图片数据。
+    bytes qr_code = 2;
+  }
 }
 
 // 确认 TOTP 验证码并正式启用 TOTP。
 message ConfirmEnableTotp {
   message Request {
-      // TOTP 验证码。
-      string code = 1;
-      option (gnostic.openapi.v3.schema) = {required: "code"};
-    }
+    // TOTP 验证码。
+    string code = 1;
+    option (gnostic.openapi.v3.schema) = {required: "code"};
+  }
   message Response {}
 }
 
 // 校验 TOTP 验证码并关闭 TOTP。
 message DisableTotp {
   message Request {
-      // TOTP 验证码。
-      string code = 1;
-      option (gnostic.openapi.v3.schema) = {required: "code"};
-    }
+    // TOTP 验证码。
+    string code = 1;
+    option (gnostic.openapi.v3.schema) = {required: "code"};
+  }
   message Response {}
 }
 
@@ -81,14 +81,14 @@ message GetCurrentTotp {
   message Response {
 
     message Totp {
-        // 账号 ID。
-        int64 user_id = 1;
-        // 是否启用 TOTP。
-        bool enable = 2;
-        // 启用时间。
-        string enable_time = 3;
-      }
-      // TOTP 认证状态。
-      Totp totp = 1;
+      // 账号 ID。
+      int64 user_id = 1;
+      // 是否启用 TOTP。
+      bool enable = 2;
+      // 启用时间。
+      string enable_time = 3;
     }
+    // TOTP 认证状态。
+    Totp totp = 1;
+  }
 }

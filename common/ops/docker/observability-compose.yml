@@ -9,7 +9,7 @@ services:
   tempo:
     image: grafana/tempo:2.8.1
     restart: on-failure:3
-    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    command: [ "-config.file=/etc/tempo/tempo.yaml" ]
     ports:
       - "3200:3200"
     volumes:
@@ -21,7 +21,7 @@ services:
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.129.0
     restart: on-failure:3
-    command: ["--config=/etc/otel-collector/otel-collector.yaml"]
+    command: [ "--config=/etc/otel-collector/otel-collector.yaml" ]
     depends_on:
       - tempo
     ports:

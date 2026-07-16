@@ -82,134 +82,134 @@ service RelationService {
 // 当前账号关注目标账号。
 message FollowRelation {
   message Request {
-      // 目标账号 ID。
-      int64 target_id = 1;
-      option (gnostic.openapi.v3.schema) = {required: "target_id"};
-    }
+    // 目标账号 ID。
+    int64 target_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
+  }
   message Response {}
 }
 
 // 当前账号取消关注目标账号。
 message UnfollowRelation {
   message Request {
-      // 目标账号 ID。
-      int64 target_id = 1;
-      option (gnostic.openapi.v3.schema) = {required: "target_id"};
-    }
+    // 目标账号 ID。
+    int64 target_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
+  }
   message Response {}
 }
 
 // 当前账号拉黑目标账号。
 message BlockRelation {
   message Request {
-      // 目标账号 ID。
-      int64 target_id = 1;
-      option (gnostic.openapi.v3.schema) = {required: "target_id"};
-    }
+    // 目标账号 ID。
+    int64 target_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
+  }
   message Response {}
 }
 
 // 当前账号取消拉黑目标账号。
 message UnblockRelation {
   message Request {
-      // 目标账号 ID。
-      int64 target_id = 1;
-      option (gnostic.openapi.v3.schema) = {required: "target_id"};
-    }
+    // 目标账号 ID。
+    int64 target_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
+  }
   message Response {}
 }
 
 // 分页查询当前账号关注的账号列表。
 message ListFollowingRelations {
   message Request {
-      // 分页参数。
-      .common.api.app.common.PageRequest page = 1;
-    }
+    // 分页参数。
+    .common.api.app.common.PageRequest page = 1;
+  }
   message Response {
 
     message Relation {
-        int64 id = 1;
-        .common.api.app.user.v1.RelationType type = 2;
-        int64 actor_id = 3;
-        int64 target_id = 4;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
-      // 分页结果。
-      .common.api.app.common.PageResponse page = 1;
-      // 账号关系列表。
-      repeated Relation rows = 2;
+      int64 id = 1;
+      .common.api.app.user.v1.RelationType type = 2;
+      int64 actor_id = 3;
+      int64 target_id = 4;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
     }
+    // 分页结果。
+    .common.api.app.common.PageResponse page = 1;
+    // 账号关系列表。
+    repeated Relation rows = 2;
+  }
 }
 
 // 分页查询当前账号的粉丝账号列表。
 message ListFollowersRelations {
   message Request {
-      // 分页参数。
-      .common.api.app.common.PageRequest page = 1;
-    }
+    // 分页参数。
+    .common.api.app.common.PageRequest page = 1;
+  }
   message Response {
 
     message Relation {
-        int64 id = 1;
-        .common.api.app.user.v1.RelationType type = 2;
-        int64 actor_id = 3;
-        int64 target_id = 4;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
-      // 分页结果。
-      .common.api.app.common.PageResponse page = 1;
-      // 账号关系列表。
-      repeated Relation rows = 2;
+      int64 id = 1;
+      .common.api.app.user.v1.RelationType type = 2;
+      int64 actor_id = 3;
+      int64 target_id = 4;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
     }
+    // 分页结果。
+    .common.api.app.common.PageResponse page = 1;
+    // 账号关系列表。
+    repeated Relation rows = 2;
+  }
 }
 
 // 分页查询当前账号拉黑的账号列表。
 message ListBlockedRelations {
   message Request {
-      // 分页参数。
-      .common.api.app.common.PageRequest page = 1;
-    }
+    // 分页参数。
+    .common.api.app.common.PageRequest page = 1;
+  }
   message Response {
 
     message Relation {
-        int64 id = 1;
-        .common.api.app.user.v1.RelationType type = 2;
-        int64 actor_id = 3;
-        int64 target_id = 4;
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-      }
-      // 分页结果。
-      .common.api.app.common.PageResponse page = 1;
-      // 账号关系列表。
-      repeated Relation rows = 2;
+      int64 id = 1;
+      .common.api.app.user.v1.RelationType type = 2;
+      int64 actor_id = 3;
+      int64 target_id = 4;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
     }
+    // 分页结果。
+    .common.api.app.common.PageResponse page = 1;
+    // 账号关系列表。
+    repeated Relation rows = 2;
+  }
 }
 
 // 查询当前账号与目标账号之间的关系。
 message GetStatusRelation {
   message Request {
-      // 目标账号 ID。
-      int64 target_id = 1;
-      option (gnostic.openapi.v3.schema) = {required: "target_id"};
-    }
+    // 目标账号 ID。
+    int64 target_id = 1;
+    option (gnostic.openapi.v3.schema) = {required: "target_id"};
+  }
   message Response {
 
     message RelationStatus {
-        // 目标账号 ID。
-        int64 target_id = 1;
-        // 当前账号是否关注目标账号。
-        bool following = 2;
-        // 目标账号是否关注当前账号。
-        bool followed_by = 3;
-        // 当前账号是否拉黑目标账号。
-        bool blocking = 4;
-        // 目标账号是否拉黑当前账号。
-        bool blocked_by = 5;
-      }
-      // 关系状态。
-      RelationStatus status = 1;
+      // 目标账号 ID。
+      int64 target_id = 1;
+      // 当前账号是否关注目标账号。
+      bool following = 2;
+      // 目标账号是否关注当前账号。
+      bool followed_by = 3;
+      // 当前账号是否拉黑目标账号。
+      bool blocking = 4;
+      // 目标账号是否拉黑当前账号。
+      bool blocked_by = 5;
     }
+    // 关系状态。
+    RelationStatus status = 1;
+  }
 }

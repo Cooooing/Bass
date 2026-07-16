@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.platform.v1;
 
@@ -24,28 +24,28 @@ service PlatformOssService {
 
 message GetUploadTokenOss {
   message Request {
-      int64 user_id = 1;
-      string user_name = 2;
-      int32 num = 3;
-    }
+    int64 user_id = 1;
+    string user_name = 2;
+    int32 num = 3;
+  }
   message Response {
 
     message UploadToken {
-        string key = 1;
-        string token = 2;
-      }
-      repeated UploadToken upload_token = 1;
+      string key = 1;
+      string token = 2;
     }
+    repeated UploadToken upload_token = 1;
+  }
 }
 
 message AuditOss {
   message Request {
-      int64 user_id = 1;
-      string user_name = 2;
-      string key = 3;
-      bool status = 4;
-      optional string reason = 5;
-    }
+    int64 user_id = 1;
+    string user_name = 2;
+    string key = 3;
+    bool status = 4;
+    optional string reason = 5;
+  }
   message Response {}
 }
 
@@ -53,52 +53,52 @@ message ListOss {
   message Request {
 
     message OssQueryParams {
-        optional string provider = 1;
-        optional string bucket = 2;
-        optional string key = 3;
-        optional string mime_type = 4;
-        optional bool blocked = 5;
-        optional string blocked_by_name = 6;
-        common.Int64Range size = 7;
-      }
-      .common.api.app.common.PageRequest page = 1;
-      OssQueryParams query = 2;
+      optional string provider = 1;
+      optional string bucket = 2;
+      optional string key = 3;
+      optional string mime_type = 4;
+      optional bool blocked = 5;
+      optional string blocked_by_name = 6;
+      common.Int64Range size = 7;
     }
+    .common.api.app.common.PageRequest page = 1;
+    OssQueryParams query = 2;
+  }
   message Response {
 
     message Oss {
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-        int64 id = 1;
-        string provider = 2;
-        string bucket = 3;
-        string key = 4;
-        string mime_type = 5;
-        int64 size = 6;
-        string hash = 7;
-        optional string audit_callback_reply = 8;
-        bool blocked = 9;
-        optional string blocked_reason = 10;
-        google.protobuf.Timestamp blocked_at = 11;
-        optional int64 blocked_by = 12;
-        optional string blocked_by_name = 13;
-      }
-      .common.api.app.common.PageResponse page = 1;
-      repeated Oss rows = 2;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
+      int64 id = 1;
+      string provider = 2;
+      string bucket = 3;
+      string key = 4;
+      string mime_type = 5;
+      int64 size = 6;
+      string hash = 7;
+      optional string audit_callback_reply = 8;
+      bool blocked = 9;
+      optional string blocked_reason = 10;
+      google.protobuf.Timestamp blocked_at = 11;
+      optional int64 blocked_by = 12;
+      optional string blocked_by_name = 13;
     }
+    .common.api.app.common.PageResponse page = 1;
+    repeated Oss rows = 2;
+  }
 }
 
 message QiniuUploadCallbackOss {
   message Request {
-      string key = 1;
-      string hash = 2;
-      int64 size = 3;
-      string bucket = 4;
-      string name = 5;
-      string mime_type = 6;
-      int64 upload_by = 7;
-      string upload_by_name = 8;
-    }
+    string key = 1;
+    string hash = 2;
+    int64 size = 3;
+    string bucket = 4;
+    string name = 5;
+    string mime_type = 6;
+    int64 upload_by = 7;
+    string upload_by_name = 8;
+  }
   message Response {}
 }
 
@@ -106,33 +106,33 @@ message QiniuIncrementAuditCallbackOss {
   message Request {
 
     message Item {
-        string cmd = 1;
-        int32 code = 2;
-        string desc = 3;
-        ItemResultWrapper result = 4;
-        int32 returnOld = 5;
-      }
+      string cmd = 1;
+      int32 code = 2;
+      string desc = 3;
+      ItemResultWrapper result = 4;
+      int32 returnOld = 5;
+    }
 
     message ItemResultWrapper {
-        bool disable = 1;
-        ItemResult result = 2;
-      }
+      bool disable = 1;
+      ItemResult result = 2;
+    }
 
     message ItemResult {
-        int32 code = 1;
-        string message = 2;
-        google.protobuf.Struct scenes = 3;
-        string suggestion = 4;
-      }
-      string id = 1;
-      string pipeline = 2;
-      int32 code = 3;
-      string desc = 4;
-      string reqid = 5;
-      string inputBucket = 6;
-      string inputKey = 7;
-      repeated Item items = 8;
+      int32 code = 1;
+      string message = 2;
+      google.protobuf.Struct scenes = 3;
+      string suggestion = 4;
     }
+    string id = 1;
+    string pipeline = 2;
+    int32 code = 3;
+    string desc = 4;
+    string reqid = 5;
+    string inputBucket = 6;
+    string inputKey = 7;
+    repeated Item items = 8;
+  }
   message Response {}
 }
 

@@ -10,9 +10,10 @@ import (
 	"platform/internal/config"
 	"platform/internal/data/gen"
 
+	"log/slog"
+
 	"github.com/qiniu/go-sdk/v7/auth"
 	"github.com/qiniu/go-sdk/v7/storage"
-	"log/slog"
 )
 
 type Qiniu struct {

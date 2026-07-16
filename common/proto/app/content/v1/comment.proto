@@ -27,93 +27,93 @@ service ContentCommentService {
 
 message CreateComment {
   message Request {
-      int64 article_id = 1; // 文章 ID
-      string content = 2; // 评论内容
-      optional int64 reply_id = 3; // 回复评论 ID
-      int64 user_id = 4; // 用户 ID
-    }
+    int64 article_id = 1; // 文章 ID
+    string content = 2; // 评论内容
+    optional int64 reply_id = 3; // 回复评论 ID
+    int64 user_id = 4; // 用户 ID
+  }
   message Response {
 
     message Comment {
 
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 评论 ID
-        int64 article_id = 2; // 文章 ID
-        string content = 3; // 评论内容
-        int32 level = 5; // 评论层级
-        optional int64 parent_id = 6; // 父级评论 ID
-        optional int64 reply_id = 7; // 回复评论 ID
-        int32 thank_count = 9; // 感谢数量
-        int32 like_count = 10; // 点赞数量
-        int32 reply_count = 11; // 子评论数量
-        optional int64 reply_user_id = 12; // 被回复用户 ID
-        ContentRestriction restriction = 13; // 管理限制
-        google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
-      }
-      Comment comment = 1; // 评论信息
+      int64 id = 1; // 评论 ID
+      int64 article_id = 2; // 文章 ID
+      string content = 3; // 评论内容
+      int32 level = 5; // 评论层级
+      optional int64 parent_id = 6; // 父级评论 ID
+      optional int64 reply_id = 7; // 回复评论 ID
+      int32 thank_count = 9; // 感谢数量
+      int32 like_count = 10; // 点赞数量
+      int32 reply_count = 11; // 子评论数量
+      optional int64 reply_user_id = 12; // 被回复用户 ID
+      ContentRestriction restriction = 13; // 管理限制
+      google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
     }
+    Comment comment = 1; // 评论信息
+  }
 }
 
 message HideComment {
   message Request {
-      int64 id = 1; // 评论 ID
-      int64 user_id = 2; // 操作用户 ID
-      optional string reason = 3; // 操作原因
-    }
+    int64 id = 1; // 评论 ID
+    int64 user_id = 2; // 操作用户 ID
+    optional string reason = 3; // 操作原因
+  }
   message Response {}
 }
 
 message UnhideComment {
   message Request {
-      int64 id = 1; // 评论 ID
-      int64 user_id = 2; // 操作用户 ID
-      optional string reason = 3; // 操作原因
-    }
+    int64 id = 1; // 评论 ID
+    int64 user_id = 2; // 操作用户 ID
+    optional string reason = 3; // 操作原因
+  }
   message Response {}
 }
 
 message LockComment {
   message Request {
-      int64 id = 1; // 评论 ID
-      int64 user_id = 2; // 操作用户 ID
-      optional string reason = 3; // 操作原因
-    }
+    int64 id = 1; // 评论 ID
+    int64 user_id = 2; // 操作用户 ID
+    optional string reason = 3; // 操作原因
+  }
   message Response {}
 }
 
 message UnlockComment {
   message Request {
-      int64 id = 1; // 评论 ID
-      int64 user_id = 2; // 操作用户 ID
-      optional string reason = 3; // 操作原因
-    }
+    int64 id = 1; // 评论 ID
+    int64 user_id = 2; // 操作用户 ID
+    optional string reason = 3; // 操作原因
+  }
   message Response {}
 }
 
 message LikeComment {
   message Request {
-      int64 id = 1; // 评论 ID
-      bool liked = 2; // 是否点赞
-      int64 user_id = 3; // 用户 ID
-    }
+    int64 id = 1; // 评论 ID
+    bool liked = 2; // 是否点赞
+    int64 user_id = 3; // 用户 ID
+  }
   message Response {
-      bool liked = 1; // 是否点赞
-    }
+    bool liked = 1; // 是否点赞
+  }
 }
 
 message ThankComment {
   message Request {
-      int64 id = 1; // 评论 ID
-      bool thanked = 2; // 是否感谢
-      int64 user_id = 3; // 用户 ID
-    }
+    int64 id = 1; // 评论 ID
+    bool thanked = 2; // 是否感谢
+    int64 user_id = 3; // 用户 ID
+  }
   message Response {
-      bool thanked = 1; // 是否感谢
-    }
+    bool thanked = 1; // 是否感谢
+  }
 }
 
 message ListComments {
@@ -121,42 +121,42 @@ message ListComments {
 
     message CommentQueryParams {
 
-        optional int64 comment_id = 1; // 评论 ID
-        optional int64 article_id = 2; // 文章 ID
-        optional int64 parent_id = 3; // 父级评论 ID
-        optional int64 reply_id = 4; // 回复评论 ID
-        optional CommentOrder order = 5; // 排序
-        optional int32 level = 6; // 层级
-        optional int64 user_id = 9; // 评论用户 ID
-        optional ContentRestriction restriction = 10; // 管理限制
-        repeated ContentRestriction restrictions = 11; // 管理限制列表
-      }
-      CommentQueryParams query = 1; // 查询参数
+      optional int64 comment_id = 1; // 评论 ID
+      optional int64 article_id = 2; // 文章 ID
+      optional int64 parent_id = 3; // 父级评论 ID
+      optional int64 reply_id = 4; // 回复评论 ID
+      optional CommentOrder order = 5; // 排序
+      optional int32 level = 6; // 层级
+      optional int64 user_id = 9; // 评论用户 ID
+      optional ContentRestriction restriction = 10; // 管理限制
+      repeated ContentRestriction restrictions = 11; // 管理限制列表
     }
+    CommentQueryParams query = 1; // 查询参数
+  }
   message Response {
 
     message Comment {
 
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 评论 ID
-        int64 article_id = 2; // 文章 ID
-        string content = 3; // 评论内容
-        int32 level = 5; // 评论层级
-        optional int64 parent_id = 6; // 父级评论 ID
-        optional int64 reply_id = 7; // 回复评论 ID
-        int32 thank_count = 9; // 感谢数量
-        int32 like_count = 10; // 点赞数量
-        int32 reply_count = 11; // 子评论数量
-        optional int64 reply_user_id = 12; // 被回复用户 ID
-        ContentRestriction restriction = 13; // 管理限制
-        google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
-      }
-      repeated Comment rows = 1; // 评论列表
+      int64 id = 1; // 评论 ID
+      int64 article_id = 2; // 文章 ID
+      string content = 3; // 评论内容
+      int32 level = 5; // 评论层级
+      optional int64 parent_id = 6; // 父级评论 ID
+      optional int64 reply_id = 7; // 回复评论 ID
+      int32 thank_count = 9; // 感谢数量
+      int32 like_count = 10; // 点赞数量
+      int32 reply_count = 11; // 子评论数量
+      optional int64 reply_user_id = 12; // 被回复用户 ID
+      ContentRestriction restriction = 13; // 管理限制
+      google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
     }
+    repeated Comment rows = 1; // 评论列表
+  }
 }
 
 message PageComments {
@@ -164,129 +164,129 @@ message PageComments {
 
     message CommentQueryParams {
 
-        optional int64 comment_id = 1; // 评论 ID
-        optional int64 article_id = 2; // 文章 ID
-        optional int64 parent_id = 3; // 父级评论 ID
-        optional int64 reply_id = 4; // 回复评论 ID
-        optional CommentOrder order = 5; // 排序
-        optional int32 level = 6; // 层级
-        optional int64 user_id = 9; // 评论用户 ID
-        optional ContentRestriction restriction = 10; // 管理限制
-        repeated ContentRestriction restrictions = 11; // 管理限制列表
-      }
-      CommentQueryParams query = 1; // 查询参数
-      optional .common.api.app.common.PageRequest page = 2; // 分页参数
+      optional int64 comment_id = 1; // 评论 ID
+      optional int64 article_id = 2; // 文章 ID
+      optional int64 parent_id = 3; // 父级评论 ID
+      optional int64 reply_id = 4; // 回复评论 ID
+      optional CommentOrder order = 5; // 排序
+      optional int32 level = 6; // 层级
+      optional int64 user_id = 9; // 评论用户 ID
+      optional ContentRestriction restriction = 10; // 管理限制
+      repeated ContentRestriction restrictions = 11; // 管理限制列表
     }
+    CommentQueryParams query = 1; // 查询参数
+    optional .common.api.app.common.PageRequest page = 2; // 分页参数
+  }
   message Response {
 
     message Comment {
 
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 评论 ID
-        int64 article_id = 2; // 文章 ID
-        string content = 3; // 评论内容
-        int32 level = 5; // 评论层级
-        optional int64 parent_id = 6; // 父级评论 ID
-        optional int64 reply_id = 7; // 回复评论 ID
-        int32 thank_count = 9; // 感谢数量
-        int32 like_count = 10; // 点赞数量
-        int32 reply_count = 11; // 子评论数量
-        optional int64 reply_user_id = 12; // 被回复用户 ID
-        ContentRestriction restriction = 13; // 管理限制
-        google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
-      }
-      repeated Comment rows = 1; // 评论列表
-      .common.api.app.common.PageResponse page = 2; // 分页信息
+      int64 id = 1; // 评论 ID
+      int64 article_id = 2; // 文章 ID
+      string content = 3; // 评论内容
+      int32 level = 5; // 评论层级
+      optional int64 parent_id = 6; // 父级评论 ID
+      optional int64 reply_id = 7; // 回复评论 ID
+      int32 thank_count = 9; // 感谢数量
+      int32 like_count = 10; // 点赞数量
+      int32 reply_count = 11; // 子评论数量
+      optional int64 reply_user_id = 12; // 被回复用户 ID
+      ContentRestriction restriction = 13; // 管理限制
+      google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
     }
+    repeated Comment rows = 1; // 评论列表
+    .common.api.app.common.PageResponse page = 2; // 分页信息
+  }
 }
 
 message MapCommentViewerActionStates {
   message Request {
-      repeated int64 comment_ids = 1; // 评论 ID 列表
-      int64 user_id = 2; // 用户 ID
-    }
+    repeated int64 comment_ids = 1; // 评论 ID 列表
+    int64 user_id = 2; // 用户 ID
+  }
   message Response {
 
     message State {
-        bool liked = 1; // 是否点赞
-        bool thanked = 2; // 是否感谢
-      }
-      map<int64, State> states = 1; // 评论行为状态映射
+      bool liked = 1; // 是否点赞
+      bool thanked = 2; // 是否感谢
     }
+    map<int64, State> states = 1; // 评论行为状态映射
+  }
 }
 
 message ListCommentReplyPreviews {
   message Request {
 
-      int64 article_id = 1; // 文章 ID
-      repeated int64 parent_ids = 2; // 父级评论 ID
-      int32 limit_per_parent = 3; // 每条父级评论返回的回复数量
-      optional CommentOrder order = 4; // 排序
-      optional ContentRestriction restriction = 7; // 管理限制
-      repeated ContentRestriction restrictions = 8; // 管理限制列表
-    }
+    int64 article_id = 1; // 文章 ID
+    repeated int64 parent_ids = 2; // 父级评论 ID
+    int32 limit_per_parent = 3; // 每条父级评论返回的回复数量
+    optional CommentOrder order = 4; // 排序
+    optional ContentRestriction restriction = 7; // 管理限制
+    repeated ContentRestriction restrictions = 8; // 管理限制列表
+  }
   message Response {
 
     message CommentReplyPreview {
-        int64 parent_id = 1; // 父级评论 ID
-        repeated Comment rows = 2; // 回复列表
-      }
+      int64 parent_id = 1; // 父级评论 ID
+      repeated Comment rows = 2; // 回复列表
+    }
 
     message Comment {
 
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 评论 ID
-        int64 article_id = 2; // 文章 ID
-        string content = 3; // 评论内容
-        int32 level = 5; // 评论层级
-        optional int64 parent_id = 6; // 父级评论 ID
-        optional int64 reply_id = 7; // 回复评论 ID
-        int32 thank_count = 9; // 感谢数量
-        int32 like_count = 10; // 点赞数量
-        int32 reply_count = 11; // 子评论数量
-        optional int64 reply_user_id = 12; // 被回复用户 ID
-        ContentRestriction restriction = 13; // 管理限制
-        google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
-      }
-      repeated CommentReplyPreview rows = 1; // 回复预览列表
+      int64 id = 1; // 评论 ID
+      int64 article_id = 2; // 文章 ID
+      string content = 3; // 评论内容
+      int32 level = 5; // 评论层级
+      optional int64 parent_id = 6; // 父级评论 ID
+      optional int64 reply_id = 7; // 回复评论 ID
+      int32 thank_count = 9; // 感谢数量
+      int32 like_count = 10; // 点赞数量
+      int32 reply_count = 11; // 子评论数量
+      optional int64 reply_user_id = 12; // 被回复用户 ID
+      ContentRestriction restriction = 13; // 管理限制
+      google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
     }
+    repeated CommentReplyPreview rows = 1; // 回复预览列表
+  }
 }
 
 message MapArticleLastComments {
   message Request {
 
-      repeated int64 article_ids = 1; // 文章 ID
-    }
+    repeated int64 article_ids = 1; // 文章 ID
+  }
   message Response {
 
     message Comment {
 
-        google.protobuf.Timestamp created_at = 1000; // 创建时间
-        google.protobuf.Timestamp updated_at = 1001; // 更新时间
-        optional int64 created_by = 1002; // 创建人
-        optional int64 updated_by = 1003; // 更新人
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+      optional int64 created_by = 1002; // 创建人
+      optional int64 updated_by = 1003; // 更新人
 
-        int64 id = 1; // 评论 ID
-        int64 article_id = 2; // 文章 ID
-        string content = 3; // 评论内容
-        int32 level = 5; // 评论层级
-        optional int64 parent_id = 6; // 父级评论 ID
-        optional int64 reply_id = 7; // 回复评论 ID
-        int32 thank_count = 9; // 感谢数量
-        int32 like_count = 10; // 点赞数量
-        int32 reply_count = 11; // 子评论数量
-        optional int64 reply_user_id = 12; // 被回复用户 ID
-        ContentRestriction restriction = 13; // 管理限制
-        google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
-      }
-      map<int64, Comment> comments = 1; // 文章最后正常评论映射
+      int64 id = 1; // 评论 ID
+      int64 article_id = 2; // 文章 ID
+      string content = 3; // 评论内容
+      int32 level = 5; // 评论层级
+      optional int64 parent_id = 6; // 父级评论 ID
+      optional int64 reply_id = 7; // 回复评论 ID
+      int32 thank_count = 9; // 感谢数量
+      int32 like_count = 10; // 点赞数量
+      int32 reply_count = 11; // 子评论数量
+      optional int64 reply_user_id = 12; // 被回复用户 ID
+      ContentRestriction restriction = 13; // 管理限制
+      google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
     }
+    map<int64, Comment> comments = 1; // 文章最后正常评论映射
+  }
 }

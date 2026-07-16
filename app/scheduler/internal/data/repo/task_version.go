@@ -12,6 +12,7 @@ import (
 	"scheduler/internal/data/gen/taskversion"
 
 	utilent "common/pkg/util/ent"
+
 	entsql "entgo.io/ent/dialect/sql"
 )
 

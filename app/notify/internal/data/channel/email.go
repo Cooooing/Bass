@@ -9,8 +9,9 @@ import (
 	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 
-	"gopkg.in/gomail.v2"
 	"log/slog"
+
+	"gopkg.in/gomail.v2"
 )
 
 var _ bizchannel.EmailClient = (*EmailClient)(nil)

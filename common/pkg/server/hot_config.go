@@ -6,10 +6,11 @@ import (
 	"strings"
 	"sync"
 
+	"log/slog"
+
 	"github.com/go-kratos/kratos/v3/config"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
-	"log/slog"
 )
 
 // HotConfigManager 管理多个配置路径的热更新订阅。

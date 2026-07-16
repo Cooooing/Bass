@@ -33,43 +33,43 @@ message GetCurrentLocation {
   message Response {
 
     message Location {
-        // 账号 ID。
-        int64 user_id = 1;
-        // 国家或地区。
-        optional string country = 2;
-        // 省份或州。
-        optional string province = 3;
-        // 城市。
-        optional string city = 4;
-      }
-      // 当前账号地理资料。
-      Location location = 1;
+      // 账号 ID。
+      int64 user_id = 1;
+      // 国家或地区。
+      optional string country = 2;
+      // 省份或州。
+      optional string province = 3;
+      // 城市。
+      optional string city = 4;
     }
+    // 当前账号地理资料。
+    Location location = 1;
+  }
 }
 
 // 更新当前账号的地理资料。
 message UpsertCurrentLocation {
   message Request {
-      // 国家或地区。
-      optional string country = 1;
-      // 省份或州。
-      optional string province = 2;
-      // 城市。
-      optional string city = 3;
-    }
+    // 国家或地区。
+    optional string country = 1;
+    // 省份或州。
+    optional string province = 2;
+    // 城市。
+    optional string city = 3;
+  }
   message Response {
 
     message Location {
-        // 账号 ID。
-        int64 user_id = 1;
-        // 国家或地区。
-        optional string country = 2;
-        // 省份或州。
-        optional string province = 3;
-        // 城市。
-        optional string city = 4;
-      }
-      // 更新后的账号地理资料。
-      Location location = 1;
+      // 账号 ID。
+      int64 user_id = 1;
+      // 国家或地区。
+      optional string country = 2;
+      // 省份或州。
+      optional string province = 3;
+      // 城市。
+      optional string city = 4;
     }
+    // 更新后的账号地理资料。
+    Location location = 1;
+  }
 }

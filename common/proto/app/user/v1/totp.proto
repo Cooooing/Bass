@@ -19,52 +19,52 @@ service TotpService {
 
 message ValidateTotp {
   message Request {
-      int64 user_id = 1;
-      string code = 2;
-    }
+    int64 user_id = 1;
+    string code = 2;
+  }
   message Response {
-      bool verified = 1;
-    }
+    bool verified = 1;
+  }
 }
 
 message BeginEnableTotp {
   message Request {
-      int64 user_id = 1;
-      string account_name = 2;
-    }
+    int64 user_id = 1;
+    string account_name = 2;
+  }
   message Response {
-      string url = 1;
-      bytes qr_code = 2;
-    }
+    string url = 1;
+    bytes qr_code = 2;
+  }
 }
 
 message ConfirmEnableTotp {
   message Request {
-      int64 user_id = 1;
-      string code = 2;
-    }
+    int64 user_id = 1;
+    string code = 2;
+  }
   message Response {}
 }
 
 message DisableTotp {
   message Request {
-      int64 user_id = 1;
-      string code = 2;
-    }
+    int64 user_id = 1;
+    string code = 2;
+  }
   message Response {}
 }
 
 message GetTotp {
   message Request {
-      int64 user_id = 1;
-    }
+    int64 user_id = 1;
+  }
   message Response {
 
     message Totp {
-        int64 user_id = 1;
-        bool enable = 2;
-        google.protobuf.Timestamp enable_time = 3;
-      }
-      Totp totp = 1;
+      int64 user_id = 1;
+      bool enable = 2;
+      google.protobuf.Timestamp enable_time = 3;
     }
+    Totp totp = 1;
+  }
 }

@@ -19,49 +19,49 @@ message ListStationMessages {
   message Request {
 
     message NotificationStationMessageQueryParams {
-        repeated int64 ids = 1;
-        optional common.enums.EventType event_type = 2;
-        optional bool unread = 3;
-      }
-      int64 user_id = 1;
-      .common.api.app.common.PageRequest page = 2;
-      NotificationStationMessageQueryParams query = 3;
+      repeated int64 ids = 1;
+      optional common.enums.EventType event_type = 2;
+      optional bool unread = 3;
     }
+    int64 user_id = 1;
+    .common.api.app.common.PageRequest page = 2;
+    NotificationStationMessageQueryParams query = 3;
+  }
   message Response {
 
     message NotificationStationMessage {
-        google.protobuf.Timestamp created_at = 1000;
-        google.protobuf.Timestamp updated_at = 1001;
-        int64 id = 1;
-        string event_id = 2;
-        common.enums.EventType event_type = 3;
-        int64 receiver_id = 4;
-        string title = 5;
-        string content = 6;
-        NotificationChannelStatus status = 7;
-        optional google.protobuf.Timestamp read_at = 8;
-      }
-      .common.api.app.common.PageResponse page = 1;
-      repeated NotificationStationMessage rows = 2;
+      google.protobuf.Timestamp created_at = 1000;
+      google.protobuf.Timestamp updated_at = 1001;
+      int64 id = 1;
+      string event_id = 2;
+      common.enums.EventType event_type = 3;
+      int64 receiver_id = 4;
+      string title = 5;
+      string content = 6;
+      NotificationChannelStatus status = 7;
+      optional google.protobuf.Timestamp read_at = 8;
     }
+    .common.api.app.common.PageResponse page = 1;
+    repeated NotificationStationMessage rows = 2;
+  }
 }
 
 message MarkReadStationMessage {
   message Request {
-      int64 user_id = 1;
-      repeated int64 ids = 2;
-      .common.api.app.common.TimeRange created_time_range = 3;
-    }
+    int64 user_id = 1;
+    repeated int64 ids = 2;
+    .common.api.app.common.TimeRange created_time_range = 3;
+  }
   message Response {
-      int32 count = 1;
-    }
+    int32 count = 1;
+  }
 }
 
 message CountUnreadStationMessages {
   message Request {
-      int64 user_id = 1;
-    }
+    int64 user_id = 1;
+  }
   message Response {
-      int64 count = 1;
-    }
+    int64 count = 1;
+  }
 }

@@ -9,11 +9,12 @@ import (
 	"fmt"
 	"os"
 
+	"log/slog"
+
 	"github.com/go-kratos/kratos/v3"
 	ktransport "github.com/go-kratos/kratos/v3/transport"
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
-	"log/slog"
 )
 
 var (

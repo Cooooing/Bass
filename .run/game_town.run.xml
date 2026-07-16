@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="integration" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="service">
+  <configuration default="false" name="game_town" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="service">
     <module name="integration" />
-    <working_directory value="$PROJECT_DIR$/app/integration" />
+    <working_directory value="$PROJECT_DIR$/app/game_town" />
     <EXTENSION ID="net.ashald.envfile">
       <option name="IS_ENABLED" value="true" />
       <option name="IS_SUBST" value="false" />
@@ -15,7 +15,7 @@
     </EXTENSION>
     <kind value="DIRECTORY" />
     <package value="integration" />
-    <directory value="$PROJECT_DIR$/app/integration/cmd" />
+    <directory value="$PROJECT_DIR$/app/game_town/cmd" />
     <filePath value="$PROJECT_DIR$/app/integration/cmd/main.go" />
     <method v="2" />
   </configuration>

@@ -45,6 +45,14 @@
 - repo 层每个 schema 对应的 repo 定义 `Get`、`List`、`Map`、`Count`、`Page` 五个查询方法。
 - 底层能力接口方法使用业务动作和资源语义命名，返回映射的方法使用 `Map` 语义。
 
+## Git 提交
+
+- 提交信息使用 `<type>(<scope>): <summary>` 格式，例如 `refactor(platform): consolidate integration capabilities`。
+- `type` 使用 `feat`、`fix`、`refactor`、`docs`、`test`、`chore`、`build`、`ci`、`perf`、`style` 或 `revert`。
+- `scope` 使用受影响模块或目录名，例如 `bbs`、`user`、`platform`、`common`、`ops`、`doc`；跨多个模块时使用 `all`。
+- `summary` 使用简短英文动词短语，首字母小写，不以句号结尾。
+- 一次提交只表达一个主要意图；混合修改时以主要变更选择 `type` 和 `scope`。
+
 ## 生成与验证
 
 - 生成、格式化、测试和构建优先使用 Makefile；运行 make 使用 bash。

@@ -16,16 +16,16 @@ func NewContentDomainUsecase(contentDomainClient repo.ContentDomainClient) *Cont
 }
 
 type ListDomainsReq struct {
-	Page  *common.PageRequest
-	Query *bbscontentv1.ListDomains_Request_DomainQuery
+	Page  *common.PageReq
+	Query *bbscontentv1.ListDomains_Req_DomainQuery
 }
 
-type ListDomainsResponse struct {
-	Page *repo.PageResponse
+type ListDomainsResp struct {
+	Page *repo.PageResp
 	Rows []*repo.Domain
 }
 
-func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomainsReq) (*ListDomainsResponse, error) {
+func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomainsReq) (*ListDomainsResp, error) {
 	if req == nil {
 		req = &ListDomainsReq{}
 	}
@@ -50,9 +50,9 @@ func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomains
 		value := int32(bbscontentv1.DomainStatus_DOMAIN_STATUS_ENABLED)
 		query.Status = &value
 	}
-	response, err := u.contentDomainClient.ListDomains(ctx, &repo.ListDomainsReq{Page: page, Query: query})
+	resp, err := u.contentDomainClient.ListDomains(ctx, &repo.ListDomainsReq{Page: page, Query: query})
 	if err != nil {
 		return nil, err
 	}
-	return &ListDomainsResponse{Page: response.Page, Rows: response.Rows}, nil
+	return &ListDomainsResp{Page: resp.Page, Rows: resp.Rows}, nil
 }

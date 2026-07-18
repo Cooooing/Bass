@@ -30,7 +30,7 @@ func (InboxEvent) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.String("event_id").Comment("消息体中的事件幂等 ID").NotEmpty(),
 		field.Enum("event_type").Values(commonenum.EventTypeMap.EnumValues()...).Comment("事件类型"),
-		field.Enum("subject").GoType(commonenum.EventSubject("")).Comment("收到消息的 NATS 主题"),
+		field.Enum("subject").GoType(commonenum.EventSubject("")).Values(commonenum.EventSubjectMap.EnumValues()...).Comment("收到消息的 NATS 主题"),
 		field.Text("payload").Comment("原始事件 JSON 消息体"),
 		field.Enum("status").Values(commonenum.InboxEventStatusMap.EnumValues()...).Default(string(commonenum.InboxEventStatusProcessing)).Comment("处理状态"),
 		field.Int32("attempt_count").Comment("处理尝试次数").Default(0),

@@ -34,7 +34,7 @@ func (s *ChatMessageService) RegisterHttp(hs *http.Server) {
 }
 
 // Send 发送消息。
-func (s *ChatMessageService) Send(ctx context.Context, req *v1.SendChatMessage_Request) (*v1.SendChatMessage_Response, error) {
+func (s *ChatMessageService) Send(ctx context.Context, req *v1.SendChatMessage_Req) (*v1.SendChatMessage_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -56,11 +56,11 @@ func (s *ChatMessageService) Send(ctx context.Context, req *v1.SendChatMessage_R
 	if err != nil {
 		return nil, err
 	}
-	return &v1.SendChatMessage_Response{}, nil
+	return &v1.SendChatMessage_Resp{}, nil
 }
 
 // Revoke 撤回消息。
-func (s *ChatMessageService) Revoke(ctx context.Context, req *v1.RevokeChatMessage_Request) (*v1.RevokeChatMessage_Response, error) {
+func (s *ChatMessageService) Revoke(ctx context.Context, req *v1.RevokeChatMessage_Req) (*v1.RevokeChatMessage_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -71,11 +71,11 @@ func (s *ChatMessageService) Revoke(ctx context.Context, req *v1.RevokeChatMessa
 	if err != nil {
 		return nil, err
 	}
-	return &v1.RevokeChatMessage_Response{}, nil
+	return &v1.RevokeChatMessage_Resp{}, nil
 }
 
 // List 查询消息列表。
-func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_Request) (*v1.ListChatMessages_Response, error) {
+func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_Req) (*v1.ListChatMessages_Resp, error) {
 	var ids []int64
 	var sessionID *int64
 	var senderID *int64
@@ -97,7 +97,7 @@ func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*v1.ListChatMessages_Response_ChatMessage, 0, len(resp.List))
+	rows := make([]*v1.ListChatMessages_Resp_ChatMessage, 0, len(resp.List))
 	for _, item := range resp.List {
 		msgType := enum.MessageTypeMap.MustToProto(item.Type)
 		status := enum.MessageStatusMap.MustToProto(item.Status)
@@ -109,7 +109,7 @@ func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_
 		if item.GroupID != nil {
 			receiverGroupID = *item.GroupID
 		}
-		rows = append(rows, &v1.ListChatMessages_Response_ChatMessage{
+		rows = append(rows, &v1.ListChatMessages_Resp_ChatMessage{
 			Id:              item.ID,
 			ReceiverUserId:  receiverUserID,
 			ReceiverGroupId: receiverGroupID,
@@ -118,8 +118,8 @@ func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_
 			Status:          status,
 		})
 	}
-	return &v1.ListChatMessages_Response{
-		Page: &common.PageResponse{Page: uint32(resp.Page.Page), Size: uint32(resp.Page.Size), Total: uint32(resp.Page.Total)},
+	return &v1.ListChatMessages_Resp{
+		Page: &common.PageResp{Page: uint32(resp.Page.Page), Size: uint32(resp.Page.Size), Total: uint32(resp.Page.Total)},
 		Rows: rows,
 	}, nil
 }

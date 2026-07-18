@@ -6,7 +6,7 @@ import (
 )
 
 type TaskAlert interface {
-	Alert(ctx context.Context, req *TaskAlertReq) (*TaskAlertResponse, error)
+	Alert(ctx context.Context, req *TaskAlertReq) error
 }
 
 type TaskAlertReq struct {
@@ -14,5 +14,3 @@ type TaskAlertReq struct {
 	Record *model.TaskExecutionRecord
 	Reason string
 }
-
-type TaskAlertResponse struct{}

@@ -8,7 +8,7 @@ const (
 	maxPageSize uint32 = 1000
 )
 
-func PageValid(p *common.PageRequest) *common.PageRequest {
+func PageValid(p *common.PageReq) *common.PageReq {
 	if p == nil {
 		return GetPageDefault()
 	}
@@ -24,15 +24,15 @@ func PageValid(p *common.PageRequest) *common.PageRequest {
 	return p
 }
 
-func GetPageDefault() *common.PageRequest {
-	return &common.PageRequest{
+func GetPageDefault() *common.PageReq {
+	return &common.PageReq{
 		Page: defaultPage,
 		Size: defaultSize,
 	}
 }
 
-func GetPageMax() *common.PageRequest {
-	return &common.PageRequest{
+func GetPageMax() *common.PageReq {
+	return &common.PageReq{
 		Page: defaultPage,
 		Size: maxPageSize,
 	}

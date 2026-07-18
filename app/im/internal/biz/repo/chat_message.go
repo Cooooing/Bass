@@ -8,32 +8,20 @@ import (
 )
 
 type ChatMessageRepo interface {
-	Save(ctx context.Context, req *ChatMessageSaveReq) (*ChatMessageSaveResponse, error)
-	UpdateStatus(ctx context.Context, req *ChatMessageUpdateStatusReq) (*ChatMessageUpdateStatusResponse, error)
+	Save(ctx context.Context, chatMessage *model.ChatMessage) (*model.ChatMessage, error)
+	UpdateStatus(ctx context.Context, req *ChatMessageUpdateStatusReq) (*model.ChatMessage, error)
 
-	Get(ctx context.Context, req *ChatMessageGetReq) (*ChatMessageGetResponse, error)
-	List(ctx context.Context, req *ChatMessageListReq) (*ChatMessageListResponse, error)
-	Map(ctx context.Context, req *ChatMessageMapReq) (*ChatMessageMapResponse, error)
-	Count(ctx context.Context, req *ChatMessageCountReq) (*ChatMessageCountResponse, error)
-	Page(ctx context.Context, req *ChatMessagePageReq) (*ChatMessagePageResponse, error)
-}
-
-type ChatMessageSaveReq struct {
-	ChatMessage *model.ChatMessage
-}
-
-type ChatMessageSaveResponse struct {
-	ChatMessage *model.ChatMessage
+	Get(ctx context.Context, query *ChatMessageQuery) (*model.ChatMessage, error)
+	List(ctx context.Context, query *ChatMessageQuery) ([]*model.ChatMessage, error)
+	Map(ctx context.Context, query *ChatMessageQuery) (map[int64]*model.ChatMessage, error)
+	Count(ctx context.Context, query *ChatMessageQuery) (int, error)
+	Page(ctx context.Context, query *ChatMessageQuery) (*ChatMessagePageResp, error)
 }
 
 type ChatMessageUpdateStatusReq struct {
 	ChatMessageID int64
 	Status        enum.MessageStatus
 	UpdatedBy     int64
-}
-
-type ChatMessageUpdateStatusResponse struct {
-	ChatMessage *model.ChatMessage
 }
 
 type ChatMessageQuery struct {
@@ -43,43 +31,7 @@ type ChatMessageQuery struct {
 	SenderID  *int64
 }
 
-type ChatMessageGetReq struct {
-	ChatMessageQuery
-}
-
-type ChatMessageGetResponse struct {
-	ChatMessage *model.ChatMessage
-}
-
-type ChatMessageListReq struct {
-	ChatMessageQuery
-}
-
-type ChatMessageListResponse struct {
+type ChatMessagePageResp struct {
 	Rows []*model.ChatMessage
-}
-
-type ChatMessageMapReq struct {
-	ChatMessageQuery
-}
-
-type ChatMessageMapResponse struct {
-	Rows map[int64]*model.ChatMessage
-}
-
-type ChatMessageCountReq struct {
-	ChatMessageQuery
-}
-
-type ChatMessageCountResponse struct {
-	Count int
-}
-
-type ChatMessagePageReq struct {
-	ChatMessageQuery
-}
-
-type ChatMessagePageResponse struct {
-	Rows []*model.ChatMessage
-	Page *base.PageResponse
+	Page *base.PageResp
 }

@@ -3,12 +3,12 @@ package repo
 import "context"
 
 type TotpClient interface {
-	CheckEnableCodeTotp(ctx context.Context, req *CheckEnableCodeTotpReq) (*CheckEnableCodeTotpResponse, error)
-	ValidateTotp(ctx context.Context, req *ValidateTotpReq) (*ValidateTotpResponse, error)
-	BeginEnableTotp(ctx context.Context, req *BeginEnableTotpReq) (*BeginEnableTotpResponse, error)
-	ConfirmEnableTotp(ctx context.Context, req *ConfirmEnableTotpReq) (*ConfirmEnableTotpResponse, error)
-	DisableTotp(ctx context.Context, req *DisableTotpReq) (*DisableTotpResponse, error)
-	GetCurrentTotp(ctx context.Context, req *GetCurrentTotpReq) (*GetCurrentTotpResponse, error)
+	CheckEnableCodeTotp(ctx context.Context, req *CheckEnableCodeTotpReq) (bool, error)
+	ValidateTotp(ctx context.Context, req *ValidateTotpReq) (bool, error)
+	BeginEnableTotp(ctx context.Context, req *BeginEnableTotpReq) (*BeginEnableTotpResp, error)
+	ConfirmEnableTotp(ctx context.Context, req *ConfirmEnableTotpReq) error
+	DisableTotp(ctx context.Context, req *DisableTotpReq) error
+	GetCurrentTotp(ctx context.Context, userID int64) (*Totp, error)
 }
 
 type Totp struct {
@@ -22,17 +22,9 @@ type CheckEnableCodeTotpReq struct {
 	Code   string
 }
 
-type CheckEnableCodeTotpResponse struct {
-	Verified bool
-}
-
 type ValidateTotpReq struct {
 	UserID int64
 	Code   string
-}
-
-type ValidateTotpResponse struct {
-	Verified bool
 }
 
 type BeginEnableTotpReq struct {
@@ -40,7 +32,7 @@ type BeginEnableTotpReq struct {
 	AccountName string
 }
 
-type BeginEnableTotpResponse struct {
+type BeginEnableTotpResp struct {
 	URL    string
 	QRCode []byte
 }
@@ -50,19 +42,7 @@ type ConfirmEnableTotpReq struct {
 	Code   string
 }
 
-type ConfirmEnableTotpResponse struct{}
-
 type DisableTotpReq struct {
 	UserID int64
 	Code   string
-}
-
-type DisableTotpResponse struct{}
-
-type GetCurrentTotpReq struct {
-	UserID int64
-}
-
-type GetCurrentTotpResponse struct {
-	Totp *Totp
 }

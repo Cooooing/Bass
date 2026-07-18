@@ -29,27 +29,27 @@ import (
 
 var (
 	serverRequestsTotal = prometheus.NewCounterVec(
-		prometheus.CounterOpts{Name: "bass_server_requests_total", Help: "Total number of server requests."},
+		prometheus.CounterOpts{Name: "bass_server_Reqs_total", Help: "Total number of server requests."},
 		[]string{"service", "transport", "operation", "status_code"},
 	)
 	serverRequestDurationSeconds = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{Name: "bass_server_request_duration_seconds", Help: "Server request duration in seconds.", Buckets: prometheus.DefBuckets},
+		prometheus.HistogramOpts{Name: "bass_server_Req_duration_seconds", Help: "Server request duration in seconds.", Buckets: prometheus.DefBuckets},
 		[]string{"service", "transport", "operation", "status_code"},
 	)
 	clientRequestsTotal = prometheus.NewCounterVec(
-		prometheus.CounterOpts{Name: "bass_client_requests_total", Help: "Total number of client requests."},
+		prometheus.CounterOpts{Name: "bass_client_Reqs_total", Help: "Total number of client requests."},
 		[]string{"service", "target", "transport", "operation", "status_code"},
 	)
 	clientRequestDurationSeconds = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{Name: "bass_client_request_duration_seconds", Help: "Client request duration in seconds.", Buckets: prometheus.DefBuckets},
+		prometheus.HistogramOpts{Name: "bass_client_Req_duration_seconds", Help: "Client request duration in seconds.", Buckets: prometheus.DefBuckets},
 		[]string{"service", "target", "transport", "operation", "status_code"},
 	)
 	MessageRequestsTotal = prometheus.NewCounterVec(
-		prometheus.CounterOpts{Name: "bass_message_requests_total", Help: "Total number of message publish and consume operations."},
+		prometheus.CounterOpts{Name: "bass_message_Reqs_total", Help: "Total number of message publish and consume operations."},
 		[]string{"service", "direction", "subject", "status"},
 	)
 	MessageRequestDurationSeconds = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{Name: "bass_message_request_duration_seconds", Help: "Message publish and consume duration in seconds.", Buckets: prometheus.DefBuckets},
+		prometheus.HistogramOpts{Name: "bass_message_Req_duration_seconds", Help: "Message publish and consume duration in seconds.", Buckets: prometheus.DefBuckets},
 		[]string{"service", "direction", "subject", "status"},
 	)
 	DeadLetterAlertsTotal = prometheus.NewCounterVec(

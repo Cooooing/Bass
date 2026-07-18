@@ -27,43 +27,43 @@ func (s *TotpService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *TotpService) RegisterHttp(hs *http.Server) {}
 
-func (s *TotpService) Validate(ctx context.Context, req *v1.ValidateTotp_Request) (*v1.ValidateTotp_Response, error) {
+func (s *TotpService) Validate(ctx context.Context, req *v1.ValidateTotp_Req) (*v1.ValidateTotp_Resp, error) {
 	res, err := s.totpUsecase.ValidateByUserID(ctx, &usecase.ValidateTotpByUserIDReq{UserID: req.GetUserId(), Code: req.GetCode()})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.ValidateTotp_Response{Verified: res.Verified}, nil
+	return &v1.ValidateTotp_Resp{Verified: res}, nil
 }
 
-func (s *TotpService) BeginEnable(ctx context.Context, req *v1.BeginEnableTotp_Request) (*v1.BeginEnableTotp_Response, error) {
+func (s *TotpService) BeginEnable(ctx context.Context, req *v1.BeginEnableTotp_Req) (*v1.BeginEnableTotp_Resp, error) {
 	res, err := s.totpUsecase.BeginEnable(ctx, &usecase.BeginEnableTotpReq{UserID: req.GetUserId(), AccountName: req.GetAccountName()})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.BeginEnableTotp_Response{Url: res.URL, QrCode: res.QRCode}, nil
+	return &v1.BeginEnableTotp_Resp{Url: res.URL, QrCode: res.QRCode}, nil
 }
 
-func (s *TotpService) ConfirmEnable(ctx context.Context, req *v1.ConfirmEnableTotp_Request) (*v1.ConfirmEnableTotp_Response, error) {
+func (s *TotpService) ConfirmEnable(ctx context.Context, req *v1.ConfirmEnableTotp_Req) (*v1.ConfirmEnableTotp_Resp, error) {
 	err := s.totpUsecase.ConfirmEnable(ctx, &usecase.ConfirmEnableTotpReq{UserID: req.GetUserId(), Code: req.GetCode()})
-	return &v1.ConfirmEnableTotp_Response{}, err
+	return &v1.ConfirmEnableTotp_Resp{}, err
 }
 
-func (s *TotpService) Disable(ctx context.Context, req *v1.DisableTotp_Request) (*v1.DisableTotp_Response, error) {
+func (s *TotpService) Disable(ctx context.Context, req *v1.DisableTotp_Req) (*v1.DisableTotp_Resp, error) {
 	err := s.totpUsecase.Disable(ctx, &usecase.DisableTotpReq{UserID: req.GetUserId(), Code: req.GetCode()})
-	return &v1.DisableTotp_Response{}, err
+	return &v1.DisableTotp_Resp{}, err
 }
 
-func (s *TotpService) Get(ctx context.Context, req *v1.GetTotp_Request) (*v1.GetTotp_Response, error) {
-	res, err := s.totpUsecase.GetByUserID(ctx, &usecase.GetTotpByUserIDReq{UserID: req.GetUserId()})
+func (s *TotpService) Get(ctx context.Context, req *v1.GetTotp_Req) (*v1.GetTotp_Resp, error) {
+	res, err := s.totpUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
-	reply := &v1.GetTotp_Response_Totp{UserId: req.GetUserId()}
-	if res.Totp != nil {
-		reply.Enable = res.Totp.Enable
-		if res.Totp.EnableTime != nil {
-			reply.EnableTime = timestamppb.New(*res.Totp.EnableTime)
+	reply := &v1.GetTotp_Resp_Totp{UserId: req.GetUserId()}
+	if res != nil {
+		reply.Enable = res.Enable
+		if res.EnableTime != nil {
+			reply.EnableTime = timestamppb.New(*res.EnableTime)
 		}
 	}
-	return &v1.GetTotp_Response{Totp: reply}, nil
+	return &v1.GetTotp_Resp{Totp: reply}, nil
 }

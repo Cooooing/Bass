@@ -10,18 +10,18 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/user/v1;v1";
 
 service AccountService {
-  rpc Get(GetAccount.Request) returns (GetAccount.Response) {} // 查询单个账号。
-  rpc List(ListAccounts.Request) returns (ListAccounts.Response) {} // 查询账号列表。
-  rpc Map(MapAccounts.Request) returns (MapAccounts.Response) {} // 查询账号映射。
-  rpc UpdateProfile(UpdateProfileAccount.Request) returns (UpdateProfileAccount.Response) {} // 更新账号展示资料。
-  rpc Avatar(AvatarAccount.Request) returns (.common.api.app.common.ImageResponse) {} // 生成默认账号头像。
+  rpc Get(GetAccount.Req) returns (GetAccount.Resp) {} // 查询单个账号。
+  rpc List(ListAccounts.Req) returns (ListAccounts.Resp) {} // 查询账号列表。
+  rpc Map(MapAccounts.Req) returns (MapAccounts.Resp) {} // 查询账号映射。
+  rpc UpdateProfile(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {} // 更新账号展示资料。
+  rpc Avatar(AvatarAccount.Req) returns (.common.api.app.common.ImageResp) {} // 生成默认账号头像。
 }
 
 message GetAccount {
-  message Request {
+  message Req {
     int64 user_id = 1;
   }
-  message Response {
+  message Resp {
 
     message Account {
       AccountBasic basic = 1;
@@ -53,14 +53,14 @@ message GetAccount {
 }
 
 message ListAccounts {
-  message Request {
+  message Req {
 
     message AccountQuery {
       repeated int64 user_ids = 1;
     }
     AccountQuery query = 1;
   }
-  message Response {
+  message Resp {
 
     message Account {
       AccountBasic basic = 1;
@@ -92,14 +92,14 @@ message ListAccounts {
 }
 
 message MapAccounts {
-  message Request {
+  message Req {
 
     message AccountQuery {
       repeated int64 user_ids = 1;
     }
     AccountQuery query = 1;
   }
-  message Response {
+  message Resp {
 
     message Account {
       AccountBasic basic = 1;
@@ -131,7 +131,7 @@ message MapAccounts {
 }
 
 message UpdateProfileAccount {
-  message Request {
+  message Req {
     int64 user_id = 1;
     optional string avatar_url = 2;
     optional string nickname = 3;
@@ -139,7 +139,7 @@ message UpdateProfileAccount {
     optional string introduction = 5;
     optional MBTI mbti = 6;
   }
-  message Response {
+  message Resp {
 
     message AccountBasic {
       int64 id = 1;
@@ -160,7 +160,7 @@ message UpdateProfileAccount {
 }
 
 message AvatarAccount {
-  message Request {
+  message Req {
     string name = 1;
   }
 }

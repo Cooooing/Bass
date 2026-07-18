@@ -13,7 +13,7 @@ option go_package = "common/proto/gen/bbs/v1/user;user";
 // 认证接口。
 service AuthService {
   // 使用邮箱发起账号注册。
-  rpc StartEmailRegistration(StartEmailRegistration.Request) returns (StartEmailRegistration.Response) {
+  rpc StartEmailRegistration(StartEmailRegistration.Req) returns (StartEmailRegistration.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/start-email-registration"
       body: "*"
@@ -21,7 +21,7 @@ service AuthService {
   }
 
   // 校验邮箱注册验证码。
-  rpc VerifyEmailRegistration(VerifyEmailRegistration.Request) returns (VerifyEmailRegistration.Response) {
+  rpc VerifyEmailRegistration(VerifyEmailRegistration.Req) returns (VerifyEmailRegistration.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/verify-email-registration"
       body: "*"
@@ -29,7 +29,7 @@ service AuthService {
   }
 
   // 使用手机号发起账号注册。
-  rpc StartPhoneRegistration(StartPhoneRegistration.Request) returns (StartPhoneRegistration.Response) {
+  rpc StartPhoneRegistration(StartPhoneRegistration.Req) returns (StartPhoneRegistration.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/start-phone-registration"
       body: "*"
@@ -37,7 +37,7 @@ service AuthService {
   }
 
   // 校验手机号注册验证码。
-  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Request) returns (VerifyPhoneRegistration.Response) {
+  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Req) returns (VerifyPhoneRegistration.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/verify-phone-registration"
       body: "*"
@@ -45,7 +45,7 @@ service AuthService {
   }
 
   // 使用密码登录账号。
-  rpc LoginByPassword(LoginByPassword.Request) returns (LoginByPassword.Response) {
+  rpc LoginByPassword(LoginByPassword.Req) returns (LoginByPassword.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/login-by-password"
       body: "*"
@@ -53,7 +53,7 @@ service AuthService {
   }
 
   // 登出当前账号。
-  rpc Logout(Logout.Request) returns (Logout.Response) {
+  rpc Logout(Logout.Req) returns (Logout.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/logout"
       body: "*"
@@ -63,7 +63,7 @@ service AuthService {
 
 // 使用邮箱发起账号注册。
 message StartEmailRegistration {
-  message Request {
+  message Req {
     // 邮箱地址。
     string email = 1;
     // 账号密码。
@@ -78,7 +78,7 @@ message StartEmailRegistration {
       required: "name"
     };
   }
-  message Response {
+  message Resp {
     // 验证码令牌。
     string code_token = 1;
     // 验证码。
@@ -88,7 +88,7 @@ message StartEmailRegistration {
 
 // 校验邮箱注册验证码。
 message VerifyEmailRegistration {
-  message Request {
+  message Req {
     // 验证码。
     string code = 1;
     // 验证码令牌。
@@ -98,12 +98,12 @@ message VerifyEmailRegistration {
       required: "code_token"
     };
   }
-  message Response {}
+  message Resp {}
 }
 
 // 使用手机号发起账号注册。
 message StartPhoneRegistration {
-  message Request {
+  message Req {
     // 手机号。
     string phone = 1;
     // 账号密码。
@@ -118,7 +118,7 @@ message StartPhoneRegistration {
       required: "name"
     };
   }
-  message Response {
+  message Resp {
     // 验证码令牌。
     string code_token = 1;
     // 验证码。
@@ -128,7 +128,7 @@ message StartPhoneRegistration {
 
 // 校验手机号注册验证码。
 message VerifyPhoneRegistration {
-  message Request {
+  message Req {
     // 验证码。
     string code = 1;
     // 验证码令牌。
@@ -138,12 +138,12 @@ message VerifyPhoneRegistration {
       required: "code_token"
     };
   }
-  message Response {}
+  message Resp {}
 }
 
 // 使用密码登录账号。
 message LoginByPassword {
-  message Request {
+  message Req {
     // 账号、邮箱或手机号。
     string account = 1;
     // 账号密码。
@@ -153,7 +153,7 @@ message LoginByPassword {
       required: "password"
     };
   }
-  message Response {
+  message Resp {
 
     message Account {
       AccountBasic basic = 1;
@@ -189,6 +189,6 @@ message LoginByPassword {
 
 // 登出当前账号。
 message Logout {
-  message Request {}
-  message Response {}
+  message Req {}
+  message Resp {}
 }

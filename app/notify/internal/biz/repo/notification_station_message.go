@@ -9,63 +9,19 @@ import (
 )
 
 type NotificationStationMessageRepo interface {
-	Save(ctx context.Context, req *NotificationStationMessageSaveReq) (*NotificationStationMessageSaveResponse, error)
-	Get(ctx context.Context, req *NotificationStationMessageGetReq) (*NotificationStationMessageGetResponse, error)
-	List(ctx context.Context, req *NotificationStationMessageListReq) (*NotificationStationMessageListResponse, error)
-	Map(ctx context.Context, req *NotificationStationMessageMapReq) (*NotificationStationMessageMapResponse, error)
-	Count(ctx context.Context, req *NotificationStationMessageCountReq) (*NotificationStationMessageCountResponse, error)
-	Page(ctx context.Context, req *NotificationStationMessagePageReq) (*NotificationStationMessagePageResponse, error)
-	MarkRead(ctx context.Context, req *NotificationStationMessageMarkReadReq) (*NotificationStationMessageMarkReadResponse, error)
-	CountUnread(ctx context.Context, req *NotificationStationMessageCountUnreadReq) (*NotificationStationMessageCountUnreadResponse, error)
+	Save(ctx context.Context, message *model.NotificationStationMessage) (*model.NotificationStationMessage, error)
+	Get(ctx context.Context, query *NotificationStationMessageQuery) (*model.NotificationStationMessage, error)
+	List(ctx context.Context, query *NotificationStationMessageQuery) ([]*model.NotificationStationMessage, error)
+	Map(ctx context.Context, query *NotificationStationMessageQuery) (map[int64]*model.NotificationStationMessage, error)
+	Count(ctx context.Context, query *NotificationStationMessageQuery) (int, error)
+	Page(ctx context.Context, query *NotificationStationMessageQuery) (*NotificationStationMessagePageResp, error)
+	MarkRead(ctx context.Context, req *NotificationStationMessageMarkReadReq) (int, error)
+	CountUnread(ctx context.Context, receiverID int64) (int, error)
 }
 
-type NotificationStationMessageSaveReq struct {
-	Message *model.NotificationStationMessage
-}
-
-type NotificationStationMessageSaveResponse struct {
-	Message *model.NotificationStationMessage
-}
-
-type NotificationStationMessageGetReq struct {
-	Query *NotificationStationMessageQuery
-}
-
-type NotificationStationMessageGetResponse struct {
-	Item *model.NotificationStationMessage
-}
-
-type NotificationStationMessageListReq struct {
-	Query *NotificationStationMessageQuery
-}
-
-type NotificationStationMessageListResponse struct {
+type NotificationStationMessagePageResp struct {
 	Rows []*model.NotificationStationMessage
-}
-
-type NotificationStationMessageMapReq struct {
-	Query *NotificationStationMessageQuery
-}
-
-type NotificationStationMessageMapResponse struct {
-	Rows map[int64]*model.NotificationStationMessage
-}
-
-type NotificationStationMessageCountReq struct {
-	Query *NotificationStationMessageQuery
-}
-
-type NotificationStationMessageCountResponse struct {
-	Count int
-}
-
-type NotificationStationMessagePageReq struct {
-	Query *NotificationStationMessageQuery
-}
-
-type NotificationStationMessagePageResponse struct {
-	Rows []*model.NotificationStationMessage
-	Page *base.PageResponse
+	Page *base.PageResp
 }
 
 type NotificationStationMessageMarkReadReq struct {
@@ -73,18 +29,6 @@ type NotificationStationMessageMarkReadReq struct {
 	IDs        []int64
 	StartTime  *time.Time
 	EndTime    *time.Time
-}
-
-type NotificationStationMessageMarkReadResponse struct {
-	Count int
-}
-
-type NotificationStationMessageCountUnreadReq struct {
-	ReceiverID int64
-}
-
-type NotificationStationMessageCountUnreadResponse struct {
-	Count int
 }
 
 type NotificationStationMessageQuery struct {

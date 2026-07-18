@@ -3,9 +3,9 @@ package repo
 import "context"
 
 type NotificationClient interface {
-	ListNotifications(ctx context.Context, req *ListNotificationsReq) (*ListNotificationsResponse, error)
-	MarkReadNotification(ctx context.Context, req *MarkReadNotificationReq) (*MarkReadNotificationResponse, error)
-	CountUnreadNotifications(ctx context.Context, req *CountUnreadNotificationsReq) (*CountUnreadNotificationsResponse, error)
+	ListNotifications(ctx context.Context, req *ListNotificationsReq) (*ListNotificationsResp, error)
+	MarkReadNotification(ctx context.Context, req *MarkReadNotificationReq) (int32, error)
+	CountUnreadNotifications(ctx context.Context, userID int64) (int64, error)
 }
 
 type Notification struct {
@@ -25,24 +25,12 @@ type ListNotificationsReq struct {
 	Page   *PageReq
 }
 
-type ListNotificationsResponse struct {
-	Page *PageResponse
+type ListNotificationsResp struct {
+	Page *PageResp
 	Rows []*Notification
 }
 
 type MarkReadNotificationReq struct {
 	UserID int64
 	IDs    []int64
-}
-
-type MarkReadNotificationResponse struct {
-	Count int32
-}
-
-type CountUnreadNotificationsReq struct {
-	UserID int64
-}
-
-type CountUnreadNotificationsResponse struct {
-	Count int64
 }

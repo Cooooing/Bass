@@ -38,7 +38,7 @@ func (r *TaskExecutionRecordRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *TaskExecutionRecordRepo) Get(ctx context.Context, req *bizrepo.TaskExecutionRecordGetReq) (*bizrepo.TaskExecutionRecordGetResponse, error) {
+func (r *TaskExecutionRecordRepo) Get(ctx context.Context, req *bizrepo.TaskExecutionRecordGetReq) (*model.TaskExecutionRecord, error) {
 	query := r.getClient(ctx).TaskExecutionRecord.Query()
 	query = r.getQuery(query, req)
 	row, err := query.Only(ctx)
@@ -48,10 +48,10 @@ func (r *TaskExecutionRecordRepo) Get(ctx context.Context, req *bizrepo.TaskExec
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.TaskExecutionRecordGetResponse{Row: r.model(row)}, nil
+	return r.model(row), nil
 }
 
-func (r *TaskExecutionRecordRepo) List(ctx context.Context, req *bizrepo.TaskExecutionRecordGetReq) (*bizrepo.TaskExecutionRecordListResponse, error) {
+func (r *TaskExecutionRecordRepo) List(ctx context.Context, req *bizrepo.TaskExecutionRecordGetReq) ([]*model.TaskExecutionRecord, error) {
 	query := r.getClient(ctx).TaskExecutionRecord.Query()
 	query = r.getQuery(query, req)
 	rows, err := query.Order(taskexecutionrecord.ByScheduledAt(entsql.OrderDesc())).All(ctx)
@@ -62,32 +62,32 @@ func (r *TaskExecutionRecordRepo) List(ctx context.Context, req *bizrepo.TaskExe
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return &bizrepo.TaskExecutionRecordListResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *TaskExecutionRecordRepo) Map(ctx context.Context, req *bizrepo.TaskExecutionRecordGetReq) (*bizrepo.TaskExecutionRecordMapResponse, error) {
-	resp, err := r.List(ctx, req)
+func (r *TaskExecutionRecordRepo) Map(ctx context.Context, req *bizrepo.TaskExecutionRecordGetReq) (map[int64]*model.TaskExecutionRecord, error) {
+	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[int64]*model.TaskExecutionRecord, len(resp.Rows))
-	for _, row := range resp.Rows {
+	result := make(map[int64]*model.TaskExecutionRecord, len(rows))
+	for _, row := range rows {
 		result[row.ID] = row
 	}
-	return &bizrepo.TaskExecutionRecordMapResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *TaskExecutionRecordRepo) Count(ctx context.Context, req *bizrepo.TaskExecutionRecordGetReq) (*bizrepo.TaskExecutionRecordCountResponse, error) {
+func (r *TaskExecutionRecordRepo) Count(ctx context.Context, req *bizrepo.TaskExecutionRecordGetReq) (int, error) {
 	query := r.getClient(ctx).TaskExecutionRecord.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &bizrepo.TaskExecutionRecordCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *TaskExecutionRecordRepo) Page(ctx context.Context, req *bizrepo.TaskExecutionRecordPageReq) (*bizrepo.TaskExecutionRecordPageResponse, error) {
+func (r *TaskExecutionRecordRepo) Page(ctx context.Context, req *bizrepo.TaskExecutionRecordPageReq) (*bizrepo.TaskExecutionRecordPageResp, error) {
 	page := server.PageValid(req.Page)
 	query := r.getClient(ctx).TaskExecutionRecord.Query()
 	query = r.getQuery(query, &req.TaskExecutionRecordGetReq)
@@ -103,10 +103,10 @@ func (r *TaskExecutionRecordRepo) Page(ctx context.Context, req *bizrepo.TaskExe
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return &bizrepo.TaskExecutionRecordPageResponse{Rows: result, Page: &common.PageResponse{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
+	return &bizrepo.TaskExecutionRecordPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
 }
 
-func (r *TaskExecutionRecordRepo) ExistsPeriod(ctx context.Context, req *bizrepo.TaskExecutionRecordExistsPeriodReq) (*bizrepo.TaskExecutionRecordExistsPeriodResponse, error) {
+func (r *TaskExecutionRecordRepo) ExistsPeriod(ctx context.Context, req *bizrepo.TaskExecutionRecordExistsPeriodReq) (bool, error) {
 	exists, err := r.getClient(ctx).TaskExecutionRecord.Query().
 		Where(
 			taskexecutionrecord.TaskIDEQ(req.TaskID),
@@ -114,12 +114,12 @@ func (r *TaskExecutionRecordRepo) ExistsPeriod(ctx context.Context, req *bizrepo
 		).
 		Exist(ctx)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &bizrepo.TaskExecutionRecordExistsPeriodResponse{Exists: exists}, nil
+	return exists, nil
 }
 
-func (r *TaskExecutionRecordRepo) Create(ctx context.Context, req *bizrepo.TaskExecutionRecordCreateReq) (*bizrepo.TaskExecutionRecordCreateResponse, error) {
+func (r *TaskExecutionRecordRepo) Create(ctx context.Context, req *bizrepo.TaskExecutionRecordCreateReq) (*bizrepo.TaskExecutionRecordCreateResp, error) {
 	record := req.Record
 	created, err := r.getClient(ctx).TaskExecutionRecord.Create().
 		SetTaskID(record.TaskID).
@@ -137,17 +137,17 @@ func (r *TaskExecutionRecordRepo) Create(ctx context.Context, req *bizrepo.TaskE
 		Save(ctx)
 	if gen.IsConstraintError(err) {
 		if strings.Contains(err.Error(), "scheduler_task_execution_records_task_period_unique") {
-			return &bizrepo.TaskExecutionRecordCreateResponse{Conflict: true}, nil
+			return &bizrepo.TaskExecutionRecordCreateResp{Conflict: true}, nil
 		}
 		return nil, err
 	}
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.TaskExecutionRecordCreateResponse{Row: r.model(created), Created: true}, nil
+	return &bizrepo.TaskExecutionRecordCreateResp{Row: r.model(created), Created: true}, nil
 }
 
-func (r *TaskExecutionRecordRepo) HasUnexpiredRunning(ctx context.Context, req *bizrepo.TaskExecutionRecordHasUnexpiredRunningReq) (*bizrepo.TaskExecutionRecordHasUnexpiredRunningResponse, error) {
+func (r *TaskExecutionRecordRepo) HasUnexpiredRunning(ctx context.Context, req *bizrepo.TaskExecutionRecordHasUnexpiredRunningReq) (bool, error) {
 	exists, err := r.getClient(ctx).TaskExecutionRecord.Query().
 		Where(
 			taskexecutionrecord.TaskIDEQ(req.TaskID),
@@ -156,14 +156,14 @@ func (r *TaskExecutionRecordRepo) HasUnexpiredRunning(ctx context.Context, req *
 		).
 		Exist(ctx)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &bizrepo.TaskExecutionRecordHasUnexpiredRunningResponse{Exists: exists}, nil
+	return exists, nil
 }
 
-func (r *TaskExecutionRecordRepo) MarkUnknown(ctx context.Context, req *bizrepo.TaskExecutionRecordMarkUnknownReq) (*bizrepo.TaskExecutionRecordMarkUnknownResponse, error) {
+func (r *TaskExecutionRecordRepo) MarkUnknown(ctx context.Context, req *bizrepo.TaskExecutionRecordMarkUnknownReq) ([]*model.TaskExecutionRecord, error) {
 	if len(req.IDs) == 0 {
-		return &bizrepo.TaskExecutionRecordMarkUnknownResponse{}, nil
+		return nil, nil
 	}
 	rows, err := r.getClient(ctx).TaskExecutionRecord.Query().
 		Where(taskexecutionrecord.IDIn(req.IDs...), taskexecutionrecord.StatusEQ(taskexecutionrecord.StatusRunning)).
@@ -195,10 +195,10 @@ func (r *TaskExecutionRecordRepo) MarkUnknown(ctx context.Context, req *bizrepo.
 		}
 		result = append(result, r.model(updated))
 	}
-	return &bizrepo.TaskExecutionRecordMarkUnknownResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *TaskExecutionRecordRepo) MarkFinished(ctx context.Context, req *bizrepo.TaskExecutionRecordMarkFinishedReq) (*bizrepo.TaskExecutionRecordMarkFinishedResponse, error) {
+func (r *TaskExecutionRecordRepo) MarkFinished(ctx context.Context, req *bizrepo.TaskExecutionRecordMarkFinishedReq) (*bizrepo.TaskExecutionRecordMarkFinishedResp, error) {
 	row, err := r.getClient(ctx).TaskExecutionRecord.UpdateOneID(req.ID).
 		Where(taskexecutionrecord.StatusEQ(taskexecutionrecord.StatusRunning)).
 		SetStatus(taskexecutionrecord.Status(req.Status)).
@@ -211,12 +211,12 @@ func (r *TaskExecutionRecordRepo) MarkFinished(ctx context.Context, req *bizrepo
 		if getErr != nil {
 			return nil, getErr
 		}
-		return &bizrepo.TaskExecutionRecordMarkFinishedResponse{Row: current.Row}, nil
+		return &bizrepo.TaskExecutionRecordMarkFinishedResp{Row: current}, nil
 	}
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.TaskExecutionRecordMarkFinishedResponse{Row: r.model(row), Updated: true}, nil
+	return &bizrepo.TaskExecutionRecordMarkFinishedResp{Row: r.model(row), Updated: true}, nil
 }
 
 func (r *TaskExecutionRecordRepo) getQuery(query *gen.TaskExecutionRecordQuery, req *bizrepo.TaskExecutionRecordGetReq) *gen.TaskExecutionRecordQuery {

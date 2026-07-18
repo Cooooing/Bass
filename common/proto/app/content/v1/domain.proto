@@ -10,16 +10,16 @@ option go_package = "common/proto/gen/content/v1;v1";
 
 // 领域服务
 service ContentDomainService {
-  rpc BatchCreate(BatchCreateDomains.Request) returns (BatchCreateDomains.Response) {} // 批量创建领域
+  rpc BatchCreate(BatchCreateDomains.Req) returns (BatchCreateDomains.Resp) {} // 批量创建领域
 
-  rpc Update(UpdateDomain.Request) returns (UpdateDomain.Response) {} // 修改领域信息
+  rpc Update(UpdateDomain.Req) returns (UpdateDomain.Resp) {} // 修改领域信息
 
-  rpc List(ListDomains.Request) returns (ListDomains.Response) {} // 查询领域列表
-  rpc Page(PageDomains.Request) returns (PageDomains.Response) {} // 分页查询领域
+  rpc List(ListDomains.Req) returns (ListDomains.Resp) {} // 查询领域列表
+  rpc Page(PageDomains.Req) returns (PageDomains.Resp) {} // 分页查询领域
 }
 
 message BatchCreateDomains {
-  message Request {repeated Domain domains = 1; // 领域信息列表
+  message Req {repeated Domain domains = 1; // 领域信息列表
     int64 user_id = 2; // 用户 ID
 
     message Domain {
@@ -31,7 +31,7 @@ message BatchCreateDomains {
       bool is_nav = 7; // 是否导航
     }
   }
-  message Response {
+  message Resp {
 
     message Domain {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -52,7 +52,7 @@ message BatchCreateDomains {
 }
 
 message UpdateDomain {
-  message Request {
+  message Req {
     Domain domain = 1; // 领域信息
     int64 user_id = 2; // 用户 ID
 
@@ -66,7 +66,7 @@ message UpdateDomain {
       bool is_nav = 7; // 是否导航
     }
   }
-  message Response {
+  message Resp {
 
     message Domain {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -87,7 +87,7 @@ message UpdateDomain {
 }
 
 message ListDomains {
-  message Request {
+  message Req {
 
     message DomainQueryParams {
       repeated int64 ids = 1; // 主键列表
@@ -100,7 +100,7 @@ message ListDomains {
     }
     DomainQueryParams query = 1; // 查询参数
   }
-  message Response {
+  message Resp {
 
     message Domain {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -121,7 +121,7 @@ message ListDomains {
 }
 
 message PageDomains {
-  message Request {
+  message Req {
 
     message DomainQueryParams {
       repeated int64 ids = 1; // 主键列表
@@ -133,9 +133,9 @@ message PageDomains {
       optional bool is_nav = 7; // 是否导航
     }
     DomainQueryParams query = 1; // 查询参数
-    optional .common.api.app.common.PageRequest page = 2; // 分页参数
+    optional .common.api.app.common.PageReq page = 2; // 分页参数
   }
-  message Response {
+  message Resp {
 
     message Domain {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -152,6 +152,6 @@ message PageDomains {
       bool is_nav = 7; // 是否导航
     }
     repeated Domain rows = 1; // 领域列表
-    optional .common.api.app.common.PageResponse page = 2; // 分页信息
+    optional .common.api.app.common.PageResp page = 2; // 分页信息
   }
 }

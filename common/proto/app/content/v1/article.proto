@@ -10,38 +10,38 @@ option go_package = "common/proto/gen/content/v1;v1";
 
 // Article 服务
 service ContentArticleService {
-  rpc Create(CreateArticle.Request) returns (CreateArticle.Response) {} // 创建文章草稿
-  rpc AddPostscript(AddPostscriptArticle.Request) returns (AddPostscriptArticle.Response) {} // 添加附言
-  rpc ListPostscripts(ListArticlePostscripts.Request) returns (ListArticlePostscripts.Response) {} // 查询附言列表
+  rpc Create(CreateArticle.Req) returns (CreateArticle.Resp) {} // 创建文章草稿
+  rpc AddPostscript(AddPostscriptArticle.Req) returns (AddPostscriptArticle.Resp) {} // 添加附言
+  rpc ListPostscripts(ListArticlePostscripts.Req) returns (ListArticlePostscripts.Resp) {} // 查询附言列表
 
-  rpc Publish(PublishArticle.Request) returns (PublishArticle.Response) {} // 发布文章
-  rpc Update(UpdateArticle.Request) returns (UpdateArticle.Response) {} // 修改文章内容
-  rpc DiscardDraft(DiscardDraftArticle.Request) returns (DiscardDraftArticle.Response) {} // 丢弃草稿
-  rpc MakePrivate(MakePrivateArticle.Request) returns (MakePrivateArticle.Response) {} // 设为私有
-  rpc MakePublic(MakePublicArticle.Request) returns (MakePublicArticle.Response) {} // 设为公开
-  rpc Archive(ArchiveArticle.Request) returns (ArchiveArticle.Response) {} // 归档文章
-  rpc Unarchive(UnarchiveArticle.Request) returns (UnarchiveArticle.Response) {} // 取消归档
-  rpc Hide(HideArticle.Request) returns (HideArticle.Response) {} // 管理隐藏文章
-  rpc Unhide(UnhideArticle.Request) returns (UnhideArticle.Response) {} // 取消管理隐藏
-  rpc Lock(LockArticle.Request) returns (LockArticle.Response) {} // 管理锁定文章
-  rpc Unlock(UnlockArticle.Request) returns (UnlockArticle.Response) {} // 管理解锁文章
+  rpc Publish(PublishArticle.Req) returns (PublishArticle.Resp) {} // 发布文章
+  rpc Update(UpdateArticle.Req) returns (UpdateArticle.Resp) {} // 修改文章内容
+  rpc DiscardDraft(DiscardDraftArticle.Req) returns (DiscardDraftArticle.Resp) {} // 丢弃草稿
+  rpc MakePrivate(MakePrivateArticle.Req) returns (MakePrivateArticle.Resp) {} // 设为私有
+  rpc MakePublic(MakePublicArticle.Req) returns (MakePublicArticle.Resp) {} // 设为公开
+  rpc Archive(ArchiveArticle.Req) returns (ArchiveArticle.Resp) {} // 归档文章
+  rpc Unarchive(UnarchiveArticle.Req) returns (UnarchiveArticle.Resp) {} // 取消归档
+  rpc Hide(HideArticle.Req) returns (HideArticle.Resp) {} // 管理隐藏文章
+  rpc Unhide(UnhideArticle.Req) returns (UnhideArticle.Resp) {} // 取消管理隐藏
+  rpc Lock(LockArticle.Req) returns (LockArticle.Resp) {} // 管理锁定文章
+  rpc Unlock(UnlockArticle.Req) returns (UnlockArticle.Resp) {} // 管理解锁文章
 
-  rpc Like(LikeArticle.Request) returns (LikeArticle.Response) {} // 点赞文章
-  rpc Thank(ThankArticle.Request) returns (ThankArticle.Response) {} // 感谢文章
-  rpc Collect(CollectArticle.Request) returns (CollectArticle.Response) {} // 收藏文章
-  rpc Watch(WatchArticle.Request) returns (WatchArticle.Response) {} // 关注文章
-  rpc Reward(RewardArticle.Request) returns (RewardArticle.Response) {} // 打赏文章
-  rpc AcceptAnswer(AcceptAnswerArticle.Request) returns (AcceptAnswerArticle.Response) {} // 采纳评论
-  rpc View(ViewArticle.Request) returns (ViewArticle.Response) {} // 浏览文章
+  rpc Like(LikeArticle.Req) returns (LikeArticle.Resp) {} // 点赞文章
+  rpc Thank(ThankArticle.Req) returns (ThankArticle.Resp) {} // 感谢文章
+  rpc Collect(CollectArticle.Req) returns (CollectArticle.Resp) {} // 收藏文章
+  rpc Watch(WatchArticle.Req) returns (WatchArticle.Resp) {} // 关注文章
+  rpc Reward(RewardArticle.Req) returns (RewardArticle.Resp) {} // 打赏文章
+  rpc AcceptAnswer(AcceptAnswerArticle.Req) returns (AcceptAnswerArticle.Resp) {} // 采纳评论
+  rpc View(ViewArticle.Req) returns (ViewArticle.Resp) {} // 浏览文章
 
-  rpc MapViewerActionStates(MapArticleViewerActionStates.Request) returns (MapArticleViewerActionStates.Response) {} // 查询用户的文章行为状态
-  rpc Get(GetArticle.Request) returns (GetArticle.Response) {} // 查询单篇文章
-  rpc List(ListArticles.Request) returns (ListArticles.Response) {} // 查询文章列表
-  rpc Page(PageArticles.Request) returns (PageArticles.Response) {} // 分页查询文章
+  rpc MapViewerActionStates(MapArticleViewerActionStates.Req) returns (MapArticleViewerActionStates.Resp) {} // 查询用户的文章行为状态
+  rpc Get(GetArticle.Req) returns (GetArticle.Resp) {} // 查询单篇文章
+  rpc List(ListArticles.Req) returns (ListArticles.Resp) {} // 查询文章列表
+  rpc Page(PageArticles.Req) returns (PageArticles.Resp) {} // 分页查询文章
 }
 
 message CreateArticle {
-  message Request {Article article = 1; // 文章信息
+  message Req {Article article = 1; // 文章信息
     int64 user_id = 2; // 用户 ID
 
     message Article {
@@ -67,7 +67,7 @@ message CreateArticle {
       }
     }
   }
-  message Response {
+  message Resp {
 
     message Article {
 
@@ -116,12 +116,12 @@ message CreateArticle {
 }
 
 message AddPostscriptArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     string content = 2; // 附言内容
     int64 user_id = 3; // 用户 ID
   }
-  message Response {
+  message Resp {
 
     message ArticlePostscript {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -139,11 +139,11 @@ message AddPostscriptArticle {
 }
 
 message ListArticlePostscripts {
-  message Request {
+  message Req {
 
     int64 article_id = 1; // 文章 ID
   }
-  message Response {
+  message Resp {
 
     message ArticlePostscript {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -161,16 +161,16 @@ message ListArticlePostscripts {
 }
 
 message PublishArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 user_id = 2; // 用户 ID
     ArticleVisibility visibility = 3; // 发布后的可见范围
   }
-  message Response {}
+  message Resp {}
 }
 
 message UpdateArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     Article article = 2; // 文章信息
     int64 user_id = 3; // 用户 ID
@@ -198,7 +198,7 @@ message UpdateArticle {
       }
     }
   }
-  message Response {
+  message Resp {
 
     message Article {
 
@@ -247,159 +247,159 @@ message UpdateArticle {
 }
 
 message DiscardDraftArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 user_id = 2; // 用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message MakePrivateArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 user_id = 2; // 用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message MakePublicArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 user_id = 2; // 用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message ArchiveArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 user_id = 2; // 用户 ID
     optional string reason = 3; // 操作原因
   }
-  message Response {}
+  message Resp {}
 }
 
 message UnarchiveArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 user_id = 2; // 用户 ID
     optional string reason = 3; // 操作原因
   }
-  message Response {}
+  message Resp {}
 }
 
 message HideArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 user_id = 2; // 用户 ID
     optional string reason = 3; // 操作原因
   }
-  message Response {}
+  message Resp {}
 }
 
 message UnhideArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 user_id = 2; // 用户 ID
     optional string reason = 3; // 操作原因
   }
-  message Response {}
+  message Resp {}
 }
 
 message LockArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 user_id = 2; // 用户 ID
     optional string reason = 3; // 操作原因
   }
-  message Response {}
+  message Resp {}
 }
 
 message UnlockArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 user_id = 2; // 用户 ID
     optional string reason = 3; // 操作原因
   }
-  message Response {}
+  message Resp {}
 }
 
 message LikeArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     bool liked = 2; // 是否点赞
     int64 user_id = 3; // 用户 ID
   }
-  message Response {
+  message Resp {
     bool liked = 1; // 是否点赞
   }
 }
 
 message ThankArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     bool thanked = 2; // 是否感谢
     int64 user_id = 3; // 用户 ID
   }
-  message Response {
+  message Resp {
     bool thanked = 1; // 是否感谢
   }
 }
 
 message CollectArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     bool collected = 2; // 是否收藏
     int64 user_id = 3; // 用户 ID
   }
-  message Response {
+  message Resp {
     bool collected = 1; // 是否收藏
   }
 }
 
 message WatchArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     bool watched = 2; // 是否关注
     int64 user_id = 3; // 用户 ID
   }
-  message Response {
+  message Resp {
     bool watched = 1; // 是否关注
   }
 }
 
 message RewardArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int32 points = 2; // 积分
     int64 user_id = 3; // 用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message AcceptAnswerArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     int64 comment_id = 2; // 评论 ID
     int64 user_id = 3; // 用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message ViewArticle {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     optional int64 viewer_user_id = 2; // 查看用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message MapArticleViewerActionStates {
-  message Request {
+  message Req {
     repeated int64 article_ids = 1; // 文章 ID 列表
     int64 user_id = 2; // 用户 ID
   }
-  message Response {
+  message Resp {
 
     message ArticleViewerActionState {
       bool liked = 1; // 是否已点赞
@@ -412,11 +412,11 @@ message MapArticleViewerActionStates {
 }
 
 message GetArticle {
-  message Request {
+  message Req {
 
     int64 article_id = 1; // 文章 ID
   }
-  message Response {
+  message Resp {
 
     message Article {
 
@@ -465,7 +465,7 @@ message GetArticle {
 }
 
 message ListArticles {
-  message Request {
+  message Req {
 
     message ArticleQueryParams {
 
@@ -484,7 +484,7 @@ message ListArticles {
     }
     ArticleQueryParams query = 1; // 查询参数
   }
-  message Response {
+  message Resp {
 
     message Article {
 
@@ -533,7 +533,7 @@ message ListArticles {
 }
 
 message PageArticles {
-  message Request {
+  message Req {
 
     message ArticleQueryParams {
 
@@ -551,9 +551,9 @@ message PageArticles {
       repeated ContentRestriction restrictions = 15; // 管理限制列表
     }
     ArticleQueryParams query = 1; // 查询参数
-    .common.api.app.common.PageRequest page = 2; // 分页参数
+    .common.api.app.common.PageReq page = 2; // 分页参数
   }
-  message Response {
+  message Resp {
 
     message Article {
 
@@ -598,6 +598,6 @@ message PageArticles {
       }
     }
     repeated Article rows = 1; // 文章列表
-    .common.api.app.common.PageResponse page = 2; // 分页信息
+    .common.api.app.common.PageResp page = 2; // 分页信息
   }
 }

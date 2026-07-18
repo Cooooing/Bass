@@ -28,7 +28,7 @@ func NewHTTPServer(
 			obs.ServerMiddleware(),
 			recovery.Recovery(),
 		),
-		transporthttp.ResponseEncoder(server.HttpResponseEncoder),
+		transporthttp.ResponseEncoder(server.HttpRespEncoder),
 		transporthttp.ErrorEncoder(server.HttpErrorEncoder(nil)),
 	}
 	if c.Http.Network != "" {
@@ -42,20 +42,7 @@ func NewHTTPServer(
 	}
 
 	srv := transporthttp.NewServer(opts...)
-	srv.Handle("/push/v1/sse/connect", newSSEHandler(sseUc, logger))
-	if obsConf := c.GetObservability(); obsConf != nil && obsConf.GetEnableMetrics() {
-		srv.Handle("/metrics", promhttp.Handler())
-		logger.Info("metrics endpoint registered", slog.String(constant.LogFieldPath, "/metrics"))
-	}
-	for _, s := range services {
-		s.RegisterHttp(srv)
-	}
-
-	return srv
-}
-
-func newSSEHandler(sseUc *usecase.SSEUsecase, logger *slog.Logger) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
+	srv.Handle("/push/v1/sse/connect", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		token := r.URL.Query().Get("token")
 		if token == "" {
 			http.Error(w, "missing token", http.StatusUnauthorized)
@@ -81,5 +68,14 @@ func newSSEHandler(sseUc *usecase.SSEUsecase, logger *slog.Logger) http.HandlerF
 		if err := sseUc.Connect(r.Context(), &usecase.ConnectReq{Token: token, Writer: w}); err != nil {
 			logger.Error("sse connect failed", slog.Any("err", err))
 		}
+	}))
+	if obsConf := c.GetObservability(); obsConf != nil && obsConf.GetEnableMetrics() {
+		srv.Handle("/metrics", promhttp.Handler())
+		logger.Info("metrics endpoint registered", slog.String(constant.LogFieldPath, "/metrics"))
 	}
+	for _, s := range services {
+		s.RegisterHttp(srv)
+	}
+
+	return srv
 }

@@ -16,7 +16,7 @@ enum BusinessErrorCode {
   BUSINESS_ERROR_CODE_COMMON_FORBIDDEN = 10003 [(errors.code) = 403]; // 无权限
   BUSINESS_ERROR_CODE_COMMON_NOT_FOUND = 10004 [(errors.code) = 404]; // 资源不存在
   BUSINESS_ERROR_CODE_COMMON_CONFLICT = 10005 [(errors.code) = 409]; // 状态冲突
-  BUSINESS_ERROR_CODE_COMMON_TOO_MANY_REQUESTS = 10006 [(errors.code) = 429]; // 请求过于频繁
+  BUSINESS_ERROR_CODE_COMMON_TOO_MANY_ReqS = 10006 [(errors.code) = 429]; // 请求过于频繁
   BUSINESS_ERROR_CODE_COMMON_INTERNAL = 10007 [(errors.code) = 500]; // 服务内部错误
   BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED = 10008 [(errors.code) = 501]; // 功能未实现
   BUSINESS_ERROR_CODE_COMMON_UPSTREAM_UNAVAILABLE = 10009 [(errors.code) = 503]; // 上游服务不可用
@@ -54,7 +54,7 @@ enum BusinessErrorCode {
   BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID = 12014 [(errors.code) = 400]; // 内容标签信息无效
   BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID = 12015 [(errors.code) = 400]; // 内容领域信息无效
   BUSINESS_ERROR_CODE_CONTENT_COMMENT_INVALID = 12016 [(errors.code) = 400]; // 内容评论信息无效
-  BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_REQUEST_INVALID = 13001 [(errors.code) = 400]; // 通知限流请求无效
+  BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_Req_INVALID = 13001 [(errors.code) = 400]; // 通知限流请求无效
   BUSINESS_ERROR_CODE_NOTIFY_CHANNEL_INVALID = 13002 [(errors.code) = 400]; // 通知渠道无效
   BUSINESS_ERROR_CODE_NOTIFY_RECIPIENT_INVALID = 13003 [(errors.code) = 400]; // 通知接收人无效
   BUSINESS_ERROR_CODE_IM_CHAT_SESSION_NOT_FOUND = 14001 [(errors.code) = 404]; // 即时通信会话不存在

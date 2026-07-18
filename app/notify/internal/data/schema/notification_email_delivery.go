@@ -39,7 +39,7 @@ func (NotificationEmailDelivery) Fields() []ent.Field {
 		field.Int32("attempt_count").Comment("发送尝试次数").Default(0),
 		field.Time("last_attempt_at").Comment("最近一次发送尝试时间").Optional().Nillable(),
 		field.String("provider_message_id").Comment("服务商消息 ID").Optional().Nillable(),
-		field.String("provider_response").Comment("服务商响应摘要").Optional().Nillable(),
+		field.String("provider_resp").Comment("服务商响应摘要").Optional().Nillable(),
 		field.Time("sent_at").Comment("发送成功时间").Optional().Nillable(),
 	}
 }

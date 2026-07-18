@@ -24,12 +24,12 @@ func (s *SessionService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterGameTownSessionServiceServer(gs, s)
 }
 func (s *SessionService) RegisterHttp(hs *http.Server) {}
-func (s *SessionService) Start(ctx context.Context, req *v1.StartGameTownSession_Request) (*v1.StartGameTownSession_Response, error) {
+func (s *SessionService) Start(ctx context.Context, req *v1.StartGameTownSession_Req) (*v1.StartGameTownSession_Resp, error) {
 	clientType := ""
 	if value, ok := gameenum.SessionClientTypeMap.ToEnum(req.GetClientType()); ok {
 		clientType = string(value)
 	}
-	startResponse, err := s.gameUsecase.StartSession(ctx, &usecase.StartSessionReq{PlayerID: req.PlayerId, ClientType: clientType})
+	row, err := s.gameUsecase.StartSession(ctx, &usecase.StartSessionReq{PlayerID: req.PlayerId, ClientType: clientType})
 	if err != nil {
 		return nil, err
 	}
@@ -45,9 +45,9 @@ func (s *SessionService) Start(ctx context.Context, req *v1.StartGameTownSession
 		}
 		return timestamppb.New(t)
 	}
-	reply := &v1.StartGameTownSession_Response{}
-	if row := startResponse.Row; row != nil {
-		reply.Row = &v1.StartGameTownSession_Response_GameTownSession{
+	reply := &v1.StartGameTownSession_Resp{}
+	if row != nil {
+		reply.Row = &v1.StartGameTownSession_Resp_GameTownSession{
 			CreatedAt:      timestamp(row.CreatedAt),
 			UpdatedAt:      timestamp(row.UpdatedAt),
 			Id:             row.ID,
@@ -61,8 +61,8 @@ func (s *SessionService) Start(ctx context.Context, req *v1.StartGameTownSession
 	}
 	return reply, nil
 }
-func (s *SessionService) End(ctx context.Context, req *v1.EndGameTownSession_Request) (*v1.EndGameTownSession_Response, error) {
-	endResponse, err := s.gameUsecase.EndSession(ctx, &usecase.EndSessionReq{ID: req.GetId()})
+func (s *SessionService) End(ctx context.Context, req *v1.EndGameTownSession_Req) (*v1.EndGameTownSession_Resp, error) {
+	row, err := s.gameUsecase.EndSession(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -78,9 +78,9 @@ func (s *SessionService) End(ctx context.Context, req *v1.EndGameTownSession_Req
 		}
 		return timestamppb.New(t)
 	}
-	reply := &v1.EndGameTownSession_Response{}
-	if row := endResponse.Row; row != nil {
-		reply.Row = &v1.EndGameTownSession_Response_GameTownSession{
+	reply := &v1.EndGameTownSession_Resp{}
+	if row != nil {
+		reply.Row = &v1.EndGameTownSession_Resp_GameTownSession{
 			CreatedAt:      timestamp(row.CreatedAt),
 			UpdatedAt:      timestamp(row.UpdatedAt),
 			Id:             row.ID,

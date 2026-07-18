@@ -18,15 +18,15 @@ func NewNotificationUsecase(notificationClient repo.NotificationClient) *Notific
 
 type ListNotificationsReq struct {
 	UserID int64
-	Page   *common.PageRequest
+	Page   *common.PageReq
 }
 
-type ListNotificationsResponse struct {
-	Page *common.PageResponse
-	Rows []*bbsnotifyv1.ListNotifications_Response_Notification
+type ListNotificationsResp struct {
+	Page *common.PageResp
+	Rows []*bbsnotifyv1.ListNotifications_Resp_Notification
 }
 
-func (u *NotificationUsecase) ListNotifications(ctx context.Context, req *ListNotificationsReq) (*ListNotificationsResponse, error) {
+func (u *NotificationUsecase) ListNotifications(ctx context.Context, req *ListNotificationsReq) (*ListNotificationsResp, error) {
 	if req == nil {
 		req = &ListNotificationsReq{}
 	}
@@ -38,13 +38,13 @@ func (u *NotificationUsecase) ListNotifications(ctx context.Context, req *ListNo
 	if err != nil {
 		return nil, err
 	}
-	var page *common.PageResponse
+	var page *common.PageResp
 	if reply.Page != nil {
-		page = &common.PageResponse{Page: reply.Page.Page, Size: reply.Page.Size, Total: reply.Page.Total}
+		page = &common.PageResp{Page: reply.Page.Page, Size: reply.Page.Size, Total: reply.Page.Total}
 	}
-	rows := make([]*bbsnotifyv1.ListNotifications_Response_Notification, 0, len(reply.Rows))
+	rows := make([]*bbsnotifyv1.ListNotifications_Resp_Notification, 0, len(reply.Rows))
 	for _, item := range reply.Rows {
-		rows = append(rows, &bbsnotifyv1.ListNotifications_Response_Notification{
+		rows = append(rows, &bbsnotifyv1.ListNotifications_Resp_Notification{
 			Id:         item.ID,
 			EventId:    item.EventID,
 			ReceiverId: item.ReceiverID,
@@ -56,7 +56,7 @@ func (u *NotificationUsecase) ListNotifications(ctx context.Context, req *ListNo
 			UpdatedAt:  item.UpdatedAt,
 		})
 	}
-	return &ListNotificationsResponse{Page: page, Rows: rows}, nil
+	return &ListNotificationsResp{Page: page, Rows: rows}, nil
 }
 
 type MarkReadNotificationReq struct {
@@ -64,30 +64,18 @@ type MarkReadNotificationReq struct {
 	IDs    []int64
 }
 
-type MarkReadNotificationResponse struct {
-	Count int32
-}
-
-func (u *NotificationUsecase) MarkReadNotification(ctx context.Context, req *MarkReadNotificationReq) (*MarkReadNotificationResponse, error) {
+func (u *NotificationUsecase) MarkReadNotification(ctx context.Context, req *MarkReadNotificationReq) (int32, error) {
 	reply, err := u.notificationClient.MarkReadNotification(ctx, &repo.MarkReadNotificationReq{UserID: req.UserID, IDs: req.IDs})
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &MarkReadNotificationResponse{Count: reply.Count}, nil
+	return reply, nil
 }
 
-type CountUnreadNotificationsReq struct {
-	UserID int64
-}
-
-type CountUnreadNotificationsResponse struct {
-	Count int64
-}
-
-func (u *NotificationUsecase) CountUnreadNotifications(ctx context.Context, req *CountUnreadNotificationsReq) (*CountUnreadNotificationsResponse, error) {
-	reply, err := u.notificationClient.CountUnreadNotifications(ctx, &repo.CountUnreadNotificationsReq{UserID: req.UserID})
+func (u *NotificationUsecase) CountUnreadNotifications(ctx context.Context, userID int64) (int64, error) {
+	reply, err := u.notificationClient.CountUnreadNotifications(ctx, userID)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &CountUnreadNotificationsResponse{Count: reply.Count}, nil
+	return reply, nil
 }

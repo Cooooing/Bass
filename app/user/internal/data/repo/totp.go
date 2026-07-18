@@ -32,64 +32,64 @@ func (r *TotpRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *TotpRepo) Get(ctx context.Context, req *repo.TotpGetReq) (*repo.TotpGetResponse, error) {
+func (r *TotpRepo) Get(ctx context.Context, req *repo.TotpGetReq) (*model.Totp, error) {
 	row, err := r.get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.TotpGetResponse{Totp: row}, nil
+	return row, nil
 }
 
-func (r *TotpRepo) List(ctx context.Context, req *repo.TotpGetReq) (*repo.TotpListResponse, error) {
+func (r *TotpRepo) List(ctx context.Context, req *repo.TotpGetReq) ([]*model.Totp, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.TotpListResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *TotpRepo) Map(ctx context.Context, req *repo.TotpGetReq) (*repo.TotpMapResponse, error) {
+func (r *TotpRepo) Map(ctx context.Context, req *repo.TotpGetReq) (map[int64]*model.Totp, error) {
 	rows, err := r.mapRows(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.TotpMapResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *TotpRepo) Count(ctx context.Context, req *repo.TotpGetReq) (*repo.TotpCountResponse, error) {
+func (r *TotpRepo) Count(ctx context.Context, req *repo.TotpGetReq) (int, error) {
 	count, err := r.count(ctx, req)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.TotpCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *TotpRepo) Page(ctx context.Context, req *repo.TotpPageReq) (*repo.TotpPageResponse, error) {
-	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+func (r *TotpRepo) Page(ctx context.Context, req *repo.TotpPageReq) (*repo.TotpPageResp, error) {
+	rows, page, err := r.page(ctx, &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
-	resp := repo.PageResponse{}
+	resp := repo.PageResp{}
 	if page != nil {
-		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+		resp = repo.PageResp{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
 	}
-	return &repo.TotpPageResponse{Rows: rows, Page: resp}, nil
+	return &repo.TotpPageResp{Rows: rows, Page: resp}, nil
 }
 
-func (r *TotpRepo) UpsertEnabledByUserID(ctx context.Context, req *repo.TotpUpsertEnabledByUserIDReq) (*repo.TotpUpsertEnabledByUserIDResponse, error) {
+func (r *TotpRepo) UpsertEnabledByUserID(ctx context.Context, req *repo.TotpUpsertEnabledByUserIDReq) (*model.Totp, error) {
 	row, err := r.upsertEnabledByUserID(ctx, req.UserID, req.Secret)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.TotpUpsertEnabledByUserIDResponse{Totp: row}, nil
+	return row, nil
 }
 
-func (r *TotpRepo) DisableByUserID(ctx context.Context, req *repo.TotpDisableByUserIDReq) (*repo.TotpDisableByUserIDResponse, error) {
-	row, err := r.disableByUserID(ctx, req.UserID)
+func (r *TotpRepo) DisableByUserID(ctx context.Context, userID int64) (*model.Totp, error) {
+	row, err := r.disableByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.TotpDisableByUserIDResponse{Totp: row}, nil
+	return row, nil
 }
 func (r *TotpRepo) get(ctx context.Context, req *repo.TotpGetReq) (*model.Totp, error) {
 	tx := r.getClient(ctx)
@@ -151,7 +151,7 @@ func (r *TotpRepo) count(ctx context.Context, req *repo.TotpGetReq) (int, error)
 	return query.Count(ctx)
 }
 
-func (r *TotpRepo) page(ctx context.Context, page *common.PageRequest, req *repo.TotpGetReq) ([]*model.Totp, *common.PageResponse, error) {
+func (r *TotpRepo) page(ctx context.Context, page *common.PageReq, req *repo.TotpGetReq) ([]*model.Totp, *common.PageResp, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Totp.Query()
@@ -177,7 +177,7 @@ func (r *TotpRepo) page(ctx context.Context, page *common.PageRequest, req *repo
 			Secret:     row.Secret,
 		})
 	}
-	return result, &common.PageResponse{
+	return result, &common.PageResp{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

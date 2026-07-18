@@ -83,7 +83,7 @@ return 0
 	}
 }
 
-func (r *TaskLockRepo) TryAcquireSchedule(ctx context.Context, req *bizrepo.TaskScheduleAcquireReq) (*bizrepo.TaskScheduleAcquireResponse, error) {
+func (r *TaskLockRepo) TryAcquireSchedule(ctx context.Context, req *bizrepo.TaskScheduleAcquireReq) (*bizrepo.TaskScheduleAcquireResp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("scheduler task schedule acquire request is nil")
 	}
@@ -115,15 +115,15 @@ func (r *TaskLockRepo) TryAcquireSchedule(ctx context.Context, req *bizrepo.Task
 	if decision != schedulerenum.TaskScheduleDecisionRun {
 		runningToken = ""
 	}
-	return &bizrepo.TaskScheduleAcquireResponse{
+	return &bizrepo.TaskScheduleAcquireResp{
 		Decision:     decision,
 		RunningToken: runningToken,
 	}, nil
 }
 
-func (r *TaskLockRepo) RegisterRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) (*bizrepo.TaskRunningLockResponse, error) {
+func (r *TaskLockRepo) RegisterRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) (bool, error) {
 	if req.RunningToken == "" || req.ExecutionRecordID == 0 {
-		return &bizrepo.TaskRunningLockResponse{}, nil
+		return false, nil
 	}
 	exclusiveValue := "0"
 	if req.Exclusive {
@@ -140,14 +140,14 @@ func (r *TaskLockRepo) RegisterRunning(ctx context.Context, req *bizrepo.TaskRun
 		exclusiveValue,
 	).Int64()
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &bizrepo.TaskRunningLockResponse{OK: result == 1}, nil
+	return result == 1, nil
 }
 
-func (r *TaskLockRepo) RefreshRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) (*bizrepo.TaskRunningLockResponse, error) {
+func (r *TaskLockRepo) RefreshRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) (bool, error) {
 	if req.RunningToken == "" || req.ExecutionRecordID == 0 {
-		return &bizrepo.TaskRunningLockResponse{}, nil
+		return false, nil
 	}
 	exclusiveValue := "0"
 	if req.Exclusive {
@@ -164,14 +164,14 @@ func (r *TaskLockRepo) RefreshRunning(ctx context.Context, req *bizrepo.TaskRunn
 		exclusiveValue,
 	).Int64()
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &bizrepo.TaskRunningLockResponse{OK: result == 1}, nil
+	return result == 1, nil
 }
 
-func (r *TaskLockRepo) ReleaseRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) (*bizrepo.TaskRunningReleaseResponse, error) {
+func (r *TaskLockRepo) ReleaseRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) error {
 	if req.RunningToken == "" {
-		return &bizrepo.TaskRunningReleaseResponse{}, nil
+		return nil
 	}
 	exclusiveValue := "0"
 	if req.Exclusive {
@@ -186,15 +186,15 @@ func (r *TaskLockRepo) ReleaseRunning(ctx context.Context, req *bizrepo.TaskRunn
 		req.RunningToken,
 		exclusiveValue,
 	).Err(); err != nil {
-		return nil, err
+		return err
 	}
-	return &bizrepo.TaskRunningReleaseResponse{}, nil
+	return nil
 }
 
-func (r *TaskLockRepo) MapRunning(ctx context.Context, req *bizrepo.TaskRunningMapReq) (*bizrepo.TaskRunningMapResponse, error) {
+func (r *TaskLockRepo) MapRunning(ctx context.Context, req *bizrepo.TaskRunningMapReq) (map[int64]bool, error) {
 	result := make(map[int64]bool, len(req.ExecutionRecordIDs))
 	if len(req.ExecutionRecordIDs) == 0 {
-		return &bizrepo.TaskRunningMapResponse{Rows: result}, nil
+		return result, nil
 	}
 	fields := make([]string, 0, len(req.ExecutionRecordIDs))
 	for _, id := range req.ExecutionRecordIDs {
@@ -210,5 +210,5 @@ func (r *TaskLockRepo) MapRunning(ctx context.Context, req *bizrepo.TaskRunningM
 			result[req.ExecutionRecordIDs[i]] = true
 		}
 	}
-	return &bizrepo.TaskRunningMapResponse{Rows: result}, nil
+	return result, nil
 }

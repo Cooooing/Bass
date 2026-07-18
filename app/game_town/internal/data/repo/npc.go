@@ -16,7 +16,7 @@ func NewNpcRepo(db *gen.Client) bizrepo.NpcRepo {
 	return &NpcRepo{baseRepo: &baseRepo{db: db}}
 }
 
-func (r *NpcRepo) ListNpcs(ctx context.Context, req *bizrepo.ListNpcsReq) (*bizrepo.ListNpcsResponse, error) {
+func (r *NpcRepo) ListNpcs(ctx context.Context, req *bizrepo.ListNpcsReq) ([]*model.Npc, error) {
 	query := r.db.Npc.Query().Where(npc.WorldID(req.WorldID), npc.DeletedAtIsNil(), npc.Enabled(true))
 	if req.LocationID != nil {
 		query = query.Where(npc.CurrentLocationID(*req.LocationID))
@@ -29,21 +29,21 @@ func (r *NpcRepo) ListNpcs(ctx context.Context, req *bizrepo.ListNpcsReq) (*bizr
 	for _, row := range rows {
 		result = append(result, r.npc(row))
 	}
-	return &bizrepo.ListNpcsResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *NpcRepo) GetNpc(ctx context.Context, req *bizrepo.GetNpcReq) (*bizrepo.GetNpcResponse, error) {
-	row, err := r.db.Npc.Query().Where(npc.ID(req.ID), npc.DeletedAtIsNil()).Only(ctx)
+func (r *NpcRepo) GetNpc(ctx context.Context, id int64) (*model.Npc, error) {
+	row, err := r.db.Npc.Query().Where(npc.ID(id), npc.DeletedAtIsNil()).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_NPC_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.GetNpcResponse{Row: r.npc(row)}, nil
+	return r.npc(row), nil
 }
 
-func (r *NpcRepo) GetNpcByCode(ctx context.Context, req *bizrepo.GetNpcByCodeReq) (*bizrepo.GetNpcByCodeResponse, error) {
+func (r *NpcRepo) GetNpcByCode(ctx context.Context, req *bizrepo.GetNpcByCodeReq) (*model.Npc, error) {
 	row, err := r.db.Npc.Query().Where(npc.WorldID(req.WorldID), npc.Code(req.Code), npc.DeletedAtIsNil()).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_NPC_NOT_FOUND)
@@ -51,5 +51,5 @@ func (r *NpcRepo) GetNpcByCode(ctx context.Context, req *bizrepo.GetNpcByCodeReq
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.GetNpcByCodeResponse{Row: r.npc(row)}, nil
+	return r.npc(row), nil
 }

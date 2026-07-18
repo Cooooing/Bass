@@ -18,15 +18,15 @@ func NewContentTagClient(contentClient *rpc.ContentClient) repo.ContentTagClient
 	return &ContentTagClient{contentClient: contentClient}
 }
 
-func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq) (*repo.CreateTagResponse, error) {
+func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq) (*repo.Tag, error) {
 	tag := req.Tag
 	var status *contentv1.TagStatus
 	if tag.Status != nil {
 		status = new(contentv1.TagStatus(*tag.Status))
 	}
-	reply, err := r.contentClient.Tag.BatchCreate(ctx, &contentv1.BatchCreateTags_Request{
+	reply, err := r.contentClient.Tag.BatchCreate(ctx, &contentv1.BatchCreateTags_Req{
 		UserId: req.UserID,
-		Tags: []*contentv1.BatchCreateTags_Request_Tag{
+		Tags: []*contentv1.BatchCreateTags_Req_Tag{
 			{
 				Name:        tag.Name,
 				Description: tag.Description,
@@ -40,10 +40,10 @@ func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq
 	}
 	rows := reply.GetRows()
 	if len(rows) == 0 {
-		return &repo.CreateTagResponse{}, nil
+		return nil, nil
 	}
 	item := rows[0]
-	return &repo.CreateTagResponse{Tag: &repo.Tag{
+	return &repo.Tag{
 		ID:          item.GetId(),
 		Name:        item.GetName(),
 		Description: item.Description,
@@ -53,19 +53,19 @@ func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq
 		UpdatedBy:   item.UpdatedBy,
 		CreatedAt:   formatProtoTime(item.GetCreatedAt()),
 		UpdatedAt:   formatProtoTime(item.GetUpdatedAt()),
-	}}, nil
+	}, nil
 }
 
-func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq) (*repo.UpdateTagResponse, error) {
+func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq) (*repo.Tag, error) {
 	tag := req.Tag
 	var status *contentv1.TagStatus
 	if tag.Status != nil {
 		status = new(contentv1.TagStatus(*tag.Status))
 	}
-	reply, err := r.contentClient.Tag.Update(ctx, &contentv1.UpdateTag_Request{
+	reply, err := r.contentClient.Tag.Update(ctx, &contentv1.UpdateTag_Req{
 		TagId:  req.TagID,
 		UserId: req.UserID,
-		Tag: &contentv1.UpdateTag_Request_Tag{
+		Tag: &contentv1.UpdateTag_Req_Tag{
 			Name:        tag.Name,
 			Description: tag.Description,
 			DomainId:    tag.DomainID,
@@ -76,7 +76,7 @@ func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq
 		return nil, err
 	}
 	item := reply.GetTag()
-	return &repo.UpdateTagResponse{Tag: &repo.Tag{
+	return &repo.Tag{
 		ID:          item.GetId(),
 		Name:        item.GetName(),
 		Description: item.Description,
@@ -86,15 +86,15 @@ func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq
 		UpdatedBy:   item.UpdatedBy,
 		CreatedAt:   formatProtoTime(item.GetCreatedAt()),
 		UpdatedAt:   formatProtoTime(item.GetUpdatedAt()),
-	}}, nil
+	}, nil
 }
 
-func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) (*repo.ListTagsResponse, error) {
+func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) (*repo.ListTagsResp, error) {
 	query := req.Query
 	if query == nil {
 		query = &repo.TagQuery{}
 	}
-	contentQuery := &contentv1.PageTags_Request_TagQueryParams{
+	contentQuery := &contentv1.PageTags_Req_TagQueryParams{
 		Ids:         query.IDs,
 		Name:        query.Name,
 		Names:       query.Names,
@@ -104,11 +104,11 @@ func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) 
 	if query.Status != nil {
 		contentQuery.Status = new(contentv1.TagStatus(*query.Status))
 	}
-	var pageReq *common.PageRequest
+	var pageReq *common.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}
+		pageReq = &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}
 	}
-	reply, err := r.contentClient.Tag.Page(ctx, &contentv1.PageTags_Request{
+	reply, err := r.contentClient.Tag.Page(ctx, &contentv1.PageTags_Req{
 		Page:  pageReq,
 		Query: contentQuery,
 	})
@@ -129,9 +129,9 @@ func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) 
 			UpdatedAt:   formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
-	var page *repo.PageResponse
+	var page *repo.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResponse{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+		page = &repo.PageResp{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
 	}
-	return &repo.ListTagsResponse{Page: page, Rows: rows}, nil
+	return &repo.ListTagsResp{Page: page, Rows: rows}, nil
 }

@@ -22,8 +22,8 @@ func NewPlayerService(gameUsecase *usecase.GameUsecase) *PlayerService {
 }
 func (s *PlayerService) RegisterGrpc(gs *grpc.Server) { v1.RegisterGameTownPlayerServiceServer(gs, s) }
 func (s *PlayerService) RegisterHttp(hs *http.Server) {}
-func (s *PlayerService) Register(ctx context.Context, req *v1.RegisterGameTownPlayer_Request) (*v1.RegisterGameTownPlayer_Response, error) {
-	registerResponse, err := s.gameUsecase.RegisterPlayer(ctx, &usecase.RegisterPlayerReq{Name: req.GetName(), DisplayName: req.GetDisplayName()})
+func (s *PlayerService) Register(ctx context.Context, req *v1.RegisterGameTownPlayer_Req) (*v1.RegisterGameTownPlayer_Resp, error) {
+	row, err := s.gameUsecase.RegisterPlayer(ctx, &usecase.RegisterPlayerReq{Name: req.GetName(), DisplayName: req.GetDisplayName()})
 	if err != nil {
 		return nil, err
 	}
@@ -33,9 +33,9 @@ func (s *PlayerService) Register(ctx context.Context, req *v1.RegisterGameTownPl
 		}
 		return timestamppb.New(*t)
 	}
-	reply := &v1.RegisterGameTownPlayer_Response{}
-	if row := registerResponse.Row; row != nil {
-		reply.Row = &v1.RegisterGameTownPlayer_Response_GameTownPlayer{
+	reply := &v1.RegisterGameTownPlayer_Resp{}
+	if row != nil {
+		reply.Row = &v1.RegisterGameTownPlayer_Resp_GameTownPlayer{
 			CreatedAt:   timestamp(row.CreatedAt),
 			UpdatedAt:   timestamp(row.UpdatedAt),
 			Id:          row.ID,
@@ -46,8 +46,8 @@ func (s *PlayerService) Register(ctx context.Context, req *v1.RegisterGameTownPl
 	}
 	return reply, nil
 }
-func (s *PlayerService) Get(ctx context.Context, req *v1.GetGameTownPlayer_Request) (*v1.GetGameTownPlayer_Response, error) {
-	getResponse, err := s.gameUsecase.GetPlayer(ctx, &usecase.GetPlayerReq{ID: req.GetId()})
+func (s *PlayerService) Get(ctx context.Context, req *v1.GetGameTownPlayer_Req) (*v1.GetGameTownPlayer_Resp, error) {
+	row, err := s.gameUsecase.GetPlayer(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -57,9 +57,9 @@ func (s *PlayerService) Get(ctx context.Context, req *v1.GetGameTownPlayer_Reque
 		}
 		return timestamppb.New(*t)
 	}
-	reply := &v1.GetGameTownPlayer_Response{}
-	if row := getResponse.Row; row != nil {
-		reply.Row = &v1.GetGameTownPlayer_Response_GameTownPlayer{
+	reply := &v1.GetGameTownPlayer_Resp{}
+	if row != nil {
+		reply.Row = &v1.GetGameTownPlayer_Resp_GameTownPlayer{
 			CreatedAt:   timestamp(row.CreatedAt),
 			UpdatedAt:   timestamp(row.UpdatedAt),
 			Id:          row.ID,

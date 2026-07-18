@@ -11,7 +11,7 @@ option go_package = "common/proto/gen/bbs/v1/user;user";
 // 账号隐私设置接口。
 service PrivacySettingService {
   // 获取当前账号的隐私设置。
-  rpc GetCurrent(GetCurrentPrivacySetting.Request) returns (GetCurrentPrivacySetting.Response) {
+  rpc GetCurrent(GetCurrentPrivacySetting.Req) returns (GetCurrentPrivacySetting.Resp) {
     option (google.api.http) = {
       post: "/v1/user/privacy-setting/get-current"
       body: "*"
@@ -19,7 +19,7 @@ service PrivacySettingService {
   }
 
   // 更新当前账号的隐私设置。
-  rpc UpdateCurrent(UpdateCurrentPrivacySetting.Request) returns (UpdateCurrentPrivacySetting.Response) {
+  rpc UpdateCurrent(UpdateCurrentPrivacySetting.Req) returns (UpdateCurrentPrivacySetting.Resp) {
     option (google.api.http) = {
       post: "/v1/user/privacy-setting/update-current"
       body: "*"
@@ -29,8 +29,8 @@ service PrivacySettingService {
 
 // 获取当前账号的隐私设置。
 message GetCurrentPrivacySetting {
-  message Request {}
-  message Response {
+  message Req {}
+  message Resp {
 
     message PrivacySetting {
       // 账号 ID。
@@ -55,7 +55,7 @@ message GetCurrentPrivacySetting {
 
 // 更新当前账号的隐私设置。
 message UpdateCurrentPrivacySetting {
-  message Request {
+  message Req {
     // 是否公开积分。
     optional bool public_points = 1;
     // 是否公开粉丝列表。
@@ -69,7 +69,7 @@ message UpdateCurrentPrivacySetting {
     // 是否公开地理资料。
     optional bool public_location = 6;
   }
-  message Response {
+  message Resp {
 
     message PrivacySetting {
       // 账号 ID。

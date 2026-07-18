@@ -32,8 +32,7 @@ func (r *ChatGroupMemberRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *ChatGroupMemberRepo) Save(ctx context.Context, req *repo.ChatGroupMemberSaveReq) (*repo.ChatGroupMemberSaveResponse, error) {
-	chatGroupMember := req.ChatGroupMember
+func (r *ChatGroupMemberRepo) Save(ctx context.Context, chatGroupMember *model.ChatGroupMember) (*model.ChatGroupMember, error) {
 	save, err := r.getClient(ctx).ChatGroupMember.Create().
 		SetGroupID(chatGroupMember.GroupID).
 		SetUserID(chatGroupMember.UserID).
@@ -46,10 +45,10 @@ func (r *ChatGroupMemberRepo) Save(ctx context.Context, req *repo.ChatGroupMembe
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ChatGroupMemberSaveResponse{ChatGroupMember: r.toModel(save)}, nil
+	return r.toModel(save), nil
 }
 
-func (r *ChatGroupMemberRepo) UpdateMuteEndAt(ctx context.Context, req *repo.ChatGroupMemberUpdateMuteEndAtReq) (*repo.ChatGroupMemberUpdateMuteEndAtResponse, error) {
+func (r *ChatGroupMemberRepo) UpdateMuteEndAt(ctx context.Context, req *repo.ChatGroupMemberUpdateMuteEndAtReq) (*model.ChatGroupMember, error) {
 	var muteEndAtTime *time.Time
 	if req.MuteEndAt > 0 {
 		t := time.Now().Add(req.MuteEndAt)
@@ -76,16 +75,12 @@ func (r *ChatGroupMemberRepo) UpdateMuteEndAt(ctx context.Context, req *repo.Cha
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ChatGroupMemberUpdateMuteEndAtResponse{ChatGroupMember: r.toModel(t)}, nil
+	return r.toModel(t), nil
 }
 
-func (r *ChatGroupMemberRepo) Get(ctx context.Context, req *repo.ChatGroupMemberGetReq) (*repo.ChatGroupMemberGetResponse, error) {
+func (r *ChatGroupMemberRepo) Get(ctx context.Context, req *repo.ChatGroupMemberQuery) (*model.ChatGroupMember, error) {
 	query := r.getClient(ctx).ChatGroupMember.Query()
-	var queryReq *repo.ChatGroupMemberQuery
-	if req != nil {
-		queryReq = &req.ChatGroupMemberQuery
-	}
-	query = r.getQuery(query, queryReq)
+	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_CHAT_GROUP_NOT_FOUND)
@@ -93,16 +88,12 @@ func (r *ChatGroupMemberRepo) Get(ctx context.Context, req *repo.ChatGroupMember
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ChatGroupMemberGetResponse{ChatGroupMember: r.toModel(t)}, nil
+	return r.toModel(t), nil
 }
 
-func (r *ChatGroupMemberRepo) List(ctx context.Context, req *repo.ChatGroupMemberListReq) (*repo.ChatGroupMemberListResponse, error) {
+func (r *ChatGroupMemberRepo) List(ctx context.Context, req *repo.ChatGroupMemberQuery) ([]*model.ChatGroupMember, error) {
 	query := r.getClient(ctx).ChatGroupMember.Query()
-	var queryReq *repo.ChatGroupMemberQuery
-	if req != nil {
-		queryReq = &req.ChatGroupMemberQuery
-	}
-	query = r.getQuery(query, queryReq)
+	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
@@ -111,50 +102,38 @@ func (r *ChatGroupMemberRepo) List(ctx context.Context, req *repo.ChatGroupMembe
 	for _, item := range list {
 		result = append(result, r.toModel(item))
 	}
-	return &repo.ChatGroupMemberListResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *ChatGroupMemberRepo) Map(ctx context.Context, req *repo.ChatGroupMemberMapReq) (*repo.ChatGroupMemberMapResponse, error) {
-	listReq := &repo.ChatGroupMemberListReq{}
-	if req != nil {
-		listReq.ChatGroupMemberQuery = req.ChatGroupMemberQuery
-	}
-	listResp, err := r.List(ctx, listReq)
+func (r *ChatGroupMemberRepo) Map(ctx context.Context, req *repo.ChatGroupMemberQuery) (map[int64]*model.ChatGroupMember, error) {
+	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[int64]*model.ChatGroupMember, len(listResp.Rows))
-	for _, item := range listResp.Rows {
+	result := make(map[int64]*model.ChatGroupMember, len(listResp))
+	for _, item := range listResp {
 		result[item.ID] = item
 	}
-	return &repo.ChatGroupMemberMapResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *ChatGroupMemberRepo) Count(ctx context.Context, req *repo.ChatGroupMemberCountReq) (*repo.ChatGroupMemberCountResponse, error) {
+func (r *ChatGroupMemberRepo) Count(ctx context.Context, req *repo.ChatGroupMemberQuery) (int, error) {
 	query := r.getClient(ctx).ChatGroupMember.Query()
-	var queryReq *repo.ChatGroupMemberQuery
-	if req != nil {
-		queryReq = &req.ChatGroupMemberQuery
-	}
-	query = r.getQuery(query, queryReq)
+	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.ChatGroupMemberCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *ChatGroupMemberRepo) Page(ctx context.Context, req *repo.ChatGroupMemberPageReq) (*repo.ChatGroupMemberPageResponse, error) {
+func (r *ChatGroupMemberRepo) Page(ctx context.Context, req *repo.ChatGroupMemberQuery) (*repo.ChatGroupMemberPageResp, error) {
 	page := normalizePage(nil)
 	if req != nil {
 		page = normalizePage(req.Page)
 	}
 	query := r.getClient(ctx).ChatGroupMember.Query()
-	var queryReq *repo.ChatGroupMemberQuery
-	if req != nil {
-		queryReq = &req.ChatGroupMemberQuery
-	}
-	query = r.getQuery(query, queryReq)
+	query = r.getQuery(query, req)
 	countQuery := query.Clone()
 	count, err := countQuery.Count(ctx)
 	if err != nil {
@@ -168,9 +147,9 @@ func (r *ChatGroupMemberRepo) Page(ctx context.Context, req *repo.ChatGroupMembe
 	for _, item := range list {
 		result = append(result, r.toModel(item))
 	}
-	return &repo.ChatGroupMemberPageResponse{
+	return &repo.ChatGroupMemberPageResp{
 		Rows: result,
-		Page: &base.PageResponse{
+		Page: &base.PageResp{
 			Total: int64(count),
 			Size:  page.Size,
 			Page:  page.Page,

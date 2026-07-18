@@ -27,32 +27,32 @@ func (s *NodeService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *NodeService) RegisterHttp(hs *http.Server) {}
 
-func (s *NodeService) RegisterNode(ctx context.Context, req *pushhubv1.RegisterNode_Request) (*pushhubv1.RegisterNode_Response, error) {
-	resp, err := s.nodeUc.RegisterNode(ctx, &usecase.RegisterNodeReq{Address: req.Address})
+func (s *NodeService) RegisterNode(ctx context.Context, req *pushhubv1.RegisterNode_Req) (*pushhubv1.RegisterNode_Resp, error) {
+	nodeID, err := s.nodeUc.RegisterNode(ctx, req.Address)
 	if err != nil {
 		return nil, err
 	}
-	return &pushhubv1.RegisterNode_Response{NodeId: resp.NodeID}, nil
+	return &pushhubv1.RegisterNode_Resp{NodeId: nodeID}, nil
 }
 
-func (s *NodeService) Heartbeat(ctx context.Context, req *pushhubv1.Heartbeat_Request) (*pushhubv1.Heartbeat_Response, error) {
+func (s *NodeService) Heartbeat(ctx context.Context, req *pushhubv1.Heartbeat_Req) (*pushhubv1.Heartbeat_Resp, error) {
 	if err := s.nodeUc.Heartbeat(ctx, &usecase.HeartbeatReq{
 		NodeID:          req.NodeId,
 		ConnectionCount: req.ConnectionCount,
 	}); err != nil {
 		return nil, err
 	}
-	return &pushhubv1.Heartbeat_Response{}, nil
+	return &pushhubv1.Heartbeat_Resp{}, nil
 }
 
-func (s *NodeService) ListNodes(ctx context.Context, req *pushhubv1.ListNodes_Request) (*pushhubv1.ListNodes_Response, error) {
-	resp, err := s.nodeUc.ListNodes(ctx, &usecase.ListNodesReq{})
+func (s *NodeService) ListNodes(ctx context.Context, req *pushhubv1.ListNodes_Req) (*pushhubv1.ListNodes_Resp, error) {
+	rows, err := s.nodeUc.ListNodes(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*pushhubv1.ListNodes_Response_NodeInfo, 0, len(resp.Rows))
-	for _, node := range resp.Rows {
-		rows = append(rows, &pushhubv1.ListNodes_Response_NodeInfo{
+	replyRows := make([]*pushhubv1.ListNodes_Resp_NodeInfo, 0, len(rows))
+	for _, node := range rows {
+		replyRows = append(replyRows, &pushhubv1.ListNodes_Resp_NodeInfo{
 			NodeId:          node.NodeID,
 			Address:         node.Address,
 			ConnectionCount: node.ConnectionCount,
@@ -61,5 +61,5 @@ func (s *NodeService) ListNodes(ctx context.Context, req *pushhubv1.ListNodes_Re
 			LastHeartbeatAt: timestamppb.New(node.LastHeartbeatAt),
 		})
 	}
-	return &pushhubv1.ListNodes_Response{Rows: rows}, nil
+	return &pushhubv1.ListNodes_Resp{Rows: replyRows}, nil
 }

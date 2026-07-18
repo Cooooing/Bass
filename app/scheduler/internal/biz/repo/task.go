@@ -7,14 +7,14 @@ import (
 )
 
 type TaskRepo interface {
-	Get(ctx context.Context, req *TaskGetReq) (*TaskGetResponse, error)
-	List(ctx context.Context, req *TaskGetReq) (*TaskListResponse, error)
-	Map(ctx context.Context, req *TaskGetReq) (*TaskMapResponse, error)
-	Count(ctx context.Context, req *TaskGetReq) (*TaskCountResponse, error)
-	Page(ctx context.Context, req *TaskPageReq) (*TaskPageResponse, error)
+	Get(ctx context.Context, req *TaskGetReq) (*model.Task, error)
+	List(ctx context.Context, req *TaskGetReq) ([]*model.Task, error)
+	Map(ctx context.Context, req *TaskGetReq) (map[int64]*model.Task, error)
+	Count(ctx context.Context, req *TaskGetReq) (int, error)
+	Page(ctx context.Context, req *TaskPageReq) (*TaskPageResp, error)
 
-	Upsert(ctx context.Context, req *TaskUpsertReq) (*TaskUpsertResponse, error)
-	Lock(ctx context.Context, req *TaskLockReq) (*TaskLockResponse, error)
+	Upsert(ctx context.Context, row *model.Task) (*model.Task, error)
+	Lock(ctx context.Context, id int64) error
 }
 
 type TaskGetReq struct {
@@ -25,42 +25,12 @@ type TaskGetReq struct {
 	Enabled *bool
 }
 
-type TaskGetResponse struct {
-	Row *model.Task
-}
-
-type TaskListResponse struct {
-	Rows []*model.Task
-}
-
-type TaskMapResponse struct {
-	Rows map[int64]*model.Task
-}
-
-type TaskCountResponse struct {
-	Count int
-}
-
 type TaskPageReq struct {
-	Page *common.PageRequest
+	Page *common.PageReq
 	TaskGetReq
 }
 
-type TaskPageResponse struct {
+type TaskPageResp struct {
 	Rows []*model.Task
-	Page *common.PageResponse
+	Page *common.PageResp
 }
-
-type TaskUpsertReq struct {
-	Row *model.Task
-}
-
-type TaskUpsertResponse struct {
-	Row *model.Task
-}
-
-type TaskLockReq struct {
-	ID int64
-}
-
-type TaskLockResponse struct{}

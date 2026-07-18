@@ -18,8 +18,8 @@ func NewPreferencesClient(userClient *rpc.UserClient) repo.PreferencesClient {
 	return &PreferencesClient{userClient: userClient}
 }
 
-func (r *PreferencesClient) GetCurrentPreferences(ctx context.Context, req *repo.GetCurrentPreferencesReq) (*repo.GetCurrentPreferencesResponse, error) {
-	reply, err := r.userClient.Preferences.Get(ctx, &userv1.GetPreferences_Request{UserId: req.UserID})
+func (r *PreferencesClient) GetCurrentPreferences(ctx context.Context, userID int64) (*repo.Preference, error) {
+	reply, err := r.userClient.Preferences.Get(ctx, &userv1.GetPreferences_Req{UserId: userID})
 	if err != nil {
 		return nil, err
 	}
@@ -34,11 +34,11 @@ func (r *PreferencesClient) GetCurrentPreferences(ctx context.Context, req *repo
 			MobileTheme: preferences.MobileTheme,
 		}
 	}
-	return &repo.GetCurrentPreferencesResponse{Preference: out}, nil
+	return out, nil
 }
 
-func (r *PreferencesClient) UpdateCurrentPreferences(ctx context.Context, req *repo.UpdateCurrentPreferencesReq) (*repo.UpdateCurrentPreferencesResponse, error) {
-	updateReq := &userv1.UpdatePreferences_Request{
+func (r *PreferencesClient) UpdateCurrentPreferences(ctx context.Context, req *repo.UpdateCurrentPreferencesReq) (*repo.Preference, error) {
+	updateReq := &userv1.UpdatePreferences_Req{
 		UserId:      req.UserID,
 		Timezone:    req.Timezone,
 		Theme:       req.Theme,
@@ -63,5 +63,5 @@ func (r *PreferencesClient) UpdateCurrentPreferences(ctx context.Context, req *r
 			MobileTheme: preferences.MobileTheme,
 		}
 	}
-	return &repo.UpdateCurrentPreferencesResponse{Preference: out}, nil
+	return out, nil
 }

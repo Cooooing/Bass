@@ -32,64 +32,64 @@ func (r *PreferencesRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *PreferencesRepo) Get(ctx context.Context, req *repo.PreferencesGetReq) (*repo.PreferencesGetResponse, error) {
+func (r *PreferencesRepo) Get(ctx context.Context, req *repo.PreferencesGetReq) (*model.Preferences, error) {
 	preferences, err := r.get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.PreferencesGetResponse{Preferences: preferences}, nil
+	return preferences, nil
 }
 
-func (r *PreferencesRepo) List(ctx context.Context, req *repo.PreferencesGetReq) (*repo.PreferencesListResponse, error) {
+func (r *PreferencesRepo) List(ctx context.Context, req *repo.PreferencesGetReq) ([]*model.Preferences, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.PreferencesListResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *PreferencesRepo) Map(ctx context.Context, req *repo.PreferencesGetReq) (*repo.PreferencesMapResponse, error) {
+func (r *PreferencesRepo) Map(ctx context.Context, req *repo.PreferencesGetReq) (map[int64]*model.Preferences, error) {
 	rows, err := r.mapRows(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.PreferencesMapResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *PreferencesRepo) Count(ctx context.Context, req *repo.PreferencesGetReq) (*repo.PreferencesCountResponse, error) {
+func (r *PreferencesRepo) Count(ctx context.Context, req *repo.PreferencesGetReq) (int, error) {
 	count, err := r.count(ctx, req)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.PreferencesCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *PreferencesRepo) Page(ctx context.Context, req *repo.PreferencesPageReq) (*repo.PreferencesPageResponse, error) {
-	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+func (r *PreferencesRepo) Page(ctx context.Context, req *repo.PreferencesPageReq) (*repo.PreferencesPageResp, error) {
+	rows, page, err := r.page(ctx, &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
-	resp := repo.PageResponse{}
+	resp := repo.PageResp{}
 	if page != nil {
-		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+		resp = repo.PageResp{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
 	}
-	return &repo.PreferencesPageResponse{Rows: rows, Page: resp}, nil
+	return &repo.PreferencesPageResp{Rows: rows, Page: resp}, nil
 }
 
-func (r *PreferencesRepo) UpsertByUserID(ctx context.Context, req *repo.PreferencesUpsertByUserIDReq) (*repo.PreferencesUpsertByUserIDResponse, error) {
-	preferences, err := r.upsertByUserID(ctx, req.Preferences)
+func (r *PreferencesRepo) UpsertByUserID(ctx context.Context, preferences *model.Preferences) (*model.Preferences, error) {
+	preferences, err := r.upsertByUserID(ctx, preferences)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.PreferencesUpsertByUserIDResponse{Preferences: preferences}, nil
+	return preferences, nil
 }
 
-func (r *PreferencesRepo) Update(ctx context.Context, req *repo.PreferencesUpdateReq) (*repo.PreferencesUpdateResponse, error) {
-	preferences, err := r.update(ctx, req.Preferences)
+func (r *PreferencesRepo) Update(ctx context.Context, preferences *model.Preferences) (*model.Preferences, error) {
+	preferences, err := r.update(ctx, preferences)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.PreferencesUpdateResponse{Preferences: preferences}, nil
+	return preferences, nil
 }
 func (r *PreferencesRepo) get(ctx context.Context, req *repo.PreferencesGetReq) (*model.Preferences, error) {
 	tx := r.getClient(ctx)
@@ -153,7 +153,7 @@ func (r *PreferencesRepo) count(ctx context.Context, req *repo.PreferencesGetReq
 	return query.Count(ctx)
 }
 
-func (r *PreferencesRepo) page(ctx context.Context, page *common.PageRequest, req *repo.PreferencesGetReq) ([]*model.Preferences, *common.PageResponse, error) {
+func (r *PreferencesRepo) page(ctx context.Context, page *common.PageReq, req *repo.PreferencesGetReq) ([]*model.Preferences, *common.PageResp, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Preferences.Query()
@@ -180,7 +180,7 @@ func (r *PreferencesRepo) page(ctx context.Context, page *common.PageRequest, re
 			MobileTheme: new(p.MobileTheme),
 		})
 	}
-	return result, &common.PageResponse{
+	return result, &common.PageResp{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

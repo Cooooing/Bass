@@ -11,9 +11,9 @@ type SendResult struct {
 	ProviderRequestID *string
 	ProviderCode      *string
 	ProviderMessage   *string
-	ProviderResponse  *string
+	ProviderResp      *string
 	HTTPStatus        *int
-	ResponseBody      *string
+	RespBody          *string
 }
 
 type EmailClient interface {

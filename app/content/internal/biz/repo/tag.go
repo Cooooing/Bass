@@ -8,59 +8,19 @@ import (
 )
 
 type TagRepo interface {
-	Save(ctx context.Context, req *TagSaveReq) (*TagSaveResponse, error)
-	Saves(ctx context.Context, req *TagSavesReq) (*TagSavesResponse, error)
-	Update(ctx context.Context, req *TagUpdateReq) (*TagUpdateResponse, error)
-	Get(ctx context.Context, req *TagGetReq) (*TagGetResponse, error)
-	List(ctx context.Context, req *TagGetReq) (*TagListResponse, error)
-	Map(ctx context.Context, req *TagGetReq) (*TagMapResponse, error)
-	Count(ctx context.Context, req *TagGetReq) (*TagCountResponse, error)
-	Page(ctx context.Context, req *TagGetReq) (*TagPageResponse, error)
+	Save(ctx context.Context, tag *model.Tag) (*model.Tag, error)
+	Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag, error)
+	Update(ctx context.Context, tag *model.Tag) (*model.Tag, error)
+	Get(ctx context.Context, req *TagGetReq) (*model.Tag, error)
+	List(ctx context.Context, req *TagGetReq) ([]*model.Tag, error)
+	Map(ctx context.Context, req *TagGetReq) (map[int64]*model.Tag, error)
+	Count(ctx context.Context, req *TagGetReq) (int, error)
+	Page(ctx context.Context, req *TagGetReq) (*TagPageResp, error)
 }
 
-type TagSaveReq struct {
-	Tag *model.Tag
-}
-
-type TagSaveResponse struct {
-	Tag *model.Tag
-}
-
-type TagSavesReq struct {
-	Tags []*model.Tag
-}
-
-type TagSavesResponse struct {
+type TagPageResp struct {
 	Rows []*model.Tag
-}
-
-type TagUpdateReq struct {
-	Tag *model.Tag
-}
-
-type TagUpdateResponse struct {
-	Tag *model.Tag
-}
-
-type TagGetResponse struct {
-	Tag *model.Tag
-}
-
-type TagListResponse struct {
-	Rows []*model.Tag
-}
-
-type TagMapResponse struct {
-	Rows map[int64]*model.Tag
-}
-
-type TagCountResponse struct {
-	Count int
-}
-
-type TagPageResponse struct {
-	Rows []*model.Tag
-	Page *base.PageResponse
+	Page *base.PageResp
 }
 
 type TagGetReq struct {

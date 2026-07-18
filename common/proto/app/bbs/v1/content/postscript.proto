@@ -11,7 +11,7 @@ option go_package = "common/proto/gen/bbs/v1/content;content";
 // 文章附言接口。
 service PostscriptService {
   // 添加文章附言。
-  rpc Add(AddPostscript.Request) returns (AddPostscript.Response) {
+  rpc Add(AddPostscript.Req) returns (AddPostscript.Resp) {
     option (google.api.http) = {
       post: "/v1/content/postscript/add"
       body: "*"
@@ -21,7 +21,7 @@ service PostscriptService {
 
 // 添加文章附言。
 message AddPostscript {
-  message Request {
+  message Req {
     // 文章 ID。
     int64 article_id = 1;
     // 附言内容。
@@ -31,7 +31,7 @@ message AddPostscript {
       required: "content"
     };
   }
-  message Response {
+  message Resp {
 
     message ArticlePostscript {
       int64 id = 1; // 附言 ID

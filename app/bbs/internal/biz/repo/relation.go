@@ -3,14 +3,14 @@ package repo
 import "context"
 
 type RelationClient interface {
-	Follow(ctx context.Context, req *FollowRelationReq) (*FollowRelationResponse, error)
-	Unfollow(ctx context.Context, req *UnfollowRelationReq) (*UnfollowRelationResponse, error)
-	Block(ctx context.Context, req *BlockRelationReq) (*BlockRelationResponse, error)
-	Unblock(ctx context.Context, req *UnblockRelationReq) (*UnblockRelationResponse, error)
-	ListFollowing(ctx context.Context, req *ListFollowingRelationsReq) (*ListFollowingRelationsResponse, error)
-	ListFollowers(ctx context.Context, req *ListFollowersRelationsReq) (*ListFollowersRelationsResponse, error)
-	ListBlocked(ctx context.Context, req *ListBlockedRelationsReq) (*ListBlockedRelationsResponse, error)
-	GetStatus(ctx context.Context, req *GetStatusRelationReq) (*GetStatusRelationResponse, error)
+	Follow(ctx context.Context, req *FollowRelationReq) error
+	Unfollow(ctx context.Context, req *UnfollowRelationReq) error
+	Block(ctx context.Context, req *BlockRelationReq) error
+	Unblock(ctx context.Context, req *UnblockRelationReq) error
+	ListFollowing(ctx context.Context, req *ListFollowingRelationsReq) (*ListFollowingRelationsResp, error)
+	ListFollowers(ctx context.Context, req *ListFollowersRelationsReq) (*ListFollowersRelationsResp, error)
+	ListBlocked(ctx context.Context, req *ListBlockedRelationsReq) (*ListBlockedRelationsResp, error)
+	GetStatus(ctx context.Context, req *GetStatusRelationReq) (*RelationStatus, error)
 }
 
 type FollowRelationReq struct {
@@ -18,36 +18,28 @@ type FollowRelationReq struct {
 	TargetID int64
 }
 
-type FollowRelationResponse struct{}
-
 type UnfollowRelationReq struct {
 	ActorID  int64
 	TargetID int64
 }
-
-type UnfollowRelationResponse struct{}
 
 type BlockRelationReq struct {
 	ActorID  int64
 	TargetID int64
 }
 
-type BlockRelationResponse struct{}
-
 type UnblockRelationReq struct {
 	ActorID  int64
 	TargetID int64
 }
-
-type UnblockRelationResponse struct{}
 
 type ListFollowingRelationsReq struct {
 	ActorID int64
 	Page    *PageReq
 }
 
-type ListFollowingRelationsResponse struct {
-	Page *PageResponse
+type ListFollowingRelationsResp struct {
+	Page *PageResp
 	Rows []*Relation
 }
 
@@ -56,8 +48,8 @@ type ListFollowersRelationsReq struct {
 	Page    *PageReq
 }
 
-type ListFollowersRelationsResponse struct {
-	Page *PageResponse
+type ListFollowersRelationsResp struct {
+	Page *PageResp
 	Rows []*Relation
 }
 
@@ -66,18 +58,14 @@ type ListBlockedRelationsReq struct {
 	Page    *PageReq
 }
 
-type ListBlockedRelationsResponse struct {
-	Page *PageResponse
+type ListBlockedRelationsResp struct {
+	Page *PageResp
 	Rows []*Relation
 }
 
 type GetStatusRelationReq struct {
 	ActorID  int64
 	TargetID int64
-}
-
-type GetStatusRelationResponse struct {
-	Status *RelationStatus
 }
 
 type Relation struct {

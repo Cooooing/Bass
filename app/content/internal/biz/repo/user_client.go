@@ -7,13 +7,5 @@ import (
 )
 
 type UserClient interface {
-	MapAccounts(ctx context.Context, req *MapAccountsReq) (*MapAccountsResponse, error)
-}
-
-type MapAccountsReq struct {
-	UserIDs []int64
-}
-
-type MapAccountsResponse struct {
-	Rows map[int64]*model.UserAccountBasic
+	MapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.UserAccountBasic, error)
 }

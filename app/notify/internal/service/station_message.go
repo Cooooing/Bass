@@ -30,9 +30,9 @@ func (s *StationMessageService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *StationMessageService) RegisterHttp(hs *http.Server) {}
 
-func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMessages_Request) (*v1.ListStationMessages_Response, error) {
+func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMessages_Req) (*v1.ListStationMessages_Resp, error) {
 	if req == nil {
-		req = &v1.ListStationMessages_Request{}
+		req = &v1.ListStationMessages_Req{}
 	}
 	query := &usecase.StationMessagePageReq{ReceiverID: new(req.GetUserId())}
 	if req != nil && req.Query != nil {
@@ -45,17 +45,17 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 		pageReq = &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())}
 	}
 	query.Page = pageReq
-	pageResponse, err := s.stationMessageUsecase.Page(ctx, query)
+	pageResp, err := s.stationMessageUsecase.Page(ctx, query)
 	if err != nil {
 		return nil, err
 	}
-	rows := pageResponse.Rows
-	replyRows := make([]*v1.ListStationMessages_Response_NotificationStationMessage, 0, len(rows))
+	rows := pageResp.Rows
+	replyRows := make([]*v1.ListStationMessages_Resp_NotificationStationMessage, 0, len(rows))
 	for _, row := range rows {
 		if row == nil {
 			continue
 		}
-		item := &v1.ListStationMessages_Response_NotificationStationMessage{
+		item := &v1.ListStationMessages_Resp_NotificationStationMessage{
 			Id:         row.ID,
 			EventId:    row.EventID,
 			ReceiverId: row.ReceiverID,
@@ -75,12 +75,12 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 		}
 		replyRows = append(replyRows, item)
 	}
-	return &v1.ListStationMessages_Response{Page: &common.PageResponse{Page: uint32(pageResponse.Page.Page), Size: uint32(pageResponse.Page.Size), Total: uint32(pageResponse.Page.Total)}, Rows: replyRows}, nil
+	return &v1.ListStationMessages_Resp{Page: &common.PageResp{Page: uint32(pageResp.Page.Page), Size: uint32(pageResp.Page.Size), Total: uint32(pageResp.Page.Total)}, Rows: replyRows}, nil
 }
 
-func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadStationMessage_Request) (*v1.MarkReadStationMessage_Response, error) {
+func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadStationMessage_Req) (*v1.MarkReadStationMessage_Resp, error) {
 	if req == nil {
-		req = &v1.MarkReadStationMessage_Request{}
+		req = &v1.MarkReadStationMessage_Req{}
 	}
 	var startTime *time.Time
 	var endTime *time.Time
@@ -96,7 +96,7 @@ func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadSt
 	if req != nil {
 		ids = req.GetIds()
 	}
-	markReadResponse, err := s.stationMessageUsecase.MarkRead(ctx, &usecase.StationMessageMarkReadReq{
+	markReadResp, err := s.stationMessageUsecase.MarkRead(ctx, &usecase.StationMessageMarkReadReq{
 		ReceiverID: req.GetUserId(),
 		IDs:        ids,
 		StartTime:  startTime,
@@ -105,16 +105,16 @@ func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadSt
 	if err != nil {
 		return nil, err
 	}
-	return &v1.MarkReadStationMessage_Response{Count: int32(markReadResponse.Count)}, nil
+	return &v1.MarkReadStationMessage_Resp{Count: int32(markReadResp)}, nil
 }
 
-func (s *StationMessageService) CountUnread(ctx context.Context, req *v1.CountUnreadStationMessages_Request) (*v1.CountUnreadStationMessages_Response, error) {
+func (s *StationMessageService) CountUnread(ctx context.Context, req *v1.CountUnreadStationMessages_Req) (*v1.CountUnreadStationMessages_Resp, error) {
 	if req == nil {
-		req = &v1.CountUnreadStationMessages_Request{}
+		req = &v1.CountUnreadStationMessages_Req{}
 	}
-	countResponse, err := s.stationMessageUsecase.CountUnread(ctx, &usecase.StationMessageCountUnreadReq{ReceiverID: req.GetUserId()})
+	countResp, err := s.stationMessageUsecase.CountUnread(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
-	return &v1.CountUnreadStationMessages_Response{Count: int64(countResponse.Count)}, nil
+	return &v1.CountUnreadStationMessages_Resp{Count: int64(countResp)}, nil
 }

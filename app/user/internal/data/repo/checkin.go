@@ -33,56 +33,56 @@ func (r *CheckinRecordRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *CheckinRecordRepo) Get(ctx context.Context, req *repo.CheckinRecordGetReq) (*repo.CheckinRecordGetResponse, error) {
+func (r *CheckinRecordRepo) Get(ctx context.Context, req *repo.CheckinRecordGetReq) (*model.CheckinRecord, error) {
 	record, err := r.get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CheckinRecordGetResponse{Record: record}, nil
+	return record, nil
 }
 
-func (r *CheckinRecordRepo) List(ctx context.Context, req *repo.CheckinRecordGetReq) (*repo.CheckinRecordListResponse, error) {
+func (r *CheckinRecordRepo) List(ctx context.Context, req *repo.CheckinRecordGetReq) ([]*model.CheckinRecord, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CheckinRecordListResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *CheckinRecordRepo) Map(ctx context.Context, req *repo.CheckinRecordGetReq) (*repo.CheckinRecordMapResponse, error) {
+func (r *CheckinRecordRepo) Map(ctx context.Context, req *repo.CheckinRecordGetReq) (map[int64]*model.CheckinRecord, error) {
 	rows, err := r.mapRows(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CheckinRecordMapResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *CheckinRecordRepo) Count(ctx context.Context, req *repo.CheckinRecordGetReq) (*repo.CheckinRecordCountResponse, error) {
+func (r *CheckinRecordRepo) Count(ctx context.Context, req *repo.CheckinRecordGetReq) (int, error) {
 	count, err := r.count(ctx, req)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.CheckinRecordCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *CheckinRecordRepo) Page(ctx context.Context, req *repo.CheckinRecordPageReq) (*repo.CheckinRecordPageResponse, error) {
-	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+func (r *CheckinRecordRepo) Page(ctx context.Context, req *repo.CheckinRecordPageReq) (*repo.CheckinRecordPageResp, error) {
+	rows, page, err := r.page(ctx, &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
-	resp := repo.PageResponse{}
+	resp := repo.PageResp{}
 	if page != nil {
-		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+		resp = repo.PageResp{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
 	}
-	return &repo.CheckinRecordPageResponse{Rows: rows, Page: resp}, nil
+	return &repo.CheckinRecordPageResp{Rows: rows, Page: resp}, nil
 }
 
-func (r *CheckinRecordRepo) UpsertRecord(ctx context.Context, req *repo.CheckinRecordUpsertReq) (*repo.CheckinRecordUpsertResponse, error) {
-	record, err := r.upsertRecord(ctx, req.Record)
+func (r *CheckinRecordRepo) UpsertRecord(ctx context.Context, record *model.CheckinRecord) (*model.CheckinRecord, error) {
+	record, err := r.upsertRecord(ctx, record)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CheckinRecordUpsertResponse{Record: record}, nil
+	return record, nil
 }
 func (r *CheckinRecordRepo) get(ctx context.Context, req *repo.CheckinRecordGetReq) (*model.CheckinRecord, error) {
 	tx := r.getClient(ctx)
@@ -146,7 +146,7 @@ func (r *CheckinRecordRepo) count(ctx context.Context, req *repo.CheckinRecordGe
 	return query.Count(ctx)
 }
 
-func (r *CheckinRecordRepo) page(ctx context.Context, page *common.PageRequest, req *repo.CheckinRecordGetReq) ([]*model.CheckinRecord, *common.PageResponse, error) {
+func (r *CheckinRecordRepo) page(ctx context.Context, page *common.PageReq, req *repo.CheckinRecordGetReq) ([]*model.CheckinRecord, *common.PageResp, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.CheckinRecord.Query()
@@ -173,7 +173,7 @@ func (r *CheckinRecordRepo) page(ctx context.Context, page *common.PageRequest, 
 			Checked:       row.Checked,
 		})
 	}
-	return result, &common.PageResponse{
+	return result, &common.PageResp{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,
@@ -274,56 +274,56 @@ func (r *CheckinStatRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *CheckinStatRepo) Get(ctx context.Context, req *repo.CheckinStatGetReq) (*repo.CheckinStatGetResponse, error) {
+func (r *CheckinStatRepo) Get(ctx context.Context, req *repo.CheckinStatGetReq) (*model.CheckinStat, error) {
 	stat, err := r.get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CheckinStatGetResponse{Stat: stat}, nil
+	return stat, nil
 }
 
-func (r *CheckinStatRepo) List(ctx context.Context, req *repo.CheckinStatGetReq) (*repo.CheckinStatListResponse, error) {
+func (r *CheckinStatRepo) List(ctx context.Context, req *repo.CheckinStatGetReq) ([]*model.CheckinStat, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CheckinStatListResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *CheckinStatRepo) Map(ctx context.Context, req *repo.CheckinStatGetReq) (*repo.CheckinStatMapResponse, error) {
+func (r *CheckinStatRepo) Map(ctx context.Context, req *repo.CheckinStatGetReq) (map[int64]*model.CheckinStat, error) {
 	rows, err := r.mapRows(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CheckinStatMapResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *CheckinStatRepo) Count(ctx context.Context, req *repo.CheckinStatGetReq) (*repo.CheckinStatCountResponse, error) {
+func (r *CheckinStatRepo) Count(ctx context.Context, req *repo.CheckinStatGetReq) (int, error) {
 	count, err := r.count(ctx, req)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.CheckinStatCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *CheckinStatRepo) Page(ctx context.Context, req *repo.CheckinStatPageReq) (*repo.CheckinStatPageResponse, error) {
-	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+func (r *CheckinStatRepo) Page(ctx context.Context, req *repo.CheckinStatPageReq) (*repo.CheckinStatPageResp, error) {
+	rows, page, err := r.page(ctx, &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
-	resp := repo.PageResponse{}
+	resp := repo.PageResp{}
 	if page != nil {
-		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+		resp = repo.PageResp{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
 	}
-	return &repo.CheckinStatPageResponse{Rows: rows, Page: resp}, nil
+	return &repo.CheckinStatPageResp{Rows: rows, Page: resp}, nil
 }
 
-func (r *CheckinStatRepo) UpsertStat(ctx context.Context, req *repo.CheckinStatUpsertReq) (*repo.CheckinStatUpsertResponse, error) {
-	stat, err := r.upsertStat(ctx, req.Stat)
+func (r *CheckinStatRepo) UpsertStat(ctx context.Context, stat *model.CheckinStat) (*model.CheckinStat, error) {
+	stat, err := r.upsertStat(ctx, stat)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CheckinStatUpsertResponse{Stat: stat}, nil
+	return stat, nil
 }
 func (r *CheckinStatRepo) get(ctx context.Context, req *repo.CheckinStatGetReq) (*model.CheckinStat, error) {
 	tx := r.getClient(ctx)
@@ -385,7 +385,7 @@ func (r *CheckinStatRepo) count(ctx context.Context, req *repo.CheckinStatGetReq
 	return query.Count(ctx)
 }
 
-func (r *CheckinStatRepo) page(ctx context.Context, page *common.PageRequest, req *repo.CheckinStatGetReq) ([]*model.CheckinStat, *common.PageResponse, error) {
+func (r *CheckinStatRepo) page(ctx context.Context, page *common.PageReq, req *repo.CheckinStatGetReq) ([]*model.CheckinStat, *common.PageResp, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.CheckinStat.Query()
@@ -411,7 +411,7 @@ func (r *CheckinStatRepo) page(ctx context.Context, page *common.PageRequest, re
 			LongestStreak:      new(s.LongestStreak),
 		})
 	}
-	return result, &common.PageResponse{
+	return result, &common.PageResp{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

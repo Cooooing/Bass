@@ -7,36 +7,24 @@ import (
 )
 
 type EventRepo interface {
-	CreateEvent(ctx context.Context, req *CreateEventReq) (*CreateEventResponse, error)
-	Page(ctx context.Context, req *EventPageReq) (*EventPageResponse, error)
-	ListRecentEvents(ctx context.Context, req *ListRecentEventsReq) (*ListRecentEventsResponse, error)
-}
-
-type CreateEventReq struct {
-	Row *model.Event
-}
-
-type CreateEventResponse struct {
-	Row *model.Event
+	CreateEvent(ctx context.Context, row *model.Event) (*model.Event, error)
+	Page(ctx context.Context, req *EventPageReq) (*EventPageResp, error)
+	ListRecentEvents(ctx context.Context, req *ListRecentEventsReq) ([]*model.Event, error)
 }
 
 type EventPageReq struct {
-	Page  *common.PageRequest
+	Page  *common.PageReq
 	Query EventQuery
 }
 
-type EventPageResponse struct {
+type EventPageResp struct {
 	Rows []*model.Event
-	Page *common.PageResponse
+	Page *common.PageResp
 }
 
 type ListRecentEventsReq struct {
 	WorldID int64
 	Limit   int
-}
-
-type ListRecentEventsResponse struct {
-	Rows []*model.Event
 }
 
 type EventQuery struct {

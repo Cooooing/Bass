@@ -53,26 +53,26 @@ func (u *ChatMessageUsecase) sendToUser(ctx context.Context, req *sendToUserReq)
 	receiverID := req.ReceiverID
 	msgType := req.MessageType
 	content := req.Content
-	sessionResp, err := u.findOrCreateSession(ctx, &findOrCreateSessionReq{UserID: senderID, ReceiverID: receiverID})
+	session, err := u.findOrCreateSession(ctx, &findOrCreateSessionReq{UserID: senderID, ReceiverID: receiverID})
 	if err != nil {
 		return err
 	}
-	msgResp, err := u.chatMessageRepo.Save(ctx, &repo.ChatMessageSaveReq{ChatMessage: &model.ChatMessage{
+	msg, err := u.chatMessageRepo.Save(ctx, &model.ChatMessage{
 		SenderID:   senderID,
 		ReceiverID: &receiverID,
-		SessionID:  &sessionResp.ChatSession.ID,
+		SessionID:  &session.ID,
 		Type:       msgType,
 		Content:    content,
 		Status:     enum.MessageStatusNormal,
 		CreatedBy:  &senderID,
 		UpdatedBy:  &senderID,
-	}})
+	})
 	if err != nil {
 		return err
 	}
 	_, err = u.chatSessionRepo.UpdateLastReadMessage(ctx, &repo.ChatSessionUpdateLastReadMessageReq{
-		ChatSessionID:      sessionResp.ChatSession.ID,
-		MessageID:          msgResp.ChatMessage.ID,
+		ChatSessionID:      session.ID,
+		MessageID:          msg.ID,
 		OperationReadCount: 0,
 		UpdatedBy:          senderID,
 	})
@@ -91,10 +91,10 @@ func (u *ChatMessageUsecase) sendToGroup(ctx context.Context, req *sendToGroupRe
 	groupID := req.GroupID
 	msgType := req.MessageType
 	content := req.Content
-	if _, err := u.chatGroupMemberRepo.Get(ctx, &repo.ChatGroupMemberGetReq{ChatGroupMemberQuery: repo.ChatGroupMemberQuery{GroupID: &groupID, UserID: &senderID}}); err != nil {
+	if _, err := u.chatGroupMemberRepo.Get(ctx, &repo.ChatGroupMemberQuery{GroupID: &groupID, UserID: &senderID}); err != nil {
 		return err
 	}
-	msgResp, err := u.chatMessageRepo.Save(ctx, &repo.ChatMessageSaveReq{ChatMessage: &model.ChatMessage{
+	msg, err := u.chatMessageRepo.Save(ctx, &model.ChatMessage{
 		SenderID:  senderID,
 		GroupID:   &groupID,
 		Type:      msgType,
@@ -102,11 +102,11 @@ func (u *ChatMessageUsecase) sendToGroup(ctx context.Context, req *sendToGroupRe
 		Status:    enum.MessageStatusNormal,
 		CreatedBy: &senderID,
 		UpdatedBy: &senderID,
-	}})
+	})
 	if err != nil {
 		return err
 	}
-	_, err = u.chatGroupRepo.UpdateLastMessage(ctx, &repo.ChatGroupUpdateLastMessageReq{Message: msgResp.ChatMessage, UpdatedBy: senderID})
+	_, err = u.chatGroupRepo.UpdateLastMessage(ctx, &repo.ChatGroupUpdateLastMessageReq{Message: msg, UpdatedBy: senderID})
 	return err
 }
 
@@ -115,26 +115,22 @@ type findOrCreateSessionReq struct {
 	ReceiverID int64
 }
 
-type findOrCreateSessionResponse struct {
-	ChatSession *model.ChatSession
-}
-
-func (u *ChatMessageUsecase) findOrCreateSession(ctx context.Context, req *findOrCreateSessionReq) (*findOrCreateSessionResponse, error) {
+func (u *ChatMessageUsecase) findOrCreateSession(ctx context.Context, req *findOrCreateSessionReq) (*model.ChatSession, error) {
 	userID := req.UserID
 	receiverID := req.ReceiverID
-	listResp, err := u.chatSessionRepo.List(ctx, &repo.ChatSessionListReq{ChatSessionQuery: repo.ChatSessionQuery{CreatedBy: &userID, ReceiverID: &receiverID}})
-	if err == nil && len(listResp.Rows) > 0 {
-		return &findOrCreateSessionResponse{ChatSession: listResp.Rows[0]}, nil
+	listResp, err := u.chatSessionRepo.List(ctx, &repo.ChatSessionQuery{CreatedBy: &userID, ReceiverID: &receiverID})
+	if err == nil && len(listResp) > 0 {
+		return listResp[0], nil
 	}
-	listResp, err = u.chatSessionRepo.List(ctx, &repo.ChatSessionListReq{ChatSessionQuery: repo.ChatSessionQuery{CreatedBy: &receiverID, ReceiverID: &userID}})
-	if err == nil && len(listResp.Rows) > 0 {
-		return &findOrCreateSessionResponse{ChatSession: listResp.Rows[0]}, nil
+	listResp, err = u.chatSessionRepo.List(ctx, &repo.ChatSessionQuery{CreatedBy: &receiverID, ReceiverID: &userID})
+	if err == nil && len(listResp) > 0 {
+		return listResp[0], nil
 	}
-	sessionResp, err := u.chatSessionRepo.Save(ctx, &repo.ChatSessionSaveReq{ChatSession: &model.ChatSession{ReceiverID: &receiverID, CreatedBy: &userID, UpdatedBy: &userID}})
+	session, err := u.chatSessionRepo.Save(ctx, &model.ChatSession{ReceiverID: &receiverID, CreatedBy: &userID, UpdatedBy: &userID})
 	if err != nil {
 		return nil, err
 	}
-	return &findOrCreateSessionResponse{ChatSession: sessionResp.ChatSession}, nil
+	return session, nil
 }
 
 type RevokeReq struct {
@@ -143,15 +139,15 @@ type RevokeReq struct {
 }
 
 func (u *ChatMessageUsecase) Revoke(ctx context.Context, req *RevokeReq) error {
-	msgResp, err := u.chatMessageRepo.Get(ctx, &repo.ChatMessageGetReq{ChatMessageQuery: repo.ChatMessageQuery{IDs: []int64{req.MessageID}}})
+	msg, err := u.chatMessageRepo.Get(ctx, &repo.ChatMessageQuery{IDs: []int64{req.MessageID}})
 	if err != nil {
 		return err
 	}
-	if msgResp.ChatMessage.SenderID != req.SenderID {
+	if msg.SenderID != req.SenderID {
 		return nil
 	}
 	_, err = u.chatMessageRepo.UpdateStatus(ctx, &repo.ChatMessageUpdateStatusReq{
-		ChatMessageID: msgResp.ChatMessage.ID,
+		ChatMessageID: msg.ID,
 		Status:        enum.MessageStatusRevoke,
 		UpdatedBy:     req.SenderID,
 	})
@@ -165,15 +161,15 @@ type ChatMessageListReq struct {
 	SenderID  *int64
 }
 
-type ChatMessageListResponse struct {
+type ChatMessageListResp struct {
 	List []*model.ChatMessage
-	Page *base.PageResponse
+	Page *base.PageResp
 }
 
-func (u *ChatMessageUsecase) List(ctx context.Context, req *ChatMessageListReq) (*ChatMessageListResponse, error) {
-	pageResponse, err := u.chatMessageRepo.Page(ctx, &repo.ChatMessagePageReq{ChatMessageQuery: repo.ChatMessageQuery{Page: req.Page, IDs: req.IDs, SessionID: req.SessionID, SenderID: req.SenderID}})
+func (u *ChatMessageUsecase) List(ctx context.Context, req *ChatMessageListReq) (*ChatMessageListResp, error) {
+	pageResp, err := u.chatMessageRepo.Page(ctx, &repo.ChatMessageQuery{Page: req.Page, IDs: req.IDs, SessionID: req.SessionID, SenderID: req.SenderID})
 	if err != nil {
 		return nil, err
 	}
-	return &ChatMessageListResponse{List: pageResponse.Rows, Page: pageResponse.Page}, nil
+	return &ChatMessageListResp{List: pageResp.Rows, Page: pageResp.Page}, nil
 }

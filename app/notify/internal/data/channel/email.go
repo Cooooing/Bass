@@ -48,7 +48,7 @@ func (c *EmailClient) SendEmail(_ context.Context, req *bizchannel.EmailRequest)
 	dialer.SSL = email.SmtpPort == 465
 
 	if err := dialer.DialAndSend(message); err != nil {
-		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusUnknown, ProviderResponse: new(fmt.Sprintf("send email: %v", err))}, nil
+		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusUnknown, ProviderResp: new(fmt.Sprintf("send email: %v", err))}, nil
 	}
 	c.log.Info(fmt.Sprintf("send email succeeded: to=%s", req.ToEmail))
 	return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusSucceeded}, nil

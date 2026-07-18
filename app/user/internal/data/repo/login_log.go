@@ -32,56 +32,56 @@ func (r *LoginLogRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *LoginLogRepo) Create(ctx context.Context, req *repo.LoginLogCreateReq) (*repo.LoginLogCreateResponse, error) {
-	log, err := r.create(ctx, req.Log)
+func (r *LoginLogRepo) Create(ctx context.Context, log *model.LoginLog) (*model.LoginLog, error) {
+	log, err := r.create(ctx, log)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.LoginLogCreateResponse{Log: log}, nil
+	return log, nil
 }
 
-func (r *LoginLogRepo) Get(ctx context.Context, req *repo.LoginLogGetReq) (*repo.LoginLogGetResponse, error) {
+func (r *LoginLogRepo) Get(ctx context.Context, req *repo.LoginLogGetReq) (*model.LoginLog, error) {
 	log, err := r.get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.LoginLogGetResponse{Log: log}, nil
+	return log, nil
 }
 
-func (r *LoginLogRepo) List(ctx context.Context, req *repo.LoginLogGetReq) (*repo.LoginLogListResponse, error) {
+func (r *LoginLogRepo) List(ctx context.Context, req *repo.LoginLogGetReq) ([]*model.LoginLog, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.LoginLogListResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *LoginLogRepo) Map(ctx context.Context, req *repo.LoginLogGetReq) (*repo.LoginLogMapResponse, error) {
+func (r *LoginLogRepo) Map(ctx context.Context, req *repo.LoginLogGetReq) (map[int64]*model.LoginLog, error) {
 	rows, err := r.mapRows(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.LoginLogMapResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *LoginLogRepo) Count(ctx context.Context, req *repo.LoginLogGetReq) (*repo.LoginLogCountResponse, error) {
+func (r *LoginLogRepo) Count(ctx context.Context, req *repo.LoginLogGetReq) (int, error) {
 	count, err := r.count(ctx, req)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.LoginLogCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *LoginLogRepo) Page(ctx context.Context, req *repo.LoginLogPageReq) (*repo.LoginLogPageResponse, error) {
-	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+func (r *LoginLogRepo) Page(ctx context.Context, req *repo.LoginLogPageReq) (*repo.LoginLogPageResp, error) {
+	rows, page, err := r.page(ctx, &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
-	resp := repo.PageResponse{}
+	resp := repo.PageResp{}
 	if page != nil {
-		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+		resp = repo.PageResp{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
 	}
-	return &repo.LoginLogPageResponse{Rows: rows, Page: resp}, nil
+	return &repo.LoginLogPageResp{Rows: rows, Page: resp}, nil
 }
 func (r *LoginLogRepo) create(ctx context.Context, l *model.LoginLog) (*model.LoginLog, error) {
 	tx := r.getClient(ctx)
@@ -200,7 +200,7 @@ func (r *LoginLogRepo) count(ctx context.Context, req *repo.LoginLogGetReq) (int
 	return query.Count(ctx)
 }
 
-func (r *LoginLogRepo) page(ctx context.Context, page *common.PageRequest, req *repo.LoginLogGetReq) ([]*model.LoginLog, *common.PageResponse, error) {
+func (r *LoginLogRepo) page(ctx context.Context, page *common.PageReq, req *repo.LoginLogGetReq) ([]*model.LoginLog, *common.PageResp, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.LoginLog.Query()
@@ -238,7 +238,7 @@ func (r *LoginLogRepo) page(ctx context.Context, page *common.PageRequest, req *
 			UpdatedAt:   l.UpdatedAt,
 		})
 	}
-	return result, &common.PageResponse{
+	return result, &common.PageResp{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

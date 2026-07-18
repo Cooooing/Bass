@@ -8,23 +8,15 @@ import (
 )
 
 type ChatGroupMemberRepo interface {
-	Save(ctx context.Context, req *ChatGroupMemberSaveReq) (*ChatGroupMemberSaveResponse, error)
+	Save(ctx context.Context, chatGroupMember *model.ChatGroupMember) (*model.ChatGroupMember, error)
 
-	UpdateMuteEndAt(ctx context.Context, req *ChatGroupMemberUpdateMuteEndAtReq) (*ChatGroupMemberUpdateMuteEndAtResponse, error)
+	UpdateMuteEndAt(ctx context.Context, req *ChatGroupMemberUpdateMuteEndAtReq) (*model.ChatGroupMember, error)
 
-	Get(ctx context.Context, req *ChatGroupMemberGetReq) (*ChatGroupMemberGetResponse, error)
-	List(ctx context.Context, req *ChatGroupMemberListReq) (*ChatGroupMemberListResponse, error)
-	Map(ctx context.Context, req *ChatGroupMemberMapReq) (*ChatGroupMemberMapResponse, error)
-	Count(ctx context.Context, req *ChatGroupMemberCountReq) (*ChatGroupMemberCountResponse, error)
-	Page(ctx context.Context, req *ChatGroupMemberPageReq) (*ChatGroupMemberPageResponse, error)
-}
-
-type ChatGroupMemberSaveReq struct {
-	ChatGroupMember *model.ChatGroupMember
-}
-
-type ChatGroupMemberSaveResponse struct {
-	ChatGroupMember *model.ChatGroupMember
+	Get(ctx context.Context, query *ChatGroupMemberQuery) (*model.ChatGroupMember, error)
+	List(ctx context.Context, query *ChatGroupMemberQuery) ([]*model.ChatGroupMember, error)
+	Map(ctx context.Context, query *ChatGroupMemberQuery) (map[int64]*model.ChatGroupMember, error)
+	Count(ctx context.Context, query *ChatGroupMemberQuery) (int, error)
+	Page(ctx context.Context, query *ChatGroupMemberQuery) (*ChatGroupMemberPageResp, error)
 }
 
 type ChatGroupMemberUpdateMuteEndAtReq struct {
@@ -34,10 +26,6 @@ type ChatGroupMemberUpdateMuteEndAtReq struct {
 	UpdatedBy int64
 }
 
-type ChatGroupMemberUpdateMuteEndAtResponse struct {
-	ChatGroupMember *model.ChatGroupMember
-}
-
 type ChatGroupMemberQuery struct {
 	Page    *base.PageRequest
 	IDs     []int64
@@ -45,43 +33,7 @@ type ChatGroupMemberQuery struct {
 	UserID  *int64
 }
 
-type ChatGroupMemberGetReq struct {
-	ChatGroupMemberQuery
-}
-
-type ChatGroupMemberGetResponse struct {
-	ChatGroupMember *model.ChatGroupMember
-}
-
-type ChatGroupMemberListReq struct {
-	ChatGroupMemberQuery
-}
-
-type ChatGroupMemberListResponse struct {
+type ChatGroupMemberPageResp struct {
 	Rows []*model.ChatGroupMember
-}
-
-type ChatGroupMemberMapReq struct {
-	ChatGroupMemberQuery
-}
-
-type ChatGroupMemberMapResponse struct {
-	Rows map[int64]*model.ChatGroupMember
-}
-
-type ChatGroupMemberCountReq struct {
-	ChatGroupMemberQuery
-}
-
-type ChatGroupMemberCountResponse struct {
-	Count int
-}
-
-type ChatGroupMemberPageReq struct {
-	ChatGroupMemberQuery
-}
-
-type ChatGroupMemberPageResponse struct {
-	Rows []*model.ChatGroupMember
-	Page *base.PageResponse
+	Page *base.PageResp
 }

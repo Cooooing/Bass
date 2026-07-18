@@ -17,8 +17,8 @@ func NewLocationClient(userClient *rpc.UserClient) repo.LocationClient {
 	return &LocationClient{userClient: userClient}
 }
 
-func (r *LocationClient) GetCurrentLocation(ctx context.Context, req *repo.GetCurrentLocationReq) (*repo.GetCurrentLocationResponse, error) {
-	reply, err := r.userClient.Location.Get(ctx, &userv1.GetLocation_Request{UserId: req.UserID})
+func (r *LocationClient) GetCurrentLocation(ctx context.Context, userID int64) (*repo.Location, error) {
+	reply, err := r.userClient.Location.Get(ctx, &userv1.GetLocation_Req{UserId: userID})
 	if err != nil {
 		return nil, err
 	}
@@ -32,11 +32,11 @@ func (r *LocationClient) GetCurrentLocation(ctx context.Context, req *repo.GetCu
 			City:     location.City,
 		}
 	}
-	return &repo.GetCurrentLocationResponse{Location: out}, nil
+	return out, nil
 }
 
-func (r *LocationClient) UpsertCurrentLocation(ctx context.Context, req *repo.UpsertCurrentLocationReq) (*repo.UpsertCurrentLocationResponse, error) {
-	reply, err := r.userClient.Location.Upsert(ctx, &userv1.UpsertLocation_Request{
+func (r *LocationClient) UpsertCurrentLocation(ctx context.Context, req *repo.UpsertCurrentLocationReq) (*repo.Location, error) {
+	reply, err := r.userClient.Location.Upsert(ctx, &userv1.UpsertLocation_Req{
 		UserId:   req.UserID,
 		Country:  req.Country,
 		Province: req.Province,
@@ -55,5 +55,5 @@ func (r *LocationClient) UpsertCurrentLocation(ctx context.Context, req *repo.Up
 			City:     location.City,
 		}
 	}
-	return &repo.UpsertCurrentLocationResponse{Location: out}, nil
+	return out, nil
 }

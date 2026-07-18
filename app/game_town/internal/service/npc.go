@@ -23,8 +23,8 @@ func NewNpcService(gameUsecase *usecase.GameUsecase) *NpcService {
 }
 func (s *NpcService) RegisterGrpc(gs *grpc.Server) { v1.RegisterGameTownNpcServiceServer(gs, s) }
 func (s *NpcService) RegisterHttp(hs *http.Server) {}
-func (s *NpcService) Get(ctx context.Context, req *v1.GetGameTownNpc_Request) (*v1.GetGameTownNpc_Response, error) {
-	getResponse, err := s.gameUsecase.GetNpc(ctx, &usecase.GetNpcReq{ID: req.GetId()})
+func (s *NpcService) Get(ctx context.Context, req *v1.GetGameTownNpc_Req) (*v1.GetGameTownNpc_Resp, error) {
+	row, err := s.gameUsecase.GetNpc(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -41,9 +41,9 @@ func (s *NpcService) Get(ctx context.Context, req *v1.GetGameTownNpc_Request) (*
 		}
 		return st
 	}
-	reply := &v1.GetGameTownNpc_Response{}
-	if row := getResponse.Row; row != nil {
-		reply.Row = &v1.GetGameTownNpc_Response_GameTownNpc{
+	reply := &v1.GetGameTownNpc_Resp{}
+	if row != nil {
+		reply.Row = &v1.GetGameTownNpc_Resp_GameTownNpc{
 			CreatedAt:         timestamp(row.CreatedAt),
 			UpdatedAt:         timestamp(row.UpdatedAt),
 			Id:                row.ID,
@@ -63,8 +63,8 @@ func (s *NpcService) Get(ctx context.Context, req *v1.GetGameTownNpc_Request) (*
 	}
 	return reply, nil
 }
-func (s *NpcService) List(ctx context.Context, req *v1.ListGameTownNpcs_Request) (*v1.ListGameTownNpcs_Response, error) {
-	listResponse, err := s.gameUsecase.ListNpcs(ctx, &usecase.ListNpcsReq{WorldID: req.GetWorldId(), LocationID: req.LocationId})
+func (s *NpcService) List(ctx context.Context, req *v1.ListGameTownNpcs_Req) (*v1.ListGameTownNpcs_Resp, error) {
+	rows, err := s.gameUsecase.ListNpcs(ctx, &usecase.ListNpcsReq{WorldID: req.GetWorldId(), LocationID: req.LocationId})
 	if err != nil {
 		return nil, err
 	}
@@ -81,13 +81,13 @@ func (s *NpcService) List(ctx context.Context, req *v1.ListGameTownNpcs_Request)
 		}
 		return st
 	}
-	reply := &v1.ListGameTownNpcs_Response{Rows: make([]*v1.ListGameTownNpcs_Response_GameTownNpc, 0, len(listResponse.Rows))}
-	for _, row := range listResponse.Rows {
+	reply := &v1.ListGameTownNpcs_Resp{Rows: make([]*v1.ListGameTownNpcs_Resp_GameTownNpc, 0, len(rows))}
+	for _, row := range rows {
 		if row == nil {
 			reply.Rows = append(reply.Rows, nil)
 			continue
 		}
-		reply.Rows = append(reply.Rows, &v1.ListGameTownNpcs_Response_GameTownNpc{
+		reply.Rows = append(reply.Rows, &v1.ListGameTownNpcs_Resp_GameTownNpc{
 			CreatedAt:         timestamp(row.CreatedAt),
 			UpdatedAt:         timestamp(row.UpdatedAt),
 			Id:                row.ID,

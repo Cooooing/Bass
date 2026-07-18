@@ -15,22 +15,14 @@ func NewPreferencesUsecase(preferencesClient repo.PreferencesClient) *Preference
 	return &PreferencesUsecase{preferencesClient: preferencesClient}
 }
 
-type GetCurrentPreferencesReq struct {
-	UserID int64
-}
-
-type GetCurrentPreferencesResponse struct {
-	Preference *bbsuserv1.GetCurrentPreferences_Response_Preference
-}
-
-func (u *PreferencesUsecase) GetCurrentPreferences(ctx context.Context, req *GetCurrentPreferencesReq) (*GetCurrentPreferencesResponse, error) {
-	reply, err := u.preferencesClient.GetCurrentPreferences(ctx, &repo.GetCurrentPreferencesReq{UserID: req.UserID})
+func (u *PreferencesUsecase) GetCurrentPreferences(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentPreferences_Resp_Preference, error) {
+	reply, err := u.preferencesClient.GetCurrentPreferences(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
-	var preference *bbsuserv1.GetCurrentPreferences_Response_Preference
-	if row := reply.Preference; row != nil {
-		preference = &bbsuserv1.GetCurrentPreferences_Response_Preference{
+	var preference *bbsuserv1.GetCurrentPreferences_Resp_Preference
+	if row := reply; row != nil {
+		preference = &bbsuserv1.GetCurrentPreferences_Resp_Preference{
 			UserId:      row.UserID,
 			Language:    commonenums.Language(row.Language),
 			Timezone:    row.Timezone,
@@ -38,7 +30,7 @@ func (u *PreferencesUsecase) GetCurrentPreferences(ctx context.Context, req *Get
 			MobileTheme: row.MobileTheme,
 		}
 	}
-	return &GetCurrentPreferencesResponse{Preference: preference}, nil
+	return preference, nil
 }
 
 type UpdateCurrentPreferencesReq struct {
@@ -49,11 +41,7 @@ type UpdateCurrentPreferencesReq struct {
 	Language    *commonenums.Language
 }
 
-type UpdateCurrentPreferencesResponse struct {
-	Preference *bbsuserv1.UpdateCurrentPreferences_Response_Preference
-}
-
-func (u *PreferencesUsecase) UpdateCurrentPreferences(ctx context.Context, req *UpdateCurrentPreferencesReq) (*UpdateCurrentPreferencesResponse, error) {
+func (u *PreferencesUsecase) UpdateCurrentPreferences(ctx context.Context, req *UpdateCurrentPreferencesReq) (*bbsuserv1.UpdateCurrentPreferences_Resp_Preference, error) {
 	var language *int32
 	if req.Language != nil {
 		value := int32(*req.Language)
@@ -69,9 +57,9 @@ func (u *PreferencesUsecase) UpdateCurrentPreferences(ctx context.Context, req *
 	if err != nil {
 		return nil, err
 	}
-	var preference *bbsuserv1.UpdateCurrentPreferences_Response_Preference
-	if row := reply.Preference; row != nil {
-		preference = &bbsuserv1.UpdateCurrentPreferences_Response_Preference{
+	var preference *bbsuserv1.UpdateCurrentPreferences_Resp_Preference
+	if row := reply; row != nil {
+		preference = &bbsuserv1.UpdateCurrentPreferences_Resp_Preference{
 			UserId:      row.UserID,
 			Language:    commonenums.Language(row.Language),
 			Timezone:    row.Timezone,
@@ -79,5 +67,5 @@ func (u *PreferencesUsecase) UpdateCurrentPreferences(ctx context.Context, req *
 			MobileTheme: row.MobileTheme,
 		}
 	}
-	return &UpdateCurrentPreferencesResponse{Preference: preference}, nil
+	return preference, nil
 }

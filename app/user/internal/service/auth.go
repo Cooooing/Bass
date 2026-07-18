@@ -35,14 +35,14 @@ func (s *AuthService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *AuthService) RegisterHttp(hs *http.Server) {}
 
-func (s *AuthService) StartEmailRegistration(ctx context.Context, req *v1.StartEmailRegistration_Request) (*v1.StartEmailRegistration_Response, error) {
-	res, err := s.authUsecase.StartEmailRegistration(ctx, &usecase.StartEmailRegistrationReq{Account: &model.Account{
+func (s *AuthService) StartEmailRegistration(ctx context.Context, req *v1.StartEmailRegistration_Req) (*v1.StartEmailRegistration_Resp, error) {
+	res, err := s.authUsecase.StartEmailRegistration(ctx, &model.Account{
 		Email:    &req.Email,
 		Password: req.Password,
 		Name:     req.Name,
 		Nickname: req.Nickname,
-	}})
-	reply := &v1.StartEmailRegistration_Response{}
+	})
+	reply := &v1.StartEmailRegistration_Resp{}
 	if res != nil {
 		reply.CodeToken = res.Token
 	}
@@ -52,19 +52,19 @@ func (s *AuthService) StartEmailRegistration(ctx context.Context, req *v1.StartE
 	return reply, err
 }
 
-func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *v1.VerifyEmailRegistration_Request) (*v1.VerifyEmailRegistration_Response, error) {
+func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *v1.VerifyEmailRegistration_Req) (*v1.VerifyEmailRegistration_Resp, error) {
 	err := s.authUsecase.VerifyEmailRegistration(ctx, &usecase.VerifyEmailRegistrationReq{CodeToken: req.CodeToken, Code: req.Code})
-	return &v1.VerifyEmailRegistration_Response{}, err
+	return &v1.VerifyEmailRegistration_Resp{}, err
 }
 
-func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *v1.StartPhoneRegistration_Request) (*v1.StartPhoneRegistration_Response, error) {
-	res, err := s.authUsecase.StartPhoneRegistration(ctx, &usecase.StartPhoneRegistrationReq{Account: &model.Account{
+func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *v1.StartPhoneRegistration_Req) (*v1.StartPhoneRegistration_Resp, error) {
+	res, err := s.authUsecase.StartPhoneRegistration(ctx, &model.Account{
 		Phone:    &req.Phone,
 		Password: req.Password,
 		Name:     req.Name,
 		Nickname: req.Nickname,
-	}})
-	reply := &v1.StartPhoneRegistration_Response{}
+	})
+	reply := &v1.StartPhoneRegistration_Resp{}
 	if res != nil {
 		reply.CodeToken = res.Token
 	}
@@ -74,12 +74,12 @@ func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *v1.StartP
 	return reply, err
 }
 
-func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *v1.VerifyPhoneRegistration_Request) (*v1.VerifyPhoneRegistration_Response, error) {
+func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *v1.VerifyPhoneRegistration_Req) (*v1.VerifyPhoneRegistration_Resp, error) {
 	err := s.authUsecase.VerifyPhoneRegistration(ctx, &usecase.VerifyPhoneRegistrationReq{CodeToken: req.CodeToken, Code: req.Code})
-	return &v1.VerifyPhoneRegistration_Response{}, err
+	return &v1.VerifyPhoneRegistration_Resp{}, err
 }
 
-func (s *AuthService) LoginByPassword(ctx context.Context, req *v1.LoginByPassword_Request) (*v1.LoginByPassword_Response, error) {
+func (s *AuthService) LoginByPassword(ctx context.Context, req *v1.LoginByPassword_Req) (*v1.LoginByPassword_Resp, error) {
 	res, err := s.authUsecase.LoginByPassword(ctx, &usecase.LoginByPasswordReq{
 		Account:  req.Account,
 		Password: req.Password,
@@ -103,7 +103,7 @@ func (s *AuthService) LoginByPassword(ctx context.Context, req *v1.LoginByPasswo
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS).WithCause(err)
 	}
 	account := res.Account
-	basic := &v1.LoginByPassword_Response_AccountBasic{
+	basic := &v1.LoginByPassword_Resp_AccountBasic{
 		Id:            account.ID,
 		Name:          account.Name,
 		Nickname:      account.Nickname,
@@ -125,11 +125,11 @@ func (s *AuthService) LoginByPassword(ctx context.Context, req *v1.LoginByPasswo
 	if account.UpdatedAt != nil {
 		basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 	}
-	return &v1.LoginByPassword_Response{
+	return &v1.LoginByPassword_Resp{
 		Token: res.Token,
-		Account: &v1.LoginByPassword_Response_Account{
+		Account: &v1.LoginByPassword_Resp_Account{
 			Basic: basic,
-			Contact: &v1.LoginByPassword_Response_AccountContact{
+			Contact: &v1.LoginByPassword_Resp_AccountContact{
 				UserId: account.ID,
 				Email:  account.Email,
 				Phone:  account.Phone,
@@ -138,19 +138,19 @@ func (s *AuthService) LoginByPassword(ctx context.Context, req *v1.LoginByPasswo
 	}, nil
 }
 
-func (s *AuthService) Logout(ctx context.Context, req *v1.Logout_Request) (*v1.Logout_Response, error) {
-	err := s.authUsecase.Logout(ctx, &usecase.LogoutReq{Token: req.GetToken()})
-	return &v1.Logout_Response{}, err
+func (s *AuthService) Logout(ctx context.Context, req *v1.Logout_Req) (*v1.Logout_Resp, error) {
+	err := s.authUsecase.Logout(ctx, req.GetToken())
+	return &v1.Logout_Resp{}, err
 }
 
-func (s *AuthService) ParseToken(ctx context.Context, req *v1.ParseToken_Request) (*v1.ParseToken_Response, error) {
-	res, err := s.authUsecase.ParseToken(ctx, &usecase.ParseTokenReq{Token: req.GetToken()})
+func (s *AuthService) ParseToken(ctx context.Context, req *v1.ParseToken_Req) (*v1.ParseToken_Resp, error) {
+	res, err := s.authUsecase.ParseToken(ctx, req.GetToken())
 	if err != nil {
 		return nil, err
 	}
-	user := res.User
-	return &v1.ParseToken_Response{
-		User: &v1.ParseToken_Response_TokenUser{
+	user := res
+	return &v1.ParseToken_Resp{
+		User: &v1.ParseToken_Resp_TokenUser{
 			Id:       user.ID,
 			Name:     user.Name,
 			Nickname: user.Nickname,

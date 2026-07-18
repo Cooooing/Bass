@@ -17,8 +17,8 @@ func NewAccountClient(userClient *rpc.UserClient) repo.AccountClient {
 	return &AccountClient{userClient: userClient}
 }
 
-func (r *AccountClient) GetCurrentAccount(ctx context.Context, req *repo.GetCurrentAccountReq) (*repo.GetCurrentAccountResponse, error) {
-	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Request{UserId: req.UserID})
+func (r *AccountClient) GetCurrentAccount(ctx context.Context, userID int64) (*repo.Account, error) {
+	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Req{UserId: userID})
 	if err != nil {
 		return nil, err
 	}
@@ -50,11 +50,11 @@ func (r *AccountClient) GetCurrentAccount(ctx context.Context, req *repo.GetCurr
 			}
 		}
 	}
-	return &repo.GetCurrentAccountResponse{Account: out}, nil
+	return out, nil
 }
 
-func (r *AccountClient) GetProfileAccount(ctx context.Context, req *repo.GetProfileAccountReq) (*repo.GetProfileAccountResponse, error) {
-	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Request{UserId: req.UserID})
+func (r *AccountClient) GetProfileAccount(ctx context.Context, userID int64) (*repo.AccountProfile, error) {
+	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Req{UserId: userID})
 	if err != nil {
 		return nil, err
 	}
@@ -76,11 +76,11 @@ func (r *AccountClient) GetProfileAccount(ctx context.Context, req *repo.GetProf
 			UpdatedAt:     formatProtoTime(account.GetUpdatedAt()),
 		}
 	}
-	return &repo.GetProfileAccountResponse{Profile: profile}, nil
+	return profile, nil
 }
 
-func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.UpdateProfileAccountReq) (*repo.UpdateProfileAccountResponse, error) {
-	updateReq := &userv1.UpdateProfileAccount_Request{
+func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.UpdateProfileAccountReq) (*repo.AccountProfile, error) {
+	updateReq := &userv1.UpdateProfileAccount_Req{
 		UserId:       req.UserID,
 		AvatarUrl:    req.AvatarURL,
 		Nickname:     req.Nickname,
@@ -113,13 +113,13 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 			UpdatedAt:     formatProtoTime(account.GetUpdatedAt()),
 		}
 	}
-	return &repo.UpdateProfileAccountResponse{Profile: profile}, nil
+	return profile, nil
 }
 
-func (r *AccountClient) AvatarAccount(ctx context.Context, req *repo.AvatarAccountReq) (*repo.AvatarAccountResponse, error) {
-	reply, err := r.userClient.Account.Avatar(ctx, &userv1.AvatarAccount_Request{Name: req.Name})
+func (r *AccountClient) AvatarAccount(ctx context.Context, name string) (*repo.AvatarAccountResp, error) {
+	reply, err := r.userClient.Account.Avatar(ctx, &userv1.AvatarAccount_Req{Name: name})
 	if err != nil {
 		return nil, err
 	}
-	return &repo.AvatarAccountResponse{Data: reply.GetData(), ContentType: reply.GetContentType()}, nil
+	return &repo.AvatarAccountResp{Data: reply.GetData(), ContentType: reply.GetContentType()}, nil
 }

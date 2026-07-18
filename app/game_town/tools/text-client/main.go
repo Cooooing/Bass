@@ -38,7 +38,7 @@ func main() {
 	defer cleanup()
 
 	ctx := context.Background()
-	sessionReply, err := gameTownClient.Session.Start(ctx, &v1.StartGameTownSession_Request{
+	sessionReply, err := gameTownClient.Session.Start(ctx, &v1.StartGameTownSession_Req{
 		PlayerId:   new(int64(1)),
 		ClientType: v1.GameTownSessionClientType_GAME_TOWN_SESSION_CLIENT_TYPE_TEXT_CLIENT,
 	})
@@ -65,7 +65,7 @@ func main() {
 		}
 		if strings.HasPrefix(line, "/register ") {
 			name := strings.TrimSpace(strings.TrimPrefix(line, "/register "))
-			reply, err := gameTownClient.Player.Register(ctx, &v1.RegisterGameTownPlayer_Request{Name: name, DisplayName: name})
+			reply, err := gameTownClient.Player.Register(ctx, &v1.RegisterGameTownPlayer_Req{Name: name, DisplayName: name})
 			if err != nil {
 				fmt.Println("error:", err)
 				continue
@@ -78,7 +78,7 @@ func main() {
 			fmt.Println("please register first: /register <name>")
 			continue
 		}
-		reply, err := gameTownClient.Command.Execute(ctx, &v1.ExecuteGameTownCommand_Request{SessionId: sessionID, PlayerId: playerID, RawText: line})
+		reply, err := gameTownClient.Command.Execute(ctx, &v1.ExecuteGameTownCommand_Req{SessionId: sessionID, PlayerId: playerID, RawText: line})
 		if err != nil {
 			fmt.Println("error:", err)
 			continue
@@ -96,7 +96,7 @@ func main() {
 			fmt.Printf("npc: %s (%s)\n", npc.GetName(), npc.GetCode())
 		}
 	}
-	_, _ = gameTownClient.Session.End(ctx, &v1.EndGameTownSession_Request{Id: sessionID})
+	_, _ = gameTownClient.Session.End(ctx, &v1.EndGameTownSession_Req{Id: sessionID})
 }
 
 func newGameTownClient(addr string, consulAddr string, datacenter string, token string, timeout time.Duration) (*rpc.GameTownClient, func(), string, error) {

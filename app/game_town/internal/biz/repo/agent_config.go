@@ -6,18 +6,10 @@ import (
 )
 
 type AgentConfigRepo interface {
-	CreateAgentConfig(ctx context.Context, req *CreateAgentConfigReq) (*CreateAgentConfigResponse, error)
-	GetAgentConfig(ctx context.Context, req *GetAgentConfigReq) (*GetAgentConfigResponse, error)
-	GetDefaultAgentConfig(ctx context.Context, req *GetDefaultAgentConfigReq) (*GetDefaultAgentConfigResponse, error)
-	ListAgentConfigs(ctx context.Context, req *ListAgentConfigsReq) (*ListAgentConfigsResponse, error)
-}
-
-type CreateAgentConfigReq struct {
-	Row *model.AgentConfig
-}
-
-type CreateAgentConfigResponse struct {
-	Row *model.AgentConfig
+	CreateAgentConfig(ctx context.Context, row *model.AgentConfig) (*model.AgentConfig, error)
+	GetAgentConfig(ctx context.Context, req *GetAgentConfigReq) (*model.AgentConfig, error)
+	GetDefaultAgentConfig(ctx context.Context, playerID int64) (*model.AgentConfig, error)
+	ListAgentConfigs(ctx context.Context, req *ListAgentConfigsReq) ([]*model.AgentConfig, error)
 }
 
 type GetAgentConfigReq struct {
@@ -25,23 +17,7 @@ type GetAgentConfigReq struct {
 	PlayerID int64
 }
 
-type GetAgentConfigResponse struct {
-	Row *model.AgentConfig
-}
-
-type GetDefaultAgentConfigReq struct {
-	PlayerID int64
-}
-
-type GetDefaultAgentConfigResponse struct {
-	Row *model.AgentConfig
-}
-
 type ListAgentConfigsReq struct {
 	PlayerID int64
 	Status   *string
-}
-
-type ListAgentConfigsResponse struct {
-	Rows []*model.AgentConfig
 }

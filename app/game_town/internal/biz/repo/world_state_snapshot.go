@@ -6,22 +6,6 @@ import (
 )
 
 type WorldStateSnapshotRepo interface {
-	GetLatestWorldState(ctx context.Context, req *GetLatestWorldStateReq) (*GetLatestWorldStateResponse, error)
-	CreateState(ctx context.Context, req *CreateStateReq) (*CreateStateResponse, error)
-}
-
-type GetLatestWorldStateReq struct {
-	WorldID int64
-}
-
-type GetLatestWorldStateResponse struct {
-	Row *model.WorldStateSnapshot
-}
-
-type CreateStateReq struct {
-	Row *model.WorldStateSnapshot
-}
-
-type CreateStateResponse struct {
-	Row *model.WorldStateSnapshot
+	GetLatestWorldState(ctx context.Context, worldID int64) (*model.WorldStateSnapshot, error)
+	CreateState(ctx context.Context, row *model.WorldStateSnapshot) (*model.WorldStateSnapshot, error)
 }

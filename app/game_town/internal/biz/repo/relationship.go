@@ -6,24 +6,12 @@ import (
 )
 
 type RelationshipRepo interface {
-	GetRelationship(ctx context.Context, req *GetRelationshipReq) (*GetRelationshipResponse, error)
-	UpsertRelationship(ctx context.Context, req *UpsertRelationshipReq) (*UpsertRelationshipResponse, error)
+	GetRelationship(ctx context.Context, req *GetRelationshipReq) (*model.Relationship, error)
+	UpsertRelationship(ctx context.Context, row *model.Relationship) (*model.Relationship, error)
 }
 
 type GetRelationshipReq struct {
 	WorldID  int64
 	PlayerID int64
 	NpcID    int64
-}
-
-type GetRelationshipResponse struct {
-	Row *model.Relationship
-}
-
-type UpsertRelationshipReq struct {
-	Row *model.Relationship
-}
-
-type UpsertRelationshipResponse struct {
-	Row *model.Relationship
 }

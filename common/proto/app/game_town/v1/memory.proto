@@ -9,17 +9,17 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/game_town/v1;v1";
 
 service GameTownMemoryService {
-  rpc List(ListGameTownMemories.Request) returns (ListGameTownMemories.Response) {} // 查询记忆。
+  rpc List(ListGameTownMemories.Req) returns (ListGameTownMemories.Resp) {} // 查询记忆。
 }
 
 message ListGameTownMemories {
-  message Request {
+  message Req {
     int64 world_id = 1; // 世界 ID
     int64 player_id = 2; // 玩家 ID
     optional int64 npc_id = 3; // NPC ID
     optional GameTownMemoryType type = 4; // 记忆类型
   }
-  message Response {
+  message Resp {
 
     message GameTownMemory {
       google.protobuf.Timestamp created_at = 1000; // 创建时间

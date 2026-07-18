@@ -14,8 +14,7 @@ func NewMemoryRepo(db *gen.Client) bizrepo.MemoryRepo {
 	return &MemoryRepo{baseRepo: &baseRepo{db: db}}
 }
 
-func (r *MemoryRepo) ListMemories(ctx context.Context, req *bizrepo.ListMemoriesReq) (*bizrepo.ListMemoriesResponse, error) {
-	queryReq := req.Query
+func (r *MemoryRepo) ListMemories(ctx context.Context, queryReq *bizrepo.MemoryQuery) ([]*model.Memory, error) {
 	query := r.db.Memory.Query().Where(memory.WorldID(queryReq.WorldID), memory.PlayerID(queryReq.PlayerID), memory.DeletedAtIsNil())
 	if queryReq.NpcID != nil {
 		query = query.Where(memory.NpcID(*queryReq.NpcID))
@@ -31,14 +30,13 @@ func (r *MemoryRepo) ListMemories(ctx context.Context, req *bizrepo.ListMemories
 	for _, row := range rows {
 		result = append(result, r.memory(row))
 	}
-	return &bizrepo.ListMemoriesResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *MemoryRepo) CreateMemory(ctx context.Context, req *bizrepo.CreateMemoryReq) (*bizrepo.CreateMemoryResponse, error) {
-	row := req.Row
+func (r *MemoryRepo) CreateMemory(ctx context.Context, row *model.Memory) (*model.Memory, error) {
 	created, err := r.db.Memory.Create().SetWorldID(row.WorldID).SetPlayerID(row.PlayerID).SetNpcID(row.NpcID).SetType(row.Type).SetContent(row.Content).SetImportance(row.Importance).SetNillableSourceEventID(row.SourceEventID).SetNillableLastRecalledAt(row.LastRecalledAt).SetNillableExpiresAt(row.ExpiresAt).Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.CreateMemoryResponse{Row: r.memory(created)}, nil
+	return r.memory(created), nil
 }

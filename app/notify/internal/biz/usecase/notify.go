@@ -102,24 +102,20 @@ type NotifyListEnabledRulesReq struct {
 	Language  notifyenum.Language
 }
 
-type NotifyListEnabledRulesResponse struct {
-	Rules []*model.NotificationRule
-}
-
-func (u *NotifyUsecase) ListEnabledRules(ctx context.Context, req *NotifyListEnabledRulesReq) (*NotifyListEnabledRulesResponse, error) {
+func (u *NotifyUsecase) ListEnabledRules(ctx context.Context, req *NotifyListEnabledRulesReq) ([]*model.NotificationRule, error) {
 	if req == nil {
 		req = &NotifyListEnabledRulesReq{}
 	}
 	enabled := true
-	rulesResponse, err := u.notificationRuleRepo.List(ctx, &repo.NotificationRuleListReq{Query: &repo.NotificationRuleQuery{
+	rulesResp, err := u.notificationRuleRepo.List(ctx, &repo.NotificationRuleQuery{
 		EventType: &req.EventType,
 		Language:  &req.Language,
 		Enabled:   &enabled,
-	}})
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &NotifyListEnabledRulesResponse{Rules: rulesResponse.Rows}, nil
+	return rulesResp, nil
 }
 
 type NotifyProcessReq struct {
@@ -133,19 +129,18 @@ func (u *NotifyUsecase) Process(ctx context.Context, req *NotifyProcessReq) erro
 	}
 	notificationContext := req.NotificationContext
 	rules := req.Rules
-	loadAccountsResp, err := u.loadAccounts(ctx, &loadAccountsReq{NotificationContext: notificationContext, Rules: rules})
+	accountsByUserID, err := u.loadAccounts(ctx, &loadAccountsReq{NotificationContext: notificationContext, Rules: rules})
 	if err != nil {
 		return err
 	}
-	accountsByUserID := loadAccountsResp.AccountsByUserID
 	for _, rule := range rules {
-		processRuleResp, err := u.processRule(ctx, &processRuleReq{NotificationContext: notificationContext, Rule: rule, AccountsByUserID: accountsByUserID})
+		status, err := u.processRule(ctx, &processRuleReq{NotificationContext: notificationContext, Rule: rule, AccountsByUserID: accountsByUserID})
 		if err != nil {
 			return err
 		}
-		switch processRuleResp.Status {
+		switch status {
 		case notifyenum.NotificationChannelStatusProcessing, notifyenum.NotificationChannelStatusFailed, notifyenum.NotificationChannelStatusInternalError:
-			return fmt.Errorf("notification channel not completed: event_id=%s channel=%s status=%s", notificationContext.EventID, rule.Channel, processRuleResp.Status)
+			return fmt.Errorf("notification channel not completed: event_id=%s channel=%s status=%s", notificationContext.EventID, rule.Channel, status)
 		}
 	}
 	return nil
@@ -157,42 +152,38 @@ type processRuleReq struct {
 	AccountsByUserID    map[int64]*model.UserAccount
 }
 
-type processRuleResponse struct {
-	Status notifyenum.NotificationChannelStatus
-}
-
-func (u *NotifyUsecase) processRule(ctx context.Context, req *processRuleReq) (*processRuleResponse, error) {
+func (u *NotifyUsecase) processRule(ctx context.Context, req *processRuleReq) (notifyenum.NotificationChannelStatus, error) {
 	rule := req.Rule
 	if rule == nil || !rule.Enabled {
-		return &processRuleResponse{Status: notifyenum.NotificationChannelStatusSkipped}, nil
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
 	switch rule.Channel {
 	case notifyenum.NotificationChannelStation:
 		resp, err := u.processStation(ctx, &processStationReq{NotificationContext: req.NotificationContext, Rule: rule})
 		if err != nil {
-			return nil, err
+			return "", err
 		}
-		return &processRuleResponse{Status: resp.Status}, nil
+		return resp, nil
 	case notifyenum.NotificationChannelEmail:
 		resp, err := u.processEmail(ctx, &processEmailReq{NotificationContext: req.NotificationContext, Rule: rule, AccountsByUserID: req.AccountsByUserID})
 		if err != nil {
-			return nil, err
+			return "", err
 		}
-		return &processRuleResponse{Status: resp.Status}, nil
+		return resp, nil
 	case notifyenum.NotificationChannelTencentSMS:
 		resp, err := u.processTencentSMS(ctx, &processTencentSMSReq{NotificationContext: req.NotificationContext, Rule: rule, AccountsByUserID: req.AccountsByUserID})
 		if err != nil {
-			return nil, err
+			return "", err
 		}
-		return &processRuleResponse{Status: resp.Status}, nil
+		return resp, nil
 	case notifyenum.NotificationChannelLarkWebhook:
 		resp, err := u.processLarkWebhook(ctx, &processLarkWebhookReq{NotificationContext: req.NotificationContext, Rule: rule})
 		if err != nil {
-			return nil, err
+			return "", err
 		}
-		return &processRuleResponse{Status: resp.Status}, nil
+		return resp, nil
 	default:
-		return &processRuleResponse{Status: notifyenum.NotificationChannelStatusSkipped}, nil
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
 }
 
@@ -201,15 +192,11 @@ type processStationReq struct {
 	Rule                *model.NotificationRule
 }
 
-type processStationResponse struct {
-	Status notifyenum.NotificationChannelStatus
-}
-
-func (u *NotifyUsecase) processStation(ctx context.Context, req *processStationReq) (*processStationResponse, error) {
+func (u *NotifyUsecase) processStation(ctx context.Context, req *processStationReq) (notifyenum.NotificationChannelStatus, error) {
 	notificationContext := req.NotificationContext
 	rule := req.Rule
 	if rule.StationTemplate == nil {
-		return &processStationResponse{Status: notifyenum.NotificationChannelStatusSkipped}, nil
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
 	seen := make(map[int64]struct{}, len(notificationContext.Recipients))
 	written := false
@@ -229,23 +216,23 @@ func (u *NotifyUsecase) processStation(ctx context.Context, req *processStationR
 		if !ok {
 			continue
 		}
-		_, err := u.stationMessageRepo.Save(ctx, &repo.NotificationStationMessageSaveReq{Message: &model.NotificationStationMessage{
+		_, err := u.stationMessageRepo.Save(ctx, &model.NotificationStationMessage{
 			EventID:    notificationContext.EventID,
 			EventType:  notificationContext.EventType,
 			ReceiverID: recipient.UserID,
 			Title:      title,
 			Content:    content,
 			Status:     notifyenum.NotificationChannelStatusSucceeded,
-		}})
+		})
 		if err != nil {
-			return &processStationResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+			return notifyenum.NotificationChannelStatusInternalError, err
 		}
 		written = true
 	}
 	if !written {
-		return &processStationResponse{Status: notifyenum.NotificationChannelStatusSkipped}, nil
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
-	return &processStationResponse{Status: notifyenum.NotificationChannelStatusSucceeded}, nil
+	return notifyenum.NotificationChannelStatusSucceeded, nil
 }
 
 type processEmailReq struct {
@@ -254,19 +241,15 @@ type processEmailReq struct {
 	AccountsByUserID    map[int64]*model.UserAccount
 }
 
-type processEmailResponse struct {
-	Status notifyenum.NotificationChannelStatus
-}
-
-func (u *NotifyUsecase) processEmail(ctx context.Context, req *processEmailReq) (*processEmailResponse, error) {
+func (u *NotifyUsecase) processEmail(ctx context.Context, req *processEmailReq) (notifyenum.NotificationChannelStatus, error) {
 	notificationContext := req.NotificationContext
 	rule := req.Rule
 	accountsByUserID := req.AccountsByUserID
 	if rule.EmailTemplate == nil {
-		return &processEmailResponse{Status: notifyenum.NotificationChannelStatusSkipped}, nil
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
 	if u.emailClient == nil {
-		return &processEmailResponse{Status: notifyenum.NotificationChannelStatusInternalError}, fmt.Errorf("email client is nil")
+		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("email client is nil")
 	}
 	status := notifyenum.NotificationChannelStatusSkipped
 	seen := map[string]struct{}{}
@@ -307,67 +290,58 @@ func (u *NotifyUsecase) processEmail(ctx context.Context, req *processEmailReq) 
 		if recipient.UserID != 0 {
 			delivery.ReceiverID = new(recipient.UserID)
 		}
-		sendEmailResp, err := u.sendEmail(ctx, &sendEmailReq{Delivery: delivery})
-		itemStatus := sendEmailResp.Status
+		sendEmailResp, err := u.sendEmail(ctx, delivery)
+		itemStatus := sendEmailResp
 		if err != nil {
-			return &processEmailResponse{Status: itemStatus}, err
+			return itemStatus, err
 		}
 		status = status.Merge(itemStatus)
 		if status.Blocking() {
-			return &processEmailResponse{Status: status}, nil
+			return status, nil
 		}
 	}
-	return &processEmailResponse{Status: status}, nil
+	return status, nil
 }
 
-type sendEmailReq struct {
-	Delivery *model.NotificationEmailDelivery
-}
-
-type sendEmailResponse struct {
-	Status notifyenum.NotificationChannelStatus
-}
-
-func (u *NotifyUsecase) sendEmail(ctx context.Context, req *sendEmailReq) (*sendEmailResponse, error) {
-	delivery := req.Delivery
-	saveResp, err := u.emailDeliveryRepo.SaveOrGet(ctx, &repo.NotificationEmailDeliverySaveOrGetReq{Delivery: delivery})
+func (u *NotifyUsecase) sendEmail(ctx context.Context, delivery *model.NotificationEmailDelivery) (notifyenum.NotificationChannelStatus, error) {
+	saveResp, err := u.emailDeliveryRepo.SaveOrGet(ctx, delivery)
 	if err == nil {
-		delivery = saveResp.Delivery
+		delivery = saveResp
 	}
 	if err != nil {
-		return &sendEmailResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	if delivery.Status == notifyenum.NotificationChannelStatusSucceeded {
-		return &sendEmailResponse{Status: notifyenum.NotificationChannelStatusSucceeded}, nil
+		return notifyenum.NotificationChannelStatusSucceeded, nil
 	}
 	if delivery.Status == notifyenum.NotificationChannelStatusUnknown {
-		return &sendEmailResponse{Status: notifyenum.NotificationChannelStatusUnknown}, nil
+		return notifyenum.NotificationChannelStatusUnknown, nil
 	}
 	if delivery.Status == notifyenum.NotificationChannelStatusRateLimited {
-		return &sendEmailResponse{Status: notifyenum.NotificationChannelStatusRateLimited}, nil
+		return notifyenum.NotificationChannelStatusRateLimited, nil
 	}
 	claimResp, err := u.emailDeliveryRepo.Claim(ctx, &repo.NotificationEmailDeliveryClaimReq{ID: delivery.ID, Now: time.Now(), ProcessingTimeout: u.externalProcessingTimeout})
 	if err != nil {
-		return &sendEmailResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
-	if !claimResp.Claimed {
-		return &sendEmailResponse{Status: delivery.Status}, nil
+	if !claimResp {
+		return delivery.Status, nil
 	}
 	if u.rateLimitEnabled {
-		allowResp, err := u.notificationRateLimitCache.Allow(ctx, &repo.NotificationRateLimitAllowReq{Spec: &repo.NotificationRateLimitSpec{
+		allowResp, err := u.notificationRateLimitCache.Allow(ctx, &repo.NotificationRateLimitSpec{
 			Channel:   notifyenum.NotificationChannelEmail,
 			Recipient: delivery.ToEmail,
 			Window:    u.rateLimitWindow,
 			MaxCount:  u.rateLimitMaxCount,
-		}})
+		})
 		if err != nil {
-			return &sendEmailResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+			return notifyenum.NotificationChannelStatusInternalError, err
 		}
-		if !allowResp.Allowed {
-			if _, err := u.emailDeliveryRepo.MarkRateLimited(ctx, &repo.NotificationEmailDeliveryMarkRateLimitedReq{ID: delivery.ID}); err != nil {
-				return &sendEmailResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		if !allowResp {
+			if err := u.emailDeliveryRepo.MarkRateLimited(ctx, delivery.ID); err != nil {
+				return notifyenum.NotificationChannelStatusInternalError, err
 			}
-			return &sendEmailResponse{Status: notifyenum.NotificationChannelStatusRateLimited}, nil
+			return notifyenum.NotificationChannelStatusRateLimited, nil
 		}
 	}
 	result, err := u.emailClient.SendEmail(ctx, &bizchannel.EmailRequest{
@@ -378,13 +352,13 @@ func (u *NotifyUsecase) sendEmail(ctx context.Context, req *sendEmailReq) (*send
 		ContentType:    delivery.ContentType,
 	})
 	if err != nil {
-		return &sendEmailResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	finishResp, err := u.finishEmail(ctx, &finishEmailReq{DeliveryID: delivery.ID, Result: result})
 	if err != nil {
-		return &sendEmailResponse{Status: finishResp.Status}, err
+		return finishResp, err
 	}
-	return &sendEmailResponse{Status: finishResp.Status}, nil
+	return finishResp, nil
 }
 
 type finishEmailReq struct {
@@ -392,27 +366,23 @@ type finishEmailReq struct {
 	Result     *bizchannel.SendResult
 }
 
-type finishEmailResponse struct {
-	Status notifyenum.NotificationChannelStatus
-}
-
-func (u *NotifyUsecase) finishEmail(ctx context.Context, req *finishEmailReq) (*finishEmailResponse, error) {
+func (u *NotifyUsecase) finishEmail(ctx context.Context, req *finishEmailReq) (notifyenum.NotificationChannelStatus, error) {
 	deliveryID := req.DeliveryID
 	result := req.Result
 	if result == nil {
-		_, err := u.emailDeliveryRepo.MarkUnknown(ctx, &repo.NotificationEmailDeliveryMarkUnknownReq{ID: deliveryID})
-		return &finishEmailResponse{Status: notifyenum.NotificationChannelStatusUnknown}, err
+		err := u.emailDeliveryRepo.MarkUnknown(ctx, &repo.NotificationEmailDeliveryMarkUnknownReq{ID: deliveryID})
+		return notifyenum.NotificationChannelStatusUnknown, err
 	}
 	switch result.Status {
 	case notifyenum.NotificationChannelStatusSucceeded:
-		_, err := u.emailDeliveryRepo.MarkSucceeded(ctx, &repo.NotificationEmailDeliveryMarkSucceededReq{ID: deliveryID, ProviderMessageID: result.ProviderMessageID, ProviderResponse: result.ProviderResponse, SentAt: time.Now()})
-		return &finishEmailResponse{Status: notifyenum.NotificationChannelStatusSucceeded}, err
+		err := u.emailDeliveryRepo.MarkSucceeded(ctx, &repo.NotificationEmailDeliveryMarkSucceededReq{ID: deliveryID, ProviderMessageID: result.ProviderMessageID, ProviderResp: result.ProviderResp, SentAt: time.Now()})
+		return notifyenum.NotificationChannelStatusSucceeded, err
 	case notifyenum.NotificationChannelStatusFailed:
-		_, err := u.emailDeliveryRepo.MarkFailed(ctx, &repo.NotificationEmailDeliveryMarkFailedReq{ID: deliveryID, ProviderResponse: result.ProviderResponse})
-		return &finishEmailResponse{Status: notifyenum.NotificationChannelStatusFailed}, err
+		err := u.emailDeliveryRepo.MarkFailed(ctx, &repo.NotificationEmailDeliveryMarkFailedReq{ID: deliveryID, ProviderResp: result.ProviderResp})
+		return notifyenum.NotificationChannelStatusFailed, err
 	default:
-		_, err := u.emailDeliveryRepo.MarkUnknown(ctx, &repo.NotificationEmailDeliveryMarkUnknownReq{ID: deliveryID, ProviderResponse: result.ProviderResponse})
-		return &finishEmailResponse{Status: notifyenum.NotificationChannelStatusUnknown}, err
+		err := u.emailDeliveryRepo.MarkUnknown(ctx, &repo.NotificationEmailDeliveryMarkUnknownReq{ID: deliveryID, ProviderResp: result.ProviderResp})
+		return notifyenum.NotificationChannelStatusUnknown, err
 	}
 }
 
@@ -422,22 +392,18 @@ type processTencentSMSReq struct {
 	AccountsByUserID    map[int64]*model.UserAccount
 }
 
-type processTencentSMSResponse struct {
-	Status notifyenum.NotificationChannelStatus
-}
-
-func (u *NotifyUsecase) processTencentSMS(ctx context.Context, req *processTencentSMSReq) (*processTencentSMSResponse, error) {
+func (u *NotifyUsecase) processTencentSMS(ctx context.Context, req *processTencentSMSReq) (notifyenum.NotificationChannelStatus, error) {
 	notificationContext := req.NotificationContext
 	rule := req.Rule
 	accountsByUserID := req.AccountsByUserID
 	if !u.smsEnabled {
-		return &processTencentSMSResponse{Status: notifyenum.NotificationChannelStatusSkipped}, nil
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
 	if rule.TencentSMSTemplate == nil {
-		return &processTencentSMSResponse{Status: notifyenum.NotificationChannelStatusSkipped}, nil
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
 	if u.tencentSMSClient == nil {
-		return &processTencentSMSResponse{Status: notifyenum.NotificationChannelStatusInternalError}, fmt.Errorf("tencent sms client is nil")
+		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("tencent sms client is nil")
 	}
 	status := notifyenum.NotificationChannelStatusSkipped
 	seen := map[string]struct{}{}
@@ -484,67 +450,58 @@ func (u *NotifyUsecase) processTencentSMS(ctx context.Context, req *processTence
 		if recipient.UserID != 0 {
 			delivery.ReceiverID = new(recipient.UserID)
 		}
-		sendTencentSMSResp, err := u.sendTencentSMS(ctx, &sendTencentSMSReq{Delivery: delivery})
-		itemStatus := sendTencentSMSResp.Status
+		sendTencentSMSResp, err := u.sendTencentSMS(ctx, delivery)
+		itemStatus := sendTencentSMSResp
 		if err != nil {
-			return &processTencentSMSResponse{Status: itemStatus}, err
+			return itemStatus, err
 		}
 		status = status.Merge(itemStatus)
 		if status.Blocking() {
-			return &processTencentSMSResponse{Status: status}, nil
+			return status, nil
 		}
 	}
-	return &processTencentSMSResponse{Status: status}, nil
+	return status, nil
 }
 
-type sendTencentSMSReq struct {
-	Delivery *model.NotificationTencentSMSDelivery
-}
-
-type sendTencentSMSResponse struct {
-	Status notifyenum.NotificationChannelStatus
-}
-
-func (u *NotifyUsecase) sendTencentSMS(ctx context.Context, req *sendTencentSMSReq) (*sendTencentSMSResponse, error) {
-	delivery := req.Delivery
-	saveResp, err := u.tencentSMSDeliveryRepo.SaveOrGet(ctx, &repo.NotificationTencentSMSDeliverySaveOrGetReq{Delivery: delivery})
+func (u *NotifyUsecase) sendTencentSMS(ctx context.Context, delivery *model.NotificationTencentSMSDelivery) (notifyenum.NotificationChannelStatus, error) {
+	saveResp, err := u.tencentSMSDeliveryRepo.SaveOrGet(ctx, delivery)
 	if err == nil {
-		delivery = saveResp.Delivery
+		delivery = saveResp
 	}
 	if err != nil {
-		return &sendTencentSMSResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	if delivery.Status == notifyenum.NotificationChannelStatusSucceeded {
-		return &sendTencentSMSResponse{Status: notifyenum.NotificationChannelStatusSucceeded}, nil
+		return notifyenum.NotificationChannelStatusSucceeded, nil
 	}
 	if delivery.Status == notifyenum.NotificationChannelStatusUnknown {
-		return &sendTencentSMSResponse{Status: notifyenum.NotificationChannelStatusUnknown}, nil
+		return notifyenum.NotificationChannelStatusUnknown, nil
 	}
 	if delivery.Status == notifyenum.NotificationChannelStatusRateLimited {
-		return &sendTencentSMSResponse{Status: notifyenum.NotificationChannelStatusRateLimited}, nil
+		return notifyenum.NotificationChannelStatusRateLimited, nil
 	}
 	claimResp, err := u.tencentSMSDeliveryRepo.Claim(ctx, &repo.NotificationTencentSMSDeliveryClaimReq{ID: delivery.ID, Now: time.Now(), ProcessingTimeout: u.externalProcessingTimeout})
 	if err != nil {
-		return &sendTencentSMSResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
-	if !claimResp.Claimed {
-		return &sendTencentSMSResponse{Status: delivery.Status}, nil
+	if !claimResp {
+		return delivery.Status, nil
 	}
 	if u.rateLimitEnabled {
-		allowResp, err := u.notificationRateLimitCache.Allow(ctx, &repo.NotificationRateLimitAllowReq{Spec: &repo.NotificationRateLimitSpec{
+		allowResp, err := u.notificationRateLimitCache.Allow(ctx, &repo.NotificationRateLimitSpec{
 			Channel:   notifyenum.NotificationChannelTencentSMS,
 			Recipient: delivery.Phone,
 			Window:    u.rateLimitWindow,
 			MaxCount:  u.rateLimitMaxCount,
-		}})
+		})
 		if err != nil {
-			return &sendTencentSMSResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+			return notifyenum.NotificationChannelStatusInternalError, err
 		}
-		if !allowResp.Allowed {
-			if _, err := u.tencentSMSDeliveryRepo.MarkRateLimited(ctx, &repo.NotificationTencentSMSDeliveryMarkRateLimitedReq{ID: delivery.ID}); err != nil {
-				return &sendTencentSMSResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		if !allowResp {
+			if err := u.tencentSMSDeliveryRepo.MarkRateLimited(ctx, delivery.ID); err != nil {
+				return notifyenum.NotificationChannelStatusInternalError, err
 			}
-			return &sendTencentSMSResponse{Status: notifyenum.NotificationChannelStatusRateLimited}, nil
+			return notifyenum.NotificationChannelStatusRateLimited, nil
 		}
 	}
 	result, err := u.tencentSMSClient.SendTencentSMS(ctx, &bizchannel.TencentSMSRequest{
@@ -556,13 +513,13 @@ func (u *NotifyUsecase) sendTencentSMS(ctx context.Context, req *sendTencentSMSR
 		TemplateParams:     delivery.TemplateParams,
 	})
 	if err != nil {
-		return &sendTencentSMSResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	finishResp, err := u.finishTencentSMS(ctx, &finishTencentSMSReq{DeliveryID: delivery.ID, Result: result})
 	if err != nil {
-		return &sendTencentSMSResponse{Status: finishResp.Status}, err
+		return finishResp, err
 	}
-	return &sendTencentSMSResponse{Status: finishResp.Status}, nil
+	return finishResp, nil
 }
 
 type finishTencentSMSReq struct {
@@ -570,27 +527,23 @@ type finishTencentSMSReq struct {
 	Result     *bizchannel.SendResult
 }
 
-type finishTencentSMSResponse struct {
-	Status notifyenum.NotificationChannelStatus
-}
-
-func (u *NotifyUsecase) finishTencentSMS(ctx context.Context, req *finishTencentSMSReq) (*finishTencentSMSResponse, error) {
+func (u *NotifyUsecase) finishTencentSMS(ctx context.Context, req *finishTencentSMSReq) (notifyenum.NotificationChannelStatus, error) {
 	deliveryID := req.DeliveryID
 	result := req.Result
 	if result == nil {
-		_, err := u.tencentSMSDeliveryRepo.MarkUnknown(ctx, &repo.NotificationTencentSMSDeliveryMarkUnknownReq{ID: deliveryID})
-		return &finishTencentSMSResponse{Status: notifyenum.NotificationChannelStatusUnknown}, err
+		err := u.tencentSMSDeliveryRepo.MarkUnknown(ctx, &repo.NotificationTencentSMSDeliveryMarkUnknownReq{ID: deliveryID})
+		return notifyenum.NotificationChannelStatusUnknown, err
 	}
 	switch result.Status {
 	case notifyenum.NotificationChannelStatusSucceeded:
-		_, err := u.tencentSMSDeliveryRepo.MarkSucceeded(ctx, &repo.NotificationTencentSMSDeliveryMarkSucceededReq{ID: deliveryID, ProviderRequestID: result.ProviderRequestID, ProviderCode: result.ProviderCode, ProviderMessage: result.ProviderMessage, SentAt: time.Now()})
-		return &finishTencentSMSResponse{Status: notifyenum.NotificationChannelStatusSucceeded}, err
+		err := u.tencentSMSDeliveryRepo.MarkSucceeded(ctx, &repo.NotificationTencentSMSDeliveryMarkSucceededReq{ID: deliveryID, ProviderRequestID: result.ProviderRequestID, ProviderCode: result.ProviderCode, ProviderMessage: result.ProviderMessage, SentAt: time.Now()})
+		return notifyenum.NotificationChannelStatusSucceeded, err
 	case notifyenum.NotificationChannelStatusFailed:
-		_, err := u.tencentSMSDeliveryRepo.MarkFailed(ctx, &repo.NotificationTencentSMSDeliveryMarkFailedReq{ID: deliveryID, ProviderRequestID: result.ProviderRequestID, ProviderCode: result.ProviderCode, ProviderMessage: result.ProviderMessage})
-		return &finishTencentSMSResponse{Status: notifyenum.NotificationChannelStatusFailed}, err
+		err := u.tencentSMSDeliveryRepo.MarkFailed(ctx, &repo.NotificationTencentSMSDeliveryMarkFailedReq{ID: deliveryID, ProviderRequestID: result.ProviderRequestID, ProviderCode: result.ProviderCode, ProviderMessage: result.ProviderMessage})
+		return notifyenum.NotificationChannelStatusFailed, err
 	default:
-		_, err := u.tencentSMSDeliveryRepo.MarkUnknown(ctx, &repo.NotificationTencentSMSDeliveryMarkUnknownReq{ID: deliveryID, ProviderRequestID: result.ProviderRequestID, ProviderCode: result.ProviderCode, ProviderMessage: result.ProviderMessage})
-		return &finishTencentSMSResponse{Status: notifyenum.NotificationChannelStatusUnknown}, err
+		err := u.tencentSMSDeliveryRepo.MarkUnknown(ctx, &repo.NotificationTencentSMSDeliveryMarkUnknownReq{ID: deliveryID, ProviderRequestID: result.ProviderRequestID, ProviderCode: result.ProviderCode, ProviderMessage: result.ProviderMessage})
+		return notifyenum.NotificationChannelStatusUnknown, err
 	}
 }
 
@@ -599,29 +552,25 @@ type processLarkWebhookReq struct {
 	Rule                *model.NotificationRule
 }
 
-type processLarkWebhookResponse struct {
-	Status notifyenum.NotificationChannelStatus
-}
-
-func (u *NotifyUsecase) processLarkWebhook(ctx context.Context, req *processLarkWebhookReq) (*processLarkWebhookResponse, error) {
+func (u *NotifyUsecase) processLarkWebhook(ctx context.Context, req *processLarkWebhookReq) (notifyenum.NotificationChannelStatus, error) {
 	notificationContext := req.NotificationContext
 	rule := req.Rule
 	if rule.LarkWebhookTemplate == nil || rule.LarkWebhookTemplate.WebhookID == "" || rule.LarkWebhookTemplate.Token == "" {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusSkipped}, nil
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
 	if u.larkWebhookClient == nil {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusInternalError}, fmt.Errorf("lark webhook client is nil")
+		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("lark webhook client is nil")
 	}
 	renderedContent, ok := u.renderTemplate(rule.LarkWebhookTemplate.ContentTemplate, notificationContext.TemplateData)
 	if !ok {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusSkipped}, nil
+		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
 	var content map[string]any
 	if err := json.Unmarshal([]byte(renderedContent), &content); err != nil {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	if content == nil {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusInternalError}, fmt.Errorf("lark webhook content must be json object")
+		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("lark webhook content must be json object")
 	}
 	msgType := strings.TrimSpace(rule.LarkWebhookTemplate.MsgType)
 	if msgType == "" {
@@ -635,7 +584,7 @@ func (u *NotifyUsecase) processLarkWebhook(ctx context.Context, req *processLark
 		Content: content,
 	})
 	if err != nil {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	delivery := &model.NotificationLarkWebhookDelivery{
 		EventID:     notificationContext.EventID,
@@ -644,25 +593,25 @@ func (u *NotifyUsecase) processLarkWebhook(ctx context.Context, req *processLark
 		RequestBody: string(requestBodyBytes),
 		Status:      notifyenum.NotificationChannelStatusProcessing,
 	}
-	saveResp, err := u.larkWebhookDeliveryRepo.SaveOrGet(ctx, &repo.NotificationLarkWebhookDeliverySaveOrGetReq{Delivery: delivery})
+	saveResp, err := u.larkWebhookDeliveryRepo.SaveOrGet(ctx, delivery)
 	if err == nil {
-		delivery = saveResp.Delivery
+		delivery = saveResp
 	}
 	if err != nil {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	if delivery.Status == notifyenum.NotificationChannelStatusSucceeded {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusSucceeded}, nil
+		return notifyenum.NotificationChannelStatusSucceeded, nil
 	}
 	if delivery.Status == notifyenum.NotificationChannelStatusUnknown {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusUnknown}, nil
+		return notifyenum.NotificationChannelStatusUnknown, nil
 	}
 	claimResp, err := u.larkWebhookDeliveryRepo.Claim(ctx, &repo.NotificationLarkWebhookDeliveryClaimReq{ID: delivery.ID, Now: time.Now(), ProcessingTimeout: u.externalProcessingTimeout})
 	if err != nil {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
-	if !claimResp.Claimed {
-		return &processLarkWebhookResponse{Status: delivery.Status}, nil
+	if !claimResp {
+		return delivery.Status, nil
 	}
 	result, err := u.larkWebhookClient.SendLarkWebhook(ctx, &bizchannel.LarkWebhookRequest{
 		IdempotencyKey: fmt.Sprintf("%d", delivery.ID),
@@ -671,22 +620,22 @@ func (u *NotifyUsecase) processLarkWebhook(ctx context.Context, req *processLark
 		RequestBody:    delivery.RequestBody,
 	})
 	if err != nil {
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusInternalError}, err
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	if result == nil {
-		_, err := u.larkWebhookDeliveryRepo.MarkUnknown(ctx, &repo.NotificationLarkWebhookDeliveryMarkUnknownReq{ID: delivery.ID})
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusUnknown}, err
+		err := u.larkWebhookDeliveryRepo.MarkUnknown(ctx, &repo.NotificationLarkWebhookDeliveryMarkUnknownReq{ID: delivery.ID})
+		return notifyenum.NotificationChannelStatusUnknown, err
 	}
 	switch result.Status {
 	case notifyenum.NotificationChannelStatusSucceeded:
-		_, err = u.larkWebhookDeliveryRepo.MarkSucceeded(ctx, &repo.NotificationLarkWebhookDeliveryMarkSucceededReq{ID: delivery.ID, HTTPStatus: result.HTTPStatus, ResponseBody: result.ResponseBody, SentAt: time.Now()})
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusSucceeded}, err
+		err = u.larkWebhookDeliveryRepo.MarkSucceeded(ctx, &repo.NotificationLarkWebhookDeliveryMarkSucceededReq{ID: delivery.ID, HTTPStatus: result.HTTPStatus, RespBody: result.RespBody, SentAt: time.Now()})
+		return notifyenum.NotificationChannelStatusSucceeded, err
 	case notifyenum.NotificationChannelStatusFailed:
-		_, err = u.larkWebhookDeliveryRepo.MarkFailed(ctx, &repo.NotificationLarkWebhookDeliveryMarkFailedReq{ID: delivery.ID, HTTPStatus: result.HTTPStatus, ResponseBody: result.ResponseBody})
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusFailed}, err
+		err = u.larkWebhookDeliveryRepo.MarkFailed(ctx, &repo.NotificationLarkWebhookDeliveryMarkFailedReq{ID: delivery.ID, HTTPStatus: result.HTTPStatus, RespBody: result.RespBody})
+		return notifyenum.NotificationChannelStatusFailed, err
 	default:
-		_, err = u.larkWebhookDeliveryRepo.MarkUnknown(ctx, &repo.NotificationLarkWebhookDeliveryMarkUnknownReq{ID: delivery.ID, HTTPStatus: result.HTTPStatus, ResponseBody: result.ResponseBody})
-		return &processLarkWebhookResponse{Status: notifyenum.NotificationChannelStatusUnknown}, err
+		err = u.larkWebhookDeliveryRepo.MarkUnknown(ctx, &repo.NotificationLarkWebhookDeliveryMarkUnknownReq{ID: delivery.ID, HTTPStatus: result.HTTPStatus, RespBody: result.RespBody})
+		return notifyenum.NotificationChannelStatusUnknown, err
 	}
 }
 
@@ -695,11 +644,8 @@ type loadAccountsReq struct {
 	Rules               []*model.NotificationRule
 }
 
-type loadAccountsResponse struct {
-	AccountsByUserID map[int64]*model.UserAccount
-}
-
-func (u *NotifyUsecase) loadAccounts(ctx context.Context, req *loadAccountsReq) (*loadAccountsResponse, error) {
+func (u *NotifyUsecase) loadAccounts(ctx context.Context, req *loadAccountsReq) (map[int64]*model.
+	UserAccount, error) {
 	notificationContext := req.NotificationContext
 	rules := req.Rules
 	needsContact := false
@@ -713,7 +659,7 @@ func (u *NotifyUsecase) loadAccounts(ctx context.Context, req *loadAccountsReq) 
 		}
 	}
 	if !needsContact || u.userClient == nil {
-		return &loadAccountsResponse{AccountsByUserID: map[int64]*model.UserAccount{}}, nil
+		return map[int64]*model.UserAccount{}, nil
 	}
 	userIDs := make([]int64, 0)
 	seen := map[int64]struct{}{}
@@ -731,13 +677,13 @@ func (u *NotifyUsecase) loadAccounts(ctx context.Context, req *loadAccountsReq) 
 		userIDs = append(userIDs, recipient.UserID)
 	}
 	if len(userIDs) == 0 {
-		return &loadAccountsResponse{AccountsByUserID: map[int64]*model.UserAccount{}}, nil
+		return map[int64]*model.UserAccount{}, nil
 	}
-	resp, err := u.userClient.MapAccounts(ctx, &repo.UserMapAccountsReq{UserIDs: userIDs})
+	resp, err := u.userClient.MapAccounts(ctx, userIDs)
 	if err != nil {
 		return nil, err
 	}
-	return &loadAccountsResponse{AccountsByUserID: resp.Rows}, nil
+	return resp, nil
 }
 func (u *NotifyUsecase) renderTemplate(tplStr string, data any) (string, bool) {
 	tpl, err := template.New("").Option("missingkey=error").Parse(tplStr)

@@ -36,93 +36,52 @@ func NewNodeRegistryRepo(rdb *client.RedisClient) *NodeRegistryRepo {
 	return &NodeRegistryRepo{rdb: rdb}
 }
 
-func (r *NodeRegistryRepo) RegisterNode(ctx context.Context, req *bizrepo.RegisterNodeReq) (*bizrepo.RegisterNodeResponse, error) {
-	if err := r.registerNode(ctx, req.NodeID, req.Address); err != nil {
-		return nil, err
-	}
-	return &bizrepo.RegisterNodeResponse{}, nil
+func (r *NodeRegistryRepo) RegisterNode(ctx context.Context, req *bizrepo.RegisterNodeReq) error {
+	return r.registerNode(ctx, req.NodeID, req.Address)
 }
 
-func (r *NodeRegistryRepo) UpdateHeartbeat(ctx context.Context, req *bizrepo.UpdateHeartbeatReq) (*bizrepo.UpdateHeartbeatResponse, error) {
-	if err := r.updateHeartbeat(ctx, req.NodeID, req.ConnectionCount); err != nil {
-		return nil, err
-	}
-	return &bizrepo.UpdateHeartbeatResponse{}, nil
+func (r *NodeRegistryRepo) UpdateHeartbeat(ctx context.Context, req *bizrepo.UpdateHeartbeatReq) error {
+	return r.updateHeartbeat(ctx, req.NodeID, req.ConnectionCount)
 }
 
-func (r *NodeRegistryRepo) GetNode(ctx context.Context, req *bizrepo.GetNodeReq) (*bizrepo.GetNodeResponse, error) {
-	row, err := r.getNode(ctx, req.NodeID)
-	if err != nil {
-		return nil, err
-	}
-	return &bizrepo.GetNodeResponse{Row: row}, nil
+func (r *NodeRegistryRepo) GetNode(ctx context.Context, nodeID string) (*model.NodeInfo, error) {
+	return r.getNode(ctx, nodeID)
 }
 
-func (r *NodeRegistryRepo) ListNodes(ctx context.Context, req *bizrepo.ListNodesReq) (*bizrepo.ListNodesResponse, error) {
-	rows, err := r.listNodes(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return &bizrepo.ListNodesResponse{Rows: rows}, nil
+func (r *NodeRegistryRepo) ListNodes(ctx context.Context) ([]*model.NodeInfo, error) {
+	return r.listNodes(ctx)
 }
 
-func (r *NodeRegistryRepo) RemoveNode(ctx context.Context, req *bizrepo.RemoveNodeReq) (*bizrepo.RemoveNodeResponse, error) {
-	if err := r.removeNode(ctx, req.NodeID); err != nil {
-		return nil, err
-	}
-	return &bizrepo.RemoveNodeResponse{}, nil
+func (r *NodeRegistryRepo) RemoveNode(ctx context.Context, nodeID string) error {
+	return r.removeNode(ctx, nodeID)
 }
 
-func (r *NodeRegistryRepo) MapUserToNode(ctx context.Context, req *bizrepo.MapUserToNodeReq) (*bizrepo.MapUserToNodeResponse, error) {
-	if err := r.mapUserToNode(ctx, req.UserID, req.NodeID); err != nil {
-		return nil, err
-	}
-	return &bizrepo.MapUserToNodeResponse{}, nil
+func (r *NodeRegistryRepo) MapUserToNode(ctx context.Context, req *bizrepo.MapUserToNodeReq) error {
+	return r.mapUserToNode(ctx, req.UserID, req.NodeID)
 }
 
-func (r *NodeRegistryRepo) UnmapUserFromNode(ctx context.Context, req *bizrepo.UnmapUserFromNodeReq) (*bizrepo.UnmapUserFromNodeResponse, error) {
-	if err := r.unmapUserFromNode(ctx, req.UserID, req.NodeID); err != nil {
-		return nil, err
-	}
-	return &bizrepo.UnmapUserFromNodeResponse{}, nil
+func (r *NodeRegistryRepo) UnmapUserFromNode(ctx context.Context, req *bizrepo.UnmapUserFromNodeReq) error {
+	return r.unmapUserFromNode(ctx, req.UserID, req.NodeID)
 }
 
-func (r *NodeRegistryRepo) GetUserNodes(ctx context.Context, req *bizrepo.GetUserNodesReq) (*bizrepo.GetUserNodesResponse, error) {
-	nodeIDs, err := r.getUserNodes(ctx, req.UserID)
-	if err != nil {
-		return nil, err
-	}
-	return &bizrepo.GetUserNodesResponse{NodeIDs: nodeIDs}, nil
+func (r *NodeRegistryRepo) GetUserNodes(ctx context.Context, userID int64) ([]string, error) {
+	return r.getUserNodes(ctx, userID)
 }
 
-func (r *NodeRegistryRepo) GetAllOnlineNodes(ctx context.Context, req *bizrepo.GetAllOnlineNodesReq) (*bizrepo.GetAllOnlineNodesResponse, error) {
-	rows, err := r.getAllOnlineNodes(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return &bizrepo.GetAllOnlineNodesResponse{Rows: rows}, nil
+func (r *NodeRegistryRepo) GetAllOnlineNodes(ctx context.Context) ([]*model.NodeInfo, error) {
+	return r.getAllOnlineNodes(ctx)
 }
 
-func (r *NodeRegistryRepo) SaveOfflineEvent(ctx context.Context, req *bizrepo.SaveOfflineEventReq) (*bizrepo.SaveOfflineEventResponse, error) {
-	if err := r.saveOfflineEvent(ctx, req.UserID, req.Event); err != nil {
-		return nil, err
-	}
-	return &bizrepo.SaveOfflineEventResponse{}, nil
+func (r *NodeRegistryRepo) SaveOfflineEvent(ctx context.Context, req *bizrepo.SaveOfflineEventReq) error {
+	return r.saveOfflineEvent(ctx, req.UserID, req.Event)
 }
 
-func (r *NodeRegistryRepo) GetOfflineEvents(ctx context.Context, req *bizrepo.GetOfflineEventsReq) (*bizrepo.GetOfflineEventsResponse, error) {
-	rows, err := r.getOfflineEvents(ctx, req.UserID)
-	if err != nil {
-		return nil, err
-	}
-	return &bizrepo.GetOfflineEventsResponse{Rows: rows}, nil
+func (r *NodeRegistryRepo) GetOfflineEvents(ctx context.Context, userID int64) ([]*model.PushEvent, error) {
+	return r.getOfflineEvents(ctx, userID)
 }
 
-func (r *NodeRegistryRepo) ClearOfflineEvents(ctx context.Context, req *bizrepo.ClearOfflineEventsReq) (*bizrepo.ClearOfflineEventsResponse, error) {
-	if err := r.clearOfflineEvents(ctx, req.UserID); err != nil {
-		return nil, err
-	}
-	return &bizrepo.ClearOfflineEventsResponse{}, nil
+func (r *NodeRegistryRepo) ClearOfflineEvents(ctx context.Context, userID int64) error {
+	return r.clearOfflineEvents(ctx, userID)
 }
 
 // nodeRecord Redis 中存储的节点 JSON 结构。

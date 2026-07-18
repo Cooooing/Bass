@@ -18,10 +18,10 @@ func NewNotificationClient(notifyClient *rpc.NotifyClient) repo.NotificationClie
 	return &NotificationClient{notifyClient: notifyClient}
 }
 
-func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.ListNotificationsReq) (*repo.ListNotificationsResponse, error) {
-	listReq := &notifyv1.ListStationMessages_Request{UserId: req.UserID}
+func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.ListNotificationsReq) (*repo.ListNotificationsResp, error) {
+	listReq := &notifyv1.ListStationMessages_Req{UserId: req.UserID}
 	if req.Page != nil {
-		listReq.Page = &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}
+		listReq.Page = &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}
 	}
 	reply, err := r.notifyClient.StationMessage.List(ctx, listReq)
 	if err != nil {
@@ -41,28 +41,28 @@ func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.Li
 			UpdatedAt:  formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
-	var page *repo.PageResponse
+	var page *repo.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResponse{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+		page = &repo.PageResp{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
 	}
-	return &repo.ListNotificationsResponse{Page: page, Rows: rows}, nil
+	return &repo.ListNotificationsResp{Page: page, Rows: rows}, nil
 }
 
-func (r *NotificationClient) MarkReadNotification(ctx context.Context, req *repo.MarkReadNotificationReq) (*repo.MarkReadNotificationResponse, error) {
-	reply, err := r.notifyClient.StationMessage.MarkRead(ctx, &notifyv1.MarkReadStationMessage_Request{
+func (r *NotificationClient) MarkReadNotification(ctx context.Context, req *repo.MarkReadNotificationReq) (int32, error) {
+	reply, err := r.notifyClient.StationMessage.MarkRead(ctx, &notifyv1.MarkReadStationMessage_Req{
 		UserId: req.UserID,
 		Ids:    req.IDs,
 	})
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.MarkReadNotificationResponse{Count: reply.GetCount()}, nil
+	return reply.GetCount(), nil
 }
 
-func (r *NotificationClient) CountUnreadNotifications(ctx context.Context, req *repo.CountUnreadNotificationsReq) (*repo.CountUnreadNotificationsResponse, error) {
-	reply, err := r.notifyClient.StationMessage.CountUnread(ctx, &notifyv1.CountUnreadStationMessages_Request{UserId: req.UserID})
+func (r *NotificationClient) CountUnreadNotifications(ctx context.Context, userID int64) (int64, error) {
+	reply, err := r.notifyClient.StationMessage.CountUnread(ctx, &notifyv1.CountUnreadStationMessages_Req{UserId: userID})
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.CountUnreadNotificationsResponse{Count: reply.GetCount()}, nil
+	return reply.GetCount(), nil
 }

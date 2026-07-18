@@ -20,21 +20,13 @@ func NewNodeUsecase(logger *slog.Logger, registry repo.NodeRegistry) *NodeUsecas
 	return &NodeUsecase{log: logger, registry: registry}
 }
 
-type RegisterNodeReq struct {
-	Address string
-}
-
-type RegisterNodeResponse struct {
-	NodeID string
-}
-
-func (uc *NodeUsecase) RegisterNode(ctx context.Context, req *RegisterNodeReq) (*RegisterNodeResponse, error) {
+func (uc *NodeUsecase) RegisterNode(ctx context.Context, address string) (string, error) {
 	nodeID := uuid.New().String()
-	if _, err := uc.registry.RegisterNode(ctx, &repo.RegisterNodeReq{NodeID: nodeID, Address: req.Address}); err != nil {
-		return nil, fmt.Errorf("register node: %w", err)
+	if err := uc.registry.RegisterNode(ctx, &repo.RegisterNodeReq{NodeID: nodeID, Address: address}); err != nil {
+		return "", fmt.Errorf("register node: %w", err)
 	}
-	uc.log.Info(fmt.Sprintf("node registered: node_id=%s address=%s", nodeID, req.Address))
-	return &RegisterNodeResponse{NodeID: nodeID}, nil
+	uc.log.Info(fmt.Sprintf("node registered: node_id=%s address=%s", nodeID, address))
+	return nodeID, nil
 }
 
 type HeartbeatReq struct {
@@ -43,22 +35,16 @@ type HeartbeatReq struct {
 }
 
 func (uc *NodeUsecase) Heartbeat(ctx context.Context, req *HeartbeatReq) error {
-	if _, err := uc.registry.UpdateHeartbeat(ctx, &repo.UpdateHeartbeatReq{NodeID: req.NodeID, ConnectionCount: req.ConnectionCount}); err != nil {
+	if err := uc.registry.UpdateHeartbeat(ctx, &repo.UpdateHeartbeatReq{NodeID: req.NodeID, ConnectionCount: req.ConnectionCount}); err != nil {
 		return fmt.Errorf("update heartbeat: %w", err)
 	}
 	return nil
 }
 
-type ListNodesReq struct{}
-
-type ListNodesResponse struct {
-	Rows []*model.NodeInfo
-}
-
-func (uc *NodeUsecase) ListNodes(ctx context.Context, req *ListNodesReq) (*ListNodesResponse, error) {
-	nodesResp, err := uc.registry.ListNodes(ctx, &repo.ListNodesReq{})
+func (uc *NodeUsecase) ListNodes(ctx context.Context) ([]*model.NodeInfo, error) {
+	rows, err := uc.registry.ListNodes(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("list nodes: %w", err)
 	}
-	return &ListNodesResponse{Rows: nodesResp.Rows}, nil
+	return rows, nil
 }

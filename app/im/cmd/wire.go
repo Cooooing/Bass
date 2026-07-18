@@ -12,6 +12,7 @@ import (
 	"im/internal/service"
 	"log/slog"
 
+	"github.com/go-kratos/kratos/v3"
 	"github.com/google/wire"
 )
 

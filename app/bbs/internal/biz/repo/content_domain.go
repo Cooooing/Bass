@@ -31,11 +31,11 @@ type ListDomainsReq struct {
 	Query *DomainQuery
 }
 
-type ListDomainsResponse struct {
-	Page *PageResponse
+type ListDomainsResp struct {
+	Page *PageResp
 	Rows []*Domain
 }
 
 type ContentDomainClient interface {
-	ListDomains(ctx context.Context, req *ListDomainsReq) (*ListDomainsResponse, error)
+	ListDomains(ctx context.Context, req *ListDomainsReq) (*ListDomainsResp, error)
 }

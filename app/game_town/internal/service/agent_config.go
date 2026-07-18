@@ -24,8 +24,8 @@ func (s *AgentConfigService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterGameTownAgentConfigServiceServer(gs, s)
 }
 func (s *AgentConfigService) RegisterHttp(hs *http.Server) {}
-func (s *AgentConfigService) Create(ctx context.Context, req *v1.CreateGameTownAgentConfig_Request) (*v1.CreateGameTownAgentConfig_Response, error) {
-	createResponse, err := s.gameUsecase.CreateAgentConfig(ctx, &usecase.CreateAgentConfigReq{PlayerID: req.GetPlayerId(), Name: req.GetName(), Provider: req.GetProvider(), ModelName: req.GetModel(), BaseURL: req.GetBaseUrl(), APIKey: req.GetApiKey(), TimeoutSeconds: req.GetTimeoutSeconds(), IsDefault: req.GetIsDefault()})
+func (s *AgentConfigService) Create(ctx context.Context, req *v1.CreateGameTownAgentConfig_Req) (*v1.CreateGameTownAgentConfig_Resp, error) {
+	row, err := s.gameUsecase.CreateAgentConfig(ctx, &usecase.CreateAgentConfigReq{PlayerID: req.GetPlayerId(), Name: req.GetName(), Provider: req.GetProvider(), ModelName: req.GetModel(), BaseURL: req.GetBaseUrl(), APIKey: req.GetApiKey(), TimeoutSeconds: req.GetTimeoutSeconds(), IsDefault: req.GetIsDefault()})
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +35,9 @@ func (s *AgentConfigService) Create(ctx context.Context, req *v1.CreateGameTownA
 		}
 		return timestamppb.New(*t)
 	}
-	reply := &v1.CreateGameTownAgentConfig_Response{}
-	if row := createResponse.Row; row != nil {
-		reply.Row = &v1.CreateGameTownAgentConfig_Response_GameTownAgentConfig{
+	reply := &v1.CreateGameTownAgentConfig_Resp{}
+	if row != nil {
+		reply.Row = &v1.CreateGameTownAgentConfig_Resp_GameTownAgentConfig{
 			CreatedAt:      timestamp(row.CreatedAt),
 			UpdatedAt:      timestamp(row.UpdatedAt),
 			Id:             row.ID,
@@ -54,8 +54,8 @@ func (s *AgentConfigService) Create(ctx context.Context, req *v1.CreateGameTownA
 	}
 	return reply, nil
 }
-func (s *AgentConfigService) Get(ctx context.Context, req *v1.GetGameTownAgentConfig_Request) (*v1.GetGameTownAgentConfig_Response, error) {
-	getResponse, err := s.gameUsecase.GetAgentConfig(ctx, &usecase.GetAgentConfigReq{ID: req.GetId(), PlayerID: req.GetPlayerId()})
+func (s *AgentConfigService) Get(ctx context.Context, req *v1.GetGameTownAgentConfig_Req) (*v1.GetGameTownAgentConfig_Resp, error) {
+	row, err := s.gameUsecase.GetAgentConfig(ctx, &usecase.GetAgentConfigReq{ID: req.GetId(), PlayerID: req.GetPlayerId()})
 	if err != nil {
 		return nil, err
 	}
@@ -65,9 +65,9 @@ func (s *AgentConfigService) Get(ctx context.Context, req *v1.GetGameTownAgentCo
 		}
 		return timestamppb.New(*t)
 	}
-	reply := &v1.GetGameTownAgentConfig_Response{}
-	if row := getResponse.Row; row != nil {
-		reply.Row = &v1.GetGameTownAgentConfig_Response_GameTownAgentConfig{
+	reply := &v1.GetGameTownAgentConfig_Resp{}
+	if row != nil {
+		reply.Row = &v1.GetGameTownAgentConfig_Resp_GameTownAgentConfig{
 			CreatedAt:      timestamp(row.CreatedAt),
 			UpdatedAt:      timestamp(row.UpdatedAt),
 			Id:             row.ID,
@@ -84,7 +84,7 @@ func (s *AgentConfigService) Get(ctx context.Context, req *v1.GetGameTownAgentCo
 	}
 	return reply, nil
 }
-func (s *AgentConfigService) List(ctx context.Context, req *v1.ListGameTownAgentConfigs_Request) (*v1.ListGameTownAgentConfigs_Response, error) {
+func (s *AgentConfigService) List(ctx context.Context, req *v1.ListGameTownAgentConfigs_Req) (*v1.ListGameTownAgentConfigs_Resp, error) {
 	var status *string
 	if req.Status != nil && *req.Status != v1.GameTownAgentConfigStatus_GAME_TOWN_AGENT_CONFIG_STATUS_UNSPECIFIED {
 		value, ok := gameenum.AgentConfigStatusMap.ToEnum(*req.Status)
@@ -93,7 +93,7 @@ func (s *AgentConfigService) List(ctx context.Context, req *v1.ListGameTownAgent
 			status = &statusValue
 		}
 	}
-	listResponse, err := s.gameUsecase.ListAgentConfigs(ctx, &usecase.ListAgentConfigsReq{PlayerID: req.GetPlayerId(), Status: status})
+	rows, err := s.gameUsecase.ListAgentConfigs(ctx, &usecase.ListAgentConfigsReq{PlayerID: req.GetPlayerId(), Status: status})
 	if err != nil {
 		return nil, err
 	}
@@ -103,13 +103,13 @@ func (s *AgentConfigService) List(ctx context.Context, req *v1.ListGameTownAgent
 		}
 		return timestamppb.New(*t)
 	}
-	reply := &v1.ListGameTownAgentConfigs_Response{Rows: make([]*v1.ListGameTownAgentConfigs_Response_GameTownAgentConfig, 0, len(listResponse.Rows))}
-	for _, row := range listResponse.Rows {
+	reply := &v1.ListGameTownAgentConfigs_Resp{Rows: make([]*v1.ListGameTownAgentConfigs_Resp_GameTownAgentConfig, 0, len(rows))}
+	for _, row := range rows {
 		if row == nil {
 			reply.Rows = append(reply.Rows, nil)
 			continue
 		}
-		reply.Rows = append(reply.Rows, &v1.ListGameTownAgentConfigs_Response_GameTownAgentConfig{
+		reply.Rows = append(reply.Rows, &v1.ListGameTownAgentConfigs_Resp_GameTownAgentConfig{
 			CreatedAt:      timestamp(row.CreatedAt),
 			UpdatedAt:      timestamp(row.UpdatedAt),
 			Id:             row.ID,

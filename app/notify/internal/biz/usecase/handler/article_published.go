@@ -28,11 +28,11 @@ func (h *ArticlePublishedHandler) Build(ctx context.Context, event *enums.Event)
 	if payload == nil || payload.GetArticleId() == 0 || h.contentClient == nil {
 		return nil, nil
 	}
-	articleResponse, err := h.contentClient.GetArticle(ctx, &repo.ContentGetArticleReq{ArticleID: payload.GetArticleId()})
+	articleResp, err := h.contentClient.GetArticle(ctx, payload.GetArticleId())
 	if err != nil {
 		return nil, err
 	}
-	article := articleResponse.Article
+	article := articleResp
 	templateData := model.ArticlePublishedTemplateData{
 		Article: h.articleTemplateData(article),
 	}
@@ -42,12 +42,12 @@ func (h *ArticlePublishedHandler) Build(ctx context.Context, event *enums.Event)
 			TemplateData: templateData,
 		}, nil
 	}
-	followerResponse, err := h.userClient.ListFollowerIDs(ctx, &repo.UserListFollowerIDsReq{UserID: article.AuthorID})
+	followerResp, err := h.userClient.ListFollowerIDs(ctx, article.AuthorID)
 	if err != nil {
 		return nil, err
 	}
-	recipients := make([]*usecase.NotificationRecipient, 0, len(followerResponse.UserIDs))
-	for _, followerID := range followerResponse.UserIDs {
+	recipients := make([]*usecase.NotificationRecipient, 0, len(followerResp))
+	for _, followerID := range followerResp {
 		if followerID == 0 || followerID == article.AuthorID {
 			continue
 		}

@@ -19,14 +19,10 @@ type AddPostscriptReq struct {
 	Content   string
 }
 
-type AddPostscriptResponse struct {
-	Postscript *repo.ArticlePostscript
-}
-
-func (u *ContentPostscriptUsecase) AddPostscript(ctx context.Context, req *AddPostscriptReq) (*AddPostscriptResponse, error) {
-	response, err := u.contentPostscriptClient.AddPostscript(ctx, &repo.AddPostscriptReq{UserID: req.UserID, ArticleID: req.ArticleID, Content: req.Content})
+func (u *ContentPostscriptUsecase) AddPostscript(ctx context.Context, req *AddPostscriptReq) (*repo.ArticlePostscript, error) {
+	resp, err := u.contentPostscriptClient.AddPostscript(ctx, &repo.AddPostscriptReq{UserID: req.UserID, ArticleID: req.ArticleID, Content: req.Content})
 	if err != nil {
 		return nil, err
 	}
-	return &AddPostscriptResponse{Postscript: response.Postscript}, nil
+	return resp, nil
 }

@@ -9,59 +9,59 @@ import "user/v1/enum.proto";
 option go_package = "common/proto/gen/user/v1;v1";
 
 service AuthService {
-  rpc StartEmailRegistration(StartEmailRegistration.Request) returns (StartEmailRegistration.Response) {} // 使用邮箱发起账号注册，成功后返回验证码令牌。
-  rpc VerifyEmailRegistration(VerifyEmailRegistration.Request) returns (VerifyEmailRegistration.Response) {} // 校验邮箱注册验证码并创建账号。
-  rpc StartPhoneRegistration(StartPhoneRegistration.Request) returns (StartPhoneRegistration.Response) {} // 使用手机号发起账号注册，成功后返回验证码令牌。
-  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Request) returns (VerifyPhoneRegistration.Response) {} // 校验手机号注册验证码并创建账号。
-  rpc LoginByPassword(LoginByPassword.Request) returns (LoginByPassword.Response) {} // 使用账号名、邮箱或手机号加密码登录。
-  rpc Logout(Logout.Request) returns (Logout.Response) {} // 登出账号并清理令牌。
-  rpc ParseToken(ParseToken.Request) returns (ParseToken.Response) {} // 解析登录令牌。
+  rpc StartEmailRegistration(StartEmailRegistration.Req) returns (StartEmailRegistration.Resp) {} // 使用邮箱发起账号注册，成功后返回验证码令牌。
+  rpc VerifyEmailRegistration(VerifyEmailRegistration.Req) returns (VerifyEmailRegistration.Resp) {} // 校验邮箱注册验证码并创建账号。
+  rpc StartPhoneRegistration(StartPhoneRegistration.Req) returns (StartPhoneRegistration.Resp) {} // 使用手机号发起账号注册，成功后返回验证码令牌。
+  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Req) returns (VerifyPhoneRegistration.Resp) {} // 校验手机号注册验证码并创建账号。
+  rpc LoginByPassword(LoginByPassword.Req) returns (LoginByPassword.Resp) {} // 使用账号名、邮箱或手机号加密码登录。
+  rpc Logout(Logout.Req) returns (Logout.Resp) {} // 登出账号并清理令牌。
+  rpc ParseToken(ParseToken.Req) returns (ParseToken.Resp) {} // 解析登录令牌。
 }
 
 message StartEmailRegistration {
-  message Request {
+  message Req {
     string email = 1;
     string password = 2;
     string name = 3;
     optional string nickname = 4;
   }
-  message Response {
+  message Resp {
     string code_token = 1;
     string code = 2;
   }
 }
 
 message VerifyEmailRegistration {
-  message Request {
+  message Req {
     string code = 1;
     string code_token = 2;
   }
-  message Response {}
+  message Resp {}
 }
 
 message StartPhoneRegistration {
-  message Request {
+  message Req {
     string phone = 1;
     string password = 2;
     string name = 3;
     optional string nickname = 4;
   }
-  message Response {
+  message Resp {
     string code_token = 1;
     string code = 2;
   }
 }
 
 message VerifyPhoneRegistration {
-  message Request {
+  message Req {
     string code = 1;
     string code_token = 2;
   }
-  message Response {}
+  message Resp {}
 }
 
 message LoginByPassword {
-  message Request {
+  message Req {
     string account = 1;
     string password = 2;
     string ip = 3;
@@ -75,7 +75,7 @@ message LoginByPassword {
     string platform = 11;
     string request_id = 12;
   }
-  message Response {
+  message Resp {
 
     message Account {
       AccountBasic basic = 1;
@@ -108,17 +108,17 @@ message LoginByPassword {
 }
 
 message Logout {
-  message Request {
+  message Req {
     string token = 1;
   }
-  message Response {}
+  message Resp {}
 }
 
 message ParseToken {
-  message Request {
+  message Req {
     string token = 1;
   }
-  message Response {
+  message Resp {
 
     message TokenUser {
       int64 id = 1;

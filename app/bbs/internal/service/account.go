@@ -35,27 +35,27 @@ func (s *AccountService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterAccountServiceHTTPServer(hs, s)
 }
 
-func (s *AccountService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Request) (*bbsuserv1.GetCurrentAccount_Response, error) {
+func (s *AccountService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Req) (*bbsuserv1.GetCurrentAccount_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	response, err := s.accountUsecase.GetCurrentAccount(ctx, &usecase.GetCurrentAccountReq{UserID: userID})
+	account, err := s.accountUsecase.GetCurrentAccount(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.GetCurrentAccount_Response{Account: response.Account}, nil
+	return &bbsuserv1.GetCurrentAccount_Resp{Account: account}, nil
 }
 
-func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfileAccount_Request) (*bbsuserv1.GetProfileAccount_Response, error) {
-	response, err := s.accountUsecase.GetProfileAccount(ctx, &usecase.GetProfileAccountReq{UserID: req.GetUserId()})
+func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfileAccount_Req) (*bbsuserv1.GetProfileAccount_Resp, error) {
+	profile, err := s.accountUsecase.GetProfileAccount(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.GetProfileAccount_Response{Profile: response.Profile}, nil
+	return &bbsuserv1.GetProfileAccount_Resp{Profile: profile}, nil
 }
 
-func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Request) (*bbsuserv1.UpdateProfileAccount_Response, error) {
+func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Req) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -105,17 +105,17 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
 	}
-	response, err := s.accountUsecase.UpdateProfileAccount(ctx, &usecase.UpdateProfileAccountReq{UserID: userID, AvatarURL: req.AvatarUrl, Nickname: req.Nickname, URL: req.Url, Introduction: req.Introduction, Mbti: req.Mbti})
+	profile, err := s.accountUsecase.UpdateProfileAccount(ctx, &usecase.UpdateProfileAccountReq{UserID: userID, AvatarURL: req.AvatarUrl, Nickname: req.Nickname, URL: req.Url, Introduction: req.Introduction, Mbti: req.Mbti})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.UpdateProfileAccount_Response{Profile: response.Profile}, nil
+	return &bbsuserv1.UpdateProfileAccount_Resp{Profile: profile}, nil
 }
 
-func (s *AccountService) Avatar(ctx context.Context, req *bbsuserv1.AvatarAccount_Request) (*common.ImageResponse, error) {
-	response, err := s.accountUsecase.AvatarAccount(ctx, &usecase.AvatarAccountReq{Name: req.GetName()})
+func (s *AccountService) Avatar(ctx context.Context, req *bbsuserv1.AvatarAccount_Req) (*common.ImageResp, error) {
+	resp, err := s.accountUsecase.AvatarAccount(ctx, req.GetName())
 	if err != nil {
 		return nil, err
 	}
-	return &common.ImageResponse{Data: response.Data, ContentType: response.ContentType}, nil
+	return &common.ImageResp{Data: resp.Data, ContentType: resp.ContentType}, nil
 }

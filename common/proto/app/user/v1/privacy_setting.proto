@@ -10,15 +10,15 @@ import "user/v1/enum.proto";
 option go_package = "common/proto/gen/user/v1;v1";
 
 service PrivacySettingService {
-  rpc Get(GetPrivacySetting.Request) returns (GetPrivacySetting.Response) {} // 获取账号隐私设置，缺省时返回默认设置。
-  rpc Update(UpdatePrivacySetting.Request) returns (UpdatePrivacySetting.Response) {} // 更新账号隐私设置；缺省扩展表使用 upsert 创建。
+  rpc Get(GetPrivacySetting.Req) returns (GetPrivacySetting.Resp) {} // 获取账号隐私设置，缺省时返回默认设置。
+  rpc Update(UpdatePrivacySetting.Req) returns (UpdatePrivacySetting.Resp) {} // 更新账号隐私设置；缺省扩展表使用 upsert 创建。
 }
 
 message GetPrivacySetting {
-  message Request {
+  message Req {
     int64 user_id = 1;
   }
-  message Response {
+  message Resp {
 
     message PrivacySetting {
       int64 user_id = 1;
@@ -34,7 +34,7 @@ message GetPrivacySetting {
 }
 
 message UpdatePrivacySetting {
-  message Request {
+  message Req {
     int64 user_id = 1;
     optional bool public_points = 2;
     optional bool public_followers = 3;
@@ -43,7 +43,7 @@ message UpdatePrivacySetting {
     optional bool public_online_status = 6;
     optional bool public_location = 7;
   }
-  message Response {
+  message Resp {
 
     message PrivacySetting {
       int64 user_id = 1;

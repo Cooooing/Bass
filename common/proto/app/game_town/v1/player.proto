@@ -10,16 +10,16 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/game_town/v1;v1";
 
 service GameTownPlayerService {
-  rpc Register(RegisterGameTownPlayer.Request) returns (RegisterGameTownPlayer.Response) {} // 注册玩家。
-  rpc Get(GetGameTownPlayer.Request) returns (GetGameTownPlayer.Response) {} // 获取玩家。
+  rpc Register(RegisterGameTownPlayer.Req) returns (RegisterGameTownPlayer.Resp) {} // 注册玩家。
+  rpc Get(GetGameTownPlayer.Req) returns (GetGameTownPlayer.Resp) {} // 获取玩家。
 }
 
 message RegisterGameTownPlayer {
-  message Request {
+  message Req {
     string name = 1; // 玩家登录名
     string display_name = 2; // 展示名称
   }
-  message Response {
+  message Resp {
 
     message GameTownPlayer {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -34,10 +34,10 @@ message RegisterGameTownPlayer {
 }
 
 message GetGameTownPlayer {
-  message Request {
+  message Req {
     int64 id = 1; // 玩家 ID
   }
-  message Response {
+  message Resp {
 
     message GameTownPlayer {
       google.protobuf.Timestamp created_at = 1000; // 创建时间

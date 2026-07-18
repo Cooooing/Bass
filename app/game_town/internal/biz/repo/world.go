@@ -8,9 +8,9 @@ import (
 )
 
 type WorldRepo interface {
-	CreateWorld(ctx context.Context, req *CreateWorldReq) (*CreateWorldResponse, error)
-	Get(ctx context.Context, req *WorldGetReq) (*WorldGetResponse, error)
-	Page(ctx context.Context, req *WorldPageReq) (*WorldPageResponse, error)
+	CreateWorld(ctx context.Context, req *CreateWorldReq) (*CreateWorldResp, error)
+	Get(ctx context.Context, id int64) (*model.World, error)
+	Page(ctx context.Context, req *WorldPageReq) (*WorldPageResp, error)
 }
 
 type CreateWorldReq struct {
@@ -25,7 +25,7 @@ type CreateWorldReq struct {
 	Generated       *agent.GenerateWorldOutput
 }
 
-type CreateWorldResponse struct {
+type CreateWorldResp struct {
 	World           *model.World
 	DefaultLocation *model.Location
 	Npcs            []*model.Npc
@@ -33,22 +33,14 @@ type CreateWorldResponse struct {
 	Events          []*model.Event
 }
 
-type WorldGetReq struct {
-	ID int64
-}
-
-type WorldGetResponse struct {
-	Row *model.World
-}
-
 type WorldPageReq struct {
-	Page  *common.PageRequest
+	Page  *common.PageReq
 	Query WorldQuery
 }
 
-type WorldPageResponse struct {
+type WorldPageResp struct {
 	Rows []*model.World
-	Page *common.PageResponse
+	Page *common.PageResp
 }
 
 type WorldQuery struct {

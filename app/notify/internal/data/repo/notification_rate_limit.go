@@ -69,34 +69,29 @@ func NewNotificationRateLimitCache(redisClient *client.RedisClient) bizrepo.Noti
 	return &NotificationRateLimitCache{redisClient: redisClient}
 }
 
-func (c *NotificationRateLimitCache) Allow(ctx context.Context, req *bizrepo.NotificationRateLimitAllowReq) (*bizrepo.NotificationRateLimitAllowResponse, error) {
-	if req == nil {
-		return nil, fmt.Errorf("notification rate limit allow request is nil")
-	}
-	key, err := notificationRateLimitKey(req.Spec)
+func (c *NotificationRateLimitCache) Allow(ctx context.Context, spec *bizrepo.NotificationRateLimitSpec) (bool, error) {
+
+	key, err := notificationRateLimitKey(spec)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
 	allowed, err := notificationRateLimitAllowScript.Run(
 		ctx,
 		c.redisClient.Client,
 		[]string{key},
-		time.Now().UnixMilli(),
-		req.Spec.Window.Milliseconds(),
-		req.Spec.MaxCount,
-		uuid.NewString(),
+		time.Now().UnixMilli(), spec.
+			Window.Milliseconds(), spec.
+			MaxCount, uuid.NewString(),
 	).Int()
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &bizrepo.NotificationRateLimitAllowResponse{Allowed: allowed == 1}, nil
+	return allowed == 1, nil
 }
 
-func (c *NotificationRateLimitCache) Check(ctx context.Context, req *bizrepo.NotificationRateLimitCheckReq) (*bizrepo.NotificationRateLimitCheckResponse, error) {
-	if req == nil {
-		return nil, fmt.Errorf("notification rate limit check request is nil")
-	}
-	key, err := notificationRateLimitKey(req.Spec)
+func (c *NotificationRateLimitCache) Check(ctx context.Context, spec *bizrepo.NotificationRateLimitSpec) (*bizrepo.NotificationRateLimitState, error) {
+
+	key, err := notificationRateLimitKey(spec)
 	if err != nil {
 		return nil, err
 	}
@@ -104,9 +99,9 @@ func (c *NotificationRateLimitCache) Check(ctx context.Context, req *bizrepo.Not
 		ctx,
 		c.redisClient.Client,
 		[]string{key},
-		time.Now().UnixMilli(),
-		req.Spec.Window.Milliseconds(),
-		req.Spec.MaxCount,
+		time.Now().UnixMilli(), spec.
+			Window.Milliseconds(), spec.
+			MaxCount,
 	).Int64Slice()
 	if err != nil {
 		return nil, err
@@ -121,7 +116,7 @@ func (c *NotificationRateLimitCache) Check(ctx context.Context, req *bizrepo.Not
 	if len(values) > 2 && values[2] > 0 {
 		state.RemainingCount = values[2]
 	}
-	return &bizrepo.NotificationRateLimitCheckResponse{State: state}, nil
+	return state, nil
 }
 
 func notificationRateLimitKey(spec *bizrepo.NotificationRateLimitSpec) (string, error) {

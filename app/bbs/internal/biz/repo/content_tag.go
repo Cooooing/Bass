@@ -35,18 +35,10 @@ type CreateTagReq struct {
 	Tag    *TagSave
 }
 
-type CreateTagResponse struct {
-	Tag *Tag
-}
-
 type UpdateTagReq struct {
 	UserID int64
 	TagID  int64
 	Tag    *TagSave
-}
-
-type UpdateTagResponse struct {
-	Tag *Tag
 }
 
 type ListTagsReq struct {
@@ -54,13 +46,13 @@ type ListTagsReq struct {
 	Query *TagQuery
 }
 
-type ListTagsResponse struct {
-	Page *PageResponse
+type ListTagsResp struct {
+	Page *PageResp
 	Rows []*Tag
 }
 
 type ContentTagClient interface {
-	CreateTag(ctx context.Context, req *CreateTagReq) (*CreateTagResponse, error)
-	UpdateTag(ctx context.Context, req *UpdateTagReq) (*UpdateTagResponse, error)
-	ListTags(ctx context.Context, req *ListTagsReq) (*ListTagsResponse, error)
+	CreateTag(ctx context.Context, req *CreateTagReq) (*Tag, error)
+	UpdateTag(ctx context.Context, req *UpdateTagReq) (*Tag, error)
+	ListTags(ctx context.Context, req *ListTagsReq) (*ListTagsResp, error)
 }

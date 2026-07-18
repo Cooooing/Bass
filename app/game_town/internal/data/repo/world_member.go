@@ -4,6 +4,7 @@ import (
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"game_town/internal/biz/model"
 	bizrepo "game_town/internal/biz/repo"
 	"game_town/internal/data/gen"
 	"game_town/internal/data/gen/location"
@@ -18,7 +19,7 @@ func NewWorldMemberRepo(db *gen.Client) bizrepo.WorldMemberRepo {
 	return &WorldMemberRepo{baseRepo: &baseRepo{db: db}}
 }
 
-func (r *WorldMemberRepo) JoinWorld(ctx context.Context, req *bizrepo.JoinWorldReq) (*bizrepo.JoinWorldResponse, error) {
+func (r *WorldMemberRepo) JoinWorld(ctx context.Context, req *bizrepo.JoinWorldReq) (*bizrepo.JoinWorldResp, error) {
 	worldRow, err := r.db.World.Query().Where(world.Code(req.WorldCode), world.DeletedAtIsNil()).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_NOT_FOUND)
@@ -46,10 +47,10 @@ func (r *WorldMemberRepo) JoinWorld(ctx context.Context, req *bizrepo.JoinWorldR
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.JoinWorldResponse{World: r.world(worldRow), Member: r.member(memberRow), Location: r.location(locationRow)}, nil
+	return &bizrepo.JoinWorldResp{World: r.world(worldRow), Member: r.member(memberRow), Location: r.location(locationRow)}, nil
 }
 
-func (r *WorldMemberRepo) GetMember(ctx context.Context, req *bizrepo.GetMemberReq) (*bizrepo.GetMemberResponse, error) {
+func (r *WorldMemberRepo) GetMember(ctx context.Context, req *bizrepo.GetMemberReq) (*model.WorldMember, error) {
 	row, err := r.db.WorldMember.Query().Where(worldmember.WorldID(req.WorldID), worldmember.PlayerID(req.PlayerID)).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
@@ -57,10 +58,10 @@ func (r *WorldMemberRepo) GetMember(ctx context.Context, req *bizrepo.GetMemberR
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.GetMemberResponse{Row: r.member(row)}, nil
+	return r.member(row), nil
 }
 
-func (r *WorldMemberRepo) MoveMember(ctx context.Context, req *bizrepo.MoveMemberReq) (*bizrepo.MoveMemberResponse, error) {
+func (r *WorldMemberRepo) MoveMember(ctx context.Context, req *bizrepo.MoveMemberReq) (*model.WorldMember, error) {
 	current, err := r.db.WorldMember.Query().Where(worldmember.WorldID(req.WorldID), worldmember.PlayerID(req.PlayerID)).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
@@ -72,5 +73,5 @@ func (r *WorldMemberRepo) MoveMember(ctx context.Context, req *bizrepo.MoveMembe
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.MoveMemberResponse{Row: r.member(row)}, nil
+	return r.member(row), nil
 }

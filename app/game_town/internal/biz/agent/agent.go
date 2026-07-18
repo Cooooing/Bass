@@ -135,7 +135,10 @@ func (r *BladesRunner) GenerateWorld(ctx context.Context, input *GenerateWorldIn
 	if base == "" {
 		base = "一个由玩家共同塑造的文字世界"
 	}
-	worldName := shortName(base)
+	worldName := strings.TrimSpace(base)
+	if len([]rune(worldName)) > 18 {
+		worldName = string([]rune(worldName)[:18])
+	}
 	locations := make([]GeneratedLocation, 0, locationCount)
 	for i := 0; i < locationCount; i++ {
 		code := fmt.Sprintf("loc_%02d", i+1)
@@ -154,7 +157,11 @@ func (r *BladesRunner) GenerateWorld(ctx context.Context, input *GenerateWorldIn
 		{Key: "tension", Name: "紧张度", Description: "世界内部冲突压力", MinValue: 0, MaxValue: 100, InitialValue: 30},
 	}
 	initial := map[string]any{"stability": float64(60), "activity": float64(40), "tension": float64(30)}
-	return &GenerateWorldOutput{WorldName: worldName, WorldSummary: base, Locations: locations, Npcs: npcs, Metrics: metrics, InitialMetrics: initial, CurrentArc: "世界刚刚生成，玩家的行动会决定后续走向", OpeningEvents: []string{"世界被创建"}, RawProviderName: providerName(input.Config)}, nil
+	provider := "blades"
+	if input.Config != nil && strings.TrimSpace(input.Config.Provider) != "" {
+		provider = strings.TrimSpace(input.Config.Provider)
+	}
+	return &GenerateWorldOutput{WorldName: worldName, WorldSummary: base, Locations: locations, Npcs: npcs, Metrics: metrics, InitialMetrics: initial, CurrentArc: "世界刚刚生成，玩家的行动会决定后续走向", OpeningEvents: []string{"世界被创建"}, RawProviderName: provider}, nil
 }
 
 func (r *BladesRunner) Talk(ctx context.Context, input *TalkInput) (*TalkOutput, error) {
@@ -166,19 +173,4 @@ func (r *BladesRunner) Talk(ctx context.Context, input *TalkInput) (*TalkOutput,
 func (r *BladesRunner) Direct(ctx context.Context, input *DirectInput) (*DirectOutput, error) {
 	_ = ctx
 	return &DirectOutput{Summary: "世界根据近期事件完成一次演化", CurrentArc: input.Arc, WorldMetricDelta: map[string]int32{"activity": 1, "tension": -1}, Events: []string{"世界状态发生了细微变化"}}, nil
-}
-
-func shortName(description string) string {
-	name := strings.TrimSpace(description)
-	if len([]rune(name)) > 18 {
-		return string([]rune(name)[:18])
-	}
-	return name
-}
-
-func providerName(config *RunConfig) string {
-	if config == nil || strings.TrimSpace(config.Provider) == "" {
-		return "blades"
-	}
-	return strings.TrimSpace(config.Provider)
 }

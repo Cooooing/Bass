@@ -10,49 +10,49 @@ option go_package = "common/proto/gen/im/v1;v1";
 
 // ChatSession 服务
 service IMChatSessionService {
-  rpc MarkMuted(MarkMutedChatSession.Request) returns (MarkMutedChatSession.Response) {} // 免打扰
-  rpc MarkPinned(MarkPinnedChatSession.Request) returns (MarkPinnedChatSession.Response) {} // 置顶
-  rpc MarkRead(MarkReadChatSession.Request) returns (MarkReadChatSession.Response) {} // 标为已读
-  rpc List(ListChatSessions.Request) returns (ListChatSessions.Response) {} // 查询会话数据
+  rpc MarkMuted(MarkMutedChatSession.Req) returns (MarkMutedChatSession.Resp) {} // 免打扰
+  rpc MarkPinned(MarkPinnedChatSession.Req) returns (MarkPinnedChatSession.Resp) {} // 置顶
+  rpc MarkRead(MarkReadChatSession.Req) returns (MarkReadChatSession.Resp) {} // 标为已读
+  rpc List(ListChatSessions.Req) returns (ListChatSessions.Resp) {} // 查询会话数据
 }
 
 message MarkMutedChatSession {
-  message Request {
+  message Req {
     repeated int64 ids = 1; // 会话ID
     bool disturb = 2; // 是否免打扰
     int64 user_id = 3; // 用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message MarkPinnedChatSession {
-  message Request {
+  message Req {
     repeated int64 ids = 1; // 会话ID
     bool top = 2; // 是否置顶
     int64 user_id = 3; // 用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message MarkReadChatSession {
-  message Request {
+  message Req {
     repeated int64 ids = 1; // 会话ID
     int64 user_id = 2; // 用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message ListChatSessions {
-  message Request {
+  message Req {
 
     message ChatSessionQueryParams {
       repeated int64 ids = 2; // 主键
     }
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+    .common.api.app.common.PageReq page = 1; // 分页参数
     ChatSessionQueryParams query = 2; // 查询参数
     int64 user_id = 3; // 用户 ID
   }
-  message Response {
+  message Resp {
 
     message ChatSession {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -65,7 +65,7 @@ message ListChatSessions {
       int64 last_read_message_id = 6; // 已读最后一条消息 ID
       uint32 unread_count = 7; // 未读数
     }
-    .common.api.app.common.PageResponse page = 1; // 分页信息
+    .common.api.app.common.PageResp page = 1; // 分页信息
     repeated ChatSession rows = 2; // 消息信息
   }
 }

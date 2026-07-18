@@ -6,22 +6,12 @@ import (
 )
 
 type TotpSecretCache interface {
-	Save(ctx context.Context, req *TotpSecretCacheSaveReq) (*TotpSecretCacheSaveResponse, error)
-	Get(ctx context.Context, req *TotpSecretCacheGetReq) (*TotpSecretCacheGetResponse, error)
+	Save(ctx context.Context, req *TotpSecretCacheSaveReq) error
+	Get(ctx context.Context, userID int64) (string, error)
 }
 
 type TotpSecretCacheSaveReq struct {
 	UserID int64
 	Secret string
 	TTL    time.Duration
-}
-
-type TotpSecretCacheSaveResponse struct{}
-
-type TotpSecretCacheGetReq struct {
-	UserID int64
-}
-
-type TotpSecretCacheGetResponse struct {
-	Secret string
 }

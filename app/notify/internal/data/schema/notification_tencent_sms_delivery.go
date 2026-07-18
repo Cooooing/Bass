@@ -39,7 +39,7 @@ func (NotificationTencentSMSDelivery) Fields() []ent.Field {
 		field.Enum("status").Values(notifyenum.NotificationChannelStatusMap.EnumValues()...).Default(string(notifyenum.NotificationChannelStatusProcessing)).Comment("通道状态"),
 		field.Int32("attempt_count").Comment("发送尝试次数").Default(0),
 		field.Time("last_attempt_at").Comment("最近一次发送尝试时间").Optional().Nillable(),
-		field.String("provider_request_id").Comment("腾讯云请求 ID").Optional().Nillable(),
+		field.String("provider_Req_id").Comment("腾讯云请求 ID").Optional().Nillable(),
 		field.String("provider_code").Comment("腾讯云返回码").Optional().Nillable(),
 		field.String("provider_message").Comment("腾讯云返回消息").Optional().Nillable(),
 		field.Time("sent_at").Comment("发送成功时间").Optional().Nillable(),

@@ -10,29 +10,29 @@ option go_package = "common/proto/gen/content/v1;v1";
 
 // 评论服务
 service ContentCommentService {
-  rpc Create(CreateComment.Request) returns (CreateComment.Response) {} // 创建评论
-  rpc Hide(HideComment.Request) returns (HideComment.Response) {} // 管理隐藏评论
-  rpc Unhide(UnhideComment.Request) returns (UnhideComment.Response) {} // 取消管理隐藏
-  rpc Lock(LockComment.Request) returns (LockComment.Response) {} // 管理锁定评论
-  rpc Unlock(UnlockComment.Request) returns (UnlockComment.Response) {} // 管理解锁评论
-  rpc Like(LikeComment.Request) returns (LikeComment.Response) {} // 点赞评论
-  rpc Thank(ThankComment.Request) returns (ThankComment.Response) {} // 感谢评论
+  rpc Create(CreateComment.Req) returns (CreateComment.Resp) {} // 创建评论
+  rpc Hide(HideComment.Req) returns (HideComment.Resp) {} // 管理隐藏评论
+  rpc Unhide(UnhideComment.Req) returns (UnhideComment.Resp) {} // 取消管理隐藏
+  rpc Lock(LockComment.Req) returns (LockComment.Resp) {} // 管理锁定评论
+  rpc Unlock(UnlockComment.Req) returns (UnlockComment.Resp) {} // 管理解锁评论
+  rpc Like(LikeComment.Req) returns (LikeComment.Resp) {} // 点赞评论
+  rpc Thank(ThankComment.Req) returns (ThankComment.Resp) {} // 感谢评论
 
-  rpc List(ListComments.Request) returns (ListComments.Response) {} // 查询评论列表
-  rpc Page(PageComments.Request) returns (PageComments.Response) {} // 分页查询评论
-  rpc MapViewerActionStates(MapCommentViewerActionStates.Request) returns (MapCommentViewerActionStates.Response) {} // 查询用户的评论行为状态
-  rpc ListReplyPreviews(ListCommentReplyPreviews.Request) returns (ListCommentReplyPreviews.Response) {} // 查询评论回复预览
-  rpc MapArticleLastComments(MapArticleLastComments.Request) returns (MapArticleLastComments.Response) {} // 查询文章最后正常评论映射
+  rpc List(ListComments.Req) returns (ListComments.Resp) {} // 查询评论列表
+  rpc Page(PageComments.Req) returns (PageComments.Resp) {} // 分页查询评论
+  rpc MapViewerActionStates(MapCommentViewerActionStates.Req) returns (MapCommentViewerActionStates.Resp) {} // 查询用户的评论行为状态
+  rpc ListReplyPreviews(ListCommentReplyPreviews.Req) returns (ListCommentReplyPreviews.Resp) {} // 查询评论回复预览
+  rpc MapArticleLastComments(MapArticleLastComments.Req) returns (MapArticleLastComments.Resp) {} // 查询文章最后正常评论映射
 }
 
 message CreateComment {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     string content = 2; // 评论内容
     optional int64 reply_id = 3; // 回复评论 ID
     int64 user_id = 4; // 用户 ID
   }
-  message Response {
+  message Resp {
 
     message Comment {
 
@@ -59,65 +59,65 @@ message CreateComment {
 }
 
 message HideComment {
-  message Request {
+  message Req {
     int64 id = 1; // 评论 ID
     int64 user_id = 2; // 操作用户 ID
     optional string reason = 3; // 操作原因
   }
-  message Response {}
+  message Resp {}
 }
 
 message UnhideComment {
-  message Request {
+  message Req {
     int64 id = 1; // 评论 ID
     int64 user_id = 2; // 操作用户 ID
     optional string reason = 3; // 操作原因
   }
-  message Response {}
+  message Resp {}
 }
 
 message LockComment {
-  message Request {
+  message Req {
     int64 id = 1; // 评论 ID
     int64 user_id = 2; // 操作用户 ID
     optional string reason = 3; // 操作原因
   }
-  message Response {}
+  message Resp {}
 }
 
 message UnlockComment {
-  message Request {
+  message Req {
     int64 id = 1; // 评论 ID
     int64 user_id = 2; // 操作用户 ID
     optional string reason = 3; // 操作原因
   }
-  message Response {}
+  message Resp {}
 }
 
 message LikeComment {
-  message Request {
+  message Req {
     int64 id = 1; // 评论 ID
     bool liked = 2; // 是否点赞
     int64 user_id = 3; // 用户 ID
   }
-  message Response {
+  message Resp {
     bool liked = 1; // 是否点赞
   }
 }
 
 message ThankComment {
-  message Request {
+  message Req {
     int64 id = 1; // 评论 ID
     bool thanked = 2; // 是否感谢
     int64 user_id = 3; // 用户 ID
   }
-  message Response {
+  message Resp {
     bool thanked = 1; // 是否感谢
   }
 }
 
 message ListComments {
-  message Request {
+  message Req {
 
     message CommentQueryParams {
 
@@ -133,7 +133,7 @@ message ListComments {
     }
     CommentQueryParams query = 1; // 查询参数
   }
-  message Response {
+  message Resp {
 
     message Comment {
 
@@ -160,7 +160,7 @@ message ListComments {
 }
 
 message PageComments {
-  message Request {
+  message Req {
 
     message CommentQueryParams {
 
@@ -175,9 +175,9 @@ message PageComments {
       repeated ContentRestriction restrictions = 11; // 管理限制列表
     }
     CommentQueryParams query = 1; // 查询参数
-    optional .common.api.app.common.PageRequest page = 2; // 分页参数
+    optional .common.api.app.common.PageReq page = 2; // 分页参数
   }
-  message Response {
+  message Resp {
 
     message Comment {
 
@@ -200,16 +200,16 @@ message PageComments {
       google.protobuf.Timestamp deleted_at = 14; // 逻辑删除时间
     }
     repeated Comment rows = 1; // 评论列表
-    .common.api.app.common.PageResponse page = 2; // 分页信息
+    .common.api.app.common.PageResp page = 2; // 分页信息
   }
 }
 
 message MapCommentViewerActionStates {
-  message Request {
+  message Req {
     repeated int64 comment_ids = 1; // 评论 ID 列表
     int64 user_id = 2; // 用户 ID
   }
-  message Response {
+  message Resp {
 
     message State {
       bool liked = 1; // 是否点赞
@@ -220,7 +220,7 @@ message MapCommentViewerActionStates {
 }
 
 message ListCommentReplyPreviews {
-  message Request {
+  message Req {
 
     int64 article_id = 1; // 文章 ID
     repeated int64 parent_ids = 2; // 父级评论 ID
@@ -229,7 +229,7 @@ message ListCommentReplyPreviews {
     optional ContentRestriction restriction = 7; // 管理限制
     repeated ContentRestriction restrictions = 8; // 管理限制列表
   }
-  message Response {
+  message Resp {
 
     message CommentReplyPreview {
       int64 parent_id = 1; // 父级评论 ID
@@ -261,11 +261,11 @@ message ListCommentReplyPreviews {
 }
 
 message MapArticleLastComments {
-  message Request {
+  message Req {
 
     repeated int64 article_ids = 1; // 文章 ID
   }
-  message Response {
+  message Resp {
 
     message Comment {
 

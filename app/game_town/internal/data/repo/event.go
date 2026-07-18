@@ -17,9 +17,8 @@ func NewEventRepo(db *gen.Client) bizrepo.EventRepo {
 	return &EventRepo{baseRepo: &baseRepo{db: db}}
 }
 
-func (r *EventRepo) CreateEvent(ctx context.Context, req *bizrepo.CreateEventReq) (*bizrepo.CreateEventResponse, error) {
+func (r *EventRepo) CreateEvent(ctx context.Context, row *model.Event) (*model.Event, error) {
 	now := time.Now()
-	row := req.Row
 	if row.OccurredAt.IsZero() {
 		row.OccurredAt = now
 	}
@@ -27,10 +26,10 @@ func (r *EventRepo) CreateEvent(ctx context.Context, req *bizrepo.CreateEventReq
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.CreateEventResponse{Row: r.event(created)}, nil
+	return r.event(created), nil
 }
 
-func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizrepo.EventPageResponse, error) {
+func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizrepo.EventPageResp, error) {
 	pageReq := server.PageValid(req.Page)
 	queryReq := req.Query
 	query := r.db.Event.Query().Where(event.WorldID(queryReq.WorldID))
@@ -55,10 +54,10 @@ func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizre
 	for _, row := range rows {
 		result = append(result, r.event(row))
 	}
-	return &bizrepo.EventPageResponse{Rows: result, Page: &common.PageResponse{Total: uint32(total), Page: pageReq.Page, Size: pageReq.Size}}, nil
+	return &bizrepo.EventPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: pageReq.Page, Size: pageReq.Size}}, nil
 }
 
-func (r *EventRepo) ListRecentEvents(ctx context.Context, req *bizrepo.ListRecentEventsReq) (*bizrepo.ListRecentEventsResponse, error) {
+func (r *EventRepo) ListRecentEvents(ctx context.Context, req *bizrepo.ListRecentEventsReq) ([]*model.Event, error) {
 	limit := req.Limit
 	if limit <= 0 {
 		limit = 20
@@ -71,5 +70,5 @@ func (r *EventRepo) ListRecentEvents(ctx context.Context, req *bizrepo.ListRecen
 	for _, row := range rows {
 		result = append(result, r.event(row))
 	}
-	return &bizrepo.ListRecentEventsResponse{Rows: result}, nil
+	return result, nil
 }

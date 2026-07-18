@@ -23,7 +23,7 @@ func NewEventService(gameUsecase *usecase.GameUsecase) *EventService {
 }
 func (s *EventService) RegisterGrpc(gs *grpc.Server) { v1.RegisterGameTownEventServiceServer(gs, s) }
 func (s *EventService) RegisterHttp(hs *http.Server) {}
-func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Request) (*v1.PageGameTownEvents_Response, error) {
+func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Req) (*v1.PageGameTownEvents_Resp, error) {
 	var typ *string
 	if req.Type != nil && *req.Type != v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_UNSPECIFIED {
 		value, ok := gameenum.EventTypeMap.ToEnum(*req.Type)
@@ -32,7 +32,7 @@ func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Requ
 			typ = &typeValue
 		}
 	}
-	pageResponse, err := s.gameUsecase.PageEvents(ctx, &usecase.PageEventsReq{Page: req.GetPage(), WorldID: req.GetWorldId(), ActorPlayerID: req.ActorPlayerId, TargetNpcID: req.TargetNpcId, Type: typ})
+	pageResp, err := s.gameUsecase.PageEvents(ctx, &usecase.PageEventsReq{Page: req.GetPage(), WorldID: req.GetWorldId(), ActorPlayerID: req.ActorPlayerId, TargetNpcID: req.TargetNpcId, Type: typ})
 	if err != nil {
 		return nil, err
 	}
@@ -49,13 +49,13 @@ func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Requ
 		}
 		return st
 	}
-	reply := &v1.PageGameTownEvents_Response{Page: pageResponse.Page, Rows: make([]*v1.PageGameTownEvents_Response_GameTownEvent, 0, len(pageResponse.Rows))}
-	for _, row := range pageResponse.Rows {
+	reply := &v1.PageGameTownEvents_Resp{Page: pageResp.Page, Rows: make([]*v1.PageGameTownEvents_Resp_GameTownEvent, 0, len(pageResp.Rows))}
+	for _, row := range pageResp.Rows {
 		if row == nil {
 			reply.Rows = append(reply.Rows, nil)
 			continue
 		}
-		reply.Rows = append(reply.Rows, &v1.PageGameTownEvents_Response_GameTownEvent{
+		reply.Rows = append(reply.Rows, &v1.PageGameTownEvents_Resp_GameTownEvent{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			Id:            row.ID,
 			WorldId:       row.WorldID,

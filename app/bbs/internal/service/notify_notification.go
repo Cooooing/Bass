@@ -24,36 +24,36 @@ func (s *NotificationService) RegisterHttp(hs *http.Server) {
 	bbsnotifyv1.RegisterNotificationServiceHTTPServer(hs, s)
 }
 
-func (s *NotificationService) List(ctx context.Context, req *bbsnotifyv1.ListNotifications_Request) (*bbsnotifyv1.ListNotifications_Response, error) {
+func (s *NotificationService) List(ctx context.Context, req *bbsnotifyv1.ListNotifications_Req) (*bbsnotifyv1.ListNotifications_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	response, err := s.notificationUsecase.ListNotifications(ctx, &usecase.ListNotificationsReq{UserID: userID, Page: req.GetPage()})
+	resp, err := s.notificationUsecase.ListNotifications(ctx, &usecase.ListNotificationsReq{UserID: userID, Page: req.GetPage()})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsnotifyv1.ListNotifications_Response{Page: response.Page, Rows: response.Rows}, nil
+	return &bbsnotifyv1.ListNotifications_Resp{Page: resp.Page, Rows: resp.Rows}, nil
 }
-func (s *NotificationService) MarkRead(ctx context.Context, req *bbsnotifyv1.MarkReadNotification_Request) (*bbsnotifyv1.MarkReadNotification_Response, error) {
+func (s *NotificationService) MarkRead(ctx context.Context, req *bbsnotifyv1.MarkReadNotification_Req) (*bbsnotifyv1.MarkReadNotification_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	response, err := s.notificationUsecase.MarkReadNotification(ctx, &usecase.MarkReadNotificationReq{UserID: userID, IDs: req.GetIds()})
+	resp, err := s.notificationUsecase.MarkReadNotification(ctx, &usecase.MarkReadNotificationReq{UserID: userID, IDs: req.GetIds()})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsnotifyv1.MarkReadNotification_Response{Count: response.Count}, nil
+	return &bbsnotifyv1.MarkReadNotification_Resp{Count: resp}, nil
 }
-func (s *NotificationService) CountUnread(ctx context.Context, req *bbsnotifyv1.CountUnreadNotifications_Request) (*bbsnotifyv1.CountUnreadNotifications_Response, error) {
+func (s *NotificationService) CountUnread(ctx context.Context, req *bbsnotifyv1.CountUnreadNotifications_Req) (*bbsnotifyv1.CountUnreadNotifications_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	response, err := s.notificationUsecase.CountUnreadNotifications(ctx, &usecase.CountUnreadNotificationsReq{UserID: userID})
+	count, err := s.notificationUsecase.CountUnreadNotifications(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
-	return &bbsnotifyv1.CountUnreadNotifications_Response{Count: response.Count}, nil
+	return &bbsnotifyv1.CountUnreadNotifications_Resp{Count: count}, nil
 }

@@ -41,23 +41,23 @@ func NewSchedulerRunner(logger *slog.Logger, conf *config.Bootstrap, taskRepo re
 func (r *SchedulerRunner) Start(ctx context.Context) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	r.cancel = cancel
-	tasksResp, err := r.taskRepo.List(runCtx, &repo.TaskGetReq{Enabled: new(true)})
+	tasks, err := r.taskRepo.List(runCtx, &repo.TaskGetReq{Enabled: new(true)})
 	if err != nil {
 		return err
 	}
-	for _, item := range tasksResp.Rows {
+	for _, item := range tasks {
 		r.registerTask(runCtx, item)
 	}
-	changedResp, err := r.taskEventBus.SubscribeTaskChanged(runCtx, &repo.SubscribeTaskChangedReq{})
+	changedMessages, err := r.taskEventBus.SubscribeTaskChanged(runCtx)
 	if err != nil {
 		return err
 	}
-	canceledResp, err := r.taskEventBus.SubscribeExecutionCanceled(runCtx, &repo.SubscribeExecutionCanceledReq{})
+	canceledMessages, err := r.taskEventBus.SubscribeExecutionCanceled(runCtx)
 	if err != nil {
 		return err
 	}
-	changedCh := changedResp.Messages
-	canceledCh := canceledResp.Messages
+	changedCh := changedMessages
+	canceledCh := canceledMessages
 	r.cron.Start()
 	go func() {
 		for {
@@ -68,17 +68,17 @@ func (r *SchedulerRunner) Start(ctx context.Context) error {
 				if !ok {
 					return
 				}
-				taskResp, err := r.taskRepo.Get(runCtx, &repo.TaskGetReq{ID: &msg.TaskID})
+				task, err := r.taskRepo.Get(runCtx, &repo.TaskGetReq{ID: &msg.TaskID})
 				if err != nil {
 					r.unregisterTask(runCtx, msg.TaskID)
 					continue
 				}
-				r.registerTask(runCtx, taskResp.Row)
+				r.registerTask(runCtx, task)
 			case msg, ok := <-canceledCh:
 				if !ok {
 					return
 				}
-				r.taskUsecase.CancelExecutionLocally(runCtx, &TaskCancelExecutionLocallyReq{ID: msg.ExecutionRecordID})
+				r.taskUsecase.CancelExecutionLocally(runCtx, msg.ExecutionRecordID)
 			}
 		}
 	}()
@@ -95,7 +95,7 @@ func (r *SchedulerRunner) Stop(ctx context.Context) error {
 	}
 	stopRunningCtx, cancel := context.WithTimeout(ctx, 100*time.Millisecond)
 	defer cancel()
-	return r.taskUsecase.StopRunning(stopRunningCtx, &TaskStopRunningReq{})
+	return r.taskUsecase.StopRunning(stopRunningCtx)
 }
 
 func (r *SchedulerRunner) registerTask(ctx context.Context, task *model.Task) {

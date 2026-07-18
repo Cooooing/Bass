@@ -49,7 +49,7 @@ var bbsErrorMessages = serverutil.ErrorMessages{
 			commonenums.Language_LANGUAGE_EN:    "The current state does not allow this operation",
 		},
 	},
-	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_REQUESTS: {
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_ReqS: {
 		Text: map[commonenums.Language]string{
 			commonenums.Language_LANGUAGE_ZH_CN: "操作过于频繁，请 %d 秒后再试",
 			commonenums.Language_LANGUAGE_ZH_TW: "操作過於頻繁，請 %d 秒後再試",
@@ -317,7 +317,7 @@ var bbsErrorMessages = serverutil.ErrorMessages{
 			commonenums.Language_LANGUAGE_EN:    "Invalid comment information",
 		},
 	},
-	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_REQUEST_INVALID: {
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_Req_INVALID: {
 		Text: map[commonenums.Language]string{
 			commonenums.Language_LANGUAGE_ZH_CN: "限流请求无效",
 			commonenums.Language_LANGUAGE_ZH_TW: "限流請求無效",

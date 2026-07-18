@@ -13,7 +13,7 @@ option go_package = "common/proto/gen/bbs/v1/user;user";
 // 账号接口。
 service AccountService {
   // 获取当前账号的完整资料。
-  rpc GetCurrent(GetCurrentAccount.Request) returns (GetCurrentAccount.Response) {
+  rpc GetCurrent(GetCurrentAccount.Req) returns (GetCurrentAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/get-current"
       body: "*"
@@ -21,7 +21,7 @@ service AccountService {
   }
 
   // 按账号 ID 获取账号展示资料。
-  rpc GetProfile(GetProfileAccount.Request) returns (GetProfileAccount.Response) {
+  rpc GetProfile(GetProfileAccount.Req) returns (GetProfileAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/get-profile"
       body: "*"
@@ -29,7 +29,7 @@ service AccountService {
   }
 
   // 更新当前账号的展示资料。
-  rpc UpdateProfile(UpdateProfileAccount.Request) returns (UpdateProfileAccount.Response) {
+  rpc UpdateProfile(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/update-profile"
       body: "*"
@@ -37,15 +37,15 @@ service AccountService {
   }
 
   // 生成默认账号头像。
-  rpc Avatar(AvatarAccount.Request) returns (.common.api.app.common.ImageResponse) {
+  rpc Avatar(AvatarAccount.Req) returns (.common.api.app.common.ImageResp) {
     option (google.api.http) = {get: "/v1/user/account/avatar"};
   }
 }
 
 // 获取当前账号的完整资料。
 message GetCurrentAccount {
-  message Request {}
-  message Response {
+  message Req {}
+  message Resp {
 
     message Account {
       // 账号展示资料。
@@ -96,12 +96,12 @@ message GetCurrentAccount {
 
 // 按账号 ID 获取账号展示资料。
 message GetProfileAccount {
-  message Request {
+  message Req {
     // 账号 ID。
     int64 user_id = 1;
     option (gnostic.openapi.v3.schema) = {required: "user_id"};
   }
-  message Response {
+  message Resp {
 
     message AccountProfile {
       // 账号 ID。
@@ -136,7 +136,7 @@ message GetProfileAccount {
 
 // 更新当前账号的展示资料。
 message UpdateProfileAccount {
-  message Request {
+  message Req {
     // 头像 URL。
     optional string avatar_url = 1;
     // 昵称。
@@ -148,7 +148,7 @@ message UpdateProfileAccount {
     // MBTI 类型。
     optional MBTI mbti = 5;
   }
-  message Response {
+  message Resp {
 
     message AccountProfile {
       // 账号 ID。
@@ -183,7 +183,7 @@ message UpdateProfileAccount {
 
 // 生成默认账号头像。
 message AvatarAccount {
-  message Request {
+  message Req {
     // 用于生成头像的账号名。
     string name = 1;
     option (gnostic.openapi.v3.schema) = {required: "name"};

@@ -12,42 +12,42 @@ option go_package = "common/proto/gen/im/v1;v1";
 
 // ChatMessage 服务
 service IMChatMessageService {
-  rpc Send(SendChatMessage.Request) returns (SendChatMessage.Response) {} // 发送消息
-  rpc Revoke(RevokeChatMessage.Request) returns (RevokeChatMessage.Response) {} // 撤回消息
-  rpc List(ListChatMessages.Request) returns (ListChatMessages.Response) {} // 查询消息数据
+  rpc Send(SendChatMessage.Req) returns (SendChatMessage.Resp) {} // 发送消息
+  rpc Revoke(RevokeChatMessage.Req) returns (RevokeChatMessage.Resp) {} // 撤回消息
+  rpc List(ListChatMessages.Req) returns (ListChatMessages.Resp) {} // 查询消息数据
 }
 
 message SendChatMessage {
-  message Request {
+  message Req {
     int64 receiver_id = 1; // 接收者 ID
     ReceiverType receiver_type = 2; // 接收者类型
     int64 user_id = 3; // 用户 ID
     MessageType type = 5; // 消息类型
     string content = 6; // 内容
   }
-  message Response {}
+  message Resp {}
 }
 
 message RevokeChatMessage {
-  message Request {
+  message Req {
     int64 id = 1; // 主键
     int64 user_id = 2; // 用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message ListChatMessages {
-  message Request {
+  message Req {
 
     message ChatMessageQueryParams {
       repeated int64 ids = 2; // 主键
       int64 session_id = 3; // 会话id
       int64 sender_id = 4; // 发送者 ID
     }
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+    .common.api.app.common.PageReq page = 1; // 分页参数
     ChatMessageQueryParams query = 2; // 查询参数
   }
-  message Response {
+  message Resp {
 
     message ChatMessage {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -92,7 +92,7 @@ message ListChatMessages {
       uint32 member_count = 7; // 群成员数
       ChatMessage last_message = 9; // 最后一条消息
     }
-    .common.api.app.common.PageResponse page = 1; // 分页信息
+    .common.api.app.common.PageResp page = 1; // 分页信息
     repeated ChatMessage rows = 2; // 消息信息
   }
 }

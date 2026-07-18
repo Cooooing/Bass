@@ -31,7 +31,7 @@ func (r *InboxEventRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *InboxEventRepo) SaveProcessing(ctx context.Context, req *bizrepo.InboxEventSaveProcessingReq) (*bizrepo.InboxEventSaveProcessingResponse, error) {
+func (r *InboxEventRepo) SaveProcessing(ctx context.Context, req *bizrepo.InboxEventSaveProcessingReq) (*bizrepo.InboxEventSaveProcessingResp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("inbox event save request is nil")
 	}
@@ -57,7 +57,7 @@ func (r *InboxEventRepo) SaveProcessing(ctx context.Context, req *bizrepo.InboxE
 		SetProcessingStartedAt(req.Now).
 		Save(ctx)
 	if err == nil {
-		return &bizrepo.InboxEventSaveProcessingResponse{Event: toInboxEventModel(save), Claimed: true}, nil
+		return &bizrepo.InboxEventSaveProcessingResp{Event: toInboxEventModel(save), Claimed: true}, nil
 	}
 	if !gen.IsConstraintError(err) {
 		return nil, err
@@ -69,23 +69,23 @@ func (r *InboxEventRepo) SaveProcessing(ctx context.Context, req *bizrepo.InboxE
 	if getErr != nil {
 		return nil, getErr
 	}
-	return &bizrepo.InboxEventSaveProcessingResponse{Event: toInboxEventModel(exist), Claimed: false}, nil
+	return &bizrepo.InboxEventSaveProcessingResp{Event: toInboxEventModel(exist), Claimed: false}, nil
 }
 
-func (r *InboxEventRepo) Get(ctx context.Context, req *bizrepo.InboxEventGetReq) (*bizrepo.InboxEventGetResponse, error) {
+func (r *InboxEventRepo) Get(ctx context.Context, req *bizrepo.InboxEventQuery) (*model.InboxEvent, error) {
 	query := r.getClient(ctx).InboxEvent.Query()
 	query = r.getQuery(query, inboxEventQuery(req))
 	row, err := query.First(ctx)
 	if gen.IsNotFound(err) {
-		return &bizrepo.InboxEventGetResponse{}, nil
+		return nil, nil
 	}
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.InboxEventGetResponse{Item: toInboxEventModel(row)}, nil
+	return toInboxEventModel(row), nil
 }
 
-func (r *InboxEventRepo) List(ctx context.Context, req *bizrepo.InboxEventListReq) (*bizrepo.InboxEventListResponse, error) {
+func (r *InboxEventRepo) List(ctx context.Context, req *bizrepo.InboxEventQuery) ([]*model.InboxEvent, error) {
 	query := r.getClient(ctx).InboxEvent.Query()
 	query = r.getQuery(query, inboxEventListQuery(req))
 	list, err := query.All(ctx)
@@ -96,32 +96,33 @@ func (r *InboxEventRepo) List(ctx context.Context, req *bizrepo.InboxEventListRe
 	for _, row := range list {
 		result = append(result, toInboxEventModel(row))
 	}
-	return &bizrepo.InboxEventListResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *InboxEventRepo) Map(ctx context.Context, req *bizrepo.InboxEventMapReq) (*bizrepo.InboxEventMapResponse, error) {
-	listResponse, err := r.List(ctx, &bizrepo.InboxEventListReq{Query: inboxEventMapQuery(req)})
+func (r *InboxEventRepo) Map(ctx context.Context, req *bizrepo.InboxEventQuery) (map[int64]*model.
+	InboxEvent, error) {
+	list, err := r.List(ctx, inboxEventMapQuery(req))
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[int64]*model.InboxEvent, len(listResponse.Rows))
-	for _, item := range listResponse.Rows {
+	result := make(map[int64]*model.InboxEvent, len(list))
+	for _, item := range list {
 		result[item.ID] = item
 	}
-	return &bizrepo.InboxEventMapResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *InboxEventRepo) Count(ctx context.Context, req *bizrepo.InboxEventCountReq) (*bizrepo.InboxEventCountResponse, error) {
+func (r *InboxEventRepo) Count(ctx context.Context, req *bizrepo.InboxEventQuery) (int, error) {
 	query := r.getClient(ctx).InboxEvent.Query()
 	query = r.getQuery(query, inboxEventCountQuery(req))
 	count, err := query.Count(ctx)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &bizrepo.InboxEventCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *InboxEventRepo) Page(ctx context.Context, req *bizrepo.InboxEventPageReq) (*bizrepo.InboxEventPageResponse, error) {
+func (r *InboxEventRepo) Page(ctx context.Context, req *bizrepo.InboxEventQuery) (*bizrepo.InboxEventPageResp, error) {
 	queryReq := inboxEventPageQuery(req)
 	var pageReq *base.PageRequest
 	if queryReq != nil {
@@ -145,9 +146,9 @@ func (r *InboxEventRepo) Page(ctx context.Context, req *bizrepo.InboxEventPageRe
 	for _, row := range list {
 		result = append(result, toInboxEventModel(row))
 	}
-	return &bizrepo.InboxEventPageResponse{
+	return &bizrepo.InboxEventPageResp{
 		Rows: result,
-		Page: &base.PageResponse{
+		Page: &base.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,
@@ -155,9 +156,9 @@ func (r *InboxEventRepo) Page(ctx context.Context, req *bizrepo.InboxEventPageRe
 	}, nil
 }
 
-func (r *InboxEventRepo) ClaimRetry(ctx context.Context, req *bizrepo.InboxEventClaimRetryReq) (*bizrepo.InboxEventClaimRetryResponse, error) {
+func (r *InboxEventRepo) ClaimRetry(ctx context.Context, req *bizrepo.InboxEventClaimRetryReq) (bool, error) {
 	if req == nil {
-		return nil, fmt.Errorf("inbox event claim retry request is nil")
+		return false, fmt.Errorf("inbox event claim retry request is nil")
 	}
 	maxRetry := req.MaxRetry
 	if maxRetry <= 0 {
@@ -183,7 +184,7 @@ func (r *InboxEventRepo) ClaimRetry(ctx context.Context, req *bizrepo.InboxEvent
 		ClearProcessedAt().
 		Save(ctx)
 	if err != nil || count > 0 {
-		return &bizrepo.InboxEventClaimRetryResponse{Claimed: count > 0}, err
+		return count > 0, err
 	}
 	_, err = r.getClient(ctx).InboxEvent.Update().
 		Where(
@@ -200,12 +201,12 @@ func (r *InboxEventRepo) ClaimRetry(ctx context.Context, req *bizrepo.InboxEvent
 		).
 		SetStatus(inboxevent.Status(commonenum.InboxEventStatusDead)).
 		Save(ctx)
-	return &bizrepo.InboxEventClaimRetryResponse{}, err
+	return false, err
 }
 
-func (r *InboxEventRepo) MarkProcessed(ctx context.Context, req *bizrepo.InboxEventMarkProcessedReq) (*bizrepo.InboxEventMarkProcessedResponse, error) {
+func (r *InboxEventRepo) MarkProcessed(ctx context.Context, req *bizrepo.InboxEventMarkProcessedReq) error {
 	if req == nil {
-		return nil, fmt.Errorf("inbox event mark processed request is nil")
+		return fmt.Errorf("inbox event mark processed request is nil")
 	}
 	err := r.getClient(ctx).InboxEvent.Update().
 		Where(inboxevent.EventIDEQ(req.EventID)).
@@ -214,14 +215,14 @@ func (r *InboxEventRepo) MarkProcessed(ctx context.Context, req *bizrepo.InboxEv
 		ClearLastError().
 		Exec(ctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &bizrepo.InboxEventMarkProcessedResponse{}, nil
+	return nil
 }
 
-func (r *InboxEventRepo) MarkFailed(ctx context.Context, req *bizrepo.InboxEventMarkFailedReq) (*bizrepo.InboxEventMarkFailedResponse, error) {
+func (r *InboxEventRepo) MarkFailed(ctx context.Context, req *bizrepo.InboxEventMarkFailedReq) error {
 	if req == nil {
-		return nil, fmt.Errorf("inbox event mark failed request is nil")
+		return fmt.Errorf("inbox event mark failed request is nil")
 	}
 	maxRetry := req.MaxRetry
 	if maxRetry <= 0 {
@@ -235,7 +236,7 @@ func (r *InboxEventRepo) MarkFailed(ctx context.Context, req *bizrepo.InboxEvent
 		Where(inboxevent.EventIDEQ(req.EventID)).
 		Only(ctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	status := commonenum.InboxEventStatusFailed
 	if event.AttemptCount >= maxRetry {
@@ -247,9 +248,9 @@ func (r *InboxEventRepo) MarkFailed(ctx context.Context, req *bizrepo.InboxEvent
 		SetLastError(lastError).
 		Exec(ctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &bizrepo.InboxEventMarkFailedResponse{}, nil
+	return nil
 }
 
 func (r *InboxEventRepo) getQuery(query *gen.InboxEventQuery, req *bizrepo.InboxEventQuery) *gen.InboxEventQuery {
@@ -280,39 +281,29 @@ func (r *InboxEventRepo) getQuery(query *gen.InboxEventQuery, req *bizrepo.Inbox
 	return query
 }
 
-func inboxEventQuery(req *bizrepo.InboxEventGetReq) *bizrepo.InboxEventQuery {
-	if req == nil {
-		return nil
-	}
-	return req.Query
+func inboxEventQuery(query *bizrepo.InboxEventQuery) *bizrepo.InboxEventQuery {
+
+	return query
 }
 
-func inboxEventListQuery(req *bizrepo.InboxEventListReq) *bizrepo.InboxEventQuery {
-	if req == nil {
-		return nil
-	}
-	return req.Query
+func inboxEventListQuery(query *bizrepo.InboxEventQuery) *bizrepo.InboxEventQuery {
+
+	return query
 }
 
-func inboxEventMapQuery(req *bizrepo.InboxEventMapReq) *bizrepo.InboxEventQuery {
-	if req == nil {
-		return nil
-	}
-	return req.Query
+func inboxEventMapQuery(query *bizrepo.InboxEventQuery) *bizrepo.InboxEventQuery {
+
+	return query
 }
 
-func inboxEventCountQuery(req *bizrepo.InboxEventCountReq) *bizrepo.InboxEventQuery {
-	if req == nil {
-		return nil
-	}
-	return req.Query
+func inboxEventCountQuery(query *bizrepo.InboxEventQuery) *bizrepo.InboxEventQuery {
+
+	return query
 }
 
-func inboxEventPageQuery(req *bizrepo.InboxEventPageReq) *bizrepo.InboxEventQuery {
-	if req == nil {
-		return nil
-	}
-	return req.Query
+func inboxEventPageQuery(query *bizrepo.InboxEventQuery) *bizrepo.InboxEventQuery {
+
+	return query
 }
 
 func toInboxEventModel(row *gen.InboxEvent) *model.InboxEvent {

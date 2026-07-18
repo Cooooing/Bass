@@ -20,15 +20,15 @@ func NewConnectionRegistryRepo() *ConnectionRegistryRepo {
 	return &ConnectionRegistryRepo{connections: make(map[int64][]*model.Connection)}
 }
 
-func (r *ConnectionRegistryRepo) AddConnection(ctx context.Context, req *bizrepo.AddConnectionReq) (*bizrepo.AddConnectionResponse, error) {
+func (r *ConnectionRegistryRepo) AddConnection(ctx context.Context, req *bizrepo.AddConnectionReq) error {
 	_ = ctx
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.connections[req.UserID] = append(r.connections[req.UserID], req.Connection)
-	return &bizrepo.AddConnectionResponse{}, nil
+	return nil
 }
 
-func (r *ConnectionRegistryRepo) RemoveConnection(ctx context.Context, req *bizrepo.RemoveConnectionReq) (*bizrepo.RemoveConnectionResponse, error) {
+func (r *ConnectionRegistryRepo) RemoveConnection(ctx context.Context, req *bizrepo.RemoveConnectionReq) error {
 	_ = ctx
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -44,44 +44,42 @@ func (r *ConnectionRegistryRepo) RemoveConnection(ctx context.Context, req *bizr
 	} else {
 		r.connections[req.UserID] = filtered
 	}
-	return &bizrepo.RemoveConnectionResponse{}, nil
+	return nil
 }
 
-func (r *ConnectionRegistryRepo) GetConnections(ctx context.Context, req *bizrepo.GetConnectionsReq) (*bizrepo.GetConnectionsResponse, error) {
+func (r *ConnectionRegistryRepo) GetConnections(ctx context.Context, userID int64) ([]*model.Connection, error) {
 	_ = ctx
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	conns := r.connections[req.UserID]
+	conns := r.connections[userID]
 	if conns == nil {
-		return &bizrepo.GetConnectionsResponse{}, nil
+		return nil, nil
 	}
 	result := make([]*model.Connection, len(conns))
 	copy(result, conns)
-	return &bizrepo.GetConnectionsResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *ConnectionRegistryRepo) GetConnectionCount(ctx context.Context, req *bizrepo.GetConnectionCountReq) (*bizrepo.GetConnectionCountResponse, error) {
+func (r *ConnectionRegistryRepo) GetConnectionCount(ctx context.Context) (int64, error) {
 	_ = ctx
-	_ = req
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 	var count int64
 	for _, conns := range r.connections {
 		count += int64(len(conns))
 	}
-	return &bizrepo.GetConnectionCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *ConnectionRegistryRepo) GetAllUserIDs(ctx context.Context, req *bizrepo.GetAllUserIDsReq) (*bizrepo.GetAllUserIDsResponse, error) {
+func (r *ConnectionRegistryRepo) GetAllUserIDs(ctx context.Context) ([]int64, error) {
 	_ = ctx
-	_ = req
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 	userIDs := make([]int64, 0, len(r.connections))
 	for uid := range r.connections {
 		userIDs = append(userIDs, uid)
 	}
-	return &bizrepo.GetAllUserIDsResponse{UserIDs: userIDs}, nil
+	return userIDs, nil
 }
 
 func (r *ConnectionRegistryRepo) CleanupStaleConnections() int {

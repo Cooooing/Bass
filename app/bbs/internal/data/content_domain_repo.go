@@ -18,12 +18,12 @@ func NewContentDomainClient(contentClient *rpc.ContentClient) repo.ContentDomain
 	return &ContentDomainClient{contentClient: contentClient}
 }
 
-func (r *ContentDomainClient) ListDomains(ctx context.Context, req *repo.ListDomainsReq) (*repo.ListDomainsResponse, error) {
+func (r *ContentDomainClient) ListDomains(ctx context.Context, req *repo.ListDomainsReq) (*repo.ListDomainsResp, error) {
 	query := req.Query
 	if query == nil {
 		query = &repo.DomainQuery{}
 	}
-	contentQuery := &contentv1.PageDomains_Request_DomainQueryParams{
+	contentQuery := &contentv1.PageDomains_Req_DomainQueryParams{
 		Ids:         query.IDs,
 		Name:        query.Name,
 		Description: query.Description,
@@ -34,11 +34,11 @@ func (r *ContentDomainClient) ListDomains(ctx context.Context, req *repo.ListDom
 	if query.Status != nil {
 		contentQuery.Status = new(contentv1.DomainStatus(*query.Status))
 	}
-	var pageReq *common.PageRequest
+	var pageReq *common.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}
+		pageReq = &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}
 	}
-	reply, err := r.contentClient.Domain.Page(ctx, &contentv1.PageDomains_Request{
+	reply, err := r.contentClient.Domain.Page(ctx, &contentv1.PageDomains_Req{
 		Page:  pageReq,
 		Query: contentQuery,
 	})
@@ -62,9 +62,9 @@ func (r *ContentDomainClient) ListDomains(ctx context.Context, req *repo.ListDom
 		}
 		rows = append(rows, row)
 	}
-	var page *repo.PageResponse
+	var page *repo.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResponse{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+		page = &repo.PageResp{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
 	}
-	return &repo.ListDomainsResponse{Page: page, Rows: rows}, nil
+	return &repo.ListDomainsResp{Page: page, Rows: rows}, nil
 }

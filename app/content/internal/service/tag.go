@@ -34,7 +34,7 @@ func NewTagService(tagUsecase *usecase.TagUsecase) *TagService {
 	}
 }
 
-func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Request) (*v1.BatchCreateTags_Response, error) {
+func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Req) (*v1.BatchCreateTags_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -53,14 +53,14 @@ func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Re
 			UpdatedBy:   new(req.UserId),
 		})
 	}
-	savesResponse, err := s.tagUsecase.Saves(ctx, &usecase.TagSavesReq{Tags: tags})
+	savesResp, err := s.tagUsecase.Saves(ctx, tags)
 	if err != nil {
 		return nil, err
 	}
-	saves := savesResponse.Rows
-	reply := make([]*v1.BatchCreateTags_Response_Tag, len(saves))
+	saves := savesResp
+	reply := make([]*v1.BatchCreateTags_Resp_Tag, len(saves))
 	for i, save := range saves {
-		reply[i] = &v1.BatchCreateTags_Response_Tag{
+		reply[i] = &v1.BatchCreateTags_Resp_Tag{
 			CreatedAt:   timestamppb.New(*save.CreatedAt),
 			UpdatedAt:   timestamppb.New(*save.UpdatedAt),
 			CreatedBy:   save.CreatedBy,
@@ -72,12 +72,12 @@ func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Re
 			Status:      new(enum.TagStatusMap.MustToProto(save.Status)),
 		}
 	}
-	return &v1.BatchCreateTags_Response{
+	return &v1.BatchCreateTags_Resp{
 		Rows: reply,
 	}, err
 }
 
-func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Request) (*v1.UpdateTag_Response, error) {
+func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Req) (*v1.UpdateTag_Resp, error) {
 	if req.Tag == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
@@ -91,20 +91,20 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Request) (*v1
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
-	updateResponse, err := s.tagUsecase.Update(ctx, &usecase.TagUpdateReq{Tag: &model.Tag{
+	updateResp, err := s.tagUsecase.Update(ctx, &model.Tag{
 		ID:          req.TagId,
 		Name:        req.Tag.Name,
 		Description: req.Tag.Description,
 		DomainID:    req.Tag.DomainId,
 		Status:      updateTagStatus,
 		UpdatedBy:   new(req.UserId),
-	}})
+	})
 	if err != nil {
 		return nil, err
 	}
-	update := updateResponse.Tag
-	return &v1.UpdateTag_Response{
-		Tag: &v1.UpdateTag_Response_Tag{
+	update := updateResp
+	return &v1.UpdateTag_Resp{
+		Tag: &v1.UpdateTag_Resp_Tag{
 			CreatedAt:   timestamppb.New(*update.CreatedAt),
 			UpdatedAt:   timestamppb.New(*update.UpdatedAt),
 			CreatedBy:   update.CreatedBy,
@@ -118,8 +118,8 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Request) (*v1
 	}, nil
 }
 
-func (s *TagService) List(ctx context.Context, req *v1.ListTags_Request) (*v1.ListTags_Response, error) {
-	req.Query = util.OrDefault(req.Query, &v1.ListTags_Request_TagQueryParams{})
+func (s *TagService) List(ctx context.Context, req *v1.ListTags_Req) (*v1.ListTags_Resp, error) {
+	req.Query = util.OrDefault(req.Query, &v1.ListTags_Req_TagQueryParams{})
 	var tagStatus *enum.TagStatus
 	if req.Query.Status != nil {
 		status, ok := enum.TagStatusMap.ToEnum(*req.Query.Status)
@@ -137,14 +137,14 @@ func (s *TagService) List(ctx context.Context, req *v1.ListTags_Request) (*v1.Li
 		DomainID:    req.Query.DomainId,
 	}
 	getReq.Page = &base.PageRequest{Page: 1, Size: 1000}
-	pageResponse, err := s.tagUsecase.Page(ctx, getReq)
+	pageResp, err := s.tagUsecase.Page(ctx, getReq)
 	if err != nil {
 		return nil, err
 	}
-	data := pageResponse.Rows
-	reply := make([]*v1.ListTags_Response_Tag, len(data))
+	data := pageResp.Rows
+	reply := make([]*v1.ListTags_Resp_Tag, len(data))
 	for i, datum := range data {
-		reply[i] = &v1.ListTags_Response_Tag{
+		reply[i] = &v1.ListTags_Resp_Tag{
 			CreatedAt:   timestamppb.New(*datum.CreatedAt),
 			UpdatedAt:   timestamppb.New(*datum.UpdatedAt),
 			CreatedBy:   datum.CreatedBy,
@@ -156,13 +156,13 @@ func (s *TagService) List(ctx context.Context, req *v1.ListTags_Request) (*v1.Li
 			Status:      new(enum.TagStatusMap.MustToProto(datum.Status)),
 		}
 	}
-	return &v1.ListTags_Response{
+	return &v1.ListTags_Resp{
 		Rows: reply,
 	}, err
 }
 
-func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Request) (*v1.PageTags_Response, error) {
-	req.Query = util.OrDefault(req.Query, &v1.PageTags_Request_TagQueryParams{})
+func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Req) (*v1.PageTags_Resp, error) {
+	req.Query = util.OrDefault(req.Query, &v1.PageTags_Req_TagQueryParams{})
 	var tagStatus *enum.TagStatus
 	if req.Query.Status != nil {
 		status, ok := enum.TagStatusMap.ToEnum(*req.Query.Status)
@@ -180,15 +180,15 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Request) (*v1.Pa
 		DomainID:    req.Query.DomainId,
 	}
 	getReq.Page = &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())}
-	pageResponse, err := s.tagUsecase.Page(ctx, getReq)
+	pageResp, err := s.tagUsecase.Page(ctx, getReq)
 	if err != nil {
 		return nil, err
 	}
-	data := pageResponse.Rows
-	page := pageResponse.Page
-	reply := make([]*v1.PageTags_Response_Tag, len(data))
+	data := pageResp.Rows
+	page := pageResp.Page
+	reply := make([]*v1.PageTags_Resp_Tag, len(data))
 	for i, datum := range data {
-		reply[i] = &v1.PageTags_Response_Tag{
+		reply[i] = &v1.PageTags_Resp_Tag{
 			CreatedAt:   timestamppb.New(*datum.CreatedAt),
 			UpdatedAt:   timestamppb.New(*datum.UpdatedAt),
 			CreatedBy:   datum.CreatedBy,
@@ -200,8 +200,8 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Request) (*v1.Pa
 			Status:      new(enum.TagStatusMap.MustToProto(datum.Status)),
 		}
 	}
-	return &v1.PageTags_Response{
-		Page: &common.PageResponse{Page: uint32(page.Page), Size: uint32(page.Size), Total: uint32(page.Total)},
+	return &v1.PageTags_Resp{
+		Page: &common.PageResp{Page: uint32(page.Page), Size: uint32(page.Size), Total: uint32(page.Total)},
 		Rows: reply,
 	}, err
 }

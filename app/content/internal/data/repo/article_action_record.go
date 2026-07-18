@@ -33,23 +33,22 @@ func (r *ArticleActionRecordRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *ArticleActionRecordRepo) Save(ctx context.Context, req *repo.ArticleActionRecordSaveReq) (*repo.ArticleActionRecordSaveResponse, error) {
-	record := req.Record
+func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.ArticleActionRecord) (bool, error) {
 	_, err := r.getClient(ctx).ArticleActionRecord.Create().
 		SetArticleID(record.ArticleID).
 		SetUserID(record.UserID).
 		SetType(articleactionrecord.Type(record.Type)).
 		Save(ctx)
 	if gen.IsConstraintError(err) {
-		return &repo.ArticleActionRecordSaveResponse{Created: false}, nil
+		return false, nil
 	}
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &repo.ArticleActionRecordSaveResponse{Created: true}, nil
+	return true, nil
 }
 
-func (r *ArticleActionRecordRepo) Delete(ctx context.Context, req *repo.ArticleActionRecordDeleteReq) (*repo.ArticleActionRecordDeleteResponse, error) {
+func (r *ArticleActionRecordRepo) Delete(ctx context.Context, req *repo.ArticleActionRecordDeleteReq) (int, error) {
 	articleId := req.ArticleID
 	userId := req.UserID
 	action := req.Action
@@ -59,22 +58,22 @@ func (r *ArticleActionRecordRepo) Delete(ctx context.Context, req *repo.ArticleA
 		Where(articleactionrecord.TypeEQ(articleactionrecord.Type(action))).
 		Exec(ctx)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.ArticleActionRecordDeleteResponse{Deleted: deleted}, nil
+	return deleted, nil
 }
 
-func (r *ArticleActionRecordRepo) Exist(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordExistResponse, error) {
+func (r *ArticleActionRecordRepo) Exist(ctx context.Context, req *repo.ArticleActionRecordReq) (bool, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	exist, err := query.Exist(ctx)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &repo.ArticleActionRecordExistResponse{Exist: exist}, nil
+	return exist, nil
 }
 
-func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordGetResponse, error) {
+func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActionRecordReq) (*model.ArticleActionRecord, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
@@ -84,15 +83,15 @@ func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActi
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ArticleActionRecordGetResponse{Record: &model.ArticleActionRecord{
+	return &model.ArticleActionRecord{
 		ID:        c.ID,
 		ArticleID: c.ArticleID,
 		UserID:    c.UserID,
 		Type:      enum.ArticleAction(c.Type),
-	}}, nil
+	}, nil
 }
 
-func (r *ArticleActionRecordRepo) List(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordListResponse, error) {
+func (r *ArticleActionRecordRepo) List(ctx context.Context, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -108,30 +107,31 @@ func (r *ArticleActionRecordRepo) List(ctx context.Context, req *repo.ArticleAct
 			Type:      enum.ArticleAction(list[i].Type),
 		})
 	}
-	return &repo.ArticleActionRecordListResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *ArticleActionRecordRepo) Map(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordMapResponse, error) {
-	listResponse, err := r.List(ctx, req)
+func (r *ArticleActionRecordRepo) Map(ctx context.Context, req *repo.ArticleActionRecordReq) (map[int64]*model.
+	ArticleActionRecord, error) {
+	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ArticleActionRecordMapResponse{Rows: lo.SliceToMap(listResponse.Rows, func(item *model.ArticleActionRecord) (int64, *model.ArticleActionRecord) {
+	return lo.SliceToMap(listResp, func(item *model.ArticleActionRecord) (int64, *model.ArticleActionRecord) {
 		return item.ID, item
-	})}, nil
+	}), nil
 }
 
-func (r *ArticleActionRecordRepo) Count(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordCountResponse, error) {
+func (r *ArticleActionRecordRepo) Count(ctx context.Context, req *repo.ArticleActionRecordReq) (int, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.ArticleActionRecordCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *ArticleActionRecordRepo) Page(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordPageResponse, error) {
+func (r *ArticleActionRecordRepo) Page(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordPageResp, error) {
 	page := normalizePage(req.Page)
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
@@ -153,9 +153,9 @@ func (r *ArticleActionRecordRepo) Page(ctx context.Context, req *repo.ArticleAct
 			Type:      enum.ArticleAction(list[i].Type),
 		})
 	}
-	return &repo.ArticleActionRecordPageResponse{
+	return &repo.ArticleActionRecordPageResp{
 		Rows: rows,
-		Page: &base.PageResponse{
+		Page: &base.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

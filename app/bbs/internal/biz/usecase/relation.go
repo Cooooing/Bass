@@ -22,11 +22,13 @@ type FollowReq struct {
 }
 
 func (u *RelationUsecase) Follow(ctx context.Context, req *FollowReq) error {
-	if err := validateRelationTarget(req); err != nil {
-		return err
+	if req == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	_, err := u.relationClient.Follow(ctx, &repo.FollowRelationReq{ActorID: req.ActorID, TargetID: req.TargetID})
-	return err
+	if req.ActorID == req.TargetID {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
+	return u.relationClient.Follow(ctx, &repo.FollowRelationReq{ActorID: req.ActorID, TargetID: req.TargetID})
 }
 
 type UnfollowReq struct {
@@ -35,11 +37,13 @@ type UnfollowReq struct {
 }
 
 func (u *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowReq) error {
-	if err := validateRelationTarget(req); err != nil {
-		return err
+	if req == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	_, err := u.relationClient.Unfollow(ctx, &repo.UnfollowRelationReq{ActorID: req.ActorID, TargetID: req.TargetID})
-	return err
+	if req.ActorID == req.TargetID {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
+	return u.relationClient.Unfollow(ctx, &repo.UnfollowRelationReq{ActorID: req.ActorID, TargetID: req.TargetID})
 }
 
 type BlockReq struct {
@@ -48,11 +52,13 @@ type BlockReq struct {
 }
 
 func (u *RelationUsecase) Block(ctx context.Context, req *BlockReq) error {
-	if err := validateRelationTarget(req); err != nil {
-		return err
+	if req == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	_, err := u.relationClient.Block(ctx, &repo.BlockRelationReq{ActorID: req.ActorID, TargetID: req.TargetID})
-	return err
+	if req.ActorID == req.TargetID {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
+	return u.relationClient.Block(ctx, &repo.BlockRelationReq{ActorID: req.ActorID, TargetID: req.TargetID})
 }
 
 type UnblockReq struct {
@@ -61,24 +67,26 @@ type UnblockReq struct {
 }
 
 func (u *RelationUsecase) Unblock(ctx context.Context, req *UnblockReq) error {
-	if err := validateRelationTarget(req); err != nil {
-		return err
+	if req == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	_, err := u.relationClient.Unblock(ctx, &repo.UnblockRelationReq{ActorID: req.ActorID, TargetID: req.TargetID})
-	return err
+	if req.ActorID == req.TargetID {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
+	return u.relationClient.Unblock(ctx, &repo.UnblockRelationReq{ActorID: req.ActorID, TargetID: req.TargetID})
 }
 
 type ListFollowingReq struct {
 	ActorID int64
-	Page    *common.PageRequest
+	Page    *common.PageReq
 }
 
-type ListFollowingResponse struct {
-	Page *repo.PageResponse
+type ListFollowingResp struct {
+	Page *repo.PageResp
 	Rows []*repo.Relation
 }
 
-func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingReq) (*ListFollowingResponse, error) {
+func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingReq) (*ListFollowingResp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -86,24 +94,24 @@ func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingR
 	if req.Page != nil {
 		page = &repo.PageReq{Page: req.Page.GetPage(), Size: req.Page.GetSize()}
 	}
-	response, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{ActorID: req.ActorID, Page: page})
+	resp, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{ActorID: req.ActorID, Page: page})
 	if err != nil {
 		return nil, err
 	}
-	return &ListFollowingResponse{Page: response.Page, Rows: response.Rows}, nil
+	return &ListFollowingResp{Page: resp.Page, Rows: resp.Rows}, nil
 }
 
 type ListFollowersReq struct {
 	ActorID int64
-	Page    *common.PageRequest
+	Page    *common.PageReq
 }
 
-type ListFollowersResponse struct {
-	Page *repo.PageResponse
+type ListFollowersResp struct {
+	Page *repo.PageResp
 	Rows []*repo.Relation
 }
 
-func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersReq) (*ListFollowersResponse, error) {
+func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersReq) (*ListFollowersResp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -111,24 +119,24 @@ func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersR
 	if req.Page != nil {
 		page = &repo.PageReq{Page: req.Page.GetPage(), Size: req.Page.GetSize()}
 	}
-	response, err := u.relationClient.ListFollowers(ctx, &repo.ListFollowersRelationsReq{ActorID: req.ActorID, Page: page})
+	resp, err := u.relationClient.ListFollowers(ctx, &repo.ListFollowersRelationsReq{ActorID: req.ActorID, Page: page})
 	if err != nil {
 		return nil, err
 	}
-	return &ListFollowersResponse{Page: response.Page, Rows: response.Rows}, nil
+	return &ListFollowersResp{Page: resp.Page, Rows: resp.Rows}, nil
 }
 
 type ListBlockedReq struct {
 	ActorID int64
-	Page    *common.PageRequest
+	Page    *common.PageReq
 }
 
-type ListBlockedResponse struct {
-	Page *repo.PageResponse
+type ListBlockedResp struct {
+	Page *repo.PageResp
 	Rows []*repo.Relation
 }
 
-func (u *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedReq) (*ListBlockedResponse, error) {
+func (u *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedReq) (*ListBlockedResp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -136,11 +144,11 @@ func (u *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedReq) 
 	if req.Page != nil {
 		page = &repo.PageReq{Page: req.Page.GetPage(), Size: req.Page.GetSize()}
 	}
-	response, err := u.relationClient.ListBlocked(ctx, &repo.ListBlockedRelationsReq{ActorID: req.ActorID, Page: page})
+	resp, err := u.relationClient.ListBlocked(ctx, &repo.ListBlockedRelationsReq{ActorID: req.ActorID, Page: page})
 	if err != nil {
 		return nil, err
 	}
-	return &ListBlockedResponse{Page: response.Page, Rows: response.Rows}, nil
+	return &ListBlockedResp{Page: resp.Page, Rows: resp.Rows}, nil
 }
 
 type GetStatusReq struct {
@@ -148,41 +156,13 @@ type GetStatusReq struct {
 	TargetID int64
 }
 
-type GetStatusResponse struct {
-	Status *repo.RelationStatus
-}
-
-func (u *RelationUsecase) GetStatus(ctx context.Context, req *GetStatusReq) (*GetStatusResponse, error) {
+func (u *RelationUsecase) GetStatus(ctx context.Context, req *GetStatusReq) (*repo.RelationStatus, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	response, err := u.relationClient.GetStatus(ctx, &repo.GetStatusRelationReq{ActorID: req.ActorID, TargetID: req.TargetID})
+	resp, err := u.relationClient.GetStatus(ctx, &repo.GetStatusRelationReq{ActorID: req.ActorID, TargetID: req.TargetID})
 	if err != nil {
 		return nil, err
 	}
-	return &GetStatusResponse{Status: response.Status}, nil
-}
-
-type relationTarget interface {
-	getActorID() int64
-	getTargetID() int64
-}
-
-func (req *FollowReq) getActorID() int64    { return req.ActorID }
-func (req *FollowReq) getTargetID() int64   { return req.TargetID }
-func (req *UnfollowReq) getActorID() int64  { return req.ActorID }
-func (req *UnfollowReq) getTargetID() int64 { return req.TargetID }
-func (req *BlockReq) getActorID() int64     { return req.ActorID }
-func (req *BlockReq) getTargetID() int64    { return req.TargetID }
-func (req *UnblockReq) getActorID() int64   { return req.ActorID }
-func (req *UnblockReq) getTargetID() int64  { return req.TargetID }
-
-func validateRelationTarget(req relationTarget) error {
-	if req == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	if req.getActorID() == req.getTargetID() {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
-	}
-	return nil
+	return resp, nil
 }

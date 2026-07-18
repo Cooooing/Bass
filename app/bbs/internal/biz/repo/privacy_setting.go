@@ -3,8 +3,8 @@ package repo
 import "context"
 
 type PrivacySettingClient interface {
-	GetCurrentPrivacySetting(ctx context.Context, req *GetCurrentPrivacySettingReq) (*GetCurrentPrivacySettingResponse, error)
-	UpdateCurrentPrivacySetting(ctx context.Context, req *UpdateCurrentPrivacySettingReq) (*UpdateCurrentPrivacySettingResponse, error)
+	GetCurrentPrivacySetting(ctx context.Context, userID int64) (*PrivacySetting, error)
+	UpdateCurrentPrivacySetting(ctx context.Context, req *UpdateCurrentPrivacySettingReq) (*PrivacySetting, error)
 }
 
 type PrivacySetting struct {
@@ -17,14 +17,6 @@ type PrivacySetting struct {
 	PublicLocation     *bool
 }
 
-type GetCurrentPrivacySettingReq struct {
-	UserID int64
-}
-
-type GetCurrentPrivacySettingResponse struct {
-	PrivacySetting *PrivacySetting
-}
-
 type UpdateCurrentPrivacySettingReq struct {
 	UserID             int64
 	PublicPoints       *bool
@@ -33,8 +25,4 @@ type UpdateCurrentPrivacySettingReq struct {
 	PublicComments     *bool
 	PublicOnlineStatus *bool
 	PublicLocation     *bool
-}
-
-type UpdateCurrentPrivacySettingResponse struct {
-	PrivacySetting *PrivacySetting
 }

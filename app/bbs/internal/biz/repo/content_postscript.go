@@ -8,10 +8,6 @@ type AddPostscriptReq struct {
 	Content   string
 }
 
-type AddPostscriptResponse struct {
-	Postscript *ArticlePostscript
-}
-
 type ContentPostscriptClient interface {
-	AddPostscript(ctx context.Context, req *AddPostscriptReq) (*AddPostscriptResponse, error)
+	AddPostscript(ctx context.Context, req *AddPostscriptReq) (*ArticlePostscript, error)
 }

@@ -44,7 +44,7 @@ func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.O
 			recovery.Recovery(),
 			validate.ProtoValidate(),
 		),
-		kratoshttp.ResponseEncoder(server.HttpResponseEncoder),
+		kratoshttp.ResponseEncoder(server.HttpRespEncoder),
 		kratoshttp.ErrorEncoder(server.HttpErrorEncoder(func(r *stdhttp.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string {
 			return bbsErrorMessages.Resolve(r, code, data)
 		})),

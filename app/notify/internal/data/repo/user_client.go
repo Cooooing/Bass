@@ -21,12 +21,13 @@ func NewUserClient(userClient *rpc.UserClient) bizrepo.UserClient {
 	}
 }
 
-func (c *UserClient) MapAccounts(ctx context.Context, req *bizrepo.UserMapAccountsReq) (*bizrepo.UserMapAccountsResponse, error) {
-	if req == nil || len(req.UserIDs) == 0 {
-		return &bizrepo.UserMapAccountsResponse{Rows: map[int64]*model.UserAccount{}}, nil
+func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.
+	UserAccount, error) {
+	if len(userIDs) == 0 {
+		return map[int64]*model.UserAccount{}, nil
 	}
-	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Request{
-		Query: &userv1.MapAccounts_Request_AccountQuery{UserIds: req.UserIDs},
+	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
+		Query: &userv1.MapAccounts_Req_AccountQuery{UserIds: userIDs},
 	})
 	if err != nil {
 		return nil, err
@@ -49,20 +50,20 @@ func (c *UserClient) MapAccounts(ctx context.Context, req *bizrepo.UserMapAccoun
 		}
 		result[item.ID] = item
 	}
-	return &bizrepo.UserMapAccountsResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (c *UserClient) ListFollowerIDs(ctx context.Context, req *bizrepo.UserListFollowerIDsReq) (*bizrepo.UserListFollowerIDsResponse, error) {
-	if req == nil || req.UserID == 0 {
-		return &bizrepo.UserListFollowerIDsResponse{}, nil
+func (c *UserClient) ListFollowerIDs(ctx context.Context, userID int64) ([]int64, error) {
+	if userID == 0 {
+		return []int64{}, nil
 	}
 	page := uint32(1)
 	size := uint32(500)
 	userIDs := make([]int64, 0)
 	for {
-		reply, err := c.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Request{
-			UserId: req.UserID,
-			Page:   &common.PageRequest{Page: page, Size: size},
+		reply, err := c.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Req{
+			UserId: userID,
+			Page:   &common.PageReq{Page: page, Size: size},
 		})
 		if err != nil {
 			return nil, err
@@ -71,11 +72,11 @@ func (c *UserClient) ListFollowerIDs(ctx context.Context, req *bizrepo.UserListF
 		for _, row := range rows {
 			userIDs = append(userIDs, row.GetActorId())
 		}
-		pageResponse := reply.GetPage()
-		if pageResponse == nil || len(rows) == 0 || pageResponse.GetPage()*pageResponse.GetSize() >= pageResponse.GetTotal() {
+		pageResp := reply.GetPage()
+		if pageResp == nil || len(rows) == 0 || pageResp.GetPage()*pageResp.GetSize() >= pageResp.GetTotal() {
 			break
 		}
 		page++
 	}
-	return &bizrepo.UserListFollowerIDsResponse{UserIDs: userIDs}, nil
+	return userIDs, nil
 }

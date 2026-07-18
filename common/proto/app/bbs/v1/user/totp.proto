@@ -12,7 +12,7 @@ option go_package = "common/proto/gen/bbs/v1/user;user";
 // TOTP 认证接口。
 service TotpService {
   // 开始启用 TOTP。
-  rpc BeginEnable(BeginEnableTotp.Request) returns (BeginEnableTotp.Response) {
+  rpc BeginEnable(BeginEnableTotp.Req) returns (BeginEnableTotp.Resp) {
     option (google.api.http) = {
       post: "/v1/user/totp/begin-enable"
       body: "*"
@@ -20,7 +20,7 @@ service TotpService {
   }
 
   // 确认 TOTP 验证码并正式启用 TOTP。
-  rpc ConfirmEnable(ConfirmEnableTotp.Request) returns (ConfirmEnableTotp.Response) {
+  rpc ConfirmEnable(ConfirmEnableTotp.Req) returns (ConfirmEnableTotp.Resp) {
     option (google.api.http) = {
       post: "/v1/user/totp/confirm-enable"
       body: "*"
@@ -28,7 +28,7 @@ service TotpService {
   }
 
   // 校验 TOTP 验证码并关闭 TOTP。
-  rpc Disable(DisableTotp.Request) returns (DisableTotp.Response) {
+  rpc Disable(DisableTotp.Req) returns (DisableTotp.Resp) {
     option (google.api.http) = {
       post: "/v1/user/totp/disable"
       body: "*"
@@ -36,7 +36,7 @@ service TotpService {
   }
 
   // 获取当前账号的 TOTP 状态。
-  rpc GetCurrent(GetCurrentTotp.Request) returns (GetCurrentTotp.Response) {
+  rpc GetCurrent(GetCurrentTotp.Req) returns (GetCurrentTotp.Resp) {
     option (google.api.http) = {
       post: "/v1/user/totp/get-current"
       body: "*"
@@ -46,8 +46,8 @@ service TotpService {
 
 // 开始启用 TOTP。
 message BeginEnableTotp {
-  message Request {}
-  message Response {
+  message Req {}
+  message Resp {
     // TOTP 绑定 URL。
     string url = 1;
     // TOTP 二维码图片数据。
@@ -57,28 +57,28 @@ message BeginEnableTotp {
 
 // 确认 TOTP 验证码并正式启用 TOTP。
 message ConfirmEnableTotp {
-  message Request {
+  message Req {
     // TOTP 验证码。
     string code = 1;
     option (gnostic.openapi.v3.schema) = {required: "code"};
   }
-  message Response {}
+  message Resp {}
 }
 
 // 校验 TOTP 验证码并关闭 TOTP。
 message DisableTotp {
-  message Request {
+  message Req {
     // TOTP 验证码。
     string code = 1;
     option (gnostic.openapi.v3.schema) = {required: "code"};
   }
-  message Response {}
+  message Resp {}
 }
 
 // 获取当前账号的 TOTP 状态。
 message GetCurrentTotp {
-  message Request {}
-  message Response {
+  message Req {}
+  message Resp {
 
     message Totp {
       // 账号 ID。

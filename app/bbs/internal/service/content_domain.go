@@ -25,22 +25,22 @@ func (s *ContentDomainService) RegisterHttp(hs *http.Server) {
 	bbscontentv1.RegisterDomainServiceHTTPServer(hs, s)
 }
 
-func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListDomains_Request) (*bbscontentv1.ListDomains_Response, error) {
-	response, err := s.contentDomainUsecase.ListDomains(ctx, &usecase.ListDomainsReq{Page: req.GetPage(), Query: req.GetQuery()})
+func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListDomains_Req) (*bbscontentv1.ListDomains_Resp, error) {
+	resp, err := s.contentDomainUsecase.ListDomains(ctx, &usecase.ListDomainsReq{Page: req.GetPage(), Query: req.GetQuery()})
 	if err != nil {
 		return nil, err
 	}
-	var page *common.PageResponse
-	if response.Page != nil {
-		page = &common.PageResponse{Page: response.Page.Page, Size: response.Page.Size, Total: response.Page.Total}
+	var page *common.PageResp
+	if resp.Page != nil {
+		page = &common.PageResp{Page: resp.Page.Page, Size: resp.Page.Size, Total: resp.Page.Total}
 	}
-	rows := make([]*bbscontentv1.ListDomains_Response_Domain, 0, len(response.Rows))
-	for _, row := range response.Rows {
+	rows := make([]*bbscontentv1.ListDomains_Resp_Domain, 0, len(resp.Rows))
+	for _, row := range resp.Rows {
 		if row == nil {
 			rows = append(rows, nil)
 			continue
 		}
-		rows = append(rows, &bbscontentv1.ListDomains_Response_Domain{
+		rows = append(rows, &bbscontentv1.ListDomains_Resp_Domain{
 			Id:          row.ID,
 			Name:        row.Name,
 			Description: row.Description,
@@ -54,5 +54,5 @@ func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListD
 			UpdatedAt:   row.UpdatedAt,
 		})
 	}
-	return &bbscontentv1.ListDomains_Response{Page: page, Rows: rows}, nil
+	return &bbscontentv1.ListDomains_Resp{Page: page, Rows: rows}, nil
 }

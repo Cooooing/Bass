@@ -14,7 +14,7 @@ option go_package = "common/proto/gen/bbs/v1/content;content";
 // 评论接口。
 service CommentService {
   // 创建评论。
-  rpc Create(CreateComment.Request) returns (CreateComment.Response) {
+  rpc Create(CreateComment.Req) returns (CreateComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/create"
       body: "*"
@@ -22,7 +22,7 @@ service CommentService {
   }
 
   // 分页查询评论列表。
-  rpc List(ListComments.Request) returns (ListComments.Response) {
+  rpc List(ListComments.Req) returns (ListComments.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list"
       body: "*"
@@ -30,7 +30,7 @@ service CommentService {
   }
 
   // 分页查询评论楼层。
-  rpc ListThreads(ListCommentThreads.Request) returns (ListCommentThreads.Response) {
+  rpc ListThreads(ListCommentThreads.Req) returns (ListCommentThreads.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-threads"
       body: "*"
@@ -38,7 +38,7 @@ service CommentService {
   }
 
   // 分页查询评论回复。
-  rpc ListReplies(ListCommentReplies.Request) returns (ListCommentReplies.Response) {
+  rpc ListReplies(ListCommentReplies.Req) returns (ListCommentReplies.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-replies"
       body: "*"
@@ -46,7 +46,7 @@ service CommentService {
   }
 
   // 分页查询评论时间线。
-  rpc ListTimeline(ListCommentTimeline.Request) returns (ListCommentTimeline.Response) {
+  rpc ListTimeline(ListCommentTimeline.Req) returns (ListCommentTimeline.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-timeline"
       body: "*"
@@ -54,7 +54,7 @@ service CommentService {
   }
 
   // 点赞或取消点赞评论。
-  rpc Like(LikeComment.Request) returns (LikeComment.Response) {
+  rpc Like(LikeComment.Req) returns (LikeComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/like"
       body: "*"
@@ -62,7 +62,7 @@ service CommentService {
   }
 
   // 感谢或取消感谢评论。
-  rpc Thank(ThankComment.Request) returns (ThankComment.Response) {
+  rpc Thank(ThankComment.Req) returns (ThankComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/thank"
       body: "*"
@@ -72,14 +72,14 @@ service CommentService {
 
 // 分页查询评论楼层。
 message ListCommentThreads {
-  message Request {
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数
     int64 article_id = 2; // 文章 ID
     optional CommentOrder order = 3; // 顶层评论排序方式
     optional int32 reply_preview_limit = 4; // 每个楼层返回的回复预览数量
     option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
-  message Response {
+  message Resp {
 
     message CommentThread {
       CommentListItem root = 1; // 顶层评论
@@ -160,15 +160,15 @@ message ListCommentThreads {
       string created_at = 1000; // 创建时间
       string updated_at = 1001; // 更新时间
     }
-    .common.api.app.common.PageResponse page = 1; // 分页结果
+    .common.api.app.common.PageResp page = 1; // 分页结果
     repeated CommentThread rows = 2; // 评论楼层列表
   }
 }
 
 // 分页查询评论回复。
 message ListCommentReplies {
-  message Request {
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数
     int64 article_id = 2; // 文章 ID
     int64 parent_id = 3; // 顶层评论 ID
     optional CommentOrder order = 4; // 排序方式
@@ -177,7 +177,7 @@ message ListCommentReplies {
       required: "parent_id"
     };
   }
-  message Response {
+  message Resp {
 
     message CommentListItem {
 
@@ -251,20 +251,20 @@ message ListCommentReplies {
       string created_at = 1000; // 创建时间
       string updated_at = 1001; // 更新时间
     }
-    .common.api.app.common.PageResponse page = 1; // 分页结果
+    .common.api.app.common.PageResp page = 1; // 分页结果
     repeated CommentListItem rows = 2; // 回复列表
   }
 }
 
 // 分页查询评论时间线。
 message ListCommentTimeline {
-  message Request {
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数
     int64 article_id = 2; // 文章 ID
     optional CommentOrder order = 3; // 排序方式
     option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
-  message Response {
+  message Resp {
 
     message CommentListItem {
 
@@ -338,14 +338,14 @@ message ListCommentTimeline {
       string created_at = 1000; // 创建时间
       string updated_at = 1001; // 更新时间
     }
-    .common.api.app.common.PageResponse page = 1; // 分页结果
+    .common.api.app.common.PageResp page = 1; // 分页结果
     repeated CommentListItem rows = 2; // 评论列表
   }
 }
 
 // 创建评论。
 message CreateComment {
-  message Request {
+  message Req {
     int64 article_id = 1; // 文章 ID
     string content = 2; // 评论内容
     int64 reply_id = 3; // 回复的评论 ID
@@ -354,7 +354,7 @@ message CreateComment {
       required: "content"
     };
   }
-  message Response {
+  message Resp {
 
     message CommentDetail {
 
@@ -434,7 +434,7 @@ message CreateComment {
 
 // 分页查询评论列表。
 message ListComments {
-  message Request {
+  message Req {
 
     message CommentQuery {
 
@@ -448,10 +448,10 @@ message ListComments {
       optional ContentRestriction restriction = 9; // 管理限制
       repeated ContentRestriction restrictions = 10; // 管理限制列表
     }
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+    .common.api.app.common.PageReq page = 1; // 分页参数
     CommentQuery query = 2; // 查询条件
   }
-  message Response {
+  message Resp {
 
     message CommentListItem {
 
@@ -525,14 +525,14 @@ message ListComments {
       string created_at = 1000; // 创建时间
       string updated_at = 1001; // 更新时间
     }
-    .common.api.app.common.PageResponse page = 1; // 分页结果
+    .common.api.app.common.PageResp page = 1; // 分页结果
     repeated CommentListItem rows = 2; // 评论列表
   }
 }
 
 // 点赞或取消点赞评论。
 message LikeComment {
-  message Request {
+  message Req {
     int64 id = 1; // 评论 ID
     bool active = 2; // 是否点赞
     option (gnostic.openapi.v3.schema) = {
@@ -540,14 +540,14 @@ message LikeComment {
       required: "active"
     };
   }
-  message Response {
+  message Resp {
     bool liked = 1; // 是否已点赞
   }
 }
 
 // 感谢或取消感谢评论。
 message ThankComment {
-  message Request {
+  message Req {
     int64 id = 1; // 评论 ID
     bool active = 2; // 是否感谢
     option (gnostic.openapi.v3.schema) = {
@@ -555,7 +555,7 @@ message ThankComment {
       required: "active"
     };
   }
-  message Response {
+  message Resp {
     bool thanked = 1; // 是否已感谢
   }
 }

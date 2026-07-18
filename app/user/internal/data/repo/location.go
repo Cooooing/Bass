@@ -31,64 +31,64 @@ func (r *LocationRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *LocationRepo) Get(ctx context.Context, req *repo.LocationGetReq) (*repo.LocationGetResponse, error) {
+func (r *LocationRepo) Get(ctx context.Context, req *repo.LocationGetReq) (*model.Location, error) {
 	location, err := r.get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.LocationGetResponse{Location: location}, nil
+	return location, nil
 }
 
-func (r *LocationRepo) List(ctx context.Context, req *repo.LocationGetReq) (*repo.LocationListResponse, error) {
+func (r *LocationRepo) List(ctx context.Context, req *repo.LocationGetReq) ([]*model.Location, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.LocationListResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *LocationRepo) Map(ctx context.Context, req *repo.LocationGetReq) (*repo.LocationMapResponse, error) {
+func (r *LocationRepo) Map(ctx context.Context, req *repo.LocationGetReq) (map[int64]*model.Location, error) {
 	rows, err := r.mapRows(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.LocationMapResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *LocationRepo) Count(ctx context.Context, req *repo.LocationGetReq) (*repo.LocationCountResponse, error) {
+func (r *LocationRepo) Count(ctx context.Context, req *repo.LocationGetReq) (int, error) {
 	count, err := r.count(ctx, req)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.LocationCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *LocationRepo) Page(ctx context.Context, req *repo.LocationPageReq) (*repo.LocationPageResponse, error) {
-	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+func (r *LocationRepo) Page(ctx context.Context, req *repo.LocationPageReq) (*repo.LocationPageResp, error) {
+	rows, page, err := r.page(ctx, &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
-	resp := repo.PageResponse{}
+	resp := repo.PageResp{}
 	if page != nil {
-		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+		resp = repo.PageResp{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
 	}
-	return &repo.LocationPageResponse{Rows: rows, Page: resp}, nil
+	return &repo.LocationPageResp{Rows: rows, Page: resp}, nil
 }
 
-func (r *LocationRepo) UpsertByUserID(ctx context.Context, req *repo.LocationUpsertByUserIDReq) (*repo.LocationUpsertByUserIDResponse, error) {
-	location, err := r.upsertByUserID(ctx, req.Location)
+func (r *LocationRepo) UpsertByUserID(ctx context.Context, location *model.Location) (*model.Location, error) {
+	location, err := r.upsertByUserID(ctx, location)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.LocationUpsertByUserIDResponse{Location: location}, nil
+	return location, nil
 }
 
-func (r *LocationRepo) Update(ctx context.Context, req *repo.LocationUpdateReq) (*repo.LocationUpdateResponse, error) {
-	location, err := r.update(ctx, req.Location)
+func (r *LocationRepo) Update(ctx context.Context, location *model.Location) (*model.Location, error) {
+	location, err := r.update(ctx, location)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.LocationUpdateResponse{Location: location}, nil
+	return location, nil
 }
 func (r *LocationRepo) get(ctx context.Context, req *repo.LocationGetReq) (*model.Location, error) {
 	tx := r.getClient(ctx)
@@ -150,7 +150,7 @@ func (r *LocationRepo) count(ctx context.Context, req *repo.LocationGetReq) (int
 	return query.Count(ctx)
 }
 
-func (r *LocationRepo) page(ctx context.Context, page *common.PageRequest, req *repo.LocationGetReq) ([]*model.Location, *common.PageResponse, error) {
+func (r *LocationRepo) page(ctx context.Context, page *common.PageReq, req *repo.LocationGetReq) ([]*model.Location, *common.PageResp, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Location.Query()
@@ -176,7 +176,7 @@ func (r *LocationRepo) page(ctx context.Context, page *common.PageRequest, req *
 			City:     l.City,
 		})
 	}
-	return result, &common.PageResponse{
+	return result, &common.PageResp{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

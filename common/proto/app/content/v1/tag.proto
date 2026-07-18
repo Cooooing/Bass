@@ -10,16 +10,16 @@ option go_package = "common/proto/gen/content/v1;v1";
 
 // 标签服务
 service ContentTagService {
-  rpc BatchCreate(BatchCreateTags.Request) returns (BatchCreateTags.Response) {} // 批量创建标签
+  rpc BatchCreate(BatchCreateTags.Req) returns (BatchCreateTags.Resp) {} // 批量创建标签
 
-  rpc Update(UpdateTag.Request) returns (UpdateTag.Response) {} // 更新标签
+  rpc Update(UpdateTag.Req) returns (UpdateTag.Resp) {} // 更新标签
 
-  rpc List(ListTags.Request) returns (ListTags.Response) {} // 查询标签列表
-  rpc Page(PageTags.Request) returns (PageTags.Response) {} // 分页查询标签
+  rpc List(ListTags.Req) returns (ListTags.Resp) {} // 查询标签列表
+  rpc Page(PageTags.Req) returns (PageTags.Resp) {} // 分页查询标签
 }
 
 message BatchCreateTags {
-  message Request {repeated Tag tags = 1; // 标签信息列表
+  message Req {repeated Tag tags = 1; // 标签信息列表
     int64 user_id = 2; // 用户 ID
 
     message Tag {
@@ -29,7 +29,7 @@ message BatchCreateTags {
       optional string description = 4; // 标签描述
     }
   }
-  message Response {
+  message Resp {
 
     message Tag {
       optional google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -48,7 +48,7 @@ message BatchCreateTags {
 }
 
 message UpdateTag {
-  message Request {
+  message Req {
     int64 tag_id = 1; // 标签 ID
     Tag tag = 2; // 标签信息
     int64 user_id = 3; // 用户 ID
@@ -60,7 +60,7 @@ message UpdateTag {
       optional string description = 4; // 标签描述
     }
   }
-  message Response {
+  message Resp {
 
     message Tag {
       optional google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -79,7 +79,7 @@ message UpdateTag {
 }
 
 message ListTags {
-  message Request {
+  message Req {
 
     message TagQueryParams {
       repeated int64 ids = 1; // 标签 ID 列表
@@ -91,7 +91,7 @@ message ListTags {
     }
     TagQueryParams query = 1; // 查询参数
   }
-  message Response {
+  message Resp {
 
     message Tag {
       optional google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -110,7 +110,7 @@ message ListTags {
 }
 
 message PageTags {
-  message Request {
+  message Req {
 
     message TagQueryParams {
       repeated int64 ids = 1; // 标签 ID 列表
@@ -121,9 +121,9 @@ message PageTags {
       optional int64 domain_id = 6; // 领域 ID
     }
     TagQueryParams query = 1; // 查询参数
-    optional .common.api.app.common.PageRequest page = 2; // 分页参数
+    optional .common.api.app.common.PageReq page = 2; // 分页参数
   }
-  message Response {
+  message Resp {
 
     message Tag {
       optional google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -138,6 +138,6 @@ message PageTags {
       optional TagStatus status = 6; // 标签启停状态
     }
     repeated Tag rows = 1; // 标签列表
-    .common.api.app.common.PageResponse page = 2; // 分页信息
+    .common.api.app.common.PageResp page = 2; // 分页信息
   }
 }

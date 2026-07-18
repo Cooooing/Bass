@@ -6,13 +6,5 @@ import (
 )
 
 type AgentRunRepo interface {
-	CreateAgentRun(ctx context.Context, req *CreateAgentRunReq) (*CreateAgentRunResponse, error)
-}
-
-type CreateAgentRunReq struct {
-	Row *model.AgentRun
-}
-
-type CreateAgentRunResponse struct {
-	Row *model.AgentRun
+	CreateAgentRun(ctx context.Context, row *model.AgentRun) (*model.AgentRun, error)
 }

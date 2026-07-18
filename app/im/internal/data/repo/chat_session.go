@@ -31,8 +31,7 @@ func (r *ChatSessionRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *ChatSessionRepo) Save(ctx context.Context, req *repo.ChatSessionSaveReq) (*repo.ChatSessionSaveResponse, error) {
-	chatSession := req.ChatSession
+func (r *ChatSessionRepo) Save(ctx context.Context, chatSession *model.ChatSession) (*model.ChatSession, error) {
 	if (chatSession.ReceiverID == nil && chatSession.GroupID == nil) || (chatSession.ReceiverID != nil && chatSession.GroupID != nil) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_CHAT_SESSION_INVALID)
 	}
@@ -45,10 +44,10 @@ func (r *ChatSessionRepo) Save(ctx context.Context, req *repo.ChatSessionSaveReq
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ChatSessionSaveResponse{ChatSession: r.toModel(save)}, nil
+	return r.toModel(save), nil
 }
 
-func (r *ChatSessionRepo) UpdateLastReadMessage(ctx context.Context, req *repo.ChatSessionUpdateLastReadMessageReq) (*repo.ChatSessionUpdateLastReadMessageResponse, error) {
+func (r *ChatSessionRepo) UpdateLastReadMessage(ctx context.Context, req *repo.ChatSessionUpdateLastReadMessageReq) (*model.ChatSession, error) {
 	update, err := r.getClient(ctx).ChatSession.UpdateOneID(req.ChatSessionID).
 		SetLastReadMessageID(req.MessageID).
 		AddReadCount(req.OperationReadCount).
@@ -57,10 +56,10 @@ func (r *ChatSessionRepo) UpdateLastReadMessage(ctx context.Context, req *repo.C
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ChatSessionUpdateLastReadMessageResponse{ChatSession: r.toModel(update)}, nil
+	return r.toModel(update), nil
 }
 
-func (r *ChatSessionRepo) UpdateMuted(ctx context.Context, req *repo.ChatSessionUpdateMutedReq) (*repo.ChatSessionUpdateMutedResponse, error) {
+func (r *ChatSessionRepo) UpdateMuted(ctx context.Context, req *repo.ChatSessionUpdateMutedReq) (*model.ChatSession, error) {
 	update, err := r.getClient(ctx).ChatSession.UpdateOneID(req.ChatSessionID).
 		SetIsMuted(req.Muted).
 		SetUpdatedBy(req.UpdatedBy).
@@ -68,10 +67,10 @@ func (r *ChatSessionRepo) UpdateMuted(ctx context.Context, req *repo.ChatSession
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ChatSessionUpdateMutedResponse{ChatSession: r.toModel(update)}, nil
+	return r.toModel(update), nil
 }
 
-func (r *ChatSessionRepo) UpdatePinned(ctx context.Context, req *repo.ChatSessionUpdatePinnedReq) (*repo.ChatSessionUpdatePinnedResponse, error) {
+func (r *ChatSessionRepo) UpdatePinned(ctx context.Context, req *repo.ChatSessionUpdatePinnedReq) (*model.ChatSession, error) {
 	update, err := r.getClient(ctx).ChatSession.UpdateOneID(req.ChatSessionID).
 		SetIsPinned(req.Pinned).
 		SetUpdatedBy(req.UpdatedBy).
@@ -79,16 +78,12 @@ func (r *ChatSessionRepo) UpdatePinned(ctx context.Context, req *repo.ChatSessio
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ChatSessionUpdatePinnedResponse{ChatSession: r.toModel(update)}, nil
+	return r.toModel(update), nil
 }
 
-func (r *ChatSessionRepo) Get(ctx context.Context, req *repo.ChatSessionGetReq) (*repo.ChatSessionGetResponse, error) {
+func (r *ChatSessionRepo) Get(ctx context.Context, req *repo.ChatSessionQuery) (*model.ChatSession, error) {
 	query := r.getClient(ctx).ChatSession.Query()
-	var queryReq *repo.ChatSessionQuery
-	if req != nil {
-		queryReq = &req.ChatSessionQuery
-	}
-	query = r.getQuery(query, queryReq)
+	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_CHAT_SESSION_NOT_FOUND)
@@ -96,16 +91,12 @@ func (r *ChatSessionRepo) Get(ctx context.Context, req *repo.ChatSessionGetReq) 
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ChatSessionGetResponse{ChatSession: r.toModel(t)}, nil
+	return r.toModel(t), nil
 }
 
-func (r *ChatSessionRepo) List(ctx context.Context, req *repo.ChatSessionListReq) (*repo.ChatSessionListResponse, error) {
+func (r *ChatSessionRepo) List(ctx context.Context, req *repo.ChatSessionQuery) ([]*model.ChatSession, error) {
 	query := r.getClient(ctx).ChatSession.Query()
-	var queryReq *repo.ChatSessionQuery
-	if req != nil {
-		queryReq = &req.ChatSessionQuery
-	}
-	query = r.getQuery(query, queryReq)
+	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
@@ -114,50 +105,38 @@ func (r *ChatSessionRepo) List(ctx context.Context, req *repo.ChatSessionListReq
 	for _, item := range list {
 		chatSessions = append(chatSessions, r.toModel(item))
 	}
-	return &repo.ChatSessionListResponse{Rows: chatSessions}, nil
+	return chatSessions, nil
 }
 
-func (r *ChatSessionRepo) Map(ctx context.Context, req *repo.ChatSessionMapReq) (*repo.ChatSessionMapResponse, error) {
-	listReq := &repo.ChatSessionListReq{}
-	if req != nil {
-		listReq.ChatSessionQuery = req.ChatSessionQuery
-	}
-	listResp, err := r.List(ctx, listReq)
+func (r *ChatSessionRepo) Map(ctx context.Context, req *repo.ChatSessionQuery) (map[int64]*model.ChatSession, error) {
+	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[int64]*model.ChatSession, len(listResp.Rows))
-	for _, item := range listResp.Rows {
+	result := make(map[int64]*model.ChatSession, len(listResp))
+	for _, item := range listResp {
 		result[item.ID] = item
 	}
-	return &repo.ChatSessionMapResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *ChatSessionRepo) Count(ctx context.Context, req *repo.ChatSessionCountReq) (*repo.ChatSessionCountResponse, error) {
+func (r *ChatSessionRepo) Count(ctx context.Context, req *repo.ChatSessionQuery) (int, error) {
 	query := r.getClient(ctx).ChatSession.Query()
-	var queryReq *repo.ChatSessionQuery
-	if req != nil {
-		queryReq = &req.ChatSessionQuery
-	}
-	query = r.getQuery(query, queryReq)
+	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.ChatSessionCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *ChatSessionRepo) Page(ctx context.Context, req *repo.ChatSessionPageReq) (*repo.ChatSessionPageResponse, error) {
+func (r *ChatSessionRepo) Page(ctx context.Context, req *repo.ChatSessionQuery) (*repo.ChatSessionPageResp, error) {
 	page := normalizePage(nil)
 	if req != nil {
 		page = normalizePage(req.Page)
 	}
 	query := r.getClient(ctx).ChatSession.Query()
-	var queryReq *repo.ChatSessionQuery
-	if req != nil {
-		queryReq = &req.ChatSessionQuery
-	}
-	query = r.getQuery(query, queryReq)
+	query = r.getQuery(query, req)
 	countQuery := query.Clone()
 	count, err := countQuery.Count(ctx)
 	if err != nil {
@@ -171,9 +150,9 @@ func (r *ChatSessionRepo) Page(ctx context.Context, req *repo.ChatSessionPageReq
 	for _, item := range list {
 		chatSessions = append(chatSessions, r.toModel(item))
 	}
-	return &repo.ChatSessionPageResponse{
+	return &repo.ChatSessionPageResp{
 		Rows: chatSessions,
-		Page: &base.PageResponse{
+		Page: &base.PageResp{
 			Total: int64(count),
 			Size:  page.Size,
 			Page:  page.Page,

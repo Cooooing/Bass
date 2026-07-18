@@ -34,7 +34,7 @@ func (s *ChatGroupService) RegisterHttp(hs *http.Server) {
 }
 
 // Create 创建群组。
-func (s *ChatGroupService) Create(ctx context.Context, req *v1.CreateChatGroup_Request) (*v1.CreateChatGroup_Response, error) {
+func (s *ChatGroupService) Create(ctx context.Context, req *v1.CreateChatGroup_Req) (*v1.CreateChatGroup_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -47,11 +47,11 @@ func (s *ChatGroupService) Create(ctx context.Context, req *v1.CreateChatGroup_R
 	if err != nil {
 		return nil, err
 	}
-	return &v1.CreateChatGroup_Response{}, nil
+	return &v1.CreateChatGroup_Resp{}, nil
 }
 
 // Dismiss 解散群组。
-func (s *ChatGroupService) Dismiss(ctx context.Context, req *v1.DismissChatGroup_Request) (*v1.DismissChatGroup_Response, error) {
+func (s *ChatGroupService) Dismiss(ctx context.Context, req *v1.DismissChatGroup_Req) (*v1.DismissChatGroup_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -62,11 +62,11 @@ func (s *ChatGroupService) Dismiss(ctx context.Context, req *v1.DismissChatGroup
 	if err != nil {
 		return nil, err
 	}
-	return &v1.DismissChatGroup_Response{}, nil
+	return &v1.DismissChatGroup_Resp{}, nil
 }
 
 // List 查询群组列表。
-func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Request) (*v1.ListChatGroups_Response, error) {
+func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Req) (*v1.ListChatGroups_Resp, error) {
 	var ids []int64
 	var status *enum.ChatGroupStatus
 	if req.GetQuery() != nil {
@@ -87,10 +87,10 @@ func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Requ
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*v1.ListChatGroups_Response_ChatGroup, 0, len(resp.List))
+	rows := make([]*v1.ListChatGroups_Resp_ChatGroup, 0, len(resp.List))
 	for _, item := range resp.List {
 		status := enum.ChatGroupStatusMap.MustToProto(item.Status)
-		rows = append(rows, &v1.ListChatGroups_Response_ChatGroup{
+		rows = append(rows, &v1.ListChatGroups_Resp_ChatGroup{
 			Id:           item.ID,
 			Name:         item.Name,
 			Avatar:       item.Avatar,
@@ -99,8 +99,8 @@ func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Requ
 			MemberCount:  item.MemberCount,
 		})
 	}
-	return &v1.ListChatGroups_Response{
-		Page: &common.PageResponse{Page: uint32(resp.Page.Page), Size: uint32(resp.Page.Size), Total: uint32(resp.Page.Total)},
+	return &v1.ListChatGroups_Resp{
+		Page: &common.PageResp{Page: uint32(resp.Page.Page), Size: uint32(resp.Page.Size), Total: uint32(resp.Page.Total)},
 		Rows: rows,
 	}, nil
 }

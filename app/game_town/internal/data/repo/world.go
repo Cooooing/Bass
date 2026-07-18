@@ -19,7 +19,7 @@ func NewWorldRepo(db *gen.Client) bizrepo.WorldRepo {
 	return &WorldRepo{baseRepo: &baseRepo{db: db}}
 }
 
-func (r *WorldRepo) CreateWorld(ctx context.Context, req *bizrepo.CreateWorldReq) (*bizrepo.CreateWorldResponse, error) {
+func (r *WorldRepo) CreateWorld(ctx context.Context, req *bizrepo.CreateWorldReq) (*bizrepo.CreateWorldResp, error) {
 	tx, err := r.db.Tx(ctx)
 	if err != nil {
 		return nil, err
@@ -28,7 +28,11 @@ func (r *WorldRepo) CreateWorld(ctx context.Context, req *bizrepo.CreateWorldReq
 	client := tx.Client()
 	now := time.Now()
 	code := "w" + time.Now().Format("20060102150405")
-	worldRow, err := client.World.Create().SetCode(code).SetName(req.Generated.WorldName).SetDescription(req.Description).SetScale(req.Scale).SetStatus("generating").SetCreatorPlayerID(req.CreatorPlayerID).SetSeed(req.Seed).SetGenerationParams(map[string]any{"npc_count": float64(req.NpcCount), "location_count": float64(req.LocationCount), "style_tags": req.StyleTags, "agent_config_id": optionalNumber(req.AgentConfigID)}).SetGenerationSummary(req.Generated.WorldSummary).SetNillableAgentConfigID(req.AgentConfigID).Save(ctx)
+	var agentConfigID any
+	if req.AgentConfigID != nil {
+		agentConfigID = *req.AgentConfigID
+	}
+	worldRow, err := client.World.Create().SetCode(code).SetName(req.Generated.WorldName).SetDescription(req.Description).SetScale(req.Scale).SetStatus("generating").SetCreatorPlayerID(req.CreatorPlayerID).SetSeed(req.Seed).SetGenerationParams(map[string]any{"npc_count": float64(req.NpcCount), "location_count": float64(req.LocationCount), "style_tags": req.StyleTags, "agent_config_id": agentConfigID}).SetGenerationSummary(req.Generated.WorldSummary).SetNillableAgentConfigID(req.AgentConfigID).Save(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -90,21 +94,21 @@ func (r *WorldRepo) CreateWorld(ctx context.Context, req *bizrepo.CreateWorldReq
 	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
-	return &bizrepo.CreateWorldResponse{World: r.world(worldRow), DefaultLocation: r.location(defaultLocation), Npcs: npcs, State: r.state(stateRow), Events: events}, nil
+	return &bizrepo.CreateWorldResp{World: r.world(worldRow), DefaultLocation: r.location(defaultLocation), Npcs: npcs, State: r.state(stateRow), Events: events}, nil
 }
 
-func (r *WorldRepo) Get(ctx context.Context, req *bizrepo.WorldGetReq) (*bizrepo.WorldGetResponse, error) {
-	row, err := r.db.World.Query().Where(world.ID(req.ID), world.DeletedAtIsNil()).Only(ctx)
+func (r *WorldRepo) Get(ctx context.Context, id int64) (*model.World, error) {
+	row, err := r.db.World.Query().Where(world.ID(id), world.DeletedAtIsNil()).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.WorldGetResponse{Row: r.world(row)}, nil
+	return r.world(row), nil
 }
 
-func (r *WorldRepo) Page(ctx context.Context, req *bizrepo.WorldPageReq) (*bizrepo.WorldPageResponse, error) {
+func (r *WorldRepo) Page(ctx context.Context, req *bizrepo.WorldPageReq) (*bizrepo.WorldPageResp, error) {
 	pageReq := server.PageValid(req.Page)
 	queryReq := req.Query
 	query := r.db.World.Query().Where(world.DeletedAtIsNil())
@@ -126,5 +130,5 @@ func (r *WorldRepo) Page(ctx context.Context, req *bizrepo.WorldPageReq) (*bizre
 	for _, row := range rows {
 		result = append(result, r.world(row))
 	}
-	return &bizrepo.WorldPageResponse{Rows: result, Page: &common.PageResponse{Total: uint32(total), Page: pageReq.Page, Size: pageReq.Size}}, nil
+	return &bizrepo.WorldPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: pageReq.Page, Size: pageReq.Size}}, nil
 }

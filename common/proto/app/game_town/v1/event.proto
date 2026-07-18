@@ -10,18 +10,18 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/game_town/v1;v1";
 
 service GameTownEventService {
-  rpc Page(PageGameTownEvents.Request) returns (PageGameTownEvents.Response) {} // 分页查询事件。
+  rpc Page(PageGameTownEvents.Req) returns (PageGameTownEvents.Resp) {} // 分页查询事件。
 }
 
 message PageGameTownEvents {
-  message Request {
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数
     int64 world_id = 2; // 世界 ID
     optional int64 actor_player_id = 3; // 玩家 ID
     optional int64 target_npc_id = 4; // NPC ID
     optional GameTownEventType type = 5; // 事件类型
   }
-  message Response {
+  message Resp {
 
     message GameTownEvent {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -38,7 +38,7 @@ message PageGameTownEvents {
       google.protobuf.Struct metadata = 11; // 元数据
       google.protobuf.Timestamp occurred_at = 12; // 发生时间
     }
-    .common.api.app.common.PageResponse page = 1; // 分页结果
+    .common.api.app.common.PageResp page = 1; // 分页结果
     repeated GameTownEvent rows = 2; // 事件列表
   }
 }

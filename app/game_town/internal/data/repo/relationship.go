@@ -15,19 +15,18 @@ func NewRelationshipRepo(db *gen.Client) bizrepo.RelationshipRepo {
 	return &RelationshipRepo{baseRepo: &baseRepo{db: db}}
 }
 
-func (r *RelationshipRepo) GetRelationship(ctx context.Context, req *bizrepo.GetRelationshipReq) (*bizrepo.GetRelationshipResponse, error) {
+func (r *RelationshipRepo) GetRelationship(ctx context.Context, req *bizrepo.GetRelationshipReq) (*model.Relationship, error) {
 	row, err := r.db.Relationship.Query().Where(relationship.WorldID(req.WorldID), relationship.PlayerID(req.PlayerID), relationship.NpcID(req.NpcID)).Only(ctx)
 	if gen.IsNotFound(err) {
-		return &bizrepo.GetRelationshipResponse{Row: &model.Relationship{WorldID: req.WorldID, PlayerID: req.PlayerID, NpcID: req.NpcID, Affinity: 50, Trust: 50, Tension: 0, CustomMetrics: map[string]any{}}}, nil
+		return &model.Relationship{WorldID: req.WorldID, PlayerID: req.PlayerID, NpcID: req.NpcID, Affinity: 50, Trust: 50, Tension: 0, CustomMetrics: map[string]any{}}, nil
 	}
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.GetRelationshipResponse{Row: r.relationship(row)}, nil
+	return r.relationship(row), nil
 }
 
-func (r *RelationshipRepo) UpsertRelationship(ctx context.Context, req *bizrepo.UpsertRelationshipReq) (*bizrepo.UpsertRelationshipResponse, error) {
-	row := req.Row
+func (r *RelationshipRepo) UpsertRelationship(ctx context.Context, row *model.Relationship) (*model.Relationship, error) {
 	current, err := r.db.Relationship.Query().Where(relationship.WorldID(row.WorldID), relationship.PlayerID(row.PlayerID), relationship.NpcID(row.NpcID)).Only(ctx)
 	now := time.Now()
 	if gen.IsNotFound(err) {
@@ -35,7 +34,7 @@ func (r *RelationshipRepo) UpsertRelationship(ctx context.Context, req *bizrepo.
 		if err != nil {
 			return nil, err
 		}
-		return &bizrepo.UpsertRelationshipResponse{Row: r.relationship(created)}, nil
+		return r.relationship(created), nil
 	}
 	if err != nil {
 		return nil, err
@@ -44,5 +43,5 @@ func (r *RelationshipRepo) UpsertRelationship(ctx context.Context, req *bizrepo.
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.UpsertRelationshipResponse{Row: r.relationship(updated)}, nil
+	return r.relationship(updated), nil
 }

@@ -126,18 +126,10 @@ type CreateArticleReq struct {
 	Article *ArticleSave
 }
 
-type CreateArticleResponse struct {
-	Article *ArticleDetail
-}
-
 type UpdateArticleReq struct {
 	UserID    int64
 	ArticleID int64
 	Article   *ArticleSave
-}
-
-type UpdateArticleResponse struct {
-	Article *ArticleDetail
 }
 
 type UpdateDraftArticleReq struct {
@@ -146,24 +138,16 @@ type UpdateDraftArticleReq struct {
 	Article   *ArticleSave
 }
 
-type UpdateDraftArticleResponse struct {
-	Article *ArticleDetail
-}
-
 type PublishArticleReq struct {
 	UserID     int64
 	ArticleID  int64
 	Visibility int32
 }
 
-type PublishArticleResponse struct{}
-
 type DiscardDraftArticleReq struct {
 	UserID    int64
 	ArticleID int64
 }
-
-type DiscardDraftArticleResponse struct{}
 
 type ListArticlesReq struct {
 	UserID int64
@@ -171,8 +155,8 @@ type ListArticlesReq struct {
 	Query  *ArticleQuery
 }
 
-type ListArticlesResponse struct {
-	Page *PageResponse
+type ListArticlesResp struct {
+	Page *PageResp
 	Rows []*ArticleListItem
 }
 
@@ -181,25 +165,15 @@ type GetArticleReq struct {
 	ArticleID int64
 }
 
-type GetArticleResponse struct {
-	Article *ArticleDetail
-}
-
 type ViewArticleReq struct {
 	UserID    int64
 	ArticleID int64
 }
 
-type ViewArticleResponse struct{}
-
 type LikeArticleReq struct {
 	UserID    int64
 	ArticleID int64
 	Active    bool
-}
-
-type LikeArticleResponse struct {
-	Liked bool
 }
 
 type ThankArticleReq struct {
@@ -208,18 +182,10 @@ type ThankArticleReq struct {
 	Active    bool
 }
 
-type ThankArticleResponse struct {
-	Thanked bool
-}
-
 type CollectArticleReq struct {
 	UserID    int64
 	ArticleID int64
 	Active    bool
-}
-
-type CollectArticleResponse struct {
-	Collected bool
 }
 
 type WatchArticleReq struct {
@@ -228,17 +194,11 @@ type WatchArticleReq struct {
 	Active    bool
 }
 
-type WatchArticleResponse struct {
-	Watched bool
-}
-
 type RewardArticleReq struct {
 	UserID    int64
 	ArticleID int64
 	Points    int32
 }
-
-type RewardArticleResponse struct{}
 
 type AcceptAnswerArticleReq struct {
 	UserID    int64
@@ -246,21 +206,19 @@ type AcceptAnswerArticleReq struct {
 	CommentID int64
 }
 
-type AcceptAnswerArticleResponse struct{}
-
 type ContentArticleClient interface {
-	CreateArticle(ctx context.Context, req *CreateArticleReq) (*CreateArticleResponse, error)
-	UpdateArticle(ctx context.Context, req *UpdateArticleReq) (*UpdateArticleResponse, error)
-	UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (*UpdateDraftArticleResponse, error)
-	PublishArticle(ctx context.Context, req *PublishArticleReq) (*PublishArticleResponse, error)
-	DiscardDraftArticle(ctx context.Context, req *DiscardDraftArticleReq) (*DiscardDraftArticleResponse, error)
-	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResponse, error)
-	GetArticle(ctx context.Context, req *GetArticleReq) (*GetArticleResponse, error)
-	ViewArticle(ctx context.Context, req *ViewArticleReq) (*ViewArticleResponse, error)
-	LikeArticle(ctx context.Context, req *LikeArticleReq) (*LikeArticleResponse, error)
-	ThankArticle(ctx context.Context, req *ThankArticleReq) (*ThankArticleResponse, error)
-	CollectArticle(ctx context.Context, req *CollectArticleReq) (*CollectArticleResponse, error)
-	WatchArticle(ctx context.Context, req *WatchArticleReq) (*WatchArticleResponse, error)
-	RewardArticle(ctx context.Context, req *RewardArticleReq) (*RewardArticleResponse, error)
-	AcceptAnswerArticle(ctx context.Context, req *AcceptAnswerArticleReq) (*AcceptAnswerArticleResponse, error)
+	CreateArticle(ctx context.Context, req *CreateArticleReq) (*ArticleDetail, error)
+	UpdateArticle(ctx context.Context, req *UpdateArticleReq) (*ArticleDetail, error)
+	UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (*ArticleDetail, error)
+	PublishArticle(ctx context.Context, req *PublishArticleReq) error
+	DiscardDraftArticle(ctx context.Context, req *DiscardDraftArticleReq) error
+	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error)
+	GetArticle(ctx context.Context, req *GetArticleReq) (*ArticleDetail, error)
+	ViewArticle(ctx context.Context, req *ViewArticleReq) error
+	LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error)
+	ThankArticle(ctx context.Context, req *ThankArticleReq) (bool, error)
+	CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error)
+	WatchArticle(ctx context.Context, req *WatchArticleReq) (bool, error)
+	RewardArticle(ctx context.Context, req *RewardArticleReq) error
+	AcceptAnswerArticle(ctx context.Context, req *AcceptAnswerArticleReq) error
 }

@@ -60,10 +60,3 @@ func (r *baseRepo) session(row *gen.Session) *model.Session {
 func (r *baseRepo) agentRun(row *gen.AgentRun) *model.AgentRun {
 	return &model.AgentRun{ID: row.ID, WorldID: row.WorldID, AgentConfigID: row.AgentConfigID, RunType: row.RunType, CommandID: row.CommandID, EventID: row.EventID, NpcID: row.NpcID, Model: row.Model, InputJSON: row.InputJSON, OutputJSON: row.OutputJSON, Status: row.Status, ErrorSummary: row.ErrorSummary, LatencyMS: row.LatencyMs, CreatedAt: row.CreatedAt}
 }
-
-func optionalNumber(v *int64) any {
-	if v == nil {
-		return nil
-	}
-	return float64(*v)
-}

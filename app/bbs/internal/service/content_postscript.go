@@ -24,18 +24,18 @@ func (s *ContentPostscriptService) RegisterHttp(hs *http.Server) {
 	bbscontentv1.RegisterPostscriptServiceHTTPServer(hs, s)
 }
 
-func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.AddPostscript_Request) (*bbscontentv1.AddPostscript_Response, error) {
+func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.AddPostscript_Req) (*bbscontentv1.AddPostscript_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	response, err := s.contentPostscriptUsecase.AddPostscript(ctx, &usecase.AddPostscriptReq{UserID: userID, ArticleID: req.GetArticleId(), Content: req.GetContent()})
+	resp, err := s.contentPostscriptUsecase.AddPostscript(ctx, &usecase.AddPostscriptReq{UserID: userID, ArticleID: req.GetArticleId(), Content: req.GetContent()})
 	if err != nil {
 		return nil, err
 	}
-	var postscript *bbscontentv1.AddPostscript_Response_ArticlePostscript
-	if response.Postscript != nil {
-		postscript = &bbscontentv1.AddPostscript_Response_ArticlePostscript{Id: response.Postscript.ID, ArticleId: response.Postscript.ArticleID, Content: response.Postscript.Content, ContentRender: response.Postscript.ContentRender, Restriction: bbscontentv1.ContentRestriction(response.Postscript.Restriction), CreatedBy: response.Postscript.CreatedBy, UpdatedBy: response.Postscript.UpdatedBy, CreatedAt: response.Postscript.CreatedAt, UpdatedAt: response.Postscript.UpdatedAt}
+	var postscript *bbscontentv1.AddPostscript_Resp_ArticlePostscript
+	if resp != nil {
+		postscript = &bbscontentv1.AddPostscript_Resp_ArticlePostscript{Id: resp.ID, ArticleId: resp.ArticleID, Content: resp.Content, ContentRender: resp.ContentRender, Restriction: bbscontentv1.ContentRestriction(resp.Restriction), CreatedBy: resp.CreatedBy, UpdatedBy: resp.UpdatedBy, CreatedAt: resp.CreatedAt, UpdatedAt: resp.UpdatedAt}
 	}
-	return &bbscontentv1.AddPostscript_Response{Postscript: postscript}, nil
+	return &bbscontentv1.AddPostscript_Resp{Postscript: postscript}, nil
 }

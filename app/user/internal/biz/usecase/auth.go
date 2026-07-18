@@ -78,36 +78,28 @@ type CheckPasswordLoginReq struct {
 	Password string
 }
 
-type CheckPasswordLoginResponse struct {
-	Passed bool
-}
-
-func (s *AuthUsecase) CheckPasswordLogin(ctx context.Context, req *CheckPasswordLoginReq) (*CheckPasswordLoginResponse, error) {
+func (s *AuthUsecase) CheckPasswordLogin(ctx context.Context, req *CheckPasswordLoginReq) (bool, error) {
 	if req.Account == "" || req.Password == "" {
-		return &CheckPasswordLoginResponse{}, nil
+		return false, nil
 	}
-	existResp, err := s.accountRepo.ExistsByAccount(ctx, &repo.AccountExistsByAccountReq{Account: req.Account})
-	if err != nil || !existResp.Exists {
-		return &CheckPasswordLoginResponse{}, err
+	exists, err := s.accountRepo.ExistsByAccount(ctx, req.Account)
+	if err != nil || !exists {
+		return false, err
 	}
-	userResp, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{Account: &req.Account})
+	user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{Account: &req.Account})
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &CheckPasswordLoginResponse{Passed: str.VerifyPassword(userResp.Account.Password, req.Password)}, nil
+	return str.VerifyPassword(user.Password, req.Password), nil
 }
 
-type StartEmailRegistrationReq struct {
-	Account *model.Account
-}
-
-type StartEmailRegistrationResponse struct {
+type StartEmailRegistrationResp struct {
 	Code  string
 	Token string
 }
 
-func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, req *StartEmailRegistrationReq) (*StartEmailRegistrationResponse, error) {
-	u := req.Account
+func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, account *model.Account) (*StartEmailRegistrationResp, error) {
+	u := account
 	if u == nil || u.Email == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -130,7 +122,7 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, req *StartEmai
 	if err != nil {
 		return nil, err
 	}
-	_, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+	err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE,
@@ -149,7 +141,7 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, req *StartEmai
 		}
 		return nil, err
 	}
-	return &StartEmailRegistrationResponse{Code: code, Token: token}, nil
+	return &StartEmailRegistrationResp{Code: code, Token: token}, nil
 }
 
 type CheckEmailRegistrationCodeReq struct {
@@ -157,21 +149,17 @@ type CheckEmailRegistrationCodeReq struct {
 	Code      string
 }
 
-type CheckEmailRegistrationCodeResponse struct {
-	Passed bool
-}
-
-func (s *AuthUsecase) CheckEmailRegistrationCode(ctx context.Context, req *CheckEmailRegistrationCodeReq) (*CheckEmailRegistrationCodeResponse, error) {
+func (s *AuthUsecase) CheckEmailRegistrationCode(ctx context.Context, req *CheckEmailRegistrationCodeReq) (bool, error) {
 	token, err := s.tokenUsecase.VerityCodeAccountTokenGen.Parse(req.CodeToken)
 	if err != nil {
-		return &CheckEmailRegistrationCodeResponse{}, nil
+		return false, nil
 	}
 	saveUser := &registerAccountCache{}
 	verityCode, err := s.tokenCache.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterEmail, token.Account, saveUser)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &CheckEmailRegistrationCodeResponse{Passed: verityCode == req.Code && saveUser.PasswordHash != ""}, nil
+	return verityCode == req.Code && saveUser.PasswordHash != "", nil
 }
 
 type VerifyEmailRegistrationReq struct {
@@ -200,7 +188,7 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEm
 			Password: saveUser.PasswordHash,
 			Email:    saveUser.Email,
 		}
-		createdResp, err := s.accountRepo.Create(ctx, &repo.AccountCreateReq{Account: user})
+		created, err := s.accountRepo.Create(ctx, user)
 		if err != nil {
 			return err
 		}
@@ -208,7 +196,7 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEm
 		if err != nil {
 			return err
 		}
-		return s.saveRegisterOutbox(ctx, createdResp.Account.ID)
+		return s.saveRegisterOutbox(ctx, created.ID)
 	})
 	if err != nil {
 		return err
@@ -216,17 +204,13 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEm
 	return nil
 }
 
-type StartPhoneRegistrationReq struct {
-	Account *model.Account
-}
-
-type StartPhoneRegistrationResponse struct {
+type StartPhoneRegistrationResp struct {
 	Code  string
 	Token string
 }
 
-func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, req *StartPhoneRegistrationReq) (*StartPhoneRegistrationResponse, error) {
-	u := req.Account
+func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, account *model.Account) (*StartPhoneRegistrationResp, error) {
+	u := account
 	if u == nil || u.Phone == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -249,7 +233,7 @@ func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, req *StartPhon
 	if err != nil {
 		return nil, err
 	}
-	_, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+	err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_PHONE_VERIFICATION_CODE,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_PHONE_VERIFICATION_CODE,
@@ -268,7 +252,7 @@ func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, req *StartPhon
 		}
 		return nil, err
 	}
-	return &StartPhoneRegistrationResponse{Code: code, Token: token}, nil
+	return &StartPhoneRegistrationResp{Code: code, Token: token}, nil
 }
 
 type CheckPhoneRegistrationCodeReq struct {
@@ -276,21 +260,17 @@ type CheckPhoneRegistrationCodeReq struct {
 	Code      string
 }
 
-type CheckPhoneRegistrationCodeResponse struct {
-	Passed bool
-}
-
-func (s *AuthUsecase) CheckPhoneRegistrationCode(ctx context.Context, req *CheckPhoneRegistrationCodeReq) (*CheckPhoneRegistrationCodeResponse, error) {
+func (s *AuthUsecase) CheckPhoneRegistrationCode(ctx context.Context, req *CheckPhoneRegistrationCodeReq) (bool, error) {
 	token, err := s.tokenUsecase.VerityCodeAccountTokenGen.Parse(req.CodeToken)
 	if err != nil {
-		return &CheckPhoneRegistrationCodeResponse{}, nil
+		return false, nil
 	}
 	saveUser := &registerAccountCache{}
 	verityCode, err := s.tokenCache.GetVerityCode(ctx, constant.VerifyCodeTypeRegisterPhone, token.Account, saveUser)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &CheckPhoneRegistrationCodeResponse{Passed: verityCode == req.Code && saveUser.PasswordHash != ""}, nil
+	return verityCode == req.Code && saveUser.PasswordHash != "", nil
 }
 
 type VerifyPhoneRegistrationReq struct {
@@ -319,7 +299,7 @@ func (s *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, req *VerifyPh
 			Password: saveUser.PasswordHash,
 			Phone:    saveUser.Phone,
 		}
-		createdResp, err := s.accountRepo.Create(ctx, &repo.AccountCreateReq{Account: user})
+		created, err := s.accountRepo.Create(ctx, user)
 		if err != nil {
 			return err
 		}
@@ -327,7 +307,7 @@ func (s *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, req *VerifyPh
 		if err != nil {
 			return err
 		}
-		return s.saveRegisterOutbox(ctx, createdResp.Account.ID)
+		return s.saveRegisterOutbox(ctx, created.ID)
 	})
 	if err != nil {
 		return err
@@ -341,12 +321,12 @@ type LoginByPasswordReq struct {
 	LoginContext *model.LoginContext
 }
 
-type LoginByPasswordResponse struct {
+type LoginByPasswordResp struct {
 	Token   string
 	Account *model.Account
 }
 
-func (s *AuthUsecase) LoginByPassword(ctx context.Context, req *LoginByPasswordReq) (*LoginByPasswordResponse, error) {
+func (s *AuthUsecase) LoginByPassword(ctx context.Context, req *LoginByPasswordReq) (*LoginByPasswordResp, error) {
 	var loginUserID *int64
 	loginStatus := enum.LoginStatusFailed
 	defer func() {
@@ -381,18 +361,17 @@ func (s *AuthUsecase) LoginByPassword(ctx context.Context, req *LoginByPasswordR
 				loginLog.DeviceID = new(req.LoginContext.DeviceID)
 			}
 		}
-		if _, logErr := s.loginLogRepo.Create(ctx, &repo.LoginLogCreateReq{Log: loginLog}); logErr != nil {
+		if _, logErr := s.loginLogRepo.Create(ctx, loginLog); logErr != nil {
 			s.logger.WarnContext(ctx, "record login log failed", constant.LogFieldErr, logErr)
 		}
 	}()
 
-	userResp, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{Account: &req.Account})
+	user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{Account: &req.Account})
 	if err != nil {
 		return nil, err
 	}
-	user := userResp.Account
 	loginUserID = new(user.ID)
-	if !str.VerifyPassword(userResp.Account.Password, req.Password) {
+	if !str.VerifyPassword(user.Password, req.Password) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
 	}
 
@@ -407,12 +386,11 @@ func (s *AuthUsecase) LoginByPassword(ctx context.Context, req *LoginByPasswordR
 	if user.Nickname != nil {
 		saveUser.Nickname = *user.Nickname
 	}
-	prefsResp, err := s.prefsRepo.Get(ctx, &repo.PreferencesGetReq{UserID: &user.ID})
+	prefs, err := s.prefsRepo.Get(ctx, &repo.PreferencesGetReq{UserID: &user.ID})
 	if err != nil {
 		return nil, err
 	}
-	if prefsResp.Preferences != nil {
-		prefs := prefsResp.Preferences
+	if prefs != nil {
 		if prefs.Language != nil {
 			saveUser.Language = enum.LanguageMap.MustToProto(*prefs.Language)
 		}
@@ -437,7 +415,7 @@ func (s *AuthUsecase) LoginByPassword(ctx context.Context, req *LoginByPasswordR
 		loginPayload.RequestId = req.LoginContext.RequestID
 		loginPayload.Ip = req.LoginContext.IP
 	}
-	if _, outboxErr := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+	if outboxErr := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_LOGIN,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_LOGIN,
@@ -450,16 +428,12 @@ func (s *AuthUsecase) LoginByPassword(ctx context.Context, req *LoginByPasswordR
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INTERNAL).WithCause(outboxErr)
 	}
 
-	return &LoginByPasswordResponse{Token: token, Account: user}, nil
+	return &LoginByPasswordResp{Token: token, Account: user}, nil
 }
 
-type LogoutReq struct {
-	Token string
-}
-
-func (s *AuthUsecase) Logout(ctx context.Context, req *LogoutReq) error {
-	tokenUser, getErr := s.tokenCache.GetToken(ctx, req.Token)
-	err := s.tokenCache.DelToken(ctx, req.Token)
+func (s *AuthUsecase) Logout(ctx context.Context, token string) error {
+	tokenUser, getErr := s.tokenCache.GetToken(ctx, token)
+	err := s.tokenCache.DelToken(ctx, token)
 	if err != nil {
 		return err
 	}
@@ -468,7 +442,7 @@ func (s *AuthUsecase) Logout(ctx context.Context, req *LogoutReq) error {
 		return nil
 	}
 	if tokenUser != nil {
-		if _, outboxErr := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		if outboxErr := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_LOGOUT,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_LOGOUT,
@@ -487,34 +461,26 @@ func (s *AuthUsecase) Logout(ctx context.Context, req *LogoutReq) error {
 	return nil
 }
 
-type ParseTokenReq struct {
-	Token string
-}
-
-type ParseTokenResponse struct {
-	User *commonModel.User
-}
-
-func (s *AuthUsecase) ParseToken(ctx context.Context, req *ParseTokenReq) (*ParseTokenResponse, error) {
-	if req.Token == "" {
+func (s *AuthUsecase) ParseToken(ctx context.Context, token string) (*commonModel.User, error) {
+	if token == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
-	tokenData, err := s.tokenUsecase.TokenGen.Parse(req.Token)
+	tokenData, err := s.tokenUsecase.TokenGen.Parse(token)
 	if err != nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID).WithCause(err)
 	}
-	user, err := s.tokenCache.GetToken(ctx, req.Token)
+	user, err := s.tokenCache.GetToken(ctx, token)
 	if err != nil {
 		return nil, err
 	}
 	if user == nil || user.ID != tokenData.Id {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
-	return &ParseTokenResponse{User: user}, nil
+	return user, nil
 }
 
 func (s *AuthUsecase) saveRegisterOutbox(ctx context.Context, userID int64) error {
-	_, err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+	err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_REGISTER,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_REGISTER,

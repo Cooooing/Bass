@@ -14,8 +14,8 @@ func NewWorldMetricDefinitionRepo(db *gen.Client) bizrepo.WorldMetricDefinitionR
 	return &WorldMetricDefinitionRepo{baseRepo: &baseRepo{db: db}}
 }
 
-func (r *WorldMetricDefinitionRepo) ListWorldMetrics(ctx context.Context, req *bizrepo.ListWorldMetricsReq) (*bizrepo.ListWorldMetricsResponse, error) {
-	rows, err := r.db.WorldMetricDefinition.Query().Where(worldmetricdefinition.WorldID(req.WorldID)).Order(worldmetricdefinition.ByID()).All(ctx)
+func (r *WorldMetricDefinitionRepo) ListWorldMetrics(ctx context.Context, worldID int64) ([]*model.WorldMetricDefinition, error) {
+	rows, err := r.db.WorldMetricDefinition.Query().Where(worldmetricdefinition.WorldID(worldID)).Order(worldmetricdefinition.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -23,5 +23,5 @@ func (r *WorldMetricDefinitionRepo) ListWorldMetrics(ctx context.Context, req *b
 	for _, row := range rows {
 		result = append(result, r.metric(row))
 	}
-	return &bizrepo.ListWorldMetricsResponse{Rows: result}, nil
+	return result, nil
 }

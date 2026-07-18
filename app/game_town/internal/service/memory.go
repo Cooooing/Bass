@@ -22,7 +22,7 @@ func NewMemoryService(gameUsecase *usecase.GameUsecase) *MemoryService {
 }
 func (s *MemoryService) RegisterGrpc(gs *grpc.Server) { v1.RegisterGameTownMemoryServiceServer(gs, s) }
 func (s *MemoryService) RegisterHttp(hs *http.Server) {}
-func (s *MemoryService) List(ctx context.Context, req *v1.ListGameTownMemories_Request) (*v1.ListGameTownMemories_Response, error) {
+func (s *MemoryService) List(ctx context.Context, req *v1.ListGameTownMemories_Req) (*v1.ListGameTownMemories_Resp, error) {
 	var typ *string
 	if req.Type != nil && *req.Type != v1.GameTownMemoryType_GAME_TOWN_MEMORY_TYPE_UNSPECIFIED {
 		value, ok := gameenum.MemoryTypeMap.ToEnum(*req.Type)
@@ -31,7 +31,7 @@ func (s *MemoryService) List(ctx context.Context, req *v1.ListGameTownMemories_R
 			typ = &typeValue
 		}
 	}
-	listResponse, err := s.gameUsecase.ListMemories(ctx, &usecase.ListMemoriesReq{WorldID: req.GetWorldId(), PlayerID: req.GetPlayerId(), NpcID: req.NpcId, Type: typ})
+	rows, err := s.gameUsecase.ListMemories(ctx, &usecase.ListMemoriesReq{WorldID: req.GetWorldId(), PlayerID: req.GetPlayerId(), NpcID: req.NpcId, Type: typ})
 	if err != nil {
 		return nil, err
 	}
@@ -41,13 +41,13 @@ func (s *MemoryService) List(ctx context.Context, req *v1.ListGameTownMemories_R
 		}
 		return timestamppb.New(*t)
 	}
-	reply := &v1.ListGameTownMemories_Response{Rows: make([]*v1.ListGameTownMemories_Response_GameTownMemory, 0, len(listResponse.Rows))}
-	for _, row := range listResponse.Rows {
+	reply := &v1.ListGameTownMemories_Resp{Rows: make([]*v1.ListGameTownMemories_Resp_GameTownMemory, 0, len(rows))}
+	for _, row := range rows {
 		if row == nil {
 			reply.Rows = append(reply.Rows, nil)
 			continue
 		}
-		reply.Rows = append(reply.Rows, &v1.ListGameTownMemories_Response_GameTownMemory{
+		reply.Rows = append(reply.Rows, &v1.ListGameTownMemories_Resp_GameTownMemory{
 			CreatedAt:      timestamp(row.CreatedAt),
 			UpdatedAt:      timestamp(row.UpdatedAt),
 			Id:             row.ID,

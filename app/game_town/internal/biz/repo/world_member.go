@@ -6,9 +6,9 @@ import (
 )
 
 type WorldMemberRepo interface {
-	JoinWorld(ctx context.Context, req *JoinWorldReq) (*JoinWorldResponse, error)
-	GetMember(ctx context.Context, req *GetMemberReq) (*GetMemberResponse, error)
-	MoveMember(ctx context.Context, req *MoveMemberReq) (*MoveMemberResponse, error)
+	JoinWorld(ctx context.Context, req *JoinWorldReq) (*JoinWorldResp, error)
+	GetMember(ctx context.Context, req *GetMemberReq) (*model.WorldMember, error)
+	MoveMember(ctx context.Context, req *MoveMemberReq) (*model.WorldMember, error)
 }
 
 type JoinWorldReq struct {
@@ -16,7 +16,7 @@ type JoinWorldReq struct {
 	WorldCode string
 }
 
-type JoinWorldResponse struct {
+type JoinWorldResp struct {
 	World    *model.World
 	Member   *model.WorldMember
 	Location *model.Location
@@ -27,16 +27,8 @@ type GetMemberReq struct {
 	PlayerID int64
 }
 
-type GetMemberResponse struct {
-	Row *model.WorldMember
-}
-
 type MoveMemberReq struct {
 	WorldID    int64
 	PlayerID   int64
 	LocationID int64
-}
-
-type MoveMemberResponse struct {
-	Row *model.WorldMember
 }

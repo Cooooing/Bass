@@ -14,34 +14,10 @@ func NewPrivacySettingUsecase(privacySettingRepo repo.PrivacySettingRepo) *Priva
 	return &PrivacySettingUsecase{privacySettingRepo: privacySettingRepo}
 }
 
-type GetPrivacySettingByUserIDReq struct {
-	UserID int64
+func (s *PrivacySettingUsecase) GetByUserID(ctx context.Context, userID int64) (*model.PrivacySetting, error) {
+	return s.privacySettingRepo.Get(ctx, &repo.PrivacySettingGetReq{UserID: &userID})
 }
 
-type GetPrivacySettingByUserIDResponse struct {
-	PrivacySetting *model.PrivacySetting
-}
-
-func (s *PrivacySettingUsecase) GetByUserID(ctx context.Context, req *GetPrivacySettingByUserIDReq) (*GetPrivacySettingByUserIDResponse, error) {
-	privacySettingResp, err := s.privacySettingRepo.Get(ctx, &repo.PrivacySettingGetReq{UserID: &req.UserID})
-	if err != nil {
-		return nil, err
-	}
-	return &GetPrivacySettingByUserIDResponse{PrivacySetting: privacySettingResp.PrivacySetting}, nil
-}
-
-type UpsertPrivacySettingByUserIDReq struct {
-	PrivacySetting *model.PrivacySetting
-}
-
-type UpsertPrivacySettingByUserIDResponse struct {
-	PrivacySetting *model.PrivacySetting
-}
-
-func (s *PrivacySettingUsecase) UpsertByUserID(ctx context.Context, req *UpsertPrivacySettingByUserIDReq) (*UpsertPrivacySettingByUserIDResponse, error) {
-	privacySettingResp, err := s.privacySettingRepo.UpsertByUserID(ctx, &repo.PrivacySettingUpsertByUserIDReq{PrivacySetting: req.PrivacySetting})
-	if err != nil {
-		return nil, err
-	}
-	return &UpsertPrivacySettingByUserIDResponse{PrivacySetting: privacySettingResp.PrivacySetting}, nil
+func (s *PrivacySettingUsecase) UpsertByUserID(ctx context.Context, setting *model.PrivacySetting) (*model.PrivacySetting, error) {
+	return s.privacySettingRepo.UpsertByUserID(ctx, setting)
 }

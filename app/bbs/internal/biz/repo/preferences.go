@@ -3,8 +3,8 @@ package repo
 import "context"
 
 type PreferencesClient interface {
-	GetCurrentPreferences(ctx context.Context, req *GetCurrentPreferencesReq) (*GetCurrentPreferencesResponse, error)
-	UpdateCurrentPreferences(ctx context.Context, req *UpdateCurrentPreferencesReq) (*UpdateCurrentPreferencesResponse, error)
+	GetCurrentPreferences(ctx context.Context, userID int64) (*Preference, error)
+	UpdateCurrentPreferences(ctx context.Context, req *UpdateCurrentPreferencesReq) (*Preference, error)
 }
 
 type Preference struct {
@@ -15,22 +15,10 @@ type Preference struct {
 	MobileTheme *string
 }
 
-type GetCurrentPreferencesReq struct {
-	UserID int64
-}
-
-type GetCurrentPreferencesResponse struct {
-	Preference *Preference
-}
-
 type UpdateCurrentPreferencesReq struct {
 	UserID      int64
 	Timezone    *string
 	Theme       *string
 	MobileTheme *string
 	Language    *int32
-}
-
-type UpdateCurrentPreferencesResponse struct {
-	Preference *Preference
 }

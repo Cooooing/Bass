@@ -27,7 +27,7 @@ type ContentArticleDetail = repo.ArticleDetail
 
 type ContentAccountProfile = repo.AccountProfile
 
-type ContentPageResponse = repo.PageResponse
+type ContentPageResp = repo.PageResp
 type ContentArticleSave struct {
 	Title         string
 	Content       string
@@ -46,19 +46,15 @@ type CreateArticleReq struct {
 	Article *ContentArticleSave
 }
 
-type CreateArticleResponse struct {
-	Article *ContentArticleDetail
-}
-
-func (u *ContentArticleUsecase) CreateArticle(ctx context.Context, req *CreateArticleReq) (*CreateArticleResponse, error) {
+func (u *ContentArticleUsecase) CreateArticle(ctx context.Context, req *CreateArticleReq) (*ContentArticleDetail, error) {
 	if req == nil || req.Article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	article := req.Article
-	if err := validateArticleType(article.Type, article.BountyPoints); err != nil {
+	if err := u.validateArticleType(article.Type, article.BountyPoints); err != nil {
 		return nil, err
 	}
-	response, err := u.contentArticleClient.CreateArticle(ctx, &repo.CreateArticleReq{
+	resp, err := u.contentArticleClient.CreateArticle(ctx, &repo.CreateArticleReq{
 		UserID: req.UserID,
 		Article: &repo.ArticleSave{
 			Title:         article.Title,
@@ -76,7 +72,7 @@ func (u *ContentArticleUsecase) CreateArticle(ctx context.Context, req *CreateAr
 	if err != nil {
 		return nil, err
 	}
-	return &CreateArticleResponse{Article: response.Article}, nil
+	return resp, nil
 }
 
 type UpdateArticleReq struct {
@@ -85,19 +81,15 @@ type UpdateArticleReq struct {
 	Article   *ContentArticleSave
 }
 
-type UpdateArticleResponse struct {
-	Article *ContentArticleDetail
-}
-
-func (u *ContentArticleUsecase) UpdateArticle(ctx context.Context, req *UpdateArticleReq) (*UpdateArticleResponse, error) {
+func (u *ContentArticleUsecase) UpdateArticle(ctx context.Context, req *UpdateArticleReq) (*ContentArticleDetail, error) {
 	if req == nil || req.Article == nil || req.ArticleID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	article := req.Article
-	if err := validateArticleType(article.Type, article.BountyPoints); err != nil {
+	if err := u.validateArticleType(article.Type, article.BountyPoints); err != nil {
 		return nil, err
 	}
-	response, err := u.contentArticleClient.UpdateArticle(ctx, &repo.UpdateArticleReq{
+	resp, err := u.contentArticleClient.UpdateArticle(ctx, &repo.UpdateArticleReq{
 		UserID:    req.UserID,
 		ArticleID: req.ArticleID,
 		Article: &repo.ArticleSave{
@@ -116,7 +108,7 @@ func (u *ContentArticleUsecase) UpdateArticle(ctx context.Context, req *UpdateAr
 	if err != nil {
 		return nil, err
 	}
-	return &UpdateArticleResponse{Article: response.Article}, nil
+	return resp, nil
 }
 
 type UpdateDraftArticleReq struct {
@@ -125,11 +117,7 @@ type UpdateDraftArticleReq struct {
 	Article   *ContentArticleSave
 }
 
-type UpdateDraftArticleResponse struct {
-	Article *ContentArticleDetail
-}
-
-func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (*UpdateDraftArticleResponse, error) {
+func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (*ContentArticleDetail, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -137,7 +125,7 @@ func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *Upd
 	if err != nil {
 		return nil, err
 	}
-	return &UpdateDraftArticleResponse{Article: reply.Article}, nil
+	return reply, nil
 }
 
 type PublishArticleReq struct {
@@ -158,8 +146,7 @@ func (u *ContentArticleUsecase) PublishArticle(ctx context.Context, req *Publish
 	default:
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
 	}
-	_, err := u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Visibility: int32(visibility)})
-	return err
+	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Visibility: int32(visibility)})
 }
 
 type DiscardDraftArticleReq struct {
@@ -171,22 +158,21 @@ func (u *ContentArticleUsecase) DiscardDraftArticle(ctx context.Context, req *Di
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	_, err := u.contentArticleClient.DiscardDraftArticle(ctx, &repo.DiscardDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
-	return err
+	return u.contentArticleClient.DiscardDraftArticle(ctx, &repo.DiscardDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
 }
 
 type ListArticlesReq struct {
 	UserID int64
-	Page   *common.PageRequest
-	Query  *bbscontentv1.ListArticles_Request_ArticleQuery
+	Page   *common.PageReq
+	Query  *bbscontentv1.ListArticles_Req_ArticleQuery
 }
 
-type ListArticlesResponse struct {
-	Page *ContentPageResponse
+type ListArticlesResp struct {
+	Page *ContentPageResp
 	Rows []*ContentArticleListItem
 }
 
-func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResponse, error) {
+func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error) {
 	if req == nil {
 		req = &ListArticlesReq{}
 	}
@@ -225,11 +211,11 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 			query.Visibilities = append(query.Visibilities, int32(item))
 		}
 	}
-	response, err := u.contentArticleClient.ListArticles(ctx, &repo.ListArticlesReq{UserID: req.UserID, Page: page, Query: query})
+	resp, err := u.contentArticleClient.ListArticles(ctx, &repo.ListArticlesReq{UserID: req.UserID, Page: page, Query: query})
 	if err != nil {
 		return nil, err
 	}
-	return &ListArticlesResponse{Page: response.Page, Rows: response.Rows}, nil
+	return &ListArticlesResp{Page: resp.Page, Rows: resp.Rows}, nil
 }
 
 type GetArticleReq struct {
@@ -237,19 +223,15 @@ type GetArticleReq struct {
 	ArticleID int64
 }
 
-type GetArticleResponse struct {
-	Article *ContentArticleDetail
-}
-
-func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleReq) (*GetArticleResponse, error) {
+func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleReq) (*ContentArticleDetail, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	response, err := u.contentArticleClient.GetArticle(ctx, &repo.GetArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
+	resp, err := u.contentArticleClient.GetArticle(ctx, &repo.GetArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
 	if err != nil {
 		return nil, err
 	}
-	return &GetArticleResponse{Article: response.Article}, nil
+	return resp, nil
 }
 
 type ViewArticleReq struct {
@@ -261,8 +243,7 @@ func (u *ContentArticleUsecase) ViewArticle(ctx context.Context, req *ViewArticl
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	_, err := u.contentArticleClient.ViewArticle(ctx, &repo.ViewArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
-	return err
+	return u.contentArticleClient.ViewArticle(ctx, &repo.ViewArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
 }
 
 type LikeArticleReq struct {
@@ -271,19 +252,15 @@ type LikeArticleReq struct {
 	Active    bool
 }
 
-type LikeArticleResponse struct {
-	Liked bool
-}
-
-func (u *ContentArticleUsecase) LikeArticle(ctx context.Context, req *LikeArticleReq) (*LikeArticleResponse, error) {
+func (u *ContentArticleUsecase) LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error) {
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	response, err := u.contentArticleClient.LikeArticle(ctx, &repo.LikeArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
+	resp, err := u.contentArticleClient.LikeArticle(ctx, &repo.LikeArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &LikeArticleResponse{Liked: response.Liked}, nil
+	return resp, nil
 }
 
 type ThankArticleReq struct {
@@ -292,19 +269,15 @@ type ThankArticleReq struct {
 	Active    bool
 }
 
-type ThankArticleResponse struct {
-	Thanked bool
-}
-
-func (u *ContentArticleUsecase) ThankArticle(ctx context.Context, req *ThankArticleReq) (*ThankArticleResponse, error) {
+func (u *ContentArticleUsecase) ThankArticle(ctx context.Context, req *ThankArticleReq) (bool, error) {
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	response, err := u.contentArticleClient.ThankArticle(ctx, &repo.ThankArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
+	resp, err := u.contentArticleClient.ThankArticle(ctx, &repo.ThankArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &ThankArticleResponse{Thanked: response.Thanked}, nil
+	return resp, nil
 }
 
 type CollectArticleReq struct {
@@ -313,19 +286,15 @@ type CollectArticleReq struct {
 	Active    bool
 }
 
-type CollectArticleResponse struct {
-	Collected bool
-}
-
-func (u *ContentArticleUsecase) CollectArticle(ctx context.Context, req *CollectArticleReq) (*CollectArticleResponse, error) {
+func (u *ContentArticleUsecase) CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error) {
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	response, err := u.contentArticleClient.CollectArticle(ctx, &repo.CollectArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
+	resp, err := u.contentArticleClient.CollectArticle(ctx, &repo.CollectArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &CollectArticleResponse{Collected: response.Collected}, nil
+	return resp, nil
 }
 
 type WatchArticleReq struct {
@@ -334,19 +303,15 @@ type WatchArticleReq struct {
 	Active    bool
 }
 
-type WatchArticleResponse struct {
-	Watched bool
-}
-
-func (u *ContentArticleUsecase) WatchArticle(ctx context.Context, req *WatchArticleReq) (*WatchArticleResponse, error) {
+func (u *ContentArticleUsecase) WatchArticle(ctx context.Context, req *WatchArticleReq) (bool, error) {
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	response, err := u.contentArticleClient.WatchArticle(ctx, &repo.WatchArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
+	resp, err := u.contentArticleClient.WatchArticle(ctx, &repo.WatchArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &WatchArticleResponse{Watched: response.Watched}, nil
+	return resp, nil
 }
 
 type RewardArticleReq struct {
@@ -359,8 +324,7 @@ func (u *ContentArticleUsecase) RewardArticle(ctx context.Context, req *RewardAr
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	_, err := u.contentArticleClient.RewardArticle(ctx, &repo.RewardArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Points: req.Points})
-	return err
+	return u.contentArticleClient.RewardArticle(ctx, &repo.RewardArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Points: req.Points})
 }
 
 type AcceptAnswerArticleReq struct {
@@ -373,11 +337,10 @@ func (u *ContentArticleUsecase) AcceptAnswerArticle(ctx context.Context, req *Ac
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	_, err := u.contentArticleClient.AcceptAnswerArticle(ctx, &repo.AcceptAnswerArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, CommentID: req.CommentID})
-	return err
+	return u.contentArticleClient.AcceptAnswerArticle(ctx, &repo.AcceptAnswerArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, CommentID: req.CommentID})
 }
 
-func validateArticleType(articleType bbscontentv1.ArticleType, bountyPoints *int32) error {
+func (u *ContentArticleUsecase) validateArticleType(articleType bbscontentv1.ArticleType, bountyPoints *int32) error {
 	switch articleType {
 	case bbscontentv1.ArticleType_ARTICLE_TYPE_NORMAL, bbscontentv1.ArticleType_ARTICLE_TYPE_QA:
 	default:

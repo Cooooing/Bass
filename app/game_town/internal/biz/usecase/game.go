@@ -53,19 +53,11 @@ type RegisterPlayerReq struct {
 	DisplayName string
 }
 
-type RegisterPlayerResponse struct {
-	Row *model.Player
-}
-
-func (u *GameUsecase) RegisterPlayer(ctx context.Context, req *RegisterPlayerReq) (*RegisterPlayerResponse, error) {
+func (u *GameUsecase) RegisterPlayer(ctx context.Context, req *RegisterPlayerReq) (*model.Player, error) {
 	if req == nil {
 		req = &RegisterPlayerReq{}
 	}
-	resp, err := u.registerPlayer(ctx, &registerPlayerReq{Name: req.Name, DisplayName: req.DisplayName})
-	if err != nil {
-		return nil, err
-	}
-	return &RegisterPlayerResponse{Row: resp.Row}, nil
+	return u.registerPlayer(ctx, &registerPlayerReq{Name: req.Name, DisplayName: req.DisplayName})
 }
 
 type registerPlayerReq struct {
@@ -73,11 +65,7 @@ type registerPlayerReq struct {
 	DisplayName string
 }
 
-type registerPlayerResponse struct {
-	Row *model.Player
-}
-
-func (u *GameUsecase) registerPlayer(ctx context.Context, req *registerPlayerReq) (*registerPlayerResponse, error) {
+func (u *GameUsecase) registerPlayer(ctx context.Context, req *registerPlayerReq) (*model.Player, error) {
 	if req == nil {
 		req = &registerPlayerReq{}
 	}
@@ -93,7 +81,7 @@ func (u *GameUsecase) registerPlayer(ctx context.Context, req *registerPlayerReq
 	if err != nil {
 		return nil, err
 	}
-	return &registerPlayerResponse{Row: resp.Row}, nil
+	return resp, nil
 }
 
 type CreateAgentConfigReq struct {
@@ -107,15 +95,11 @@ type CreateAgentConfigReq struct {
 	IsDefault      bool
 }
 
-type CreateAgentConfigResponse struct {
-	Row *model.AgentConfig
-}
-
-func (u *GameUsecase) CreateAgentConfig(ctx context.Context, req *CreateAgentConfigReq) (*CreateAgentConfigResponse, error) {
+func (u *GameUsecase) CreateAgentConfig(ctx context.Context, req *CreateAgentConfigReq) (*model.AgentConfig, error) {
 	if req == nil {
 		req = &CreateAgentConfigReq{}
 	}
-	resp, err := u.createAgentConfig(ctx, &createAgentConfigReq{
+	return u.createAgentConfig(ctx, &createAgentConfigReq{
 		PlayerID:       req.PlayerID,
 		Name:           req.Name,
 		Provider:       req.Provider,
@@ -125,10 +109,6 @@ func (u *GameUsecase) CreateAgentConfig(ctx context.Context, req *CreateAgentCon
 		TimeoutSeconds: req.TimeoutSeconds,
 		IsDefault:      req.IsDefault,
 	})
-	if err != nil {
-		return nil, err
-	}
-	return &CreateAgentConfigResponse{Row: resp.Row}, nil
 }
 
 type createAgentConfigReq struct {
@@ -142,11 +122,7 @@ type createAgentConfigReq struct {
 	IsDefault      bool
 }
 
-type createAgentConfigResponse struct {
-	Row *model.AgentConfig
-}
-
-func (u *GameUsecase) createAgentConfig(ctx context.Context, req *createAgentConfigReq) (*createAgentConfigResponse, error) {
+func (u *GameUsecase) createAgentConfig(ctx context.Context, req *createAgentConfigReq) (*model.AgentConfig, error) {
 	if req == nil {
 		req = &createAgentConfigReq{}
 	}
@@ -167,14 +143,14 @@ func (u *GameUsecase) createAgentConfig(ctx context.Context, req *createAgentCon
 	if err != nil {
 		return nil, err
 	}
-	if len(listResp.Rows) == 0 {
+	if len(listResp) == 0 {
 		isDefault = true
 	}
-	createResp, err := u.agentConfigRepo.CreateAgentConfig(ctx, &repo.CreateAgentConfigReq{Row: &model.AgentConfig{PlayerID: req.PlayerID, Name: name, Provider: provider, Model: modelName, BaseURL: baseURL, APIKey: apiKey, TimeoutSeconds: timeoutSeconds, IsDefault: isDefault, Status: "active"}})
+	createResp, err := u.agentConfigRepo.CreateAgentConfig(ctx, &model.AgentConfig{PlayerID: req.PlayerID, Name: name, Provider: provider, Model: modelName, BaseURL: baseURL, APIKey: apiKey, TimeoutSeconds: timeoutSeconds, IsDefault: isDefault, Status: "active"})
 	if err != nil {
 		return nil, err
 	}
-	return &createAgentConfigResponse{Row: createResp.Row}, nil
+	return createResp, nil
 }
 
 type GetAgentConfigReq struct {
@@ -182,19 +158,11 @@ type GetAgentConfigReq struct {
 	PlayerID int64
 }
 
-type GetAgentConfigResponse struct {
-	Row *model.AgentConfig
-}
-
-func (u *GameUsecase) GetAgentConfig(ctx context.Context, req *GetAgentConfigReq) (*GetAgentConfigResponse, error) {
+func (u *GameUsecase) GetAgentConfig(ctx context.Context, req *GetAgentConfigReq) (*model.AgentConfig, error) {
 	if req == nil {
 		req = &GetAgentConfigReq{}
 	}
-	resp, err := u.getAgentConfig(ctx, &getAgentConfigReq{ID: req.ID, PlayerID: req.PlayerID})
-	if err != nil {
-		return nil, err
-	}
-	return &GetAgentConfigResponse{Row: resp.Row}, nil
+	return u.getAgentConfig(ctx, &getAgentConfigReq{ID: req.ID, PlayerID: req.PlayerID})
 }
 
 type getAgentConfigReq struct {
@@ -202,11 +170,7 @@ type getAgentConfigReq struct {
 	PlayerID int64
 }
 
-type getAgentConfigResponse struct {
-	Row *model.AgentConfig
-}
-
-func (u *GameUsecase) getAgentConfig(ctx context.Context, req *getAgentConfigReq) (*getAgentConfigResponse, error) {
+func (u *GameUsecase) getAgentConfig(ctx context.Context, req *getAgentConfigReq) (*model.AgentConfig, error) {
 	if req == nil {
 		req = &getAgentConfigReq{}
 	}
@@ -217,7 +181,7 @@ func (u *GameUsecase) getAgentConfig(ctx context.Context, req *getAgentConfigReq
 	if err != nil {
 		return nil, err
 	}
-	return &getAgentConfigResponse{Row: resp.Row}, nil
+	return resp, nil
 }
 
 type ListAgentConfigsReq struct {
@@ -225,19 +189,11 @@ type ListAgentConfigsReq struct {
 	Status   *string
 }
 
-type ListAgentConfigsResponse struct {
-	Rows []*model.AgentConfig
-}
-
-func (u *GameUsecase) ListAgentConfigs(ctx context.Context, req *ListAgentConfigsReq) (*ListAgentConfigsResponse, error) {
+func (u *GameUsecase) ListAgentConfigs(ctx context.Context, req *ListAgentConfigsReq) ([]*model.AgentConfig, error) {
 	if req == nil {
 		req = &ListAgentConfigsReq{}
 	}
-	resp, err := u.listAgentConfigs(ctx, &listAgentConfigsReq{PlayerID: req.PlayerID, Status: req.Status})
-	if err != nil {
-		return nil, err
-	}
-	return &ListAgentConfigsResponse{Rows: resp.Rows}, nil
+	return u.listAgentConfigs(ctx, &listAgentConfigsReq{PlayerID: req.PlayerID, Status: req.Status})
 }
 
 type listAgentConfigsReq struct {
@@ -245,11 +201,7 @@ type listAgentConfigsReq struct {
 	Status   *string
 }
 
-type listAgentConfigsResponse struct {
-	Rows []*model.AgentConfig
-}
-
-func (u *GameUsecase) listAgentConfigs(ctx context.Context, req *listAgentConfigsReq) (*listAgentConfigsResponse, error) {
+func (u *GameUsecase) listAgentConfigs(ctx context.Context, req *listAgentConfigsReq) ([]*model.AgentConfig, error) {
 	if req == nil {
 		req = &listAgentConfigsReq{}
 	}
@@ -260,45 +212,19 @@ func (u *GameUsecase) listAgentConfigs(ctx context.Context, req *listAgentConfig
 	if err != nil {
 		return nil, err
 	}
-	return &listAgentConfigsResponse{Rows: resp.Rows}, nil
+	return resp, nil
 }
 
-type GetPlayerReq struct {
-	ID int64
+func (u *GameUsecase) GetPlayer(ctx context.Context, id int64) (*model.Player, error) {
+	return u.getPlayer(ctx, id)
 }
 
-type GetPlayerResponse struct {
-	Row *model.Player
-}
-
-func (u *GameUsecase) GetPlayer(ctx context.Context, req *GetPlayerReq) (*GetPlayerResponse, error) {
-	if req == nil {
-		req = &GetPlayerReq{}
-	}
-	resp, err := u.getPlayer(ctx, &getPlayerReq{ID: req.ID})
+func (u *GameUsecase) getPlayer(ctx context.Context, id int64) (*model.Player, error) {
+	resp, err := u.playerRepo.GetPlayer(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	return &GetPlayerResponse{Row: resp.Row}, nil
-}
-
-type getPlayerReq struct {
-	ID int64
-}
-
-type getPlayerResponse struct {
-	Row *model.Player
-}
-
-func (u *GameUsecase) getPlayer(ctx context.Context, req *getPlayerReq) (*getPlayerResponse, error) {
-	if req == nil {
-		req = &getPlayerReq{}
-	}
-	resp, err := u.playerRepo.GetPlayer(ctx, &repo.GetPlayerReq{ID: req.ID})
-	if err != nil {
-		return nil, err
-	}
-	return &getPlayerResponse{Row: resp.Row}, nil
+	return resp, nil
 }
 
 type StartSessionReq struct {
@@ -306,19 +232,11 @@ type StartSessionReq struct {
 	ClientType string
 }
 
-type StartSessionResponse struct {
-	Row *model.Session
-}
-
-func (u *GameUsecase) StartSession(ctx context.Context, req *StartSessionReq) (*StartSessionResponse, error) {
+func (u *GameUsecase) StartSession(ctx context.Context, req *StartSessionReq) (*model.Session, error) {
 	if req == nil {
 		req = &StartSessionReq{}
 	}
-	resp, err := u.startSession(ctx, &startSessionReq{PlayerID: req.PlayerID, ClientType: req.ClientType})
-	if err != nil {
-		return nil, err
-	}
-	return &StartSessionResponse{Row: resp.Row}, nil
+	return u.startSession(ctx, &startSessionReq{PlayerID: req.PlayerID, ClientType: req.ClientType})
 }
 
 type startSessionReq struct {
@@ -326,11 +244,7 @@ type startSessionReq struct {
 	ClientType string
 }
 
-type startSessionResponse struct {
-	Row *model.Session
-}
-
-func (u *GameUsecase) startSession(ctx context.Context, req *startSessionReq) (*startSessionResponse, error) {
+func (u *GameUsecase) startSession(ctx context.Context, req *startSessionReq) (*model.Session, error) {
 	if req == nil {
 		req = &startSessionReq{}
 	}
@@ -342,45 +256,19 @@ func (u *GameUsecase) startSession(ctx context.Context, req *startSessionReq) (*
 	if err != nil {
 		return nil, err
 	}
-	return &startSessionResponse{Row: resp.Row}, nil
+	return resp, nil
 }
 
-type EndSessionReq struct {
-	ID int64
+func (u *GameUsecase) EndSession(ctx context.Context, id int64) (*model.Session, error) {
+	return u.endSession(ctx, id)
 }
 
-type EndSessionResponse struct {
-	Row *model.Session
-}
-
-func (u *GameUsecase) EndSession(ctx context.Context, req *EndSessionReq) (*EndSessionResponse, error) {
-	if req == nil {
-		req = &EndSessionReq{}
-	}
-	resp, err := u.endSession(ctx, &endSessionReq{ID: req.ID})
+func (u *GameUsecase) endSession(ctx context.Context, id int64) (*model.Session, error) {
+	resp, err := u.sessionRepo.EndSession(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	return &EndSessionResponse{Row: resp.Row}, nil
-}
-
-type endSessionReq struct {
-	ID int64
-}
-
-type endSessionResponse struct {
-	Row *model.Session
-}
-
-func (u *GameUsecase) endSession(ctx context.Context, req *endSessionReq) (*endSessionResponse, error) {
-	if req == nil {
-		req = &endSessionReq{}
-	}
-	resp, err := u.sessionRepo.EndSession(ctx, &repo.EndSessionReq{ID: req.ID})
-	if err != nil {
-		return nil, err
-	}
-	return &endSessionResponse{Row: resp.Row}, nil
+	return resp, nil
 }
 
 type CreateWorldReq struct {
@@ -394,15 +282,11 @@ type CreateWorldReq struct {
 	AgentConfigID *int64
 }
 
-type CreateWorldResponse struct {
-	Result *repo.CreateWorldResponse
-}
-
-func (u *GameUsecase) CreateWorld(ctx context.Context, req *CreateWorldReq) (*CreateWorldResponse, error) {
+func (u *GameUsecase) CreateWorld(ctx context.Context, req *CreateWorldReq) (*repo.CreateWorldResp, error) {
 	if req == nil {
 		req = &CreateWorldReq{}
 	}
-	resp, err := u.createWorld(ctx, &createWorldReq{
+	return u.createWorld(ctx, &createWorldReq{
 		PlayerID:      req.PlayerID,
 		Description:   req.Description,
 		NpcCount:      req.NpcCount,
@@ -412,10 +296,6 @@ func (u *GameUsecase) CreateWorld(ctx context.Context, req *CreateWorldReq) (*Cr
 		Tags:          req.Tags,
 		AgentConfigID: req.AgentConfigID,
 	})
-	if err != nil {
-		return nil, err
-	}
-	return &CreateWorldResponse{Result: resp.Result}, nil
 }
 
 type createWorldReq struct {
@@ -429,11 +309,7 @@ type createWorldReq struct {
 	AgentConfigID *int64
 }
 
-type createWorldResponse struct {
-	Result *repo.CreateWorldResponse
-}
-
-func (u *GameUsecase) createWorld(ctx context.Context, req *createWorldReq) (*createWorldResponse, error) {
+func (u *GameUsecase) createWorld(ctx context.Context, req *createWorldReq) (*repo.CreateWorldResp, error) {
 	if req == nil {
 		req = &createWorldReq{}
 	}
@@ -463,7 +339,7 @@ func (u *GameUsecase) createWorld(ctx context.Context, req *createWorldReq) (*cr
 	if err != nil {
 		return nil, err
 	}
-	agentConfig := agentConfigResp.Row
+	agentConfig := agentConfigResp
 	out, err := u.agent.GenerateWorld(ctx, &agent.GenerateWorldInput{Config: agentRunConfig(agentConfig), Description: req.Description, NpcCount: npcCount, LocationCount: locationCount, Scale: scale, Seed: actualSeed, StyleTags: req.Tags})
 	if err != nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_FAILED).WithCause(err)
@@ -472,8 +348,8 @@ func (u *GameUsecase) createWorld(ctx context.Context, req *createWorldReq) (*cr
 	if err != nil {
 		return nil, err
 	}
-	_, _ = u.agentRunRepo.CreateAgentRun(ctx, &repo.CreateAgentRunReq{Row: &model.AgentRun{WorldID: &result.World.ID, RunType: "world_generate", AgentConfigID: &agentConfig.ID, Model: agentConfig.Model, InputJSON: map[string]any{"description": req.Description, "seed": float64(actualSeed)}, OutputJSON: map[string]any{"world_name": out.WorldName}, Status: "succeeded"}})
-	return &createWorldResponse{Result: result}, nil
+	_, _ = u.agentRunRepo.CreateAgentRun(ctx, &model.AgentRun{WorldID: &result.World.ID, RunType: "world_generate", AgentConfigID: &agentConfig.ID, Model: agentConfig.Model, InputJSON: map[string]any{"description": req.Description, "seed": float64(actualSeed)}, OutputJSON: map[string]any{"world_name": out.WorldName}, Status: "succeeded"})
+	return result, nil
 }
 
 type JoinWorldReq struct {
@@ -481,19 +357,11 @@ type JoinWorldReq struct {
 	WorldCode string
 }
 
-type JoinWorldResponse struct {
-	Result *repo.JoinWorldResponse
-}
-
-func (u *GameUsecase) JoinWorld(ctx context.Context, req *JoinWorldReq) (*JoinWorldResponse, error) {
+func (u *GameUsecase) JoinWorld(ctx context.Context, req *JoinWorldReq) (*repo.JoinWorldResp, error) {
 	if req == nil {
 		req = &JoinWorldReq{}
 	}
-	resp, err := u.joinWorld(ctx, &joinWorldReq{PlayerID: req.PlayerID, WorldCode: req.WorldCode})
-	if err != nil {
-		return nil, err
-	}
-	return &JoinWorldResponse{Result: resp.Result}, nil
+	return u.joinWorld(ctx, &joinWorldReq{PlayerID: req.PlayerID, WorldCode: req.WorldCode})
 }
 
 type joinWorldReq struct {
@@ -501,11 +369,7 @@ type joinWorldReq struct {
 	WorldCode string
 }
 
-type joinWorldResponse struct {
-	Result *repo.JoinWorldResponse
-}
-
-func (u *GameUsecase) joinWorld(ctx context.Context, req *joinWorldReq) (*joinWorldResponse, error) {
+func (u *GameUsecase) joinWorld(ctx context.Context, req *joinWorldReq) (*repo.JoinWorldResp, error) {
 	if req == nil {
 		req = &joinWorldReq{}
 	}
@@ -516,59 +380,33 @@ func (u *GameUsecase) joinWorld(ctx context.Context, req *joinWorldReq) (*joinWo
 	if err != nil {
 		return nil, err
 	}
-	return &joinWorldResponse{Result: resp}, nil
+	return resp, nil
 }
 
-type GetWorldReq struct {
-	ID int64
+func (u *GameUsecase) GetWorld(ctx context.Context, id int64) (*model.World, error) {
+	return u.getWorld(ctx, id)
 }
 
-type GetWorldResponse struct {
-	Row *model.World
-}
-
-func (u *GameUsecase) GetWorld(ctx context.Context, req *GetWorldReq) (*GetWorldResponse, error) {
-	if req == nil {
-		req = &GetWorldReq{}
-	}
-	resp, err := u.getWorld(ctx, &getWorldReq{ID: req.ID})
+func (u *GameUsecase) getWorld(ctx context.Context, id int64) (*model.World, error) {
+	resp, err := u.worldRepo.Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	return &GetWorldResponse{Row: resp.Row}, nil
-}
-
-type getWorldReq struct {
-	ID int64
-}
-
-type getWorldResponse struct {
-	Row *model.World
-}
-
-func (u *GameUsecase) getWorld(ctx context.Context, req *getWorldReq) (*getWorldResponse, error) {
-	if req == nil {
-		req = &getWorldReq{}
-	}
-	resp, err := u.worldRepo.Get(ctx, &repo.WorldGetReq{ID: req.ID})
-	if err != nil {
-		return nil, err
-	}
-	return &getWorldResponse{Row: resp.Row}, nil
+	return resp, nil
 }
 
 type PageWorldsReq struct {
-	Page            *common.PageRequest
+	Page            *common.PageReq
 	CreatorPlayerID *int64
 	Status          *string
 }
 
-type PageWorldsResponse struct {
+type PageWorldsResp struct {
 	Rows []*model.World
-	Page *common.PageResponse
+	Page *common.PageResp
 }
 
-func (u *GameUsecase) PageWorlds(ctx context.Context, req *PageWorldsReq) (*PageWorldsResponse, error) {
+func (u *GameUsecase) PageWorlds(ctx context.Context, req *PageWorldsReq) (*PageWorldsResp, error) {
 	if req == nil {
 		req = &PageWorldsReq{}
 	}
@@ -576,89 +414,49 @@ func (u *GameUsecase) PageWorlds(ctx context.Context, req *PageWorldsReq) (*Page
 	if err != nil {
 		return nil, err
 	}
-	return &PageWorldsResponse{Rows: pageResp.Rows, Page: pageResp.Page}, nil
+	return &PageWorldsResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
 }
 
-type GetStateReq struct {
-	WorldID int64
-}
-
-type GetStateResponse struct {
+type GetStateResp struct {
 	State   *model.WorldStateSnapshot
 	Metrics []*model.WorldMetricDefinition
 }
 
-func (u *GameUsecase) GetState(ctx context.Context, req *GetStateReq) (*GetStateResponse, error) {
-	if req == nil {
-		req = &GetStateReq{}
-	}
-	resp, err := u.getState(ctx, &getStateReq{WorldID: req.WorldID})
+func (u *GameUsecase) GetState(ctx context.Context, worldID int64) (*GetStateResp, error) {
+	resp, err := u.getState(ctx, worldID)
 	if err != nil {
 		return nil, err
 	}
-	return &GetStateResponse{State: resp.State, Metrics: resp.Metrics}, nil
+	return &GetStateResp{State: resp.State, Metrics: resp.Metrics}, nil
 }
 
-type getStateReq struct {
-	WorldID int64
-}
-
-type getStateResponse struct {
+type getStateResp struct {
 	State   *model.WorldStateSnapshot
 	Metrics []*model.WorldMetricDefinition
 }
 
-func (u *GameUsecase) getState(ctx context.Context, req *getStateReq) (*getStateResponse, error) {
-	if req == nil {
-		req = &getStateReq{}
-	}
-	stateResp, err := u.worldStateSnapshotRepo.GetLatestWorldState(ctx, &repo.GetLatestWorldStateReq{WorldID: req.WorldID})
+func (u *GameUsecase) getState(ctx context.Context, worldID int64) (*getStateResp, error) {
+	stateResp, err := u.worldStateSnapshotRepo.GetLatestWorldState(ctx, worldID)
 	if err != nil {
 		return nil, err
 	}
-	metricsResp, err := u.worldMetricDefinitionRepo.ListWorldMetrics(ctx, &repo.ListWorldMetricsReq{WorldID: req.WorldID})
+	metricsResp, err := u.worldMetricDefinitionRepo.ListWorldMetrics(ctx, worldID)
 	if err != nil {
 		return nil, err
 	}
-	return &getStateResponse{State: stateResp.Row, Metrics: metricsResp.Rows}, nil
+	return &getStateResp{State: stateResp, Metrics: metricsResp}, nil
 }
 
-type GetNpcReq struct {
-	ID int64
+func (u *GameUsecase) GetNpc(ctx context.Context, id int64) (*model.Npc, error) {
+	return u.getNpc(ctx, id)
 }
 
-type GetNpcResponse struct {
-	Row *model.Npc
-}
-
-func (u *GameUsecase) GetNpc(ctx context.Context, req *GetNpcReq) (*GetNpcResponse, error) {
-	if req == nil {
-		req = &GetNpcReq{}
-	}
-	resp, err := u.getNpc(ctx, &getNpcReq{ID: req.ID})
+func (u *GameUsecase) getNpc(ctx context.Context, id int64) (*model.Npc, error) {
+	resp, err := u.npcRepo.GetNpc(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	return &GetNpcResponse{Row: resp.Row}, nil
-}
-
-type getNpcReq struct {
-	ID int64
-}
-
-type getNpcResponse struct {
-	Row *model.Npc
-}
-
-func (u *GameUsecase) getNpc(ctx context.Context, req *getNpcReq) (*getNpcResponse, error) {
-	if req == nil {
-		req = &getNpcReq{}
-	}
-	resp, err := u.npcRepo.GetNpc(ctx, &repo.GetNpcReq{ID: req.ID})
-	if err != nil {
-		return nil, err
-	}
-	return &getNpcResponse{Row: resp.Row}, nil
+	return resp, nil
 }
 
 type ListNpcsReq struct {
@@ -666,19 +464,11 @@ type ListNpcsReq struct {
 	LocationID *int64
 }
 
-type ListNpcsResponse struct {
-	Rows []*model.Npc
-}
-
-func (u *GameUsecase) ListNpcs(ctx context.Context, req *ListNpcsReq) (*ListNpcsResponse, error) {
+func (u *GameUsecase) ListNpcs(ctx context.Context, req *ListNpcsReq) ([]*model.Npc, error) {
 	if req == nil {
 		req = &ListNpcsReq{}
 	}
-	resp, err := u.listNpcs(ctx, &listNpcsReq{WorldID: req.WorldID, LocationID: req.LocationID})
-	if err != nil {
-		return nil, err
-	}
-	return &ListNpcsResponse{Rows: resp.Rows}, nil
+	return u.listNpcs(ctx, &listNpcsReq{WorldID: req.WorldID, LocationID: req.LocationID})
 }
 
 type listNpcsReq struct {
@@ -686,11 +476,7 @@ type listNpcsReq struct {
 	LocationID *int64
 }
 
-type listNpcsResponse struct {
-	Rows []*model.Npc
-}
-
-func (u *GameUsecase) listNpcs(ctx context.Context, req *listNpcsReq) (*listNpcsResponse, error) {
+func (u *GameUsecase) listNpcs(ctx context.Context, req *listNpcsReq) ([]*model.Npc, error) {
 	if req == nil {
 		req = &listNpcsReq{}
 	}
@@ -698,7 +484,7 @@ func (u *GameUsecase) listNpcs(ctx context.Context, req *listNpcsReq) (*listNpcs
 	if err != nil {
 		return nil, err
 	}
-	return &listNpcsResponse{Rows: resp.Rows}, nil
+	return resp, nil
 }
 
 type ListMemoriesReq struct {
@@ -708,35 +494,31 @@ type ListMemoriesReq struct {
 	Type     *string
 }
 
-type ListMemoriesResponse struct {
-	Rows []*model.Memory
-}
-
-func (u *GameUsecase) ListMemories(ctx context.Context, req *ListMemoriesReq) (*ListMemoriesResponse, error) {
+func (u *GameUsecase) ListMemories(ctx context.Context, req *ListMemoriesReq) ([]*model.Memory, error) {
 	if req == nil {
 		req = &ListMemoriesReq{}
 	}
-	listResp, err := u.memoryRepo.ListMemories(ctx, &repo.ListMemoriesReq{Query: repo.MemoryQuery{WorldID: req.WorldID, PlayerID: req.PlayerID, NpcID: req.NpcID, Type: req.Type}})
+	listResp, err := u.memoryRepo.ListMemories(ctx, &repo.MemoryQuery{WorldID: req.WorldID, PlayerID: req.PlayerID, NpcID: req.NpcID, Type: req.Type})
 	if err != nil {
 		return nil, err
 	}
-	return &ListMemoriesResponse{Rows: listResp.Rows}, nil
+	return listResp, nil
 }
 
 type PageEventsReq struct {
-	Page          *common.PageRequest
+	Page          *common.PageReq
 	WorldID       int64
 	ActorPlayerID *int64
 	TargetNpcID   *int64
 	Type          *string
 }
 
-type PageEventsResponse struct {
+type PageEventsResp struct {
 	Rows []*model.Event
-	Page *common.PageResponse
+	Page *common.PageResp
 }
 
-func (u *GameUsecase) PageEvents(ctx context.Context, req *PageEventsReq) (*PageEventsResponse, error) {
+func (u *GameUsecase) PageEvents(ctx context.Context, req *PageEventsReq) (*PageEventsResp, error) {
 	if req == nil {
 		req = &PageEventsReq{}
 	}
@@ -744,22 +526,22 @@ func (u *GameUsecase) PageEvents(ctx context.Context, req *PageEventsReq) (*Page
 	if err != nil {
 		return nil, err
 	}
-	return &PageEventsResponse{Rows: pageResp.Rows, Page: pageResp.Page}, nil
+	return &PageEventsResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
 }
 
 type PageCommandsReq struct {
-	Page      *common.PageRequest
+	Page      *common.PageReq
 	WorldID   *int64
 	SessionID *int64
 	PlayerID  *int64
 }
 
-type PageCommandsResponse struct {
+type PageCommandsResp struct {
 	Rows []*model.Command
-	Page *common.PageResponse
+	Page *common.PageResp
 }
 
-func (u *GameUsecase) PageCommands(ctx context.Context, req *PageCommandsReq) (*PageCommandsResponse, error) {
+func (u *GameUsecase) PageCommands(ctx context.Context, req *PageCommandsReq) (*PageCommandsResp, error) {
 	if req == nil {
 		req = &PageCommandsReq{}
 	}
@@ -767,7 +549,7 @@ func (u *GameUsecase) PageCommands(ctx context.Context, req *PageCommandsReq) (*
 	if err != nil {
 		return nil, err
 	}
-	return &PageCommandsResponse{Rows: pageResp.Rows, Page: pageResp.Page}, nil
+	return &PageCommandsResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
 }
 
 type ReplayCommandsReq struct {
@@ -775,12 +557,12 @@ type ReplayCommandsReq struct {
 	PlayerID  int64
 }
 
-type ReplayCommandsResponse struct {
+type ReplayCommandsResp struct {
 	Commands []*model.Command
 	Events   []*model.Event
 }
 
-func (u *GameUsecase) ReplayCommands(ctx context.Context, req *ReplayCommandsReq) (*ReplayCommandsResponse, error) {
+func (u *GameUsecase) ReplayCommands(ctx context.Context, req *ReplayCommandsReq) (*ReplayCommandsResp, error) {
 	if req == nil {
 		req = &ReplayCommandsReq{}
 	}
@@ -788,7 +570,7 @@ func (u *GameUsecase) ReplayCommands(ctx context.Context, req *ReplayCommandsReq
 	if err != nil {
 		return nil, err
 	}
-	return &ReplayCommandsResponse{Commands: resp.Commands, Events: resp.Events}, nil
+	return &ReplayCommandsResp{Commands: resp.Commands, Events: resp.Events}, nil
 }
 
 type replayCommandsReq struct {
@@ -796,12 +578,12 @@ type replayCommandsReq struct {
 	PlayerID  int64
 }
 
-type replayCommandsResponse struct {
+type replayCommandsResp struct {
 	Commands []*model.Command
 	Events   []*model.Event
 }
 
-func (u *GameUsecase) replayCommands(ctx context.Context, req *replayCommandsReq) (*replayCommandsResponse, error) {
+func (u *GameUsecase) replayCommands(ctx context.Context, req *replayCommandsReq) (*replayCommandsResp, error) {
 	if req == nil {
 		req = &replayCommandsReq{}
 	}
@@ -810,7 +592,7 @@ func (u *GameUsecase) replayCommands(ctx context.Context, req *replayCommandsReq
 		return nil, err
 	}
 	var worldID int64
-	commands := commandResp.Rows
+	commands := commandResp
 	for _, item := range commands {
 		if item.WorldID != nil {
 			worldID = *item.WorldID
@@ -818,13 +600,13 @@ func (u *GameUsecase) replayCommands(ctx context.Context, req *replayCommandsReq
 		}
 	}
 	if worldID == 0 {
-		return &replayCommandsResponse{Commands: commands}, nil
+		return &replayCommandsResp{Commands: commands}, nil
 	}
-	eventResp, err := u.eventRepo.Page(ctx, &repo.EventPageReq{Page: &common.PageRequest{Page: 1, Size: 100}, Query: repo.EventQuery{WorldID: worldID}})
+	eventResp, err := u.eventRepo.Page(ctx, &repo.EventPageReq{Page: &common.PageReq{Page: 1, Size: 100}, Query: repo.EventQuery{WorldID: worldID}})
 	if err != nil {
 		return nil, err
 	}
-	return &replayCommandsResponse{Commands: commands, Events: eventResp.Rows}, nil
+	return &replayCommandsResp{Commands: commands, Events: eventResp.Rows}, nil
 }
 
 type TickReq struct {
@@ -833,12 +615,12 @@ type TickReq struct {
 	Limit            uint32
 }
 
-type TickResponse struct {
+type TickResp struct {
 	State  *model.WorldStateSnapshot
 	Events []*model.Event
 }
 
-func (u *GameUsecase) Tick(ctx context.Context, req *TickReq) (*TickResponse, error) {
+func (u *GameUsecase) Tick(ctx context.Context, req *TickReq) (*TickResp, error) {
 	if req == nil {
 		req = &TickReq{}
 	}
@@ -846,7 +628,7 @@ func (u *GameUsecase) Tick(ctx context.Context, req *TickReq) (*TickResponse, er
 	if err != nil {
 		return nil, err
 	}
-	return &TickResponse{State: resp.State, Events: resp.Events}, nil
+	return &TickResp{State: resp.State, Events: resp.Events}, nil
 }
 
 type tickReq struct {
@@ -855,20 +637,20 @@ type tickReq struct {
 	Limit            uint32
 }
 
-type tickResponse struct {
+type tickResp struct {
 	State  *model.WorldStateSnapshot
 	Events []*model.Event
 }
 
-func (u *GameUsecase) tick(ctx context.Context, req *tickReq) (*tickResponse, error) {
+func (u *GameUsecase) tick(ctx context.Context, req *tickReq) (*tickResp, error) {
 	if req == nil {
 		req = &tickReq{}
 	}
-	worldResp, err := u.worldRepo.Get(ctx, &repo.WorldGetReq{ID: req.WorldID})
+	worldResp, err := u.worldRepo.Get(ctx, req.WorldID)
 	if err != nil {
 		return nil, err
 	}
-	stateResp, err := u.worldStateSnapshotRepo.GetLatestWorldState(ctx, &repo.GetLatestWorldStateReq{WorldID: req.WorldID})
+	stateResp, err := u.worldStateSnapshotRepo.GetLatestWorldState(ctx, req.WorldID)
 	if err != nil {
 		return nil, err
 	}
@@ -876,31 +658,35 @@ func (u *GameUsecase) tick(ctx context.Context, req *tickReq) (*tickResponse, er
 	if err != nil {
 		return nil, err
 	}
-	recent := recentResp.Rows
+	recent := recentResp
 	summaries := make([]string, 0, len(recent))
 	for _, item := range recent {
 		summaries = append(summaries, item.Summary)
 	}
-	worldRow := worldResp.Row
-	agentConfigResp, err := u.worldAgentConfig(ctx, &worldAgentConfigReq{World: worldRow})
+	worldRow := worldResp
+	agentConfigResp, err := u.worldAgentConfig(ctx, worldRow)
 	if err != nil {
 		return nil, err
 	}
-	agentConfig := agentConfigResp.Row
-	out, err := u.agent.Direct(ctx, &agent.DirectInput{Config: agentRunConfig(agentConfig), WorldName: worldRow.Name, Arc: stateResp.Row.CurrentArc, Metrics: stateResp.Row.Metrics, Events: summaries})
+	agentConfig := agentConfigResp
+	out, err := u.agent.Direct(ctx, &agent.DirectInput{Config: agentRunConfig(agentConfig), WorldName: worldRow.Name, Arc: stateResp.CurrentArc, Metrics: stateResp.Metrics, Events: summaries})
 	if err != nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_FAILED).WithCause(err)
 	}
-	metrics := applyMetricDelta(stateResp.Row.Metrics, out.WorldMetricDelta, u.conf.GetGameTown().GetEffect().GetMaxDelta())
-	eventResp, err := u.eventRepo.CreateEvent(ctx, &repo.CreateEventReq{Row: &model.Event{WorldID: req.WorldID, Type: "world_tick", ActorPlayerID: &req.OperatorPlayerID, Summary: out.Summary, Content: strings.Join(out.Events, "\n"), Effects: map[string]any{"metrics": out.WorldMetricDelta}, Metadata: map[string]any{}, OccurredAt: time.Now()}})
+	metrics := applyMetricDelta(stateResp.Metrics, out.WorldMetricDelta, u.conf.GetGameTown().GetEffect().GetMaxDelta())
+	currentArc := out.CurrentArc
+	if strings.TrimSpace(currentArc) == "" {
+		currentArc = stateResp.CurrentArc
+	}
+	eventResp, err := u.eventRepo.CreateEvent(ctx, &model.Event{WorldID: req.WorldID, Type: "world_tick", ActorPlayerID: &req.OperatorPlayerID, Summary: out.Summary, Content: strings.Join(out.Events, "\n"), Effects: map[string]any{"metrics": out.WorldMetricDelta}, Metadata: map[string]any{}, OccurredAt: time.Now()})
 	if err != nil {
 		return nil, err
 	}
-	newStateResp, err := u.worldStateSnapshotRepo.CreateState(ctx, &repo.CreateStateReq{Row: &model.WorldStateSnapshot{WorldID: req.WorldID, TickCount: stateResp.Row.TickCount + 1, CurrentArc: firstNonEmpty(out.CurrentArc, stateResp.Row.CurrentArc), Metrics: metrics, Summary: out.Summary, ReasonEventID: &eventResp.Row.ID}})
+	newStateResp, err := u.worldStateSnapshotRepo.CreateState(ctx, &model.WorldStateSnapshot{WorldID: req.WorldID, TickCount: stateResp.TickCount + 1, CurrentArc: currentArc, Metrics: metrics, Summary: out.Summary, ReasonEventID: &eventResp.ID})
 	if err != nil {
 		return nil, err
 	}
-	return &tickResponse{State: newStateResp.Row, Events: []*model.Event{eventResp.Row}}, nil
+	return &tickResp{State: newStateResp, Events: []*model.Event{eventResp}}, nil
 }
 
 type ExecuteCommandReq struct {
@@ -909,19 +695,11 @@ type ExecuteCommandReq struct {
 	Raw       string
 }
 
-type ExecuteCommandResponse struct {
-	Result *CommandResult
-}
-
-func (u *GameUsecase) ExecuteCommand(ctx context.Context, req *ExecuteCommandReq) (*ExecuteCommandResponse, error) {
+func (u *GameUsecase) ExecuteCommand(ctx context.Context, req *ExecuteCommandReq) (*CommandResult, error) {
 	if req == nil {
 		req = &ExecuteCommandReq{}
 	}
-	resp, err := u.executeCommand(ctx, &executeCommandReq{SessionID: req.SessionID, PlayerID: req.PlayerID, Raw: req.Raw})
-	if err != nil {
-		return nil, err
-	}
-	return &ExecuteCommandResponse{Result: resp.Result}, nil
+	return u.executeCommand(ctx, &executeCommandReq{SessionID: req.SessionID, PlayerID: req.PlayerID, Raw: req.Raw})
 }
 
 type executeCommandReq struct {
@@ -930,11 +708,7 @@ type executeCommandReq struct {
 	Raw       string
 }
 
-type executeCommandResponse struct {
-	Result *CommandResult
-}
-
-func (u *GameUsecase) executeCommand(ctx context.Context, req *executeCommandReq) (*executeCommandResponse, error) {
+func (u *GameUsecase) executeCommand(ctx context.Context, req *executeCommandReq) (*CommandResult, error) {
 	if req == nil {
 		req = &executeCommandReq{}
 	}
@@ -945,34 +719,34 @@ func (u *GameUsecase) executeCommand(ctx context.Context, req *executeCommandReq
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_COMMAND_INVALID)
 	}
 	cmdType, payload := parseCommand(raw)
-	createdResp, err := u.commandRepo.CreateCommand(ctx, &repo.CreateCommandReq{Row: &model.Command{SessionID: sessionID, PlayerID: &playerID, RawText: raw, Type: cmdType, ParsedPayload: payload, Status: "received", ResultSummary: ""}})
+	createdResp, err := u.commandRepo.CreateCommand(ctx, &model.Command{SessionID: sessionID, PlayerID: &playerID, RawText: raw, Type: cmdType, ParsedPayload: payload, Status: "received", ResultSummary: ""})
 	if err != nil {
 		return nil, err
 	}
-	result := &CommandResult{Command: createdResp.Row}
+	result := &CommandResult{Command: createdResp}
 	var finishWorldID *int64
 	defer func() {
 		if result.Command != nil && result.Command.Status == "received" {
 			updated, _ := u.commandRepo.FinishCommand(ctx, &repo.FinishCommandReq{ID: result.Command.ID, Status: "succeeded", Summary: result.Command.ResultSummary, WorldID: finishWorldID})
 			if updated != nil {
-				result.Command = updated.Row
+				result.Command = updated
 			}
 		}
 	}()
-	sessionResp, err := u.sessionRepo.GetSession(ctx, &repo.GetSessionReq{ID: sessionID})
+	sessionResp, err := u.sessionRepo.GetSession(ctx, sessionID)
 	if err != nil {
 		return nil, err
 	}
 	switch cmdType {
 	case "help":
-		result.FeedbackLines = []string{"/register <name>", "/agent config create <name> --provider blades --model <model> --base-url <url> --api-key <key> --default", "/agent configs", "/world create <闂傚倷鑳堕、濠囶敋瑜忛幑銏犖旈崨顓㈠敹? --npc 4 --locations 4 --scale small --seed 42 --agent-config <id>", "/world join <world_code>", "/look", "/move <location_code>", "/talk <npc_code> <content>", "/do <content>", "/tick"}
+		result.FeedbackLines = []string{"/register <name>", "/agent config create <name> --provider blades --model <model> --base-url <url> --api-key <key> --default", "/agent configs", "/world create <闂傚倸鍊搁崐鎼佸磹閻戣姤鍤勯柛顐ｆ磸閳ь兛鐒︾换婵嬪炊閼稿灚娅旈柣鐔哥矊缁绘﹢鐛幋锕€顫呴柣妯荤墬濡啫鐣烽妸鈺婃晣闁靛繒濮甸弳? --npc 4 --locations 4 --scale small --seed 42 --agent-config <id>", "/world join <world_code>", "/look", "/move <location_code>", "/talk <npc_code> <content>", "/do <content>", "/tick"}
 		result.Command.ResultSummary = "help"
 	case "agent_config_create":
 		createResp, err := u.createAgentConfig(ctx, &createAgentConfigReq{PlayerID: playerID, Name: stringValue(payload, "name"), Provider: stringValue(payload, "provider"), ModelName: stringValue(payload, "model"), BaseURL: stringValue(payload, "base_url"), APIKey: stringValue(payload, "api_key"), TimeoutSeconds: int32(uint32Value(payload, "timeout_seconds")), IsDefault: boolValue(payload, "is_default")})
 		if err != nil {
 			return nil, err
 		}
-		row := createResp.Row
+		row := createResp
 		result.FeedbackLines = []string{fmt.Sprintf("Agent config created: %s (%d)", row.Name, row.ID)}
 		result.Command.ResultSummary = "create agent config"
 	case "agent_config_list":
@@ -980,7 +754,7 @@ func (u *GameUsecase) executeCommand(ctx context.Context, req *executeCommandReq
 		if err != nil {
 			return nil, err
 		}
-		rows := listResp.Rows
+		rows := listResp
 		lines := make([]string, 0, len(rows))
 		for _, row := range rows {
 			lines = append(lines, fmt.Sprintf("%d %s provider=%s model=%s default=%t", row.ID, row.Name, row.Provider, row.Model, row.IsDefault))
@@ -1008,7 +782,7 @@ func (u *GameUsecase) executeCommand(ctx context.Context, req *executeCommandReq
 		if err != nil {
 			return nil, err
 		}
-		createdWorld := createWorldResp.Result
+		createdWorld := createWorldResp
 		finishWorldID = &createdWorld.World.ID
 		_, _ = u.sessionRepo.UpdateSessionWorld(ctx, &repo.UpdateSessionWorldReq{ID: sessionID, PlayerID: playerID, WorldID: createdWorld.World.ID})
 		result.CurrentWorld = createdWorld.World
@@ -1023,19 +797,19 @@ func (u *GameUsecase) executeCommand(ctx context.Context, req *executeCommandReq
 		if err != nil {
 			return nil, err
 		}
-		joined := joinResp.Result
+		joined := joinResp
 		finishWorldID = &joined.World.ID
 		_, _ = u.sessionRepo.UpdateSessionWorld(ctx, &repo.UpdateSessionWorldReq{ID: sessionID, PlayerID: playerID, WorldID: joined.World.ID})
 		result.CurrentWorld = joined.World
 		result.CurrentLocation = joined.Location
 		npcResp, _ := u.npcRepo.ListNpcs(ctx, &repo.ListNpcsReq{WorldID: joined.World.ID, LocationID: &joined.Location.ID})
-		result.VisibleNpcs = npcResp.Rows
-		stateResp, _ := u.worldStateSnapshotRepo.GetLatestWorldState(ctx, &repo.GetLatestWorldStateReq{WorldID: joined.World.ID})
-		result.WorldState = stateResp.Row
+		result.VisibleNpcs = npcResp
+		stateResp, _ := u.worldStateSnapshotRepo.GetLatestWorldState(ctx, joined.World.ID)
+		result.WorldState = stateResp
 		result.FeedbackLines = []string{fmt.Sprintf("joined world: %s", joined.World.Name)}
 		result.Command.ResultSummary = "join world"
 	default:
-		sessionRow := sessionResp.Row
+		sessionRow := sessionResp
 		if sessionRow.CurrentWorldID == nil {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_NOT_FOUND)
 		}
@@ -1045,9 +819,9 @@ func (u *GameUsecase) executeCommand(ctx context.Context, req *executeCommandReq
 		if err != nil {
 			return nil, err
 		}
-		return &executeCommandResponse{Result: executeResp.Result}, nil
+		return executeResp, nil
 	}
-	return &executeCommandResponse{Result: result}, nil
+	return result, nil
 }
 
 type executeWorldCommandReq struct {
@@ -1058,11 +832,7 @@ type executeWorldCommandReq struct {
 	Payload     map[string]any
 }
 
-type executeWorldCommandResponse struct {
-	Result *CommandResult
-}
-
-func (u *GameUsecase) executeWorldCommand(ctx context.Context, req *executeWorldCommandReq) (*executeWorldCommandResponse, error) {
+func (u *GameUsecase) executeWorldCommand(ctx context.Context, req *executeWorldCommandReq) (*CommandResult, error) {
 	if req == nil {
 		req = &executeWorldCommandReq{}
 	}
@@ -1074,7 +844,7 @@ func (u *GameUsecase) executeWorldCommand(ctx context.Context, req *executeWorld
 	playerID := req.PlayerID
 	cmdType := req.CommandType
 	payload := req.Payload
-	worldResp, err := u.worldRepo.Get(ctx, &repo.WorldGetReq{ID: worldID})
+	worldResp, err := u.worldRepo.Get(ctx, worldID)
 	if err != nil {
 		return nil, err
 	}
@@ -1082,19 +852,19 @@ func (u *GameUsecase) executeWorldCommand(ctx context.Context, req *executeWorld
 	if err != nil {
 		return nil, err
 	}
-	member := memberResp.Row
-	locationResp, err := u.locationRepo.GetLocation(ctx, &repo.GetLocationReq{ID: member.CurrentLocationID})
+	member := memberResp
+	locationResp, err := u.locationRepo.GetLocation(ctx, member.CurrentLocationID)
 	if err != nil {
 		return nil, err
 	}
-	stateResp, _ := u.worldStateSnapshotRepo.GetLatestWorldState(ctx, &repo.GetLatestWorldStateReq{WorldID: worldID})
-	locationRow := locationResp.Row
+	stateResp, _ := u.worldStateSnapshotRepo.GetLatestWorldState(ctx, worldID)
+	locationRow := locationResp
 	npcResp, _ := u.npcRepo.ListNpcs(ctx, &repo.ListNpcsReq{WorldID: worldID, LocationID: &locationRow.ID})
-	worldRow := worldResp.Row
+	worldRow := worldResp
 	result.CurrentWorld = worldRow
 	result.CurrentLocation = locationRow
-	result.VisibleNpcs = npcResp.Rows
-	result.WorldState = stateResp.Row
+	result.VisibleNpcs = npcResp
+	result.WorldState = stateResp
 	switch cmdType {
 	case "look":
 		result.FeedbackLines = []string{fmt.Sprintf("%s: %s", locationRow.Name, locationRow.Description)}
@@ -1104,19 +874,19 @@ func (u *GameUsecase) executeWorldCommand(ctx context.Context, req *executeWorld
 		if err != nil {
 			return nil, err
 		}
-		loc := locResp.Row
+		loc := locResp
 		_, err = u.worldMemberRepo.MoveMember(ctx, &repo.MoveMemberReq{WorldID: worldID, PlayerID: playerID, LocationID: loc.ID})
 		if err != nil {
 			return nil, err
 		}
-		eventResp, err := u.eventRepo.CreateEvent(ctx, &repo.CreateEventReq{Row: &model.Event{WorldID: worldID, Type: "player_moved", ActorPlayerID: &playerID, LocationID: &loc.ID, CommandID: &result.Command.ID, Summary: fmt.Sprintf("player moved to %s", loc.Name), Effects: map[string]any{}, Metadata: map[string]any{}, OccurredAt: time.Now()}})
+		eventResp, err := u.eventRepo.CreateEvent(ctx, &model.Event{WorldID: worldID, Type: "player_moved", ActorPlayerID: &playerID, LocationID: &loc.ID, CommandID: &result.Command.ID, Summary: fmt.Sprintf("player moved to %s", loc.Name), Effects: map[string]any{}, Metadata: map[string]any{}, OccurredAt: time.Now()})
 		if err != nil {
 			return nil, err
 		}
 		result.CurrentLocation = loc
 		moveNpcResp, _ := u.npcRepo.ListNpcs(ctx, &repo.ListNpcsReq{WorldID: worldID, LocationID: &loc.ID})
-		result.VisibleNpcs = moveNpcResp.Rows
-		result.Events = []*model.Event{eventResp.Row}
+		result.VisibleNpcs = moveNpcResp
+		result.Events = []*model.Event{eventResp}
 		result.FeedbackLines = []string{fmt.Sprintf("arrived at %s", loc.Name)}
 		result.Command.ResultSummary = "move"
 	case "talk":
@@ -1125,47 +895,51 @@ func (u *GameUsecase) executeWorldCommand(ctx context.Context, req *executeWorld
 			return nil, err
 		}
 		content := stringValue(payload, "content")
-		npcRow := npcResp.Row
+		npcRow := npcResp
 		relResp, _ := u.relationshipRepo.GetRelationship(ctx, &repo.GetRelationshipReq{WorldID: worldID, PlayerID: playerID, NpcID: npcRow.ID})
-		memoryResp, _ := u.memoryRepo.ListMemories(ctx, &repo.ListMemoriesReq{Query: repo.MemoryQuery{WorldID: worldID, PlayerID: playerID, NpcID: &npcRow.ID}})
-		memories := memoryResp.Rows
+		memoryResp, _ := u.memoryRepo.ListMemories(ctx, &repo.MemoryQuery{WorldID: worldID, PlayerID: playerID, NpcID: &npcRow.ID})
+		memories := memoryResp
 		memoryTexts := make([]string, 0, len(memories))
 		for _, item := range memories {
 			memoryTexts = append(memoryTexts, item.Content)
 		}
-		worldRow := worldResp.Row
-		agentConfigResp, err := u.worldAgentConfig(ctx, &worldAgentConfigReq{World: worldRow})
+		worldRow := worldResp
+		agentConfigResp, err := u.worldAgentConfig(ctx, worldRow)
 		if err != nil {
 			return nil, err
 		}
-		agentConfig := agentConfigResp.Row
-		out, err := u.agent.Talk(ctx, &agent.TalkInput{Config: agentRunConfig(agentConfig), WorldName: worldRow.Name, LocationName: locationRow.Name, NpcName: npcRow.Name, NpcRole: npcRow.Role, NpcPersonality: npcRow.Personality, Relationship: map[string]any{"affinity": relResp.Row.Affinity, "trust": relResp.Row.Trust, "tension": relResp.Row.Tension}, Memories: memoryTexts, WorldMetrics: stateMetrics(stateResp.Row), Content: content})
+		agentConfig := agentConfigResp
+		worldMetrics := map[string]any{}
+		if stateResp != nil && stateResp.Metrics != nil {
+			worldMetrics = stateResp.Metrics
+		}
+		out, err := u.agent.Talk(ctx, &agent.TalkInput{Config: agentRunConfig(agentConfig), WorldName: worldRow.Name, LocationName: locationRow.Name, NpcName: npcRow.Name, NpcRole: npcRow.Role, NpcPersonality: npcRow.Personality, Relationship: map[string]any{"affinity": relResp.Affinity, "trust": relResp.Trust, "tension": relResp.Tension}, Memories: memoryTexts, WorldMetrics: worldMetrics, Content: content})
 		if err != nil {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_FAILED).WithCause(err)
 		}
-		rel := relResp.Row
+		rel := relResp
 		rel.Affinity = clamp(rel.Affinity + limitedDelta(out.RelationshipDelta["affinity"], u.conf.GetGameTown().GetEffect().GetMaxDelta()))
 		rel.Trust = clamp(rel.Trust + limitedDelta(out.RelationshipDelta["trust"], u.conf.GetGameTown().GetEffect().GetMaxDelta()))
 		rel.Tension = clamp(rel.Tension + limitedDelta(out.RelationshipDelta["tension"], u.conf.GetGameTown().GetEffect().GetMaxDelta()))
-		_, _ = u.relationshipRepo.UpsertRelationship(ctx, &repo.UpsertRelationshipReq{Row: rel})
-		eventResp, err := u.eventRepo.CreateEvent(ctx, &repo.CreateEventReq{Row: &model.Event{WorldID: worldID, Type: "player_talked_to_npc", ActorPlayerID: &playerID, TargetNpcID: &npcRow.ID, LocationID: &locationRow.ID, CommandID: &result.Command.ID, Summary: fmt.Sprintf("player talked to %s", npcRow.Name), Content: content, Effects: map[string]any{"relationship": out.RelationshipDelta, "metrics": out.WorldMetricDelta}, Metadata: map[string]any{}, OccurredAt: time.Now()}})
+		_, _ = u.relationshipRepo.UpsertRelationship(ctx, rel)
+		eventResp, err := u.eventRepo.CreateEvent(ctx, &model.Event{WorldID: worldID, Type: "player_talked_to_npc", ActorPlayerID: &playerID, TargetNpcID: &npcRow.ID, LocationID: &locationRow.ID, CommandID: &result.Command.ID, Summary: fmt.Sprintf("player talked to %s", npcRow.Name), Content: content, Effects: map[string]any{"relationship": out.RelationshipDelta, "metrics": out.WorldMetricDelta}, Metadata: map[string]any{}, OccurredAt: time.Now()})
 		if err != nil {
 			return nil, err
 		}
 		for _, candidate := range out.MemoryCandidates {
-			_, _ = u.memoryRepo.CreateMemory(ctx, &repo.CreateMemoryReq{Row: &model.Memory{WorldID: worldID, PlayerID: playerID, NpcID: npcRow.ID, Type: "long_term", Content: candidate, Importance: 50, SourceEventID: &eventResp.Row.ID}})
+			_, _ = u.memoryRepo.CreateMemory(ctx, &model.Memory{WorldID: worldID, PlayerID: playerID, NpcID: npcRow.ID, Type: "long_term", Content: candidate, Importance: 50, SourceEventID: &eventResp.ID})
 		}
-		_, _ = u.agentRunRepo.CreateAgentRun(ctx, &repo.CreateAgentRunReq{Row: &model.AgentRun{WorldID: &worldID, RunType: "npc_talk", CommandID: &result.Command.ID, NpcID: &npcRow.ID, AgentConfigID: &agentConfig.ID, Model: agentConfig.Model, InputJSON: map[string]any{"content": content}, OutputJSON: map[string]any{"reply": out.Reply}, Status: "succeeded"}})
-		result.Events = []*model.Event{eventResp.Row}
+		_, _ = u.agentRunRepo.CreateAgentRun(ctx, &model.AgentRun{WorldID: &worldID, RunType: "npc_talk", CommandID: &result.Command.ID, NpcID: &npcRow.ID, AgentConfigID: &agentConfig.ID, Model: agentConfig.Model, InputJSON: map[string]any{"content": content}, OutputJSON: map[string]any{"reply": out.Reply}, Status: "succeeded"})
+		result.Events = []*model.Event{eventResp}
 		result.FeedbackLines = []string{out.Reply}
 		result.Command.ResultSummary = "npc talk"
 	case "do":
 		content := stringValue(payload, "content")
-		eventResp, err := u.eventRepo.CreateEvent(ctx, &repo.CreateEventReq{Row: &model.Event{WorldID: worldID, Type: "player_action", ActorPlayerID: &playerID, LocationID: &locationRow.ID, CommandID: &result.Command.ID, Summary: "player action", Content: content, Effects: map[string]any{"activity": 1}, Metadata: map[string]any{}, OccurredAt: time.Now()}})
+		eventResp, err := u.eventRepo.CreateEvent(ctx, &model.Event{WorldID: worldID, Type: "player_action", ActorPlayerID: &playerID, LocationID: &locationRow.ID, CommandID: &result.Command.ID, Summary: "player action", Content: content, Effects: map[string]any{"activity": 1}, Metadata: map[string]any{}, OccurredAt: time.Now()})
 		if err != nil {
 			return nil, err
 		}
-		result.Events = []*model.Event{eventResp.Row}
+		result.Events = []*model.Event{eventResp}
 		result.FeedbackLines = []string{"action recorded"}
 		result.Command.ResultSummary = "player action"
 	case "tick":
@@ -1178,7 +952,7 @@ func (u *GameUsecase) executeWorldCommand(ctx context.Context, req *executeWorld
 		result.FeedbackLines = []string{tickResp.State.Summary}
 		result.Command.ResultSummary = "world tick"
 	case "events":
-		eventsResp, err := u.eventRepo.Page(ctx, &repo.EventPageReq{Page: &common.PageRequest{Page: 1, Size: 10}, Query: repo.EventQuery{WorldID: worldID}})
+		eventsResp, err := u.eventRepo.Page(ctx, &repo.EventPageReq{Page: &common.PageReq{Page: 1, Size: 10}, Query: repo.EventQuery{WorldID: worldID}})
 		if err != nil {
 			return nil, err
 		}
@@ -1193,10 +967,10 @@ func (u *GameUsecase) executeWorldCommand(ctx context.Context, req *executeWorld
 			if err != nil {
 				return nil, err
 			}
-			npcID = &npcResp.Row.ID
+			npcID = &npcResp.ID
 		}
-		memoryResp, err := u.memoryRepo.ListMemories(ctx, &repo.ListMemoriesReq{Query: repo.MemoryQuery{WorldID: worldID, PlayerID: playerID, NpcID: npcID}})
-		memories := memoryResp.Rows
+		memoryResp, err := u.memoryRepo.ListMemories(ctx, &repo.MemoryQuery{WorldID: worldID, PlayerID: playerID, NpcID: npcID})
+		memories := memoryResp
 		if err != nil {
 			return nil, err
 		}
@@ -1210,15 +984,15 @@ func (u *GameUsecase) executeWorldCommand(ctx context.Context, req *executeWorld
 		result.FeedbackLines = lines
 		result.Command.ResultSummary = "list memory"
 	case "npcs":
-		result.FeedbackLines = []string{fmt.Sprintf("current location npc count: %d", len(npcResp.Rows))}
+		result.FeedbackLines = []string{fmt.Sprintf("current location npc count: %d", len(result.VisibleNpcs))}
 		result.Command.ResultSummary = "list npc"
 	case "status":
-		result.FeedbackLines = []string{fmt.Sprintf("world: %s, arc: %s", worldRow.Name, stateResp.Row.CurrentArc)}
+		result.FeedbackLines = []string{fmt.Sprintf("world: %s, arc: %s", worldRow.Name, stateResp.CurrentArc)}
 		result.Command.ResultSummary = "status"
 	default:
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_COMMAND_INVALID)
 	}
-	return &executeWorldCommandResponse{Result: result}, nil
+	return result, nil
 }
 
 func parseCommand(raw string) (string, map[string]any) {
@@ -1366,20 +1140,6 @@ func int64Value(m map[string]any, key string) (int64, bool) {
 	}
 	return 0, false
 }
-func firstNonEmpty(values ...string) string {
-	for _, v := range values {
-		if strings.TrimSpace(v) != "" {
-			return v
-		}
-	}
-	return ""
-}
-func stateMetrics(state *model.WorldStateSnapshot) map[string]any {
-	if state == nil || state.Metrics == nil {
-		return map[string]any{}
-	}
-	return state.Metrics
-}
 func applyMetricDelta(metrics map[string]any, delta map[string]int32, maxDelta int32) map[string]any {
 	result := map[string]any{}
 	for k, v := range metrics {
@@ -1432,11 +1192,7 @@ type selectedAgentConfigReq struct {
 	AgentConfigID *int64
 }
 
-type selectedAgentConfigResponse struct {
-	Row *model.AgentConfig
-}
-
-func (u *GameUsecase) selectedAgentConfig(ctx context.Context, req *selectedAgentConfigReq) (*selectedAgentConfigResponse, error) {
+func (u *GameUsecase) selectedAgentConfig(ctx context.Context, req *selectedAgentConfigReq) (*model.AgentConfig, error) {
 	if req == nil {
 		req = &selectedAgentConfigReq{}
 	}
@@ -1445,28 +1201,16 @@ func (u *GameUsecase) selectedAgentConfig(ctx context.Context, req *selectedAgen
 		if err != nil {
 			return nil, err
 		}
-		return &selectedAgentConfigResponse{Row: resp.Row}, nil
+		return resp, nil
 	}
-	resp, err := u.agentConfigRepo.GetDefaultAgentConfig(ctx, &repo.GetDefaultAgentConfigReq{PlayerID: req.PlayerID})
+	resp, err := u.agentConfigRepo.GetDefaultAgentConfig(ctx, req.PlayerID)
 	if err != nil {
 		return nil, err
 	}
-	return &selectedAgentConfigResponse{Row: resp.Row}, nil
+	return resp, nil
 }
 
-type worldAgentConfigReq struct {
-	World *model.World
-}
-
-type worldAgentConfigResponse struct {
-	Row *model.AgentConfig
-}
-
-func (u *GameUsecase) worldAgentConfig(ctx context.Context, req *worldAgentConfigReq) (*worldAgentConfigResponse, error) {
-	if req == nil {
-		req = &worldAgentConfigReq{}
-	}
-	worldRow := req.World
+func (u *GameUsecase) worldAgentConfig(ctx context.Context, worldRow *model.World) (*model.AgentConfig, error) {
 	if worldRow == nil || worldRow.AgentConfigID == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_CONFIG_NOT_FOUND)
 	}
@@ -1474,7 +1218,7 @@ func (u *GameUsecase) worldAgentConfig(ctx context.Context, req *worldAgentConfi
 	if err != nil {
 		return nil, err
 	}
-	return &worldAgentConfigResponse{Row: resp.Row}, nil
+	return resp, nil
 }
 
 func agentRunConfig(config *model.AgentConfig) *agent.RunConfig {

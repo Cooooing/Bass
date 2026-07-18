@@ -23,12 +23,12 @@ func NewWorldService(gameUsecase *usecase.GameUsecase) *WorldService {
 }
 func (s *WorldService) RegisterGrpc(gs *grpc.Server) { v1.RegisterGameTownWorldServiceServer(gs, s) }
 func (s *WorldService) RegisterHttp(hs *http.Server) {}
-func (s *WorldService) Create(ctx context.Context, req *v1.CreateGameTownWorld_Request) (*v1.CreateGameTownWorld_Response, error) {
+func (s *WorldService) Create(ctx context.Context, req *v1.CreateGameTownWorld_Req) (*v1.CreateGameTownWorld_Resp, error) {
 	scale, ok := gameenum.WorldScaleMap.ToEnum(req.GetScale())
 	if !ok {
 		scale = gameenum.WorldScaleSmall
 	}
-	createResponse, err := s.gameUsecase.CreateWorld(ctx, &usecase.CreateWorldReq{PlayerID: req.GetCreatorPlayerId(), Description: req.GetDescription(), NpcCount: req.GetNpcCount(), LocationCount: req.GetLocationCount(), Scale: string(scale), Seed: req.Seed, Tags: req.GetStyleTags(), AgentConfigID: req.AgentConfigId})
+	result, err := s.gameUsecase.CreateWorld(ctx, &usecase.CreateWorldReq{PlayerID: req.GetCreatorPlayerId(), Description: req.GetDescription(), NpcCount: req.GetNpcCount(), LocationCount: req.GetLocationCount(), Scale: string(scale), Seed: req.Seed, Tags: req.GetStyleTags(), AgentConfigID: req.AgentConfigId})
 	if err != nil {
 		return nil, err
 	}
@@ -51,10 +51,9 @@ func (s *WorldService) Create(ctx context.Context, req *v1.CreateGameTownWorld_R
 		}
 		return st
 	}
-	result := createResponse.Result
-	reply := &v1.CreateGameTownWorld_Response{}
+	reply := &v1.CreateGameTownWorld_Resp{}
 	if row := result.World; row != nil {
-		reply.World = &v1.CreateGameTownWorld_Response_GameTownWorld{
+		reply.World = &v1.CreateGameTownWorld_Resp_GameTownWorld{
 			CreatedAt:         timestamp(row.CreatedAt),
 			UpdatedAt:         timestamp(row.UpdatedAt),
 			Id:                row.ID,
@@ -72,7 +71,7 @@ func (s *WorldService) Create(ctx context.Context, req *v1.CreateGameTownWorld_R
 		}
 	}
 	if row := result.DefaultLocation; row != nil {
-		reply.DefaultLocation = &v1.CreateGameTownWorld_Response_GameTownLocation{
+		reply.DefaultLocation = &v1.CreateGameTownWorld_Resp_GameTownLocation{
 			CreatedAt:   timestamp(row.CreatedAt),
 			UpdatedAt:   timestamp(row.UpdatedAt),
 			Id:          row.ID,
@@ -85,13 +84,13 @@ func (s *WorldService) Create(ctx context.Context, req *v1.CreateGameTownWorld_R
 			Enabled:     row.Enabled,
 		}
 	}
-	reply.Npcs = make([]*v1.CreateGameTownWorld_Response_GameTownNpc, 0, len(result.Npcs))
+	reply.Npcs = make([]*v1.CreateGameTownWorld_Resp_GameTownNpc, 0, len(result.Npcs))
 	for _, row := range result.Npcs {
 		if row == nil {
 			reply.Npcs = append(reply.Npcs, nil)
 			continue
 		}
-		reply.Npcs = append(reply.Npcs, &v1.CreateGameTownWorld_Response_GameTownNpc{
+		reply.Npcs = append(reply.Npcs, &v1.CreateGameTownWorld_Resp_GameTownNpc{
 			CreatedAt:         timestamp(row.CreatedAt),
 			UpdatedAt:         timestamp(row.UpdatedAt),
 			Id:                row.ID,
@@ -110,7 +109,7 @@ func (s *WorldService) Create(ctx context.Context, req *v1.CreateGameTownWorld_R
 		})
 	}
 	if row := result.State; row != nil {
-		reply.State = &v1.CreateGameTownWorld_Response_GameTownWorldStateSnapshot{
+		reply.State = &v1.CreateGameTownWorld_Resp_GameTownWorldStateSnapshot{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			Id:            row.ID,
 			WorldId:       row.WorldID,
@@ -121,13 +120,13 @@ func (s *WorldService) Create(ctx context.Context, req *v1.CreateGameTownWorld_R
 			ReasonEventId: row.ReasonEventID,
 		}
 	}
-	reply.Events = make([]*v1.CreateGameTownWorld_Response_GameTownEvent, 0, len(result.Events))
+	reply.Events = make([]*v1.CreateGameTownWorld_Resp_GameTownEvent, 0, len(result.Events))
 	for _, row := range result.Events {
 		if row == nil {
 			reply.Events = append(reply.Events, nil)
 			continue
 		}
-		reply.Events = append(reply.Events, &v1.CreateGameTownWorld_Response_GameTownEvent{
+		reply.Events = append(reply.Events, &v1.CreateGameTownWorld_Resp_GameTownEvent{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			Id:            row.ID,
 			WorldId:       row.WorldID,
@@ -145,8 +144,8 @@ func (s *WorldService) Create(ctx context.Context, req *v1.CreateGameTownWorld_R
 	}
 	return reply, nil
 }
-func (s *WorldService) Join(ctx context.Context, req *v1.JoinGameTownWorld_Request) (*v1.JoinGameTownWorld_Response, error) {
-	joinResponse, err := s.gameUsecase.JoinWorld(ctx, &usecase.JoinWorldReq{PlayerID: req.GetPlayerId(), WorldCode: req.GetWorldCode()})
+func (s *WorldService) Join(ctx context.Context, req *v1.JoinGameTownWorld_Req) (*v1.JoinGameTownWorld_Resp, error) {
+	result, err := s.gameUsecase.JoinWorld(ctx, &usecase.JoinWorldReq{PlayerID: req.GetPlayerId(), WorldCode: req.GetWorldCode()})
 	if err != nil {
 		return nil, err
 	}
@@ -169,10 +168,9 @@ func (s *WorldService) Join(ctx context.Context, req *v1.JoinGameTownWorld_Reque
 		}
 		return st
 	}
-	result := joinResponse.Result
-	reply := &v1.JoinGameTownWorld_Response{}
+	reply := &v1.JoinGameTownWorld_Resp{}
 	if row := result.World; row != nil {
-		reply.World = &v1.JoinGameTownWorld_Response_GameTownWorld{
+		reply.World = &v1.JoinGameTownWorld_Resp_GameTownWorld{
 			CreatedAt:         timestamp(row.CreatedAt),
 			UpdatedAt:         timestamp(row.UpdatedAt),
 			Id:                row.ID,
@@ -190,7 +188,7 @@ func (s *WorldService) Join(ctx context.Context, req *v1.JoinGameTownWorld_Reque
 		}
 	}
 	if row := result.Member; row != nil {
-		reply.Member = &v1.JoinGameTownWorld_Response_GameTownWorldMember{
+		reply.Member = &v1.JoinGameTownWorld_Resp_GameTownWorldMember{
 			CreatedAt:         timestamp(row.CreatedAt),
 			UpdatedAt:         timestamp(row.UpdatedAt),
 			Id:                row.ID,
@@ -203,7 +201,7 @@ func (s *WorldService) Join(ctx context.Context, req *v1.JoinGameTownWorld_Reque
 		}
 	}
 	if row := result.Location; row != nil {
-		reply.Location = &v1.JoinGameTownWorld_Response_GameTownLocation{
+		reply.Location = &v1.JoinGameTownWorld_Resp_GameTownLocation{
 			CreatedAt:   timestamp(row.CreatedAt),
 			UpdatedAt:   timestamp(row.UpdatedAt),
 			Id:          row.ID,
@@ -218,8 +216,8 @@ func (s *WorldService) Join(ctx context.Context, req *v1.JoinGameTownWorld_Reque
 	}
 	return reply, nil
 }
-func (s *WorldService) Get(ctx context.Context, req *v1.GetGameTownWorld_Request) (*v1.GetGameTownWorld_Response, error) {
-	getResponse, err := s.gameUsecase.GetWorld(ctx, &usecase.GetWorldReq{ID: req.GetId()})
+func (s *WorldService) Get(ctx context.Context, req *v1.GetGameTownWorld_Req) (*v1.GetGameTownWorld_Resp, error) {
+	row, err := s.gameUsecase.GetWorld(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
@@ -236,9 +234,9 @@ func (s *WorldService) Get(ctx context.Context, req *v1.GetGameTownWorld_Request
 		}
 		return st
 	}
-	reply := &v1.GetGameTownWorld_Response{}
-	if row := getResponse.Row; row != nil {
-		reply.Row = &v1.GetGameTownWorld_Response_GameTownWorld{
+	reply := &v1.GetGameTownWorld_Resp{}
+	if row != nil {
+		reply.Row = &v1.GetGameTownWorld_Resp_GameTownWorld{
 			CreatedAt:         timestamp(row.CreatedAt),
 			UpdatedAt:         timestamp(row.UpdatedAt),
 			Id:                row.ID,
@@ -257,7 +255,7 @@ func (s *WorldService) Get(ctx context.Context, req *v1.GetGameTownWorld_Request
 	}
 	return reply, nil
 }
-func (s *WorldService) Page(ctx context.Context, req *v1.PageGameTownWorlds_Request) (*v1.PageGameTownWorlds_Response, error) {
+func (s *WorldService) Page(ctx context.Context, req *v1.PageGameTownWorlds_Req) (*v1.PageGameTownWorlds_Resp, error) {
 	var status *string
 	if req.Status != nil && *req.Status != v1.GameTownWorldStatus_GAME_TOWN_WORLD_STATUS_UNSPECIFIED {
 		value, ok := gameenum.WorldStatusMap.ToEnum(*req.Status)
@@ -266,7 +264,7 @@ func (s *WorldService) Page(ctx context.Context, req *v1.PageGameTownWorlds_Requ
 			status = &statusValue
 		}
 	}
-	pageResponse, err := s.gameUsecase.PageWorlds(ctx, &usecase.PageWorldsReq{Page: req.GetPage(), CreatorPlayerID: req.CreatorPlayerId, Status: status})
+	pageResp, err := s.gameUsecase.PageWorlds(ctx, &usecase.PageWorldsReq{Page: req.GetPage(), CreatorPlayerID: req.CreatorPlayerId, Status: status})
 	if err != nil {
 		return nil, err
 	}
@@ -283,13 +281,13 @@ func (s *WorldService) Page(ctx context.Context, req *v1.PageGameTownWorlds_Requ
 		}
 		return st
 	}
-	reply := &v1.PageGameTownWorlds_Response{Page: pageResponse.Page, Rows: make([]*v1.PageGameTownWorlds_Response_GameTownWorld, 0, len(pageResponse.Rows))}
-	for _, row := range pageResponse.Rows {
+	reply := &v1.PageGameTownWorlds_Resp{Page: pageResp.Page, Rows: make([]*v1.PageGameTownWorlds_Resp_GameTownWorld, 0, len(pageResp.Rows))}
+	for _, row := range pageResp.Rows {
 		if row == nil {
 			reply.Rows = append(reply.Rows, nil)
 			continue
 		}
-		reply.Rows = append(reply.Rows, &v1.PageGameTownWorlds_Response_GameTownWorld{
+		reply.Rows = append(reply.Rows, &v1.PageGameTownWorlds_Resp_GameTownWorld{
 			CreatedAt:         timestamp(row.CreatedAt),
 			UpdatedAt:         timestamp(row.UpdatedAt),
 			Id:                row.ID,
@@ -308,8 +306,8 @@ func (s *WorldService) Page(ctx context.Context, req *v1.PageGameTownWorlds_Requ
 	}
 	return reply, nil
 }
-func (s *WorldService) GetState(ctx context.Context, req *v1.GetGameTownWorldState_Request) (*v1.GetGameTownWorldState_Response, error) {
-	stateResponse, err := s.gameUsecase.GetState(ctx, &usecase.GetStateReq{WorldID: req.GetWorldId()})
+func (s *WorldService) GetState(ctx context.Context, req *v1.GetGameTownWorldState_Req) (*v1.GetGameTownWorldState_Resp, error) {
+	stateResp, err := s.gameUsecase.GetState(ctx, req.GetWorldId())
 	if err != nil {
 		return nil, err
 	}
@@ -332,9 +330,9 @@ func (s *WorldService) GetState(ctx context.Context, req *v1.GetGameTownWorldSta
 		}
 		return st
 	}
-	reply := &v1.GetGameTownWorldState_Response{Metrics: make([]*v1.GetGameTownWorldState_Response_GameTownWorldMetricDefinition, 0, len(stateResponse.Metrics))}
-	if row := stateResponse.State; row != nil {
-		reply.Row = &v1.GetGameTownWorldState_Response_GameTownWorldStateSnapshot{
+	reply := &v1.GetGameTownWorldState_Resp{Metrics: make([]*v1.GetGameTownWorldState_Resp_GameTownWorldMetricDefinition, 0, len(stateResp.Metrics))}
+	if row := stateResp.State; row != nil {
+		reply.Row = &v1.GetGameTownWorldState_Resp_GameTownWorldStateSnapshot{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			Id:            row.ID,
 			WorldId:       row.WorldID,
@@ -345,12 +343,12 @@ func (s *WorldService) GetState(ctx context.Context, req *v1.GetGameTownWorldSta
 			ReasonEventId: row.ReasonEventID,
 		}
 	}
-	for _, row := range stateResponse.Metrics {
+	for _, row := range stateResp.Metrics {
 		if row == nil {
 			reply.Metrics = append(reply.Metrics, nil)
 			continue
 		}
-		reply.Metrics = append(reply.Metrics, &v1.GetGameTownWorldState_Response_GameTownWorldMetricDefinition{
+		reply.Metrics = append(reply.Metrics, &v1.GetGameTownWorldState_Resp_GameTownWorldMetricDefinition{
 			CreatedAt:    timestamp(row.CreatedAt),
 			UpdatedAt:    timestamp(row.UpdatedAt),
 			Id:           row.ID,
@@ -365,8 +363,8 @@ func (s *WorldService) GetState(ctx context.Context, req *v1.GetGameTownWorldSta
 	}
 	return reply, nil
 }
-func (s *WorldService) Tick(ctx context.Context, req *v1.TickGameTownWorld_Request) (*v1.TickGameTownWorld_Response, error) {
-	tickResponse, err := s.gameUsecase.Tick(ctx, &usecase.TickReq{WorldID: req.GetWorldId(), OperatorPlayerID: req.GetOperatorPlayerId(), Limit: req.GetRecentEventLimit()})
+func (s *WorldService) Tick(ctx context.Context, req *v1.TickGameTownWorld_Req) (*v1.TickGameTownWorld_Resp, error) {
+	tickResp, err := s.gameUsecase.Tick(ctx, &usecase.TickReq{WorldID: req.GetWorldId(), OperatorPlayerID: req.GetOperatorPlayerId(), Limit: req.GetRecentEventLimit()})
 	if err != nil {
 		return nil, err
 	}
@@ -383,9 +381,9 @@ func (s *WorldService) Tick(ctx context.Context, req *v1.TickGameTownWorld_Reque
 		}
 		return st
 	}
-	reply := &v1.TickGameTownWorld_Response{Events: make([]*v1.TickGameTownWorld_Response_GameTownEvent, 0, len(tickResponse.Events))}
-	if row := tickResponse.State; row != nil {
-		reply.State = &v1.TickGameTownWorld_Response_GameTownWorldStateSnapshot{
+	reply := &v1.TickGameTownWorld_Resp{Events: make([]*v1.TickGameTownWorld_Resp_GameTownEvent, 0, len(tickResp.Events))}
+	if row := tickResp.State; row != nil {
+		reply.State = &v1.TickGameTownWorld_Resp_GameTownWorldStateSnapshot{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			Id:            row.ID,
 			WorldId:       row.WorldID,
@@ -396,12 +394,12 @@ func (s *WorldService) Tick(ctx context.Context, req *v1.TickGameTownWorld_Reque
 			ReasonEventId: row.ReasonEventID,
 		}
 	}
-	for _, row := range tickResponse.Events {
+	for _, row := range tickResp.Events {
 		if row == nil {
 			reply.Events = append(reply.Events, nil)
 			continue
 		}
-		reply.Events = append(reply.Events, &v1.TickGameTownWorld_Response_GameTownEvent{
+		reply.Events = append(reply.Events, &v1.TickGameTownWorld_Resp_GameTownEvent{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			Id:            row.ID,
 			WorldId:       row.WorldID,

@@ -25,11 +25,11 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func HttpResponseEncoder(w http.ResponseWriter, r *http.Request, data any) error {
-	if ImageResponse, ok := data.(*common.ImageResponse); ok {
-		w.Header().Set("Content-Type", ImageResponse.ContentType)
+func HttpRespEncoder(w http.ResponseWriter, r *http.Request, data any) error {
+	if ImageResp, ok := data.(*common.ImageResp); ok {
+		w.Header().Set("Content-Type", ImageResp.ContentType)
 		w.WriteHeader(http.StatusOK)
-		_, err := w.Write(ImageResponse.Data)
+		_, err := w.Write(ImageResp.Data)
 		if err != nil {
 			return err
 		}
@@ -167,7 +167,7 @@ func UserAuthMiddleware(authClient userv1.AuthServiceClient) middleware.Middlewa
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 			}
 
-			reply, err := authClient.ParseToken(ctx, &userv1.ParseToken_Request{Token: token})
+			reply, err := authClient.ParseToken(ctx, &userv1.ParseToken_Req{Token: token})
 			if err != nil {
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID).WithCause(err)
 			}

@@ -58,9 +58,9 @@ var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubj
 	EventSubjectContentCommentStatusUpdate:  {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_STATUS_UPDATED},
 })
 
-// Values 返回 Ent enum 允许写入的持久化值。
+// Values 仅用于满足 Ent GoType 接口；schema 必须显式使用 EventSubjectMap.EnumValues() 填充数据库枚举值。
 func (EventSubject) Values() []string {
-	return EventSubjectMap.EnumValues()
+	return nil
 }
 
 // EventSubjectByEventType 根据事件类型返回对应的 MQ 主题。

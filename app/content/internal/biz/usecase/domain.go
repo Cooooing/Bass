@@ -24,58 +24,42 @@ func NewContentUsecase(
 	}
 }
 
-type DomainAddsReq struct {
-	Domains []*model.Domain
-}
-
-type DomainAddsResponse struct {
-	Rows []*model.Domain
-}
-
-func (d *ContentUsecase) Adds(ctx context.Context, req *DomainAddsReq) (*DomainAddsResponse, error) {
+func (d *ContentUsecase) Adds(ctx context.Context, domains []*model.Domain) ([]*model.Domain, error) {
 	var (
 		rows []*model.Domain
 		err  error
 	)
 	err = d.tx(ctx, func(ctx context.Context) error {
-		savesResponse, saveErr := d.domainRepo.Saves(ctx, &repo.DomainSavesReq{Domains: req.Domains})
+		savesResp, saveErr := d.domainRepo.Saves(ctx, domains)
 		if saveErr != nil {
 			return saveErr
 		}
-		rows = savesResponse.Rows
+		rows = savesResp
 		return err
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &DomainAddsResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-type DomainUpdateReq struct {
-	Domain *model.Domain
-}
-
-type DomainUpdateResponse struct {
-	Domain *model.Domain
-}
-
-func (d *ContentUsecase) Update(ctx context.Context, req *DomainUpdateReq) (*DomainUpdateResponse, error) {
+func (d *ContentUsecase) Update(ctx context.Context, domain *model.Domain) (*model.Domain, error) {
 	var (
-		domain *model.Domain
-		err    error
+		updated *model.Domain
+		err     error
 	)
 	err = d.tx(ctx, func(ctx context.Context) error {
-		updateResponse, updateErr := d.domainRepo.Update(ctx, &repo.DomainUpdateReq{Domain: req.Domain})
+		updateResp, updateErr := d.domainRepo.Update(ctx, domain)
 		if updateErr != nil {
 			return updateErr
 		}
-		domain = updateResponse.Domain
+		updated = updateResp
 		return err
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &DomainUpdateResponse{Domain: domain}, nil
+	return updated, nil
 }
 
 type DomainPageReq struct {
@@ -89,16 +73,16 @@ type DomainPageReq struct {
 	IsNav       *bool
 }
 
-type DomainPageResponse struct {
+type DomainPageResp struct {
 	Rows []*model.Domain
-	Page *base.PageResponse
+	Page *base.PageResp
 }
 
-func (d *ContentUsecase) Page(ctx context.Context, req *DomainPageReq) (*DomainPageResponse, error) {
+func (d *ContentUsecase) Page(ctx context.Context, req *DomainPageReq) (*DomainPageResp, error) {
 	if req == nil {
 		req = &DomainPageReq{}
 	}
-	pageResponse, err := d.domainRepo.Page(ctx, &repo.DomainGetReq{
+	pageResp, err := d.domainRepo.Page(ctx, &repo.DomainGetReq{
 		Page:        req.Page,
 		DomainIds:   req.DomainIDs,
 		Name:        req.Name,
@@ -111,5 +95,5 @@ func (d *ContentUsecase) Page(ctx context.Context, req *DomainPageReq) (*DomainP
 	if err != nil {
 		return nil, err
 	}
-	return &DomainPageResponse{Rows: pageResponse.Rows, Page: pageResponse.Page}, nil
+	return &DomainPageResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
 }

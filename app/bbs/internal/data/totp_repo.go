@@ -17,51 +17,51 @@ func NewTotpClient(userClient *rpc.UserClient) repo.TotpClient {
 	return &TotpClient{userClient: userClient}
 }
 
-func (r *TotpClient) CheckEnableCodeTotp(ctx context.Context, req *repo.CheckEnableCodeTotpReq) (*repo.CheckEnableCodeTotpResponse, error) {
-	reply, err := r.userClient.Totp.Validate(ctx, &userv1.ValidateTotp_Request{UserId: req.UserID, Code: req.Code})
+func (r *TotpClient) CheckEnableCodeTotp(ctx context.Context, req *repo.CheckEnableCodeTotpReq) (bool, error) {
+	reply, err := r.userClient.Totp.Validate(ctx, &userv1.ValidateTotp_Req{UserId: req.UserID, Code: req.Code})
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &repo.CheckEnableCodeTotpResponse{Verified: reply.GetVerified()}, nil
+	return reply.GetVerified(), nil
 }
 
-func (r *TotpClient) ValidateTotp(ctx context.Context, req *repo.ValidateTotpReq) (*repo.ValidateTotpResponse, error) {
-	reply, err := r.userClient.Totp.Validate(ctx, &userv1.ValidateTotp_Request{UserId: req.UserID, Code: req.Code})
+func (r *TotpClient) ValidateTotp(ctx context.Context, req *repo.ValidateTotpReq) (bool, error) {
+	reply, err := r.userClient.Totp.Validate(ctx, &userv1.ValidateTotp_Req{UserId: req.UserID, Code: req.Code})
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &repo.ValidateTotpResponse{Verified: reply.GetVerified()}, nil
+	return reply.GetVerified(), nil
 }
 
-func (r *TotpClient) BeginEnableTotp(ctx context.Context, req *repo.BeginEnableTotpReq) (*repo.BeginEnableTotpResponse, error) {
-	reply, err := r.userClient.Totp.BeginEnable(ctx, &userv1.BeginEnableTotp_Request{UserId: req.UserID, AccountName: req.AccountName})
+func (r *TotpClient) BeginEnableTotp(ctx context.Context, req *repo.BeginEnableTotpReq) (*repo.BeginEnableTotpResp, error) {
+	reply, err := r.userClient.Totp.BeginEnable(ctx, &userv1.BeginEnableTotp_Req{UserId: req.UserID, AccountName: req.AccountName})
 	if err != nil {
 		return nil, err
 	}
-	return &repo.BeginEnableTotpResponse{
+	return &repo.BeginEnableTotpResp{
 		URL:    reply.GetUrl(),
 		QRCode: reply.GetQrCode(),
 	}, nil
 }
 
-func (r *TotpClient) ConfirmEnableTotp(ctx context.Context, req *repo.ConfirmEnableTotpReq) (*repo.ConfirmEnableTotpResponse, error) {
-	_, err := r.userClient.Totp.ConfirmEnable(ctx, &userv1.ConfirmEnableTotp_Request{UserId: req.UserID, Code: req.Code})
+func (r *TotpClient) ConfirmEnableTotp(ctx context.Context, req *repo.ConfirmEnableTotpReq) error {
+	_, err := r.userClient.Totp.ConfirmEnable(ctx, &userv1.ConfirmEnableTotp_Req{UserId: req.UserID, Code: req.Code})
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &repo.ConfirmEnableTotpResponse{}, nil
+	return nil
 }
 
-func (r *TotpClient) DisableTotp(ctx context.Context, req *repo.DisableTotpReq) (*repo.DisableTotpResponse, error) {
-	_, err := r.userClient.Totp.Disable(ctx, &userv1.DisableTotp_Request{UserId: req.UserID, Code: req.Code})
+func (r *TotpClient) DisableTotp(ctx context.Context, req *repo.DisableTotpReq) error {
+	_, err := r.userClient.Totp.Disable(ctx, &userv1.DisableTotp_Req{UserId: req.UserID, Code: req.Code})
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &repo.DisableTotpResponse{}, nil
+	return nil
 }
 
-func (r *TotpClient) GetCurrentTotp(ctx context.Context, req *repo.GetCurrentTotpReq) (*repo.GetCurrentTotpResponse, error) {
-	reply, err := r.userClient.Totp.Get(ctx, &userv1.GetTotp_Request{UserId: req.UserID})
+func (r *TotpClient) GetCurrentTotp(ctx context.Context, userID int64) (*repo.Totp, error) {
+	reply, err := r.userClient.Totp.Get(ctx, &userv1.GetTotp_Req{UserId: userID})
 	if err != nil {
 		return nil, err
 	}
@@ -74,5 +74,5 @@ func (r *TotpClient) GetCurrentTotp(ctx context.Context, req *repo.GetCurrentTot
 			EnableTime: formatProtoTime(totpSetting.GetEnableTime()),
 		}
 	}
-	return &repo.GetCurrentTotpResponse{Totp: out}, nil
+	return out, nil
 }

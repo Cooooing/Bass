@@ -14,24 +14,16 @@ func NewAccountUsecase(accountClient repo.AccountClient) *AccountUsecase {
 	return &AccountUsecase{accountClient: accountClient}
 }
 
-type GetCurrentAccountReq struct {
-	UserID int64
-}
-
-type GetCurrentAccountResponse struct {
-	Account *bbsuserv1.GetCurrentAccount_Response_Account
-}
-
-func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, req *GetCurrentAccountReq) (*GetCurrentAccountResponse, error) {
-	reply, err := u.accountClient.GetCurrentAccount(ctx, &repo.GetCurrentAccountReq{UserID: req.UserID})
+func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentAccount_Resp_Account, error) {
+	reply, err := u.accountClient.GetCurrentAccount(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
-	var account *bbsuserv1.GetCurrentAccount_Response_Account
-	if reply.Account != nil {
-		account = &bbsuserv1.GetCurrentAccount_Response_Account{}
-		if profile := reply.Account.Profile; profile != nil {
-			account.Profile = &bbsuserv1.GetCurrentAccount_Response_AccountProfile{
+	var account *bbsuserv1.GetCurrentAccount_Resp_Account
+	if reply != nil {
+		account = &bbsuserv1.GetCurrentAccount_Resp_Account{}
+		if profile := reply.Profile; profile != nil {
+			account.Profile = &bbsuserv1.GetCurrentAccount_Resp_AccountProfile{
 				Id:            profile.ID,
 				Name:          profile.Name,
 				Nickname:      profile.Nickname,
@@ -46,33 +38,25 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, req *GetCurrentA
 				UpdatedAt:     profile.UpdatedAt,
 			}
 		}
-		if contact := reply.Account.Contact; contact != nil {
-			account.Contact = &bbsuserv1.GetCurrentAccount_Response_AccountContact{
+		if contact := reply.Contact; contact != nil {
+			account.Contact = &bbsuserv1.GetCurrentAccount_Resp_AccountContact{
 				UserId: contact.UserID,
 				Email:  contact.Email,
 				Phone:  contact.Phone,
 			}
 		}
 	}
-	return &GetCurrentAccountResponse{Account: account}, nil
+	return account, nil
 }
 
-type GetProfileAccountReq struct {
-	UserID int64
-}
-
-type GetProfileAccountResponse struct {
-	Profile *bbsuserv1.GetProfileAccount_Response_AccountProfile
-}
-
-func (u *AccountUsecase) GetProfileAccount(ctx context.Context, req *GetProfileAccountReq) (*GetProfileAccountResponse, error) {
-	reply, err := u.accountClient.GetProfileAccount(ctx, &repo.GetProfileAccountReq{UserID: req.UserID})
+func (u *AccountUsecase) GetProfileAccount(ctx context.Context, userID int64) (*bbsuserv1.GetProfileAccount_Resp_AccountProfile, error) {
+	reply, err := u.accountClient.GetProfileAccount(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
-	var profile *bbsuserv1.GetProfileAccount_Response_AccountProfile
-	if row := reply.Profile; row != nil {
-		profile = &bbsuserv1.GetProfileAccount_Response_AccountProfile{
+	var profile *bbsuserv1.GetProfileAccount_Resp_AccountProfile
+	if row := reply; row != nil {
+		profile = &bbsuserv1.GetProfileAccount_Resp_AccountProfile{
 			Id:            row.ID,
 			Name:          row.Name,
 			Nickname:      row.Nickname,
@@ -87,7 +71,7 @@ func (u *AccountUsecase) GetProfileAccount(ctx context.Context, req *GetProfileA
 			UpdatedAt:     row.UpdatedAt,
 		}
 	}
-	return &GetProfileAccountResponse{Profile: profile}, nil
+	return profile, nil
 }
 
 type UpdateProfileAccountReq struct {
@@ -99,11 +83,7 @@ type UpdateProfileAccountReq struct {
 	Mbti         *bbsuserv1.MBTI
 }
 
-type UpdateProfileAccountResponse struct {
-	Profile *bbsuserv1.UpdateProfileAccount_Response_AccountProfile
-}
-
-func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*UpdateProfileAccountResponse, error) {
+func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*bbsuserv1.UpdateProfileAccount_Resp_AccountProfile, error) {
 	var mbti *int32
 	if req.Mbti != nil {
 		value := int32(*req.Mbti)
@@ -120,9 +100,9 @@ func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdatePr
 	if err != nil {
 		return nil, err
 	}
-	var profile *bbsuserv1.UpdateProfileAccount_Response_AccountProfile
-	if row := reply.Profile; row != nil {
-		profile = &bbsuserv1.UpdateProfileAccount_Response_AccountProfile{
+	var profile *bbsuserv1.UpdateProfileAccount_Resp_AccountProfile
+	if row := reply; row != nil {
+		profile = &bbsuserv1.UpdateProfileAccount_Resp_AccountProfile{
 			Id:            row.ID,
 			Name:          row.Name,
 			Nickname:      row.Nickname,
@@ -137,22 +117,18 @@ func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdatePr
 			UpdatedAt:     row.UpdatedAt,
 		}
 	}
-	return &UpdateProfileAccountResponse{Profile: profile}, nil
+	return profile, nil
 }
 
-type AvatarAccountReq struct {
-	Name string
-}
-
-type AvatarAccountResponse struct {
+type AvatarAccountResp struct {
 	Data        []byte
 	ContentType string
 }
 
-func (u *AccountUsecase) AvatarAccount(ctx context.Context, req *AvatarAccountReq) (*AvatarAccountResponse, error) {
-	reply, err := u.accountClient.AvatarAccount(ctx, &repo.AvatarAccountReq{Name: req.Name})
+func (u *AccountUsecase) AvatarAccount(ctx context.Context, name string) (*AvatarAccountResp, error) {
+	reply, err := u.accountClient.AvatarAccount(ctx, name)
 	if err != nil {
 		return nil, err
 	}
-	return &AvatarAccountResponse{Data: reply.Data, ContentType: reply.ContentType}, nil
+	return &AvatarAccountResp{Data: reply.Data, ContentType: reply.ContentType}, nil
 }

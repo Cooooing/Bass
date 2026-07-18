@@ -10,15 +10,15 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/game_town/v1;v1";
 
 service GameTownNpcService {
-  rpc Get(GetGameTownNpc.Request) returns (GetGameTownNpc.Response) {} // 获取 NPC。
-  rpc List(ListGameTownNpcs.Request) returns (ListGameTownNpcs.Response) {} // 查询 NPC。
+  rpc Get(GetGameTownNpc.Req) returns (GetGameTownNpc.Resp) {} // 获取 NPC。
+  rpc List(ListGameTownNpcs.Req) returns (ListGameTownNpcs.Resp) {} // 查询 NPC。
 }
 
 message GetGameTownNpc {
-  message Request {
+  message Req {
     int64 id = 1; // NPC ID
   }
-  message Response {
+  message Resp {
 
     message GameTownNpc {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -42,11 +42,11 @@ message GetGameTownNpc {
 }
 
 message ListGameTownNpcs {
-  message Request {
+  message Req {
     int64 world_id = 1; // 世界 ID
     optional int64 location_id = 2; // 地点 ID
   }
-  message Response {
+  message Resp {
 
     message GameTownNpc {
       google.protobuf.Timestamp created_at = 1000; // 创建时间

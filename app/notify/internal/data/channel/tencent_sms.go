@@ -68,7 +68,7 @@ func (c *TencentSMSClient) SendTencentSMS(_ context.Context, req *bizchannel.Ten
 	request.TemplateParamSet = common.StringPtrs(req.TemplateParams)
 	request.PhoneNumberSet = common.StringPtrs([]string{req.Phone})
 
-	response, err := c.client.SendSms(request)
+	resp, err := c.client.SendSms(request)
 	if err != nil {
 		if sdkErr, ok := errors.AsType[*tencenterrors.TencentCloudSDKError](err); ok {
 			return &bizchannel.SendResult{
@@ -80,14 +80,14 @@ func (c *TencentSMSClient) SendTencentSMS(_ context.Context, req *bizchannel.Ten
 		}
 		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusUnknown, ProviderMessage: new(fmt.Sprintf("send tencent sms: %v", err))}, nil
 	}
-	reply, _ := json.Marshal(response.Response)
+	reply, _ := json.Marshal(resp.Response)
 	requestID := ""
-	if response.Response != nil && response.Response.RequestId != nil {
-		requestID = *response.Response.RequestId
+	if resp.Response != nil && resp.Response.RequestId != nil {
+		requestID = *resp.Response.RequestId
 	}
 	return &bizchannel.SendResult{
 		Status:            notifyenum.NotificationChannelStatusSucceeded,
 		ProviderRequestID: &requestID,
-		ProviderResponse:  new(string(reply)),
+		ProviderResp:      new(string(reply)),
 	}, nil
 }

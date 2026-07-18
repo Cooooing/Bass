@@ -33,7 +33,7 @@ func (r *TaskVersionRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *TaskVersionRepo) Get(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*bizrepo.TaskVersionGetResponse, error) {
+func (r *TaskVersionRepo) Get(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*model.TaskVersion, error) {
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, req)
 	row, err := query.Only(ctx)
@@ -43,10 +43,10 @@ func (r *TaskVersionRepo) Get(ctx context.Context, req *bizrepo.TaskVersionGetRe
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.TaskVersionGetResponse{Row: r.model(row)}, nil
+	return r.model(row), nil
 }
 
-func (r *TaskVersionRepo) List(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*bizrepo.TaskVersionListResponse, error) {
+func (r *TaskVersionRepo) List(ctx context.Context, req *bizrepo.TaskVersionGetReq) ([]*model.TaskVersion, error) {
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, req)
 	rows, err := query.Order(taskversion.ByTaskID(), taskversion.ByVersion(entsql.OrderDesc())).All(ctx)
@@ -57,32 +57,32 @@ func (r *TaskVersionRepo) List(ctx context.Context, req *bizrepo.TaskVersionGetR
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return &bizrepo.TaskVersionListResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *TaskVersionRepo) Map(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*bizrepo.TaskVersionMapResponse, error) {
-	resp, err := r.List(ctx, req)
+func (r *TaskVersionRepo) Map(ctx context.Context, req *bizrepo.TaskVersionGetReq) (map[int64]*model.TaskVersion, error) {
+	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[int64]*model.TaskVersion, len(resp.Rows))
-	for _, row := range resp.Rows {
+	result := make(map[int64]*model.TaskVersion, len(rows))
+	for _, row := range rows {
 		result[row.ID] = row
 	}
-	return &bizrepo.TaskVersionMapResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *TaskVersionRepo) Count(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*bizrepo.TaskVersionCountResponse, error) {
+func (r *TaskVersionRepo) Count(ctx context.Context, req *bizrepo.TaskVersionGetReq) (int, error) {
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &bizrepo.TaskVersionCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *TaskVersionRepo) Page(ctx context.Context, req *bizrepo.TaskVersionPageReq) (*bizrepo.TaskVersionPageResponse, error) {
+func (r *TaskVersionRepo) Page(ctx context.Context, req *bizrepo.TaskVersionPageReq) (*bizrepo.TaskVersionPageResp, error) {
 	page := server.PageValid(req.Page)
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, &req.TaskVersionGetReq)
@@ -98,11 +98,11 @@ func (r *TaskVersionRepo) Page(ctx context.Context, req *bizrepo.TaskVersionPage
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return &bizrepo.TaskVersionPageResponse{Rows: result, Page: &common.PageResponse{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
+	return &bizrepo.TaskVersionPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
 }
 
-func (r *TaskVersionRepo) Create(ctx context.Context, req *bizrepo.TaskVersionCreateReq) (*bizrepo.TaskVersionCreateResponse, error) {
-	row := req.Task
+func (r *TaskVersionRepo) Create(ctx context.Context, taskRow *model.Task) (*model.TaskVersion, error) {
+	row := taskRow
 	created, err := r.getClient(ctx).TaskVersion.Create().
 		SetTaskID(row.ID).
 		SetVersion(row.Version).
@@ -119,7 +119,7 @@ func (r *TaskVersionRepo) Create(ctx context.Context, req *bizrepo.TaskVersionCr
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.TaskVersionCreateResponse{Row: r.model(created)}, nil
+	return r.model(created), nil
 }
 
 func (r *TaskVersionRepo) getQuery(query *gen.TaskVersionQuery, req *bizrepo.TaskVersionGetReq) *gen.TaskVersionQuery {

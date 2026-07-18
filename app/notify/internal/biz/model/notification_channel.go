@@ -32,7 +32,7 @@ type NotificationEmailDelivery struct {
 	AttemptCount      int32
 	LastAttemptAt     *time.Time
 	ProviderMessageID *string
-	ProviderResponse  *string
+	ProviderResp      *string
 	SentAt            *time.Time
 	CreatedAt         *time.Time
 	UpdatedAt         *time.Time
@@ -69,7 +69,7 @@ type NotificationLarkWebhookDelivery struct {
 	AttemptCount  int32
 	LastAttemptAt *time.Time
 	HTTPStatus    *int
-	ResponseBody  *string
+	RespBody      *string
 	SentAt        *time.Time
 	CreatedAt     *time.Time
 	UpdatedAt     *time.Time

@@ -40,20 +40,8 @@ func NewTotpUsecase(
 	}, nil
 }
 
-type GetTotpByUserIDReq struct {
-	UserID int64
-}
-
-type GetTotpByUserIDResponse struct {
-	Totp *model.Totp
-}
-
-func (u *TotpUsecase) GetByUserID(ctx context.Context, req *GetTotpByUserIDReq) (*GetTotpByUserIDResponse, error) {
-	totpResp, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &req.UserID})
-	if err != nil {
-		return nil, err
-	}
-	return &GetTotpByUserIDResponse{Totp: totpResp.Totp}, nil
+func (u *TotpUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Totp, error) {
+	return u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &userID})
 }
 
 type ValidateTotpByUserIDReq struct {
@@ -61,20 +49,15 @@ type ValidateTotpByUserIDReq struct {
 	Code   string
 }
 
-type ValidateTotpByUserIDResponse struct {
-	Verified bool
-}
-
-func (u *TotpUsecase) ValidateByUserID(ctx context.Context, req *ValidateTotpByUserIDReq) (*ValidateTotpByUserIDResponse, error) {
-	totpResp, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &req.UserID})
+func (u *TotpUsecase) ValidateByUserID(ctx context.Context, req *ValidateTotpByUserIDReq) (bool, error) {
+	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &req.UserID})
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	row := totpResp.Totp
 	if row == nil || !row.Enable || row.Secret == "" {
-		return &ValidateTotpByUserIDResponse{}, nil
+		return false, nil
 	}
-	return &ValidateTotpByUserIDResponse{Verified: totp.Validate(req.Code, row.Secret)}, nil
+	return totp.Validate(req.Code, row.Secret), nil
 }
 
 type BeginEnableTotpReq struct {
@@ -82,17 +65,17 @@ type BeginEnableTotpReq struct {
 	AccountName string
 }
 
-type BeginEnableTotpResponse struct {
+type BeginEnableTotpResp struct {
 	URL    string
 	QRCode []byte
 }
 
-func (u *TotpUsecase) BeginEnable(ctx context.Context, req *BeginEnableTotpReq) (*BeginEnableTotpResponse, error) {
-	totpResp, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &req.UserID})
+func (u *TotpUsecase) BeginEnable(ctx context.Context, req *BeginEnableTotpReq) (*BeginEnableTotpResp, error) {
+	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &req.UserID})
 	if err != nil {
 		return nil, err
 	}
-	row := totpResp.Totp
+
 	if row != nil && row.Enable {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_ENABLED)
 	}
@@ -104,7 +87,7 @@ func (u *TotpUsecase) BeginEnable(ctx context.Context, req *BeginEnableTotpReq) 
 	if err != nil {
 		return nil, err
 	}
-	if _, err = u.totpSecretCache.Save(ctx, &repo.TotpSecretCacheSaveReq{UserID: req.UserID, Secret: key.Secret(), TTL: 5 * time.Minute}); err != nil {
+	if err = u.totpSecretCache.Save(ctx, &repo.TotpSecretCacheSaveReq{UserID: req.UserID, Secret: key.Secret(), TTL: 5 * time.Minute}); err != nil {
 		return nil, err
 	}
 
@@ -116,7 +99,7 @@ func (u *TotpUsecase) BeginEnable(ctx context.Context, req *BeginEnableTotpReq) 
 	if err = png.Encode(buf, image); err != nil {
 		return nil, err
 	}
-	return &BeginEnableTotpResponse{URL: key.URL(), QRCode: buf.Bytes()}, nil
+	return &BeginEnableTotpResp{URL: key.URL(), QRCode: buf.Bytes()}, nil
 }
 
 type CheckEnableTotpCodeReq struct {
@@ -124,16 +107,12 @@ type CheckEnableTotpCodeReq struct {
 	Code   string
 }
 
-type CheckEnableTotpCodeResponse struct {
-	Verified bool
-}
-
-func (u *TotpUsecase) CheckEnableCode(ctx context.Context, req *CheckEnableTotpCodeReq) (*CheckEnableTotpCodeResponse, error) {
-	secretResp, err := u.totpSecretCache.Get(ctx, &repo.TotpSecretCacheGetReq{UserID: req.UserID})
+func (u *TotpUsecase) CheckEnableCode(ctx context.Context, req *CheckEnableTotpCodeReq) (bool, error) {
+	secret, err := u.totpSecretCache.Get(ctx, req.UserID)
 	if err != nil {
-		return &CheckEnableTotpCodeResponse{}, nil
+		return false, nil
 	}
-	return &CheckEnableTotpCodeResponse{Verified: totp.Validate(req.Code, secretResp.Secret)}, nil
+	return totp.Validate(req.Code, secret), nil
 }
 
 type DisableTotpReq struct {
@@ -142,11 +121,11 @@ type DisableTotpReq struct {
 }
 
 func (u *TotpUsecase) Disable(ctx context.Context, req *DisableTotpReq) error {
-	totpResp, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &req.UserID})
+	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &req.UserID})
 	if err != nil {
 		return err
 	}
-	row := totpResp.Totp
+
 	if row == nil || !row.Enable {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_ALREADY_DISABLED)
 	}
@@ -155,10 +134,10 @@ func (u *TotpUsecase) Disable(ctx context.Context, req *DisableTotpReq) error {
 	}
 
 	return u.tx(ctx, func(ctx context.Context) error {
-		if _, err := u.totpRepo.DisableByUserID(ctx, &repo.TotpDisableByUserIDReq{UserID: req.UserID}); err != nil {
+		if _, err := u.totpRepo.DisableByUserID(ctx, req.UserID); err != nil {
 			return err
 		}
-		_, err := u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		err := u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_TOTP_DISABLE,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_TOTP_DISABLE,
@@ -179,19 +158,19 @@ type ConfirmEnableTotpReq struct {
 }
 
 func (u *TotpUsecase) ConfirmEnable(ctx context.Context, req *ConfirmEnableTotpReq) error {
-	secretResp, err := u.totpSecretCache.Get(ctx, &repo.TotpSecretCacheGetReq{UserID: req.UserID})
+	secret, err := u.totpSecretCache.Get(ctx, req.UserID)
 	if err != nil {
 		return err
 	}
-	if !totp.Validate(req.Code, secretResp.Secret) {
+	if !totp.Validate(req.Code, secret) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
 	}
 
 	return u.tx(ctx, func(ctx context.Context) error {
-		if _, err = u.totpRepo.UpsertEnabledByUserID(ctx, &repo.TotpUpsertEnabledByUserIDReq{UserID: req.UserID, Secret: secretResp.Secret}); err != nil {
+		if _, err = u.totpRepo.UpsertEnabledByUserID(ctx, &repo.TotpUpsertEnabledByUserIDReq{UserID: req.UserID, Secret: secret}); err != nil {
 			return err
 		}
-		_, err := u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		err := u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_TOTP_ENABLE,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_TOTP_ENABLE,

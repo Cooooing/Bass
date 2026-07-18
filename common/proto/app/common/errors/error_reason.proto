@@ -44,7 +44,7 @@ enum ErrorReason {
 
   // ===== 4xx 客户端错误 =====
 
-  BadRequest = 400 [(errors.code) = 400]; // 请求语法错误、参数错误
+  BadReq = 400 [(errors.code) = 400]; // 请求语法错误、参数错误
   Unauthorized = 401 [(errors.code) = 401]; // 未认证，需身份验证
   PaymentRequired = 402 [(errors.code) = 402]; // 保留，支付相关
   Forbidden = 403 [(errors.code) = 403]; // 已认证但无权限访问
@@ -52,7 +52,7 @@ enum ErrorReason {
   MethodNotAllowed = 405 [(errors.code) = 405]; // 请求方法不被允许
   NotAcceptable = 406 [(errors.code) = 406]; // 无可接受的内容
   ProxyAuthenticationRequired = 407 [(errors.code) = 407]; // 代理认证
-  RequestTimeout = 408 [(errors.code) = 408]; // 请求超时
+  ReqTimeout = 408 [(errors.code) = 408]; // 请求超时
   Conflict = 409 [(errors.code) = 409]; // 请求与服务器状态冲突
   Gone = 410 [(errors.code) = 410]; // 资源永久删除
   LengthRequired = 411 [(errors.code) = 411]; // 需 Content-Length 头
@@ -63,15 +63,15 @@ enum ErrorReason {
   RangeNotSatisfiable = 416 [(errors.code) = 416]; // Range 请求不可满足
   ExpectationFailed = 417 [(errors.code) = 417]; // Expect 请求无法满足
   ImATeapot = 418 [(errors.code) = 418]; // 玩笑：茶壶不能煮咖啡
-  MisdirectedRequest = 421 [(errors.code) = 421]; // 请求被错误路由
+  MisdirectedReq = 421 [(errors.code) = 421]; // 请求被错误路由
   UnprocessableEntity = 422 [(errors.code) = 422]; // WebDAV：语义错误无法处理
   Locked = 423 [(errors.code) = 423]; // WebDAV：资源锁定
   FailedDependency = 424 [(errors.code) = 424]; // WebDAV：前置请求失败
   TooEarly = 425 [(errors.code) = 425]; // 实验性：请求过早
   UpgradeRequired = 426 [(errors.code) = 426]; // 需升级协议
   PreconditionRequired = 428 [(errors.code) = 428]; // 需前置条件，防止丢失更新
-  TooManyRequests = 429 [(errors.code) = 429]; // 请求过多，限流
-  RequestHeaderFieldsTooLarge = 431 [(errors.code) = 431]; // 请求头字段过大
+  TooManyReqs = 429 [(errors.code) = 429]; // 请求过多，限流
+  ReqHeaderFieldsTooLarge = 431 [(errors.code) = 431]; // 请求头字段过大
   UnavailableForLegalReasons = 451 [(errors.code) = 451]; // 法律原因不可用
 
   // ===== 5xx 服务器错误 =====

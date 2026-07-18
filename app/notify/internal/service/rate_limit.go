@@ -29,9 +29,9 @@ func (s *RateLimitService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *RateLimitService) RegisterHttp(hs *http.Server) {}
 
-func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationRateLimit_Request) (*v1.CheckNotificationRateLimit_Response, error) {
+func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationRateLimit_Req) (*v1.CheckNotificationRateLimit_Resp, error) {
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_REQUEST_INVALID)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_Req_INVALID)
 	}
 	channel, ok := notifyenum.NotificationChannelMap.ToEnum(req.GetChannel())
 	if !ok || (channel != notifyenum.NotificationChannelEmail && channel != notifyenum.NotificationChannelTencentSMS) {
@@ -49,7 +49,7 @@ func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationR
 	if state.RetryAfter > 0 {
 		retryAfterSeconds = int64((state.RetryAfter + time.Second - 1) / time.Second)
 	}
-	return &v1.CheckNotificationRateLimit_Response{
+	return &v1.CheckNotificationRateLimit_Resp{
 		Limited:           state.Limited,
 		RetryAfterSeconds: retryAfterSeconds,
 		RemainingCount:    state.RemainingCount,

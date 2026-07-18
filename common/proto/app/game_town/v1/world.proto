@@ -10,16 +10,16 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/game_town/v1;v1";
 
 service GameTownWorldService {
-  rpc Create(CreateGameTownWorld.Request) returns (CreateGameTownWorld.Response) {} // 创建随机世界。
-  rpc Join(JoinGameTownWorld.Request) returns (JoinGameTownWorld.Response) {} // 加入世界。
-  rpc Get(GetGameTownWorld.Request) returns (GetGameTownWorld.Response) {} // 获取世界。
-  rpc Page(PageGameTownWorlds.Request) returns (PageGameTownWorlds.Response) {} // 分页查询世界。
-  rpc GetState(GetGameTownWorldState.Request) returns (GetGameTownWorldState.Response) {} // 获取世界状态。
-  rpc Tick(TickGameTownWorld.Request) returns (TickGameTownWorld.Response) {} // 推动世界演化。
+  rpc Create(CreateGameTownWorld.Req) returns (CreateGameTownWorld.Resp) {} // 创建随机世界。
+  rpc Join(JoinGameTownWorld.Req) returns (JoinGameTownWorld.Resp) {} // 加入世界。
+  rpc Get(GetGameTownWorld.Req) returns (GetGameTownWorld.Resp) {} // 获取世界。
+  rpc Page(PageGameTownWorlds.Req) returns (PageGameTownWorlds.Resp) {} // 分页查询世界。
+  rpc GetState(GetGameTownWorldState.Req) returns (GetGameTownWorldState.Resp) {} // 获取世界状态。
+  rpc Tick(TickGameTownWorld.Req) returns (TickGameTownWorld.Resp) {} // 推动世界演化。
 }
 
 message CreateGameTownWorld {
-  message Request {
+  message Req {
     int64 creator_player_id = 1; // 创建玩家 ID
     string description = 2; // 世界描述
     uint32 npc_count = 3; // NPC 数量
@@ -29,7 +29,7 @@ message CreateGameTownWorld {
     repeated string style_tags = 7; // 风格标签
     optional int64 agent_config_id = 8; // Agent 配置 ID
   }
-  message Response {
+  message Resp {
 
     message GameTownNpc {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -114,11 +114,11 @@ message CreateGameTownWorld {
 }
 
 message JoinGameTownWorld {
-  message Request {
+  message Req {
     int64 player_id = 1; // 玩家 ID
     string world_code = 2; // 世界短码
   }
-  message Response {
+  message Resp {
 
     message GameTownWorld {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -168,10 +168,10 @@ message JoinGameTownWorld {
 }
 
 message GetGameTownWorld {
-  message Request {
+  message Req {
     int64 id = 1; // 世界 ID
   }
-  message Response {
+  message Resp {
 
     message GameTownWorld {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -194,12 +194,12 @@ message GetGameTownWorld {
 }
 
 message PageGameTownWorlds {
-  message Request {
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数
     optional int64 creator_player_id = 2; // 创建玩家 ID
     optional GameTownWorldStatus status = 3; // 世界状态
   }
-  message Response {
+  message Resp {
 
     message GameTownWorld {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -217,16 +217,16 @@ message PageGameTownWorlds {
       string generation_summary = 11; // 生成摘要
       optional int64 agent_config_id = 12; // Agent 配置 ID
     }
-    .common.api.app.common.PageResponse page = 1; // 分页结果
+    .common.api.app.common.PageResp page = 1; // 分页结果
     repeated GameTownWorld rows = 2; // 世界列表
   }
 }
 
 message GetGameTownWorldState {
-  message Request {
+  message Req {
     int64 world_id = 1; // 世界 ID
   }
-  message Response {
+  message Resp {
 
     message GameTownWorldStateSnapshot {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -257,12 +257,12 @@ message GetGameTownWorldState {
 }
 
 message TickGameTownWorld {
-  message Request {
+  message Req {
     int64 world_id = 1; // 世界 ID
     int64 operator_player_id = 2; // 操作玩家 ID
     uint32 recent_event_limit = 3; // 近期事件数量
   }
-  message Response {
+  message Resp {
 
     message GameTownWorldStateSnapshot {
       google.protobuf.Timestamp created_at = 1000; // 创建时间

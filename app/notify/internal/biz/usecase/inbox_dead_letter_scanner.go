@@ -66,11 +66,11 @@ func (s *InboxDeadLetterScanner) Stop(_ context.Context) error {
 
 func (s *InboxDeadLetterScanner) scan(ctx context.Context) error {
 	status := commonenum.InboxEventStatusDead
-	pageResponse, err := s.inboxRepo.Page(ctx, &repo.InboxEventPageReq{Query: &repo.InboxEventQuery{Page: &base.PageRequest{Page: 1, Size: inboxDeadLetterScanLimit}, Status: &status}})
+	pageResp, err := s.inboxRepo.Page(ctx, &repo.InboxEventQuery{Page: &base.PageRequest{Page: 1, Size: inboxDeadLetterScanLimit}, Status: &status})
 	if err != nil {
 		return err
 	}
-	for _, row := range pageResponse.Rows {
+	for _, row := range pageResp.Rows {
 		lastError := ""
 		if row.LastError != nil {
 			lastError = *row.LastError

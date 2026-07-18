@@ -3,10 +3,10 @@ package repo
 import "context"
 
 type AccountClient interface {
-	GetCurrentAccount(ctx context.Context, req *GetCurrentAccountReq) (*GetCurrentAccountResponse, error)
-	GetProfileAccount(ctx context.Context, req *GetProfileAccountReq) (*GetProfileAccountResponse, error)
-	UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*UpdateProfileAccountResponse, error)
-	AvatarAccount(ctx context.Context, req *AvatarAccountReq) (*AvatarAccountResponse, error)
+	GetCurrentAccount(ctx context.Context, userID int64) (*Account, error)
+	GetProfileAccount(ctx context.Context, userID int64) (*AccountProfile, error)
+	UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*AccountProfile, error)
+	AvatarAccount(ctx context.Context, name string) (*AvatarAccountResp, error)
 }
 
 type AccountProfile struct {
@@ -35,22 +35,6 @@ type Account struct {
 	Contact *AccountContact
 }
 
-type GetCurrentAccountReq struct {
-	UserID int64
-}
-
-type GetCurrentAccountResponse struct {
-	Account *Account
-}
-
-type GetProfileAccountReq struct {
-	UserID int64
-}
-
-type GetProfileAccountResponse struct {
-	Profile *AccountProfile
-}
-
 type UpdateProfileAccountReq struct {
 	UserID       int64
 	AvatarURL    *string
@@ -59,16 +43,7 @@ type UpdateProfileAccountReq struct {
 	Introduction *string
 	MBTI         *int32
 }
-
-type UpdateProfileAccountResponse struct {
-	Profile *AccountProfile
-}
-
-type AvatarAccountReq struct {
-	Name string
-}
-
-type AvatarAccountResponse struct {
+type AvatarAccountResp struct {
 	Data        []byte
 	ContentType string
 }

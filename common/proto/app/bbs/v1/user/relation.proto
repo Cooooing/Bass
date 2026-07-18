@@ -15,7 +15,7 @@ option go_package = "common/proto/gen/bbs/v1/user;user";
 // 账号关系接口。
 service RelationService {
   // 当前账号关注目标账号。
-  rpc Follow(FollowRelation.Request) returns (FollowRelation.Response) {
+  rpc Follow(FollowRelation.Req) returns (FollowRelation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/follow"
       body: "*"
@@ -23,7 +23,7 @@ service RelationService {
   }
 
   // 当前账号取消关注目标账号。
-  rpc Unfollow(UnfollowRelation.Request) returns (UnfollowRelation.Response) {
+  rpc Unfollow(UnfollowRelation.Req) returns (UnfollowRelation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/unfollow"
       body: "*"
@@ -31,7 +31,7 @@ service RelationService {
   }
 
   // 当前账号拉黑目标账号。
-  rpc Block(BlockRelation.Request) returns (BlockRelation.Response) {
+  rpc Block(BlockRelation.Req) returns (BlockRelation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/block"
       body: "*"
@@ -39,7 +39,7 @@ service RelationService {
   }
 
   // 当前账号取消拉黑目标账号。
-  rpc Unblock(UnblockRelation.Request) returns (UnblockRelation.Response) {
+  rpc Unblock(UnblockRelation.Req) returns (UnblockRelation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/unblock"
       body: "*"
@@ -47,7 +47,7 @@ service RelationService {
   }
 
   // 分页查询当前账号关注的账号列表。
-  rpc ListFollowing(ListFollowingRelations.Request) returns (ListFollowingRelations.Response) {
+  rpc ListFollowing(ListFollowingRelations.Req) returns (ListFollowingRelations.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/list-following"
       body: "*"
@@ -55,7 +55,7 @@ service RelationService {
   }
 
   // 分页查询当前账号的粉丝账号列表。
-  rpc ListFollowers(ListFollowersRelations.Request) returns (ListFollowersRelations.Response) {
+  rpc ListFollowers(ListFollowersRelations.Req) returns (ListFollowersRelations.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/list-followers"
       body: "*"
@@ -63,7 +63,7 @@ service RelationService {
   }
 
   // 分页查询当前账号拉黑的账号列表。
-  rpc ListBlocked(ListBlockedRelations.Request) returns (ListBlockedRelations.Response) {
+  rpc ListBlocked(ListBlockedRelations.Req) returns (ListBlockedRelations.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/list-blocked"
       body: "*"
@@ -71,7 +71,7 @@ service RelationService {
   }
 
   // 查询当前账号与目标账号之间的关系。
-  rpc GetStatus(GetStatusRelation.Request) returns (GetStatusRelation.Response) {
+  rpc GetStatus(GetStatusRelation.Req) returns (GetStatusRelation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/relation/get-status"
       body: "*"
@@ -81,51 +81,51 @@ service RelationService {
 
 // 当前账号关注目标账号。
 message FollowRelation {
-  message Request {
+  message Req {
     // 目标账号 ID。
     int64 target_id = 1;
     option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
-  message Response {}
+  message Resp {}
 }
 
 // 当前账号取消关注目标账号。
 message UnfollowRelation {
-  message Request {
+  message Req {
     // 目标账号 ID。
     int64 target_id = 1;
     option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
-  message Response {}
+  message Resp {}
 }
 
 // 当前账号拉黑目标账号。
 message BlockRelation {
-  message Request {
+  message Req {
     // 目标账号 ID。
     int64 target_id = 1;
     option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
-  message Response {}
+  message Resp {}
 }
 
 // 当前账号取消拉黑目标账号。
 message UnblockRelation {
-  message Request {
+  message Req {
     // 目标账号 ID。
     int64 target_id = 1;
     option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
-  message Response {}
+  message Resp {}
 }
 
 // 分页查询当前账号关注的账号列表。
 message ListFollowingRelations {
-  message Request {
+  message Req {
     // 分页参数。
-    .common.api.app.common.PageRequest page = 1;
+    .common.api.app.common.PageReq page = 1;
   }
-  message Response {
+  message Resp {
 
     message Relation {
       int64 id = 1;
@@ -136,7 +136,7 @@ message ListFollowingRelations {
       google.protobuf.Timestamp updated_at = 1001;
     }
     // 分页结果。
-    .common.api.app.common.PageResponse page = 1;
+    .common.api.app.common.PageResp page = 1;
     // 账号关系列表。
     repeated Relation rows = 2;
   }
@@ -144,11 +144,11 @@ message ListFollowingRelations {
 
 // 分页查询当前账号的粉丝账号列表。
 message ListFollowersRelations {
-  message Request {
+  message Req {
     // 分页参数。
-    .common.api.app.common.PageRequest page = 1;
+    .common.api.app.common.PageReq page = 1;
   }
-  message Response {
+  message Resp {
 
     message Relation {
       int64 id = 1;
@@ -159,7 +159,7 @@ message ListFollowersRelations {
       google.protobuf.Timestamp updated_at = 1001;
     }
     // 分页结果。
-    .common.api.app.common.PageResponse page = 1;
+    .common.api.app.common.PageResp page = 1;
     // 账号关系列表。
     repeated Relation rows = 2;
   }
@@ -167,11 +167,11 @@ message ListFollowersRelations {
 
 // 分页查询当前账号拉黑的账号列表。
 message ListBlockedRelations {
-  message Request {
+  message Req {
     // 分页参数。
-    .common.api.app.common.PageRequest page = 1;
+    .common.api.app.common.PageReq page = 1;
   }
-  message Response {
+  message Resp {
 
     message Relation {
       int64 id = 1;
@@ -182,7 +182,7 @@ message ListBlockedRelations {
       google.protobuf.Timestamp updated_at = 1001;
     }
     // 分页结果。
-    .common.api.app.common.PageResponse page = 1;
+    .common.api.app.common.PageResp page = 1;
     // 账号关系列表。
     repeated Relation rows = 2;
   }
@@ -190,12 +190,12 @@ message ListBlockedRelations {
 
 // 查询当前账号与目标账号之间的关系。
 message GetStatusRelation {
-  message Request {
+  message Req {
     // 目标账号 ID。
     int64 target_id = 1;
     option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
-  message Response {
+  message Resp {
 
     message RelationStatus {
       // 目标账号 ID。

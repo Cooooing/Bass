@@ -5,7 +5,7 @@ type PageReq struct {
 	Size uint32
 }
 
-type PageResponse struct {
+type PageResp struct {
 	Total uint32
 	Page  uint32
 	Size  uint32

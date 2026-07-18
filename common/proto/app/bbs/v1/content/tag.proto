@@ -12,7 +12,7 @@ option go_package = "common/proto/gen/bbs/v1/content;content";
 // 标签接口。
 service TagService {
   // 创建标签。
-  rpc Create(CreateTag.Request) returns (CreateTag.Response) {
+  rpc Create(CreateTag.Req) returns (CreateTag.Resp) {
     option (google.api.http) = {
       post: "/v1/content/tag/create"
       body: "*"
@@ -20,7 +20,7 @@ service TagService {
   }
 
   // 更新标签。
-  rpc Update(UpdateTag.Request) returns (UpdateTag.Response) {
+  rpc Update(UpdateTag.Req) returns (UpdateTag.Resp) {
     option (google.api.http) = {
       post: "/v1/content/tag/update"
       body: "*"
@@ -28,7 +28,7 @@ service TagService {
   }
 
   // 分页查询标签列表。
-  rpc List(ListTags.Request) returns (ListTags.Response) {
+  rpc List(ListTags.Req) returns (ListTags.Resp) {
     option (google.api.http) = {
       post: "/v1/content/tag/list"
       body: "*"
@@ -38,7 +38,7 @@ service TagService {
 
 // 创建标签。
 message CreateTag {
-  message Request {// 标签保存内容。
+  message Req {// 标签保存内容。
     Tag tag = 1;
     option (gnostic.openapi.v3.schema) = {required: "tag"};
 
@@ -54,7 +54,7 @@ message CreateTag {
       option (gnostic.openapi.v3.schema) = {required: "name"};
     }
   }
-  message Response {
+  message Resp {
 
     message Tag {
       int64 id = 1; // 标签 ID
@@ -74,7 +74,7 @@ message CreateTag {
 
 // 更新标签。
 message UpdateTag {
-  message Request {
+  message Req {
     // 标签 ID。
     int64 tag_id = 1;
     // 标签保存内容。
@@ -96,7 +96,7 @@ message UpdateTag {
       option (gnostic.openapi.v3.schema) = {required: "name"};
     }
   }
-  message Response {
+  message Resp {
 
     message Tag {
       int64 id = 1; // 标签 ID
@@ -118,7 +118,7 @@ message UpdateTag {
 
 // 分页查询标签列表。
 message ListTags {
-  message Request {
+  message Req {
 
     message TagQuery {
       // 标签 ID 列表。
@@ -135,11 +135,11 @@ message ListTags {
       optional int64 domain_id = 6;
     }
     // 分页参数。
-    .common.api.app.common.PageRequest page = 1;
+    .common.api.app.common.PageReq page = 1;
     // 查询条件。
     TagQuery query = 2;
   }
-  message Response {
+  message Resp {
 
     message Tag {
       int64 id = 1; // 标签 ID
@@ -153,7 +153,7 @@ message ListTags {
       string updated_at = 1001; // 更新时间
     }
     // 分页结果。
-    .common.api.app.common.PageResponse page = 1;
+    .common.api.app.common.PageResp page = 1;
     // 标签列表。
     repeated Tag rows = 2;
   }

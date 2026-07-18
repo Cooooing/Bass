@@ -10,15 +10,15 @@ import "user/v1/enum.proto";
 option go_package = "common/proto/gen/user/v1;v1";
 
 service LocationService {
-  rpc Get(GetLocation.Request) returns (GetLocation.Response) {} // 获取账号地理资料。
-  rpc Upsert(UpsertLocation.Request) returns (UpsertLocation.Response) {} // 更新账号地理资料；缺省扩展表使用 upsert 创建。
+  rpc Get(GetLocation.Req) returns (GetLocation.Resp) {} // 获取账号地理资料。
+  rpc Upsert(UpsertLocation.Req) returns (UpsertLocation.Resp) {} // 更新账号地理资料；缺省扩展表使用 upsert 创建。
 }
 
 message GetLocation {
-  message Request {
+  message Req {
     int64 user_id = 1;
   }
-  message Response {
+  message Resp {
 
     message Location {
       int64 user_id = 1;
@@ -31,13 +31,13 @@ message GetLocation {
 }
 
 message UpsertLocation {
-  message Request {
+  message Req {
     int64 user_id = 1;
     optional string country = 2;
     optional string province = 3;
     optional string city = 4;
   }
-  message Response {
+  message Resp {
 
     message Location {
       int64 user_id = 1;

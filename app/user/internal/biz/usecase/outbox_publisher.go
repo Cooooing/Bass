@@ -101,11 +101,11 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 	}()
 	var events []*model.OutboxEvent
 	err = p.tx(ctx, func(ctx context.Context) error {
-		claimedResp, err := p.outboxRepo.ClaimForPublish(ctx, &repo.OutboxEventClaimForPublishReq{Limit: p.publishLimit(), StaleBefore: time.Now().Add(-p.publishTimeout())})
+		claimed, err := p.outboxRepo.ClaimForPublish(ctx, &repo.OutboxEventClaimForPublishReq{Limit: p.publishLimit(), StaleBefore: time.Now().Add(-p.publishTimeout())})
 		if err != nil {
 			return err
 		}
-		events = claimedResp.Rows
+		events = claimed
 		return nil
 	})
 	if err != nil {
@@ -117,17 +117,17 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 	published := false
 	var batchErr error
 	for _, event := range events {
-		_, err = p.eventClient.Publish(ctx, &repo.EventClientPublishReq{Message: &repo.EventClientMessage{
+		err = p.eventClient.Publish(ctx, &repo.EventClientMessage{
 			Subject: string(event.Subject),
 			Payload: event.Payload,
 			Headers: event.Headers,
-		}})
+		})
 		if err != nil {
 			p.logger.ErrorContext(ctx, "publish outbox event failed", constant.LogFieldEventID, event.EventID, constant.LogFieldErr, err)
 			if ctx.Err() != nil {
 				return published, ctx.Err()
 			}
-			if _, markErr := p.outboxRepo.MarkFailed(ctx, &repo.OutboxEventMarkFailedReq{ID: event.ID, LastError: err.Error(), MaxRetry: p.maxRetry()}); markErr != nil {
+			if markErr := p.outboxRepo.MarkFailed(ctx, &repo.OutboxEventMarkFailedReq{ID: event.ID, LastError: err.Error(), MaxRetry: p.maxRetry()}); markErr != nil {
 				p.logger.ErrorContext(ctx, "mark outbox event failed", constant.LogFieldEventID, event.EventID, constant.LogFieldErr, markErr)
 				if batchErr == nil {
 					batchErr = markErr
@@ -135,7 +135,7 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 			}
 			continue
 		}
-		if _, err = p.outboxRepo.MarkPublished(ctx, &repo.OutboxEventMarkPublishedReq{ID: event.ID, PublishedAt: time.Now()}); err != nil {
+		if err = p.outboxRepo.MarkPublished(ctx, &repo.OutboxEventMarkPublishedReq{ID: event.ID, PublishedAt: time.Now()}); err != nil {
 			if ctx.Err() != nil {
 				return published, ctx.Err()
 			}

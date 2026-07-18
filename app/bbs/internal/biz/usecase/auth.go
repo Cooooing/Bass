@@ -10,7 +10,7 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func bbsTime(value string) *timestamppb.Timestamp {
+func (u *AuthUsecase) bbsTime(value string) *timestamppb.Timestamp {
 	if value == "" {
 		return nil
 	}
@@ -36,12 +36,12 @@ type StartEmailRegistrationReq struct {
 	Nickname *string
 }
 
-type StartEmailRegistrationResponse struct {
+type StartEmailRegistrationResp struct {
 	CodeToken string
 	Code      string
 }
 
-func (u *AuthUsecase) StartEmailRegistration(ctx context.Context, req *StartEmailRegistrationReq) (*StartEmailRegistrationResponse, error) {
+func (u *AuthUsecase) StartEmailRegistration(ctx context.Context, req *StartEmailRegistrationReq) (*StartEmailRegistrationResp, error) {
 	reply, err := u.authRepo.StartEmailRegistration(ctx, &repo.StartEmailRegistrationReq{
 		Email:    req.Email,
 		Password: req.Password,
@@ -51,7 +51,7 @@ func (u *AuthUsecase) StartEmailRegistration(ctx context.Context, req *StartEmai
 	if err != nil {
 		return nil, err
 	}
-	return &StartEmailRegistrationResponse{CodeToken: reply.CodeToken, Code: reply.Code}, nil
+	return &StartEmailRegistrationResp{CodeToken: reply.CodeToken, Code: reply.Code}, nil
 }
 
 type VerifyEmailRegistrationReq struct {
@@ -60,7 +60,7 @@ type VerifyEmailRegistrationReq struct {
 }
 
 func (u *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEmailRegistrationReq) error {
-	_, err := u.authRepo.VerifyEmailRegistration(ctx, &repo.VerifyEmailRegistrationReq{Code: req.Code, CodeToken: req.CodeToken})
+	err := u.authRepo.VerifyEmailRegistration(ctx, &repo.VerifyEmailRegistrationReq{Code: req.Code, CodeToken: req.CodeToken})
 	return err
 }
 
@@ -71,12 +71,12 @@ type StartPhoneRegistrationReq struct {
 	Nickname *string
 }
 
-type StartPhoneRegistrationResponse struct {
+type StartPhoneRegistrationResp struct {
 	CodeToken string
 	Code      string
 }
 
-func (u *AuthUsecase) StartPhoneRegistration(ctx context.Context, req *StartPhoneRegistrationReq) (*StartPhoneRegistrationResponse, error) {
+func (u *AuthUsecase) StartPhoneRegistration(ctx context.Context, req *StartPhoneRegistrationReq) (*StartPhoneRegistrationResp, error) {
 	reply, err := u.authRepo.StartPhoneRegistration(ctx, &repo.StartPhoneRegistrationReq{
 		Phone:    req.Phone,
 		Password: req.Password,
@@ -86,7 +86,7 @@ func (u *AuthUsecase) StartPhoneRegistration(ctx context.Context, req *StartPhon
 	if err != nil {
 		return nil, err
 	}
-	return &StartPhoneRegistrationResponse{CodeToken: reply.CodeToken, Code: reply.Code}, nil
+	return &StartPhoneRegistrationResp{CodeToken: reply.CodeToken, Code: reply.Code}, nil
 }
 
 type VerifyPhoneRegistrationReq struct {
@@ -95,7 +95,7 @@ type VerifyPhoneRegistrationReq struct {
 }
 
 func (u *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, req *VerifyPhoneRegistrationReq) error {
-	_, err := u.authRepo.VerifyPhoneRegistration(ctx, &repo.VerifyPhoneRegistrationReq{Code: req.Code, CodeToken: req.CodeToken})
+	err := u.authRepo.VerifyPhoneRegistration(ctx, &repo.VerifyPhoneRegistrationReq{Code: req.Code, CodeToken: req.CodeToken})
 	return err
 }
 
@@ -104,21 +104,21 @@ type LoginByPasswordReq struct {
 	Password string
 }
 
-type LoginByPasswordResponse struct {
+type LoginByPasswordResp struct {
 	Token   string
-	Account *bbsuserv1.LoginByPassword_Response_Account
+	Account *bbsuserv1.LoginByPassword_Resp_Account
 }
 
-func (u *AuthUsecase) LoginByPassword(ctx context.Context, req *LoginByPasswordReq) (*LoginByPasswordResponse, error) {
+func (u *AuthUsecase) LoginByPassword(ctx context.Context, req *LoginByPasswordReq) (*LoginByPasswordResp, error) {
 	reply, err := u.authRepo.LoginByPassword(ctx, &repo.LoginByPasswordReq{Account: req.Account, Password: req.Password})
 	if err != nil {
 		return nil, err
 	}
-	var account *bbsuserv1.LoginByPassword_Response_Account
+	var account *bbsuserv1.LoginByPassword_Resp_Account
 	if reply.Account != nil {
-		account = &bbsuserv1.LoginByPassword_Response_Account{}
+		account = &bbsuserv1.LoginByPassword_Resp_Account{}
 		if profile := reply.Account.Profile; profile != nil {
-			account.Basic = &bbsuserv1.LoginByPassword_Response_AccountBasic{
+			account.Basic = &bbsuserv1.LoginByPassword_Resp_AccountBasic{
 				Id:            profile.ID,
 				Name:          profile.Name,
 				Nickname:      profile.Nickname,
@@ -129,26 +129,21 @@ func (u *AuthUsecase) LoginByPassword(ctx context.Context, req *LoginByPasswordR
 				Mbti:          bbsuserv1.MBTI(profile.MBTI),
 				FollowCount:   profile.FollowCount,
 				FollowerCount: profile.FollowerCount,
-				CreatedAt:     bbsTime(profile.CreatedAt),
-				UpdatedAt:     bbsTime(profile.UpdatedAt),
+				CreatedAt:     u.bbsTime(profile.CreatedAt),
+				UpdatedAt:     u.bbsTime(profile.UpdatedAt),
 			}
 		}
 		if contact := reply.Account.Contact; contact != nil {
-			account.Contact = &bbsuserv1.LoginByPassword_Response_AccountContact{
+			account.Contact = &bbsuserv1.LoginByPassword_Resp_AccountContact{
 				UserId: contact.UserID,
 				Email:  contact.Email,
 				Phone:  contact.Phone,
 			}
 		}
 	}
-	return &LoginByPasswordResponse{Token: reply.Token, Account: account}, nil
+	return &LoginByPasswordResp{Token: reply.Token, Account: account}, nil
 }
 
-type LogoutReq struct {
-	Token string
-}
-
-func (u *AuthUsecase) Logout(ctx context.Context, req *LogoutReq) error {
-	_, err := u.authRepo.Logout(ctx, &repo.LogoutReq{Token: req.Token})
-	return err
+func (u *AuthUsecase) Logout(ctx context.Context, token string) error {
+	return u.authRepo.Logout(ctx, token)
 }

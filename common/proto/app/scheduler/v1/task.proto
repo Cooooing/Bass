@@ -9,19 +9,19 @@ import "scheduler/v1/enum.proto";
 option go_package = "common/proto/gen/scheduler/v1;v1";
 
 service SchedulerTaskService {
-  rpc Upsert(UpsertSchedulerTask.Request) returns (UpsertSchedulerTask.Response) {} // 新增或更新定时任务。
-  rpc Get(GetSchedulerTask.Request) returns (GetSchedulerTask.Response) {} // 获取定时任务。
-  rpc Page(PageSchedulerTasks.Request) returns (PageSchedulerTasks.Response) {} // 分页查询定时任务。
-  rpc ListAvailableTasks(ListSchedulerAvailableTasks.Request) returns (ListSchedulerAvailableTasks.Response) {} // 查询代码内已注册任务。
-  rpc PageExecutionRecords(PageSchedulerTaskExecutionRecords.Request) returns (PageSchedulerTaskExecutionRecords.Response) {} // 分页查询任务执行记录。
-  rpc Trigger(TriggerSchedulerTask.Request) returns (TriggerSchedulerTask.Response) {} // 手动触发一次任务运行。
-  rpc CancelExecution(CancelSchedulerTaskExecution.Request) returns (CancelSchedulerTaskExecution.Response) {} // 取消正在运行的任务执行记录。
-  rpc CheckExecutionRuntimes(CheckSchedulerTaskExecutionRuntimes.Request) returns (CheckSchedulerTaskExecutionRuntimes.Response) {} // 检查执行记录 Redis 运行态。
-  rpc MarkExecutionsUnknown(MarkSchedulerTaskExecutionsUnknown.Request) returns (MarkSchedulerTaskExecutionsUnknown.Response) {} // 将已确认丢失运行心跳的记录标记为未知。
+  rpc Upsert(UpsertSchedulerTask.Req) returns (UpsertSchedulerTask.Resp) {} // 新增或更新定时任务。
+  rpc Get(GetSchedulerTask.Req) returns (GetSchedulerTask.Resp) {} // 获取定时任务。
+  rpc Page(PageSchedulerTasks.Req) returns (PageSchedulerTasks.Resp) {} // 分页查询定时任务。
+  rpc ListAvailableTasks(ListSchedulerAvailableTasks.Req) returns (ListSchedulerAvailableTasks.Resp) {} // 查询代码内已注册任务。
+  rpc PageExecutionRecords(PageSchedulerTaskExecutionRecords.Req) returns (PageSchedulerTaskExecutionRecords.Resp) {} // 分页查询任务执行记录。
+  rpc Trigger(TriggerSchedulerTask.Req) returns (TriggerSchedulerTask.Resp) {} // 手动触发一次任务运行。
+  rpc CancelExecution(CancelSchedulerTaskExecution.Req) returns (CancelSchedulerTaskExecution.Resp) {} // 取消正在运行的任务执行记录。
+  rpc CheckExecutionRuntimes(CheckSchedulerTaskExecutionRuntimes.Req) returns (CheckSchedulerTaskExecutionRuntimes.Resp) {} // 检查执行记录 Redis 运行态。
+  rpc MarkExecutionsUnknown(MarkSchedulerTaskExecutionsUnknown.Req) returns (MarkSchedulerTaskExecutionsUnknown.Resp) {} // 将已确认丢失运行心跳的记录标记为未知。
 }
 
 message UpsertSchedulerTask {
-  message Request {
+  message Req {
     int64 id = 1; // 任务 ID，0 表示新增
     string name = 2; // 代码内任务名称
     string title = 3; // 展示名称
@@ -33,7 +33,7 @@ message UpsertSchedulerTask {
     bool allow_overlap = 9; // 是否允许同一任务重叠执行
     optional bool alert_enabled = 10; // 是否启用告警，未传时默认启用
   }
-  message Response {
+  message Resp {
 
     message SchedulerTask {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -56,10 +56,10 @@ message UpsertSchedulerTask {
 }
 
 message GetSchedulerTask {
-  message Request {
+  message Req {
     int64 id = 1; // 任务 ID
   }
-  message Response {
+  message Resp {
 
     message SchedulerTask {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -82,7 +82,7 @@ message GetSchedulerTask {
 }
 
 message PageSchedulerTasks {
-  message Request {
+  message Req {
 
     message SchedulerTaskQueryParams {
       repeated int64 ids = 1; // 任务 ID 列表
@@ -90,10 +90,10 @@ message PageSchedulerTasks {
       optional string title = 3; // 展示名称，模糊匹配
       optional bool enabled = 4; // 是否启用
     }
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+    .common.api.app.common.PageReq page = 1; // 分页参数
     SchedulerTaskQueryParams query = 2; // 查询条件
   }
-  message Response {
+  message Resp {
 
     message SchedulerTask {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -111,20 +111,20 @@ message PageSchedulerTasks {
       bool alert_enabled = 10; // 是否启用告警
       int64 version = 16; // 任务配置版本
     }
-    .common.api.app.common.PageResponse page = 1; // 分页结果
+    .common.api.app.common.PageResp page = 1; // 分页结果
     repeated SchedulerTask rows = 2; // 任务列表
   }
 }
 
 message ListSchedulerAvailableTasks {
-  message Request {
+  message Req {
 
     message SchedulerAvailableTaskQueryParams {
       optional string keyword = 1; // 搜索关键词，匹配 name、title、description
     }
     SchedulerAvailableTaskQueryParams query = 1; // 查询条件
   }
-  message Response {
+  message Resp {
 
     message SchedulerAvailableTask {
       string name = 1; // 代码内任务名称
@@ -136,7 +136,7 @@ message ListSchedulerAvailableTasks {
 }
 
 message PageSchedulerTaskExecutionRecords {
-  message Request {
+  message Req {
 
     message SchedulerTaskExecutionRecordQueryParams {
       repeated int64 ids = 1; // 执行记录 ID 列表
@@ -144,10 +144,10 @@ message PageSchedulerTaskExecutionRecords {
       optional SchedulerTaskExecutionStatus status = 3; // 执行状态
       optional SchedulerTaskTriggerType trigger_type = 4; // 触发类型
     }
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+    .common.api.app.common.PageReq page = 1; // 分页参数
     SchedulerTaskExecutionRecordQueryParams query = 2; // 查询条件
   }
-  message Response {
+  message Resp {
 
     message SchedulerTaskExecutionRecord {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -167,17 +167,17 @@ message PageSchedulerTaskExecutionRecords {
       string last_error = 16; // 最近一次错误摘要
       string trace_id = 17; // 链路追踪 ID
     }
-    .common.api.app.common.PageResponse page = 1; // 分页结果
+    .common.api.app.common.PageResp page = 1; // 分页结果
     repeated SchedulerTaskExecutionRecord rows = 2; // 执行记录列表
   }
 }
 
 message TriggerSchedulerTask {
-  message Request {
+  message Req {
     int64 id = 1; // 任务 ID
     string payload = 2; // 本次手动触发覆盖使用的 JSON 参数
   }
-  message Response {
+  message Resp {
 
     message SchedulerTaskExecutionRecord {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -202,10 +202,10 @@ message TriggerSchedulerTask {
 }
 
 message CancelSchedulerTaskExecution {
-  message Request {
+  message Req {
     int64 id = 1; // 执行记录 ID
   }
-  message Response {
+  message Resp {
 
     message SchedulerTaskExecutionRecord {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -230,10 +230,10 @@ message CancelSchedulerTaskExecution {
 }
 
 message CheckSchedulerTaskExecutionRuntimes {
-  message Request {
+  message Req {
     repeated int64 ids = 1; // 执行记录 ID 列表
   }
-  message Response {
+  message Resp {
 
     message SchedulerTaskExecutionRuntime {
       int64 execution_record_id = 1; // 执行记录 ID
@@ -245,10 +245,10 @@ message CheckSchedulerTaskExecutionRuntimes {
 }
 
 message MarkSchedulerTaskExecutionsUnknown {
-  message Request {
+  message Req {
     repeated int64 ids = 1; // 执行记录 ID 列表
   }
-  message Response {
+  message Resp {
 
     message SchedulerTaskExecutionRecord {
       google.protobuf.Timestamp created_at = 1000; // 创建时间

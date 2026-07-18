@@ -10,18 +10,18 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/game_town/v1;v1";
 
 service GameTownCommandService {
-  rpc Execute(ExecuteGameTownCommand.Request) returns (ExecuteGameTownCommand.Response) {} // 执行文字命令。
-  rpc Page(PageGameTownCommands.Request) returns (PageGameTownCommands.Response) {} // 分页查询命令。
-  rpc Replay(ReplayGameTownCommands.Request) returns (ReplayGameTownCommands.Response) {} // 回放命令。
+  rpc Execute(ExecuteGameTownCommand.Req) returns (ExecuteGameTownCommand.Resp) {} // 执行文字命令。
+  rpc Page(PageGameTownCommands.Req) returns (PageGameTownCommands.Resp) {} // 分页查询命令。
+  rpc Replay(ReplayGameTownCommands.Req) returns (ReplayGameTownCommands.Resp) {} // 回放命令。
 }
 
 message ExecuteGameTownCommand {
-  message Request {
+  message Req {
     int64 session_id = 1; // 会话 ID
     int64 player_id = 2; // 玩家 ID
     string raw_text = 3; // 原始命令
   }
-  message Response {
+  message Resp {
 
     message GameTownNpc {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -123,13 +123,13 @@ message ExecuteGameTownCommand {
 }
 
 message PageGameTownCommands {
-  message Request {
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数
     optional int64 world_id = 2; // 世界 ID
     optional int64 session_id = 3; // 会话 ID
     optional int64 player_id = 4; // 玩家 ID
   }
-  message Response {
+  message Resp {
 
     message GameTownCommand {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -145,17 +145,17 @@ message PageGameTownCommands {
       optional int32 error_code = 9; // 错误码
       string result_summary = 10; // 执行摘要
     }
-    .common.api.app.common.PageResponse page = 1; // 分页结果
+    .common.api.app.common.PageResp page = 1; // 分页结果
     repeated GameTownCommand rows = 2; // 命令列表
   }
 }
 
 message ReplayGameTownCommands {
-  message Request {
+  message Req {
     int64 session_id = 1; // 会话 ID
     int64 player_id = 2; // 玩家 ID
   }
-  message Response {
+  message Resp {
 
     message GameTownCommand {
       google.protobuf.Timestamp created_at = 1000; // 创建时间

@@ -21,21 +21,21 @@ func NewTotpSecretCache(redisClient *client.RedisClient) repo.TotpSecretCache {
 	return &TotpSecretCache{redisClient: redisClient}
 }
 
-func (c *TotpSecretCache) Save(ctx context.Context, req *repo.TotpSecretCacheSaveReq) (*repo.TotpSecretCacheSaveResponse, error) {
+func (c *TotpSecretCache) Save(ctx context.Context, req *repo.TotpSecretCacheSaveReq) error {
 	err := c.redisClient.Client.SetEx(ctx, constant.GetKeyTotpSecret(strconv.FormatInt(req.UserID, 10)), req.Secret, req.TTL).Err()
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &repo.TotpSecretCacheSaveResponse{}, nil
+	return nil
 }
 
-func (c *TotpSecretCache) Get(ctx context.Context, req *repo.TotpSecretCacheGetReq) (*repo.TotpSecretCacheGetResponse, error) {
-	secret, err := c.redisClient.Client.Get(ctx, constant.GetKeyTotpSecret(strconv.FormatInt(req.UserID, 10))).Result()
+func (c *TotpSecretCache) Get(ctx context.Context, userID int64) (string, error) {
+	secret, err := c.redisClient.Client.Get(ctx, constant.GetKeyTotpSecret(strconv.FormatInt(userID, 10))).Result()
 	if errors.Is(err, redis.Nil) {
-		return &repo.TotpSecretCacheGetResponse{}, nil
+		return "", nil
 	}
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	return &repo.TotpSecretCacheGetResponse{Secret: secret}, nil
+	return secret, nil
 }

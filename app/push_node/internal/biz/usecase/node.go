@@ -34,9 +34,7 @@ func NewNodeUsecase(conf *config.Bootstrap, logger *slog.Logger, registry repo.C
 	}
 }
 
-type ConnectHubReq struct{}
-
-func (uc *NodeUsecase) ConnectHub(ctx context.Context, req *ConnectHubReq) error {
+func (uc *NodeUsecase) ConnectHub(ctx context.Context) error {
 	uc.log.Info(fmt.Sprintf("start heartbeat loop: node_id=%s", uc.nodeID))
 	loopCtx, cancel := context.WithCancel(ctx)
 	uc.cancelLoop = cancel
@@ -44,11 +42,8 @@ func (uc *NodeUsecase) ConnectHub(ctx context.Context, req *ConnectHubReq) error
 	return nil
 }
 
-type StopReq struct{}
-
-func (uc *NodeUsecase) Stop(ctx context.Context, req *StopReq) error {
+func (uc *NodeUsecase) Stop(ctx context.Context) error {
 	_ = ctx
-	_ = req
 	if uc.cancelLoop != nil {
 		uc.cancelLoop()
 	}
@@ -71,13 +66,12 @@ func (uc *NodeUsecase) heartbeatLoop(ctx context.Context) {
 }
 
 func (uc *NodeUsecase) sendHeartbeat(ctx context.Context) {
-	countResp, err := uc.registry.GetConnectionCount(ctx, &repo.GetConnectionCountReq{})
+	connectionCount, err := uc.registry.GetConnectionCount(ctx)
 	if err != nil {
 		uc.log.Warn(fmt.Sprintf("get connection count failed: err=%v", err))
 		return
 	}
-	connectionCount := countResp.Count
-	_, err = uc.hubClient.Heartbeat(ctx, &pushhubv1.Heartbeat_Request{
+	_, err = uc.hubClient.Heartbeat(ctx, &pushhubv1.Heartbeat_Req{
 		NodeId:          uc.nodeID,
 		ConnectionCount: connectionCount,
 	})
@@ -93,7 +87,7 @@ func RegisterWithHub(ctx context.Context, conn *grpc.ClientConn, conf *config.Bo
 	var nodeID string
 	var lastErr error
 	for i := 0; i < 3; i++ {
-		resp, err := client.RegisterNode(ctx, &pushhubv1.RegisterNode_Request{
+		resp, err := client.RegisterNode(ctx, &pushhubv1.RegisterNode_Req{
 			Address: fmt.Sprintf("%s:%d", conf.Http.Host, conf.Http.Port),
 		})
 		if err != nil {

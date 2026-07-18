@@ -37,22 +37,22 @@ func NewCommentService(
 	}
 }
 
-func (s *CommentService) Create(ctx context.Context, req *v1.CreateComment_Request) (rsp *v1.CreateComment_Response, err error) {
+func (s *CommentService) Create(ctx context.Context, req *v1.CreateComment_Req) (rsp *v1.CreateComment_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	addResponse, err := s.commentUsecase.Add(ctx, &usecase.CommentAddReq{Comment: &model.Comment{
+	addResp, err := s.commentUsecase.Add(ctx, &model.Comment{
 		ArticleID: req.ArticleId,
 		Content:   req.Content,
 		ReplyID:   req.ReplyId,
 		CreatedBy: new(req.UserId),
 		UpdatedBy: new(req.UserId),
-	}})
+	})
 	if err != nil {
 		return nil, err
 	}
-	comment := addResponse.Comment
-	reply := &v1.CreateComment_Response_Comment{
+	comment := addResp
+	reply := &v1.CreateComment_Resp_Comment{
 		CreatedAt:   timestamppb.New(*comment.CreatedAt),
 		UpdatedAt:   timestamppb.New(*comment.UpdatedAt),
 		CreatedBy:   comment.CreatedBy,
@@ -72,45 +72,45 @@ func (s *CommentService) Create(ctx context.Context, req *v1.CreateComment_Reque
 	if comment.DeletedAt != nil {
 		reply.DeletedAt = timestamppb.New(*comment.DeletedAt)
 	}
-	return &v1.CreateComment_Response{
+	return &v1.CreateComment_Resp{
 		Comment: reply,
 	}, err
 }
 
-func (s *CommentService) Hide(ctx context.Context, req *v1.HideComment_Request) (*v1.HideComment_Response, error) {
+func (s *CommentService) Hide(ctx context.Context, req *v1.HideComment_Req) (*v1.HideComment_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	err := s.commentUsecase.Hide(ctx, &usecase.CommentHideReq{CommentID: req.Id, UserID: req.UserId, Reason: req.Reason})
-	return &v1.HideComment_Response{}, err
+	return &v1.HideComment_Resp{}, err
 }
 
-func (s *CommentService) Unhide(ctx context.Context, req *v1.UnhideComment_Request) (*v1.UnhideComment_Response, error) {
+func (s *CommentService) Unhide(ctx context.Context, req *v1.UnhideComment_Req) (*v1.UnhideComment_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	err := s.commentUsecase.Unhide(ctx, &usecase.CommentUnhideReq{CommentID: req.Id, UserID: req.UserId, Reason: req.Reason})
-	return &v1.UnhideComment_Response{}, err
+	return &v1.UnhideComment_Resp{}, err
 }
 
-func (s *CommentService) Lock(ctx context.Context, req *v1.LockComment_Request) (*v1.LockComment_Response, error) {
+func (s *CommentService) Lock(ctx context.Context, req *v1.LockComment_Req) (*v1.LockComment_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	err := s.commentUsecase.Lock(ctx, &usecase.CommentLockReq{CommentID: req.Id, UserID: req.UserId, Reason: req.Reason})
-	return &v1.LockComment_Response{}, err
+	return &v1.LockComment_Resp{}, err
 }
 
-func (s *CommentService) Unlock(ctx context.Context, req *v1.UnlockComment_Request) (*v1.UnlockComment_Response, error) {
+func (s *CommentService) Unlock(ctx context.Context, req *v1.UnlockComment_Req) (*v1.UnlockComment_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	err := s.commentUsecase.Unlock(ctx, &usecase.CommentUnlockReq{CommentID: req.Id, UserID: req.UserId, Reason: req.Reason})
-	return &v1.UnlockComment_Response{}, err
+	return &v1.UnlockComment_Resp{}, err
 }
 
-func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Request) (*v1.ListComments_Response, error) {
-	req.Query = util.OrDefault(req.Query, &v1.ListComments_Request_CommentQueryParams{})
+func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Req) (*v1.ListComments_Resp, error) {
+	req.Query = util.OrDefault(req.Query, &v1.ListComments_Req_CommentQueryParams{})
 	var restriction *enum.ContentRestriction
 	if req.Query.Restriction != nil {
 		status, ok := enum.ContentRestrictionMap.ToEnum(*req.Query.Restriction)
@@ -135,7 +135,7 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Request)
 		}
 		dbOrder = new(order)
 	}
-	pageResponse, err := s.commentUsecase.Page(ctx, &usecase.CommentPageReq{
+	pageResp, err := s.commentUsecase.Page(ctx, &usecase.CommentPageReq{
 		Page:         &base.PageRequest{Page: 1, Size: 1000},
 		CommentID:    req.Query.CommentId,
 		ParentID:     req.Query.ParentId,
@@ -150,10 +150,10 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Request)
 	if err != nil {
 		return nil, err
 	}
-	comments := pageResponse.Rows
-	rows := make([]*v1.ListComments_Response_Comment, 0, len(comments))
+	comments := pageResp.Rows
+	rows := make([]*v1.ListComments_Resp_Comment, 0, len(comments))
 	for _, comment := range comments {
-		row := &v1.ListComments_Response_Comment{
+		row := &v1.ListComments_Resp_Comment{
 			CreatedAt:   timestamppb.New(*comment.CreatedAt),
 			UpdatedAt:   timestamppb.New(*comment.UpdatedAt),
 			CreatedBy:   comment.CreatedBy,
@@ -175,13 +175,13 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Request)
 		}
 		rows = append(rows, row)
 	}
-	return &v1.ListComments_Response{
+	return &v1.ListComments_Resp{
 		Rows: rows,
 	}, err
 }
 
-func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Request) (*v1.PageComments_Response, error) {
-	req.Query = util.OrDefault(req.Query, &v1.PageComments_Request_CommentQueryParams{})
+func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v1.PageComments_Resp, error) {
+	req.Query = util.OrDefault(req.Query, &v1.PageComments_Req_CommentQueryParams{})
 	var restriction *enum.ContentRestriction
 	if req.Query.Restriction != nil {
 		status, ok := enum.ContentRestrictionMap.ToEnum(*req.Query.Restriction)
@@ -206,7 +206,7 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Request)
 		}
 		dbOrder = new(order)
 	}
-	pageResponse, err := s.commentUsecase.Page(ctx, &usecase.CommentPageReq{
+	pageResp, err := s.commentUsecase.Page(ctx, &usecase.CommentPageReq{
 		Page:         &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())},
 		CommentID:    req.Query.CommentId,
 		ParentID:     req.Query.ParentId,
@@ -221,10 +221,10 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Request)
 	if err != nil {
 		return nil, err
 	}
-	comments := pageResponse.Rows
-	rows := make([]*v1.PageComments_Response_Comment, 0, len(comments))
+	comments := pageResp.Rows
+	rows := make([]*v1.PageComments_Resp_Comment, 0, len(comments))
 	for _, comment := range comments {
-		row := &v1.PageComments_Response_Comment{
+		row := &v1.PageComments_Resp_Comment{
 			CreatedAt:   timestamppb.New(*comment.CreatedAt),
 			UpdatedAt:   timestamppb.New(*comment.UpdatedAt),
 			CreatedBy:   comment.CreatedBy,
@@ -246,13 +246,13 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Request)
 		}
 		rows = append(rows, row)
 	}
-	return &v1.PageComments_Response{
-		Page: &common.PageResponse{Page: uint32(pageResponse.Page.Page), Size: uint32(pageResponse.Page.Size), Total: uint32(pageResponse.Page.Total)},
+	return &v1.PageComments_Resp{
+		Page: &common.PageResp{Page: uint32(pageResp.Page.Page), Size: uint32(pageResp.Page.Size), Total: uint32(pageResp.Page.Total)},
 		Rows: rows,
 	}, err
 }
 
-func (s *CommentService) ListReplyPreviews(ctx context.Context, req *v1.ListCommentReplyPreviews_Request) (*v1.ListCommentReplyPreviews_Response, error) {
+func (s *CommentService) ListReplyPreviews(ctx context.Context, req *v1.ListCommentReplyPreviews_Req) (*v1.ListCommentReplyPreviews_Resp, error) {
 	var restriction *enum.ContentRestriction
 	if req.Restriction != nil {
 		status, ok := enum.ContentRestrictionMap.ToEnum(*req.Restriction)
@@ -277,19 +277,19 @@ func (s *CommentService) ListReplyPreviews(ctx context.Context, req *v1.ListComm
 		}
 		dbOrder = new(order)
 	}
-	previewsResponse, err := s.commentUsecase.ListReplyPreviews(ctx, &usecase.CommentListReplyPreviewsReq{ArticleID: req.ArticleId, ParentIDs: req.ParentIds, LimitPerParent: req.LimitPerParent, Restriction: restriction, Restrictions: restrictions, Order: dbOrder})
+	previewsResp, err := s.commentUsecase.ListReplyPreviews(ctx, &usecase.CommentListReplyPreviewsReq{ArticleID: req.ArticleId, ParentIDs: req.ParentIds, LimitPerParent: req.LimitPerParent, Restriction: restriction, Restrictions: restrictions, Order: dbOrder})
 	if err != nil {
 		return nil, err
 	}
-	previews := previewsResponse.Rows
-	rows := make([]*v1.ListCommentReplyPreviews_Response_CommentReplyPreview, 0, len(previews))
+	previews := previewsResp
+	rows := make([]*v1.ListCommentReplyPreviews_Resp_CommentReplyPreview, 0, len(previews))
 	for _, preview := range previews {
-		row := &v1.ListCommentReplyPreviews_Response_CommentReplyPreview{
+		row := &v1.ListCommentReplyPreviews_Resp_CommentReplyPreview{
 			ParentId: preview.ParentID,
-			Rows:     make([]*v1.ListCommentReplyPreviews_Response_Comment, 0, len(preview.Rows)),
+			Rows:     make([]*v1.ListCommentReplyPreviews_Resp_Comment, 0, len(preview.Rows)),
 		}
 		for _, comment := range preview.Rows {
-			reply := &v1.ListCommentReplyPreviews_Response_Comment{
+			reply := &v1.ListCommentReplyPreviews_Resp_Comment{
 				CreatedAt:   timestamppb.New(*comment.CreatedAt),
 				UpdatedAt:   timestamppb.New(*comment.UpdatedAt),
 				CreatedBy:   comment.CreatedBy,
@@ -313,24 +313,24 @@ func (s *CommentService) ListReplyPreviews(ctx context.Context, req *v1.ListComm
 		}
 		rows = append(rows, row)
 	}
-	return &v1.ListCommentReplyPreviews_Response{
+	return &v1.ListCommentReplyPreviews_Resp{
 		Rows: rows,
 	}, nil
 }
 
-func (s *CommentService) MapViewerActionStates(ctx context.Context, req *v1.MapCommentViewerActionStates_Request) (*v1.MapCommentViewerActionStates_Response, error) {
+func (s *CommentService) MapViewerActionStates(ctx context.Context, req *v1.MapCommentViewerActionStates_Req) (*v1.MapCommentViewerActionStates_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	statesResponse, err := s.commentUsecase.MapViewerActionStates(ctx, &usecase.CommentMapViewerActionStatesReq{CommentIDs: req.CommentIds, UserID: req.UserId})
+	statesResp, err := s.commentUsecase.MapViewerActionStates(ctx, &usecase.CommentMapViewerActionStatesReq{CommentIDs: req.CommentIds, UserID: req.UserId})
 	if err != nil {
 		return nil, err
 	}
-	reply := &v1.MapCommentViewerActionStates_Response{
-		States: make(map[int64]*v1.MapCommentViewerActionStates_Response_State, len(statesResponse.States)),
+	reply := &v1.MapCommentViewerActionStates_Resp{
+		States: make(map[int64]*v1.MapCommentViewerActionStates_Resp_State, len(statesResp)),
 	}
-	for commentID, state := range statesResponse.States {
-		reply.States[commentID] = &v1.MapCommentViewerActionStates_Response_State{
+	for commentID, state := range statesResp {
+		reply.States[commentID] = &v1.MapCommentViewerActionStates_Resp_State{
 			Liked:   state.Liked,
 			Thanked: state.Thanked,
 		}
@@ -338,17 +338,17 @@ func (s *CommentService) MapViewerActionStates(ctx context.Context, req *v1.MapC
 	return reply, nil
 }
 
-func (s *CommentService) MapArticleLastComments(ctx context.Context, req *v1.MapArticleLastComments_Request) (*v1.MapArticleLastComments_Response, error) {
-	commentsResponse, err := s.commentUsecase.MapArticleLastComments(ctx, &usecase.CommentMapArticleLastCommentsReq{ArticleIDs: req.ArticleIds})
+func (s *CommentService) MapArticleLastComments(ctx context.Context, req *v1.MapArticleLastComments_Req) (*v1.MapArticleLastComments_Resp, error) {
+	commentsResp, err := s.commentUsecase.MapArticleLastComments(ctx, req.ArticleIds)
 	if err != nil {
 		return nil, err
 	}
-	comments := commentsResponse.Comments
-	reply := &v1.MapArticleLastComments_Response{
-		Comments: make(map[int64]*v1.MapArticleLastComments_Response_Comment, len(comments)),
+	comments := commentsResp
+	reply := &v1.MapArticleLastComments_Resp{
+		Comments: make(map[int64]*v1.MapArticleLastComments_Resp_Comment, len(comments)),
 	}
 	for articleID, comment := range comments {
-		reply.Comments[articleID] = &v1.MapArticleLastComments_Response_Comment{
+		reply.Comments[articleID] = &v1.MapArticleLastComments_Resp_Comment{
 			CreatedAt:   timestamppb.New(*comment.CreatedAt),
 			UpdatedAt:   timestamppb.New(*comment.UpdatedAt),
 			CreatedBy:   comment.CreatedBy,
@@ -372,18 +372,18 @@ func (s *CommentService) MapArticleLastComments(ctx context.Context, req *v1.Map
 	return reply, nil
 }
 
-func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Request) (rsp *v1.LikeComment_Response, err error) {
+func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Req) (rsp *v1.LikeComment_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	likeResponse, err := s.commentUsecase.Like(ctx, &usecase.CommentLikeReq{CommentID: req.Id, UserID: req.UserId, Active: req.Liked})
-	return &v1.LikeComment_Response{Liked: likeResponse.Liked}, err
+	likeResp, err := s.commentUsecase.Like(ctx, &usecase.CommentLikeReq{CommentID: req.Id, UserID: req.UserId, Active: req.Liked})
+	return &v1.LikeComment_Resp{Liked: likeResp}, err
 }
 
-func (s *CommentService) Thank(ctx context.Context, req *v1.ThankComment_Request) (rsp *v1.ThankComment_Response, err error) {
+func (s *CommentService) Thank(ctx context.Context, req *v1.ThankComment_Req) (rsp *v1.ThankComment_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	thankResponse, err := s.commentUsecase.Thank(ctx, &usecase.CommentThankReq{CommentID: req.Id, UserID: req.UserId, Active: req.Thanked})
-	return &v1.ThankComment_Response{Thanked: thankResponse.Thanked}, err
+	thankResp, err := s.commentUsecase.Thank(ctx, &usecase.CommentThankReq{CommentID: req.Id, UserID: req.UserId, Active: req.Thanked})
+	return &v1.ThankComment_Resp{Thanked: thankResp}, err
 }

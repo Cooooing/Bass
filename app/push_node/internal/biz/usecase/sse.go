@@ -62,7 +62,7 @@ func (uc *SSEUsecase) Connect(ctx context.Context, req *ConnectReq) error {
 
 	connID := uuid.New().String()
 	conn := &model.Connection{ID: connID, UserID: userID, CreatedAt: time.Now()}
-	if _, err := uc.registry.AddConnection(ctx, &repo.AddConnectionReq{UserID: userID, Connection: conn}); err != nil {
+	if err := uc.registry.AddConnection(ctx, &repo.AddConnectionReq{UserID: userID, Connection: conn}); err != nil {
 		uc.log.Error(fmt.Sprintf("register SSE connection failed: err=%v", err))
 		return nil
 	}
@@ -71,7 +71,7 @@ func (uc *SSEUsecase) Connect(ctx context.Context, req *ConnectReq) error {
 
 	defer func() {
 		uc.writers.Delete(connID)
-		_, _ = uc.registry.RemoveConnection(ctx, &repo.RemoveConnectionReq{UserID: userID, ConnectionID: connID})
+		_ = uc.registry.RemoveConnection(ctx, &repo.RemoveConnectionReq{UserID: userID, ConnectionID: connID})
 		uc.log.Info(fmt.Sprintf("SSE connection closed: user_id=%d conn_id=%s", userID, connID))
 	}()
 
@@ -93,42 +93,25 @@ func (uc *SSEUsecase) Connect(ctx context.Context, req *ConnectReq) error {
 	}
 }
 
-type GetConnectionCountReq struct{}
-
-type GetConnectionCountResponse struct {
-	Count int64
+func (uc *SSEUsecase) GetConnectionCount(ctx context.Context) (int64, error) {
+	return uc.registry.GetConnectionCount(ctx)
 }
 
-func (uc *SSEUsecase) GetConnectionCount(ctx context.Context, req *GetConnectionCountReq) (*GetConnectionCountResponse, error) {
-	_ = ctx
-	_ = req
-	countResp, err := uc.registry.GetConnectionCount(ctx, &repo.GetConnectionCountReq{})
-	if err != nil {
-		return nil, err
-	}
-	return &GetConnectionCountResponse{Count: countResp.Count}, nil
-}
-
-type HandleNATSMessageReq struct {
-	Message *client.Message
-}
-
-func (uc *SSEUsecase) HandleNATSMessage(ctx context.Context, req *HandleNATSMessageReq) error {
+func (uc *SSEUsecase) HandleNATSMessage(ctx context.Context, message *client.Message) error {
 	_ = ctx
 	var event struct {
 		UserID  int64  `json:"user_id"`
 		Type    int32  `json:"type"`
 		Payload string `json:"payload"`
 	}
-	if err := json.Unmarshal(req.Message.Data, &event); err != nil {
+	if err := json.Unmarshal(message.Data, &event); err != nil {
 		return fmt.Errorf("parse NATS message: %w", err)
 	}
 
-	connResp, err := uc.registry.GetConnections(ctx, &repo.GetConnectionsReq{UserID: event.UserID})
+	conns, err := uc.registry.GetConnections(ctx, event.UserID)
 	if err != nil {
 		return err
 	}
-	conns := connResp.Rows
 	if len(conns) == 0 {
 		uc.log.Debug(fmt.Sprintf("user has no online connection, message ignored: user_id=%d", event.UserID))
 		return nil
@@ -147,7 +130,7 @@ func (uc *SSEUsecase) HandleNATSMessage(ctx context.Context, req *HandleNATSMess
 		if _, err := fmt.Fprint(w, sseData); err != nil {
 			uc.log.Debug(fmt.Sprintf("SSE write failed: user_id=%d conn_id=%s err=%v", event.UserID, conn.ID, err))
 			uc.writers.Delete(conn.ID)
-			_, _ = uc.registry.RemoveConnection(ctx, &repo.RemoveConnectionReq{UserID: event.UserID, ConnectionID: conn.ID})
+			_ = uc.registry.RemoveConnection(ctx, &repo.RemoveConnectionReq{UserID: event.UserID, ConnectionID: conn.ID})
 			continue
 		}
 		if f, ok := w.(http.Flusher); ok {

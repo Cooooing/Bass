@@ -25,8 +25,8 @@ func (s *CommandService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterGameTownCommandServiceServer(gs, s)
 }
 func (s *CommandService) RegisterHttp(hs *http.Server) {}
-func (s *CommandService) Execute(ctx context.Context, req *v1.ExecuteGameTownCommand_Request) (*v1.ExecuteGameTownCommand_Response, error) {
-	executeResponse, err := s.gameUsecase.ExecuteCommand(ctx, &usecase.ExecuteCommandReq{SessionID: req.GetSessionId(), PlayerID: req.GetPlayerId(), Raw: req.GetRawText()})
+func (s *CommandService) Execute(ctx context.Context, req *v1.ExecuteGameTownCommand_Req) (*v1.ExecuteGameTownCommand_Resp, error) {
+	result, err := s.gameUsecase.ExecuteCommand(ctx, &usecase.ExecuteCommandReq{SessionID: req.GetSessionId(), PlayerID: req.GetPlayerId(), Raw: req.GetRawText()})
 	if err != nil {
 		return nil, err
 	}
@@ -49,10 +49,9 @@ func (s *CommandService) Execute(ctx context.Context, req *v1.ExecuteGameTownCom
 		}
 		return st
 	}
-	result := executeResponse.Result
-	reply := &v1.ExecuteGameTownCommand_Response{FeedbackLines: result.FeedbackLines}
+	reply := &v1.ExecuteGameTownCommand_Resp{FeedbackLines: result.FeedbackLines}
 	if row := result.Command; row != nil {
-		reply.Command = &v1.ExecuteGameTownCommand_Response_GameTownCommand{
+		reply.Command = &v1.ExecuteGameTownCommand_Resp_GameTownCommand{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			HandledAt:     timestamp(row.HandledAt),
 			Id:            row.ID,
@@ -68,7 +67,7 @@ func (s *CommandService) Execute(ctx context.Context, req *v1.ExecuteGameTownCom
 		}
 	}
 	if row := result.CurrentWorld; row != nil {
-		reply.CurrentWorld = &v1.ExecuteGameTownCommand_Response_GameTownWorld{
+		reply.CurrentWorld = &v1.ExecuteGameTownCommand_Resp_GameTownWorld{
 			CreatedAt:         timestamp(row.CreatedAt),
 			UpdatedAt:         timestamp(row.UpdatedAt),
 			Id:                row.ID,
@@ -86,7 +85,7 @@ func (s *CommandService) Execute(ctx context.Context, req *v1.ExecuteGameTownCom
 		}
 	}
 	if row := result.CurrentLocation; row != nil {
-		reply.CurrentLocation = &v1.ExecuteGameTownCommand_Response_GameTownLocation{
+		reply.CurrentLocation = &v1.ExecuteGameTownCommand_Resp_GameTownLocation{
 			CreatedAt:   timestamp(row.CreatedAt),
 			UpdatedAt:   timestamp(row.UpdatedAt),
 			Id:          row.ID,
@@ -99,13 +98,13 @@ func (s *CommandService) Execute(ctx context.Context, req *v1.ExecuteGameTownCom
 			Enabled:     row.Enabled,
 		}
 	}
-	reply.VisibleNpcs = make([]*v1.ExecuteGameTownCommand_Response_GameTownNpc, 0, len(result.VisibleNpcs))
+	reply.VisibleNpcs = make([]*v1.ExecuteGameTownCommand_Resp_GameTownNpc, 0, len(result.VisibleNpcs))
 	for _, row := range result.VisibleNpcs {
 		if row == nil {
 			reply.VisibleNpcs = append(reply.VisibleNpcs, nil)
 			continue
 		}
-		reply.VisibleNpcs = append(reply.VisibleNpcs, &v1.ExecuteGameTownCommand_Response_GameTownNpc{
+		reply.VisibleNpcs = append(reply.VisibleNpcs, &v1.ExecuteGameTownCommand_Resp_GameTownNpc{
 			CreatedAt:         timestamp(row.CreatedAt),
 			UpdatedAt:         timestamp(row.UpdatedAt),
 			Id:                row.ID,
@@ -124,7 +123,7 @@ func (s *CommandService) Execute(ctx context.Context, req *v1.ExecuteGameTownCom
 		})
 	}
 	if row := result.WorldState; row != nil {
-		reply.WorldState = &v1.ExecuteGameTownCommand_Response_GameTownWorldStateSnapshot{
+		reply.WorldState = &v1.ExecuteGameTownCommand_Resp_GameTownWorldStateSnapshot{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			Id:            row.ID,
 			WorldId:       row.WorldID,
@@ -135,13 +134,13 @@ func (s *CommandService) Execute(ctx context.Context, req *v1.ExecuteGameTownCom
 			ReasonEventId: row.ReasonEventID,
 		}
 	}
-	reply.Events = make([]*v1.ExecuteGameTownCommand_Response_GameTownEvent, 0, len(result.Events))
+	reply.Events = make([]*v1.ExecuteGameTownCommand_Resp_GameTownEvent, 0, len(result.Events))
 	for _, row := range result.Events {
 		if row == nil {
 			reply.Events = append(reply.Events, nil)
 			continue
 		}
-		reply.Events = append(reply.Events, &v1.ExecuteGameTownCommand_Response_GameTownEvent{
+		reply.Events = append(reply.Events, &v1.ExecuteGameTownCommand_Resp_GameTownEvent{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			Id:            row.ID,
 			WorldId:       row.WorldID,
@@ -159,8 +158,8 @@ func (s *CommandService) Execute(ctx context.Context, req *v1.ExecuteGameTownCom
 	}
 	return reply, nil
 }
-func (s *CommandService) Page(ctx context.Context, req *v1.PageGameTownCommands_Request) (*v1.PageGameTownCommands_Response, error) {
-	pageResponse, err := s.gameUsecase.PageCommands(ctx, &usecase.PageCommandsReq{Page: req.GetPage(), WorldID: req.WorldId, SessionID: req.SessionId, PlayerID: req.PlayerId})
+func (s *CommandService) Page(ctx context.Context, req *v1.PageGameTownCommands_Req) (*v1.PageGameTownCommands_Resp, error) {
+	pageResp, err := s.gameUsecase.PageCommands(ctx, &usecase.PageCommandsReq{Page: req.GetPage(), WorldID: req.WorldId, SessionID: req.SessionId, PlayerID: req.PlayerId})
 	if err != nil {
 		return nil, err
 	}
@@ -183,13 +182,13 @@ func (s *CommandService) Page(ctx context.Context, req *v1.PageGameTownCommands_
 		}
 		return st
 	}
-	reply := &v1.PageGameTownCommands_Response{Page: pageResponse.Page, Rows: make([]*v1.PageGameTownCommands_Response_GameTownCommand, 0, len(pageResponse.Rows))}
-	for _, row := range pageResponse.Rows {
+	reply := &v1.PageGameTownCommands_Resp{Page: pageResp.Page, Rows: make([]*v1.PageGameTownCommands_Resp_GameTownCommand, 0, len(pageResp.Rows))}
+	for _, row := range pageResp.Rows {
 		if row == nil {
 			reply.Rows = append(reply.Rows, nil)
 			continue
 		}
-		reply.Rows = append(reply.Rows, &v1.PageGameTownCommands_Response_GameTownCommand{
+		reply.Rows = append(reply.Rows, &v1.PageGameTownCommands_Resp_GameTownCommand{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			HandledAt:     timestamp(row.HandledAt),
 			Id:            row.ID,
@@ -206,8 +205,8 @@ func (s *CommandService) Page(ctx context.Context, req *v1.PageGameTownCommands_
 	}
 	return reply, nil
 }
-func (s *CommandService) Replay(ctx context.Context, req *v1.ReplayGameTownCommands_Request) (*v1.ReplayGameTownCommands_Response, error) {
-	replayResponse, err := s.gameUsecase.ReplayCommands(ctx, &usecase.ReplayCommandsReq{SessionID: req.GetSessionId(), PlayerID: req.GetPlayerId()})
+func (s *CommandService) Replay(ctx context.Context, req *v1.ReplayGameTownCommands_Req) (*v1.ReplayGameTownCommands_Resp, error) {
+	replayResp, err := s.gameUsecase.ReplayCommands(ctx, &usecase.ReplayCommandsReq{SessionID: req.GetSessionId(), PlayerID: req.GetPlayerId()})
 	if err != nil {
 		return nil, err
 	}
@@ -230,16 +229,16 @@ func (s *CommandService) Replay(ctx context.Context, req *v1.ReplayGameTownComma
 		}
 		return st
 	}
-	reply := &v1.ReplayGameTownCommands_Response{
-		Commands: make([]*v1.ReplayGameTownCommands_Response_GameTownCommand, 0, len(replayResponse.Commands)),
-		Events:   make([]*v1.ReplayGameTownCommands_Response_GameTownEvent, 0, len(replayResponse.Events)),
+	reply := &v1.ReplayGameTownCommands_Resp{
+		Commands: make([]*v1.ReplayGameTownCommands_Resp_GameTownCommand, 0, len(replayResp.Commands)),
+		Events:   make([]*v1.ReplayGameTownCommands_Resp_GameTownEvent, 0, len(replayResp.Events)),
 	}
-	for _, row := range replayResponse.Commands {
+	for _, row := range replayResp.Commands {
 		if row == nil {
 			reply.Commands = append(reply.Commands, nil)
 			continue
 		}
-		reply.Commands = append(reply.Commands, &v1.ReplayGameTownCommands_Response_GameTownCommand{
+		reply.Commands = append(reply.Commands, &v1.ReplayGameTownCommands_Resp_GameTownCommand{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			HandledAt:     timestamp(row.HandledAt),
 			Id:            row.ID,
@@ -254,12 +253,12 @@ func (s *CommandService) Replay(ctx context.Context, req *v1.ReplayGameTownComma
 			ResultSummary: row.ResultSummary,
 		})
 	}
-	for _, row := range replayResponse.Events {
+	for _, row := range replayResp.Events {
 		if row == nil {
 			reply.Events = append(reply.Events, nil)
 			continue
 		}
-		reply.Events = append(reply.Events, &v1.ReplayGameTownCommands_Response_GameTownEvent{
+		reply.Events = append(reply.Events, &v1.ReplayGameTownCommands_Resp_GameTownEvent{
 			CreatedAt:     timestampValue(row.CreatedAt),
 			Id:            row.ID,
 			WorldId:       row.WorldID,

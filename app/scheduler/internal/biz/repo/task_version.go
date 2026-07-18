@@ -7,13 +7,13 @@ import (
 )
 
 type TaskVersionRepo interface {
-	Get(ctx context.Context, req *TaskVersionGetReq) (*TaskVersionGetResponse, error)
-	List(ctx context.Context, req *TaskVersionGetReq) (*TaskVersionListResponse, error)
-	Map(ctx context.Context, req *TaskVersionGetReq) (*TaskVersionMapResponse, error)
-	Count(ctx context.Context, req *TaskVersionGetReq) (*TaskVersionCountResponse, error)
-	Page(ctx context.Context, req *TaskVersionPageReq) (*TaskVersionPageResponse, error)
+	Get(ctx context.Context, req *TaskVersionGetReq) (*model.TaskVersion, error)
+	List(ctx context.Context, req *TaskVersionGetReq) ([]*model.TaskVersion, error)
+	Map(ctx context.Context, req *TaskVersionGetReq) (map[int64]*model.TaskVersion, error)
+	Count(ctx context.Context, req *TaskVersionGetReq) (int, error)
+	Page(ctx context.Context, req *TaskVersionPageReq) (*TaskVersionPageResp, error)
 
-	Create(ctx context.Context, req *TaskVersionCreateReq) (*TaskVersionCreateResponse, error)
+	Create(ctx context.Context, task *model.Task) (*model.TaskVersion, error)
 }
 
 type TaskVersionGetReq struct {
@@ -25,36 +25,12 @@ type TaskVersionGetReq struct {
 	Versions []int64
 }
 
-type TaskVersionGetResponse struct {
-	Row *model.TaskVersion
-}
-
-type TaskVersionListResponse struct {
-	Rows []*model.TaskVersion
-}
-
-type TaskVersionMapResponse struct {
-	Rows map[int64]*model.TaskVersion
-}
-
-type TaskVersionCountResponse struct {
-	Count int
-}
-
 type TaskVersionPageReq struct {
-	Page *common.PageRequest
+	Page *common.PageReq
 	TaskVersionGetReq
 }
 
-type TaskVersionPageResponse struct {
+type TaskVersionPageResp struct {
 	Rows []*model.TaskVersion
-	Page *common.PageResponse
-}
-
-type TaskVersionCreateReq struct {
-	Task *model.Task
-}
-
-type TaskVersionCreateResponse struct {
-	Row *model.TaskVersion
+	Page *common.PageResp
 }

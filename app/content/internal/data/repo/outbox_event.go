@@ -62,25 +62,22 @@ func (r *OutboxEventRepo) withTxClient(ctx context.Context, fn func(c *gen.Clien
 	return tx.Commit()
 }
 
-func (r *OutboxEventRepo) Save(ctx context.Context, req *repo.OutboxEventSave) (*repo.OutboxEventSaveResponse, error) {
-	if req == nil {
-		return nil, fmt.Errorf("outbox event save request is nil")
+func (r *OutboxEventRepo) Save(ctx context.Context, event *commonenums.Event) error {
+	if event == nil {
+		return fmt.Errorf("outbox event is nil")
 	}
-	if req.Event == nil {
-		return nil, fmt.Errorf("outbox event is nil")
-	}
-	eventType, ok := commonenum.EventTypeMap.ToEnum(req.Event.Type)
+	eventType, ok := commonenum.EventTypeMap.ToEnum(event.Type)
 	if !ok {
-		return nil, fmt.Errorf("unknown event type: %s", req.Event.Type)
+		return fmt.Errorf("unknown event type: %s", event.Type)
 	}
-	subject, ok := commonenum.EventSubjectMap.ToEnum(req.Event.Subject)
+	subject, ok := commonenum.EventSubjectMap.ToEnum(event.Subject)
 	if !ok {
-		return nil, fmt.Errorf("unknown event subject: %s", req.Event.Subject)
+		return fmt.Errorf("unknown event subject: %s", event.Subject)
 	}
-	r.normalizeEvent(req.Event)
-	payloadBytes, err := protojson.MarshalOptions{UseProtoNames: true}.Marshal(req.Event)
+	r.normalizeEvent(event)
+	payloadBytes, err := protojson.MarshalOptions{UseProtoNames: true}.Marshal(event)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	payload := string(payloadBytes)
 	headers := map[string]string{}
@@ -88,7 +85,7 @@ func (r *OutboxEventRepo) Save(ctx context.Context, req *repo.OutboxEventSave) (
 
 	if err := r.withTxClient(ctx, func(c *gen.Client) error {
 		create := c.OutboxEvent.Create().
-			SetEventID(req.Event.EventId).
+			SetEventID(event.EventId).
 			SetEventType(outboxevent.EventType(eventType)).
 			SetSubject(subject).
 			SetPayload(payload)
@@ -97,12 +94,12 @@ func (r *OutboxEventRepo) Save(ctx context.Context, req *repo.OutboxEventSave) (
 		}
 		return create.Exec(ctx)
 	}); err != nil {
-		return nil, err
+		return err
 	}
-	return &repo.OutboxEventSaveResponse{}, nil
+	return nil
 }
 
-func (r *OutboxEventRepo) Get(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventGetResponse, error) {
+func (r *OutboxEventRepo) Get(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEvent, error) {
 	query := r.getClient(ctx).OutboxEvent.Query()
 	query = r.getQuery(query, req)
 	event, err := query.First(ctx)
@@ -112,7 +109,7 @@ func (r *OutboxEventRepo) Get(ctx context.Context, req *repo.OutboxEventGetReq) 
 	if err != nil {
 		return nil, err
 	}
-	return &repo.OutboxEventGetResponse{Event: &repo.OutboxEvent{
+	return &repo.OutboxEvent{
 		ID:         event.ID,
 		EventID:    event.EventID,
 		EventType:  commonenum.EventType(event.EventType),
@@ -123,10 +120,10 @@ func (r *OutboxEventRepo) Get(ctx context.Context, req *repo.OutboxEventGetReq) 
 		RetryCount: event.RetryCount,
 		LastError:  event.LastError,
 		UpdatedAt:  event.UpdatedAt,
-	}}, nil
+	}, nil
 }
 
-func (r *OutboxEventRepo) List(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventListResponse, error) {
+func (r *OutboxEventRepo) List(ctx context.Context, req *repo.OutboxEventGetReq) ([]*repo.OutboxEvent, error) {
 	query := r.getClient(ctx).OutboxEvent.Query()
 	query = r.getQuery(query, req)
 	events, err := query.All(ctx)
@@ -148,30 +145,30 @@ func (r *OutboxEventRepo) List(ctx context.Context, req *repo.OutboxEventGetReq)
 			UpdatedAt:  event.UpdatedAt,
 		})
 	}
-	return &repo.OutboxEventListResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *OutboxEventRepo) Map(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventMapResponse, error) {
-	listResponse, err := r.List(ctx, req)
+func (r *OutboxEventRepo) Map(ctx context.Context, req *repo.OutboxEventGetReq) (map[int64]*repo.OutboxEvent, error) {
+	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.OutboxEventMapResponse{Rows: lo.SliceToMap(listResponse.Rows, func(item *repo.OutboxEvent) (int64, *repo.OutboxEvent) {
+	return lo.SliceToMap(listResp, func(item *repo.OutboxEvent) (int64, *repo.OutboxEvent) {
 		return item.ID, item
-	})}, nil
+	}), nil
 }
 
-func (r *OutboxEventRepo) Count(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventCountResponse, error) {
+func (r *OutboxEventRepo) Count(ctx context.Context, req *repo.OutboxEventGetReq) (int, error) {
 	query := r.getClient(ctx).OutboxEvent.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.OutboxEventCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventPageResponse, error) {
+func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventPageResp, error) {
 	page := normalizePage(req.Page)
 	query := r.getClient(ctx).OutboxEvent.Query()
 	query = r.getQuery(query, req)
@@ -201,9 +198,9 @@ func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventGetReq)
 			UpdatedAt:  event.UpdatedAt,
 		})
 	}
-	return &repo.OutboxEventPageResponse{
+	return &repo.OutboxEventPageResp{
 		Rows: result,
-		Page: &base.PageResponse{
+		Page: &base.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,
@@ -211,7 +208,7 @@ func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventGetReq)
 	}, nil
 }
 
-func (r *OutboxEventRepo) ClaimForPublish(ctx context.Context, req *repo.OutboxEventClaimForPublishReq) (*repo.OutboxEventClaimForPublishResponse, error) {
+func (r *OutboxEventRepo) ClaimForPublish(ctx context.Context, req *repo.OutboxEventClaimForPublishReq) ([]*repo.OutboxEvent, error) {
 	limit := req.Limit
 	staleBefore := req.StaleBefore
 	var result []*repo.OutboxEvent
@@ -270,10 +267,10 @@ func (r *OutboxEventRepo) ClaimForPublish(ctx context.Context, req *repo.OutboxE
 	if err != nil {
 		return nil, err
 	}
-	return &repo.OutboxEventClaimForPublishResponse{Rows: result}, nil
+	return result, nil
 }
 
-func (r *OutboxEventRepo) MarkPublished(ctx context.Context, req *repo.OutboxEventMarkPublishedReq) (*repo.OutboxEventMarkPublishedResponse, error) {
+func (r *OutboxEventRepo) MarkPublished(ctx context.Context, req *repo.OutboxEventMarkPublishedReq) error {
 	id := req.ID
 	publishedAt := req.PublishedAt
 	if err := r.withTxClient(ctx, func(c *gen.Client) error {
@@ -283,12 +280,12 @@ func (r *OutboxEventRepo) MarkPublished(ctx context.Context, req *repo.OutboxEve
 			ClearLastError().
 			Exec(ctx)
 	}); err != nil {
-		return nil, err
+		return err
 	}
-	return &repo.OutboxEventMarkPublishedResponse{}, nil
+	return nil
 }
 
-func (r *OutboxEventRepo) MarkFailed(ctx context.Context, req *repo.OutboxEventMarkFailedReq) (*repo.OutboxEventMarkFailedResponse, error) {
+func (r *OutboxEventRepo) MarkFailed(ctx context.Context, req *repo.OutboxEventMarkFailedReq) error {
 	id := req.ID
 	lastError := req.LastError
 	maxRetry := req.MaxRetry
@@ -314,9 +311,9 @@ func (r *OutboxEventRepo) MarkFailed(ctx context.Context, req *repo.OutboxEventM
 			SetLastError(lastError).
 			Exec(ctx)
 	}); err != nil {
-		return nil, err
+		return err
 	}
-	return &repo.OutboxEventMarkFailedResponse{}, nil
+	return nil
 }
 
 var _ repo.EventClient = (*NatsEventClient)(nil)
@@ -331,19 +328,18 @@ func NewNatsEventClient(natsClient *client.NatsClient) repo.EventClient {
 	}
 }
 
-func (p *NatsEventClient) Publish(ctx context.Context, req *repo.EventClientPublishReq) (*repo.EventClientPublishResponse, error) {
-	msg := req.Message
+func (p *NatsEventClient) Publish(ctx context.Context, msg *repo.EventClientMessage) error {
 	if msg == nil {
-		return nil, fmt.Errorf("event message is nil")
+		return fmt.Errorf("event message is nil")
 	}
 	if err := p.natsClient.Publish(ctx, msg.Subject, &client.Message{
 		Subject: msg.Subject,
 		Data:    []byte(msg.Payload),
 		Header:  msg.Headers,
 	}); err != nil {
-		return nil, err
+		return err
 	}
-	return &repo.EventClientPublishResponse{}, nil
+	return nil
 }
 
 func (r *OutboxEventRepo) normalizeEvent(event *commonenums.Event) {

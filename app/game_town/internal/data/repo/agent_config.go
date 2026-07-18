@@ -16,8 +16,7 @@ func NewAgentConfigRepo(db *gen.Client) bizrepo.AgentConfigRepo {
 	return &AgentConfigRepo{baseRepo: &baseRepo{db: db}}
 }
 
-func (r *AgentConfigRepo) CreateAgentConfig(ctx context.Context, req *bizrepo.CreateAgentConfigReq) (*bizrepo.CreateAgentConfigResponse, error) {
-	row := req.Row
+func (r *AgentConfigRepo) CreateAgentConfig(ctx context.Context, row *model.AgentConfig) (*model.AgentConfig, error) {
 	if row.IsDefault {
 		_, err := r.db.AgentConfig.Update().Where(agentconfig.PlayerID(row.PlayerID), agentconfig.DeletedAtIsNil()).SetIsDefault(false).Save(ctx)
 		if err != nil {
@@ -31,10 +30,10 @@ func (r *AgentConfigRepo) CreateAgentConfig(ctx context.Context, req *bizrepo.Cr
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.CreateAgentConfigResponse{Row: r.agentConfig(created)}, nil
+	return r.agentConfig(created), nil
 }
 
-func (r *AgentConfigRepo) GetAgentConfig(ctx context.Context, req *bizrepo.GetAgentConfigReq) (*bizrepo.GetAgentConfigResponse, error) {
+func (r *AgentConfigRepo) GetAgentConfig(ctx context.Context, req *bizrepo.GetAgentConfigReq) (*model.AgentConfig, error) {
 	row, err := r.db.AgentConfig.Query().Where(agentconfig.ID(req.ID), agentconfig.PlayerID(req.PlayerID), agentconfig.DeletedAtIsNil()).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_CONFIG_NOT_FOUND)
@@ -42,13 +41,13 @@ func (r *AgentConfigRepo) GetAgentConfig(ctx context.Context, req *bizrepo.GetAg
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.GetAgentConfigResponse{Row: r.agentConfig(row)}, nil
+	return r.agentConfig(row), nil
 }
 
-func (r *AgentConfigRepo) GetDefaultAgentConfig(ctx context.Context, req *bizrepo.GetDefaultAgentConfigReq) (*bizrepo.GetDefaultAgentConfigResponse, error) {
-	row, err := r.db.AgentConfig.Query().Where(agentconfig.PlayerID(req.PlayerID), agentconfig.IsDefault(true), agentconfig.Status("active"), agentconfig.DeletedAtIsNil()).Order(agentconfig.ByID()).First(ctx)
+func (r *AgentConfigRepo) GetDefaultAgentConfig(ctx context.Context, playerID int64) (*model.AgentConfig, error) {
+	row, err := r.db.AgentConfig.Query().Where(agentconfig.PlayerID(playerID), agentconfig.IsDefault(true), agentconfig.Status("active"), agentconfig.DeletedAtIsNil()).Order(agentconfig.ByID()).First(ctx)
 	if gen.IsNotFound(err) {
-		row, err = r.db.AgentConfig.Query().Where(agentconfig.PlayerID(req.PlayerID), agentconfig.Status("active"), agentconfig.DeletedAtIsNil()).Order(agentconfig.ByID()).First(ctx)
+		row, err = r.db.AgentConfig.Query().Where(agentconfig.PlayerID(playerID), agentconfig.Status("active"), agentconfig.DeletedAtIsNil()).Order(agentconfig.ByID()).First(ctx)
 	}
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_CONFIG_NOT_FOUND)
@@ -56,10 +55,10 @@ func (r *AgentConfigRepo) GetDefaultAgentConfig(ctx context.Context, req *bizrep
 	if err != nil {
 		return nil, err
 	}
-	return &bizrepo.GetDefaultAgentConfigResponse{Row: r.agentConfig(row)}, nil
+	return r.agentConfig(row), nil
 }
 
-func (r *AgentConfigRepo) ListAgentConfigs(ctx context.Context, req *bizrepo.ListAgentConfigsReq) (*bizrepo.ListAgentConfigsResponse, error) {
+func (r *AgentConfigRepo) ListAgentConfigs(ctx context.Context, req *bizrepo.ListAgentConfigsReq) ([]*model.AgentConfig, error) {
 	query := r.db.AgentConfig.Query().Where(agentconfig.PlayerID(req.PlayerID), agentconfig.DeletedAtIsNil())
 	if req.Status != nil {
 		query = query.Where(agentconfig.Status(*req.Status))
@@ -72,5 +71,5 @@ func (r *AgentConfigRepo) ListAgentConfigs(ctx context.Context, req *bizrepo.Lis
 	for _, row := range rows {
 		result = append(result, r.agentConfig(row))
 	}
-	return &bizrepo.ListAgentConfigsResponse{Rows: result}, nil
+	return result, nil
 }

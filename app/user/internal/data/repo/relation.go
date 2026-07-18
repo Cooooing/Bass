@@ -32,72 +32,72 @@ func (r *RelationRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *RelationRepo) Create(ctx context.Context, req *repo.RelationCreateReq) (*repo.RelationCreateResponse, error) {
-	relation, err := r.create(ctx, req.Relation)
+func (r *RelationRepo) Create(ctx context.Context, relation *model.Relation) (*model.Relation, error) {
+	relation, err := r.create(ctx, relation)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.RelationCreateResponse{Relation: relation}, nil
+	return relation, nil
 }
 
-func (r *RelationRepo) Delete(ctx context.Context, req *repo.RelationDeleteReq) (*repo.RelationDeleteResponse, error) {
+func (r *RelationRepo) Delete(ctx context.Context, req *repo.RelationDeleteReq) (int, error) {
 	deleted, err := r.delete(ctx, req)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.RelationDeleteResponse{Deleted: deleted}, nil
+	return deleted, nil
 }
 
-func (r *RelationRepo) Exists(ctx context.Context, req *repo.RelationGetReq) (*repo.RelationExistsResponse, error) {
+func (r *RelationRepo) Exists(ctx context.Context, req *repo.RelationGetReq) (bool, error) {
 	exists, err := r.exists(ctx, req)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &repo.RelationExistsResponse{Exists: exists}, nil
+	return exists, nil
 }
 
-func (r *RelationRepo) Get(ctx context.Context, req *repo.RelationGetReq) (*repo.RelationGetResponse, error) {
+func (r *RelationRepo) Get(ctx context.Context, req *repo.RelationGetReq) (*model.Relation, error) {
 	relation, err := r.get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.RelationGetResponse{Relation: relation}, nil
+	return relation, nil
 }
 
-func (r *RelationRepo) List(ctx context.Context, req *repo.RelationGetReq) (*repo.RelationListResponse, error) {
+func (r *RelationRepo) List(ctx context.Context, req *repo.RelationGetReq) ([]*model.Relation, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.RelationListResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *RelationRepo) Map(ctx context.Context, req *repo.RelationGetReq) (*repo.RelationMapResponse, error) {
+func (r *RelationRepo) Map(ctx context.Context, req *repo.RelationGetReq) (map[int64]*model.Relation, error) {
 	rows, err := r.mapRows(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.RelationMapResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *RelationRepo) Count(ctx context.Context, req *repo.RelationGetReq) (*repo.RelationCountResponse, error) {
+func (r *RelationRepo) Count(ctx context.Context, req *repo.RelationGetReq) (int, error) {
 	count, err := r.count(ctx, req)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.RelationCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *RelationRepo) Page(ctx context.Context, req *repo.RelationPageReq) (*repo.RelationPageResponse, error) {
-	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+func (r *RelationRepo) Page(ctx context.Context, req *repo.RelationPageReq) (*repo.RelationPageResp, error) {
+	rows, page, err := r.page(ctx, &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
-	resp := repo.PageResponse{}
+	resp := repo.PageResp{}
 	if page != nil {
-		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+		resp = repo.PageResp{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
 	}
-	return &repo.RelationPageResponse{Rows: rows, Page: resp}, nil
+	return &repo.RelationPageResp{Rows: rows, Page: resp}, nil
 }
 func (r *RelationRepo) create(ctx context.Context, u *model.Relation) (*model.Relation, error) {
 	tx := r.getClient(ctx)
@@ -197,7 +197,7 @@ func (r *RelationRepo) count(ctx context.Context, req *repo.RelationGetReq) (int
 	return query.Count(ctx)
 }
 
-func (r *RelationRepo) page(ctx context.Context, page *common.PageRequest, req *repo.RelationGetReq) ([]*model.Relation, *common.PageResponse, error) {
+func (r *RelationRepo) page(ctx context.Context, page *common.PageReq, req *repo.RelationGetReq) ([]*model.Relation, *common.PageResp, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Relation.Query()
@@ -227,7 +227,7 @@ func (r *RelationRepo) page(ctx context.Context, page *common.PageRequest, req *
 			UpdatedAt: rel.UpdatedAt,
 		})
 	}
-	return result, &common.PageResponse{
+	return result, &common.PageResp{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

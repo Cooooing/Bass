@@ -7,25 +7,17 @@ import (
 )
 
 type ChatSessionRepo interface {
-	Save(ctx context.Context, req *ChatSessionSaveReq) (*ChatSessionSaveResponse, error)
+	Save(ctx context.Context, chatSession *model.ChatSession) (*model.ChatSession, error)
 
-	UpdateLastReadMessage(ctx context.Context, req *ChatSessionUpdateLastReadMessageReq) (*ChatSessionUpdateLastReadMessageResponse, error)
-	UpdateMuted(ctx context.Context, req *ChatSessionUpdateMutedReq) (*ChatSessionUpdateMutedResponse, error)
-	UpdatePinned(ctx context.Context, req *ChatSessionUpdatePinnedReq) (*ChatSessionUpdatePinnedResponse, error)
+	UpdateLastReadMessage(ctx context.Context, req *ChatSessionUpdateLastReadMessageReq) (*model.ChatSession, error)
+	UpdateMuted(ctx context.Context, req *ChatSessionUpdateMutedReq) (*model.ChatSession, error)
+	UpdatePinned(ctx context.Context, req *ChatSessionUpdatePinnedReq) (*model.ChatSession, error)
 
-	Get(ctx context.Context, req *ChatSessionGetReq) (*ChatSessionGetResponse, error)
-	List(ctx context.Context, req *ChatSessionListReq) (*ChatSessionListResponse, error)
-	Map(ctx context.Context, req *ChatSessionMapReq) (*ChatSessionMapResponse, error)
-	Count(ctx context.Context, req *ChatSessionCountReq) (*ChatSessionCountResponse, error)
-	Page(ctx context.Context, req *ChatSessionPageReq) (*ChatSessionPageResponse, error)
-}
-
-type ChatSessionSaveReq struct {
-	ChatSession *model.ChatSession
-}
-
-type ChatSessionSaveResponse struct {
-	ChatSession *model.ChatSession
+	Get(ctx context.Context, query *ChatSessionQuery) (*model.ChatSession, error)
+	List(ctx context.Context, query *ChatSessionQuery) ([]*model.ChatSession, error)
+	Map(ctx context.Context, query *ChatSessionQuery) (map[int64]*model.ChatSession, error)
+	Count(ctx context.Context, query *ChatSessionQuery) (int, error)
+	Page(ctx context.Context, query *ChatSessionQuery) (*ChatSessionPageResp, error)
 }
 
 type ChatSessionUpdateLastReadMessageReq struct {
@@ -35,28 +27,16 @@ type ChatSessionUpdateLastReadMessageReq struct {
 	UpdatedBy          int64
 }
 
-type ChatSessionUpdateLastReadMessageResponse struct {
-	ChatSession *model.ChatSession
-}
-
 type ChatSessionUpdateMutedReq struct {
 	ChatSessionID int64
 	Muted         bool
 	UpdatedBy     int64
 }
 
-type ChatSessionUpdateMutedResponse struct {
-	ChatSession *model.ChatSession
-}
-
 type ChatSessionUpdatePinnedReq struct {
 	ChatSessionID int64
 	Pinned        bool
 	UpdatedBy     int64
-}
-
-type ChatSessionUpdatePinnedResponse struct {
-	ChatSession *model.ChatSession
 }
 
 type ChatSessionQuery struct {
@@ -67,43 +47,7 @@ type ChatSessionQuery struct {
 	ReceiverID *int64
 }
 
-type ChatSessionGetReq struct {
-	ChatSessionQuery
-}
-
-type ChatSessionGetResponse struct {
-	ChatSession *model.ChatSession
-}
-
-type ChatSessionListReq struct {
-	ChatSessionQuery
-}
-
-type ChatSessionListResponse struct {
+type ChatSessionPageResp struct {
 	Rows []*model.ChatSession
-}
-
-type ChatSessionMapReq struct {
-	ChatSessionQuery
-}
-
-type ChatSessionMapResponse struct {
-	Rows map[int64]*model.ChatSession
-}
-
-type ChatSessionCountReq struct {
-	ChatSessionQuery
-}
-
-type ChatSessionCountResponse struct {
-	Count int
-}
-
-type ChatSessionPageReq struct {
-	ChatSessionQuery
-}
-
-type ChatSessionPageResponse struct {
-	Rows []*model.ChatSession
-	Page *base.PageResponse
+	Page *base.PageResp
 }

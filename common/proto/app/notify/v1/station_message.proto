@@ -10,13 +10,13 @@ import "notify/v1/enum.proto";
 option go_package = "common/proto/gen/notify/v1;v1";
 
 service NotifyStationMessageService {
-  rpc List(ListStationMessages.Request) returns (ListStationMessages.Response) {} // 查询账号站内信列表。
-  rpc MarkRead(MarkReadStationMessage.Request) returns (MarkReadStationMessage.Response) {} // 标记账号站内信为已读。
-  rpc CountUnread(CountUnreadStationMessages.Request) returns (CountUnreadStationMessages.Response) {} // 查询账号未读站内信数量。
+  rpc List(ListStationMessages.Req) returns (ListStationMessages.Resp) {} // 查询账号站内信列表。
+  rpc MarkRead(MarkReadStationMessage.Req) returns (MarkReadStationMessage.Resp) {} // 标记账号站内信为已读。
+  rpc CountUnread(CountUnreadStationMessages.Req) returns (CountUnreadStationMessages.Resp) {} // 查询账号未读站内信数量。
 }
 
 message ListStationMessages {
-  message Request {
+  message Req {
 
     message NotificationStationMessageQueryParams {
       repeated int64 ids = 1;
@@ -24,10 +24,10 @@ message ListStationMessages {
       optional bool unread = 3;
     }
     int64 user_id = 1;
-    .common.api.app.common.PageRequest page = 2;
+    .common.api.app.common.PageReq page = 2;
     NotificationStationMessageQueryParams query = 3;
   }
-  message Response {
+  message Resp {
 
     message NotificationStationMessage {
       google.protobuf.Timestamp created_at = 1000;
@@ -41,27 +41,27 @@ message ListStationMessages {
       NotificationChannelStatus status = 7;
       optional google.protobuf.Timestamp read_at = 8;
     }
-    .common.api.app.common.PageResponse page = 1;
+    .common.api.app.common.PageResp page = 1;
     repeated NotificationStationMessage rows = 2;
   }
 }
 
 message MarkReadStationMessage {
-  message Request {
+  message Req {
     int64 user_id = 1;
     repeated int64 ids = 2;
     .common.api.app.common.TimeRange created_time_range = 3;
   }
-  message Response {
+  message Resp {
     int32 count = 1;
   }
 }
 
 message CountUnreadStationMessages {
-  message Request {
+  message Req {
     int64 user_id = 1;
   }
-  message Response {
+  message Resp {
     int64 count = 1;
   }
 }

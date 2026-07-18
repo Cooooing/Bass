@@ -31,23 +31,22 @@ func (r *CommentActionRecordRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *CommentActionRecordRepo) Save(ctx context.Context, req *repo.CommentActionRecordSaveReq) (*repo.CommentActionRecordSaveResponse, error) {
-	record := req.Record
+func (r *CommentActionRecordRepo) Save(ctx context.Context, record *model.CommentActionRecord) (bool, error) {
 	_, err := r.getClient(ctx).CommentActionRecord.Create().
 		SetCommentID(record.CommentID).
 		SetUserID(record.UserID).
 		SetType(commentactionrecord.Type(record.Type)).
 		Save(ctx)
 	if gen.IsConstraintError(err) {
-		return &repo.CommentActionRecordSaveResponse{Created: false}, nil
+		return false, nil
 	}
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &repo.CommentActionRecordSaveResponse{Created: true}, nil
+	return true, nil
 }
 
-func (r *CommentActionRecordRepo) Delete(ctx context.Context, req *repo.CommentActionRecordDeleteReq) (*repo.CommentActionRecordDeleteResponse, error) {
+func (r *CommentActionRecordRepo) Delete(ctx context.Context, req *repo.CommentActionRecordDeleteReq) (int, error) {
 	commentId := req.CommentID
 	userId := req.UserID
 	action := req.Action
@@ -57,22 +56,22 @@ func (r *CommentActionRecordRepo) Delete(ctx context.Context, req *repo.CommentA
 		Where(commentactionrecord.TypeEQ(commentactionrecord.Type(action))).
 		Exec(ctx)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.CommentActionRecordDeleteResponse{Deleted: deleted}, nil
+	return deleted, nil
 }
 
-func (r *CommentActionRecordRepo) Exist(ctx context.Context, req *repo.CommentActionRecordReq) (*repo.CommentActionRecordExistResponse, error) {
+func (r *CommentActionRecordRepo) Exist(ctx context.Context, req *repo.CommentActionRecordReq) (bool, error) {
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
 	exist, err := query.Exist(ctx)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-	return &repo.CommentActionRecordExistResponse{Exist: exist}, nil
+	return exist, nil
 }
 
-func (r *CommentActionRecordRepo) Get(ctx context.Context, req *repo.CommentActionRecordReq) (*repo.CommentActionRecordGetResponse, error) {
+func (r *CommentActionRecordRepo) Get(ctx context.Context, req *repo.CommentActionRecordReq) (*model.CommentActionRecord, error) {
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
 	row, err := query.First(ctx)
@@ -82,15 +81,15 @@ func (r *CommentActionRecordRepo) Get(ctx context.Context, req *repo.CommentActi
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CommentActionRecordGetResponse{Record: &model.CommentActionRecord{
+	return &model.CommentActionRecord{
 		ID:        row.ID,
 		CommentID: row.CommentID,
 		UserID:    row.UserID,
 		Type:      enum.CommentAction(row.Type),
-	}}, nil
+	}, nil
 }
 
-func (r *CommentActionRecordRepo) List(ctx context.Context, req *repo.CommentActionRecordReq) (*repo.CommentActionRecordListResponse, error) {
+func (r *CommentActionRecordRepo) List(ctx context.Context, req *repo.CommentActionRecordReq) ([]*model.CommentActionRecord, error) {
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -106,30 +105,30 @@ func (r *CommentActionRecordRepo) List(ctx context.Context, req *repo.CommentAct
 			Type:      enum.CommentAction(row.Type),
 		})
 	}
-	return &repo.CommentActionRecordListResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-func (r *CommentActionRecordRepo) Map(ctx context.Context, req *repo.CommentActionRecordReq) (*repo.CommentActionRecordMapResponse, error) {
-	listResponse, err := r.List(ctx, req)
+func (r *CommentActionRecordRepo) Map(ctx context.Context, req *repo.CommentActionRecordReq) (map[int64]*model.CommentActionRecord, error) {
+	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CommentActionRecordMapResponse{Rows: lo.SliceToMap(listResponse.Rows, func(item *model.CommentActionRecord) (int64, *model.CommentActionRecord) {
+	return lo.SliceToMap(listResp, func(item *model.CommentActionRecord) (int64, *model.CommentActionRecord) {
 		return item.ID, item
-	})}, nil
+	}), nil
 }
 
-func (r *CommentActionRecordRepo) Count(ctx context.Context, req *repo.CommentActionRecordReq) (*repo.CommentActionRecordCountResponse, error) {
+func (r *CommentActionRecordRepo) Count(ctx context.Context, req *repo.CommentActionRecordReq) (int, error) {
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &repo.CommentActionRecordCountResponse{Count: count}, nil
+	return count, nil
 }
 
-func (r *CommentActionRecordRepo) Page(ctx context.Context, req *repo.CommentActionRecordReq) (*repo.CommentActionRecordPageResponse, error) {
+func (r *CommentActionRecordRepo) Page(ctx context.Context, req *repo.CommentActionRecordReq) (*repo.CommentActionRecordPageResp, error) {
 	page := normalizePage(req.Page)
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
@@ -153,9 +152,9 @@ func (r *CommentActionRecordRepo) Page(ctx context.Context, req *repo.CommentAct
 			Type:      enum.CommentAction(row.Type),
 		})
 	}
-	return &repo.CommentActionRecordPageResponse{
+	return &repo.CommentActionRecordPageResp{
 		Rows: rows,
-		Page: &base.PageResponse{
+		Page: &base.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

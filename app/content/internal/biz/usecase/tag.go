@@ -24,58 +24,42 @@ func NewTagUsecase(
 	}
 }
 
-type TagSavesReq struct {
-	Tags []*model.Tag
-}
-
-type TagSavesResponse struct {
-	Rows []*model.Tag
-}
-
-func (t *TagUsecase) Saves(ctx context.Context, req *TagSavesReq) (*TagSavesResponse, error) {
+func (t *TagUsecase) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag, error) {
 	var (
 		rows []*model.Tag
 		err  error
 	)
 	err = t.tx(ctx, func(ctx context.Context) error {
-		savesResponse, saveErr := t.tagRepo.Saves(ctx, &repo.TagSavesReq{Tags: req.Tags})
+		savesResp, saveErr := t.tagRepo.Saves(ctx, tags)
 		if saveErr != nil {
 			return saveErr
 		}
-		rows = savesResponse.Rows
+		rows = savesResp
 		return err
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &TagSavesResponse{Rows: rows}, nil
+	return rows, nil
 }
 
-type TagUpdateReq struct {
-	Tag *model.Tag
-}
-
-type TagUpdateResponse struct {
-	Tag *model.Tag
-}
-
-func (t *TagUsecase) Update(ctx context.Context, req *TagUpdateReq) (*TagUpdateResponse, error) {
+func (t *TagUsecase) Update(ctx context.Context, tag *model.Tag) (*model.Tag, error) {
 	var (
-		tag *model.Tag
-		err error
+		updated *model.Tag
+		err     error
 	)
 	err = t.tx(ctx, func(ctx context.Context) error {
-		updateResponse, updateErr := t.tagRepo.Update(ctx, &repo.TagUpdateReq{Tag: req.Tag})
+		updateResp, updateErr := t.tagRepo.Update(ctx, tag)
 		if updateErr != nil {
 			return updateErr
 		}
-		tag = updateResponse.Tag
+		updated = updateResp
 		return err
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &TagUpdateResponse{Tag: tag}, nil
+	return updated, nil
 }
 
 type TagPageReq struct {
@@ -88,16 +72,16 @@ type TagPageReq struct {
 	DomainID    *int64
 }
 
-type TagPageResponse struct {
+type TagPageResp struct {
 	Rows []*model.Tag
-	Page *base.PageResponse
+	Page *base.PageResp
 }
 
-func (t *TagUsecase) Page(ctx context.Context, req *TagPageReq) (*TagPageResponse, error) {
+func (t *TagUsecase) Page(ctx context.Context, req *TagPageReq) (*TagPageResp, error) {
 	if req == nil {
 		req = &TagPageReq{}
 	}
-	pageResponse, err := t.tagRepo.Page(ctx, &repo.TagGetReq{
+	pageResp, err := t.tagRepo.Page(ctx, &repo.TagGetReq{
 		Page:        req.Page,
 		TagIds:      req.TagIDs,
 		Name:        req.Name,
@@ -109,5 +93,5 @@ func (t *TagUsecase) Page(ctx context.Context, req *TagPageReq) (*TagPageRespons
 	if err != nil {
 		return nil, err
 	}
-	return &TagPageResponse{Rows: pageResponse.Rows, Page: pageResponse.Page}, nil
+	return &TagPageResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
 }

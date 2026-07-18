@@ -6,24 +6,8 @@ import (
 )
 
 type MemoryRepo interface {
-	ListMemories(ctx context.Context, req *ListMemoriesReq) (*ListMemoriesResponse, error)
-	CreateMemory(ctx context.Context, req *CreateMemoryReq) (*CreateMemoryResponse, error)
-}
-
-type ListMemoriesReq struct {
-	Query MemoryQuery
-}
-
-type ListMemoriesResponse struct {
-	Rows []*model.Memory
-}
-
-type CreateMemoryReq struct {
-	Row *model.Memory
-}
-
-type CreateMemoryResponse struct {
-	Row *model.Memory
+	ListMemories(ctx context.Context, query *MemoryQuery) ([]*model.Memory, error)
+	CreateMemory(ctx context.Context, row *model.Memory) (*model.Memory, error)
 }
 
 type MemoryQuery struct {

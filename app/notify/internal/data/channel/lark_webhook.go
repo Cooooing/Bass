@@ -58,7 +58,7 @@ func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizchannel
 	httpReq.Header.Set("Content-Type", "application/json")
 	reply, err := c.httpClient.Do(httpReq)
 	if err != nil {
-		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusUnknown, ProviderResponse: new(fmt.Sprintf("send lark webhook: %v", err))}, nil
+		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusUnknown, ProviderResp: new(fmt.Sprintf("send lark webhook: %v", err))}, nil
 	}
 	defer reply.Body.Close()
 	body, _ := io.ReadAll(reply.Body)
@@ -67,9 +67,9 @@ func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizchannel
 		status = notifyenum.NotificationChannelStatusFailed
 	}
 	return &bizchannel.SendResult{
-		Status:       status,
-		HTTPStatus:   new(reply.StatusCode),
-		ResponseBody: new(string(body)),
+		Status:     status,
+		HTTPStatus: new(reply.StatusCode),
+		RespBody:   new(string(body)),
 	}, nil
 }
 

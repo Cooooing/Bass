@@ -25,26 +25,26 @@ type StationMessagePageReq struct {
 	Unread     *bool
 }
 
-type StationMessagePageResponse struct {
+type StationMessagePageResp struct {
 	Rows []*model.NotificationStationMessage
-	Page *base.PageResponse
+	Page *base.PageResp
 }
 
-func (u *StationMessageUsecase) Page(ctx context.Context, req *StationMessagePageReq) (*StationMessagePageResponse, error) {
+func (u *StationMessageUsecase) Page(ctx context.Context, req *StationMessagePageReq) (*StationMessagePageResp, error) {
 	if req == nil {
 		req = &StationMessagePageReq{}
 	}
-	pageResponse, err := u.stationMessageRepo.Page(ctx, &repo.NotificationStationMessagePageReq{Query: &repo.NotificationStationMessageQuery{
+	pageResp, err := u.stationMessageRepo.Page(ctx, &repo.NotificationStationMessageQuery{
 		Page:       req.Page,
 		IDs:        req.IDs,
 		ReceiverID: req.ReceiverID,
 		EventType:  req.EventType,
 		Unread:     req.Unread,
-	}})
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &StationMessagePageResponse{Rows: pageResponse.Rows, Page: pageResponse.Page}, nil
+	return &StationMessagePageResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
 }
 
 type StationMessageMarkReadReq struct {
@@ -54,41 +54,27 @@ type StationMessageMarkReadReq struct {
 	EndTime    *time.Time
 }
 
-type StationMessageMarkReadResponse struct {
-	Count int
-}
-
-func (u *StationMessageUsecase) MarkRead(ctx context.Context, req *StationMessageMarkReadReq) (*StationMessageMarkReadResponse, error) {
+func (u *StationMessageUsecase) MarkRead(ctx context.Context, req *StationMessageMarkReadReq) (int, error) {
 	if req == nil {
 		req = &StationMessageMarkReadReq{}
 	}
-	response, err := u.stationMessageRepo.MarkRead(ctx, &repo.NotificationStationMessageMarkReadReq{
+	count, err := u.stationMessageRepo.MarkRead(ctx, &repo.NotificationStationMessageMarkReadReq{
 		ReceiverID: req.ReceiverID,
 		IDs:        req.IDs,
 		StartTime:  req.StartTime,
 		EndTime:    req.EndTime,
 	})
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &StationMessageMarkReadResponse{Count: response.Count}, nil
+	return count, nil
 }
 
-type StationMessageCountUnreadReq struct {
-	ReceiverID int64
-}
+func (u *StationMessageUsecase) CountUnread(ctx context.Context, receiverID int64) (int, error) {
 
-type StationMessageCountUnreadResponse struct {
-	Count int
-}
-
-func (u *StationMessageUsecase) CountUnread(ctx context.Context, req *StationMessageCountUnreadReq) (*StationMessageCountUnreadResponse, error) {
-	if req == nil {
-		req = &StationMessageCountUnreadReq{}
-	}
-	response, err := u.stationMessageRepo.CountUnread(ctx, &repo.NotificationStationMessageCountUnreadReq{ReceiverID: req.ReceiverID})
+	count, err := u.stationMessageRepo.CountUnread(ctx, receiverID)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	return &StationMessageCountUnreadResponse{Count: response.Count}, nil
+	return count, nil
 }

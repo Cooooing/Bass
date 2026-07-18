@@ -77,18 +77,14 @@ type CreateCommentReq struct {
 	ReplyID   int64
 }
 
-type CreateCommentResponse struct {
-	Comment *CommentDetail
-}
-
 type ListCommentsReq struct {
 	UserID int64
 	Page   *PageReq
 	Query  *CommentQuery
 }
 
-type ListCommentsResponse struct {
-	Page *PageResponse
+type ListCommentsResp struct {
+	Page *PageResp
 	Rows []*CommentListItem
 }
 
@@ -100,8 +96,8 @@ type ListCommentThreadsReq struct {
 	ReplyPreviewLimit *int32
 }
 
-type ListCommentThreadsResponse struct {
-	Page *PageResponse
+type ListCommentThreadsResp struct {
+	Page *PageResp
 	Rows []*CommentThread
 }
 
@@ -113,8 +109,8 @@ type ListCommentRepliesReq struct {
 	Order     *int32
 }
 
-type ListCommentRepliesResponse struct {
-	Page *PageResponse
+type ListCommentRepliesResp struct {
+	Page *PageResp
 	Rows []*CommentListItem
 }
 
@@ -125,8 +121,8 @@ type ListCommentTimelineReq struct {
 	Order     *int32
 }
 
-type ListCommentTimelineResponse struct {
-	Page *PageResponse
+type ListCommentTimelineResp struct {
+	Page *PageResp
 	Rows []*CommentListItem
 }
 
@@ -136,26 +132,18 @@ type LikeCommentReq struct {
 	Active bool
 }
 
-type LikeCommentResponse struct {
-	Liked bool
-}
-
 type ThankCommentReq struct {
 	UserID int64
 	ID     int64
 	Active bool
 }
 
-type ThankCommentResponse struct {
-	Thanked bool
-}
-
 type ContentCommentClient interface {
-	CreateComment(ctx context.Context, req *CreateCommentReq) (*CreateCommentResponse, error)
-	ListComments(ctx context.Context, req *ListCommentsReq) (*ListCommentsResponse, error)
-	ListCommentThreads(ctx context.Context, req *ListCommentThreadsReq) (*ListCommentThreadsResponse, error)
-	ListCommentReplies(ctx context.Context, req *ListCommentRepliesReq) (*ListCommentRepliesResponse, error)
-	ListCommentTimeline(ctx context.Context, req *ListCommentTimelineReq) (*ListCommentTimelineResponse, error)
-	LikeComment(ctx context.Context, req *LikeCommentReq) (*LikeCommentResponse, error)
-	ThankComment(ctx context.Context, req *ThankCommentReq) (*ThankCommentResponse, error)
+	CreateComment(ctx context.Context, req *CreateCommentReq) (*CommentDetail, error)
+	ListComments(ctx context.Context, req *ListCommentsReq) (*ListCommentsResp, error)
+	ListCommentThreads(ctx context.Context, req *ListCommentThreadsReq) (*ListCommentThreadsResp, error)
+	ListCommentReplies(ctx context.Context, req *ListCommentRepliesReq) (*ListCommentRepliesResp, error)
+	ListCommentTimeline(ctx context.Context, req *ListCommentTimelineReq) (*ListCommentTimelineResp, error)
+	LikeComment(ctx context.Context, req *LikeCommentReq) (bool, error)
+	ThankComment(ctx context.Context, req *ThankCommentReq) (bool, error)
 }

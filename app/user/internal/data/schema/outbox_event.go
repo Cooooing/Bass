@@ -29,7 +29,7 @@ func (OutboxEvent) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.String("event_id").Comment("全局幂等 ID，对应 common.enums.Event.event_id").NotEmpty().Unique(),
 		field.Enum("event_type").Values(commonenum.EventTypeMap.EnumValues()...).Comment("事件类型"),
-		field.Enum("subject").GoType(commonenum.EventSubject("")).Comment("NATS 主题"),
+		field.Enum("subject").GoType(commonenum.EventSubject("")).Values(commonenum.EventSubjectMap.EnumValues()...).Comment("NATS 主题"),
 		field.Text("payload").Comment("JSON 编码后的 common.enums.Event"),
 		field.JSON("headers", map[string]string{}).Comment("消息头").Default(map[string]string{}),
 		field.Enum("status").Values(commonenum.OutboxEventStatusMap.EnumValues()...).Default(string(commonenum.OutboxEventStatusPending)).Comment("投递状态"),

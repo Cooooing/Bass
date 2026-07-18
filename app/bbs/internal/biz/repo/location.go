@@ -3,8 +3,8 @@ package repo
 import "context"
 
 type LocationClient interface {
-	GetCurrentLocation(ctx context.Context, req *GetCurrentLocationReq) (*GetCurrentLocationResponse, error)
-	UpsertCurrentLocation(ctx context.Context, req *UpsertCurrentLocationReq) (*UpsertCurrentLocationResponse, error)
+	GetCurrentLocation(ctx context.Context, userID int64) (*Location, error)
+	UpsertCurrentLocation(ctx context.Context, req *UpsertCurrentLocationReq) (*Location, error)
 }
 
 type Location struct {
@@ -14,21 +14,9 @@ type Location struct {
 	City     *string
 }
 
-type GetCurrentLocationReq struct {
-	UserID int64
-}
-
-type GetCurrentLocationResponse struct {
-	Location *Location
-}
-
 type UpsertCurrentLocationReq struct {
 	UserID   int64
 	Country  *string
 	Province *string
 	City     *string
-}
-
-type UpsertCurrentLocationResponse struct {
-	Location *Location
 }

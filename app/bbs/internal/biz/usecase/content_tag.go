@@ -29,11 +29,7 @@ type CreateTagReq struct {
 	Tag    *ContentTagSave
 }
 
-type CreateTagResponse struct {
-	Tag *repo.Tag
-}
-
-func (u *ContentTagUsecase) CreateTag(ctx context.Context, req *CreateTagReq) (*CreateTagResponse, error) {
+func (u *ContentTagUsecase) CreateTag(ctx context.Context, req *CreateTagReq) (*repo.Tag, error) {
 	if req == nil || req.Tag == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -42,11 +38,11 @@ func (u *ContentTagUsecase) CreateTag(ctx context.Context, req *CreateTagReq) (*
 		value := int32(*req.Tag.Status)
 		status = &value
 	}
-	response, err := u.contentTagClient.CreateTag(ctx, &repo.CreateTagReq{UserID: req.UserID, Tag: &repo.TagSave{Name: req.Tag.Name, Description: req.Tag.Description, DomainID: req.Tag.DomainID, Status: status}})
+	resp, err := u.contentTagClient.CreateTag(ctx, &repo.CreateTagReq{UserID: req.UserID, Tag: &repo.TagSave{Name: req.Tag.Name, Description: req.Tag.Description, DomainID: req.Tag.DomainID, Status: status}})
 	if err != nil {
 		return nil, err
 	}
-	return &CreateTagResponse{Tag: response.Tag}, nil
+	return resp, nil
 }
 
 type UpdateTagReq struct {
@@ -55,11 +51,7 @@ type UpdateTagReq struct {
 	Tag    *ContentTagSave
 }
 
-type UpdateTagResponse struct {
-	Tag *repo.Tag
-}
-
-func (u *ContentTagUsecase) UpdateTag(ctx context.Context, req *UpdateTagReq) (*UpdateTagResponse, error) {
+func (u *ContentTagUsecase) UpdateTag(ctx context.Context, req *UpdateTagReq) (*repo.Tag, error) {
 	if req == nil || req.Tag == nil || req.TagID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -68,24 +60,24 @@ func (u *ContentTagUsecase) UpdateTag(ctx context.Context, req *UpdateTagReq) (*
 		value := int32(*req.Tag.Status)
 		status = &value
 	}
-	response, err := u.contentTagClient.UpdateTag(ctx, &repo.UpdateTagReq{UserID: req.UserID, TagID: req.TagID, Tag: &repo.TagSave{Name: req.Tag.Name, Description: req.Tag.Description, DomainID: req.Tag.DomainID, Status: status}})
+	resp, err := u.contentTagClient.UpdateTag(ctx, &repo.UpdateTagReq{UserID: req.UserID, TagID: req.TagID, Tag: &repo.TagSave{Name: req.Tag.Name, Description: req.Tag.Description, DomainID: req.Tag.DomainID, Status: status}})
 	if err != nil {
 		return nil, err
 	}
-	return &UpdateTagResponse{Tag: response.Tag}, nil
+	return resp, nil
 }
 
 type ListTagsReq struct {
-	Page  *common.PageRequest
-	Query *bbscontentv1.ListTags_Request_TagQuery
+	Page  *common.PageReq
+	Query *bbscontentv1.ListTags_Req_TagQuery
 }
 
-type ListTagsResponse struct {
-	Page *repo.PageResponse
+type ListTagsResp struct {
+	Page *repo.PageResp
 	Rows []*repo.Tag
 }
 
-func (u *ContentTagUsecase) ListTags(ctx context.Context, req *ListTagsReq) (*ListTagsResponse, error) {
+func (u *ContentTagUsecase) ListTags(ctx context.Context, req *ListTagsReq) (*ListTagsResp, error) {
 	if req == nil {
 		req = &ListTagsReq{}
 	}
@@ -109,9 +101,9 @@ func (u *ContentTagUsecase) ListTags(ctx context.Context, req *ListTagsReq) (*Li
 		value := int32(bbscontentv1.TagStatus_TAG_STATUS_ENABLED)
 		query.Status = &value
 	}
-	response, err := u.contentTagClient.ListTags(ctx, &repo.ListTagsReq{Page: page, Query: query})
+	resp, err := u.contentTagClient.ListTags(ctx, &repo.ListTagsReq{Page: page, Query: query})
 	if err != nil {
 		return nil, err
 	}
-	return &ListTagsResponse{Page: response.Page, Rows: response.Rows}, nil
+	return &ListTagsResp{Page: resp.Page, Rows: resp.Rows}, nil
 }

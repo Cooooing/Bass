@@ -7,18 +7,10 @@ import (
 )
 
 type CommandRepo interface {
-	CreateCommand(ctx context.Context, req *CreateCommandReq) (*CreateCommandResponse, error)
-	FinishCommand(ctx context.Context, req *FinishCommandReq) (*FinishCommandResponse, error)
-	Page(ctx context.Context, req *CommandPageReq) (*CommandPageResponse, error)
-	List(ctx context.Context, req *CommandListReq) (*CommandListResponse, error)
-}
-
-type CreateCommandReq struct {
-	Row *model.Command
-}
-
-type CreateCommandResponse struct {
-	Row *model.Command
+	CreateCommand(ctx context.Context, row *model.Command) (*model.Command, error)
+	FinishCommand(ctx context.Context, req *FinishCommandReq) (*model.Command, error)
+	Page(ctx context.Context, req *CommandPageReq) (*CommandPageResp, error)
+	List(ctx context.Context, req *CommandListReq) ([]*model.Command, error)
 }
 
 type FinishCommandReq struct {
@@ -29,27 +21,19 @@ type FinishCommandReq struct {
 	WorldID   *int64
 }
 
-type FinishCommandResponse struct {
-	Row *model.Command
-}
-
 type CommandPageReq struct {
-	Page  *common.PageRequest
+	Page  *common.PageReq
 	Query CommandQuery
 }
 
-type CommandPageResponse struct {
+type CommandPageResp struct {
 	Rows []*model.Command
-	Page *common.PageResponse
+	Page *common.PageResp
 }
 
 type CommandListReq struct {
 	SessionID int64
 	PlayerID  int64
-}
-
-type CommandListResponse struct {
-	Rows []*model.Command
 }
 
 type CommandQuery struct {

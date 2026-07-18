@@ -21,17 +21,17 @@ func NewContentClient(contentClient *rpc.ContentClient, userClient *rpc.UserClie
 	return &ContentClient{contentClient: contentClient, userClient: userClient}
 }
 
-func (c *ContentClient) GetArticle(ctx context.Context, req *bizrepo.ContentGetArticleReq) (*bizrepo.ContentGetArticleResponse, error) {
-	if req == nil || req.ArticleID == 0 {
-		return &bizrepo.ContentGetArticleResponse{}, nil
+func (c *ContentClient) GetArticle(ctx context.Context, articleID int64) (*model.ContentArticle, error) {
+	if articleID == 0 {
+		return nil, nil
 	}
-	reply, err := c.contentClient.Article.Get(ctx, &contentv1.GetArticle_Request{ArticleId: req.ArticleID})
+	reply, err := c.contentClient.Article.Get(ctx, &contentv1.GetArticle_Req{ArticleId: articleID})
 	if err != nil {
 		return nil, err
 	}
 	article := reply.GetArticle()
 	if article == nil {
-		return &bizrepo.ContentGetArticleResponse{}, nil
+		return nil, nil
 	}
 	result := &model.ContentArticle{
 		ID:       article.GetId(),
@@ -46,24 +46,24 @@ func (c *ContentClient) GetArticle(ctx context.Context, req *bizrepo.ContentGetA
 		result.AuthorName = author.Name
 		result.AuthorNickname = author.Nickname
 	}
-	return &bizrepo.ContentGetArticleResponse{Article: result}, nil
+	return result, nil
 }
 
-func (c *ContentClient) GetComment(ctx context.Context, req *bizrepo.ContentGetCommentReq) (*bizrepo.ContentGetCommentResponse, error) {
-	if req == nil || req.CommentID == 0 {
-		return &bizrepo.ContentGetCommentResponse{}, nil
+func (c *ContentClient) GetComment(ctx context.Context, commentID int64) (*model.ContentComment, error) {
+	if commentID == 0 {
+		return nil, nil
 	}
-	reply, err := c.contentClient.Comment.Page(ctx, &contentv1.PageComments_Request{
-		Page: &common.PageRequest{Page: 1, Size: 1},
-		Query: &contentv1.PageComments_Request_CommentQueryParams{
-			CommentId: new(req.CommentID),
+	reply, err := c.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
+		Page: &common.PageReq{Page: 1, Size: 1},
+		Query: &contentv1.PageComments_Req_CommentQueryParams{
+			CommentId: new(commentID),
 		},
 	})
 	if err != nil {
 		return nil, err
 	}
 	if len(reply.GetRows()) == 0 {
-		return &bizrepo.ContentGetCommentResponse{}, nil
+		return nil, nil
 	}
 	comment := reply.GetRows()[0]
 	result := &model.ContentComment{
@@ -85,13 +85,13 @@ func (c *ContentClient) GetComment(ctx context.Context, req *bizrepo.ContentGetC
 		result.ReplyUserName = replyUser.Name
 	}
 	if result.ArticleID != 0 {
-		articleResponse, err := c.GetArticle(ctx, &bizrepo.ContentGetArticleReq{ArticleID: result.ArticleID})
+		articleResp, err := c.GetArticle(ctx, result.ArticleID)
 		if err != nil {
 			return nil, err
 		}
-		result.Article = articleResponse.Article
+		result.Article = articleResp
 	}
-	return &bizrepo.ContentGetCommentResponse{Comment: result}, nil
+	return result, nil
 }
 
 func (c *ContentClient) mapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.UserAccount, error) {
@@ -110,8 +110,8 @@ func (c *ContentClient) mapAccounts(ctx context.Context, userIDs []int64) (map[i
 	if len(ids) == 0 {
 		return map[int64]*model.UserAccount{}, nil
 	}
-	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Request{
-		Query: &userv1.MapAccounts_Request_AccountQuery{UserIds: ids},
+	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
+		Query: &userv1.MapAccounts_Req_AccountQuery{UserIds: ids},
 	})
 	if err != nil {
 		return nil, err

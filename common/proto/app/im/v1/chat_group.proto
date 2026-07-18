@@ -12,31 +12,31 @@ option go_package = "common/proto/gen/im/v1;v1";
 
 // ChatGroup 服务
 service IMChatGroupService {
-  rpc Create(CreateChatGroup.Request) returns (CreateChatGroup.Response) {} // 创建群组
-  rpc Dismiss(DismissChatGroup.Request) returns (DismissChatGroup.Response) {} // 解散群组
-  rpc List(ListChatGroups.Request) returns (ListChatGroups.Response) {} // 查询群组列表
+  rpc Create(CreateChatGroup.Req) returns (CreateChatGroup.Resp) {} // 创建群组
+  rpc Dismiss(DismissChatGroup.Req) returns (DismissChatGroup.Resp) {} // 解散群组
+  rpc List(ListChatGroups.Req) returns (ListChatGroups.Resp) {} // 查询群组列表
 }
 
 message CreateChatGroup {
-  message Request {
+  message Req {
     int64 user_id = 1; // 用户 ID
     string name = 2; // 群名称
     optional string avatar = 3; // 群头像
     optional string introduction = 4; // 群简介
   }
-  message Response {}
+  message Resp {}
 }
 
 message DismissChatGroup {
-  message Request {
+  message Req {
     int64 id = 1; // 群组ID
     int64 user_id = 2; // 用户 ID
   }
-  message Response {}
+  message Resp {}
 }
 
 message ListChatGroups {
-  message Request {
+  message Req {
 
     message ChatGroupQueryParams {
       repeated int64 ids = 2; // 主键
@@ -45,10 +45,10 @@ message ListChatGroups {
       repeated int64 sender_ids = 6; // 发送者ID
       optional ChatGroupStatus status = 8; // 状态
     }
-    .common.api.app.common.PageRequest page = 1; // 分页参数
+    .common.api.app.common.PageReq page = 1; // 分页参数
     ChatGroupQueryParams query = 2; // 查询参数
   }
-  message Response {
+  message Resp {
 
     message ChatGroup {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -93,7 +93,7 @@ message ListChatGroups {
       string content = 8; // 内容
       MessageStatus status = 9; // 状态
     }
-    .common.api.app.common.PageResponse page = 1; // 分页信息
+    .common.api.app.common.PageResp page = 1; // 分页信息
     repeated ChatGroup rows = 2; // 群组列表
   }
 }

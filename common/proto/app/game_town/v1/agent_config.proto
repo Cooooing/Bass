@@ -9,13 +9,13 @@ import "google/protobuf/timestamp.proto";
 option go_package = "common/proto/gen/game_town/v1;v1";
 
 service GameTownAgentConfigService {
-  rpc Create(CreateGameTownAgentConfig.Request) returns (CreateGameTownAgentConfig.Response) {} // 创建 Agent 配置。
-  rpc Get(GetGameTownAgentConfig.Request) returns (GetGameTownAgentConfig.Response) {} // 获取 Agent 配置。
-  rpc List(ListGameTownAgentConfigs.Request) returns (ListGameTownAgentConfigs.Response) {} // 查询玩家 Agent 配置。
+  rpc Create(CreateGameTownAgentConfig.Req) returns (CreateGameTownAgentConfig.Resp) {} // 创建 Agent 配置。
+  rpc Get(GetGameTownAgentConfig.Req) returns (GetGameTownAgentConfig.Resp) {} // 获取 Agent 配置。
+  rpc List(ListGameTownAgentConfigs.Req) returns (ListGameTownAgentConfigs.Resp) {} // 查询玩家 Agent 配置。
 }
 
 message CreateGameTownAgentConfig {
-  message Request {
+  message Req {
     int64 player_id = 1; // 玩家 ID
     string name = 2; // 配置名称
     string provider = 3; // 供应商
@@ -25,7 +25,7 @@ message CreateGameTownAgentConfig {
     int32 timeout_seconds = 7; // 超时秒数
     bool is_default = 8; // 是否默认配置
   }
-  message Response {
+  message Resp {
 
     message GameTownAgentConfig {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -46,11 +46,11 @@ message CreateGameTownAgentConfig {
 }
 
 message GetGameTownAgentConfig {
-  message Request {
+  message Req {
     int64 id = 1; // 配置 ID
     int64 player_id = 2; // 玩家 ID
   }
-  message Response {
+  message Resp {
 
     message GameTownAgentConfig {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -71,11 +71,11 @@ message GetGameTownAgentConfig {
 }
 
 message ListGameTownAgentConfigs {
-  message Request {
+  message Req {
     int64 player_id = 1; // 玩家 ID
     optional GameTownAgentConfigStatus status = 2; // 配置状态
   }
-  message Response {
+  message Resp {
 
     message GameTownAgentConfig {
       google.protobuf.Timestamp created_at = 1000; // 创建时间

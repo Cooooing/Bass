@@ -41,9 +41,9 @@ func NewNodeServer(nodeUsecase *usecase.NodeUsecase) *NodeServer {
 }
 
 func (s *NodeServer) Start(ctx context.Context) error {
-	return s.nodeUsecase.ConnectHub(ctx, &usecase.ConnectHubReq{})
+	return s.nodeUsecase.ConnectHub(ctx)
 }
 
 func (s *NodeServer) Stop(ctx context.Context) error {
-	return s.nodeUsecase.Stop(ctx, &usecase.StopReq{})
+	return s.nodeUsecase.Stop(ctx)
 }

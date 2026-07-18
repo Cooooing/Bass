@@ -15,11 +15,11 @@ func (h *userClientHandler) loadBasic(ctx context.Context, userID int64) (*model
 	if h.userClient == nil || userID == 0 {
 		return nil, nil
 	}
-	usersResponse, err := h.userClient.MapAccounts(ctx, &repo.UserMapAccountsReq{UserIDs: []int64{userID}})
+	usersResp, err := h.userClient.MapAccounts(ctx, []int64{userID})
 	if err != nil {
 		return nil, err
 	}
-	return usersResponse.Rows[userID], nil
+	return usersResp[userID], nil
 }
 
 func (h *userClientHandler) loadAccounts(ctx context.Context, userIDs ...int64) (map[int64]*model.UserAccount, error) {
@@ -41,11 +41,11 @@ func (h *userClientHandler) loadAccounts(ctx context.Context, userIDs ...int64) 
 	if len(ids) == 0 {
 		return map[int64]*model.UserAccount{}, nil
 	}
-	response, err := h.userClient.MapAccounts(ctx, &repo.UserMapAccountsReq{UserIDs: ids})
+	resp, err := h.userClient.MapAccounts(ctx, ids)
 	if err != nil {
 		return nil, err
 	}
-	return response.Rows, nil
+	return resp, nil
 }
 
 func (h *userClientHandler) templateUser(userID int64, user *model.UserAccount) model.TemplateUser {
@@ -110,11 +110,11 @@ type articleActorHandler struct {
 func (h *articleActorHandler) build(ctx context.Context, eventID string, articleID int64, senderID int64) (*usecase.NotificationContext, error) {
 	var article *model.ContentArticle
 	if h.contentClient != nil && articleID != 0 {
-		articleResponse, err := h.contentClient.GetArticle(ctx, &repo.ContentGetArticleReq{ArticleID: articleID})
+		articleResp, err := h.contentClient.GetArticle(ctx, articleID)
 		if err != nil {
 			return nil, err
 		}
-		article = articleResponse.Article
+		article = articleResp
 	}
 	users, err := h.loadAccounts(ctx, senderID)
 	if err != nil {

@@ -19,20 +19,19 @@ func NewUserClient(userClient *rpc.UserClient) bizrepo.UserClient {
 	return &UserClient{userClient: userClient}
 }
 
-func (c *UserClient) MapAccounts(ctx context.Context, req *bizrepo.MapAccountsReq) (*bizrepo.MapAccountsResponse, error) {
-	userIDs := req.UserIDs
+func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.UserAccountBasic, error) {
 	if len(userIDs) == 0 {
-		return &bizrepo.MapAccountsResponse{Rows: map[int64]*model.UserAccountBasic{}}, nil
+		return map[int64]*model.UserAccountBasic{}, nil
 	}
-	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Request{
-		Query: &userv1.MapAccounts_Request_AccountQuery{UserIds: userIDs},
+	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
+		Query: &userv1.MapAccounts_Req_AccountQuery{UserIds: userIDs},
 	})
 	if err != nil {
 		return nil, err
 	}
 	accounts := reply.GetAccounts()
 	if len(accounts) == 0 {
-		return &bizrepo.MapAccountsResponse{Rows: map[int64]*model.UserAccountBasic{}}, nil
+		return map[int64]*model.UserAccountBasic{}, nil
 	}
 	result := make(map[int64]*model.UserAccountBasic, len(accounts))
 	for userID, account := range accounts {
@@ -47,5 +46,5 @@ func (c *UserClient) MapAccounts(ctx context.Context, req *bizrepo.MapAccountsRe
 			Avatar:   basic.GetAvatarUrl(),
 		}
 	}
-	return &bizrepo.MapAccountsResponse{Rows: result}, nil
+	return result, nil
 }

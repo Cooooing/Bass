@@ -33,7 +33,7 @@ func (s *ChatSessionService) RegisterHttp(hs *http.Server) {
 }
 
 // MarkMuted 设置免打扰状态。
-func (s *ChatSessionService) MarkMuted(ctx context.Context, req *v1.MarkMutedChatSession_Request) (*v1.MarkMutedChatSession_Response, error) {
+func (s *ChatSessionService) MarkMuted(ctx context.Context, req *v1.MarkMutedChatSession_Req) (*v1.MarkMutedChatSession_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -45,11 +45,11 @@ func (s *ChatSessionService) MarkMuted(ctx context.Context, req *v1.MarkMutedCha
 	if err != nil {
 		return nil, err
 	}
-	return &v1.MarkMutedChatSession_Response{}, nil
+	return &v1.MarkMutedChatSession_Resp{}, nil
 }
 
 // MarkPinned 设置置顶状态。
-func (s *ChatSessionService) MarkPinned(ctx context.Context, req *v1.MarkPinnedChatSession_Request) (*v1.MarkPinnedChatSession_Response, error) {
+func (s *ChatSessionService) MarkPinned(ctx context.Context, req *v1.MarkPinnedChatSession_Req) (*v1.MarkPinnedChatSession_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -61,11 +61,11 @@ func (s *ChatSessionService) MarkPinned(ctx context.Context, req *v1.MarkPinnedC
 	if err != nil {
 		return nil, err
 	}
-	return &v1.MarkPinnedChatSession_Response{}, nil
+	return &v1.MarkPinnedChatSession_Resp{}, nil
 }
 
 // MarkRead 标记已读。
-func (s *ChatSessionService) MarkRead(ctx context.Context, req *v1.MarkReadChatSession_Request) (*v1.MarkReadChatSession_Response, error) {
+func (s *ChatSessionService) MarkRead(ctx context.Context, req *v1.MarkReadChatSession_Req) (*v1.MarkReadChatSession_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -76,11 +76,11 @@ func (s *ChatSessionService) MarkRead(ctx context.Context, req *v1.MarkReadChatS
 	if err != nil {
 		return nil, err
 	}
-	return &v1.MarkReadChatSession_Response{}, nil
+	return &v1.MarkReadChatSession_Resp{}, nil
 }
 
 // List 查询会话列表。
-func (s *ChatSessionService) List(ctx context.Context, req *v1.ListChatSessions_Request) (*v1.ListChatSessions_Response, error) {
+func (s *ChatSessionService) List(ctx context.Context, req *v1.ListChatSessions_Req) (*v1.ListChatSessions_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -96,9 +96,9 @@ func (s *ChatSessionService) List(ctx context.Context, req *v1.ListChatSessions_
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*v1.ListChatSessions_Response_ChatSession, 0, len(resp.List))
+	rows := make([]*v1.ListChatSessions_Resp_ChatSession, 0, len(resp.List))
 	for _, item := range resp.List {
-		row := &v1.ListChatSessions_Response_ChatSession{
+		row := &v1.ListChatSessions_Resp_ChatSession{
 			Id:          item.ID,
 			IsMuted:     item.IsMuted,
 			IsPinned:    item.IsPinned,
@@ -115,8 +115,8 @@ func (s *ChatSessionService) List(ctx context.Context, req *v1.ListChatSessions_
 		}
 		rows = append(rows, row)
 	}
-	return &v1.ListChatSessions_Response{
-		Page: &common.PageResponse{Page: uint32(resp.Page.Page), Size: uint32(resp.Page.Size), Total: uint32(resp.Page.Total)},
+	return &v1.ListChatSessions_Resp{
+		Page: &common.PageResp{Page: uint32(resp.Page.Page), Size: uint32(resp.Page.Size), Total: uint32(resp.Page.Total)},
 		Rows: rows,
 	}, nil
 }

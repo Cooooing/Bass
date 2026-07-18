@@ -11,7 +11,7 @@ option go_package = "common/proto/gen/bbs/v1/notify;notify";
 // 通知接口。
 service NotificationService {
   // 分页查询通知列表。
-  rpc List(ListNotifications.Request) returns (ListNotifications.Response) {
+  rpc List(ListNotifications.Req) returns (ListNotifications.Resp) {
     option (google.api.http) = {
       post: "/v1/notify/notification/list"
       body: "*"
@@ -19,7 +19,7 @@ service NotificationService {
   }
 
   // 标记通知为已读。
-  rpc MarkRead(MarkReadNotification.Request) returns (MarkReadNotification.Response) {
+  rpc MarkRead(MarkReadNotification.Req) returns (MarkReadNotification.Resp) {
     option (google.api.http) = {
       post: "/v1/notify/notification/mark-read"
       body: "*"
@@ -27,7 +27,7 @@ service NotificationService {
   }
 
   // 统计未读通知数量。
-  rpc CountUnread(CountUnreadNotifications.Request) returns (CountUnreadNotifications.Response) {
+  rpc CountUnread(CountUnreadNotifications.Req) returns (CountUnreadNotifications.Resp) {
     option (google.api.http) = {
       post: "/v1/notify/notification/count-unread"
       body: "*"
@@ -37,11 +37,11 @@ service NotificationService {
 
 // 分页查询通知列表。
 message ListNotifications {
-  message Request {
+  message Req {
     // 分页参数。
-    .common.api.app.common.PageRequest page = 1;
+    .common.api.app.common.PageReq page = 1;
   }
-  message Response {
+  message Resp {
 
     message Notification {
       // 通知 ID。
@@ -64,7 +64,7 @@ message ListNotifications {
       string updated_at = 1001;
     }
     // 分页结果。
-    .common.api.app.common.PageResponse page = 1;
+    .common.api.app.common.PageResp page = 1;
     // 通知列表。
     repeated Notification rows = 2;
   }
@@ -72,11 +72,11 @@ message ListNotifications {
 
 // 标记通知为已读。
 message MarkReadNotification {
-  message Request {
+  message Req {
     // 通知 ID 列表。
     repeated int64 ids = 1;
   }
-  message Response {
+  message Resp {
     // 成功标记的通知数量。
     int32 count = 1;
   }
@@ -84,8 +84,8 @@ message MarkReadNotification {
 
 // 统计未读通知数量。
 message CountUnreadNotifications {
-  message Request {}
-  message Response {
+  message Req {}
+  message Resp {
     // 未读通知数量。
     int64 count = 1;
   }

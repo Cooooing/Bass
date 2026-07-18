@@ -41,88 +41,52 @@ func (r *AccountRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *AccountRepo) Create(ctx context.Context, req *repo.AccountCreateReq) (*repo.AccountCreateResponse, error) {
-	account, err := r.create(ctx, req.Account)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.AccountCreateResponse{Account: account}, nil
+func (r *AccountRepo) Create(ctx context.Context, account *model.Account) (*model.Account, error) {
+	return r.create(ctx, account)
 }
 
-func (r *AccountRepo) Update(ctx context.Context, req *repo.AccountUpdateReq) (*repo.AccountUpdateResponse, error) {
-	account, err := r.update(ctx, req.Account)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.AccountUpdateResponse{Account: account}, nil
+func (r *AccountRepo) Update(ctx context.Context, account *model.Account) (*model.Account, error) {
+	return r.update(ctx, account)
 }
 
-func (r *AccountRepo) UpdateProfile(ctx context.Context, req *repo.AccountUpdateProfileReq) (*repo.AccountUpdateProfileResponse, error) {
-	account, err := r.updateProfile(ctx, req.Profile)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.AccountUpdateProfileResponse{Account: account}, nil
+func (r *AccountRepo) UpdateProfile(ctx context.Context, profile *model.AccountProfileUpdate) (*model.Account, error) {
+	return r.updateProfile(ctx, profile)
 }
 
-func (r *AccountRepo) AddStat(ctx context.Context, req *repo.AccountAddStatReq) (*repo.AccountAddStatResponse, error) {
-	account, err := r.addStat(ctx, req.UserID, req.StatType, req.Num)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.AccountAddStatResponse{Account: account}, nil
+func (r *AccountRepo) AddStat(ctx context.Context, req *repo.AccountAddStatReq) (*model.Account, error) {
+	return r.addStat(ctx, req.UserID, req.StatType, req.Num)
 }
 
-func (r *AccountRepo) ExistsByAccount(ctx context.Context, req *repo.AccountExistsByAccountReq) (*repo.AccountExistsByAccountResponse, error) {
-	exists, err := r.existsByAccount(ctx, req.Account)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.AccountExistsByAccountResponse{Exists: exists}, nil
+func (r *AccountRepo) ExistsByAccount(ctx context.Context, account string) (bool, error) {
+	return r.existsByAccount(ctx, account)
 }
 
-func (r *AccountRepo) Get(ctx context.Context, req *repo.AccountGetReq) (*repo.AccountGetResponse, error) {
-	account, err := r.get(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.AccountGetResponse{Account: account}, nil
+func (r *AccountRepo) Get(ctx context.Context, req *repo.AccountGetReq) (*model.Account, error) {
+	return r.get(ctx, req)
 }
 
-func (r *AccountRepo) List(ctx context.Context, req *repo.AccountGetReq) (*repo.AccountListResponse, error) {
-	rows, err := r.list(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.AccountListResponse{Rows: rows}, nil
+func (r *AccountRepo) List(ctx context.Context, req *repo.AccountGetReq) ([]*model.Account, error) {
+	return r.list(ctx, req)
 }
 
-func (r *AccountRepo) Map(ctx context.Context, req *repo.AccountGetReq) (*repo.AccountMapResponse, error) {
-	rows, err := r.mapRows(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.AccountMapResponse{Rows: rows}, nil
+func (r *AccountRepo) Map(ctx context.Context, req *repo.AccountGetReq) (map[int64]*model.Account, error) {
+	return r.mapRows(ctx, req)
 }
 
-func (r *AccountRepo) Count(ctx context.Context, req *repo.AccountGetReq) (*repo.AccountCountResponse, error) {
-	count, err := r.count(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.AccountCountResponse{Count: count}, nil
+func (r *AccountRepo) Count(ctx context.Context, req *repo.AccountGetReq) (int, error) {
+	return r.count(ctx, req)
 }
 
-func (r *AccountRepo) Page(ctx context.Context, req *repo.AccountPageReq) (*repo.AccountPageResponse, error) {
-	rows, page, err := r.page(ctx, &common.PageRequest{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+func (r *AccountRepo) Page(ctx context.Context, req *repo.AccountPageReq) (*repo.AccountPageResp, error) {
+	rows, page, err := r.page(ctx, &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
-	resp := repo.PageResponse{}
+	resp := repo.PageResp{}
 	if page != nil {
-		resp = repo.PageResponse{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+		resp = repo.PageResp{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
 	}
-	return &repo.AccountPageResponse{Rows: rows, Page: resp}, nil
+	return &repo.AccountPageResp{Rows: rows, Page: resp}, nil
 }
 func (r *AccountRepo) create(ctx context.Context, u *model.Account) (*model.Account, error) {
 	tx := r.getClient(ctx)
@@ -373,7 +337,7 @@ func (r *AccountRepo) count(ctx context.Context, req *repo.AccountGetReq) (int, 
 	return query.Count(ctx)
 }
 
-func (r *AccountRepo) page(ctx context.Context, page *common.PageRequest, req *repo.AccountGetReq) ([]*model.Account, *common.PageResponse, error) {
+func (r *AccountRepo) page(ctx context.Context, page *common.PageReq, req *repo.AccountGetReq) ([]*model.Account, *common.PageResp, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Account.Query()
@@ -412,7 +376,7 @@ func (r *AccountRepo) page(ctx context.Context, page *common.PageRequest, req *r
 			UpdatedAt:     u.UpdatedAt,
 		})
 	}
-	return result, &common.PageResponse{
+	return result, &common.PageResp{
 		Total: uint32(total),
 		Page:  page.Page,
 		Size:  page.Size,

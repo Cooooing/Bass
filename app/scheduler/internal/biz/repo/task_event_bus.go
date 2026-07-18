@@ -12,32 +12,8 @@ type TaskExecutionCanceledMessage struct {
 }
 
 type TaskEventBus interface {
-	PublishTaskChanged(ctx context.Context, req *PublishTaskChangedReq) (*PublishTaskChangedResponse, error)
-	PublishExecutionCanceled(ctx context.Context, req *PublishExecutionCanceledReq) (*PublishExecutionCanceledResponse, error)
-	SubscribeTaskChanged(ctx context.Context, req *SubscribeTaskChangedReq) (*SubscribeTaskChangedResponse, error)
-	SubscribeExecutionCanceled(ctx context.Context, req *SubscribeExecutionCanceledReq) (*SubscribeExecutionCanceledResponse, error)
-}
-
-type PublishTaskChangedReq struct {
-	Message *TaskChangedMessage
-}
-
-type PublishTaskChangedResponse struct{}
-
-type PublishExecutionCanceledReq struct {
-	Message *TaskExecutionCanceledMessage
-}
-
-type PublishExecutionCanceledResponse struct{}
-
-type SubscribeTaskChangedReq struct{}
-
-type SubscribeTaskChangedResponse struct {
-	Messages <-chan TaskChangedMessage
-}
-
-type SubscribeExecutionCanceledReq struct{}
-
-type SubscribeExecutionCanceledResponse struct {
-	Messages <-chan TaskExecutionCanceledMessage
+	PublishTaskChanged(ctx context.Context, message *TaskChangedMessage) error
+	PublishExecutionCanceled(ctx context.Context, message *TaskExecutionCanceledMessage) error
+	SubscribeTaskChanged(ctx context.Context) (<-chan TaskChangedMessage, error)
+	SubscribeExecutionCanceled(ctx context.Context) (<-chan TaskExecutionCanceledMessage, error)
 }

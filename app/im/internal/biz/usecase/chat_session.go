@@ -69,26 +69,26 @@ type MarkReadReq struct {
 
 func (u *ChatSessionUsecase) MarkRead(ctx context.Context, req *MarkReadReq) error {
 	for _, id := range req.IDs {
-		sessionResp, err := u.chatSessionRepo.Get(ctx, &repo.ChatSessionGetReq{ChatSessionQuery: repo.ChatSessionQuery{IDs: []int64{id}}})
+		session, err := u.chatSessionRepo.Get(ctx, &repo.ChatSessionQuery{IDs: []int64{id}})
 		if err != nil {
 			return err
 		}
-		latestMsgResp, err := u.chatMessageRepo.Get(ctx, &repo.ChatMessageGetReq{ChatMessageQuery: repo.ChatMessageQuery{SessionID: &id}})
+		latestMsg, err := u.chatMessageRepo.Get(ctx, &repo.ChatMessageQuery{SessionID: &id})
 		if err != nil {
 			continue
 		}
 		var readDelta int32
-		if sessionResp.ChatSession.LastReadMessageID != nil {
-			readDelta = int32(latestMsgResp.ChatMessage.ID - *sessionResp.ChatSession.LastReadMessageID)
+		if session.LastReadMessageID != nil {
+			readDelta = int32(latestMsg.ID - *session.LastReadMessageID)
 		} else {
-			readDelta = int32(latestMsgResp.ChatMessage.ID)
+			readDelta = int32(latestMsg.ID)
 		}
 		if readDelta <= 0 {
 			continue
 		}
 		_, err = u.chatSessionRepo.UpdateLastReadMessage(ctx, &repo.ChatSessionUpdateLastReadMessageReq{
 			ChatSessionID:      id,
-			MessageID:          latestMsgResp.ChatMessage.ID,
+			MessageID:          latestMsg.ID,
 			OperationReadCount: readDelta,
 			UpdatedBy:          req.UserID,
 		})
@@ -105,19 +105,19 @@ type ChatSessionPageReq struct {
 	UserID   int64
 }
 
-type ChatSessionPageResponse struct {
+type ChatSessionPageResp struct {
 	List []*model.ChatSession
-	Page *base.PageResponse
+	Page *base.PageResp
 }
 
-func (u *ChatSessionUsecase) Page(ctx context.Context, req *ChatSessionPageReq) (*ChatSessionPageResponse, error) {
-	pageResponse, err := u.chatSessionRepo.Page(ctx, &repo.ChatSessionPageReq{ChatSessionQuery: repo.ChatSessionQuery{
+func (u *ChatSessionUsecase) Page(ctx context.Context, req *ChatSessionPageReq) (*ChatSessionPageResp, error) {
+	pageResp, err := u.chatSessionRepo.Page(ctx, &repo.ChatSessionQuery{
 		Page:      req.Page,
 		IDs:       req.QueryIDs,
 		CreatedBy: &req.UserID,
-	}})
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &ChatSessionPageResponse{List: pageResponse.Rows, Page: pageResponse.Page}, nil
+	return &ChatSessionPageResp{List: pageResp.Rows, Page: pageResp.Page}, nil
 }

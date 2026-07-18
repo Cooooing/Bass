@@ -40,7 +40,7 @@ func (Article) Mixin() []ent.Mixin {
 
 - 表名使用归属服务表前缀。
 - 字段使用明确中文注释。
-- 业务固定取值使用枚举。
+- 业务固定取值使用枚举。`field.Enum` 必须通过对应 `xxxMap.EnumValues()` 填充 `Values`，例如 `field.Enum("provider").Values(enum.ObjectStorageProviderMap.EnumValues()...).Comment("对象存储提供商")`，禁止手写枚举值列表或只使用 `GoType` 承载数据库枚举值；需要绑定内部类型时可以同时使用 `GoType`，但 `Values` 仍然必须来自 `EnumValues()`。
 - 唯一约束对应真实业务幂等或唯一性。
 - 索引只服务实际查询、唯一约束、补偿扫描或审计路径。
 - 逻辑删除统一使用 `deleted_at`；软删除唯一约束使用 `WHERE deleted_at IS NULL` 的部分唯一索引。

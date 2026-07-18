@@ -39,13 +39,13 @@
 ## 契约边界
 
 - 契约分为 BFF HTTP、内部 gRPC、内部事件和外部回调。
-- BFF proto 定义自己的 request、response 和对外结构，不引用内部服务 message。
+- BFF proto 定义自己的 request、resp 和对外结构，不引用内部服务 message。
 - 内部服务 proto 只暴露 gRPC 契约，不写 `google.api.http` 注解。
 - 业务模块 proto 不定义 `model.proto`，也不把领域模型放到独立公共 message 中复用。
-- 每个 RPC 使用一个顶层 message，并且顶层 message 下面只能直接定义 `Request` 和 `Response`。
-- 业务子 message 必须定义在实际使用它的 `Request` 或 `Response` 内；禁止在 RPC 顶层定义 `Account`、`Item`、`Summary` 这类业务模型。
-- 不同 RPC 之间禁止复用业务子 message；即使字段完全一致，也要在各自的 `Request` 或 `Response` 内复制定义。
-- 禁止引用 `OtherRpc.Response.Item`、`OtherRpc.Request.Query` 这类其他 RPC 的内部业务 message。
+- 每个 RPC 使用一个顶层 message，并且顶层 message 下面只能直接定义 `Request` 和 `Resp`。
+- 业务子 message 必须定义在实际使用它的 `Request` 或 `Resp` 内；禁止在 RPC 顶层定义 `Account`、`Item`、`Summary` 这类业务模型。
+- 不同 RPC 之间禁止复用业务子 message；即使字段完全一致，也要在各自的 `Request` 或 `Resp` 内复制定义。
+- 禁止引用 `OtherRpc.Resp.Item`、`OtherRpc.Request.Query` 这类其他 RPC 的内部业务 message。
 - 只有 `common` 中的分页、区间、公共枚举、公共错误数据和事件基础结构可以跨模块复用；业务服务、BFF 和入口层不能复用其他模块的业务 message。
 - 枚举放在独立 `enum.proto`。
 - `List`、`Page` 响应数组字段统一为 `rows`，分页信息字段统一为 `page`。
@@ -74,7 +74,7 @@
 ### 枚举
 
 - 跨服务、跨层或落库约束枚举必须定义 proto enum。
-- 内部业务代码可以使用 string 枚举，但必须通过 `common/pkg/enum.Mapping` 绑定 proto 枚举。
+- 内部业务代码可以使用 string 枚举，但必须通过 `common/pkg/enum.Mapping` 绑定 proto 枚举。数据库枚举字段必须使用对应映射的 `EnumValues()` 填充 Ent `Values`，避免扩展枚举时重复维护 schema 取值。
 - 事件类型、事件主题和事件消费队列组使用 common 枚举，业务代码不能直接书写 MQ subject 和 queue group 字符串。
 - `EventType` 每个服务保留独立数值段；`EventSubject` 数值与对应 `EventType` 保持一致。
 - 新增枚举值时同步补充 proto 注释、内部枚举常量和映射表。

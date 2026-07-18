@@ -3,7 +3,7 @@
 HTTP service 用于 BFF 或 OpenAPI，负责入口协议适配、端侧校验和内部 RPC 编排。
 
 ```go
-func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Request) (*v1.PublishArticle_Response, error) {
+func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req) (*v1.PublishArticle_Resp, error) {
 	if req.ArticleId == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -13,7 +13,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 		return nil, err
 	}
 
-	response, err := s.contentClient.Publish(ctx, &contentv1.PublishArticle_Request{
+	resp, err := s.contentClient.Publish(ctx, &contentv1.PublishArticle_Req{
 		ArticleId:  req.ArticleId,
 		OperatorId: userID,
 	})
@@ -21,10 +21,10 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 		return nil, err
 	}
 
-	return &v1.PublishArticle_Response{
-		Row: &v1.PublishArticle_Response_ArticleView{
-			Id:    response.GetRow().GetId(),
-			Title: response.GetRow().GetTitle(),
+	return &v1.PublishArticle_Resp{
+		Row: &v1.PublishArticle_Resp_ArticleView{
+			Id:    resp.GetRow().GetId(),
+			Title: resp.GetRow().GetTitle(),
 		},
 	}, nil
 }

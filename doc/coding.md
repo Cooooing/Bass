@@ -15,27 +15,28 @@
 - Go 代码按 Go 1.26 编写；需要基础类型指针时使用 `new(expr)`，不使用 `common/pkg/util.Ptr` 或临时变量取地址。
 - 适量添加注释，注释和文档使用简体中文，只描述意图、约束和边界，不复述代码表面行为。
 - 一次性简单逻辑、入参校验和字段组装保留在当前函数内，不拆分无复用价值的辅助函数。
-- 不新增通用转换接口、游离组装函数或 `ConvertToRpc`、`toXXX`、`buildXXXResponse` 等转换函数。
+- 不新增通用转换接口、游离组装函数或 `ConvertToRpc`、`toXXX`、`buildXXXResp` 等转换函数。
 - slice、map、set 的去重、映射、过滤、分组和键值提取优先使用 `github.com/samber/lo`；存在副作用、错误短路或事务操作时使用显式循环。
 - 不手改生成代码，不在无关模块制造 `go.mod` 或 `go.sum` 变更。
 
 ## Usecase 接口
 
-- usecase receiver 方法除 `ctx` 外，只接收一个 `*XxxReq`；即使当前只有一个业务参数，也要定义请求结构体。
-- usecase receiver 方法有业务返回值时返回 `*XxxResponse, error`；只有副作用且无业务返回值时可以只返回 `error`。
-- `XxxReq` 和 `XxxResponse` 定义在对应方法正上方，不放到集中式 `query.go` 或 `dto.go` 文件。
-- `XxxReq` 不使用 proto request、repo query、data/gen 类型或具体数据库类型；`XxxResponse` 不使用 proto response。
+- usecase receiver 方法的业务参数数量不包含 `ctx`；业务返回值数量不包含 `error`。
+- 无业务参数时不定义 `XxxReq`；一个业务参数时直接传参；两个及以上业务参数时定义 `*XxxReq`。
+- 无业务返回值时只返回 `error`；一个业务返回值时直接返回该值和 `error`；两个及以上业务返回值时定义 `*XxxResp`。
+- 需要 `XxxReq` 或 `XxxResp` 时，定义在对应方法正上方，不放到集中式 `query.go` 或 `dto.go` 文件。
+- `XxxReq` 不使用 proto request、repo query、data/gen 类型或具体数据库类型；`XxxResp` 不使用 proto resp。
 - repo 查询对象只在 usecase 方法内部构造，不向 service 层暴露。
-- 请求或响应存在复杂嵌套业务结构时，结构体定义到 `biz/model`，usecase 方法上方仍保留轻量 `XxxReq` / `XxxResponse` 作为边界。
-
+- 请求或响应存在复杂嵌套业务结构时，结构体定义到 `biz/model`，usecase 方法上方只保留必要的轻量 `XxxReq` / `XxxResp` 边界。
 
 ## Repo 接口
 
-- biz/repo 接口方法除 `ctx` 外，只接收一个 `*XxxReq`；即使当前只有一个业务参数，也要定义请求结构体。
-- biz/repo 接口方法返回 `*XxxResponse, error`；只有确实不需要业务返回值的动作，也要返回空响应结构体。
-- `XxxReq` 和 `XxxResponse` 定义在对应 repo 文件中，不使用 proto request、proto response、data/gen 类型、Ent predicate 或数据库类型。
-- BFF 的 RPC client 适配也按 repo 接口处理；actor、token、分页、查询条件都作为 repo request 显式字段传入。
-- proto request/response 只在 service 层和 data 层 RPC 适配代码中出现，不穿透到 biz/repo 接口。
+- biz/repo 接口方法的业务参数数量不包含 `ctx`；业务返回值数量不包含 `error`。
+- 无业务参数时不定义 `XxxReq`；一个业务参数时直接传参；两个及以上业务参数时定义 `*XxxReq`。
+- 无业务返回值时只返回 `error`；一个业务返回值时直接返回该值和 `error`；两个及以上业务返回值时定义 `*XxxResp`。
+- 需要 `XxxReq` 或 `XxxResp` 时，定义在对应 repo 文件中，不使用 proto request、proto resp、data/gen 类型、Ent predicate 或数据库类型。
+- BFF 的 RPC client 适配也按 repo 接口处理；actor、token、分页、查询条件中有两个及以上业务参数时封装为 repo request。
+- proto request/resp 只在 service 层和 data 层 RPC 适配代码中出现，不穿透到 biz/repo 接口。
 
 ## 命名约定
 

@@ -4,7 +4,7 @@ HTTP proto 用于 BFF 或 OpenAPI，对外暴露 HTTP/JSON 契约。
 
 ## 文件组织
 
-- HTTP proto 定义自己的 `Request`、`Response` 和对外结构。
+- HTTP proto 定义自己的 `Request`、`Resp` 和对外结构。
 - 业务模块不定义 `model.proto`，不把对外视图放到独立公共 message 中复用。
 - HTTP 路径按入口语义命名，不复用内部服务 proto message。
 - OpenAPI 文档从 proto 注释和 `google.api.http` 生成。
@@ -13,7 +13,7 @@ HTTP proto 用于 BFF 或 OpenAPI，对外暴露 HTTP/JSON 契约。
 
 ```proto
 service ArticleService {
-  rpc Publish(PublishArticle.Request) returns (PublishArticle.Response) {
+  rpc Publish(PublishArticle.Request) returns (PublishArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/bbs/article/publish"
       body: "*"
@@ -26,7 +26,7 @@ message PublishArticle {
     int64 article_id = 1; // 文章 ID
   }
 
-  message Response {
+  message Resp {
     ArticleView row = 1; // 文章视图
 
     message ArticleView {

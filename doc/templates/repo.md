@@ -6,75 +6,50 @@
 
 ```go
 type ArticleRepo interface {
-	Get(ctx context.Context, req *ArticleGetReq) (*ArticleGetResponse, error)
-	List(ctx context.Context, req *ArticleGetReq) (*ArticleListResponse, error)
-	Map(ctx context.Context, req *ArticleGetReq) (*ArticleMapResponse, error)
-	Count(ctx context.Context, req *ArticleGetReq) (*ArticleCountResponse, error)
-	Page(ctx context.Context, req *ArticlePageReq) (*ArticlePageResponse, error)
+	Get(ctx context.Context, articleID int64) (*model.Article, error)
+	List(ctx context.Context, req *ArticleListReq) ([]*model.Article, error)
+	Map(ctx context.Context, req *ArticleListReq) (map[int64]*model.Article, error)
+	Count(ctx context.Context, req *ArticleListReq) (int, error)
+	Page(ctx context.Context, req *ArticlePageReq) (*ArticlePageResp, error)
 
-	Publish(ctx context.Context, req *ArticlePublishReq) (*ArticlePublishResponse, error)
+	Publish(ctx context.Context, req *ArticlePublishReq) (*model.Article, error)
 }
 
-type ArticleGetReq struct {
-	ArticleID *int64
-}
-
-type ArticleGetResponse struct {
-	Article *model.Article
-}
-
-type ArticleListResponse struct {
-	Rows []*model.Article
-}
-
-type ArticleMapResponse struct {
-	Rows map[int64]*model.Article
-}
-
-type ArticleCountResponse struct {
-	Count int
+type ArticleListReq struct {
+	AuthorID *int64
+	Status   *enum.ArticleStatus
 }
 
 type ArticlePageReq struct {
 	Page  base.PageRequest
-	Query ArticleGetReq
+	Query ArticleListReq
 }
 
-type ArticlePageResponse struct {
+type ArticlePageResp struct {
 	Rows []*model.Article
-	Page base.PageResponse
+	Page base.PageResp
 }
 
 type ArticlePublishReq struct {
 	ArticleID  int64
 	OperatorID int64
 }
-
-type ArticlePublishResponse struct {
-	Article *model.Article
-}
 ```
 
 ## data repo 实现
 
 ```go
-func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*repo.ArticleGetResponse, error) {
-	query := r.getClient(ctx).Article.Query()
-	if req.ArticleID != nil {
-		query.Where(article.ID(*req.ArticleID))
-	}
-	row, err := query.Only(ctx)
+func (r *ArticleRepo) Get(ctx context.Context, articleID int64) (*model.Article, error) {
+	row, err := r.getClient(ctx).Article.Query().Where(article.ID(articleID)).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return &repo.ArticleGetResponse{
-		Article: &model.Article{
-			ID:    row.ID,
-			Title: row.Title,
-		},
+	return &model.Article{
+		ID:    row.ID,
+		Title: row.Title,
 	}, nil
 }
 ```
@@ -82,12 +57,12 @@ func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*repo.A
 ## 必须
 
 - biz/repo 参数对象只表达持久化查询、写入条件或外部能力调用条件。
-- biz/repo 接口方法除 `ctx` 外只接收一个 `*XxxReq`，返回 `*XxxResponse, error`。
+- 无业务参数时不定义 `XxxReq`；一个业务参数时直接传参；两个及以上业务参数时定义 `*XxxReq`。无业务返回值时只返回 `error`；一个业务返回值时直接返回该值和 `error`；两个及以上业务返回值时定义 `*XxxResp`。
 - data 层显式组装 Ent entity 和 biz model。
 - 返回 map 的方法使用 `Map` 语义命名。
 
 ## 禁止
 
 - repo 写方法同时处理多个不相关资源。
-- biz 接口暴露 proto request/response、Ent predicate、Ent entity 或数据库类型。
+- biz 接口暴露 proto request/resp、Ent predicate、Ent entity 或数据库类型。
 - 用 `Manager`、`Resolver`、`Writer` 包装真实依赖。

@@ -3,7 +3,7 @@
 内部 gRPC service 层只做协议适配，不承载领域流程。
 
 ```go
-func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Request) (*v1.PublishArticle_Response, error) {
+func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req) (*v1.PublishArticle_Resp, error) {
 	if req.ArticleId == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -11,16 +11,16 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 
-	response, err := s.articleUsecase.Publish(ctx, &usecase.PublishArticleReq{ArticleID: req.ArticleId, OperatorID: req.OperatorId})
+	resp, err := s.articleUsecase.Publish(ctx, &usecase.PublishArticleReq{ArticleID: req.ArticleId, OperatorID: req.OperatorId})
 	if err != nil {
 		return nil, err
 	}
 
-	return &v1.PublishArticle_Response{
-		Row: &v1.PublishArticle_Response_Article{
-			Id:            response.Article.ID,
-			Title:         response.Article.Title,
-			PublishStatus: enum.ArticlePublishStatusMap.MustToProto(response.Article.PublishStatus),
+	return &v1.PublishArticle_Resp{
+		Row: &v1.PublishArticle_Resp_Article{
+			Id:            resp.Article.ID,
+			Title:         resp.Article.Title,
+			PublishStatus: enum.ArticlePublishStatusMap.MustToProto(resp.Article.PublishStatus),
 		},
 	}, nil
 }
@@ -30,11 +30,11 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 
 - 从 request 显式读取业务输入。
 - 在 service 层完成 proto 枚举到内部枚举的转换。
-- 在当前接收者方法内显式组装 response。
+- 在当前接收者方法内显式组装 resp。
 
 ## 禁止
 
 - 从 ctx、metadata、header、JWT 或缓存会话读取当前用户。
 - 新增包级私有 helper。
-- 新增 `toXXX`、`buildXXXResponse`、`ConvertToRpc`。
+- 新增 `toXXX`、`buildXXXResp`、`ConvertToRpc`。
 - 把 proto 生成枚举传入 biz。

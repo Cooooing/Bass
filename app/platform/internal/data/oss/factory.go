@@ -1,41 +1,28 @@
 package oss
 
 import (
+	"fmt"
 	"platform/internal/biz/repo"
 	"platform/internal/config"
 	"platform/internal/data/oss/minio"
 	"platform/internal/data/oss/qiniu"
+	"platform/internal/enum"
 
 	"github.com/google/wire"
 )
 
 var ProviderSet = wire.NewSet(
-	NewFactory,
 	ProvideObjectStorageClient,
-	minio.NewMinio,
-	qiniu.NewQiniu,
 )
 
-type Factory struct {
-	clients map[string]repo.ObjectStorageClient
-}
-
-func NewFactory(
-	minio *minio.Minio,
-	qiniu *qiniu.Qiniu,
-) *Factory {
-	return &Factory{
-		clients: map[string]repo.ObjectStorageClient{
-			minio.Name(): minio,
-			qiniu.Name(): qiniu,
-		},
+func ProvideObjectStorageClient(conf *config.Bootstrap) (repo.ObjectStorageClient, error) {
+	provider := conf.GetPlatform().GetOss().GetProvider()
+	switch provider {
+	case string(enum.ObjectStorageProviderMinio):
+		return minio.NewMinio(conf)
+	case string(enum.ObjectStorageProviderQiniu):
+		return qiniu.NewQiniu(conf), nil
+	default:
+		return nil, fmt.Errorf("unsupported object storage provider: %s", provider)
 	}
-}
-
-func (f *Factory) Get(name string) repo.ObjectStorageClient {
-	return f.clients[name]
-}
-
-func ProvideObjectStorageClient(conf *config.Bootstrap, minio *minio.Minio, qiniu *qiniu.Qiniu) repo.ObjectStorageClient {
-	return NewFactory(minio, qiniu).Get(conf.Platform.Oss.Provider)
 }

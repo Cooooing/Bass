@@ -62,9 +62,16 @@ platform:
     enable: true
     ipv4_xdb_path: configs/ip2region/ipv4.xdb
     ipv6_xdb_path: configs/ip2region/ipv6.xdb
+    cache_policy: vectorindex
   oss:
-    provider: qiniu
+    provider: minio
     minio:
+      endpoint: ${MINIO_HOST:s3.dev.bass.local}:${MINIO_PORT:80}
+      access_key: ${MINIO_ROOT_USER:admin}
+      secret_key: ${MINIO_ROOT_PASSWORD:changemechangeme}
+      bucket: ${MINIO_BUCKET:bass-assets}
+      use_ssl: false
+      timeout: ${MINIO_TIMEOUT:30s}
     qiniu:
       access_key: ${QINIU_ACCESS_KEY:}
       secret_key: ${QINIU_SECRET_KEY:}

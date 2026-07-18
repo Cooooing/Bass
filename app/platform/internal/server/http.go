@@ -22,7 +22,7 @@ func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.O
 			recovery.Recovery(),
 			validate.ProtoValidate(),
 		),
-		transporthttp.ResponseEncoder(server.HttpResponseEncoder),
+		transporthttp.ResponseEncoder(server.HttpRespEncoder),
 		transporthttp.ErrorEncoder(server.HttpErrorEncoder(nil)),
 	}
 	if c.Http.Network != "" {

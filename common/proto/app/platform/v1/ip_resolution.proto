@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.platform.v1;
 
@@ -7,15 +7,19 @@ option go_package = "common/proto/gen/platform/v1;v1";
 // IP 解析服务。
 service PlatformIpResolutionService {
   // 解析 IP 地理信息。
-  rpc ResolveIp(ResolveIp.Request) returns (ResolveIp.Response) {}
+  rpc ResolveIp(ResolveIp.Req) returns (ResolveIp.Resp) {}
+  // 从互联网源文件更新本地 IP 数据，并同步 OSS。
+  rpc UpdateIpDataFromSource(UpdateIpDataFromSource.Req) returns (UpdateIpDataFromSource.Resp) {}
+  // 从 OSS 更新本地 IP 数据。
+  rpc UpdateIpDataFromOss(UpdateIpDataFromOss.Req) returns (UpdateIpDataFromOss.Resp) {}
 }
 
 message ResolveIp {
-  message Request {
+  message Req {
     // IP 地址。
     string ip = 1;
   }
-  message Response {
+  message Resp {
     // 国家。
     string country = 1;
     // 省份。
@@ -29,3 +33,12 @@ message ResolveIp {
   }
 }
 
+message UpdateIpDataFromSource {
+  message Req {}
+  message Resp {}
+}
+
+message UpdateIpDataFromOss {
+  message Req {}
+  message Resp {}
+}

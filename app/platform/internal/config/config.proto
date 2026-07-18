@@ -27,6 +27,7 @@ message Platform {
     bool enable = 1;
     string ipv4_xdb_path = 2;
     string ipv6_xdb_path = 3;
+    string cache_policy = 4;
   }
 
   message Oss {
@@ -46,6 +47,13 @@ message Platform {
       string increment_audit_callback_url = 9;
     }
 
-    message Minio {}
+    message Minio {
+      string endpoint = 1;
+      string access_key = 2;
+      string secret_key = 3;
+      string bucket = 4;
+      bool use_ssl = 5;
+      google.protobuf.Duration timeout = 6;
+    }
   }
 }

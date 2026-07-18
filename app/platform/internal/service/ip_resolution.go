@@ -1,7 +1,7 @@
 package service
 
 import (
-	"common/proto/gen/platform/v1"
+	v1 "common/proto/gen/platform/v1"
 	"context"
 	"platform/internal/biz/usecase"
 
@@ -26,17 +26,30 @@ func (s *IpResolutionService) RegisterGrpc(gs *grpc.Server) {
 func (s *IpResolutionService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *IpResolutionService) ResolveIp(ctx context.Context, req *v1.ResolveIp_Request) (*v1.ResolveIp_Response, error) {
-	getResponse, err := s.ipUsecase.Get(ctx, &usecase.IpResolutionGetReq{IP: req.GetIp()})
+func (s *IpResolutionService) ResolveIp(ctx context.Context, req *v1.ResolveIp_Req) (*v1.ResolveIp_Resp, error) {
+	info, err := s.ipUsecase.Get(ctx, req.GetIp())
 	if err != nil {
 		return nil, err
 	}
-	info := getResponse.Info
-	return &v1.ResolveIp_Response{
+	return &v1.ResolveIp_Resp{
 		Country:     info.Country,
 		Province:    info.Province,
 		City:        info.City,
 		Isp:         info.ISP,
 		CountryCode: info.CountryCode,
 	}, nil
+}
+
+func (s *IpResolutionService) UpdateIpDataFromSource(ctx context.Context, req *v1.UpdateIpDataFromSource_Req) (*v1.UpdateIpDataFromSource_Resp, error) {
+	if err := s.ipUsecase.UpdateIpDataFromSource(ctx); err != nil {
+		return nil, err
+	}
+	return &v1.UpdateIpDataFromSource_Resp{}, nil
+}
+
+func (s *IpResolutionService) UpdateIpDataFromOss(ctx context.Context, req *v1.UpdateIpDataFromOss_Req) (*v1.UpdateIpDataFromOss_Resp, error) {
+	if err := s.ipUsecase.UpdateIpDataFromOss(ctx); err != nil {
+		return nil, err
+	}
+	return &v1.UpdateIpDataFromOss_Resp{}, nil
 }

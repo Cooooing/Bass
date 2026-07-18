@@ -48,6 +48,7 @@ Thumbs.db
 /app/**/server
 !/app/**/server/
 /app/**/test/
+/app/**/configs/ip2region/*.xdb
 
 # Local environment and scratch files
 /common/ops/docker/.env

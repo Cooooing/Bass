@@ -1,44 +1,26 @@
 package repo
 
 import (
-	commonClient "common/pkg/client"
 	"common/proto/gen/common"
 	"context"
 	"platform/internal/biz/model"
 	"platform/internal/biz/repo"
-	"platform/internal/config"
 	"platform/internal/data/gen"
 	"platform/internal/data/gen/objectstorage"
+	"platform/internal/enum"
 
 	"common/pkg/server"
 	utilent "common/pkg/util/ent"
-	"log/slog"
 )
 
 var _ repo.ObjectStorageRepo = (*ObjectStorageRepo)(nil)
 
 type ObjectStorageRepo struct {
-	conf         *config.Bootstrap
-	log          *slog.Logger
-	db           *gen.Client
-	consulClient *commonClient.ConsulClient
-	redisClient  *commonClient.RedisClient
+	db *gen.Client
 }
 
-func NewObjectStorageRepo(
-	conf *config.Bootstrap,
-	logger *slog.Logger,
-	db *gen.Client,
-	consulClient *commonClient.ConsulClient,
-	redisClient *commonClient.RedisClient,
-) repo.ObjectStorageRepo {
-	return &ObjectStorageRepo{
-		conf:         conf,
-		log:          logger,
-		db:           db,
-		consulClient: consulClient,
-		redisClient:  redisClient,
-	}
+func NewObjectStorageRepo(db *gen.Client) repo.ObjectStorageRepo {
+	return &ObjectStorageRepo{db: db}
 }
 
 func (r *ObjectStorageRepo) getClient(ctx context.Context) *gen.Client {
@@ -48,143 +30,83 @@ func (r *ObjectStorageRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *ObjectStorageRepo) Save(ctx context.Context, req *repo.ObjectStorageSaveReq) (*repo.ObjectStorageSaveResponse, error) {
-	row, err := r.saveObject(ctx, req.Row)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.ObjectStorageSaveResponse{Row: row}, nil
-}
-
-func (r *ObjectStorageRepo) UpdateAudit(ctx context.Context, req *repo.ObjectStorageUpdateAuditReq) (*repo.ObjectStorageUpdateAuditResponse, error) {
-	if err := r.updateAuditObject(ctx, req.Row); err != nil {
-		return nil, err
-	}
-	return &repo.ObjectStorageUpdateAuditResponse{}, nil
-}
-
-func (r *ObjectStorageRepo) Delete(ctx context.Context, req *repo.ObjectStorageDeleteReq) (*repo.ObjectStorageDeleteResponse, error) {
-	count, err := r.deleteObject(ctx, req.Row)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.ObjectStorageDeleteResponse{Count: count}, nil
-}
-
-func (r *ObjectStorageRepo) Exist(ctx context.Context, req *repo.ObjectStorageGetReq) (*repo.ObjectStorageExistResponse, error) {
-	exists, err := r.existObject(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.ObjectStorageExistResponse{Exists: exists}, nil
-}
-
-func (r *ObjectStorageRepo) Get(ctx context.Context, req *repo.ObjectStorageGetReq) (*repo.ObjectStorageGetResponse, error) {
-	row, err := r.getObject(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.ObjectStorageGetResponse{Row: row}, nil
-}
-
-func (r *ObjectStorageRepo) List(ctx context.Context, req *repo.ObjectStorageGetReq) (*repo.ObjectStorageListResponse, error) {
-	rows, err := r.listObjects(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.ObjectStorageListResponse{Rows: rows}, nil
-}
-
-func (r *ObjectStorageRepo) Map(ctx context.Context, req *repo.ObjectStorageGetReq) (*repo.ObjectStorageMapResponse, error) {
-	rows, err := r.mapObjects(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.ObjectStorageMapResponse{Rows: rows}, nil
-}
-
-func (r *ObjectStorageRepo) Count(ctx context.Context, req *repo.ObjectStorageGetReq) (*repo.ObjectStorageCountResponse, error) {
-	count, err := r.countObjects(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.ObjectStorageCountResponse{Count: count}, nil
-}
-
-func (r *ObjectStorageRepo) Page(ctx context.Context, req *repo.ObjectStoragePageReq) (*repo.ObjectStoragePageResponse, error) {
-	rows, page, err := r.pageObjects(ctx, req.Page, &req.ObjectStorageGetReq)
-	if err != nil {
-		return nil, err
-	}
-	return &repo.ObjectStoragePageResponse{Rows: rows, Page: page}, nil
-}
-func (r *ObjectStorageRepo) saveObject(ctx context.Context, u *model.ObjectStorage) (*model.ObjectStorage, error) {
-	save, err := r.getClient(ctx).ObjectStorage.Create().
-		SetProvider(u.Provider).
-		SetBucket(u.Bucket).
-		SetKey(u.Key).
-		SetMimeType(u.MimeType).
-		SetSize(u.Size).
-		SetHash(u.Hash).
-		SetUploadBy(u.UploadBy).
-		SetUploadByName(u.UploadByName).
+func (r *ObjectStorageRepo) Save(ctx context.Context, row *model.ObjectStorage) (*model.ObjectStorage, error) {
+	saved, err := r.getClient(ctx).ObjectStorage.Create().
+		SetProvider(objectstorage.Provider(row.Provider)).
+		SetBucket(row.Bucket).
+		SetKey(row.Key).
+		SetMimeType(row.MimeType).
+		SetSize(row.Size).
+		SetHash(row.Hash).
+		SetUploadBy(row.UploadBy).
 		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &model.ObjectStorage{
-		ID:                 save.ID,
-		Provider:           save.Provider,
-		Bucket:             save.Bucket,
-		Key:                save.Key,
-		MimeType:           save.MimeType,
-		Size:               save.Size,
-		Hash:               save.Hash,
-		UploadBy:           save.UploadBy,
-		UploadByName:       save.UploadByName,
-		AuditCallbackReply: save.AuditCallbackReply,
-		Blocked:            save.Blocked,
-		BlockedReason:      save.BlockedReason,
-		BlockedAt:          save.BlockedAt,
-		BlockedBy:          save.BlockedBy,
-		BlockedByName:      save.BlockedByName,
-		CreatedAt:          save.CreatedAt,
-		UpdatedAt:          save.UpdatedAt,
+		ID:                 saved.ID,
+		Provider:           enum.ObjectStorageProvider(saved.Provider),
+		Bucket:             saved.Bucket,
+		Key:                saved.Key,
+		MimeType:           saved.MimeType,
+		Size:               saved.Size,
+		Hash:               saved.Hash,
+		UploadBy:           saved.UploadBy,
+		AuditCallbackReply: saved.AuditCallbackReply,
+		Blocked:            saved.Blocked,
+		BlockedReason:      saved.BlockedReason,
+		BlockedAt:          saved.BlockedAt,
+		BlockedBy:          saved.BlockedBy,
+		CreatedAt:          saved.CreatedAt,
+		UpdatedAt:          saved.UpdatedAt,
 	}, nil
 }
 
-func (r *ObjectStorageRepo) updateAuditObject(ctx context.Context, u *model.ObjectStorage) error {
+func (r *ObjectStorageRepo) UpdateAudit(ctx context.Context, row *model.ObjectStorage) error {
 	_, err := r.getClient(ctx).ObjectStorage.Update().
-		Where(objectstorage.KeyEQ(u.Key)).
-		SetNillableAuditCallbackReply(u.AuditCallbackReply).
-		SetBlocked(u.Blocked).
-		SetNillableBlockedReason(u.BlockedReason).
-		SetNillableBlockedAt(u.BlockedAt).
-		SetNillableBlockedBy(u.BlockedBy).
-		SetNillableBlockedByName(u.BlockedByName).
+		Where(objectstorage.KeyEQ(row.Key)).
+		SetNillableAuditCallbackReply(row.AuditCallbackReply).
+		SetBlocked(row.Blocked).
+		SetNillableBlockedReason(row.BlockedReason).
+		SetNillableBlockedAt(row.BlockedAt).
+		SetNillableBlockedBy(row.BlockedBy).
 		Save(ctx)
-	return err
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (r *ObjectStorageRepo) deleteObject(ctx context.Context, u *model.ObjectStorage) (int, error) {
-	if u == nil {
+func (r *ObjectStorageRepo) Delete(ctx context.Context, row *model.ObjectStorage) (int, error) {
+	if row == nil {
 		return 0, nil
 	}
-	if u.ID != 0 {
-		return 1, r.getClient(ctx).ObjectStorage.DeleteOneID(u.ID).Exec(ctx)
+	if row.ID != 0 {
+		err := r.getClient(ctx).ObjectStorage.DeleteOneID(row.ID).Exec(ctx)
+		if err != nil {
+			return 0, err
+		}
+		return 1, nil
 	}
-	return r.getClient(ctx).ObjectStorage.Delete().
-		Where(objectstorage.KeyEQ(u.Key)).
+	count, err := r.getClient(ctx).ObjectStorage.Delete().
+		Where(objectstorage.KeyEQ(row.Key)).
 		Exec(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }
 
-func (r *ObjectStorageRepo) existObject(ctx context.Context, req *repo.ObjectStorageGetReq) (bool, error) {
+func (r *ObjectStorageRepo) Exist(ctx context.Context, req *repo.ObjectStorageGetReq) (bool, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
-	return query.Exist(ctx)
+	exists, err := query.Exist(ctx)
+	if err != nil {
+		return false, err
+	}
+	return exists, nil
 }
-
-func (r *ObjectStorageRepo) getObject(ctx context.Context, req *repo.ObjectStorageGetReq) (*model.ObjectStorage, error) {
+func (r *ObjectStorageRepo) Get(ctx context.Context, req *repo.ObjectStorageGetReq) (*model.ObjectStorage, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
 	row, err := query.First(ctx)
@@ -196,121 +118,118 @@ func (r *ObjectStorageRepo) getObject(ctx context.Context, req *repo.ObjectStora
 	}
 	return &model.ObjectStorage{
 		ID:                 row.ID,
-		Provider:           row.Provider,
+		Provider:           enum.ObjectStorageProvider(row.Provider),
 		Bucket:             row.Bucket,
 		Key:                row.Key,
 		MimeType:           row.MimeType,
 		Size:               row.Size,
 		Hash:               row.Hash,
 		UploadBy:           row.UploadBy,
-		UploadByName:       row.UploadByName,
 		AuditCallbackReply: row.AuditCallbackReply,
 		Blocked:            row.Blocked,
 		BlockedReason:      row.BlockedReason,
 		BlockedAt:          row.BlockedAt,
 		BlockedBy:          row.BlockedBy,
-		BlockedByName:      row.BlockedByName,
 		CreatedAt:          row.CreatedAt,
 		UpdatedAt:          row.UpdatedAt,
 	}, nil
 }
 
-func (r *ObjectStorageRepo) listObjects(ctx context.Context, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, error) {
-	var (
-		records []*model.ObjectStorage
-		err     error
-	)
+func (r *ObjectStorageRepo) List(ctx context.Context, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
-	list, err := query.All(ctx)
+	rows, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	for i := range list {
-		records = append(records, &model.ObjectStorage{
-			ID:                 list[i].ID,
-			Provider:           list[i].Provider,
-			Bucket:             list[i].Bucket,
-			Key:                list[i].Key,
-			MimeType:           list[i].MimeType,
-			Size:               list[i].Size,
-			Hash:               list[i].Hash,
-			UploadBy:           list[i].UploadBy,
-			UploadByName:       list[i].UploadByName,
-			AuditCallbackReply: list[i].AuditCallbackReply,
-			Blocked:            list[i].Blocked,
-			BlockedReason:      list[i].BlockedReason,
-			BlockedAt:          list[i].BlockedAt,
-			BlockedBy:          list[i].BlockedBy,
-			BlockedByName:      list[i].BlockedByName,
-			CreatedAt:          list[i].CreatedAt,
-			UpdatedAt:          list[i].UpdatedAt,
+	result := make([]*model.ObjectStorage, 0, len(rows))
+	for _, row := range rows {
+		result = append(result, &model.ObjectStorage{
+			ID:                 row.ID,
+			Provider:           enum.ObjectStorageProvider(row.Provider),
+			Bucket:             row.Bucket,
+			Key:                row.Key,
+			MimeType:           row.MimeType,
+			Size:               row.Size,
+			Hash:               row.Hash,
+			UploadBy:           row.UploadBy,
+			AuditCallbackReply: row.AuditCallbackReply,
+			Blocked:            row.Blocked,
+			BlockedReason:      row.BlockedReason,
+			BlockedAt:          row.BlockedAt,
+			BlockedBy:          row.BlockedBy,
+			CreatedAt:          row.CreatedAt,
+			UpdatedAt:          row.UpdatedAt,
 		})
-	}
-	return records, nil
-}
-
-func (r *ObjectStorageRepo) mapObjects(ctx context.Context, req *repo.ObjectStorageGetReq) (map[int64]*model.ObjectStorage, error) {
-	list, err := r.listObjects(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	result := make(map[int64]*model.ObjectStorage, len(list))
-	for _, item := range list {
-		result[item.ID] = item
 	}
 	return result, nil
 }
 
-func (r *ObjectStorageRepo) countObjects(ctx context.Context, req *repo.ObjectStorageGetReq) (int, error) {
-	query := r.getClient(ctx).ObjectStorage.Query()
-	query = r.getQuery(query, req)
-	return query.Count(ctx)
+func (r *ObjectStorageRepo) Map(ctx context.Context, req *repo.ObjectStorageGetReq) (map[int64]*model.ObjectStorage, error) {
+	rows, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.ObjectStorage, len(rows))
+	for _, row := range rows {
+		result[row.ID] = row
+	}
+	return result, nil
 }
 
-func (r *ObjectStorageRepo) pageObjects(ctx context.Context, page *common.PageRequest, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, *common.PageResponse, error) {
-	var (
-		items []*model.ObjectStorage
-		err   error
-	)
-	page = server.PageValid(page)
+func (r *ObjectStorageRepo) Count(ctx context.Context, req *repo.ObjectStorageGetReq) (int, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
+	count, err := query.Count(ctx)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+func (r *ObjectStorageRepo) Page(ctx context.Context, req *repo.ObjectStoragePageReq) (*repo.ObjectStoragePageResp, error) {
+	if req == nil {
+		req = &repo.ObjectStoragePageReq{}
+	}
+	page := server.PageValid(req.Page)
+	query := r.getClient(ctx).ObjectStorage.Query()
+	query = r.getQuery(query, &req.ObjectStorageGetReq)
 	countQuery := query.Clone()
 	count, err := countQuery.Count(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	rows, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-
-	for _, item := range list {
-		items = append(items, &model.ObjectStorage{
-			ID:                 item.ID,
-			Provider:           item.Provider,
-			Bucket:             item.Bucket,
-			Key:                item.Key,
-			MimeType:           item.MimeType,
-			Size:               item.Size,
-			Hash:               item.Hash,
-			UploadBy:           item.UploadBy,
-			UploadByName:       item.UploadByName,
-			AuditCallbackReply: item.AuditCallbackReply,
-			Blocked:            item.Blocked,
-			BlockedReason:      item.BlockedReason,
-			BlockedAt:          item.BlockedAt,
-			BlockedBy:          item.BlockedBy,
-			BlockedByName:      item.BlockedByName,
-			CreatedAt:          item.CreatedAt,
-			UpdatedAt:          item.UpdatedAt,
+	result := make([]*model.ObjectStorage, 0, len(rows))
+	for _, row := range rows {
+		result = append(result, &model.ObjectStorage{
+			ID:                 row.ID,
+			Provider:           enum.ObjectStorageProvider(row.Provider),
+			Bucket:             row.Bucket,
+			Key:                row.Key,
+			MimeType:           row.MimeType,
+			Size:               row.Size,
+			Hash:               row.Hash,
+			UploadBy:           row.UploadBy,
+			AuditCallbackReply: row.AuditCallbackReply,
+			Blocked:            row.Blocked,
+			BlockedReason:      row.BlockedReason,
+			BlockedAt:          row.BlockedAt,
+			BlockedBy:          row.BlockedBy,
+			CreatedAt:          row.CreatedAt,
+			UpdatedAt:          row.UpdatedAt,
 		})
 	}
-	return items, &common.PageResponse{
-		Total: uint32(count),
-		Size:  page.Size,
-		Page:  page.Page,
+	return &repo.ObjectStoragePageResp{
+		Rows: result,
+		Page: &common.PageResp{
+			Total: uint32(count),
+			Size:  page.Size,
+			Page:  page.Page,
+		},
 	}, nil
 }
 
@@ -325,7 +244,7 @@ func (r *ObjectStorageRepo) getQuery(query *gen.ObjectStorageQuery, req *repo.Ob
 		query = query.Where(objectstorage.IDIn(req.IDs...))
 	}
 	if req.Provider != nil {
-		query = query.Where(objectstorage.ProviderEQ(*req.Provider))
+		query = query.Where(objectstorage.ProviderEQ(objectstorage.Provider(*req.Provider)))
 	}
 	if req.Bucket != nil {
 		query = query.Where(objectstorage.BucketEQ(*req.Bucket))
@@ -346,9 +265,6 @@ func (r *ObjectStorageRepo) getQuery(query *gen.ObjectStorageQuery, req *repo.Ob
 	}
 	if req.Blocked != nil {
 		query = query.Where(objectstorage.BlockedEQ(*req.Blocked))
-	}
-	if req.BlockedByName != nil {
-		query = query.Where(objectstorage.BlockedByNameEQ(*req.BlockedByName))
 	}
 	return query
 }

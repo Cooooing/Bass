@@ -1,34 +1,42 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.platform.v1;
 
 import "common/common.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "platform/v1/enum.proto";
 
 option go_package = "common/proto/gen/platform/v1;v1";
 
 // OSS 服务。
 service PlatformOssService {
   // 获取上传凭证。
-  rpc GetUploadToken(GetUploadTokenOss.Request) returns (GetUploadTokenOss.Response) {}
+  rpc GetUploadToken(GetUploadTokenOss.Req) returns (GetUploadTokenOss.Resp) {}
+  // 直接上传对象。
+  rpc Upload(UploadOss.Req) returns (UploadOss.Resp) {}
+  // 流式上传对象。
+  rpc StreamUpload(stream StreamUploadOss.Req) returns (StreamUploadOss.Resp) {}
+  // 直接下载对象。
+  rpc Download(DownloadOss.Req) returns (DownloadOss.Resp) {}
+  // 流式下载对象。
+  rpc StreamDownload(StreamDownloadOss.Req) returns (stream StreamDownloadOss.Resp) {}
   // 审核对象。
-  rpc Audit(AuditOss.Request) returns (AuditOss.Response) {}
+  rpc Audit(AuditOss.Req) returns (AuditOss.Resp) {}
   // 查询对象列表。
-  rpc List(ListOss.Request) returns (ListOss.Response) {}
+  rpc List(ListOss.Req) returns (ListOss.Resp) {}
   // 七牛上传回调。
-  rpc QiniuUploadCallback(QiniuUploadCallbackOss.Request) returns (QiniuUploadCallbackOss.Response) {}
+  rpc QiniuUploadCallback(QiniuUploadCallbackOss.Req) returns (QiniuUploadCallbackOss.Resp) {}
   // 七牛增量审核回调。
-  rpc QiniuIncrementAuditCallback(QiniuIncrementAuditCallbackOss.Request) returns (QiniuIncrementAuditCallbackOss.Response) {}
+  rpc QiniuIncrementAuditCallback(QiniuIncrementAuditCallbackOss.Req) returns (QiniuIncrementAuditCallbackOss.Resp) {}
 }
 
 message GetUploadTokenOss {
-  message Request {
+  message Req {
     int64 user_id = 1;
-    string user_name = 2;
     int32 num = 3;
   }
-  message Response {
+  message Resp {
 
     message UploadToken {
       string key = 1;
@@ -38,39 +46,105 @@ message GetUploadTokenOss {
   }
 }
 
-message AuditOss {
-  message Request {
+message UploadOss {
+  message Req {
     int64 user_id = 1;
-    string user_name = 2;
+    string key = 3;
+    string file_name = 4;
+    string mime_type = 5;
+    bytes content = 6;
+  }
+  message Resp {
+    int64 id = 1;
+    ObjectStorageProvider provider = 2;
+    string bucket = 3;
+    string key = 4;
+    string mime_type = 5;
+    int64 size = 6;
+    string hash = 7;
+  }
+}
+
+message StreamUploadOss {
+  message Req {
+
+    message Meta {
+      int64 user_id = 1;
+      string key = 3;
+      string file_name = 4;
+      string mime_type = 5;
+      int64 size = 6;
+    }
+    oneof payload {
+      Meta meta = 1;
+      bytes chunk = 2;
+    }
+  }
+  message Resp {
+    int64 id = 1;
+    ObjectStorageProvider provider = 2;
+    string bucket = 3;
+    string key = 4;
+    string mime_type = 5;
+    int64 size = 6;
+    string hash = 7;
+  }
+}
+
+message DownloadOss {
+  message Req {
+    string key = 1;
+  }
+  message Resp {
+    string key = 1;
+    string mime_type = 2;
+    int64 size = 3;
+    bytes content = 4;
+  }
+}
+
+message StreamDownloadOss {
+  message Req {
+    string key = 1;
+  }
+  message Resp {
+    string key = 1;
+    string mime_type = 2;
+    int64 size = 3;
+    bytes chunk = 4;
+  }
+}
+message AuditOss {
+  message Req {
+    int64 user_id = 1;
     string key = 3;
     bool status = 4;
     optional string reason = 5;
   }
-  message Response {}
+  message Resp {}
 }
 
 message ListOss {
-  message Request {
+  message Req {
 
     message OssQueryParams {
-      optional string provider = 1;
+      optional ObjectStorageProvider provider = 1;
       optional string bucket = 2;
       optional string key = 3;
       optional string mime_type = 4;
       optional bool blocked = 5;
-      optional string blocked_by_name = 6;
       common.Int64Range size = 7;
     }
-    .common.api.app.common.PageRequest page = 1;
+    .common.api.app.common.PageReq page = 1;
     OssQueryParams query = 2;
   }
-  message Response {
+  message Resp {
 
     message Oss {
       google.protobuf.Timestamp created_at = 1000;
       google.protobuf.Timestamp updated_at = 1001;
       int64 id = 1;
-      string provider = 2;
+      ObjectStorageProvider provider = 2;
       string bucket = 3;
       string key = 4;
       string mime_type = 5;
@@ -81,15 +155,14 @@ message ListOss {
       optional string blocked_reason = 10;
       google.protobuf.Timestamp blocked_at = 11;
       optional int64 blocked_by = 12;
-      optional string blocked_by_name = 13;
     }
-    .common.api.app.common.PageResponse page = 1;
+    .common.api.app.common.PageResp page = 1;
     repeated Oss rows = 2;
   }
 }
 
 message QiniuUploadCallbackOss {
-  message Request {
+  message Req {
     string key = 1;
     string hash = 2;
     int64 size = 3;
@@ -97,13 +170,12 @@ message QiniuUploadCallbackOss {
     string name = 5;
     string mime_type = 6;
     int64 upload_by = 7;
-    string upload_by_name = 8;
   }
-  message Response {}
+  message Resp {}
 }
 
 message QiniuIncrementAuditCallbackOss {
-  message Request {
+  message Req {
 
     message Item {
       string cmd = 1;
@@ -133,6 +205,5 @@ message QiniuIncrementAuditCallbackOss {
     string inputKey = 7;
     repeated Item items = 8;
   }
-  message Response {}
+  message Resp {}
 }
-

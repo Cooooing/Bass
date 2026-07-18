@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.platform.v1;
+
+option go_package = "common/proto/gen/platform/v1;v1";
+
+// ObjectStorageProvider 表示对象存储提供商。
+enum ObjectStorageProvider {
+  OBJECT_STORAGE_PROVIDER_UNSPECIFIED = 0; // 未指定
+  OBJECT_STORAGE_PROVIDER_MINIO = 1; // MinIO
+  OBJECT_STORAGE_PROVIDER_QINIU = 2; // 七牛云
+}

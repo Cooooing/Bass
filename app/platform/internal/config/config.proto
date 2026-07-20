@@ -28,6 +28,8 @@ message Platform {
     string ipv4_xdb_path = 2;
     string ipv6_xdb_path = 3;
     string cache_policy = 4;
+    string ipv4_source_url = 5;
+    string ipv6_source_url = 6;
   }
 
   message Oss {

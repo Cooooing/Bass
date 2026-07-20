@@ -63,6 +63,8 @@ platform:
     ipv4_xdb_path: configs/ip2region/ipv4.xdb
     ipv6_xdb_path: configs/ip2region/ipv6.xdb
     cache_policy: vectorindex
+    ipv4_source_url: https://github.com/lionsoul2014/ip2region/raw/refs/heads/master/data/ip2region_v4.xdb
+    ipv6_source_url: https://github.com/lionsoul2014/ip2region/raw/refs/heads/master/data/ip2region_v6.xdb
   oss:
     provider: minio
     minio:

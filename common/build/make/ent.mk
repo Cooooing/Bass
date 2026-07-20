@@ -8,6 +8,7 @@ MODULE_GEN_TARGETS := config ent wire
 ENT_SCHEMA_DIR ?= $(if $(wildcard $(APP_DIR)/internal/data/schema),./internal/data/schema,./internal/data/ent/schema)
 ENT_GEN_DIR ?= $(APP_DIR)/internal/data/gen
 
+ENT_FEATURES := sql/upsert sql/modifier intercept
 clean: ent-clean
 
 # Clean Ent generated artifacts.
@@ -20,6 +21,6 @@ ent-clean:
 .PHONY: ent
 ent: ent-clean
 	@echo "[ent] ent generate..."
-	$(call run,cd $(APP_DIR) && ent generate --target=$(ENT_GEN_DIR) $(ENT_SCHEMA_DIR),[ent] ent generate)
+	$(call run,cd $(APP_DIR) && ent generate --target=$(ENT_GEN_DIR) $(foreach feature,$(ENT_FEATURES),--feature $(feature)) $(ENT_SCHEMA_DIR),[ent] ent generate)
 
 endif

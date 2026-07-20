@@ -13,7 +13,6 @@ import (
 
 	commonModel "common/pkg/model"
 	"common/pkg/util"
-	"platform/internal/biz/repo"
 	"platform/internal/config"
 
 	"github.com/lionsoul2014/ip2region/binding/golang/service"
@@ -129,7 +128,7 @@ func (u *IpResolutionUsecase) uploadIpDataToOss(ctx context.Context, key string,
 	if err == nil && util.Sha256Bytes(current) == util.Sha256Bytes(content) {
 		return nil
 	}
-	_, err = u.objectStorageUsecase.objectStorageClient.Upload(ctx, &repo.ObjectStorageUploadReq{
+	_, err = u.objectStorageUsecase.Upload(ctx, &UploadReq{
 		Key:      key,
 		FileName: filepath.Base(key),
 		MimeType: "application/octet-stream",
@@ -259,15 +258,11 @@ func (u *IpResolutionUsecase) Get(ctx context.Context, ip string) (*commonModel.
 
 func (u *IpResolutionUsecase) UpdateIpDataFromSource(ctx context.Context) error {
 	ipData := u.conf.GetPlatform().GetIpData()
-	const (
-		ipv4Url = "https://github.com/lionsoul2014/ip2region/raw/refs/heads/master/data/ip2region_v4.xdb"
-		ipv6Url = "https://github.com/lionsoul2014/ip2region/raw/refs/heads/master/data/ip2region_v6.xdb"
-	)
-	ipv4Content, err := u.downloadIpDataFromSource(ctx, ipv4Url)
+	ipv4Content, err := u.downloadIpDataFromSource(ctx, ipData.GetIpv4SourceUrl())
 	if err != nil {
 		return fmt.Errorf("download IPv4 ip data from source: %w", err)
 	}
-	ipv6Content, err := u.downloadIpDataFromSource(ctx, ipv6Url)
+	ipv6Content, err := u.downloadIpDataFromSource(ctx, ipData.GetIpv6SourceUrl())
 	if err != nil {
 		return fmt.Errorf("download IPv6 ip data from source: %w", err)
 	}

@@ -3,6 +3,7 @@ package repo
 import (
 	"common/proto/gen/common"
 	"context"
+	"fmt"
 	"platform/internal/biz/model"
 	"platform/internal/biz/repo"
 	"platform/internal/data/gen"
@@ -31,7 +32,10 @@ func (r *ObjectStorageRepo) getClient(ctx context.Context) *gen.Client {
 }
 
 func (r *ObjectStorageRepo) Save(ctx context.Context, row *model.ObjectStorage) (*model.ObjectStorage, error) {
-	saved, err := r.getClient(ctx).ObjectStorage.Create().
+	if row == nil {
+		return nil, fmt.Errorf("object storage row is nil")
+	}
+	err := r.getClient(ctx).ObjectStorage.Create().
 		SetProvider(objectstorage.Provider(row.Provider)).
 		SetBucket(row.Bucket).
 		SetKey(row.Key).
@@ -39,27 +43,28 @@ func (r *ObjectStorageRepo) Save(ctx context.Context, row *model.ObjectStorage) 
 		SetSize(row.Size).
 		SetHash(row.Hash).
 		SetUploadBy(row.UploadBy).
-		Save(ctx)
+		OnConflictColumns(objectstorage.FieldProvider, objectstorage.FieldBucket, objectstorage.FieldKey).
+		UpdateMimeType().
+		UpdateSize().
+		UpdateHash().
+		UpdateUploadBy().
+		UpdateUpdatedAt().
+		Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &model.ObjectStorage{
-		ID:                 saved.ID,
-		Provider:           enum.ObjectStorageProvider(saved.Provider),
-		Bucket:             saved.Bucket,
-		Key:                saved.Key,
-		MimeType:           saved.MimeType,
-		Size:               saved.Size,
-		Hash:               saved.Hash,
-		UploadBy:           saved.UploadBy,
-		AuditCallbackReply: saved.AuditCallbackReply,
-		Blocked:            saved.Blocked,
-		BlockedReason:      saved.BlockedReason,
-		BlockedAt:          saved.BlockedAt,
-		BlockedBy:          saved.BlockedBy,
-		CreatedAt:          saved.CreatedAt,
-		UpdatedAt:          saved.UpdatedAt,
-	}, nil
+	result, err := r.Get(ctx, &repo.ObjectStorageGetReq{
+		Provider: &row.Provider,
+		Bucket:   &row.Bucket,
+		Key:      &row.Key,
+	})
+	if err != nil {
+		return nil, err
+	}
+	if result == nil {
+		return nil, fmt.Errorf("object storage row not found after save")
+	}
+	return result, nil
 }
 
 func (r *ObjectStorageRepo) UpdateAudit(ctx context.Context, row *model.ObjectStorage) error {

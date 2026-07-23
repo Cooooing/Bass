@@ -76,7 +76,6 @@ message LoginByPassword {
     string request_id = 12;
   }
   message Resp {
-
     message Account {
       AccountBasic basic = 1;
       AccountContact contact = 2;
@@ -119,7 +118,6 @@ message ParseToken {
     string token = 1;
   }
   message Resp {
-
     message TokenUser {
       int64 id = 1;
       string name = 2;

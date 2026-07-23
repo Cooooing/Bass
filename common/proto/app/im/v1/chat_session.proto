@@ -44,7 +44,6 @@ message MarkReadChatSession {
 
 message ListChatSessions {
   message Req {
-
     message ChatSessionQueryParams {
       repeated int64 ids = 2; // 主键
     }
@@ -53,7 +52,6 @@ message ListChatSessions {
     int64 user_id = 3; // 用户 ID
   }
   message Resp {
-
     message ChatSession {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 创建时间

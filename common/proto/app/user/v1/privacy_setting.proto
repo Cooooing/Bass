@@ -6,7 +6,6 @@ import "common/enums/language.proto";
 import "google/protobuf/timestamp.proto";
 import "user/v1/enum.proto";
 
-
 option go_package = "common/proto/gen/user/v1;v1";
 
 service PrivacySettingService {
@@ -19,7 +18,6 @@ message GetPrivacySetting {
     int64 user_id = 1;
   }
   message Resp {
-
     message PrivacySetting {
       int64 user_id = 1;
       optional bool public_points = 2;
@@ -44,7 +42,6 @@ message UpdatePrivacySetting {
     optional bool public_location = 7;
   }
   message Resp {
-
     message PrivacySetting {
       int64 user_id = 1;
       optional bool public_points = 2;

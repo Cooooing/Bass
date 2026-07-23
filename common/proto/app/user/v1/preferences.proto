@@ -18,7 +18,6 @@ message GetPreferences {
     int64 user_id = 1;
   }
   message Resp {
-
     message Preferences {
       int64 user_id = 1;
       optional string timezone = 3;
@@ -39,7 +38,6 @@ message UpdatePreferences {
     optional common.enums.Language language = 7;
   }
   message Resp {
-
     message Preferences {
       int64 user_id = 1;
       optional string timezone = 3;

@@ -3,9 +3,9 @@ syntax = "proto3";
 package common.api.app.user.v1;
 
 import "common/common.proto";
-import "user/v1/enum.proto";
 import "common/enums/language.proto";
 import "google/protobuf/timestamp.proto";
+import "user/v1/enum.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
 
@@ -22,7 +22,6 @@ message GetAccount {
     int64 user_id = 1;
   }
   message Resp {
-
     message Account {
       AccountBasic basic = 1;
       AccountContact contact = 2;
@@ -54,14 +53,12 @@ message GetAccount {
 
 message ListAccounts {
   message Req {
-
     message AccountQuery {
       repeated int64 user_ids = 1;
     }
     AccountQuery query = 1;
   }
   message Resp {
-
     message Account {
       AccountBasic basic = 1;
       AccountContact contact = 2;
@@ -93,14 +90,12 @@ message ListAccounts {
 
 message MapAccounts {
   message Req {
-
     message AccountQuery {
       repeated int64 user_ids = 1;
     }
     AccountQuery query = 1;
   }
   message Resp {
-
     message Account {
       AccountBasic basic = 1;
       AccountContact contact = 2;
@@ -140,7 +135,6 @@ message UpdateProfileAccount {
     optional MBTI mbti = 6;
   }
   message Resp {
-
     message AccountBasic {
       int64 id = 1;
       string name = 2;

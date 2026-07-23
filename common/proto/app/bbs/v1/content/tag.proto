@@ -55,7 +55,6 @@ message CreateTag {
     }
   }
   message Resp {
-
     message Tag {
       int64 id = 1; // 标签 ID
       string name = 2; // 标签名称
@@ -97,7 +96,6 @@ message UpdateTag {
     }
   }
   message Resp {
-
     message Tag {
       int64 id = 1; // 标签 ID
       string name = 2; // 标签名称
@@ -119,7 +117,6 @@ message UpdateTag {
 // 分页查询标签列表。
 message ListTags {
   message Req {
-
     message TagQuery {
       // 标签 ID 列表。
       repeated int64 ids = 1;
@@ -140,7 +137,6 @@ message ListTags {
     TagQuery query = 2;
   }
   message Resp {
-
     message Tag {
       int64 id = 1; // 标签 ID
       string name = 2; // 标签名称

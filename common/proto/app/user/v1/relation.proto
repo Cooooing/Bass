@@ -58,7 +58,6 @@ message ListFollowingRelations {
     int64 user_id = 2;
   }
   message Resp {
-
     message Relation {
       int64 id = 1;
       RelationType type = 2;
@@ -78,7 +77,6 @@ message ListFollowersRelations {
     int64 user_id = 2;
   }
   message Resp {
-
     message Relation {
       int64 id = 1;
       RelationType type = 2;
@@ -98,7 +96,6 @@ message ListBlockedRelations {
     int64 user_id = 2;
   }
   message Resp {
-
     message Relation {
       int64 id = 1;
       RelationType type = 2;
@@ -118,7 +115,6 @@ message MapRelationStatuses {
     repeated int64 target_ids = 2;
   }
   message Resp {
-
     message RelationStatus {
       int64 target_id = 1;
       bool following = 2;

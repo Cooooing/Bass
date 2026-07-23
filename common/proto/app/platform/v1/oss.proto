@@ -37,7 +37,6 @@ message GetUploadTokenOss {
     int32 num = 3;
   }
   message Resp {
-
     message UploadToken {
       string key = 1;
       string token = 2;
@@ -67,7 +66,6 @@ message UploadOss {
 
 message StreamUploadOss {
   message Req {
-
     message Meta {
       int64 user_id = 1;
       string key = 3;
@@ -126,7 +124,6 @@ message AuditOss {
 
 message ListOss {
   message Req {
-
     message OssQueryParams {
       optional ObjectStorageProvider provider = 1;
       optional string bucket = 2;
@@ -139,7 +136,6 @@ message ListOss {
     OssQueryParams query = 2;
   }
   message Resp {
-
     message Oss {
       google.protobuf.Timestamp created_at = 1000;
       google.protobuf.Timestamp updated_at = 1001;
@@ -176,7 +172,6 @@ message QiniuUploadCallbackOss {
 
 message QiniuIncrementAuditCallbackOss {
   message Req {
-
     message Item {
       string cmd = 1;
       int32 code = 2;

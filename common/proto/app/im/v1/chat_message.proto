@@ -3,9 +3,9 @@ syntax = "proto3";
 package common.api.app.im.v1;
 
 import "common/common.proto";
-import "im/v1/enum.proto";
 import "common/enums/language.proto";
 import "google/protobuf/timestamp.proto";
+import "im/v1/enum.proto";
 import "user/v1/enum.proto";
 
 option go_package = "common/proto/gen/im/v1;v1";
@@ -38,7 +38,6 @@ message RevokeChatMessage {
 
 message ListChatMessages {
   message Req {
-
     message ChatMessageQueryParams {
       repeated int64 ids = 2; // 主键
       int64 session_id = 3; // 会话id
@@ -48,7 +47,6 @@ message ListChatMessages {
     ChatMessageQueryParams query = 2; // 查询参数
   }
   message Resp {
-
     message ChatMessage {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间

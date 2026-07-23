@@ -3,11 +3,11 @@ syntax = "proto3";
 package common.api.app.bbs.v1.content;
 
 import "bbs/v1/content/enum.proto";
+import "bbs/v1/user/enum.proto";
 import "common/common.proto";
+import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
-import "bbs/v1/user/enum.proto";
-import "common/enums/language.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
@@ -80,7 +80,6 @@ message ListCommentThreads {
     option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {
-
     message CommentThread {
       CommentListItem root = 1; // 顶层评论
       repeated CommentListItem preview_replies = 2; // 回复预览列表
@@ -89,7 +88,6 @@ message ListCommentThreads {
     }
 
     message CommentListItem {
-
       int64 id = 1; // 评论 ID
       int64 article_id = 2; // 文章 ID
       string content = 3; // 原始内容
@@ -145,7 +143,6 @@ message ListCommentThreads {
     }
 
     message ArticleBrief {
-
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       ArticleType type = 4; // 文章类型
@@ -178,9 +175,7 @@ message ListCommentReplies {
     };
   }
   message Resp {
-
     message CommentListItem {
-
       int64 id = 1; // 评论 ID
       int64 article_id = 2; // 文章 ID
       string content = 3; // 原始内容
@@ -236,7 +231,6 @@ message ListCommentReplies {
     }
 
     message ArticleBrief {
-
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       ArticleType type = 4; // 文章类型
@@ -265,9 +259,7 @@ message ListCommentTimeline {
     option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {
-
     message CommentListItem {
-
       int64 id = 1; // 评论 ID
       int64 article_id = 2; // 文章 ID
       string content = 3; // 原始内容
@@ -323,7 +315,6 @@ message ListCommentTimeline {
     }
 
     message ArticleBrief {
-
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       ArticleType type = 4; // 文章类型
@@ -355,9 +346,7 @@ message CreateComment {
     };
   }
   message Resp {
-
     message CommentDetail {
-
       int64 id = 1; // 评论 ID
       int64 article_id = 2; // 文章 ID
       string content = 3; // 原始内容
@@ -408,7 +397,6 @@ message CreateComment {
     }
 
     message ArticleBrief {
-
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       ArticleType type = 4; // 文章类型
@@ -435,9 +423,7 @@ message CreateComment {
 // 分页查询评论列表。
 message ListComments {
   message Req {
-
     message CommentQuery {
-
       optional int64 comment_id = 1; // 评论 ID
       optional int64 article_id = 2; // 文章 ID
       optional int64 parent_id = 3; // 父评论 ID
@@ -452,9 +438,7 @@ message ListComments {
     CommentQuery query = 2; // 查询条件
   }
   message Resp {
-
     message CommentListItem {
-
       int64 id = 1; // 评论 ID
       int64 article_id = 2; // 文章 ID
       string content = 3; // 原始内容
@@ -510,7 +494,6 @@ message ListComments {
     }
 
     message ArticleBrief {
-
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       ArticleType type = 4; // 文章类型

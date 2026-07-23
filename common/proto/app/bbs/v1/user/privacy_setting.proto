@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
-import "google/api/annotations.proto";
 import "bbs/v1/user/enum.proto";
 import "common/enums/language.proto";
+import "google/api/annotations.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
@@ -31,7 +31,6 @@ service PrivacySettingService {
 message GetCurrentPrivacySetting {
   message Req {}
   message Resp {
-
     message PrivacySetting {
       // 账号 ID。
       int64 user_id = 1;
@@ -70,7 +69,6 @@ message UpdateCurrentPrivacySetting {
     optional bool public_location = 6;
   }
   message Resp {
-
     message PrivacySetting {
       // 账号 ID。
       int64 user_id = 1;

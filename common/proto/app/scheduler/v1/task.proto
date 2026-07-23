@@ -34,7 +34,6 @@ message UpsertSchedulerTask {
     optional bool alert_enabled = 10; // 是否启用告警，未传时默认启用
   }
   message Resp {
-
     message SchedulerTask {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -60,7 +59,6 @@ message GetSchedulerTask {
     int64 id = 1; // 任务 ID
   }
   message Resp {
-
     message SchedulerTask {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -83,7 +81,6 @@ message GetSchedulerTask {
 
 message PageSchedulerTasks {
   message Req {
-
     message SchedulerTaskQueryParams {
       repeated int64 ids = 1; // 任务 ID 列表
       optional string name = 2; // 代码内任务名称，模糊匹配
@@ -94,7 +91,6 @@ message PageSchedulerTasks {
     SchedulerTaskQueryParams query = 2; // 查询条件
   }
   message Resp {
-
     message SchedulerTask {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -118,14 +114,12 @@ message PageSchedulerTasks {
 
 message ListSchedulerAvailableTasks {
   message Req {
-
     message SchedulerAvailableTaskQueryParams {
       optional string keyword = 1; // 搜索关键词，匹配 name、title、description
     }
     SchedulerAvailableTaskQueryParams query = 1; // 查询条件
   }
   message Resp {
-
     message SchedulerAvailableTask {
       string name = 1; // 代码内任务名称
       string title = 2; // 展示名称
@@ -137,7 +131,6 @@ message ListSchedulerAvailableTasks {
 
 message PageSchedulerTaskExecutionRecords {
   message Req {
-
     message SchedulerTaskExecutionRecordQueryParams {
       repeated int64 ids = 1; // 执行记录 ID 列表
       optional int64 task_id = 2; // 任务 ID
@@ -148,7 +141,6 @@ message PageSchedulerTaskExecutionRecords {
     SchedulerTaskExecutionRecordQueryParams query = 2; // 查询条件
   }
   message Resp {
-
     message SchedulerTaskExecutionRecord {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -178,7 +170,6 @@ message TriggerSchedulerTask {
     string payload = 2; // 本次手动触发覆盖使用的 JSON 参数
   }
   message Resp {
-
     message SchedulerTaskExecutionRecord {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -206,7 +197,6 @@ message CancelSchedulerTaskExecution {
     int64 id = 1; // 执行记录 ID
   }
   message Resp {
-
     message SchedulerTaskExecutionRecord {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -234,7 +224,6 @@ message CheckSchedulerTaskExecutionRuntimes {
     repeated int64 ids = 1; // 执行记录 ID 列表
   }
   message Resp {
-
     message SchedulerTaskExecutionRuntime {
       int64 execution_record_id = 1; // 执行记录 ID
       int64 task_id = 2; // 任务 ID
@@ -249,7 +238,6 @@ message MarkSchedulerTaskExecutionsUnknown {
     repeated int64 ids = 1; // 执行记录 ID 列表
   }
   message Resp {
-
     message SchedulerTaskExecutionRecord {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间

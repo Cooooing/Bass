@@ -2,13 +2,13 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
+import "bbs/v1/user/enum.proto";
 import "common/common.proto";
+import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
-import "bbs/v1/user/enum.proto";
-import "user/v1/enum.proto";
-import "common/enums/language.proto";
 import "google/protobuf/timestamp.proto";
+import "user/v1/enum.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
@@ -126,7 +126,6 @@ message ListFollowingRelations {
     .common.api.app.common.PageReq page = 1;
   }
   message Resp {
-
     message Relation {
       int64 id = 1;
       .common.api.app.user.v1.RelationType type = 2;
@@ -149,7 +148,6 @@ message ListFollowersRelations {
     .common.api.app.common.PageReq page = 1;
   }
   message Resp {
-
     message Relation {
       int64 id = 1;
       .common.api.app.user.v1.RelationType type = 2;
@@ -172,7 +170,6 @@ message ListBlockedRelations {
     .common.api.app.common.PageReq page = 1;
   }
   message Resp {
-
     message Relation {
       int64 id = 1;
       .common.api.app.user.v1.RelationType type = 2;
@@ -196,7 +193,6 @@ message GetStatusRelation {
     option (gnostic.openapi.v3.schema) = {required: "target_id"};
   }
   message Resp {
-
     message RelationStatus {
       // 目标账号 ID。
       int64 target_id = 1;

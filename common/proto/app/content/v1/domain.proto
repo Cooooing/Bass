@@ -19,7 +19,8 @@ service ContentDomainService {
 }
 
 message BatchCreateDomains {
-  message Req {repeated Domain domains = 1; // 领域信息列表
+  message Req {
+    repeated Domain domains = 1; // 领域信息列表
     int64 user_id = 2; // 用户 ID
 
     message Domain {
@@ -32,7 +33,6 @@ message BatchCreateDomains {
     }
   }
   message Resp {
-
     message Domain {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -67,7 +67,6 @@ message UpdateDomain {
     }
   }
   message Resp {
-
     message Domain {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -88,7 +87,6 @@ message UpdateDomain {
 
 message ListDomains {
   message Req {
-
     message DomainQueryParams {
       repeated int64 ids = 1; // 主键列表
       optional string name = 2; // 领域名称
@@ -101,7 +99,6 @@ message ListDomains {
     DomainQueryParams query = 1; // 查询参数
   }
   message Resp {
-
     message Domain {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -122,7 +119,6 @@ message ListDomains {
 
 message PageDomains {
   message Req {
-
     message DomainQueryParams {
       repeated int64 ids = 1; // 主键列表
       optional string name = 2; // 领域名称
@@ -136,7 +132,6 @@ message PageDomains {
     optional .common.api.app.common.PageReq page = 2; // 分页参数
   }
   message Resp {
-
     message Domain {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间

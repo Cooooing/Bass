@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
-import "gnostic/openapi/v3/annotations.proto";
-import "google/api/annotations.proto";
 import "bbs/v1/user/enum.proto";
 import "common/enums/language.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
@@ -79,7 +79,6 @@ message DisableTotp {
 message GetCurrentTotp {
   message Req {}
   message Resp {
-
     message Totp {
       // 账号 ID。
       int64 user_id = 1;

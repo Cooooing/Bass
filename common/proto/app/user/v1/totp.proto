@@ -6,7 +6,6 @@ import "common/enums/language.proto";
 import "google/protobuf/timestamp.proto";
 import "user/v1/enum.proto";
 
-
 option go_package = "common/proto/gen/user/v1;v1";
 
 service TotpService {
@@ -59,7 +58,6 @@ message GetTotp {
     int64 user_id = 1;
   }
   message Resp {
-
     message Totp {
       int64 user_id = 1;
       bool enable = 2;

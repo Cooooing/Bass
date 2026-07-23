@@ -4,9 +4,9 @@ package common.api.app.bbs.v1.user;
 
 import "bbs/v1/user/enum.proto";
 import "common/common.proto";
+import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
-import "common/enums/language.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
@@ -46,7 +46,6 @@ service AccountService {
 message GetCurrentAccount {
   message Req {}
   message Resp {
-
     message Account {
       // 账号展示资料。
       AccountProfile profile = 1;
@@ -102,7 +101,6 @@ message GetProfileAccount {
     option (gnostic.openapi.v3.schema) = {required: "user_id"};
   }
   message Resp {
-
     message AccountProfile {
       // 账号 ID。
       int64 id = 1;
@@ -149,7 +147,6 @@ message UpdateProfileAccount {
     optional MBTI mbti = 5;
   }
   message Resp {
-
     message AccountProfile {
       // 账号 ID。
       int64 id = 1;

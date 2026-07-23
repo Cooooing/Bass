@@ -19,7 +19,8 @@ service ContentTagService {
 }
 
 message BatchCreateTags {
-  message Req {repeated Tag tags = 1; // 标签信息列表
+  message Req {
+    repeated Tag tags = 1; // 标签信息列表
     int64 user_id = 2; // 用户 ID
 
     message Tag {
@@ -30,7 +31,6 @@ message BatchCreateTags {
     }
   }
   message Resp {
-
     message Tag {
       optional google.protobuf.Timestamp created_at = 1000; // 创建时间
       optional google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -61,7 +61,6 @@ message UpdateTag {
     }
   }
   message Resp {
-
     message Tag {
       optional google.protobuf.Timestamp created_at = 1000; // 创建时间
       optional google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -80,7 +79,6 @@ message UpdateTag {
 
 message ListTags {
   message Req {
-
     message TagQueryParams {
       repeated int64 ids = 1; // 标签 ID 列表
       optional string name = 2; // 标签名称
@@ -92,7 +90,6 @@ message ListTags {
     TagQueryParams query = 1; // 查询参数
   }
   message Resp {
-
     message Tag {
       optional google.protobuf.Timestamp created_at = 1000; // 创建时间
       optional google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -111,7 +108,6 @@ message ListTags {
 
 message PageTags {
   message Req {
-
     message TagQueryParams {
       repeated int64 ids = 1; // 标签 ID 列表
       optional string name = 2; // 标签名称
@@ -124,7 +120,6 @@ message PageTags {
     optional .common.api.app.common.PageReq page = 2; // 分页参数
   }
   message Resp {
-
     message Tag {
       optional google.protobuf.Timestamp created_at = 1000; // 创建时间
       optional google.protobuf.Timestamp updated_at = 1001; // 更新时间

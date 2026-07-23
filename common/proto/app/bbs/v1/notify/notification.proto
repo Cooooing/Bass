@@ -3,8 +3,8 @@ syntax = "proto3";
 package common.api.app.bbs.v1.notify;
 
 import "common/common.proto";
-import "google/api/annotations.proto";
 import "common/enums/event.proto";
+import "google/api/annotations.proto";
 
 option go_package = "common/proto/gen/bbs/v1/notify;notify";
 
@@ -42,7 +42,6 @@ message ListNotifications {
     .common.api.app.common.PageReq page = 1;
   }
   message Resp {
-
     message Notification {
       // 通知 ID。
       int64 id = 1;

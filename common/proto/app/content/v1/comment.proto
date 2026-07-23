@@ -33,9 +33,7 @@ message CreateComment {
     int64 user_id = 4; // 用户 ID
   }
   message Resp {
-
     message Comment {
-
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人
@@ -118,9 +116,7 @@ message ThankComment {
 
 message ListComments {
   message Req {
-
     message CommentQueryParams {
-
       optional int64 comment_id = 1; // 评论 ID
       optional int64 article_id = 2; // 文章 ID
       optional int64 parent_id = 3; // 父级评论 ID
@@ -134,9 +130,7 @@ message ListComments {
     CommentQueryParams query = 1; // 查询参数
   }
   message Resp {
-
     message Comment {
-
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人
@@ -161,9 +155,7 @@ message ListComments {
 
 message PageComments {
   message Req {
-
     message CommentQueryParams {
-
       optional int64 comment_id = 1; // 评论 ID
       optional int64 article_id = 2; // 文章 ID
       optional int64 parent_id = 3; // 父级评论 ID
@@ -178,9 +170,7 @@ message PageComments {
     optional .common.api.app.common.PageReq page = 2; // 分页参数
   }
   message Resp {
-
     message Comment {
-
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人
@@ -210,7 +200,6 @@ message MapCommentViewerActionStates {
     int64 user_id = 2; // 用户 ID
   }
   message Resp {
-
     message State {
       bool liked = 1; // 是否点赞
       bool thanked = 2; // 是否感谢
@@ -221,7 +210,6 @@ message MapCommentViewerActionStates {
 
 message ListCommentReplyPreviews {
   message Req {
-
     int64 article_id = 1; // 文章 ID
     repeated int64 parent_ids = 2; // 父级评论 ID
     int32 limit_per_parent = 3; // 每条父级评论返回的回复数量
@@ -230,14 +218,12 @@ message ListCommentReplyPreviews {
     repeated ContentRestriction restrictions = 8; // 管理限制列表
   }
   message Resp {
-
     message CommentReplyPreview {
       int64 parent_id = 1; // 父级评论 ID
       repeated Comment rows = 2; // 回复列表
     }
 
     message Comment {
-
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人
@@ -262,13 +248,10 @@ message ListCommentReplyPreviews {
 
 message MapArticleLastComments {
   message Req {
-
     repeated int64 article_ids = 1; // 文章 ID
   }
   message Resp {
-
     message Comment {
-
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人

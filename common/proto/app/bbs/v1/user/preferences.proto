@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
+import "bbs/v1/user/enum.proto";
 import "common/enums/language.proto";
 import "google/api/annotations.proto";
-import "bbs/v1/user/enum.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
@@ -31,7 +31,6 @@ service PreferencesService {
 message GetCurrentPreferences {
   message Req {}
   message Resp {
-
     message Preference {
       // 账号 ID。
       int64 user_id = 1;
@@ -62,7 +61,6 @@ message UpdateCurrentPreferences {
     optional common.enums.Language language = 7;
   }
   message Resp {
-
     message Preference {
       // 账号 ID。
       int64 user_id = 1;

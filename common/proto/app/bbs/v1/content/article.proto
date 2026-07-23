@@ -3,11 +3,11 @@ syntax = "proto3";
 package common.api.app.bbs.v1.content;
 
 import "bbs/v1/content/enum.proto";
+import "bbs/v1/user/enum.proto";
 import "common/common.proto";
+import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
-import "bbs/v1/user/enum.proto";
-import "common/enums/language.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
@@ -125,7 +125,6 @@ message CreateArticle {
     option (gnostic.openapi.v3.schema) = {required: "article"};
 
     message Article {
-
       string title = 1; // 标题
       string content = 2; // 原始内容
       optional string reward_content = 4; // 打赏后可见内容
@@ -144,9 +143,7 @@ message CreateArticle {
     }
   }
   message Resp {
-
     message ArticleDetail {
-
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       string content = 3; // 原始内容
@@ -245,7 +242,6 @@ message UpdateArticle {
     };
 
     message Article {
-
       string title = 1; // 标题
       string content = 2; // 原始内容
       optional string reward_content = 4; // 打赏后可见内容
@@ -264,9 +260,7 @@ message UpdateArticle {
     }
   }
   message Resp {
-
     message ArticleDetail {
-
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       string content = 3; // 原始内容
@@ -365,7 +359,6 @@ message UpdateDraftArticle {
     };
 
     message Article {
-
       string title = 1; // 标题
       string content = 2; // 原始内容
       optional string reward_content = 4; // 打赏后可见内容
@@ -384,9 +377,7 @@ message UpdateDraftArticle {
     }
   }
   message Resp {
-
     message ArticleDetail {
-
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       string content = 3; // 原始内容
@@ -496,9 +487,7 @@ message DiscardDraftArticle {
 // 分页查询文章列表。
 message ListArticles {
   message Req {
-
     message ArticleQuery {
-
       optional int64 tag_id = 1; // 标签 ID
       optional int64 domain_id = 2; // 板块 ID
       optional ArticleType type = 4; // 文章类型
@@ -516,9 +505,7 @@ message ListArticles {
     ArticleQuery query = 2; // 查询条件
   }
   message Resp {
-
     message ArticleListItem {
-
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       string content = 3; // 摘要原始内容
@@ -598,9 +585,7 @@ message GetArticle {
     option (gnostic.openapi.v3.schema) = {required: "article_id"};
   }
   message Resp {
-
     message ArticleDetail {
-
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       string content = 3; // 原始内容

@@ -41,11 +41,11 @@ service ContentArticleService {
 }
 
 message CreateArticle {
-  message Req {Article article = 1; // 文章信息
+  message Req {
+    Article article = 1; // 文章信息
     int64 user_id = 2; // 用户 ID
 
     message Article {
-
       string title = 1; // 标题
       string content = 2; // 内容
       ArticleType type = 5; // 类型
@@ -68,9 +68,7 @@ message CreateArticle {
     }
   }
   message Resp {
-
     message Article {
-
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人
@@ -122,7 +120,6 @@ message AddPostscriptArticle {
     int64 user_id = 3; // 用户 ID
   }
   message Resp {
-
     message ArticlePostscript {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -140,11 +137,9 @@ message AddPostscriptArticle {
 
 message ListArticlePostscripts {
   message Req {
-
     int64 article_id = 1; // 文章 ID
   }
   message Resp {
-
     message ArticlePostscript {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
@@ -176,7 +171,6 @@ message UpdateArticle {
     int64 user_id = 3; // 用户 ID
 
     message Article {
-
       string title = 1; // 标题
       string content = 2; // 内容
       ArticleType type = 5; // 类型
@@ -199,9 +193,7 @@ message UpdateArticle {
     }
   }
   message Resp {
-
     message Article {
-
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人
@@ -400,7 +392,6 @@ message MapArticleViewerActionStates {
     int64 user_id = 2; // 用户 ID
   }
   message Resp {
-
     message ArticleViewerActionState {
       bool liked = 1; // 是否已点赞
       bool thanked = 2; // 是否已感谢
@@ -413,13 +404,10 @@ message MapArticleViewerActionStates {
 
 message GetArticle {
   message Req {
-
     int64 article_id = 1; // 文章 ID
   }
   message Resp {
-
     message Article {
-
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人
@@ -466,9 +454,7 @@ message GetArticle {
 
 message ListArticles {
   message Req {
-
     message ArticleQueryParams {
-
       optional int64 tag_id = 1; // 标签
       optional int64 domain_id = 2; // 领域
       optional ArticleType type = 4; // 类型
@@ -485,9 +471,7 @@ message ListArticles {
     ArticleQueryParams query = 1; // 查询参数
   }
   message Resp {
-
     message Article {
-
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人
@@ -534,9 +518,7 @@ message ListArticles {
 
 message PageArticles {
   message Req {
-
     message ArticleQueryParams {
-
       optional int64 tag_id = 1; // 标签
       optional int64 domain_id = 2; // 领域
       optional ArticleType type = 4; // 类型
@@ -554,9 +536,7 @@ message PageArticles {
     .common.api.app.common.PageReq page = 2; // 分页参数
   }
   message Resp {
-
     message Article {
-
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人

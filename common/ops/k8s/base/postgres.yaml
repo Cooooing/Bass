@@ -15,11 +15,11 @@ primary:
     size: 10Gi
   resources:
     requests:
-      cpu: 50m
-      memory: 64Mi
+      cpu: "1"
+      memory: 1Gi
     limits:
-      cpu: 100m
-      memory: 128Mi
+      cpu: "2"
+      memory: 2Gi
   # ClusterIP，仅集群内访问
 readReplicas:
   replicaCount: 0

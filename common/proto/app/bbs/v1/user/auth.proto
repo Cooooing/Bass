@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
-import "gnostic/openapi/v3/annotations.proto";
-import "google/api/annotations.proto";
 import "bbs/v1/user/enum.proto";
 import "common/enums/language.proto";
+import "gnostic/openapi/v3/annotations.proto";
+import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
@@ -154,7 +154,6 @@ message LoginByPassword {
     };
   }
   message Resp {
-
     message Account {
       AccountBasic basic = 1;
       AccountContact contact = 2;

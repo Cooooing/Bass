@@ -6,7 +6,6 @@ import "common/enums/language.proto";
 import "google/protobuf/timestamp.proto";
 import "user/v1/enum.proto";
 
-
 option go_package = "common/proto/gen/user/v1;v1";
 
 service LocationService {
@@ -19,7 +18,6 @@ message GetLocation {
     int64 user_id = 1;
   }
   message Resp {
-
     message Location {
       int64 user_id = 1;
       optional string country = 2;
@@ -38,7 +36,6 @@ message UpsertLocation {
     optional string city = 4;
   }
   message Resp {
-
     message Location {
       int64 user_id = 1;
       optional string country = 2;

@@ -37,7 +37,6 @@ message DismissChatGroup {
 
 message ListChatGroups {
   message Req {
-
     message ChatGroupQueryParams {
       repeated int64 ids = 2; // 主键
       repeated string uuids = 3; // UUID 列表
@@ -49,7 +48,6 @@ message ListChatGroups {
     ChatGroupQueryParams query = 2; // 查询参数
   }
   message Resp {
-
     message ChatGroup {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间

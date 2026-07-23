@@ -24,7 +24,6 @@ service DomainService {
 // 分页查询内容板块列表。
 message ListDomains {
   message Req {
-
     message DomainQuery {
       // 板块 ID 列表。
       repeated int64 ids = 1;
@@ -47,7 +46,6 @@ message ListDomains {
     DomainQuery query = 2;
   }
   message Resp {
-
     message Domain {
       int64 id = 1; // 板块 ID
       string name = 2; // 板块名称

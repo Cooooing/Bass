@@ -2,9 +2,9 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.content;
 
+import "bbs/v1/content/enum.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
-import "bbs/v1/content/enum.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
@@ -32,7 +32,6 @@ message AddPostscript {
     };
   }
   message Resp {
-
     message ArticlePostscript {
       int64 id = 1; // 附言 ID
       int64 article_id = 2; // 文章 ID

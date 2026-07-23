@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.push_hub.v1;
 
@@ -44,7 +44,6 @@ message Heartbeat {
 message ListNodes {
   message Req {}
   message Resp {
-
     message NodeInfo {
       string node_id = 1;
       string address = 2;

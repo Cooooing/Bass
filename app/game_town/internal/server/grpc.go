@@ -1,12 +1,13 @@
 package server
 
 import (
-	commonClient "common/pkg/client"
-	"common/pkg/server"
 	"fmt"
-	"game_town/internal/config"
 	"log/slog"
 	"time"
+
+	commonclient "common/pkg/client"
+	"common/pkg/server"
+	"game_town/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
@@ -15,24 +16,50 @@ import (
 	"google.golang.org/grpc/keepalive"
 )
 
-func NewGRPCServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.Service) *grpc.Server {
-	ka := []ggrpc.ServerOption{
-		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{MinTime: 10 * time.Second, PermitWithoutStream: false}),
-		ggrpc.KeepaliveParams(keepalive.ServerParameters{MaxConnectionIdle: 300 * time.Second, MaxConnectionAge: 600 * time.Second, MaxConnectionAgeGrace: 30 * time.Second, Time: 60 * time.Second, Timeout: 20 * time.Second}),
+func NewGRPCServer(
+	conf *config.Bootstrap,
+	log *slog.Logger,
+	observer *commonclient.Observer,
+	services []server.Service,
+) *grpc.Server {
+	grpcOptions := []ggrpc.ServerOption{
+		ggrpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
+			MinTime:             10 * time.Second,
+			PermitWithoutStream: false,
+		}),
+		ggrpc.KeepaliveParams(keepalive.ServerParameters{
+			MaxConnectionIdle:     300 * time.Second,
+			MaxConnectionAge:      600 * time.Second,
+			MaxConnectionAgeGrace: 30 * time.Second,
+			Time:                  60 * time.Second,
+			Timeout:               20 * time.Second,
+		}),
 	}
-	serverOpts := []grpc.ServerOption{
-		grpc.Middleware(server.RequestLogContextMiddleware(), obs.ServerMiddleware(), recovery.Recovery(), validate.ProtoValidate()),
-		grpc.Options(ka...),
+	serverOptions := []grpc.ServerOption{
+		grpc.Middleware(
+			server.RequestLogContextMiddleware(),
+			observer.ServerMiddleware(),
+			recovery.Recovery(),
+			validate.ProtoValidate(),
+		),
+		grpc.Options(grpcOptions...),
 	}
-	if c.GetGrpc().GetHost() != "" && c.GetGrpc().GetPort() != 0 {
-		serverOpts = append(serverOpts, grpc.Address(fmt.Sprintf("%s:%d", c.GetGrpc().GetHost(), c.GetGrpc().GetPort())))
+	if conf.GetGrpc().GetHost() != "" && conf.GetGrpc().GetPort() != 0 {
+		serverOptions = append(serverOptions, grpc.Address(fmt.Sprintf(
+			"%s:%d",
+			conf.GetGrpc().GetHost(),
+			conf.GetGrpc().GetPort(),
+		)))
 	}
-	if c.GetGrpc().GetTimeout() != nil {
-		serverOpts = append(serverOpts, grpc.Timeout(c.GetGrpc().GetTimeout().AsDuration()))
+	if conf.GetGrpc().GetTimeout() != nil {
+		serverOptions = append(
+			serverOptions,
+			grpc.Timeout(conf.GetGrpc().GetTimeout().AsDuration()),
+		)
 	}
-	srv := grpc.NewServer(serverOpts...)
-	for _, s := range services {
-		s.RegisterGrpc(srv)
+	grpcServer := grpc.NewServer(serverOptions...)
+	for _, service := range services {
+		service.RegisterGrpc(grpcServer)
 	}
-	return srv
+	return grpcServer
 }

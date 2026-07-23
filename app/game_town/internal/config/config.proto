@@ -2,6 +2,7 @@ syntax = "proto3";
 package kratos.api.config;
 
 import "common/config.proto";
+import "google/protobuf/duration.proto";
 
 option go_package = "game_town/internal/config;config";
 
@@ -17,21 +18,34 @@ message Bootstrap {
 }
 
 message GameTown {
-  Command command = 1;
+  Agent agent = 1;
   World world = 2;
-  Effect effect = 3;
+  Memory memory = 3;
 }
 
-message Command {
-  uint32 max_content_length = 1;
+message Agent {
+  uint32 global_concurrency = 1;
+  uint32 model_concurrency = 2;
+  uint32 world_concurrency = 3;
+  uint32 max_retry = 4;
+  google.protobuf.Duration retry_base_delay = 5;
+  google.protobuf.Duration tick_interval = 6;
+  uint32 recent_event_limit = 7;
 }
 
 message World {
   uint32 max_npc_count = 1;
   uint32 max_location_count = 2;
-  string default_scale = 3;
+  uint32 time_scale = 3;
+  uint32 max_catch_up_changes = 4;
 }
 
-message Effect {
-  int32 max_delta = 1;
+message Memory {
+  bool embedding_enabled = 1;
+  string base_url = 2;
+  string model = 3;
+  uint32 dimensions = 4;
+  google.protobuf.Duration timeout = 5;
+  uint32 candidate_limit = 6;
+  uint32 result_limit = 7;
 }

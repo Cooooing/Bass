@@ -1,128 +1,121 @@
 package service
 
 import (
-	v1 "common/proto/gen/game_town/v1"
 	"context"
+
+	"common/pkg/apperror"
+	"common/proto/gen/common"
+	cerrors "common/proto/gen/common/errors"
+	v1 "common/proto/gen/game_town/v1"
+	"game_town/internal/biz/base"
+	"game_town/internal/biz/model"
 	"game_town/internal/biz/usecase"
 	gameenum "game_town/internal/enum"
-	"time"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
+	"github.com/samber/lo"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type AgentConfigService struct {
 	v1.UnimplementedGameTownAgentConfigServiceServer
-	gameUsecase *usecase.GameUsecase
+	usecase *usecase.AgentConfigUsecase
 }
 
-func NewAgentConfigService(gameUsecase *usecase.GameUsecase) *AgentConfigService {
-	return &AgentConfigService{gameUsecase: gameUsecase}
+func NewAgentConfigService(usecase *usecase.AgentConfigUsecase) *AgentConfigService {
+	return &AgentConfigService{usecase: usecase}
 }
-func (s *AgentConfigService) RegisterGrpc(gs *grpc.Server) {
-	v1.RegisterGameTownAgentConfigServiceServer(gs, s)
+
+func (s *AgentConfigService) RegisterGrpc(server *grpc.Server) {
+	v1.RegisterGameTownAgentConfigServiceServer(server, s)
 }
-func (s *AgentConfigService) RegisterHttp(hs *http.Server) {}
-func (s *AgentConfigService) Create(ctx context.Context, req *v1.CreateGameTownAgentConfig_Req) (*v1.CreateGameTownAgentConfig_Resp, error) {
-	row, err := s.gameUsecase.CreateAgentConfig(ctx, &usecase.CreateAgentConfigReq{PlayerID: req.GetPlayerId(), Name: req.GetName(), Provider: req.GetProvider(), ModelName: req.GetModel(), BaseURL: req.GetBaseUrl(), APIKey: req.GetApiKey(), TimeoutSeconds: req.GetTimeoutSeconds(), IsDefault: req.GetIsDefault()})
+
+func (s *AgentConfigService) RegisterHttp(*http.Server) {}
+
+func (s *AgentConfigService) Create(ctx context.Context, req *v1.CreateGameTownAgentConfig_Request) (*v1.CreateGameTownAgentConfig_Resp, error) {
+	provider, ok := gameenum.AgentProviderMap.ToEnum(req.GetProvider())
+	if !ok {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	row, err := s.usecase.Create(ctx, &usecase.CreateAgentConfigReq{
+		Name:           req.GetName(),
+		Provider:       provider,
+		BaseURL:        req.GetBaseUrl(),
+		Model:          req.GetModel(),
+		SecretEnv:      req.GetSecretEnv(),
+		TimeoutSeconds: req.GetTimeoutSeconds(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	timestamp := func(t *time.Time) *timestamppb.Timestamp {
-		if t == nil {
-			return nil
-		}
-		return timestamppb.New(*t)
-	}
-	reply := &v1.CreateGameTownAgentConfig_Resp{}
-	if row != nil {
-		reply.Row = &v1.CreateGameTownAgentConfig_Resp_GameTownAgentConfig{
-			CreatedAt:      timestamp(row.CreatedAt),
-			UpdatedAt:      timestamp(row.UpdatedAt),
+	return &v1.CreateGameTownAgentConfig_Resp{
+		Row: &v1.CreateGameTownAgentConfig_Resp_Row{
 			Id:             row.ID,
-			PlayerId:       row.PlayerID,
 			Name:           row.Name,
-			Provider:       row.Provider,
-			Model:          row.Model,
+			Provider:       gameenum.AgentProviderMap.MustToProto(row.Provider),
 			BaseUrl:        row.BaseURL,
-			HasApiKey:      row.APIKey != "",
+			Model:          row.Model,
+			SecretEnv:      row.SecretEnv,
 			TimeoutSeconds: row.TimeoutSeconds,
-			IsDefault:      row.IsDefault,
-			Status:         gameenum.AgentConfigStatusMap.MustToProto(gameenum.AgentConfigStatus(row.Status)),
-		}
-	}
-	return reply, nil
+			CreatedAt:      timestamppb.New(*row.CreatedAt),
+			UpdatedAt:      timestamppb.New(*row.UpdatedAt),
+		},
+	}, nil
 }
-func (s *AgentConfigService) Get(ctx context.Context, req *v1.GetGameTownAgentConfig_Req) (*v1.GetGameTownAgentConfig_Resp, error) {
-	row, err := s.gameUsecase.GetAgentConfig(ctx, &usecase.GetAgentConfigReq{ID: req.GetId(), PlayerID: req.GetPlayerId()})
+
+func (s *AgentConfigService) Get(ctx context.Context, req *v1.GetGameTownAgentConfig_Request) (*v1.GetGameTownAgentConfig_Resp, error) {
+	if req.GetId() <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	row, err := s.usecase.Get(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
-	timestamp := func(t *time.Time) *timestamppb.Timestamp {
-		if t == nil {
-			return nil
-		}
-		return timestamppb.New(*t)
-	}
-	reply := &v1.GetGameTownAgentConfig_Resp{}
-	if row != nil {
-		reply.Row = &v1.GetGameTownAgentConfig_Resp_GameTownAgentConfig{
-			CreatedAt:      timestamp(row.CreatedAt),
-			UpdatedAt:      timestamp(row.UpdatedAt),
+	return &v1.GetGameTownAgentConfig_Resp{
+		Row: &v1.GetGameTownAgentConfig_Resp_Row{
 			Id:             row.ID,
-			PlayerId:       row.PlayerID,
 			Name:           row.Name,
-			Provider:       row.Provider,
-			Model:          row.Model,
+			Provider:       gameenum.AgentProviderMap.MustToProto(row.Provider),
 			BaseUrl:        row.BaseURL,
-			HasApiKey:      row.APIKey != "",
+			Model:          row.Model,
+			SecretEnv:      row.SecretEnv,
 			TimeoutSeconds: row.TimeoutSeconds,
-			IsDefault:      row.IsDefault,
-			Status:         gameenum.AgentConfigStatusMap.MustToProto(gameenum.AgentConfigStatus(row.Status)),
-		}
-	}
-	return reply, nil
+			CreatedAt:      timestamppb.New(*row.CreatedAt),
+			UpdatedAt:      timestamppb.New(*row.UpdatedAt),
+		},
+	}, nil
 }
-func (s *AgentConfigService) List(ctx context.Context, req *v1.ListGameTownAgentConfigs_Req) (*v1.ListGameTownAgentConfigs_Resp, error) {
-	var status *string
-	if req.Status != nil && *req.Status != v1.GameTownAgentConfigStatus_GAME_TOWN_AGENT_CONFIG_STATUS_UNSPECIFIED {
-		value, ok := gameenum.AgentConfigStatusMap.ToEnum(*req.Status)
-		if ok {
-			statusValue := string(value)
-			status = &statusValue
-		}
+
+func (s *AgentConfigService) List(ctx context.Context, req *v1.ListGameTownAgentConfigs_Request) (*v1.ListGameTownAgentConfigs_Resp, error) {
+	page := base.PageRequest{}
+	if req.GetPage() != nil {
+		page.Page = int64(req.GetPage().GetPage())
+		page.Size = int64(req.GetPage().GetSize())
 	}
-	rows, err := s.gameUsecase.ListAgentConfigs(ctx, &usecase.ListAgentConfigsReq{PlayerID: req.GetPlayerId(), Status: status})
+	resp, err := s.usecase.Page(ctx, page)
 	if err != nil {
 		return nil, err
 	}
-	timestamp := func(t *time.Time) *timestamppb.Timestamp {
-		if t == nil {
-			return nil
-		}
-		return timestamppb.New(*t)
-	}
-	reply := &v1.ListGameTownAgentConfigs_Resp{Rows: make([]*v1.ListGameTownAgentConfigs_Resp_GameTownAgentConfig, 0, len(rows))}
-	for _, row := range rows {
-		if row == nil {
-			reply.Rows = append(reply.Rows, nil)
-			continue
-		}
-		reply.Rows = append(reply.Rows, &v1.ListGameTownAgentConfigs_Resp_GameTownAgentConfig{
-			CreatedAt:      timestamp(row.CreatedAt),
-			UpdatedAt:      timestamp(row.UpdatedAt),
-			Id:             row.ID,
-			PlayerId:       row.PlayerID,
-			Name:           row.Name,
-			Provider:       row.Provider,
-			Model:          row.Model,
-			BaseUrl:        row.BaseURL,
-			HasApiKey:      row.APIKey != "",
-			TimeoutSeconds: row.TimeoutSeconds,
-			IsDefault:      row.IsDefault,
-			Status:         gameenum.AgentConfigStatusMap.MustToProto(gameenum.AgentConfigStatus(row.Status)),
-		})
+	reply := &v1.ListGameTownAgentConfigs_Resp{
+		Page: &common.PageResp{
+			Page:  uint32(resp.Page.Page),
+			Size:  uint32(resp.Page.Size),
+			Total: uint32(resp.Page.Total),
+		},
+		Rows: lo.Map(resp.Rows, func(row *model.AgentConfig, _ int) *v1.ListGameTownAgentConfigs_Resp_Row {
+			return &v1.ListGameTownAgentConfigs_Resp_Row{
+				Id:             row.ID,
+				Name:           row.Name,
+				Provider:       gameenum.AgentProviderMap.MustToProto(row.Provider),
+				BaseUrl:        row.BaseURL,
+				Model:          row.Model,
+				SecretEnv:      row.SecretEnv,
+				TimeoutSeconds: row.TimeoutSeconds,
+				CreatedAt:      timestamppb.New(*row.CreatedAt),
+				UpdatedAt:      timestamppb.New(*row.UpdatedAt),
+			}
+		}),
 	}
 	return reply, nil
 }

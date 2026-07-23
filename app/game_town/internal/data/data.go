@@ -12,23 +12,32 @@ import (
 
 var DataProviderSet = wire.NewSet(
 	client.NewDataBaseClient,
+	client.ProvideTx,
+	client.NewAgentClient,
+	client.NewEmbeddingClient,
 	ProvideConsul,
 	commonClient.NewObservability,
 	commonClient.NewConsulClient,
-	repo.NewPlayerRepo,
+	repo.NewEventNotifier,
 	repo.NewAgentConfigRepo,
-	repo.NewSessionRepo,
+	repo.NewPlayerRepo,
 	repo.NewWorldRepo,
 	repo.NewWorldMemberRepo,
 	repo.NewLocationRepo,
 	repo.NewNpcRepo,
-	repo.NewCommandRepo,
+	repo.NewWorldStateRepo,
+	repo.NewWorldRuleRepo,
 	repo.NewEventRepo,
-	repo.NewWorldStateSnapshotRepo,
-	repo.NewWorldMetricDefinitionRepo,
-	repo.NewMemoryRepo,
+	repo.NewObservationRepo,
+	repo.NewClaimRepo,
+	repo.NewNpcBeliefRepo,
 	repo.NewRelationshipRepo,
-	repo.NewAgentRunRepo,
+	repo.NewFactionRepo,
+	repo.NewFactionMembershipRepo,
+	repo.NewNpcMemoryRepo,
+	repo.NewAgentJobRepo,
 )
 
-func ProvideConsul(c *config.Bootstrap) *common.Consul { return c.Consul }
+func ProvideConsul(c *config.Bootstrap) *common.Consul {
+	return c.Consul
+}

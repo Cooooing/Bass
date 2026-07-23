@@ -32,11 +32,24 @@ trace:
 observability:
   enable_metrics: true
 game_town:
-  command:
-    max_content_length: 2000
+  agent:
+    global_concurrency: 4
+    model_concurrency: 2
+    world_concurrency: 2
+    max_retry: 2
+    retry_base_delay: 5s
+    tick_interval: ${GAME_TOWN_TICK_INTERVAL:60s}
+    recent_event_limit: 20
   world:
     max_npc_count: 12
     max_location_count: 20
-    default_scale: small
-  effect:
-    max_delta: 5
+    time_scale: 24
+    max_catch_up_changes: 100
+  memory:
+    embedding_enabled: false
+    base_url: http://192.168.100.10:31434
+    model: bge-m3
+    dimensions: 1024
+    timeout: 30s
+    candidate_limit: 32
+    result_limit: 8

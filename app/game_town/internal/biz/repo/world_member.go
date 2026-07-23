@@ -2,33 +2,45 @@ package repo
 
 import (
 	"context"
+
+	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 )
 
 type WorldMemberRepo interface {
-	JoinWorld(ctx context.Context, req *JoinWorldReq) (*JoinWorldResp, error)
-	GetMember(ctx context.Context, req *GetMemberReq) (*model.WorldMember, error)
-	MoveMember(ctx context.Context, req *MoveMemberReq) (*model.WorldMember, error)
+	Save(ctx context.Context, member *model.WorldMember) (*model.WorldMember, error)
+	Move(ctx context.Context, memberID int64, locationID int64) (*model.WorldMember, error)
+	UpdateCharacter(ctx context.Context, req *WorldMemberCharacterReq) (*model.WorldMember, error)
+	Get(ctx context.Context, req *WorldMemberQuery) (*model.WorldMember, error)
+	List(ctx context.Context, req *WorldMemberQuery) ([]*model.WorldMember, error)
+	Map(ctx context.Context, req *WorldMemberQuery) (map[int64]*model.WorldMember, error)
+	Count(ctx context.Context, req *WorldMemberQuery) (int, error)
+	Page(ctx context.Context, req *WorldMemberPageReq) (*WorldMemberPageResp, error)
 }
 
-type JoinWorldReq struct {
-	PlayerID  int64
-	WorldCode string
+type WorldMemberCharacterReq struct {
+	MemberID   int64
+	Name       string
+	Background string
+	Goal       string
+	Traits     []string
+	Ready      bool
 }
 
-type JoinWorldResp struct {
-	World    *model.World
-	Member   *model.WorldMember
-	Location *model.Location
+type WorldMemberQuery struct {
+	ID         *int64
+	IDs        []int64
+	WorldID    *int64
+	PlayerID   *int64
+	LocationID *int64
 }
 
-type GetMemberReq struct {
-	WorldID  int64
-	PlayerID int64
+type WorldMemberPageReq struct {
+	Page  base.PageRequest
+	Query WorldMemberQuery
 }
 
-type MoveMemberReq struct {
-	WorldID    int64
-	PlayerID   int64
-	LocationID int64
+type WorldMemberPageResp struct {
+	Rows []*model.WorldMember
+	Page base.PageResp
 }

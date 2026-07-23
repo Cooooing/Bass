@@ -3,6 +3,7 @@ package schema
 import (
 	"common/pkg/constant"
 	utilent "common/pkg/util/ent"
+	gameenum "game_town/internal/enum"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -11,24 +12,39 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// Player 保存文字世界内的玩家身份。
-type Player struct{ ent.Schema }
+// Player 定义游戏玩家。
+type Player struct {
+	ent.Schema
+}
 
 func (Player) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "players"}, entsql.WithComments(true)}
+	return []schema.Annotation{
+		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "players"},
+		entsql.WithComments(true),
+	}
 }
+
 func (Player) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.String("name").Comment("玩家登录名").MaxLen(64).NotEmpty(),
-		field.String("display_name").Comment("展示名称").MaxLen(64).NotEmpty(),
-		field.String("status").Comment("玩家状态").MaxLen(32).NotEmpty(),
+		field.String("name").Comment("玩家唯一名称").MaxRuneLen(64).NotEmpty(),
+		field.String("display_name").Comment("显示名称").MaxRuneLen(64).NotEmpty(),
+		field.Enum("status").Values(gameenum.PlayerStatusMap.EnumValues()...).Default(string(gameenum.PlayerStatusActive)).Comment("玩家状态"),
 	}
 }
+
 func (Player) Mixin() []ent.Mixin {
-	return []ent.Mixin{utilent.TimeAuditMixin{}, utilent.SoftDeleteMixin{}}
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+		utilent.SoftDeleteMixin{},
+	}
 }
+
 func (Player) Indexes() []ent.Index {
-	return []ent.Index{index.Fields("name").Unique().StorageKey("game_town_players_name_active_unique").Annotations(entsql.IndexWhere("deleted_at IS NULL"))}
+	return []ent.Index{
+		index.Fields("name").
+			Unique().
+			StorageKey("game_town_players_name_active_unique").
+			Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+	}
 }
-func (Player) Edges() []ent.Edge { return nil }

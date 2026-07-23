@@ -2,22 +2,33 @@ package repo
 
 import (
 	"context"
+
+	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
+	"game_town/internal/enum"
 )
 
 type AgentConfigRepo interface {
-	CreateAgentConfig(ctx context.Context, row *model.AgentConfig) (*model.AgentConfig, error)
-	GetAgentConfig(ctx context.Context, req *GetAgentConfigReq) (*model.AgentConfig, error)
-	GetDefaultAgentConfig(ctx context.Context, playerID int64) (*model.AgentConfig, error)
-	ListAgentConfigs(ctx context.Context, req *ListAgentConfigsReq) ([]*model.AgentConfig, error)
+	Save(ctx context.Context, config *model.AgentConfig) (*model.AgentConfig, error)
+	Get(ctx context.Context, req *AgentConfigQuery) (*model.AgentConfig, error)
+	List(ctx context.Context, req *AgentConfigQuery) ([]*model.AgentConfig, error)
+	Map(ctx context.Context, req *AgentConfigQuery) (map[int64]*model.AgentConfig, error)
+	Count(ctx context.Context, req *AgentConfigQuery) (int, error)
+	Page(ctx context.Context, req *AgentConfigPageReq) (*AgentConfigPageResp, error)
 }
 
-type GetAgentConfigReq struct {
-	ID       int64
-	PlayerID int64
+type AgentConfigQuery struct {
+	ID       *int64
+	IDs      []int64
+	Provider *enum.AgentProvider
 }
 
-type ListAgentConfigsReq struct {
-	PlayerID int64
-	Status   *string
+type AgentConfigPageReq struct {
+	Page  base.PageRequest
+	Query AgentConfigQuery
+}
+
+type AgentConfigPageResp struct {
+	Rows []*model.AgentConfig
+	Page base.PageResp
 }

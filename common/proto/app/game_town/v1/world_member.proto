@@ -1,0 +1,79 @@
+﻿syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+import "game_town/v1/enum.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/game_town/v1;v1";
+
+service GameTownWorldMemberService {
+  rpc Join(JoinGameTownWorld.Request) returns (JoinGameTownWorld.Resp) {}
+  rpc Get(GetGameTownWorldMember.Request) returns (GetGameTownWorldMember.Resp) {}
+  rpc SubmitAction(SubmitGameTownAction.Request) returns (SubmitGameTownAction.Resp) {}
+}
+
+message JoinGameTownWorld {
+  message Request {
+    int64 player_id = 1; // 玩家账号 ID
+    string world_code = 2; // 世界编码
+    optional string character_preference = 3; // 玩家希望扮演的角色倾向，最终角色由世界模型裁决
+  }
+
+  message Resp {
+    int64 world_id = 1; // 世界 ID
+    int64 member_id = 2; // 世界成员 ID
+    int64 location_id = 3; // 初始地点 ID
+    int64 event_id = 4; // 玩家加入事件 ID
+  }
+}
+
+message GetGameTownWorldMember {
+  message Request {
+    int64 world_id = 1; // 世界 ID
+    int64 player_id = 2; // 玩家账号 ID
+  }
+
+  message Resp {
+    message Attribute {
+      string code = 1; // 属性编码
+      string name = 2; // 属性名称
+      string value = 3; // 玩家可见值
+      GameTownKnowledgeCertainty certainty = 4; // 确定程度
+    }
+
+    int64 id = 1; // 世界成员 ID
+    int64 world_id = 2; // 世界 ID
+    int64 player_id = 3; // 玩家账号 ID
+    int64 current_location_id = 4; // 当前地点 ID
+    GameTownWorldMemberRole role = 5; // 世界成员角色
+    google.protobuf.Timestamp world_time = 6; // 当前世界时间
+    repeated Attribute attributes = 7; // 玩家状态属性
+    google.protobuf.Timestamp joined_at = 8; // 加入时间
+    string character_name = 9; // 世界内角色名
+    string character_background = 10; // 世界裁决后的角色背景
+    string character_goal = 11; // 当前角色目标
+    repeated string character_traits = 12; // 玩家可见角色标签
+    bool character_ready = 13; // 角色是否已生成完成
+    string character_preference = 14; // 玩家提交的角色倾向
+  }
+}
+
+message SubmitGameTownAction {
+  message Request {
+    message EntityRef {
+      GameTownEntityType type = 1; // 目标类型
+      int64 id = 2; // 目标 ID
+    }
+
+    int64 world_id = 1; // 世界 ID
+    int64 player_id = 2; // 玩家账号 ID
+    string content = 3; // 自由行动描述
+    repeated EntityRef targets = 4; // 可选目标提示
+    optional string client_request_id = 5; // 客户端幂等键
+  }
+
+  message Resp {
+    int64 event_id = 1; // 玩家行动事件 ID
+  }
+}

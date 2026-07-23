@@ -1,134 +1,208 @@
 package repo
 
 import (
-	"common/pkg/apperror"
-	"common/pkg/server"
-	"common/proto/gen/common"
-	cerrors "common/proto/gen/common/errors"
 	"context"
+
+	"common/pkg/apperror"
+	utilent "common/pkg/util/ent"
+	cerrors "common/proto/gen/common/errors"
 	"game_town/internal/biz/model"
 	bizrepo "game_town/internal/biz/repo"
 	"game_town/internal/data/gen"
 	"game_town/internal/data/gen/world"
-	"time"
+	"game_town/internal/enum"
+
+	"github.com/samber/lo"
 )
 
-type WorldRepo struct{ *baseRepo }
+var _ bizrepo.WorldRepo = (*WorldRepo)(nil)
+
+type WorldRepo struct {
+	db *gen.Client
+}
 
 func NewWorldRepo(db *gen.Client) bizrepo.WorldRepo {
-	return &WorldRepo{baseRepo: &baseRepo{db: db}}
+	return &WorldRepo{db: db}
 }
 
-func (r *WorldRepo) CreateWorld(ctx context.Context, req *bizrepo.CreateWorldReq) (*bizrepo.CreateWorldResp, error) {
-	tx, err := r.db.Tx(ctx)
-	if err != nil {
-		return nil, err
+func (r *WorldRepo) getClient(ctx context.Context) *gen.Client {
+	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
+		return tx
 	}
-	defer func() { _ = tx.Rollback() }()
-	client := tx.Client()
-	now := time.Now()
-	code := "w" + time.Now().Format("20060102150405")
-	var agentConfigID any
-	if req.AgentConfigID != nil {
-		agentConfigID = *req.AgentConfigID
-	}
-	worldRow, err := client.World.Create().SetCode(code).SetName(req.Generated.WorldName).SetDescription(req.Description).SetScale(req.Scale).SetStatus("generating").SetCreatorPlayerID(req.CreatorPlayerID).SetSeed(req.Seed).SetGenerationParams(map[string]any{"npc_count": float64(req.NpcCount), "location_count": float64(req.LocationCount), "style_tags": req.StyleTags, "agent_config_id": agentConfigID}).SetGenerationSummary(req.Generated.WorldSummary).SetNillableAgentConfigID(req.AgentConfigID).Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	locations := make(map[string]*gen.Location, len(req.Generated.Locations))
-	var defaultLocation *gen.Location
-	for i, item := range req.Generated.Locations {
-		row, err := client.Location.Create().SetWorldID(worldRow.ID).SetCode(item.Code).SetName(item.Name).SetDescription(item.Description).SetTags(item.Tags).SetSort(int32(i)).SetEnabled(true).Save(ctx)
-		if err != nil {
-			return nil, err
-		}
-		locations[item.Code] = row
-		if defaultLocation == nil {
-			defaultLocation = row
-		}
-	}
-	if defaultLocation == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_INVALID)
-	}
-	npcs := make([]*model.Npc, 0, len(req.Generated.Npcs))
-	for _, item := range req.Generated.Npcs {
-		loc := locations[item.LocationCode]
-		if loc == nil {
-			loc = defaultLocation
-		}
-		row, err := client.Npc.Create().SetWorldID(worldRow.ID).SetCode(item.Code).SetName(item.Name).SetRole(item.Role).SetPersonality(item.Personality).SetGoal(item.Goal).SetBackground(item.Background).SetCurrentLocationID(loc.ID).SetState("idle").SetSystemPrompt(item.SystemPrompt).SetGeneratedProfile(item.Profile).SetEnabled(true).Save(ctx)
-		if err != nil {
-			return nil, err
-		}
-		npcs = append(npcs, r.npc(row))
-	}
-	for _, item := range req.Generated.Metrics {
-		if _, err := client.WorldMetricDefinition.Create().SetWorldID(worldRow.ID).SetKey(item.Key).SetName(item.Name).SetDescription(item.Description).SetMinValue(item.MinValue).SetMaxValue(item.MaxValue).SetInitialValue(item.InitialValue).Save(ctx); err != nil {
-			return nil, err
-		}
-	}
-	stateRow, err := client.WorldStateSnapshot.Create().SetWorldID(worldRow.ID).SetTickCount(0).SetCurrentArc(req.Generated.CurrentArc).SetMetrics(req.Generated.InitialMetrics).SetSummary(req.Generated.WorldSummary).SetCreatedAt(now).Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	events := make([]*model.Event, 0, len(req.Generated.OpeningEvents)+1)
-	summary := "世界已创建"
-	if len(req.Generated.OpeningEvents) > 0 {
-		summary = req.Generated.OpeningEvents[0]
-	}
-	eventRow, err := client.Event.Create().SetWorldID(worldRow.ID).SetType("world_created").SetActorPlayerID(req.CreatorPlayerID).SetSummary(summary).SetContent(req.Generated.WorldSummary).SetEffects(map[string]any{}).SetMetadata(map[string]any{"seed": float64(req.Seed)}).SetOccurredAt(now).SetCreatedAt(now).Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	events = append(events, r.event(eventRow))
-	memberRow, err := client.WorldMember.Create().SetWorldID(worldRow.ID).SetPlayerID(req.CreatorPlayerID).SetCurrentLocationID(defaultLocation.ID).SetRole("owner").SetJoinedAt(now).SetLastSeenAt(now).Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	_ = memberRow
-	worldRow, err = client.World.UpdateOneID(worldRow.ID).SetStatus("active").SetDefaultLocationID(defaultLocation.ID).Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	if err := tx.Commit(); err != nil {
-		return nil, err
-	}
-	return &bizrepo.CreateWorldResp{World: r.world(worldRow), DefaultLocation: r.location(defaultLocation), Npcs: npcs, State: r.state(stateRow), Events: events}, nil
+	return r.db
 }
 
-func (r *WorldRepo) Get(ctx context.Context, id int64) (*model.World, error) {
-	row, err := r.db.World.Query().Where(world.ID(id), world.DeletedAtIsNil()).Only(ctx)
+func (r *WorldRepo) Save(ctx context.Context, row *model.World) (*model.World, error) {
+	saved, err := r.getClient(ctx).World.Create().
+		SetCode(row.Code).
+		SetName(row.Name).
+		SetDescription(row.Description).
+		SetStatus(world.Status(row.Status)).
+		SetCreatorPlayerID(row.CreatorPlayerID).
+		SetNillableDefaultLocationID(row.DefaultLocationID).
+		SetAgentConfigID(row.AgentConfigID).
+		SetSeed(row.Seed).
+		SetGenerationSummary(row.GenerationSummary).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &model.World{
+		ID:                saved.ID,
+		Code:              saved.Code,
+		Name:              saved.Name,
+		Description:       saved.Description,
+		Status:            enum.WorldStatus(saved.Status),
+		CreatorPlayerID:   saved.CreatorPlayerID,
+		DefaultLocationID: saved.DefaultLocationID,
+		AgentConfigID:     saved.AgentConfigID,
+		Seed:              saved.Seed,
+		GenerationSummary: saved.GenerationSummary,
+		CreatedAt:         saved.CreatedAt,
+		UpdatedAt:         saved.UpdatedAt,
+	}, nil
+}
+
+func worldQuery(q *gen.WorldQuery, req *bizrepo.WorldQuery) *gen.WorldQuery {
+	q = q.Where(world.DeletedAtIsNil())
+	if req == nil {
+		return q
+	}
+	if req.ID != nil {
+		q = q.Where(world.ID(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		q = q.Where(world.IDIn(req.IDs...))
+	}
+	if req.Code != nil {
+		q = q.Where(world.Code(*req.Code))
+	}
+	if req.CreatorPlayerID != nil {
+		q = q.Where(world.CreatorPlayerID(*req.CreatorPlayerID))
+	}
+	if req.Status != nil {
+		q = q.Where(world.StatusEQ(world.Status(*req.Status)))
+	}
+	return q
+}
+
+func (r *WorldRepo) Get(ctx context.Context, req *bizrepo.WorldQuery) (*model.World, error) {
+	row, err := worldQuery(r.getClient(ctx).World.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return r.world(row), nil
+	return &model.World{
+		ID:                row.ID,
+		Code:              row.Code,
+		Name:              row.Name,
+		Description:       row.Description,
+		Status:            enum.WorldStatus(row.Status),
+		CreatorPlayerID:   row.CreatorPlayerID,
+		DefaultLocationID: row.DefaultLocationID,
+		AgentConfigID:     row.AgentConfigID,
+		Seed:              row.Seed,
+		GenerationSummary: row.GenerationSummary,
+		CreatedAt:         row.CreatedAt,
+		UpdatedAt:         row.UpdatedAt,
+	}, nil
+}
+
+func (r *WorldRepo) List(ctx context.Context, req *bizrepo.WorldQuery) ([]*model.World, error) {
+	rows, err := worldQuery(r.getClient(ctx).World.Query(), req).Order(world.ByID()).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	out := lo.Map(rows, func(row *gen.World, _ int) *model.World {
+		return &model.World{
+			ID:                row.ID,
+			Code:              row.Code,
+			Name:              row.Name,
+			Description:       row.Description,
+			Status:            enum.WorldStatus(row.Status),
+			CreatorPlayerID:   row.CreatorPlayerID,
+			DefaultLocationID: row.DefaultLocationID,
+			AgentConfigID:     row.AgentConfigID,
+			Seed:              row.Seed,
+			GenerationSummary: row.GenerationSummary,
+			CreatedAt:         row.CreatedAt,
+			UpdatedAt:         row.UpdatedAt,
+		}
+	})
+	return out, nil
+}
+
+func (r *WorldRepo) Map(ctx context.Context, req *bizrepo.WorldQuery) (map[int64]*model.World, error) {
+	rows, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	out := make(map[int64]*model.World, len(rows))
+	for _, row := range rows {
+		out[row.ID] = row
+	}
+	return out, nil
+}
+
+func (r *WorldRepo) Count(ctx context.Context, req *bizrepo.WorldQuery) (int, error) {
+	return worldQuery(r.getClient(ctx).World.Query(), req).Count(ctx)
 }
 
 func (r *WorldRepo) Page(ctx context.Context, req *bizrepo.WorldPageReq) (*bizrepo.WorldPageResp, error) {
-	pageReq := server.PageValid(req.Page)
-	queryReq := req.Query
-	query := r.db.World.Query().Where(world.DeletedAtIsNil())
-	if queryReq.CreatorPlayerID != nil {
-		query = query.Where(world.CreatorPlayerID(*queryReq.CreatorPlayerID))
-	}
-	if queryReq.Status != nil {
-		query = query.Where(world.Status(*queryReq.Status))
-	}
-	total, err := query.Clone().Count(ctx)
+	p := page(req.Page)
+	q := worldQuery(r.getClient(ctx).World.Query(), &req.Query)
+	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := query.Order(world.ByID()).Limit(int(pageReq.Size)).Offset(int((pageReq.Page - 1) * pageReq.Size)).All(ctx)
+	rows, err := q.Order(world.ByID()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]*model.World, 0, len(rows))
-	for _, row := range rows {
-		result = append(result, r.world(row))
+	out := lo.Map(rows, func(row *gen.World, _ int) *model.World {
+		return &model.World{
+			ID:                row.ID,
+			Code:              row.Code,
+			Name:              row.Name,
+			Description:       row.Description,
+			Status:            enum.WorldStatus(row.Status),
+			CreatorPlayerID:   row.CreatorPlayerID,
+			DefaultLocationID: row.DefaultLocationID,
+			AgentConfigID:     row.AgentConfigID,
+			Seed:              row.Seed,
+			GenerationSummary: row.GenerationSummary,
+			CreatedAt:         row.CreatedAt,
+			UpdatedAt:         row.UpdatedAt,
+		}
+	})
+	return &bizrepo.WorldPageResp{Rows: out, Page: basePage(total, p)}, nil
+}
+
+func (r *WorldRepo) Update(ctx context.Context, row *model.World) (*model.World, error) {
+	saved, err := r.getClient(ctx).World.UpdateOneID(row.ID).
+		SetName(row.Name).
+		SetDescription(row.Description).
+		SetStatus(world.Status(row.Status)).
+		SetNillableDefaultLocationID(row.DefaultLocationID).
+		SetGenerationSummary(row.GenerationSummary).
+		Save(ctx)
+	if err != nil {
+		return nil, err
 	}
-	return &bizrepo.WorldPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: pageReq.Page, Size: pageReq.Size}}, nil
+	return &model.World{
+		ID:                saved.ID,
+		Code:              saved.Code,
+		Name:              saved.Name,
+		Description:       saved.Description,
+		Status:            enum.WorldStatus(saved.Status),
+		CreatorPlayerID:   saved.CreatorPlayerID,
+		DefaultLocationID: saved.DefaultLocationID,
+		AgentConfigID:     saved.AgentConfigID,
+		Seed:              saved.Seed,
+		GenerationSummary: saved.GenerationSummary,
+		CreatedAt:         saved.CreatedAt,
+		UpdatedAt:         saved.UpdatedAt,
+	}, nil
 }

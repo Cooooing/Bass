@@ -1,18 +1,19 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"game_town/internal/enum"
+)
 
 type AgentConfig struct {
 	ID             int64
-	PlayerID       int64
 	Name           string
-	Provider       string
-	Model          string
+	Provider       enum.AgentProvider
 	BaseURL        string
-	APIKey         string
+	Model          string
+	SecretEnv      string
 	TimeoutSeconds int32
-	IsDefault      bool
-	Status         string
 	CreatedAt      *time.Time
 	UpdatedAt      *time.Time
 }

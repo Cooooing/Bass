@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+import "game_town/v1/enum.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/game_town/v1;v1";
+
+service GameTownFactionService {
+  rpc Get(GetGameTownFaction.Request) returns (GetGameTownFaction.Resp) {}
+  rpc List(ListGameTownFactions.Request) returns (ListGameTownFactions.Resp) {}
+}
+
+message GetGameTownFaction {
+  message Request {
+    int64 world_id = 1; // 世界 ID
+    int64 player_id = 2; // 查询玩家 ID
+    int64 id = 3; // 阵营 ID
+  }
+
+  message Resp {
+    message Row {
+      int64 id = 1; // 阵营 ID
+      string code = 2; // 阵营编码
+      string name = 3; // 阵营名称
+      string description = 4; // 公开描述
+      string public_goal = 5; // 公开目标
+      GameTownFactionStatus status = 6; // 玩家已知状态
+      GameTownRelationshipAttitude attitude = 7; // 阵营表现出的态度
+      repeated string relationship_tags = 8; // 公开关系标签
+      repeated int64 known_member_npc_ids = 9; // 已知 NPC 成员
+      repeated int64 known_location_ids = 10; // 已知据点
+      string player_role = 11; // 玩家公开身份
+      repeated string reputation_tags = 12; // 玩家公开声望标签
+      google.protobuf.Timestamp known_at = 13; // 获知时间
+    }
+
+    Row row = 1; // 阵营玩家视图
+  }
+}
+
+message ListGameTownFactions {
+  message Request {
+    int64 world_id = 1; // 世界 ID
+    int64 player_id = 2; // 查询玩家 ID
+  }
+
+  message Resp {
+    message Row {
+      int64 id = 1; // 阵营 ID
+      string code = 2; // 阵营编码
+      string name = 3; // 阵营名称
+      GameTownFactionStatus status = 4; // 玩家已知状态
+      GameTownRelationshipAttitude attitude = 5; // 阵营表现出的态度
+      repeated string reputation_tags = 6; // 玩家公开声望标签
+    }
+
+    repeated Row rows = 1; // 已知阵营列表
+  }
+}

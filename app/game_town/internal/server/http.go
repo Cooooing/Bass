@@ -1,12 +1,13 @@
 package server
 
 import (
+	"fmt"
+	"log/slog"
+
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	"common/pkg/server"
-	"fmt"
 	"game_town/internal/config"
-	"log/slog"
 
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
 	"github.com/go-kratos/kratos/v3/transport/http"

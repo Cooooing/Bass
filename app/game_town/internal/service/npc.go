@@ -1,109 +1,89 @@
 package service
 
 import (
-	v1 "common/proto/gen/game_town/v1"
 	"context"
+
+	"common/pkg/apperror"
+	cerrors "common/proto/gen/common/errors"
+	v1 "common/proto/gen/game_town/v1"
+	"game_town/internal/biz/model"
 	"game_town/internal/biz/usecase"
-	gameenum "game_town/internal/enum"
-	"time"
+	"game_town/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
-	"google.golang.org/protobuf/types/known/structpb"
+	"github.com/samber/lo"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type NpcService struct {
 	v1.UnimplementedGameTownNpcServiceServer
-	gameUsecase *usecase.GameUsecase
+	usecase *usecase.NpcUsecase
 }
 
-func NewNpcService(gameUsecase *usecase.GameUsecase) *NpcService {
-	return &NpcService{gameUsecase: gameUsecase}
+func NewNpcService(usecase *usecase.NpcUsecase) *NpcService {
+	return &NpcService{usecase: usecase}
 }
-func (s *NpcService) RegisterGrpc(gs *grpc.Server) { v1.RegisterGameTownNpcServiceServer(gs, s) }
-func (s *NpcService) RegisterHttp(hs *http.Server) {}
-func (s *NpcService) Get(ctx context.Context, req *v1.GetGameTownNpc_Req) (*v1.GetGameTownNpc_Resp, error) {
-	row, err := s.gameUsecase.GetNpc(ctx, req.GetId())
+
+func (s *NpcService) RegisterGrpc(server *grpc.Server) {
+	v1.RegisterGameTownNpcServiceServer(server, s)
+}
+
+func (s *NpcService) RegisterHttp(*http.Server) {}
+
+func (s *NpcService) Get(ctx context.Context, req *v1.GetGameTownNpc_Request) (*v1.GetGameTownNpc_Resp, error) {
+	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 || req.GetId() <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+
+	row, err := s.usecase.Get(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
-	timestamp := func(t *time.Time) *timestamppb.Timestamp {
-		if t == nil {
-			return nil
-		}
-		return timestamppb.New(*t)
+	if row.WorldID != req.GetWorldId() {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
-	structValue := func(values map[string]any) *structpb.Struct {
-		st, err := structpb.NewStruct(values)
-		if err != nil {
-			return &structpb.Struct{}
-		}
-		return st
-	}
-	reply := &v1.GetGameTownNpc_Resp{}
-	if row != nil {
-		reply.Row = &v1.GetGameTownNpc_Resp_GameTownNpc{
-			CreatedAt:         timestamp(row.CreatedAt),
-			UpdatedAt:         timestamp(row.UpdatedAt),
-			Id:                row.ID,
-			WorldId:           row.WorldID,
-			Code:              row.Code,
-			Name:              row.Name,
-			Role:              row.Role,
-			Personality:       row.Personality,
-			Goal:              row.Goal,
-			Background:        row.Background,
-			CurrentLocationId: row.CurrentLocationID,
-			State:             gameenum.NpcStateMap.MustToProto(gameenum.NpcState(row.State)),
-			SystemPrompt:      row.SystemPrompt,
-			GeneratedProfile:  structValue(row.GeneratedProfile),
-			Enabled:           row.Enabled,
-		}
-	}
-	return reply, nil
+
+	return &v1.GetGameTownNpc_Resp{
+		Row: &v1.GetGameTownNpc_Resp_Row{
+			Id:                  row.ID,
+			WorldId:             row.WorldID,
+			Code:                row.Code,
+			Name:                row.Name,
+			Role:                row.Role,
+			Species:             row.Species,
+			LifeStatus:          enum.NpcLifeStatusMap.MustToProto(row.LifeStatus),
+			LastKnownLocationId: new(row.CurrentLocationID),
+			KnownAt:             timestamppb.New(*row.UpdatedAt),
+		},
+	}, nil
 }
-func (s *NpcService) List(ctx context.Context, req *v1.ListGameTownNpcs_Req) (*v1.ListGameTownNpcs_Resp, error) {
-	rows, err := s.gameUsecase.ListNpcs(ctx, &usecase.ListNpcsReq{WorldID: req.GetWorldId(), LocationID: req.LocationId})
+
+func (s *NpcService) List(ctx context.Context, req *v1.ListGameTownNpcs_Request) (*v1.ListGameTownNpcs_Resp, error) {
+	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+
+	rows, err := s.usecase.List(ctx, &usecase.ListNpcsReq{
+		WorldID:    req.GetWorldId(),
+		LocationID: req.LocationId,
+	})
 	if err != nil {
 		return nil, err
 	}
-	timestamp := func(t *time.Time) *timestamppb.Timestamp {
-		if t == nil {
-			return nil
-		}
-		return timestamppb.New(*t)
-	}
-	structValue := func(values map[string]any) *structpb.Struct {
-		st, err := structpb.NewStruct(values)
-		if err != nil {
-			return &structpb.Struct{}
-		}
-		return st
-	}
-	reply := &v1.ListGameTownNpcs_Resp{Rows: make([]*v1.ListGameTownNpcs_Resp_GameTownNpc, 0, len(rows))}
-	for _, row := range rows {
-		if row == nil {
-			reply.Rows = append(reply.Rows, nil)
-			continue
-		}
-		reply.Rows = append(reply.Rows, &v1.ListGameTownNpcs_Resp_GameTownNpc{
-			CreatedAt:         timestamp(row.CreatedAt),
-			UpdatedAt:         timestamp(row.UpdatedAt),
-			Id:                row.ID,
-			WorldId:           row.WorldID,
-			Code:              row.Code,
-			Name:              row.Name,
-			Role:              row.Role,
-			Personality:       row.Personality,
-			Goal:              row.Goal,
-			Background:        row.Background,
-			CurrentLocationId: row.CurrentLocationID,
-			State:             gameenum.NpcStateMap.MustToProto(gameenum.NpcState(row.State)),
-			SystemPrompt:      row.SystemPrompt,
-			GeneratedProfile:  structValue(row.GeneratedProfile),
-			Enabled:           row.Enabled,
-		})
-	}
-	return reply, nil
+
+	return &v1.ListGameTownNpcs_Resp{
+		Rows: lo.Map(rows, func(row *model.Npc, _ int) *v1.ListGameTownNpcs_Resp_Row {
+			return &v1.ListGameTownNpcs_Resp_Row{
+				Id:                  row.ID,
+				Code:                row.Code,
+				Name:                row.Name,
+				Role:                row.Role,
+				Species:             row.Species,
+				LifeStatus:          enum.NpcLifeStatusMap.MustToProto(row.LifeStatus),
+				LastKnownLocationId: new(row.CurrentLocationID),
+				StateTags:           row.StateTags,
+			}
+		}),
+	}, nil
 }

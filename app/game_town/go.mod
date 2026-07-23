@@ -5,11 +5,17 @@ go 1.26.1
 require (
 	common v0.0.0-00010101000000-000000000000
 	entgo.io/ent v0.14.5
+	github.com/charmbracelet/bubbles v1.0.0
+	github.com/charmbracelet/bubbletea v1.3.10
+	github.com/charmbracelet/lipgloss v1.1.0
+	github.com/charmbracelet/x/term v0.2.2
 	github.com/go-kratos/kratos/contrib/middleware/validate/v3 v3.0.0-20260626125723-668db92c2c00
 	github.com/go-kratos/kratos/v3 v3.0.0
 	github.com/google/wire v0.7.0
 	github.com/lib/pq v1.12.3
+	github.com/pgvector/pgvector-go v0.3.0
 	github.com/prometheus/client_golang v1.23.2
+	github.com/samber/lo v1.53.0
 	google.golang.org/grpc v1.81.0
 	google.golang.org/protobuf v1.36.11
 )
@@ -25,19 +31,28 @@ require (
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
+	github.com/atotto/clipboard v0.1.4 // indirect
+	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bmatcuk/doublestar v1.3.4 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/charmbracelet/colorprofile v0.4.1 // indirect
+	github.com/charmbracelet/x/ansi v0.11.6 // indirect
+	github.com/charmbracelet/x/cellbuf v0.0.15 // indirect
+	github.com/clipperhouse/displaywidth v0.9.0 // indirect
+	github.com/clipperhouse/stringish v0.1.1 // indirect
+	github.com/clipperhouse/uax29/v2 v2.5.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
+	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/fatih/color v1.19.0 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/go-kratos/kratos/contrib/config/consul/v3 v3.0.0-20260626125723-668db92c2c00 // indirect
 	github.com/go-kratos/kratos/contrib/registry/consul/v3 v3.0.0-20260626125723-668db92c2c00 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-openapi/inflect v0.19.0 // indirect
+	github.com/go-openapi/inflect v0.21.0 // indirect
 	github.com/go-playground/form/v4 v4.3.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/google/cel-go v0.28.1 // indirect
@@ -56,14 +71,20 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/go-rootcerts v1.0.2 // indirect
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
-	github.com/hashicorp/hcl/v2 v2.18.1 // indirect
+	github.com/hashicorp/hcl/v2 v2.23.0 // indirect
 	github.com/hashicorp/serf v0.10.2 // indirect
 	github.com/hibiken/asynq v0.25.1 // indirect
 	github.com/klauspost/compress v1.18.5 // indirect
+	github.com/lucasb-eyer/go-colorful v1.3.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.22 // indirect
+	github.com/mattn/go-localereader v0.0.1 // indirect
+	github.com/mattn/go-runewidth v0.0.19 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
+	github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 // indirect
+	github.com/muesli/cancelreader v0.2.2 // indirect
+	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/nats-io/nats.go v1.51.0 // indirect
 	github.com/nats-io/nkeys v0.4.15 // indirect
@@ -73,10 +94,11 @@ require (
 	github.com/prometheus/common v0.66.1 // indirect
 	github.com/prometheus/procfs v0.16.1 // indirect
 	github.com/redis/go-redis/v9 v9.17.2 // indirect
+	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
-	github.com/samber/lo v1.53.0 // indirect
 	github.com/spf13/cast v1.7.0 // indirect
-	github.com/zclconf/go-cty v1.14.4 // indirect
+	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
+	github.com/zclconf/go-cty v1.16.2 // indirect
 	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/otel v1.43.0 // indirect
@@ -96,6 +118,7 @@ require (
 	golang.org/x/sys v0.44.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
+	golang.org/x/tools v0.45.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260511170946-3700d4141b60 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260511170946-3700d4141b60 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

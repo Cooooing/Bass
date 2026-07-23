@@ -1,74 +1,213 @@
 package repo
 
 import (
-	"common/pkg/server"
-	"common/proto/gen/common"
 	"context"
+	"slices"
+
+	"common/pkg/apperror"
+	utilent "common/pkg/util/ent"
+	cerrors "common/proto/gen/common/errors"
 	"game_town/internal/biz/model"
 	bizrepo "game_town/internal/biz/repo"
 	"game_town/internal/data/gen"
 	"game_town/internal/data/gen/event"
-	"time"
+	"game_town/internal/enum"
+
+	"entgo.io/ent/dialect/sql"
+	"github.com/samber/lo"
 )
 
-type EventRepo struct{ *baseRepo }
+var _ bizrepo.EventRepo = (*EventRepo)(nil)
 
-func NewEventRepo(db *gen.Client) bizrepo.EventRepo {
-	return &EventRepo{baseRepo: &baseRepo{db: db}}
+type EventRepo struct {
+	db *gen.Client
 }
 
-func (r *EventRepo) CreateEvent(ctx context.Context, row *model.Event) (*model.Event, error) {
-	now := time.Now()
-	if row.OccurredAt.IsZero() {
-		row.OccurredAt = now
+func NewEventRepo(db *gen.Client) bizrepo.EventRepo {
+	return &EventRepo{db: db}
+}
+
+func (r *EventRepo) getClient(ctx context.Context) *gen.Client {
+	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
+		return tx
 	}
-	created, err := r.db.Event.Create().SetWorldID(row.WorldID).SetType(row.Type).SetNillableActorPlayerID(row.ActorPlayerID).SetNillableTargetNpcID(row.TargetNpcID).SetNillableLocationID(row.LocationID).SetNillableCommandID(row.CommandID).SetSummary(row.Summary).SetContent(row.Content).SetEffects(row.Effects).SetMetadata(row.Metadata).SetOccurredAt(row.OccurredAt).SetCreatedAt(now).Save(ctx)
+	return r.db
+}
+
+func (r *EventRepo) Save(ctx context.Context, row *model.Event) (*model.Event, error) {
+	saved, err := r.getClient(ctx).Event.Create().
+		SetWorldID(row.WorldID).
+		SetSequence(row.Sequence).
+		SetType(event.Type(row.Type)).
+		SetNillableActorPlayerID(row.ActorPlayerID).
+		SetNillableNpcID(row.NpcID).
+		SetNillableLocationID(row.LocationID).
+		SetNillableCausationEventID(row.CausationEventID).
+		SetSummary(row.Summary).
+		SetContent(row.Content).
+		SetPayload(row.Payload).
+		SetWorldTime(row.WorldTime).
+		SetOccurredAt(row.OccurredAt).
+		SetCreatedAt(row.CreatedAt).
+		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return r.event(created), nil
+	return &model.Event{
+		ID:               saved.ID,
+		WorldID:          saved.WorldID,
+		Sequence:         saved.Sequence,
+		Type:             enum.EventType(saved.Type),
+		ActorPlayerID:    saved.ActorPlayerID,
+		NpcID:            saved.NpcID,
+		LocationID:       saved.LocationID,
+		CausationEventID: saved.CausationEventID,
+		Summary:          saved.Summary,
+		Content:          saved.Content,
+		Payload:          saved.Payload,
+		WorldTime:        saved.WorldTime,
+		OccurredAt:       saved.OccurredAt,
+		CreatedAt:        saved.CreatedAt,
+	}, nil
+}
+
+func eventQuery(q *gen.EventQuery, req *bizrepo.EventQuery) *gen.EventQuery {
+	if req == nil {
+		return q
+	}
+	if req.ID != nil {
+		q = q.Where(event.ID(*req.ID))
+	}
+	if len(req.IDs) > 0 {
+		q = q.Where(event.IDIn(req.IDs...))
+	}
+	if req.WorldID != nil {
+		q = q.Where(event.WorldID(*req.WorldID))
+	}
+	if req.AfterSequence != nil {
+		q = q.Where(event.SequenceGT(*req.AfterSequence))
+	}
+	if req.Type != nil {
+		q = q.Where(event.TypeEQ(event.Type(*req.Type)))
+	}
+	if req.ActorPlayerID != nil {
+		q = q.Where(event.ActorPlayerID(*req.ActorPlayerID))
+	}
+	if req.NpcID != nil {
+		q = q.Where(event.NpcID(*req.NpcID))
+	}
+	if req.CausationEventID != nil {
+		q = q.Where(event.CausationEventID(*req.CausationEventID))
+	}
+	return q
+}
+
+func (r *EventRepo) Get(ctx context.Context, req *bizrepo.EventQuery) (*model.Event, error) {
+	row, err := eventQuery(r.getClient(ctx).Event.Query(), req).Only(ctx)
+	if gen.IsNotFound(err) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &model.Event{
+		ID:               row.ID,
+		WorldID:          row.WorldID,
+		Sequence:         row.Sequence,
+		Type:             enum.EventType(row.Type),
+		ActorPlayerID:    row.ActorPlayerID,
+		NpcID:            row.NpcID,
+		LocationID:       row.LocationID,
+		CausationEventID: row.CausationEventID,
+		Summary:          row.Summary,
+		Content:          row.Content,
+		Payload:          row.Payload,
+		WorldTime:        row.WorldTime,
+		OccurredAt:       row.OccurredAt,
+		CreatedAt:        row.CreatedAt,
+	}, nil
+}
+
+func (r *EventRepo) List(ctx context.Context, req *bizrepo.EventQuery) ([]*model.Event, error) {
+	query := eventQuery(r.getClient(ctx).Event.Query(), req)
+	var rows []*gen.Event
+	var err error
+	if req != nil && req.RecentLimit > 0 {
+		rows, err = query.Order(event.BySequence(sql.OrderDesc())).Limit(req.RecentLimit).All(ctx)
+		slices.Reverse(rows)
+	} else if req != nil && req.Limit > 0 {
+		rows, err = query.Order(event.BySequence()).Limit(req.Limit).All(ctx)
+	} else {
+		rows, err = query.Order(event.BySequence()).All(ctx)
+	}
+	if err != nil {
+		return nil, err
+	}
+	out := lo.Map(rows, func(row *gen.Event, _ int) *model.Event {
+		return &model.Event{
+			ID:               row.ID,
+			WorldID:          row.WorldID,
+			Sequence:         row.Sequence,
+			Type:             enum.EventType(row.Type),
+			ActorPlayerID:    row.ActorPlayerID,
+			NpcID:            row.NpcID,
+			LocationID:       row.LocationID,
+			CausationEventID: row.CausationEventID,
+			Summary:          row.Summary,
+			Content:          row.Content,
+			Payload:          row.Payload,
+			WorldTime:        row.WorldTime,
+			OccurredAt:       row.OccurredAt,
+			CreatedAt:        row.CreatedAt,
+		}
+	})
+	return out, nil
+}
+
+func (r *EventRepo) Map(ctx context.Context, req *bizrepo.EventQuery) (map[int64]*model.Event, error) {
+	rows, err := r.List(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	out := make(map[int64]*model.Event, len(rows))
+	for _, row := range rows {
+		out[row.ID] = row
+	}
+	return out, nil
+}
+
+func (r *EventRepo) Count(ctx context.Context, req *bizrepo.EventQuery) (int, error) {
+	return eventQuery(r.getClient(ctx).Event.Query(), req).Count(ctx)
 }
 
 func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizrepo.EventPageResp, error) {
-	pageReq := server.PageValid(req.Page)
-	queryReq := req.Query
-	query := r.db.Event.Query().Where(event.WorldID(queryReq.WorldID))
-	if queryReq.ActorPlayerID != nil {
-		query = query.Where(event.ActorPlayerID(*queryReq.ActorPlayerID))
-	}
-	if queryReq.TargetNpcID != nil {
-		query = query.Where(event.TargetNpcID(*queryReq.TargetNpcID))
-	}
-	if queryReq.Type != nil {
-		query = query.Where(event.Type(*queryReq.Type))
-	}
-	total, err := query.Clone().Count(ctx)
+	p := page(req.Page)
+	q := eventQuery(r.getClient(ctx).Event.Query(), &req.Query)
+	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := query.Order(gen.Desc(event.FieldOccurredAt)).Limit(int(pageReq.Size)).Offset(int((pageReq.Page - 1) * pageReq.Size)).All(ctx)
+	rows, err := q.Order(event.BySequence()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]*model.Event, 0, len(rows))
-	for _, row := range rows {
-		result = append(result, r.event(row))
-	}
-	return &bizrepo.EventPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: pageReq.Page, Size: pageReq.Size}}, nil
-}
-
-func (r *EventRepo) ListRecentEvents(ctx context.Context, req *bizrepo.ListRecentEventsReq) ([]*model.Event, error) {
-	limit := req.Limit
-	if limit <= 0 {
-		limit = 20
-	}
-	rows, err := r.db.Event.Query().Where(event.WorldID(req.WorldID)).Order(gen.Desc(event.FieldOccurredAt)).Limit(limit).All(ctx)
-	if err != nil {
-		return nil, err
-	}
-	result := make([]*model.Event, 0, len(rows))
-	for _, row := range rows {
-		result = append(result, r.event(row))
-	}
-	return result, nil
+	out := lo.Map(rows, func(row *gen.Event, _ int) *model.Event {
+		return &model.Event{
+			ID:               row.ID,
+			WorldID:          row.WorldID,
+			Sequence:         row.Sequence,
+			Type:             enum.EventType(row.Type),
+			ActorPlayerID:    row.ActorPlayerID,
+			NpcID:            row.NpcID,
+			LocationID:       row.LocationID,
+			CausationEventID: row.CausationEventID,
+			Summary:          row.Summary,
+			Content:          row.Content,
+			Payload:          row.Payload,
+			WorldTime:        row.WorldTime,
+			OccurredAt:       row.OccurredAt,
+			CreatedAt:        row.CreatedAt,
+		}
+	})
+	return &bizrepo.EventPageResp{Rows: out, Page: basePage(total, p)}, nil
 }

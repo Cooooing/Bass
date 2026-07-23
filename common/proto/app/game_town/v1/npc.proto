@@ -3,68 +3,71 @@ syntax = "proto3";
 package common.api.app.game_town.v1;
 
 import "game_town/v1/enum.proto";
-import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
-
 
 option go_package = "common/proto/gen/game_town/v1;v1";
 
 service GameTownNpcService {
-  rpc Get(GetGameTownNpc.Req) returns (GetGameTownNpc.Resp) {} // 获取 NPC。
-  rpc List(ListGameTownNpcs.Req) returns (ListGameTownNpcs.Resp) {} // 查询 NPC。
+  rpc Get(GetGameTownNpc.Request) returns (GetGameTownNpc.Resp) {}
+  rpc List(ListGameTownNpcs.Request) returns (ListGameTownNpcs.Resp) {}
 }
 
 message GetGameTownNpc {
-  message Req {
-    int64 id = 1; // NPC ID
+  message Request {
+    int64 world_id = 1; // 世界 ID
+    int64 player_id = 2; // 查询玩家 ID
+    int64 id = 3; // NPC ID
   }
-  message Resp {
 
-    message GameTownNpc {
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+  message Resp {
+    message Attribute {
+      string code = 1; // 属性编码
+      string name = 2; // 属性名称
+      string value = 3; // 玩家可见值
+      GameTownKnowledgeCertainty certainty = 4; // 确定程度
+      google.protobuf.Timestamp known_at = 5; // 获知时间
+    }
+
+    message Row {
       int64 id = 1; // NPC ID
       int64 world_id = 2; // 世界 ID
       string code = 3; // NPC 编码
       string name = 4; // NPC 名称
-      string role = 5; // 角色职责
-      string personality = 6; // 性格
-      string goal = 7; // 目标
-      string background = 8; // 背景
-      int64 current_location_id = 9; // 当前地点 ID
-      GameTownNpcState state = 10; // NPC 状态
-      string system_prompt = 11; // 系统提示词
-      google.protobuf.Struct generated_profile = 12; // 生成画像
-      bool enabled = 13; // 是否启用
+      string role = 5; // 角色定位
+      string species = 6; // 种族
+      GameTownNpcLifeStatus life_status = 7; // 玩家已知生命状态
+      optional int64 last_known_location_id = 8; // 最后已知地点 ID
+      GameTownRelationshipAttitude attitude = 9; // NPC 表现出的态度
+      repeated string relationship_tags = 10; // 玩家已知关系标签
+      repeated int64 public_faction_ids = 11; // 玩家已知公开阵营
+      repeated Attribute attributes = 12; // 玩家可观察属性
+      google.protobuf.Timestamp known_at = 13; // 信息更新时间
     }
-    GameTownNpc row = 1; // NPC
+
+    Row row = 1; // NPC 玩家视图
   }
 }
 
 message ListGameTownNpcs {
-  message Req {
+  message Request {
     int64 world_id = 1; // 世界 ID
-    optional int64 location_id = 2; // 地点 ID
+    int64 player_id = 2; // 查询玩家 ID
+    optional int64 location_id = 3; // 限定地点
   }
-  message Resp {
 
-    message GameTownNpc {
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+  message Resp {
+    message Row {
       int64 id = 1; // NPC ID
-      int64 world_id = 2; // 世界 ID
-      string code = 3; // NPC 编码
-      string name = 4; // NPC 名称
-      string role = 5; // 角色职责
-      string personality = 6; // 性格
-      string goal = 7; // 目标
-      string background = 8; // 背景
-      int64 current_location_id = 9; // 当前地点 ID
-      GameTownNpcState state = 10; // NPC 状态
-      string system_prompt = 11; // 系统提示词
-      google.protobuf.Struct generated_profile = 12; // 生成画像
-      bool enabled = 13; // 是否启用
+      string code = 2; // NPC 编码
+      string name = 3; // NPC 名称
+      string role = 4; // 角色定位
+      string species = 5; // 种族
+      GameTownNpcLifeStatus life_status = 6; // 玩家已知生命状态
+      optional int64 last_known_location_id = 7; // 最后已知地点 ID
+      GameTownRelationshipAttitude attitude = 8; // NPC 表现出的态度
+      repeated string state_tags = 9; // 可观察状态标签
     }
-    repeated GameTownNpc rows = 1; // NPC 列表
+
+    repeated Row rows = 1; // NPC 玩家视图列表
   }
 }

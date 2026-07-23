@@ -1,35 +1,41 @@
 package repo
 
 import (
-	"common/proto/gen/common"
 	"context"
+
+	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
+	"game_town/internal/enum"
 )
 
 type EventRepo interface {
-	CreateEvent(ctx context.Context, row *model.Event) (*model.Event, error)
+	Save(ctx context.Context, event *model.Event) (*model.Event, error)
+	Get(ctx context.Context, req *EventQuery) (*model.Event, error)
+	List(ctx context.Context, req *EventQuery) ([]*model.Event, error)
+	Map(ctx context.Context, req *EventQuery) (map[int64]*model.Event, error)
+	Count(ctx context.Context, req *EventQuery) (int, error)
 	Page(ctx context.Context, req *EventPageReq) (*EventPageResp, error)
-	ListRecentEvents(ctx context.Context, req *ListRecentEventsReq) ([]*model.Event, error)
+}
+
+type EventQuery struct {
+	ID               *int64
+	IDs              []int64
+	WorldID          *int64
+	AfterSequence    *uint64
+	Type             *enum.EventType
+	ActorPlayerID    *int64
+	NpcID            *int64
+	RecentLimit      int
+	Limit            int
+	CausationEventID *int64
 }
 
 type EventPageReq struct {
-	Page  *common.PageReq
+	Page  base.PageRequest
 	Query EventQuery
 }
 
 type EventPageResp struct {
 	Rows []*model.Event
-	Page *common.PageResp
-}
-
-type ListRecentEventsReq struct {
-	WorldID int64
-	Limit   int
-}
-
-type EventQuery struct {
-	WorldID       int64
-	ActorPlayerID *int64
-	TargetNpcID   *int64
-	Type          *string
+	Page base.PageResp
 }

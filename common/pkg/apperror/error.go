@@ -21,8 +21,15 @@ const (
 type Option func(metadata map[string]string)
 
 func New(code cerrors.BusinessErrorCode, opts ...Option) *kratoserrors.Error {
+	return NewMessage(code, "", opts...)
+}
+
+func NewMessage(code cerrors.BusinessErrorCode, message string, opts ...Option) *kratoserrors.Error {
 	if !validBusinessCode(code) || code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_SUCCESS {
 		code = cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_UNKNOWN
+	}
+	if message == "" {
+		message = code.String()
 	}
 	metadata := map[string]string{
 		metadataBusinessCode: strconv.Itoa(int(code)),
@@ -32,7 +39,7 @@ func New(code cerrors.BusinessErrorCode, opts ...Option) *kratoserrors.Error {
 			opt(metadata)
 		}
 	}
-	return kratoserrors.New(StatusCode(code), code.String(), "").WithMetadata(metadata)
+	return kratoserrors.New(StatusCode(code), code.String(), message).WithMetadata(metadata)
 }
 
 func WithData[T proto.Message](data T) Option {
@@ -53,6 +60,18 @@ func WithData[T proto.Message](data T) Option {
 		}
 		metadata[metadataData] = string(payload)
 	}
+}
+
+func CommonInvalidArgument() *kratoserrors.Error {
+	return New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+}
+
+func GameTownWorldInvalid() *kratoserrors.Error {
+	return New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_INVALID)
+}
+
+func GameTownWorldInvalidMessage(message string) *kratoserrors.Error {
+	return NewMessage(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_INVALID, message)
 }
 
 func BusinessCode(err error) (cerrors.BusinessErrorCode, bool) {

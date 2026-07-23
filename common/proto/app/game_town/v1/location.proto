@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+import "game_town/v1/enum.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/game_town/v1;v1";
+
+service GameTownLocationService {
+  rpc Get(GetGameTownLocation.Request) returns (GetGameTownLocation.Resp) {}
+  rpc List(ListGameTownLocations.Request) returns (ListGameTownLocations.Resp) {}
+}
+
+message GetGameTownLocation {
+  message Request {
+    int64 world_id = 1; // 世界 ID
+    int64 player_id = 2; // 查询玩家 ID
+    int64 id = 3; // 地点 ID
+  }
+
+  message Resp {
+    message Row {
+      int64 id = 1; // 地点 ID
+      string code = 2; // 地点编码
+      string name = 3; // 地点名称
+      string description = 4; // 当前或最后已知描述
+      GameTownLocationStatus status = 5; // 玩家已知状态
+      optional int64 controlling_faction_id = 6; // 已知控制阵营
+      repeated string environment_tags = 7; // 环境标签
+      repeated int64 visible_npc_ids = 8; // 当前可见 NPC
+      google.protobuf.Timestamp known_at = 9; // 获知时间
+    }
+
+    Row row = 1; // 地点玩家视图
+  }
+}
+
+message ListGameTownLocations {
+  message Request {
+    int64 world_id = 1; // 世界 ID
+    int64 player_id = 2; // 查询玩家 ID
+  }
+
+  message Resp {
+    message Row {
+      int64 id = 1; // 地点 ID
+      string code = 2; // 地点编码
+      string name = 3; // 地点名称
+      GameTownLocationStatus status = 4; // 玩家已知状态
+      bool current = 5; // 是否为玩家当前位置
+      bool accessible = 6; // 是否已知可达
+    }
+
+    repeated Row rows = 1; // 已知地点列表
+  }
+}

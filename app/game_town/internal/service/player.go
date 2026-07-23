@@ -1,11 +1,13 @@
 package service
 
 import (
-	v1 "common/proto/gen/game_town/v1"
 	"context"
+
+	"common/pkg/apperror"
+	cerrors "common/proto/gen/common/errors"
+	v1 "common/proto/gen/game_town/v1"
 	"game_town/internal/biz/usecase"
 	gameenum "game_town/internal/enum"
-	"time"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -14,59 +16,55 @@ import (
 
 type PlayerService struct {
 	v1.UnimplementedGameTownPlayerServiceServer
-	gameUsecase *usecase.GameUsecase
+	usecase *usecase.PlayerUsecase
 }
 
-func NewPlayerService(gameUsecase *usecase.GameUsecase) *PlayerService {
-	return &PlayerService{gameUsecase: gameUsecase}
+func NewPlayerService(usecase *usecase.PlayerUsecase) *PlayerService {
+	return &PlayerService{usecase: usecase}
 }
-func (s *PlayerService) RegisterGrpc(gs *grpc.Server) { v1.RegisterGameTownPlayerServiceServer(gs, s) }
-func (s *PlayerService) RegisterHttp(hs *http.Server) {}
-func (s *PlayerService) Register(ctx context.Context, req *v1.RegisterGameTownPlayer_Req) (*v1.RegisterGameTownPlayer_Resp, error) {
-	row, err := s.gameUsecase.RegisterPlayer(ctx, &usecase.RegisterPlayerReq{Name: req.GetName(), DisplayName: req.GetDisplayName()})
+
+func (s *PlayerService) RegisterGrpc(server *grpc.Server) {
+	v1.RegisterGameTownPlayerServiceServer(server, s)
+}
+
+func (s *PlayerService) RegisterHttp(*http.Server) {}
+
+func (s *PlayerService) Register(ctx context.Context, req *v1.RegisterGameTownPlayer_Request) (*v1.RegisterGameTownPlayer_Resp, error) {
+	row, err := s.usecase.Register(ctx, &usecase.RegisterPlayerReq{
+		Name:        req.GetName(),
+		DisplayName: req.GetDisplayName(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	timestamp := func(t *time.Time) *timestamppb.Timestamp {
-		if t == nil {
-			return nil
-		}
-		return timestamppb.New(*t)
-	}
-	reply := &v1.RegisterGameTownPlayer_Resp{}
-	if row != nil {
-		reply.Row = &v1.RegisterGameTownPlayer_Resp_GameTownPlayer{
-			CreatedAt:   timestamp(row.CreatedAt),
-			UpdatedAt:   timestamp(row.UpdatedAt),
+	return &v1.RegisterGameTownPlayer_Resp{
+		Row: &v1.RegisterGameTownPlayer_Resp_Row{
 			Id:          row.ID,
 			Name:        row.Name,
 			DisplayName: row.DisplayName,
-			Status:      gameenum.PlayerStatusMap.MustToProto(gameenum.PlayerStatus(row.Status)),
-		}
-	}
-	return reply, nil
+			Status:      gameenum.PlayerStatusMap.MustToProto(row.Status),
+			CreatedAt:   timestamppb.New(*row.CreatedAt),
+			UpdatedAt:   timestamppb.New(*row.UpdatedAt),
+		},
+	}, nil
 }
-func (s *PlayerService) Get(ctx context.Context, req *v1.GetGameTownPlayer_Req) (*v1.GetGameTownPlayer_Resp, error) {
-	row, err := s.gameUsecase.GetPlayer(ctx, req.GetId())
+
+func (s *PlayerService) Get(ctx context.Context, req *v1.GetGameTownPlayer_Request) (*v1.GetGameTownPlayer_Resp, error) {
+	if req.GetId() <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	row, err := s.usecase.Get(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
-	timestamp := func(t *time.Time) *timestamppb.Timestamp {
-		if t == nil {
-			return nil
-		}
-		return timestamppb.New(*t)
-	}
-	reply := &v1.GetGameTownPlayer_Resp{}
-	if row != nil {
-		reply.Row = &v1.GetGameTownPlayer_Resp_GameTownPlayer{
-			CreatedAt:   timestamp(row.CreatedAt),
-			UpdatedAt:   timestamp(row.UpdatedAt),
+	return &v1.GetGameTownPlayer_Resp{
+		Row: &v1.GetGameTownPlayer_Resp_Row{
 			Id:          row.ID,
 			Name:        row.Name,
 			DisplayName: row.DisplayName,
-			Status:      gameenum.PlayerStatusMap.MustToProto(gameenum.PlayerStatus(row.Status)),
-		}
-	}
-	return reply, nil
+			Status:      gameenum.PlayerStatusMap.MustToProto(row.Status),
+			CreatedAt:   timestamppb.New(*row.CreatedAt),
+			UpdatedAt:   timestamppb.New(*row.UpdatedAt),
+		},
+	}, nil
 }

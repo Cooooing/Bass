@@ -5,7 +5,7 @@ package common.api.app.platform.v1;
 import "common/common.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
-import "platform/v1/enum.proto";
+import "platform/v1/enum/object_storage.proto";
 
 option go_package = "common/proto/gen/platform/v1;v1";
 

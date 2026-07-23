@@ -6,6 +6,7 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/content/v1"
+	contentv1enum "common/proto/gen/content/v1/enum"
 	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/usecase"
@@ -42,7 +43,7 @@ func (s *DomainService) BatchCreate(ctx context.Context, req *v1.BatchCreateDoma
 	}
 	domains := make([]*model.Domain, len(req.Domains))
 	for i, d := range req.Domains {
-		domainStatus, ok := enum.DomainStatusMap.ToEnum(util.DerefOrDefault(d.Status, v1.DomainStatus_DOMAIN_STATUS_ENABLED))
+		domainStatus, ok := enum.DomainStatusMap.ToEnum(util.DerefOrDefault(d.Status, contentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED))
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
 		}
@@ -91,7 +92,7 @@ func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomain_Req) (*
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	domainStatus, ok := enum.DomainStatusMap.ToEnum(util.DerefOrDefault(req.Domain.Status, v1.DomainStatus_DOMAIN_STATUS_ENABLED))
+	domainStatus, ok := enum.DomainStatusMap.ToEnum(util.DerefOrDefault(req.Domain.Status, contentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED))
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
 	}

@@ -2,7 +2,7 @@ package enum
 
 import (
 	"common/pkg/enum"
-	v1 "common/proto/gen/content/v1"
+	v1 "common/proto/gen/content/v1/enum"
 )
 
 // ArticleOrder 表示文章列表排序方式。

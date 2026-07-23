@@ -3,6 +3,7 @@ package usecase
 import (
 	"bbs/internal/biz/repo"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	"common/proto/gen/common"
 	"context"
 )
@@ -51,8 +52,8 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 	}
 	query := &repo.CommentQuery{
 		Restrictions: []int32{
-			int32(bbscontentv1.ContentRestriction_CONTENT_RESTRICTION_NONE),
-			int32(bbscontentv1.ContentRestriction_CONTENT_RESTRICTION_LOCKED),
+			int32(bbscontentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE),
+			int32(bbscontentv1enum.ContentRestriction_CONTENT_RESTRICTION_LOCKED),
 		},
 	}
 	if req.Query != nil {
@@ -78,7 +79,7 @@ type ListCommentThreadsReq struct {
 	UserID            int64
 	Page              *common.PageReq
 	ArticleID         int64
-	Order             *bbscontentv1.CommentOrder
+	Order             *bbscontentv1enum.CommentOrder
 	ReplyPreviewLimit *int32
 }
 
@@ -109,7 +110,7 @@ type ListCommentRepliesReq struct {
 	Page      *common.PageReq
 	ArticleID int64
 	ParentID  int64
-	Order     *bbscontentv1.CommentOrder
+	Order     *bbscontentv1enum.CommentOrder
 }
 
 type ListCommentRepliesResp struct {
@@ -138,7 +139,7 @@ type ListCommentTimelineReq struct {
 	UserID    int64
 	Page      *common.PageReq
 	ArticleID int64
-	Order     *bbscontentv1.CommentOrder
+	Order     *bbscontentv1enum.CommentOrder
 }
 
 type ListCommentTimelineResp struct {

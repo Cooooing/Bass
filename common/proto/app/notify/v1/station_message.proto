@@ -5,7 +5,7 @@ package common.api.app.notify.v1;
 import "common/common.proto";
 import "common/enums/event.proto";
 import "google/protobuf/timestamp.proto";
-import "notify/v1/enum.proto";
+import "notify/v1/enum/channel_status.proto";
 
 option go_package = "common/proto/gen/notify/v1;v1";
 

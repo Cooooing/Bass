@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package common.api.app.notify.v1;
 
-import "notify/v1/enum.proto";
+import "notify/v1/enum/channel.proto";
 
 option go_package = "common/proto/gen/notify/v1;v1";
 

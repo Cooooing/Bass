@@ -4,6 +4,7 @@ import (
 	"bbs/internal/biz/usecase"
 	"common/pkg/apperror"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
@@ -101,7 +102,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 	}
 	if req.Mbti != nil {
-		if _, ok := bbsuserv1.MBTI_name[int32(*req.Mbti)]; !ok {
+		if _, ok := bbsuserv1enum.MBTI_name[int32(*req.Mbti)]; !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
 	}

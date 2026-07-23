@@ -2,7 +2,7 @@ package enum
 
 import (
 	"common/pkg/enum"
-	v1 "common/proto/gen/content/v1"
+	v1 "common/proto/gen/content/v1/enum"
 )
 
 // ArticleAction 表示文章互动行为类型。

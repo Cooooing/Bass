@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.content;
+
+option go_package = "common/proto/gen/bbs/v1/content/enum;enum";
+
+// 评论排序方式。
+enum CommentOrder {
+  COMMENT_ORDER_UNSPECIFIED = 0; // 未指定
+  COMMENT_ORDER_NEWEST = 1; // 最新优先
+  COMMENT_ORDER_HOTTEST = 2; // 热度优先
+  COMMENT_ORDER_OLDEST = 3; // 最早优先
+}

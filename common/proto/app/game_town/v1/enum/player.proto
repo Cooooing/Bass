@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+option go_package = "common/proto/gen/game_town/v1/enum;enum";
+
+enum GameTownPlayerStatus {
+  GAME_TOWN_PLAYER_STATUS_UNSPECIFIED = 0; // 未指定
+  GAME_TOWN_PLAYER_STATUS_ACTIVE = 1; // 正常
+  GAME_TOWN_PLAYER_STATUS_DISABLED = 2; // 已禁用
+}

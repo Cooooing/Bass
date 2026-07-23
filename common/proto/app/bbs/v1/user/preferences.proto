@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
-import "bbs/v1/user/enum.proto";
 import "common/enums/language.proto";
 import "google/api/annotations.proto";
 

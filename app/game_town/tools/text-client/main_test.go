@@ -1,6 +1,7 @@
 package main
 
 import (
+	v1enum "common/proto/gen/game_town/v1/enum"
 	"context"
 	"strings"
 	"testing"
@@ -124,7 +125,7 @@ func TestEventSuggestedChoicesFiltersInvalidTargetsAndFallsBackToNpc(t *testing.
 				Label:   "继续询问",
 				Content: "继续询问星图来源",
 				Targets: []*v1.WatchGameTownEvents_Resp_SuggestedAction_EntityRef{
-					{Type: v1.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_UNSPECIFIED, Id: 0},
+					{Type: v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_UNSPECIFIED, Id: 0},
 				},
 			},
 		},
@@ -135,7 +136,7 @@ func TestEventSuggestedChoicesFiltersInvalidTargetsAndFallsBackToNpc(t *testing.
 	if len(choices[0].targets) != 1 {
 		t.Fatalf("targets len = %d, want 1", len(choices[0].targets))
 	}
-	if choices[0].targets[0].GetType() != v1.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_NPC {
+	if choices[0].targets[0].GetType() != v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_NPC {
 		t.Fatalf("target type = %v, want NPC", choices[0].targets[0].GetType())
 	}
 	if choices[0].targets[0].GetId() != 9 {

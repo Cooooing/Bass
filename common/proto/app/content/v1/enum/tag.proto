@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+option go_package = "common/proto/gen/content/v1/enum;enum";
+
+// TagStatus 表示标签状态。
+enum TagStatus {
+  TAG_STATUS_UNSPECIFIED = 0; // 未指定
+  TAG_STATUS_ENABLED = 1; // 启用
+  TAG_STATUS_DISABLED = 2; // 禁用
+}

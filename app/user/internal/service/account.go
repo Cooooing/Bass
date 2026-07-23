@@ -6,6 +6,7 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/user/v1"
+	v1enum "common/proto/gen/user/v1/enum"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
@@ -172,7 +173,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 	var mbti *enum.MBTI
 	clearMBTI := false
 	if req.Mbti != nil {
-		if *req.Mbti == v1.MBTI_MBTI_UNSPECIFIED {
+		if *req.Mbti == v1enum.MBTI_MBTI_UNSPECIFIED {
 			clearMBTI = true
 		} else {
 			value, ok := enum.MBTIMap.ToEnum(*req.Mbti)

@@ -5,6 +5,7 @@ import (
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
 	contentv1 "common/proto/gen/content/v1"
+	contentv1enum "common/proto/gen/content/v1/enum"
 	"context"
 )
 
@@ -32,7 +33,7 @@ func (r *ContentDomainClient) ListDomains(ctx context.Context, req *repo.ListDom
 		IsNav:       query.IsNav,
 	}
 	if query.Status != nil {
-		contentQuery.Status = new(contentv1.DomainStatus(*query.Status))
+		contentQuery.Status = new(contentv1enum.DomainStatus(*query.Status))
 	}
 	var pageReq *common.PageReq
 	if req.Page != nil {

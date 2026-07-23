@@ -1,12 +1,11 @@
 package main
 
 import (
+	v1enum "common/proto/gen/game_town/v1/enum"
 	"context"
 	"io"
 	"strings"
 	"testing"
-
-	v1 "common/proto/gen/game_town/v1"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -18,10 +17,10 @@ func TestRecordEventsKeepsPlayerSequencesAndDeduplicatesGlobalStats(t *testing.T
 		seenEvent: make(map[int64]bool),
 	}
 
-	state.recordPageEvent(1, 10, 1, v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_REPLIED)
-	state.recordPageEvent(2, 10, 1, v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_REPLIED)
-	state.recordStreamEvent(1, 11, 2, v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_WORLD_EVOLVED)
-	state.recordStreamEvent(1, 11, 2, v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_WORLD_EVOLVED)
+	state.recordPageEvent(1, 10, 1, v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_REPLIED)
+	state.recordPageEvent(2, 10, 1, v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_REPLIED)
+	state.recordStreamEvent(1, 11, 2, v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_WORLD_EVOLVED)
+	state.recordStreamEvent(1, 11, 2, v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_WORLD_EVOLVED)
 
 	stats := state.snapshotStats()
 	if stats.pageEvents != 2 {

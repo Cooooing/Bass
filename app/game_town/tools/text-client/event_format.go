@@ -1,6 +1,7 @@
 package main
 
 import (
+	v1enum "common/proto/gen/game_town/v1/enum"
 	"fmt"
 	"strings"
 
@@ -36,7 +37,7 @@ func eventSuggestedChoices(event *v1.WatchGameTownEvents_Resp) []suggestedChoice
 		}
 		targets := make([]*v1.SubmitGameTownAction_Request_EntityRef, 0, len(action.GetTargets()))
 		for _, target := range action.GetTargets() {
-			if target.GetId() <= 0 || target.GetType() == v1.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_UNSPECIFIED {
+			if target.GetId() <= 0 || target.GetType() == v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_UNSPECIFIED {
 				continue
 			}
 			targets = append(targets, &v1.SubmitGameTownAction_Request_EntityRef{Type: target.GetType(), Id: target.GetId()})

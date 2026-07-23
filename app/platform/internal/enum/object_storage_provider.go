@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/platform/v1"
+	v1 "common/proto/gen/platform/v1/enum"
 )
 
 type ObjectStorageProvider string

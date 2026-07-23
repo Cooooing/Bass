@@ -3,6 +3,7 @@ package usecase
 import (
 	"bbs/internal/biz/repo"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	"time"
 
 	"context"
@@ -125,8 +126,8 @@ func (u *AuthUsecase) LoginByPassword(ctx context.Context, req *LoginByPasswordR
 				Url:           profile.URL,
 				AvatarUrl:     profile.AvatarURL,
 				Introduction:  profile.Introduction,
-				Status:        bbsuserv1.AccountStatus(profile.Status),
-				Mbti:          bbsuserv1.MBTI(profile.MBTI),
+				Status:        bbsuserv1enum.AccountStatus(profile.Status),
+				Mbti:          bbsuserv1enum.MBTI(profile.MBTI),
 				FollowCount:   profile.FollowCount,
 				FollowerCount: profile.FollowerCount,
 				CreatedAt:     u.bbsTime(profile.CreatedAt),

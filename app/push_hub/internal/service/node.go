@@ -1,6 +1,7 @@
 package service
 
 import (
+	pushhubv1enum "common/proto/gen/push_hub/v1/enum"
 	"context"
 
 	pushhubv1 "common/proto/gen/push_hub/v1"
@@ -56,7 +57,7 @@ func (s *NodeService) ListNodes(ctx context.Context, req *pushhubv1.ListNodes_Re
 			NodeId:          node.NodeID,
 			Address:         node.Address,
 			ConnectionCount: node.ConnectionCount,
-			Status:          pushhubv1.NodeStatus(node.Status),
+			Status:          pushhubv1enum.NodeStatus(node.Status),
 			RegisteredAt:    timestamppb.New(node.RegisteredAt),
 			LastHeartbeatAt: timestamppb.New(node.LastHeartbeatAt),
 		})

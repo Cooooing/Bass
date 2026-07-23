@@ -2,7 +2,7 @@ package enum
 
 import (
 	"common/pkg/enum"
-	v1 "common/proto/gen/user/v1"
+	v1 "common/proto/gen/user/v1/enum"
 )
 
 type AccountStatus string

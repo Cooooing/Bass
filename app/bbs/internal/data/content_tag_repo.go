@@ -5,6 +5,7 @@ import (
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
 	contentv1 "common/proto/gen/content/v1"
+	contentv1enum "common/proto/gen/content/v1/enum"
 	"context"
 )
 
@@ -20,9 +21,9 @@ func NewContentTagClient(contentClient *rpc.ContentClient) repo.ContentTagClient
 
 func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq) (*repo.Tag, error) {
 	tag := req.Tag
-	var status *contentv1.TagStatus
+	var status *contentv1enum.TagStatus
 	if tag.Status != nil {
-		status = new(contentv1.TagStatus(*tag.Status))
+		status = new(contentv1enum.TagStatus(*tag.Status))
 	}
 	reply, err := r.contentClient.Tag.BatchCreate(ctx, &contentv1.BatchCreateTags_Req{
 		UserId: req.UserID,
@@ -58,9 +59,9 @@ func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq
 
 func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq) (*repo.Tag, error) {
 	tag := req.Tag
-	var status *contentv1.TagStatus
+	var status *contentv1enum.TagStatus
 	if tag.Status != nil {
-		status = new(contentv1.TagStatus(*tag.Status))
+		status = new(contentv1enum.TagStatus(*tag.Status))
 	}
 	reply, err := r.contentClient.Tag.Update(ctx, &contentv1.UpdateTag_Req{
 		TagId:  req.TagID,
@@ -102,7 +103,7 @@ func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) 
 		DomainId:    query.DomainID,
 	}
 	if query.Status != nil {
-		contentQuery.Status = new(contentv1.TagStatus(*query.Status))
+		contentQuery.Status = new(contentv1enum.TagStatus(*query.Status))
 	}
 	var pageReq *common.PageReq
 	if req.Page != nil {

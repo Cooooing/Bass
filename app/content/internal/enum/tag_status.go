@@ -2,7 +2,7 @@ package enum
 
 import (
 	"common/pkg/enum"
-	v1 "common/proto/gen/content/v1"
+	v1 "common/proto/gen/content/v1/enum"
 )
 
 // TagStatus 表示标签状态。

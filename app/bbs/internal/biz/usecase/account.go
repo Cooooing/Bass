@@ -3,6 +3,7 @@ package usecase
 import (
 	"bbs/internal/biz/repo"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	"context"
 )
 
@@ -30,8 +31,8 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*
 				Url:           profile.URL,
 				AvatarUrl:     profile.AvatarURL,
 				Introduction:  profile.Introduction,
-				Status:        bbsuserv1.AccountStatus(profile.Status),
-				Mbti:          bbsuserv1.MBTI(profile.MBTI),
+				Status:        bbsuserv1enum.AccountStatus(profile.Status),
+				Mbti:          bbsuserv1enum.MBTI(profile.MBTI),
 				FollowCount:   profile.FollowCount,
 				FollowerCount: profile.FollowerCount,
 				CreatedAt:     profile.CreatedAt,
@@ -63,8 +64,8 @@ func (u *AccountUsecase) GetProfileAccount(ctx context.Context, userID int64) (*
 			Url:           row.URL,
 			AvatarUrl:     row.AvatarURL,
 			Introduction:  row.Introduction,
-			Status:        bbsuserv1.AccountStatus(row.Status),
-			Mbti:          bbsuserv1.MBTI(row.MBTI),
+			Status:        bbsuserv1enum.AccountStatus(row.Status),
+			Mbti:          bbsuserv1enum.MBTI(row.MBTI),
 			FollowCount:   row.FollowCount,
 			FollowerCount: row.FollowerCount,
 			CreatedAt:     row.CreatedAt,
@@ -80,7 +81,7 @@ type UpdateProfileAccountReq struct {
 	Nickname     *string
 	URL          *string
 	Introduction *string
-	Mbti         *bbsuserv1.MBTI
+	Mbti         *bbsuserv1enum.MBTI
 }
 
 func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*bbsuserv1.UpdateProfileAccount_Resp_AccountProfile, error) {
@@ -109,8 +110,8 @@ func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdatePr
 			Url:           row.URL,
 			AvatarUrl:     row.AvatarURL,
 			Introduction:  row.Introduction,
-			Status:        bbsuserv1.AccountStatus(row.Status),
-			Mbti:          bbsuserv1.MBTI(row.MBTI),
+			Status:        bbsuserv1enum.AccountStatus(row.Status),
+			Mbti:          bbsuserv1enum.MBTI(row.MBTI),
 			FollowCount:   row.FollowCount,
 			FollowerCount: row.FollowerCount,
 			CreatedAt:     row.CreatedAt,

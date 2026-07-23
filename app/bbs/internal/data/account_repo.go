@@ -4,6 +4,7 @@ import (
 	"bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
 	userv1 "common/proto/gen/user/v1"
+	userv1enum "common/proto/gen/user/v1/enum"
 	"context"
 )
 
@@ -88,7 +89,7 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 		Introduction: req.Introduction,
 	}
 	if req.MBTI != nil {
-		mbti := userv1.MBTI(*req.MBTI)
+		mbti := userv1enum.MBTI(*req.MBTI)
 		updateReq.Mbti = &mbti
 	}
 	reply, err := r.userClient.Account.UpdateProfile(ctx, updateReq)

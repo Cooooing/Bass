@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+option go_package = "common/proto/gen/game_town/v1/enum;enum";
+
+enum GameTownNpcLifeStatus {
+  GAME_TOWN_NPC_LIFE_STATUS_UNSPECIFIED = 0; // 未指定
+  GAME_TOWN_NPC_LIFE_STATUS_ALIVE = 1; // 存活
+  GAME_TOWN_NPC_LIFE_STATUS_MISSING = 2; // 失踪
+  GAME_TOWN_NPC_LIFE_STATUS_DEAD = 3; // 死亡
+}

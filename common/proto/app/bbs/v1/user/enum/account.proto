@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
-option go_package = "common/proto/gen/bbs/v1/user;user";
+option go_package = "common/proto/gen/bbs/v1/user/enum;enum";
 
 // 账号状态。
 enum AccountStatus {

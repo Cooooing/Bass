@@ -1,6 +1,7 @@
 package main
 
 import (
+	v1enum "common/proto/gen/game_town/v1/enum"
 	"context"
 	"fmt"
 	"strconv"
@@ -160,7 +161,7 @@ func isChoiceIndex(raw string) bool {
 
 func npcTarget(npcID int64) *v1.SubmitGameTownAction_Request_EntityRef {
 	return &v1.SubmitGameTownAction_Request_EntityRef{
-		Type: v1.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_NPC,
+		Type: v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_NPC,
 		Id:   npcID,
 	}
 }
@@ -174,7 +175,7 @@ func validSubmitTargets(targets []*v1.SubmitGameTownAction_Request_EntityRef) []
 		if target.GetId() <= 0 {
 			continue
 		}
-		if target.GetType() == v1.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_UNSPECIFIED {
+		if target.GetType() == v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_UNSPECIFIED {
 			continue
 		}
 		result = append(result, target)
@@ -244,6 +245,6 @@ func helpLines() []string {
 	}
 }
 
-func eventName(value v1.GameTownEventType) string {
+func eventName(value v1enum.GameTownEventType) string {
 	return strings.ToLower(strings.TrimPrefix(value.String(), "GAME_TOWN_EVENT_TYPE_"))
 }

@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.api.app.game_town.v1;
 
 import "common/common.proto";
-import "game_town/v1/enum.proto";
+import "game_town/v1/enum/world.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/game_town/v1;v1";

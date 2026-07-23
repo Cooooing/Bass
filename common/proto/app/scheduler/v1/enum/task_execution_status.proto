@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package common.api.app.scheduler.v1;
+
+option go_package = "common/proto/gen/scheduler/v1/enum;enum";
+
+enum SchedulerTaskExecutionStatus {
+  SCHEDULER_TASK_EXECUTION_STATUS_UNSPECIFIED = 0; // 未指定
+  SCHEDULER_TASK_EXECUTION_STATUS_RUNNING = 1; // 正在运行
+  SCHEDULER_TASK_EXECUTION_STATUS_SUCCESS = 2; // 执行成功
+  SCHEDULER_TASK_EXECUTION_STATUS_FAILED = 3; // 执行失败
+  SCHEDULER_TASK_EXECUTION_STATUS_TIMEOUT = 4; // 等待目标响应超时
+  SCHEDULER_TASK_EXECUTION_STATUS_CANCELED = 5; // 已取消
+  SCHEDULER_TASK_EXECUTION_STATUS_OVERLAP_SKIPPED = 6; // 因运行重叠跳过
+  SCHEDULER_TASK_EXECUTION_STATUS_UNKNOWN = 7; // 执行结果未知
+}

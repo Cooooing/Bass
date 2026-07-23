@@ -3,6 +3,7 @@ package usecase
 import (
 	"bbs/internal/biz/repo"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	"common/proto/gen/common"
 	"context"
 )
@@ -47,7 +48,7 @@ func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomains
 		}
 	}
 	if query.Status == nil {
-		value := int32(bbscontentv1.DomainStatus_DOMAIN_STATUS_ENABLED)
+		value := int32(bbscontentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED)
 		query.Status = &value
 	}
 	resp, err := u.contentDomainClient.ListDomains(ctx, &repo.ListDomainsReq{Page: page, Query: query})

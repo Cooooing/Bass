@@ -3,6 +3,7 @@ package service
 import (
 	"bbs/internal/biz/usecase"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	"common/proto/gen/common"
 	"context"
 
@@ -42,7 +43,7 @@ func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.Create
 	if resp != nil {
 		tag = &bbscontentv1.CreateTag_Resp_Tag{Id: resp.ID, Name: resp.Name, Description: resp.Description, DomainId: resp.DomainID, CreatedBy: resp.CreatedBy, UpdatedBy: resp.UpdatedBy, CreatedAt: resp.CreatedAt, UpdatedAt: resp.UpdatedAt}
 		if resp.Status != nil {
-			status := bbscontentv1.TagStatus(*resp.Status)
+			status := bbscontentv1enum.TagStatus(*resp.Status)
 			tag.Status = &status
 		}
 	}
@@ -65,7 +66,7 @@ func (s *ContentTagService) Update(ctx context.Context, req *bbscontentv1.Update
 	if resp != nil {
 		tag = &bbscontentv1.UpdateTag_Resp_Tag{Id: resp.ID, Name: resp.Name, Description: resp.Description, DomainId: resp.DomainID, CreatedBy: resp.CreatedBy, UpdatedBy: resp.UpdatedBy, CreatedAt: resp.CreatedAt, UpdatedAt: resp.UpdatedAt}
 		if resp.Status != nil {
-			status := bbscontentv1.TagStatus(*resp.Status)
+			status := bbscontentv1enum.TagStatus(*resp.Status)
 			tag.Status = &status
 		}
 	}
@@ -88,7 +89,7 @@ func (s *ContentTagService) List(ctx context.Context, req *bbscontentv1.ListTags
 		}
 		tag := &bbscontentv1.ListTags_Resp_Tag{Id: row.ID, Name: row.Name, Description: row.Description, DomainId: row.DomainID, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
 		if row.Status != nil {
-			status := bbscontentv1.TagStatus(*row.Status)
+			status := bbscontentv1enum.TagStatus(*row.Status)
 			tag.Status = &status
 		}
 		rows = append(rows, tag)

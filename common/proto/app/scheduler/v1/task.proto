@@ -4,7 +4,9 @@ package common.api.app.scheduler.v1;
 
 import "common/common.proto";
 import "google/protobuf/timestamp.proto";
-import "scheduler/v1/enum.proto";
+import "scheduler/v1/enum/task_execution_status.proto";
+import "scheduler/v1/enum/task_trigger_type.proto";
+import "scheduler/v1/enum/task_execution_runtime_state.proto";
 
 option go_package = "common/proto/gen/scheduler/v1;v1";
 

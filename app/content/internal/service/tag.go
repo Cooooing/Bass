@@ -6,6 +6,7 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/content/v1"
+	contentv1enum "common/proto/gen/content/v1/enum"
 	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/usecase"
@@ -40,7 +41,7 @@ func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Re
 	}
 	tags := make([]*model.Tag, 0, len(req.Tags))
 	for _, tagSave := range req.Tags {
-		tagStatus, ok := enum.TagStatusMap.ToEnum(util.DerefOrDefault(tagSave.Status, v1.TagStatus_TAG_STATUS_ENABLED))
+		tagStatus, ok := enum.TagStatusMap.ToEnum(util.DerefOrDefault(tagSave.Status, contentv1enum.TagStatus_TAG_STATUS_ENABLED))
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 		}

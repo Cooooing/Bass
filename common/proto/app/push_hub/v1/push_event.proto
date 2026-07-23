@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package common.api.app.push_hub.v1;
 
-import "push_hub/v1/enum.proto";
+import "push_hub/v1/enum/push_event.proto";
 
 option go_package = "common/proto/gen/push_hub/v1;v1";
 

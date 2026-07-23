@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+option go_package = "common/proto/gen/game_town/v1/enum;enum";
+
+enum GameTownFactionStatus {
+  GAME_TOWN_FACTION_STATUS_UNSPECIFIED = 0; // 未指定
+  GAME_TOWN_FACTION_STATUS_ACTIVE = 1; // 活跃
+  GAME_TOWN_FACTION_STATUS_DECLINING = 2; // 衰落
+  GAME_TOWN_FACTION_STATUS_COLLAPSED = 3; // 崩溃
+}

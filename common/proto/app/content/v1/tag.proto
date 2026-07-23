@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.api.app.content.v1;
 
 import "common/common.proto";
-import "content/v1/enum.proto";
+import "content/v1/enum/tag.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";

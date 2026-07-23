@@ -2,7 +2,7 @@ package enum
 
 import (
 	"common/pkg/enum"
-	v1 "common/proto/gen/content/v1"
+	v1 "common/proto/gen/content/v1/enum"
 )
 
 // CommentAction 表示评论互动行为类型。

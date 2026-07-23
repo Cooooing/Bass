@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	schedulerv1 "common/proto/gen/scheduler/v1"
+	schedulerv1 "common/proto/gen/scheduler/v1/enum"
 )
 
 // TaskTriggerType 定义任务触发类型。

@@ -2,13 +2,14 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
-import "bbs/v1/user/enum.proto";
 import "common/common.proto";
 import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "user/v1/enum.proto";
+import "user/v1/enum/account.proto";
+import "user/v1/enum/auth.proto";
+import "user/v1/enum/relation.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 

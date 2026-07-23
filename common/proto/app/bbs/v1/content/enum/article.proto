@@ -2,21 +2,7 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.content;
 
-option go_package = "common/proto/gen/bbs/v1/content;content";
-
-// 内容板块状态。
-enum DomainStatus {
-  DOMAIN_STATUS_UNSPECIFIED = 0; // 未指定
-  DOMAIN_STATUS_ENABLED = 1; // 启用
-  DOMAIN_STATUS_DISABLED = 2; // 停用
-}
-
-// 标签状态。
-enum TagStatus {
-  TAG_STATUS_UNSPECIFIED = 0; // 未指定
-  TAG_STATUS_ENABLED = 1; // 启用
-  TAG_STATUS_DISABLED = 2; // 停用
-}
+option go_package = "common/proto/gen/bbs/v1/content/enum;enum";
 
 // 文章发布状态。
 enum ArticlePublishStatus {
@@ -53,12 +39,4 @@ enum ArticleOrder {
   ARTICLE_ORDER_UNSPECIFIED = 0; // 未指定
   ARTICLE_ORDER_NEWEST = 1; // 最新优先
   ARTICLE_ORDER_HOTTEST = 2; // 热度优先
-}
-
-// 评论排序方式。
-enum CommentOrder {
-  COMMENT_ORDER_UNSPECIFIED = 0; // 未指定
-  COMMENT_ORDER_NEWEST = 1; // 最新优先
-  COMMENT_ORDER_HOTTEST = 2; // 热度优先
-  COMMENT_ORDER_OLDEST = 3; // 最早优先
 }

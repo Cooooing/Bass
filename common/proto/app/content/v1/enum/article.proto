@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+option go_package = "common/proto/gen/content/v1/enum;enum";
+
+// ArticlePublishStatus 表示文章发布生命周期状态。
+enum ArticlePublishStatus {
+  ARTICLE_PUBLISH_STATUS_UNSPECIFIED = 0; // 未指定
+  ARTICLE_PUBLISH_STATUS_DRAFT = 1; // 草稿
+  ARTICLE_PUBLISH_STATUS_PUBLISHED = 2; // 已发布
+  ARTICLE_PUBLISH_STATUS_ARCHIVED = 3; // 已归档
+}
+
+// ArticleVisibility 表示已发布文章的可见范围。
+enum ArticleVisibility {
+  ARTICLE_VISIBILITY_UNSPECIFIED = 0; // 未指定
+  ARTICLE_VISIBILITY_PUBLIC = 1; // 公开
+  ARTICLE_VISIBILITY_PRIVATE = 2; // 私有
+}
+
+// ContentRestriction 表示内容的管理限制状态。
+enum ContentRestriction {
+  CONTENT_RESTRICTION_UNSPECIFIED = 0; // 未指定
+  CONTENT_RESTRICTION_NONE = 1; // 无管理限制
+  CONTENT_RESTRICTION_HIDDEN = 2; // 管理隐藏
+  CONTENT_RESTRICTION_LOCKED = 3; // 管理锁定
+}
+
+// ArticleType 表示文章业务类型。
+enum ArticleType {
+  ARTICLE_TYPE_UNSPECIFIED = 0; // 未指定
+  ARTICLE_TYPE_NORMAL = 1; // 普通文章
+  ARTICLE_TYPE_QA = 2; // 问答文章
+}
+
+// ArticleAction 表示文章互动行为类型。
+enum ArticleAction {
+  ARTICLE_ACTION_UNSPECIFIED = 0; // 未指定
+  ARTICLE_ACTION_LIKE = 1; // 点赞
+  ARTICLE_ACTION_THANK = 2; // 感谢
+  ARTICLE_ACTION_COLLECT = 3; // 收藏
+  ARTICLE_ACTION_WATCH = 4; // 关注
+  ARTICLE_ACTION_REWARD = 5; // 打赏
+  ARTICLE_ACTION_REPLY = 6; // 回复
+}
+
+// ArticleOrder 表示文章列表排序方式。
+enum ArticleOrder {
+  ARTICLE_ORDER_UNSPECIFIED = 0; // 未指定
+  ARTICLE_ORDER_NEWEST = 1; // 最新
+  ARTICLE_ORDER_HOTTEST = 2; // 最热
+}

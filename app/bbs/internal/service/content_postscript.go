@@ -3,6 +3,7 @@ package service
 import (
 	"bbs/internal/biz/usecase"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -35,7 +36,7 @@ func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.Ad
 	}
 	var postscript *bbscontentv1.AddPostscript_Resp_ArticlePostscript
 	if resp != nil {
-		postscript = &bbscontentv1.AddPostscript_Resp_ArticlePostscript{Id: resp.ID, ArticleId: resp.ArticleID, Content: resp.Content, ContentRender: resp.ContentRender, Restriction: bbscontentv1.ContentRestriction(resp.Restriction), CreatedBy: resp.CreatedBy, UpdatedBy: resp.UpdatedBy, CreatedAt: resp.CreatedAt, UpdatedAt: resp.UpdatedAt}
+		postscript = &bbscontentv1.AddPostscript_Resp_ArticlePostscript{Id: resp.ID, ArticleId: resp.ArticleID, Content: resp.Content, ContentRender: resp.ContentRender, Restriction: bbscontentv1enum.ContentRestriction(resp.Restriction), CreatedBy: resp.CreatedBy, UpdatedBy: resp.UpdatedBy, CreatedAt: resp.CreatedAt, UpdatedAt: resp.UpdatedAt}
 	}
 	return &bbscontentv1.AddPostscript_Resp{Postscript: postscript}, nil
 }

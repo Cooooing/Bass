@@ -3,7 +3,9 @@ syntax = "proto3";
 package common.api.app.game_town.v1;
 
 import "common/common.proto";
-import "game_town/v1/enum.proto";
+import "game_town/v1/enum/entity.proto";
+import "game_town/v1/enum/knowledge.proto";
+import "game_town/v1/enum/event.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 

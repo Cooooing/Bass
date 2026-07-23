@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+option go_package = "common/proto/gen/game_town/v1/enum;enum";
+
+enum GameTownMemoryKind {
+  GAME_TOWN_MEMORY_KIND_UNSPECIFIED = 0; // 未指定
+  GAME_TOWN_MEMORY_KIND_EXPERIENCE = 1; // 亲历事件
+  GAME_TOWN_MEMORY_KIND_CONVERSATION = 2; // 对话摘要
+  GAME_TOWN_MEMORY_KIND_RELATIONSHIP = 3; // 关系变化
+  GAME_TOWN_MEMORY_KIND_REFLECTION = 4; // 反思
+  GAME_TOWN_MEMORY_KIND_RUMOR = 5; // 传闻
+}
+
+enum GameTownEmbeddingStatus {
+  GAME_TOWN_EMBEDDING_STATUS_UNSPECIFIED = 0; // 未指定
+  GAME_TOWN_EMBEDDING_STATUS_PENDING = 1; // 等待生成
+  GAME_TOWN_EMBEDDING_STATUS_READY = 2; // 已生成
+  GAME_TOWN_EMBEDDING_STATUS_FAILED = 3; // 生成失败
+}

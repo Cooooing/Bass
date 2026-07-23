@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.content;
 
-import "bbs/v1/content/enum.proto";
+import "bbs/v1/content/enum/tag.proto";
 import "common/common.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";

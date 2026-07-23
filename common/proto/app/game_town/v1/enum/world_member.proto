@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+option go_package = "common/proto/gen/game_town/v1/enum;enum";
+
+enum GameTownWorldMemberRole {
+  GAME_TOWN_WORLD_MEMBER_ROLE_UNSPECIFIED = 0; // 未指定
+  GAME_TOWN_WORLD_MEMBER_ROLE_OWNER = 1; // 创建者
+  GAME_TOWN_WORLD_MEMBER_ROLE_MEMBER = 2; // 成员
+}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+option go_package = "common/proto/gen/game_town/v1/enum;enum";
+
+enum GameTownLocationStatus {
+  GAME_TOWN_LOCATION_STATUS_UNSPECIFIED = 0; // 未指定
+  GAME_TOWN_LOCATION_STATUS_ACTIVE = 1; // 正常
+  GAME_TOWN_LOCATION_STATUS_DAMAGED = 2; // 受损
+  GAME_TOWN_LOCATION_STATUS_BLOCKED = 3; // 封锁
+  GAME_TOWN_LOCATION_STATUS_DESTROYED = 4; // 毁灭
+  GAME_TOWN_LOCATION_STATUS_RUINS = 5; // 遗迹
+}

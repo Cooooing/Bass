@@ -6,6 +6,7 @@ import (
 	"common/pkg/util"
 	"common/proto/gen/common"
 	contentv1 "common/proto/gen/content/v1"
+	contentv1enum "common/proto/gen/content/v1/enum"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"fmt"
@@ -63,15 +64,15 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListC
 		UserId:    query.UserID,
 	}
 	if query.Restriction != nil {
-		contentQuery.Restriction = new(contentv1.ContentRestriction(*query.Restriction))
+		contentQuery.Restriction = new(contentv1enum.ContentRestriction(*query.Restriction))
 	}
 	if len(query.Restrictions) > 0 {
-		contentQuery.Restrictions = lo.Map(query.Restrictions, func(item int32, _ int) contentv1.ContentRestriction {
-			return contentv1.ContentRestriction(item)
+		contentQuery.Restrictions = lo.Map(query.Restrictions, func(item int32, _ int) contentv1enum.ContentRestriction {
+			return contentv1enum.ContentRestriction(item)
 		})
 	}
 	if query.Order != nil {
-		contentQuery.Order = new(contentv1.CommentOrder(*query.Order))
+		contentQuery.Order = new(contentv1enum.CommentOrder(*query.Order))
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page:  pageReq,
@@ -114,12 +115,12 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	if req.Page != nil {
 		pageReq = &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}
 	}
-	normal := contentv1.ContentRestriction_CONTENT_RESTRICTION_NONE
-	locked := contentv1.ContentRestriction_CONTENT_RESTRICTION_LOCKED
-	restrictions := []contentv1.ContentRestriction{normal, locked}
-	order := contentv1.CommentOrder_COMMENT_ORDER_HOTTEST
-	if req.Order != nil && *req.Order != int32(contentv1.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
-		order = contentv1.CommentOrder(*req.Order)
+	normal := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE
+	locked := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_LOCKED
+	restrictions := []contentv1enum.ContentRestriction{normal, locked}
+	order := contentv1enum.CommentOrder_COMMENT_ORDER_HOTTEST
+	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
+		order = contentv1enum.CommentOrder(*req.Order)
 	}
 	level := int32(1)
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
@@ -149,7 +150,7 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 		if previewLimit > 5 {
 			previewLimit = 5
 		}
-		previewOrder := contentv1.CommentOrder_COMMENT_ORDER_OLDEST
+		previewOrder := contentv1enum.CommentOrder_COMMENT_ORDER_OLDEST
 		previews, err := r.contentClient.Comment.ListReplyPreviews(ctx, &contentv1.ListCommentReplyPreviews_Req{
 			ArticleId:      req.ArticleID,
 			ParentIds:      rootIDs,
@@ -221,12 +222,12 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo
 	if req.Page != nil {
 		pageReq = &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}
 	}
-	normal := contentv1.ContentRestriction_CONTENT_RESTRICTION_NONE
-	locked := contentv1.ContentRestriction_CONTENT_RESTRICTION_LOCKED
-	restrictions := []contentv1.ContentRestriction{normal, locked}
-	order := contentv1.CommentOrder_COMMENT_ORDER_OLDEST
-	if req.Order != nil && *req.Order != int32(contentv1.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
-		order = contentv1.CommentOrder(*req.Order)
+	normal := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE
+	locked := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_LOCKED
+	restrictions := []contentv1enum.ContentRestriction{normal, locked}
+	order := contentv1enum.CommentOrder_COMMENT_ORDER_OLDEST
+	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
+		order = contentv1enum.CommentOrder(*req.Order)
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page: pageReq,
@@ -272,12 +273,12 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 	if req.Page != nil {
 		pageReq = &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}
 	}
-	normal := contentv1.ContentRestriction_CONTENT_RESTRICTION_NONE
-	locked := contentv1.ContentRestriction_CONTENT_RESTRICTION_LOCKED
-	restrictions := []contentv1.ContentRestriction{normal, locked}
-	order := contentv1.CommentOrder_COMMENT_ORDER_NEWEST
-	if req.Order != nil && *req.Order != int32(contentv1.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
-		order = contentv1.CommentOrder(*req.Order)
+	normal := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE
+	locked := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_LOCKED
+	restrictions := []contentv1enum.ContentRestriction{normal, locked}
+	order := contentv1enum.CommentOrder_COMMENT_ORDER_NEWEST
+	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
+		order = contentv1enum.CommentOrder(*req.Order)
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page: pageReq,

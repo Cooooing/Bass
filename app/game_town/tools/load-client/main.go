@@ -1,6 +1,7 @@
 package main
 
 import (
+	v1enum "common/proto/gen/game_town/v1/enum"
 	"context"
 	"errors"
 	"flag"
@@ -224,7 +225,7 @@ func ensureAgentConfig(ctx context.Context, client *rpc.GameTownClient, conf con
 	name := "load-local-ollama-" + strings.NewReplacer(":", "-", "/", "-", ".", "-").Replace(conf.model)
 	created, err := client.AgentConfig.Create(ctx, &v1.CreateGameTownAgentConfig_Request{
 		Name:           name,
-		Provider:       v1.GameTownAgentProvider_GAME_TOWN_AGENT_PROVIDER_OLLAMA,
+		Provider:       v1enum.GameTownAgentProvider_GAME_TOWN_AGENT_PROVIDER_OLLAMA,
 		BaseUrl:        conf.ollamaURL,
 		Model:          conf.model,
 		TimeoutSeconds: 90,
@@ -275,10 +276,10 @@ func waitWorldReady(ctx context.Context, client *rpc.GameTownClient, state *runS
 			return fmt.Errorf("get world status failed: %w", err)
 		}
 		switch reply.GetRow().GetStatus() {
-		case v1.GameTownWorldStatus_GAME_TOWN_WORLD_STATUS_ACTIVE:
+		case v1enum.GameTownWorldStatus_GAME_TOWN_WORLD_STATUS_ACTIVE:
 			fmt.Printf("world ready: %s\n", reply.GetRow().GetName())
 			return nil
-		case v1.GameTownWorldStatus_GAME_TOWN_WORLD_STATUS_FAILED:
+		case v1enum.GameTownWorldStatus_GAME_TOWN_WORLD_STATUS_FAILED:
 			return errors.New("world generation failed")
 		}
 		if err := sleepContext(ctx, interval); err != nil {
@@ -479,7 +480,7 @@ func moveAction(ctx context.Context, client *rpc.GameTownClient, state *runState
 			content := "I travel to " + location.GetName() + " and watch how the route has changed."
 			targets := []*v1.SubmitGameTownAction_Request_EntityRef{
 				{
-					Type: v1.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_LOCATION,
+					Type: v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_LOCATION,
 					Id:   location.GetId(),
 				},
 			}
@@ -513,7 +514,7 @@ func npcTalkAction(ctx context.Context, client *rpc.GameTownClient, state *runSt
 	}
 	npc := npcs.GetRows()[rand.IntN(len(npcs.GetRows()))]
 	content := fmt.Sprintf("I ask %s: what recent sign could change the balance of power?", npc.GetName())
-	targets := []*v1.SubmitGameTownAction_Request_EntityRef{{Type: v1.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_NPC, Id: npc.GetId()}}
+	targets := []*v1.SubmitGameTownAction_Request_EntityRef{{Type: v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_NPC, Id: npc.GetId()}}
 	return content, targets, true, nil
 }
 
@@ -759,7 +760,7 @@ func (s *runState) recordSubmitted(playerID int64, bigEvent bool) {
 	}
 }
 
-func (s *runState) recordPageEvent(playerID int64, eventID int64, sequence uint64, eventType v1.GameTownEventType) {
+func (s *runState) recordPageEvent(playerID int64, eventID int64, sequence uint64, eventType v1enum.GameTownEventType) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.stats.pageEvents++
@@ -767,7 +768,7 @@ func (s *runState) recordPageEvent(playerID int64, eventID int64, sequence uint6
 	s.recordEventLocked(playerID, eventID, sequence, eventType)
 }
 
-func (s *runState) recordStreamEvent(playerID int64, eventID int64, sequence uint64, eventType v1.GameTownEventType) {
+func (s *runState) recordStreamEvent(playerID int64, eventID int64, sequence uint64, eventType v1enum.GameTownEventType) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.stats.streamEvents++
@@ -790,7 +791,7 @@ func (s *runState) recordStreamReconnect(err error) {
 	s.stats.streamReconnects++
 }
 
-func (s *runState) recordEventLocked(playerID int64, eventID int64, sequence uint64, eventType v1.GameTownEventType) {
+func (s *runState) recordEventLocked(playerID int64, eventID int64, sequence uint64, eventType v1enum.GameTownEventType) {
 	if sequence <= s.playerSeq[playerID] {
 		return
 	}
@@ -836,38 +837,38 @@ func (s *runState) snapshotPlayerStats() map[int64]playerRunStats {
 	return result
 }
 
-func countEvent(stats *runStats, eventType v1.GameTownEventType) {
+func countEvent(stats *runStats, eventType v1enum.GameTownEventType) {
 	switch eventType {
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_REPLIED:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_REPLIED:
 		stats.npcReplies++
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_WORLD_EVOLVED:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_WORLD_EVOLVED:
 		stats.worldEvolved++
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_PLANNED:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_PLANNED:
 		stats.npcPlanned++
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_WORLD_TICK_REQUESTED:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_WORLD_TICK_REQUESTED:
 		stats.worldTicks++
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_RESOLVED:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_RESOLVED:
 		stats.resolved++
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_REJECTED:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_REJECTED:
 		stats.rejected++
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_CLARIFICATION_REQUIRED:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_CLARIFICATION_REQUIRED:
 		stats.clarification++
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_AGENT_JOB_FAILED:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_AGENT_JOB_FAILED:
 		stats.jobFailed++
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_PLAYER_CHARACTER_READY:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_PLAYER_CHARACTER_READY:
 		stats.characterReady++
 	}
 }
 
-func countPlayerEvent(stats *playerRunStats, eventType v1.GameTownEventType) {
+func countPlayerEvent(stats *playerRunStats, eventType v1enum.GameTownEventType) {
 	switch eventType {
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_REPLIED:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_REPLIED:
 		stats.npcReplies++
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_RESOLVED,
-		v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_REJECTED,
-		v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_CLARIFICATION_REQUIRED:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_RESOLVED,
+		v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_REJECTED,
+		v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_ACTION_CLARIFICATION_REQUIRED:
 		stats.actionResults++
-	case v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_PLAYER_CHARACTER_READY:
+	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_PLAYER_CHARACTER_READY:
 		stats.characterReady = true
 	}
 }

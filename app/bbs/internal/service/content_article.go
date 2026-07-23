@@ -3,7 +3,8 @@ package service
 import (
 	"bbs/internal/biz/usecase"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
-	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
+	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	"common/proto/gen/common"
 	"context"
 
@@ -135,7 +136,7 @@ func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetAr
 		return nil, err
 	}
 	article := resp
-	if article.PublishStatus == int32(bbscontentv1.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED) && article.Visibility == int32(bbscontentv1.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC) && article.Restriction == int32(bbscontentv1.ContentRestriction_CONTENT_RESTRICTION_NONE) {
+	if article.PublishStatus == int32(bbscontentv1enum.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED) && article.Visibility == int32(bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC) && article.Restriction == int32(bbscontentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE) {
 		if err := s.contentArticleUsecase.ViewArticle(ctx, &usecase.ViewArticleReq{UserID: userID, ArticleID: req.GetArticleId()}); err != nil {
 			return nil, err
 		}
@@ -220,10 +221,10 @@ func (s *ContentArticleService) articleListItem(row *usecase.ContentArticleListI
 		ContentRender:     row.ContentRender,
 		HasPostscript:     row.HasPostscript,
 		HasReward:         row.HasReward,
-		PublishStatus:     bbscontentv1.ArticlePublishStatus(row.PublishStatus),
-		Visibility:        bbscontentv1.ArticleVisibility(row.Visibility),
-		Restriction:       bbscontentv1.ContentRestriction(row.Restriction),
-		Type:              bbscontentv1.ArticleType(row.Type),
+		PublishStatus:     bbscontentv1enum.ArticlePublishStatus(row.PublishStatus),
+		Visibility:        bbscontentv1enum.ArticleVisibility(row.Visibility),
+		Restriction:       bbscontentv1enum.ContentRestriction(row.Restriction),
+		Type:              bbscontentv1enum.ArticleType(row.Type),
 		BountyPoints:      row.BountyPoints,
 		AcceptedAnswerId:  row.AcceptedAnswerID,
 		Statement:         row.Statement,
@@ -267,10 +268,10 @@ func (s *ContentArticleService) articleDetail(row *usecase.ContentArticleDetail)
 		RewardContent:       row.RewardContent,
 		RewardContentRender: row.RewardContentRender,
 		RewardPoints:        row.RewardPoints,
-		PublishStatus:       bbscontentv1.ArticlePublishStatus(row.PublishStatus),
-		Visibility:          bbscontentv1.ArticleVisibility(row.Visibility),
-		Restriction:         bbscontentv1.ContentRestriction(row.Restriction),
-		Type:                bbscontentv1.ArticleType(row.Type),
+		PublishStatus:       bbscontentv1enum.ArticlePublishStatus(row.PublishStatus),
+		Visibility:          bbscontentv1enum.ArticleVisibility(row.Visibility),
+		Restriction:         bbscontentv1enum.ContentRestriction(row.Restriction),
+		Type:                bbscontentv1enum.ArticleType(row.Type),
 		BountyPoints:        row.BountyPoints,
 		AcceptedAnswerId:    row.AcceptedAnswerID,
 		Statement:           row.Statement,
@@ -308,12 +309,12 @@ func (s *ContentArticleService) articlePostscript(row *usecase.ContentArticlePos
 	if row == nil {
 		return nil
 	}
-	return &bbscontentv1.CreateArticle_Resp_ArticlePostscript{Id: row.ID, ArticleId: row.ArticleID, Content: row.Content, ContentRender: row.ContentRender, Restriction: bbscontentv1.ContentRestriction(row.Restriction), CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
+	return &bbscontentv1.CreateArticle_Resp_ArticlePostscript{Id: row.ID, ArticleId: row.ArticleID, Content: row.Content, ContentRender: row.ContentRender, Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
 }
 
 func (s *ContentArticleService) accountProfile(row *usecase.ContentAccountProfile) *bbscontentv1.CreateArticle_Resp_AccountProfile {
 	if row == nil {
 		return nil
 	}
-	return &bbscontentv1.CreateArticle_Resp_AccountProfile{Id: row.ID, Name: row.Name, Nickname: row.Nickname, Url: row.URL, AvatarUrl: row.AvatarURL, Introduction: row.Introduction, Mbti: bbsuserv1.MBTI(row.MBTI), Status: bbsuserv1.AccountStatus(row.Status), FollowCount: row.FollowCount, FollowerCount: row.FollowerCount, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
+	return &bbscontentv1.CreateArticle_Resp_AccountProfile{Id: row.ID, Name: row.Name, Nickname: row.Nickname, Url: row.URL, AvatarUrl: row.AvatarURL, Introduction: row.Introduction, Mbti: bbsuserv1enum.MBTI(row.MBTI), Status: bbsuserv1enum.AccountStatus(row.Status), FollowCount: row.FollowCount, FollowerCount: row.FollowerCount, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
 }

@@ -3,6 +3,7 @@ package service
 import (
 	"bbs/internal/biz/usecase"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	"common/proto/gen/common"
 	"context"
 
@@ -44,7 +45,7 @@ func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListD
 			Id:          row.ID,
 			Name:        row.Name,
 			Description: row.Description,
-			Status:      bbscontentv1.DomainStatus(row.Status),
+			Status:      bbscontentv1enum.DomainStatus(row.Status),
 			Url:         row.URL,
 			Icon:        row.Icon,
 			IsNav:       row.IsNav,

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+option go_package = "common/proto/gen/game_town/v1/enum;enum";
+
+enum GameTownAgentProvider {
+  GAME_TOWN_AGENT_PROVIDER_UNSPECIFIED = 0; // 未指定
+  GAME_TOWN_AGENT_PROVIDER_OLLAMA = 1; // Ollama 原生协议
+  GAME_TOWN_AGENT_PROVIDER_OPENAI_COMPATIBLE = 2; // OpenAI 兼容协议
+}

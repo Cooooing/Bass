@@ -4,7 +4,7 @@ package common.api.app.push_hub.v1;
 
 import "common/common.proto";
 import "google/protobuf/timestamp.proto";
-import "push_hub/v1/enum.proto";
+import "push_hub/v1/enum/node.proto";
 
 option go_package = "common/proto/gen/push_hub/v1;v1";
 

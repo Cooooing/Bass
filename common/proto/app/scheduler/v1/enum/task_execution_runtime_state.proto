@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.api.app.scheduler.v1;
+
+option go_package = "common/proto/gen/scheduler/v1/enum;enum";
+
+enum SchedulerTaskExecutionRuntimeState {
+  SCHEDULER_TASK_EXECUTION_RUNTIME_STATE_UNSPECIFIED = 0; // 未指定
+  SCHEDULER_TASK_EXECUTION_RUNTIME_STATE_ACTIVE = 1; // Redis 心跳仍存在
+  SCHEDULER_TASK_EXECUTION_RUNTIME_STATE_STALE = 2; // Redis 心跳已丢失且超过超时窗口
+  SCHEDULER_TASK_EXECUTION_RUNTIME_STATE_UNKNOWN = 3; // 当前无法确认是否仍在运行
+  SCHEDULER_TASK_EXECUTION_RUNTIME_STATE_TERMINAL = 4; // 数据库已记录终态
+}

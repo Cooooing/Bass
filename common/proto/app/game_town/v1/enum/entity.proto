@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+option go_package = "common/proto/gen/game_town/v1/enum;enum";
+
+enum GameTownEntityType {
+  GAME_TOWN_ENTITY_TYPE_UNSPECIFIED = 0; // 未指定
+  GAME_TOWN_ENTITY_TYPE_PLAYER = 1; // 玩家角色
+  GAME_TOWN_ENTITY_TYPE_NPC = 2; // NPC
+  GAME_TOWN_ENTITY_TYPE_LOCATION = 3; // 地点
+  GAME_TOWN_ENTITY_TYPE_FACTION = 4; // 阵营
+}

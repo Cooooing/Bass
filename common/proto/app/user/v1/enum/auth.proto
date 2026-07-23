@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+option go_package = "common/proto/gen/user/v1/enum;enum";
+
+enum LoginMethod {
+  LOGIN_METHOD_UNSPECIFIED = 0;
+  LOGIN_METHOD_PASSWORD = 1; // 密码登录
+}
+
+enum LoginStatus {
+  LOGIN_STATUS_UNSPECIFIED = 0;
+  LOGIN_STATUS_SUCCESS = 1; // 登录成功
+  LOGIN_STATUS_FAILED = 2; // 登录失败
+}

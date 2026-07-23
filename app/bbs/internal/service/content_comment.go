@@ -3,7 +3,8 @@ package service
 import (
 	"bbs/internal/biz/usecase"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
-	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
+	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	"common/proto/gen/common"
 	"context"
 
@@ -37,15 +38,15 @@ func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.Cr
 	}
 	var comment *bbscontentv1.CreateComment_Resp_CommentDetail
 	if resp != nil {
-		comment = &bbscontentv1.CreateComment_Resp_CommentDetail{Id: resp.ID, ArticleId: resp.ArticleID, Content: resp.Content, ContentRender: resp.ContentRender, Level: resp.Level, ParentId: resp.ParentID, ReplyId: resp.ReplyID, ReplyCount: resp.ReplyCount, LikeCount: resp.LikeCount, ThankCount: resp.ThankCount, Restriction: bbscontentv1.ContentRestriction(resp.Restriction), DeletedAt: resp.DeletedAt, CreatedBy: resp.CreatedBy, UpdatedBy: resp.UpdatedBy, CreatedAt: resp.CreatedAt, UpdatedAt: resp.UpdatedAt}
+		comment = &bbscontentv1.CreateComment_Resp_CommentDetail{Id: resp.ID, ArticleId: resp.ArticleID, Content: resp.Content, ContentRender: resp.ContentRender, Level: resp.Level, ParentId: resp.ParentID, ReplyId: resp.ReplyID, ReplyCount: resp.ReplyCount, LikeCount: resp.LikeCount, ThankCount: resp.ThankCount, Restriction: bbscontentv1enum.ContentRestriction(resp.Restriction), DeletedAt: resp.DeletedAt, CreatedBy: resp.CreatedBy, UpdatedBy: resp.UpdatedBy, CreatedAt: resp.CreatedAt, UpdatedAt: resp.UpdatedAt}
 		if resp.ViewerActionState != nil {
 			comment.ViewerActionState = &bbscontentv1.CreateComment_Resp_CommentViewerActionState{Liked: resp.ViewerActionState.Liked, Thanked: resp.ViewerActionState.Thanked}
 		}
 		if resp.User != nil {
-			comment.User = &bbscontentv1.CreateComment_Resp_AccountProfile{Id: resp.User.ID, Name: resp.User.Name, Nickname: resp.User.Nickname, Url: resp.User.URL, AvatarUrl: resp.User.AvatarURL, Introduction: resp.User.Introduction, Status: bbsuserv1.AccountStatus(resp.User.Status), Mbti: bbsuserv1.MBTI(resp.User.MBTI), FollowCount: resp.User.FollowCount, FollowerCount: resp.User.FollowerCount, CreatedAt: resp.User.CreatedAt, UpdatedAt: resp.User.UpdatedAt}
+			comment.User = &bbscontentv1.CreateComment_Resp_AccountProfile{Id: resp.User.ID, Name: resp.User.Name, Nickname: resp.User.Nickname, Url: resp.User.URL, AvatarUrl: resp.User.AvatarURL, Introduction: resp.User.Introduction, Status: bbsuserv1enum.AccountStatus(resp.User.Status), Mbti: bbsuserv1enum.MBTI(resp.User.MBTI), FollowCount: resp.User.FollowCount, FollowerCount: resp.User.FollowerCount, CreatedAt: resp.User.CreatedAt, UpdatedAt: resp.User.UpdatedAt}
 		}
 		if resp.ReplyUser != nil {
-			comment.ReplyUser = &bbscontentv1.CreateComment_Resp_AccountProfile{Id: resp.ReplyUser.ID, Name: resp.ReplyUser.Name, Nickname: resp.ReplyUser.Nickname, Url: resp.ReplyUser.URL, AvatarUrl: resp.ReplyUser.AvatarURL, Introduction: resp.ReplyUser.Introduction, Status: bbsuserv1.AccountStatus(resp.ReplyUser.Status), Mbti: bbsuserv1.MBTI(resp.ReplyUser.MBTI), FollowCount: resp.ReplyUser.FollowCount, FollowerCount: resp.ReplyUser.FollowerCount, CreatedAt: resp.ReplyUser.CreatedAt, UpdatedAt: resp.ReplyUser.UpdatedAt}
+			comment.ReplyUser = &bbscontentv1.CreateComment_Resp_AccountProfile{Id: resp.ReplyUser.ID, Name: resp.ReplyUser.Name, Nickname: resp.ReplyUser.Nickname, Url: resp.ReplyUser.URL, AvatarUrl: resp.ReplyUser.AvatarURL, Introduction: resp.ReplyUser.Introduction, Status: bbsuserv1enum.AccountStatus(resp.ReplyUser.Status), Mbti: bbsuserv1enum.MBTI(resp.ReplyUser.MBTI), FollowCount: resp.ReplyUser.FollowCount, FollowerCount: resp.ReplyUser.FollowerCount, CreatedAt: resp.ReplyUser.CreatedAt, UpdatedAt: resp.ReplyUser.UpdatedAt}
 		}
 	}
 	return &bbscontentv1.CreateComment_Resp{Comment: comment}, nil
@@ -70,15 +71,15 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 			rows = append(rows, nil)
 			continue
 		}
-		item := &bbscontentv1.ListComments_Resp_CommentListItem{Id: row.ID, ArticleId: row.ArticleID, Content: row.Content, ContentRender: row.ContentRender, Level: row.Level, ParentId: row.ParentID, ReplyId: row.ReplyID, ReplyCount: row.ReplyCount, LikeCount: row.LikeCount, ThankCount: row.ThankCount, Restriction: bbscontentv1.ContentRestriction(row.Restriction), DeletedAt: row.DeletedAt, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
+		item := &bbscontentv1.ListComments_Resp_CommentListItem{Id: row.ID, ArticleId: row.ArticleID, Content: row.Content, ContentRender: row.ContentRender, Level: row.Level, ParentId: row.ParentID, ReplyId: row.ReplyID, ReplyCount: row.ReplyCount, LikeCount: row.LikeCount, ThankCount: row.ThankCount, Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), DeletedAt: row.DeletedAt, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
 		if row.ViewerActionState != nil {
 			item.ViewerActionState = &bbscontentv1.ListComments_Resp_CommentViewerActionState{Liked: row.ViewerActionState.Liked, Thanked: row.ViewerActionState.Thanked}
 		}
 		if row.User != nil {
-			item.User = &bbscontentv1.ListComments_Resp_AccountProfile{Id: row.User.ID, Name: row.User.Name, Nickname: row.User.Nickname, Url: row.User.URL, AvatarUrl: row.User.AvatarURL, Introduction: row.User.Introduction, Status: bbsuserv1.AccountStatus(row.User.Status), Mbti: bbsuserv1.MBTI(row.User.MBTI), FollowCount: row.User.FollowCount, FollowerCount: row.User.FollowerCount, CreatedAt: row.User.CreatedAt, UpdatedAt: row.User.UpdatedAt}
+			item.User = &bbscontentv1.ListComments_Resp_AccountProfile{Id: row.User.ID, Name: row.User.Name, Nickname: row.User.Nickname, Url: row.User.URL, AvatarUrl: row.User.AvatarURL, Introduction: row.User.Introduction, Status: bbsuserv1enum.AccountStatus(row.User.Status), Mbti: bbsuserv1enum.MBTI(row.User.MBTI), FollowCount: row.User.FollowCount, FollowerCount: row.User.FollowerCount, CreatedAt: row.User.CreatedAt, UpdatedAt: row.User.UpdatedAt}
 		}
 		if row.ReplyUser != nil {
-			item.ReplyUser = &bbscontentv1.ListComments_Resp_AccountProfile{Id: row.ReplyUser.ID, Name: row.ReplyUser.Name, Nickname: row.ReplyUser.Nickname, Url: row.ReplyUser.URL, AvatarUrl: row.ReplyUser.AvatarURL, Introduction: row.ReplyUser.Introduction, Status: bbsuserv1.AccountStatus(row.ReplyUser.Status), Mbti: bbsuserv1.MBTI(row.ReplyUser.MBTI), FollowCount: row.ReplyUser.FollowCount, FollowerCount: row.ReplyUser.FollowerCount, CreatedAt: row.ReplyUser.CreatedAt, UpdatedAt: row.ReplyUser.UpdatedAt}
+			item.ReplyUser = &bbscontentv1.ListComments_Resp_AccountProfile{Id: row.ReplyUser.ID, Name: row.ReplyUser.Name, Nickname: row.ReplyUser.Nickname, Url: row.ReplyUser.URL, AvatarUrl: row.ReplyUser.AvatarURL, Introduction: row.ReplyUser.Introduction, Status: bbsuserv1enum.AccountStatus(row.ReplyUser.Status), Mbti: bbsuserv1enum.MBTI(row.ReplyUser.MBTI), FollowCount: row.ReplyUser.FollowCount, FollowerCount: row.ReplyUser.FollowerCount, CreatedAt: row.ReplyUser.CreatedAt, UpdatedAt: row.ReplyUser.UpdatedAt}
 		}
 		rows = append(rows, item)
 	}
@@ -106,15 +107,15 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 		}
 		thread := &bbscontentv1.ListCommentThreads_Resp_CommentThread{ReplyCount: row.ReplyCount, HasMoreReplies: row.HasMoreReplies}
 		if row.Root != nil {
-			thread.Root = &bbscontentv1.ListCommentThreads_Resp_CommentListItem{Id: row.Root.ID, ArticleId: row.Root.ArticleID, Content: row.Root.Content, ContentRender: row.Root.ContentRender, Level: row.Root.Level, ParentId: row.Root.ParentID, ReplyId: row.Root.ReplyID, ReplyCount: row.Root.ReplyCount, LikeCount: row.Root.LikeCount, ThankCount: row.Root.ThankCount, Restriction: bbscontentv1.ContentRestriction(row.Root.Restriction), DeletedAt: row.Root.DeletedAt, CreatedBy: row.Root.CreatedBy, UpdatedBy: row.Root.UpdatedBy, CreatedAt: row.Root.CreatedAt, UpdatedAt: row.Root.UpdatedAt}
+			thread.Root = &bbscontentv1.ListCommentThreads_Resp_CommentListItem{Id: row.Root.ID, ArticleId: row.Root.ArticleID, Content: row.Root.Content, ContentRender: row.Root.ContentRender, Level: row.Root.Level, ParentId: row.Root.ParentID, ReplyId: row.Root.ReplyID, ReplyCount: row.Root.ReplyCount, LikeCount: row.Root.LikeCount, ThankCount: row.Root.ThankCount, Restriction: bbscontentv1enum.ContentRestriction(row.Root.Restriction), DeletedAt: row.Root.DeletedAt, CreatedBy: row.Root.CreatedBy, UpdatedBy: row.Root.UpdatedBy, CreatedAt: row.Root.CreatedAt, UpdatedAt: row.Root.UpdatedAt}
 			if row.Root.ViewerActionState != nil {
 				thread.Root.ViewerActionState = &bbscontentv1.ListCommentThreads_Resp_CommentViewerActionState{Liked: row.Root.ViewerActionState.Liked, Thanked: row.Root.ViewerActionState.Thanked}
 			}
 			if row.Root.User != nil {
-				thread.Root.User = &bbscontentv1.ListCommentThreads_Resp_AccountProfile{Id: row.Root.User.ID, Name: row.Root.User.Name, Nickname: row.Root.User.Nickname, Url: row.Root.User.URL, AvatarUrl: row.Root.User.AvatarURL, Introduction: row.Root.User.Introduction, Status: bbsuserv1.AccountStatus(row.Root.User.Status), Mbti: bbsuserv1.MBTI(row.Root.User.MBTI), FollowCount: row.Root.User.FollowCount, FollowerCount: row.Root.User.FollowerCount, CreatedAt: row.Root.User.CreatedAt, UpdatedAt: row.Root.User.UpdatedAt}
+				thread.Root.User = &bbscontentv1.ListCommentThreads_Resp_AccountProfile{Id: row.Root.User.ID, Name: row.Root.User.Name, Nickname: row.Root.User.Nickname, Url: row.Root.User.URL, AvatarUrl: row.Root.User.AvatarURL, Introduction: row.Root.User.Introduction, Status: bbsuserv1enum.AccountStatus(row.Root.User.Status), Mbti: bbsuserv1enum.MBTI(row.Root.User.MBTI), FollowCount: row.Root.User.FollowCount, FollowerCount: row.Root.User.FollowerCount, CreatedAt: row.Root.User.CreatedAt, UpdatedAt: row.Root.User.UpdatedAt}
 			}
 			if row.Root.ReplyUser != nil {
-				thread.Root.ReplyUser = &bbscontentv1.ListCommentThreads_Resp_AccountProfile{Id: row.Root.ReplyUser.ID, Name: row.Root.ReplyUser.Name, Nickname: row.Root.ReplyUser.Nickname, Url: row.Root.ReplyUser.URL, AvatarUrl: row.Root.ReplyUser.AvatarURL, Introduction: row.Root.ReplyUser.Introduction, Status: bbsuserv1.AccountStatus(row.Root.ReplyUser.Status), Mbti: bbsuserv1.MBTI(row.Root.ReplyUser.MBTI), FollowCount: row.Root.ReplyUser.FollowCount, FollowerCount: row.Root.ReplyUser.FollowerCount, CreatedAt: row.Root.ReplyUser.CreatedAt, UpdatedAt: row.Root.ReplyUser.UpdatedAt}
+				thread.Root.ReplyUser = &bbscontentv1.ListCommentThreads_Resp_AccountProfile{Id: row.Root.ReplyUser.ID, Name: row.Root.ReplyUser.Name, Nickname: row.Root.ReplyUser.Nickname, Url: row.Root.ReplyUser.URL, AvatarUrl: row.Root.ReplyUser.AvatarURL, Introduction: row.Root.ReplyUser.Introduction, Status: bbsuserv1enum.AccountStatus(row.Root.ReplyUser.Status), Mbti: bbsuserv1enum.MBTI(row.Root.ReplyUser.MBTI), FollowCount: row.Root.ReplyUser.FollowCount, FollowerCount: row.Root.ReplyUser.FollowerCount, CreatedAt: row.Root.ReplyUser.CreatedAt, UpdatedAt: row.Root.ReplyUser.UpdatedAt}
 			}
 		}
 		thread.PreviewReplies = make([]*bbscontentv1.ListCommentThreads_Resp_CommentListItem, 0, len(row.PreviewReplies))
@@ -123,15 +124,15 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 				thread.PreviewReplies = append(thread.PreviewReplies, nil)
 				continue
 			}
-			item := &bbscontentv1.ListCommentThreads_Resp_CommentListItem{Id: preview.ID, ArticleId: preview.ArticleID, Content: preview.Content, ContentRender: preview.ContentRender, Level: preview.Level, ParentId: preview.ParentID, ReplyId: preview.ReplyID, ReplyCount: preview.ReplyCount, LikeCount: preview.LikeCount, ThankCount: preview.ThankCount, Restriction: bbscontentv1.ContentRestriction(preview.Restriction), DeletedAt: preview.DeletedAt, CreatedBy: preview.CreatedBy, UpdatedBy: preview.UpdatedBy, CreatedAt: preview.CreatedAt, UpdatedAt: preview.UpdatedAt}
+			item := &bbscontentv1.ListCommentThreads_Resp_CommentListItem{Id: preview.ID, ArticleId: preview.ArticleID, Content: preview.Content, ContentRender: preview.ContentRender, Level: preview.Level, ParentId: preview.ParentID, ReplyId: preview.ReplyID, ReplyCount: preview.ReplyCount, LikeCount: preview.LikeCount, ThankCount: preview.ThankCount, Restriction: bbscontentv1enum.ContentRestriction(preview.Restriction), DeletedAt: preview.DeletedAt, CreatedBy: preview.CreatedBy, UpdatedBy: preview.UpdatedBy, CreatedAt: preview.CreatedAt, UpdatedAt: preview.UpdatedAt}
 			if preview.ViewerActionState != nil {
 				item.ViewerActionState = &bbscontentv1.ListCommentThreads_Resp_CommentViewerActionState{Liked: preview.ViewerActionState.Liked, Thanked: preview.ViewerActionState.Thanked}
 			}
 			if preview.User != nil {
-				item.User = &bbscontentv1.ListCommentThreads_Resp_AccountProfile{Id: preview.User.ID, Name: preview.User.Name, Nickname: preview.User.Nickname, Url: preview.User.URL, AvatarUrl: preview.User.AvatarURL, Introduction: preview.User.Introduction, Status: bbsuserv1.AccountStatus(preview.User.Status), Mbti: bbsuserv1.MBTI(preview.User.MBTI), FollowCount: preview.User.FollowCount, FollowerCount: preview.User.FollowerCount, CreatedAt: preview.User.CreatedAt, UpdatedAt: preview.User.UpdatedAt}
+				item.User = &bbscontentv1.ListCommentThreads_Resp_AccountProfile{Id: preview.User.ID, Name: preview.User.Name, Nickname: preview.User.Nickname, Url: preview.User.URL, AvatarUrl: preview.User.AvatarURL, Introduction: preview.User.Introduction, Status: bbsuserv1enum.AccountStatus(preview.User.Status), Mbti: bbsuserv1enum.MBTI(preview.User.MBTI), FollowCount: preview.User.FollowCount, FollowerCount: preview.User.FollowerCount, CreatedAt: preview.User.CreatedAt, UpdatedAt: preview.User.UpdatedAt}
 			}
 			if preview.ReplyUser != nil {
-				item.ReplyUser = &bbscontentv1.ListCommentThreads_Resp_AccountProfile{Id: preview.ReplyUser.ID, Name: preview.ReplyUser.Name, Nickname: preview.ReplyUser.Nickname, Url: preview.ReplyUser.URL, AvatarUrl: preview.ReplyUser.AvatarURL, Introduction: preview.ReplyUser.Introduction, Status: bbsuserv1.AccountStatus(preview.ReplyUser.Status), Mbti: bbsuserv1.MBTI(preview.ReplyUser.MBTI), FollowCount: preview.ReplyUser.FollowCount, FollowerCount: preview.ReplyUser.FollowerCount, CreatedAt: preview.ReplyUser.CreatedAt, UpdatedAt: preview.ReplyUser.UpdatedAt}
+				item.ReplyUser = &bbscontentv1.ListCommentThreads_Resp_AccountProfile{Id: preview.ReplyUser.ID, Name: preview.ReplyUser.Name, Nickname: preview.ReplyUser.Nickname, Url: preview.ReplyUser.URL, AvatarUrl: preview.ReplyUser.AvatarURL, Introduction: preview.ReplyUser.Introduction, Status: bbsuserv1enum.AccountStatus(preview.ReplyUser.Status), Mbti: bbsuserv1enum.MBTI(preview.ReplyUser.MBTI), FollowCount: preview.ReplyUser.FollowCount, FollowerCount: preview.ReplyUser.FollowerCount, CreatedAt: preview.ReplyUser.CreatedAt, UpdatedAt: preview.ReplyUser.UpdatedAt}
 			}
 			thread.PreviewReplies = append(thread.PreviewReplies, item)
 		}
@@ -159,15 +160,15 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 			rows = append(rows, nil)
 			continue
 		}
-		item := &bbscontentv1.ListCommentReplies_Resp_CommentListItem{Id: row.ID, ArticleId: row.ArticleID, Content: row.Content, ContentRender: row.ContentRender, Level: row.Level, ParentId: row.ParentID, ReplyId: row.ReplyID, ReplyCount: row.ReplyCount, LikeCount: row.LikeCount, ThankCount: row.ThankCount, Restriction: bbscontentv1.ContentRestriction(row.Restriction), DeletedAt: row.DeletedAt, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
+		item := &bbscontentv1.ListCommentReplies_Resp_CommentListItem{Id: row.ID, ArticleId: row.ArticleID, Content: row.Content, ContentRender: row.ContentRender, Level: row.Level, ParentId: row.ParentID, ReplyId: row.ReplyID, ReplyCount: row.ReplyCount, LikeCount: row.LikeCount, ThankCount: row.ThankCount, Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), DeletedAt: row.DeletedAt, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
 		if row.ViewerActionState != nil {
 			item.ViewerActionState = &bbscontentv1.ListCommentReplies_Resp_CommentViewerActionState{Liked: row.ViewerActionState.Liked, Thanked: row.ViewerActionState.Thanked}
 		}
 		if row.User != nil {
-			item.User = &bbscontentv1.ListCommentReplies_Resp_AccountProfile{Id: row.User.ID, Name: row.User.Name, Nickname: row.User.Nickname, Url: row.User.URL, AvatarUrl: row.User.AvatarURL, Introduction: row.User.Introduction, Status: bbsuserv1.AccountStatus(row.User.Status), Mbti: bbsuserv1.MBTI(row.User.MBTI), FollowCount: row.User.FollowCount, FollowerCount: row.User.FollowerCount, CreatedAt: row.User.CreatedAt, UpdatedAt: row.User.UpdatedAt}
+			item.User = &bbscontentv1.ListCommentReplies_Resp_AccountProfile{Id: row.User.ID, Name: row.User.Name, Nickname: row.User.Nickname, Url: row.User.URL, AvatarUrl: row.User.AvatarURL, Introduction: row.User.Introduction, Status: bbsuserv1enum.AccountStatus(row.User.Status), Mbti: bbsuserv1enum.MBTI(row.User.MBTI), FollowCount: row.User.FollowCount, FollowerCount: row.User.FollowerCount, CreatedAt: row.User.CreatedAt, UpdatedAt: row.User.UpdatedAt}
 		}
 		if row.ReplyUser != nil {
-			item.ReplyUser = &bbscontentv1.ListCommentReplies_Resp_AccountProfile{Id: row.ReplyUser.ID, Name: row.ReplyUser.Name, Nickname: row.ReplyUser.Nickname, Url: row.ReplyUser.URL, AvatarUrl: row.ReplyUser.AvatarURL, Introduction: row.ReplyUser.Introduction, Status: bbsuserv1.AccountStatus(row.ReplyUser.Status), Mbti: bbsuserv1.MBTI(row.ReplyUser.MBTI), FollowCount: row.ReplyUser.FollowCount, FollowerCount: row.ReplyUser.FollowerCount, CreatedAt: row.ReplyUser.CreatedAt, UpdatedAt: row.ReplyUser.UpdatedAt}
+			item.ReplyUser = &bbscontentv1.ListCommentReplies_Resp_AccountProfile{Id: row.ReplyUser.ID, Name: row.ReplyUser.Name, Nickname: row.ReplyUser.Nickname, Url: row.ReplyUser.URL, AvatarUrl: row.ReplyUser.AvatarURL, Introduction: row.ReplyUser.Introduction, Status: bbsuserv1enum.AccountStatus(row.ReplyUser.Status), Mbti: bbsuserv1enum.MBTI(row.ReplyUser.MBTI), FollowCount: row.ReplyUser.FollowCount, FollowerCount: row.ReplyUser.FollowerCount, CreatedAt: row.ReplyUser.CreatedAt, UpdatedAt: row.ReplyUser.UpdatedAt}
 		}
 		rows = append(rows, item)
 	}
@@ -193,15 +194,15 @@ func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbsconten
 			rows = append(rows, nil)
 			continue
 		}
-		item := &bbscontentv1.ListCommentTimeline_Resp_CommentListItem{Id: row.ID, ArticleId: row.ArticleID, Content: row.Content, ContentRender: row.ContentRender, Level: row.Level, ParentId: row.ParentID, ReplyId: row.ReplyID, ReplyCount: row.ReplyCount, LikeCount: row.LikeCount, ThankCount: row.ThankCount, Restriction: bbscontentv1.ContentRestriction(row.Restriction), DeletedAt: row.DeletedAt, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
+		item := &bbscontentv1.ListCommentTimeline_Resp_CommentListItem{Id: row.ID, ArticleId: row.ArticleID, Content: row.Content, ContentRender: row.ContentRender, Level: row.Level, ParentId: row.ParentID, ReplyId: row.ReplyID, ReplyCount: row.ReplyCount, LikeCount: row.LikeCount, ThankCount: row.ThankCount, Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), DeletedAt: row.DeletedAt, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
 		if row.ViewerActionState != nil {
 			item.ViewerActionState = &bbscontentv1.ListCommentTimeline_Resp_CommentViewerActionState{Liked: row.ViewerActionState.Liked, Thanked: row.ViewerActionState.Thanked}
 		}
 		if row.User != nil {
-			item.User = &bbscontentv1.ListCommentTimeline_Resp_AccountProfile{Id: row.User.ID, Name: row.User.Name, Nickname: row.User.Nickname, Url: row.User.URL, AvatarUrl: row.User.AvatarURL, Introduction: row.User.Introduction, Status: bbsuserv1.AccountStatus(row.User.Status), Mbti: bbsuserv1.MBTI(row.User.MBTI), FollowCount: row.User.FollowCount, FollowerCount: row.User.FollowerCount, CreatedAt: row.User.CreatedAt, UpdatedAt: row.User.UpdatedAt}
+			item.User = &bbscontentv1.ListCommentTimeline_Resp_AccountProfile{Id: row.User.ID, Name: row.User.Name, Nickname: row.User.Nickname, Url: row.User.URL, AvatarUrl: row.User.AvatarURL, Introduction: row.User.Introduction, Status: bbsuserv1enum.AccountStatus(row.User.Status), Mbti: bbsuserv1enum.MBTI(row.User.MBTI), FollowCount: row.User.FollowCount, FollowerCount: row.User.FollowerCount, CreatedAt: row.User.CreatedAt, UpdatedAt: row.User.UpdatedAt}
 		}
 		if row.ReplyUser != nil {
-			item.ReplyUser = &bbscontentv1.ListCommentTimeline_Resp_AccountProfile{Id: row.ReplyUser.ID, Name: row.ReplyUser.Name, Nickname: row.ReplyUser.Nickname, Url: row.ReplyUser.URL, AvatarUrl: row.ReplyUser.AvatarURL, Introduction: row.ReplyUser.Introduction, Status: bbsuserv1.AccountStatus(row.ReplyUser.Status), Mbti: bbsuserv1.MBTI(row.ReplyUser.MBTI), FollowCount: row.ReplyUser.FollowCount, FollowerCount: row.ReplyUser.FollowerCount, CreatedAt: row.ReplyUser.CreatedAt, UpdatedAt: row.ReplyUser.UpdatedAt}
+			item.ReplyUser = &bbscontentv1.ListCommentTimeline_Resp_AccountProfile{Id: row.ReplyUser.ID, Name: row.ReplyUser.Name, Nickname: row.ReplyUser.Nickname, Url: row.ReplyUser.URL, AvatarUrl: row.ReplyUser.AvatarURL, Introduction: row.ReplyUser.Introduction, Status: bbsuserv1enum.AccountStatus(row.ReplyUser.Status), Mbti: bbsuserv1enum.MBTI(row.ReplyUser.MBTI), FollowCount: row.ReplyUser.FollowCount, FollowerCount: row.ReplyUser.FollowerCount, CreatedAt: row.ReplyUser.CreatedAt, UpdatedAt: row.ReplyUser.UpdatedAt}
 		}
 		rows = append(rows, item)
 	}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.content;
+
+option go_package = "common/proto/gen/bbs/v1/content/enum;enum";
+
+// 内容板块状态。
+enum DomainStatus {
+  DOMAIN_STATUS_UNSPECIFIED = 0; // 未指定
+  DOMAIN_STATUS_ENABLED = 1; // 启用
+  DOMAIN_STATUS_DISABLED = 2; // 停用
+}

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+option go_package = "common/proto/gen/content/v1/enum;enum";
+
+// ContentModerationTarget 表示内容管理处置目标类型。
+enum ContentModerationTarget {
+  CONTENT_MODERATION_TARGET_UNSPECIFIED = 0; // 未指定
+  CONTENT_MODERATION_TARGET_ARTICLE = 1; // 文章
+  CONTENT_MODERATION_TARGET_COMMENT = 2; // 评论
+  CONTENT_MODERATION_TARGET_POSTSCRIPT = 3; // 附言
+}
+
+// ContentModerationAction 表示内容管理处置动作。
+enum ContentModerationAction {
+  CONTENT_MODERATION_ACTION_UNSPECIFIED = 0; // 未指定
+  CONTENT_MODERATION_ACTION_HIDE = 1; // 隐藏
+  CONTENT_MODERATION_ACTION_UNHIDE = 2; // 取消隐藏
+  CONTENT_MODERATION_ACTION_LOCK = 3; // 锁定
+  CONTENT_MODERATION_ACTION_UNLOCK = 4; // 解锁
+  CONTENT_MODERATION_ACTION_DELETE = 5; // 删除
+  CONTENT_MODERATION_ACTION_RESTORE = 6; // 恢复
+}

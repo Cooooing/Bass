@@ -1,6 +1,7 @@
 package main
 
 import (
+	v1enum "common/proto/gen/game_town/v1/enum"
 	"context"
 	"fmt"
 	"strings"
@@ -26,12 +27,12 @@ func listAgentConfigs(ctx context.Context, client *rpc.GameTownClient) commandRe
 }
 
 func createAgentConfig(ctx context.Context, client *rpc.GameTownClient, parts []string) commandResult {
-	var provider v1.GameTownAgentProvider
+	var provider v1enum.GameTownAgentProvider
 	switch strings.ToLower(parts[3]) {
 	case "ollama":
-		provider = v1.GameTownAgentProvider_GAME_TOWN_AGENT_PROVIDER_OLLAMA
+		provider = v1enum.GameTownAgentProvider_GAME_TOWN_AGENT_PROVIDER_OLLAMA
 	case "openai":
-		provider = v1.GameTownAgentProvider_GAME_TOWN_AGENT_PROVIDER_OPENAI_COMPATIBLE
+		provider = v1enum.GameTownAgentProvider_GAME_TOWN_AGENT_PROVIDER_OPENAI_COMPATIBLE
 	default:
 		return commandResult{err: fmt.Errorf("provider 只支持 ollama 或 openai")}
 	}

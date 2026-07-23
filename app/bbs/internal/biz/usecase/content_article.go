@@ -4,6 +4,7 @@ import (
 	"bbs/internal/biz/repo"
 	"common/pkg/apperror"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
@@ -33,7 +34,7 @@ type ContentArticleSave struct {
 	Content       string
 	RewardContent *string
 	RewardPoints  *int32
-	Type          bbscontentv1.ArticleType
+	Type          bbscontentv1enum.ArticleType
 	BountyPoints  *int32
 	Statement     *string
 	Commentable   *bool
@@ -131,7 +132,7 @@ func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *Upd
 type PublishArticleReq struct {
 	UserID     int64
 	ArticleID  int64
-	Visibility bbscontentv1.ArticleVisibility
+	Visibility bbscontentv1enum.ArticleVisibility
 }
 
 func (u *ContentArticleUsecase) PublishArticle(ctx context.Context, req *PublishArticleReq) error {
@@ -140,9 +141,9 @@ func (u *ContentArticleUsecase) PublishArticle(ctx context.Context, req *Publish
 	}
 	visibility := req.Visibility
 	switch visibility {
-	case bbscontentv1.ArticleVisibility_ARTICLE_VISIBILITY_UNSPECIFIED:
-		visibility = bbscontentv1.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC
-	case bbscontentv1.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC, bbscontentv1.ArticleVisibility_ARTICLE_VISIBILITY_PRIVATE:
+	case bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_UNSPECIFIED:
+		visibility = bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC
+	case bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC, bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PRIVATE:
 	default:
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
 	}
@@ -340,13 +341,13 @@ func (u *ContentArticleUsecase) AcceptAnswerArticle(ctx context.Context, req *Ac
 	return u.contentArticleClient.AcceptAnswerArticle(ctx, &repo.AcceptAnswerArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, CommentID: req.CommentID})
 }
 
-func (u *ContentArticleUsecase) validateArticleType(articleType bbscontentv1.ArticleType, bountyPoints *int32) error {
+func (u *ContentArticleUsecase) validateArticleType(articleType bbscontentv1enum.ArticleType, bountyPoints *int32) error {
 	switch articleType {
-	case bbscontentv1.ArticleType_ARTICLE_TYPE_NORMAL, bbscontentv1.ArticleType_ARTICLE_TYPE_QA:
+	case bbscontentv1enum.ArticleType_ARTICLE_TYPE_NORMAL, bbscontentv1enum.ArticleType_ARTICLE_TYPE_QA:
 	default:
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
 	}
-	if articleType != bbscontentv1.ArticleType_ARTICLE_TYPE_QA && bountyPoints != nil {
+	if articleType != bbscontentv1enum.ArticleType_ARTICLE_TYPE_QA && bountyPoints != nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
 	}
 	return nil

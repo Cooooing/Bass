@@ -6,6 +6,7 @@ import (
 	"common/pkg/util"
 	"common/proto/gen/common"
 	contentv1 "common/proto/gen/content/v1"
+	contentv1enum "common/proto/gen/content/v1/enum"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"fmt"
@@ -48,13 +49,13 @@ func (r *ContentArticleClient) CreateArticle(ctx context.Context, req *repo.Crea
 		save.Content = article.Content
 		save.RewardContent = article.RewardContent
 		save.RewardPoints = article.RewardPoints
-		save.Type = contentv1.ArticleType(article.Type)
+		save.Type = contentv1enum.ArticleType(article.Type)
 		save.Statement = article.Statement
 		save.Commentable = article.Commentable
 		save.Anonymous = article.Anonymous
 		save.TagIds = article.TagIDs
-		switch contentv1.ArticleType(article.Type) {
-		case contentv1.ArticleType_ARTICLE_TYPE_QA:
+		switch contentv1enum.ArticleType(article.Type) {
+		case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
 			if article.BountyPoints != nil {
 				save.TypeParams = &contentv1.CreateArticle_Req_Article_Qa{Qa: &contentv1.CreateArticle_Req_Article_QA{BountyPoints: *article.BountyPoints}}
 			}
@@ -84,13 +85,13 @@ func (r *ContentArticleClient) UpdateArticle(ctx context.Context, req *repo.Upda
 		save.Content = article.Content
 		save.RewardContent = article.RewardContent
 		save.RewardPoints = article.RewardPoints
-		save.Type = contentv1.ArticleType(article.Type)
+		save.Type = contentv1enum.ArticleType(article.Type)
 		save.Statement = article.Statement
 		save.Commentable = article.Commentable
 		save.Anonymous = article.Anonymous
 		save.TagIds = article.TagIDs
-		switch contentv1.ArticleType(article.Type) {
-		case contentv1.ArticleType_ARTICLE_TYPE_QA:
+		switch contentv1enum.ArticleType(article.Type) {
+		case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
 			if article.BountyPoints != nil {
 				save.TypeParams = &contentv1.UpdateArticle_Req_Article_Qa{Qa: &contentv1.UpdateArticle_Req_Article_QA{BountyPoints: *article.BountyPoints}}
 			}
@@ -124,7 +125,7 @@ func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.Pub
 	_, err := r.contentClient.Article.Publish(ctx, &contentv1.PublishArticle_Req{
 		ArticleId:  req.ArticleID,
 		UserId:     req.UserID,
-		Visibility: contentv1.ArticleVisibility(req.Visibility),
+		Visibility: contentv1enum.ArticleVisibility(req.Visibility),
 	})
 	if err != nil {
 		return err
@@ -152,34 +153,34 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 		AuthorId: query.AuthorID,
 	}
 	if query.Type != nil {
-		contentQuery.Type = new(contentv1.ArticleType(*query.Type))
+		contentQuery.Type = new(contentv1enum.ArticleType(*query.Type))
 	}
 	if query.Order != nil {
-		contentQuery.Order = new(contentv1.ArticleOrder(*query.Order))
+		contentQuery.Order = new(contentv1enum.ArticleOrder(*query.Order))
 	}
-	normal := contentv1.ContentRestriction_CONTENT_RESTRICTION_NONE
-	locked := contentv1.ContentRestriction_CONTENT_RESTRICTION_LOCKED
-	contentQuery.Restrictions = []contentv1.ContentRestriction{normal, locked}
+	normal := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE
+	locked := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_LOCKED
+	contentQuery.Restrictions = []contentv1enum.ContentRestriction{normal, locked}
 	if query.AuthorID != nil && *query.AuthorID == req.UserID {
 		if query.PublishStatus != nil {
-			contentQuery.PublishStatus = new(contentv1.ArticlePublishStatus(*query.PublishStatus))
+			contentQuery.PublishStatus = new(contentv1enum.ArticlePublishStatus(*query.PublishStatus))
 		}
 		if len(query.PublishStatuses) > 0 {
-			contentQuery.PublishStatuses = lo.Map(query.PublishStatuses, func(item int32, _ int) contentv1.ArticlePublishStatus {
-				return contentv1.ArticlePublishStatus(item)
+			contentQuery.PublishStatuses = lo.Map(query.PublishStatuses, func(item int32, _ int) contentv1enum.ArticlePublishStatus {
+				return contentv1enum.ArticlePublishStatus(item)
 			})
 		}
 		if query.Visibility != nil {
-			contentQuery.Visibility = new(contentv1.ArticleVisibility(*query.Visibility))
+			contentQuery.Visibility = new(contentv1enum.ArticleVisibility(*query.Visibility))
 		}
 		if len(query.Visibilities) > 0 {
-			contentQuery.Visibilities = lo.Map(query.Visibilities, func(item int32, _ int) contentv1.ArticleVisibility {
-				return contentv1.ArticleVisibility(item)
+			contentQuery.Visibilities = lo.Map(query.Visibilities, func(item int32, _ int) contentv1enum.ArticleVisibility {
+				return contentv1enum.ArticleVisibility(item)
 			})
 		}
 	} else {
-		published := contentv1.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED
-		public := contentv1.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC
+		published := contentv1enum.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED
+		public := contentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC
 		contentQuery.PublishStatus = &published
 		contentQuery.Visibility = &public
 	}
@@ -402,7 +403,7 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.PageArticles_Resp
 		EditedAt:          formatProtoTime(item.GetEditedAt()),
 	}
 	switch item.GetType() {
-	case contentv1.ArticleType_ARTICLE_TYPE_QA:
+	case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
 		if qa := item.GetQa(); qa != nil {
 			out.BountyPoints = qa.BountyPoints
 			out.AcceptedAnswerID = qa.AcceptedAnswerId
@@ -464,7 +465,7 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.PageArticles_Resp_A
 		EditedAt:            formatProtoTime(item.GetEditedAt()),
 	}
 	switch item.GetType() {
-	case contentv1.ArticleType_ARTICLE_TYPE_QA:
+	case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
 		if qa := item.GetQa(); qa != nil {
 			out.BountyPoints = qa.BountyPoints
 			out.AcceptedAnswerID = qa.AcceptedAnswerId

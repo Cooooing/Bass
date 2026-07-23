@@ -2,7 +2,7 @@ package enum
 
 import (
 	"common/pkg/enum"
-	v1 "common/proto/gen/im/v1"
+	v1 "common/proto/gen/im/v1/enum"
 )
 
 type ChatGroupStatus string

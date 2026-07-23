@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.push_hub.v1;
+
+option go_package = "common/proto/gen/push_hub/v1/enum;enum";
+
+// 节点状态
+enum NodeStatus {
+  NODE_STATUS_UNKNOWN = 0;
+  NODE_STATUS_ONLINE = 1; // 在线
+  NODE_STATUS_OFFLINE = 2; // 离线
+}

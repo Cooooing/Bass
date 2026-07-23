@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package common.api.app.platform.v1;
 
-option go_package = "common/proto/gen/platform/v1;v1";
+option go_package = "common/proto/gen/platform/v1/enum;enum";
 
 // ObjectStorageProvider 表示对象存储提供商。
 enum ObjectStorageProvider {

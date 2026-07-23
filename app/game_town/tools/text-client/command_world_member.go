@@ -1,6 +1,7 @@
 package main
 
 import (
+	v1enum "common/proto/gen/game_town/v1/enum"
 	"context"
 	"fmt"
 	"strconv"
@@ -174,7 +175,7 @@ func movePlayer(ctx context.Context, client *rpc.GameTownClient, playerID, world
 		return commandResult{lines: lines}
 	}
 	content := fmt.Sprintf("移动到 %s", location.GetName())
-	targets := []*v1.SubmitGameTownAction_Request_EntityRef{{Type: v1.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_LOCATION, Id: location.GetId()}}
+	targets := []*v1.SubmitGameTownAction_Request_EntityRef{{Type: v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_LOCATION, Id: location.GetId()}}
 	return submitAction(ctx, client, playerID, worldID, content, targets)
 }
 

@@ -4,7 +4,7 @@ import (
 	"bbs/internal/biz/usecase"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	"common/proto/gen/common"
-	userv1 "common/proto/gen/user/v1"
+	userv1enum "common/proto/gen/user/v1/enum"
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -77,7 +77,7 @@ func (s *RelationService) ListFollowing(ctx context.Context, req *bbsuserv1.List
 			rows = append(rows, nil)
 			continue
 		}
-		rows = append(rows, &bbsuserv1.ListFollowingRelations_Resp_Relation{Id: row.ID, Type: userv1.RelationType(row.Type), ActorId: row.ActorID, TargetId: row.TargetID, CreatedAt: protoTime(row.CreatedAt), UpdatedAt: protoTime(row.UpdatedAt)})
+		rows = append(rows, &bbsuserv1.ListFollowingRelations_Resp_Relation{Id: row.ID, Type: userv1enum.RelationType(row.Type), ActorId: row.ActorID, TargetId: row.TargetID, CreatedAt: protoTime(row.CreatedAt), UpdatedAt: protoTime(row.UpdatedAt)})
 	}
 	return &bbsuserv1.ListFollowingRelations_Resp{Page: page, Rows: rows}, nil
 }
@@ -100,7 +100,7 @@ func (s *RelationService) ListFollowers(ctx context.Context, req *bbsuserv1.List
 			rows = append(rows, nil)
 			continue
 		}
-		rows = append(rows, &bbsuserv1.ListFollowersRelations_Resp_Relation{Id: row.ID, Type: userv1.RelationType(row.Type), ActorId: row.ActorID, TargetId: row.TargetID, CreatedAt: protoTime(row.CreatedAt), UpdatedAt: protoTime(row.UpdatedAt)})
+		rows = append(rows, &bbsuserv1.ListFollowersRelations_Resp_Relation{Id: row.ID, Type: userv1enum.RelationType(row.Type), ActorId: row.ActorID, TargetId: row.TargetID, CreatedAt: protoTime(row.CreatedAt), UpdatedAt: protoTime(row.UpdatedAt)})
 	}
 	return &bbsuserv1.ListFollowersRelations_Resp{Page: page, Rows: rows}, nil
 }
@@ -123,7 +123,7 @@ func (s *RelationService) ListBlocked(ctx context.Context, req *bbsuserv1.ListBl
 			rows = append(rows, nil)
 			continue
 		}
-		rows = append(rows, &bbsuserv1.ListBlockedRelations_Resp_Relation{Id: row.ID, Type: userv1.RelationType(row.Type), ActorId: row.ActorID, TargetId: row.TargetID, CreatedAt: protoTime(row.CreatedAt), UpdatedAt: protoTime(row.UpdatedAt)})
+		rows = append(rows, &bbsuserv1.ListBlockedRelations_Resp_Relation{Id: row.ID, Type: userv1enum.RelationType(row.Type), ActorId: row.ActorID, TargetId: row.TargetID, CreatedAt: protoTime(row.CreatedAt), UpdatedAt: protoTime(row.UpdatedAt)})
 	}
 	return &bbsuserv1.ListBlockedRelations_Resp{Page: page, Rows: rows}, nil
 }

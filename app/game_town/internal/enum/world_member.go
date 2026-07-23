@@ -2,7 +2,7 @@ package enum
 
 import (
 	commonenum "common/pkg/enum"
-	v1 "common/proto/gen/game_town/v1"
+	v1 "common/proto/gen/game_town/v1/enum"
 )
 
 type WorldMemberRole string

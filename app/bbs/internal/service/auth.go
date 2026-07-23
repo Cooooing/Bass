@@ -4,6 +4,7 @@ import (
 	"bbs/internal/biz/usecase"
 	"common/pkg/apperror"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"net/mail"
@@ -89,7 +90,7 @@ func (s *AuthService) LoginByPassword(ctx context.Context, req *bbsuserv1.LoginB
 	if resp.Account != nil {
 		account = &bbsuserv1.LoginByPassword_Resp_Account{}
 		if profile := resp.Account.Basic; profile != nil {
-			account.Basic = &bbsuserv1.LoginByPassword_Resp_AccountBasic{Id: profile.Id, Name: profile.Name, Nickname: profile.Nickname, Url: profile.Url, AvatarUrl: profile.AvatarUrl, Introduction: profile.Introduction, Status: bbsuserv1.AccountStatus(profile.Status), Mbti: bbsuserv1.MBTI(profile.Mbti), FollowCount: profile.FollowCount, FollowerCount: profile.FollowerCount, CreatedAt: profile.CreatedAt, UpdatedAt: profile.UpdatedAt}
+			account.Basic = &bbsuserv1.LoginByPassword_Resp_AccountBasic{Id: profile.Id, Name: profile.Name, Nickname: profile.Nickname, Url: profile.Url, AvatarUrl: profile.AvatarUrl, Introduction: profile.Introduction, Status: bbsuserv1enum.AccountStatus(profile.Status), Mbti: bbsuserv1enum.MBTI(profile.Mbti), FollowCount: profile.FollowCount, FollowerCount: profile.FollowerCount, CreatedAt: profile.CreatedAt, UpdatedAt: profile.UpdatedAt}
 		}
 		if contact := resp.Account.Contact; contact != nil {
 			account.Contact = &bbsuserv1.LoginByPassword_Resp_AccountContact{UserId: contact.UserId, Email: contact.Email, Phone: contact.Phone}

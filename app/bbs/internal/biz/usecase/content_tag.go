@@ -4,6 +4,7 @@ import (
 	"bbs/internal/biz/repo"
 	"common/pkg/apperror"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
+	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
@@ -21,7 +22,7 @@ type ContentTagSave struct {
 	Name        string
 	Description *string
 	DomainID    *int64
-	Status      *bbscontentv1.TagStatus
+	Status      *bbscontentv1enum.TagStatus
 }
 
 type CreateTagReq struct {
@@ -98,7 +99,7 @@ func (u *ContentTagUsecase) ListTags(ctx context.Context, req *ListTagsReq) (*Li
 		}
 	}
 	if query.Status == nil {
-		value := int32(bbscontentv1.TagStatus_TAG_STATUS_ENABLED)
+		value := int32(bbscontentv1enum.TagStatus_TAG_STATUS_ENABLED)
 		query.Status = &value
 	}
 	resp, err := u.contentTagClient.ListTags(ctx, &repo.ListTagsReq{Page: page, Query: query})

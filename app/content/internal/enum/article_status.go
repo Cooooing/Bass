@@ -2,7 +2,7 @@ package enum
 
 import (
 	"common/pkg/enum"
-	v1 "common/proto/gen/content/v1"
+	v1 "common/proto/gen/content/v1/enum"
 )
 
 // ArticlePublishStatus 表示文章发布生命周期状态。

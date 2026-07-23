@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.api.app.game_town.v1;
+
+option go_package = "common/proto/gen/game_town/v1/enum;enum";
+
+enum GameTownWorldStatus {
+  GAME_TOWN_WORLD_STATUS_UNSPECIFIED = 0; // 未指定
+  GAME_TOWN_WORLD_STATUS_GENERATING = 1; // 生成中
+  GAME_TOWN_WORLD_STATUS_ACTIVE = 2; // 可交互
+  GAME_TOWN_WORLD_STATUS_FAILED = 3; // 生成失败
+  GAME_TOWN_WORLD_STATUS_ARCHIVED = 4; // 已归档
+}

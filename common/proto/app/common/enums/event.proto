@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.common.enums;
 
@@ -23,6 +23,9 @@ enum EventType {
   EVENT_TYPE_USER_UNBLOCK = 1011; // 取消拉黑用户
   EVENT_TYPE_USER_TOTP_ENABLE = 1012; // 启用 TOTP 认证
   EVENT_TYPE_USER_TOTP_DISABLE = 1013; // 停用 TOTP 认证
+  EVENT_TYPE_USER_ACCOUNT_CANCELLED = 1014; // 用户账号注销
+  EVENT_TYPE_USER_ACCOUNT_BANNED = 1015; // 用户账号封禁
+  EVENT_TYPE_USER_ACCOUNT_UNBANNED = 1016; // 用户账号解封
 
   // 内容文章事件（2000-2099）
   EVENT_TYPE_ARTICLE_PUBLISHED = 2001; // 发布文章
@@ -61,6 +64,9 @@ enum EventSubject {
   EVENT_SUBJECT_USER_UNBLOCK = 1011; // user.unblock
   EVENT_SUBJECT_USER_TOTP_ENABLE = 1012; // user.totp.enable
   EVENT_SUBJECT_USER_TOTP_DISABLE = 1013; // user.totp.disable
+  EVENT_SUBJECT_USER_ACCOUNT_CANCELLED = 1014; // user.account.cancelled
+  EVENT_SUBJECT_USER_ACCOUNT_BANNED = 1015; // user.account.banned
+  EVENT_SUBJECT_USER_ACCOUNT_UNBANNED = 1016; // user.account.unbanned
 
   // 内容文章事件（2000-2099）
   EVENT_SUBJECT_ARTICLE_PUBLISHED = 2001; // content.article.published
@@ -132,6 +138,9 @@ message Event {
     UserUnblockPayload user_unblock = 1011;
     UserTotpEnablePayload user_totp_enable = 1012;
     UserTotpDisablePayload user_totp_disable = 1013;
+    UserAccountCancelledPayload user_account_cancelled = 1014;
+    UserAccountBannedPayload user_account_banned = 1015;
+    UserAccountUnbannedPayload user_account_unbanned = 1016;
     ArticlePublishedPayload article_published = 2001;
     ArticleLikedPayload article_liked = 2002;
     ArticleThankedPayload article_thanked = 2003;

@@ -1,4 +1,4 @@
-package schema
+﻿package schema
 
 import (
 	"common/pkg/constant"
@@ -51,9 +51,9 @@ func (Account) Mixin() []ent.Mixin {
 
 func (Account) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("name").Unique(),
-		index.Fields("email").Unique(),
-		index.Fields("phone").Unique(),
+		index.Fields("name").Unique().StorageKey("user_accounts_name_unique"),
+		index.Fields("email").Unique().StorageKey("user_accounts_email_active_unique").Annotations(entsql.IndexWhere("status <> 'cancelled' AND email IS NOT NULL")),
+		index.Fields("phone").Unique().StorageKey("user_accounts_phone_active_unique").Annotations(entsql.IndexWhere("status <> 'cancelled' AND phone IS NOT NULL")),
 	}
 }
 

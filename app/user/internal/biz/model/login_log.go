@@ -6,18 +6,29 @@ import (
 )
 
 type LoginLog struct {
-	ID          int64
-	UserID      *int64
-	LoginMethod enum.LoginMethod
-	Status      enum.LoginStatus
-	IP          *string
-	Country     *string
-	CountryCode *string
-	Province    *string
-	City        *string
-	ISP         *string
-	UserAgent   *string
-	DeviceID    *string
-	CreatedAt   *time.Time
-	UpdatedAt   *time.Time
+	ID             int64
+	UserID         *int64
+	AccountInput   string
+	LoginType      enum.LoginType
+	Realm          enum.LoginRealm
+	Status         enum.LoginStatus
+	FailureReason  *enum.LoginFailureReason
+	SessionID      string
+	IP             *string
+	Country        *string
+	CountryCode    *string
+	Province       *string
+	City           *string
+	ISP            *string
+	UserAgent      *string
+	ClientType     *enum.ClientType
+	DeviceType     *enum.DeviceType
+	OSName         string
+	OSVersion      string
+	BrowserName    string
+	BrowserVersion string
+	AppName        string
+	AppVersion     string
+	CreatedAt      *time.Time
+	UpdatedAt      *time.Time
 }

@@ -8,6 +8,7 @@ import (
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	cerrors "common/proto/gen/common/errors"
 	userv1 "common/proto/gen/user/v1"
+	userenum "common/proto/gen/user/v1/enum"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -26,7 +27,10 @@ var bbsHTTPAuthOperationWhitelist = map[string]struct{}{
 	bbsuserv1.OperationAuthServiceVerifyEmailRegistration: {},
 	bbsuserv1.OperationAuthServiceStartPhoneRegistration:  {},
 	bbsuserv1.OperationAuthServiceVerifyPhoneRegistration: {},
-	bbsuserv1.OperationAuthServiceLoginByPassword:         {},
+	bbsuserv1.OperationAuthServiceStartEmailLogin:         {},
+	bbsuserv1.OperationAuthServiceStartPhoneLogin:         {},
+	bbsuserv1.OperationAuthServiceLogin:                   {},
+	bbsuserv1.OperationAuthServiceRefreshToken:            {},
 	bbsuserv1.OperationAccountServiceAvatar:               {},
 }
 
@@ -39,7 +43,7 @@ func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.O
 	var opts = []kratoshttp.ServerOption{
 		kratoshttp.Middleware(
 			server.RequestLogContextMiddleware(),
-			selector.Server(server.UserAuthMiddleware(authClient)).Match(authRequiredMatch).Build(),
+			selector.Server(server.UserAuthMiddleware(authClient, userenum.LoginRealm_LOGIN_REALM_BBS)).Match(authRequiredMatch).Build(),
 			obs.ServerMiddleware(),
 			recovery.Recovery(),
 			validate.ProtoValidate(),

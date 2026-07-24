@@ -2,7 +2,6 @@ package enum
 
 import "common/proto/gen/common/enums"
 
-// EventSubject 定义跨服务事件的 MQ 主题。
 type EventSubject string
 
 const (
@@ -17,6 +16,9 @@ const (
 	EventSubjectUserUnblock                 EventSubject = "user.unblock"
 	EventSubjectUserTotpEnable              EventSubject = "user.totp.enable"
 	EventSubjectUserTotpDisable             EventSubject = "user.totp.disable"
+	EventSubjectUserAccountCancelled        EventSubject = "user.account.cancelled"
+	EventSubjectUserAccountBanned           EventSubject = "user.account.banned"
+	EventSubjectUserAccountUnbanned         EventSubject = "user.account.unbanned"
 	EventSubjectContentArticlePublish       EventSubject = "content.article.published"
 	EventSubjectContentArticleLike          EventSubject = "content.article.liked"
 	EventSubjectContentArticleThank         EventSubject = "content.article.thanked"
@@ -31,7 +33,6 @@ const (
 	EventSubjectContentCommentStatusUpdate  EventSubject = "content.comment.status_updated"
 )
 
-// EventSubjectMap 将内部事件主题映射到 proto 事件主题。
 var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubject]Entry[EventSubject, enums.EventSubject]{
 	EventSubjectUserRegister:                {Proto: enums.EventSubject_EVENT_SUBJECT_USER_REGISTER},
 	EventSubjectUserLogin:                   {Proto: enums.EventSubject_EVENT_SUBJECT_USER_LOGIN},
@@ -44,6 +45,9 @@ var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubj
 	EventSubjectUserUnblock:                 {Proto: enums.EventSubject_EVENT_SUBJECT_USER_UNBLOCK},
 	EventSubjectUserTotpEnable:              {Proto: enums.EventSubject_EVENT_SUBJECT_USER_TOTP_ENABLE},
 	EventSubjectUserTotpDisable:             {Proto: enums.EventSubject_EVENT_SUBJECT_USER_TOTP_DISABLE},
+	EventSubjectUserAccountCancelled:        {Proto: enums.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_CANCELLED},
+	EventSubjectUserAccountBanned:           {Proto: enums.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_BANNED},
+	EventSubjectUserAccountUnbanned:         {Proto: enums.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_UNBANNED},
 	EventSubjectContentArticlePublish:       {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED},
 	EventSubjectContentArticleLike:          {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED},
 	EventSubjectContentArticleThank:         {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED},
@@ -58,12 +62,7 @@ var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubj
 	EventSubjectContentCommentStatusUpdate:  {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_STATUS_UPDATED},
 })
 
-// Values 仅用于满足 Ent GoType 接口；schema 必须显式使用 EventSubjectMap.EnumValues() 填充数据库枚举值。
-func (EventSubject) Values() []string {
-	return nil
-}
-
-// EventSubjectByEventType 根据事件类型返回对应的 MQ 主题。
+func (EventSubject) Values() []string { return nil }
 func EventSubjectByEventType(eventType enums.EventType) (EventSubject, bool) {
 	return EventSubjectMap.ToEnum(enums.EventSubject(eventType))
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/google/wire"
 )
 
-// ServerProviderSet 是 server 层依赖集合。
 var ServerProviderSet = wire.NewSet(
 	ProvideServers,
 	NewGRPCServer,
@@ -20,10 +19,7 @@ func ProvideServers(
 	grpcServer *grpc.Server,
 	httpServer *http.Server,
 	schedulerRunner *usecase.SchedulerRunner,
+	delayedTaskRunner *usecase.DelayedTaskRunner,
 ) []transport.Server {
-	return []transport.Server{
-		grpcServer,
-		httpServer,
-		schedulerRunner,
-	}
+	return []transport.Server{grpcServer, httpServer, schedulerRunner, delayedTaskRunner}
 }

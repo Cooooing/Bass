@@ -1,16 +1,51 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.user.v1;
 
 option go_package = "common/proto/gen/user/v1/enum;enum";
 
-enum LoginMethod {
-  LOGIN_METHOD_UNSPECIFIED = 0;
-  LOGIN_METHOD_PASSWORD = 1; // 密码登录
+enum LoginType {
+  LOGIN_TYPE_UNSPECIFIED = 0;
+  LOGIN_TYPE_PASSWORD = 1; // 密码登录
+  LOGIN_TYPE_EMAIL = 2; // 邮箱验证码登录
+  LOGIN_TYPE_PHONE = 3; // 手机验证码登录
+}
+
+enum LoginRealm {
+  LOGIN_REALM_UNSPECIFIED = 0;
+  LOGIN_REALM_BBS = 1; // 社区前台
+  LOGIN_REALM_BBS_ADMIN = 2; // 社区管理后台
+}
+
+enum ClientType {
+  CLIENT_TYPE_UNSPECIFIED = 0;
+  CLIENT_TYPE_UNKNOWN = 1; // 未识别客户端
+  CLIENT_TYPE_WEB = 2; // Web 客户端
+  CLIENT_TYPE_ADMIN_WEB = 3; // 管理后台 Web 客户端
+  CLIENT_TYPE_MOBILE = 4; // 移动客户端
+}
+
+enum DeviceType {
+  DEVICE_TYPE_UNSPECIFIED = 0;
+  DEVICE_TYPE_UNKNOWN = 1; // 未识别设备
+  DEVICE_TYPE_DESKTOP = 2; // 桌面设备
+  DEVICE_TYPE_MOBILE = 3; // 手机设备
+  DEVICE_TYPE_TABLET = 4; // 平板设备
+  DEVICE_TYPE_BOT = 5; // 机器人或爬虫
 }
 
 enum LoginStatus {
   LOGIN_STATUS_UNSPECIFIED = 0;
   LOGIN_STATUS_SUCCESS = 1; // 登录成功
   LOGIN_STATUS_FAILED = 2; // 登录失败
+}
+
+enum LoginFailureReason {
+  LOGIN_FAILURE_REASON_UNSPECIFIED = 0;
+  LOGIN_FAILURE_REASON_INVALID_CREDENTIALS = 1; // 账号或密码错误
+  LOGIN_FAILURE_REASON_TOTP_INVALID = 2; // TOTP 验证失败
+  LOGIN_FAILURE_REASON_CODE_INVALID_OR_EXPIRED = 3; // 验证码无效或过期
+  LOGIN_FAILURE_REASON_ACCOUNT_NOT_NORMAL = 4; // 账号状态不允许登录
+  LOGIN_FAILURE_REASON_NOT_IMPLEMENTED = 5; // 登录方式未实现
+  LOGIN_FAILURE_REASON_INTERNAL = 6; // 内部错误
 }

@@ -20,9 +20,7 @@ type LoginLogRepo struct {
 }
 
 func NewLoginLogRepo(db *gen.Client) repo.LoginLogRepo {
-	return &LoginLogRepo{
-		db: db,
-	}
+	return &LoginLogRepo{db: db}
 }
 
 func (r *LoginLogRepo) getClient(ctx context.Context) *gen.Client {
@@ -33,43 +31,32 @@ func (r *LoginLogRepo) getClient(ctx context.Context) *gen.Client {
 }
 
 func (r *LoginLogRepo) Create(ctx context.Context, log *model.LoginLog) (*model.LoginLog, error) {
-	log, err := r.create(ctx, log)
-	if err != nil {
-		return nil, err
-	}
-	return log, nil
+	return r.create(ctx, log)
 }
 
 func (r *LoginLogRepo) Get(ctx context.Context, req *repo.LoginLogGetReq) (*model.LoginLog, error) {
-	log, err := r.get(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	return log, nil
+	return r.get(ctx, req)
 }
 
 func (r *LoginLogRepo) List(ctx context.Context, req *repo.LoginLogGetReq) ([]*model.LoginLog, error) {
+	return r.list(ctx, req)
+}
+
+func (r *LoginLogRepo) Map(ctx context.Context, req *repo.LoginLogGetReq) (map[int64]*model.LoginLog, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return rows, nil
-}
-
-func (r *LoginLogRepo) Map(ctx context.Context, req *repo.LoginLogGetReq) (map[int64]*model.LoginLog, error) {
-	rows, err := r.mapRows(ctx, req)
-	if err != nil {
-		return nil, err
+	result := make(map[int64]*model.LoginLog, len(rows))
+	for _, item := range rows {
+		result[item.ID] = item
 	}
-	return rows, nil
+	return result, nil
 }
 
 func (r *LoginLogRepo) Count(ctx context.Context, req *repo.LoginLogGetReq) (int, error) {
-	count, err := r.count(ctx, req)
-	if err != nil {
-		return 0, err
-	}
-	return count, nil
+	query := r.getClient(ctx).LoginLog.Query()
+	return r.getQuery(query, req).Count(ctx)
 }
 
 func (r *LoginLogRepo) Page(ctx context.Context, req *repo.LoginLogPageReq) (*repo.LoginLogPageResp, error) {
@@ -83,12 +70,15 @@ func (r *LoginLogRepo) Page(ctx context.Context, req *repo.LoginLogPageReq) (*re
 	}
 	return &repo.LoginLogPageResp{Rows: rows, Page: resp}, nil
 }
+
 func (r *LoginLogRepo) create(ctx context.Context, l *model.LoginLog) (*model.LoginLog, error) {
-	tx := r.getClient(ctx)
-	created, err := tx.LoginLog.Create().
+	create := r.getClient(ctx).LoginLog.Create().
 		SetNillableUserID(l.UserID).
-		SetLoginMethod(loginlog.LoginMethod(l.LoginMethod)).
+		SetAccountInput(l.AccountInput).
+		SetLoginType(loginlog.LoginType(l.LoginType)).
+		SetRealm(loginlog.Realm(l.Realm)).
 		SetStatus(loginlog.Status(l.Status)).
+		SetSessionID(l.SessionID).
 		SetNillableIP(l.IP).
 		SetNillableCountry(l.Country).
 		SetNillableCountryCode(l.CountryCode).
@@ -96,153 +86,74 @@ func (r *LoginLogRepo) create(ctx context.Context, l *model.LoginLog) (*model.Lo
 		SetNillableCity(l.City).
 		SetNillableIsp(l.ISP).
 		SetNillableUserAgent(l.UserAgent).
-		SetNillableDeviceID(l.DeviceID).
-		Save(ctx)
+		SetOsName(l.OSName).
+		SetOsVersion(l.OSVersion).
+		SetBrowserName(l.BrowserName).
+		SetBrowserVersion(l.BrowserVersion).
+		SetAppName(l.AppName).
+		SetAppVersion(l.AppVersion)
+	if l.FailureReason != nil {
+		create.SetFailureReason(loginlog.FailureReason(*l.FailureReason))
+	}
+	if l.ClientType != nil {
+		create.SetClientType(loginlog.ClientType(*l.ClientType))
+	}
+	if l.DeviceType != nil {
+		create.SetDeviceType(loginlog.DeviceType(*l.DeviceType))
+	}
+	created, err := create.Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return &model.LoginLog{
-		ID:          created.ID,
-		UserID:      created.UserID,
-		LoginMethod: enum.LoginMethod(created.LoginMethod),
-		Status:      enum.LoginStatus(created.Status),
-		IP:          created.IP,
-		Country:     created.Country,
-		CountryCode: created.CountryCode,
-		Province:    created.Province,
-		City:        created.City,
-		ISP:         created.Isp,
-		UserAgent:   created.UserAgent,
-		DeviceID:    created.DeviceID,
-		CreatedAt:   created.CreatedAt,
-		UpdatedAt:   created.UpdatedAt,
-	}, nil
+	return loginLogToModel(created), nil
 }
 
 func (r *LoginLogRepo) get(ctx context.Context, req *repo.LoginLogGetReq) (*model.LoginLog, error) {
-	tx := r.getClient(ctx)
-	query := tx.LoginLog.Query()
+	query := r.getClient(ctx).LoginLog.Query()
 	query = r.getQuery(query, req)
 	if req != nil && req.LastSuccess {
 		query = query.Order(gen.Desc(loginlog.FieldCreatedAt))
 	}
-	l, err := query.First(ctx)
+	row, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
 	}
 	if err != nil {
 		return nil, err
 	}
-	return &model.LoginLog{
-		ID:          l.ID,
-		UserID:      l.UserID,
-		LoginMethod: enum.LoginMethod(l.LoginMethod),
-		Status:      enum.LoginStatus(l.Status),
-		IP:          l.IP,
-		Country:     l.Country,
-		CountryCode: l.CountryCode,
-		Province:    l.Province,
-		City:        l.City,
-		ISP:         l.Isp,
-		UserAgent:   l.UserAgent,
-		DeviceID:    l.DeviceID,
-		CreatedAt:   l.CreatedAt,
-		UpdatedAt:   l.UpdatedAt,
-	}, nil
+	return loginLogToModel(row), nil
 }
 
 func (r *LoginLogRepo) list(ctx context.Context, req *repo.LoginLogGetReq) ([]*model.LoginLog, error) {
-	tx := r.getClient(ctx)
-	query := tx.LoginLog.Query()
-	query = r.getQuery(query, req)
-	list, err := query.Order(gen.Desc(loginlog.FieldCreatedAt)).All(ctx)
+	query := r.getClient(ctx).LoginLog.Query()
+	rows, err := r.getQuery(query, req).Order(gen.Desc(loginlog.FieldCreatedAt)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]*model.LoginLog, 0, len(list))
-	for _, l := range list {
-		result = append(result, &model.LoginLog{
-			ID:          l.ID,
-			UserID:      l.UserID,
-			LoginMethod: enum.LoginMethod(l.LoginMethod),
-			Status:      enum.LoginStatus(l.Status),
-			IP:          l.IP,
-			Country:     l.Country,
-			CountryCode: l.CountryCode,
-			Province:    l.Province,
-			City:        l.City,
-			ISP:         l.Isp,
-			UserAgent:   l.UserAgent,
-			DeviceID:    l.DeviceID,
-			CreatedAt:   l.CreatedAt,
-			UpdatedAt:   l.UpdatedAt,
-		})
+	result := make([]*model.LoginLog, 0, len(rows))
+	for _, row := range rows {
+		result = append(result, loginLogToModel(row))
 	}
 	return result, nil
-}
-
-func (r *LoginLogRepo) mapRows(ctx context.Context, req *repo.LoginLogGetReq) (map[int64]*model.LoginLog, error) {
-	list, err := r.list(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	result := make(map[int64]*model.LoginLog, len(list))
-	for _, item := range list {
-		result[item.ID] = item
-	}
-	return result, nil
-}
-
-func (r *LoginLogRepo) count(ctx context.Context, req *repo.LoginLogGetReq) (int, error) {
-	tx := r.getClient(ctx)
-	query := tx.LoginLog.Query()
-	query = r.getQuery(query, req)
-	return query.Count(ctx)
 }
 
 func (r *LoginLogRepo) page(ctx context.Context, page *common.PageReq, req *repo.LoginLogGetReq) ([]*model.LoginLog, *common.PageResp, error) {
-	tx := r.getClient(ctx)
 	page = server.PageValid(page)
-	query := tx.LoginLog.Query()
+	query := r.getClient(ctx).LoginLog.Query()
 	query = r.getQuery(query, req)
-
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
-	list, err := query.
-		Order(gen.Desc(loginlog.FieldCreatedAt)).
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
-		All(ctx)
+	rows, err := query.Order(gen.Desc(loginlog.FieldCreatedAt)).Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
-
-	result := make([]*model.LoginLog, 0, len(list))
-	for _, l := range list {
-		result = append(result, &model.LoginLog{
-			ID:          l.ID,
-			UserID:      l.UserID,
-			LoginMethod: enum.LoginMethod(l.LoginMethod),
-			Status:      enum.LoginStatus(l.Status),
-			IP:          l.IP,
-			Country:     l.Country,
-			CountryCode: l.CountryCode,
-			Province:    l.Province,
-			City:        l.City,
-			ISP:         l.Isp,
-			UserAgent:   l.UserAgent,
-			DeviceID:    l.DeviceID,
-			CreatedAt:   l.CreatedAt,
-			UpdatedAt:   l.UpdatedAt,
-		})
+	result := make([]*model.LoginLog, 0, len(rows))
+	for _, row := range rows {
+		result = append(result, loginLogToModel(row))
 	}
-	return result, &common.PageResp{
-		Total: uint32(total),
-		Page:  page.Page,
-		Size:  page.Size,
-	}, nil
+	return result, &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}, nil
 }
 
 func (r *LoginLogRepo) getQuery(query *gen.LoginLogQuery, req *repo.LoginLogGetReq) *gen.LoginLogQuery {
@@ -271,4 +182,47 @@ func (r *LoginLogRepo) getQuery(query *gen.LoginLogQuery, req *repo.LoginLogGetR
 		query = query.Where(loginlog.IP(*req.IP))
 	}
 	return query
+}
+
+func loginLogToModel(row *gen.LoginLog) *model.LoginLog {
+	if row == nil {
+		return nil
+	}
+	result := &model.LoginLog{
+		ID:             row.ID,
+		UserID:         row.UserID,
+		AccountInput:   row.AccountInput,
+		LoginType:      enum.LoginType(row.LoginType),
+		Realm:          enum.LoginRealm(row.Realm),
+		Status:         enum.LoginStatus(row.Status),
+		SessionID:      row.SessionID,
+		IP:             row.IP,
+		Country:        row.Country,
+		CountryCode:    row.CountryCode,
+		Province:       row.Province,
+		City:           row.City,
+		ISP:            row.Isp,
+		UserAgent:      row.UserAgent,
+		OSName:         row.OsName,
+		OSVersion:      row.OsVersion,
+		BrowserName:    row.BrowserName,
+		BrowserVersion: row.BrowserVersion,
+		AppName:        row.AppName,
+		AppVersion:     row.AppVersion,
+		CreatedAt:      row.CreatedAt,
+		UpdatedAt:      row.UpdatedAt,
+	}
+	if row.FailureReason != nil {
+		value := enum.LoginFailureReason(*row.FailureReason)
+		result.FailureReason = &value
+	}
+	if row.ClientType != nil {
+		value := enum.ClientType(*row.ClientType)
+		result.ClientType = &value
+	}
+	if row.DeviceType != nil {
+		value := enum.DeviceType(*row.DeviceType)
+		result.DeviceType = &value
+	}
+	return result
 }

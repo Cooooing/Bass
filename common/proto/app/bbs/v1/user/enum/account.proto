@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
@@ -13,7 +13,7 @@ enum AccountStatus {
   // 封禁。
   ACCOUNT_STATUS_BANNED = 2;
   // 注销。
-  ACCOUNT_STATUS_DELETED = 3;
+  ACCOUNT_STATUS_CANCELLED = 3;
 }
 
 // MBTI 类型。

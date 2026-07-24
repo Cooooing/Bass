@@ -4,137 +4,129 @@ import (
 	"bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
 	"common/pkg/constant"
-	commonmodel "common/pkg/model"
 	"common/pkg/server"
-	"common/pkg/util"
+	bbsuserenum "common/proto/gen/bbs/v1/user/enum"
 	userv1 "common/proto/gen/user/v1"
+	userenum "common/proto/gen/user/v1/enum"
 	"context"
+
+	"github.com/mileusna/useragent"
 )
 
 var _ repo.AuthRepo = (*AuthRepo)(nil)
 
-type AuthRepo struct {
-	userClient *rpc.UserClient
-}
+type AuthRepo struct{ userClient *rpc.UserClient }
 
-func NewAuthRepo(userClient *rpc.UserClient) repo.AuthRepo {
-	return &AuthRepo{userClient: userClient}
-}
-
-func NewAuthClient(userClient *rpc.UserClient) repo.AuthRepo {
-	return NewAuthRepo(userClient)
-}
+func NewAuthRepo(userClient *rpc.UserClient) repo.AuthRepo   { return &AuthRepo{userClient: userClient} }
+func NewAuthClient(userClient *rpc.UserClient) repo.AuthRepo { return NewAuthRepo(userClient) }
 
 func (r *AuthRepo) StartEmailRegistration(ctx context.Context, req *repo.StartEmailRegistrationReq) (*repo.StartEmailRegistrationResp, error) {
-	reply, err := r.userClient.Auth.StartEmailRegistration(ctx, &userv1.StartEmailRegistration_Req{
-		Email:    req.Email,
-		Password: req.Password,
-		Name:     req.Name,
-		Nickname: req.Nickname,
-	})
+	reply, err := r.userClient.Auth.StartEmailRegistration(ctx, &userv1.StartEmailRegistration_Req{Email: req.Email, Password: req.Password, Name: req.Name, Nickname: req.Nickname})
 	if err != nil {
 		return nil, err
 	}
-	return &repo.StartEmailRegistrationResp{CodeToken: reply.GetCodeToken(), Code: reply.GetCode()}, nil
+	return &repo.StartEmailRegistrationResp{Code: reply.GetCode()}, nil
 }
-
 func (r *AuthRepo) VerifyEmailRegistration(ctx context.Context, req *repo.VerifyEmailRegistrationReq) error {
-	_, err := r.userClient.Auth.VerifyEmailRegistration(ctx, &userv1.VerifyEmailRegistration_Req{
-		Code:      req.Code,
-		CodeToken: req.CodeToken,
-	})
-	if err != nil {
-		return err
-	}
-	return nil
+	_, err := r.userClient.Auth.VerifyEmailRegistration(ctx, &userv1.VerifyEmailRegistration_Req{Email: req.Email, Code: req.Code})
+	return err
 }
-
 func (r *AuthRepo) StartPhoneRegistration(ctx context.Context, req *repo.StartPhoneRegistrationReq) (*repo.StartPhoneRegistrationResp, error) {
-	reply, err := r.userClient.Auth.StartPhoneRegistration(ctx, &userv1.StartPhoneRegistration_Req{
-		Phone:    req.Phone,
-		Password: req.Password,
-		Name:     req.Name,
-		Nickname: req.Nickname,
-	})
+	reply, err := r.userClient.Auth.StartPhoneRegistration(ctx, &userv1.StartPhoneRegistration_Req{Phone: req.Phone, Password: req.Password, Name: req.Name, Nickname: req.Nickname})
 	if err != nil {
 		return nil, err
 	}
-	return &repo.StartPhoneRegistrationResp{CodeToken: reply.GetCodeToken(), Code: reply.GetCode()}, nil
+	return &repo.StartPhoneRegistrationResp{Code: reply.GetCode()}, nil
 }
-
 func (r *AuthRepo) VerifyPhoneRegistration(ctx context.Context, req *repo.VerifyPhoneRegistrationReq) error {
-	_, err := r.userClient.Auth.VerifyPhoneRegistration(ctx, &userv1.VerifyPhoneRegistration_Req{
-		Code:      req.Code,
-		CodeToken: req.CodeToken,
-	})
-	if err != nil {
-		return err
-	}
-	return nil
+	_, err := r.userClient.Auth.VerifyPhoneRegistration(ctx, &userv1.VerifyPhoneRegistration_Req{Phone: req.Phone, Code: req.Code})
+	return err
 }
-
-func (r *AuthRepo) LoginByPassword(ctx context.Context, req *repo.LoginByPasswordReq) (*repo.LoginByPasswordResp, error) {
-	loginReq := &userv1.LoginByPassword_Req{
-		Account:   req.Account,
-		Password:  req.Password,
-		UserAgent: server.GetHeader(ctx, constant.HeaderUserAgent),
-		DeviceId:  server.GetHeader(ctx, constant.HeaderDeviceID),
-		Platform:  server.GetHeader(ctx, constant.HeaderPlatform),
-		RequestId: server.GetHeader(ctx, constant.HeaderRequestID),
-	}
-	if loginReq.RequestId == "" {
-		loginReq.RequestId = server.GetHeader(ctx, constant.HeaderTraceID)
-	}
-	if ipInfo, ok := util.GetContextValue[*commonmodel.IpInfo](ctx, constant.CtxIpInfo); ok && ipInfo != nil {
-		loginReq.Ip = ipInfo.Ip
-		loginReq.Country = ipInfo.Country
-		loginReq.CountryCode = ipInfo.CountryCode
-		loginReq.Province = ipInfo.Province
-		loginReq.City = ipInfo.City
-		loginReq.Isp = ipInfo.ISP
-	}
-	if loginReq.Ip == "" {
-		loginReq.Ip = server.ClientIP(ctx)
-	}
-	reply, err := r.userClient.Auth.LoginByPassword(ctx, loginReq)
+func (r *AuthRepo) StartEmailLogin(ctx context.Context, email string) (*repo.StartEmailLoginResp, error) {
+	reply, err := r.userClient.Auth.StartEmailLogin(ctx, &userv1.StartEmailLogin_Req{Email: email})
 	if err != nil {
 		return nil, err
 	}
-	account := reply.GetAccount()
-	var out *repo.Account
-	if account != nil {
-		out = &repo.Account{}
-		if basic := account.GetBasic(); basic != nil {
-			out.Profile = &repo.AccountProfile{
-				ID:            basic.GetId(),
-				Name:          basic.GetName(),
-				Nickname:      basic.Nickname,
-				URL:           basic.Url,
-				AvatarURL:     basic.AvatarUrl,
-				Introduction:  basic.Introduction,
-				Status:        int32(basic.GetStatus()),
-				MBTI:          int32(basic.GetMbti()),
-				FollowCount:   basic.FollowCount,
-				FollowerCount: basic.FollowerCount,
-				CreatedAt:     formatProtoTime(basic.GetCreatedAt()),
-				UpdatedAt:     formatProtoTime(basic.GetUpdatedAt()),
-			}
-		}
-		if contact := account.GetContact(); contact != nil {
-			out.Contact = &repo.AccountContact{
-				UserID: contact.GetUserId(),
-				Email:  contact.Email,
-				Phone:  contact.Phone,
-			}
-		}
+	return &repo.StartEmailLoginResp{Code: reply.GetCode()}, nil
+}
+func (r *AuthRepo) StartPhoneLogin(ctx context.Context, phone string) (*repo.StartPhoneLoginResp, error) {
+	reply, err := r.userClient.Auth.StartPhoneLogin(ctx, &userv1.StartPhoneLogin_Req{Phone: phone})
+	if err != nil {
+		return nil, err
 	}
-	return &repo.LoginByPasswordResp{Token: reply.GetToken(), Account: out}, nil
+	return &repo.StartPhoneLoginResp{Code: reply.GetCode()}, nil
 }
 
-func (r *AuthRepo) Logout(ctx context.Context, token string) error {
-	_, err := r.userClient.Auth.Logout(ctx, &userv1.Logout_Req{Token: token})
-	if err != nil {
-		return err
+func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginResp, error) {
+	loginReq := &userv1.Login_Req{Type: loginTypeToUser(req.Type), Realm: userenum.LoginRealm_LOGIN_REALM_BBS, Client: clientInfo(ctx)}
+	switch req.Type {
+	case bbsuserenum.LoginType_LOGIN_TYPE_PASSWORD:
+		loginReq.Credential = &userv1.Login_Req_PasswordCredential_{PasswordCredential: &userv1.Login_Req_PasswordCredential{Account: req.Account, Password: req.Password, Code: req.Code}}
+	case bbsuserenum.LoginType_LOGIN_TYPE_EMAIL:
+		loginReq.Credential = &userv1.Login_Req_EmailCredential_{EmailCredential: &userv1.Login_Req_EmailCredential{Email: req.Email, Code: req.Code}}
+	case bbsuserenum.LoginType_LOGIN_TYPE_PHONE:
+		loginReq.Credential = &userv1.Login_Req_PhoneCredential_{PhoneCredential: &userv1.Login_Req_PhoneCredential{Phone: req.Phone, Code: req.Code}}
 	}
-	return nil
+	reply, err := r.userClient.Auth.Login(ctx, loginReq)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.LoginResp{Token: repo.TokenResp{AccessToken: reply.GetAccessToken(), RefreshToken: reply.GetRefreshToken(), AccessTokenExpiresAt: reply.GetAccessTokenExpiresAt().AsTime(), RefreshTokenExpiresAt: reply.GetRefreshTokenExpiresAt().AsTime(), SessionExpiresAt: reply.GetSessionExpiresAt().AsTime()}, Account: userAccountToRepo(reply.GetAccount())}, nil
+}
+
+func (r *AuthRepo) RefreshToken(ctx context.Context, refreshToken string) (*repo.TokenResp, error) {
+	reply, err := r.userClient.Auth.RefreshToken(ctx, &userv1.RefreshToken_Req{RefreshToken: refreshToken, Realm: userenum.LoginRealm_LOGIN_REALM_BBS})
+	if err != nil {
+		return nil, err
+	}
+	return &repo.TokenResp{AccessToken: reply.GetAccessToken(), RefreshToken: reply.GetRefreshToken(), AccessTokenExpiresAt: reply.GetAccessTokenExpiresAt().AsTime(), RefreshTokenExpiresAt: reply.GetRefreshTokenExpiresAt().AsTime(), SessionExpiresAt: reply.GetSessionExpiresAt().AsTime()}, nil
+}
+
+func (r *AuthRepo) Logout(ctx context.Context, accessToken string) error {
+	_, err := r.userClient.Auth.Logout(ctx, &userv1.Logout_Req{AccessToken: accessToken, Realm: userenum.LoginRealm_LOGIN_REALM_BBS})
+	return err
+}
+func (r *AuthRepo) CancelAccount(ctx context.Context, req *repo.CancelAccountReq) error {
+	_, err := r.userClient.Auth.CancelAccount(ctx, &userv1.CancelAccount_Req{UserId: req.UserID, Password: req.Password, Code: req.Code})
+	return err
+}
+
+func loginTypeToUser(t bbsuserenum.LoginType) userenum.LoginType {
+	switch t {
+	case bbsuserenum.LoginType_LOGIN_TYPE_EMAIL:
+		return userenum.LoginType_LOGIN_TYPE_EMAIL
+	case bbsuserenum.LoginType_LOGIN_TYPE_PHONE:
+		return userenum.LoginType_LOGIN_TYPE_PHONE
+	default:
+		return userenum.LoginType_LOGIN_TYPE_PASSWORD
+	}
+}
+
+func clientInfo(ctx context.Context) *userv1.Login_Req_ClientInfo {
+	uaRaw := server.GetHeader(ctx, constant.HeaderUserAgent)
+	ua := useragent.Parse(uaRaw)
+	clientType := userenum.ClientType_CLIENT_TYPE_WEB
+	deviceType := userenum.DeviceType_DEVICE_TYPE_DESKTOP
+	if ua.Bot {
+		deviceType = userenum.DeviceType_DEVICE_TYPE_BOT
+	} else if ua.Tablet {
+		deviceType = userenum.DeviceType_DEVICE_TYPE_TABLET
+	} else if ua.Mobile {
+		deviceType = userenum.DeviceType_DEVICE_TYPE_MOBILE
+	}
+	return &userv1.Login_Req_ClientInfo{Ip: server.ClientIP(ctx), UserAgent: uaRaw, ClientType: clientType, DeviceType: deviceType, OsName: ua.OS, OsVersion: ua.OSVersion, BrowserName: ua.Name, BrowserVersion: ua.Version, AppName: server.GetHeader(ctx, constant.HeaderBassAppName), AppVersion: server.GetHeader(ctx, constant.HeaderBassAppVersion)}
+}
+
+func userAccountToRepo(account *userv1.Login_Resp_Account) *repo.Account {
+	if account == nil {
+		return nil
+	}
+	out := &repo.Account{}
+	if basic := account.GetBasic(); basic != nil {
+		out.Profile = &repo.AccountProfile{ID: basic.GetId(), Name: basic.GetName(), Nickname: basic.Nickname, URL: basic.Url, AvatarURL: basic.AvatarUrl, Introduction: basic.Introduction, Status: int32(basic.GetStatus()), MBTI: int32(basic.GetMbti()), FollowCount: basic.FollowCount, FollowerCount: basic.FollowerCount, CreatedAt: formatProtoTime(basic.GetCreatedAt()), UpdatedAt: formatProtoTime(basic.GetUpdatedAt())}
+	}
+	if contact := account.GetContact(); contact != nil {
+		out.Contact = &repo.AccountContact{UserID: contact.GetUserId(), Email: contact.Email, Phone: contact.Phone}
+	}
+	return out
 }

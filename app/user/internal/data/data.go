@@ -22,9 +22,7 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewNatsClient,
 	commonClient.NewLarkWebhookClient,
 	commonClient.NewDeadLetterAlertClient,
-
 	client.ProvideTx,
-
 	repo.NewAccountRepo,
 	repo.NewRelationRepo,
 	repo.NewPreferencesRepo,
@@ -34,19 +32,16 @@ var DataProviderSet = wire.NewSet(
 	repo.NewCheckinRecordRepo,
 	repo.NewCheckinStatRepo,
 	repo.NewLoginLogRepo,
+	repo.NewBanRecordRepo,
+	repo.NewRbacRepo,
 	repo.NewOutboxEventRepo,
 	repo.NewTotpSecretCache,
+	repo.NewAuthCacheRepo,
+	repo.NewDelayedTaskClient,
+	repo.NewIPResolver,
 	repo.NewNatsEventClient,
 )
 
-func ProvideRedis(c *config.Bootstrap) *common.Redis {
-	return c.Redis
-}
-
-func ProvideConsul(c *config.Bootstrap) *common.Consul {
-	return c.Consul
-}
-
-func ProvideNats(c *config.Bootstrap) *common.Nats {
-	return c.Nats
-}
+func ProvideRedis(c *config.Bootstrap) *common.Redis   { return c.Redis }
+func ProvideConsul(c *config.Bootstrap) *common.Consul { return c.Consul }
+func ProvideNats(c *config.Bootstrap) *common.Nats     { return c.Nats }

@@ -2,7 +2,6 @@ package enum
 
 import "common/proto/gen/common/enums"
 
-// EventType 定义跨服务事件类型的内部持久化值。
 type EventType string
 
 const (
@@ -17,6 +16,9 @@ const (
 	EventTypeUserUnblock                 EventType = "user_unblock"
 	EventTypeUserTotpEnable              EventType = "user_totp_enable"
 	EventTypeUserTotpDisable             EventType = "user_totp_disable"
+	EventTypeUserAccountCancelled        EventType = "user_account_cancelled"
+	EventTypeUserAccountBanned           EventType = "user_account_banned"
+	EventTypeUserAccountUnbanned         EventType = "user_account_unbanned"
 	EventTypeContentArticlePublish       EventType = "content_article_publish"
 	EventTypeContentArticleLike          EventType = "content_article_like"
 	EventTypeContentArticleThank         EventType = "content_article_thank"
@@ -31,7 +33,6 @@ const (
 	EventTypeContentCommentStatusUpdate  EventType = "content_comment_status_update"
 )
 
-// EventTypeMap 将内部事件类型映射到 proto 事件类型。
 var EventTypeMap = NewMapping[EventType, enums.EventType](map[EventType]Entry[EventType, enums.EventType]{
 	EventTypeUserRegister:                {Proto: enums.EventType_EVENT_TYPE_USER_REGISTER},
 	EventTypeUserLogin:                   {Proto: enums.EventType_EVENT_TYPE_USER_LOGIN},
@@ -44,6 +45,9 @@ var EventTypeMap = NewMapping[EventType, enums.EventType](map[EventType]Entry[Ev
 	EventTypeUserUnblock:                 {Proto: enums.EventType_EVENT_TYPE_USER_UNBLOCK},
 	EventTypeUserTotpEnable:              {Proto: enums.EventType_EVENT_TYPE_USER_TOTP_ENABLE},
 	EventTypeUserTotpDisable:             {Proto: enums.EventType_EVENT_TYPE_USER_TOTP_DISABLE},
+	EventTypeUserAccountCancelled:        {Proto: enums.EventType_EVENT_TYPE_USER_ACCOUNT_CANCELLED},
+	EventTypeUserAccountBanned:           {Proto: enums.EventType_EVENT_TYPE_USER_ACCOUNT_BANNED},
+	EventTypeUserAccountUnbanned:         {Proto: enums.EventType_EVENT_TYPE_USER_ACCOUNT_UNBANNED},
 	EventTypeContentArticlePublish:       {Proto: enums.EventType_EVENT_TYPE_ARTICLE_PUBLISHED},
 	EventTypeContentArticleLike:          {Proto: enums.EventType_EVENT_TYPE_ARTICLE_LIKED},
 	EventTypeContentArticleThank:         {Proto: enums.EventType_EVENT_TYPE_ARTICLE_THANKED},

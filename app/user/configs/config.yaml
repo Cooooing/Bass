@@ -1,4 +1,4 @@
-server:
+﻿server:
   name: user
   version: 1.0.0
   mode: ${SERVICE_MODE:dev}
@@ -78,8 +78,16 @@ event:
 business:
   app: FishPi
   avatar: https://treble.sxisa.com/api/user/v1/user/avatar/%s
-  jwt:
-    secret: ${USER_JWT_SECRET:your-jwt-secret-here}
-    expires: 864000s
-    email_expire: 300s
-    phone_expire: 300s
+  auth:
+    session:
+      secret: ${USER_JWT_SECRET:your-jwt-secret-here}
+      access_token_ttl: 900s # 15min
+      refresh_token_ttl: 2592000s # 30d
+      session_ttl: 15552000s # 180d
+    verification_code:
+      code_ttl: 300s # 5min
+      resend_interval: 60s # 1min
+      max_attempts: 5
+      register_draft_ttl: 1800s # 30min
+    totp:
+      temporary_secret_ttl: 300s # 5min

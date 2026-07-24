@@ -15,6 +15,7 @@ import (
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type AuthService struct {
@@ -26,19 +27,10 @@ type AuthService struct {
 }
 
 func NewAuthService(authUsecase *usecase.AuthUsecase) *AuthService {
-	return &AuthService{
-		authUsecase: authUsecase,
-		phoneRe:     regexp.MustCompile(`^1[3-9]\d{9}$`),
-		nameRe:      regexp.MustCompile(`^[a-z0-9]+(?:-[a-z0-9]+)*$`),
-		codeRe:      regexp.MustCompile(`^[A-Za-z0-9]{6}$`),
-	}
+	return &AuthService{authUsecase: authUsecase, phoneRe: regexp.MustCompile(`^1[3-9]\d{9}$`), nameRe: regexp.MustCompile(`^[a-z0-9]+(?:-[a-z0-9]+)*$`), codeRe: regexp.MustCompile(`^[A-Za-z0-9]{6}$`)}
 }
-
 func (s *AuthService) RegisterGrpc(gs *grpc.Server) {}
-
-func (s *AuthService) RegisterHttp(hs *http.Server) {
-	bbsuserv1.RegisterAuthServiceHTTPServer(hs, s)
-}
+func (s *AuthService) RegisterHttp(hs *http.Server) { bbsuserv1.RegisterAuthServiceHTTPServer(hs, s) }
 
 func (s *AuthService) StartEmailRegistration(ctx context.Context, req *bbsuserv1.StartEmailRegistration_Req) (*bbsuserv1.StartEmailRegistration_Resp, error) {
 	if err := s.validateStartEmailRegistration(req); err != nil {
@@ -48,17 +40,14 @@ func (s *AuthService) StartEmailRegistration(ctx context.Context, req *bbsuserv1
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.StartEmailRegistration_Resp{CodeToken: resp.CodeToken, Code: resp.Code}, nil
+	return &bbsuserv1.StartEmailRegistration_Resp{Code: resp.Code}, nil
 }
-
 func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *bbsuserv1.VerifyEmailRegistration_Req) (*bbsuserv1.VerifyEmailRegistration_Resp, error) {
 	if err := s.validateVerifyEmailRegistration(req); err != nil {
 		return nil, err
 	}
-	err := s.authUsecase.VerifyEmailRegistration(ctx, &usecase.VerifyEmailRegistrationReq{Code: req.GetCode(), CodeToken: req.GetCodeToken()})
-	return &bbsuserv1.VerifyEmailRegistration_Resp{}, err
+	return &bbsuserv1.VerifyEmailRegistration_Resp{}, s.authUsecase.VerifyEmailRegistration(ctx, &usecase.VerifyEmailRegistrationReq{Email: req.GetEmail(), Code: req.GetCode()})
 }
-
 func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *bbsuserv1.StartPhoneRegistration_Req) (*bbsuserv1.StartPhoneRegistration_Resp, error) {
 	if err := s.validateStartPhoneRegistration(req); err != nil {
 		return nil, err
@@ -67,45 +56,128 @@ func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *bbsuserv1
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.StartPhoneRegistration_Resp{CodeToken: resp.CodeToken, Code: resp.Code}, nil
+	return &bbsuserv1.StartPhoneRegistration_Resp{Code: resp.Code}, nil
 }
-
 func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *bbsuserv1.VerifyPhoneRegistration_Req) (*bbsuserv1.VerifyPhoneRegistration_Resp, error) {
 	if err := s.validateVerifyPhoneRegistration(req); err != nil {
 		return nil, err
 	}
-	err := s.authUsecase.VerifyPhoneRegistration(ctx, &usecase.VerifyPhoneRegistrationReq{Code: req.GetCode(), CodeToken: req.GetCodeToken()})
-	return &bbsuserv1.VerifyPhoneRegistration_Resp{}, err
+	return &bbsuserv1.VerifyPhoneRegistration_Resp{}, s.authUsecase.VerifyPhoneRegistration(ctx, &usecase.VerifyPhoneRegistrationReq{Phone: req.GetPhone(), Code: req.GetCode()})
 }
-
-func (s *AuthService) LoginByPassword(ctx context.Context, req *bbsuserv1.LoginByPassword_Req) (*bbsuserv1.LoginByPassword_Resp, error) {
-	if err := s.validateLoginByPassword(req); err != nil {
-		return nil, err
-	}
-	resp, err := s.authUsecase.LoginByPassword(ctx, &usecase.LoginByPasswordReq{Account: req.GetAccount(), Password: req.GetPassword()})
+func (s *AuthService) StartEmailLogin(ctx context.Context, req *bbsuserv1.StartEmailLogin_Req) (*bbsuserv1.StartEmailLogin_Resp, error) {
+	email, err := s.normalizeEmail(req.GetEmail())
 	if err != nil {
 		return nil, err
 	}
-	var account *bbsuserv1.LoginByPassword_Resp_Account
-	if resp.Account != nil {
-		account = &bbsuserv1.LoginByPassword_Resp_Account{}
-		if profile := resp.Account.Basic; profile != nil {
-			account.Basic = &bbsuserv1.LoginByPassword_Resp_AccountBasic{Id: profile.Id, Name: profile.Name, Nickname: profile.Nickname, Url: profile.Url, AvatarUrl: profile.AvatarUrl, Introduction: profile.Introduction, Status: bbsuserv1enum.AccountStatus(profile.Status), Mbti: bbsuserv1enum.MBTI(profile.Mbti), FollowCount: profile.FollowCount, FollowerCount: profile.FollowerCount, CreatedAt: profile.CreatedAt, UpdatedAt: profile.UpdatedAt}
-		}
-		if contact := resp.Account.Contact; contact != nil {
-			account.Contact = &bbsuserv1.LoginByPassword_Resp_AccountContact{UserId: contact.UserId, Email: contact.Email, Phone: contact.Phone}
-		}
+	resp, err := s.authUsecase.StartEmailLogin(ctx, email)
+	if err != nil {
+		return nil, err
 	}
-	return &bbsuserv1.LoginByPassword_Resp{Token: resp.Token, Account: account}, nil
+	return &bbsuserv1.StartEmailLogin_Resp{Code: resp.Code}, nil
+}
+func (s *AuthService) StartPhoneLogin(ctx context.Context, req *bbsuserv1.StartPhoneLogin_Req) (*bbsuserv1.StartPhoneLogin_Resp, error) {
+	phone, err := s.normalizePhone(req.GetPhone())
+	if err != nil {
+		return nil, err
+	}
+	resp, err := s.authUsecase.StartPhoneLogin(ctx, phone)
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.StartPhoneLogin_Resp{Code: resp.Code}, nil
 }
 
+func (s *AuthService) Login(ctx context.Context, req *bbsuserv1.Login_Req) (*bbsuserv1.Login_Resp, error) {
+	ucReq, err := s.validateLogin(req)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := s.authUsecase.Login(ctx, ucReq)
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.Login_Resp{AccessToken: resp.AccessToken, RefreshToken: resp.RefreshToken, AccessTokenExpiresAt: timestamppb.New(resp.AccessTokenExpiresAt), RefreshTokenExpiresAt: timestamppb.New(resp.RefreshTokenExpiresAt), SessionExpiresAt: timestamppb.New(resp.SessionExpiresAt), Account: resp.Account}, nil
+}
+func (s *AuthService) RefreshToken(ctx context.Context, req *bbsuserv1.RefreshToken_Req) (*bbsuserv1.RefreshToken_Resp, error) {
+	token := strings.TrimSpace(req.GetRefreshToken())
+	if token == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	resp, err := s.authUsecase.RefreshToken(ctx, token)
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.RefreshToken_Resp{AccessToken: resp.AccessToken, RefreshToken: resp.RefreshToken, AccessTokenExpiresAt: timestamppb.New(resp.AccessTokenExpiresAt), RefreshTokenExpiresAt: timestamppb.New(resp.RefreshTokenExpiresAt), SessionExpiresAt: timestamppb.New(resp.SessionExpiresAt)}, nil
+}
 func (s *AuthService) Logout(ctx context.Context, req *bbsuserv1.Logout_Req) (*bbsuserv1.Logout_Resp, error) {
 	token, err := currentToken(ctx)
 	if err != nil {
 		return nil, err
 	}
-	err = s.authUsecase.Logout(ctx, token)
-	return &bbsuserv1.Logout_Resp{}, err
+	return &bbsuserv1.Logout_Resp{}, s.authUsecase.Logout(ctx, token)
+}
+func (s *AuthService) CancelAccount(ctx context.Context, req *bbsuserv1.CancelAccount_Req) (*bbsuserv1.CancelAccount_Resp, error) {
+	userID, err := currentUserID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if strings.TrimSpace(req.GetPassword()) == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return &bbsuserv1.CancelAccount_Resp{}, s.authUsecase.CancelAccount(ctx, userID, req.GetPassword(), req.GetCode())
+}
+
+func (s *AuthService) validateLogin(req *bbsuserv1.Login_Req) (*usecase.LoginReq, error) {
+	if req == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	out := &usecase.LoginReq{Type: req.GetType()}
+	switch req.GetType() {
+	case bbsuserv1enum.LoginType_LOGIN_TYPE_PASSWORD:
+		cred := req.GetPasswordCredential()
+		if cred == nil {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		account, err := s.normalizeLoginAccount(cred.GetAccount())
+		if err != nil {
+			return nil, err
+		}
+		if strings.TrimSpace(cred.GetPassword()) == "" {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		out.Account, out.Password, out.Code = account, cred.GetPassword(), strings.TrimSpace(cred.GetCode())
+	case bbsuserv1enum.LoginType_LOGIN_TYPE_EMAIL:
+		cred := req.GetEmailCredential()
+		if cred == nil {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		email, err := s.normalizeEmail(cred.GetEmail())
+		if err != nil {
+			return nil, err
+		}
+		code, err := s.normalizeCode(cred.GetCode())
+		if err != nil {
+			return nil, err
+		}
+		out.Email, out.Code = email, code
+	case bbsuserv1enum.LoginType_LOGIN_TYPE_PHONE:
+		cred := req.GetPhoneCredential()
+		if cred == nil {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		phone, err := s.normalizePhone(cred.GetPhone())
+		if err != nil {
+			return nil, err
+		}
+		code, err := s.normalizeCode(cred.GetCode())
+		if err != nil {
+			return nil, err
+		}
+		out.Phone, out.Code = phone, code
+	default:
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return out, nil
 }
 
 func (s *AuthService) validateStartEmailRegistration(req *bbsuserv1.StartEmailRegistration_Req) error {
@@ -127,12 +199,9 @@ func (s *AuthService) validateStartEmailRegistration(req *bbsuserv1.StartEmailRe
 	if err := s.validatePassword(req.GetPassword()); err != nil {
 		return err
 	}
-	req.Email = email
-	req.Name = name
-	req.Nickname = nickname
+	req.Email, req.Name, req.Nickname = email, name, nickname
 	return nil
 }
-
 func (s *AuthService) validateStartPhoneRegistration(req *bbsuserv1.StartPhoneRegistration_Req) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -152,50 +221,37 @@ func (s *AuthService) validateStartPhoneRegistration(req *bbsuserv1.StartPhoneRe
 	if err := s.validatePassword(req.GetPassword()); err != nil {
 		return err
 	}
-	req.Phone = phone
-	req.Name = name
-	req.Nickname = nickname
+	req.Phone, req.Name, req.Nickname = phone, name, nickname
 	return nil
 }
-
 func (s *AuthService) validateVerifyEmailRegistration(req *bbsuserv1.VerifyEmailRegistration_Req) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	code, codeToken, err := s.normalizeVerification(req.GetCode(), req.GetCodeToken())
+	email, err := s.normalizeEmail(req.GetEmail())
 	if err != nil {
 		return err
 	}
-	req.Code = code
-	req.CodeToken = codeToken
+	code, err := s.normalizeCode(req.GetCode())
+	if err != nil {
+		return err
+	}
+	req.Email, req.Code = email, code
 	return nil
 }
-
 func (s *AuthService) validateVerifyPhoneRegistration(req *bbsuserv1.VerifyPhoneRegistration_Req) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	code, codeToken, err := s.normalizeVerification(req.GetCode(), req.GetCodeToken())
+	phone, err := s.normalizePhone(req.GetPhone())
 	if err != nil {
 		return err
 	}
-	req.Code = code
-	req.CodeToken = codeToken
-	return nil
-}
-
-func (s *AuthService) validateLoginByPassword(req *bbsuserv1.LoginByPassword_Req) error {
-	if req == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	account, err := s.normalizeLoginAccount(req.GetAccount())
+	code, err := s.normalizeCode(req.GetCode())
 	if err != nil {
 		return err
 	}
-	if strings.TrimSpace(req.GetPassword()) == "" {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	req.Account = account
+	req.Phone, req.Code = phone, code
 	return nil
 }
 
@@ -210,7 +266,6 @@ func (s *AuthService) normalizeEmail(email string) (string, error) {
 	}
 	return email, nil
 }
-
 func (s *AuthService) normalizePhone(phone string) (string, error) {
 	phone = strings.TrimSpace(phone)
 	if !s.phoneRe.MatchString(phone) {
@@ -218,7 +273,6 @@ func (s *AuthService) normalizePhone(phone string) (string, error) {
 	}
 	return phone, nil
 }
-
 func (s *AuthService) normalizeName(name string) (string, error) {
 	name = strings.ToLower(strings.TrimSpace(name))
 	length := utf8.RuneCountInString(name)
@@ -227,7 +281,6 @@ func (s *AuthService) normalizeName(name string) (string, error) {
 	}
 	return name, nil
 }
-
 func (s *AuthService) normalizeNickname(nickname *string) (*string, error) {
 	if nickname == nil {
 		return nil, nil
@@ -239,12 +292,11 @@ func (s *AuthService) normalizeNickname(nickname *string) (*string, error) {
 	}
 	for _, r := range value {
 		if !unicode.IsDigit(r) {
-			return new(value), nil
+			return &value, nil
 		}
 	}
 	return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 }
-
 func (s *AuthService) validatePassword(password string) error {
 	if len(password) < 8 || len(password) > 64 {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -270,19 +322,13 @@ func (s *AuthService) validatePassword(password string) error {
 	}
 	return nil
 }
-
-func (s *AuthService) normalizeVerification(code string, codeToken string) (string, string, error) {
+func (s *AuthService) normalizeCode(code string) (string, error) {
 	code = strings.TrimSpace(code)
-	codeToken = strings.TrimSpace(codeToken)
 	if !s.codeRe.MatchString(code) {
-		return "", "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	if codeToken == "" {
-		return "", "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	return code, codeToken, nil
+	return code, nil
 }
-
 func (s *AuthService) normalizeLoginAccount(account string) (string, error) {
 	account = strings.TrimSpace(account)
 	if account == "" {

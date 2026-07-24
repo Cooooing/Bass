@@ -7,17 +7,19 @@ import (
 	"github.com/google/wire"
 )
 
-// BizProviderSet 是 biz 层依赖集合。
 var BizProviderSet = wire.NewSet(
 	task.NewNoop,
+	task.NewUserUnbanExpired,
 	ProvideTasks,
 	usecase.NewTaskUsecase,
+	usecase.NewDelayedTaskUsecase,
 	usecase.NewSchedulerRunner,
+	usecase.NewDelayedTaskRunner,
 )
 
-func ProvideTasks(noop *task.Noop) map[string]task.Task {
+func ProvideTasks(noop *task.Noop, userUnbanExpired *task.UserUnbanExpired) map[string]task.Task {
 	tasks := map[string]task.Task{}
-	for _, item := range []task.Task{noop} {
+	for _, item := range []task.Task{noop, userUnbanExpired} {
 		name := item.Name()
 		if name == "" {
 			panic("scheduler task name is empty")

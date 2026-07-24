@@ -1,0 +1,116 @@
+﻿syntax = "proto3";
+
+package common.api.app.user.v1;
+
+import "google/protobuf/timestamp.proto";
+import "user/v1/enum/auth.proto";
+
+option go_package = "common/proto/gen/user/v1;v1";
+
+service RbacService {
+  rpc UpsertRole(UpsertRbacRole.Req) returns (UpsertRbacRole.Resp) {} // 新增或更新角色。
+  rpc UpsertPermission(UpsertRbacPermission.Req) returns (UpsertRbacPermission.Resp) {} // 新增或更新权限。
+  rpc BindRolePermission(BindRbacRolePermission.Req) returns (BindRbacRolePermission.Resp) {} // 绑定角色权限。
+  rpc UnbindRolePermission(UnbindRbacRolePermission.Req) returns (UnbindRbacRolePermission.Resp) {} // 解绑角色权限。
+  rpc GrantRole(GrantRbacRole.Req) returns (GrantRbacRole.Resp) {} // 给账号授予角色。
+  rpc RevokeRole(RevokeRbacRole.Req) returns (RevokeRbacRole.Resp) {} // 撤销账号角色。
+  rpc CheckPermission(CheckRbacPermission.Req) returns (CheckRbacPermission.Resp) {} // 校验账号权限。
+}
+
+message UpsertRbacRole {
+  message Req {
+    int64 id = 1; // 角色 ID，0 表示新增
+    LoginRealm realm = 2; // 权限域
+    string code = 3; // 角色编码
+    string name = 4; // 角色名称
+    string description = 5; // 角色说明
+    bool built_in = 6; // 是否内置角色
+    optional bool enabled = 7; // 是否启用，未传默认启用
+  }
+  message Resp {
+    message Role {
+      int64 id = 1; // 角色 ID
+      LoginRealm realm = 2; // 权限域
+      string code = 3; // 角色编码
+      string name = 4; // 角色名称
+      string description = 5; // 角色说明
+      bool built_in = 6; // 是否内置角色
+      bool enabled = 7; // 是否启用
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+    }
+    Role row = 1; // 角色
+  }
+}
+
+message UpsertRbacPermission {
+  message Req {
+    int64 id = 1; // 权限 ID，0 表示新增
+    LoginRealm realm = 2; // 权限域
+    string code = 3; // 权限编码
+    string name = 4; // 权限名称
+    string description = 5; // 权限说明
+    optional bool enabled = 6; // 是否启用，未传默认启用
+  }
+  message Resp {
+    message Permission {
+      int64 id = 1; // 权限 ID
+      LoginRealm realm = 2; // 权限域
+      string code = 3; // 权限编码
+      string name = 4; // 权限名称
+      string description = 5; // 权限说明
+      bool enabled = 6; // 是否启用
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+    }
+    Permission row = 1; // 权限
+  }
+}
+
+message BindRbacRolePermission {
+  message Req {
+    int64 role_id = 1; // 角色 ID
+    int64 permission_id = 2; // 权限 ID
+    int64 operator_id = 3; // 操作人账号 ID
+  }
+  message Resp {}
+}
+
+message UnbindRbacRolePermission {
+  message Req {
+    int64 role_id = 1; // 角色 ID
+    int64 permission_id = 2; // 权限 ID
+    int64 operator_id = 3; // 操作人账号 ID
+  }
+  message Resp {}
+}
+
+message GrantRbacRole {
+  message Req {
+    int64 user_id = 1; // 被授权账号 ID
+    int64 role_id = 2; // 角色 ID
+    int64 granted_by = 3; // 授权人账号 ID
+    optional google.protobuf.Timestamp expires_at = 4; // 授权过期时间，空表示永久
+  }
+  message Resp {}
+}
+
+message RevokeRbacRole {
+  message Req {
+    int64 user_id = 1; // 被撤权账号 ID
+    int64 role_id = 2; // 角色 ID
+    int64 operator_id = 3; // 操作人账号 ID
+  }
+  message Resp {}
+}
+
+message CheckRbacPermission {
+  message Req {
+    int64 user_id = 1; // 账号 ID
+    LoginRealm realm = 2; // 权限域
+    string permission_code = 3; // 权限编码
+  }
+  message Resp {
+    bool allowed = 1; // 是否允许
+  }
+}

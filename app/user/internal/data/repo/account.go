@@ -57,6 +57,10 @@ func (r *AccountRepo) AddStat(ctx context.Context, req *repo.AccountAddStatReq) 
 	return r.addStat(ctx, req.UserID, req.StatType, req.Num)
 }
 
+func (r *AccountRepo) UpdateStatus(ctx context.Context, userID int64, status enum.AccountStatus) (*model.Account, error) {
+	return r.updateStatus(ctx, userID, status)
+}
+
 func (r *AccountRepo) ExistsByAccount(ctx context.Context, account string) (bool, error) {
 	return r.existsByAccount(ctx, account)
 }
@@ -246,13 +250,38 @@ func (r *AccountRepo) addStat(ctx context.Context, userId int64, statType enum.A
 	}, nil
 }
 
+func (r *AccountRepo) updateStatus(ctx context.Context, userID int64, status enum.AccountStatus) (*model.Account, error) {
+	saved, err := r.getClient(ctx).Account.UpdateOneID(userID).
+		SetStatus(account.Status(status)).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &model.Account{
+		ID:            saved.ID,
+		Name:          saved.Name,
+		Nickname:      saved.Nickname,
+		Password:      saved.Password,
+		Email:         saved.Email,
+		Phone:         saved.Phone,
+		URL:           saved.URL,
+		AvatarURL:     saved.AvatarURL,
+		Introduction:  saved.Introduction,
+		Mbti:          (*enum.MBTI)(saved.Mbti),
+		Status:        new(enum.AccountStatus(saved.Status)),
+		FollowCount:   new(saved.FollowCount),
+		FollowerCount: new(saved.FollowerCount),
+		CreatedAt:     saved.CreatedAt,
+		UpdatedAt:     saved.UpdatedAt,
+	}, nil
+}
 func (r *AccountRepo) existsByAccount(ctx context.Context, accountValue string) (bool, error) {
 	tx := r.getClient(ctx)
 	return tx.Account.Query().
 		Where(account.Or(
 			account.NameEQ(accountValue),
-			account.EmailEQ(accountValue),
-			account.PhoneEQ(accountValue),
+			account.And(account.EmailEQ(accountValue), account.StatusNEQ(account.Status(enum.AccountStatusCancelled))),
+			account.And(account.PhoneEQ(accountValue), account.StatusNEQ(account.Status(enum.AccountStatusCancelled))),
 		)).
 		Exist(ctx)
 }
@@ -420,8 +449,8 @@ func (r *AccountRepo) getQuery(query *gen.AccountQuery, req *repo.AccountGetReq)
 	if req.Account != nil {
 		query = query.Where(account.Or(
 			account.NameEQ(*req.Account),
-			account.EmailEQ(*req.Account),
-			account.PhoneEQ(*req.Account),
+			account.And(account.EmailEQ(*req.Account), account.StatusNEQ(account.Status(enum.AccountStatusCancelled))),
+			account.And(account.PhoneEQ(*req.Account), account.StatusNEQ(account.Status(enum.AccountStatusCancelled))),
 		))
 	}
 	return query

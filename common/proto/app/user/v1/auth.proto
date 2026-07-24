@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.user.v1;
 
@@ -11,122 +11,227 @@ import "user/v1/enum/relation.proto";
 option go_package = "common/proto/gen/user/v1;v1";
 
 service AuthService {
-  rpc StartEmailRegistration(StartEmailRegistration.Req) returns (StartEmailRegistration.Resp) {} // 使用邮箱发起账号注册，成功后返回验证码令牌。
+  rpc StartEmailRegistration(StartEmailRegistration.Req) returns (StartEmailRegistration.Resp) {} // 使用邮箱发起账号注册。
   rpc VerifyEmailRegistration(VerifyEmailRegistration.Req) returns (VerifyEmailRegistration.Resp) {} // 校验邮箱注册验证码并创建账号。
-  rpc StartPhoneRegistration(StartPhoneRegistration.Req) returns (StartPhoneRegistration.Resp) {} // 使用手机号发起账号注册，成功后返回验证码令牌。
-  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Req) returns (VerifyPhoneRegistration.Resp) {} // 校验手机号注册验证码并创建账号。
-  rpc LoginByPassword(LoginByPassword.Req) returns (LoginByPassword.Resp) {} // 使用账号名、邮箱或手机号加密码登录。
-  rpc Logout(Logout.Req) returns (Logout.Resp) {} // 登出账号并清理令牌。
-  rpc ParseToken(ParseToken.Req) returns (ParseToken.Resp) {} // 解析登录令牌。
+  rpc StartPhoneRegistration(StartPhoneRegistration.Req) returns (StartPhoneRegistration.Resp) {} // 使用手机号发起账号注册，P0 返回未实现。
+  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Req) returns (VerifyPhoneRegistration.Resp) {} // 校验手机号注册验证码，P0 返回未实现。
+  rpc StartEmailLogin(StartEmailLogin.Req) returns (StartEmailLogin.Resp) {} // 发送邮箱登录验证码。
+  rpc StartPhoneLogin(StartPhoneLogin.Req) returns (StartPhoneLogin.Resp) {} // 发送手机号登录验证码，P0 返回未实现。
+  rpc Login(Login.Req) returns (Login.Resp) {} // 使用密码、邮箱验证码或手机号验证码登录。
+  rpc RefreshToken(RefreshToken.Req) returns (RefreshToken.Resp) {} // 使用 refresh token 刷新会话令牌。
+  rpc Logout(Logout.Req) returns (Logout.Resp) {} // 登出当前会话。
+  rpc ParseToken(ParseToken.Req) returns (ParseToken.Resp) {} // 解析 access token 并滑动刷新会话。
+  rpc CancelAccount(CancelAccount.Req) returns (CancelAccount.Resp) {} // 注销账号并失效全部会话。
+  rpc BanAccount(BanAccount.Req) returns (BanAccount.Resp) {} // 封禁账号并失效全部会话。
+  rpc UnbanExpired(UnbanExpired.Req) returns (UnbanExpired.Resp) {} // 过期封禁解封，由 scheduler 调用。
 }
 
 message StartEmailRegistration {
   message Req {
-    string email = 1;
-    string password = 2;
-    string name = 3;
-    optional string nickname = 4;
+    string email = 1; // 邮箱地址
+    string password = 2; // 账号密码
+    string name = 3; // 账号名
+    optional string nickname = 4; // 昵称
   }
   message Resp {
-    string code_token = 1;
-    string code = 2;
+    string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
 message VerifyEmailRegistration {
   message Req {
-    string code = 1;
-    string code_token = 2;
+    string email = 1; // 邮箱地址
+    string code = 2; // 验证码
   }
   message Resp {}
 }
 
 message StartPhoneRegistration {
   message Req {
-    string phone = 1;
-    string password = 2;
-    string name = 3;
-    optional string nickname = 4;
+    string phone = 1; // 手机号
+    string password = 2; // 账号密码
+    string name = 3; // 账号名
+    optional string nickname = 4; // 昵称
   }
   message Resp {
-    string code_token = 1;
-    string code = 2;
+    string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
 message VerifyPhoneRegistration {
   message Req {
-    string code = 1;
-    string code_token = 2;
+    string phone = 1; // 手机号
+    string code = 2; // 验证码
   }
   message Resp {}
 }
 
-message LoginByPassword {
+message StartEmailLogin {
   message Req {
-    string account = 1;
-    string password = 2;
-    string ip = 3;
-    string country = 4;
-    string country_code = 5;
-    string province = 6;
-    string city = 7;
-    string isp = 8;
-    string user_agent = 9;
-    string device_id = 10;
-    string platform = 11;
-    string request_id = 12;
+    string email = 1; // 邮箱地址
   }
   message Resp {
+    string code = 1; // 非生产环境返回验证码，生产环境为空
+  }
+}
+
+message StartPhoneLogin {
+  message Req {
+    string phone = 1; // 手机号
+  }
+  message Resp {
+    string code = 1; // 非生产环境返回验证码，生产环境为空
+  }
+}
+
+message Login {
+  message Req {
+    message ClientInfo {
+      string ip = 1; // 客户端 IP
+      string user_agent = 2; // 原始 User-Agent
+      ClientType client_type = 3; // 客户端类型
+      DeviceType device_type = 4; // 设备类型
+      string os_name = 5; // 操作系统名称
+      string os_version = 6; // 操作系统版本
+      string browser_name = 7; // 浏览器名称
+      string browser_version = 8; // 浏览器版本
+      string app_name = 9; // 客户端应用名称
+      string app_version = 10; // 客户端应用版本
+    }
+
+    message PasswordCredential {
+      string account = 1; // 账号名、邮箱或手机号
+      string password = 2; // 密码
+      string code = 3; // 账号启用 TOTP 时作为 TOTP code
+    }
+
+    message EmailCredential {
+      string email = 1; // 邮箱地址
+      string code = 2; // 邮箱验证码
+    }
+
+    message PhoneCredential {
+      string phone = 1; // 手机号
+      string code = 2; // 手机验证码
+    }
+
+    LoginType type = 1; // 登录方式
+    LoginRealm realm = 2; // 登录域，由调用方固定传入
+    ClientInfo client = 3; // 客户端信息
+
+    oneof credential {
+      PasswordCredential password_credential = 10; // 密码登录凭证
+      EmailCredential email_credential = 11; // 邮箱登录凭证
+      PhoneCredential phone_credential = 12; // 手机登录凭证
+    }
+  }
+
+  message Resp {
     message Account {
-      AccountBasic basic = 1;
-      AccountContact contact = 2;
+      AccountBasic basic = 1; // 基础信息
+      AccountContact contact = 2; // 联系方式
     }
 
     message AccountBasic {
-      int64 id = 1;
-      string name = 2;
-      optional string nickname = 3;
-      optional string url = 4;
-      optional string avatar_url = 5;
-      optional string introduction = 6;
-      MBTI mbti = 7;
-      AccountStatus status = 8;
-      optional int32 follow_count = 10;
-      optional int32 follower_count = 11;
-      google.protobuf.Timestamp created_at = 1000;
-      google.protobuf.Timestamp updated_at = 1001;
+      int64 id = 1; // 账号 ID
+      string name = 2; // 账号名
+      optional string nickname = 3; // 昵称
+      optional string url = 4; // 个人主页 URL
+      optional string avatar_url = 5; // 头像 URL
+      optional string introduction = 6; // 个人简介
+      MBTI mbti = 7; // MBTI 类型
+      AccountStatus status = 8; // 账号状态
+      optional int32 follow_count = 10; // 关注数
+      optional int32 follower_count = 11; // 粉丝数
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountContact {
-      int64 user_id = 1;
-      optional string email = 2;
-      optional string phone = 3;
+      int64 user_id = 1; // 账号 ID
+      optional string email = 2; // 邮箱
+      optional string phone = 3; // 手机号
     }
-    string token = 1;
-    Account account = 2;
+
+    string access_token = 1; // access token
+    string refresh_token = 2; // refresh token
+    google.protobuf.Timestamp access_token_expires_at = 3; // access token 过期时间
+    google.protobuf.Timestamp refresh_token_expires_at = 4; // refresh token 空闲过期时间
+    google.protobuf.Timestamp session_expires_at = 5; // session 绝对过期时间
+    Account account = 6; // 当前账号信息
+  }
+}
+
+message RefreshToken {
+  message Req {
+    string refresh_token = 1; // refresh token
+    LoginRealm realm = 2; // 登录域
+  }
+  message Resp {
+    string access_token = 1; // 新 access token
+    string refresh_token = 2; // 新 refresh token
+    google.protobuf.Timestamp access_token_expires_at = 3; // access token 过期时间
+    google.protobuf.Timestamp refresh_token_expires_at = 4; // refresh token 空闲过期时间
+    google.protobuf.Timestamp session_expires_at = 5; // session 绝对过期时间
   }
 }
 
 message Logout {
   message Req {
-    string token = 1;
+    string access_token = 1; // access token
+    LoginRealm realm = 2; // 登录域
   }
   message Resp {}
 }
 
 message ParseToken {
   message Req {
-    string token = 1;
+    string access_token = 1; // access token
+    LoginRealm realm = 2; // 登录域
   }
   message Resp {
     message TokenUser {
-      int64 id = 1;
-      string name = 2;
-      string nickname = 3;
-      common.enums.Language language = 4;
-      string timezone = 5;
+      int64 id = 1; // 账号 ID
+      string name = 2; // 账号名
+      string nickname = 3; // 昵称
+      common.enums.Language language = 4; // 语言
+      string timezone = 5; // 时区
+      string session_id = 6; // 会话 ID
+      LoginRealm realm = 7; // 登录域
     }
-    TokenUser user = 1;
+    TokenUser user = 1; // token 用户
+  }
+}
+
+message CancelAccount {
+  message Req {
+    int64 user_id = 1; // 账号 ID
+    string password = 2; // 当前密码
+    string code = 3; // 启用 TOTP 时作为 TOTP code
+  }
+  message Resp {}
+}
+
+message BanAccount {
+  message Req {
+    int64 user_id = 1; // 被封禁账号 ID
+    int64 operator_id = 2; // 操作人账号 ID
+    LoginRealm operator_realm = 3; // 操作人登录域
+    string reason = 4; // 封禁原因
+    string remark = 5; // 操作备注
+    optional google.protobuf.Timestamp banned_until = 6; // 封禁截止时间，空表示永久封禁
+  }
+  message Resp {
+    int64 ban_record_id = 1; // 封禁记录 ID
+  }
+}
+
+message UnbanExpired {
+  message Req {
+    int64 user_id = 1; // 账号 ID
+    int64 ban_record_id = 2; // 封禁记录 ID
+  }
+  message Resp {
+    bool updated = 1; // 是否执行了解封状态更新
   }
 }

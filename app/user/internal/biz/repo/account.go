@@ -13,6 +13,8 @@ type AccountRepo interface {
 	UpdateProfile(ctx context.Context, profile *model.AccountProfileUpdate) (*model.Account, error)
 	AddStat(ctx context.Context, req *AccountAddStatReq) (*model.Account, error)
 
+	UpdateStatus(ctx context.Context, userID int64, status enum.AccountStatus) (*model.Account, error)
+
 	ExistsByAccount(ctx context.Context, account string) (bool, error)
 	Get(ctx context.Context, req *AccountGetReq) (*model.Account, error)
 	List(ctx context.Context, req *AccountGetReq) ([]*model.Account, error)

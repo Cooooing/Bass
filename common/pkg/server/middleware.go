@@ -9,6 +9,7 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	userv1 "common/proto/gen/user/v1"
+	userv1enum "common/proto/gen/user/v1/enum"
 	"context"
 	"encoding/json"
 	"log/slog"
@@ -153,7 +154,7 @@ func RequestLogContextMiddleware() middleware.Middleware {
 	}
 }
 
-func UserAuthMiddleware(authClient userv1.AuthServiceClient) middleware.Middleware {
+func UserAuthMiddleware(authClient userv1.AuthServiceClient, realm userv1enum.LoginRealm) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			const bearerPrefix = "Bearer "
@@ -167,7 +168,7 @@ func UserAuthMiddleware(authClient userv1.AuthServiceClient) middleware.Middlewa
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 			}
 
-			reply, err := authClient.ParseToken(ctx, &userv1.ParseToken_Req{Token: token})
+			reply, err := authClient.ParseToken(ctx, &userv1.ParseToken_Req{AccessToken: token, Realm: realm})
 			if err != nil {
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID).WithCause(err)
 			}

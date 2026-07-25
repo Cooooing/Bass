@@ -17,6 +17,7 @@ import (
 var _ bizrepo.InboxEventRepo = (*InboxEventRepo)(nil)
 
 type InboxEventRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -62,7 +63,7 @@ func (r *InboxEventRepo) SaveProcessing(ctx context.Context, req *bizrepo.InboxE
 		Save(ctx)
 	if err == nil {
 		return &bizrepo.InboxEventSaveProcessingResp{
-			Event:   toInboxEventModel(save),
+			Event:   r.inboxEvent(save),
 			Claimed: true,
 		}, nil
 	}
@@ -77,14 +78,14 @@ func (r *InboxEventRepo) SaveProcessing(ctx context.Context, req *bizrepo.InboxE
 		return nil, getErr
 	}
 	return &bizrepo.InboxEventSaveProcessingResp{
-		Event:   toInboxEventModel(exist),
+		Event:   r.inboxEvent(exist),
 		Claimed: false,
 	}, nil
 }
 
 func (r *InboxEventRepo) Get(ctx context.Context, req *bizrepo.InboxEventQuery) (*model.InboxEvent, error) {
 	query := r.getClient(ctx).InboxEvent.Query()
-	query = r.getQuery(query, inboxEventQuery(req))
+	query = r.getQuery(query, req)
 	row, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
@@ -92,26 +93,26 @@ func (r *InboxEventRepo) Get(ctx context.Context, req *bizrepo.InboxEventQuery) 
 	if err != nil {
 		return nil, err
 	}
-	return toInboxEventModel(row), nil
+	return r.inboxEvent(row), nil
 }
 
 func (r *InboxEventRepo) List(ctx context.Context, req *bizrepo.InboxEventQuery) ([]*model.InboxEvent, error) {
 	query := r.getClient(ctx).InboxEvent.Query()
-	query = r.getQuery(query, inboxEventListQuery(req))
+	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	result := make([]*model.InboxEvent, 0, len(list))
 	for _, row := range list {
-		result = append(result, toInboxEventModel(row))
+		result = append(result, r.inboxEvent(row))
 	}
 	return result, nil
 }
 
 func (r *InboxEventRepo) Map(ctx context.Context, req *bizrepo.InboxEventQuery) (map[int64]*model.
 	InboxEvent, error) {
-	list, err := r.List(ctx, inboxEventMapQuery(req))
+	list, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +125,7 @@ func (r *InboxEventRepo) Map(ctx context.Context, req *bizrepo.InboxEventQuery) 
 
 func (r *InboxEventRepo) Count(ctx context.Context, req *bizrepo.InboxEventQuery) (int, error) {
 	query := r.getClient(ctx).InboxEvent.Query()
-	query = r.getQuery(query, inboxEventCountQuery(req))
+	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
 	if err != nil {
 		return 0, err
@@ -133,12 +134,12 @@ func (r *InboxEventRepo) Count(ctx context.Context, req *bizrepo.InboxEventQuery
 }
 
 func (r *InboxEventRepo) Page(ctx context.Context, req *bizrepo.InboxEventQuery) (*bizrepo.InboxEventPageResp, error) {
-	queryReq := inboxEventPageQuery(req)
+	queryReq := req
 	var pageReq *base.PageRequest
 	if queryReq != nil {
 		pageReq = queryReq.Page
 	}
-	page := normalizePage(pageReq)
+	page := r.normalizePage(pageReq)
 	query := r.getClient(ctx).InboxEvent.Query()
 	query = r.getQuery(query, queryReq)
 	total, err := query.Clone().Count(ctx)
@@ -154,7 +155,7 @@ func (r *InboxEventRepo) Page(ctx context.Context, req *bizrepo.InboxEventQuery)
 	}
 	result := make([]*model.InboxEvent, 0, len(list))
 	for _, row := range list {
-		result = append(result, toInboxEventModel(row))
+		result = append(result, r.inboxEvent(row))
 	}
 	return &bizrepo.InboxEventPageResp{
 		Rows: result,
@@ -291,32 +292,7 @@ func (r *InboxEventRepo) getQuery(query *gen.InboxEventQuery, req *bizrepo.Inbox
 	return query
 }
 
-func inboxEventQuery(query *bizrepo.InboxEventQuery) *bizrepo.InboxEventQuery {
-
-	return query
-}
-
-func inboxEventListQuery(query *bizrepo.InboxEventQuery) *bizrepo.InboxEventQuery {
-
-	return query
-}
-
-func inboxEventMapQuery(query *bizrepo.InboxEventQuery) *bizrepo.InboxEventQuery {
-
-	return query
-}
-
-func inboxEventCountQuery(query *bizrepo.InboxEventQuery) *bizrepo.InboxEventQuery {
-
-	return query
-}
-
-func inboxEventPageQuery(query *bizrepo.InboxEventQuery) *bizrepo.InboxEventQuery {
-
-	return query
-}
-
-func toInboxEventModel(row *gen.InboxEvent) *model.InboxEvent {
+func (r *InboxEventRepo) inboxEvent(row *gen.InboxEvent) *model.InboxEvent {
 	if row == nil {
 		return nil
 	}

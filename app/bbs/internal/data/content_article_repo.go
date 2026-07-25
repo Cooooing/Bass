@@ -33,6 +33,7 @@ func cloneDataMessage[T proto.Message](src proto.Message, dst T) T {
 var _ repo.ContentArticleClient = (*ContentArticleClient)(nil)
 
 type ContentArticleClient struct {
+	protoTimeFormatter
 	contentClient *rpc.ContentClient
 	userClient    *rpc.UserClient
 }
@@ -207,10 +208,9 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 			})
 		}
 	} else {
-		published := contentv1enum.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED
-		public := contentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC
-		contentQuery.PublishStatus = &published
-		contentQuery.Visibility = &public
+
+		contentQuery.PublishStatus = new(contentv1enum.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED)
+		contentQuery.Visibility = new(contentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC)
 	}
 	var pageReq *common.PageReq
 	if req.Page != nil {
@@ -295,8 +295,8 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 				Restriction:   int32(postscript.GetRestriction()),
 				CreatedBy:     postscript.CreatedBy,
 				UpdatedBy:     postscript.UpdatedBy,
-				CreatedAt:     formatProtoTime(postscript.GetCreatedAt()),
-				UpdatedAt:     formatProtoTime(postscript.GetUpdatedAt()),
+				CreatedAt:     r.formatProtoTime(postscript.GetCreatedAt()),
+				UpdatedAt:     r.formatProtoTime(postscript.GetUpdatedAt()),
 			})
 		}
 	}
@@ -466,10 +466,10 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.PageArticles_Resp
 		ReplyCount:        item.GetReplyCount(),
 		CoverImageURL:     r.articleCoverImageURL(item),
 		ViewerActionState: state,
-		CreatedAt:         formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:         formatProtoTime(item.GetUpdatedAt()),
-		PublishedAt:       formatProtoTime(item.GetPublishedAt()),
-		EditedAt:          formatProtoTime(item.GetEditedAt()),
+		CreatedAt:         r.formatProtoTime(item.GetCreatedAt()),
+		UpdatedAt:         r.formatProtoTime(item.GetUpdatedAt()),
+		PublishedAt:       r.formatProtoTime(item.GetPublishedAt()),
+		EditedAt:          r.formatProtoTime(item.GetEditedAt()),
 	}
 	switch item.GetType() {
 	case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
@@ -486,7 +486,7 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.PageArticles_Resp
 		out.AuthorUser = profiles[*item.CreatedBy]
 	}
 	if lastComment != nil {
-		out.LastReplyAt = formatProtoTime(lastComment.GetCreatedAt())
+		out.LastReplyAt = r.formatProtoTime(lastComment.GetCreatedAt())
 		if lastComment.CreatedBy != nil {
 			if !item.GetAnonymous() || item.CreatedBy == nil || *lastComment.CreatedBy != *item.CreatedBy {
 				out.LastReplyUser = profiles[*lastComment.CreatedBy]
@@ -528,10 +528,10 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.PageArticles_Resp_A
 		ReplyCount:          item.GetReplyCount(),
 		CoverImageURL:       r.articleCoverImageURL(item),
 		ViewerActionState:   state,
-		CreatedAt:           formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:           formatProtoTime(item.GetUpdatedAt()),
-		PublishedAt:         formatProtoTime(item.GetPublishedAt()),
-		EditedAt:            formatProtoTime(item.GetEditedAt()),
+		CreatedAt:           r.formatProtoTime(item.GetCreatedAt()),
+		UpdatedAt:           r.formatProtoTime(item.GetUpdatedAt()),
+		PublishedAt:         r.formatProtoTime(item.GetPublishedAt()),
+		EditedAt:            r.formatProtoTime(item.GetEditedAt()),
 	}
 	switch item.GetType() {
 	case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
@@ -548,7 +548,7 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.PageArticles_Resp_A
 		out.AuthorUser = profiles[*item.CreatedBy]
 	}
 	if lastComment != nil {
-		out.LastReplyAt = formatProtoTime(lastComment.GetCreatedAt())
+		out.LastReplyAt = r.formatProtoTime(lastComment.GetCreatedAt())
 		if lastComment.CreatedBy != nil {
 			if !item.GetAnonymous() || item.CreatedBy == nil || *lastComment.CreatedBy != *item.CreatedBy {
 				out.LastReplyUser = profiles[*lastComment.CreatedBy]
@@ -631,8 +631,8 @@ func (r *ContentArticleClient) loadAccountProfiles(ctx context.Context, userIDs 
 			Status:        int32(basic.GetStatus()),
 			FollowCount:   basic.FollowCount,
 			FollowerCount: basic.FollowerCount,
-			CreatedAt:     formatProtoTime(basic.GetCreatedAt()),
-			UpdatedAt:     formatProtoTime(basic.GetUpdatedAt()),
+			CreatedAt:     r.formatProtoTime(basic.GetCreatedAt()),
+			UpdatedAt:     r.formatProtoTime(basic.GetUpdatedAt()),
 		}
 	}
 	return out, nil

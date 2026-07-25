@@ -198,7 +198,7 @@ func (r *LocationRepo) page(ctx context.Context, page *common.PageReq, req *repo
 
 func (r *LocationRepo) upsertByUserID(ctx context.Context, l *model.Location) (*model.Location, error) {
 	existing, err := r.get(ctx, &repo.LocationGetReq{
-		UserID: &l.UserID,
+		UserID: new(l.UserID),
 	})
 	if err != nil {
 		return nil, err

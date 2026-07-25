@@ -17,6 +17,7 @@ import (
 var _ repo.ContentModerationRecordRepo = (*ContentModerationRecordRepo)(nil)
 
 type ContentModerationRecordRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -123,7 +124,7 @@ func (r *ContentModerationRecordRepo) Count(ctx context.Context, req *repo.Conte
 }
 
 func (r *ContentModerationRecordRepo) Page(ctx context.Context, req *repo.ContentModerationRecordGetReq) (*repo.ContentModerationRecordPageResp, error) {
-	page := normalizePage(req.Page)
+	page := r.normalizePage(req.Page)
 	query := r.getClient(ctx).ContentModerationRecord.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)

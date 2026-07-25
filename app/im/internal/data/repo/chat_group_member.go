@@ -18,6 +18,7 @@ import (
 var _ repo.ChatGroupMemberRepo = (*ChatGroupMemberRepo)(nil)
 
 type ChatGroupMemberRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -55,8 +56,7 @@ func (r *ChatGroupMemberRepo) Save(ctx context.Context, chatGroupMember *model.C
 func (r *ChatGroupMemberRepo) UpdateMuteEndAt(ctx context.Context, req *repo.ChatGroupMemberUpdateMuteEndAtReq) (*model.ChatGroupMember, error) {
 	var muteEndAtTime *time.Time
 	if req.MuteEndAt > 0 {
-		t := time.Now().Add(req.MuteEndAt)
-		muteEndAtTime = &t
+		muteEndAtTime = new(time.Now().Add(req.MuteEndAt))
 	}
 	query := r.getClient(ctx).ChatGroupMember.Update().
 		Where(
@@ -132,9 +132,9 @@ func (r *ChatGroupMemberRepo) Count(ctx context.Context, req *repo.ChatGroupMemb
 }
 
 func (r *ChatGroupMemberRepo) Page(ctx context.Context, req *repo.ChatGroupMemberQuery) (*repo.ChatGroupMemberPageResp, error) {
-	page := normalizePage(nil)
+	page := r.normalizePage(nil)
 	if req != nil {
-		page = normalizePage(req.Page)
+		page = r.normalizePage(req.Page)
 	}
 	query := r.getClient(ctx).ChatGroupMember.Query()
 	query = r.getQuery(query, req)

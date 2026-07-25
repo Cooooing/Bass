@@ -13,21 +13,18 @@ import (
 	"log/slog"
 )
 
-const (
-	outboxMinPollInterval = time.Second
-	outboxMaxPollInterval = 8 * time.Second
-	outboxPublishLimit    = 1000
-	outboxPublishTimeout  = 5 * time.Minute
-)
-
 type OutboxPublisher struct {
-	logger      *slog.Logger
-	conf        *config.Bootstrap
-	tx          base.Tx
-	outboxRepo  repo.OutboxEventRepo
-	eventClient repo.EventClient
-	redisLock   *commonClient.RedisLock
-	cancel      context.CancelFunc
+	logger                 *slog.Logger
+	conf                   *config.Bootstrap
+	tx                     base.Tx
+	outboxRepo             repo.OutboxEventRepo
+	eventClient            repo.EventClient
+	redisLock              *commonClient.RedisLock
+	cancel                 context.CancelFunc
+	defaultMinPollInterval time.Duration
+	defaultMaxPollInterval time.Duration
+	defaultPublishLimit    int
+	defaultPublishTimeout  time.Duration
 }
 
 func NewOutboxPublisher(
@@ -39,12 +36,16 @@ func NewOutboxPublisher(
 	redisLock *commonClient.RedisLock,
 ) *OutboxPublisher {
 	return &OutboxPublisher{
-		logger:      logger,
-		conf:        conf,
-		tx:          tx,
-		outboxRepo:  outboxRepo,
-		eventClient: eventClient,
-		redisLock:   redisLock,
+		logger:                 logger,
+		conf:                   conf,
+		tx:                     tx,
+		outboxRepo:             outboxRepo,
+		eventClient:            eventClient,
+		redisLock:              redisLock,
+		defaultMinPollInterval: time.Second,
+		defaultMaxPollInterval: 8 * time.Second,
+		defaultPublishLimit:    1000,
+		defaultPublishTimeout:  5 * time.Minute,
 	}
 }
 
@@ -171,7 +172,7 @@ func (p *OutboxPublisher) publishLimit() int {
 	if p.conf != nil && p.conf.GetEvent() != nil && p.conf.GetEvent().GetOutbox() != nil && p.conf.GetEvent().GetOutbox().GetPublishLimit() > 0 {
 		return int(p.conf.GetEvent().GetOutbox().GetPublishLimit())
 	}
-	return outboxPublishLimit
+	return p.defaultPublishLimit
 }
 
 func (p *OutboxPublisher) maxRetry() int32 {
@@ -185,7 +186,7 @@ func (p *OutboxPublisher) publishTimeout() time.Duration {
 	if p.conf != nil && p.conf.GetEvent() != nil && p.conf.GetEvent().GetOutbox() != nil && p.conf.GetEvent().GetOutbox().GetPublishTimeout() != nil && p.conf.GetEvent().GetOutbox().GetPublishTimeout().AsDuration() > 0 {
 		return p.conf.GetEvent().GetOutbox().GetPublishTimeout().AsDuration()
 	}
-	return outboxPublishTimeout
+	return p.defaultPublishTimeout
 }
 
 func (p *OutboxPublisher) pollLockTTL() time.Duration {
@@ -199,12 +200,12 @@ func (p *OutboxPublisher) minPollInterval() time.Duration {
 	if p.conf != nil && p.conf.GetEvent() != nil && p.conf.GetEvent().GetOutbox() != nil && p.conf.GetEvent().GetOutbox().GetMinPollInterval() != nil && p.conf.GetEvent().GetOutbox().GetMinPollInterval().AsDuration() > 0 {
 		return p.conf.GetEvent().GetOutbox().GetMinPollInterval().AsDuration()
 	}
-	return outboxMinPollInterval
+	return p.defaultMinPollInterval
 }
 
 func (p *OutboxPublisher) maxPollInterval() time.Duration {
 	if p.conf != nil && p.conf.GetEvent() != nil && p.conf.GetEvent().GetOutbox() != nil && p.conf.GetEvent().GetOutbox().GetMaxPollInterval() != nil && p.conf.GetEvent().GetOutbox().GetMaxPollInterval().AsDuration() > 0 {
 		return p.conf.GetEvent().GetOutbox().GetMaxPollInterval().AsDuration()
 	}
-	return outboxMaxPollInterval
+	return p.defaultMaxPollInterval
 }

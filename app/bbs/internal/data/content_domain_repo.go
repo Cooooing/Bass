@@ -12,6 +12,7 @@ import (
 var _ repo.ContentDomainClient = (*ContentDomainClient)(nil)
 
 type ContentDomainClient struct {
+	protoTimeFormatter
 	contentClient *rpc.ContentClient
 }
 
@@ -65,8 +66,8 @@ func (r *ContentDomainClient) ListDomains(ctx context.Context, req *repo.ListDom
 			IsNav:       item.GetIsNav(),
 			CreatedBy:   item.CreatedBy,
 			UpdatedBy:   item.UpdatedBy,
-			CreatedAt:   formatProtoTime(item.GetCreatedAt()),
-			UpdatedAt:   formatProtoTime(item.GetUpdatedAt()),
+			CreatedAt:   r.formatProtoTime(item.GetCreatedAt()),
+			UpdatedAt:   r.formatProtoTime(item.GetUpdatedAt()),
 		}
 		rows = append(rows, row)
 	}

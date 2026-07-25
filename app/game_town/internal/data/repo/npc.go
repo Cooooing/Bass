@@ -19,6 +19,7 @@ import (
 var _ bizrepo.NpcRepo = (*NpcRepo)(nil)
 
 type NpcRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -88,7 +89,7 @@ func (r *NpcRepo) Save(ctx context.Context, row *model.Npc) (*model.Npc, error) 
 	}, nil
 }
 
-func npcQuery(q *gen.NpcQuery, req *bizrepo.NpcQuery) *gen.NpcQuery {
+func (r *NpcRepo) npcQuery(q *gen.NpcQuery, req *bizrepo.NpcQuery) *gen.NpcQuery {
 	q = q.Where(npc.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -115,7 +116,7 @@ func npcQuery(q *gen.NpcQuery, req *bizrepo.NpcQuery) *gen.NpcQuery {
 }
 
 func (r *NpcRepo) Get(ctx context.Context, req *bizrepo.NpcQuery) (*model.Npc, error) {
-	row, err := npcQuery(r.getClient(ctx).Npc.Query(), req).Only(ctx)
+	row, err := r.npcQuery(r.getClient(ctx).Npc.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_NPC_NOT_FOUND)
 	}
@@ -149,7 +150,7 @@ func (r *NpcRepo) Get(ctx context.Context, req *bizrepo.NpcQuery) (*model.Npc, e
 }
 
 func (r *NpcRepo) List(ctx context.Context, req *bizrepo.NpcQuery) ([]*model.Npc, error) {
-	rows, err := npcQuery(r.getClient(ctx).Npc.Query(), req).Order(npc.ByID()).All(ctx)
+	rows, err := r.npcQuery(r.getClient(ctx).Npc.Query(), req).Order(npc.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -195,17 +196,17 @@ func (r *NpcRepo) Map(ctx context.Context, req *bizrepo.NpcQuery) (map[int64]*mo
 }
 
 func (r *NpcRepo) Count(ctx context.Context, req *bizrepo.NpcQuery) (int, error) {
-	return npcQuery(r.getClient(ctx).Npc.Query(), req).Count(ctx)
+	return r.npcQuery(r.getClient(ctx).Npc.Query(), req).Count(ctx)
 }
 
 func (r *NpcRepo) Page(ctx context.Context, req *bizrepo.NpcPageReq) (*bizrepo.NpcPageResp, error) {
-	p := page(req.Page)
-	q := npcQuery(r.getClient(ctx).Npc.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.npcQuery(r.getClient(ctx).Npc.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(npc.ByID()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
+	rows, err := q.Order(npc.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -237,7 +238,7 @@ func (r *NpcRepo) Page(ctx context.Context, req *bizrepo.NpcPageReq) (*bizrepo.N
 	})
 	return &bizrepo.NpcPageResp{
 		Rows: out,
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 

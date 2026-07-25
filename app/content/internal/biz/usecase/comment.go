@@ -69,11 +69,10 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*mode
 		replyComment := &model.Comment{}
 		var parentID *int64
 		if comment.ReplyID != nil {
-			commentStatus := enum.ContentRestrictionNone
 			replyCommentResp, replyCommentErr := d.commentRepo.Get(ctx, &repo.CommentGetReq{
 				CommentId:   comment.ReplyID,
 				ArticleId:   new(comment.ArticleID),
-				Restriction: &commentStatus,
+				Restriction: new(enum.ContentRestrictionNone),
 			})
 			if replyCommentErr != nil {
 				return replyCommentErr
@@ -408,7 +407,7 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 	active := req.Active
 	err := d.tx(ctx, func(ctx context.Context) error {
 		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
-			CommentId: &commentId,
+			CommentId: new(commentId),
 		})
 		comment := commentResp
 		if err != nil {
@@ -498,7 +497,7 @@ func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool,
 	active := req.Active
 	err := d.tx(ctx, func(ctx context.Context) error {
 		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
-			CommentId: &commentId,
+			CommentId: new(commentId),
 		})
 		comment := commentResp
 		if err != nil {

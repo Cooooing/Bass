@@ -28,7 +28,7 @@ type NotificationContext struct {
 	EventID      string
 	EventType    commonenum.EventType
 	Language     notifyenum.Language
-	TemplateData any
+	TemplateData model.NotificationTemplateData
 	Recipients   []*NotificationRecipient
 }
 
@@ -110,7 +110,7 @@ func (u *NotifyUsecase) ListEnabledRules(ctx context.Context, req *NotifyListEna
 	rulesResp, err := u.notificationRuleRepo.List(ctx, &repo.NotificationRuleQuery{
 		EventType: &req.EventType,
 		Language:  &req.Language,
-		Enabled:   &enabled,
+		Enabled:   new(enabled),
 	})
 	if err != nil {
 		return nil, err
@@ -631,20 +631,20 @@ func (u *NotifyUsecase) processLarkWebhook(ctx context.Context, req *processLark
 	if !ok {
 		return notifyenum.NotificationChannelStatusSkipped, nil
 	}
-	var content map[string]any
-	if err := json.Unmarshal([]byte(renderedContent), &content); err != nil {
-		return notifyenum.NotificationChannelStatusInternalError, err
-	}
-	if content == nil {
+	content := json.RawMessage(bytes.TrimSpace([]byte(renderedContent)))
+	if len(content) == 0 || content[0] != '{' {
 		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("lark webhook content must be json object")
+	}
+	if !json.Valid(content) {
+		return notifyenum.NotificationChannelStatusInternalError, fmt.Errorf("lark webhook content must be valid json")
 	}
 	msgType := strings.TrimSpace(rule.LarkWebhookTemplate.MsgType)
 	if msgType == "" {
 		msgType = "text"
 	}
 	requestBodyBytes, err := json.Marshal(struct {
-		MsgType string         `json:"msg_type"`
-		Content map[string]any `json:"content"`
+		MsgType string          `json:"msg_type"`
+		Content json.RawMessage `json:"content"`
 	}{
 		MsgType: msgType,
 		Content: content,
@@ -771,7 +771,7 @@ func (u *NotifyUsecase) loadAccounts(ctx context.Context, req *loadAccountsReq) 
 	return resp, nil
 }
 
-func (u *NotifyUsecase) renderTemplate(tplStr string, data any) (string, bool) {
+func (u *NotifyUsecase) renderTemplate(tplStr string, data model.NotificationTemplateData) (string, bool) {
 	tpl, err := template.New("").Option("missingkey=error").Parse(tplStr)
 	if err != nil {
 		return "", false

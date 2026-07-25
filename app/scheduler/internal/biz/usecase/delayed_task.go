@@ -5,7 +5,6 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
-	"encoding/json"
 	"fmt"
 	"log/slog"
 	"os"
@@ -19,10 +18,11 @@ import (
 )
 
 type DelayedTaskUsecase struct {
-	logger *slog.Logger
-	conf   *config.Bootstrap
-	repo   repo.DelayedTaskRepo
-	tasks  map[string]taskimpl.Task
+	logger   *slog.Logger
+	conf     *config.Bootstrap
+	repo     repo.DelayedTaskRepo
+	tasks    map[string]taskimpl.Task
+	workerID string
 }
 
 func NewDelayedTaskUsecase(
@@ -31,11 +31,16 @@ func NewDelayedTaskUsecase(
 	delayedTaskRepo repo.DelayedTaskRepo,
 	tasks map[string]taskimpl.Task,
 ) *DelayedTaskUsecase {
+	workerID := "scheduler"
+	if host, err := os.Hostname(); err == nil && host != "" {
+		workerID = host
+	}
 	return &DelayedTaskUsecase{
-		logger: logger,
-		conf:   conf,
-		repo:   delayedTaskRepo,
-		tasks:  tasks,
+		logger:   logger,
+		conf:     conf,
+		repo:     delayedTaskRepo,
+		tasks:    tasks,
+		workerID: workerID,
 	}
 }
 
@@ -49,15 +54,9 @@ type DelayedTaskRegisterReq struct {
 }
 
 func (u *DelayedTaskUsecase) Register(ctx context.Context, req *DelayedTaskRegisterReq) (*model.DelayedTask, error) {
-	if req == nil || strings.TrimSpace(req.IdempotencyKey) == "" || strings.TrimSpace(req.TaskName) == "" || req.ExecuteAt.IsZero() {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
 	payload := strings.TrimSpace(req.Payload)
 	if payload == "" {
 		payload = "{}"
-	}
-	if !json.Valid([]byte(payload)) {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	if req.MaxAttempts <= 0 {
 		req.MaxAttempts = 3
@@ -78,12 +77,29 @@ func (u *DelayedTaskUsecase) Register(ctx context.Context, req *DelayedTaskRegis
 }
 
 func (u *DelayedTaskUsecase) Cancel(ctx context.Context, id int64, idempotencyKey string) error {
-	_, err := u.repo.Cancel(ctx, delayedTaskGetReq(id, idempotencyKey))
+	if id != 0 {
+		_, err := u.repo.Cancel(ctx, &repo.DelayedTaskGetReq{
+			ID: new(id),
+		})
+		return err
+	}
+	key := strings.TrimSpace(idempotencyKey)
+	_, err := u.repo.Cancel(ctx, &repo.DelayedTaskGetReq{
+		IdempotencyKey: new(key),
+	})
 	return err
 }
 
 func (u *DelayedTaskUsecase) Get(ctx context.Context, id int64, idempotencyKey string) (*model.DelayedTask, error) {
-	return u.repo.Get(ctx, delayedTaskGetReq(id, idempotencyKey))
+	if id != 0 {
+		return u.repo.Get(ctx, &repo.DelayedTaskGetReq{
+			ID: new(id),
+		})
+	}
+	key := strings.TrimSpace(idempotencyKey)
+	return u.repo.Get(ctx, &repo.DelayedTaskGetReq{
+		IdempotencyKey: new(key),
+	})
 }
 
 type DelayedTaskPageReq struct {
@@ -97,9 +113,6 @@ type DelayedTaskPageResp struct {
 }
 
 func (u *DelayedTaskUsecase) Page(ctx context.Context, req *DelayedTaskPageReq) (*DelayedTaskPageResp, error) {
-	if req == nil {
-		req = &DelayedTaskPageReq{}
-	}
 	resp, err := u.repo.Page(ctx, &repo.DelayedTaskPageReq{
 		Page: req.Page,
 		DelayedTaskGetReq: repo.DelayedTaskGetReq{
@@ -118,7 +131,7 @@ func (u *DelayedTaskUsecase) Page(ctx context.Context, req *DelayedTaskPageReq) 
 
 func (u *DelayedTaskUsecase) Trigger(ctx context.Context, id int64) error {
 	row, err := u.repo.Get(ctx, &repo.DelayedTaskGetReq{
-		ID: &id,
+		ID: new(id),
 	})
 	if err != nil {
 		return err
@@ -138,7 +151,7 @@ func (u *DelayedTaskUsecase) RunDue(ctx context.Context, limit int) error {
 		if ctx.Err() != nil {
 			return ctx.Err()
 		}
-		claimed, claimedRow, err := u.repo.MarkRunning(ctx, row.ID, workerID(), time.Now().Add(time.Duration(row.TimeoutSeconds)*time.Second))
+		claimed, claimedRow, err := u.repo.MarkRunning(ctx, row.ID, u.workerID, time.Now().Add(time.Duration(row.TimeoutSeconds)*time.Second))
 		if err != nil {
 			u.logger.ErrorContext(ctx, "claim delayed task failed", "delayed_task_id", row.ID, "err", err)
 			continue
@@ -189,24 +202,4 @@ func (u *DelayedTaskUsecase) markDelayedTaskFailed(ctx context.Context, row *mod
 		return err
 	}
 	return execErr
-}
-
-func delayedTaskGetReq(id int64, idempotencyKey string) *repo.DelayedTaskGetReq {
-	if id != 0 {
-		return &repo.DelayedTaskGetReq{
-			ID: &id,
-		}
-	}
-	key := strings.TrimSpace(idempotencyKey)
-	return &repo.DelayedTaskGetReq{
-		IdempotencyKey: &key,
-	}
-}
-
-func workerID() string {
-	host, _ := os.Hostname()
-	if host == "" {
-		host = "scheduler"
-	}
-	return host
 }

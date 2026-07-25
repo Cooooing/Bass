@@ -103,7 +103,7 @@ func (c *TencentSMSClient) SendTencentSMS(_ context.Context, req *bizchannel.Ten
 	}
 	return &bizchannel.SendResult{
 		Status:            notifyenum.NotificationChannelStatusSucceeded,
-		ProviderRequestID: &requestID,
+		ProviderRequestID: new(requestID),
 		ProviderResp:      new(string(reply)),
 	}, nil
 }

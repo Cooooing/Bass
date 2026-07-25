@@ -14,8 +14,6 @@ import (
 	"log/slog"
 )
 
-const outboxDeadLetterScanLimit = 100
-
 type OutboxDeadLetterScanner struct {
 	logger      *slog.Logger
 	conf        *config.Bootstrap
@@ -64,14 +62,13 @@ func (s *OutboxDeadLetterScanner) Stop(_ context.Context) error {
 }
 
 func (s *OutboxDeadLetterScanner) scan(ctx context.Context) error {
-	status := commonenum.OutboxEventStatusDead
 	pageResp, err := s.outboxRepo.Page(ctx, &repo.OutboxEventPageReq{
 		Page: repo.PageReq{
 			Page: 1,
-			Size: outboxDeadLetterScanLimit,
+			Size: 100,
 		},
 		Query: repo.OutboxEventGetReq{
-			Status: &status,
+			Status: new(commonenum.OutboxEventStatusDead),
 		},
 	})
 	if err != nil {

@@ -17,7 +17,6 @@ type AuthRepo interface {
 	RefreshToken(ctx context.Context, refreshToken string) (*TokenResp, error)
 	Logout(ctx context.Context, accessToken string) error
 	CancelAccount(ctx context.Context, req *CancelAccountReq) error
-	UnbanAccounts(ctx context.Context, userIDs []int64) error
 }
 
 type StartEmailRegistrationReq struct {

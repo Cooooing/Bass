@@ -1,5 +1,9 @@
 package model
 
+type NotificationTemplateData interface {
+	notificationTemplateData()
+}
+
 type TemplateUser struct {
 	ID       int64
 	Name     string
@@ -25,10 +29,14 @@ type UserRegisterTemplateData struct {
 	User TemplateUser
 }
 
+func (UserRegisterTemplateData) notificationTemplateData() {}
+
 type VerificationCodeTemplateData struct {
 	Code           string
 	ExpiresSeconds int64
 }
+
+func (VerificationCodeTemplateData) notificationTemplateData() {}
 
 func (d VerificationCodeTemplateData) ExpiresMinutes() int64 {
 	expiresMinutes := d.ExpiresSeconds / 60
@@ -43,20 +51,30 @@ type UserFollowTemplateData struct {
 	Followed TemplateUser
 }
 
+func (UserFollowTemplateData) notificationTemplateData() {}
+
 type ArticlePublishedTemplateData struct {
 	Article TemplateArticle
 }
+
+func (ArticlePublishedTemplateData) notificationTemplateData() {}
 
 type ArticleActorTemplateData struct {
 	Article TemplateArticle
 	Actor   TemplateUser
 }
 
+func (ArticleActorTemplateData) notificationTemplateData() {}
+
 type CommentPublishedTemplateData struct {
 	Comment TemplateComment
 }
+
+func (CommentPublishedTemplateData) notificationTemplateData() {}
 
 type CommentLikedTemplateData struct {
 	Comment TemplateComment
 	Actor   TemplateUser
 }
+
+func (CommentLikedTemplateData) notificationTemplateData() {}

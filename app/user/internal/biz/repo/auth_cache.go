@@ -4,17 +4,18 @@ import (
 	"context"
 	"time"
 	"user/internal/biz/model"
+	"user/internal/enum"
 )
 
 type AuthCacheRepo interface {
 	SaveCode(ctx context.Context, code *model.VerificationCode, ttl time.Duration) error
-	GetCode(ctx context.Context, codeType string, account string) (*model.VerificationCode, error)
-	IncrCodeAttempts(ctx context.Context, codeType string, account string) (int64, error)
-	DeleteCode(ctx context.Context, codeType string, account string) error
+	GetCode(ctx context.Context, codeType enum.VerificationType, account string) (*model.VerificationCode, error)
+	IncrCodeAttempts(ctx context.Context, codeType enum.VerificationType, account string) (int64, error)
+	DeleteCode(ctx context.Context, codeType enum.VerificationType, account string) error
 
-	SaveRegisterDraft(ctx context.Context, draftType string, account string, draft *model.RegisterDraft, ttl time.Duration) error
-	GetRegisterDraft(ctx context.Context, draftType string, account string) (*model.RegisterDraft, error)
-	DeleteRegisterDraft(ctx context.Context, draftType string, account string) error
+	SaveRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string, draft *model.RegisterDraft, ttl time.Duration) error
+	GetRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string) (*model.RegisterDraft, error)
+	DeleteRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string) error
 
 	SaveSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration) error
 	GetSession(ctx context.Context, sessionID string) (*model.RefreshSession, error)

@@ -81,11 +81,11 @@ JSON 结构：
 		req.NpcCount,
 	)
 
-	var output model.WorldDraft
-	if err := c.completeJSON(ctx, req.Config, "你负责生成有因果规则、时间和社会结构的活世界，只输出合法 JSON。所有字符串必须使用简体中文。", prompt, worldDraftSchema(req.LocationCount, req.NpcCount), &output, 1024); err != nil {
+	output := new(model.WorldDraft)
+	if err := c.completeJSON(ctx, req.Config, "你负责生成有因果规则、时间和社会结构的活世界，只输出合法 JSON。所有字符串必须使用简体中文。", prompt, c.worldDraftSchema(req.LocationCount, req.NpcCount), output, 1024); err != nil {
 		return nil, err
 	}
-	return &output, nil
+	return output, nil
 }
 
 func (c *AgentClient) GenerateCharacter(ctx context.Context, req *repo.GenerateCharacterReq) (*model.CharacterDraft, error) {
@@ -120,14 +120,14 @@ JSON 结构：{"name":"","background":"","goal":"","traits":[]}
 		req.Location.Description,
 		req.Player.DisplayName,
 		preference,
-		eventContext(req.RecentEvents),
+		c.eventContext(req.RecentEvents),
 	)
 
-	var output model.CharacterDraft
-	if err := c.completeJSON(ctx, req.Config, "你负责根据活世界状态裁决玩家在该世界中的初始角色，只输出合法 JSON。所有字符串必须使用简体中文。", prompt, characterDraftSchema(), &output, 384); err != nil {
+	output := new(model.CharacterDraft)
+	if err := c.completeJSON(ctx, req.Config, "你负责根据活世界状态裁决玩家在该世界中的初始角色，只输出合法 JSON。所有字符串必须使用简体中文。", prompt, c.characterDraftSchema(), output, 384); err != nil {
 		return nil, err
 	}
-	return &output, nil
+	return output, nil
 }
 
 func (c *AgentClient) Talk(ctx context.Context, req *repo.TalkReq) (*model.NpcReply, error) {
@@ -160,18 +160,18 @@ NPC：%s，%s，%s，性格：%s
 		req.Npc.Personality,
 		req.Npc.Goal,
 		req.Npc.ContextSummary,
-		eventContext(req.RecentEvents),
-		memoryContext(req.Memories),
-		characterName(req.Member, req.Player),
+		c.eventContext(req.RecentEvents),
+		c.memoryContext(req.Memories),
+		c.characterName(req.Member, req.Player),
 		req.Content,
 	)
 
 	systemPrompt := req.Npc.SystemPrompt + "\n你不是全知者，只能依据提供给你的观察和记忆回答。所有字符串必须使用简体中文。"
-	var output model.NpcReply
-	if err := c.completeJSON(ctx, req.Config, systemPrompt, prompt, npcReplySchema(), &output, 384); err != nil {
+	output := new(model.NpcReply)
+	if err := c.completeJSON(ctx, req.Config, systemPrompt, prompt, c.npcReplySchema(), output, 384); err != nil {
 		return nil, err
 	}
-	return &output, nil
+	return output, nil
 }
 
 func (c *AgentClient) Act(ctx context.Context, req *repo.ActReq) (*model.ActionResolution, error) {
@@ -223,18 +223,18 @@ func (c *AgentClient) Act(ctx context.Context, req *repo.ActReq) (*model.ActionR
 		req.State.CurrentArc,
 		req.Location.Name,
 		req.Location.Description,
-		characterName(req.Member, req.Player),
+		c.characterName(req.Member, req.Player),
 		target,
-		eventContext(req.RecentEvents),
-		memoryContext(req.Memories),
+		c.eventContext(req.RecentEvents),
+		c.memoryContext(req.Memories),
 		req.Content,
 	)
 
-	var output model.ActionResolution
-	if err := c.completeJSON(ctx, req.Config, systemPrompt, prompt, actionResolutionSchema(), &output, 384); err != nil {
+	output := new(model.ActionResolution)
+	if err := c.completeJSON(ctx, req.Config, systemPrompt, prompt, c.actionResolutionSchema(), output, 384); err != nil {
 		return nil, err
 	}
-	return &output, nil
+	return output, nil
 }
 
 func (c *AgentClient) PlanNpc(ctx context.Context, req *repo.PlanNpcReq) (*model.NpcPlan, error) {
@@ -258,16 +258,16 @@ NPC：%s，%s，%s，当前目标：%s
 		req.Npc.Species,
 		req.Npc.Goal,
 		req.Npc.ContextSummary,
-		eventContext(req.RecentEvents),
-		memoryContext(req.Memories),
+		c.eventContext(req.RecentEvents),
+		c.memoryContext(req.Memories),
 	)
 
 	systemPrompt := req.Npc.SystemPrompt + "\n你需要为自己制定下一步计划，只输出合法 JSON。所有字符串必须使用简体中文。"
-	var output model.NpcPlan
-	if err := c.completeJSON(ctx, req.Config, systemPrompt, prompt, npcPlanSchema(), &output, 384); err != nil {
+	output := new(model.NpcPlan)
+	if err := c.completeJSON(ctx, req.Config, systemPrompt, prompt, c.npcPlanSchema(), output, 384); err != nil {
 		return nil, err
 	}
-	return &output, nil
+	return output, nil
 }
 
 func (c *AgentClient) Tick(ctx context.Context, req *repo.TickReq) (*model.ActionResolution, error) {
@@ -304,20 +304,20 @@ summary 80 字内，world_summary 120 字内，current_arc 40 字内，actions �
 		req.State.Summary,
 		req.State.CurrentArc,
 		req.State.WorldTime.Format(time.RFC3339),
-		eventContext(req.RecentEvents),
-		npcContext(req.Npcs),
-		locationContext(req.Locations),
-		factionContext(req.Factions),
+		c.eventContext(req.RecentEvents),
+		c.npcContext(req.Npcs),
+		c.locationContext(req.Locations),
+		c.factionContext(req.Factions),
 	)
 
-	var output model.ActionResolution
-	if err := c.completeJSON(ctx, req.Config, "你是世界裁决者，负责提出结构化演化动作，只输出合法 JSON。所有字符串必须使用简体中文。", prompt, actionResolutionSchema(), &output, 384); err != nil {
+	output := new(model.ActionResolution)
+	if err := c.completeJSON(ctx, req.Config, "你是世界裁决者，负责提出结构化演化动作，只输出合法 JSON。所有字符串必须使用简体中文。", prompt, c.actionResolutionSchema(), output, 384); err != nil {
 		return nil, err
 	}
-	return &output, nil
+	return output, nil
 }
 
-func eventContext(events []*model.Event) string {
+func (c *AgentClient) eventContext(events []*model.Event) string {
 	parts := lo.FilterMap(events, func(event *model.Event, _ int) (string, bool) {
 		if event == nil {
 			return "", false
@@ -327,7 +327,7 @@ func eventContext(events []*model.Event) string {
 	return strings.Join(parts, " | ")
 }
 
-func memoryContext(memories []*model.NpcMemory) string {
+func (c *AgentClient) memoryContext(memories []*model.NpcMemory) string {
 	parts := lo.FilterMap(memories, func(memory *model.NpcMemory, _ int) (string, bool) {
 		if memory == nil {
 			return "", false
@@ -337,7 +337,7 @@ func memoryContext(memories []*model.NpcMemory) string {
 	return strings.Join(parts, " | ")
 }
 
-func characterName(member *model.WorldMember, player *model.Player) string {
+func (c *AgentClient) characterName(member *model.WorldMember, player *model.Player) string {
 	if member != nil && strings.TrimSpace(member.CharacterName) != "" {
 		return member.CharacterName
 	}
@@ -347,21 +347,21 @@ func characterName(member *model.WorldMember, player *model.Player) string {
 	return "未知玩家"
 }
 
-func npcContext(rows []*model.Npc) string {
+func (c *AgentClient) npcContext(rows []*model.Npc) string {
 	parts := lo.Map(rows, func(row *model.Npc, _ int) string {
 		return fmt.Sprintf("%d:%s[%s]@%d 目标=%s", row.ID, row.Name, row.LifeStatus, row.CurrentLocationID, row.Goal)
 	})
 	return strings.Join(parts, " | ")
 }
 
-func locationContext(rows []*model.Location) string {
+func (c *AgentClient) locationContext(rows []*model.Location) string {
 	parts := lo.Map(rows, func(row *model.Location, _ int) string {
 		return fmt.Sprintf("%d:%s[%s] %s", row.ID, row.Name, row.Status, row.Description)
 	})
 	return strings.Join(parts, " | ")
 }
 
-func factionContext(rows []*model.Faction) string {
+func (c *AgentClient) factionContext(rows []*model.Faction) string {
 	parts := lo.Map(rows, func(row *model.Faction, _ int) string {
 		return fmt.Sprintf("%d:%s[%s] 目标=%s", row.ID, row.Name, row.Status, row.PublicGoal)
 	})
@@ -386,7 +386,7 @@ func (c *AgentClient) completeJSON(ctx context.Context, config *model.AgentConfi
 		return err
 	}
 	if err = json.Unmarshal([]byte(content), output); err != nil {
-		return fmt.Errorf("decode agent json: %w; content=%s", err, truncateBody(content, 512))
+		return fmt.Errorf("decode agent json: %w; content=%s", err, c.truncateBody(content, 512))
 	}
 	return nil
 }
@@ -409,7 +409,7 @@ func (c *AgentClient) callOllama(ctx context.Context, config *model.AgentConfig,
 	body := map[string]any{
 		"model":  config.Model,
 		"stream": false,
-		"format": ollamaFormat(schema),
+		"format": c.ollamaFormat(schema),
 		"think":  false,
 		"options": map[string]any{
 			"temperature": 0.2,
@@ -506,53 +506,53 @@ func (c *AgentClient) post(ctx context.Context, url string, config *model.AgentC
 	return nil
 }
 
-func ollamaFormat(schema any) any {
+func (c *AgentClient) ollamaFormat(schema any) any {
 	if schema == nil {
 		return "json"
 	}
 	return schema
 }
 
-func worldDraftSchema(locationCount uint32, npcCount uint32) map[string]any {
-	return objectSchema(
+func (c *AgentClient) worldDraftSchema(locationCount uint32, npcCount uint32) map[string]any {
+	return c.objectSchema(
 		[]string{"name", "summary", "current_arc", "current_era", "rules", "locations", "factions", "npcs"},
 		map[string]any{
-			"name":        stringSchema(),
-			"summary":     stringSchema(),
-			"current_arc": stringSchema(),
-			"current_era": stringSchema(),
+			"name":        c.stringSchema(),
+			"summary":     c.stringSchema(),
+			"current_arc": c.stringSchema(),
+			"current_era": c.stringSchema(),
 			"rules":       map[string]any{"type": "object"},
-			"locations": arraySchema(int(locationCount), int(locationCount), objectSchema(
+			"locations": c.arraySchema(int(locationCount), int(locationCount), c.objectSchema(
 				[]string{"code", "name", "description", "environment_tags"},
 				map[string]any{
-					"code":             stringSchema(),
-					"name":             stringSchema(),
-					"description":      stringSchema(),
-					"environment_tags": stringArraySchema(0, 8),
+					"code":             c.stringSchema(),
+					"name":             c.stringSchema(),
+					"description":      c.stringSchema(),
+					"environment_tags": c.stringArraySchema(0, 8),
 				},
 			)),
-			"factions": arraySchema(2, 3, objectSchema(
+			"factions": c.arraySchema(2, 3, c.objectSchema(
 				[]string{"code", "name", "description", "public_goal"},
 				map[string]any{
-					"code":        stringSchema(),
-					"name":        stringSchema(),
-					"description": stringSchema(),
-					"public_goal": stringSchema(),
+					"code":        c.stringSchema(),
+					"name":        c.stringSchema(),
+					"description": c.stringSchema(),
+					"public_goal": c.stringSchema(),
 				},
 			)),
-			"npcs": arraySchema(int(npcCount), int(npcCount), objectSchema(
+			"npcs": c.arraySchema(int(npcCount), int(npcCount), c.objectSchema(
 				[]string{"code", "name", "role", "species", "personality", "goal", "background", "location_code", "faction_code", "system_prompt", "attributes"},
 				map[string]any{
-					"code":          stringSchema(),
-					"name":          stringSchema(),
-					"role":          stringSchema(),
-					"species":       stringSchema(),
-					"personality":   stringSchema(),
-					"goal":          stringSchema(),
-					"background":    stringSchema(),
-					"location_code": stringSchema(),
-					"faction_code":  stringSchema(),
-					"system_prompt": stringSchema(),
+					"code":          c.stringSchema(),
+					"name":          c.stringSchema(),
+					"role":          c.stringSchema(),
+					"species":       c.stringSchema(),
+					"personality":   c.stringSchema(),
+					"goal":          c.stringSchema(),
+					"background":    c.stringSchema(),
+					"location_code": c.stringSchema(),
+					"faction_code":  c.stringSchema(),
+					"system_prompt": c.stringSchema(),
 					"attributes":    map[string]any{"type": "object"},
 				},
 			)),
@@ -560,109 +560,109 @@ func worldDraftSchema(locationCount uint32, npcCount uint32) map[string]any {
 	)
 }
 
-func characterDraftSchema() map[string]any {
-	return objectSchema(
+func (c *AgentClient) characterDraftSchema() map[string]any {
+	return c.objectSchema(
 		[]string{"name", "background", "goal", "traits"},
 		map[string]any{
-			"name":       stringSchema(32),
-			"background": stringSchema(180),
-			"goal":       stringSchema(100),
-			"traits":     stringArraySchema(0, 6),
+			"name":       c.stringSchema(32),
+			"background": c.stringSchema(180),
+			"goal":       c.stringSchema(100),
+			"traits":     c.stringArraySchema(0, 6),
 		},
 	)
 }
 
-func npcReplySchema() map[string]any {
-	return objectSchema(
+func (c *AgentClient) npcReplySchema() map[string]any {
+	return c.objectSchema(
 		[]string{"reply", "context_summary", "suggested_actions", "claims"},
 		map[string]any{
-			"reply":             stringSchema(180),
-			"context_summary":   stringSchema(120),
-			"suggested_actions": suggestedActionsSchema(),
-			"claims":            claimsSchema(),
+			"reply":             c.stringSchema(180),
+			"context_summary":   c.stringSchema(120),
+			"suggested_actions": c.suggestedActionsSchema(),
+			"claims":            c.claimsSchema(),
 		},
 	)
 }
 
-func actionResolutionSchema() map[string]any {
-	return objectSchema(
+func (c *AgentClient) actionResolutionSchema() map[string]any {
+	return c.objectSchema(
 		[]string{"status", "summary", "clarification", "world_summary", "current_arc", "actions", "claims", "suggested_actions"},
 		map[string]any{
-			"status":            enumStringSchema([]string{"resolved", "rejected", "clarification"}),
-			"summary":           stringSchema(120),
-			"clarification":     stringSchema(100),
-			"world_summary":     stringSchema(180),
-			"current_arc":       stringSchema(80),
-			"actions":           actionStepsSchema(),
-			"claims":            claimsSchema(),
-			"suggested_actions": suggestedActionsSchema(),
+			"status":            c.enumStringSchema([]string{"resolved", "rejected", "clarification"}),
+			"summary":           c.stringSchema(120),
+			"clarification":     c.stringSchema(100),
+			"world_summary":     c.stringSchema(180),
+			"current_arc":       c.stringSchema(80),
+			"actions":           c.actionStepsSchema(),
+			"claims":            c.claimsSchema(),
+			"suggested_actions": c.suggestedActionsSchema(),
 		},
 	)
 }
 
-func npcPlanSchema() map[string]any {
-	return objectSchema(
+func (c *AgentClient) npcPlanSchema() map[string]any {
+	return c.objectSchema(
 		[]string{"summary", "goal", "next_decision_minutes", "actions"},
 		map[string]any{
-			"summary":               stringSchema(120),
-			"goal":                  stringSchema(100),
+			"summary":               c.stringSchema(120),
+			"goal":                  c.stringSchema(100),
 			"next_decision_minutes": map[string]any{"type": "integer"},
-			"actions":               actionStepsSchema(),
+			"actions":               c.actionStepsSchema(),
 		},
 	)
 }
 
-func suggestedActionsSchema() map[string]any {
-	return arraySchema(0, 4, objectSchema(
+func (c *AgentClient) suggestedActionsSchema() map[string]any {
+	return c.arraySchema(0, 4, c.objectSchema(
 		[]string{"label", "content", "targets"},
 		map[string]any{
-			"label":   stringSchema(40),
-			"content": stringSchema(100),
-			"targets": entityRefsSchema(),
+			"label":   c.stringSchema(40),
+			"content": c.stringSchema(100),
+			"targets": c.entityRefsSchema(),
 		},
 	))
 }
 
-func claimsSchema() map[string]any {
-	return arraySchema(0, 3, objectSchema(
+func (c *AgentClient) claimsSchema() map[string]any {
+	return c.arraySchema(0, 3, c.objectSchema(
 		[]string{"subject_type", "subject_id", "predicate", "object", "truth"},
 		map[string]any{
-			"subject_type": enumStringSchema([]string{"world", "player", "npc", "location", "faction"}),
+			"subject_type": c.enumStringSchema([]string{"world", "player", "npc", "location", "faction"}),
 			"subject_id":   map[string]any{"type": "integer"},
-			"predicate":    stringSchema(80),
+			"predicate":    c.stringSchema(80),
 			"object":       map[string]any{"type": "object"},
-			"truth":        enumStringSchema([]string{"true", "false", "unknown"}),
+			"truth":        c.enumStringSchema([]string{"true", "false", "unknown"}),
 		},
 	))
 }
 
-func actionStepsSchema() map[string]any {
-	return arraySchema(0, 3, objectSchema(
+func (c *AgentClient) actionStepsSchema() map[string]any {
+	return c.arraySchema(0, 3, c.objectSchema(
 		[]string{"type", "target", "parameters", "duration_minutes"},
 		map[string]any{
-			"type":             enumStringSchema([]string{"move", "move_player", "move_npc", "change_npc_state", "change_location", "change_faction", "change_relationship", "share_claim"}),
-			"target":           entityRefSchema(),
+			"type":             c.enumStringSchema([]string{"move", "move_player", "move_npc", "change_npc_state", "change_location", "change_faction", "change_relationship", "share_claim"}),
+			"target":           c.entityRefSchema(),
 			"parameters":       map[string]any{"type": "object"},
 			"duration_minutes": map[string]any{"type": "integer"},
 		},
 	))
 }
 
-func entityRefsSchema() map[string]any {
-	return arraySchema(0, 4, entityRefSchema())
+func (c *AgentClient) entityRefsSchema() map[string]any {
+	return c.arraySchema(0, 4, c.entityRefSchema())
 }
 
-func entityRefSchema() map[string]any {
-	return objectSchema(
+func (c *AgentClient) entityRefSchema() map[string]any {
+	return c.objectSchema(
 		[]string{"type", "id"},
 		map[string]any{
-			"type": enumStringSchema([]string{"world", "player", "npc", "location", "faction"}),
+			"type": c.enumStringSchema([]string{"world", "player", "npc", "location", "faction"}),
 			"id":   map[string]any{"type": "integer"},
 		},
 	)
 }
 
-func objectSchema(required []string, properties map[string]any) map[string]any {
+func (c *AgentClient) objectSchema(required []string, properties map[string]any) map[string]any {
 	return map[string]any{
 		"type":                 "object",
 		"additionalProperties": false,
@@ -671,7 +671,7 @@ func objectSchema(required []string, properties map[string]any) map[string]any {
 	}
 }
 
-func arraySchema(minItems int, maxItems int, items any) map[string]any {
+func (c *AgentClient) arraySchema(minItems int, maxItems int, items any) map[string]any {
 	return map[string]any{
 		"type":     "array",
 		"minItems": minItems,
@@ -680,11 +680,11 @@ func arraySchema(minItems int, maxItems int, items any) map[string]any {
 	}
 }
 
-func stringArraySchema(minItems int, maxItems int) map[string]any {
-	return arraySchema(minItems, maxItems, stringSchema())
+func (c *AgentClient) stringArraySchema(minItems int, maxItems int) map[string]any {
+	return c.arraySchema(minItems, maxItems, c.stringSchema())
 }
 
-func stringSchema(maxLength ...int) map[string]any {
+func (c *AgentClient) stringSchema(maxLength ...int) map[string]any {
 	schema := map[string]any{"type": "string"}
 	if len(maxLength) > 0 && maxLength[0] > 0 {
 		schema["maxLength"] = maxLength[0]
@@ -692,11 +692,11 @@ func stringSchema(maxLength ...int) map[string]any {
 	return schema
 }
 
-func enumStringSchema(values []string) map[string]any {
+func (c *AgentClient) enumStringSchema(values []string) map[string]any {
 	return map[string]any{"type": "string", "enum": values}
 }
 
-func truncateBody(content string, limit int) string {
+func (c *AgentClient) truncateBody(content string, limit int) string {
 	if len(content) <= limit {
 		return content
 	}

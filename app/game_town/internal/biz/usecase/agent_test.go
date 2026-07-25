@@ -22,7 +22,7 @@ func TestFairAgentJobsPrioritizesAndRoundsWorlds(t *testing.T) {
 		{ID: 4, WorldID: 10, Priority: enum.AgentJobPriorityLow},
 		{ID: 5, WorldID: 20, Priority: enum.AgentJobPriorityLow},
 	}
-	got := jobIDs(fairAgentJobs(jobs, new(0)))
+	got := jobIDs((&WorldAgentRunner{}).fairAgentJobs(jobs, new(0)))
 	want := []int64{1, 3, 2, 4, 5}
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("unexpected fair order: got %v want %v", got, want)
@@ -35,8 +35,8 @@ func TestFairAgentJobsRotatesStartingWorld(t *testing.T) {
 		{ID: 2, WorldID: 20, Priority: enum.AgentJobPriorityHigh},
 	}
 	cursor := new(0)
-	_ = fairAgentJobs(jobs, cursor)
-	got := jobIDs(fairAgentJobs(jobs, cursor))
+	_ = (&WorldAgentRunner{}).fairAgentJobs(jobs, cursor)
+	got := jobIDs((&WorldAgentRunner{}).fairAgentJobs(jobs, cursor))
 	want := []int64{2, 1}
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("unexpected rotated order: got %v want %v", got, want)
@@ -120,9 +120,9 @@ func TestTickScanInterval(t *testing.T) {
 }
 
 func TestNormalizeModelTextUsesRuneLimit(t *testing.T) {
-	value := "  " + strings.Repeat("雾", maxCurrentArcRunes+20) + "  "
-	got := normalizeModelText(value, maxCurrentArcRunes)
-	if len([]rune(got)) != maxCurrentArcRunes {
+	value := "  " + strings.Repeat("雾", 256+20) + "  "
+	got := (&WorldAgentRunner{}).normalizeModelText(value, 256)
+	if len([]rune(got)) != 256 {
 		t.Fatalf("rune length = %d", len([]rune(got)))
 	}
 	if strings.HasPrefix(got, " ") || strings.HasSuffix(got, " ") {

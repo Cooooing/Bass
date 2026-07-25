@@ -7,13 +7,7 @@ import (
 	"time"
 	"user/internal/biz/model"
 	"user/internal/config"
-
-	"google.golang.org/protobuf/types/known/durationpb"
-)
-
-const (
-	tokenTypeAccess  = "access"
-	tokenTypeRefresh = "refresh"
+	"user/internal/enum"
 )
 
 type TokenUsecase struct {
@@ -24,9 +18,13 @@ type TokenUsecase struct {
 func NewTokenUsecase(
 	conf *config.Bootstrap,
 ) *TokenUsecase {
+	secret := conf.GetBusiness().GetAuth().GetSession().GetSecret()
+	if secret == "" {
+		secret = "dev-user-session-secret"
+	}
 	return &TokenUsecase{
 		conf:     conf,
-		TokenGen: jwt.NewTokenGenerator[model.Token](sessionSecret(conf)),
+		TokenGen: jwt.NewTokenGenerator[model.Token](secret),
 	}
 }
 
@@ -44,7 +42,7 @@ func (u *TokenUsecase) GenerateAccess(req *GenerateAccessTokenReq) (string, time
 	ttl := u.AccessTokenTTL()
 	expiresAt := time.Now().Add(ttl)
 	token, err := u.TokenGen.Generate(model.Token{
-		Type:      tokenTypeAccess,
+		Type:      enum.TokenTypeAccess,
 		UserID:    req.UserID,
 		SessionID: req.SessionID,
 		Realm:     req.Realm,
@@ -67,7 +65,7 @@ func (u *TokenUsecase) GenerateRefresh(req *GenerateRefreshTokenReq) (string, ti
 	ttl := u.RefreshTokenTTL()
 	expiresAt := time.Now().Add(ttl)
 	token, err := u.TokenGen.Generate(model.Token{
-		Type:      tokenTypeRefresh,
+		Type:      enum.TokenTypeRefresh,
 		UserID:    req.UserID,
 		SessionID: req.SessionID,
 		Realm:     req.Realm,
@@ -81,28 +79,25 @@ func (u *TokenUsecase) Parse(token string) (model.Token, error) {
 }
 
 func (u *TokenUsecase) AccessTokenTTL() time.Duration {
-	return durationOrDefault(u.conf.GetBusiness().GetAuth().GetSession().GetAccessTokenTtl(), 15*time.Minute)
+	ttl := u.conf.GetBusiness().GetAuth().GetSession().GetAccessTokenTtl()
+	if ttl == nil || ttl.AsDuration() <= 0 {
+		return 15 * time.Minute
+	}
+	return ttl.AsDuration()
 }
 
 func (u *TokenUsecase) RefreshTokenTTL() time.Duration {
-	return durationOrDefault(u.conf.GetBusiness().GetAuth().GetSession().GetRefreshTokenTtl(), 30*24*time.Hour)
+	ttl := u.conf.GetBusiness().GetAuth().GetSession().GetRefreshTokenTtl()
+	if ttl == nil || ttl.AsDuration() <= 0 {
+		return 30 * 24 * time.Hour
+	}
+	return ttl.AsDuration()
 }
 
 func (u *TokenUsecase) SessionTTL() time.Duration {
-	return durationOrDefault(u.conf.GetBusiness().GetAuth().GetSession().GetSessionTtl(), 180*24*time.Hour)
-}
-
-func sessionSecret(conf *config.Bootstrap) string {
-	secret := conf.GetBusiness().GetAuth().GetSession().GetSecret()
-	if secret == "" {
-		return "dev-user-session-secret"
+	ttl := u.conf.GetBusiness().GetAuth().GetSession().GetSessionTtl()
+	if ttl == nil || ttl.AsDuration() <= 0 {
+		return 180 * 24 * time.Hour
 	}
-	return secret
-}
-
-func durationOrDefault(duration *durationpb.Duration, fallback time.Duration) time.Duration {
-	if duration == nil || duration.AsDuration() <= 0 {
-		return fallback
-	}
-	return duration.AsDuration()
+	return ttl.AsDuration()
 }

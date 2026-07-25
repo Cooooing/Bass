@@ -21,6 +21,7 @@ import (
 )
 
 type AuthService struct {
+	contextReader
 	bbsuserv1.UnimplementedAuthServiceServer
 	authUsecase *usecase.AuthUsecase
 	phoneRe     *regexp.Regexp
@@ -205,7 +206,7 @@ func (s *AuthService) RefreshToken(ctx context.Context, req *bbsuserv1.RefreshTo
 }
 
 func (s *AuthService) Logout(ctx context.Context, req *bbsuserv1.Logout_Req) (*bbsuserv1.Logout_Resp, error) {
-	token, err := currentToken(ctx)
+	token, err := s.currentToken(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -213,7 +214,7 @@ func (s *AuthService) Logout(ctx context.Context, req *bbsuserv1.Logout_Req) (*b
 }
 
 func (s *AuthService) CancelAccount(ctx context.Context, req *bbsuserv1.CancelAccount_Req) (*bbsuserv1.CancelAccount_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -221,21 +222,6 @@ func (s *AuthService) CancelAccount(ctx context.Context, req *bbsuserv1.CancelAc
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	return &bbsuserv1.CancelAccount_Resp{}, s.authUsecase.CancelAccount(ctx, userID, req.GetPassword(), req.GetCode())
-}
-
-func (s *AuthService) UnbanAccounts(ctx context.Context, req *bbsuserv1.UnbanAccounts_Req) (*bbsuserv1.UnbanAccounts_Resp, error) {
-	if req == nil || len(req.GetUserIds()) == 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	for _, userID := range req.GetUserIds() {
-		if userID == 0 {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-		}
-	}
-	if err := s.authUsecase.UnbanAccounts(ctx, req.GetUserIds()); err != nil {
-		return nil, err
-	}
-	return &bbsuserv1.UnbanAccounts_Resp{}, nil
 }
 
 func (s *AuthService) validateLogin(req *bbsuserv1.Login_Req) (*usecase.LoginReq, error) {
@@ -415,7 +401,7 @@ func (s *AuthService) normalizeNickname(nickname *string) (*string, error) {
 	}
 	for _, r := range value {
 		if !unicode.IsDigit(r) {
-			return &value, nil
+			return new(value), nil
 		}
 	}
 	return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

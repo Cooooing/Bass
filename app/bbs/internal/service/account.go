@@ -16,12 +16,8 @@ import (
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
-const (
-	maxProfileURLLength          = 2048
-	maxProfileIntroductionLength = 512
-)
-
 type AccountService struct {
+	contextReader
 	bbsuserv1.UnimplementedAccountServiceServer
 	accountUsecase *usecase.AccountUsecase
 }
@@ -42,7 +38,7 @@ func (s *AccountService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *AccountService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Req) (*bbsuserv1.GetCurrentAccount_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +62,7 @@ func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfi
 }
 
 func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Req) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +71,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 	}
 	if req.AvatarUrl != nil {
 		value := strings.TrimSpace(*req.AvatarUrl)
-		if utf8.RuneCountInString(value) > maxProfileURLLength {
+		if utf8.RuneCountInString(value) > 2048 {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
 		req.AvatarUrl = new(value)
@@ -102,12 +98,12 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 	}
 	if req.Url != nil {
 		value := strings.TrimSpace(*req.Url)
-		if utf8.RuneCountInString(value) > maxProfileURLLength {
+		if utf8.RuneCountInString(value) > 2048 {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
 		req.Url = new(value)
 	}
-	if req.Introduction != nil && utf8.RuneCountInString(*req.Introduction) > maxProfileIntroductionLength {
+	if req.Introduction != nil && utf8.RuneCountInString(*req.Introduction) > 512 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 	}
 	if req.Mbti != nil {

@@ -26,6 +26,7 @@ func cloneMessage[T proto.Message](src proto.Message, dst T) T {
 }
 
 type ContentArticleService struct {
+	contextReader
 	bbscontentv1.UnimplementedArticleServiceServer
 	contentArticleUsecase *usecase.ContentArticleUsecase
 }
@@ -46,7 +47,7 @@ func (s *ContentArticleService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentArticleService) Create(ctx context.Context, req *bbscontentv1.CreateArticle_Req) (*bbscontentv1.CreateArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +79,7 @@ func (s *ContentArticleService) Create(ctx context.Context, req *bbscontentv1.Cr
 }
 
 func (s *ContentArticleService) Update(ctx context.Context, req *bbscontentv1.UpdateArticle_Req) (*bbscontentv1.UpdateArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +112,7 @@ func (s *ContentArticleService) Update(ctx context.Context, req *bbscontentv1.Up
 }
 
 func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontentv1.UpdateDraftArticle_Req) (*bbscontentv1.UpdateDraftArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +145,7 @@ func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontent
 }
 
 func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.PublishArticle_Req) (*bbscontentv1.PublishArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +158,7 @@ func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.P
 }
 
 func (s *ContentArticleService) DiscardDraft(ctx context.Context, req *bbscontentv1.DiscardDraftArticle_Req) (*bbscontentv1.DiscardDraftArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -169,7 +170,7 @@ func (s *ContentArticleService) DiscardDraft(ctx context.Context, req *bbsconten
 }
 
 func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Req) (*bbscontentv1.ListArticles_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -200,7 +201,7 @@ func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.List
 }
 
 func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetArticle_Req) (*bbscontentv1.GetArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -226,7 +227,7 @@ func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetAr
 }
 
 func (s *ContentArticleService) Like(ctx context.Context, req *bbscontentv1.LikeArticle_Req) (*bbscontentv1.LikeArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -244,7 +245,7 @@ func (s *ContentArticleService) Like(ctx context.Context, req *bbscontentv1.Like
 }
 
 func (s *ContentArticleService) Thank(ctx context.Context, req *bbscontentv1.ThankArticle_Req) (*bbscontentv1.ThankArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -262,7 +263,7 @@ func (s *ContentArticleService) Thank(ctx context.Context, req *bbscontentv1.Tha
 }
 
 func (s *ContentArticleService) Collect(ctx context.Context, req *bbscontentv1.CollectArticle_Req) (*bbscontentv1.CollectArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -280,7 +281,7 @@ func (s *ContentArticleService) Collect(ctx context.Context, req *bbscontentv1.C
 }
 
 func (s *ContentArticleService) Watch(ctx context.Context, req *bbscontentv1.WatchArticle_Req) (*bbscontentv1.WatchArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -298,7 +299,7 @@ func (s *ContentArticleService) Watch(ctx context.Context, req *bbscontentv1.Wat
 }
 
 func (s *ContentArticleService) Reward(ctx context.Context, req *bbscontentv1.RewardArticle_Req) (*bbscontentv1.RewardArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -311,7 +312,7 @@ func (s *ContentArticleService) Reward(ctx context.Context, req *bbscontentv1.Re
 }
 
 func (s *ContentArticleService) AcceptAnswer(ctx context.Context, req *bbscontentv1.AcceptAnswerArticle_Req) (*bbscontentv1.AcceptAnswerArticle_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -48,8 +48,7 @@ type UpdateCurrentPreferencesReq struct {
 func (u *PreferencesUsecase) UpdateCurrentPreferences(ctx context.Context, req *UpdateCurrentPreferencesReq) (*bbsuserv1.UpdateCurrentPreferences_Resp_Preference, error) {
 	var language *int32
 	if req.Language != nil {
-		value := int32(*req.Language)
-		language = &value
+		language = new(int32(*req.Language))
 	}
 	reply, err := u.preferencesClient.UpdateCurrentPreferences(ctx, &repo.UpdateCurrentPreferencesReq{
 		UserID:      req.UserID,

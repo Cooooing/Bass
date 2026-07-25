@@ -10,6 +10,7 @@ import (
 )
 
 type NotificationService struct {
+	contextReader
 	bbsnotifyv1.UnimplementedNotificationServiceServer
 	notificationUsecase *usecase.NotificationUsecase
 }
@@ -30,7 +31,7 @@ func (s *NotificationService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *NotificationService) List(ctx context.Context, req *bbsnotifyv1.ListNotifications_Req) (*bbsnotifyv1.ListNotifications_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +49,7 @@ func (s *NotificationService) List(ctx context.Context, req *bbsnotifyv1.ListNot
 }
 
 func (s *NotificationService) MarkRead(ctx context.Context, req *bbsnotifyv1.MarkReadNotification_Req) (*bbsnotifyv1.MarkReadNotification_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +66,7 @@ func (s *NotificationService) MarkRead(ctx context.Context, req *bbsnotifyv1.Mar
 }
 
 func (s *NotificationService) CountUnread(ctx context.Context, req *bbsnotifyv1.CountUnreadNotifications_Req) (*bbsnotifyv1.CountUnreadNotifications_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

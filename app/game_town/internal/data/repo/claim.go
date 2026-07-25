@@ -17,6 +17,7 @@ import (
 var _ bizrepo.ClaimRepo = (*ClaimRepo)(nil)
 
 type ClaimRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -48,10 +49,10 @@ func (r *ClaimRepo) Save(ctx context.Context, row *model.Claim) (*model.Claim, e
 	if err != nil {
 		return nil, err
 	}
-	return claimModel(saved), nil
+	return r.claim(saved), nil
 }
 
-func claimQuery(q *gen.ClaimQuery, req *bizrepo.ClaimQuery) *gen.ClaimQuery {
+func (r *ClaimRepo) claimQuery(q *gen.ClaimQuery, req *bizrepo.ClaimQuery) *gen.ClaimQuery {
 	if req == nil {
 		return q
 	}
@@ -77,25 +78,25 @@ func claimQuery(q *gen.ClaimQuery, req *bizrepo.ClaimQuery) *gen.ClaimQuery {
 }
 
 func (r *ClaimRepo) Get(ctx context.Context, req *bizrepo.ClaimQuery) (*model.Claim, error) {
-	row, err := claimQuery(r.getClient(ctx).Claim.Query(), req).Only(ctx)
+	row, err := r.claimQuery(r.getClient(ctx).Claim.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return claimModel(row), nil
+	return r.claim(row), nil
 }
 
 func (r *ClaimRepo) List(ctx context.Context, req *bizrepo.ClaimQuery) ([]*model.Claim, error) {
-	rows, err := claimQuery(r.getClient(ctx).Claim.Query(), req).
+	rows, err := r.claimQuery(r.getClient(ctx).Claim.Query(), req).
 		Order(claim.ByID()).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return lo.Map(rows, func(row *gen.Claim, _ int) *model.Claim {
-		return claimModel(row)
+		return r.claim(row)
 	}), nil
 }
 
@@ -112,32 +113,32 @@ func (r *ClaimRepo) Map(ctx context.Context, req *bizrepo.ClaimQuery) (map[int64
 }
 
 func (r *ClaimRepo) Count(ctx context.Context, req *bizrepo.ClaimQuery) (int, error) {
-	return claimQuery(r.getClient(ctx).Claim.Query(), req).Count(ctx)
+	return r.claimQuery(r.getClient(ctx).Claim.Query(), req).Count(ctx)
 }
 
 func (r *ClaimRepo) Page(ctx context.Context, req *bizrepo.ClaimPageReq) (*bizrepo.ClaimPageResp, error) {
-	p := page(req.Page)
-	q := claimQuery(r.getClient(ctx).Claim.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.claimQuery(r.getClient(ctx).Claim.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rows, err := q.Order(claim.ByID()).
-		Offset(pageOffset(p)).
-		Limit(pageLimit(p)).
+		Offset(r.pageOffset(p)).
+		Limit(r.pageLimit(p)).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &bizrepo.ClaimPageResp{
 		Rows: lo.Map(rows, func(row *gen.Claim, _ int) *model.Claim {
-			return claimModel(row)
+			return r.claim(row)
 		}),
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 
-func claimModel(row *gen.Claim) *model.Claim {
+func (r *ClaimRepo) claim(row *gen.Claim) *model.Claim {
 	return &model.Claim{
 		ID:            row.ID,
 		WorldID:       row.WorldID,

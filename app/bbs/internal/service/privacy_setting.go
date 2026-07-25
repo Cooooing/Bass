@@ -10,6 +10,7 @@ import (
 )
 
 type PrivacySettingService struct {
+	contextReader
 	bbsuserv1.UnimplementedPrivacySettingServiceServer
 	privacySettingUsecase *usecase.PrivacySettingUsecase
 }
@@ -30,7 +31,7 @@ func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPrivacySetting_Req) (*bbsuserv1.GetCurrentPrivacySetting_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *bbsuserv1.G
 }
 
 func (s *PrivacySettingService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPrivacySetting_Req) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

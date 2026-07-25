@@ -19,6 +19,7 @@ import (
 var _ bizrepo.AgentJobRepo = (*AgentJobRepo)(nil)
 
 type AgentJobRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -74,7 +75,7 @@ func (r *AgentJobRepo) Save(ctx context.Context, row *model.AgentJob) (*model.Ag
 	}, nil
 }
 
-func agentJobQuery(q *gen.AgentJobQuery, req *bizrepo.AgentJobQuery) *gen.AgentJobQuery {
+func (r *AgentJobRepo) agentJobQuery(q *gen.AgentJobQuery, req *bizrepo.AgentJobQuery) *gen.AgentJobQuery {
 	if req == nil {
 		return q
 	}
@@ -118,7 +119,7 @@ func agentJobQuery(q *gen.AgentJobQuery, req *bizrepo.AgentJobQuery) *gen.AgentJ
 }
 
 func (r *AgentJobRepo) Get(ctx context.Context, req *bizrepo.AgentJobQuery) (*model.AgentJob, error) {
-	row, err := agentJobQuery(r.getClient(ctx).AgentJob.Query(), req).Only(ctx)
+	row, err := r.agentJobQuery(r.getClient(ctx).AgentJob.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
@@ -146,7 +147,7 @@ func (r *AgentJobRepo) Get(ctx context.Context, req *bizrepo.AgentJobQuery) (*mo
 }
 
 func (r *AgentJobRepo) List(ctx context.Context, req *bizrepo.AgentJobQuery) ([]*model.AgentJob, error) {
-	rows, err := agentJobQuery(r.getClient(ctx).AgentJob.Query(), req).Order(agentjob.ByPriority(), agentjob.ByID()).All(ctx)
+	rows, err := r.agentJobQuery(r.getClient(ctx).AgentJob.Query(), req).Order(agentjob.ByPriority(), agentjob.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -186,17 +187,17 @@ func (r *AgentJobRepo) Map(ctx context.Context, req *bizrepo.AgentJobQuery) (map
 }
 
 func (r *AgentJobRepo) Count(ctx context.Context, req *bizrepo.AgentJobQuery) (int, error) {
-	return agentJobQuery(r.getClient(ctx).AgentJob.Query(), req).Count(ctx)
+	return r.agentJobQuery(r.getClient(ctx).AgentJob.Query(), req).Count(ctx)
 }
 
 func (r *AgentJobRepo) Page(ctx context.Context, req *bizrepo.AgentJobPageReq) (*bizrepo.AgentJobPageResp, error) {
-	p := page(req.Page)
-	q := agentJobQuery(r.getClient(ctx).AgentJob.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.agentJobQuery(r.getClient(ctx).AgentJob.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(agentjob.ByPriority(), agentjob.ByID()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
+	rows, err := q.Order(agentjob.ByPriority(), agentjob.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -222,7 +223,7 @@ func (r *AgentJobRepo) Page(ctx context.Context, req *bizrepo.AgentJobPageReq) (
 	})
 	return &bizrepo.AgentJobPageResp{
 		Rows: out,
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 

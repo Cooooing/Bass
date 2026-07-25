@@ -19,6 +19,7 @@ import (
 var _ repo.DomainRepo = (*DomainRepo)(nil)
 
 type DomainRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -207,7 +208,7 @@ func (r *DomainRepo) Count(ctx context.Context, req *repo.DomainGetReq) (int, er
 }
 
 func (r *DomainRepo) Page(ctx context.Context, req *repo.DomainGetReq) (*repo.DomainPageResp, error) {
-	page := normalizePage(req.Page)
+	page := r.normalizePage(req.Page)
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()

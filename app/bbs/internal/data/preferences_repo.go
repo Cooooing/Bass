@@ -51,8 +51,7 @@ func (r *PreferencesClient) UpdateCurrentPreferences(ctx context.Context, req *r
 		MobileTheme: req.MobileTheme,
 	}
 	if req.Language != nil {
-		language := commonenums.Language(*req.Language)
-		updateReq.Language = &language
+		updateReq.Language = new(commonenums.Language(*req.Language))
 	}
 	reply, err := r.userClient.Preferences.Update(ctx, updateReq)
 	if err != nil {

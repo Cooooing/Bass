@@ -17,12 +17,12 @@ func (w *genTxWrapper) Rollback() error {
 	return w.tx.Rollback()
 }
 
-func (w *genTxWrapper) Client() interface{} {
+func (w *genTxWrapper) Client() *gen.Client {
 	return w.tx.Client()
 }
 
 func ProvideTx(db *gen.Client) base.Tx {
-	starter := func(ctx context.Context) (utilent.Tx, error) {
+	starter := func(ctx context.Context) (utilent.Tx[*gen.Client], error) {
 		tx, err := db.Tx(ctx)
 		if err != nil {
 			return nil, err

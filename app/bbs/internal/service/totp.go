@@ -10,6 +10,7 @@ import (
 )
 
 type TotpService struct {
+	contextReader
 	bbsuserv1.UnimplementedTotpServiceServer
 	totpUsecase *usecase.TotpUsecase
 }
@@ -30,7 +31,7 @@ func (s *TotpService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func (s *TotpService) BeginEnable(ctx context.Context, req *bbsuserv1.BeginEnableTotp_Req) (*bbsuserv1.BeginEnableTotp_Resp, error) {
-	user, err := currentUser(ctx)
+	user, err := s.currentUser(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +49,7 @@ func (s *TotpService) BeginEnable(ctx context.Context, req *bbsuserv1.BeginEnabl
 }
 
 func (s *TotpService) ConfirmEnable(ctx context.Context, req *bbsuserv1.ConfirmEnableTotp_Req) (*bbsuserv1.ConfirmEnableTotp_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +61,7 @@ func (s *TotpService) ConfirmEnable(ctx context.Context, req *bbsuserv1.ConfirmE
 }
 
 func (s *TotpService) Disable(ctx context.Context, req *bbsuserv1.DisableTotp_Req) (*bbsuserv1.DisableTotp_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +73,7 @@ func (s *TotpService) Disable(ctx context.Context, req *bbsuserv1.DisableTotp_Re
 }
 
 func (s *TotpService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentTotp_Req) (*bbsuserv1.GetCurrentTotp_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

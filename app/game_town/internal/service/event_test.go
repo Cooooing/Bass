@@ -3,7 +3,7 @@ package service
 import "testing"
 
 func TestNewEventPayloadNormalizesTypedSlices(t *testing.T) {
-	payload, err := newEventPayload(map[string]any{
+	payload, err := (&EventService{}).newEventPayload(map[string]any{
 		"character_traits": []string{"scavenger", "mecha-whisperer"},
 		"suggested_actions": []any{
 			map[string]any{
@@ -38,8 +38,8 @@ func TestInt64ValueSupportsPayloadNumbers(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			if got := int64Value(test.value); got != test.want {
-				t.Fatalf("int64Value() = %d, want %d", got, test.want)
+			if got := (&EventService{}).int64Value(test.value); got != test.want {
+				t.Fatalf("(&EventService{}).int64Value() = %d, want %d", got, test.want)
 			}
 		})
 	}

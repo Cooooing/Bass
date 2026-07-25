@@ -13,6 +13,7 @@ import (
 var _ repo.RelationClient = (*RelationClient)(nil)
 
 type RelationClient struct {
+	protoTimeFormatter
 	userClient *rpc.UserClient
 }
 
@@ -99,11 +100,11 @@ func (r *RelationClient) ListFollowing(ctx context.Context, req *repo.ListFollow
 		}
 		rows = append(rows, &repo.Relation{
 			ID:        item.GetId(),
-			Type:      relationTypeFromUser(item.GetType()),
+			Type:      r.relationTypeFromUser(item.GetType()),
 			ActorID:   item.GetActorId(),
 			TargetID:  item.GetTargetId(),
-			CreatedAt: formatProtoTime(item.GetCreatedAt()),
-			UpdatedAt: formatProtoTime(item.GetUpdatedAt()),
+			CreatedAt: r.formatProtoTime(item.GetCreatedAt()),
+			UpdatedAt: r.formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
 	return &repo.ListFollowingRelationsResp{
@@ -143,11 +144,11 @@ func (r *RelationClient) ListFollowers(ctx context.Context, req *repo.ListFollow
 		}
 		rows = append(rows, &repo.Relation{
 			ID:        item.GetId(),
-			Type:      relationTypeFromUser(item.GetType()),
+			Type:      r.relationTypeFromUser(item.GetType()),
 			ActorID:   item.GetActorId(),
 			TargetID:  item.GetTargetId(),
-			CreatedAt: formatProtoTime(item.GetCreatedAt()),
-			UpdatedAt: formatProtoTime(item.GetUpdatedAt()),
+			CreatedAt: r.formatProtoTime(item.GetCreatedAt()),
+			UpdatedAt: r.formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
 	return &repo.ListFollowersRelationsResp{
@@ -187,11 +188,11 @@ func (r *RelationClient) ListBlocked(ctx context.Context, req *repo.ListBlockedR
 		}
 		rows = append(rows, &repo.Relation{
 			ID:        item.GetId(),
-			Type:      relationTypeFromUser(item.GetType()),
+			Type:      r.relationTypeFromUser(item.GetType()),
 			ActorID:   item.GetActorId(),
 			TargetID:  item.GetTargetId(),
-			CreatedAt: formatProtoTime(item.GetCreatedAt()),
-			UpdatedAt: formatProtoTime(item.GetUpdatedAt()),
+			CreatedAt: r.formatProtoTime(item.GetCreatedAt()),
+			UpdatedAt: r.formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
 	return &repo.ListBlockedRelationsResp{
@@ -221,7 +222,7 @@ func (r *RelationClient) GetStatus(ctx context.Context, req *repo.GetStatusRelat
 	return out, nil
 }
 
-func relationTypeFromUser(value userv1enum.RelationType) enum.RelationType {
+func (r *RelationClient) relationTypeFromUser(value userv1enum.RelationType) enum.RelationType {
 	switch value {
 	case userv1enum.RelationType_RELATION_TYPE_BLOCK:
 		return enum.RelationTypeBlock

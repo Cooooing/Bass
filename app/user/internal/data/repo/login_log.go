@@ -120,7 +120,7 @@ func (r *LoginLogRepo) create(ctx context.Context, l *model.LoginLog) (*model.Lo
 	if err != nil {
 		return nil, err
 	}
-	return loginLogToModel(created), nil
+	return r.loginLog(created), nil
 }
 
 func (r *LoginLogRepo) get(ctx context.Context, req *repo.LoginLogGetReq) (*model.LoginLog, error) {
@@ -136,7 +136,7 @@ func (r *LoginLogRepo) get(ctx context.Context, req *repo.LoginLogGetReq) (*mode
 	if err != nil {
 		return nil, err
 	}
-	return loginLogToModel(row), nil
+	return r.loginLog(row), nil
 }
 
 func (r *LoginLogRepo) list(ctx context.Context, req *repo.LoginLogGetReq) ([]*model.LoginLog, error) {
@@ -147,7 +147,7 @@ func (r *LoginLogRepo) list(ctx context.Context, req *repo.LoginLogGetReq) ([]*m
 	}
 	result := make([]*model.LoginLog, 0, len(rows))
 	for _, row := range rows {
-		result = append(result, loginLogToModel(row))
+		result = append(result, r.loginLog(row))
 	}
 	return result, nil
 }
@@ -166,7 +166,7 @@ func (r *LoginLogRepo) page(ctx context.Context, page *common.PageReq, req *repo
 	}
 	result := make([]*model.LoginLog, 0, len(rows))
 	for _, row := range rows {
-		result = append(result, loginLogToModel(row))
+		result = append(result, r.loginLog(row))
 	}
 	return result, &common.PageResp{
 		Total: uint32(total),
@@ -203,7 +203,7 @@ func (r *LoginLogRepo) getQuery(query *gen.LoginLogQuery, req *repo.LoginLogGetR
 	return query
 }
 
-func loginLogToModel(row *gen.LoginLog) *model.LoginLog {
+func (r *LoginLogRepo) loginLog(row *gen.LoginLog) *model.LoginLog {
 	if row == nil {
 		return nil
 	}
@@ -232,16 +232,13 @@ func loginLogToModel(row *gen.LoginLog) *model.LoginLog {
 		UpdatedAt:      row.UpdatedAt,
 	}
 	if row.FailureReason != nil {
-		value := enum.LoginFailureReason(*row.FailureReason)
-		result.FailureReason = &value
+		result.FailureReason = new(enum.LoginFailureReason(*row.FailureReason))
 	}
 	if row.ClientType != nil {
-		value := enum.ClientType(*row.ClientType)
-		result.ClientType = &value
+		result.ClientType = new(enum.ClientType(*row.ClientType))
 	}
 	if row.DeviceType != nil {
-		value := enum.DeviceType(*row.DeviceType)
-		result.DeviceType = &value
+		result.DeviceType = new(enum.DeviceType(*row.DeviceType))
 	}
 	return result
 }

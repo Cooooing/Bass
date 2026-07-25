@@ -21,12 +21,12 @@ func (r *WorldAgentRunner) callAgent(ctx context.Context, result *agentResult) e
 		result.draft, err = r.agentClient.GenerateWorld(ctx, &repo.GenerateWorldReq{
 			Config:        result.config,
 			World:         result.world,
-			NpcCount:      uint32Value(result.source.Payload, "npc_count"),
-			LocationCount: uint32Value(result.source.Payload, "location_count"),
+			NpcCount:      r.uint32Value(result.source.Payload, "npc_count"),
+			LocationCount: r.uint32Value(result.source.Payload, "location_count"),
 		})
 		if err != nil {
 			r.log.WarnContext(ctx, "world generation agent failed; use fallback draft", "world_id", result.world.ID, constant.LogFieldErr, err)
-			result.draft = fallbackWorldDraft(result)
+			result.draft = r.fallbackWorldDraft(result)
 			err = nil
 		}
 	case enum.AgentJobTypePlayerCharacterGenerate:
@@ -62,13 +62,13 @@ func (r *WorldAgentRunner) callAgent(ctx context.Context, result *agentResult) e
 			Member:       result.member,
 			Location:     result.location,
 			Npc:          result.npc,
-			RecentEvents: resultEvents(result),
+			RecentEvents: r.resultEvents(result),
 			Memories:     result.memories,
 			Content:      result.source.Content,
 		})
 		if err != nil {
 			r.log.WarnContext(ctx, "npc talk agent failed; use fallback reply", "world_id", result.world.ID, constant.LogFieldErr, err)
-			result.reply = fallbackNpcReply(result, err)
+			result.reply = r.fallbackNpcReply(result, err)
 			err = nil
 		}
 	case enum.AgentJobTypePlayerAct, enum.AgentJobTypePlayerActionInterpret:
@@ -85,13 +85,13 @@ func (r *WorldAgentRunner) callAgent(ctx context.Context, result *agentResult) e
 				Member:       result.member,
 				Location:     result.location,
 				Npc:          result.npc,
-				RecentEvents: resultEvents(result),
+				RecentEvents: r.resultEvents(result),
 				Memories:     result.memories,
 				Content:      result.source.Content,
 			})
 			if err != nil {
 				r.log.WarnContext(ctx, "target npc action agent failed; use fallback reply", "world_id", result.world.ID, constant.LogFieldErr, err)
-				result.reply = fallbackNpcReply(result, err)
+				result.reply = r.fallbackNpcReply(result, err)
 				err = nil
 			}
 			break
@@ -103,13 +103,13 @@ func (r *WorldAgentRunner) callAgent(ctx context.Context, result *agentResult) e
 			Player:       result.player,
 			Member:       result.member,
 			Location:     result.location,
-			RecentEvents: resultEvents(result),
+			RecentEvents: r.resultEvents(result),
 			Content:      result.source.Content,
-			Targets:      actionTargets(result.source.Payload),
+			Targets:      r.actionTargets(result.source.Payload),
 		})
 		if err != nil {
 			r.log.WarnContext(ctx, "player action agent failed; use fallback resolution", "world_id", result.world.ID, constant.LogFieldErr, err)
-			result.resolution = fallbackPlayerActionResolution(result, err)
+			result.resolution = r.fallbackPlayerActionResolution(result, err)
 			err = nil
 		}
 	case enum.AgentJobTypeNpcPlan:
@@ -153,7 +153,7 @@ func (r *WorldAgentRunner) callAgent(ctx context.Context, result *agentResult) e
 		})
 		if err != nil {
 			r.log.WarnContext(ctx, "npc plan agent failed; use fallback plan", "world_id", result.world.ID, "npc_id", result.npc.ID, constant.LogFieldErr, err)
-			result.plan = fallbackNpcPlan(result, err)
+			result.plan = r.fallbackNpcPlan(result, err)
 			err = nil
 		}
 	case enum.AgentJobTypeWorldTick:
@@ -194,7 +194,7 @@ func (r *WorldAgentRunner) callAgent(ctx context.Context, result *agentResult) e
 		})
 		if err != nil {
 			r.log.WarnContext(ctx, "world tick agent failed; use fallback resolution", "world_id", result.world.ID, constant.LogFieldErr, err)
-			result.resolution = fallbackWorldTickResolution(result, err)
+			result.resolution = r.fallbackWorldTickResolution(result, err)
 			err = nil
 		}
 	case enum.AgentJobTypeMemoryEmbed:
@@ -278,7 +278,7 @@ func (r *WorldAgentRunner) loadActionContext(ctx context.Context, result *agentR
 	return nil
 }
 
-func resultEvents(result *agentResult) []*model.Event {
+func (r *WorldAgentRunner) resultEvents(result *agentResult) []*model.Event {
 	if result == nil || result.source == nil || result.source.Payload == nil {
 		return nil
 	}
@@ -360,7 +360,7 @@ func (r *WorldAgentRunner) npcMemories(ctx context.Context, npc *model.Npc, prom
 	return nil, nil
 }
 
-func actionTargets(payload map[string]any) []model.EntityRef {
+func (r *WorldAgentRunner) actionTargets(payload map[string]any) []model.EntityRef {
 	if payload == nil {
 		return nil
 	}
@@ -375,7 +375,7 @@ func actionTargets(payload map[string]any) []model.EntityRef {
 		if !ok {
 			continue
 		}
-		id := entityIDValue(item["id"])
+		id := r.entityIDValue(item["id"])
 		if id <= 0 {
 			continue
 		}
@@ -393,7 +393,7 @@ func actionTargets(payload map[string]any) []model.EntityRef {
 	return result
 }
 
-func entityIDValue(value any) int64 {
+func (r *WorldAgentRunner) entityIDValue(value any) int64 {
 	switch typedValue := value.(type) {
 	case int:
 		return int64(typedValue)
@@ -423,15 +423,15 @@ func entityIDValue(value any) int64 {
 	case float64:
 		return int64(typedValue)
 	case string:
-		return parseEntityIDString(typedValue)
+		return r.parseEntityIDString(typedValue)
 	case fmt.Stringer:
-		return parseEntityIDString(typedValue.String())
+		return r.parseEntityIDString(typedValue.String())
 	default:
 		return 0
 	}
 }
 
-func parseEntityIDString(value string) int64 {
+func (r *WorldAgentRunner) parseEntityIDString(value string) int64 {
 	value = strings.TrimSpace(value)
 	if value == "" {
 		return 0
@@ -447,14 +447,14 @@ func parseEntityIDString(value string) int64 {
 	return int64(floatValue)
 }
 
-func fallbackNpcReply(result *agentResult, err error) *model.NpcReply {
+func (r *WorldAgentRunner) fallbackNpcReply(result *agentResult, err error) *model.NpcReply {
 	reply := "我需要一点时间整理线索。你可以先说明更具体的目标，或换一个方向调查。"
 	if result != nil && result.npc != nil {
 		reply = result.npc.Name + "短暂沉思后说：" + reply
 	}
 	return &model.NpcReply{
 		Reply:          reply,
-		ContextSummary: fallbackContextSummary(result, err),
+		ContextSummary: r.fallbackContextSummary(result, err),
 		SuggestedActions: []model.SuggestedAction{
 			{Label: "追问线索", Content: "请告诉我你目前最确定的一条线索。"},
 			{Label: "换个问题", Content: "我想从另一个角度调查这件事。"},
@@ -462,14 +462,14 @@ func fallbackNpcReply(result *agentResult, err error) *model.NpcReply {
 	}
 }
 
-func fallbackWorldDraft(result *agentResult) *model.WorldDraft {
+func (r *WorldAgentRunner) fallbackWorldDraft(result *agentResult) *model.WorldDraft {
 	description := "一个正在自行演化的文字世界"
 	if result != nil && result.world != nil && strings.TrimSpace(result.world.Description) != "" {
 		description = result.world.Description
 	}
 	return &model.WorldDraft{
 		Name:       "未命名边境",
-		Summary:    normalizeModelText(description, 120),
+		Summary:    r.normalizeModelText(description, 120),
 		CurrentArc: "新局势正在形成",
 		CurrentEra: "初始纪元",
 		Rules: map[string]any{
@@ -493,18 +493,18 @@ func fallbackWorldDraft(result *agentResult) *model.WorldDraft {
 	}
 }
 
-func fallbackPlayerActionResolution(result *agentResult, err error) *model.ActionResolution {
+func (r *WorldAgentRunner) fallbackPlayerActionResolution(result *agentResult, err error) *model.ActionResolution {
 	summary := "玩家行动已被记录，世界暂时需要更多信息来裁决细节"
 	clarification := "请补充你的具体目标、对象或愿意承担的代价。"
 	if result != nil && result.source != nil && strings.TrimSpace(result.source.Content) != "" {
-		summary = normalizeModelText("玩家尝试："+result.source.Content, 120)
+		summary = r.normalizeModelText("玩家尝试："+result.source.Content, 120)
 	}
 	return &model.ActionResolution{
 		Status:        "clarification",
 		Summary:       summary,
 		Clarification: clarification,
-		WorldSummary:  fallbackWorldSummary(result),
-		CurrentArc:    fallbackCurrentArc(result),
+		WorldSummary:  r.fallbackWorldSummary(result),
+		CurrentArc:    r.fallbackCurrentArc(result),
 		SuggestedActions: []model.SuggestedAction{
 			{Label: "说明目标", Content: "我的目标是获得一个明确线索，并愿意付出合理代价。"},
 			{Label: "谨慎行动", Content: "我先观察周围反应，不贸然推进。"},
@@ -512,7 +512,7 @@ func fallbackPlayerActionResolution(result *agentResult, err error) *model.Actio
 	}
 }
 
-func deterministicPlayerActionResolution(result *agentResult) *model.ActionResolution {
+func (r *WorldAgentRunner) deterministicPlayerActionResolution(result *agentResult) *model.ActionResolution {
 	content := ""
 	if result != nil && result.source != nil {
 		content = strings.TrimSpace(result.source.Content)
@@ -520,10 +520,10 @@ func deterministicPlayerActionResolution(result *agentResult) *model.ActionResol
 	if content == "" {
 		content = "玩家采取了一个未说明细节的行动"
 	}
-	summary := normalizeModelText("玩家行动产生影响："+content, 120)
+	summary := r.normalizeModelText("玩家行动产生影响："+content, 120)
 	actions := make([]model.ActionStep, 0, 2)
 	if result != nil && result.source != nil {
-		for _, target := range actionTargets(result.source.Payload) {
+		for _, target := range r.actionTargets(result.source.Payload) {
 			if target.Type == enum.EntityTypeLocation {
 				actions = append(actions, model.ActionStep{
 					Type: "move_player",
@@ -544,7 +544,7 @@ func deterministicPlayerActionResolution(result *agentResult) *model.ActionResol
 				ID:   result.location.ID,
 			},
 			Parameters: map[string]any{
-				"description":      normalizeModelText(result.location.Description+"玩家行动让这里的局势出现新的变化。", 180),
+				"description":      r.normalizeModelText(result.location.Description+"玩家行动让这里的局势出现新的变化。", 180),
 				"environment_tags": []string{"player_influenced"},
 			},
 			DurationMinutes: 30,
@@ -553,8 +553,8 @@ func deterministicPlayerActionResolution(result *agentResult) *model.ActionResol
 	return &model.ActionResolution{
 		Status:       "resolved",
 		Summary:      summary,
-		WorldSummary: fallbackWorldSummary(result),
-		CurrentArc:   fallbackCurrentArc(result),
+		WorldSummary: r.fallbackWorldSummary(result),
+		CurrentArc:   r.fallbackCurrentArc(result),
 		Actions:      actions,
 		SuggestedActions: []model.SuggestedAction{
 			{Label: "继续推进", Content: "我继续沿着这个方向扩大影响。"},
@@ -563,7 +563,7 @@ func deterministicPlayerActionResolution(result *agentResult) *model.ActionResol
 	}
 }
 
-func fallbackNpcPlan(result *agentResult, err error) *model.NpcPlan {
+func (r *WorldAgentRunner) fallbackNpcPlan(result *agentResult, err error) *model.NpcPlan {
 	summary := "NPC 根据当前局势维持原计划，并继续观察变化。"
 	goal := "观察局势"
 	actions := make([]model.ActionStep, 0, 1)
@@ -599,10 +599,10 @@ func fallbackNpcPlan(result *agentResult, err error) *model.NpcPlan {
 	}
 }
 
-func fallbackWorldTickResolution(result *agentResult, err error) *model.ActionResolution {
+func (r *WorldAgentRunner) fallbackWorldTickResolution(result *agentResult, err error) *model.ActionResolution {
 	summary := "世界在没有玩家直接推动时继续缓慢演化。"
 	if result != nil && result.state != nil && strings.TrimSpace(result.state.CurrentArc) != "" {
-		summary = normalizeModelText(result.state.CurrentArc+"出现新的余波。", 120)
+		summary = r.normalizeModelText(result.state.CurrentArc+"出现新的余波。", 120)
 	}
 	actions := make([]model.ActionStep, 0, 2)
 	if result != nil && len(result.locations) > 0 {
@@ -614,7 +614,7 @@ func fallbackWorldTickResolution(result *agentResult, err error) *model.ActionRe
 				ID:   location.ID,
 			},
 			Parameters: map[string]any{
-				"description":      normalizeModelText(location.Description+"局势的余波让这里出现新的变化。", 180),
+				"description":      r.normalizeModelText(location.Description+"局势的余波让这里出现新的变化。", 180),
 				"environment_tags": []string{"evolving"},
 			},
 			DurationMinutes: 60,
@@ -629,7 +629,7 @@ func fallbackWorldTickResolution(result *agentResult, err error) *model.ActionRe
 				ID:   faction.ID,
 			},
 			Parameters: map[string]any{
-				"public_goal": normalizeModelText(faction.PublicGoal+"，并重新评估近期风险。", 120),
+				"public_goal": r.normalizeModelText(faction.PublicGoal+"，并重新评估近期风险。", 120),
 			},
 			DurationMinutes: 60,
 		})
@@ -637,13 +637,13 @@ func fallbackWorldTickResolution(result *agentResult, err error) *model.ActionRe
 	return &model.ActionResolution{
 		Status:       "resolved",
 		Summary:      summary,
-		WorldSummary: fallbackWorldSummary(result),
-		CurrentArc:   fallbackCurrentArc(result),
+		WorldSummary: r.fallbackWorldSummary(result),
+		CurrentArc:   r.fallbackCurrentArc(result),
 		Actions:      actions,
 	}
 }
 
-func fallbackWorldSummary(result *agentResult) string {
+func (r *WorldAgentRunner) fallbackWorldSummary(result *agentResult) string {
 	if result != nil && result.state != nil && strings.TrimSpace(result.state.Summary) != "" {
 		return result.state.Summary
 	}
@@ -653,16 +653,16 @@ func fallbackWorldSummary(result *agentResult) string {
 	return "世界局势仍在持续变化。"
 }
 
-func fallbackCurrentArc(result *agentResult) string {
+func (r *WorldAgentRunner) fallbackCurrentArc(result *agentResult) string {
 	if result != nil && result.state != nil && strings.TrimSpace(result.state.CurrentArc) != "" {
-		return normalizeModelText(result.state.CurrentArc, 80)
+		return r.normalizeModelText(result.state.CurrentArc, 80)
 	}
 	return "暗流涌动"
 }
 
-func fallbackContextSummary(result *agentResult, err error) string {
+func (r *WorldAgentRunner) fallbackContextSummary(result *agentResult, err error) string {
 	if result != nil && result.npc != nil && strings.TrimSpace(result.npc.ContextSummary) != "" {
-		return normalizeModelText(result.npc.ContextSummary, 120)
+		return r.normalizeModelText(result.npc.ContextSummary, 120)
 	}
 	return "模型响应不稳定，NPC 保留当前认知并等待更多可观察事实。"
 }

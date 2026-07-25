@@ -61,6 +61,10 @@ func (r *AccountRepo) UpdateStatus(ctx context.Context, userID int64, status enu
 	return r.updateStatus(ctx, userID, status)
 }
 
+func (r *AccountRepo) UnbanBanned(ctx context.Context, userIDs []int64) error {
+	return r.unbanBanned(ctx, userIDs)
+}
+
 func (r *AccountRepo) ExistsByAccount(ctx context.Context, account string) (bool, error) {
 	return r.existsByAccount(ctx, account)
 }
@@ -287,6 +291,17 @@ func (r *AccountRepo) updateStatus(ctx context.Context, userID int64, status enu
 		CreatedAt:     saved.CreatedAt,
 		UpdatedAt:     saved.UpdatedAt,
 	}, nil
+}
+
+func (r *AccountRepo) unbanBanned(ctx context.Context, userIDs []int64) error {
+	_, err := r.getClient(ctx).Account.Update().
+		Where(
+			account.IDIn(userIDs...),
+			account.StatusEQ(account.Status(enum.AccountStatusBanned)),
+		).
+		SetStatus(account.Status(enum.AccountStatusNormal)).
+		Save(ctx)
+	return err
 }
 
 func (r *AccountRepo) existsByAccount(ctx context.Context, accountValue string) (bool, error) {

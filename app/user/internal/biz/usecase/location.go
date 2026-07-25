@@ -20,7 +20,7 @@ func NewLocationUsecase(
 
 func (s *LocationUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Location, error) {
 	return s.locationRepo.Get(ctx, &repo.LocationGetReq{
-		UserID: &userID,
+		UserID: new(userID),
 	})
 }
 

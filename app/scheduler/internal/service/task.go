@@ -203,14 +203,14 @@ func (s *SchedulerTaskService) PageExecutionRecords(ctx context.Context, req *sc
 			if !ok {
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 			}
-			query.Status = &statusValue
+			query.Status = new(statusValue)
 		}
 		if req.GetQuery().TriggerType != nil {
 			triggerType, ok := schedulerenum.TaskTriggerTypeMap.ToEnum(req.GetQuery().GetTriggerType())
 			if !ok {
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 			}
-			query.TriggerType = &triggerType
+			query.TriggerType = new(triggerType)
 		}
 	}
 	query.Page = req.GetPage()

@@ -91,8 +91,7 @@ type UpdateProfileAccountReq struct {
 func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*bbsuserv1.UpdateProfileAccount_Resp_AccountProfile, error) {
 	var mbti *int32
 	if req.Mbti != nil {
-		value := int32(*req.Mbti)
-		mbti = &value
+		mbti = new(int32(*req.Mbti))
 	}
 	reply, err := u.accountClient.UpdateProfileAccount(ctx, &repo.UpdateProfileAccountReq{
 		UserID:       req.UserID,

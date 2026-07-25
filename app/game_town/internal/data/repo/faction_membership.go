@@ -17,6 +17,7 @@ import (
 var _ bizrepo.FactionMembershipRepo = (*FactionMembershipRepo)(nil)
 
 type FactionMembershipRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -50,10 +51,10 @@ func (r *FactionMembershipRepo) Save(ctx context.Context, row *model.FactionMemb
 	if err != nil {
 		return nil, err
 	}
-	return factionMembershipModel(saved), nil
+	return r.factionMembership(saved), nil
 }
 
-func factionMembershipQuery(q *gen.FactionMembershipQuery, req *bizrepo.FactionMembershipQuery) *gen.FactionMembershipQuery {
+func (r *FactionMembershipRepo) factionMembershipQuery(q *gen.FactionMembershipQuery, req *bizrepo.FactionMembershipQuery) *gen.FactionMembershipQuery {
 	if req == nil {
 		return q
 	}
@@ -79,25 +80,25 @@ func factionMembershipQuery(q *gen.FactionMembershipQuery, req *bizrepo.FactionM
 }
 
 func (r *FactionMembershipRepo) Get(ctx context.Context, req *bizrepo.FactionMembershipQuery) (*model.FactionMembership, error) {
-	row, err := factionMembershipQuery(r.getClient(ctx).FactionMembership.Query(), req).Only(ctx)
+	row, err := r.factionMembershipQuery(r.getClient(ctx).FactionMembership.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return factionMembershipModel(row), nil
+	return r.factionMembership(row), nil
 }
 
 func (r *FactionMembershipRepo) List(ctx context.Context, req *bizrepo.FactionMembershipQuery) ([]*model.FactionMembership, error) {
-	rows, err := factionMembershipQuery(r.getClient(ctx).FactionMembership.Query(), req).
+	rows, err := r.factionMembershipQuery(r.getClient(ctx).FactionMembership.Query(), req).
 		Order(factionmembership.ByID()).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return lo.Map(rows, func(row *gen.FactionMembership, _ int) *model.FactionMembership {
-		return factionMembershipModel(row)
+		return r.factionMembership(row)
 	}), nil
 }
 
@@ -114,32 +115,32 @@ func (r *FactionMembershipRepo) Map(ctx context.Context, req *bizrepo.FactionMem
 }
 
 func (r *FactionMembershipRepo) Count(ctx context.Context, req *bizrepo.FactionMembershipQuery) (int, error) {
-	return factionMembershipQuery(r.getClient(ctx).FactionMembership.Query(), req).Count(ctx)
+	return r.factionMembershipQuery(r.getClient(ctx).FactionMembership.Query(), req).Count(ctx)
 }
 
 func (r *FactionMembershipRepo) Page(ctx context.Context, req *bizrepo.FactionMembershipPageReq) (*bizrepo.FactionMembershipPageResp, error) {
-	p := page(req.Page)
-	q := factionMembershipQuery(r.getClient(ctx).FactionMembership.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.factionMembershipQuery(r.getClient(ctx).FactionMembership.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rows, err := q.Order(factionmembership.ByID()).
-		Offset(pageOffset(p)).
-		Limit(pageLimit(p)).
+		Offset(r.pageOffset(p)).
+		Limit(r.pageLimit(p)).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &bizrepo.FactionMembershipPageResp{
 		Rows: lo.Map(rows, func(row *gen.FactionMembership, _ int) *model.FactionMembership {
-			return factionMembershipModel(row)
+			return r.factionMembership(row)
 		}),
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 
-func factionMembershipModel(row *gen.FactionMembership) *model.FactionMembership {
+func (r *FactionMembershipRepo) factionMembership(row *gen.FactionMembership) *model.FactionMembership {
 	return &model.FactionMembership{
 		ID:         row.ID,
 		WorldID:    row.WorldID,

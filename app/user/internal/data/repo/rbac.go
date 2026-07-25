@@ -42,7 +42,7 @@ func (r *RbacRepo) GetRole(ctx context.Context, roleID int64) (*model.RbacRole, 
 	if err != nil {
 		return nil, err
 	}
-	return rbacRoleToModel(row), nil
+	return r.role(row), nil
 }
 
 func (r *RbacRepo) UpsertRole(ctx context.Context, row *model.RbacRole) (*model.RbacRole, error) {
@@ -52,7 +52,7 @@ func (r *RbacRepo) UpsertRole(ctx context.Context, row *model.RbacRole) (*model.
 		if err != nil {
 			return nil, err
 		}
-		return rbacRoleToModel(saved), nil
+		return r.role(saved), nil
 	}
 	existing, err := client.RbacRole.Query().Where(rbacrole.RealmEQ(rbacrole.Realm(row.Realm)), rbacrole.Code(row.Code)).First(ctx)
 	if err != nil && !gen.IsNotFound(err) {
@@ -63,13 +63,13 @@ func (r *RbacRepo) UpsertRole(ctx context.Context, row *model.RbacRole) (*model.
 		if err != nil {
 			return nil, err
 		}
-		return rbacRoleToModel(saved), nil
+		return r.role(saved), nil
 	}
 	saved, err := client.RbacRole.Create().SetRealm(rbacrole.Realm(row.Realm)).SetCode(row.Code).SetName(row.Name).SetDescription(row.Description).SetBuiltIn(row.BuiltIn).SetEnabled(row.Enabled).Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return rbacRoleToModel(saved), nil
+	return r.role(saved), nil
 }
 
 func (r *RbacRepo) UpsertPermission(ctx context.Context, row *model.RbacPermission) (*model.RbacPermission, error) {
@@ -79,7 +79,7 @@ func (r *RbacRepo) UpsertPermission(ctx context.Context, row *model.RbacPermissi
 		if err != nil {
 			return nil, err
 		}
-		return rbacPermissionToModel(saved), nil
+		return r.permission(saved), nil
 	}
 	existing, err := client.RbacPermission.Query().Where(rbacpermission.RealmEQ(rbacpermission.Realm(row.Realm)), rbacpermission.Code(row.Code)).First(ctx)
 	if err != nil && !gen.IsNotFound(err) {
@@ -90,13 +90,13 @@ func (r *RbacRepo) UpsertPermission(ctx context.Context, row *model.RbacPermissi
 		if err != nil {
 			return nil, err
 		}
-		return rbacPermissionToModel(saved), nil
+		return r.permission(saved), nil
 	}
 	saved, err := client.RbacPermission.Create().SetRealm(rbacpermission.Realm(row.Realm)).SetCode(row.Code).SetName(row.Name).SetDescription(row.Description).SetEnabled(row.Enabled).Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return rbacPermissionToModel(saved), nil
+	return r.permission(saved), nil
 }
 
 func (r *RbacRepo) BindRolePermission(ctx context.Context, roleID int64, permissionID int64) error {
@@ -194,7 +194,7 @@ func (r *RbacRepo) PermissionCodes(ctx context.Context, userID int64, realm comm
 	return codes, nil
 }
 
-func rbacRoleToModel(row *gen.RbacRole) *model.RbacRole {
+func (r *RbacRepo) role(row *gen.RbacRole) *model.RbacRole {
 	if row == nil {
 		return nil
 	}
@@ -211,7 +211,7 @@ func rbacRoleToModel(row *gen.RbacRole) *model.RbacRole {
 	}
 }
 
-func rbacPermissionToModel(row *gen.RbacPermission) *model.RbacPermission {
+func (r *RbacRepo) permission(row *gen.RbacPermission) *model.RbacPermission {
 	if row == nil {
 		return nil
 	}

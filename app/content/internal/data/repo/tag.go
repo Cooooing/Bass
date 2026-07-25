@@ -19,6 +19,7 @@ import (
 var _ repo.TagRepo = (*TagRepo)(nil)
 
 type TagRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -190,7 +191,7 @@ func (r *TagRepo) Count(ctx context.Context, req *repo.TagGetReq) (int, error) {
 }
 
 func (r *TagRepo) Page(ctx context.Context, req *repo.TagGetReq) (*repo.TagPageResp, error) {
-	page := normalizePage(req.Page)
+	page := r.normalizePage(req.Page)
 	query := r.getClient(ctx).Tag.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()

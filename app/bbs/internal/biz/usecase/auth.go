@@ -211,7 +211,3 @@ func (u *AuthUsecase) CancelAccount(ctx context.Context, userID int64, password 
 		Code:     code,
 	})
 }
-
-func (u *AuthUsecase) UnbanAccounts(ctx context.Context, userIDs []int64) error {
-	return u.authRepo.UnbanAccounts(ctx, userIDs)
-}

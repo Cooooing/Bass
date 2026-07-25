@@ -12,6 +12,7 @@ import (
 var _ repo.ContentPostscriptClient = (*ContentPostscriptClient)(nil)
 
 type ContentPostscriptClient struct {
+	protoTimeFormatter
 	contentClient *rpc.ContentClient
 }
 
@@ -40,7 +41,7 @@ func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *repo.A
 		ContentRender: util.LuteEngine.MarkdownStr(fmt.Sprintf("article_postscript_%d", item.GetId()), item.GetContent()),
 		CreatedBy:     item.CreatedBy,
 		UpdatedBy:     item.UpdatedBy,
-		CreatedAt:     formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:     formatProtoTime(item.GetUpdatedAt()),
+		CreatedAt:     r.formatProtoTime(item.GetCreatedAt()),
+		UpdatedAt:     r.formatProtoTime(item.GetUpdatedAt()),
 	}, nil
 }

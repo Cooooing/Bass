@@ -11,6 +11,7 @@ import (
 )
 
 type ContentPostscriptService struct {
+	contextReader
 	bbscontentv1.UnimplementedPostscriptServiceServer
 	contentPostscriptUsecase *usecase.ContentPostscriptUsecase
 }
@@ -31,7 +32,7 @@ func (s *ContentPostscriptService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.AddPostscript_Req) (*bbscontentv1.AddPostscript_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

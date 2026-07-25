@@ -10,6 +10,7 @@ import (
 )
 
 type PreferencesService struct {
+	contextReader
 	bbsuserv1.UnimplementedPreferencesServiceServer
 	preferencesUsecase *usecase.PreferencesUsecase
 }
@@ -30,7 +31,7 @@ func (s *PreferencesService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *PreferencesService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPreferences_Req) (*bbsuserv1.GetCurrentPreferences_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (s *PreferencesService) GetCurrent(ctx context.Context, req *bbsuserv1.GetC
 }
 
 func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPreferences_Req) (*bbsuserv1.UpdateCurrentPreferences_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -17,6 +17,7 @@ import (
 var _ repo.CommentActionRecordRepo = (*CommentActionRecordRepo)(nil)
 
 type CommentActionRecordRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -133,7 +134,7 @@ func (r *CommentActionRecordRepo) Count(ctx context.Context, req *repo.CommentAc
 }
 
 func (r *CommentActionRecordRepo) Page(ctx context.Context, req *repo.CommentActionRecordReq) (*repo.CommentActionRecordPageResp, error) {
-	page := normalizePage(req.Page)
+	page := r.normalizePage(req.Page)
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)

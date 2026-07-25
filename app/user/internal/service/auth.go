@@ -7,6 +7,7 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/user/v1"
 	"context"
+	"strings"
 	"time"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
@@ -104,6 +105,9 @@ func (s *AuthService) StartPhoneLogin(ctx context.Context, req *v1.StartPhoneLog
 }
 
 func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_Resp, error) {
+	if req == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	loginType, ok := enum.LoginTypeMap.ToEnum(req.GetType())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -266,6 +270,9 @@ func (s *AuthService) ParseToken(ctx context.Context, req *v1.ParseToken_Req) (*
 }
 
 func (s *AuthService) CancelAccount(ctx context.Context, req *v1.CancelAccount_Req) (*v1.CancelAccount_Resp, error) {
+	if req == nil || req.GetUserId() == 0 || strings.TrimSpace(req.GetPassword()) == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	err := s.authUsecase.CancelAccount(ctx, &usecase.CancelAccountReq{
 		UserID:   req.GetUserId(),
 		Password: req.GetPassword(),
@@ -275,14 +282,16 @@ func (s *AuthService) CancelAccount(ctx context.Context, req *v1.CancelAccount_R
 }
 
 func (s *AuthService) BanAccount(ctx context.Context, req *v1.BanAccount_Req) (*v1.BanAccount_Resp, error) {
+	if req == nil || req.GetUserId() == 0 || req.GetOperatorId() == 0 || strings.TrimSpace(req.GetReason()) == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetOperatorRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	var bannedUntil *time.Time
 	if req.BannedUntil != nil {
-		value := req.BannedUntil.AsTime()
-		bannedUntil = &value
+		bannedUntil = new(req.BannedUntil.AsTime())
 	}
 	res, err := s.authUsecase.BanAccount(ctx, &usecase.BanAccountReq{
 		UserID:        req.GetUserId(),

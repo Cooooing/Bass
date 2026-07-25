@@ -6,6 +6,7 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/user/v1"
 	"context"
+	"strings"
 	"time"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
@@ -36,6 +37,9 @@ func (s *RbacService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *RbacService) UpsertRole(ctx context.Context, req *v1.UpsertRbacRole_Req) (*v1.UpsertRbacRole_Resp, error) {
+	if req == nil || strings.TrimSpace(req.GetCode()) == "" || strings.TrimSpace(req.GetName()) == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -47,8 +51,8 @@ func (s *RbacService) UpsertRole(ctx context.Context, req *v1.UpsertRbacRole_Req
 	row, err := s.rbacUsecase.UpsertRole(ctx, &model.RbacRole{
 		ID:          req.GetId(),
 		Realm:       realm,
-		Code:        req.GetCode(),
-		Name:        req.GetName(),
+		Code:        strings.TrimSpace(req.GetCode()),
+		Name:        strings.TrimSpace(req.GetName()),
 		Description: req.GetDescription(),
 		BuiltIn:     req.GetBuiltIn(),
 		Enabled:     enabled,
@@ -80,6 +84,9 @@ func (s *RbacService) UpsertRole(ctx context.Context, req *v1.UpsertRbacRole_Req
 }
 
 func (s *RbacService) UpsertPermission(ctx context.Context, req *v1.UpsertRbacPermission_Req) (*v1.UpsertRbacPermission_Resp, error) {
+	if req == nil || strings.TrimSpace(req.GetCode()) == "" || strings.TrimSpace(req.GetName()) == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -91,8 +98,8 @@ func (s *RbacService) UpsertPermission(ctx context.Context, req *v1.UpsertRbacPe
 	row, err := s.rbacUsecase.UpsertPermission(ctx, &model.RbacPermission{
 		ID:          req.GetId(),
 		Realm:       realm,
-		Code:        req.GetCode(),
-		Name:        req.GetName(),
+		Code:        strings.TrimSpace(req.GetCode()),
+		Name:        strings.TrimSpace(req.GetName()),
 		Description: req.GetDescription(),
 		Enabled:     enabled,
 	})
@@ -122,32 +129,46 @@ func (s *RbacService) UpsertPermission(ctx context.Context, req *v1.UpsertRbacPe
 }
 
 func (s *RbacService) BindRolePermission(ctx context.Context, req *v1.BindRbacRolePermission_Req) (*v1.BindRbacRolePermission_Resp, error) {
+	if req == nil || req.GetRoleId() == 0 || req.GetPermissionId() == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	return &v1.BindRbacRolePermission_Resp{}, s.rbacUsecase.BindRolePermission(ctx, req.GetRoleId(), req.GetPermissionId())
 }
 
 func (s *RbacService) UnbindRolePermission(ctx context.Context, req *v1.UnbindRbacRolePermission_Req) (*v1.UnbindRbacRolePermission_Resp, error) {
+	if req == nil || req.GetRoleId() == 0 || req.GetPermissionId() == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	return &v1.UnbindRbacRolePermission_Resp{}, s.rbacUsecase.UnbindRolePermission(ctx, req.GetRoleId(), req.GetPermissionId())
 }
 
 func (s *RbacService) GrantRole(ctx context.Context, req *v1.GrantRbacRole_Req) (*v1.GrantRbacRole_Resp, error) {
+	if req == nil || req.GetUserId() == 0 || req.GetRoleId() == 0 || req.GetGrantedBy() == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	var expiresAt *time.Time
 	if req.ExpiresAt != nil {
-		value := req.ExpiresAt.AsTime()
-		expiresAt = &value
+		expiresAt = new(req.ExpiresAt.AsTime())
 	}
 	return &v1.GrantRbacRole_Resp{}, s.rbacUsecase.GrantRole(ctx, req.GetUserId(), req.GetRoleId(), req.GetGrantedBy(), expiresAt)
 }
 
 func (s *RbacService) RevokeRole(ctx context.Context, req *v1.RevokeRbacRole_Req) (*v1.RevokeRbacRole_Resp, error) {
+	if req == nil || req.GetUserId() == 0 || req.GetRoleId() == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	return &v1.RevokeRbacRole_Resp{}, s.rbacUsecase.RevokeRole(ctx, req.GetUserId(), req.GetRoleId())
 }
 
 func (s *RbacService) CheckPermission(ctx context.Context, req *v1.CheckRbacPermission_Req) (*v1.CheckRbacPermission_Resp, error) {
+	if req == nil || req.GetUserId() == 0 || strings.TrimSpace(req.GetPermissionCode()) == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	allowed, err := s.rbacUsecase.CheckPermission(ctx, req.GetUserId(), realm, req.GetPermissionCode())
+	allowed, err := s.rbacUsecase.CheckPermission(ctx, req.GetUserId(), realm, strings.TrimSpace(req.GetPermissionCode()))
 	return &v1.CheckRbacPermission_Resp{
 		Allowed: allowed,
 	}, err

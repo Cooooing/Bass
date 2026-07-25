@@ -76,7 +76,7 @@ func (u *ChatSessionUsecase) MarkRead(ctx context.Context, req *MarkReadReq) err
 			return err
 		}
 		latestMsg, err := u.chatMessageRepo.Get(ctx, &repo.ChatMessageQuery{
-			SessionID: &id,
+			SessionID: new(id),
 		})
 		if err != nil {
 			continue

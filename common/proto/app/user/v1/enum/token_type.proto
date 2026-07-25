@@ -1,0 +1,12 @@
+﻿syntax = "proto3";
+
+package common.api.app.user.v1;
+
+option go_package = "common/proto/gen/user/v1/enum;enum";
+
+// TokenType 表示用户认证 token 类型。
+enum TokenType {
+  TOKEN_TYPE_UNSPECIFIED = 0; // 未指定
+  TOKEN_TYPE_ACCESS = 1; // access token
+  TOKEN_TYPE_REFRESH = 2; // refresh token
+}

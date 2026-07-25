@@ -129,17 +129,17 @@ func (r *fakeExecutionRepo) Create(_ context.Context, req *repo.TaskExecutionRec
 			Conflict: true,
 		}, nil
 	}
-	row := *record
+	row := new(model.TaskExecutionRecord)
+	*row = *record
 	r.nextID++
 	row.ID = r.nextID
 	row.Status = req.Status
-	now := time.Now()
-	row.UpdatedAt = &now
-	r.record = &row
-	r.records[row.ID] = &row
-	r.recordsByPeriod[key] = &row
+	row.UpdatedAt = new(time.Now())
+	r.record = row
+	r.records[row.ID] = row
+	r.recordsByPeriod[key] = row
 	return &repo.TaskExecutionRecordCreateResp{
-		Row:     &row,
+		Row:     row,
 		Created: true,
 	}, nil
 }
@@ -241,7 +241,8 @@ func (r *fakeTaskRepo) Page(context.Context, *repo.TaskPageReq) (*repo.TaskPageR
 }
 
 func (r *fakeTaskRepo) Upsert(_ context.Context, row *model.Task) (*model.Task, error) {
-	saved := *row
+	saved := new(model.Task)
+	*saved = *row
 	if saved.ID == 0 {
 		saved.ID = 1
 	}
@@ -250,8 +251,8 @@ func (r *fakeTaskRepo) Upsert(_ context.Context, row *model.Task) (*model.Task, 
 	} else {
 		saved.Version++
 	}
-	r.task = &saved
-	return &saved, nil
+	r.task = saved
+	return saved, nil
 }
 
 func (r *fakeTaskRepo) Lock(context.Context, int64) error {
@@ -1085,7 +1086,7 @@ func TestStaleRunningCanBeMarkedUnknownAndCannotBeOverwritten(t *testing.T) {
 	record := startResp.Record
 	oldStartedAt := time.Now().Add(-time.Hour)
 	executionRepo.mu.Lock()
-	executionRepo.records[record.ID].StartedAt = &oldStartedAt
+	executionRepo.records[record.ID].StartedAt = new(oldStartedAt)
 	executionRepo.mu.Unlock()
 	runtimeResp, err := usecase.CheckExecutionRuntimes(context.Background(), []int64{record.ID})
 	if err != nil {

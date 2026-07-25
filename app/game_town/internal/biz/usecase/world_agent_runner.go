@@ -23,8 +23,6 @@ type worldLoop struct {
 	results chan *agentResult
 }
 
-const worldEventConsumeBatchSize = 64
-
 type agentResult struct {
 	job        *model.AgentJob
 	source     *model.Event
@@ -78,20 +76,21 @@ type WorldAgentRunner struct {
 	eventNotifier         repo.EventNotifier
 	eventUsecase          *EventUsecase
 
-	mu              sync.Mutex
-	loops           map[int64]*worldLoop
-	cancel          context.CancelFunc
-	active          int
-	activeMemory    int
-	activeWorld     map[int64]int
-	activeConfig    map[int64]int
-	lanes           map[string]bool
-	breakerFailures map[int64]int
-	breakerUntil    map[int64]time.Time
-	scheduleCursor  int
-	schedulerWake   chan struct{}
-	tickMu          sync.Mutex
-	tickTimers      map[int64]*time.Timer
+	mu                    sync.Mutex
+	loops                 map[int64]*worldLoop
+	cancel                context.CancelFunc
+	active                int
+	activeMemory          int
+	activeWorld           map[int64]int
+	activeConfig          map[int64]int
+	lanes                 map[string]bool
+	breakerFailures       map[int64]int
+	breakerUntil          map[int64]time.Time
+	scheduleCursor        int
+	schedulerWake         chan struct{}
+	eventConsumeBatchSize int
+	tickMu                sync.Mutex
+	tickTimers            map[int64]*time.Timer
 }
 
 func NewWorldAgentRunner(
@@ -152,6 +151,7 @@ func NewWorldAgentRunner(
 		breakerFailures:       make(map[int64]int),
 		breakerUntil:          make(map[int64]time.Time),
 		schedulerWake:         make(chan struct{}, 1),
+		eventConsumeBatchSize: 64,
 		tickTimers:            make(map[int64]*time.Timer),
 	}
 }
@@ -302,7 +302,7 @@ func (r *WorldAgentRunner) consume(ctx context.Context, worldID int64) bool {
 	events, err := r.eventRepo.List(ctx, &repo.EventQuery{
 		WorldID:       new(worldID),
 		AfterSequence: new(state.AgentCursor),
-		Limit:         worldEventConsumeBatchSize,
+		Limit:         r.eventConsumeBatchSize,
 	})
 	if err != nil {
 		r.log.ErrorContext(ctx, "load world events failed", "world_id", worldID, constant.LogFieldErr, err)
@@ -422,7 +422,7 @@ func (r *WorldAgentRunner) consume(ctx context.Context, worldID int64) bool {
 			r.eventUsecase.Publish(fastEvent)
 		}
 	}
-	return len(events) == worldEventConsumeBatchSize
+	return len(events) == r.eventConsumeBatchSize
 }
 
 func (r *WorldAgentRunner) resolveFastPlayerActionInTx(ctx context.Context, event *model.Event) (*model.Event, bool, error) {
@@ -437,7 +437,7 @@ func (r *WorldAgentRunner) resolveFastPlayerActionInTx(ctx context.Context, even
 		return nil, true, err
 	}
 
-	targets := actionTargets(event.Payload)
+	targets := r.actionTargets(event.Payload)
 	var locationID int64
 	for _, target := range targets {
 		if target.Type == enum.EntityTypeLocation {

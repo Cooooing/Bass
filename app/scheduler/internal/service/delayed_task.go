@@ -8,8 +8,10 @@ import (
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	schedulerv1enum "common/proto/gen/scheduler/v1/enum"
 	"context"
+	"encoding/json"
 	"scheduler/internal/biz/usecase"
 	schedulerenum "scheduler/internal/enum"
+	"strings"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -37,6 +39,12 @@ func (s *SchedulerDelayedTaskService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *SchedulerDelayedTaskService) Register(ctx context.Context, req *schedulerv1.RegisterSchedulerDelayedTask_Req) (*schedulerv1.RegisterSchedulerDelayedTask_Resp, error) {
+	if req == nil || strings.TrimSpace(req.GetIdempotencyKey()) == "" || strings.TrimSpace(req.GetTaskName()) == "" || req.GetExecuteAt() == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	if req.GetPayload() != "" && !json.Valid([]byte(strings.TrimSpace(req.GetPayload()))) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	row, err := s.usecase.Register(ctx, &usecase.DelayedTaskRegisterReq{
 		IdempotencyKey: req.GetIdempotencyKey(),
 		TaskName:       req.GetTaskName(),
@@ -82,10 +90,16 @@ func (s *SchedulerDelayedTaskService) Register(ctx context.Context, req *schedul
 }
 
 func (s *SchedulerDelayedTaskService) Cancel(ctx context.Context, req *schedulerv1.CancelSchedulerDelayedTask_Req) (*schedulerv1.CancelSchedulerDelayedTask_Resp, error) {
+	if req == nil || (req.GetId() == 0 && strings.TrimSpace(req.GetIdempotencyKey()) == "") {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	return &schedulerv1.CancelSchedulerDelayedTask_Resp{}, s.usecase.Cancel(ctx, req.GetId(), req.GetIdempotencyKey())
 }
 
 func (s *SchedulerDelayedTaskService) Get(ctx context.Context, req *schedulerv1.GetSchedulerDelayedTask_Req) (*schedulerv1.GetSchedulerDelayedTask_Resp, error) {
+	if req == nil || (req.GetId() == 0 && strings.TrimSpace(req.GetIdempotencyKey()) == "") {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	row, err := s.usecase.Get(ctx, req.GetId(), req.GetIdempotencyKey())
 	if err != nil {
 		return nil, err
@@ -132,7 +146,7 @@ func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
-		status = &value
+		status = new(value)
 	}
 	resp, err := s.usecase.Page(ctx, &usecase.DelayedTaskPageReq{
 		Page:     req.GetPage(),
@@ -182,6 +196,9 @@ func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1
 }
 
 func (s *SchedulerDelayedTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerDelayedTask_Req) (*schedulerv1.TriggerSchedulerDelayedTask_Resp, error) {
+	if req == nil || req.GetId() == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	return &schedulerv1.TriggerSchedulerDelayedTask_Resp{}, s.usecase.Trigger(ctx, req.GetId())
 }
 

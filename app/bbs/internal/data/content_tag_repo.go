@@ -12,6 +12,7 @@ import (
 var _ repo.ContentTagClient = (*ContentTagClient)(nil)
 
 type ContentTagClient struct {
+	protoTimeFormatter
 	contentClient *rpc.ContentClient
 }
 
@@ -56,8 +57,8 @@ func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq
 		Status:      new(int32(item.GetStatus())),
 		CreatedBy:   item.CreatedBy,
 		UpdatedBy:   item.UpdatedBy,
-		CreatedAt:   formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:   formatProtoTime(item.GetUpdatedAt()),
+		CreatedAt:   r.formatProtoTime(item.GetCreatedAt()),
+		UpdatedAt:   r.formatProtoTime(item.GetUpdatedAt()),
 	}, nil
 }
 
@@ -89,8 +90,8 @@ func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq
 		Status:      new(int32(item.GetStatus())),
 		CreatedBy:   item.CreatedBy,
 		UpdatedBy:   item.UpdatedBy,
-		CreatedAt:   formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:   formatProtoTime(item.GetUpdatedAt()),
+		CreatedAt:   r.formatProtoTime(item.GetCreatedAt()),
+		UpdatedAt:   r.formatProtoTime(item.GetUpdatedAt()),
 	}, nil
 }
 
@@ -133,8 +134,8 @@ func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) 
 			Status:      new(int32(item.GetStatus())),
 			CreatedBy:   item.CreatedBy,
 			UpdatedBy:   item.UpdatedBy,
-			CreatedAt:   formatProtoTime(item.GetCreatedAt()),
-			UpdatedAt:   formatProtoTime(item.GetUpdatedAt()),
+			CreatedAt:   r.formatProtoTime(item.GetCreatedAt()),
+			UpdatedAt:   r.formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
 	var page *repo.PageResp

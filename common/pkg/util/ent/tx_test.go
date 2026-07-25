@@ -2,13 +2,12 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"strings"
 	"sync"
 	"testing"
 )
-
-// --- mock 实现 ---
 
 type mockTx struct {
 	mu         sync.Mutex
@@ -37,7 +36,7 @@ func (m *mockTx) Rollback() error {
 	return nil
 }
 
-func (m *mockTx) Client() interface{} {
+func (m *mockTx) Client() string {
 	return m.client
 }
 
@@ -53,7 +52,6 @@ func (m *mockTx) isRolledBack() bool {
 	return m.rolledBack
 }
 
-// failingTx 支持注入 commit/rollback 失败
 type failingTx struct {
 	*mockTx
 	failCommit   bool
@@ -74,7 +72,6 @@ func (f *failingTx) Rollback() error {
 	return f.mockTx.Rollback()
 }
 
-// savableTx 支持 TxExec（用于 savepoint 测试）
 type savableTx struct {
 	*mockTx
 	mu   sync.Mutex
@@ -87,7 +84,7 @@ func newSavableTx(client string) *savableTx {
 	}
 }
 
-func (s *savableTx) TxExec(_ context.Context, sql string, _ ...any) error {
+func (s *savableTx) TxExec(_ context.Context, sql string, _ ...driver.Value) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.sqls = append(s.sqls, sql)
@@ -102,13 +99,12 @@ func (s *savableTx) getSQLs() []string {
 	return cp
 }
 
-// failingSavableTx savepoint 操作可注入失败
 type failingSavableTx struct {
 	*savableTx
 	failOnPrefix string
 }
 
-func (f *failingSavableTx) TxExec(_ context.Context, sql string, _ ...any) error {
+func (f *failingSavableTx) TxExec(_ context.Context, sql string, _ ...driver.Value) error {
 	if f.failOnPrefix != "" && strings.HasPrefix(sql, f.failOnPrefix) {
 		return errors.New("savepoint exec failed")
 	}
@@ -118,21 +114,21 @@ func (f *failingSavableTx) TxExec(_ context.Context, sql string, _ ...any) error
 	return nil
 }
 
-// --- 辅助函数 ---
-
-func newStarter(tx Tx) TxStarter {
-	return func(_ context.Context) (Tx, error) { return tx, nil }
+func newStarter(tx Tx[string]) TxStarter[string] {
+	return func(_ context.Context) (Tx[string], error) {
+		return tx, nil
+	}
 }
 
-func newFailingStarter(err error) TxStarter {
-	return func(_ context.Context) (Tx, error) { return nil, err }
+func newFailingStarter(err error) TxStarter[string] {
+	return func(_ context.Context) (Tx[string], error) {
+		return nil, err
+	}
 }
 
-func withTx(ctx context.Context, tx Tx) context.Context {
+func withTx(ctx context.Context, tx Tx[string]) context.Context {
 	return context.WithValue(ctx, txKey{}, tx)
 }
-
-// --- 基础事务测试 ---
 
 func TestWithTx_CommitOnSuccess(t *testing.T) {
 	tx := newMockTx("db")
@@ -238,8 +234,6 @@ func TestWithTx_DefaultPropagationIsRequired(t *testing.T) {
 	}
 }
 
-// --- PropagationRequired ---
-
 func TestRequired_NoExistingTx(t *testing.T) {
 	tx := newMockTx("db")
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
@@ -259,7 +253,7 @@ func TestRequired_NoExistingTx(t *testing.T) {
 func TestRequired_WithExistingTx_JoinsOuter(t *testing.T) {
 	outer := newMockTx("outer")
 	innerCalled := false
-	starter := func(_ context.Context) (Tx, error) {
+	starter := func(_ context.Context) (Tx[string], error) {
 		innerCalled = true
 		return newMockTx("inner"), nil
 	}
@@ -279,8 +273,6 @@ func TestRequired_WithExistingTx_JoinsOuter(t *testing.T) {
 		t.Fatal("starter should not be called")
 	}
 }
-
-// --- PropagationRequiresNew ---
 
 func TestRequiresNew_WithExistingTx_CreatesNew(t *testing.T) {
 	outer := newMockTx("outer")
@@ -337,8 +329,6 @@ func TestRequiresNew_NoExistingTx(t *testing.T) {
 	}
 }
 
-// --- PropagationNested ---
-
 func TestNested_WithExistingTx_Savepoint(t *testing.T) {
 	outer := newSavableTx("outer")
 
@@ -351,7 +341,7 @@ func TestNested_WithExistingTx_Savepoint(t *testing.T) {
 	}
 	sqls := outer.getSQLs()
 	if len(sqls) != 2 {
-		t.Fatalf("expected 2 SQLs (SAVEPOINT + RELEASE), got %d: %v", len(sqls), sqls)
+		t.Fatalf("expected 2 SQLs, got %d: %v", len(sqls), sqls)
 	}
 	if !strings.HasPrefix(sqls[0], "SAVEPOINT sp_") {
 		t.Fatalf("expected SAVEPOINT, got: %s", sqls[0])
@@ -400,7 +390,6 @@ func TestNested_NoExistingTx_CreatesTx(t *testing.T) {
 }
 
 func TestNested_NonSaver_Fallback(t *testing.T) {
-	// mockTx 不实现 TxExec，退化为扁平事务。
 	outer := newMockTx("outer")
 	ctx := withTx(context.Background(), outer)
 
@@ -430,8 +419,6 @@ func TestNested_SavepointCreateFails(t *testing.T) {
 	}
 }
 
-// --- PropagationNotSupported ---
-
 func TestNotSupported_WithExistingTx_Suspends(t *testing.T) {
 	outer := newMockTx("outer")
 	fnCalled := false
@@ -439,9 +426,6 @@ func TestNotSupported_WithExistingTx_Suspends(t *testing.T) {
 	ctx := withTx(context.Background(), outer)
 	err := WithTx(ctx, newStarter(newMockTx("inner")), func(ctx context.Context) error {
 		fnCalled = true
-		// NotSupported 挂起事务，fn 在无事务上下文中执行
-		// 但 suspendedTx 仍实现 Tx 接口，ClientFromCtx 可以提取到 client
-		// 关键验证：starter 不被调用，外层事务不被提交或回滚。
 		return nil
 	}, WithPropagation(PropagationNotSupported))
 	if err != nil {
@@ -487,8 +471,6 @@ func TestNotSupported_NoExistingTx(t *testing.T) {
 	}
 }
 
-// --- PropagationNever ---
-
 func TestNever_WithExistingTx_Error(t *testing.T) {
 	outer := newMockTx("outer")
 	ctx := withTx(context.Background(), outer)
@@ -519,14 +501,12 @@ func TestNever_NoExistingTx_Runs(t *testing.T) {
 	}
 }
 
-// --- PropagationSupports ---
-
 func TestSupports_WithExistingTx_Joins(t *testing.T) {
 	outer := newMockTx("outer")
 	starterCalled := false
 
 	ctx := withTx(context.Background(), outer)
-	err := WithTx(ctx, func(_ context.Context) (Tx, error) {
+	err := WithTx(ctx, func(_ context.Context) (Tx[string], error) {
 		starterCalled = true
 		return newMockTx("inner"), nil
 	}, func(ctx context.Context) error {
@@ -555,13 +535,10 @@ func TestSupports_NoExistingTx_RunsWithoutTx(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	// Supports 无外层事务时，当前实现不创建新 tx
 	if tx.isCommitted() {
 		t.Fatal("tx should not be committed")
 	}
 }
-
-// --- 嵌套事务场景 ---
 
 func TestNestedScenario_RequiredFlatten(t *testing.T) {
 	outer := newMockTx("outer")
@@ -611,7 +588,7 @@ func TestNestedScenario_RequiresNew_InnerFailOuterSucceeds(t *testing.T) {
 		_ = WithTx(ctx, newStarter(inner), func(ctx context.Context) error {
 			return errors.New("inner fail")
 		}, WithPropagation(PropagationRequiresNew))
-		return nil // 外层事务继续执行。
+		return nil
 	})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -631,8 +608,6 @@ func TestNestedScenario_NestedSavepoint_PartialRollback(t *testing.T) {
 		_ = WithTx(ctx, newStarter(newMockTx("inner")), func(ctx context.Context) error {
 			return errors.New("inner fail")
 		}, WithPropagation(PropagationNested))
-
-		// 外层事务继续成功执行。
 		return nil
 	})
 	if err != nil {
@@ -643,8 +618,8 @@ func TestNestedScenario_NestedSavepoint_PartialRollback(t *testing.T) {
 	}
 	sqls := outer.getSQLs()
 	hasRollbackTo := false
-	for _, s := range sqls {
-		if strings.HasPrefix(s, "ROLLBACK TO SAVEPOINT") {
+	for _, sql := range sqls {
+		if strings.HasPrefix(sql, "ROLLBACK TO SAVEPOINT") {
 			hasRollbackTo = true
 		}
 	}
@@ -658,9 +633,7 @@ func TestNestedScenario_ThreeLevelsDeep(t *testing.T) {
 	l2 := newSavableTx("l2")
 
 	err := WithTx(context.Background(), newStarter(l1), func(ctx context.Context) error {
-		// 第二层：RequiresNew。
 		return WithTx(ctx, newStarter(l2), func(ctx context.Context) error {
-			// 第三层：Nested，在第二层事务上创建 savepoint。
 			return WithTx(ctx, newStarter(newMockTx("unused")), func(ctx context.Context) error {
 				c, _ := ClientFromCtx[string](ctx)
 				if c != "l2" {
@@ -679,14 +652,11 @@ func TestNestedScenario_ThreeLevelsDeep(t *testing.T) {
 	if !l2.isCommitted() {
 		t.Fatal("l2 should be committed")
 	}
-	// 第二层事务应该有 savepoint SQL。
 	sqls := l2.getSQLs()
 	if len(sqls) < 2 {
 		t.Fatalf("l2 should have savepoint SQLs, got: %v", sqls)
 	}
 }
-
-// --- ClientFromCtx ---
 
 func TestClientFromCtx_NoTx(t *testing.T) {
 	c, ok := ClientFromCtx[string](context.Background())
@@ -708,7 +678,7 @@ func (i intClient) Rollback() error {
 	return nil
 }
 
-func (i intClient) Client() interface{} {
+func (i intClient) Client() int {
 	return i.v
 }
 
@@ -716,7 +686,7 @@ func TestClientFromCtx_TypeMismatch(t *testing.T) {
 	tx := intClient{
 		v: 42,
 	}
-	ctx := withTx(context.Background(), tx)
+	ctx := context.WithValue(context.Background(), txKey{}, tx)
 	c, ok := ClientFromCtx[string](ctx)
 	if ok {
 		t.Fatal("type mismatch should return false")
@@ -727,8 +697,7 @@ func TestClientFromCtx_TypeMismatch(t *testing.T) {
 }
 
 func TestClientFromCtx_WithSuspendedTx(t *testing.T) {
-	// suspendedTx 包装的 tx 也应该能提取 client
-	suspended := suspendedTx{
+	suspended := suspendedTx[string]{
 		tx: newMockTx("suspended"),
 	}
 	ctx := context.WithValue(context.Background(), txKey{}, suspended)
@@ -738,15 +707,12 @@ func TestClientFromCtx_WithSuspendedTx(t *testing.T) {
 	}
 }
 
-// --- Option ---
-
 func TestWithPropagation_SetsOption(t *testing.T) {
 	tx := newMockTx("db")
 	fnCalled := false
 
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
 		fnCalled = true
-		// Never + 无外层 tx = 正常执行
 		return nil
 	}, WithPropagation(PropagationNever))
 	if err != nil {

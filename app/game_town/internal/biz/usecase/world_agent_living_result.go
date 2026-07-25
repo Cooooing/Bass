@@ -37,7 +37,7 @@ func (r *WorldAgentRunner) applyPlayerActionResult(ctx context.Context, result *
 	if worldSummary == "" {
 		worldSummary = result.state.Summary
 	}
-	currentArc := normalizeModelText(result.resolution.CurrentArc, maxCurrentArcRunes)
+	currentArc := r.normalizeModelText(result.resolution.CurrentArc, 256)
 	if currentArc == "" {
 		currentArc = result.state.CurrentArc
 	}
@@ -49,12 +49,12 @@ func (r *WorldAgentRunner) applyPlayerActionResult(ctx context.Context, result *
 		PublicChronicle: result.state.PublicChronicle,
 		CurrentEra:      result.state.CurrentEra,
 	}); err != nil {
-		if !isWorldVersionConflict(err) {
+		if !r.isWorldVersionConflict(err) {
 			return nil, err
 		}
 	}
 
-	summary := normalizeModelText(result.resolution.Summary, maxEventSummaryRunes)
+	summary := r.normalizeModelText(result.resolution.Summary, 512)
 	if summary == "" {
 		summary = "玩家行动已处理"
 	}
@@ -74,9 +74,9 @@ func (r *WorldAgentRunner) applyPlayerActionResult(ctx context.Context, result *
 		Content:          content,
 		Payload: map[string]any{
 			"status":            status,
-			"actions":           actionStepPayload(result.resolution.Actions),
-			"claims":            claimDraftPayload(result.resolution.Claims),
-			"suggested_actions": suggestedActionPayload(result.resolution.SuggestedActions),
+			"actions":           r.actionStepPayload(result.resolution.Actions),
+			"claims":            r.claimDraftPayload(result.resolution.Claims),
+			"suggested_actions": r.suggestedActionPayload(result.resolution.SuggestedActions),
 		},
 	})
 	if err != nil {
@@ -93,11 +93,11 @@ func (r *WorldAgentRunner) applyPlayerActionResult(ctx context.Context, result *
 	return event, nil
 }
 
-func isWorldVersionConflict(err error) bool {
+func (r *WorldAgentRunner) isWorldVersionConflict(err error) bool {
 	return err != nil && strings.Contains(err.Error(), "world version conflict")
 }
 
-func isNpcVersionConflict(err error) bool {
+func (r *WorldAgentRunner) isNpcVersionConflict(err error) bool {
 	return err != nil && strings.Contains(err.Error(), "npc version conflict")
 }
 
@@ -114,13 +114,13 @@ func (r *WorldAgentRunner) applyNpcPlan(ctx context.Context, result *agentResult
 	updated, err := r.npcRepo.UpdateAutonomy(ctx, &repo.NpcAutonomyUpdateReq{
 		NpcID:          result.npc.ID,
 		Version:        result.npc.Version,
-		Goal:           normalizeModelText(result.plan.Goal, maxEventSummaryRunes),
-		ContextSummary: normalizeModelText(result.plan.Summary, maxEventSummaryRunes),
+		Goal:           r.normalizeModelText(result.plan.Goal, 512),
+		ContextSummary: r.normalizeModelText(result.plan.Summary, 512),
 		NextDecisionAt: new(next),
 		LastPlannedAt:  new(result.state.WorldTime),
 	})
 	if err != nil {
-		if !isNpcVersionConflict(err) {
+		if !r.isNpcVersionConflict(err) {
 			return nil, err
 		}
 		updated, err = r.npcRepo.Get(ctx, &repo.NpcQuery{
@@ -143,7 +143,7 @@ func (r *WorldAgentRunner) applyNpcPlan(ctx context.Context, result *agentResult
 
 	payload := map[string]any{
 		"goal":    updated.Goal,
-		"actions": actionStepPayload(result.plan.Actions),
+		"actions": r.actionStepPayload(result.plan.Actions),
 	}
 	return r.eventUsecase.AppendInTx(ctx, &AppendEventReq{
 		WorldID:          result.world.ID,
@@ -152,12 +152,12 @@ func (r *WorldAgentRunner) applyNpcPlan(ctx context.Context, result *agentResult
 		LocationID:       new(updated.CurrentLocationID),
 		CausationEventID: new(result.source.ID),
 		Summary:          updated.Name + " 制定了新的计划",
-		Content:          normalizeModelText(result.plan.Summary, maxEventSummaryRunes),
+		Content:          r.normalizeModelText(result.plan.Summary, 512),
 		Payload:          payload,
 	})
 }
 
-func suggestedActionPayload(values []model.SuggestedAction) []any {
+func (r *WorldAgentRunner) suggestedActionPayload(values []model.SuggestedAction) []any {
 	result := make([]any, 0, len(values))
 	for _, value := range values {
 		targets := make([]any, 0, len(value.Targets))
@@ -169,7 +169,7 @@ func suggestedActionPayload(values []model.SuggestedAction) []any {
 	return result
 }
 
-func actionStepPayload(values []model.ActionStep) []any {
+func (r *WorldAgentRunner) actionStepPayload(values []model.ActionStep) []any {
 	result := make([]any, 0, len(values))
 	for _, value := range values {
 		item := map[string]any{

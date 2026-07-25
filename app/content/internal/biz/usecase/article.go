@@ -67,10 +67,9 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 	err = d.tx(ctx, func(ctx context.Context) error {
 		bindTagIDs := lo.Uniq(req.TagIDs)
 		if len(bindTagIDs) > 0 {
-			tagStatus := enum.TagStatusEnabled
 			countResp, err := d.tagRepo.Count(ctx, &repo.TagGetReq{
 				TagIds: bindTagIDs,
-				Status: &tagStatus,
+				Status: new(enum.TagStatusEnabled),
 			})
 			if err != nil {
 				return err
@@ -124,7 +123,7 @@ func (d *ArticleUsecase) AddPostscript(ctx context.Context, req *ArticleAddPosts
 	var save *model.ArticlePostscript
 	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: &articleId,
+			ArticleId: new(articleId),
 		})
 		article := articleResp
 		if err != nil {
@@ -184,10 +183,9 @@ func (d *ArticleUsecase) ListPostscripts(ctx context.Context, articleID int64) (
 	if _, err := d.Get(ctx, articleId); err != nil {
 		return nil, err
 	}
-	restriction := enum.ContentRestrictionNone
 	listResp, err := d.postscriptRepo.List(ctx, &repo.ArticlePostscriptGetReq{
 		ArticleID:   new(articleId),
-		Restriction: &restriction,
+		Restriction: new(enum.ContentRestrictionNone),
 	})
 	if err != nil {
 		return nil, err
@@ -699,11 +697,10 @@ func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, req *ArticleAcceptAns
 			article.AcceptedAnswerID != nil {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
-		commentStatus := enum.ContentRestrictionNone
 		exist, err := d.commentRepo.Exist(ctx, &repo.CommentGetReq{
-			CommentId:   &commentId,
-			ArticleId:   &articleId,
-			Restriction: &commentStatus,
+			CommentId:   new(commentId),
+			ArticleId:   new(articleId),
+			Restriction: new(enum.ContentRestrictionNone),
 		})
 		if err != nil {
 			return err
@@ -1191,7 +1188,7 @@ func (d *ArticleUsecase) DiscardDraft(ctx context.Context, req *ArticleDiscardDr
 	userId := req.UserID
 	return d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: &articleId,
+			ArticleId: new(articleId),
 		})
 		article := articleResp
 		if err != nil {

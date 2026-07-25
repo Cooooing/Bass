@@ -42,7 +42,8 @@ type TaskUsecase struct {
 	tasks                   map[string]taskimpl.Task
 	taskEventBus            repo.TaskEventBus
 	alert                   repo.TaskAlert
-	runningCancels          sync.Map
+	runningCancelMu         sync.Mutex
+	runningCancels          map[int64]context.CancelFunc
 	runningWG               sync.WaitGroup
 }
 
@@ -70,6 +71,7 @@ func NewTaskUsecase(
 		tasks:                   tasks,
 		taskEventBus:            taskEventBus,
 		alert:                   alert,
+		runningCancels:          make(map[int64]context.CancelFunc),
 	}
 }
 
@@ -125,7 +127,7 @@ func (u *TaskUsecase) upsert(ctx context.Context, row *model.Task) (*model.Task,
 
 func (u *TaskUsecase) Get(ctx context.Context, id int64) (*model.Task, error) {
 	return u.taskRepo.Get(ctx, &repo.TaskGetReq{
-		ID: &id,
+		ID: new(id),
 	})
 }
 
@@ -256,7 +258,7 @@ func (u *TaskUsecase) trigger(ctx context.Context, req *taskTriggerReq) (*model.
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	task, err := u.taskRepo.Get(ctx, &repo.TaskGetReq{
-		ID: &id,
+		ID: new(id),
 	})
 	if err != nil {
 		return nil, err
@@ -290,7 +292,7 @@ func (u *TaskUsecase) cancelExecution(ctx context.Context, id int64) (*model.Tas
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	record, err := u.taskExecutionRecordRepo.Get(ctx, &repo.TaskExecutionRecordGetReq{
-		ID: &id,
+		ID: new(id),
 	})
 	if err != nil {
 		return nil, err
@@ -312,8 +314,11 @@ func (u *TaskUsecase) CancelExecutionLocally(ctx context.Context, id int64) erro
 
 func (u *TaskUsecase) cancelExecutionLocally(ctx context.Context, id int64) error {
 	_ = ctx
-	if cancelValue, ok := u.runningCancels.Load(id); ok {
-		cancelValue.(context.CancelFunc)()
+	u.runningCancelMu.Lock()
+	cancel := u.runningCancels[id]
+	u.runningCancelMu.Unlock()
+	if cancel != nil {
+		cancel()
 	}
 	return nil
 }
@@ -950,7 +955,9 @@ func (u *TaskUsecase) startCreatedExecution(ctx context.Context, req *taskStartC
 	}
 	span.SetAttributes(attribute.Int64("scheduler.execution.id", record.ID))
 	callCtx, cancel := context.WithTimeout(context.WithoutCancel(runCtx), timeout)
-	u.runningCancels.Store(record.ID, cancel)
+	u.runningCancelMu.Lock()
+	u.runningCancels[record.ID] = cancel
+	u.runningCancelMu.Unlock()
 	heartbeatInterval := time.Duration(0)
 	if req.RunningToken != "" {
 		var configErr error
@@ -983,7 +990,9 @@ func (u *TaskUsecase) startCreatedExecution(ctx context.Context, req *taskStartC
 			})
 			span.End()
 			cancel()
-			u.runningCancels.Delete(record.ID)
+			u.runningCancelMu.Lock()
+			delete(u.runningCancels, record.ID)
+			u.runningCancelMu.Unlock()
 			if releaseErr := u.releaseRunning(context.WithoutCancel(runCtx), &taskReleaseRunningReq{
 				TaskID:            task.ID,
 				ExecutionRecordID: record.ID,
@@ -1042,7 +1051,11 @@ func (u *TaskUsecase) executeRecord(ctx context.Context, req *taskExecuteRecordR
 	span := req.Span
 	defer span.End()
 	defer req.Cancel()
-	defer u.runningCancels.Delete(record.ID)
+	defer func() {
+		u.runningCancelMu.Lock()
+		delete(u.runningCancels, record.ID)
+		u.runningCancelMu.Unlock()
+	}()
 	defer u.runningWG.Done()
 	if req.RunningToken != "" {
 		go u.heartbeatRunningLock(ctx, &taskHeartbeatRunningLockReq{
@@ -1161,8 +1174,7 @@ func (u *TaskUsecase) heartbeatRunningLock(ctx context.Context, req *taskHeartbe
 			if err != nil {
 				u.logger.ErrorContext(context.WithoutCancel(ctx), "refresh scheduler running lock failed", constant.LogFieldTaskID, req.TaskID, constant.LogFieldErr, err)
 			}
-			// Redis 心跳失败时主动取消执行，避免本地任务继续占用资源。
-			req.Cancel()
+			// Redis 蹇冭烦澶辫触鏃朵富鍔ㄥ彇娑堟墽琛岋紝閬垮厤鏈湴浠诲姟缁х画鍗犵敤璧勬簮銆?			req.Cancel()
 			return
 		}
 	}
@@ -1571,10 +1583,15 @@ func (u *TaskUsecase) StopRunning(ctx context.Context) error {
 }
 
 func (u *TaskUsecase) stopRunning(ctx context.Context) error {
-	u.runningCancels.Range(func(_, value any) bool {
-		value.(context.CancelFunc)()
-		return true
-	})
+	u.runningCancelMu.Lock()
+	cancels := make([]context.CancelFunc, 0, len(u.runningCancels))
+	for _, cancel := range u.runningCancels {
+		cancels = append(cancels, cancel)
+	}
+	u.runningCancelMu.Unlock()
+	for _, cancel := range cancels {
+		cancel()
+	}
 	done := make(chan struct{})
 	go func() {
 		u.runningWG.Wait()

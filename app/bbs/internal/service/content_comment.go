@@ -13,6 +13,7 @@ import (
 )
 
 type ContentCommentService struct {
+	contextReader
 	bbscontentv1.UnimplementedCommentServiceServer
 	contentCommentUsecase *usecase.ContentCommentUsecase
 }
@@ -33,7 +34,7 @@ func (s *ContentCommentService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.CreateComment_Req) (*bbscontentv1.CreateComment_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +112,7 @@ func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.Cr
 }
 
 func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.ListComments_Req) (*bbscontentv1.ListComments_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -202,7 +203,7 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 }
 
 func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontentv1.ListCommentThreads_Req) (*bbscontentv1.ListCommentThreads_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -365,7 +366,7 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 }
 
 func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontentv1.ListCommentReplies_Req) (*bbscontentv1.ListCommentReplies_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -458,7 +459,7 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 }
 
 func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbscontentv1.ListCommentTimeline_Req) (*bbscontentv1.ListCommentTimeline_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -550,7 +551,7 @@ func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbsconten
 }
 
 func (s *ContentCommentService) Like(ctx context.Context, req *bbscontentv1.LikeComment_Req) (*bbscontentv1.LikeComment_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -568,7 +569,7 @@ func (s *ContentCommentService) Like(ctx context.Context, req *bbscontentv1.Like
 }
 
 func (s *ContentCommentService) Thank(ctx context.Context, req *bbscontentv1.ThankComment_Req) (*bbscontentv1.ThankComment_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

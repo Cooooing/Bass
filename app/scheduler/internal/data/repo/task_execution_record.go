@@ -225,7 +225,7 @@ func (r *TaskExecutionRecordRepo) MarkFinished(ctx context.Context, req *bizrepo
 		Save(ctx)
 	if gen.IsNotFound(err) {
 		current, getErr := r.Get(ctx, &bizrepo.TaskExecutionRecordGetReq{
-			ID: &req.ID,
+			ID: new(req.ID),
 		})
 		if getErr != nil {
 			return nil, getErr

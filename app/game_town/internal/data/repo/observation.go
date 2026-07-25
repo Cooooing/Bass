@@ -19,9 +19,8 @@ import (
 
 var _ bizrepo.ObservationRepo = (*ObservationRepo)(nil)
 
-const observationEventAlias = "visible_events"
-
 type ObservationRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -57,10 +56,10 @@ func (r *ObservationRepo) Save(ctx context.Context, row *model.Observation) (*mo
 	if err != nil {
 		return nil, err
 	}
-	return observationModel(saved), nil
+	return r.observation(saved), nil
 }
 
-func observationQuery(q *gen.ObservationQuery, req *bizrepo.ObservationQuery) *gen.ObservationQuery {
+func (r *ObservationRepo) observationQuery(q *gen.ObservationQuery, req *bizrepo.ObservationQuery) *gen.ObservationQuery {
 	if req == nil {
 		return q
 	}
@@ -90,7 +89,7 @@ func observationQuery(q *gen.ObservationQuery, req *bizrepo.ObservationQuery) *g
 	}
 	if req.AfterEventSequence != nil || req.EventType != nil {
 		q.Modify(func(selector *sql.Selector) {
-			events := sql.Table(event.Table).As(observationEventAlias)
+			events := sql.Table(event.Table).As("visible_events")
 			selector.Join(events).On(selector.C(observation.FieldEventID), events.C(event.FieldID))
 			if req.AfterEventSequence != nil {
 				selector.Where(sql.GT(events.C(event.FieldSequence), *req.AfterEventSequence))
@@ -104,25 +103,25 @@ func observationQuery(q *gen.ObservationQuery, req *bizrepo.ObservationQuery) *g
 }
 
 func (r *ObservationRepo) Get(ctx context.Context, req *bizrepo.ObservationQuery) (*model.Observation, error) {
-	row, err := observationQuery(r.getClient(ctx).Observation.Query(), req).Only(ctx)
+	row, err := r.observationQuery(r.getClient(ctx).Observation.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return observationModel(row), nil
+	return r.observation(row), nil
 }
 
 func (r *ObservationRepo) List(ctx context.Context, req *bizrepo.ObservationQuery) ([]*model.Observation, error) {
-	rows, err := observationQuery(r.getClient(ctx).Observation.Query(), req).
+	rows, err := r.observationQuery(r.getClient(ctx).Observation.Query(), req).
 		Order(observation.ByEventID()).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return lo.Map(rows, func(row *gen.Observation, _ int) *model.Observation {
-		return observationModel(row)
+		return r.observation(row)
 	}), nil
 }
 
@@ -139,12 +138,12 @@ func (r *ObservationRepo) Map(ctx context.Context, req *bizrepo.ObservationQuery
 }
 
 func (r *ObservationRepo) Count(ctx context.Context, req *bizrepo.ObservationQuery) (int, error) {
-	return observationQuery(r.getClient(ctx).Observation.Query(), req).Count(ctx)
+	return r.observationQuery(r.getClient(ctx).Observation.Query(), req).Count(ctx)
 }
 
 func (r *ObservationRepo) Page(ctx context.Context, req *bizrepo.ObservationPageReq) (*bizrepo.ObservationPageResp, error) {
-	p := page(req.Page)
-	q := observationQuery(r.getClient(ctx).Observation.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.observationQuery(r.getClient(ctx).Observation.Query(), &req.Query)
 	total := 0
 	if !req.SkipTotal {
 		var err error
@@ -153,26 +152,26 @@ func (r *ObservationRepo) Page(ctx context.Context, req *bizrepo.ObservationPage
 			return nil, err
 		}
 	}
-	q = orderObservations(q, &req.Query)
+	q = r.orderObservations(q, &req.Query)
 	rows, err := q.
-		Offset(pageOffset(p)).
-		Limit(pageLimit(p)).
+		Offset(r.pageOffset(p)).
+		Limit(r.pageLimit(p)).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &bizrepo.ObservationPageResp{
 		Rows: lo.Map(rows, func(row *gen.Observation, _ int) *model.Observation {
-			return observationModel(row)
+			return r.observation(row)
 		}),
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 
-func orderObservations(q *gen.ObservationQuery, req *bizrepo.ObservationQuery) *gen.ObservationQuery {
+func (r *ObservationRepo) orderObservations(q *gen.ObservationQuery, req *bizrepo.ObservationQuery) *gen.ObservationQuery {
 	if req != nil && (req.AfterEventSequence != nil || req.EventType != nil) {
 		q.Modify(func(selector *sql.Selector) {
-			events := sql.Table(event.Table).As(observationEventAlias)
+			events := sql.Table(event.Table).As("visible_events")
 			selector.OrderBy(events.C(event.FieldSequence))
 		})
 		return q
@@ -180,7 +179,7 @@ func orderObservations(q *gen.ObservationQuery, req *bizrepo.ObservationQuery) *
 	return q.Order(observation.ByEventID())
 }
 
-func observationModel(row *gen.Observation) *model.Observation {
+func (r *ObservationRepo) observation(row *gen.Observation) *model.Observation {
 	return &model.Observation{
 		ID:         row.ID,
 		WorldID:    row.WorldID,

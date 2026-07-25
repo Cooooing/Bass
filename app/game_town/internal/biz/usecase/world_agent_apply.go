@@ -189,14 +189,14 @@ func (r *WorldAgentRunner) applyPlayerMove(ctx context.Context, result *agentRes
 }
 
 func (r *WorldAgentRunner) applyNpcMove(ctx context.Context, result *agentResult, step model.ActionStep) error {
-	npcID := int64Param(step.Parameters, "npc_id")
+	npcID := r.int64Param(step.Parameters, "npc_id")
 	if npcID == 0 && step.Target != nil && step.Target.Type == enum.EntityTypeNpc {
 		npcID = step.Target.ID
 	}
 	if npcID == 0 && result.npc != nil {
 		npcID = result.npc.ID
 	}
-	locationID := int64Param(step.Parameters, "location_id")
+	locationID := r.int64Param(step.Parameters, "location_id")
 	if locationID == 0 && step.Target != nil && step.Target.Type == enum.EntityTypeLocation {
 		locationID = step.Target.ID
 	}
@@ -249,7 +249,7 @@ func (r *WorldAgentRunner) applyNpcMove(ctx context.Context, result *agentResult
 }
 
 func (r *WorldAgentRunner) applyNpcStateChange(ctx context.Context, result *agentResult, step model.ActionStep) error {
-	npcID := targetID(step, enum.EntityTypeNpc)
+	npcID := r.targetID(step, enum.EntityTypeNpc)
 	if npcID == 0 && result.npc != nil {
 		npcID = result.npc.ID
 	}
@@ -264,7 +264,7 @@ func (r *WorldAgentRunner) applyNpcStateChange(ctx context.Context, result *agen
 		return err
 	}
 	var lifeStatus *enum.NpcLifeStatus
-	if raw := strings.TrimSpace(stringParam(step.Parameters, "life_status")); raw != "" {
+	if raw := strings.TrimSpace(r.stringParam(step.Parameters, "life_status")); raw != "" {
 		status := enum.NpcLifeStatus(raw)
 		lifeStatus = new(status)
 	}
@@ -276,8 +276,8 @@ func (r *WorldAgentRunner) applyNpcStateChange(ctx context.Context, result *agen
 		NpcID:          npc.ID,
 		Version:        npc.Version,
 		LifeStatus:     lifeStatus,
-		StateTags:      stringSliceParam(step.Parameters, "state_tags"),
-		Attributes:     mapParam(step.Parameters, "attributes"),
+		StateTags:      r.stringSliceParam(step.Parameters, "state_tags"),
+		Attributes:     r.mapParam(step.Parameters, "attributes"),
 		DeathWorldTime: deathWorldTime,
 	})
 	if err != nil {
@@ -300,7 +300,7 @@ func (r *WorldAgentRunner) applyNpcStateChange(ctx context.Context, result *agen
 		Payload: map[string]any{
 			"npc_id":      npc.ID,
 			"life_status": stringValue(lifeStatus),
-			"state_tags":  stringSliceParam(step.Parameters, "state_tags"),
+			"state_tags":  r.stringSliceParam(step.Parameters, "state_tags"),
 		},
 	})
 	if err != nil {
@@ -311,7 +311,7 @@ func (r *WorldAgentRunner) applyNpcStateChange(ctx context.Context, result *agen
 }
 
 func (r *WorldAgentRunner) applyLocationChange(ctx context.Context, result *agentResult, step model.ActionStep) error {
-	locationID := targetID(step, enum.EntityTypeLocation)
+	locationID := r.targetID(step, enum.EntityTypeLocation)
 	if locationID == 0 {
 		return nil
 	}
@@ -323,19 +323,19 @@ func (r *WorldAgentRunner) applyLocationChange(ctx context.Context, result *agen
 		return err
 	}
 	var status *enum.LocationStatus
-	if raw := strings.TrimSpace(stringParam(step.Parameters, "status")); raw != "" {
+	if raw := strings.TrimSpace(r.stringParam(step.Parameters, "status")); raw != "" {
 		value := enum.LocationStatus(raw)
 		status = new(value)
 	}
-	accessible := boolPtrParam(step.Parameters, "accessible")
+	accessible := r.boolPtrParam(step.Parameters, "accessible")
 	_, err = r.locationRepo.UpdateState(ctx, &repo.LocationStateUpdateReq{
 		LocationID:      location.ID,
 		Version:         location.Version,
 		Status:          status,
-		Description:     stringParam(step.Parameters, "description"),
+		Description:     r.stringParam(step.Parameters, "description"),
 		Accessible:      accessible,
-		EnvironmentTags: stringSliceParam(step.Parameters, "environment_tags"),
-		Attributes:      mapParam(step.Parameters, "attributes"),
+		EnvironmentTags: r.stringSliceParam(step.Parameters, "environment_tags"),
+		Attributes:      r.mapParam(step.Parameters, "attributes"),
 	})
 	if err != nil {
 		return err
@@ -346,13 +346,13 @@ func (r *WorldAgentRunner) applyLocationChange(ctx context.Context, result *agen
 		LocationID:       new(location.ID),
 		CausationEventID: new(result.source.ID),
 		Summary:          location.Name + " 发生变化",
-		Content:          nonEmptyString(stringParam(step.Parameters, "description"), location.Description),
+		Content:          r.nonEmptyString(r.stringParam(step.Parameters, "description"), location.Description),
 		Payload: map[string]any{
 			"public":           true,
 			"location_id":      location.ID,
 			"status":           stringValue(status),
-			"accessible":       boolPtrValue(accessible),
-			"environment_tags": stringSliceParam(step.Parameters, "environment_tags"),
+			"accessible":       r.boolPtrValue(accessible),
+			"environment_tags": r.stringSliceParam(step.Parameters, "environment_tags"),
 		},
 	})
 	if err != nil {
@@ -363,7 +363,7 @@ func (r *WorldAgentRunner) applyLocationChange(ctx context.Context, result *agen
 }
 
 func (r *WorldAgentRunner) applyFactionChange(ctx context.Context, result *agentResult, step model.ActionStep) error {
-	factionID := targetID(step, enum.EntityTypeFaction)
+	factionID := r.targetID(step, enum.EntityTypeFaction)
 	if factionID == 0 {
 		return nil
 	}
@@ -375,7 +375,7 @@ func (r *WorldAgentRunner) applyFactionChange(ctx context.Context, result *agent
 		return err
 	}
 	var status *enum.FactionStatus
-	if raw := strings.TrimSpace(stringParam(step.Parameters, "status")); raw != "" {
+	if raw := strings.TrimSpace(r.stringParam(step.Parameters, "status")); raw != "" {
 		value := enum.FactionStatus(raw)
 		status = new(value)
 	}
@@ -383,9 +383,9 @@ func (r *WorldAgentRunner) applyFactionChange(ctx context.Context, result *agent
 		FactionID:   faction.ID,
 		Version:     faction.Version,
 		Status:      status,
-		Description: stringParam(step.Parameters, "description"),
-		PublicGoal:  stringParam(step.Parameters, "public_goal"),
-		Attributes:  mapParam(step.Parameters, "attributes"),
+		Description: r.stringParam(step.Parameters, "description"),
+		PublicGoal:  r.stringParam(step.Parameters, "public_goal"),
+		Attributes:  r.mapParam(step.Parameters, "attributes"),
 	})
 	if err != nil {
 		return err
@@ -395,7 +395,7 @@ func (r *WorldAgentRunner) applyFactionChange(ctx context.Context, result *agent
 		Type:             enum.EventTypeFactionChanged,
 		CausationEventID: new(result.source.ID),
 		Summary:          faction.Name + " 发生变化",
-		Content:          nonEmptyString(stringParam(step.Parameters, "public_goal"), faction.PublicGoal),
+		Content:          r.nonEmptyString(r.stringParam(step.Parameters, "public_goal"), faction.PublicGoal),
 		Payload: map[string]any{
 			"public":     true,
 			"faction_id": faction.ID,
@@ -410,8 +410,8 @@ func (r *WorldAgentRunner) applyFactionChange(ctx context.Context, result *agent
 }
 
 func (r *WorldAgentRunner) applyRelationshipChange(ctx context.Context, result *agentResult, step model.ActionStep) error {
-	sourceType := enum.EntityType(stringParam(step.Parameters, "source_type"))
-	sourceID := int64Param(step.Parameters, "source_id")
+	sourceType := enum.EntityType(r.stringParam(step.Parameters, "source_type"))
+	sourceID := r.int64Param(step.Parameters, "source_id")
 	if sourceType == "" && result.npc != nil {
 		sourceType = enum.EntityTypeNpc
 		sourceID = result.npc.ID
@@ -420,8 +420,8 @@ func (r *WorldAgentRunner) applyRelationshipChange(ctx context.Context, result *
 		sourceType = enum.EntityTypePlayer
 		sourceID = result.member.PlayerID
 	}
-	targetType := enum.EntityType(stringParam(step.Parameters, "target_type"))
-	targetID := int64Param(step.Parameters, "target_id")
+	targetType := enum.EntityType(r.stringParam(step.Parameters, "target_type"))
+	targetID := r.int64Param(step.Parameters, "target_id")
 	if step.Target != nil {
 		targetType = step.Target.Type
 		targetID = step.Target.ID
@@ -435,15 +435,15 @@ func (r *WorldAgentRunner) applyRelationshipChange(ctx context.Context, result *
 		SourceID:   sourceID,
 		TargetType: targetType,
 		TargetID:   targetID,
-		Metrics:    floatMapParam(step.Parameters, "metrics"),
-		Tags:       stringSliceParam(step.Parameters, "tags"),
+		Metrics:    r.floatMapParam(step.Parameters, "metrics"),
+		Tags:       r.stringSliceParam(step.Parameters, "tags"),
 	})
 	return err
 }
 
 func (r *WorldAgentRunner) applyClaimShare(ctx context.Context, result *agentResult, step model.ActionStep) error {
-	npcID := targetID(step, enum.EntityTypeNpc)
-	claimID := int64Param(step.Parameters, "claim_id")
+	npcID := r.targetID(step, enum.EntityTypeNpc)
+	claimID := r.int64Param(step.Parameters, "claim_id")
 	if npcID == 0 || claimID == 0 {
 		return nil
 	}
@@ -500,7 +500,7 @@ func (r *WorldAgentRunner) appendSideEventInTx(ctx context.Context, result *agen
 	return r.eventUsecase.AppendInTx(ctx, req)
 }
 
-func claimDraftPayload(values []model.ClaimDraft) []any {
+func (r *WorldAgentRunner) claimDraftPayload(values []model.ClaimDraft) []any {
 	result := make([]any, 0, len(values))
 	for _, value := range values {
 		result = append(result, map[string]any{
@@ -514,14 +514,14 @@ func claimDraftPayload(values []model.ClaimDraft) []any {
 	return result
 }
 
-func targetID(step model.ActionStep, entityType enum.EntityType) int64 {
+func (r *WorldAgentRunner) targetID(step model.ActionStep, entityType enum.EntityType) int64 {
 	if step.Target == nil || step.Target.Type != entityType {
 		return 0
 	}
 	return step.Target.ID
 }
 
-func int64Param(values map[string]any, key string) int64 {
+func (r *WorldAgentRunner) int64Param(values map[string]any, key string) int64 {
 	if values == nil {
 		return 0
 	}
@@ -541,7 +541,7 @@ func int64Param(values map[string]any, key string) int64 {
 
 type jsonNumber float64
 
-func stringParam(values map[string]any, key string) string {
+func (r *WorldAgentRunner) stringParam(values map[string]any, key string) string {
 	if values == nil {
 		return ""
 	}
@@ -549,7 +549,7 @@ func stringParam(values map[string]any, key string) string {
 	return strings.TrimSpace(value)
 }
 
-func boolPtrParam(values map[string]any, key string) *bool {
+func (r *WorldAgentRunner) boolPtrParam(values map[string]any, key string) *bool {
 	if values == nil {
 		return nil
 	}
@@ -560,7 +560,7 @@ func boolPtrParam(values map[string]any, key string) *bool {
 	return new(value)
 }
 
-func stringSliceParam(values map[string]any, key string) []string {
+func (r *WorldAgentRunner) stringSliceParam(values map[string]any, key string) []string {
 	if values == nil {
 		return nil
 	}
@@ -581,7 +581,7 @@ func stringSliceParam(values map[string]any, key string) []string {
 	return result
 }
 
-func mapParam(values map[string]any, key string) map[string]any {
+func (r *WorldAgentRunner) mapParam(values map[string]any, key string) map[string]any {
 	if values == nil {
 		return nil
 	}
@@ -589,7 +589,7 @@ func mapParam(values map[string]any, key string) map[string]any {
 	return value
 }
 
-func floatMapParam(values map[string]any, key string) map[string]float64 {
+func (r *WorldAgentRunner) floatMapParam(values map[string]any, key string) map[string]float64 {
 	result := make(map[string]float64)
 	if values == nil {
 		return result
@@ -621,14 +621,14 @@ func stringValue[T ~string](value *T) string {
 	return string(*value)
 }
 
-func boolPtrValue(value *bool) any {
+func (r *WorldAgentRunner) boolPtrValue(value *bool) any {
 	if value == nil {
 		return nil
 	}
 	return *value
 }
 
-func nonEmptyString(value string, fallback string) string {
+func (r *WorldAgentRunner) nonEmptyString(value string, fallback string) string {
 	value = strings.TrimSpace(value)
 	if value != "" {
 		return value

@@ -10,6 +10,7 @@ import (
 )
 
 type LocationService struct {
+	contextReader
 	bbsuserv1.UnimplementedLocationServiceServer
 	locationUsecase *usecase.LocationUsecase
 }
@@ -30,7 +31,7 @@ func (s *LocationService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *LocationService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Req) (*bbsuserv1.GetCurrentLocation_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (s *LocationService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurr
 }
 
 func (s *LocationService) UpsertCurrent(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Req) (*bbsuserv1.UpsertCurrentLocation_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

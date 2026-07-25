@@ -12,6 +12,7 @@ import (
 )
 
 type RelationService struct {
+	contextReader
 	bbsuserv1.UnimplementedRelationServiceServer
 	relationUsecase *usecase.RelationUsecase
 }
@@ -32,7 +33,7 @@ func (s *RelationService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *RelationService) Follow(ctx context.Context, req *bbsuserv1.FollowRelation_Req) (*bbsuserv1.FollowRelation_Resp, error) {
-	actorID, err := currentUserID(ctx)
+	actorID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +45,7 @@ func (s *RelationService) Follow(ctx context.Context, req *bbsuserv1.FollowRelat
 }
 
 func (s *RelationService) Unfollow(ctx context.Context, req *bbsuserv1.UnfollowRelation_Req) (*bbsuserv1.UnfollowRelation_Resp, error) {
-	actorID, err := currentUserID(ctx)
+	actorID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,7 @@ func (s *RelationService) Unfollow(ctx context.Context, req *bbsuserv1.UnfollowR
 }
 
 func (s *RelationService) Block(ctx context.Context, req *bbsuserv1.BlockRelation_Req) (*bbsuserv1.BlockRelation_Resp, error) {
-	actorID, err := currentUserID(ctx)
+	actorID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +69,7 @@ func (s *RelationService) Block(ctx context.Context, req *bbsuserv1.BlockRelatio
 }
 
 func (s *RelationService) Unblock(ctx context.Context, req *bbsuserv1.UnblockRelation_Req) (*bbsuserv1.UnblockRelation_Resp, error) {
-	actorID, err := currentUserID(ctx)
+	actorID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +81,7 @@ func (s *RelationService) Unblock(ctx context.Context, req *bbsuserv1.UnblockRel
 }
 
 func (s *RelationService) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowingRelations_Req) (*bbsuserv1.ListFollowingRelations_Resp, error) {
-	actorID, err := currentUserID(ctx)
+	actorID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -110,8 +111,8 @@ func (s *RelationService) ListFollowing(ctx context.Context, req *bbsuserv1.List
 			Type:      enum.RelationTypeMap.MustToProto(row.Type),
 			ActorId:   row.ActorID,
 			TargetId:  row.TargetID,
-			CreatedAt: protoTime(row.CreatedAt),
-			UpdatedAt: protoTime(row.UpdatedAt),
+			CreatedAt: s.protoTime(row.CreatedAt),
+			UpdatedAt: s.protoTime(row.UpdatedAt),
 		})
 	}
 	return &bbsuserv1.ListFollowingRelations_Resp{
@@ -121,7 +122,7 @@ func (s *RelationService) ListFollowing(ctx context.Context, req *bbsuserv1.List
 }
 
 func (s *RelationService) ListFollowers(ctx context.Context, req *bbsuserv1.ListFollowersRelations_Req) (*bbsuserv1.ListFollowersRelations_Resp, error) {
-	actorID, err := currentUserID(ctx)
+	actorID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -151,8 +152,8 @@ func (s *RelationService) ListFollowers(ctx context.Context, req *bbsuserv1.List
 			Type:      enum.RelationTypeMap.MustToProto(row.Type),
 			ActorId:   row.ActorID,
 			TargetId:  row.TargetID,
-			CreatedAt: protoTime(row.CreatedAt),
-			UpdatedAt: protoTime(row.UpdatedAt),
+			CreatedAt: s.protoTime(row.CreatedAt),
+			UpdatedAt: s.protoTime(row.UpdatedAt),
 		})
 	}
 	return &bbsuserv1.ListFollowersRelations_Resp{
@@ -162,7 +163,7 @@ func (s *RelationService) ListFollowers(ctx context.Context, req *bbsuserv1.List
 }
 
 func (s *RelationService) ListBlocked(ctx context.Context, req *bbsuserv1.ListBlockedRelations_Req) (*bbsuserv1.ListBlockedRelations_Resp, error) {
-	actorID, err := currentUserID(ctx)
+	actorID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -192,8 +193,8 @@ func (s *RelationService) ListBlocked(ctx context.Context, req *bbsuserv1.ListBl
 			Type:      enum.RelationTypeMap.MustToProto(row.Type),
 			ActorId:   row.ActorID,
 			TargetId:  row.TargetID,
-			CreatedAt: protoTime(row.CreatedAt),
-			UpdatedAt: protoTime(row.UpdatedAt),
+			CreatedAt: s.protoTime(row.CreatedAt),
+			UpdatedAt: s.protoTime(row.UpdatedAt),
 		})
 	}
 	return &bbsuserv1.ListBlockedRelations_Resp{
@@ -203,7 +204,7 @@ func (s *RelationService) ListBlocked(ctx context.Context, req *bbsuserv1.ListBl
 }
 
 func (s *RelationService) GetStatus(ctx context.Context, req *bbsuserv1.GetStatusRelation_Req) (*bbsuserv1.GetStatusRelation_Resp, error) {
-	actorID, err := currentUserID(ctx)
+	actorID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}

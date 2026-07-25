@@ -18,6 +18,7 @@ import (
 var _ bizrepo.NotificationStationMessageRepo = (*NotificationStationMessageRepo)(nil)
 
 type NotificationStationMessageRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -50,7 +51,7 @@ func (r *NotificationStationMessageRepo) Save(ctx context.Context, message *mode
 		SetNillableReadAt(message.ReadAt).
 		Save(ctx)
 	if err == nil {
-		return stationMessageModel(save), nil
+		return r.stationMessage(save), nil
 	}
 	if !gen.IsConstraintError(err) {
 		return nil, err
@@ -64,12 +65,12 @@ func (r *NotificationStationMessageRepo) Save(ctx context.Context, message *mode
 	if getErr != nil {
 		return nil, getErr
 	}
-	return stationMessageModel(exist), nil
+	return r.stationMessage(exist), nil
 }
 
 func (r *NotificationStationMessageRepo) Get(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) (*model.NotificationStationMessage, error) {
 	query := r.getClient(ctx).NotificationStationMessage.Query()
-	query = r.getQuery(query, stationMessageGetQuery(req))
+	query = r.getQuery(query, req)
 	item, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
@@ -77,12 +78,12 @@ func (r *NotificationStationMessageRepo) Get(ctx context.Context, req *bizrepo.N
 	if err != nil {
 		return nil, err
 	}
-	return stationMessageModel(item), nil
+	return r.stationMessage(item), nil
 }
 
 func (r *NotificationStationMessageRepo) List(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) ([]*model.NotificationStationMessage, error) {
 	query := r.getClient(ctx).NotificationStationMessage.Query()
-	query = r.getQuery(query, stationMessageListQuery(req))
+	query = r.getQuery(query, req)
 	list, err := query.
 		Order(gen.Desc(notificationstationmessage.FieldCreatedAt), gen.Desc(notificationstationmessage.FieldID)).
 		All(ctx)
@@ -91,14 +92,14 @@ func (r *NotificationStationMessageRepo) List(ctx context.Context, req *bizrepo.
 	}
 	items := make([]*model.NotificationStationMessage, 0, len(list))
 	for _, item := range list {
-		items = append(items, stationMessageModel(item))
+		items = append(items, r.stationMessage(item))
 	}
 	return items, nil
 }
 
 func (r *NotificationStationMessageRepo) Map(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) (map[int64]*model.
 	NotificationStationMessage, error) {
-	list, err := r.List(ctx, stationMessageMapQuery(req))
+	list, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +112,7 @@ func (r *NotificationStationMessageRepo) Map(ctx context.Context, req *bizrepo.N
 
 func (r *NotificationStationMessageRepo) Count(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) (int, error) {
 	query := r.getClient(ctx).NotificationStationMessage.Query()
-	query = r.getQuery(query, stationMessageCountQuery(req))
+	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
 	if err != nil {
 		return 0, err
@@ -120,12 +121,12 @@ func (r *NotificationStationMessageRepo) Count(ctx context.Context, req *bizrepo
 }
 
 func (r *NotificationStationMessageRepo) Page(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) (*bizrepo.NotificationStationMessagePageResp, error) {
-	queryReq := stationMessagePageQuery(req)
+	queryReq := req
 	var pageReq *base.PageRequest
 	if queryReq != nil {
 		pageReq = queryReq.Page
 	}
-	page := normalizePage(pageReq)
+	page := r.normalizePage(pageReq)
 	query := r.getClient(ctx).NotificationStationMessage.Query()
 	query = r.getQuery(query, queryReq)
 
@@ -144,7 +145,7 @@ func (r *NotificationStationMessageRepo) Page(ctx context.Context, req *bizrepo.
 
 	items := make([]*model.NotificationStationMessage, 0, len(list))
 	for _, item := range list {
-		items = append(items, stationMessageModel(item))
+		items = append(items, r.stationMessage(item))
 	}
 	return &bizrepo.NotificationStationMessagePageResp{
 		Rows: items,
@@ -227,32 +228,7 @@ func (r *NotificationStationMessageRepo) getQuery(query *gen.NotificationStation
 	return query
 }
 
-func stationMessageGetQuery(query *bizrepo.NotificationStationMessageQuery) *bizrepo.NotificationStationMessageQuery {
-
-	return query
-}
-
-func stationMessageListQuery(query *bizrepo.NotificationStationMessageQuery) *bizrepo.NotificationStationMessageQuery {
-
-	return query
-}
-
-func stationMessageMapQuery(query *bizrepo.NotificationStationMessageQuery) *bizrepo.NotificationStationMessageQuery {
-
-	return query
-}
-
-func stationMessageCountQuery(query *bizrepo.NotificationStationMessageQuery) *bizrepo.NotificationStationMessageQuery {
-
-	return query
-}
-
-func stationMessagePageQuery(query *bizrepo.NotificationStationMessageQuery) *bizrepo.NotificationStationMessageQuery {
-
-	return query
-}
-
-func stationMessageModel(item *gen.NotificationStationMessage) *model.NotificationStationMessage {
+func (r *NotificationStationMessageRepo) stationMessage(item *gen.NotificationStationMessage) *model.NotificationStationMessage {
 	if item == nil {
 		return nil
 	}

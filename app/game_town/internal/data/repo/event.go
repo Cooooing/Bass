@@ -20,6 +20,7 @@ import (
 var _ bizrepo.EventRepo = (*EventRepo)(nil)
 
 type EventRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -75,7 +76,7 @@ func (r *EventRepo) Save(ctx context.Context, row *model.Event) (*model.Event, e
 	}, nil
 }
 
-func eventQuery(q *gen.EventQuery, req *bizrepo.EventQuery) *gen.EventQuery {
+func (r *EventRepo) eventQuery(q *gen.EventQuery, req *bizrepo.EventQuery) *gen.EventQuery {
 	if req == nil {
 		return q
 	}
@@ -107,7 +108,7 @@ func eventQuery(q *gen.EventQuery, req *bizrepo.EventQuery) *gen.EventQuery {
 }
 
 func (r *EventRepo) Get(ctx context.Context, req *bizrepo.EventQuery) (*model.Event, error) {
-	row, err := eventQuery(r.getClient(ctx).Event.Query(), req).Only(ctx)
+	row, err := r.eventQuery(r.getClient(ctx).Event.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
@@ -133,7 +134,7 @@ func (r *EventRepo) Get(ctx context.Context, req *bizrepo.EventQuery) (*model.Ev
 }
 
 func (r *EventRepo) List(ctx context.Context, req *bizrepo.EventQuery) ([]*model.Event, error) {
-	query := eventQuery(r.getClient(ctx).Event.Query(), req)
+	query := r.eventQuery(r.getClient(ctx).Event.Query(), req)
 	var rows []*gen.Event
 	var err error
 	if req != nil && req.RecentLimit > 0 {
@@ -181,17 +182,17 @@ func (r *EventRepo) Map(ctx context.Context, req *bizrepo.EventQuery) (map[int64
 }
 
 func (r *EventRepo) Count(ctx context.Context, req *bizrepo.EventQuery) (int, error) {
-	return eventQuery(r.getClient(ctx).Event.Query(), req).Count(ctx)
+	return r.eventQuery(r.getClient(ctx).Event.Query(), req).Count(ctx)
 }
 
 func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizrepo.EventPageResp, error) {
-	p := page(req.Page)
-	q := eventQuery(r.getClient(ctx).Event.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.eventQuery(r.getClient(ctx).Event.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(event.BySequence()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
+	rows, err := q.Order(event.BySequence()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -215,6 +216,6 @@ func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizre
 	})
 	return &bizrepo.EventPageResp{
 		Rows: out,
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }

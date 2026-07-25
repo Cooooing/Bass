@@ -9,16 +9,16 @@ import (
 	bizrepo "push_node/internal/biz/repo"
 )
 
-const connectionKeepAlive = 5 * time.Minute
-
 type ConnectionRegistryRepo struct {
 	mu          sync.RWMutex
 	connections map[int64][]*model.Connection
+	keepAlive   time.Duration
 }
 
 func NewConnectionRegistryRepo() *ConnectionRegistryRepo {
 	return &ConnectionRegistryRepo{
 		connections: make(map[int64][]*model.Connection),
+		keepAlive:   5 * time.Minute,
 	}
 }
 
@@ -92,7 +92,7 @@ func (r *ConnectionRegistryRepo) CleanupStaleConnections() int {
 	for userID, conns := range r.connections {
 		filtered := make([]*model.Connection, 0, len(conns))
 		for _, c := range conns {
-			if now.Sub(c.CreatedAt) < connectionKeepAlive {
+			if now.Sub(c.CreatedAt) < r.keepAlive {
 				filtered = append(filtered, c)
 			} else {
 				removed++

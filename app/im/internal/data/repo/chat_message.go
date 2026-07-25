@@ -15,6 +15,7 @@ import (
 var _ repo.ChatMessageRepo = (*ChatMessageRepo)(nil)
 
 type ChatMessageRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -109,9 +110,9 @@ func (r *ChatMessageRepo) Count(ctx context.Context, req *repo.ChatMessageQuery)
 }
 
 func (r *ChatMessageRepo) Page(ctx context.Context, req *repo.ChatMessageQuery) (*repo.ChatMessagePageResp, error) {
-	page := normalizePage(nil)
+	page := r.normalizePage(nil)
 	if req != nil {
-		page = normalizePage(req.Page)
+		page = r.normalizePage(req.Page)
 	}
 	query := r.getClient(ctx).ChatMessage.Query()
 	query = r.getQuery(query, req)

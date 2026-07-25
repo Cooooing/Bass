@@ -84,13 +84,13 @@ func (u *ChatMessageUsecase) sendToUser(ctx context.Context, req *sendToUserReq)
 	}
 	msg, err := u.chatMessageRepo.Save(ctx, &model.ChatMessage{
 		SenderID:   senderID,
-		ReceiverID: &receiverID,
+		ReceiverID: new(receiverID),
 		SessionID:  &session.ID,
 		Type:       msgType,
 		Content:    content,
 		Status:     enum.MessageStatusNormal,
-		CreatedBy:  &senderID,
-		UpdatedBy:  &senderID,
+		CreatedBy:  new(senderID),
+		UpdatedBy:  new(senderID),
 	})
 	if err != nil {
 		return err
@@ -117,19 +117,19 @@ func (u *ChatMessageUsecase) sendToGroup(ctx context.Context, req *sendToGroupRe
 	msgType := req.MessageType
 	content := req.Content
 	if _, err := u.chatGroupMemberRepo.Get(ctx, &repo.ChatGroupMemberQuery{
-		GroupID: &groupID,
-		UserID:  &senderID,
+		GroupID: new(groupID),
+		UserID:  new(senderID),
 	}); err != nil {
 		return err
 	}
 	msg, err := u.chatMessageRepo.Save(ctx, &model.ChatMessage{
 		SenderID:  senderID,
-		GroupID:   &groupID,
+		GroupID:   new(groupID),
 		Type:      msgType,
 		Content:   content,
 		Status:    enum.MessageStatusNormal,
-		CreatedBy: &senderID,
-		UpdatedBy: &senderID,
+		CreatedBy: new(senderID),
+		UpdatedBy: new(senderID),
 	})
 	if err != nil {
 		return err
@@ -150,23 +150,23 @@ func (u *ChatMessageUsecase) findOrCreateSession(ctx context.Context, req *findO
 	userID := req.UserID
 	receiverID := req.ReceiverID
 	listResp, err := u.chatSessionRepo.List(ctx, &repo.ChatSessionQuery{
-		CreatedBy:  &userID,
-		ReceiverID: &receiverID,
+		CreatedBy:  new(userID),
+		ReceiverID: new(receiverID),
 	})
 	if err == nil && len(listResp) > 0 {
 		return listResp[0], nil
 	}
 	listResp, err = u.chatSessionRepo.List(ctx, &repo.ChatSessionQuery{
-		CreatedBy:  &receiverID,
-		ReceiverID: &userID,
+		CreatedBy:  new(receiverID),
+		ReceiverID: new(userID),
 	})
 	if err == nil && len(listResp) > 0 {
 		return listResp[0], nil
 	}
 	session, err := u.chatSessionRepo.Save(ctx, &model.ChatSession{
-		ReceiverID: &receiverID,
-		CreatedBy:  &userID,
-		UpdatedBy:  &userID,
+		ReceiverID: new(receiverID),
+		CreatedBy:  new(userID),
+		UpdatedBy:  new(userID),
 	})
 	if err != nil {
 		return nil, err

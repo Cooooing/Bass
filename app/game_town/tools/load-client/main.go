@@ -1070,7 +1070,7 @@ func bigEvent(round int) string {
 }
 
 func stringPtr(value string) *string {
-	return &value
+	return new(value)
 }
 
 func sleepContext(ctx context.Context, duration time.Duration) error {

@@ -14,6 +14,7 @@ type AccountRepo interface {
 	AddStat(ctx context.Context, req *AccountAddStatReq) (*model.Account, error)
 
 	UpdateStatus(ctx context.Context, userID int64, status enum.AccountStatus) (*model.Account, error)
+	UnbanBanned(ctx context.Context, userIDs []int64) error
 
 	ExistsByAccount(ctx context.Context, account string) (bool, error)
 	Get(ctx context.Context, req *AccountGetReq) (*model.Account, error)

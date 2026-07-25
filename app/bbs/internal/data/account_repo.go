@@ -11,6 +11,7 @@ import (
 var _ repo.AccountClient = (*AccountClient)(nil)
 
 type AccountClient struct {
+	protoTimeFormatter
 	userClient *rpc.UserClient
 }
 
@@ -45,8 +46,8 @@ func (r *AccountClient) GetCurrentAccount(ctx context.Context, userID int64) (*r
 				MBTI:          int32(basic.GetMbti()),
 				FollowCount:   basic.FollowCount,
 				FollowerCount: basic.FollowerCount,
-				CreatedAt:     formatProtoTime(basic.GetCreatedAt()),
-				UpdatedAt:     formatProtoTime(basic.GetUpdatedAt()),
+				CreatedAt:     r.formatProtoTime(basic.GetCreatedAt()),
+				UpdatedAt:     r.formatProtoTime(basic.GetUpdatedAt()),
 			}
 		}
 		if contact := account.GetContact(); contact != nil {
@@ -81,8 +82,8 @@ func (r *AccountClient) GetProfileAccount(ctx context.Context, userID int64) (*r
 			MBTI:          int32(account.GetMbti()),
 			FollowCount:   account.FollowCount,
 			FollowerCount: account.FollowerCount,
-			CreatedAt:     formatProtoTime(account.GetCreatedAt()),
-			UpdatedAt:     formatProtoTime(account.GetUpdatedAt()),
+			CreatedAt:     r.formatProtoTime(account.GetCreatedAt()),
+			UpdatedAt:     r.formatProtoTime(account.GetUpdatedAt()),
 		}
 	}
 	return profile, nil
@@ -97,8 +98,7 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 		Introduction: req.Introduction,
 	}
 	if req.MBTI != nil {
-		mbti := userv1enum.MBTI(*req.MBTI)
-		updateReq.Mbti = &mbti
+		updateReq.Mbti = new(userv1enum.MBTI(*req.MBTI))
 	}
 	reply, err := r.userClient.Account.UpdateProfile(ctx, updateReq)
 	if err != nil {
@@ -118,8 +118,8 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 			MBTI:          int32(account.GetMbti()),
 			FollowCount:   account.FollowCount,
 			FollowerCount: account.FollowerCount,
-			CreatedAt:     formatProtoTime(account.GetCreatedAt()),
-			UpdatedAt:     formatProtoTime(account.GetUpdatedAt()),
+			CreatedAt:     r.formatProtoTime(account.GetCreatedAt()),
+			UpdatedAt:     r.formatProtoTime(account.GetUpdatedAt()),
 		}
 	}
 	return profile, nil

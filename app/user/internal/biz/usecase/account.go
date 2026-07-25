@@ -38,7 +38,7 @@ func NewAccountUsecase(
 
 func (s *AccountUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Account, error) {
 	return s.accountRepo.Get(ctx, &repo.AccountGetReq{
-		UserID: &userID,
+		UserID: new(userID),
 	})
 }
 
@@ -114,7 +114,7 @@ func (s *AccountUsecase) UpdateSetting(ctx context.Context, req *UpdateAccountSe
 
 		var err error
 		fullAccount, err = s.accountRepo.Get(ctx, &repo.AccountGetReq{
-			UserID: &req.UserID,
+			UserID: new(req.UserID),
 		})
 		return err
 	})

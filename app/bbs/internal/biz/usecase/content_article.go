@@ -208,23 +208,19 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 			AuthorID: req.Query.AuthorId,
 		}
 		if req.Query.Type != nil {
-			value := int32(*req.Query.Type)
-			query.Type = &value
+			query.Type = new(int32(*req.Query.Type))
 		}
 		if req.Query.Order != nil {
-			value := int32(*req.Query.Order)
-			query.Order = &value
+			query.Order = new(int32(*req.Query.Order))
 		}
 		if req.Query.PublishStatus != nil {
-			value := int32(*req.Query.PublishStatus)
-			query.PublishStatus = &value
+			query.PublishStatus = new(int32(*req.Query.PublishStatus))
 		}
 		for _, item := range req.Query.PublishStatuses {
 			query.PublishStatuses = append(query.PublishStatuses, int32(item))
 		}
 		if req.Query.Visibility != nil {
-			value := int32(*req.Query.Visibility)
-			query.Visibility = &value
+			query.Visibility = new(int32(*req.Query.Visibility))
 		}
 		for _, item := range req.Query.Visibilities {
 			query.Visibilities = append(query.Visibilities, int32(item))

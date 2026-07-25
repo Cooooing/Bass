@@ -2,27 +2,23 @@ package repo
 
 import "im/internal/biz/base"
 
-const (
-	defaultPage int64 = 1
-	defaultSize int64 = 10
-	maxPageSize int64 = 1000
-)
+type pageNormalizer struct{}
 
-func normalizePage(p *base.PageRequest) *base.PageRequest {
+func (pageNormalizer) normalizePage(p *base.PageRequest) *base.PageRequest {
 	if p == nil {
 		return &base.PageRequest{
-			Page: defaultPage,
-			Size: defaultSize,
+			Page: 1,
+			Size: 10,
 		}
 	}
 	if p.Page <= 0 {
-		p.Page = defaultPage
+		p.Page = 1
 	}
 	if p.Size <= 0 {
-		p.Size = defaultSize
+		p.Size = 10
 	}
-	if p.Size > maxPageSize {
-		p.Size = maxPageSize
+	if p.Size > 1000 {
+		p.Size = 1000
 	}
 	return p
 }

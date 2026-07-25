@@ -19,6 +19,7 @@ import (
 var _ bizrepo.WorldMemberRepo = (*WorldMemberRepo)(nil)
 
 type WorldMemberRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -55,10 +56,10 @@ func (r *WorldMemberRepo) Save(ctx context.Context, row *model.WorldMember) (*mo
 	if err != nil {
 		return nil, err
 	}
-	return memberModel(saved), nil
+	return r.member(saved), nil
 }
 
-func memberQuery(q *gen.WorldMemberQuery, req *bizrepo.WorldMemberQuery) *gen.WorldMemberQuery {
+func (r *WorldMemberRepo) memberQuery(q *gen.WorldMemberQuery, req *bizrepo.WorldMemberQuery) *gen.WorldMemberQuery {
 	if req == nil {
 		return q
 	}
@@ -81,23 +82,23 @@ func memberQuery(q *gen.WorldMemberQuery, req *bizrepo.WorldMemberQuery) *gen.Wo
 }
 
 func (r *WorldMemberRepo) Get(ctx context.Context, req *bizrepo.WorldMemberQuery) (*model.WorldMember, error) {
-	row, err := memberQuery(r.getClient(ctx).WorldMember.Query(), req).Only(ctx)
+	row, err := r.memberQuery(r.getClient(ctx).WorldMember.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return memberModel(row), nil
+	return r.member(row), nil
 }
 
 func (r *WorldMemberRepo) List(ctx context.Context, req *bizrepo.WorldMemberQuery) ([]*model.WorldMember, error) {
-	rows, err := memberQuery(r.getClient(ctx).WorldMember.Query(), req).Order(worldmember.ByID()).All(ctx)
+	rows, err := r.memberQuery(r.getClient(ctx).WorldMember.Query(), req).Order(worldmember.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return lo.Map(rows, func(row *gen.WorldMember, _ int) *model.WorldMember {
-		return memberModel(row)
+		return r.member(row)
 	}), nil
 }
 
@@ -114,25 +115,25 @@ func (r *WorldMemberRepo) Map(ctx context.Context, req *bizrepo.WorldMemberQuery
 }
 
 func (r *WorldMemberRepo) Count(ctx context.Context, req *bizrepo.WorldMemberQuery) (int, error) {
-	return memberQuery(r.getClient(ctx).WorldMember.Query(), req).Count(ctx)
+	return r.memberQuery(r.getClient(ctx).WorldMember.Query(), req).Count(ctx)
 }
 
 func (r *WorldMemberRepo) Page(ctx context.Context, req *bizrepo.WorldMemberPageReq) (*bizrepo.WorldMemberPageResp, error) {
-	p := page(req.Page)
-	q := memberQuery(r.getClient(ctx).WorldMember.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.memberQuery(r.getClient(ctx).WorldMember.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(worldmember.ByID()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
+	rows, err := q.Order(worldmember.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &bizrepo.WorldMemberPageResp{
 		Rows: lo.Map(rows, func(row *gen.WorldMember, _ int) *model.WorldMember {
-			return memberModel(row)
+			return r.member(row)
 		}),
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 
@@ -144,7 +145,7 @@ func (r *WorldMemberRepo) Move(ctx context.Context, id int64, locationID int64) 
 	if err != nil {
 		return nil, err
 	}
-	return memberModel(row), nil
+	return r.member(row), nil
 }
 
 func (r *WorldMemberRepo) UpdateCharacter(ctx context.Context, req *bizrepo.WorldMemberCharacterReq) (*model.WorldMember, error) {
@@ -159,10 +160,10 @@ func (r *WorldMemberRepo) UpdateCharacter(ctx context.Context, req *bizrepo.Worl
 	if err != nil {
 		return nil, err
 	}
-	return memberModel(row), nil
+	return r.member(row), nil
 }
 
-func memberModel(row *gen.WorldMember) *model.WorldMember {
+func (r *WorldMemberRepo) member(row *gen.WorldMember) *model.WorldMember {
 	return &model.WorldMember{
 		ID:                  row.ID,
 		WorldID:             row.WorldID,

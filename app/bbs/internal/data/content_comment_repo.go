@@ -17,6 +17,7 @@ import (
 var _ repo.ContentCommentClient = (*ContentCommentClient)(nil)
 
 type ContentCommentClient struct {
+	protoTimeFormatter
 	contentClient *rpc.ContentClient
 	userClient    *rpc.UserClient
 }
@@ -146,14 +147,13 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
 		order = contentv1enum.CommentOrder(*req.Order)
 	}
-	level := int32(1)
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page: pageReq,
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
 			ArticleId:    new(req.ArticleID),
-			Level:        &level,
+			Level:        new(int32(1)),
 			Restrictions: restrictions,
-			Order:        &order,
+			Order:        new(order),
 		},
 	})
 	if err != nil {
@@ -174,12 +174,11 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 		if previewLimit > 5 {
 			previewLimit = 5
 		}
-		previewOrder := contentv1enum.CommentOrder_COMMENT_ORDER_OLDEST
 		previews, err := r.contentClient.Comment.ListReplyPreviews(ctx, &contentv1.ListCommentReplyPreviews_Req{
 			ArticleId:      req.ArticleID,
 			ParentIds:      rootIDs,
 			LimitPerParent: previewLimit,
-			Order:          &previewOrder,
+			Order:          new(contentv1enum.CommentOrder_COMMENT_ORDER_OLDEST),
 			Restrictions:   restrictions,
 		})
 		if err != nil {
@@ -269,7 +268,7 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo
 			ArticleId:    new(req.ArticleID),
 			ParentId:     new(req.ParentID),
 			Restrictions: restrictions,
-			Order:        &order,
+			Order:        new(order),
 		},
 	})
 	if err != nil {
@@ -329,7 +328,7 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
 			ArticleId:    new(req.ArticleID),
 			Restrictions: restrictions,
-			Order:        &order,
+			Order:        new(order),
 		},
 	})
 	if err != nil {
@@ -470,13 +469,13 @@ func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp
 		ParentID:          item.ParentId,
 		ReplyID:           item.ReplyId,
 		Restriction:       int32(item.GetRestriction()),
-		DeletedAt:         formatProtoTime(item.GetDeletedAt()),
+		DeletedAt:         r.formatProtoTime(item.GetDeletedAt()),
 		ThankCount:        item.GetThankCount(),
 		LikeCount:         item.GetLikeCount(),
 		ReplyCount:        item.GetReplyCount(),
 		ViewerActionState: state,
-		CreatedAt:         formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:         formatProtoTime(item.GetUpdatedAt()),
+		CreatedAt:         r.formatProtoTime(item.GetCreatedAt()),
+		UpdatedAt:         r.formatProtoTime(item.GetUpdatedAt()),
 	}
 	if !r.anonymousArticleUser(article, item.CreatedBy) {
 		out.CreatedBy = item.CreatedBy
@@ -504,13 +503,13 @@ func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_C
 		ParentID:          item.ParentId,
 		ReplyID:           item.ReplyId,
 		Restriction:       int32(item.GetRestriction()),
-		DeletedAt:         formatProtoTime(item.GetDeletedAt()),
+		DeletedAt:         r.formatProtoTime(item.GetDeletedAt()),
 		ThankCount:        item.GetThankCount(),
 		LikeCount:         item.GetLikeCount(),
 		ReplyCount:        item.GetReplyCount(),
 		ViewerActionState: &repo.CommentViewerActionState{},
-		CreatedAt:         formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:         formatProtoTime(item.GetUpdatedAt()),
+		CreatedAt:         r.formatProtoTime(item.GetCreatedAt()),
+		UpdatedAt:         r.formatProtoTime(item.GetUpdatedAt()),
 	}
 	if !r.anonymousArticleUser(article, item.CreatedBy) {
 		out.CreatedBy = item.CreatedBy
@@ -568,8 +567,8 @@ func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs 
 			Status:        int32(basic.GetStatus()),
 			FollowCount:   basic.FollowCount,
 			FollowerCount: basic.FollowerCount,
-			CreatedAt:     formatProtoTime(basic.GetCreatedAt()),
-			UpdatedAt:     formatProtoTime(basic.GetUpdatedAt()),
+			CreatedAt:     r.formatProtoTime(basic.GetCreatedAt()),
+			UpdatedAt:     r.formatProtoTime(basic.GetUpdatedAt()),
 		}
 	}
 	return out, nil

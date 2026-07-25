@@ -239,7 +239,7 @@ func (r *WorldAgentRunner) recoverStaleRunningJobs(ctx context.Context) {
 	}
 }
 
-func fairAgentJobs(jobs []*model.AgentJob, cursor *int) []*model.AgentJob {
+func (r *WorldAgentRunner) fairAgentJobs(jobs []*model.AgentJob, cursor *int) []*model.AgentJob {
 	ordered := make([]*model.AgentJob, 0, len(jobs))
 	used := make(map[int64]bool, len(jobs))
 	priorities := []enum.AgentJobPriority{
@@ -294,8 +294,8 @@ func fairAgentJobs(jobs []*model.AgentJob, cursor *int) []*model.AgentJob {
 func (r *WorldAgentRunner) orderDispatchJobs(jobs []*model.AgentJob, now time.Time) []*model.AgentJob {
 	overdueTicks, remaining := r.splitOverdueTickJobs(jobs, now)
 	ordered := make([]*model.AgentJob, 0, len(jobs))
-	ordered = append(ordered, fairAgentJobs(overdueTicks, &r.scheduleCursor)...)
-	ordered = append(ordered, fairAgentJobs(remaining, &r.scheduleCursor)...)
+	ordered = append(ordered, r.fairAgentJobs(overdueTicks, &r.scheduleCursor)...)
+	ordered = append(ordered, r.fairAgentJobs(remaining, &r.scheduleCursor)...)
 	return ordered
 }
 

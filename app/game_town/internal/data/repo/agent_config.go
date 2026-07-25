@@ -19,6 +19,7 @@ import (
 var _ bizrepo.AgentConfigRepo = (*AgentConfigRepo)(nil)
 
 type AgentConfigRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -47,20 +48,20 @@ func (r *AgentConfigRepo) Save(ctx context.Context, row *model.AgentConfig) (*mo
 		SetTimeoutSeconds(row.TimeoutSeconds).
 		Save(ctx)
 	if err != nil {
-		if isAgentConfigNameConflict(err) {
+		if r.isAgentConfigNameConflict(err) {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		return nil, err
 	}
-	return agentConfigModel(saved), nil
+	return r.agentConfig(saved), nil
 }
 
-func isAgentConfigNameConflict(err error) bool {
+func (r *AgentConfigRepo) isAgentConfigNameConflict(err error) bool {
 	message := err.Error()
 	return strings.Contains(message, "game_town_agent_configs_name_active_unique") || strings.Contains(message, "duplicate key")
 }
 
-func agentConfigQuery(q *gen.AgentConfigQuery, req *bizrepo.AgentConfigQuery) *gen.AgentConfigQuery {
+func (r *AgentConfigRepo) agentConfigQuery(q *gen.AgentConfigQuery, req *bizrepo.AgentConfigQuery) *gen.AgentConfigQuery {
 	q = q.Where(agentconfig.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -78,23 +79,23 @@ func agentConfigQuery(q *gen.AgentConfigQuery, req *bizrepo.AgentConfigQuery) *g
 }
 
 func (r *AgentConfigRepo) Get(ctx context.Context, req *bizrepo.AgentConfigQuery) (*model.AgentConfig, error) {
-	row, err := agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), req).Only(ctx)
+	row, err := r.agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_CONFIG_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return agentConfigModel(row), nil
+	return r.agentConfig(row), nil
 }
 
 func (r *AgentConfigRepo) List(ctx context.Context, req *bizrepo.AgentConfigQuery) ([]*model.AgentConfig, error) {
-	rows, err := agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), req).Order(agentconfig.ByID()).All(ctx)
+	rows, err := r.agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), req).Order(agentconfig.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return lo.Map(rows, func(row *gen.AgentConfig, _ int) *model.AgentConfig {
-		return agentConfigModel(row)
+		return r.agentConfig(row)
 	}), nil
 }
 
@@ -111,30 +112,30 @@ func (r *AgentConfigRepo) Map(ctx context.Context, req *bizrepo.AgentConfigQuery
 }
 
 func (r *AgentConfigRepo) Count(ctx context.Context, req *bizrepo.AgentConfigQuery) (int, error) {
-	return agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), req).Count(ctx)
+	return r.agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), req).Count(ctx)
 }
 
 func (r *AgentConfigRepo) Page(ctx context.Context, req *bizrepo.AgentConfigPageReq) (*bizrepo.AgentConfigPageResp, error) {
-	p := page(req.Page)
-	q := agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(agentconfig.ByID()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
+	rows, err := q.Order(agentconfig.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	out := lo.Map(rows, func(row *gen.AgentConfig, _ int) *model.AgentConfig {
-		return agentConfigModel(row)
+		return r.agentConfig(row)
 	})
 	return &bizrepo.AgentConfigPageResp{
 		Rows: out,
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 
-func agentConfigModel(row *gen.AgentConfig) *model.AgentConfig {
+func (r *AgentConfigRepo) agentConfig(row *gen.AgentConfig) *model.AgentConfig {
 	return &model.AgentConfig{
 		ID:             row.ID,
 		Name:           row.Name,

@@ -17,6 +17,7 @@ import (
 var _ bizrepo.NpcBeliefRepo = (*NpcBeliefRepo)(nil)
 
 type NpcBeliefRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -51,10 +52,10 @@ func (r *NpcBeliefRepo) Save(ctx context.Context, row *model.NpcBelief) (*model.
 	if err != nil {
 		return nil, err
 	}
-	return npcBeliefModel(saved), nil
+	return r.npcBelief(saved), nil
 }
 
-func npcBeliefQuery(q *gen.NpcBeliefQuery, req *bizrepo.NpcBeliefQuery) *gen.NpcBeliefQuery {
+func (r *NpcBeliefRepo) npcBeliefQuery(q *gen.NpcBeliefQuery, req *bizrepo.NpcBeliefQuery) *gen.NpcBeliefQuery {
 	if req == nil {
 		return q
 	}
@@ -77,25 +78,25 @@ func npcBeliefQuery(q *gen.NpcBeliefQuery, req *bizrepo.NpcBeliefQuery) *gen.Npc
 }
 
 func (r *NpcBeliefRepo) Get(ctx context.Context, req *bizrepo.NpcBeliefQuery) (*model.NpcBelief, error) {
-	row, err := npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), req).Only(ctx)
+	row, err := r.npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return npcBeliefModel(row), nil
+	return r.npcBelief(row), nil
 }
 
 func (r *NpcBeliefRepo) List(ctx context.Context, req *bizrepo.NpcBeliefQuery) ([]*model.NpcBelief, error) {
-	rows, err := npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), req).
+	rows, err := r.npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), req).
 		Order(npcbelief.ByConfidence()).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return lo.Map(rows, func(row *gen.NpcBelief, _ int) *model.NpcBelief {
-		return npcBeliefModel(row)
+		return r.npcBelief(row)
 	}), nil
 }
 
@@ -112,32 +113,32 @@ func (r *NpcBeliefRepo) Map(ctx context.Context, req *bizrepo.NpcBeliefQuery) (m
 }
 
 func (r *NpcBeliefRepo) Count(ctx context.Context, req *bizrepo.NpcBeliefQuery) (int, error) {
-	return npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), req).Count(ctx)
+	return r.npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), req).Count(ctx)
 }
 
 func (r *NpcBeliefRepo) Page(ctx context.Context, req *bizrepo.NpcBeliefPageReq) (*bizrepo.NpcBeliefPageResp, error) {
-	p := page(req.Page)
-	q := npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rows, err := q.Order(npcbelief.ByConfidence()).
-		Offset(pageOffset(p)).
-		Limit(pageLimit(p)).
+		Offset(r.pageOffset(p)).
+		Limit(r.pageLimit(p)).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &bizrepo.NpcBeliefPageResp{
 		Rows: lo.Map(rows, func(row *gen.NpcBelief, _ int) *model.NpcBelief {
-			return npcBeliefModel(row)
+			return r.npcBelief(row)
 		}),
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 
-func npcBeliefModel(row *gen.NpcBelief) *model.NpcBelief {
+func (r *NpcBeliefRepo) npcBelief(row *gen.NpcBelief) *model.NpcBelief {
 	return &model.NpcBelief{
 		ID:             row.ID,
 		WorldID:        row.WorldID,

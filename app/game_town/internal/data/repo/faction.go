@@ -18,6 +18,7 @@ import (
 var _ bizrepo.FactionRepo = (*FactionRepo)(nil)
 
 type FactionRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -50,10 +51,10 @@ func (r *FactionRepo) Save(ctx context.Context, row *model.Faction) (*model.Fact
 	if err != nil {
 		return nil, err
 	}
-	return factionModel(saved), nil
+	return r.faction(saved), nil
 }
 
-func factionQuery(q *gen.FactionQuery, req *bizrepo.FactionQuery) *gen.FactionQuery {
+func (r *FactionRepo) factionQuery(q *gen.FactionQuery, req *bizrepo.FactionQuery) *gen.FactionQuery {
 	q = q.Where(faction.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -74,25 +75,25 @@ func factionQuery(q *gen.FactionQuery, req *bizrepo.FactionQuery) *gen.FactionQu
 }
 
 func (r *FactionRepo) Get(ctx context.Context, req *bizrepo.FactionQuery) (*model.Faction, error) {
-	row, err := factionQuery(r.getClient(ctx).Faction.Query(), req).Only(ctx)
+	row, err := r.factionQuery(r.getClient(ctx).Faction.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return factionModel(row), nil
+	return r.faction(row), nil
 }
 
 func (r *FactionRepo) List(ctx context.Context, req *bizrepo.FactionQuery) ([]*model.Faction, error) {
-	rows, err := factionQuery(r.getClient(ctx).Faction.Query(), req).
+	rows, err := r.factionQuery(r.getClient(ctx).Faction.Query(), req).
 		Order(faction.ByID()).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return lo.Map(rows, func(row *gen.Faction, _ int) *model.Faction {
-		return factionModel(row)
+		return r.faction(row)
 	}), nil
 }
 
@@ -109,32 +110,32 @@ func (r *FactionRepo) Map(ctx context.Context, req *bizrepo.FactionQuery) (map[i
 }
 
 func (r *FactionRepo) Count(ctx context.Context, req *bizrepo.FactionQuery) (int, error) {
-	return factionQuery(r.getClient(ctx).Faction.Query(), req).Count(ctx)
+	return r.factionQuery(r.getClient(ctx).Faction.Query(), req).Count(ctx)
 }
 
 func (r *FactionRepo) Page(ctx context.Context, req *bizrepo.FactionPageReq) (*bizrepo.FactionPageResp, error) {
-	p := page(req.Page)
-	q := factionQuery(r.getClient(ctx).Faction.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.factionQuery(r.getClient(ctx).Faction.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rows, err := q.Order(faction.ByID()).
-		Offset(pageOffset(p)).
-		Limit(pageLimit(p)).
+		Offset(r.pageOffset(p)).
+		Limit(r.pageLimit(p)).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &bizrepo.FactionPageResp{
 		Rows: lo.Map(rows, func(row *gen.Faction, _ int) *model.Faction {
-			return factionModel(row)
+			return r.faction(row)
 		}),
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 
-func factionModel(row *gen.Faction) *model.Faction {
+func (r *FactionRepo) faction(row *gen.Faction) *model.Faction {
 	return &model.Faction{
 		ID:          row.ID,
 		WorldID:     row.WorldID,

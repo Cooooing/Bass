@@ -14,15 +14,6 @@ import (
 	"game_town/internal/enum"
 )
 
-const (
-	maxWorldNameRunes    = 128
-	maxLocationNameRunes = 128
-	maxNpcNameRunes      = 128
-	maxNpcRoleRunes      = 128
-	maxCurrentArcRunes   = 256
-	maxEventSummaryRunes = 512
-)
-
 func (r *WorldAgentRunner) applyResult(ctx context.Context, result *agentResult) {
 	if result.err != nil {
 		r.log.WarnContext(ctx, "apply agent result failed before transaction", constant.LogFieldTaskID, result.job.ID, "world_id", result.job.WorldID, "type", result.job.Type, constant.LogFieldErr, result.err)
@@ -79,12 +70,12 @@ func (r *WorldAgentRunner) applyPlayerCharacter(ctx context.Context, result *age
 	if result.character == nil || result.member == nil || result.player == nil {
 		return nil, fmt.Errorf("player character context is incomplete")
 	}
-	name := normalizeModelText(result.character.Name, maxNpcNameRunes)
+	name := r.normalizeModelText(result.character.Name, 128)
 	if name == "" {
 		name = "无名旅人"
 	}
-	background := normalizeModelText(result.character.Background, 1024)
-	goal := normalizeModelText(result.character.Goal, maxEventSummaryRunes)
+	background := r.normalizeModelText(result.character.Background, 1024)
+	goal := r.normalizeModelText(result.character.Goal, 512)
 	traits := result.character.Traits
 	if len(traits) > 6 {
 		traits = traits[:6]
@@ -120,16 +111,16 @@ func (r *WorldAgentRunner) applyPlayerCharacter(ctx context.Context, result *age
 }
 
 func (r *WorldAgentRunner) applyWorldDraft(ctx context.Context, result *agentResult) (*model.Event, error) {
-	draft := normalizeWorldDraft(result)
-	locationCount := int(uint32Value(result.source.Payload, "location_count"))
-	npcCount := int(uint32Value(result.source.Payload, "npc_count"))
+	draft := r.normalizeWorldDraft(result)
+	locationCount := int(r.uint32Value(result.source.Payload, "location_count"))
+	npcCount := int(r.uint32Value(result.source.Payload, "npc_count"))
 	if locationCount <= 0 {
 		locationCount = len(draft.Locations)
 	}
 	if npcCount <= 0 {
 		npcCount = len(draft.Npcs)
 	}
-	ensureWorldDraftCounts(draft, locationCount, npcCount)
+	r.ensureWorldDraftCounts(draft, locationCount, npcCount)
 	if len(draft.Locations) > locationCount {
 		draft.Locations = draft.Locations[:locationCount]
 	}
@@ -137,8 +128,8 @@ func (r *WorldAgentRunner) applyWorldDraft(ctx context.Context, result *agentRes
 		draft.Npcs = draft.Npcs[:npcCount]
 	}
 
-	draft.Name = normalizeModelText(draft.Name, maxWorldNameRunes)
-	draft.CurrentArc = normalizeModelText(draft.CurrentArc, maxCurrentArcRunes)
+	draft.Name = r.normalizeModelText(draft.Name, 128)
+	draft.CurrentArc = r.normalizeModelText(draft.CurrentArc, 256)
 	if draft.Name == "" {
 		return nil, fmt.Errorf("world name is empty")
 	}
@@ -146,8 +137,8 @@ func (r *WorldAgentRunner) applyWorldDraft(ctx context.Context, result *agentRes
 	locations := make(map[string]*model.Location, len(draft.Locations))
 	var firstLocation *model.Location
 	for index, item := range draft.Locations {
-		code := normalizedDraftCode(item.Code, fmt.Sprintf("location_%d", index+1), locations)
-		name := normalizeModelText(item.Name, maxLocationNameRunes)
+		code := r.normalizedDraftCode(item.Code, fmt.Sprintf("location_%d", index+1), locations)
+		name := r.normalizeModelText(item.Name, 128)
 		if name == "" {
 			name = fmt.Sprintf("地点%d", index+1)
 		}
@@ -181,9 +172,9 @@ func (r *WorldAgentRunner) applyWorldDraft(ctx context.Context, result *agentRes
 
 	npcCodes := make(map[string]struct{}, len(draft.Npcs))
 	for index, item := range draft.Npcs {
-		code := normalizedNpcCode(item.Code, fmt.Sprintf("npc_%d", index+1), npcCodes)
-		name := normalizeModelText(item.Name, maxNpcNameRunes)
-		role := normalizeModelText(item.Role, maxNpcRoleRunes)
+		code := r.normalizedNpcCode(item.Code, fmt.Sprintf("npc_%d", index+1), npcCodes)
+		name := r.normalizeModelText(item.Name, 128)
+		role := r.normalizeModelText(item.Role, 128)
 		location := locations[strings.TrimSpace(item.LocationCode)]
 		if name == "" {
 			name = fmt.Sprintf("角色%d", index+1)
@@ -234,7 +225,7 @@ func (r *WorldAgentRunner) applyWorldDraft(ctx context.Context, result *agentRes
 	if _, err = r.worldRuleRepo.Save(ctx, &model.WorldRule{
 		WorldID: result.world.ID,
 		Version: 1,
-		Rules:   defaultWorldRules(draft.Rules),
+		Rules:   r.defaultWorldRules(draft.Rules),
 	}); err != nil {
 		return nil, err
 	}
@@ -255,7 +246,7 @@ func (r *WorldAgentRunner) applyWorldDraft(ctx context.Context, result *agentRes
 		CurrentArc:      draft.CurrentArc,
 		NextTickAt:      new(nextTickAt),
 		PublicChronicle: strings.TrimSpace(draft.Summary),
-		CurrentEra:      normalizeModelText(draft.CurrentEra, 128),
+		CurrentEra:      r.normalizeModelText(draft.CurrentEra, 128),
 		NextDueAt:       new(nextTickAt),
 	}); err != nil {
 		return nil, err
@@ -283,7 +274,7 @@ func (r *WorldAgentRunner) applyNpcReply(ctx context.Context, result *agentResul
 		contextSummary = result.npc.ContextSummary
 	}
 	if _, err := r.npcRepo.UpdateContext(ctx, result.npc.ID, result.npc.Version, contextSummary); err != nil {
-		if !isNpcVersionConflict(err) {
+		if !r.isNpcVersionConflict(err) {
 			return nil, err
 		}
 	}
@@ -298,8 +289,8 @@ func (r *WorldAgentRunner) applyNpcReply(ctx context.Context, result *agentResul
 		Summary:          result.npc.Name + " 回复",
 		Content:          strings.TrimSpace(result.reply.Reply),
 		Payload: map[string]any{
-			"suggested_actions": suggestedActionPayload(result.reply.SuggestedActions),
-			"claims":            claimDraftPayload(result.reply.Claims),
+			"suggested_actions": r.suggestedActionPayload(result.reply.SuggestedActions),
+			"claims":            r.claimDraftPayload(result.reply.Claims),
 		},
 	})
 	if err != nil {
@@ -325,11 +316,11 @@ func (r *WorldAgentRunner) applyResolution(ctx context.Context, result *agentRes
 	if worldSummary == "" {
 		worldSummary = result.state.Summary
 	}
-	currentArc := normalizeModelText(result.resolution.CurrentArc, maxCurrentArcRunes)
+	currentArc := r.normalizeModelText(result.resolution.CurrentArc, 256)
 	if currentArc == "" {
-		currentArc = normalizeModelText(result.state.CurrentArc, maxCurrentArcRunes)
+		currentArc = r.normalizeModelText(result.state.CurrentArc, 256)
 	}
-	eventSummary := normalizeModelText(result.resolution.Summary, maxEventSummaryRunes)
+	eventSummary := r.normalizeModelText(result.resolution.Summary, 512)
 	if eventSummary == "" {
 		eventSummary = "世界继续演进"
 		if eventType == enum.EventTypeActionResolved {
@@ -368,7 +359,7 @@ func (r *WorldAgentRunner) applyResolution(ctx context.Context, result *agentRes
 		NextTickAt:      new(nextTickAt),
 		NextDueAt:       new(nextTickAt),
 	}); err != nil {
-		if !isWorldVersionConflict(err) {
+		if !r.isWorldVersionConflict(err) {
 			return nil, err
 		}
 		if err = r.worldStateRepo.UpdateNextTick(ctx, result.world.ID, nextTickAt); err != nil {
@@ -385,8 +376,8 @@ func (r *WorldAgentRunner) applyResolution(ctx context.Context, result *agentRes
 		Summary:          eventSummary,
 		Content:          eventContent,
 		Payload: map[string]any{
-			"actions": actionStepPayload(result.resolution.Actions),
-			"claims":  claimDraftPayload(result.resolution.Claims),
+			"actions": r.actionStepPayload(result.resolution.Actions),
+			"claims":  r.claimDraftPayload(result.resolution.Claims),
 			"public":  eventType == enum.EventTypeWorldEvolved,
 		},
 	})
@@ -423,7 +414,7 @@ func (r *WorldAgentRunner) isDuplicateWorldEvolution(ctx context.Context, worldI
 	return false, nil
 }
 
-func normalizeModelText(value string, maxRunes int) string {
+func (r *WorldAgentRunner) normalizeModelText(value string, maxRunes int) string {
 	value = strings.TrimSpace(value)
 	runes := []rune(value)
 	if len(runes) > maxRunes {
@@ -432,12 +423,12 @@ func normalizeModelText(value string, maxRunes int) string {
 	return value
 }
 
-func normalizeWorldDraft(result *agentResult) *model.WorldDraft {
+func (r *WorldAgentRunner) normalizeWorldDraft(result *agentResult) *model.WorldDraft {
 	if result == nil || result.draft == nil {
-		return fallbackWorldDraft(result)
+		return r.fallbackWorldDraft(result)
 	}
 	draft := result.draft
-	fallback := fallbackWorldDraft(result)
+	fallback := r.fallbackWorldDraft(result)
 	if strings.TrimSpace(draft.Name) == "" {
 		draft.Name = fallback.Name
 	}
@@ -462,8 +453,8 @@ func normalizeWorldDraft(result *agentResult) *model.WorldDraft {
 	return draft
 }
 
-func ensureWorldDraftCounts(draft *model.WorldDraft, locationCount int, npcCount int) {
-	fallback := fallbackWorldDraft(nil)
+func (r *WorldAgentRunner) ensureWorldDraftCounts(draft *model.WorldDraft, locationCount int, npcCount int) {
+	fallback := r.fallbackWorldDraft(nil)
 	if locationCount <= 0 && npcCount > 0 {
 		locationCount = 1
 	}
@@ -499,31 +490,31 @@ func ensureWorldDraftCounts(draft *model.WorldDraft, locationCount int, npcCount
 	}
 }
 
-func normalizedDraftCode(value string, fallback string, existing map[string]*model.Location) string {
-	code := normalizeASCIIIdentifier(value)
+func (r *WorldAgentRunner) normalizedDraftCode(value string, fallback string, existing map[string]*model.Location) string {
+	code := r.normalizeASCIIIdentifier(value)
 	if code == "" {
 		code = fallback
 	}
 	for index := 2; existing[code] != nil; index++ {
 		code = fmt.Sprintf("%s_%d", fallback, index)
 	}
-	return normalizeModelText(code, 64)
+	return r.normalizeModelText(code, 64)
 }
 
-func normalizedNpcCode(value string, fallback string, existing map[string]struct{}) string {
-	code := normalizeASCIIIdentifier(value)
+func (r *WorldAgentRunner) normalizedNpcCode(value string, fallback string, existing map[string]struct{}) string {
+	code := r.normalizeASCIIIdentifier(value)
 	if code == "" {
 		code = fallback
 	}
 	for index := 2; ; index++ {
 		if _, ok := existing[code]; !ok {
-			return normalizeModelText(code, 64)
+			return r.normalizeModelText(code, 64)
 		}
 		code = fmt.Sprintf("%s_%d", fallback, index)
 	}
 }
 
-func normalizeASCIIIdentifier(value string) string {
+func (r *WorldAgentRunner) normalizeASCIIIdentifier(value string) string {
 	value = strings.ToLower(strings.TrimSpace(value))
 	var builder strings.Builder
 	for _, char := range value {
@@ -562,7 +553,7 @@ func (r *WorldAgentRunner) handleFailure(ctx context.Context, result *agentResul
 		if _, err := r.agentJobRepo.MarkFailed(ctx, &repo.AgentJobMarkFailedReq{
 			JobID:        result.job.ID,
 			FinishedAt:   time.Now(),
-			ErrorSummary: truncateError(result.err),
+			ErrorSummary: r.truncateError(result.err),
 		}); err != nil {
 			return err
 		}
@@ -580,7 +571,7 @@ func (r *WorldAgentRunner) handleFailure(ctx context.Context, result *agentResul
 		}
 		if result.job.Type == enum.AgentJobTypeWorldGenerate && result.world != nil {
 			result.world.Status = enum.WorldStatusFailed
-			result.world.GenerationSummary = truncateError(result.err)
+			result.world.GenerationSummary = r.truncateError(result.err)
 			if _, err := r.worldRepo.Update(ctx, result.world); err != nil {
 				return err
 			}
@@ -618,7 +609,7 @@ func (r *WorldAgentRunner) handleFailure(ctx context.Context, result *agentResul
 			LocationID:       locationID,
 			CausationEventID: causationEventID,
 			Summary:          summary,
-			Content:          truncateError(result.err),
+			Content:          r.truncateError(result.err),
 		})
 		return err
 	}); err != nil {
@@ -633,7 +624,7 @@ func (r *WorldAgentRunner) persistAgentJobRetry(ctx context.Context, result *age
 		JobID:        result.job.ID,
 		AttemptCount: result.job.AttemptCount,
 		AvailableAt:  time.Now().Add(delay),
-		ErrorSummary: truncateError(result.err),
+		ErrorSummary: r.truncateError(result.err),
 	})
 	if err != nil {
 		r.log.ErrorContext(ctx, "retry agent job failed", constant.LogFieldTaskID, result.job.ID, constant.LogFieldErr, err)

@@ -4,7 +4,7 @@ import "reflect"
 
 // Ptr 返回一个指向 v 的指针
 func Ptr[T any](v T) *T {
-	return &v
+	return new(v)
 }
 
 // If 模拟三元运算符：条件 ? 真值 : 假值。
@@ -48,7 +48,7 @@ func PtrOrDefault[T comparable](v T, defaultValue *T) *T {
 	if v == zero {
 		return defaultValue
 	}
-	return &v
+	return new(v)
 }
 
 // DerefOrDefault 如果指针 v 为 nil，返回默认值，否则返回 *v。

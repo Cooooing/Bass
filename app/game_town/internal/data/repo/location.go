@@ -19,6 +19,7 @@ import (
 var _ bizrepo.LocationRepo = (*LocationRepo)(nil)
 
 type LocationRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -72,7 +73,7 @@ func (r *LocationRepo) Save(ctx context.Context, row *model.Location) (*model.Lo
 	}, nil
 }
 
-func locationQuery(q *gen.LocationQuery, req *bizrepo.LocationQuery) *gen.LocationQuery {
+func (r *LocationRepo) locationQuery(q *gen.LocationQuery, req *bizrepo.LocationQuery) *gen.LocationQuery {
 	q = q.Where(location.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -93,7 +94,7 @@ func locationQuery(q *gen.LocationQuery, req *bizrepo.LocationQuery) *gen.Locati
 }
 
 func (r *LocationRepo) Get(ctx context.Context, req *bizrepo.LocationQuery) (*model.Location, error) {
-	row, err := locationQuery(r.getClient(ctx).Location.Query(), req).Only(ctx)
+	row, err := r.locationQuery(r.getClient(ctx).Location.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_LOCATION_NOT_FOUND)
 	}
@@ -119,7 +120,7 @@ func (r *LocationRepo) Get(ctx context.Context, req *bizrepo.LocationQuery) (*mo
 }
 
 func (r *LocationRepo) List(ctx context.Context, req *bizrepo.LocationQuery) ([]*model.Location, error) {
-	rows, err := locationQuery(r.getClient(ctx).Location.Query(), req).Order(location.BySort(), location.ByID()).All(ctx)
+	rows, err := r.locationQuery(r.getClient(ctx).Location.Query(), req).Order(location.BySort(), location.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -157,17 +158,17 @@ func (r *LocationRepo) Map(ctx context.Context, req *bizrepo.LocationQuery) (map
 }
 
 func (r *LocationRepo) Count(ctx context.Context, req *bizrepo.LocationQuery) (int, error) {
-	return locationQuery(r.getClient(ctx).Location.Query(), req).Count(ctx)
+	return r.locationQuery(r.getClient(ctx).Location.Query(), req).Count(ctx)
 }
 
 func (r *LocationRepo) Page(ctx context.Context, req *bizrepo.LocationPageReq) (*bizrepo.LocationPageResp, error) {
-	p := page(req.Page)
-	q := locationQuery(r.getClient(ctx).Location.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.locationQuery(r.getClient(ctx).Location.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(location.BySort(), location.ByID()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
+	rows, err := q.Order(location.BySort(), location.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -191,7 +192,7 @@ func (r *LocationRepo) Page(ctx context.Context, req *bizrepo.LocationPageReq) (
 	})
 	return &bizrepo.LocationPageResp{
 		Rows: out,
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 

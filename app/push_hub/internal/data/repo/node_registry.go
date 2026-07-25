@@ -14,29 +14,28 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-const (
-	// Redis Key 前缀
-	keyNodeHash    = "push_hub:nodes"        // Hash: node_id -> JSON{node_info}
-	keyUserNodes   = "push_hub:user_nodes"   // Hash: user_id -> JSON[node_id 列表]
-	keyOfflineList = "push_hub:offline:"     // List prefix: push_hub:offline:{user_id}
-	keyOnlineSet   = "push_hub:online_nodes" // Set: 所有在线节点 ID
-
-	// 节点过期时间（无心跳超过 90s 判定离线）
-	nodeExpire = 90 * time.Second
-	// 离线事件过期时间
-	offlineEventExpire = 24 * time.Hour
-)
-
 // NodeRegistryRepo Redis 实现的节点注册表。
 type NodeRegistryRepo struct {
-	rdb *client.RedisClient
+	rdb                *client.RedisClient
+	keyNodeHash        string
+	keyUserNodes       string
+	keyOfflineList     string
+	keyOnlineSet       string
+	nodeExpire         time.Duration
+	offlineEventExpire time.Duration
 }
 
 func NewNodeRegistryRepo(
 	rdb *client.RedisClient,
 ) *NodeRegistryRepo {
 	return &NodeRegistryRepo{
-		rdb: rdb,
+		rdb:                rdb,
+		keyNodeHash:        "push_hub:nodes",
+		keyUserNodes:       "push_hub:user_nodes",
+		keyOfflineList:     "push_hub:offline:",
+		keyOnlineSet:       "push_hub:online_nodes",
+		nodeExpire:         90 * time.Second,
+		offlineEventExpire: 24 * time.Hour,
 	}
 }
 
@@ -114,21 +113,21 @@ func (r *NodeRegistryRepo) registerNode(ctx context.Context, nodeID, address str
 	}
 
 	pipe := r.rdb.Client.Pipeline()
-	pipe.HSet(ctx, keyNodeHash, nodeID, data)
-	pipe.SAdd(ctx, keyOnlineSet, nodeID)
+	pipe.HSet(ctx, r.keyNodeHash, nodeID, data)
+	pipe.SAdd(ctx, r.keyOnlineSet, nodeID)
 	_, err = pipe.Exec(ctx)
 	return err
 }
 
 func (r *NodeRegistryRepo) updateHeartbeat(ctx context.Context, nodeID string, connectionCount int64) error {
 	// 获取当前节点信息
-	data, err := r.rdb.Client.HGet(ctx, keyNodeHash, nodeID).Bytes()
+	data, err := r.rdb.Client.HGet(ctx, r.keyNodeHash, nodeID).Bytes()
 	if err != nil {
 		return fmt.Errorf("获取节点信息: %w", err)
 	}
 
-	var record nodeRecord
-	if err := json.Unmarshal(data, &record); err != nil {
+	record := new(nodeRecord)
+	if err := json.Unmarshal(data, record); err != nil {
 		return fmt.Errorf("反序列化节点: %w", err)
 	}
 
@@ -142,14 +141,14 @@ func (r *NodeRegistryRepo) updateHeartbeat(ctx context.Context, nodeID string, c
 	}
 
 	pipe := r.rdb.Client.Pipeline()
-	pipe.HSet(ctx, keyNodeHash, nodeID, updatedData)
-	pipe.SAdd(ctx, keyOnlineSet, nodeID)
+	pipe.HSet(ctx, r.keyNodeHash, nodeID, updatedData)
+	pipe.SAdd(ctx, r.keyOnlineSet, nodeID)
 	_, err = pipe.Exec(ctx)
 	return err
 }
 
 func (r *NodeRegistryRepo) getNode(ctx context.Context, nodeID string) (*model.NodeInfo, error) {
-	data, err := r.rdb.Client.HGet(ctx, keyNodeHash, nodeID).Bytes()
+	data, err := r.rdb.Client.HGet(ctx, r.keyNodeHash, nodeID).Bytes()
 	if err != nil {
 		if err == redis.Nil {
 			return nil, nil
@@ -157,16 +156,16 @@ func (r *NodeRegistryRepo) getNode(ctx context.Context, nodeID string) (*model.N
 		return nil, fmt.Errorf("获取节点: %w", err)
 	}
 
-	var record nodeRecord
-	if err := json.Unmarshal(data, &record); err != nil {
+	record := new(nodeRecord)
+	if err := json.Unmarshal(data, record); err != nil {
 		return nil, fmt.Errorf("反序列化节点: %w", err)
 	}
 
-	return r.toModel(&record), nil
+	return r.toModel(record), nil
 }
 
 func (r *NodeRegistryRepo) listNodes(ctx context.Context) ([]*model.NodeInfo, error) {
-	results, err := r.rdb.Client.HGetAll(ctx, keyNodeHash).Result()
+	results, err := r.rdb.Client.HGetAll(ctx, r.keyNodeHash).Result()
 	if err != nil {
 		return nil, fmt.Errorf("列出节点: %w", err)
 	}
@@ -174,13 +173,13 @@ func (r *NodeRegistryRepo) listNodes(ctx context.Context) ([]*model.NodeInfo, er
 	nodes := make([]*model.NodeInfo, 0, len(results))
 	now := time.Now()
 	for _, data := range results {
-		var record nodeRecord
-		if err := json.Unmarshal([]byte(data), &record); err != nil {
+		record := new(nodeRecord)
+		if err := json.Unmarshal([]byte(data), record); err != nil {
 			continue
 		}
-		info := r.toModel(&record)
+		info := r.toModel(record)
 		// 判断节点是否在线（心跳超时则标记离线）
-		if now.Sub(info.LastHeartbeatAt) > nodeExpire {
+		if now.Sub(info.LastHeartbeatAt) > r.nodeExpire {
 			info.Status = 2 // NODE_STATUS_OFFLINE
 		}
 		nodes = append(nodes, info)
@@ -190,15 +189,15 @@ func (r *NodeRegistryRepo) listNodes(ctx context.Context) ([]*model.NodeInfo, er
 
 func (r *NodeRegistryRepo) removeNode(ctx context.Context, nodeID string) error {
 	pipe := r.rdb.Client.Pipeline()
-	pipe.HDel(ctx, keyNodeHash, nodeID)
-	pipe.SRem(ctx, keyOnlineSet, nodeID)
+	pipe.HDel(ctx, r.keyNodeHash, nodeID)
+	pipe.SRem(ctx, r.keyOnlineSet, nodeID)
 	_, err := pipe.Exec(ctx)
 	return err
 }
 
 func (r *NodeRegistryRepo) mapUserToNode(ctx context.Context, userID int64, nodeID string) error {
 	key := strconv.FormatInt(userID, 10)
-	data, err := r.rdb.Client.HGet(ctx, keyUserNodes, key).Bytes()
+	data, err := r.rdb.Client.HGet(ctx, r.keyUserNodes, key).Bytes()
 	if err != nil && err != redis.Nil {
 		return fmt.Errorf("获取用户节点映射: %w", err)
 	}
@@ -221,12 +220,12 @@ func (r *NodeRegistryRepo) mapUserToNode(ctx context.Context, userID int64, node
 		return fmt.Errorf("序列化用户节点映射: %w", err)
 	}
 
-	return r.rdb.Client.HSet(ctx, keyUserNodes, key, updatedData).Err()
+	return r.rdb.Client.HSet(ctx, r.keyUserNodes, key, updatedData).Err()
 }
 
 func (r *NodeRegistryRepo) unmapUserFromNode(ctx context.Context, userID int64, nodeID string) error {
 	key := strconv.FormatInt(userID, 10)
-	data, err := r.rdb.Client.HGet(ctx, keyUserNodes, key).Bytes()
+	data, err := r.rdb.Client.HGet(ctx, r.keyUserNodes, key).Bytes()
 	if err != nil {
 		if err == redis.Nil {
 			return nil
@@ -249,12 +248,12 @@ func (r *NodeRegistryRepo) unmapUserFromNode(ctx context.Context, userID int64, 
 		return fmt.Errorf("序列化用户节点映射: %w", err)
 	}
 
-	return r.rdb.Client.HSet(ctx, keyUserNodes, key, updatedData).Err()
+	return r.rdb.Client.HSet(ctx, r.keyUserNodes, key, updatedData).Err()
 }
 
 func (r *NodeRegistryRepo) getUserNodes(ctx context.Context, userID int64) ([]string, error) {
 	key := strconv.FormatInt(userID, 10)
-	data, err := r.rdb.Client.HGet(ctx, keyUserNodes, key).Bytes()
+	data, err := r.rdb.Client.HGet(ctx, r.keyUserNodes, key).Bytes()
 	if err != nil {
 		if err == redis.Nil {
 			return nil, nil
@@ -270,7 +269,7 @@ func (r *NodeRegistryRepo) getUserNodes(ctx context.Context, userID int64) ([]st
 	// 过滤掉不在线的节点
 	onlineIDs := make([]string, 0, len(nodeIDs))
 	for _, id := range nodeIDs {
-		exists, err := r.rdb.Client.SIsMember(ctx, keyOnlineSet, id).Result()
+		exists, err := r.rdb.Client.SIsMember(ctx, r.keyOnlineSet, id).Result()
 		if err == nil && exists {
 			onlineIDs = append(onlineIDs, id)
 		}
@@ -280,7 +279,7 @@ func (r *NodeRegistryRepo) getUserNodes(ctx context.Context, userID int64) ([]st
 }
 
 func (r *NodeRegistryRepo) getAllOnlineNodes(ctx context.Context) ([]*model.NodeInfo, error) {
-	nodeIDs, err := r.rdb.Client.SMembers(ctx, keyOnlineSet).Result()
+	nodeIDs, err := r.rdb.Client.SMembers(ctx, r.keyOnlineSet).Result()
 	if err != nil {
 		return nil, fmt.Errorf("获取在线节点集合: %w", err)
 	}
@@ -288,19 +287,19 @@ func (r *NodeRegistryRepo) getAllOnlineNodes(ctx context.Context) ([]*model.Node
 	nodes := make([]*model.NodeInfo, 0, len(nodeIDs))
 	now := time.Now()
 	for _, nodeID := range nodeIDs {
-		data, err := r.rdb.Client.HGet(ctx, keyNodeHash, nodeID).Bytes()
+		data, err := r.rdb.Client.HGet(ctx, r.keyNodeHash, nodeID).Bytes()
 		if err != nil {
 			continue
 		}
-		var record nodeRecord
-		if err := json.Unmarshal(data, &record); err != nil {
+		record := new(nodeRecord)
+		if err := json.Unmarshal(data, record); err != nil {
 			continue
 		}
-		info := r.toModel(&record)
+		info := r.toModel(record)
 		// 心跳超时的节点不返回
-		if now.Sub(info.LastHeartbeatAt) > nodeExpire {
+		if now.Sub(info.LastHeartbeatAt) > r.nodeExpire {
 			// 异步清理过期节点
-			_ = r.rdb.Client.SRem(ctx, keyOnlineSet, nodeID).Err()
+			_ = r.rdb.Client.SRem(ctx, r.keyOnlineSet, nodeID).Err()
 			continue
 		}
 		nodes = append(nodes, info)
@@ -309,7 +308,7 @@ func (r *NodeRegistryRepo) getAllOnlineNodes(ctx context.Context) ([]*model.Node
 }
 
 func (r *NodeRegistryRepo) saveOfflineEvent(ctx context.Context, userID int64, event *model.PushEvent) error {
-	key := keyOfflineList + strconv.FormatInt(userID, 10)
+	key := r.keyOfflineList + strconv.FormatInt(userID, 10)
 	data, err := json.Marshal(event)
 	if err != nil {
 		return fmt.Errorf("序列化离线事件: %w", err)
@@ -317,13 +316,13 @@ func (r *NodeRegistryRepo) saveOfflineEvent(ctx context.Context, userID int64, e
 
 	pipe := r.rdb.Client.Pipeline()
 	pipe.RPush(ctx, key, data)
-	pipe.Expire(ctx, key, offlineEventExpire)
+	pipe.Expire(ctx, key, r.offlineEventExpire)
 	_, err = pipe.Exec(ctx)
 	return err
 }
 
 func (r *NodeRegistryRepo) getOfflineEvents(ctx context.Context, userID int64) ([]*model.PushEvent, error) {
-	key := keyOfflineList + strconv.FormatInt(userID, 10)
+	key := r.keyOfflineList + strconv.FormatInt(userID, 10)
 	results, err := r.rdb.Client.LRange(ctx, key, 0, -1).Result()
 	if err != nil {
 		return nil, fmt.Errorf("获取离线事件: %w", err)
@@ -331,17 +330,17 @@ func (r *NodeRegistryRepo) getOfflineEvents(ctx context.Context, userID int64) (
 
 	events := make([]*model.PushEvent, 0, len(results))
 	for _, data := range results {
-		var event model.PushEvent
-		if err := json.Unmarshal([]byte(data), &event); err != nil {
+		event := new(model.PushEvent)
+		if err := json.Unmarshal([]byte(data), event); err != nil {
 			continue
 		}
-		events = append(events, &event)
+		events = append(events, event)
 	}
 	return events, nil
 }
 
 func (r *NodeRegistryRepo) clearOfflineEvents(ctx context.Context, userID int64) error {
-	key := keyOfflineList + strconv.FormatInt(userID, 10)
+	key := r.keyOfflineList + strconv.FormatInt(userID, 10)
 	return r.rdb.Client.Del(ctx, key).Err()
 }
 

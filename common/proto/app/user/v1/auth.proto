@@ -27,7 +27,7 @@ service AuthService {
   rpc ParseToken(ParseToken.Req) returns (ParseToken.Resp) {} // 解析 access token 并滑动刷新会话。
   rpc CancelAccount(CancelAccount.Req) returns (CancelAccount.Resp) {} // 注销账号并失效全部会话。
   rpc BanAccount(BanAccount.Req) returns (BanAccount.Resp) {} // 封禁账号并失效全部会话。
-  rpc UnbanAccounts(UnbanAccounts.Req) returns (UnbanAccounts.Resp) {} // 解封已到期的封禁账号，支持批量操作。
+  rpc UnbanAccounts(UnbanAccounts.Req) returns (UnbanAccounts.Resp) {} // 批量解封账号。
 }
 
 message StartEmailRegistration {

@@ -4,6 +4,7 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	"content/internal/biz/base"
 	"context"
+	"database/sql/driver"
 
 	"common/pkg/apperror"
 	utilent "common/pkg/util/ent"
@@ -20,6 +21,7 @@ import (
 var _ repo.CommentRepo = (*CommentRepo)(nil)
 
 type CommentRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -191,7 +193,7 @@ func (r *CommentRepo) Count(ctx context.Context, req *repo.CommentGetReq) (int, 
 }
 
 func (r *CommentRepo) Page(ctx context.Context, req *repo.CommentGetReq) (*repo.CommentPageResp, error) {
-	page := normalizePage(req.Page)
+	page := r.normalizePage(req.Page)
 	query := r.getClient(ctx).Comment.Query().WithReply(func(q *gen.CommentQuery) {
 		q.Where(commentent.DeletedAtIsNil())
 	})
@@ -393,7 +395,7 @@ func (r *CommentRepo) MapArticleLastComments(ctx context.Context, req *repo.Comm
 	if len(req.ArticleIds) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	articleIdsAny := lo.Map(req.ArticleIds, func(item int64, _ int) any {
+	articleIDValues := lo.Map(req.ArticleIds, func(item int64, _ int) driver.Value {
 		return item
 	})
 	commentTable := sql.Table(commentent.Table)
@@ -404,17 +406,17 @@ func (r *CommentRepo) MapArticleLastComments(ctx context.Context, req *repo.Comm
 				sql.As(sql.Max(commentTable.C(commentent.FieldCreatedAt)), "latest_time"),
 			).
 				From(commentTable).
-				Where(sql.In(commentTable.C(commentent.FieldArticleID), articleIdsAny...)).
+				Where(sql.InValues(commentTable.C(commentent.FieldArticleID), articleIDValues...)).
 				Where(sql.IsNull(commentTable.C(commentent.FieldDeletedAt))).
 				GroupBy(commentTable.C(commentent.FieldArticleID))
 			if req.Restriction != nil {
 				sub = sub.Where(sql.EQ(commentTable.C(commentent.FieldRestriction), string(commentent.Restriction(*req.Restriction))))
 			}
 			if len(req.Restrictions) > 0 {
-				restrictions := lo.Map(req.Restrictions, func(item enum.ContentRestriction, _ int) any {
+				restrictionValues := lo.Map(req.Restrictions, func(item enum.ContentRestriction, _ int) driver.Value {
 					return string(commentent.Restriction(item))
 				})
-				sub = sub.Where(sql.In(commentTable.C(commentent.FieldRestriction), restrictions...))
+				sub = sub.Where(sql.InValues(commentTable.C(commentent.FieldRestriction), restrictionValues...))
 			}
 			s.Join(sub).On(
 				s.C(commentent.FieldArticleID), sub.C(commentent.FieldArticleID),

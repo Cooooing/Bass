@@ -17,7 +17,10 @@ import (
 
 var _ repo.AuthRepo = (*AuthRepo)(nil)
 
-type AuthRepo struct{ userClient *rpc.UserClient }
+type AuthRepo struct {
+	protoTimeFormatter
+	userClient *rpc.UserClient
+}
 
 func NewAuthRepo(
 	userClient *rpc.UserClient,
@@ -104,10 +107,40 @@ func (r *AuthRepo) StartPhoneLogin(ctx context.Context, phone string) (*repo.Sta
 }
 
 func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginResp, error) {
+	loginType := userenum.LoginType_LOGIN_TYPE_PASSWORD
+	switch req.Type {
+	case enum.LoginTypeEmail:
+		loginType = userenum.LoginType_LOGIN_TYPE_EMAIL
+	case enum.LoginTypePhone:
+		loginType = userenum.LoginType_LOGIN_TYPE_PHONE
+	}
+
+	uaRaw := server.GetHeader(ctx, constant.HeaderUserAgent)
+	ua := useragent.Parse(uaRaw)
+	deviceType := userenum.DeviceType_DEVICE_TYPE_DESKTOP
+	if ua.Bot {
+		deviceType = userenum.DeviceType_DEVICE_TYPE_BOT
+	} else if ua.Tablet {
+		deviceType = userenum.DeviceType_DEVICE_TYPE_TABLET
+	} else if ua.Mobile {
+		deviceType = userenum.DeviceType_DEVICE_TYPE_MOBILE
+	}
+
 	loginReq := &userv1.Login_Req{
-		Type:   loginTypeToUser(req.Type),
-		Realm:  commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmBBS),
-		Client: clientInfo(ctx),
+		Type:  loginType,
+		Realm: commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmBBS),
+		Client: &userv1.Login_Req_ClientInfo{
+			Ip:             server.ClientIP(ctx),
+			UserAgent:      uaRaw,
+			ClientType:     userenum.ClientType_CLIENT_TYPE_WEB,
+			DeviceType:     deviceType,
+			OsName:         ua.OS,
+			OsVersion:      ua.OSVersion,
+			BrowserName:    ua.Name,
+			BrowserVersion: ua.Version,
+			AppName:        server.GetHeader(ctx, constant.HeaderBassAppName),
+			AppVersion:     server.GetHeader(ctx, constant.HeaderBassAppVersion),
+		},
 	}
 	switch req.Type {
 	case enum.LoginTypePassword:
@@ -133,10 +166,40 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 			},
 		}
 	}
+
 	reply, err := r.userClient.Auth.Login(ctx, loginReq)
 	if err != nil {
 		return nil, err
 	}
+
+	var account *repo.Account
+	if reply.GetAccount() != nil {
+		account = &repo.Account{}
+		if basic := reply.GetAccount().GetBasic(); basic != nil {
+			account.Profile = &repo.AccountProfile{
+				ID:            basic.GetId(),
+				Name:          basic.GetName(),
+				Nickname:      basic.Nickname,
+				URL:           basic.Url,
+				AvatarURL:     basic.AvatarUrl,
+				Introduction:  basic.Introduction,
+				Status:        int32(basic.GetStatus()),
+				MBTI:          int32(basic.GetMbti()),
+				FollowCount:   basic.FollowCount,
+				FollowerCount: basic.FollowerCount,
+				CreatedAt:     r.formatProtoTime(basic.GetCreatedAt()),
+				UpdatedAt:     r.formatProtoTime(basic.GetUpdatedAt()),
+			}
+		}
+		if contact := reply.GetAccount().GetContact(); contact != nil {
+			account.Contact = &repo.AccountContact{
+				UserID: contact.GetUserId(),
+				Email:  contact.Email,
+				Phone:  contact.Phone,
+			}
+		}
+	}
+
 	return &repo.LoginResp{
 		Token: repo.TokenResp{
 			AccessToken:           reply.GetAccessToken(),
@@ -145,10 +208,9 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 			RefreshTokenExpiresAt: reply.GetRefreshTokenExpiresAt().AsTime(),
 			SessionExpiresAt:      reply.GetSessionExpiresAt().AsTime(),
 		},
-		Account: userAccountToRepo(reply.GetAccount()),
+		Account: account,
 	}, nil
 }
-
 func (r *AuthRepo) RefreshToken(ctx context.Context, refreshToken string) (*repo.TokenResp, error) {
 	reply, err := r.userClient.Auth.RefreshToken(ctx, &userv1.RefreshToken_Req{
 		RefreshToken: refreshToken,
@@ -181,79 +243,4 @@ func (r *AuthRepo) CancelAccount(ctx context.Context, req *repo.CancelAccountReq
 		Code:     req.Code,
 	})
 	return err
-}
-
-func (r *AuthRepo) UnbanAccounts(ctx context.Context, userIDs []int64) error {
-	_, err := r.userClient.Auth.UnbanAccounts(ctx, &userv1.UnbanAccounts_Req{
-		UserIds: userIDs,
-	})
-	return err
-}
-
-func loginTypeToUser(t enum.LoginType) userenum.LoginType {
-	switch t {
-	case enum.LoginTypeEmail:
-		return userenum.LoginType_LOGIN_TYPE_EMAIL
-	case enum.LoginTypePhone:
-		return userenum.LoginType_LOGIN_TYPE_PHONE
-	default:
-		return userenum.LoginType_LOGIN_TYPE_PASSWORD
-	}
-}
-
-func clientInfo(ctx context.Context) *userv1.Login_Req_ClientInfo {
-	uaRaw := server.GetHeader(ctx, constant.HeaderUserAgent)
-	ua := useragent.Parse(uaRaw)
-	clientType := userenum.ClientType_CLIENT_TYPE_WEB
-	deviceType := userenum.DeviceType_DEVICE_TYPE_DESKTOP
-	if ua.Bot {
-		deviceType = userenum.DeviceType_DEVICE_TYPE_BOT
-	} else if ua.Tablet {
-		deviceType = userenum.DeviceType_DEVICE_TYPE_TABLET
-	} else if ua.Mobile {
-		deviceType = userenum.DeviceType_DEVICE_TYPE_MOBILE
-	}
-	return &userv1.Login_Req_ClientInfo{
-		Ip:             server.ClientIP(ctx),
-		UserAgent:      uaRaw,
-		ClientType:     clientType,
-		DeviceType:     deviceType,
-		OsName:         ua.OS,
-		OsVersion:      ua.OSVersion,
-		BrowserName:    ua.Name,
-		BrowserVersion: ua.Version,
-		AppName:        server.GetHeader(ctx, constant.HeaderBassAppName),
-		AppVersion:     server.GetHeader(ctx, constant.HeaderBassAppVersion),
-	}
-}
-
-func userAccountToRepo(account *userv1.Login_Resp_Account) *repo.Account {
-	if account == nil {
-		return nil
-	}
-	out := &repo.Account{}
-	if basic := account.GetBasic(); basic != nil {
-		out.Profile = &repo.AccountProfile{
-			ID:            basic.GetId(),
-			Name:          basic.GetName(),
-			Nickname:      basic.Nickname,
-			URL:           basic.Url,
-			AvatarURL:     basic.AvatarUrl,
-			Introduction:  basic.Introduction,
-			Status:        int32(basic.GetStatus()),
-			MBTI:          int32(basic.GetMbti()),
-			FollowCount:   basic.FollowCount,
-			FollowerCount: basic.FollowerCount,
-			CreatedAt:     formatProtoTime(basic.GetCreatedAt()),
-			UpdatedAt:     formatProtoTime(basic.GetUpdatedAt()),
-		}
-	}
-	if contact := account.GetContact(); contact != nil {
-		out.Contact = &repo.AccountContact{
-			UserID: contact.GetUserId(),
-			Email:  contact.Email,
-			Phone:  contact.Phone,
-		}
-	}
-	return out
 }

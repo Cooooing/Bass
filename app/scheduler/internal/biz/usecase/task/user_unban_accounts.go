@@ -9,8 +9,6 @@ import (
 	"fmt"
 )
 
-const UserUnbanAccountsTaskName = "user.unban_accounts"
-
 type UserUnbanAccounts struct{ consul *commonClient.ConsulClient }
 
 func NewUserUnbanAccounts(
@@ -22,7 +20,7 @@ func NewUserUnbanAccounts(
 }
 
 func (t *UserUnbanAccounts) Name() string {
-	return UserUnbanAccountsTaskName
+	return "user.unban_accounts"
 }
 
 func (t *UserUnbanAccounts) Title() string {

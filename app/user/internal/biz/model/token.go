@@ -4,10 +4,11 @@ import (
 	commonenum "common/pkg/enum"
 	commonenums "common/proto/gen/common/enums"
 	"time"
+	"user/internal/enum"
 )
 
 type Token struct {
-	Type      string                `json:"typ"`
+	Type      enum.TokenType        `json:"typ"`
 	UserID    int64                 `json:"user_id"`
 	SessionID string                `json:"sid"`
 	Realm     commonenum.LoginRealm `json:"realm"`

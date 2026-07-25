@@ -31,6 +31,17 @@ type LarkWebhookRequest struct {
 	Text    string
 }
 
+type larkWebhookTextContent struct {
+	Text string `json:"text"`
+}
+
+type larkWebhookTextRequestBody struct {
+	MsgType   string                 `json:"msg_type"`
+	Content   larkWebhookTextContent `json:"content"`
+	Timestamp string                 `json:"timestamp,omitempty"`
+	Sign      string                 `json:"sign,omitempty"`
+}
+
 func NewLarkWebhookClient(
 	logger *slog.Logger,
 ) *LarkWebhookClient {
@@ -48,14 +59,16 @@ func (c *LarkWebhookClient) SendText(ctx context.Context, req *LarkWebhookReques
 		ctx, cancel = context.WithTimeout(ctx, req.Timeout)
 		defer cancel()
 	}
-	body := map[string]any{
-		"msg_type": "text",
-		"content":  map[string]string{"text": req.Text},
+	body := &larkWebhookTextRequestBody{
+		MsgType: "text",
+		Content: larkWebhookTextContent{
+			Text: req.Text,
+		},
 	}
 	if strings.TrimSpace(req.Secret) != "" {
 		timestamp := time.Now().Unix()
-		body["timestamp"] = fmt.Sprintf("%d", timestamp)
-		body["sign"] = c.sign(req.Secret, timestamp)
+		body.Timestamp = fmt.Sprintf("%d", timestamp)
+		body.Sign = c.sign(req.Secret, timestamp)
 	}
 	payload, err := json.Marshal(body)
 	if err != nil {

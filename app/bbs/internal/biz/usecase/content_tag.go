@@ -40,8 +40,7 @@ func (u *ContentTagUsecase) CreateTag(ctx context.Context, req *CreateTagReq) (*
 	}
 	var status *int32
 	if req.Tag.Status != nil {
-		value := int32(*req.Tag.Status)
-		status = &value
+		status = new(int32(*req.Tag.Status))
 	}
 	resp, err := u.contentTagClient.CreateTag(ctx, &repo.CreateTagReq{
 		UserID: req.UserID,
@@ -70,8 +69,7 @@ func (u *ContentTagUsecase) UpdateTag(ctx context.Context, req *UpdateTagReq) (*
 	}
 	var status *int32
 	if req.Tag.Status != nil {
-		value := int32(*req.Tag.Status)
-		status = &value
+		status = new(int32(*req.Tag.Status))
 	}
 	resp, err := u.contentTagClient.UpdateTag(ctx, &repo.UpdateTagReq{
 		UserID: req.UserID,
@@ -118,13 +116,11 @@ func (u *ContentTagUsecase) ListTags(ctx context.Context, req *ListTagsReq) (*Li
 		query.Description = req.Query.Description
 		query.DomainID = req.Query.DomainId
 		if req.Query.Status != nil {
-			value := int32(*req.Query.Status)
-			query.Status = &value
+			query.Status = new(int32(*req.Query.Status))
 		}
 	}
 	if query.Status == nil {
-		value := int32(bbscontentv1enum.TagStatus_TAG_STATUS_ENABLED)
-		query.Status = &value
+		query.Status = new(int32(bbscontentv1enum.TagStatus_TAG_STATUS_ENABLED))
 	}
 	resp, err := u.contentTagClient.ListTags(ctx, &repo.ListTagsReq{
 		Page:  page,

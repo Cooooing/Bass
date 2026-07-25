@@ -199,7 +199,7 @@ func (u *WorldMemberUsecase) SubmitAction(ctx context.Context, req *SubmitAction
 		return nil, err
 	}
 
-	targets, npcID := actionPayloadTargets(req.Targets)
+	targets, npcID := u.actionPayloadTargets(req.Targets)
 	var event *model.Event
 	err = u.tx(ctx, func(ctx context.Context) error {
 		var err error
@@ -226,7 +226,7 @@ func (u *WorldMemberUsecase) SubmitAction(ctx context.Context, req *SubmitAction
 	return event, nil
 }
 
-func actionPayloadTargets(rows []SubmitActionTarget) ([]any, *int64) {
+func (u *WorldMemberUsecase) actionPayloadTargets(rows []SubmitActionTarget) ([]any, *int64) {
 	targets := make([]any, 0, len(rows))
 	var npcID *int64
 	for _, target := range rows {

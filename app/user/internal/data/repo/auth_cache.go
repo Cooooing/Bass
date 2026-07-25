@@ -19,133 +19,191 @@ import (
 var _ repo.AuthCacheRepo = (*AuthCacheRepo)(nil)
 
 type AuthCacheRepo struct {
-	redisClient *client.RedisClient
+	redisClient            *client.RedisClient
+	authCodeKey            string
+	authRegisterDraftKey   string
+	authRefreshSessionKey  string
+	authUserSessionsKey    string
+	authRbacPermissionsKey string
 }
 
 func NewAuthCacheRepo(
 	redisClient *client.RedisClient,
 ) repo.AuthCacheRepo {
 	return &AuthCacheRepo{
-		redisClient: redisClient,
+		redisClient:            redisClient,
+		authCodeKey:            "Auth:Code:{%s}:{%s}",
+		authRegisterDraftKey:   "Auth:RegisterDraft:{%s}:{%s}",
+		authRefreshSessionKey:  "Auth:Refresh:{%s}",
+		authUserSessionsKey:    "Auth:UserSessions:{%d}",
+		authRbacPermissionsKey: "Auth:Rbac:{%s}:{%d}",
 	}
 }
 
-const (
-	authCodeKey            = "Auth:Code:{%s}:{%s}"
-	authRegisterDraftKey   = "Auth:RegisterDraft:{%s}:{%s}"
-	authRefreshSessionKey  = "Auth:Refresh:{%s}"
-	authUserSessionsKey    = "Auth:UserSessions:{%d}"
-	authRbacPermissionsKey = "Auth:Rbac:{%s}:{%d}"
-)
-
-func authCodeRedisKey(codeType string, account string) string {
-	return fmt.Sprintf(authCodeKey, codeType, account)
+func (r *AuthCacheRepo) authCodeRedisKey(codeType enum.VerificationType, account string) string {
+	return fmt.Sprintf(r.authCodeKey, string(codeType), account)
 }
 
-func authRegisterDraftRedisKey(draftType string, account string) string {
-	return fmt.Sprintf(authRegisterDraftKey, draftType, account)
+func (r *AuthCacheRepo) authRegisterDraftRedisKey(draftType enum.VerificationType, account string) string {
+	return fmt.Sprintf(r.authRegisterDraftKey, string(draftType), account)
 }
 
-func authRefreshSessionRedisKey(sessionID string) string {
-	return fmt.Sprintf(authRefreshSessionKey, sessionID)
+func (r *AuthCacheRepo) authRefreshSessionRedisKey(sessionID string) string {
+	return fmt.Sprintf(r.authRefreshSessionKey, sessionID)
 }
 
-func authUserSessionsRedisKey(userID int64) string {
-	return fmt.Sprintf(authUserSessionsKey, userID)
+func (r *AuthCacheRepo) authUserSessionsRedisKey(userID int64) string {
+	return fmt.Sprintf(r.authUserSessionsKey, userID)
 }
 
-func authRbacPermissionsRedisKey(realm string, userID int64) string {
-	return fmt.Sprintf(authRbacPermissionsKey, realm, userID)
+func (r *AuthCacheRepo) authRbacPermissionsRedisKey(realm string, userID int64) string {
+	return fmt.Sprintf(r.authRbacPermissionsKey, realm, userID)
 }
 
-func authUserRbacPermissionsPattern(userID int64) string {
+func (r *AuthCacheRepo) authUserRbacPermissionsPattern(userID int64) string {
 	return fmt.Sprintf("Auth:Rbac:*:{%d}", userID)
 }
 
-func authRealmRbacPermissionsPattern(realm string) string {
+func (r *AuthCacheRepo) authRealmRbacPermissionsPattern(realm string) string {
 	return fmt.Sprintf("Auth:Rbac:%s:*", realm)
 }
 
 func (r *AuthCacheRepo) SaveCode(ctx context.Context, code *model.VerificationCode, ttl time.Duration) error {
-	key := authCodeRedisKey(code.Type, code.Account)
-	values := map[string]any{
-		"type":            code.Type,
-		"account":         code.Account,
-		"code":            code.Code,
-		"attempts":        code.Attempts,
-		"max_attempts":    code.MaxAttempts,
-		"created_at_unix": code.CreatedAtUnix,
-		"expires_at_unix": code.ExpiresAtUnix,
-	}
+	key := r.authCodeRedisKey(code.Type, code.Account)
 	pipe := r.redisClient.Client.TxPipeline()
-	pipe.HSet(ctx, key, values)
+	pipe.HSet(
+		ctx,
+		key,
+		"type",
+		string(code.Type),
+		"account",
+		code.Account,
+		"code",
+		code.Code,
+		"attempts",
+		strconv.FormatInt(int64(code.Attempts), 10),
+		"max_attempts",
+		strconv.FormatInt(int64(code.MaxAttempts), 10),
+		"created_at_unix",
+		strconv.FormatInt(code.CreatedAtUnix, 10),
+		"expires_at_unix",
+		strconv.FormatInt(code.ExpiresAtUnix, 10),
+	)
 	pipe.Expire(ctx, key, ttl)
 	_, err := pipe.Exec(ctx)
 	return err
 }
 
-func (r *AuthCacheRepo) GetCode(ctx context.Context, codeType string, account string) (*model.VerificationCode, error) {
-	values, err := r.redisClient.Client.HGetAll(ctx, authCodeRedisKey(codeType, account)).Result()
+func (r *AuthCacheRepo) GetCode(ctx context.Context, codeType enum.VerificationType, account string) (*model.VerificationCode, error) {
+	values, err := r.redisClient.Client.HGetAll(ctx, r.authCodeRedisKey(codeType, account)).Result()
 	if err != nil {
 		return nil, err
 	}
 	if len(values) == 0 {
 		return nil, nil
 	}
+	attempts, err := strconv.ParseInt(values["attempts"], 10, 32)
+	if err != nil {
+		return nil, err
+	}
+	maxAttempts, err := strconv.ParseInt(values["max_attempts"], 10, 32)
+	if err != nil {
+		return nil, err
+	}
+	createdAtUnix, err := strconv.ParseInt(values["created_at_unix"], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	expiresAtUnix, err := strconv.ParseInt(values["expires_at_unix"], 10, 64)
+	if err != nil {
+		return nil, err
+	}
 	return &model.VerificationCode{
-		Type:          values["type"],
+		Type:          enum.VerificationType(values["type"]),
 		Account:       values["account"],
 		Code:          values["code"],
-		Attempts:      parseInt32(values["attempts"]),
-		MaxAttempts:   parseInt32(values["max_attempts"]),
-		CreatedAtUnix: parseInt64(values["created_at_unix"]),
-		ExpiresAtUnix: parseInt64(values["expires_at_unix"]),
+		Attempts:      int32(attempts),
+		MaxAttempts:   int32(maxAttempts),
+		CreatedAtUnix: createdAtUnix,
+		ExpiresAtUnix: expiresAtUnix,
 	}, nil
 }
 
-func (r *AuthCacheRepo) IncrCodeAttempts(ctx context.Context, codeType string, account string) (int64, error) {
-	return r.redisClient.Client.HIncrBy(ctx, authCodeRedisKey(codeType, account), "attempts", 1).Result()
+func (r *AuthCacheRepo) IncrCodeAttempts(ctx context.Context, codeType enum.VerificationType, account string) (int64, error) {
+	return r.redisClient.Client.HIncrBy(ctx, r.authCodeRedisKey(codeType, account), "attempts", 1).Result()
 }
 
-func (r *AuthCacheRepo) DeleteCode(ctx context.Context, codeType string, account string) error {
-	return r.redisClient.Client.Del(ctx, authCodeRedisKey(codeType, account)).Err()
+func (r *AuthCacheRepo) DeleteCode(ctx context.Context, codeType enum.VerificationType, account string) error {
+	return r.redisClient.Client.Del(ctx, r.authCodeRedisKey(codeType, account)).Err()
 }
 
-func (r *AuthCacheRepo) SaveRegisterDraft(ctx context.Context, draftType string, account string, draft *model.RegisterDraft, ttl time.Duration) error {
+func (r *AuthCacheRepo) SaveRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string, draft *model.RegisterDraft, ttl time.Duration) error {
 	data, err := json.Marshal(draft)
 	if err != nil {
 		return err
 	}
-	return r.redisClient.Client.Set(ctx, authRegisterDraftRedisKey(draftType, account), data, ttl).Err()
+	return r.redisClient.Client.Set(ctx, r.authRegisterDraftRedisKey(draftType, account), data, ttl).Err()
 }
 
-func (r *AuthCacheRepo) GetRegisterDraft(ctx context.Context, draftType string, account string) (*model.RegisterDraft, error) {
-	data, err := r.redisClient.Client.Get(ctx, authRegisterDraftRedisKey(draftType, account)).Bytes()
+func (r *AuthCacheRepo) GetRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string) (*model.RegisterDraft, error) {
+	data, err := r.redisClient.Client.Get(ctx, r.authRegisterDraftRedisKey(draftType, account)).Bytes()
 	if errors.Is(err, redis.Nil) {
 		return nil, nil
 	}
 	if err != nil {
 		return nil, err
 	}
-	var draft model.RegisterDraft
-	if err := json.Unmarshal(data, &draft); err != nil {
+	draft := new(model.RegisterDraft)
+	if err := json.Unmarshal(data, draft); err != nil {
 		return nil, err
 	}
-	return &draft, nil
+	return draft, nil
 }
 
-func (r *AuthCacheRepo) DeleteRegisterDraft(ctx context.Context, draftType string, account string) error {
-	return r.redisClient.Client.Del(ctx, authRegisterDraftRedisKey(draftType, account)).Err()
+func (r *AuthCacheRepo) DeleteRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string) error {
+	return r.redisClient.Client.Del(ctx, r.authRegisterDraftRedisKey(draftType, account)).Err()
 }
 
 func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration) error {
-	key := authRefreshSessionRedisKey(session.SessionID)
-	values := sessionHash(session)
+	key := r.authRefreshSessionRedisKey(session.SessionID)
 	expiresAt := time.Now().Add(ttl).Unix()
 	pipe := r.redisClient.Client.TxPipeline()
-	pipe.HSet(ctx, key, values)
+	pipe.HSet(
+		ctx,
+		key,
+		"user_id",
+		strconv.FormatInt(session.UserID, 10),
+		"realm",
+		string(session.Realm),
+		"current_jti",
+		session.CurrentJTI,
+		"created_at_unix",
+		strconv.FormatInt(session.CreatedAtUnix, 10),
+		"last_seen_at_unix",
+		strconv.FormatInt(session.LastSeenAtUnix, 10),
+		"session_expires_at_unix",
+		strconv.FormatInt(session.SessionExpiresAtUnix, 10),
+		"client_type",
+		string(session.Client.ClientType),
+		"device_type",
+		string(session.Client.DeviceType),
+		"os_name",
+		session.Client.OSName,
+		"os_version",
+		session.Client.OSVersion,
+		"browser_name",
+		session.Client.BrowserName,
+		"browser_version",
+		session.Client.BrowserVersion,
+		"app_name",
+		session.Client.AppName,
+		"app_version",
+		session.Client.AppVersion,
+		"user_agent",
+		session.Client.UserAgent,
+	)
 	pipe.Expire(ctx, key, ttl)
-	pipe.ZAdd(ctx, authUserSessionsRedisKey(session.UserID), redis.Z{
+	pipe.ZAdd(ctx, r.authUserSessionsRedisKey(session.UserID), redis.Z{
 		Score:  float64(expiresAt),
 		Member: session.SessionID,
 	})
@@ -154,23 +212,58 @@ func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshS
 }
 
 func (r *AuthCacheRepo) GetSession(ctx context.Context, sessionID string) (*model.RefreshSession, error) {
-	values, err := r.redisClient.Client.HGetAll(ctx, authRefreshSessionRedisKey(sessionID)).Result()
+	values, err := r.redisClient.Client.HGetAll(ctx, r.authRefreshSessionRedisKey(sessionID)).Result()
 	if err != nil {
 		return nil, err
 	}
 	if len(values) == 0 {
 		return nil, nil
 	}
-	return sessionFromHash(sessionID, values), nil
+	userID, err := strconv.ParseInt(values["user_id"], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	createdAtUnix, err := strconv.ParseInt(values["created_at_unix"], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	lastSeenAtUnix, err := strconv.ParseInt(values["last_seen_at_unix"], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	sessionExpiresAtUnix, err := strconv.ParseInt(values["session_expires_at_unix"], 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	return &model.RefreshSession{
+		SessionID:            sessionID,
+		UserID:               userID,
+		Realm:                commonenum.LoginRealm(values["realm"]),
+		CurrentJTI:           values["current_jti"],
+		CreatedAtUnix:        createdAtUnix,
+		LastSeenAtUnix:       lastSeenAtUnix,
+		SessionExpiresAtUnix: sessionExpiresAtUnix,
+		Client: model.LoginContext{
+			ClientType:     enum.ClientType(values["client_type"]),
+			DeviceType:     enum.DeviceType(values["device_type"]),
+			OSName:         values["os_name"],
+			OSVersion:      values["os_version"],
+			BrowserName:    values["browser_name"],
+			BrowserVersion: values["browser_version"],
+			AppName:        values["app_name"],
+			AppVersion:     values["app_version"],
+			UserAgent:      values["user_agent"],
+		},
+	}, nil
 }
 
 func (r *AuthCacheRepo) TouchSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration) error {
-	key := authRefreshSessionRedisKey(session.SessionID)
+	key := r.authRefreshSessionRedisKey(session.SessionID)
 	expiresAt := time.Now().Add(ttl).Unix()
 	pipe := r.redisClient.Client.TxPipeline()
 	pipe.HSet(ctx, key, "last_seen_at_unix", session.LastSeenAtUnix)
 	pipe.Expire(ctx, key, ttl)
-	pipe.ZAdd(ctx, authUserSessionsRedisKey(session.UserID), redis.Z{
+	pipe.ZAdd(ctx, r.authUserSessionsRedisKey(session.UserID), redis.Z{
 		Score:  float64(expiresAt),
 		Member: session.SessionID,
 	})
@@ -179,7 +272,7 @@ func (r *AuthCacheRepo) TouchSession(ctx context.Context, session *model.Refresh
 }
 
 func (r *AuthCacheRepo) RotateSessionJTI(ctx context.Context, sessionID string, oldJTI string, newJTI string, lastSeenAtUnix int64, ttl time.Duration) (bool, error) {
-	key := authRefreshSessionRedisKey(sessionID)
+	key := r.authRefreshSessionRedisKey(sessionID)
 	script := redis.NewScript(`
 local current = redis.call('HGET', KEYS[1], 'current_jti')
 if not current then
@@ -204,23 +297,23 @@ return 1
 
 func (r *AuthCacheRepo) DeleteSession(ctx context.Context, userID int64, sessionID string) error {
 	pipe := r.redisClient.Client.TxPipeline()
-	pipe.Del(ctx, authRefreshSessionRedisKey(sessionID))
+	pipe.Del(ctx, r.authRefreshSessionRedisKey(sessionID))
 	if userID > 0 {
-		pipe.ZRem(ctx, authUserSessionsRedisKey(userID), sessionID)
+		pipe.ZRem(ctx, r.authUserSessionsRedisKey(userID), sessionID)
 	}
 	_, err := pipe.Exec(ctx)
 	return err
 }
 
 func (r *AuthCacheRepo) DeleteUserSessions(ctx context.Context, userID int64) error {
-	indexKey := authUserSessionsRedisKey(userID)
+	indexKey := r.authUserSessionsRedisKey(userID)
 	sids, err := r.redisClient.Client.ZRange(ctx, indexKey, 0, -1).Result()
 	if err != nil {
 		return err
 	}
 	pipe := r.redisClient.Client.TxPipeline()
 	for _, sid := range sids {
-		pipe.Del(ctx, authRefreshSessionRedisKey(sid))
+		pipe.Del(ctx, r.authRefreshSessionRedisKey(sid))
 	}
 	pipe.Del(ctx, indexKey)
 	_, err = pipe.Exec(ctx)
@@ -232,11 +325,11 @@ func (r *AuthCacheRepo) SaveRbacPermissions(ctx context.Context, realm string, u
 	if err != nil {
 		return err
 	}
-	return r.redisClient.Client.Set(ctx, authRbacPermissionsRedisKey(realm, userID), data, ttl).Err()
+	return r.redisClient.Client.Set(ctx, r.authRbacPermissionsRedisKey(realm, userID), data, ttl).Err()
 }
 
 func (r *AuthCacheRepo) GetRbacPermissions(ctx context.Context, realm string, userID int64) ([]string, bool, error) {
-	data, err := r.redisClient.Client.Get(ctx, authRbacPermissionsRedisKey(realm, userID)).Bytes()
+	data, err := r.redisClient.Client.Get(ctx, r.authRbacPermissionsRedisKey(realm, userID)).Bytes()
 	if errors.Is(err, redis.Nil) {
 		return nil, false, nil
 	}
@@ -251,15 +344,15 @@ func (r *AuthCacheRepo) GetRbacPermissions(ctx context.Context, realm string, us
 }
 
 func (r *AuthCacheRepo) DeleteRbacPermissions(ctx context.Context, realm string, userID int64) error {
-	return r.redisClient.Client.Del(ctx, authRbacPermissionsRedisKey(realm, userID)).Err()
+	return r.redisClient.Client.Del(ctx, r.authRbacPermissionsRedisKey(realm, userID)).Err()
 }
 
 func (r *AuthCacheRepo) DeleteUserRbacPermissions(ctx context.Context, userID int64) error {
-	return r.deleteByPattern(ctx, authUserRbacPermissionsPattern(userID))
+	return r.deleteByPattern(ctx, r.authUserRbacPermissionsPattern(userID))
 }
 
 func (r *AuthCacheRepo) DeleteRealmRbacPermissions(ctx context.Context, realm string) error {
-	return r.deleteByPattern(ctx, authRealmRbacPermissionsPattern(realm))
+	return r.deleteByPattern(ctx, r.authRealmRbacPermissionsPattern(realm))
 }
 
 func (r *AuthCacheRepo) deleteByPattern(ctx context.Context, pattern string) error {
@@ -279,56 +372,4 @@ func (r *AuthCacheRepo) deleteByPattern(ctx context.Context, pattern string) err
 		}
 		cursor = next
 	}
-}
-
-func sessionHash(session *model.RefreshSession) map[string]any {
-	return map[string]any{
-		"user_id":                 session.UserID,
-		"realm":                   string(session.Realm),
-		"current_jti":             session.CurrentJTI,
-		"created_at_unix":         session.CreatedAtUnix,
-		"last_seen_at_unix":       session.LastSeenAtUnix,
-		"session_expires_at_unix": session.SessionExpiresAtUnix,
-		"client_type":             string(session.Client.ClientType),
-		"device_type":             string(session.Client.DeviceType),
-		"os_name":                 session.Client.OSName,
-		"os_version":              session.Client.OSVersion,
-		"browser_name":            session.Client.BrowserName,
-		"browser_version":         session.Client.BrowserVersion,
-		"app_name":                session.Client.AppName,
-		"app_version":             session.Client.AppVersion,
-		"user_agent":              session.Client.UserAgent,
-	}
-}
-
-func sessionFromHash(sessionID string, values map[string]string) *model.RefreshSession {
-	return &model.RefreshSession{
-		SessionID:            sessionID,
-		UserID:               parseInt64(values["user_id"]),
-		Realm:                commonenum.LoginRealm(values["realm"]),
-		CurrentJTI:           values["current_jti"],
-		CreatedAtUnix:        parseInt64(values["created_at_unix"]),
-		LastSeenAtUnix:       parseInt64(values["last_seen_at_unix"]),
-		SessionExpiresAtUnix: parseInt64(values["session_expires_at_unix"]),
-		Client: model.LoginContext{
-			ClientType:     enum.ClientType(values["client_type"]),
-			DeviceType:     enum.DeviceType(values["device_type"]),
-			OSName:         values["os_name"],
-			OSVersion:      values["os_version"],
-			BrowserName:    values["browser_name"],
-			BrowserVersion: values["browser_version"],
-			AppName:        values["app_name"],
-			AppVersion:     values["app_version"],
-			UserAgent:      values["user_agent"],
-		},
-	}
-}
-
-func parseInt64(value string) int64 {
-	parsed, _ := strconv.ParseInt(value, 10, 64)
-	return parsed
-}
-
-func parseInt32(value string) int32 {
-	return int32(parseInt64(value))
 }

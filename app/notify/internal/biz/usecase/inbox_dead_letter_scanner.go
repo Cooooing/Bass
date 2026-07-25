@@ -15,8 +15,6 @@ import (
 	"log/slog"
 )
 
-const inboxDeadLetterScanLimit = 100
-
 type InboxDeadLetterScanner struct {
 	log         *slog.Logger
 	conf        *config.Bootstrap
@@ -65,13 +63,12 @@ func (s *InboxDeadLetterScanner) Stop(_ context.Context) error {
 }
 
 func (s *InboxDeadLetterScanner) scan(ctx context.Context) error {
-	status := commonenum.InboxEventStatusDead
 	pageResp, err := s.inboxRepo.Page(ctx, &repo.InboxEventQuery{
 		Page: &base.PageRequest{
 			Page: 1,
-			Size: inboxDeadLetterScanLimit,
+			Size: 100,
 		},
-		Status: &status,
+		Status: new(commonenum.InboxEventStatusDead),
 	})
 	if err != nil {
 		return err

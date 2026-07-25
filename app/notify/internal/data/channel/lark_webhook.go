@@ -25,6 +25,13 @@ type LarkWebhookClient struct {
 	httpClient *http.Client
 }
 
+type larkWebhookRequestBody struct {
+	MsgType   string          `json:"msg_type"`
+	Content   json.RawMessage `json:"content"`
+	Timestamp string          `json:"timestamp,omitempty"`
+	Sign      string          `json:"sign,omitempty"`
+}
+
 func NewLarkWebhookClient(
 	conf *config.Bootstrap,
 	httpClient *http.Client,
@@ -82,19 +89,19 @@ func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizchannel
 }
 
 func (c *LarkWebhookClient) signLarkWebhookRequestBody(requestBody string, secret string, timestamp int64) (string, error) {
-	var payload map[string]any
-	if err := json.Unmarshal([]byte(requestBody), &payload); err != nil {
+	payload := new(larkWebhookRequestBody)
+	if err := json.Unmarshal([]byte(requestBody), payload); err != nil {
 		return "", err
 	}
-	if payload == nil {
-		return "", errors.New("lark webhook request body must be json object")
+	if strings.TrimSpace(payload.MsgType) == "" || len(payload.Content) == 0 {
+		return "", errors.New("lark webhook request body must include msg_type and content")
 	}
 	sign, err := c.genLarkWebhookSign(secret, timestamp)
 	if err != nil {
 		return "", err
 	}
-	payload["timestamp"] = fmt.Sprintf("%d", timestamp)
-	payload["sign"] = sign
+	payload.Timestamp = fmt.Sprintf("%d", timestamp)
+	payload.Sign = sign
 	signedBody, err := json.Marshal(payload)
 	if err != nil {
 		return "", err

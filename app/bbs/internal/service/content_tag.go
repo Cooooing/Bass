@@ -12,6 +12,7 @@ import (
 )
 
 type ContentTagService struct {
+	contextReader
 	bbscontentv1.UnimplementedTagServiceServer
 	contentTagUsecase *usecase.ContentTagUsecase
 }
@@ -32,7 +33,7 @@ func (s *ContentTagService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.CreateTag_Req) (*bbscontentv1.CreateTag_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +66,7 @@ func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.Create
 			UpdatedAt:   resp.UpdatedAt,
 		}
 		if resp.Status != nil {
-			status := bbscontentv1enum.TagStatus(*resp.Status)
-			tag.Status = &status
+			tag.Status = new(bbscontentv1enum.TagStatus(*resp.Status))
 		}
 	}
 	return &bbscontentv1.CreateTag_Resp{
@@ -75,7 +75,7 @@ func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.Create
 }
 
 func (s *ContentTagService) Update(ctx context.Context, req *bbscontentv1.UpdateTag_Req) (*bbscontentv1.UpdateTag_Resp, error) {
-	userID, err := currentUserID(ctx)
+	userID, err := s.currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -109,8 +109,7 @@ func (s *ContentTagService) Update(ctx context.Context, req *bbscontentv1.Update
 			UpdatedAt:   resp.UpdatedAt,
 		}
 		if resp.Status != nil {
-			status := bbscontentv1enum.TagStatus(*resp.Status)
-			tag.Status = &status
+			tag.Status = new(bbscontentv1enum.TagStatus(*resp.Status))
 		}
 	}
 	return &bbscontentv1.UpdateTag_Resp{
@@ -151,8 +150,7 @@ func (s *ContentTagService) List(ctx context.Context, req *bbscontentv1.ListTags
 			UpdatedAt:   row.UpdatedAt,
 		}
 		if row.Status != nil {
-			status := bbscontentv1enum.TagStatus(*row.Status)
-			tag.Status = &status
+			tag.Status = new(bbscontentv1enum.TagStatus(*row.Status))
 		}
 		rows = append(rows, tag)
 	}

@@ -12,7 +12,9 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func currentUser(ctx context.Context) (*commonmodel.User, error) {
+type contextReader struct{}
+
+func (contextReader) currentUser(ctx context.Context) (*commonmodel.User, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -20,15 +22,15 @@ func currentUser(ctx context.Context) (*commonmodel.User, error) {
 	return user, nil
 }
 
-func currentUserID(ctx context.Context) (int64, error) {
-	user, err := currentUser(ctx)
+func (r contextReader) currentUserID(ctx context.Context) (int64, error) {
+	user, err := r.currentUser(ctx)
 	if err != nil {
 		return 0, err
 	}
 	return user.ID, nil
 }
 
-func currentToken(ctx context.Context) (string, error) {
+func (contextReader) currentToken(ctx context.Context) (string, error) {
 	token, ok := util.GetContextValue[string](ctx, constant.CtxToken)
 	if !ok || token == "" {
 		return "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -36,7 +38,7 @@ func currentToken(ctx context.Context) (string, error) {
 	return token, nil
 }
 
-func protoTime(value string) *timestamppb.Timestamp {
+func (contextReader) protoTime(value string) *timestamppb.Timestamp {
 	if value == "" {
 		return nil
 	}

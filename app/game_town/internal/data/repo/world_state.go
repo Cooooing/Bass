@@ -19,6 +19,7 @@ import (
 var _ bizrepo.WorldStateRepo = (*WorldStateRepo)(nil)
 
 type WorldStateRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -76,7 +77,7 @@ func (r *WorldStateRepo) Save(ctx context.Context, row *model.WorldState) (*mode
 	}, nil
 }
 
-func worldStateQuery(q *gen.WorldStateQuery, req *bizrepo.WorldStateQuery) *gen.WorldStateQuery {
+func (r *WorldStateRepo) worldStateQuery(q *gen.WorldStateQuery, req *bizrepo.WorldStateQuery) *gen.WorldStateQuery {
 	if req == nil {
 		return q
 	}
@@ -99,7 +100,7 @@ func worldStateQuery(q *gen.WorldStateQuery, req *bizrepo.WorldStateQuery) *gen.
 }
 
 func (r *WorldStateRepo) Get(ctx context.Context, req *bizrepo.WorldStateQuery) (*model.WorldState, error) {
-	row, err := worldStateQuery(r.getClient(ctx).WorldState.Query(), req).Only(ctx)
+	row, err := r.worldStateQuery(r.getClient(ctx).WorldState.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
@@ -128,7 +129,7 @@ func (r *WorldStateRepo) Get(ctx context.Context, req *bizrepo.WorldStateQuery) 
 }
 
 func (r *WorldStateRepo) List(ctx context.Context, req *bizrepo.WorldStateQuery) ([]*model.WorldState, error) {
-	rows, err := worldStateQuery(r.getClient(ctx).WorldState.Query(), req).Order(worldstate.ByID()).All(ctx)
+	rows, err := r.worldStateQuery(r.getClient(ctx).WorldState.Query(), req).Order(worldstate.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -169,17 +170,17 @@ func (r *WorldStateRepo) Map(ctx context.Context, req *bizrepo.WorldStateQuery) 
 }
 
 func (r *WorldStateRepo) Count(ctx context.Context, req *bizrepo.WorldStateQuery) (int, error) {
-	return worldStateQuery(r.getClient(ctx).WorldState.Query(), req).Count(ctx)
+	return r.worldStateQuery(r.getClient(ctx).WorldState.Query(), req).Count(ctx)
 }
 
 func (r *WorldStateRepo) Page(ctx context.Context, req *bizrepo.WorldStatePageReq) (*bizrepo.WorldStatePageResp, error) {
-	p := page(req.Page)
-	q := worldStateQuery(r.getClient(ctx).WorldState.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.worldStateQuery(r.getClient(ctx).WorldState.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(worldstate.ByID()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
+	rows, err := q.Order(worldstate.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -206,7 +207,7 @@ func (r *WorldStateRepo) Page(ctx context.Context, req *bizrepo.WorldStatePageRe
 	})
 	return &bizrepo.WorldStatePageResp{
 		Rows: out,
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 

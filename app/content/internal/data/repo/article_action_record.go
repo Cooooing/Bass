@@ -19,6 +19,7 @@ import (
 var _ repo.ArticleActionRecordRepo = (*ArticleActionRecordRepo)(nil)
 
 type ArticleActionRecordRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -136,7 +137,7 @@ func (r *ArticleActionRecordRepo) Count(ctx context.Context, req *repo.ArticleAc
 }
 
 func (r *ArticleActionRecordRepo) Page(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordPageResp, error) {
-	page := normalizePage(req.Page)
+	page := r.normalizePage(req.Page)
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()

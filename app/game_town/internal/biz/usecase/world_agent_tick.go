@@ -367,7 +367,7 @@ func (r *WorldAgentRunner) tickScanInterval() time.Duration {
 	return interval
 }
 
-func uint32Value(values map[string]any, key string) uint32 {
+func (r *WorldAgentRunner) uint32Value(values map[string]any, key string) uint32 {
 	value, ok := values[key].(float64)
 	if !ok {
 		return 0
@@ -375,7 +375,7 @@ func uint32Value(values map[string]any, key string) uint32 {
 	return uint32(value)
 }
 
-func truncateError(err error) string {
+func (r *WorldAgentRunner) truncateError(err error) string {
 	if err == nil {
 		return ""
 	}

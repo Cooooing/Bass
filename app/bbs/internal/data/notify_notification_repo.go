@@ -11,6 +11,7 @@ import (
 var _ repo.NotificationClient = (*NotificationClient)(nil)
 
 type NotificationClient struct {
+	protoTimeFormatter
 	notifyClient *rpc.NotifyClient
 }
 
@@ -45,9 +46,9 @@ func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.Li
 			EventType:  int32(item.GetEventType()),
 			Title:      item.GetTitle(),
 			Content:    item.GetContent(),
-			ReadAt:     formatProtoTime(item.GetReadAt()),
-			CreatedAt:  formatProtoTime(item.GetCreatedAt()),
-			UpdatedAt:  formatProtoTime(item.GetUpdatedAt()),
+			ReadAt:     r.formatProtoTime(item.GetReadAt()),
+			CreatedAt:  r.formatProtoTime(item.GetCreatedAt()),
+			UpdatedAt:  r.formatProtoTime(item.GetUpdatedAt()),
 		})
 	}
 	var page *repo.PageResp

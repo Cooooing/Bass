@@ -92,14 +92,6 @@ service AuthService {
       body: "*"
     };
   }
-
-  // 解封已到期的封禁账号，支持批量操作。
-  rpc UnbanAccounts(UnbanAccounts.Req) returns (UnbanAccounts.Resp) {
-    option (google.api.http) = {
-      post: "/v1/user/auth/unban-accounts"
-      body: "*"
-    };
-  }
 }
 
 message StartEmailRegistration {
@@ -266,14 +258,6 @@ message CancelAccount {
     string password = 1; // 当前密码
     string code = 2; // 启用 TOTP 时作为 TOTP code
     option (gnostic.openapi.v3.schema) = { required: "password" };
-  }
-  message Resp {}
-}
-
-message UnbanAccounts {
-  message Req {
-    repeated int64 user_ids = 1; // 账号 ID 列表
-    option (gnostic.openapi.v3.schema) = { required: "user_ids" };
   }
   message Resp {}
 }

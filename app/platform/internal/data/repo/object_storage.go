@@ -58,9 +58,9 @@ func (r *ObjectStorageRepo) Save(ctx context.Context, row *model.ObjectStorage) 
 		return nil, err
 	}
 	result, err := r.Get(ctx, &repo.ObjectStorageGetReq{
-		Provider: &row.Provider,
-		Bucket:   &row.Bucket,
-		Key:      &row.Key,
+		Provider: new(row.Provider),
+		Bucket:   new(row.Bucket),
+		Key:      new(row.Key),
 	})
 	if err != nil {
 		return nil, err

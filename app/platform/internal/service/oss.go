@@ -209,7 +209,7 @@ func (s *OssService) List(ctx context.Context, req *v1.ListOss_Req) (*v1.ListOss
 		if !ok {
 			return nil, errors.New("invalid object storage provider")
 		}
-		provider = &item
+		provider = new(item)
 	}
 	pageResp, err := s.objectStorageUsecase.Page(ctx, &usecase.ObjectStoragePageReq{
 		Page:     req.Page,

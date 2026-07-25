@@ -261,5 +261,5 @@ func newCallAgentTestResult(jobType enum.AgentJobType) *agentResult {
 }
 
 func newInt64(value int64) *int64 {
-	return &value
+	return new(value)
 }

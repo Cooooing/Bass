@@ -202,7 +202,7 @@ func (r *PreferencesRepo) page(ctx context.Context, page *common.PageReq, req *r
 
 func (r *PreferencesRepo) upsertByUserID(ctx context.Context, p *model.Preferences) (*model.Preferences, error) {
 	existing, err := r.get(ctx, &repo.PreferencesGetReq{
-		UserID: &p.UserID,
+		UserID: new(p.UserID),
 	})
 	if err != nil {
 		return nil, err

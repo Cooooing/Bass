@@ -76,8 +76,7 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 		query.Level = req.Query.Level
 		query.UserID = req.Query.UserId
 		if req.Query.Order != nil {
-			value := int32(*req.Query.Order)
-			query.Order = &value
+			query.Order = new(int32(*req.Query.Order))
 		}
 	}
 	resp, err := u.contentCommentClient.ListComments(ctx, &repo.ListCommentsReq{
@@ -117,8 +116,7 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 	}
 	var order *int32
 	if req.Order != nil {
-		value := int32(*req.Order)
-		order = &value
+		order = new(int32(*req.Order))
 	}
 	resp, err := u.contentCommentClient.ListCommentThreads(ctx, &repo.ListCommentThreadsReq{
 		UserID:            req.UserID,
@@ -159,8 +157,7 @@ func (u *ContentCommentUsecase) ListCommentReplies(ctx context.Context, req *Lis
 	}
 	var order *int32
 	if req.Order != nil {
-		value := int32(*req.Order)
-		order = &value
+		order = new(int32(*req.Order))
 	}
 	resp, err := u.contentCommentClient.ListCommentReplies(ctx, &repo.ListCommentRepliesReq{
 		UserID:    req.UserID,
@@ -200,8 +197,7 @@ func (u *ContentCommentUsecase) ListCommentTimeline(ctx context.Context, req *Li
 	}
 	var order *int32
 	if req.Order != nil {
-		value := int32(*req.Order)
-		order = &value
+		order = new(int32(*req.Order))
 	}
 	resp, err := u.contentCommentClient.ListCommentTimeline(ctx, &repo.ListCommentTimelineReq{
 		UserID:    req.UserID,

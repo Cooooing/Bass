@@ -17,6 +17,7 @@ import (
 var _ bizrepo.RelationshipRepo = (*RelationshipRepo)(nil)
 
 type RelationshipRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -49,10 +50,10 @@ func (r *RelationshipRepo) Save(ctx context.Context, row *model.Relationship) (*
 	if err != nil {
 		return nil, err
 	}
-	return relationshipModel(saved), nil
+	return r.relationship(saved), nil
 }
 
-func relationshipQuery(q *gen.LivingRelationshipQuery, req *bizrepo.RelationshipQuery) *gen.LivingRelationshipQuery {
+func (r *RelationshipRepo) relationshipQuery(q *gen.LivingRelationshipQuery, req *bizrepo.RelationshipQuery) *gen.LivingRelationshipQuery {
 	if req == nil {
 		return q
 	}
@@ -78,25 +79,25 @@ func relationshipQuery(q *gen.LivingRelationshipQuery, req *bizrepo.Relationship
 }
 
 func (r *RelationshipRepo) Get(ctx context.Context, req *bizrepo.RelationshipQuery) (*model.Relationship, error) {
-	row, err := relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), req).Only(ctx)
+	row, err := r.relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err
 	}
-	return relationshipModel(row), nil
+	return r.relationship(row), nil
 }
 
 func (r *RelationshipRepo) List(ctx context.Context, req *bizrepo.RelationshipQuery) ([]*model.Relationship, error) {
-	rows, err := relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), req).
+	rows, err := r.relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), req).
 		Order(livingrelationship.ByID()).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return lo.Map(rows, func(row *gen.LivingRelationship, _ int) *model.Relationship {
-		return relationshipModel(row)
+		return r.relationship(row)
 	}), nil
 }
 
@@ -113,32 +114,32 @@ func (r *RelationshipRepo) Map(ctx context.Context, req *bizrepo.RelationshipQue
 }
 
 func (r *RelationshipRepo) Count(ctx context.Context, req *bizrepo.RelationshipQuery) (int, error) {
-	return relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), req).Count(ctx)
+	return r.relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), req).Count(ctx)
 }
 
 func (r *RelationshipRepo) Page(ctx context.Context, req *bizrepo.RelationshipPageReq) (*bizrepo.RelationshipPageResp, error) {
-	p := page(req.Page)
-	q := relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rows, err := q.Order(livingrelationship.ByID()).
-		Offset(pageOffset(p)).
-		Limit(pageLimit(p)).
+		Offset(r.pageOffset(p)).
+		Limit(r.pageLimit(p)).
 		All(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &bizrepo.RelationshipPageResp{
 		Rows: lo.Map(rows, func(row *gen.LivingRelationship, _ int) *model.Relationship {
-			return relationshipModel(row)
+			return r.relationship(row)
 		}),
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 
-func relationshipModel(row *gen.LivingRelationship) *model.Relationship {
+func (r *RelationshipRepo) relationship(row *gen.LivingRelationship) *model.Relationship {
 	return &model.Relationship{
 		ID:         row.ID,
 		WorldID:    row.WorldID,
@@ -162,7 +163,7 @@ func (r *RelationshipRepo) Upsert(ctx context.Context, req *bizrepo.Relationship
 		TargetType: new(req.TargetType),
 		TargetID:   new(req.TargetID),
 	}
-	row, err := relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), query).Only(ctx)
+	row, err := r.relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), query).Only(ctx)
 	if gen.IsNotFound(err) {
 		return r.Save(ctx, &model.Relationship{
 			WorldID:    req.WorldID,
@@ -185,5 +186,5 @@ func (r *RelationshipRepo) Upsert(ctx context.Context, req *bizrepo.Relationship
 	if err != nil {
 		return nil, err
 	}
-	return relationshipModel(updated), nil
+	return r.relationship(updated), nil
 }

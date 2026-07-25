@@ -17,6 +17,7 @@ import (
 var _ bizrepo.WorldRuleRepo = (*WorldRuleRepo)(nil)
 
 type WorldRuleRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -54,7 +55,7 @@ func (r *WorldRuleRepo) Save(ctx context.Context, row *model.WorldRule) (*model.
 	}, nil
 }
 
-func worldRuleQuery(q *gen.WorldRuleQuery, req *bizrepo.WorldRuleQuery) *gen.WorldRuleQuery {
+func (r *WorldRuleRepo) worldRuleQuery(q *gen.WorldRuleQuery, req *bizrepo.WorldRuleQuery) *gen.WorldRuleQuery {
 	if req == nil {
 		return q
 	}
@@ -68,7 +69,7 @@ func worldRuleQuery(q *gen.WorldRuleQuery, req *bizrepo.WorldRuleQuery) *gen.Wor
 }
 
 func (r *WorldRuleRepo) Get(ctx context.Context, req *bizrepo.WorldRuleQuery) (*model.WorldRule, error) {
-	row, err := worldRuleQuery(r.getClient(ctx).WorldRule.Query(), req).Only(ctx)
+	row, err := r.worldRuleQuery(r.getClient(ctx).WorldRule.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
@@ -86,7 +87,7 @@ func (r *WorldRuleRepo) Get(ctx context.Context, req *bizrepo.WorldRuleQuery) (*
 }
 
 func (r *WorldRuleRepo) List(ctx context.Context, req *bizrepo.WorldRuleQuery) ([]*model.WorldRule, error) {
-	rows, err := worldRuleQuery(r.getClient(ctx).WorldRule.Query(), req).Order(worldrule.ByID()).All(ctx)
+	rows, err := r.worldRuleQuery(r.getClient(ctx).WorldRule.Query(), req).Order(worldrule.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -115,17 +116,17 @@ func (r *WorldRuleRepo) Map(ctx context.Context, req *bizrepo.WorldRuleQuery) (m
 }
 
 func (r *WorldRuleRepo) Count(ctx context.Context, req *bizrepo.WorldRuleQuery) (int, error) {
-	return worldRuleQuery(r.getClient(ctx).WorldRule.Query(), req).Count(ctx)
+	return r.worldRuleQuery(r.getClient(ctx).WorldRule.Query(), req).Count(ctx)
 }
 
 func (r *WorldRuleRepo) Page(ctx context.Context, req *bizrepo.WorldRulePageReq) (*bizrepo.WorldRulePageResp, error) {
-	p := page(req.Page)
-	q := worldRuleQuery(r.getClient(ctx).WorldRule.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.worldRuleQuery(r.getClient(ctx).WorldRule.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(worldrule.ByID()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
+	rows, err := q.Order(worldrule.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -141,6 +142,6 @@ func (r *WorldRuleRepo) Page(ctx context.Context, req *bizrepo.WorldRulePageReq)
 	})
 	return &bizrepo.WorldRulePageResp{
 		Rows: out,
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }

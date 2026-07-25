@@ -207,7 +207,7 @@ func (r *PrivacySettingRepo) page(ctx context.Context, page *common.PageReq, req
 
 func (r *PrivacySettingRepo) upsertByUserID(ctx context.Context, p *model.PrivacySetting) (*model.PrivacySetting, error) {
 	existing, err := r.get(ctx, &repo.PrivacySettingGetReq{
-		UserID: &p.UserID,
+		UserID: new(p.UserID),
 	})
 	if err != nil {
 		return nil, err

@@ -45,7 +45,7 @@ func (r *BanRecordRepo) Create(ctx context.Context, record *model.BanRecord) (*m
 	if err != nil {
 		return nil, err
 	}
-	return banRecordToModel(row), nil
+	return r.banRecord(row), nil
 }
 
 func (r *BanRecordRepo) Get(ctx context.Context, id int64) (*model.BanRecord, error) {
@@ -56,7 +56,7 @@ func (r *BanRecordRepo) Get(ctx context.Context, id int64) (*model.BanRecord, er
 	if err != nil {
 		return nil, err
 	}
-	return banRecordToModel(row), nil
+	return r.banRecord(row), nil
 }
 
 func (r *BanRecordRepo) LatestByUserID(ctx context.Context, userID int64) (*model.BanRecord, error) {
@@ -67,10 +67,10 @@ func (r *BanRecordRepo) LatestByUserID(ctx context.Context, userID int64) (*mode
 	if err != nil {
 		return nil, err
 	}
-	return banRecordToModel(row), nil
+	return r.banRecord(row), nil
 }
 
-func banRecordToModel(row *gen.BanRecord) *model.BanRecord {
+func (r *BanRecordRepo) banRecord(row *gen.BanRecord) *model.BanRecord {
 	if row == nil {
 		return nil
 	}

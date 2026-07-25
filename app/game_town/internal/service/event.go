@@ -90,13 +90,13 @@ func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Requ
 		if row == nil || observation == nil {
 			continue
 		}
-		payload, err := newEventPayload(row.Payload)
+		payload, err := s.newEventPayload(row.Payload)
 		if err != nil {
 			return nil, err
 		}
 
 		suggestions := make([]*v1.PageGameTownEvents_Resp_Row_SuggestedAction, 0)
-		for _, raw := range sliceValues(row.Payload["suggested_actions"]) {
+		for _, raw := range s.sliceValues(row.Payload["suggested_actions"]) {
 			item, ok := raw.(map[string]any)
 			if !ok {
 				continue
@@ -104,13 +104,13 @@ func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Requ
 			label, _ := item["label"].(string)
 			content, _ := item["content"].(string)
 			targets := make([]*v1.PageGameTownEvents_Resp_Row_SuggestedAction_EntityRef, 0)
-			for _, rawTarget := range sliceValues(item["targets"]) {
+			for _, rawTarget := range s.sliceValues(item["targets"]) {
 				target, ok := rawTarget.(map[string]any)
 				if !ok {
 					continue
 				}
 				targetType, _ := target["type"].(string)
-				targetID := int64Value(target["id"])
+				targetID := s.int64Value(target["id"])
 				typeValue := enum.EntityType(targetType)
 				targets = append(targets, &v1.PageGameTownEvents_Resp_Row_SuggestedAction_EntityRef{
 					Type: enum.EntityTypeMap.MustToProto(typeValue),
@@ -160,12 +160,12 @@ func (s *EventService) Watch(req *v1.WatchGameTownEvents_Request, stream ggrpc.S
 			return nil
 		}
 
-		payload, err := newEventPayload(row.Payload)
+		payload, err := s.newEventPayload(row.Payload)
 		if err != nil {
 			return err
 		}
 		suggestions := make([]*v1.WatchGameTownEvents_Resp_SuggestedAction, 0)
-		for _, raw := range sliceValues(row.Payload["suggested_actions"]) {
+		for _, raw := range s.sliceValues(row.Payload["suggested_actions"]) {
 			item, ok := raw.(map[string]any)
 			if !ok {
 				continue
@@ -173,13 +173,13 @@ func (s *EventService) Watch(req *v1.WatchGameTownEvents_Request, stream ggrpc.S
 			label, _ := item["label"].(string)
 			content, _ := item["content"].(string)
 			targets := make([]*v1.WatchGameTownEvents_Resp_SuggestedAction_EntityRef, 0)
-			for _, rawTarget := range sliceValues(item["targets"]) {
+			for _, rawTarget := range s.sliceValues(item["targets"]) {
 				target, ok := rawTarget.(map[string]any)
 				if !ok {
 					continue
 				}
 				targetType, _ := target["type"].(string)
-				targetID := int64Value(target["id"])
+				targetID := s.int64Value(target["id"])
 				typeValue := enum.EntityType(targetType)
 				targets = append(targets, &v1.WatchGameTownEvents_Resp_SuggestedAction_EntityRef{
 					Type: enum.EntityTypeMap.MustToProto(typeValue),
@@ -258,35 +258,35 @@ func (s *EventService) Watch(req *v1.WatchGameTownEvents_Request, stream ggrpc.S
 	}
 }
 
-func newEventPayload(payload map[string]any) (*structpb.Struct, error) {
+func (s *EventService) newEventPayload(payload map[string]any) (*structpb.Struct, error) {
 	if payload == nil {
 		return structpb.NewStruct(map[string]any{})
 	}
-	normalized, ok := normalizeProtoValue(payload).(map[string]any)
+	normalized, ok := s.normalizeProtoValue(payload).(map[string]any)
 	if !ok {
 		return nil, fmt.Errorf("invalid event payload")
 	}
 	return structpb.NewStruct(normalized)
 }
 
-func normalizeProtoValue(value any) any {
+func (s *EventService) normalizeProtoValue(value any) any {
 	switch typed := value.(type) {
 	case nil:
 		return nil
 	case json.Number:
-		return jsonNumberValue(typed)
+		return s.jsonNumberValue(typed)
 	case fmt.Stringer:
 		return typed.String()
 	case map[string]any:
 		result := make(map[string]any, len(typed))
 		for key, item := range typed {
-			result[key] = normalizeProtoValue(item)
+			result[key] = s.normalizeProtoValue(item)
 		}
 		return result
 	case []any:
 		result := make([]any, 0, len(typed))
 		for _, item := range typed {
-			result = append(result, normalizeProtoValue(item))
+			result = append(result, s.normalizeProtoValue(item))
 		}
 		return result
 	case []string:
@@ -344,11 +344,11 @@ func normalizeProtoValue(value any) any {
 	case float32:
 		return float64(typed)
 	default:
-		return normalizeReflectValue(value)
+		return s.normalizeReflectValue(value)
 	}
 }
 
-func normalizeReflectValue(value any) any {
+func (s *EventService) normalizeReflectValue(value any) any {
 	reflected := reflect.ValueOf(value)
 	if !reflected.IsValid() {
 		return nil
@@ -357,27 +357,27 @@ func normalizeReflectValue(value any) any {
 		if reflected.IsNil() {
 			return nil
 		}
-		return normalizeProtoValue(reflected.Elem().Interface())
+		return s.normalizeProtoValue(reflected.Elem().Interface())
 	}
 	if reflected.Kind() == reflect.Map && reflected.Type().Key().Kind() == reflect.String {
 		result := make(map[string]any, reflected.Len())
 		iterator := reflected.MapRange()
 		for iterator.Next() {
-			result[iterator.Key().String()] = normalizeProtoValue(iterator.Value().Interface())
+			result[iterator.Key().String()] = s.normalizeProtoValue(iterator.Value().Interface())
 		}
 		return result
 	}
 	if reflected.Kind() == reflect.Slice || reflected.Kind() == reflect.Array {
 		result := make([]any, 0, reflected.Len())
 		for index := 0; index < reflected.Len(); index++ {
-			result = append(result, normalizeProtoValue(reflected.Index(index).Interface()))
+			result = append(result, s.normalizeProtoValue(reflected.Index(index).Interface()))
 		}
 		return result
 	}
 	return fmt.Sprint(value)
 }
 
-func jsonNumberValue(value json.Number) any {
+func (s *EventService) jsonNumberValue(value json.Number) any {
 	if parsed, err := value.Int64(); err == nil {
 		return float64(parsed)
 	}
@@ -387,15 +387,15 @@ func jsonNumberValue(value json.Number) any {
 	return value.String()
 }
 
-func sliceValues(value any) []any {
-	normalized, ok := normalizeProtoValue(value).([]any)
+func (s *EventService) sliceValues(value any) []any {
+	normalized, ok := s.normalizeProtoValue(value).([]any)
 	if !ok {
 		return nil
 	}
 	return normalized
 }
 
-func int64Value(value any) int64 {
+func (s *EventService) int64Value(value any) int64 {
 	switch typed := value.(type) {
 	case int:
 		return int64(typed)
@@ -425,15 +425,15 @@ func int64Value(value any) int64 {
 	case float64:
 		return int64(typed)
 	case string:
-		return parseInt64String(typed)
+		return s.parseInt64String(typed)
 	case fmt.Stringer:
-		return parseInt64String(typed.String())
+		return s.parseInt64String(typed.String())
 	default:
 		return 0
 	}
 }
 
-func parseInt64String(value string) int64 {
+func (s *EventService) parseInt64String(value string) int64 {
 	value = strings.TrimSpace(value)
 	if value == "" {
 		return 0

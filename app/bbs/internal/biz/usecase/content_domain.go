@@ -50,13 +50,11 @@ func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomains
 		query.Icon = req.Query.Icon
 		query.IsNav = req.Query.IsNav
 		if req.Query.Status != nil {
-			value := int32(*req.Query.Status)
-			query.Status = &value
+			query.Status = new(int32(*req.Query.Status))
 		}
 	}
 	if query.Status == nil {
-		value := int32(bbscontentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED)
-		query.Status = &value
+		query.Status = new(int32(bbscontentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED))
 	}
 	resp, err := u.contentDomainClient.ListDomains(ctx, &repo.ListDomainsReq{
 		Page:  page,

@@ -6,7 +6,9 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func formatProtoTime(ts *timestamppb.Timestamp) string {
+type protoTimeFormatter struct{}
+
+func (protoTimeFormatter) formatProtoTime(ts *timestamppb.Timestamp) string {
 	if ts == nil {
 		return ""
 	}

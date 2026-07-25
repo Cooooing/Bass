@@ -17,7 +17,7 @@ func (r *WorldAgentRunner) saveDraftFactions(ctx context.Context, worldID int64,
 
 	for _, item := range draft.Factions {
 		code := strings.TrimSpace(item.Code)
-		name := normalizeModelText(item.Name, maxNpcNameRunes)
+		name := r.normalizeModelText(item.Name, 128)
 		if code == "" || len(code) > 64 || name == "" {
 			return nil, fmt.Errorf("invalid faction")
 		}
@@ -42,7 +42,7 @@ func (r *WorldAgentRunner) saveDraftFactions(ctx context.Context, worldID int64,
 	return out, nil
 }
 
-func defaultWorldRules(rules map[string]any) map[string]any {
+func (r *WorldAgentRunner) defaultWorldRules(rules map[string]any) map[string]any {
 	if rules == nil {
 		rules = make(map[string]any)
 	}

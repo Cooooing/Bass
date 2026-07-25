@@ -122,7 +122,7 @@ func (u *EventUsecase) projectObservations(ctx context.Context, event *model.Eve
 			Source:     source,
 			Certainty:  enum.KnowledgeCertaintyConfirmed,
 			Summary:    summary,
-			Salience:   eventSalience(event.Type),
+			Salience:   u.eventSalience(event.Type),
 			ObservedAt: event.OccurredAt,
 			WorldTime:  event.WorldTime,
 		})
@@ -138,7 +138,7 @@ func (u *EventUsecase) projectObservations(ctx context.Context, event *model.Eve
 			Source:     source,
 			Certainty:  enum.KnowledgeCertaintyConfirmed,
 			Summary:    summary,
-			Salience:   eventSalience(event.Type),
+			Salience:   u.eventSalience(event.Type),
 			ObservedAt: event.OccurredAt,
 			WorldTime:  event.WorldTime,
 		})
@@ -169,7 +169,7 @@ func (u *EventUsecase) projectAreaObservations(ctx context.Context, event *model
 		if _, ok := players[member.PlayerID]; ok {
 			continue
 		}
-		players[member.PlayerID] = observationSource(public)
+		players[member.PlayerID] = u.observationSource(public)
 	}
 
 	rows, err := u.npcRepo.List(ctx, npcQuery)
@@ -180,19 +180,19 @@ func (u *EventUsecase) projectAreaObservations(ctx context.Context, event *model
 		if _, ok := npcs[npc.ID]; ok {
 			continue
 		}
-		npcs[npc.ID] = observationSource(public)
+		npcs[npc.ID] = u.observationSource(public)
 	}
 	return nil
 }
 
-func observationSource(public bool) enum.ObservationSource {
+func (u *EventUsecase) observationSource(public bool) enum.ObservationSource {
 	if public {
 		return enum.ObservationSourcePublic
 	}
 	return enum.ObservationSourceWitnessed
 }
 
-func eventSalience(eventType enum.EventType) float64 {
+func (u *EventUsecase) eventSalience(eventType enum.EventType) float64 {
 	switch eventType {
 	case enum.EventTypeNpcDied, enum.EventTypeLocationChanged, enum.EventTypeFactionChanged, enum.EventTypeWorldReady:
 		return 1

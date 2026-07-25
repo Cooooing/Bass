@@ -35,7 +35,7 @@ func (r *DelayedTaskRepo) getClient(ctx context.Context) *gen.Client {
 
 func (r *DelayedTaskRepo) Register(ctx context.Context, row *model.DelayedTask) (*model.DelayedTask, error) {
 	if existing, err := r.Get(ctx, &bizrepo.DelayedTaskGetReq{
-		IdempotencyKey: &row.IdempotencyKey,
+		IdempotencyKey: new(row.IdempotencyKey),
 	}); err != nil || existing != nil {
 		return existing, err
 	}
@@ -53,12 +53,12 @@ func (r *DelayedTaskRepo) Register(ctx context.Context, row *model.DelayedTask) 
 	if err != nil {
 		return nil, err
 	}
-	return delayedTaskToModel(created), nil
+	return r.delayedTask(created), nil
 }
 
 func (r *DelayedTaskRepo) Get(ctx context.Context, req *bizrepo.DelayedTaskGetReq) (*model.DelayedTask, error) {
 	query := r.getClient(ctx).DelayedTask.Query()
-	query = delayedTaskQuery(query, req)
+	query = r.delayedTaskQuery(query, req)
 	row, err := query.First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
@@ -66,13 +66,13 @@ func (r *DelayedTaskRepo) Get(ctx context.Context, req *bizrepo.DelayedTaskGetRe
 	if err != nil {
 		return nil, err
 	}
-	return delayedTaskToModel(row), nil
+	return r.delayedTask(row), nil
 }
 
 func (r *DelayedTaskRepo) Page(ctx context.Context, req *bizrepo.DelayedTaskPageReq) (*bizrepo.DelayedTaskPageResp, error) {
 	page := server.PageValid(req.Page)
 	query := r.getClient(ctx).DelayedTask.Query()
-	query = delayedTaskQuery(query, &req.DelayedTaskGetReq)
+	query = r.delayedTaskQuery(query, &req.DelayedTaskGetReq)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
@@ -83,7 +83,7 @@ func (r *DelayedTaskRepo) Page(ctx context.Context, req *bizrepo.DelayedTaskPage
 	}
 	result := make([]*model.DelayedTask, 0, len(rows))
 	for _, row := range rows {
-		result = append(result, delayedTaskToModel(row))
+		result = append(result, r.delayedTask(row))
 	}
 	return &bizrepo.DelayedTaskPageResp{
 		Rows: result,
@@ -127,7 +127,7 @@ func (r *DelayedTaskRepo) ListDue(ctx context.Context, now time.Time, limit int)
 	}
 	result := make([]*model.DelayedTask, 0, len(rows))
 	for _, row := range rows {
-		result = append(result, delayedTaskToModel(row))
+		result = append(result, r.delayedTask(row))
 	}
 	return result, nil
 }
@@ -149,7 +149,7 @@ func (r *DelayedTaskRepo) MarkRunning(ctx context.Context, id int64, workerID st
 		return false, nil, err
 	}
 	row, err := r.Get(ctx, &bizrepo.DelayedTaskGetReq{
-		ID: &id,
+		ID: new(id),
 	})
 	return true, row, err
 }
@@ -159,7 +159,7 @@ func (r *DelayedTaskRepo) MarkSuccess(ctx context.Context, id int64, finishedAt 
 	if err != nil {
 		return nil, err
 	}
-	return delayedTaskToModel(row), nil
+	return r.delayedTask(row), nil
 }
 
 func (r *DelayedTaskRepo) MarkFailed(ctx context.Context, id int64, attempt int32, final bool, nextRunAt time.Time, lastError string) (*model.DelayedTask, error) {
@@ -173,10 +173,10 @@ func (r *DelayedTaskRepo) MarkFailed(ctx context.Context, id int64, attempt int3
 	if err != nil {
 		return nil, err
 	}
-	return delayedTaskToModel(row), nil
+	return r.delayedTask(row), nil
 }
 
-func delayedTaskQuery(query *gen.DelayedTaskQuery, req *bizrepo.DelayedTaskGetReq) *gen.DelayedTaskQuery {
+func (r *DelayedTaskRepo) delayedTaskQuery(query *gen.DelayedTaskQuery, req *bizrepo.DelayedTaskGetReq) *gen.DelayedTaskQuery {
 	if req == nil {
 		return query
 	}
@@ -195,7 +195,7 @@ func delayedTaskQuery(query *gen.DelayedTaskQuery, req *bizrepo.DelayedTaskGetRe
 	return query
 }
 
-func delayedTaskToModel(row *gen.DelayedTask) *model.DelayedTask {
+func (r *DelayedTaskRepo) delayedTask(row *gen.DelayedTask) *model.DelayedTask {
 	if row == nil {
 		return nil
 	}

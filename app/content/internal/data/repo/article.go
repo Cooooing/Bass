@@ -22,6 +22,7 @@ import (
 var _ repo.ArticleRepo = (*ArticleRepo)(nil)
 
 type ArticleRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -426,7 +427,7 @@ func (r *ArticleRepo) Count(ctx context.Context, req *repo.ArticleGetReq) (int, 
 }
 
 func (r *ArticleRepo) Page(ctx context.Context, req *repo.ArticleGetReq) (*repo.ArticlePageResp, error) {
-	page := normalizePage(req.Page)
+	page := r.normalizePage(req.Page)
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)

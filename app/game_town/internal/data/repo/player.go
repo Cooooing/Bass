@@ -18,6 +18,7 @@ import (
 var _ bizrepo.PlayerRepo = (*PlayerRepo)(nil)
 
 type PlayerRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -55,7 +56,7 @@ func (r *PlayerRepo) Save(ctx context.Context, row *model.Player) (*model.Player
 	}, nil
 }
 
-func playerQuery(q *gen.PlayerQuery, req *bizrepo.PlayerQuery) *gen.PlayerQuery {
+func (r *PlayerRepo) playerQuery(q *gen.PlayerQuery, req *bizrepo.PlayerQuery) *gen.PlayerQuery {
 	q = q.Where(player.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -76,7 +77,7 @@ func playerQuery(q *gen.PlayerQuery, req *bizrepo.PlayerQuery) *gen.PlayerQuery 
 }
 
 func (r *PlayerRepo) Get(ctx context.Context, req *bizrepo.PlayerQuery) (*model.Player, error) {
-	row, err := playerQuery(r.getClient(ctx).Player.Query(), req).Only(ctx)
+	row, err := r.playerQuery(r.getClient(ctx).Player.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_PLAYER_NOT_FOUND)
 	}
@@ -94,7 +95,7 @@ func (r *PlayerRepo) Get(ctx context.Context, req *bizrepo.PlayerQuery) (*model.
 }
 
 func (r *PlayerRepo) List(ctx context.Context, req *bizrepo.PlayerQuery) ([]*model.Player, error) {
-	rows, err := playerQuery(r.getClient(ctx).Player.Query(), req).Order(player.ByID()).All(ctx)
+	rows, err := r.playerQuery(r.getClient(ctx).Player.Query(), req).Order(player.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -124,17 +125,17 @@ func (r *PlayerRepo) Map(ctx context.Context, req *bizrepo.PlayerQuery) (map[int
 }
 
 func (r *PlayerRepo) Count(ctx context.Context, req *bizrepo.PlayerQuery) (int, error) {
-	return playerQuery(r.getClient(ctx).Player.Query(), req).Count(ctx)
+	return r.playerQuery(r.getClient(ctx).Player.Query(), req).Count(ctx)
 }
 
 func (r *PlayerRepo) Page(ctx context.Context, req *bizrepo.PlayerPageReq) (*bizrepo.PlayerPageResp, error) {
-	p := page(req.Page)
-	q := playerQuery(r.getClient(ctx).Player.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.playerQuery(r.getClient(ctx).Player.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(player.ByID()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
+	rows, err := q.Order(player.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -150,6 +151,6 @@ func (r *PlayerRepo) Page(ctx context.Context, req *bizrepo.PlayerPageReq) (*biz
 	})
 	return &bizrepo.PlayerPageResp{
 		Rows: out,
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }

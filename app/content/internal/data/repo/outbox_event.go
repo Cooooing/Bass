@@ -25,6 +25,7 @@ import (
 var _ repo.OutboxEventRepo = (*OutboxEventRepo)(nil)
 
 type OutboxEventRepo struct {
+	pageNormalizer
 	db *gen.Client
 }
 
@@ -175,7 +176,7 @@ func (r *OutboxEventRepo) Count(ctx context.Context, req *repo.OutboxEventGetReq
 }
 
 func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventPageResp, error) {
-	page := normalizePage(req.Page)
+	page := r.normalizePage(req.Page)
 	query := r.getClient(ctx).OutboxEvent.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)

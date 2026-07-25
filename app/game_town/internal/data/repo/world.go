@@ -18,6 +18,7 @@ import (
 var _ bizrepo.WorldRepo = (*WorldRepo)(nil)
 
 type WorldRepo struct {
+	pageHelper
 	db *gen.Client
 }
 
@@ -67,7 +68,7 @@ func (r *WorldRepo) Save(ctx context.Context, row *model.World) (*model.World, e
 	}, nil
 }
 
-func worldQuery(q *gen.WorldQuery, req *bizrepo.WorldQuery) *gen.WorldQuery {
+func (r *WorldRepo) worldQuery(q *gen.WorldQuery, req *bizrepo.WorldQuery) *gen.WorldQuery {
 	q = q.Where(world.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -91,7 +92,7 @@ func worldQuery(q *gen.WorldQuery, req *bizrepo.WorldQuery) *gen.WorldQuery {
 }
 
 func (r *WorldRepo) Get(ctx context.Context, req *bizrepo.WorldQuery) (*model.World, error) {
-	row, err := worldQuery(r.getClient(ctx).World.Query(), req).Only(ctx)
+	row, err := r.worldQuery(r.getClient(ctx).World.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_NOT_FOUND)
 	}
@@ -115,7 +116,7 @@ func (r *WorldRepo) Get(ctx context.Context, req *bizrepo.WorldQuery) (*model.Wo
 }
 
 func (r *WorldRepo) List(ctx context.Context, req *bizrepo.WorldQuery) ([]*model.World, error) {
-	rows, err := worldQuery(r.getClient(ctx).World.Query(), req).Order(world.ByID()).All(ctx)
+	rows, err := r.worldQuery(r.getClient(ctx).World.Query(), req).Order(world.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -151,17 +152,17 @@ func (r *WorldRepo) Map(ctx context.Context, req *bizrepo.WorldQuery) (map[int64
 }
 
 func (r *WorldRepo) Count(ctx context.Context, req *bizrepo.WorldQuery) (int, error) {
-	return worldQuery(r.getClient(ctx).World.Query(), req).Count(ctx)
+	return r.worldQuery(r.getClient(ctx).World.Query(), req).Count(ctx)
 }
 
 func (r *WorldRepo) Page(ctx context.Context, req *bizrepo.WorldPageReq) (*bizrepo.WorldPageResp, error) {
-	p := page(req.Page)
-	q := worldQuery(r.getClient(ctx).World.Query(), &req.Query)
+	p := r.page(req.Page)
+	q := r.worldQuery(r.getClient(ctx).World.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(world.ByID()).Offset(pageOffset(p)).Limit(pageLimit(p)).All(ctx)
+	rows, err := q.Order(world.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +184,7 @@ func (r *WorldRepo) Page(ctx context.Context, req *bizrepo.WorldPageReq) (*bizre
 	})
 	return &bizrepo.WorldPageResp{
 		Rows: out,
-		Page: basePage(total, p),
+		Page: r.basePage(total, p),
 	}, nil
 }
 

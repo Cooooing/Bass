@@ -14,8 +14,6 @@ import (
 
 var _ bizrepo.NotificationRateLimitCache = (*NotificationRateLimitCache)(nil)
 
-const notificationRateLimitKeyPrefix = "notify:rate_limit"
-
 var notificationRateLimitAllowScript = redis.NewScript(`
 local key = KEYS[1]
 local now = tonumber(ARGV[1])
@@ -63,6 +61,7 @@ return {1, retry_after, 0}
 
 type NotificationRateLimitCache struct {
 	redisClient *client.RedisClient
+	keyPrefix   string
 }
 
 func NewNotificationRateLimitCache(
@@ -70,12 +69,13 @@ func NewNotificationRateLimitCache(
 ) bizrepo.NotificationRateLimitCache {
 	return &NotificationRateLimitCache{
 		redisClient: redisClient,
+		keyPrefix:   "notify:rate_limit",
 	}
 }
 
 func (c *NotificationRateLimitCache) Allow(ctx context.Context, spec *bizrepo.NotificationRateLimitSpec) (bool, error) {
 
-	key, err := notificationRateLimitKey(spec)
+	key, err := c.notificationRateLimitKey(spec)
 	if err != nil {
 		return false, err
 	}
@@ -95,7 +95,7 @@ func (c *NotificationRateLimitCache) Allow(ctx context.Context, spec *bizrepo.No
 
 func (c *NotificationRateLimitCache) Check(ctx context.Context, spec *bizrepo.NotificationRateLimitSpec) (*bizrepo.NotificationRateLimitState, error) {
 
-	key, err := notificationRateLimitKey(spec)
+	key, err := c.notificationRateLimitKey(spec)
 	if err != nil {
 		return nil, err
 	}
@@ -123,7 +123,7 @@ func (c *NotificationRateLimitCache) Check(ctx context.Context, spec *bizrepo.No
 	return state, nil
 }
 
-func notificationRateLimitKey(spec *bizrepo.NotificationRateLimitSpec) (string, error) {
+func (c *NotificationRateLimitCache) notificationRateLimitKey(spec *bizrepo.NotificationRateLimitSpec) (string, error) {
 	if spec == nil {
 		return "", fmt.Errorf("notification rate limit spec is nil")
 	}
@@ -134,5 +134,5 @@ func notificationRateLimitKey(spec *bizrepo.NotificationRateLimitSpec) (string, 
 	if recipient == "" {
 		return "", fmt.Errorf("notification rate limit recipient is empty")
 	}
-	return fmt.Sprintf("%s:%s:%s", notificationRateLimitKeyPrefix, spec.Channel, recipient), nil
+	return fmt.Sprintf("%s:%s:%s", c.keyPrefix, spec.Channel, recipient), nil
 }

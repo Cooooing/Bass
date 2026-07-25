@@ -6,9 +6,7 @@ import (
 )
 
 // ToUpperCamelCase 将字符串转换为大驼峰命名
-func ToUpperCamelCase(
-	s string,
-) string {
+func ToUpperCamelCase(s string) string {
 	words := splitWords(s)
 	for i, word := range words {
 		if word == "" {
@@ -21,9 +19,7 @@ func ToUpperCamelCase(
 }
 
 // ToLowerCamelCase 将字符串转换为小驼峰命名
-func ToLowerCamelCase(
-	s string,
-) string {
+func ToLowerCamelCase(s string) string {
 	words := splitWords(s)
 	for i, word := range words {
 		if word == "" {
@@ -41,9 +37,7 @@ func ToLowerCamelCase(
 }
 
 // ToSnakeCase 将字符串转换为蛇形命名
-func ToSnakeCase(
-	s string,
-) string {
+func ToSnakeCase(s string) string {
 	words := splitWords(s)
 	for i, word := range words {
 		if word == "" {
@@ -56,9 +50,7 @@ func ToSnakeCase(
 }
 
 // ToKebabCase 将字符串转换为短横线命名
-func ToKebabCase(
-	s string,
-) string {
+func ToKebabCase(s string) string {
 	words := splitWords(s)
 	for i, word := range words {
 		if word == "" {
@@ -71,9 +63,7 @@ func ToKebabCase(
 }
 
 // titleCase 将单词首字母大写，其余小写
-func titleCase(
-	s string,
-) string {
+func titleCase(s string) string {
 	if s == "" {
 		return s
 	}
@@ -83,9 +73,7 @@ func titleCase(
 }
 
 // splitWords 将输入字符串按下划线、短横线、空格或驼峰规则分割为单词
-func splitWords(
-	s string,
-) []string {
+func splitWords(s string) []string {
 	var words []string
 	var word strings.Builder
 	isUpper := false

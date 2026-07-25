@@ -24,21 +24,14 @@ func NewContentDomainService(
 	}
 }
 
-func (s *ContentDomainService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *ContentDomainService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *ContentDomainService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *ContentDomainService) RegisterHttp(hs *http.Server) {
 	bbscontentv1.RegisterDomainServiceHTTPServer(hs, s)
 }
 
-func (s *ContentDomainService) List(
-	ctx context.Context,
-	req *bbscontentv1.ListDomains_Req,
-) (*bbscontentv1.ListDomains_Resp, error) {
+func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListDomains_Req) (*bbscontentv1.ListDomains_Resp, error) {
 	resp, err := s.contentDomainUsecase.ListDomains(ctx, &usecase.ListDomainsReq{
 		Page:  req.GetPage(),
 		Query: req.GetQuery(),

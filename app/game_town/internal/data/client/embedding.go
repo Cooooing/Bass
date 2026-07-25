@@ -45,10 +45,7 @@ func NewEmbeddingClient(
 	}
 }
 
-func (c *EmbeddingClient) Embed(
-	ctx context.Context,
-	input []string,
-) ([][]float32, error) {
+func (c *EmbeddingClient) Embed(ctx context.Context, input []string) ([][]float32, error) {
 	if !c.enabled || len(input) == 0 {
 		return nil, fmt.Errorf("embedding is disabled")
 	}

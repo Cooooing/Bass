@@ -156,9 +156,7 @@ func NewWorldAgentRunner(
 	}
 }
 
-func (r *WorldAgentRunner) Start(
-	ctx context.Context,
-) error {
+func (r *WorldAgentRunner) Start(ctx context.Context) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	r.cancel = cancel
 
@@ -213,19 +211,14 @@ func (r *WorldAgentRunner) Start(
 	return nil
 }
 
-func (r *WorldAgentRunner) Stop(
-	_ context.Context,
-) error {
+func (r *WorldAgentRunner) Stop(_ context.Context) error {
 	if r.cancel != nil {
 		r.cancel()
 	}
 	return nil
 }
 
-func (r *WorldAgentRunner) ensureLoop(
-	ctx context.Context,
-	worldID int64,
-) *worldLoop {
+func (r *WorldAgentRunner) ensureLoop(ctx context.Context, worldID int64) *worldLoop {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -243,10 +236,7 @@ func (r *WorldAgentRunner) ensureLoop(
 	return loop
 }
 
-func (r *WorldAgentRunner) runWorld(
-	ctx context.Context,
-	loop *worldLoop,
-) {
+func (r *WorldAgentRunner) runWorld(ctx context.Context, loop *worldLoop) {
 	for {
 		select {
 		case <-ctx.Done():
@@ -279,9 +269,7 @@ func (r *WorldAgentRunner) runWorld(
 	}
 }
 
-func (r *WorldAgentRunner) recoverWorldLoops(
-	ctx context.Context,
-) {
+func (r *WorldAgentRunner) recoverWorldLoops(ctx context.Context) {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 
@@ -303,10 +291,7 @@ func (r *WorldAgentRunner) recoverWorldLoops(
 	}
 }
 
-func (r *WorldAgentRunner) consume(
-	ctx context.Context,
-	worldID int64,
-) bool {
+func (r *WorldAgentRunner) consume(ctx context.Context, worldID int64) bool {
 	state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{
 		WorldID: new(worldID),
 	})
@@ -440,10 +425,7 @@ func (r *WorldAgentRunner) consume(
 	return len(events) == worldEventConsumeBatchSize
 }
 
-func (r *WorldAgentRunner) resolveFastPlayerActionInTx(
-	ctx context.Context,
-	event *model.Event,
-) (*model.Event, bool, error) {
+func (r *WorldAgentRunner) resolveFastPlayerActionInTx(ctx context.Context, event *model.Event) (*model.Event, bool, error) {
 	if event.Type != enum.EventTypePlayerActionSubmitted || event.ActorPlayerID == nil || event.NpcID != nil {
 		return nil, false, nil
 	}
@@ -489,14 +471,7 @@ func (r *WorldAgentRunner) resolveFastPlayerActionInTx(
 	return resolved, true, err
 }
 
-func (r *WorldAgentRunner) appendFastActionEvent(
-	ctx context.Context,
-	source *model.Event,
-	eventType enum.EventType,
-	summary string,
-	content string,
-	locationID int64,
-) (*model.Event, error) {
+func (r *WorldAgentRunner) appendFastActionEvent(ctx context.Context, source *model.Event, eventType enum.EventType, summary string, content string, locationID int64) (*model.Event, error) {
 	return r.eventUsecase.AppendInTx(ctx, &AppendEventReq{
 		WorldID:          source.WorldID,
 		Type:             eventType,

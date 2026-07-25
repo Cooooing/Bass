@@ -33,18 +33,7 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewStationMessageUsecase,
 )
 
-func ProvideEventHandlers(
-	articleCollectedHandler *handler.ArticleCollectedHandler,
-	articleLikedHandler *handler.ArticleLikedHandler,
-	articlePublishedHandler *handler.ArticlePublishedHandler,
-	articleThankedHandler *handler.ArticleThankedHandler,
-	articleWatchedHandler *handler.ArticleWatchedHandler,
-	commentLikedHandler *handler.CommentLikedHandler,
-	commentPublishedHandler *handler.CommentPublishedHandler,
-	userFollowHandler *handler.UserFollowHandler,
-	userRegisterHandler *handler.UserRegisterHandler,
-	userVerificationCodeHandler *handler.UserVerificationCodeHandler,
-) usecase.EventHandlers {
+func ProvideEventHandlers(articleCollectedHandler *handler.ArticleCollectedHandler, articleLikedHandler *handler.ArticleLikedHandler, articlePublishedHandler *handler.ArticlePublishedHandler, articleThankedHandler *handler.ArticleThankedHandler, articleWatchedHandler *handler.ArticleWatchedHandler, commentLikedHandler *handler.CommentLikedHandler, commentPublishedHandler *handler.CommentPublishedHandler, userFollowHandler *handler.UserFollowHandler, userRegisterHandler *handler.UserRegisterHandler, userVerificationCodeHandler *handler.UserVerificationCodeHandler) usecase.EventHandlers {
 	eventHandlers := usecase.EventHandlers{
 		commonenum.EventTypeContentArticleCollect:     articleCollectedHandler,
 		commonenum.EventTypeContentArticleLike:        articleLikedHandler,

@@ -13,9 +13,7 @@ func NewHandlerFactory[T any]() *HandlerFactory[T] {
 	}
 }
 
-func NewHandlerFactoryWithHandlers[T any](
-	handlers ...Handler[T],
-) *HandlerFactory[T] {
+func NewHandlerFactoryWithHandlers[T any](handlers ...Handler[T]) *HandlerFactory[T] {
 	factory := &HandlerFactory[T]{
 		registry: make(map[string]func() Handler[T]),
 	}
@@ -28,17 +26,12 @@ func NewHandlerFactoryWithHandlers[T any](
 }
 
 // Register 注册 Handler 构造函数
-func (f *HandlerFactory[T]) Register(
-	name string,
-	constructor func() Handler[T],
-) {
+func (f *HandlerFactory[T]) Register(name string, constructor func() Handler[T]) {
 	f.registry[name] = constructor
 }
 
 // BuildChainByNames 根据 Handler 名称数组构建责任链
-func (f *HandlerFactory[T]) BuildChainByNames(
-	names []string,
-) (Handler[T], error) {
+func (f *HandlerFactory[T]) BuildChainByNames(names []string) (Handler[T], error) {
 	if len(names) == 0 {
 		return nil, fmt.Errorf("handler names list is empty")
 	}

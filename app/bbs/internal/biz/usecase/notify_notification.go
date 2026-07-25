@@ -30,10 +30,7 @@ type ListNotificationsResp struct {
 	Rows []*bbsnotifyv1.ListNotifications_Resp_Notification
 }
 
-func (u *NotificationUsecase) ListNotifications(
-	ctx context.Context,
-	req *ListNotificationsReq,
-) (*ListNotificationsResp, error) {
+func (u *NotificationUsecase) ListNotifications(ctx context.Context, req *ListNotificationsReq) (*ListNotificationsResp, error) {
 	if req == nil {
 		req = &ListNotificationsReq{}
 	}
@@ -84,10 +81,7 @@ type MarkReadNotificationReq struct {
 	IDs    []int64
 }
 
-func (u *NotificationUsecase) MarkReadNotification(
-	ctx context.Context,
-	req *MarkReadNotificationReq,
-) (int32, error) {
+func (u *NotificationUsecase) MarkReadNotification(ctx context.Context, req *MarkReadNotificationReq) (int32, error) {
 	reply, err := u.notificationClient.MarkReadNotification(ctx, &repo.MarkReadNotificationReq{
 		UserID: req.UserID,
 		IDs:    req.IDs,
@@ -98,10 +92,7 @@ func (u *NotificationUsecase) MarkReadNotification(
 	return reply, nil
 }
 
-func (u *NotificationUsecase) CountUnreadNotifications(
-	ctx context.Context,
-	userID int64,
-) (int64, error) {
+func (u *NotificationUsecase) CountUnreadNotifications(ctx context.Context, userID int64) (int64, error) {
 	reply, err := u.notificationClient.CountUnreadNotifications(ctx, userID)
 	if err != nil {
 		return 0, err

@@ -23,10 +23,7 @@ func NewUserClient(
 	}
 }
 
-func (c *UserClient) MapAccounts(
-	ctx context.Context,
-	userIDs []int64,
-) (map[int64]*model.UserAccountBasic, error) {
+func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.UserAccountBasic, error) {
 	if len(userIDs) == 0 {
 		return map[int64]*model.UserAccountBasic{}, nil
 	}

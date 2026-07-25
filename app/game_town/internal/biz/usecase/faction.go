@@ -23,10 +23,7 @@ func NewFactionUsecase(
 	}
 }
 
-func (u *FactionUsecase) Get(
-	ctx context.Context,
-	worldID, playerID, factionID int64,
-) (*model.Faction, error) {
+func (u *FactionUsecase) Get(ctx context.Context, worldID, playerID, factionID int64) (*model.Faction, error) {
 	if err := u.requireMember(ctx, worldID, playerID); err != nil {
 		return nil, err
 	}
@@ -36,10 +33,7 @@ func (u *FactionUsecase) Get(
 	})
 }
 
-func (u *FactionUsecase) List(
-	ctx context.Context,
-	worldID, playerID int64,
-) ([]*model.Faction, error) {
+func (u *FactionUsecase) List(ctx context.Context, worldID, playerID int64) ([]*model.Faction, error) {
 	if err := u.requireMember(ctx, worldID, playerID); err != nil {
 		return nil, err
 	}
@@ -48,10 +42,7 @@ func (u *FactionUsecase) List(
 	})
 }
 
-func (u *FactionUsecase) requireMember(
-	ctx context.Context,
-	worldID, playerID int64,
-) error {
+func (u *FactionUsecase) requireMember(ctx context.Context, worldID, playerID int64) error {
 	_, err := u.worldMemberRepo.Get(ctx, &repo.WorldMemberQuery{
 		WorldID:  new(worldID),
 		PlayerID: new(playerID),

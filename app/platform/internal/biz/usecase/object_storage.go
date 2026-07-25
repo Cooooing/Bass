@@ -37,17 +37,11 @@ func NewObjectStorageUsecase(
 	}
 }
 
-func (d *ObjectStorageUsecase) CreateBucket(
-	ctx context.Context,
-	bucket string,
-) error {
+func (d *ObjectStorageUsecase) CreateBucket(ctx context.Context, bucket string) error {
 	return d.objectStorageClient.CreateBucket(ctx, bucket)
 }
 
-func (d *ObjectStorageUsecase) DeleteBucket(
-	ctx context.Context,
-	bucket string,
-) error {
+func (d *ObjectStorageUsecase) DeleteBucket(ctx context.Context, bucket string) error {
 	return d.objectStorageClient.DeleteBucket(ctx, bucket)
 }
 
@@ -59,10 +53,7 @@ type UploadReq struct {
 	Content  []byte
 }
 
-func (d *ObjectStorageUsecase) Upload(
-	ctx context.Context,
-	req *UploadReq,
-) (*model.ObjectStorage, error) {
+func (d *ObjectStorageUsecase) Upload(ctx context.Context, req *UploadReq) (*model.ObjectStorage, error) {
 	if req == nil {
 		req = &UploadReq{}
 	}
@@ -112,10 +103,7 @@ type StreamUploadReq struct {
 	Body     io.Reader
 }
 
-func (d *ObjectStorageUsecase) StreamUpload(
-	ctx context.Context,
-	req *StreamUploadReq,
-) (*model.ObjectStorage, error) {
+func (d *ObjectStorageUsecase) StreamUpload(ctx context.Context, req *StreamUploadReq) (*model.ObjectStorage, error) {
 	if req == nil {
 		req = &StreamUploadReq{}
 	}
@@ -167,10 +155,7 @@ type DownloadResp struct {
 	Content  []byte
 }
 
-func (d *ObjectStorageUsecase) Download(
-	ctx context.Context,
-	key string,
-) (*DownloadResp, error) {
+func (d *ObjectStorageUsecase) Download(ctx context.Context, key string) (*DownloadResp, error) {
 	downloadResp, err := d.objectStorageClient.Download(ctx, key)
 	if err != nil {
 		return nil, err
@@ -190,10 +175,7 @@ type StreamDownloadResp struct {
 	Body     io.ReadCloser
 }
 
-func (d *ObjectStorageUsecase) StreamDownload(
-	ctx context.Context,
-	key string,
-) (*StreamDownloadResp, error) {
+func (d *ObjectStorageUsecase) StreamDownload(ctx context.Context, key string) (*StreamDownloadResp, error) {
 	downloadResp, err := d.objectStorageClient.StreamDownload(ctx, key)
 	if err != nil {
 		return nil, err
@@ -211,10 +193,7 @@ type UploadTokenReq struct {
 	UserID int64
 }
 
-func (d *ObjectStorageUsecase) UploadToken(
-	ctx context.Context,
-	req *UploadTokenReq,
-) ([]*model.UploadToken, error) {
+func (d *ObjectStorageUsecase) UploadToken(ctx context.Context, req *UploadTokenReq) ([]*model.UploadToken, error) {
 	if req == nil {
 		req = &UploadTokenReq{}
 	}
@@ -243,10 +222,7 @@ type UpdateAuditReq struct {
 	UserID int64
 }
 
-func (d *ObjectStorageUsecase) UpdateAudit(
-	ctx context.Context,
-	req *UpdateAuditReq,
-) error {
+func (d *ObjectStorageUsecase) UpdateAudit(ctx context.Context, req *UpdateAuditReq) error {
 	if req == nil {
 		req = &UpdateAuditReq{}
 	}
@@ -283,10 +259,7 @@ type ObjectStoragePageResp struct {
 	Page *common.PageResp
 }
 
-func (d *ObjectStorageUsecase) Page(
-	ctx context.Context,
-	req *ObjectStoragePageReq,
-) (*ObjectStoragePageResp, error) {
+func (d *ObjectStorageUsecase) Page(ctx context.Context, req *ObjectStoragePageReq) (*ObjectStoragePageResp, error) {
 	if req == nil {
 		req = &ObjectStoragePageReq{}
 	}
@@ -322,10 +295,7 @@ func (d *ObjectStorageUsecase) Page(
 	}, nil
 }
 
-func (d *ObjectStorageUsecase) QiniuUploadCallback(
-	ctx context.Context,
-	row *model.ObjectStorage,
-) error {
+func (d *ObjectStorageUsecase) QiniuUploadCallback(ctx context.Context, row *model.ObjectStorage) error {
 	return d.tx(ctx, func(ctx context.Context) error {
 		_, err := d.objectStorageRepo.Save(ctx, row)
 		return err
@@ -338,10 +308,7 @@ type QiniuIncrementAuditCallbackReq struct {
 	Blocked bool
 }
 
-func (d *ObjectStorageUsecase) QiniuIncrementAuditCallback(
-	ctx context.Context,
-	req *QiniuIncrementAuditCallbackReq,
-) error {
+func (d *ObjectStorageUsecase) QiniuIncrementAuditCallback(ctx context.Context, req *QiniuIncrementAuditCallbackReq) error {
 	if req == nil {
 		req = &QiniuIncrementAuditCallbackReq{}
 	}

@@ -28,21 +28,14 @@ func NewWorldMemberService(
 	}
 }
 
-func (s *WorldMemberService) RegisterGrpc(
-	server *grpc.Server,
-) {
+func (s *WorldMemberService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterGameTownWorldMemberServiceServer(server, s)
 }
 
-func (s *WorldMemberService) RegisterHttp(
-	*http.Server,
-) {
+func (s *WorldMemberService) RegisterHttp(*http.Server) {
 }
 
-func (s *WorldMemberService) Join(
-	ctx context.Context,
-	req *v1.JoinGameTownWorld_Request,
-) (*v1.JoinGameTownWorld_Resp, error) {
+func (s *WorldMemberService) Join(ctx context.Context, req *v1.JoinGameTownWorld_Request) (*v1.JoinGameTownWorld_Resp, error) {
 	if req.GetPlayerId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -64,10 +57,7 @@ func (s *WorldMemberService) Join(
 	}, nil
 }
 
-func (s *WorldMemberService) Get(
-	ctx context.Context,
-	req *v1.GetGameTownWorldMember_Request,
-) (*v1.GetGameTownWorldMember_Resp, error) {
+func (s *WorldMemberService) Get(ctx context.Context, req *v1.GetGameTownWorldMember_Request) (*v1.GetGameTownWorldMember_Resp, error) {
 	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -105,10 +95,7 @@ func (s *WorldMemberService) Get(
 	}, nil
 }
 
-func (s *WorldMemberService) SubmitAction(
-	ctx context.Context,
-	req *v1.SubmitGameTownAction_Request,
-) (*v1.SubmitGameTownAction_Resp, error) {
+func (s *WorldMemberService) SubmitAction(ctx context.Context, req *v1.SubmitGameTownAction_Request) (*v1.SubmitGameTownAction_Resp, error) {
 	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

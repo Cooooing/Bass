@@ -26,21 +26,14 @@ func NewNodeService(
 	}
 }
 
-func (s *NodeService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *NodeService) RegisterGrpc(gs *grpc.Server) {
 	pushhubv1.RegisterPushHubNodeServiceServer(gs, s)
 }
 
-func (s *NodeService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *NodeService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *NodeService) RegisterNode(
-	ctx context.Context,
-	req *pushhubv1.RegisterNode_Req,
-) (*pushhubv1.RegisterNode_Resp, error) {
+func (s *NodeService) RegisterNode(ctx context.Context, req *pushhubv1.RegisterNode_Req) (*pushhubv1.RegisterNode_Resp, error) {
 	nodeID, err := s.nodeUc.RegisterNode(ctx, req.Address)
 	if err != nil {
 		return nil, err
@@ -50,10 +43,7 @@ func (s *NodeService) RegisterNode(
 	}, nil
 }
 
-func (s *NodeService) Heartbeat(
-	ctx context.Context,
-	req *pushhubv1.Heartbeat_Req,
-) (*pushhubv1.Heartbeat_Resp, error) {
+func (s *NodeService) Heartbeat(ctx context.Context, req *pushhubv1.Heartbeat_Req) (*pushhubv1.Heartbeat_Resp, error) {
 	if err := s.nodeUc.Heartbeat(ctx, &usecase.HeartbeatReq{
 		NodeID:          req.NodeId,
 		ConnectionCount: req.ConnectionCount,
@@ -63,10 +53,7 @@ func (s *NodeService) Heartbeat(
 	return &pushhubv1.Heartbeat_Resp{}, nil
 }
 
-func (s *NodeService) ListNodes(
-	ctx context.Context,
-	req *pushhubv1.ListNodes_Req,
-) (*pushhubv1.ListNodes_Resp, error) {
+func (s *NodeService) ListNodes(ctx context.Context, req *pushhubv1.ListNodes_Req) (*pushhubv1.ListNodes_Resp, error) {
 	rows, err := s.nodeUc.ListNodes(ctx)
 	if err != nil {
 		return nil, err

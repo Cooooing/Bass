@@ -13,10 +13,6 @@ var ServiceProviderSet = wire.NewSet(
 	NewSchedulerDelayedTaskService,
 )
 
-func ProvideServices(
-	commonSystemService *CommonSystemService,
-	schedulerTaskService *SchedulerTaskService,
-	schedulerDelayedTaskService *SchedulerDelayedTaskService,
-) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, schedulerTaskService *SchedulerTaskService, schedulerDelayedTaskService *SchedulerDelayedTaskService) []server.Service {
 	return []server.Service{commonSystemService, schedulerTaskService, schedulerDelayedTaskService}
 }

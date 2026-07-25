@@ -24,21 +24,14 @@ func NewContentTagService(
 	}
 }
 
-func (s *ContentTagService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *ContentTagService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *ContentTagService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *ContentTagService) RegisterHttp(hs *http.Server) {
 	bbscontentv1.RegisterTagServiceHTTPServer(hs, s)
 }
 
-func (s *ContentTagService) Create(
-	ctx context.Context,
-	req *bbscontentv1.CreateTag_Req,
-) (*bbscontentv1.CreateTag_Resp, error) {
+func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.CreateTag_Req) (*bbscontentv1.CreateTag_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -81,10 +74,7 @@ func (s *ContentTagService) Create(
 	}, nil
 }
 
-func (s *ContentTagService) Update(
-	ctx context.Context,
-	req *bbscontentv1.UpdateTag_Req,
-) (*bbscontentv1.UpdateTag_Resp, error) {
+func (s *ContentTagService) Update(ctx context.Context, req *bbscontentv1.UpdateTag_Req) (*bbscontentv1.UpdateTag_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -128,10 +118,7 @@ func (s *ContentTagService) Update(
 	}, nil
 }
 
-func (s *ContentTagService) List(
-	ctx context.Context,
-	req *bbscontentv1.ListTags_Req,
-) (*bbscontentv1.ListTags_Resp, error) {
+func (s *ContentTagService) List(ctx context.Context, req *bbscontentv1.ListTags_Req) (*bbscontentv1.ListTags_Resp, error) {
 	resp, err := s.contentTagUsecase.ListTags(ctx, &usecase.ListTagsReq{
 		Page:  req.GetPage(),
 		Query: req.GetQuery(),

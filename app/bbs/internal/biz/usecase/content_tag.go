@@ -34,10 +34,7 @@ type CreateTagReq struct {
 	Tag    *ContentTagSave
 }
 
-func (u *ContentTagUsecase) CreateTag(
-	ctx context.Context,
-	req *CreateTagReq,
-) (*repo.Tag, error) {
+func (u *ContentTagUsecase) CreateTag(ctx context.Context, req *CreateTagReq) (*repo.Tag, error) {
 	if req == nil || req.Tag == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -67,10 +64,7 @@ type UpdateTagReq struct {
 	Tag    *ContentTagSave
 }
 
-func (u *ContentTagUsecase) UpdateTag(
-	ctx context.Context,
-	req *UpdateTagReq,
-) (*repo.Tag, error) {
+func (u *ContentTagUsecase) UpdateTag(ctx context.Context, req *UpdateTagReq) (*repo.Tag, error) {
 	if req == nil || req.Tag == nil || req.TagID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -105,10 +99,7 @@ type ListTagsResp struct {
 	Rows []*repo.Tag
 }
 
-func (u *ContentTagUsecase) ListTags(
-	ctx context.Context,
-	req *ListTagsReq,
-) (*ListTagsResp, error) {
+func (u *ContentTagUsecase) ListTags(ctx context.Context, req *ListTagsReq) (*ListTagsResp, error) {
 	if req == nil {
 		req = &ListTagsReq{}
 	}

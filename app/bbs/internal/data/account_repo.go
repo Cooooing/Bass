@@ -22,10 +22,7 @@ func NewAccountClient(
 	}
 }
 
-func (r *AccountClient) GetCurrentAccount(
-	ctx context.Context,
-	userID int64,
-) (*repo.Account, error) {
+func (r *AccountClient) GetCurrentAccount(ctx context.Context, userID int64) (*repo.Account, error) {
 	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Req{
 		UserId: userID,
 	})
@@ -63,10 +60,7 @@ func (r *AccountClient) GetCurrentAccount(
 	return out, nil
 }
 
-func (r *AccountClient) GetProfileAccount(
-	ctx context.Context,
-	userID int64,
-) (*repo.AccountProfile, error) {
+func (r *AccountClient) GetProfileAccount(ctx context.Context, userID int64) (*repo.AccountProfile, error) {
 	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Req{
 		UserId: userID,
 	})
@@ -94,10 +88,7 @@ func (r *AccountClient) GetProfileAccount(
 	return profile, nil
 }
 
-func (r *AccountClient) UpdateProfileAccount(
-	ctx context.Context,
-	req *repo.UpdateProfileAccountReq,
-) (*repo.AccountProfile, error) {
+func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.UpdateProfileAccountReq) (*repo.AccountProfile, error) {
 	updateReq := &userv1.UpdateProfileAccount_Req{
 		UserId:       req.UserID,
 		AvatarUrl:    req.AvatarURL,
@@ -134,10 +125,7 @@ func (r *AccountClient) UpdateProfileAccount(
 	return profile, nil
 }
 
-func (r *AccountClient) AvatarAccount(
-	ctx context.Context,
-	name string,
-) (*repo.AvatarAccountResp, error) {
+func (r *AccountClient) AvatarAccount(ctx context.Context, name string) (*repo.AvatarAccountResp, error) {
 	reply, err := r.userClient.Account.Avatar(ctx, &userv1.AvatarAccount_Req{
 		Name: name,
 	})

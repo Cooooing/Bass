@@ -31,10 +31,7 @@ func NewTaskAlert(
 	}
 }
 
-func (a *TaskAlert) Alert(
-	ctx context.Context,
-	req *bizrepo.TaskAlertReq,
-) error {
+func (a *TaskAlert) Alert(ctx context.Context, req *bizrepo.TaskAlertReq) error {
 	task := req.Task
 	record := req.Record
 	reason := req.Reason

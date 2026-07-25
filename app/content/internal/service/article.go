@@ -24,15 +24,11 @@ type ArticleService struct {
 	articleUsecase *usecase.ArticleUsecase
 }
 
-func (s *ArticleService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentArticleServiceServer(gs, s)
 }
 
-func (s *ArticleService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *ArticleService) RegisterHttp(hs *http.Server) {
 }
 
 func NewArticleService(
@@ -43,10 +39,7 @@ func NewArticleService(
 	}
 }
 
-func (s *ArticleService) Create(
-	ctx context.Context,
-	req *v1.CreateArticle_Req,
-) (rsp *v1.CreateArticle_Resp, err error) {
+func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Req) (rsp *v1.CreateArticle_Resp, err error) {
 	article := req.Article
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -130,10 +123,7 @@ func (s *ArticleService) Create(
 	}, nil
 }
 
-func (s *ArticleService) Publish(
-	ctx context.Context,
-	req *v1.PublishArticle_Req,
-) (rsp *v1.PublishArticle_Resp, err error) {
+func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req) (rsp *v1.PublishArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -149,10 +139,7 @@ func (s *ArticleService) Publish(
 	return &v1.PublishArticle_Resp{}, err
 }
 
-func (s *ArticleService) AddPostscript(
-	ctx context.Context,
-	req *v1.AddPostscriptArticle_Req,
-) (rsp *v1.AddPostscriptArticle_Resp, err error) {
+func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticle_Req) (rsp *v1.AddPostscriptArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -179,10 +166,7 @@ func (s *ArticleService) AddPostscript(
 	}, err
 }
 
-func (s *ArticleService) ListPostscripts(
-	ctx context.Context,
-	req *v1.ListArticlePostscripts_Req,
-) (rsp *v1.ListArticlePostscripts_Resp, err error) {
+func (s *ArticleService) ListPostscripts(ctx context.Context, req *v1.ListArticlePostscripts_Req) (rsp *v1.ListArticlePostscripts_Resp, err error) {
 	listPostscriptsResp, err := s.articleUsecase.ListPostscripts(ctx, req.ArticleId)
 	if err != nil {
 		return nil, err
@@ -206,10 +190,7 @@ func (s *ArticleService) ListPostscripts(
 	}, nil
 }
 
-func (s *ArticleService) Update(
-	ctx context.Context,
-	req *v1.UpdateArticle_Req,
-) (rsp *v1.UpdateArticle_Resp, err error) {
+func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticle_Req) (rsp *v1.UpdateArticle_Resp, err error) {
 	article := req.Article
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -291,10 +272,7 @@ func (s *ArticleService) Update(
 	}, nil
 }
 
-func (s *ArticleService) DiscardDraft(
-	ctx context.Context,
-	req *v1.DiscardDraftArticle_Req,
-) (rsp *v1.DiscardDraftArticle_Resp, err error) {
+func (s *ArticleService) DiscardDraft(ctx context.Context, req *v1.DiscardDraftArticle_Req) (rsp *v1.DiscardDraftArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -305,10 +283,7 @@ func (s *ArticleService) DiscardDraft(
 	return &v1.DiscardDraftArticle_Resp{}, err
 }
 
-func (s *ArticleService) MakePrivate(
-	ctx context.Context,
-	req *v1.MakePrivateArticle_Req,
-) (*v1.MakePrivateArticle_Resp, error) {
+func (s *ArticleService) MakePrivate(ctx context.Context, req *v1.MakePrivateArticle_Req) (*v1.MakePrivateArticle_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -319,10 +294,7 @@ func (s *ArticleService) MakePrivate(
 	return &v1.MakePrivateArticle_Resp{}, err
 }
 
-func (s *ArticleService) MakePublic(
-	ctx context.Context,
-	req *v1.MakePublicArticle_Req,
-) (*v1.MakePublicArticle_Resp, error) {
+func (s *ArticleService) MakePublic(ctx context.Context, req *v1.MakePublicArticle_Req) (*v1.MakePublicArticle_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -333,10 +305,7 @@ func (s *ArticleService) MakePublic(
 	return &v1.MakePublicArticle_Resp{}, err
 }
 
-func (s *ArticleService) Archive(
-	ctx context.Context,
-	req *v1.ArchiveArticle_Req,
-) (*v1.ArchiveArticle_Resp, error) {
+func (s *ArticleService) Archive(ctx context.Context, req *v1.ArchiveArticle_Req) (*v1.ArchiveArticle_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -348,10 +317,7 @@ func (s *ArticleService) Archive(
 	return &v1.ArchiveArticle_Resp{}, err
 }
 
-func (s *ArticleService) Unarchive(
-	ctx context.Context,
-	req *v1.UnarchiveArticle_Req,
-) (*v1.UnarchiveArticle_Resp, error) {
+func (s *ArticleService) Unarchive(ctx context.Context, req *v1.UnarchiveArticle_Req) (*v1.UnarchiveArticle_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -363,10 +329,7 @@ func (s *ArticleService) Unarchive(
 	return &v1.UnarchiveArticle_Resp{}, err
 }
 
-func (s *ArticleService) Hide(
-	ctx context.Context,
-	req *v1.HideArticle_Req,
-) (rsp *v1.HideArticle_Resp, err error) {
+func (s *ArticleService) Hide(ctx context.Context, req *v1.HideArticle_Req) (rsp *v1.HideArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -378,10 +341,7 @@ func (s *ArticleService) Hide(
 	return &v1.HideArticle_Resp{}, err
 }
 
-func (s *ArticleService) Unhide(
-	ctx context.Context,
-	req *v1.UnhideArticle_Req,
-) (*v1.UnhideArticle_Resp, error) {
+func (s *ArticleService) Unhide(ctx context.Context, req *v1.UnhideArticle_Req) (*v1.UnhideArticle_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -393,10 +353,7 @@ func (s *ArticleService) Unhide(
 	return &v1.UnhideArticle_Resp{}, err
 }
 
-func (s *ArticleService) Lock(
-	ctx context.Context,
-	req *v1.LockArticle_Req,
-) (rsp *v1.LockArticle_Resp, err error) {
+func (s *ArticleService) Lock(ctx context.Context, req *v1.LockArticle_Req) (rsp *v1.LockArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -408,10 +365,7 @@ func (s *ArticleService) Lock(
 	return &v1.LockArticle_Resp{}, err
 }
 
-func (s *ArticleService) Unlock(
-	ctx context.Context,
-	req *v1.UnlockArticle_Req,
-) (rsp *v1.UnlockArticle_Resp, err error) {
+func (s *ArticleService) Unlock(ctx context.Context, req *v1.UnlockArticle_Req) (rsp *v1.UnlockArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -423,10 +377,7 @@ func (s *ArticleService) Unlock(
 	return &v1.UnlockArticle_Resp{}, err
 }
 
-func (s *ArticleService) List(
-	ctx context.Context,
-	req *v1.ListArticles_Req,
-) (rsp *v1.ListArticles_Resp, err error) {
+func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Req) (rsp *v1.ListArticles_Resp, err error) {
 	req.Query = util.OrDefault(req.Query, &v1.ListArticles_Req_ArticleQueryParams{})
 	var publishStatus *enum.ArticlePublishStatus
 	if req.Query.PublishStatus != nil {
@@ -566,10 +517,7 @@ func (s *ArticleService) List(
 	}, err
 }
 
-func (s *ArticleService) Page(
-	ctx context.Context,
-	req *v1.PageArticles_Req,
-) (rsp *v1.PageArticles_Resp, err error) {
+func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (rsp *v1.PageArticles_Resp, err error) {
 	req.Query = util.OrDefault(req.Query, &v1.PageArticles_Req_ArticleQueryParams{})
 	var publishStatus *enum.ArticlePublishStatus
 	if req.Query.PublishStatus != nil {
@@ -715,10 +663,7 @@ func (s *ArticleService) Page(
 	}, err
 }
 
-func (s *ArticleService) Get(
-	ctx context.Context,
-	req *v1.GetArticle_Req,
-) (rsp *v1.GetArticle_Resp, err error) {
+func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (rsp *v1.GetArticle_Resp, err error) {
 	getResp, err := s.articleUsecase.Get(ctx, req.ArticleId)
 	if err != nil {
 		return nil, err
@@ -770,10 +715,7 @@ func (s *ArticleService) Get(
 	}, err
 }
 
-func (s *ArticleService) MapViewerActionStates(
-	ctx context.Context,
-	req *v1.MapArticleViewerActionStates_Req,
-) (rsp *v1.MapArticleViewerActionStates_Resp, err error) {
+func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapArticleViewerActionStates_Req) (rsp *v1.MapArticleViewerActionStates_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -799,10 +741,7 @@ func (s *ArticleService) MapViewerActionStates(
 	}, nil
 }
 
-func (s *ArticleService) Reward(
-	ctx context.Context,
-	req *v1.RewardArticle_Req,
-) (rsp *v1.RewardArticle_Resp, err error) {
+func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Req) (rsp *v1.RewardArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -814,10 +753,7 @@ func (s *ArticleService) Reward(
 	return &v1.RewardArticle_Resp{}, err
 }
 
-func (s *ArticleService) View(
-	ctx context.Context,
-	req *v1.ViewArticle_Req,
-) (rsp *v1.ViewArticle_Resp, err error) {
+func (s *ArticleService) View(ctx context.Context, req *v1.ViewArticle_Req) (rsp *v1.ViewArticle_Resp, err error) {
 	err = s.articleUsecase.View(ctx, &usecase.ArticleViewReq{
 		ArticleID:    req.ArticleId,
 		ViewerUserID: req.ViewerUserId,
@@ -825,10 +761,7 @@ func (s *ArticleService) View(
 	return &v1.ViewArticle_Resp{}, err
 }
 
-func (s *ArticleService) Like(
-	ctx context.Context,
-	req *v1.LikeArticle_Req,
-) (rsp *v1.LikeArticle_Resp, err error) {
+func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticle_Req) (rsp *v1.LikeArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -842,10 +775,7 @@ func (s *ArticleService) Like(
 	}, err
 }
 
-func (s *ArticleService) Thank(
-	ctx context.Context,
-	req *v1.ThankArticle_Req,
-) (rsp *v1.ThankArticle_Resp, err error) {
+func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Req) (rsp *v1.ThankArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -859,10 +789,7 @@ func (s *ArticleService) Thank(
 	}, err
 }
 
-func (s *ArticleService) Collect(
-	ctx context.Context,
-	req *v1.CollectArticle_Req,
-) (rsp *v1.CollectArticle_Resp, err error) {
+func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Req) (rsp *v1.CollectArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -876,10 +803,7 @@ func (s *ArticleService) Collect(
 	}, err
 }
 
-func (s *ArticleService) Watch(
-	ctx context.Context,
-	req *v1.WatchArticle_Req,
-) (rsp *v1.WatchArticle_Resp, err error) {
+func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticle_Req) (rsp *v1.WatchArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -893,10 +817,7 @@ func (s *ArticleService) Watch(
 	}, err
 }
 
-func (s *ArticleService) AcceptAnswer(
-	ctx context.Context,
-	req *v1.AcceptAnswerArticle_Req,
-) (rsp *v1.AcceptAnswerArticle_Resp, err error) {
+func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerArticle_Req) (rsp *v1.AcceptAnswerArticle_Resp, err error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

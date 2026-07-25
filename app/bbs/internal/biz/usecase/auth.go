@@ -26,10 +26,7 @@ type StartEmailRegistrationReq struct {
 }
 type StartEmailRegistrationResp struct{ Code string }
 
-func (u *AuthUsecase) StartEmailRegistration(
-	ctx context.Context,
-	req *StartEmailRegistrationReq,
-) (*StartEmailRegistrationResp, error) {
+func (u *AuthUsecase) StartEmailRegistration(ctx context.Context, req *StartEmailRegistrationReq) (*StartEmailRegistrationResp, error) {
 	reply, err := u.authRepo.StartEmailRegistration(ctx, &repo.StartEmailRegistrationReq{
 		Email:    req.Email,
 		Password: req.Password,
@@ -49,10 +46,7 @@ type VerifyEmailRegistrationReq struct {
 	Code  string
 }
 
-func (u *AuthUsecase) VerifyEmailRegistration(
-	ctx context.Context,
-	req *VerifyEmailRegistrationReq,
-) error {
+func (u *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEmailRegistrationReq) error {
 	return u.authRepo.VerifyEmailRegistration(ctx, &repo.VerifyEmailRegistrationReq{
 		Email: req.Email,
 		Code:  req.Code,
@@ -67,10 +61,7 @@ type StartPhoneRegistrationReq struct {
 }
 type StartPhoneRegistrationResp struct{ Code string }
 
-func (u *AuthUsecase) StartPhoneRegistration(
-	ctx context.Context,
-	req *StartPhoneRegistrationReq,
-) (*StartPhoneRegistrationResp, error) {
+func (u *AuthUsecase) StartPhoneRegistration(ctx context.Context, req *StartPhoneRegistrationReq) (*StartPhoneRegistrationResp, error) {
 	reply, err := u.authRepo.StartPhoneRegistration(ctx, &repo.StartPhoneRegistrationReq{
 		Phone:    req.Phone,
 		Password: req.Password,
@@ -90,10 +81,7 @@ type VerifyPhoneRegistrationReq struct {
 	Code  string
 }
 
-func (u *AuthUsecase) VerifyPhoneRegistration(
-	ctx context.Context,
-	req *VerifyPhoneRegistrationReq,
-) error {
+func (u *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, req *VerifyPhoneRegistrationReq) error {
 	return u.authRepo.VerifyPhoneRegistration(ctx, &repo.VerifyPhoneRegistrationReq{
 		Phone: req.Phone,
 		Code:  req.Code,
@@ -102,10 +90,7 @@ func (u *AuthUsecase) VerifyPhoneRegistration(
 
 type StartEmailLoginResp struct{ Code string }
 
-func (u *AuthUsecase) StartEmailLogin(
-	ctx context.Context,
-	email string,
-) (*StartEmailLoginResp, error) {
+func (u *AuthUsecase) StartEmailLogin(ctx context.Context, email string) (*StartEmailLoginResp, error) {
 	reply, err := u.authRepo.StartEmailLogin(ctx, email)
 	if err != nil {
 		return nil, err
@@ -117,10 +102,7 @@ func (u *AuthUsecase) StartEmailLogin(
 
 type StartPhoneLoginResp struct{ Code string }
 
-func (u *AuthUsecase) StartPhoneLogin(
-	ctx context.Context,
-	phone string,
-) (*StartPhoneLoginResp, error) {
+func (u *AuthUsecase) StartPhoneLogin(ctx context.Context, phone string) (*StartPhoneLoginResp, error) {
 	reply, err := u.authRepo.StartPhoneLogin(ctx, phone)
 	if err != nil {
 		return nil, err
@@ -147,10 +129,7 @@ type LoginResp struct {
 	Account               *model.Account
 }
 
-func (u *AuthUsecase) Login(
-	ctx context.Context,
-	req *LoginReq,
-) (*LoginResp, error) {
+func (u *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, error) {
 	reply, err := u.authRepo.Login(ctx, &repo.LoginReq{
 		Type:     req.Type,
 		Account:  req.Account,
@@ -207,10 +186,7 @@ type RefreshTokenResp struct {
 	SessionExpiresAt      time.Time
 }
 
-func (u *AuthUsecase) RefreshToken(
-	ctx context.Context,
-	refreshToken string,
-) (*RefreshTokenResp, error) {
+func (u *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string) (*RefreshTokenResp, error) {
 	reply, err := u.authRepo.RefreshToken(ctx, refreshToken)
 	if err != nil {
 		return nil, err
@@ -224,22 +200,18 @@ func (u *AuthUsecase) RefreshToken(
 	}, nil
 }
 
-func (u *AuthUsecase) Logout(
-	ctx context.Context,
-	accessToken string,
-) error {
+func (u *AuthUsecase) Logout(ctx context.Context, accessToken string) error {
 	return u.authRepo.Logout(ctx, accessToken)
 }
 
-func (u *AuthUsecase) CancelAccount(
-	ctx context.Context,
-	userID int64,
-	password string,
-	code string,
-) error {
+func (u *AuthUsecase) CancelAccount(ctx context.Context, userID int64, password string, code string) error {
 	return u.authRepo.CancelAccount(ctx, &repo.CancelAccountReq{
 		UserID:   userID,
 		Password: password,
 		Code:     code,
 	})
+}
+
+func (u *AuthUsecase) UnbanAccounts(ctx context.Context, userIDs []int64) error {
+	return u.authRepo.UnbanAccounts(ctx, userIDs)
 }

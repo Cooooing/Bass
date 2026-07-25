@@ -13,11 +13,7 @@ import (
 	"github.com/samber/lo"
 )
 
-func useWorld(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	value string,
-) commandResult {
+func useWorld(ctx context.Context, client *rpc.GameTownClient, value string) commandResult {
 	worldID, err := strconv.ParseInt(value, 10, 64)
 	if err != nil || worldID <= 0 {
 		return commandUsage("/world use <world_id>")
@@ -42,10 +38,7 @@ func useWorld(
 	}
 }
 
-func listWorlds(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-) commandResult {
+func listWorlds(ctx context.Context, client *rpc.GameTownClient) commandResult {
 	reply, err := client.World.Page(ctx, &v1.PageGameTownWorlds_Request{
 		Page: &common.PageReq{
 			Page: 1,
@@ -69,12 +62,7 @@ func listWorlds(
 	}
 }
 
-func createWorld(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	parts []string,
-) commandResult {
+func createWorld(ctx context.Context, client *rpc.GameTownClient, playerID int64, parts []string) commandResult {
 	if playerID == 0 {
 		return commandResult{
 			err: fmt.Errorf("请先使用 /register <name> 注册玩家，或 /player use <player_id>"),
@@ -111,12 +99,7 @@ func createWorld(
 	}
 }
 
-func joinWorld(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	parts []string,
-) commandResult {
+func joinWorld(ctx context.Context, client *rpc.GameTownClient, playerID int64, parts []string) commandResult {
 	if playerID == 0 {
 		return commandResult{
 			err: fmt.Errorf("请先使用 /register <name> 注册玩家，或 /player use <player_id>"),

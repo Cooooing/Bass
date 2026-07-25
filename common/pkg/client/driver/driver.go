@@ -27,11 +27,7 @@ type observedDriver struct {
 	policy  policy
 }
 
-func Wrap(
-	drv dialect.Driver,
-	logger *slog.Logger,
-	config Config,
-) dialect.Driver {
+func Wrap(drv dialect.Driver, logger *slog.Logger, config Config) dialect.Driver {
 	return &observedDriver{
 		wrapped: drv,
 		logger:  logger,
@@ -39,31 +35,21 @@ func Wrap(
 	}
 }
 
-func (d *observedDriver) Exec(
-	ctx context.Context,
-	query string,
-	args, v any,
-) (err error) {
+func (d *observedDriver) Exec(ctx context.Context, query string, args, v any) (err error) {
 	start := time.Now()
 	err = d.wrapped.Exec(ctx, query, args, v)
 	d.recordSQL(ctx, query, args, time.Since(start), err)
 	return err
 }
 
-func (d *observedDriver) Query(
-	ctx context.Context,
-	query string,
-	args, v any,
-) (err error) {
+func (d *observedDriver) Query(ctx context.Context, query string, args, v any) (err error) {
 	start := time.Now()
 	err = d.wrapped.Query(ctx, query, args, v)
 	d.recordSQL(ctx, query, args, time.Since(start), err)
 	return err
 }
 
-func (d *observedDriver) Tx(
-	ctx context.Context,
-) (dialect.Tx, error) {
+func (d *observedDriver) Tx(ctx context.Context) (dialect.Tx, error) {
 	tx, err := d.wrapped.Tx(ctx)
 	if err != nil {
 		return nil, err
@@ -84,13 +70,7 @@ func (d *observedDriver) Dialect() string {
 	return d.wrapped.Dialect()
 }
 
-func (d *observedDriver) recordSQL(
-	ctx context.Context,
-	query string,
-	args any,
-	latency time.Duration,
-	err error,
-) {
+func (d *observedDriver) recordSQL(ctx context.Context, query string, args any, latency time.Duration, err error) {
 	level, shouldRecord, withCaller := d.policy.sqlLevel(latency, err)
 	if !shouldRecord {
 		return
@@ -114,22 +94,14 @@ type observedTx struct {
 	txID   string
 }
 
-func (t *observedTx) Exec(
-	ctx context.Context,
-	query string,
-	args, v any,
-) (err error) {
+func (t *observedTx) Exec(ctx context.Context, query string, args, v any) (err error) {
 	start := time.Now()
 	err = t.Tx.Exec(ctx, query, args, v)
 	t.recordSQL(ctx, query, args, time.Since(start), err)
 	return err
 }
 
-func (t *observedTx) Query(
-	ctx context.Context,
-	query string,
-	args, v any,
-) (err error) {
+func (t *observedTx) Query(ctx context.Context, query string, args, v any) (err error) {
 	start := time.Now()
 	err = t.Tx.Query(ctx, query, args, v)
 	t.recordSQL(ctx, query, args, time.Since(start), err)
@@ -173,13 +145,7 @@ func (t *observedTx) Rollback() error {
 	return err
 }
 
-func (t *observedTx) recordSQL(
-	ctx context.Context,
-	query string,
-	args any,
-	latency time.Duration,
-	err error,
-) {
+func (t *observedTx) recordSQL(ctx context.Context, query string, args any, latency time.Duration, err error) {
 	level, shouldRecord, withCaller := t.policy.sqlLevel(latency, err)
 	if !shouldRecord {
 		return
@@ -205,9 +171,7 @@ type policy struct {
 	hasConfigured bool
 }
 
-func newPolicy(
-	config Config,
-) policy {
+func newPolicy(config Config) policy {
 	if config == nil {
 		return policy{
 			slowSQL: defaultSlowThreshold,
@@ -225,10 +189,7 @@ func newPolicy(
 	}
 }
 
-func (p policy) sqlLevel(
-	latency time.Duration,
-	err error,
-) (slog.Level, bool, bool) {
+func (p policy) sqlLevel(latency time.Duration, err error) (slog.Level, bool, bool) {
 	if err != nil {
 		return slog.LevelError, true, true
 	}
@@ -241,11 +202,7 @@ func (p policy) sqlLevel(
 	return slog.LevelDebug, false, false
 }
 
-func (p policy) txLevel(
-	latency time.Duration,
-	err error,
-	rollback bool,
-) (slog.Level, bool) {
+func (p policy) txLevel(latency time.Duration, err error, rollback bool) (slog.Level, bool) {
 	if err != nil {
 		return slog.LevelError, true
 	}
@@ -271,13 +228,7 @@ func (p policy) sampled() bool {
 	return rand.Float64() < p.sampleRate
 }
 
-func sqlAttrs(
-	query string,
-	args any,
-	latency time.Duration,
-	err error,
-	txID string,
-) []slog.Attr {
+func sqlAttrs(query string, args any, latency time.Duration, err error, txID string) []slog.Attr {
 	attrs := []slog.Attr{
 		slog.String(constant.LogFieldKind, constant.LogKindSQL),
 		slog.Int64(constant.LogFieldLatencyMS, latency.Milliseconds()),
@@ -293,15 +244,11 @@ func sqlAttrs(
 	return attrs
 }
 
-func normalizeSQL(
-	query string,
-) string {
+func normalizeSQL(query string) string {
 	return strings.Join(strings.Fields(query), " ")
 }
 
-func argsCount(
-	args any,
-) int {
+func argsCount(args any) int {
 	switch v := args.(type) {
 	case nil:
 		return 0
@@ -360,10 +307,7 @@ func findCaller() (callerInfo, bool) {
 	return callerInfo{}, false
 }
 
-func skipCaller(
-	funcName string,
-	file string,
-) bool {
+func skipCaller(funcName string, file string) bool {
 	normalizedFile := strings.ReplaceAll(file, "\\", "/")
 	if strings.HasPrefix(funcName, "runtime.") || strings.HasPrefix(funcName, "runtime/") {
 		return true

@@ -34,10 +34,7 @@ type StationMessagePageResp struct {
 	Page *base.PageResp
 }
 
-func (u *StationMessageUsecase) Page(
-	ctx context.Context,
-	req *StationMessagePageReq,
-) (*StationMessagePageResp, error) {
+func (u *StationMessageUsecase) Page(ctx context.Context, req *StationMessagePageReq) (*StationMessagePageResp, error) {
 	if req == nil {
 		req = &StationMessagePageReq{}
 	}
@@ -64,10 +61,7 @@ type StationMessageMarkReadReq struct {
 	EndTime    *time.Time
 }
 
-func (u *StationMessageUsecase) MarkRead(
-	ctx context.Context,
-	req *StationMessageMarkReadReq,
-) (int, error) {
+func (u *StationMessageUsecase) MarkRead(ctx context.Context, req *StationMessageMarkReadReq) (int, error) {
 	if req == nil {
 		req = &StationMessageMarkReadReq{}
 	}
@@ -83,10 +77,7 @@ func (u *StationMessageUsecase) MarkRead(
 	return count, nil
 }
 
-func (u *StationMessageUsecase) CountUnread(
-	ctx context.Context,
-	receiverID int64,
-) (int, error) {
+func (u *StationMessageUsecase) CountUnread(ctx context.Context, receiverID int64) (int, error) {
 
 	count, err := u.stationMessageRepo.CountUnread(ctx, receiverID)
 	if err != nil {

@@ -39,9 +39,7 @@ func NewInboxDeadLetterScanner(
 	}
 }
 
-func (s *InboxDeadLetterScanner) Start(
-	ctx context.Context,
-) error {
+func (s *InboxDeadLetterScanner) Start(ctx context.Context) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	s.cancel = cancel
 	go func() {
@@ -59,18 +57,14 @@ func (s *InboxDeadLetterScanner) Start(
 	return nil
 }
 
-func (s *InboxDeadLetterScanner) Stop(
-	_ context.Context,
-) error {
+func (s *InboxDeadLetterScanner) Stop(_ context.Context) error {
 	if s.cancel != nil {
 		s.cancel()
 	}
 	return nil
 }
 
-func (s *InboxDeadLetterScanner) scan(
-	ctx context.Context,
-) error {
+func (s *InboxDeadLetterScanner) scan(ctx context.Context) error {
 	status := commonenum.InboxEventStatusDead
 	pageResp, err := s.inboxRepo.Page(ctx, &repo.InboxEventQuery{
 		Page: &base.PageRequest{

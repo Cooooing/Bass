@@ -28,19 +28,14 @@ func NewNpcBeliefRepo(
 	}
 }
 
-func (r *NpcBeliefRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *NpcBeliefRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *NpcBeliefRepo) Save(
-	ctx context.Context,
-	row *model.NpcBelief,
-) (*model.NpcBelief, error) {
+func (r *NpcBeliefRepo) Save(ctx context.Context, row *model.NpcBelief) (*model.NpcBelief, error) {
 	saved, err := r.getClient(ctx).NpcBelief.Create().
 		SetWorldID(row.WorldID).
 		SetNpcID(row.NpcID).
@@ -59,10 +54,7 @@ func (r *NpcBeliefRepo) Save(
 	return npcBeliefModel(saved), nil
 }
 
-func npcBeliefQuery(
-	q *gen.NpcBeliefQuery,
-	req *bizrepo.NpcBeliefQuery,
-) *gen.NpcBeliefQuery {
+func npcBeliefQuery(q *gen.NpcBeliefQuery, req *bizrepo.NpcBeliefQuery) *gen.NpcBeliefQuery {
 	if req == nil {
 		return q
 	}
@@ -84,10 +76,7 @@ func npcBeliefQuery(
 	return q
 }
 
-func (r *NpcBeliefRepo) Get(
-	ctx context.Context,
-	req *bizrepo.NpcBeliefQuery,
-) (*model.NpcBelief, error) {
+func (r *NpcBeliefRepo) Get(ctx context.Context, req *bizrepo.NpcBeliefQuery) (*model.NpcBelief, error) {
 	row, err := npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -98,10 +87,7 @@ func (r *NpcBeliefRepo) Get(
 	return npcBeliefModel(row), nil
 }
 
-func (r *NpcBeliefRepo) List(
-	ctx context.Context,
-	req *bizrepo.NpcBeliefQuery,
-) ([]*model.NpcBelief, error) {
+func (r *NpcBeliefRepo) List(ctx context.Context, req *bizrepo.NpcBeliefQuery) ([]*model.NpcBelief, error) {
 	rows, err := npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), req).
 		Order(npcbelief.ByConfidence()).
 		All(ctx)
@@ -113,10 +99,7 @@ func (r *NpcBeliefRepo) List(
 	}), nil
 }
 
-func (r *NpcBeliefRepo) Map(
-	ctx context.Context,
-	req *bizrepo.NpcBeliefQuery,
-) (map[int64]*model.NpcBelief, error) {
+func (r *NpcBeliefRepo) Map(ctx context.Context, req *bizrepo.NpcBeliefQuery) (map[int64]*model.NpcBelief, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -128,17 +111,11 @@ func (r *NpcBeliefRepo) Map(
 	return out, nil
 }
 
-func (r *NpcBeliefRepo) Count(
-	ctx context.Context,
-	req *bizrepo.NpcBeliefQuery,
-) (int, error) {
+func (r *NpcBeliefRepo) Count(ctx context.Context, req *bizrepo.NpcBeliefQuery) (int, error) {
 	return npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), req).Count(ctx)
 }
 
-func (r *NpcBeliefRepo) Page(
-	ctx context.Context,
-	req *bizrepo.NpcBeliefPageReq,
-) (*bizrepo.NpcBeliefPageResp, error) {
+func (r *NpcBeliefRepo) Page(ctx context.Context, req *bizrepo.NpcBeliefPageReq) (*bizrepo.NpcBeliefPageResp, error) {
 	p := page(req.Page)
 	q := npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -160,9 +137,7 @@ func (r *NpcBeliefRepo) Page(
 	}, nil
 }
 
-func npcBeliefModel(
-	row *gen.NpcBelief,
-) *model.NpcBelief {
+func npcBeliefModel(row *gen.NpcBelief) *model.NpcBelief {
 	return &model.NpcBelief{
 		ID:             row.ID,
 		WorldID:        row.WorldID,

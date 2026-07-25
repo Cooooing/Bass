@@ -59,10 +59,7 @@ func (m *Minio) Name() string {
 	return string(enum.ObjectStorageProviderMinio)
 }
 
-func (m *Minio) CreateBucket(
-	ctx context.Context,
-	bucket string,
-) error {
+func (m *Minio) CreateBucket(ctx context.Context, bucket string) error {
 	if bucket == "" {
 		bucket = m.bucket
 	}
@@ -79,10 +76,7 @@ func (m *Minio) CreateBucket(
 	return nil
 }
 
-func (m *Minio) DeleteBucket(
-	ctx context.Context,
-	bucket string,
-) error {
+func (m *Minio) DeleteBucket(ctx context.Context, bucket string) error {
 	if bucket == "" {
 		bucket = m.bucket
 	}
@@ -92,10 +86,7 @@ func (m *Minio) DeleteBucket(
 	return nil
 }
 
-func (m *Minio) Upload(
-	ctx context.Context,
-	req *repo.ObjectStorageUploadReq,
-) (*repo.ObjectStorageUploadResp, error) {
+func (m *Minio) Upload(ctx context.Context, req *repo.ObjectStorageUploadReq) (*repo.ObjectStorageUploadResp, error) {
 	if req == nil {
 		req = &repo.ObjectStorageUploadReq{}
 	}
@@ -115,10 +106,7 @@ func (m *Minio) Upload(
 	}, nil
 }
 
-func (m *Minio) StreamUpload(
-	ctx context.Context,
-	req *repo.ObjectStorageStreamUploadReq,
-) (*repo.ObjectStorageStreamUploadResp, error) {
+func (m *Minio) StreamUpload(ctx context.Context, req *repo.ObjectStorageStreamUploadReq) (*repo.ObjectStorageStreamUploadResp, error) {
 	if req == nil {
 		req = &repo.ObjectStorageStreamUploadReq{}
 	}
@@ -142,10 +130,7 @@ func (m *Minio) StreamUpload(
 	}, nil
 }
 
-func (m *Minio) Download(
-	ctx context.Context,
-	key string,
-) (*repo.ObjectStorageDownloadResp, error) {
+func (m *Minio) Download(ctx context.Context, key string) (*repo.ObjectStorageDownloadResp, error) {
 	object, err := m.client.GetObject(ctx, m.bucket, key, miniosdk.GetObjectOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("download minio object: %w", err)
@@ -167,10 +152,7 @@ func (m *Minio) Download(
 	}, nil
 }
 
-func (m *Minio) StreamDownload(
-	ctx context.Context,
-	key string,
-) (*repo.ObjectStorageStreamDownloadResp, error) {
+func (m *Minio) StreamDownload(ctx context.Context, key string) (*repo.ObjectStorageStreamDownloadResp, error) {
 	object, err := m.client.GetObject(ctx, m.bucket, key, miniosdk.GetObjectOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("stream download minio object: %w", err)
@@ -188,10 +170,7 @@ func (m *Minio) StreamDownload(
 	}, nil
 }
 
-func (m *Minio) UploadToken(
-	ctx context.Context,
-	req *repo.ObjectStorageUploadTokenReq,
-) (string, error) {
+func (m *Minio) UploadToken(ctx context.Context, req *repo.ObjectStorageUploadTokenReq) (string, error) {
 	if req == nil {
 		req = &repo.ObjectStorageUploadTokenReq{}
 	}
@@ -204,9 +183,6 @@ func (m *Minio) UploadToken(
 	return url.String(), nil
 }
 
-func (m *Minio) Status(
-	ctx context.Context,
-	req *repo.ObjectStorageStatusReq,
-) error {
+func (m *Minio) Status(ctx context.Context, req *repo.ObjectStorageStatusReq) error {
 	return nil
 }

@@ -11,9 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func TestRecordEventsKeepsPlayerSequencesAndDeduplicatesGlobalStats(
-	t *testing.T,
-) {
+func TestRecordEventsKeepsPlayerSequencesAndDeduplicatesGlobalStats(t *testing.T) {
 	state := &runState{
 		playerSeq: make(map[int64]uint64),
 		seenEvent: make(map[int64]bool),
@@ -45,9 +43,7 @@ func TestRecordEventsKeepsPlayerSequencesAndDeduplicatesGlobalStats(
 	}
 }
 
-func TestRetryableWatchError(
-	t *testing.T,
-) {
+func TestRetryableWatchError(t *testing.T) {
 	ctx := context.Background()
 	tests := []struct {
 		name string
@@ -69,9 +65,7 @@ func TestRetryableWatchError(
 	}
 }
 
-func TestRetryableWatchErrorStopsWhenContextCanceled(
-	t *testing.T,
-) {
+func TestRetryableWatchErrorStopsWhenContextCanceled(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 	if retryableWatchError(ctx, io.EOF) {
@@ -79,9 +73,7 @@ func TestRetryableWatchErrorStopsWhenContextCanceled(
 	}
 }
 
-func TestValidateRunStrictRequiresWatchEvents(
-	t *testing.T,
-) {
+func TestValidateRunStrictRequiresWatchEvents(t *testing.T) {
 	state := &runState{
 		playerSeq: make(map[int64]uint64),
 		seenEvent: make(map[int64]bool),
@@ -105,9 +97,7 @@ func TestValidateRunStrictRequiresWatchEvents(
 	}
 }
 
-func TestValidateRunStrictRequiresFeedbackDensity(
-	t *testing.T,
-) {
+func TestValidateRunStrictRequiresFeedbackDensity(t *testing.T) {
 	state := &runState{
 		playerSeq: make(map[int64]uint64),
 		seenEvent: make(map[int64]bool),
@@ -139,9 +129,7 @@ func TestValidateRunStrictRequiresFeedbackDensity(
 	}
 }
 
-func TestValidateRunStrictRequiresWorldEvolutionForLongRun(
-	t *testing.T,
-) {
+func TestValidateRunStrictRequiresWorldEvolutionForLongRun(t *testing.T) {
 	state := &runState{
 		playerSeq: make(map[int64]uint64),
 		seenEvent: make(map[int64]bool),

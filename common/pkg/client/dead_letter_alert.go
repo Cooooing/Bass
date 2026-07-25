@@ -39,12 +39,7 @@ func NewDeadLetterAlertClient(
 	}
 }
 
-func (c *DeadLetterAlertClient) Alert(
-	ctx context.Context,
-	deadLetterConf *common.Event_DeadLetter,
-	alertConf *common.Alert,
-	alert *DeadLetterAlert,
-) error {
+func (c *DeadLetterAlertClient) Alert(ctx context.Context, deadLetterConf *common.Event_DeadLetter, alertConf *common.Alert, alert *DeadLetterAlert) error {
 	if c == nil || alert == nil || alert.Service == "" || alert.Source == "" || alert.EventID == "" {
 		return nil
 	}
@@ -77,9 +72,7 @@ func (c *DeadLetterAlertClient) Alert(
 	})
 }
 
-func (c *DeadLetterAlertClient) text(
-	alert *DeadLetterAlert,
-) string {
+func (c *DeadLetterAlertClient) text(alert *DeadLetterAlert) string {
 	updatedAt := ""
 	if alert.UpdatedAt != nil {
 		updatedAt = alert.UpdatedAt.Format(time.RFC3339)

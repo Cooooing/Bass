@@ -39,21 +39,14 @@ func NewAuthService(
 	}
 }
 
-func (s *AuthService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *AuthService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *AuthService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *AuthService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterAuthServiceHTTPServer(hs, s)
 }
 
-func (s *AuthService) StartEmailRegistration(
-	ctx context.Context,
-	req *bbsuserv1.StartEmailRegistration_Req,
-) (*bbsuserv1.StartEmailRegistration_Resp, error) {
+func (s *AuthService) StartEmailRegistration(ctx context.Context, req *bbsuserv1.StartEmailRegistration_Req) (*bbsuserv1.StartEmailRegistration_Resp, error) {
 	if err := s.validateStartEmailRegistration(req); err != nil {
 		return nil, err
 	}
@@ -71,10 +64,7 @@ func (s *AuthService) StartEmailRegistration(
 	}, nil
 }
 
-func (s *AuthService) VerifyEmailRegistration(
-	ctx context.Context,
-	req *bbsuserv1.VerifyEmailRegistration_Req,
-) (*bbsuserv1.VerifyEmailRegistration_Resp, error) {
+func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *bbsuserv1.VerifyEmailRegistration_Req) (*bbsuserv1.VerifyEmailRegistration_Resp, error) {
 	if err := s.validateVerifyEmailRegistration(req); err != nil {
 		return nil, err
 	}
@@ -84,10 +74,7 @@ func (s *AuthService) VerifyEmailRegistration(
 	})
 }
 
-func (s *AuthService) StartPhoneRegistration(
-	ctx context.Context,
-	req *bbsuserv1.StartPhoneRegistration_Req,
-) (*bbsuserv1.StartPhoneRegistration_Resp, error) {
+func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *bbsuserv1.StartPhoneRegistration_Req) (*bbsuserv1.StartPhoneRegistration_Resp, error) {
 	if err := s.validateStartPhoneRegistration(req); err != nil {
 		return nil, err
 	}
@@ -105,10 +92,7 @@ func (s *AuthService) StartPhoneRegistration(
 	}, nil
 }
 
-func (s *AuthService) VerifyPhoneRegistration(
-	ctx context.Context,
-	req *bbsuserv1.VerifyPhoneRegistration_Req,
-) (*bbsuserv1.VerifyPhoneRegistration_Resp, error) {
+func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *bbsuserv1.VerifyPhoneRegistration_Req) (*bbsuserv1.VerifyPhoneRegistration_Resp, error) {
 	if err := s.validateVerifyPhoneRegistration(req); err != nil {
 		return nil, err
 	}
@@ -118,10 +102,7 @@ func (s *AuthService) VerifyPhoneRegistration(
 	})
 }
 
-func (s *AuthService) StartEmailLogin(
-	ctx context.Context,
-	req *bbsuserv1.StartEmailLogin_Req,
-) (*bbsuserv1.StartEmailLogin_Resp, error) {
+func (s *AuthService) StartEmailLogin(ctx context.Context, req *bbsuserv1.StartEmailLogin_Req) (*bbsuserv1.StartEmailLogin_Resp, error) {
 	email, err := s.normalizeEmail(req.GetEmail())
 	if err != nil {
 		return nil, err
@@ -135,10 +116,7 @@ func (s *AuthService) StartEmailLogin(
 	}, nil
 }
 
-func (s *AuthService) StartPhoneLogin(
-	ctx context.Context,
-	req *bbsuserv1.StartPhoneLogin_Req,
-) (*bbsuserv1.StartPhoneLogin_Resp, error) {
+func (s *AuthService) StartPhoneLogin(ctx context.Context, req *bbsuserv1.StartPhoneLogin_Req) (*bbsuserv1.StartPhoneLogin_Resp, error) {
 	phone, err := s.normalizePhone(req.GetPhone())
 	if err != nil {
 		return nil, err
@@ -152,10 +130,7 @@ func (s *AuthService) StartPhoneLogin(
 	}, nil
 }
 
-func (s *AuthService) Login(
-	ctx context.Context,
-	req *bbsuserv1.Login_Req,
-) (*bbsuserv1.Login_Resp, error) {
+func (s *AuthService) Login(ctx context.Context, req *bbsuserv1.Login_Req) (*bbsuserv1.Login_Resp, error) {
 	ucReq, err := s.validateLogin(req)
 	if err != nil {
 		return nil, err
@@ -211,10 +186,7 @@ func (s *AuthService) Login(
 	}, nil
 }
 
-func (s *AuthService) RefreshToken(
-	ctx context.Context,
-	req *bbsuserv1.RefreshToken_Req,
-) (*bbsuserv1.RefreshToken_Resp, error) {
+func (s *AuthService) RefreshToken(ctx context.Context, req *bbsuserv1.RefreshToken_Req) (*bbsuserv1.RefreshToken_Resp, error) {
 	token := strings.TrimSpace(req.GetRefreshToken())
 	if token == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -232,10 +204,7 @@ func (s *AuthService) RefreshToken(
 	}, nil
 }
 
-func (s *AuthService) Logout(
-	ctx context.Context,
-	req *bbsuserv1.Logout_Req,
-) (*bbsuserv1.Logout_Resp, error) {
+func (s *AuthService) Logout(ctx context.Context, req *bbsuserv1.Logout_Req) (*bbsuserv1.Logout_Resp, error) {
 	token, err := currentToken(ctx)
 	if err != nil {
 		return nil, err
@@ -243,10 +212,7 @@ func (s *AuthService) Logout(
 	return &bbsuserv1.Logout_Resp{}, s.authUsecase.Logout(ctx, token)
 }
 
-func (s *AuthService) CancelAccount(
-	ctx context.Context,
-	req *bbsuserv1.CancelAccount_Req,
-) (*bbsuserv1.CancelAccount_Resp, error) {
+func (s *AuthService) CancelAccount(ctx context.Context, req *bbsuserv1.CancelAccount_Req) (*bbsuserv1.CancelAccount_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -257,9 +223,22 @@ func (s *AuthService) CancelAccount(
 	return &bbsuserv1.CancelAccount_Resp{}, s.authUsecase.CancelAccount(ctx, userID, req.GetPassword(), req.GetCode())
 }
 
-func (s *AuthService) validateLogin(
-	req *bbsuserv1.Login_Req,
-) (*usecase.LoginReq, error) {
+func (s *AuthService) UnbanAccounts(ctx context.Context, req *bbsuserv1.UnbanAccounts_Req) (*bbsuserv1.UnbanAccounts_Resp, error) {
+	if req == nil || len(req.GetUserIds()) == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	for _, userID := range req.GetUserIds() {
+		if userID == 0 {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+	}
+	if err := s.authUsecase.UnbanAccounts(ctx, req.GetUserIds()); err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.UnbanAccounts_Resp{}, nil
+}
+
+func (s *AuthService) validateLogin(req *bbsuserv1.Login_Req) (*usecase.LoginReq, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -318,9 +297,7 @@ func (s *AuthService) validateLogin(
 	return out, nil
 }
 
-func (s *AuthService) validateStartEmailRegistration(
-	req *bbsuserv1.StartEmailRegistration_Req,
-) error {
+func (s *AuthService) validateStartEmailRegistration(req *bbsuserv1.StartEmailRegistration_Req) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -343,9 +320,7 @@ func (s *AuthService) validateStartEmailRegistration(
 	return nil
 }
 
-func (s *AuthService) validateStartPhoneRegistration(
-	req *bbsuserv1.StartPhoneRegistration_Req,
-) error {
+func (s *AuthService) validateStartPhoneRegistration(req *bbsuserv1.StartPhoneRegistration_Req) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -368,9 +343,7 @@ func (s *AuthService) validateStartPhoneRegistration(
 	return nil
 }
 
-func (s *AuthService) validateVerifyEmailRegistration(
-	req *bbsuserv1.VerifyEmailRegistration_Req,
-) error {
+func (s *AuthService) validateVerifyEmailRegistration(req *bbsuserv1.VerifyEmailRegistration_Req) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -386,9 +359,7 @@ func (s *AuthService) validateVerifyEmailRegistration(
 	return nil
 }
 
-func (s *AuthService) validateVerifyPhoneRegistration(
-	req *bbsuserv1.VerifyPhoneRegistration_Req,
-) error {
+func (s *AuthService) validateVerifyPhoneRegistration(req *bbsuserv1.VerifyPhoneRegistration_Req) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -404,9 +375,7 @@ func (s *AuthService) validateVerifyPhoneRegistration(
 	return nil
 }
 
-func (s *AuthService) normalizeEmail(
-	email string,
-) (string, error) {
+func (s *AuthService) normalizeEmail(email string) (string, error) {
 	email = strings.ToLower(strings.TrimSpace(email))
 	if email == "" || utf8.RuneCountInString(email) > 254 {
 		return "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -418,9 +387,7 @@ func (s *AuthService) normalizeEmail(
 	return email, nil
 }
 
-func (s *AuthService) normalizePhone(
-	phone string,
-) (string, error) {
+func (s *AuthService) normalizePhone(phone string) (string, error) {
 	phone = strings.TrimSpace(phone)
 	if !s.phoneRe.MatchString(phone) {
 		return "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -428,9 +395,7 @@ func (s *AuthService) normalizePhone(
 	return phone, nil
 }
 
-func (s *AuthService) normalizeName(
-	name string,
-) (string, error) {
+func (s *AuthService) normalizeName(name string) (string, error) {
 	name = strings.ToLower(strings.TrimSpace(name))
 	length := utf8.RuneCountInString(name)
 	if length < 4 || length > 32 || !s.nameRe.MatchString(name) {
@@ -439,9 +404,7 @@ func (s *AuthService) normalizeName(
 	return name, nil
 }
 
-func (s *AuthService) normalizeNickname(
-	nickname *string,
-) (*string, error) {
+func (s *AuthService) normalizeNickname(nickname *string) (*string, error) {
 	if nickname == nil {
 		return nil, nil
 	}
@@ -458,9 +421,7 @@ func (s *AuthService) normalizeNickname(
 	return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 }
 
-func (s *AuthService) validatePassword(
-	password string,
-) error {
+func (s *AuthService) validatePassword(password string) error {
 	if len(password) < 6 || len(password) > 64 {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -486,9 +447,7 @@ func (s *AuthService) validatePassword(
 	return nil
 }
 
-func (s *AuthService) normalizeCode(
-	code string,
-) (string, error) {
+func (s *AuthService) normalizeCode(code string) (string, error) {
 	code = strings.TrimSpace(code)
 	if !s.codeRe.MatchString(code) {
 		return "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -496,9 +455,7 @@ func (s *AuthService) normalizeCode(
 	return code, nil
 }
 
-func (s *AuthService) normalizeLoginAccount(
-	account string,
-) (string, error) {
+func (s *AuthService) normalizeLoginAccount(account string) (string, error) {
 	account = strings.TrimSpace(account)
 	if account == "" {
 		return "", apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

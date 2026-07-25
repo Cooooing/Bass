@@ -8,9 +8,7 @@ import (
 	v1 "common/proto/gen/game_town/v1"
 )
 
-func formatEventLine(
-	event *v1.WatchGameTownEvents_Resp,
-) string {
+func formatEventLine(event *v1.WatchGameTownEvents_Resp) string {
 	line := fmt.Sprintf("[%d] %s · %s", event.GetSequence(), eventName(event.GetType()), event.GetSummary())
 	if event.GetContent() != "" {
 		line += "\n  " + event.GetContent()
@@ -30,9 +28,7 @@ func formatEventLine(
 	return line
 }
 
-func eventSuggestedChoices(
-	event *v1.WatchGameTownEvents_Resp,
-) []suggestedChoice {
+func eventSuggestedChoices(event *v1.WatchGameTownEvents_Resp) []suggestedChoice {
 	choices := make([]suggestedChoice, 0, len(event.GetSuggestedActions()))
 	for _, action := range event.GetSuggestedActions() {
 		content := strings.TrimSpace(action.GetContent())

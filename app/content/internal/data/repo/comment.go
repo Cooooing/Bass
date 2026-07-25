@@ -31,19 +31,14 @@ func NewCommentRepo(
 	}
 }
 
-func (r *CommentRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *CommentRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *CommentRepo) Save(
-	ctx context.Context,
-	comment *model.Comment,
-) (*model.Comment, error) {
+func (r *CommentRepo) Save(ctx context.Context, comment *model.Comment) (*model.Comment, error) {
 	save, err := r.getClient(ctx).Comment.Create().
 		SetArticleID(comment.ArticleID).
 		SetContent(comment.Content).
@@ -76,10 +71,7 @@ func (r *CommentRepo) Save(
 	}, nil
 }
 
-func (r *CommentRepo) UpdateRestriction(
-	ctx context.Context,
-	req *repo.CommentUpdateRestrictionReq,
-) error {
+func (r *CommentRepo) UpdateRestriction(ctx context.Context, req *repo.CommentUpdateRestrictionReq) error {
 	commentId := req.CommentID
 	restriction := req.Restriction
 	updatedBy := req.UpdatedBy
@@ -92,10 +84,7 @@ func (r *CommentRepo) UpdateRestriction(
 	return nil
 }
 
-func (r *CommentRepo) AddStats(
-	ctx context.Context,
-	req *repo.CommentAddStatsReq,
-) error {
+func (r *CommentRepo) AddStats(ctx context.Context, req *repo.CommentAddStatsReq) error {
 	commentId := req.CommentID
 	stats := req.Stats
 	updateOne := r.getClient(ctx).Comment.UpdateOneID(commentId)
@@ -114,10 +103,7 @@ func (r *CommentRepo) AddStats(
 	return nil
 }
 
-func (r *CommentRepo) Exist(
-	ctx context.Context,
-	req *repo.CommentGetReq,
-) (bool, error) {
+func (r *CommentRepo) Exist(ctx context.Context, req *repo.CommentGetReq) (bool, error) {
 	query := r.getClient(ctx).Comment.Query()
 	query = r.getQuery(query, req)
 	exist, err := query.Exist(ctx)
@@ -127,10 +113,7 @@ func (r *CommentRepo) Exist(
 	return exist, nil
 }
 
-func (r *CommentRepo) Get(
-	ctx context.Context,
-	req *repo.CommentGetReq,
-) (*model.Comment, error) {
+func (r *CommentRepo) Get(ctx context.Context, req *repo.CommentGetReq) (*model.Comment, error) {
 	query := r.getClient(ctx).Comment.Query()
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
@@ -159,10 +142,7 @@ func (r *CommentRepo) Get(
 	}, nil
 }
 
-func (r *CommentRepo) List(
-	ctx context.Context,
-	req *repo.CommentGetReq,
-) ([]*model.Comment, error) {
+func (r *CommentRepo) List(ctx context.Context, req *repo.CommentGetReq) ([]*model.Comment, error) {
 	query := r.getClient(ctx).Comment.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -190,10 +170,7 @@ func (r *CommentRepo) List(
 	}), nil
 }
 
-func (r *CommentRepo) Map(
-	ctx context.Context,
-	req *repo.CommentGetReq,
-) (map[int64]*model.Comment, error) {
+func (r *CommentRepo) Map(ctx context.Context, req *repo.CommentGetReq) (map[int64]*model.Comment, error) {
 	list, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -203,10 +180,7 @@ func (r *CommentRepo) Map(
 	}), nil
 }
 
-func (r *CommentRepo) Count(
-	ctx context.Context,
-	req *repo.CommentGetReq,
-) (int, error) {
+func (r *CommentRepo) Count(ctx context.Context, req *repo.CommentGetReq) (int, error) {
 	query := r.getClient(ctx).Comment.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -216,10 +190,7 @@ func (r *CommentRepo) Count(
 	return count, nil
 }
 
-func (r *CommentRepo) Page(
-	ctx context.Context,
-	req *repo.CommentGetReq,
-) (*repo.CommentPageResp, error) {
+func (r *CommentRepo) Page(ctx context.Context, req *repo.CommentGetReq) (*repo.CommentPageResp, error) {
 	page := normalizePage(req.Page)
 	query := r.getClient(ctx).Comment.Query().WithReply(func(q *gen.CommentQuery) {
 		q.Where(commentent.DeletedAtIsNil())
@@ -266,10 +237,7 @@ func (r *CommentRepo) Page(
 	}, nil
 }
 
-func (r *CommentRepo) ListReplyPreviews(
-	ctx context.Context,
-	req *repo.CommentReplyPreviewReq,
-) ([]*repo.CommentReplyPreview, error) {
+func (r *CommentRepo) ListReplyPreviews(ctx context.Context, req *repo.CommentReplyPreviewReq) ([]*repo.CommentReplyPreview, error) {
 	parentIds := lo.Uniq(req.ParentIds)
 	if len(parentIds) == 0 {
 		return nil, nil
@@ -329,10 +297,7 @@ func (r *CommentRepo) ListReplyPreviews(
 	}), nil
 }
 
-func (r *CommentRepo) getQuery(
-	query *gen.CommentQuery,
-	req *repo.CommentGetReq,
-) *gen.CommentQuery {
+func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq) *gen.CommentQuery {
 	query = query.Where(commentent.DeletedAtIsNil())
 	if req == nil {
 		req = &repo.CommentGetReq{}
@@ -392,10 +357,7 @@ func (r *CommentRepo) getQuery(
 	return query
 }
 
-func (r *CommentRepo) GetArticleLastComment(
-	ctx context.Context,
-	req *repo.CommentGetReq,
-) (*model.Comment, error) {
+func (r *CommentRepo) GetArticleLastComment(ctx context.Context, req *repo.CommentGetReq) (*model.Comment, error) {
 	if req.ArticleId == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -427,10 +389,7 @@ func (r *CommentRepo) GetArticleLastComment(
 	}, nil
 }
 
-func (r *CommentRepo) MapArticleLastComments(
-	ctx context.Context,
-	req *repo.CommentGetReq,
-) (map[int64]*model.Comment, error) {
+func (r *CommentRepo) MapArticleLastComments(ctx context.Context, req *repo.CommentGetReq) (map[int64]*model.Comment, error) {
 	if len(req.ArticleIds) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

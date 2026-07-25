@@ -36,19 +36,13 @@ func NewAccountUsecase(
 	}, nil
 }
 
-func (s *AccountUsecase) GetByUserID(
-	ctx context.Context,
-	userID int64,
-) (*model.Account, error) {
+func (s *AccountUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Account, error) {
 	return s.accountRepo.Get(ctx, &repo.AccountGetReq{
 		UserID: &userID,
 	})
 }
 
-func (s *AccountUsecase) CheckAvailability(
-	ctx context.Context,
-	availability *model.AccountAvailability,
-) (*model.AccountAvailability, error) {
+func (s *AccountUsecase) CheckAvailability(ctx context.Context, availability *model.AccountAvailability) (*model.AccountAvailability, error) {
 	if availability == nil {
 		return &model.AccountAvailability{}, nil
 	}
@@ -83,28 +77,19 @@ func (s *AccountUsecase) CheckAvailability(
 	return result, nil
 }
 
-func (s *AccountUsecase) ListByUserIDs(
-	ctx context.Context,
-	userIDs []int64,
-) ([]*model.Account, error) {
+func (s *AccountUsecase) ListByUserIDs(ctx context.Context, userIDs []int64) ([]*model.Account, error) {
 	return s.accountRepo.List(ctx, &repo.AccountGetReq{
 		UserIds: userIDs,
 	})
 }
 
-func (s *AccountUsecase) MapByUserIDs(
-	ctx context.Context,
-	userIDs []int64,
-) (map[int64]*model.Account, error) {
+func (s *AccountUsecase) MapByUserIDs(ctx context.Context, userIDs []int64) (map[int64]*model.Account, error) {
 	return s.accountRepo.Map(ctx, &repo.AccountGetReq{
 		UserIds: userIDs,
 	})
 }
 
-func (s *AccountUsecase) UpdateProfile(
-	ctx context.Context,
-	profile *model.AccountProfileUpdate,
-) (*model.Account, error) {
+func (s *AccountUsecase) UpdateProfile(ctx context.Context, profile *model.AccountProfileUpdate) (*model.Account, error) {
 	return s.accountRepo.UpdateProfile(ctx, profile)
 }
 
@@ -114,10 +99,7 @@ type UpdateAccountSettingReq struct {
 	Preferences *model.Preferences
 }
 
-func (s *AccountUsecase) UpdateSetting(
-	ctx context.Context,
-	req *UpdateAccountSettingReq,
-) (*model.Account, error) {
+func (s *AccountUsecase) UpdateSetting(ctx context.Context, req *UpdateAccountSettingReq) (*model.Account, error) {
 	var fullAccount *model.Account
 	err := s.tx(ctx, func(ctx context.Context) error {
 		req.Account.ID = req.UserID
@@ -142,10 +124,7 @@ func (s *AccountUsecase) UpdateSetting(
 	return fullAccount, nil
 }
 
-func (s *AccountUsecase) Avatar(
-	ctx context.Context,
-	name string,
-) ([]byte, error) {
+func (s *AccountUsecase) Avatar(ctx context.Context, name string) ([]byte, error) {
 	buf := &bytes.Buffer{}
 	avatar := goavatar.Make(name, goavatar.WithSize(512))
 	err := png.Encode(buf, avatar)

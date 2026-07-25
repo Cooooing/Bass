@@ -13,10 +13,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func cloneMessage[T proto.Message](
-	src proto.Message,
-	dst T,
-) T {
+func cloneMessage[T proto.Message](src proto.Message, dst T) T {
 	if src == nil {
 		return dst
 	}
@@ -41,21 +38,14 @@ func NewContentArticleService(
 	}
 }
 
-func (s *ContentArticleService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *ContentArticleService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *ContentArticleService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *ContentArticleService) RegisterHttp(hs *http.Server) {
 	bbscontentv1.RegisterArticleServiceHTTPServer(hs, s)
 }
 
-func (s *ContentArticleService) Create(
-	ctx context.Context,
-	req *bbscontentv1.CreateArticle_Req,
-) (*bbscontentv1.CreateArticle_Resp, error) {
+func (s *ContentArticleService) Create(ctx context.Context, req *bbscontentv1.CreateArticle_Req) (*bbscontentv1.CreateArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -87,10 +77,7 @@ func (s *ContentArticleService) Create(
 	}, nil
 }
 
-func (s *ContentArticleService) Update(
-	ctx context.Context,
-	req *bbscontentv1.UpdateArticle_Req,
-) (*bbscontentv1.UpdateArticle_Resp, error) {
+func (s *ContentArticleService) Update(ctx context.Context, req *bbscontentv1.UpdateArticle_Req) (*bbscontentv1.UpdateArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -123,10 +110,7 @@ func (s *ContentArticleService) Update(
 	}, nil
 }
 
-func (s *ContentArticleService) UpdateDraft(
-	ctx context.Context,
-	req *bbscontentv1.UpdateDraftArticle_Req,
-) (*bbscontentv1.UpdateDraftArticle_Resp, error) {
+func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontentv1.UpdateDraftArticle_Req) (*bbscontentv1.UpdateDraftArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -159,10 +143,7 @@ func (s *ContentArticleService) UpdateDraft(
 	}, nil
 }
 
-func (s *ContentArticleService) Publish(
-	ctx context.Context,
-	req *bbscontentv1.PublishArticle_Req,
-) (*bbscontentv1.PublishArticle_Resp, error) {
+func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.PublishArticle_Req) (*bbscontentv1.PublishArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -175,10 +156,7 @@ func (s *ContentArticleService) Publish(
 	return &bbscontentv1.PublishArticle_Resp{}, err
 }
 
-func (s *ContentArticleService) DiscardDraft(
-	ctx context.Context,
-	req *bbscontentv1.DiscardDraftArticle_Req,
-) (*bbscontentv1.DiscardDraftArticle_Resp, error) {
+func (s *ContentArticleService) DiscardDraft(ctx context.Context, req *bbscontentv1.DiscardDraftArticle_Req) (*bbscontentv1.DiscardDraftArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -190,10 +168,7 @@ func (s *ContentArticleService) DiscardDraft(
 	return &bbscontentv1.DiscardDraftArticle_Resp{}, err
 }
 
-func (s *ContentArticleService) List(
-	ctx context.Context,
-	req *bbscontentv1.ListArticles_Req,
-) (*bbscontentv1.ListArticles_Resp, error) {
+func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Req) (*bbscontentv1.ListArticles_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -224,10 +199,7 @@ func (s *ContentArticleService) List(
 	}, nil
 }
 
-func (s *ContentArticleService) Get(
-	ctx context.Context,
-	req *bbscontentv1.GetArticle_Req,
-) (*bbscontentv1.GetArticle_Resp, error) {
+func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetArticle_Req) (*bbscontentv1.GetArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -253,10 +225,7 @@ func (s *ContentArticleService) Get(
 	}, nil
 }
 
-func (s *ContentArticleService) Like(
-	ctx context.Context,
-	req *bbscontentv1.LikeArticle_Req,
-) (*bbscontentv1.LikeArticle_Resp, error) {
+func (s *ContentArticleService) Like(ctx context.Context, req *bbscontentv1.LikeArticle_Req) (*bbscontentv1.LikeArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -274,10 +243,7 @@ func (s *ContentArticleService) Like(
 	}, nil
 }
 
-func (s *ContentArticleService) Thank(
-	ctx context.Context,
-	req *bbscontentv1.ThankArticle_Req,
-) (*bbscontentv1.ThankArticle_Resp, error) {
+func (s *ContentArticleService) Thank(ctx context.Context, req *bbscontentv1.ThankArticle_Req) (*bbscontentv1.ThankArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -295,10 +261,7 @@ func (s *ContentArticleService) Thank(
 	}, nil
 }
 
-func (s *ContentArticleService) Collect(
-	ctx context.Context,
-	req *bbscontentv1.CollectArticle_Req,
-) (*bbscontentv1.CollectArticle_Resp, error) {
+func (s *ContentArticleService) Collect(ctx context.Context, req *bbscontentv1.CollectArticle_Req) (*bbscontentv1.CollectArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -316,10 +279,7 @@ func (s *ContentArticleService) Collect(
 	}, nil
 }
 
-func (s *ContentArticleService) Watch(
-	ctx context.Context,
-	req *bbscontentv1.WatchArticle_Req,
-) (*bbscontentv1.WatchArticle_Resp, error) {
+func (s *ContentArticleService) Watch(ctx context.Context, req *bbscontentv1.WatchArticle_Req) (*bbscontentv1.WatchArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -337,10 +297,7 @@ func (s *ContentArticleService) Watch(
 	}, nil
 }
 
-func (s *ContentArticleService) Reward(
-	ctx context.Context,
-	req *bbscontentv1.RewardArticle_Req,
-) (*bbscontentv1.RewardArticle_Resp, error) {
+func (s *ContentArticleService) Reward(ctx context.Context, req *bbscontentv1.RewardArticle_Req) (*bbscontentv1.RewardArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -353,10 +310,7 @@ func (s *ContentArticleService) Reward(
 	return &bbscontentv1.RewardArticle_Resp{}, err
 }
 
-func (s *ContentArticleService) AcceptAnswer(
-	ctx context.Context,
-	req *bbscontentv1.AcceptAnswerArticle_Req,
-) (*bbscontentv1.AcceptAnswerArticle_Resp, error) {
+func (s *ContentArticleService) AcceptAnswer(ctx context.Context, req *bbscontentv1.AcceptAnswerArticle_Req) (*bbscontentv1.AcceptAnswerArticle_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -369,9 +323,7 @@ func (s *ContentArticleService) AcceptAnswer(
 	return &bbscontentv1.AcceptAnswerArticle_Resp{}, err
 }
 
-func (s *ContentArticleService) articleListItem(
-	row *usecase.ContentArticleListItem,
-) *bbscontentv1.ListArticles_Resp_ArticleListItem {
+func (s *ContentArticleService) articleListItem(row *usecase.ContentArticleListItem) *bbscontentv1.ListArticles_Resp_ArticleListItem {
 	if row == nil {
 		return nil
 	}
@@ -411,9 +363,7 @@ func (s *ContentArticleService) articleListItem(
 	}
 }
 
-func (s *ContentArticleService) articleDetail(
-	row *usecase.ContentArticleDetail,
-) *bbscontentv1.CreateArticle_Resp_ArticleDetail {
+func (s *ContentArticleService) articleDetail(row *usecase.ContentArticleDetail) *bbscontentv1.CreateArticle_Resp_ArticleDetail {
 	if row == nil {
 		return nil
 	}
@@ -461,9 +411,7 @@ func (s *ContentArticleService) articleDetail(
 	}
 }
 
-func (s *ContentArticleService) articleViewerActionState(
-	row *usecase.ContentArticleViewerActionState,
-) *bbscontentv1.CreateArticle_Resp_ArticleViewerActionState {
+func (s *ContentArticleService) articleViewerActionState(row *usecase.ContentArticleViewerActionState) *bbscontentv1.CreateArticle_Resp_ArticleViewerActionState {
 	if row == nil {
 		return nil
 	}
@@ -475,9 +423,7 @@ func (s *ContentArticleService) articleViewerActionState(
 	}
 }
 
-func (s *ContentArticleService) articlePostscript(
-	row *usecase.ContentArticlePostscript,
-) *bbscontentv1.CreateArticle_Resp_ArticlePostscript {
+func (s *ContentArticleService) articlePostscript(row *usecase.ContentArticlePostscript) *bbscontentv1.CreateArticle_Resp_ArticlePostscript {
 	if row == nil {
 		return nil
 	}
@@ -494,9 +440,7 @@ func (s *ContentArticleService) articlePostscript(
 	}
 }
 
-func (s *ContentArticleService) accountProfile(
-	row *usecase.ContentAccountProfile,
-) *bbscontentv1.CreateArticle_Resp_AccountProfile {
+func (s *ContentArticleService) accountProfile(row *usecase.ContentAccountProfile) *bbscontentv1.CreateArticle_Resp_AccountProfile {
 	if row == nil {
 		return nil
 	}

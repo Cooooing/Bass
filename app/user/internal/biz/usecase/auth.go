@@ -93,10 +93,7 @@ type CheckPasswordLoginReq struct {
 	Password string
 }
 
-func (s *AuthUsecase) CheckPasswordLogin(
-	ctx context.Context,
-	req *CheckPasswordLoginReq,
-) (bool, error) {
+func (s *AuthUsecase) CheckPasswordLogin(ctx context.Context, req *CheckPasswordLoginReq) (bool, error) {
 	if req.Account == "" || req.Password == "" {
 		return false, nil
 	}
@@ -116,10 +113,7 @@ type StartEmailRegistrationResp struct {
 	Code string
 }
 
-func (s *AuthUsecase) StartEmailRegistration(
-	ctx context.Context,
-	account *model.Account,
-) (*StartEmailRegistrationResp, error) {
+func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, account *model.Account) (*StartEmailRegistrationResp, error) {
 	if account == nil || account.Email == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -177,10 +171,7 @@ type CheckEmailRegistrationCodeReq struct {
 	Code  string
 }
 
-func (s *AuthUsecase) CheckEmailRegistrationCode(
-	ctx context.Context,
-	req *CheckEmailRegistrationCodeReq,
-) (bool, error) {
+func (s *AuthUsecase) CheckEmailRegistrationCode(ctx context.Context, req *CheckEmailRegistrationCodeReq) (bool, error) {
 	return s.checkVerificationCode(ctx, verificationTypeEmail, normalizeAccountKey(req.Email), req.Code, false)
 }
 
@@ -189,10 +180,7 @@ type VerifyEmailRegistrationReq struct {
 	Code  string
 }
 
-func (s *AuthUsecase) VerifyEmailRegistration(
-	ctx context.Context,
-	req *VerifyEmailRegistrationReq,
-) error {
+func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEmailRegistrationReq) error {
 	email := normalizeAccountKey(req.Email)
 	ok, err := s.checkVerificationCode(ctx, verificationTypeEmail, email, req.Code, true)
 	if err != nil {
@@ -232,10 +220,7 @@ type StartPhoneRegistrationResp struct {
 	Code string
 }
 
-func (s *AuthUsecase) StartPhoneRegistration(
-	ctx context.Context,
-	account *model.Account,
-) (*StartPhoneRegistrationResp, error) {
+func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, account *model.Account) (*StartPhoneRegistrationResp, error) {
 	return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
 }
 
@@ -244,10 +229,7 @@ type CheckPhoneRegistrationCodeReq struct {
 	Code  string
 }
 
-func (s *AuthUsecase) CheckPhoneRegistrationCode(
-	ctx context.Context,
-	req *CheckPhoneRegistrationCodeReq,
-) (bool, error) {
+func (s *AuthUsecase) CheckPhoneRegistrationCode(ctx context.Context, req *CheckPhoneRegistrationCodeReq) (bool, error) {
 	return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
 }
 
@@ -256,10 +238,7 @@ type VerifyPhoneRegistrationReq struct {
 	Code  string
 }
 
-func (s *AuthUsecase) VerifyPhoneRegistration(
-	ctx context.Context,
-	req *VerifyPhoneRegistrationReq,
-) error {
+func (s *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, req *VerifyPhoneRegistrationReq) error {
 	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
 }
 
@@ -267,10 +246,7 @@ type StartEmailLoginResp struct {
 	Code string
 }
 
-func (s *AuthUsecase) StartEmailLogin(
-	ctx context.Context,
-	email string,
-) (*StartEmailLoginResp, error) {
+func (s *AuthUsecase) StartEmailLogin(ctx context.Context, email string) (*StartEmailLoginResp, error) {
 	email = normalizeAccountKey(email)
 	user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
 		Account: &email,
@@ -307,10 +283,7 @@ type StartPhoneLoginResp struct {
 	Code string
 }
 
-func (s *AuthUsecase) StartPhoneLogin(
-	ctx context.Context,
-	phone string,
-) (*StartPhoneLoginResp, error) {
+func (s *AuthUsecase) StartPhoneLogin(ctx context.Context, phone string) (*StartPhoneLoginResp, error) {
 	return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
 }
 
@@ -330,10 +303,7 @@ type LoginResp struct {
 	Account   *model.Account
 }
 
-func (s *AuthUsecase) Login(
-	ctx context.Context,
-	req *LoginReq,
-) (*LoginResp, error) {
+func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -390,11 +360,7 @@ func (s *AuthUsecase) Login(
 	}, nil
 }
 
-func (s *AuthUsecase) loginByPassword(
-	ctx context.Context,
-	req *LoginReq,
-	audit *model.LoginLog,
-) (*model.Account, error) {
+func (s *AuthUsecase) loginByPassword(ctx context.Context, req *LoginReq, audit *model.LoginLog) (*model.Account, error) {
 	accountInput := strings.TrimSpace(req.PasswordAccount)
 	if accountInput == "" || strings.TrimSpace(req.Password) == "" {
 		audit.FailureReason = ptr(enum.LoginFailureReasonInvalidCredentials)
@@ -426,12 +392,7 @@ func (s *AuthUsecase) loginByPassword(
 	return user, nil
 }
 
-func (s *AuthUsecase) loginByEmail(
-	ctx context.Context,
-	email string,
-	code string,
-	audit *model.LoginLog,
-) (*model.Account, error) {
+func (s *AuthUsecase) loginByEmail(ctx context.Context, email string, code string, audit *model.LoginLog) (*model.Account, error) {
 	ok, err := s.checkVerificationCode(ctx, verificationTypeEmail, email, code, true)
 	if err != nil {
 		return nil, err
@@ -455,11 +416,7 @@ func (s *AuthUsecase) loginByEmail(
 	return user, nil
 }
 
-func (s *AuthUsecase) RefreshToken(
-	ctx context.Context,
-	refreshToken string,
-	realm commonenum.LoginRealm,
-) (*model.TokenPair, error) {
+func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, realm commonenum.LoginRealm) (*model.TokenPair, error) {
 	claims, err := s.tokenUsecase.Parse(refreshToken)
 	if err != nil || claims.Type != tokenTypeRefresh || claims.Realm != realm || claims.SessionID == "" || claims.JTI == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
@@ -526,11 +483,7 @@ func (s *AuthUsecase) RefreshToken(
 	}, nil
 }
 
-func (s *AuthUsecase) Logout(
-	ctx context.Context,
-	accessToken string,
-	realm commonenum.LoginRealm,
-) error {
+func (s *AuthUsecase) Logout(ctx context.Context, accessToken string, realm commonenum.LoginRealm) error {
 	claims, err := s.tokenUsecase.Parse(accessToken)
 	if err != nil || claims.Type != tokenTypeAccess || claims.Realm != realm || claims.SessionID == "" {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
@@ -547,11 +500,7 @@ type ParseTokenResp struct {
 	Realm     commonenum.LoginRealm
 }
 
-func (s *AuthUsecase) ParseToken(
-	ctx context.Context,
-	accessToken string,
-	realm commonenum.LoginRealm,
-) (*ParseTokenResp, error) {
+func (s *AuthUsecase) ParseToken(ctx context.Context, accessToken string, realm commonenum.LoginRealm) (*ParseTokenResp, error) {
 	if accessToken == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
@@ -590,10 +539,7 @@ type CancelAccountReq struct {
 	Code     string
 }
 
-func (s *AuthUsecase) CancelAccount(
-	ctx context.Context,
-	req *CancelAccountReq,
-) error {
+func (s *AuthUsecase) CancelAccount(ctx context.Context, req *CancelAccountReq) error {
 	user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
 		UserID: &req.UserID,
 	})
@@ -645,10 +591,7 @@ type BanAccountResp struct {
 	BanRecordID int64
 }
 
-func (s *AuthUsecase) BanAccount(
-	ctx context.Context,
-	req *BanAccountReq,
-) (*BanAccountResp, error) {
+func (s *AuthUsecase) BanAccount(ctx context.Context, req *BanAccountReq) (*BanAccountResp, error) {
 	if req == nil || req.UserID == 0 || req.OperatorID == 0 || strings.TrimSpace(req.Reason) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -700,7 +643,7 @@ func (s *AuthUsecase) BanAccount(
 		return nil, err
 	}
 	if req.BannedUntil != nil {
-		if err := s.delayedTaskClient.RegisterUnbanExpired(ctx, req.UserID, record.ID, *req.BannedUntil); err != nil {
+		if err := s.delayedTaskClient.RegisterUnbanAccounts(ctx, req.UserID, record.ID, *req.BannedUntil); err != nil {
 			return nil, err
 		}
 	}
@@ -709,57 +652,67 @@ func (s *AuthUsecase) BanAccount(
 	}, nil
 }
 
-func (s *AuthUsecase) UnbanExpired(
-	ctx context.Context,
-	userID int64,
-	banRecordID int64,
-) (bool, error) {
-	user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
-		UserID: &userID,
-	})
-	if err != nil {
-		return false, err
+func (s *AuthUsecase) UnbanAccounts(ctx context.Context, userIDs []int64) error {
+	if len(userIDs) == 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	if user == nil || user.Status == nil || *user.Status != enum.AccountStatusBanned {
-		return false, nil
-	}
-	record, err := s.banRecordRepo.Get(ctx, banRecordID)
-	if err != nil || record == nil || record.UserID != userID || record.BannedUntil == nil || record.BannedUntil.After(time.Now()) {
-		return false, err
-	}
-	latest, err := s.banRecordRepo.LatestByUserID(ctx, userID)
-	if err != nil {
-		return false, err
-	}
-	if latest == nil || latest.ID != banRecordID {
-		return false, nil
-	}
-	err = s.tx(ctx, func(ctx context.Context) error {
-		if _, err := s.accountRepo.UpdateStatus(ctx, userID, enum.AccountStatusNormal); err != nil {
-			return err
+	uniqueUserIDs := make([]int64, 0, len(userIDs))
+	seenUserIDs := make(map[int64]struct{}, len(userIDs))
+	for _, userID := range userIDs {
+		if userID == 0 {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
-		return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			Event: &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_USER_ACCOUNT_UNBANNED,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_UNBANNED,
-				Payload: &commonenums.Event_UserAccountUnbanned{
-					UserAccountUnbanned: &commonenums.UserAccountUnbannedPayload{
-						UserId:      userID,
-						BanRecordId: banRecordID,
+		if _, ok := seenUserIDs[userID]; ok {
+			continue
+		}
+		seenUserIDs[userID] = struct{}{}
+		uniqueUserIDs = append(uniqueUserIDs, userID)
+	}
+	now := time.Now()
+	return s.tx(ctx, func(ctx context.Context) error {
+		for _, userID := range uniqueUserIDs {
+			user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
+				UserID: &userID,
+			})
+			if err != nil {
+				return err
+			}
+			if user == nil || user.Status == nil || *user.Status != enum.AccountStatusBanned {
+				continue
+			}
+			latest, err := s.banRecordRepo.LatestByUserID(ctx, userID)
+			if err != nil {
+				return err
+			}
+			if latest == nil || latest.BannedUntil == nil || latest.BannedUntil.After(now) {
+				continue
+			}
+			if _, err := s.accountRepo.UpdateStatus(ctx, userID, enum.AccountStatusNormal); err != nil {
+				return err
+			}
+			if err := s.authCacheRepo.DeleteUserRbacPermissions(ctx, userID); err != nil {
+				return err
+			}
+			if err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				Event: &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_USER_ACCOUNT_UNBANNED,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_UNBANNED,
+					Payload: &commonenums.Event_UserAccountUnbanned{
+						UserAccountUnbanned: &commonenums.UserAccountUnbannedPayload{
+							UserId:      userID,
+							BanRecordId: latest.ID,
+						},
 					},
 				},
-			},
-		})
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
 	})
-	return err == nil, err
 }
 
-func (s *AuthUsecase) createSession(
-	ctx context.Context,
-	account *model.Account,
-	realm commonenum.LoginRealm,
-	client *model.LoginContext,
-) (*model.TokenPair, error) {
+func (s *AuthUsecase) createSession(ctx context.Context, account *model.Account, realm commonenum.LoginRealm, client *model.LoginContext) (*model.TokenPair, error) {
 	now := time.Now()
 	sid := uuid.NewString()
 	jti := uuid.NewString()
@@ -835,10 +788,7 @@ type tokenIdentity struct {
 	Timezone string
 }
 
-func (s *AuthUsecase) tokenIdentity(
-	ctx context.Context,
-	userID int64,
-) (*tokenIdentity, error) {
+func (s *AuthUsecase) tokenIdentity(ctx context.Context, userID int64) (*tokenIdentity, error) {
 	account, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
 		UserID: &userID,
 	})
@@ -875,13 +825,7 @@ func (s *AuthUsecase) tokenIdentity(
 	return identity, nil
 }
 
-func (s *AuthUsecase) checkVerificationCode(
-	ctx context.Context,
-	codeType string,
-	account string,
-	code string,
-	consumeAttempt bool,
-) (bool, error) {
+func (s *AuthUsecase) checkVerificationCode(ctx context.Context, codeType string, account string, code string, consumeAttempt bool) (bool, error) {
 	row, err := s.authCacheRepo.GetCode(ctx, codeType, account)
 	if err != nil {
 		return false, err
@@ -895,11 +839,7 @@ func (s *AuthUsecase) checkVerificationCode(
 	return true, nil
 }
 
-func (s *AuthUsecase) validateTotpIfEnabled(
-	ctx context.Context,
-	userID int64,
-	code string,
-) (bool, error) {
+func (s *AuthUsecase) validateTotpIfEnabled(ctx context.Context, userID int64, code string) (bool, error) {
 	row, err := s.totpRepo.Get(ctx, &repo.TotpGetReq{
 		UserID: &userID,
 	})
@@ -912,13 +852,7 @@ func (s *AuthUsecase) validateTotpIfEnabled(
 	return strings.TrimSpace(code) != "" && totp.Validate(code, row.Secret), nil
 }
 
-func (s *AuthUsecase) saveVerificationCodeOutbox(
-	ctx context.Context,
-	codeType string,
-	account string,
-	code string,
-	ttl time.Duration,
-) error {
+func (s *AuthUsecase) saveVerificationCodeOutbox(ctx context.Context, codeType string, account string, code string, ttl time.Duration) error {
 	payloadSeconds := int64(ttl.Seconds())
 	if codeType == verificationTypeEmail {
 		return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
@@ -950,15 +884,7 @@ func (s *AuthUsecase) saveVerificationCodeOutbox(
 	})
 }
 
-func (s *AuthUsecase) saveLoginOutbox(
-	ctx context.Context,
-	account *model.Account,
-	loginType enum.LoginType,
-	realm commonenum.LoginRealm,
-	sessionID string,
-	client *model.LoginContext,
-	accountInput string,
-) error {
+func (s *AuthUsecase) saveLoginOutbox(ctx context.Context, account *model.Account, loginType enum.LoginType, realm commonenum.LoginRealm, sessionID string, client *model.LoginContext, accountInput string) error {
 	return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_LOGIN,
@@ -983,13 +909,7 @@ func (s *AuthUsecase) saveLoginOutbox(
 	})
 }
 
-func (s *AuthUsecase) saveLogoutOutbox(
-	ctx context.Context,
-	userID int64,
-	name string,
-	sessionID string,
-	realm commonenum.LoginRealm,
-) error {
+func (s *AuthUsecase) saveLogoutOutbox(ctx context.Context, userID int64, name string, sessionID string, realm commonenum.LoginRealm) error {
 	return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_LOGOUT,
@@ -1006,10 +926,7 @@ func (s *AuthUsecase) saveLogoutOutbox(
 	})
 }
 
-func (s *AuthUsecase) saveRegisterOutbox(
-	ctx context.Context,
-	userID int64,
-) error {
+func (s *AuthUsecase) saveRegisterOutbox(ctx context.Context, userID int64) error {
 	return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_REGISTER,
@@ -1023,10 +940,7 @@ func (s *AuthUsecase) saveRegisterOutbox(
 	})
 }
 
-func (s *AuthUsecase) sessionRedisTTL(
-	session *model.RefreshSession,
-	now time.Time,
-) time.Duration {
+func (s *AuthUsecase) sessionRedisTTL(session *model.RefreshSession, now time.Time) time.Duration {
 	remaining := time.Until(time.Unix(session.SessionExpiresAtUnix, 0))
 	if remaining <= 0 {
 		return time.Second
@@ -1054,9 +968,7 @@ func (s *AuthUsecase) verificationMaxAttempts() int32 {
 	return maxAttempts
 }
 
-func normalizeLoginContext(
-	client *model.LoginContext,
-) *model.LoginContext {
+func normalizeLoginContext(client *model.LoginContext) *model.LoginContext {
 	if client == nil {
 		client = &model.LoginContext{}
 	}
@@ -1069,10 +981,7 @@ func normalizeLoginContext(
 	return client
 }
 
-func (s *AuthUsecase) enrichLoginContext(
-	ctx context.Context,
-	client *model.LoginContext,
-) {
+func (s *AuthUsecase) enrichLoginContext(ctx context.Context, client *model.LoginContext) {
 	if client == nil || client.IP == "" || s.ipClient == nil {
 		return
 	}
@@ -1091,10 +1000,7 @@ func (s *AuthUsecase) enrichLoginContext(
 	client.ISP = info.ISP
 }
 
-func fillLoginLogClient(
-	log *model.LoginLog,
-	client *model.LoginContext,
-) {
+func fillLoginLogClient(log *model.LoginLog, client *model.LoginContext) {
 	if client.IP != "" {
 		log.IP = &client.IP
 	}
@@ -1126,21 +1032,15 @@ func fillLoginLogClient(
 	log.AppVersion = client.AppVersion
 }
 
-func normalizeAccountKey(
-	account string,
-) string {
+func normalizeAccountKey(account string) string {
 	return strings.ToLower(strings.TrimSpace(account))
 }
 
-func isNormalAccount(
-	account *model.Account,
-) bool {
+func isNormalAccount(account *model.Account) bool {
 	return account != nil && account.Status != nil && *account.Status == enum.AccountStatusNormal
 }
 
-func isAccountNotFound(
-	err error,
-) bool {
+func isAccountNotFound(err error) bool {
 	if err == nil {
 		return false
 	}
@@ -1148,18 +1048,13 @@ func isAccountNotFound(
 	return ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND
 }
 
-func minTime(
-	a time.Time,
-	b time.Time,
-) time.Time {
+func minTime(a time.Time, b time.Time) time.Time {
 	if a.Before(b) {
 		return a
 	}
 	return b
 }
 
-func ptr[T any](
-	value T,
-) *T {
+func ptr[T any](value T) *T {
 	return &value
 }

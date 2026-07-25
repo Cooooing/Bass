@@ -28,19 +28,14 @@ func NewRelationshipRepo(
 	}
 }
 
-func (r *RelationshipRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *RelationshipRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *RelationshipRepo) Save(
-	ctx context.Context,
-	row *model.Relationship,
-) (*model.Relationship, error) {
+func (r *RelationshipRepo) Save(ctx context.Context, row *model.Relationship) (*model.Relationship, error) {
 	saved, err := r.getClient(ctx).LivingRelationship.Create().
 		SetWorldID(row.WorldID).
 		SetSourceType(livingrelationship.SourceType(row.SourceType)).
@@ -57,10 +52,7 @@ func (r *RelationshipRepo) Save(
 	return relationshipModel(saved), nil
 }
 
-func relationshipQuery(
-	q *gen.LivingRelationshipQuery,
-	req *bizrepo.RelationshipQuery,
-) *gen.LivingRelationshipQuery {
+func relationshipQuery(q *gen.LivingRelationshipQuery, req *bizrepo.RelationshipQuery) *gen.LivingRelationshipQuery {
 	if req == nil {
 		return q
 	}
@@ -85,10 +77,7 @@ func relationshipQuery(
 	return q
 }
 
-func (r *RelationshipRepo) Get(
-	ctx context.Context,
-	req *bizrepo.RelationshipQuery,
-) (*model.Relationship, error) {
+func (r *RelationshipRepo) Get(ctx context.Context, req *bizrepo.RelationshipQuery) (*model.Relationship, error) {
 	row, err := relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -99,10 +88,7 @@ func (r *RelationshipRepo) Get(
 	return relationshipModel(row), nil
 }
 
-func (r *RelationshipRepo) List(
-	ctx context.Context,
-	req *bizrepo.RelationshipQuery,
-) ([]*model.Relationship, error) {
+func (r *RelationshipRepo) List(ctx context.Context, req *bizrepo.RelationshipQuery) ([]*model.Relationship, error) {
 	rows, err := relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), req).
 		Order(livingrelationship.ByID()).
 		All(ctx)
@@ -114,10 +100,7 @@ func (r *RelationshipRepo) List(
 	}), nil
 }
 
-func (r *RelationshipRepo) Map(
-	ctx context.Context,
-	req *bizrepo.RelationshipQuery,
-) (map[int64]*model.Relationship, error) {
+func (r *RelationshipRepo) Map(ctx context.Context, req *bizrepo.RelationshipQuery) (map[int64]*model.Relationship, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -129,17 +112,11 @@ func (r *RelationshipRepo) Map(
 	return out, nil
 }
 
-func (r *RelationshipRepo) Count(
-	ctx context.Context,
-	req *bizrepo.RelationshipQuery,
-) (int, error) {
+func (r *RelationshipRepo) Count(ctx context.Context, req *bizrepo.RelationshipQuery) (int, error) {
 	return relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), req).Count(ctx)
 }
 
-func (r *RelationshipRepo) Page(
-	ctx context.Context,
-	req *bizrepo.RelationshipPageReq,
-) (*bizrepo.RelationshipPageResp, error) {
+func (r *RelationshipRepo) Page(ctx context.Context, req *bizrepo.RelationshipPageReq) (*bizrepo.RelationshipPageResp, error) {
 	p := page(req.Page)
 	q := relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -161,9 +138,7 @@ func (r *RelationshipRepo) Page(
 	}, nil
 }
 
-func relationshipModel(
-	row *gen.LivingRelationship,
-) *model.Relationship {
+func relationshipModel(row *gen.LivingRelationship) *model.Relationship {
 	return &model.Relationship{
 		ID:         row.ID,
 		WorldID:    row.WorldID,
@@ -179,10 +154,7 @@ func relationshipModel(
 	}
 }
 
-func (r *RelationshipRepo) Upsert(
-	ctx context.Context,
-	req *bizrepo.RelationshipUpsertReq,
-) (*model.Relationship, error) {
+func (r *RelationshipRepo) Upsert(ctx context.Context, req *bizrepo.RelationshipUpsertReq) (*model.Relationship, error) {
 	query := &bizrepo.RelationshipQuery{
 		WorldID:    new(req.WorldID),
 		SourceType: new(req.SourceType),

@@ -13,9 +13,7 @@ import (
 	"game_town/internal/enum"
 )
 
-func TestAgentClientGenerateWorldWithOllama(
-	t *testing.T,
-) {
+func TestAgentClientGenerateWorldWithOllama(t *testing.T) {
 	draftJSON, err := json.Marshal(&model.WorldDraft{
 		Name:       "Town",
 		Summary:    "Ready",
@@ -88,9 +86,7 @@ func TestAgentClientGenerateWorldWithOllama(
 	}
 }
 
-func TestAgentClientOpenAISecretRequired(
-	t *testing.T,
-) {
+func TestAgentClientOpenAISecretRequired(t *testing.T) {
 	client := &AgentClient{
 		httpClient: http.DefaultClient,
 	}

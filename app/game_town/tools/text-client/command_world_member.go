@@ -11,11 +11,7 @@ import (
 	v1 "common/proto/gen/game_town/v1"
 )
 
-func lookWorld(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID, worldID int64,
-) commandResult {
+func lookWorld(ctx context.Context, client *rpc.GameTownClient, playerID, worldID int64) commandResult {
 	if err := requireWorldContext(playerID, worldID); err != nil {
 		return commandResult{
 			err: err,
@@ -80,12 +76,7 @@ func lookWorld(
 	}
 }
 
-func showPlayerCharacter(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	worldID int64,
-) commandResult {
+func showPlayerCharacter(ctx context.Context, client *rpc.GameTownClient, playerID int64, worldID int64) commandResult {
 	if err := requireWorldContext(playerID, worldID); err != nil {
 		return commandResult{
 			err: err,
@@ -122,12 +113,7 @@ func showPlayerCharacter(
 	}
 }
 
-func listTargets(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	worldID int64,
-) commandResult {
+func listTargets(ctx context.Context, client *rpc.GameTownClient, playerID int64, worldID int64) commandResult {
 	if err := requireWorldContext(playerID, worldID); err != nil {
 		return commandResult{
 			err: err,
@@ -182,12 +168,7 @@ func listTargets(
 	}
 }
 
-func listKnownNpcs(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	worldID int64,
-) commandResult {
+func listKnownNpcs(ctx context.Context, client *rpc.GameTownClient, playerID int64, worldID int64) commandResult {
 	if err := requireWorldContext(playerID, worldID); err != nil {
 		return commandResult{
 			err: err,
@@ -220,12 +201,7 @@ func listKnownNpcs(
 	}
 }
 
-func listKnownFactions(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	worldID int64,
-) commandResult {
+func listKnownFactions(ctx context.Context, client *rpc.GameTownClient, playerID int64, worldID int64) commandResult {
 	if err := requireWorldContext(playerID, worldID); err != nil {
 		return commandResult{
 			err: err,
@@ -254,12 +230,7 @@ func listKnownFactions(
 	}
 }
 
-func movePlayer(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID, worldID int64,
-	locationQuery string,
-) commandResult {
+func movePlayer(ctx context.Context, client *rpc.GameTownClient, playerID, worldID int64, locationQuery string) commandResult {
 	if err := requireWorldContext(playerID, worldID); err != nil {
 		return commandResult{
 			err: err,
@@ -287,12 +258,7 @@ func movePlayer(
 	return submitAction(ctx, client, playerID, worldID, content, targets)
 }
 
-func resolveLocation(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID, worldID int64,
-	query string,
-) (*v1.ListGameTownLocations_Resp_Row, []string, error) {
+func resolveLocation(ctx context.Context, client *rpc.GameTownClient, playerID, worldID int64, query string) (*v1.ListGameTownLocations_Resp_Row, []string, error) {
 	reply, err := client.Location.List(ctx, &v1.ListGameTownLocations_Request{
 		WorldId:  worldID,
 		PlayerId: playerID,
@@ -317,12 +283,7 @@ func resolveLocation(
 	return nil, alternatives, nil
 }
 
-func talkNpc(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID, worldID int64,
-	parts []string,
-) commandResult {
+func talkNpc(ctx context.Context, client *rpc.GameTownClient, playerID, worldID int64, parts []string) commandResult {
 	if len(parts) < 3 {
 		return commandResult{
 			err: fmt.Errorf("usage: /talk <npc_id> <content>"),
@@ -341,22 +302,11 @@ func talkNpc(
 	return result
 }
 
-func actInWorld(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID, worldID int64,
-	content []string,
-) commandResult {
+func actInWorld(ctx context.Context, client *rpc.GameTownClient, playerID, worldID int64, content []string) commandResult {
 	return submitAction(ctx, client, playerID, worldID, strings.Join(content, " "), nil)
 }
 
-func submitAction(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID, worldID int64,
-	content string,
-	targets []*v1.SubmitGameTownAction_Request_EntityRef,
-) commandResult {
+func submitAction(ctx context.Context, client *rpc.GameTownClient, playerID, worldID int64, content string, targets []*v1.SubmitGameTownAction_Request_EntityRef) commandResult {
 	if err := requireWorldContext(playerID, worldID); err != nil {
 		return commandResult{
 			err: err,

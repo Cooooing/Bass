@@ -22,10 +22,7 @@ func NewPreferencesClient(
 	}
 }
 
-func (r *PreferencesClient) GetCurrentPreferences(
-	ctx context.Context,
-	userID int64,
-) (*repo.Preference, error) {
+func (r *PreferencesClient) GetCurrentPreferences(ctx context.Context, userID int64) (*repo.Preference, error) {
 	reply, err := r.userClient.Preferences.Get(ctx, &userv1.GetPreferences_Req{
 		UserId: userID,
 	})
@@ -46,10 +43,7 @@ func (r *PreferencesClient) GetCurrentPreferences(
 	return out, nil
 }
 
-func (r *PreferencesClient) UpdateCurrentPreferences(
-	ctx context.Context,
-	req *repo.UpdateCurrentPreferencesReq,
-) (*repo.Preference, error) {
+func (r *PreferencesClient) UpdateCurrentPreferences(ctx context.Context, req *repo.UpdateCurrentPreferencesReq) (*repo.Preference, error) {
 	updateReq := &userv1.UpdatePreferences_Req{
 		UserId:      req.UserID,
 		Timezone:    req.Timezone,

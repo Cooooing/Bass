@@ -21,10 +21,7 @@ func NewIPClient(
 	}
 }
 
-func (r *IPClient) Resolve(
-	ctx context.Context,
-	ip string,
-) (*commonModel.IpInfo, error) {
+func (r *IPClient) Resolve(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
 	conn, err := r.consul.GetGrpcConn(constant.PlatformServiceName.String())
 	if err != nil {
 		return nil, err

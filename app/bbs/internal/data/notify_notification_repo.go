@@ -22,10 +22,7 @@ func NewNotificationClient(
 	}
 }
 
-func (r *NotificationClient) ListNotifications(
-	ctx context.Context,
-	req *repo.ListNotificationsReq,
-) (*repo.ListNotificationsResp, error) {
+func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.ListNotificationsReq) (*repo.ListNotificationsResp, error) {
 	listReq := &notifyv1.ListStationMessages_Req{
 		UserId: req.UserID,
 	}
@@ -67,10 +64,7 @@ func (r *NotificationClient) ListNotifications(
 	}, nil
 }
 
-func (r *NotificationClient) MarkReadNotification(
-	ctx context.Context,
-	req *repo.MarkReadNotificationReq,
-) (int32, error) {
+func (r *NotificationClient) MarkReadNotification(ctx context.Context, req *repo.MarkReadNotificationReq) (int32, error) {
 	reply, err := r.notifyClient.StationMessage.MarkRead(ctx, &notifyv1.MarkReadStationMessage_Req{
 		UserId: req.UserID,
 		Ids:    req.IDs,
@@ -81,10 +75,7 @@ func (r *NotificationClient) MarkReadNotification(
 	return reply.GetCount(), nil
 }
 
-func (r *NotificationClient) CountUnreadNotifications(
-	ctx context.Context,
-	userID int64,
-) (int64, error) {
+func (r *NotificationClient) CountUnreadNotifications(ctx context.Context, userID int64) (int64, error) {
 	reply, err := r.notifyClient.StationMessage.CountUnread(ctx, &notifyv1.CountUnreadStationMessages_Req{
 		UserId: userID,
 	})

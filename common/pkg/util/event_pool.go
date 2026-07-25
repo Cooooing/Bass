@@ -34,8 +34,6 @@ func NewEventPool(
 	return e, cleanup, err
 }
 
-func (p *EventPool) Submit(
-	task func(),
-) error {
+func (p *EventPool) Submit(task func()) error {
 	return p.pool.Submit(task)
 }

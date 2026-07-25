@@ -22,21 +22,14 @@ func NewLocationService(
 	}
 }
 
-func (s *LocationService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *LocationService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *LocationService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterLocationServiceHTTPServer(hs, s)
 }
 
-func (s *LocationService) GetCurrent(
-	ctx context.Context,
-	req *bbsuserv1.GetCurrentLocation_Req,
-) (*bbsuserv1.GetCurrentLocation_Resp, error) {
+func (s *LocationService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Req) (*bbsuserv1.GetCurrentLocation_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -50,10 +43,7 @@ func (s *LocationService) GetCurrent(
 	}, nil
 }
 
-func (s *LocationService) UpsertCurrent(
-	ctx context.Context,
-	req *bbsuserv1.UpsertCurrentLocation_Req,
-) (*bbsuserv1.UpsertCurrentLocation_Resp, error) {
+func (s *LocationService) UpsertCurrent(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Req) (*bbsuserv1.UpsertCurrentLocation_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

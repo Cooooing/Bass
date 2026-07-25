@@ -9,11 +9,7 @@ import (
 	v1 "common/proto/gen/game_town/v1"
 )
 
-func usePlayer(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	value string,
-) commandResult {
+func usePlayer(ctx context.Context, client *rpc.GameTownClient, value string) commandResult {
 	playerID, err := strconv.ParseInt(value, 10, 64)
 	if err != nil || playerID <= 0 {
 		return commandUsage("/player use <player_id>")
@@ -36,11 +32,7 @@ func usePlayer(
 	}
 }
 
-func registerPlayer(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	name string,
-) commandResult {
+func registerPlayer(ctx context.Context, client *rpc.GameTownClient, name string) commandResult {
 	reply, err := client.Player.Register(
 		ctx,
 		&v1.RegisterGameTownPlayer_Request{

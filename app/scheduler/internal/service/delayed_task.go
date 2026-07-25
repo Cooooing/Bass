@@ -29,21 +29,14 @@ func NewSchedulerDelayedTaskService(
 	}
 }
 
-func (s *SchedulerDelayedTaskService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *SchedulerDelayedTaskService) RegisterGrpc(gs *grpc.Server) {
 	schedulerv1.RegisterSchedulerDelayedTaskServiceServer(gs, s)
 }
 
-func (s *SchedulerDelayedTaskService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *SchedulerDelayedTaskService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *SchedulerDelayedTaskService) Register(
-	ctx context.Context,
-	req *schedulerv1.RegisterSchedulerDelayedTask_Req,
-) (*schedulerv1.RegisterSchedulerDelayedTask_Resp, error) {
+func (s *SchedulerDelayedTaskService) Register(ctx context.Context, req *schedulerv1.RegisterSchedulerDelayedTask_Req) (*schedulerv1.RegisterSchedulerDelayedTask_Resp, error) {
 	row, err := s.usecase.Register(ctx, &usecase.DelayedTaskRegisterReq{
 		IdempotencyKey: req.GetIdempotencyKey(),
 		TaskName:       req.GetTaskName(),
@@ -88,17 +81,11 @@ func (s *SchedulerDelayedTaskService) Register(
 	}, nil
 }
 
-func (s *SchedulerDelayedTaskService) Cancel(
-	ctx context.Context,
-	req *schedulerv1.CancelSchedulerDelayedTask_Req,
-) (*schedulerv1.CancelSchedulerDelayedTask_Resp, error) {
+func (s *SchedulerDelayedTaskService) Cancel(ctx context.Context, req *schedulerv1.CancelSchedulerDelayedTask_Req) (*schedulerv1.CancelSchedulerDelayedTask_Resp, error) {
 	return &schedulerv1.CancelSchedulerDelayedTask_Resp{}, s.usecase.Cancel(ctx, req.GetId(), req.GetIdempotencyKey())
 }
 
-func (s *SchedulerDelayedTaskService) Get(
-	ctx context.Context,
-	req *schedulerv1.GetSchedulerDelayedTask_Req,
-) (*schedulerv1.GetSchedulerDelayedTask_Resp, error) {
+func (s *SchedulerDelayedTaskService) Get(ctx context.Context, req *schedulerv1.GetSchedulerDelayedTask_Req) (*schedulerv1.GetSchedulerDelayedTask_Resp, error) {
 	row, err := s.usecase.Get(ctx, req.GetId(), req.GetIdempotencyKey())
 	if err != nil {
 		return nil, err
@@ -136,10 +123,7 @@ func (s *SchedulerDelayedTaskService) Get(
 	}, nil
 }
 
-func (s *SchedulerDelayedTaskService) Page(
-	ctx context.Context,
-	req *schedulerv1.PageSchedulerDelayedTasks_Req,
-) (*schedulerv1.PageSchedulerDelayedTasks_Resp, error) {
+func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1.PageSchedulerDelayedTasks_Req) (*schedulerv1.PageSchedulerDelayedTasks_Resp, error) {
 	req = util.OrDefault(req, &schedulerv1.PageSchedulerDelayedTasks_Req{})
 	query := util.OrDefault(req.Query, &schedulerv1.PageSchedulerDelayedTasks_Req_Query{})
 	var status *schedulerenum.DelayedTaskStatus
@@ -197,10 +181,7 @@ func (s *SchedulerDelayedTaskService) Page(
 	}, nil
 }
 
-func (s *SchedulerDelayedTaskService) Trigger(
-	ctx context.Context,
-	req *schedulerv1.TriggerSchedulerDelayedTask_Req,
-) (*schedulerv1.TriggerSchedulerDelayedTask_Resp, error) {
+func (s *SchedulerDelayedTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerDelayedTask_Req) (*schedulerv1.TriggerSchedulerDelayedTask_Resp, error) {
 	return &schedulerv1.TriggerSchedulerDelayedTask_Resp{}, s.usecase.Trigger(ctx, req.GetId())
 }
 

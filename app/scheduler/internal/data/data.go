@@ -30,20 +30,14 @@ var DataProviderSet = wire.NewSet(
 	repo.NewDelayedTaskRepo,
 )
 
-func ProvideRedis(
-	c *config.Bootstrap,
-) *common.Redis {
+func ProvideRedis(c *config.Bootstrap) *common.Redis {
 	return c.Redis
 }
 
-func ProvideNats(
-	c *config.Bootstrap,
-) *common.Nats {
+func ProvideNats(c *config.Bootstrap) *common.Nats {
 	return c.Nats
 }
 
-func ProvideConsul(
-	c *config.Bootstrap,
-) *common.Consul {
+func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul
 }

@@ -15,13 +15,7 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
-func newGameTownClient(
-	addr string,
-	consulAddr string,
-	datacenter string,
-	token string,
-	timeout time.Duration,
-) (*rpc.GameTownClient, func(), string, error) {
+func newGameTownClient(addr string, consulAddr string, datacenter string, token string, timeout time.Duration) (*rpc.GameTownClient, func(), string, error) {
 	if addr != "" {
 		conn, err := grpc.NewClient(
 			addr,
@@ -57,10 +51,7 @@ func newGameTownClient(
 	return client, cleanup, target, nil
 }
 
-func envDefault(
-	key string,
-	fallback string,
-) string {
+func envDefault(key string, fallback string) string {
 	if value := os.Getenv(key); value != "" {
 		return value
 	}

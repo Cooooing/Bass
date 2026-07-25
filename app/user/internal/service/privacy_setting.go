@@ -24,21 +24,14 @@ func NewPrivacySettingService(
 	}
 }
 
-func (s *PrivacySettingService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *PrivacySettingService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterPrivacySettingServiceServer(gs, s)
 }
 
-func (s *PrivacySettingService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *PrivacySettingService) Get(
-	ctx context.Context,
-	req *v1.GetPrivacySetting_Req,
-) (*v1.GetPrivacySetting_Resp, error) {
+func (s *PrivacySettingService) Get(ctx context.Context, req *v1.GetPrivacySetting_Req) (*v1.GetPrivacySetting_Resp, error) {
 	res, err := s.privacySettingUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
@@ -59,10 +52,7 @@ func (s *PrivacySettingService) Get(
 	}, nil
 }
 
-func (s *PrivacySettingService) Update(
-	ctx context.Context,
-	req *v1.UpdatePrivacySetting_Req,
-) (*v1.UpdatePrivacySetting_Resp, error) {
+func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivacySetting_Req) (*v1.UpdatePrivacySetting_Resp, error) {
 	res, err := s.privacySettingUsecase.UpsertByUserID(ctx, &model.PrivacySetting{
 		UserID:             req.GetUserId(),
 		PublicPoints:       req.PublicPoints,

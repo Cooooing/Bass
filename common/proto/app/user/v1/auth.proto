@@ -27,7 +27,7 @@ service AuthService {
   rpc ParseToken(ParseToken.Req) returns (ParseToken.Resp) {} // 解析 access token 并滑动刷新会话。
   rpc CancelAccount(CancelAccount.Req) returns (CancelAccount.Resp) {} // 注销账号并失效全部会话。
   rpc BanAccount(BanAccount.Req) returns (BanAccount.Resp) {} // 封禁账号并失效全部会话。
-  rpc UnbanExpired(UnbanExpired.Req) returns (UnbanExpired.Resp) {} // 过期封禁解封，由 scheduler 调用。
+  rpc UnbanAccounts(UnbanAccounts.Req) returns (UnbanAccounts.Resp) {} // 解封已到期的封禁账号，支持批量操作。
 }
 
 message StartEmailRegistration {
@@ -230,12 +230,9 @@ message BanAccount {
   }
 }
 
-message UnbanExpired {
+message UnbanAccounts {
   message Req {
-    int64 user_id = 1; // 账号 ID
-    int64 ban_record_id = 2; // 封禁记录 ID
+    repeated int64 user_ids = 1; // 账号 ID 列表
   }
-  message Resp {
-    bool updated = 1; // 是否执行了解封状态更新
-  }
+  message Resp {}
 }

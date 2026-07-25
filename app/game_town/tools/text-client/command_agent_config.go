@@ -13,10 +13,7 @@ import (
 	"github.com/samber/lo"
 )
 
-func listAgentConfigs(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-) commandResult {
+func listAgentConfigs(ctx context.Context, client *rpc.GameTownClient) commandResult {
 	reply, err := client.AgentConfig.List(ctx, &v1.ListGameTownAgentConfigs_Request{
 		Page: &common.PageReq{
 			Page: 1,
@@ -40,11 +37,7 @@ func listAgentConfigs(
 	}
 }
 
-func createAgentConfig(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	parts []string,
-) commandResult {
+func createAgentConfig(ctx context.Context, client *rpc.GameTownClient, parts []string) commandResult {
 	var provider v1enum.GameTownAgentProvider
 	switch strings.ToLower(parts[3]) {
 	case "ollama":

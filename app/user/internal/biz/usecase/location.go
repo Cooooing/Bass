@@ -18,18 +18,12 @@ func NewLocationUsecase(
 	}
 }
 
-func (s *LocationUsecase) GetByUserID(
-	ctx context.Context,
-	userID int64,
-) (*model.Location, error) {
+func (s *LocationUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Location, error) {
 	return s.locationRepo.Get(ctx, &repo.LocationGetReq{
 		UserID: &userID,
 	})
 }
 
-func (s *LocationUsecase) UpsertByUserID(
-	ctx context.Context,
-	location *model.Location,
-) (*model.Location, error) {
+func (s *LocationUsecase) UpsertByUserID(ctx context.Context, location *model.Location) (*model.Location, error) {
 	return s.locationRepo.UpsertByUserID(ctx, location)
 }

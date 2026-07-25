@@ -16,12 +16,7 @@ var ServerProviderSet = wire.NewSet(
 	NewHTTPServer,
 )
 
-func ProvideServers(
-	grpcServer *grpc.Server,
-	httpServer *http.Server,
-	outboxPublisher *usecase.OutboxPublisher,
-	outboxDeadLetterScanner *usecase.OutboxDeadLetterScanner,
-) []transport.Server {
+func ProvideServers(grpcServer *grpc.Server, httpServer *http.Server, outboxPublisher *usecase.OutboxPublisher, outboxDeadLetterScanner *usecase.OutboxDeadLetterScanner) []transport.Server {
 	return []transport.Server{
 		grpcServer,
 		httpServer,

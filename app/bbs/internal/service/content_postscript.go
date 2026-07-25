@@ -23,21 +23,14 @@ func NewContentPostscriptService(
 	}
 }
 
-func (s *ContentPostscriptService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *ContentPostscriptService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *ContentPostscriptService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *ContentPostscriptService) RegisterHttp(hs *http.Server) {
 	bbscontentv1.RegisterPostscriptServiceHTTPServer(hs, s)
 }
 
-func (s *ContentPostscriptService) Add(
-	ctx context.Context,
-	req *bbscontentv1.AddPostscript_Req,
-) (*bbscontentv1.AddPostscript_Resp, error) {
+func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.AddPostscript_Req) (*bbscontentv1.AddPostscript_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

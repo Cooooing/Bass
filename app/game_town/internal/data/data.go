@@ -38,8 +38,6 @@ var DataProviderSet = wire.NewSet(
 	repo.NewAgentJobRepo,
 )
 
-func ProvideConsul(
-	c *config.Bootstrap,
-) *common.Consul {
+func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul
 }

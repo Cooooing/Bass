@@ -11,10 +11,7 @@ import (
 	"game_town/internal/enum"
 )
 
-func (r *WorldAgentRunner) applyPlayerActionResult(
-	ctx context.Context,
-	result *agentResult,
-) (*model.Event, error) {
+func (r *WorldAgentRunner) applyPlayerActionResult(ctx context.Context, result *agentResult) (*model.Event, error) {
 	if result.resolution == nil {
 		return nil, fmt.Errorf("player action resolution is nil")
 	}
@@ -96,22 +93,15 @@ func (r *WorldAgentRunner) applyPlayerActionResult(
 	return event, nil
 }
 
-func isWorldVersionConflict(
-	err error,
-) bool {
+func isWorldVersionConflict(err error) bool {
 	return err != nil && strings.Contains(err.Error(), "world version conflict")
 }
 
-func isNpcVersionConflict(
-	err error,
-) bool {
+func isNpcVersionConflict(err error) bool {
 	return err != nil && strings.Contains(err.Error(), "npc version conflict")
 }
 
-func (r *WorldAgentRunner) applyNpcPlan(
-	ctx context.Context,
-	result *agentResult,
-) (*model.Event, error) {
+func (r *WorldAgentRunner) applyNpcPlan(ctx context.Context, result *agentResult) (*model.Event, error) {
 	if result.npc == nil || result.plan == nil {
 		return nil, fmt.Errorf("npc plan context is incomplete")
 	}
@@ -167,9 +157,7 @@ func (r *WorldAgentRunner) applyNpcPlan(
 	})
 }
 
-func suggestedActionPayload(
-	values []model.SuggestedAction,
-) []any {
+func suggestedActionPayload(values []model.SuggestedAction) []any {
 	result := make([]any, 0, len(values))
 	for _, value := range values {
 		targets := make([]any, 0, len(value.Targets))
@@ -181,9 +169,7 @@ func suggestedActionPayload(
 	return result
 }
 
-func actionStepPayload(
-	values []model.ActionStep,
-) []any {
+func actionStepPayload(values []model.ActionStep) []any {
 	result := make([]any, 0, len(values))
 	for _, value := range values {
 		item := map[string]any{

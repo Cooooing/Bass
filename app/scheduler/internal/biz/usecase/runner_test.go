@@ -11,9 +11,7 @@ import (
 	"time"
 )
 
-func TestSchedulerRunnerStartLoadsEnabledTasksWithList(
-	t *testing.T,
-) {
+func TestSchedulerRunnerStartLoadsEnabledTasksWithList(t *testing.T) {
 	taskRepo := &fakeTaskRepo{
 		task: testTask(true),
 	}
@@ -30,9 +28,7 @@ func TestSchedulerRunnerStartLoadsEnabledTasksWithList(
 	}
 }
 
-func TestSchedulerRunnerScheduleFieldSkipsDatabase(
-	t *testing.T,
-) {
+func TestSchedulerRunnerScheduleFieldSkipsDatabase(t *testing.T) {
 	task := testTask(true)
 	executionRepo := &fakeExecutionRepo{
 		created: true,
@@ -62,9 +58,7 @@ func TestSchedulerRunnerScheduleFieldSkipsDatabase(
 	}
 }
 
-func TestSchedulerRunnerScheduleConflictSkipsExecution(
-	t *testing.T,
-) {
+func TestSchedulerRunnerScheduleConflictSkipsExecution(t *testing.T) {
 	task := testTask(true)
 	executionRepo := &fakeExecutionRepo{
 		scheduleConflict: true,
@@ -87,23 +81,12 @@ func TestSchedulerRunnerScheduleConflictSkipsExecution(
 	}
 }
 
-func newTestSchedulerRunner(
-	t *testing.T,
-	taskRepo *fakeTaskRepo,
-	executionRepo *fakeExecutionRepo,
-	task taskimpl.Task,
-) *SchedulerRunner {
+func newTestSchedulerRunner(t *testing.T, taskRepo *fakeTaskRepo, executionRepo *fakeExecutionRepo, task taskimpl.Task) *SchedulerRunner {
 	t.Helper()
 	return newTestSchedulerRunnerWithTaskLock(t, taskRepo, executionRepo, task, &fakeTaskLockRepo{})
 }
 
-func newTestSchedulerRunnerWithTaskLock(
-	t *testing.T,
-	taskRepo *fakeTaskRepo,
-	executionRepo *fakeExecutionRepo,
-	task taskimpl.Task,
-	taskLockRepo *fakeTaskLockRepo,
-) *SchedulerRunner {
+func newTestSchedulerRunnerWithTaskLock(t *testing.T, taskRepo *fakeTaskRepo, executionRepo *fakeExecutionRepo, task taskimpl.Task, taskLockRepo *fakeTaskLockRepo) *SchedulerRunner {
 	t.Helper()
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
 	taskUsecase := NewTaskUsecase(

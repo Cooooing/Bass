@@ -21,12 +21,7 @@ func (w *genTxWrapper) Client() interface{} {
 	return w.tx.Client()
 }
 
-func WithTx(
-	ctx context.Context,
-	client *gen.Client,
-	fn func(tx *gen.Client) error,
-	opts ...utilent.TxOption,
-) error {
+func WithTx(ctx context.Context, client *gen.Client, fn func(tx *gen.Client) error, opts ...utilent.TxOption) error {
 	starter := func(ctx context.Context) (utilent.Tx, error) {
 		tx, err := client.Tx(ctx)
 		if err != nil {

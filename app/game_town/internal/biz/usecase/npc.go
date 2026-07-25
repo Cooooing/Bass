@@ -32,10 +32,7 @@ func NewNpcUsecase(
 	}
 }
 
-func (u *NpcUsecase) Get(
-	ctx context.Context,
-	npcID int64,
-) (*model.Npc, error) {
+func (u *NpcUsecase) Get(ctx context.Context, npcID int64) (*model.Npc, error) {
 	return u.npcRepo.Get(ctx, &repo.NpcQuery{
 		ID: new(npcID),
 	})
@@ -46,10 +43,7 @@ type ListNpcsReq struct {
 	LocationID *int64
 }
 
-func (u *NpcUsecase) List(
-	ctx context.Context,
-	req *ListNpcsReq,
-) ([]*model.Npc, error) {
+func (u *NpcUsecase) List(ctx context.Context, req *ListNpcsReq) ([]*model.Npc, error) {
 	return u.npcRepo.List(ctx, &repo.NpcQuery{
 		WorldID:    new(req.WorldID),
 		LocationID: req.LocationID,
@@ -63,10 +57,7 @@ type TalkNpcReq struct {
 	Content  string
 }
 
-func (u *NpcUsecase) Talk(
-	ctx context.Context,
-	req *TalkNpcReq,
-) (*model.Event, error) {
+func (u *NpcUsecase) Talk(ctx context.Context, req *TalkNpcReq) (*model.Event, error) {
 	content := strings.TrimSpace(req.Content)
 	if content == "" {
 		return nil, apperror.CommonInvalidArgument()

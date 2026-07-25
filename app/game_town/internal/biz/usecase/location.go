@@ -23,10 +23,7 @@ func NewLocationUsecase(
 	}
 }
 
-func (u *LocationUsecase) Get(
-	ctx context.Context,
-	worldID, playerID, locationID int64,
-) (*model.Location, error) {
+func (u *LocationUsecase) Get(ctx context.Context, worldID, playerID, locationID int64) (*model.Location, error) {
 	if _, err := u.member(ctx, worldID, playerID); err != nil {
 		return nil, err
 	}
@@ -36,10 +33,7 @@ func (u *LocationUsecase) Get(
 	})
 }
 
-func (u *LocationUsecase) List(
-	ctx context.Context,
-	worldID, playerID int64,
-) ([]*model.Location, *model.WorldMember, error) {
+func (u *LocationUsecase) List(ctx context.Context, worldID, playerID int64) ([]*model.Location, *model.WorldMember, error) {
 	member, err := u.member(ctx, worldID, playerID)
 	if err != nil {
 		return nil, nil, err
@@ -50,10 +44,7 @@ func (u *LocationUsecase) List(
 	return rows, member, err
 }
 
-func (u *LocationUsecase) member(
-	ctx context.Context,
-	worldID, playerID int64,
-) (*model.WorldMember, error) {
+func (u *LocationUsecase) member(ctx context.Context, worldID, playerID int64) (*model.WorldMember, error) {
 	return u.worldMemberRepo.Get(ctx, &repo.WorldMemberQuery{
 		WorldID:  new(worldID),
 		PlayerID: new(playerID),

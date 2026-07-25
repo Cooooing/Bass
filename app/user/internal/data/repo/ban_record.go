@@ -25,19 +25,14 @@ func NewBanRecordRepo(
 	}
 }
 
-func (r *BanRecordRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *BanRecordRepo) getClient(ctx context.Context) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *BanRecordRepo) Create(
-	ctx context.Context,
-	record *model.BanRecord,
-) (*model.BanRecord, error) {
+func (r *BanRecordRepo) Create(ctx context.Context, record *model.BanRecord) (*model.BanRecord, error) {
 	create := r.getClient(ctx).BanRecord.Create().
 		SetUserID(record.UserID).
 		SetOperatorID(record.OperatorID).
@@ -53,10 +48,7 @@ func (r *BanRecordRepo) Create(
 	return banRecordToModel(row), nil
 }
 
-func (r *BanRecordRepo) Get(
-	ctx context.Context,
-	id int64,
-) (*model.BanRecord, error) {
+func (r *BanRecordRepo) Get(ctx context.Context, id int64) (*model.BanRecord, error) {
 	row, err := r.getClient(ctx).BanRecord.Query().Where(banrecord.ID(id)).First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
@@ -67,10 +59,7 @@ func (r *BanRecordRepo) Get(
 	return banRecordToModel(row), nil
 }
 
-func (r *BanRecordRepo) LatestByUserID(
-	ctx context.Context,
-	userID int64,
-) (*model.BanRecord, error) {
+func (r *BanRecordRepo) LatestByUserID(ctx context.Context, userID int64) (*model.BanRecord, error) {
 	row, err := r.getClient(ctx).BanRecord.Query().Where(banrecord.UserID(userID)).Order(gen.Desc(banrecord.FieldCreatedAt)).First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
@@ -81,9 +70,7 @@ func (r *BanRecordRepo) LatestByUserID(
 	return banRecordToModel(row), nil
 }
 
-func banRecordToModel(
-	row *gen.BanRecord,
-) *model.BanRecord {
+func banRecordToModel(row *gen.BanRecord) *model.BanRecord {
 	if row == nil {
 		return nil
 	}

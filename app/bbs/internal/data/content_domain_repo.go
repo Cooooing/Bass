@@ -23,10 +23,7 @@ func NewContentDomainClient(
 	}
 }
 
-func (r *ContentDomainClient) ListDomains(
-	ctx context.Context,
-	req *repo.ListDomainsReq,
-) (*repo.ListDomainsResp, error) {
+func (r *ContentDomainClient) ListDomains(ctx context.Context, req *repo.ListDomainsReq) (*repo.ListDomainsResp, error) {
 	query := req.Query
 	if query == nil {
 		query = &repo.DomainQuery{}

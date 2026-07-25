@@ -27,10 +27,7 @@ type RegisterPlayerReq struct {
 	DisplayName string
 }
 
-func (u *PlayerUsecase) Register(
-	ctx context.Context,
-	req *RegisterPlayerReq,
-) (*model.Player, error) {
+func (u *PlayerUsecase) Register(ctx context.Context, req *RegisterPlayerReq) (*model.Player, error) {
 	name := strings.ToLower(strings.TrimSpace(req.Name))
 	displayName := strings.TrimSpace(req.DisplayName)
 	if name == "" || len(name) > 64 {
@@ -46,10 +43,7 @@ func (u *PlayerUsecase) Register(
 	})
 }
 
-func (u *PlayerUsecase) Get(
-	ctx context.Context,
-	playerID int64,
-) (*model.Player, error) {
+func (u *PlayerUsecase) Get(ctx context.Context, playerID int64) (*model.Player, error) {
 	return u.playerRepo.Get(ctx, &repo.PlayerQuery{
 		ID: new(playerID),
 	})

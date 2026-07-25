@@ -55,10 +55,7 @@ func NewTencentSMSClient(
 	}, nil
 }
 
-func (c *TencentSMSClient) SendTencentSMS(
-	_ context.Context,
-	req *bizchannel.TencentSMSRequest,
-) (*bizchannel.SendResult, error) {
+func (c *TencentSMSClient) SendTencentSMS(_ context.Context, req *bizchannel.TencentSMSRequest) (*bizchannel.SendResult, error) {
 	if req == nil || req.Phone == "" {
 		return &bizchannel.SendResult{
 			Status: notifyenum.NotificationChannelStatusFailed,

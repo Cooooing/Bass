@@ -73,20 +73,14 @@ func NewTaskUsecase(
 	}
 }
 
-func (u *TaskUsecase) Upsert(
-	ctx context.Context,
-	row *model.Task,
-) (*model.Task, error) {
+func (u *TaskUsecase) Upsert(ctx context.Context, row *model.Task) (*model.Task, error) {
 	if row == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	return u.upsert(ctx, row)
 }
 
-func (u *TaskUsecase) upsert(
-	ctx context.Context,
-	row *model.Task,
-) (*model.Task, error) {
+func (u *TaskUsecase) upsert(ctx context.Context, row *model.Task) (*model.Task, error) {
 	if strings.TrimSpace(row.Name) == "" || strings.TrimSpace(row.Title) == "" || strings.TrimSpace(row.CronSpec) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -129,10 +123,7 @@ func (u *TaskUsecase) upsert(
 	return saved, nil
 }
 
-func (u *TaskUsecase) Get(
-	ctx context.Context,
-	id int64,
-) (*model.Task, error) {
+func (u *TaskUsecase) Get(ctx context.Context, id int64) (*model.Task, error) {
 	return u.taskRepo.Get(ctx, &repo.TaskGetReq{
 		ID: &id,
 	})
@@ -151,10 +142,7 @@ type TaskPageResp struct {
 	Page *common.PageResp
 }
 
-func (u *TaskUsecase) Page(
-	ctx context.Context,
-	req *TaskPageReq,
-) (*TaskPageResp, error) {
+func (u *TaskUsecase) Page(ctx context.Context, req *TaskPageReq) (*TaskPageResp, error) {
 	if req == nil {
 		req = &TaskPageReq{}
 	}
@@ -189,10 +177,7 @@ type TaskExecutionRecordPageResp struct {
 	Page *common.PageResp
 }
 
-func (u *TaskUsecase) PageExecutionRecords(
-	ctx context.Context,
-	req *TaskExecutionRecordPageReq,
-) (*TaskExecutionRecordPageResp, error) {
+func (u *TaskUsecase) PageExecutionRecords(ctx context.Context, req *TaskExecutionRecordPageReq) (*TaskExecutionRecordPageResp, error) {
 	if req == nil {
 		req = &TaskExecutionRecordPageReq{}
 	}
@@ -214,17 +199,11 @@ func (u *TaskUsecase) PageExecutionRecords(
 	}, nil
 }
 
-func (u *TaskUsecase) ListAvailableTasks(
-	ctx context.Context,
-	keyword string,
-) ([]*model.AvailableTask, error) {
+func (u *TaskUsecase) ListAvailableTasks(ctx context.Context, keyword string) ([]*model.AvailableTask, error) {
 	return u.listAvailableTasks(ctx, keyword)
 }
 
-func (u *TaskUsecase) listAvailableTasks(
-	ctx context.Context,
-	keyword string,
-) ([]*model.AvailableTask, error) {
+func (u *TaskUsecase) listAvailableTasks(ctx context.Context, keyword string) ([]*model.AvailableTask, error) {
 	_ = ctx
 	keyword = strings.ToLower(strings.TrimSpace(keyword))
 	rows := make([]*model.AvailableTask, 0, len(u.tasks))
@@ -252,10 +231,7 @@ type TaskTriggerReq struct {
 	Payload string
 }
 
-func (u *TaskUsecase) Trigger(
-	ctx context.Context,
-	req *TaskTriggerReq,
-) (*model.TaskExecutionRecord, error) {
+func (u *TaskUsecase) Trigger(ctx context.Context, req *TaskTriggerReq) (*model.TaskExecutionRecord, error) {
 	if req == nil {
 		req = &TaskTriggerReq{}
 	}
@@ -274,10 +250,7 @@ type taskTriggerReq struct {
 	Payload string
 }
 
-func (u *TaskUsecase) trigger(
-	ctx context.Context,
-	req *taskTriggerReq,
-) (*model.TaskExecutionRecord, error) {
+func (u *TaskUsecase) trigger(ctx context.Context, req *taskTriggerReq) (*model.TaskExecutionRecord, error) {
 	id := req.ID
 	if id == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -308,17 +281,11 @@ func (u *TaskUsecase) trigger(
 	return scheduleResp, nil
 }
 
-func (u *TaskUsecase) CancelExecution(
-	ctx context.Context,
-	id int64,
-) (*model.TaskExecutionRecord, error) {
+func (u *TaskUsecase) CancelExecution(ctx context.Context, id int64) (*model.TaskExecutionRecord, error) {
 	return u.cancelExecution(ctx, id)
 }
 
-func (u *TaskUsecase) cancelExecution(
-	ctx context.Context,
-	id int64,
-) (*model.TaskExecutionRecord, error) {
+func (u *TaskUsecase) cancelExecution(ctx context.Context, id int64) (*model.TaskExecutionRecord, error) {
 	if id == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -339,17 +306,11 @@ func (u *TaskUsecase) cancelExecution(
 	return record, nil
 }
 
-func (u *TaskUsecase) CancelExecutionLocally(
-	ctx context.Context,
-	id int64,
-) error {
+func (u *TaskUsecase) CancelExecutionLocally(ctx context.Context, id int64) error {
 	return u.cancelExecutionLocally(ctx, id)
 }
 
-func (u *TaskUsecase) cancelExecutionLocally(
-	ctx context.Context,
-	id int64,
-) error {
+func (u *TaskUsecase) cancelExecutionLocally(ctx context.Context, id int64) error {
 	_ = ctx
 	if cancelValue, ok := u.runningCancels.Load(id); ok {
 		cancelValue.(context.CancelFunc)()
@@ -363,10 +324,7 @@ type TaskScheduleExecutionReq struct {
 	TriggerType schedulerenum.TaskTriggerType
 }
 
-func (u *TaskUsecase) ScheduleExecution(
-	ctx context.Context,
-	req *TaskScheduleExecutionReq,
-) (*model.TaskExecutionRecord, error) {
+func (u *TaskUsecase) ScheduleExecution(ctx context.Context, req *TaskScheduleExecutionReq) (*model.TaskExecutionRecord, error) {
 	if req == nil || req.Task == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -390,10 +348,7 @@ type taskScheduleExecutionReq struct {
 	TriggerType schedulerenum.TaskTriggerType
 }
 
-func (u *TaskUsecase) scheduleExecution(
-	ctx context.Context,
-	req *taskScheduleExecutionReq,
-) (resp *model.TaskExecutionRecord, err error) {
+func (u *TaskUsecase) scheduleExecution(ctx context.Context, req *taskScheduleExecutionReq) (resp *model.TaskExecutionRecord, err error) {
 	task := req.Task
 	scheduledAt := req.ScheduledAt
 	triggerType := req.TriggerType
@@ -672,10 +627,7 @@ type TaskCreateOverlapSkippedResp struct {
 	Conflict bool
 }
 
-func (u *TaskUsecase) CreateOverlapSkipped(
-	ctx context.Context,
-	req *TaskCreateOverlapSkippedReq,
-) (*TaskCreateOverlapSkippedResp, error) {
+func (u *TaskUsecase) CreateOverlapSkipped(ctx context.Context, req *TaskCreateOverlapSkippedReq) (*TaskCreateOverlapSkippedResp, error) {
 	if req == nil || req.Task == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -706,10 +658,7 @@ type taskCreateOverlapSkippedResp struct {
 	Conflict bool
 }
 
-func (u *TaskUsecase) createOverlapSkipped(
-	ctx context.Context,
-	req *taskCreateOverlapSkippedReq,
-) (*taskCreateOverlapSkippedResp, error) {
+func (u *TaskUsecase) createOverlapSkipped(ctx context.Context, req *taskCreateOverlapSkippedReq) (*taskCreateOverlapSkippedResp, error) {
 	task := req.Task
 	traceID := ""
 	if oteltrace.SpanContextFromContext(ctx).IsValid() {
@@ -763,10 +712,7 @@ type TaskStartExecutionResp struct {
 	Conflict bool
 }
 
-func (u *TaskUsecase) StartExecution(
-	ctx context.Context,
-	req *TaskStartExecutionReq,
-) (*TaskStartExecutionResp, error) {
+func (u *TaskUsecase) StartExecution(ctx context.Context, req *TaskStartExecutionReq) (*TaskStartExecutionResp, error) {
 	if req == nil || req.Task == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -799,10 +745,7 @@ type taskStartExecutionResp struct {
 	Conflict bool
 }
 
-func (u *TaskUsecase) startExecution(
-	ctx context.Context,
-	req *taskStartExecutionReq,
-) (*taskStartExecutionResp, error) {
+func (u *TaskUsecase) startExecution(ctx context.Context, req *taskStartExecutionReq) (*taskStartExecutionResp, error) {
 	task := req.Task
 	traceID := ""
 	if oteltrace.SpanContextFromContext(ctx).IsValid() {
@@ -975,10 +918,7 @@ type taskStartCreatedExecutionResp struct {
 	Conflict bool
 }
 
-func (u *TaskUsecase) startCreatedExecution(
-	ctx context.Context,
-	req *taskStartCreatedExecutionReq,
-) (*taskStartCreatedExecutionResp, error) {
+func (u *TaskUsecase) startCreatedExecution(ctx context.Context, req *taskStartCreatedExecutionReq) (*taskStartCreatedExecutionResp, error) {
 	task := req.Task
 	record := req.Record
 	runCtx, span := otel.Tracer("scheduler.task").Start(
@@ -1096,10 +1036,7 @@ type taskExecuteRecordReq struct {
 	RunningTTL        time.Duration
 }
 
-func (u *TaskUsecase) executeRecord(
-	ctx context.Context,
-	req *taskExecuteRecordReq,
-) {
+func (u *TaskUsecase) executeRecord(ctx context.Context, req *taskExecuteRecordReq) {
 	task := req.Task
 	record := req.Record
 	span := req.Span
@@ -1203,10 +1140,7 @@ type taskHeartbeatRunningLockReq struct {
 	TTL               time.Duration
 }
 
-func (u *TaskUsecase) heartbeatRunningLock(
-	ctx context.Context,
-	req *taskHeartbeatRunningLockReq,
-) {
+func (u *TaskUsecase) heartbeatRunningLock(ctx context.Context, req *taskHeartbeatRunningLockReq) {
 	ticker := time.NewTicker(req.Interval)
 	defer ticker.Stop()
 	for {
@@ -1234,17 +1168,11 @@ func (u *TaskUsecase) heartbeatRunningLock(
 	}
 }
 
-func (u *TaskUsecase) CheckExecutionRuntimes(
-	ctx context.Context,
-	ids []int64,
-) ([]*model.TaskExecutionRuntime, error) {
+func (u *TaskUsecase) CheckExecutionRuntimes(ctx context.Context, ids []int64) ([]*model.TaskExecutionRuntime, error) {
 	return u.checkExecutionRuntimes(ctx, ids)
 }
 
-func (u *TaskUsecase) checkExecutionRuntimes(
-	ctx context.Context,
-	ids []int64,
-) ([]*model.TaskExecutionRuntime, error) {
+func (u *TaskUsecase) checkExecutionRuntimes(ctx context.Context, ids []int64) ([]*model.TaskExecutionRuntime, error) {
 	if len(ids) == 0 {
 		return nil, nil
 	}
@@ -1361,17 +1289,11 @@ func (u *TaskUsecase) checkExecutionRuntimes(
 	return result, nil
 }
 
-func (u *TaskUsecase) MarkExecutionsUnknown(
-	ctx context.Context,
-	ids []int64,
-) ([]*model.TaskExecutionRecord, error) {
+func (u *TaskUsecase) MarkExecutionsUnknown(ctx context.Context, ids []int64) ([]*model.TaskExecutionRecord, error) {
 	return u.markExecutionsUnknown(ctx, ids)
 }
 
-func (u *TaskUsecase) markExecutionsUnknown(
-	ctx context.Context,
-	ids []int64,
-) ([]*model.TaskExecutionRecord, error) {
+func (u *TaskUsecase) markExecutionsUnknown(ctx context.Context, ids []int64) ([]*model.TaskExecutionRecord, error) {
 	if len(ids) == 0 {
 		return nil, nil
 	}
@@ -1488,10 +1410,7 @@ type taskCreateExecutionRecordResp struct {
 	Conflict bool
 }
 
-func (u *TaskUsecase) createExecutionRecord(
-	ctx context.Context,
-	req *taskCreateExecutionRecordReq,
-) (*taskCreateExecutionRecordResp, error) {
+func (u *TaskUsecase) createExecutionRecord(ctx context.Context, req *taskCreateExecutionRecordReq) (*taskCreateExecutionRecordResp, error) {
 	resp, err := u.taskExecutionRecordRepo.Create(ctx, &repo.TaskExecutionRecordCreateReq{
 		Record: req.Record,
 		Status: req.Status,
@@ -1519,10 +1438,7 @@ type taskMarkExecutionFinishedResp struct {
 	Updated bool
 }
 
-func (u *TaskUsecase) markExecutionFinished(
-	ctx context.Context,
-	req *taskMarkExecutionFinishedReq,
-) (*taskMarkExecutionFinishedResp, error) {
+func (u *TaskUsecase) markExecutionFinished(ctx context.Context, req *taskMarkExecutionFinishedReq) (*taskMarkExecutionFinishedResp, error) {
 	resp, err := u.taskExecutionRecordRepo.MarkFinished(ctx, &repo.TaskExecutionRecordMarkFinishedReq{
 		ID:         req.ID,
 		Status:     req.Status,
@@ -1546,10 +1462,7 @@ type taskReleaseRunningReq struct {
 	Exclusive         bool
 }
 
-func (u *TaskUsecase) releaseRunning(
-	ctx context.Context,
-	req *taskReleaseRunningReq,
-) error {
+func (u *TaskUsecase) releaseRunning(ctx context.Context, req *taskReleaseRunningReq) error {
 	err := u.taskLockRepo.ReleaseRunning(ctx, &repo.TaskRunningLockReq{
 		TaskID:            req.TaskID,
 		ExecutionRecordID: req.ExecutionRecordID,
@@ -1567,10 +1480,7 @@ type taskRegisterRunningReq struct {
 	TTL               time.Duration
 }
 
-func (u *TaskUsecase) registerRunning(
-	ctx context.Context,
-	req *taskRegisterRunningReq,
-) (bool, error) {
+func (u *TaskUsecase) registerRunning(ctx context.Context, req *taskRegisterRunningReq) (bool, error) {
 	ok, err := u.taskLockRepo.RegisterRunning(ctx, &repo.TaskRunningLockReq{
 		TaskID:            req.TaskID,
 		ExecutionRecordID: req.ExecutionRecordID,
@@ -1592,10 +1502,7 @@ type taskRefreshRunningReq struct {
 	TTL               time.Duration
 }
 
-func (u *TaskUsecase) refreshRunning(
-	ctx context.Context,
-	req *taskRefreshRunningReq,
-) (bool, error) {
+func (u *TaskUsecase) refreshRunning(ctx context.Context, req *taskRefreshRunningReq) (bool, error) {
 	ok, err := u.taskLockRepo.RefreshRunning(ctx, &repo.TaskRunningLockReq{
 		TaskID:            req.TaskID,
 		ExecutionRecordID: req.ExecutionRecordID,
@@ -1614,10 +1521,7 @@ type taskMapRunningReq struct {
 	ExecutionRecordIDs []int64
 }
 
-func (u *TaskUsecase) mapRunning(
-	ctx context.Context,
-	req *taskMapRunningReq,
-) (map[int64]bool, error) {
+func (u *TaskUsecase) mapRunning(ctx context.Context, req *taskMapRunningReq) (map[int64]bool, error) {
 	rows, err := u.taskLockRepo.MapRunning(ctx, &repo.TaskRunningMapReq{
 		TaskID:             req.TaskID,
 		ExecutionRecordIDs: req.ExecutionRecordIDs,
@@ -1628,10 +1532,7 @@ func (u *TaskUsecase) mapRunning(
 	return rows, nil
 }
 
-func (u *TaskUsecase) listExecutionRecords(
-	ctx context.Context,
-	query *repo.TaskExecutionRecordGetReq,
-) ([]*model.TaskExecutionRecord, error) {
+func (u *TaskUsecase) listExecutionRecords(ctx context.Context, query *repo.TaskExecutionRecordGetReq) ([]*model.TaskExecutionRecord, error) {
 	rows, err := u.taskExecutionRecordRepo.List(ctx, query)
 	if err != nil {
 		return nil, err
@@ -1639,10 +1540,7 @@ func (u *TaskUsecase) listExecutionRecords(
 	return rows, nil
 }
 
-func (u *TaskUsecase) listTaskVersions(
-	ctx context.Context,
-	query *repo.TaskVersionGetReq,
-) ([]*model.TaskVersion, error) {
+func (u *TaskUsecase) listTaskVersions(ctx context.Context, query *repo.TaskVersionGetReq) ([]*model.TaskVersion, error) {
 	rows, err := u.taskVersionRepo.List(ctx, query)
 	if err != nil {
 		return nil, err
@@ -1656,10 +1554,7 @@ type taskMarkUnknownExecutionRecordsReq struct {
 	LastError  string
 }
 
-func (u *TaskUsecase) markUnknownExecutionRecords(
-	ctx context.Context,
-	req *taskMarkUnknownExecutionRecordsReq,
-) ([]*model.TaskExecutionRecord, error) {
+func (u *TaskUsecase) markUnknownExecutionRecords(ctx context.Context, req *taskMarkUnknownExecutionRecordsReq) ([]*model.TaskExecutionRecord, error) {
 	rows, err := u.taskExecutionRecordRepo.MarkUnknown(ctx, &repo.TaskExecutionRecordMarkUnknownReq{
 		IDs:        req.IDs,
 		FinishedAt: req.FinishedAt,
@@ -1671,15 +1566,11 @@ func (u *TaskUsecase) markUnknownExecutionRecords(
 	return rows, nil
 }
 
-func (u *TaskUsecase) StopRunning(
-	ctx context.Context,
-) error {
+func (u *TaskUsecase) StopRunning(ctx context.Context) error {
 	return u.stopRunning(ctx)
 }
 
-func (u *TaskUsecase) stopRunning(
-	ctx context.Context,
-) error {
+func (u *TaskUsecase) stopRunning(ctx context.Context) error {
 	u.runningCancels.Range(func(_, value any) bool {
 		value.(context.CancelFunc)()
 		return true

@@ -25,10 +25,7 @@ type FollowReq struct {
 	TargetID int64
 }
 
-func (u *RelationUsecase) Follow(
-	ctx context.Context,
-	req *FollowReq,
-) error {
+func (u *RelationUsecase) Follow(ctx context.Context, req *FollowReq) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -46,10 +43,7 @@ type UnfollowReq struct {
 	TargetID int64
 }
 
-func (u *RelationUsecase) Unfollow(
-	ctx context.Context,
-	req *UnfollowReq,
-) error {
+func (u *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowReq) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -67,10 +61,7 @@ type BlockReq struct {
 	TargetID int64
 }
 
-func (u *RelationUsecase) Block(
-	ctx context.Context,
-	req *BlockReq,
-) error {
+func (u *RelationUsecase) Block(ctx context.Context, req *BlockReq) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -88,10 +79,7 @@ type UnblockReq struct {
 	TargetID int64
 }
 
-func (u *RelationUsecase) Unblock(
-	ctx context.Context,
-	req *UnblockReq,
-) error {
+func (u *RelationUsecase) Unblock(ctx context.Context, req *UnblockReq) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -114,10 +102,7 @@ type ListFollowingResp struct {
 	Rows []*repo.Relation
 }
 
-func (u *RelationUsecase) ListFollowing(
-	ctx context.Context,
-	req *ListFollowingReq,
-) (*ListFollowingResp, error) {
+func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingReq) (*ListFollowingResp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -151,10 +136,7 @@ type ListFollowersResp struct {
 	Rows []*repo.Relation
 }
 
-func (u *RelationUsecase) ListFollowers(
-	ctx context.Context,
-	req *ListFollowersReq,
-) (*ListFollowersResp, error) {
+func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersReq) (*ListFollowersResp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -188,10 +170,7 @@ type ListBlockedResp struct {
 	Rows []*repo.Relation
 }
 
-func (u *RelationUsecase) ListBlocked(
-	ctx context.Context,
-	req *ListBlockedReq,
-) (*ListBlockedResp, error) {
+func (u *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedReq) (*ListBlockedResp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -220,10 +199,7 @@ type GetStatusReq struct {
 	TargetID int64
 }
 
-func (u *RelationUsecase) GetStatus(
-	ctx context.Context,
-	req *GetStatusReq,
-) (*repo.RelationStatus, error) {
+func (u *RelationUsecase) GetStatus(ctx context.Context, req *GetStatusReq) (*repo.RelationStatus, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

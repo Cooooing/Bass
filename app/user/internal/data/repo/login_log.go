@@ -28,40 +28,26 @@ func NewLoginLogRepo(
 	}
 }
 
-func (r *LoginLogRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *LoginLogRepo) getClient(ctx context.Context) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *LoginLogRepo) Create(
-	ctx context.Context,
-	log *model.LoginLog,
-) (*model.LoginLog, error) {
+func (r *LoginLogRepo) Create(ctx context.Context, log *model.LoginLog) (*model.LoginLog, error) {
 	return r.create(ctx, log)
 }
 
-func (r *LoginLogRepo) Get(
-	ctx context.Context,
-	req *repo.LoginLogGetReq,
-) (*model.LoginLog, error) {
+func (r *LoginLogRepo) Get(ctx context.Context, req *repo.LoginLogGetReq) (*model.LoginLog, error) {
 	return r.get(ctx, req)
 }
 
-func (r *LoginLogRepo) List(
-	ctx context.Context,
-	req *repo.LoginLogGetReq,
-) ([]*model.LoginLog, error) {
+func (r *LoginLogRepo) List(ctx context.Context, req *repo.LoginLogGetReq) ([]*model.LoginLog, error) {
 	return r.list(ctx, req)
 }
 
-func (r *LoginLogRepo) Map(
-	ctx context.Context,
-	req *repo.LoginLogGetReq,
-) (map[int64]*model.LoginLog, error) {
+func (r *LoginLogRepo) Map(ctx context.Context, req *repo.LoginLogGetReq) (map[int64]*model.LoginLog, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
@@ -73,18 +59,12 @@ func (r *LoginLogRepo) Map(
 	return result, nil
 }
 
-func (r *LoginLogRepo) Count(
-	ctx context.Context,
-	req *repo.LoginLogGetReq,
-) (int, error) {
+func (r *LoginLogRepo) Count(ctx context.Context, req *repo.LoginLogGetReq) (int, error) {
 	query := r.getClient(ctx).LoginLog.Query()
 	return r.getQuery(query, req).Count(ctx)
 }
 
-func (r *LoginLogRepo) Page(
-	ctx context.Context,
-	req *repo.LoginLogPageReq,
-) (*repo.LoginLogPageResp, error) {
+func (r *LoginLogRepo) Page(ctx context.Context, req *repo.LoginLogPageReq) (*repo.LoginLogPageResp, error) {
 	rows, page, err := r.page(ctx, &common.PageReq{
 		Page: req.Page.Page,
 		Size: req.Page.Size,
@@ -106,10 +86,7 @@ func (r *LoginLogRepo) Page(
 	}, nil
 }
 
-func (r *LoginLogRepo) create(
-	ctx context.Context,
-	l *model.LoginLog,
-) (*model.LoginLog, error) {
+func (r *LoginLogRepo) create(ctx context.Context, l *model.LoginLog) (*model.LoginLog, error) {
 	create := r.getClient(ctx).LoginLog.Create().
 		SetNillableUserID(l.UserID).
 		SetAccountInput(l.AccountInput).
@@ -146,10 +123,7 @@ func (r *LoginLogRepo) create(
 	return loginLogToModel(created), nil
 }
 
-func (r *LoginLogRepo) get(
-	ctx context.Context,
-	req *repo.LoginLogGetReq,
-) (*model.LoginLog, error) {
+func (r *LoginLogRepo) get(ctx context.Context, req *repo.LoginLogGetReq) (*model.LoginLog, error) {
 	query := r.getClient(ctx).LoginLog.Query()
 	query = r.getQuery(query, req)
 	if req != nil && req.LastSuccess {
@@ -165,10 +139,7 @@ func (r *LoginLogRepo) get(
 	return loginLogToModel(row), nil
 }
 
-func (r *LoginLogRepo) list(
-	ctx context.Context,
-	req *repo.LoginLogGetReq,
-) ([]*model.LoginLog, error) {
+func (r *LoginLogRepo) list(ctx context.Context, req *repo.LoginLogGetReq) ([]*model.LoginLog, error) {
 	query := r.getClient(ctx).LoginLog.Query()
 	rows, err := r.getQuery(query, req).Order(gen.Desc(loginlog.FieldCreatedAt)).All(ctx)
 	if err != nil {
@@ -181,11 +152,7 @@ func (r *LoginLogRepo) list(
 	return result, nil
 }
 
-func (r *LoginLogRepo) page(
-	ctx context.Context,
-	page *common.PageReq,
-	req *repo.LoginLogGetReq,
-) ([]*model.LoginLog, *common.PageResp, error) {
+func (r *LoginLogRepo) page(ctx context.Context, page *common.PageReq, req *repo.LoginLogGetReq) ([]*model.LoginLog, *common.PageResp, error) {
 	page = server.PageValid(page)
 	query := r.getClient(ctx).LoginLog.Query()
 	query = r.getQuery(query, req)
@@ -208,10 +175,7 @@ func (r *LoginLogRepo) page(
 	}, nil
 }
 
-func (r *LoginLogRepo) getQuery(
-	query *gen.LoginLogQuery,
-	req *repo.LoginLogGetReq,
-) *gen.LoginLogQuery {
+func (r *LoginLogRepo) getQuery(query *gen.LoginLogQuery, req *repo.LoginLogGetReq) *gen.LoginLogQuery {
 	if req == nil {
 		return query
 	}
@@ -239,9 +203,7 @@ func (r *LoginLogRepo) getQuery(
 	return query
 }
 
-func loginLogToModel(
-	row *gen.LoginLog,
-) *model.LoginLog {
+func loginLogToModel(row *gen.LoginLog) *model.LoginLog {
 	if row == nil {
 		return nil
 	}

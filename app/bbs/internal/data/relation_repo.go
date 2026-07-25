@@ -24,10 +24,7 @@ func NewRelationClient(
 	}
 }
 
-func (r *RelationClient) Follow(
-	ctx context.Context,
-	req *repo.FollowRelationReq,
-) error {
+func (r *RelationClient) Follow(ctx context.Context, req *repo.FollowRelationReq) error {
 	_, err := r.userClient.Relation.Follow(ctx, &userv1.FollowRelation_Req{
 		ActorId:  req.ActorID,
 		TargetId: req.TargetID,
@@ -38,10 +35,7 @@ func (r *RelationClient) Follow(
 	return nil
 }
 
-func (r *RelationClient) Unfollow(
-	ctx context.Context,
-	req *repo.UnfollowRelationReq,
-) error {
+func (r *RelationClient) Unfollow(ctx context.Context, req *repo.UnfollowRelationReq) error {
 	_, err := r.userClient.Relation.Unfollow(ctx, &userv1.UnfollowRelation_Req{
 		ActorId:  req.ActorID,
 		TargetId: req.TargetID,
@@ -52,10 +46,7 @@ func (r *RelationClient) Unfollow(
 	return nil
 }
 
-func (r *RelationClient) Block(
-	ctx context.Context,
-	req *repo.BlockRelationReq,
-) error {
+func (r *RelationClient) Block(ctx context.Context, req *repo.BlockRelationReq) error {
 	_, err := r.userClient.Relation.Block(ctx, &userv1.BlockRelation_Req{
 		ActorId:  req.ActorID,
 		TargetId: req.TargetID,
@@ -66,10 +57,7 @@ func (r *RelationClient) Block(
 	return nil
 }
 
-func (r *RelationClient) Unblock(
-	ctx context.Context,
-	req *repo.UnblockRelationReq,
-) error {
+func (r *RelationClient) Unblock(ctx context.Context, req *repo.UnblockRelationReq) error {
 	_, err := r.userClient.Relation.Unblock(ctx, &userv1.UnblockRelation_Req{
 		ActorId:  req.ActorID,
 		TargetId: req.TargetID,
@@ -80,10 +68,7 @@ func (r *RelationClient) Unblock(
 	return nil
 }
 
-func (r *RelationClient) ListFollowing(
-	ctx context.Context,
-	req *repo.ListFollowingRelationsReq,
-) (*repo.ListFollowingRelationsResp, error) {
+func (r *RelationClient) ListFollowing(ctx context.Context, req *repo.ListFollowingRelationsReq) (*repo.ListFollowingRelationsResp, error) {
 	var pageReq *common.PageReq
 	if req.Page != nil {
 		pageReq = &common.PageReq{
@@ -127,10 +112,7 @@ func (r *RelationClient) ListFollowing(
 	}, nil
 }
 
-func (r *RelationClient) ListFollowers(
-	ctx context.Context,
-	req *repo.ListFollowersRelationsReq,
-) (*repo.ListFollowersRelationsResp, error) {
+func (r *RelationClient) ListFollowers(ctx context.Context, req *repo.ListFollowersRelationsReq) (*repo.ListFollowersRelationsResp, error) {
 	var pageReq *common.PageReq
 	if req.Page != nil {
 		pageReq = &common.PageReq{
@@ -174,10 +156,7 @@ func (r *RelationClient) ListFollowers(
 	}, nil
 }
 
-func (r *RelationClient) ListBlocked(
-	ctx context.Context,
-	req *repo.ListBlockedRelationsReq,
-) (*repo.ListBlockedRelationsResp, error) {
+func (r *RelationClient) ListBlocked(ctx context.Context, req *repo.ListBlockedRelationsReq) (*repo.ListBlockedRelationsResp, error) {
 	var pageReq *common.PageReq
 	if req.Page != nil {
 		pageReq = &common.PageReq{
@@ -221,10 +200,7 @@ func (r *RelationClient) ListBlocked(
 	}, nil
 }
 
-func (r *RelationClient) GetStatus(
-	ctx context.Context,
-	req *repo.GetStatusRelationReq,
-) (*repo.RelationStatus, error) {
+func (r *RelationClient) GetStatus(ctx context.Context, req *repo.GetStatusRelationReq) (*repo.RelationStatus, error) {
 	reply, err := r.userClient.Relation.MapStatus(ctx, &userv1.MapRelationStatuses_Req{
 		ActorId:   req.ActorID,
 		TargetIds: []int64{req.TargetID},
@@ -245,9 +221,7 @@ func (r *RelationClient) GetStatus(
 	return out, nil
 }
 
-func relationTypeFromUser(
-	value userv1enum.RelationType,
-) enum.RelationType {
+func relationTypeFromUser(value userv1enum.RelationType) enum.RelationType {
 	switch value {
 	case userv1enum.RelationType_RELATION_TYPE_BLOCK:
 		return enum.RelationTypeBlock

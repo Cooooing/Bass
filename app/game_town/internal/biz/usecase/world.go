@@ -58,10 +58,7 @@ type CreateWorldResp struct {
 	Event *model.Event
 }
 
-func (u *WorldUsecase) Create(
-	ctx context.Context,
-	req *CreateWorldReq,
-) (*CreateWorldResp, error) {
+func (u *WorldUsecase) Create(ctx context.Context, req *CreateWorldReq) (*CreateWorldResp, error) {
 	description := strings.TrimSpace(req.Description)
 	if req.CreatorPlayerID <= 0 || req.AgentConfigID <= 0 || description == "" {
 		return nil, apperror.GameTownWorldInvalid()
@@ -139,10 +136,7 @@ func (u *WorldUsecase) Create(
 	}, nil
 }
 
-func (u *WorldUsecase) Get(
-	ctx context.Context,
-	worldID int64,
-) (*model.World, error) {
+func (u *WorldUsecase) Get(ctx context.Context, worldID int64) (*model.World, error) {
 	return u.worldRepo.Get(ctx, &repo.WorldQuery{
 		ID: new(worldID),
 	})
@@ -159,10 +153,7 @@ type PageWorldsResp struct {
 	Page base.PageResp
 }
 
-func (u *WorldUsecase) Page(
-	ctx context.Context,
-	req *PageWorldsReq,
-) (*PageWorldsResp, error) {
+func (u *WorldUsecase) Page(ctx context.Context, req *PageWorldsReq) (*PageWorldsResp, error) {
 	resp, err := u.worldRepo.Page(ctx, &repo.WorldPageReq{
 		Page: req.Page,
 		Query: repo.WorldQuery{

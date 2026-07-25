@@ -28,19 +28,14 @@ func NewChatSessionRepo(
 	}
 }
 
-func (r *ChatSessionRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *ChatSessionRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *ChatSessionRepo) Save(
-	ctx context.Context,
-	chatSession *model.ChatSession,
-) (*model.ChatSession, error) {
+func (r *ChatSessionRepo) Save(ctx context.Context, chatSession *model.ChatSession) (*model.ChatSession, error) {
 	if (chatSession.ReceiverID == nil && chatSession.GroupID == nil) || (chatSession.ReceiverID != nil && chatSession.GroupID != nil) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_CHAT_SESSION_INVALID)
 	}
@@ -56,10 +51,7 @@ func (r *ChatSessionRepo) Save(
 	return r.toModel(save), nil
 }
 
-func (r *ChatSessionRepo) UpdateLastReadMessage(
-	ctx context.Context,
-	req *repo.ChatSessionUpdateLastReadMessageReq,
-) (*model.ChatSession, error) {
+func (r *ChatSessionRepo) UpdateLastReadMessage(ctx context.Context, req *repo.ChatSessionUpdateLastReadMessageReq) (*model.ChatSession, error) {
 	update, err := r.getClient(ctx).ChatSession.UpdateOneID(req.ChatSessionID).
 		SetLastReadMessageID(req.MessageID).
 		AddReadCount(req.OperationReadCount).
@@ -71,10 +63,7 @@ func (r *ChatSessionRepo) UpdateLastReadMessage(
 	return r.toModel(update), nil
 }
 
-func (r *ChatSessionRepo) UpdateMuted(
-	ctx context.Context,
-	req *repo.ChatSessionUpdateMutedReq,
-) (*model.ChatSession, error) {
+func (r *ChatSessionRepo) UpdateMuted(ctx context.Context, req *repo.ChatSessionUpdateMutedReq) (*model.ChatSession, error) {
 	update, err := r.getClient(ctx).ChatSession.UpdateOneID(req.ChatSessionID).
 		SetIsMuted(req.Muted).
 		SetUpdatedBy(req.UpdatedBy).
@@ -85,10 +74,7 @@ func (r *ChatSessionRepo) UpdateMuted(
 	return r.toModel(update), nil
 }
 
-func (r *ChatSessionRepo) UpdatePinned(
-	ctx context.Context,
-	req *repo.ChatSessionUpdatePinnedReq,
-) (*model.ChatSession, error) {
+func (r *ChatSessionRepo) UpdatePinned(ctx context.Context, req *repo.ChatSessionUpdatePinnedReq) (*model.ChatSession, error) {
 	update, err := r.getClient(ctx).ChatSession.UpdateOneID(req.ChatSessionID).
 		SetIsPinned(req.Pinned).
 		SetUpdatedBy(req.UpdatedBy).
@@ -99,10 +85,7 @@ func (r *ChatSessionRepo) UpdatePinned(
 	return r.toModel(update), nil
 }
 
-func (r *ChatSessionRepo) Get(
-	ctx context.Context,
-	req *repo.ChatSessionQuery,
-) (*model.ChatSession, error) {
+func (r *ChatSessionRepo) Get(ctx context.Context, req *repo.ChatSessionQuery) (*model.ChatSession, error) {
 	query := r.getClient(ctx).ChatSession.Query()
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
@@ -115,10 +98,7 @@ func (r *ChatSessionRepo) Get(
 	return r.toModel(t), nil
 }
 
-func (r *ChatSessionRepo) List(
-	ctx context.Context,
-	req *repo.ChatSessionQuery,
-) ([]*model.ChatSession, error) {
+func (r *ChatSessionRepo) List(ctx context.Context, req *repo.ChatSessionQuery) ([]*model.ChatSession, error) {
 	query := r.getClient(ctx).ChatSession.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -132,10 +112,7 @@ func (r *ChatSessionRepo) List(
 	return chatSessions, nil
 }
 
-func (r *ChatSessionRepo) Map(
-	ctx context.Context,
-	req *repo.ChatSessionQuery,
-) (map[int64]*model.ChatSession, error) {
+func (r *ChatSessionRepo) Map(ctx context.Context, req *repo.ChatSessionQuery) (map[int64]*model.ChatSession, error) {
 	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -147,10 +124,7 @@ func (r *ChatSessionRepo) Map(
 	return result, nil
 }
 
-func (r *ChatSessionRepo) Count(
-	ctx context.Context,
-	req *repo.ChatSessionQuery,
-) (int, error) {
+func (r *ChatSessionRepo) Count(ctx context.Context, req *repo.ChatSessionQuery) (int, error) {
 	query := r.getClient(ctx).ChatSession.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -160,10 +134,7 @@ func (r *ChatSessionRepo) Count(
 	return count, nil
 }
 
-func (r *ChatSessionRepo) Page(
-	ctx context.Context,
-	req *repo.ChatSessionQuery,
-) (*repo.ChatSessionPageResp, error) {
+func (r *ChatSessionRepo) Page(ctx context.Context, req *repo.ChatSessionQuery) (*repo.ChatSessionPageResp, error) {
 	page := normalizePage(nil)
 	if req != nil {
 		page = normalizePage(req.Page)
@@ -193,10 +164,7 @@ func (r *ChatSessionRepo) Page(
 	}, nil
 }
 
-func (r *ChatSessionRepo) getQuery(
-	query *gen.ChatSessionQuery,
-	req *repo.ChatSessionQuery,
-) *gen.ChatSessionQuery {
+func (r *ChatSessionRepo) getQuery(query *gen.ChatSessionQuery, req *repo.ChatSessionQuery) *gen.ChatSessionQuery {
 	query.WithGroup().WithLastMessageOfSession()
 	if req == nil {
 		return query
@@ -216,9 +184,7 @@ func (r *ChatSessionRepo) getQuery(
 	return query
 }
 
-func (r *ChatSessionRepo) toModel(
-	t *gen.ChatSession,
-) *model.ChatSession {
+func (r *ChatSessionRepo) toModel(t *gen.ChatSession) *model.ChatSession {
 	item := &model.ChatSession{
 		ID:                t.ID,
 		ReceiverID:        t.ReceiverID,

@@ -27,10 +27,7 @@ func NewContentClient(
 	}
 }
 
-func (c *ContentClient) GetArticle(
-	ctx context.Context,
-	articleID int64,
-) (*model.ContentArticle, error) {
+func (c *ContentClient) GetArticle(ctx context.Context, articleID int64) (*model.ContentArticle, error) {
 	if articleID == 0 {
 		return nil, nil
 	}
@@ -60,10 +57,7 @@ func (c *ContentClient) GetArticle(
 	return result, nil
 }
 
-func (c *ContentClient) GetComment(
-	ctx context.Context,
-	commentID int64,
-) (*model.ContentComment, error) {
+func (c *ContentClient) GetComment(ctx context.Context, commentID int64) (*model.ContentComment, error) {
 	if commentID == 0 {
 		return nil, nil
 	}
@@ -111,10 +105,7 @@ func (c *ContentClient) GetComment(
 	return result, nil
 }
 
-func (c *ContentClient) mapAccounts(
-	ctx context.Context,
-	userIDs []int64,
-) (map[int64]*model.UserAccount, error) {
+func (c *ContentClient) mapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.UserAccount, error) {
 	ids := make([]int64, 0, len(userIDs))
 	seen := make(map[int64]struct{}, len(userIDs))
 	for _, userID := range userIDs {

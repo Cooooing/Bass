@@ -2,9 +2,7 @@ package str
 
 import "testing"
 
-func TestSonyflake(
-	t *testing.T,
-) {
+func TestSonyflake(t *testing.T) {
 	sf, err := NewSonyflake()
 	if err != nil {
 		t.Fatal(err)

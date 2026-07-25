@@ -30,10 +30,7 @@ type ListDomainsResp struct {
 	Rows []*repo.Domain
 }
 
-func (u *ContentDomainUsecase) ListDomains(
-	ctx context.Context,
-	req *ListDomainsReq,
-) (*ListDomainsResp, error) {
+func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomainsReq) (*ListDomainsResp, error) {
 	if req == nil {
 		req = &ListDomainsReq{}
 	}

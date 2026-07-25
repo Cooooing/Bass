@@ -9,11 +9,7 @@ import (
 	"game_town/internal/enum"
 )
 
-func (r *WorldAgentRunner) saveDraftFactions(
-	ctx context.Context,
-	worldID int64,
-	draft *model.WorldDraft,
-) (map[string]*model.Faction, error) {
+func (r *WorldAgentRunner) saveDraftFactions(ctx context.Context, worldID int64, draft *model.WorldDraft) (map[string]*model.Faction, error) {
 	out := make(map[string]*model.Faction, len(draft.Factions))
 	if draft == nil {
 		return out, nil
@@ -46,9 +42,7 @@ func (r *WorldAgentRunner) saveDraftFactions(
 	return out, nil
 }
 
-func defaultWorldRules(
-	rules map[string]any,
-) map[string]any {
+func defaultWorldRules(rules map[string]any) map[string]any {
 	if rules == nil {
 		rules = make(map[string]any)
 	}

@@ -22,10 +22,7 @@ func NewTaskEventBus(
 	}
 }
 
-func (b *TaskEventBus) PublishTaskChanged(
-	ctx context.Context,
-	message *bizrepo.TaskChangedMessage,
-) error {
+func (b *TaskEventBus) PublishTaskChanged(ctx context.Context, message *bizrepo.TaskChangedMessage) error {
 	data, err := json.Marshal(message)
 	if err != nil {
 		return err
@@ -38,10 +35,7 @@ func (b *TaskEventBus) PublishTaskChanged(
 	return nil
 }
 
-func (b *TaskEventBus) PublishExecutionCanceled(
-	ctx context.Context,
-	message *bizrepo.TaskExecutionCanceledMessage,
-) error {
+func (b *TaskEventBus) PublishExecutionCanceled(ctx context.Context, message *bizrepo.TaskExecutionCanceledMessage) error {
 	data, err := json.Marshal(message)
 	if err != nil {
 		return err
@@ -54,9 +48,7 @@ func (b *TaskEventBus) PublishExecutionCanceled(
 	return nil
 }
 
-func (b *TaskEventBus) SubscribeTaskChanged(
-	ctx context.Context,
-) (<-chan bizrepo.TaskChangedMessage, error) {
+func (b *TaskEventBus) SubscribeTaskChanged(ctx context.Context) (<-chan bizrepo.TaskChangedMessage, error) {
 	ch := make(chan bizrepo.TaskChangedMessage, 16)
 	_, err := b.natsClient.Subscribe(ctx, constant.SchedulerTaskChangedSubject, func(_ context.Context, msg *commonClient.Message) error {
 		var payload bizrepo.TaskChangedMessage
@@ -72,9 +64,7 @@ func (b *TaskEventBus) SubscribeTaskChanged(
 	return ch, nil
 }
 
-func (b *TaskEventBus) SubscribeExecutionCanceled(
-	ctx context.Context,
-) (<-chan bizrepo.TaskExecutionCanceledMessage, error) {
+func (b *TaskEventBus) SubscribeExecutionCanceled(ctx context.Context) (<-chan bizrepo.TaskExecutionCanceledMessage, error) {
 	ch := make(chan bizrepo.TaskExecutionCanceledMessage, 16)
 	_, err := b.natsClient.Subscribe(ctx, constant.SchedulerTaskExecutionCanceledSubject, func(_ context.Context, msg *commonClient.Message) error {
 		var payload bizrepo.TaskExecutionCanceledMessage

@@ -29,21 +29,14 @@ func NewNpcService(
 	}
 }
 
-func (s *NpcService) RegisterGrpc(
-	server *grpc.Server,
-) {
+func (s *NpcService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterGameTownNpcServiceServer(server, s)
 }
 
-func (s *NpcService) RegisterHttp(
-	*http.Server,
-) {
+func (s *NpcService) RegisterHttp(*http.Server) {
 }
 
-func (s *NpcService) Get(
-	ctx context.Context,
-	req *v1.GetGameTownNpc_Request,
-) (*v1.GetGameTownNpc_Resp, error) {
+func (s *NpcService) Get(ctx context.Context, req *v1.GetGameTownNpc_Request) (*v1.GetGameTownNpc_Resp, error) {
 	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 || req.GetId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -71,10 +64,7 @@ func (s *NpcService) Get(
 	}, nil
 }
 
-func (s *NpcService) List(
-	ctx context.Context,
-	req *v1.ListGameTownNpcs_Request,
-) (*v1.ListGameTownNpcs_Resp, error) {
+func (s *NpcService) List(ctx context.Context, req *v1.ListGameTownNpcs_Request) (*v1.ListGameTownNpcs_Resp, error) {
 	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

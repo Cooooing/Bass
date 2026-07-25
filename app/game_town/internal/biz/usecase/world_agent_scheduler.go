@@ -18,9 +18,7 @@ func (r *WorldAgentRunner) wakeScheduler() {
 	}
 }
 
-func (r *WorldAgentRunner) schedule(
-	ctx context.Context,
-) {
+func (r *WorldAgentRunner) schedule(ctx context.Context) {
 	recoveryTicker := time.NewTicker(30 * time.Second)
 	defer recoveryTicker.Stop()
 
@@ -42,17 +40,13 @@ func (r *WorldAgentRunner) schedule(
 	}
 }
 
-func (r *WorldAgentRunner) recoverAgentJobs(
-	ctx context.Context,
-) {
+func (r *WorldAgentRunner) recoverAgentJobs(ctx context.Context) {
 	r.recoverGeneratingWorldJobs(ctx)
 	r.recoverPendingCharacterJobs(ctx)
 	r.recoverStaleRunningJobs(ctx)
 }
 
-func (r *WorldAgentRunner) dispatch(
-	ctx context.Context,
-) {
+func (r *WorldAgentRunner) dispatch(ctx context.Context) {
 	status := enum.AgentJobStatusQueued
 	now := time.Now()
 	jobs, err := r.agentJobRepo.List(ctx, &repo.AgentJobQuery{
@@ -76,9 +70,7 @@ func (r *WorldAgentRunner) dispatch(
 	}
 }
 
-func (r *WorldAgentRunner) recoverGeneratingWorldJobs(
-	ctx context.Context,
-) {
+func (r *WorldAgentRunner) recoverGeneratingWorldJobs(ctx context.Context) {
 	status := enum.WorldStatusGenerating
 	worlds, err := r.worldRepo.List(ctx, &repo.WorldQuery{
 		Status: new(status),
@@ -138,9 +130,7 @@ func (r *WorldAgentRunner) recoverGeneratingWorldJobs(
 	}
 }
 
-func (r *WorldAgentRunner) recoverPendingCharacterJobs(
-	ctx context.Context,
-) {
+func (r *WorldAgentRunner) recoverPendingCharacterJobs(ctx context.Context) {
 	status := enum.WorldStatusActive
 	worlds, err := r.worldRepo.List(ctx, &repo.WorldQuery{
 		Status: new(status),
@@ -154,10 +144,7 @@ func (r *WorldAgentRunner) recoverPendingCharacterJobs(
 	}
 }
 
-func (r *WorldAgentRunner) recoverWorldCharacterJobs(
-	ctx context.Context,
-	world *model.World,
-) {
+func (r *WorldAgentRunner) recoverWorldCharacterJobs(ctx context.Context, world *model.World) {
 	if world == nil {
 		return
 	}
@@ -178,11 +165,7 @@ func (r *WorldAgentRunner) recoverWorldCharacterJobs(
 	}
 }
 
-func (r *WorldAgentRunner) recoverMemberCharacterJob(
-	ctx context.Context,
-	world *model.World,
-	member *model.WorldMember,
-) error {
+func (r *WorldAgentRunner) recoverMemberCharacterJob(ctx context.Context, world *model.World, member *model.WorldMember) error {
 	eventType := enum.EventTypePlayerJoined
 	events, err := r.eventRepo.List(ctx, &repo.EventQuery{
 		WorldID:       new(world.ID),
@@ -230,9 +213,7 @@ func (r *WorldAgentRunner) recoverMemberCharacterJob(
 	return nil
 }
 
-func (r *WorldAgentRunner) recoverStaleRunningJobs(
-	ctx context.Context,
-) {
+func (r *WorldAgentRunner) recoverStaleRunningJobs(ctx context.Context) {
 	status := enum.AgentJobStatusRunning
 	cutoff := time.Now().Add(-r.staleJobDuration())
 	jobs, err := r.agentJobRepo.List(ctx, &repo.AgentJobQuery{
@@ -258,10 +239,7 @@ func (r *WorldAgentRunner) recoverStaleRunningJobs(
 	}
 }
 
-func fairAgentJobs(
-	jobs []*model.AgentJob,
-	cursor *int,
-) []*model.AgentJob {
+func fairAgentJobs(jobs []*model.AgentJob, cursor *int) []*model.AgentJob {
 	ordered := make([]*model.AgentJob, 0, len(jobs))
 	used := make(map[int64]bool, len(jobs))
 	priorities := []enum.AgentJobPriority{
@@ -313,10 +291,7 @@ func fairAgentJobs(
 	return ordered
 }
 
-func (r *WorldAgentRunner) orderDispatchJobs(
-	jobs []*model.AgentJob,
-	now time.Time,
-) []*model.AgentJob {
+func (r *WorldAgentRunner) orderDispatchJobs(jobs []*model.AgentJob, now time.Time) []*model.AgentJob {
 	overdueTicks, remaining := r.splitOverdueTickJobs(jobs, now)
 	ordered := make([]*model.AgentJob, 0, len(jobs))
 	ordered = append(ordered, fairAgentJobs(overdueTicks, &r.scheduleCursor)...)
@@ -324,10 +299,7 @@ func (r *WorldAgentRunner) orderDispatchJobs(
 	return ordered
 }
 
-func (r *WorldAgentRunner) promoteOverdueTickJobs(
-	jobs []*model.AgentJob,
-	now time.Time,
-) []*model.AgentJob {
+func (r *WorldAgentRunner) promoteOverdueTickJobs(jobs []*model.AgentJob, now time.Time) []*model.AgentJob {
 	promoted, remaining := r.splitOverdueTickJobs(jobs, now)
 	if len(promoted) == 0 {
 		return jobs
@@ -335,10 +307,7 @@ func (r *WorldAgentRunner) promoteOverdueTickJobs(
 	return append(promoted, remaining...)
 }
 
-func (r *WorldAgentRunner) splitOverdueTickJobs(
-	jobs []*model.AgentJob,
-	now time.Time,
-) ([]*model.AgentJob, []*model.AgentJob) {
+func (r *WorldAgentRunner) splitOverdueTickJobs(jobs []*model.AgentJob, now time.Time) ([]*model.AgentJob, []*model.AgentJob) {
 	threshold := r.tickInterval() / 2
 	if threshold < 30*time.Second {
 		threshold = 30 * time.Second
@@ -356,10 +325,7 @@ func (r *WorldAgentRunner) splitOverdueTickJobs(
 	return promoted, remaining
 }
 
-func (r *WorldAgentRunner) acquire(
-	ctx context.Context,
-	job *model.AgentJob,
-) (*model.World, bool) {
+func (r *WorldAgentRunner) acquire(ctx context.Context, job *model.AgentJob) (*model.World, bool) {
 	if job == nil {
 		return nil, false
 	}
@@ -412,11 +378,7 @@ func (r *WorldAgentRunner) acquire(
 	return world, true
 }
 
-func (r *WorldAgentRunner) acquireBackgroundJob(
-	ctx context.Context,
-	job *model.AgentJob,
-	laneKey string,
-) (*model.World, bool) {
+func (r *WorldAgentRunner) acquireBackgroundJob(ctx context.Context, job *model.AgentJob, laneKey string) (*model.World, bool) {
 	r.mu.Lock()
 	blocked := r.lanes[laneKey]
 	r.mu.Unlock()
@@ -450,11 +412,7 @@ func (r *WorldAgentRunner) acquireBackgroundJob(
 	return world, true
 }
 
-func (r *WorldAgentRunner) acquireMemoryJob(
-	ctx context.Context,
-	job *model.AgentJob,
-	laneKey string,
-) (*model.World, bool) {
+func (r *WorldAgentRunner) acquireMemoryJob(ctx context.Context, job *model.AgentJob, laneKey string) (*model.World, bool) {
 	r.mu.Lock()
 	blocked := r.activeMemory >= r.memoryLimit() || r.lanes[laneKey]
 	r.mu.Unlock()
@@ -489,10 +447,7 @@ func (r *WorldAgentRunner) acquireMemoryJob(
 	return world, true
 }
 
-func (r *WorldAgentRunner) release(
-	world *model.World,
-	job *model.AgentJob,
-) {
+func (r *WorldAgentRunner) release(world *model.World, job *model.AgentJob) {
 	r.mu.Lock()
 	switch job.Type {
 	case enum.AgentJobTypeMemoryEmbed:
@@ -507,11 +462,7 @@ func (r *WorldAgentRunner) release(
 	r.wakeScheduler()
 }
 
-func (r *WorldAgentRunner) execute(
-	ctx context.Context,
-	job *model.AgentJob,
-	world *model.World,
-) {
+func (r *WorldAgentRunner) execute(ctx context.Context, job *model.AgentJob, world *model.World) {
 	defer r.release(world, job)
 
 	running, err := r.agentJobRepo.MarkRunning(ctx, job.ID, time.Now())

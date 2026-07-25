@@ -9,11 +9,7 @@ type Result[T any] struct {
 	Time    *time.Time `json:"time"`
 }
 
-func NewResult[T any](
-	code int,
-	message string,
-	data T,
-) *Result[T] {
+func NewResult[T any](code int, message string, data T) *Result[T] {
 	return &Result[T]{
 		Code:    code,
 		Message: message,

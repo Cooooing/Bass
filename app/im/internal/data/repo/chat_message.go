@@ -26,19 +26,14 @@ func NewChatMessageRepo(
 	}
 }
 
-func (r *ChatMessageRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *ChatMessageRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *ChatMessageRepo) Save(
-	ctx context.Context,
-	chatMessage *model.ChatMessage,
-) (*model.ChatMessage, error) {
+func (r *ChatMessageRepo) Save(ctx context.Context, chatMessage *model.ChatMessage) (*model.ChatMessage, error) {
 	save, err := r.getClient(ctx).ChatMessage.Create().
 		SetSenderID(chatMessage.SenderID).
 		SetNillableReceiverID(chatMessage.ReceiverID).
@@ -56,10 +51,7 @@ func (r *ChatMessageRepo) Save(
 	return r.toModel(save), nil
 }
 
-func (r *ChatMessageRepo) UpdateStatus(
-	ctx context.Context,
-	req *repo.ChatMessageUpdateStatusReq,
-) (*model.ChatMessage, error) {
+func (r *ChatMessageRepo) UpdateStatus(ctx context.Context, req *repo.ChatMessageUpdateStatusReq) (*model.ChatMessage, error) {
 	update, err := r.getClient(ctx).ChatMessage.UpdateOneID(req.ChatMessageID).
 		SetStatus(chatmessage.Status(req.Status)).
 		SetUpdatedBy(req.UpdatedBy).
@@ -70,10 +62,7 @@ func (r *ChatMessageRepo) UpdateStatus(
 	return r.toModel(update), nil
 }
 
-func (r *ChatMessageRepo) Get(
-	ctx context.Context,
-	req *repo.ChatMessageQuery,
-) (*model.ChatMessage, error) {
+func (r *ChatMessageRepo) Get(ctx context.Context, req *repo.ChatMessageQuery) (*model.ChatMessage, error) {
 	query := r.getClient(ctx).ChatMessage.Query()
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
@@ -83,10 +72,7 @@ func (r *ChatMessageRepo) Get(
 	return r.toModel(t), nil
 }
 
-func (r *ChatMessageRepo) List(
-	ctx context.Context,
-	req *repo.ChatMessageQuery,
-) ([]*model.ChatMessage, error) {
+func (r *ChatMessageRepo) List(ctx context.Context, req *repo.ChatMessageQuery) ([]*model.ChatMessage, error) {
 	query := r.getClient(ctx).ChatMessage.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -100,10 +86,7 @@ func (r *ChatMessageRepo) List(
 	return result, nil
 }
 
-func (r *ChatMessageRepo) Map(
-	ctx context.Context,
-	req *repo.ChatMessageQuery,
-) (map[int64]*model.ChatMessage, error) {
+func (r *ChatMessageRepo) Map(ctx context.Context, req *repo.ChatMessageQuery) (map[int64]*model.ChatMessage, error) {
 	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -115,10 +98,7 @@ func (r *ChatMessageRepo) Map(
 	return result, nil
 }
 
-func (r *ChatMessageRepo) Count(
-	ctx context.Context,
-	req *repo.ChatMessageQuery,
-) (int, error) {
+func (r *ChatMessageRepo) Count(ctx context.Context, req *repo.ChatMessageQuery) (int, error) {
 	query := r.getClient(ctx).ChatMessage.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -128,10 +108,7 @@ func (r *ChatMessageRepo) Count(
 	return count, nil
 }
 
-func (r *ChatMessageRepo) Page(
-	ctx context.Context,
-	req *repo.ChatMessageQuery,
-) (*repo.ChatMessagePageResp, error) {
+func (r *ChatMessageRepo) Page(ctx context.Context, req *repo.ChatMessageQuery) (*repo.ChatMessagePageResp, error) {
 	page := normalizePage(nil)
 	if req != nil {
 		page = normalizePage(req.Page)
@@ -161,10 +138,7 @@ func (r *ChatMessageRepo) Page(
 	}, nil
 }
 
-func (r *ChatMessageRepo) getQuery(
-	query *gen.ChatMessageQuery,
-	req *repo.ChatMessageQuery,
-) *gen.ChatMessageQuery {
+func (r *ChatMessageRepo) getQuery(query *gen.ChatMessageQuery, req *repo.ChatMessageQuery) *gen.ChatMessageQuery {
 	if req == nil {
 		return query
 	}
@@ -180,9 +154,7 @@ func (r *ChatMessageRepo) getQuery(
 	return query
 }
 
-func (r *ChatMessageRepo) toModel(
-	t *gen.ChatMessage,
-) *model.ChatMessage {
+func (r *ChatMessageRepo) toModel(t *gen.ChatMessage) *model.ChatMessage {
 	return &model.ChatMessage{
 		ID:         t.ID,
 		SenderID:   t.SenderID,

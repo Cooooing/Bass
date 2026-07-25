@@ -28,19 +28,14 @@ func NewWorldRuleRepo(
 	}
 }
 
-func (r *WorldRuleRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *WorldRuleRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *WorldRuleRepo) Save(
-	ctx context.Context,
-	row *model.WorldRule,
-) (*model.WorldRule, error) {
+func (r *WorldRuleRepo) Save(ctx context.Context, row *model.WorldRule) (*model.WorldRule, error) {
 	saved, err := r.getClient(ctx).WorldRule.Create().
 		SetWorldID(row.WorldID).
 		SetVersion(row.Version).
@@ -59,10 +54,7 @@ func (r *WorldRuleRepo) Save(
 	}, nil
 }
 
-func worldRuleQuery(
-	q *gen.WorldRuleQuery,
-	req *bizrepo.WorldRuleQuery,
-) *gen.WorldRuleQuery {
+func worldRuleQuery(q *gen.WorldRuleQuery, req *bizrepo.WorldRuleQuery) *gen.WorldRuleQuery {
 	if req == nil {
 		return q
 	}
@@ -75,10 +67,7 @@ func worldRuleQuery(
 	return q
 }
 
-func (r *WorldRuleRepo) Get(
-	ctx context.Context,
-	req *bizrepo.WorldRuleQuery,
-) (*model.WorldRule, error) {
+func (r *WorldRuleRepo) Get(ctx context.Context, req *bizrepo.WorldRuleQuery) (*model.WorldRule, error) {
 	row, err := worldRuleQuery(r.getClient(ctx).WorldRule.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -96,10 +85,7 @@ func (r *WorldRuleRepo) Get(
 	}, nil
 }
 
-func (r *WorldRuleRepo) List(
-	ctx context.Context,
-	req *bizrepo.WorldRuleQuery,
-) ([]*model.WorldRule, error) {
+func (r *WorldRuleRepo) List(ctx context.Context, req *bizrepo.WorldRuleQuery) ([]*model.WorldRule, error) {
 	rows, err := worldRuleQuery(r.getClient(ctx).WorldRule.Query(), req).Order(worldrule.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
@@ -116,10 +102,7 @@ func (r *WorldRuleRepo) List(
 	}), nil
 }
 
-func (r *WorldRuleRepo) Map(
-	ctx context.Context,
-	req *bizrepo.WorldRuleQuery,
-) (map[int64]*model.WorldRule, error) {
+func (r *WorldRuleRepo) Map(ctx context.Context, req *bizrepo.WorldRuleQuery) (map[int64]*model.WorldRule, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -131,17 +114,11 @@ func (r *WorldRuleRepo) Map(
 	return out, nil
 }
 
-func (r *WorldRuleRepo) Count(
-	ctx context.Context,
-	req *bizrepo.WorldRuleQuery,
-) (int, error) {
+func (r *WorldRuleRepo) Count(ctx context.Context, req *bizrepo.WorldRuleQuery) (int, error) {
 	return worldRuleQuery(r.getClient(ctx).WorldRule.Query(), req).Count(ctx)
 }
 
-func (r *WorldRuleRepo) Page(
-	ctx context.Context,
-	req *bizrepo.WorldRulePageReq,
-) (*bizrepo.WorldRulePageResp, error) {
+func (r *WorldRuleRepo) Page(ctx context.Context, req *bizrepo.WorldRulePageReq) (*bizrepo.WorldRulePageResp, error) {
 	p := page(req.Page)
 	q := worldRuleQuery(r.getClient(ctx).WorldRule.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)

@@ -13,10 +13,7 @@ type worldMemberRepoStub struct {
 	member *model.WorldMember
 }
 
-func (r *worldMemberRepoStub) Get(
-	context.Context,
-	*repo.WorldMemberQuery,
-) (*model.WorldMember, error) {
+func (r *worldMemberRepoStub) Get(context.Context, *repo.WorldMemberQuery) (*model.WorldMember, error) {
 	return r.member, nil
 }
 
@@ -25,16 +22,11 @@ type worldStateRepoStub struct {
 	state *model.WorldState
 }
 
-func (r *worldStateRepoStub) Get(
-	context.Context,
-	*repo.WorldStateQuery,
-) (*model.WorldState, error) {
+func (r *worldStateRepoStub) Get(context.Context, *repo.WorldStateQuery) (*model.WorldState, error) {
 	return r.state, nil
 }
 
-func TestWorldMemberGet(
-	t *testing.T,
-) {
+func TestWorldMemberGet(t *testing.T) {
 	usecase := NewWorldMemberUsecase(
 		nil,
 		nil,

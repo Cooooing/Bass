@@ -30,10 +30,7 @@ type BeginEnableTotpResp struct {
 	QRCode []byte
 }
 
-func (u *TotpUsecase) BeginEnableTotp(
-	ctx context.Context,
-	req *BeginEnableTotpReq,
-) (*BeginEnableTotpResp, error) {
+func (u *TotpUsecase) BeginEnableTotp(ctx context.Context, req *BeginEnableTotpReq) (*BeginEnableTotpResp, error) {
 	current, err := u.totpClient.GetCurrentTotp(ctx, req.UserID)
 	if err != nil {
 		return nil, err
@@ -59,10 +56,7 @@ type ConfirmEnableTotpReq struct {
 	Code   string
 }
 
-func (u *TotpUsecase) ConfirmEnableTotp(
-	ctx context.Context,
-	req *ConfirmEnableTotpReq,
-) error {
+func (u *TotpUsecase) ConfirmEnableTotp(ctx context.Context, req *ConfirmEnableTotpReq) error {
 	current, err := u.totpClient.GetCurrentTotp(ctx, req.UserID)
 	if err != nil {
 		return err
@@ -93,10 +87,7 @@ type DisableTotpReq struct {
 	Code   string
 }
 
-func (u *TotpUsecase) DisableTotp(
-	ctx context.Context,
-	req *DisableTotpReq,
-) error {
+func (u *TotpUsecase) DisableTotp(ctx context.Context, req *DisableTotpReq) error {
 	current, err := u.totpClient.GetCurrentTotp(ctx, req.UserID)
 	if err != nil {
 		return err
@@ -122,10 +113,7 @@ func (u *TotpUsecase) DisableTotp(
 	return err
 }
 
-func (u *TotpUsecase) GetCurrentTotp(
-	ctx context.Context,
-	userID int64,
-) (*bbsuserv1.GetCurrentTotp_Resp_Totp, error) {
+func (u *TotpUsecase) GetCurrentTotp(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentTotp_Resp_Totp, error) {
 	reply, err := u.totpClient.GetCurrentTotp(ctx, userID)
 	if err != nil {
 		return nil, err

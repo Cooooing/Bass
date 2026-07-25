@@ -7,9 +7,7 @@ import (
 	"testing"
 )
 
-func TestPgvectorCheckErrorReportsMissingExtension(
-	t *testing.T,
-) {
+func TestPgvectorCheckErrorReportsMissingExtension(t *testing.T) {
 	err := pgvectorCheckError(sql.ErrNoRows)
 	if err == nil {
 		t.Fatal("expected error")
@@ -19,9 +17,7 @@ func TestPgvectorCheckErrorReportsMissingExtension(
 	}
 }
 
-func TestPgvectorCheckErrorPreservesDatabaseFailure(
-	t *testing.T,
-) {
+func TestPgvectorCheckErrorPreservesDatabaseFailure(t *testing.T) {
 	cause := errors.New("password authentication failed")
 	err := pgvectorCheckError(cause)
 	if err == nil {

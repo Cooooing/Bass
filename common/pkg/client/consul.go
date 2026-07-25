@@ -107,9 +107,7 @@ func (c *ConsulClient) Discovery() registry.Discovery {
 	return c.reg
 }
 
-func (c *ConsulClient) RegisterService(
-	svc *consulapi.AgentServiceRegistration,
-) error {
+func (c *ConsulClient) RegisterService(svc *consulapi.AgentServiceRegistration) error {
 	if err := c.Client.Agent().ServiceRegister(svc); err != nil {
 		return fmt.Errorf("register %s: %w", svc.ID, err)
 	}
@@ -120,9 +118,7 @@ func (c *ConsulClient) RegisterService(
 	return nil
 }
 
-func (c *ConsulClient) GetGrpcConn(
-	service string,
-) (*grpc.ClientConn, error) {
+func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 	if v, ok := c.grpcConns.Load(service); ok {
 		return v.(*grpc.ClientConn), nil
 	}
@@ -163,9 +159,7 @@ func (c *ConsulClient) GetGrpcConn(
 	return conn, nil
 }
 
-func (c *ConsulClient) GetHTTPClient(
-	service string,
-) (*khttp.Client, error) {
+func (c *ConsulClient) GetHTTPClient(service string) (*khttp.Client, error) {
 	if v, ok := c.httpConns.Load(service); ok {
 		return v.(*khttp.Client), nil
 	}

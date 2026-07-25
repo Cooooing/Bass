@@ -3,17 +3,12 @@ package util
 import "reflect"
 
 // Ptr 返回一个指向 v 的指针
-func Ptr[T any](
-	v T,
-) *T {
+func Ptr[T any](v T) *T {
 	return &v
 }
 
 // If 模拟三元运算符：条件 ? 真值 : 假值。
-func If[T any](
-	condition bool,
-	trueValue, falseValue T,
-) T {
+func If[T any](condition bool, trueValue, falseValue T) T {
 	if condition {
 		return trueValue
 	}
@@ -22,9 +17,7 @@ func If[T any](
 
 // IsNil 判断一个值是否为 nil
 // 注意：只有引用类型（chan, func, interface, map, pointer, slice）才可能为 nil
-func IsNil(
-	v any,
-) bool {
+func IsNil(v any) bool {
 	if v == nil {
 		return true
 	}
@@ -37,17 +30,12 @@ func IsNil(
 	return false
 }
 
-func IsNotNil(
-	v any,
-) bool {
+func IsNotNil(v any) bool {
 	return !IsNil(v)
 }
 
 // OrDefault 如果 v 为 nil，返回默认值，否则返回 v。
-func OrDefault[T any](
-	v T,
-	defaultValue T,
-) T {
+func OrDefault[T any](v T, defaultValue T) T {
 	if IsNil(v) {
 		return defaultValue
 	}
@@ -55,10 +43,7 @@ func OrDefault[T any](
 }
 
 // PtrOrDefault 如果 v 为零值，返回默认值，否则返回 v 的指针。
-func PtrOrDefault[T comparable](
-	v T,
-	defaultValue *T,
-) *T {
+func PtrOrDefault[T comparable](v T, defaultValue *T) *T {
 	var zero T
 	if v == zero {
 		return defaultValue
@@ -67,10 +52,7 @@ func PtrOrDefault[T comparable](
 }
 
 // DerefOrDefault 如果指针 v 为 nil，返回默认值，否则返回 *v。
-func DerefOrDefault[T any](
-	v *T,
-	defaultValue T,
-) T {
+func DerefOrDefault[T any](v *T, defaultValue T) T {
 	if v == nil {
 		return defaultValue
 	}

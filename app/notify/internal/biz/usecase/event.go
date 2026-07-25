@@ -58,10 +58,7 @@ type EventHandleMessageReq struct {
 	Payload     []byte
 }
 
-func (u *EventUsecase) HandleMessage(
-	ctx context.Context,
-	req *EventHandleMessageReq,
-) error {
+func (u *EventUsecase) HandleMessage(ctx context.Context, req *EventHandleMessageReq) error {
 	if req == nil {
 		return errors.New("event handle message request is required")
 	}
@@ -188,10 +185,7 @@ type markFailedReq struct {
 	Err     error
 }
 
-func (u *EventUsecase) markFailed(
-	ctx context.Context,
-	req *markFailedReq,
-) error {
+func (u *EventUsecase) markFailed(ctx context.Context, req *markFailedReq) error {
 	eventID := req.EventID
 	err := req.Err
 	if markErr := u.inboxEventRepo.MarkFailed(ctx, &repo.InboxEventMarkFailedReq{

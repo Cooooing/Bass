@@ -58,10 +58,7 @@ type ArticleAddReq struct {
 	TagIDs  []int64
 }
 
-func (d *ArticleUsecase) Add(
-	ctx context.Context,
-	req *ArticleAddReq,
-) (*model.Article, error) {
+func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Article, error) {
 	article := req.Article
 	var (
 		save *model.Article
@@ -120,10 +117,7 @@ type ArticleAddPostscriptReq struct {
 	UserID    int64
 }
 
-func (d *ArticleUsecase) AddPostscript(
-	ctx context.Context,
-	req *ArticleAddPostscriptReq,
-) (*model.ArticlePostscript, error) {
+func (d *ArticleUsecase) AddPostscript(ctx context.Context, req *ArticleAddPostscriptReq) (*model.ArticlePostscript, error) {
 	articleId := req.ArticleID
 	content := req.Content
 	userId := req.UserID
@@ -185,10 +179,7 @@ func (d *ArticleUsecase) AddPostscript(
 	return save, nil
 }
 
-func (d *ArticleUsecase) ListPostscripts(
-	ctx context.Context,
-	articleID int64,
-) ([]*model.ArticlePostscript, error) {
+func (d *ArticleUsecase) ListPostscripts(ctx context.Context, articleID int64) ([]*model.ArticlePostscript, error) {
 	articleId := articleID
 	if _, err := d.Get(ctx, articleId); err != nil {
 		return nil, err
@@ -204,10 +195,7 @@ func (d *ArticleUsecase) ListPostscripts(
 	return listResp, nil
 }
 
-func (d *ArticleUsecase) Update(
-	ctx context.Context,
-	article *model.Article,
-) (*model.Article, error) {
+func (d *ArticleUsecase) Update(ctx context.Context, article *model.Article) (*model.Article, error) {
 	var (
 		save *model.Article
 		err  error
@@ -277,10 +265,7 @@ type ArticleRewardReq struct {
 	Points    int32
 }
 
-func (d *ArticleUsecase) Reward(
-	ctx context.Context,
-	req *ArticleRewardReq,
-) error {
+func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) error {
 	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_REWARD_NOT_IMPLEMENTED)
 }
 
@@ -290,10 +275,7 @@ type ArticleLikeReq struct {
 	Active    bool
 }
 
-func (d *ArticleUsecase) Like(
-	ctx context.Context,
-	req *ArticleLikeReq,
-) (bool, error) {
+func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, error) {
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
@@ -372,10 +354,7 @@ type ArticleThankReq struct {
 	Active    bool
 }
 
-func (d *ArticleUsecase) Thank(
-	ctx context.Context,
-	req *ArticleThankReq,
-) (bool, error) {
+func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool, error) {
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
@@ -454,10 +433,7 @@ type ArticleCollectReq struct {
 	Active    bool
 }
 
-func (d *ArticleUsecase) Collect(
-	ctx context.Context,
-	req *ArticleCollectReq,
-) (bool, error) {
+func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (bool, error) {
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
@@ -536,10 +512,7 @@ type ArticleWatchReq struct {
 	Active    bool
 }
 
-func (d *ArticleUsecase) Watch(
-	ctx context.Context,
-	req *ArticleWatchReq,
-) (bool, error) {
+func (d *ArticleUsecase) Watch(ctx context.Context, req *ArticleWatchReq) (bool, error) {
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
@@ -617,10 +590,7 @@ type ArticleViewReq struct {
 	ViewerUserID *int64
 }
 
-func (d *ArticleUsecase) View(
-	ctx context.Context,
-	req *ArticleViewReq,
-) error {
+func (d *ArticleUsecase) View(ctx context.Context, req *ArticleViewReq) error {
 	articleId := req.ArticleID
 	return d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
@@ -654,10 +624,7 @@ type ArticlePublishReq struct {
 	Visibility enum.ArticleVisibility
 }
 
-func (d *ArticleUsecase) Publish(
-	ctx context.Context,
-	req *ArticlePublishReq,
-) error {
+func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	visibility := req.Visibility
@@ -710,10 +677,7 @@ type ArticleAcceptAnswerReq struct {
 	UserID    int64
 }
 
-func (d *ArticleUsecase) AcceptAnswer(
-	ctx context.Context,
-	req *ArticleAcceptAnswerReq,
-) error {
+func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, req *ArticleAcceptAnswerReq) error {
 	articleId := req.ArticleID
 	commentId := req.CommentID
 	userId := req.UserID
@@ -775,10 +739,7 @@ type ArticleMakePrivateReq struct {
 	UserID    int64
 }
 
-func (d *ArticleUsecase) MakePrivate(
-	ctx context.Context,
-	req *ArticleMakePrivateReq,
-) error {
+func (d *ArticleUsecase) MakePrivate(ctx context.Context, req *ArticleMakePrivateReq) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	return d.updateVisibility(ctx, &articleUpdateVisibilityReq{
@@ -793,10 +754,7 @@ type ArticleMakePublicReq struct {
 	UserID    int64
 }
 
-func (d *ArticleUsecase) MakePublic(
-	ctx context.Context,
-	req *ArticleMakePublicReq,
-) error {
+func (d *ArticleUsecase) MakePublic(ctx context.Context, req *ArticleMakePublicReq) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	return d.updateVisibility(ctx, &articleUpdateVisibilityReq{
@@ -812,10 +770,7 @@ type articleUpdateVisibilityReq struct {
 	UserID     int64
 }
 
-func (d *ArticleUsecase) updateVisibility(
-	ctx context.Context,
-	req *articleUpdateVisibilityReq,
-) error {
+func (d *ArticleUsecase) updateVisibility(ctx context.Context, req *articleUpdateVisibilityReq) error {
 	articleId := req.ArticleID
 	visibility := req.Visibility
 	userId := req.UserID
@@ -865,10 +820,7 @@ type ArticleArchiveReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Archive(
-	ctx context.Context,
-	req *ArticleArchiveReq,
-) error {
+func (d *ArticleUsecase) Archive(ctx context.Context, req *ArticleArchiveReq) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
@@ -887,10 +839,7 @@ type ArticleUnarchiveReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Unarchive(
-	ctx context.Context,
-	req *ArticleUnarchiveReq,
-) error {
+func (d *ArticleUsecase) Unarchive(ctx context.Context, req *ArticleUnarchiveReq) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
@@ -911,10 +860,7 @@ type articleUpdatePublishStatusReq struct {
 	Reason        *string
 }
 
-func (d *ArticleUsecase) updatePublishStatus(
-	ctx context.Context,
-	req *articleUpdatePublishStatusReq,
-) error {
+func (d *ArticleUsecase) updatePublishStatus(ctx context.Context, req *articleUpdatePublishStatusReq) error {
 	articleId := req.ArticleID
 	publishStatus := req.PublishStatus
 	userId := req.UserID
@@ -975,10 +921,7 @@ type ArticleHideReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Hide(
-	ctx context.Context,
-	req *ArticleHideReq,
-) error {
+func (d *ArticleUsecase) Hide(ctx context.Context, req *ArticleHideReq) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
@@ -997,10 +940,7 @@ type ArticleUnhideReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Unhide(
-	ctx context.Context,
-	req *ArticleUnhideReq,
-) error {
+func (d *ArticleUsecase) Unhide(ctx context.Context, req *ArticleUnhideReq) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
@@ -1019,10 +959,7 @@ type ArticleLockReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Lock(
-	ctx context.Context,
-	req *ArticleLockReq,
-) error {
+func (d *ArticleUsecase) Lock(ctx context.Context, req *ArticleLockReq) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
@@ -1041,10 +978,7 @@ type ArticleUnlockReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Unlock(
-	ctx context.Context,
-	req *ArticleUnlockReq,
-) error {
+func (d *ArticleUsecase) Unlock(ctx context.Context, req *ArticleUnlockReq) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
@@ -1065,10 +999,7 @@ type articleUpdateRestrictionReq struct {
 	Reason      *string
 }
 
-func (d *ArticleUsecase) updateRestriction(
-	ctx context.Context,
-	req *articleUpdateRestrictionReq,
-) error {
+func (d *ArticleUsecase) updateRestriction(ctx context.Context, req *articleUpdateRestrictionReq) error {
 	articleId := req.ArticleID
 	restriction := req.Restriction
 	userId := req.UserID
@@ -1141,10 +1072,7 @@ func (d *ArticleUsecase) updateRestriction(
 	})
 }
 
-func (d *ArticleUsecase) Get(
-	ctx context.Context,
-	articleID int64,
-) (*model.Article, error) {
+func (d *ArticleUsecase) Get(ctx context.Context, articleID int64) (*model.Article, error) {
 	articleId := articleID
 	articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 		ArticleId: new(articleId),
@@ -1177,10 +1105,7 @@ type ArticlePageResp struct {
 	Page *base.PageResp
 }
 
-func (d *ArticleUsecase) Page(
-	ctx context.Context,
-	req *ArticlePageReq,
-) (*ArticlePageResp, error) {
+func (d *ArticleUsecase) Page(ctx context.Context, req *ArticlePageReq) (*ArticlePageResp, error) {
 	if req == nil {
 		req = &ArticlePageReq{}
 	}
@@ -1213,10 +1138,7 @@ type ArticleMapViewerActionStatesReq struct {
 	UserID     int64
 }
 
-func (d *ArticleUsecase) MapViewerActionStates(
-	ctx context.Context,
-	req *ArticleMapViewerActionStatesReq,
-) (map[int64]*model.
+func (d *ArticleUsecase) MapViewerActionStates(ctx context.Context, req *ArticleMapViewerActionStatesReq) (map[int64]*model.
 	ArticleViewerActionState, error) {
 	articleIds := req.ArticleIDs
 	userId := req.UserID
@@ -1264,10 +1186,7 @@ type ArticleDiscardDraftReq struct {
 	UserID    int64
 }
 
-func (d *ArticleUsecase) DiscardDraft(
-	ctx context.Context,
-	req *ArticleDiscardDraftReq,
-) error {
+func (d *ArticleUsecase) DiscardDraft(ctx context.Context, req *ArticleDiscardDraftReq) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	return d.tx(ctx, func(ctx context.Context) error {
@@ -1288,9 +1207,6 @@ func (d *ArticleUsecase) DiscardDraft(
 	})
 }
 
-func (d *ArticleUsecase) isAuthor(
-	article *model.Article,
-	userId int64,
-) bool {
+func (d *ArticleUsecase) isAuthor(article *model.Article, userId int64) bool {
 	return article != nil && article.CreatedBy != nil && *article.CreatedBy == userId
 }

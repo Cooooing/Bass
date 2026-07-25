@@ -44,9 +44,7 @@ func NewSchedulerRunner(
 	}
 }
 
-func (r *SchedulerRunner) Start(
-	ctx context.Context,
-) error {
+func (r *SchedulerRunner) Start(ctx context.Context) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	r.cancel = cancel
 	tasks, err := r.taskRepo.List(runCtx, &repo.TaskGetReq{
@@ -97,9 +95,7 @@ func (r *SchedulerRunner) Start(
 	return nil
 }
 
-func (r *SchedulerRunner) Stop(
-	ctx context.Context,
-) error {
+func (r *SchedulerRunner) Stop(ctx context.Context) error {
 	if r.cancel != nil {
 		r.cancel()
 	}
@@ -112,10 +108,7 @@ func (r *SchedulerRunner) Stop(
 	return r.taskUsecase.StopRunning(stopRunningCtx)
 }
 
-func (r *SchedulerRunner) registerTask(
-	ctx context.Context,
-	task *model.Task,
-) {
+func (r *SchedulerRunner) registerTask(ctx context.Context, task *model.Task) {
 	schedule, err := r.taskUsecase.cronParser.Parse(task.CronSpec)
 	if err != nil {
 		r.logger.ErrorContext(ctx, "parse scheduler task cron failed", constant.LogFieldTaskID, task.ID, constant.LogFieldTaskName, task.Name, constant.LogFieldErr, err)
@@ -142,10 +135,7 @@ func (r *SchedulerRunner) registerTask(
 	r.logger.DebugContext(ctx, "scheduler task registered", constant.LogFieldTaskID, task.ID, constant.LogFieldTaskName, task.Name, "entry_id", int(entryID), "cron_spec", task.CronSpec)
 }
 
-func (r *SchedulerRunner) unregisterTask(
-	ctx context.Context,
-	taskID int64,
-) {
+func (r *SchedulerRunner) unregisterTask(ctx context.Context, taskID int64) {
 	r.mu.Lock()
 	entryID, ok := r.entryIDs[taskID]
 	if ok {

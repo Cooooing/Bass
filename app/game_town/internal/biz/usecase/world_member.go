@@ -52,10 +52,7 @@ type JoinWorldResp struct {
 	EventID    int64
 }
 
-func (u *WorldMemberUsecase) Join(
-	ctx context.Context,
-	req *JoinWorldReq,
-) (*JoinWorldResp, error) {
+func (u *WorldMemberUsecase) Join(ctx context.Context, req *JoinWorldReq) (*JoinWorldResp, error) {
 	worldCode := strings.TrimSpace(req.WorldCode)
 	characterPreference := strings.TrimSpace(req.CharacterPreference)
 	if req.PlayerID <= 0 || worldCode == "" {
@@ -153,10 +150,7 @@ type GetWorldMemberResp struct {
 	State  *model.WorldState
 }
 
-func (u *WorldMemberUsecase) Get(
-	ctx context.Context,
-	req *GetWorldMemberReq,
-) (*GetWorldMemberResp, error) {
+func (u *WorldMemberUsecase) Get(ctx context.Context, req *GetWorldMemberReq) (*GetWorldMemberResp, error) {
 	member, err := u.worldMemberRepo.Get(ctx, &repo.WorldMemberQuery{
 		WorldID:  new(req.WorldID),
 		PlayerID: new(req.PlayerID),
@@ -191,10 +185,7 @@ type SubmitActionReq struct {
 	ClientRequestID string
 }
 
-func (u *WorldMemberUsecase) SubmitAction(
-	ctx context.Context,
-	req *SubmitActionReq,
-) (*model.Event, error) {
+func (u *WorldMemberUsecase) SubmitAction(ctx context.Context, req *SubmitActionReq) (*model.Event, error) {
 	content := strings.TrimSpace(req.Content)
 	if req.WorldID <= 0 || req.PlayerID <= 0 || content == "" {
 		return nil, apperror.CommonInvalidArgument()
@@ -235,9 +226,7 @@ func (u *WorldMemberUsecase) SubmitAction(
 	return event, nil
 }
 
-func actionPayloadTargets(
-	rows []SubmitActionTarget,
-) ([]any, *int64) {
+func actionPayloadTargets(rows []SubmitActionTarget) ([]any, *int64) {
 	targets := make([]any, 0, len(rows))
 	var npcID *int64
 	for _, target := range rows {

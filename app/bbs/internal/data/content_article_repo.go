@@ -18,10 +18,7 @@ import (
 	"github.com/samber/lo"
 )
 
-func cloneDataMessage[T proto.Message](
-	src proto.Message,
-	dst T,
-) T {
+func cloneDataMessage[T proto.Message](src proto.Message, dst T) T {
 	if src == nil {
 		return dst
 	}
@@ -50,10 +47,7 @@ func NewContentArticleClient(
 	}
 }
 
-func (r *ContentArticleClient) CreateArticle(
-	ctx context.Context,
-	req *repo.CreateArticleReq,
-) (*repo.ArticleDetail, error) {
+func (r *ContentArticleClient) CreateArticle(ctx context.Context, req *repo.CreateArticleReq) (*repo.ArticleDetail, error) {
 	save := &contentv1.CreateArticle_Req_Article{}
 	if req != nil && req.Article != nil {
 		article := req.Article
@@ -96,10 +90,7 @@ func (r *ContentArticleClient) CreateArticle(
 	return r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()]), nil
 }
 
-func (r *ContentArticleClient) UpdateArticle(
-	ctx context.Context,
-	req *repo.UpdateArticleReq,
-) (*repo.ArticleDetail, error) {
+func (r *ContentArticleClient) UpdateArticle(ctx context.Context, req *repo.UpdateArticleReq) (*repo.ArticleDetail, error) {
 	save := &contentv1.UpdateArticle_Req_Article{}
 	if req != nil && req.Article != nil {
 		article := req.Article
@@ -143,10 +134,7 @@ func (r *ContentArticleClient) UpdateArticle(
 	return r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()]), nil
 }
 
-func (r *ContentArticleClient) UpdateDraftArticle(
-	ctx context.Context,
-	req *repo.UpdateDraftArticleReq,
-) (*repo.ArticleDetail, error) {
+func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo.UpdateDraftArticleReq) (*repo.ArticleDetail, error) {
 	reply, err := r.UpdateArticle(ctx, &repo.UpdateArticleReq{
 		UserID:    req.UserID,
 		ArticleID: req.ArticleID,
@@ -158,10 +146,7 @@ func (r *ContentArticleClient) UpdateDraftArticle(
 	return reply, nil
 }
 
-func (r *ContentArticleClient) PublishArticle(
-	ctx context.Context,
-	req *repo.PublishArticleReq,
-) error {
+func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.PublishArticleReq) error {
 	_, err := r.contentClient.Article.Publish(ctx, &contentv1.PublishArticle_Req{
 		ArticleId:  req.ArticleID,
 		UserId:     req.UserID,
@@ -173,10 +158,7 @@ func (r *ContentArticleClient) PublishArticle(
 	return nil
 }
 
-func (r *ContentArticleClient) DiscardDraftArticle(
-	ctx context.Context,
-	req *repo.DiscardDraftArticleReq,
-) error {
+func (r *ContentArticleClient) DiscardDraftArticle(ctx context.Context, req *repo.DiscardDraftArticleReq) error {
 	_, err := r.contentClient.Article.DiscardDraft(ctx, &contentv1.DiscardDraftArticle_Req{
 		ArticleId: req.ArticleID,
 		UserId:    req.UserID,
@@ -187,10 +169,7 @@ func (r *ContentArticleClient) DiscardDraftArticle(
 	return nil
 }
 
-func (r *ContentArticleClient) ListArticles(
-	ctx context.Context,
-	req *repo.ListArticlesReq,
-) (*repo.ListArticlesResp, error) {
+func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListArticlesReq) (*repo.ListArticlesResp, error) {
 	query := req.Query
 	if query == nil {
 		query = &repo.ArticleQuery{}
@@ -281,10 +260,7 @@ func (r *ContentArticleClient) ListArticles(
 	}, nil
 }
 
-func (r *ContentArticleClient) GetArticle(
-	ctx context.Context,
-	req *repo.GetArticleReq,
-) (*repo.ArticleDetail, error) {
+func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArticleReq) (*repo.ArticleDetail, error) {
 	reply, err := r.contentClient.Article.Get(ctx, &contentv1.GetArticle_Req{
 		ArticleId: req.ArticleID,
 	})
@@ -327,10 +303,7 @@ func (r *ContentArticleClient) GetArticle(
 	return detail, nil
 }
 
-func (r *ContentArticleClient) ViewArticle(
-	ctx context.Context,
-	req *repo.ViewArticleReq,
-) error {
+func (r *ContentArticleClient) ViewArticle(ctx context.Context, req *repo.ViewArticleReq) error {
 	_, err := r.contentClient.Article.View(ctx, &contentv1.ViewArticle_Req{
 		ArticleId:    req.ArticleID,
 		ViewerUserId: new(req.UserID),
@@ -341,10 +314,7 @@ func (r *ContentArticleClient) ViewArticle(
 	return nil
 }
 
-func (r *ContentArticleClient) LikeArticle(
-	ctx context.Context,
-	req *repo.LikeArticleReq,
-) (bool, error) {
+func (r *ContentArticleClient) LikeArticle(ctx context.Context, req *repo.LikeArticleReq) (bool, error) {
 	reply, err := r.contentClient.Article.Like(ctx, &contentv1.LikeArticle_Req{
 		ArticleId: req.ArticleID,
 		Liked:     req.Active,
@@ -356,10 +326,7 @@ func (r *ContentArticleClient) LikeArticle(
 	return reply.GetLiked(), nil
 }
 
-func (r *ContentArticleClient) ThankArticle(
-	ctx context.Context,
-	req *repo.ThankArticleReq,
-) (bool, error) {
+func (r *ContentArticleClient) ThankArticle(ctx context.Context, req *repo.ThankArticleReq) (bool, error) {
 	reply, err := r.contentClient.Article.Thank(ctx, &contentv1.ThankArticle_Req{
 		ArticleId: req.ArticleID,
 		Thanked:   req.Active,
@@ -371,10 +338,7 @@ func (r *ContentArticleClient) ThankArticle(
 	return reply.GetThanked(), nil
 }
 
-func (r *ContentArticleClient) CollectArticle(
-	ctx context.Context,
-	req *repo.CollectArticleReq,
-) (bool, error) {
+func (r *ContentArticleClient) CollectArticle(ctx context.Context, req *repo.CollectArticleReq) (bool, error) {
 	reply, err := r.contentClient.Article.Collect(ctx, &contentv1.CollectArticle_Req{
 		ArticleId: req.ArticleID,
 		Collected: req.Active,
@@ -386,10 +350,7 @@ func (r *ContentArticleClient) CollectArticle(
 	return reply.GetCollected(), nil
 }
 
-func (r *ContentArticleClient) WatchArticle(
-	ctx context.Context,
-	req *repo.WatchArticleReq,
-) (bool, error) {
+func (r *ContentArticleClient) WatchArticle(ctx context.Context, req *repo.WatchArticleReq) (bool, error) {
 	reply, err := r.contentClient.Article.Watch(ctx, &contentv1.WatchArticle_Req{
 		ArticleId: req.ArticleID,
 		Watched:   req.Active,
@@ -401,10 +362,7 @@ func (r *ContentArticleClient) WatchArticle(
 	return reply.GetWatched(), nil
 }
 
-func (r *ContentArticleClient) RewardArticle(
-	ctx context.Context,
-	req *repo.RewardArticleReq,
-) error {
+func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.RewardArticleReq) error {
 	_, err := r.contentClient.Article.Reward(ctx, &contentv1.RewardArticle_Req{
 		ArticleId: req.ArticleID,
 		Points:    req.Points,
@@ -416,10 +374,7 @@ func (r *ContentArticleClient) RewardArticle(
 	return nil
 }
 
-func (r *ContentArticleClient) AcceptAnswerArticle(
-	ctx context.Context,
-	req *repo.AcceptAnswerArticleReq,
-) error {
+func (r *ContentArticleClient) AcceptAnswerArticle(ctx context.Context, req *repo.AcceptAnswerArticleReq) error {
 	_, err := r.contentClient.Article.AcceptAnswer(ctx, &contentv1.AcceptAnswerArticle_Req{
 		ArticleId: req.ArticleID,
 		CommentId: req.CommentID,
@@ -431,11 +386,7 @@ func (r *ContentArticleClient) AcceptAnswerArticle(
 	return nil
 }
 
-func (r *ContentArticleClient) loadArticleFacts(
-	ctx context.Context,
-	articleIDs []int64,
-	userID int64,
-) (map[int64]*contentv1.MapArticleLastComments_Resp_Comment, map[int64]*repo.ArticleViewerActionState, error) {
+func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs []int64, userID int64) (map[int64]*contentv1.MapArticleLastComments_Resp_Comment, map[int64]*repo.ArticleViewerActionState, error) {
 	if len(articleIDs) == 0 {
 		return map[int64]*contentv1.MapArticleLastComments_Resp_Comment{}, map[int64]*repo.ArticleViewerActionState{}, nil
 	}
@@ -455,9 +406,7 @@ func (r *ContentArticleClient) loadArticleFacts(
 	return commentResp.GetComments(), r.articleViewerActionStates(stateResp.GetStates()), nil
 }
 
-func (r *ContentArticleClient) articleViewerActionStates(
-	states map[int64]*contentv1.MapArticleViewerActionStates_Resp_ArticleViewerActionState,
-) map[int64]*repo.ArticleViewerActionState {
+func (r *ContentArticleClient) articleViewerActionStates(states map[int64]*contentv1.MapArticleViewerActionStates_Resp_ArticleViewerActionState) map[int64]*repo.ArticleViewerActionState {
 	reply := make(map[int64]*repo.ArticleViewerActionState, len(states))
 	for articleID, state := range states {
 		reply[articleID] = &repo.ArticleViewerActionState{
@@ -470,10 +419,7 @@ func (r *ContentArticleClient) articleViewerActionStates(
 	return reply
 }
 
-func (r *ContentArticleClient) articleProfileIDs(
-	item *contentv1.PageArticles_Resp_Article,
-	lastComment *contentv1.MapArticleLastComments_Resp_Comment,
-) []int64 {
+func (r *ContentArticleClient) articleProfileIDs(item *contentv1.PageArticles_Resp_Article, lastComment *contentv1.MapArticleLastComments_Resp_Comment) []int64 {
 	if item == nil {
 		return nil
 	}
@@ -490,12 +436,7 @@ func (r *ContentArticleClient) articleProfileIDs(
 	return userIDs
 }
 
-func (r *ContentArticleClient) articleListItem(
-	item *contentv1.PageArticles_Resp_Article,
-	profiles map[int64]*repo.AccountProfile,
-	lastComment *contentv1.MapArticleLastComments_Resp_Comment,
-	state *repo.ArticleViewerActionState,
-) *repo.ArticleListItem {
+func (r *ContentArticleClient) articleListItem(item *contentv1.PageArticles_Resp_Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState) *repo.ArticleListItem {
 	if item == nil {
 		return nil
 	}
@@ -555,12 +496,7 @@ func (r *ContentArticleClient) articleListItem(
 	return out
 }
 
-func (r *ContentArticleClient) articleDetail(
-	item *contentv1.PageArticles_Resp_Article,
-	profiles map[int64]*repo.AccountProfile,
-	lastComment *contentv1.MapArticleLastComments_Resp_Comment,
-	state *repo.ArticleViewerActionState,
-) *repo.ArticleDetail {
+func (r *ContentArticleClient) articleDetail(item *contentv1.PageArticles_Resp_Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState) *repo.ArticleDetail {
 	if item == nil {
 		return nil
 	}
@@ -622,9 +558,7 @@ func (r *ContentArticleClient) articleDetail(
 	return out
 }
 
-func (r *ContentArticleClient) articleSummaryContent(
-	content string,
-) string {
+func (r *ContentArticleClient) articleSummaryContent(content string) string {
 	runes := []rune(content)
 	if len(runes) > 200 {
 		return string(runes[:200]) + "..."
@@ -632,33 +566,22 @@ func (r *ContentArticleClient) articleSummaryContent(
 	return content
 }
 
-func (r *ContentArticleClient) articleContentRender(
-	articleID int64,
-	content string,
-) string {
+func (r *ContentArticleClient) articleContentRender(articleID int64, content string) string {
 	return util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_content", articleID), content)
 }
 
-func (r *ContentArticleClient) articleRewardContentRender(
-	articleID int64,
-	content *string,
-) *string {
+func (r *ContentArticleClient) articleRewardContentRender(articleID int64, content *string) *string {
 	if content == nil {
 		return nil
 	}
 	return new(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", articleID), *content))
 }
 
-func (r *ContentArticleClient) articlePostscriptContentRender(
-	postscriptID int64,
-	content string,
-) string {
+func (r *ContentArticleClient) articlePostscriptContentRender(postscriptID int64, content string) string {
 	return util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_postscript", postscriptID), content)
 }
 
-func (r *ContentArticleClient) articleCoverImageURL(
-	item *contentv1.PageArticles_Resp_Article,
-) *string {
+func (r *ContentArticleClient) articleCoverImageURL(item *contentv1.PageArticles_Resp_Article) *string {
 	if item == nil || item.GetContent() == "" {
 		return nil
 	}
@@ -673,10 +596,7 @@ func (r *ContentArticleClient) articleCoverImageURL(
 	return coverImageURL
 }
 
-func (r *ContentArticleClient) loadAccountProfiles(
-	ctx context.Context,
-	userIDs ...int64,
-) (map[int64]*repo.AccountProfile, error) {
+func (r *ContentArticleClient) loadAccountProfiles(ctx context.Context, userIDs ...int64) (map[int64]*repo.AccountProfile, error) {
 	if r.userClient == nil {
 		return map[int64]*repo.AccountProfile{}, nil
 	}

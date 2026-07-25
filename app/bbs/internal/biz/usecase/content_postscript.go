@@ -23,10 +23,7 @@ type AddPostscriptReq struct {
 	Content   string
 }
 
-func (u *ContentPostscriptUsecase) AddPostscript(
-	ctx context.Context,
-	req *AddPostscriptReq,
-) (*repo.ArticlePostscript, error) {
+func (u *ContentPostscriptUsecase) AddPostscript(ctx context.Context, req *AddPostscriptReq) (*repo.ArticlePostscript, error) {
 	resp, err := u.contentPostscriptClient.AddPostscript(ctx, &repo.AddPostscriptReq{
 		UserID:    req.UserID,
 		ArticleID: req.ArticleID,

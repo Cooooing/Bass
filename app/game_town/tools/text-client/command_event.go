@@ -11,12 +11,7 @@ import (
 	"github.com/samber/lo"
 )
 
-func listEvents(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	worldID int64,
-) commandResult {
+func listEvents(ctx context.Context, client *rpc.GameTownClient, playerID int64, worldID int64) commandResult {
 	if err := requireWorldContext(playerID, worldID); err != nil {
 		return commandResult{
 			err: err,

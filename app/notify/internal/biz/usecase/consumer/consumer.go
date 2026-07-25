@@ -34,9 +34,7 @@ func NewConsumer(
 	}
 }
 
-func (c *Consumer) Start(
-	ctx context.Context,
-) error {
+func (c *Consumer) Start(ctx context.Context) error {
 	c.ctx, c.cancel = context.WithCancel(ctx)
 	queueGroup := string(commonenum.EventQueueGroupNotify)
 	for _, subject := range c.subjects {
@@ -58,9 +56,7 @@ func (c *Consumer) Start(
 	return nil
 }
 
-func (c *Consumer) Stop(
-	_ context.Context,
-) error {
+func (c *Consumer) Stop(_ context.Context) error {
 	if c.cancel == nil {
 		return nil
 	}

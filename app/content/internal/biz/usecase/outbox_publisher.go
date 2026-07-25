@@ -49,9 +49,7 @@ func NewOutboxPublisher(
 	}
 }
 
-func (p *OutboxPublisher) Start(
-	ctx context.Context,
-) error {
+func (p *OutboxPublisher) Start(ctx context.Context) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	p.cancel = cancel
 	go func() {
@@ -81,18 +79,14 @@ func (p *OutboxPublisher) Start(
 	return nil
 }
 
-func (p *OutboxPublisher) Stop(
-	_ context.Context,
-) error {
+func (p *OutboxPublisher) Stop(_ context.Context) error {
 	if p.cancel != nil {
 		p.cancel()
 	}
 	return nil
 }
 
-func (p *OutboxPublisher) publishBatch(
-	ctx context.Context,
-) (bool, error) {
+func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 	lock, acquired, err := p.redisLock.TryAcquire(ctx, constant.GetKeyOutboxPublisherLock(p.serviceName()), p.pollLockTTL())
 	if err != nil {
 		p.log.Warn(fmt.Sprintf("acquire outbox publisher lock failed: %v", err))

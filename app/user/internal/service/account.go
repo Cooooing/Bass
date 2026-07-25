@@ -30,21 +30,14 @@ func NewAccountService(
 	}
 }
 
-func (s *AccountService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterAccountServiceServer(gs, s)
 }
 
-func (s *AccountService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *AccountService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *AccountService) Get(
-	ctx context.Context,
-	req *v1.GetAccount_Req,
-) (*v1.GetAccount_Resp, error) {
+func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.GetAccount_Resp, error) {
 	req = util.OrDefault(req, &v1.GetAccount_Req{})
 	res, err := s.accountUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
@@ -86,10 +79,7 @@ func (s *AccountService) Get(
 	}, nil
 }
 
-func (s *AccountService) List(
-	ctx context.Context,
-	req *v1.ListAccounts_Req,
-) (*v1.ListAccounts_Resp, error) {
+func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v1.ListAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.ListAccounts_Req{})
 	query := util.OrDefault(req.Query, &v1.ListAccounts_Req_AccountQuery{})
 	if len(query.UserIds) == 0 {
@@ -141,10 +131,7 @@ func (s *AccountService) List(
 	}, nil
 }
 
-func (s *AccountService) Map(
-	ctx context.Context,
-	req *v1.MapAccounts_Req,
-) (*v1.MapAccounts_Resp, error) {
+func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.MapAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.MapAccounts_Req{})
 	query := util.OrDefault(req.Query, &v1.MapAccounts_Req_AccountQuery{})
 	if len(query.UserIds) == 0 {
@@ -196,10 +183,7 @@ func (s *AccountService) Map(
 	}, nil
 }
 
-func (s *AccountService) UpdateProfile(
-	ctx context.Context,
-	req *v1.UpdateProfileAccount_Req,
-) (*v1.UpdateProfileAccount_Resp, error) {
+func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfileAccount_Req) (*v1.UpdateProfileAccount_Resp, error) {
 	req = util.OrDefault(req, &v1.UpdateProfileAccount_Req{})
 	var mbti *enum.MBTI
 	clearMBTI := false
@@ -254,10 +238,7 @@ func (s *AccountService) UpdateProfile(
 	}, nil
 }
 
-func (s *AccountService) Avatar(
-	ctx context.Context,
-	req *v1.AvatarAccount_Req,
-) (*common.ImageResp, error) {
+func (s *AccountService) Avatar(ctx context.Context, req *v1.AvatarAccount_Req) (*common.ImageResp, error) {
 	res, err := s.accountUsecase.Avatar(ctx, req.GetName())
 	if err != nil {
 		return nil, err

@@ -11,9 +11,7 @@ import (
 	"github.com/samber/lo"
 )
 
-func TestResolveClientMode(
-	t *testing.T,
-) {
+func TestResolveClientMode(t *testing.T) {
 	tests := []struct {
 		name     string
 		mode     string
@@ -40,9 +38,7 @@ func TestResolveClientMode(
 	}
 }
 
-func TestExecuteHelp(
-	t *testing.T,
-) {
+func TestExecuteHelp(t *testing.T) {
 	result := executeCommand(context.Background(), nil, 0, 0, 0, nil, "/help")
 	if result.err != nil {
 		t.Fatalf("executeCommand() error = %v", result.err)
@@ -52,9 +48,7 @@ func TestExecuteHelp(
 	}
 }
 
-func TestRunConsoleAcceptsLineInput(
-	t *testing.T,
-) {
+func TestRunConsoleAcceptsLineInput(t *testing.T) {
 	input := strings.NewReader("/help\n/quit\n")
 	var output strings.Builder
 	if err := runConsole(context.Background(), nil, "test", input, &output); err != nil {
@@ -65,9 +59,7 @@ func TestRunConsoleAcceptsLineInput(
 	}
 }
 
-func TestExecuteIncompleteCommandShowsUsage(
-	t *testing.T,
-) {
+func TestExecuteIncompleteCommandShowsUsage(t *testing.T) {
 	result := executeCommand(context.Background(), nil, 0, 0, 0, nil, "/world create")
 	if result.err != nil {
 		t.Fatalf("executeCommand() error = %v", result.err)
@@ -77,9 +69,7 @@ func TestExecuteIncompleteCommandShowsUsage(
 	}
 }
 
-func TestExecuteUnknownCommand(
-	t *testing.T,
-) {
+func TestExecuteUnknownCommand(t *testing.T) {
 	result := executeCommand(context.Background(), nil, 0, 0, 0, nil, "/missing")
 	if result.err != nil {
 		t.Fatalf("executeCommand() error = %v", result.err)
@@ -89,9 +79,7 @@ func TestExecuteUnknownCommand(
 	}
 }
 
-func TestExecuteBackClearsDialog(
-	t *testing.T,
-) {
+func TestExecuteBackClearsDialog(t *testing.T) {
 	result := executeCommand(context.Background(), nil, 1, 1, 7, nil, "/back")
 	if result.err != nil {
 		t.Fatalf("executeCommand() error = %v", result.err)
@@ -101,9 +89,7 @@ func TestExecuteBackClearsDialog(
 	}
 }
 
-func TestJoinWorldRejectsPlaceholderCode(
-	t *testing.T,
-) {
+func TestJoinWorldRejectsPlaceholderCode(t *testing.T) {
 	result := joinWorld(context.Background(), nil, 1, []string{"<world_code>", "角色倾向"})
 	if result.err == nil {
 		t.Fatalf("expected placeholder error")
@@ -113,18 +99,14 @@ func TestJoinWorldRejectsPlaceholderCode(
 	}
 }
 
-func TestSubmitSuggestedChoiceRejectsOutOfRange(
-	t *testing.T,
-) {
+func TestSubmitSuggestedChoiceRejectsOutOfRange(t *testing.T) {
 	_, ok := submitSuggestedChoice(context.Background(), nil, 1, 1, 0, nil, "1")
 	if ok {
 		t.Fatalf("unexpected suggested choice match")
 	}
 }
 
-func TestExecuteNumericInputWithoutSuggestionsShowsHint(
-	t *testing.T,
-) {
+func TestExecuteNumericInputWithoutSuggestionsShowsHint(t *testing.T) {
 	result := executeCommand(context.Background(), nil, 1, 1, 0, nil, "3")
 	if result.err != nil {
 		t.Fatalf("executeCommand() error = %v", result.err)
@@ -134,9 +116,7 @@ func TestExecuteNumericInputWithoutSuggestionsShowsHint(
 	}
 }
 
-func TestEventSuggestedChoicesFiltersInvalidTargetsAndFallsBackToNpc(
-	t *testing.T,
-) {
+func TestEventSuggestedChoicesFiltersInvalidTargetsAndFallsBackToNpc(t *testing.T) {
 	npcID := int64(9)
 	choices := eventSuggestedChoices(&v1.WatchGameTownEvents_Resp{
 		NpcId: &npcID,

@@ -19,10 +19,7 @@ func NewAccountUsecase(
 	}
 }
 
-func (u *AccountUsecase) GetCurrentAccount(
-	ctx context.Context,
-	userID int64,
-) (*bbsuserv1.GetCurrentAccount_Resp_Account, error) {
+func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentAccount_Resp_Account, error) {
 	reply, err := u.accountClient.GetCurrentAccount(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -57,10 +54,7 @@ func (u *AccountUsecase) GetCurrentAccount(
 	return account, nil
 }
 
-func (u *AccountUsecase) GetProfileAccount(
-	ctx context.Context,
-	userID int64,
-) (*bbsuserv1.GetProfileAccount_Resp_AccountProfile, error) {
+func (u *AccountUsecase) GetProfileAccount(ctx context.Context, userID int64) (*bbsuserv1.GetProfileAccount_Resp_AccountProfile, error) {
 	reply, err := u.accountClient.GetProfileAccount(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -94,10 +88,7 @@ type UpdateProfileAccountReq struct {
 	Mbti         *bbsuserv1enum.MBTI
 }
 
-func (u *AccountUsecase) UpdateProfileAccount(
-	ctx context.Context,
-	req *UpdateProfileAccountReq,
-) (*bbsuserv1.UpdateProfileAccount_Resp_AccountProfile, error) {
+func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*bbsuserv1.UpdateProfileAccount_Resp_AccountProfile, error) {
 	var mbti *int32
 	if req.Mbti != nil {
 		value := int32(*req.Mbti)
@@ -139,10 +130,7 @@ type AvatarAccountResp struct {
 	ContentType string
 }
 
-func (u *AccountUsecase) AvatarAccount(
-	ctx context.Context,
-	name string,
-) (*AvatarAccountResp, error) {
+func (u *AccountUsecase) AvatarAccount(ctx context.Context, name string) (*AvatarAccountResp, error) {
 	reply, err := u.accountClient.AvatarAccount(ctx, name)
 	if err != nil {
 		return nil, err

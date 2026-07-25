@@ -27,22 +27,15 @@ func NewChatSessionService(
 	}
 }
 
-func (s *ChatSessionService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *ChatSessionService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterIMChatSessionServiceServer(gs, s)
 }
 
-func (s *ChatSessionService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *ChatSessionService) RegisterHttp(hs *http.Server) {
 }
 
 // MarkMuted 设置免打扰状态。
-func (s *ChatSessionService) MarkMuted(
-	ctx context.Context,
-	req *v1.MarkMutedChatSession_Req,
-) (*v1.MarkMutedChatSession_Resp, error) {
+func (s *ChatSessionService) MarkMuted(ctx context.Context, req *v1.MarkMutedChatSession_Req) (*v1.MarkMutedChatSession_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -58,10 +51,7 @@ func (s *ChatSessionService) MarkMuted(
 }
 
 // MarkPinned 设置置顶状态。
-func (s *ChatSessionService) MarkPinned(
-	ctx context.Context,
-	req *v1.MarkPinnedChatSession_Req,
-) (*v1.MarkPinnedChatSession_Resp, error) {
+func (s *ChatSessionService) MarkPinned(ctx context.Context, req *v1.MarkPinnedChatSession_Req) (*v1.MarkPinnedChatSession_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -77,10 +67,7 @@ func (s *ChatSessionService) MarkPinned(
 }
 
 // MarkRead 标记已读。
-func (s *ChatSessionService) MarkRead(
-	ctx context.Context,
-	req *v1.MarkReadChatSession_Req,
-) (*v1.MarkReadChatSession_Resp, error) {
+func (s *ChatSessionService) MarkRead(ctx context.Context, req *v1.MarkReadChatSession_Req) (*v1.MarkReadChatSession_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -95,10 +82,7 @@ func (s *ChatSessionService) MarkRead(
 }
 
 // List 查询会话列表。
-func (s *ChatSessionService) List(
-	ctx context.Context,
-	req *v1.ListChatSessions_Req,
-) (*v1.ListChatSessions_Resp, error) {
+func (s *ChatSessionService) List(ctx context.Context, req *v1.ListChatSessions_Req) (*v1.ListChatSessions_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

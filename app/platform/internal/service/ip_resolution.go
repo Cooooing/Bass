@@ -23,21 +23,14 @@ func NewIpResolutionService(
 	}
 }
 
-func (s *IpResolutionService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *IpResolutionService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterPlatformIpResolutionServiceServer(gs, s)
 }
 
-func (s *IpResolutionService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *IpResolutionService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *IpResolutionService) ResolveIp(
-	ctx context.Context,
-	req *v1.ResolveIp_Req,
-) (*v1.ResolveIp_Resp, error) {
+func (s *IpResolutionService) ResolveIp(ctx context.Context, req *v1.ResolveIp_Req) (*v1.ResolveIp_Resp, error) {
 	info, err := s.ipUsecase.Get(ctx, req.GetIp())
 	if err != nil {
 		return nil, err
@@ -51,20 +44,14 @@ func (s *IpResolutionService) ResolveIp(
 	}, nil
 }
 
-func (s *IpResolutionService) UpdateIpDataFromSource(
-	ctx context.Context,
-	req *v1.UpdateIpDataFromSource_Req,
-) (*v1.UpdateIpDataFromSource_Resp, error) {
+func (s *IpResolutionService) UpdateIpDataFromSource(ctx context.Context, req *v1.UpdateIpDataFromSource_Req) (*v1.UpdateIpDataFromSource_Resp, error) {
 	if err := s.ipUsecase.UpdateIpDataFromSource(ctx); err != nil {
 		return nil, err
 	}
 	return &v1.UpdateIpDataFromSource_Resp{}, nil
 }
 
-func (s *IpResolutionService) UpdateIpDataFromOss(
-	ctx context.Context,
-	req *v1.UpdateIpDataFromOss_Req,
-) (*v1.UpdateIpDataFromOss_Resp, error) {
+func (s *IpResolutionService) UpdateIpDataFromOss(ctx context.Context, req *v1.UpdateIpDataFromOss_Req) (*v1.UpdateIpDataFromOss_Resp, error) {
 	if err := s.ipUsecase.UpdateIpDataFromOss(ctx); err != nil {
 		return nil, err
 	}

@@ -7,9 +7,7 @@ import (
 	"game_town/internal/biz/model"
 )
 
-func TestEventNotifierPublishesWakeAndEvent(
-	t *testing.T,
-) {
+func TestEventNotifierPublishesWakeAndEvent(t *testing.T) {
 	n := NewEventNotifier().(*EventNotifier)
 	all, stopAll := n.SubscribeAll()
 	defer stopAll()

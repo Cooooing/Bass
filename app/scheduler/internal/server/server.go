@@ -15,11 +15,6 @@ var ServerProviderSet = wire.NewSet(
 	NewHTTPServer,
 )
 
-func ProvideServers(
-	grpcServer *grpc.Server,
-	httpServer *http.Server,
-	schedulerRunner *usecase.SchedulerRunner,
-	delayedTaskRunner *usecase.DelayedTaskRunner,
-) []transport.Server {
+func ProvideServers(grpcServer *grpc.Server, httpServer *http.Server, schedulerRunner *usecase.SchedulerRunner, delayedTaskRunner *usecase.DelayedTaskRunner) []transport.Server {
 	return []transport.Server{grpcServer, httpServer, schedulerRunner, delayedTaskRunner}
 }

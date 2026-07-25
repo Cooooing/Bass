@@ -34,21 +34,14 @@ func NewAccountService(
 	}
 }
 
-func (s *AccountService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *AccountService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *AccountService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterAccountServiceHTTPServer(hs, s)
 }
 
-func (s *AccountService) GetCurrent(
-	ctx context.Context,
-	req *bbsuserv1.GetCurrentAccount_Req,
-) (*bbsuserv1.GetCurrentAccount_Resp, error) {
+func (s *AccountService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Req) (*bbsuserv1.GetCurrentAccount_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -62,10 +55,7 @@ func (s *AccountService) GetCurrent(
 	}, nil
 }
 
-func (s *AccountService) GetProfile(
-	ctx context.Context,
-	req *bbsuserv1.GetProfileAccount_Req,
-) (*bbsuserv1.GetProfileAccount_Resp, error) {
+func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfileAccount_Req) (*bbsuserv1.GetProfileAccount_Resp, error) {
 	profile, err := s.accountUsecase.GetProfileAccount(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
@@ -75,10 +65,7 @@ func (s *AccountService) GetProfile(
 	}, nil
 }
 
-func (s *AccountService) UpdateProfile(
-	ctx context.Context,
-	req *bbsuserv1.UpdateProfileAccount_Req,
-) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
+func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Req) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -144,10 +131,7 @@ func (s *AccountService) UpdateProfile(
 	}, nil
 }
 
-func (s *AccountService) Avatar(
-	ctx context.Context,
-	req *bbsuserv1.AvatarAccount_Req,
-) (*common.ImageResp, error) {
+func (s *AccountService) Avatar(ctx context.Context, req *bbsuserv1.AvatarAccount_Req) (*common.ImageResp, error) {
 	resp, err := s.accountUsecase.AvatarAccount(ctx, req.GetName())
 	if err != nil {
 		return nil, err

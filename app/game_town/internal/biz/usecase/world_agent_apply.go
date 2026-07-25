@@ -12,12 +12,7 @@ import (
 	"game_town/internal/enum"
 )
 
-func (r *WorldAgentRunner) saveNpcConversationMemory(
-	ctx context.Context,
-	npc *model.Npc,
-	event *model.Event,
-	content string,
-) error {
+func (r *WorldAgentRunner) saveNpcConversationMemory(ctx context.Context, npc *model.Npc, event *model.Event, content string) error {
 	embeddingStatus := enum.EmbeddingStatusFailed
 	embeddingError := "embedding disabled"
 	if r.embeddingEnabled() {
@@ -45,11 +40,7 @@ func (r *WorldAgentRunner) saveNpcConversationMemory(
 	return r.enqueueMemoryEmbedding(ctx, event, memory)
 }
 
-func (r *WorldAgentRunner) enqueueMemoryEmbedding(
-	ctx context.Context,
-	event *model.Event,
-	memory *model.NpcMemory,
-) error {
+func (r *WorldAgentRunner) enqueueMemoryEmbedding(ctx context.Context, event *model.Event, memory *model.NpcMemory) error {
 	jobType := enum.AgentJobTypeMemoryEmbed
 	count, err := r.agentJobRepo.Count(ctx, &repo.AgentJobQuery{
 		SourceEventID: new(event.ID),
@@ -75,10 +66,7 @@ func (r *WorldAgentRunner) enqueueMemoryEmbedding(
 	return err
 }
 
-func (r *WorldAgentRunner) applyMemoryEmbedding(
-	ctx context.Context,
-	result *agentResult,
-) error {
+func (r *WorldAgentRunner) applyMemoryEmbedding(ctx context.Context, result *agentResult) error {
 	if result.memory == nil {
 		return nil
 	}
@@ -92,12 +80,7 @@ func (r *WorldAgentRunner) applyMemoryEmbedding(
 	})
 }
 
-func (r *WorldAgentRunner) saveClaims(
-	ctx context.Context,
-	event *model.Event,
-	sourceNpc *model.Npc,
-	drafts []model.ClaimDraft,
-) error {
+func (r *WorldAgentRunner) saveClaims(ctx context.Context, event *model.Event, sourceNpc *model.Npc, drafts []model.ClaimDraft) error {
 	for _, draft := range drafts {
 		predicate := strings.TrimSpace(draft.Predicate)
 		if predicate == "" || draft.SubjectID <= 0 || draft.SubjectType == "" {
@@ -144,11 +127,7 @@ func (r *WorldAgentRunner) saveClaims(
 	return nil
 }
 
-func (r *WorldAgentRunner) applyActionSteps(
-	ctx context.Context,
-	result *agentResult,
-	steps []model.ActionStep,
-) error {
+func (r *WorldAgentRunner) applyActionSteps(ctx context.Context, result *agentResult, steps []model.ActionStep) error {
 	for _, step := range steps {
 		if err := r.applyActionStep(ctx, result, step); err != nil {
 			if ctx.Err() != nil {
@@ -169,11 +148,7 @@ func (r *WorldAgentRunner) applyActionSteps(
 	return nil
 }
 
-func (r *WorldAgentRunner) applyActionStep(
-	ctx context.Context,
-	result *agentResult,
-	step model.ActionStep,
-) error {
+func (r *WorldAgentRunner) applyActionStep(ctx context.Context, result *agentResult, step model.ActionStep) error {
 	actionType := strings.TrimSpace(step.Type)
 	switch actionType {
 	case "move", "move_player":
@@ -195,11 +170,7 @@ func (r *WorldAgentRunner) applyActionStep(
 	}
 }
 
-func (r *WorldAgentRunner) applyPlayerMove(
-	ctx context.Context,
-	result *agentResult,
-	step model.ActionStep,
-) error {
+func (r *WorldAgentRunner) applyPlayerMove(ctx context.Context, result *agentResult, step model.ActionStep) error {
 	if result.member == nil || step.Target == nil || step.Target.Type != enum.EntityTypeLocation {
 		return nil
 	}
@@ -217,11 +188,7 @@ func (r *WorldAgentRunner) applyPlayerMove(
 	return err
 }
 
-func (r *WorldAgentRunner) applyNpcMove(
-	ctx context.Context,
-	result *agentResult,
-	step model.ActionStep,
-) error {
+func (r *WorldAgentRunner) applyNpcMove(ctx context.Context, result *agentResult, step model.ActionStep) error {
 	npcID := int64Param(step.Parameters, "npc_id")
 	if npcID == 0 && step.Target != nil && step.Target.Type == enum.EntityTypeNpc {
 		npcID = step.Target.ID
@@ -281,11 +248,7 @@ func (r *WorldAgentRunner) applyNpcMove(
 	return nil
 }
 
-func (r *WorldAgentRunner) applyNpcStateChange(
-	ctx context.Context,
-	result *agentResult,
-	step model.ActionStep,
-) error {
+func (r *WorldAgentRunner) applyNpcStateChange(ctx context.Context, result *agentResult, step model.ActionStep) error {
 	npcID := targetID(step, enum.EntityTypeNpc)
 	if npcID == 0 && result.npc != nil {
 		npcID = result.npc.ID
@@ -347,11 +310,7 @@ func (r *WorldAgentRunner) applyNpcStateChange(
 	return nil
 }
 
-func (r *WorldAgentRunner) applyLocationChange(
-	ctx context.Context,
-	result *agentResult,
-	step model.ActionStep,
-) error {
+func (r *WorldAgentRunner) applyLocationChange(ctx context.Context, result *agentResult, step model.ActionStep) error {
 	locationID := targetID(step, enum.EntityTypeLocation)
 	if locationID == 0 {
 		return nil
@@ -403,11 +362,7 @@ func (r *WorldAgentRunner) applyLocationChange(
 	return nil
 }
 
-func (r *WorldAgentRunner) applyFactionChange(
-	ctx context.Context,
-	result *agentResult,
-	step model.ActionStep,
-) error {
+func (r *WorldAgentRunner) applyFactionChange(ctx context.Context, result *agentResult, step model.ActionStep) error {
 	factionID := targetID(step, enum.EntityTypeFaction)
 	if factionID == 0 {
 		return nil
@@ -454,11 +409,7 @@ func (r *WorldAgentRunner) applyFactionChange(
 	return nil
 }
 
-func (r *WorldAgentRunner) applyRelationshipChange(
-	ctx context.Context,
-	result *agentResult,
-	step model.ActionStep,
-) error {
+func (r *WorldAgentRunner) applyRelationshipChange(ctx context.Context, result *agentResult, step model.ActionStep) error {
 	sourceType := enum.EntityType(stringParam(step.Parameters, "source_type"))
 	sourceID := int64Param(step.Parameters, "source_id")
 	if sourceType == "" && result.npc != nil {
@@ -490,11 +441,7 @@ func (r *WorldAgentRunner) applyRelationshipChange(
 	return err
 }
 
-func (r *WorldAgentRunner) applyClaimShare(
-	ctx context.Context,
-	result *agentResult,
-	step model.ActionStep,
-) error {
+func (r *WorldAgentRunner) applyClaimShare(ctx context.Context, result *agentResult, step model.ActionStep) error {
 	npcID := targetID(step, enum.EntityTypeNpc)
 	claimID := int64Param(step.Parameters, "claim_id")
 	if npcID == 0 || claimID == 0 {
@@ -546,20 +493,14 @@ func (r *WorldAgentRunner) applyClaimShare(
 	return nil
 }
 
-func (r *WorldAgentRunner) appendSideEventInTx(
-	ctx context.Context,
-	result *agentResult,
-	req *AppendEventReq,
-) (*model.Event, error) {
+func (r *WorldAgentRunner) appendSideEventInTx(ctx context.Context, result *agentResult, req *AppendEventReq) (*model.Event, error) {
 	if result == nil || result.source == nil || req == nil {
 		return nil, nil
 	}
 	return r.eventUsecase.AppendInTx(ctx, req)
 }
 
-func claimDraftPayload(
-	values []model.ClaimDraft,
-) []any {
+func claimDraftPayload(values []model.ClaimDraft) []any {
 	result := make([]any, 0, len(values))
 	for _, value := range values {
 		result = append(result, map[string]any{
@@ -573,20 +514,14 @@ func claimDraftPayload(
 	return result
 }
 
-func targetID(
-	step model.ActionStep,
-	entityType enum.EntityType,
-) int64 {
+func targetID(step model.ActionStep, entityType enum.EntityType) int64 {
 	if step.Target == nil || step.Target.Type != entityType {
 		return 0
 	}
 	return step.Target.ID
 }
 
-func int64Param(
-	values map[string]any,
-	key string,
-) int64 {
+func int64Param(values map[string]any, key string) int64 {
 	if values == nil {
 		return 0
 	}
@@ -606,10 +541,7 @@ func int64Param(
 
 type jsonNumber float64
 
-func stringParam(
-	values map[string]any,
-	key string,
-) string {
+func stringParam(values map[string]any, key string) string {
 	if values == nil {
 		return ""
 	}
@@ -617,10 +549,7 @@ func stringParam(
 	return strings.TrimSpace(value)
 }
 
-func boolPtrParam(
-	values map[string]any,
-	key string,
-) *bool {
+func boolPtrParam(values map[string]any, key string) *bool {
 	if values == nil {
 		return nil
 	}
@@ -631,10 +560,7 @@ func boolPtrParam(
 	return new(value)
 }
 
-func stringSliceParam(
-	values map[string]any,
-	key string,
-) []string {
+func stringSliceParam(values map[string]any, key string) []string {
 	if values == nil {
 		return nil
 	}
@@ -655,10 +581,7 @@ func stringSliceParam(
 	return result
 }
 
-func mapParam(
-	values map[string]any,
-	key string,
-) map[string]any {
+func mapParam(values map[string]any, key string) map[string]any {
 	if values == nil {
 		return nil
 	}
@@ -666,10 +589,7 @@ func mapParam(
 	return value
 }
 
-func floatMapParam(
-	values map[string]any,
-	key string,
-) map[string]float64 {
+func floatMapParam(values map[string]any, key string) map[string]float64 {
 	result := make(map[string]float64)
 	if values == nil {
 		return result
@@ -694,28 +614,21 @@ func floatMapParam(
 	return result
 }
 
-func stringValue[T ~string](
-	value *T,
-) string {
+func stringValue[T ~string](value *T) string {
 	if value == nil {
 		return ""
 	}
 	return string(*value)
 }
 
-func boolPtrValue(
-	value *bool,
-) any {
+func boolPtrValue(value *bool) any {
 	if value == nil {
 		return nil
 	}
 	return *value
 }
 
-func nonEmptyString(
-	value string,
-	fallback string,
-) string {
+func nonEmptyString(value string, fallback string) string {
 	value = strings.TrimSpace(value)
 	if value != "" {
 		return value

@@ -27,21 +27,14 @@ func NewSchedulerTaskService(
 	}
 }
 
-func (s *SchedulerTaskService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *SchedulerTaskService) RegisterGrpc(gs *grpc.Server) {
 	schedulerv1.RegisterSchedulerTaskServiceServer(gs, s)
 }
 
-func (s *SchedulerTaskService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *SchedulerTaskService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *SchedulerTaskService) Upsert(
-	ctx context.Context,
-	req *schedulerv1.UpsertSchedulerTask_Req,
-) (*schedulerv1.UpsertSchedulerTask_Resp, error) {
+func (s *SchedulerTaskService) Upsert(ctx context.Context, req *schedulerv1.UpsertSchedulerTask_Req) (*schedulerv1.UpsertSchedulerTask_Resp, error) {
 	if req.GetName() == "" || req.GetTitle() == "" || req.GetCronSpec() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -92,10 +85,7 @@ func (s *SchedulerTaskService) Upsert(
 	}, nil
 }
 
-func (s *SchedulerTaskService) Get(
-	ctx context.Context,
-	req *schedulerv1.GetSchedulerTask_Req,
-) (*schedulerv1.GetSchedulerTask_Resp, error) {
+func (s *SchedulerTaskService) Get(ctx context.Context, req *schedulerv1.GetSchedulerTask_Req) (*schedulerv1.GetSchedulerTask_Resp, error) {
 	row, err := s.taskUsecase.Get(ctx, req.GetId())
 	if err != nil {
 		return nil, err
@@ -127,10 +117,7 @@ func (s *SchedulerTaskService) Get(
 	}, nil
 }
 
-func (s *SchedulerTaskService) Page(
-	ctx context.Context,
-	req *schedulerv1.PageSchedulerTasks_Req,
-) (*schedulerv1.PageSchedulerTasks_Resp, error) {
+func (s *SchedulerTaskService) Page(ctx context.Context, req *schedulerv1.PageSchedulerTasks_Req) (*schedulerv1.PageSchedulerTasks_Resp, error) {
 	query := &usecase.TaskPageReq{}
 	if req.GetQuery() != nil {
 		query.IDs = req.GetQuery().GetIds()
@@ -182,10 +169,7 @@ func (s *SchedulerTaskService) Page(
 	}, nil
 }
 
-func (s *SchedulerTaskService) ListAvailableTasks(
-	ctx context.Context,
-	req *schedulerv1.ListSchedulerAvailableTasks_Req,
-) (*schedulerv1.ListSchedulerAvailableTasks_Resp, error) {
+func (s *SchedulerTaskService) ListAvailableTasks(ctx context.Context, req *schedulerv1.ListSchedulerAvailableTasks_Req) (*schedulerv1.ListSchedulerAvailableTasks_Resp, error) {
 	keyword := ""
 	if req.GetQuery() != nil {
 		keyword = req.GetQuery().GetKeyword()
@@ -207,10 +191,7 @@ func (s *SchedulerTaskService) ListAvailableTasks(
 	}, nil
 }
 
-func (s *SchedulerTaskService) PageExecutionRecords(
-	ctx context.Context,
-	req *schedulerv1.PageSchedulerTaskExecutionRecords_Req,
-) (*schedulerv1.PageSchedulerTaskExecutionRecords_Resp, error) {
+func (s *SchedulerTaskService) PageExecutionRecords(ctx context.Context, req *schedulerv1.PageSchedulerTaskExecutionRecords_Req) (*schedulerv1.PageSchedulerTaskExecutionRecords_Resp, error) {
 	query := &usecase.TaskExecutionRecordPageReq{}
 	if req.GetQuery() != nil {
 		query.IDs = req.GetQuery().GetIds()
@@ -282,10 +263,7 @@ func (s *SchedulerTaskService) PageExecutionRecords(
 	}, nil
 }
 
-func (s *SchedulerTaskService) Trigger(
-	ctx context.Context,
-	req *schedulerv1.TriggerSchedulerTask_Req,
-) (*schedulerv1.TriggerSchedulerTask_Resp, error) {
+func (s *SchedulerTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerTask_Req) (*schedulerv1.TriggerSchedulerTask_Resp, error) {
 	row, err := s.taskUsecase.Trigger(ctx, &usecase.TaskTriggerReq{
 		ID:      req.GetId(),
 		Payload: req.GetPayload(),
@@ -332,10 +310,7 @@ func (s *SchedulerTaskService) Trigger(
 	}, nil
 }
 
-func (s *SchedulerTaskService) CancelExecution(
-	ctx context.Context,
-	req *schedulerv1.CancelSchedulerTaskExecution_Req,
-) (*schedulerv1.CancelSchedulerTaskExecution_Resp, error) {
+func (s *SchedulerTaskService) CancelExecution(ctx context.Context, req *schedulerv1.CancelSchedulerTaskExecution_Req) (*schedulerv1.CancelSchedulerTaskExecution_Resp, error) {
 	row, err := s.taskUsecase.CancelExecution(ctx, req.GetId())
 	if err != nil {
 		return nil, err
@@ -379,10 +354,7 @@ func (s *SchedulerTaskService) CancelExecution(
 	}, nil
 }
 
-func (s *SchedulerTaskService) CheckExecutionRuntimes(
-	ctx context.Context,
-	req *schedulerv1.CheckSchedulerTaskExecutionRuntimes_Req,
-) (*schedulerv1.CheckSchedulerTaskExecutionRuntimes_Resp, error) {
+func (s *SchedulerTaskService) CheckExecutionRuntimes(ctx context.Context, req *schedulerv1.CheckSchedulerTaskExecutionRuntimes_Req) (*schedulerv1.CheckSchedulerTaskExecutionRuntimes_Resp, error) {
 	rows, err := s.taskUsecase.CheckExecutionRuntimes(ctx, req.GetIds())
 	if err != nil {
 		return nil, err
@@ -401,10 +373,7 @@ func (s *SchedulerTaskService) CheckExecutionRuntimes(
 	}, nil
 }
 
-func (s *SchedulerTaskService) MarkExecutionsUnknown(
-	ctx context.Context,
-	req *schedulerv1.MarkSchedulerTaskExecutionsUnknown_Req,
-) (*schedulerv1.MarkSchedulerTaskExecutionsUnknown_Resp, error) {
+func (s *SchedulerTaskService) MarkExecutionsUnknown(ctx context.Context, req *schedulerv1.MarkSchedulerTaskExecutionsUnknown_Req) (*schedulerv1.MarkSchedulerTaskExecutionsUnknown_Resp, error) {
 	rows, err := s.taskUsecase.MarkExecutionsUnknown(ctx, req.GetIds())
 	if err != nil {
 		return nil, err

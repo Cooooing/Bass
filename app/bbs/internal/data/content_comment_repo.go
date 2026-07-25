@@ -31,10 +31,7 @@ func NewContentCommentClient(
 	}
 }
 
-func (r *ContentCommentClient) CreateComment(
-	ctx context.Context,
-	req *repo.CreateCommentReq,
-) (*repo.CommentDetail, error) {
+func (r *ContentCommentClient) CreateComment(ctx context.Context, req *repo.CreateCommentReq) (*repo.CommentDetail, error) {
 	var replyID *int64
 	if req.ReplyID != 0 {
 		replyID = new(req.ReplyID)
@@ -60,10 +57,7 @@ func (r *ContentCommentClient) CreateComment(
 	return r.commentDetail(item, articles[item.GetArticleId()], profiles), nil
 }
 
-func (r *ContentCommentClient) ListComments(
-	ctx context.Context,
-	req *repo.ListCommentsReq,
-) (*repo.ListCommentsResp, error) {
+func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListCommentsReq) (*repo.ListCommentsResp, error) {
 	var pageReq *common.PageReq
 	if req.Page != nil {
 		pageReq = &common.PageReq{
@@ -137,10 +131,7 @@ func (r *ContentCommentClient) ListComments(
 	}, nil
 }
 
-func (r *ContentCommentClient) ListCommentThreads(
-	ctx context.Context,
-	req *repo.ListCommentThreadsReq,
-) (*repo.ListCommentThreadsResp, error) {
+func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo.ListCommentThreadsReq) (*repo.ListCommentThreadsResp, error) {
 	var pageReq *common.PageReq
 	if req.Page != nil {
 		pageReq = &common.PageReq{
@@ -257,10 +248,7 @@ func (r *ContentCommentClient) ListCommentThreads(
 	}, nil
 }
 
-func (r *ContentCommentClient) ListCommentReplies(
-	ctx context.Context,
-	req *repo.ListCommentRepliesReq,
-) (*repo.ListCommentRepliesResp, error) {
+func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo.ListCommentRepliesReq) (*repo.ListCommentRepliesResp, error) {
 	var pageReq *common.PageReq
 	if req.Page != nil {
 		pageReq = &common.PageReq{
@@ -321,10 +309,7 @@ func (r *ContentCommentClient) ListCommentReplies(
 	}, nil
 }
 
-func (r *ContentCommentClient) ListCommentTimeline(
-	ctx context.Context,
-	req *repo.ListCommentTimelineReq,
-) (*repo.ListCommentTimelineResp, error) {
+func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *repo.ListCommentTimelineReq) (*repo.ListCommentTimelineResp, error) {
 	var pageReq *common.PageReq
 	if req.Page != nil {
 		pageReq = &common.PageReq{
@@ -384,10 +369,7 @@ func (r *ContentCommentClient) ListCommentTimeline(
 	}, nil
 }
 
-func (r *ContentCommentClient) LikeComment(
-	ctx context.Context,
-	req *repo.LikeCommentReq,
-) (bool, error) {
+func (r *ContentCommentClient) LikeComment(ctx context.Context, req *repo.LikeCommentReq) (bool, error) {
 	reply, err := r.contentClient.Comment.Like(ctx, &contentv1.LikeComment_Req{
 		Id:     req.ID,
 		Liked:  req.Active,
@@ -399,10 +381,7 @@ func (r *ContentCommentClient) LikeComment(
 	return reply.GetLiked(), nil
 }
 
-func (r *ContentCommentClient) ThankComment(
-	ctx context.Context,
-	req *repo.ThankCommentReq,
-) (bool, error) {
+func (r *ContentCommentClient) ThankComment(ctx context.Context, req *repo.ThankCommentReq) (bool, error) {
 	reply, err := r.contentClient.Comment.Thank(ctx, &contentv1.ThankComment_Req{
 		Id:      req.ID,
 		Thanked: req.Active,
@@ -414,11 +393,7 @@ func (r *ContentCommentClient) ThankComment(
 	return reply.GetThanked(), nil
 }
 
-func (r *ContentCommentClient) loadCommentViewerActionStates(
-	ctx context.Context,
-	userID int64,
-	commentIDs []int64,
-) (map[int64]*repo.CommentViewerActionState, error) {
+func (r *ContentCommentClient) loadCommentViewerActionStates(ctx context.Context, userID int64, commentIDs []int64) (map[int64]*repo.CommentViewerActionState, error) {
 	commentIDs = lo.Uniq(commentIDs)
 	if len(commentIDs) == 0 {
 		return map[int64]*repo.CommentViewerActionState{}, nil
@@ -443,11 +418,7 @@ func (r *ContentCommentClient) loadCommentViewerActionStates(
 	return states, nil
 }
 
-func (r *ContentCommentClient) loadCommentArticles(
-	ctx context.Context,
-	comments []*contentv1.PageComments_Resp_Comment,
-	viewerUserID int64,
-) (map[int64]*contentv1.GetArticle_Resp_Article, error) {
+func (r *ContentCommentClient) loadCommentArticles(ctx context.Context, comments []*contentv1.PageComments_Resp_Comment, viewerUserID int64) (map[int64]*contentv1.GetArticle_Resp_Article, error) {
 	articleIDs := lo.Uniq(lo.FilterMap(comments, func(item *contentv1.PageComments_Resp_Comment, _ int) (int64, bool) {
 		if item == nil || item.GetArticleId() == 0 {
 			return 0, false
@@ -469,10 +440,7 @@ func (r *ContentCommentClient) loadCommentArticles(
 	return articles, nil
 }
 
-func (r *ContentCommentClient) commentProfileIDs(
-	item *contentv1.PageComments_Resp_Comment,
-	article *contentv1.GetArticle_Resp_Article,
-) []int64 {
+func (r *ContentCommentClient) commentProfileIDs(item *contentv1.PageComments_Resp_Comment, article *contentv1.GetArticle_Resp_Article) []int64 {
 	if item == nil {
 		return nil
 	}
@@ -486,12 +454,7 @@ func (r *ContentCommentClient) commentProfileIDs(
 	return userIDs
 }
 
-func (r *ContentCommentClient) commentListItem(
-	item *contentv1.PageComments_Resp_Comment,
-	article *contentv1.GetArticle_Resp_Article,
-	profiles map[int64]*repo.AccountProfile,
-	state *repo.CommentViewerActionState,
-) *repo.CommentListItem {
+func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp_Comment, article *contentv1.GetArticle_Resp_Article, profiles map[int64]*repo.AccountProfile, state *repo.CommentViewerActionState) *repo.CommentListItem {
 	if item == nil {
 		return nil
 	}
@@ -528,11 +491,7 @@ func (r *ContentCommentClient) commentListItem(
 	return out
 }
 
-func (r *ContentCommentClient) commentDetail(
-	item *contentv1.PageComments_Resp_Comment,
-	article *contentv1.GetArticle_Resp_Article,
-	profiles map[int64]*repo.AccountProfile,
-) *repo.CommentDetail {
+func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_Comment, article *contentv1.GetArticle_Resp_Article, profiles map[int64]*repo.AccountProfile) *repo.CommentDetail {
 	if item == nil {
 		return nil
 	}
@@ -566,24 +525,15 @@ func (r *ContentCommentClient) commentDetail(
 	return out
 }
 
-func (r *ContentCommentClient) anonymousArticleUser(
-	article *contentv1.GetArticle_Resp_Article,
-	userID *int64,
-) bool {
+func (r *ContentCommentClient) anonymousArticleUser(article *contentv1.GetArticle_Resp_Article, userID *int64) bool {
 	return article != nil && article.GetAnonymous() && userID != nil && article.CreatedBy != nil && *article.CreatedBy == *userID
 }
 
-func (r *ContentCommentClient) commentContentRender(
-	commentID int64,
-	content string,
-) string {
+func (r *ContentCommentClient) commentContentRender(commentID int64, content string) string {
 	return util.LuteEngine.MarkdownStr(fmt.Sprintf("comment_%d", commentID), content)
 }
 
-func (r *ContentCommentClient) loadAccountProfiles(
-	ctx context.Context,
-	userIDs ...int64,
-) (map[int64]*repo.AccountProfile, error) {
+func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs ...int64) (map[int64]*repo.AccountProfile, error) {
 	if r.userClient == nil {
 		return map[int64]*repo.AccountProfile{}, nil
 	}

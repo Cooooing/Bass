@@ -24,21 +24,14 @@ func NewRelationService(
 	}
 }
 
-func (s *RelationService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *RelationService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *RelationService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *RelationService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterRelationServiceHTTPServer(hs, s)
 }
 
-func (s *RelationService) Follow(
-	ctx context.Context,
-	req *bbsuserv1.FollowRelation_Req,
-) (*bbsuserv1.FollowRelation_Resp, error) {
+func (s *RelationService) Follow(ctx context.Context, req *bbsuserv1.FollowRelation_Req) (*bbsuserv1.FollowRelation_Resp, error) {
 	actorID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -50,10 +43,7 @@ func (s *RelationService) Follow(
 	return &bbsuserv1.FollowRelation_Resp{}, err
 }
 
-func (s *RelationService) Unfollow(
-	ctx context.Context,
-	req *bbsuserv1.UnfollowRelation_Req,
-) (*bbsuserv1.UnfollowRelation_Resp, error) {
+func (s *RelationService) Unfollow(ctx context.Context, req *bbsuserv1.UnfollowRelation_Req) (*bbsuserv1.UnfollowRelation_Resp, error) {
 	actorID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -65,10 +55,7 @@ func (s *RelationService) Unfollow(
 	return &bbsuserv1.UnfollowRelation_Resp{}, err
 }
 
-func (s *RelationService) Block(
-	ctx context.Context,
-	req *bbsuserv1.BlockRelation_Req,
-) (*bbsuserv1.BlockRelation_Resp, error) {
+func (s *RelationService) Block(ctx context.Context, req *bbsuserv1.BlockRelation_Req) (*bbsuserv1.BlockRelation_Resp, error) {
 	actorID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -80,10 +67,7 @@ func (s *RelationService) Block(
 	return &bbsuserv1.BlockRelation_Resp{}, err
 }
 
-func (s *RelationService) Unblock(
-	ctx context.Context,
-	req *bbsuserv1.UnblockRelation_Req,
-) (*bbsuserv1.UnblockRelation_Resp, error) {
+func (s *RelationService) Unblock(ctx context.Context, req *bbsuserv1.UnblockRelation_Req) (*bbsuserv1.UnblockRelation_Resp, error) {
 	actorID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -95,10 +79,7 @@ func (s *RelationService) Unblock(
 	return &bbsuserv1.UnblockRelation_Resp{}, err
 }
 
-func (s *RelationService) ListFollowing(
-	ctx context.Context,
-	req *bbsuserv1.ListFollowingRelations_Req,
-) (*bbsuserv1.ListFollowingRelations_Resp, error) {
+func (s *RelationService) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowingRelations_Req) (*bbsuserv1.ListFollowingRelations_Resp, error) {
 	actorID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -139,10 +120,7 @@ func (s *RelationService) ListFollowing(
 	}, nil
 }
 
-func (s *RelationService) ListFollowers(
-	ctx context.Context,
-	req *bbsuserv1.ListFollowersRelations_Req,
-) (*bbsuserv1.ListFollowersRelations_Resp, error) {
+func (s *RelationService) ListFollowers(ctx context.Context, req *bbsuserv1.ListFollowersRelations_Req) (*bbsuserv1.ListFollowersRelations_Resp, error) {
 	actorID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -183,10 +161,7 @@ func (s *RelationService) ListFollowers(
 	}, nil
 }
 
-func (s *RelationService) ListBlocked(
-	ctx context.Context,
-	req *bbsuserv1.ListBlockedRelations_Req,
-) (*bbsuserv1.ListBlockedRelations_Resp, error) {
+func (s *RelationService) ListBlocked(ctx context.Context, req *bbsuserv1.ListBlockedRelations_Req) (*bbsuserv1.ListBlockedRelations_Resp, error) {
 	actorID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -227,10 +202,7 @@ func (s *RelationService) ListBlocked(
 	}, nil
 }
 
-func (s *RelationService) GetStatus(
-	ctx context.Context,
-	req *bbsuserv1.GetStatusRelation_Req,
-) (*bbsuserv1.GetStatusRelation_Resp, error) {
+func (s *RelationService) GetStatus(ctx context.Context, req *bbsuserv1.GetStatusRelation_Req) (*bbsuserv1.GetStatusRelation_Resp, error) {
 	actorID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

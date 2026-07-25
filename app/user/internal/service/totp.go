@@ -23,21 +23,14 @@ func NewTotpService(
 	}
 }
 
-func (s *TotpService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *TotpService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterTotpServiceServer(gs, s)
 }
 
-func (s *TotpService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *TotpService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *TotpService) Validate(
-	ctx context.Context,
-	req *v1.ValidateTotp_Req,
-) (*v1.ValidateTotp_Resp, error) {
+func (s *TotpService) Validate(ctx context.Context, req *v1.ValidateTotp_Req) (*v1.ValidateTotp_Resp, error) {
 	res, err := s.totpUsecase.ValidateByUserID(ctx, &usecase.ValidateTotpByUserIDReq{
 		UserID: req.GetUserId(),
 		Code:   req.GetCode(),
@@ -50,10 +43,7 @@ func (s *TotpService) Validate(
 	}, nil
 }
 
-func (s *TotpService) BeginEnable(
-	ctx context.Context,
-	req *v1.BeginEnableTotp_Req,
-) (*v1.BeginEnableTotp_Resp, error) {
+func (s *TotpService) BeginEnable(ctx context.Context, req *v1.BeginEnableTotp_Req) (*v1.BeginEnableTotp_Resp, error) {
 	res, err := s.totpUsecase.BeginEnable(ctx, &usecase.BeginEnableTotpReq{
 		UserID:      req.GetUserId(),
 		AccountName: req.GetAccountName(),
@@ -67,10 +57,7 @@ func (s *TotpService) BeginEnable(
 	}, nil
 }
 
-func (s *TotpService) ConfirmEnable(
-	ctx context.Context,
-	req *v1.ConfirmEnableTotp_Req,
-) (*v1.ConfirmEnableTotp_Resp, error) {
+func (s *TotpService) ConfirmEnable(ctx context.Context, req *v1.ConfirmEnableTotp_Req) (*v1.ConfirmEnableTotp_Resp, error) {
 	err := s.totpUsecase.ConfirmEnable(ctx, &usecase.ConfirmEnableTotpReq{
 		UserID: req.GetUserId(),
 		Code:   req.GetCode(),
@@ -78,10 +65,7 @@ func (s *TotpService) ConfirmEnable(
 	return &v1.ConfirmEnableTotp_Resp{}, err
 }
 
-func (s *TotpService) Disable(
-	ctx context.Context,
-	req *v1.DisableTotp_Req,
-) (*v1.DisableTotp_Resp, error) {
+func (s *TotpService) Disable(ctx context.Context, req *v1.DisableTotp_Req) (*v1.DisableTotp_Resp, error) {
 	err := s.totpUsecase.Disable(ctx, &usecase.DisableTotpReq{
 		UserID: req.GetUserId(),
 		Code:   req.GetCode(),
@@ -89,10 +73,7 @@ func (s *TotpService) Disable(
 	return &v1.DisableTotp_Resp{}, err
 }
 
-func (s *TotpService) Get(
-	ctx context.Context,
-	req *v1.GetTotp_Req,
-) (*v1.GetTotp_Resp, error) {
+func (s *TotpService) Get(ctx context.Context, req *v1.GetTotp_Req) (*v1.GetTotp_Resp, error) {
 	res, err := s.totpUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err

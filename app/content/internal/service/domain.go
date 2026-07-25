@@ -23,15 +23,11 @@ type DomainService struct {
 	contentUsecase *usecase.ContentUsecase
 }
 
-func (s *DomainService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *DomainService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentDomainServiceServer(gs, s)
 }
 
-func (s *DomainService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *DomainService) RegisterHttp(hs *http.Server) {
 }
 
 func NewDomainService(
@@ -42,10 +38,7 @@ func NewDomainService(
 	}
 }
 
-func (s *DomainService) BatchCreate(
-	ctx context.Context,
-	req *v1.BatchCreateDomains_Req,
-) (*v1.BatchCreateDomains_Resp, error) {
+func (s *DomainService) BatchCreate(ctx context.Context, req *v1.BatchCreateDomains_Req) (*v1.BatchCreateDomains_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -93,10 +86,7 @@ func (s *DomainService) BatchCreate(
 	}, nil
 }
 
-func (s *DomainService) Update(
-	ctx context.Context,
-	req *v1.UpdateDomain_Req,
-) (*v1.UpdateDomain_Resp, error) {
+func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomain_Req) (*v1.UpdateDomain_Resp, error) {
 	if req.Domain == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
 	}
@@ -139,10 +129,7 @@ func (s *DomainService) Update(
 	}, err
 }
 
-func (s *DomainService) List(
-	ctx context.Context,
-	req *v1.ListDomains_Req,
-) (*v1.ListDomains_Resp, error) {
+func (s *DomainService) List(ctx context.Context, req *v1.ListDomains_Req) (*v1.ListDomains_Resp, error) {
 	req.Query = util.OrDefault(req.Query, &v1.ListDomains_Req_DomainQueryParams{})
 	var domainStatus *enum.DomainStatus
 	if req.Query.Status != nil {
@@ -192,10 +179,7 @@ func (s *DomainService) List(
 	}, err
 }
 
-func (s *DomainService) Page(
-	ctx context.Context,
-	req *v1.PageDomains_Req,
-) (*v1.PageDomains_Resp, error) {
+func (s *DomainService) Page(ctx context.Context, req *v1.PageDomains_Req) (*v1.PageDomains_Resp, error) {
 	req.Query = util.OrDefault(req.Query, &v1.PageDomains_Req_DomainQueryParams{})
 	var domainStatus *enum.DomainStatus
 	if req.Query.Status != nil {

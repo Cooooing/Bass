@@ -16,13 +16,7 @@ type eventResult struct {
 	err   error
 }
 
-func startWatcher(
-	parent context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	worldID int64,
-	after uint64,
-) (context.CancelFunc, <-chan eventResult) {
+func startWatcher(parent context.Context, client *rpc.GameTownClient, playerID int64, worldID int64, after uint64) (context.CancelFunc, <-chan eventResult) {
 	ctx, cancel := context.WithCancel(parent)
 	out := make(chan eventResult, 128)
 	go func() {
@@ -74,10 +68,7 @@ func startWatcher(
 	return cancel, out
 }
 
-func retryWatcher(
-	ctx context.Context,
-	err error,
-) bool {
+func retryWatcher(ctx context.Context, err error) bool {
 	if !isRetryableWatcherError(err) {
 		return false
 	}
@@ -91,9 +82,7 @@ func retryWatcher(
 	}
 }
 
-func isRetryableWatcherError(
-	err error,
-) bool {
+func isRetryableWatcherError(err error) bool {
 	switch status.Code(err) {
 	case codes.Unavailable,
 		codes.DeadlineExceeded,
@@ -106,11 +95,7 @@ func isRetryableWatcherError(
 	}
 }
 
-func publishWatcherResult(
-	ctx context.Context,
-	out chan<- eventResult,
-	result eventResult,
-) bool {
+func publishWatcherResult(ctx context.Context, out chan<- eventResult, result eventResult) bool {
 	select {
 	case out <- result:
 		return true

@@ -29,19 +29,14 @@ func NewWorldRepo(
 	}
 }
 
-func (r *WorldRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *WorldRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *WorldRepo) Save(
-	ctx context.Context,
-	row *model.World,
-) (*model.World, error) {
+func (r *WorldRepo) Save(ctx context.Context, row *model.World) (*model.World, error) {
 	saved, err := r.getClient(ctx).World.Create().
 		SetCode(row.Code).
 		SetName(row.Name).
@@ -72,10 +67,7 @@ func (r *WorldRepo) Save(
 	}, nil
 }
 
-func worldQuery(
-	q *gen.WorldQuery,
-	req *bizrepo.WorldQuery,
-) *gen.WorldQuery {
+func worldQuery(q *gen.WorldQuery, req *bizrepo.WorldQuery) *gen.WorldQuery {
 	q = q.Where(world.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -98,10 +90,7 @@ func worldQuery(
 	return q
 }
 
-func (r *WorldRepo) Get(
-	ctx context.Context,
-	req *bizrepo.WorldQuery,
-) (*model.World, error) {
+func (r *WorldRepo) Get(ctx context.Context, req *bizrepo.WorldQuery) (*model.World, error) {
 	row, err := worldQuery(r.getClient(ctx).World.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_NOT_FOUND)
@@ -125,10 +114,7 @@ func (r *WorldRepo) Get(
 	}, nil
 }
 
-func (r *WorldRepo) List(
-	ctx context.Context,
-	req *bizrepo.WorldQuery,
-) ([]*model.World, error) {
+func (r *WorldRepo) List(ctx context.Context, req *bizrepo.WorldQuery) ([]*model.World, error) {
 	rows, err := worldQuery(r.getClient(ctx).World.Query(), req).Order(world.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
@@ -152,10 +138,7 @@ func (r *WorldRepo) List(
 	return out, nil
 }
 
-func (r *WorldRepo) Map(
-	ctx context.Context,
-	req *bizrepo.WorldQuery,
-) (map[int64]*model.World, error) {
+func (r *WorldRepo) Map(ctx context.Context, req *bizrepo.WorldQuery) (map[int64]*model.World, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -167,17 +150,11 @@ func (r *WorldRepo) Map(
 	return out, nil
 }
 
-func (r *WorldRepo) Count(
-	ctx context.Context,
-	req *bizrepo.WorldQuery,
-) (int, error) {
+func (r *WorldRepo) Count(ctx context.Context, req *bizrepo.WorldQuery) (int, error) {
 	return worldQuery(r.getClient(ctx).World.Query(), req).Count(ctx)
 }
 
-func (r *WorldRepo) Page(
-	ctx context.Context,
-	req *bizrepo.WorldPageReq,
-) (*bizrepo.WorldPageResp, error) {
+func (r *WorldRepo) Page(ctx context.Context, req *bizrepo.WorldPageReq) (*bizrepo.WorldPageResp, error) {
 	p := page(req.Page)
 	q := worldQuery(r.getClient(ctx).World.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -210,10 +187,7 @@ func (r *WorldRepo) Page(
 	}, nil
 }
 
-func (r *WorldRepo) Update(
-	ctx context.Context,
-	row *model.World,
-) (*model.World, error) {
+func (r *WorldRepo) Update(ctx context.Context, row *model.World) (*model.World, error) {
 	saved, err := r.getClient(ctx).World.UpdateOneID(row.ID).
 		SetName(row.Name).
 		SetDescription(row.Description).

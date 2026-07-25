@@ -19,10 +19,7 @@ type ErrorMessageSpec struct {
 	Data proto.Message
 }
 
-func (m ErrorMessageSpec) Render(
-	language commonenums.Language,
-	data json.RawMessage,
-) string {
+func (m ErrorMessageSpec) Render(language commonenums.Language, data json.RawMessage) string {
 	text := m.Text[language]
 	if text == "" {
 		text = m.Text[commonenums.Language_LANGUAGE_ZH_CN]
@@ -48,11 +45,7 @@ func (m ErrorMessageSpec) Render(
 
 type ErrorMessages map[cerrors.BusinessErrorCode]ErrorMessageSpec
 
-func (messages ErrorMessages) Resolve(
-	r *http.Request,
-	code cerrors.BusinessErrorCode,
-	data json.RawMessage,
-) string {
+func (messages ErrorMessages) Resolve(r *http.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string {
 	language := commonenums.Language_LANGUAGE_ZH_CN
 	if r != nil {
 		if user, ok := util.GetContextValue[*commonmodel.User](r.Context(), constant.CtxUserInfo); ok && user != nil && user.Language != commonenums.Language_LANGUAGE_UNSPECIFIED {

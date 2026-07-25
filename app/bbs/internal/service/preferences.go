@@ -22,21 +22,14 @@ func NewPreferencesService(
 	}
 }
 
-func (s *PreferencesService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *PreferencesService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *PreferencesService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterPreferencesServiceHTTPServer(hs, s)
 }
 
-func (s *PreferencesService) GetCurrent(
-	ctx context.Context,
-	req *bbsuserv1.GetCurrentPreferences_Req,
-) (*bbsuserv1.GetCurrentPreferences_Resp, error) {
+func (s *PreferencesService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPreferences_Req) (*bbsuserv1.GetCurrentPreferences_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -50,10 +43,7 @@ func (s *PreferencesService) GetCurrent(
 	}, nil
 }
 
-func (s *PreferencesService) UpdateCurrent(
-	ctx context.Context,
-	req *bbsuserv1.UpdateCurrentPreferences_Req,
-) (*bbsuserv1.UpdateCurrentPreferences_Resp, error) {
+func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPreferences_Req) (*bbsuserv1.UpdateCurrentPreferences_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

@@ -132,11 +132,7 @@ func NewGlobalErrHandler(
 	}
 }
 
-func (h *GlobalErrHandler) HandleError(
-	ctx context.Context,
-	task *asynq.Task,
-	err error,
-) {
+func (h *GlobalErrHandler) HandleError(ctx context.Context, task *asynq.Task, err error) {
 	h.logger.ErrorContext(ctx, "task failed", constant.LogFieldKind, constant.LogKindAsynq, "task", task.Type(), "payload", string(task.Payload()), constant.LogFieldErr, err)
 	for _, taskName := range lo.Keys(h.tasks) {
 		if strings.HasPrefix(task.Type(), string(taskName)) {
@@ -152,33 +148,23 @@ type asynqSlogLogger struct {
 	logger *slog.Logger
 }
 
-func (l *asynqSlogLogger) Debug(
-	args ...interface{},
-) {
+func (l *asynqSlogLogger) Debug(args ...interface{}) {
 	l.logger.Debug(fmt.Sprint(args...))
 }
 
-func (l *asynqSlogLogger) Info(
-	args ...interface{},
-) {
+func (l *asynqSlogLogger) Info(args ...interface{}) {
 	l.logger.Info(fmt.Sprint(args...))
 }
 
-func (l *asynqSlogLogger) Warn(
-	args ...interface{},
-) {
+func (l *asynqSlogLogger) Warn(args ...interface{}) {
 	l.logger.Warn(fmt.Sprint(args...))
 }
 
-func (l *asynqSlogLogger) Error(
-	args ...interface{},
-) {
+func (l *asynqSlogLogger) Error(args ...interface{}) {
 	l.logger.Error(fmt.Sprint(args...))
 }
 
-func (l *asynqSlogLogger) Fatal(
-	args ...interface{},
-) {
+func (l *asynqSlogLogger) Fatal(args ...interface{}) {
 	l.logger.Error(fmt.Sprint(args...))
 	os.Exit(1)
 }
@@ -198,10 +184,7 @@ func NewProducer(
 	}
 }
 
-func (p *Producer) EnqueueContextTask(
-	ctx context.Context,
-	data *model.Task,
-) error {
+func (p *Producer) EnqueueContextTask(ctx context.Context, data *model.Task) error {
 	marshal, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -227,10 +210,7 @@ func (p *Producer) EnqueueContextTask(
 	return nil
 }
 
-func (p *Producer) EnqueueContextTasks(
-	ctx context.Context,
-	data []*model.Task,
-) error {
+func (p *Producer) EnqueueContextTasks(ctx context.Context, data []*model.Task) error {
 	for _, d := range data {
 		err := p.EnqueueContextTask(ctx, d)
 		if err != nil {
@@ -240,9 +220,7 @@ func (p *Producer) EnqueueContextTasks(
 	return nil
 }
 
-func (p *Producer) RegisterTask(
-	data *model.Task,
-) error {
+func (p *Producer) RegisterTask(data *model.Task) error {
 	marshal, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -267,9 +245,7 @@ func (p *Producer) RegisterTask(
 	return nil
 }
 
-func (p *Producer) RegisterTasks(
-	data []*model.Task,
-) error {
+func (p *Producer) RegisterTasks(data []*model.Task) error {
 	for _, d := range data {
 		err := p.RegisterTask(d)
 		if err != nil {
@@ -279,9 +255,7 @@ func (p *Producer) RegisterTasks(
 	return nil
 }
 
-func (p *Producer) UnregisterTask(
-	taskName string,
-) error {
+func (p *Producer) UnregisterTask(taskName string) error {
 	err := p.scheduler.Unregister(taskName)
 	if err != nil {
 		return err
@@ -289,9 +263,7 @@ func (p *Producer) UnregisterTask(
 	return nil
 }
 
-func (p *Producer) UnregisterTasks(
-	taskNames []string,
-) error {
+func (p *Producer) UnregisterTasks(taskNames []string) error {
 	for _, taskName := range taskNames {
 		err := p.UnregisterTask(taskName)
 		if err != nil {

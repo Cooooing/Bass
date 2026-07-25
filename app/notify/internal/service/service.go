@@ -13,11 +13,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewRateLimitService,
 )
 
-func ProvideServices(
-	commonSystemService *CommonSystemService,
-	stationMessageService *StationMessageService,
-	rateLimitService *RateLimitService,
-) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, stationMessageService *StationMessageService, rateLimitService *RateLimitService) []server.Service {
 	return []server.Service{
 		commonSystemService,
 		stationMessageService,

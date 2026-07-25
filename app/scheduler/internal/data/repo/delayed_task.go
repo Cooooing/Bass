@@ -26,19 +26,14 @@ func NewDelayedTaskRepo(
 	}
 }
 
-func (r *DelayedTaskRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *DelayedTaskRepo) getClient(ctx context.Context) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *DelayedTaskRepo) Register(
-	ctx context.Context,
-	row *model.DelayedTask,
-) (*model.DelayedTask, error) {
+func (r *DelayedTaskRepo) Register(ctx context.Context, row *model.DelayedTask) (*model.DelayedTask, error) {
 	if existing, err := r.Get(ctx, &bizrepo.DelayedTaskGetReq{
 		IdempotencyKey: &row.IdempotencyKey,
 	}); err != nil || existing != nil {
@@ -61,10 +56,7 @@ func (r *DelayedTaskRepo) Register(
 	return delayedTaskToModel(created), nil
 }
 
-func (r *DelayedTaskRepo) Get(
-	ctx context.Context,
-	req *bizrepo.DelayedTaskGetReq,
-) (*model.DelayedTask, error) {
+func (r *DelayedTaskRepo) Get(ctx context.Context, req *bizrepo.DelayedTaskGetReq) (*model.DelayedTask, error) {
 	query := r.getClient(ctx).DelayedTask.Query()
 	query = delayedTaskQuery(query, req)
 	row, err := query.First(ctx)
@@ -77,10 +69,7 @@ func (r *DelayedTaskRepo) Get(
 	return delayedTaskToModel(row), nil
 }
 
-func (r *DelayedTaskRepo) Page(
-	ctx context.Context,
-	req *bizrepo.DelayedTaskPageReq,
-) (*bizrepo.DelayedTaskPageResp, error) {
+func (r *DelayedTaskRepo) Page(ctx context.Context, req *bizrepo.DelayedTaskPageReq) (*bizrepo.DelayedTaskPageResp, error) {
 	page := server.PageValid(req.Page)
 	query := r.getClient(ctx).DelayedTask.Query()
 	query = delayedTaskQuery(query, &req.DelayedTaskGetReq)
@@ -106,10 +95,7 @@ func (r *DelayedTaskRepo) Page(
 	}, nil
 }
 
-func (r *DelayedTaskRepo) Cancel(
-	ctx context.Context,
-	req *bizrepo.DelayedTaskGetReq,
-) (bool, error) {
+func (r *DelayedTaskRepo) Cancel(ctx context.Context, req *bizrepo.DelayedTaskGetReq) (bool, error) {
 	row, err := r.Get(ctx, req)
 	if err != nil || row == nil {
 		return false, err
@@ -121,11 +107,7 @@ func (r *DelayedTaskRepo) Cancel(
 	return affected > 0, err
 }
 
-func (r *DelayedTaskRepo) ListDue(
-	ctx context.Context,
-	now time.Time,
-	limit int,
-) ([]*model.DelayedTask, error) {
+func (r *DelayedTaskRepo) ListDue(ctx context.Context, now time.Time, limit int) ([]*model.DelayedTask, error) {
 	if limit <= 0 {
 		limit = 100
 	}
@@ -150,12 +132,7 @@ func (r *DelayedTaskRepo) ListDue(
 	return result, nil
 }
 
-func (r *DelayedTaskRepo) MarkRunning(
-	ctx context.Context,
-	id int64,
-	workerID string,
-	lockExpiresAt time.Time,
-) (bool, *model.DelayedTask, error) {
+func (r *DelayedTaskRepo) MarkRunning(ctx context.Context, id int64, workerID string, lockExpiresAt time.Time) (bool, *model.DelayedTask, error) {
 	now := time.Now()
 	affected, err := r.getClient(ctx).DelayedTask.Update().Where(
 		delayedtask.ID(id),
@@ -177,11 +154,7 @@ func (r *DelayedTaskRepo) MarkRunning(
 	return true, row, err
 }
 
-func (r *DelayedTaskRepo) MarkSuccess(
-	ctx context.Context,
-	id int64,
-	finishedAt time.Time,
-) (*model.DelayedTask, error) {
+func (r *DelayedTaskRepo) MarkSuccess(ctx context.Context, id int64, finishedAt time.Time) (*model.DelayedTask, error) {
 	row, err := r.getClient(ctx).DelayedTask.UpdateOneID(id).SetStatus(delayedtask.Status(schedulerenum.DelayedTaskStatusSuccess)).SetFinishedAt(finishedAt).ClearLockExpiresAt().SetLockedBy("").SetLastError("").Save(ctx)
 	if err != nil {
 		return nil, err
@@ -189,14 +162,7 @@ func (r *DelayedTaskRepo) MarkSuccess(
 	return delayedTaskToModel(row), nil
 }
 
-func (r *DelayedTaskRepo) MarkFailed(
-	ctx context.Context,
-	id int64,
-	attempt int32,
-	final bool,
-	nextRunAt time.Time,
-	lastError string,
-) (*model.DelayedTask, error) {
+func (r *DelayedTaskRepo) MarkFailed(ctx context.Context, id int64, attempt int32, final bool, nextRunAt time.Time, lastError string) (*model.DelayedTask, error) {
 	update := r.getClient(ctx).DelayedTask.UpdateOneID(id).SetAttempt(attempt).SetLastError(lastError).ClearLockExpiresAt().SetLockedBy("")
 	if final {
 		update.SetStatus(delayedtask.Status(schedulerenum.DelayedTaskStatusFailed)).SetFinishedAt(time.Now())
@@ -210,10 +176,7 @@ func (r *DelayedTaskRepo) MarkFailed(
 	return delayedTaskToModel(row), nil
 }
 
-func delayedTaskQuery(
-	query *gen.DelayedTaskQuery,
-	req *bizrepo.DelayedTaskGetReq,
-) *gen.DelayedTaskQuery {
+func delayedTaskQuery(query *gen.DelayedTaskQuery, req *bizrepo.DelayedTaskGetReq) *gen.DelayedTaskQuery {
 	if req == nil {
 		return query
 	}
@@ -232,9 +195,7 @@ func delayedTaskQuery(
 	return query
 }
 
-func delayedTaskToModel(
-	row *gen.DelayedTask,
-) *model.DelayedTask {
+func delayedTaskToModel(row *gen.DelayedTask) *model.DelayedTask {
 	if row == nil {
 		return nil
 	}

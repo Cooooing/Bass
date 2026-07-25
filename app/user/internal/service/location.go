@@ -23,21 +23,14 @@ func NewLocationService(
 	}
 }
 
-func (s *LocationService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterLocationServiceServer(gs, s)
 }
 
-func (s *LocationService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *LocationService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *LocationService) Get(
-	ctx context.Context,
-	req *v1.GetLocation_Req,
-) (*v1.GetLocation_Resp, error) {
+func (s *LocationService) Get(ctx context.Context, req *v1.GetLocation_Req) (*v1.GetLocation_Resp, error) {
 	res, err := s.locationUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
@@ -55,10 +48,7 @@ func (s *LocationService) Get(
 	}, nil
 }
 
-func (s *LocationService) Upsert(
-	ctx context.Context,
-	req *v1.UpsertLocation_Req,
-) (*v1.UpsertLocation_Resp, error) {
+func (s *LocationService) Upsert(ctx context.Context, req *v1.UpsertLocation_Req) (*v1.UpsertLocation_Resp, error) {
 	res, err := s.locationUsecase.UpsertByUserID(ctx, &model.Location{
 		UserID:   req.GetUserId(),
 		Country:  req.Country,

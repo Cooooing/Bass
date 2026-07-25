@@ -30,19 +30,14 @@ func NewArticleActionRecordRepo(
 	}
 }
 
-func (r *ArticleActionRecordRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *ArticleActionRecordRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *ArticleActionRecordRepo) Save(
-	ctx context.Context,
-	record *model.ArticleActionRecord,
-) (bool, error) {
+func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.ArticleActionRecord) (bool, error) {
 	_, err := r.getClient(ctx).ArticleActionRecord.Create().
 		SetArticleID(record.ArticleID).
 		SetUserID(record.UserID).
@@ -57,10 +52,7 @@ func (r *ArticleActionRecordRepo) Save(
 	return true, nil
 }
 
-func (r *ArticleActionRecordRepo) Delete(
-	ctx context.Context,
-	req *repo.ArticleActionRecordDeleteReq,
-) (int, error) {
+func (r *ArticleActionRecordRepo) Delete(ctx context.Context, req *repo.ArticleActionRecordDeleteReq) (int, error) {
 	articleId := req.ArticleID
 	userId := req.UserID
 	action := req.Action
@@ -75,10 +67,7 @@ func (r *ArticleActionRecordRepo) Delete(
 	return deleted, nil
 }
 
-func (r *ArticleActionRecordRepo) Exist(
-	ctx context.Context,
-	req *repo.ArticleActionRecordReq,
-) (bool, error) {
+func (r *ArticleActionRecordRepo) Exist(ctx context.Context, req *repo.ArticleActionRecordReq) (bool, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	exist, err := query.Exist(ctx)
@@ -88,10 +77,7 @@ func (r *ArticleActionRecordRepo) Exist(
 	return exist, nil
 }
 
-func (r *ArticleActionRecordRepo) Get(
-	ctx context.Context,
-	req *repo.ArticleActionRecordReq,
-) (*model.ArticleActionRecord, error) {
+func (r *ArticleActionRecordRepo) Get(ctx context.Context, req *repo.ArticleActionRecordReq) (*model.ArticleActionRecord, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	c, err := query.First(ctx)
@@ -109,10 +95,7 @@ func (r *ArticleActionRecordRepo) Get(
 	}, nil
 }
 
-func (r *ArticleActionRecordRepo) List(
-	ctx context.Context,
-	req *repo.ArticleActionRecordReq,
-) ([]*model.ArticleActionRecord, error) {
+func (r *ArticleActionRecordRepo) List(ctx context.Context, req *repo.ArticleActionRecordReq) ([]*model.ArticleActionRecord, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -131,10 +114,7 @@ func (r *ArticleActionRecordRepo) List(
 	return rows, nil
 }
 
-func (r *ArticleActionRecordRepo) Map(
-	ctx context.Context,
-	req *repo.ArticleActionRecordReq,
-) (map[int64]*model.
+func (r *ArticleActionRecordRepo) Map(ctx context.Context, req *repo.ArticleActionRecordReq) (map[int64]*model.
 	ArticleActionRecord, error) {
 	listResp, err := r.List(ctx, req)
 	if err != nil {
@@ -145,10 +125,7 @@ func (r *ArticleActionRecordRepo) Map(
 	}), nil
 }
 
-func (r *ArticleActionRecordRepo) Count(
-	ctx context.Context,
-	req *repo.ArticleActionRecordReq,
-) (int, error) {
+func (r *ArticleActionRecordRepo) Count(ctx context.Context, req *repo.ArticleActionRecordReq) (int, error) {
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -158,10 +135,7 @@ func (r *ArticleActionRecordRepo) Count(
 	return count, nil
 }
 
-func (r *ArticleActionRecordRepo) Page(
-	ctx context.Context,
-	req *repo.ArticleActionRecordReq,
-) (*repo.ArticleActionRecordPageResp, error) {
+func (r *ArticleActionRecordRepo) Page(ctx context.Context, req *repo.ArticleActionRecordReq) (*repo.ArticleActionRecordPageResp, error) {
 	page := normalizePage(req.Page)
 	query := r.getClient(ctx).ArticleActionRecord.Query()
 	query = r.getQuery(query, req)
@@ -193,10 +167,7 @@ func (r *ArticleActionRecordRepo) Page(
 	}, nil
 }
 
-func (r *ArticleActionRecordRepo) getQuery(
-	query *gen.ArticleActionRecordQuery,
-	req *repo.ArticleActionRecordReq,
-) *gen.ArticleActionRecordQuery {
+func (r *ArticleActionRecordRepo) getQuery(query *gen.ArticleActionRecordQuery, req *repo.ArticleActionRecordReq) *gen.ArticleActionRecordQuery {
 	if req.ID != nil {
 		query = query.Where(articleactionrecord.IDEQ(*req.ID))
 	}

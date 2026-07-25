@@ -23,11 +23,7 @@ func NewSonyflake() (*sonyflake.Sonyflake, error) {
 	})
 }
 
-func RandStr(
-	sf *sonyflake.Sonyflake,
-	length int,
-	useLower, useUpper, useDigit, useUnderscore bool,
-) string {
+func RandStr(sf *sonyflake.Sonyflake, length int, useLower, useUpper, useDigit, useUnderscore bool) string {
 	// 构建字符集
 	var charset string
 	if useDigit {
@@ -62,9 +58,7 @@ func RandStr(
 	return sb.String()
 }
 
-func RandomInRange(
-	min, max int,
-) int {
+func RandomInRange(min, max int) int {
 	if min > max {
 		min, max = max, min // 处理min>max的情况
 	} else if min == max {

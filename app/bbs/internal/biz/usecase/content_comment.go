@@ -27,10 +27,7 @@ type CreateCommentReq struct {
 	ReplyID   int64
 }
 
-func (u *ContentCommentUsecase) CreateComment(
-	ctx context.Context,
-	req *CreateCommentReq,
-) (*repo.CommentDetail, error) {
+func (u *ContentCommentUsecase) CreateComment(ctx context.Context, req *CreateCommentReq) (*repo.CommentDetail, error) {
 	resp, err := u.contentCommentClient.CreateComment(ctx, &repo.CreateCommentReq{
 		UserID:    req.UserID,
 		ArticleID: req.ArticleID,
@@ -54,10 +51,7 @@ type ListCommentsResp struct {
 	Rows []*repo.CommentListItem
 }
 
-func (u *ContentCommentUsecase) ListComments(
-	ctx context.Context,
-	req *ListCommentsReq,
-) (*ListCommentsResp, error) {
+func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListCommentsReq) (*ListCommentsResp, error) {
 	if req == nil {
 		req = &ListCommentsReq{}
 	}
@@ -113,10 +107,7 @@ type ListCommentThreadsResp struct {
 	Rows []*repo.CommentThread
 }
 
-func (u *ContentCommentUsecase) ListCommentThreads(
-	ctx context.Context,
-	req *ListCommentThreadsReq,
-) (*ListCommentThreadsResp, error) {
+func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *ListCommentThreadsReq) (*ListCommentThreadsResp, error) {
 	var page *repo.PageReq
 	if req.Page != nil {
 		page = &repo.PageReq{
@@ -158,10 +149,7 @@ type ListCommentRepliesResp struct {
 	Rows []*repo.CommentListItem
 }
 
-func (u *ContentCommentUsecase) ListCommentReplies(
-	ctx context.Context,
-	req *ListCommentRepliesReq,
-) (*ListCommentRepliesResp, error) {
+func (u *ContentCommentUsecase) ListCommentReplies(ctx context.Context, req *ListCommentRepliesReq) (*ListCommentRepliesResp, error) {
 	var page *repo.PageReq
 	if req.Page != nil {
 		page = &repo.PageReq{
@@ -202,10 +190,7 @@ type ListCommentTimelineResp struct {
 	Rows []*repo.CommentListItem
 }
 
-func (u *ContentCommentUsecase) ListCommentTimeline(
-	ctx context.Context,
-	req *ListCommentTimelineReq,
-) (*ListCommentTimelineResp, error) {
+func (u *ContentCommentUsecase) ListCommentTimeline(ctx context.Context, req *ListCommentTimelineReq) (*ListCommentTimelineResp, error) {
 	var page *repo.PageReq
 	if req.Page != nil {
 		page = &repo.PageReq{
@@ -239,10 +224,7 @@ type LikeCommentReq struct {
 	Active bool
 }
 
-func (u *ContentCommentUsecase) LikeComment(
-	ctx context.Context,
-	req *LikeCommentReq,
-) (bool, error) {
+func (u *ContentCommentUsecase) LikeComment(ctx context.Context, req *LikeCommentReq) (bool, error) {
 	resp, err := u.contentCommentClient.LikeComment(ctx, &repo.LikeCommentReq{
 		UserID: req.UserID,
 		ID:     req.ID,
@@ -260,10 +242,7 @@ type ThankCommentReq struct {
 	Active bool
 }
 
-func (u *ContentCommentUsecase) ThankComment(
-	ctx context.Context,
-	req *ThankCommentReq,
-) (bool, error) {
+func (u *ContentCommentUsecase) ThankComment(ctx context.Context, req *ThankCommentReq) (bool, error) {
 	resp, err := u.contentCommentClient.ThankComment(ctx, &repo.ThankCommentReq{
 		UserID: req.UserID,
 		ID:     req.ID,

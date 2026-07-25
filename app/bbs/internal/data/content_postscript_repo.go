@@ -23,10 +23,7 @@ func NewContentPostscriptClient(
 	}
 }
 
-func (r *ContentPostscriptClient) AddPostscript(
-	ctx context.Context,
-	req *repo.AddPostscriptReq,
-) (*repo.ArticlePostscript, error) {
+func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *repo.AddPostscriptReq) (*repo.ArticlePostscript, error) {
 	reply, err := r.contentClient.Article.AddPostscript(ctx, &contentv1.AddPostscriptArticle_Req{
 		ArticleId: req.ArticleID,
 		Content:   req.Content,

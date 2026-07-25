@@ -31,10 +31,7 @@ func NewEmailClient(
 	}
 }
 
-func (c *EmailClient) SendEmail(
-	_ context.Context,
-	req *bizchannel.EmailRequest,
-) (*bizchannel.SendResult, error) {
+func (c *EmailClient) SendEmail(_ context.Context, req *bizchannel.EmailRequest) (*bizchannel.SendResult, error) {
 	if req == nil || req.ToEmail == "" {
 		return &bizchannel.SendResult{
 			Status: notifyenum.NotificationChannelStatusFailed,

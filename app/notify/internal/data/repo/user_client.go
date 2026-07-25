@@ -23,10 +23,7 @@ func NewUserClient(
 	}
 }
 
-func (c *UserClient) MapAccounts(
-	ctx context.Context,
-	userIDs []int64,
-) (map[int64]*model.
+func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.
 	UserAccount, error) {
 	if len(userIDs) == 0 {
 		return map[int64]*model.UserAccount{}, nil
@@ -60,10 +57,7 @@ func (c *UserClient) MapAccounts(
 	return result, nil
 }
 
-func (c *UserClient) ListFollowerIDs(
-	ctx context.Context,
-	userID int64,
-) ([]int64, error) {
+func (c *UserClient) ListFollowerIDs(ctx context.Context, userID int64) ([]int64, error) {
 	if userID == 0 {
 		return []int64{}, nil
 	}

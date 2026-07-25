@@ -25,20 +25,13 @@ func NewDelayedTaskClient(
 	}
 }
 
-type unbanExpiredPayload struct {
-	UserID      int64 `json:"user_id"`
-	BanRecordID int64 `json:"ban_record_id"`
+type unbanAccountsPayload struct {
+	UserIDs []int64 `json:"user_ids"`
 }
 
-func (c *DelayedTaskClient) RegisterUnbanExpired(
-	ctx context.Context,
-	userID int64,
-	banRecordID int64,
-	executeAt time.Time,
-) error {
-	payload, err := json.Marshal(&unbanExpiredPayload{
-		UserID:      userID,
-		BanRecordID: banRecordID,
+func (c *DelayedTaskClient) RegisterUnbanAccounts(ctx context.Context, userID int64, banRecordID int64, executeAt time.Time) error {
+	payload, err := json.Marshal(&unbanAccountsPayload{
+		UserIDs: []int64{userID},
 	})
 	if err != nil {
 		return err
@@ -49,8 +42,8 @@ func (c *DelayedTaskClient) RegisterUnbanExpired(
 	}
 	client := schedulerv1.NewSchedulerDelayedTaskServiceClient(conn)
 	_, err = client.Register(ctx, &schedulerv1.RegisterSchedulerDelayedTask_Req{
-		IdempotencyKey: fmt.Sprintf("user.unban_expired:%d", banRecordID),
-		TaskName:       "user.unban_expired",
+		IdempotencyKey: fmt.Sprintf("user.unban_accounts:%d", banRecordID),
+		TaskName:       "user.unban_accounts",
 		Payload:        string(payload),
 		ExecuteAt:      timestamppb.New(executeAt),
 		MaxAttempts:    10,

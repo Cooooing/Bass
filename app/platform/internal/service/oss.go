@@ -35,21 +35,14 @@ func NewOssService(
 	}
 }
 
-func (s *OssService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *OssService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterPlatformOssServiceServer(gs, s)
 }
 
-func (s *OssService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *OssService) RegisterHttp(hs *http.Server) {
 }
 
-func (s *OssService) Upload(
-	ctx context.Context,
-	req *v1.UploadOss_Req,
-) (*v1.UploadOss_Resp, error) {
+func (s *OssService) Upload(ctx context.Context, req *v1.UploadOss_Req) (*v1.UploadOss_Resp, error) {
 	row, err := s.objectStorageUsecase.Upload(ctx, &usecase.UploadReq{
 		UserID:   req.GetUserId(),
 		Key:      req.GetKey(),
@@ -71,9 +64,7 @@ func (s *OssService) Upload(
 	}, nil
 }
 
-func (s *OssService) StreamUpload(
-	stream v1.PlatformOssService_StreamUploadServer,
-) error {
+func (s *OssService) StreamUpload(stream v1.PlatformOssService_StreamUploadServer) error {
 	first, err := stream.Recv()
 	if err != nil {
 		return err
@@ -135,10 +126,7 @@ func (s *OssService) StreamUpload(
 	})
 }
 
-func (s *OssService) Download(
-	ctx context.Context,
-	req *v1.DownloadOss_Req,
-) (*v1.DownloadOss_Resp, error) {
+func (s *OssService) Download(ctx context.Context, req *v1.DownloadOss_Req) (*v1.DownloadOss_Resp, error) {
 	downloadResp, err := s.objectStorageUsecase.Download(ctx, req.GetKey())
 	if err != nil {
 		return nil, err
@@ -151,10 +139,7 @@ func (s *OssService) Download(
 	}, nil
 }
 
-func (s *OssService) StreamDownload(
-	req *v1.StreamDownloadOss_Req,
-	stream v1.PlatformOssService_StreamDownloadServer,
-) error {
+func (s *OssService) StreamDownload(req *v1.StreamDownloadOss_Req, stream v1.PlatformOssService_StreamDownloadServer) error {
 	downloadResp, err := s.objectStorageUsecase.StreamDownload(stream.Context(), req.GetKey())
 	if err != nil {
 		return err
@@ -182,10 +167,7 @@ func (s *OssService) StreamDownload(
 	}
 }
 
-func (s *OssService) GetUploadToken(
-	ctx context.Context,
-	req *v1.GetUploadTokenOss_Req,
-) (*v1.GetUploadTokenOss_Resp, error) {
+func (s *OssService) GetUploadToken(ctx context.Context, req *v1.GetUploadTokenOss_Req) (*v1.GetUploadTokenOss_Resp, error) {
 	tokens, err := s.objectStorageUsecase.UploadToken(ctx, &usecase.UploadTokenReq{
 		Num:    int(req.Num),
 		UserID: req.GetUserId(),
@@ -205,10 +187,7 @@ func (s *OssService) GetUploadToken(
 	}, nil
 }
 
-func (s *OssService) Audit(
-	ctx context.Context,
-	req *v1.AuditOss_Req,
-) (*v1.AuditOss_Resp, error) {
+func (s *OssService) Audit(ctx context.Context, req *v1.AuditOss_Req) (*v1.AuditOss_Resp, error) {
 	err := s.objectStorageUsecase.UpdateAudit(ctx, &usecase.UpdateAuditReq{
 		Key:    req.Key,
 		Enable: req.Status,
@@ -221,10 +200,7 @@ func (s *OssService) Audit(
 	return &v1.AuditOss_Resp{}, nil
 }
 
-func (s *OssService) List(
-	ctx context.Context,
-	req *v1.ListOss_Req,
-) (*v1.ListOss_Resp, error) {
+func (s *OssService) List(ctx context.Context, req *v1.ListOss_Req) (*v1.ListOss_Resp, error) {
 	req.Page = util.OrDefault(req.Page, &common.PageReq{})
 	req.Query = util.OrDefault(req.Query, &v1.ListOss_Req_OssQueryParams{})
 	var provider *enum.ObjectStorageProvider
@@ -276,10 +252,7 @@ func (s *OssService) List(
 	}, nil
 }
 
-func (s *OssService) QiniuUploadCallback(
-	ctx context.Context,
-	req *v1.QiniuUploadCallbackOss_Req,
-) (*v1.QiniuUploadCallbackOss_Resp, error) {
+func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploadCallbackOss_Req) (*v1.QiniuUploadCallbackOss_Resp, error) {
 	s.log.Info("qiniu upload callback",
 		"bucket", req.GetBucket(),
 		"key", req.GetKey(),
@@ -300,10 +273,7 @@ func (s *OssService) QiniuUploadCallback(
 	return &v1.QiniuUploadCallbackOss_Resp{}, err
 }
 
-func (s *OssService) QiniuIncrementAuditCallback(
-	ctx context.Context,
-	req *v1.QiniuIncrementAuditCallbackOss_Req,
-) (*v1.QiniuIncrementAuditCallbackOss_Resp, error) {
+func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.QiniuIncrementAuditCallbackOss_Req) (*v1.QiniuIncrementAuditCallbackOss_Resp, error) {
 	opts := protojson.MarshalOptions{
 		EmitUnpopulated: true,
 	}

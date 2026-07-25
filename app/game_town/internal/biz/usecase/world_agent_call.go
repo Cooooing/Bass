@@ -14,10 +14,7 @@ import (
 	"game_town/internal/enum"
 )
 
-func (r *WorldAgentRunner) callAgent(
-	ctx context.Context,
-	result *agentResult,
-) error {
+func (r *WorldAgentRunner) callAgent(ctx context.Context, result *agentResult) error {
 	var err error
 	switch result.job.Type {
 	case enum.AgentJobTypeWorldGenerate:
@@ -231,10 +228,7 @@ func (r *WorldAgentRunner) callAgent(
 	return err
 }
 
-func (r *WorldAgentRunner) loadActionContext(
-	ctx context.Context,
-	result *agentResult,
-) error {
+func (r *WorldAgentRunner) loadActionContext(ctx context.Context, result *agentResult) error {
 	var err error
 	result.player, err = r.playerRepo.Get(ctx, &repo.PlayerQuery{
 		ID: result.source.ActorPlayerID,
@@ -284,9 +278,7 @@ func (r *WorldAgentRunner) loadActionContext(
 	return nil
 }
 
-func resultEvents(
-	result *agentResult,
-) []*model.Event {
+func resultEvents(result *agentResult) []*model.Event {
 	if result == nil || result.source == nil || result.source.Payload == nil {
 		return nil
 	}
@@ -294,30 +286,21 @@ func resultEvents(
 	return events
 }
 
-func (r *WorldAgentRunner) npcVisibleEvents(
-	ctx context.Context,
-	worldID, npcID int64,
-) ([]*model.Event, error) {
+func (r *WorldAgentRunner) npcVisibleEvents(ctx context.Context, worldID, npcID int64) ([]*model.Event, error) {
 	return r.visibleEvents(ctx, &repo.ObservationQuery{
 		WorldID: new(worldID),
 		NpcID:   new(npcID),
 	})
 }
 
-func (r *WorldAgentRunner) playerVisibleEvents(
-	ctx context.Context,
-	worldID, playerID int64,
-) ([]*model.Event, error) {
+func (r *WorldAgentRunner) playerVisibleEvents(ctx context.Context, worldID, playerID int64) ([]*model.Event, error) {
 	return r.visibleEvents(ctx, &repo.ObservationQuery{
 		WorldID:  new(worldID),
 		PlayerID: new(playerID),
 	})
 }
 
-func (r *WorldAgentRunner) visibleEvents(
-	ctx context.Context,
-	query *repo.ObservationQuery,
-) ([]*model.Event, error) {
+func (r *WorldAgentRunner) visibleEvents(ctx context.Context, query *repo.ObservationQuery) ([]*model.Event, error) {
 	observations, err := r.observationRepo.List(ctx, query)
 	if err != nil {
 		return nil, err
@@ -341,11 +324,7 @@ func (r *WorldAgentRunner) visibleEvents(
 	})
 }
 
-func (r *WorldAgentRunner) npcMemories(
-	ctx context.Context,
-	npc *model.Npc,
-	prompt string,
-) ([]*model.NpcMemory, error) {
+func (r *WorldAgentRunner) npcMemories(ctx context.Context, npc *model.Npc, prompt string) ([]*model.NpcMemory, error) {
 	if npc == nil {
 		return nil, nil
 	}
@@ -381,9 +360,7 @@ func (r *WorldAgentRunner) npcMemories(
 	return nil, nil
 }
 
-func actionTargets(
-	payload map[string]any,
-) []model.EntityRef {
+func actionTargets(payload map[string]any) []model.EntityRef {
 	if payload == nil {
 		return nil
 	}
@@ -416,9 +393,7 @@ func actionTargets(
 	return result
 }
 
-func entityIDValue(
-	value any,
-) int64 {
+func entityIDValue(value any) int64 {
 	switch typedValue := value.(type) {
 	case int:
 		return int64(typedValue)
@@ -456,9 +431,7 @@ func entityIDValue(
 	}
 }
 
-func parseEntityIDString(
-	value string,
-) int64 {
+func parseEntityIDString(value string) int64 {
 	value = strings.TrimSpace(value)
 	if value == "" {
 		return 0
@@ -474,10 +447,7 @@ func parseEntityIDString(
 	return int64(floatValue)
 }
 
-func fallbackNpcReply(
-	result *agentResult,
-	err error,
-) *model.NpcReply {
+func fallbackNpcReply(result *agentResult, err error) *model.NpcReply {
 	reply := "我需要一点时间整理线索。你可以先说明更具体的目标，或换一个方向调查。"
 	if result != nil && result.npc != nil {
 		reply = result.npc.Name + "短暂沉思后说：" + reply
@@ -492,9 +462,7 @@ func fallbackNpcReply(
 	}
 }
 
-func fallbackWorldDraft(
-	result *agentResult,
-) *model.WorldDraft {
+func fallbackWorldDraft(result *agentResult) *model.WorldDraft {
 	description := "一个正在自行演化的文字世界"
 	if result != nil && result.world != nil && strings.TrimSpace(result.world.Description) != "" {
 		description = result.world.Description
@@ -525,10 +493,7 @@ func fallbackWorldDraft(
 	}
 }
 
-func fallbackPlayerActionResolution(
-	result *agentResult,
-	err error,
-) *model.ActionResolution {
+func fallbackPlayerActionResolution(result *agentResult, err error) *model.ActionResolution {
 	summary := "玩家行动已被记录，世界暂时需要更多信息来裁决细节"
 	clarification := "请补充你的具体目标、对象或愿意承担的代价。"
 	if result != nil && result.source != nil && strings.TrimSpace(result.source.Content) != "" {
@@ -547,9 +512,7 @@ func fallbackPlayerActionResolution(
 	}
 }
 
-func deterministicPlayerActionResolution(
-	result *agentResult,
-) *model.ActionResolution {
+func deterministicPlayerActionResolution(result *agentResult) *model.ActionResolution {
 	content := ""
 	if result != nil && result.source != nil {
 		content = strings.TrimSpace(result.source.Content)
@@ -600,10 +563,7 @@ func deterministicPlayerActionResolution(
 	}
 }
 
-func fallbackNpcPlan(
-	result *agentResult,
-	err error,
-) *model.NpcPlan {
+func fallbackNpcPlan(result *agentResult, err error) *model.NpcPlan {
 	summary := "NPC 根据当前局势维持原计划，并继续观察变化。"
 	goal := "观察局势"
 	actions := make([]model.ActionStep, 0, 1)
@@ -639,10 +599,7 @@ func fallbackNpcPlan(
 	}
 }
 
-func fallbackWorldTickResolution(
-	result *agentResult,
-	err error,
-) *model.ActionResolution {
+func fallbackWorldTickResolution(result *agentResult, err error) *model.ActionResolution {
 	summary := "世界在没有玩家直接推动时继续缓慢演化。"
 	if result != nil && result.state != nil && strings.TrimSpace(result.state.CurrentArc) != "" {
 		summary = normalizeModelText(result.state.CurrentArc+"出现新的余波。", 120)
@@ -686,9 +643,7 @@ func fallbackWorldTickResolution(
 	}
 }
 
-func fallbackWorldSummary(
-	result *agentResult,
-) string {
+func fallbackWorldSummary(result *agentResult) string {
 	if result != nil && result.state != nil && strings.TrimSpace(result.state.Summary) != "" {
 		return result.state.Summary
 	}
@@ -698,19 +653,14 @@ func fallbackWorldSummary(
 	return "世界局势仍在持续变化。"
 }
 
-func fallbackCurrentArc(
-	result *agentResult,
-) string {
+func fallbackCurrentArc(result *agentResult) string {
 	if result != nil && result.state != nil && strings.TrimSpace(result.state.CurrentArc) != "" {
 		return normalizeModelText(result.state.CurrentArc, 80)
 	}
 	return "暗流涌动"
 }
 
-func fallbackContextSummary(
-	result *agentResult,
-	err error,
-) string {
+func fallbackContextSummary(result *agentResult, err error) string {
 	if result != nil && result.npc != nil && strings.TrimSpace(result.npc.ContextSummary) != "" {
 		return normalizeModelText(result.npc.ContextSummary, 120)
 	}

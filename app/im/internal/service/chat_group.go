@@ -28,22 +28,15 @@ func NewChatGroupService(
 	}
 }
 
-func (s *ChatGroupService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *ChatGroupService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterIMChatGroupServiceServer(gs, s)
 }
 
-func (s *ChatGroupService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *ChatGroupService) RegisterHttp(hs *http.Server) {
 }
 
 // Create 创建群组。
-func (s *ChatGroupService) Create(
-	ctx context.Context,
-	req *v1.CreateChatGroup_Req,
-) (*v1.CreateChatGroup_Resp, error) {
+func (s *ChatGroupService) Create(ctx context.Context, req *v1.CreateChatGroup_Req) (*v1.CreateChatGroup_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -60,10 +53,7 @@ func (s *ChatGroupService) Create(
 }
 
 // Dismiss 解散群组。
-func (s *ChatGroupService) Dismiss(
-	ctx context.Context,
-	req *v1.DismissChatGroup_Req,
-) (*v1.DismissChatGroup_Resp, error) {
+func (s *ChatGroupService) Dismiss(ctx context.Context, req *v1.DismissChatGroup_Req) (*v1.DismissChatGroup_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -78,10 +68,7 @@ func (s *ChatGroupService) Dismiss(
 }
 
 // List 查询群组列表。
-func (s *ChatGroupService) List(
-	ctx context.Context,
-	req *v1.ListChatGroups_Req,
-) (*v1.ListChatGroups_Resp, error) {
+func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Req) (*v1.ListChatGroups_Resp, error) {
 	var ids []int64
 	var status *enum.ChatGroupStatus
 	if req.GetQuery() != nil {

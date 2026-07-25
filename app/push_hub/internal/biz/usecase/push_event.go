@@ -37,10 +37,7 @@ type PublishEventReq struct {
 	Payload   string
 }
 
-func (uc *PushEventUsecase) PublishEvent(
-	ctx context.Context,
-	req *PublishEventReq,
-) error {
+func (uc *PushEventUsecase) PublishEvent(ctx context.Context, req *PublishEventReq) error {
 	nodeIDs, err := uc.registry.GetUserNodes(ctx, req.UserID)
 	if err != nil {
 		return fmt.Errorf("get user nodes: %w", err)
@@ -90,10 +87,7 @@ type BroadcastEventReq struct {
 	Payload   string
 }
 
-func (uc *PushEventUsecase) BroadcastEvent(
-	ctx context.Context,
-	req *BroadcastEventReq,
-) error {
+func (uc *PushEventUsecase) BroadcastEvent(ctx context.Context, req *BroadcastEventReq) error {
 	nodes, err := uc.registry.GetAllOnlineNodes(ctx)
 	if err != nil {
 		return fmt.Errorf("get online nodes: %w", err)

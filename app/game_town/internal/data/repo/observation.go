@@ -33,19 +33,14 @@ func NewObservationRepo(
 	}
 }
 
-func (r *ObservationRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *ObservationRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *ObservationRepo) Save(
-	ctx context.Context,
-	row *model.Observation,
-) (*model.Observation, error) {
+func (r *ObservationRepo) Save(ctx context.Context, row *model.Observation) (*model.Observation, error) {
 	saved, err := r.getClient(ctx).Observation.Create().
 		SetWorldID(row.WorldID).
 		SetEventID(row.EventID).
@@ -65,10 +60,7 @@ func (r *ObservationRepo) Save(
 	return observationModel(saved), nil
 }
 
-func observationQuery(
-	q *gen.ObservationQuery,
-	req *bizrepo.ObservationQuery,
-) *gen.ObservationQuery {
+func observationQuery(q *gen.ObservationQuery, req *bizrepo.ObservationQuery) *gen.ObservationQuery {
 	if req == nil {
 		return q
 	}
@@ -111,10 +103,7 @@ func observationQuery(
 	return q
 }
 
-func (r *ObservationRepo) Get(
-	ctx context.Context,
-	req *bizrepo.ObservationQuery,
-) (*model.Observation, error) {
+func (r *ObservationRepo) Get(ctx context.Context, req *bizrepo.ObservationQuery) (*model.Observation, error) {
 	row, err := observationQuery(r.getClient(ctx).Observation.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -125,10 +114,7 @@ func (r *ObservationRepo) Get(
 	return observationModel(row), nil
 }
 
-func (r *ObservationRepo) List(
-	ctx context.Context,
-	req *bizrepo.ObservationQuery,
-) ([]*model.Observation, error) {
+func (r *ObservationRepo) List(ctx context.Context, req *bizrepo.ObservationQuery) ([]*model.Observation, error) {
 	rows, err := observationQuery(r.getClient(ctx).Observation.Query(), req).
 		Order(observation.ByEventID()).
 		All(ctx)
@@ -140,10 +126,7 @@ func (r *ObservationRepo) List(
 	}), nil
 }
 
-func (r *ObservationRepo) Map(
-	ctx context.Context,
-	req *bizrepo.ObservationQuery,
-) (map[int64]*model.Observation, error) {
+func (r *ObservationRepo) Map(ctx context.Context, req *bizrepo.ObservationQuery) (map[int64]*model.Observation, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -155,17 +138,11 @@ func (r *ObservationRepo) Map(
 	return out, nil
 }
 
-func (r *ObservationRepo) Count(
-	ctx context.Context,
-	req *bizrepo.ObservationQuery,
-) (int, error) {
+func (r *ObservationRepo) Count(ctx context.Context, req *bizrepo.ObservationQuery) (int, error) {
 	return observationQuery(r.getClient(ctx).Observation.Query(), req).Count(ctx)
 }
 
-func (r *ObservationRepo) Page(
-	ctx context.Context,
-	req *bizrepo.ObservationPageReq,
-) (*bizrepo.ObservationPageResp, error) {
+func (r *ObservationRepo) Page(ctx context.Context, req *bizrepo.ObservationPageReq) (*bizrepo.ObservationPageResp, error) {
 	p := page(req.Page)
 	q := observationQuery(r.getClient(ctx).Observation.Query(), &req.Query)
 	total := 0
@@ -192,10 +169,7 @@ func (r *ObservationRepo) Page(
 	}, nil
 }
 
-func orderObservations(
-	q *gen.ObservationQuery,
-	req *bizrepo.ObservationQuery,
-) *gen.ObservationQuery {
+func orderObservations(q *gen.ObservationQuery, req *bizrepo.ObservationQuery) *gen.ObservationQuery {
 	if req != nil && (req.AfterEventSequence != nil || req.EventType != nil) {
 		q.Modify(func(selector *sql.Selector) {
 			events := sql.Table(event.Table).As(observationEventAlias)
@@ -206,9 +180,7 @@ func orderObservations(
 	return q.Order(observation.ByEventID())
 }
 
-func observationModel(
-	row *gen.Observation,
-) *model.Observation {
+func observationModel(row *gen.Observation) *model.Observation {
 	return &model.Observation{
 		ID:         row.ID,
 		WorldID:    row.WorldID,

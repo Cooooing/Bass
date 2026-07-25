@@ -47,10 +47,7 @@ func NewCommentUsecase(
 	}
 }
 
-func (d *CommentUsecase) Add(
-	ctx context.Context,
-	comment *model.Comment,
-) (*model.Comment, error) {
+func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*model.Comment, error) {
 	var c *model.Comment
 	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
@@ -164,10 +161,7 @@ type CommentPageResp struct {
 	Rows []*model.Comment
 }
 
-func (d *CommentUsecase) Page(
-	ctx context.Context,
-	req *CommentPageReq,
-) (*CommentPageResp, error) {
+func (d *CommentUsecase) Page(ctx context.Context, req *CommentPageReq) (*CommentPageResp, error) {
 	if req == nil {
 		req = &CommentPageReq{}
 	}
@@ -206,10 +200,7 @@ type CommentChildPreview struct {
 	Rows     []*model.Comment
 }
 
-func (d *CommentUsecase) ListReplyPreviews(
-	ctx context.Context,
-	req *CommentListReplyPreviewsReq,
-) ([]*CommentChildPreview, error) {
+func (d *CommentUsecase) ListReplyPreviews(ctx context.Context, req *CommentListReplyPreviewsReq) ([]*CommentChildPreview, error) {
 	articleID := req.ArticleID
 	parentIDs := req.ParentIDs
 	limitPerParent := req.LimitPerParent
@@ -241,10 +232,7 @@ func (d *CommentUsecase) ListReplyPreviews(
 	return rows, nil
 }
 
-func (d *CommentUsecase) MapArticleLastComments(
-	ctx context.Context,
-	articleIDs []int64,
-) (map[int64]*model.
+func (d *CommentUsecase) MapArticleLastComments(ctx context.Context, articleIDs []int64) (map[int64]*model.
 	Comment, error) {
 	articleIds := articleIDs
 	if len(articleIds) == 0 {
@@ -269,10 +257,7 @@ type CommentHideReq struct {
 	Reason    *string
 }
 
-func (d *CommentUsecase) Hide(
-	ctx context.Context,
-	req *CommentHideReq,
-) error {
+func (d *CommentUsecase) Hide(ctx context.Context, req *CommentHideReq) error {
 	commentId := req.CommentID
 	userId := req.UserID
 	reason := req.Reason
@@ -291,10 +276,7 @@ type CommentUnhideReq struct {
 	Reason    *string
 }
 
-func (d *CommentUsecase) Unhide(
-	ctx context.Context,
-	req *CommentUnhideReq,
-) error {
+func (d *CommentUsecase) Unhide(ctx context.Context, req *CommentUnhideReq) error {
 	commentId := req.CommentID
 	userId := req.UserID
 	reason := req.Reason
@@ -313,10 +295,7 @@ type CommentLockReq struct {
 	Reason    *string
 }
 
-func (d *CommentUsecase) Lock(
-	ctx context.Context,
-	req *CommentLockReq,
-) error {
+func (d *CommentUsecase) Lock(ctx context.Context, req *CommentLockReq) error {
 	commentId := req.CommentID
 	userId := req.UserID
 	reason := req.Reason
@@ -335,10 +314,7 @@ type CommentUnlockReq struct {
 	Reason    *string
 }
 
-func (d *CommentUsecase) Unlock(
-	ctx context.Context,
-	req *CommentUnlockReq,
-) error {
+func (d *CommentUsecase) Unlock(ctx context.Context, req *CommentUnlockReq) error {
 	commentId := req.CommentID
 	userId := req.UserID
 	reason := req.Reason
@@ -359,10 +335,7 @@ type commentUpdateRestrictionReq struct {
 	Reason      *string
 }
 
-func (d *CommentUsecase) updateRestriction(
-	ctx context.Context,
-	req *commentUpdateRestrictionReq,
-) error {
+func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpdateRestrictionReq) error {
 	commentId := req.CommentID
 	restriction := req.Restriction
 	userId := req.UserID
@@ -429,10 +402,7 @@ type CommentLikeReq struct {
 	Active    bool
 }
 
-func (d *CommentUsecase) Like(
-	ctx context.Context,
-	req *CommentLikeReq,
-) (bool, error) {
+func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, error) {
 	commentId := req.CommentID
 	userId := req.UserID
 	active := req.Active
@@ -522,10 +492,7 @@ type CommentThankReq struct {
 	Active    bool
 }
 
-func (d *CommentUsecase) Thank(
-	ctx context.Context,
-	req *CommentThankReq,
-) (bool, error) {
+func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool, error) {
 	commentId := req.CommentID
 	userId := req.UserID
 	active := req.Active
@@ -614,10 +581,7 @@ type CommentMapViewerActionStatesReq struct {
 	UserID     int64
 }
 
-func (d *CommentUsecase) MapViewerActionStates(
-	ctx context.Context,
-	req *CommentMapViewerActionStatesReq,
-) (map[int64]*model.
+func (d *CommentUsecase) MapViewerActionStates(ctx context.Context, req *CommentMapViewerActionStatesReq) (map[int64]*model.
 	CommentViewerActionState, error) {
 	commentIds := req.CommentIDs
 	userId := req.UserID

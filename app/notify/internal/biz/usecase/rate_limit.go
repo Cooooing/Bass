@@ -50,10 +50,7 @@ type RateLimitCheckResp struct {
 	RemainingCount int64
 }
 
-func (u *RateLimitUsecase) Check(
-	ctx context.Context,
-	req *RateLimitCheckReq,
-) (*RateLimitCheckResp, error) {
+func (u *RateLimitUsecase) Check(ctx context.Context, req *RateLimitCheckReq) (*RateLimitCheckResp, error) {
 	if req == nil {
 		req = &RateLimitCheckReq{}
 	}

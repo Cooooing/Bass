@@ -193,11 +193,7 @@ func (c *NatsClient) Close() error {
 	return nil
 }
 
-func (c *NatsClient) Publish(
-	ctx context.Context,
-	subject string,
-	msg *Message,
-) (err error) {
+func (c *NatsClient) Publish(ctx context.Context, subject string, msg *Message) (err error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -289,11 +285,7 @@ func (c *NatsClient) Publish(
 	return nil
 }
 
-func (c *NatsClient) Subscribe(
-	ctx context.Context,
-	subject string,
-	handler MessageHandler,
-) (Unsubscriber, error) {
+func (c *NatsClient) Subscribe(ctx context.Context, subject string, handler MessageHandler) (Unsubscriber, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -328,11 +320,7 @@ func (c *NatsClient) Subscribe(
 	}, nil
 }
 
-func (c *NatsClient) QueueSubscribe(
-	ctx context.Context,
-	subject, queue string,
-	handler MessageHandler,
-) (Unsubscriber, error) {
+func (c *NatsClient) QueueSubscribe(ctx context.Context, subject, queue string, handler MessageHandler) (Unsubscriber, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -367,13 +355,7 @@ func (c *NatsClient) QueueSubscribe(
 	}, nil
 }
 
-func (c *NatsClient) handleMsg(
-	ctx context.Context,
-	m *nats.Msg,
-	handler MessageHandler,
-	isJetStream bool,
-	queue string,
-) {
+func (c *NatsClient) handleMsg(ctx context.Context, m *nats.Msg, handler MessageHandler, isJetStream bool, queue string) {
 	if ctx == nil {
 		ctx = context.Background()
 	}

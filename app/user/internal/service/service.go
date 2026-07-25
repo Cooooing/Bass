@@ -19,16 +19,6 @@ var ServiceProviderSet = wire.NewSet(
 	NewTotpService,
 )
 
-func ProvideServices(
-	commonSystemService *CommonSystemService,
-	authService *AuthService,
-	rbacService *RbacService,
-	accountService *AccountService,
-	preferencesService *PreferencesService,
-	privacySettingService *PrivacySettingService,
-	locationService *LocationService,
-	relationService *RelationService,
-	totpService *TotpService,
-) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, authService *AuthService, rbacService *RbacService, accountService *AccountService, preferencesService *PreferencesService, privacySettingService *PrivacySettingService, locationService *LocationService, relationService *RelationService, totpService *TotpService) []server.Service {
 	return []server.Service{commonSystemService, authService, rbacService, accountService, preferencesService, privacySettingService, locationService, relationService, totpService}
 }

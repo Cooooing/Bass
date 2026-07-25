@@ -85,10 +85,7 @@ return 0
 	}
 }
 
-func (r *TaskLockRepo) TryAcquireSchedule(
-	ctx context.Context,
-	req *bizrepo.TaskScheduleAcquireReq,
-) (*bizrepo.TaskScheduleAcquireResp, error) {
+func (r *TaskLockRepo) TryAcquireSchedule(ctx context.Context, req *bizrepo.TaskScheduleAcquireReq) (*bizrepo.TaskScheduleAcquireResp, error) {
 	if req == nil {
 		return nil, fmt.Errorf("scheduler task schedule acquire request is nil")
 	}
@@ -126,10 +123,7 @@ func (r *TaskLockRepo) TryAcquireSchedule(
 	}, nil
 }
 
-func (r *TaskLockRepo) RegisterRunning(
-	ctx context.Context,
-	req *bizrepo.TaskRunningLockReq,
-) (bool, error) {
+func (r *TaskLockRepo) RegisterRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) (bool, error) {
 	if req.RunningToken == "" || req.ExecutionRecordID == 0 {
 		return false, nil
 	}
@@ -153,10 +147,7 @@ func (r *TaskLockRepo) RegisterRunning(
 	return result == 1, nil
 }
 
-func (r *TaskLockRepo) RefreshRunning(
-	ctx context.Context,
-	req *bizrepo.TaskRunningLockReq,
-) (bool, error) {
+func (r *TaskLockRepo) RefreshRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) (bool, error) {
 	if req.RunningToken == "" || req.ExecutionRecordID == 0 {
 		return false, nil
 	}
@@ -180,10 +171,7 @@ func (r *TaskLockRepo) RefreshRunning(
 	return result == 1, nil
 }
 
-func (r *TaskLockRepo) ReleaseRunning(
-	ctx context.Context,
-	req *bizrepo.TaskRunningLockReq,
-) error {
+func (r *TaskLockRepo) ReleaseRunning(ctx context.Context, req *bizrepo.TaskRunningLockReq) error {
 	if req.RunningToken == "" {
 		return nil
 	}
@@ -205,10 +193,7 @@ func (r *TaskLockRepo) ReleaseRunning(
 	return nil
 }
 
-func (r *TaskLockRepo) MapRunning(
-	ctx context.Context,
-	req *bizrepo.TaskRunningMapReq,
-) (map[int64]bool, error) {
+func (r *TaskLockRepo) MapRunning(ctx context.Context, req *bizrepo.TaskRunningMapReq) (map[int64]bool, error) {
 	result := make(map[int64]bool, len(req.ExecutionRecordIDs))
 	if len(req.ExecutionRecordIDs) == 0 {
 		return result, nil

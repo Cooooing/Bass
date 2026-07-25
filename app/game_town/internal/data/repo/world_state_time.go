@@ -12,11 +12,7 @@ import (
 	"game_town/internal/data/gen/worldstate"
 )
 
-func (r *WorldStateRepo) UpdateNextDue(
-	ctx context.Context,
-	worldID int64,
-	nextDueAt *time.Time,
-) error {
+func (r *WorldStateRepo) UpdateNextDue(ctx context.Context, worldID int64, nextDueAt *time.Time) error {
 	update := r.getClient(ctx).WorldState.Update().Where(worldstate.WorldID(worldID))
 	if nextDueAt == nil {
 		update.ClearNextDueAt()
@@ -33,10 +29,7 @@ func (r *WorldStateRepo) UpdateNextDue(
 	return nil
 }
 
-func (r *WorldStateRepo) AdvanceTime(
-	ctx context.Context,
-	req *bizrepo.WorldStateAdvanceTimeReq,
-) (*model.WorldState, error) {
+func (r *WorldStateRepo) AdvanceTime(ctx context.Context, req *bizrepo.WorldStateAdvanceTimeReq) (*model.WorldState, error) {
 	update := r.getClient(ctx).WorldState.Update().Where(worldstate.WorldID(req.WorldID), worldstate.Version(req.Version)).
 		SetWorldTime(req.WorldTime).
 		SetTimeAnchor(req.TimeAnchor).

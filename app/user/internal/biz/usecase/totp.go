@@ -40,10 +40,7 @@ func NewTotpUsecase(
 	}, nil
 }
 
-func (u *TotpUsecase) GetByUserID(
-	ctx context.Context,
-	userID int64,
-) (*model.Totp, error) {
+func (u *TotpUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Totp, error) {
 	return u.totpRepo.Get(ctx, &repo.TotpGetReq{
 		UserID: &userID,
 	})
@@ -54,10 +51,7 @@ type ValidateTotpByUserIDReq struct {
 	Code   string
 }
 
-func (u *TotpUsecase) ValidateByUserID(
-	ctx context.Context,
-	req *ValidateTotpByUserIDReq,
-) (bool, error) {
+func (u *TotpUsecase) ValidateByUserID(ctx context.Context, req *ValidateTotpByUserIDReq) (bool, error) {
 	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{
 		UserID: &req.UserID,
 	})
@@ -80,10 +74,7 @@ type BeginEnableTotpResp struct {
 	QRCode []byte
 }
 
-func (u *TotpUsecase) BeginEnable(
-	ctx context.Context,
-	req *BeginEnableTotpReq,
-) (*BeginEnableTotpResp, error) {
+func (u *TotpUsecase) BeginEnable(ctx context.Context, req *BeginEnableTotpReq) (*BeginEnableTotpResp, error) {
 	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{
 		UserID: &req.UserID,
 	})
@@ -129,10 +120,7 @@ type CheckEnableTotpCodeReq struct {
 	Code   string
 }
 
-func (u *TotpUsecase) CheckEnableCode(
-	ctx context.Context,
-	req *CheckEnableTotpCodeReq,
-) (bool, error) {
+func (u *TotpUsecase) CheckEnableCode(ctx context.Context, req *CheckEnableTotpCodeReq) (bool, error) {
 	secret, err := u.totpSecretCache.Get(ctx, req.UserID)
 	if err != nil {
 		return false, nil
@@ -145,10 +133,7 @@ type DisableTotpReq struct {
 	Code   string
 }
 
-func (u *TotpUsecase) Disable(
-	ctx context.Context,
-	req *DisableTotpReq,
-) error {
+func (u *TotpUsecase) Disable(ctx context.Context, req *DisableTotpReq) error {
 	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{
 		UserID: &req.UserID,
 	})
@@ -187,10 +172,7 @@ type ConfirmEnableTotpReq struct {
 	Code   string
 }
 
-func (u *TotpUsecase) ConfirmEnable(
-	ctx context.Context,
-	req *ConfirmEnableTotpReq,
-) error {
+func (u *TotpUsecase) ConfirmEnable(ctx context.Context, req *ConfirmEnableTotpReq) error {
 	secret, err := u.totpSecretCache.Get(ctx, req.UserID)
 	if err != nil {
 		return err

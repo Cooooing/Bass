@@ -14,12 +14,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewChatMessageService,
 )
 
-func ProvideServices(
-	commonSystemService *CommonSystemService,
-	chatGroupService *ChatGroupService,
-	chatSessionService *ChatSessionService,
-	chatMessageService *ChatMessageService,
-) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, chatGroupService *ChatGroupService, chatSessionService *ChatSessionService, chatMessageService *ChatMessageService) []server.Service {
 	return []server.Service{
 		commonSystemService,
 		chatGroupService,

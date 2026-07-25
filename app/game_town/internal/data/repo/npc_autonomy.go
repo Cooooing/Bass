@@ -9,10 +9,7 @@ import (
 	"game_town/internal/data/gen/npc"
 )
 
-func (r *NpcRepo) UpdateAutonomy(
-	ctx context.Context,
-	req *bizrepo.NpcAutonomyUpdateReq,
-) (*model.Npc, error) {
+func (r *NpcRepo) UpdateAutonomy(ctx context.Context, req *bizrepo.NpcAutonomyUpdateReq) (*model.Npc, error) {
 	update := r.getClient(ctx).Npc.Update().Where(npc.ID(req.NpcID), npc.Version(req.Version), npc.DeletedAtIsNil())
 	if req.Goal != "" {
 		update.SetGoal(req.Goal)
@@ -33,10 +30,7 @@ func (r *NpcRepo) UpdateAutonomy(
 	})
 }
 
-func (r *NpcRepo) UpdateState(
-	ctx context.Context,
-	req *bizrepo.NpcStateUpdateReq,
-) (*model.Npc, error) {
+func (r *NpcRepo) UpdateState(ctx context.Context, req *bizrepo.NpcStateUpdateReq) (*model.Npc, error) {
 	update := r.getClient(ctx).Npc.Update().Where(npc.ID(req.NpcID), npc.Version(req.Version), npc.DeletedAtIsNil())
 	if req.CurrentLocationID != nil {
 		update.SetCurrentLocationID(*req.CurrentLocationID)

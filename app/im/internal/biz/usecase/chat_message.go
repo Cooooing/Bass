@@ -42,10 +42,7 @@ type SendReq struct {
 	Content      string
 }
 
-func (u *ChatMessageUsecase) Send(
-	ctx context.Context,
-	req *SendReq,
-) error {
+func (u *ChatMessageUsecase) Send(ctx context.Context, req *SendReq) error {
 	switch req.ReceiverType {
 	case enum.ReceiverTypeUser:
 		return u.sendToUser(ctx, &sendToUserReq{
@@ -73,10 +70,7 @@ type sendToUserReq struct {
 	Content     string
 }
 
-func (u *ChatMessageUsecase) sendToUser(
-	ctx context.Context,
-	req *sendToUserReq,
-) error {
+func (u *ChatMessageUsecase) sendToUser(ctx context.Context, req *sendToUserReq) error {
 	senderID := req.SenderID
 	receiverID := req.ReceiverID
 	msgType := req.MessageType
@@ -117,10 +111,7 @@ type sendToGroupReq struct {
 	Content     string
 }
 
-func (u *ChatMessageUsecase) sendToGroup(
-	ctx context.Context,
-	req *sendToGroupReq,
-) error {
+func (u *ChatMessageUsecase) sendToGroup(ctx context.Context, req *sendToGroupReq) error {
 	senderID := req.SenderID
 	groupID := req.GroupID
 	msgType := req.MessageType
@@ -155,10 +146,7 @@ type findOrCreateSessionReq struct {
 	ReceiverID int64
 }
 
-func (u *ChatMessageUsecase) findOrCreateSession(
-	ctx context.Context,
-	req *findOrCreateSessionReq,
-) (*model.ChatSession, error) {
+func (u *ChatMessageUsecase) findOrCreateSession(ctx context.Context, req *findOrCreateSessionReq) (*model.ChatSession, error) {
 	userID := req.UserID
 	receiverID := req.ReceiverID
 	listResp, err := u.chatSessionRepo.List(ctx, &repo.ChatSessionQuery{
@@ -191,10 +179,7 @@ type RevokeReq struct {
 	SenderID  int64
 }
 
-func (u *ChatMessageUsecase) Revoke(
-	ctx context.Context,
-	req *RevokeReq,
-) error {
+func (u *ChatMessageUsecase) Revoke(ctx context.Context, req *RevokeReq) error {
 	msg, err := u.chatMessageRepo.Get(ctx, &repo.ChatMessageQuery{
 		IDs: []int64{req.MessageID},
 	})
@@ -224,10 +209,7 @@ type ChatMessageListResp struct {
 	Page *base.PageResp
 }
 
-func (u *ChatMessageUsecase) List(
-	ctx context.Context,
-	req *ChatMessageListReq,
-) (*ChatMessageListResp, error) {
+func (u *ChatMessageUsecase) List(ctx context.Context, req *ChatMessageListReq) (*ChatMessageListResp, error) {
 	pageResp, err := u.chatMessageRepo.Page(ctx, &repo.ChatMessageQuery{
 		Page:      req.Page,
 		IDs:       req.IDs,

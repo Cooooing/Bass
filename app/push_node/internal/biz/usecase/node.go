@@ -40,9 +40,7 @@ func NewNodeUsecase(
 	}
 }
 
-func (uc *NodeUsecase) ConnectHub(
-	ctx context.Context,
-) error {
+func (uc *NodeUsecase) ConnectHub(ctx context.Context) error {
 	uc.log.Info(fmt.Sprintf("start heartbeat loop: node_id=%s", uc.nodeID))
 	loopCtx, cancel := context.WithCancel(ctx)
 	uc.cancelLoop = cancel
@@ -50,9 +48,7 @@ func (uc *NodeUsecase) ConnectHub(
 	return nil
 }
 
-func (uc *NodeUsecase) Stop(
-	ctx context.Context,
-) error {
+func (uc *NodeUsecase) Stop(ctx context.Context) error {
 	_ = ctx
 	if uc.cancelLoop != nil {
 		uc.cancelLoop()
@@ -61,9 +57,7 @@ func (uc *NodeUsecase) Stop(
 	return nil
 }
 
-func (uc *NodeUsecase) heartbeatLoop(
-	ctx context.Context,
-) {
+func (uc *NodeUsecase) heartbeatLoop(ctx context.Context) {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 	uc.sendHeartbeat(ctx)
@@ -77,9 +71,7 @@ func (uc *NodeUsecase) heartbeatLoop(
 	}
 }
 
-func (uc *NodeUsecase) sendHeartbeat(
-	ctx context.Context,
-) {
+func (uc *NodeUsecase) sendHeartbeat(ctx context.Context) {
 	connectionCount, err := uc.registry.GetConnectionCount(ctx)
 	if err != nil {
 		uc.log.Warn(fmt.Sprintf("get connection count failed: err=%v", err))
@@ -96,11 +88,7 @@ func (uc *NodeUsecase) sendHeartbeat(
 	uc.log.Debug(fmt.Sprintf("heartbeat sent: node_id=%s connections=%d", uc.nodeID, connectionCount))
 }
 
-func RegisterWithHub(
-	ctx context.Context,
-	conn *grpc.ClientConn,
-	conf *config.Bootstrap,
-) (string, error) {
+func RegisterWithHub(ctx context.Context, conn *grpc.ClientConn, conf *config.Bootstrap) (string, error) {
 	client := pushhubv1.NewPushHubNodeServiceClient(conn)
 	var nodeID string
 	var lastErr error

@@ -54,10 +54,7 @@ type ConnectReq struct {
 	Writer http.ResponseWriter
 }
 
-func (uc *SSEUsecase) Connect(
-	ctx context.Context,
-	req *ConnectReq,
-) error {
+func (uc *SSEUsecase) Connect(ctx context.Context, req *ConnectReq) error {
 	tokenData, err := uc.tokenGen.Parse(req.Token)
 	if err != nil {
 		uc.log.Warn("SSE token validation failed")
@@ -112,16 +109,11 @@ func (uc *SSEUsecase) Connect(
 	}
 }
 
-func (uc *SSEUsecase) GetConnectionCount(
-	ctx context.Context,
-) (int64, error) {
+func (uc *SSEUsecase) GetConnectionCount(ctx context.Context) (int64, error) {
 	return uc.registry.GetConnectionCount(ctx)
 }
 
-func (uc *SSEUsecase) HandleNATSMessage(
-	ctx context.Context,
-	message *client.Message,
-) error {
+func (uc *SSEUsecase) HandleNATSMessage(ctx context.Context, message *client.Message) error {
 	_ = ctx
 	var event struct {
 		UserID  int64  `json:"user_id"`

@@ -18,10 +18,7 @@ func NewLocationUsecase(
 	}
 }
 
-func (u *LocationUsecase) GetCurrentLocation(
-	ctx context.Context,
-	userID int64,
-) (*bbsuserv1.GetCurrentLocation_Resp_Location, error) {
+func (u *LocationUsecase) GetCurrentLocation(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentLocation_Resp_Location, error) {
 	reply, err := u.locationClient.GetCurrentLocation(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -45,10 +42,7 @@ type UpsertCurrentLocationReq struct {
 	City     *string
 }
 
-func (u *LocationUsecase) UpsertCurrentLocation(
-	ctx context.Context,
-	req *UpsertCurrentLocationReq,
-) (*bbsuserv1.UpsertCurrentLocation_Resp_Location, error) {
+func (u *LocationUsecase) UpsertCurrentLocation(ctx context.Context, req *UpsertCurrentLocationReq) (*bbsuserv1.UpsertCurrentLocation_Resp_Location, error) {
 	reply, err := u.locationClient.UpsertCurrentLocation(ctx, &repo.UpsertCurrentLocationReq{
 		UserID:   req.UserID,
 		Country:  req.Country,

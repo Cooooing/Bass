@@ -5,10 +5,7 @@ import (
 	"common/proto/gen/common"
 )
 
-func LoadConfig(
-	bootstrapPath string,
-	path string,
-) (*Bootstrap, *common.Bootstrap, func(), error) {
+func LoadConfig(bootstrapPath string, path string) (*Bootstrap, *common.Bootstrap, func(), error) {
 	c, bc, hot, cleanup, err := commonserver.LoadConfig[*Bootstrap](bootstrapPath, path)
 	if err != nil {
 		return nil, nil, cleanup, err

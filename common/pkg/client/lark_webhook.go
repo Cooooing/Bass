@@ -39,10 +39,7 @@ func NewLarkWebhookClient(
 	}
 }
 
-func (c *LarkWebhookClient) SendText(
-	ctx context.Context,
-	req *LarkWebhookRequest,
-) error {
+func (c *LarkWebhookClient) SendText(ctx context.Context, req *LarkWebhookRequest) error {
 	if req == nil || strings.TrimSpace(req.Token) == "" || strings.TrimSpace(req.Text) == "" {
 		return nil
 	}
@@ -91,10 +88,7 @@ func (c *LarkWebhookClient) SendText(
 	return nil
 }
 
-func (c *LarkWebhookClient) sign(
-	secret string,
-	timestamp int64,
-) string {
+func (c *LarkWebhookClient) sign(secret string, timestamp int64) string {
 	stringToSign := fmt.Sprintf("%d", timestamp) + "\n" + secret
 	h := hmac.New(sha256.New, []byte(stringToSign))
 	_, _ = h.Write(nil)

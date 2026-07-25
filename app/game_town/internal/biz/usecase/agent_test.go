@@ -14,9 +14,7 @@ import (
 	"google.golang.org/protobuf/types/known/durationpb"
 )
 
-func TestFairAgentJobsPrioritizesAndRoundsWorlds(
-	t *testing.T,
-) {
+func TestFairAgentJobsPrioritizesAndRoundsWorlds(t *testing.T) {
 	jobs := []*model.AgentJob{
 		{ID: 1, WorldID: 10, Priority: enum.AgentJobPriorityHigh},
 		{ID: 2, WorldID: 10, Priority: enum.AgentJobPriorityHigh},
@@ -31,9 +29,7 @@ func TestFairAgentJobsPrioritizesAndRoundsWorlds(
 	}
 }
 
-func TestFairAgentJobsRotatesStartingWorld(
-	t *testing.T,
-) {
+func TestFairAgentJobsRotatesStartingWorld(t *testing.T) {
 	jobs := []*model.AgentJob{
 		{ID: 1, WorldID: 10, Priority: enum.AgentJobPriorityHigh},
 		{ID: 2, WorldID: 20, Priority: enum.AgentJobPriorityHigh},
@@ -47,9 +43,7 @@ func TestFairAgentJobsRotatesStartingWorld(
 	}
 }
 
-func TestPromoteOverdueTickJobsPreventsLowPriorityStarvation(
-	t *testing.T,
-) {
+func TestPromoteOverdueTickJobsPreventsLowPriorityStarvation(t *testing.T) {
 	now := time.Now()
 	runner := &WorldAgentRunner{
 		conf: &config.Bootstrap{
@@ -73,9 +67,7 @@ func TestPromoteOverdueTickJobsPreventsLowPriorityStarvation(
 	}
 }
 
-func TestSchedulerOrderPromotesOverdueTickBeforeHighPriorityBacklog(
-	t *testing.T,
-) {
+func TestSchedulerOrderPromotesOverdueTickBeforeHighPriorityBacklog(t *testing.T) {
 	now := time.Now()
 	runner := &WorldAgentRunner{
 		conf: &config.Bootstrap{
@@ -99,9 +91,7 @@ func TestSchedulerOrderPromotesOverdueTickBeforeHighPriorityBacklog(
 	}
 }
 
-func TestTickScanInterval(
-	t *testing.T,
-) {
+func TestTickScanInterval(t *testing.T) {
 	tests := []struct {
 		name         string
 		tickInterval time.Duration
@@ -129,9 +119,7 @@ func TestTickScanInterval(
 	}
 }
 
-func TestNormalizeModelTextUsesRuneLimit(
-	t *testing.T,
-) {
+func TestNormalizeModelTextUsesRuneLimit(t *testing.T) {
 	value := "  " + strings.Repeat("雾", maxCurrentArcRunes+20) + "  "
 	got := normalizeModelText(value, maxCurrentArcRunes)
 	if len([]rune(got)) != maxCurrentArcRunes {
@@ -142,9 +130,7 @@ func TestNormalizeModelTextUsesRuneLimit(
 	}
 }
 
-func jobIDs(
-	jobs []*model.AgentJob,
-) []int64 {
+func jobIDs(jobs []*model.AgentJob) []int64 {
 	return lo.Map(jobs, func(job *model.AgentJob, _ int) int64 {
 		return job.ID
 	})

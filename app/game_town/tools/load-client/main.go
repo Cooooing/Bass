@@ -142,10 +142,7 @@ func parseFlags() config {
 	return conf
 }
 
-func checkGameTownHealth(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-) error {
+func checkGameTownHealth(ctx context.Context, client *rpc.GameTownClient) error {
 	if client == nil || client.System == nil {
 		return errors.New("system health client is nil")
 	}
@@ -162,11 +159,7 @@ func checkGameTownHealth(
 	return nil
 }
 
-func run(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	conf config,
-) (*runState, error) {
+func run(ctx context.Context, client *rpc.GameTownClient, conf config) (*runState, error) {
 	state := &runState{
 		playerSeq:   make(map[int64]uint64),
 		seenEvent:   make(map[int64]bool),
@@ -229,11 +222,7 @@ func run(
 	return state, nil
 }
 
-func ensureAgentConfig(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	conf config,
-) (int64, error) {
+func ensureAgentConfig(ctx context.Context, client *rpc.GameTownClient, conf config) (int64, error) {
 	name := "load-local-ollama-" + strings.NewReplacer(":", "-", "/", "-", ".", "-").Replace(conf.model)
 	created, err := client.AgentConfig.Create(ctx, &v1.CreateGameTownAgentConfig_Request{
 		Name:           name,
@@ -265,11 +254,7 @@ func ensureAgentConfig(
 	return 0, fmt.Errorf("create config failed and reusable config not found: %w", err)
 }
 
-func registerPlayers(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	count int,
-) ([]playerState, error) {
+func registerPlayers(ctx context.Context, client *rpc.GameTownClient, count int) ([]playerState, error) {
 	players := make([]playerState, 0, count)
 	runID := time.Now().Format("20060102150405")
 	for i := range count {
@@ -291,12 +276,7 @@ func registerPlayers(
 	return players, nil
 }
 
-func waitWorldReady(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-	interval time.Duration,
-) error {
+func waitWorldReady(ctx context.Context, client *rpc.GameTownClient, state *runState, interval time.Duration) error {
 	for {
 		if err := collectEvents(ctx, client, state); err != nil {
 			return err
@@ -322,11 +302,7 @@ func waitWorldReady(
 	}
 }
 
-func joinPlayers(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-) error {
+func joinPlayers(ctx context.Context, client *rpc.GameTownClient, state *runState) error {
 	for i := range state.players {
 		preference := characterPreference(i)
 		reply, err := retryRPC(ctx, "join world", func() (*v1.JoinGameTownWorld_Resp, error) {
@@ -346,13 +322,7 @@ func joinPlayers(
 	return collectEvents(ctx, client, state)
 }
 
-func startWatchers(
-	ctx context.Context,
-	wg *sync.WaitGroup,
-	client *rpc.GameTownClient,
-	state *runState,
-	retryDelay time.Duration,
-) {
+func startWatchers(ctx context.Context, wg *sync.WaitGroup, client *rpc.GameTownClient, state *runState, retryDelay time.Duration) {
 	for _, player := range state.players {
 		playerID := player.id
 		wg.Add(1)
@@ -363,13 +333,7 @@ func startWatchers(
 	}
 }
 
-func watchPlayer(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-	playerID int64,
-	retryDelay time.Duration,
-) {
+func watchPlayer(ctx context.Context, client *rpc.GameTownClient, state *runState, playerID int64, retryDelay time.Duration) {
 	for ctx.Err() == nil {
 		afterSequence := state.lastSequence(playerID)
 		stream, err := client.Event.Watch(ctx, &v1.WatchGameTownEvents_Request{
@@ -400,10 +364,7 @@ func watchPlayer(
 	}
 }
 
-func retryableWatchError(
-	ctx context.Context,
-	err error,
-) bool {
+func retryableWatchError(ctx context.Context, err error) bool {
 	if err == nil || ctx.Err() != nil {
 		return false
 	}
@@ -413,10 +374,7 @@ func retryableWatchError(
 	return retryableRPCError(ctx, err)
 }
 
-func retryableRPCError(
-	ctx context.Context,
-	err error,
-) bool {
+func retryableRPCError(ctx context.Context, err error) bool {
 	if err == nil || ctx.Err() != nil {
 		return false
 	}
@@ -433,12 +391,7 @@ func retryableRPCError(
 		strings.Contains(message, "rejecting connections")
 }
 
-func waitCharactersReady(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-	interval time.Duration,
-) error {
+func waitCharactersReady(ctx context.Context, client *rpc.GameTownClient, state *runState, interval time.Duration) error {
 	for {
 		if err := collectEvents(ctx, client, state); err != nil {
 			return err
@@ -470,12 +423,7 @@ func waitCharactersReady(
 	}
 }
 
-func playRounds(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-	conf config,
-) error {
+func playRounds(ctx context.Context, client *rpc.GameTownClient, state *runState, conf config) error {
 	for round := 1; round <= conf.rounds; round++ {
 		playerIndex := (round - 1) % len(state.players)
 		player := state.players[playerIndex]
@@ -510,14 +458,7 @@ func playRounds(
 	return waitAsyncSettled(ctx, client, state, conf)
 }
 
-func nextAction(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-	player playerState,
-	round int,
-	conf config,
-) (string, []*v1.SubmitGameTownAction_Request_EntityRef, bool, error) {
+func nextAction(ctx context.Context, client *rpc.GameTownClient, state *runState, player playerState, round int, conf config) (string, []*v1.SubmitGameTownAction_Request_EntityRef, bool, error) {
 	if round <= len(state.players) {
 		content, targets, ok, err := npcTalkAction(ctx, client, state, player)
 		if err != nil {
@@ -552,12 +493,7 @@ func nextAction(
 	return smallAction(round), nil, false, nil
 }
 
-func moveAction(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-	player playerState,
-) (string, []*v1.SubmitGameTownAction_Request_EntityRef, bool, error) {
+func moveAction(ctx context.Context, client *rpc.GameTownClient, state *runState, player playerState) (string, []*v1.SubmitGameTownAction_Request_EntityRef, bool, error) {
 	locations, err := retryRPC(ctx, "list locations", func() (*v1.ListGameTownLocations_Resp, error) {
 		return client.Location.List(ctx, &v1.ListGameTownLocations_Request{
 			WorldId:  state.worldID,
@@ -582,18 +518,11 @@ func moveAction(
 	return "", nil, false, nil
 }
 
-func shouldTalkToNpc(
-	round int,
-) bool {
+func shouldTalkToNpc(round int) bool {
 	return round%40 == 0
 }
 
-func npcTalkAction(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-	player playerState,
-) (string, []*v1.SubmitGameTownAction_Request_EntityRef, bool, error) {
+func npcTalkAction(ctx context.Context, client *rpc.GameTownClient, state *runState, player playerState) (string, []*v1.SubmitGameTownAction_Request_EntityRef, bool, error) {
 	npcs, err := retryRPC(ctx, "list npcs", func() (*v1.ListGameTownNpcs_Resp, error) {
 		return client.Npc.List(ctx, &v1.ListGameTownNpcs_Request{
 			WorldId:    state.worldID,
@@ -624,12 +553,7 @@ func npcTalkAction(
 	return content, targets, true, nil
 }
 
-func waitAsyncSettled(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-	conf config,
-) error {
+func waitAsyncSettled(ctx context.Context, client *rpc.GameTownClient, state *runState, conf config) error {
 	if !conf.strict {
 		for i := 0; i < 3; i++ {
 			if err := collectEvents(ctx, client, state); err != nil {
@@ -689,11 +613,7 @@ func waitAsyncSettled(
 	}
 }
 
-func strictAsyncSatisfied(
-	stats runStats,
-	playerStats map[int64]playerRunStats,
-	conf config,
-) bool {
+func strictAsyncSatisfied(stats runStats, playerStats map[int64]playerRunStats, conf config) bool {
 	if stats.characterReady < conf.players || stats.streamEvents == 0 {
 		return false
 	}
@@ -721,9 +641,7 @@ func strictAsyncSatisfied(
 	return validatePlayerStats(playerStats, conf) == nil
 }
 
-func strictSettleTimeout(
-	conf config,
-) time.Duration {
+func strictSettleTimeout(conf config) time.Duration {
 	if conf.settleTimeout > 0 {
 		return conf.settleTimeout
 	}
@@ -739,21 +657,15 @@ func strictSettleTimeout(
 	return 5 * time.Minute
 }
 
-func feedbackCount(
-	stats runStats,
-) int {
+func feedbackCount(stats runStats) int {
 	return stats.npcReplies + stats.resolved + stats.rejected + stats.clarification
 }
 
-func worldEvolutionCount(
-	stats runStats,
-) int {
+func worldEvolutionCount(stats runStats) int {
 	return stats.worldEvolved + stats.npcPlanned + stats.worldTicks
 }
 
-func minTotalFeedback(
-	conf config,
-) int {
+func minTotalFeedback(conf config) int {
 	value := conf.rounds / 4
 	if conf.rounds >= 1000 {
 		value = conf.rounds / 3
@@ -764,10 +676,7 @@ func minTotalFeedback(
 	return value
 }
 
-func minPlayerFeedback(
-	player playerRunStats,
-	conf config,
-) int {
+func minPlayerFeedback(player playerRunStats, conf config) int {
 	value := player.submitted / 4
 	if conf.rounds >= 1000 {
 		value = player.submitted / 3
@@ -778,9 +687,7 @@ func minPlayerFeedback(
 	return value
 }
 
-func minWorldEvolution(
-	conf config,
-) int {
+func minWorldEvolution(conf config) int {
 	if conf.rounds >= 1000 {
 		value := conf.rounds / 100
 		if value < 10 {
@@ -797,9 +704,7 @@ func minWorldEvolution(
 	return 0
 }
 
-func minWorldEvolved(
-	conf config,
-) int {
+func minWorldEvolved(conf config) int {
 	if conf.rounds >= 1000 {
 		return 5
 	}
@@ -809,11 +714,7 @@ func minWorldEvolved(
 	return 0
 }
 
-func collectEvents(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-) error {
+func collectEvents(ctx context.Context, client *rpc.GameTownClient, state *runState) error {
 	for _, player := range state.players {
 		reply, err := pageEventsWithRetry(ctx, client, state, player.id)
 		if err != nil {
@@ -826,11 +727,7 @@ func collectEvents(
 	return nil
 }
 
-func retryRPC[T any](
-	ctx context.Context,
-	operation string,
-	call func() (T, error),
-) (T, error) {
+func retryRPC[T any](ctx context.Context, operation string, call func() (T, error)) (T, error) {
 	var zero T
 	var lastErr error
 	for attempt := 1; attempt <= 10; attempt++ {
@@ -849,12 +746,7 @@ func retryRPC[T any](
 	return zero, fmt.Errorf("%s failed after retries: %w", operation, lastErr)
 }
 
-func pageEventsWithRetry(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	state *runState,
-	playerID int64,
-) (*v1.PageGameTownEvents_Resp, error) {
+func pageEventsWithRetry(ctx context.Context, client *rpc.GameTownClient, state *runState, playerID int64) (*v1.PageGameTownEvents_Resp, error) {
 	var lastErr error
 	for attempt := 1; attempt <= 10; attempt++ {
 		afterSequence := state.lastSequence(playerID)
@@ -881,17 +773,13 @@ func pageEventsWithRetry(
 	return nil, lastErr
 }
 
-func (s *runState) lastSequence(
-	playerID int64,
-) uint64 {
+func (s *runState) lastSequence(playerID int64) uint64 {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return s.playerSeq[playerID]
 }
 
-func (s *runState) initPlayerStats(
-	players []playerState,
-) {
+func (s *runState) initPlayerStats(players []playerState) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	for _, player := range players {
@@ -901,10 +789,7 @@ func (s *runState) initPlayerStats(
 	}
 }
 
-func (s *runState) recordSubmitted(
-	playerID int64,
-	bigEvent bool,
-) {
+func (s *runState) recordSubmitted(playerID int64, bigEvent bool) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.stats.submittedActions++
@@ -914,12 +799,7 @@ func (s *runState) recordSubmitted(
 	}
 }
 
-func (s *runState) recordPageEvent(
-	playerID int64,
-	eventID int64,
-	sequence uint64,
-	eventType v1enum.GameTownEventType,
-) {
+func (s *runState) recordPageEvent(playerID int64, eventID int64, sequence uint64, eventType v1enum.GameTownEventType) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.stats.pageEvents++
@@ -927,12 +807,7 @@ func (s *runState) recordPageEvent(
 	s.recordEventLocked(playerID, eventID, sequence, eventType)
 }
 
-func (s *runState) recordStreamEvent(
-	playerID int64,
-	eventID int64,
-	sequence uint64,
-	eventType v1enum.GameTownEventType,
-) {
+func (s *runState) recordStreamEvent(playerID int64, eventID int64, sequence uint64, eventType v1enum.GameTownEventType) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.stats.streamEvents++
@@ -946,9 +821,7 @@ func (s *runState) recordStreamError() {
 	s.stats.streamErrors++
 }
 
-func (s *runState) recordStreamReconnect(
-	err error,
-) {
+func (s *runState) recordStreamReconnect(err error) {
 	if err == nil || errors.Is(err, context.Canceled) {
 		return
 	}
@@ -957,12 +830,7 @@ func (s *runState) recordStreamReconnect(
 	s.stats.streamReconnects++
 }
 
-func (s *runState) recordEventLocked(
-	playerID int64,
-	eventID int64,
-	sequence uint64,
-	eventType v1enum.GameTownEventType,
-) {
+func (s *runState) recordEventLocked(playerID int64, eventID int64, sequence uint64, eventType v1enum.GameTownEventType) {
 	if sequence <= s.playerSeq[playerID] {
 		return
 	}
@@ -977,9 +845,7 @@ func (s *runState) recordEventLocked(
 	countEvent(&s.stats, eventType)
 }
 
-func (s *runState) ensurePlayerStatsLocked(
-	playerID int64,
-) *playerRunStats {
+func (s *runState) ensurePlayerStatsLocked(playerID int64) *playerRunStats {
 	if s.playerStats == nil {
 		s.playerStats = make(map[int64]*playerRunStats)
 	}
@@ -1010,10 +876,7 @@ func (s *runState) snapshotPlayerStats() map[int64]playerRunStats {
 	return result
 }
 
-func countEvent(
-	stats *runStats,
-	eventType v1enum.GameTownEventType,
-) {
+func countEvent(stats *runStats, eventType v1enum.GameTownEventType) {
 	switch eventType {
 	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_REPLIED:
 		stats.npcReplies++
@@ -1036,10 +899,7 @@ func countEvent(
 	}
 }
 
-func countPlayerEvent(
-	stats *playerRunStats,
-	eventType v1enum.GameTownEventType,
-) {
+func countPlayerEvent(stats *playerRunStats, eventType v1enum.GameTownEventType) {
 	switch eventType {
 	case v1enum.GameTownEventType_GAME_TOWN_EVENT_TYPE_NPC_REPLIED:
 		stats.npcReplies++
@@ -1052,10 +912,7 @@ func countPlayerEvent(
 	}
 }
 
-func validateRun(
-	state *runState,
-	conf config,
-) error {
+func validateRun(state *runState, conf config) error {
 	stats := state.snapshotStats()
 	if stats.submittedActions != conf.rounds {
 		return fmt.Errorf("submitted action count mismatch: got=%d want=%d", stats.submittedActions, conf.rounds)
@@ -1096,10 +953,7 @@ func validateRun(
 	return validatePlayerStats(state.snapshotPlayerStats(), conf)
 }
 
-func validatePlayerStats(
-	stats map[int64]playerRunStats,
-	conf config,
-) error {
+func validatePlayerStats(stats map[int64]playerRunStats, conf config) error {
 	if len(stats) < conf.players {
 		return fmt.Errorf("strict validation failed: player stats count=%d players=%d", len(stats), conf.players)
 	}
@@ -1132,9 +986,7 @@ func validatePlayerStats(
 	return nil
 }
 
-func newGameTownClient(
-	conf config,
-) (*rpc.GameTownClient, func(), string, error) {
+func newGameTownClient(conf config) (*rpc.GameTownClient, func(), string, error) {
 	if conf.addr != "" {
 		conn, err := grpc.NewClient(conf.addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
@@ -1159,9 +1011,7 @@ func newGameTownClient(
 	return client, cleanup, "consul://" + conf.consulAddr + "/" + constant.GameTownServiceName.String(), nil
 }
 
-func printReport(
-	state *runState,
-) {
+func printReport(state *runState) {
 	stats := state.snapshotStats()
 	playerStats := state.snapshotPlayerStats()
 	fmt.Println("\nGame Town load test report")
@@ -1190,9 +1040,7 @@ func defaultWorldDescription() string {
 	return "A floating-islands steam fantasy world. Broken continents drift through storm routes. Cloud whales, a machine church, airship guilds, and exiled royal houses compete for wind cores that can stabilize the islands. Recently the sky rift has widened, some islands have started to fall, and the sleeping cloud whales are sending warnings. The world evolves even without player input; people can grow, get hurt, ally, betray, disappear, or die, and locations and factions can change through disasters, wars, trade, and secret operations."
 }
 
-func characterPreference(
-	index int,
-) string {
+func characterPreference(index int) string {
 	values := []string{
 		"I want to play an airship mechanic who can hear cloud whale songs and read omens in engine noise.",
 		"I want to play a young courier from the exiled royal houses who carries a secret wind-core diagram.",
@@ -1201,9 +1049,7 @@ func characterPreference(
 	return values[index%len(values)]
 }
 
-func smallAction(
-	round int,
-) string {
+func smallAction(round int) string {
 	values := []string{
 		"I gather rumors nearby and record which faction has moved strangely.",
 		"I observe the sky rift and try to predict the next dangerous area.",
@@ -1213,9 +1059,7 @@ func smallAction(
 	return values[round%len(values)]
 }
 
-func bigEvent(
-	round int,
-) string {
+func bigEvent(round int) string {
 	values := []string{
 		"Major event: an outer floating island starts falling, refugees flood into the main harbor, and the airship guild demands control of the route.",
 		"Major event: the machine church announces a new wind-core fragment and locks down the news, triggering conflict with royal exiles and merchants.",
@@ -1225,16 +1069,11 @@ func bigEvent(
 	return values[(round/100)%len(values)]
 }
 
-func stringPtr(
-	value string,
-) *string {
+func stringPtr(value string) *string {
 	return &value
 }
 
-func sleepContext(
-	ctx context.Context,
-	duration time.Duration,
-) error {
+func sleepContext(ctx context.Context, duration time.Duration) error {
 	timer := time.NewTimer(duration)
 	defer timer.Stop()
 	select {
@@ -1245,10 +1084,7 @@ func sleepContext(
 	}
 }
 
-func envDefault(
-	key string,
-	fallback string,
-) string {
+func envDefault(key string, fallback string) string {
 	value := os.Getenv(key)
 	if value == "" {
 		return fallback
@@ -1256,10 +1092,7 @@ func envDefault(
 	return value
 }
 
-func fatal(
-	format string,
-	args ...any,
-) {
+func fatal(format string, args ...any) {
 	_, _ = fmt.Fprintf(os.Stderr, format+"\n", args...)
 	os.Exit(1)
 }

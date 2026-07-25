@@ -24,10 +24,7 @@ func NewContentUsecase(
 	}
 }
 
-func (d *ContentUsecase) Adds(
-	ctx context.Context,
-	domains []*model.Domain,
-) ([]*model.Domain, error) {
+func (d *ContentUsecase) Adds(ctx context.Context, domains []*model.Domain) ([]*model.Domain, error) {
 	var (
 		rows []*model.Domain
 		err  error
@@ -46,10 +43,7 @@ func (d *ContentUsecase) Adds(
 	return rows, nil
 }
 
-func (d *ContentUsecase) Update(
-	ctx context.Context,
-	domain *model.Domain,
-) (*model.Domain, error) {
+func (d *ContentUsecase) Update(ctx context.Context, domain *model.Domain) (*model.Domain, error) {
 	var (
 		updated *model.Domain
 		err     error
@@ -84,10 +78,7 @@ type DomainPageResp struct {
 	Page *base.PageResp
 }
 
-func (d *ContentUsecase) Page(
-	ctx context.Context,
-	req *DomainPageReq,
-) (*DomainPageResp, error) {
+func (d *ContentUsecase) Page(ctx context.Context, req *DomainPageReq) (*DomainPageResp, error) {
 	if req == nil {
 		req = &DomainPageReq{}
 	}

@@ -118,12 +118,7 @@ func (o *Observer) Service() string {
 	return o.service
 }
 
-func SetupTracing(
-	ctx context.Context,
-	serviceName string,
-	version string,
-	traceConf *common.Trace,
-) (func(context.Context) error, error) {
+func SetupTracing(ctx context.Context, serviceName string, version string, traceConf *common.Trace) (func(context.Context) error, error) {
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
 	res, err := resource.New(ctx, resource.WithAttributes(semconv.ServiceName(serviceName), semconv.ServiceVersion(version)))
@@ -242,9 +237,7 @@ func (o *Observer) ServerMiddleware() middleware.Middleware {
 	}
 }
 
-func (o *Observer) ClientMiddleware(
-	target string,
-) middleware.Middleware {
+func (o *Observer) ClientMiddleware(target string) middleware.Middleware {
 	if target == "" {
 		target = "unknown"
 	}

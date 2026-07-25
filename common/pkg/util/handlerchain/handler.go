@@ -18,17 +18,12 @@ type BaseHandler[T any] struct {
 }
 
 // SetNext 设置下一个 Handler
-func (b *BaseHandler[T]) SetNext(
-	next Handler[T],
-) {
+func (b *BaseHandler[T]) SetNext(next Handler[T]) {
 	b.next = next
 }
 
 // Next 调用下一个 Handler
-func (b *BaseHandler[T]) Next(
-	ctx context.Context,
-	data T,
-) (T, error) {
+func (b *BaseHandler[T]) Next(ctx context.Context, data T) (T, error) {
 	if b.next != nil {
 		return b.next.Handle(ctx, data)
 	}
@@ -41,9 +36,7 @@ func (b *BaseHandler[T]) Name() string {
 }
 
 // NewBaseHandler 创建一个带名字的 BaseHandler
-func NewBaseHandler[T any](
-	name string,
-) BaseHandler[T] {
+func NewBaseHandler[T any](name string) BaseHandler[T] {
 	return BaseHandler[T]{
 		name: name,
 	}

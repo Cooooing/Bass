@@ -28,19 +28,14 @@ func NewCommentActionRecordRepo(
 	}
 }
 
-func (r *CommentActionRecordRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *CommentActionRecordRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *CommentActionRecordRepo) Save(
-	ctx context.Context,
-	record *model.CommentActionRecord,
-) (bool, error) {
+func (r *CommentActionRecordRepo) Save(ctx context.Context, record *model.CommentActionRecord) (bool, error) {
 	_, err := r.getClient(ctx).CommentActionRecord.Create().
 		SetCommentID(record.CommentID).
 		SetUserID(record.UserID).
@@ -55,10 +50,7 @@ func (r *CommentActionRecordRepo) Save(
 	return true, nil
 }
 
-func (r *CommentActionRecordRepo) Delete(
-	ctx context.Context,
-	req *repo.CommentActionRecordDeleteReq,
-) (int, error) {
+func (r *CommentActionRecordRepo) Delete(ctx context.Context, req *repo.CommentActionRecordDeleteReq) (int, error) {
 	commentId := req.CommentID
 	userId := req.UserID
 	action := req.Action
@@ -73,10 +65,7 @@ func (r *CommentActionRecordRepo) Delete(
 	return deleted, nil
 }
 
-func (r *CommentActionRecordRepo) Exist(
-	ctx context.Context,
-	req *repo.CommentActionRecordReq,
-) (bool, error) {
+func (r *CommentActionRecordRepo) Exist(ctx context.Context, req *repo.CommentActionRecordReq) (bool, error) {
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
 	exist, err := query.Exist(ctx)
@@ -86,10 +75,7 @@ func (r *CommentActionRecordRepo) Exist(
 	return exist, nil
 }
 
-func (r *CommentActionRecordRepo) Get(
-	ctx context.Context,
-	req *repo.CommentActionRecordReq,
-) (*model.CommentActionRecord, error) {
+func (r *CommentActionRecordRepo) Get(ctx context.Context, req *repo.CommentActionRecordReq) (*model.CommentActionRecord, error) {
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
 	row, err := query.First(ctx)
@@ -107,10 +93,7 @@ func (r *CommentActionRecordRepo) Get(
 	}, nil
 }
 
-func (r *CommentActionRecordRepo) List(
-	ctx context.Context,
-	req *repo.CommentActionRecordReq,
-) ([]*model.CommentActionRecord, error) {
+func (r *CommentActionRecordRepo) List(ctx context.Context, req *repo.CommentActionRecordReq) ([]*model.CommentActionRecord, error) {
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -129,10 +112,7 @@ func (r *CommentActionRecordRepo) List(
 	return rows, nil
 }
 
-func (r *CommentActionRecordRepo) Map(
-	ctx context.Context,
-	req *repo.CommentActionRecordReq,
-) (map[int64]*model.CommentActionRecord, error) {
+func (r *CommentActionRecordRepo) Map(ctx context.Context, req *repo.CommentActionRecordReq) (map[int64]*model.CommentActionRecord, error) {
 	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -142,10 +122,7 @@ func (r *CommentActionRecordRepo) Map(
 	}), nil
 }
 
-func (r *CommentActionRecordRepo) Count(
-	ctx context.Context,
-	req *repo.CommentActionRecordReq,
-) (int, error) {
+func (r *CommentActionRecordRepo) Count(ctx context.Context, req *repo.CommentActionRecordReq) (int, error) {
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -155,10 +132,7 @@ func (r *CommentActionRecordRepo) Count(
 	return count, nil
 }
 
-func (r *CommentActionRecordRepo) Page(
-	ctx context.Context,
-	req *repo.CommentActionRecordReq,
-) (*repo.CommentActionRecordPageResp, error) {
+func (r *CommentActionRecordRepo) Page(ctx context.Context, req *repo.CommentActionRecordReq) (*repo.CommentActionRecordPageResp, error) {
 	page := normalizePage(req.Page)
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
@@ -192,10 +166,7 @@ func (r *CommentActionRecordRepo) Page(
 	}, nil
 }
 
-func (r *CommentActionRecordRepo) getQuery(
-	query *gen.CommentActionRecordQuery,
-	req *repo.CommentActionRecordReq,
-) *gen.CommentActionRecordQuery {
+func (r *CommentActionRecordRepo) getQuery(query *gen.CommentActionRecordQuery, req *repo.CommentActionRecordReq) *gen.CommentActionRecordQuery {
 	if req == nil {
 		return query
 	}

@@ -13,9 +13,7 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func TestTaskLockRepoScheduleExclusiveAndRunningHeartbeat(
-	t *testing.T,
-) {
+func TestTaskLockRepoScheduleExclusiveAndRunningHeartbeat(t *testing.T) {
 	redisServer := miniredis.RunT(t)
 	redisClient := redis.NewClient(&redis.Options{
 		Addr: redisServer.Addr(),

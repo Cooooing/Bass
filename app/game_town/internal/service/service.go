@@ -19,17 +19,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewEventService,
 )
 
-func ProvideServices(
-	system *CommonSystemService,
-	agentConfig *AgentConfigService,
-	player *PlayerService,
-	world *WorldService,
-	worldMember *WorldMemberService,
-	npc *NpcService,
-	location *LocationService,
-	faction *FactionService,
-	event *EventService,
-) []server.Service {
+func ProvideServices(system *CommonSystemService, agentConfig *AgentConfigService, player *PlayerService, world *WorldService, worldMember *WorldMemberService, npc *NpcService, location *LocationService, faction *FactionService, event *EventService) []server.Service {
 	return []server.Service{
 		system,
 		agentConfig,

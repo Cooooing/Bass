@@ -21,10 +21,7 @@ func NewNatsEventClient(
 	}
 }
 
-func (p *NatsEventClient) Publish(
-	ctx context.Context,
-	msg *repo.EventClientMessage,
-) error {
+func (p *NatsEventClient) Publish(ctx context.Context, msg *repo.EventClientMessage) error {
 	if msg == nil {
 		return fmt.Errorf("event message is nil")
 	}

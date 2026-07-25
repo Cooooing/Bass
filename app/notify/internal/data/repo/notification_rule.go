@@ -27,19 +27,14 @@ func NewNotificationRuleRepo(
 	}
 }
 
-func (r *NotificationRuleRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *NotificationRuleRepo) getClient(ctx context.Context) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *NotificationRuleRepo) Get(
-	ctx context.Context,
-	req *bizrepo.NotificationRuleQuery,
-) (*model.NotificationRule, error) {
+func (r *NotificationRuleRepo) Get(ctx context.Context, req *bizrepo.NotificationRuleQuery) (*model.NotificationRule, error) {
 	list, err := r.List(ctx, notificationRuleGetQuery(req))
 	if err != nil || len(list) == 0 {
 		return nil, err
@@ -47,10 +42,7 @@ func (r *NotificationRuleRepo) Get(
 	return list[0], nil
 }
 
-func (r *NotificationRuleRepo) List(
-	ctx context.Context,
-	req *bizrepo.NotificationRuleQuery,
-) ([]*model.NotificationRule, error) {
+func (r *NotificationRuleRepo) List(ctx context.Context, req *bizrepo.NotificationRuleQuery) ([]*model.NotificationRule, error) {
 	query := r.getClient(ctx).NotificationRule.Query()
 	query = r.getQuery(query, notificationRuleListQuery(req))
 	list, err := query.
@@ -70,10 +62,7 @@ func (r *NotificationRuleRepo) List(
 	return rules, nil
 }
 
-func (r *NotificationRuleRepo) Map(
-	ctx context.Context,
-	req *bizrepo.NotificationRuleQuery,
-) (map[int64]*model.
+func (r *NotificationRuleRepo) Map(ctx context.Context, req *bizrepo.NotificationRuleQuery) (map[int64]*model.
 	NotificationRule, error) {
 	list, err := r.List(ctx, notificationRuleMapQuery(req))
 	if err != nil {
@@ -86,10 +75,7 @@ func (r *NotificationRuleRepo) Map(
 	return result, nil
 }
 
-func (r *NotificationRuleRepo) Count(
-	ctx context.Context,
-	req *bizrepo.NotificationRuleQuery,
-) (int, error) {
+func (r *NotificationRuleRepo) Count(ctx context.Context, req *bizrepo.NotificationRuleQuery) (int, error) {
 	query := r.getClient(ctx).NotificationRule.Query()
 	query = r.getQuery(query, notificationRuleCountQuery(req))
 	count, err := query.Count(ctx)
@@ -99,10 +85,7 @@ func (r *NotificationRuleRepo) Count(
 	return count, nil
 }
 
-func (r *NotificationRuleRepo) Page(
-	ctx context.Context,
-	req *bizrepo.NotificationRuleQuery,
-) (*bizrepo.NotificationRulePageResp, error) {
+func (r *NotificationRuleRepo) Page(ctx context.Context, req *bizrepo.NotificationRuleQuery) (*bizrepo.NotificationRulePageResp, error) {
 	queryReq := notificationRulePageQuery(req)
 	var pageReq *base.PageRequest
 	if queryReq != nil {
@@ -141,10 +124,7 @@ func (r *NotificationRuleRepo) Page(
 	}, nil
 }
 
-func (r *NotificationRuleRepo) getQuery(
-	query *gen.NotificationRuleQuery,
-	req *bizrepo.NotificationRuleQuery,
-) *gen.NotificationRuleQuery {
+func (r *NotificationRuleRepo) getQuery(query *gen.NotificationRuleQuery, req *bizrepo.NotificationRuleQuery) *gen.NotificationRuleQuery {
 	if req == nil {
 		return query
 	}
@@ -169,44 +149,32 @@ func (r *NotificationRuleRepo) getQuery(
 	return query
 }
 
-func notificationRuleGetQuery(
-	query *bizrepo.NotificationRuleQuery,
-) *bizrepo.NotificationRuleQuery {
+func notificationRuleGetQuery(query *bizrepo.NotificationRuleQuery) *bizrepo.NotificationRuleQuery {
 
 	return query
 }
 
-func notificationRuleListQuery(
-	query *bizrepo.NotificationRuleQuery,
-) *bizrepo.NotificationRuleQuery {
+func notificationRuleListQuery(query *bizrepo.NotificationRuleQuery) *bizrepo.NotificationRuleQuery {
 
 	return query
 }
 
-func notificationRuleMapQuery(
-	query *bizrepo.NotificationRuleQuery,
-) *bizrepo.NotificationRuleQuery {
+func notificationRuleMapQuery(query *bizrepo.NotificationRuleQuery) *bizrepo.NotificationRuleQuery {
 
 	return query
 }
 
-func notificationRuleCountQuery(
-	query *bizrepo.NotificationRuleQuery,
-) *bizrepo.NotificationRuleQuery {
+func notificationRuleCountQuery(query *bizrepo.NotificationRuleQuery) *bizrepo.NotificationRuleQuery {
 
 	return query
 }
 
-func notificationRulePageQuery(
-	query *bizrepo.NotificationRuleQuery,
-) *bizrepo.NotificationRuleQuery {
+func notificationRulePageQuery(query *bizrepo.NotificationRuleQuery) *bizrepo.NotificationRuleQuery {
 
 	return query
 }
 
-func notificationRuleModel(
-	item *gen.NotificationRule,
-) *model.NotificationRule {
+func notificationRuleModel(item *gen.NotificationRule) *model.NotificationRule {
 	rule := &model.NotificationRule{
 		ID:        item.ID,
 		EventType: commonenum.EventType(item.EventType),

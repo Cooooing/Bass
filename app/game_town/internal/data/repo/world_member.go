@@ -30,19 +30,14 @@ func NewWorldMemberRepo(
 	}
 }
 
-func (r *WorldMemberRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *WorldMemberRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *WorldMemberRepo) Save(
-	ctx context.Context,
-	row *model.WorldMember,
-) (*model.WorldMember, error) {
+func (r *WorldMemberRepo) Save(ctx context.Context, row *model.WorldMember) (*model.WorldMember, error) {
 	saved, err := r.getClient(ctx).WorldMember.Create().
 		SetWorldID(row.WorldID).
 		SetPlayerID(row.PlayerID).
@@ -63,10 +58,7 @@ func (r *WorldMemberRepo) Save(
 	return memberModel(saved), nil
 }
 
-func memberQuery(
-	q *gen.WorldMemberQuery,
-	req *bizrepo.WorldMemberQuery,
-) *gen.WorldMemberQuery {
+func memberQuery(q *gen.WorldMemberQuery, req *bizrepo.WorldMemberQuery) *gen.WorldMemberQuery {
 	if req == nil {
 		return q
 	}
@@ -88,10 +80,7 @@ func memberQuery(
 	return q
 }
 
-func (r *WorldMemberRepo) Get(
-	ctx context.Context,
-	req *bizrepo.WorldMemberQuery,
-) (*model.WorldMember, error) {
+func (r *WorldMemberRepo) Get(ctx context.Context, req *bizrepo.WorldMemberQuery) (*model.WorldMember, error) {
 	row, err := memberQuery(r.getClient(ctx).WorldMember.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -102,10 +91,7 @@ func (r *WorldMemberRepo) Get(
 	return memberModel(row), nil
 }
 
-func (r *WorldMemberRepo) List(
-	ctx context.Context,
-	req *bizrepo.WorldMemberQuery,
-) ([]*model.WorldMember, error) {
+func (r *WorldMemberRepo) List(ctx context.Context, req *bizrepo.WorldMemberQuery) ([]*model.WorldMember, error) {
 	rows, err := memberQuery(r.getClient(ctx).WorldMember.Query(), req).Order(worldmember.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
@@ -115,10 +101,7 @@ func (r *WorldMemberRepo) List(
 	}), nil
 }
 
-func (r *WorldMemberRepo) Map(
-	ctx context.Context,
-	req *bizrepo.WorldMemberQuery,
-) (map[int64]*model.WorldMember, error) {
+func (r *WorldMemberRepo) Map(ctx context.Context, req *bizrepo.WorldMemberQuery) (map[int64]*model.WorldMember, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -130,17 +113,11 @@ func (r *WorldMemberRepo) Map(
 	return out, nil
 }
 
-func (r *WorldMemberRepo) Count(
-	ctx context.Context,
-	req *bizrepo.WorldMemberQuery,
-) (int, error) {
+func (r *WorldMemberRepo) Count(ctx context.Context, req *bizrepo.WorldMemberQuery) (int, error) {
 	return memberQuery(r.getClient(ctx).WorldMember.Query(), req).Count(ctx)
 }
 
-func (r *WorldMemberRepo) Page(
-	ctx context.Context,
-	req *bizrepo.WorldMemberPageReq,
-) (*bizrepo.WorldMemberPageResp, error) {
+func (r *WorldMemberRepo) Page(ctx context.Context, req *bizrepo.WorldMemberPageReq) (*bizrepo.WorldMemberPageResp, error) {
 	p := page(req.Page)
 	q := memberQuery(r.getClient(ctx).WorldMember.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -159,11 +136,7 @@ func (r *WorldMemberRepo) Page(
 	}, nil
 }
 
-func (r *WorldMemberRepo) Move(
-	ctx context.Context,
-	id int64,
-	locationID int64,
-) (*model.WorldMember, error) {
+func (r *WorldMemberRepo) Move(ctx context.Context, id int64, locationID int64) (*model.WorldMember, error) {
 	row, err := r.getClient(ctx).WorldMember.UpdateOneID(id).
 		SetCurrentLocationID(locationID).
 		SetLastSeenAt(time.Now()).
@@ -174,10 +147,7 @@ func (r *WorldMemberRepo) Move(
 	return memberModel(row), nil
 }
 
-func (r *WorldMemberRepo) UpdateCharacter(
-	ctx context.Context,
-	req *bizrepo.WorldMemberCharacterReq,
-) (*model.WorldMember, error) {
+func (r *WorldMemberRepo) UpdateCharacter(ctx context.Context, req *bizrepo.WorldMemberCharacterReq) (*model.WorldMember, error) {
 	row, err := r.getClient(ctx).WorldMember.UpdateOneID(req.MemberID).
 		SetCharacterName(req.Name).
 		SetCharacterBackground(req.Background).
@@ -192,9 +162,7 @@ func (r *WorldMemberRepo) UpdateCharacter(
 	return memberModel(row), nil
 }
 
-func memberModel(
-	row *gen.WorldMember,
-) *model.WorldMember {
+func memberModel(row *gen.WorldMember) *model.WorldMember {
 	return &model.WorldMember{
 		ID:                  row.ID,
 		WorldID:             row.WorldID,

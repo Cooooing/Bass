@@ -21,14 +21,10 @@ var DataProviderSet = wire.NewSet(
 	wire.Bind(new(commonClient.Subscriber), new(*commonClient.NatsClient)),
 )
 
-func ProvideConsul(
-	c *config.Bootstrap,
-) *common.Consul {
+func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul
 }
 
-func ProvideNats(
-	c *config.Bootstrap,
-) *common.Nats {
+func ProvideNats(c *config.Bootstrap) *common.Nats {
 	return c.Nats
 }

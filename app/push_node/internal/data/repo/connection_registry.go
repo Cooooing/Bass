@@ -22,10 +22,7 @@ func NewConnectionRegistryRepo() *ConnectionRegistryRepo {
 	}
 }
 
-func (r *ConnectionRegistryRepo) AddConnection(
-	ctx context.Context,
-	req *bizrepo.AddConnectionReq,
-) error {
+func (r *ConnectionRegistryRepo) AddConnection(ctx context.Context, req *bizrepo.AddConnectionReq) error {
 	_ = ctx
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -33,10 +30,7 @@ func (r *ConnectionRegistryRepo) AddConnection(
 	return nil
 }
 
-func (r *ConnectionRegistryRepo) RemoveConnection(
-	ctx context.Context,
-	req *bizrepo.RemoveConnectionReq,
-) error {
+func (r *ConnectionRegistryRepo) RemoveConnection(ctx context.Context, req *bizrepo.RemoveConnectionReq) error {
 	_ = ctx
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -55,10 +49,7 @@ func (r *ConnectionRegistryRepo) RemoveConnection(
 	return nil
 }
 
-func (r *ConnectionRegistryRepo) GetConnections(
-	ctx context.Context,
-	userID int64,
-) ([]*model.Connection, error) {
+func (r *ConnectionRegistryRepo) GetConnections(ctx context.Context, userID int64) ([]*model.Connection, error) {
 	_ = ctx
 	r.mu.RLock()
 	defer r.mu.RUnlock()
@@ -71,9 +62,7 @@ func (r *ConnectionRegistryRepo) GetConnections(
 	return result, nil
 }
 
-func (r *ConnectionRegistryRepo) GetConnectionCount(
-	ctx context.Context,
-) (int64, error) {
+func (r *ConnectionRegistryRepo) GetConnectionCount(ctx context.Context) (int64, error) {
 	_ = ctx
 	r.mu.RLock()
 	defer r.mu.RUnlock()
@@ -84,9 +73,7 @@ func (r *ConnectionRegistryRepo) GetConnectionCount(
 	return count, nil
 }
 
-func (r *ConnectionRegistryRepo) GetAllUserIDs(
-	ctx context.Context,
-) ([]int64, error) {
+func (r *ConnectionRegistryRepo) GetAllUserIDs(ctx context.Context) ([]int64, error) {
 	_ = ctx
 	r.mu.RLock()
 	defer r.mu.RUnlock()

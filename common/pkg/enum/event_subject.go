@@ -66,8 +66,6 @@ func (EventSubject) Values() []string {
 	return nil
 }
 
-func EventSubjectByEventType(
-	eventType enums.EventType,
-) (EventSubject, bool) {
+func EventSubjectByEventType(eventType enums.EventType) (EventSubject, bool) {
 	return EventSubjectMap.ToEnum(enums.EventSubject(eventType))
 }

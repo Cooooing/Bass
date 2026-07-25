@@ -23,10 +23,7 @@ func NewContentTagClient(
 	}
 }
 
-func (r *ContentTagClient) CreateTag(
-	ctx context.Context,
-	req *repo.CreateTagReq,
-) (*repo.Tag, error) {
+func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq) (*repo.Tag, error) {
 	tag := req.Tag
 	var status *contentv1enum.TagStatus
 	if tag.Status != nil {
@@ -64,10 +61,7 @@ func (r *ContentTagClient) CreateTag(
 	}, nil
 }
 
-func (r *ContentTagClient) UpdateTag(
-	ctx context.Context,
-	req *repo.UpdateTagReq,
-) (*repo.Tag, error) {
+func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq) (*repo.Tag, error) {
 	tag := req.Tag
 	var status *contentv1enum.TagStatus
 	if tag.Status != nil {
@@ -100,10 +94,7 @@ func (r *ContentTagClient) UpdateTag(
 	}, nil
 }
 
-func (r *ContentTagClient) ListTags(
-	ctx context.Context,
-	req *repo.ListTagsReq,
-) (*repo.ListTagsResp, error) {
+func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) (*repo.ListTagsResp, error) {
 	query := req.Query
 	if query == nil {
 		query = &repo.TagQuery{}

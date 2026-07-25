@@ -49,10 +49,7 @@ type FollowRelationReq struct {
 	TargetID int64
 }
 
-func (d *RelationUsecase) Follow(
-	ctx context.Context,
-	req *FollowRelationReq,
-) error {
+func (d *RelationUsecase) Follow(ctx context.Context, req *FollowRelationReq) error {
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
@@ -116,10 +113,7 @@ type UnfollowRelationReq struct {
 	TargetID int64
 }
 
-func (d *RelationUsecase) Unfollow(
-	ctx context.Context,
-	req *UnfollowRelationReq,
-) error {
+func (d *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowRelationReq) error {
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
@@ -182,10 +176,7 @@ type BlockRelationReq struct {
 	TargetID int64
 }
 
-func (d *RelationUsecase) Block(
-	ctx context.Context,
-	req *BlockRelationReq,
-) error {
+func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) error {
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
@@ -235,10 +226,7 @@ type UnblockRelationReq struct {
 	TargetID int64
 }
 
-func (d *RelationUsecase) Unblock(
-	ctx context.Context,
-	req *UnblockRelationReq,
-) error {
+func (d *RelationUsecase) Unblock(ctx context.Context, req *UnblockRelationReq) error {
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
@@ -292,10 +280,7 @@ type ListFollowingRelationsResp struct {
 	Page RelationPageResp
 }
 
-func (d *RelationUsecase) ListFollowing(
-	ctx context.Context,
-	req *ListFollowingRelationsReq,
-) (*ListFollowingRelationsResp, error) {
+func (d *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingRelationsReq) (*ListFollowingRelationsResp, error) {
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
 		Page: repo.PageReq{
 			Page: req.Page.Page,
@@ -330,10 +315,7 @@ type ListFollowersRelationsResp struct {
 	Page RelationPageResp
 }
 
-func (d *RelationUsecase) ListFollowers(
-	ctx context.Context,
-	req *ListFollowersRelationsReq,
-) (*ListFollowersRelationsResp, error) {
+func (d *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersRelationsReq) (*ListFollowersRelationsResp, error) {
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
 		Page: repo.PageReq{
 			Page: req.Page.Page,
@@ -368,10 +350,7 @@ type ListBlockedRelationsResp struct {
 	Page RelationPageResp
 }
 
-func (d *RelationUsecase) ListBlocked(
-	ctx context.Context,
-	req *ListBlockedRelationsReq,
-) (*ListBlockedRelationsResp, error) {
+func (d *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedRelationsReq) (*ListBlockedRelationsResp, error) {
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
 		Page: repo.PageReq{
 			Page: req.Page.Page,
@@ -401,10 +380,7 @@ type MapRelationStatusReq struct {
 	TargetIDs []int64
 }
 
-func (d *RelationUsecase) MapStatus(
-	ctx context.Context,
-	req *MapRelationStatusReq,
-) (map[int64]*model.RelationStatus, error) {
+func (d *RelationUsecase) MapStatus(ctx context.Context, req *MapRelationStatusReq) (map[int64]*model.RelationStatus, error) {
 	statuses := make(map[int64]*model.RelationStatus, len(req.TargetIDs))
 	for _, targetID := range req.TargetIDs {
 		statuses[targetID] = &model.RelationStatus{

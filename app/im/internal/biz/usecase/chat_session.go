@@ -28,10 +28,7 @@ type MarkMutedReq struct {
 	UserID  int64
 }
 
-func (u *ChatSessionUsecase) MarkMuted(
-	ctx context.Context,
-	req *MarkMutedReq,
-) error {
+func (u *ChatSessionUsecase) MarkMuted(ctx context.Context, req *MarkMutedReq) error {
 	for _, id := range req.IDs {
 		_, err := u.chatSessionRepo.UpdateMuted(ctx, &repo.ChatSessionUpdateMutedReq{
 			ChatSessionID: id,
@@ -51,10 +48,7 @@ type MarkPinnedReq struct {
 	UserID int64
 }
 
-func (u *ChatSessionUsecase) MarkPinned(
-	ctx context.Context,
-	req *MarkPinnedReq,
-) error {
+func (u *ChatSessionUsecase) MarkPinned(ctx context.Context, req *MarkPinnedReq) error {
 	for _, id := range req.IDs {
 		_, err := u.chatSessionRepo.UpdatePinned(ctx, &repo.ChatSessionUpdatePinnedReq{
 			ChatSessionID: id,
@@ -73,10 +67,7 @@ type MarkReadReq struct {
 	UserID int64
 }
 
-func (u *ChatSessionUsecase) MarkRead(
-	ctx context.Context,
-	req *MarkReadReq,
-) error {
+func (u *ChatSessionUsecase) MarkRead(ctx context.Context, req *MarkReadReq) error {
 	for _, id := range req.IDs {
 		session, err := u.chatSessionRepo.Get(ctx, &repo.ChatSessionQuery{
 			IDs: []int64{id},
@@ -123,10 +114,7 @@ type ChatSessionPageResp struct {
 	Page *base.PageResp
 }
 
-func (u *ChatSessionUsecase) Page(
-	ctx context.Context,
-	req *ChatSessionPageReq,
-) (*ChatSessionPageResp, error) {
+func (u *ChatSessionUsecase) Page(ctx context.Context, req *ChatSessionPageReq) (*ChatSessionPageResp, error) {
 	pageResp, err := u.chatSessionRepo.Page(ctx, &repo.ChatSessionQuery{
 		Page:      req.Page,
 		IDs:       req.QueryIDs,

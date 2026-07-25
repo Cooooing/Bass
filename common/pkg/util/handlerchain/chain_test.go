@@ -14,10 +14,7 @@ func (h *ValidateHandler) Name() string {
 	return "ValidateHandler"
 }
 
-func (h *ValidateHandler) Handle(
-	ctx context.Context,
-	data string,
-) (string, error) {
+func (h *ValidateHandler) Handle(ctx context.Context, data string) (string, error) {
 	fmt.Println("ValidateHandler executed")
 	return h.Next(ctx, data)
 }
@@ -30,17 +27,12 @@ func (h *TransformHandler) Name() string {
 	return "TransformHandler"
 }
 
-func (h *TransformHandler) Handle(
-	ctx context.Context,
-	data string,
-) (string, error) {
+func (h *TransformHandler) Handle(ctx context.Context, data string) (string, error) {
 	fmt.Println("TransformHandler executed")
 	return h.Next(ctx, data)
 }
 
-func TestChain(
-	t *testing.T,
-) {
+func TestChain(t *testing.T) {
 	// 创建独立工厂实例
 	factory := NewHandlerFactory[string]()
 

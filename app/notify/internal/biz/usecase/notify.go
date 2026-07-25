@@ -102,10 +102,7 @@ type NotifyListEnabledRulesReq struct {
 	Language  notifyenum.Language
 }
 
-func (u *NotifyUsecase) ListEnabledRules(
-	ctx context.Context,
-	req *NotifyListEnabledRulesReq,
-) ([]*model.NotificationRule, error) {
+func (u *NotifyUsecase) ListEnabledRules(ctx context.Context, req *NotifyListEnabledRulesReq) ([]*model.NotificationRule, error) {
 	if req == nil {
 		req = &NotifyListEnabledRulesReq{}
 	}
@@ -126,10 +123,7 @@ type NotifyProcessReq struct {
 	Rules               []*model.NotificationRule
 }
 
-func (u *NotifyUsecase) Process(
-	ctx context.Context,
-	req *NotifyProcessReq,
-) error {
+func (u *NotifyUsecase) Process(ctx context.Context, req *NotifyProcessReq) error {
 	if req == nil || req.NotificationContext == nil || req.NotificationContext.EventID == "" {
 		return nil
 	}
@@ -165,10 +159,7 @@ type processRuleReq struct {
 	AccountsByUserID    map[int64]*model.UserAccount
 }
 
-func (u *NotifyUsecase) processRule(
-	ctx context.Context,
-	req *processRuleReq,
-) (notifyenum.NotificationChannelStatus, error) {
+func (u *NotifyUsecase) processRule(ctx context.Context, req *processRuleReq) (notifyenum.NotificationChannelStatus, error) {
 	rule := req.Rule
 	if rule == nil || !rule.Enabled {
 		return notifyenum.NotificationChannelStatusSkipped, nil
@@ -222,10 +213,7 @@ type processStationReq struct {
 	Rule                *model.NotificationRule
 }
 
-func (u *NotifyUsecase) processStation(
-	ctx context.Context,
-	req *processStationReq,
-) (notifyenum.NotificationChannelStatus, error) {
+func (u *NotifyUsecase) processStation(ctx context.Context, req *processStationReq) (notifyenum.NotificationChannelStatus, error) {
 	notificationContext := req.NotificationContext
 	rule := req.Rule
 	if rule.StationTemplate == nil {
@@ -274,10 +262,7 @@ type processEmailReq struct {
 	AccountsByUserID    map[int64]*model.UserAccount
 }
 
-func (u *NotifyUsecase) processEmail(
-	ctx context.Context,
-	req *processEmailReq,
-) (notifyenum.NotificationChannelStatus, error) {
+func (u *NotifyUsecase) processEmail(ctx context.Context, req *processEmailReq) (notifyenum.NotificationChannelStatus, error) {
 	notificationContext := req.NotificationContext
 	rule := req.Rule
 	accountsByUserID := req.AccountsByUserID
@@ -339,10 +324,7 @@ func (u *NotifyUsecase) processEmail(
 	return status, nil
 }
 
-func (u *NotifyUsecase) sendEmail(
-	ctx context.Context,
-	delivery *model.NotificationEmailDelivery,
-) (notifyenum.NotificationChannelStatus, error) {
+func (u *NotifyUsecase) sendEmail(ctx context.Context, delivery *model.NotificationEmailDelivery) (notifyenum.NotificationChannelStatus, error) {
 	saveResp, err := u.emailDeliveryRepo.SaveOrGet(ctx, delivery)
 	if err == nil {
 		delivery = saveResp
@@ -412,10 +394,7 @@ type finishEmailReq struct {
 	Result     *bizchannel.SendResult
 }
 
-func (u *NotifyUsecase) finishEmail(
-	ctx context.Context,
-	req *finishEmailReq,
-) (notifyenum.NotificationChannelStatus, error) {
+func (u *NotifyUsecase) finishEmail(ctx context.Context, req *finishEmailReq) (notifyenum.NotificationChannelStatus, error) {
 	deliveryID := req.DeliveryID
 	result := req.Result
 	if result == nil {
@@ -454,10 +433,7 @@ type processTencentSMSReq struct {
 	AccountsByUserID    map[int64]*model.UserAccount
 }
 
-func (u *NotifyUsecase) processTencentSMS(
-	ctx context.Context,
-	req *processTencentSMSReq,
-) (notifyenum.NotificationChannelStatus, error) {
+func (u *NotifyUsecase) processTencentSMS(ctx context.Context, req *processTencentSMSReq) (notifyenum.NotificationChannelStatus, error) {
 	notificationContext := req.NotificationContext
 	rule := req.Rule
 	accountsByUserID := req.AccountsByUserID
@@ -528,10 +504,7 @@ func (u *NotifyUsecase) processTencentSMS(
 	return status, nil
 }
 
-func (u *NotifyUsecase) sendTencentSMS(
-	ctx context.Context,
-	delivery *model.NotificationTencentSMSDelivery,
-) (notifyenum.NotificationChannelStatus, error) {
+func (u *NotifyUsecase) sendTencentSMS(ctx context.Context, delivery *model.NotificationTencentSMSDelivery) (notifyenum.NotificationChannelStatus, error) {
 	saveResp, err := u.tencentSMSDeliveryRepo.SaveOrGet(ctx, delivery)
 	if err == nil {
 		delivery = saveResp
@@ -602,10 +575,7 @@ type finishTencentSMSReq struct {
 	Result     *bizchannel.SendResult
 }
 
-func (u *NotifyUsecase) finishTencentSMS(
-	ctx context.Context,
-	req *finishTencentSMSReq,
-) (notifyenum.NotificationChannelStatus, error) {
+func (u *NotifyUsecase) finishTencentSMS(ctx context.Context, req *finishTencentSMSReq) (notifyenum.NotificationChannelStatus, error) {
 	deliveryID := req.DeliveryID
 	result := req.Result
 	if result == nil {
@@ -648,10 +618,7 @@ type processLarkWebhookReq struct {
 	Rule                *model.NotificationRule
 }
 
-func (u *NotifyUsecase) processLarkWebhook(
-	ctx context.Context,
-	req *processLarkWebhookReq,
-) (notifyenum.NotificationChannelStatus, error) {
+func (u *NotifyUsecase) processLarkWebhook(ctx context.Context, req *processLarkWebhookReq) (notifyenum.NotificationChannelStatus, error) {
 	notificationContext := req.NotificationContext
 	rule := req.Rule
 	if rule.LarkWebhookTemplate == nil || rule.LarkWebhookTemplate.WebhookID == "" || rule.LarkWebhookTemplate.Token == "" {
@@ -762,10 +729,7 @@ type loadAccountsReq struct {
 	Rules               []*model.NotificationRule
 }
 
-func (u *NotifyUsecase) loadAccounts(
-	ctx context.Context,
-	req *loadAccountsReq,
-) (map[int64]*model.
+func (u *NotifyUsecase) loadAccounts(ctx context.Context, req *loadAccountsReq) (map[int64]*model.
 	UserAccount, error) {
 	notificationContext := req.NotificationContext
 	rules := req.Rules
@@ -807,10 +771,7 @@ func (u *NotifyUsecase) loadAccounts(
 	return resp, nil
 }
 
-func (u *NotifyUsecase) renderTemplate(
-	tplStr string,
-	data any,
-) (string, bool) {
+func (u *NotifyUsecase) renderTemplate(tplStr string, data any) (string, bool) {
 	tpl, err := template.New("").Option("missingkey=error").Parse(tplStr)
 	if err != nil {
 		return "", false

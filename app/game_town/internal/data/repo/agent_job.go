@@ -30,19 +30,14 @@ func NewAgentJobRepo(
 	}
 }
 
-func (r *AgentJobRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *AgentJobRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *AgentJobRepo) Save(
-	ctx context.Context,
-	row *model.AgentJob,
-) (*model.AgentJob, error) {
+func (r *AgentJobRepo) Save(ctx context.Context, row *model.AgentJob) (*model.AgentJob, error) {
 	saved, err := r.getClient(ctx).AgentJob.Create().
 		SetWorldID(row.WorldID).
 		SetSourceEventID(row.SourceEventID).
@@ -79,10 +74,7 @@ func (r *AgentJobRepo) Save(
 	}, nil
 }
 
-func agentJobQuery(
-	q *gen.AgentJobQuery,
-	req *bizrepo.AgentJobQuery,
-) *gen.AgentJobQuery {
+func agentJobQuery(q *gen.AgentJobQuery, req *bizrepo.AgentJobQuery) *gen.AgentJobQuery {
 	if req == nil {
 		return q
 	}
@@ -125,10 +117,7 @@ func agentJobQuery(
 	return q
 }
 
-func (r *AgentJobRepo) Get(
-	ctx context.Context,
-	req *bizrepo.AgentJobQuery,
-) (*model.AgentJob, error) {
+func (r *AgentJobRepo) Get(ctx context.Context, req *bizrepo.AgentJobQuery) (*model.AgentJob, error) {
 	row, err := agentJobQuery(r.getClient(ctx).AgentJob.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -156,10 +145,7 @@ func (r *AgentJobRepo) Get(
 	}, nil
 }
 
-func (r *AgentJobRepo) List(
-	ctx context.Context,
-	req *bizrepo.AgentJobQuery,
-) ([]*model.AgentJob, error) {
+func (r *AgentJobRepo) List(ctx context.Context, req *bizrepo.AgentJobQuery) ([]*model.AgentJob, error) {
 	rows, err := agentJobQuery(r.getClient(ctx).AgentJob.Query(), req).Order(agentjob.ByPriority(), agentjob.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
@@ -187,10 +173,7 @@ func (r *AgentJobRepo) List(
 	return out, nil
 }
 
-func (r *AgentJobRepo) Map(
-	ctx context.Context,
-	req *bizrepo.AgentJobQuery,
-) (map[int64]*model.AgentJob, error) {
+func (r *AgentJobRepo) Map(ctx context.Context, req *bizrepo.AgentJobQuery) (map[int64]*model.AgentJob, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -202,17 +185,11 @@ func (r *AgentJobRepo) Map(
 	return out, nil
 }
 
-func (r *AgentJobRepo) Count(
-	ctx context.Context,
-	req *bizrepo.AgentJobQuery,
-) (int, error) {
+func (r *AgentJobRepo) Count(ctx context.Context, req *bizrepo.AgentJobQuery) (int, error) {
 	return agentJobQuery(r.getClient(ctx).AgentJob.Query(), req).Count(ctx)
 }
 
-func (r *AgentJobRepo) Page(
-	ctx context.Context,
-	req *bizrepo.AgentJobPageReq,
-) (*bizrepo.AgentJobPageResp, error) {
+func (r *AgentJobRepo) Page(ctx context.Context, req *bizrepo.AgentJobPageReq) (*bizrepo.AgentJobPageResp, error) {
 	p := page(req.Page)
 	q := agentJobQuery(r.getClient(ctx).AgentJob.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -249,11 +226,7 @@ func (r *AgentJobRepo) Page(
 	}, nil
 }
 
-func (r *AgentJobRepo) MarkRunning(
-	ctx context.Context,
-	id int64,
-	now time.Time,
-) (*model.AgentJob, error) {
+func (r *AgentJobRepo) MarkRunning(ctx context.Context, id int64, now time.Time) (*model.AgentJob, error) {
 	row, err := r.getClient(ctx).AgentJob.UpdateOneID(id).SetStatus(agentjob.StatusRunning).SetStartedAt(now).AddAttemptCount(1).Save(ctx)
 	if err != nil {
 		return nil, err
@@ -278,11 +251,7 @@ func (r *AgentJobRepo) MarkRunning(
 	}, nil
 }
 
-func (r *AgentJobRepo) MarkSucceeded(
-	ctx context.Context,
-	id int64,
-	now time.Time,
-) (*model.AgentJob, error) {
+func (r *AgentJobRepo) MarkSucceeded(ctx context.Context, id int64, now time.Time) (*model.AgentJob, error) {
 	row, err := r.getClient(ctx).AgentJob.UpdateOneID(id).SetStatus(agentjob.StatusSucceeded).SetFinishedAt(now).SetErrorSummary("").Save(ctx)
 	if err != nil {
 		return nil, err
@@ -307,10 +276,7 @@ func (r *AgentJobRepo) MarkSucceeded(
 	}, nil
 }
 
-func (r *AgentJobRepo) Retry(
-	ctx context.Context,
-	req *bizrepo.AgentJobRetryReq,
-) (*model.AgentJob, error) {
+func (r *AgentJobRepo) Retry(ctx context.Context, req *bizrepo.AgentJobRetryReq) (*model.AgentJob, error) {
 	row, err := r.getClient(ctx).AgentJob.UpdateOneID(req.JobID).
 		SetStatus(agentjob.StatusQueued).
 		SetAttemptCount(req.AttemptCount).
@@ -341,10 +307,7 @@ func (r *AgentJobRepo) Retry(
 	}, nil
 }
 
-func (r *AgentJobRepo) MarkFailed(
-	ctx context.Context,
-	req *bizrepo.AgentJobMarkFailedReq,
-) (*model.AgentJob, error) {
+func (r *AgentJobRepo) MarkFailed(ctx context.Context, req *bizrepo.AgentJobMarkFailedReq) (*model.AgentJob, error) {
 	row, err := r.getClient(ctx).AgentJob.UpdateOneID(req.JobID).
 		SetStatus(agentjob.StatusFailed).
 		SetFinishedAt(req.FinishedAt).

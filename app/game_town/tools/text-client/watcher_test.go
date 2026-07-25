@@ -8,9 +8,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func TestIsRetryableWatcherError(
-	t *testing.T,
-) {
+func TestIsRetryableWatcherError(t *testing.T) {
 	tests := []struct {
 		name string
 		err  error

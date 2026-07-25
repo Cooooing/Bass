@@ -29,10 +29,7 @@ func NewPushHubConn(
 	return conn, cleanup, nil
 }
 
-func ProvideNodeID(
-	conf *config.Bootstrap,
-	conn *grpc.ClientConn,
-) (string, error) {
+func ProvideNodeID(conf *config.Bootstrap, conn *grpc.ClientConn) (string, error) {
 	nodeID, err := usecase.RegisterWithHub(context.Background(), conn, conf)
 	if err != nil {
 		return "", err
@@ -49,14 +46,10 @@ func NewNodeServer(
 	}
 }
 
-func (s *NodeServer) Start(
-	ctx context.Context,
-) error {
+func (s *NodeServer) Start(ctx context.Context) error {
 	return s.nodeUsecase.ConnectHub(ctx)
 }
 
-func (s *NodeServer) Stop(
-	ctx context.Context,
-) error {
+func (s *NodeServer) Stop(ctx context.Context) error {
 	return s.nodeUsecase.Stop(ctx)
 }

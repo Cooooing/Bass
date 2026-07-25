@@ -47,11 +47,7 @@ var eventStyle = lipgloss.NewStyle().
 var errorStyle = lipgloss.NewStyle().
 	Foreground(lipgloss.Color("196"))
 
-func newModel(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	target string,
-) model {
+func newModel(ctx context.Context, client *rpc.GameTownClient, target string) model {
 	input := textinput.New()
 	input.Placeholder = "输入 /help 查看命令"
 	input.Focus()
@@ -82,9 +78,7 @@ func (m model) Init() tea.Cmd {
 	return tea.Batch(textinput.Blink, m.spinner.Tick)
 }
 
-func (m model) Update(
-	msg tea.Msg,
-) (tea.Model, tea.Cmd) {
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.viewport.Width = max(1, msg.Width-2)
@@ -108,9 +102,7 @@ func (m model) Update(
 	return m, cmd
 }
 
-func (m model) updateKey(
-	msg tea.KeyMsg,
-) (tea.Model, tea.Cmd) {
+func (m model) updateKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "ctrl+c":
 		m.stopWatch()
@@ -155,9 +147,7 @@ func (m model) updateKey(
 	}
 }
 
-func (m model) updateCommandResult(
-	result commandResult,
-) (tea.Model, tea.Cmd) {
+func (m model) updateCommandResult(result commandResult) (tea.Model, tea.Cmd) {
 	m.busy = false
 	if result.err != nil {
 		m.lines = append(
@@ -199,9 +189,7 @@ func (m model) updateCommandResult(
 	return m, nil
 }
 
-func (m model) updateEventResult(
-	result eventResult,
-) (tea.Model, tea.Cmd) {
+func (m model) updateEventResult(result eventResult) (tea.Model, tea.Cmd) {
 	if result.err != nil {
 		m.lines = append(
 			m.lines,
@@ -283,9 +271,7 @@ func (m *model) stopWatch() {
 	m.eventCh = nil
 }
 
-func waitEvent(
-	events <-chan eventResult,
-) tea.Cmd {
+func waitEvent(events <-chan eventResult) tea.Cmd {
 	return func() tea.Msg {
 		result, ok := <-events
 		if !ok {
@@ -297,15 +283,7 @@ func waitEvent(
 	}
 }
 
-func executeCommandCmd(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	worldID int64,
-	dialogNpcID int64,
-	suggestions []suggestedChoice,
-	raw string,
-) tea.Cmd {
+func executeCommandCmd(ctx context.Context, client *rpc.GameTownClient, playerID int64, worldID int64, dialogNpcID int64, suggestions []suggestedChoice, raw string) tea.Cmd {
 	return func() tea.Msg {
 		return executeCommand(
 			ctx,
@@ -345,10 +323,7 @@ func commandSuggestions() []string {
 	}
 }
 
-func max(
-	a int,
-	b int,
-) int {
+func max(a int, b int) int {
 	if a > b {
 		return a
 	}

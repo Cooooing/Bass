@@ -33,10 +33,7 @@ func NewAuthClient(
 	return NewAuthRepo(userClient)
 }
 
-func (r *AuthRepo) StartEmailRegistration(
-	ctx context.Context,
-	req *repo.StartEmailRegistrationReq,
-) (*repo.StartEmailRegistrationResp, error) {
+func (r *AuthRepo) StartEmailRegistration(ctx context.Context, req *repo.StartEmailRegistrationReq) (*repo.StartEmailRegistrationResp, error) {
 	reply, err := r.userClient.Auth.StartEmailRegistration(ctx, &userv1.StartEmailRegistration_Req{
 		Email:    req.Email,
 		Password: req.Password,
@@ -51,10 +48,7 @@ func (r *AuthRepo) StartEmailRegistration(
 	}, nil
 }
 
-func (r *AuthRepo) VerifyEmailRegistration(
-	ctx context.Context,
-	req *repo.VerifyEmailRegistrationReq,
-) error {
+func (r *AuthRepo) VerifyEmailRegistration(ctx context.Context, req *repo.VerifyEmailRegistrationReq) error {
 	_, err := r.userClient.Auth.VerifyEmailRegistration(ctx, &userv1.VerifyEmailRegistration_Req{
 		Email: req.Email,
 		Code:  req.Code,
@@ -62,10 +56,7 @@ func (r *AuthRepo) VerifyEmailRegistration(
 	return err
 }
 
-func (r *AuthRepo) StartPhoneRegistration(
-	ctx context.Context,
-	req *repo.StartPhoneRegistrationReq,
-) (*repo.StartPhoneRegistrationResp, error) {
+func (r *AuthRepo) StartPhoneRegistration(ctx context.Context, req *repo.StartPhoneRegistrationReq) (*repo.StartPhoneRegistrationResp, error) {
 	reply, err := r.userClient.Auth.StartPhoneRegistration(ctx, &userv1.StartPhoneRegistration_Req{
 		Phone:    req.Phone,
 		Password: req.Password,
@@ -80,10 +71,7 @@ func (r *AuthRepo) StartPhoneRegistration(
 	}, nil
 }
 
-func (r *AuthRepo) VerifyPhoneRegistration(
-	ctx context.Context,
-	req *repo.VerifyPhoneRegistrationReq,
-) error {
+func (r *AuthRepo) VerifyPhoneRegistration(ctx context.Context, req *repo.VerifyPhoneRegistrationReq) error {
 	_, err := r.userClient.Auth.VerifyPhoneRegistration(ctx, &userv1.VerifyPhoneRegistration_Req{
 		Phone: req.Phone,
 		Code:  req.Code,
@@ -91,10 +79,7 @@ func (r *AuthRepo) VerifyPhoneRegistration(
 	return err
 }
 
-func (r *AuthRepo) StartEmailLogin(
-	ctx context.Context,
-	email string,
-) (*repo.StartEmailLoginResp, error) {
+func (r *AuthRepo) StartEmailLogin(ctx context.Context, email string) (*repo.StartEmailLoginResp, error) {
 	reply, err := r.userClient.Auth.StartEmailLogin(ctx, &userv1.StartEmailLogin_Req{
 		Email: email,
 	})
@@ -106,10 +91,7 @@ func (r *AuthRepo) StartEmailLogin(
 	}, nil
 }
 
-func (r *AuthRepo) StartPhoneLogin(
-	ctx context.Context,
-	phone string,
-) (*repo.StartPhoneLoginResp, error) {
+func (r *AuthRepo) StartPhoneLogin(ctx context.Context, phone string) (*repo.StartPhoneLoginResp, error) {
 	reply, err := r.userClient.Auth.StartPhoneLogin(ctx, &userv1.StartPhoneLogin_Req{
 		Phone: phone,
 	})
@@ -121,10 +103,7 @@ func (r *AuthRepo) StartPhoneLogin(
 	}, nil
 }
 
-func (r *AuthRepo) Login(
-	ctx context.Context,
-	req *repo.LoginReq,
-) (*repo.LoginResp, error) {
+func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginResp, error) {
 	loginReq := &userv1.Login_Req{
 		Type:   loginTypeToUser(req.Type),
 		Realm:  commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmBBS),
@@ -170,10 +149,7 @@ func (r *AuthRepo) Login(
 	}, nil
 }
 
-func (r *AuthRepo) RefreshToken(
-	ctx context.Context,
-	refreshToken string,
-) (*repo.TokenResp, error) {
+func (r *AuthRepo) RefreshToken(ctx context.Context, refreshToken string) (*repo.TokenResp, error) {
 	reply, err := r.userClient.Auth.RefreshToken(ctx, &userv1.RefreshToken_Req{
 		RefreshToken: refreshToken,
 		Realm:        commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmBBS),
@@ -190,10 +166,7 @@ func (r *AuthRepo) RefreshToken(
 	}, nil
 }
 
-func (r *AuthRepo) Logout(
-	ctx context.Context,
-	accessToken string,
-) error {
+func (r *AuthRepo) Logout(ctx context.Context, accessToken string) error {
 	_, err := r.userClient.Auth.Logout(ctx, &userv1.Logout_Req{
 		AccessToken: accessToken,
 		Realm:       commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmBBS),
@@ -201,10 +174,7 @@ func (r *AuthRepo) Logout(
 	return err
 }
 
-func (r *AuthRepo) CancelAccount(
-	ctx context.Context,
-	req *repo.CancelAccountReq,
-) error {
+func (r *AuthRepo) CancelAccount(ctx context.Context, req *repo.CancelAccountReq) error {
 	_, err := r.userClient.Auth.CancelAccount(ctx, &userv1.CancelAccount_Req{
 		UserId:   req.UserID,
 		Password: req.Password,
@@ -213,9 +183,14 @@ func (r *AuthRepo) CancelAccount(
 	return err
 }
 
-func loginTypeToUser(
-	t enum.LoginType,
-) userenum.LoginType {
+func (r *AuthRepo) UnbanAccounts(ctx context.Context, userIDs []int64) error {
+	_, err := r.userClient.Auth.UnbanAccounts(ctx, &userv1.UnbanAccounts_Req{
+		UserIds: userIDs,
+	})
+	return err
+}
+
+func loginTypeToUser(t enum.LoginType) userenum.LoginType {
 	switch t {
 	case enum.LoginTypeEmail:
 		return userenum.LoginType_LOGIN_TYPE_EMAIL
@@ -226,9 +201,7 @@ func loginTypeToUser(
 	}
 }
 
-func clientInfo(
-	ctx context.Context,
-) *userv1.Login_Req_ClientInfo {
+func clientInfo(ctx context.Context) *userv1.Login_Req_ClientInfo {
 	uaRaw := server.GetHeader(ctx, constant.HeaderUserAgent)
 	ua := useragent.Parse(uaRaw)
 	clientType := userenum.ClientType_CLIENT_TYPE_WEB
@@ -254,9 +227,7 @@ func clientInfo(
 	}
 }
 
-func userAccountToRepo(
-	account *userv1.Login_Resp_Account,
-) *repo.Account {
+func userAccountToRepo(account *userv1.Login_Resp_Account) *repo.Account {
 	if account == nil {
 		return nil
 	}

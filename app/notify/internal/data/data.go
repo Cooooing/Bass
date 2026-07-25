@@ -47,20 +47,14 @@ var DataProviderSet = wire.NewSet(
 	wire.Bind(new(bizchannel.LarkWebhookClient), new(*channel.LarkWebhookClient)),
 )
 
-func ProvideRedis(
-	c *config.Bootstrap,
-) *common.Redis {
+func ProvideRedis(c *config.Bootstrap) *common.Redis {
 	return c.Redis
 }
 
-func ProvideConsul(
-	c *config.Bootstrap,
-) *common.Consul {
+func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul
 }
 
-func ProvideNats(
-	c *config.Bootstrap,
-) *common.Nats {
+func ProvideNats(c *config.Bootstrap) *common.Nats {
 	return c.Nats
 }

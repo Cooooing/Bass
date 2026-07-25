@@ -26,16 +26,11 @@ func NewTotpSecretCache(
 
 const authTotpSecretKey = "Auth:TotpSecret:{%d}"
 
-func authTotpSecretRedisKey(
-	userID int64,
-) string {
+func authTotpSecretRedisKey(userID int64) string {
 	return fmt.Sprintf(authTotpSecretKey, userID)
 }
 
-func (c *TotpSecretCache) Save(
-	ctx context.Context,
-	req *repo.TotpSecretCacheSaveReq,
-) error {
+func (c *TotpSecretCache) Save(ctx context.Context, req *repo.TotpSecretCacheSaveReq) error {
 	err := c.redisClient.Client.SetEx(ctx, authTotpSecretRedisKey(req.UserID), req.Secret, req.TTL).Err()
 	if err != nil {
 		return err
@@ -43,10 +38,7 @@ func (c *TotpSecretCache) Save(
 	return nil
 }
 
-func (c *TotpSecretCache) Get(
-	ctx context.Context,
-	userID int64,
-) (string, error) {
+func (c *TotpSecretCache) Get(ctx context.Context, userID int64) (string, error) {
 	secret, err := c.redisClient.Client.Get(ctx, authTotpSecretRedisKey(userID)).Result()
 	if errors.Is(err, redis.Nil) {
 		return "", nil

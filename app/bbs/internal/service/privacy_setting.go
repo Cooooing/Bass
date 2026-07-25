@@ -22,21 +22,14 @@ func NewPrivacySettingService(
 	}
 }
 
-func (s *PrivacySettingService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *PrivacySettingService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *PrivacySettingService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterPrivacySettingServiceHTTPServer(hs, s)
 }
 
-func (s *PrivacySettingService) GetCurrent(
-	ctx context.Context,
-	req *bbsuserv1.GetCurrentPrivacySetting_Req,
-) (*bbsuserv1.GetCurrentPrivacySetting_Resp, error) {
+func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPrivacySetting_Req) (*bbsuserv1.GetCurrentPrivacySetting_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -50,10 +43,7 @@ func (s *PrivacySettingService) GetCurrent(
 	}, nil
 }
 
-func (s *PrivacySettingService) UpdateCurrent(
-	ctx context.Context,
-	req *bbsuserv1.UpdateCurrentPrivacySetting_Req,
-) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp, error) {
+func (s *PrivacySettingService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPrivacySetting_Req) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

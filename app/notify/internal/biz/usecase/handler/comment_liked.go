@@ -27,10 +27,7 @@ func NewCommentLikedHandler(
 	}
 }
 
-func (h *CommentLikedHandler) Build(
-	ctx context.Context,
-	event *enums.Event,
-) (*usecase.NotificationContext, error) {
+func (h *CommentLikedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}

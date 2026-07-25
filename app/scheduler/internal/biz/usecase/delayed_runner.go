@@ -22,9 +22,7 @@ func NewDelayedTaskRunner(
 	}
 }
 
-func (r *DelayedTaskRunner) Start(
-	ctx context.Context,
-) error {
+func (r *DelayedTaskRunner) Start(ctx context.Context) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	r.cancel = cancel
 	go func() {
@@ -44,9 +42,7 @@ func (r *DelayedTaskRunner) Start(
 	return nil
 }
 
-func (r *DelayedTaskRunner) Stop(
-	ctx context.Context,
-) error {
+func (r *DelayedTaskRunner) Stop(ctx context.Context) error {
 	if r.cancel != nil {
 		r.cancel()
 	}

@@ -70,10 +70,7 @@ func NewIpResolutionUsecase(
 	return u, cleanup, nil
 }
 
-func (u *IpResolutionUsecase) downloadIpDataFromSource(
-	ctx context.Context,
-	url string,
-) ([]byte, error) {
+func (u *IpResolutionUsecase) downloadIpDataFromSource(ctx context.Context, url string) ([]byte, error) {
 	url = strings.TrimSpace(url)
 	if url == "" {
 		return nil, fmt.Errorf("ip data source url is empty")
@@ -104,10 +101,7 @@ func (u *IpResolutionUsecase) downloadIpDataFromSource(
 	return content, nil
 }
 
-func (u *IpResolutionUsecase) downloadIpDataFromOss(
-	ctx context.Context,
-	key string,
-) ([]byte, error) {
+func (u *IpResolutionUsecase) downloadIpDataFromOss(ctx context.Context, key string) ([]byte, error) {
 	key = strings.TrimSpace(key)
 	if key == "" {
 		return nil, fmt.Errorf("ip data oss object key is empty")
@@ -122,11 +116,7 @@ func (u *IpResolutionUsecase) downloadIpDataFromOss(
 	return downloadResp.Content, nil
 }
 
-func (u *IpResolutionUsecase) uploadIpDataToOss(
-	ctx context.Context,
-	key string,
-	content []byte,
-) error {
+func (u *IpResolutionUsecase) uploadIpDataToOss(ctx context.Context, key string, content []byte) error {
 	key = strings.TrimSpace(key)
 	if key == "" {
 		return fmt.Errorf("ip data oss object key is empty")
@@ -150,11 +140,7 @@ func (u *IpResolutionUsecase) uploadIpDataToOss(
 	return nil
 }
 
-func (u *IpResolutionUsecase) uploadIpDataToLocal(
-	ctx context.Context,
-	ipv4Content []byte,
-	ipv6Content []byte,
-) error {
+func (u *IpResolutionUsecase) uploadIpDataToLocal(ctx context.Context, ipv4Content []byte, ipv6Content []byte) error {
 	ipData := u.conf.GetPlatform().GetIpData()
 	ipv4Path := strings.TrimSpace(ipData.GetIpv4XdbPath())
 	if ipv4Path == "" {
@@ -217,11 +203,7 @@ func (u *IpResolutionUsecase) uploadIpDataToLocal(
 	return nil
 }
 
-func (u *IpResolutionUsecase) writeIpDataFile(
-	ctx context.Context,
-	path string,
-	content []byte,
-) (bool, error) {
+func (u *IpResolutionUsecase) writeIpDataFile(ctx context.Context, path string, content []byte) (bool, error) {
 	if err := ctx.Err(); err != nil {
 		return false, err
 	}
@@ -244,10 +226,7 @@ func (u *IpResolutionUsecase) writeIpDataFile(
 	return true, nil
 }
 
-func (u *IpResolutionUsecase) Get(
-	ctx context.Context,
-	ip string,
-) (*commonModel.IpInfo, error) {
+func (u *IpResolutionUsecase) Get(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
 	def := "unknown"
 	u.mu.RLock()
 	defer u.mu.RUnlock()
@@ -285,9 +264,7 @@ func (u *IpResolutionUsecase) Get(
 	}, nil
 }
 
-func (u *IpResolutionUsecase) UpdateIpDataFromSource(
-	ctx context.Context,
-) error {
+func (u *IpResolutionUsecase) UpdateIpDataFromSource(ctx context.Context) error {
 	ipData := u.conf.GetPlatform().GetIpData()
 	ipv4Content, err := u.downloadIpDataFromSource(ctx, ipData.GetIpv4SourceUrl())
 	if err != nil {
@@ -306,9 +283,7 @@ func (u *IpResolutionUsecase) UpdateIpDataFromSource(
 	return u.uploadIpDataToLocal(ctx, ipv4Content, ipv6Content)
 }
 
-func (u *IpResolutionUsecase) UpdateIpDataFromOss(
-	ctx context.Context,
-) error {
+func (u *IpResolutionUsecase) UpdateIpDataFromOss(ctx context.Context) error {
 	ipData := u.conf.GetPlatform().GetIpData()
 	ipv4Content, err := u.downloadIpDataFromOss(ctx, ipData.GetIpv4XdbPath())
 	if err != nil {

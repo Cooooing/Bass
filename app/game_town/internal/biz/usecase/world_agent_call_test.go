@@ -18,10 +18,7 @@ type agentClientSpy struct {
 	tickCalled    bool
 }
 
-func (c *agentClientSpy) Act(
-	context.Context,
-	*repo.ActReq,
-) (*model.ActionResolution, error) {
+func (c *agentClientSpy) Act(context.Context, *repo.ActReq) (*model.ActionResolution, error) {
 	c.actCalled = true
 	return &model.ActionResolution{
 		Status:  "resolved",
@@ -29,10 +26,7 @@ func (c *agentClientSpy) Act(
 	}, nil
 }
 
-func (c *agentClientSpy) PlanNpc(
-	context.Context,
-	*repo.PlanNpcReq,
-) (*model.NpcPlan, error) {
+func (c *agentClientSpy) PlanNpc(context.Context, *repo.PlanNpcReq) (*model.NpcPlan, error) {
 	c.planNpcCalled = true
 	return &model.NpcPlan{
 		Summary:        "NPC 生成了自主计划",
@@ -41,10 +35,7 @@ func (c *agentClientSpy) PlanNpc(
 	}, nil
 }
 
-func (c *agentClientSpy) Tick(
-	context.Context,
-	*repo.TickReq,
-) (*model.ActionResolution, error) {
+func (c *agentClientSpy) Tick(context.Context, *repo.TickReq) (*model.ActionResolution, error) {
 	c.tickCalled = true
 	return &model.ActionResolution{
 		Status:  "resolved",
@@ -57,10 +48,7 @@ type playerRepoCallStub struct {
 	player *model.Player
 }
 
-func (r *playerRepoCallStub) Get(
-	context.Context,
-	*repo.PlayerQuery,
-) (*model.Player, error) {
+func (r *playerRepoCallStub) Get(context.Context, *repo.PlayerQuery) (*model.Player, error) {
 	return r.player, nil
 }
 
@@ -70,17 +58,11 @@ type locationRepoCallStub struct {
 	locations []*model.Location
 }
 
-func (r *locationRepoCallStub) Get(
-	context.Context,
-	*repo.LocationQuery,
-) (*model.Location, error) {
+func (r *locationRepoCallStub) Get(context.Context, *repo.LocationQuery) (*model.Location, error) {
 	return r.location, nil
 }
 
-func (r *locationRepoCallStub) List(
-	context.Context,
-	*repo.LocationQuery,
-) ([]*model.Location, error) {
+func (r *locationRepoCallStub) List(context.Context, *repo.LocationQuery) ([]*model.Location, error) {
 	return r.locations, nil
 }
 
@@ -90,17 +72,11 @@ type npcRepoCallStub struct {
 	npcs []*model.Npc
 }
 
-func (r *npcRepoCallStub) Get(
-	context.Context,
-	*repo.NpcQuery,
-) (*model.Npc, error) {
+func (r *npcRepoCallStub) Get(context.Context, *repo.NpcQuery) (*model.Npc, error) {
 	return r.npc, nil
 }
 
-func (r *npcRepoCallStub) List(
-	context.Context,
-	*repo.NpcQuery,
-) ([]*model.Npc, error) {
+func (r *npcRepoCallStub) List(context.Context, *repo.NpcQuery) ([]*model.Npc, error) {
 	return r.npcs, nil
 }
 
@@ -109,10 +85,7 @@ type factionRepoCallStub struct {
 	factions []*model.Faction
 }
 
-func (r *factionRepoCallStub) List(
-	context.Context,
-	*repo.FactionQuery,
-) ([]*model.Faction, error) {
+func (r *factionRepoCallStub) List(context.Context, *repo.FactionQuery) ([]*model.Faction, error) {
 	return r.factions, nil
 }
 
@@ -120,10 +93,7 @@ type observationRepoCallStub struct {
 	repo.ObservationRepo
 }
 
-func (r *observationRepoCallStub) List(
-	context.Context,
-	*repo.ObservationQuery,
-) ([]*model.Observation, error) {
+func (r *observationRepoCallStub) List(context.Context, *repo.ObservationQuery) ([]*model.Observation, error) {
 	return nil, nil
 }
 
@@ -132,10 +102,7 @@ type eventRepoCallStub struct {
 	events []*model.Event
 }
 
-func (r *eventRepoCallStub) List(
-	context.Context,
-	*repo.EventQuery,
-) ([]*model.Event, error) {
+func (r *eventRepoCallStub) List(context.Context, *repo.EventQuery) ([]*model.Event, error) {
 	return r.events, nil
 }
 
@@ -143,16 +110,11 @@ type npcMemoryRepoCallStub struct {
 	repo.NpcMemoryRepo
 }
 
-func (r *npcMemoryRepoCallStub) List(
-	context.Context,
-	*repo.NpcMemoryQuery,
-) ([]*model.NpcMemory, error) {
+func (r *npcMemoryRepoCallStub) List(context.Context, *repo.NpcMemoryQuery) ([]*model.NpcMemory, error) {
 	return nil, nil
 }
 
-func TestCallAgentUsesModelForPlayerAction(
-	t *testing.T,
-) {
+func TestCallAgentUsesModelForPlayerAction(t *testing.T) {
 	client := &agentClientSpy{}
 	runner := newCallAgentTestRunner(client)
 	result := newCallAgentTestResult(enum.AgentJobTypePlayerActionInterpret)
@@ -170,9 +132,7 @@ func TestCallAgentUsesModelForPlayerAction(
 	}
 }
 
-func TestCallAgentUsesModelForNpcPlan(
-	t *testing.T,
-) {
+func TestCallAgentUsesModelForNpcPlan(t *testing.T) {
 	client := &agentClientSpy{}
 	runner := newCallAgentTestRunner(client)
 	result := newCallAgentTestResult(enum.AgentJobTypeNpcPlan)
@@ -191,9 +151,7 @@ func TestCallAgentUsesModelForNpcPlan(
 	}
 }
 
-func TestCallAgentUsesModelForWorldTick(
-	t *testing.T,
-) {
+func TestCallAgentUsesModelForWorldTick(t *testing.T) {
 	client := &agentClientSpy{}
 	runner := newCallAgentTestRunner(client)
 	result := newCallAgentTestResult(enum.AgentJobTypeWorldTick)
@@ -209,9 +167,7 @@ func TestCallAgentUsesModelForWorldTick(
 	}
 }
 
-func newCallAgentTestRunner(
-	client repo.AgentClient,
-) *WorldAgentRunner {
+func newCallAgentTestRunner(client repo.AgentClient) *WorldAgentRunner {
 	location := &model.Location{
 		ID:         2,
 		WorldID:    1,
@@ -270,9 +226,7 @@ func newCallAgentTestRunner(
 	}
 }
 
-func newCallAgentTestResult(
-	jobType enum.AgentJobType,
-) *agentResult {
+func newCallAgentTestResult(jobType enum.AgentJobType) *agentResult {
 	now := time.Now()
 	return &agentResult{
 		job: &model.AgentJob{
@@ -306,8 +260,6 @@ func newCallAgentTestResult(
 	}
 }
 
-func newInt64(
-	value int64,
-) *int64 {
+func newInt64(value int64) *int64 {
 	return &value
 }

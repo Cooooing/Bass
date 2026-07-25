@@ -30,15 +30,7 @@ type commandResult struct {
 	err              error
 }
 
-func executeCommand(
-	parent context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	worldID int64,
-	dialogNpcID int64,
-	suggestions []suggestedChoice,
-	raw string,
-) commandResult {
+func executeCommand(parent context.Context, client *rpc.GameTownClient, playerID int64, worldID int64, dialogNpcID int64, suggestions []suggestedChoice, raw string) commandResult {
 	raw = strings.TrimSpace(raw)
 	if raw == "" {
 		return commandResult{}
@@ -147,15 +139,7 @@ func executeCommand(
 	}
 }
 
-func submitSuggestedChoice(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	worldID int64,
-	dialogNpcID int64,
-	suggestions []suggestedChoice,
-	raw string,
-) (commandResult, bool) {
+func submitSuggestedChoice(ctx context.Context, client *rpc.GameTownClient, playerID int64, worldID int64, dialogNpcID int64, suggestions []suggestedChoice, raw string) (commandResult, bool) {
 	index, err := strconv.Atoi(raw)
 	if err != nil || index <= 0 || index > len(suggestions) {
 		return commandResult{}, false
@@ -168,25 +152,19 @@ func submitSuggestedChoice(
 	return submitAction(ctx, client, playerID, worldID, choice.content, targets), true
 }
 
-func isChoiceIndex(
-	raw string,
-) bool {
+func isChoiceIndex(raw string) bool {
 	index, err := strconv.Atoi(strings.TrimSpace(raw))
 	return err == nil && index > 0
 }
 
-func npcTarget(
-	npcID int64,
-) *v1.SubmitGameTownAction_Request_EntityRef {
+func npcTarget(npcID int64) *v1.SubmitGameTownAction_Request_EntityRef {
 	return &v1.SubmitGameTownAction_Request_EntityRef{
 		Type: v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_NPC,
 		Id:   npcID,
 	}
 }
 
-func validSubmitTargets(
-	targets []*v1.SubmitGameTownAction_Request_EntityRef,
-) []*v1.SubmitGameTownAction_Request_EntityRef {
+func validSubmitTargets(targets []*v1.SubmitGameTownAction_Request_EntityRef) []*v1.SubmitGameTownAction_Request_EntityRef {
 	result := make([]*v1.SubmitGameTownAction_Request_EntityRef, 0, len(targets))
 	for _, target := range targets {
 		if target == nil {
@@ -203,13 +181,7 @@ func validSubmitTargets(
 	return result
 }
 
-func enterTalk(
-	ctx context.Context,
-	client *rpc.GameTownClient,
-	playerID int64,
-	worldID int64,
-	rawNpcID string,
-) commandResult {
+func enterTalk(ctx context.Context, client *rpc.GameTownClient, playerID int64, worldID int64, rawNpcID string) commandResult {
 	if err := requireWorldContext(playerID, worldID); err != nil {
 		return commandResult{
 			err: err,
@@ -237,9 +209,7 @@ func enterTalk(
 	}
 }
 
-func commandUsage(
-	lines ...string,
-) commandResult {
+func commandUsage(lines ...string) commandResult {
 	return commandResult{
 		lines: lo.Map(lines, func(line string, _ int) string {
 			return "用法: " + line
@@ -247,10 +217,7 @@ func commandUsage(
 	}
 }
 
-func requireWorldContext(
-	playerID int64,
-	worldID int64,
-) error {
+func requireWorldContext(playerID int64, worldID int64) error {
 	if playerID == 0 {
 		return fmt.Errorf("请先 /register <name> 或 /player use <player_id>")
 	}
@@ -288,8 +255,6 @@ func helpLines() []string {
 	}
 }
 
-func eventName(
-	value v1enum.GameTownEventType,
-) string {
+func eventName(value v1enum.GameTownEventType) string {
 	return strings.ToLower(strings.TrimPrefix(value.String(), "GAME_TOWN_EVENT_TYPE_"))
 }

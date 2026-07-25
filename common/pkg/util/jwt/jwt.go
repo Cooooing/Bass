@@ -20,19 +20,14 @@ type Claims[T any] struct {
 }
 
 // NewTokenGenerator 创建一个新的 Token 生成器
-func NewTokenGenerator[T any](
-	secret string,
-) *TokenGenerator[T] {
+func NewTokenGenerator[T any](secret string) *TokenGenerator[T] {
 	return &TokenGenerator[T]{
 		secret: secret,
 	}
 }
 
 // Generate 生成 JWT Token
-func (g *TokenGenerator[T]) Generate(
-	data T,
-	expire time.Duration,
-) (string, error) {
+func (g *TokenGenerator[T]) Generate(data T, expire time.Duration) (string, error) {
 	claims := &Claims[T]{
 		Data: data,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -48,9 +43,7 @@ func (g *TokenGenerator[T]) Generate(
 
 // Parse 解析 Token 并返回业务数据 T
 // 如果 Token 无效、过期或解析失败，返回错误
-func (g *TokenGenerator[T]) Parse(
-	tokenStr string,
-) (T, error) {
+func (g *TokenGenerator[T]) Parse(tokenStr string) (T, error) {
 	var zero T // 泛型的零值，用于返回错误时
 
 	parsedToken, err := jwt.ParseWithClaims(tokenStr, &Claims[T]{}, func(token *jwt.Token) (interface{}, error) {

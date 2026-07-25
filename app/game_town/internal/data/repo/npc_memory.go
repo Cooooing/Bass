@@ -33,19 +33,14 @@ func NewNpcMemoryRepo(
 	}
 }
 
-func (r *NpcMemoryRepo) getClient(
-	ctx context.Context,
-) *gen.Client {
+func (r *NpcMemoryRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *NpcMemoryRepo) Save(
-	ctx context.Context,
-	row *model.NpcMemory,
-) (*model.NpcMemory, error) {
+func (r *NpcMemoryRepo) Save(ctx context.Context, row *model.NpcMemory) (*model.NpcMemory, error) {
 	saved, err := r.getClient(ctx).NpcMemory.Create().
 		SetWorldID(row.WorldID).
 		SetNpcID(row.NpcID).
@@ -66,10 +61,7 @@ func (r *NpcMemoryRepo) Save(
 	return npcMemoryModel(saved), nil
 }
 
-func (r *NpcMemoryRepo) SetEmbedding(
-	ctx context.Context,
-	req *bizrepo.NpcMemoryEmbeddingReq,
-) error {
+func (r *NpcMemoryRepo) SetEmbedding(ctx context.Context, req *bizrepo.NpcMemoryEmbeddingReq) error {
 	update := r.getClient(ctx).NpcMemory.UpdateOneID(req.ID).
 		SetEmbeddingModel(req.Model).
 		SetEmbeddingStatus(npcmemory.EmbeddingStatus(req.Status)).
@@ -80,10 +72,7 @@ func (r *NpcMemoryRepo) SetEmbedding(
 	return update.Exec(ctx)
 }
 
-func npcMemoryQuery(
-	q *gen.NpcMemoryQuery,
-	req *bizrepo.NpcMemoryQuery,
-) *gen.NpcMemoryQuery {
+func npcMemoryQuery(q *gen.NpcMemoryQuery, req *bizrepo.NpcMemoryQuery) *gen.NpcMemoryQuery {
 	if req == nil {
 		return q
 	}
@@ -105,10 +94,7 @@ func npcMemoryQuery(
 	return q
 }
 
-func (r *NpcMemoryRepo) Get(
-	ctx context.Context,
-	req *bizrepo.NpcMemoryQuery,
-) (*model.NpcMemory, error) {
+func (r *NpcMemoryRepo) Get(ctx context.Context, req *bizrepo.NpcMemoryQuery) (*model.NpcMemory, error) {
 	row, err := npcMemoryQuery(r.getClient(ctx).NpcMemory.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -119,10 +105,7 @@ func (r *NpcMemoryRepo) Get(
 	return npcMemoryModel(row), nil
 }
 
-func (r *NpcMemoryRepo) List(
-	ctx context.Context,
-	req *bizrepo.NpcMemoryQuery,
-) ([]*model.NpcMemory, error) {
+func (r *NpcMemoryRepo) List(ctx context.Context, req *bizrepo.NpcMemoryQuery) ([]*model.NpcMemory, error) {
 	q := npcMemoryQuery(r.getClient(ctx).NpcMemory.Query(), req)
 	if req != nil && req.RecentLimit > 0 {
 		q = q.Order(npcmemory.ByOccurredWorldTime(sql.OrderDesc())).Limit(req.RecentLimit)
@@ -142,10 +125,7 @@ func (r *NpcMemoryRepo) List(
 	}), nil
 }
 
-func (r *NpcMemoryRepo) Search(
-	ctx context.Context,
-	req *bizrepo.NpcMemorySearchReq,
-) ([]*model.NpcMemory, error) {
+func (r *NpcMemoryRepo) Search(ctx context.Context, req *bizrepo.NpcMemorySearchReq) ([]*model.NpcMemory, error) {
 	if req.WorldID <= 0 || req.NpcID <= 0 || len(req.Vector) == 0 {
 		return nil, nil
 	}
@@ -203,11 +183,7 @@ func (r *NpcMemoryRepo) Search(
 	return out, nil
 }
 
-func (r *NpcMemoryRepo) searchVectorCandidates(
-	ctx context.Context,
-	req *bizrepo.NpcMemorySearchReq,
-	limit int,
-) ([]*gen.NpcMemory, error) {
+func (r *NpcMemoryRepo) searchVectorCandidates(ctx context.Context, req *bizrepo.NpcMemorySearchReq, limit int) ([]*gen.NpcMemory, error) {
 	return r.getClient(ctx).NpcMemory.Query().
 		Where(
 			npcmemory.WorldID(req.WorldID),
@@ -230,10 +206,7 @@ type scoredMemory struct {
 	score float64
 }
 
-func (r *NpcMemoryRepo) Map(
-	ctx context.Context,
-	req *bizrepo.NpcMemoryQuery,
-) (map[int64]*model.NpcMemory, error) {
+func (r *NpcMemoryRepo) Map(ctx context.Context, req *bizrepo.NpcMemoryQuery) (map[int64]*model.NpcMemory, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -245,17 +218,11 @@ func (r *NpcMemoryRepo) Map(
 	return out, nil
 }
 
-func (r *NpcMemoryRepo) Count(
-	ctx context.Context,
-	req *bizrepo.NpcMemoryQuery,
-) (int, error) {
+func (r *NpcMemoryRepo) Count(ctx context.Context, req *bizrepo.NpcMemoryQuery) (int, error) {
 	return npcMemoryQuery(r.getClient(ctx).NpcMemory.Query(), req).Count(ctx)
 }
 
-func (r *NpcMemoryRepo) Page(
-	ctx context.Context,
-	req *bizrepo.NpcMemoryPageReq,
-) (*bizrepo.NpcMemoryPageResp, error) {
+func (r *NpcMemoryRepo) Page(ctx context.Context, req *bizrepo.NpcMemoryPageReq) (*bizrepo.NpcMemoryPageResp, error) {
 	p := page(req.Page)
 	q := npcMemoryQuery(r.getClient(ctx).NpcMemory.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -277,9 +244,7 @@ func (r *NpcMemoryRepo) Page(
 	}, nil
 }
 
-func npcMemoryModel(
-	row *gen.NpcMemory,
-) *model.NpcMemory {
+func npcMemoryModel(row *gen.NpcMemory) *model.NpcMemory {
 	return &model.NpcMemory{
 		ID:                  row.ID,
 		WorldID:             row.WorldID,

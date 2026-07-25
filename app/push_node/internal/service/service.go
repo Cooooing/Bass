@@ -11,8 +11,6 @@ var ServiceProviderSet = wire.NewSet(
 	NewCommonSystemService,
 )
 
-func ProvideServices(
-	commonSystemService *CommonSystemService,
-) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService) []server.Service {
 	return []server.Service{commonSystemService}
 }

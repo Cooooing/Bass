@@ -22,21 +22,14 @@ func NewNotificationService(
 	}
 }
 
-func (s *NotificationService) RegisterGrpc(
-	gs *grpc.Server,
-) {
+func (s *NotificationService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *NotificationService) RegisterHttp(
-	hs *http.Server,
-) {
+func (s *NotificationService) RegisterHttp(hs *http.Server) {
 	bbsnotifyv1.RegisterNotificationServiceHTTPServer(hs, s)
 }
 
-func (s *NotificationService) List(
-	ctx context.Context,
-	req *bbsnotifyv1.ListNotifications_Req,
-) (*bbsnotifyv1.ListNotifications_Resp, error) {
+func (s *NotificationService) List(ctx context.Context, req *bbsnotifyv1.ListNotifications_Req) (*bbsnotifyv1.ListNotifications_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -54,10 +47,7 @@ func (s *NotificationService) List(
 	}, nil
 }
 
-func (s *NotificationService) MarkRead(
-	ctx context.Context,
-	req *bbsnotifyv1.MarkReadNotification_Req,
-) (*bbsnotifyv1.MarkReadNotification_Resp, error) {
+func (s *NotificationService) MarkRead(ctx context.Context, req *bbsnotifyv1.MarkReadNotification_Req) (*bbsnotifyv1.MarkReadNotification_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -74,10 +64,7 @@ func (s *NotificationService) MarkRead(
 	}, nil
 }
 
-func (s *NotificationService) CountUnread(
-	ctx context.Context,
-	req *bbsnotifyv1.CountUnreadNotifications_Req,
-) (*bbsnotifyv1.CountUnreadNotifications_Resp, error) {
+func (s *NotificationService) CountUnread(ctx context.Context, req *bbsnotifyv1.CountUnreadNotifications_Req) (*bbsnotifyv1.CountUnreadNotifications_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err

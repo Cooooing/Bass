@@ -21,7 +21,14 @@ type WorldMemberUsecase struct {
 	eventUsecase    *EventUsecase
 }
 
-func NewWorldMemberUsecase(tx base.Tx, playerRepo repo.PlayerRepo, worldRepo repo.WorldRepo, worldMemberRepo repo.WorldMemberRepo, worldStateRepo repo.WorldStateRepo, eventUsecase *EventUsecase) *WorldMemberUsecase {
+func NewWorldMemberUsecase(
+	tx base.Tx,
+	playerRepo repo.PlayerRepo,
+	worldRepo repo.WorldRepo,
+	worldMemberRepo repo.WorldMemberRepo,
+	worldStateRepo repo.WorldStateRepo,
+	eventUsecase *EventUsecase,
+) *WorldMemberUsecase {
 	return &WorldMemberUsecase{
 		tx:              tx,
 		playerRepo:      playerRepo,
@@ -45,18 +52,25 @@ type JoinWorldResp struct {
 	EventID    int64
 }
 
-func (u *WorldMemberUsecase) Join(ctx context.Context, req *JoinWorldReq) (*JoinWorldResp, error) {
+func (u *WorldMemberUsecase) Join(
+	ctx context.Context,
+	req *JoinWorldReq,
+) (*JoinWorldResp, error) {
 	worldCode := strings.TrimSpace(req.WorldCode)
 	characterPreference := strings.TrimSpace(req.CharacterPreference)
 	if req.PlayerID <= 0 || worldCode == "" {
 		return nil, apperror.CommonInvalidArgument()
 	}
 
-	if _, err := u.playerRepo.Get(ctx, &repo.PlayerQuery{ID: new(req.PlayerID)}); err != nil {
+	if _, err := u.playerRepo.Get(ctx, &repo.PlayerQuery{
+		ID: new(req.PlayerID),
+	}); err != nil {
 		return nil, err
 	}
 
-	world, err := u.worldRepo.Get(ctx, &repo.WorldQuery{Code: new(worldCode)})
+	world, err := u.worldRepo.Get(ctx, &repo.WorldQuery{
+		Code: new(worldCode),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +153,10 @@ type GetWorldMemberResp struct {
 	State  *model.WorldState
 }
 
-func (u *WorldMemberUsecase) Get(ctx context.Context, req *GetWorldMemberReq) (*GetWorldMemberResp, error) {
+func (u *WorldMemberUsecase) Get(
+	ctx context.Context,
+	req *GetWorldMemberReq,
+) (*GetWorldMemberResp, error) {
 	member, err := u.worldMemberRepo.Get(ctx, &repo.WorldMemberQuery{
 		WorldID:  new(req.WorldID),
 		PlayerID: new(req.PlayerID),
@@ -148,7 +165,9 @@ func (u *WorldMemberUsecase) Get(ctx context.Context, req *GetWorldMemberReq) (*
 		return nil, err
 	}
 
-	state, err := u.worldStateRepo.Get(ctx, &repo.WorldStateQuery{WorldID: new(req.WorldID)})
+	state, err := u.worldStateRepo.Get(ctx, &repo.WorldStateQuery{
+		WorldID: new(req.WorldID),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +191,10 @@ type SubmitActionReq struct {
 	ClientRequestID string
 }
 
-func (u *WorldMemberUsecase) SubmitAction(ctx context.Context, req *SubmitActionReq) (*model.Event, error) {
+func (u *WorldMemberUsecase) SubmitAction(
+	ctx context.Context,
+	req *SubmitActionReq,
+) (*model.Event, error) {
 	content := strings.TrimSpace(req.Content)
 	if req.WorldID <= 0 || req.PlayerID <= 0 || content == "" {
 		return nil, apperror.CommonInvalidArgument()
@@ -213,7 +235,9 @@ func (u *WorldMemberUsecase) SubmitAction(ctx context.Context, req *SubmitAction
 	return event, nil
 }
 
-func actionPayloadTargets(rows []SubmitActionTarget) ([]any, *int64) {
+func actionPayloadTargets(
+	rows []SubmitActionTarget,
+) ([]any, *int64) {
 	targets := make([]any, 0, len(rows))
 	var npcID *int64
 	for _, target := range rows {

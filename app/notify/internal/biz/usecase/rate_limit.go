@@ -15,7 +15,10 @@ type RateLimitUsecase struct {
 	maxCount                   int64
 }
 
-func NewRateLimitUsecase(conf *config.Bootstrap, notificationRateLimitCache repo.NotificationRateLimitCache) *RateLimitUsecase {
+func NewRateLimitUsecase(
+	conf *config.Bootstrap,
+	notificationRateLimitCache repo.NotificationRateLimitCache,
+) *RateLimitUsecase {
 	enabled := true
 	window := 5 * time.Minute
 	maxCount := int64(5)
@@ -47,12 +50,17 @@ type RateLimitCheckResp struct {
 	RemainingCount int64
 }
 
-func (u *RateLimitUsecase) Check(ctx context.Context, req *RateLimitCheckReq) (*RateLimitCheckResp, error) {
+func (u *RateLimitUsecase) Check(
+	ctx context.Context,
+	req *RateLimitCheckReq,
+) (*RateLimitCheckResp, error) {
 	if req == nil {
 		req = &RateLimitCheckReq{}
 	}
 	if !u.enabled {
-		return &RateLimitCheckResp{RemainingCount: u.maxCount}, nil
+		return &RateLimitCheckResp{
+			RemainingCount: u.maxCount,
+		}, nil
 	}
 	checkResp, err := u.notificationRateLimitCache.Check(ctx, &repo.NotificationRateLimitSpec{
 		Channel:   req.Channel,

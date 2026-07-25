@@ -20,21 +20,30 @@ type ChatMessageService struct {
 	chatMessageUsecase *usecase.ChatMessageUsecase
 }
 
-func NewChatMessageService(chatMessageUsecase *usecase.ChatMessageUsecase) *ChatMessageService {
+func NewChatMessageService(
+	chatMessageUsecase *usecase.ChatMessageUsecase,
+) *ChatMessageService {
 	return &ChatMessageService{
 		chatMessageUsecase: chatMessageUsecase,
 	}
 }
 
-func (s *ChatMessageService) RegisterGrpc(gs *grpc.Server) {
+func (s *ChatMessageService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	v1.RegisterIMChatMessageServiceServer(gs, s)
 }
 
-func (s *ChatMessageService) RegisterHttp(hs *http.Server) {
+func (s *ChatMessageService) RegisterHttp(
+	hs *http.Server,
+) {
 }
 
 // Send 发送消息。
-func (s *ChatMessageService) Send(ctx context.Context, req *v1.SendChatMessage_Req) (*v1.SendChatMessage_Resp, error) {
+func (s *ChatMessageService) Send(
+	ctx context.Context,
+	req *v1.SendChatMessage_Req,
+) (*v1.SendChatMessage_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -60,7 +69,10 @@ func (s *ChatMessageService) Send(ctx context.Context, req *v1.SendChatMessage_R
 }
 
 // Revoke 撤回消息。
-func (s *ChatMessageService) Revoke(ctx context.Context, req *v1.RevokeChatMessage_Req) (*v1.RevokeChatMessage_Resp, error) {
+func (s *ChatMessageService) Revoke(
+	ctx context.Context,
+	req *v1.RevokeChatMessage_Req,
+) (*v1.RevokeChatMessage_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -75,7 +87,10 @@ func (s *ChatMessageService) Revoke(ctx context.Context, req *v1.RevokeChatMessa
 }
 
 // List 查询消息列表。
-func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_Req) (*v1.ListChatMessages_Resp, error) {
+func (s *ChatMessageService) List(
+	ctx context.Context,
+	req *v1.ListChatMessages_Req,
+) (*v1.ListChatMessages_Resp, error) {
 	var ids []int64
 	var sessionID *int64
 	var senderID *int64
@@ -89,7 +104,10 @@ func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_
 		}
 	}
 	resp, err := s.chatMessageUsecase.List(ctx, &usecase.ChatMessageListReq{
-		Page:      &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())},
+		Page: &base.PageRequest{
+			Page: int64(req.GetPage().GetPage()),
+			Size: int64(req.GetPage().GetSize()),
+		},
 		IDs:       ids,
 		SessionID: sessionID,
 		SenderID:  senderID,
@@ -119,7 +137,11 @@ func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_
 		})
 	}
 	return &v1.ListChatMessages_Resp{
-		Page: &common.PageResp{Page: uint32(resp.Page.Page), Size: uint32(resp.Page.Size), Total: uint32(resp.Page.Total)},
+		Page: &common.PageResp{
+			Page:  uint32(resp.Page.Page),
+			Size:  uint32(resp.Page.Size),
+			Total: uint32(resp.Page.Total),
+		},
 		Rows: rows,
 	}, nil
 }

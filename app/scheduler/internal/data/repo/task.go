@@ -22,18 +22,27 @@ type TaskRepo struct {
 	db *gen.Client
 }
 
-func NewTaskRepo(db *gen.Client) bizrepo.TaskRepo {
-	return &TaskRepo{db: db}
+func NewTaskRepo(
+	db *gen.Client,
+) bizrepo.TaskRepo {
+	return &TaskRepo{
+		db: db,
+	}
 }
 
-func (r *TaskRepo) getClient(ctx context.Context) *gen.Client {
+func (r *TaskRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *TaskRepo) Get(ctx context.Context, req *bizrepo.TaskGetReq) (*model.Task, error) {
+func (r *TaskRepo) Get(
+	ctx context.Context,
+	req *bizrepo.TaskGetReq,
+) (*model.Task, error) {
 	query := r.getClient(ctx).Task.Query().Where(task.DeletedAtIsNil())
 	query = r.getQuery(query, req)
 	row, err := query.Only(ctx)
@@ -46,7 +55,10 @@ func (r *TaskRepo) Get(ctx context.Context, req *bizrepo.TaskGetReq) (*model.Tas
 	return r.model(row), nil
 }
 
-func (r *TaskRepo) List(ctx context.Context, req *bizrepo.TaskGetReq) ([]*model.Task, error) {
+func (r *TaskRepo) List(
+	ctx context.Context,
+	req *bizrepo.TaskGetReq,
+) ([]*model.Task, error) {
 	query := r.getClient(ctx).Task.Query().Where(task.DeletedAtIsNil())
 	query = r.getQuery(query, req)
 	rows, err := query.Order(task.ByID()).All(ctx)
@@ -60,7 +72,10 @@ func (r *TaskRepo) List(ctx context.Context, req *bizrepo.TaskGetReq) ([]*model.
 	return result, nil
 }
 
-func (r *TaskRepo) Map(ctx context.Context, req *bizrepo.TaskGetReq) (map[int64]*model.Task, error) {
+func (r *TaskRepo) Map(
+	ctx context.Context,
+	req *bizrepo.TaskGetReq,
+) (map[int64]*model.Task, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -72,7 +87,10 @@ func (r *TaskRepo) Map(ctx context.Context, req *bizrepo.TaskGetReq) (map[int64]
 	return result, nil
 }
 
-func (r *TaskRepo) Count(ctx context.Context, req *bizrepo.TaskGetReq) (int, error) {
+func (r *TaskRepo) Count(
+	ctx context.Context,
+	req *bizrepo.TaskGetReq,
+) (int, error) {
 	query := r.getClient(ctx).Task.Query().Where(task.DeletedAtIsNil())
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -82,7 +100,10 @@ func (r *TaskRepo) Count(ctx context.Context, req *bizrepo.TaskGetReq) (int, err
 	return count, nil
 }
 
-func (r *TaskRepo) Page(ctx context.Context, req *bizrepo.TaskPageReq) (*bizrepo.TaskPageResp, error) {
+func (r *TaskRepo) Page(
+	ctx context.Context,
+	req *bizrepo.TaskPageReq,
+) (*bizrepo.TaskPageResp, error) {
 	page := server.PageValid(req.Page)
 	query := r.getClient(ctx).Task.Query().Where(task.DeletedAtIsNil())
 	query = r.getQuery(query, &req.TaskGetReq)
@@ -98,10 +119,20 @@ func (r *TaskRepo) Page(ctx context.Context, req *bizrepo.TaskPageReq) (*bizrepo
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return &bizrepo.TaskPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
+	return &bizrepo.TaskPageResp{
+		Rows: result,
+		Page: &common.PageResp{
+			Total: uint32(total),
+			Page:  page.Page,
+			Size:  page.Size,
+		},
+	}, nil
 }
 
-func (r *TaskRepo) Upsert(ctx context.Context, row *model.Task) (*model.Task, error) {
+func (r *TaskRepo) Upsert(
+	ctx context.Context,
+	row *model.Task,
+) (*model.Task, error) {
 	var result *model.Task
 	if row.ID > 0 {
 		current, err := r.getClient(ctx).Task.Query().Where(task.ID(row.ID), task.DeletedAtIsNil()).Only(ctx)
@@ -147,7 +178,10 @@ func (r *TaskRepo) Upsert(ctx context.Context, row *model.Task) (*model.Task, er
 	return result, nil
 }
 
-func (r *TaskRepo) Lock(ctx context.Context, id int64) error {
+func (r *TaskRepo) Lock(
+	ctx context.Context,
+	id int64,
+) error {
 	_, err := r.getClient(ctx).Task.Query().
 		Where(
 			task.ID(id),
@@ -163,7 +197,10 @@ func (r *TaskRepo) Lock(ctx context.Context, id int64) error {
 	return nil
 }
 
-func (r *TaskRepo) getQuery(query *gen.TaskQuery, req *bizrepo.TaskGetReq) *gen.TaskQuery {
+func (r *TaskRepo) getQuery(
+	query *gen.TaskQuery,
+	req *bizrepo.TaskGetReq,
+) *gen.TaskQuery {
 	if req == nil {
 		return query
 	}
@@ -185,7 +222,9 @@ func (r *TaskRepo) getQuery(query *gen.TaskQuery, req *bizrepo.TaskGetReq) *gen.
 	return query
 }
 
-func (r *TaskRepo) model(row *gen.Task) *model.Task {
+func (r *TaskRepo) model(
+	row *gen.Task,
+) *model.Task {
 	return &model.Task{
 		ID:             row.ID,
 		Name:           row.Name,

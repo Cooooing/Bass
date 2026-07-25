@@ -11,11 +11,18 @@ type PreferencesUsecase struct {
 	preferencesClient repo.PreferencesClient
 }
 
-func NewPreferencesUsecase(preferencesClient repo.PreferencesClient) *PreferencesUsecase {
-	return &PreferencesUsecase{preferencesClient: preferencesClient}
+func NewPreferencesUsecase(
+	preferencesClient repo.PreferencesClient,
+) *PreferencesUsecase {
+	return &PreferencesUsecase{
+		preferencesClient: preferencesClient,
+	}
 }
 
-func (u *PreferencesUsecase) GetCurrentPreferences(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentPreferences_Resp_Preference, error) {
+func (u *PreferencesUsecase) GetCurrentPreferences(
+	ctx context.Context,
+	userID int64,
+) (*bbsuserv1.GetCurrentPreferences_Resp_Preference, error) {
 	reply, err := u.preferencesClient.GetCurrentPreferences(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -41,7 +48,10 @@ type UpdateCurrentPreferencesReq struct {
 	Language    *commonenums.Language
 }
 
-func (u *PreferencesUsecase) UpdateCurrentPreferences(ctx context.Context, req *UpdateCurrentPreferencesReq) (*bbsuserv1.UpdateCurrentPreferences_Resp_Preference, error) {
+func (u *PreferencesUsecase) UpdateCurrentPreferences(
+	ctx context.Context,
+	req *UpdateCurrentPreferencesReq,
+) (*bbsuserv1.UpdateCurrentPreferences_Resp_Preference, error) {
 	var language *int32
 	if req.Language != nil {
 		value := int32(*req.Language)

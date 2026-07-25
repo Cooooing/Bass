@@ -13,16 +13,25 @@ var _ bizrepo.IPClient = (*IPClient)(nil)
 
 type IPClient struct{ consul *commonClient.ConsulClient }
 
-func NewIPClient(consul *commonClient.ConsulClient) bizrepo.IPClient {
-	return &IPClient{consul: consul}
+func NewIPClient(
+	consul *commonClient.ConsulClient,
+) bizrepo.IPClient {
+	return &IPClient{
+		consul: consul,
+	}
 }
 
-func (r *IPClient) Resolve(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
+func (r *IPClient) Resolve(
+	ctx context.Context,
+	ip string,
+) (*commonModel.IpInfo, error) {
 	conn, err := r.consul.GetGrpcConn(constant.PlatformServiceName.String())
 	if err != nil {
 		return nil, err
 	}
-	reply, err := platformv1.NewPlatformIpResolutionServiceClient(conn).ResolveIp(ctx, &platformv1.ResolveIp_Req{Ip: ip})
+	reply, err := platformv1.NewPlatformIpResolutionServiceClient(conn).ResolveIp(ctx, &platformv1.ResolveIp_Req{
+		Ip: ip,
+	})
 	if err != nil {
 		return nil, err
 	}

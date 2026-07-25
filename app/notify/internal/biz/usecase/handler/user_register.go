@@ -12,11 +12,20 @@ type UserRegisterHandler struct {
 	userClientHandler
 }
 
-func NewUserRegisterHandler(userClient repo.UserClient) *UserRegisterHandler {
-	return &UserRegisterHandler{userClientHandler: userClientHandler{userClient: userClient}}
+func NewUserRegisterHandler(
+	userClient repo.UserClient,
+) *UserRegisterHandler {
+	return &UserRegisterHandler{
+		userClientHandler: userClientHandler{
+			userClient: userClient,
+		},
+	}
 }
 
-func (h *UserRegisterHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
+func (h *UserRegisterHandler) Build(
+	ctx context.Context,
+	event *enums.Event,
+) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}

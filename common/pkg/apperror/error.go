@@ -20,11 +20,18 @@ const (
 
 type Option func(metadata map[string]string)
 
-func New(code cerrors.BusinessErrorCode, opts ...Option) *kratoserrors.Error {
+func New(
+	code cerrors.BusinessErrorCode,
+	opts ...Option,
+) *kratoserrors.Error {
 	return NewMessage(code, "", opts...)
 }
 
-func NewMessage(code cerrors.BusinessErrorCode, message string, opts ...Option) *kratoserrors.Error {
+func NewMessage(
+	code cerrors.BusinessErrorCode,
+	message string,
+	opts ...Option,
+) *kratoserrors.Error {
 	if !validBusinessCode(code) || code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_SUCCESS {
 		code = cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_UNKNOWN
 	}
@@ -42,7 +49,9 @@ func NewMessage(code cerrors.BusinessErrorCode, message string, opts ...Option) 
 	return kratoserrors.New(StatusCode(code), code.String(), message).WithMetadata(metadata)
 }
 
-func WithData[T proto.Message](data T) Option {
+func WithData[T proto.Message](
+	data T,
+) Option {
 	return func(metadata map[string]string) {
 		value := reflect.ValueOf(data)
 		if !value.IsValid() {
@@ -54,7 +63,9 @@ func WithData[T proto.Message](data T) Option {
 				return
 			}
 		}
-		payload, err := protojson.MarshalOptions{UseProtoNames: true}.Marshal(data)
+		payload, err := protojson.MarshalOptions{
+			UseProtoNames: true,
+		}.Marshal(data)
 		if err != nil {
 			return
 		}
@@ -70,11 +81,15 @@ func GameTownWorldInvalid() *kratoserrors.Error {
 	return New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_INVALID)
 }
 
-func GameTownWorldInvalidMessage(message string) *kratoserrors.Error {
+func GameTownWorldInvalidMessage(
+	message string,
+) *kratoserrors.Error {
 	return NewMessage(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_INVALID, message)
 }
 
-func BusinessCode(err error) (cerrors.BusinessErrorCode, bool) {
+func BusinessCode(
+	err error,
+) (cerrors.BusinessErrorCode, bool) {
 	se := kratoserrors.FromError(err)
 	if se == nil {
 		return 0, false
@@ -100,7 +115,9 @@ func BusinessCode(err error) (cerrors.BusinessErrorCode, bool) {
 	return 0, false
 }
 
-func Data(err error) json.RawMessage {
+func Data(
+	err error,
+) json.RawMessage {
 	se := kratoserrors.FromError(err)
 	if se == nil || se.Metadata == nil {
 		return nil
@@ -112,7 +129,9 @@ func Data(err error) json.RawMessage {
 	return json.RawMessage(raw)
 }
 
-func StatusCode(code cerrors.BusinessErrorCode) int {
+func StatusCode(
+	code cerrors.BusinessErrorCode,
+) int {
 	if !validBusinessCode(code) {
 		return http.StatusInternalServerError
 	}
@@ -128,7 +147,9 @@ func StatusCode(code cerrors.BusinessErrorCode) int {
 	return http.StatusInternalServerError
 }
 
-func IsInternal(err error) bool {
+func IsInternal(
+	err error,
+) bool {
 	if code, ok := BusinessCode(err); ok {
 		return code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INTERNAL
 	}
@@ -136,12 +157,17 @@ func IsInternal(err error) bool {
 	return se != nil && se.Code >= http.StatusInternalServerError
 }
 
-func validBusinessCode(code cerrors.BusinessErrorCode) bool {
+func validBusinessCode(
+	code cerrors.BusinessErrorCode,
+) bool {
 	_, ok := cerrors.BusinessErrorCode_name[int32(code)]
 	return ok
 }
 
-func extensionInt32(message proto.Message, extension protoreflect.ExtensionType) int {
+func extensionInt32(
+	message proto.Message,
+	extension protoreflect.ExtensionType,
+) int {
 	if message == nil || !proto.HasExtension(message, extension) {
 		return 0
 	}

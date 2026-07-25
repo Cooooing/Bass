@@ -17,7 +17,9 @@ type UserClient struct {
 	Totp           userv1.TotpServiceClient
 }
 
-func NewUserClient(conn *grpc.ClientConn) *UserClient {
+func NewUserClient(
+	conn *grpc.ClientConn,
+) *UserClient {
 	return &UserClient{
 		Account:        userv1.NewAccountServiceClient(conn),
 		Auth:           userv1.NewAuthServiceClient(conn),

@@ -13,8 +13,12 @@ type StationMessageUsecase struct {
 	stationMessageRepo repo.NotificationStationMessageRepo
 }
 
-func NewStationMessageUsecase(stationMessageRepo repo.NotificationStationMessageRepo) *StationMessageUsecase {
-	return &StationMessageUsecase{stationMessageRepo: stationMessageRepo}
+func NewStationMessageUsecase(
+	stationMessageRepo repo.NotificationStationMessageRepo,
+) *StationMessageUsecase {
+	return &StationMessageUsecase{
+		stationMessageRepo: stationMessageRepo,
+	}
 }
 
 type StationMessagePageReq struct {
@@ -30,7 +34,10 @@ type StationMessagePageResp struct {
 	Page *base.PageResp
 }
 
-func (u *StationMessageUsecase) Page(ctx context.Context, req *StationMessagePageReq) (*StationMessagePageResp, error) {
+func (u *StationMessageUsecase) Page(
+	ctx context.Context,
+	req *StationMessagePageReq,
+) (*StationMessagePageResp, error) {
 	if req == nil {
 		req = &StationMessagePageReq{}
 	}
@@ -44,7 +51,10 @@ func (u *StationMessageUsecase) Page(ctx context.Context, req *StationMessagePag
 	if err != nil {
 		return nil, err
 	}
-	return &StationMessagePageResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
+	return &StationMessagePageResp{
+		Rows: pageResp.Rows,
+		Page: pageResp.Page,
+	}, nil
 }
 
 type StationMessageMarkReadReq struct {
@@ -54,7 +64,10 @@ type StationMessageMarkReadReq struct {
 	EndTime    *time.Time
 }
 
-func (u *StationMessageUsecase) MarkRead(ctx context.Context, req *StationMessageMarkReadReq) (int, error) {
+func (u *StationMessageUsecase) MarkRead(
+	ctx context.Context,
+	req *StationMessageMarkReadReq,
+) (int, error) {
 	if req == nil {
 		req = &StationMessageMarkReadReq{}
 	}
@@ -70,7 +83,10 @@ func (u *StationMessageUsecase) MarkRead(ctx context.Context, req *StationMessag
 	return count, nil
 }
 
-func (u *StationMessageUsecase) CountUnread(ctx context.Context, receiverID int64) (int, error) {
+func (u *StationMessageUsecase) CountUnread(
+	ctx context.Context,
+	receiverID int64,
+) (int, error) {
 
 	count, err := u.stationMessageRepo.CountUnread(ctx, receiverID)
 	if err != nil {

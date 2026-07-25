@@ -19,7 +19,9 @@ type AgentConfig struct {
 
 func (AgentConfig) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "agent_configs"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "agent_configs",
+		},
 		entsql.WithComments(true),
 	}
 }

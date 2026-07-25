@@ -13,14 +13,24 @@ type CommentLikedHandler struct {
 	contentClientHandler
 }
 
-func NewCommentLikedHandler(userClient repo.UserClient, contentClient repo.ContentClient) *CommentLikedHandler {
+func NewCommentLikedHandler(
+	userClient repo.UserClient,
+	contentClient repo.ContentClient,
+) *CommentLikedHandler {
 	return &CommentLikedHandler{
-		userClientHandler:    userClientHandler{userClient: userClient},
-		contentClientHandler: contentClientHandler{contentClient: contentClient},
+		userClientHandler: userClientHandler{
+			userClient: userClient,
+		},
+		contentClientHandler: contentClientHandler{
+			contentClient: contentClient,
+		},
 	}
 }
 
-func (h *CommentLikedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
+func (h *CommentLikedHandler) Build(
+	ctx context.Context,
+	event *enums.Event,
+) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}
@@ -43,7 +53,9 @@ func (h *CommentLikedHandler) Build(ctx context.Context, event *enums.Event) (*u
 	}
 	recipients := make([]*usecase.NotificationRecipient, 0, 1)
 	if comment != nil && comment.UserID != 0 && comment.UserID != payload.GetSenderId() {
-		recipients = append(recipients, &usecase.NotificationRecipient{UserID: comment.UserID})
+		recipients = append(recipients, &usecase.NotificationRecipient{
+			UserID: comment.UserID,
+		})
 	}
 	return &usecase.NotificationContext{
 		EventID:      event.EventId,

@@ -15,7 +15,9 @@ var ProviderSet = wire.NewSet(
 	ProvideObjectStorageClient,
 )
 
-func ProvideObjectStorageClient(conf *config.Bootstrap) (repo.ObjectStorageClient, error) {
+func ProvideObjectStorageClient(
+	conf *config.Bootstrap,
+) (repo.ObjectStorageClient, error) {
 	provider := conf.GetPlatform().GetOss().GetProvider()
 	switch provider {
 	case string(enum.ObjectStorageProviderMinio):

@@ -15,16 +15,25 @@ type UserClient struct {
 	userClient *rpc.UserClient
 }
 
-func NewUserClient(userClient *rpc.UserClient) bizrepo.UserClient {
-	return &UserClient{userClient: userClient}
+func NewUserClient(
+	userClient *rpc.UserClient,
+) bizrepo.UserClient {
+	return &UserClient{
+		userClient: userClient,
+	}
 }
 
-func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.UserAccountBasic, error) {
+func (c *UserClient) MapAccounts(
+	ctx context.Context,
+	userIDs []int64,
+) (map[int64]*model.UserAccountBasic, error) {
 	if len(userIDs) == 0 {
 		return map[int64]*model.UserAccountBasic{}, nil
 	}
 	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
-		Query: &userv1.MapAccounts_Req_AccountQuery{UserIds: userIDs},
+		Query: &userv1.MapAccounts_Req_AccountQuery{
+			UserIds: userIDs,
+		},
 	})
 	if err != nil {
 		return nil, err

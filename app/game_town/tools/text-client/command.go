@@ -44,13 +44,21 @@ func executeCommand(
 		return commandResult{}
 	}
 	if raw == "/help" {
-		return commandResult{lines: helpLines()}
+		return commandResult{
+			lines: helpLines(),
+		}
 	}
 	if raw == "/status" {
-		return commandResult{lines: []string{fmt.Sprintf("player=%d world=%d dialog_npc=%d suggestions=%d", playerID, worldID, dialogNpcID, len(suggestions))}}
+		return commandResult{
+			lines: []string{fmt.Sprintf("player=%d world=%d dialog_npc=%d suggestions=%d", playerID, worldID, dialogNpcID, len(suggestions))},
+		}
 	}
 	if raw == "/back" {
-		return commandResult{lines: []string{"已退出当前对话。"}, clearDialog: true, clearSuggestions: true}
+		return commandResult{
+			lines:            []string{"已退出当前对话。"},
+			clearDialog:      true,
+			clearSuggestions: true,
+		}
 	}
 
 	ctx, cancel := context.WithTimeout(parent, 15*time.Second)
@@ -62,7 +70,9 @@ func executeCommand(
 			return result
 		}
 		if isChoiceIndex(raw) {
-			return commandResult{lines: []string{"当前没有可选回答。你可以直接输入完整行动，或等待 NPC 回复后再输入数字。"}}
+			return commandResult{
+				lines: []string{"当前没有可选回答。你可以直接输入完整行动，或等待 NPC 回复后再输入数字。"},
+			}
 		}
 		if dialogNpcID > 0 {
 			return submitAction(ctx, client, playerID, worldID, raw, []*v1.SubmitGameTownAction_Request_EntityRef{npcTarget(dialogNpcID)})
@@ -70,7 +80,9 @@ func executeCommand(
 		if playerID > 0 && worldID > 0 {
 			return submitAction(ctx, client, playerID, worldID, raw, nil)
 		}
-		return commandResult{err: requireWorldContext(playerID, worldID)}
+		return commandResult{
+			err: requireWorldContext(playerID, worldID),
+		}
 	}
 
 	parts := strings.Fields(raw)
@@ -129,7 +141,9 @@ func executeCommand(
 	case parts[0] == "/act":
 		return commandUsage("/act <content>")
 	default:
-		return commandResult{lines: []string{"未知命令，输入 /help 查看帮助。自由行动请先 /world join 后直接输入，或使用 /act <content>。"}}
+		return commandResult{
+			lines: []string{"未知命令，输入 /help 查看帮助。自由行动请先 /world join 后直接输入，或使用 /act <content>。"},
+		}
 	}
 }
 
@@ -154,19 +168,25 @@ func submitSuggestedChoice(
 	return submitAction(ctx, client, playerID, worldID, choice.content, targets), true
 }
 
-func isChoiceIndex(raw string) bool {
+func isChoiceIndex(
+	raw string,
+) bool {
 	index, err := strconv.Atoi(strings.TrimSpace(raw))
 	return err == nil && index > 0
 }
 
-func npcTarget(npcID int64) *v1.SubmitGameTownAction_Request_EntityRef {
+func npcTarget(
+	npcID int64,
+) *v1.SubmitGameTownAction_Request_EntityRef {
 	return &v1.SubmitGameTownAction_Request_EntityRef{
 		Type: v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_NPC,
 		Id:   npcID,
 	}
 }
 
-func validSubmitTargets(targets []*v1.SubmitGameTownAction_Request_EntityRef) []*v1.SubmitGameTownAction_Request_EntityRef {
+func validSubmitTargets(
+	targets []*v1.SubmitGameTownAction_Request_EntityRef,
+) []*v1.SubmitGameTownAction_Request_EntityRef {
 	result := make([]*v1.SubmitGameTownAction_Request_EntityRef, 0, len(targets))
 	for _, target := range targets {
 		if target == nil {
@@ -183,17 +203,33 @@ func validSubmitTargets(targets []*v1.SubmitGameTownAction_Request_EntityRef) []
 	return result
 }
 
-func enterTalk(ctx context.Context, client *rpc.GameTownClient, playerID int64, worldID int64, rawNpcID string) commandResult {
+func enterTalk(
+	ctx context.Context,
+	client *rpc.GameTownClient,
+	playerID int64,
+	worldID int64,
+	rawNpcID string,
+) commandResult {
 	if err := requireWorldContext(playerID, worldID); err != nil {
-		return commandResult{err: err}
+		return commandResult{
+			err: err,
+		}
 	}
 	npcID, err := strconv.ParseInt(rawNpcID, 10, 64)
 	if err != nil || npcID <= 0 {
-		return commandResult{err: fmt.Errorf("invalid npc id")}
+		return commandResult{
+			err: fmt.Errorf("invalid npc id"),
+		}
 	}
-	_, err = client.Npc.Get(ctx, &v1.GetGameTownNpc_Request{WorldId: worldID, PlayerId: playerID, Id: npcID})
+	_, err = client.Npc.Get(ctx, &v1.GetGameTownNpc_Request{
+		WorldId:  worldID,
+		PlayerId: playerID,
+		Id:       npcID,
+	})
 	if err != nil {
-		return commandResult{err: err}
+		return commandResult{
+			err: err,
+		}
 	}
 	return commandResult{
 		lines:       []string{fmt.Sprintf("已进入 NPC %d 对话。直接输入文本发送；输入数字选择建议回答；/back 退出。", npcID)},
@@ -201,13 +237,20 @@ func enterTalk(ctx context.Context, client *rpc.GameTownClient, playerID int64, 
 	}
 }
 
-func commandUsage(lines ...string) commandResult {
-	return commandResult{lines: lo.Map(lines, func(line string, _ int) string {
-		return "用法: " + line
-	})}
+func commandUsage(
+	lines ...string,
+) commandResult {
+	return commandResult{
+		lines: lo.Map(lines, func(line string, _ int) string {
+			return "用法: " + line
+		}),
+	}
 }
 
-func requireWorldContext(playerID int64, worldID int64) error {
+func requireWorldContext(
+	playerID int64,
+	worldID int64,
+) error {
 	if playerID == 0 {
 		return fmt.Errorf("请先 /register <name> 或 /player use <player_id>")
 	}
@@ -245,6 +288,8 @@ func helpLines() []string {
 	}
 }
 
-func eventName(value v1enum.GameTownEventType) string {
+func eventName(
+	value v1enum.GameTownEventType,
+) string {
 	return strings.ToLower(strings.TrimPrefix(value.String(), "GAME_TOWN_EVENT_TYPE_"))
 }

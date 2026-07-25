@@ -7,12 +7,16 @@ import (
 
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
-	bizrepo "game_town/internal/biz/repo"
 	"game_town/internal/biz/model"
+	bizrepo "game_town/internal/biz/repo"
 	"game_town/internal/data/gen/worldstate"
 )
 
-func (r *WorldStateRepo) UpdateNextDue(ctx context.Context, worldID int64, nextDueAt *time.Time) error {
+func (r *WorldStateRepo) UpdateNextDue(
+	ctx context.Context,
+	worldID int64,
+	nextDueAt *time.Time,
+) error {
 	update := r.getClient(ctx).WorldState.Update().Where(worldstate.WorldID(worldID))
 	if nextDueAt == nil {
 		update.ClearNextDueAt()
@@ -29,7 +33,10 @@ func (r *WorldStateRepo) UpdateNextDue(ctx context.Context, worldID int64, nextD
 	return nil
 }
 
-func (r *WorldStateRepo) AdvanceTime(ctx context.Context, req *bizrepo.WorldStateAdvanceTimeReq) (*model.WorldState, error) {
+func (r *WorldStateRepo) AdvanceTime(
+	ctx context.Context,
+	req *bizrepo.WorldStateAdvanceTimeReq,
+) (*model.WorldState, error) {
 	update := r.getClient(ctx).WorldState.Update().Where(worldstate.WorldID(req.WorldID), worldstate.Version(req.Version)).
 		SetWorldTime(req.WorldTime).
 		SetTimeAnchor(req.TimeAnchor).
@@ -46,5 +53,7 @@ func (r *WorldStateRepo) AdvanceTime(ctx context.Context, req *bizrepo.WorldStat
 	if count == 0 {
 		return nil, fmt.Errorf("world version conflict")
 	}
-	return r.Get(ctx, &bizrepo.WorldStateQuery{WorldID: new(req.WorldID)})
+	return r.Get(ctx, &bizrepo.WorldStateQuery{
+		WorldID: new(req.WorldID),
+	})
 }

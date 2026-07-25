@@ -25,8 +25,18 @@ type DelayedTaskUsecase struct {
 	tasks  map[string]taskimpl.Task
 }
 
-func NewDelayedTaskUsecase(logger *slog.Logger, conf *config.Bootstrap, delayedTaskRepo repo.DelayedTaskRepo, tasks map[string]taskimpl.Task) *DelayedTaskUsecase {
-	return &DelayedTaskUsecase{logger: logger, conf: conf, repo: delayedTaskRepo, tasks: tasks}
+func NewDelayedTaskUsecase(
+	logger *slog.Logger,
+	conf *config.Bootstrap,
+	delayedTaskRepo repo.DelayedTaskRepo,
+	tasks map[string]taskimpl.Task,
+) *DelayedTaskUsecase {
+	return &DelayedTaskUsecase{
+		logger: logger,
+		conf:   conf,
+		repo:   delayedTaskRepo,
+		tasks:  tasks,
+	}
 }
 
 type DelayedTaskRegisterReq struct {
@@ -38,7 +48,10 @@ type DelayedTaskRegisterReq struct {
 	TimeoutSeconds int32
 }
 
-func (u *DelayedTaskUsecase) Register(ctx context.Context, req *DelayedTaskRegisterReq) (*model.DelayedTask, error) {
+func (u *DelayedTaskUsecase) Register(
+	ctx context.Context,
+	req *DelayedTaskRegisterReq,
+) (*model.DelayedTask, error) {
 	if req == nil || strings.TrimSpace(req.IdempotencyKey) == "" || strings.TrimSpace(req.TaskName) == "" || req.ExecuteAt.IsZero() {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -55,15 +68,32 @@ func (u *DelayedTaskUsecase) Register(ctx context.Context, req *DelayedTaskRegis
 	if req.TimeoutSeconds <= 0 {
 		req.TimeoutSeconds = 30
 	}
-	return u.repo.Register(ctx, &model.DelayedTask{IdempotencyKey: strings.TrimSpace(req.IdempotencyKey), TaskName: strings.TrimSpace(req.TaskName), Payload: payload, ExecuteAt: req.ExecuteAt, NextRunAt: req.ExecuteAt, Status: schedulerenum.DelayedTaskStatusPending, MaxAttempts: req.MaxAttempts, TimeoutSeconds: req.TimeoutSeconds})
+	return u.repo.Register(ctx, &model.DelayedTask{
+		IdempotencyKey: strings.TrimSpace(req.IdempotencyKey),
+		TaskName:       strings.TrimSpace(req.TaskName),
+		Payload:        payload,
+		ExecuteAt:      req.ExecuteAt,
+		NextRunAt:      req.ExecuteAt,
+		Status:         schedulerenum.DelayedTaskStatusPending,
+		MaxAttempts:    req.MaxAttempts,
+		TimeoutSeconds: req.TimeoutSeconds,
+	})
 }
 
-func (u *DelayedTaskUsecase) Cancel(ctx context.Context, id int64, idempotencyKey string) error {
+func (u *DelayedTaskUsecase) Cancel(
+	ctx context.Context,
+	id int64,
+	idempotencyKey string,
+) error {
 	_, err := u.repo.Cancel(ctx, delayedTaskGetReq(id, idempotencyKey))
 	return err
 }
 
-func (u *DelayedTaskUsecase) Get(ctx context.Context, id int64, idempotencyKey string) (*model.DelayedTask, error) {
+func (u *DelayedTaskUsecase) Get(
+	ctx context.Context,
+	id int64,
+	idempotencyKey string,
+) (*model.DelayedTask, error) {
 	return u.repo.Get(ctx, delayedTaskGetReq(id, idempotencyKey))
 }
 
@@ -77,19 +107,36 @@ type DelayedTaskPageResp struct {
 	Page *common.PageResp
 }
 
-func (u *DelayedTaskUsecase) Page(ctx context.Context, req *DelayedTaskPageReq) (*DelayedTaskPageResp, error) {
+func (u *DelayedTaskUsecase) Page(
+	ctx context.Context,
+	req *DelayedTaskPageReq,
+) (*DelayedTaskPageResp, error) {
 	if req == nil {
 		req = &DelayedTaskPageReq{}
 	}
-	resp, err := u.repo.Page(ctx, &repo.DelayedTaskPageReq{Page: req.Page, DelayedTaskGetReq: repo.DelayedTaskGetReq{TaskName: req.TaskName, Status: req.Status}})
+	resp, err := u.repo.Page(ctx, &repo.DelayedTaskPageReq{
+		Page: req.Page,
+		DelayedTaskGetReq: repo.DelayedTaskGetReq{
+			TaskName: req.TaskName,
+			Status:   req.Status,
+		},
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &DelayedTaskPageResp{Rows: resp.Rows, Page: resp.Page}, nil
+	return &DelayedTaskPageResp{
+		Rows: resp.Rows,
+		Page: resp.Page,
+	}, nil
 }
 
-func (u *DelayedTaskUsecase) Trigger(ctx context.Context, id int64) error {
-	row, err := u.repo.Get(ctx, &repo.DelayedTaskGetReq{ID: &id})
+func (u *DelayedTaskUsecase) Trigger(
+	ctx context.Context,
+	id int64,
+) error {
+	row, err := u.repo.Get(ctx, &repo.DelayedTaskGetReq{
+		ID: &id,
+	})
 	if err != nil {
 		return err
 	}
@@ -99,7 +146,10 @@ func (u *DelayedTaskUsecase) Trigger(ctx context.Context, id int64) error {
 	return u.Execute(ctx, row)
 }
 
-func (u *DelayedTaskUsecase) RunDue(ctx context.Context, limit int) error {
+func (u *DelayedTaskUsecase) RunDue(
+	ctx context.Context,
+	limit int,
+) error {
 	rows, err := u.repo.ListDue(ctx, time.Now(), limit)
 	if err != nil {
 		return err
@@ -125,7 +175,10 @@ func (u *DelayedTaskUsecase) RunDue(ctx context.Context, limit int) error {
 	return nil
 }
 
-func (u *DelayedTaskUsecase) Execute(ctx context.Context, row *model.DelayedTask) error {
+func (u *DelayedTaskUsecase) Execute(
+	ctx context.Context,
+	row *model.DelayedTask,
+) error {
 	if row == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -146,7 +199,11 @@ func (u *DelayedTaskUsecase) Execute(ctx context.Context, row *model.DelayedTask
 	return err
 }
 
-func (u *DelayedTaskUsecase) markDelayedTaskFailed(ctx context.Context, row *model.DelayedTask, execErr error) error {
+func (u *DelayedTaskUsecase) markDelayedTaskFailed(
+	ctx context.Context,
+	row *model.DelayedTask,
+	execErr error,
+) error {
 	attempt := row.Attempt + 1
 	final := attempt >= row.MaxAttempts
 	next := time.Now().Add(time.Duration(attempt) * time.Minute)
@@ -161,12 +218,19 @@ func (u *DelayedTaskUsecase) markDelayedTaskFailed(ctx context.Context, row *mod
 	return execErr
 }
 
-func delayedTaskGetReq(id int64, idempotencyKey string) *repo.DelayedTaskGetReq {
+func delayedTaskGetReq(
+	id int64,
+	idempotencyKey string,
+) *repo.DelayedTaskGetReq {
 	if id != 0 {
-		return &repo.DelayedTaskGetReq{ID: &id}
+		return &repo.DelayedTaskGetReq{
+			ID: &id,
+		}
 	}
 	key := strings.TrimSpace(idempotencyKey)
-	return &repo.DelayedTaskGetReq{IdempotencyKey: &key}
+	return &repo.DelayedTaskGetReq{
+		IdempotencyKey: &key,
+	}
 }
 
 func workerID() string {

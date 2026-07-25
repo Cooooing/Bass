@@ -11,14 +11,26 @@ type ArticleCollectedHandler struct {
 	articleActorHandler
 }
 
-func NewArticleCollectedHandler(userClient repo.UserClient, contentClient repo.ContentClient) *ArticleCollectedHandler {
-	return &ArticleCollectedHandler{articleActorHandler: articleActorHandler{
-		userClientHandler:    userClientHandler{userClient: userClient},
-		contentClientHandler: contentClientHandler{contentClient: contentClient},
-	}}
+func NewArticleCollectedHandler(
+	userClient repo.UserClient,
+	contentClient repo.ContentClient,
+) *ArticleCollectedHandler {
+	return &ArticleCollectedHandler{
+		articleActorHandler: articleActorHandler{
+			userClientHandler: userClientHandler{
+				userClient: userClient,
+			},
+			contentClientHandler: contentClientHandler{
+				contentClient: contentClient,
+			},
+		},
+	}
 }
 
-func (h *ArticleCollectedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
+func (h *ArticleCollectedHandler) Build(
+	ctx context.Context,
+	event *enums.Event,
+) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}

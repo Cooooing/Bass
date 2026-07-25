@@ -16,24 +16,43 @@ type ContentDomainService struct {
 	contentDomainUsecase *usecase.ContentDomainUsecase
 }
 
-func NewContentDomainService(contentDomainUsecase *usecase.ContentDomainUsecase) *ContentDomainService {
-	return &ContentDomainService{contentDomainUsecase: contentDomainUsecase}
+func NewContentDomainService(
+	contentDomainUsecase *usecase.ContentDomainUsecase,
+) *ContentDomainService {
+	return &ContentDomainService{
+		contentDomainUsecase: contentDomainUsecase,
+	}
 }
 
-func (s *ContentDomainService) RegisterGrpc(gs *grpc.Server) {}
+func (s *ContentDomainService) RegisterGrpc(
+	gs *grpc.Server,
+) {
+}
 
-func (s *ContentDomainService) RegisterHttp(hs *http.Server) {
+func (s *ContentDomainService) RegisterHttp(
+	hs *http.Server,
+) {
 	bbscontentv1.RegisterDomainServiceHTTPServer(hs, s)
 }
 
-func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListDomains_Req) (*bbscontentv1.ListDomains_Resp, error) {
-	resp, err := s.contentDomainUsecase.ListDomains(ctx, &usecase.ListDomainsReq{Page: req.GetPage(), Query: req.GetQuery()})
+func (s *ContentDomainService) List(
+	ctx context.Context,
+	req *bbscontentv1.ListDomains_Req,
+) (*bbscontentv1.ListDomains_Resp, error) {
+	resp, err := s.contentDomainUsecase.ListDomains(ctx, &usecase.ListDomainsReq{
+		Page:  req.GetPage(),
+		Query: req.GetQuery(),
+	})
 	if err != nil {
 		return nil, err
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{Page: resp.Page.Page, Size: resp.Page.Size, Total: resp.Page.Total}
+		page = &common.PageResp{
+			Page:  resp.Page.Page,
+			Size:  resp.Page.Size,
+			Total: resp.Page.Total,
+		}
 	}
 	rows := make([]*bbscontentv1.ListDomains_Resp_Domain, 0, len(resp.Rows))
 	for _, row := range resp.Rows {
@@ -55,5 +74,8 @@ func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListD
 			UpdatedAt:   row.UpdatedAt,
 		})
 	}
-	return &bbscontentv1.ListDomains_Resp{Page: page, Rows: rows}, nil
+	return &bbscontentv1.ListDomains_Resp{
+		Page: page,
+		Rows: rows,
+	}, nil
 }

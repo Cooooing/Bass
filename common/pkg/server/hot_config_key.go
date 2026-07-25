@@ -12,7 +12,9 @@ import (
 
 var protoMessageType = reflect.TypeOf((*proto.Message)(nil)).Elem()
 
-func (m *HotConfigManager[T]) resolveProtoHotField(field any) (protoHotResolvedField, error) {
+func (m *HotConfigManager[T]) resolveProtoHotField(
+	field any,
+) (protoHotResolvedField, error) {
 	if m.isNilProtoMessage(m.root) {
 		return protoHotResolvedField{}, errors.New("hot config root is nil")
 	}
@@ -46,7 +48,9 @@ func (m *HotConfigManager[T]) resolveProtoHotField(field any) (protoHotResolvedF
 	}, nil
 }
 
-func (m *HotConfigManager[T]) newProtoMessageLike(root proto.Message) (proto.Message, error) {
+func (m *HotConfigManager[T]) newProtoMessageLike(
+	root proto.Message,
+) (proto.Message, error) {
 	if m.isNilProtoMessage(root) {
 		return nil, errors.New("hot config proto root is nil")
 	}
@@ -61,7 +65,9 @@ func (m *HotConfigManager[T]) newProtoMessageLike(root proto.Message) (proto.Mes
 	return msg, nil
 }
 
-func (m *HotConfigManager[T]) isNilProtoMessage(msg proto.Message) bool {
+func (m *HotConfigManager[T]) isNilProtoMessage(
+	msg proto.Message,
+) bool {
 	v := reflect.ValueOf(msg)
 	if !v.IsValid() {
 		return true
@@ -74,7 +80,11 @@ func (m *HotConfigManager[T]) isNilProtoMessage(msg proto.Message) bool {
 	}
 }
 
-func (m *HotConfigManager[T]) findProtoHotPath(v reflect.Value, target uintptr, prefix []string) ([]string, bool) {
+func (m *HotConfigManager[T]) findProtoHotPath(
+	v reflect.Value,
+	target uintptr,
+	prefix []string,
+) ([]string, bool) {
 	if v.Kind() == reflect.Pointer {
 		if v.IsNil() {
 			return nil, false
@@ -106,7 +116,9 @@ func (m *HotConfigManager[T]) findProtoHotPath(v reflect.Value, target uintptr, 
 	return nil, false
 }
 
-func (m *HotConfigManager[T]) protoFieldName(field reflect.StructField) (string, bool) {
+func (m *HotConfigManager[T]) protoFieldName(
+	field reflect.StructField,
+) (string, bool) {
 	tag := field.Tag.Get("protobuf")
 	if tag == "" {
 		return "", false
@@ -119,7 +131,10 @@ func (m *HotConfigManager[T]) protoFieldName(field reflect.StructField) (string,
 	return "", false
 }
 
-func (m *HotConfigManager[T]) validateProtoHotPath(root proto.Message, names []protoreflect.Name) error {
+func (m *HotConfigManager[T]) validateProtoHotPath(
+	root proto.Message,
+	names []protoreflect.Name,
+) error {
 	if len(names) == 0 {
 		return errors.New("hot config proto path is empty")
 	}

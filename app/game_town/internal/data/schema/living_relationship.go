@@ -18,7 +18,9 @@ type LivingRelationship struct {
 
 func (LivingRelationship) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "relationships"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "relationships",
+		},
 		entsql.WithComments(true),
 	}
 }

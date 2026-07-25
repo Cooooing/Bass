@@ -21,7 +21,9 @@ type TokenUsecase struct {
 	TokenGen *jwt.TokenGenerator[model.Token]
 }
 
-func NewTokenUsecase(conf *config.Bootstrap) *TokenUsecase {
+func NewTokenUsecase(
+	conf *config.Bootstrap,
+) *TokenUsecase {
 	return &TokenUsecase{
 		conf:     conf,
 		TokenGen: jwt.NewTokenGenerator[model.Token](sessionSecret(conf)),
@@ -38,7 +40,9 @@ type GenerateAccessTokenReq struct {
 	Timezone  string
 }
 
-func (u *TokenUsecase) GenerateAccess(req *GenerateAccessTokenReq) (string, time.Time, error) {
+func (u *TokenUsecase) GenerateAccess(
+	req *GenerateAccessTokenReq,
+) (string, time.Time, error) {
 	ttl := u.AccessTokenTTL()
 	expiresAt := time.Now().Add(ttl)
 	token, err := u.TokenGen.Generate(model.Token{
@@ -61,7 +65,9 @@ type GenerateRefreshTokenReq struct {
 	JTI       string
 }
 
-func (u *TokenUsecase) GenerateRefresh(req *GenerateRefreshTokenReq) (string, time.Time, error) {
+func (u *TokenUsecase) GenerateRefresh(
+	req *GenerateRefreshTokenReq,
+) (string, time.Time, error) {
 	ttl := u.RefreshTokenTTL()
 	expiresAt := time.Now().Add(ttl)
 	token, err := u.TokenGen.Generate(model.Token{
@@ -74,7 +80,9 @@ func (u *TokenUsecase) GenerateRefresh(req *GenerateRefreshTokenReq) (string, ti
 	return token, expiresAt, err
 }
 
-func (u *TokenUsecase) Parse(token string) (model.Token, error) {
+func (u *TokenUsecase) Parse(
+	token string,
+) (model.Token, error) {
 	return u.TokenGen.Parse(token)
 }
 
@@ -90,7 +98,9 @@ func (u *TokenUsecase) SessionTTL() time.Duration {
 	return durationOrDefault(u.conf.GetBusiness().GetAuth().GetSession().GetSessionTtl(), 180*24*time.Hour)
 }
 
-func sessionSecret(conf *config.Bootstrap) string {
+func sessionSecret(
+	conf *config.Bootstrap,
+) string {
 	secret := conf.GetBusiness().GetAuth().GetSession().GetSecret()
 	if secret == "" {
 		return "dev-user-session-secret"
@@ -98,7 +108,10 @@ func sessionSecret(conf *config.Bootstrap) string {
 	return secret
 }
 
-func durationOrDefault(duration *durationpb.Duration, fallback time.Duration) time.Duration {
+func durationOrDefault(
+	duration *durationpb.Duration,
+	fallback time.Duration,
+) time.Duration {
 	if duration == nil || duration.AsDuration() <= 0 {
 		return fallback
 	}

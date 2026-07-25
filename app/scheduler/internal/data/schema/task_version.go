@@ -18,7 +18,9 @@ type TaskVersion struct {
 
 func (TaskVersion) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixScheduler.String() + "task_versions"},
+		entsql.Annotation{
+			Table: constant.TablePrefixScheduler.String() + "task_versions",
+		},
 		entsql.WithComments(true),
 	}
 }
@@ -53,4 +55,6 @@ func (TaskVersion) Indexes() []ent.Index {
 	}
 }
 
-func (TaskVersion) Edges() []ent.Edge { return nil }
+func (TaskVersion) Edges() []ent.Edge {
+	return nil
+}

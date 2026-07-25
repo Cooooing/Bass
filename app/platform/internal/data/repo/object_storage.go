@@ -20,18 +20,27 @@ type ObjectStorageRepo struct {
 	db *gen.Client
 }
 
-func NewObjectStorageRepo(db *gen.Client) repo.ObjectStorageRepo {
-	return &ObjectStorageRepo{db: db}
+func NewObjectStorageRepo(
+	db *gen.Client,
+) repo.ObjectStorageRepo {
+	return &ObjectStorageRepo{
+		db: db,
+	}
 }
 
-func (r *ObjectStorageRepo) getClient(ctx context.Context) *gen.Client {
+func (r *ObjectStorageRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *ObjectStorageRepo) Save(ctx context.Context, row *model.ObjectStorage) (*model.ObjectStorage, error) {
+func (r *ObjectStorageRepo) Save(
+	ctx context.Context,
+	row *model.ObjectStorage,
+) (*model.ObjectStorage, error) {
 	if row == nil {
 		return nil, fmt.Errorf("object storage row is nil")
 	}
@@ -67,7 +76,10 @@ func (r *ObjectStorageRepo) Save(ctx context.Context, row *model.ObjectStorage) 
 	return result, nil
 }
 
-func (r *ObjectStorageRepo) UpdateAudit(ctx context.Context, row *model.ObjectStorage) error {
+func (r *ObjectStorageRepo) UpdateAudit(
+	ctx context.Context,
+	row *model.ObjectStorage,
+) error {
 	_, err := r.getClient(ctx).ObjectStorage.Update().
 		Where(objectstorage.KeyEQ(row.Key)).
 		SetNillableAuditCallbackReply(row.AuditCallbackReply).
@@ -82,7 +94,10 @@ func (r *ObjectStorageRepo) UpdateAudit(ctx context.Context, row *model.ObjectSt
 	return nil
 }
 
-func (r *ObjectStorageRepo) Delete(ctx context.Context, row *model.ObjectStorage) (int, error) {
+func (r *ObjectStorageRepo) Delete(
+	ctx context.Context,
+	row *model.ObjectStorage,
+) (int, error) {
 	if row == nil {
 		return 0, nil
 	}
@@ -102,7 +117,10 @@ func (r *ObjectStorageRepo) Delete(ctx context.Context, row *model.ObjectStorage
 	return count, nil
 }
 
-func (r *ObjectStorageRepo) Exist(ctx context.Context, req *repo.ObjectStorageGetReq) (bool, error) {
+func (r *ObjectStorageRepo) Exist(
+	ctx context.Context,
+	req *repo.ObjectStorageGetReq,
+) (bool, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
 	exists, err := query.Exist(ctx)
@@ -111,7 +129,11 @@ func (r *ObjectStorageRepo) Exist(ctx context.Context, req *repo.ObjectStorageGe
 	}
 	return exists, nil
 }
-func (r *ObjectStorageRepo) Get(ctx context.Context, req *repo.ObjectStorageGetReq) (*model.ObjectStorage, error) {
+
+func (r *ObjectStorageRepo) Get(
+	ctx context.Context,
+	req *repo.ObjectStorageGetReq,
+) (*model.ObjectStorage, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
 	row, err := query.First(ctx)
@@ -140,7 +162,10 @@ func (r *ObjectStorageRepo) Get(ctx context.Context, req *repo.ObjectStorageGetR
 	}, nil
 }
 
-func (r *ObjectStorageRepo) List(ctx context.Context, req *repo.ObjectStorageGetReq) ([]*model.ObjectStorage, error) {
+func (r *ObjectStorageRepo) List(
+	ctx context.Context,
+	req *repo.ObjectStorageGetReq,
+) ([]*model.ObjectStorage, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
 	rows, err := query.All(ctx)
@@ -170,7 +195,10 @@ func (r *ObjectStorageRepo) List(ctx context.Context, req *repo.ObjectStorageGet
 	return result, nil
 }
 
-func (r *ObjectStorageRepo) Map(ctx context.Context, req *repo.ObjectStorageGetReq) (map[int64]*model.ObjectStorage, error) {
+func (r *ObjectStorageRepo) Map(
+	ctx context.Context,
+	req *repo.ObjectStorageGetReq,
+) (map[int64]*model.ObjectStorage, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -182,7 +210,10 @@ func (r *ObjectStorageRepo) Map(ctx context.Context, req *repo.ObjectStorageGetR
 	return result, nil
 }
 
-func (r *ObjectStorageRepo) Count(ctx context.Context, req *repo.ObjectStorageGetReq) (int, error) {
+func (r *ObjectStorageRepo) Count(
+	ctx context.Context,
+	req *repo.ObjectStorageGetReq,
+) (int, error) {
 	query := r.getClient(ctx).ObjectStorage.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -192,7 +223,10 @@ func (r *ObjectStorageRepo) Count(ctx context.Context, req *repo.ObjectStorageGe
 	return count, nil
 }
 
-func (r *ObjectStorageRepo) Page(ctx context.Context, req *repo.ObjectStoragePageReq) (*repo.ObjectStoragePageResp, error) {
+func (r *ObjectStorageRepo) Page(
+	ctx context.Context,
+	req *repo.ObjectStoragePageReq,
+) (*repo.ObjectStoragePageResp, error) {
 	if req == nil {
 		req = &repo.ObjectStoragePageReq{}
 	}
@@ -238,7 +272,10 @@ func (r *ObjectStorageRepo) Page(ctx context.Context, req *repo.ObjectStoragePag
 	}, nil
 }
 
-func (r *ObjectStorageRepo) getQuery(query *gen.ObjectStorageQuery, req *repo.ObjectStorageGetReq) *gen.ObjectStorageQuery {
+func (r *ObjectStorageRepo) getQuery(
+	query *gen.ObjectStorageQuery,
+	req *repo.ObjectStorageGetReq,
+) *gen.ObjectStorageQuery {
 	if req == nil {
 		return query
 	}

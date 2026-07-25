@@ -12,11 +12,19 @@ type DelayedTaskRunner struct {
 	cancel  context.CancelFunc
 }
 
-func NewDelayedTaskRunner(logger *slog.Logger, usecase *DelayedTaskUsecase) *DelayedTaskRunner {
-	return &DelayedTaskRunner{logger: logger, usecase: usecase}
+func NewDelayedTaskRunner(
+	logger *slog.Logger,
+	usecase *DelayedTaskUsecase,
+) *DelayedTaskRunner {
+	return &DelayedTaskRunner{
+		logger:  logger,
+		usecase: usecase,
+	}
 }
 
-func (r *DelayedTaskRunner) Start(ctx context.Context) error {
+func (r *DelayedTaskRunner) Start(
+	ctx context.Context,
+) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	r.cancel = cancel
 	go func() {
@@ -36,7 +44,9 @@ func (r *DelayedTaskRunner) Start(ctx context.Context) error {
 	return nil
 }
 
-func (r *DelayedTaskRunner) Stop(ctx context.Context) error {
+func (r *DelayedTaskRunner) Stop(
+	ctx context.Context,
+) error {
 	if r.cancel != nil {
 		r.cancel()
 	}

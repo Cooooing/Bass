@@ -26,11 +26,19 @@ type RedisLockHandle struct {
 	redisClient *RedisClient
 }
 
-func NewRedisLock(redisClient *RedisClient) *RedisLock {
-	return &RedisLock{redisClient: redisClient}
+func NewRedisLock(
+	redisClient *RedisClient,
+) *RedisLock {
+	return &RedisLock{
+		redisClient: redisClient,
+	}
 }
 
-func (l *RedisLock) TryAcquire(ctx context.Context, key string, ttl time.Duration) (*RedisLockHandle, bool, error) {
+func (l *RedisLock) TryAcquire(
+	ctx context.Context,
+	key string,
+	ttl time.Duration,
+) (*RedisLockHandle, bool, error) {
 	if l == nil || l.redisClient == nil || l.redisClient.Client == nil || key == "" || ttl <= 0 {
 		return nil, false, nil
 	}
@@ -46,7 +54,9 @@ func (l *RedisLock) TryAcquire(ctx context.Context, key string, ttl time.Duratio
 	}, true, nil
 }
 
-func (h *RedisLockHandle) Release(ctx context.Context) error {
+func (h *RedisLockHandle) Release(
+	ctx context.Context,
+) error {
 	if h == nil || h.redisClient == nil || h.redisClient.Client == nil || h.key == "" || h.token == "" {
 		return nil
 	}

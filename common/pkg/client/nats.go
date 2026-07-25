@@ -56,7 +56,11 @@ type NatsClient struct {
 	subs    []*nats.Subscription
 }
 
-func NewNatsClient(logger *slog.Logger, conf *common.Nats, observer *Observer) (*NatsClient, func(), error) {
+func NewNatsClient(
+	logger *slog.Logger,
+	conf *common.Nats,
+	observer *Observer,
+) (*NatsClient, func(), error) {
 	if observer == nil {
 		observer = NewObservability(logger, nil)
 	}
@@ -189,7 +193,11 @@ func (c *NatsClient) Close() error {
 	return nil
 }
 
-func (c *NatsClient) Publish(ctx context.Context, subject string, msg *Message) (err error) {
+func (c *NatsClient) Publish(
+	ctx context.Context,
+	subject string,
+	msg *Message,
+) (err error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -247,7 +255,11 @@ func (c *NatsClient) Publish(ctx context.Context, subject string, msg *Message) 
 			header.Set(k, v)
 		}
 	}
-	natsMsg := &nats.Msg{Subject: subject, Data: msg.Data, Header: header}
+	natsMsg := &nats.Msg{
+		Subject: subject,
+		Data:    msg.Data,
+		Header:  header,
+	}
 
 	c.mu.RLock()
 	defer c.mu.RUnlock()
@@ -277,7 +289,11 @@ func (c *NatsClient) Publish(ctx context.Context, subject string, msg *Message) 
 	return nil
 }
 
-func (c *NatsClient) Subscribe(ctx context.Context, subject string, handler MessageHandler) (Unsubscriber, error) {
+func (c *NatsClient) Subscribe(
+	ctx context.Context,
+	subject string,
+	handler MessageHandler,
+) (Unsubscriber, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -293,7 +309,9 @@ func (c *NatsClient) Subscribe(ctx context.Context, subject string, handler Mess
 			return nil, fmt.Errorf("jetstream subscribe %s: %w", subject, err)
 		}
 		c.subs = append(c.subs, sub)
-		return &subscription{sub: sub}, nil
+		return &subscription{
+			sub: sub,
+		}, nil
 	}
 
 	sub, err := c.conn.Subscribe(subject, func(m *nats.Msg) {
@@ -305,10 +323,16 @@ func (c *NatsClient) Subscribe(ctx context.Context, subject string, handler Mess
 
 	c.subs = append(c.subs, sub)
 	c.logger.InfoContext(ctx, "nats subscribed", constant.LogFieldKind, constant.LogKindMessage, constant.LogFieldSubject, subject)
-	return &subscription{sub: sub}, nil
+	return &subscription{
+		sub: sub,
+	}, nil
 }
 
-func (c *NatsClient) QueueSubscribe(ctx context.Context, subject, queue string, handler MessageHandler) (Unsubscriber, error) {
+func (c *NatsClient) QueueSubscribe(
+	ctx context.Context,
+	subject, queue string,
+	handler MessageHandler,
+) (Unsubscriber, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -324,7 +348,9 @@ func (c *NatsClient) QueueSubscribe(ctx context.Context, subject, queue string, 
 			return nil, fmt.Errorf("jetstream queue subscribe %s[%s]: %w", subject, queue, err)
 		}
 		c.subs = append(c.subs, sub)
-		return &subscription{sub: sub}, nil
+		return &subscription{
+			sub: sub,
+		}, nil
 	}
 
 	sub, err := c.conn.QueueSubscribe(subject, queue, func(m *nats.Msg) {
@@ -336,10 +362,18 @@ func (c *NatsClient) QueueSubscribe(ctx context.Context, subject, queue string, 
 
 	c.subs = append(c.subs, sub)
 	c.logger.InfoContext(ctx, "nats queue subscribed", constant.LogFieldKind, constant.LogKindMessage, constant.LogFieldSubject, subject, constant.LogFieldQueue, queue)
-	return &subscription{sub: sub}, nil
+	return &subscription{
+		sub: sub,
+	}, nil
 }
 
-func (c *NatsClient) handleMsg(ctx context.Context, m *nats.Msg, handler MessageHandler, isJetStream bool, queue string) {
+func (c *NatsClient) handleMsg(
+	ctx context.Context,
+	m *nats.Msg,
+	handler MessageHandler,
+	isJetStream bool,
+	queue string,
+) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -354,7 +388,9 @@ func (c *NatsClient) handleMsg(ctx context.Context, m *nats.Msg, handler Message
 	} else if strings.Count(subjectLabel, ".") > 2 {
 		subjectLabel = "dynamic"
 	}
-	msg := &Message{Subject: subject}
+	msg := &Message{
+		Subject: subject,
+	}
 	if m != nil {
 		msg.Data = m.Data
 		if len(m.Header) > 0 {

@@ -22,18 +22,27 @@ type AgentConfigRepo struct {
 	db *gen.Client
 }
 
-func NewAgentConfigRepo(db *gen.Client) bizrepo.AgentConfigRepo {
-	return &AgentConfigRepo{db: db}
+func NewAgentConfigRepo(
+	db *gen.Client,
+) bizrepo.AgentConfigRepo {
+	return &AgentConfigRepo{
+		db: db,
+	}
 }
 
-func (r *AgentConfigRepo) getClient(ctx context.Context) *gen.Client {
+func (r *AgentConfigRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *AgentConfigRepo) Save(ctx context.Context, row *model.AgentConfig) (*model.AgentConfig, error) {
+func (r *AgentConfigRepo) Save(
+	ctx context.Context,
+	row *model.AgentConfig,
+) (*model.AgentConfig, error) {
 	saved, err := r.getClient(ctx).AgentConfig.Create().
 		SetName(row.Name).
 		SetProvider(agentconfig.Provider(row.Provider)).
@@ -51,12 +60,17 @@ func (r *AgentConfigRepo) Save(ctx context.Context, row *model.AgentConfig) (*mo
 	return agentConfigModel(saved), nil
 }
 
-func isAgentConfigNameConflict(err error) bool {
+func isAgentConfigNameConflict(
+	err error,
+) bool {
 	message := err.Error()
 	return strings.Contains(message, "game_town_agent_configs_name_active_unique") || strings.Contains(message, "duplicate key")
 }
 
-func agentConfigQuery(q *gen.AgentConfigQuery, req *bizrepo.AgentConfigQuery) *gen.AgentConfigQuery {
+func agentConfigQuery(
+	q *gen.AgentConfigQuery,
+	req *bizrepo.AgentConfigQuery,
+) *gen.AgentConfigQuery {
 	q = q.Where(agentconfig.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -73,7 +87,10 @@ func agentConfigQuery(q *gen.AgentConfigQuery, req *bizrepo.AgentConfigQuery) *g
 	return q
 }
 
-func (r *AgentConfigRepo) Get(ctx context.Context, req *bizrepo.AgentConfigQuery) (*model.AgentConfig, error) {
+func (r *AgentConfigRepo) Get(
+	ctx context.Context,
+	req *bizrepo.AgentConfigQuery,
+) (*model.AgentConfig, error) {
 	row, err := agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_CONFIG_NOT_FOUND)
@@ -84,7 +101,10 @@ func (r *AgentConfigRepo) Get(ctx context.Context, req *bizrepo.AgentConfigQuery
 	return agentConfigModel(row), nil
 }
 
-func (r *AgentConfigRepo) List(ctx context.Context, req *bizrepo.AgentConfigQuery) ([]*model.AgentConfig, error) {
+func (r *AgentConfigRepo) List(
+	ctx context.Context,
+	req *bizrepo.AgentConfigQuery,
+) ([]*model.AgentConfig, error) {
 	rows, err := agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), req).Order(agentconfig.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
@@ -94,7 +114,10 @@ func (r *AgentConfigRepo) List(ctx context.Context, req *bizrepo.AgentConfigQuer
 	}), nil
 }
 
-func (r *AgentConfigRepo) Map(ctx context.Context, req *bizrepo.AgentConfigQuery) (map[int64]*model.AgentConfig, error) {
+func (r *AgentConfigRepo) Map(
+	ctx context.Context,
+	req *bizrepo.AgentConfigQuery,
+) (map[int64]*model.AgentConfig, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -106,11 +129,17 @@ func (r *AgentConfigRepo) Map(ctx context.Context, req *bizrepo.AgentConfigQuery
 	return out, nil
 }
 
-func (r *AgentConfigRepo) Count(ctx context.Context, req *bizrepo.AgentConfigQuery) (int, error) {
+func (r *AgentConfigRepo) Count(
+	ctx context.Context,
+	req *bizrepo.AgentConfigQuery,
+) (int, error) {
 	return agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), req).Count(ctx)
 }
 
-func (r *AgentConfigRepo) Page(ctx context.Context, req *bizrepo.AgentConfigPageReq) (*bizrepo.AgentConfigPageResp, error) {
+func (r *AgentConfigRepo) Page(
+	ctx context.Context,
+	req *bizrepo.AgentConfigPageReq,
+) (*bizrepo.AgentConfigPageResp, error) {
 	p := page(req.Page)
 	q := agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -124,10 +153,15 @@ func (r *AgentConfigRepo) Page(ctx context.Context, req *bizrepo.AgentConfigPage
 	out := lo.Map(rows, func(row *gen.AgentConfig, _ int) *model.AgentConfig {
 		return agentConfigModel(row)
 	})
-	return &bizrepo.AgentConfigPageResp{Rows: out, Page: basePage(total, p)}, nil
+	return &bizrepo.AgentConfigPageResp{
+		Rows: out,
+		Page: basePage(total, p),
+	}, nil
 }
 
-func agentConfigModel(row *gen.AgentConfig) *model.AgentConfig {
+func agentConfigModel(
+	row *gen.AgentConfig,
+) *model.AgentConfig {
 	return &model.AgentConfig{
 		ID:             row.ID,
 		Name:           row.Name,

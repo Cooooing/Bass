@@ -49,7 +49,9 @@ func NewOutboxPublisher(
 	}
 }
 
-func (p *OutboxPublisher) Start(ctx context.Context) error {
+func (p *OutboxPublisher) Start(
+	ctx context.Context,
+) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	p.cancel = cancel
 	go func() {
@@ -79,14 +81,18 @@ func (p *OutboxPublisher) Start(ctx context.Context) error {
 	return nil
 }
 
-func (p *OutboxPublisher) Stop(_ context.Context) error {
+func (p *OutboxPublisher) Stop(
+	_ context.Context,
+) error {
 	if p.cancel != nil {
 		p.cancel()
 	}
 	return nil
 }
 
-func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
+func (p *OutboxPublisher) publishBatch(
+	ctx context.Context,
+) (bool, error) {
 	lock, acquired, err := p.redisLock.TryAcquire(ctx, constant.GetKeyOutboxPublisherLock(p.serviceName()), p.pollLockTTL())
 	if err != nil {
 		p.log.Warn(fmt.Sprintf("acquire outbox publisher lock failed: %v", err))
@@ -102,7 +108,10 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 	}()
 	var events []*repo.OutboxEvent
 	err = p.tx(ctx, func(ctx context.Context) error {
-		claimResp, err := p.outboxRepo.ClaimForPublish(ctx, &repo.OutboxEventClaimForPublishReq{Limit: p.publishLimit(), StaleBefore: time.Now().Add(-p.publishTimeout())})
+		claimResp, err := p.outboxRepo.ClaimForPublish(ctx, &repo.OutboxEventClaimForPublishReq{
+			Limit:       p.publishLimit(),
+			StaleBefore: time.Now().Add(-p.publishTimeout()),
+		})
 		if err != nil {
 			return err
 		}
@@ -128,7 +137,11 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 			if ctx.Err() != nil {
 				return published, ctx.Err()
 			}
-			if markErr := p.outboxRepo.MarkFailed(ctx, &repo.OutboxEventMarkFailedReq{ID: event.ID, LastError: err.Error(), MaxRetry: p.maxRetry()}); markErr != nil {
+			if markErr := p.outboxRepo.MarkFailed(ctx, &repo.OutboxEventMarkFailedReq{
+				ID:        event.ID,
+				LastError: err.Error(),
+				MaxRetry:  p.maxRetry(),
+			}); markErr != nil {
 				p.log.Error(fmt.Sprintf("mark outbox event failed: event_id=%s err=%v", event.EventID, markErr))
 				if batchErr == nil {
 					batchErr = markErr
@@ -136,7 +149,10 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 			}
 			continue
 		}
-		if err = p.outboxRepo.MarkPublished(ctx, &repo.OutboxEventMarkPublishedReq{ID: event.ID, PublishedAt: time.Now()}); err != nil {
+		if err = p.outboxRepo.MarkPublished(ctx, &repo.OutboxEventMarkPublishedReq{
+			ID:          event.ID,
+			PublishedAt: time.Now(),
+		}); err != nil {
 			if ctx.Err() != nil {
 				return published, ctx.Err()
 			}

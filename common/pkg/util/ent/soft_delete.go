@@ -21,11 +21,25 @@ func (SoftDeleteMixin) Fields() []ent.Field {
 	}
 }
 
-func (SoftDeleteMixin) Edges() []ent.Edge                { return nil }
-func (SoftDeleteMixin) Indexes() []ent.Index             { return nil }
-func (SoftDeleteMixin) Interceptors() []ent.Interceptor  { return nil }
-func (SoftDeleteMixin) Policy() ent.Policy               { return nil }
-func (SoftDeleteMixin) Annotations() []schema.Annotation { return nil }
+func (SoftDeleteMixin) Edges() []ent.Edge {
+	return nil
+}
+
+func (SoftDeleteMixin) Indexes() []ent.Index {
+	return nil
+}
+
+func (SoftDeleteMixin) Interceptors() []ent.Interceptor {
+	return nil
+}
+
+func (SoftDeleteMixin) Policy() ent.Policy {
+	return nil
+}
+
+func (SoftDeleteMixin) Annotations() []schema.Annotation {
+	return nil
+}
 
 func (SoftDeleteMixin) Hooks() []ent.Hook {
 	return []ent.Hook{softDeleteHook()}

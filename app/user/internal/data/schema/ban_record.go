@@ -19,7 +19,9 @@ type BanRecord struct {
 
 func (BanRecord) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixUser.String() + "ban_records"},
+		entsql.Annotation{
+			Table: constant.TablePrefixUser.String() + "ban_records",
+		},
 		entsql.WithComments(true),
 	}
 }
@@ -49,4 +51,6 @@ func (BanRecord) Indexes() []ent.Index {
 	}
 }
 
-func (BanRecord) Edges() []ent.Edge { return nil }
+func (BanRecord) Edges() []ent.Edge {
+	return nil
+}

@@ -39,7 +39,10 @@ type fakeExecutionRepo struct {
 	markFinishedRows       []*model.TaskExecutionRecord
 }
 
-func (r *fakeExecutionRepo) Get(_ context.Context, req *repo.TaskExecutionRecordGetReq) (*model.TaskExecutionRecord, error) {
+func (r *fakeExecutionRepo) Get(
+	_ context.Context,
+	req *repo.TaskExecutionRecordGetReq,
+) (*model.TaskExecutionRecord, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.getCalled++
@@ -58,7 +61,10 @@ func (r *fakeExecutionRepo) Get(_ context.Context, req *repo.TaskExecutionRecord
 	return r.record, nil
 }
 
-func (r *fakeExecutionRepo) List(_ context.Context, req *repo.TaskExecutionRecordGetReq) ([]*model.TaskExecutionRecord, error) {
+func (r *fakeExecutionRepo) List(
+	_ context.Context,
+	req *repo.TaskExecutionRecordGetReq,
+) ([]*model.TaskExecutionRecord, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if req != nil && len(req.IDs) > 0 && r.records != nil {
@@ -77,19 +83,31 @@ func (r *fakeExecutionRepo) List(_ context.Context, req *repo.TaskExecutionRecor
 	return rows, nil
 }
 
-func (r *fakeExecutionRepo) Map(context.Context, *repo.TaskExecutionRecordGetReq) (map[int64]*model.TaskExecutionRecord, error) {
+func (r *fakeExecutionRepo) Map(
+	context.Context,
+	*repo.TaskExecutionRecordGetReq,
+) (map[int64]*model.TaskExecutionRecord, error) {
 	return nil, nil
 }
 
-func (r *fakeExecutionRepo) Count(context.Context, *repo.TaskExecutionRecordGetReq) (int, error) {
+func (r *fakeExecutionRepo) Count(
+	context.Context,
+	*repo.TaskExecutionRecordGetReq,
+) (int, error) {
 	return 0, nil
 }
 
-func (r *fakeExecutionRepo) Page(context.Context, *repo.TaskExecutionRecordPageReq) (*repo.TaskExecutionRecordPageResp, error) {
+func (r *fakeExecutionRepo) Page(
+	context.Context,
+	*repo.TaskExecutionRecordPageReq,
+) (*repo.TaskExecutionRecordPageResp, error) {
 	return &repo.TaskExecutionRecordPageResp{}, nil
 }
 
-func (r *fakeExecutionRepo) ExistsPeriod(_ context.Context, req *repo.TaskExecutionRecordExistsPeriodReq) (bool, error) {
+func (r *fakeExecutionRepo) ExistsPeriod(
+	_ context.Context,
+	req *repo.TaskExecutionRecordExistsPeriodReq,
+) (bool, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if r.recordsByPeriod == nil {
@@ -99,7 +117,10 @@ func (r *fakeExecutionRepo) ExistsPeriod(_ context.Context, req *repo.TaskExecut
 	return ok, nil
 }
 
-func (r *fakeExecutionRepo) Create(_ context.Context, req *repo.TaskExecutionRecordCreateReq) (*repo.TaskExecutionRecordCreateResp, error) {
+func (r *fakeExecutionRepo) Create(
+	_ context.Context,
+	req *repo.TaskExecutionRecordCreateReq,
+) (*repo.TaskExecutionRecordCreateResp, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.createCalled++
@@ -107,7 +128,10 @@ func (r *fakeExecutionRepo) Create(_ context.Context, req *repo.TaskExecutionRec
 		return nil, r.createErr
 	}
 	if r.scheduleConflict {
-		return &repo.TaskExecutionRecordCreateResp{Row: r.record, Conflict: true}, nil
+		return &repo.TaskExecutionRecordCreateResp{
+			Row:      r.record,
+			Conflict: true,
+		}, nil
 	}
 	if !r.created {
 		return &repo.TaskExecutionRecordCreateResp{}, nil
@@ -121,7 +145,10 @@ func (r *fakeExecutionRepo) Create(_ context.Context, req *repo.TaskExecutionRec
 	record := req.Record
 	key := executionPeriodKey(record.TaskID, record.ScheduledAt)
 	if current, ok := r.recordsByPeriod[key]; ok {
-		return &repo.TaskExecutionRecordCreateResp{Row: current, Conflict: true}, nil
+		return &repo.TaskExecutionRecordCreateResp{
+			Row:      current,
+			Conflict: true,
+		}, nil
 	}
 	row := *record
 	r.nextID++
@@ -132,14 +159,23 @@ func (r *fakeExecutionRepo) Create(_ context.Context, req *repo.TaskExecutionRec
 	r.record = &row
 	r.records[row.ID] = &row
 	r.recordsByPeriod[key] = &row
-	return &repo.TaskExecutionRecordCreateResp{Row: &row, Created: true}, nil
+	return &repo.TaskExecutionRecordCreateResp{
+		Row:     &row,
+		Created: true,
+	}, nil
 }
 
-func (r *fakeExecutionRepo) HasUnexpiredRunning(context.Context, *repo.TaskExecutionRecordHasUnexpiredRunningReq) (bool, error) {
+func (r *fakeExecutionRepo) HasUnexpiredRunning(
+	context.Context,
+	*repo.TaskExecutionRecordHasUnexpiredRunningReq,
+) (bool, error) {
 	return r.hasUnexpiredRunning, r.hasUnexpiredRunningErr
 }
 
-func (r *fakeExecutionRepo) MarkUnknown(_ context.Context, req *repo.TaskExecutionRecordMarkUnknownReq) ([]*model.TaskExecutionRecord, error) {
+func (r *fakeExecutionRepo) MarkUnknown(
+	_ context.Context,
+	req *repo.TaskExecutionRecordMarkUnknownReq,
+) ([]*model.TaskExecutionRecord, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	rows := make([]*model.TaskExecutionRecord, 0, len(req.IDs))
@@ -161,13 +197,18 @@ func (r *fakeExecutionRepo) MarkUnknown(_ context.Context, req *repo.TaskExecuti
 	return rows, nil
 }
 
-func (r *fakeExecutionRepo) MarkFinished(_ context.Context, req *repo.TaskExecutionRecordMarkFinishedReq) (*repo.TaskExecutionRecordMarkFinishedResp, error) {
+func (r *fakeExecutionRepo) MarkFinished(
+	_ context.Context,
+	req *repo.TaskExecutionRecordMarkFinishedReq,
+) (*repo.TaskExecutionRecordMarkFinishedResp, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if r.records != nil {
 		current := r.records[req.ID]
 		if current == nil || current.Status != schedulerenum.TaskExecutionStatusRunning {
-			return &repo.TaskExecutionRecordMarkFinishedResp{Row: current}, nil
+			return &repo.TaskExecutionRecordMarkFinishedResp{
+				Row: current,
+			}, nil
 		}
 		current.Status = req.Status
 		current.FinishedAt = new(req.FinishedAt)
@@ -175,7 +216,10 @@ func (r *fakeExecutionRepo) MarkFinished(_ context.Context, req *repo.TaskExecut
 		current.LastError = req.LastError
 		current.UpdatedAt = new(req.FinishedAt)
 		r.markFinishedRows = append(r.markFinishedRows, current)
-		return &repo.TaskExecutionRecordMarkFinishedResp{Row: current, Updated: true}, nil
+		return &repo.TaskExecutionRecordMarkFinishedResp{
+			Row:     current,
+			Updated: true,
+		}, nil
 	}
 	row := &model.TaskExecutionRecord{
 		ID:         req.ID,
@@ -185,7 +229,10 @@ func (r *fakeExecutionRepo) MarkFinished(_ context.Context, req *repo.TaskExecut
 		LastError:  req.LastError,
 	}
 	r.markFinishedRows = append(r.markFinishedRows, row)
-	return &repo.TaskExecutionRecordMarkFinishedResp{Row: row, Updated: true}, nil
+	return &repo.TaskExecutionRecordMarkFinishedResp{
+		Row:     row,
+		Updated: true,
+	}, nil
 }
 
 type fakeTaskRepo struct {
@@ -193,7 +240,10 @@ type fakeTaskRepo struct {
 	listReq *repo.TaskGetReq
 }
 
-func (r *fakeTaskRepo) Get(_ context.Context, req *repo.TaskGetReq) (*model.Task, error) {
+func (r *fakeTaskRepo) Get(
+	_ context.Context,
+	req *repo.TaskGetReq,
+) (*model.Task, error) {
 	if r.task == nil {
 		return nil, errors.New("task not found")
 	}
@@ -203,7 +253,10 @@ func (r *fakeTaskRepo) Get(_ context.Context, req *repo.TaskGetReq) (*model.Task
 	return r.task, nil
 }
 
-func (r *fakeTaskRepo) List(_ context.Context, req *repo.TaskGetReq) ([]*model.Task, error) {
+func (r *fakeTaskRepo) List(
+	_ context.Context,
+	req *repo.TaskGetReq,
+) ([]*model.Task, error) {
 	r.listReq = req
 	if r.task == nil {
 		return nil, nil
@@ -211,19 +264,31 @@ func (r *fakeTaskRepo) List(_ context.Context, req *repo.TaskGetReq) ([]*model.T
 	return []*model.Task{r.task}, nil
 }
 
-func (r *fakeTaskRepo) Map(context.Context, *repo.TaskGetReq) (map[int64]*model.Task, error) {
+func (r *fakeTaskRepo) Map(
+	context.Context,
+	*repo.TaskGetReq,
+) (map[int64]*model.Task, error) {
 	return nil, nil
 }
 
-func (r *fakeTaskRepo) Count(context.Context, *repo.TaskGetReq) (int, error) {
+func (r *fakeTaskRepo) Count(
+	context.Context,
+	*repo.TaskGetReq,
+) (int, error) {
 	return 0, nil
 }
 
-func (r *fakeTaskRepo) Page(context.Context, *repo.TaskPageReq) (*repo.TaskPageResp, error) {
+func (r *fakeTaskRepo) Page(
+	context.Context,
+	*repo.TaskPageReq,
+) (*repo.TaskPageResp, error) {
 	return &repo.TaskPageResp{}, nil
 }
 
-func (r *fakeTaskRepo) Upsert(_ context.Context, row *model.Task) (*model.Task, error) {
+func (r *fakeTaskRepo) Upsert(
+	_ context.Context,
+	row *model.Task,
+) (*model.Task, error) {
 	saved := *row
 	if saved.ID == 0 {
 		saved.ID = 1
@@ -237,7 +302,10 @@ func (r *fakeTaskRepo) Upsert(_ context.Context, row *model.Task) (*model.Task, 
 	return &saved, nil
 }
 
-func (r *fakeTaskRepo) Lock(context.Context, int64) error {
+func (r *fakeTaskRepo) Lock(
+	context.Context,
+	int64,
+) error {
 	return nil
 }
 
@@ -247,11 +315,17 @@ type fakeTaskVersionRepo struct {
 	err     error
 }
 
-func (r *fakeTaskVersionRepo) Get(context.Context, *repo.TaskVersionGetReq) (*model.TaskVersion, error) {
+func (r *fakeTaskVersionRepo) Get(
+	context.Context,
+	*repo.TaskVersionGetReq,
+) (*model.TaskVersion, error) {
 	return nil, nil
 }
 
-func (r *fakeTaskVersionRepo) List(_ context.Context, req *repo.TaskVersionGetReq) ([]*model.TaskVersion, error) {
+func (r *fakeTaskVersionRepo) List(
+	_ context.Context,
+	req *repo.TaskVersionGetReq,
+) ([]*model.TaskVersion, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	rows := make([]*model.TaskVersion, 0, len(r.created))
@@ -285,19 +359,31 @@ func (r *fakeTaskVersionRepo) List(_ context.Context, req *repo.TaskVersionGetRe
 	return rows, nil
 }
 
-func (r *fakeTaskVersionRepo) Map(context.Context, *repo.TaskVersionGetReq) (map[int64]*model.TaskVersion, error) {
+func (r *fakeTaskVersionRepo) Map(
+	context.Context,
+	*repo.TaskVersionGetReq,
+) (map[int64]*model.TaskVersion, error) {
 	return nil, nil
 }
 
-func (r *fakeTaskVersionRepo) Count(context.Context, *repo.TaskVersionGetReq) (int, error) {
+func (r *fakeTaskVersionRepo) Count(
+	context.Context,
+	*repo.TaskVersionGetReq,
+) (int, error) {
 	return 0, nil
 }
 
-func (r *fakeTaskVersionRepo) Page(context.Context, *repo.TaskVersionPageReq) (*repo.TaskVersionPageResp, error) {
+func (r *fakeTaskVersionRepo) Page(
+	context.Context,
+	*repo.TaskVersionPageReq,
+) (*repo.TaskVersionPageResp, error) {
 	return &repo.TaskVersionPageResp{}, nil
 }
 
-func (r *fakeTaskVersionRepo) Create(_ context.Context, task *model.Task) (*model.TaskVersion, error) {
+func (r *fakeTaskVersionRepo) Create(
+	_ context.Context,
+	task *model.Task,
+) (*model.TaskVersion, error) {
 	if r.err != nil {
 		return nil, r.err
 	}
@@ -335,7 +421,10 @@ type fakeTaskLockRepo struct {
 	releasedTokens []string
 }
 
-func (r *fakeTaskLockRepo) TryAcquireSchedule(_ context.Context, req *repo.TaskScheduleAcquireReq) (*repo.TaskScheduleAcquireResp, error) {
+func (r *fakeTaskLockRepo) TryAcquireSchedule(
+	_ context.Context,
+	req *repo.TaskScheduleAcquireReq,
+) (*repo.TaskScheduleAcquireResp, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.acquireCalled++
@@ -347,18 +436,25 @@ func (r *fakeTaskLockRepo) TryAcquireSchedule(_ context.Context, req *repo.TaskS
 	}
 	key := executionPeriodKey(req.TaskID, req.ScheduledAt)
 	if _, ok := r.schedules[key]; ok {
-		return &repo.TaskScheduleAcquireResp{Decision: schedulerenum.TaskScheduleDecisionSkip}, nil
+		return &repo.TaskScheduleAcquireResp{
+			Decision: schedulerenum.TaskScheduleDecisionSkip,
+		}, nil
 	}
 	r.schedules[key] = "schedule-token-" + strconv.Itoa(r.acquireCalled)
 	token := "running-token-" + strconv.Itoa(r.acquireCalled)
 	if req.AllowOverlap {
-		return &repo.TaskScheduleAcquireResp{Decision: schedulerenum.TaskScheduleDecisionRun, RunningToken: token}, nil
+		return &repo.TaskScheduleAcquireResp{
+			Decision:     schedulerenum.TaskScheduleDecisionRun,
+			RunningToken: token,
+		}, nil
 	}
 	if r.runningByTask == nil {
 		r.runningByTask = map[int64]string{}
 	}
 	if r.runningByTask[req.TaskID] != "" {
-		return &repo.TaskScheduleAcquireResp{Decision: schedulerenum.TaskScheduleDecisionOverlap}, nil
+		return &repo.TaskScheduleAcquireResp{
+			Decision: schedulerenum.TaskScheduleDecisionOverlap,
+		}, nil
 	}
 	r.runningByTask[req.TaskID] = token
 	return &repo.TaskScheduleAcquireResp{
@@ -367,7 +463,10 @@ func (r *fakeTaskLockRepo) TryAcquireSchedule(_ context.Context, req *repo.TaskS
 	}, nil
 }
 
-func (r *fakeTaskLockRepo) RegisterRunning(_ context.Context, req *repo.TaskRunningLockReq) (bool, error) {
+func (r *fakeTaskLockRepo) RegisterRunning(
+	_ context.Context,
+	req *repo.TaskRunningLockReq,
+) (bool, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.registerCalled++
@@ -384,7 +483,10 @@ func (r *fakeTaskLockRepo) RegisterRunning(_ context.Context, req *repo.TaskRunn
 	return true, nil
 }
 
-func (r *fakeTaskLockRepo) RefreshRunning(_ context.Context, req *repo.TaskRunningLockReq) (bool, error) {
+func (r *fakeTaskLockRepo) RefreshRunning(
+	_ context.Context,
+	req *repo.TaskRunningLockReq,
+) (bool, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.refreshCalled++
@@ -400,7 +502,10 @@ func (r *fakeTaskLockRepo) RefreshRunning(_ context.Context, req *repo.TaskRunni
 	return true, nil
 }
 
-func (r *fakeTaskLockRepo) ReleaseRunning(_ context.Context, req *repo.TaskRunningLockReq) error {
+func (r *fakeTaskLockRepo) ReleaseRunning(
+	_ context.Context,
+	req *repo.TaskRunningLockReq,
+) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.releaseCalled++
@@ -420,7 +525,10 @@ func (r *fakeTaskLockRepo) ReleaseRunning(_ context.Context, req *repo.TaskRunni
 	return nil
 }
 
-func (r *fakeTaskLockRepo) MapRunning(_ context.Context, req *repo.TaskRunningMapReq) (map[int64]bool, error) {
+func (r *fakeTaskLockRepo) MapRunning(
+	_ context.Context,
+	req *repo.TaskRunningMapReq,
+) (map[int64]bool, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	if r.err != nil {
@@ -439,11 +547,17 @@ type fakeTaskEventBus struct {
 	cancelMessages []*repo.TaskExecutionCanceledMessage
 }
 
-func (fakeTaskEventBus) PublishTaskChanged(context.Context, *repo.TaskChangedMessage) error {
+func (fakeTaskEventBus) PublishTaskChanged(
+	context.Context,
+	*repo.TaskChangedMessage,
+) error {
 	return nil
 }
 
-func (b *fakeTaskEventBus) PublishExecutionCanceled(_ context.Context, msg *repo.TaskExecutionCanceledMessage) error {
+func (b *fakeTaskEventBus) PublishExecutionCanceled(
+	_ context.Context,
+	msg *repo.TaskExecutionCanceledMessage,
+) error {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 	if b.cancelErr != nil {
@@ -453,11 +567,15 @@ func (b *fakeTaskEventBus) PublishExecutionCanceled(_ context.Context, msg *repo
 	return nil
 }
 
-func (fakeTaskEventBus) SubscribeTaskChanged(context.Context) (<-chan repo.TaskChangedMessage, error) {
+func (fakeTaskEventBus) SubscribeTaskChanged(
+	context.Context,
+) (<-chan repo.TaskChangedMessage, error) {
 	return make(chan repo.TaskChangedMessage), nil
 }
 
-func (fakeTaskEventBus) SubscribeExecutionCanceled(context.Context) (<-chan repo.TaskExecutionCanceledMessage, error) {
+func (fakeTaskEventBus) SubscribeExecutionCanceled(
+	context.Context,
+) (<-chan repo.TaskExecutionCanceledMessage, error) {
 	return make(chan repo.TaskExecutionCanceledMessage), nil
 }
 
@@ -467,7 +585,10 @@ type fakeAlert struct {
 	records int
 }
 
-func (a *fakeAlert) Alert(_ context.Context, req *repo.TaskAlertReq) error {
+func (a *fakeAlert) Alert(
+	_ context.Context,
+	req *repo.TaskAlertReq,
+) error {
 	reason := req.Reason
 	a.mu.Lock()
 	defer a.mu.Unlock()
@@ -484,13 +605,22 @@ type fakeTask struct {
 	executions  atomic.Int64
 }
 
-func (t *fakeTask) Name() string { return "noop" }
+func (t *fakeTask) Name() string {
+	return "noop"
+}
 
-func (t *fakeTask) Title() string { return "空任务" }
+func (t *fakeTask) Title() string {
+	return "空任务"
+}
 
-func (t *fakeTask) Description() string { return "用于测试的空任务" }
+func (t *fakeTask) Description() string {
+	return "用于测试的空任务"
+}
 
-func (t *fakeTask) Execute(ctx context.Context, payload string) error {
+func (t *fakeTask) Execute(
+	ctx context.Context,
+	payload string,
+) error {
 	t.executions.Add(1)
 	if t.executed != nil {
 		t.executed <- payload
@@ -508,7 +638,9 @@ func (t *fakeTask) Execute(ctx context.Context, payload string) error {
 	return t.err
 }
 
-func TestUpsertCreatesTaskVersionSnapshot(t *testing.T) {
+func TestUpsertCreatesTaskVersionSnapshot(
+	t *testing.T,
+) {
 	taskRepo := &fakeTaskRepo{}
 	taskVersionRepo := &fakeTaskVersionRepo{}
 	usecase := NewTaskUsecase(
@@ -541,7 +673,9 @@ func TestUpsertCreatesTaskVersionSnapshot(t *testing.T) {
 	}
 }
 
-func TestCancelExecutionPublishesIntentWithoutChangingRecordStatus(t *testing.T) {
+func TestCancelExecutionPublishesIntentWithoutChangingRecordStatus(
+	t *testing.T,
+) {
 	startedAt := time.Now().Add(-time.Second)
 	record := &model.TaskExecutionRecord{
 		ID:        7,
@@ -549,13 +683,17 @@ func TestCancelExecutionPublishesIntentWithoutChangingRecordStatus(t *testing.T)
 		StartedAt: new(startedAt),
 		Status:    schedulerenum.TaskExecutionStatusRunning,
 	}
-	executionRepo := &fakeExecutionRepo{records: map[int64]*model.TaskExecutionRecord{record.ID: record}}
+	executionRepo := &fakeExecutionRepo{
+		records: map[int64]*model.TaskExecutionRecord{record.ID: record},
+	}
 	eventBus := &fakeTaskEventBus{}
 	usecase := NewTaskUsecase(
 		slog.New(slog.NewTextHandler(io.Discard, nil)),
 		testConf(),
 		testTx,
-		&fakeTaskRepo{task: testTask(true)},
+		&fakeTaskRepo{
+			task: testTask(true),
+		},
 		&fakeTaskVersionRepo{},
 		executionRepo,
 		&fakeTaskLockRepo{},
@@ -580,12 +718,23 @@ func TestCancelExecutionPublishesIntentWithoutChangingRecordStatus(t *testing.T)
 	}
 }
 
-func TestCanceledContextMarksExecutionCanceledWhenTaskReturnsNil(t *testing.T) {
-	taskImpl := &fakeTask{block: make(chan struct{}), nilOnCancel: true}
-	executionRepo := &fakeExecutionRepo{created: true}
+func TestCanceledContextMarksExecutionCanceledWhenTaskReturnsNil(
+	t *testing.T,
+) {
+	taskImpl := &fakeTask{
+		block:       make(chan struct{}),
+		nilOnCancel: true,
+	}
+	executionRepo := &fakeExecutionRepo{
+		created: true,
+	}
 	usecase := newTestTaskUsecase(t, executionRepo, taskImpl)
 
-	startResp, err := usecase.StartExecution(context.Background(), &TaskStartExecutionReq{Task: testTask(true), ScheduledAt: time.Now(), TriggerType: schedulerenum.TaskTriggerTypeManual})
+	startResp, err := usecase.StartExecution(context.Background(), &TaskStartExecutionReq{
+		Task:        testTask(true),
+		ScheduledAt: time.Now(),
+		TriggerType: schedulerenum.TaskTriggerTypeManual,
+	})
 	if err != nil || !startResp.Created {
 		t.Fatalf("StartExecution returned record=%#v created=%v err=%v", startResp.Record, startResp.Created, err)
 	}
@@ -606,12 +755,23 @@ func TestCanceledContextMarksExecutionCanceledWhenTaskReturnsNil(t *testing.T) {
 	}
 }
 
-func TestStartExecutionScheduleConflictReturnsResult(t *testing.T) {
-	existing := &model.TaskExecutionRecord{ID: 1}
-	executionRepo := &fakeExecutionRepo{record: existing, scheduleConflict: true}
+func TestStartExecutionScheduleConflictReturnsResult(
+	t *testing.T,
+) {
+	existing := &model.TaskExecutionRecord{
+		ID: 1,
+	}
+	executionRepo := &fakeExecutionRepo{
+		record:           existing,
+		scheduleConflict: true,
+	}
 	usecase := newTestTaskUsecase(t, executionRepo, &fakeTask{})
 
-	startResp, err := usecase.StartExecution(context.Background(), &TaskStartExecutionReq{Task: testTask(true), ScheduledAt: time.Now(), TriggerType: schedulerenum.TaskTriggerTypeSchedule})
+	startResp, err := usecase.StartExecution(context.Background(), &TaskStartExecutionReq{
+		Task:        testTask(true),
+		ScheduledAt: time.Now(),
+		TriggerType: schedulerenum.TaskTriggerTypeSchedule,
+	})
 	if err != nil {
 		t.Fatalf("StartExecution returned error: %v", err)
 	}
@@ -632,11 +792,17 @@ func TestStartExecutionScheduleConflictReturnsResult(t *testing.T) {
 	}
 }
 
-func TestScheduleExecutionOverlapSkippedWhenRunningLockExists(t *testing.T) {
+func TestScheduleExecutionOverlapSkippedWhenRunningLockExists(
+	t *testing.T,
+) {
 	alert := &fakeAlert{}
-	executionRepo := &fakeExecutionRepo{created: true}
+	executionRepo := &fakeExecutionRepo{
+		created: true,
+	}
 	task := testTask(false)
-	taskLockRepo := &fakeTaskLockRepo{runningByTask: map[int64]string{task.ID: "existing-token"}}
+	taskLockRepo := &fakeTaskLockRepo{
+		runningByTask: map[int64]string{task.ID: "existing-token"},
+	}
 	usecase := NewTaskUsecase(
 		slog.New(slog.NewTextHandler(io.Discard, nil)),
 		testConf(),
@@ -645,12 +811,18 @@ func TestScheduleExecutionOverlapSkippedWhenRunningLockExists(t *testing.T) {
 		&fakeTaskVersionRepo{},
 		executionRepo,
 		taskLockRepo,
-		map[string]taskimpl.Task{"noop": &fakeTask{executed: make(chan string, 1)}},
+		map[string]taskimpl.Task{"noop": &fakeTask{
+			executed: make(chan string, 1),
+		}},
 		&fakeTaskEventBus{},
 		alert,
 	)
 
-	scheduleResp, err := usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: time.Now(), TriggerType: schedulerenum.TaskTriggerTypeManual})
+	scheduleResp, err := usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{
+		Task:        task,
+		ScheduledAt: time.Now(),
+		TriggerType: schedulerenum.TaskTriggerTypeManual,
+	})
 	if err != nil {
 		t.Fatalf("StartExecution returned error: %v", err)
 	}
@@ -663,14 +835,24 @@ func TestScheduleExecutionOverlapSkippedWhenRunningLockExists(t *testing.T) {
 	}
 }
 
-func TestStartExecutionExecutesAndMarksSuccess(t *testing.T) {
+func TestStartExecutionExecutesAndMarksSuccess(
+	t *testing.T,
+) {
 	executed := make(chan string, 1)
 	alert := &fakeAlert{}
-	executionRepo := &fakeExecutionRepo{created: true}
-	usecase := newTestTaskUsecase(t, executionRepo, &fakeTask{executed: executed}, alert)
+	executionRepo := &fakeExecutionRepo{
+		created: true,
+	}
+	usecase := newTestTaskUsecase(t, executionRepo, &fakeTask{
+		executed: executed,
+	}, alert)
 	task := testTask(true)
 
-	scheduleResp, err := usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: time.Now(), TriggerType: schedulerenum.TaskTriggerTypeManual})
+	scheduleResp, err := usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{
+		Task:        task,
+		ScheduledAt: time.Now(),
+		TriggerType: schedulerenum.TaskTriggerTypeManual,
+	})
 	if err != nil {
 		t.Fatalf("StartExecution returned error: %v", err)
 	}
@@ -709,13 +891,23 @@ func TestStartExecutionExecutesAndMarksSuccess(t *testing.T) {
 	}
 }
 
-func TestStartExecutionFailedAlertsOnce(t *testing.T) {
+func TestStartExecutionFailedAlertsOnce(
+	t *testing.T,
+) {
 	alert := &fakeAlert{}
-	executionRepo := &fakeExecutionRepo{created: true}
-	usecase := newTestTaskUsecase(t, executionRepo, &fakeTask{err: errors.New("execute failed")}, alert)
+	executionRepo := &fakeExecutionRepo{
+		created: true,
+	}
+	usecase := newTestTaskUsecase(t, executionRepo, &fakeTask{
+		err: errors.New("execute failed"),
+	}, alert)
 	task := testTask(true)
 
-	scheduleResp, err := usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: time.Now(), TriggerType: schedulerenum.TaskTriggerTypeManual})
+	scheduleResp, err := usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{
+		Task:        task,
+		ScheduledAt: time.Now(),
+		TriggerType: schedulerenum.TaskTriggerTypeManual,
+	})
 	if err != nil {
 		t.Fatalf("ScheduleExecution returned error: %v", err)
 	}
@@ -744,7 +936,12 @@ func TestStartExecutionFailedAlertsOnce(t *testing.T) {
 	}
 }
 
-func newTestTaskUsecase(t *testing.T, executionRepo *fakeExecutionRepo, task taskimpl.Task, alerts ...*fakeAlert) *TaskUsecase {
+func newTestTaskUsecase(
+	t *testing.T,
+	executionRepo *fakeExecutionRepo,
+	task taskimpl.Task,
+	alerts ...*fakeAlert,
+) *TaskUsecase {
 	t.Helper()
 	alert := &fakeAlert{}
 	if len(alerts) > 0 && alerts[0] != nil {
@@ -754,7 +951,9 @@ func newTestTaskUsecase(t *testing.T, executionRepo *fakeExecutionRepo, task tas
 		slog.New(slog.NewTextHandler(io.Discard, nil)),
 		testConf(),
 		testTx,
-		&fakeTaskRepo{task: testTask(true)},
+		&fakeTaskRepo{
+			task: testTask(true),
+		},
 		&fakeTaskVersionRepo{},
 		executionRepo,
 		&fakeTaskLockRepo{},
@@ -764,7 +963,11 @@ func newTestTaskUsecase(t *testing.T, executionRepo *fakeExecutionRepo, task tas
 	)
 }
 
-func testTx(ctx context.Context, fn func(ctx context.Context) error, _ ...utilent.TxOption) error {
+func testTx(
+	ctx context.Context,
+	fn func(ctx context.Context) error,
+	_ ...utilent.TxOption,
+) error {
 	return fn(ctx)
 }
 
@@ -776,7 +979,9 @@ func testConf() *config.Bootstrap {
 	}
 }
 
-func testTask(allowOverlap bool) *model.Task {
+func testTask(
+	allowOverlap bool,
+) *model.Task {
 	return &model.Task{
 		ID:             1,
 		Name:           "noop",
@@ -791,10 +996,14 @@ func testTask(allowOverlap bool) *model.Task {
 	}
 }
 
-func TestScheduleExecutionHighConcurrencyCreatesOneRecord(t *testing.T) {
+func TestScheduleExecutionHighConcurrencyCreatesOneRecord(
+	t *testing.T,
+) {
 	competitors := envInt("SCHEDULER_RACE_COMPETITORS", 1000)
 	taskImpl := &fakeTask{}
-	executionRepo := &fakeExecutionRepo{created: true}
+	executionRepo := &fakeExecutionRepo{
+		created: true,
+	}
 	usecase := newTestTaskUsecase(t, executionRepo, taskImpl)
 	task := testTask(true)
 	scheduledAt := time.Date(2026, 7, 4, 10, 0, 0, 123, time.UTC)
@@ -803,7 +1012,11 @@ func TestScheduleExecutionHighConcurrencyCreatesOneRecord(t *testing.T) {
 	for i := 0; i < competitors; i++ {
 		go func() {
 			defer wg.Done()
-			_, _ = usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: scheduledAt, TriggerType: schedulerenum.TaskTriggerTypeSchedule})
+			_, _ = usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{
+				Task:        task,
+				ScheduledAt: scheduledAt,
+				TriggerType: schedulerenum.TaskTriggerTypeSchedule,
+			})
 		}()
 	}
 	wg.Wait()
@@ -822,11 +1035,15 @@ func TestScheduleExecutionHighConcurrencyCreatesOneRecord(t *testing.T) {
 	}
 }
 
-func TestScheduleExecutionCreatesOneRecordPerPeriod(t *testing.T) {
+func TestScheduleExecutionCreatesOneRecordPerPeriod(
+	t *testing.T,
+) {
 	periods := envInt("SCHEDULER_PERIOD_COUNT", 20)
 	competitors := envInt("SCHEDULER_PERIOD_COMPETITORS", 100)
 	taskImpl := &fakeTask{}
-	executionRepo := &fakeExecutionRepo{created: true}
+	executionRepo := &fakeExecutionRepo{
+		created: true,
+	}
 	usecase := newTestTaskUsecase(t, executionRepo, taskImpl)
 	task := testTask(true)
 	base := time.Date(2026, 7, 4, 10, 0, 0, 0, time.UTC)
@@ -837,7 +1054,11 @@ func TestScheduleExecutionCreatesOneRecordPerPeriod(t *testing.T) {
 			wg.Add(1)
 			go func() {
 				defer wg.Done()
-				_, _ = usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: scheduledAt, TriggerType: schedulerenum.TaskTriggerTypeSchedule})
+				_, _ = usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{
+					Task:        task,
+					ScheduledAt: scheduledAt,
+					TriggerType: schedulerenum.TaskTriggerTypeSchedule,
+				})
 			}()
 		}
 	}
@@ -857,18 +1078,26 @@ func TestScheduleExecutionCreatesOneRecordPerPeriod(t *testing.T) {
 	}
 }
 
-func TestScheduleExecutionRedisFailureFallsBackToDatabaseUnique(t *testing.T) {
+func TestScheduleExecutionRedisFailureFallsBackToDatabaseUnique(
+	t *testing.T,
+) {
 	competitors := envInt("SCHEDULER_REDIS_FALLBACK_COMPETITORS", 1000)
 	taskImpl := &fakeTask{}
-	executionRepo := &fakeExecutionRepo{created: true}
+	executionRepo := &fakeExecutionRepo{
+		created: true,
+	}
 	usecase := NewTaskUsecase(
 		slog.New(slog.NewTextHandler(io.Discard, nil)),
 		testConf(),
 		testTx,
-		&fakeTaskRepo{task: testTask(true)},
+		&fakeTaskRepo{
+			task: testTask(true),
+		},
 		&fakeTaskVersionRepo{},
 		executionRepo,
-		&fakeTaskLockRepo{err: errors.New("redis unavailable")},
+		&fakeTaskLockRepo{
+			err: errors.New("redis unavailable"),
+		},
 		map[string]taskimpl.Task{"noop": taskImpl},
 		&fakeTaskEventBus{},
 		&fakeAlert{},
@@ -880,7 +1109,11 @@ func TestScheduleExecutionRedisFailureFallsBackToDatabaseUnique(t *testing.T) {
 	for i := 0; i < competitors; i++ {
 		go func() {
 			defer wg.Done()
-			_, _ = usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: scheduledAt, TriggerType: schedulerenum.TaskTriggerTypeSchedule})
+			_, _ = usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{
+				Task:        task,
+				ScheduledAt: scheduledAt,
+				TriggerType: schedulerenum.TaskTriggerTypeSchedule,
+			})
 		}()
 	}
 	wg.Wait()
@@ -903,23 +1136,36 @@ func TestScheduleExecutionRedisFailureFallsBackToDatabaseUnique(t *testing.T) {
 	}
 }
 
-func TestScheduleExecutionRedisFailureFallbackOverlapSkipped(t *testing.T) {
+func TestScheduleExecutionRedisFailureFallbackOverlapSkipped(
+	t *testing.T,
+) {
 	taskImpl := &fakeTask{}
-	executionRepo := &fakeExecutionRepo{created: true, hasUnexpiredRunning: true}
+	executionRepo := &fakeExecutionRepo{
+		created:             true,
+		hasUnexpiredRunning: true,
+	}
 	usecase := NewTaskUsecase(
 		slog.New(slog.NewTextHandler(io.Discard, nil)),
 		testConf(),
 		testTx,
-		&fakeTaskRepo{task: testTask(false)},
+		&fakeTaskRepo{
+			task: testTask(false),
+		},
 		&fakeTaskVersionRepo{},
 		executionRepo,
-		&fakeTaskLockRepo{err: errors.New("redis unavailable")},
+		&fakeTaskLockRepo{
+			err: errors.New("redis unavailable"),
+		},
 		map[string]taskimpl.Task{"noop": taskImpl},
 		&fakeTaskEventBus{},
 		&fakeAlert{},
 	)
 	task := testTask(false)
-	scheduleResp, err := usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: time.Now(), TriggerType: schedulerenum.TaskTriggerTypeSchedule})
+	scheduleResp, err := usecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{
+		Task:        task,
+		ScheduledAt: time.Now(),
+		TriggerType: schedulerenum.TaskTriggerTypeSchedule,
+	})
 	if err != nil {
 		t.Fatalf("ScheduleExecution returned error: %v", err)
 	}
@@ -932,8 +1178,12 @@ func TestScheduleExecutionRedisFailureFallbackOverlapSkipped(t *testing.T) {
 	}
 }
 
-func TestStaleRunningCanBeMarkedUnknownAndCannotBeOverwritten(t *testing.T) {
-	executionRepo := &fakeExecutionRepo{created: true}
+func TestStaleRunningCanBeMarkedUnknownAndCannotBeOverwritten(
+	t *testing.T,
+) {
+	executionRepo := &fakeExecutionRepo{
+		created: true,
+	}
 	taskVersionRepo := &fakeTaskVersionRepo{
 		created: []*model.TaskVersion{{
 			TaskID:         testTask(true).ID,
@@ -946,16 +1196,24 @@ func TestStaleRunningCanBeMarkedUnknownAndCannotBeOverwritten(t *testing.T) {
 		slog.New(slog.NewTextHandler(io.Discard, nil)),
 		testConf(),
 		testTx,
-		&fakeTaskRepo{task: testTask(true)},
+		&fakeTaskRepo{
+			task: testTask(true),
+		},
 		taskVersionRepo,
 		executionRepo,
 		&fakeTaskLockRepo{},
-		map[string]taskimpl.Task{"noop": &fakeTask{block: make(chan struct{})}},
+		map[string]taskimpl.Task{"noop": &fakeTask{
+			block: make(chan struct{}),
+		}},
 		&fakeTaskEventBus{},
 		&fakeAlert{},
 	)
 	task := testTask(true)
-	startResp, err := usecase.StartExecution(context.Background(), &TaskStartExecutionReq{Task: task, ScheduledAt: time.Now(), TriggerType: schedulerenum.TaskTriggerTypeSchedule})
+	startResp, err := usecase.StartExecution(context.Background(), &TaskStartExecutionReq{
+		Task:        task,
+		ScheduledAt: time.Now(),
+		TriggerType: schedulerenum.TaskTriggerTypeSchedule,
+	})
 	if err != nil || !startResp.Created {
 		t.Fatalf("StartExecution returned record=%#v created=%v err=%v", startResp.Record, startResp.Created, err)
 	}
@@ -981,7 +1239,12 @@ func TestStaleRunningCanBeMarkedUnknownAndCannotBeOverwritten(t *testing.T) {
 		t.Fatalf("expected unknown row, got %#v", unknownRows)
 	}
 	finishedAt := time.Now()
-	markResp, err := executionRepo.MarkFinished(context.Background(), &repo.TaskExecutionRecordMarkFinishedReq{ID: record.ID, Status: schedulerenum.TaskExecutionStatusSuccess, FinishedAt: finishedAt, DurationMS: 1})
+	markResp, err := executionRepo.MarkFinished(context.Background(), &repo.TaskExecutionRecordMarkFinishedReq{
+		ID:         record.ID,
+		Status:     schedulerenum.TaskExecutionStatusSuccess,
+		FinishedAt: finishedAt,
+		DurationMS: 1,
+	})
 	row := markResp.Row
 	updated := markResp.Updated
 	if err != nil {
@@ -995,11 +1258,17 @@ func TestStaleRunningCanBeMarkedUnknownAndCannotBeOverwritten(t *testing.T) {
 	}
 }
 
-func executionPeriodKey(taskID int64, scheduledAt time.Time) string {
+func executionPeriodKey(
+	taskID int64,
+	scheduledAt time.Time,
+) string {
 	return strconv.FormatInt(taskID, 10) + ":" + scheduledAt.UTC().Format(time.RFC3339Nano)
 }
 
-func envInt(name string, defaultValue int) int {
+func envInt(
+	name string,
+	defaultValue int,
+) int {
 	value := strings.TrimSpace(os.Getenv(name))
 	if value == "" {
 		return defaultValue

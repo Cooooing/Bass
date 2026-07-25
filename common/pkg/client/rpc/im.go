@@ -12,7 +12,9 @@ type IMClient struct {
 	Session imv1.IMChatSessionServiceClient
 }
 
-func NewIMClient(conn *grpc.ClientConn) *IMClient {
+func NewIMClient(
+	conn *grpc.ClientConn,
+) *IMClient {
 	return &IMClient{
 		Group:   imv1.NewIMChatGroupServiceClient(conn),
 		Message: imv1.NewIMChatMessageServiceClient(conn),

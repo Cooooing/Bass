@@ -19,7 +19,9 @@ type GameTownClient struct {
 	Event       gametownv1.GameTownEventServiceClient
 }
 
-func NewGameTownClient(conn *grpc.ClientConn) *GameTownClient {
+func NewGameTownClient(
+	conn *grpc.ClientConn,
+) *GameTownClient {
 	return &GameTownClient{
 		System:      commonv1.NewCommonSystemServiceClient(conn),
 		AgentConfig: gametownv1.NewGameTownAgentConfigServiceClient(conn),

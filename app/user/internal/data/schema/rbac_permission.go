@@ -18,7 +18,9 @@ type RbacPermission struct {
 }
 
 func (RbacPermission) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: constant.TablePrefixUser.String() + "rbac_permissions"}, entsql.WithComments(true)}
+	return []schema.Annotation{entsql.Annotation{
+		Table: constant.TablePrefixUser.String() + "rbac_permissions",
+	}, entsql.WithComments(true)}
 }
 
 func (RbacPermission) Fields() []ent.Field {
@@ -32,7 +34,9 @@ func (RbacPermission) Fields() []ent.Field {
 	}
 }
 
-func (RbacPermission) Mixin() []ent.Mixin { return []ent.Mixin{utilent.TimeAuditMixin{}} }
+func (RbacPermission) Mixin() []ent.Mixin {
+	return []ent.Mixin{utilent.TimeAuditMixin{}}
+}
 
 func (RbacPermission) Indexes() []ent.Index {
 	return []ent.Index{
@@ -41,4 +45,6 @@ func (RbacPermission) Indexes() []ent.Index {
 	}
 }
 
-func (RbacPermission) Edges() []ent.Edge { return nil }
+func (RbacPermission) Edges() []ent.Edge {
+	return nil
+}

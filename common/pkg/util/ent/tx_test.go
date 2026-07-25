@@ -17,8 +17,12 @@ type mockTx struct {
 	client     string
 }
 
-func newMockTx(client string) *mockTx {
-	return &mockTx{client: client}
+func newMockTx(
+	client string,
+) *mockTx {
+	return &mockTx{
+		client: client,
+	}
 }
 
 func (m *mockTx) Commit() error {
@@ -35,7 +39,9 @@ func (m *mockTx) Rollback() error {
 	return nil
 }
 
-func (m *mockTx) Client() interface{} { return m.client }
+func (m *mockTx) Client() interface{} {
+	return m.client
+}
 
 func (m *mockTx) isCommitted() bool {
 	m.mu.Lock()
@@ -77,11 +83,19 @@ type savableTx struct {
 	sqls []string
 }
 
-func newSavableTx(client string) *savableTx {
-	return &savableTx{mockTx: newMockTx(client)}
+func newSavableTx(
+	client string,
+) *savableTx {
+	return &savableTx{
+		mockTx: newMockTx(client),
+	}
 }
 
-func (s *savableTx) TxExec(_ context.Context, sql string, _ ...any) error {
+func (s *savableTx) TxExec(
+	_ context.Context,
+	sql string,
+	_ ...any,
+) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.sqls = append(s.sqls, sql)
@@ -102,7 +116,11 @@ type failingSavableTx struct {
 	failOnPrefix string
 }
 
-func (f *failingSavableTx) TxExec(_ context.Context, sql string, _ ...any) error {
+func (f *failingSavableTx) TxExec(
+	_ context.Context,
+	sql string,
+	_ ...any,
+) error {
 	if f.failOnPrefix != "" && strings.HasPrefix(sql, f.failOnPrefix) {
 		return errors.New("savepoint exec failed")
 	}
@@ -114,21 +132,30 @@ func (f *failingSavableTx) TxExec(_ context.Context, sql string, _ ...any) error
 
 // --- 辅助函数 ---
 
-func newStarter(tx Tx) TxStarter {
+func newStarter(
+	tx Tx,
+) TxStarter {
 	return func(_ context.Context) (Tx, error) { return tx, nil }
 }
 
-func newFailingStarter(err error) TxStarter {
+func newFailingStarter(
+	err error,
+) TxStarter {
 	return func(_ context.Context) (Tx, error) { return nil, err }
 }
 
-func withTx(ctx context.Context, tx Tx) context.Context {
+func withTx(
+	ctx context.Context,
+	tx Tx,
+) context.Context {
 	return context.WithValue(ctx, txKey{}, tx)
 }
 
 // --- 基础事务测试 ---
 
-func TestWithTx_CommitOnSuccess(t *testing.T) {
+func TestWithTx_CommitOnSuccess(
+	t *testing.T,
+) {
 	tx := newMockTx("db")
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
 		c, ok := ClientFromCtx[string](ctx)
@@ -148,7 +175,9 @@ func TestWithTx_CommitOnSuccess(t *testing.T) {
 	}
 }
 
-func TestWithTx_RollbackOnError(t *testing.T) {
+func TestWithTx_RollbackOnError(
+	t *testing.T,
+) {
 	tx := newMockTx("db")
 	bizErr := errors.New("business error")
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
@@ -165,7 +194,9 @@ func TestWithTx_RollbackOnError(t *testing.T) {
 	}
 }
 
-func TestWithTx_RollbackOnPanic(t *testing.T) {
+func TestWithTx_RollbackOnPanic(
+	t *testing.T,
+) {
 	tx := newMockTx("db")
 	func() {
 		defer func() {
@@ -182,8 +213,13 @@ func TestWithTx_RollbackOnPanic(t *testing.T) {
 	}
 }
 
-func TestWithTx_RollbackFails(t *testing.T) {
-	tx := &failingTx{mockTx: newMockTx("db"), failRollback: true}
+func TestWithTx_RollbackFails(
+	t *testing.T,
+) {
+	tx := &failingTx{
+		mockTx:       newMockTx("db"),
+		failRollback: true,
+	}
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
 		return errors.New("biz err")
 	})
@@ -192,8 +228,13 @@ func TestWithTx_RollbackFails(t *testing.T) {
 	}
 }
 
-func TestWithTx_CommitFails(t *testing.T) {
-	tx := &failingTx{mockTx: newMockTx("db"), failCommit: true}
+func TestWithTx_CommitFails(
+	t *testing.T,
+) {
+	tx := &failingTx{
+		mockTx:     newMockTx("db"),
+		failCommit: true,
+	}
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
 		return nil
 	})
@@ -202,7 +243,9 @@ func TestWithTx_CommitFails(t *testing.T) {
 	}
 }
 
-func TestWithTx_StarterFails(t *testing.T) {
+func TestWithTx_StarterFails(
+	t *testing.T,
+) {
 	starterErr := errors.New("connection refused")
 	err := WithTx(context.Background(), newFailingStarter(starterErr), func(ctx context.Context) error {
 		t.Fatal("fn should not be called")
@@ -213,7 +256,9 @@ func TestWithTx_StarterFails(t *testing.T) {
 	}
 }
 
-func TestWithTx_DefaultPropagationIsRequired(t *testing.T) {
+func TestWithTx_DefaultPropagationIsRequired(
+	t *testing.T,
+) {
 	tx := newMockTx("db")
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
 		return nil
@@ -228,7 +273,9 @@ func TestWithTx_DefaultPropagationIsRequired(t *testing.T) {
 
 // --- PropagationRequired ---
 
-func TestRequired_NoExistingTx(t *testing.T) {
+func TestRequired_NoExistingTx(
+	t *testing.T,
+) {
 	tx := newMockTx("db")
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
 		if _, ok := ClientFromCtx[string](ctx); !ok {
@@ -244,7 +291,9 @@ func TestRequired_NoExistingTx(t *testing.T) {
 	}
 }
 
-func TestRequired_WithExistingTx_JoinsOuter(t *testing.T) {
+func TestRequired_WithExistingTx_JoinsOuter(
+	t *testing.T,
+) {
 	outer := newMockTx("outer")
 	innerCalled := false
 	starter := func(_ context.Context) (Tx, error) {
@@ -270,7 +319,9 @@ func TestRequired_WithExistingTx_JoinsOuter(t *testing.T) {
 
 // --- PropagationRequiresNew ---
 
-func TestRequiresNew_WithExistingTx_CreatesNew(t *testing.T) {
+func TestRequiresNew_WithExistingTx_CreatesNew(
+	t *testing.T,
+) {
 	outer := newMockTx("outer")
 	inner := newMockTx("inner")
 
@@ -293,7 +344,9 @@ func TestRequiresNew_WithExistingTx_CreatesNew(t *testing.T) {
 	}
 }
 
-func TestRequiresNew_InnerFail_OuterUnaffected(t *testing.T) {
+func TestRequiresNew_InnerFail_OuterUnaffected(
+	t *testing.T,
+) {
 	outer := newMockTx("outer")
 	inner := newMockTx("inner")
 
@@ -312,7 +365,9 @@ func TestRequiresNew_InnerFail_OuterUnaffected(t *testing.T) {
 	}
 }
 
-func TestRequiresNew_NoExistingTx(t *testing.T) {
+func TestRequiresNew_NoExistingTx(
+	t *testing.T,
+) {
 	tx := newMockTx("db")
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
 		return nil
@@ -327,7 +382,9 @@ func TestRequiresNew_NoExistingTx(t *testing.T) {
 
 // --- PropagationNested ---
 
-func TestNested_WithExistingTx_Savepoint(t *testing.T) {
+func TestNested_WithExistingTx_Savepoint(
+	t *testing.T,
+) {
 	outer := newSavableTx("outer")
 
 	ctx := withTx(context.Background(), outer)
@@ -349,7 +406,9 @@ func TestNested_WithExistingTx_Savepoint(t *testing.T) {
 	}
 }
 
-func TestNested_InnerFail_RollbackToSavepoint(t *testing.T) {
+func TestNested_InnerFail_RollbackToSavepoint(
+	t *testing.T,
+) {
 	outer := newSavableTx("outer")
 
 	ctx := withTx(context.Background(), outer)
@@ -374,7 +433,9 @@ func TestNested_InnerFail_RollbackToSavepoint(t *testing.T) {
 	}
 }
 
-func TestNested_NoExistingTx_CreatesTx(t *testing.T) {
+func TestNested_NoExistingTx_CreatesTx(
+	t *testing.T,
+) {
 	tx := newMockTx("db")
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
 		return nil
@@ -387,7 +448,9 @@ func TestNested_NoExistingTx_CreatesTx(t *testing.T) {
 	}
 }
 
-func TestNested_NonSaver_Fallback(t *testing.T) {
+func TestNested_NonSaver_Fallback(
+	t *testing.T,
+) {
 	// mockTx 不实现 TxExec，退化为扁平事务。
 	outer := newMockTx("outer")
 	ctx := withTx(context.Background(), outer)
@@ -400,7 +463,9 @@ func TestNested_NonSaver_Fallback(t *testing.T) {
 	}
 }
 
-func TestNested_SavepointCreateFails(t *testing.T) {
+func TestNested_SavepointCreateFails(
+	t *testing.T,
+) {
 	outer := &failingSavableTx{
 		savableTx:    newSavableTx("outer"),
 		failOnPrefix: "SAVEPOINT",
@@ -420,7 +485,9 @@ func TestNested_SavepointCreateFails(t *testing.T) {
 
 // --- PropagationNotSupported ---
 
-func TestNotSupported_WithExistingTx_Suspends(t *testing.T) {
+func TestNotSupported_WithExistingTx_Suspends(
+	t *testing.T,
+) {
 	outer := newMockTx("outer")
 	fnCalled := false
 
@@ -443,7 +510,9 @@ func TestNotSupported_WithExistingTx_Suspends(t *testing.T) {
 	}
 }
 
-func TestNotSupported_InnerError_Propagates(t *testing.T) {
+func TestNotSupported_InnerError_Propagates(
+	t *testing.T,
+) {
 	outer := newMockTx("outer")
 	ctx := withTx(context.Background(), outer)
 
@@ -458,7 +527,9 @@ func TestNotSupported_InnerError_Propagates(t *testing.T) {
 	}
 }
 
-func TestNotSupported_NoExistingTx(t *testing.T) {
+func TestNotSupported_NoExistingTx(
+	t *testing.T,
+) {
 	fnCalled := false
 	err := WithTx(context.Background(), newStarter(newMockTx("db")), func(ctx context.Context) error {
 		fnCalled = true
@@ -477,7 +548,9 @@ func TestNotSupported_NoExistingTx(t *testing.T) {
 
 // --- PropagationNever ---
 
-func TestNever_WithExistingTx_Error(t *testing.T) {
+func TestNever_WithExistingTx_Error(
+	t *testing.T,
+) {
 	outer := newMockTx("outer")
 	ctx := withTx(context.Background(), outer)
 
@@ -493,7 +566,9 @@ func TestNever_WithExistingTx_Error(t *testing.T) {
 	}
 }
 
-func TestNever_NoExistingTx_Runs(t *testing.T) {
+func TestNever_NoExistingTx_Runs(
+	t *testing.T,
+) {
 	fnCalled := false
 	err := WithTx(context.Background(), newStarter(newMockTx("db")), func(ctx context.Context) error {
 		fnCalled = true
@@ -509,7 +584,9 @@ func TestNever_NoExistingTx_Runs(t *testing.T) {
 
 // --- PropagationSupports ---
 
-func TestSupports_WithExistingTx_Joins(t *testing.T) {
+func TestSupports_WithExistingTx_Joins(
+	t *testing.T,
+) {
 	outer := newMockTx("outer")
 	starterCalled := false
 
@@ -532,7 +609,9 @@ func TestSupports_WithExistingTx_Joins(t *testing.T) {
 	}
 }
 
-func TestSupports_NoExistingTx_RunsWithoutTx(t *testing.T) {
+func TestSupports_NoExistingTx_RunsWithoutTx(
+	t *testing.T,
+) {
 	tx := newMockTx("db")
 	err := WithTx(context.Background(), newStarter(tx), func(ctx context.Context) error {
 		if _, ok := ClientFromCtx[string](ctx); ok {
@@ -551,7 +630,9 @@ func TestSupports_NoExistingTx_RunsWithoutTx(t *testing.T) {
 
 // --- 嵌套事务场景 ---
 
-func TestNestedScenario_RequiredFlatten(t *testing.T) {
+func TestNestedScenario_RequiredFlatten(
+	t *testing.T,
+) {
 	outer := newMockTx("outer")
 	err := WithTx(context.Background(), newStarter(outer), func(ctx context.Context) error {
 		return WithTx(ctx, newStarter(newMockTx("inner")), func(ctx context.Context) error {
@@ -570,7 +651,9 @@ func TestNestedScenario_RequiredFlatten(t *testing.T) {
 	}
 }
 
-func TestNestedScenario_RequiresNewIsolation(t *testing.T) {
+func TestNestedScenario_RequiresNewIsolation(
+	t *testing.T,
+) {
 	outer := newMockTx("outer")
 	inner := newMockTx("inner")
 
@@ -591,7 +674,9 @@ func TestNestedScenario_RequiresNewIsolation(t *testing.T) {
 	}
 }
 
-func TestNestedScenario_RequiresNew_InnerFailOuterSucceeds(t *testing.T) {
+func TestNestedScenario_RequiresNew_InnerFailOuterSucceeds(
+	t *testing.T,
+) {
 	outer := newMockTx("outer")
 	inner := newMockTx("inner")
 
@@ -612,7 +697,9 @@ func TestNestedScenario_RequiresNew_InnerFailOuterSucceeds(t *testing.T) {
 	}
 }
 
-func TestNestedScenario_NestedSavepoint_PartialRollback(t *testing.T) {
+func TestNestedScenario_NestedSavepoint_PartialRollback(
+	t *testing.T,
+) {
 	outer := newSavableTx("outer")
 
 	err := WithTx(context.Background(), newStarter(outer), func(ctx context.Context) error {
@@ -641,7 +728,9 @@ func TestNestedScenario_NestedSavepoint_PartialRollback(t *testing.T) {
 	}
 }
 
-func TestNestedScenario_ThreeLevelsDeep(t *testing.T) {
+func TestNestedScenario_ThreeLevelsDeep(
+	t *testing.T,
+) {
 	l1 := newSavableTx("l1")
 	l2 := newSavableTx("l2")
 
@@ -676,7 +765,9 @@ func TestNestedScenario_ThreeLevelsDeep(t *testing.T) {
 
 // --- ClientFromCtx ---
 
-func TestClientFromCtx_NoTx(t *testing.T) {
+func TestClientFromCtx_NoTx(
+	t *testing.T,
+) {
 	c, ok := ClientFromCtx[string](context.Background())
 	if ok {
 		t.Fatal("should not find client")
@@ -688,12 +779,24 @@ func TestClientFromCtx_NoTx(t *testing.T) {
 
 type intClient struct{ v int }
 
-func (i intClient) Commit() error       { return nil }
-func (i intClient) Rollback() error     { return nil }
-func (i intClient) Client() interface{} { return i.v }
+func (i intClient) Commit() error {
+	return nil
+}
 
-func TestClientFromCtx_TypeMismatch(t *testing.T) {
-	tx := intClient{v: 42}
+func (i intClient) Rollback() error {
+	return nil
+}
+
+func (i intClient) Client() interface{} {
+	return i.v
+}
+
+func TestClientFromCtx_TypeMismatch(
+	t *testing.T,
+) {
+	tx := intClient{
+		v: 42,
+	}
 	ctx := withTx(context.Background(), tx)
 	c, ok := ClientFromCtx[string](ctx)
 	if ok {
@@ -704,9 +807,13 @@ func TestClientFromCtx_TypeMismatch(t *testing.T) {
 	}
 }
 
-func TestClientFromCtx_WithSuspendedTx(t *testing.T) {
+func TestClientFromCtx_WithSuspendedTx(
+	t *testing.T,
+) {
 	// suspendedTx 包装的 tx 也应该能提取 client
-	suspended := suspendedTx{tx: newMockTx("suspended")}
+	suspended := suspendedTx{
+		tx: newMockTx("suspended"),
+	}
 	ctx := context.WithValue(context.Background(), txKey{}, suspended)
 	c, ok := ClientFromCtx[string](ctx)
 	if !ok || c != "suspended" {
@@ -716,7 +823,9 @@ func TestClientFromCtx_WithSuspendedTx(t *testing.T) {
 
 // --- Option ---
 
-func TestWithPropagation_SetsOption(t *testing.T) {
+func TestWithPropagation_SetsOption(
+	t *testing.T,
+) {
 	tx := newMockTx("db")
 	fnCalled := false
 

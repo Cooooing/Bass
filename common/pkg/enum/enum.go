@@ -14,7 +14,9 @@ type Entry[E ~string, P ~int32] struct {
 }
 
 // NewMapping 根据内部枚举集合构建映射。
-func NewMapping[E ~string, P ~int32](entries map[E]Entry[E, P]) *Mapping[E, P] {
+func NewMapping[E ~string, P ~int32](
+	entries map[E]Entry[E, P],
+) *Mapping[E, P] {
 	m := &Mapping[E, P]{
 		toProto:   make(map[E]P, len(entries)),
 		fromProto: make(map[P]E, len(entries)),
@@ -30,25 +32,33 @@ func NewMapping[E ~string, P ~int32](entries map[E]Entry[E, P]) *Mapping[E, P] {
 }
 
 // ToEnum 将 proto 枚举值转换为内部枚举值。
-func (m *Mapping[E, P]) ToEnum(v P) (E, bool) {
+func (m *Mapping[E, P]) ToEnum(
+	v P,
+) (E, bool) {
 	val, ok := m.fromProto[v]
 	return val, ok
 }
 
 // MustToEnum 将 proto 枚举值转换为内部枚举值；未知值返回零值。
-func (m *Mapping[E, P]) MustToEnum(v P) E {
+func (m *Mapping[E, P]) MustToEnum(
+	v P,
+) E {
 	val, _ := m.fromProto[v]
 	return val
 }
 
 // ToProto 将内部枚举值转换为 proto 枚举值。
-func (m *Mapping[E, P]) ToProto(v E) (P, bool) {
+func (m *Mapping[E, P]) ToProto(
+	v E,
+) (P, bool) {
 	val, ok := m.toProto[v]
 	return val, ok
 }
 
 // MustToProto 将内部枚举值转换为 proto 枚举值；未知值返回零值。
-func (m *Mapping[E, P]) MustToProto(v E) P {
+func (m *Mapping[E, P]) MustToProto(
+	v E,
+) P {
 	return m.toProto[v]
 }
 

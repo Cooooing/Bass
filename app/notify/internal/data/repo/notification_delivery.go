@@ -24,18 +24,27 @@ type NotificationEmailDeliveryRepo struct {
 	db *gen.Client
 }
 
-func NewNotificationEmailDeliveryRepo(db *gen.Client) bizrepo.NotificationEmailDeliveryRepo {
-	return &NotificationEmailDeliveryRepo{db: db}
+func NewNotificationEmailDeliveryRepo(
+	db *gen.Client,
+) bizrepo.NotificationEmailDeliveryRepo {
+	return &NotificationEmailDeliveryRepo{
+		db: db,
+	}
 }
 
-func (r *NotificationEmailDeliveryRepo) getClient(ctx context.Context) *gen.Client {
+func (r *NotificationEmailDeliveryRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *NotificationEmailDeliveryRepo) SaveOrGet(ctx context.Context, delivery *model.NotificationEmailDelivery) (*model.NotificationEmailDelivery, error) {
+func (r *NotificationEmailDeliveryRepo) SaveOrGet(
+	ctx context.Context,
+	delivery *model.NotificationEmailDelivery,
+) (*model.NotificationEmailDelivery, error) {
 	save, err := r.getClient(ctx).NotificationEmailDelivery.Create().
 		SetEventID(delivery.EventID).
 		SetEventType(notificationemaildelivery.EventType(delivery.EventType)).
@@ -68,7 +77,10 @@ func (r *NotificationEmailDeliveryRepo) SaveOrGet(ctx context.Context, delivery 
 	return emailDeliveryModel(exist), nil
 }
 
-func (r *NotificationEmailDeliveryRepo) Get(ctx context.Context, req *bizrepo.NotificationEmailDeliveryQuery) (*model.NotificationEmailDelivery, error) {
+func (r *NotificationEmailDeliveryRepo) Get(
+	ctx context.Context,
+	req *bizrepo.NotificationEmailDeliveryQuery,
+) (*model.NotificationEmailDelivery, error) {
 	list, err := r.List(ctx, emailGetQuery(req))
 	if err != nil || len(list) == 0 {
 		return nil, err
@@ -76,7 +88,10 @@ func (r *NotificationEmailDeliveryRepo) Get(ctx context.Context, req *bizrepo.No
 	return list[0], nil
 }
 
-func (r *NotificationEmailDeliveryRepo) List(ctx context.Context, req *bizrepo.NotificationEmailDeliveryQuery) ([]*model.NotificationEmailDelivery, error) {
+func (r *NotificationEmailDeliveryRepo) List(
+	ctx context.Context,
+	req *bizrepo.NotificationEmailDeliveryQuery,
+) ([]*model.NotificationEmailDelivery, error) {
 	query := r.getClient(ctx).NotificationEmailDelivery.Query()
 	query = r.getEmailQuery(query, emailListQuery(req))
 	list, err := query.All(ctx)
@@ -90,7 +105,10 @@ func (r *NotificationEmailDeliveryRepo) List(ctx context.Context, req *bizrepo.N
 	return result, nil
 }
 
-func (r *NotificationEmailDeliveryRepo) Map(ctx context.Context, req *bizrepo.NotificationEmailDeliveryQuery) (map[int64]*model.
+func (r *NotificationEmailDeliveryRepo) Map(
+	ctx context.Context,
+	req *bizrepo.NotificationEmailDeliveryQuery,
+) (map[int64]*model.
 	NotificationEmailDelivery, error) {
 	list, err := r.List(ctx, emailMapQuery(req))
 	if err != nil {
@@ -103,7 +121,10 @@ func (r *NotificationEmailDeliveryRepo) Map(ctx context.Context, req *bizrepo.No
 	return result, nil
 }
 
-func (r *NotificationEmailDeliveryRepo) Count(ctx context.Context, req *bizrepo.NotificationEmailDeliveryQuery) (int, error) {
+func (r *NotificationEmailDeliveryRepo) Count(
+	ctx context.Context,
+	req *bizrepo.NotificationEmailDeliveryQuery,
+) (int, error) {
 	query := r.getClient(ctx).NotificationEmailDelivery.Query()
 	query = r.getEmailQuery(query, emailCountQuery(req))
 	count, err := query.Count(ctx)
@@ -113,7 +134,10 @@ func (r *NotificationEmailDeliveryRepo) Count(ctx context.Context, req *bizrepo.
 	return count, nil
 }
 
-func (r *NotificationEmailDeliveryRepo) Page(ctx context.Context, req *bizrepo.NotificationEmailDeliveryQuery) (*bizrepo.NotificationEmailDeliveryPageResp, error) {
+func (r *NotificationEmailDeliveryRepo) Page(
+	ctx context.Context,
+	req *bizrepo.NotificationEmailDeliveryQuery,
+) (*bizrepo.NotificationEmailDeliveryPageResp, error) {
 	queryReq := emailPageQuery(req)
 	var pageReq *base.PageRequest
 	if queryReq != nil {
@@ -139,11 +163,18 @@ func (r *NotificationEmailDeliveryRepo) Page(ctx context.Context, req *bizrepo.N
 	}
 	return &bizrepo.NotificationEmailDeliveryPageResp{
 		Rows: result,
-		Page: &base.PageResp{Total: int64(total), Page: page.Page, Size: page.Size},
+		Page: &base.PageResp{
+			Total: int64(total),
+			Page:  page.Page,
+			Size:  page.Size,
+		},
 	}, nil
 }
 
-func (r *NotificationEmailDeliveryRepo) Claim(ctx context.Context, req *bizrepo.NotificationEmailDeliveryClaimReq) (bool, error) {
+func (r *NotificationEmailDeliveryRepo) Claim(
+	ctx context.Context,
+	req *bizrepo.NotificationEmailDeliveryClaimReq,
+) (bool, error) {
 	conditions := []predicate.NotificationEmailDelivery{
 		notificationemaildelivery.StatusEQ(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusFailed)),
 		notificationemaildelivery.And(
@@ -166,7 +197,10 @@ func (r *NotificationEmailDeliveryRepo) Claim(ctx context.Context, req *bizrepo.
 	return count > 0, err
 }
 
-func (r *NotificationEmailDeliveryRepo) MarkSucceeded(ctx context.Context, req *bizrepo.NotificationEmailDeliveryMarkSucceededReq) error {
+func (r *NotificationEmailDeliveryRepo) MarkSucceeded(
+	ctx context.Context,
+	req *bizrepo.NotificationEmailDeliveryMarkSucceededReq,
+) error {
 	err := r.getClient(ctx).NotificationEmailDelivery.Update().
 		Where(notificationemaildelivery.IDEQ(req.ID), notificationemaildelivery.StatusNEQ(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusSucceeded)).
@@ -180,7 +214,10 @@ func (r *NotificationEmailDeliveryRepo) MarkSucceeded(ctx context.Context, req *
 	return nil
 }
 
-func (r *NotificationEmailDeliveryRepo) MarkFailed(ctx context.Context, req *bizrepo.NotificationEmailDeliveryMarkFailedReq) error {
+func (r *NotificationEmailDeliveryRepo) MarkFailed(
+	ctx context.Context,
+	req *bizrepo.NotificationEmailDeliveryMarkFailedReq,
+) error {
 	err := r.getClient(ctx).NotificationEmailDelivery.Update().
 		Where(notificationemaildelivery.IDEQ(req.ID), notificationemaildelivery.StatusNEQ(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusFailed)).
@@ -192,7 +229,10 @@ func (r *NotificationEmailDeliveryRepo) MarkFailed(ctx context.Context, req *biz
 	return nil
 }
 
-func (r *NotificationEmailDeliveryRepo) MarkUnknown(ctx context.Context, req *bizrepo.NotificationEmailDeliveryMarkUnknownReq) error {
+func (r *NotificationEmailDeliveryRepo) MarkUnknown(
+	ctx context.Context,
+	req *bizrepo.NotificationEmailDeliveryMarkUnknownReq,
+) error {
 	err := r.getClient(ctx).NotificationEmailDelivery.Update().
 		Where(notificationemaildelivery.IDEQ(req.ID), notificationemaildelivery.StatusNEQ(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusUnknown)).
@@ -204,7 +244,10 @@ func (r *NotificationEmailDeliveryRepo) MarkUnknown(ctx context.Context, req *bi
 	return nil
 }
 
-func (r *NotificationEmailDeliveryRepo) MarkRateLimited(ctx context.Context, id int64) error {
+func (r *NotificationEmailDeliveryRepo) MarkRateLimited(
+	ctx context.Context,
+	id int64,
+) error {
 	err := r.getClient(ctx).NotificationEmailDelivery.Update().
 		Where(notificationemaildelivery.IDEQ(id), notificationemaildelivery.StatusNEQ(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationemaildelivery.Status(notifyenum.NotificationChannelStatusRateLimited)).
@@ -219,18 +262,27 @@ type NotificationTencentSMSDeliveryRepo struct {
 	db *gen.Client
 }
 
-func NewNotificationTencentSMSDeliveryRepo(db *gen.Client) bizrepo.NotificationTencentSMSDeliveryRepo {
-	return &NotificationTencentSMSDeliveryRepo{db: db}
+func NewNotificationTencentSMSDeliveryRepo(
+	db *gen.Client,
+) bizrepo.NotificationTencentSMSDeliveryRepo {
+	return &NotificationTencentSMSDeliveryRepo{
+		db: db,
+	}
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) getClient(ctx context.Context) *gen.Client {
+func (r *NotificationTencentSMSDeliveryRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) SaveOrGet(ctx context.Context, delivery *model.NotificationTencentSMSDelivery) (*model.NotificationTencentSMSDelivery, error) {
+func (r *NotificationTencentSMSDeliveryRepo) SaveOrGet(
+	ctx context.Context,
+	delivery *model.NotificationTencentSMSDelivery,
+) (*model.NotificationTencentSMSDelivery, error) {
 	save, err := r.getClient(ctx).NotificationTencentSMSDelivery.Create().
 		SetEventID(delivery.EventID).
 		SetEventType(notificationtencentsmsdelivery.EventType(delivery.EventType)).
@@ -262,7 +314,10 @@ func (r *NotificationTencentSMSDeliveryRepo) SaveOrGet(ctx context.Context, deli
 	return tencentSMSDeliveryModel(exist), nil
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) Get(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryQuery) (*model.NotificationTencentSMSDelivery, error) {
+func (r *NotificationTencentSMSDeliveryRepo) Get(
+	ctx context.Context,
+	req *bizrepo.NotificationTencentSMSDeliveryQuery,
+) (*model.NotificationTencentSMSDelivery, error) {
 	list, err := r.List(ctx, tencentSMSGetQuery(req))
 	if err != nil || len(list) == 0 {
 		return nil, err
@@ -270,7 +325,10 @@ func (r *NotificationTencentSMSDeliveryRepo) Get(ctx context.Context, req *bizre
 	return list[0], nil
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) List(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryQuery) ([]*model.NotificationTencentSMSDelivery, error) {
+func (r *NotificationTencentSMSDeliveryRepo) List(
+	ctx context.Context,
+	req *bizrepo.NotificationTencentSMSDeliveryQuery,
+) ([]*model.NotificationTencentSMSDelivery, error) {
 	query := r.getClient(ctx).NotificationTencentSMSDelivery.Query()
 	query = r.getTencentSMSQuery(query, tencentSMSListQuery(req))
 	list, err := query.All(ctx)
@@ -284,7 +342,10 @@ func (r *NotificationTencentSMSDeliveryRepo) List(ctx context.Context, req *bizr
 	return result, nil
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) Map(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryQuery) (map[int64]*model.
+func (r *NotificationTencentSMSDeliveryRepo) Map(
+	ctx context.Context,
+	req *bizrepo.NotificationTencentSMSDeliveryQuery,
+) (map[int64]*model.
 	NotificationTencentSMSDelivery, error) {
 	list, err := r.List(ctx, tencentSMSMapQuery(req))
 	if err != nil {
@@ -297,7 +358,10 @@ func (r *NotificationTencentSMSDeliveryRepo) Map(ctx context.Context, req *bizre
 	return result, nil
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) Count(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryQuery) (int, error) {
+func (r *NotificationTencentSMSDeliveryRepo) Count(
+	ctx context.Context,
+	req *bizrepo.NotificationTencentSMSDeliveryQuery,
+) (int, error) {
 	query := r.getClient(ctx).NotificationTencentSMSDelivery.Query()
 	query = r.getTencentSMSQuery(query, tencentSMSCountQuery(req))
 	count, err := query.Count(ctx)
@@ -307,7 +371,10 @@ func (r *NotificationTencentSMSDeliveryRepo) Count(ctx context.Context, req *biz
 	return count, nil
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) Page(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryQuery) (*bizrepo.NotificationTencentSMSDeliveryPageResp, error) {
+func (r *NotificationTencentSMSDeliveryRepo) Page(
+	ctx context.Context,
+	req *bizrepo.NotificationTencentSMSDeliveryQuery,
+) (*bizrepo.NotificationTencentSMSDeliveryPageResp, error) {
 	queryReq := tencentSMSPageQuery(req)
 	var pageReq *base.PageRequest
 	if queryReq != nil {
@@ -330,11 +397,18 @@ func (r *NotificationTencentSMSDeliveryRepo) Page(ctx context.Context, req *bizr
 	}
 	return &bizrepo.NotificationTencentSMSDeliveryPageResp{
 		Rows: result,
-		Page: &base.PageResp{Total: int64(total), Page: page.Page, Size: page.Size},
+		Page: &base.PageResp{
+			Total: int64(total),
+			Page:  page.Page,
+			Size:  page.Size,
+		},
 	}, nil
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) Claim(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryClaimReq) (bool, error) {
+func (r *NotificationTencentSMSDeliveryRepo) Claim(
+	ctx context.Context,
+	req *bizrepo.NotificationTencentSMSDeliveryClaimReq,
+) (bool, error) {
 	conditions := []predicate.NotificationTencentSMSDelivery{
 		notificationtencentsmsdelivery.StatusEQ(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusFailed)),
 		notificationtencentsmsdelivery.And(
@@ -357,7 +431,10 @@ func (r *NotificationTencentSMSDeliveryRepo) Claim(ctx context.Context, req *biz
 	return count > 0, err
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) MarkSucceeded(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryMarkSucceededReq) error {
+func (r *NotificationTencentSMSDeliveryRepo) MarkSucceeded(
+	ctx context.Context,
+	req *bizrepo.NotificationTencentSMSDeliveryMarkSucceededReq,
+) error {
 	err := r.getClient(ctx).NotificationTencentSMSDelivery.Update().
 		Where(notificationtencentsmsdelivery.IDEQ(req.ID), notificationtencentsmsdelivery.StatusNEQ(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusSucceeded)).
@@ -372,7 +449,10 @@ func (r *NotificationTencentSMSDeliveryRepo) MarkSucceeded(ctx context.Context, 
 	return nil
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) MarkFailed(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryMarkFailedReq) error {
+func (r *NotificationTencentSMSDeliveryRepo) MarkFailed(
+	ctx context.Context,
+	req *bizrepo.NotificationTencentSMSDeliveryMarkFailedReq,
+) error {
 	err := r.getClient(ctx).NotificationTencentSMSDelivery.Update().
 		Where(notificationtencentsmsdelivery.IDEQ(req.ID), notificationtencentsmsdelivery.StatusNEQ(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusFailed)).
@@ -386,7 +466,10 @@ func (r *NotificationTencentSMSDeliveryRepo) MarkFailed(ctx context.Context, req
 	return nil
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) MarkUnknown(ctx context.Context, req *bizrepo.NotificationTencentSMSDeliveryMarkUnknownReq) error {
+func (r *NotificationTencentSMSDeliveryRepo) MarkUnknown(
+	ctx context.Context,
+	req *bizrepo.NotificationTencentSMSDeliveryMarkUnknownReq,
+) error {
 	err := r.getClient(ctx).NotificationTencentSMSDelivery.Update().
 		Where(notificationtencentsmsdelivery.IDEQ(req.ID), notificationtencentsmsdelivery.StatusNEQ(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusUnknown)).
@@ -400,7 +483,10 @@ func (r *NotificationTencentSMSDeliveryRepo) MarkUnknown(ctx context.Context, re
 	return nil
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) MarkRateLimited(ctx context.Context, id int64) error {
+func (r *NotificationTencentSMSDeliveryRepo) MarkRateLimited(
+	ctx context.Context,
+	id int64,
+) error {
 	err := r.getClient(ctx).NotificationTencentSMSDelivery.Update().
 		Where(notificationtencentsmsdelivery.IDEQ(id), notificationtencentsmsdelivery.StatusNEQ(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationtencentsmsdelivery.Status(notifyenum.NotificationChannelStatusRateLimited)).
@@ -415,18 +501,27 @@ type NotificationLarkWebhookDeliveryRepo struct {
 	db *gen.Client
 }
 
-func NewNotificationLarkWebhookDeliveryRepo(db *gen.Client) bizrepo.NotificationLarkWebhookDeliveryRepo {
-	return &NotificationLarkWebhookDeliveryRepo{db: db}
+func NewNotificationLarkWebhookDeliveryRepo(
+	db *gen.Client,
+) bizrepo.NotificationLarkWebhookDeliveryRepo {
+	return &NotificationLarkWebhookDeliveryRepo{
+		db: db,
+	}
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) getClient(ctx context.Context) *gen.Client {
+func (r *NotificationLarkWebhookDeliveryRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) SaveOrGet(ctx context.Context, delivery *model.NotificationLarkWebhookDelivery) (*model.NotificationLarkWebhookDelivery, error) {
+func (r *NotificationLarkWebhookDeliveryRepo) SaveOrGet(
+	ctx context.Context,
+	delivery *model.NotificationLarkWebhookDelivery,
+) (*model.NotificationLarkWebhookDelivery, error) {
 	save, err := r.getClient(ctx).NotificationLarkWebhookDelivery.Create().
 		SetEventID(delivery.EventID).
 		SetEventType(notificationlarkwebhookdelivery.EventType(delivery.EventType)).
@@ -453,7 +548,10 @@ func (r *NotificationLarkWebhookDeliveryRepo) SaveOrGet(ctx context.Context, del
 	return larkWebhookDeliveryModel(exist), nil
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) Get(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryQuery) (*model.NotificationLarkWebhookDelivery, error) {
+func (r *NotificationLarkWebhookDeliveryRepo) Get(
+	ctx context.Context,
+	req *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) (*model.NotificationLarkWebhookDelivery, error) {
 	list, err := r.List(ctx, larkWebhookGetQuery(req))
 	if err != nil || len(list) == 0 {
 		return nil, err
@@ -461,7 +559,10 @@ func (r *NotificationLarkWebhookDeliveryRepo) Get(ctx context.Context, req *bizr
 	return list[0], nil
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) List(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryQuery) ([]*model.NotificationLarkWebhookDelivery, error) {
+func (r *NotificationLarkWebhookDeliveryRepo) List(
+	ctx context.Context,
+	req *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) ([]*model.NotificationLarkWebhookDelivery, error) {
 	query := r.getClient(ctx).NotificationLarkWebhookDelivery.Query()
 	query = r.getLarkWebhookQuery(query, larkWebhookListQuery(req))
 	list, err := query.All(ctx)
@@ -475,7 +576,10 @@ func (r *NotificationLarkWebhookDeliveryRepo) List(ctx context.Context, req *biz
 	return result, nil
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) Map(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryQuery) (map[int64]*model.
+func (r *NotificationLarkWebhookDeliveryRepo) Map(
+	ctx context.Context,
+	req *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) (map[int64]*model.
 	NotificationLarkWebhookDelivery, error) {
 	list, err := r.List(ctx, larkWebhookMapQuery(req))
 	if err != nil {
@@ -488,7 +592,10 @@ func (r *NotificationLarkWebhookDeliveryRepo) Map(ctx context.Context, req *bizr
 	return result, nil
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) Count(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryQuery) (int, error) {
+func (r *NotificationLarkWebhookDeliveryRepo) Count(
+	ctx context.Context,
+	req *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) (int, error) {
 	query := r.getClient(ctx).NotificationLarkWebhookDelivery.Query()
 	query = r.getLarkWebhookQuery(query, larkWebhookCountQuery(req))
 	count, err := query.Count(ctx)
@@ -498,7 +605,10 @@ func (r *NotificationLarkWebhookDeliveryRepo) Count(ctx context.Context, req *bi
 	return count, nil
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) Page(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryQuery) (*bizrepo.NotificationLarkWebhookDeliveryPageResp, error) {
+func (r *NotificationLarkWebhookDeliveryRepo) Page(
+	ctx context.Context,
+	req *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) (*bizrepo.NotificationLarkWebhookDeliveryPageResp, error) {
 	queryReq := larkWebhookPageQuery(req)
 	var pageReq *base.PageRequest
 	if queryReq != nil {
@@ -521,11 +631,18 @@ func (r *NotificationLarkWebhookDeliveryRepo) Page(ctx context.Context, req *biz
 	}
 	return &bizrepo.NotificationLarkWebhookDeliveryPageResp{
 		Rows: result,
-		Page: &base.PageResp{Total: int64(total), Page: page.Page, Size: page.Size},
+		Page: &base.PageResp{
+			Total: int64(total),
+			Page:  page.Page,
+			Size:  page.Size,
+		},
 	}, nil
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) Claim(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryClaimReq) (bool, error) {
+func (r *NotificationLarkWebhookDeliveryRepo) Claim(
+	ctx context.Context,
+	req *bizrepo.NotificationLarkWebhookDeliveryClaimReq,
+) (bool, error) {
 	conditions := []predicate.NotificationLarkWebhookDelivery{
 		notificationlarkwebhookdelivery.StatusEQ(notificationlarkwebhookdelivery.Status(notifyenum.NotificationChannelStatusFailed)),
 		notificationlarkwebhookdelivery.And(
@@ -548,7 +665,10 @@ func (r *NotificationLarkWebhookDeliveryRepo) Claim(ctx context.Context, req *bi
 	return count > 0, err
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) MarkSucceeded(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryMarkSucceededReq) error {
+func (r *NotificationLarkWebhookDeliveryRepo) MarkSucceeded(
+	ctx context.Context,
+	req *bizrepo.NotificationLarkWebhookDeliveryMarkSucceededReq,
+) error {
 	err := r.getClient(ctx).NotificationLarkWebhookDelivery.Update().
 		Where(notificationlarkwebhookdelivery.IDEQ(req.ID), notificationlarkwebhookdelivery.StatusNEQ(notificationlarkwebhookdelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationlarkwebhookdelivery.Status(notifyenum.NotificationChannelStatusSucceeded)).
@@ -562,7 +682,10 @@ func (r *NotificationLarkWebhookDeliveryRepo) MarkSucceeded(ctx context.Context,
 	return nil
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) MarkFailed(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryMarkFailedReq) error {
+func (r *NotificationLarkWebhookDeliveryRepo) MarkFailed(
+	ctx context.Context,
+	req *bizrepo.NotificationLarkWebhookDeliveryMarkFailedReq,
+) error {
 	err := r.getClient(ctx).NotificationLarkWebhookDelivery.Update().
 		Where(notificationlarkwebhookdelivery.IDEQ(req.ID), notificationlarkwebhookdelivery.StatusNEQ(notificationlarkwebhookdelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationlarkwebhookdelivery.Status(notifyenum.NotificationChannelStatusFailed)).
@@ -575,7 +698,10 @@ func (r *NotificationLarkWebhookDeliveryRepo) MarkFailed(ctx context.Context, re
 	return nil
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) MarkUnknown(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryMarkUnknownReq) error {
+func (r *NotificationLarkWebhookDeliveryRepo) MarkUnknown(
+	ctx context.Context,
+	req *bizrepo.NotificationLarkWebhookDeliveryMarkUnknownReq,
+) error {
 	err := r.getClient(ctx).NotificationLarkWebhookDelivery.Update().
 		Where(notificationlarkwebhookdelivery.IDEQ(req.ID), notificationlarkwebhookdelivery.StatusNEQ(notificationlarkwebhookdelivery.Status(notifyenum.NotificationChannelStatusSucceeded))).
 		SetStatus(notificationlarkwebhookdelivery.Status(notifyenum.NotificationChannelStatusUnknown)).
@@ -587,7 +713,11 @@ func (r *NotificationLarkWebhookDeliveryRepo) MarkUnknown(ctx context.Context, r
 	}
 	return nil
 }
-func (r *NotificationEmailDeliveryRepo) getEmailQuery(query *gen.NotificationEmailDeliveryQuery, req *bizrepo.NotificationEmailDeliveryQuery) *gen.NotificationEmailDeliveryQuery {
+
+func (r *NotificationEmailDeliveryRepo) getEmailQuery(
+	query *gen.NotificationEmailDeliveryQuery,
+	req *bizrepo.NotificationEmailDeliveryQuery,
+) *gen.NotificationEmailDeliveryQuery {
 	if req == nil {
 		return query
 	}
@@ -618,7 +748,10 @@ func (r *NotificationEmailDeliveryRepo) getEmailQuery(query *gen.NotificationEma
 	return query
 }
 
-func (r *NotificationTencentSMSDeliveryRepo) getTencentSMSQuery(query *gen.NotificationTencentSMSDeliveryQuery, req *bizrepo.NotificationTencentSMSDeliveryQuery) *gen.NotificationTencentSMSDeliveryQuery {
+func (r *NotificationTencentSMSDeliveryRepo) getTencentSMSQuery(
+	query *gen.NotificationTencentSMSDeliveryQuery,
+	req *bizrepo.NotificationTencentSMSDeliveryQuery,
+) *gen.NotificationTencentSMSDeliveryQuery {
 	if req == nil {
 		return query
 	}
@@ -649,7 +782,10 @@ func (r *NotificationTencentSMSDeliveryRepo) getTencentSMSQuery(query *gen.Notif
 	return query
 }
 
-func (r *NotificationLarkWebhookDeliveryRepo) getLarkWebhookQuery(query *gen.NotificationLarkWebhookDeliveryQuery, req *bizrepo.NotificationLarkWebhookDeliveryQuery) *gen.NotificationLarkWebhookDeliveryQuery {
+func (r *NotificationLarkWebhookDeliveryRepo) getLarkWebhookQuery(
+	query *gen.NotificationLarkWebhookDeliveryQuery,
+	req *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) *gen.NotificationLarkWebhookDeliveryQuery {
 	if req == nil {
 		return query
 	}
@@ -677,103 +813,184 @@ func (r *NotificationLarkWebhookDeliveryRepo) getLarkWebhookQuery(query *gen.Not
 	return query
 }
 
-func emailGetQuery(query *bizrepo.NotificationEmailDeliveryQuery) *bizrepo.NotificationEmailDeliveryQuery {
-
-	return query
-}
-func emailListQuery(query *bizrepo.NotificationEmailDeliveryQuery) *bizrepo.NotificationEmailDeliveryQuery {
-
-	return query
-}
-func emailMapQuery(query *bizrepo.NotificationEmailDeliveryQuery) *bizrepo.NotificationEmailDeliveryQuery {
-
-	return query
-}
-func emailCountQuery(query *bizrepo.NotificationEmailDeliveryQuery) *bizrepo.NotificationEmailDeliveryQuery {
-
-	return query
-}
-func emailPageQuery(query *bizrepo.NotificationEmailDeliveryQuery) *bizrepo.NotificationEmailDeliveryQuery {
+func emailGetQuery(
+	query *bizrepo.NotificationEmailDeliveryQuery,
+) *bizrepo.NotificationEmailDeliveryQuery {
 
 	return query
 }
 
-func tencentSMSGetQuery(query *bizrepo.NotificationTencentSMSDeliveryQuery) *bizrepo.NotificationTencentSMSDeliveryQuery {
-
-	return query
-}
-func tencentSMSListQuery(query *bizrepo.NotificationTencentSMSDeliveryQuery) *bizrepo.NotificationTencentSMSDeliveryQuery {
-
-	return query
-}
-func tencentSMSMapQuery(query *bizrepo.NotificationTencentSMSDeliveryQuery) *bizrepo.NotificationTencentSMSDeliveryQuery {
-
-	return query
-}
-func tencentSMSCountQuery(query *bizrepo.NotificationTencentSMSDeliveryQuery) *bizrepo.NotificationTencentSMSDeliveryQuery {
-
-	return query
-}
-func tencentSMSPageQuery(query *bizrepo.NotificationTencentSMSDeliveryQuery) *bizrepo.NotificationTencentSMSDeliveryQuery {
+func emailListQuery(
+	query *bizrepo.NotificationEmailDeliveryQuery,
+) *bizrepo.NotificationEmailDeliveryQuery {
 
 	return query
 }
 
-func larkWebhookGetQuery(query *bizrepo.NotificationLarkWebhookDeliveryQuery) *bizrepo.NotificationLarkWebhookDeliveryQuery {
-
-	return query
-}
-func larkWebhookListQuery(query *bizrepo.NotificationLarkWebhookDeliveryQuery) *bizrepo.NotificationLarkWebhookDeliveryQuery {
-
-	return query
-}
-func larkWebhookMapQuery(query *bizrepo.NotificationLarkWebhookDeliveryQuery) *bizrepo.NotificationLarkWebhookDeliveryQuery {
-
-	return query
-}
-func larkWebhookCountQuery(query *bizrepo.NotificationLarkWebhookDeliveryQuery) *bizrepo.NotificationLarkWebhookDeliveryQuery {
-
-	return query
-}
-func larkWebhookPageQuery(query *bizrepo.NotificationLarkWebhookDeliveryQuery) *bizrepo.NotificationLarkWebhookDeliveryQuery {
+func emailMapQuery(
+	query *bizrepo.NotificationEmailDeliveryQuery,
+) *bizrepo.NotificationEmailDeliveryQuery {
 
 	return query
 }
 
-func emailDeliveryModel(item *gen.NotificationEmailDelivery) *model.NotificationEmailDelivery {
+func emailCountQuery(
+	query *bizrepo.NotificationEmailDeliveryQuery,
+) *bizrepo.NotificationEmailDeliveryQuery {
+
+	return query
+}
+
+func emailPageQuery(
+	query *bizrepo.NotificationEmailDeliveryQuery,
+) *bizrepo.NotificationEmailDeliveryQuery {
+
+	return query
+}
+
+func tencentSMSGetQuery(
+	query *bizrepo.NotificationTencentSMSDeliveryQuery,
+) *bizrepo.NotificationTencentSMSDeliveryQuery {
+
+	return query
+}
+
+func tencentSMSListQuery(
+	query *bizrepo.NotificationTencentSMSDeliveryQuery,
+) *bizrepo.NotificationTencentSMSDeliveryQuery {
+
+	return query
+}
+
+func tencentSMSMapQuery(
+	query *bizrepo.NotificationTencentSMSDeliveryQuery,
+) *bizrepo.NotificationTencentSMSDeliveryQuery {
+
+	return query
+}
+
+func tencentSMSCountQuery(
+	query *bizrepo.NotificationTencentSMSDeliveryQuery,
+) *bizrepo.NotificationTencentSMSDeliveryQuery {
+
+	return query
+}
+
+func tencentSMSPageQuery(
+	query *bizrepo.NotificationTencentSMSDeliveryQuery,
+) *bizrepo.NotificationTencentSMSDeliveryQuery {
+
+	return query
+}
+
+func larkWebhookGetQuery(
+	query *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) *bizrepo.NotificationLarkWebhookDeliveryQuery {
+
+	return query
+}
+
+func larkWebhookListQuery(
+	query *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) *bizrepo.NotificationLarkWebhookDeliveryQuery {
+
+	return query
+}
+
+func larkWebhookMapQuery(
+	query *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) *bizrepo.NotificationLarkWebhookDeliveryQuery {
+
+	return query
+}
+
+func larkWebhookCountQuery(
+	query *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) *bizrepo.NotificationLarkWebhookDeliveryQuery {
+
+	return query
+}
+
+func larkWebhookPageQuery(
+	query *bizrepo.NotificationLarkWebhookDeliveryQuery,
+) *bizrepo.NotificationLarkWebhookDeliveryQuery {
+
+	return query
+}
+
+func emailDeliveryModel(
+	item *gen.NotificationEmailDelivery,
+) *model.NotificationEmailDelivery {
 	if item == nil {
 		return nil
 	}
 	return &model.NotificationEmailDelivery{
-		ID: item.ID, EventID: item.EventID, EventType: commonenum.EventType(item.EventType), ReceiverID: item.ReceiverID,
-		ToEmail: item.ToEmail, Subject: item.Subject, Body: item.Body, ContentType: item.ContentType,
-		Status: notifyenum.NotificationChannelStatus(item.Status), AttemptCount: item.AttemptCount, LastAttemptAt: item.LastAttemptAt,
-		ProviderMessageID: item.ProviderMessageID, ProviderResp: item.ProviderResp, SentAt: item.SentAt,
-		CreatedAt: item.CreatedAt, UpdatedAt: item.UpdatedAt,
+		ID:                item.ID,
+		EventID:           item.EventID,
+		EventType:         commonenum.EventType(item.EventType),
+		ReceiverID:        item.ReceiverID,
+		ToEmail:           item.ToEmail,
+		Subject:           item.Subject,
+		Body:              item.Body,
+		ContentType:       item.ContentType,
+		Status:            notifyenum.NotificationChannelStatus(item.Status),
+		AttemptCount:      item.AttemptCount,
+		LastAttemptAt:     item.LastAttemptAt,
+		ProviderMessageID: item.ProviderMessageID,
+		ProviderResp:      item.ProviderResp,
+		SentAt:            item.SentAt,
+		CreatedAt:         item.CreatedAt,
+		UpdatedAt:         item.UpdatedAt,
 	}
 }
 
-func tencentSMSDeliveryModel(item *gen.NotificationTencentSMSDelivery) *model.NotificationTencentSMSDelivery {
+func tencentSMSDeliveryModel(
+	item *gen.NotificationTencentSMSDelivery,
+) *model.NotificationTencentSMSDelivery {
 	if item == nil {
 		return nil
 	}
 	return &model.NotificationTencentSMSDelivery{
-		ID: item.ID, EventID: item.EventID, EventType: commonenum.EventType(item.EventType), ReceiverID: item.ReceiverID,
-		Phone: item.Phone, SMSSDKAppID: item.SmsSdkAppID, SignName: item.SignName, ProviderTemplateID: item.ProviderTemplateID,
-		TemplateParams: item.TemplateParams, Status: notifyenum.NotificationChannelStatus(item.Status), AttemptCount: item.AttemptCount,
-		LastAttemptAt: item.LastAttemptAt, ProviderRequestID: item.ProviderRequestID, ProviderCode: item.ProviderCode,
-		ProviderMessage: item.ProviderMessage, SentAt: item.SentAt, CreatedAt: item.CreatedAt, UpdatedAt: item.UpdatedAt,
+		ID:                 item.ID,
+		EventID:            item.EventID,
+		EventType:          commonenum.EventType(item.EventType),
+		ReceiverID:         item.ReceiverID,
+		Phone:              item.Phone,
+		SMSSDKAppID:        item.SmsSdkAppID,
+		SignName:           item.SignName,
+		ProviderTemplateID: item.ProviderTemplateID,
+		TemplateParams:     item.TemplateParams,
+		Status:             notifyenum.NotificationChannelStatus(item.Status),
+		AttemptCount:       item.AttemptCount,
+		LastAttemptAt:      item.LastAttemptAt,
+		ProviderRequestID:  item.ProviderRequestID,
+		ProviderCode:       item.ProviderCode,
+		ProviderMessage:    item.ProviderMessage,
+		SentAt:             item.SentAt,
+		CreatedAt:          item.CreatedAt,
+		UpdatedAt:          item.UpdatedAt,
 	}
 }
 
-func larkWebhookDeliveryModel(item *gen.NotificationLarkWebhookDelivery) *model.NotificationLarkWebhookDelivery {
+func larkWebhookDeliveryModel(
+	item *gen.NotificationLarkWebhookDelivery,
+) *model.NotificationLarkWebhookDelivery {
 	if item == nil {
 		return nil
 	}
 	return &model.NotificationLarkWebhookDelivery{
-		ID: item.ID, EventID: item.EventID, EventType: commonenum.EventType(item.EventType), WebhookID: item.WebhookID,
-		RequestBody: item.RequestBody, Status: notifyenum.NotificationChannelStatus(item.Status), AttemptCount: item.AttemptCount,
-		LastAttemptAt: item.LastAttemptAt, HTTPStatus: item.HTTPStatus, RespBody: item.RespBody, SentAt: item.SentAt,
-		CreatedAt: item.CreatedAt, UpdatedAt: item.UpdatedAt,
+		ID:            item.ID,
+		EventID:       item.EventID,
+		EventType:     commonenum.EventType(item.EventType),
+		WebhookID:     item.WebhookID,
+		RequestBody:   item.RequestBody,
+		Status:        notifyenum.NotificationChannelStatus(item.Status),
+		AttemptCount:  item.AttemptCount,
+		LastAttemptAt: item.LastAttemptAt,
+		HTTPStatus:    item.HTTPStatus,
+		RespBody:      item.RespBody,
+		SentAt:        item.SentAt,
+		CreatedAt:     item.CreatedAt,
+		UpdatedAt:     item.UpdatedAt,
 	}
 }

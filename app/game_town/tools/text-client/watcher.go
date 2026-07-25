@@ -41,7 +41,9 @@ func startWatcher(
 				if retryWatcher(ctx, err) {
 					continue
 				}
-				publishWatcherResult(ctx, out, eventResult{err: err})
+				publishWatcherResult(ctx, out, eventResult{
+					err: err,
+				})
 				return
 			}
 			for {
@@ -53,13 +55,17 @@ func startWatcher(
 					if retryWatcher(ctx, err) {
 						break
 					}
-					publishWatcherResult(ctx, out, eventResult{err: err})
+					publishWatcherResult(ctx, out, eventResult{
+						err: err,
+					})
 					return
 				}
 				if event.GetSequence() > lastSequence {
 					lastSequence = event.GetSequence()
 				}
-				if !publishWatcherResult(ctx, out, eventResult{event: event}) {
+				if !publishWatcherResult(ctx, out, eventResult{
+					event: event,
+				}) {
 					return
 				}
 			}
@@ -68,7 +74,10 @@ func startWatcher(
 	return cancel, out
 }
 
-func retryWatcher(ctx context.Context, err error) bool {
+func retryWatcher(
+	ctx context.Context,
+	err error,
+) bool {
 	if !isRetryableWatcherError(err) {
 		return false
 	}
@@ -82,7 +91,9 @@ func retryWatcher(ctx context.Context, err error) bool {
 	}
 }
 
-func isRetryableWatcherError(err error) bool {
+func isRetryableWatcherError(
+	err error,
+) bool {
 	switch status.Code(err) {
 	case codes.Unavailable,
 		codes.DeadlineExceeded,

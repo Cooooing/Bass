@@ -19,7 +19,9 @@ type AgentJob struct {
 
 func (AgentJob) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "agent_jobs"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "agent_jobs",
+		},
 		entsql.WithComments(true),
 	}
 }

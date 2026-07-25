@@ -11,14 +11,26 @@ type ArticleLikedHandler struct {
 	articleActorHandler
 }
 
-func NewArticleLikedHandler(userClient repo.UserClient, contentClient repo.ContentClient) *ArticleLikedHandler {
-	return &ArticleLikedHandler{articleActorHandler: articleActorHandler{
-		userClientHandler:    userClientHandler{userClient: userClient},
-		contentClientHandler: contentClientHandler{contentClient: contentClient},
-	}}
+func NewArticleLikedHandler(
+	userClient repo.UserClient,
+	contentClient repo.ContentClient,
+) *ArticleLikedHandler {
+	return &ArticleLikedHandler{
+		articleActorHandler: articleActorHandler{
+			userClientHandler: userClientHandler{
+				userClient: userClient,
+			},
+			contentClientHandler: contentClientHandler{
+				contentClient: contentClient,
+			},
+		},
+	}
 }
 
-func (h *ArticleLikedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
+func (h *ArticleLikedHandler) Build(
+	ctx context.Context,
+	event *enums.Event,
+) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}

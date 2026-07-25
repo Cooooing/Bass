@@ -20,7 +20,9 @@ type ChatMessage struct {
 
 func (ChatMessage) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixIM.String() + "chat_messages"},
+		entsql.Annotation{
+			Table: constant.TablePrefixIM.String() + "chat_messages",
+		},
 		entsql.WithComments(true),
 	}
 }

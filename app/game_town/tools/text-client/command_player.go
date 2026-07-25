@@ -18,9 +18,13 @@ func usePlayer(
 	if err != nil || playerID <= 0 {
 		return commandUsage("/player use <player_id>")
 	}
-	reply, err := client.Player.Get(ctx, &v1.GetGameTownPlayer_Request{Id: playerID})
+	reply, err := client.Player.Get(ctx, &v1.GetGameTownPlayer_Request{
+		Id: playerID,
+	})
 	if err != nil {
-		return commandResult{err: err}
+		return commandResult{
+			err: err,
+		}
 	}
 	return commandResult{
 		playerID: playerID,
@@ -31,6 +35,7 @@ func usePlayer(
 		)},
 	}
 }
+
 func registerPlayer(
 	ctx context.Context,
 	client *rpc.GameTownClient,
@@ -44,7 +49,9 @@ func registerPlayer(
 		},
 	)
 	if err != nil {
-		return commandResult{err: err}
+		return commandResult{
+			err: err,
+		}
 	}
 	return commandResult{
 		playerID: reply.GetRow().GetId(),

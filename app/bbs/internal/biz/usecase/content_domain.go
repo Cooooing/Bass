@@ -12,8 +12,12 @@ type ContentDomainUsecase struct {
 	contentDomainClient repo.ContentDomainClient
 }
 
-func NewContentDomainUsecase(contentDomainClient repo.ContentDomainClient) *ContentDomainUsecase {
-	return &ContentDomainUsecase{contentDomainClient: contentDomainClient}
+func NewContentDomainUsecase(
+	contentDomainClient repo.ContentDomainClient,
+) *ContentDomainUsecase {
+	return &ContentDomainUsecase{
+		contentDomainClient: contentDomainClient,
+	}
 }
 
 type ListDomainsReq struct {
@@ -26,13 +30,19 @@ type ListDomainsResp struct {
 	Rows []*repo.Domain
 }
 
-func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomainsReq) (*ListDomainsResp, error) {
+func (u *ContentDomainUsecase) ListDomains(
+	ctx context.Context,
+	req *ListDomainsReq,
+) (*ListDomainsResp, error) {
 	if req == nil {
 		req = &ListDomainsReq{}
 	}
 	var page *repo.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{Page: req.Page.GetPage(), Size: req.Page.GetSize()}
+		page = &repo.PageReq{
+			Page: req.Page.GetPage(),
+			Size: req.Page.GetSize(),
+		}
 	}
 	query := &repo.DomainQuery{}
 	if req.Query != nil {
@@ -51,9 +61,15 @@ func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomains
 		value := int32(bbscontentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED)
 		query.Status = &value
 	}
-	resp, err := u.contentDomainClient.ListDomains(ctx, &repo.ListDomainsReq{Page: page, Query: query})
+	resp, err := u.contentDomainClient.ListDomains(ctx, &repo.ListDomainsReq{
+		Page:  page,
+		Query: query,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &ListDomainsResp{Page: resp.Page, Rows: resp.Rows}, nil
+	return &ListDomainsResp{
+		Page: resp.Page,
+		Rows: resp.Rows,
+	}, nil
 }

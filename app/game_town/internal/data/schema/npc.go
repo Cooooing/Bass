@@ -18,7 +18,9 @@ type Npc struct {
 
 func (Npc) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "npcs"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "npcs",
+		},
 		entsql.WithComments(true),
 	}
 }

@@ -18,7 +18,9 @@ type ObjectStorage struct {
 
 func (ObjectStorage) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixPlatform.String() + "object_storages"},
+		entsql.Annotation{
+			Table: constant.TablePrefixPlatform.String() + "object_storages",
+		},
 		entsql.WithComments(true),
 	}
 }

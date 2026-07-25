@@ -18,7 +18,9 @@ type RbacRole struct {
 }
 
 func (RbacRole) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: constant.TablePrefixUser.String() + "rbac_roles"}, entsql.WithComments(true)}
+	return []schema.Annotation{entsql.Annotation{
+		Table: constant.TablePrefixUser.String() + "rbac_roles",
+	}, entsql.WithComments(true)}
 }
 
 func (RbacRole) Fields() []ent.Field {
@@ -33,7 +35,9 @@ func (RbacRole) Fields() []ent.Field {
 	}
 }
 
-func (RbacRole) Mixin() []ent.Mixin { return []ent.Mixin{utilent.TimeAuditMixin{}} }
+func (RbacRole) Mixin() []ent.Mixin {
+	return []ent.Mixin{utilent.TimeAuditMixin{}}
+}
 
 func (RbacRole) Indexes() []ent.Index {
 	return []ent.Index{
@@ -42,4 +46,6 @@ func (RbacRole) Indexes() []ent.Index {
 	}
 }
 
-func (RbacRole) Edges() []ent.Edge { return nil }
+func (RbacRole) Edges() []ent.Edge {
+	return nil
+}

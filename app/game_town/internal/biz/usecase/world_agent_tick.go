@@ -12,7 +12,9 @@ import (
 	"game_town/internal/enum"
 )
 
-func (r *WorldAgentRunner) scheduleTicks(ctx context.Context) {
+func (r *WorldAgentRunner) scheduleTicks(
+	ctx context.Context,
+) {
 	r.restoreTickTimers(ctx)
 	recoveryTicker := time.NewTicker(time.Minute)
 	defer recoveryTicker.Stop()
@@ -28,15 +30,21 @@ func (r *WorldAgentRunner) scheduleTicks(ctx context.Context) {
 	}
 }
 
-func (r *WorldAgentRunner) restoreTickTimers(ctx context.Context) {
+func (r *WorldAgentRunner) restoreTickTimers(
+	ctx context.Context,
+) {
 	status := enum.WorldStatusActive
-	worlds, err := r.worldRepo.List(ctx, &repo.WorldQuery{Status: new(status)})
+	worlds, err := r.worldRepo.List(ctx, &repo.WorldQuery{
+		Status: new(status),
+	})
 	if err != nil {
 		r.log.ErrorContext(ctx, "load active world tick timers failed", constant.LogFieldErr, err)
 		return
 	}
 	for _, world := range worlds {
-		state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{WorldID: new(world.ID)})
+		state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{
+			WorldID: new(world.ID),
+		})
 		if err != nil {
 			r.log.ErrorContext(ctx, "load active world tick state failed", "world_id", world.ID, constant.LogFieldErr, err)
 			continue
@@ -45,8 +53,13 @@ func (r *WorldAgentRunner) restoreTickTimers(ctx context.Context) {
 	}
 }
 
-func (r *WorldAgentRunner) refreshWorldTimer(ctx context.Context, worldID int64) {
-	state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{WorldID: new(worldID)})
+func (r *WorldAgentRunner) refreshWorldTimer(
+	ctx context.Context,
+	worldID int64,
+) {
+	state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{
+		WorldID: new(worldID),
+	})
 	if err != nil {
 		r.log.ErrorContext(ctx, "refresh world tick timer failed", "world_id", worldID, constant.LogFieldErr, err)
 		return
@@ -54,7 +67,11 @@ func (r *WorldAgentRunner) refreshWorldTimer(ctx context.Context, worldID int64)
 	r.armWorldTimer(ctx, worldID, state.NextDueAt)
 }
 
-func (r *WorldAgentRunner) armWorldTimer(ctx context.Context, worldID int64, dueAt *time.Time) {
+func (r *WorldAgentRunner) armWorldTimer(
+	ctx context.Context,
+	worldID int64,
+	dueAt *time.Time,
+) {
 	if dueAt == nil {
 		return
 	}
@@ -82,11 +99,16 @@ func (r *WorldAgentRunner) stopTickTimers() {
 	}
 }
 
-func (r *WorldAgentRunner) triggerWorldTick(ctx context.Context, worldID int64) {
+func (r *WorldAgentRunner) triggerWorldTick(
+	ctx context.Context,
+	worldID int64,
+) {
 	if ctx.Err() != nil {
 		return
 	}
-	state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{WorldID: new(worldID)})
+	state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{
+		WorldID: new(worldID),
+	})
 	if err != nil {
 		r.log.ErrorContext(ctx, "load world tick state failed", "world_id", worldID, constant.LogFieldErr, err)
 		return
@@ -101,7 +123,11 @@ func (r *WorldAgentRunner) triggerWorldTick(ctx context.Context, worldID int64) 
 	r.refreshWorldTimer(ctx, worldID)
 }
 
-func (r *WorldAgentRunner) scheduleWorldTick(ctx context.Context, state *model.WorldState, now time.Time) error {
+func (r *WorldAgentRunner) scheduleWorldTick(
+	ctx context.Context,
+	state *model.WorldState,
+	now time.Time,
+) error {
 	pending, err := r.hasPendingTickWork(ctx, state)
 	if err != nil {
 		return err
@@ -179,7 +205,12 @@ func (r *WorldAgentRunner) scheduleWorldTick(ctx context.Context, state *model.W
 	return nil
 }
 
-func (r *WorldAgentRunner) hasPendingNpcPlanWork(ctx context.Context, worldID int64, npcID int64, cursor uint64) (bool, error) {
+func (r *WorldAgentRunner) hasPendingNpcPlanWork(
+	ctx context.Context,
+	worldID int64,
+	npcID int64,
+	cursor uint64,
+) (bool, error) {
 	statuses := []enum.AgentJobStatus{
 		enum.AgentJobStatusQueued,
 		enum.AgentJobStatusRunning,
@@ -205,7 +236,10 @@ func (r *WorldAgentRunner) hasPendingNpcPlanWork(ctx context.Context, worldID in
 	return jobCount > 0 || pendingCount > 0, nil
 }
 
-func (r *WorldAgentRunner) hasPendingTickWork(ctx context.Context, state *model.WorldState) (bool, error) {
+func (r *WorldAgentRunner) hasPendingTickWork(
+	ctx context.Context,
+	state *model.WorldState,
+) (bool, error) {
 	statuses := []enum.AgentJobStatus{
 		enum.AgentJobStatusQueued,
 		enum.AgentJobStatusRunning,
@@ -228,7 +262,10 @@ func (r *WorldAgentRunner) hasPendingTickWork(ctx context.Context, state *model.
 	return jobCount+pendingCount > 0, nil
 }
 
-func (r *WorldAgentRunner) nextWorldTime(state *model.WorldState, now time.Time) time.Time {
+func (r *WorldAgentRunner) nextWorldTime(
+	state *model.WorldState,
+	now time.Time,
+) time.Time {
 	scale := state.TimeScale
 	if scale == 0 {
 		scale = 24
@@ -237,15 +274,23 @@ func (r *WorldAgentRunner) nextWorldTime(state *model.WorldState, now time.Time)
 	return state.WorldTime.Add(time.Duration(float64(elapsed) * float64(scale)))
 }
 
-func (r *WorldAgentRunner) recentEvents(ctx context.Context, worldID int64) ([]*model.Event, error) {
+func (r *WorldAgentRunner) recentEvents(
+	ctx context.Context,
+	worldID int64,
+) ([]*model.Event, error) {
 	limit := int(r.conf.GetGameTown().GetAgent().GetRecentEventLimit())
 	if limit <= 0 {
 		limit = 20
 	}
-	return r.eventRepo.List(ctx, &repo.EventQuery{WorldID: new(worldID), RecentLimit: limit})
+	return r.eventRepo.List(ctx, &repo.EventQuery{
+		WorldID:     new(worldID),
+		RecentLimit: limit,
+	})
 }
 
-func (r *WorldAgentRunner) recordFailure(config *model.AgentConfig) {
+func (r *WorldAgentRunner) recordFailure(
+	config *model.AgentConfig,
+) {
 	if config == nil {
 		return
 	}
@@ -264,7 +309,9 @@ func (r *WorldAgentRunner) recordFailure(config *model.AgentConfig) {
 	time.AfterFunc(duration, r.wakeScheduler)
 }
 
-func (r *WorldAgentRunner) recordSuccess(configID int64) {
+func (r *WorldAgentRunner) recordSuccess(
+	configID int64,
+) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -336,6 +383,7 @@ func (r *WorldAgentRunner) staleJobDuration() time.Duration {
 	}
 	return timeout + time.Minute
 }
+
 func (r *WorldAgentRunner) tickInterval() time.Duration {
 	interval := r.conf.GetGameTown().GetAgent().GetTickInterval()
 	if interval != nil && interval.AsDuration() > 0 {
@@ -355,7 +403,10 @@ func (r *WorldAgentRunner) tickScanInterval() time.Duration {
 	return interval
 }
 
-func uint32Value(values map[string]any, key string) uint32 {
+func uint32Value(
+	values map[string]any,
+	key string,
+) uint32 {
 	value, ok := values[key].(float64)
 	if !ok {
 		return 0
@@ -363,7 +414,9 @@ func uint32Value(values map[string]any, key string) uint32 {
 	return uint32(value)
 }
 
-func truncateError(err error) string {
+func truncateError(
+	err error,
+) string {
 	if err == nil {
 		return ""
 	}

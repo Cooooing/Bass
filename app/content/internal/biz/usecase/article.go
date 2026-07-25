@@ -58,7 +58,10 @@ type ArticleAddReq struct {
 	TagIDs  []int64
 }
 
-func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Article, error) {
+func (d *ArticleUsecase) Add(
+	ctx context.Context,
+	req *ArticleAddReq,
+) (*model.Article, error) {
 	article := req.Article
 	var (
 		save *model.Article
@@ -68,7 +71,10 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 		bindTagIDs := lo.Uniq(req.TagIDs)
 		if len(bindTagIDs) > 0 {
 			tagStatus := enum.TagStatusEnabled
-			countResp, err := d.tagRepo.Count(ctx, &repo.TagGetReq{TagIds: bindTagIDs, Status: &tagStatus})
+			countResp, err := d.tagRepo.Count(ctx, &repo.TagGetReq{
+				TagIds: bindTagIDs,
+				Status: &tagStatus,
+			})
 			if err != nil {
 				return err
 			}
@@ -93,7 +99,10 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 			return err
 		}
 		if len(bindTagIDs) > 0 {
-			if err = d.articleRepo.ReplaceTags(ctx, &repo.ArticleReplaceTagsReq{ArticleID: save.ID, TagIDs: bindTagIDs}); err != nil {
+			if err = d.articleRepo.ReplaceTags(ctx, &repo.ArticleReplaceTagsReq{
+				ArticleID: save.ID,
+				TagIDs:    bindTagIDs,
+			}); err != nil {
 				return err
 			}
 		}
@@ -111,7 +120,10 @@ type ArticleAddPostscriptReq struct {
 	UserID    int64
 }
 
-func (d *ArticleUsecase) AddPostscript(ctx context.Context, req *ArticleAddPostscriptReq) (*model.ArticlePostscript, error) {
+func (d *ArticleUsecase) AddPostscript(
+	ctx context.Context,
+	req *ArticleAddPostscriptReq,
+) (*model.ArticlePostscript, error) {
 	articleId := req.ArticleID
 	content := req.Content
 	userId := req.UserID
@@ -146,7 +158,11 @@ func (d *ArticleUsecase) AddPostscript(ctx context.Context, req *ArticleAddPosts
 		if err != nil {
 			return err
 		}
-		if err = d.articleRepo.UpdateHasPostscript(ctx, &repo.ArticleUpdateHasPostscriptReq{ArticleID: articleId, HasPostscript: true, UpdatedBy: userId}); err != nil {
+		if err = d.articleRepo.UpdateHasPostscript(ctx, &repo.ArticleUpdateHasPostscriptReq{
+			ArticleID:     articleId,
+			HasPostscript: true,
+			UpdatedBy:     userId,
+		}); err != nil {
 			return err
 		}
 		err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -169,7 +185,10 @@ func (d *ArticleUsecase) AddPostscript(ctx context.Context, req *ArticleAddPosts
 	return save, nil
 }
 
-func (d *ArticleUsecase) ListPostscripts(ctx context.Context, articleID int64) ([]*model.ArticlePostscript, error) {
+func (d *ArticleUsecase) ListPostscripts(
+	ctx context.Context,
+	articleID int64,
+) ([]*model.ArticlePostscript, error) {
 	articleId := articleID
 	if _, err := d.Get(ctx, articleId); err != nil {
 		return nil, err
@@ -185,7 +204,10 @@ func (d *ArticleUsecase) ListPostscripts(ctx context.Context, articleID int64) (
 	return listResp, nil
 }
 
-func (d *ArticleUsecase) Update(ctx context.Context, article *model.Article) (*model.Article, error) {
+func (d *ArticleUsecase) Update(
+	ctx context.Context,
+	article *model.Article,
+) (*model.Article, error) {
 	var (
 		save *model.Article
 		err  error
@@ -255,7 +277,10 @@ type ArticleRewardReq struct {
 	Points    int32
 }
 
-func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) error {
+func (d *ArticleUsecase) Reward(
+	ctx context.Context,
+	req *ArticleRewardReq,
+) error {
 	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_REWARD_NOT_IMPLEMENTED)
 }
 
@@ -265,12 +290,17 @@ type ArticleLikeReq struct {
 	Active    bool
 }
 
-func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, error) {
+func (d *ArticleUsecase) Like(
+	ctx context.Context,
+	req *ArticleLikeReq,
+) (bool, error) {
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
 	err := d.tx(ctx, func(ctx context.Context) error {
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: new(articleId),
+		})
 		article := articleResp
 		if err != nil {
 			return err
@@ -291,7 +321,12 @@ func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, e
 			if !createdResp {
 				return nil
 			}
-			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: articleId, Stats: repo.ArticleStatUpdate{LikeCount: 1}}); err != nil {
+			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
+				ArticleID: articleId,
+				Stats: repo.ArticleStatUpdate{
+					LikeCount: 1,
+				},
+			}); err != nil {
 				return err
 			}
 			err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -306,14 +341,23 @@ func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, e
 			})
 		}
 
-		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{ArticleID: articleId, UserID: userId, Action: enum.ArticleActionLike})
+		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
+			ArticleID: articleId,
+			UserID:    userId,
+			Action:    enum.ArticleActionLike,
+		})
 		if err != nil {
 			return err
 		}
 		if deletedResp == 0 {
 			return nil
 		}
-		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: articleId, Stats: repo.ArticleStatUpdate{LikeCount: -1}})
+		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
+			ArticleID: articleId,
+			Stats: repo.ArticleStatUpdate{
+				LikeCount: -1,
+			},
+		})
 		return err
 	})
 	if err != nil {
@@ -328,12 +372,17 @@ type ArticleThankReq struct {
 	Active    bool
 }
 
-func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool, error) {
+func (d *ArticleUsecase) Thank(
+	ctx context.Context,
+	req *ArticleThankReq,
+) (bool, error) {
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
 	err := d.tx(ctx, func(ctx context.Context) error {
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: new(articleId),
+		})
 		article := articleResp
 		if err != nil {
 			return err
@@ -354,7 +403,12 @@ func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool,
 			if !createdResp {
 				return nil
 			}
-			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: articleId, Stats: repo.ArticleStatUpdate{ThankCount: 1}}); err != nil {
+			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
+				ArticleID: articleId,
+				Stats: repo.ArticleStatUpdate{
+					ThankCount: 1,
+				},
+			}); err != nil {
 				return err
 			}
 			err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -369,14 +423,23 @@ func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool,
 			})
 		}
 
-		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{ArticleID: articleId, UserID: userId, Action: enum.ArticleActionThank})
+		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
+			ArticleID: articleId,
+			UserID:    userId,
+			Action:    enum.ArticleActionThank,
+		})
 		if err != nil {
 			return err
 		}
 		if deletedResp == 0 {
 			return nil
 		}
-		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: articleId, Stats: repo.ArticleStatUpdate{ThankCount: -1}})
+		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
+			ArticleID: articleId,
+			Stats: repo.ArticleStatUpdate{
+				ThankCount: -1,
+			},
+		})
 		return err
 	})
 	if err != nil {
@@ -391,12 +454,17 @@ type ArticleCollectReq struct {
 	Active    bool
 }
 
-func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (bool, error) {
+func (d *ArticleUsecase) Collect(
+	ctx context.Context,
+	req *ArticleCollectReq,
+) (bool, error) {
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
 	err := d.tx(ctx, func(ctx context.Context) error {
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: new(articleId),
+		})
 		article := articleResp
 		if err != nil {
 			return err
@@ -417,7 +485,12 @@ func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (b
 			if !createdResp {
 				return nil
 			}
-			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: articleId, Stats: repo.ArticleStatUpdate{CollectCount: 1}}); err != nil {
+			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
+				ArticleID: articleId,
+				Stats: repo.ArticleStatUpdate{
+					CollectCount: 1,
+				},
+			}); err != nil {
 				return err
 			}
 			err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -432,14 +505,23 @@ func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (b
 			})
 		}
 
-		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{ArticleID: articleId, UserID: userId, Action: enum.ArticleActionCollect})
+		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
+			ArticleID: articleId,
+			UserID:    userId,
+			Action:    enum.ArticleActionCollect,
+		})
 		if err != nil {
 			return err
 		}
 		if deletedResp == 0 {
 			return nil
 		}
-		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: articleId, Stats: repo.ArticleStatUpdate{CollectCount: -1}})
+		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
+			ArticleID: articleId,
+			Stats: repo.ArticleStatUpdate{
+				CollectCount: -1,
+			},
+		})
 		return err
 	})
 	if err != nil {
@@ -454,12 +536,17 @@ type ArticleWatchReq struct {
 	Active    bool
 }
 
-func (d *ArticleUsecase) Watch(ctx context.Context, req *ArticleWatchReq) (bool, error) {
+func (d *ArticleUsecase) Watch(
+	ctx context.Context,
+	req *ArticleWatchReq,
+) (bool, error) {
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
 	err := d.tx(ctx, func(ctx context.Context) error {
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: new(articleId),
+		})
 		article := articleResp
 		if err != nil {
 			return err
@@ -480,7 +567,12 @@ func (d *ArticleUsecase) Watch(ctx context.Context, req *ArticleWatchReq) (bool,
 			if !createdResp {
 				return nil
 			}
-			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: articleId, Stats: repo.ArticleStatUpdate{WatchCount: 1}}); err != nil {
+			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
+				ArticleID: articleId,
+				Stats: repo.ArticleStatUpdate{
+					WatchCount: 1,
+				},
+			}); err != nil {
 				return err
 			}
 			err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -495,14 +587,23 @@ func (d *ArticleUsecase) Watch(ctx context.Context, req *ArticleWatchReq) (bool,
 			})
 		}
 
-		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{ArticleID: articleId, UserID: userId, Action: enum.ArticleActionWatch})
+		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
+			ArticleID: articleId,
+			UserID:    userId,
+			Action:    enum.ArticleActionWatch,
+		})
 		if err != nil {
 			return err
 		}
 		if deletedResp == 0 {
 			return nil
 		}
-		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: articleId, Stats: repo.ArticleStatUpdate{WatchCount: -1}})
+		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
+			ArticleID: articleId,
+			Stats: repo.ArticleStatUpdate{
+				WatchCount: -1,
+			},
+		})
 		return err
 	})
 	if err != nil {
@@ -516,10 +617,15 @@ type ArticleViewReq struct {
 	ViewerUserID *int64
 }
 
-func (d *ArticleUsecase) View(ctx context.Context, req *ArticleViewReq) error {
+func (d *ArticleUsecase) View(
+	ctx context.Context,
+	req *ArticleViewReq,
+) error {
 	articleId := req.ArticleID
 	return d.tx(ctx, func(ctx context.Context) error {
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: new(articleId),
+		})
 		article := articleResp
 		if err != nil {
 			return err
@@ -532,7 +638,12 @@ func (d *ArticleUsecase) View(ctx context.Context, req *ArticleViewReq) error {
 		if article.Restriction == enum.ContentRestrictionHidden {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
-		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: articleId, Stats: repo.ArticleStatUpdate{ViewCount: 1}})
+		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
+			ArticleID: articleId,
+			Stats: repo.ArticleStatUpdate{
+				ViewCount: 1,
+			},
+		})
 		return err
 	})
 }
@@ -543,12 +654,17 @@ type ArticlePublishReq struct {
 	Visibility enum.ArticleVisibility
 }
 
-func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) error {
+func (d *ArticleUsecase) Publish(
+	ctx context.Context,
+	req *ArticlePublishReq,
+) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	visibility := req.Visibility
 	return d.tx(ctx, func(ctx context.Context) error {
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: new(articleId),
+		})
 		article := articleResp
 		if err != nil {
 			return err
@@ -565,7 +681,13 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
 		}
 		now := time.Now()
-		if err = d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{ArticleID: articleId, PublishStatus: enum.ArticlePublishStatusPublished, Visibility: visibility, PublishedAt: new(now), UpdatedBy: userId}); err != nil {
+		if err = d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
+			ArticleID:     articleId,
+			PublishStatus: enum.ArticlePublishStatusPublished,
+			Visibility:    visibility,
+			PublishedAt:   new(now),
+			UpdatedBy:     userId,
+		}); err != nil {
 			return err
 		}
 		err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -588,7 +710,10 @@ type ArticleAcceptAnswerReq struct {
 	UserID    int64
 }
 
-func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, req *ArticleAcceptAnswerReq) error {
+func (d *ArticleUsecase) AcceptAnswer(
+	ctx context.Context,
+	req *ArticleAcceptAnswerReq,
+) error {
 	articleId := req.ArticleID
 	commentId := req.CommentID
 	userId := req.UserID
@@ -622,7 +747,11 @@ func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, req *ArticleAcceptAns
 		if !exist {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
 		}
-		if _, err = d.articleRepo.UpdateAcceptedAnswerID(ctx, &repo.ArticleUpdateAcceptedAnswerIDReq{ArticleID: articleId, CommentID: commentId, UpdatedBy: userId}); err != nil {
+		if _, err = d.articleRepo.UpdateAcceptedAnswerID(ctx, &repo.ArticleUpdateAcceptedAnswerIDReq{
+			ArticleID: articleId,
+			CommentID: commentId,
+			UpdatedBy: userId,
+		}); err != nil {
 			return err
 		}
 		err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -646,10 +775,17 @@ type ArticleMakePrivateReq struct {
 	UserID    int64
 }
 
-func (d *ArticleUsecase) MakePrivate(ctx context.Context, req *ArticleMakePrivateReq) error {
+func (d *ArticleUsecase) MakePrivate(
+	ctx context.Context,
+	req *ArticleMakePrivateReq,
+) error {
 	articleId := req.ArticleID
 	userId := req.UserID
-	return d.updateVisibility(ctx, &articleUpdateVisibilityReq{ArticleID: articleId, Visibility: enum.ArticleVisibilityPrivate, UserID: userId})
+	return d.updateVisibility(ctx, &articleUpdateVisibilityReq{
+		ArticleID:  articleId,
+		Visibility: enum.ArticleVisibilityPrivate,
+		UserID:     userId,
+	})
 }
 
 type ArticleMakePublicReq struct {
@@ -657,10 +793,17 @@ type ArticleMakePublicReq struct {
 	UserID    int64
 }
 
-func (d *ArticleUsecase) MakePublic(ctx context.Context, req *ArticleMakePublicReq) error {
+func (d *ArticleUsecase) MakePublic(
+	ctx context.Context,
+	req *ArticleMakePublicReq,
+) error {
 	articleId := req.ArticleID
 	userId := req.UserID
-	return d.updateVisibility(ctx, &articleUpdateVisibilityReq{ArticleID: articleId, Visibility: enum.ArticleVisibilityPublic, UserID: userId})
+	return d.updateVisibility(ctx, &articleUpdateVisibilityReq{
+		ArticleID:  articleId,
+		Visibility: enum.ArticleVisibilityPublic,
+		UserID:     userId,
+	})
 }
 
 type articleUpdateVisibilityReq struct {
@@ -669,12 +812,17 @@ type articleUpdateVisibilityReq struct {
 	UserID     int64
 }
 
-func (d *ArticleUsecase) updateVisibility(ctx context.Context, req *articleUpdateVisibilityReq) error {
+func (d *ArticleUsecase) updateVisibility(
+	ctx context.Context,
+	req *articleUpdateVisibilityReq,
+) error {
 	articleId := req.ArticleID
 	visibility := req.Visibility
 	userId := req.UserID
 	return d.tx(ctx, func(ctx context.Context) error {
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: new(articleId),
+		})
 		article := articleResp
 		if err != nil {
 			return err
@@ -685,7 +833,11 @@ func (d *ArticleUsecase) updateVisibility(ctx context.Context, req *articleUpdat
 		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Restriction != enum.ContentRestrictionNone {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
-		if err := d.articleRepo.UpdateVisibility(ctx, &repo.ArticleUpdateVisibilityReq{ArticleID: articleId, Visibility: visibility, UpdatedBy: userId}); err != nil {
+		if err := d.articleRepo.UpdateVisibility(ctx, &repo.ArticleUpdateVisibilityReq{
+			ArticleID:  articleId,
+			Visibility: visibility,
+			UpdatedBy:  userId,
+		}); err != nil {
 			return err
 		}
 		err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -713,11 +865,20 @@ type ArticleArchiveReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Archive(ctx context.Context, req *ArticleArchiveReq) error {
+func (d *ArticleUsecase) Archive(
+	ctx context.Context,
+	req *ArticleArchiveReq,
+) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
-	return d.updatePublishStatus(ctx, &articleUpdatePublishStatusReq{ArticleID: articleId, PublishStatus: enum.ArticlePublishStatusArchived, UserID: userId, Action: "archived", Reason: reason})
+	return d.updatePublishStatus(ctx, &articleUpdatePublishStatusReq{
+		ArticleID:     articleId,
+		PublishStatus: enum.ArticlePublishStatusArchived,
+		UserID:        userId,
+		Action:        "archived",
+		Reason:        reason,
+	})
 }
 
 type ArticleUnarchiveReq struct {
@@ -726,11 +887,20 @@ type ArticleUnarchiveReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Unarchive(ctx context.Context, req *ArticleUnarchiveReq) error {
+func (d *ArticleUsecase) Unarchive(
+	ctx context.Context,
+	req *ArticleUnarchiveReq,
+) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
-	return d.updatePublishStatus(ctx, &articleUpdatePublishStatusReq{ArticleID: articleId, PublishStatus: enum.ArticlePublishStatusPublished, UserID: userId, Action: "unarchived", Reason: reason})
+	return d.updatePublishStatus(ctx, &articleUpdatePublishStatusReq{
+		ArticleID:     articleId,
+		PublishStatus: enum.ArticlePublishStatusPublished,
+		UserID:        userId,
+		Action:        "unarchived",
+		Reason:        reason,
+	})
 }
 
 type articleUpdatePublishStatusReq struct {
@@ -741,14 +911,19 @@ type articleUpdatePublishStatusReq struct {
 	Reason        *string
 }
 
-func (d *ArticleUsecase) updatePublishStatus(ctx context.Context, req *articleUpdatePublishStatusReq) error {
+func (d *ArticleUsecase) updatePublishStatus(
+	ctx context.Context,
+	req *articleUpdatePublishStatusReq,
+) error {
 	articleId := req.ArticleID
 	publishStatus := req.PublishStatus
 	userId := req.UserID
 	action := req.Action
 	reason := req.Reason
 	return d.tx(ctx, func(ctx context.Context) error {
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: new(articleId),
+		})
 		article := articleResp
 		if err != nil {
 			return err
@@ -766,7 +941,12 @@ func (d *ArticleUsecase) updatePublishStatus(ctx context.Context, req *articleUp
 				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 			}
 		}
-		if err := d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{ArticleID: articleId, PublishStatus: publishStatus, Visibility: article.Visibility, UpdatedBy: userId}); err != nil {
+		if err := d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
+			ArticleID:     articleId,
+			PublishStatus: publishStatus,
+			Visibility:    article.Visibility,
+			UpdatedBy:     userId,
+		}); err != nil {
 			return err
 		}
 		err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -795,11 +975,20 @@ type ArticleHideReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Hide(ctx context.Context, req *ArticleHideReq) error {
+func (d *ArticleUsecase) Hide(
+	ctx context.Context,
+	req *ArticleHideReq,
+) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
-	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{ArticleID: articleId, Restriction: enum.ContentRestrictionHidden, UserID: userId, Action: enum.ContentModerationActionHide, Reason: reason})
+	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{
+		ArticleID:   articleId,
+		Restriction: enum.ContentRestrictionHidden,
+		UserID:      userId,
+		Action:      enum.ContentModerationActionHide,
+		Reason:      reason,
+	})
 }
 
 type ArticleUnhideReq struct {
@@ -808,11 +997,20 @@ type ArticleUnhideReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Unhide(ctx context.Context, req *ArticleUnhideReq) error {
+func (d *ArticleUsecase) Unhide(
+	ctx context.Context,
+	req *ArticleUnhideReq,
+) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
-	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{ArticleID: articleId, Restriction: enum.ContentRestrictionNone, UserID: userId, Action: enum.ContentModerationActionUnhide, Reason: reason})
+	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{
+		ArticleID:   articleId,
+		Restriction: enum.ContentRestrictionNone,
+		UserID:      userId,
+		Action:      enum.ContentModerationActionUnhide,
+		Reason:      reason,
+	})
 }
 
 type ArticleLockReq struct {
@@ -821,11 +1019,20 @@ type ArticleLockReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Lock(ctx context.Context, req *ArticleLockReq) error {
+func (d *ArticleUsecase) Lock(
+	ctx context.Context,
+	req *ArticleLockReq,
+) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
-	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{ArticleID: articleId, Restriction: enum.ContentRestrictionLocked, UserID: userId, Action: enum.ContentModerationActionLock, Reason: reason})
+	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{
+		ArticleID:   articleId,
+		Restriction: enum.ContentRestrictionLocked,
+		UserID:      userId,
+		Action:      enum.ContentModerationActionLock,
+		Reason:      reason,
+	})
 }
 
 type ArticleUnlockReq struct {
@@ -834,11 +1041,20 @@ type ArticleUnlockReq struct {
 	Reason    *string
 }
 
-func (d *ArticleUsecase) Unlock(ctx context.Context, req *ArticleUnlockReq) error {
+func (d *ArticleUsecase) Unlock(
+	ctx context.Context,
+	req *ArticleUnlockReq,
+) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	reason := req.Reason
-	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{ArticleID: articleId, Restriction: enum.ContentRestrictionNone, UserID: userId, Action: enum.ContentModerationActionUnlock, Reason: reason})
+	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{
+		ArticleID:   articleId,
+		Restriction: enum.ContentRestrictionNone,
+		UserID:      userId,
+		Action:      enum.ContentModerationActionUnlock,
+		Reason:      reason,
+	})
 }
 
 type articleUpdateRestrictionReq struct {
@@ -849,14 +1065,19 @@ type articleUpdateRestrictionReq struct {
 	Reason      *string
 }
 
-func (d *ArticleUsecase) updateRestriction(ctx context.Context, req *articleUpdateRestrictionReq) error {
+func (d *ArticleUsecase) updateRestriction(
+	ctx context.Context,
+	req *articleUpdateRestrictionReq,
+) error {
 	articleId := req.ArticleID
 	restriction := req.Restriction
 	userId := req.UserID
 	action := req.Action
 	reason := req.Reason
 	return d.tx(ctx, func(ctx context.Context) error {
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)})
+		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+			ArticleId: new(articleId),
+		})
 		article := articleResp
 		if err != nil {
 			return err
@@ -884,7 +1105,11 @@ func (d *ArticleUsecase) updateRestriction(ctx context.Context, req *articleUpda
 				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 			}
 		}
-		if err := d.articleRepo.UpdateRestriction(ctx, &repo.ArticleUpdateRestrictionReq{ArticleID: articleId, Restriction: restriction, UpdatedBy: userId}); err != nil {
+		if err := d.articleRepo.UpdateRestriction(ctx, &repo.ArticleUpdateRestrictionReq{
+			ArticleID:   articleId,
+			Restriction: restriction,
+			UpdatedBy:   userId,
+		}); err != nil {
 			return err
 		}
 		if _, err := d.moderationRecordRepo.Save(ctx, &model.ContentModerationRecord{
@@ -916,7 +1141,10 @@ func (d *ArticleUsecase) updateRestriction(ctx context.Context, req *articleUpda
 	})
 }
 
-func (d *ArticleUsecase) Get(ctx context.Context, articleID int64) (*model.Article, error) {
+func (d *ArticleUsecase) Get(
+	ctx context.Context,
+	articleID int64,
+) (*model.Article, error) {
 	articleId := articleID
 	articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 		ArticleId: new(articleId),
@@ -949,7 +1177,10 @@ type ArticlePageResp struct {
 	Page *base.PageResp
 }
 
-func (d *ArticleUsecase) Page(ctx context.Context, req *ArticlePageReq) (*ArticlePageResp, error) {
+func (d *ArticleUsecase) Page(
+	ctx context.Context,
+	req *ArticlePageReq,
+) (*ArticlePageResp, error) {
 	if req == nil {
 		req = &ArticlePageReq{}
 	}
@@ -971,7 +1202,10 @@ func (d *ArticleUsecase) Page(ctx context.Context, req *ArticlePageReq) (*Articl
 	if err != nil {
 		return nil, err
 	}
-	return &ArticlePageResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
+	return &ArticlePageResp{
+		Rows: pageResp.Rows,
+		Page: pageResp.Page,
+	}, nil
 }
 
 type ArticleMapViewerActionStatesReq struct {
@@ -979,7 +1213,10 @@ type ArticleMapViewerActionStatesReq struct {
 	UserID     int64
 }
 
-func (d *ArticleUsecase) MapViewerActionStates(ctx context.Context, req *ArticleMapViewerActionStatesReq) (map[int64]*model.
+func (d *ArticleUsecase) MapViewerActionStates(
+	ctx context.Context,
+	req *ArticleMapViewerActionStatesReq,
+) (map[int64]*model.
 	ArticleViewerActionState, error) {
 	articleIds := req.ArticleIDs
 	userId := req.UserID
@@ -1027,7 +1264,10 @@ type ArticleDiscardDraftReq struct {
 	UserID    int64
 }
 
-func (d *ArticleUsecase) DiscardDraft(ctx context.Context, req *ArticleDiscardDraftReq) error {
+func (d *ArticleUsecase) DiscardDraft(
+	ctx context.Context,
+	req *ArticleDiscardDraftReq,
+) error {
 	articleId := req.ArticleID
 	userId := req.UserID
 	return d.tx(ctx, func(ctx context.Context) error {
@@ -1048,6 +1288,9 @@ func (d *ArticleUsecase) DiscardDraft(ctx context.Context, req *ArticleDiscardDr
 	})
 }
 
-func (d *ArticleUsecase) isAuthor(article *model.Article, userId int64) bool {
+func (d *ArticleUsecase) isAuthor(
+	article *model.Article,
+	userId int64,
+) bool {
 	return article != nil && article.CreatedBy != nil && *article.CreatedBy == userId
 }

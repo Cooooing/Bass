@@ -18,7 +18,9 @@ type Event struct{ ent.Schema }
 
 func (Event) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "events"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "events",
+		},
 		entsql.WithComments(true),
 	}
 }

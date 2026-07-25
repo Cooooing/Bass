@@ -19,7 +19,9 @@ type NotificationStationTemplate struct {
 
 func (NotificationStationTemplate) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_station_template"},
+		entsql.Annotation{
+			Table: constant.TablePrefixNotify.String() + "notification_station_template",
+		},
 		entsql.WithComments(true),
 	}
 }

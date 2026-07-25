@@ -8,9 +8,14 @@ const (
 	maxPageSize int64 = 1000
 )
 
-func normalizePage(p *base.PageRequest) *base.PageRequest {
+func normalizePage(
+	p *base.PageRequest,
+) *base.PageRequest {
 	if p == nil {
-		return &base.PageRequest{Page: defaultPage, Size: defaultSize}
+		return &base.PageRequest{
+			Page: defaultPage,
+			Size: defaultSize,
+		}
 	}
 	if p.Page <= 0 {
 		p.Page = defaultPage

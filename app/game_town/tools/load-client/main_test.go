@@ -11,7 +11,9 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func TestRecordEventsKeepsPlayerSequencesAndDeduplicatesGlobalStats(t *testing.T) {
+func TestRecordEventsKeepsPlayerSequencesAndDeduplicatesGlobalStats(
+	t *testing.T,
+) {
 	state := &runState{
 		playerSeq: make(map[int64]uint64),
 		seenEvent: make(map[int64]bool),
@@ -43,7 +45,9 @@ func TestRecordEventsKeepsPlayerSequencesAndDeduplicatesGlobalStats(t *testing.T
 	}
 }
 
-func TestRetryableWatchError(t *testing.T) {
+func TestRetryableWatchError(
+	t *testing.T,
+) {
 	ctx := context.Background()
 	tests := []struct {
 		name string
@@ -65,7 +69,9 @@ func TestRetryableWatchError(t *testing.T) {
 	}
 }
 
-func TestRetryableWatchErrorStopsWhenContextCanceled(t *testing.T) {
+func TestRetryableWatchErrorStopsWhenContextCanceled(
+	t *testing.T,
+) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 	if retryableWatchError(ctx, io.EOF) {
@@ -73,7 +79,9 @@ func TestRetryableWatchErrorStopsWhenContextCanceled(t *testing.T) {
 	}
 }
 
-func TestValidateRunStrictRequiresWatchEvents(t *testing.T) {
+func TestValidateRunStrictRequiresWatchEvents(
+	t *testing.T,
+) {
 	state := &runState{
 		playerSeq: make(map[int64]uint64),
 		seenEvent: make(map[int64]bool),
@@ -83,7 +91,12 @@ func TestValidateRunStrictRequiresWatchEvents(t *testing.T) {
 			bigEvents:        1,
 		},
 	}
-	err := validateRun(state, config{players: 2, rounds: 10, bigEventEvery: 5, strict: true})
+	err := validateRun(state, config{
+		players:       2,
+		rounds:        10,
+		bigEventEvery: 5,
+		strict:        true,
+	})
 	if err == nil {
 		t.Fatal("validateRun() error = nil, want missing Watch event error")
 	}
@@ -92,7 +105,9 @@ func TestValidateRunStrictRequiresWatchEvents(t *testing.T) {
 	}
 }
 
-func TestValidateRunStrictRequiresFeedbackDensity(t *testing.T) {
+func TestValidateRunStrictRequiresFeedbackDensity(
+	t *testing.T,
+) {
 	state := &runState{
 		playerSeq: make(map[int64]uint64),
 		seenEvent: make(map[int64]bool),
@@ -110,7 +125,12 @@ func TestValidateRunStrictRequiresFeedbackDensity(t *testing.T) {
 		},
 	}
 
-	err := validateRun(state, config{players: 2, rounds: 20, bigEventEvery: 5, strict: true})
+	err := validateRun(state, config{
+		players:       2,
+		rounds:        20,
+		bigEventEvery: 5,
+		strict:        true,
+	})
 	if err == nil {
 		t.Fatal("validateRun() error = nil, want feedback density error")
 	}
@@ -119,7 +139,9 @@ func TestValidateRunStrictRequiresFeedbackDensity(t *testing.T) {
 	}
 }
 
-func TestValidateRunStrictRequiresWorldEvolutionForLongRun(t *testing.T) {
+func TestValidateRunStrictRequiresWorldEvolutionForLongRun(
+	t *testing.T,
+) {
 	state := &runState{
 		playerSeq: make(map[int64]uint64),
 		seenEvent: make(map[int64]bool),
@@ -139,7 +161,12 @@ func TestValidateRunStrictRequiresWorldEvolutionForLongRun(t *testing.T) {
 		},
 	}
 
-	err := validateRun(state, config{players: 4, rounds: 1000, bigEventEvery: 100, strict: true})
+	err := validateRun(state, config{
+		players:       4,
+		rounds:        1000,
+		bigEventEvery: 100,
+		strict:        true,
+	})
 	if err == nil {
 		t.Fatal("validateRun() error = nil, want world evolution error")
 	}

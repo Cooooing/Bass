@@ -23,5 +23,10 @@ var DelayedTaskStatusMap = commonenum.NewMapping[DelayedTaskStatus, schedulerv1.
 	DelayedTaskStatusCancelled: {Proto: schedulerv1.SchedulerDelayedTaskStatus_SCHEDULER_DELAYED_TASK_STATUS_CANCELLED},
 })
 
-func (DelayedTaskStatus) Values() []string { return DelayedTaskStatusMap.EnumValues() }
-func (s DelayedTaskStatus) String() string { return string(s) }
+func (DelayedTaskStatus) Values() []string {
+	return DelayedTaskStatusMap.EnumValues()
+}
+
+func (s DelayedTaskStatus) String() string {
+	return string(s)
+}

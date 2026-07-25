@@ -15,11 +15,18 @@ type ContentTagClient struct {
 	contentClient *rpc.ContentClient
 }
 
-func NewContentTagClient(contentClient *rpc.ContentClient) repo.ContentTagClient {
-	return &ContentTagClient{contentClient: contentClient}
+func NewContentTagClient(
+	contentClient *rpc.ContentClient,
+) repo.ContentTagClient {
+	return &ContentTagClient{
+		contentClient: contentClient,
+	}
 }
 
-func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq) (*repo.Tag, error) {
+func (r *ContentTagClient) CreateTag(
+	ctx context.Context,
+	req *repo.CreateTagReq,
+) (*repo.Tag, error) {
 	tag := req.Tag
 	var status *contentv1enum.TagStatus
 	if tag.Status != nil {
@@ -57,7 +64,10 @@ func (r *ContentTagClient) CreateTag(ctx context.Context, req *repo.CreateTagReq
 	}, nil
 }
 
-func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq) (*repo.Tag, error) {
+func (r *ContentTagClient) UpdateTag(
+	ctx context.Context,
+	req *repo.UpdateTagReq,
+) (*repo.Tag, error) {
 	tag := req.Tag
 	var status *contentv1enum.TagStatus
 	if tag.Status != nil {
@@ -90,7 +100,10 @@ func (r *ContentTagClient) UpdateTag(ctx context.Context, req *repo.UpdateTagReq
 	}, nil
 }
 
-func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) (*repo.ListTagsResp, error) {
+func (r *ContentTagClient) ListTags(
+	ctx context.Context,
+	req *repo.ListTagsReq,
+) (*repo.ListTagsResp, error) {
 	query := req.Query
 	if query == nil {
 		query = &repo.TagQuery{}
@@ -107,7 +120,10 @@ func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) 
 	}
 	var pageReq *common.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}
+		pageReq = &common.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
+		}
 	}
 	reply, err := r.contentClient.Tag.Page(ctx, &contentv1.PageTags_Req{
 		Page:  pageReq,
@@ -132,7 +148,14 @@ func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) 
 	}
 	var page *repo.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+		page = &repo.PageResp{
+			Page:  reply.GetPage().GetPage(),
+			Size:  reply.GetPage().GetSize(),
+			Total: reply.GetPage().GetTotal(),
+		}
 	}
-	return &repo.ListTagsResp{Page: page, Rows: rows}, nil
+	return &repo.ListTagsResp{
+		Page: page,
+		Rows: rows,
+	}, nil
 }

@@ -9,7 +9,10 @@ import (
 	"game_town/internal/data/gen/npc"
 )
 
-func (r *NpcRepo) UpdateAutonomy(ctx context.Context, req *bizrepo.NpcAutonomyUpdateReq) (*model.Npc, error) {
+func (r *NpcRepo) UpdateAutonomy(
+	ctx context.Context,
+	req *bizrepo.NpcAutonomyUpdateReq,
+) (*model.Npc, error) {
 	update := r.getClient(ctx).Npc.Update().Where(npc.ID(req.NpcID), npc.Version(req.Version), npc.DeletedAtIsNil())
 	if req.Goal != "" {
 		update.SetGoal(req.Goal)
@@ -25,10 +28,15 @@ func (r *NpcRepo) UpdateAutonomy(ctx context.Context, req *bizrepo.NpcAutonomyUp
 	if count == 0 {
 		return nil, fmt.Errorf("npc version conflict")
 	}
-	return r.Get(ctx, &bizrepo.NpcQuery{ID: new(req.NpcID)})
+	return r.Get(ctx, &bizrepo.NpcQuery{
+		ID: new(req.NpcID),
+	})
 }
 
-func (r *NpcRepo) UpdateState(ctx context.Context, req *bizrepo.NpcStateUpdateReq) (*model.Npc, error) {
+func (r *NpcRepo) UpdateState(
+	ctx context.Context,
+	req *bizrepo.NpcStateUpdateReq,
+) (*model.Npc, error) {
 	update := r.getClient(ctx).Npc.Update().Where(npc.ID(req.NpcID), npc.Version(req.Version), npc.DeletedAtIsNil())
 	if req.CurrentLocationID != nil {
 		update.SetCurrentLocationID(*req.CurrentLocationID)
@@ -53,5 +61,7 @@ func (r *NpcRepo) UpdateState(ctx context.Context, req *bizrepo.NpcStateUpdateRe
 	if count == 0 {
 		return nil, fmt.Errorf("npc version conflict")
 	}
-	return r.Get(ctx, &bizrepo.NpcQuery{ID: new(req.NpcID)})
+	return r.Get(ctx, &bizrepo.NpcQuery{
+		ID: new(req.NpcID),
+	})
 }

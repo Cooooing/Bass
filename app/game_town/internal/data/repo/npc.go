@@ -22,18 +22,27 @@ type NpcRepo struct {
 	db *gen.Client
 }
 
-func NewNpcRepo(db *gen.Client) bizrepo.NpcRepo {
-	return &NpcRepo{db: db}
+func NewNpcRepo(
+	db *gen.Client,
+) bizrepo.NpcRepo {
+	return &NpcRepo{
+		db: db,
+	}
 }
 
-func (r *NpcRepo) getClient(ctx context.Context) *gen.Client {
+func (r *NpcRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *NpcRepo) Save(ctx context.Context, row *model.Npc) (*model.Npc, error) {
+func (r *NpcRepo) Save(
+	ctx context.Context,
+	row *model.Npc,
+) (*model.Npc, error) {
 	saved, err := r.getClient(ctx).Npc.Create().
 		SetWorldID(row.WorldID).
 		SetCode(row.Code).
@@ -84,7 +93,10 @@ func (r *NpcRepo) Save(ctx context.Context, row *model.Npc) (*model.Npc, error) 
 	}, nil
 }
 
-func npcQuery(q *gen.NpcQuery, req *bizrepo.NpcQuery) *gen.NpcQuery {
+func npcQuery(
+	q *gen.NpcQuery,
+	req *bizrepo.NpcQuery,
+) *gen.NpcQuery {
 	q = q.Where(npc.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -110,7 +122,10 @@ func npcQuery(q *gen.NpcQuery, req *bizrepo.NpcQuery) *gen.NpcQuery {
 	return q
 }
 
-func (r *NpcRepo) Get(ctx context.Context, req *bizrepo.NpcQuery) (*model.Npc, error) {
+func (r *NpcRepo) Get(
+	ctx context.Context,
+	req *bizrepo.NpcQuery,
+) (*model.Npc, error) {
 	row, err := npcQuery(r.getClient(ctx).Npc.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_NPC_NOT_FOUND)
@@ -144,7 +159,10 @@ func (r *NpcRepo) Get(ctx context.Context, req *bizrepo.NpcQuery) (*model.Npc, e
 	}, nil
 }
 
-func (r *NpcRepo) List(ctx context.Context, req *bizrepo.NpcQuery) ([]*model.Npc, error) {
+func (r *NpcRepo) List(
+	ctx context.Context,
+	req *bizrepo.NpcQuery,
+) ([]*model.Npc, error) {
 	rows, err := npcQuery(r.getClient(ctx).Npc.Query(), req).Order(npc.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
@@ -178,7 +196,10 @@ func (r *NpcRepo) List(ctx context.Context, req *bizrepo.NpcQuery) ([]*model.Npc
 	return out, nil
 }
 
-func (r *NpcRepo) Map(ctx context.Context, req *bizrepo.NpcQuery) (map[int64]*model.Npc, error) {
+func (r *NpcRepo) Map(
+	ctx context.Context,
+	req *bizrepo.NpcQuery,
+) (map[int64]*model.Npc, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -190,11 +211,17 @@ func (r *NpcRepo) Map(ctx context.Context, req *bizrepo.NpcQuery) (map[int64]*mo
 	return out, nil
 }
 
-func (r *NpcRepo) Count(ctx context.Context, req *bizrepo.NpcQuery) (int, error) {
+func (r *NpcRepo) Count(
+	ctx context.Context,
+	req *bizrepo.NpcQuery,
+) (int, error) {
 	return npcQuery(r.getClient(ctx).Npc.Query(), req).Count(ctx)
 }
 
-func (r *NpcRepo) Page(ctx context.Context, req *bizrepo.NpcPageReq) (*bizrepo.NpcPageResp, error) {
+func (r *NpcRepo) Page(
+	ctx context.Context,
+	req *bizrepo.NpcPageReq,
+) (*bizrepo.NpcPageResp, error) {
 	p := page(req.Page)
 	q := npcQuery(r.getClient(ctx).Npc.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -231,10 +258,18 @@ func (r *NpcRepo) Page(ctx context.Context, req *bizrepo.NpcPageReq) (*bizrepo.N
 			LastPlannedAt:     row.LastPlannedAt,
 		}
 	})
-	return &bizrepo.NpcPageResp{Rows: out, Page: basePage(total, p)}, nil
+	return &bizrepo.NpcPageResp{
+		Rows: out,
+		Page: basePage(total, p),
+	}, nil
 }
 
-func (r *NpcRepo) UpdateContext(ctx context.Context, id int64, version int64, summary string) (*model.Npc, error) {
+func (r *NpcRepo) UpdateContext(
+	ctx context.Context,
+	id int64,
+	version int64,
+	summary string,
+) (*model.Npc, error) {
 	count, err := r.getClient(ctx).Npc.Update().Where(npc.ID(id), npc.Version(version), npc.DeletedAtIsNil()).SetContextSummary(summary).AddVersion(1).Save(ctx)
 	if err != nil {
 		return nil, err
@@ -242,5 +277,7 @@ func (r *NpcRepo) UpdateContext(ctx context.Context, id int64, version int64, su
 	if count == 0 {
 		return nil, fmt.Errorf("npc version conflict")
 	}
-	return r.Get(ctx, &bizrepo.NpcQuery{ID: new(id)})
+	return r.Get(ctx, &bizrepo.NpcQuery{
+		ID: new(id),
+	})
 }

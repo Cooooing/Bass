@@ -20,21 +20,30 @@ type ChatGroupService struct {
 	chatGroupUsecase *usecase.ChatGroupUsecase
 }
 
-func NewChatGroupService(chatGroupUsecase *usecase.ChatGroupUsecase) *ChatGroupService {
+func NewChatGroupService(
+	chatGroupUsecase *usecase.ChatGroupUsecase,
+) *ChatGroupService {
 	return &ChatGroupService{
 		chatGroupUsecase: chatGroupUsecase,
 	}
 }
 
-func (s *ChatGroupService) RegisterGrpc(gs *grpc.Server) {
+func (s *ChatGroupService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	v1.RegisterIMChatGroupServiceServer(gs, s)
 }
 
-func (s *ChatGroupService) RegisterHttp(hs *http.Server) {
+func (s *ChatGroupService) RegisterHttp(
+	hs *http.Server,
+) {
 }
 
 // Create 创建群组。
-func (s *ChatGroupService) Create(ctx context.Context, req *v1.CreateChatGroup_Req) (*v1.CreateChatGroup_Resp, error) {
+func (s *ChatGroupService) Create(
+	ctx context.Context,
+	req *v1.CreateChatGroup_Req,
+) (*v1.CreateChatGroup_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -51,7 +60,10 @@ func (s *ChatGroupService) Create(ctx context.Context, req *v1.CreateChatGroup_R
 }
 
 // Dismiss 解散群组。
-func (s *ChatGroupService) Dismiss(ctx context.Context, req *v1.DismissChatGroup_Req) (*v1.DismissChatGroup_Resp, error) {
+func (s *ChatGroupService) Dismiss(
+	ctx context.Context,
+	req *v1.DismissChatGroup_Req,
+) (*v1.DismissChatGroup_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -66,7 +78,10 @@ func (s *ChatGroupService) Dismiss(ctx context.Context, req *v1.DismissChatGroup
 }
 
 // List 查询群组列表。
-func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Req) (*v1.ListChatGroups_Resp, error) {
+func (s *ChatGroupService) List(
+	ctx context.Context,
+	req *v1.ListChatGroups_Req,
+) (*v1.ListChatGroups_Resp, error) {
 	var ids []int64
 	var status *enum.ChatGroupStatus
 	if req.GetQuery() != nil {
@@ -80,7 +95,10 @@ func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Req)
 		}
 	}
 	resp, err := s.chatGroupUsecase.List(ctx, &usecase.ChatGroupListReq{
-		Page:   &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())},
+		Page: &base.PageRequest{
+			Page: int64(req.GetPage().GetPage()),
+			Size: int64(req.GetPage().GetSize()),
+		},
 		IDs:    ids,
 		Status: status,
 	})
@@ -100,7 +118,11 @@ func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Req)
 		})
 	}
 	return &v1.ListChatGroups_Resp{
-		Page: &common.PageResp{Page: uint32(resp.Page.Page), Size: uint32(resp.Page.Size), Total: uint32(resp.Page.Total)},
+		Page: &common.PageResp{
+			Page:  uint32(resp.Page.Page),
+			Size:  uint32(resp.Page.Size),
+			Total: uint32(resp.Page.Total),
+		},
 		Rows: rows,
 	}, nil
 }

@@ -19,17 +19,29 @@ type RateLimitService struct {
 	rateLimitUsecase *usecase.RateLimitUsecase
 }
 
-func NewRateLimitService(rateLimitUsecase *usecase.RateLimitUsecase) *RateLimitService {
-	return &RateLimitService{rateLimitUsecase: rateLimitUsecase}
+func NewRateLimitService(
+	rateLimitUsecase *usecase.RateLimitUsecase,
+) *RateLimitService {
+	return &RateLimitService{
+		rateLimitUsecase: rateLimitUsecase,
+	}
 }
 
-func (s *RateLimitService) RegisterGrpc(gs *grpc.Server) {
+func (s *RateLimitService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	v1.RegisterNotifyRateLimitServiceServer(gs, s)
 }
 
-func (s *RateLimitService) RegisterHttp(hs *http.Server) {}
+func (s *RateLimitService) RegisterHttp(
+	hs *http.Server,
+) {
+}
 
-func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationRateLimit_Req) (*v1.CheckNotificationRateLimit_Resp, error) {
+func (s *RateLimitService) Check(
+	ctx context.Context,
+	req *v1.CheckNotificationRateLimit_Req,
+) (*v1.CheckNotificationRateLimit_Resp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_Req_INVALID)
 	}
@@ -41,7 +53,10 @@ func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationR
 	if recipient == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RECIPIENT_INVALID)
 	}
-	state, err := s.rateLimitUsecase.Check(ctx, &usecase.RateLimitCheckReq{Channel: channel, Recipient: recipient})
+	state, err := s.rateLimitUsecase.Check(ctx, &usecase.RateLimitCheckReq{
+		Channel:   channel,
+		Recipient: recipient,
+	})
 	if err != nil {
 		return nil, err
 	}

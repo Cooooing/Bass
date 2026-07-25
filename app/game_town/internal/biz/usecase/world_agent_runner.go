@@ -156,12 +156,16 @@ func NewWorldAgentRunner(
 	}
 }
 
-func (r *WorldAgentRunner) Start(ctx context.Context) error {
+func (r *WorldAgentRunner) Start(
+	ctx context.Context,
+) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	r.cancel = cancel
 
 	running := enum.AgentJobStatusRunning
-	jobs, err := r.agentJobRepo.List(runCtx, &repo.AgentJobQuery{Status: new(running)})
+	jobs, err := r.agentJobRepo.List(runCtx, &repo.AgentJobQuery{
+		Status: new(running),
+	})
 	if err != nil {
 		cancel()
 		return err
@@ -209,14 +213,19 @@ func (r *WorldAgentRunner) Start(ctx context.Context) error {
 	return nil
 }
 
-func (r *WorldAgentRunner) Stop(_ context.Context) error {
+func (r *WorldAgentRunner) Stop(
+	_ context.Context,
+) error {
 	if r.cancel != nil {
 		r.cancel()
 	}
 	return nil
 }
 
-func (r *WorldAgentRunner) ensureLoop(ctx context.Context, worldID int64) *worldLoop {
+func (r *WorldAgentRunner) ensureLoop(
+	ctx context.Context,
+	worldID int64,
+) *worldLoop {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -234,7 +243,10 @@ func (r *WorldAgentRunner) ensureLoop(ctx context.Context, worldID int64) *world
 	return loop
 }
 
-func (r *WorldAgentRunner) runWorld(ctx context.Context, loop *worldLoop) {
+func (r *WorldAgentRunner) runWorld(
+	ctx context.Context,
+	loop *worldLoop,
+) {
 	for {
 		select {
 		case <-ctx.Done():
@@ -267,7 +279,9 @@ func (r *WorldAgentRunner) runWorld(ctx context.Context, loop *worldLoop) {
 	}
 }
 
-func (r *WorldAgentRunner) recoverWorldLoops(ctx context.Context) {
+func (r *WorldAgentRunner) recoverWorldLoops(
+	ctx context.Context,
+) {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 
@@ -289,8 +303,13 @@ func (r *WorldAgentRunner) recoverWorldLoops(ctx context.Context) {
 	}
 }
 
-func (r *WorldAgentRunner) consume(ctx context.Context, worldID int64) bool {
-	state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{WorldID: new(worldID)})
+func (r *WorldAgentRunner) consume(
+	ctx context.Context,
+	worldID int64,
+) bool {
+	state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{
+		WorldID: new(worldID),
+	})
 	if err != nil {
 		r.log.ErrorContext(ctx, "load world state failed", "world_id", worldID, constant.LogFieldErr, err)
 		return false
@@ -421,7 +440,10 @@ func (r *WorldAgentRunner) consume(ctx context.Context, worldID int64) bool {
 	return len(events) == worldEventConsumeBatchSize
 }
 
-func (r *WorldAgentRunner) resolveFastPlayerActionInTx(ctx context.Context, event *model.Event) (*model.Event, bool, error) {
+func (r *WorldAgentRunner) resolveFastPlayerActionInTx(
+	ctx context.Context,
+	event *model.Event,
+) (*model.Event, bool, error) {
 	if event.Type != enum.EventTypePlayerActionSubmitted || event.ActorPlayerID == nil || event.NpcID != nil {
 		return nil, false, nil
 	}
@@ -445,7 +467,9 @@ func (r *WorldAgentRunner) resolveFastPlayerActionInTx(ctx context.Context, even
 		return nil, false, nil
 	}
 
-	location, err := r.locationRepo.Get(ctx, &repo.LocationQuery{ID: new(locationID)})
+	location, err := r.locationRepo.Get(ctx, &repo.LocationQuery{
+		ID: new(locationID),
+	})
 	if err != nil {
 		rejected, appendErr := r.appendFastActionEvent(ctx, event, enum.EventTypeActionRejected, "目标地点不存在", "你暂时无法前往这个地点。", member.CurrentLocationID)
 		return rejected, true, appendErr
@@ -465,7 +489,14 @@ func (r *WorldAgentRunner) resolveFastPlayerActionInTx(ctx context.Context, even
 	return resolved, true, err
 }
 
-func (r *WorldAgentRunner) appendFastActionEvent(ctx context.Context, source *model.Event, eventType enum.EventType, summary string, content string, locationID int64) (*model.Event, error) {
+func (r *WorldAgentRunner) appendFastActionEvent(
+	ctx context.Context,
+	source *model.Event,
+	eventType enum.EventType,
+	summary string,
+	content string,
+	locationID int64,
+) (*model.Event, error) {
 	return r.eventUsecase.AppendInTx(ctx, &AppendEventReq{
 		WorldID:          source.WorldID,
 		Type:             eventType,

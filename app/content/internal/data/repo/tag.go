@@ -22,18 +22,27 @@ type TagRepo struct {
 	db *gen.Client
 }
 
-func NewTagRepo(db *gen.Client) repo.TagRepo {
-	return &TagRepo{db: db}
+func NewTagRepo(
+	db *gen.Client,
+) repo.TagRepo {
+	return &TagRepo{
+		db: db,
+	}
 }
 
-func (r *TagRepo) getClient(ctx context.Context) *gen.Client {
+func (r *TagRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *TagRepo) Save(ctx context.Context, tag *model.Tag) (*model.Tag, error) {
+func (r *TagRepo) Save(
+	ctx context.Context,
+	tag *model.Tag,
+) (*model.Tag, error) {
 	save, err := r.getClient(ctx).Tag.Create().
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
@@ -58,7 +67,10 @@ func (r *TagRepo) Save(ctx context.Context, tag *model.Tag) (*model.Tag, error) 
 	}, nil
 }
 
-func (r *TagRepo) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag, error) {
+func (r *TagRepo) Saves(
+	ctx context.Context,
+	tags []*model.Tag,
+) ([]*model.Tag, error) {
 	client := r.getClient(ctx)
 	creates := make([]*gen.TagCreate, 0, len(tags))
 	for i := range tags {
@@ -93,7 +105,10 @@ func (r *TagRepo) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag, e
 	return res, nil
 }
 
-func (r *TagRepo) Update(ctx context.Context, tag *model.Tag) (*model.Tag, error) {
+func (r *TagRepo) Update(
+	ctx context.Context,
+	tag *model.Tag,
+) (*model.Tag, error) {
 	save, err := r.getClient(ctx).Tag.UpdateOneID(tag.ID).
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
@@ -117,7 +132,10 @@ func (r *TagRepo) Update(ctx context.Context, tag *model.Tag) (*model.Tag, error
 	}, nil
 }
 
-func (r *TagRepo) Get(ctx context.Context, req *repo.TagGetReq) (*model.Tag, error) {
+func (r *TagRepo) Get(
+	ctx context.Context,
+	req *repo.TagGetReq,
+) (*model.Tag, error) {
 	query := r.getClient(ctx).Tag.Query()
 	query = r.getQuery(query, req)
 	t, err := query.First(ctx)
@@ -140,7 +158,10 @@ func (r *TagRepo) Get(ctx context.Context, req *repo.TagGetReq) (*model.Tag, err
 	}, nil
 }
 
-func (r *TagRepo) List(ctx context.Context, req *repo.TagGetReq) ([]*model.Tag, error) {
+func (r *TagRepo) List(
+	ctx context.Context,
+	req *repo.TagGetReq,
+) ([]*model.Tag, error) {
 	query := r.getClient(ctx).Tag.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -165,7 +186,10 @@ func (r *TagRepo) List(ctx context.Context, req *repo.TagGetReq) ([]*model.Tag, 
 	return tags, nil
 }
 
-func (r *TagRepo) Map(ctx context.Context, req *repo.TagGetReq) (map[int64]*model.Tag, error) {
+func (r *TagRepo) Map(
+	ctx context.Context,
+	req *repo.TagGetReq,
+) (map[int64]*model.Tag, error) {
 	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -175,7 +199,10 @@ func (r *TagRepo) Map(ctx context.Context, req *repo.TagGetReq) (map[int64]*mode
 	}), nil
 }
 
-func (r *TagRepo) Count(ctx context.Context, req *repo.TagGetReq) (int, error) {
+func (r *TagRepo) Count(
+	ctx context.Context,
+	req *repo.TagGetReq,
+) (int, error) {
 	query := r.getClient(ctx).Tag.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -185,7 +212,10 @@ func (r *TagRepo) Count(ctx context.Context, req *repo.TagGetReq) (int, error) {
 	return count, nil
 }
 
-func (r *TagRepo) Page(ctx context.Context, req *repo.TagGetReq) (*repo.TagPageResp, error) {
+func (r *TagRepo) Page(
+	ctx context.Context,
+	req *repo.TagGetReq,
+) (*repo.TagPageResp, error) {
 	page := normalizePage(req.Page)
 	query := r.getClient(ctx).Tag.Query()
 	query = r.getQuery(query, req)
@@ -223,7 +253,10 @@ func (r *TagRepo) Page(ctx context.Context, req *repo.TagGetReq) (*repo.TagPageR
 	}, nil
 }
 
-func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQuery {
+func (r *TagRepo) getQuery(
+	query *gen.TagQuery,
+	req *repo.TagGetReq,
+) *gen.TagQuery {
 	if req.TagId != nil {
 		query = query.Where(tagent.IDEQ(*req.TagId))
 	}

@@ -17,7 +17,9 @@ type Totp struct {
 
 func (Totp) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixUser.String() + "totp"},
+		entsql.Annotation{
+			Table: constant.TablePrefixUser.String() + "totp",
+		},
 		entsql.WithComments(true),
 	}
 }

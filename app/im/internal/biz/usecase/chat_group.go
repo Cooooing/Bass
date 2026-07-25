@@ -18,8 +18,16 @@ type ChatGroupUsecase struct {
 	log                 *slog.Logger
 }
 
-func NewChatGroupUsecase(chatGroupRepo repo.ChatGroupRepo, chatGroupMemberRepo repo.ChatGroupMemberRepo, logger *slog.Logger) (*ChatGroupUsecase, error) {
-	return &ChatGroupUsecase{chatGroupRepo: chatGroupRepo, chatGroupMemberRepo: chatGroupMemberRepo, log: logger}, nil
+func NewChatGroupUsecase(
+	chatGroupRepo repo.ChatGroupRepo,
+	chatGroupMemberRepo repo.ChatGroupMemberRepo,
+	logger *slog.Logger,
+) (*ChatGroupUsecase, error) {
+	return &ChatGroupUsecase{
+		chatGroupRepo:       chatGroupRepo,
+		chatGroupMemberRepo: chatGroupMemberRepo,
+		log:                 logger,
+	}, nil
 }
 
 type CreateReq struct {
@@ -29,7 +37,10 @@ type CreateReq struct {
 	OwnerID      int64
 }
 
-func (u *ChatGroupUsecase) Create(ctx context.Context, req *CreateReq) (int64, error) {
+func (u *ChatGroupUsecase) Create(
+	ctx context.Context,
+	req *CreateReq,
+) (int64, error) {
 	group, err := u.chatGroupRepo.Save(ctx, &model.ChatGroup{
 		Name:         req.Name,
 		Avatar:       req.Avatar,
@@ -60,8 +71,13 @@ type DismissReq struct {
 	OperatorID int64
 }
 
-func (u *ChatGroupUsecase) Dismiss(ctx context.Context, req *DismissReq) error {
-	group, err := u.chatGroupRepo.Get(ctx, &repo.ChatGroupQuery{IDs: []int64{req.GroupID}})
+func (u *ChatGroupUsecase) Dismiss(
+	ctx context.Context,
+	req *DismissReq,
+) error {
+	group, err := u.chatGroupRepo.Get(ctx, &repo.ChatGroupQuery{
+		IDs: []int64{req.GroupID},
+	})
 	if err != nil {
 		return err
 	}
@@ -87,10 +103,20 @@ type ChatGroupListResp struct {
 	Page *base.PageResp
 }
 
-func (u *ChatGroupUsecase) List(ctx context.Context, req *ChatGroupListReq) (*ChatGroupListResp, error) {
-	pageResp, err := u.chatGroupRepo.Page(ctx, &repo.ChatGroupQuery{Page: req.Page, IDs: req.IDs, Status: req.Status})
+func (u *ChatGroupUsecase) List(
+	ctx context.Context,
+	req *ChatGroupListReq,
+) (*ChatGroupListResp, error) {
+	pageResp, err := u.chatGroupRepo.Page(ctx, &repo.ChatGroupQuery{
+		Page:   req.Page,
+		IDs:    req.IDs,
+		Status: req.Status,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &ChatGroupListResp{List: pageResp.Rows, Page: pageResp.Page}, nil
+	return &ChatGroupListResp{
+		List: pageResp.Rows,
+		Page: pageResp.Page,
+	}, nil
 }

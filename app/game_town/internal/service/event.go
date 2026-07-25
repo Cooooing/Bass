@@ -29,17 +29,29 @@ type EventService struct {
 	usecase *usecase.EventUsecase
 }
 
-func NewEventService(usecase *usecase.EventUsecase) *EventService {
-	return &EventService{usecase: usecase}
+func NewEventService(
+	usecase *usecase.EventUsecase,
+) *EventService {
+	return &EventService{
+		usecase: usecase,
+	}
 }
 
-func (s *EventService) RegisterGrpc(server *grpc.Server) {
+func (s *EventService) RegisterGrpc(
+	server *grpc.Server,
+) {
 	v1.RegisterGameTownEventServiceServer(server, s)
 }
 
-func (s *EventService) RegisterHttp(*http.Server) {}
+func (s *EventService) RegisterHttp(
+	*http.Server,
+) {
+}
 
-func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Request) (*v1.PageGameTownEvents_Resp, error) {
+func (s *EventService) Page(
+	ctx context.Context,
+	req *v1.PageGameTownEvents_Request,
+) (*v1.PageGameTownEvents_Resp, error) {
 	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -141,7 +153,10 @@ func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Requ
 	return reply, nil
 }
 
-func (s *EventService) Watch(req *v1.WatchGameTownEvents_Request, stream ggrpc.ServerStreamingServer[v1.WatchGameTownEvents_Resp]) error {
+func (s *EventService) Watch(
+	req *v1.WatchGameTownEvents_Request,
+	stream ggrpc.ServerStreamingServer[v1.WatchGameTownEvents_Resp],
+) error {
 	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -252,7 +267,10 @@ func (s *EventService) Watch(req *v1.WatchGameTownEvents_Request, stream ggrpc.S
 		}
 	}
 }
-func newEventPayload(payload map[string]any) (*structpb.Struct, error) {
+
+func newEventPayload(
+	payload map[string]any,
+) (*structpb.Struct, error) {
 	if payload == nil {
 		return structpb.NewStruct(map[string]any{})
 	}
@@ -263,7 +281,9 @@ func newEventPayload(payload map[string]any) (*structpb.Struct, error) {
 	return structpb.NewStruct(normalized)
 }
 
-func normalizeProtoValue(value any) any {
+func normalizeProtoValue(
+	value any,
+) any {
 	switch typed := value.(type) {
 	case nil:
 		return nil
@@ -342,7 +362,9 @@ func normalizeProtoValue(value any) any {
 	}
 }
 
-func normalizeReflectValue(value any) any {
+func normalizeReflectValue(
+	value any,
+) any {
 	reflected := reflect.ValueOf(value)
 	if !reflected.IsValid() {
 		return nil
@@ -371,7 +393,9 @@ func normalizeReflectValue(value any) any {
 	return fmt.Sprint(value)
 }
 
-func jsonNumberValue(value json.Number) any {
+func jsonNumberValue(
+	value json.Number,
+) any {
 	if parsed, err := value.Int64(); err == nil {
 		return float64(parsed)
 	}
@@ -381,7 +405,9 @@ func jsonNumberValue(value json.Number) any {
 	return value.String()
 }
 
-func sliceValues(value any) []any {
+func sliceValues(
+	value any,
+) []any {
 	normalized, ok := normalizeProtoValue(value).([]any)
 	if !ok {
 		return nil
@@ -389,7 +415,9 @@ func sliceValues(value any) []any {
 	return normalized
 }
 
-func int64Value(value any) int64 {
+func int64Value(
+	value any,
+) int64 {
 	switch typed := value.(type) {
 	case int:
 		return int64(typed)
@@ -427,7 +455,9 @@ func int64Value(value any) int64 {
 	}
 }
 
-func parseInt64String(value string) int64 {
+func parseInt64String(
+	value string,
+) int64 {
 	value = strings.TrimSpace(value)
 	if value == "" {
 		return 0

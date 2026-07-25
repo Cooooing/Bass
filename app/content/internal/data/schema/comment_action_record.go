@@ -19,7 +19,9 @@ type CommentActionRecord struct {
 
 func (CommentActionRecord) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixContent.String() + "comment_action_records"},
+		entsql.Annotation{
+			Table: constant.TablePrefixContent.String() + "comment_action_records",
+		},
 		entsql.WithComments(true),
 	}
 }

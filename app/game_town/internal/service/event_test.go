@@ -2,7 +2,9 @@ package service
 
 import "testing"
 
-func TestNewEventPayloadNormalizesTypedSlices(t *testing.T) {
+func TestNewEventPayloadNormalizesTypedSlices(
+	t *testing.T,
+) {
 	payload, err := newEventPayload(map[string]any{
 		"character_traits": []string{"scavenger", "mecha-whisperer"},
 		"suggested_actions": []any{
@@ -23,7 +25,9 @@ func TestNewEventPayloadNormalizesTypedSlices(t *testing.T) {
 	}
 }
 
-func TestInt64ValueSupportsPayloadNumbers(t *testing.T) {
+func TestInt64ValueSupportsPayloadNumbers(
+	t *testing.T,
+) {
 	tests := []struct {
 		name  string
 		value any

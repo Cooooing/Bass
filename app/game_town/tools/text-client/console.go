@@ -16,7 +16,9 @@ type consolePrinter struct {
 	writer io.Writer
 }
 
-func (p *consolePrinter) Println(value string) {
+func (p *consolePrinter) Println(
+	value string,
+) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 	fmt.Fprintln(p.writer, value)
@@ -34,7 +36,9 @@ func (s *consoleSession) Dialog() (int64, []suggestedChoice) {
 	return s.dialogNpcID, append([]suggestedChoice(nil), s.suggestions...)
 }
 
-func (s *consoleSession) SetDialog(npcID int64) {
+func (s *consoleSession) SetDialog(
+	npcID int64,
+) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.dialogNpcID = npcID
@@ -54,13 +58,18 @@ func (s *consoleSession) ClearSuggestions() {
 	s.suggestions = nil
 }
 
-func (s *consoleSession) SetSuggestions(values []suggestedChoice) {
+func (s *consoleSession) SetSuggestions(
+	values []suggestedChoice,
+) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.suggestions = append([]suggestedChoice(nil), values...)
 }
 
-func (s *consoleSession) SetDialogSuggestions(npcID int64, values []suggestedChoice) {
+func (s *consoleSession) SetDialogSuggestions(
+	npcID int64,
+	values []suggestedChoice,
+) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if npcID > 0 {
@@ -69,8 +78,16 @@ func (s *consoleSession) SetDialogSuggestions(npcID int64, values []suggestedCho
 	s.suggestions = append([]suggestedChoice(nil), values...)
 }
 
-func runConsole(ctx context.Context, client *rpc.GameTownClient, target string, input io.Reader, output io.Writer) error {
-	printer := &consolePrinter{writer: output}
+func runConsole(
+	ctx context.Context,
+	client *rpc.GameTownClient,
+	target string,
+	input io.Reader,
+	output io.Writer,
+) error {
+	printer := &consolePrinter{
+		writer: output,
+	}
 	session := &consoleSession{}
 	printer.Println("Game Town Console connected: " + target)
 	printer.Println("Console line mode enabled. Type /help for commands. Non-command text is sent as free action after joining a world.")
@@ -122,7 +139,10 @@ func runConsole(ctx context.Context, client *rpc.GameTownClient, target string, 
 	return scanner.Err()
 }
 
-func printCommandResult(printer *consolePrinter, result commandResult) {
+func printCommandResult(
+	printer *consolePrinter,
+	result commandResult,
+) {
 	if result.err != nil {
 		printer.Println("error: " + result.err.Error())
 		return
@@ -132,7 +152,12 @@ func printCommandResult(printer *consolePrinter, result commandResult) {
 	}
 }
 
-func printConsoleEvents(ctx context.Context, printer *consolePrinter, session *consoleSession, events <-chan eventResult) {
+func printConsoleEvents(
+	ctx context.Context,
+	printer *consolePrinter,
+	session *consoleSession,
+	events <-chan eventResult,
+) {
 	for {
 		select {
 		case <-ctx.Done():

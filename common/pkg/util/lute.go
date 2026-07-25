@@ -9,7 +9,11 @@ import (
 
 var LuteEngine = lute.New()
 
-func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames map[string]struct{}) ast.WalkStatus {
+func ParseNodeLinkAtUsernames(
+	n *ast.Node,
+	entering bool,
+	atUsernames map[string]struct{},
+) ast.WalkStatus {
 	if !entering || n.Type != ast.NodeLink {
 		return ast.WalkContinue
 	}
@@ -44,7 +48,11 @@ func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames map[string
 	return ast.WalkContinue
 }
 
-func ParseNodeImageCoverImageUrl(n *ast.Node, entering bool, coverImageUrl *string) ast.WalkStatus {
+func ParseNodeImageCoverImageUrl(
+	n *ast.Node,
+	entering bool,
+	coverImageUrl *string,
+) ast.WalkStatus {
 	if !entering || n.Type != ast.NodeImage {
 		return ast.WalkContinue
 	}

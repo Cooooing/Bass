@@ -21,7 +21,9 @@ type NotificationRule struct {
 
 func (NotificationRule) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_rule"},
+		entsql.Annotation{
+			Table: constant.TablePrefixNotify.String() + "notification_rule",
+		},
 		entsql.WithComments(true),
 	}
 }

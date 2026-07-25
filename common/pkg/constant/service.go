@@ -42,6 +42,8 @@ const (
 	PushNodeSubjectPrefix                 = "push.node."
 )
 
-func GetPushNodeSubject(nodeID string) string {
+func GetPushNodeSubject(
+	nodeID string,
+) string {
 	return PushNodeSubjectPrefix + nodeID
 }

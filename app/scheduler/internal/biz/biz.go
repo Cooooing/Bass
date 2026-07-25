@@ -17,7 +17,10 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewDelayedTaskRunner,
 )
 
-func ProvideTasks(noop *task.Noop, userUnbanExpired *task.UserUnbanExpired) map[string]task.Task {
+func ProvideTasks(
+	noop *task.Noop,
+	userUnbanExpired *task.UserUnbanExpired,
+) map[string]task.Task {
 	tasks := map[string]task.Task{}
 	for _, item := range []task.Task{noop, userUnbanExpired} {
 		name := item.Name()

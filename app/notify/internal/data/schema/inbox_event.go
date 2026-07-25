@@ -20,7 +20,9 @@ type InboxEvent struct {
 
 func (InboxEvent) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_inbox_event"},
+		entsql.Annotation{
+			Table: constant.TablePrefixNotify.String() + "notification_inbox_event",
+		},
 		entsql.WithComments(true),
 	}
 }

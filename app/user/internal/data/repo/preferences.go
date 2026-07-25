@@ -19,20 +19,27 @@ type PreferencesRepo struct {
 	db *gen.Client
 }
 
-func NewPreferencesRepo(db *gen.Client) repo.PreferencesRepo {
+func NewPreferencesRepo(
+	db *gen.Client,
+) repo.PreferencesRepo {
 	return &PreferencesRepo{
 		db: db,
 	}
 }
 
-func (r *PreferencesRepo) getClient(ctx context.Context) *gen.Client {
+func (r *PreferencesRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *PreferencesRepo) Get(ctx context.Context, req *repo.PreferencesGetReq) (*model.Preferences, error) {
+func (r *PreferencesRepo) Get(
+	ctx context.Context,
+	req *repo.PreferencesGetReq,
+) (*model.Preferences, error) {
 	preferences, err := r.get(ctx, req)
 	if err != nil {
 		return nil, err
@@ -40,7 +47,10 @@ func (r *PreferencesRepo) Get(ctx context.Context, req *repo.PreferencesGetReq) 
 	return preferences, nil
 }
 
-func (r *PreferencesRepo) List(ctx context.Context, req *repo.PreferencesGetReq) ([]*model.Preferences, error) {
+func (r *PreferencesRepo) List(
+	ctx context.Context,
+	req *repo.PreferencesGetReq,
+) ([]*model.Preferences, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
@@ -48,7 +58,10 @@ func (r *PreferencesRepo) List(ctx context.Context, req *repo.PreferencesGetReq)
 	return rows, nil
 }
 
-func (r *PreferencesRepo) Map(ctx context.Context, req *repo.PreferencesGetReq) (map[int64]*model.Preferences, error) {
+func (r *PreferencesRepo) Map(
+	ctx context.Context,
+	req *repo.PreferencesGetReq,
+) (map[int64]*model.Preferences, error) {
 	rows, err := r.mapRows(ctx, req)
 	if err != nil {
 		return nil, err
@@ -56,7 +69,10 @@ func (r *PreferencesRepo) Map(ctx context.Context, req *repo.PreferencesGetReq) 
 	return rows, nil
 }
 
-func (r *PreferencesRepo) Count(ctx context.Context, req *repo.PreferencesGetReq) (int, error) {
+func (r *PreferencesRepo) Count(
+	ctx context.Context,
+	req *repo.PreferencesGetReq,
+) (int, error) {
 	count, err := r.count(ctx, req)
 	if err != nil {
 		return 0, err
@@ -64,19 +80,35 @@ func (r *PreferencesRepo) Count(ctx context.Context, req *repo.PreferencesGetReq
 	return count, nil
 }
 
-func (r *PreferencesRepo) Page(ctx context.Context, req *repo.PreferencesPageReq) (*repo.PreferencesPageResp, error) {
-	rows, page, err := r.page(ctx, &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+func (r *PreferencesRepo) Page(
+	ctx context.Context,
+	req *repo.PreferencesPageReq,
+) (*repo.PreferencesPageResp, error) {
+	rows, page, err := r.page(ctx, &common.PageReq{
+		Page: req.Page.Page,
+		Size: req.Page.Size,
+	}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
 	resp := repo.PageResp{}
 	if page != nil {
-		resp = repo.PageResp{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+		resp = repo.PageResp{
+			Total: page.GetTotal(),
+			Page:  page.GetPage(),
+			Size:  page.GetSize(),
+		}
 	}
-	return &repo.PreferencesPageResp{Rows: rows, Page: resp}, nil
+	return &repo.PreferencesPageResp{
+		Rows: rows,
+		Page: resp,
+	}, nil
 }
 
-func (r *PreferencesRepo) UpsertByUserID(ctx context.Context, preferences *model.Preferences) (*model.Preferences, error) {
+func (r *PreferencesRepo) UpsertByUserID(
+	ctx context.Context,
+	preferences *model.Preferences,
+) (*model.Preferences, error) {
 	preferences, err := r.upsertByUserID(ctx, preferences)
 	if err != nil {
 		return nil, err
@@ -84,14 +116,21 @@ func (r *PreferencesRepo) UpsertByUserID(ctx context.Context, preferences *model
 	return preferences, nil
 }
 
-func (r *PreferencesRepo) Update(ctx context.Context, preferences *model.Preferences) (*model.Preferences, error) {
+func (r *PreferencesRepo) Update(
+	ctx context.Context,
+	preferences *model.Preferences,
+) (*model.Preferences, error) {
 	preferences, err := r.update(ctx, preferences)
 	if err != nil {
 		return nil, err
 	}
 	return preferences, nil
 }
-func (r *PreferencesRepo) get(ctx context.Context, req *repo.PreferencesGetReq) (*model.Preferences, error) {
+
+func (r *PreferencesRepo) get(
+	ctx context.Context,
+	req *repo.PreferencesGetReq,
+) (*model.Preferences, error) {
 	tx := r.getClient(ctx)
 	query := tx.Preferences.Query()
 	query = r.getQuery(query, req)
@@ -112,7 +151,10 @@ func (r *PreferencesRepo) get(ctx context.Context, req *repo.PreferencesGetReq) 
 	}, nil
 }
 
-func (r *PreferencesRepo) list(ctx context.Context, req *repo.PreferencesGetReq) ([]*model.Preferences, error) {
+func (r *PreferencesRepo) list(
+	ctx context.Context,
+	req *repo.PreferencesGetReq,
+) ([]*model.Preferences, error) {
 	tx := r.getClient(ctx)
 	query := tx.Preferences.Query()
 	query = r.getQuery(query, req)
@@ -134,7 +176,10 @@ func (r *PreferencesRepo) list(ctx context.Context, req *repo.PreferencesGetReq)
 	return result, nil
 }
 
-func (r *PreferencesRepo) mapRows(ctx context.Context, req *repo.PreferencesGetReq) (map[int64]*model.Preferences, error) {
+func (r *PreferencesRepo) mapRows(
+	ctx context.Context,
+	req *repo.PreferencesGetReq,
+) (map[int64]*model.Preferences, error) {
 	list, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
@@ -146,14 +191,21 @@ func (r *PreferencesRepo) mapRows(ctx context.Context, req *repo.PreferencesGetR
 	return result, nil
 }
 
-func (r *PreferencesRepo) count(ctx context.Context, req *repo.PreferencesGetReq) (int, error) {
+func (r *PreferencesRepo) count(
+	ctx context.Context,
+	req *repo.PreferencesGetReq,
+) (int, error) {
 	tx := r.getClient(ctx)
 	query := tx.Preferences.Query()
 	query = r.getQuery(query, req)
 	return query.Count(ctx)
 }
 
-func (r *PreferencesRepo) page(ctx context.Context, page *common.PageReq, req *repo.PreferencesGetReq) ([]*model.Preferences, *common.PageResp, error) {
+func (r *PreferencesRepo) page(
+	ctx context.Context,
+	page *common.PageReq,
+	req *repo.PreferencesGetReq,
+) ([]*model.Preferences, *common.PageResp, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Preferences.Query()
@@ -187,8 +239,13 @@ func (r *PreferencesRepo) page(ctx context.Context, page *common.PageReq, req *r
 	}, nil
 }
 
-func (r *PreferencesRepo) upsertByUserID(ctx context.Context, p *model.Preferences) (*model.Preferences, error) {
-	existing, err := r.get(ctx, &repo.PreferencesGetReq{UserID: &p.UserID})
+func (r *PreferencesRepo) upsertByUserID(
+	ctx context.Context,
+	p *model.Preferences,
+) (*model.Preferences, error) {
+	existing, err := r.get(ctx, &repo.PreferencesGetReq{
+		UserID: &p.UserID,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -225,7 +282,10 @@ func (r *PreferencesRepo) upsertByUserID(ctx context.Context, p *model.Preferenc
 	return r.update(ctx, p)
 }
 
-func (r *PreferencesRepo) update(ctx context.Context, p *model.Preferences) (*model.Preferences, error) {
+func (r *PreferencesRepo) update(
+	ctx context.Context,
+	p *model.Preferences,
+) (*model.Preferences, error) {
 	tx := r.getClient(ctx)
 	if p.Language == nil && p.Timezone == nil && p.Theme == nil && p.MobileTheme == nil {
 		saved, err := tx.Preferences.Get(ctx, p.ID)
@@ -268,7 +328,10 @@ func (r *PreferencesRepo) update(ctx context.Context, p *model.Preferences) (*mo
 	}, nil
 }
 
-func (r *PreferencesRepo) getQuery(query *gen.PreferencesQuery, req *repo.PreferencesGetReq) *gen.PreferencesQuery {
+func (r *PreferencesRepo) getQuery(
+	query *gen.PreferencesQuery,
+	req *repo.PreferencesGetReq,
+) *gen.PreferencesQuery {
 	if req == nil {
 		return query
 	}

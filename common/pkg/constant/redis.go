@@ -10,14 +10,22 @@ var (
 	DeadLetterAlert     = "Event:DeadLetterAlert:{%s}:{%s}:{%s}" // 死信告警去重。
 )
 
-func GetKeyRequestNonce(nonce string) string {
+func GetKeyRequestNonce(
+	nonce string,
+) string {
 	return fmt.Sprintf(RequestNonce, nonce)
 }
 
-func GetKeyOutboxPublisherLock(service string) string {
+func GetKeyOutboxPublisherLock(
+	service string,
+) string {
 	return fmt.Sprintf(OutboxPublisherLock, service)
 }
 
-func GetKeyDeadLetterAlert(service string, source string, eventID string) string {
+func GetKeyDeadLetterAlert(
+	service string,
+	source string,
+	eventID string,
+) string {
 	return fmt.Sprintf(DeadLetterAlert, service, source, eventID)
 }

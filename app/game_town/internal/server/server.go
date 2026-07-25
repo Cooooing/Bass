@@ -11,6 +11,10 @@ import (
 
 var ServerProviderSet = wire.NewSet(ProvideServers, NewGRPCServer, NewHTTPServer)
 
-func ProvideServers(grpcServer *grpc.Server, httpServer *http.Server, agentRunner *usecase.WorldAgentRunner) []transport.Server {
+func ProvideServers(
+	grpcServer *grpc.Server,
+	httpServer *http.Server,
+	agentRunner *usecase.WorldAgentRunner,
+) []transport.Server {
 	return []transport.Server{grpcServer, httpServer, agentRunner}
 }

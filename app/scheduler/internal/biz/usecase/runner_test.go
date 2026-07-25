@@ -11,9 +11,15 @@ import (
 	"time"
 )
 
-func TestSchedulerRunnerStartLoadsEnabledTasksWithList(t *testing.T) {
-	taskRepo := &fakeTaskRepo{task: testTask(true)}
-	runner := newTestSchedulerRunner(t, taskRepo, &fakeExecutionRepo{created: true}, &fakeTask{})
+func TestSchedulerRunnerStartLoadsEnabledTasksWithList(
+	t *testing.T,
+) {
+	taskRepo := &fakeTaskRepo{
+		task: testTask(true),
+	}
+	runner := newTestSchedulerRunner(t, taskRepo, &fakeExecutionRepo{
+		created: true,
+	}, &fakeTask{})
 	if err := runner.Start(context.Background()); err != nil {
 		t.Fatalf("Start returned error: %v", err)
 	}
@@ -24,17 +30,27 @@ func TestSchedulerRunnerStartLoadsEnabledTasksWithList(t *testing.T) {
 	}
 }
 
-func TestSchedulerRunnerScheduleFieldSkipsDatabase(t *testing.T) {
+func TestSchedulerRunnerScheduleFieldSkipsDatabase(
+	t *testing.T,
+) {
 	task := testTask(true)
-	executionRepo := &fakeExecutionRepo{created: true}
+	executionRepo := &fakeExecutionRepo{
+		created: true,
+	}
 	taskLockRepo := &fakeTaskLockRepo{
 		schedules: map[string]string{},
 	}
-	runner := newTestSchedulerRunnerWithTaskLock(t, &fakeTaskRepo{task: task}, executionRepo, &fakeTask{}, taskLockRepo)
+	runner := newTestSchedulerRunnerWithTaskLock(t, &fakeTaskRepo{
+		task: task,
+	}, executionRepo, &fakeTask{}, taskLockRepo)
 	scheduledAt := time.Date(2026, 7, 4, 10, 0, 0, 0, time.UTC)
 	taskLockRepo.schedules[executionPeriodKey(task.ID, scheduledAt)] = "token"
 
-	if _, err := runner.taskUsecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: scheduledAt, TriggerType: schedulerenum.TaskTriggerTypeSchedule}); err != nil {
+	if _, err := runner.taskUsecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{
+		Task:        task,
+		ScheduledAt: scheduledAt,
+		TriggerType: schedulerenum.TaskTriggerTypeSchedule,
+	}); err != nil {
 		t.Fatalf("ScheduleExecution returned error: %v", err)
 	}
 
@@ -46,13 +62,23 @@ func TestSchedulerRunnerScheduleFieldSkipsDatabase(t *testing.T) {
 	}
 }
 
-func TestSchedulerRunnerScheduleConflictSkipsExecution(t *testing.T) {
+func TestSchedulerRunnerScheduleConflictSkipsExecution(
+	t *testing.T,
+) {
 	task := testTask(true)
-	executionRepo := &fakeExecutionRepo{scheduleConflict: true}
-	runner := newTestSchedulerRunner(t, &fakeTaskRepo{task: task}, executionRepo, &fakeTask{})
+	executionRepo := &fakeExecutionRepo{
+		scheduleConflict: true,
+	}
+	runner := newTestSchedulerRunner(t, &fakeTaskRepo{
+		task: task,
+	}, executionRepo, &fakeTask{})
 	scheduledAt := time.Date(2026, 7, 4, 10, 0, 0, 0, time.UTC)
 
-	if _, err := runner.taskUsecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{Task: task, ScheduledAt: scheduledAt, TriggerType: schedulerenum.TaskTriggerTypeSchedule}); err != nil {
+	if _, err := runner.taskUsecase.ScheduleExecution(context.Background(), &TaskScheduleExecutionReq{
+		Task:        task,
+		ScheduledAt: scheduledAt,
+		TriggerType: schedulerenum.TaskTriggerTypeSchedule,
+	}); err != nil {
 		t.Fatalf("ScheduleExecution returned error: %v", err)
 	}
 
@@ -61,12 +87,23 @@ func TestSchedulerRunnerScheduleConflictSkipsExecution(t *testing.T) {
 	}
 }
 
-func newTestSchedulerRunner(t *testing.T, taskRepo *fakeTaskRepo, executionRepo *fakeExecutionRepo, task taskimpl.Task) *SchedulerRunner {
+func newTestSchedulerRunner(
+	t *testing.T,
+	taskRepo *fakeTaskRepo,
+	executionRepo *fakeExecutionRepo,
+	task taskimpl.Task,
+) *SchedulerRunner {
 	t.Helper()
 	return newTestSchedulerRunnerWithTaskLock(t, taskRepo, executionRepo, task, &fakeTaskLockRepo{})
 }
 
-func newTestSchedulerRunnerWithTaskLock(t *testing.T, taskRepo *fakeTaskRepo, executionRepo *fakeExecutionRepo, task taskimpl.Task, taskLockRepo *fakeTaskLockRepo) *SchedulerRunner {
+func newTestSchedulerRunnerWithTaskLock(
+	t *testing.T,
+	taskRepo *fakeTaskRepo,
+	executionRepo *fakeExecutionRepo,
+	task taskimpl.Task,
+	taskLockRepo *fakeTaskLockRepo,
+) *SchedulerRunner {
 	t.Helper()
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
 	taskUsecase := NewTaskUsecase(
@@ -83,7 +120,9 @@ func newTestSchedulerRunnerWithTaskLock(t *testing.T, taskRepo *fakeTaskRepo, ex
 	)
 	return NewSchedulerRunner(
 		logger,
-		&config.Bootstrap{Scheduler: testConf().Scheduler},
+		&config.Bootstrap{
+			Scheduler: testConf().Scheduler,
+		},
 		taskRepo,
 		taskUsecase,
 		&fakeTaskEventBus{},

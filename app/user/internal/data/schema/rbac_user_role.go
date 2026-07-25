@@ -1,4 +1,4 @@
-﻿package schema
+package schema
 
 import (
 	"common/pkg/constant"
@@ -17,7 +17,9 @@ type RbacUserRole struct {
 }
 
 func (RbacUserRole) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: constant.TablePrefixUser.String() + "rbac_user_roles"}, entsql.WithComments(true)}
+	return []schema.Annotation{entsql.Annotation{
+		Table: constant.TablePrefixUser.String() + "rbac_user_roles",
+	}, entsql.WithComments(true)}
 }
 
 func (RbacUserRole) Fields() []ent.Field {
@@ -30,7 +32,9 @@ func (RbacUserRole) Fields() []ent.Field {
 	}
 }
 
-func (RbacUserRole) Mixin() []ent.Mixin { return []ent.Mixin{utilent.TimeAuditMixin{}} }
+func (RbacUserRole) Mixin() []ent.Mixin {
+	return []ent.Mixin{utilent.TimeAuditMixin{}}
+}
 
 func (RbacUserRole) Indexes() []ent.Index {
 	return []ent.Index{
@@ -40,4 +44,6 @@ func (RbacUserRole) Indexes() []ent.Index {
 	}
 }
 
-func (RbacUserRole) Edges() []ent.Edge { return nil }
+func (RbacUserRole) Edges() []ent.Edge {
+	return nil
+}

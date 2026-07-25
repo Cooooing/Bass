@@ -15,19 +15,26 @@ type UserClient struct {
 	userClient *rpc.UserClient
 }
 
-func NewUserClient(userClient *rpc.UserClient) bizrepo.UserClient {
+func NewUserClient(
+	userClient *rpc.UserClient,
+) bizrepo.UserClient {
 	return &UserClient{
 		userClient: userClient,
 	}
 }
 
-func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.
+func (c *UserClient) MapAccounts(
+	ctx context.Context,
+	userIDs []int64,
+) (map[int64]*model.
 	UserAccount, error) {
 	if len(userIDs) == 0 {
 		return map[int64]*model.UserAccount{}, nil
 	}
 	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
-		Query: &userv1.MapAccounts_Req_AccountQuery{UserIds: userIDs},
+		Query: &userv1.MapAccounts_Req_AccountQuery{
+			UserIds: userIDs,
+		},
 	})
 	if err != nil {
 		return nil, err
@@ -53,7 +60,10 @@ func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int6
 	return result, nil
 }
 
-func (c *UserClient) ListFollowerIDs(ctx context.Context, userID int64) ([]int64, error) {
+func (c *UserClient) ListFollowerIDs(
+	ctx context.Context,
+	userID int64,
+) ([]int64, error) {
 	if userID == 0 {
 		return []int64{}, nil
 	}
@@ -63,7 +73,10 @@ func (c *UserClient) ListFollowerIDs(ctx context.Context, userID int64) ([]int64
 	for {
 		reply, err := c.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Req{
 			UserId: userID,
-			Page:   &common.PageReq{Page: page, Size: size},
+			Page: &common.PageReq{
+				Page: page,
+				Size: size,
+			},
 		})
 		if err != nil {
 			return nil, err

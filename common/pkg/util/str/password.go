@@ -12,7 +12,9 @@ import (
 const DefaultCost = bcrypt.DefaultCost
 
 // HashPassword 将明文密码加密为 bcrypt 哈希
-func HashPassword(plain string) (string, error) {
+func HashPassword(
+	plain string,
+) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(plain), DefaultCost)
 	if err != nil {
 		return "", err
@@ -21,20 +23,27 @@ func HashPassword(plain string) (string, error) {
 }
 
 // VerifyPassword 验证明文密码是否与加密密码匹配
-func VerifyPassword(hashed string, plain string) bool {
+func VerifyPassword(
+	hashed string,
+	plain string,
+) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(plain))
 	return err == nil
 }
 
 // MD5Hash 返回输入字符串的 32 位小写 MD5 加密结果
 // 注意：MD5 不具有抗碰撞性，不得用于密码、token 等安全场景，仅用于非安全性的校验和/指纹计算。
-func MD5Hash(text string) string {
+func MD5Hash(
+	text string,
+) string {
 	hash := md5.Sum([]byte(text))
 	return hex.EncodeToString(hash[:])
 }
 
 // Sha256Hash 返回输入字符串的 SHA256 加密结果（16进制）
-func Sha256Hash(text string) string {
+func Sha256Hash(
+	text string,
+) string {
 	hash := sha256.New()
 	hash.Write([]byte(text))
 	return hex.EncodeToString(hash.Sum(nil))

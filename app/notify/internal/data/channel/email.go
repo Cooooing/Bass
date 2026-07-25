@@ -21,13 +21,24 @@ type EmailClient struct {
 	log  *slog.Logger
 }
 
-func NewEmailClient(conf *config.Bootstrap, logger *slog.Logger) *EmailClient {
-	return &EmailClient{conf: conf, log: logger}
+func NewEmailClient(
+	conf *config.Bootstrap,
+	logger *slog.Logger,
+) *EmailClient {
+	return &EmailClient{
+		conf: conf,
+		log:  logger,
+	}
 }
 
-func (c *EmailClient) SendEmail(_ context.Context, req *bizchannel.EmailRequest) (*bizchannel.SendResult, error) {
+func (c *EmailClient) SendEmail(
+	_ context.Context,
+	req *bizchannel.EmailRequest,
+) (*bizchannel.SendResult, error) {
 	if req == nil || req.ToEmail == "" {
-		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusFailed}, nil
+		return &bizchannel.SendResult{
+			Status: notifyenum.NotificationChannelStatusFailed,
+		}, nil
 	}
 	if c.conf == nil || c.conf.Notify == nil || c.conf.Notify.Email == nil || !c.conf.Notify.Email.Enable {
 		return nil, errors.New("email sender is disabled")
@@ -48,8 +59,13 @@ func (c *EmailClient) SendEmail(_ context.Context, req *bizchannel.EmailRequest)
 	dialer.SSL = email.SmtpPort == 465
 
 	if err := dialer.DialAndSend(message); err != nil {
-		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusUnknown, ProviderResp: new(fmt.Sprintf("send email: %v", err))}, nil
+		return &bizchannel.SendResult{
+			Status:       notifyenum.NotificationChannelStatusUnknown,
+			ProviderResp: new(fmt.Sprintf("send email: %v", err)),
+		}, nil
 	}
 	c.log.Info(fmt.Sprintf("send email succeeded: to=%s", req.ToEmail))
-	return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusSucceeded}, nil
+	return &bizchannel.SendResult{
+		Status: notifyenum.NotificationChannelStatusSucceeded,
+	}, nil
 }

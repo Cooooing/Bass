@@ -19,7 +19,9 @@ type ChatGroup struct {
 
 func (ChatGroup) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixIM.String() + "chat_groups"},
+		entsql.Annotation{
+			Table: constant.TablePrefixIM.String() + "chat_groups",
+		},
 	}
 }
 

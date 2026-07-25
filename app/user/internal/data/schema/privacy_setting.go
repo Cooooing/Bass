@@ -17,7 +17,9 @@ type PrivacySetting struct {
 
 func (PrivacySetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixUser.String() + "privacies"},
+		entsql.Annotation{
+			Table: constant.TablePrefixUser.String() + "privacies",
+		},
 		entsql.WithComments(true),
 	}
 }

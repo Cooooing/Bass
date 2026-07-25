@@ -20,7 +20,9 @@ type Relation struct {
 
 func (Relation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixUser.String() + "relations"},
+		entsql.Annotation{
+			Table: constant.TablePrefixUser.String() + "relations",
+		},
 		entsql.WithComments(true),
 	}
 }

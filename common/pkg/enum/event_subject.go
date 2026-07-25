@@ -62,7 +62,12 @@ var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubj
 	EventSubjectContentCommentStatusUpdate:  {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_STATUS_UPDATED},
 })
 
-func (EventSubject) Values() []string { return nil }
-func EventSubjectByEventType(eventType enums.EventType) (EventSubject, bool) {
+func (EventSubject) Values() []string {
+	return nil
+}
+
+func EventSubjectByEventType(
+	eventType enums.EventType,
+) (EventSubject, bool) {
 	return EventSubjectMap.ToEnum(enums.EventSubject(eventType))
 }

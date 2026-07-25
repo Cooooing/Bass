@@ -19,7 +19,9 @@ type OutboxEvent struct {
 
 func (OutboxEvent) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixContent.String() + "outbox_events"},
+		entsql.Annotation{
+			Table: constant.TablePrefixContent.String() + "outbox_events",
+		},
 		entsql.WithComments(true),
 	}
 }

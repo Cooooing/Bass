@@ -19,7 +19,9 @@ type NotificationTencentSMSTemplate struct {
 
 func (NotificationTencentSMSTemplate) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_tencent_sms_template"},
+		entsql.Annotation{
+			Table: constant.TablePrefixNotify.String() + "notification_tencent_sms_template",
+		},
 		entsql.WithComments(true),
 	}
 }

@@ -13,14 +13,24 @@ type ArticlePublishedHandler struct {
 	contentClientHandler
 }
 
-func NewArticlePublishedHandler(userClient repo.UserClient, contentClient repo.ContentClient) *ArticlePublishedHandler {
+func NewArticlePublishedHandler(
+	userClient repo.UserClient,
+	contentClient repo.ContentClient,
+) *ArticlePublishedHandler {
 	return &ArticlePublishedHandler{
-		userClientHandler:    userClientHandler{userClient: userClient},
-		contentClientHandler: contentClientHandler{contentClient: contentClient},
+		userClientHandler: userClientHandler{
+			userClient: userClient,
+		},
+		contentClientHandler: contentClientHandler{
+			contentClient: contentClient,
+		},
 	}
 }
 
-func (h *ArticlePublishedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
+func (h *ArticlePublishedHandler) Build(
+	ctx context.Context,
+	event *enums.Event,
+) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}
@@ -51,7 +61,9 @@ func (h *ArticlePublishedHandler) Build(ctx context.Context, event *enums.Event)
 		if followerID == 0 || followerID == article.AuthorID {
 			continue
 		}
-		recipients = append(recipients, &usecase.NotificationRecipient{UserID: followerID})
+		recipients = append(recipients, &usecase.NotificationRecipient{
+			UserID: followerID,
+		})
 	}
 	return &usecase.NotificationContext{
 		EventID:      event.EventId,

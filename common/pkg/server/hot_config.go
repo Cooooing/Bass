@@ -49,7 +49,9 @@ type protoHotResolvedField struct {
 //
 // 配置源中删除字段或变更字段类型时 Kratos Watch 不会触发回调，需业务侧兼容。
 // 热更新不做语义校验（必填、范围等），由调用方自行保证配置合法性。
-func (m *HotConfigManager[T]) BindProtoHotFields(fields ...any) error {
+func (m *HotConfigManager[T]) BindProtoHotFields(
+	fields ...any,
+) error {
 	if len(fields) == 0 {
 		return nil
 	}
@@ -123,7 +125,9 @@ func (m *HotConfigManager[T]) Close() error {
 	return c.Close()
 }
 
-func (m *HotConfigManager[T]) applyProtoHotFields(entry *hotConfigEntry) {
+func (m *HotConfigManager[T]) applyProtoHotFields(
+	entry *hotConfigEntry,
+) {
 	entry.mu.RLock()
 	fields := make([]protoHotResolvedField, len(entry.fields))
 	copy(fields, entry.fields)
@@ -152,7 +156,11 @@ func (m *HotConfigManager[T]) applyProtoHotFields(entry *hotConfigEntry) {
 	}
 }
 
-func (m *HotConfigManager[T]) copyProtoHotField(dst proto.Message, src proto.Message, names []protoreflect.Name) error {
+func (m *HotConfigManager[T]) copyProtoHotField(
+	dst proto.Message,
+	src proto.Message,
+	names []protoreflect.Name,
+) error {
 	if m.isNilProtoMessage(dst) {
 		return errors.New("hot config destination is nil")
 	}

@@ -13,11 +13,22 @@ const UserUnbanExpiredTaskName = "user.unban_expired"
 
 type UserUnbanExpired struct{ consul *commonClient.ConsulClient }
 
-func NewUserUnbanExpired(consul *commonClient.ConsulClient) *UserUnbanExpired {
-	return &UserUnbanExpired{consul: consul}
+func NewUserUnbanExpired(
+	consul *commonClient.ConsulClient,
+) *UserUnbanExpired {
+	return &UserUnbanExpired{
+		consul: consul,
+	}
 }
-func (t *UserUnbanExpired) Name() string  { return UserUnbanExpiredTaskName }
-func (t *UserUnbanExpired) Title() string { return "用户过期封禁解封" }
+
+func (t *UserUnbanExpired) Name() string {
+	return UserUnbanExpiredTaskName
+}
+
+func (t *UserUnbanExpired) Title() string {
+	return "用户过期封禁解封"
+}
+
 func (t *UserUnbanExpired) Description() string {
 	return "调用 user.UnbanExpired 解封已到期的临时封禁账号。"
 }
@@ -27,7 +38,10 @@ type userUnbanExpiredPayload struct {
 	BanRecordID int64 `json:"ban_record_id"`
 }
 
-func (t *UserUnbanExpired) Execute(ctx context.Context, payload string) error {
+func (t *UserUnbanExpired) Execute(
+	ctx context.Context,
+	payload string,
+) error {
 	var data userUnbanExpiredPayload
 	if err := json.Unmarshal([]byte(payload), &data); err != nil {
 		return err
@@ -39,6 +53,9 @@ func (t *UserUnbanExpired) Execute(ctx context.Context, payload string) error {
 	if err != nil {
 		return err
 	}
-	_, err = userv1.NewAuthServiceClient(conn).UnbanExpired(ctx, &userv1.UnbanExpired_Req{UserId: data.UserID, BanRecordId: data.BanRecordID})
+	_, err = userv1.NewAuthServiceClient(conn).UnbanExpired(ctx, &userv1.UnbanExpired_Req{
+		UserId:      data.UserID,
+		BanRecordId: data.BanRecordID,
+	})
 	return err
 }

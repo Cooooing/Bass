@@ -39,7 +39,9 @@ func NewOutboxDeadLetterScanner(
 	}
 }
 
-func (s *OutboxDeadLetterScanner) Start(ctx context.Context) error {
+func (s *OutboxDeadLetterScanner) Start(
+	ctx context.Context,
+) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	s.cancel = cancel
 	go func() {
@@ -57,16 +59,26 @@ func (s *OutboxDeadLetterScanner) Start(ctx context.Context) error {
 	return nil
 }
 
-func (s *OutboxDeadLetterScanner) Stop(_ context.Context) error {
+func (s *OutboxDeadLetterScanner) Stop(
+	_ context.Context,
+) error {
 	if s.cancel != nil {
 		s.cancel()
 	}
 	return nil
 }
 
-func (s *OutboxDeadLetterScanner) scan(ctx context.Context) error {
+func (s *OutboxDeadLetterScanner) scan(
+	ctx context.Context,
+) error {
 	status := commonenum.OutboxEventStatusDead
-	pageResp, err := s.outboxRepo.Page(ctx, &repo.OutboxEventGetReq{Page: &base.PageRequest{Page: 1, Size: outboxDeadLetterScanLimit}, Status: &status})
+	pageResp, err := s.outboxRepo.Page(ctx, &repo.OutboxEventGetReq{
+		Page: &base.PageRequest{
+			Page: 1,
+			Size: outboxDeadLetterScanLimit,
+		},
+		Status: &status,
+	})
 	if err != nil {
 		return err
 	}

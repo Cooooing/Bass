@@ -14,17 +14,29 @@ type PreferencesService struct {
 	preferencesUsecase *usecase.PreferencesUsecase
 }
 
-func NewPreferencesService(preferencesUsecase *usecase.PreferencesUsecase) *PreferencesService {
-	return &PreferencesService{preferencesUsecase: preferencesUsecase}
+func NewPreferencesService(
+	preferencesUsecase *usecase.PreferencesUsecase,
+) *PreferencesService {
+	return &PreferencesService{
+		preferencesUsecase: preferencesUsecase,
+	}
 }
 
-func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {}
+func (s *PreferencesService) RegisterGrpc(
+	gs *grpc.Server,
+) {
+}
 
-func (s *PreferencesService) RegisterHttp(hs *http.Server) {
+func (s *PreferencesService) RegisterHttp(
+	hs *http.Server,
+) {
 	bbsuserv1.RegisterPreferencesServiceHTTPServer(hs, s)
 }
 
-func (s *PreferencesService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPreferences_Req) (*bbsuserv1.GetCurrentPreferences_Resp, error) {
+func (s *PreferencesService) GetCurrent(
+	ctx context.Context,
+	req *bbsuserv1.GetCurrentPreferences_Req,
+) (*bbsuserv1.GetCurrentPreferences_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -33,17 +45,30 @@ func (s *PreferencesService) GetCurrent(ctx context.Context, req *bbsuserv1.GetC
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.GetCurrentPreferences_Resp{Preference: preference}, nil
+	return &bbsuserv1.GetCurrentPreferences_Resp{
+		Preference: preference,
+	}, nil
 }
 
-func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPreferences_Req) (*bbsuserv1.UpdateCurrentPreferences_Resp, error) {
+func (s *PreferencesService) UpdateCurrent(
+	ctx context.Context,
+	req *bbsuserv1.UpdateCurrentPreferences_Req,
+) (*bbsuserv1.UpdateCurrentPreferences_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	preference, err := s.preferencesUsecase.UpdateCurrentPreferences(ctx, &usecase.UpdateCurrentPreferencesReq{UserID: userID, Timezone: req.Timezone, Theme: req.Theme, MobileTheme: req.MobileTheme, Language: req.Language})
+	preference, err := s.preferencesUsecase.UpdateCurrentPreferences(ctx, &usecase.UpdateCurrentPreferencesReq{
+		UserID:      userID,
+		Timezone:    req.Timezone,
+		Theme:       req.Theme,
+		MobileTheme: req.MobileTheme,
+		Language:    req.Language,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.UpdateCurrentPreferences_Resp{Preference: preference}, nil
+	return &bbsuserv1.UpdateCurrentPreferences_Resp{
+		Preference: preference,
+	}, nil
 }

@@ -17,7 +17,10 @@ import (
 )
 
 // LoadConfig 加载配置并保留底层 watcher，用于模块内注册热更新配置。
-func LoadConfig[T proto.Message](bootstrapPath string, path string) (T, *common.Bootstrap, *HotConfigManager[T], func(), error) {
+func LoadConfig[T proto.Message](
+	bootstrapPath string,
+	path string,
+) (T, *common.Bootstrap, *HotConfigManager[T], func(), error) {
 	var zero T
 	cleanup := func() {}
 
@@ -85,7 +88,9 @@ func LoadConfig[T proto.Message](bootstrapPath string, path string) (T, *common.
 	return conf, bc, manager, cleanup, nil
 }
 
-func loadBootstrap(path string) (*common.Bootstrap, error) {
+func loadBootstrap(
+	path string,
+) (*common.Bootstrap, error) {
 	c := config.New(config.WithSource(env.NewSource(""), file.NewSource(path)))
 	defer func(c config.Config) {
 		_ = c.Close()

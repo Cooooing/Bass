@@ -20,18 +20,27 @@ type ContentModerationRecordRepo struct {
 	db *gen.Client
 }
 
-func NewContentModerationRecordRepo(db *gen.Client) repo.ContentModerationRecordRepo {
-	return &ContentModerationRecordRepo{db: db}
+func NewContentModerationRecordRepo(
+	db *gen.Client,
+) repo.ContentModerationRecordRepo {
+	return &ContentModerationRecordRepo{
+		db: db,
+	}
 }
 
-func (r *ContentModerationRecordRepo) getClient(ctx context.Context) *gen.Client {
+func (r *ContentModerationRecordRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *ContentModerationRecordRepo) Save(ctx context.Context, record *model.ContentModerationRecord) (*model.ContentModerationRecord, error) {
+func (r *ContentModerationRecordRepo) Save(
+	ctx context.Context,
+	record *model.ContentModerationRecord,
+) (*model.ContentModerationRecord, error) {
 	save, err := r.getClient(ctx).ContentModerationRecord.Create().
 		SetTarget(contentmoderationrecord.Target(record.Target)).
 		SetTargetID(record.TargetID).
@@ -56,7 +65,10 @@ func (r *ContentModerationRecordRepo) Save(ctx context.Context, record *model.Co
 	}, nil
 }
 
-func (r *ContentModerationRecordRepo) Get(ctx context.Context, req *repo.ContentModerationRecordGetReq) (*model.ContentModerationRecord, error) {
+func (r *ContentModerationRecordRepo) Get(
+	ctx context.Context,
+	req *repo.ContentModerationRecordGetReq,
+) (*model.ContentModerationRecord, error) {
 	query := r.getClient(ctx).ContentModerationRecord.Query()
 	query = r.getQuery(query, req)
 	record, err := query.First(ctx)
@@ -76,7 +88,10 @@ func (r *ContentModerationRecordRepo) Get(ctx context.Context, req *repo.Content
 	}, nil
 }
 
-func (r *ContentModerationRecordRepo) List(ctx context.Context, req *repo.ContentModerationRecordGetReq) ([]*model.ContentModerationRecord, error) {
+func (r *ContentModerationRecordRepo) List(
+	ctx context.Context,
+	req *repo.ContentModerationRecordGetReq,
+) ([]*model.ContentModerationRecord, error) {
 	query := r.getClient(ctx).ContentModerationRecord.Query()
 	query = r.getQuery(query, req)
 	records, err := query.All(ctx)
@@ -98,7 +113,10 @@ func (r *ContentModerationRecordRepo) List(ctx context.Context, req *repo.Conten
 	}), nil
 }
 
-func (r *ContentModerationRecordRepo) Map(ctx context.Context, req *repo.ContentModerationRecordGetReq) (map[int64]*model.ContentModerationRecord, error) {
+func (r *ContentModerationRecordRepo) Map(
+	ctx context.Context,
+	req *repo.ContentModerationRecordGetReq,
+) (map[int64]*model.ContentModerationRecord, error) {
 	records, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -108,7 +126,10 @@ func (r *ContentModerationRecordRepo) Map(ctx context.Context, req *repo.Content
 	}), nil
 }
 
-func (r *ContentModerationRecordRepo) Count(ctx context.Context, req *repo.ContentModerationRecordGetReq) (int, error) {
+func (r *ContentModerationRecordRepo) Count(
+	ctx context.Context,
+	req *repo.ContentModerationRecordGetReq,
+) (int, error) {
 	query := r.getClient(ctx).ContentModerationRecord.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -117,7 +138,11 @@ func (r *ContentModerationRecordRepo) Count(ctx context.Context, req *repo.Conte
 	}
 	return count, nil
 }
-func (r *ContentModerationRecordRepo) Page(ctx context.Context, req *repo.ContentModerationRecordGetReq) (*repo.ContentModerationRecordPageResp, error) {
+
+func (r *ContentModerationRecordRepo) Page(
+	ctx context.Context,
+	req *repo.ContentModerationRecordGetReq,
+) (*repo.ContentModerationRecordPageResp, error) {
 	page := normalizePage(req.Page)
 	query := r.getClient(ctx).ContentModerationRecord.Query()
 	query = r.getQuery(query, req)
@@ -152,7 +177,10 @@ func (r *ContentModerationRecordRepo) Page(ctx context.Context, req *repo.Conten
 	}, nil
 }
 
-func (r *ContentModerationRecordRepo) getQuery(query *gen.ContentModerationRecordQuery, req *repo.ContentModerationRecordGetReq) *gen.ContentModerationRecordQuery {
+func (r *ContentModerationRecordRepo) getQuery(
+	query *gen.ContentModerationRecordQuery,
+	req *repo.ContentModerationRecordGetReq,
+) *gen.ContentModerationRecordQuery {
 	if req == nil {
 		return query
 	}

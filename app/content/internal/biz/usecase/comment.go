@@ -47,7 +47,10 @@ func NewCommentUsecase(
 	}
 }
 
-func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*model.Comment, error) {
+func (d *CommentUsecase) Add(
+	ctx context.Context,
+	comment *model.Comment,
+) (*model.Comment, error) {
 	var c *model.Comment
 	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
@@ -84,13 +87,23 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*mode
 			} else {
 				parentID = replyComment.ParentID
 			}
-			err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{CommentID: *parentID, Stats: repo.CommentStatUpdate{ReplyCount: 1}})
+			err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{
+				CommentID: *parentID,
+				Stats: repo.CommentStatUpdate{
+					ReplyCount: 1,
+				},
+			})
 			if err != nil {
 				return err
 			}
 		}
 
-		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: article.ID, Stats: repo.ArticleStatUpdate{ReplyCount: 1}})
+		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
+			ArticleID: article.ID,
+			Stats: repo.ArticleStatUpdate{
+				ReplyCount: 1,
+			},
+		})
 		if err != nil {
 			return err
 		}
@@ -151,7 +164,10 @@ type CommentPageResp struct {
 	Rows []*model.Comment
 }
 
-func (d *CommentUsecase) Page(ctx context.Context, req *CommentPageReq) (*CommentPageResp, error) {
+func (d *CommentUsecase) Page(
+	ctx context.Context,
+	req *CommentPageReq,
+) (*CommentPageResp, error) {
 	if req == nil {
 		req = &CommentPageReq{}
 	}
@@ -170,7 +186,10 @@ func (d *CommentUsecase) Page(ctx context.Context, req *CommentPageReq) (*Commen
 	if err != nil {
 		return nil, err
 	}
-	return &CommentPageResp{Page: pageResp.Page, Rows: pageResp.Rows}, nil
+	return &CommentPageResp{
+		Page: pageResp.Page,
+		Rows: pageResp.Rows,
+	}, nil
 }
 
 type CommentListReplyPreviewsReq struct {
@@ -187,14 +206,19 @@ type CommentChildPreview struct {
 	Rows     []*model.Comment
 }
 
-func (d *CommentUsecase) ListReplyPreviews(ctx context.Context, req *CommentListReplyPreviewsReq) ([]*CommentChildPreview, error) {
+func (d *CommentUsecase) ListReplyPreviews(
+	ctx context.Context,
+	req *CommentListReplyPreviewsReq,
+) ([]*CommentChildPreview, error) {
 	articleID := req.ArticleID
 	parentIDs := req.ParentIDs
 	limitPerParent := req.LimitPerParent
 	restriction := req.Restriction
 	restrictions := req.Restrictions
 	order := req.Order
-	if _, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleID)}); err != nil {
+	if _, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+		ArticleId: new(articleID),
+	}); err != nil {
 		return nil, err
 	}
 	previews, err := d.commentRepo.ListReplyPreviews(ctx, &repo.CommentReplyPreviewReq{
@@ -209,12 +233,18 @@ func (d *CommentUsecase) ListReplyPreviews(ctx context.Context, req *CommentList
 		return nil, err
 	}
 	rows := lo.Map(previews, func(preview *repo.CommentReplyPreview, _ int) *CommentChildPreview {
-		return &CommentChildPreview{ParentID: preview.ParentId, Rows: preview.Rows}
+		return &CommentChildPreview{
+			ParentID: preview.ParentId,
+			Rows:     preview.Rows,
+		}
 	})
 	return rows, nil
 }
 
-func (d *CommentUsecase) MapArticleLastComments(ctx context.Context, articleIDs []int64) (map[int64]*model.
+func (d *CommentUsecase) MapArticleLastComments(
+	ctx context.Context,
+	articleIDs []int64,
+) (map[int64]*model.
 	Comment, error) {
 	articleIds := articleIDs
 	if len(articleIds) == 0 {
@@ -239,11 +269,20 @@ type CommentHideReq struct {
 	Reason    *string
 }
 
-func (d *CommentUsecase) Hide(ctx context.Context, req *CommentHideReq) error {
+func (d *CommentUsecase) Hide(
+	ctx context.Context,
+	req *CommentHideReq,
+) error {
 	commentId := req.CommentID
 	userId := req.UserID
 	reason := req.Reason
-	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{CommentID: commentId, Restriction: enum.ContentRestrictionHidden, UserID: userId, Action: enum.ContentModerationActionHide, Reason: reason})
+	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{
+		CommentID:   commentId,
+		Restriction: enum.ContentRestrictionHidden,
+		UserID:      userId,
+		Action:      enum.ContentModerationActionHide,
+		Reason:      reason,
+	})
 }
 
 type CommentUnhideReq struct {
@@ -252,11 +291,20 @@ type CommentUnhideReq struct {
 	Reason    *string
 }
 
-func (d *CommentUsecase) Unhide(ctx context.Context, req *CommentUnhideReq) error {
+func (d *CommentUsecase) Unhide(
+	ctx context.Context,
+	req *CommentUnhideReq,
+) error {
 	commentId := req.CommentID
 	userId := req.UserID
 	reason := req.Reason
-	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{CommentID: commentId, Restriction: enum.ContentRestrictionNone, UserID: userId, Action: enum.ContentModerationActionUnhide, Reason: reason})
+	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{
+		CommentID:   commentId,
+		Restriction: enum.ContentRestrictionNone,
+		UserID:      userId,
+		Action:      enum.ContentModerationActionUnhide,
+		Reason:      reason,
+	})
 }
 
 type CommentLockReq struct {
@@ -265,11 +313,20 @@ type CommentLockReq struct {
 	Reason    *string
 }
 
-func (d *CommentUsecase) Lock(ctx context.Context, req *CommentLockReq) error {
+func (d *CommentUsecase) Lock(
+	ctx context.Context,
+	req *CommentLockReq,
+) error {
 	commentId := req.CommentID
 	userId := req.UserID
 	reason := req.Reason
-	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{CommentID: commentId, Restriction: enum.ContentRestrictionLocked, UserID: userId, Action: enum.ContentModerationActionLock, Reason: reason})
+	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{
+		CommentID:   commentId,
+		Restriction: enum.ContentRestrictionLocked,
+		UserID:      userId,
+		Action:      enum.ContentModerationActionLock,
+		Reason:      reason,
+	})
 }
 
 type CommentUnlockReq struct {
@@ -278,11 +335,20 @@ type CommentUnlockReq struct {
 	Reason    *string
 }
 
-func (d *CommentUsecase) Unlock(ctx context.Context, req *CommentUnlockReq) error {
+func (d *CommentUsecase) Unlock(
+	ctx context.Context,
+	req *CommentUnlockReq,
+) error {
 	commentId := req.CommentID
 	userId := req.UserID
 	reason := req.Reason
-	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{CommentID: commentId, Restriction: enum.ContentRestrictionNone, UserID: userId, Action: enum.ContentModerationActionUnlock, Reason: reason})
+	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{
+		CommentID:   commentId,
+		Restriction: enum.ContentRestrictionNone,
+		UserID:      userId,
+		Action:      enum.ContentModerationActionUnlock,
+		Reason:      reason,
+	})
 }
 
 type commentUpdateRestrictionReq struct {
@@ -293,14 +359,19 @@ type commentUpdateRestrictionReq struct {
 	Reason      *string
 }
 
-func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpdateRestrictionReq) error {
+func (d *CommentUsecase) updateRestriction(
+	ctx context.Context,
+	req *commentUpdateRestrictionReq,
+) error {
 	commentId := req.CommentID
 	restriction := req.Restriction
 	userId := req.UserID
 	action := req.Action
 	reason := req.Reason
 	return d.tx(ctx, func(ctx context.Context) error {
-		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{CommentId: new(commentId)})
+		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
+			CommentId: new(commentId),
+		})
 		comment := commentResp
 		if err != nil {
 			return err
@@ -319,7 +390,11 @@ func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpda
 				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_COMMENT_STATUS)
 			}
 		}
-		if err := d.commentRepo.UpdateRestriction(ctx, &repo.CommentUpdateRestrictionReq{CommentID: commentId, Restriction: restriction, UpdatedBy: userId}); err != nil {
+		if err := d.commentRepo.UpdateRestriction(ctx, &repo.CommentUpdateRestrictionReq{
+			CommentID:   commentId,
+			Restriction: restriction,
+			UpdatedBy:   userId,
+		}); err != nil {
 			return err
 		}
 		if _, err := d.moderationRecordRepo.Save(ctx, &model.ContentModerationRecord{
@@ -354,7 +429,10 @@ type CommentLikeReq struct {
 	Active    bool
 }
 
-func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, error) {
+func (d *CommentUsecase) Like(
+	ctx context.Context,
+	req *CommentLikeReq,
+) (bool, error) {
 	commentId := req.CommentID
 	userId := req.UserID
 	active := req.Active
@@ -393,7 +471,12 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 			if !createdResp {
 				return nil
 			}
-			if err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{CommentID: commentId, Stats: repo.CommentStatUpdate{LikeCount: 1}}); err != nil {
+			if err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{
+				CommentID: commentId,
+				Stats: repo.CommentStatUpdate{
+					LikeCount: 1,
+				},
+			}); err != nil {
 				return err
 			}
 			err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -408,14 +491,23 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 			})
 		}
 
-		deletedResp, err := d.commentActionRecordRepo.Delete(ctx, &repo.CommentActionRecordDeleteReq{CommentID: commentId, UserID: userId, Action: enum.CommentActionLike})
+		deletedResp, err := d.commentActionRecordRepo.Delete(ctx, &repo.CommentActionRecordDeleteReq{
+			CommentID: commentId,
+			UserID:    userId,
+			Action:    enum.CommentActionLike,
+		})
 		if err != nil {
 			return err
 		}
 		if deletedResp == 0 {
 			return nil
 		}
-		err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{CommentID: commentId, Stats: repo.CommentStatUpdate{LikeCount: -1}})
+		err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{
+			CommentID: commentId,
+			Stats: repo.CommentStatUpdate{
+				LikeCount: -1,
+			},
+		})
 		return err
 	})
 	if err != nil {
@@ -430,7 +522,10 @@ type CommentThankReq struct {
 	Active    bool
 }
 
-func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool, error) {
+func (d *CommentUsecase) Thank(
+	ctx context.Context,
+	req *CommentThankReq,
+) (bool, error) {
 	commentId := req.CommentID
 	userId := req.UserID
 	active := req.Active
@@ -469,7 +564,12 @@ func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool,
 			if !createdResp {
 				return nil
 			}
-			if err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{CommentID: commentId, Stats: repo.CommentStatUpdate{ThankCount: 1}}); err != nil {
+			if err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{
+				CommentID: commentId,
+				Stats: repo.CommentStatUpdate{
+					ThankCount: 1,
+				},
+			}); err != nil {
 				return err
 			}
 			err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -484,14 +584,23 @@ func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool,
 			})
 		}
 
-		deletedResp, err := d.commentActionRecordRepo.Delete(ctx, &repo.CommentActionRecordDeleteReq{CommentID: commentId, UserID: userId, Action: enum.CommentActionThank})
+		deletedResp, err := d.commentActionRecordRepo.Delete(ctx, &repo.CommentActionRecordDeleteReq{
+			CommentID: commentId,
+			UserID:    userId,
+			Action:    enum.CommentActionThank,
+		})
 		if err != nil {
 			return err
 		}
 		if deletedResp == 0 {
 			return nil
 		}
-		err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{CommentID: commentId, Stats: repo.CommentStatUpdate{ThankCount: -1}})
+		err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{
+			CommentID: commentId,
+			Stats: repo.CommentStatUpdate{
+				ThankCount: -1,
+			},
+		})
 		return err
 	})
 	if err != nil {
@@ -505,7 +614,10 @@ type CommentMapViewerActionStatesReq struct {
 	UserID     int64
 }
 
-func (d *CommentUsecase) MapViewerActionStates(ctx context.Context, req *CommentMapViewerActionStatesReq) (map[int64]*model.
+func (d *CommentUsecase) MapViewerActionStates(
+	ctx context.Context,
+	req *CommentMapViewerActionStatesReq,
+) (map[int64]*model.
 	CommentViewerActionState, error) {
 	commentIds := req.CommentIDs
 	userId := req.UserID

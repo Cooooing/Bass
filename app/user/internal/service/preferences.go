@@ -19,22 +19,36 @@ type PreferencesService struct {
 	preferencesUsecase *usecase.PreferencesUsecase
 }
 
-func NewPreferencesService(preferencesUsecase *usecase.PreferencesUsecase) *PreferencesService {
-	return &PreferencesService{preferencesUsecase: preferencesUsecase}
+func NewPreferencesService(
+	preferencesUsecase *usecase.PreferencesUsecase,
+) *PreferencesService {
+	return &PreferencesService{
+		preferencesUsecase: preferencesUsecase,
+	}
 }
 
-func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
+func (s *PreferencesService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	v1.RegisterPreferencesServiceServer(gs, s)
 }
 
-func (s *PreferencesService) RegisterHttp(hs *http.Server) {}
+func (s *PreferencesService) RegisterHttp(
+	hs *http.Server,
+) {
+}
 
-func (s *PreferencesService) Get(ctx context.Context, req *v1.GetPreferences_Req) (*v1.GetPreferences_Resp, error) {
+func (s *PreferencesService) Get(
+	ctx context.Context,
+	req *v1.GetPreferences_Req,
+) (*v1.GetPreferences_Resp, error) {
 	res, err := s.preferencesUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
-	reply := &v1.GetPreferences_Resp_Preferences{UserId: req.GetUserId()}
+	reply := &v1.GetPreferences_Resp_Preferences{
+		UserId: req.GetUserId(),
+	}
 	if res != nil {
 		if res.Language != nil {
 			reply.Language = enum.LanguageMap.MustToProto(*res.Language)
@@ -43,10 +57,15 @@ func (s *PreferencesService) Get(ctx context.Context, req *v1.GetPreferences_Req
 		reply.Theme = res.Theme
 		reply.MobileTheme = res.MobileTheme
 	}
-	return &v1.GetPreferences_Resp{Preferences: reply}, nil
+	return &v1.GetPreferences_Resp{
+		Preferences: reply,
+	}, nil
 }
 
-func (s *PreferencesService) Update(ctx context.Context, req *v1.UpdatePreferences_Req) (*v1.UpdatePreferences_Resp, error) {
+func (s *PreferencesService) Update(
+	ctx context.Context,
+	req *v1.UpdatePreferences_Req,
+) (*v1.UpdatePreferences_Resp, error) {
 	var language *enum.Language
 	if req.Language != nil {
 		if *req.Language != commonenums.Language_LANGUAGE_UNSPECIFIED {
@@ -77,5 +96,7 @@ func (s *PreferencesService) Update(ctx context.Context, req *v1.UpdatePreferenc
 	if preferences.Language != nil {
 		reply.Language = enum.LanguageMap.MustToProto(*preferences.Language)
 	}
-	return &v1.UpdatePreferences_Resp{Preferences: reply}, nil
+	return &v1.UpdatePreferences_Resp{
+		Preferences: reply,
+	}, nil
 }

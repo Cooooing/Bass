@@ -5,7 +5,9 @@ import (
 	"testing"
 )
 
-func TestNaming(t *testing.T) {
+func TestNaming(
+	t *testing.T,
+) {
 	tests := []struct {
 		name      string
 		converter func(string) string

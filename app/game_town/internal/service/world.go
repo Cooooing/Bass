@@ -23,17 +23,29 @@ type WorldService struct {
 	usecase *usecase.WorldUsecase
 }
 
-func NewWorldService(usecase *usecase.WorldUsecase) *WorldService {
-	return &WorldService{usecase: usecase}
+func NewWorldService(
+	usecase *usecase.WorldUsecase,
+) *WorldService {
+	return &WorldService{
+		usecase: usecase,
+	}
 }
 
-func (s *WorldService) RegisterGrpc(server *grpc.Server) {
+func (s *WorldService) RegisterGrpc(
+	server *grpc.Server,
+) {
 	v1.RegisterGameTownWorldServiceServer(server, s)
 }
 
-func (s *WorldService) RegisterHttp(*http.Server) {}
+func (s *WorldService) RegisterHttp(
+	*http.Server,
+) {
+}
 
-func (s *WorldService) Create(ctx context.Context, req *v1.CreateGameTownWorld_Request) (*v1.CreateGameTownWorld_Resp, error) {
+func (s *WorldService) Create(
+	ctx context.Context,
+	req *v1.CreateGameTownWorld_Request,
+) (*v1.CreateGameTownWorld_Resp, error) {
 	resp, err := s.usecase.Create(ctx, &usecase.CreateWorldReq{
 		CreatorPlayerID: req.GetCreatorPlayerId(),
 		Description:     req.GetDescription(),
@@ -65,7 +77,10 @@ func (s *WorldService) Create(ctx context.Context, req *v1.CreateGameTownWorld_R
 	}, nil
 }
 
-func (s *WorldService) Get(ctx context.Context, req *v1.GetGameTownWorld_Request) (*v1.GetGameTownWorld_Resp, error) {
+func (s *WorldService) Get(
+	ctx context.Context,
+	req *v1.GetGameTownWorld_Request,
+) (*v1.GetGameTownWorld_Resp, error) {
 	if req.GetId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -91,7 +106,10 @@ func (s *WorldService) Get(ctx context.Context, req *v1.GetGameTownWorld_Request
 	}, nil
 }
 
-func (s *WorldService) Page(ctx context.Context, req *v1.PageGameTownWorlds_Request) (*v1.PageGameTownWorlds_Resp, error) {
+func (s *WorldService) Page(
+	ctx context.Context,
+	req *v1.PageGameTownWorlds_Request,
+) (*v1.PageGameTownWorlds_Resp, error) {
 	page := base.PageRequest{}
 	if req.GetPage() != nil {
 		page.Page = int64(req.GetPage().GetPage())

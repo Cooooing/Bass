@@ -1,4 +1,4 @@
-﻿package schema
+package schema
 
 import (
 	"common/pkg/constant"
@@ -17,7 +17,9 @@ type RbacRolePermission struct {
 }
 
 func (RbacRolePermission) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: constant.TablePrefixUser.String() + "rbac_role_permissions"}, entsql.WithComments(true)}
+	return []schema.Annotation{entsql.Annotation{
+		Table: constant.TablePrefixUser.String() + "rbac_role_permissions",
+	}, entsql.WithComments(true)}
 }
 
 func (RbacRolePermission) Fields() []ent.Field {
@@ -28,7 +30,9 @@ func (RbacRolePermission) Fields() []ent.Field {
 	}
 }
 
-func (RbacRolePermission) Mixin() []ent.Mixin { return []ent.Mixin{utilent.TimeAuditMixin{}} }
+func (RbacRolePermission) Mixin() []ent.Mixin {
+	return []ent.Mixin{utilent.TimeAuditMixin{}}
+}
 
 func (RbacRolePermission) Indexes() []ent.Index {
 	return []ent.Index{
@@ -37,4 +41,6 @@ func (RbacRolePermission) Indexes() []ent.Index {
 	}
 }
 
-func (RbacRolePermission) Edges() []ent.Edge { return nil }
+func (RbacRolePermission) Edges() []ent.Edge {
+	return nil
+}

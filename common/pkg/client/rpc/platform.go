@@ -11,7 +11,9 @@ type PlatformClient struct {
 	Oss          platformv1.PlatformOssServiceClient
 }
 
-func NewPlatformClient(conn *grpc.ClientConn) *PlatformClient {
+func NewPlatformClient(
+	conn *grpc.ClientConn,
+) *PlatformClient {
 	return &PlatformClient{
 		IpResolution: platformv1.NewPlatformIpResolutionServiceClient(conn),
 		Oss:          platformv1.NewPlatformOssServiceClient(conn),

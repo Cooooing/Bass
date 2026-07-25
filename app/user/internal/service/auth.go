@@ -1,9 +1,9 @@
 package service
 
 import (
-	commonenum "common/pkg/enum"
 	"common/pkg/apperror"
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/user/v1"
 	"context"
@@ -24,18 +24,37 @@ type AuthService struct {
 	authUsecase *usecase.AuthUsecase
 }
 
-func NewAuthService(conf *config.Bootstrap, authUsecase *usecase.AuthUsecase) *AuthService {
-	return &AuthService{conf: conf, authUsecase: authUsecase}
+func NewAuthService(
+	conf *config.Bootstrap,
+	authUsecase *usecase.AuthUsecase,
+) *AuthService {
+	return &AuthService{
+		conf:        conf,
+		authUsecase: authUsecase,
+	}
 }
 
-func (s *AuthService) RegisterGrpc(gs *grpc.Server) {
+func (s *AuthService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	v1.RegisterAuthServiceServer(gs, s)
 }
 
-func (s *AuthService) RegisterHttp(hs *http.Server) {}
+func (s *AuthService) RegisterHttp(
+	hs *http.Server,
+) {
+}
 
-func (s *AuthService) StartEmailRegistration(ctx context.Context, req *v1.StartEmailRegistration_Req) (*v1.StartEmailRegistration_Resp, error) {
-	res, err := s.authUsecase.StartEmailRegistration(ctx, &model.Account{Email: &req.Email, Password: req.Password, Name: req.Name, Nickname: req.Nickname})
+func (s *AuthService) StartEmailRegistration(
+	ctx context.Context,
+	req *v1.StartEmailRegistration_Req,
+) (*v1.StartEmailRegistration_Resp, error) {
+	res, err := s.authUsecase.StartEmailRegistration(ctx, &model.Account{
+		Email:    &req.Email,
+		Password: req.Password,
+		Name:     req.Name,
+		Nickname: req.Nickname,
+	})
 	reply := &v1.StartEmailRegistration_Resp{}
 	if err == nil && res != nil && s.conf.GetServer().GetMode() != constant.Prod {
 		reply.Code = res.Code
@@ -43,13 +62,27 @@ func (s *AuthService) StartEmailRegistration(ctx context.Context, req *v1.StartE
 	return reply, err
 }
 
-func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *v1.VerifyEmailRegistration_Req) (*v1.VerifyEmailRegistration_Resp, error) {
-	err := s.authUsecase.VerifyEmailRegistration(ctx, &usecase.VerifyEmailRegistrationReq{Email: req.GetEmail(), Code: req.GetCode()})
+func (s *AuthService) VerifyEmailRegistration(
+	ctx context.Context,
+	req *v1.VerifyEmailRegistration_Req,
+) (*v1.VerifyEmailRegistration_Resp, error) {
+	err := s.authUsecase.VerifyEmailRegistration(ctx, &usecase.VerifyEmailRegistrationReq{
+		Email: req.GetEmail(),
+		Code:  req.GetCode(),
+	})
 	return &v1.VerifyEmailRegistration_Resp{}, err
 }
 
-func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *v1.StartPhoneRegistration_Req) (*v1.StartPhoneRegistration_Resp, error) {
-	res, err := s.authUsecase.StartPhoneRegistration(ctx, &model.Account{Phone: &req.Phone, Password: req.Password, Name: req.Name, Nickname: req.Nickname})
+func (s *AuthService) StartPhoneRegistration(
+	ctx context.Context,
+	req *v1.StartPhoneRegistration_Req,
+) (*v1.StartPhoneRegistration_Resp, error) {
+	res, err := s.authUsecase.StartPhoneRegistration(ctx, &model.Account{
+		Phone:    &req.Phone,
+		Password: req.Password,
+		Name:     req.Name,
+		Nickname: req.Nickname,
+	})
 	reply := &v1.StartPhoneRegistration_Resp{}
 	if err == nil && res != nil && s.conf.GetServer().GetMode() != constant.Prod {
 		reply.Code = res.Code
@@ -57,12 +90,21 @@ func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *v1.StartP
 	return reply, err
 }
 
-func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *v1.VerifyPhoneRegistration_Req) (*v1.VerifyPhoneRegistration_Resp, error) {
-	err := s.authUsecase.VerifyPhoneRegistration(ctx, &usecase.VerifyPhoneRegistrationReq{Phone: req.GetPhone(), Code: req.GetCode()})
+func (s *AuthService) VerifyPhoneRegistration(
+	ctx context.Context,
+	req *v1.VerifyPhoneRegistration_Req,
+) (*v1.VerifyPhoneRegistration_Resp, error) {
+	err := s.authUsecase.VerifyPhoneRegistration(ctx, &usecase.VerifyPhoneRegistrationReq{
+		Phone: req.GetPhone(),
+		Code:  req.GetCode(),
+	})
 	return &v1.VerifyPhoneRegistration_Resp{}, err
 }
 
-func (s *AuthService) StartEmailLogin(ctx context.Context, req *v1.StartEmailLogin_Req) (*v1.StartEmailLogin_Resp, error) {
+func (s *AuthService) StartEmailLogin(
+	ctx context.Context,
+	req *v1.StartEmailLogin_Req,
+) (*v1.StartEmailLogin_Resp, error) {
 	res, err := s.authUsecase.StartEmailLogin(ctx, req.GetEmail())
 	reply := &v1.StartEmailLogin_Resp{}
 	if err == nil && res != nil && s.conf.GetServer().GetMode() != constant.Prod {
@@ -71,7 +113,10 @@ func (s *AuthService) StartEmailLogin(ctx context.Context, req *v1.StartEmailLog
 	return reply, err
 }
 
-func (s *AuthService) StartPhoneLogin(ctx context.Context, req *v1.StartPhoneLogin_Req) (*v1.StartPhoneLogin_Resp, error) {
+func (s *AuthService) StartPhoneLogin(
+	ctx context.Context,
+	req *v1.StartPhoneLogin_Req,
+) (*v1.StartPhoneLogin_Resp, error) {
 	res, err := s.authUsecase.StartPhoneLogin(ctx, req.GetPhone())
 	reply := &v1.StartPhoneLogin_Resp{}
 	if err == nil && res != nil && s.conf.GetServer().GetMode() != constant.Prod {
@@ -80,7 +125,10 @@ func (s *AuthService) StartPhoneLogin(ctx context.Context, req *v1.StartPhoneLog
 	return reply, err
 }
 
-func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_Resp, error) {
+func (s *AuthService) Login(
+	ctx context.Context,
+	req *v1.Login_Req,
+) (*v1.Login_Resp, error) {
 	loginType, ok := enum.LoginTypeMap.ToEnum(req.GetType())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -90,7 +138,10 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	client := req.GetClient()
-	clientContext := &model.LoginContext{ClientType: enum.ClientTypeUnknown, DeviceType: enum.DeviceTypeUnknown}
+	clientContext := &model.LoginContext{
+		ClientType: enum.ClientTypeUnknown,
+		DeviceType: enum.DeviceTypeUnknown,
+	}
 	if client != nil {
 		clientType, ok := enum.ClientTypeMap.ToEnum(client.GetClientType())
 		if !ok {
@@ -100,9 +151,24 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 		if !ok {
 			deviceType = enum.DeviceTypeUnknown
 		}
-		clientContext = &model.LoginContext{IP: client.GetIp(), UserAgent: client.GetUserAgent(), ClientType: clientType, DeviceType: deviceType, OSName: client.GetOsName(), OSVersion: client.GetOsVersion(), BrowserName: client.GetBrowserName(), BrowserVersion: client.GetBrowserVersion(), AppName: client.GetAppName(), AppVersion: client.GetAppVersion()}
+		clientContext = &model.LoginContext{
+			IP:             client.GetIp(),
+			UserAgent:      client.GetUserAgent(),
+			ClientType:     clientType,
+			DeviceType:     deviceType,
+			OSName:         client.GetOsName(),
+			OSVersion:      client.GetOsVersion(),
+			BrowserName:    client.GetBrowserName(),
+			BrowserVersion: client.GetBrowserVersion(),
+			AppName:        client.GetAppName(),
+			AppVersion:     client.GetAppVersion(),
+		}
 	}
-	ucReq := &usecase.LoginReq{Type: loginType, Realm: realm, Client: clientContext}
+	ucReq := &usecase.LoginReq{
+		Type:   loginType,
+		Realm:  realm,
+		Client: clientContext,
+	}
 	switch loginType {
 	case enum.LoginTypePassword:
 		cred := req.GetPasswordCredential()
@@ -133,7 +199,16 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 	}
 	var account *v1.Login_Resp_Account
 	if res.Account != nil {
-		basic := &v1.Login_Resp_AccountBasic{Id: res.Account.ID, Name: res.Account.Name, Nickname: res.Account.Nickname, Url: res.Account.URL, AvatarUrl: res.Account.AvatarURL, Introduction: res.Account.Introduction, FollowCount: res.Account.FollowCount, FollowerCount: res.Account.FollowerCount}
+		basic := &v1.Login_Resp_AccountBasic{
+			Id:            res.Account.ID,
+			Name:          res.Account.Name,
+			Nickname:      res.Account.Nickname,
+			Url:           res.Account.URL,
+			AvatarUrl:     res.Account.AvatarURL,
+			Introduction:  res.Account.Introduction,
+			FollowCount:   res.Account.FollowCount,
+			FollowerCount: res.Account.FollowerCount,
+		}
 		if res.Account.Mbti != nil {
 			basic.Mbti = enum.MBTIMap.MustToProto(*res.Account.Mbti)
 		}
@@ -146,7 +221,14 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 		if res.Account.UpdatedAt != nil {
 			basic.UpdatedAt = timestamppb.New(*res.Account.UpdatedAt)
 		}
-		account = &v1.Login_Resp_Account{Basic: basic, Contact: &v1.Login_Resp_AccountContact{UserId: res.Account.ID, Email: res.Account.Email, Phone: res.Account.Phone}}
+		account = &v1.Login_Resp_Account{
+			Basic: basic,
+			Contact: &v1.Login_Resp_AccountContact{
+				UserId: res.Account.ID,
+				Email:  res.Account.Email,
+				Phone:  res.Account.Phone,
+			},
+		}
 	}
 	return &v1.Login_Resp{
 		AccessToken:           res.TokenPair.AccessToken,
@@ -158,7 +240,10 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 	}, nil
 }
 
-func (s *AuthService) RefreshToken(ctx context.Context, req *v1.RefreshToken_Req) (*v1.RefreshToken_Resp, error) {
+func (s *AuthService) RefreshToken(
+	ctx context.Context,
+	req *v1.RefreshToken_Req,
+) (*v1.RefreshToken_Resp, error) {
 	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -176,7 +261,10 @@ func (s *AuthService) RefreshToken(ctx context.Context, req *v1.RefreshToken_Req
 	}, nil
 }
 
-func (s *AuthService) Logout(ctx context.Context, req *v1.Logout_Req) (*v1.Logout_Resp, error) {
+func (s *AuthService) Logout(
+	ctx context.Context,
+	req *v1.Logout_Req,
+) (*v1.Logout_Resp, error) {
 	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -185,7 +273,10 @@ func (s *AuthService) Logout(ctx context.Context, req *v1.Logout_Req) (*v1.Logou
 	return &v1.Logout_Resp{}, err
 }
 
-func (s *AuthService) ParseToken(ctx context.Context, req *v1.ParseToken_Req) (*v1.ParseToken_Resp, error) {
+func (s *AuthService) ParseToken(
+	ctx context.Context,
+	req *v1.ParseToken_Req,
+) (*v1.ParseToken_Resp, error) {
 	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -195,17 +286,35 @@ func (s *AuthService) ParseToken(ctx context.Context, req *v1.ParseToken_Req) (*
 		return nil, err
 	}
 	user := res.User
-	return &v1.ParseToken_Resp{User: &v1.ParseToken_Resp_TokenUser{
-		Id: user.ID, Name: user.Name, Nickname: user.Nickname, Language: user.Language, Timezone: user.Timezone, SessionId: res.SessionID, Realm: commonenum.LoginRealmMap.MustToProto(res.Realm),
-	}}, nil
+	return &v1.ParseToken_Resp{
+		User: &v1.ParseToken_Resp_TokenUser{
+			Id:        user.ID,
+			Name:      user.Name,
+			Nickname:  user.Nickname,
+			Language:  user.Language,
+			Timezone:  user.Timezone,
+			SessionId: res.SessionID,
+			Realm:     commonenum.LoginRealmMap.MustToProto(res.Realm),
+		},
+	}, nil
 }
 
-func (s *AuthService) CancelAccount(ctx context.Context, req *v1.CancelAccount_Req) (*v1.CancelAccount_Resp, error) {
-	err := s.authUsecase.CancelAccount(ctx, &usecase.CancelAccountReq{UserID: req.GetUserId(), Password: req.GetPassword(), Code: req.GetCode()})
+func (s *AuthService) CancelAccount(
+	ctx context.Context,
+	req *v1.CancelAccount_Req,
+) (*v1.CancelAccount_Resp, error) {
+	err := s.authUsecase.CancelAccount(ctx, &usecase.CancelAccountReq{
+		UserID:   req.GetUserId(),
+		Password: req.GetPassword(),
+		Code:     req.GetCode(),
+	})
 	return &v1.CancelAccount_Resp{}, err
 }
 
-func (s *AuthService) BanAccount(ctx context.Context, req *v1.BanAccount_Req) (*v1.BanAccount_Resp, error) {
+func (s *AuthService) BanAccount(
+	ctx context.Context,
+	req *v1.BanAccount_Req,
+) (*v1.BanAccount_Resp, error) {
 	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetOperatorRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -215,14 +324,28 @@ func (s *AuthService) BanAccount(ctx context.Context, req *v1.BanAccount_Req) (*
 		value := req.BannedUntil.AsTime()
 		bannedUntil = &value
 	}
-	res, err := s.authUsecase.BanAccount(ctx, &usecase.BanAccountReq{UserID: req.GetUserId(), OperatorID: req.GetOperatorId(), OperatorRealm: realm, Reason: req.GetReason(), Remark: req.GetRemark(), BannedUntil: bannedUntil})
+	res, err := s.authUsecase.BanAccount(ctx, &usecase.BanAccountReq{
+		UserID:        req.GetUserId(),
+		OperatorID:    req.GetOperatorId(),
+		OperatorRealm: realm,
+		Reason:        req.GetReason(),
+		Remark:        req.GetRemark(),
+		BannedUntil:   bannedUntil,
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.BanAccount_Resp{BanRecordId: res.BanRecordID}, nil
+	return &v1.BanAccount_Resp{
+		BanRecordId: res.BanRecordID,
+	}, nil
 }
 
-func (s *AuthService) UnbanExpired(ctx context.Context, req *v1.UnbanExpired_Req) (*v1.UnbanExpired_Resp, error) {
+func (s *AuthService) UnbanExpired(
+	ctx context.Context,
+	req *v1.UnbanExpired_Req,
+) (*v1.UnbanExpired_Resp, error) {
 	updated, err := s.authUsecase.UnbanExpired(ctx, req.GetUserId(), req.GetBanRecordId())
-	return &v1.UnbanExpired_Resp{Updated: updated}, err
+	return &v1.UnbanExpired_Resp{
+		Updated: updated,
+	}, err
 }

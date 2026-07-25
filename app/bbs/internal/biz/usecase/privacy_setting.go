@@ -10,11 +10,18 @@ type PrivacySettingUsecase struct {
 	privacySettingClient repo.PrivacySettingClient
 }
 
-func NewPrivacySettingUsecase(privacySettingClient repo.PrivacySettingClient) *PrivacySettingUsecase {
-	return &PrivacySettingUsecase{privacySettingClient: privacySettingClient}
+func NewPrivacySettingUsecase(
+	privacySettingClient repo.PrivacySettingClient,
+) *PrivacySettingUsecase {
+	return &PrivacySettingUsecase{
+		privacySettingClient: privacySettingClient,
+	}
 }
 
-func (u *PrivacySettingUsecase) GetCurrentPrivacySetting(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentPrivacySetting_Resp_PrivacySetting, error) {
+func (u *PrivacySettingUsecase) GetCurrentPrivacySetting(
+	ctx context.Context,
+	userID int64,
+) (*bbsuserv1.GetCurrentPrivacySetting_Resp_PrivacySetting, error) {
 	reply, err := u.privacySettingClient.GetCurrentPrivacySetting(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -44,7 +51,10 @@ type UpdateCurrentPrivacySettingReq struct {
 	PublicLocation     *bool
 }
 
-func (u *PrivacySettingUsecase) UpdateCurrentPrivacySetting(ctx context.Context, req *UpdateCurrentPrivacySettingReq) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp_PrivacySetting, error) {
+func (u *PrivacySettingUsecase) UpdateCurrentPrivacySetting(
+	ctx context.Context,
+	req *UpdateCurrentPrivacySettingReq,
+) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp_PrivacySetting, error) {
 	reply, err := u.privacySettingClient.UpdateCurrentPrivacySetting(ctx, &repo.UpdateCurrentPrivacySettingReq{
 		UserID:             req.UserID,
 		PublicPoints:       req.PublicPoints,

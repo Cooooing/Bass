@@ -17,7 +17,9 @@ type NpcBelief struct {
 
 func (NpcBelief) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "npc_beliefs"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "npc_beliefs",
+		},
 		entsql.WithComments(true),
 	}
 }

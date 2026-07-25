@@ -21,18 +21,27 @@ type FactionRepo struct {
 	db *gen.Client
 }
 
-func NewFactionRepo(db *gen.Client) bizrepo.FactionRepo {
-	return &FactionRepo{db: db}
+func NewFactionRepo(
+	db *gen.Client,
+) bizrepo.FactionRepo {
+	return &FactionRepo{
+		db: db,
+	}
 }
 
-func (r *FactionRepo) getClient(ctx context.Context) *gen.Client {
+func (r *FactionRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *FactionRepo) Save(ctx context.Context, row *model.Faction) (*model.Faction, error) {
+func (r *FactionRepo) Save(
+	ctx context.Context,
+	row *model.Faction,
+) (*model.Faction, error) {
 	saved, err := r.getClient(ctx).Faction.Create().
 		SetWorldID(row.WorldID).
 		SetCode(row.Code).
@@ -49,7 +58,10 @@ func (r *FactionRepo) Save(ctx context.Context, row *model.Faction) (*model.Fact
 	return factionModel(saved), nil
 }
 
-func factionQuery(q *gen.FactionQuery, req *bizrepo.FactionQuery) *gen.FactionQuery {
+func factionQuery(
+	q *gen.FactionQuery,
+	req *bizrepo.FactionQuery,
+) *gen.FactionQuery {
 	q = q.Where(faction.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -69,7 +81,10 @@ func factionQuery(q *gen.FactionQuery, req *bizrepo.FactionQuery) *gen.FactionQu
 	return q
 }
 
-func (r *FactionRepo) Get(ctx context.Context, req *bizrepo.FactionQuery) (*model.Faction, error) {
+func (r *FactionRepo) Get(
+	ctx context.Context,
+	req *bizrepo.FactionQuery,
+) (*model.Faction, error) {
 	row, err := factionQuery(r.getClient(ctx).Faction.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -80,7 +95,10 @@ func (r *FactionRepo) Get(ctx context.Context, req *bizrepo.FactionQuery) (*mode
 	return factionModel(row), nil
 }
 
-func (r *FactionRepo) List(ctx context.Context, req *bizrepo.FactionQuery) ([]*model.Faction, error) {
+func (r *FactionRepo) List(
+	ctx context.Context,
+	req *bizrepo.FactionQuery,
+) ([]*model.Faction, error) {
 	rows, err := factionQuery(r.getClient(ctx).Faction.Query(), req).
 		Order(faction.ByID()).
 		All(ctx)
@@ -92,7 +110,10 @@ func (r *FactionRepo) List(ctx context.Context, req *bizrepo.FactionQuery) ([]*m
 	}), nil
 }
 
-func (r *FactionRepo) Map(ctx context.Context, req *bizrepo.FactionQuery) (map[int64]*model.Faction, error) {
+func (r *FactionRepo) Map(
+	ctx context.Context,
+	req *bizrepo.FactionQuery,
+) (map[int64]*model.Faction, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -104,11 +125,17 @@ func (r *FactionRepo) Map(ctx context.Context, req *bizrepo.FactionQuery) (map[i
 	return out, nil
 }
 
-func (r *FactionRepo) Count(ctx context.Context, req *bizrepo.FactionQuery) (int, error) {
+func (r *FactionRepo) Count(
+	ctx context.Context,
+	req *bizrepo.FactionQuery,
+) (int, error) {
 	return factionQuery(r.getClient(ctx).Faction.Query(), req).Count(ctx)
 }
 
-func (r *FactionRepo) Page(ctx context.Context, req *bizrepo.FactionPageReq) (*bizrepo.FactionPageResp, error) {
+func (r *FactionRepo) Page(
+	ctx context.Context,
+	req *bizrepo.FactionPageReq,
+) (*bizrepo.FactionPageResp, error) {
 	p := page(req.Page)
 	q := factionQuery(r.getClient(ctx).Faction.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -130,7 +157,9 @@ func (r *FactionRepo) Page(ctx context.Context, req *bizrepo.FactionPageReq) (*b
 	}, nil
 }
 
-func factionModel(row *gen.Faction) *model.Faction {
+func factionModel(
+	row *gen.Faction,
+) *model.Faction {
 	return &model.Faction{
 		ID:          row.ID,
 		WorldID:     row.WorldID,
@@ -146,7 +175,10 @@ func factionModel(row *gen.Faction) *model.Faction {
 	}
 }
 
-func (r *FactionRepo) UpdateState(ctx context.Context, req *bizrepo.FactionStateUpdateReq) (*model.Faction, error) {
+func (r *FactionRepo) UpdateState(
+	ctx context.Context,
+	req *bizrepo.FactionStateUpdateReq,
+) (*model.Faction, error) {
 	update := r.getClient(ctx).Faction.Update().Where(faction.ID(req.FactionID), faction.Version(req.Version), faction.DeletedAtIsNil())
 	if req.Status != nil {
 		update.SetStatus(faction.Status(*req.Status))
@@ -168,5 +200,7 @@ func (r *FactionRepo) UpdateState(ctx context.Context, req *bizrepo.FactionState
 	if count == 0 {
 		return nil, fmt.Errorf("faction version conflict")
 	}
-	return r.Get(ctx, &bizrepo.FactionQuery{ID: new(req.FactionID)})
+	return r.Get(ctx, &bizrepo.FactionQuery{
+		ID: new(req.FactionID),
+	})
 }

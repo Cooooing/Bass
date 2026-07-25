@@ -22,18 +22,27 @@ type WorldStateRepo struct {
 	db *gen.Client
 }
 
-func NewWorldStateRepo(db *gen.Client) bizrepo.WorldStateRepo {
-	return &WorldStateRepo{db: db}
+func NewWorldStateRepo(
+	db *gen.Client,
+) bizrepo.WorldStateRepo {
+	return &WorldStateRepo{
+		db: db,
+	}
 }
 
-func (r *WorldStateRepo) getClient(ctx context.Context) *gen.Client {
+func (r *WorldStateRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *WorldStateRepo) Save(ctx context.Context, row *model.WorldState) (*model.WorldState, error) {
+func (r *WorldStateRepo) Save(
+	ctx context.Context,
+	row *model.WorldState,
+) (*model.WorldState, error) {
 	saved, err := r.getClient(ctx).WorldState.Create().
 		SetWorldID(row.WorldID).
 		SetVersion(row.Version).
@@ -72,7 +81,10 @@ func (r *WorldStateRepo) Save(ctx context.Context, row *model.WorldState) (*mode
 	}, nil
 }
 
-func worldStateQuery(q *gen.WorldStateQuery, req *bizrepo.WorldStateQuery) *gen.WorldStateQuery {
+func worldStateQuery(
+	q *gen.WorldStateQuery,
+	req *bizrepo.WorldStateQuery,
+) *gen.WorldStateQuery {
 	if req == nil {
 		return q
 	}
@@ -94,7 +106,10 @@ func worldStateQuery(q *gen.WorldStateQuery, req *bizrepo.WorldStateQuery) *gen.
 	return q
 }
 
-func (r *WorldStateRepo) Get(ctx context.Context, req *bizrepo.WorldStateQuery) (*model.WorldState, error) {
+func (r *WorldStateRepo) Get(
+	ctx context.Context,
+	req *bizrepo.WorldStateQuery,
+) (*model.WorldState, error) {
 	row, err := worldStateQuery(r.getClient(ctx).WorldState.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -123,7 +138,10 @@ func (r *WorldStateRepo) Get(ctx context.Context, req *bizrepo.WorldStateQuery) 
 	}, nil
 }
 
-func (r *WorldStateRepo) List(ctx context.Context, req *bizrepo.WorldStateQuery) ([]*model.WorldState, error) {
+func (r *WorldStateRepo) List(
+	ctx context.Context,
+	req *bizrepo.WorldStateQuery,
+) ([]*model.WorldState, error) {
 	rows, err := worldStateQuery(r.getClient(ctx).WorldState.Query(), req).Order(worldstate.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
@@ -152,7 +170,10 @@ func (r *WorldStateRepo) List(ctx context.Context, req *bizrepo.WorldStateQuery)
 	return out, nil
 }
 
-func (r *WorldStateRepo) Map(ctx context.Context, req *bizrepo.WorldStateQuery) (map[int64]*model.WorldState, error) {
+func (r *WorldStateRepo) Map(
+	ctx context.Context,
+	req *bizrepo.WorldStateQuery,
+) (map[int64]*model.WorldState, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -164,11 +185,17 @@ func (r *WorldStateRepo) Map(ctx context.Context, req *bizrepo.WorldStateQuery) 
 	return out, nil
 }
 
-func (r *WorldStateRepo) Count(ctx context.Context, req *bizrepo.WorldStateQuery) (int, error) {
+func (r *WorldStateRepo) Count(
+	ctx context.Context,
+	req *bizrepo.WorldStateQuery,
+) (int, error) {
 	return worldStateQuery(r.getClient(ctx).WorldState.Query(), req).Count(ctx)
 }
 
-func (r *WorldStateRepo) Page(ctx context.Context, req *bizrepo.WorldStatePageReq) (*bizrepo.WorldStatePageResp, error) {
+func (r *WorldStateRepo) Page(
+	ctx context.Context,
+	req *bizrepo.WorldStatePageReq,
+) (*bizrepo.WorldStatePageResp, error) {
 	p := page(req.Page)
 	q := worldStateQuery(r.getClient(ctx).WorldState.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -200,10 +227,16 @@ func (r *WorldStateRepo) Page(ctx context.Context, req *bizrepo.WorldStatePageRe
 			NextDueAt:       row.NextDueAt,
 		}
 	})
-	return &bizrepo.WorldStatePageResp{Rows: out, Page: basePage(total, p)}, nil
+	return &bizrepo.WorldStatePageResp{
+		Rows: out,
+		Page: basePage(total, p),
+	}, nil
 }
 
-func (r *WorldStateRepo) NextEventSequence(ctx context.Context, worldID int64) (uint64, error) {
+func (r *WorldStateRepo) NextEventSequence(
+	ctx context.Context,
+	worldID int64,
+) (uint64, error) {
 	count, err := r.getClient(ctx).WorldState.Update().Where(worldstate.WorldID(worldID)).AddEventSequence(1).Save(ctx)
 	if err != nil {
 		return 0, err
@@ -211,19 +244,29 @@ func (r *WorldStateRepo) NextEventSequence(ctx context.Context, worldID int64) (
 	if count == 0 {
 		return 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
 	}
-	row, err := r.Get(ctx, &bizrepo.WorldStateQuery{WorldID: new(worldID)})
+	row, err := r.Get(ctx, &bizrepo.WorldStateQuery{
+		WorldID: new(worldID),
+	})
 	if err != nil {
 		return 0, err
 	}
 	return row.EventSequence, nil
 }
 
-func (r *WorldStateRepo) AdvanceCursor(ctx context.Context, worldID int64, sequence uint64) error {
+func (r *WorldStateRepo) AdvanceCursor(
+	ctx context.Context,
+	worldID int64,
+	sequence uint64,
+) error {
 	_, err := r.getClient(ctx).WorldState.Update().Where(worldstate.WorldID(worldID), worldstate.AgentCursorLT(sequence)).SetAgentCursor(sequence).Save(ctx)
 	return err
 }
 
-func (r *WorldStateRepo) UpdateNextTick(ctx context.Context, worldID int64, next time.Time) error {
+func (r *WorldStateRepo) UpdateNextTick(
+	ctx context.Context,
+	worldID int64,
+	next time.Time,
+) error {
 	count, err := r.getClient(ctx).WorldState.Update().Where(worldstate.WorldID(worldID)).SetNextTickAt(next).SetNextDueAt(next).Save(ctx)
 	if err != nil {
 		return err
@@ -234,7 +277,10 @@ func (r *WorldStateRepo) UpdateNextTick(ctx context.Context, worldID int64, next
 	return nil
 }
 
-func (r *WorldStateRepo) UpdateNarrative(ctx context.Context, req *bizrepo.WorldStateUpdateNarrativeReq) (*model.WorldState, error) {
+func (r *WorldStateRepo) UpdateNarrative(
+	ctx context.Context,
+	req *bizrepo.WorldStateUpdateNarrativeReq,
+) (*model.WorldState, error) {
 	count, err := r.getClient(ctx).WorldState.Update().
 		Where(worldstate.WorldID(req.WorldID), worldstate.Version(req.Version)).
 		SetSummary(req.Summary).
@@ -251,5 +297,7 @@ func (r *WorldStateRepo) UpdateNarrative(ctx context.Context, req *bizrepo.World
 	if count == 0 {
 		return nil, fmt.Errorf("world version conflict")
 	}
-	return r.Get(ctx, &bizrepo.WorldStateQuery{WorldID: new(req.WorldID)})
+	return r.Get(ctx, &bizrepo.WorldStateQuery{
+		WorldID: new(req.WorldID),
+	})
 }

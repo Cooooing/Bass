@@ -22,18 +22,27 @@ type TaskVersionRepo struct {
 	db *gen.Client
 }
 
-func NewTaskVersionRepo(db *gen.Client) bizrepo.TaskVersionRepo {
-	return &TaskVersionRepo{db: db}
+func NewTaskVersionRepo(
+	db *gen.Client,
+) bizrepo.TaskVersionRepo {
+	return &TaskVersionRepo{
+		db: db,
+	}
 }
 
-func (r *TaskVersionRepo) getClient(ctx context.Context) *gen.Client {
+func (r *TaskVersionRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *TaskVersionRepo) Get(ctx context.Context, req *bizrepo.TaskVersionGetReq) (*model.TaskVersion, error) {
+func (r *TaskVersionRepo) Get(
+	ctx context.Context,
+	req *bizrepo.TaskVersionGetReq,
+) (*model.TaskVersion, error) {
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, req)
 	row, err := query.Only(ctx)
@@ -46,7 +55,10 @@ func (r *TaskVersionRepo) Get(ctx context.Context, req *bizrepo.TaskVersionGetRe
 	return r.model(row), nil
 }
 
-func (r *TaskVersionRepo) List(ctx context.Context, req *bizrepo.TaskVersionGetReq) ([]*model.TaskVersion, error) {
+func (r *TaskVersionRepo) List(
+	ctx context.Context,
+	req *bizrepo.TaskVersionGetReq,
+) ([]*model.TaskVersion, error) {
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, req)
 	rows, err := query.Order(taskversion.ByTaskID(), taskversion.ByVersion(entsql.OrderDesc())).All(ctx)
@@ -60,7 +72,10 @@ func (r *TaskVersionRepo) List(ctx context.Context, req *bizrepo.TaskVersionGetR
 	return result, nil
 }
 
-func (r *TaskVersionRepo) Map(ctx context.Context, req *bizrepo.TaskVersionGetReq) (map[int64]*model.TaskVersion, error) {
+func (r *TaskVersionRepo) Map(
+	ctx context.Context,
+	req *bizrepo.TaskVersionGetReq,
+) (map[int64]*model.TaskVersion, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -72,7 +87,10 @@ func (r *TaskVersionRepo) Map(ctx context.Context, req *bizrepo.TaskVersionGetRe
 	return result, nil
 }
 
-func (r *TaskVersionRepo) Count(ctx context.Context, req *bizrepo.TaskVersionGetReq) (int, error) {
+func (r *TaskVersionRepo) Count(
+	ctx context.Context,
+	req *bizrepo.TaskVersionGetReq,
+) (int, error) {
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -82,7 +100,10 @@ func (r *TaskVersionRepo) Count(ctx context.Context, req *bizrepo.TaskVersionGet
 	return count, nil
 }
 
-func (r *TaskVersionRepo) Page(ctx context.Context, req *bizrepo.TaskVersionPageReq) (*bizrepo.TaskVersionPageResp, error) {
+func (r *TaskVersionRepo) Page(
+	ctx context.Context,
+	req *bizrepo.TaskVersionPageReq,
+) (*bizrepo.TaskVersionPageResp, error) {
 	page := server.PageValid(req.Page)
 	query := r.getClient(ctx).TaskVersion.Query()
 	query = r.getQuery(query, &req.TaskVersionGetReq)
@@ -98,10 +119,20 @@ func (r *TaskVersionRepo) Page(ctx context.Context, req *bizrepo.TaskVersionPage
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return &bizrepo.TaskVersionPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
+	return &bizrepo.TaskVersionPageResp{
+		Rows: result,
+		Page: &common.PageResp{
+			Total: uint32(total),
+			Page:  page.Page,
+			Size:  page.Size,
+		},
+	}, nil
 }
 
-func (r *TaskVersionRepo) Create(ctx context.Context, taskRow *model.Task) (*model.TaskVersion, error) {
+func (r *TaskVersionRepo) Create(
+	ctx context.Context,
+	taskRow *model.Task,
+) (*model.TaskVersion, error) {
 	row := taskRow
 	created, err := r.getClient(ctx).TaskVersion.Create().
 		SetTaskID(row.ID).
@@ -122,7 +153,10 @@ func (r *TaskVersionRepo) Create(ctx context.Context, taskRow *model.Task) (*mod
 	return r.model(created), nil
 }
 
-func (r *TaskVersionRepo) getQuery(query *gen.TaskVersionQuery, req *bizrepo.TaskVersionGetReq) *gen.TaskVersionQuery {
+func (r *TaskVersionRepo) getQuery(
+	query *gen.TaskVersionQuery,
+	req *bizrepo.TaskVersionGetReq,
+) *gen.TaskVersionQuery {
 	if req == nil {
 		return query
 	}
@@ -147,7 +181,9 @@ func (r *TaskVersionRepo) getQuery(query *gen.TaskVersionQuery, req *bizrepo.Tas
 	return query
 }
 
-func (r *TaskVersionRepo) model(row *gen.TaskVersion) *model.TaskVersion {
+func (r *TaskVersionRepo) model(
+	row *gen.TaskVersion,
+) *model.TaskVersion {
 	return &model.TaskVersion{
 		ID:             row.ID,
 		TaskID:         row.TaskID,

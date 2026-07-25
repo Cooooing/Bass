@@ -27,14 +27,24 @@ type DeadLetterAlertClient struct {
 	larkClient  *LarkWebhookClient
 }
 
-func NewDeadLetterAlertClient(logger *slog.Logger, redisClient *RedisClient, larkClient *LarkWebhookClient) *DeadLetterAlertClient {
+func NewDeadLetterAlertClient(
+	logger *slog.Logger,
+	redisClient *RedisClient,
+	larkClient *LarkWebhookClient,
+) *DeadLetterAlertClient {
 	return &DeadLetterAlertClient{
 		logger:      logger,
 		redisClient: redisClient,
 		larkClient:  larkClient,
 	}
 }
-func (c *DeadLetterAlertClient) Alert(ctx context.Context, deadLetterConf *common.Event_DeadLetter, alertConf *common.Alert, alert *DeadLetterAlert) error {
+
+func (c *DeadLetterAlertClient) Alert(
+	ctx context.Context,
+	deadLetterConf *common.Event_DeadLetter,
+	alertConf *common.Alert,
+	alert *DeadLetterAlert,
+) error {
 	if c == nil || alert == nil || alert.Service == "" || alert.Source == "" || alert.EventID == "" {
 		return nil
 	}
@@ -66,7 +76,10 @@ func (c *DeadLetterAlertClient) Alert(ctx context.Context, deadLetterConf *commo
 		Text:    c.text(alert),
 	})
 }
-func (c *DeadLetterAlertClient) text(alert *DeadLetterAlert) string {
+
+func (c *DeadLetterAlertClient) text(
+	alert *DeadLetterAlert,
+) string {
 	updatedAt := ""
 	if alert.UpdatedAt != nil {
 		updatedAt = alert.UpdatedAt.Format(time.RFC3339)

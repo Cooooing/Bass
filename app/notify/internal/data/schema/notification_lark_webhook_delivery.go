@@ -20,7 +20,9 @@ type NotificationLarkWebhookDelivery struct {
 
 func (NotificationLarkWebhookDelivery) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_lark_webhook_delivery"},
+		entsql.Annotation{
+			Table: constant.TablePrefixNotify.String() + "notification_lark_webhook_delivery",
+		},
 		entsql.WithComments(true),
 	}
 }

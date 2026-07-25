@@ -11,14 +11,26 @@ type ArticleWatchedHandler struct {
 	articleActorHandler
 }
 
-func NewArticleWatchedHandler(userClient repo.UserClient, contentClient repo.ContentClient) *ArticleWatchedHandler {
-	return &ArticleWatchedHandler{articleActorHandler: articleActorHandler{
-		userClientHandler:    userClientHandler{userClient: userClient},
-		contentClientHandler: contentClientHandler{contentClient: contentClient},
-	}}
+func NewArticleWatchedHandler(
+	userClient repo.UserClient,
+	contentClient repo.ContentClient,
+) *ArticleWatchedHandler {
+	return &ArticleWatchedHandler{
+		articleActorHandler: articleActorHandler{
+			userClientHandler: userClientHandler{
+				userClient: userClient,
+			},
+			contentClientHandler: contentClientHandler{
+				contentClient: contentClient,
+			},
+		},
+	}
 }
 
-func (h *ArticleWatchedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
+func (h *ArticleWatchedHandler) Build(
+	ctx context.Context,
+	event *enums.Event,
+) (*usecase.NotificationContext, error) {
 	if event == nil || event.EventId == "" {
 		return nil, nil
 	}

@@ -20,7 +20,9 @@ type NotificationEmailDelivery struct {
 
 func (NotificationEmailDelivery) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_email_delivery"},
+		entsql.Annotation{
+			Table: constant.TablePrefixNotify.String() + "notification_email_delivery",
+		},
 		entsql.WithComments(true),
 	}
 }

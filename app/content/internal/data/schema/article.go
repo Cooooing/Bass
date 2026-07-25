@@ -19,7 +19,9 @@ type Article struct {
 
 func (Article) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixContent.String() + "articles"},
+		entsql.Annotation{
+			Table: constant.TablePrefixContent.String() + "articles",
+		},
 		entsql.WithComments(true),
 	}
 }

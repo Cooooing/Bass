@@ -20,21 +20,35 @@ type StationMessageService struct {
 	stationMessageUsecase *usecase.StationMessageUsecase
 }
 
-func NewStationMessageService(stationMessageUsecase *usecase.StationMessageUsecase) *StationMessageService {
-	return &StationMessageService{stationMessageUsecase: stationMessageUsecase}
+func NewStationMessageService(
+	stationMessageUsecase *usecase.StationMessageUsecase,
+) *StationMessageService {
+	return &StationMessageService{
+		stationMessageUsecase: stationMessageUsecase,
+	}
 }
 
-func (s *StationMessageService) RegisterGrpc(gs *grpc.Server) {
+func (s *StationMessageService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	v1.RegisterNotifyStationMessageServiceServer(gs, s)
 }
 
-func (s *StationMessageService) RegisterHttp(hs *http.Server) {}
+func (s *StationMessageService) RegisterHttp(
+	hs *http.Server,
+) {
+}
 
-func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMessages_Req) (*v1.ListStationMessages_Resp, error) {
+func (s *StationMessageService) List(
+	ctx context.Context,
+	req *v1.ListStationMessages_Req,
+) (*v1.ListStationMessages_Resp, error) {
 	if req == nil {
 		req = &v1.ListStationMessages_Req{}
 	}
-	query := &usecase.StationMessagePageReq{ReceiverID: new(req.GetUserId())}
+	query := &usecase.StationMessagePageReq{
+		ReceiverID: new(req.GetUserId()),
+	}
 	if req != nil && req.Query != nil {
 		query.IDs = req.Query.GetIds()
 		query.EventType = req.Query.EventType
@@ -42,7 +56,10 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 	}
 	var pageReq *base.PageRequest
 	if req != nil {
-		pageReq = &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())}
+		pageReq = &base.PageRequest{
+			Page: int64(req.GetPage().GetPage()),
+			Size: int64(req.GetPage().GetSize()),
+		}
 	}
 	query.Page = pageReq
 	pageResp, err := s.stationMessageUsecase.Page(ctx, query)
@@ -75,10 +92,20 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 		}
 		replyRows = append(replyRows, item)
 	}
-	return &v1.ListStationMessages_Resp{Page: &common.PageResp{Page: uint32(pageResp.Page.Page), Size: uint32(pageResp.Page.Size), Total: uint32(pageResp.Page.Total)}, Rows: replyRows}, nil
+	return &v1.ListStationMessages_Resp{
+		Page: &common.PageResp{
+			Page:  uint32(pageResp.Page.Page),
+			Size:  uint32(pageResp.Page.Size),
+			Total: uint32(pageResp.Page.Total),
+		},
+		Rows: replyRows,
+	}, nil
 }
 
-func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadStationMessage_Req) (*v1.MarkReadStationMessage_Resp, error) {
+func (s *StationMessageService) MarkRead(
+	ctx context.Context,
+	req *v1.MarkReadStationMessage_Req,
+) (*v1.MarkReadStationMessage_Resp, error) {
 	if req == nil {
 		req = &v1.MarkReadStationMessage_Req{}
 	}
@@ -105,10 +132,15 @@ func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadSt
 	if err != nil {
 		return nil, err
 	}
-	return &v1.MarkReadStationMessage_Resp{Count: int32(markReadResp)}, nil
+	return &v1.MarkReadStationMessage_Resp{
+		Count: int32(markReadResp),
+	}, nil
 }
 
-func (s *StationMessageService) CountUnread(ctx context.Context, req *v1.CountUnreadStationMessages_Req) (*v1.CountUnreadStationMessages_Resp, error) {
+func (s *StationMessageService) CountUnread(
+	ctx context.Context,
+	req *v1.CountUnreadStationMessages_Req,
+) (*v1.CountUnreadStationMessages_Resp, error) {
 	if req == nil {
 		req = &v1.CountUnreadStationMessages_Req{}
 	}
@@ -116,5 +148,7 @@ func (s *StationMessageService) CountUnread(ctx context.Context, req *v1.CountUn
 	if err != nil {
 		return nil, err
 	}
-	return &v1.CountUnreadStationMessages_Resp{Count: int64(countResp)}, nil
+	return &v1.CountUnreadStationMessages_Resp{
+		Count: int64(countResp),
+	}, nil
 }

@@ -18,7 +18,10 @@ type RedisClient struct {
 	Client *redis.Client
 }
 
-func NewRedisClient(logger *slog.Logger, conf *common.Redis) (*RedisClient, func(), error) {
+func NewRedisClient(
+	logger *slog.Logger,
+	conf *common.Redis,
+) (*RedisClient, func(), error) {
 	if conf.DialTimeout == nil {
 		conf.DialTimeout = durationpb.New(5 * time.Second)
 	}

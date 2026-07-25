@@ -20,7 +20,9 @@ type NpcMemory struct {
 
 func (NpcMemory) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "npc_memories"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "npc_memories",
+		},
 		entsql.WithComments(true),
 	}
 }

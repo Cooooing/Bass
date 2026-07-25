@@ -18,15 +18,22 @@ type Qiniu struct {
 	conf *config.Bootstrap
 }
 
-func NewQiniu(conf *config.Bootstrap) *Qiniu {
-	return &Qiniu{conf: conf}
+func NewQiniu(
+	conf *config.Bootstrap,
+) *Qiniu {
+	return &Qiniu{
+		conf: conf,
+	}
 }
 
 func (q *Qiniu) Name() string {
 	return string(enum.ObjectStorageProviderQiniu)
 }
 
-func (q *Qiniu) CreateBucket(ctx context.Context, bucket string) error {
+func (q *Qiniu) CreateBucket(
+	ctx context.Context,
+	bucket string,
+) error {
 	if bucket == "" {
 		bucket = q.conf.Platform.Oss.Qiniu.Bucket
 	}
@@ -38,7 +45,10 @@ func (q *Qiniu) CreateBucket(ctx context.Context, bucket string) error {
 	return nil
 }
 
-func (q *Qiniu) DeleteBucket(ctx context.Context, bucket string) error {
+func (q *Qiniu) DeleteBucket(
+	ctx context.Context,
+	bucket string,
+) error {
 	if bucket == "" {
 		bucket = q.conf.Platform.Oss.Qiniu.Bucket
 	}
@@ -49,18 +59,26 @@ func (q *Qiniu) DeleteBucket(ctx context.Context, bucket string) error {
 	}
 	return nil
 }
-func (q *Qiniu) Upload(ctx context.Context, req *repo.ObjectStorageUploadReq) (*repo.ObjectStorageUploadResp, error) {
+
+func (q *Qiniu) Upload(
+	ctx context.Context,
+	req *repo.ObjectStorageUploadReq,
+) (*repo.ObjectStorageUploadResp, error) {
 	if req == nil {
 		req = &repo.ObjectStorageUploadReq{}
 	}
 	mac := auth.New(q.conf.Platform.Oss.Qiniu.AccessKey, q.conf.Platform.Oss.Qiniu.SecretKey)
-	putPolicy := storage.PutPolicy{Scope: fmt.Sprintf("%s:%s", q.conf.Platform.Oss.Qiniu.Bucket, req.Key)}
+	putPolicy := storage.PutPolicy{
+		Scope: fmt.Sprintf("%s:%s", q.conf.Platform.Oss.Qiniu.Bucket, req.Key),
+	}
 	if q.conf.Platform.Oss.Qiniu.Timeout != nil {
 		putPolicy.Expires = uint64(q.conf.Platform.Oss.Qiniu.Timeout.Seconds)
 	}
 	putRet := &storage.PutRet{}
 	uploader := storage.NewFormUploader(nil)
-	if err := uploader.Put(ctx, putRet, putPolicy.UploadToken(mac), req.Key, bytes.NewReader(req.Content), int64(len(req.Content)), &storage.PutExtra{MimeType: req.MimeType}); err != nil {
+	if err := uploader.Put(ctx, putRet, putPolicy.UploadToken(mac), req.Key, bytes.NewReader(req.Content), int64(len(req.Content)), &storage.PutExtra{
+		MimeType: req.MimeType,
+	}); err != nil {
 		return nil, err
 	}
 	return &repo.ObjectStorageUploadResp{
@@ -73,12 +91,17 @@ func (q *Qiniu) Upload(ctx context.Context, req *repo.ObjectStorageUploadReq) (*
 	}, nil
 }
 
-func (q *Qiniu) StreamUpload(ctx context.Context, req *repo.ObjectStorageStreamUploadReq) (*repo.ObjectStorageStreamUploadResp, error) {
+func (q *Qiniu) StreamUpload(
+	ctx context.Context,
+	req *repo.ObjectStorageStreamUploadReq,
+) (*repo.ObjectStorageStreamUploadResp, error) {
 	if req == nil {
 		req = &repo.ObjectStorageStreamUploadReq{}
 	}
 	mac := auth.New(q.conf.Platform.Oss.Qiniu.AccessKey, q.conf.Platform.Oss.Qiniu.SecretKey)
-	putPolicy := storage.PutPolicy{Scope: fmt.Sprintf("%s:%s", q.conf.Platform.Oss.Qiniu.Bucket, req.Key)}
+	putPolicy := storage.PutPolicy{
+		Scope: fmt.Sprintf("%s:%s", q.conf.Platform.Oss.Qiniu.Bucket, req.Key),
+	}
 	if q.conf.Platform.Oss.Qiniu.Timeout != nil {
 		putPolicy.Expires = uint64(q.conf.Platform.Oss.Qiniu.Timeout.Seconds)
 	}
@@ -97,15 +120,24 @@ func (q *Qiniu) StreamUpload(ctx context.Context, req *repo.ObjectStorageStreamU
 	}, nil
 }
 
-func (q *Qiniu) Download(ctx context.Context, key string) (*repo.ObjectStorageDownloadResp, error) {
+func (q *Qiniu) Download(
+	ctx context.Context,
+	key string,
+) (*repo.ObjectStorageDownloadResp, error) {
 	return nil, fmt.Errorf("qiniu download requires download domain config")
 }
 
-func (q *Qiniu) StreamDownload(ctx context.Context, key string) (*repo.ObjectStorageStreamDownloadResp, error) {
+func (q *Qiniu) StreamDownload(
+	ctx context.Context,
+	key string,
+) (*repo.ObjectStorageStreamDownloadResp, error) {
 	return nil, fmt.Errorf("qiniu stream download requires download domain config")
 }
 
-func (q *Qiniu) UploadToken(ctx context.Context, req *repo.ObjectStorageUploadTokenReq) (string, error) {
+func (q *Qiniu) UploadToken(
+	ctx context.Context,
+	req *repo.ObjectStorageUploadTokenReq,
+) (string, error) {
 	mac := auth.New(q.conf.Platform.Oss.Qiniu.AccessKey, q.conf.Platform.Oss.Qiniu.SecretKey)
 	putPolicy := storage.PutPolicy{
 		Scope:            fmt.Sprintf("%s:%s", q.conf.Platform.Oss.Qiniu.Bucket, req.Key),
@@ -122,7 +154,10 @@ func (q *Qiniu) UploadToken(ctx context.Context, req *repo.ObjectStorageUploadTo
 	return putPolicy.UploadToken(mac), nil
 }
 
-func (q *Qiniu) Status(ctx context.Context, req *repo.ObjectStorageStatusReq) error {
+func (q *Qiniu) Status(
+	ctx context.Context,
+	req *repo.ObjectStorageStatusReq,
+) error {
 	mac := auth.New(q.conf.Platform.Oss.Qiniu.AccessKey, q.conf.Platform.Oss.Qiniu.SecretKey)
 	bucketManager := storage.NewBucketManager(mac, nil)
 	err := bucketManager.UpdateObjectStatus(q.conf.Platform.Oss.Qiniu.Bucket, req.Key, req.Enable)

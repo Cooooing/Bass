@@ -69,7 +69,10 @@ func run() error {
 	return err
 }
 
-func resolveClientMode(mode string, terminal bool) (string, error) {
+func resolveClientMode(
+	mode string,
+	terminal bool,
+) (string, error) {
 	switch mode {
 	case clientModeAuto:
 		if terminal {

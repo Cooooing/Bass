@@ -15,12 +15,23 @@ type ContentPostscriptClient struct {
 	contentClient *rpc.ContentClient
 }
 
-func NewContentPostscriptClient(contentClient *rpc.ContentClient) repo.ContentPostscriptClient {
-	return &ContentPostscriptClient{contentClient: contentClient}
+func NewContentPostscriptClient(
+	contentClient *rpc.ContentClient,
+) repo.ContentPostscriptClient {
+	return &ContentPostscriptClient{
+		contentClient: contentClient,
+	}
 }
 
-func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *repo.AddPostscriptReq) (*repo.ArticlePostscript, error) {
-	reply, err := r.contentClient.Article.AddPostscript(ctx, &contentv1.AddPostscriptArticle_Req{ArticleId: req.ArticleID, Content: req.Content, UserId: req.UserID})
+func (r *ContentPostscriptClient) AddPostscript(
+	ctx context.Context,
+	req *repo.AddPostscriptReq,
+) (*repo.ArticlePostscript, error) {
+	reply, err := r.contentClient.Article.AddPostscript(ctx, &contentv1.AddPostscriptArticle_Req{
+		ArticleId: req.ArticleID,
+		Content:   req.Content,
+		UserId:    req.UserID,
+	})
 	if err != nil {
 		return nil, err
 	}

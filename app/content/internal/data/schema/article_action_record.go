@@ -19,7 +19,9 @@ type ArticleActionRecord struct {
 
 func (ArticleActionRecord) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixContent.String() + "article_action_records"},
+		entsql.Annotation{
+			Table: constant.TablePrefixContent.String() + "article_action_records",
+		},
 		entsql.WithComments(true),
 	}
 }

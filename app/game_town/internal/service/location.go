@@ -18,17 +18,29 @@ type LocationService struct {
 	usecase *usecase.LocationUsecase
 }
 
-func NewLocationService(usecase *usecase.LocationUsecase) *LocationService {
-	return &LocationService{usecase: usecase}
+func NewLocationService(
+	usecase *usecase.LocationUsecase,
+) *LocationService {
+	return &LocationService{
+		usecase: usecase,
+	}
 }
 
-func (s *LocationService) RegisterGrpc(server *grpc.Server) {
+func (s *LocationService) RegisterGrpc(
+	server *grpc.Server,
+) {
 	v1.RegisterGameTownLocationServiceServer(server, s)
 }
 
-func (s *LocationService) RegisterHttp(*http.Server) {}
+func (s *LocationService) RegisterHttp(
+	*http.Server,
+) {
+}
 
-func (s *LocationService) Get(ctx context.Context, req *v1.GetGameTownLocation_Request) (*v1.GetGameTownLocation_Resp, error) {
+func (s *LocationService) Get(
+	ctx context.Context,
+	req *v1.GetGameTownLocation_Request,
+) (*v1.GetGameTownLocation_Resp, error) {
 	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 || req.GetId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -51,7 +63,10 @@ func (s *LocationService) Get(ctx context.Context, req *v1.GetGameTownLocation_R
 	}, nil
 }
 
-func (s *LocationService) List(ctx context.Context, req *v1.ListGameTownLocations_Request) (*v1.ListGameTownLocations_Resp, error) {
+func (s *LocationService) List(
+	ctx context.Context,
+	req *v1.ListGameTownLocations_Request,
+) (*v1.ListGameTownLocations_Resp, error) {
 	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

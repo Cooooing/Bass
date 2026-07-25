@@ -16,7 +16,9 @@ type NodeServer struct {
 	nodeUsecase *usecase.NodeUsecase
 }
 
-func NewPushHubConn(conf *config.Bootstrap) (*grpc.ClientConn, func(), error) {
+func NewPushHubConn(
+	conf *config.Bootstrap,
+) (*grpc.ClientConn, func(), error) {
 	conn, err := grpc.NewClient(conf.PushNode.PushHubAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, nil, fmt.Errorf("create push_hub grpc client failed: %w", err)
@@ -27,7 +29,10 @@ func NewPushHubConn(conf *config.Bootstrap) (*grpc.ClientConn, func(), error) {
 	return conn, cleanup, nil
 }
 
-func ProvideNodeID(conf *config.Bootstrap, conn *grpc.ClientConn) (string, error) {
+func ProvideNodeID(
+	conf *config.Bootstrap,
+	conn *grpc.ClientConn,
+) (string, error) {
 	nodeID, err := usecase.RegisterWithHub(context.Background(), conn, conf)
 	if err != nil {
 		return "", err
@@ -36,14 +41,22 @@ func ProvideNodeID(conf *config.Bootstrap, conn *grpc.ClientConn) (string, error
 	return nodeID, nil
 }
 
-func NewNodeServer(nodeUsecase *usecase.NodeUsecase) *NodeServer {
-	return &NodeServer{nodeUsecase: nodeUsecase}
+func NewNodeServer(
+	nodeUsecase *usecase.NodeUsecase,
+) *NodeServer {
+	return &NodeServer{
+		nodeUsecase: nodeUsecase,
+	}
 }
 
-func (s *NodeServer) Start(ctx context.Context) error {
+func (s *NodeServer) Start(
+	ctx context.Context,
+) error {
 	return s.nodeUsecase.ConnectHub(ctx)
 }
 
-func (s *NodeServer) Stop(ctx context.Context) error {
+func (s *NodeServer) Stop(
+	ctx context.Context,
+) error {
 	return s.nodeUsecase.Stop(ctx)
 }

@@ -57,7 +57,10 @@ func newGameTownClient(
 	return client, cleanup, target, nil
 }
 
-func envDefault(key string, fallback string) string {
+func envDefault(
+	key string,
+	fallback string,
+) string {
 	if value := os.Getenv(key); value != "" {
 		return value
 	}

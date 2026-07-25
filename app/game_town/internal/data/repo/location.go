@@ -22,18 +22,27 @@ type LocationRepo struct {
 	db *gen.Client
 }
 
-func NewLocationRepo(db *gen.Client) bizrepo.LocationRepo {
-	return &LocationRepo{db: db}
+func NewLocationRepo(
+	db *gen.Client,
+) bizrepo.LocationRepo {
+	return &LocationRepo{
+		db: db,
+	}
 }
 
-func (r *LocationRepo) getClient(ctx context.Context) *gen.Client {
+func (r *LocationRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *LocationRepo) Save(ctx context.Context, row *model.Location) (*model.Location, error) {
+func (r *LocationRepo) Save(
+	ctx context.Context,
+	row *model.Location,
+) (*model.Location, error) {
 	saved, err := r.getClient(ctx).Location.Create().
 		SetWorldID(row.WorldID).
 		SetCode(row.Code).
@@ -68,7 +77,10 @@ func (r *LocationRepo) Save(ctx context.Context, row *model.Location) (*model.Lo
 	}, nil
 }
 
-func locationQuery(q *gen.LocationQuery, req *bizrepo.LocationQuery) *gen.LocationQuery {
+func locationQuery(
+	q *gen.LocationQuery,
+	req *bizrepo.LocationQuery,
+) *gen.LocationQuery {
 	q = q.Where(location.DeletedAtIsNil())
 	if req == nil {
 		return q
@@ -88,7 +100,10 @@ func locationQuery(q *gen.LocationQuery, req *bizrepo.LocationQuery) *gen.Locati
 	return q
 }
 
-func (r *LocationRepo) Get(ctx context.Context, req *bizrepo.LocationQuery) (*model.Location, error) {
+func (r *LocationRepo) Get(
+	ctx context.Context,
+	req *bizrepo.LocationQuery,
+) (*model.Location, error) {
 	row, err := locationQuery(r.getClient(ctx).Location.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_LOCATION_NOT_FOUND)
@@ -114,7 +129,10 @@ func (r *LocationRepo) Get(ctx context.Context, req *bizrepo.LocationQuery) (*mo
 	}, nil
 }
 
-func (r *LocationRepo) List(ctx context.Context, req *bizrepo.LocationQuery) ([]*model.Location, error) {
+func (r *LocationRepo) List(
+	ctx context.Context,
+	req *bizrepo.LocationQuery,
+) ([]*model.Location, error) {
 	rows, err := locationQuery(r.getClient(ctx).Location.Query(), req).Order(location.BySort(), location.ByID()).All(ctx)
 	if err != nil {
 		return nil, err
@@ -140,7 +158,10 @@ func (r *LocationRepo) List(ctx context.Context, req *bizrepo.LocationQuery) ([]
 	return out, nil
 }
 
-func (r *LocationRepo) Map(ctx context.Context, req *bizrepo.LocationQuery) (map[int64]*model.Location, error) {
+func (r *LocationRepo) Map(
+	ctx context.Context,
+	req *bizrepo.LocationQuery,
+) (map[int64]*model.Location, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -152,11 +173,17 @@ func (r *LocationRepo) Map(ctx context.Context, req *bizrepo.LocationQuery) (map
 	return out, nil
 }
 
-func (r *LocationRepo) Count(ctx context.Context, req *bizrepo.LocationQuery) (int, error) {
+func (r *LocationRepo) Count(
+	ctx context.Context,
+	req *bizrepo.LocationQuery,
+) (int, error) {
 	return locationQuery(r.getClient(ctx).Location.Query(), req).Count(ctx)
 }
 
-func (r *LocationRepo) Page(ctx context.Context, req *bizrepo.LocationPageReq) (*bizrepo.LocationPageResp, error) {
+func (r *LocationRepo) Page(
+	ctx context.Context,
+	req *bizrepo.LocationPageReq,
+) (*bizrepo.LocationPageResp, error) {
 	p := page(req.Page)
 	q := locationQuery(r.getClient(ctx).Location.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -185,10 +212,16 @@ func (r *LocationRepo) Page(ctx context.Context, req *bizrepo.LocationPageReq) (
 			UpdatedAt:            row.UpdatedAt,
 		}
 	})
-	return &bizrepo.LocationPageResp{Rows: out, Page: basePage(total, p)}, nil
+	return &bizrepo.LocationPageResp{
+		Rows: out,
+		Page: basePage(total, p),
+	}, nil
 }
 
-func (r *LocationRepo) UpdateState(ctx context.Context, req *bizrepo.LocationStateUpdateReq) (*model.Location, error) {
+func (r *LocationRepo) UpdateState(
+	ctx context.Context,
+	req *bizrepo.LocationStateUpdateReq,
+) (*model.Location, error) {
 	update := r.getClient(ctx).Location.Update().Where(location.ID(req.LocationID), location.Version(req.Version), location.DeletedAtIsNil())
 	if req.Status != nil {
 		update.SetStatus(location.Status(*req.Status))
@@ -216,5 +249,7 @@ func (r *LocationRepo) UpdateState(ctx context.Context, req *bizrepo.LocationSta
 	if count == 0 {
 		return nil, fmt.Errorf("location version conflict")
 	}
-	return r.Get(ctx, &bizrepo.LocationQuery{ID: new(req.LocationID)})
+	return r.Get(ctx, &bizrepo.LocationQuery{
+		ID: new(req.LocationID),
+	})
 }

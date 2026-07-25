@@ -24,7 +24,10 @@ func NewTagUsecase(
 	}
 }
 
-func (t *TagUsecase) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag, error) {
+func (t *TagUsecase) Saves(
+	ctx context.Context,
+	tags []*model.Tag,
+) ([]*model.Tag, error) {
 	var (
 		rows []*model.Tag
 		err  error
@@ -43,7 +46,10 @@ func (t *TagUsecase) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag
 	return rows, nil
 }
 
-func (t *TagUsecase) Update(ctx context.Context, tag *model.Tag) (*model.Tag, error) {
+func (t *TagUsecase) Update(
+	ctx context.Context,
+	tag *model.Tag,
+) (*model.Tag, error) {
 	var (
 		updated *model.Tag
 		err     error
@@ -77,7 +83,10 @@ type TagPageResp struct {
 	Page *base.PageResp
 }
 
-func (t *TagUsecase) Page(ctx context.Context, req *TagPageReq) (*TagPageResp, error) {
+func (t *TagUsecase) Page(
+	ctx context.Context,
+	req *TagPageReq,
+) (*TagPageResp, error) {
 	if req == nil {
 		req = &TagPageReq{}
 	}
@@ -93,5 +102,8 @@ func (t *TagUsecase) Page(ctx context.Context, req *TagPageReq) (*TagPageResp, e
 	if err != nil {
 		return nil, err
 	}
-	return &TagPageResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
+	return &TagPageResp{
+		Rows: pageResp.Rows,
+		Page: pageResp.Page,
+	}, nil
 }

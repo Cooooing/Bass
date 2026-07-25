@@ -8,7 +8,9 @@ const (
 	maxPageSize uint32 = 1000
 )
 
-func PageValid(p *common.PageReq) *common.PageReq {
+func PageValid(
+	p *common.PageReq,
+) *common.PageReq {
 	if p == nil {
 		return GetPageDefault()
 	}

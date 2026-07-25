@@ -58,7 +58,10 @@ type CreateWorldResp struct {
 	Event *model.Event
 }
 
-func (u *WorldUsecase) Create(ctx context.Context, req *CreateWorldReq) (*CreateWorldResp, error) {
+func (u *WorldUsecase) Create(
+	ctx context.Context,
+	req *CreateWorldReq,
+) (*CreateWorldResp, error) {
 	description := strings.TrimSpace(req.Description)
 	if req.CreatorPlayerID <= 0 || req.AgentConfigID <= 0 || description == "" {
 		return nil, apperror.GameTownWorldInvalid()
@@ -75,10 +78,14 @@ func (u *WorldUsecase) Create(ctx context.Context, req *CreateWorldReq) (*Create
 		locationCount > u.conf.GetGameTown().GetWorld().GetMaxLocationCount() {
 		return nil, apperror.GameTownWorldInvalid()
 	}
-	if _, err := u.playerRepo.Get(ctx, &repo.PlayerQuery{ID: new(req.CreatorPlayerID)}); err != nil {
+	if _, err := u.playerRepo.Get(ctx, &repo.PlayerQuery{
+		ID: new(req.CreatorPlayerID),
+	}); err != nil {
 		return nil, err
 	}
-	if _, err := u.agentConfigRepo.Get(ctx, &repo.AgentConfigQuery{ID: new(req.AgentConfigID)}); err != nil {
+	if _, err := u.agentConfigRepo.Get(ctx, &repo.AgentConfigQuery{
+		ID: new(req.AgentConfigID),
+	}); err != nil {
 		return nil, err
 	}
 	seed := time.Now().UnixNano()
@@ -132,8 +139,13 @@ func (u *WorldUsecase) Create(ctx context.Context, req *CreateWorldReq) (*Create
 	}, nil
 }
 
-func (u *WorldUsecase) Get(ctx context.Context, worldID int64) (*model.World, error) {
-	return u.worldRepo.Get(ctx, &repo.WorldQuery{ID: new(worldID)})
+func (u *WorldUsecase) Get(
+	ctx context.Context,
+	worldID int64,
+) (*model.World, error) {
+	return u.worldRepo.Get(ctx, &repo.WorldQuery{
+		ID: new(worldID),
+	})
 }
 
 type PageWorldsReq struct {
@@ -147,7 +159,10 @@ type PageWorldsResp struct {
 	Page base.PageResp
 }
 
-func (u *WorldUsecase) Page(ctx context.Context, req *PageWorldsReq) (*PageWorldsResp, error) {
+func (u *WorldUsecase) Page(
+	ctx context.Context,
+	req *PageWorldsReq,
+) (*PageWorldsResp, error) {
 	resp, err := u.worldRepo.Page(ctx, &repo.WorldPageReq{
 		Page: req.Page,
 		Query: repo.WorldQuery{

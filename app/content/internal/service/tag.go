@@ -23,19 +23,29 @@ type TagService struct {
 	tagUsecase *usecase.TagUsecase
 }
 
-func (s *TagService) RegisterGrpc(gs *grpc.Server) {
+func (s *TagService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	v1.RegisterContentTagServiceServer(gs, s)
 }
 
-func (s *TagService) RegisterHttp(hs *http.Server) {}
+func (s *TagService) RegisterHttp(
+	hs *http.Server,
+) {
+}
 
-func NewTagService(tagUsecase *usecase.TagUsecase) *TagService {
+func NewTagService(
+	tagUsecase *usecase.TagUsecase,
+) *TagService {
 	return &TagService{
 		tagUsecase: tagUsecase,
 	}
 }
 
-func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Req) (*v1.BatchCreateTags_Resp, error) {
+func (s *TagService) BatchCreate(
+	ctx context.Context,
+	req *v1.BatchCreateTags_Req,
+) (*v1.BatchCreateTags_Resp, error) {
 	if req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -78,7 +88,10 @@ func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Re
 	}, err
 }
 
-func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Req) (*v1.UpdateTag_Resp, error) {
+func (s *TagService) Update(
+	ctx context.Context,
+	req *v1.UpdateTag_Req,
+) (*v1.UpdateTag_Resp, error) {
 	if req.Tag == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
@@ -119,7 +132,10 @@ func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Req) (*v1.Upd
 	}, nil
 }
 
-func (s *TagService) List(ctx context.Context, req *v1.ListTags_Req) (*v1.ListTags_Resp, error) {
+func (s *TagService) List(
+	ctx context.Context,
+	req *v1.ListTags_Req,
+) (*v1.ListTags_Resp, error) {
 	req.Query = util.OrDefault(req.Query, &v1.ListTags_Req_TagQueryParams{})
 	var tagStatus *enum.TagStatus
 	if req.Query.Status != nil {
@@ -137,7 +153,10 @@ func (s *TagService) List(ctx context.Context, req *v1.ListTags_Req) (*v1.ListTa
 		Status:      tagStatus,
 		DomainID:    req.Query.DomainId,
 	}
-	getReq.Page = &base.PageRequest{Page: 1, Size: 1000}
+	getReq.Page = &base.PageRequest{
+		Page: 1,
+		Size: 1000,
+	}
 	pageResp, err := s.tagUsecase.Page(ctx, getReq)
 	if err != nil {
 		return nil, err
@@ -162,7 +181,10 @@ func (s *TagService) List(ctx context.Context, req *v1.ListTags_Req) (*v1.ListTa
 	}, err
 }
 
-func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Req) (*v1.PageTags_Resp, error) {
+func (s *TagService) Page(
+	ctx context.Context,
+	req *v1.PageTags_Req,
+) (*v1.PageTags_Resp, error) {
 	req.Query = util.OrDefault(req.Query, &v1.PageTags_Req_TagQueryParams{})
 	var tagStatus *enum.TagStatus
 	if req.Query.Status != nil {
@@ -180,7 +202,10 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Req) (*v1.PageTa
 		Status:      tagStatus,
 		DomainID:    req.Query.DomainId,
 	}
-	getReq.Page = &base.PageRequest{Page: int64(req.GetPage().GetPage()), Size: int64(req.GetPage().GetSize())}
+	getReq.Page = &base.PageRequest{
+		Page: int64(req.GetPage().GetPage()),
+		Size: int64(req.GetPage().GetSize()),
+	}
 	pageResp, err := s.tagUsecase.Page(ctx, getReq)
 	if err != nil {
 		return nil, err
@@ -202,7 +227,11 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Req) (*v1.PageTa
 		}
 	}
 	return &v1.PageTags_Resp{
-		Page: &common.PageResp{Page: uint32(page.Page), Size: uint32(page.Size), Total: uint32(page.Total)},
+		Page: &common.PageResp{
+			Page:  uint32(page.Page),
+			Size:  uint32(page.Size),
+			Total: uint32(page.Total),
+		},
 		Rows: reply,
 	}, err
 }

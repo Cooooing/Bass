@@ -1,4 +1,4 @@
-﻿package schema
+package schema
 
 import (
 	"common/pkg/constant"
@@ -20,7 +20,9 @@ type Account struct {
 
 func (Account) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixUser.String() + "accounts"},
+		entsql.Annotation{
+			Table: constant.TablePrefixUser.String() + "accounts",
+		},
 		entsql.WithComments(true),
 	}
 }

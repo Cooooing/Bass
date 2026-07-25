@@ -23,10 +23,15 @@ type AgentClient struct {
 }
 
 func NewAgentClient() repo.AgentClient {
-	return &AgentClient{httpClient: &http.Client{}}
+	return &AgentClient{
+		httpClient: &http.Client{},
+	}
 }
 
-func (c *AgentClient) GenerateWorld(ctx context.Context, req *repo.GenerateWorldReq) (*model.WorldDraft, error) {
+func (c *AgentClient) GenerateWorld(
+	ctx context.Context,
+	req *repo.GenerateWorldReq,
+) (*model.WorldDraft, error) {
 	prompt := fmt.Sprintf(`请根据玩家描述创建一个可自行演化的文字游戏世界。
 
 玩家描述：%s
@@ -86,7 +91,10 @@ JSON 结构：
 	return &output, nil
 }
 
-func (c *AgentClient) GenerateCharacter(ctx context.Context, req *repo.GenerateCharacterReq) (*model.CharacterDraft, error) {
+func (c *AgentClient) GenerateCharacter(
+	ctx context.Context,
+	req *repo.GenerateCharacterReq,
+) (*model.CharacterDraft, error) {
 	preference := strings.TrimSpace(req.Preference)
 	if preference == "" {
 		preference = "由世界根据当前局势安排一个合理的初始身份"
@@ -128,7 +136,10 @@ JSON 结构：{"name":"","background":"","goal":"","traits":[]}
 	return &output, nil
 }
 
-func (c *AgentClient) Talk(ctx context.Context, req *repo.TalkReq) (*model.NpcReply, error) {
+func (c *AgentClient) Talk(
+	ctx context.Context,
+	req *repo.TalkReq,
+) (*model.NpcReply, error) {
 	prompt := fmt.Sprintf(`你正在扮演一个独立 NPC。你不是全知者，只能依据提供给你的观察、记忆和公开世界信息回答。
 
 公开世界背景：%s
@@ -172,7 +183,10 @@ NPC：%s，%s，%s，性格：%s
 	return &output, nil
 }
 
-func (c *AgentClient) Act(ctx context.Context, req *repo.ActReq) (*model.ActionResolution, error) {
+func (c *AgentClient) Act(
+	ctx context.Context,
+	req *repo.ActReq,
+) (*model.ActionResolution, error) {
 	target := "无明确 NPC 目标"
 	systemPrompt := "你负责解释玩家的自由行动，并提出可由世界规则校验的结构化结果，只输出合法 JSON。所有字符串必须使用简体中文。"
 	if req.Npc != nil {
@@ -235,7 +249,10 @@ func (c *AgentClient) Act(ctx context.Context, req *repo.ActReq) (*model.ActionR
 	return &output, nil
 }
 
-func (c *AgentClient) PlanNpc(ctx context.Context, req *repo.PlanNpcReq) (*model.NpcPlan, error) {
+func (c *AgentClient) PlanNpc(
+	ctx context.Context,
+	req *repo.PlanNpcReq,
+) (*model.NpcPlan, error) {
 	prompt := fmt.Sprintf(`公开世界背景：%s
 世界时间：%s
 当前位置：%s - %s
@@ -268,7 +285,10 @@ NPC：%s，%s，%s，当前目标：%s
 	return &output, nil
 }
 
-func (c *AgentClient) Tick(ctx context.Context, req *repo.TickReq) (*model.ActionResolution, error) {
+func (c *AgentClient) Tick(
+	ctx context.Context,
+	req *repo.TickReq,
+) (*model.ActionResolution, error) {
 	prompt := fmt.Sprintf(`世界：%s
 内部世界摘要：%s
 当前阶段：%s
@@ -315,7 +335,9 @@ summary 80 字内，world_summary 120 字内，current_arc 40 字内，actions �
 	return &output, nil
 }
 
-func eventContext(events []*model.Event) string {
+func eventContext(
+	events []*model.Event,
+) string {
 	parts := lo.FilterMap(events, func(event *model.Event, _ int) (string, bool) {
 		if event == nil {
 			return "", false
@@ -325,7 +347,9 @@ func eventContext(events []*model.Event) string {
 	return strings.Join(parts, " | ")
 }
 
-func memoryContext(memories []*model.NpcMemory) string {
+func memoryContext(
+	memories []*model.NpcMemory,
+) string {
 	parts := lo.FilterMap(memories, func(memory *model.NpcMemory, _ int) (string, bool) {
 		if memory == nil {
 			return "", false
@@ -335,7 +359,10 @@ func memoryContext(memories []*model.NpcMemory) string {
 	return strings.Join(parts, " | ")
 }
 
-func characterName(member *model.WorldMember, player *model.Player) string {
+func characterName(
+	member *model.WorldMember,
+	player *model.Player,
+) string {
 	if member != nil && strings.TrimSpace(member.CharacterName) != "" {
 		return member.CharacterName
 	}
@@ -345,28 +372,42 @@ func characterName(member *model.WorldMember, player *model.Player) string {
 	return "未知玩家"
 }
 
-func npcContext(rows []*model.Npc) string {
+func npcContext(
+	rows []*model.Npc,
+) string {
 	parts := lo.Map(rows, func(row *model.Npc, _ int) string {
 		return fmt.Sprintf("%d:%s[%s]@%d 目标=%s", row.ID, row.Name, row.LifeStatus, row.CurrentLocationID, row.Goal)
 	})
 	return strings.Join(parts, " | ")
 }
 
-func locationContext(rows []*model.Location) string {
+func locationContext(
+	rows []*model.Location,
+) string {
 	parts := lo.Map(rows, func(row *model.Location, _ int) string {
 		return fmt.Sprintf("%d:%s[%s] %s", row.ID, row.Name, row.Status, row.Description)
 	})
 	return strings.Join(parts, " | ")
 }
 
-func factionContext(rows []*model.Faction) string {
+func factionContext(
+	rows []*model.Faction,
+) string {
 	parts := lo.Map(rows, func(row *model.Faction, _ int) string {
 		return fmt.Sprintf("%d:%s[%s] 目标=%s", row.ID, row.Name, row.Status, row.PublicGoal)
 	})
 	return strings.Join(parts, " | ")
 }
 
-func (c *AgentClient) completeJSON(ctx context.Context, config *model.AgentConfig, systemPrompt string, userPrompt string, schema any, output any, maxTokens int) error {
+func (c *AgentClient) completeJSON(
+	ctx context.Context,
+	config *model.AgentConfig,
+	systemPrompt string,
+	userPrompt string,
+	schema any,
+	output any,
+	maxTokens int,
+) error {
 	if config == nil {
 		return fmt.Errorf("agent config is nil")
 	}
@@ -389,7 +430,14 @@ func (c *AgentClient) completeJSON(ctx context.Context, config *model.AgentConfi
 	return nil
 }
 
-func (c *AgentClient) complete(ctx context.Context, config *model.AgentConfig, systemPrompt string, userPrompt string, schema any, maxTokens int) (string, error) {
+func (c *AgentClient) complete(
+	ctx context.Context,
+	config *model.AgentConfig,
+	systemPrompt string,
+	userPrompt string,
+	schema any,
+	maxTokens int,
+) (string, error) {
 	switch config.Provider {
 	case enum.AgentProviderOllama:
 		return c.callOllama(ctx, config, systemPrompt, userPrompt, schema, maxTokens)
@@ -400,7 +448,14 @@ func (c *AgentClient) complete(ctx context.Context, config *model.AgentConfig, s
 	}
 }
 
-func (c *AgentClient) callOllama(ctx context.Context, config *model.AgentConfig, systemPrompt string, userPrompt string, schema any, maxTokens int) (string, error) {
+func (c *AgentClient) callOllama(
+	ctx context.Context,
+	config *model.AgentConfig,
+	systemPrompt string,
+	userPrompt string,
+	schema any,
+	maxTokens int,
+) (string, error) {
 	if maxTokens <= 0 {
 		maxTokens = 512
 	}
@@ -435,7 +490,14 @@ func (c *AgentClient) callOllama(ctx context.Context, config *model.AgentConfig,
 	return response.Message.Content, nil
 }
 
-func (c *AgentClient) callOpenAICompatible(ctx context.Context, config *model.AgentConfig, systemPrompt string, userPrompt string, _ any, maxTokens int) (string, error) {
+func (c *AgentClient) callOpenAICompatible(
+	ctx context.Context,
+	config *model.AgentConfig,
+	systemPrompt string,
+	userPrompt string,
+	_ any,
+	maxTokens int,
+) (string, error) {
 	if maxTokens <= 0 {
 		maxTokens = 512
 	}
@@ -468,7 +530,13 @@ func (c *AgentClient) callOpenAICompatible(ctx context.Context, config *model.Ag
 	return response.Choices[0].Message.Content, nil
 }
 
-func (c *AgentClient) post(ctx context.Context, url string, config *model.AgentConfig, body any, output any) error {
+func (c *AgentClient) post(
+	ctx context.Context,
+	url string,
+	config *model.AgentConfig,
+	body any,
+	output any,
+) error {
 	data, err := json.Marshal(body)
 	if err != nil {
 		return err
@@ -504,14 +572,19 @@ func (c *AgentClient) post(ctx context.Context, url string, config *model.AgentC
 	return nil
 }
 
-func ollamaFormat(schema any) any {
+func ollamaFormat(
+	schema any,
+) any {
 	if schema == nil {
 		return "json"
 	}
 	return schema
 }
 
-func worldDraftSchema(locationCount uint32, npcCount uint32) map[string]any {
+func worldDraftSchema(
+	locationCount uint32,
+	npcCount uint32,
+) map[string]any {
 	return objectSchema(
 		[]string{"name", "summary", "current_arc", "current_era", "rules", "locations", "factions", "npcs"},
 		map[string]any{
@@ -660,7 +733,10 @@ func entityRefSchema() map[string]any {
 	)
 }
 
-func objectSchema(required []string, properties map[string]any) map[string]any {
+func objectSchema(
+	required []string,
+	properties map[string]any,
+) map[string]any {
 	return map[string]any{
 		"type":                 "object",
 		"additionalProperties": false,
@@ -669,7 +745,11 @@ func objectSchema(required []string, properties map[string]any) map[string]any {
 	}
 }
 
-func arraySchema(minItems int, maxItems int, items any) map[string]any {
+func arraySchema(
+	minItems int,
+	maxItems int,
+	items any,
+) map[string]any {
 	return map[string]any{
 		"type":     "array",
 		"minItems": minItems,
@@ -678,11 +758,16 @@ func arraySchema(minItems int, maxItems int, items any) map[string]any {
 	}
 }
 
-func stringArraySchema(minItems int, maxItems int) map[string]any {
+func stringArraySchema(
+	minItems int,
+	maxItems int,
+) map[string]any {
 	return arraySchema(minItems, maxItems, stringSchema())
 }
 
-func stringSchema(maxLength ...int) map[string]any {
+func stringSchema(
+	maxLength ...int,
+) map[string]any {
 	schema := map[string]any{"type": "string"}
 	if len(maxLength) > 0 && maxLength[0] > 0 {
 		schema["maxLength"] = maxLength[0]
@@ -690,11 +775,16 @@ func stringSchema(maxLength ...int) map[string]any {
 	return schema
 }
 
-func enumStringSchema(values []string) map[string]any {
+func enumStringSchema(
+	values []string,
+) map[string]any {
 	return map[string]any{"type": "string", "enum": values}
 }
 
-func truncateBody(content string, limit int) string {
+func truncateBody(
+	content string,
+	limit int,
+) string {
 	if len(content) <= limit {
 		return content
 	}

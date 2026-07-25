@@ -1,8 +1,8 @@
 package schema
 
 import (
-	commonenum "common/pkg/enum"
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	utilent "common/pkg/util/ent"
 	userenum "user/internal/enum"
 
@@ -21,7 +21,9 @@ type LoginLog struct {
 
 func (LoginLog) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixUser.String() + "login_logs"},
+		entsql.Annotation{
+			Table: constant.TablePrefixUser.String() + "login_logs",
+		},
 		entsql.WithComments(true),
 	}
 }

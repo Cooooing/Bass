@@ -19,7 +19,9 @@ type Player struct {
 
 func (Player) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "players"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "players",
+		},
 		entsql.WithComments(true),
 	}
 }

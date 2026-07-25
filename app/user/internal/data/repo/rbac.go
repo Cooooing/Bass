@@ -19,15 +19,27 @@ var _ bizrepo.RbacRepo = (*RbacRepo)(nil)
 
 type RbacRepo struct{ db *gen.Client }
 
-func NewRbacRepo(db *gen.Client) bizrepo.RbacRepo { return &RbacRepo{db: db} }
-func (r *RbacRepo) getClient(ctx context.Context) *gen.Client {
+func NewRbacRepo(
+	db *gen.Client,
+) bizrepo.RbacRepo {
+	return &RbacRepo{
+		db: db,
+	}
+}
+
+func (r *RbacRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *RbacRepo) GetRole(ctx context.Context, roleID int64) (*model.RbacRole, error) {
+func (r *RbacRepo) GetRole(
+	ctx context.Context,
+	roleID int64,
+) (*model.RbacRole, error) {
 	row, err := r.getClient(ctx).RbacRole.Query().Where(rbacrole.ID(roleID)).First(ctx)
 	if gen.IsNotFound(err) {
 		return nil, nil
@@ -38,7 +50,10 @@ func (r *RbacRepo) GetRole(ctx context.Context, roleID int64) (*model.RbacRole, 
 	return rbacRoleToModel(row), nil
 }
 
-func (r *RbacRepo) UpsertRole(ctx context.Context, row *model.RbacRole) (*model.RbacRole, error) {
+func (r *RbacRepo) UpsertRole(
+	ctx context.Context,
+	row *model.RbacRole,
+) (*model.RbacRole, error) {
 	client := r.getClient(ctx)
 	if row.ID != 0 {
 		saved, err := client.RbacRole.UpdateOneID(row.ID).SetRealm(rbacrole.Realm(row.Realm)).SetCode(row.Code).SetName(row.Name).SetDescription(row.Description).SetBuiltIn(row.BuiltIn).SetEnabled(row.Enabled).Save(ctx)
@@ -65,7 +80,10 @@ func (r *RbacRepo) UpsertRole(ctx context.Context, row *model.RbacRole) (*model.
 	return rbacRoleToModel(saved), nil
 }
 
-func (r *RbacRepo) UpsertPermission(ctx context.Context, row *model.RbacPermission) (*model.RbacPermission, error) {
+func (r *RbacRepo) UpsertPermission(
+	ctx context.Context,
+	row *model.RbacPermission,
+) (*model.RbacPermission, error) {
 	client := r.getClient(ctx)
 	if row.ID != 0 {
 		saved, err := client.RbacPermission.UpdateOneID(row.ID).SetRealm(rbacpermission.Realm(row.Realm)).SetCode(row.Code).SetName(row.Name).SetDescription(row.Description).SetEnabled(row.Enabled).Save(ctx)
@@ -92,18 +110,34 @@ func (r *RbacRepo) UpsertPermission(ctx context.Context, row *model.RbacPermissi
 	return rbacPermissionToModel(saved), nil
 }
 
-func (r *RbacRepo) BindRolePermission(ctx context.Context, roleID int64, permissionID int64) error {
+func (r *RbacRepo) BindRolePermission(
+	ctx context.Context,
+	roleID int64,
+	permissionID int64,
+) error {
 	exists, err := r.getClient(ctx).RbacRolePermission.Query().Where(rbacrolepermission.RoleID(roleID), rbacrolepermission.PermissionID(permissionID)).Exist(ctx)
 	if err != nil || exists {
 		return err
 	}
 	return r.getClient(ctx).RbacRolePermission.Create().SetRoleID(roleID).SetPermissionID(permissionID).Exec(ctx)
 }
-func (r *RbacRepo) UnbindRolePermission(ctx context.Context, roleID int64, permissionID int64) error {
+
+func (r *RbacRepo) UnbindRolePermission(
+	ctx context.Context,
+	roleID int64,
+	permissionID int64,
+) error {
 	_, err := r.getClient(ctx).RbacRolePermission.Delete().Where(rbacrolepermission.RoleID(roleID), rbacrolepermission.PermissionID(permissionID)).Exec(ctx)
 	return err
 }
-func (r *RbacRepo) GrantRole(ctx context.Context, userID int64, roleID int64, grantedBy int64, expiresAt *time.Time) error {
+
+func (r *RbacRepo) GrantRole(
+	ctx context.Context,
+	userID int64,
+	roleID int64,
+	grantedBy int64,
+	expiresAt *time.Time,
+) error {
 	exists, err := r.getClient(ctx).RbacUserRole.Query().Where(rbacuserrole.UserID(userID), rbacuserrole.RoleID(roleID)).Exist(ctx)
 	if err != nil {
 		return err
@@ -124,12 +158,23 @@ func (r *RbacRepo) GrantRole(ctx context.Context, userID int64, roleID int64, gr
 	}
 	return create.Exec(ctx)
 }
-func (r *RbacRepo) RevokeRole(ctx context.Context, userID int64, roleID int64) error {
+
+func (r *RbacRepo) RevokeRole(
+	ctx context.Context,
+	userID int64,
+	roleID int64,
+) error {
 	_, err := r.getClient(ctx).RbacUserRole.Delete().Where(rbacuserrole.UserID(userID), rbacuserrole.RoleID(roleID)).Exec(ctx)
 	return err
 }
 
-func (r *RbacRepo) HasPermission(ctx context.Context, userID int64, realm commonenum.LoginRealm, permissionCode string, now time.Time) (bool, error) {
+func (r *RbacRepo) HasPermission(
+	ctx context.Context,
+	userID int64,
+	realm commonenum.LoginRealm,
+	permissionCode string,
+	now time.Time,
+) (bool, error) {
 	codes, err := r.PermissionCodes(ctx, userID, realm, now)
 	if err != nil {
 		return false, err
@@ -142,7 +187,12 @@ func (r *RbacRepo) HasPermission(ctx context.Context, userID int64, realm common
 	return false, nil
 }
 
-func (r *RbacRepo) PermissionCodes(ctx context.Context, userID int64, realm commonenum.LoginRealm, now time.Time) ([]string, error) {
+func (r *RbacRepo) PermissionCodes(
+	ctx context.Context,
+	userID int64,
+	realm commonenum.LoginRealm,
+	now time.Time,
+) ([]string, error) {
 	client := r.getClient(ctx)
 	userRoles, err := client.RbacUserRole.Query().Where(rbacuserrole.UserID(userID), rbacuserrole.Or(rbacuserrole.ExpiresAtIsNil(), rbacuserrole.ExpiresAtGT(now))).All(ctx)
 	if err != nil || len(userRoles) == 0 {
@@ -184,15 +234,39 @@ func (r *RbacRepo) PermissionCodes(ctx context.Context, userID int64, realm comm
 	return codes, nil
 }
 
-func rbacRoleToModel(row *gen.RbacRole) *model.RbacRole {
+func rbacRoleToModel(
+	row *gen.RbacRole,
+) *model.RbacRole {
 	if row == nil {
 		return nil
 	}
-	return &model.RbacRole{ID: row.ID, Realm: commonenum.LoginRealm(row.Realm), Code: row.Code, Name: row.Name, Description: row.Description, BuiltIn: row.BuiltIn, Enabled: row.Enabled, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
+	return &model.RbacRole{
+		ID:          row.ID,
+		Realm:       commonenum.LoginRealm(row.Realm),
+		Code:        row.Code,
+		Name:        row.Name,
+		Description: row.Description,
+		BuiltIn:     row.BuiltIn,
+		Enabled:     row.Enabled,
+		CreatedAt:   row.CreatedAt,
+		UpdatedAt:   row.UpdatedAt,
+	}
 }
-func rbacPermissionToModel(row *gen.RbacPermission) *model.RbacPermission {
+
+func rbacPermissionToModel(
+	row *gen.RbacPermission,
+) *model.RbacPermission {
 	if row == nil {
 		return nil
 	}
-	return &model.RbacPermission{ID: row.ID, Realm: commonenum.LoginRealm(row.Realm), Code: row.Code, Name: row.Name, Description: row.Description, Enabled: row.Enabled, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
+	return &model.RbacPermission{
+		ID:          row.ID,
+		Realm:       commonenum.LoginRealm(row.Realm),
+		Code:        row.Code,
+		Name:        row.Name,
+		Description: row.Description,
+		Enabled:     row.Enabled,
+		CreatedAt:   row.CreatedAt,
+		UpdatedAt:   row.UpdatedAt,
+	}
 }

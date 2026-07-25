@@ -23,17 +23,29 @@ type AgentConfigService struct {
 	usecase *usecase.AgentConfigUsecase
 }
 
-func NewAgentConfigService(usecase *usecase.AgentConfigUsecase) *AgentConfigService {
-	return &AgentConfigService{usecase: usecase}
+func NewAgentConfigService(
+	usecase *usecase.AgentConfigUsecase,
+) *AgentConfigService {
+	return &AgentConfigService{
+		usecase: usecase,
+	}
 }
 
-func (s *AgentConfigService) RegisterGrpc(server *grpc.Server) {
+func (s *AgentConfigService) RegisterGrpc(
+	server *grpc.Server,
+) {
 	v1.RegisterGameTownAgentConfigServiceServer(server, s)
 }
 
-func (s *AgentConfigService) RegisterHttp(*http.Server) {}
+func (s *AgentConfigService) RegisterHttp(
+	*http.Server,
+) {
+}
 
-func (s *AgentConfigService) Create(ctx context.Context, req *v1.CreateGameTownAgentConfig_Request) (*v1.CreateGameTownAgentConfig_Resp, error) {
+func (s *AgentConfigService) Create(
+	ctx context.Context,
+	req *v1.CreateGameTownAgentConfig_Request,
+) (*v1.CreateGameTownAgentConfig_Resp, error) {
 	provider, ok := gameenum.AgentProviderMap.ToEnum(req.GetProvider())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -64,7 +76,10 @@ func (s *AgentConfigService) Create(ctx context.Context, req *v1.CreateGameTownA
 	}, nil
 }
 
-func (s *AgentConfigService) Get(ctx context.Context, req *v1.GetGameTownAgentConfig_Request) (*v1.GetGameTownAgentConfig_Resp, error) {
+func (s *AgentConfigService) Get(
+	ctx context.Context,
+	req *v1.GetGameTownAgentConfig_Request,
+) (*v1.GetGameTownAgentConfig_Resp, error) {
 	if req.GetId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -87,7 +102,10 @@ func (s *AgentConfigService) Get(ctx context.Context, req *v1.GetGameTownAgentCo
 	}, nil
 }
 
-func (s *AgentConfigService) List(ctx context.Context, req *v1.ListGameTownAgentConfigs_Request) (*v1.ListGameTownAgentConfigs_Resp, error) {
+func (s *AgentConfigService) List(
+	ctx context.Context,
+	req *v1.ListGameTownAgentConfigs_Request,
+) (*v1.ListGameTownAgentConfigs_Resp, error) {
 	page := base.PageRequest{}
 	if req.GetPage() != nil {
 		page.Page = int64(req.GetPage().GetPage())

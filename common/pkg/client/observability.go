@@ -29,31 +29,55 @@ import (
 
 var (
 	serverRequestsTotal = prometheus.NewCounterVec(
-		prometheus.CounterOpts{Name: "bass_server_Reqs_total", Help: "Total number of server requests."},
+		prometheus.CounterOpts{
+			Name: "bass_server_Reqs_total",
+			Help: "Total number of server requests.",
+		},
 		[]string{"service", "transport", "operation", "status_code"},
 	)
 	serverRequestDurationSeconds = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{Name: "bass_server_Req_duration_seconds", Help: "Server request duration in seconds.", Buckets: prometheus.DefBuckets},
+		prometheus.HistogramOpts{
+			Name:    "bass_server_Req_duration_seconds",
+			Help:    "Server request duration in seconds.",
+			Buckets: prometheus.DefBuckets,
+		},
 		[]string{"service", "transport", "operation", "status_code"},
 	)
 	clientRequestsTotal = prometheus.NewCounterVec(
-		prometheus.CounterOpts{Name: "bass_client_Reqs_total", Help: "Total number of client requests."},
+		prometheus.CounterOpts{
+			Name: "bass_client_Reqs_total",
+			Help: "Total number of client requests.",
+		},
 		[]string{"service", "target", "transport", "operation", "status_code"},
 	)
 	clientRequestDurationSeconds = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{Name: "bass_client_Req_duration_seconds", Help: "Client request duration in seconds.", Buckets: prometheus.DefBuckets},
+		prometheus.HistogramOpts{
+			Name:    "bass_client_Req_duration_seconds",
+			Help:    "Client request duration in seconds.",
+			Buckets: prometheus.DefBuckets,
+		},
 		[]string{"service", "target", "transport", "operation", "status_code"},
 	)
 	MessageRequestsTotal = prometheus.NewCounterVec(
-		prometheus.CounterOpts{Name: "bass_message_Reqs_total", Help: "Total number of message publish and consume operations."},
+		prometheus.CounterOpts{
+			Name: "bass_message_Reqs_total",
+			Help: "Total number of message publish and consume operations.",
+		},
 		[]string{"service", "direction", "subject", "status"},
 	)
 	MessageRequestDurationSeconds = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{Name: "bass_message_Req_duration_seconds", Help: "Message publish and consume duration in seconds.", Buckets: prometheus.DefBuckets},
+		prometheus.HistogramOpts{
+			Name:    "bass_message_Req_duration_seconds",
+			Help:    "Message publish and consume duration in seconds.",
+			Buckets: prometheus.DefBuckets,
+		},
 		[]string{"service", "direction", "subject", "status"},
 	)
 	DeadLetterAlertsTotal = prometheus.NewCounterVec(
-		prometheus.CounterOpts{Name: "bass_dead_letter_alerts_total", Help: "Total number of deduplicated dead letter alerts."},
+		prometheus.CounterOpts{
+			Name: "bass_dead_letter_alerts_total",
+			Help: "Total number of deduplicated dead letter alerts.",
+		},
 		[]string{"service", "source", "event_type", "subject"},
 	)
 )
@@ -69,7 +93,10 @@ type Observer struct {
 	clientTracer oteltrace.Tracer
 }
 
-func NewObservability(logger *slog.Logger, server *common.Server) *Observer {
+func NewObservability(
+	logger *slog.Logger,
+	server *common.Server,
+) *Observer {
 	service := "unknown"
 	if server != nil {
 		if server.GetName() != "" {
@@ -91,7 +118,12 @@ func (o *Observer) Service() string {
 	return o.service
 }
 
-func SetupTracing(ctx context.Context, serviceName string, version string, traceConf *common.Trace) (func(context.Context) error, error) {
+func SetupTracing(
+	ctx context.Context,
+	serviceName string,
+	version string,
+	traceConf *common.Trace,
+) (func(context.Context) error, error) {
 	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}))
 
 	res, err := resource.New(ctx, resource.WithAttributes(semconv.ServiceName(serviceName), semconv.ServiceVersion(version)))
@@ -210,7 +242,9 @@ func (o *Observer) ServerMiddleware() middleware.Middleware {
 	}
 }
 
-func (o *Observer) ClientMiddleware(target string) middleware.Middleware {
+func (o *Observer) ClientMiddleware(
+	target string,
+) middleware.Middleware {
 	if target == "" {
 		target = "unknown"
 	}

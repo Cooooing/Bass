@@ -18,7 +18,9 @@ type Domain struct {
 
 func (Domain) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixContent.String() + "domains"},
+		entsql.Annotation{
+			Table: constant.TablePrefixContent.String() + "domains",
+		},
 		entsql.WithComments(true),
 	}
 }

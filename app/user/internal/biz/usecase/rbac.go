@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	commonenum "common/pkg/enum"
 	"common/pkg/apperror"
+	commonenum "common/pkg/enum"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"strings"
@@ -20,10 +20,22 @@ type RbacUsecase struct {
 	authCacheRepo repo.AuthCacheRepo
 }
 
-func NewRbacUsecase(accountRepo repo.AccountRepo, rbacRepo repo.RbacRepo, authCacheRepo repo.AuthCacheRepo) *RbacUsecase {
-	return &RbacUsecase{accountRepo: accountRepo, rbacRepo: rbacRepo, authCacheRepo: authCacheRepo}
+func NewRbacUsecase(
+	accountRepo repo.AccountRepo,
+	rbacRepo repo.RbacRepo,
+	authCacheRepo repo.AuthCacheRepo,
+) *RbacUsecase {
+	return &RbacUsecase{
+		accountRepo:   accountRepo,
+		rbacRepo:      rbacRepo,
+		authCacheRepo: authCacheRepo,
+	}
 }
-func (u *RbacUsecase) UpsertRole(ctx context.Context, row *model.RbacRole) (*model.RbacRole, error) {
+
+func (u *RbacUsecase) UpsertRole(
+	ctx context.Context,
+	row *model.RbacRole,
+) (*model.RbacRole, error) {
 	if row == nil || strings.TrimSpace(row.Code) == "" || strings.TrimSpace(row.Name) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -34,7 +46,11 @@ func (u *RbacUsecase) UpsertRole(ctx context.Context, row *model.RbacRole) (*mod
 	_ = u.authCacheRepo.DeleteRealmRbacPermissions(ctx, string(saved.Realm))
 	return saved, nil
 }
-func (u *RbacUsecase) UpsertPermission(ctx context.Context, row *model.RbacPermission) (*model.RbacPermission, error) {
+
+func (u *RbacUsecase) UpsertPermission(
+	ctx context.Context,
+	row *model.RbacPermission,
+) (*model.RbacPermission, error) {
 	if row == nil || strings.TrimSpace(row.Code) == "" || strings.TrimSpace(row.Name) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -45,7 +61,12 @@ func (u *RbacUsecase) UpsertPermission(ctx context.Context, row *model.RbacPermi
 	_ = u.authCacheRepo.DeleteRealmRbacPermissions(ctx, string(saved.Realm))
 	return saved, nil
 }
-func (u *RbacUsecase) BindRolePermission(ctx context.Context, roleID int64, permissionID int64) error {
+
+func (u *RbacUsecase) BindRolePermission(
+	ctx context.Context,
+	roleID int64,
+	permissionID int64,
+) error {
 	if roleID == 0 || permissionID == 0 {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -59,7 +80,12 @@ func (u *RbacUsecase) BindRolePermission(ctx context.Context, roleID int64, perm
 	u.deleteRoleRealmCache(ctx, role)
 	return nil
 }
-func (u *RbacUsecase) UnbindRolePermission(ctx context.Context, roleID int64, permissionID int64) error {
+
+func (u *RbacUsecase) UnbindRolePermission(
+	ctx context.Context,
+	roleID int64,
+	permissionID int64,
+) error {
 	if roleID == 0 || permissionID == 0 {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -73,7 +99,14 @@ func (u *RbacUsecase) UnbindRolePermission(ctx context.Context, roleID int64, pe
 	u.deleteRoleRealmCache(ctx, role)
 	return nil
 }
-func (u *RbacUsecase) GrantRole(ctx context.Context, userID int64, roleID int64, grantedBy int64, expiresAt *time.Time) error {
+
+func (u *RbacUsecase) GrantRole(
+	ctx context.Context,
+	userID int64,
+	roleID int64,
+	grantedBy int64,
+	expiresAt *time.Time,
+) error {
 	if userID == 0 || roleID == 0 || grantedBy == 0 {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -87,7 +120,12 @@ func (u *RbacUsecase) GrantRole(ctx context.Context, userID int64, roleID int64,
 	u.deleteUserRoleCache(ctx, userID, role)
 	return nil
 }
-func (u *RbacUsecase) RevokeRole(ctx context.Context, userID int64, roleID int64) error {
+
+func (u *RbacUsecase) RevokeRole(
+	ctx context.Context,
+	userID int64,
+	roleID int64,
+) error {
 	if userID == 0 || roleID == 0 {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -101,12 +139,20 @@ func (u *RbacUsecase) RevokeRole(ctx context.Context, userID int64, roleID int64
 	u.deleteUserRoleCache(ctx, userID, role)
 	return nil
 }
-func (u *RbacUsecase) CheckPermission(ctx context.Context, userID int64, realm commonenum.LoginRealm, permissionCode string) (bool, error) {
+
+func (u *RbacUsecase) CheckPermission(
+	ctx context.Context,
+	userID int64,
+	realm commonenum.LoginRealm,
+	permissionCode string,
+) (bool, error) {
 	code := strings.TrimSpace(permissionCode)
 	if userID == 0 || code == "" {
 		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	account, err := u.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &userID})
+	account, err := u.accountRepo.Get(ctx, &repo.AccountGetReq{
+		UserID: &userID,
+	})
 	if err != nil {
 		return false, err
 	}
@@ -124,14 +170,21 @@ func (u *RbacUsecase) CheckPermission(ctx context.Context, userID int64, realm c
 	return containsPermission(permissions, code), nil
 }
 
-func (u *RbacUsecase) deleteRoleRealmCache(ctx context.Context, role *model.RbacRole) {
+func (u *RbacUsecase) deleteRoleRealmCache(
+	ctx context.Context,
+	role *model.RbacRole,
+) {
 	if role == nil {
 		return
 	}
 	_ = u.authCacheRepo.DeleteRealmRbacPermissions(ctx, string(role.Realm))
 }
 
-func (u *RbacUsecase) deleteUserRoleCache(ctx context.Context, userID int64, role *model.RbacRole) {
+func (u *RbacUsecase) deleteUserRoleCache(
+	ctx context.Context,
+	userID int64,
+	role *model.RbacRole,
+) {
 	if role == nil {
 		_ = u.authCacheRepo.DeleteUserRbacPermissions(ctx, userID)
 		return
@@ -139,7 +192,10 @@ func (u *RbacUsecase) deleteUserRoleCache(ctx context.Context, userID int64, rol
 	_ = u.authCacheRepo.DeleteRbacPermissions(ctx, string(role.Realm), userID)
 }
 
-func containsPermission(permissions []string, code string) bool {
+func containsPermission(
+	permissions []string,
+	code string,
+) bool {
 	for _, item := range permissions {
 		if item == code {
 			return true

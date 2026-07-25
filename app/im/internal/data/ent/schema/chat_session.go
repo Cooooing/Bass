@@ -18,7 +18,9 @@ type ChatSession struct {
 
 func (ChatSession) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixIM.String() + "chat_sessions"},
+		entsql.Annotation{
+			Table: constant.TablePrefixIM.String() + "chat_sessions",
+		},
 	}
 }
 

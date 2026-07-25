@@ -19,7 +19,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func checkPgvector(ctx context.Context, drv *sql.Driver) (string, error) {
+func checkPgvector(
+	ctx context.Context,
+	drv *sql.Driver,
+) (string, error) {
 	var version string
 	err := drv.DB().QueryRowContext(ctx, "SELECT extversion FROM pg_extension WHERE extname = 'vector'").Scan(&version)
 	if err == nil {
@@ -28,14 +31,19 @@ func checkPgvector(ctx context.Context, drv *sql.Driver) (string, error) {
 	return "", pgvectorCheckError(err)
 }
 
-func pgvectorCheckError(err error) error {
+func pgvectorCheckError(
+	err error,
+) error {
 	if errors.Is(err, dbsql.ErrNoRows) {
 		return fmt.Errorf("pgvector extension is not initialized; initialize it once as a database administrator with CREATE EXTENSION IF NOT EXISTS vector")
 	}
 	return fmt.Errorf("failed checking pgvector extension: %w", err)
 }
 
-func NewDataBaseClient(logger *slog.Logger, conf *config.Bootstrap) (*gen.Client, func(), error) {
+func NewDataBaseClient(
+	logger *slog.Logger,
+	conf *config.Bootstrap,
+) (*gen.Client, func(), error) {
 	drv, err := sql.Open(conf.Database.Driver, conf.Database.Source)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to open db: %w", err)

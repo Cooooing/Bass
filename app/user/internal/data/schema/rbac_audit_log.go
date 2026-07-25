@@ -18,7 +18,9 @@ type RbacAuditLog struct {
 }
 
 func (RbacAuditLog) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: constant.TablePrefixUser.String() + "rbac_audit_logs"}, entsql.WithComments(true)}
+	return []schema.Annotation{entsql.Annotation{
+		Table: constant.TablePrefixUser.String() + "rbac_audit_logs",
+	}, entsql.WithComments(true)}
 }
 
 func (RbacAuditLog) Fields() []ent.Field {
@@ -34,7 +36,9 @@ func (RbacAuditLog) Fields() []ent.Field {
 	}
 }
 
-func (RbacAuditLog) Mixin() []ent.Mixin { return []ent.Mixin{utilent.TimeAuditMixin{}} }
+func (RbacAuditLog) Mixin() []ent.Mixin {
+	return []ent.Mixin{utilent.TimeAuditMixin{}}
+}
 
 func (RbacAuditLog) Indexes() []ent.Index {
 	return []ent.Index{
@@ -43,4 +47,6 @@ func (RbacAuditLog) Indexes() []ent.Index {
 	}
 }
 
-func (RbacAuditLog) Edges() []ent.Edge { return nil }
+func (RbacAuditLog) Edges() []ent.Edge {
+	return nil
+}

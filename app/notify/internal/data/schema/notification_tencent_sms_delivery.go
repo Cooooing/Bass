@@ -20,7 +20,9 @@ type NotificationTencentSMSDelivery struct {
 
 func (NotificationTencentSMSDelivery) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_tencent_sms_delivery"},
+		entsql.Annotation{
+			Table: constant.TablePrefixNotify.String() + "notification_tencent_sms_delivery",
+		},
 		entsql.WithComments(true),
 	}
 }

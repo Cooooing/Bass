@@ -13,7 +13,9 @@ type EventPool struct {
 	size int
 }
 
-func NewEventPool(logger *slog.Logger) (*EventPool, func(), error) {
+func NewEventPool(
+	logger *slog.Logger,
+) (*EventPool, func(), error) {
 	size := 16
 	pool, err := ants.NewPool(
 		size,
@@ -32,6 +34,8 @@ func NewEventPool(logger *slog.Logger) (*EventPool, func(), error) {
 	return e, cleanup, err
 }
 
-func (p *EventPool) Submit(task func()) error {
+func (p *EventPool) Submit(
+	task func(),
+) error {
 	return p.pool.Submit(task)
 }

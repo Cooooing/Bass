@@ -49,14 +49,19 @@ type AppendEventReq struct {
 	Payload          map[string]any
 }
 
-func (u *EventUsecase) AppendInTx(ctx context.Context, req *AppendEventReq) (*model.Event, error) {
+func (u *EventUsecase) AppendInTx(
+	ctx context.Context,
+	req *AppendEventReq,
+) (*model.Event, error) {
 	sequence, err := u.worldStateRepo.NextEventSequence(ctx, req.WorldID)
 	if err != nil {
 		return nil, err
 	}
 
 	now := time.Now()
-	state, err := u.worldStateRepo.Get(ctx, &repo.WorldStateQuery{WorldID: new(req.WorldID)})
+	state, err := u.worldStateRepo.Get(ctx, &repo.WorldStateQuery{
+		WorldID: new(req.WorldID),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +96,10 @@ func (u *EventUsecase) AppendInTx(ctx context.Context, req *AppendEventReq) (*mo
 	return event, nil
 }
 
-func (u *EventUsecase) projectObservations(ctx context.Context, event *model.Event) error {
+func (u *EventUsecase) projectObservations(
+	ctx context.Context,
+	event *model.Event,
+) error {
 	players := make(map[int64]enum.ObservationSource)
 	npcs := make(map[int64]enum.ObservationSource)
 	if event.ActorPlayerID != nil {
@@ -147,9 +155,19 @@ func (u *EventUsecase) projectObservations(ctx context.Context, event *model.Eve
 	return nil
 }
 
-func (u *EventUsecase) projectAreaObservations(ctx context.Context, event *model.Event, public bool, players map[int64]enum.ObservationSource, npcs map[int64]enum.ObservationSource) error {
-	memberQuery := &repo.WorldMemberQuery{WorldID: new(event.WorldID)}
-	npcQuery := &repo.NpcQuery{WorldID: new(event.WorldID)}
+func (u *EventUsecase) projectAreaObservations(
+	ctx context.Context,
+	event *model.Event,
+	public bool,
+	players map[int64]enum.ObservationSource,
+	npcs map[int64]enum.ObservationSource,
+) error {
+	memberQuery := &repo.WorldMemberQuery{
+		WorldID: new(event.WorldID),
+	}
+	npcQuery := &repo.NpcQuery{
+		WorldID: new(event.WorldID),
+	}
 	if !public {
 		memberQuery.LocationID = event.LocationID
 		npcQuery.LocationID = event.LocationID
@@ -179,14 +197,18 @@ func (u *EventUsecase) projectAreaObservations(ctx context.Context, event *model
 	return nil
 }
 
-func observationSource(public bool) enum.ObservationSource {
+func observationSource(
+	public bool,
+) enum.ObservationSource {
 	if public {
 		return enum.ObservationSourcePublic
 	}
 	return enum.ObservationSourceWitnessed
 }
 
-func eventSalience(eventType enum.EventType) float64 {
+func eventSalience(
+	eventType enum.EventType,
+) float64 {
 	switch eventType {
 	case enum.EventTypeNpcDied, enum.EventTypeLocationChanged, enum.EventTypeFactionChanged, enum.EventTypeWorldReady:
 		return 1
@@ -197,7 +219,9 @@ func eventSalience(eventType enum.EventType) float64 {
 	}
 }
 
-func (u *EventUsecase) Publish(event *model.Event) {
+func (u *EventUsecase) Publish(
+	event *model.Event,
+) {
 	if event == nil {
 		return
 	}
@@ -218,7 +242,10 @@ type PageEventsResp struct {
 	Page base.PageResp
 }
 
-func (u *EventUsecase) Page(ctx context.Context, req *PageEventsReq) (*PageEventsResp, error) {
+func (u *EventUsecase) Page(
+	ctx context.Context,
+	req *PageEventsReq,
+) (*PageEventsResp, error) {
 	pageResp, err := u.observationRepo.Page(ctx, &repo.ObservationPageReq{
 		Page:      req.Page,
 		SkipTotal: req.SkipTotal,
@@ -275,9 +302,15 @@ type ListEventsAfterReq struct {
 	AfterSequence uint64
 }
 
-func (u *EventUsecase) ListAfter(ctx context.Context, req *ListEventsAfterReq) ([]*model.PerceivedEvent, error) {
+func (u *EventUsecase) ListAfter(
+	ctx context.Context,
+	req *ListEventsAfterReq,
+) ([]*model.PerceivedEvent, error) {
 	resp, err := u.Page(ctx, &PageEventsReq{
-		Page:          base.PageRequest{Page: 1, Size: 100},
+		Page: base.PageRequest{
+			Page: 1,
+			Size: 100,
+		},
 		WorldID:       req.WorldID,
 		PlayerID:      req.PlayerID,
 		AfterSequence: req.AfterSequence,
@@ -289,7 +322,12 @@ func (u *EventUsecase) ListAfter(ctx context.Context, req *ListEventsAfterReq) (
 	return resp.Rows, nil
 }
 
-func (u *EventUsecase) VisibleToPlayer(ctx context.Context, worldID int64, playerID int64, eventID int64) (*model.Observation, bool, error) {
+func (u *EventUsecase) VisibleToPlayer(
+	ctx context.Context,
+	worldID int64,
+	playerID int64,
+	eventID int64,
+) (*model.Observation, bool, error) {
 	rows, err := u.observationRepo.List(ctx, &repo.ObservationQuery{
 		WorldID:  new(worldID),
 		PlayerID: new(playerID),
@@ -304,6 +342,8 @@ func (u *EventUsecase) VisibleToPlayer(ctx context.Context, worldID int64, playe
 	return rows[0], true, nil
 }
 
-func (u *EventUsecase) Watch(worldID int64) (<-chan *model.Event, func()) {
+func (u *EventUsecase) Watch(
+	worldID int64,
+) (<-chan *model.Event, func()) {
 	return u.eventNotifier.Watch(worldID)
 }

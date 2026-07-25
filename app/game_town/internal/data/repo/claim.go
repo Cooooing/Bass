@@ -20,18 +20,27 @@ type ClaimRepo struct {
 	db *gen.Client
 }
 
-func NewClaimRepo(db *gen.Client) bizrepo.ClaimRepo {
-	return &ClaimRepo{db: db}
+func NewClaimRepo(
+	db *gen.Client,
+) bizrepo.ClaimRepo {
+	return &ClaimRepo{
+		db: db,
+	}
 }
 
-func (r *ClaimRepo) getClient(ctx context.Context) *gen.Client {
+func (r *ClaimRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *ClaimRepo) Save(ctx context.Context, row *model.Claim) (*model.Claim, error) {
+func (r *ClaimRepo) Save(
+	ctx context.Context,
+	row *model.Claim,
+) (*model.Claim, error) {
 	saved, err := r.getClient(ctx).Claim.Create().
 		SetWorldID(row.WorldID).
 		SetNillableOriginEventID(row.OriginEventID).
@@ -47,7 +56,10 @@ func (r *ClaimRepo) Save(ctx context.Context, row *model.Claim) (*model.Claim, e
 	return claimModel(saved), nil
 }
 
-func claimQuery(q *gen.ClaimQuery, req *bizrepo.ClaimQuery) *gen.ClaimQuery {
+func claimQuery(
+	q *gen.ClaimQuery,
+	req *bizrepo.ClaimQuery,
+) *gen.ClaimQuery {
 	if req == nil {
 		return q
 	}
@@ -72,7 +84,10 @@ func claimQuery(q *gen.ClaimQuery, req *bizrepo.ClaimQuery) *gen.ClaimQuery {
 	return q
 }
 
-func (r *ClaimRepo) Get(ctx context.Context, req *bizrepo.ClaimQuery) (*model.Claim, error) {
+func (r *ClaimRepo) Get(
+	ctx context.Context,
+	req *bizrepo.ClaimQuery,
+) (*model.Claim, error) {
 	row, err := claimQuery(r.getClient(ctx).Claim.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -83,7 +98,10 @@ func (r *ClaimRepo) Get(ctx context.Context, req *bizrepo.ClaimQuery) (*model.Cl
 	return claimModel(row), nil
 }
 
-func (r *ClaimRepo) List(ctx context.Context, req *bizrepo.ClaimQuery) ([]*model.Claim, error) {
+func (r *ClaimRepo) List(
+	ctx context.Context,
+	req *bizrepo.ClaimQuery,
+) ([]*model.Claim, error) {
 	rows, err := claimQuery(r.getClient(ctx).Claim.Query(), req).
 		Order(claim.ByID()).
 		All(ctx)
@@ -95,7 +113,10 @@ func (r *ClaimRepo) List(ctx context.Context, req *bizrepo.ClaimQuery) ([]*model
 	}), nil
 }
 
-func (r *ClaimRepo) Map(ctx context.Context, req *bizrepo.ClaimQuery) (map[int64]*model.Claim, error) {
+func (r *ClaimRepo) Map(
+	ctx context.Context,
+	req *bizrepo.ClaimQuery,
+) (map[int64]*model.Claim, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -107,11 +128,17 @@ func (r *ClaimRepo) Map(ctx context.Context, req *bizrepo.ClaimQuery) (map[int64
 	return out, nil
 }
 
-func (r *ClaimRepo) Count(ctx context.Context, req *bizrepo.ClaimQuery) (int, error) {
+func (r *ClaimRepo) Count(
+	ctx context.Context,
+	req *bizrepo.ClaimQuery,
+) (int, error) {
 	return claimQuery(r.getClient(ctx).Claim.Query(), req).Count(ctx)
 }
 
-func (r *ClaimRepo) Page(ctx context.Context, req *bizrepo.ClaimPageReq) (*bizrepo.ClaimPageResp, error) {
+func (r *ClaimRepo) Page(
+	ctx context.Context,
+	req *bizrepo.ClaimPageReq,
+) (*bizrepo.ClaimPageResp, error) {
 	p := page(req.Page)
 	q := claimQuery(r.getClient(ctx).Claim.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -133,7 +160,9 @@ func (r *ClaimRepo) Page(ctx context.Context, req *bizrepo.ClaimPageReq) (*bizre
 	}, nil
 }
 
-func claimModel(row *gen.Claim) *model.Claim {
+func claimModel(
+	row *gen.Claim,
+) *model.Claim {
 	return &model.Claim{
 		ID:            row.ID,
 		WorldID:       row.WorldID,

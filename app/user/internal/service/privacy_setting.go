@@ -16,22 +16,36 @@ type PrivacySettingService struct {
 	privacySettingUsecase *usecase.PrivacySettingUsecase
 }
 
-func NewPrivacySettingService(privacySettingUsecase *usecase.PrivacySettingUsecase) *PrivacySettingService {
-	return &PrivacySettingService{privacySettingUsecase: privacySettingUsecase}
+func NewPrivacySettingService(
+	privacySettingUsecase *usecase.PrivacySettingUsecase,
+) *PrivacySettingService {
+	return &PrivacySettingService{
+		privacySettingUsecase: privacySettingUsecase,
+	}
 }
 
-func (s *PrivacySettingService) RegisterGrpc(gs *grpc.Server) {
+func (s *PrivacySettingService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	v1.RegisterPrivacySettingServiceServer(gs, s)
 }
 
-func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {}
+func (s *PrivacySettingService) RegisterHttp(
+	hs *http.Server,
+) {
+}
 
-func (s *PrivacySettingService) Get(ctx context.Context, req *v1.GetPrivacySetting_Req) (*v1.GetPrivacySetting_Resp, error) {
+func (s *PrivacySettingService) Get(
+	ctx context.Context,
+	req *v1.GetPrivacySetting_Req,
+) (*v1.GetPrivacySetting_Resp, error) {
 	res, err := s.privacySettingUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
 		return nil, err
 	}
-	reply := &v1.GetPrivacySetting_Resp_PrivacySetting{UserId: req.GetUserId()}
+	reply := &v1.GetPrivacySetting_Resp_PrivacySetting{
+		UserId: req.GetUserId(),
+	}
 	if res != nil {
 		reply.PublicPoints = res.PublicPoints
 		reply.PublicFollowers = res.PublicFollowers
@@ -40,10 +54,15 @@ func (s *PrivacySettingService) Get(ctx context.Context, req *v1.GetPrivacySetti
 		reply.PublicOnlineStatus = res.PublicOnlineStatus
 		reply.PublicLocation = res.PublicLocation
 	}
-	return &v1.GetPrivacySetting_Resp{PrivacySetting: reply}, nil
+	return &v1.GetPrivacySetting_Resp{
+		PrivacySetting: reply,
+	}, nil
 }
 
-func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivacySetting_Req) (*v1.UpdatePrivacySetting_Resp, error) {
+func (s *PrivacySettingService) Update(
+	ctx context.Context,
+	req *v1.UpdatePrivacySetting_Req,
+) (*v1.UpdatePrivacySetting_Resp, error) {
 	res, err := s.privacySettingUsecase.UpsertByUserID(ctx, &model.PrivacySetting{
 		UserID:             req.GetUserId(),
 		PublicPoints:       req.PublicPoints,
@@ -57,13 +76,15 @@ func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivac
 		return nil, err
 	}
 	privacySetting := res
-	return &v1.UpdatePrivacySetting_Resp{PrivacySetting: &v1.UpdatePrivacySetting_Resp_PrivacySetting{
-		UserId:             req.GetUserId(),
-		PublicPoints:       privacySetting.PublicPoints,
-		PublicFollowers:    privacySetting.PublicFollowers,
-		PublicArticles:     privacySetting.PublicArticles,
-		PublicComments:     privacySetting.PublicComments,
-		PublicOnlineStatus: privacySetting.PublicOnlineStatus,
-		PublicLocation:     privacySetting.PublicLocation,
-	}}, nil
+	return &v1.UpdatePrivacySetting_Resp{
+		PrivacySetting: &v1.UpdatePrivacySetting_Resp_PrivacySetting{
+			UserId:             req.GetUserId(),
+			PublicPoints:       privacySetting.PublicPoints,
+			PublicFollowers:    privacySetting.PublicFollowers,
+			PublicArticles:     privacySetting.PublicArticles,
+			PublicComments:     privacySetting.PublicComments,
+			PublicOnlineStatus: privacySetting.PublicOnlineStatus,
+			PublicLocation:     privacySetting.PublicLocation,
+		},
+	}, nil
 }

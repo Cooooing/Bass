@@ -25,7 +25,9 @@ type EmbeddingClient struct {
 	http       *http.Client
 }
 
-func NewEmbeddingClient(conf *config.Bootstrap) repo.EmbeddingClient {
+func NewEmbeddingClient(
+	conf *config.Bootstrap,
+) repo.EmbeddingClient {
 	memory := conf.GetGameTown().GetMemory()
 	timeout := 30 * time.Second
 	if memory.GetTimeout() != nil && memory.GetTimeout().AsDuration() > 0 {
@@ -37,11 +39,16 @@ func NewEmbeddingClient(conf *config.Bootstrap) repo.EmbeddingClient {
 		model:      memory.GetModel(),
 		dimensions: int(memory.GetDimensions()),
 		timeout:    timeout,
-		http:       &http.Client{Timeout: timeout},
+		http: &http.Client{
+			Timeout: timeout,
+		},
 	}
 }
 
-func (c *EmbeddingClient) Embed(ctx context.Context, input []string) ([][]float32, error) {
+func (c *EmbeddingClient) Embed(
+	ctx context.Context,
+	input []string,
+) ([][]float32, error) {
 	if !c.enabled || len(input) == 0 {
 		return nil, fmt.Errorf("embedding is disabled")
 	}

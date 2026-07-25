@@ -19,7 +19,9 @@ type TaskExecutionRecord struct {
 
 func (TaskExecutionRecord) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixScheduler.String() + "task_execution_records"},
+		entsql.Annotation{
+			Table: constant.TablePrefixScheduler.String() + "task_execution_records",
+		},
 		entsql.WithComments(true),
 	}
 }
@@ -62,4 +64,6 @@ func (TaskExecutionRecord) Indexes() []ent.Index {
 	}
 }
 
-func (TaskExecutionRecord) Edges() []ent.Edge { return nil }
+func (TaskExecutionRecord) Edges() []ent.Edge {
+	return nil
+}

@@ -65,7 +65,10 @@ func NewHTTPServer(
 		}
 
 		logger.Info("sse client connecting", constant.LogFieldAddress, r.RemoteAddr)
-		if err := sseUc.Connect(r.Context(), &usecase.ConnectReq{Token: token, Writer: w}); err != nil {
+		if err := sseUc.Connect(r.Context(), &usecase.ConnectReq{
+			Token:  token,
+			Writer: w,
+		}); err != nil {
 			logger.Error("sse connect failed", slog.Any("err", err))
 		}
 	}))

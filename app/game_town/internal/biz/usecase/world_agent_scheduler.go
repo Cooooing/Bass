@@ -18,7 +18,9 @@ func (r *WorldAgentRunner) wakeScheduler() {
 	}
 }
 
-func (r *WorldAgentRunner) schedule(ctx context.Context) {
+func (r *WorldAgentRunner) schedule(
+	ctx context.Context,
+) {
 	recoveryTicker := time.NewTicker(30 * time.Second)
 	defer recoveryTicker.Stop()
 
@@ -40,13 +42,17 @@ func (r *WorldAgentRunner) schedule(ctx context.Context) {
 	}
 }
 
-func (r *WorldAgentRunner) recoverAgentJobs(ctx context.Context) {
+func (r *WorldAgentRunner) recoverAgentJobs(
+	ctx context.Context,
+) {
 	r.recoverGeneratingWorldJobs(ctx)
 	r.recoverPendingCharacterJobs(ctx)
 	r.recoverStaleRunningJobs(ctx)
 }
 
-func (r *WorldAgentRunner) dispatch(ctx context.Context) {
+func (r *WorldAgentRunner) dispatch(
+	ctx context.Context,
+) {
 	status := enum.AgentJobStatusQueued
 	now := time.Now()
 	jobs, err := r.agentJobRepo.List(ctx, &repo.AgentJobQuery{
@@ -70,9 +76,13 @@ func (r *WorldAgentRunner) dispatch(ctx context.Context) {
 	}
 }
 
-func (r *WorldAgentRunner) recoverGeneratingWorldJobs(ctx context.Context) {
+func (r *WorldAgentRunner) recoverGeneratingWorldJobs(
+	ctx context.Context,
+) {
 	status := enum.WorldStatusGenerating
-	worlds, err := r.worldRepo.List(ctx, &repo.WorldQuery{Status: new(status)})
+	worlds, err := r.worldRepo.List(ctx, &repo.WorldQuery{
+		Status: new(status),
+	})
 	if err != nil {
 		r.log.ErrorContext(ctx, "load generating worlds failed", constant.LogFieldErr, err)
 		return
@@ -103,7 +113,9 @@ func (r *WorldAgentRunner) recoverGeneratingWorldJobs(ctx context.Context) {
 		if count > 0 {
 			continue
 		}
-		state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{WorldID: new(world.ID)})
+		state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{
+			WorldID: new(world.ID),
+		})
 		if err != nil {
 			r.log.ErrorContext(ctx, "load generating world state failed", "world_id", world.ID, constant.LogFieldErr, err)
 			continue
@@ -126,9 +138,13 @@ func (r *WorldAgentRunner) recoverGeneratingWorldJobs(ctx context.Context) {
 	}
 }
 
-func (r *WorldAgentRunner) recoverPendingCharacterJobs(ctx context.Context) {
+func (r *WorldAgentRunner) recoverPendingCharacterJobs(
+	ctx context.Context,
+) {
 	status := enum.WorldStatusActive
-	worlds, err := r.worldRepo.List(ctx, &repo.WorldQuery{Status: new(status)})
+	worlds, err := r.worldRepo.List(ctx, &repo.WorldQuery{
+		Status: new(status),
+	})
 	if err != nil {
 		r.log.ErrorContext(ctx, "load active worlds failed", constant.LogFieldErr, err)
 		return
@@ -138,11 +154,16 @@ func (r *WorldAgentRunner) recoverPendingCharacterJobs(ctx context.Context) {
 	}
 }
 
-func (r *WorldAgentRunner) recoverWorldCharacterJobs(ctx context.Context, world *model.World) {
+func (r *WorldAgentRunner) recoverWorldCharacterJobs(
+	ctx context.Context,
+	world *model.World,
+) {
 	if world == nil {
 		return
 	}
-	members, err := r.worldMemberRepo.List(ctx, &repo.WorldMemberQuery{WorldID: new(world.ID)})
+	members, err := r.worldMemberRepo.List(ctx, &repo.WorldMemberQuery{
+		WorldID: new(world.ID),
+	})
 	if err != nil {
 		r.log.ErrorContext(ctx, "load world members failed", "world_id", world.ID, constant.LogFieldErr, err)
 		return
@@ -157,7 +178,11 @@ func (r *WorldAgentRunner) recoverWorldCharacterJobs(ctx context.Context, world 
 	}
 }
 
-func (r *WorldAgentRunner) recoverMemberCharacterJob(ctx context.Context, world *model.World, member *model.WorldMember) error {
+func (r *WorldAgentRunner) recoverMemberCharacterJob(
+	ctx context.Context,
+	world *model.World,
+	member *model.WorldMember,
+) error {
 	eventType := enum.EventTypePlayerJoined
 	events, err := r.eventRepo.List(ctx, &repo.EventQuery{
 		WorldID:       new(world.ID),
@@ -182,7 +207,9 @@ func (r *WorldAgentRunner) recoverMemberCharacterJob(ctx context.Context, world 
 	if count > 0 {
 		return nil
 	}
-	state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{WorldID: new(world.ID)})
+	state, err := r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{
+		WorldID: new(world.ID),
+	})
 	if err != nil {
 		return err
 	}
@@ -202,7 +229,10 @@ func (r *WorldAgentRunner) recoverMemberCharacterJob(ctx context.Context, world 
 	r.log.WarnContext(ctx, "recovered missing character generation job", "world_id", world.ID, "player_id", member.PlayerID, constant.LogFieldEventID, source.ID)
 	return nil
 }
-func (r *WorldAgentRunner) recoverStaleRunningJobs(ctx context.Context) {
+
+func (r *WorldAgentRunner) recoverStaleRunningJobs(
+	ctx context.Context,
+) {
 	status := enum.AgentJobStatusRunning
 	cutoff := time.Now().Add(-r.staleJobDuration())
 	jobs, err := r.agentJobRepo.List(ctx, &repo.AgentJobQuery{
@@ -228,7 +258,10 @@ func (r *WorldAgentRunner) recoverStaleRunningJobs(ctx context.Context) {
 	}
 }
 
-func fairAgentJobs(jobs []*model.AgentJob, cursor *int) []*model.AgentJob {
+func fairAgentJobs(
+	jobs []*model.AgentJob,
+	cursor *int,
+) []*model.AgentJob {
 	ordered := make([]*model.AgentJob, 0, len(jobs))
 	used := make(map[int64]bool, len(jobs))
 	priorities := []enum.AgentJobPriority{
@@ -280,7 +313,10 @@ func fairAgentJobs(jobs []*model.AgentJob, cursor *int) []*model.AgentJob {
 	return ordered
 }
 
-func (r *WorldAgentRunner) orderDispatchJobs(jobs []*model.AgentJob, now time.Time) []*model.AgentJob {
+func (r *WorldAgentRunner) orderDispatchJobs(
+	jobs []*model.AgentJob,
+	now time.Time,
+) []*model.AgentJob {
 	overdueTicks, remaining := r.splitOverdueTickJobs(jobs, now)
 	ordered := make([]*model.AgentJob, 0, len(jobs))
 	ordered = append(ordered, fairAgentJobs(overdueTicks, &r.scheduleCursor)...)
@@ -288,7 +324,10 @@ func (r *WorldAgentRunner) orderDispatchJobs(jobs []*model.AgentJob, now time.Ti
 	return ordered
 }
 
-func (r *WorldAgentRunner) promoteOverdueTickJobs(jobs []*model.AgentJob, now time.Time) []*model.AgentJob {
+func (r *WorldAgentRunner) promoteOverdueTickJobs(
+	jobs []*model.AgentJob,
+	now time.Time,
+) []*model.AgentJob {
 	promoted, remaining := r.splitOverdueTickJobs(jobs, now)
 	if len(promoted) == 0 {
 		return jobs
@@ -296,7 +335,10 @@ func (r *WorldAgentRunner) promoteOverdueTickJobs(jobs []*model.AgentJob, now ti
 	return append(promoted, remaining...)
 }
 
-func (r *WorldAgentRunner) splitOverdueTickJobs(jobs []*model.AgentJob, now time.Time) ([]*model.AgentJob, []*model.AgentJob) {
+func (r *WorldAgentRunner) splitOverdueTickJobs(
+	jobs []*model.AgentJob,
+	now time.Time,
+) ([]*model.AgentJob, []*model.AgentJob) {
 	threshold := r.tickInterval() / 2
 	if threshold < 30*time.Second {
 		threshold = 30 * time.Second
@@ -314,7 +356,10 @@ func (r *WorldAgentRunner) splitOverdueTickJobs(jobs []*model.AgentJob, now time
 	return promoted, remaining
 }
 
-func (r *WorldAgentRunner) acquire(ctx context.Context, job *model.AgentJob) (*model.World, bool) {
+func (r *WorldAgentRunner) acquire(
+	ctx context.Context,
+	job *model.AgentJob,
+) (*model.World, bool) {
 	if job == nil {
 		return nil, false
 	}
@@ -332,7 +377,9 @@ func (r *WorldAgentRunner) acquire(ctx context.Context, job *model.AgentJob) (*m
 		return nil, false
 	}
 
-	world, err := r.worldRepo.Get(ctx, &repo.WorldQuery{ID: new(job.WorldID)})
+	world, err := r.worldRepo.Get(ctx, &repo.WorldQuery{
+		ID: new(job.WorldID),
+	})
 	if err != nil {
 		r.log.ErrorContext(
 			ctx,
@@ -365,7 +412,11 @@ func (r *WorldAgentRunner) acquire(ctx context.Context, job *model.AgentJob) (*m
 	return world, true
 }
 
-func (r *WorldAgentRunner) acquireBackgroundJob(ctx context.Context, job *model.AgentJob, laneKey string) (*model.World, bool) {
+func (r *WorldAgentRunner) acquireBackgroundJob(
+	ctx context.Context,
+	job *model.AgentJob,
+	laneKey string,
+) (*model.World, bool) {
 	r.mu.Lock()
 	blocked := r.lanes[laneKey]
 	r.mu.Unlock()
@@ -373,7 +424,9 @@ func (r *WorldAgentRunner) acquireBackgroundJob(ctx context.Context, job *model.
 		return nil, false
 	}
 
-	world, err := r.worldRepo.Get(ctx, &repo.WorldQuery{ID: new(job.WorldID)})
+	world, err := r.worldRepo.Get(ctx, &repo.WorldQuery{
+		ID: new(job.WorldID),
+	})
 	if err != nil {
 		r.log.ErrorContext(
 			ctx,
@@ -397,7 +450,11 @@ func (r *WorldAgentRunner) acquireBackgroundJob(ctx context.Context, job *model.
 	return world, true
 }
 
-func (r *WorldAgentRunner) acquireMemoryJob(ctx context.Context, job *model.AgentJob, laneKey string) (*model.World, bool) {
+func (r *WorldAgentRunner) acquireMemoryJob(
+	ctx context.Context,
+	job *model.AgentJob,
+	laneKey string,
+) (*model.World, bool) {
 	r.mu.Lock()
 	blocked := r.activeMemory >= r.memoryLimit() || r.lanes[laneKey]
 	r.mu.Unlock()
@@ -405,7 +462,9 @@ func (r *WorldAgentRunner) acquireMemoryJob(ctx context.Context, job *model.Agen
 		return nil, false
 	}
 
-	world, err := r.worldRepo.Get(ctx, &repo.WorldQuery{ID: new(job.WorldID)})
+	world, err := r.worldRepo.Get(ctx, &repo.WorldQuery{
+		ID: new(job.WorldID),
+	})
 	if err != nil {
 		r.log.ErrorContext(
 			ctx,
@@ -430,7 +489,10 @@ func (r *WorldAgentRunner) acquireMemoryJob(ctx context.Context, job *model.Agen
 	return world, true
 }
 
-func (r *WorldAgentRunner) release(world *model.World, job *model.AgentJob) {
+func (r *WorldAgentRunner) release(
+	world *model.World,
+	job *model.AgentJob,
+) {
 	r.mu.Lock()
 	switch job.Type {
 	case enum.AgentJobTypeMemoryEmbed:
@@ -445,7 +507,11 @@ func (r *WorldAgentRunner) release(world *model.World, job *model.AgentJob) {
 	r.wakeScheduler()
 }
 
-func (r *WorldAgentRunner) execute(ctx context.Context, job *model.AgentJob, world *model.World) {
+func (r *WorldAgentRunner) execute(
+	ctx context.Context,
+	job *model.AgentJob,
+	world *model.World,
+) {
 	defer r.release(world, job)
 
 	running, err := r.agentJobRepo.MarkRunning(ctx, job.ID, time.Now())
@@ -466,7 +532,9 @@ func (r *WorldAgentRunner) execute(ctx context.Context, job *model.AgentJob, wor
 		done:  make(chan struct{}),
 	}
 	r.log.InfoContext(ctx, "execute agent job", constant.LogFieldTaskID, running.ID, "world_id", running.WorldID, "type", running.Type, "attempt", running.AttemptCount)
-	result.source, result.err = r.eventRepo.Get(ctx, &repo.EventQuery{ID: new(job.SourceEventID)})
+	result.source, result.err = r.eventRepo.Get(ctx, &repo.EventQuery{
+		ID: new(job.SourceEventID),
+	})
 	if result.err == nil {
 		result.state, result.err = r.worldStateRepo.Get(ctx, &repo.WorldStateQuery{
 			WorldID: new(job.WorldID),

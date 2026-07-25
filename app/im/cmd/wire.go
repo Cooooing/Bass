@@ -16,6 +16,10 @@ import (
 	"github.com/google/wire"
 )
 
-func wireApp(*config.Bootstrap, *common.Server, *slog.Logger) (*kratos.App, func(), error) {
+func wireApp(
+	*config.Bootstrap,
+	*common.Server,
+	*slog.Logger,
+) (*kratos.App, func(), error) {
 	panic(wire.Build(server.ServerProviderSet, service.ServiceProviderSet, biz.BizProviderSet, data.DataProviderSet, newApp))
 }

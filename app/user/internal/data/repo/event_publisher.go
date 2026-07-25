@@ -13,11 +13,18 @@ type NatsEventClient struct {
 	natsClient *client.NatsClient
 }
 
-func NewNatsEventClient(natsClient *client.NatsClient) repo.EventClient {
-	return &NatsEventClient{natsClient: natsClient}
+func NewNatsEventClient(
+	natsClient *client.NatsClient,
+) repo.EventClient {
+	return &NatsEventClient{
+		natsClient: natsClient,
+	}
 }
 
-func (p *NatsEventClient) Publish(ctx context.Context, msg *repo.EventClientMessage) error {
+func (p *NatsEventClient) Publish(
+	ctx context.Context,
+	msg *repo.EventClientMessage,
+) error {
 	if msg == nil {
 		return fmt.Errorf("event message is nil")
 	}

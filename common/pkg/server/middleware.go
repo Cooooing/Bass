@@ -26,7 +26,11 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func HttpRespEncoder(w http.ResponseWriter, r *http.Request, data any) error {
+func HttpRespEncoder(
+	w http.ResponseWriter,
+	r *http.Request,
+	data any,
+) error {
 	if ImageResp, ok := data.(*common.ImageResp); ok {
 		w.Header().Set("Content-Type", ImageResp.ContentType)
 		w.WriteHeader(http.StatusOK)
@@ -64,7 +68,9 @@ func HttpRespEncoder(w http.ResponseWriter, r *http.Request, data any) error {
 	return json.NewEncoder(w).Encode(result)
 }
 
-func HttpErrorEncoder(resolve func(r *http.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string) func(w http.ResponseWriter, r *http.Request, err error) {
+func HttpErrorEncoder(
+	resolve func(r *http.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string,
+) func(w http.ResponseWriter, r *http.Request, err error) {
 	return func(w http.ResponseWriter, r *http.Request, err error) {
 		w.Header().Set("Content-Type", "application/json")
 
@@ -88,7 +94,9 @@ func HttpErrorEncoder(resolve func(r *http.Request, code cerrors.BusinessErrorCo
 	}
 }
 
-func TimestampMiddleware(mode string) middleware.Middleware {
+func TimestampMiddleware(
+	mode string,
+) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			if mode == constant.Dev {
@@ -116,7 +124,10 @@ func TimestampMiddleware(mode string) middleware.Middleware {
 	}
 }
 
-func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Middleware {
+func NonceMiddleware(
+	redisClient *client.RedisClient,
+	mode string,
+) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			if mode == constant.Dev {
@@ -136,6 +147,7 @@ func NonceMiddleware(redisClient *client.RedisClient, mode string) middleware.Mi
 		}
 	}
 }
+
 func RequestLogContextMiddleware() middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
@@ -154,7 +166,10 @@ func RequestLogContextMiddleware() middleware.Middleware {
 	}
 }
 
-func UserAuthMiddleware(authClient userv1.AuthServiceClient, realm commonenum.LoginRealm) middleware.Middleware {
+func UserAuthMiddleware(
+	authClient userv1.AuthServiceClient,
+	realm commonenum.LoginRealm,
+) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			const bearerPrefix = "Bearer "
@@ -168,7 +183,10 @@ func UserAuthMiddleware(authClient userv1.AuthServiceClient, realm commonenum.Lo
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 			}
 
-			reply, err := authClient.ParseToken(ctx, &userv1.ParseToken_Req{AccessToken: token, Realm: commonenum.LoginRealmMap.MustToProto(realm)})
+			reply, err := authClient.ParseToken(ctx, &userv1.ParseToken_Req{
+				AccessToken: token,
+				Realm:       commonenum.LoginRealmMap.MustToProto(realm),
+			})
 			if err != nil {
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID).WithCause(err)
 			}
@@ -193,7 +211,10 @@ func UserAuthMiddleware(authClient userv1.AuthServiceClient, realm commonenum.Lo
 	}
 }
 
-func GetHeader(ctx context.Context, key string) string {
+func GetHeader(
+	ctx context.Context,
+	key string,
+) string {
 	var v string
 	if md, ok := metadata.FromIncomingContext(ctx); ok {
 		if vals := md.Get(strings.ToLower(key)); len(vals) > 0 {

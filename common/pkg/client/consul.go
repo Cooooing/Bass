@@ -39,7 +39,11 @@ type ConsulClient struct {
 	services []string
 }
 
-func NewConsulClient(logger *slog.Logger, conf *common.Consul, observer *Observer) (*ConsulClient, func(), error) {
+func NewConsulClient(
+	logger *slog.Logger,
+	conf *common.Consul,
+	observer *Observer,
+) (*ConsulClient, func(), error) {
 	if observer == nil {
 		observer = NewObservability(logger, nil)
 	}
@@ -61,7 +65,9 @@ func NewConsulClient(logger *slog.Logger, conf *common.Consul, observer *Observe
 	cfg.HttpClient = &http.Client{
 		Timeout: conf.DialTimeout.AsDuration(),
 		Transport: &http.Transport{
-			DialContext: (&net.Dialer{Timeout: conf.DialTimeout.AsDuration()}).DialContext,
+			DialContext: (&net.Dialer{
+				Timeout: conf.DialTimeout.AsDuration(),
+			}).DialContext,
 		},
 	}
 
@@ -93,11 +99,17 @@ func NewConsulClient(logger *slog.Logger, conf *common.Consul, observer *Observe
 	return c, c.Close, nil
 }
 
-func (c *ConsulClient) Registrar() registry.Registrar { return c.reg }
+func (c *ConsulClient) Registrar() registry.Registrar {
+	return c.reg
+}
 
-func (c *ConsulClient) Discovery() registry.Discovery { return c.reg }
+func (c *ConsulClient) Discovery() registry.Discovery {
+	return c.reg
+}
 
-func (c *ConsulClient) RegisterService(svc *consulapi.AgentServiceRegistration) error {
+func (c *ConsulClient) RegisterService(
+	svc *consulapi.AgentServiceRegistration,
+) error {
 	if err := c.Client.Agent().ServiceRegister(svc); err != nil {
 		return fmt.Errorf("register %s: %w", svc.ID, err)
 	}
@@ -108,7 +120,9 @@ func (c *ConsulClient) RegisterService(svc *consulapi.AgentServiceRegistration) 
 	return nil
 }
 
-func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
+func (c *ConsulClient) GetGrpcConn(
+	service string,
+) (*grpc.ClientConn, error) {
 	if v, ok := c.grpcConns.Load(service); ok {
 		return v.(*grpc.ClientConn), nil
 	}
@@ -149,7 +163,9 @@ func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 	return conn, nil
 }
 
-func (c *ConsulClient) GetHTTPClient(service string) (*khttp.Client, error) {
+func (c *ConsulClient) GetHTTPClient(
+	service string,
+) (*khttp.Client, error) {
 	if v, ok := c.httpConns.Load(service); ok {
 		return v.(*khttp.Client), nil
 	}

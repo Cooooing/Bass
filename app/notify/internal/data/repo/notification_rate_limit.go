@@ -65,11 +65,18 @@ type NotificationRateLimitCache struct {
 	redisClient *client.RedisClient
 }
 
-func NewNotificationRateLimitCache(redisClient *client.RedisClient) bizrepo.NotificationRateLimitCache {
-	return &NotificationRateLimitCache{redisClient: redisClient}
+func NewNotificationRateLimitCache(
+	redisClient *client.RedisClient,
+) bizrepo.NotificationRateLimitCache {
+	return &NotificationRateLimitCache{
+		redisClient: redisClient,
+	}
 }
 
-func (c *NotificationRateLimitCache) Allow(ctx context.Context, spec *bizrepo.NotificationRateLimitSpec) (bool, error) {
+func (c *NotificationRateLimitCache) Allow(
+	ctx context.Context,
+	spec *bizrepo.NotificationRateLimitSpec,
+) (bool, error) {
 
 	key, err := notificationRateLimitKey(spec)
 	if err != nil {
@@ -89,7 +96,10 @@ func (c *NotificationRateLimitCache) Allow(ctx context.Context, spec *bizrepo.No
 	return allowed == 1, nil
 }
 
-func (c *NotificationRateLimitCache) Check(ctx context.Context, spec *bizrepo.NotificationRateLimitSpec) (*bizrepo.NotificationRateLimitState, error) {
+func (c *NotificationRateLimitCache) Check(
+	ctx context.Context,
+	spec *bizrepo.NotificationRateLimitSpec,
+) (*bizrepo.NotificationRateLimitState, error) {
 
 	key, err := notificationRateLimitKey(spec)
 	if err != nil {
@@ -119,7 +129,9 @@ func (c *NotificationRateLimitCache) Check(ctx context.Context, spec *bizrepo.No
 	return state, nil
 }
 
-func notificationRateLimitKey(spec *bizrepo.NotificationRateLimitSpec) (string, error) {
+func notificationRateLimitKey(
+	spec *bizrepo.NotificationRateLimitSpec,
+) (string, error) {
 	if spec == nil {
 		return "", fmt.Errorf("notification rate limit spec is nil")
 	}

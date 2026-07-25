@@ -18,7 +18,9 @@ type Faction struct {
 
 func (Faction) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "factions"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "factions",
+		},
 		entsql.WithComments(true),
 	}
 }

@@ -22,18 +22,27 @@ type DomainRepo struct {
 	db *gen.Client
 }
 
-func NewDomainRepo(db *gen.Client) repo.DomainRepo {
-	return &DomainRepo{db: db}
+func NewDomainRepo(
+	db *gen.Client,
+) repo.DomainRepo {
+	return &DomainRepo{
+		db: db,
+	}
 }
 
-func (r *DomainRepo) getClient(ctx context.Context) *gen.Client {
+func (r *DomainRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *DomainRepo) Save(ctx context.Context, domainModel *model.Domain) (*model.Domain, error) {
+func (r *DomainRepo) Save(
+	ctx context.Context,
+	domainModel *model.Domain,
+) (*model.Domain, error) {
 	save, err := r.getClient(ctx).Domain.Create().
 		SetName(domainModel.Name).
 		SetNillableDescription(domainModel.Description).
@@ -62,7 +71,10 @@ func (r *DomainRepo) Save(ctx context.Context, domainModel *model.Domain) (*mode
 	}, nil
 }
 
-func (r *DomainRepo) Saves(ctx context.Context, domains []*model.Domain) ([]*model.Domain, error) {
+func (r *DomainRepo) Saves(
+	ctx context.Context,
+	domains []*model.Domain,
+) ([]*model.Domain, error) {
 	client := r.getClient(ctx)
 	creates := make([]*gen.DomainCreate, 0, len(domains))
 	for i := range domains {
@@ -102,7 +114,10 @@ func (r *DomainRepo) Saves(ctx context.Context, domains []*model.Domain) ([]*mod
 	return res, nil
 }
 
-func (r *DomainRepo) Update(ctx context.Context, domainModel *model.Domain) (*model.Domain, error) {
+func (r *DomainRepo) Update(
+	ctx context.Context,
+	domainModel *model.Domain,
+) (*model.Domain, error) {
 	save, err := r.getClient(ctx).Domain.UpdateOneID(domainModel.ID).
 		SetName(domainModel.Name).
 		SetNillableDescription(domainModel.Description).
@@ -130,7 +145,10 @@ func (r *DomainRepo) Update(ctx context.Context, domainModel *model.Domain) (*mo
 	}, nil
 }
 
-func (r *DomainRepo) Get(ctx context.Context, req *repo.DomainGetReq) (*model.Domain, error) {
+func (r *DomainRepo) Get(
+	ctx context.Context,
+	req *repo.DomainGetReq,
+) (*model.Domain, error) {
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	d, err := query.First(ctx)
@@ -155,7 +173,10 @@ func (r *DomainRepo) Get(ctx context.Context, req *repo.DomainGetReq) (*model.Do
 	}, nil
 }
 
-func (r *DomainRepo) List(ctx context.Context, req *repo.DomainGetReq) ([]*model.Domain, error) {
+func (r *DomainRepo) List(
+	ctx context.Context,
+	req *repo.DomainGetReq,
+) ([]*model.Domain, error) {
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
@@ -182,7 +203,10 @@ func (r *DomainRepo) List(ctx context.Context, req *repo.DomainGetReq) ([]*model
 	return domains, nil
 }
 
-func (r *DomainRepo) Map(ctx context.Context, req *repo.DomainGetReq) (map[int64]*model.Domain, error) {
+func (r *DomainRepo) Map(
+	ctx context.Context,
+	req *repo.DomainGetReq,
+) (map[int64]*model.Domain, error) {
 	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -192,7 +216,10 @@ func (r *DomainRepo) Map(ctx context.Context, req *repo.DomainGetReq) (map[int64
 	}), nil
 }
 
-func (r *DomainRepo) Count(ctx context.Context, req *repo.DomainGetReq) (int, error) {
+func (r *DomainRepo) Count(
+	ctx context.Context,
+	req *repo.DomainGetReq,
+) (int, error) {
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -202,7 +229,10 @@ func (r *DomainRepo) Count(ctx context.Context, req *repo.DomainGetReq) (int, er
 	return count, nil
 }
 
-func (r *DomainRepo) Page(ctx context.Context, req *repo.DomainGetReq) (*repo.DomainPageResp, error) {
+func (r *DomainRepo) Page(
+	ctx context.Context,
+	req *repo.DomainGetReq,
+) (*repo.DomainPageResp, error) {
 	page := normalizePage(req.Page)
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
@@ -242,7 +272,10 @@ func (r *DomainRepo) Page(ctx context.Context, req *repo.DomainGetReq) (*repo.Do
 	}, nil
 }
 
-func (r *DomainRepo) getQuery(query *gen.DomainQuery, req *repo.DomainGetReq) *gen.DomainQuery {
+func (r *DomainRepo) getQuery(
+	query *gen.DomainQuery,
+	req *repo.DomainGetReq,
+) *gen.DomainQuery {
 	if req.DomainId != nil {
 		query = query.Where(domain.IDEQ(*req.DomainId))
 	}

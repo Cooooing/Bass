@@ -18,7 +18,9 @@ type Preferences struct {
 
 func (Preferences) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixUser.String() + "preferences"},
+		entsql.Annotation{
+			Table: constant.TablePrefixUser.String() + "preferences",
+		},
 		entsql.WithComments(true),
 	}
 }

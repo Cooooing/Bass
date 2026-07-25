@@ -17,7 +17,9 @@ type Location struct {
 
 func (Location) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixUser.String() + "locations"},
+		entsql.Annotation{
+			Table: constant.TablePrefixUser.String() + "locations",
+		},
 		entsql.WithComments(true),
 	}
 }

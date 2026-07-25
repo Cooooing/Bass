@@ -11,7 +11,10 @@ type userClientHandler struct {
 	userClient repo.UserClient
 }
 
-func (h *userClientHandler) loadBasic(ctx context.Context, userID int64) (*model.UserAccount, error) {
+func (h *userClientHandler) loadBasic(
+	ctx context.Context,
+	userID int64,
+) (*model.UserAccount, error) {
 	if h.userClient == nil || userID == 0 {
 		return nil, nil
 	}
@@ -22,7 +25,10 @@ func (h *userClientHandler) loadBasic(ctx context.Context, userID int64) (*model
 	return usersResp[userID], nil
 }
 
-func (h *userClientHandler) loadAccounts(ctx context.Context, userIDs ...int64) (map[int64]*model.UserAccount, error) {
+func (h *userClientHandler) loadAccounts(
+	ctx context.Context,
+	userIDs ...int64,
+) (map[int64]*model.UserAccount, error) {
 	if h.userClient == nil {
 		return map[int64]*model.UserAccount{}, nil
 	}
@@ -48,8 +54,13 @@ func (h *userClientHandler) loadAccounts(ctx context.Context, userIDs ...int64) 
 	return resp, nil
 }
 
-func (h *userClientHandler) templateUser(userID int64, user *model.UserAccount) model.TemplateUser {
-	data := model.TemplateUser{ID: userID}
+func (h *userClientHandler) templateUser(
+	userID int64,
+	user *model.UserAccount,
+) model.TemplateUser {
+	data := model.TemplateUser{
+		ID: userID,
+	}
 	if user == nil {
 		return data
 	}
@@ -66,7 +77,9 @@ type contentClientHandler struct {
 	contentClient repo.ContentClient
 }
 
-func (h *contentClientHandler) articleTemplateData(article *model.ContentArticle) model.TemplateArticle {
+func (h *contentClientHandler) articleTemplateData(
+	article *model.ContentArticle,
+) model.TemplateArticle {
 	if article == nil {
 		return model.TemplateArticle{}
 	}
@@ -81,7 +94,9 @@ func (h *contentClientHandler) articleTemplateData(article *model.ContentArticle
 	}
 }
 
-func (h *contentClientHandler) commentTemplateData(comment *model.ContentComment) model.TemplateComment {
+func (h *contentClientHandler) commentTemplateData(
+	comment *model.ContentComment,
+) model.TemplateComment {
 	if comment == nil {
 		return model.TemplateComment{}
 	}
@@ -107,7 +122,12 @@ type articleActorHandler struct {
 	contentClientHandler
 }
 
-func (h *articleActorHandler) build(ctx context.Context, eventID string, articleID int64, senderID int64) (*usecase.NotificationContext, error) {
+func (h *articleActorHandler) build(
+	ctx context.Context,
+	eventID string,
+	articleID int64,
+	senderID int64,
+) (*usecase.NotificationContext, error) {
 	var article *model.ContentArticle
 	if h.contentClient != nil && articleID != 0 {
 		articleResp, err := h.contentClient.GetArticle(ctx, articleID)
@@ -127,7 +147,9 @@ func (h *articleActorHandler) build(ctx context.Context, eventID string, article
 
 	recipients := make([]*usecase.NotificationRecipient, 0, 1)
 	if article != nil && article.AuthorID != 0 && article.AuthorID != senderID {
-		recipients = append(recipients, &usecase.NotificationRecipient{UserID: article.AuthorID})
+		recipients = append(recipients, &usecase.NotificationRecipient{
+			UserID: article.AuthorID,
+		})
 	}
 	return &usecase.NotificationContext{
 		EventID:      eventID,

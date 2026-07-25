@@ -13,7 +13,9 @@ import (
 	"game_town/internal/enum"
 )
 
-func TestAgentClientGenerateWorldWithOllama(t *testing.T) {
+func TestAgentClientGenerateWorldWithOllama(
+	t *testing.T,
+) {
 	draftJSON, err := json.Marshal(&model.WorldDraft{
 		Name:       "Town",
 		Summary:    "Ready",
@@ -62,7 +64,9 @@ func TestAgentClientGenerateWorldWithOllama(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client := &AgentClient{httpClient: server.Client()}
+	client := &AgentClient{
+		httpClient: server.Client(),
+	}
 	draft, err := client.GenerateWorld(context.Background(), &repo.GenerateWorldReq{
 		Config: &model.AgentConfig{
 			Provider:       enum.AgentProviderOllama,
@@ -70,7 +74,9 @@ func TestAgentClientGenerateWorldWithOllama(t *testing.T) {
 			Model:          "qwen",
 			TimeoutSeconds: 5,
 		},
-		World:         &model.World{Description: "test"},
+		World: &model.World{
+			Description: "test",
+		},
 		NpcCount:      1,
 		LocationCount: 1,
 	})
@@ -82,8 +88,12 @@ func TestAgentClientGenerateWorldWithOllama(t *testing.T) {
 	}
 }
 
-func TestAgentClientOpenAISecretRequired(t *testing.T) {
-	client := &AgentClient{httpClient: http.DefaultClient}
+func TestAgentClientOpenAISecretRequired(
+	t *testing.T,
+) {
+	client := &AgentClient{
+		httpClient: http.DefaultClient,
+	}
 	_, err := client.Talk(context.Background(), &repo.TalkReq{
 		Config: &model.AgentConfig{
 			Provider:       enum.AgentProviderOpenAICompatible,

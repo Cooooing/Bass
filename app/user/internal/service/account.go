@@ -22,17 +22,29 @@ type AccountService struct {
 	accountUsecase *usecase.AccountUsecase
 }
 
-func NewAccountService(accountUsecase *usecase.AccountUsecase) *AccountService {
-	return &AccountService{accountUsecase: accountUsecase}
+func NewAccountService(
+	accountUsecase *usecase.AccountUsecase,
+) *AccountService {
+	return &AccountService{
+		accountUsecase: accountUsecase,
+	}
 }
 
-func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
+func (s *AccountService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	v1.RegisterAccountServiceServer(gs, s)
 }
 
-func (s *AccountService) RegisterHttp(hs *http.Server) {}
+func (s *AccountService) RegisterHttp(
+	hs *http.Server,
+) {
+}
 
-func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.GetAccount_Resp, error) {
+func (s *AccountService) Get(
+	ctx context.Context,
+	req *v1.GetAccount_Req,
+) (*v1.GetAccount_Resp, error) {
 	req = util.OrDefault(req, &v1.GetAccount_Req{})
 	res, err := s.accountUsecase.GetByUserID(ctx, req.GetUserId())
 	if err != nil {
@@ -69,14 +81,21 @@ func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.G
 			Phone:  account.Phone,
 		},
 	}
-	return &v1.GetAccount_Resp{Account: replyAccount}, nil
+	return &v1.GetAccount_Resp{
+		Account: replyAccount,
+	}, nil
 }
 
-func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v1.ListAccounts_Resp, error) {
+func (s *AccountService) List(
+	ctx context.Context,
+	req *v1.ListAccounts_Req,
+) (*v1.ListAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.ListAccounts_Req{})
 	query := util.OrDefault(req.Query, &v1.ListAccounts_Req_AccountQuery{})
 	if len(query.UserIds) == 0 {
-		return &v1.ListAccounts_Resp{Rows: []*v1.ListAccounts_Resp_Account{}}, nil
+		return &v1.ListAccounts_Resp{
+			Rows: []*v1.ListAccounts_Resp_Account{},
+		}, nil
 	}
 	res, err := s.accountUsecase.ListByUserIDs(ctx, query.UserIds)
 	if err != nil {
@@ -117,14 +136,21 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v
 		}
 		rows = append(rows, replyAccount)
 	}
-	return &v1.ListAccounts_Resp{Rows: rows}, nil
+	return &v1.ListAccounts_Resp{
+		Rows: rows,
+	}, nil
 }
 
-func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.MapAccounts_Resp, error) {
+func (s *AccountService) Map(
+	ctx context.Context,
+	req *v1.MapAccounts_Req,
+) (*v1.MapAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.MapAccounts_Req{})
 	query := util.OrDefault(req.Query, &v1.MapAccounts_Req_AccountQuery{})
 	if len(query.UserIds) == 0 {
-		return &v1.MapAccounts_Resp{Accounts: map[int64]*v1.MapAccounts_Resp_Account{}}, nil
+		return &v1.MapAccounts_Resp{
+			Accounts: map[int64]*v1.MapAccounts_Resp_Account{},
+		}, nil
 	}
 	res, err := s.accountUsecase.MapByUserIDs(ctx, query.UserIds)
 	if err != nil {
@@ -165,10 +191,15 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.
 		}
 		rows[userID] = replyAccount
 	}
-	return &v1.MapAccounts_Resp{Accounts: rows}, nil
+	return &v1.MapAccounts_Resp{
+		Accounts: rows,
+	}, nil
 }
 
-func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfileAccount_Req) (*v1.UpdateProfileAccount_Resp, error) {
+func (s *AccountService) UpdateProfile(
+	ctx context.Context,
+	req *v1.UpdateProfileAccount_Req,
+) (*v1.UpdateProfileAccount_Resp, error) {
 	req = util.OrDefault(req, &v1.UpdateProfileAccount_Req{})
 	var mbti *enum.MBTI
 	clearMBTI := false
@@ -218,13 +249,21 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 	if account.UpdatedAt != nil {
 		basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 	}
-	return &v1.UpdateProfileAccount_Resp{Account: basic}, nil
+	return &v1.UpdateProfileAccount_Resp{
+		Account: basic,
+	}, nil
 }
 
-func (s *AccountService) Avatar(ctx context.Context, req *v1.AvatarAccount_Req) (*common.ImageResp, error) {
+func (s *AccountService) Avatar(
+	ctx context.Context,
+	req *v1.AvatarAccount_Req,
+) (*common.ImageResp, error) {
 	res, err := s.accountUsecase.Avatar(ctx, req.GetName())
 	if err != nil {
 		return nil, err
 	}
-	return &common.ImageResp{Data: res, ContentType: "image/png"}, nil
+	return &common.ImageResp{
+		Data:        res,
+		ContentType: "image/png",
+	}, nil
 }

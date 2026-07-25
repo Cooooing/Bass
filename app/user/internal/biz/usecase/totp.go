@@ -40,8 +40,13 @@ func NewTotpUsecase(
 	}, nil
 }
 
-func (u *TotpUsecase) GetByUserID(ctx context.Context, userID int64) (*model.Totp, error) {
-	return u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &userID})
+func (u *TotpUsecase) GetByUserID(
+	ctx context.Context,
+	userID int64,
+) (*model.Totp, error) {
+	return u.totpRepo.Get(ctx, &repo.TotpGetReq{
+		UserID: &userID,
+	})
 }
 
 type ValidateTotpByUserIDReq struct {
@@ -49,8 +54,13 @@ type ValidateTotpByUserIDReq struct {
 	Code   string
 }
 
-func (u *TotpUsecase) ValidateByUserID(ctx context.Context, req *ValidateTotpByUserIDReq) (bool, error) {
-	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &req.UserID})
+func (u *TotpUsecase) ValidateByUserID(
+	ctx context.Context,
+	req *ValidateTotpByUserIDReq,
+) (bool, error) {
+	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{
+		UserID: &req.UserID,
+	})
 	if err != nil {
 		return false, err
 	}
@@ -70,8 +80,13 @@ type BeginEnableTotpResp struct {
 	QRCode []byte
 }
 
-func (u *TotpUsecase) BeginEnable(ctx context.Context, req *BeginEnableTotpReq) (*BeginEnableTotpResp, error) {
-	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &req.UserID})
+func (u *TotpUsecase) BeginEnable(
+	ctx context.Context,
+	req *BeginEnableTotpReq,
+) (*BeginEnableTotpResp, error) {
+	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{
+		UserID: &req.UserID,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +102,11 @@ func (u *TotpUsecase) BeginEnable(ctx context.Context, req *BeginEnableTotpReq) 
 	if err != nil {
 		return nil, err
 	}
-	if err = u.totpSecretCache.Save(ctx, &repo.TotpSecretCacheSaveReq{UserID: req.UserID, Secret: key.Secret(), TTL: 5 * time.Minute}); err != nil {
+	if err = u.totpSecretCache.Save(ctx, &repo.TotpSecretCacheSaveReq{
+		UserID: req.UserID,
+		Secret: key.Secret(),
+		TTL:    5 * time.Minute,
+	}); err != nil {
 		return nil, err
 	}
 
@@ -99,7 +118,10 @@ func (u *TotpUsecase) BeginEnable(ctx context.Context, req *BeginEnableTotpReq) 
 	if err = png.Encode(buf, image); err != nil {
 		return nil, err
 	}
-	return &BeginEnableTotpResp{URL: key.URL(), QRCode: buf.Bytes()}, nil
+	return &BeginEnableTotpResp{
+		URL:    key.URL(),
+		QRCode: buf.Bytes(),
+	}, nil
 }
 
 type CheckEnableTotpCodeReq struct {
@@ -107,7 +129,10 @@ type CheckEnableTotpCodeReq struct {
 	Code   string
 }
 
-func (u *TotpUsecase) CheckEnableCode(ctx context.Context, req *CheckEnableTotpCodeReq) (bool, error) {
+func (u *TotpUsecase) CheckEnableCode(
+	ctx context.Context,
+	req *CheckEnableTotpCodeReq,
+) (bool, error) {
 	secret, err := u.totpSecretCache.Get(ctx, req.UserID)
 	if err != nil {
 		return false, nil
@@ -120,8 +145,13 @@ type DisableTotpReq struct {
 	Code   string
 }
 
-func (u *TotpUsecase) Disable(ctx context.Context, req *DisableTotpReq) error {
-	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: &req.UserID})
+func (u *TotpUsecase) Disable(
+	ctx context.Context,
+	req *DisableTotpReq,
+) error {
+	row, err := u.totpRepo.Get(ctx, &repo.TotpGetReq{
+		UserID: &req.UserID,
+	})
 	if err != nil {
 		return err
 	}
@@ -157,7 +187,10 @@ type ConfirmEnableTotpReq struct {
 	Code   string
 }
 
-func (u *TotpUsecase) ConfirmEnable(ctx context.Context, req *ConfirmEnableTotpReq) error {
+func (u *TotpUsecase) ConfirmEnable(
+	ctx context.Context,
+	req *ConfirmEnableTotpReq,
+) error {
 	secret, err := u.totpSecretCache.Get(ctx, req.UserID)
 	if err != nil {
 		return err
@@ -167,7 +200,10 @@ func (u *TotpUsecase) ConfirmEnable(ctx context.Context, req *ConfirmEnableTotpR
 	}
 
 	return u.tx(ctx, func(ctx context.Context) error {
-		if _, err = u.totpRepo.UpsertEnabledByUserID(ctx, &repo.TotpUpsertEnabledByUserIDReq{UserID: req.UserID, Secret: secret}); err != nil {
+		if _, err = u.totpRepo.UpsertEnabledByUserID(ctx, &repo.TotpUpsertEnabledByUserIDReq{
+			UserID: req.UserID,
+			Secret: secret,
+		}); err != nil {
 			return err
 		}
 		err := u.outboxRepo.Save(ctx, &repo.OutboxEventSave{

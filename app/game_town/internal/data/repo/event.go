@@ -23,18 +23,27 @@ type EventRepo struct {
 	db *gen.Client
 }
 
-func NewEventRepo(db *gen.Client) bizrepo.EventRepo {
-	return &EventRepo{db: db}
+func NewEventRepo(
+	db *gen.Client,
+) bizrepo.EventRepo {
+	return &EventRepo{
+		db: db,
+	}
 }
 
-func (r *EventRepo) getClient(ctx context.Context) *gen.Client {
+func (r *EventRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *EventRepo) Save(ctx context.Context, row *model.Event) (*model.Event, error) {
+func (r *EventRepo) Save(
+	ctx context.Context,
+	row *model.Event,
+) (*model.Event, error) {
 	saved, err := r.getClient(ctx).Event.Create().
 		SetWorldID(row.WorldID).
 		SetSequence(row.Sequence).
@@ -71,7 +80,10 @@ func (r *EventRepo) Save(ctx context.Context, row *model.Event) (*model.Event, e
 	}, nil
 }
 
-func eventQuery(q *gen.EventQuery, req *bizrepo.EventQuery) *gen.EventQuery {
+func eventQuery(
+	q *gen.EventQuery,
+	req *bizrepo.EventQuery,
+) *gen.EventQuery {
 	if req == nil {
 		return q
 	}
@@ -102,7 +114,10 @@ func eventQuery(q *gen.EventQuery, req *bizrepo.EventQuery) *gen.EventQuery {
 	return q
 }
 
-func (r *EventRepo) Get(ctx context.Context, req *bizrepo.EventQuery) (*model.Event, error) {
+func (r *EventRepo) Get(
+	ctx context.Context,
+	req *bizrepo.EventQuery,
+) (*model.Event, error) {
 	row, err := eventQuery(r.getClient(ctx).Event.Query(), req).Only(ctx)
 	if gen.IsNotFound(err) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
@@ -128,7 +143,10 @@ func (r *EventRepo) Get(ctx context.Context, req *bizrepo.EventQuery) (*model.Ev
 	}, nil
 }
 
-func (r *EventRepo) List(ctx context.Context, req *bizrepo.EventQuery) ([]*model.Event, error) {
+func (r *EventRepo) List(
+	ctx context.Context,
+	req *bizrepo.EventQuery,
+) ([]*model.Event, error) {
 	query := eventQuery(r.getClient(ctx).Event.Query(), req)
 	var rows []*gen.Event
 	var err error
@@ -164,7 +182,10 @@ func (r *EventRepo) List(ctx context.Context, req *bizrepo.EventQuery) ([]*model
 	return out, nil
 }
 
-func (r *EventRepo) Map(ctx context.Context, req *bizrepo.EventQuery) (map[int64]*model.Event, error) {
+func (r *EventRepo) Map(
+	ctx context.Context,
+	req *bizrepo.EventQuery,
+) (map[int64]*model.Event, error) {
 	rows, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -176,11 +197,17 @@ func (r *EventRepo) Map(ctx context.Context, req *bizrepo.EventQuery) (map[int64
 	return out, nil
 }
 
-func (r *EventRepo) Count(ctx context.Context, req *bizrepo.EventQuery) (int, error) {
+func (r *EventRepo) Count(
+	ctx context.Context,
+	req *bizrepo.EventQuery,
+) (int, error) {
 	return eventQuery(r.getClient(ctx).Event.Query(), req).Count(ctx)
 }
 
-func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizrepo.EventPageResp, error) {
+func (r *EventRepo) Page(
+	ctx context.Context,
+	req *bizrepo.EventPageReq,
+) (*bizrepo.EventPageResp, error) {
 	p := page(req.Page)
 	q := eventQuery(r.getClient(ctx).Event.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
@@ -209,5 +236,8 @@ func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizre
 			CreatedAt:        row.CreatedAt,
 		}
 	})
-	return &bizrepo.EventPageResp{Rows: out, Page: basePage(total, p)}, nil
+	return &bizrepo.EventPageResp{
+		Rows: out,
+		Page: basePage(total, p),
+	}, nil
 }

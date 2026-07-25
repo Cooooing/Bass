@@ -20,7 +20,9 @@ type Comment struct {
 
 func (Comment) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixContent.String() + "comments"},
+		entsql.Annotation{
+			Table: constant.TablePrefixContent.String() + "comments",
+		},
 		entsql.WithComments(true),
 	}
 }

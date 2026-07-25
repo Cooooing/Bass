@@ -27,7 +27,10 @@ type AsynqClient struct {
 	Client *asynq.Client
 }
 
-func NewAsynqClient(logger *slog.Logger, redisClient *RedisClient) (*AsynqClient, func()) {
+func NewAsynqClient(
+	logger *slog.Logger,
+	redisClient *RedisClient,
+) (*AsynqClient, func()) {
 	c := &AsynqClient{
 		logger: logger,
 		Client: asynq.NewClientFromRedisClient(redisClient.Client),
@@ -46,14 +49,20 @@ type AsynqServer struct {
 	Server *asynq.Server
 }
 
-func NewAsynqServer(logger *slog.Logger, redisClient *RedisClient, tasks map[constant.TaskName]Handler) (*AsynqServer, func()) {
+func NewAsynqServer(
+	logger *slog.Logger,
+	redisClient *RedisClient,
+	tasks map[constant.TaskName]Handler,
+) (*AsynqServer, func()) {
 	mux := asynq.NewServeMux()
 	for _, t := range lo.Values(tasks) {
 		logger.Info("register task", constant.LogFieldKind, constant.LogKindAsynq, "task", t.Name().String())
 		mux.HandleFunc(t.Name().String(), t.Handler())
 	}
 
-	adapter := &asynqSlogLogger{logger: logger}
+	adapter := &asynqSlogLogger{
+		logger: logger,
+	}
 	server := asynq.NewServerFromRedisClient(redisClient.Client, asynq.Config{
 		Concurrency:              10,
 		TaskCheckInterval:        2 * time.Second,
@@ -83,9 +92,14 @@ type AsynqScheduler struct {
 	Scheduler *asynq.Scheduler
 }
 
-func NewAsynqScheduler(logger *slog.Logger, redisClient *RedisClient) (*AsynqScheduler, func()) {
+func NewAsynqScheduler(
+	logger *slog.Logger,
+	redisClient *RedisClient,
+) (*AsynqScheduler, func()) {
 	scheduler := asynq.NewSchedulerFromRedisClient(redisClient.Client, &asynq.SchedulerOpts{
-		Logger:   &asynqSlogLogger{logger: logger},
+		Logger: &asynqSlogLogger{
+			logger: logger,
+		},
 		LogLevel: asynq.InfoLevel,
 		Location: time.Local,
 	})
@@ -108,14 +122,21 @@ type GlobalErrHandler struct {
 	tasks  map[constant.TaskName]Handler
 }
 
-func NewGlobalErrHandler(logger *slog.Logger, tasks map[constant.TaskName]Handler) *GlobalErrHandler {
+func NewGlobalErrHandler(
+	logger *slog.Logger,
+	tasks map[constant.TaskName]Handler,
+) *GlobalErrHandler {
 	return &GlobalErrHandler{
 		logger: logger,
 		tasks:  tasks,
 	}
 }
 
-func (h *GlobalErrHandler) HandleError(ctx context.Context, task *asynq.Task, err error) {
+func (h *GlobalErrHandler) HandleError(
+	ctx context.Context,
+	task *asynq.Task,
+	err error,
+) {
 	h.logger.ErrorContext(ctx, "task failed", constant.LogFieldKind, constant.LogKindAsynq, "task", task.Type(), "payload", string(task.Payload()), constant.LogFieldErr, err)
 	for _, taskName := range lo.Keys(h.tasks) {
 		if strings.HasPrefix(task.Type(), string(taskName)) {
@@ -131,11 +152,33 @@ type asynqSlogLogger struct {
 	logger *slog.Logger
 }
 
-func (l *asynqSlogLogger) Debug(args ...interface{}) { l.logger.Debug(fmt.Sprint(args...)) }
-func (l *asynqSlogLogger) Info(args ...interface{})  { l.logger.Info(fmt.Sprint(args...)) }
-func (l *asynqSlogLogger) Warn(args ...interface{})  { l.logger.Warn(fmt.Sprint(args...)) }
-func (l *asynqSlogLogger) Error(args ...interface{}) { l.logger.Error(fmt.Sprint(args...)) }
-func (l *asynqSlogLogger) Fatal(args ...interface{}) {
+func (l *asynqSlogLogger) Debug(
+	args ...interface{},
+) {
+	l.logger.Debug(fmt.Sprint(args...))
+}
+
+func (l *asynqSlogLogger) Info(
+	args ...interface{},
+) {
+	l.logger.Info(fmt.Sprint(args...))
+}
+
+func (l *asynqSlogLogger) Warn(
+	args ...interface{},
+) {
+	l.logger.Warn(fmt.Sprint(args...))
+}
+
+func (l *asynqSlogLogger) Error(
+	args ...interface{},
+) {
+	l.logger.Error(fmt.Sprint(args...))
+}
+
+func (l *asynqSlogLogger) Fatal(
+	args ...interface{},
+) {
 	l.logger.Error(fmt.Sprint(args...))
 	os.Exit(1)
 }
@@ -145,14 +188,20 @@ type Producer struct {
 	scheduler *asynq.Scheduler
 }
 
-func NewProducer(client *AsynqClient, scheduler *AsynqScheduler) *Producer {
+func NewProducer(
+	client *AsynqClient,
+	scheduler *AsynqScheduler,
+) *Producer {
 	return &Producer{
 		client:    client.Client,
 		scheduler: scheduler.Scheduler,
 	}
 }
 
-func (p *Producer) EnqueueContextTask(ctx context.Context, data *model.Task) error {
+func (p *Producer) EnqueueContextTask(
+	ctx context.Context,
+	data *model.Task,
+) error {
 	marshal, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -178,7 +227,10 @@ func (p *Producer) EnqueueContextTask(ctx context.Context, data *model.Task) err
 	return nil
 }
 
-func (p *Producer) EnqueueContextTasks(ctx context.Context, data []*model.Task) error {
+func (p *Producer) EnqueueContextTasks(
+	ctx context.Context,
+	data []*model.Task,
+) error {
 	for _, d := range data {
 		err := p.EnqueueContextTask(ctx, d)
 		if err != nil {
@@ -188,7 +240,9 @@ func (p *Producer) EnqueueContextTasks(ctx context.Context, data []*model.Task) 
 	return nil
 }
 
-func (p *Producer) RegisterTask(data *model.Task) error {
+func (p *Producer) RegisterTask(
+	data *model.Task,
+) error {
 	marshal, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -213,7 +267,9 @@ func (p *Producer) RegisterTask(data *model.Task) error {
 	return nil
 }
 
-func (p *Producer) RegisterTasks(data []*model.Task) error {
+func (p *Producer) RegisterTasks(
+	data []*model.Task,
+) error {
 	for _, d := range data {
 		err := p.RegisterTask(d)
 		if err != nil {
@@ -223,7 +279,9 @@ func (p *Producer) RegisterTasks(data []*model.Task) error {
 	return nil
 }
 
-func (p *Producer) UnregisterTask(taskName string) error {
+func (p *Producer) UnregisterTask(
+	taskName string,
+) error {
 	err := p.scheduler.Unregister(taskName)
 	if err != nil {
 		return err
@@ -231,7 +289,9 @@ func (p *Producer) UnregisterTask(taskName string) error {
 	return nil
 }
 
-func (p *Producer) UnregisterTasks(taskNames []string) error {
+func (p *Producer) UnregisterTasks(
+	taskNames []string,
+) error {
 	for _, taskName := range taskNames {
 		err := p.UnregisterTask(taskName)
 		if err != nil {

@@ -19,7 +19,9 @@ type NotificationLarkWebhookTemplate struct {
 
 func (NotificationLarkWebhookTemplate) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_lark_webhook_template"},
+		entsql.Annotation{
+			Table: constant.TablePrefixNotify.String() + "notification_lark_webhook_template",
+		},
 		entsql.WithComments(true),
 	}
 }

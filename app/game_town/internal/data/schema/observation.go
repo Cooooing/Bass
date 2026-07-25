@@ -18,7 +18,9 @@ type Observation struct {
 
 func (Observation) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "observations"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "observations",
+		},
 		entsql.WithComments(true),
 	}
 }

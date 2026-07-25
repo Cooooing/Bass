@@ -19,7 +19,9 @@ type ContentModerationRecord struct {
 
 func (ContentModerationRecord) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixContent.String() + "moderation_records"},
+		entsql.Annotation{
+			Table: constant.TablePrefixContent.String() + "moderation_records",
+		},
 		entsql.WithComments(true),
 	}
 }

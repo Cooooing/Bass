@@ -4,9 +4,9 @@ import (
 	"bbs/internal/config"
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	"common/pkg/server"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
-	commonenum "common/pkg/enum"
 	cerrors "common/proto/gen/common/errors"
 	userv1 "common/proto/gen/user/v1"
 	"context"
@@ -34,7 +34,13 @@ var bbsHTTPAuthOperationWhitelist = map[string]struct{}{
 	bbsuserv1.OperationAccountServiceAvatar:               {},
 }
 
-func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.Observer, services []server.Service, authClient userv1.AuthServiceClient) *kratoshttp.Server {
+func NewHTTPServer(
+	c *config.Bootstrap,
+	logger *slog.Logger,
+	obs *commonClient.Observer,
+	services []server.Service,
+	authClient userv1.AuthServiceClient,
+) *kratoshttp.Server {
 	authRequiredMatch := func(_ context.Context, operation string) bool {
 		_, ok := bbsHTTPAuthOperationWhitelist[operation]
 		return !ok

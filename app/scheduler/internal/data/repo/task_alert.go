@@ -19,11 +19,22 @@ type TaskAlert struct {
 	conf       *config.Bootstrap
 }
 
-func NewTaskAlert(logger *slog.Logger, larkClient *commonclient.LarkWebhookClient, conf *config.Bootstrap) bizrepo.TaskAlert {
-	return &TaskAlert{logger: logger, larkClient: larkClient, conf: conf}
+func NewTaskAlert(
+	logger *slog.Logger,
+	larkClient *commonclient.LarkWebhookClient,
+	conf *config.Bootstrap,
+) bizrepo.TaskAlert {
+	return &TaskAlert{
+		logger:     logger,
+		larkClient: larkClient,
+		conf:       conf,
+	}
 }
 
-func (a *TaskAlert) Alert(ctx context.Context, req *bizrepo.TaskAlertReq) error {
+func (a *TaskAlert) Alert(
+	ctx context.Context,
+	req *bizrepo.TaskAlertReq,
+) error {
 	task := req.Task
 	record := req.Record
 	reason := req.Reason

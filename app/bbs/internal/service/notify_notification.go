@@ -14,39 +14,70 @@ type NotificationService struct {
 	notificationUsecase *usecase.NotificationUsecase
 }
 
-func NewNotificationService(notificationUsecase *usecase.NotificationUsecase) *NotificationService {
-	return &NotificationService{notificationUsecase: notificationUsecase}
+func NewNotificationService(
+	notificationUsecase *usecase.NotificationUsecase,
+) *NotificationService {
+	return &NotificationService{
+		notificationUsecase: notificationUsecase,
+	}
 }
 
-func (s *NotificationService) RegisterGrpc(gs *grpc.Server) {}
+func (s *NotificationService) RegisterGrpc(
+	gs *grpc.Server,
+) {
+}
 
-func (s *NotificationService) RegisterHttp(hs *http.Server) {
+func (s *NotificationService) RegisterHttp(
+	hs *http.Server,
+) {
 	bbsnotifyv1.RegisterNotificationServiceHTTPServer(hs, s)
 }
 
-func (s *NotificationService) List(ctx context.Context, req *bbsnotifyv1.ListNotifications_Req) (*bbsnotifyv1.ListNotifications_Resp, error) {
+func (s *NotificationService) List(
+	ctx context.Context,
+	req *bbsnotifyv1.ListNotifications_Req,
+) (*bbsnotifyv1.ListNotifications_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := s.notificationUsecase.ListNotifications(ctx, &usecase.ListNotificationsReq{UserID: userID, Page: req.GetPage()})
+	resp, err := s.notificationUsecase.ListNotifications(ctx, &usecase.ListNotificationsReq{
+		UserID: userID,
+		Page:   req.GetPage(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsnotifyv1.ListNotifications_Resp{Page: resp.Page, Rows: resp.Rows}, nil
+	return &bbsnotifyv1.ListNotifications_Resp{
+		Page: resp.Page,
+		Rows: resp.Rows,
+	}, nil
 }
-func (s *NotificationService) MarkRead(ctx context.Context, req *bbsnotifyv1.MarkReadNotification_Req) (*bbsnotifyv1.MarkReadNotification_Resp, error) {
+
+func (s *NotificationService) MarkRead(
+	ctx context.Context,
+	req *bbsnotifyv1.MarkReadNotification_Req,
+) (*bbsnotifyv1.MarkReadNotification_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := s.notificationUsecase.MarkReadNotification(ctx, &usecase.MarkReadNotificationReq{UserID: userID, IDs: req.GetIds()})
+	resp, err := s.notificationUsecase.MarkReadNotification(ctx, &usecase.MarkReadNotificationReq{
+		UserID: userID,
+		IDs:    req.GetIds(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsnotifyv1.MarkReadNotification_Resp{Count: resp}, nil
+	return &bbsnotifyv1.MarkReadNotification_Resp{
+		Count: resp,
+	}, nil
 }
-func (s *NotificationService) CountUnread(ctx context.Context, req *bbsnotifyv1.CountUnreadNotifications_Req) (*bbsnotifyv1.CountUnreadNotifications_Resp, error) {
+
+func (s *NotificationService) CountUnread(
+	ctx context.Context,
+	req *bbsnotifyv1.CountUnreadNotifications_Req,
+) (*bbsnotifyv1.CountUnreadNotifications_Resp, error) {
 	userID, err := currentUserID(ctx)
 	if err != nil {
 		return nil, err
@@ -55,5 +86,7 @@ func (s *NotificationService) CountUnread(ctx context.Context, req *bbsnotifyv1.
 	if err != nil {
 		return nil, err
 	}
-	return &bbsnotifyv1.CountUnreadNotifications_Resp{Count: count}, nil
+	return &bbsnotifyv1.CountUnreadNotifications_Resp{
+		Count: count,
+	}, nil
 }

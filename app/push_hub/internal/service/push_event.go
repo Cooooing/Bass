@@ -16,17 +16,29 @@ type PushEventService struct {
 	pushEventUc *usecase.PushEventUsecase
 }
 
-func NewPushEventService(pushEventUc *usecase.PushEventUsecase) *PushEventService {
-	return &PushEventService{pushEventUc: pushEventUc}
+func NewPushEventService(
+	pushEventUc *usecase.PushEventUsecase,
+) *PushEventService {
+	return &PushEventService{
+		pushEventUc: pushEventUc,
+	}
 }
 
-func (s *PushEventService) RegisterGrpc(gs *grpc.Server) {
+func (s *PushEventService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	pushhubv1.RegisterPushHubEventServiceServer(gs, s)
 }
 
-func (s *PushEventService) RegisterHttp(hs *http.Server) {}
+func (s *PushEventService) RegisterHttp(
+	hs *http.Server,
+) {
+}
 
-func (s *PushEventService) PublishEvent(ctx context.Context, req *pushhubv1.PublishEvent_Req) (*pushhubv1.PublishEvent_Resp, error) {
+func (s *PushEventService) PublishEvent(
+	ctx context.Context,
+	req *pushhubv1.PublishEvent_Req,
+) (*pushhubv1.PublishEvent_Resp, error) {
 	if err := s.pushEventUc.PublishEvent(ctx, &usecase.PublishEventReq{
 		EventType: int32(req.Type),
 		UserID:    req.UserId,
@@ -37,7 +49,10 @@ func (s *PushEventService) PublishEvent(ctx context.Context, req *pushhubv1.Publ
 	return &pushhubv1.PublishEvent_Resp{}, nil
 }
 
-func (s *PushEventService) BroadcastEvent(ctx context.Context, req *pushhubv1.BroadcastEvent_Req) (*pushhubv1.BroadcastEvent_Resp, error) {
+func (s *PushEventService) BroadcastEvent(
+	ctx context.Context,
+	req *pushhubv1.BroadcastEvent_Req,
+) (*pushhubv1.BroadcastEvent_Resp, error) {
 	if err := s.pushEventUc.BroadcastEvent(ctx, &usecase.BroadcastEventReq{
 		EventType: int32(req.Type),
 		Payload:   req.Payload,

@@ -17,14 +17,23 @@ func NewCommonSystemService() *CommonSystemService {
 	return &CommonSystemService{}
 }
 
-func (s *CommonSystemService) RegisterGrpc(gs *grpc.Server) {
+func (s *CommonSystemService) RegisterGrpc(
+	gs *grpc.Server,
+) {
 	commonv1.RegisterCommonSystemServiceServer(gs, s)
 }
 
-func (s *CommonSystemService) RegisterHttp(hs *http.Server) {
+func (s *CommonSystemService) RegisterHttp(
+	hs *http.Server,
+) {
 	commonv1.RegisterCommonSystemServiceHTTPServer(hs, s)
 }
 
-func (s *CommonSystemService) Health(ctx context.Context, req *commonv1.HealthSystem_Req) (*commonv1.HealthSystem_Resp, error) {
-	return &commonv1.HealthSystem_Resp{Message: "ok"}, nil
+func (s *CommonSystemService) Health(
+	ctx context.Context,
+	req *commonv1.HealthSystem_Req,
+) (*commonv1.HealthSystem_Resp, error) {
+	return &commonv1.HealthSystem_Resp{
+		Message: "ok",
+	}, nil
 }

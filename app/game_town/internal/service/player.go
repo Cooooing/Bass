@@ -19,17 +19,29 @@ type PlayerService struct {
 	usecase *usecase.PlayerUsecase
 }
 
-func NewPlayerService(usecase *usecase.PlayerUsecase) *PlayerService {
-	return &PlayerService{usecase: usecase}
+func NewPlayerService(
+	usecase *usecase.PlayerUsecase,
+) *PlayerService {
+	return &PlayerService{
+		usecase: usecase,
+	}
 }
 
-func (s *PlayerService) RegisterGrpc(server *grpc.Server) {
+func (s *PlayerService) RegisterGrpc(
+	server *grpc.Server,
+) {
 	v1.RegisterGameTownPlayerServiceServer(server, s)
 }
 
-func (s *PlayerService) RegisterHttp(*http.Server) {}
+func (s *PlayerService) RegisterHttp(
+	*http.Server,
+) {
+}
 
-func (s *PlayerService) Register(ctx context.Context, req *v1.RegisterGameTownPlayer_Request) (*v1.RegisterGameTownPlayer_Resp, error) {
+func (s *PlayerService) Register(
+	ctx context.Context,
+	req *v1.RegisterGameTownPlayer_Request,
+) (*v1.RegisterGameTownPlayer_Resp, error) {
 	row, err := s.usecase.Register(ctx, &usecase.RegisterPlayerReq{
 		Name:        req.GetName(),
 		DisplayName: req.GetDisplayName(),
@@ -49,7 +61,10 @@ func (s *PlayerService) Register(ctx context.Context, req *v1.RegisterGameTownPl
 	}, nil
 }
 
-func (s *PlayerService) Get(ctx context.Context, req *v1.GetGameTownPlayer_Request) (*v1.GetGameTownPlayer_Resp, error) {
+func (s *PlayerService) Get(
+	ctx context.Context,
+	req *v1.GetGameTownPlayer_Request,
+) (*v1.GetGameTownPlayer_Resp, error) {
 	if req.GetId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

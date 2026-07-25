@@ -15,7 +15,9 @@ import (
 type DelayedTask struct{ ent.Schema }
 
 func (DelayedTask) Annotations() []schema.Annotation {
-	return []schema.Annotation{entsql.Annotation{Table: constant.TablePrefixScheduler.String() + "delayed_tasks"}, entsql.WithComments(true)}
+	return []schema.Annotation{entsql.Annotation{
+		Table: constant.TablePrefixScheduler.String() + "delayed_tasks",
+	}, entsql.WithComments(true)}
 }
 
 func (DelayedTask) Fields() []ent.Field {
@@ -38,7 +40,9 @@ func (DelayedTask) Fields() []ent.Field {
 	}
 }
 
-func (DelayedTask) Mixin() []ent.Mixin { return []ent.Mixin{utilent.TimeAuditMixin{}} }
+func (DelayedTask) Mixin() []ent.Mixin {
+	return []ent.Mixin{utilent.TimeAuditMixin{}}
+}
 
 func (DelayedTask) Indexes() []ent.Index {
 	return []ent.Index{
@@ -48,4 +52,6 @@ func (DelayedTask) Indexes() []ent.Index {
 	}
 }
 
-func (DelayedTask) Edges() []ent.Edge { return nil }
+func (DelayedTask) Edges() []ent.Edge {
+	return nil
+}

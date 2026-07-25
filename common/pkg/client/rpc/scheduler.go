@@ -10,6 +10,10 @@ type SchedulerClient struct {
 	DelayedTask schedulerv1.SchedulerDelayedTaskServiceClient
 }
 
-func NewSchedulerClient(conn *grpc.ClientConn) *SchedulerClient {
-	return &SchedulerClient{DelayedTask: schedulerv1.NewSchedulerDelayedTaskServiceClient(conn)}
+func NewSchedulerClient(
+	conn *grpc.ClientConn,
+) *SchedulerClient {
+	return &SchedulerClient{
+		DelayedTask: schedulerv1.NewSchedulerDelayedTaskServiceClient(conn),
+	}
 }

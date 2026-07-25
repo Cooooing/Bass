@@ -20,7 +20,9 @@ type NotificationStationMessage struct {
 
 func (NotificationStationMessage) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixNotify.String() + "notification_station_message"},
+		entsql.Annotation{
+			Table: constant.TablePrefixNotify.String() + "notification_station_message",
+		},
 		entsql.WithComments(true),
 	}
 }

@@ -18,7 +18,9 @@ type CheckinRecord struct {
 
 func (CheckinRecord) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixUser.String() + "checkin_records"},
+		entsql.Annotation{
+			Table: constant.TablePrefixUser.String() + "checkin_records",
+		},
 		entsql.WithComments(true),
 	}
 }

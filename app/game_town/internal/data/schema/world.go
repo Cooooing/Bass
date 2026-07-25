@@ -19,7 +19,9 @@ type World struct {
 
 func (World) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "worlds"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "worlds",
+		},
 		entsql.WithComments(true),
 	}
 }

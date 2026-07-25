@@ -25,16 +25,24 @@ type LarkWebhookClient struct {
 	httpClient *http.Client
 }
 
-func NewLarkWebhookClient(conf *config.Bootstrap, httpClient *http.Client) *LarkWebhookClient {
+func NewLarkWebhookClient(
+	conf *config.Bootstrap,
+	httpClient *http.Client,
+) *LarkWebhookClient {
 	return &LarkWebhookClient{
 		conf:       conf,
 		httpClient: httpClient,
 	}
 }
 
-func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizchannel.LarkWebhookRequest) (*bizchannel.SendResult, error) {
+func (c *LarkWebhookClient) SendLarkWebhook(
+	ctx context.Context,
+	req *bizchannel.LarkWebhookRequest,
+) (*bizchannel.SendResult, error) {
 	if req == nil || req.Token == "" || req.RequestBody == "" {
-		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusFailed}, nil
+		return &bizchannel.SendResult{
+			Status: notifyenum.NotificationChannelStatusFailed,
+		}, nil
 	}
 	if c.httpClient == nil {
 		return nil, errors.New("lark webhook client is not configured")
@@ -58,7 +66,10 @@ func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizchannel
 	httpReq.Header.Set("Content-Type", "application/json")
 	reply, err := c.httpClient.Do(httpReq)
 	if err != nil {
-		return &bizchannel.SendResult{Status: notifyenum.NotificationChannelStatusUnknown, ProviderResp: new(fmt.Sprintf("send lark webhook: %v", err))}, nil
+		return &bizchannel.SendResult{
+			Status:       notifyenum.NotificationChannelStatusUnknown,
+			ProviderResp: new(fmt.Sprintf("send lark webhook: %v", err)),
+		}, nil
 	}
 	defer reply.Body.Close()
 	body, _ := io.ReadAll(reply.Body)
@@ -73,7 +84,11 @@ func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizchannel
 	}, nil
 }
 
-func (c *LarkWebhookClient) signLarkWebhookRequestBody(requestBody string, secret string, timestamp int64) (string, error) {
+func (c *LarkWebhookClient) signLarkWebhookRequestBody(
+	requestBody string,
+	secret string,
+	timestamp int64,
+) (string, error) {
 	var payload map[string]any
 	if err := json.Unmarshal([]byte(requestBody), &payload); err != nil {
 		return "", err
@@ -94,7 +109,10 @@ func (c *LarkWebhookClient) signLarkWebhookRequestBody(requestBody string, secre
 	return string(signedBody), nil
 }
 
-func (c *LarkWebhookClient) genLarkWebhookSign(secret string, timestamp int64) (string, error) {
+func (c *LarkWebhookClient) genLarkWebhookSign(
+	secret string,
+	timestamp int64,
+) (string, error) {
 	stringToSign := fmt.Sprintf("%d", timestamp) + "\n" + secret
 	h := hmac.New(sha256.New, []byte(stringToSign))
 	if _, err := h.Write(nil); err != nil {

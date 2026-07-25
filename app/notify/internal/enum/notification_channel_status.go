@@ -35,7 +35,9 @@ func (s NotificationChannelStatus) Blocking() bool {
 }
 
 // Merge 合并同一通知规则下多个投递目标的通道状态。
-func (s NotificationChannelStatus) Merge(next NotificationChannelStatus) NotificationChannelStatus {
+func (s NotificationChannelStatus) Merge(
+	next NotificationChannelStatus,
+) NotificationChannelStatus {
 	if s == NotificationChannelStatusSkipped {
 		return next
 	}

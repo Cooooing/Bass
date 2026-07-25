@@ -82,7 +82,9 @@ func (m model) Init() tea.Cmd {
 	return tea.Batch(textinput.Blink, m.spinner.Tick)
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m model) Update(
+	msg tea.Msg,
+) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.viewport.Width = max(1, msg.Width-2)
@@ -106,7 +108,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m model) updateKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+func (m model) updateKey(
+	msg tea.KeyMsg,
+) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "ctrl+c":
 		m.stopWatch()
@@ -279,11 +283,15 @@ func (m *model) stopWatch() {
 	m.eventCh = nil
 }
 
-func waitEvent(events <-chan eventResult) tea.Cmd {
+func waitEvent(
+	events <-chan eventResult,
+) tea.Cmd {
 	return func() tea.Msg {
 		result, ok := <-events
 		if !ok {
-			return eventResult{err: fmt.Errorf("event stream closed")}
+			return eventResult{
+				err: fmt.Errorf("event stream closed"),
+			}
 		}
 		return result
 	}
@@ -337,7 +345,10 @@ func commandSuggestions() []string {
 	}
 }
 
-func max(a int, b int) int {
+func max(
+	a int,
+	b int,
+) int {
 	if a > b {
 		return a
 	}

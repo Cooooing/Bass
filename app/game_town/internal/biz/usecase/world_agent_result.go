@@ -23,7 +23,10 @@ const (
 	maxEventSummaryRunes = 512
 )
 
-func (r *WorldAgentRunner) applyResult(ctx context.Context, result *agentResult) {
+func (r *WorldAgentRunner) applyResult(
+	ctx context.Context,
+	result *agentResult,
+) {
 	if result.err != nil {
 		r.log.WarnContext(ctx, "apply agent result failed before transaction", constant.LogFieldTaskID, result.job.ID, "world_id", result.job.WorldID, "type", result.job.Type, constant.LogFieldErr, result.err)
 		r.handleFailure(ctx, result)
@@ -75,7 +78,10 @@ func (r *WorldAgentRunner) applyResult(ctx context.Context, result *agentResult)
 	r.eventUsecase.Publish(published)
 }
 
-func (r *WorldAgentRunner) applyPlayerCharacter(ctx context.Context, result *agentResult) (*model.Event, error) {
+func (r *WorldAgentRunner) applyPlayerCharacter(
+	ctx context.Context,
+	result *agentResult,
+) (*model.Event, error) {
 	if result.character == nil || result.member == nil || result.player == nil {
 		return nil, fmt.Errorf("player character context is incomplete")
 	}
@@ -118,7 +124,11 @@ func (r *WorldAgentRunner) applyPlayerCharacter(ctx context.Context, result *age
 		},
 	})
 }
-func (r *WorldAgentRunner) applyWorldDraft(ctx context.Context, result *agentResult) (*model.Event, error) {
+
+func (r *WorldAgentRunner) applyWorldDraft(
+	ctx context.Context,
+	result *agentResult,
+) (*model.Event, error) {
 	draft := normalizeWorldDraft(result)
 	locationCount := int(uint32Value(result.source.Payload, "location_count"))
 	npcCount := int(uint32Value(result.source.Payload, "npc_count"))
@@ -230,7 +240,11 @@ func (r *WorldAgentRunner) applyWorldDraft(ctx context.Context, result *agentRes
 		}
 	}
 
-	if _, err = r.worldRuleRepo.Save(ctx, &model.WorldRule{WorldID: result.world.ID, Version: 1, Rules: defaultWorldRules(draft.Rules)}); err != nil {
+	if _, err = r.worldRuleRepo.Save(ctx, &model.WorldRule{
+		WorldID: result.world.ID,
+		Version: 1,
+		Rules:   defaultWorldRules(draft.Rules),
+	}); err != nil {
 		return nil, err
 	}
 
@@ -268,7 +282,10 @@ func (r *WorldAgentRunner) applyWorldDraft(ctx context.Context, result *agentRes
 	})
 }
 
-func (r *WorldAgentRunner) applyNpcReply(ctx context.Context, result *agentResult) (*model.Event, error) {
+func (r *WorldAgentRunner) applyNpcReply(
+	ctx context.Context,
+	result *agentResult,
+) (*model.Event, error) {
 	if result.reply == nil || result.npc == nil || result.location == nil {
 		return nil, fmt.Errorf("npc reply context is incomplete")
 	}
@@ -311,7 +328,11 @@ func (r *WorldAgentRunner) applyNpcReply(ctx context.Context, result *agentResul
 	return event, nil
 }
 
-func (r *WorldAgentRunner) applyResolution(ctx context.Context, result *agentResult, eventType enum.EventType) (*model.Event, error) {
+func (r *WorldAgentRunner) applyResolution(
+	ctx context.Context,
+	result *agentResult,
+	eventType enum.EventType,
+) (*model.Event, error) {
 	if result.resolution == nil {
 		return nil, fmt.Errorf("action resolution is nil")
 	}
@@ -394,7 +415,12 @@ func (r *WorldAgentRunner) applyResolution(ctx context.Context, result *agentRes
 	return event, nil
 }
 
-func (r *WorldAgentRunner) isDuplicateWorldEvolution(ctx context.Context, worldID int64, summary string, content string) (bool, error) {
+func (r *WorldAgentRunner) isDuplicateWorldEvolution(
+	ctx context.Context,
+	worldID int64,
+	summary string,
+	content string,
+) (bool, error) {
 	eventType := enum.EventTypeWorldEvolved
 	events, err := r.eventRepo.List(ctx, &repo.EventQuery{
 		WorldID:     new(worldID),
@@ -418,7 +444,10 @@ func (r *WorldAgentRunner) isDuplicateWorldEvolution(ctx context.Context, worldI
 	return false, nil
 }
 
-func normalizeModelText(value string, maxRunes int) string {
+func normalizeModelText(
+	value string,
+	maxRunes int,
+) string {
 	value = strings.TrimSpace(value)
 	runes := []rune(value)
 	if len(runes) > maxRunes {
@@ -427,7 +456,9 @@ func normalizeModelText(value string, maxRunes int) string {
 	return value
 }
 
-func normalizeWorldDraft(result *agentResult) *model.WorldDraft {
+func normalizeWorldDraft(
+	result *agentResult,
+) *model.WorldDraft {
 	if result == nil || result.draft == nil {
 		return fallbackWorldDraft(result)
 	}
@@ -457,7 +488,11 @@ func normalizeWorldDraft(result *agentResult) *model.WorldDraft {
 	return draft
 }
 
-func ensureWorldDraftCounts(draft *model.WorldDraft, locationCount int, npcCount int) {
+func ensureWorldDraftCounts(
+	draft *model.WorldDraft,
+	locationCount int,
+	npcCount int,
+) {
 	fallback := fallbackWorldDraft(nil)
 	if locationCount <= 0 && npcCount > 0 {
 		locationCount = 1
@@ -494,7 +529,11 @@ func ensureWorldDraftCounts(draft *model.WorldDraft, locationCount int, npcCount
 	}
 }
 
-func normalizedDraftCode(value string, fallback string, existing map[string]*model.Location) string {
+func normalizedDraftCode(
+	value string,
+	fallback string,
+	existing map[string]*model.Location,
+) string {
 	code := normalizeASCIIIdentifier(value)
 	if code == "" {
 		code = fallback
@@ -505,7 +544,11 @@ func normalizedDraftCode(value string, fallback string, existing map[string]*mod
 	return normalizeModelText(code, 64)
 }
 
-func normalizedNpcCode(value string, fallback string, existing map[string]struct{}) string {
+func normalizedNpcCode(
+	value string,
+	fallback string,
+	existing map[string]struct{},
+) string {
 	code := normalizeASCIIIdentifier(value)
 	if code == "" {
 		code = fallback
@@ -518,7 +561,9 @@ func normalizedNpcCode(value string, fallback string, existing map[string]struct
 	}
 }
 
-func normalizeASCIIIdentifier(value string) string {
+func normalizeASCIIIdentifier(
+	value string,
+) string {
 	value = strings.ToLower(strings.TrimSpace(value))
 	var builder strings.Builder
 	for _, char := range value {
@@ -534,7 +579,10 @@ func normalizeASCIIIdentifier(value string) string {
 	return strings.Trim(builder.String(), "_")
 }
 
-func (r *WorldAgentRunner) handleFailure(ctx context.Context, result *agentResult) {
+func (r *WorldAgentRunner) handleFailure(
+	ctx context.Context,
+	result *agentResult,
+) {
 	r.recordFailure(result.config)
 	if result.job.AttemptCount <= int32(r.maxRetry()) {
 		delay := time.Duration(float64(r.retryDelay()) * math.Pow(2, float64(result.job.AttemptCount-1)))
@@ -623,7 +671,11 @@ func (r *WorldAgentRunner) handleFailure(ctx context.Context, result *agentResul
 	r.eventUsecase.Publish(event)
 }
 
-func (r *WorldAgentRunner) persistAgentJobRetry(ctx context.Context, result *agentResult, delay time.Duration) bool {
+func (r *WorldAgentRunner) persistAgentJobRetry(
+	ctx context.Context,
+	result *agentResult,
+	delay time.Duration,
+) bool {
 	_, err := r.agentJobRepo.Retry(ctx, &repo.AgentJobRetryReq{
 		JobID:        result.job.ID,
 		AttemptCount: result.job.AttemptCount,
@@ -637,7 +689,11 @@ func (r *WorldAgentRunner) persistAgentJobRetry(ctx context.Context, result *age
 	return true
 }
 
-func (r *WorldAgentRunner) scheduleRetryPersistence(result *agentResult, delay time.Duration, attempt int) {
+func (r *WorldAgentRunner) scheduleRetryPersistence(
+	result *agentResult,
+	delay time.Duration,
+	attempt int,
+) {
 	if result == nil || result.job == nil || attempt > 6 {
 		return
 	}
@@ -656,7 +712,12 @@ func (r *WorldAgentRunner) scheduleRetryPersistence(result *agentResult, delay t
 		time.AfterFunc(delay, r.wakeScheduler)
 	})
 }
-func (r *WorldAgentRunner) publishRetryEvent(ctx context.Context, result *agentResult, delay time.Duration) {
+
+func (r *WorldAgentRunner) publishRetryEvent(
+	ctx context.Context,
+	result *agentResult,
+	delay time.Duration,
+) {
 	r.log.WarnContext(
 		ctx,
 		"agent job will retry",

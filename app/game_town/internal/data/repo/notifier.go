@@ -23,7 +23,9 @@ func NewEventNotifier() bizrepo.EventNotifier {
 	}
 }
 
-func (n *EventNotifier) Notify(worldID int64) {
+func (n *EventNotifier) Notify(
+	worldID int64,
+) {
 	n.mu.Lock()
 	subs := lo.Values(n.all)
 	n.mu.Unlock()
@@ -50,7 +52,9 @@ func (n *EventNotifier) SubscribeAll() (<-chan int64, func()) {
 	return ch, cancel
 }
 
-func (n *EventNotifier) Publish(event *model.Event) {
+func (n *EventNotifier) Publish(
+	event *model.Event,
+) {
 	if event == nil {
 		return
 	}
@@ -66,7 +70,9 @@ func (n *EventNotifier) Publish(event *model.Event) {
 	}
 }
 
-func (n *EventNotifier) Watch(worldID int64) (<-chan *model.Event, func()) {
+func (n *EventNotifier) Watch(
+	worldID int64,
+) (<-chan *model.Event, func()) {
 	n.mu.Lock()
 	n.next++
 	id := n.next

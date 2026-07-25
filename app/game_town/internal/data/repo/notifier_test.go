@@ -7,13 +7,19 @@ import (
 	"game_town/internal/biz/model"
 )
 
-func TestEventNotifierPublishesWakeAndEvent(t *testing.T) {
+func TestEventNotifierPublishesWakeAndEvent(
+	t *testing.T,
+) {
 	n := NewEventNotifier().(*EventNotifier)
 	all, stopAll := n.SubscribeAll()
 	defer stopAll()
 	events, stopEvents := n.Watch(42)
 	defer stopEvents()
-	event := &model.Event{ID: 1, WorldID: 42, Sequence: 7}
+	event := &model.Event{
+		ID:       1,
+		WorldID:  42,
+		Sequence: 7,
+	}
 	n.Publish(event)
 	select {
 	case worldID := <-all:

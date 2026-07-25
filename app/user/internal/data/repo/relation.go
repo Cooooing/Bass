@@ -19,20 +19,27 @@ type RelationRepo struct {
 	db *gen.Client
 }
 
-func NewRelationRepo(db *gen.Client) repo.RelationRepo {
+func NewRelationRepo(
+	db *gen.Client,
+) repo.RelationRepo {
 	return &RelationRepo{
 		db: db,
 	}
 }
 
-func (r *RelationRepo) getClient(ctx context.Context) *gen.Client {
+func (r *RelationRepo) getClient(
+	ctx context.Context,
+) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
 	}
 	return r.db
 }
 
-func (r *RelationRepo) Create(ctx context.Context, relation *model.Relation) (*model.Relation, error) {
+func (r *RelationRepo) Create(
+	ctx context.Context,
+	relation *model.Relation,
+) (*model.Relation, error) {
 	relation, err := r.create(ctx, relation)
 	if err != nil {
 		return nil, err
@@ -40,7 +47,10 @@ func (r *RelationRepo) Create(ctx context.Context, relation *model.Relation) (*m
 	return relation, nil
 }
 
-func (r *RelationRepo) Delete(ctx context.Context, req *repo.RelationDeleteReq) (int, error) {
+func (r *RelationRepo) Delete(
+	ctx context.Context,
+	req *repo.RelationDeleteReq,
+) (int, error) {
 	deleted, err := r.delete(ctx, req)
 	if err != nil {
 		return 0, err
@@ -48,7 +58,10 @@ func (r *RelationRepo) Delete(ctx context.Context, req *repo.RelationDeleteReq) 
 	return deleted, nil
 }
 
-func (r *RelationRepo) Exists(ctx context.Context, req *repo.RelationGetReq) (bool, error) {
+func (r *RelationRepo) Exists(
+	ctx context.Context,
+	req *repo.RelationGetReq,
+) (bool, error) {
 	exists, err := r.exists(ctx, req)
 	if err != nil {
 		return false, err
@@ -56,7 +69,10 @@ func (r *RelationRepo) Exists(ctx context.Context, req *repo.RelationGetReq) (bo
 	return exists, nil
 }
 
-func (r *RelationRepo) Get(ctx context.Context, req *repo.RelationGetReq) (*model.Relation, error) {
+func (r *RelationRepo) Get(
+	ctx context.Context,
+	req *repo.RelationGetReq,
+) (*model.Relation, error) {
 	relation, err := r.get(ctx, req)
 	if err != nil {
 		return nil, err
@@ -64,7 +80,10 @@ func (r *RelationRepo) Get(ctx context.Context, req *repo.RelationGetReq) (*mode
 	return relation, nil
 }
 
-func (r *RelationRepo) List(ctx context.Context, req *repo.RelationGetReq) ([]*model.Relation, error) {
+func (r *RelationRepo) List(
+	ctx context.Context,
+	req *repo.RelationGetReq,
+) ([]*model.Relation, error) {
 	rows, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
@@ -72,7 +91,10 @@ func (r *RelationRepo) List(ctx context.Context, req *repo.RelationGetReq) ([]*m
 	return rows, nil
 }
 
-func (r *RelationRepo) Map(ctx context.Context, req *repo.RelationGetReq) (map[int64]*model.Relation, error) {
+func (r *RelationRepo) Map(
+	ctx context.Context,
+	req *repo.RelationGetReq,
+) (map[int64]*model.Relation, error) {
 	rows, err := r.mapRows(ctx, req)
 	if err != nil {
 		return nil, err
@@ -80,7 +102,10 @@ func (r *RelationRepo) Map(ctx context.Context, req *repo.RelationGetReq) (map[i
 	return rows, nil
 }
 
-func (r *RelationRepo) Count(ctx context.Context, req *repo.RelationGetReq) (int, error) {
+func (r *RelationRepo) Count(
+	ctx context.Context,
+	req *repo.RelationGetReq,
+) (int, error) {
 	count, err := r.count(ctx, req)
 	if err != nil {
 		return 0, err
@@ -88,18 +113,35 @@ func (r *RelationRepo) Count(ctx context.Context, req *repo.RelationGetReq) (int
 	return count, nil
 }
 
-func (r *RelationRepo) Page(ctx context.Context, req *repo.RelationPageReq) (*repo.RelationPageResp, error) {
-	rows, page, err := r.page(ctx, &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}, &req.Query)
+func (r *RelationRepo) Page(
+	ctx context.Context,
+	req *repo.RelationPageReq,
+) (*repo.RelationPageResp, error) {
+	rows, page, err := r.page(ctx, &common.PageReq{
+		Page: req.Page.Page,
+		Size: req.Page.Size,
+	}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
 	resp := repo.PageResp{}
 	if page != nil {
-		resp = repo.PageResp{Total: page.GetTotal(), Page: page.GetPage(), Size: page.GetSize()}
+		resp = repo.PageResp{
+			Total: page.GetTotal(),
+			Page:  page.GetPage(),
+			Size:  page.GetSize(),
+		}
 	}
-	return &repo.RelationPageResp{Rows: rows, Page: resp}, nil
+	return &repo.RelationPageResp{
+		Rows: rows,
+		Page: resp,
+	}, nil
 }
-func (r *RelationRepo) create(ctx context.Context, u *model.Relation) (*model.Relation, error) {
+
+func (r *RelationRepo) create(
+	ctx context.Context,
+	u *model.Relation,
+) (*model.Relation, error) {
 	tx := r.getClient(ctx)
 	created, err := tx.Relation.Create().
 		SetActorID(u.ActorID).
@@ -119,7 +161,10 @@ func (r *RelationRepo) create(ctx context.Context, u *model.Relation) (*model.Re
 	}, nil
 }
 
-func (r *RelationRepo) delete(ctx context.Context, req *repo.RelationDeleteReq) (int, error) {
+func (r *RelationRepo) delete(
+	ctx context.Context,
+	req *repo.RelationDeleteReq,
+) (int, error) {
 	tx := r.getClient(ctx)
 	return tx.Relation.Delete().
 		Where(relation.ActorIDEQ(req.ActorID)).
@@ -128,14 +173,20 @@ func (r *RelationRepo) delete(ctx context.Context, req *repo.RelationDeleteReq) 
 		Exec(ctx)
 }
 
-func (r *RelationRepo) exists(ctx context.Context, req *repo.RelationGetReq) (bool, error) {
+func (r *RelationRepo) exists(
+	ctx context.Context,
+	req *repo.RelationGetReq,
+) (bool, error) {
 	tx := r.getClient(ctx)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
 	return query.Exist(ctx)
 }
 
-func (r *RelationRepo) get(ctx context.Context, req *repo.RelationGetReq) (*model.Relation, error) {
+func (r *RelationRepo) get(
+	ctx context.Context,
+	req *repo.RelationGetReq,
+) (*model.Relation, error) {
 	tx := r.getClient(ctx)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
@@ -156,7 +207,10 @@ func (r *RelationRepo) get(ctx context.Context, req *repo.RelationGetReq) (*mode
 	}, nil
 }
 
-func (r *RelationRepo) list(ctx context.Context, req *repo.RelationGetReq) ([]*model.Relation, error) {
+func (r *RelationRepo) list(
+	ctx context.Context,
+	req *repo.RelationGetReq,
+) ([]*model.Relation, error) {
 	tx := r.getClient(ctx)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
@@ -178,7 +232,10 @@ func (r *RelationRepo) list(ctx context.Context, req *repo.RelationGetReq) ([]*m
 	return result, nil
 }
 
-func (r *RelationRepo) mapRows(ctx context.Context, req *repo.RelationGetReq) (map[int64]*model.Relation, error) {
+func (r *RelationRepo) mapRows(
+	ctx context.Context,
+	req *repo.RelationGetReq,
+) (map[int64]*model.Relation, error) {
 	list, err := r.list(ctx, req)
 	if err != nil {
 		return nil, err
@@ -190,14 +247,21 @@ func (r *RelationRepo) mapRows(ctx context.Context, req *repo.RelationGetReq) (m
 	return result, nil
 }
 
-func (r *RelationRepo) count(ctx context.Context, req *repo.RelationGetReq) (int, error) {
+func (r *RelationRepo) count(
+	ctx context.Context,
+	req *repo.RelationGetReq,
+) (int, error) {
 	tx := r.getClient(ctx)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
 	return query.Count(ctx)
 }
 
-func (r *RelationRepo) page(ctx context.Context, page *common.PageReq, req *repo.RelationGetReq) ([]*model.Relation, *common.PageResp, error) {
+func (r *RelationRepo) page(
+	ctx context.Context,
+	page *common.PageReq,
+	req *repo.RelationGetReq,
+) ([]*model.Relation, *common.PageResp, error) {
 	tx := r.getClient(ctx)
 	page = server.PageValid(page)
 	query := tx.Relation.Query()
@@ -234,7 +298,10 @@ func (r *RelationRepo) page(ctx context.Context, page *common.PageReq, req *repo
 	}, nil
 }
 
-func (r *RelationRepo) getQuery(query *gen.RelationQuery, req *repo.RelationGetReq) *gen.RelationQuery {
+func (r *RelationRepo) getQuery(
+	query *gen.RelationQuery,
+	req *repo.RelationGetReq,
+) *gen.RelationQuery {
 	if req == nil {
 		return query
 	}

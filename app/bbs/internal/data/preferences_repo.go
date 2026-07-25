@@ -14,12 +14,21 @@ type PreferencesClient struct {
 	userClient *rpc.UserClient
 }
 
-func NewPreferencesClient(userClient *rpc.UserClient) repo.PreferencesClient {
-	return &PreferencesClient{userClient: userClient}
+func NewPreferencesClient(
+	userClient *rpc.UserClient,
+) repo.PreferencesClient {
+	return &PreferencesClient{
+		userClient: userClient,
+	}
 }
 
-func (r *PreferencesClient) GetCurrentPreferences(ctx context.Context, userID int64) (*repo.Preference, error) {
-	reply, err := r.userClient.Preferences.Get(ctx, &userv1.GetPreferences_Req{UserId: userID})
+func (r *PreferencesClient) GetCurrentPreferences(
+	ctx context.Context,
+	userID int64,
+) (*repo.Preference, error) {
+	reply, err := r.userClient.Preferences.Get(ctx, &userv1.GetPreferences_Req{
+		UserId: userID,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +46,10 @@ func (r *PreferencesClient) GetCurrentPreferences(ctx context.Context, userID in
 	return out, nil
 }
 
-func (r *PreferencesClient) UpdateCurrentPreferences(ctx context.Context, req *repo.UpdateCurrentPreferencesReq) (*repo.Preference, error) {
+func (r *PreferencesClient) UpdateCurrentPreferences(
+	ctx context.Context,
+	req *repo.UpdateCurrentPreferencesReq,
+) (*repo.Preference, error) {
 	updateReq := &userv1.UpdatePreferences_Req{
 		UserId:      req.UserID,
 		Timezone:    req.Timezone,

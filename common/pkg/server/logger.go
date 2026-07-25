@@ -13,7 +13,10 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func NewLogger(server *common.Server, conf *common.Bootstrap_Log) *slog.Logger {
+func NewLogger(
+	server *common.Server,
+	conf *common.Bootstrap_Log,
+) *slog.Logger {
 	mode := ""
 	name := "unknown"
 	version := "unknown"
@@ -64,7 +67,9 @@ func NewLogger(server *common.Server, conf *common.Bootstrap_Log) *slog.Logger {
 			return attrs
 		}),
 	)
-	handler = sourceHandler{next: handler}
+	handler = sourceHandler{
+		next: handler,
+	}
 	logger := slog.New(handler).With(
 		slog.String(constant.LogFieldServiceName, name),
 		slog.String(constant.LogFieldServiceVersion, version),
@@ -78,11 +83,17 @@ type sourceHandler struct {
 	next slog.Handler
 }
 
-func (h sourceHandler) Enabled(ctx context.Context, level slog.Level) bool {
+func (h sourceHandler) Enabled(
+	ctx context.Context,
+	level slog.Level,
+) bool {
 	return h.next.Enabled(ctx, level)
 }
 
-func (h sourceHandler) Handle(ctx context.Context, record slog.Record) error {
+func (h sourceHandler) Handle(
+	ctx context.Context,
+	record slog.Record,
+) error {
 	withSource := false
 	attrs := make([]slog.Attr, 0, record.NumAttrs())
 	record.Attrs(func(attr slog.Attr) bool {
@@ -111,10 +122,18 @@ func (h sourceHandler) Handle(ctx context.Context, record slog.Record) error {
 	return h.next.Handle(ctx, nextRecord)
 }
 
-func (h sourceHandler) WithAttrs(attrs []slog.Attr) slog.Handler {
-	return sourceHandler{next: h.next.WithAttrs(attrs)}
+func (h sourceHandler) WithAttrs(
+	attrs []slog.Attr,
+) slog.Handler {
+	return sourceHandler{
+		next: h.next.WithAttrs(attrs),
+	}
 }
 
-func (h sourceHandler) WithGroup(name string) slog.Handler {
-	return sourceHandler{next: h.next.WithGroup(name)}
+func (h sourceHandler) WithGroup(
+	name string,
+) slog.Handler {
+	return sourceHandler{
+		next: h.next.WithGroup(name),
+	}
 }

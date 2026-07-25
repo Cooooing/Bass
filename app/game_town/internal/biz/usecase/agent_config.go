@@ -15,8 +15,12 @@ type AgentConfigUsecase struct {
 	agentConfigRepo repo.AgentConfigRepo
 }
 
-func NewAgentConfigUsecase(agentConfigRepo repo.AgentConfigRepo) *AgentConfigUsecase {
-	return &AgentConfigUsecase{agentConfigRepo: agentConfigRepo}
+func NewAgentConfigUsecase(
+	agentConfigRepo repo.AgentConfigRepo,
+) *AgentConfigUsecase {
+	return &AgentConfigUsecase{
+		agentConfigRepo: agentConfigRepo,
+	}
 }
 
 type CreateAgentConfigReq struct {
@@ -28,7 +32,10 @@ type CreateAgentConfigReq struct {
 	TimeoutSeconds int32
 }
 
-func (u *AgentConfigUsecase) Create(ctx context.Context, req *CreateAgentConfigReq) (*model.AgentConfig, error) {
+func (u *AgentConfigUsecase) Create(
+	ctx context.Context,
+	req *CreateAgentConfigReq,
+) (*model.AgentConfig, error) {
 	name := strings.TrimSpace(req.Name)
 	baseURL := strings.TrimSpace(req.BaseURL)
 	modelName := strings.TrimSpace(req.Model)
@@ -52,8 +59,13 @@ func (u *AgentConfigUsecase) Create(ctx context.Context, req *CreateAgentConfigR
 	})
 }
 
-func (u *AgentConfigUsecase) Get(ctx context.Context, agentConfigID int64) (*model.AgentConfig, error) {
-	return u.agentConfigRepo.Get(ctx, &repo.AgentConfigQuery{ID: new(agentConfigID)})
+func (u *AgentConfigUsecase) Get(
+	ctx context.Context,
+	agentConfigID int64,
+) (*model.AgentConfig, error) {
+	return u.agentConfigRepo.Get(ctx, &repo.AgentConfigQuery{
+		ID: new(agentConfigID),
+	})
 }
 
 type PageAgentConfigsResp struct {
@@ -61,8 +73,13 @@ type PageAgentConfigsResp struct {
 	Page base.PageResp
 }
 
-func (u *AgentConfigUsecase) Page(ctx context.Context, page base.PageRequest) (*PageAgentConfigsResp, error) {
-	resp, err := u.agentConfigRepo.Page(ctx, &repo.AgentConfigPageReq{Page: page})
+func (u *AgentConfigUsecase) Page(
+	ctx context.Context,
+	page base.PageRequest,
+) (*PageAgentConfigsResp, error) {
+	resp, err := u.agentConfigRepo.Page(ctx, &repo.AgentConfigPageReq{
+		Page: page,
+	})
 	if err != nil {
 		return nil, err
 	}

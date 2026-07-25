@@ -17,15 +17,26 @@ type ContentClient struct {
 	userClient    *rpc.UserClient
 }
 
-func NewContentClient(contentClient *rpc.ContentClient, userClient *rpc.UserClient) bizrepo.ContentClient {
-	return &ContentClient{contentClient: contentClient, userClient: userClient}
+func NewContentClient(
+	contentClient *rpc.ContentClient,
+	userClient *rpc.UserClient,
+) bizrepo.ContentClient {
+	return &ContentClient{
+		contentClient: contentClient,
+		userClient:    userClient,
+	}
 }
 
-func (c *ContentClient) GetArticle(ctx context.Context, articleID int64) (*model.ContentArticle, error) {
+func (c *ContentClient) GetArticle(
+	ctx context.Context,
+	articleID int64,
+) (*model.ContentArticle, error) {
 	if articleID == 0 {
 		return nil, nil
 	}
-	reply, err := c.contentClient.Article.Get(ctx, &contentv1.GetArticle_Req{ArticleId: articleID})
+	reply, err := c.contentClient.Article.Get(ctx, &contentv1.GetArticle_Req{
+		ArticleId: articleID,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -49,12 +60,18 @@ func (c *ContentClient) GetArticle(ctx context.Context, articleID int64) (*model
 	return result, nil
 }
 
-func (c *ContentClient) GetComment(ctx context.Context, commentID int64) (*model.ContentComment, error) {
+func (c *ContentClient) GetComment(
+	ctx context.Context,
+	commentID int64,
+) (*model.ContentComment, error) {
 	if commentID == 0 {
 		return nil, nil
 	}
 	reply, err := c.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
-		Page: &common.PageReq{Page: 1, Size: 1},
+		Page: &common.PageReq{
+			Page: 1,
+			Size: 1,
+		},
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
 			CommentId: new(commentID),
 		},
@@ -94,7 +111,10 @@ func (c *ContentClient) GetComment(ctx context.Context, commentID int64) (*model
 	return result, nil
 }
 
-func (c *ContentClient) mapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.UserAccount, error) {
+func (c *ContentClient) mapAccounts(
+	ctx context.Context,
+	userIDs []int64,
+) (map[int64]*model.UserAccount, error) {
 	ids := make([]int64, 0, len(userIDs))
 	seen := make(map[int64]struct{}, len(userIDs))
 	for _, userID := range userIDs {
@@ -111,7 +131,9 @@ func (c *ContentClient) mapAccounts(ctx context.Context, userIDs []int64) (map[i
 		return map[int64]*model.UserAccount{}, nil
 	}
 	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
-		Query: &userv1.MapAccounts_Req_AccountQuery{UserIds: ids},
+		Query: &userv1.MapAccounts_Req_AccountQuery{
+			UserIds: ids,
+		},
 	})
 	if err != nil {
 		return nil, err

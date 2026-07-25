@@ -13,7 +13,9 @@ type ContentClient struct {
 	Tag     contentv1.ContentTagServiceClient
 }
 
-func NewContentClient(conn *grpc.ClientConn) *ContentClient {
+func NewContentClient(
+	conn *grpc.ClientConn,
+) *ContentClient {
 	return &ContentClient{
 		Article: contentv1.NewContentArticleServiceClient(conn),
 		Comment: contentv1.NewContentCommentServiceClient(conn),

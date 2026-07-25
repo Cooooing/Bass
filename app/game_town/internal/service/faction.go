@@ -18,17 +18,29 @@ type FactionService struct {
 	usecase *usecase.FactionUsecase
 }
 
-func NewFactionService(usecase *usecase.FactionUsecase) *FactionService {
-	return &FactionService{usecase: usecase}
+func NewFactionService(
+	usecase *usecase.FactionUsecase,
+) *FactionService {
+	return &FactionService{
+		usecase: usecase,
+	}
 }
 
-func (s *FactionService) RegisterGrpc(server *grpc.Server) {
+func (s *FactionService) RegisterGrpc(
+	server *grpc.Server,
+) {
 	v1.RegisterGameTownFactionServiceServer(server, s)
 }
 
-func (s *FactionService) RegisterHttp(*http.Server) {}
+func (s *FactionService) RegisterHttp(
+	*http.Server,
+) {
+}
 
-func (s *FactionService) Get(ctx context.Context, req *v1.GetGameTownFaction_Request) (*v1.GetGameTownFaction_Resp, error) {
+func (s *FactionService) Get(
+	ctx context.Context,
+	req *v1.GetGameTownFaction_Request,
+) (*v1.GetGameTownFaction_Resp, error) {
 	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 || req.GetId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -50,7 +62,10 @@ func (s *FactionService) Get(ctx context.Context, req *v1.GetGameTownFaction_Req
 	}, nil
 }
 
-func (s *FactionService) List(ctx context.Context, req *v1.ListGameTownFactions_Request) (*v1.ListGameTownFactions_Resp, error) {
+func (s *FactionService) List(
+	ctx context.Context,
+	req *v1.ListGameTownFactions_Request,
+) (*v1.ListGameTownFactions_Resp, error) {
 	if req.GetWorldId() <= 0 || req.GetPlayerId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}

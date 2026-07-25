@@ -18,7 +18,9 @@ type Claim struct {
 
 func (Claim) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixGameTown.String() + "claims"},
+		entsql.Annotation{
+			Table: constant.TablePrefixGameTown.String() + "claims",
+		},
 		entsql.WithComments(true),
 	}
 }

@@ -23,11 +23,25 @@ func (TimeAuditMixin) Fields() []ent.Field {
 	}
 }
 
-func (TimeAuditMixin) Edges() []ent.Edge                { return nil }
-func (TimeAuditMixin) Indexes() []ent.Index             { return nil }
-func (TimeAuditMixin) Interceptors() []ent.Interceptor  { return nil }
-func (TimeAuditMixin) Policy() ent.Policy               { return nil }
-func (TimeAuditMixin) Annotations() []schema.Annotation { return nil }
+func (TimeAuditMixin) Edges() []ent.Edge {
+	return nil
+}
+
+func (TimeAuditMixin) Indexes() []ent.Index {
+	return nil
+}
+
+func (TimeAuditMixin) Interceptors() []ent.Interceptor {
+	return nil
+}
+
+func (TimeAuditMixin) Policy() ent.Policy {
+	return nil
+}
+
+func (TimeAuditMixin) Annotations() []schema.Annotation {
+	return nil
+}
 
 func (TimeAuditMixin) Hooks() []ent.Hook {
 	return []ent.Hook{timeAuditHook()}

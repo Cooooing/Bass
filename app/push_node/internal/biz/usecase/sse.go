@@ -32,7 +32,13 @@ type SSEUsecase struct {
 	writers  sync.Map
 }
 
-func NewSEEUsecase(conf *config.Bootstrap, logger *slog.Logger, registry repo.ConnectionRegistry, natsSub client.Subscriber, nodeID string) *SSEUsecase {
+func NewSEEUsecase(
+	conf *config.Bootstrap,
+	logger *slog.Logger,
+	registry repo.ConnectionRegistry,
+	natsSub client.Subscriber,
+	nodeID string,
+) *SSEUsecase {
 	return &SSEUsecase{
 		conf:     conf,
 		log:      logger,
@@ -48,7 +54,10 @@ type ConnectReq struct {
 	Writer http.ResponseWriter
 }
 
-func (uc *SSEUsecase) Connect(ctx context.Context, req *ConnectReq) error {
+func (uc *SSEUsecase) Connect(
+	ctx context.Context,
+	req *ConnectReq,
+) error {
 	tokenData, err := uc.tokenGen.Parse(req.Token)
 	if err != nil {
 		uc.log.Warn("SSE token validation failed")
@@ -61,8 +70,15 @@ func (uc *SSEUsecase) Connect(ctx context.Context, req *ConnectReq) error {
 	}
 
 	connID := uuid.New().String()
-	conn := &model.Connection{ID: connID, UserID: userID, CreatedAt: time.Now()}
-	if err := uc.registry.AddConnection(ctx, &repo.AddConnectionReq{UserID: userID, Connection: conn}); err != nil {
+	conn := &model.Connection{
+		ID:        connID,
+		UserID:    userID,
+		CreatedAt: time.Now(),
+	}
+	if err := uc.registry.AddConnection(ctx, &repo.AddConnectionReq{
+		UserID:     userID,
+		Connection: conn,
+	}); err != nil {
 		uc.log.Error(fmt.Sprintf("register SSE connection failed: err=%v", err))
 		return nil
 	}
@@ -71,7 +87,10 @@ func (uc *SSEUsecase) Connect(ctx context.Context, req *ConnectReq) error {
 
 	defer func() {
 		uc.writers.Delete(connID)
-		_ = uc.registry.RemoveConnection(ctx, &repo.RemoveConnectionReq{UserID: userID, ConnectionID: connID})
+		_ = uc.registry.RemoveConnection(ctx, &repo.RemoveConnectionReq{
+			UserID:       userID,
+			ConnectionID: connID,
+		})
 		uc.log.Info(fmt.Sprintf("SSE connection closed: user_id=%d conn_id=%s", userID, connID))
 	}()
 
@@ -93,11 +112,16 @@ func (uc *SSEUsecase) Connect(ctx context.Context, req *ConnectReq) error {
 	}
 }
 
-func (uc *SSEUsecase) GetConnectionCount(ctx context.Context) (int64, error) {
+func (uc *SSEUsecase) GetConnectionCount(
+	ctx context.Context,
+) (int64, error) {
 	return uc.registry.GetConnectionCount(ctx)
 }
 
-func (uc *SSEUsecase) HandleNATSMessage(ctx context.Context, message *client.Message) error {
+func (uc *SSEUsecase) HandleNATSMessage(
+	ctx context.Context,
+	message *client.Message,
+) error {
 	_ = ctx
 	var event struct {
 		UserID  int64  `json:"user_id"`
@@ -130,7 +154,10 @@ func (uc *SSEUsecase) HandleNATSMessage(ctx context.Context, message *client.Mes
 		if _, err := fmt.Fprint(w, sseData); err != nil {
 			uc.log.Debug(fmt.Sprintf("SSE write failed: user_id=%d conn_id=%s err=%v", event.UserID, conn.ID, err))
 			uc.writers.Delete(conn.ID)
-			_ = uc.registry.RemoveConnection(ctx, &repo.RemoveConnectionReq{UserID: event.UserID, ConnectionID: conn.ID})
+			_ = uc.registry.RemoveConnection(ctx, &repo.RemoveConnectionReq{
+				UserID:       event.UserID,
+				ConnectionID: conn.ID,
+			})
 			continue
 		}
 		if f, ok := w.(http.Flusher); ok {

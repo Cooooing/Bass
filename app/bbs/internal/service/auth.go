@@ -2,6 +2,7 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
+	"bbs/internal/enum"
 	"common/pkg/apperror"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
@@ -10,6 +11,7 @@ import (
 	"net/mail"
 	"regexp"
 	"strings"
+	"time"
 	"unicode"
 	"unicode/utf8"
 
@@ -96,7 +98,27 @@ func (s *AuthService) Login(ctx context.Context, req *bbsuserv1.Login_Req) (*bbs
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.Login_Resp{AccessToken: resp.AccessToken, RefreshToken: resp.RefreshToken, AccessTokenExpiresAt: timestamppb.New(resp.AccessTokenExpiresAt), RefreshTokenExpiresAt: timestamppb.New(resp.RefreshTokenExpiresAt), SessionExpiresAt: timestamppb.New(resp.SessionExpiresAt), Account: resp.Account}, nil
+	parseTime := func(value string) *timestamppb.Timestamp {
+		if value == "" {
+			return nil
+		}
+		parsed, err := time.Parse(time.RFC3339Nano, value)
+		if err != nil {
+			return nil
+		}
+		return timestamppb.New(parsed)
+	}
+	var account *bbsuserv1.Login_Resp_Account
+	if resp.Account != nil {
+		account = &bbsuserv1.Login_Resp_Account{}
+		if profile := resp.Account.Profile; profile != nil {
+			account.Basic = &bbsuserv1.Login_Resp_AccountBasic{Id: profile.ID, Name: profile.Name, Nickname: profile.Nickname, Url: profile.URL, AvatarUrl: profile.AvatarURL, Introduction: profile.Introduction, Status: bbsuserv1enum.AccountStatus(profile.Status), Mbti: bbsuserv1enum.MBTI(profile.MBTI), FollowCount: profile.FollowCount, FollowerCount: profile.FollowerCount, CreatedAt: parseTime(profile.CreatedAt), UpdatedAt: parseTime(profile.UpdatedAt)}
+		}
+		if contact := resp.Account.Contact; contact != nil {
+			account.Contact = &bbsuserv1.Login_Resp_AccountContact{UserId: contact.UserID, Email: contact.Email, Phone: contact.Phone}
+		}
+	}
+	return &bbsuserv1.Login_Resp{AccessToken: resp.AccessToken, RefreshToken: resp.RefreshToken, AccessTokenExpiresAt: timestamppb.New(resp.AccessTokenExpiresAt), RefreshTokenExpiresAt: timestamppb.New(resp.RefreshTokenExpiresAt), SessionExpiresAt: timestamppb.New(resp.SessionExpiresAt), Account: account}, nil
 }
 func (s *AuthService) RefreshToken(ctx context.Context, req *bbsuserv1.RefreshToken_Req) (*bbsuserv1.RefreshToken_Resp, error) {
 	token := strings.TrimSpace(req.GetRefreshToken())
@@ -131,9 +153,13 @@ func (s *AuthService) validateLogin(req *bbsuserv1.Login_Req) (*usecase.LoginReq
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	out := &usecase.LoginReq{Type: req.GetType()}
-	switch req.GetType() {
-	case bbsuserv1enum.LoginType_LOGIN_TYPE_PASSWORD:
+	loginType, ok := enum.LoginTypeMap.ToEnum(req.GetType())
+	if !ok {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	out := &usecase.LoginReq{Type: loginType}
+	switch loginType {
+	case enum.LoginTypePassword:
 		cred := req.GetPasswordCredential()
 		if cred == nil {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -146,7 +172,7 @@ func (s *AuthService) validateLogin(req *bbsuserv1.Login_Req) (*usecase.LoginReq
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		out.Account, out.Password, out.Code = account, cred.GetPassword(), strings.TrimSpace(cred.GetCode())
-	case bbsuserv1enum.LoginType_LOGIN_TYPE_EMAIL:
+	case enum.LoginTypeEmail:
 		cred := req.GetEmailCredential()
 		if cred == nil {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -160,7 +186,7 @@ func (s *AuthService) validateLogin(req *bbsuserv1.Login_Req) (*usecase.LoginReq
 			return nil, err
 		}
 		out.Email, out.Code = email, code
-	case bbsuserv1enum.LoginType_LOGIN_TYPE_PHONE:
+	case enum.LoginTypePhone:
 		cred := req.GetPhoneCredential()
 		if cred == nil {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

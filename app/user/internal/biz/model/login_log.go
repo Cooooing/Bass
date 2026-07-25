@@ -1,6 +1,7 @@
 package model
 
 import (
+	commonenum "common/pkg/enum"
 	"time"
 	"user/internal/enum"
 )
@@ -10,7 +11,7 @@ type LoginLog struct {
 	UserID         *int64
 	AccountInput   string
 	LoginType      enum.LoginType
-	Realm          enum.LoginRealm
+	Realm          commonenum.LoginRealm
 	Status         enum.LoginStatus
 	FailureReason  *enum.LoginFailureReason
 	SessionID      string

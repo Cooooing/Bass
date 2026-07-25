@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+option go_package = "common/proto/gen/user/v1/enum;enum";
+
+// LoginFailureReason 表示登录失败原因。
+enum LoginFailureReason {
+  LOGIN_FAILURE_REASON_UNSPECIFIED = 0; // 未指定
+  LOGIN_FAILURE_REASON_INVALID_CREDENTIALS = 1; // 账号或密码错误
+  LOGIN_FAILURE_REASON_TOTP_INVALID = 2; // TOTP 验证失败
+  LOGIN_FAILURE_REASON_CODE_INVALID_OR_EXPIRED = 3; // 验证码无效或过期
+  LOGIN_FAILURE_REASON_ACCOUNT_NOT_NORMAL = 4; // 账号状态不允许登录
+  LOGIN_FAILURE_REASON_NOT_IMPLEMENTED = 5; // 登录方式未实现
+  LOGIN_FAILURE_REASON_INTERNAL = 6; // 内部错误
+}

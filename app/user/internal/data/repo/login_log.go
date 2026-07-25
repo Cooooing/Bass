@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonenum "common/pkg/enum"
 	"common/proto/gen/common"
 	"context"
 	"user/internal/biz/model"
@@ -193,7 +194,7 @@ func loginLogToModel(row *gen.LoginLog) *model.LoginLog {
 		UserID:         row.UserID,
 		AccountInput:   row.AccountInput,
 		LoginType:      enum.LoginType(row.LoginType),
-		Realm:          enum.LoginRealm(row.Realm),
+		Realm:          commonenum.LoginRealm(row.Realm),
 		Status:         enum.LoginStatus(row.Status),
 		SessionID:      row.SessionID,
 		IP:             row.IP,

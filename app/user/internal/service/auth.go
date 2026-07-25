@@ -1,6 +1,7 @@
 package service
 
 import (
+	commonenum "common/pkg/enum"
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	cerrors "common/proto/gen/common/errors"
@@ -84,11 +85,24 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	realm, ok := enum.LoginRealmMap.ToEnum(req.GetRealm())
+	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	ucReq := &usecase.LoginReq{Type: loginType, Realm: realm, Client: clientInfoFromProto(req.GetClient())}
+	client := req.GetClient()
+	clientContext := &model.LoginContext{ClientType: enum.ClientTypeUnknown, DeviceType: enum.DeviceTypeUnknown}
+	if client != nil {
+		clientType, ok := enum.ClientTypeMap.ToEnum(client.GetClientType())
+		if !ok {
+			clientType = enum.ClientTypeUnknown
+		}
+		deviceType, ok := enum.DeviceTypeMap.ToEnum(client.GetDeviceType())
+		if !ok {
+			deviceType = enum.DeviceTypeUnknown
+		}
+		clientContext = &model.LoginContext{IP: client.GetIp(), UserAgent: client.GetUserAgent(), ClientType: clientType, DeviceType: deviceType, OSName: client.GetOsName(), OSVersion: client.GetOsVersion(), BrowserName: client.GetBrowserName(), BrowserVersion: client.GetBrowserVersion(), AppName: client.GetAppName(), AppVersion: client.GetAppVersion()}
+	}
+	ucReq := &usecase.LoginReq{Type: loginType, Realm: realm, Client: clientContext}
 	switch loginType {
 	case enum.LoginTypePassword:
 		cred := req.GetPasswordCredential()
@@ -117,18 +131,35 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 	if err != nil {
 		return nil, err
 	}
+	var account *v1.Login_Resp_Account
+	if res.Account != nil {
+		basic := &v1.Login_Resp_AccountBasic{Id: res.Account.ID, Name: res.Account.Name, Nickname: res.Account.Nickname, Url: res.Account.URL, AvatarUrl: res.Account.AvatarURL, Introduction: res.Account.Introduction, FollowCount: res.Account.FollowCount, FollowerCount: res.Account.FollowerCount}
+		if res.Account.Mbti != nil {
+			basic.Mbti = enum.MBTIMap.MustToProto(*res.Account.Mbti)
+		}
+		if res.Account.Status != nil {
+			basic.Status = enum.AccountStatusMap.MustToProto(*res.Account.Status)
+		}
+		if res.Account.CreatedAt != nil {
+			basic.CreatedAt = timestamppb.New(*res.Account.CreatedAt)
+		}
+		if res.Account.UpdatedAt != nil {
+			basic.UpdatedAt = timestamppb.New(*res.Account.UpdatedAt)
+		}
+		account = &v1.Login_Resp_Account{Basic: basic, Contact: &v1.Login_Resp_AccountContact{UserId: res.Account.ID, Email: res.Account.Email, Phone: res.Account.Phone}}
+	}
 	return &v1.Login_Resp{
 		AccessToken:           res.TokenPair.AccessToken,
 		RefreshToken:          res.TokenPair.RefreshToken,
 		AccessTokenExpiresAt:  timestamppb.New(res.TokenPair.AccessTokenExpiresAt),
 		RefreshTokenExpiresAt: timestamppb.New(res.TokenPair.RefreshTokenExpiresAt),
 		SessionExpiresAt:      timestamppb.New(res.TokenPair.SessionExpiresAt),
-		Account:               loginAccountToProto(res.Account),
+		Account:               account,
 	}, nil
 }
 
 func (s *AuthService) RefreshToken(ctx context.Context, req *v1.RefreshToken_Req) (*v1.RefreshToken_Resp, error) {
-	realm, ok := enum.LoginRealmMap.ToEnum(req.GetRealm())
+	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -146,7 +177,7 @@ func (s *AuthService) RefreshToken(ctx context.Context, req *v1.RefreshToken_Req
 }
 
 func (s *AuthService) Logout(ctx context.Context, req *v1.Logout_Req) (*v1.Logout_Resp, error) {
-	realm, ok := enum.LoginRealmMap.ToEnum(req.GetRealm())
+	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -155,7 +186,7 @@ func (s *AuthService) Logout(ctx context.Context, req *v1.Logout_Req) (*v1.Logou
 }
 
 func (s *AuthService) ParseToken(ctx context.Context, req *v1.ParseToken_Req) (*v1.ParseToken_Resp, error) {
-	realm, ok := enum.LoginRealmMap.ToEnum(req.GetRealm())
+	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -165,7 +196,7 @@ func (s *AuthService) ParseToken(ctx context.Context, req *v1.ParseToken_Req) (*
 	}
 	user := res.User
 	return &v1.ParseToken_Resp{User: &v1.ParseToken_Resp_TokenUser{
-		Id: user.ID, Name: user.Name, Nickname: user.Nickname, Language: user.Language, Timezone: user.Timezone, SessionId: res.SessionID, Realm: enum.LoginRealmMap.MustToProto(res.Realm),
+		Id: user.ID, Name: user.Name, Nickname: user.Nickname, Language: user.Language, Timezone: user.Timezone, SessionId: res.SessionID, Realm: commonenum.LoginRealmMap.MustToProto(res.Realm),
 	}}, nil
 }
 
@@ -175,7 +206,7 @@ func (s *AuthService) CancelAccount(ctx context.Context, req *v1.CancelAccount_R
 }
 
 func (s *AuthService) BanAccount(ctx context.Context, req *v1.BanAccount_Req) (*v1.BanAccount_Resp, error) {
-	realm, ok := enum.LoginRealmMap.ToEnum(req.GetOperatorRealm())
+	realm, ok := commonenum.LoginRealmMap.ToEnum(req.GetOperatorRealm())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -194,43 +225,4 @@ func (s *AuthService) BanAccount(ctx context.Context, req *v1.BanAccount_Req) (*
 func (s *AuthService) UnbanExpired(ctx context.Context, req *v1.UnbanExpired_Req) (*v1.UnbanExpired_Resp, error) {
 	updated, err := s.authUsecase.UnbanExpired(ctx, req.GetUserId(), req.GetBanRecordId())
 	return &v1.UnbanExpired_Resp{Updated: updated}, err
-}
-
-func clientInfoFromProto(client *v1.Login_Req_ClientInfo) *model.LoginContext {
-	if client == nil {
-		return &model.LoginContext{ClientType: enum.ClientTypeUnknown, DeviceType: enum.DeviceTypeUnknown}
-	}
-	clientType, ok := enum.ClientTypeMap.ToEnum(client.GetClientType())
-	if !ok {
-		clientType = enum.ClientTypeUnknown
-	}
-	deviceType, ok := enum.DeviceTypeMap.ToEnum(client.GetDeviceType())
-	if !ok {
-		deviceType = enum.DeviceTypeUnknown
-	}
-	return &model.LoginContext{
-		IP: client.GetIp(), UserAgent: client.GetUserAgent(), ClientType: clientType, DeviceType: deviceType,
-		OSName: client.GetOsName(), OSVersion: client.GetOsVersion(), BrowserName: client.GetBrowserName(), BrowserVersion: client.GetBrowserVersion(),
-		AppName: client.GetAppName(), AppVersion: client.GetAppVersion(),
-	}
-}
-
-func loginAccountToProto(account *model.Account) *v1.Login_Resp_Account {
-	if account == nil {
-		return nil
-	}
-	basic := &v1.Login_Resp_AccountBasic{Id: account.ID, Name: account.Name, Nickname: account.Nickname, Url: account.URL, AvatarUrl: account.AvatarURL, Introduction: account.Introduction, FollowCount: account.FollowCount, FollowerCount: account.FollowerCount}
-	if account.Mbti != nil {
-		basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
-	}
-	if account.Status != nil {
-		basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)
-	}
-	if account.CreatedAt != nil {
-		basic.CreatedAt = timestamppb.New(*account.CreatedAt)
-	}
-	if account.UpdatedAt != nil {
-		basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
-	}
-	return &v1.Login_Resp_Account{Basic: basic, Contact: &v1.Login_Resp_AccountContact{UserId: account.ID, Email: account.Email, Phone: account.Phone}}
 }

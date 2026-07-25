@@ -1,7 +1,7 @@
 package enum
 
 import (
-	"common/pkg/enum"
+	commonenum "common/pkg/enum"
 	v1 "common/proto/gen/user/v1/enum"
 )
 
@@ -12,7 +12,7 @@ const (
 	RelationTypeBlock  RelationType = "block"
 )
 
-var RelationTypeMap = enum.NewMapping[RelationType, v1.RelationType](map[RelationType]enum.Entry[RelationType, v1.RelationType]{
+var RelationTypeMap = commonenum.NewMapping[RelationType, v1.RelationType](map[RelationType]commonenum.Entry[RelationType, v1.RelationType]{
 	RelationTypeFollow: {Proto: v1.RelationType_RELATION_TYPE_FOLLOW},
 	RelationTypeBlock:  {Proto: v1.RelationType_RELATION_TYPE_BLOCK},
 })

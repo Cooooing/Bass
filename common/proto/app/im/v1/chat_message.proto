@@ -7,8 +7,8 @@ import "common/enums/language.proto";
 import "google/protobuf/timestamp.proto";
 import "im/v1/enum/chat_group.proto";
 import "im/v1/enum/message.proto";
-import "user/v1/enum/account.proto";
-import "user/v1/enum/auth.proto";
+import "user/v1/enum/account_status.proto";
+import "user/v1/enum/mbti.proto";
 import "user/v1/enum/relation.proto";
 
 option go_package = "common/proto/gen/im/v1;v1";

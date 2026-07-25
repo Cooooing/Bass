@@ -1,6 +1,9 @@
 package repo
 
-import "context"
+import (
+	"bbs/internal/enum"
+	"context"
+)
 
 type RelationClient interface {
 	Follow(ctx context.Context, req *FollowRelationReq) error
@@ -70,7 +73,7 @@ type GetStatusRelationReq struct {
 
 type Relation struct {
 	ID        int64
-	Type      int32
+	Type      enum.RelationType
 	ActorID   int64
 	TargetID  int64
 	CreatedAt string

@@ -1,7 +1,6 @@
 package biz
 
 import (
-	"common/pkg/auth"
 	commonenum "common/pkg/enum"
 	"notify/internal/biz/usecase"
 	"notify/internal/biz/usecase/consumer"
@@ -12,7 +11,6 @@ import (
 
 // BizProviderSet 是 biz 层依赖集合。
 var BizProviderSet = wire.NewSet(
-	auth.NewTokenCache,
 
 	handler.NewArticleCollectedHandler,
 	handler.NewArticleLikedHandler,

@@ -1,13 +1,13 @@
 package model
 
 import (
+	commonenum "common/pkg/enum"
 	"time"
-	"user/internal/enum"
 )
 
 type RbacRole struct {
 	ID          int64
-	Realm       enum.LoginRealm
+	Realm       commonenum.LoginRealm
 	Code        string
 	Name        string
 	Description string
@@ -18,7 +18,7 @@ type RbacRole struct {
 }
 type RbacPermission struct {
 	ID          int64
-	Realm       enum.LoginRealm
+	Realm       commonenum.LoginRealm
 	Code        string
 	Name        string
 	Description string

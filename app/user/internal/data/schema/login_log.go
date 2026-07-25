@@ -1,6 +1,7 @@
-﻿package schema
+package schema
 
 import (
+	commonenum "common/pkg/enum"
 	"common/pkg/constant"
 	utilent "common/pkg/util/ent"
 	userenum "user/internal/enum"
@@ -31,7 +32,7 @@ func (LoginLog) Fields() []ent.Field {
 		field.Int64("user_id").Comment("账号 ID，登录失败且无法匹配账号时为空").Optional().Nillable(),
 		field.String("account_input").Comment("登录输入账号原文").MaxLen(320).Default(""),
 		field.Enum("login_type").Values(userenum.LoginTypeMap.EnumValues()...).Comment("登录方式"),
-		field.Enum("realm").Values(userenum.LoginRealmMap.EnumValues()...).Comment("登录域"),
+		field.Enum("realm").Values(commonenum.LoginRealmMap.EnumValues()...).Comment("登录域"),
 		field.Enum("status").Values(userenum.LoginStatusMap.EnumValues()...).Comment("登录状态"),
 		field.Enum("failure_reason").Values(userenum.LoginFailureReasonMap.EnumValues()...).Comment("失败原因").Optional().Nillable(),
 		field.String("session_id").Comment("会话 ID").MaxLen(64).Default(""),

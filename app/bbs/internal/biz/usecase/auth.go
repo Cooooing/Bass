@@ -1,25 +1,12 @@
 package usecase
 
 import (
+	"bbs/internal/biz/model"
 	"bbs/internal/biz/repo"
-	bbsuserv1 "common/proto/gen/bbs/v1/user"
-	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
+	"bbs/internal/enum"
 	"context"
 	"time"
-
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
-
-func (u *AuthUsecase) bbsTime(value string) *timestamppb.Timestamp {
-	if value == "" {
-		return nil
-	}
-	parsed, err := time.Parse(time.RFC3339Nano, value)
-	if err != nil {
-		return nil
-	}
-	return timestamppb.New(parsed)
-}
 
 type AuthUsecase struct{ authRepo repo.AuthRepo }
 
@@ -96,7 +83,7 @@ func (u *AuthUsecase) StartPhoneLogin(ctx context.Context, phone string) (*Start
 }
 
 type LoginReq struct {
-	Type     bbsuserv1enum.LoginType
+	Type     enum.LoginType
 	Account  string
 	Password string
 	Email    string
@@ -109,7 +96,7 @@ type LoginResp struct {
 	AccessTokenExpiresAt  time.Time
 	RefreshTokenExpiresAt time.Time
 	SessionExpiresAt      time.Time
-	Account               *bbsuserv1.Login_Resp_Account
+	Account               *model.Account
 }
 
 func (u *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, error) {
@@ -117,7 +104,17 @@ func (u *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 	if err != nil {
 		return nil, err
 	}
-	return &LoginResp{AccessToken: reply.Token.AccessToken, RefreshToken: reply.Token.RefreshToken, AccessTokenExpiresAt: reply.Token.AccessTokenExpiresAt, RefreshTokenExpiresAt: reply.Token.RefreshTokenExpiresAt, SessionExpiresAt: reply.Token.SessionExpiresAt, Account: accountToLoginProto(reply.Account, u)}, nil
+	var account *model.Account
+	if reply.Account != nil {
+		account = &model.Account{}
+		if profile := reply.Account.Profile; profile != nil {
+			account.Profile = &model.AccountProfile{ID: profile.ID, Name: profile.Name, Nickname: profile.Nickname, URL: profile.URL, AvatarURL: profile.AvatarURL, Introduction: profile.Introduction, Status: profile.Status, MBTI: profile.MBTI, FollowCount: profile.FollowCount, FollowerCount: profile.FollowerCount, CreatedAt: profile.CreatedAt, UpdatedAt: profile.UpdatedAt}
+		}
+		if contact := reply.Account.Contact; contact != nil {
+			account.Contact = &model.AccountContact{UserID: contact.UserID, Email: contact.Email, Phone: contact.Phone}
+		}
+	}
+	return &LoginResp{AccessToken: reply.Token.AccessToken, RefreshToken: reply.Token.RefreshToken, AccessTokenExpiresAt: reply.Token.AccessTokenExpiresAt, RefreshTokenExpiresAt: reply.Token.RefreshTokenExpiresAt, SessionExpiresAt: reply.Token.SessionExpiresAt, Account: account}, nil
 }
 
 type RefreshTokenResp struct {
@@ -140,18 +137,4 @@ func (u *AuthUsecase) Logout(ctx context.Context, accessToken string) error {
 }
 func (u *AuthUsecase) CancelAccount(ctx context.Context, userID int64, password string, code string) error {
 	return u.authRepo.CancelAccount(ctx, &repo.CancelAccountReq{UserID: userID, Password: password, Code: code})
-}
-
-func accountToLoginProto(account *repo.Account, u *AuthUsecase) *bbsuserv1.Login_Resp_Account {
-	if account == nil {
-		return nil
-	}
-	out := &bbsuserv1.Login_Resp_Account{}
-	if profile := account.Profile; profile != nil {
-		out.Basic = &bbsuserv1.Login_Resp_AccountBasic{Id: profile.ID, Name: profile.Name, Nickname: profile.Nickname, Url: profile.URL, AvatarUrl: profile.AvatarURL, Introduction: profile.Introduction, Status: bbsuserv1enum.AccountStatus(profile.Status), Mbti: bbsuserv1enum.MBTI(profile.MBTI), FollowCount: profile.FollowCount, FollowerCount: profile.FollowerCount, CreatedAt: u.bbsTime(profile.CreatedAt), UpdatedAt: u.bbsTime(profile.UpdatedAt)}
-	}
-	if contact := account.Contact; contact != nil {
-		out.Contact = &bbsuserv1.Login_Resp_AccountContact{UserId: contact.UserID, Email: contact.Email, Phone: contact.Phone}
-	}
-	return out
 }

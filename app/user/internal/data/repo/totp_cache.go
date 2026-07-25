@@ -2,10 +2,9 @@ package repo
 
 import (
 	"common/pkg/client"
-	"common/pkg/constant"
 	"context"
 	"errors"
-	"strconv"
+	"fmt"
 	"user/internal/biz/repo"
 
 	"github.com/redis/go-redis/v9"
@@ -21,8 +20,14 @@ func NewTotpSecretCache(redisClient *client.RedisClient) repo.TotpSecretCache {
 	return &TotpSecretCache{redisClient: redisClient}
 }
 
+const authTotpSecretKey = "Auth:TotpSecret:{%d}"
+
+func authTotpSecretRedisKey(userID int64) string {
+	return fmt.Sprintf(authTotpSecretKey, userID)
+}
+
 func (c *TotpSecretCache) Save(ctx context.Context, req *repo.TotpSecretCacheSaveReq) error {
-	err := c.redisClient.Client.SetEx(ctx, constant.GetKeyTotpSecret(strconv.FormatInt(req.UserID, 10)), req.Secret, req.TTL).Err()
+	err := c.redisClient.Client.SetEx(ctx, authTotpSecretRedisKey(req.UserID), req.Secret, req.TTL).Err()
 	if err != nil {
 		return err
 	}
@@ -30,7 +35,7 @@ func (c *TotpSecretCache) Save(ctx context.Context, req *repo.TotpSecretCacheSav
 }
 
 func (c *TotpSecretCache) Get(ctx context.Context, userID int64) (string, error) {
-	secret, err := c.redisClient.Client.Get(ctx, constant.GetKeyTotpSecret(strconv.FormatInt(userID, 10))).Result()
+	secret, err := c.redisClient.Client.Get(ctx, authTotpSecretRedisKey(userID)).Result()
 	if errors.Is(err, redis.Nil) {
 		return "", nil
 	}

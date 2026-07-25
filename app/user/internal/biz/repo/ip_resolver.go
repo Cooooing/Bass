@@ -5,6 +5,6 @@ import (
 	"context"
 )
 
-type IPResolver interface {
+type IPClient interface {
 	Resolve(ctx context.Context, ip string) (*commonModel.IpInfo, error)
 }

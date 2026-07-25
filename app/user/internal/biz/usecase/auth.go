@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	commonenum "common/pkg/enum"
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	commonModel "common/pkg/model"
@@ -39,7 +40,7 @@ type AuthUsecase struct {
 	authCacheRepo     repo.AuthCacheRepo
 	totpRepo          repo.TotpRepo
 	banRecordRepo     repo.BanRecordRepo
-	ipResolver        repo.IPResolver
+	ipClient          repo.IPClient
 	delayedTaskClient repo.DelayedTaskClient
 	tokenUsecase      *TokenUsecase
 
@@ -57,7 +58,7 @@ type AuthUsecaseDeps struct {
 	AuthCacheRepo     repo.AuthCacheRepo
 	TotpRepo          repo.TotpRepo
 	BanRecordRepo     repo.BanRecordRepo
-	IPResolver        repo.IPResolver
+	IPClient          repo.IPClient
 	DelayedTaskClient repo.DelayedTaskClient
 	TokenUsecase      *TokenUsecase
 }
@@ -78,7 +79,7 @@ func NewAuthUsecase(deps AuthUsecaseDeps) (*AuthUsecase, error) {
 		authCacheRepo:     deps.AuthCacheRepo,
 		totpRepo:          deps.TotpRepo,
 		banRecordRepo:     deps.BanRecordRepo,
-		ipResolver:        deps.IPResolver,
+		ipClient:          deps.IPClient,
 		delayedTaskClient: deps.DelayedTaskClient,
 		tokenUsecase:      deps.TokenUsecase,
 		sf:                sf,
@@ -278,7 +279,7 @@ func (s *AuthUsecase) StartPhoneLogin(ctx context.Context, phone string) (*Start
 
 type LoginReq struct {
 	Type            enum.LoginType
-	Realm           enum.LoginRealm
+	Realm           commonenum.LoginRealm
 	Client          *model.LoginContext
 	PasswordAccount string
 	Password        string
@@ -392,7 +393,7 @@ func (s *AuthUsecase) loginByEmail(ctx context.Context, email string, code strin
 	return user, nil
 }
 
-func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, realm enum.LoginRealm) (*model.TokenPair, error) {
+func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, realm commonenum.LoginRealm) (*model.TokenPair, error) {
 	claims, err := s.tokenUsecase.Parse(refreshToken)
 	if err != nil || claims.Type != tokenTypeRefresh || claims.Realm != realm || claims.SessionID == "" || claims.JTI == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
@@ -454,7 +455,7 @@ func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, rea
 	}, nil
 }
 
-func (s *AuthUsecase) Logout(ctx context.Context, accessToken string, realm enum.LoginRealm) error {
+func (s *AuthUsecase) Logout(ctx context.Context, accessToken string, realm commonenum.LoginRealm) error {
 	claims, err := s.tokenUsecase.Parse(accessToken)
 	if err != nil || claims.Type != tokenTypeAccess || claims.Realm != realm || claims.SessionID == "" {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
@@ -468,10 +469,10 @@ func (s *AuthUsecase) Logout(ctx context.Context, accessToken string, realm enum
 type ParseTokenResp struct {
 	User      *commonModel.User
 	SessionID string
-	Realm     enum.LoginRealm
+	Realm     commonenum.LoginRealm
 }
 
-func (s *AuthUsecase) ParseToken(ctx context.Context, accessToken string, realm enum.LoginRealm) (*ParseTokenResp, error) {
+func (s *AuthUsecase) ParseToken(ctx context.Context, accessToken string, realm commonenum.LoginRealm) (*ParseTokenResp, error) {
 	if accessToken == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
@@ -538,7 +539,7 @@ func (s *AuthUsecase) CancelAccount(ctx context.Context, req *CancelAccountReq) 
 type BanAccountReq struct {
 	UserID        int64
 	OperatorID    int64
-	OperatorRealm enum.LoginRealm
+	OperatorRealm commonenum.LoginRealm
 	Reason        string
 	Remark        string
 	BannedUntil   *time.Time
@@ -629,7 +630,7 @@ func (s *AuthUsecase) UnbanExpired(ctx context.Context, userID int64, banRecordI
 	return err == nil, err
 }
 
-func (s *AuthUsecase) createSession(ctx context.Context, account *model.Account, realm enum.LoginRealm, client *model.LoginContext) (*model.TokenPair, error) {
+func (s *AuthUsecase) createSession(ctx context.Context, account *model.Account, realm commonenum.LoginRealm, client *model.LoginContext) (*model.TokenPair, error) {
 	now := time.Now()
 	sid := uuid.NewString()
 	jti := uuid.NewString()
@@ -763,7 +764,7 @@ func (s *AuthUsecase) saveVerificationCodeOutbox(ctx context.Context, codeType s
 	}})
 }
 
-func (s *AuthUsecase) saveLoginOutbox(ctx context.Context, account *model.Account, loginType enum.LoginType, realm enum.LoginRealm, sessionID string, client *model.LoginContext, accountInput string) error {
+func (s *AuthUsecase) saveLoginOutbox(ctx context.Context, account *model.Account, loginType enum.LoginType, realm commonenum.LoginRealm, sessionID string, client *model.LoginContext, accountInput string) error {
 	return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{Event: &commonenums.Event{
 		Type:    commonenums.EventType_EVENT_TYPE_USER_LOGIN,
 		Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_LOGIN,
@@ -775,7 +776,7 @@ func (s *AuthUsecase) saveLoginOutbox(ctx context.Context, account *model.Accoun
 	}})
 }
 
-func (s *AuthUsecase) saveLogoutOutbox(ctx context.Context, userID int64, name string, sessionID string, realm enum.LoginRealm) error {
+func (s *AuthUsecase) saveLogoutOutbox(ctx context.Context, userID int64, name string, sessionID string, realm commonenum.LoginRealm) error {
 	return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{Event: &commonenums.Event{
 		Type:    commonenums.EventType_EVENT_TYPE_USER_LOGOUT,
 		Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_LOGOUT,
@@ -833,10 +834,10 @@ func normalizeLoginContext(client *model.LoginContext) *model.LoginContext {
 }
 
 func (s *AuthUsecase) enrichLoginContext(ctx context.Context, client *model.LoginContext) {
-	if client == nil || client.IP == "" || s.ipResolver == nil {
+	if client == nil || client.IP == "" || s.ipClient == nil {
 		return
 	}
-	info, err := s.ipResolver.Resolve(ctx, client.IP)
+	info, err := s.ipClient.Resolve(ctx, client.IP)
 	if err != nil {
 		s.logger.WarnContext(ctx, "resolve login ip failed", constant.LogFieldErr, err)
 		return

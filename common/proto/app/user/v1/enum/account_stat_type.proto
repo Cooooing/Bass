@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+option go_package = "common/proto/gen/user/v1/enum;enum";
+
+// AccountStatType 表示账号统计项类型。
+enum AccountStatType {
+  ACCOUNT_STAT_TYPE_UNSPECIFIED = 0; // 未指定
+  ACCOUNT_STAT_TYPE_FOLLOW = 1; // 关注数
+  ACCOUNT_STAT_TYPE_FOLLOWER = 2; // 粉丝数
+}

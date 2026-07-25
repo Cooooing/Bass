@@ -1,11 +1,12 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
 option go_package = "common/proto/gen/bbs/v1/user/enum;enum";
 
+// LoginType 表示 BBS 端对外登录方式。
 enum LoginType {
-  LOGIN_TYPE_UNSPECIFIED = 0;
+  LOGIN_TYPE_UNSPECIFIED = 0; // 未指定
   LOGIN_TYPE_PASSWORD = 1; // 密码登录
   LOGIN_TYPE_EMAIL = 2; // 邮箱验证码登录
   LOGIN_TYPE_PHONE = 3; // 手机验证码登录

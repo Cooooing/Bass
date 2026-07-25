@@ -1,7 +1,6 @@
 package data
 
 import (
-	"common/pkg/auth"
 	commonClient "common/pkg/client"
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
@@ -37,7 +36,6 @@ var DataProviderSet = wire.NewSet(
 	repo.NewTagRepo,
 	repo.NewUserClient,
 	repo.NewNatsEventClient,
-	auth.NewTokenCache,
 )
 
 func ProvideRedis(c *config.Bootstrap) *common.Redis   { return c.Redis }

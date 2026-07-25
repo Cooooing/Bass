@@ -1,12 +1,12 @@
 package usecase
 
 import (
+	commonenum "common/pkg/enum"
 	"common/pkg/util/jwt"
 	commonenums "common/proto/gen/common/enums"
 	"time"
 	"user/internal/biz/model"
 	"user/internal/config"
-	"user/internal/enum"
 
 	"google.golang.org/protobuf/types/known/durationpb"
 )
@@ -31,7 +31,7 @@ func NewTokenUsecase(conf *config.Bootstrap) *TokenUsecase {
 type GenerateAccessTokenReq struct {
 	UserID    int64
 	SessionID string
-	Realm     enum.LoginRealm
+	Realm     commonenum.LoginRealm
 	Name      string
 	Nickname  string
 	Language  commonenums.Language
@@ -57,7 +57,7 @@ func (u *TokenUsecase) GenerateAccess(req *GenerateAccessTokenReq) (string, time
 type GenerateRefreshTokenReq struct {
 	UserID    int64
 	SessionID string
-	Realm     enum.LoginRealm
+	Realm     commonenum.LoginRealm
 	JTI       string
 }
 

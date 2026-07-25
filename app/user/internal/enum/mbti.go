@@ -1,7 +1,7 @@
 package enum
 
 import (
-	"common/pkg/enum"
+	commonenum "common/pkg/enum"
 	v1 "common/proto/gen/user/v1/enum"
 )
 
@@ -26,7 +26,7 @@ const (
 	MBTIEsfp MBTI = "esfp"
 )
 
-var MBTIMap = enum.NewMapping[MBTI, v1.MBTI](map[MBTI]enum.Entry[MBTI, v1.MBTI]{
+var MBTIMap = commonenum.NewMapping[MBTI, v1.MBTI](map[MBTI]commonenum.Entry[MBTI, v1.MBTI]{
 	MBTIIntj: {Proto: v1.MBTI_MBTI_INTJ},
 	MBTIIntp: {Proto: v1.MBTI_MBTI_INTP},
 	MBTIEntj: {Proto: v1.MBTI_MBTI_ENTJ},

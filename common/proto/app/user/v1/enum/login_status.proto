@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+option go_package = "common/proto/gen/user/v1/enum;enum";
+
+// LoginStatus 表示登录审计结果。
+enum LoginStatus {
+  LOGIN_STATUS_UNSPECIFIED = 0; // 未指定
+  LOGIN_STATUS_SUCCESS = 1; // 登录成功
+  LOGIN_STATUS_FAILED = 2; // 登录失败
+}

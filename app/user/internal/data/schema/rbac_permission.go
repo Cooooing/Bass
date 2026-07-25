@@ -1,9 +1,9 @@
-﻿package schema
+package schema
 
 import (
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	utilent "common/pkg/util/ent"
-	userenum "user/internal/enum"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -24,7 +24,7 @@ func (RbacPermission) Annotations() []schema.Annotation {
 func (RbacPermission) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.Enum("realm").Values(userenum.LoginRealmMap.EnumValues()...).Comment("权限域"),
+		field.Enum("realm").Values(commonenum.LoginRealmMap.EnumValues()...).Comment("权限域"),
 		field.String("code").Comment("权限编码").MaxLen(128).NotEmpty(),
 		field.String("name").Comment("权限名称").MaxLen(128).NotEmpty(),
 		field.String("description").Comment("权限说明").MaxLen(512).Default(""),

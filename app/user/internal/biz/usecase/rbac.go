@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	commonenum "common/pkg/enum"
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 	"context"
@@ -100,7 +101,7 @@ func (u *RbacUsecase) RevokeRole(ctx context.Context, userID int64, roleID int64
 	u.deleteUserRoleCache(ctx, userID, role)
 	return nil
 }
-func (u *RbacUsecase) CheckPermission(ctx context.Context, userID int64, realm enum.LoginRealm, permissionCode string) (bool, error) {
+func (u *RbacUsecase) CheckPermission(ctx context.Context, userID int64, realm commonenum.LoginRealm, permissionCode string) (bool, error) {
 	code := strings.TrimSpace(permissionCode)
 	if userID == 0 || code == "" {
 		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

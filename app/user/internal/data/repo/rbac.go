@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonenum "common/pkg/enum"
 	"context"
 	"time"
 	"user/internal/biz/model"
@@ -10,7 +11,6 @@ import (
 	"user/internal/data/gen/rbacrole"
 	"user/internal/data/gen/rbacrolepermission"
 	"user/internal/data/gen/rbacuserrole"
-	"user/internal/enum"
 
 	utilent "common/pkg/util/ent"
 )
@@ -129,7 +129,7 @@ func (r *RbacRepo) RevokeRole(ctx context.Context, userID int64, roleID int64) e
 	return err
 }
 
-func (r *RbacRepo) HasPermission(ctx context.Context, userID int64, realm enum.LoginRealm, permissionCode string, now time.Time) (bool, error) {
+func (r *RbacRepo) HasPermission(ctx context.Context, userID int64, realm commonenum.LoginRealm, permissionCode string, now time.Time) (bool, error) {
 	codes, err := r.PermissionCodes(ctx, userID, realm, now)
 	if err != nil {
 		return false, err
@@ -142,7 +142,7 @@ func (r *RbacRepo) HasPermission(ctx context.Context, userID int64, realm enum.L
 	return false, nil
 }
 
-func (r *RbacRepo) PermissionCodes(ctx context.Context, userID int64, realm enum.LoginRealm, now time.Time) ([]string, error) {
+func (r *RbacRepo) PermissionCodes(ctx context.Context, userID int64, realm commonenum.LoginRealm, now time.Time) ([]string, error) {
 	client := r.getClient(ctx)
 	userRoles, err := client.RbacUserRole.Query().Where(rbacuserrole.UserID(userID), rbacuserrole.Or(rbacuserrole.ExpiresAtIsNil(), rbacuserrole.ExpiresAtGT(now))).All(ctx)
 	if err != nil || len(userRoles) == 0 {
@@ -188,11 +188,11 @@ func rbacRoleToModel(row *gen.RbacRole) *model.RbacRole {
 	if row == nil {
 		return nil
 	}
-	return &model.RbacRole{ID: row.ID, Realm: enum.LoginRealm(row.Realm), Code: row.Code, Name: row.Name, Description: row.Description, BuiltIn: row.BuiltIn, Enabled: row.Enabled, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
+	return &model.RbacRole{ID: row.ID, Realm: commonenum.LoginRealm(row.Realm), Code: row.Code, Name: row.Name, Description: row.Description, BuiltIn: row.BuiltIn, Enabled: row.Enabled, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
 }
 func rbacPermissionToModel(row *gen.RbacPermission) *model.RbacPermission {
 	if row == nil {
 		return nil
 	}
-	return &model.RbacPermission{ID: row.ID, Realm: enum.LoginRealm(row.Realm), Code: row.Code, Name: row.Name, Description: row.Description, Enabled: row.Enabled, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
+	return &model.RbacPermission{ID: row.ID, Realm: commonenum.LoginRealm(row.Realm), Code: row.Code, Name: row.Name, Description: row.Description, Enabled: row.Enabled, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt}
 }

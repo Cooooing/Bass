@@ -1,9 +1,9 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
 import "bbs/v1/user/enum/account.proto";
-import "bbs/v1/user/enum/auth.proto";
+import "bbs/v1/user/enum/login_type.proto";
 import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";

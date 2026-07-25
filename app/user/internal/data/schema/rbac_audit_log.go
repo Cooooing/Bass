@@ -1,9 +1,9 @@
-﻿package schema
+package schema
 
 import (
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	utilent "common/pkg/util/ent"
-	userenum "user/internal/enum"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -25,7 +25,7 @@ func (RbacAuditLog) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("operator_id").Comment("操作人账号 ID"),
-		field.Enum("realm").Values(userenum.LoginRealmMap.EnumValues()...).Comment("权限域"),
+		field.Enum("realm").Values(commonenum.LoginRealmMap.EnumValues()...).Comment("权限域"),
 		field.String("action").Comment("操作动作").MaxLen(64).NotEmpty(),
 		field.Int64("user_id").Comment("目标账号 ID").Optional().Nillable(),
 		field.Int64("role_id").Comment("目标角色 ID").Optional().Nillable(),

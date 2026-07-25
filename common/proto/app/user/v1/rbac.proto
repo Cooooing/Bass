@@ -1,9 +1,9 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.user.v1;
 
 import "google/protobuf/timestamp.proto";
-import "user/v1/enum/auth.proto";
+import "common/enums/login_realm.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
 
@@ -20,7 +20,7 @@ service RbacService {
 message UpsertRbacRole {
   message Req {
     int64 id = 1; // 角色 ID，0 表示新增
-    LoginRealm realm = 2; // 权限域
+    common.enums.LoginRealm realm = 2; // 权限域
     string code = 3; // 角色编码
     string name = 4; // 角色名称
     string description = 5; // 角色说明
@@ -30,7 +30,7 @@ message UpsertRbacRole {
   message Resp {
     message Role {
       int64 id = 1; // 角色 ID
-      LoginRealm realm = 2; // 权限域
+      common.enums.LoginRealm realm = 2; // 权限域
       string code = 3; // 角色编码
       string name = 4; // 角色名称
       string description = 5; // 角色说明
@@ -46,7 +46,7 @@ message UpsertRbacRole {
 message UpsertRbacPermission {
   message Req {
     int64 id = 1; // 权限 ID，0 表示新增
-    LoginRealm realm = 2; // 权限域
+    common.enums.LoginRealm realm = 2; // 权限域
     string code = 3; // 权限编码
     string name = 4; // 权限名称
     string description = 5; // 权限说明
@@ -55,7 +55,7 @@ message UpsertRbacPermission {
   message Resp {
     message Permission {
       int64 id = 1; // 权限 ID
-      LoginRealm realm = 2; // 权限域
+      common.enums.LoginRealm realm = 2; // 权限域
       string code = 3; // 权限编码
       string name = 4; // 权限名称
       string description = 5; // 权限说明
@@ -107,7 +107,7 @@ message RevokeRbacRole {
 message CheckRbacPermission {
   message Req {
     int64 user_id = 1; // 账号 ID
-    LoginRealm realm = 2; // 权限域
+    common.enums.LoginRealm realm = 2; // 权限域
     string permission_code = 3; // 权限编码
   }
   message Resp {

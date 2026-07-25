@@ -8,7 +8,6 @@ import (
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	schedulerv1enum "common/proto/gen/scheduler/v1/enum"
 	"context"
-	"scheduler/internal/biz/model"
 	"scheduler/internal/biz/usecase"
 	schedulerenum "scheduler/internal/enum"
 
@@ -36,7 +35,23 @@ func (s *SchedulerDelayedTaskService) Register(ctx context.Context, req *schedul
 	if err != nil {
 		return nil, err
 	}
-	return &schedulerv1.RegisterSchedulerDelayedTask_Resp{Row: registerDelayedTaskToProto(row)}, nil
+	var task *schedulerv1.RegisterSchedulerDelayedTask_Resp_DelayedTask
+	if row != nil {
+		task = &schedulerv1.RegisterSchedulerDelayedTask_Resp_DelayedTask{Id: row.ID, IdempotencyKey: row.IdempotencyKey, TaskName: row.TaskName, Payload: row.Payload, ExecuteAt: timestamppb.New(row.ExecuteAt), NextRunAt: timestamppb.New(row.NextRunAt), Status: schedulerenum.DelayedTaskStatusMap.MustToProto(row.Status), Attempt: row.Attempt, MaxAttempts: row.MaxAttempts, TimeoutSeconds: row.TimeoutSeconds, LastError: row.LastError}
+		if row.StartedAt != nil {
+			task.StartedAt = timestamppb.New(*row.StartedAt)
+		}
+		if row.FinishedAt != nil {
+			task.FinishedAt = timestamppb.New(*row.FinishedAt)
+		}
+		if row.CreatedAt != nil {
+			task.CreatedAt = timestamppb.New(*row.CreatedAt)
+		}
+		if row.UpdatedAt != nil {
+			task.UpdatedAt = timestamppb.New(*row.UpdatedAt)
+		}
+	}
+	return &schedulerv1.RegisterSchedulerDelayedTask_Resp{Row: task}, nil
 }
 
 func (s *SchedulerDelayedTaskService) Cancel(ctx context.Context, req *schedulerv1.CancelSchedulerDelayedTask_Req) (*schedulerv1.CancelSchedulerDelayedTask_Resp, error) {
@@ -48,7 +63,23 @@ func (s *SchedulerDelayedTaskService) Get(ctx context.Context, req *schedulerv1.
 	if err != nil {
 		return nil, err
 	}
-	return &schedulerv1.GetSchedulerDelayedTask_Resp{Row: getDelayedTaskToProto(row)}, nil
+	var task *schedulerv1.GetSchedulerDelayedTask_Resp_DelayedTask
+	if row != nil {
+		task = &schedulerv1.GetSchedulerDelayedTask_Resp_DelayedTask{Id: row.ID, IdempotencyKey: row.IdempotencyKey, TaskName: row.TaskName, Payload: row.Payload, ExecuteAt: timestamppb.New(row.ExecuteAt), NextRunAt: timestamppb.New(row.NextRunAt), Status: schedulerenum.DelayedTaskStatusMap.MustToProto(row.Status), Attempt: row.Attempt, MaxAttempts: row.MaxAttempts, TimeoutSeconds: row.TimeoutSeconds, LastError: row.LastError}
+		if row.StartedAt != nil {
+			task.StartedAt = timestamppb.New(*row.StartedAt)
+		}
+		if row.FinishedAt != nil {
+			task.FinishedAt = timestamppb.New(*row.FinishedAt)
+		}
+		if row.CreatedAt != nil {
+			task.CreatedAt = timestamppb.New(*row.CreatedAt)
+		}
+		if row.UpdatedAt != nil {
+			task.UpdatedAt = timestamppb.New(*row.UpdatedAt)
+		}
+	}
+	return &schedulerv1.GetSchedulerDelayedTask_Resp{Row: task}, nil
 }
 
 func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1.PageSchedulerDelayedTasks_Req) (*schedulerv1.PageSchedulerDelayedTasks_Resp, error) {
@@ -68,73 +99,30 @@ func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1
 	}
 	rows := make([]*schedulerv1.PageSchedulerDelayedTasks_Resp_DelayedTask, 0, len(resp.Rows))
 	for _, row := range resp.Rows {
-		rows = append(rows, pageDelayedTaskToProto(row))
+		if row == nil {
+			rows = append(rows, nil)
+			continue
+		}
+		task := &schedulerv1.PageSchedulerDelayedTasks_Resp_DelayedTask{Id: row.ID, IdempotencyKey: row.IdempotencyKey, TaskName: row.TaskName, Payload: row.Payload, ExecuteAt: timestamppb.New(row.ExecuteAt), NextRunAt: timestamppb.New(row.NextRunAt), Status: schedulerenum.DelayedTaskStatusMap.MustToProto(row.Status), Attempt: row.Attempt, MaxAttempts: row.MaxAttempts, TimeoutSeconds: row.TimeoutSeconds, LastError: row.LastError}
+		if row.StartedAt != nil {
+			task.StartedAt = timestamppb.New(*row.StartedAt)
+		}
+		if row.FinishedAt != nil {
+			task.FinishedAt = timestamppb.New(*row.FinishedAt)
+		}
+		if row.CreatedAt != nil {
+			task.CreatedAt = timestamppb.New(*row.CreatedAt)
+		}
+		if row.UpdatedAt != nil {
+			task.UpdatedAt = timestamppb.New(*row.UpdatedAt)
+		}
+		rows = append(rows, task)
 	}
 	return &schedulerv1.PageSchedulerDelayedTasks_Resp{Page: resp.Page, Rows: rows}, nil
 }
 
 func (s *SchedulerDelayedTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerDelayedTask_Req) (*schedulerv1.TriggerSchedulerDelayedTask_Resp, error) {
 	return &schedulerv1.TriggerSchedulerDelayedTask_Resp{}, s.usecase.Trigger(ctx, req.GetId())
-}
-
-func registerDelayedTaskToProto(row *model.DelayedTask) *schedulerv1.RegisterSchedulerDelayedTask_Resp_DelayedTask {
-	base := delayedTaskBase(row)
-	if base == nil {
-		return nil
-	}
-	return &schedulerv1.RegisterSchedulerDelayedTask_Resp_DelayedTask{Id: base.Id, IdempotencyKey: base.IdempotencyKey, TaskName: base.TaskName, Payload: base.Payload, ExecuteAt: base.ExecuteAt, NextRunAt: base.NextRunAt, Status: base.Status, Attempt: base.Attempt, MaxAttempts: base.MaxAttempts, TimeoutSeconds: base.TimeoutSeconds, StartedAt: base.StartedAt, FinishedAt: base.FinishedAt, LastError: base.LastError, CreatedAt: base.CreatedAt, UpdatedAt: base.UpdatedAt}
-}
-func getDelayedTaskToProto(row *model.DelayedTask) *schedulerv1.GetSchedulerDelayedTask_Resp_DelayedTask {
-	base := delayedTaskBase(row)
-	if base == nil {
-		return nil
-	}
-	return &schedulerv1.GetSchedulerDelayedTask_Resp_DelayedTask{Id: base.Id, IdempotencyKey: base.IdempotencyKey, TaskName: base.TaskName, Payload: base.Payload, ExecuteAt: base.ExecuteAt, NextRunAt: base.NextRunAt, Status: base.Status, Attempt: base.Attempt, MaxAttempts: base.MaxAttempts, TimeoutSeconds: base.TimeoutSeconds, StartedAt: base.StartedAt, FinishedAt: base.FinishedAt, LastError: base.LastError, CreatedAt: base.CreatedAt, UpdatedAt: base.UpdatedAt}
-}
-func pageDelayedTaskToProto(row *model.DelayedTask) *schedulerv1.PageSchedulerDelayedTasks_Resp_DelayedTask {
-	base := delayedTaskBase(row)
-	if base == nil {
-		return nil
-	}
-	return &schedulerv1.PageSchedulerDelayedTasks_Resp_DelayedTask{Id: base.Id, IdempotencyKey: base.IdempotencyKey, TaskName: base.TaskName, Payload: base.Payload, ExecuteAt: base.ExecuteAt, NextRunAt: base.NextRunAt, Status: base.Status, Attempt: base.Attempt, MaxAttempts: base.MaxAttempts, TimeoutSeconds: base.TimeoutSeconds, StartedAt: base.StartedAt, FinishedAt: base.FinishedAt, LastError: base.LastError, CreatedAt: base.CreatedAt, UpdatedAt: base.UpdatedAt}
-}
-
-type delayedTaskProtoBase struct {
-	Id             int64
-	IdempotencyKey string
-	TaskName       string
-	Payload        string
-	ExecuteAt      *timestamppb.Timestamp
-	NextRunAt      *timestamppb.Timestamp
-	Status         schedulerv1enum.SchedulerDelayedTaskStatus
-	Attempt        int32
-	MaxAttempts    int32
-	TimeoutSeconds int32
-	StartedAt      *timestamppb.Timestamp
-	FinishedAt     *timestamppb.Timestamp
-	LastError      string
-	CreatedAt      *timestamppb.Timestamp
-	UpdatedAt      *timestamppb.Timestamp
-}
-
-func delayedTaskBase(row *model.DelayedTask) *delayedTaskProtoBase {
-	if row == nil {
-		return nil
-	}
-	base := &delayedTaskProtoBase{Id: row.ID, IdempotencyKey: row.IdempotencyKey, TaskName: row.TaskName, Payload: row.Payload, ExecuteAt: timestamppb.New(row.ExecuteAt), NextRunAt: timestamppb.New(row.NextRunAt), Status: schedulerenum.DelayedTaskStatusMap.MustToProto(row.Status), Attempt: row.Attempt, MaxAttempts: row.MaxAttempts, TimeoutSeconds: row.TimeoutSeconds, LastError: row.LastError}
-	if row.StartedAt != nil {
-		base.StartedAt = timestamppb.New(*row.StartedAt)
-	}
-	if row.FinishedAt != nil {
-		base.FinishedAt = timestamppb.New(*row.FinishedAt)
-	}
-	if row.CreatedAt != nil {
-		base.CreatedAt = timestamppb.New(*row.CreatedAt)
-	}
-	if row.UpdatedAt != nil {
-		base.UpdatedAt = timestamppb.New(*row.UpdatedAt)
-	}
-	return base
 }
 
 var _ = common.PageReq{}

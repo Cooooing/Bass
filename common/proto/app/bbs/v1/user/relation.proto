@@ -7,9 +7,7 @@ import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "user/v1/enum/account.proto";
-import "user/v1/enum/auth.proto";
-import "user/v1/enum/relation.proto";
+import "bbs/v1/user/enum/relation_type.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
@@ -129,7 +127,7 @@ message ListFollowingRelations {
   message Resp {
     message Relation {
       int64 id = 1;
-      .common.api.app.user.v1.RelationType type = 2;
+      RelationType type = 2;
       int64 actor_id = 3;
       int64 target_id = 4;
       google.protobuf.Timestamp created_at = 1000;
@@ -151,7 +149,7 @@ message ListFollowersRelations {
   message Resp {
     message Relation {
       int64 id = 1;
-      .common.api.app.user.v1.RelationType type = 2;
+      RelationType type = 2;
       int64 actor_id = 3;
       int64 target_id = 4;
       google.protobuf.Timestamp created_at = 1000;
@@ -173,7 +171,7 @@ message ListBlockedRelations {
   message Resp {
     message Relation {
       int64 id = 1;
-      .common.api.app.user.v1.RelationType type = 2;
+      RelationType type = 2;
       int64 actor_id = 3;
       int64 target_id = 4;
       google.protobuf.Timestamp created_at = 1000;

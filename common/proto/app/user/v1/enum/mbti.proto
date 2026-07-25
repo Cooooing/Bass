@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+option go_package = "common/proto/gen/user/v1/enum;enum";
+
+// MBTI 表示账号 MBTI 类型。
+enum MBTI {
+  MBTI_UNSPECIFIED = 0; // 未指定
+  MBTI_INTJ = 1; // INTJ
+  MBTI_INTP = 2; // INTP
+  MBTI_ENTJ = 3; // ENTJ
+  MBTI_ENTP = 4; // ENTP
+  MBTI_INFJ = 5; // INFJ
+  MBTI_INFP = 6; // INFP
+  MBTI_ENFJ = 7; // ENFJ
+  MBTI_ENFP = 8; // ENFP
+  MBTI_ISTJ = 9; // ISTJ
+  MBTI_ISFJ = 10; // ISFJ
+  MBTI_ESTJ = 11; // ESTJ
+  MBTI_ESFJ = 12; // ESFJ
+  MBTI_ISTP = 13; // ISTP
+  MBTI_ISFP = 14; // ISFP
+  MBTI_ESTP = 15; // ESTP
+  MBTI_ESFP = 16; // ESFP
+}

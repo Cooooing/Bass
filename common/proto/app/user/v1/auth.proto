@@ -1,11 +1,15 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.user.v1;
 
+import "common/enums/login_realm.proto";
 import "common/enums/language.proto";
 import "google/protobuf/timestamp.proto";
-import "user/v1/enum/account.proto";
-import "user/v1/enum/auth.proto";
+import "user/v1/enum/account_status.proto";
+import "user/v1/enum/mbti.proto";
+import "user/v1/enum/client_type.proto";
+import "user/v1/enum/device_type.proto";
+import "user/v1/enum/login_type.proto";
 import "user/v1/enum/relation.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
@@ -116,7 +120,7 @@ message Login {
     }
 
     LoginType type = 1; // 登录方式
-    LoginRealm realm = 2; // 登录域，由调用方固定传入
+    common.enums.LoginRealm realm = 2; // 登录域，由调用方固定传入
     ClientInfo client = 3; // 客户端信息
 
     oneof credential {
@@ -165,7 +169,7 @@ message Login {
 message RefreshToken {
   message Req {
     string refresh_token = 1; // refresh token
-    LoginRealm realm = 2; // 登录域
+    common.enums.LoginRealm realm = 2; // 登录域
   }
   message Resp {
     string access_token = 1; // 新 access token
@@ -179,7 +183,7 @@ message RefreshToken {
 message Logout {
   message Req {
     string access_token = 1; // access token
-    LoginRealm realm = 2; // 登录域
+    common.enums.LoginRealm realm = 2; // 登录域
   }
   message Resp {}
 }
@@ -187,7 +191,7 @@ message Logout {
 message ParseToken {
   message Req {
     string access_token = 1; // access token
-    LoginRealm realm = 2; // 登录域
+    common.enums.LoginRealm realm = 2; // 登录域
   }
   message Resp {
     message TokenUser {
@@ -197,7 +201,7 @@ message ParseToken {
       common.enums.Language language = 4; // 语言
       string timezone = 5; // 时区
       string session_id = 6; // 会话 ID
-      LoginRealm realm = 7; // 登录域
+      common.enums.LoginRealm realm = 7; // 登录域
     }
     TokenUser user = 1; // token 用户
   }
@@ -216,7 +220,7 @@ message BanAccount {
   message Req {
     int64 user_id = 1; // 被封禁账号 ID
     int64 operator_id = 2; // 操作人账号 ID
-    LoginRealm operator_realm = 3; // 操作人登录域
+    common.enums.LoginRealm operator_realm = 3; // 操作人登录域
     string reason = 4; // 封禁原因
     string remark = 5; // 操作备注
     optional google.protobuf.Timestamp banned_until = 6; // 封禁截止时间，空表示永久封禁

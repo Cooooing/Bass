@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+option go_package = "common/proto/gen/user/v1/enum;enum";
+
+// AccountStatus 表示账号生命周期状态。
+enum AccountStatus {
+  ACCOUNT_STATUS_UNSPECIFIED = 0; // 未指定
+  ACCOUNT_STATUS_NORMAL = 1; // 正常
+  ACCOUNT_STATUS_BANNED = 2; // 封禁
+  ACCOUNT_STATUS_CANCELLED = 3; // 注销
+}

@@ -1,9 +1,9 @@
-﻿package schema
+package schema
 
 import (
 	"common/pkg/constant"
+	commonenum "common/pkg/enum"
 	utilent "common/pkg/util/ent"
-	userenum "user/internal/enum"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -29,7 +29,7 @@ func (BanRecord) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("被封禁账号 ID"),
 		field.Int64("operator_id").Comment("操作人账号 ID"),
-		field.Enum("operator_realm").Values(userenum.LoginRealmMap.EnumValues()...).Comment("操作人登录域"),
+		field.Enum("operator_realm").Values(commonenum.LoginRealmMap.EnumValues()...).Comment("操作人登录域"),
 		field.String("reason").Comment("封禁原因").MaxLen(128).NotEmpty(),
 		field.Text("remark").Comment("操作备注").Default(""),
 		field.Time("started_at").Comment("封禁开始时间"),

@@ -38,7 +38,7 @@ var DataProviderSet = wire.NewSet(
 	repo.NewTotpSecretCache,
 	repo.NewAuthCacheRepo,
 	repo.NewDelayedTaskClient,
-	repo.NewIPResolver,
+	repo.NewIPClient,
 	repo.NewNatsEventClient,
 )
 

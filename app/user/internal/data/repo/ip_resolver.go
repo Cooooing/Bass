@@ -9,15 +9,15 @@ import (
 	bizrepo "user/internal/biz/repo"
 )
 
-var _ bizrepo.IPResolver = (*IPResolver)(nil)
+var _ bizrepo.IPClient = (*IPClient)(nil)
 
-type IPResolver struct{ consul *commonClient.ConsulClient }
+type IPClient struct{ consul *commonClient.ConsulClient }
 
-func NewIPResolver(consul *commonClient.ConsulClient) bizrepo.IPResolver {
-	return &IPResolver{consul: consul}
+func NewIPClient(consul *commonClient.ConsulClient) bizrepo.IPClient {
+	return &IPClient{consul: consul}
 }
 
-func (r *IPResolver) Resolve(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
+func (r *IPClient) Resolve(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
 	conn, err := r.consul.GetGrpcConn(constant.PlatformServiceName.String())
 	if err != nil {
 		return nil, err

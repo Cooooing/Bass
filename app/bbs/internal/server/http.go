@@ -6,9 +6,9 @@ import (
 	"common/pkg/constant"
 	"common/pkg/server"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	commonenum "common/pkg/enum"
 	cerrors "common/proto/gen/common/errors"
 	userv1 "common/proto/gen/user/v1"
-	userenum "common/proto/gen/user/v1/enum"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -43,7 +43,7 @@ func NewHTTPServer(c *config.Bootstrap, logger *slog.Logger, obs *commonClient.O
 	var opts = []kratoshttp.ServerOption{
 		kratoshttp.Middleware(
 			server.RequestLogContextMiddleware(),
-			selector.Server(server.UserAuthMiddleware(authClient, userenum.LoginRealm_LOGIN_REALM_BBS)).Match(authRequiredMatch).Build(),
+			selector.Server(server.UserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(authRequiredMatch).Build(),
 			obs.ServerMiddleware(),
 			recovery.Recovery(),
 			validate.ProtoValidate(),

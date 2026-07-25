@@ -2,9 +2,11 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
+	"bbs/internal/enum"
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
 	userv1 "common/proto/gen/user/v1"
+	userv1enum "common/proto/gen/user/v1/enum"
 	"context"
 )
 
@@ -69,7 +71,7 @@ func (r *RelationClient) ListFollowing(ctx context.Context, req *repo.ListFollow
 			rows = append(rows, nil)
 			continue
 		}
-		rows = append(rows, &repo.Relation{ID: item.GetId(), Type: int32(item.GetType()), ActorID: item.GetActorId(), TargetID: item.GetTargetId(), CreatedAt: formatProtoTime(item.GetCreatedAt()), UpdatedAt: formatProtoTime(item.GetUpdatedAt())})
+		rows = append(rows, &repo.Relation{ID: item.GetId(), Type: relationTypeFromUser(item.GetType()), ActorID: item.GetActorId(), TargetID: item.GetTargetId(), CreatedAt: formatProtoTime(item.GetCreatedAt()), UpdatedAt: formatProtoTime(item.GetUpdatedAt())})
 	}
 	return &repo.ListFollowingRelationsResp{Page: page, Rows: rows}, nil
 }
@@ -93,7 +95,7 @@ func (r *RelationClient) ListFollowers(ctx context.Context, req *repo.ListFollow
 			rows = append(rows, nil)
 			continue
 		}
-		rows = append(rows, &repo.Relation{ID: item.GetId(), Type: int32(item.GetType()), ActorID: item.GetActorId(), TargetID: item.GetTargetId(), CreatedAt: formatProtoTime(item.GetCreatedAt()), UpdatedAt: formatProtoTime(item.GetUpdatedAt())})
+		rows = append(rows, &repo.Relation{ID: item.GetId(), Type: relationTypeFromUser(item.GetType()), ActorID: item.GetActorId(), TargetID: item.GetTargetId(), CreatedAt: formatProtoTime(item.GetCreatedAt()), UpdatedAt: formatProtoTime(item.GetUpdatedAt())})
 	}
 	return &repo.ListFollowersRelationsResp{Page: page, Rows: rows}, nil
 }
@@ -117,7 +119,7 @@ func (r *RelationClient) ListBlocked(ctx context.Context, req *repo.ListBlockedR
 			rows = append(rows, nil)
 			continue
 		}
-		rows = append(rows, &repo.Relation{ID: item.GetId(), Type: int32(item.GetType()), ActorID: item.GetActorId(), TargetID: item.GetTargetId(), CreatedAt: formatProtoTime(item.GetCreatedAt()), UpdatedAt: formatProtoTime(item.GetUpdatedAt())})
+		rows = append(rows, &repo.Relation{ID: item.GetId(), Type: relationTypeFromUser(item.GetType()), ActorID: item.GetActorId(), TargetID: item.GetTargetId(), CreatedAt: formatProtoTime(item.GetCreatedAt()), UpdatedAt: formatProtoTime(item.GetUpdatedAt())})
 	}
 	return &repo.ListBlockedRelationsResp{Page: page, Rows: rows}, nil
 }
@@ -132,4 +134,13 @@ func (r *RelationClient) GetStatus(ctx context.Context, req *repo.GetStatusRelat
 		out = &repo.RelationStatus{TargetID: status.GetTargetId(), Following: status.GetFollowing(), FollowedBy: status.GetFollowedBy(), Blocking: status.GetBlocking(), BlockedBy: status.GetBlockedBy()}
 	}
 	return out, nil
+}
+
+func relationTypeFromUser(value userv1enum.RelationType) enum.RelationType {
+	switch value {
+	case userv1enum.RelationType_RELATION_TYPE_BLOCK:
+		return enum.RelationTypeBlock
+	default:
+		return enum.RelationTypeFollow
+	}
 }

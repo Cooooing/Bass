@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+option go_package = "common/proto/gen/user/v1/enum;enum";
+
+// ClientType 表示发起登录的客户端类型。
+enum ClientType {
+  CLIENT_TYPE_UNSPECIFIED = 0; // 未指定
+  CLIENT_TYPE_UNKNOWN = 1; // 未识别客户端
+  CLIENT_TYPE_WEB = 2; // Web 客户端
+  CLIENT_TYPE_ADMIN_WEB = 3; // 管理后台 Web 客户端
+  CLIENT_TYPE_MOBILE = 4; // 移动客户端
+}

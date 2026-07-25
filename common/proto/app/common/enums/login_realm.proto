@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.common.enums;
+
+option go_package = "common/proto/gen/common/enums;enums";
+
+// LoginRealm 表示认证会话所属入口域。
+enum LoginRealm {
+  LOGIN_REALM_UNSPECIFIED = 0;
+  LOGIN_REALM_BBS = 1; // 社区前台
+  LOGIN_REALM_BBS_ADMIN = 2; // 社区管理后台
+}

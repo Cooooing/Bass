@@ -2,10 +2,12 @@ package data
 
 import (
 	"bbs/internal/biz/repo"
+	"bbs/internal/enum"
 	"common/pkg/client/rpc"
 	"common/pkg/constant"
 	"common/pkg/server"
-	bbsuserenum "common/proto/gen/bbs/v1/user/enum"
+	commonenum "common/pkg/enum"
+
 	userv1 "common/proto/gen/user/v1"
 	userenum "common/proto/gen/user/v1/enum"
 	"context"
@@ -58,13 +60,13 @@ func (r *AuthRepo) StartPhoneLogin(ctx context.Context, phone string) (*repo.Sta
 }
 
 func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginResp, error) {
-	loginReq := &userv1.Login_Req{Type: loginTypeToUser(req.Type), Realm: userenum.LoginRealm_LOGIN_REALM_BBS, Client: clientInfo(ctx)}
+	loginReq := &userv1.Login_Req{Type: loginTypeToUser(req.Type), Realm: commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmBBS), Client: clientInfo(ctx)}
 	switch req.Type {
-	case bbsuserenum.LoginType_LOGIN_TYPE_PASSWORD:
+	case enum.LoginTypePassword:
 		loginReq.Credential = &userv1.Login_Req_PasswordCredential_{PasswordCredential: &userv1.Login_Req_PasswordCredential{Account: req.Account, Password: req.Password, Code: req.Code}}
-	case bbsuserenum.LoginType_LOGIN_TYPE_EMAIL:
+	case enum.LoginTypeEmail:
 		loginReq.Credential = &userv1.Login_Req_EmailCredential_{EmailCredential: &userv1.Login_Req_EmailCredential{Email: req.Email, Code: req.Code}}
-	case bbsuserenum.LoginType_LOGIN_TYPE_PHONE:
+	case enum.LoginTypePhone:
 		loginReq.Credential = &userv1.Login_Req_PhoneCredential_{PhoneCredential: &userv1.Login_Req_PhoneCredential{Phone: req.Phone, Code: req.Code}}
 	}
 	reply, err := r.userClient.Auth.Login(ctx, loginReq)
@@ -75,7 +77,7 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 }
 
 func (r *AuthRepo) RefreshToken(ctx context.Context, refreshToken string) (*repo.TokenResp, error) {
-	reply, err := r.userClient.Auth.RefreshToken(ctx, &userv1.RefreshToken_Req{RefreshToken: refreshToken, Realm: userenum.LoginRealm_LOGIN_REALM_BBS})
+	reply, err := r.userClient.Auth.RefreshToken(ctx, &userv1.RefreshToken_Req{RefreshToken: refreshToken, Realm: commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmBBS)})
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +85,7 @@ func (r *AuthRepo) RefreshToken(ctx context.Context, refreshToken string) (*repo
 }
 
 func (r *AuthRepo) Logout(ctx context.Context, accessToken string) error {
-	_, err := r.userClient.Auth.Logout(ctx, &userv1.Logout_Req{AccessToken: accessToken, Realm: userenum.LoginRealm_LOGIN_REALM_BBS})
+	_, err := r.userClient.Auth.Logout(ctx, &userv1.Logout_Req{AccessToken: accessToken, Realm: commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmBBS)})
 	return err
 }
 func (r *AuthRepo) CancelAccount(ctx context.Context, req *repo.CancelAccountReq) error {
@@ -91,11 +93,11 @@ func (r *AuthRepo) CancelAccount(ctx context.Context, req *repo.CancelAccountReq
 	return err
 }
 
-func loginTypeToUser(t bbsuserenum.LoginType) userenum.LoginType {
+func loginTypeToUser(t enum.LoginType) userenum.LoginType {
 	switch t {
-	case bbsuserenum.LoginType_LOGIN_TYPE_EMAIL:
+	case enum.LoginTypeEmail:
 		return userenum.LoginType_LOGIN_TYPE_EMAIL
-	case bbsuserenum.LoginType_LOGIN_TYPE_PHONE:
+	case enum.LoginTypePhone:
 		return userenum.LoginType_LOGIN_TYPE_PHONE
 	default:
 		return userenum.LoginType_LOGIN_TYPE_PASSWORD

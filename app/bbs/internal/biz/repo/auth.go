@@ -1,10 +1,9 @@
 package repo
 
 import (
+	"bbs/internal/enum"
 	"context"
 	"time"
-
-	bbsuserenum "common/proto/gen/bbs/v1/user/enum"
 )
 
 type AuthRepo interface {
@@ -46,7 +45,7 @@ type StartEmailLoginResp struct{ Code string }
 type StartPhoneLoginResp struct{ Code string }
 
 type LoginReq struct {
-	Type     bbsuserenum.LoginType
+	Type     enum.LoginType
 	Account  string
 	Password string
 	Email    string

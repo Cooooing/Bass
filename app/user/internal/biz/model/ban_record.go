@@ -1,15 +1,15 @@
 package model
 
 import (
+	commonenum "common/pkg/enum"
 	"time"
-	"user/internal/enum"
 )
 
 type BanRecord struct {
 	ID            int64
 	UserID        int64
 	OperatorID    int64
-	OperatorRealm enum.LoginRealm
+	OperatorRealm commonenum.LoginRealm
 	Reason        string
 	Remark        string
 	StartedAt     time.Time

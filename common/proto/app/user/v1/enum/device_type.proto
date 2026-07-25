@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+option go_package = "common/proto/gen/user/v1/enum;enum";
+
+// DeviceType 表示发起登录的设备类型。
+enum DeviceType {
+  DEVICE_TYPE_UNSPECIFIED = 0; // 未指定
+  DEVICE_TYPE_UNKNOWN = 1; // 未识别设备
+  DEVICE_TYPE_DESKTOP = 2; // 桌面设备
+  DEVICE_TYPE_MOBILE = 3; // 手机设备
+  DEVICE_TYPE_TABLET = 4; // 平板设备
+  DEVICE_TYPE_BOT = 5; // 机器人或爬虫
+}

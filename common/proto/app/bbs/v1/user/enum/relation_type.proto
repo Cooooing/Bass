@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.user;
+
+option go_package = "common/proto/gen/bbs/v1/user/enum;enum";
+
+// RelationType 表示 BBS 端账号关系类型。
+enum RelationType {
+  RELATION_TYPE_UNSPECIFIED = 0; // 未指定
+  RELATION_TYPE_FOLLOW = 1; // 关注
+  RELATION_TYPE_BLOCK = 2; // 拉黑
+}

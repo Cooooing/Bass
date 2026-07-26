@@ -1,8 +1,7 @@
 package repo
 
 import (
-	commonClient "common/pkg/client"
-	"common/pkg/constant"
+	"common/pkg/client/rpc"
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
 	"encoding/json"
@@ -16,13 +15,13 @@ import (
 
 var _ bizrepo.DelayedTaskClient = (*DelayedTaskClient)(nil)
 
-type DelayedTaskClient struct{ consul *commonClient.ConsulClient }
+type DelayedTaskClient struct{ schedulerClient *rpc.SchedulerClient }
 
 func NewDelayedTaskClient(
-	consul *commonClient.ConsulClient,
+	schedulerClient *rpc.SchedulerClient,
 ) bizrepo.DelayedTaskClient {
 	return &DelayedTaskClient{
-		consul: consul,
+		schedulerClient: schedulerClient,
 	}
 }
 
@@ -40,12 +39,7 @@ func (c *DelayedTaskClient) RegisterUnbanAccounts(ctx context.Context, userID in
 	if err != nil {
 		return err
 	}
-	conn, err := c.consul.GetGrpcConn(constant.SchedulerServiceName.String())
-	if err != nil {
-		return err
-	}
-	client := schedulerv1.NewSchedulerDelayedTaskServiceClient(conn)
-	_, err = client.Register(ctx, &schedulerv1.RegisterSchedulerDelayedTask_Req{
+	_, err = c.schedulerClient.DelayedTask.Register(ctx, &schedulerv1.RegisterSchedulerDelayedTask_Req{
 		IdempotencyKey: fmt.Sprintf("user.unban_accounts:%d", banRecordID),
 		TaskName:       "user.unban_accounts",
 		Payload:        string(payload),

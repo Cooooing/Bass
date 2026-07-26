@@ -44,45 +44,41 @@ type AuthUsecase struct {
 	sf *sonyflake.Sonyflake
 }
 
-type AuthUsecaseDeps struct {
-	Conf              *config.Bootstrap
-	Logger            *slog.Logger
-	Tx                base.Tx
-	AccountRepo       repo.AccountRepo
-	PrefsRepo         repo.PreferencesRepo
-	LoginLogRepo      repo.LoginLogRepo
-	OutboxRepo        repo.OutboxEventRepo
-	AuthCacheRepo     repo.AuthCacheRepo
-	EmailOtpUsecase   *EmailOtpUsecase
-	TotpRepo          repo.TotpRepo
-	BanRecordRepo     repo.BanRecordRepo
-	IPClient          repo.IPClient
-	DelayedTaskClient repo.DelayedTaskClient
-	TokenUsecase      *TokenUsecase
-}
-
 func NewAuthUsecase(
-	deps AuthUsecaseDeps,
+	conf *config.Bootstrap,
+	logger *slog.Logger,
+	tx base.Tx,
+	accountRepo repo.AccountRepo,
+	prefsRepo repo.PreferencesRepo,
+	loginLogRepo repo.LoginLogRepo,
+	outboxRepo repo.OutboxEventRepo,
+	authCacheRepo repo.AuthCacheRepo,
+	emailOtpUsecase *EmailOtpUsecase,
+	totpRepo repo.TotpRepo,
+	banRecordRepo repo.BanRecordRepo,
+	ipClient repo.IPClient,
+	delayedTaskClient repo.DelayedTaskClient,
+	tokenUsecase *TokenUsecase,
 ) (*AuthUsecase, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
 	}
 	return &AuthUsecase{
-		conf:              deps.Conf,
-		logger:            deps.Logger,
-		tx:                deps.Tx,
-		accountRepo:       deps.AccountRepo,
-		prefsRepo:         deps.PrefsRepo,
-		loginLogRepo:      deps.LoginLogRepo,
-		outboxRepo:        deps.OutboxRepo,
-		authCacheRepo:     deps.AuthCacheRepo,
-		emailOtpUsecase:   deps.EmailOtpUsecase,
-		totpRepo:          deps.TotpRepo,
-		banRecordRepo:     deps.BanRecordRepo,
-		ipClient:          deps.IPClient,
-		delayedTaskClient: deps.DelayedTaskClient,
-		tokenUsecase:      deps.TokenUsecase,
+		conf:              conf,
+		logger:            logger,
+		tx:                tx,
+		accountRepo:       accountRepo,
+		prefsRepo:         prefsRepo,
+		loginLogRepo:      loginLogRepo,
+		outboxRepo:        outboxRepo,
+		authCacheRepo:     authCacheRepo,
+		emailOtpUsecase:   emailOtpUsecase,
+		totpRepo:          totpRepo,
+		banRecordRepo:     banRecordRepo,
+		ipClient:          ipClient,
+		delayedTaskClient: delayedTaskClient,
+		tokenUsecase:      tokenUsecase,
 		sf:                sf,
 	}, nil
 }

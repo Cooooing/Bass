@@ -8,7 +8,6 @@ import (
 
 var BizProviderSet = wire.NewSet(
 	usecase.NewTokenUsecase,
-	wire.Struct(new(usecase.AuthUsecaseDeps), "*"),
 	usecase.NewAccountUsecase,
 	usecase.NewAuthUsecase,
 	usecase.NewRbacUsecase,

@@ -1,8 +1,7 @@
 package repo
 
 import (
-	commonClient "common/pkg/client"
-	"common/pkg/constant"
+	"common/pkg/client/rpc"
 	commonModel "common/pkg/model"
 	platformv1 "common/proto/gen/platform/v1"
 	"context"
@@ -11,22 +10,18 @@ import (
 
 var _ bizrepo.IPClient = (*IPClient)(nil)
 
-type IPClient struct{ consul *commonClient.ConsulClient }
+type IPClient struct{ platformClient *rpc.PlatformClient }
 
 func NewIPClient(
-	consul *commonClient.ConsulClient,
+	platformClient *rpc.PlatformClient,
 ) bizrepo.IPClient {
 	return &IPClient{
-		consul: consul,
+		platformClient: platformClient,
 	}
 }
 
 func (r *IPClient) Resolve(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
-	conn, err := r.consul.GetGrpcConn(constant.PlatformServiceName.String())
-	if err != nil {
-		return nil, err
-	}
-	reply, err := platformv1.NewPlatformIpResolutionServiceClient(conn).ResolveIp(ctx, &platformv1.ResolveIp_Req{
+	reply, err := r.platformClient.IpResolution.ResolveIp(ctx, &platformv1.ResolveIp_Req{
 		Ip: ip,
 	})
 	if err != nil {

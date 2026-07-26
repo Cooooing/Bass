@@ -27,6 +27,9 @@ func ProvidePlatformClient(consul *client.ConsulClient) (*PlatformClient, error)
 	return newServiceClient(consul, constant.PlatformServiceName.String(), NewPlatformClient)
 }
 
+func ProvidePushHubClient(consul *client.ConsulClient) (*PushHubClient, error) {
+	return newServiceClient(consul, constant.PushHubServiceName.String(), NewPushHubClient)
+}
 func ProvideSchedulerClient(consul *client.ConsulClient) (*SchedulerClient, error) {
 	return newServiceClient(consul, constant.SchedulerServiceName.String(), NewSchedulerClient)
 }

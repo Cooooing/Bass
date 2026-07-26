@@ -4,6 +4,8 @@ import (
 	"common/proto/gen/common"
 	"context"
 	"fmt"
+
+	entsql "entgo.io/ent/dialect/sql"
 	"platform/internal/biz/model"
 	"platform/internal/biz/repo"
 	"platform/internal/data/gen"
@@ -47,7 +49,10 @@ func (r *ObjectStorageRepo) Save(ctx context.Context, row *model.ObjectStorage) 
 		SetSize(row.Size).
 		SetHash(row.Hash).
 		SetUploadBy(row.UploadBy).
-		OnConflictColumns(objectstorage.FieldProvider, objectstorage.FieldBucket, objectstorage.FieldKey).
+		OnConflict(
+			entsql.ConflictColumns(objectstorage.FieldProvider, objectstorage.FieldBucket, objectstorage.FieldKey),
+			entsql.ConflictWhere(entsql.IsNull(objectstorage.FieldDeletedAt)),
+		).
 		UpdateMimeType().
 		UpdateSize().
 		UpdateHash().
@@ -244,6 +249,7 @@ func (r *ObjectStorageRepo) Page(ctx context.Context, req *repo.ObjectStoragePag
 }
 
 func (r *ObjectStorageRepo) getQuery(query *gen.ObjectStorageQuery, req *repo.ObjectStorageGetReq) *gen.ObjectStorageQuery {
+	query = query.Where(objectstorage.DeletedAtIsNil())
 	if req == nil {
 		return query
 	}

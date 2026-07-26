@@ -41,7 +41,9 @@ func (DelayedTask) Fields() []ent.Field {
 }
 
 func (DelayedTask) Mixin() []ent.Mixin {
-	return []ent.Mixin{utilent.TimeAuditMixin{}}
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (DelayedTask) Indexes() []ent.Index {

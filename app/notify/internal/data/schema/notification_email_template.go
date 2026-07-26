@@ -37,7 +37,9 @@ func (NotificationEmailTemplate) Fields() []ent.Field {
 }
 
 func (NotificationEmailTemplate) Mixin() []ent.Mixin {
-	return []ent.Mixin{utilent.TimeAuditMixin{}}
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (NotificationEmailTemplate) Indexes() []ent.Index {

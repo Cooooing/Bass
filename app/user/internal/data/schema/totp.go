@@ -2,6 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -21,6 +22,12 @@ func (Totp) Annotations() []schema.Annotation {
 			Table: constant.TablePrefixUser.String() + "totp",
 		},
 		entsql.WithComments(true),
+	}
+}
+
+func (Totp) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
 	}
 }
 

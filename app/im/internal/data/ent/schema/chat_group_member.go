@@ -42,6 +42,7 @@ func (ChatGroupMember) Fields() []ent.Field {
 func (ChatGroupMember) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
+		utilent.SoftDeleteMixin{},
 	}
 }
 
@@ -54,7 +55,7 @@ func (ChatGroupMember) Edges() []ent.Edge {
 
 func (ChatGroupMember) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("group_id", "user_id").Unique(),
+		index.Fields("group_id", "user_id").Unique().Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 		index.Fields("user_id"),
 	}
 }

@@ -165,6 +165,7 @@ func (r *ArticlePostscriptRepo) Page(ctx context.Context, req *repo.ArticlePosts
 }
 
 func (r *ArticlePostscriptRepo) getQuery(query *gen.ArticlePostscriptQuery, req *repo.ArticlePostscriptGetReq) *gen.ArticlePostscriptQuery {
+	query = query.Where(articlepostscript.DeletedAtIsNil())
 	if req == nil {
 		return query
 	}

@@ -37,7 +37,9 @@ func (RbacAuditLog) Fields() []ent.Field {
 }
 
 func (RbacAuditLog) Mixin() []ent.Mixin {
-	return []ent.Mixin{utilent.TimeAuditMixin{}}
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (RbacAuditLog) Indexes() []ent.Index {

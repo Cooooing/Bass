@@ -248,6 +248,10 @@ func (r *DomainRepo) Page(ctx context.Context, req *repo.DomainGetReq) (*repo.Do
 }
 
 func (r *DomainRepo) getQuery(query *gen.DomainQuery, req *repo.DomainGetReq) *gen.DomainQuery {
+	query = query.Where(domain.DeletedAtIsNil())
+	if req == nil {
+		return query
+	}
 	if req.DomainId != nil {
 		query = query.Where(domain.IDEQ(*req.DomainId))
 	}

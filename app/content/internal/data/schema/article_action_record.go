@@ -2,6 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 	contentenum "content/internal/enum"
 
 	"entgo.io/ent"
@@ -23,6 +24,12 @@ func (ArticleActionRecord) Annotations() []schema.Annotation {
 			Table: constant.TablePrefixContent.String() + "article_action_records",
 		},
 		entsql.WithComments(true),
+	}
+}
+
+func (ArticleActionRecord) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
 	}
 }
 

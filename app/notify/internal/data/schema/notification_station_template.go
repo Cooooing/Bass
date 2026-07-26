@@ -36,7 +36,9 @@ func (NotificationStationTemplate) Fields() []ent.Field {
 }
 
 func (NotificationStationTemplate) Mixin() []ent.Mixin {
-	return []ent.Mixin{utilent.TimeAuditMixin{}}
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (NotificationStationTemplate) Indexes() []ent.Index {

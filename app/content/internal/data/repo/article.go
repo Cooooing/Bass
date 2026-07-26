@@ -493,10 +493,10 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 		query = query.Where(articleent.CreatedByEQ(*req.CreatedBy))
 	}
 	if req.TagId != nil {
-		query = query.Where(articleent.HasTagsWith(tagent.IDEQ(*req.TagId)))
+		query = query.Where(articleent.HasTagsWith(tagent.IDEQ(*req.TagId), tagent.DeletedAtIsNil()))
 	}
 	if req.DomainId != nil {
-		query = query.Where(articleent.HasTagsWith(tagent.DomainIDEQ(*req.DomainId)))
+		query = query.Where(articleent.HasTagsWith(tagent.DomainIDEQ(*req.DomainId), tagent.DeletedAtIsNil()))
 	}
 	if req.PublishStatus != nil {
 		query = query.Where(articleent.PublishStatusEQ(articleent.PublishStatus(*req.PublishStatus)))

@@ -41,6 +41,7 @@ func (Tag) Fields() []ent.Field {
 func (Tag) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
+		utilent.SoftDeleteMixin{},
 	}
 }
 

@@ -74,7 +74,7 @@ func (r *ChatGroupMemberRepo) UpdateMuteEndAt(ctx context.Context, req *repo.Cha
 		return nil, err
 	}
 	t, err := r.getClient(ctx).ChatGroupMember.Query().
-		Where(chatgroupmember.GroupID(req.GroupID), chatgroupmember.UserID(req.UserID)).
+		Where(chatgroupmember.GroupID(req.GroupID), chatgroupmember.UserID(req.UserID), chatgroupmember.DeletedAtIsNil()).
 		First(ctx)
 	if err != nil {
 		return nil, err
@@ -162,6 +162,7 @@ func (r *ChatGroupMemberRepo) Page(ctx context.Context, req *repo.ChatGroupMembe
 }
 
 func (r *ChatGroupMemberRepo) getQuery(query *gen.ChatGroupMemberQuery, req *repo.ChatGroupMemberQuery) *gen.ChatGroupMemberQuery {
+	query = query.Where(chatgroupmember.DeletedAtIsNil())
 	if req == nil {
 		return query
 	}

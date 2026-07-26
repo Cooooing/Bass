@@ -56,6 +56,7 @@ func (r *WorldRuleRepo) Save(ctx context.Context, row *model.WorldRule) (*model.
 }
 
 func (r *WorldRuleRepo) worldRuleQuery(q *gen.WorldRuleQuery, req *bizrepo.WorldRuleQuery) *gen.WorldRuleQuery {
+	q = q.Where(worldrule.DeletedAtIsNil())
 	if req == nil {
 		return q
 	}

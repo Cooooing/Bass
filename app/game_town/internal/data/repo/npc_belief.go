@@ -150,6 +150,6 @@ func (r *NpcBeliefRepo) npcBelief(row *gen.NpcBelief) *model.NpcBelief {
 		Stance:         enum.BeliefStance(row.Stance),
 		Confidence:     row.Confidence,
 		LearnedAt:      row.LearnedAt,
-		UpdatedAt:      new(row.UpdatedAt),
+		UpdatedAt:      row.UpdatedAt,
 	}
 }

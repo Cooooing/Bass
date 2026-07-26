@@ -166,6 +166,7 @@ func (r *ChatSessionRepo) Page(ctx context.Context, req *repo.ChatSessionQuery) 
 }
 
 func (r *ChatSessionRepo) getQuery(query *gen.ChatSessionQuery, req *repo.ChatSessionQuery) *gen.ChatSessionQuery {
+	query = query.Where(chatsession.DeletedAtIsNil())
 	query.WithGroup().WithLastMessageOfSession()
 	if req == nil {
 		return query

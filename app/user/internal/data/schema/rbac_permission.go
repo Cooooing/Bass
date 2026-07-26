@@ -35,7 +35,9 @@ func (RbacPermission) Fields() []ent.Field {
 }
 
 func (RbacPermission) Mixin() []ent.Mixin {
-	return []ent.Mixin{utilent.TimeAuditMixin{}}
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (RbacPermission) Indexes() []ent.Index {

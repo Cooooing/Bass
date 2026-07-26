@@ -38,7 +38,9 @@ func (NotificationTencentSMSTemplate) Fields() []ent.Field {
 }
 
 func (NotificationTencentSMSTemplate) Mixin() []ent.Mixin {
-	return []ent.Mixin{utilent.TimeAuditMixin{}}
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (NotificationTencentSMSTemplate) Indexes() []ent.Index {

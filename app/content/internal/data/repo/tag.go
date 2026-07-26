@@ -229,6 +229,10 @@ func (r *TagRepo) Page(ctx context.Context, req *repo.TagGetReq) (*repo.TagPageR
 }
 
 func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQuery {
+	query = query.Where(tagent.DeletedAtIsNil())
+	if req == nil {
+		return query
+	}
 	if req.TagId != nil {
 		query = query.Where(tagent.IDEQ(*req.TagId))
 	}

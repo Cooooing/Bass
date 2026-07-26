@@ -2,6 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -21,6 +22,12 @@ func (PrivacySetting) Annotations() []schema.Annotation {
 			Table: constant.TablePrefixUser.String() + "privacies",
 		},
 		entsql.WithComments(true),
+	}
+}
+
+func (PrivacySetting) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
 	}
 }
 

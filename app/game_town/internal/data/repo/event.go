@@ -72,7 +72,7 @@ func (r *EventRepo) Save(ctx context.Context, row *model.Event) (*model.Event, e
 		Payload:          saved.Payload,
 		WorldTime:        saved.WorldTime,
 		OccurredAt:       saved.OccurredAt,
-		CreatedAt:        saved.CreatedAt,
+		CreatedAt:        lo.FromPtr(saved.CreatedAt),
 	}, nil
 }
 
@@ -129,7 +129,7 @@ func (r *EventRepo) Get(ctx context.Context, req *bizrepo.EventQuery) (*model.Ev
 		Payload:          row.Payload,
 		WorldTime:        row.WorldTime,
 		OccurredAt:       row.OccurredAt,
-		CreatedAt:        row.CreatedAt,
+		CreatedAt:        lo.FromPtr(row.CreatedAt),
 	}, nil
 }
 
@@ -163,7 +163,7 @@ func (r *EventRepo) List(ctx context.Context, req *bizrepo.EventQuery) ([]*model
 			Payload:          row.Payload,
 			WorldTime:        row.WorldTime,
 			OccurredAt:       row.OccurredAt,
-			CreatedAt:        row.CreatedAt,
+			CreatedAt:        lo.FromPtr(row.CreatedAt),
 		}
 	})
 	return out, nil
@@ -211,7 +211,7 @@ func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizre
 			Payload:          row.Payload,
 			WorldTime:        row.WorldTime,
 			OccurredAt:       row.OccurredAt,
-			CreatedAt:        row.CreatedAt,
+			CreatedAt:        lo.FromPtr(row.CreatedAt),
 		}
 	})
 	return &bizrepo.EventPageResp{

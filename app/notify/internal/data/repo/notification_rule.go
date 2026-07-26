@@ -126,6 +126,7 @@ func (r *NotificationRuleRepo) Page(ctx context.Context, req *bizrepo.Notificati
 }
 
 func (r *NotificationRuleRepo) getQuery(query *gen.NotificationRuleQuery, req *bizrepo.NotificationRuleQuery) *gen.NotificationRuleQuery {
+	query = query.Where(notificationrule.DeletedAtIsNil())
 	if req == nil {
 		return query
 	}

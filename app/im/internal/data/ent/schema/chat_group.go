@@ -46,6 +46,7 @@ func (ChatGroup) Fields() []ent.Field {
 func (ChatGroup) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
+		utilent.SoftDeleteMixin{},
 	}
 }
 

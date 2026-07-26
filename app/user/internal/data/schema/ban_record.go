@@ -40,7 +40,9 @@ func (BanRecord) Fields() []ent.Field {
 }
 
 func (BanRecord) Mixin() []ent.Mixin {
-	return []ent.Mixin{utilent.TimeAuditMixin{}}
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (BanRecord) Indexes() []ent.Index {

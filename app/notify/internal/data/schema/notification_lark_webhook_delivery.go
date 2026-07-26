@@ -44,7 +44,9 @@ func (NotificationLarkWebhookDelivery) Fields() []ent.Field {
 }
 
 func (NotificationLarkWebhookDelivery) Mixin() []ent.Mixin {
-	return []ent.Mixin{utilent.TimeAuditMixin{}}
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
 }
 
 func (NotificationLarkWebhookDelivery) Indexes() []ent.Index {

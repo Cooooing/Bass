@@ -2,6 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 	gameenum "game_town/internal/enum"
 
 	"entgo.io/ent"
@@ -21,6 +22,12 @@ func (FactionMembership) Annotations() []schema.Annotation {
 			Table: constant.TablePrefixGameTown.String() + "faction_memberships",
 		},
 		entsql.WithComments(true),
+	}
+}
+
+func (FactionMembership) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
 	}
 }
 

@@ -27,6 +27,7 @@ func (WorldRule) Annotations() []schema.Annotation {
 func (WorldRule) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
+		utilent.SoftDeleteMixin{},
 	}
 }
 
@@ -41,6 +42,6 @@ func (WorldRule) Fields() []ent.Field {
 
 func (WorldRule) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("world_id").Unique().StorageKey("game_town_world_rules_world_unique"),
+		index.Fields("world_id").Unique().StorageKey("game_town_world_rules_world_unique").Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 	}
 }

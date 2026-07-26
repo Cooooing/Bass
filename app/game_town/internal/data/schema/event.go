@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 	gameenum "game_town/internal/enum"
 
 	"entgo.io/ent"
@@ -25,6 +26,12 @@ func (Event) Annotations() []schema.Annotation {
 	}
 }
 
+func (Event) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
+}
+
 func (Event) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
@@ -40,7 +47,6 @@ func (Event) Fields() []ent.Field {
 		field.JSON("payload", map[string]any{}).Comment("最小事件载荷").Optional(),
 		field.Time("world_time").Comment("事件发生的世界时间").Default(time.Now),
 		field.Time("occurred_at").Comment("事件发生的现实时间"),
-		field.Time("created_at").Comment("记录创建时间"),
 	}
 }
 

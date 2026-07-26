@@ -39,13 +39,16 @@ func (NotificationRule) Fields() []ent.Field {
 }
 
 func (NotificationRule) Mixin() []ent.Mixin {
-	return []ent.Mixin{utilent.TimeAuditMixin{}}
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+		utilent.SoftDeleteMixin{},
+	}
 }
 
 func (NotificationRule) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("event_type", "channel", "language").Unique(),
-		index.Fields("event_type", "language", "enabled"),
+		index.Fields("event_type", "channel", "language").Unique().Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+		index.Fields("event_type", "language", "enabled").Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 	}
 }
 

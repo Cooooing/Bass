@@ -2,6 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 	userenum "user/internal/enum"
 
 	"entgo.io/ent"
@@ -22,6 +23,12 @@ func (Preferences) Annotations() []schema.Annotation {
 			Table: constant.TablePrefixUser.String() + "preferences",
 		},
 		entsql.WithComments(true),
+	}
+}
+
+func (Preferences) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
 	}
 }
 

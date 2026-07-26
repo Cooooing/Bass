@@ -189,6 +189,7 @@ func (r *ChatGroupRepo) Page(ctx context.Context, req *repo.ChatGroupQuery) (*re
 }
 
 func (r *ChatGroupRepo) getQuery(query *gen.ChatGroupQuery, req *repo.ChatGroupQuery) *gen.ChatGroupQuery {
+	query = query.Where(chatgroup.DeletedAtIsNil())
 	if req == nil {
 		return query
 	}

@@ -43,6 +43,7 @@ func (Domain) Fields() []ent.Field {
 func (Domain) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
+		utilent.SoftDeleteMixin{},
 	}
 }
 

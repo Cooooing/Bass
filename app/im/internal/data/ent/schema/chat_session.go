@@ -51,6 +51,7 @@ func (ChatSession) Fields() []ent.Field {
 func (ChatSession) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
+		utilent.SoftDeleteMixin{},
 	}
 }
 
@@ -68,8 +69,8 @@ func (ChatSession) Edges() []ent.Edge {
 func (ChatSession) Indexes() []ent.Index {
 	return []ent.Index{
 		// 保证每个用户对每个群组只有一个会话
-		index.Fields("created_by", "group_id").Unique(),
+		index.Fields("created_by", "group_id").Unique().Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 		// 保证每个用户对每个私聊接收者只有一个会话
-		index.Fields("created_by", "receiver_id").Unique(),
+		index.Fields("created_by", "receiver_id").Unique().Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 	}
 }

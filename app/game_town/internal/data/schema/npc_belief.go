@@ -2,6 +2,7 @@ package schema
 
 import (
 	"common/pkg/constant"
+	utilent "common/pkg/util/ent"
 	gameenum "game_town/internal/enum"
 
 	"entgo.io/ent"
@@ -24,6 +25,12 @@ func (NpcBelief) Annotations() []schema.Annotation {
 	}
 }
 
+func (NpcBelief) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		utilent.TimeAuditMixin{},
+	}
+}
+
 func (NpcBelief) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
@@ -36,7 +43,6 @@ func (NpcBelief) Fields() []ent.Field {
 		field.Enum("stance").Values(gameenum.BeliefStanceMap.EnumValues()...).Default(string(gameenum.BeliefStanceBelieves)),
 		field.Float("confidence").Default(0.5),
 		field.Time("learned_at"),
-		field.Time("updated_at"),
 	}
 }
 

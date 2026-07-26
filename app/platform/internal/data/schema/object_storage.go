@@ -47,11 +47,12 @@ func (ObjectStorage) Fields() []ent.Field {
 func (ObjectStorage) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
+		utilent.SoftDeleteMixin{},
 	}
 }
 
 func (ObjectStorage) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("provider", "bucket", "key").Unique(),
+		index.Fields("provider", "bucket", "key").Unique().Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 	}
 }

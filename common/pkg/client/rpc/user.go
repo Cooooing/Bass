@@ -15,6 +15,7 @@ type UserClient struct {
 	PrivacySetting userv1.PrivacySettingServiceClient
 	Location       userv1.LocationServiceClient
 	Otp            userv1.OtpServiceClient
+	Outbox         userv1.OutboxServiceClient
 }
 
 func NewUserClient(
@@ -29,5 +30,6 @@ func NewUserClient(
 		PrivacySetting: userv1.NewPrivacySettingServiceClient(conn),
 		Location:       userv1.NewLocationServiceClient(conn),
 		Otp:            userv1.NewOtpServiceClient(conn),
+		Outbox:         userv1.NewOutboxServiceClient(conn),
 	}
 }

@@ -2,10 +2,12 @@ package usecase
 
 import (
 	"common/pkg/apperror"
+	"common/pkg/constant"
 	"common/pkg/util/str"
 	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"log/slog"
 	"strings"
 	"time"
 	"user/internal/biz/model"
@@ -17,28 +19,34 @@ import (
 )
 
 type EmailOtpUsecase struct {
+	logger        *slog.Logger
 	conf          *config.Bootstrap
 	accountRepo   repo.AccountRepo
 	authCacheRepo repo.AuthCacheRepo
 	outboxRepo    repo.OutboxEventRepo
+	outboxUsecase *OutboxUsecase
 	sf            *sonyflake.Sonyflake
 }
 
 func NewEmailOtpUsecase(
+	logger *slog.Logger,
 	conf *config.Bootstrap,
 	accountRepo repo.AccountRepo,
 	authCacheRepo repo.AuthCacheRepo,
 	outboxRepo repo.OutboxEventRepo,
+	outboxUsecase *OutboxUsecase,
 ) (*EmailOtpUsecase, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
 	}
 	return &EmailOtpUsecase{
+		logger:        logger,
 		conf:          conf,
 		accountRepo:   accountRepo,
 		authCacheRepo: authCacheRepo,
 		outboxRepo:    outboxRepo,
+		outboxUsecase: outboxUsecase,
 		sf:            sf,
 	}, nil
 }
@@ -96,7 +104,7 @@ func (u *EmailOtpUsecase) SendEmailOtp(ctx context.Context, req *SendEmailOtpReq
 	}, codeTTL); err != nil {
 		return nil, err
 	}
-	if err := u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+	outboxEvent, err := u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE,
@@ -108,9 +116,17 @@ func (u *EmailOtpUsecase) SendEmailOtp(ctx context.Context, req *SendEmailOtpReq
 				},
 			},
 		},
-	}); err != nil {
+	})
+	if err != nil {
 		_ = u.authCacheRepo.DeleteCode(ctx, key)
 		return nil, err
+	}
+	if outboxEvent != nil {
+		if _, err := u.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			u.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
 	}
 	return &SendEmailOtpResp{
 		Code: code,

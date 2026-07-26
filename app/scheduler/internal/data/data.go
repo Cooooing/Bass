@@ -2,6 +2,7 @@ package data
 
 import (
 	commonClient "common/pkg/client"
+	"common/pkg/client/rpc"
 	"common/proto/gen/common"
 	"scheduler/internal/config"
 	"scheduler/internal/data/client"
@@ -18,6 +19,7 @@ var DataProviderSet = wire.NewSet(
 	ProvideConsul,
 	commonClient.NewObservability,
 	commonClient.NewConsulClient,
+	rpc.ProvideUserClient,
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
 	commonClient.NewLarkWebhookClient,

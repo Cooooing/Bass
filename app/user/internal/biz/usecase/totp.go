@@ -3,10 +3,12 @@ package usecase
 import (
 	"bytes"
 	"common/pkg/apperror"
+	"common/pkg/constant"
 	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"image/png"
+	"log/slog"
 	"time"
 	"user/internal/biz/base"
 	"user/internal/biz/model"
@@ -17,26 +19,32 @@ import (
 )
 
 type TotpUsecase struct {
+	logger          *slog.Logger
 	conf            *config.Bootstrap
 	totpSecretCache repo.TotpSecretCache
 	tx              base.Tx
 	totpRepo        repo.TotpRepo
 	outboxRepo      repo.OutboxEventRepo
+	outboxUsecase   *OutboxUsecase
 }
 
 func NewTotpUsecase(
+	logger *slog.Logger,
 	conf *config.Bootstrap,
 	totpSecretCache repo.TotpSecretCache,
 	tx base.Tx,
 	totpRepo repo.TotpRepo,
 	outboxRepo repo.OutboxEventRepo,
+	outboxUsecase *OutboxUsecase,
 ) (*TotpUsecase, error) {
 	return &TotpUsecase{
+		logger:          logger,
 		conf:            conf,
 		totpSecretCache: totpSecretCache,
 		tx:              tx,
 		totpRepo:        totpRepo,
 		outboxRepo:      outboxRepo,
+		outboxUsecase:   outboxUsecase,
 	}, nil
 }
 
@@ -148,11 +156,12 @@ func (u *TotpUsecase) Disable(ctx context.Context, req *DisableTotpReq) error {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
 	}
 
-	return u.tx(ctx, func(ctx context.Context) error {
+	var outboxEvent *model.OutboxEvent
+	err = u.tx(ctx, func(ctx context.Context) error {
 		if _, err := u.totpRepo.DisableByUserID(ctx, req.UserID); err != nil {
 			return err
 		}
-		err := u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		outboxEvent, err = u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_TOTP_DISABLE,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_TOTP_DISABLE,
@@ -165,6 +174,17 @@ func (u *TotpUsecase) Disable(ctx context.Context, req *DisableTotpReq) error {
 		})
 		return err
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, err := u.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			u.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
+	}
+	return nil
 }
 
 type ConfirmEnableTotpReq struct {
@@ -181,14 +201,15 @@ func (u *TotpUsecase) ConfirmEnable(ctx context.Context, req *ConfirmEnableTotpR
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
 	}
 
-	return u.tx(ctx, func(ctx context.Context) error {
+	var outboxEvent *model.OutboxEvent
+	err = u.tx(ctx, func(ctx context.Context) error {
 		if _, err = u.totpRepo.UpsertEnabledByUserID(ctx, &repo.TotpUpsertEnabledByUserIDReq{
 			UserID: req.UserID,
 			Secret: secret,
 		}); err != nil {
 			return err
 		}
-		err := u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		outboxEvent, err = u.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_TOTP_ENABLE,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_TOTP_ENABLE,
@@ -201,4 +222,15 @@ func (u *TotpUsecase) ConfirmEnable(ctx context.Context, req *ConfirmEnableTotpR
 		})
 		return err
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, err := u.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			u.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
+	}
+	return nil
 }

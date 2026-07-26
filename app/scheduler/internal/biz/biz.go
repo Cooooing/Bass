@@ -10,6 +10,7 @@ import (
 var BizProviderSet = wire.NewSet(
 	task.NewNoop,
 	task.NewUserUnbanAccounts,
+	task.NewUserOutboxPublishBatch,
 	ProvideTasks,
 	usecase.NewTaskUsecase,
 	usecase.NewDelayedTaskUsecase,
@@ -17,9 +18,13 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewDelayedTaskRunner,
 )
 
-func ProvideTasks(noop *task.Noop, userUnbanAccounts *task.UserUnbanAccounts) map[string]task.Task {
+func ProvideTasks(
+	noop *task.Noop,
+	userUnbanAccounts *task.UserUnbanAccounts,
+	userOutboxPublishBatch *task.UserOutboxPublishBatch,
+) map[string]task.Task {
 	tasks := map[string]task.Task{}
-	for _, item := range []task.Task{noop, userUnbanAccounts} {
+	for _, item := range []task.Task{noop, userUnbanAccounts, userOutboxPublishBatch} {
 		name := item.Name()
 		if name == "" {
 			panic("scheduler task name is empty")

@@ -33,6 +33,7 @@ type AuthUsecase struct {
 	prefsRepo         repo.PreferencesRepo
 	loginLogRepo      repo.LoginLogRepo
 	outboxRepo        repo.OutboxEventRepo
+	outboxUsecase     *OutboxUsecase
 	authCacheRepo     repo.AuthCacheRepo
 	emailOtpUsecase   *EmailOtpUsecase
 	totpRepo          repo.TotpRepo
@@ -52,6 +53,7 @@ func NewAuthUsecase(
 	prefsRepo repo.PreferencesRepo,
 	loginLogRepo repo.LoginLogRepo,
 	outboxRepo repo.OutboxEventRepo,
+	outboxUsecase *OutboxUsecase,
 	authCacheRepo repo.AuthCacheRepo,
 	emailOtpUsecase *EmailOtpUsecase,
 	totpRepo repo.TotpRepo,
@@ -72,6 +74,7 @@ func NewAuthUsecase(
 		prefsRepo:         prefsRepo,
 		loginLogRepo:      loginLogRepo,
 		outboxRepo:        outboxRepo,
+		outboxUsecase:     outboxUsecase,
 		authCacheRepo:     authCacheRepo,
 		emailOtpUsecase:   emailOtpUsecase,
 		totpRepo:          totpRepo,
@@ -141,7 +144,7 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, account *model
 	}, codeTTL); err != nil {
 		return nil, err
 	}
-	if err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+	outboxEvent, err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE,
@@ -153,13 +156,21 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, account *model
 				},
 			},
 		},
-	}); err != nil {
+	})
+	if err != nil {
 		_ = s.authCacheRepo.DeleteCode(ctx, &repo.VerificationCodeKeyReq{
 			Type:    enum.VerificationTypeEmail,
 			Account: email,
 		})
 		_ = s.authCacheRepo.DeleteRegisterDraft(ctx, enum.VerificationTypeEmail, email)
 		return nil, err
+	}
+	if outboxEvent != nil {
+		if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
 	}
 	return &StartEmailRegistrationResp{
 		Code: code,
@@ -194,7 +205,8 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEm
 	if draft == nil || draft.PasswordHash == "" || draft.Email == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED)
 	}
-	return s.tx(ctx, func(ctx context.Context) error {
+	var outboxEvent *model.OutboxEvent
+	err = s.tx(ctx, func(ctx context.Context) error {
 		created, err := s.accountRepo.Create(ctx, &model.Account{
 			Name:     draft.Name,
 			Nickname: draft.Nickname,
@@ -210,7 +222,7 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEm
 		if err := s.authCacheRepo.DeleteRegisterDraft(ctx, enum.VerificationTypeEmail, email); err != nil {
 			return err
 		}
-		return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_REGISTER,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_REGISTER,
@@ -221,7 +233,19 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEm
 				},
 			},
 		})
+		return err
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
+	}
+	return nil
 }
 
 type StartPhoneRegistrationResp struct {
@@ -473,7 +497,7 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 	}
 	audit.Status = enum.LoginStatusSuccess
 	audit.SessionID = tokenPair.SessionID
-	if err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+	outboxEvent, err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_LOGIN,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_LOGIN,
@@ -494,8 +518,16 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 				},
 			},
 		},
-	}); err != nil {
+	})
+	if err != nil {
 		return nil, err
+	}
+	if outboxEvent != nil {
+		if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
 	}
 	return &LoginResp{
 		TokenPair: *tokenPair,
@@ -617,7 +649,7 @@ func (s *AuthUsecase) Logout(ctx context.Context, accessToken string, realm comm
 	if err := s.authCacheRepo.DeleteSession(ctx, claims.UserID, claims.SessionID); err != nil {
 		return err
 	}
-	return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+	outboxEvent, err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 		Event: &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_USER_LOGOUT,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_LOGOUT,
@@ -631,6 +663,17 @@ func (s *AuthUsecase) Logout(ctx context.Context, accessToken string, realm comm
 			},
 		},
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
+	}
+	return nil
 }
 
 type ParseTokenResp struct {
@@ -704,7 +747,8 @@ func (s *AuthUsecase) CancelAccount(ctx context.Context, req *CancelAccountReq) 
 	if totpRow != nil && totpRow.Enable && (strings.TrimSpace(req.Code) == "" || !totp.Validate(req.Code, totpRow.Secret)) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
 	}
-	return s.tx(ctx, func(ctx context.Context) error {
+	var outboxEvent *model.OutboxEvent
+	err = s.tx(ctx, func(ctx context.Context) error {
 		if _, err := s.accountRepo.UpdateStatus(ctx, req.UserID, enum.AccountStatusCancelled); err != nil {
 			return err
 		}
@@ -714,7 +758,7 @@ func (s *AuthUsecase) CancelAccount(ctx context.Context, req *CancelAccountReq) 
 		if err := s.authCacheRepo.DeleteUserRbacPermissions(ctx, req.UserID); err != nil {
 			return err
 		}
-		return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_ACCOUNT_CANCELLED,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_CANCELLED,
@@ -725,7 +769,19 @@ func (s *AuthUsecase) CancelAccount(ctx context.Context, req *CancelAccountReq) 
 				},
 			},
 		})
+		return err
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
+	}
+	return nil
 }
 
 type BanAccountReq struct {
@@ -743,6 +799,7 @@ type BanAccountResp struct {
 
 func (s *AuthUsecase) BanAccount(ctx context.Context, req *BanAccountReq) (*BanAccountResp, error) {
 	var record *model.BanRecord
+	var outboxEvent *model.OutboxEvent
 	err := s.tx(ctx, func(ctx context.Context) error {
 		var err error
 		record, err = s.banRecordRepo.Create(ctx, &model.BanRecord{
@@ -776,7 +833,7 @@ func (s *AuthUsecase) BanAccount(ctx context.Context, req *BanAccountReq) (*BanA
 		if req.BannedUntil != nil {
 			payload.BannedUntilUnixSeconds = req.BannedUntil.Unix()
 		}
-		return s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_ACCOUNT_BANNED,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_ACCOUNT_BANNED,
@@ -785,9 +842,17 @@ func (s *AuthUsecase) BanAccount(ctx context.Context, req *BanAccountReq) (*BanA
 				},
 			},
 		})
+		return err
 	})
 	if err != nil {
 		return nil, err
+	}
+	if outboxEvent != nil {
+		if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
 	}
 	if req.BannedUntil != nil {
 		if err := s.delayedTaskClient.RegisterUnbanAccounts(ctx, req.UserID, record.ID, req.BannedUntil); err != nil {

@@ -8,6 +8,7 @@ import (
 
 var BizProviderSet = wire.NewSet(
 	usecase.NewTokenUsecase,
+	usecase.NewOutboxUsecase,
 	usecase.NewAccountUsecase,
 	usecase.NewAuthUsecase,
 	usecase.NewRbacUsecase,
@@ -18,6 +19,4 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewTotpUsecase,
 	usecase.NewEmailOtpUsecase,
 	usecase.NewSmsOtpUsecase,
-	usecase.NewOutboxPublisher,
-	usecase.NewOutboxDeadLetterScanner,
 )

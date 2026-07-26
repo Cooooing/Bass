@@ -1,8 +1,10 @@
 package usecase
 
 import (
+	"common/pkg/constant"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"log/slog"
 
 	"common/pkg/apperror"
 	commonenums "common/proto/gen/common/enums"
@@ -13,23 +15,29 @@ import (
 )
 
 type RelationUsecase struct {
-	tx           base.Tx
-	relationRepo repo.RelationRepo
-	accountRepo  repo.AccountRepo
-	outboxRepo   repo.OutboxEventRepo
+	logger        *slog.Logger
+	tx            base.Tx
+	relationRepo  repo.RelationRepo
+	accountRepo   repo.AccountRepo
+	outboxRepo    repo.OutboxEventRepo
+	outboxUsecase *OutboxUsecase
 }
 
 func NewRelationUsecase(
+	logger *slog.Logger,
 	tx base.Tx,
 	relationRepo repo.RelationRepo,
 	accountRepo repo.AccountRepo,
 	outboxRepo repo.OutboxEventRepo,
+	outboxUsecase *OutboxUsecase,
 ) (*RelationUsecase, error) {
 	return &RelationUsecase{
-		tx:           tx,
-		relationRepo: relationRepo,
-		accountRepo:  accountRepo,
-		outboxRepo:   outboxRepo,
+		logger:        logger,
+		tx:            tx,
+		relationRepo:  relationRepo,
+		accountRepo:   accountRepo,
+		outboxRepo:    outboxRepo,
+		outboxUsecase: outboxUsecase,
 	}, nil
 }
 
@@ -50,6 +58,7 @@ type FollowRelationReq struct {
 }
 
 func (d *RelationUsecase) Follow(ctx context.Context, req *FollowRelationReq) error {
+	var outboxEvent *model.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
@@ -88,7 +97,7 @@ func (d *RelationUsecase) Follow(ctx context.Context, req *FollowRelationReq) er
 		}); err != nil {
 			return err
 		}
-		err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_FOLLOW,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_FOLLOW,
@@ -105,6 +114,13 @@ func (d *RelationUsecase) Follow(ctx context.Context, req *FollowRelationReq) er
 	if err != nil {
 		return err
 	}
+	if outboxEvent != nil {
+		if _, err := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			d.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
+	}
 	return nil
 }
 
@@ -114,6 +130,7 @@ type UnfollowRelationReq struct {
 }
 
 func (d *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowRelationReq) error {
+	var outboxEvent *model.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
@@ -151,7 +168,7 @@ func (d *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowRelationReq
 		}); err != nil {
 			return err
 		}
-		err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_UNFOLLOW,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_UNFOLLOW,
@@ -168,6 +185,13 @@ func (d *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowRelationReq
 	if err != nil {
 		return err
 	}
+	if outboxEvent != nil {
+		if _, err := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			d.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
+	}
 	return nil
 }
 
@@ -177,6 +201,7 @@ type BlockRelationReq struct {
 }
 
 func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) error {
+	var outboxEvent *model.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
@@ -201,7 +226,7 @@ func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) erro
 		}); err != nil {
 			return err
 		}
-		err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_BLOCK,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_BLOCK,
@@ -218,6 +243,13 @@ func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) erro
 	if err != nil {
 		return err
 	}
+	if outboxEvent != nil {
+		if _, err := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			d.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
+	}
 	return nil
 }
 
@@ -227,6 +259,7 @@ type UnblockRelationReq struct {
 }
 
 func (d *RelationUsecase) Unblock(ctx context.Context, req *UnblockRelationReq) error {
+	var outboxEvent *model.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
@@ -250,7 +283,7 @@ func (d *RelationUsecase) Unblock(ctx context.Context, req *UnblockRelationReq) 
 		if deleted == 0 {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_NOT_FOUND)
 		}
-		err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
 			Event: &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_USER_UNBLOCK,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_UNBLOCK,
@@ -266,6 +299,13 @@ func (d *RelationUsecase) Unblock(ctx context.Context, req *UnblockRelationReq) 
 	})
 	if err != nil {
 		return err
+	}
+	if outboxEvent != nil {
+		if _, err := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+			ID: outboxEvent.ID,
+		}); err != nil {
+			d.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
 	}
 	return nil
 }

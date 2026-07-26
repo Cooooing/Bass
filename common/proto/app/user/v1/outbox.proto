@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+import "google/protobuf/duration.proto";
+
+option go_package = "common/proto/gen/user/v1;v1";
+
+// OutboxService 提供 user 本地 outbox 事件投递能力。
+service OutboxService {
+  rpc Publish(PublishOutboxEvent.Req) returns (PublishOutboxEvent.Resp) {} // 投递单条 outbox 事件。
+  rpc PublishBatch(PublishOutboxEvents.Req) returns (PublishOutboxEvents.Resp) {} // 批量投递可抢占的 outbox 事件。
+}
+
+message PublishOutboxEvent {
+  message Req {
+    int64 id = 1; // Outbox 事件 ID。
+    google.protobuf.Duration publish_timeout = 2; // publishing 状态超时后允许重新抢占的时间。
+    int32 max_retry = 3; // 最大投递重试次数。
+  }
+  message Resp {
+    bool published = 1; // 是否投递成功。
+    bool skipped = 2; // 是否因不可抢占被跳过。
+  }
+}
+
+message PublishOutboxEvents {
+  message Req {
+    int32 limit = 1; // 本批次最大投递数量。
+    google.protobuf.Duration publish_timeout = 2; // publishing 状态超时后允许重新抢占的时间。
+    int32 max_retry = 3; // 最大投递重试次数。
+  }
+  message Resp {
+    int32 claimed = 1; // 已抢占事件数量。
+    int32 published = 2; // 已投递事件数量。
+    int32 failed = 3; // 投递失败事件数量。
+    int32 skipped = 4; // 跳过事件数量。
+  }
+}

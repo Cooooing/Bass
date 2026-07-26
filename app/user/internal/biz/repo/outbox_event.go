@@ -14,12 +14,13 @@ type OutboxEventSave struct {
 }
 
 type OutboxEventRepo interface {
-	Save(ctx context.Context, req *OutboxEventSave) error
+	Save(ctx context.Context, req *OutboxEventSave) (*model.OutboxEvent, error)
 	Get(ctx context.Context, req *OutboxEventGetReq) (*model.OutboxEvent, error)
 	List(ctx context.Context, req *OutboxEventGetReq) ([]*model.OutboxEvent, error)
 	Map(ctx context.Context, req *OutboxEventGetReq) (map[int64]*model.OutboxEvent, error)
 	Count(ctx context.Context, req *OutboxEventGetReq) (int, error)
 	Page(ctx context.Context, req *OutboxEventPageReq) (*OutboxEventPageResp, error)
+	ClaimOneForPublish(ctx context.Context, req *OutboxEventClaimOneForPublishReq) (*model.OutboxEvent, error)
 	ClaimForPublish(ctx context.Context, req *OutboxEventClaimForPublishReq) ([]*model.OutboxEvent, error)
 	MarkPublished(ctx context.Context, req *OutboxEventMarkPublishedReq) error
 	MarkFailed(ctx context.Context, req *OutboxEventMarkFailedReq) error
@@ -42,6 +43,11 @@ type OutboxEventPageReq struct {
 type OutboxEventPageResp struct {
 	Rows []*model.OutboxEvent
 	Page PageResp
+}
+
+type OutboxEventClaimOneForPublishReq struct {
+	ID          int64
+	StaleBefore *time.Time
 }
 
 type OutboxEventClaimForPublishReq struct {

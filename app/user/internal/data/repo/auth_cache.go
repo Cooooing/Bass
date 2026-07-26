@@ -69,6 +69,9 @@ func (r *AuthCacheRepo) authRealmRbacPermissionsPattern(realm string) string {
 }
 
 func (r *AuthCacheRepo) SaveCode(ctx context.Context, code *model.VerificationCode, ttl time.Duration) error {
+	if code == nil || code.CreatedAt == nil || code.ExpiresAt == nil {
+		return errors.New("verification code time is required")
+	}
 	key := r.authCodeRedisKey(code.Type, code.Account)
 	pipe := r.redisClient.Client.TxPipeline()
 	pipe.HSet(
@@ -84,10 +87,10 @@ func (r *AuthCacheRepo) SaveCode(ctx context.Context, code *model.VerificationCo
 		strconv.FormatInt(int64(code.Attempts), 10),
 		"max_attempts",
 		strconv.FormatInt(int64(code.MaxAttempts), 10),
-		"created_at_unix",
-		strconv.FormatInt(code.CreatedAtUnix, 10),
-		"expires_at_unix",
-		strconv.FormatInt(code.ExpiresAtUnix, 10),
+		"created_at",
+		code.CreatedAt.Format(time.RFC3339Nano),
+		"expires_at",
+		code.ExpiresAt.Format(time.RFC3339Nano),
 	)
 	pipe.Expire(ctx, key, ttl)
 	_, err := pipe.Exec(ctx)
@@ -110,22 +113,22 @@ func (r *AuthCacheRepo) GetCode(ctx context.Context, codeType enum.VerificationT
 	if err != nil {
 		return nil, err
 	}
-	createdAtUnix, err := strconv.ParseInt(values["created_at_unix"], 10, 64)
+	createdAt, err := time.Parse(time.RFC3339Nano, values["created_at"])
 	if err != nil {
 		return nil, err
 	}
-	expiresAtUnix, err := strconv.ParseInt(values["expires_at_unix"], 10, 64)
+	expiresAt, err := time.Parse(time.RFC3339Nano, values["expires_at"])
 	if err != nil {
 		return nil, err
 	}
 	return &model.VerificationCode{
-		Type:          enum.VerificationType(values["type"]),
-		Account:       values["account"],
-		Code:          values["code"],
-		Attempts:      int32(attempts),
-		MaxAttempts:   int32(maxAttempts),
-		CreatedAtUnix: createdAtUnix,
-		ExpiresAtUnix: expiresAtUnix,
+		Type:        enum.VerificationType(values["type"]),
+		Account:     values["account"],
+		Code:        values["code"],
+		Attempts:    int32(attempts),
+		MaxAttempts: int32(maxAttempts),
+		CreatedAt:   new(createdAt),
+		ExpiresAt:   new(expiresAt),
 	}, nil
 }
 
@@ -165,8 +168,11 @@ func (r *AuthCacheRepo) DeleteRegisterDraft(ctx context.Context, draftType enum.
 }
 
 func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration) error {
+	if session == nil || session.CreatedAt == nil || session.LastSeenAt == nil || session.SessionExpiresAt == nil {
+		return errors.New("refresh session time is required")
+	}
 	key := r.authRefreshSessionRedisKey(session.SessionID)
-	expiresAt := time.Now().Add(ttl).Unix()
+	expiresAt := time.Now().Add(ttl)
 	pipe := r.redisClient.Client.TxPipeline()
 	pipe.HSet(
 		ctx,
@@ -177,12 +183,12 @@ func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshS
 		string(session.Realm),
 		"current_jti",
 		session.CurrentJTI,
-		"created_at_unix",
-		strconv.FormatInt(session.CreatedAtUnix, 10),
-		"last_seen_at_unix",
-		strconv.FormatInt(session.LastSeenAtUnix, 10),
-		"session_expires_at_unix",
-		strconv.FormatInt(session.SessionExpiresAtUnix, 10),
+		"created_at",
+		session.CreatedAt.Format(time.RFC3339Nano),
+		"last_seen_at",
+		session.LastSeenAt.Format(time.RFC3339Nano),
+		"session_expires_at",
+		session.SessionExpiresAt.Format(time.RFC3339Nano),
 		"client_type",
 		string(session.Client.ClientType),
 		"device_type",
@@ -204,7 +210,7 @@ func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshS
 	)
 	pipe.Expire(ctx, key, ttl)
 	pipe.ZAdd(ctx, r.authUserSessionsRedisKey(session.UserID), redis.Z{
-		Score:  float64(expiresAt),
+		Score:  float64(expiresAt.Unix()),
 		Member: session.SessionID,
 	})
 	_, err := pipe.Exec(ctx)
@@ -223,26 +229,26 @@ func (r *AuthCacheRepo) GetSession(ctx context.Context, sessionID string) (*mode
 	if err != nil {
 		return nil, err
 	}
-	createdAtUnix, err := strconv.ParseInt(values["created_at_unix"], 10, 64)
+	createdAt, err := time.Parse(time.RFC3339Nano, values["created_at"])
 	if err != nil {
 		return nil, err
 	}
-	lastSeenAtUnix, err := strconv.ParseInt(values["last_seen_at_unix"], 10, 64)
+	lastSeenAt, err := time.Parse(time.RFC3339Nano, values["last_seen_at"])
 	if err != nil {
 		return nil, err
 	}
-	sessionExpiresAtUnix, err := strconv.ParseInt(values["session_expires_at_unix"], 10, 64)
+	sessionExpiresAt, err := time.Parse(time.RFC3339Nano, values["session_expires_at"])
 	if err != nil {
 		return nil, err
 	}
 	return &model.RefreshSession{
-		SessionID:            sessionID,
-		UserID:               userID,
-		Realm:                commonenum.LoginRealm(values["realm"]),
-		CurrentJTI:           values["current_jti"],
-		CreatedAtUnix:        createdAtUnix,
-		LastSeenAtUnix:       lastSeenAtUnix,
-		SessionExpiresAtUnix: sessionExpiresAtUnix,
+		SessionID:        sessionID,
+		UserID:           userID,
+		Realm:            commonenum.LoginRealm(values["realm"]),
+		CurrentJTI:       values["current_jti"],
+		CreatedAt:        new(createdAt),
+		LastSeenAt:       new(lastSeenAt),
+		SessionExpiresAt: new(sessionExpiresAt),
 		Client: model.LoginContext{
 			ClientType:     enum.ClientType(values["client_type"]),
 			DeviceType:     enum.DeviceType(values["device_type"]),
@@ -258,20 +264,26 @@ func (r *AuthCacheRepo) GetSession(ctx context.Context, sessionID string) (*mode
 }
 
 func (r *AuthCacheRepo) TouchSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration) error {
+	if session == nil || session.LastSeenAt == nil {
+		return errors.New("refresh session last_seen_at is required")
+	}
 	key := r.authRefreshSessionRedisKey(session.SessionID)
-	expiresAt := time.Now().Add(ttl).Unix()
+	expiresAt := time.Now().Add(ttl)
 	pipe := r.redisClient.Client.TxPipeline()
-	pipe.HSet(ctx, key, "last_seen_at_unix", session.LastSeenAtUnix)
+	pipe.HSet(ctx, key, "last_seen_at", session.LastSeenAt.Format(time.RFC3339Nano))
 	pipe.Expire(ctx, key, ttl)
 	pipe.ZAdd(ctx, r.authUserSessionsRedisKey(session.UserID), redis.Z{
-		Score:  float64(expiresAt),
+		Score:  float64(expiresAt.Unix()),
 		Member: session.SessionID,
 	})
 	_, err := pipe.Exec(ctx)
 	return err
 }
 
-func (r *AuthCacheRepo) RotateSessionJTI(ctx context.Context, sessionID string, oldJTI string, newJTI string, lastSeenAtUnix int64, ttl time.Duration) (bool, error) {
+func (r *AuthCacheRepo) RotateSessionJTI(ctx context.Context, sessionID string, oldJTI string, newJTI string, lastSeenAt *time.Time, ttl time.Duration) (bool, error) {
+	if lastSeenAt == nil {
+		return false, errors.New("refresh session last_seen_at is required")
+	}
 	key := r.authRefreshSessionRedisKey(sessionID)
 	script := redis.NewScript(`
 local current = redis.call('HGET', KEYS[1], 'current_jti')
@@ -281,11 +293,11 @@ end
 if current ~= ARGV[1] then
   return -1
 end
-redis.call('HSET', KEYS[1], 'current_jti', ARGV[2], 'last_seen_at_unix', ARGV[3])
+redis.call('HSET', KEYS[1], 'current_jti', ARGV[2], 'last_seen_at', ARGV[3])
 redis.call('PEXPIRE', KEYS[1], ARGV[4])
 return 1
 `)
-	result, err := script.Run(ctx, r.redisClient.Client, []string{key}, oldJTI, newJTI, strconv.FormatInt(lastSeenAtUnix, 10), strconv.FormatInt(ttl.Milliseconds(), 10)).Int()
+	result, err := script.Run(ctx, r.redisClient.Client, []string{key}, oldJTI, newJTI, lastSeenAt.Format(time.RFC3339Nano), strconv.FormatInt(ttl.Milliseconds(), 10)).Int()
 	if err != nil {
 		return false, err
 	}

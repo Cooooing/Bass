@@ -12,7 +12,7 @@ type BanRecord struct {
 	OperatorRealm commonenum.LoginRealm
 	Reason        string
 	Remark        string
-	StartedAt     time.Time
+	StartedAt     *time.Time
 	BannedUntil   *time.Time
 	CreatedAt     *time.Time
 	UpdatedAt     *time.Time

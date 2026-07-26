@@ -15,6 +15,6 @@ type RbacRepo interface {
 	UnbindRolePermission(ctx context.Context, roleID int64, permissionID int64) error
 	GrantRole(ctx context.Context, userID int64, roleID int64, grantedBy int64, expiresAt *time.Time) error
 	RevokeRole(ctx context.Context, userID int64, roleID int64) error
-	HasPermission(ctx context.Context, userID int64, realm commonenum.LoginRealm, permissionCode string, now time.Time) (bool, error)
-	PermissionCodes(ctx context.Context, userID int64, realm commonenum.LoginRealm, now time.Time) ([]string, error)
+	HasPermission(ctx context.Context, userID int64, realm commonenum.LoginRealm, permissionCode string, now *time.Time) (bool, error)
+	PermissionCodes(ctx context.Context, userID int64, realm commonenum.LoginRealm, now *time.Time) ([]string, error)
 }

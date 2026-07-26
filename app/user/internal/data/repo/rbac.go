@@ -139,7 +139,7 @@ func (r *RbacRepo) RevokeRole(ctx context.Context, userID int64, roleID int64) e
 	return err
 }
 
-func (r *RbacRepo) HasPermission(ctx context.Context, userID int64, realm commonenum.LoginRealm, permissionCode string, now time.Time) (bool, error) {
+func (r *RbacRepo) HasPermission(ctx context.Context, userID int64, realm commonenum.LoginRealm, permissionCode string, now *time.Time) (bool, error) {
 	codes, err := r.PermissionCodes(ctx, userID, realm, now)
 	if err != nil {
 		return false, err
@@ -152,9 +152,12 @@ func (r *RbacRepo) HasPermission(ctx context.Context, userID int64, realm common
 	return false, nil
 }
 
-func (r *RbacRepo) PermissionCodes(ctx context.Context, userID int64, realm commonenum.LoginRealm, now time.Time) ([]string, error) {
+func (r *RbacRepo) PermissionCodes(ctx context.Context, userID int64, realm commonenum.LoginRealm, now *time.Time) ([]string, error) {
+	if now == nil {
+		now = new(time.Now())
+	}
 	client := r.getClient(ctx)
-	userRoles, err := client.RbacUserRole.Query().Where(rbacuserrole.UserID(userID), rbacuserrole.Or(rbacuserrole.ExpiresAtIsNil(), rbacuserrole.ExpiresAtGT(now))).All(ctx)
+	userRoles, err := client.RbacUserRole.Query().Where(rbacuserrole.UserID(userID), rbacuserrole.Or(rbacuserrole.ExpiresAtIsNil(), rbacuserrole.ExpiresAtGT(*now))).All(ctx)
 	if err != nil || len(userRoles) == 0 {
 		return nil, err
 	}

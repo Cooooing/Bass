@@ -186,8 +186,12 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 				MBTI:          int32(basic.GetMbti()),
 				FollowCount:   basic.FollowCount,
 				FollowerCount: basic.FollowerCount,
-				CreatedAt:     new(basic.GetCreatedAt().AsTime()),
-				UpdatedAt:     new(basic.GetUpdatedAt().AsTime()),
+			}
+			if basic.CreatedAt != nil {
+				account.Profile.CreatedAt = new(basic.CreatedAt.AsTime())
+			}
+			if basic.UpdatedAt != nil {
+				account.Profile.UpdatedAt = new(basic.UpdatedAt.AsTime())
 			}
 		}
 		if contact := reply.GetAccount().GetContact(); contact != nil {
@@ -199,17 +203,25 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 		}
 	}
 
+	token := repo.TokenResp{
+		AccessToken:  reply.GetAccessToken(),
+		RefreshToken: reply.GetRefreshToken(),
+	}
+	if reply.AccessTokenExpiresAt != nil {
+		token.AccessTokenExpiresAt = new(reply.AccessTokenExpiresAt.AsTime())
+	}
+	if reply.RefreshTokenExpiresAt != nil {
+		token.RefreshTokenExpiresAt = new(reply.RefreshTokenExpiresAt.AsTime())
+	}
+	if reply.SessionExpiresAt != nil {
+		token.SessionExpiresAt = new(reply.SessionExpiresAt.AsTime())
+	}
 	return &repo.LoginResp{
-		Token: repo.TokenResp{
-			AccessToken:           reply.GetAccessToken(),
-			RefreshToken:          reply.GetRefreshToken(),
-			AccessTokenExpiresAt:  reply.GetAccessTokenExpiresAt().AsTime(),
-			RefreshTokenExpiresAt: reply.GetRefreshTokenExpiresAt().AsTime(),
-			SessionExpiresAt:      reply.GetSessionExpiresAt().AsTime(),
-		},
+		Token:   token,
 		Account: account,
 	}, nil
 }
+
 func (r *AuthRepo) RefreshToken(ctx context.Context, refreshToken string) (*repo.TokenResp, error) {
 	reply, err := r.userClient.Auth.RefreshToken(ctx, &userv1.RefreshToken_Req{
 		RefreshToken: refreshToken,
@@ -218,13 +230,20 @@ func (r *AuthRepo) RefreshToken(ctx context.Context, refreshToken string) (*repo
 	if err != nil {
 		return nil, err
 	}
-	return &repo.TokenResp{
-		AccessToken:           reply.GetAccessToken(),
-		RefreshToken:          reply.GetRefreshToken(),
-		AccessTokenExpiresAt:  reply.GetAccessTokenExpiresAt().AsTime(),
-		RefreshTokenExpiresAt: reply.GetRefreshTokenExpiresAt().AsTime(),
-		SessionExpiresAt:      reply.GetSessionExpiresAt().AsTime(),
-	}, nil
+	token := &repo.TokenResp{
+		AccessToken:  reply.GetAccessToken(),
+		RefreshToken: reply.GetRefreshToken(),
+	}
+	if reply.AccessTokenExpiresAt != nil {
+		token.AccessTokenExpiresAt = new(reply.AccessTokenExpiresAt.AsTime())
+	}
+	if reply.RefreshTokenExpiresAt != nil {
+		token.RefreshTokenExpiresAt = new(reply.RefreshTokenExpiresAt.AsTime())
+	}
+	if reply.SessionExpiresAt != nil {
+		token.SessionExpiresAt = new(reply.SessionExpiresAt.AsTime())
+	}
+	return token, nil
 }
 
 func (r *AuthRepo) Logout(ctx context.Context, accessToken string) error {

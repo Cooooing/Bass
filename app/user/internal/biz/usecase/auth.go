@@ -145,22 +145,22 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, account *model
 	}
 	code := str.RandStr(s.sf, 6, true, true, true, false)
 	if err := s.authCacheRepo.SaveRegisterDraft(ctx, enum.VerificationTypeEmail, email, &model.RegisterDraft{
-		Name:          account.Name,
-		Nickname:      account.Nickname,
-		PasswordHash:  passwordHash,
-		Email:         new(email),
-		CreatedAtUnix: now.Unix(),
-		ExpiresAtUnix: now.Add(draftTTL).Unix(),
+		Name:         account.Name,
+		Nickname:     account.Nickname,
+		PasswordHash: passwordHash,
+		Email:        new(email),
+		CreatedAt:    new(now),
+		ExpiresAt:    new(now.Add(draftTTL)),
 	}, draftTTL); err != nil {
 		return nil, err
 	}
 	if err := s.authCacheRepo.SaveCode(ctx, &model.VerificationCode{
-		Type:          enum.VerificationTypeEmail,
-		Account:       email,
-		Code:          code,
-		MaxAttempts:   maxAttempts,
-		CreatedAtUnix: now.Unix(),
-		ExpiresAtUnix: now.Add(codeTTL).Unix(),
+		Type:        enum.VerificationTypeEmail,
+		Account:     email,
+		Code:        code,
+		MaxAttempts: maxAttempts,
+		CreatedAt:   new(now),
+		ExpiresAt:   new(now.Add(codeTTL)),
 	}, codeTTL); err != nil {
 		return nil, err
 	}
@@ -197,7 +197,7 @@ func (s *AuthUsecase) CheckEmailRegistrationCode(ctx context.Context, req *Check
 	if err != nil {
 		return false, err
 	}
-	if row == nil || row.ExpiresAtUnix <= time.Now().Unix() || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
+	if row == nil || row.ExpiresAt == nil || !row.ExpiresAt.After(time.Now()) || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
 		return false, nil
 	}
 	return true, nil
@@ -214,7 +214,7 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEm
 	if err != nil {
 		return err
 	}
-	if row == nil || row.ExpiresAtUnix <= time.Now().Unix() || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
+	if row == nil || row.ExpiresAt == nil || !row.ExpiresAt.After(time.Now()) || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
 		if row != nil && row.Attempts < row.MaxAttempts {
 			_, _ = s.authCacheRepo.IncrCodeAttempts(ctx, enum.VerificationTypeEmail, email)
 		}
@@ -313,12 +313,12 @@ func (s *AuthUsecase) StartEmailLogin(ctx context.Context, email string) (*Start
 	}
 	code := str.RandStr(s.sf, 6, true, true, true, false)
 	if err := s.authCacheRepo.SaveCode(ctx, &model.VerificationCode{
-		Type:          enum.VerificationTypeEmail,
-		Account:       email,
-		Code:          code,
-		MaxAttempts:   maxAttempts,
-		CreatedAtUnix: now.Unix(),
-		ExpiresAtUnix: now.Add(codeTTL).Unix(),
+		Type:        enum.VerificationTypeEmail,
+		Account:     email,
+		Code:        code,
+		MaxAttempts: maxAttempts,
+		CreatedAt:   new(now),
+		ExpiresAt:   new(now.Add(codeTTL)),
 	}, codeTTL); err != nil {
 		return nil, err
 	}
@@ -473,7 +473,7 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		if err != nil {
 			return nil, err
 		}
-		if row == nil || row.ExpiresAtUnix <= time.Now().Unix() || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
+		if row == nil || row.ExpiresAt == nil || !row.ExpiresAt.After(time.Now()) || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
 			if row != nil && row.Attempts < row.MaxAttempts {
 				_, _ = s.authCacheRepo.IncrCodeAttempts(ctx, enum.VerificationTypeEmail, email)
 			}
@@ -554,14 +554,14 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		return nil, err
 	}
 	session := &model.RefreshSession{
-		SessionID:            sid,
-		UserID:               account.ID,
-		Realm:                req.Realm,
-		CurrentJTI:           jti,
-		CreatedAtUnix:        now.Unix(),
-		LastSeenAtUnix:       now.Unix(),
-		SessionExpiresAtUnix: sessionExpiresAt.Unix(),
-		Client:               *client,
+		SessionID:        sid,
+		UserID:           account.ID,
+		Realm:            req.Realm,
+		CurrentJTI:       jti,
+		CreatedAt:        new(now),
+		LastSeenAt:       new(now),
+		SessionExpiresAt: new(sessionExpiresAt),
+		Client:           *client,
 	}
 	sessionRedisTTL := sessionExpiresAt.Sub(now)
 	if sessionRedisTTL <= 0 {
@@ -575,15 +575,15 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		return nil, err
 	}
 	refreshTokenExpiresAt := refreshExpiresAt
-	if sessionExpiresAt.Before(refreshTokenExpiresAt) {
-		refreshTokenExpiresAt = sessionExpiresAt
+	if refreshTokenExpiresAt == nil || sessionExpiresAt.Before(*refreshTokenExpiresAt) {
+		refreshTokenExpiresAt = new(sessionExpiresAt)
 	}
 	tokenPair := &model.TokenPair{
 		AccessToken:           accessToken,
 		RefreshToken:          refreshToken,
 		AccessTokenExpiresAt:  accessExpiresAt,
 		RefreshTokenExpiresAt: refreshTokenExpiresAt,
-		SessionExpiresAt:      sessionExpiresAt,
+		SessionExpiresAt:      new(sessionExpiresAt),
 		SessionID:             sid,
 	}
 	audit.Status = enum.LoginStatusSuccess
@@ -627,7 +627,7 @@ func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, rea
 		return nil, err
 	}
 	now := time.Now()
-	if session == nil || session.UserID != claims.UserID || session.Realm != realm || now.Unix() >= session.SessionExpiresAtUnix {
+	if session == nil || session.UserID != claims.UserID || session.Realm != realm || session.SessionExpiresAt == nil || !session.SessionExpiresAt.After(now) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
 	account, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
@@ -648,14 +648,14 @@ func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, rea
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
 	newJTI := uuid.NewString()
-	sessionRedisTTL := time.Unix(session.SessionExpiresAtUnix, 0).Sub(now)
+	sessionRedisTTL := session.SessionExpiresAt.Sub(now)
 	if sessionRedisTTL <= 0 {
 		sessionRedisTTL = time.Second
 	}
 	if refreshTokenTTL := s.tokenUsecase.RefreshTokenTTL(); refreshTokenTTL < sessionRedisTTL {
 		sessionRedisTTL = refreshTokenTTL
 	}
-	rotated, err := s.authCacheRepo.RotateSessionJTI(ctx, claims.SessionID, claims.JTI, newJTI, now.Unix(), sessionRedisTTL)
+	rotated, err := s.authCacheRepo.RotateSessionJTI(ctx, claims.SessionID, claims.JTI, newJTI, new(now), sessionRedisTTL)
 	if err != nil {
 		return nil, err
 	}
@@ -664,7 +664,7 @@ func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, rea
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
 	session.CurrentJTI = newJTI
-	session.LastSeenAtUnix = now.Unix()
+	session.LastSeenAt = new(now)
 	if err := s.authCacheRepo.TouchSession(ctx, session, sessionRedisTTL); err != nil {
 		return nil, err
 	}
@@ -709,9 +709,9 @@ func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, rea
 	if err != nil {
 		return nil, err
 	}
-	sessionExpiresAt := time.Unix(session.SessionExpiresAtUnix, 0)
+	sessionExpiresAt := session.SessionExpiresAt
 	refreshTokenExpiresAt := refreshExpiresAt
-	if sessionExpiresAt.Before(refreshTokenExpiresAt) {
+	if refreshTokenExpiresAt == nil || sessionExpiresAt.Before(*refreshTokenExpiresAt) {
 		refreshTokenExpiresAt = sessionExpiresAt
 	}
 	return &model.TokenPair{
@@ -767,11 +767,11 @@ func (s *AuthUsecase) ParseToken(ctx context.Context, accessToken string, realm 
 		return nil, err
 	}
 	now := time.Now()
-	if session == nil || session.UserID != claims.UserID || session.Realm != realm || now.Unix() >= session.SessionExpiresAtUnix {
+	if session == nil || session.UserID != claims.UserID || session.Realm != realm || session.SessionExpiresAt == nil || !session.SessionExpiresAt.After(now) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
-	session.LastSeenAtUnix = now.Unix()
-	sessionRedisTTL := time.Unix(session.SessionExpiresAtUnix, 0).Sub(now)
+	session.LastSeenAt = new(now)
+	sessionRedisTTL := session.SessionExpiresAt.Sub(now)
 	if sessionRedisTTL <= 0 {
 		sessionRedisTTL = time.Second
 	}
@@ -866,7 +866,7 @@ func (s *AuthUsecase) BanAccount(ctx context.Context, req *BanAccountReq) (*BanA
 			OperatorRealm: req.OperatorRealm,
 			Reason:        strings.TrimSpace(req.Reason),
 			Remark:        req.Remark,
-			StartedAt:     time.Now(),
+			StartedAt:     new(time.Now()),
 			BannedUntil:   req.BannedUntil,
 		})
 		if err != nil {
@@ -905,7 +905,7 @@ func (s *AuthUsecase) BanAccount(ctx context.Context, req *BanAccountReq) (*BanA
 		return nil, err
 	}
 	if req.BannedUntil != nil {
-		if err := s.delayedTaskClient.RegisterUnbanAccounts(ctx, req.UserID, record.ID, *req.BannedUntil); err != nil {
+		if err := s.delayedTaskClient.RegisterUnbanAccounts(ctx, req.UserID, record.ID, req.BannedUntil); err != nil {
 			return nil, err
 		}
 	}

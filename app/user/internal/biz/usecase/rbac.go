@@ -110,7 +110,7 @@ func (u *RbacUsecase) CheckPermission(ctx context.Context, userID int64, realm c
 	if permissions, ok, err := u.authCacheRepo.GetRbacPermissions(ctx, string(realm), userID); err == nil && ok {
 		return lo.Contains(permissions, code), nil
 	}
-	permissions, err := u.rbacRepo.PermissionCodes(ctx, userID, realm, time.Now())
+	permissions, err := u.rbacRepo.PermissionCodes(ctx, userID, realm, new(time.Now()))
 	if err != nil {
 		return false, err
 	}

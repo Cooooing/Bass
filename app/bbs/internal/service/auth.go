@@ -180,14 +180,21 @@ func (s *AuthService) Login(ctx context.Context, req *bbsuserv1.Login_Req) (*bbs
 			}
 		}
 	}
-	return &bbsuserv1.Login_Resp{
-		AccessToken:           resp.AccessToken,
-		RefreshToken:          resp.RefreshToken,
-		AccessTokenExpiresAt:  timestamppb.New(resp.AccessTokenExpiresAt),
-		RefreshTokenExpiresAt: timestamppb.New(resp.RefreshTokenExpiresAt),
-		SessionExpiresAt:      timestamppb.New(resp.SessionExpiresAt),
-		Account:               account,
-	}, nil
+	reply := &bbsuserv1.Login_Resp{
+		AccessToken:  resp.AccessToken,
+		RefreshToken: resp.RefreshToken,
+		Account:      account,
+	}
+	if resp.AccessTokenExpiresAt != nil {
+		reply.AccessTokenExpiresAt = timestamppb.New(*resp.AccessTokenExpiresAt)
+	}
+	if resp.RefreshTokenExpiresAt != nil {
+		reply.RefreshTokenExpiresAt = timestamppb.New(*resp.RefreshTokenExpiresAt)
+	}
+	if resp.SessionExpiresAt != nil {
+		reply.SessionExpiresAt = timestamppb.New(*resp.SessionExpiresAt)
+	}
+	return reply, nil
 }
 
 func (s *AuthService) RefreshToken(ctx context.Context, req *bbsuserv1.RefreshToken_Req) (*bbsuserv1.RefreshToken_Resp, error) {
@@ -199,13 +206,20 @@ func (s *AuthService) RefreshToken(ctx context.Context, req *bbsuserv1.RefreshTo
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.RefreshToken_Resp{
-		AccessToken:           resp.AccessToken,
-		RefreshToken:          resp.RefreshToken,
-		AccessTokenExpiresAt:  timestamppb.New(resp.AccessTokenExpiresAt),
-		RefreshTokenExpiresAt: timestamppb.New(resp.RefreshTokenExpiresAt),
-		SessionExpiresAt:      timestamppb.New(resp.SessionExpiresAt),
-	}, nil
+	reply := &bbsuserv1.RefreshToken_Resp{
+		AccessToken:  resp.AccessToken,
+		RefreshToken: resp.RefreshToken,
+	}
+	if resp.AccessTokenExpiresAt != nil {
+		reply.AccessTokenExpiresAt = timestamppb.New(*resp.AccessTokenExpiresAt)
+	}
+	if resp.RefreshTokenExpiresAt != nil {
+		reply.RefreshTokenExpiresAt = timestamppb.New(*resp.RefreshTokenExpiresAt)
+	}
+	if resp.SessionExpiresAt != nil {
+		reply.SessionExpiresAt = timestamppb.New(*resp.SessionExpiresAt)
+	}
+	return reply, nil
 }
 
 func (s *AuthService) Logout(ctx context.Context, req *bbsuserv1.Logout_Req) (*bbsuserv1.Logout_Resp, error) {

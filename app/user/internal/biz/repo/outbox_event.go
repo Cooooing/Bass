@@ -46,12 +46,12 @@ type OutboxEventPageResp struct {
 
 type OutboxEventClaimForPublishReq struct {
 	Limit       int
-	StaleBefore time.Time
+	StaleBefore *time.Time
 }
 
 type OutboxEventMarkPublishedReq struct {
 	ID          int64
-	PublishedAt time.Time
+	PublishedAt *time.Time
 }
 
 type OutboxEventMarkFailedReq struct {

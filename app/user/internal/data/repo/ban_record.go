@@ -1,14 +1,15 @@
 package repo
 
 import (
-	commonenum "common/pkg/enum"
 	"context"
+	"errors"
+
+	commonenum "common/pkg/enum"
+	utilent "common/pkg/util/ent"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/gen"
 	"user/internal/data/gen/banrecord"
-
-	utilent "common/pkg/util/ent"
 )
 
 var _ repo.BanRecordRepo = (*BanRecordRepo)(nil)
@@ -33,13 +34,16 @@ func (r *BanRecordRepo) getClient(ctx context.Context) *gen.Client {
 }
 
 func (r *BanRecordRepo) Create(ctx context.Context, record *model.BanRecord) (*model.BanRecord, error) {
+	if record == nil || record.StartedAt == nil {
+		return nil, errors.New("ban record started_at is required")
+	}
 	create := r.getClient(ctx).BanRecord.Create().
 		SetUserID(record.UserID).
 		SetOperatorID(record.OperatorID).
 		SetOperatorRealm(banrecord.OperatorRealm(record.OperatorRealm)).
 		SetReason(record.Reason).
 		SetRemark(record.Remark).
-		SetStartedAt(record.StartedAt).
+		SetStartedAt(*record.StartedAt).
 		SetNillableBannedUntil(record.BannedUntil)
 	row, err := create.Save(ctx)
 	if err != nil {
@@ -81,7 +85,7 @@ func (r *BanRecordRepo) banRecord(row *gen.BanRecord) *model.BanRecord {
 		OperatorRealm: commonenum.LoginRealm(row.OperatorRealm),
 		Reason:        row.Reason,
 		Remark:        row.Remark,
-		StartedAt:     row.StartedAt,
+		StartedAt:     new(row.StartedAt),
 		BannedUntil:   row.BannedUntil,
 		CreatedAt:     row.CreatedAt,
 		UpdatedAt:     row.UpdatedAt,

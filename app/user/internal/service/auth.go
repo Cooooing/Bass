@@ -209,14 +209,21 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 			},
 		}
 	}
-	return &v1.Login_Resp{
-		AccessToken:           res.TokenPair.AccessToken,
-		RefreshToken:          res.TokenPair.RefreshToken,
-		AccessTokenExpiresAt:  timestamppb.New(res.TokenPair.AccessTokenExpiresAt),
-		RefreshTokenExpiresAt: timestamppb.New(res.TokenPair.RefreshTokenExpiresAt),
-		SessionExpiresAt:      timestamppb.New(res.TokenPair.SessionExpiresAt),
-		Account:               account,
-	}, nil
+	reply := &v1.Login_Resp{
+		AccessToken:  res.TokenPair.AccessToken,
+		RefreshToken: res.TokenPair.RefreshToken,
+		Account:      account,
+	}
+	if res.TokenPair.AccessTokenExpiresAt != nil {
+		reply.AccessTokenExpiresAt = timestamppb.New(*res.TokenPair.AccessTokenExpiresAt)
+	}
+	if res.TokenPair.RefreshTokenExpiresAt != nil {
+		reply.RefreshTokenExpiresAt = timestamppb.New(*res.TokenPair.RefreshTokenExpiresAt)
+	}
+	if res.TokenPair.SessionExpiresAt != nil {
+		reply.SessionExpiresAt = timestamppb.New(*res.TokenPair.SessionExpiresAt)
+	}
+	return reply, nil
 }
 
 func (s *AuthService) RefreshToken(ctx context.Context, req *v1.RefreshToken_Req) (*v1.RefreshToken_Resp, error) {
@@ -228,13 +235,20 @@ func (s *AuthService) RefreshToken(ctx context.Context, req *v1.RefreshToken_Req
 	if err != nil {
 		return nil, err
 	}
-	return &v1.RefreshToken_Resp{
-		AccessToken:           res.AccessToken,
-		RefreshToken:          res.RefreshToken,
-		AccessTokenExpiresAt:  timestamppb.New(res.AccessTokenExpiresAt),
-		RefreshTokenExpiresAt: timestamppb.New(res.RefreshTokenExpiresAt),
-		SessionExpiresAt:      timestamppb.New(res.SessionExpiresAt),
-	}, nil
+	reply := &v1.RefreshToken_Resp{
+		AccessToken:  res.AccessToken,
+		RefreshToken: res.RefreshToken,
+	}
+	if res.AccessTokenExpiresAt != nil {
+		reply.AccessTokenExpiresAt = timestamppb.New(*res.AccessTokenExpiresAt)
+	}
+	if res.RefreshTokenExpiresAt != nil {
+		reply.RefreshTokenExpiresAt = timestamppb.New(*res.RefreshTokenExpiresAt)
+	}
+	if res.SessionExpiresAt != nil {
+		reply.SessionExpiresAt = timestamppb.New(*res.SessionExpiresAt)
+	}
+	return reply, nil
 }
 
 func (s *AuthService) Logout(ctx context.Context, req *v1.Logout_Req) (*v1.Logout_Resp, error) {

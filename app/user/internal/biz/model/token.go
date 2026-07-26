@@ -24,21 +24,21 @@ type TokenVerityCodeAccount struct {
 }
 
 type RefreshSession struct {
-	SessionID            string
-	UserID               int64
-	Realm                commonenum.LoginRealm
-	CurrentJTI           string
-	CreatedAtUnix        int64
-	LastSeenAtUnix       int64
-	SessionExpiresAtUnix int64
-	Client               LoginContext
+	SessionID        string
+	UserID           int64
+	Realm            commonenum.LoginRealm
+	CurrentJTI       string
+	CreatedAt        *time.Time
+	LastSeenAt       *time.Time
+	SessionExpiresAt *time.Time
+	Client           LoginContext
 }
 
 type TokenPair struct {
 	AccessToken           string
 	RefreshToken          string
-	AccessTokenExpiresAt  time.Time
-	RefreshTokenExpiresAt time.Time
-	SessionExpiresAt      time.Time
+	AccessTokenExpiresAt  *time.Time
+	RefreshTokenExpiresAt *time.Time
+	SessionExpiresAt      *time.Time
 	SessionID             string
 }

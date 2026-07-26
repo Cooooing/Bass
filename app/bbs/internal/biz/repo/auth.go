@@ -56,9 +56,9 @@ type LoginReq struct {
 type TokenResp struct {
 	AccessToken           string
 	RefreshToken          string
-	AccessTokenExpiresAt  time.Time
-	RefreshTokenExpiresAt time.Time
-	SessionExpiresAt      time.Time
+	AccessTokenExpiresAt  *time.Time
+	RefreshTokenExpiresAt *time.Time
+	SessionExpiresAt      *time.Time
 }
 
 type LoginResp struct {

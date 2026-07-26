@@ -20,7 +20,7 @@ type AuthCacheRepo interface {
 	SaveSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration) error
 	GetSession(ctx context.Context, sessionID string) (*model.RefreshSession, error)
 	TouchSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration) error
-	RotateSessionJTI(ctx context.Context, sessionID string, oldJTI string, newJTI string, lastSeenAtUnix int64, ttl time.Duration) (bool, error)
+	RotateSessionJTI(ctx context.Context, sessionID string, oldJTI string, newJTI string, lastSeenAt *time.Time, ttl time.Duration) (bool, error)
 	DeleteSession(ctx context.Context, userID int64, sessionID string) error
 	DeleteUserSessions(ctx context.Context, userID int64) error
 

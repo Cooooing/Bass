@@ -104,7 +104,7 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 	err = p.tx(ctx, func(ctx context.Context) error {
 		claimed, err := p.outboxRepo.ClaimForPublish(ctx, &repo.OutboxEventClaimForPublishReq{
 			Limit:       p.publishLimit(),
-			StaleBefore: time.Now().Add(-p.publishTimeout()),
+			StaleBefore: new(time.Now().Add(-p.publishTimeout())),
 		})
 		if err != nil {
 			return err
@@ -145,7 +145,7 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 		}
 		if err = p.outboxRepo.MarkPublished(ctx, &repo.OutboxEventMarkPublishedReq{
 			ID:          event.ID,
-			PublishedAt: time.Now(),
+			PublishedAt: new(time.Now()),
 		}); err != nil {
 			if ctx.Err() != nil {
 				return published, ctx.Err()

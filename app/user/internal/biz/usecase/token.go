@@ -38,7 +38,7 @@ type GenerateAccessTokenReq struct {
 	Timezone  string
 }
 
-func (u *TokenUsecase) GenerateAccess(req *GenerateAccessTokenReq) (string, time.Time, error) {
+func (u *TokenUsecase) GenerateAccess(req *GenerateAccessTokenReq) (string, *time.Time, error) {
 	ttl := u.AccessTokenTTL()
 	expiresAt := time.Now().Add(ttl)
 	token, err := u.TokenGen.Generate(model.Token{
@@ -51,7 +51,7 @@ func (u *TokenUsecase) GenerateAccess(req *GenerateAccessTokenReq) (string, time
 		Language:  req.Language,
 		Timezone:  req.Timezone,
 	}, ttl)
-	return token, expiresAt, err
+	return token, new(expiresAt), err
 }
 
 type GenerateRefreshTokenReq struct {
@@ -61,7 +61,7 @@ type GenerateRefreshTokenReq struct {
 	JTI       string
 }
 
-func (u *TokenUsecase) GenerateRefresh(req *GenerateRefreshTokenReq) (string, time.Time, error) {
+func (u *TokenUsecase) GenerateRefresh(req *GenerateRefreshTokenReq) (string, *time.Time, error) {
 	ttl := u.RefreshTokenTTL()
 	expiresAt := time.Now().Add(ttl)
 	token, err := u.TokenGen.Generate(model.Token{
@@ -71,7 +71,7 @@ func (u *TokenUsecase) GenerateRefresh(req *GenerateRefreshTokenReq) (string, ti
 		Realm:     req.Realm,
 		JTI:       req.JTI,
 	}, ttl)
-	return token, expiresAt, err
+	return token, new(expiresAt), err
 }
 
 func (u *TokenUsecase) Parse(token string) (model.Token, error) {

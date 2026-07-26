@@ -123,9 +123,9 @@ type LoginReq struct {
 type LoginResp struct {
 	AccessToken           string
 	RefreshToken          string
-	AccessTokenExpiresAt  time.Time
-	RefreshTokenExpiresAt time.Time
-	SessionExpiresAt      time.Time
+	AccessTokenExpiresAt  *time.Time
+	RefreshTokenExpiresAt *time.Time
+	SessionExpiresAt      *time.Time
 	Account               *model.Account
 }
 
@@ -181,9 +181,9 @@ func (u *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 type RefreshTokenResp struct {
 	AccessToken           string
 	RefreshToken          string
-	AccessTokenExpiresAt  time.Time
-	RefreshTokenExpiresAt time.Time
-	SessionExpiresAt      time.Time
+	AccessTokenExpiresAt  *time.Time
+	RefreshTokenExpiresAt *time.Time
+	SessionExpiresAt      *time.Time
 }
 
 func (u *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string) (*RefreshTokenResp, error) {

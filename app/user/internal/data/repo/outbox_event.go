@@ -100,6 +100,9 @@ func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventPageReq
 }
 
 func (r *OutboxEventRepo) ClaimForPublish(ctx context.Context, req *repo.OutboxEventClaimForPublishReq) ([]*model.OutboxEvent, error) {
+	if req == nil || req.StaleBefore == nil {
+		return nil, errors.New("outbox event stale_before is required")
+	}
 	rows, err := r.claimForPublish(ctx, req.Limit, req.StaleBefore)
 	if err != nil {
 		return nil, err
@@ -108,6 +111,9 @@ func (r *OutboxEventRepo) ClaimForPublish(ctx context.Context, req *repo.OutboxE
 }
 
 func (r *OutboxEventRepo) MarkPublished(ctx context.Context, req *repo.OutboxEventMarkPublishedReq) error {
+	if req == nil || req.PublishedAt == nil {
+		return errors.New("outbox event published_at is required")
+	}
 	return r.markPublished(ctx, req.ID, req.PublishedAt)
 }
 
@@ -286,7 +292,7 @@ func (r *OutboxEventRepo) page(ctx context.Context, page *common.PageReq, req *r
 	}, nil
 }
 
-func (r *OutboxEventRepo) claimForPublish(ctx context.Context, limit int, staleBefore time.Time) ([]*model.OutboxEvent, error) {
+func (r *OutboxEventRepo) claimForPublish(ctx context.Context, limit int, staleBefore *time.Time) ([]*model.OutboxEvent, error) {
 	var result []*model.OutboxEvent
 	err := r.withTxClient(ctx, func(c *gen.Client) error {
 		events, err := c.OutboxEvent.Query().
@@ -298,7 +304,7 @@ func (r *OutboxEventRepo) claimForPublish(ctx context.Context, limit int, staleB
 					),
 					outboxevent.And(
 						outboxevent.StatusEQ(outboxevent.Status(commonenum.OutboxEventStatusPublishing)),
-						outboxevent.UpdatedAtLT(staleBefore),
+						outboxevent.UpdatedAtLT(*staleBefore),
 					),
 				),
 				func(s *sql.Selector) {
@@ -346,11 +352,11 @@ func (r *OutboxEventRepo) claimForPublish(ctx context.Context, limit int, staleB
 	return result, nil
 }
 
-func (r *OutboxEventRepo) markPublished(ctx context.Context, id int64, publishedAt time.Time) error {
+func (r *OutboxEventRepo) markPublished(ctx context.Context, id int64, publishedAt *time.Time) error {
 	return r.withTxClient(ctx, func(c *gen.Client) error {
 		return c.OutboxEvent.UpdateOneID(id).
 			SetStatus(outboxevent.Status(commonenum.OutboxEventStatusPublished)).
-			SetPublishedAt(publishedAt).
+			SetPublishedAt(*publishedAt).
 			ClearLastError().
 			Exec(ctx)
 	})

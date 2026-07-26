@@ -6,7 +6,6 @@ import (
 	"github.com/google/wire"
 )
 
-// BizProviderSet 是 biz 层依赖集合。
 var BizProviderSet = wire.NewSet(
 	usecase.NewAuthUsecase,
 	usecase.NewAccountUsecase,
@@ -14,7 +13,7 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewPrivacySettingUsecase,
 	usecase.NewLocationUsecase,
 	usecase.NewRelationUsecase,
-	usecase.NewTotpUsecase,
+	usecase.NewOtpUsecase,
 	usecase.NewContentArticleUsecase,
 	usecase.NewContentPostscriptUsecase,
 	usecase.NewContentCommentUsecase,

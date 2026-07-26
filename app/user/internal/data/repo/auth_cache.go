@@ -20,7 +20,8 @@ var _ repo.AuthCacheRepo = (*AuthCacheRepo)(nil)
 
 type AuthCacheRepo struct {
 	redisClient            *client.RedisClient
-	authCodeKey            string
+	authOtpGuestKey        string
+	authOtpUserKey         string
 	authRegisterDraftKey   string
 	authRefreshSessionKey  string
 	authUserSessionsKey    string
@@ -32,7 +33,8 @@ func NewAuthCacheRepo(
 ) repo.AuthCacheRepo {
 	return &AuthCacheRepo{
 		redisClient:            redisClient,
-		authCodeKey:            "Auth:Code:{%s}:{%s}",
+		authOtpGuestKey:        "Auth:Otp:%s:guest:%s",
+		authOtpUserKey:         "Auth:Otp:%s:user:%d:%s",
 		authRegisterDraftKey:   "Auth:RegisterDraft:{%s}:{%s}",
 		authRefreshSessionKey:  "Auth:Refresh:{%s}",
 		authUserSessionsKey:    "Auth:UserSessions:{%d}",
@@ -40,8 +42,11 @@ func NewAuthCacheRepo(
 	}
 }
 
-func (r *AuthCacheRepo) authCodeRedisKey(codeType enum.VerificationType, account string) string {
-	return fmt.Sprintf(r.authCodeKey, string(codeType), account)
+func (r *AuthCacheRepo) authCodeRedisKey(req *repo.VerificationCodeKeyReq) string {
+	if req.UserID != nil {
+		return fmt.Sprintf(r.authOtpUserKey, string(req.Type), *req.UserID, req.Account)
+	}
+	return fmt.Sprintf(r.authOtpGuestKey, string(req.Type), req.Account)
 }
 
 func (r *AuthCacheRepo) authRegisterDraftRedisKey(draftType enum.VerificationType, account string) string {
@@ -72,7 +77,15 @@ func (r *AuthCacheRepo) SaveCode(ctx context.Context, code *model.VerificationCo
 	if code == nil || code.CreatedAt == nil || code.ExpiresAt == nil {
 		return errors.New("verification code time is required")
 	}
-	key := r.authCodeRedisKey(code.Type, code.Account)
+	key := r.authCodeRedisKey(&repo.VerificationCodeKeyReq{
+		Type:    code.Type,
+		Account: code.Account,
+		UserID:  code.UserID,
+	})
+	userID := ""
+	if code.UserID != nil {
+		userID = strconv.FormatInt(*code.UserID, 10)
+	}
 	pipe := r.redisClient.Client.TxPipeline()
 	pipe.HSet(
 		ctx,
@@ -81,6 +94,8 @@ func (r *AuthCacheRepo) SaveCode(ctx context.Context, code *model.VerificationCo
 		string(code.Type),
 		"account",
 		code.Account,
+		"user_id",
+		userID,
 		"code",
 		code.Code,
 		"attempts",
@@ -97,8 +112,8 @@ func (r *AuthCacheRepo) SaveCode(ctx context.Context, code *model.VerificationCo
 	return err
 }
 
-func (r *AuthCacheRepo) GetCode(ctx context.Context, codeType enum.VerificationType, account string) (*model.VerificationCode, error) {
-	values, err := r.redisClient.Client.HGetAll(ctx, r.authCodeRedisKey(codeType, account)).Result()
+func (r *AuthCacheRepo) GetCode(ctx context.Context, req *repo.VerificationCodeKeyReq) (*model.VerificationCode, error) {
+	values, err := r.redisClient.Client.HGetAll(ctx, r.authCodeRedisKey(req)).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +136,7 @@ func (r *AuthCacheRepo) GetCode(ctx context.Context, codeType enum.VerificationT
 	if err != nil {
 		return nil, err
 	}
-	return &model.VerificationCode{
+	out := &model.VerificationCode{
 		Type:        enum.VerificationType(values["type"]),
 		Account:     values["account"],
 		Code:        values["code"],
@@ -129,15 +144,23 @@ func (r *AuthCacheRepo) GetCode(ctx context.Context, codeType enum.VerificationT
 		MaxAttempts: int32(maxAttempts),
 		CreatedAt:   new(createdAt),
 		ExpiresAt:   new(expiresAt),
-	}, nil
+	}
+	if values["user_id"] != "" {
+		userID, err := strconv.ParseInt(values["user_id"], 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		out.UserID = new(userID)
+	}
+	return out, nil
 }
 
-func (r *AuthCacheRepo) IncrCodeAttempts(ctx context.Context, codeType enum.VerificationType, account string) (int64, error) {
-	return r.redisClient.Client.HIncrBy(ctx, r.authCodeRedisKey(codeType, account), "attempts", 1).Result()
+func (r *AuthCacheRepo) IncrCodeAttempts(ctx context.Context, req *repo.VerificationCodeKeyReq) (int64, error) {
+	return r.redisClient.Client.HIncrBy(ctx, r.authCodeRedisKey(req), "attempts", 1).Result()
 }
 
-func (r *AuthCacheRepo) DeleteCode(ctx context.Context, codeType enum.VerificationType, account string) error {
-	return r.redisClient.Client.Del(ctx, r.authCodeRedisKey(codeType, account)).Err()
+func (r *AuthCacheRepo) DeleteCode(ctx context.Context, req *repo.VerificationCodeKeyReq) error {
+	return r.redisClient.Client.Del(ctx, r.authCodeRedisKey(req)).Err()
 }
 
 func (r *AuthCacheRepo) SaveRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string, draft *model.RegisterDraft, ttl time.Duration) error {

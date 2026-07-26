@@ -86,24 +86,6 @@ func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *v1.Verif
 	return &v1.VerifyPhoneRegistration_Resp{}, err
 }
 
-func (s *AuthService) StartEmailLogin(ctx context.Context, req *v1.StartEmailLogin_Req) (*v1.StartEmailLogin_Resp, error) {
-	res, err := s.authUsecase.StartEmailLogin(ctx, req.GetEmail())
-	reply := &v1.StartEmailLogin_Resp{}
-	if err == nil && res != nil && res.Code != "" && s.conf.GetServer().GetMode() != constant.Prod {
-		reply.Code = new(res.Code)
-	}
-	return reply, err
-}
-
-func (s *AuthService) StartPhoneLogin(ctx context.Context, req *v1.StartPhoneLogin_Req) (*v1.StartPhoneLogin_Resp, error) {
-	res, err := s.authUsecase.StartPhoneLogin(ctx, req.GetPhone())
-	reply := &v1.StartPhoneLogin_Resp{}
-	if err == nil && res != nil && res.Code != "" && s.conf.GetServer().GetMode() != constant.Prod {
-		reply.Code = new(res.Code)
-	}
-	return reply, err
-}
-
 func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_Resp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

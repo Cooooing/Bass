@@ -197,6 +197,50 @@ func UserAuthMiddleware(authClient userv1.AuthServiceClient, realm commonenum.Lo
 	}
 }
 
+func OptionalUserAuthMiddleware(authClient userv1.AuthServiceClient, realm commonenum.LoginRealm) middleware.Middleware {
+	return func(handler middleware.Handler) middleware.Handler {
+		return func(ctx context.Context, req interface{}) (interface{}, error) {
+			bearerPrefix := "Bearer "
+			token := GetHeader(ctx, constant.HeaderAuthentication)
+			if token == "" {
+				return handler(ctx, req)
+			}
+			if !strings.HasPrefix(token, bearerPrefix) {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
+			}
+			token = strings.TrimSpace(strings.TrimPrefix(token, bearerPrefix))
+			if token == "" {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
+			}
+
+			reply, err := authClient.ParseToken(ctx, &userv1.ParseToken_Req{
+				AccessToken: token,
+				Realm:       commonenum.LoginRealmMap.MustToProto(realm),
+			})
+			if err != nil {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID).WithCause(err)
+			}
+			tokenUser := reply.GetUser()
+			if tokenUser == nil {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
+			}
+			userInfo := &model.User{
+				ID:       tokenUser.GetId(),
+				Name:     tokenUser.GetName(),
+				Nickname: tokenUser.GetNickname(),
+				Language: tokenUser.GetLanguage(),
+				Timezone: tokenUser.GetTimezone(),
+			}
+
+			ctx = util.SetContextValue[string](ctx, constant.CtxToken, token)
+			ctx = util.SetContextValue[*model.User](ctx, constant.CtxUserInfo, userInfo)
+			ctx = kratoslog.ContextWithAttrs(ctx, slog.Int64(constant.LogFieldUserID, userInfo.ID))
+
+			return handler(ctx, req)
+		}
+	}
+}
+
 func GetHeader(ctx context.Context, key string) string {
 	var v string
 	if md, ok := metadata.FromIncomingContext(ctx); ok {

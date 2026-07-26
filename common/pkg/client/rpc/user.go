@@ -14,7 +14,7 @@ type UserClient struct {
 	Preferences    userv1.PreferencesServiceClient
 	PrivacySetting userv1.PrivacySettingServiceClient
 	Location       userv1.LocationServiceClient
-	Totp           userv1.TotpServiceClient
+	Otp            userv1.OtpServiceClient
 }
 
 func NewUserClient(
@@ -28,6 +28,6 @@ func NewUserClient(
 		Preferences:    userv1.NewPreferencesServiceClient(conn),
 		PrivacySetting: userv1.NewPrivacySettingServiceClient(conn),
 		Location:       userv1.NewLocationServiceClient(conn),
-		Totp:           userv1.NewTotpServiceClient(conn),
+		Otp:            userv1.NewOtpServiceClient(conn),
 	}
 }

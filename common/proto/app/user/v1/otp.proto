@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/user/v1;v1";
+
+// OtpService 统一提供 TOTP、邮箱 OTP、手机 OTP 能力。
+service OtpService {
+  rpc ValidateTotp(ValidateTotp.Req) returns (ValidateTotp.Resp) {} // 校验账号的 TOTP 验证码。
+  rpc BeginEnableTotp(BeginEnableTotp.Req) returns (BeginEnableTotp.Resp) {} // 开始启用 TOTP，生成临时密钥和二维码图片。
+  rpc ConfirmEnableTotp(ConfirmEnableTotp.Req) returns (ConfirmEnableTotp.Resp) {} // 确认 TOTP 验证码并正式启用 TOTP。
+  rpc DisableTotp(DisableTotp.Req) returns (DisableTotp.Resp) {} // 校验 TOTP 验证码并关闭 TOTP。
+  rpc GetTotp(GetTotp.Req) returns (GetTotp.Resp) {} // 获取账号 TOTP 状态。
+  rpc SendEmailOtp(SendEmailOtp.Req) returns (SendEmailOtp.Resp) {} // 发送邮箱 OTP，按 user_id 是否存在区分登录态 key。
+  rpc VerifyEmailOtp(VerifyEmailOtp.Req) returns (VerifyEmailOtp.Resp) {} // 校验邮箱 OTP，成功后失效。
+  rpc SendPhoneOtp(SendPhoneOtp.Req) returns (SendPhoneOtp.Resp) {} // 发送手机 OTP，P0 返回未实现。
+  rpc VerifyPhoneOtp(VerifyPhoneOtp.Req) returns (VerifyPhoneOtp.Resp) {} // 校验手机 OTP，P0 返回未实现。
+}
+
+message ValidateTotp {
+  message Req {
+    int64 user_id = 1; // 账号 ID。
+    string code = 2; // TOTP 验证码。
+  }
+  message Resp {
+    bool verified = 1; // 是否校验通过。
+  }
+}
+
+message BeginEnableTotp {
+  message Req {
+    int64 user_id = 1; // 账号 ID。
+    string account_name = 2; // TOTP 应用中展示的账号名。
+  }
+  message Resp {
+    string url = 1; // TOTP 绑定 URL。
+    bytes qr_code = 2; // TOTP 二维码图片数据。
+  }
+}
+
+message ConfirmEnableTotp {
+  message Req {
+    int64 user_id = 1; // 账号 ID。
+    string code = 2; // TOTP 验证码。
+  }
+  message Resp {}
+}
+
+message DisableTotp {
+  message Req {
+    int64 user_id = 1; // 账号 ID。
+    string code = 2; // TOTP 验证码。
+  }
+  message Resp {}
+}
+
+message GetTotp {
+  message Req {
+    int64 user_id = 1; // 账号 ID。
+  }
+  message Resp {
+    message Totp {
+      int64 user_id = 1; // 账号 ID。
+      bool enable = 2; // 是否启用 TOTP。
+      google.protobuf.Timestamp enable_time = 3; // 启用时间。
+    }
+    Totp totp = 1; // TOTP 状态。
+  }
+}
+
+message SendEmailOtp {
+  message Req {
+    string email = 1; // 邮箱地址。
+    optional int64 user_id = 2; // 登录态账号 ID，未登录时为空。
+  }
+  message Resp {
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空。
+  }
+}
+
+message VerifyEmailOtp {
+  message Req {
+    string email = 1; // 邮箱地址。
+    string code = 2; // 邮箱 OTP。
+    optional int64 user_id = 3; // 登录态账号 ID，未登录时为空。
+  }
+  message Resp {}
+}
+
+message SendPhoneOtp {
+  message Req {
+    string phone = 1; // 手机号。
+    optional int64 user_id = 2; // 登录态账号 ID，未登录时为空。
+  }
+  message Resp {
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空。
+  }
+}
+
+message VerifyPhoneOtp {
+  message Req {
+    string phone = 1; // 手机号。
+    string code = 2; // 手机 OTP。
+    optional int64 user_id = 3; // 登录态账号 ID，未登录时为空。
+  }
+  message Resp {}
+}

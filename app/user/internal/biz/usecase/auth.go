@@ -34,6 +34,7 @@ type AuthUsecase struct {
 	loginLogRepo      repo.LoginLogRepo
 	outboxRepo        repo.OutboxEventRepo
 	authCacheRepo     repo.AuthCacheRepo
+	emailOtpUsecase   *EmailOtpUsecase
 	totpRepo          repo.TotpRepo
 	banRecordRepo     repo.BanRecordRepo
 	ipClient          repo.IPClient
@@ -52,6 +53,7 @@ type AuthUsecaseDeps struct {
 	LoginLogRepo      repo.LoginLogRepo
 	OutboxRepo        repo.OutboxEventRepo
 	AuthCacheRepo     repo.AuthCacheRepo
+	EmailOtpUsecase   *EmailOtpUsecase
 	TotpRepo          repo.TotpRepo
 	BanRecordRepo     repo.BanRecordRepo
 	IPClient          repo.IPClient
@@ -75,6 +77,7 @@ func NewAuthUsecase(
 		loginLogRepo:      deps.LoginLogRepo,
 		outboxRepo:        deps.OutboxRepo,
 		authCacheRepo:     deps.AuthCacheRepo,
+		emailOtpUsecase:   deps.EmailOtpUsecase,
 		totpRepo:          deps.TotpRepo,
 		banRecordRepo:     deps.BanRecordRepo,
 		ipClient:          deps.IPClient,
@@ -155,7 +158,10 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, account *model
 			},
 		},
 	}); err != nil {
-		_ = s.authCacheRepo.DeleteCode(ctx, enum.VerificationTypeEmail, email)
+		_ = s.authCacheRepo.DeleteCode(ctx, &repo.VerificationCodeKeyReq{
+			Type:    enum.VerificationTypeEmail,
+			Account: email,
+		})
 		_ = s.authCacheRepo.DeleteRegisterDraft(ctx, enum.VerificationTypeEmail, email)
 		return nil, err
 	}
@@ -171,13 +177,17 @@ type VerifyEmailRegistrationReq struct {
 
 func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEmailRegistrationReq) error {
 	email := strings.ToLower(strings.TrimSpace(req.Email))
-	row, err := s.authCacheRepo.GetCode(ctx, enum.VerificationTypeEmail, email)
+	key := &repo.VerificationCodeKeyReq{
+		Type:    enum.VerificationTypeEmail,
+		Account: email,
+	}
+	row, err := s.authCacheRepo.GetCode(ctx, key)
 	if err != nil {
 		return err
 	}
 	if row == nil || row.ExpiresAt == nil || !row.ExpiresAt.After(time.Now()) || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
 		if row != nil && row.Attempts < row.MaxAttempts {
-			_, _ = s.authCacheRepo.IncrCodeAttempts(ctx, enum.VerificationTypeEmail, email)
+			_, _ = s.authCacheRepo.IncrCodeAttempts(ctx, key)
 		}
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED)
 	}
@@ -198,7 +208,7 @@ func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEm
 		if err != nil {
 			return err
 		}
-		if err := s.authCacheRepo.DeleteCode(ctx, enum.VerificationTypeEmail, email); err != nil {
+		if err := s.authCacheRepo.DeleteCode(ctx, key); err != nil {
 			return err
 		}
 		if err := s.authCacheRepo.DeleteRegisterDraft(ctx, enum.VerificationTypeEmail, email); err != nil {
@@ -233,74 +243,6 @@ type VerifyPhoneRegistrationReq struct {
 
 func (s *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, req *VerifyPhoneRegistrationReq) error {
 	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
-}
-
-type StartEmailLoginResp struct {
-	Code string
-}
-
-func (s *AuthUsecase) StartEmailLogin(ctx context.Context, email string) (*StartEmailLoginResp, error) {
-	email = strings.ToLower(strings.TrimSpace(email))
-	user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
-		Account: new(email),
-	})
-	if err != nil {
-		code, ok := apperror.BusinessCode(err)
-		if !(ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND) {
-			return nil, err
-		}
-	}
-	if user == nil || user.Status == nil || *user.Status != enum.AccountStatusNormal {
-		return &StartEmailLoginResp{}, nil
-	}
-	now := time.Now()
-	verificationCodeConf := s.conf.GetBusiness().GetAuth().GetVerificationCode()
-	codeTTL := 5 * time.Minute
-	if verificationCodeConf.GetCodeTtl() != nil && verificationCodeConf.GetCodeTtl().AsDuration() > 0 {
-		codeTTL = verificationCodeConf.GetCodeTtl().AsDuration()
-	}
-	maxAttempts := verificationCodeConf.GetMaxAttempts()
-	if maxAttempts <= 0 {
-		maxAttempts = 5
-	}
-	code := str.RandStr(s.sf, 6, true, true, true, false)
-	if err := s.authCacheRepo.SaveCode(ctx, &model.VerificationCode{
-		Type:        enum.VerificationTypeEmail,
-		Account:     email,
-		Code:        code,
-		MaxAttempts: maxAttempts,
-		CreatedAt:   new(now),
-		ExpiresAt:   new(now.Add(codeTTL)),
-	}, codeTTL); err != nil {
-		return nil, err
-	}
-	if err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-		Event: &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE,
-			Payload: &commonenums.Event_UserEmailVerificationCode{
-				UserEmailVerificationCode: &commonenums.UserEmailVerificationCodePayload{
-					Email:          email,
-					Code:           code,
-					ExpiresSeconds: int64(codeTTL.Seconds()),
-				},
-			},
-		},
-	}); err != nil {
-		_ = s.authCacheRepo.DeleteCode(ctx, enum.VerificationTypeEmail, email)
-		return nil, err
-	}
-	return &StartEmailLoginResp{
-		Code: code,
-	}, nil
-}
-
-type StartPhoneLoginResp struct {
-	Code string
-}
-
-func (s *AuthUsecase) StartPhoneLogin(ctx context.Context, phone string) (*StartPhoneLoginResp, error) {
-	return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
 }
 
 type LoginReq struct {
@@ -421,16 +363,12 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 	case enum.LoginTypeEmail:
 		email := strings.ToLower(strings.TrimSpace(req.Email))
 		audit.AccountInput = email
-		row, err := s.authCacheRepo.GetCode(ctx, enum.VerificationTypeEmail, email)
-		if err != nil {
-			return nil, err
-		}
-		if row == nil || row.ExpiresAt == nil || !row.ExpiresAt.After(time.Now()) || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
-			if row != nil && row.Attempts < row.MaxAttempts {
-				_, _ = s.authCacheRepo.IncrCodeAttempts(ctx, enum.VerificationTypeEmail, email)
-			}
+		if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{
+			Email: email,
+			Code:  req.Code,
+		}); err != nil {
 			audit.FailureReason = new(enum.LoginFailureReasonCodeInvalidOrExpired)
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED)
+			return nil, err
 		}
 		user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
 			Account: new(email),
@@ -446,7 +384,6 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
 		}
 		audit.UserID = new(user.ID)
-		_ = s.authCacheRepo.DeleteCode(ctx, enum.VerificationTypeEmail, email)
 		account = user
 	case enum.LoginTypePhone:
 		audit.AccountInput = req.Phone

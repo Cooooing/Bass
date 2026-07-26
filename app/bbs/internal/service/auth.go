@@ -108,38 +108,6 @@ func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *bbsuserv
 	})
 }
 
-func (s *AuthService) StartEmailLogin(ctx context.Context, req *bbsuserv1.StartEmailLogin_Req) (*bbsuserv1.StartEmailLogin_Resp, error) {
-	email, err := s.normalizeEmail(req.GetEmail())
-	if err != nil {
-		return nil, err
-	}
-	resp, err := s.authUsecase.StartEmailLogin(ctx, email)
-	if err != nil {
-		return nil, err
-	}
-	reply := &bbsuserv1.StartEmailLogin_Resp{}
-	if resp.Code != "" {
-		reply.Code = new(resp.Code)
-	}
-	return reply, nil
-}
-
-func (s *AuthService) StartPhoneLogin(ctx context.Context, req *bbsuserv1.StartPhoneLogin_Req) (*bbsuserv1.StartPhoneLogin_Resp, error) {
-	phone, err := s.normalizePhone(req.GetPhone())
-	if err != nil {
-		return nil, err
-	}
-	resp, err := s.authUsecase.StartPhoneLogin(ctx, phone)
-	if err != nil {
-		return nil, err
-	}
-	reply := &bbsuserv1.StartPhoneLogin_Resp{}
-	if resp.Code != "" {
-		reply.Code = new(resp.Code)
-	}
-	return reply, nil
-}
-
 func (s *AuthService) Login(ctx context.Context, req *bbsuserv1.Login_Req) (*bbsuserv1.Login_Resp, error) {
 	ucReq, err := s.validateLogin(req)
 	if err != nil {

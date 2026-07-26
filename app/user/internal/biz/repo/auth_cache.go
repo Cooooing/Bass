@@ -9,9 +9,9 @@ import (
 
 type AuthCacheRepo interface {
 	SaveCode(ctx context.Context, code *model.VerificationCode, ttl time.Duration) error
-	GetCode(ctx context.Context, codeType enum.VerificationType, account string) (*model.VerificationCode, error)
-	IncrCodeAttempts(ctx context.Context, codeType enum.VerificationType, account string) (int64, error)
-	DeleteCode(ctx context.Context, codeType enum.VerificationType, account string) error
+	GetCode(ctx context.Context, req *VerificationCodeKeyReq) (*model.VerificationCode, error)
+	IncrCodeAttempts(ctx context.Context, req *VerificationCodeKeyReq) (int64, error)
+	DeleteCode(ctx context.Context, req *VerificationCodeKeyReq) error
 
 	SaveRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string, draft *model.RegisterDraft, ttl time.Duration) error
 	GetRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string) (*model.RegisterDraft, error)
@@ -29,4 +29,10 @@ type AuthCacheRepo interface {
 	DeleteRbacPermissions(ctx context.Context, realm string, userID int64) error
 	DeleteUserRbacPermissions(ctx context.Context, userID int64) error
 	DeleteRealmRbacPermissions(ctx context.Context, realm string) error
+}
+
+type VerificationCodeKeyReq struct {
+	Type    enum.VerificationType
+	Account string
+	UserID  *int64
 }

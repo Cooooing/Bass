@@ -88,30 +88,6 @@ func (u *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, req *VerifyPh
 	})
 }
 
-type StartEmailLoginResp struct{ Code string }
-
-func (u *AuthUsecase) StartEmailLogin(ctx context.Context, email string) (*StartEmailLoginResp, error) {
-	reply, err := u.authRepo.StartEmailLogin(ctx, email)
-	if err != nil {
-		return nil, err
-	}
-	return &StartEmailLoginResp{
-		Code: reply.Code,
-	}, nil
-}
-
-type StartPhoneLoginResp struct{ Code string }
-
-func (u *AuthUsecase) StartPhoneLogin(ctx context.Context, phone string) (*StartPhoneLoginResp, error) {
-	reply, err := u.authRepo.StartPhoneLogin(ctx, phone)
-	if err != nil {
-		return nil, err
-	}
-	return &StartPhoneLoginResp{
-		Code: reply.Code,
-	}, nil
-}
-
 type LoginReq struct {
 	Type     enum.LoginType
 	Account  string

@@ -15,7 +15,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewPreferencesService,
 	NewPrivacySettingService,
 	NewLocationService,
-	NewTotpService,
+	NewOtpService,
 	NewContentArticleService,
 	NewContentPostscriptService,
 	NewContentCommentService,
@@ -24,7 +24,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewNotificationService,
 )
 
-func ProvideServices(commonSystemService *CommonSystemService, authService *AuthService, accountService *AccountService, relationService *RelationService, preferencesService *PreferencesService, privacySettingService *PrivacySettingService, locationService *LocationService, totpService *TotpService, contentArticleService *ContentArticleService, contentPostscriptService *ContentPostscriptService, contentCommentService *ContentCommentService, contentDomainService *ContentDomainService, contentTagService *ContentTagService, notificationService *NotificationService) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, authService *AuthService, accountService *AccountService, relationService *RelationService, preferencesService *PreferencesService, privacySettingService *PrivacySettingService, locationService *LocationService, otpService *OtpService, contentArticleService *ContentArticleService, contentPostscriptService *ContentPostscriptService, contentCommentService *ContentCommentService, contentDomainService *ContentDomainService, contentTagService *ContentTagService, notificationService *NotificationService) []server.Service {
 	return []server.Service{
 		commonSystemService,
 		authService,
@@ -33,7 +33,7 @@ func ProvideServices(commonSystemService *CommonSystemService, authService *Auth
 		preferencesService,
 		privacySettingService,
 		locationService,
-		totpService,
+		otpService,
 		contentArticleService,
 		contentPostscriptService,
 		contentCommentService,

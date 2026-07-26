@@ -11,8 +11,6 @@ type AuthRepo interface {
 	VerifyEmailRegistration(ctx context.Context, req *VerifyEmailRegistrationReq) error
 	StartPhoneRegistration(ctx context.Context, req *StartPhoneRegistrationReq) (*StartPhoneRegistrationResp, error)
 	VerifyPhoneRegistration(ctx context.Context, req *VerifyPhoneRegistrationReq) error
-	StartEmailLogin(ctx context.Context, email string) (*StartEmailLoginResp, error)
-	StartPhoneLogin(ctx context.Context, phone string) (*StartPhoneLoginResp, error)
 	Login(ctx context.Context, req *LoginReq) (*LoginResp, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*TokenResp, error)
 	Logout(ctx context.Context, accessToken string) error
@@ -41,8 +39,6 @@ type VerifyPhoneRegistrationReq struct {
 	Phone string
 	Code  string
 }
-type StartEmailLoginResp struct{ Code string }
-type StartPhoneLoginResp struct{ Code string }
 
 type LoginReq struct {
 	Type     enum.LoginType

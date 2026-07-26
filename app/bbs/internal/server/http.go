@@ -27,11 +27,16 @@ var bbsHTTPAuthOperationWhitelist = map[string]struct{}{
 	bbsuserv1.OperationAuthServiceVerifyEmailRegistration: {},
 	bbsuserv1.OperationAuthServiceStartPhoneRegistration:  {},
 	bbsuserv1.OperationAuthServiceVerifyPhoneRegistration: {},
-	bbsuserv1.OperationAuthServiceStartEmailLogin:         {},
-	bbsuserv1.OperationAuthServiceStartPhoneLogin:         {},
+	bbsuserv1.OperationOtpServiceSendEmailOtp:             {},
+	bbsuserv1.OperationOtpServiceSendPhoneOtp:             {},
 	bbsuserv1.OperationAuthServiceLogin:                   {},
 	bbsuserv1.OperationAuthServiceRefreshToken:            {},
 	bbsuserv1.OperationAccountServiceAvatar:               {},
+}
+
+var bbsHTTPOptionalAuthOperations = map[string]struct{}{
+	bbsuserv1.OperationOtpServiceSendEmailOtp: {},
+	bbsuserv1.OperationOtpServiceSendPhoneOtp: {},
 }
 
 func NewHTTPServer(
@@ -45,10 +50,15 @@ func NewHTTPServer(
 		_, ok := bbsHTTPAuthOperationWhitelist[operation]
 		return !ok
 	}
+	optionalAuthMatch := func(_ context.Context, operation string) bool {
+		_, ok := bbsHTTPOptionalAuthOperations[operation]
+		return ok
+	}
 
 	var opts = []kratoshttp.ServerOption{
 		kratoshttp.Middleware(
 			server.RequestLogContextMiddleware(),
+			selector.Server(server.OptionalUserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(optionalAuthMatch).Build(),
 			selector.Server(server.UserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(authRequiredMatch).Build(),
 			obs.ServerMiddleware(),
 			recovery.Recovery(),

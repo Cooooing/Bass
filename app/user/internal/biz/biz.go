@@ -17,6 +17,8 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewLocationUsecase,
 	usecase.NewRelationUsecase,
 	usecase.NewTotpUsecase,
+	usecase.NewEmailOtpUsecase,
+	usecase.NewSmsOtpUsecase,
 	usecase.NewOutboxPublisher,
 	usecase.NewOutboxDeadLetterScanner,
 )

@@ -81,30 +81,6 @@ func (r *AuthRepo) VerifyPhoneRegistration(ctx context.Context, req *repo.Verify
 	return err
 }
 
-func (r *AuthRepo) StartEmailLogin(ctx context.Context, email string) (*repo.StartEmailLoginResp, error) {
-	reply, err := r.userClient.Auth.StartEmailLogin(ctx, &userv1.StartEmailLogin_Req{
-		Email: email,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &repo.StartEmailLoginResp{
-		Code: reply.GetCode(),
-	}, nil
-}
-
-func (r *AuthRepo) StartPhoneLogin(ctx context.Context, phone string) (*repo.StartPhoneLoginResp, error) {
-	reply, err := r.userClient.Auth.StartPhoneLogin(ctx, &userv1.StartPhoneLogin_Req{
-		Phone: phone,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &repo.StartPhoneLoginResp{
-		Code: reply.GetCode(),
-	}, nil
-}
-
 func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginResp, error) {
 	loginType := userenum.LoginType_LOGIN_TYPE_PASSWORD
 	switch req.Type {

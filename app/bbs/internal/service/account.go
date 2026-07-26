@@ -3,6 +3,9 @@ package service
 import (
 	"bbs/internal/biz/usecase"
 	"common/pkg/apperror"
+	"common/pkg/constant"
+	commonmodel "common/pkg/model"
+	"common/pkg/util"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	"common/proto/gen/common"
@@ -17,7 +20,6 @@ import (
 )
 
 type AccountService struct {
-	contextReader
 	bbsuserv1.UnimplementedAccountServiceServer
 	accountUsecase *usecase.AccountUsecase
 }
@@ -38,11 +40,11 @@ func (s *AccountService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *AccountService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentAccount_Req) (*bbsuserv1.GetCurrentAccount_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	account, err := s.accountUsecase.GetCurrentAccount(ctx, userID)
+	account, err := s.accountUsecase.GetCurrentAccount(ctx, user.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -62,9 +64,9 @@ func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfi
 }
 
 func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Req) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
@@ -112,7 +114,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 		}
 	}
 	profile, err := s.accountUsecase.UpdateProfileAccount(ctx, &usecase.UpdateProfileAccountReq{
-		UserID:       userID,
+		UserID:       user.ID,
 		AvatarURL:    req.AvatarUrl,
 		Nickname:     req.Nickname,
 		URL:          req.Url,

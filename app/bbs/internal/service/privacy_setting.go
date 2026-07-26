@@ -2,7 +2,12 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
+	"common/pkg/apperror"
+	"common/pkg/constant"
+	commonmodel "common/pkg/model"
+	"common/pkg/util"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -10,7 +15,6 @@ import (
 )
 
 type PrivacySettingService struct {
-	contextReader
 	bbsuserv1.UnimplementedPrivacySettingServiceServer
 	privacySettingUsecase *usecase.PrivacySettingUsecase
 }
@@ -31,11 +35,11 @@ func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPrivacySetting_Req) (*bbsuserv1.GetCurrentPrivacySetting_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	setting, err := s.privacySettingUsecase.GetCurrentPrivacySetting(ctx, userID)
+	setting, err := s.privacySettingUsecase.GetCurrentPrivacySetting(ctx, user.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -45,12 +49,12 @@ func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *bbsuserv1.G
 }
 
 func (s *PrivacySettingService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPrivacySetting_Req) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	setting, err := s.privacySettingUsecase.UpdateCurrentPrivacySetting(ctx, &usecase.UpdateCurrentPrivacySettingReq{
-		UserID:             userID,
+		UserID:             user.ID,
 		PublicPoints:       req.PublicPoints,
 		PublicFollowers:    req.PublicFollowers,
 		PublicArticles:     req.PublicArticles,

@@ -2,7 +2,12 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
+	"common/pkg/apperror"
+	"common/pkg/constant"
+	commonmodel "common/pkg/model"
+	"common/pkg/util"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -10,7 +15,6 @@ import (
 )
 
 type TotpService struct {
-	contextReader
 	bbsuserv1.UnimplementedTotpServiceServer
 	totpUsecase *usecase.TotpUsecase
 }
@@ -31,9 +35,9 @@ func (s *TotpService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func (s *TotpService) BeginEnable(ctx context.Context, req *bbsuserv1.BeginEnableTotp_Req) (*bbsuserv1.BeginEnableTotp_Resp, error) {
-	user, err := s.currentUser(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.totpUsecase.BeginEnableTotp(ctx, &usecase.BeginEnableTotpReq{
 		UserID:      user.ID,
@@ -49,35 +53,35 @@ func (s *TotpService) BeginEnable(ctx context.Context, req *bbsuserv1.BeginEnabl
 }
 
 func (s *TotpService) ConfirmEnable(ctx context.Context, req *bbsuserv1.ConfirmEnableTotp_Req) (*bbsuserv1.ConfirmEnableTotp_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	err = s.totpUsecase.ConfirmEnableTotp(ctx, &usecase.ConfirmEnableTotpReq{
-		UserID: userID,
+	err := s.totpUsecase.ConfirmEnableTotp(ctx, &usecase.ConfirmEnableTotpReq{
+		UserID: user.ID,
 		Code:   req.GetCode(),
 	})
 	return &bbsuserv1.ConfirmEnableTotp_Resp{}, err
 }
 
 func (s *TotpService) Disable(ctx context.Context, req *bbsuserv1.DisableTotp_Req) (*bbsuserv1.DisableTotp_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	err = s.totpUsecase.DisableTotp(ctx, &usecase.DisableTotpReq{
-		UserID: userID,
+	err := s.totpUsecase.DisableTotp(ctx, &usecase.DisableTotpReq{
+		UserID: user.ID,
 		Code:   req.GetCode(),
 	})
 	return &bbsuserv1.DisableTotp_Resp{}, err
 }
 
 func (s *TotpService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentTotp_Req) (*bbsuserv1.GetCurrentTotp_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	totp, err := s.totpUsecase.GetCurrentTotp(ctx, userID)
+	totp, err := s.totpUsecase.GetCurrentTotp(ctx, user.ID)
 	if err != nil {
 		return nil, err
 	}

@@ -4,6 +4,9 @@ import (
 	"bbs/internal/biz/usecase"
 	"bbs/internal/enum"
 	"common/pkg/apperror"
+	"common/pkg/constant"
+	commonmodel "common/pkg/model"
+	"common/pkg/util"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	cerrors "common/proto/gen/common/errors"
@@ -11,7 +14,6 @@ import (
 	"net/mail"
 	"regexp"
 	"strings"
-	"time"
 	"unicode"
 	"unicode/utf8"
 
@@ -21,7 +23,6 @@ import (
 )
 
 type AuthService struct {
-	contextReader
 	bbsuserv1.UnimplementedAuthServiceServer
 	authUsecase *usecase.AuthUsecase
 	phoneRe     *regexp.Regexp
@@ -140,16 +141,6 @@ func (s *AuthService) Login(ctx context.Context, req *bbsuserv1.Login_Req) (*bbs
 	if err != nil {
 		return nil, err
 	}
-	parseTime := func(value string) *timestamppb.Timestamp {
-		if value == "" {
-			return nil
-		}
-		parsed, err := time.Parse(time.RFC3339Nano, value)
-		if err != nil {
-			return nil
-		}
-		return timestamppb.New(parsed)
-	}
 	var account *bbsuserv1.Login_Resp_Account
 	if resp.Account != nil {
 		account = &bbsuserv1.Login_Resp_Account{}
@@ -165,8 +156,12 @@ func (s *AuthService) Login(ctx context.Context, req *bbsuserv1.Login_Req) (*bbs
 				Mbti:          bbsuserv1enum.MBTI(profile.MBTI),
 				FollowCount:   profile.FollowCount,
 				FollowerCount: profile.FollowerCount,
-				CreatedAt:     parseTime(profile.CreatedAt),
-				UpdatedAt:     parseTime(profile.UpdatedAt),
+			}
+			if profile.CreatedAt != nil {
+				account.Basic.CreatedAt = timestamppb.New(*profile.CreatedAt)
+			}
+			if profile.UpdatedAt != nil {
+				account.Basic.UpdatedAt = timestamppb.New(*profile.UpdatedAt)
 			}
 		}
 		if contact := resp.Account.Contact; contact != nil {
@@ -206,22 +201,22 @@ func (s *AuthService) RefreshToken(ctx context.Context, req *bbsuserv1.RefreshTo
 }
 
 func (s *AuthService) Logout(ctx context.Context, req *bbsuserv1.Logout_Req) (*bbsuserv1.Logout_Resp, error) {
-	token, err := s.currentToken(ctx)
-	if err != nil {
-		return nil, err
+	token, ok := util.GetContextValue[string](ctx, constant.CtxToken)
+	if !ok || token == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	return &bbsuserv1.Logout_Resp{}, s.authUsecase.Logout(ctx, token)
 }
 
 func (s *AuthService) CancelAccount(ctx context.Context, req *bbsuserv1.CancelAccount_Req) (*bbsuserv1.CancelAccount_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	if strings.TrimSpace(req.GetPassword()) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	return &bbsuserv1.CancelAccount_Resp{}, s.authUsecase.CancelAccount(ctx, userID, req.GetPassword(), req.GetCode())
+	return &bbsuserv1.CancelAccount_Resp{}, s.authUsecase.CancelAccount(ctx, user.ID, req.GetPassword(), req.GetCode())
 }
 
 func (s *AuthService) validateLogin(req *bbsuserv1.Login_Req) (*usecase.LoginReq, error) {

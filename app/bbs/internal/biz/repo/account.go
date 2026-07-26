@@ -1,6 +1,9 @@
 package repo
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type AccountClient interface {
 	GetCurrentAccount(ctx context.Context, userID int64) (*Account, error)
@@ -20,8 +23,8 @@ type AccountProfile struct {
 	MBTI          int32
 	FollowCount   *int32
 	FollowerCount *int32
-	CreatedAt     string
-	UpdatedAt     string
+	CreatedAt     *time.Time
+	UpdatedAt     *time.Time
 }
 
 type AccountContact struct {

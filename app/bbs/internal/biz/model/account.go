@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 type AccountProfile struct {
 	ID            int64
 	Name          string
@@ -11,8 +13,8 @@ type AccountProfile struct {
 	MBTI          int32
 	FollowCount   *int32
 	FollowerCount *int32
-	CreatedAt     string
-	UpdatedAt     string
+	CreatedAt     *time.Time
+	UpdatedAt     *time.Time
 }
 
 type AccountContact struct {

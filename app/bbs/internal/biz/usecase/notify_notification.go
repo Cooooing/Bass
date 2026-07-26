@@ -6,6 +6,8 @@ import (
 	"common/proto/gen/common"
 	commonenums "common/proto/gen/common/enums"
 	"context"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type NotificationUsecase struct {
@@ -58,17 +60,24 @@ func (u *NotificationUsecase) ListNotifications(ctx context.Context, req *ListNo
 	}
 	rows := make([]*bbsnotifyv1.ListNotifications_Resp_Notification, 0, len(reply.Rows))
 	for _, item := range reply.Rows {
-		rows = append(rows, &bbsnotifyv1.ListNotifications_Resp_Notification{
+		row := &bbsnotifyv1.ListNotifications_Resp_Notification{
 			Id:         item.ID,
 			EventId:    item.EventID,
 			ReceiverId: item.ReceiverID,
 			EventType:  commonenums.EventType(item.EventType),
 			Title:      item.Title,
 			Content:    item.Content,
-			ReadAt:     item.ReadAt,
-			CreatedAt:  item.CreatedAt,
-			UpdatedAt:  item.UpdatedAt,
-		})
+		}
+		if item.ReadAt != nil {
+			row.ReadAt = timestamppb.New(*item.ReadAt)
+		}
+		if item.CreatedAt != nil {
+			row.CreatedAt = timestamppb.New(*item.CreatedAt)
+		}
+		if item.UpdatedAt != nil {
+			row.UpdatedAt = timestamppb.New(*item.UpdatedAt)
+		}
+		rows = append(rows, row)
 	}
 	return &ListNotificationsResp{
 		Page: page,

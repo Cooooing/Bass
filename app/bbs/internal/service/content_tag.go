@@ -2,17 +2,22 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
+	"common/pkg/apperror"
+	"common/pkg/constant"
+	commonmodel "common/pkg/model"
+	"common/pkg/util"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	"common/proto/gen/common"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ContentTagService struct {
-	contextReader
 	bbscontentv1.UnimplementedTagServiceServer
 	contentTagUsecase *usecase.ContentTagUsecase
 }
@@ -33,9 +38,9 @@ func (s *ContentTagService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.CreateTag_Req) (*bbscontentv1.CreateTag_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	var tagSave *usecase.ContentTagSave
 	if tag := req.GetTag(); tag != nil {
@@ -47,7 +52,7 @@ func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.Create
 		}
 	}
 	resp, err := s.contentTagUsecase.CreateTag(ctx, &usecase.CreateTagReq{
-		UserID: userID,
+		UserID: user.ID,
 		Tag:    tagSave,
 	})
 	if err != nil {
@@ -62,8 +67,8 @@ func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.Create
 			DomainId:    resp.DomainID,
 			CreatedBy:   resp.CreatedBy,
 			UpdatedBy:   resp.UpdatedBy,
-			CreatedAt:   resp.CreatedAt,
-			UpdatedAt:   resp.UpdatedAt,
+			CreatedAt:   timestamppb.New(*resp.CreatedAt),
+			UpdatedAt:   timestamppb.New(*resp.UpdatedAt),
 		}
 		if resp.Status != nil {
 			tag.Status = new(bbscontentv1enum.TagStatus(*resp.Status))
@@ -75,9 +80,9 @@ func (s *ContentTagService) Create(ctx context.Context, req *bbscontentv1.Create
 }
 
 func (s *ContentTagService) Update(ctx context.Context, req *bbscontentv1.UpdateTag_Req) (*bbscontentv1.UpdateTag_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	var tagSave *usecase.ContentTagSave
 	if tag := req.GetTag(); tag != nil {
@@ -89,7 +94,7 @@ func (s *ContentTagService) Update(ctx context.Context, req *bbscontentv1.Update
 		}
 	}
 	resp, err := s.contentTagUsecase.UpdateTag(ctx, &usecase.UpdateTagReq{
-		UserID: userID,
+		UserID: user.ID,
 		TagID:  req.GetTagId(),
 		Tag:    tagSave,
 	})
@@ -105,8 +110,8 @@ func (s *ContentTagService) Update(ctx context.Context, req *bbscontentv1.Update
 			DomainId:    resp.DomainID,
 			CreatedBy:   resp.CreatedBy,
 			UpdatedBy:   resp.UpdatedBy,
-			CreatedAt:   resp.CreatedAt,
-			UpdatedAt:   resp.UpdatedAt,
+			CreatedAt:   timestamppb.New(*resp.CreatedAt),
+			UpdatedAt:   timestamppb.New(*resp.UpdatedAt),
 		}
 		if resp.Status != nil {
 			tag.Status = new(bbscontentv1enum.TagStatus(*resp.Status))
@@ -146,8 +151,8 @@ func (s *ContentTagService) List(ctx context.Context, req *bbscontentv1.ListTags
 			DomainId:    row.DomainID,
 			CreatedBy:   row.CreatedBy,
 			UpdatedBy:   row.UpdatedBy,
-			CreatedAt:   row.CreatedAt,
-			UpdatedAt:   row.UpdatedAt,
+			CreatedAt:   timestamppb.New(*row.CreatedAt),
+			UpdatedAt:   timestamppb.New(*row.UpdatedAt),
 		}
 		if row.Status != nil {
 			tag.Status = new(bbscontentv1enum.TagStatus(*row.Status))

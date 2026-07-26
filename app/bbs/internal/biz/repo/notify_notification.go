@@ -1,6 +1,9 @@
 package repo
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type NotificationClient interface {
 	ListNotifications(ctx context.Context, req *ListNotificationsReq) (*ListNotificationsResp, error)
@@ -15,9 +18,9 @@ type Notification struct {
 	EventType  int32
 	Title      string
 	Content    string
-	ReadAt     string
-	CreatedAt  string
-	UpdatedAt  string
+	ReadAt     *time.Time
+	CreatedAt  *time.Time
+	UpdatedAt  *time.Time
 }
 
 type ListNotificationsReq struct {

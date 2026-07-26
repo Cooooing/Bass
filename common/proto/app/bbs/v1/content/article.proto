@@ -8,6 +8,7 @@ import "common/common.proto";
 import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
@@ -167,19 +168,19 @@ message CreateArticle {
       optional int64 accepted_answer_id = 23; // 已采纳答案评论 ID
       AccountProfile author_user = 24; // 作者展示资料
       AccountProfile last_reply_user = 25; // 最后回复账号展示资料
-      string last_reply_at = 26; // 最后回复时间
+      google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
       optional string cover_image_url = 27; // 封面图片 URL
       ArticleViewerActionState viewer_action_state = 28; // 当前查看账号的文章行为状态
-      string published_at = 29; // 发布时间
+      google.protobuf.Timestamp published_at = 29; // 发布时间
       repeated ArticlePostscript postscripts = 30; // 附言列表
       ArticlePublishStatus publish_status = 31; // 发布状态
       ArticleVisibility visibility = 32; // 可见范围
       ContentRestriction restriction = 33; // 管理限制
-      string edited_at = 34; // 内容编辑时间
+      google.protobuf.Timestamp edited_at = 34; // 内容编辑时间
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message ArticlePostscript {
@@ -190,8 +191,8 @@ message CreateArticle {
       ContentRestriction restriction = 5; // 管理限制
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountProfile {
@@ -216,9 +217,9 @@ message CreateArticle {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
     message ArticleViewerActionState {
@@ -284,19 +285,19 @@ message UpdateArticle {
       optional int64 accepted_answer_id = 23; // 已采纳答案评论 ID
       AccountProfile author_user = 24; // 作者展示资料
       AccountProfile last_reply_user = 25; // 最后回复账号展示资料
-      string last_reply_at = 26; // 最后回复时间
+      google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
       optional string cover_image_url = 27; // 封面图片 URL
       ArticleViewerActionState viewer_action_state = 28; // 当前查看账号的文章行为状态
-      string published_at = 29; // 发布时间
+      google.protobuf.Timestamp published_at = 29; // 发布时间
       repeated ArticlePostscript postscripts = 30; // 附言列表
       ArticlePublishStatus publish_status = 31; // 发布状态
       ArticleVisibility visibility = 32; // 可见范围
       ContentRestriction restriction = 33; // 管理限制
-      string edited_at = 34; // 内容编辑时间
+      google.protobuf.Timestamp edited_at = 34; // 内容编辑时间
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message ArticlePostscript {
@@ -307,8 +308,8 @@ message UpdateArticle {
       ContentRestriction restriction = 5; // 管理限制
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountProfile {
@@ -333,9 +334,9 @@ message UpdateArticle {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
     message ArticleViewerActionState {
@@ -401,19 +402,19 @@ message UpdateDraftArticle {
       optional int64 accepted_answer_id = 23; // 已采纳答案评论 ID
       AccountProfile author_user = 24; // 作者展示资料
       AccountProfile last_reply_user = 25; // 最后回复账号展示资料
-      string last_reply_at = 26; // 最后回复时间
+      google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
       optional string cover_image_url = 27; // 封面图片 URL
       ArticleViewerActionState viewer_action_state = 28; // 当前查看账号的文章行为状态
-      string published_at = 29; // 发布时间
+      google.protobuf.Timestamp published_at = 29; // 发布时间
       repeated ArticlePostscript postscripts = 30; // 附言列表
       ArticlePublishStatus publish_status = 31; // 发布状态
       ArticleVisibility visibility = 32; // 可见范围
       ContentRestriction restriction = 33; // 管理限制
-      string edited_at = 34; // 内容编辑时间
+      google.protobuf.Timestamp edited_at = 34; // 内容编辑时间
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message ArticlePostscript {
@@ -424,8 +425,8 @@ message UpdateDraftArticle {
       ContentRestriction restriction = 5; // 管理限制
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountProfile {
@@ -450,9 +451,9 @@ message UpdateDraftArticle {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
     message ArticleViewerActionState {
@@ -526,18 +527,18 @@ message ListArticles {
       optional int64 accepted_answer_id = 23; // 已采纳答案评论 ID
       AccountProfile author_user = 24; // 作者展示资料
       AccountProfile last_reply_user = 25; // 最后回复账号展示资料
-      string last_reply_at = 26; // 最后回复时间
+      google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
       optional string cover_image_url = 27; // 封面图片 URL
       ArticleViewerActionState viewer_action_state = 28; // 当前查看账号的文章行为状态
-      string published_at = 29; // 发布时间
+      google.protobuf.Timestamp published_at = 29; // 发布时间
       ArticlePublishStatus publish_status = 30; // 发布状态
       ArticleVisibility visibility = 31; // 可见范围
       ContentRestriction restriction = 32; // 管理限制
-      string edited_at = 33; // 内容编辑时间
+      google.protobuf.Timestamp edited_at = 33; // 内容编辑时间
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountProfile {
@@ -562,9 +563,9 @@ message ListArticles {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
     message ArticleViewerActionState {
@@ -609,19 +610,19 @@ message GetArticle {
       optional int64 accepted_answer_id = 23; // 已采纳答案评论 ID
       AccountProfile author_user = 24; // 作者展示资料
       AccountProfile last_reply_user = 25; // 最后回复账号展示资料
-      string last_reply_at = 26; // 最后回复时间
+      google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
       optional string cover_image_url = 27; // 封面图片 URL
       ArticleViewerActionState viewer_action_state = 28; // 当前查看账号的文章行为状态
-      string published_at = 29; // 发布时间
+      google.protobuf.Timestamp published_at = 29; // 发布时间
       repeated ArticlePostscript postscripts = 30; // 附言列表
       ArticlePublishStatus publish_status = 31; // 发布状态
       ArticleVisibility visibility = 32; // 可见范围
       ContentRestriction restriction = 33; // 管理限制
-      string edited_at = 34; // 内容编辑时间
+      google.protobuf.Timestamp edited_at = 34; // 内容编辑时间
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message ArticlePostscript {
@@ -632,8 +633,8 @@ message GetArticle {
       ContentRestriction restriction = 5; // 管理限制
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountProfile {
@@ -658,9 +659,9 @@ message GetArticle {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
     message ArticleViewerActionState {

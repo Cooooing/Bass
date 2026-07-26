@@ -2,7 +2,12 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
+	"common/pkg/apperror"
+	"common/pkg/constant"
+	commonmodel "common/pkg/model"
+	"common/pkg/util"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -10,7 +15,6 @@ import (
 )
 
 type PreferencesService struct {
-	contextReader
 	bbsuserv1.UnimplementedPreferencesServiceServer
 	preferencesUsecase *usecase.PreferencesUsecase
 }
@@ -31,11 +35,11 @@ func (s *PreferencesService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *PreferencesService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPreferences_Req) (*bbsuserv1.GetCurrentPreferences_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	preference, err := s.preferencesUsecase.GetCurrentPreferences(ctx, userID)
+	preference, err := s.preferencesUsecase.GetCurrentPreferences(ctx, user.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -45,12 +49,12 @@ func (s *PreferencesService) GetCurrent(ctx context.Context, req *bbsuserv1.GetC
 }
 
 func (s *PreferencesService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPreferences_Req) (*bbsuserv1.UpdateCurrentPreferences_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	preference, err := s.preferencesUsecase.UpdateCurrentPreferences(ctx, &usecase.UpdateCurrentPreferencesReq{
-		UserID:      userID,
+		UserID:      user.ID,
 		Timezone:    req.Timezone,
 		Theme:       req.Theme,
 		MobileTheme: req.MobileTheme,

@@ -1,6 +1,9 @@
 package repo
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type CommentViewerActionState struct {
 	Liked   bool
@@ -16,7 +19,7 @@ type CommentListItem struct {
 	ParentID          *int64
 	ReplyID           *int64
 	Restriction       int32
-	DeletedAt         string
+	DeletedAt         *time.Time
 	ThankCount        int32
 	LikeCount         int32
 	ReplyCount        int32
@@ -25,8 +28,8 @@ type CommentListItem struct {
 	ReplyUser         *AccountProfile
 	CreatedBy         *int64
 	UpdatedBy         *int64
-	CreatedAt         string
-	UpdatedAt         string
+	CreatedAt         *time.Time
+	UpdatedAt         *time.Time
 }
 
 type CommentDetail struct {
@@ -38,7 +41,7 @@ type CommentDetail struct {
 	ParentID          *int64
 	ReplyID           *int64
 	Restriction       int32
-	DeletedAt         string
+	DeletedAt         *time.Time
 	ThankCount        int32
 	LikeCount         int32
 	ReplyCount        int32
@@ -47,8 +50,8 @@ type CommentDetail struct {
 	ReplyUser         *AccountProfile
 	CreatedBy         *int64
 	UpdatedBy         *int64
-	CreatedAt         string
-	UpdatedAt         string
+	CreatedAt         *time.Time
+	UpdatedAt         *time.Time
 }
 
 type CommentThread struct {

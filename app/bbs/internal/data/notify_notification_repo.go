@@ -11,7 +11,6 @@ import (
 var _ repo.NotificationClient = (*NotificationClient)(nil)
 
 type NotificationClient struct {
-	protoTimeFormatter
 	notifyClient *rpc.NotifyClient
 }
 
@@ -39,17 +38,20 @@ func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.Li
 	}
 	rows := make([]*repo.Notification, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
-		rows = append(rows, &repo.Notification{
+		row := &repo.Notification{
 			ID:         item.GetId(),
 			EventID:    item.GetEventId(),
 			ReceiverID: item.GetReceiverId(),
 			EventType:  int32(item.GetEventType()),
 			Title:      item.GetTitle(),
 			Content:    item.GetContent(),
-			ReadAt:     r.formatProtoTime(item.GetReadAt()),
-			CreatedAt:  r.formatProtoTime(item.GetCreatedAt()),
-			UpdatedAt:  r.formatProtoTime(item.GetUpdatedAt()),
-		})
+			CreatedAt:  new(item.GetCreatedAt().AsTime()),
+			UpdatedAt:  new(item.GetUpdatedAt().AsTime()),
+		}
+		if item.GetReadAt() != nil {
+			row.ReadAt = new(item.GetReadAt().AsTime())
+		}
+		rows = append(rows, row)
 	}
 	var page *repo.PageResp
 	if reply.GetPage() != nil {

@@ -17,7 +17,6 @@ import (
 var _ repo.ContentCommentClient = (*ContentCommentClient)(nil)
 
 type ContentCommentClient struct {
-	protoTimeFormatter
 	contentClient *rpc.ContentClient
 	userClient    *rpc.UserClient
 }
@@ -469,13 +468,15 @@ func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp
 		ParentID:          item.ParentId,
 		ReplyID:           item.ReplyId,
 		Restriction:       int32(item.GetRestriction()),
-		DeletedAt:         r.formatProtoTime(item.GetDeletedAt()),
 		ThankCount:        item.GetThankCount(),
 		LikeCount:         item.GetLikeCount(),
 		ReplyCount:        item.GetReplyCount(),
 		ViewerActionState: state,
-		CreatedAt:         r.formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:         r.formatProtoTime(item.GetUpdatedAt()),
+		CreatedAt:         new(item.GetCreatedAt().AsTime()),
+		UpdatedAt:         new(item.GetUpdatedAt().AsTime()),
+	}
+	if item.GetDeletedAt() != nil {
+		out.DeletedAt = new(item.GetDeletedAt().AsTime())
 	}
 	if !r.anonymousArticleUser(article, item.CreatedBy) {
 		out.CreatedBy = item.CreatedBy
@@ -503,13 +504,15 @@ func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_C
 		ParentID:          item.ParentId,
 		ReplyID:           item.ReplyId,
 		Restriction:       int32(item.GetRestriction()),
-		DeletedAt:         r.formatProtoTime(item.GetDeletedAt()),
 		ThankCount:        item.GetThankCount(),
 		LikeCount:         item.GetLikeCount(),
 		ReplyCount:        item.GetReplyCount(),
 		ViewerActionState: &repo.CommentViewerActionState{},
-		CreatedAt:         r.formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:         r.formatProtoTime(item.GetUpdatedAt()),
+		CreatedAt:         new(item.GetCreatedAt().AsTime()),
+		UpdatedAt:         new(item.GetUpdatedAt().AsTime()),
+	}
+	if item.GetDeletedAt() != nil {
+		out.DeletedAt = new(item.GetDeletedAt().AsTime())
 	}
 	if !r.anonymousArticleUser(article, item.CreatedBy) {
 		out.CreatedBy = item.CreatedBy
@@ -567,8 +570,8 @@ func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs 
 			Status:        int32(basic.GetStatus()),
 			FollowCount:   basic.FollowCount,
 			FollowerCount: basic.FollowerCount,
-			CreatedAt:     r.formatProtoTime(basic.GetCreatedAt()),
-			UpdatedAt:     r.formatProtoTime(basic.GetUpdatedAt()),
+			CreatedAt:     new(basic.GetCreatedAt().AsTime()),
+			UpdatedAt:     new(basic.GetUpdatedAt().AsTime()),
 		}
 	}
 	return out, nil

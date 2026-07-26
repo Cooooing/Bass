@@ -10,7 +10,6 @@ import (
 var _ repo.TotpClient = (*TotpClient)(nil)
 
 type TotpClient struct {
-	protoTimeFormatter
 	userClient *rpc.UserClient
 }
 
@@ -91,9 +90,11 @@ func (r *TotpClient) GetCurrentTotp(ctx context.Context, userID int64) (*repo.To
 	var out *repo.Totp
 	if totpSetting != nil {
 		out = &repo.Totp{
-			UserID:     totpSetting.GetUserId(),
-			Enable:     totpSetting.GetEnable(),
-			EnableTime: r.formatProtoTime(totpSetting.GetEnableTime()),
+			UserID: totpSetting.GetUserId(),
+			Enable: totpSetting.GetEnable(),
+		}
+		if totpSetting.GetEnableTime() != nil {
+			out.EnableTime = new(totpSetting.GetEnableTime().AsTime())
 		}
 	}
 	return out, nil

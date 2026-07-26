@@ -33,7 +33,6 @@ func cloneDataMessage[T proto.Message](src proto.Message, dst T) T {
 var _ repo.ContentArticleClient = (*ContentArticleClient)(nil)
 
 type ContentArticleClient struct {
-	protoTimeFormatter
 	contentClient *rpc.ContentClient
 	userClient    *rpc.UserClient
 }
@@ -295,8 +294,8 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 				Restriction:   int32(postscript.GetRestriction()),
 				CreatedBy:     postscript.CreatedBy,
 				UpdatedBy:     postscript.UpdatedBy,
-				CreatedAt:     r.formatProtoTime(postscript.GetCreatedAt()),
-				UpdatedAt:     r.formatProtoTime(postscript.GetUpdatedAt()),
+				CreatedAt:     new(postscript.GetCreatedAt().AsTime()),
+				UpdatedAt:     new(postscript.GetUpdatedAt().AsTime()),
 			})
 		}
 	}
@@ -466,10 +465,14 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.PageArticles_Resp
 		ReplyCount:        item.GetReplyCount(),
 		CoverImageURL:     r.articleCoverImageURL(item),
 		ViewerActionState: state,
-		CreatedAt:         r.formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:         r.formatProtoTime(item.GetUpdatedAt()),
-		PublishedAt:       r.formatProtoTime(item.GetPublishedAt()),
-		EditedAt:          r.formatProtoTime(item.GetEditedAt()),
+		CreatedAt:         new(item.GetCreatedAt().AsTime()),
+		UpdatedAt:         new(item.GetUpdatedAt().AsTime()),
+	}
+	if item.GetPublishedAt() != nil {
+		out.PublishedAt = new(item.GetPublishedAt().AsTime())
+	}
+	if item.GetEditedAt() != nil {
+		out.EditedAt = new(item.GetEditedAt().AsTime())
 	}
 	switch item.GetType() {
 	case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
@@ -486,7 +489,7 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.PageArticles_Resp
 		out.AuthorUser = profiles[*item.CreatedBy]
 	}
 	if lastComment != nil {
-		out.LastReplyAt = r.formatProtoTime(lastComment.GetCreatedAt())
+		out.LastReplyAt = new(lastComment.GetCreatedAt().AsTime())
 		if lastComment.CreatedBy != nil {
 			if !item.GetAnonymous() || item.CreatedBy == nil || *lastComment.CreatedBy != *item.CreatedBy {
 				out.LastReplyUser = profiles[*lastComment.CreatedBy]
@@ -528,10 +531,14 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.PageArticles_Resp_A
 		ReplyCount:          item.GetReplyCount(),
 		CoverImageURL:       r.articleCoverImageURL(item),
 		ViewerActionState:   state,
-		CreatedAt:           r.formatProtoTime(item.GetCreatedAt()),
-		UpdatedAt:           r.formatProtoTime(item.GetUpdatedAt()),
-		PublishedAt:         r.formatProtoTime(item.GetPublishedAt()),
-		EditedAt:            r.formatProtoTime(item.GetEditedAt()),
+		CreatedAt:           new(item.GetCreatedAt().AsTime()),
+		UpdatedAt:           new(item.GetUpdatedAt().AsTime()),
+	}
+	if item.GetPublishedAt() != nil {
+		out.PublishedAt = new(item.GetPublishedAt().AsTime())
+	}
+	if item.GetEditedAt() != nil {
+		out.EditedAt = new(item.GetEditedAt().AsTime())
 	}
 	switch item.GetType() {
 	case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
@@ -548,7 +555,7 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.PageArticles_Resp_A
 		out.AuthorUser = profiles[*item.CreatedBy]
 	}
 	if lastComment != nil {
-		out.LastReplyAt = r.formatProtoTime(lastComment.GetCreatedAt())
+		out.LastReplyAt = new(lastComment.GetCreatedAt().AsTime())
 		if lastComment.CreatedBy != nil {
 			if !item.GetAnonymous() || item.CreatedBy == nil || *lastComment.CreatedBy != *item.CreatedBy {
 				out.LastReplyUser = profiles[*lastComment.CreatedBy]
@@ -631,8 +638,8 @@ func (r *ContentArticleClient) loadAccountProfiles(ctx context.Context, userIDs 
 			Status:        int32(basic.GetStatus()),
 			FollowCount:   basic.FollowCount,
 			FollowerCount: basic.FollowerCount,
-			CreatedAt:     r.formatProtoTime(basic.GetCreatedAt()),
-			UpdatedAt:     r.formatProtoTime(basic.GetUpdatedAt()),
+			CreatedAt:     new(basic.GetCreatedAt().AsTime()),
+			UpdatedAt:     new(basic.GetUpdatedAt().AsTime()),
 		}
 	}
 	return out, nil

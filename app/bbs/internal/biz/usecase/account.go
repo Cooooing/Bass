@@ -5,6 +5,8 @@ import (
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	"context"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type AccountUsecase struct {
@@ -39,8 +41,12 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*
 				Mbti:          bbsuserv1enum.MBTI(profile.MBTI),
 				FollowCount:   profile.FollowCount,
 				FollowerCount: profile.FollowerCount,
-				CreatedAt:     profile.CreatedAt,
-				UpdatedAt:     profile.UpdatedAt,
+			}
+			if profile.CreatedAt != nil {
+				account.Profile.CreatedAt = timestamppb.New(*profile.CreatedAt)
+			}
+			if profile.UpdatedAt != nil {
+				account.Profile.UpdatedAt = timestamppb.New(*profile.UpdatedAt)
 			}
 		}
 		if contact := reply.Contact; contact != nil {
@@ -72,8 +78,12 @@ func (u *AccountUsecase) GetProfileAccount(ctx context.Context, userID int64) (*
 			Mbti:          bbsuserv1enum.MBTI(row.MBTI),
 			FollowCount:   row.FollowCount,
 			FollowerCount: row.FollowerCount,
-			CreatedAt:     row.CreatedAt,
-			UpdatedAt:     row.UpdatedAt,
+		}
+		if row.CreatedAt != nil {
+			profile.CreatedAt = timestamppb.New(*row.CreatedAt)
+		}
+		if row.UpdatedAt != nil {
+			profile.UpdatedAt = timestamppb.New(*row.UpdatedAt)
 		}
 	}
 	return profile, nil
@@ -117,8 +127,12 @@ func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdatePr
 			Mbti:          bbsuserv1enum.MBTI(row.MBTI),
 			FollowCount:   row.FollowCount,
 			FollowerCount: row.FollowerCount,
-			CreatedAt:     row.CreatedAt,
-			UpdatedAt:     row.UpdatedAt,
+		}
+		if row.CreatedAt != nil {
+			profile.CreatedAt = timestamppb.New(*row.CreatedAt)
+		}
+		if row.UpdatedAt != nil {
+			profile.UpdatedAt = timestamppb.New(*row.UpdatedAt)
 		}
 	}
 	return profile, nil

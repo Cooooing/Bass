@@ -2,15 +2,21 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
+	"common/pkg/apperror"
+	"common/pkg/constant"
+	commonmodel "common/pkg/model"
+	"common/pkg/util"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	"common/proto/gen/common"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func cloneMessage[T proto.Message](src proto.Message, dst T) T {
@@ -26,7 +32,6 @@ func cloneMessage[T proto.Message](src proto.Message, dst T) T {
 }
 
 type ContentArticleService struct {
-	contextReader
 	bbscontentv1.UnimplementedArticleServiceServer
 	contentArticleUsecase *usecase.ContentArticleUsecase
 }
@@ -47,9 +52,9 @@ func (s *ContentArticleService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentArticleService) Create(ctx context.Context, req *bbscontentv1.CreateArticle_Req) (*bbscontentv1.CreateArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	var article *usecase.ContentArticleSave
 	if row := req.GetArticle(); row != nil {
@@ -67,7 +72,7 @@ func (s *ContentArticleService) Create(ctx context.Context, req *bbscontentv1.Cr
 		}
 	}
 	resp, err := s.contentArticleUsecase.CreateArticle(ctx, &usecase.CreateArticleReq{
-		UserID:  userID,
+		UserID:  user.ID,
 		Article: article,
 	})
 	if err != nil {
@@ -79,9 +84,9 @@ func (s *ContentArticleService) Create(ctx context.Context, req *bbscontentv1.Cr
 }
 
 func (s *ContentArticleService) Update(ctx context.Context, req *bbscontentv1.UpdateArticle_Req) (*bbscontentv1.UpdateArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	var article *usecase.ContentArticleSave
 	if row := req.GetArticle(); row != nil {
@@ -99,7 +104,7 @@ func (s *ContentArticleService) Update(ctx context.Context, req *bbscontentv1.Up
 		}
 	}
 	resp, err := s.contentArticleUsecase.UpdateArticle(ctx, &usecase.UpdateArticleReq{
-		UserID:    userID,
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 		Article:   article,
 	})
@@ -112,9 +117,9 @@ func (s *ContentArticleService) Update(ctx context.Context, req *bbscontentv1.Up
 }
 
 func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontentv1.UpdateDraftArticle_Req) (*bbscontentv1.UpdateDraftArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	var article *usecase.ContentArticleSave
 	if row := req.GetArticle(); row != nil {
@@ -132,7 +137,7 @@ func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontent
 		}
 	}
 	resp, err := s.contentArticleUsecase.UpdateDraftArticle(ctx, &usecase.UpdateDraftArticleReq{
-		UserID:    userID,
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 		Article:   article,
 	})
@@ -145,12 +150,12 @@ func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontent
 }
 
 func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.PublishArticle_Req) (*bbscontentv1.PublishArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	err = s.contentArticleUsecase.PublishArticle(ctx, &usecase.PublishArticleReq{
-		UserID:     userID,
+	err := s.contentArticleUsecase.PublishArticle(ctx, &usecase.PublishArticleReq{
+		UserID:     user.ID,
 		ArticleID:  req.GetArticleId(),
 		Visibility: req.GetVisibility(),
 	})
@@ -158,24 +163,24 @@ func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.P
 }
 
 func (s *ContentArticleService) DiscardDraft(ctx context.Context, req *bbscontentv1.DiscardDraftArticle_Req) (*bbscontentv1.DiscardDraftArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	err = s.contentArticleUsecase.DiscardDraftArticle(ctx, &usecase.DiscardDraftArticleReq{
-		UserID:    userID,
+	err := s.contentArticleUsecase.DiscardDraftArticle(ctx, &usecase.DiscardDraftArticleReq{
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 	})
 	return &bbscontentv1.DiscardDraftArticle_Resp{}, err
 }
 
 func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Req) (*bbscontentv1.ListArticles_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentArticleUsecase.ListArticles(ctx, &usecase.ListArticlesReq{
-		UserID: userID,
+		UserID: user.ID,
 		Page:   req.GetPage(),
 		Query:  req.GetQuery(),
 	})
@@ -201,12 +206,12 @@ func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.List
 }
 
 func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetArticle_Req) (*bbscontentv1.GetArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentArticleUsecase.GetArticle(ctx, &usecase.GetArticleReq{
-		UserID:    userID,
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 	})
 	if err != nil {
@@ -215,7 +220,7 @@ func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetAr
 	article := resp
 	if article.PublishStatus == int32(bbscontentv1enum.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED) && article.Visibility == int32(bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC) && article.Restriction == int32(bbscontentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE) {
 		if err := s.contentArticleUsecase.ViewArticle(ctx, &usecase.ViewArticleReq{
-			UserID:    userID,
+			UserID:    user.ID,
 			ArticleID: req.GetArticleId(),
 		}); err != nil {
 			return nil, err
@@ -227,12 +232,12 @@ func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetAr
 }
 
 func (s *ContentArticleService) Like(ctx context.Context, req *bbscontentv1.LikeArticle_Req) (*bbscontentv1.LikeArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentArticleUsecase.LikeArticle(ctx, &usecase.LikeArticleReq{
-		UserID:    userID,
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 		Active:    req.GetActive(),
 	})
@@ -245,12 +250,12 @@ func (s *ContentArticleService) Like(ctx context.Context, req *bbscontentv1.Like
 }
 
 func (s *ContentArticleService) Thank(ctx context.Context, req *bbscontentv1.ThankArticle_Req) (*bbscontentv1.ThankArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentArticleUsecase.ThankArticle(ctx, &usecase.ThankArticleReq{
-		UserID:    userID,
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 		Active:    req.GetActive(),
 	})
@@ -263,12 +268,12 @@ func (s *ContentArticleService) Thank(ctx context.Context, req *bbscontentv1.Tha
 }
 
 func (s *ContentArticleService) Collect(ctx context.Context, req *bbscontentv1.CollectArticle_Req) (*bbscontentv1.CollectArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentArticleUsecase.CollectArticle(ctx, &usecase.CollectArticleReq{
-		UserID:    userID,
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 		Active:    req.GetActive(),
 	})
@@ -281,12 +286,12 @@ func (s *ContentArticleService) Collect(ctx context.Context, req *bbscontentv1.C
 }
 
 func (s *ContentArticleService) Watch(ctx context.Context, req *bbscontentv1.WatchArticle_Req) (*bbscontentv1.WatchArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentArticleUsecase.WatchArticle(ctx, &usecase.WatchArticleReq{
-		UserID:    userID,
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 		Active:    req.GetActive(),
 	})
@@ -299,12 +304,12 @@ func (s *ContentArticleService) Watch(ctx context.Context, req *bbscontentv1.Wat
 }
 
 func (s *ContentArticleService) Reward(ctx context.Context, req *bbscontentv1.RewardArticle_Req) (*bbscontentv1.RewardArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	err = s.contentArticleUsecase.RewardArticle(ctx, &usecase.RewardArticleReq{
-		UserID:    userID,
+	err := s.contentArticleUsecase.RewardArticle(ctx, &usecase.RewardArticleReq{
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 		Points:    req.GetPoints(),
 	})
@@ -312,12 +317,12 @@ func (s *ContentArticleService) Reward(ctx context.Context, req *bbscontentv1.Re
 }
 
 func (s *ContentArticleService) AcceptAnswer(ctx context.Context, req *bbscontentv1.AcceptAnswerArticle_Req) (*bbscontentv1.AcceptAnswerArticle_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	err = s.contentArticleUsecase.AcceptAnswerArticle(ctx, &usecase.AcceptAnswerArticleReq{
-		UserID:    userID,
+	err := s.contentArticleUsecase.AcceptAnswerArticle(ctx, &usecase.AcceptAnswerArticleReq{
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 		CommentID: req.GetCommentId(),
 	})
@@ -328,7 +333,7 @@ func (s *ContentArticleService) articleListItem(row *usecase.ContentArticleListI
 	if row == nil {
 		return nil
 	}
-	return &bbscontentv1.ListArticles_Resp_ArticleListItem{
+	out := &bbscontentv1.ListArticles_Resp_ArticleListItem{
 		Id:                row.ID,
 		Title:             row.Title,
 		Content:           row.Content,
@@ -352,16 +357,27 @@ func (s *ContentArticleService) articleListItem(row *usecase.ContentArticleListI
 		ReplyCount:        row.ReplyCount,
 		CoverImageUrl:     row.CoverImageURL,
 		ViewerActionState: cloneMessage(s.articleViewerActionState(row.ViewerActionState), &bbscontentv1.ListArticles_Resp_ArticleViewerActionState{}),
-		LastReplyAt:       row.LastReplyAt,
 		LastReplyUser:     cloneMessage(s.accountProfile(row.LastReplyUser), &bbscontentv1.ListArticles_Resp_AccountProfile{}),
 		AuthorUser:        cloneMessage(s.accountProfile(row.AuthorUser), &bbscontentv1.ListArticles_Resp_AccountProfile{}),
 		CreatedBy:         row.CreatedBy,
 		UpdatedBy:         row.UpdatedBy,
-		CreatedAt:         row.CreatedAt,
-		UpdatedAt:         row.UpdatedAt,
-		PublishedAt:       row.PublishedAt,
-		EditedAt:          row.EditedAt,
 	}
+	if row.LastReplyAt != nil {
+		out.LastReplyAt = timestamppb.New(*row.LastReplyAt)
+	}
+	if row.CreatedAt != nil {
+		out.CreatedAt = timestamppb.New(*row.CreatedAt)
+	}
+	if row.UpdatedAt != nil {
+		out.UpdatedAt = timestamppb.New(*row.UpdatedAt)
+	}
+	if row.PublishedAt != nil {
+		out.PublishedAt = timestamppb.New(*row.PublishedAt)
+	}
+	if row.EditedAt != nil {
+		out.EditedAt = timestamppb.New(*row.EditedAt)
+	}
+	return out
 }
 
 func (s *ContentArticleService) articleDetail(row *usecase.ContentArticleDetail) *bbscontentv1.CreateArticle_Resp_ArticleDetail {
@@ -372,7 +388,7 @@ func (s *ContentArticleService) articleDetail(row *usecase.ContentArticleDetail)
 	for _, item := range row.Postscripts {
 		postscripts = append(postscripts, s.articlePostscript(item))
 	}
-	return &bbscontentv1.CreateArticle_Resp_ArticleDetail{
+	out := &bbscontentv1.CreateArticle_Resp_ArticleDetail{
 		Id:                  row.ID,
 		Title:               row.Title,
 		Content:             row.Content,
@@ -399,17 +415,28 @@ func (s *ContentArticleService) articleDetail(row *usecase.ContentArticleDetail)
 		ReplyCount:          row.ReplyCount,
 		CoverImageUrl:       row.CoverImageURL,
 		ViewerActionState:   s.articleViewerActionState(row.ViewerActionState),
-		LastReplyAt:         row.LastReplyAt,
 		LastReplyUser:       s.accountProfile(row.LastReplyUser),
 		Postscripts:         postscripts,
 		AuthorUser:          s.accountProfile(row.AuthorUser),
 		CreatedBy:           row.CreatedBy,
 		UpdatedBy:           row.UpdatedBy,
-		CreatedAt:           row.CreatedAt,
-		UpdatedAt:           row.UpdatedAt,
-		PublishedAt:         row.PublishedAt,
-		EditedAt:            row.EditedAt,
 	}
+	if row.LastReplyAt != nil {
+		out.LastReplyAt = timestamppb.New(*row.LastReplyAt)
+	}
+	if row.CreatedAt != nil {
+		out.CreatedAt = timestamppb.New(*row.CreatedAt)
+	}
+	if row.UpdatedAt != nil {
+		out.UpdatedAt = timestamppb.New(*row.UpdatedAt)
+	}
+	if row.PublishedAt != nil {
+		out.PublishedAt = timestamppb.New(*row.PublishedAt)
+	}
+	if row.EditedAt != nil {
+		out.EditedAt = timestamppb.New(*row.EditedAt)
+	}
+	return out
 }
 
 func (s *ContentArticleService) articleViewerActionState(row *usecase.ContentArticleViewerActionState) *bbscontentv1.CreateArticle_Resp_ArticleViewerActionState {
@@ -428,7 +455,7 @@ func (s *ContentArticleService) articlePostscript(row *usecase.ContentArticlePos
 	if row == nil {
 		return nil
 	}
-	return &bbscontentv1.CreateArticle_Resp_ArticlePostscript{
+	out := &bbscontentv1.CreateArticle_Resp_ArticlePostscript{
 		Id:            row.ID,
 		ArticleId:     row.ArticleID,
 		Content:       row.Content,
@@ -436,16 +463,21 @@ func (s *ContentArticleService) articlePostscript(row *usecase.ContentArticlePos
 		Restriction:   bbscontentv1enum.ContentRestriction(row.Restriction),
 		CreatedBy:     row.CreatedBy,
 		UpdatedBy:     row.UpdatedBy,
-		CreatedAt:     row.CreatedAt,
-		UpdatedAt:     row.UpdatedAt,
 	}
+	if row.CreatedAt != nil {
+		out.CreatedAt = timestamppb.New(*row.CreatedAt)
+	}
+	if row.UpdatedAt != nil {
+		out.UpdatedAt = timestamppb.New(*row.UpdatedAt)
+	}
+	return out
 }
 
 func (s *ContentArticleService) accountProfile(row *usecase.ContentAccountProfile) *bbscontentv1.CreateArticle_Resp_AccountProfile {
 	if row == nil {
 		return nil
 	}
-	return &bbscontentv1.CreateArticle_Resp_AccountProfile{
+	out := &bbscontentv1.CreateArticle_Resp_AccountProfile{
 		Id:            row.ID,
 		Name:          row.Name,
 		Nickname:      row.Nickname,
@@ -456,7 +488,12 @@ func (s *ContentArticleService) accountProfile(row *usecase.ContentAccountProfil
 		Status:        bbsuserv1enum.AccountStatus(row.Status),
 		FollowCount:   row.FollowCount,
 		FollowerCount: row.FollowerCount,
-		CreatedAt:     row.CreatedAt,
-		UpdatedAt:     row.UpdatedAt,
 	}
+	if row.CreatedAt != nil {
+		out.CreatedAt = timestamppb.New(*row.CreatedAt)
+	}
+	if row.UpdatedAt != nil {
+		out.UpdatedAt = timestamppb.New(*row.UpdatedAt)
+	}
+	return out
 }

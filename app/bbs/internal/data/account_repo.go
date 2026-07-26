@@ -11,7 +11,6 @@ import (
 var _ repo.AccountClient = (*AccountClient)(nil)
 
 type AccountClient struct {
-	protoTimeFormatter
 	userClient *rpc.UserClient
 }
 
@@ -46,8 +45,8 @@ func (r *AccountClient) GetCurrentAccount(ctx context.Context, userID int64) (*r
 				MBTI:          int32(basic.GetMbti()),
 				FollowCount:   basic.FollowCount,
 				FollowerCount: basic.FollowerCount,
-				CreatedAt:     r.formatProtoTime(basic.GetCreatedAt()),
-				UpdatedAt:     r.formatProtoTime(basic.GetUpdatedAt()),
+				CreatedAt:     new(basic.GetCreatedAt().AsTime()),
+				UpdatedAt:     new(basic.GetUpdatedAt().AsTime()),
 			}
 		}
 		if contact := account.GetContact(); contact != nil {
@@ -82,8 +81,8 @@ func (r *AccountClient) GetProfileAccount(ctx context.Context, userID int64) (*r
 			MBTI:          int32(account.GetMbti()),
 			FollowCount:   account.FollowCount,
 			FollowerCount: account.FollowerCount,
-			CreatedAt:     r.formatProtoTime(account.GetCreatedAt()),
-			UpdatedAt:     r.formatProtoTime(account.GetUpdatedAt()),
+			CreatedAt:     new(account.GetCreatedAt().AsTime()),
+			UpdatedAt:     new(account.GetUpdatedAt().AsTime()),
 		}
 	}
 	return profile, nil
@@ -118,8 +117,8 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 			MBTI:          int32(account.GetMbti()),
 			FollowCount:   account.FollowCount,
 			FollowerCount: account.FollowerCount,
-			CreatedAt:     r.formatProtoTime(account.GetCreatedAt()),
-			UpdatedAt:     r.formatProtoTime(account.GetUpdatedAt()),
+			CreatedAt:     new(account.GetCreatedAt().AsTime()),
+			UpdatedAt:     new(account.GetUpdatedAt().AsTime()),
 		}
 	}
 	return profile, nil

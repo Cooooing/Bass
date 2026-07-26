@@ -9,6 +9,7 @@ import "common/common.proto";
 import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
@@ -104,11 +105,11 @@ message ListCommentThreads {
       ArticleBrief article = 14; // 所属文章摘要
       CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
       ContentRestriction restriction = 16; // 管理限制
-      string deleted_at = 17; // 逻辑删除时间
+      google.protobuf.Timestamp deleted_at = 17; // 逻辑删除时间
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountProfile {
@@ -133,9 +134,9 @@ message ListCommentThreads {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
     message CommentViewerActionState {
@@ -155,8 +156,8 @@ message ListCommentThreads {
       ContentRestriction restriction = 10; // 管理限制
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
     .common.api.app.common.PageResp page = 1; // 分页结果
     repeated CommentThread rows = 2; // 评论楼层列表
@@ -192,11 +193,11 @@ message ListCommentReplies {
       ArticleBrief article = 14; // 所属文章摘要
       CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
       ContentRestriction restriction = 16; // 管理限制
-      string deleted_at = 17; // 逻辑删除时间
+      google.protobuf.Timestamp deleted_at = 17; // 逻辑删除时间
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountProfile {
@@ -221,9 +222,9 @@ message ListCommentReplies {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
     message CommentViewerActionState {
@@ -243,8 +244,8 @@ message ListCommentReplies {
       ContentRestriction restriction = 10; // 管理限制
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
     .common.api.app.common.PageResp page = 1; // 分页结果
     repeated CommentListItem rows = 2; // 回复列表
@@ -276,11 +277,11 @@ message ListCommentTimeline {
       ArticleBrief article = 14; // 所属文章摘要
       CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
       ContentRestriction restriction = 16; // 管理限制
-      string deleted_at = 17; // 逻辑删除时间
+      google.protobuf.Timestamp deleted_at = 17; // 逻辑删除时间
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountProfile {
@@ -305,9 +306,9 @@ message ListCommentTimeline {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
     message CommentViewerActionState {
@@ -327,8 +328,8 @@ message ListCommentTimeline {
       ContentRestriction restriction = 10; // 管理限制
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
     .common.api.app.common.PageResp page = 1; // 分页结果
     repeated CommentListItem rows = 2; // 评论列表
@@ -363,11 +364,11 @@ message CreateComment {
       ArticleBrief article = 14; // 所属文章摘要
       CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
       ContentRestriction restriction = 16; // 管理限制
-      string deleted_at = 17; // 逻辑删除时间
+      google.protobuf.Timestamp deleted_at = 17; // 逻辑删除时间
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountProfile {
@@ -392,9 +393,9 @@ message CreateComment {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
     message ArticleBrief {
@@ -409,8 +410,8 @@ message CreateComment {
       ContentRestriction restriction = 10; // 管理限制
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message CommentViewerActionState {
@@ -455,11 +456,11 @@ message ListComments {
       ArticleBrief article = 14; // 所属文章摘要
       CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
       ContentRestriction restriction = 16; // 管理限制
-      string deleted_at = 17; // 逻辑删除时间
+      google.protobuf.Timestamp deleted_at = 17; // 逻辑删除时间
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountProfile {
@@ -484,9 +485,9 @@ message ListComments {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
 
     message CommentViewerActionState {
@@ -506,8 +507,8 @@ message ListComments {
       ContentRestriction restriction = 10; // 管理限制
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
     .common.api.app.common.PageResp page = 1; // 分页结果
     repeated CommentListItem rows = 2; // 评论列表

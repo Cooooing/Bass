@@ -2,18 +2,23 @@ package service
 
 import (
 	"bbs/internal/biz/usecase"
+	"common/pkg/apperror"
+	"common/pkg/constant"
+	commonmodel "common/pkg/model"
+	"common/pkg/util"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
 	"common/proto/gen/common"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ContentCommentService struct {
-	contextReader
 	bbscontentv1.UnimplementedCommentServiceServer
 	contentCommentUsecase *usecase.ContentCommentUsecase
 }
@@ -34,12 +39,12 @@ func (s *ContentCommentService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.CreateComment_Req) (*bbscontentv1.CreateComment_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentCommentUsecase.CreateComment(ctx, &usecase.CreateCommentReq{
-		UserID:    userID,
+		UserID:    user.ID,
 		ArticleID: req.GetArticleId(),
 		Content:   req.GetContent(),
 		ReplyID:   req.GetReplyId(),
@@ -61,11 +66,10 @@ func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.Cr
 			LikeCount:     resp.LikeCount,
 			ThankCount:    resp.ThankCount,
 			Restriction:   bbscontentv1enum.ContentRestriction(resp.Restriction),
-			DeletedAt:     resp.DeletedAt,
 			CreatedBy:     resp.CreatedBy,
 			UpdatedBy:     resp.UpdatedBy,
-			CreatedAt:     resp.CreatedAt,
-			UpdatedAt:     resp.UpdatedAt,
+			CreatedAt:     timestamppb.New(*resp.CreatedAt),
+			UpdatedAt:     timestamppb.New(*resp.UpdatedAt),
 		}
 		if resp.ViewerActionState != nil {
 			comment.ViewerActionState = &bbscontentv1.CreateComment_Resp_CommentViewerActionState{
@@ -85,8 +89,8 @@ func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.Cr
 				Mbti:          bbsuserv1enum.MBTI(resp.User.MBTI),
 				FollowCount:   resp.User.FollowCount,
 				FollowerCount: resp.User.FollowerCount,
-				CreatedAt:     resp.User.CreatedAt,
-				UpdatedAt:     resp.User.UpdatedAt,
+				CreatedAt:     timestamppb.New(*resp.User.CreatedAt),
+				UpdatedAt:     timestamppb.New(*resp.User.UpdatedAt),
 			}
 		}
 		if resp.ReplyUser != nil {
@@ -101,8 +105,8 @@ func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.Cr
 				Mbti:          bbsuserv1enum.MBTI(resp.ReplyUser.MBTI),
 				FollowCount:   resp.ReplyUser.FollowCount,
 				FollowerCount: resp.ReplyUser.FollowerCount,
-				CreatedAt:     resp.ReplyUser.CreatedAt,
-				UpdatedAt:     resp.ReplyUser.UpdatedAt,
+				CreatedAt:     timestamppb.New(*resp.ReplyUser.CreatedAt),
+				UpdatedAt:     timestamppb.New(*resp.ReplyUser.UpdatedAt),
 			}
 		}
 	}
@@ -112,12 +116,12 @@ func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.Cr
 }
 
 func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.ListComments_Req) (*bbscontentv1.ListComments_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentCommentUsecase.ListComments(ctx, &usecase.ListCommentsReq{
-		UserID: userID,
+		UserID: user.ID,
 		Page:   req.GetPage(),
 		Query:  req.GetQuery(),
 	})
@@ -150,11 +154,10 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 			LikeCount:     row.LikeCount,
 			ThankCount:    row.ThankCount,
 			Restriction:   bbscontentv1enum.ContentRestriction(row.Restriction),
-			DeletedAt:     row.DeletedAt,
 			CreatedBy:     row.CreatedBy,
 			UpdatedBy:     row.UpdatedBy,
-			CreatedAt:     row.CreatedAt,
-			UpdatedAt:     row.UpdatedAt,
+			CreatedAt:     timestamppb.New(*row.CreatedAt),
+			UpdatedAt:     timestamppb.New(*row.UpdatedAt),
 		}
 		if row.ViewerActionState != nil {
 			item.ViewerActionState = &bbscontentv1.ListComments_Resp_CommentViewerActionState{
@@ -174,8 +177,8 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 				Mbti:          bbsuserv1enum.MBTI(row.User.MBTI),
 				FollowCount:   row.User.FollowCount,
 				FollowerCount: row.User.FollowerCount,
-				CreatedAt:     row.User.CreatedAt,
-				UpdatedAt:     row.User.UpdatedAt,
+				CreatedAt:     timestamppb.New(*row.User.CreatedAt),
+				UpdatedAt:     timestamppb.New(*row.User.UpdatedAt),
 			}
 		}
 		if row.ReplyUser != nil {
@@ -190,8 +193,8 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 				Mbti:          bbsuserv1enum.MBTI(row.ReplyUser.MBTI),
 				FollowCount:   row.ReplyUser.FollowCount,
 				FollowerCount: row.ReplyUser.FollowerCount,
-				CreatedAt:     row.ReplyUser.CreatedAt,
-				UpdatedAt:     row.ReplyUser.UpdatedAt,
+				CreatedAt:     timestamppb.New(*row.ReplyUser.CreatedAt),
+				UpdatedAt:     timestamppb.New(*row.ReplyUser.UpdatedAt),
 			}
 		}
 		rows = append(rows, item)
@@ -203,12 +206,12 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 }
 
 func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontentv1.ListCommentThreads_Req) (*bbscontentv1.ListCommentThreads_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentCommentUsecase.ListCommentThreads(ctx, &usecase.ListCommentThreadsReq{
-		UserID:            userID,
+		UserID:            user.ID,
 		Page:              req.GetPage(),
 		ArticleID:         req.GetArticleId(),
 		Order:             req.Order,
@@ -248,11 +251,10 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 				LikeCount:     row.Root.LikeCount,
 				ThankCount:    row.Root.ThankCount,
 				Restriction:   bbscontentv1enum.ContentRestriction(row.Root.Restriction),
-				DeletedAt:     row.Root.DeletedAt,
 				CreatedBy:     row.Root.CreatedBy,
 				UpdatedBy:     row.Root.UpdatedBy,
-				CreatedAt:     row.Root.CreatedAt,
-				UpdatedAt:     row.Root.UpdatedAt,
+				CreatedAt:     timestamppb.New(*row.Root.CreatedAt),
+				UpdatedAt:     timestamppb.New(*row.Root.UpdatedAt),
 			}
 			if row.Root.ViewerActionState != nil {
 				thread.Root.ViewerActionState = &bbscontentv1.ListCommentThreads_Resp_CommentViewerActionState{
@@ -272,8 +274,8 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 					Mbti:          bbsuserv1enum.MBTI(row.Root.User.MBTI),
 					FollowCount:   row.Root.User.FollowCount,
 					FollowerCount: row.Root.User.FollowerCount,
-					CreatedAt:     row.Root.User.CreatedAt,
-					UpdatedAt:     row.Root.User.UpdatedAt,
+					CreatedAt:     timestamppb.New(*row.Root.User.CreatedAt),
+					UpdatedAt:     timestamppb.New(*row.Root.User.UpdatedAt),
 				}
 			}
 			if row.Root.ReplyUser != nil {
@@ -288,8 +290,8 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 					Mbti:          bbsuserv1enum.MBTI(row.Root.ReplyUser.MBTI),
 					FollowCount:   row.Root.ReplyUser.FollowCount,
 					FollowerCount: row.Root.ReplyUser.FollowerCount,
-					CreatedAt:     row.Root.ReplyUser.CreatedAt,
-					UpdatedAt:     row.Root.ReplyUser.UpdatedAt,
+					CreatedAt:     timestamppb.New(*row.Root.ReplyUser.CreatedAt),
+					UpdatedAt:     timestamppb.New(*row.Root.ReplyUser.UpdatedAt),
 				}
 			}
 		}
@@ -311,11 +313,10 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 				LikeCount:     preview.LikeCount,
 				ThankCount:    preview.ThankCount,
 				Restriction:   bbscontentv1enum.ContentRestriction(preview.Restriction),
-				DeletedAt:     preview.DeletedAt,
 				CreatedBy:     preview.CreatedBy,
 				UpdatedBy:     preview.UpdatedBy,
-				CreatedAt:     preview.CreatedAt,
-				UpdatedAt:     preview.UpdatedAt,
+				CreatedAt:     timestamppb.New(*preview.CreatedAt),
+				UpdatedAt:     timestamppb.New(*preview.UpdatedAt),
 			}
 			if preview.ViewerActionState != nil {
 				item.ViewerActionState = &bbscontentv1.ListCommentThreads_Resp_CommentViewerActionState{
@@ -335,8 +336,8 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 					Mbti:          bbsuserv1enum.MBTI(preview.User.MBTI),
 					FollowCount:   preview.User.FollowCount,
 					FollowerCount: preview.User.FollowerCount,
-					CreatedAt:     preview.User.CreatedAt,
-					UpdatedAt:     preview.User.UpdatedAt,
+					CreatedAt:     timestamppb.New(*preview.User.CreatedAt),
+					UpdatedAt:     timestamppb.New(*preview.User.UpdatedAt),
 				}
 			}
 			if preview.ReplyUser != nil {
@@ -351,8 +352,8 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 					Mbti:          bbsuserv1enum.MBTI(preview.ReplyUser.MBTI),
 					FollowCount:   preview.ReplyUser.FollowCount,
 					FollowerCount: preview.ReplyUser.FollowerCount,
-					CreatedAt:     preview.ReplyUser.CreatedAt,
-					UpdatedAt:     preview.ReplyUser.UpdatedAt,
+					CreatedAt:     timestamppb.New(*preview.ReplyUser.CreatedAt),
+					UpdatedAt:     timestamppb.New(*preview.ReplyUser.UpdatedAt),
 				}
 			}
 			thread.PreviewReplies = append(thread.PreviewReplies, item)
@@ -366,12 +367,12 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 }
 
 func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontentv1.ListCommentReplies_Req) (*bbscontentv1.ListCommentReplies_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentCommentUsecase.ListCommentReplies(ctx, &usecase.ListCommentRepliesReq{
-		UserID:    userID,
+		UserID:    user.ID,
 		Page:      req.GetPage(),
 		ArticleID: req.GetArticleId(),
 		ParentID:  req.GetParentId(),
@@ -406,11 +407,10 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 			LikeCount:     row.LikeCount,
 			ThankCount:    row.ThankCount,
 			Restriction:   bbscontentv1enum.ContentRestriction(row.Restriction),
-			DeletedAt:     row.DeletedAt,
 			CreatedBy:     row.CreatedBy,
 			UpdatedBy:     row.UpdatedBy,
-			CreatedAt:     row.CreatedAt,
-			UpdatedAt:     row.UpdatedAt,
+			CreatedAt:     timestamppb.New(*row.CreatedAt),
+			UpdatedAt:     timestamppb.New(*row.UpdatedAt),
 		}
 		if row.ViewerActionState != nil {
 			item.ViewerActionState = &bbscontentv1.ListCommentReplies_Resp_CommentViewerActionState{
@@ -430,8 +430,8 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 				Mbti:          bbsuserv1enum.MBTI(row.User.MBTI),
 				FollowCount:   row.User.FollowCount,
 				FollowerCount: row.User.FollowerCount,
-				CreatedAt:     row.User.CreatedAt,
-				UpdatedAt:     row.User.UpdatedAt,
+				CreatedAt:     timestamppb.New(*row.User.CreatedAt),
+				UpdatedAt:     timestamppb.New(*row.User.UpdatedAt),
 			}
 		}
 		if row.ReplyUser != nil {
@@ -446,8 +446,8 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 				Mbti:          bbsuserv1enum.MBTI(row.ReplyUser.MBTI),
 				FollowCount:   row.ReplyUser.FollowCount,
 				FollowerCount: row.ReplyUser.FollowerCount,
-				CreatedAt:     row.ReplyUser.CreatedAt,
-				UpdatedAt:     row.ReplyUser.UpdatedAt,
+				CreatedAt:     timestamppb.New(*row.ReplyUser.CreatedAt),
+				UpdatedAt:     timestamppb.New(*row.ReplyUser.UpdatedAt),
 			}
 		}
 		rows = append(rows, item)
@@ -459,12 +459,12 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 }
 
 func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbscontentv1.ListCommentTimeline_Req) (*bbscontentv1.ListCommentTimeline_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentCommentUsecase.ListCommentTimeline(ctx, &usecase.ListCommentTimelineReq{
-		UserID:    userID,
+		UserID:    user.ID,
 		Page:      req.GetPage(),
 		ArticleID: req.GetArticleId(),
 		Order:     req.Order,
@@ -498,11 +498,10 @@ func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbsconten
 			LikeCount:     row.LikeCount,
 			ThankCount:    row.ThankCount,
 			Restriction:   bbscontentv1enum.ContentRestriction(row.Restriction),
-			DeletedAt:     row.DeletedAt,
 			CreatedBy:     row.CreatedBy,
 			UpdatedBy:     row.UpdatedBy,
-			CreatedAt:     row.CreatedAt,
-			UpdatedAt:     row.UpdatedAt,
+			CreatedAt:     timestamppb.New(*row.CreatedAt),
+			UpdatedAt:     timestamppb.New(*row.UpdatedAt),
 		}
 		if row.ViewerActionState != nil {
 			item.ViewerActionState = &bbscontentv1.ListCommentTimeline_Resp_CommentViewerActionState{
@@ -522,8 +521,8 @@ func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbsconten
 				Mbti:          bbsuserv1enum.MBTI(row.User.MBTI),
 				FollowCount:   row.User.FollowCount,
 				FollowerCount: row.User.FollowerCount,
-				CreatedAt:     row.User.CreatedAt,
-				UpdatedAt:     row.User.UpdatedAt,
+				CreatedAt:     timestamppb.New(*row.User.CreatedAt),
+				UpdatedAt:     timestamppb.New(*row.User.UpdatedAt),
 			}
 		}
 		if row.ReplyUser != nil {
@@ -538,8 +537,8 @@ func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbsconten
 				Mbti:          bbsuserv1enum.MBTI(row.ReplyUser.MBTI),
 				FollowCount:   row.ReplyUser.FollowCount,
 				FollowerCount: row.ReplyUser.FollowerCount,
-				CreatedAt:     row.ReplyUser.CreatedAt,
-				UpdatedAt:     row.ReplyUser.UpdatedAt,
+				CreatedAt:     timestamppb.New(*row.ReplyUser.CreatedAt),
+				UpdatedAt:     timestamppb.New(*row.ReplyUser.UpdatedAt),
 			}
 		}
 		rows = append(rows, item)
@@ -551,12 +550,12 @@ func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbsconten
 }
 
 func (s *ContentCommentService) Like(ctx context.Context, req *bbscontentv1.LikeComment_Req) (*bbscontentv1.LikeComment_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentCommentUsecase.LikeComment(ctx, &usecase.LikeCommentReq{
-		UserID: userID,
+		UserID: user.ID,
 		ID:     req.GetId(),
 		Active: req.GetActive(),
 	})
@@ -569,12 +568,12 @@ func (s *ContentCommentService) Like(ctx context.Context, req *bbscontentv1.Like
 }
 
 func (s *ContentCommentService) Thank(ctx context.Context, req *bbscontentv1.ThankComment_Req) (*bbscontentv1.ThankComment_Resp, error) {
-	userID, err := s.currentUserID(ctx)
-	if err != nil {
-		return nil, err
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	resp, err := s.contentCommentUsecase.ThankComment(ctx, &usecase.ThankCommentReq{
-		UserID: userID,
+		UserID: user.ID,
 		ID:     req.GetId(),
 		Active: req.GetActive(),
 	})

@@ -5,6 +5,7 @@ package common.api.app.bbs.v1.content;
 import "bbs/v1/content/enum/article.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
@@ -40,8 +41,8 @@ message AddPostscript {
       ContentRestriction restriction = 5; // 管理限制
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
     // 创建后的文章附言。
     ArticlePostscript postscript = 1;

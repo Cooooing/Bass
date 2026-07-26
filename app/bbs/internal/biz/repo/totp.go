@@ -1,6 +1,9 @@
 package repo
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type TotpClient interface {
 	CheckEnableCodeTotp(ctx context.Context, req *CheckEnableCodeTotpReq) (bool, error)
@@ -14,7 +17,7 @@ type TotpClient interface {
 type Totp struct {
 	UserID     int64
 	Enable     bool
-	EnableTime string
+	EnableTime *time.Time
 }
 
 type CheckEnableCodeTotpReq struct {

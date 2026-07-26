@@ -5,6 +5,7 @@ package common.api.app.bbs.v1.content;
 import "bbs/v1/content/enum/domain.proto";
 import "common/common.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
@@ -56,8 +57,8 @@ message ListDomains {
       bool is_nav = 7; // 是否在导航中展示
       optional int64 created_by = 1002; // 创建账号 ID
       optional int64 updated_by = 1003; // 更新账号 ID
-      string created_at = 1000; // 创建时间
-      string updated_at = 1001; // 更新时间
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
     // 分页结果。
     .common.api.app.common.PageResp page = 1;

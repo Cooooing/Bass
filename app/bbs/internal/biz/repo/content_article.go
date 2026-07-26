@@ -1,6 +1,9 @@
 package repo
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type ArticleViewerActionState struct {
 	Liked     bool
@@ -17,8 +20,8 @@ type ArticlePostscript struct {
 	Restriction   int32
 	CreatedBy     *int64
 	UpdatedBy     *int64
-	CreatedAt     string
-	UpdatedAt     string
+	CreatedAt     *time.Time
+	UpdatedAt     *time.Time
 }
 
 type ArticleListItem struct {
@@ -45,15 +48,15 @@ type ArticleListItem struct {
 	ReplyCount        int32
 	CoverImageURL     *string
 	ViewerActionState *ArticleViewerActionState
-	LastReplyAt       string
+	LastReplyAt       *time.Time
 	LastReplyUser     *AccountProfile
 	AuthorUser        *AccountProfile
 	CreatedBy         *int64
 	UpdatedBy         *int64
-	CreatedAt         string
-	UpdatedAt         string
-	PublishedAt       string
-	EditedAt          string
+	CreatedAt         *time.Time
+	UpdatedAt         *time.Time
+	PublishedAt       *time.Time
+	EditedAt          *time.Time
 }
 
 type ArticleDetail struct {
@@ -83,16 +86,16 @@ type ArticleDetail struct {
 	ReplyCount          int32
 	CoverImageURL       *string
 	ViewerActionState   *ArticleViewerActionState
-	LastReplyAt         string
+	LastReplyAt         *time.Time
 	LastReplyUser       *AccountProfile
 	Postscripts         []*ArticlePostscript
 	AuthorUser          *AccountProfile
 	CreatedBy           *int64
 	UpdatedBy           *int64
-	CreatedAt           string
-	UpdatedAt           string
-	PublishedAt         string
-	EditedAt            string
+	CreatedAt           *time.Time
+	UpdatedAt           *time.Time
+	PublishedAt         *time.Time
+	EditedAt            *time.Time
 }
 
 type ArticleSave struct {

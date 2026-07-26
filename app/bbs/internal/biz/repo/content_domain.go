@@ -1,6 +1,9 @@
 package repo
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type Domain struct {
 	ID          int64
@@ -12,8 +15,8 @@ type Domain struct {
 	IsNav       bool
 	CreatedBy   *int64
 	UpdatedBy   *int64
-	CreatedAt   string
-	UpdatedAt   string
+	CreatedAt   *time.Time
+	UpdatedAt   *time.Time
 }
 
 type DomainQuery struct {

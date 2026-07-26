@@ -3,6 +3,7 @@ package repo
 import (
 	"bbs/internal/enum"
 	"context"
+	"time"
 )
 
 type RelationClient interface {
@@ -76,8 +77,8 @@ type Relation struct {
 	Type      enum.RelationType
 	ActorID   int64
 	TargetID  int64
-	CreatedAt string
-	UpdatedAt string
+	CreatedAt *time.Time
+	UpdatedAt *time.Time
 }
 
 type RelationStatus struct {

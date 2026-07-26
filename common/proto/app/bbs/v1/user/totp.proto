@@ -5,6 +5,7 @@ package common.api.app.bbs.v1.user;
 import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
@@ -84,7 +85,7 @@ message GetCurrentTotp {
       // 是否启用 TOTP。
       bool enable = 2;
       // 启用时间。
-      string enable_time = 3;
+      google.protobuf.Timestamp enable_time = 3;
     }
     // TOTP 认证状态。
     Totp totp = 1;

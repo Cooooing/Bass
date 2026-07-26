@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ContentDomainService struct {
@@ -63,8 +64,8 @@ func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListD
 			IsNav:       row.IsNav,
 			CreatedBy:   row.CreatedBy,
 			UpdatedBy:   row.UpdatedBy,
-			CreatedAt:   row.CreatedAt,
-			UpdatedAt:   row.UpdatedAt,
+			CreatedAt:   timestamppb.New(*row.CreatedAt),
+			UpdatedAt:   timestamppb.New(*row.UpdatedAt),
 		})
 	}
 	return &bbscontentv1.ListDomains_Resp{

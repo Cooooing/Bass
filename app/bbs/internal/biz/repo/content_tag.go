@@ -1,6 +1,9 @@
 package repo
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
 type Tag struct {
 	ID          int64
@@ -10,8 +13,8 @@ type Tag struct {
 	Status      *int32
 	CreatedBy   *int64
 	UpdatedBy   *int64
-	CreatedAt   string
-	UpdatedAt   string
+	CreatedAt   *time.Time
+	UpdatedAt   *time.Time
 }
 
 type TagSave struct {

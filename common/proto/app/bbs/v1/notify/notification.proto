@@ -5,6 +5,7 @@ package common.api.app.bbs.v1.notify;
 import "common/common.proto";
 import "common/enums/event.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/notify;notify";
 
@@ -56,11 +57,11 @@ message ListNotifications {
       // 通知内容。
       string content = 6;
       // 已读时间。
-      string read_at = 7;
+      google.protobuf.Timestamp read_at = 7;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
     // 分页结果。
     .common.api.app.common.PageResp page = 1;

@@ -18,7 +18,6 @@ import (
 var _ repo.AuthRepo = (*AuthRepo)(nil)
 
 type AuthRepo struct {
-	protoTimeFormatter
 	userClient *rpc.UserClient
 }
 
@@ -187,8 +186,8 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 				MBTI:          int32(basic.GetMbti()),
 				FollowCount:   basic.FollowCount,
 				FollowerCount: basic.FollowerCount,
-				CreatedAt:     r.formatProtoTime(basic.GetCreatedAt()),
-				UpdatedAt:     r.formatProtoTime(basic.GetUpdatedAt()),
+				CreatedAt:     new(basic.GetCreatedAt().AsTime()),
+				UpdatedAt:     new(basic.GetUpdatedAt().AsTime()),
 			}
 		}
 		if contact := reply.GetAccount().GetContact(); contact != nil {

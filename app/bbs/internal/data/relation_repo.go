@@ -13,7 +13,6 @@ import (
 var _ repo.RelationClient = (*RelationClient)(nil)
 
 type RelationClient struct {
-	protoTimeFormatter
 	userClient *rpc.UserClient
 }
 
@@ -103,8 +102,8 @@ func (r *RelationClient) ListFollowing(ctx context.Context, req *repo.ListFollow
 			Type:      r.relationTypeFromUser(item.GetType()),
 			ActorID:   item.GetActorId(),
 			TargetID:  item.GetTargetId(),
-			CreatedAt: r.formatProtoTime(item.GetCreatedAt()),
-			UpdatedAt: r.formatProtoTime(item.GetUpdatedAt()),
+			CreatedAt: new(item.GetCreatedAt().AsTime()),
+			UpdatedAt: new(item.GetUpdatedAt().AsTime()),
 		})
 	}
 	return &repo.ListFollowingRelationsResp{
@@ -147,8 +146,8 @@ func (r *RelationClient) ListFollowers(ctx context.Context, req *repo.ListFollow
 			Type:      r.relationTypeFromUser(item.GetType()),
 			ActorID:   item.GetActorId(),
 			TargetID:  item.GetTargetId(),
-			CreatedAt: r.formatProtoTime(item.GetCreatedAt()),
-			UpdatedAt: r.formatProtoTime(item.GetUpdatedAt()),
+			CreatedAt: new(item.GetCreatedAt().AsTime()),
+			UpdatedAt: new(item.GetUpdatedAt().AsTime()),
 		})
 	}
 	return &repo.ListFollowersRelationsResp{
@@ -191,8 +190,8 @@ func (r *RelationClient) ListBlocked(ctx context.Context, req *repo.ListBlockedR
 			Type:      r.relationTypeFromUser(item.GetType()),
 			ActorID:   item.GetActorId(),
 			TargetID:  item.GetTargetId(),
-			CreatedAt: r.formatProtoTime(item.GetCreatedAt()),
-			UpdatedAt: r.formatProtoTime(item.GetUpdatedAt()),
+			CreatedAt: new(item.GetCreatedAt().AsTime()),
+			UpdatedAt: new(item.GetUpdatedAt().AsTime()),
 		})
 	}
 	return &repo.ListBlockedRelationsResp{

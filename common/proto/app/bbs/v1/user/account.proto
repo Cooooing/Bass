@@ -7,6 +7,7 @@ import "common/common.proto";
 import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
@@ -84,9 +85,9 @@ message GetCurrentAccount {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
     // 当前账号完整资料。
     Account account = 1;
@@ -123,9 +124,9 @@ message GetProfileAccount {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
     // 账号展示资料。
     AccountProfile profile = 1;
@@ -169,9 +170,9 @@ message UpdateProfileAccount {
       // 粉丝数量。
       optional int32 follower_count = 11;
       // 创建时间。
-      string created_at = 1000;
+      google.protobuf.Timestamp created_at = 1000;
       // 更新时间。
-      string updated_at = 1001;
+      google.protobuf.Timestamp updated_at = 1001;
     }
     // 更新后的账号展示资料。
     AccountProfile profile = 1;

@@ -6,6 +6,8 @@ import (
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type TotpUsecase struct {
@@ -121,9 +123,11 @@ func (u *TotpUsecase) GetCurrentTotp(ctx context.Context, userID int64) (*bbsuse
 	var totp *bbsuserv1.GetCurrentTotp_Resp_Totp
 	if row := reply; row != nil {
 		totp = &bbsuserv1.GetCurrentTotp_Resp_Totp{
-			UserId:     row.UserID,
-			Enable:     row.Enable,
-			EnableTime: row.EnableTime,
+			UserId: row.UserID,
+			Enable: row.Enable,
+		}
+		if row.EnableTime != nil {
+			totp.EnableTime = timestamppb.New(*row.EnableTime)
 		}
 	}
 	return totp, nil

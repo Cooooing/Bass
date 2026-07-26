@@ -232,8 +232,34 @@ func (r *fakeTaskRepo) Map(context.Context, *repo.TaskGetReq) (map[int64]*model.
 	return nil, nil
 }
 
-func (r *fakeTaskRepo) Count(context.Context, *repo.TaskGetReq) (int, error) {
-	return 0, nil
+func (r *fakeTaskRepo) MapByTitle(_ context.Context, titles []string) (map[string]*model.Task, error) {
+	result := map[string]*model.Task{}
+	if r.task == nil {
+		return result, nil
+	}
+	if len(titles) > 0 {
+		for _, title := range titles {
+			if r.task.Title == title {
+				result[r.task.Title] = r.task
+			}
+		}
+		return result, nil
+	}
+	result[r.task.Title] = r.task
+	return result, nil
+}
+
+func (r *fakeTaskRepo) Count(_ context.Context, req *repo.TaskGetReq) (int, error) {
+	if r.task == nil {
+		return 0, nil
+	}
+	if req != nil && req.Title != nil {
+		if r.task.Title == *req.Title {
+			return 1, nil
+		}
+		return 0, nil
+	}
+	return 1, nil
 }
 
 func (r *fakeTaskRepo) Page(context.Context, *repo.TaskPageReq) (*repo.TaskPageResp, error) {
@@ -502,11 +528,12 @@ func (a *fakeAlert) Alert(_ context.Context, req *repo.TaskAlertReq) error {
 }
 
 type fakeTask struct {
-	executed    chan string
-	err         error
-	block       chan struct{}
-	nilOnCancel bool
-	executions  atomic.Int64
+	executed         chan string
+	err              error
+	block            chan struct{}
+	nilOnCancel      bool
+	defaultSchedules []*taskimpl.DefaultSchedule
+	executions       atomic.Int64
 }
 
 func (t *fakeTask) Name() string {
@@ -519,6 +546,10 @@ func (t *fakeTask) Title() string {
 
 func (t *fakeTask) Description() string {
 	return "用于测试的空任务"
+}
+
+func (t *fakeTask) DefaultSchedules() []*taskimpl.DefaultSchedule {
+	return t.defaultSchedules
 }
 
 func (t *fakeTask) Execute(ctx context.Context, payload string) error {
@@ -569,6 +600,152 @@ func TestUpsertCreatesTaskVersionSnapshot(t *testing.T) {
 	version := taskVersionRepo.created[0]
 	if version.TaskID != saved.ID || version.Version != saved.Version || version.Name != saved.Name {
 		t.Fatalf("unexpected task version snapshot: %#v saved=%#v", version, saved)
+	}
+}
+
+func TestSeedDefaultTasksCreatesMissingSchedule(t *testing.T) {
+	taskRepo := &fakeTaskRepo{}
+	taskVersionRepo := &fakeTaskVersionRepo{}
+	taskImpl := &fakeTask{
+		defaultSchedules: []*taskimpl.DefaultSchedule{
+			{
+				Title:          "Noop default",
+				Description:    "Default noop schedule",
+				Enabled:        true,
+				CronSpec:       "0/5 * * * * ?",
+				Payload:        `{"name":"test"}`,
+				TimeoutSeconds: 10,
+				AllowOverlap:   true,
+				AlertEnabled:   true,
+			},
+		},
+	}
+	usecase := NewTaskUsecase(
+		slog.New(slog.NewTextHandler(io.Discard, nil)),
+		testConf(),
+		testTx,
+		taskRepo,
+		taskVersionRepo,
+		&fakeExecutionRepo{},
+		&fakeTaskLockRepo{},
+		map[string]taskimpl.Task{"noop": taskImpl},
+		&fakeTaskEventBus{},
+		&fakeAlert{},
+	)
+
+	if err := usecase.SeedDefaultTasks(context.Background()); err != nil {
+		t.Fatalf("SeedDefaultTasks returned error: %v", err)
+	}
+	if taskRepo.task == nil {
+		t.Fatalf("expected default task to be created, got %#v", taskRepo.task)
+	}
+	if taskRepo.task.Name != "noop" || taskRepo.task.CronSpec != "0/5 * * * * ?" || !taskRepo.task.Enabled {
+		t.Fatalf("unexpected default task row: %#v", taskRepo.task)
+	}
+	if len(taskVersionRepo.created) != 1 {
+		t.Fatalf("expected one task version snapshot, got %d", len(taskVersionRepo.created))
+	}
+}
+
+func TestSeedDefaultTasksSkipsExistingSchedule(t *testing.T) {
+	taskRepo := &fakeTaskRepo{
+		task: &model.Task{
+			ID:             7,
+			Name:           "noop",
+			Title:          "Noop default",
+			Description:    "Customized",
+			Enabled:        false,
+			CronSpec:       "0/30 * * * * ? *",
+			Payload:        `{"custom":true}`,
+			TimeoutSeconds: 60,
+			AllowOverlap:   false,
+			AlertEnabled:   false,
+			Version:        3,
+		},
+	}
+	taskVersionRepo := &fakeTaskVersionRepo{}
+	taskImpl := &fakeTask{
+		defaultSchedules: []*taskimpl.DefaultSchedule{
+			{
+				Title:          "Noop default",
+				Description:    "Default noop schedule",
+				Enabled:        true,
+				CronSpec:       "0/5 * * * * ?",
+				Payload:        `{"name":"test"}`,
+				TimeoutSeconds: 10,
+				AllowOverlap:   true,
+				AlertEnabled:   true,
+			},
+		},
+	}
+	usecase := NewTaskUsecase(
+		slog.New(slog.NewTextHandler(io.Discard, nil)),
+		testConf(),
+		testTx,
+		taskRepo,
+		taskVersionRepo,
+		&fakeExecutionRepo{},
+		&fakeTaskLockRepo{},
+		map[string]taskimpl.Task{"noop": taskImpl},
+		&fakeTaskEventBus{},
+		&fakeAlert{},
+	)
+
+	if err := usecase.SeedDefaultTasks(context.Background()); err != nil {
+		t.Fatalf("SeedDefaultTasks returned error: %v", err)
+	}
+	if taskRepo.task.CronSpec != "0/30 * * * * ? *" || taskRepo.task.Payload != `{"custom":true}` || taskRepo.task.Enabled {
+		t.Fatalf("seed should not overwrite existing task, got %#v", taskRepo.task)
+	}
+	if len(taskVersionRepo.created) != 0 {
+		t.Fatalf("expected no task version snapshot, got %d", len(taskVersionRepo.created))
+	}
+}
+
+func TestSeedDefaultTasksRejectsDuplicatedDefaultTitles(t *testing.T) {
+	taskRepo := &fakeTaskRepo{}
+	taskVersionRepo := &fakeTaskVersionRepo{}
+	taskImpl := &fakeTask{
+		defaultSchedules: []*taskimpl.DefaultSchedule{
+			{
+				Title:          "Noop default",
+				Enabled:        true,
+				CronSpec:       "0/5 * * * * ?",
+				Payload:        `{"name":"test"}`,
+				TimeoutSeconds: 10,
+				AlertEnabled:   true,
+			},
+			{
+				Title:          "Noop default",
+				Enabled:        true,
+				CronSpec:       "0/10 * * * * ?",
+				Payload:        `{"name":"test"}`,
+				TimeoutSeconds: 10,
+				AlertEnabled:   true,
+			},
+		},
+	}
+	usecase := NewTaskUsecase(
+		slog.New(slog.NewTextHandler(io.Discard, nil)),
+		testConf(),
+		testTx,
+		taskRepo,
+		taskVersionRepo,
+		&fakeExecutionRepo{},
+		&fakeTaskLockRepo{},
+		map[string]taskimpl.Task{"noop": taskImpl},
+		&fakeTaskEventBus{},
+		&fakeAlert{},
+	)
+
+	if err := usecase.SeedDefaultTasks(context.Background()); err == nil {
+		t.Fatal("expected duplicated default title error")
+	}
+	if taskRepo.task != nil {
+		t.Fatalf("duplicated defaults should not create task, got %#v", taskRepo.task)
+	}
+	if len(taskVersionRepo.created) != 0 {
+		t.Fatalf("duplicated defaults should not create task version, got %d", len(taskVersionRepo.created))
 	}
 }
 

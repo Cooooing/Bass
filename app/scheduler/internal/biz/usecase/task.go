@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"github.com/robfig/cron/v3"
+	"github.com/samber/lo"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	otelcodes "go.opentelemetry.io/otel/codes"
@@ -80,6 +81,65 @@ func (u *TaskUsecase) Upsert(ctx context.Context, row *model.Task) (*model.Task,
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	return u.upsert(ctx, row)
+}
+
+func (u *TaskUsecase) SeedDefaultTasks(ctx context.Context) error {
+	names := make([]string, 0, len(u.tasks))
+	for name := range u.tasks {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	defaultTasks := make([]*model.Task, 0)
+	for _, name := range names {
+		item := u.tasks[name]
+		for _, schedule := range item.DefaultSchedules() {
+			if schedule == nil {
+				continue
+			}
+			title := strings.TrimSpace(schedule.Title)
+			if title == "" {
+				title = item.Title()
+			}
+			description := strings.TrimSpace(schedule.Description)
+			if description == "" {
+				description = item.Description()
+			}
+			defaultTasks = append(defaultTasks, &model.Task{
+				Name:           item.Name(),
+				Title:          title,
+				Description:    description,
+				Enabled:        schedule.Enabled,
+				CronSpec:       schedule.CronSpec,
+				Payload:        schedule.Payload,
+				TimeoutSeconds: schedule.TimeoutSeconds,
+				AllowOverlap:   schedule.AllowOverlap,
+				AlertEnabled:   schedule.AlertEnabled,
+			})
+		}
+	}
+	if len(defaultTasks) == 0 {
+		return nil
+	}
+	titles := lo.Map(defaultTasks, func(row *model.Task, _ int) string {
+		return row.Title
+	})
+	duplicatedTitles := lo.FindDuplicates(titles)
+	if len(duplicatedTitles) > 0 {
+		return fmt.Errorf("scheduler default task title duplicated: %s", strings.Join(duplicatedTitles, ","))
+	}
+	existingTasks, err := u.taskRepo.MapByTitle(ctx, titles)
+	if err != nil {
+		return err
+	}
+	for _, row := range defaultTasks {
+		if existingTasks[row.Title] != nil {
+			continue
+		}
+		if _, err := u.upsert(ctx, row); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (u *TaskUsecase) upsert(ctx context.Context, row *model.Task) (*model.Task, error) {

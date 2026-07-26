@@ -112,6 +112,23 @@ func (r *TaskRepo) Page(ctx context.Context, req *bizrepo.TaskPageReq) (*bizrepo
 	}, nil
 }
 
+func (r *TaskRepo) MapByTitle(ctx context.Context, titles []string) (map[string]*model.Task, error) {
+	if len(titles) == 0 {
+		return map[string]*model.Task{}, nil
+	}
+	rows, err := r.List(ctx, &bizrepo.TaskGetReq{
+		Titles: titles,
+	})
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[string]*model.Task, len(rows))
+	for _, row := range rows {
+		result[row.Title] = row
+	}
+	return result, nil
+}
+
 func (r *TaskRepo) Upsert(ctx context.Context, row *model.Task) (*model.Task, error) {
 	var result *model.Task
 	if row.ID > 0 {
@@ -189,6 +206,9 @@ func (r *TaskRepo) getQuery(query *gen.TaskQuery, req *bizrepo.TaskGetReq) *gen.
 	}
 	if req.Title != nil {
 		query = query.Where(task.TitleContains(*req.Title))
+	}
+	if len(req.Titles) > 0 {
+		query = query.Where(task.TitleIn(req.Titles...))
 	}
 	if req.Enabled != nil {
 		query = query.Where(task.Enabled(*req.Enabled))

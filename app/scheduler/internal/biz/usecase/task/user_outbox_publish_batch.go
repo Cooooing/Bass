@@ -47,6 +47,21 @@ func (t *UserOutboxPublishBatch) Description() string {
 	return t.description
 }
 
+func (t *UserOutboxPublishBatch) DefaultSchedules() []*DefaultSchedule {
+	return []*DefaultSchedule{
+		{
+			Title:          t.Title(),
+			Description:    t.Description(),
+			Enabled:        true,
+			CronSpec:       "0/10 * * * * ?",
+			Payload:        `{"limit":1000,"publish_timeout_seconds":300,"max_retry":10}`,
+			TimeoutSeconds: 30,
+			AllowOverlap:   false,
+			AlertEnabled:   false,
+		},
+	}
+}
+
 type userOutboxPublishBatchPayload struct {
 	Limit                 int32 `json:"limit"`
 	PublishTimeoutSeconds int64 `json:"publish_timeout_seconds"`

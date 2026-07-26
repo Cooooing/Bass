@@ -47,6 +47,9 @@ func NewSchedulerRunner(
 func (r *SchedulerRunner) Start(ctx context.Context) error {
 	runCtx, cancel := context.WithCancel(ctx)
 	r.cancel = cancel
+	if err := r.taskUsecase.SeedDefaultTasks(runCtx); err != nil {
+		return err
+	}
 	tasks, err := r.taskRepo.List(runCtx, &repo.TaskGetReq{
 		Enabled: new(true),
 	})

@@ -39,6 +39,10 @@ func (t *UserUnbanAccounts) Description() string {
 	return t.description
 }
 
+func (t *UserUnbanAccounts) DefaultSchedules() []*DefaultSchedule {
+	return nil
+}
+
 type userUnbanAccountsPayload struct {
 	UserIDs []int64 `json:"user_ids"`
 }

@@ -13,6 +13,7 @@ type TaskRepo interface {
 	Count(ctx context.Context, req *TaskGetReq) (int, error)
 	Page(ctx context.Context, req *TaskPageReq) (*TaskPageResp, error)
 
+	MapByTitle(ctx context.Context, titles []string) (map[string]*model.Task, error)
 	Upsert(ctx context.Context, row *model.Task) (*model.Task, error)
 	Lock(ctx context.Context, id int64) error
 }
@@ -22,6 +23,7 @@ type TaskGetReq struct {
 	IDs     []int64
 	Name    *string
 	Title   *string
+	Titles  []string
 	Enabled *bool
 }
 

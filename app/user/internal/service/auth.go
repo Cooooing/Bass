@@ -50,8 +50,8 @@ func (s *AuthService) StartEmailRegistration(ctx context.Context, req *v1.StartE
 		Nickname: req.Nickname,
 	})
 	reply := &v1.StartEmailRegistration_Resp{}
-	if err == nil && res != nil && s.conf.GetServer().GetMode() != constant.Prod {
-		reply.Code = res.Code
+	if err == nil && res != nil && res.Code != "" && s.conf.GetServer().GetMode() != constant.Prod {
+		reply.Code = new(res.Code)
 	}
 	return reply, err
 }
@@ -72,8 +72,8 @@ func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *v1.StartP
 		Nickname: req.Nickname,
 	})
 	reply := &v1.StartPhoneRegistration_Resp{}
-	if err == nil && res != nil && s.conf.GetServer().GetMode() != constant.Prod {
-		reply.Code = res.Code
+	if err == nil && res != nil && res.Code != "" && s.conf.GetServer().GetMode() != constant.Prod {
+		reply.Code = new(res.Code)
 	}
 	return reply, err
 }
@@ -89,8 +89,8 @@ func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *v1.Verif
 func (s *AuthService) StartEmailLogin(ctx context.Context, req *v1.StartEmailLogin_Req) (*v1.StartEmailLogin_Resp, error) {
 	res, err := s.authUsecase.StartEmailLogin(ctx, req.GetEmail())
 	reply := &v1.StartEmailLogin_Resp{}
-	if err == nil && res != nil && s.conf.GetServer().GetMode() != constant.Prod {
-		reply.Code = res.Code
+	if err == nil && res != nil && res.Code != "" && s.conf.GetServer().GetMode() != constant.Prod {
+		reply.Code = new(res.Code)
 	}
 	return reply, err
 }
@@ -98,8 +98,8 @@ func (s *AuthService) StartEmailLogin(ctx context.Context, req *v1.StartEmailLog
 func (s *AuthService) StartPhoneLogin(ctx context.Context, req *v1.StartPhoneLogin_Req) (*v1.StartPhoneLogin_Resp, error) {
 	res, err := s.authUsecase.StartPhoneLogin(ctx, req.GetPhone())
 	reply := &v1.StartPhoneLogin_Resp{}
-	if err == nil && res != nil && s.conf.GetServer().GetMode() != constant.Prod {
-		reply.Code = res.Code
+	if err == nil && res != nil && res.Code != "" && s.conf.GetServer().GetMode() != constant.Prod {
+		reply.Code = new(res.Code)
 	}
 	return reply, err
 }

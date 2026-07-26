@@ -61,9 +61,11 @@ func (s *AuthService) StartEmailRegistration(ctx context.Context, req *bbsuserv1
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.StartEmailRegistration_Resp{
-		Code: resp.Code,
-	}, nil
+	reply := &bbsuserv1.StartEmailRegistration_Resp{}
+	if resp.Code != "" {
+		reply.Code = new(resp.Code)
+	}
+	return reply, nil
 }
 
 func (s *AuthService) VerifyEmailRegistration(ctx context.Context, req *bbsuserv1.VerifyEmailRegistration_Req) (*bbsuserv1.VerifyEmailRegistration_Resp, error) {
@@ -89,9 +91,11 @@ func (s *AuthService) StartPhoneRegistration(ctx context.Context, req *bbsuserv1
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.StartPhoneRegistration_Resp{
-		Code: resp.Code,
-	}, nil
+	reply := &bbsuserv1.StartPhoneRegistration_Resp{}
+	if resp.Code != "" {
+		reply.Code = new(resp.Code)
+	}
+	return reply, nil
 }
 
 func (s *AuthService) VerifyPhoneRegistration(ctx context.Context, req *bbsuserv1.VerifyPhoneRegistration_Req) (*bbsuserv1.VerifyPhoneRegistration_Resp, error) {
@@ -113,9 +117,11 @@ func (s *AuthService) StartEmailLogin(ctx context.Context, req *bbsuserv1.StartE
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.StartEmailLogin_Resp{
-		Code: resp.Code,
-	}, nil
+	reply := &bbsuserv1.StartEmailLogin_Resp{}
+	if resp.Code != "" {
+		reply.Code = new(resp.Code)
+	}
+	return reply, nil
 }
 
 func (s *AuthService) StartPhoneLogin(ctx context.Context, req *bbsuserv1.StartPhoneLogin_Req) (*bbsuserv1.StartPhoneLogin_Resp, error) {
@@ -127,9 +133,11 @@ func (s *AuthService) StartPhoneLogin(ctx context.Context, req *bbsuserv1.StartP
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.StartPhoneLogin_Resp{
-		Code: resp.Code,
-	}, nil
+	reply := &bbsuserv1.StartPhoneLogin_Resp{}
+	if resp.Code != "" {
+		reply.Code = new(resp.Code)
+	}
+	return reply, nil
 }
 
 func (s *AuthService) Login(ctx context.Context, req *bbsuserv1.Login_Req) (*bbsuserv1.Login_Resp, error) {

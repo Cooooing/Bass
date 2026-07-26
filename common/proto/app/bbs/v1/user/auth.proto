@@ -107,7 +107,7 @@ message StartEmailRegistration {
     };
   }
   message Resp {
-    string code = 1; // 非生产环境返回验证码，生产环境为空
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
@@ -136,7 +136,7 @@ message StartPhoneRegistration {
     };
   }
   message Resp {
-    string code = 1; // 非生产环境返回验证码，生产环境为空
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
@@ -158,7 +158,7 @@ message StartEmailLogin {
     option (gnostic.openapi.v3.schema) = { required: "email" };
   }
   message Resp {
-    string code = 1; // 非生产环境返回验证码，生产环境为空
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
@@ -168,7 +168,7 @@ message StartPhoneLogin {
     option (gnostic.openapi.v3.schema) = { required: "phone" };
   }
   message Resp {
-    string code = 1; // 非生产环境返回验证码，生产环境为空
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 

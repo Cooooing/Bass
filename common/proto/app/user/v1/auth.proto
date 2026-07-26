@@ -38,7 +38,7 @@ message StartEmailRegistration {
     optional string nickname = 4; // 昵称
   }
   message Resp {
-    string code = 1; // 非生产环境返回验证码，生产环境为空
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
@@ -58,7 +58,7 @@ message StartPhoneRegistration {
     optional string nickname = 4; // 昵称
   }
   message Resp {
-    string code = 1; // 非生产环境返回验证码，生产环境为空
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
@@ -75,7 +75,7 @@ message StartEmailLogin {
     string email = 1; // 邮箱地址
   }
   message Resp {
-    string code = 1; // 非生产环境返回验证码，生产环境为空
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
@@ -84,7 +84,7 @@ message StartPhoneLogin {
     string phone = 1; // 手机号
   }
   message Resp {
-    string code = 1; // 非生产环境返回验证码，生产环境为空
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 

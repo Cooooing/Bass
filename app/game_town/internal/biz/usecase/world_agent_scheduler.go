@@ -378,40 +378,6 @@ func (r *WorldAgentRunner) acquire(ctx context.Context, job *model.AgentJob) (*m
 	return world, true
 }
 
-func (r *WorldAgentRunner) acquireBackgroundJob(ctx context.Context, job *model.AgentJob, laneKey string) (*model.World, bool) {
-	r.mu.Lock()
-	blocked := r.lanes[laneKey]
-	r.mu.Unlock()
-	if blocked {
-		return nil, false
-	}
-
-	world, err := r.worldRepo.Get(ctx, &repo.WorldQuery{
-		ID: new(job.WorldID),
-	})
-	if err != nil {
-		r.log.ErrorContext(
-			ctx,
-			"load background agent job world failed",
-			constant.LogFieldTaskID,
-			job.ID,
-			"world_id",
-			job.WorldID,
-			constant.LogFieldErr,
-			err,
-		)
-		return nil, false
-	}
-
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	if r.lanes[laneKey] {
-		return nil, false
-	}
-	r.lanes[laneKey] = true
-	return world, true
-}
-
 func (r *WorldAgentRunner) acquireMemoryJob(ctx context.Context, job *model.AgentJob, laneKey string) (*model.World, bool) {
 	r.mu.Lock()
 	blocked := r.activeMemory >= r.memoryLimit() || r.lanes[laneKey]

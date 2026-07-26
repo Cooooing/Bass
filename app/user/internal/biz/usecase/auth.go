@@ -84,28 +84,6 @@ func NewAuthUsecase(
 	}, nil
 }
 
-type CheckPasswordLoginReq struct {
-	Account  string
-	Password string
-}
-
-func (s *AuthUsecase) CheckPasswordLogin(ctx context.Context, req *CheckPasswordLoginReq) (bool, error) {
-	if req.Account == "" || req.Password == "" {
-		return false, nil
-	}
-	user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
-		Account: new(req.Account),
-	})
-	if err != nil {
-		code, ok := apperror.BusinessCode(err)
-		if ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND {
-			return false, nil
-		}
-		return false, err
-	}
-	return user != nil && str.VerifyPassword(user.Password, req.Password), nil
-}
-
 type StartEmailRegistrationResp struct {
 	Code string
 }
@@ -186,23 +164,6 @@ func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, account *model
 	}, nil
 }
 
-type CheckEmailRegistrationCodeReq struct {
-	Email string
-	Code  string
-}
-
-func (s *AuthUsecase) CheckEmailRegistrationCode(ctx context.Context, req *CheckEmailRegistrationCodeReq) (bool, error) {
-	email := strings.ToLower(strings.TrimSpace(req.Email))
-	row, err := s.authCacheRepo.GetCode(ctx, enum.VerificationTypeEmail, email)
-	if err != nil {
-		return false, err
-	}
-	if row == nil || row.ExpiresAt == nil || !row.ExpiresAt.After(time.Now()) || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
-		return false, nil
-	}
-	return true, nil
-}
-
 type VerifyEmailRegistrationReq struct {
 	Email string
 	Code  string
@@ -263,15 +224,6 @@ type StartPhoneRegistrationResp struct {
 
 func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, account *model.Account) (*StartPhoneRegistrationResp, error) {
 	return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
-}
-
-type CheckPhoneRegistrationCodeReq struct {
-	Phone string
-	Code  string
-}
-
-func (s *AuthUsecase) CheckPhoneRegistrationCode(ctx context.Context, req *CheckPhoneRegistrationCodeReq) (bool, error) {
-	return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
 }
 
 type VerifyPhoneRegistrationReq struct {

@@ -512,57 +512,6 @@ func (r *WorldAgentRunner) fallbackPlayerActionResolution(result *agentResult, e
 	}
 }
 
-func (r *WorldAgentRunner) deterministicPlayerActionResolution(result *agentResult) *model.ActionResolution {
-	content := ""
-	if result != nil && result.source != nil {
-		content = strings.TrimSpace(result.source.Content)
-	}
-	if content == "" {
-		content = "玩家采取了一个未说明细节的行动"
-	}
-	summary := r.normalizeModelText("玩家行动产生影响："+content, 120)
-	actions := make([]model.ActionStep, 0, 2)
-	if result != nil && result.source != nil {
-		for _, target := range r.actionTargets(result.source.Payload) {
-			if target.Type == enum.EntityTypeLocation {
-				actions = append(actions, model.ActionStep{
-					Type: "move_player",
-					Target: &model.EntityRef{
-						Type: enum.EntityTypeLocation,
-						ID:   target.ID,
-					},
-				})
-				break
-			}
-		}
-	}
-	if len(actions) == 0 && result != nil && result.location != nil {
-		actions = append(actions, model.ActionStep{
-			Type: "change_location",
-			Target: &model.EntityRef{
-				Type: enum.EntityTypeLocation,
-				ID:   result.location.ID,
-			},
-			Parameters: map[string]any{
-				"description":      r.normalizeModelText(result.location.Description+"玩家行动让这里的局势出现新的变化。", 180),
-				"environment_tags": []string{"player_influenced"},
-			},
-			DurationMinutes: 30,
-		})
-	}
-	return &model.ActionResolution{
-		Status:       "resolved",
-		Summary:      summary,
-		WorldSummary: r.fallbackWorldSummary(result),
-		CurrentArc:   r.fallbackCurrentArc(result),
-		Actions:      actions,
-		SuggestedActions: []model.SuggestedAction{
-			{Label: "继续推进", Content: "我继续沿着这个方向扩大影响。"},
-			{Label: "观察后果", Content: "我先观察各方对这件事的反应。"},
-		},
-	}
-}
-
 func (r *WorldAgentRunner) fallbackNpcPlan(result *agentResult, err error) *model.NpcPlan {
 	summary := "NPC 根据当前局势维持原计划，并继续观察变化。"
 	goal := "观察局势"

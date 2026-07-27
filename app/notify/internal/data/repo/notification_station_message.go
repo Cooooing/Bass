@@ -213,10 +213,7 @@ func (r *NotificationStationMessageRepo) getQuery(query *gen.NotificationStation
 		query = query.Where(notificationstationmessage.ReceiverIDEQ(*req.ReceiverID))
 	}
 	if req.EventType != nil {
-		eventType, ok := commonenum.EventTypeMap.ToEnum(*req.EventType)
-		if ok {
-			query = query.Where(notificationstationmessage.EventTypeEQ(notificationstationmessage.EventType(eventType)))
-		}
+		query = query.Where(notificationstationmessage.EventTypeEQ(notificationstationmessage.EventType(*req.EventType)))
 	}
 	if req.Unread != nil {
 		if *req.Unread {

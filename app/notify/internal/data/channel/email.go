@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	bizchannel "notify/internal/biz/channel"
+	bizrepo "notify/internal/biz/repo"
 	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 
@@ -14,7 +14,7 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
-var _ bizchannel.EmailClient = (*EmailClient)(nil)
+var _ bizrepo.EmailClient = (*EmailClient)(nil)
 
 type EmailClient struct {
 	conf *config.Bootstrap
@@ -31,9 +31,12 @@ func NewEmailClient(
 	}
 }
 
-func (c *EmailClient) SendEmail(_ context.Context, req *bizchannel.EmailRequest) (*bizchannel.SendResult, error) {
+func (c *EmailClient) SendEmail(ctx context.Context, req *bizrepo.EmailRequest) (*bizrepo.EmailSendResult, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	if req == nil || req.ToEmail == "" {
-		return &bizchannel.SendResult{
+		return &bizrepo.EmailSendResult{
 			Status: notifyenum.NotificationChannelStatusFailed,
 		}, nil
 	}
@@ -56,13 +59,13 @@ func (c *EmailClient) SendEmail(_ context.Context, req *bizchannel.EmailRequest)
 	dialer.SSL = email.SmtpPort == 465
 
 	if err := dialer.DialAndSend(message); err != nil {
-		return &bizchannel.SendResult{
+		return &bizrepo.EmailSendResult{
 			Status:       notifyenum.NotificationChannelStatusUnknown,
 			ProviderResp: new(fmt.Sprintf("send email: %v", err)),
 		}, nil
 	}
 	c.log.Info(fmt.Sprintf("send email succeeded: to=%s", req.ToEmail))
-	return &bizchannel.SendResult{
+	return &bizrepo.EmailSendResult{
 		Status: notifyenum.NotificationChannelStatusSucceeded,
 	}, nil
 }

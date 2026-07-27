@@ -11,6 +11,7 @@ import (
 	notifyenum "notify/internal/enum"
 
 	utilent "common/pkg/util/ent"
+	entsql "entgo.io/ent/dialect/sql"
 )
 
 var _ bizrepo.NotificationRuleRepo = (*NotificationRuleRepo)(nil)
@@ -35,6 +36,57 @@ func (r *NotificationRuleRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
+func (r *NotificationRuleRepo) Upsert(ctx context.Context, rule *model.NotificationRule) (*model.NotificationRule, error) {
+	err := r.getClient(ctx).NotificationRule.Create().
+		SetEventType(notificationrule.EventType(rule.EventType)).
+		SetChannel(notificationrule.Channel(rule.Channel)).
+		SetLanguage(notificationrule.Language(rule.Language)).
+		SetEnabled(rule.Enabled).
+		OnConflict(
+			entsql.ConflictColumns(notificationrule.FieldEventType, notificationrule.FieldChannel, notificationrule.FieldLanguage),
+			entsql.ConflictWhere(entsql.IsNull(notificationrule.FieldDeletedAt)),
+		).
+		UpdateEnabled().
+		UpdateUpdatedAt().
+		Exec(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return r.Get(ctx, &bizrepo.NotificationRuleQuery{
+		EventType: &rule.EventType,
+		Channel:   &rule.Channel,
+		Language:  &rule.Language,
+	})
+}
+
+func (r *NotificationRuleRepo) BulkUpsert(ctx context.Context, rules []*model.NotificationRule) error {
+	if len(rules) == 0 {
+		return nil
+	}
+	creates := make([]*gen.NotificationRuleCreate, 0, len(rules))
+	for _, rule := range rules {
+		if rule == nil {
+			continue
+		}
+		creates = append(creates, r.getClient(ctx).NotificationRule.Create().
+			SetEventType(notificationrule.EventType(rule.EventType)).
+			SetChannel(notificationrule.Channel(rule.Channel)).
+			SetLanguage(notificationrule.Language(rule.Language)).
+			SetEnabled(rule.Enabled))
+	}
+	if len(creates) == 0 {
+		return nil
+	}
+	return r.getClient(ctx).NotificationRule.CreateBulk(creates...).
+		OnConflict(
+			entsql.ConflictColumns(notificationrule.FieldEventType, notificationrule.FieldChannel, notificationrule.FieldLanguage),
+			entsql.ConflictWhere(entsql.IsNull(notificationrule.FieldDeletedAt)),
+		).
+		UpdateEnabled().
+		UpdateUpdatedAt().
+		Exec(ctx)
+}
+
 func (r *NotificationRuleRepo) Get(ctx context.Context, req *bizrepo.NotificationRuleQuery) (*model.NotificationRule, error) {
 	list, err := r.List(ctx, req)
 	if err != nil || len(list) == 0 {
@@ -46,25 +98,27 @@ func (r *NotificationRuleRepo) Get(ctx context.Context, req *bizrepo.Notificatio
 func (r *NotificationRuleRepo) List(ctx context.Context, req *bizrepo.NotificationRuleQuery) ([]*model.NotificationRule, error) {
 	query := r.getClient(ctx).NotificationRule.Query()
 	query = r.getQuery(query, req)
-	list, err := query.
-		WithStationTemplate().
-		WithEmailTemplate().
-		WithTencentSmsTemplate().
-		WithLarkWebhookTemplate().
-		All(ctx)
+	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
 
 	rules := make([]*model.NotificationRule, 0, len(list))
 	for _, item := range list {
-		rules = append(rules, r.notificationRule(item))
+		rules = append(rules, &model.NotificationRule{
+			ID:        item.ID,
+			EventType: commonenum.EventType(item.EventType),
+			Channel:   notifyenum.NotificationChannel(item.Channel),
+			Language:  notifyenum.Language(item.Language),
+			Enabled:   item.Enabled,
+			CreatedAt: item.CreatedAt,
+			UpdatedAt: item.UpdatedAt,
+		})
 	}
 	return rules, nil
 }
 
-func (r *NotificationRuleRepo) Map(ctx context.Context, req *bizrepo.NotificationRuleQuery) (map[int64]*model.
-	NotificationRule, error) {
+func (r *NotificationRuleRepo) Map(ctx context.Context, req *bizrepo.NotificationRuleQuery) (map[int64]*model.NotificationRule, error) {
 	list, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
@@ -100,10 +154,6 @@ func (r *NotificationRuleRepo) Page(ctx context.Context, req *bizrepo.Notificati
 		return nil, err
 	}
 	list, err := query.
-		WithStationTemplate().
-		WithEmailTemplate().
-		WithTencentSmsTemplate().
-		WithLarkWebhookTemplate().
 		Limit(int(page.Size)).
 		Offset(int((page.Page - 1) * page.Size)).
 		All(ctx)
@@ -113,7 +163,15 @@ func (r *NotificationRuleRepo) Page(ctx context.Context, req *bizrepo.Notificati
 
 	rules := make([]*model.NotificationRule, 0, len(list))
 	for _, item := range list {
-		rules = append(rules, r.notificationRule(item))
+		rules = append(rules, &model.NotificationRule{
+			ID:        item.ID,
+			EventType: commonenum.EventType(item.EventType),
+			Channel:   notifyenum.NotificationChannel(item.Channel),
+			Language:  notifyenum.Language(item.Language),
+			Enabled:   item.Enabled,
+			CreatedAt: item.CreatedAt,
+			UpdatedAt: item.UpdatedAt,
+		})
 	}
 	return &bizrepo.NotificationRulePageResp{
 		Rows: rules,
@@ -139,77 +197,35 @@ func (r *NotificationRuleRepo) getQuery(query *gen.NotificationRuleQuery, req *b
 	if req.EventType != nil {
 		query = query.Where(notificationrule.EventTypeEQ(notificationrule.EventType(*req.EventType)))
 	}
+	if len(req.EventTypes) > 0 {
+		values := make([]notificationrule.EventType, 0, len(req.EventTypes))
+		for _, item := range req.EventTypes {
+			values = append(values, notificationrule.EventType(item))
+		}
+		query = query.Where(notificationrule.EventTypeIn(values...))
+	}
 	if req.Channel != nil {
 		query = query.Where(notificationrule.ChannelEQ(notificationrule.Channel(*req.Channel)))
 	}
+	if len(req.Channels) > 0 {
+		values := make([]notificationrule.Channel, 0, len(req.Channels))
+		for _, item := range req.Channels {
+			values = append(values, notificationrule.Channel(item))
+		}
+		query = query.Where(notificationrule.ChannelIn(values...))
+	}
 	if req.Language != nil {
 		query = query.Where(notificationrule.LanguageEQ(notificationrule.Language(*req.Language)))
+	}
+	if len(req.Languages) > 0 {
+		values := make([]notificationrule.Language, 0, len(req.Languages))
+		for _, item := range req.Languages {
+			values = append(values, notificationrule.Language(item))
+		}
+		query = query.Where(notificationrule.LanguageIn(values...))
 	}
 	if req.Enabled != nil {
 		query = query.Where(notificationrule.EnabledEQ(*req.Enabled))
 	}
 	return query
-}
-
-func (r *NotificationRuleRepo) notificationRule(item *gen.NotificationRule) *model.NotificationRule {
-	rule := &model.NotificationRule{
-		ID:        item.ID,
-		EventType: commonenum.EventType(item.EventType),
-		Channel:   notifyenum.NotificationChannel(item.Channel),
-		Language:  notifyenum.Language(item.Language),
-		Enabled:   item.Enabled,
-		CreatedAt: item.CreatedAt,
-		UpdatedAt: item.UpdatedAt,
-	}
-	if item.Edges.StationTemplate != nil {
-		rule.StationTemplate = &model.NotificationStationTemplate{
-			ID:              item.Edges.StationTemplate.ID,
-			RuleID:          item.Edges.StationTemplate.RuleID,
-			TitleTemplate:   item.Edges.StationTemplate.TitleTemplate,
-			ContentTemplate: item.Edges.StationTemplate.ContentTemplate,
-			CreatedAt:       item.Edges.StationTemplate.CreatedAt,
-			UpdatedAt:       item.Edges.StationTemplate.UpdatedAt,
-		}
-	}
-	if item.Edges.EmailTemplate != nil {
-		rule.EmailTemplate = &model.NotificationEmailTemplate{
-			ID:              item.Edges.EmailTemplate.ID,
-			RuleID:          item.Edges.EmailTemplate.RuleID,
-			SubjectTemplate: item.Edges.EmailTemplate.SubjectTemplate,
-			BodyTemplate:    item.Edges.EmailTemplate.BodyTemplate,
-			ContentType:     item.Edges.EmailTemplate.ContentType,
-			CreatedAt:       item.Edges.EmailTemplate.CreatedAt,
-			UpdatedAt:       item.Edges.EmailTemplate.UpdatedAt,
-		}
-	}
-	if item.Edges.TencentSmsTemplate != nil {
-		rule.TencentSMSTemplate = &model.NotificationTencentSMSTemplate{
-			ID:                 item.Edges.TencentSmsTemplate.ID,
-			RuleID:             item.Edges.TencentSmsTemplate.RuleID,
-			SMSSDKAppID:        item.Edges.TencentSmsTemplate.SmsSdkAppID,
-			SignName:           item.Edges.TencentSmsTemplate.SignName,
-			ProviderTemplateID: item.Edges.TencentSmsTemplate.ProviderTemplateID,
-			ParamTemplates:     item.Edges.TencentSmsTemplate.ParamTemplates,
-			CreatedAt:          item.Edges.TencentSmsTemplate.CreatedAt,
-			UpdatedAt:          item.Edges.TencentSmsTemplate.UpdatedAt,
-		}
-	}
-	if item.Edges.LarkWebhookTemplate != nil {
-		secret := ""
-		if item.Edges.LarkWebhookTemplate.Secret != nil {
-			secret = *item.Edges.LarkWebhookTemplate.Secret
-		}
-		rule.LarkWebhookTemplate = &model.NotificationLarkWebhookTemplate{
-			ID:              item.Edges.LarkWebhookTemplate.ID,
-			RuleID:          item.Edges.LarkWebhookTemplate.RuleID,
-			WebhookID:       item.Edges.LarkWebhookTemplate.WebhookID,
-			Token:           item.Edges.LarkWebhookTemplate.Token,
-			Secret:          secret,
-			MsgType:         item.Edges.LarkWebhookTemplate.MsgType,
-			ContentTemplate: item.Edges.LarkWebhookTemplate.ContentTemplate,
-			CreatedAt:       item.Edges.LarkWebhookTemplate.CreatedAt,
-			UpdatedAt:       item.Edges.LarkWebhookTemplate.UpdatedAt,
-		}
-	}
-	return rule
 }

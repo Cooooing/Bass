@@ -5,7 +5,7 @@ import (
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
 	"net/http"
-	bizchannel "notify/internal/biz/channel"
+	bizrepo "notify/internal/biz/repo"
 	"notify/internal/config"
 	"notify/internal/data/channel"
 	"notify/internal/data/client"
@@ -25,36 +25,45 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewRedisLock,
 	commonClient.NewNatsClient,
 	commonClient.NewLarkWebhookClient,
-	commonClient.NewDeadLetterAlertClient,
 	wire.Value(http.DefaultClient),
 	rpc.ProvideUserClient,
 	rpc.ProvideContentClient,
 	client.ProvideTx,
 	repo.NewInboxEventRepo,
 	repo.NewNotificationRuleRepo,
+	repo.NewNotificationStationTemplateRepo,
+	repo.NewNotificationEmailTemplateRepo,
+	repo.NewNotificationTencentSMSTemplateRepo,
+	repo.NewNotificationLarkWebhookTemplateRepo,
 	repo.NewNotificationStationMessageRepo,
 	repo.NewNotificationEmailDeliveryRepo,
 	repo.NewNotificationTencentSMSDeliveryRepo,
 	repo.NewNotificationLarkWebhookDeliveryRepo,
 	repo.NewNotificationRateLimitCache,
-	repo.NewUserClient,
+	repo.NewUserAccountRepo,
 	channel.NewEmailClient,
 	channel.NewTencentSMSClient,
 	channel.NewLarkWebhookClient,
 	repo.NewContentClient,
-	wire.Bind(new(bizchannel.EmailClient), new(*channel.EmailClient)),
-	wire.Bind(new(bizchannel.TencentSMSClient), new(*channel.TencentSMSClient)),
-	wire.Bind(new(bizchannel.LarkWebhookClient), new(*channel.LarkWebhookClient)),
+	wire.Bind(new(bizrepo.EmailClient), new(*channel.EmailClient)),
+	wire.Bind(new(bizrepo.TencentSMSClient), new(*channel.TencentSMSClient)),
+	wire.Bind(new(bizrepo.LarkWebhookClient), new(*channel.LarkWebhookClient)),
 )
 
-func ProvideRedis(c *config.Bootstrap) *common.Redis {
+func ProvideRedis(
+	c *config.Bootstrap,
+) *common.Redis {
 	return c.Redis
 }
 
-func ProvideConsul(c *config.Bootstrap) *common.Consul {
+func ProvideConsul(
+	c *config.Bootstrap,
+) *common.Consul {
 	return c.Consul
 }
 
-func ProvideNats(c *config.Bootstrap) *common.Nats {
+func ProvideNats(
+	c *config.Bootstrap,
+) *common.Nats {
 	return c.Nats
 }

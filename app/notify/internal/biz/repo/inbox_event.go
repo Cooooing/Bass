@@ -2,7 +2,6 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
-	"common/proto/gen/common/enums"
 	"context"
 	"notify/internal/biz/base"
 	"notify/internal/biz/model"
@@ -23,7 +22,7 @@ type InboxEventRepo interface {
 
 type InboxEventSaveProcessingReq struct {
 	EventID   string
-	EventType enums.EventType
+	EventType commonenum.EventType
 	Subject   commonenum.EventSubject
 	Payload   string
 	Now       time.Time

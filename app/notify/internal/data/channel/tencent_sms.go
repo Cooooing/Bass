@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	bizchannel "notify/internal/biz/channel"
+	bizrepo "notify/internal/biz/repo"
 	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 
@@ -15,7 +15,7 @@ import (
 	sms "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20210111"
 )
 
-var _ bizchannel.TencentSMSClient = (*TencentSMSClient)(nil)
+var _ bizrepo.TencentSMSClient = (*TencentSMSClient)(nil)
 
 type TencentSMSClient struct {
 	conf   *config.Bootstrap
@@ -55,14 +55,17 @@ func NewTencentSMSClient(
 	}, nil
 }
 
-func (c *TencentSMSClient) SendTencentSMS(_ context.Context, req *bizchannel.TencentSMSRequest) (*bizchannel.SendResult, error) {
+func (c *TencentSMSClient) SendTencentSMS(ctx context.Context, req *bizrepo.TencentSMSRequest) (*bizrepo.TencentSMSSendResult, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
 	if req == nil || req.Phone == "" {
-		return &bizchannel.SendResult{
+		return &bizrepo.TencentSMSSendResult{
 			Status: notifyenum.NotificationChannelStatusFailed,
 		}, nil
 	}
 	if c.conf == nil || c.conf.Notify == nil || c.conf.Notify.Sms == nil || !c.conf.Notify.Sms.Enable {
-		return &bizchannel.SendResult{
+		return &bizrepo.TencentSMSSendResult{
 			Status: notifyenum.NotificationChannelStatusSkipped,
 		}, nil
 	}
@@ -70,7 +73,7 @@ func (c *TencentSMSClient) SendTencentSMS(_ context.Context, req *bizchannel.Ten
 		return nil, errors.New("tencent sms config is required")
 	}
 	if req.ProviderTemplateID == "" {
-		return &bizchannel.SendResult{
+		return &bizrepo.TencentSMSSendResult{
 			Status: notifyenum.NotificationChannelStatusFailed,
 		}, nil
 	}
@@ -84,14 +87,14 @@ func (c *TencentSMSClient) SendTencentSMS(_ context.Context, req *bizchannel.Ten
 	resp, err := c.client.SendSms(request)
 	if err != nil {
 		if sdkErr, ok := errors.AsType[*tencenterrors.TencentCloudSDKError](err); ok {
-			return &bizchannel.SendResult{
+			return &bizrepo.TencentSMSSendResult{
 				Status:            notifyenum.NotificationChannelStatusFailed,
 				ProviderRequestID: new(sdkErr.GetRequestId()),
 				ProviderCode:      new(sdkErr.GetCode()),
 				ProviderMessage:   new(sdkErr.GetMessage()),
 			}, nil
 		}
-		return &bizchannel.SendResult{
+		return &bizrepo.TencentSMSSendResult{
 			Status:          notifyenum.NotificationChannelStatusUnknown,
 			ProviderMessage: new(fmt.Sprintf("send tencent sms: %v", err)),
 		}, nil
@@ -101,7 +104,7 @@ func (c *TencentSMSClient) SendTencentSMS(_ context.Context, req *bizchannel.Ten
 	if resp.Response != nil && resp.Response.RequestId != nil {
 		requestID = *resp.Response.RequestId
 	}
-	return &bizchannel.SendResult{
+	return &bizrepo.TencentSMSSendResult{
 		Status:            notifyenum.NotificationChannelStatusSucceeded,
 		ProviderRequestID: new(requestID),
 		ProviderResp:      new(string(reply)),

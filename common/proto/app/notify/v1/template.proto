@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package common.api.app.notify.v1;
+
+option go_package = "common/proto/gen/notify/v1;v1";
+
+service NotifyTemplateService {
+  rpc Preview(PreviewNotificationTemplate.Req) returns (PreviewNotificationTemplate.Resp) {} // 渲染预览通知模板。
+}
+
+message PreviewNotificationTemplate {
+  message Req {
+    string template = 1;
+    string template_data_json = 2;
+  }
+  message Resp {
+    string rendered = 1;
+  }
+}

@@ -11,14 +11,14 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	bizchannel "notify/internal/biz/channel"
+	bizrepo "notify/internal/biz/repo"
 	"notify/internal/config"
 	notifyenum "notify/internal/enum"
 	"strings"
 	"time"
 )
 
-var _ bizchannel.LarkWebhookClient = (*LarkWebhookClient)(nil)
+var _ bizrepo.LarkWebhookClient = (*LarkWebhookClient)(nil)
 
 type LarkWebhookClient struct {
 	conf       *config.Bootstrap
@@ -42,9 +42,9 @@ func NewLarkWebhookClient(
 	}
 }
 
-func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizchannel.LarkWebhookRequest) (*bizchannel.SendResult, error) {
+func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizrepo.LarkWebhookRequest) (*bizrepo.LarkWebhookSendResult, error) {
 	if req == nil || req.Token == "" || req.RequestBody == "" {
-		return &bizchannel.SendResult{
+		return &bizrepo.LarkWebhookSendResult{
 			Status: notifyenum.NotificationChannelStatusFailed,
 		}, nil
 	}
@@ -70,9 +70,9 @@ func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizchannel
 	httpReq.Header.Set("Content-Type", "application/json")
 	reply, err := c.httpClient.Do(httpReq)
 	if err != nil {
-		return &bizchannel.SendResult{
-			Status:       notifyenum.NotificationChannelStatusUnknown,
-			ProviderResp: new(fmt.Sprintf("send lark webhook: %v", err)),
+		return &bizrepo.LarkWebhookSendResult{
+			Status:   notifyenum.NotificationChannelStatusUnknown,
+			RespBody: new(fmt.Sprintf("send lark webhook: %v", err)),
 		}, nil
 	}
 	defer reply.Body.Close()
@@ -81,7 +81,7 @@ func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizchannel
 	if reply.StatusCode < http.StatusOK || reply.StatusCode >= http.StatusMultipleChoices {
 		status = notifyenum.NotificationChannelStatusFailed
 	}
-	return &bizchannel.SendResult{
+	return &bizrepo.LarkWebhookSendResult{
 		Status:     status,
 		HTTPStatus: new(reply.StatusCode),
 		RespBody:   new(string(body)),

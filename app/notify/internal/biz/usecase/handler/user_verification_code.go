@@ -1,54 +1,95 @@
 package handler
 
 import (
-	"common/proto/gen/common/enums"
+	commonenum "common/pkg/enum"
 	"context"
 	"notify/internal/biz/model"
+	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/usecase"
+	notifyenum "notify/internal/enum"
+	notifytemplate "notify/template"
 )
 
-type UserVerificationCodeHandler struct{}
-
-func NewUserVerificationCodeHandler() *UserVerificationCodeHandler {
-	return &UserVerificationCodeHandler{}
+type UserVerificationCodeHandler struct {
+	notifyUsecase *usecase.NotifyUsecase
 }
 
-func (h *UserVerificationCodeHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
-	if event == nil || event.EventId == "" {
-		return nil, nil
+func NewUserVerificationCodeHandler(
+	notifyUsecase *usecase.NotifyUsecase,
+) *UserVerificationCodeHandler {
+	return &UserVerificationCodeHandler{
+		notifyUsecase: notifyUsecase,
 	}
-	switch event.Type {
-	case enums.EventType_EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE:
+}
+
+func (h *UserVerificationCodeHandler) Templates() []*model.NotificationTemplateDefinition {
+	return []*model.NotificationTemplateDefinition{
+		{
+			EventType: commonenum.EventTypeUserEmailVerificationCode,
+			Channel:   notifyenum.NotificationChannelEmail,
+			Language:  notifyenum.LanguageZhCN,
+			Enabled:   true,
+			EmailTemplate: &model.NotificationEmailTemplateDefinition{
+				SubjectTemplate: notifytemplate.MustReadTemplate("email/user_email_verification_code.zh_CN.subject.txt"),
+				BodyTemplate:    notifytemplate.MustReadTemplate("email/user_email_verification_code.zh_CN.body.html"),
+				ContentType:     "text/html",
+			},
+		},
+		{
+			EventType: commonenum.EventTypeUserPhoneVerificationCode,
+			Channel:   notifyenum.NotificationChannelTencentSMS,
+			Language:  notifyenum.LanguageZhCN,
+			Enabled:   true,
+			TencentSMSTemplate: &model.NotificationTencentSMSTemplateDefinition{
+				ParamTemplates: []string{"{{.Code}}"},
+			},
+		},
+	}
+}
+
+func (h *UserVerificationCodeHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
+	event := req.Event
+	if event == nil || event.GetEventId() == "" {
+		return nil
+	}
+	switch req.EventType {
+	case commonenum.EventTypeUserEmailVerificationCode:
 		payload := event.GetUserEmailVerificationCode()
 		if payload == nil || payload.GetEmail() == "" || payload.GetCode() == "" {
-			return nil, nil
+			return nil
 		}
-		return &usecase.NotificationContext{
-			EventID: event.EventId,
-			TemplateData: model.VerificationCodeTemplateData{
+		return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
+			EventID:   event.GetEventId(),
+			EventType: req.EventType,
+			Language:  req.Language,
+			Channels:  []notifyenum.NotificationChannel{notifyenum.NotificationChannelEmail},
+			TemplateData: templatedata.VerificationCode{
 				Code:           payload.GetCode(),
 				ExpiresSeconds: payload.GetExpiresSeconds(),
 			},
-			Recipients: []*usecase.NotificationRecipient{
+			Recipients: []*model.NotificationRecipient{
 				{Email: payload.GetEmail()},
 			},
-		}, nil
-	case enums.EventType_EVENT_TYPE_USER_PHONE_VERIFICATION_CODE:
+		})
+	case commonenum.EventTypeUserPhoneVerificationCode:
 		payload := event.GetUserPhoneVerificationCode()
 		if payload == nil || payload.GetPhone() == "" || payload.GetCode() == "" {
-			return nil, nil
+			return nil
 		}
-		return &usecase.NotificationContext{
-			EventID: event.EventId,
-			TemplateData: model.VerificationCodeTemplateData{
+		return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
+			EventID:   event.GetEventId(),
+			EventType: req.EventType,
+			Language:  req.Language,
+			Channels:  []notifyenum.NotificationChannel{notifyenum.NotificationChannelTencentSMS},
+			TemplateData: templatedata.VerificationCode{
 				Code:           payload.GetCode(),
 				ExpiresSeconds: payload.GetExpiresSeconds(),
 			},
-			Recipients: []*usecase.NotificationRecipient{
+			Recipients: []*model.NotificationRecipient{
 				{Phone: payload.GetPhone()},
 			},
-		}, nil
+		})
 	default:
-		return nil, nil
+		return nil
 	}
 }

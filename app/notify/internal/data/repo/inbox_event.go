@@ -2,7 +2,6 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
-	"common/proto/gen/common/enums"
 	"context"
 	"fmt"
 	"notify/internal/biz/base"
@@ -43,10 +42,7 @@ func (r *InboxEventRepo) SaveProcessing(ctx context.Context, req *bizrepo.InboxE
 	if req.EventID == "" {
 		return nil, fmt.Errorf("event id is required")
 	}
-	eventType, ok := commonenum.EventTypeMap.ToEnum(enums.EventType(req.EventType))
-	if !ok {
-		return nil, fmt.Errorf("unknown event type: %s", req.EventType.String())
-	}
+	eventType := req.EventType
 	if _, ok := commonenum.EventSubjectMap.ToProto(req.Subject); !ok {
 		return nil, fmt.Errorf("unknown event subject: %s", req.Subject)
 	}

@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"common/proto/gen/common/enums"
+	commonenum "common/pkg/enum"
 	"context"
 	"notify/internal/biz/base"
 	"notify/internal/biz/model"
@@ -25,7 +25,7 @@ type StationMessagePageReq struct {
 	Page       *base.PageRequest
 	IDs        []int64
 	ReceiverID *int64
-	EventType  *enums.EventType
+	EventType  *commonenum.EventType
 	Unread     *bool
 }
 

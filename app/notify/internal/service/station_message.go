@@ -44,7 +44,11 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 	}
 	if req != nil && req.Query != nil {
 		query.IDs = req.Query.GetIds()
-		query.EventType = req.Query.EventType
+		if req.Query.EventType != nil {
+			if eventType, ok := commonenum.EventTypeMap.ToEnum(*req.Query.EventType); ok {
+				query.EventType = &eventType
+			}
+		}
 		query.Unread = req.Query.Unread
 	}
 	var pageReq *base.PageRequest

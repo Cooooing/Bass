@@ -9,6 +9,8 @@ import (
 )
 
 type NotificationRuleRepo interface {
+	Upsert(ctx context.Context, rule *model.NotificationRule) (*model.NotificationRule, error)
+	BulkUpsert(ctx context.Context, rules []*model.NotificationRule) error
 	Get(ctx context.Context, query *NotificationRuleQuery) (*model.NotificationRule, error)
 	List(ctx context.Context, query *NotificationRuleQuery) ([]*model.NotificationRule, error)
 	Map(ctx context.Context, query *NotificationRuleQuery) (map[int64]*model.NotificationRule, error)
@@ -22,11 +24,14 @@ type NotificationRulePageResp struct {
 }
 
 type NotificationRuleQuery struct {
-	Page      *base.PageRequest
-	ID        *int64
-	IDs       []int64
-	EventType *commonenum.EventType
-	Channel   *notifyenum.NotificationChannel
-	Language  *notifyenum.Language
-	Enabled   *bool
+	Page       *base.PageRequest
+	ID         *int64
+	IDs        []int64
+	EventType  *commonenum.EventType
+	EventTypes []commonenum.EventType
+	Channel    *notifyenum.NotificationChannel
+	Channels   []notifyenum.NotificationChannel
+	Language   *notifyenum.Language
+	Languages  []notifyenum.Language
+	Enabled    *bool
 }

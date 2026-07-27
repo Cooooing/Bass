@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"common/proto/gen/common/enums"
 	"context"
+	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
+	notifyenum "notify/internal/enum"
 )
 
 type ArticleLikedHandler struct {
@@ -12,8 +13,9 @@ type ArticleLikedHandler struct {
 }
 
 func NewArticleLikedHandler(
-	userClient repo.UserClient,
+	userClient repo.UserAccountRepo,
 	contentClient repo.ContentClient,
+	notifyUsecase *usecase.NotifyUsecase,
 ) *ArticleLikedHandler {
 	return &ArticleLikedHandler{
 		articleActorHandler: articleActorHandler{
@@ -23,17 +25,38 @@ func NewArticleLikedHandler(
 			contentClientHandler: contentClientHandler{
 				contentClient: contentClient,
 			},
+			notifyUsecase: notifyUsecase,
 		},
 	}
 }
 
-func (h *ArticleLikedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
-	if event == nil || event.EventId == "" {
-		return nil, nil
+func (h *ArticleLikedHandler) Templates() []*model.NotificationTemplateDefinition {
+	return nil
+}
+
+func (h *ArticleLikedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
+	event := req.Event
+	if event == nil || event.GetEventId() == "" {
+		return nil
 	}
 	payload := event.GetArticleLiked()
-	if payload == nil {
-		return nil, nil
+	if payload == nil || payload.GetArticleId() == 0 {
+		return nil
 	}
-	return h.build(ctx, event.EventId, payload.GetArticleId(), payload.GetSenderId())
+	notificationContext, err := h.build(ctx, &articleActorBuildReq{
+		EventID:   event.GetEventId(),
+		ArticleID: payload.GetArticleId(),
+		SenderID:  payload.GetSenderId(),
+	})
+	if err != nil || notificationContext == nil {
+		return err
+	}
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
+		EventID:      event.GetEventId(),
+		EventType:    req.EventType,
+		Language:     req.Language,
+		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
+		TemplateData: notificationContext.TemplateData,
+		Recipients:   notificationContext.Recipients,
+	})
 }

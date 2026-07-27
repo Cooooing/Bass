@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"common/proto/gen/common/enums"
+	commonenum "common/pkg/enum"
 	"context"
 	"notify/internal/biz/base"
 	"notify/internal/biz/model"
@@ -37,6 +37,6 @@ type NotificationStationMessageQuery struct {
 	IDs        []int64
 	EventIDs   []string
 	ReceiverID *int64
-	EventType  *enums.EventType
+	EventType  *commonenum.EventType
 	Unread     *bool
 }

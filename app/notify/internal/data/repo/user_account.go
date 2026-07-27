@@ -9,26 +9,25 @@ import (
 	bizrepo "notify/internal/biz/repo"
 )
 
-var _ bizrepo.UserClient = (*UserClient)(nil)
+var _ bizrepo.UserAccountRepo = (*UserAccountRepo)(nil)
 
-type UserClient struct {
+type UserAccountRepo struct {
 	userClient *rpc.UserClient
 }
 
-func NewUserClient(
+func NewUserAccountRepo(
 	userClient *rpc.UserClient,
-) bizrepo.UserClient {
-	return &UserClient{
+) bizrepo.UserAccountRepo {
+	return &UserAccountRepo{
 		userClient: userClient,
 	}
 }
 
-func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.
-	UserAccount, error) {
+func (r *UserAccountRepo) MapAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.UserAccount, error) {
 	if len(userIDs) == 0 {
 		return map[int64]*model.UserAccount{}, nil
 	}
-	reply, err := c.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
+	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
 		Query: &userv1.MapAccounts_Req_AccountQuery{
 			UserIds: userIDs,
 		},
@@ -57,7 +56,7 @@ func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int6
 	return result, nil
 }
 
-func (c *UserClient) ListFollowerIDs(ctx context.Context, userID int64) ([]int64, error) {
+func (r *UserAccountRepo) ListFollowerIDs(ctx context.Context, userID int64) ([]int64, error) {
 	if userID == 0 {
 		return []int64{}, nil
 	}
@@ -65,7 +64,7 @@ func (c *UserClient) ListFollowerIDs(ctx context.Context, userID int64) ([]int64
 	size := uint32(500)
 	userIDs := make([]int64, 0)
 	for {
-		reply, err := c.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Req{
+		reply, err := r.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Req{
 			UserId: userID,
 			Page: &common.PageReq{
 				Page: page,

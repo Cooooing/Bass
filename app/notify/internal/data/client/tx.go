@@ -21,7 +21,9 @@ func (w *genTxWrapper) Client() *gen.Client {
 	return w.tx.Client()
 }
 
-func ProvideTx(db *gen.Client) base.Tx {
+func ProvideTx(
+	db *gen.Client,
+) base.Tx {
 	starter := func(ctx context.Context) (utilent.Tx[*gen.Client], error) {
 		tx, err := db.Tx(ctx)
 		if err != nil {

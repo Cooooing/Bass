@@ -3,12 +3,15 @@ package handler
 import (
 	"context"
 	"notify/internal/biz/model"
+	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
+
+	"github.com/samber/lo"
 )
 
 type userClientHandler struct {
-	userClient repo.UserClient
+	userClient repo.UserAccountRepo
 }
 
 func (h *userClientHandler) loadBasic(ctx context.Context, userID int64) (*model.UserAccount, error) {
@@ -26,18 +29,9 @@ func (h *userClientHandler) loadAccounts(ctx context.Context, userIDs ...int64) 
 	if h.userClient == nil {
 		return map[int64]*model.UserAccount{}, nil
 	}
-	seen := map[int64]struct{}{}
-	ids := make([]int64, 0, len(userIDs))
-	for _, userID := range userIDs {
-		if userID == 0 {
-			continue
-		}
-		if _, ok := seen[userID]; ok {
-			continue
-		}
-		seen[userID] = struct{}{}
-		ids = append(ids, userID)
-	}
+	ids := lo.Uniq(lo.Filter(userIDs, func(userID int64, _ int) bool {
+		return userID != 0
+	}))
 	if len(ids) == 0 {
 		return map[int64]*model.UserAccount{}, nil
 	}
@@ -48,8 +42,8 @@ func (h *userClientHandler) loadAccounts(ctx context.Context, userIDs ...int64) 
 	return resp, nil
 }
 
-func (h *userClientHandler) templateUser(userID int64, user *model.UserAccount) model.TemplateUser {
-	data := model.TemplateUser{
+func (h *userClientHandler) templateUser(userID int64, user *model.UserAccount) templatedata.User {
+	data := templatedata.User{
 		ID: userID,
 	}
 	if user == nil {
@@ -68,14 +62,14 @@ type contentClientHandler struct {
 	contentClient repo.ContentClient
 }
 
-func (h *contentClientHandler) articleTemplateData(article *model.ContentArticle) model.TemplateArticle {
+func (h *contentClientHandler) articleTemplateData(article *model.ContentArticle) templatedata.Article {
 	if article == nil {
-		return model.TemplateArticle{}
+		return templatedata.Article{}
 	}
-	return model.TemplateArticle{
+	return templatedata.Article{
 		ID:    article.ID,
 		Title: article.Title,
-		Author: model.TemplateUser{
+		Author: templatedata.User{
 			ID:       article.AuthorID,
 			Name:     article.AuthorName,
 			Nickname: article.AuthorNickname,
@@ -83,20 +77,20 @@ func (h *contentClientHandler) articleTemplateData(article *model.ContentArticle
 	}
 }
 
-func (h *contentClientHandler) commentTemplateData(comment *model.ContentComment) model.TemplateComment {
+func (h *contentClientHandler) commentTemplateData(comment *model.ContentComment) templatedata.Comment {
 	if comment == nil {
-		return model.TemplateComment{}
+		return templatedata.Comment{}
 	}
-	return model.TemplateComment{
+	return templatedata.Comment{
 		ID:        comment.ID,
 		ArticleID: comment.ArticleID,
 		Content:   comment.Content,
-		User: model.TemplateUser{
+		User: templatedata.User{
 			ID:       comment.UserID,
 			Name:     comment.UserName,
 			Nickname: comment.UserNickname,
 		},
-		ReplyUser: model.TemplateUser{
+		ReplyUser: templatedata.User{
 			ID:   comment.ReplyUserID,
 			Name: comment.ReplyUserName,
 		},
@@ -107,34 +101,54 @@ func (h *contentClientHandler) commentTemplateData(comment *model.ContentComment
 type articleActorHandler struct {
 	userClientHandler
 	contentClientHandler
+	notifyUsecase *usecase.NotifyUsecase
 }
 
-func (h *articleActorHandler) build(ctx context.Context, eventID string, articleID int64, senderID int64) (*usecase.NotificationContext, error) {
+type articleActorBuildReq struct {
+	EventID   string
+	ArticleID int64
+	SenderID  int64
+}
+
+func (h *articleActorHandler) build(ctx context.Context, req *articleActorBuildReq) (*model.NotificationContext, error) {
+	if req == nil {
+		return nil, nil
+	}
 	var article *model.ContentArticle
-	if h.contentClient != nil && articleID != 0 {
-		articleResp, err := h.contentClient.GetArticle(ctx, articleID)
+	if h.contentClient != nil && req.ArticleID != 0 {
+		articleResp, err := h.contentClient.GetArticle(ctx, req.ArticleID)
 		if err != nil {
 			return nil, err
 		}
 		article = articleResp
 	}
-	users, err := h.loadAccounts(ctx, senderID)
+	var authorID int64
+	if article != nil {
+		authorID = article.AuthorID
+	}
+	users, err := h.loadAccounts(ctx, req.SenderID, authorID)
 	if err != nil {
 		return nil, err
 	}
-	templateData := model.ArticleActorTemplateData{
+	if article != nil {
+		if author := users[article.AuthorID]; author != nil {
+			article.AuthorName = author.Name
+			article.AuthorNickname = author.Nickname
+		}
+	}
+	templateData := templatedata.ArticleActor{
 		Article: h.articleTemplateData(article),
-		Actor:   h.templateUser(senderID, users[senderID]),
+		Actor:   h.templateUser(req.SenderID, users[req.SenderID]),
 	}
 
-	recipients := make([]*usecase.NotificationRecipient, 0, 1)
-	if article != nil && article.AuthorID != 0 && article.AuthorID != senderID {
-		recipients = append(recipients, &usecase.NotificationRecipient{
+	recipients := make([]*model.NotificationRecipient, 0, 1)
+	if article != nil && article.AuthorID != 0 && article.AuthorID != req.SenderID {
+		recipients = append(recipients, &model.NotificationRecipient{
 			UserID: article.AuthorID,
 		})
 	}
-	return &usecase.NotificationContext{
-		EventID:      eventID,
+	return &model.NotificationContext{
+		EventID:      req.EventID,
 		TemplateData: templateData,
 		Recipients:   recipients,
 	}, nil

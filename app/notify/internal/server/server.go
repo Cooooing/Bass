@@ -1,27 +1,31 @@
 package server
 
 import (
-	"notify/internal/biz/usecase"
-	"notify/internal/biz/usecase/consumer"
-
 	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 	"github.com/google/wire"
 )
 
-// ServerProviderSet 是 server 层依赖集合。
+// ServerProviderSet is the dependency provider set for server.
 var ServerProviderSet = wire.NewSet(
 	ProvideServers,
+	NewConsumer,
 	NewGRPCServer,
 	NewHTTPServer,
+	NewTemplateInitializationServer,
 )
 
-func ProvideServers(grpcServer *grpc.Server, httpServer *http.Server, consumerServer *consumer.Consumer, inboxDeadLetterScanner *usecase.InboxDeadLetterScanner) []transport.Server {
+func ProvideServers(
+	grpcServer *grpc.Server,
+	httpServer *http.Server,
+	templateInitializationServer *TemplateInitializationServer,
+	consumerServer *Consumer,
+) []transport.Server {
 	return []transport.Server{
+		templateInitializationServer,
 		grpcServer,
 		httpServer,
 		consumerServer,
-		inboxDeadLetterScanner,
 	}
 }

@@ -1,47 +1,72 @@
 package handler
 
 import (
-	"common/proto/gen/common/enums"
+	commonenum "common/pkg/enum"
 	"context"
 	"notify/internal/biz/model"
+	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
+	notifyenum "notify/internal/enum"
+	notifytemplate "notify/template"
 )
 
 type UserRegisterHandler struct {
 	userClientHandler
+	notifyUsecase *usecase.NotifyUsecase
 }
 
 func NewUserRegisterHandler(
-	userClient repo.UserClient,
+	userClient repo.UserAccountRepo,
+	notifyUsecase *usecase.NotifyUsecase,
 ) *UserRegisterHandler {
 	return &UserRegisterHandler{
 		userClientHandler: userClientHandler{
 			userClient: userClient,
 		},
+		notifyUsecase: notifyUsecase,
 	}
 }
 
-func (h *UserRegisterHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
-	if event == nil || event.EventId == "" {
-		return nil, nil
+func (h *UserRegisterHandler) Templates() []*model.NotificationTemplateDefinition {
+	return []*model.NotificationTemplateDefinition{
+		{
+			EventType: commonenum.EventTypeUserRegister,
+			Channel:   notifyenum.NotificationChannelStation,
+			Language:  notifyenum.LanguageZhCN,
+			Enabled:   true,
+			StationTemplate: &model.NotificationStationTemplateDefinition{
+				TitleTemplate:   notifytemplate.MustReadTemplate("station/user_register.zh_CN.title.txt"),
+				ContentTemplate: notifytemplate.MustReadTemplate("station/user_register.zh_CN.content.txt"),
+			},
+		},
+	}
+}
+
+func (h *UserRegisterHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
+	event := req.Event
+	if event == nil || event.GetEventId() == "" {
+		return nil
 	}
 	payload := event.GetUserRegister()
 	if payload == nil || payload.GetUserId() == 0 {
-		return nil, nil
+		return nil
 	}
 	user, err := h.loadBasic(ctx, payload.GetUserId())
 	if err != nil {
-		return nil, err
+		return err
 	}
-	templateData := model.UserRegisterTemplateData{
+	templateData := templatedata.UserRegister{
 		User: h.templateUser(payload.GetUserId(), user),
 	}
-	return &usecase.NotificationContext{
-		EventID:      event.EventId,
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
+		EventID:      event.GetEventId(),
+		EventType:    req.EventType,
+		Language:     req.Language,
+		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 		TemplateData: templateData,
-		Recipients: []*usecase.NotificationRecipient{
+		Recipients: []*model.NotificationRecipient{
 			{UserID: payload.GetUserId()},
 		},
-	}, nil
+	})
 }

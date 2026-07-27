@@ -1,21 +1,24 @@
 package handler
 
 import (
-	"common/proto/gen/common/enums"
 	"context"
 	"notify/internal/biz/model"
+	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
+	notifyenum "notify/internal/enum"
 )
 
 type ArticlePublishedHandler struct {
 	userClientHandler
 	contentClientHandler
+	notifyUsecase *usecase.NotifyUsecase
 }
 
 func NewArticlePublishedHandler(
-	userClient repo.UserClient,
+	userClient repo.UserAccountRepo,
 	contentClient repo.ContentClient,
+	notifyUsecase *usecase.NotifyUsecase,
 ) *ArticlePublishedHandler {
 	return &ArticlePublishedHandler{
 		userClientHandler: userClientHandler{
@@ -24,47 +27,69 @@ func NewArticlePublishedHandler(
 		contentClientHandler: contentClientHandler{
 			contentClient: contentClient,
 		},
+		notifyUsecase: notifyUsecase,
 	}
 }
 
-func (h *ArticlePublishedHandler) Build(ctx context.Context, event *enums.Event) (*usecase.NotificationContext, error) {
-	if event == nil || event.EventId == "" {
-		return nil, nil
+func (h *ArticlePublishedHandler) Templates() []*model.NotificationTemplateDefinition {
+	return nil
+}
+
+func (h *ArticlePublishedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
+	event := req.Event
+	if event == nil || event.GetEventId() == "" {
+		return nil
 	}
 	payload := event.GetArticlePublished()
 	if payload == nil || payload.GetArticleId() == 0 || h.contentClient == nil {
-		return nil, nil
+		return nil
 	}
 	articleResp, err := h.contentClient.GetArticle(ctx, payload.GetArticleId())
 	if err != nil {
-		return nil, err
+		return err
 	}
 	article := articleResp
-	templateData := model.ArticlePublishedTemplateData{
+	if article != nil && article.AuthorID != 0 {
+		users, err := h.loadAccounts(ctx, article.AuthorID)
+		if err != nil {
+			return err
+		}
+		if author := users[article.AuthorID]; author != nil {
+			article.AuthorName = author.Name
+			article.AuthorNickname = author.Nickname
+		}
+	}
+	templateData := templatedata.ArticlePublished{
 		Article: h.articleTemplateData(article),
 	}
 	if article == nil || article.AuthorID == 0 || h.userClient == nil {
-		return &usecase.NotificationContext{
-			EventID:      event.EventId,
+		return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
+			EventID:      event.GetEventId(),
+			EventType:    req.EventType,
+			Language:     req.Language,
+			Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 			TemplateData: templateData,
-		}, nil
+		})
 	}
 	followerResp, err := h.userClient.ListFollowerIDs(ctx, article.AuthorID)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	recipients := make([]*usecase.NotificationRecipient, 0, len(followerResp))
+	recipients := make([]*model.NotificationRecipient, 0, len(followerResp))
 	for _, followerID := range followerResp {
 		if followerID == 0 || followerID == article.AuthorID {
 			continue
 		}
-		recipients = append(recipients, &usecase.NotificationRecipient{
+		recipients = append(recipients, &model.NotificationRecipient{
 			UserID: followerID,
 		})
 	}
-	return &usecase.NotificationContext{
-		EventID:      event.EventId,
+	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
+		EventID:      event.GetEventId(),
+		EventType:    req.EventType,
+		Language:     req.Language,
+		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 		TemplateData: templateData,
 		Recipients:   recipients,
-	}, nil
+	})
 }

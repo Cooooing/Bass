@@ -1,6 +1,6 @@
 name: bass-infra
 
-# 鍒涘缓 bass 瀹瑰櫒缃戠粶
+# 创建 bass 容器网络
 networks:
   bass:
     driver: bridge
@@ -8,7 +8,7 @@ networks:
 
 services:
   postgres:
-    image: postgres:18.0
+    image: postgres:18.4
     restart: on-failure:3
     env_file:
       - .env
@@ -25,7 +25,7 @@ services:
       retries: 5
 
   redis:
-    image: redis:8.2.2
+    image: redis:8.8.1
     restart: on-failure:3
     env_file:
       - .env
@@ -43,7 +43,7 @@ services:
       retries: 5
 
   consul:
-    image: hashicorp/consul:1.22.3
+    image: hashicorp/consul:2.0.0
     restart: on-failure:3
     env_file:
       - .env
@@ -87,7 +87,7 @@ services:
       - .env
     environment:
       - TZ=Asia/Shanghai
-      - MAX_PAYLOAD=1048576  # 1MB锛屽彲閫夛紝榛樿涔熸槸 1MB
+      - MAX_PAYLOAD=1048576  # 1MB，可选，默认也是 1MB
     command: >
       --js
       --sd /data/jetstream

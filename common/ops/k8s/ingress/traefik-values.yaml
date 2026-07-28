@@ -1,9 +1,14 @@
-# Traefik Helm Values - Bass Infrastructure
+# Traefik Helm 配置
 # 安装命令: helm upgrade --install traefik traefik/traefik -n traefik --create-namespace -f ./traefik-values.yaml
 
 # 部署方式：DaemonSet + hostNetwork
 deployment:
   kind: DaemonSet
+
+image:
+  registry: docker.io
+  repository: traefik
+  tag: v3.7.5
 
 hostNetwork: true
 
@@ -16,7 +21,7 @@ updateStrategy:
 tolerations:
   - operator: Exists
 
-# hostNetwork 时 containerPort 等于 hostPort，直接绑定宿主机端口
+# 使用 hostNetwork 时，容器端口直接绑定宿主机端口
 ports:
   web:
     port: 80
@@ -42,7 +47,7 @@ ports:
     protocol: TCP
     expose:
       default: false
-  # TCP 入口，使用标准端口
+  # TCP 入口使用标准端口
   postgresql:
     port: 5432
     exposedPort: 5432

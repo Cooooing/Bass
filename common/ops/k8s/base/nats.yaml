@@ -27,7 +27,7 @@ promExporter:
   enabled: false
 
 service:
-  # 浠呴泦缇ゅ唴璁块棶
+  # 仅集群内访问
   enabled: true
 
 container:

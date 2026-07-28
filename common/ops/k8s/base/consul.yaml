@@ -1,9 +1,11 @@
 global:
   name: bass-consul
   datacenter: dc1
+  image: hashicorp/consul:2.0.0
   acls:
     # 查看 token: kubectl get secret bass-consul-bootstrap-acl-token -n <namespace> -o jsonpath='{.data.token}' | base64 -d
     manageSystemACLs: true
+
 server:
   replicas: 1
   bootstrapExpect: 1

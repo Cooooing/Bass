@@ -1,5 +1,9 @@
 fullnameOverride: bass-minio
 
+image:
+  repository: quay.io/minio/minio
+  tag: RELEASE.2025-09-07T16-13-09Z
+
 existingSecret: bass-minio-secret
 
 mode: standalone
@@ -21,6 +25,6 @@ resources:
 service:
   type: ClusterIP
 
-# Console 通过 Ingress 暴露
+# 控制台通过 Ingress 暴露
 consoleService:
   type: ClusterIP

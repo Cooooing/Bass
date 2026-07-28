@@ -27,10 +27,13 @@ promExporter:
   enabled: false
 
 service:
-  # ClusterIP，仅集群内访问
+  # 浠呴泦缇ゅ唴璁块棶
   enabled: true
 
 container:
+  image:
+    repository: nats
+    tag: 2.14.2
   env:
     NATS_USER:
       valueFrom:

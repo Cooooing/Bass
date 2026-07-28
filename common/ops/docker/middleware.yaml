@@ -1,6 +1,6 @@
 name: bass-infra
 
-# docker network create bass
+# 鍒涘缓 bass 瀹瑰櫒缃戠粶
 networks:
   bass:
     driver: bridge
@@ -81,13 +81,13 @@ services:
       retries: 5
 
   nats:
-    image: nats:2.12.7
+    image: nats:2.14.2
     restart: on-failure:3
     env_file:
       - .env
     environment:
       - TZ=Asia/Shanghai
-      - MAX_PAYLOAD=1048576  # 1MB，可选，默认也是 1MB
+      - MAX_PAYLOAD=1048576  # 1MB锛屽彲閫夛紝榛樿涔熸槸 1MB
     command: >
       --js
       --sd /data/jetstream

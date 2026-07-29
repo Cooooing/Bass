@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"strings"
+	"time"
 
 	"common/pkg/apperror"
 	"game_town/internal/biz/base"
@@ -24,12 +25,12 @@ func NewAgentConfigUsecase(
 }
 
 type CreateAgentConfigReq struct {
-	Name           string
-	Provider       enum.AgentProvider
-	BaseURL        string
-	Model          string
-	SecretEnv      string
-	TimeoutSeconds int32
+	Name      string
+	Provider  enum.AgentProvider
+	BaseURL   string
+	Model     string
+	SecretEnv string
+	Timeout   time.Duration
 }
 
 func (u *AgentConfigUsecase) Create(ctx context.Context, req *CreateAgentConfigReq) (*model.AgentConfig, error) {
@@ -42,17 +43,17 @@ func (u *AgentConfigUsecase) Create(ctx context.Context, req *CreateAgentConfigR
 	if _, ok := enum.AgentProviderMap.ToProto(req.Provider); !ok {
 		return nil, apperror.CommonInvalidArgument()
 	}
-	timeoutSeconds := req.TimeoutSeconds
-	if timeoutSeconds <= 0 {
-		timeoutSeconds = 60
+	timeout := req.Timeout
+	if timeout <= 0 {
+		timeout = 60 * time.Second
 	}
 	return u.agentConfigRepo.Save(ctx, &model.AgentConfig{
-		Name:           name,
-		Provider:       req.Provider,
-		BaseURL:        baseURL,
-		Model:          modelName,
-		SecretEnv:      strings.TrimSpace(req.SecretEnv),
-		TimeoutSeconds: timeoutSeconds,
+		Name:      name,
+		Provider:  req.Provider,
+		BaseURL:   baseURL,
+		Model:     modelName,
+		SecretEnv: strings.TrimSpace(req.SecretEnv),
+		Timeout:   timeout,
 	})
 }
 

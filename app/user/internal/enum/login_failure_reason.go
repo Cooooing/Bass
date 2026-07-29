@@ -24,3 +24,7 @@ var LoginFailureReasonMap = commonenum.NewMapping[LoginFailureReason, v1.LoginFa
 	LoginFailureReasonNotImplemented:       {Proto: v1.LoginFailureReason_LOGIN_FAILURE_REASON_NOT_IMPLEMENTED},
 	LoginFailureReasonInternal:             {Proto: v1.LoginFailureReason_LOGIN_FAILURE_REASON_INTERNAL},
 })
+
+func (e LoginFailureReason) String() string {
+	return string(e)
+}

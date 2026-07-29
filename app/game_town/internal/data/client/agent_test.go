@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"game_town/internal/biz/model"
 	"game_town/internal/biz/repo"
@@ -67,10 +68,10 @@ func TestAgentClientGenerateWorldWithOllama(t *testing.T) {
 	}
 	draft, err := client.GenerateWorld(context.Background(), &repo.GenerateWorldReq{
 		Config: &model.AgentConfig{
-			Provider:       enum.AgentProviderOllama,
-			BaseURL:        server.URL,
-			Model:          "qwen",
-			TimeoutSeconds: 5,
+			Provider: enum.AgentProviderOllama,
+			BaseURL:  server.URL,
+			Model:    "qwen",
+			Timeout:  5 * time.Second,
 		},
 		World: &model.World{
 			Description: "test",
@@ -92,11 +93,11 @@ func TestAgentClientOpenAISecretRequired(t *testing.T) {
 	}
 	_, err := client.Talk(context.Background(), &repo.TalkReq{
 		Config: &model.AgentConfig{
-			Provider:       enum.AgentProviderOpenAICompatible,
-			BaseURL:        "http://127.0.0.1",
-			Model:          "test",
-			SecretEnv:      "GAME_TOWN_MISSING_SECRET",
-			TimeoutSeconds: 1,
+			Provider:  enum.AgentProviderOpenAICompatible,
+			BaseURL:   "http://127.0.0.1",
+			Model:     "test",
+			SecretEnv: "GAME_TOWN_MISSING_SECRET",
+			Timeout:   time.Second,
 		},
 		World:    &model.World{},
 		State:    &model.WorldState{},

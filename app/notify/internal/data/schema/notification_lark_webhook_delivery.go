@@ -34,7 +34,7 @@ func (NotificationLarkWebhookDelivery) Fields() []ent.Field {
 		field.Enum("event_type").Values(commonenum.EventTypeMap.EnumValues()...).Comment("来源事件类型"),
 		field.String("webhook_id").Comment("Lark webhook 配置标识").NotEmpty(),
 		field.String("request_body").Comment("请求体"),
-		field.Enum("status").Values(notifyenum.NotificationChannelStatusMap.EnumValues()...).Default(string(notifyenum.NotificationChannelStatusProcessing)).Comment("通道状态"),
+		field.Enum("status").Values(notifyenum.NotificationChannelStatusMap.EnumValues()...).Default(notifyenum.NotificationChannelStatusProcessing.String()).Comment("通道状态"),
 		field.Int32("attempt_count").Comment("发送尝试次数").Default(0),
 		field.Time("last_attempt_at").Comment("最近一次发送尝试时间").Optional().Nillable(),
 		field.Int("http_status").Comment("HTTP 状态码").Optional().Nillable(),

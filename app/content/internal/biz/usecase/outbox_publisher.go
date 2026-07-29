@@ -123,7 +123,7 @@ func (p *OutboxPublisher) publishBatch(ctx context.Context) (bool, error) {
 	var batchErr error
 	for _, event := range events {
 		err = p.eventClient.Publish(ctx, &repo.EventClientMessage{
-			Subject: string(event.Subject),
+			Subject: event.Subject.String(),
 			Payload: event.Payload,
 			Headers: event.Headers,
 		})

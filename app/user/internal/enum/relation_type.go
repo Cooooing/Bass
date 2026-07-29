@@ -16,3 +16,7 @@ var RelationTypeMap = commonenum.NewMapping[RelationType, v1.RelationType](map[R
 	RelationTypeFollow: {Proto: v1.RelationType_RELATION_TYPE_FOLLOW},
 	RelationTypeBlock:  {Proto: v1.RelationType_RELATION_TYPE_BLOCK},
 })
+
+func (e RelationType) String() string {
+	return string(e)
+}

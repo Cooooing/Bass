@@ -22,3 +22,7 @@ var PlayerStatusMap = commonenum.NewMapping[PlayerStatus, v1.GameTownPlayerStatu
 		},
 	},
 )
+
+func (e PlayerStatus) String() string {
+	return string(e)
+}

@@ -32,7 +32,7 @@ func (ChatGroup) Fields() []ent.Field {
 		field.String("avatar").Comment("群头像").Optional().Nillable(),
 		field.String("introduction").Comment("群简介").Optional().Nillable(),
 		field.Int64("owner_id").Comment("群主id"),
-		field.Enum("status").Values(enum.ChatGroupStatusMap.EnumValues()...).Default(string(enum.ChatGroupStatusNormal)).Comment("群状态"),
+		field.Enum("status").Values(enum.ChatGroupStatusMap.EnumValues()...).Default(enum.ChatGroupStatusNormal.String()).Comment("群状态"),
 		field.Uint32("member_count").Comment("群成员数").Default(0),
 
 		field.Uint32("message_count").Comment("群消息数").Default(0),

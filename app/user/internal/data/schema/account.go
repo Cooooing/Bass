@@ -39,7 +39,7 @@ func (Account) Fields() []ent.Field {
 		field.String("avatar_url").Comment("头像 URL").Optional().Nillable(),
 		field.String("introduction").Comment("个人简介").Optional().Nillable(),
 		field.Enum("mbti").Values(userenum.MBTIMap.EnumValues()...).Comment("MBTI 类型").Optional().Nillable(),
-		field.Enum("status").Values(userenum.AccountStatusMap.EnumValues()...).Default(string(userenum.AccountStatusNormal)).Comment("账号状态"),
+		field.Enum("status").Values(userenum.AccountStatusMap.EnumValues()...).Default(userenum.AccountStatusNormal.String()).Comment("账号状态"),
 		field.Int32("follow_count").Comment("关注数").Default(0),
 		field.Int32("follower_count").Comment("粉丝数").Default(0),
 	}

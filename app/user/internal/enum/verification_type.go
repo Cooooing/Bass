@@ -16,3 +16,7 @@ var VerificationTypeMap = commonenum.NewMapping[VerificationType, v1.Verificatio
 	VerificationTypeEmail: {Proto: v1.VerificationType_VERIFICATION_TYPE_EMAIL},
 	VerificationTypePhone: {Proto: v1.VerificationType_VERIFICATION_TYPE_PHONE},
 })
+
+func (e VerificationType) String() string {
+	return string(e)
+}

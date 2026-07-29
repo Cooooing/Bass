@@ -18,3 +18,7 @@ var LoginTypeMap = commonenum.NewMapping[LoginType, v1.LoginType](map[LoginType]
 	LoginTypeEmail:    {Proto: v1.LoginType_LOGIN_TYPE_EMAIL},
 	LoginTypePhone:    {Proto: v1.LoginType_LOGIN_TYPE_PHONE},
 })
+
+func (e LoginType) String() string {
+	return string(e)
+}

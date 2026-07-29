@@ -37,7 +37,7 @@ func (NotificationEmailDelivery) Fields() []ent.Field {
 		field.String("subject").Comment("邮件主题"),
 		field.String("body").Comment("邮件正文"),
 		field.String("content_type").Comment("正文类型"),
-		field.Enum("status").Values(notifyenum.NotificationChannelStatusMap.EnumValues()...).Default(string(notifyenum.NotificationChannelStatusProcessing)).Comment("通道状态"),
+		field.Enum("status").Values(notifyenum.NotificationChannelStatusMap.EnumValues()...).Default(notifyenum.NotificationChannelStatusProcessing.String()).Comment("通道状态"),
 		field.Int32("attempt_count").Comment("发送尝试次数").Default(0),
 		field.Time("last_attempt_at").Comment("最近一次发送尝试时间").Optional().Nillable(),
 		field.String("provider_message_id").Comment("服务商消息 ID").Optional().Nillable(),

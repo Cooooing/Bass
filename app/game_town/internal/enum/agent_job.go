@@ -62,3 +62,15 @@ var AgentJobStatusMap = commonenum.NewMapping[AgentJobStatus, v1.GameTownAgentJo
 		AgentJobStatusFailed:    {Proto: v1.GameTownAgentJobStatus_GAME_TOWN_AGENT_JOB_STATUS_FAILED},
 	},
 )
+
+func (e AgentJobType) String() string {
+	return string(e)
+}
+
+func (e AgentJobPriority) String() string {
+	return string(e)
+}
+
+func (e AgentJobStatus) String() string {
+	return string(e)
+}

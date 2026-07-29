@@ -98,3 +98,47 @@ const (
 	EmbeddingStatusReady   EmbeddingStatus = "ready"
 	EmbeddingStatusFailed  EmbeddingStatus = "failed"
 )
+
+func (e EntityType) String() string {
+	return string(e)
+}
+
+func (e KnowledgeCertainty) String() string {
+	return string(e)
+}
+
+func (e ObservationSource) String() string {
+	return string(e)
+}
+
+func (e RelationshipAttitude) String() string {
+	return string(e)
+}
+
+func (e NpcLifeStatus) String() string {
+	return string(e)
+}
+
+func (e LocationStatus) String() string {
+	return string(e)
+}
+
+func (e FactionStatus) String() string {
+	return string(e)
+}
+
+func (e ClaimTruth) String() string {
+	return string(e)
+}
+
+func (e BeliefStance) String() string {
+	return string(e)
+}
+
+func (e MemoryKind) String() string {
+	return string(e)
+}
+
+func (e EmbeddingStatus) String() string {
+	return string(e)
+}

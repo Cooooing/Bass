@@ -22,3 +22,7 @@ var DeviceTypeMap = commonenum.NewMapping[DeviceType, v1.DeviceType](map[DeviceT
 	DeviceTypeTablet:  {Proto: v1.DeviceType_DEVICE_TYPE_TABLET},
 	DeviceTypeBot:     {Proto: v1.DeviceType_DEVICE_TYPE_BOT},
 })
+
+func (e DeviceType) String() string {
+	return string(e)
+}

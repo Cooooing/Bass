@@ -39,13 +39,11 @@ func (c *DelayedTaskClient) RegisterUnbanAccounts(ctx context.Context, userID in
 	if err != nil {
 		return err
 	}
-	_, err = c.schedulerClient.DelayedTask.Register(ctx, &schedulerv1.RegisterSchedulerDelayedTask_Req{
+	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{
 		IdempotencyKey: fmt.Sprintf("user.unban_accounts:%d", banRecordID),
-		TaskName:       "user.unban_accounts",
+		Name:           "user.unban_accounts",
 		Payload:        string(payload),
-		ExecuteAt:      timestamppb.New(*executeAt),
-		MaxAttempts:    10,
-		TimeoutSeconds: 30,
+		ScheduledAt:    timestamppb.New(*executeAt),
 	})
 	return err
 }

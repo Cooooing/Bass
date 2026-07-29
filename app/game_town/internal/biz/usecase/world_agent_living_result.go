@@ -56,7 +56,7 @@ func (r *WorldAgentRunner) applyPlayerActionResult(ctx context.Context, result *
 
 	summary := r.normalizeModelText(result.resolution.Summary, 512)
 	if summary == "" {
-		summary = "玩家行动已处理"
+		summary = "玩家行动已处。"
 	}
 	content := summary
 	if status == "clarification" && strings.TrimSpace(result.resolution.Clarification) != "" {
@@ -151,7 +151,7 @@ func (r *WorldAgentRunner) applyNpcPlan(ctx context.Context, result *agentResult
 		NpcID:            new(updated.ID),
 		LocationID:       new(updated.CurrentLocationID),
 		CausationEventID: new(result.source.ID),
-		Summary:          updated.Name + " 制定了新的计划",
+		Summary:          updated.Name + " 制定了新的计。",
 		Content:          r.normalizeModelText(result.plan.Summary, 512),
 		Payload:          payload,
 	})
@@ -162,7 +162,7 @@ func (r *WorldAgentRunner) suggestedActionPayload(values []model.SuggestedAction
 	for _, value := range values {
 		targets := make([]any, 0, len(value.Targets))
 		for _, target := range value.Targets {
-			targets = append(targets, map[string]any{"type": string(target.Type), "id": target.ID})
+			targets = append(targets, map[string]any{"type": target.Type.String(), "id": target.ID})
 		}
 		result = append(result, map[string]any{"label": value.Label, "content": value.Content, "targets": targets})
 	}
@@ -178,7 +178,7 @@ func (r *WorldAgentRunner) actionStepPayload(values []model.ActionStep) []any {
 			"duration_minutes": value.DurationMinutes,
 		}
 		if value.Target != nil {
-			item["target"] = map[string]any{"type": string(value.Target.Type), "id": value.Target.ID}
+			item["target"] = map[string]any{"type": value.Target.Type.String(), "id": value.Target.ID}
 		}
 		result = append(result, item)
 	}

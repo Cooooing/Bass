@@ -135,7 +135,7 @@ func NewGlobalErrHandler(
 func (h *GlobalErrHandler) HandleError(ctx context.Context, task *asynq.Task, err error) {
 	h.logger.ErrorContext(ctx, "task failed", constant.LogFieldKind, constant.LogKindAsynq, "task", task.Type(), "payload", string(task.Payload()), constant.LogFieldErr, err)
 	for _, taskName := range lo.Keys(h.tasks) {
-		if strings.HasPrefix(task.Type(), string(taskName)) {
+		if strings.HasPrefix(task.Type(), taskName.String()) {
 			if t, ok := h.tasks[taskName]; ok {
 				t.ErrHandler(ctx, task, err)
 				return

@@ -16,3 +16,7 @@ var ObjectStorageProviderMap = commonenum.NewMapping[ObjectStorageProvider, v1.O
 	ObjectStorageProviderMinio: {Proto: v1.ObjectStorageProvider_OBJECT_STORAGE_PROVIDER_MINIO},
 	ObjectStorageProviderQiniu: {Proto: v1.ObjectStorageProvider_OBJECT_STORAGE_PROVIDER_QINIU},
 })
+
+func (e ObjectStorageProvider) String() string {
+	return string(e)
+}

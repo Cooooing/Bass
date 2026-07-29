@@ -119,7 +119,7 @@ func (u *WorldMemberUsecase) Join(ctx context.Context, req *JoinWorldReq) (*Join
 			Type:          enum.EventTypePlayerJoined,
 			ActorPlayerID: new(req.PlayerID),
 			LocationID:    world.DefaultLocationID,
-			Summary:       "玩家加入世界，等待世界生成角色",
+			Summary:       "玩家加入世界，等待世界生成角。",
 			Payload: map[string]any{
 				"public":               true,
 				"character_preference": characterPreference,
@@ -234,7 +234,7 @@ func (u *WorldMemberUsecase) actionPayloadTargets(rows []SubmitActionTarget) ([]
 			continue
 		}
 		targets = append(targets, map[string]any{
-			"type": string(target.Type),
+			"type": target.Type.String(),
 			"id":   target.ID,
 		})
 		if npcID == nil && target.Type == enum.EntityTypeNpc {

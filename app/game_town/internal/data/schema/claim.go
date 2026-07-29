@@ -40,7 +40,7 @@ func (Claim) Fields() []ent.Field {
 		field.Int64("subject_id"),
 		field.String("predicate").MaxLen(128),
 		field.JSON("object", map[string]any{}),
-		field.Enum("truth").Values(enum.ClaimTruthMap.EnumValues()...).Default(string(enum.ClaimTruthUnknown)),
+		field.Enum("truth").Values(enum.ClaimTruthMap.EnumValues()...).Default(enum.ClaimTruthUnknown.String()),
 	}
 }
 

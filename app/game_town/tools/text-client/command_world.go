@@ -114,11 +114,10 @@ func joinWorld(ctx context.Context, client *rpc.GameTownClient, playerID int64, 
 			err: fmt.Errorf("请把 %s 替换成 /world list 中显示的真实世界 code，例如 /world join wdkxxxx 我的角色倾向", worldCode),
 		}
 	}
-	preference := strings.TrimSpace(strings.Join(parts[1:], " "))
 	reply, err := client.WorldMember.Join(ctx, &v1.JoinGameTownWorld_Request{
 		PlayerId:            playerID,
 		WorldCode:           worldCode,
-		CharacterPreference: &preference,
+		CharacterPreference: new(strings.TrimSpace(strings.Join(parts[1:], " "))),
 	})
 	if err != nil {
 		return commandResult{

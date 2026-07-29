@@ -95,7 +95,7 @@ func (r *ObservationRepo) observationQuery(q *gen.ObservationQuery, req *bizrepo
 				selector.Where(sql.GT(events.C(event.FieldSequence), *req.AfterEventSequence))
 			}
 			if req.EventType != nil {
-				selector.Where(sql.EQ(events.C(event.FieldType), string(*req.EventType)))
+				selector.Where(sql.EQ(events.C(event.FieldType), req.EventType.String()))
 			}
 		})
 	}

@@ -34,7 +34,7 @@ func (AgentJob) Fields() []ent.Field {
 		field.Enum("type").Values(gameenum.AgentJobTypeMap.EnumValues()...).Comment("任务类型"),
 		field.Enum("priority").Values(gameenum.AgentJobPriorityMap.EnumValues()...).Comment("任务优先级"),
 		field.String("lane_key").Comment("串行执行通道").MaxLen(128).NotEmpty(),
-		field.Enum("status").Values(gameenum.AgentJobStatusMap.EnumValues()...).Default(string(gameenum.AgentJobStatusQueued)).Comment("任务状态"),
+		field.Enum("status").Values(gameenum.AgentJobStatusMap.EnumValues()...).Default(gameenum.AgentJobStatusQueued.String()).Comment("任务状态"),
 		field.Int64("world_version").Comment("创建任务时的世界版本"),
 		field.Int64("npc_id").Comment("关联 NPC ID").Nillable().Optional(),
 		field.Int32("attempt_count").Comment("模型调用次数").Default(0),

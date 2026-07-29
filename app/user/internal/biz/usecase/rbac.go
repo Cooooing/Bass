@@ -35,7 +35,7 @@ func (u *RbacUsecase) UpsertRole(ctx context.Context, row *model.RbacRole) (*mod
 	if err != nil {
 		return nil, err
 	}
-	_ = u.authCacheRepo.DeleteRealmRbacPermissions(ctx, string(saved.Realm))
+	_ = u.authCacheRepo.DeleteRealmRbacPermissions(ctx, saved.Realm.String())
 	return saved, nil
 }
 
@@ -44,7 +44,7 @@ func (u *RbacUsecase) UpsertPermission(ctx context.Context, row *model.RbacPermi
 	if err != nil {
 		return nil, err
 	}
-	_ = u.authCacheRepo.DeleteRealmRbacPermissions(ctx, string(saved.Realm))
+	_ = u.authCacheRepo.DeleteRealmRbacPermissions(ctx, saved.Realm.String())
 	return saved, nil
 }
 
@@ -107,14 +107,14 @@ func (u *RbacUsecase) CheckPermission(ctx context.Context, userID int64, realm c
 	if account == nil || account.Status == nil || *account.Status != enum.AccountStatusNormal {
 		return false, nil
 	}
-	if permissions, ok, err := u.authCacheRepo.GetRbacPermissions(ctx, string(realm), userID); err == nil && ok {
+	if permissions, ok, err := u.authCacheRepo.GetRbacPermissions(ctx, realm.String(), userID); err == nil && ok {
 		return lo.Contains(permissions, code), nil
 	}
 	permissions, err := u.rbacRepo.PermissionCodes(ctx, userID, realm, new(time.Now()))
 	if err != nil {
 		return false, err
 	}
-	_ = u.authCacheRepo.SaveRbacPermissions(ctx, string(realm), userID, permissions, 5*time.Minute)
+	_ = u.authCacheRepo.SaveRbacPermissions(ctx, realm.String(), userID, permissions, 5*time.Minute)
 	return lo.Contains(permissions, code), nil
 }
 
@@ -122,7 +122,7 @@ func (u *RbacUsecase) deleteRoleRealmCache(ctx context.Context, role *model.Rbac
 	if role == nil {
 		return
 	}
-	_ = u.authCacheRepo.DeleteRealmRbacPermissions(ctx, string(role.Realm))
+	_ = u.authCacheRepo.DeleteRealmRbacPermissions(ctx, role.Realm.String())
 }
 
 func (u *RbacUsecase) deleteUserRoleCache(ctx context.Context, userID int64, role *model.RbacRole) {
@@ -130,5 +130,5 @@ func (u *RbacUsecase) deleteUserRoleCache(ctx context.Context, userID int64, rol
 		_ = u.authCacheRepo.DeleteUserRbacPermissions(ctx, userID)
 		return
 	}
-	_ = u.authCacheRepo.DeleteRbacPermissions(ctx, string(role.Realm), userID)
+	_ = u.authCacheRepo.DeleteRbacPermissions(ctx, role.Realm.String(), userID)
 }

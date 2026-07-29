@@ -56,7 +56,7 @@ func NewMinio(
 }
 
 func (m *Minio) Name() string {
-	return string(enum.ObjectStorageProviderMinio)
+	return enum.ObjectStorageProviderMinio.String()
 }
 
 func (m *Minio) CreateBucket(ctx context.Context, bucket string) error {

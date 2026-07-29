@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"common/pkg/apperror"
 	"common/proto/gen/common"
@@ -44,12 +45,12 @@ func (s *AgentConfigService) Create(ctx context.Context, req *v1.CreateGameTownA
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	row, err := s.usecase.Create(ctx, &usecase.CreateAgentConfigReq{
-		Name:           req.GetName(),
-		Provider:       provider,
-		BaseURL:        req.GetBaseUrl(),
-		Model:          req.GetModel(),
-		SecretEnv:      req.GetSecretEnv(),
-		TimeoutSeconds: req.GetTimeoutSeconds(),
+		Name:      req.GetName(),
+		Provider:  provider,
+		BaseURL:   req.GetBaseUrl(),
+		Model:     req.GetModel(),
+		SecretEnv: req.GetSecretEnv(),
+		Timeout:   time.Duration(req.GetTimeoutSeconds()) * time.Second,
 	})
 	if err != nil {
 		return nil, err
@@ -62,7 +63,7 @@ func (s *AgentConfigService) Create(ctx context.Context, req *v1.CreateGameTownA
 			BaseUrl:        row.BaseURL,
 			Model:          row.Model,
 			SecretEnv:      row.SecretEnv,
-			TimeoutSeconds: row.TimeoutSeconds,
+			TimeoutSeconds: int32(row.Timeout / time.Second),
 			CreatedAt:      timestamppb.New(*row.CreatedAt),
 			UpdatedAt:      timestamppb.New(*row.UpdatedAt),
 		},
@@ -85,7 +86,7 @@ func (s *AgentConfigService) Get(ctx context.Context, req *v1.GetGameTownAgentCo
 			BaseUrl:        row.BaseURL,
 			Model:          row.Model,
 			SecretEnv:      row.SecretEnv,
-			TimeoutSeconds: row.TimeoutSeconds,
+			TimeoutSeconds: int32(row.Timeout / time.Second),
 			CreatedAt:      timestamppb.New(*row.CreatedAt),
 			UpdatedAt:      timestamppb.New(*row.UpdatedAt),
 		},
@@ -116,7 +117,7 @@ func (s *AgentConfigService) List(ctx context.Context, req *v1.ListGameTownAgent
 				BaseUrl:        row.BaseURL,
 				Model:          row.Model,
 				SecretEnv:      row.SecretEnv,
-				TimeoutSeconds: row.TimeoutSeconds,
+				TimeoutSeconds: int32(row.Timeout / time.Second),
 				CreatedAt:      timestamppb.New(*row.CreatedAt),
 				UpdatedAt:      timestamppb.New(*row.UpdatedAt),
 			}

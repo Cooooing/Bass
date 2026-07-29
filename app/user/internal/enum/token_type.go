@@ -16,3 +16,7 @@ var TokenTypeMap = commonenum.NewMapping[TokenType, v1.TokenType](map[TokenType]
 	TokenTypeAccess:  {Proto: v1.TokenType_TOKEN_TYPE_ACCESS},
 	TokenTypeRefresh: {Proto: v1.TokenType_TOKEN_TYPE_REFRESH},
 })
+
+func (e TokenType) String() string {
+	return string(e)
+}

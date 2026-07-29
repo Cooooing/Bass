@@ -174,8 +174,7 @@ func (u *TencentSMSUsecase) Process(ctx context.Context, req *TencentSMSProcessR
 						}
 						var sentAt *time.Time
 						if itemStatus == notifyenum.NotificationChannelStatusSucceeded {
-							now := time.Now()
-							sentAt = &now
+							sentAt = new(time.Now())
 						}
 						err = u.tencentSMSDeliveryRepo.UpdateStatus(ctx, &repo.NotificationTencentSMSDeliveryUpdateStatusReq{
 							ID:                delivery.ID,

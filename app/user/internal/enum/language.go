@@ -18,3 +18,7 @@ var LanguageMap = commonenum.NewMapping[Language, commonenums.Language](map[Lang
 	LanguageZhTW: {Proto: commonenums.Language_LANGUAGE_ZH_TW},
 	LanguageEn:   {Proto: commonenums.Language_LANGUAGE_EN},
 })
+
+func (e Language) String() string {
+	return string(e)
+}

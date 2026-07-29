@@ -65,3 +65,7 @@ var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubj
 func (EventSubject) Values() []string {
 	return nil
 }
+
+func (e EventSubject) String() string {
+	return string(e)
+}

@@ -46,7 +46,7 @@ func (Npc) Fields() []ent.Field {
 		field.Int64("current_location_id"),
 		field.Text("system_prompt"),
 		field.Text("context_summary"),
-		field.Enum("life_status").Values(enum.NpcLifeStatusMap.EnumValues()...).Default(string(enum.NpcLifeStatusAlive)),
+		field.Enum("life_status").Values(enum.NpcLifeStatusMap.EnumValues()...).Default(enum.NpcLifeStatusAlive.String()),
 		field.JSON("state_tags", []string{}).Optional(),
 		field.JSON("attributes", map[string]any{}).Optional(),
 		field.Time("birth_world_time").Optional().Nillable(),

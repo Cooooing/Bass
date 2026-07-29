@@ -44,13 +44,13 @@ func NewAuthCacheRepo(
 
 func (r *AuthCacheRepo) authCodeRedisKey(req *repo.VerificationCodeKeyReq) string {
 	if req.UserID != nil {
-		return fmt.Sprintf(r.authOtpUserKey, string(req.Type), *req.UserID, req.Account)
+		return fmt.Sprintf(r.authOtpUserKey, req.Type.String(), *req.UserID, req.Account)
 	}
-	return fmt.Sprintf(r.authOtpGuestKey, string(req.Type), req.Account)
+	return fmt.Sprintf(r.authOtpGuestKey, req.Type.String(), req.Account)
 }
 
 func (r *AuthCacheRepo) authRegisterDraftRedisKey(draftType enum.VerificationType, account string) string {
-	return fmt.Sprintf(r.authRegisterDraftKey, string(draftType), account)
+	return fmt.Sprintf(r.authRegisterDraftKey, draftType.String(), account)
 }
 
 func (r *AuthCacheRepo) authRefreshSessionRedisKey(sessionID string) string {
@@ -91,7 +91,7 @@ func (r *AuthCacheRepo) SaveCode(ctx context.Context, code *model.VerificationCo
 		ctx,
 		key,
 		"type",
-		string(code.Type),
+		code.Type.String(),
 		"account",
 		code.Account,
 		"user_id",
@@ -203,7 +203,7 @@ func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshS
 		"user_id",
 		strconv.FormatInt(session.UserID, 10),
 		"realm",
-		string(session.Realm),
+		session.Realm.String(),
 		"current_jti",
 		session.CurrentJTI,
 		"created_at",
@@ -213,9 +213,9 @@ func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshS
 		"session_expires_at",
 		session.SessionExpiresAt.Format(time.RFC3339Nano),
 		"client_type",
-		string(session.Client.ClientType),
+		session.Client.ClientType.String(),
 		"device_type",
-		string(session.Client.DeviceType),
+		session.Client.DeviceType.String(),
 		"os_name",
 		session.Client.OSName,
 		"os_version",

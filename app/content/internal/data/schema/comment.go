@@ -35,7 +35,7 @@ func (Comment) Fields() []ent.Field {
 		field.Int32("level").Comment("评论层级"),
 		field.Int64("parent_id").Comment("父级评论 ID").Optional().Nillable(),
 		field.Int64("reply_id").Comment("回复评论 ID").Optional().Nillable(),
-		field.Enum("restriction").Values(contentenum.ContentRestrictionMap.EnumValues()...).Default(string(contentenum.ContentRestrictionNone)).Comment("管理限制"),
+		field.Enum("restriction").Values(contentenum.ContentRestrictionMap.EnumValues()...).Default(contentenum.ContentRestrictionNone.String()).Comment("管理限制"),
 
 		field.Int32("thank_count").Comment("感谢数").Default(0),
 		field.Int32("like_count").Comment("点赞数").Default(0),

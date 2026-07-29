@@ -234,7 +234,7 @@ func (r *WorldAgentRunner) applyNpcMove(ctx context.Context, result *agentResult
 		NpcID:            new(npc.ID),
 		LocationID:       new(location.ID),
 		CausationEventID: new(result.source.ID),
-		Summary:          npc.Name + " 移动到 " + location.Name,
+		Summary:          npc.Name + " 移动" + location.Name,
 		Content:          npc.Name + " 前往 " + location.Name + "，这会影响后续可见事件和 NPC 交流。",
 		Payload: map[string]any{
 			"npc_id":      npc.ID,
@@ -284,7 +284,7 @@ func (r *WorldAgentRunner) applyNpcStateChange(ctx context.Context, result *agen
 		return err
 	}
 	eventType := enum.EventTypeNpcStateChanged
-	summary := npc.Name + " 状态发生变化"
+	summary := npc.Name + " 状态发生变。"
 	if lifeStatus != nil && *lifeStatus == enum.NpcLifeStatusDead {
 		eventType = enum.EventTypeNpcDied
 		summary = npc.Name + " 死亡"
@@ -504,11 +504,11 @@ func (r *WorldAgentRunner) claimDraftPayload(values []model.ClaimDraft) []any {
 	result := make([]any, 0, len(values))
 	for _, value := range values {
 		result = append(result, map[string]any{
-			"subject_type": string(value.SubjectType),
+			"subject_type": value.SubjectType.String(),
 			"subject_id":   value.SubjectID,
 			"predicate":    value.Predicate,
 			"object":       value.Object,
-			"truth":        string(value.Truth),
+			"truth":        value.Truth.String(),
 		})
 	}
 	return result

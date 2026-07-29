@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"strings"
+	"time"
 
 	"common/pkg/apperror"
 	utilent "common/pkg/util/ent"
@@ -45,7 +46,7 @@ func (r *AgentConfigRepo) Save(ctx context.Context, row *model.AgentConfig) (*mo
 		SetBaseURL(row.BaseURL).
 		SetModel(row.Model).
 		SetSecretEnv(row.SecretEnv).
-		SetTimeoutSeconds(row.TimeoutSeconds).
+		SetTimeoutSeconds(int32(row.Timeout / time.Second)).
 		Save(ctx)
 	if err != nil {
 		if r.isAgentConfigNameConflict(err) {
@@ -137,14 +138,14 @@ func (r *AgentConfigRepo) Page(ctx context.Context, req *bizrepo.AgentConfigPage
 
 func (r *AgentConfigRepo) agentConfig(row *gen.AgentConfig) *model.AgentConfig {
 	return &model.AgentConfig{
-		ID:             row.ID,
-		Name:           row.Name,
-		Provider:       enum.AgentProvider(row.Provider),
-		BaseURL:        row.BaseURL,
-		Model:          row.Model,
-		SecretEnv:      row.SecretEnv,
-		TimeoutSeconds: row.TimeoutSeconds,
-		CreatedAt:      row.CreatedAt,
-		UpdatedAt:      row.UpdatedAt,
+		ID:        row.ID,
+		Name:      row.Name,
+		Provider:  enum.AgentProvider(row.Provider),
+		BaseURL:   row.BaseURL,
+		Model:     row.Model,
+		SecretEnv: row.SecretEnv,
+		Timeout:   time.Duration(row.TimeoutSeconds) * time.Second,
+		CreatedAt: row.CreatedAt,
+		UpdatedAt: row.UpdatedAt,
 	}
 }

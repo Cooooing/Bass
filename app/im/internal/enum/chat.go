@@ -64,3 +64,23 @@ var ReceiverTypeMap = enum.NewMapping[ReceiverType, v1.ReceiverType](map[Receive
 	ReceiverTypeUser:  {Proto: v1.ReceiverType_RECEIVER_TYPE_USER},
 	ReceiverTypeGroup: {Proto: v1.ReceiverType_RECEIVER_TYPE_GROUP},
 })
+
+func (e ChatGroupStatus) String() string {
+	return string(e)
+}
+
+func (e ChatGroupMemberRole) String() string {
+	return string(e)
+}
+
+func (e MessageType) String() string {
+	return string(e)
+}
+
+func (e MessageStatus) String() string {
+	return string(e)
+}
+
+func (e ReceiverType) String() string {
+	return string(e)
+}

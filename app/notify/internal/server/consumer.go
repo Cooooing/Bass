@@ -39,9 +39,9 @@ func NewConsumer(
 
 func (c *Consumer) Start(ctx context.Context) error {
 	c.ctx, c.cancel = context.WithCancel(ctx)
-	queueGroup := string(commonenum.EventQueueGroupNotify)
+	queueGroup := commonenum.EventQueueGroupNotify.String()
 	for _, subject := range c.subjects {
-		subjectName := string(subject)
+		subjectName := subject.String()
 		_, err := c.natsClient.QueueSubscribe(c.ctx, subjectName, queueGroup, func(ctx context.Context, msg *client.Message) error {
 			if msg == nil {
 				return nil

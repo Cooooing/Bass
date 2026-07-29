@@ -47,7 +47,7 @@ func (NpcMemory) Fields() []ent.Field {
 		field.Time("last_recalled_at").Nillable().Optional(),
 		field.Other("embedding", pgvector.Vector{}).SchemaType(map[string]string{dialect.Postgres: "vector(1024)"}).Optional().Nillable(),
 		field.String("embedding_model").MaxLen(128).Default(""),
-		field.Enum("embedding_status").Values(gameenum.EmbeddingStatusMap.EnumValues()...).Default(string(gameenum.EmbeddingStatusPending)),
+		field.Enum("embedding_status").Values(gameenum.EmbeddingStatusMap.EnumValues()...).Default(gameenum.EmbeddingStatusPending.String()),
 		field.String("embedding_error").MaxRuneLen(512).Default(""),
 	}
 }

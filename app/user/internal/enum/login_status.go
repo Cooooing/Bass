@@ -16,3 +16,7 @@ var LoginStatusMap = commonenum.NewMapping[LoginStatus, v1.LoginStatus](map[Logi
 	LoginStatusSuccess: {Proto: v1.LoginStatus_LOGIN_STATUS_SUCCESS},
 	LoginStatusFailed:  {Proto: v1.LoginStatus_LOGIN_STATUS_FAILED},
 })
+
+func (e LoginStatus) String() string {
+	return string(e)
+}

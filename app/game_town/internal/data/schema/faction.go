@@ -40,7 +40,7 @@ func (Faction) Fields() []ent.Field {
 		field.String("name").MaxLen(128),
 		field.Text("description"),
 		field.Text("public_goal"),
-		field.Enum("status").Values(enum.FactionStatusMap.EnumValues()...).Default(string(enum.FactionStatusActive)),
+		field.Enum("status").Values(enum.FactionStatusMap.EnumValues()...).Default(enum.FactionStatusActive.String()),
 		field.JSON("attributes", map[string]any{}).Optional(),
 		field.Int64("version").Default(1),
 	}

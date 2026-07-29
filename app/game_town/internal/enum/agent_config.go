@@ -22,3 +22,7 @@ var AgentProviderMap = commonenum.NewMapping[AgentProvider, v1.GameTownAgentProv
 		},
 	},
 )
+
+func (e AgentProvider) String() string {
+	return string(e)
+}

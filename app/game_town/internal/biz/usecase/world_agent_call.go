@@ -386,7 +386,7 @@ func (r *WorldAgentRunner) actionTargets(payload map[string]any) []model.EntityR
 	}
 	slices.SortFunc(result, func(a, b model.EntityRef) int {
 		if a.Type != b.Type {
-			return strings.Compare(string(a.Type), string(b.Type))
+			return strings.Compare(a.Type.String(), b.Type.String())
 		}
 		return int(a.ID - b.ID)
 	})
@@ -468,9 +468,9 @@ func (r *WorldAgentRunner) fallbackWorldDraft(result *agentResult) *model.WorldD
 		description = result.world.Description
 	}
 	return &model.WorldDraft{
-		Name:       "未命名边境",
+		Name:       "未命名边。",
 		Summary:    r.normalizeModelText(description, 120),
-		CurrentArc: "新局势正在形成",
+		CurrentArc: "新局势正在形。",
 		CurrentEra: "初始纪元",
 		Rules: map[string]any{
 			"time_scale": 24,
@@ -481,13 +481,13 @@ func (r *WorldAgentRunner) fallbackWorldDraft(result *agentResult) *model.WorldD
 			{Code: "ruins", Name: "旧日遗迹", Description: "埋藏秘密、失踪线索和势力争夺目标。", EnvironmentTags: []string{"secret", "ancient"}},
 		},
 		Factions: []model.WorldDraftFaction{
-			{Code: "council", Name: "地方议会", Description: "维持秩序并控制公开资源。", PublicGoal: "稳定局势"},
-			{Code: "seekers", Name: "寻迹者同盟", Description: "追查异常与失踪事件。", PublicGoal: "揭开真相"},
+			{Code: "council", Name: "地方议会", Description: "维持秩序并控制公开资源。", PublicGoal: "稳定局。"},
+			{Code: "seekers", Name: "寻迹者同。", Description: "追查异常与失踪事件。", PublicGoal: "揭开真相"},
 		},
 		Npcs: []model.WorldDraftNpc{
-			{Code: "warden", Name: "守望者", Role: "秩序维护者", Species: "人类", Personality: "谨慎", Goal: "防止危机扩散", Background: "长期守护中心据点。", LocationCode: "center", FactionCode: "council", SystemPrompt: "你是谨慎的守望者，只依据已知事实回应。"},
-			{Code: "scout", Name: "斥候", Role: "情报收集者", Species: "人类", Personality: "敏锐", Goal: "调查异常源头", Background: "经常往返荒野与据点。", LocationCode: "wilds", FactionCode: "seekers", SystemPrompt: "你是敏锐的斥候，只说自己观察到的内容。"},
-			{Code: "keeper", Name: "遗迹看守", Role: "秘密保管者", Species: "未知", Personality: "沉默", Goal: "守住旧日秘密", Background: "与旧日遗迹存在长期联系。", LocationCode: "ruins", FactionCode: "seekers", SystemPrompt: "你是沉默的遗迹看守，不泄漏未知秘密。"},
+			{Code: "warden", Name: "守望。", Role: "秩序维护。", Species: "人类", Personality: "谨慎", Goal: "防止危机扩散", Background: "长期守护中心据点。", LocationCode: "center", FactionCode: "council", SystemPrompt: "你是谨慎的守望者，只依据已知事实回应。"},
+			{Code: "scout", Name: "斥。", Role: "情报收集。", Species: "人类", Personality: "敏锐", Goal: "调查异常源头", Background: "经常往返荒野与据点。", LocationCode: "wilds", FactionCode: "seekers", SystemPrompt: "你是敏锐的斥候，只说自己观察到的内容。"},
+			{Code: "keeper", Name: "遗迹看守", Role: "秘密保管。", Species: "未知", Personality: "沉默", Goal: "守住旧日秘密", Background: "与旧日遗迹存在长期联系。", LocationCode: "ruins", FactionCode: "seekers", SystemPrompt: "你是沉默的遗迹看守，不泄漏未知秘密。"},
 			{Code: "trader", Name: "行商", Role: "资源中介", Species: "人类", Personality: "精明", Goal: "在动荡中寻找交易机会", Background: "掌握多方传闻但真假混杂。", LocationCode: "center", FactionCode: "council", SystemPrompt: "你是精明的行商，区分亲眼所见和听来的传闻。"},
 		},
 	}
@@ -497,7 +497,7 @@ func (r *WorldAgentRunner) fallbackPlayerActionResolution(result *agentResult, e
 	summary := "玩家行动已被记录，世界暂时需要更多信息来裁决细节"
 	clarification := "请补充你的具体目标、对象或愿意承担的代价。"
 	if result != nil && result.source != nil && strings.TrimSpace(result.source.Content) != "" {
-		summary = r.normalizeModelText("玩家尝试："+result.source.Content, 120)
+		summary = r.normalizeModelText("玩家尝试"+result.source.Content, 120)
 	}
 	return &model.ActionResolution{
 		Status:        "clarification",
@@ -514,7 +514,7 @@ func (r *WorldAgentRunner) fallbackPlayerActionResolution(result *agentResult, e
 
 func (r *WorldAgentRunner) fallbackNpcPlan(result *agentResult, err error) *model.NpcPlan {
 	summary := "NPC 根据当前局势维持原计划，并继续观察变化。"
-	goal := "观察局势"
+	goal := "观察局。"
 	actions := make([]model.ActionStep, 0, 1)
 	if result != nil && result.npc != nil {
 		if strings.TrimSpace(result.npc.Goal) != "" {

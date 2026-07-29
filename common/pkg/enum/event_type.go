@@ -61,3 +61,7 @@ var EventTypeMap = NewMapping[EventType, enums.EventType](map[EventType]Entry[Ev
 	EventTypeContentCommentThank:         {Proto: enums.EventType_EVENT_TYPE_COMMENT_THANKED},
 	EventTypeContentCommentStatusUpdate:  {Proto: enums.EventType_EVENT_TYPE_COMMENT_STATUS_UPDATED},
 })
+
+func (e EventType) String() string {
+	return string(e)
+}

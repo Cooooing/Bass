@@ -40,7 +40,7 @@ func (NpcBelief) Fields() []ent.Field {
 		field.Int64("source_npc_id").Nillable().Optional(),
 		field.Int64("source_player_id").Nillable().Optional(),
 		field.Int64("source_event_id").Nillable().Optional(),
-		field.Enum("stance").Values(gameenum.BeliefStanceMap.EnumValues()...).Default(string(gameenum.BeliefStanceBelieves)),
+		field.Enum("stance").Values(gameenum.BeliefStanceMap.EnumValues()...).Default(gameenum.BeliefStanceBelieves.String()),
 		field.Float("confidence").Default(0.5),
 		field.Time("learned_at"),
 	}

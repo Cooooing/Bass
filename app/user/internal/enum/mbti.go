@@ -44,3 +44,7 @@ var MBTIMap = commonenum.NewMapping[MBTI, v1.MBTI](map[MBTI]commonenum.Entry[MBT
 	MBTIEstp: {Proto: v1.MBTI_MBTI_ESTP},
 	MBTIEsfp: {Proto: v1.MBTI_MBTI_ESFP},
 })
+
+func (e MBTI) String() string {
+	return string(e)
+}

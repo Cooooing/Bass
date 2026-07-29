@@ -117,9 +117,8 @@ func TestExecuteNumericInputWithoutSuggestionsShowsHint(t *testing.T) {
 }
 
 func TestEventSuggestedChoicesFiltersInvalidTargetsAndFallsBackToNpc(t *testing.T) {
-	npcID := int64(9)
 	choices := eventSuggestedChoices(&v1.WatchGameTownEvents_Resp{
-		NpcId: &npcID,
+		NpcId: new(int64(9)),
 		SuggestedActions: []*v1.WatchGameTownEvents_Resp_SuggestedAction{
 			{
 				Label:   "继续询问",

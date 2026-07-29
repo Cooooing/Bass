@@ -32,7 +32,7 @@ func (World) Fields() []ent.Field {
 		field.String("code").Comment("世界编码").MaxLen(32).NotEmpty(),
 		field.String("name").Comment("世界名称").MaxRuneLen(128).Default(""),
 		field.Text("description").Comment("世界生成描述"),
-		field.Enum("status").Values(gameenum.WorldStatusMap.EnumValues()...).Default(string(gameenum.WorldStatusGenerating)).Comment("世界状态"),
+		field.Enum("status").Values(gameenum.WorldStatusMap.EnumValues()...).Default(gameenum.WorldStatusGenerating.String()).Comment("世界状态"),
 		field.Int64("creator_player_id").Comment("创建玩家 ID"),
 		field.Int64("default_location_id").Comment("默认地点 ID").Nillable().Optional(),
 		field.Int64("agent_config_id").Comment("模型配置 ID"),

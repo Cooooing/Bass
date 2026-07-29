@@ -33,7 +33,7 @@ func (NotificationRule) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.Enum("event_type").Values(commonenum.EventTypeMap.EnumValues()...).Comment("事件类型"),
 		field.Enum("channel").Values(notifyenum.NotificationChannelMap.EnumValues()...).Comment("通知通道"),
-		field.Enum("language").Values(notifyenum.LanguageMap.EnumValues()...).Default(string(notifyenum.LanguageZhCN)).Comment("语言"),
+		field.Enum("language").Values(notifyenum.LanguageMap.EnumValues()...).Default(notifyenum.LanguageZhCN.String()).Comment("语言"),
 		field.Bool("enabled").Comment("是否启用").Default(false),
 	}
 }

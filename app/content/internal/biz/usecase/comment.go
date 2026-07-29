@@ -385,8 +385,8 @@ func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpda
 				CommentStatusUpdated: &commonenums.CommentStatusUpdatedPayload{
 					SenderId:    userId,
 					CommentId:   commentId,
-					Action:      string(action),
-					Restriction: string(restriction),
+					Action:      action.String(),
+					Restriction: restriction.String(),
 					Reason:      reason,
 				},
 			},

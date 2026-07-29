@@ -157,7 +157,7 @@ func (r *WorldAgentRunner) scheduleWorldTick(ctx context.Context, state *model.W
 				Type:       enum.EventTypeNpcPlanRequested,
 				NpcID:      new(npc.ID),
 				LocationID: new(npc.CurrentLocationID),
-				Summary:    "请求 NPC 自主计划",
+				Summary:    "璇锋眰 NPC 鑷富璁″垝",
 			})
 			if err != nil {
 				return err
@@ -168,7 +168,7 @@ func (r *WorldAgentRunner) scheduleWorldTick(ctx context.Context, state *model.W
 		event, err := r.eventUsecase.AppendInTx(ctx, &AppendEventReq{
 			WorldID: state.WorldID,
 			Type:    enum.EventTypeWorldTickRequested,
-			Summary: "请求世界演进",
+			Summary: "璇锋眰涓栫晫婕旇繘",
 			Payload: map[string]any{"public": true},
 		})
 		if err != nil {
@@ -336,7 +336,7 @@ func (r *WorldAgentRunner) staleJobDuration() time.Duration {
 	configs, err := r.agentConfigRepo.List(context.Background(), nil)
 	if err == nil {
 		for _, config := range configs {
-			value := time.Duration(config.TimeoutSeconds) * time.Second
+			value := config.Timeout
 			if value > timeout {
 				timeout = value
 			}

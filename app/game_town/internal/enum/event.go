@@ -66,3 +66,7 @@ var EventTypeMap = commonenum.NewMapping[EventType, v1.GameTownEventType](
 		EventTypePlayerCharacterFailed:       {Proto: v1.GameTownEventType_GAME_TOWN_EVENT_TYPE_PLAYER_CHARACTER_FAILED},
 	},
 )
+
+func (e EventType) String() string {
+	return string(e)
+}

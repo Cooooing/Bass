@@ -18,9 +18,9 @@ var ProviderSet = wire.NewSet(
 func ProvideObjectStorageClient(conf *config.Bootstrap) (repo.ObjectStorageClient, error) {
 	provider := conf.GetPlatform().GetOss().GetProvider()
 	switch provider {
-	case string(enum.ObjectStorageProviderMinio):
+	case enum.ObjectStorageProviderMinio.String():
 		return minio.NewMinio(conf)
-	case string(enum.ObjectStorageProviderQiniu):
+	case enum.ObjectStorageProviderQiniu.String():
 		return qiniu.NewQiniu(conf), nil
 	default:
 		return nil, fmt.Errorf("unsupported object storage provider: %s", provider)

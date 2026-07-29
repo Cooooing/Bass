@@ -34,9 +34,9 @@ func (ChatMessage) Fields() []ent.Field {
 		field.Int64("receiver_id").Comment("私聊接收者ID (仅私聊有值)").Optional().Nillable(),
 		field.Int64("group_id").Comment("群组ID (仅群聊有值)").Optional().Nillable(),
 		field.Int64("session_id").Comment("所属会话 ID").Optional().Nillable(),
-		field.Enum("type").Values(enum.MessageTypeMap.EnumValues()...).Default(string(enum.MessageTypeNormal)).Comment("消息内容类型"),
+		field.Enum("type").Values(enum.MessageTypeMap.EnumValues()...).Default(enum.MessageTypeNormal.String()).Comment("消息内容类型"),
 		field.Text("content").Comment("消息内容"),
-		field.Enum("status").Values(enum.MessageStatusMap.EnumValues()...).Default(string(enum.MessageStatusNormal)).Comment("消息状态"),
+		field.Enum("status").Values(enum.MessageStatusMap.EnumValues()...).Default(enum.MessageStatusNormal.String()).Comment("消息状态"),
 		field.Int64("created_by").Comment("创建人ID").Nillable().Optional(),
 		field.Int64("updated_by").Comment("更新人ID").Nillable().Optional(),
 	}

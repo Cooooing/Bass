@@ -35,7 +35,7 @@ func (NotificationStationMessage) Fields() []ent.Field {
 		field.Int64("receiver_id").Comment("接收者用户 ID"),
 		field.String("title").Comment("标题"),
 		field.String("content").Comment("内容"),
-		field.Enum("status").Values(notifyenum.NotificationChannelStatusMap.EnumValues()...).Default(string(notifyenum.NotificationChannelStatusSucceeded)).Comment("通道状态"),
+		field.Enum("status").Values(notifyenum.NotificationChannelStatusMap.EnumValues()...).Default(notifyenum.NotificationChannelStatusSucceeded.String()).Comment("通道状态"),
 		field.Time("read_at").Comment("已读时间").Optional().Nillable(),
 	}
 }

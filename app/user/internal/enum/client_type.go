@@ -20,3 +20,7 @@ var ClientTypeMap = commonenum.NewMapping[ClientType, v1.ClientType](map[ClientT
 	ClientTypeAdminWeb: {Proto: v1.ClientType_CLIENT_TYPE_ADMIN_WEB},
 	ClientTypeMobile:   {Proto: v1.ClientType_CLIENT_TYPE_MOBILE},
 })
+
+func (e ClientType) String() string {
+	return string(e)
+}

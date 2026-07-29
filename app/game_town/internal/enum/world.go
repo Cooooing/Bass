@@ -30,3 +30,7 @@ var WorldStatusMap = commonenum.NewMapping[WorldStatus, v1.GameTownWorldStatus](
 		},
 	},
 )
+
+func (e WorldStatus) String() string {
+	return string(e)
+}

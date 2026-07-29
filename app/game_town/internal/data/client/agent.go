@@ -373,7 +373,7 @@ func (c *AgentClient) completeJSON(ctx context.Context, config *model.AgentConfi
 		return fmt.Errorf("agent config is nil")
 	}
 
-	timeout := time.Duration(config.TimeoutSeconds) * time.Second
+	timeout := config.Timeout
 	if timeout <= 0 {
 		timeout = 60 * time.Second
 	}

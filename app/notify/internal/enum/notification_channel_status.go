@@ -53,3 +53,7 @@ func (s NotificationChannelStatus) Merge(next NotificationChannelStatus) Notific
 	}
 	return s
 }
+
+func (e NotificationChannelStatus) String() string {
+	return string(e)
+}

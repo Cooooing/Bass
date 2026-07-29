@@ -39,7 +39,7 @@ func (Location) Fields() []ent.Field {
 		field.String("code").MaxLen(64),
 		field.String("name").MaxLen(128),
 		field.Text("description"),
-		field.Enum("status").Values(enum.LocationStatusMap.EnumValues()...).Default(string(enum.LocationStatusActive)),
+		field.Enum("status").Values(enum.LocationStatusMap.EnumValues()...).Default(enum.LocationStatusActive.String()),
 		field.Int64("controlling_faction_id").Optional().Nillable(),
 		field.JSON("environment_tags", []string{}).Optional(),
 		field.JSON("attributes", map[string]any{}).Optional(),

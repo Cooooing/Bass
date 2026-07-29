@@ -52,3 +52,11 @@ var InboxEventStatusMap = NewMapping[InboxEventStatus, enums.InboxEventStatus](m
 	InboxEventStatusFailed:     {Proto: enums.InboxEventStatus_INBOX_EVENT_STATUS_FAILED},
 	InboxEventStatusDead:       {Proto: enums.InboxEventStatus_INBOX_EVENT_STATUS_DEAD},
 })
+
+func (e OutboxEventStatus) String() string {
+	return string(e)
+}
+
+func (e InboxEventStatus) String() string {
+	return string(e)
+}

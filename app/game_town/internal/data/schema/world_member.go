@@ -32,7 +32,7 @@ func (WorldMember) Fields() []ent.Field {
 		field.Int64("world_id").Comment("世界 ID"),
 		field.Int64("player_id").Comment("玩家账号 ID"),
 		field.Int64("current_location_id").Comment("当前地点 ID"),
-		field.Enum("role").Values(gameenum.WorldMemberRoleMap.EnumValues()...).Default(string(gameenum.WorldMemberRoleMember)).Comment("世界成员角色"),
+		field.Enum("role").Values(gameenum.WorldMemberRoleMap.EnumValues()...).Default(gameenum.WorldMemberRoleMember.String()).Comment("世界成员角色"),
 		field.String("character_preference").Comment("玩家提交的角色倾向").MaxRuneLen(512).Default(""),
 		field.String("character_name").Comment("世界内角色名").MaxRuneLen(128).Default(""),
 		field.String("character_background").Comment("世界裁决后的角色背景").MaxRuneLen(1024).Default(""),

@@ -18,3 +18,7 @@ var LanguageMap = enum.NewMapping[Language, enums.Language](map[Language]enum.En
 	LanguageZhTW: {Proto: enums.Language_LANGUAGE_ZH_TW},
 	LanguageEn:   {Proto: enums.Language_LANGUAGE_EN},
 })
+
+func (e Language) String() string {
+	return string(e)
+}

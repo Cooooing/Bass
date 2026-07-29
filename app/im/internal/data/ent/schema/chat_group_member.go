@@ -31,7 +31,7 @@ func (ChatGroupMember) Fields() []ent.Field {
 		field.Int64("group_id").Comment("群id"),
 		field.Int64("user_id").Comment("成员id"),
 		field.String("nickname").Comment("群内昵称").Optional().Nillable(),
-		field.Enum("role").Values(enum.ChatGroupMemberRoleMap.EnumValues()...).Default(string(enum.ChatGroupMemberRoleMember)).Comment("群成员角色"),
+		field.Enum("role").Values(enum.ChatGroupMemberRoleMap.EnumValues()...).Default(enum.ChatGroupMemberRoleMember.String()).Comment("群成员角色"),
 		field.Time("mute_end_at").Comment("禁言结束时间").Optional().Nillable(),
 		field.Int64("created_by").Comment("创建人ID").Nillable().Optional(),
 		field.Int64("updated_by").Comment("更新人ID").Nillable().Optional(),

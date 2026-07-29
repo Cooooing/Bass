@@ -18,3 +18,7 @@ var AccountStatusMap = commonenum.NewMapping[AccountStatus, v1.AccountStatus](ma
 	AccountStatusBanned:    {Proto: v1.AccountStatus_ACCOUNT_STATUS_BANNED},
 	AccountStatusCancelled: {Proto: v1.AccountStatus_ACCOUNT_STATUS_CANCELLED},
 })
+
+func (e AccountStatus) String() string {
+	return string(e)
+}

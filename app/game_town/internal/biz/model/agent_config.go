@@ -7,13 +7,13 @@ import (
 )
 
 type AgentConfig struct {
-	ID             int64
-	Name           string
-	Provider       enum.AgentProvider
-	BaseURL        string
-	Model          string
-	SecretEnv      string
-	TimeoutSeconds int32
-	CreatedAt      *time.Time
-	UpdatedAt      *time.Time
+	ID        int64
+	Name      string
+	Provider  enum.AgentProvider
+	BaseURL   string
+	Model     string
+	SecretEnv string
+	Timeout   time.Duration
+	CreatedAt *time.Time
+	UpdatedAt *time.Time
 }

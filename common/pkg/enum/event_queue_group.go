@@ -13,3 +13,7 @@ const (
 var EventQueueGroupMap = NewMapping[EventQueueGroup, enums.EventQueueGroup](map[EventQueueGroup]Entry[EventQueueGroup, enums.EventQueueGroup]{
 	EventQueueGroupNotify: {Proto: enums.EventQueueGroup_EVENT_QUEUE_GROUP_NOTIFY},
 })
+
+func (e EventQueueGroup) String() string {
+	return string(e)
+}

@@ -15,3 +15,7 @@ var LoginRealmMap = NewMapping[LoginRealm, enums.LoginRealm](map[LoginRealm]Entr
 	LoginRealmBBS:      {Proto: enums.LoginRealm_LOGIN_REALM_BBS},
 	LoginRealmBBSAdmin: {Proto: enums.LoginRealm_LOGIN_REALM_BBS_ADMIN},
 })
+
+func (e LoginRealm) String() string {
+	return string(e)
+}

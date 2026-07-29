@@ -31,7 +31,7 @@ func (Player) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.String("name").Comment("玩家唯一名称").MaxRuneLen(64).NotEmpty(),
 		field.String("display_name").Comment("显示名称").MaxRuneLen(64).NotEmpty(),
-		field.Enum("status").Values(gameenum.PlayerStatusMap.EnumValues()...).Default(string(gameenum.PlayerStatusActive)).Comment("玩家状态"),
+		field.Enum("status").Values(gameenum.PlayerStatusMap.EnumValues()...).Default(gameenum.PlayerStatusActive.String()).Comment("玩家状态"),
 	}
 }
 

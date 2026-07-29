@@ -167,8 +167,7 @@ func (u *EmailUsecase) Process(ctx context.Context, req *EmailProcessReq) (notif
 						}
 						var sentAt *time.Time
 						if itemStatus == notifyenum.NotificationChannelStatusSucceeded {
-							now := time.Now()
-							sentAt = &now
+							sentAt = new(time.Now())
 						}
 						err = u.emailDeliveryRepo.UpdateStatus(ctx, &repo.NotificationEmailDeliveryUpdateStatusReq{
 							ID:                delivery.ID,

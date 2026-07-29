@@ -20,3 +20,7 @@ var NotificationChannelMap = enum.NewMapping[NotificationChannel, v1.Notificatio
 	NotificationChannelTencentSMS:  {Proto: v1.NotificationChannel_NOTIFICATION_CHANNEL_TENCENT_SMS},
 	NotificationChannelLarkWebhook: {Proto: v1.NotificationChannel_NOTIFICATION_CHANNEL_LARK_WEBHOOK},
 })
+
+func (e NotificationChannel) String() string {
+	return string(e)
+}

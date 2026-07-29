@@ -27,7 +27,7 @@ func NewQiniu(
 }
 
 func (q *Qiniu) Name() string {
-	return string(enum.ObjectStorageProviderQiniu)
+	return enum.ObjectStorageProviderQiniu.String()
 }
 
 func (q *Qiniu) CreateBucket(ctx context.Context, bucket string) error {

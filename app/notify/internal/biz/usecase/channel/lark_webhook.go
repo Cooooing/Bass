@@ -123,8 +123,7 @@ func (u *LarkWebhookUsecase) Process(ctx context.Context, req *LarkWebhookProces
 	}
 	var sentAt *time.Time
 	if status == notifyenum.NotificationChannelStatusSucceeded {
-		now := time.Now()
-		sentAt = &now
+		sentAt = new(time.Now())
 	}
 	err = u.larkWebhookDeliveryRepo.UpdateStatus(ctx, &repo.NotificationLarkWebhookDeliveryUpdateStatusReq{
 		ID:         delivery.ID,

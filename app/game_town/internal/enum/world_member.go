@@ -22,3 +22,7 @@ var WorldMemberRoleMap = commonenum.NewMapping[WorldMemberRole, v1.GameTownWorld
 		},
 	},
 )
+
+func (e WorldMemberRole) String() string {
+	return string(e)
+}

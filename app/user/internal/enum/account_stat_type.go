@@ -16,3 +16,7 @@ var AccountStatTypeMap = commonenum.NewMapping[AccountStatType, v1.AccountStatTy
 	AccountStatTypeFollow:   {Proto: v1.AccountStatType_ACCOUNT_STAT_TYPE_FOLLOW},
 	AccountStatTypeFollower: {Proto: v1.AccountStatType_ACCOUNT_STAT_TYPE_FOLLOWER},
 })
+
+func (e AccountStatType) String() string {
+	return string(e)
+}

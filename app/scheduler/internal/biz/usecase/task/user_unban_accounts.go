@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 )
 
 type UserUnbanAccounts struct {
@@ -22,8 +23,8 @@ func NewUserUnbanAccounts(
 	return &UserUnbanAccounts{
 		userClient:  userClient,
 		name:        "user.unban_accounts",
-		title:       "User unban accounts",
-		description: "Call user.UnbanAccounts to unban expired temporary bans.",
+		title:       "用户批量解封",
+		description: "调用 user.UnbanAccounts 解封过期临时封禁账号。",
 	}
 }
 
@@ -39,8 +40,20 @@ func (t *UserUnbanAccounts) Description() string {
 	return t.description
 }
 
-func (t *UserUnbanAccounts) DefaultSchedules() []*DefaultSchedule {
+func (t *UserUnbanAccounts) DefaultScheduledTasks() []*DefaultScheduledTask {
 	return nil
+}
+
+func (t *UserUnbanAccounts) DefaultDelayedTasks() []*DefaultDelayedTask {
+	return []*DefaultDelayedTask{
+		{
+			Title:       t.Title(),
+			Description: t.Description(),
+			Enabled:     true,
+			Timeout:     30 * time.Second,
+			MaxAttempts: 3,
+		},
+	}
 }
 
 type userUnbanAccountsPayload struct {

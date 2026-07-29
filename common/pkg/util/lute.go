@@ -19,25 +19,13 @@ func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames map[string
 		return ast.WalkContinue
 	}
 
-	/*
-		匹配用户链接：
-		@username
-		[@username](用户主页链接)
-
-		匹配文章链接：
-		&username:title
-		[&username:title](文章链接)
-
-		匹配标签链接：
-		#tag/domain
-		[#tag/domain](标签链接)
-	*/
+	// 匹配用户链接：@username 或 [@username](用户主页链接)。
 	if strings.HasPrefix(text, "@") {
 		atUsernames[text[1:]] = struct{}{}
 	} else if strings.HasPrefix(text, "&") {
 		parts := strings.SplitN(text[1:], ":", 2)
 		if len(parts) == 2 {
-			// 解析 username:title。
+			// 预留文章链接解析：&username:title。
 		}
 	}
 

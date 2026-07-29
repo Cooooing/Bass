@@ -9,10 +9,18 @@ import (
 var ServiceProviderSet = wire.NewSet(
 	ProvideServices,
 	NewCommonSystemService,
-	NewSchedulerTaskService,
+	NewSchedulerScheduledTaskService,
 	NewSchedulerDelayedTaskService,
 )
 
-func ProvideServices(commonSystemService *CommonSystemService, schedulerTaskService *SchedulerTaskService, schedulerDelayedTaskService *SchedulerDelayedTaskService) []server.Service {
-	return []server.Service{commonSystemService, schedulerTaskService, schedulerDelayedTaskService}
+func ProvideServices(
+	commonSystemService *CommonSystemService,
+	schedulerScheduledTaskService *SchedulerScheduledTaskService,
+	schedulerDelayedTaskService *SchedulerDelayedTaskService,
+) []server.Service {
+	return []server.Service{
+		commonSystemService,
+		schedulerScheduledTaskService,
+		schedulerDelayedTaskService,
+	}
 }

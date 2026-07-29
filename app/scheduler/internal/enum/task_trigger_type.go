@@ -14,11 +14,17 @@ const (
 )
 
 // TaskTriggerTypeMap 将内部任务触发类型映射到 proto 枚举。
-var TaskTriggerTypeMap = commonenum.NewMapping[TaskTriggerType, schedulerv1.SchedulerTaskTriggerType](map[TaskTriggerType]commonenum.Entry[TaskTriggerType, schedulerv1.SchedulerTaskTriggerType]{
-	TaskTriggerTypeSchedule: {Proto: schedulerv1.SchedulerTaskTriggerType_SCHEDULER_TASK_TRIGGER_TYPE_SCHEDULE},
-	TaskTriggerTypeManual:   {Proto: schedulerv1.SchedulerTaskTriggerType_SCHEDULER_TASK_TRIGGER_TYPE_MANUAL},
-})
+var TaskTriggerTypeMap = commonenum.NewMapping[TaskTriggerType, schedulerv1.SchedulerTaskTriggerType](
+	map[TaskTriggerType]commonenum.Entry[TaskTriggerType, schedulerv1.SchedulerTaskTriggerType]{
+		TaskTriggerTypeSchedule: {Proto: schedulerv1.SchedulerTaskTriggerType_SCHEDULER_TASK_TRIGGER_TYPE_SCHEDULE},
+		TaskTriggerTypeManual:   {Proto: schedulerv1.SchedulerTaskTriggerType_SCHEDULER_TASK_TRIGGER_TYPE_MANUAL},
+	},
+)
 
 func (TaskTriggerType) Values() []string {
 	return TaskTriggerTypeMap.EnumValues()
+}
+
+func (e TaskTriggerType) String() string {
+	return string(e)
 }

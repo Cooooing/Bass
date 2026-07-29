@@ -5,30 +5,52 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
+	"math/rand/v2"
 	"os"
+	"scheduler/internal/biz/base"
 	"scheduler/internal/biz/model"
 	"scheduler/internal/biz/repo"
 	taskimpl "scheduler/internal/biz/usecase/task"
 	"scheduler/internal/config"
 	schedulerenum "scheduler/internal/enum"
+	"sort"
 	"strings"
+	"sync"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/samber/lo"
 )
 
 type DelayedTaskUsecase struct {
-	logger   *slog.Logger
-	conf     *config.Bootstrap
-	repo     repo.DelayedTaskRepo
-	tasks    map[string]taskimpl.Task
-	workerID string
+	logger               *slog.Logger
+	conf                 *config.Bootstrap
+	tx                   base.Tx
+	repo                 repo.DelayedTaskRepo
+	delayedTaskCacheRepo repo.DelayedTaskCacheRepo
+	versionRepo          repo.DelayedTaskVersionRepo
+	executionRepo        repo.DelayedTaskExecutionRecordRepo
+	scheduleRepo         repo.DelayedTaskScheduleRepo
+	tasks                map[string]taskimpl.Task
+	workerID             string
+	runningMu            sync.Mutex
+	runningCancel        map[int64]context.CancelFunc
+	clockSkewGrace       time.Duration
 }
 
 func NewDelayedTaskUsecase(
 	logger *slog.Logger,
 	conf *config.Bootstrap,
+	tx base.Tx,
 	delayedTaskRepo repo.DelayedTaskRepo,
+	delayedTaskCacheRepo repo.DelayedTaskCacheRepo,
+	versionRepo repo.DelayedTaskVersionRepo,
+	executionRepo repo.DelayedTaskExecutionRecordRepo,
+	scheduleRepo repo.DelayedTaskScheduleRepo,
 	tasks map[string]taskimpl.Task,
 ) *DelayedTaskUsecase {
 	workerID := "scheduler"
@@ -36,170 +58,523 @@ func NewDelayedTaskUsecase(
 		workerID = host
 	}
 	return &DelayedTaskUsecase{
-		logger:   logger,
-		conf:     conf,
-		repo:     delayedTaskRepo,
-		tasks:    tasks,
-		workerID: workerID,
+		logger:               logger,
+		conf:                 conf,
+		tx:                   tx,
+		repo:                 delayedTaskRepo,
+		delayedTaskCacheRepo: delayedTaskCacheRepo,
+		versionRepo:          versionRepo,
+		executionRepo:        executionRepo,
+		scheduleRepo:         scheduleRepo,
+		tasks:                tasks,
+		workerID:             workerID,
+		runningCancel:        make(map[int64]context.CancelFunc),
+		clockSkewGrace:       10 * time.Second,
 	}
 }
 
-type DelayedTaskRegisterReq struct {
-	IdempotencyKey string
-	TaskName       string
-	Payload        string
-	ExecuteAt      time.Time
-	MaxAttempts    int32
-	TimeoutSeconds int32
-}
-
-func (u *DelayedTaskUsecase) Register(ctx context.Context, req *DelayedTaskRegisterReq) (*model.DelayedTask, error) {
-	payload := strings.TrimSpace(req.Payload)
-	if payload == "" {
-		payload = "{}"
+func (u *DelayedTaskUsecase) Upsert(ctx context.Context, row *model.DelayedTask) (*model.DelayedTask, error) {
+	if row == nil || strings.TrimSpace(row.Name) == "" || strings.TrimSpace(row.Title) == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	if req.MaxAttempts <= 0 {
-		req.MaxAttempts = 3
+	if row.Timeout <= 0 {
+		row.Timeout = 30 * time.Second
 	}
-	if req.TimeoutSeconds <= 0 {
-		req.TimeoutSeconds = 30
+	if row.MaxAttempts <= 0 {
+		row.MaxAttempts = 3
 	}
-	return u.repo.Register(ctx, &model.DelayedTask{
-		IdempotencyKey: strings.TrimSpace(req.IdempotencyKey),
-		TaskName:       strings.TrimSpace(req.TaskName),
-		Payload:        payload,
-		ExecuteAt:      req.ExecuteAt,
-		NextRunAt:      req.ExecuteAt,
-		Status:         schedulerenum.DelayedTaskStatusPending,
-		MaxAttempts:    req.MaxAttempts,
-		TimeoutSeconds: req.TimeoutSeconds,
+	if row.MisfirePolicy == "" {
+		row.MisfirePolicy = schedulerenum.TaskMisfirePolicyExecuteAll
+	}
+	var saved *model.DelayedTask
+	err := u.tx(ctx, func(txCtx context.Context) error {
+		var err error
+		saved, err = u.repo.Upsert(txCtx, row)
+		if err != nil {
+			return err
+		}
+		_, err = u.versionRepo.Create(txCtx, saved)
+		return err
 	})
+	if err != nil {
+		return nil, err
+	}
+	_ = u.delayedTaskCacheRepo.DeleteDelayedTask(ctx, saved.Title)
+	return saved, nil
 }
 
-func (u *DelayedTaskUsecase) Cancel(ctx context.Context, id int64, idempotencyKey string) error {
-	if id != 0 {
-		_, err := u.repo.Cancel(ctx, &repo.DelayedTaskGetReq{
-			ID: new(id),
-		})
+func (u *DelayedTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
+	names := make([]string, 0, len(u.tasks))
+	for name := range u.tasks {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	defaultTasks := make([]*model.DelayedTask, 0)
+	for _, name := range names {
+		item := u.tasks[name]
+		for _, task := range item.DefaultDelayedTasks() {
+			if task == nil {
+				continue
+			}
+			title := strings.TrimSpace(task.Title)
+			if title == "" {
+				title = item.Title()
+			}
+			description := strings.TrimSpace(task.Description)
+			if description == "" {
+				description = item.Description()
+			}
+			defaultTasks = append(defaultTasks, &model.DelayedTask{
+				Name:          item.Name(),
+				Title:         title,
+				Description:   description,
+				Enabled:       task.Enabled,
+				Timeout:       task.Timeout,
+				StaleAfter:    task.StaleAfter,
+				MaxAttempts:   task.MaxAttempts,
+				MisfirePolicy: task.MisfirePolicy,
+			})
+		}
+	}
+	if len(defaultTasks) == 0 {
+		return nil
+	}
+	titles := lo.Map(defaultTasks, func(row *model.DelayedTask, _ int) string { return row.Title })
+	if duplicatedTitles := lo.FindDuplicates(titles); len(duplicatedTitles) > 0 {
+		return fmt.Errorf("scheduler default delayed task title duplicated: %s", strings.Join(duplicatedTitles, ","))
+	}
+	existingTasks, err := u.repo.MapByTitle(ctx, titles)
+	if err != nil {
 		return err
 	}
-	key := strings.TrimSpace(idempotencyKey)
-	_, err := u.repo.Cancel(ctx, &repo.DelayedTaskGetReq{
-		IdempotencyKey: new(key),
-	})
-	return err
+	for _, row := range defaultTasks {
+		if existingTasks[row.Title] != nil {
+			continue
+		}
+		if _, err = u.Upsert(ctx, row); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
-func (u *DelayedTaskUsecase) Get(ctx context.Context, id int64, idempotencyKey string) (*model.DelayedTask, error) {
-	if id != 0 {
-		return u.repo.Get(ctx, &repo.DelayedTaskGetReq{
-			ID: new(id),
-		})
+type DelayedTaskGetReq struct {
+	ID    int64
+	Title string
+}
+
+func (u *DelayedTaskUsecase) Get(ctx context.Context, req *DelayedTaskGetReq) (*model.DelayedTask, error) {
+	if req == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	key := strings.TrimSpace(idempotencyKey)
-	return u.repo.Get(ctx, &repo.DelayedTaskGetReq{
-		IdempotencyKey: new(key),
-	})
+	title := strings.TrimSpace(req.Title)
+	if title != "" {
+		row, err := u.delayedTaskCacheRepo.GetDelayedTask(ctx, title)
+		if err != nil || row != nil {
+			return row, err
+		}
+		row, err = u.repo.Get(ctx, &repo.DelayedTaskGetReq{Title: &title})
+		if err == nil && row != nil {
+			_ = u.delayedTaskCacheRepo.SetDelayedTask(ctx, row)
+		}
+		return row, err
+	}
+	if req.ID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	row, err := u.repo.Get(ctx, &repo.DelayedTaskGetReq{ID: &req.ID})
+	if err == nil && row != nil {
+		_ = u.delayedTaskCacheRepo.SetDelayedTask(ctx, row)
+	}
+	return row, err
 }
 
 type DelayedTaskPageReq struct {
-	Page     *common.PageReq
-	TaskName *string
-	Status   *schedulerenum.DelayedTaskStatus
+	Page    *common.PageReq
+	IDs     []int64
+	Name    *string
+	Title   *string
+	Enabled *bool
 }
+
 type DelayedTaskPageResp struct {
 	Rows []*model.DelayedTask
 	Page *common.PageResp
 }
 
 func (u *DelayedTaskUsecase) Page(ctx context.Context, req *DelayedTaskPageReq) (*DelayedTaskPageResp, error) {
+	if req == nil {
+		req = &DelayedTaskPageReq{}
+	}
 	resp, err := u.repo.Page(ctx, &repo.DelayedTaskPageReq{
 		Page: req.Page,
 		DelayedTaskGetReq: repo.DelayedTaskGetReq{
-			TaskName: req.TaskName,
-			Status:   req.Status,
+			IDs:     req.IDs,
+			Name:    req.Name,
+			Title:   req.Title,
+			Enabled: req.Enabled,
 		},
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &DelayedTaskPageResp{
-		Rows: resp.Rows,
-		Page: resp.Page,
-	}, nil
+	return &DelayedTaskPageResp{Rows: resp.Rows, Page: resp.Page}, nil
 }
 
-func (u *DelayedTaskUsecase) Trigger(ctx context.Context, id int64) error {
-	row, err := u.repo.Get(ctx, &repo.DelayedTaskGetReq{
-		ID: new(id),
+func (u *DelayedTaskUsecase) ListAvailableTasks(ctx context.Context, keyword string) ([]*model.AvailableTask, error) {
+	_ = ctx
+	keyword = strings.ToLower(strings.TrimSpace(keyword))
+	rows := make([]*model.AvailableTask, 0, len(u.tasks))
+	for _, item := range u.tasks {
+		row := &model.AvailableTask{Name: item.Name(), Title: item.Title(), Description: item.Description()}
+		if keyword == "" ||
+			strings.Contains(strings.ToLower(row.Name), keyword) ||
+			strings.Contains(strings.ToLower(row.Title), keyword) ||
+			strings.Contains(strings.ToLower(row.Description), keyword) {
+			rows = append(rows, row)
+		}
+	}
+	sort.Slice(rows, func(i, j int) bool { return rows[i].Name < rows[j].Name })
+	return rows, nil
+}
+
+type DelayedTaskScheduleReq struct {
+	ID             int64
+	Title          string
+	IdempotencyKey string
+	Payload        string
+	ScheduledAt    time.Time
+	TriggerType    schedulerenum.TaskTriggerType
+}
+
+func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskScheduleReq) (*model.DelayedTaskExecutionRecord, error) {
+	if req == nil || strings.TrimSpace(req.IdempotencyKey) == "" || req.ScheduledAt.IsZero() {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	payload := strings.TrimSpace(req.Payload)
+	if payload == "" {
+		payload = "{}"
+	}
+	if !json.Valid([]byte(payload)) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	var task *model.DelayedTask
+	var err error
+	if req.ID > 0 {
+		task, err = u.Get(ctx, &DelayedTaskGetReq{ID: req.ID})
+	} else {
+		task, err = u.Get(ctx, &DelayedTaskGetReq{Title: req.Title})
+	}
+	if err != nil {
+		return nil, err
+	}
+	if task == nil || !task.Enabled {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	triggerType := req.TriggerType
+	if triggerType == "" {
+		triggerType = schedulerenum.TaskTriggerTypeSchedule
+	}
+	// 延迟任务配置不保存单次执行参数，执行实例在记录表中保存完整快照。
+	record := &model.DelayedTaskExecutionRecord{
+		DelayedTaskID:      task.ID,
+		DelayedTaskVersion: task.Version,
+		IdempotencyKey:     strings.TrimSpace(req.IdempotencyKey),
+		TriggerType:        triggerType,
+		ScheduleKey:        uuid.NewString(),
+		ScheduledAt:        req.ScheduledAt.Truncate(time.Second),
+		Status:             schedulerenum.TaskExecutionStatusPending,
+		Attempt:            0,
+		MaxAttempts:        task.MaxAttempts,
+		Timeout:            task.Timeout,
+		StaleAfter:         task.StaleAfter,
+		MisfirePolicy:      task.MisfirePolicy,
+		Payload:            payload,
+	}
+	var created *repo.DelayedTaskExecutionRecordCreateResp
+	err = u.tx(ctx, func(txCtx context.Context) error {
+		var err error
+		created, err = u.executionRepo.CreatePending(txCtx, record)
+		if err != nil || created == nil || created.Row == nil || !created.Created {
+			return err
+		}
+		return u.scheduleRepo.Schedule(txCtx, &repo.DelayedTaskScheduleReq{
+			DelayedTask: task,
+			Record:      created.Row,
+			Subject:     u.delayedTaskScheduleSubject(created.Row.ID),
+			Target:      u.delayedTaskExecuteSubject(),
+		})
 	})
 	if err != nil {
-		return err
+		if created != nil && created.Created && created.Row != nil {
+			_ = u.scheduleRepo.Cancel(context.WithoutCancel(ctx), u.delayedTaskScheduleSubject(created.Row.ID))
+		}
+		return nil, err
 	}
-	if row == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_FOUND)
-	}
-	return u.Execute(ctx, row)
+	return created.Row, nil
 }
 
-func (u *DelayedTaskUsecase) RunDue(ctx context.Context, limit int) error {
-	rows, err := u.repo.ListDue(ctx, time.Now(), limit)
+func (u *DelayedTaskUsecase) Trigger(ctx context.Context, id int64, payload string) (*model.DelayedTaskExecutionRecord, error) {
+	return u.Schedule(ctx, &DelayedTaskScheduleReq{
+		ID:             id,
+		IdempotencyKey: uuid.NewString(),
+		Payload:        payload,
+		ScheduledAt:    time.Now().Truncate(time.Second),
+		TriggerType:    schedulerenum.TaskTriggerTypeManual,
+	})
+}
+
+func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idempotencyKey string) (*model.DelayedTaskExecutionRecord, error) {
+	var query repo.DelayedTaskExecutionRecordGetReq
+	if id > 0 {
+		query.ID = &id
+	} else {
+		query.IdempotencyKey = new(strings.TrimSpace(idempotencyKey))
+	}
+	row, err := u.executionRepo.MarkCanceled(ctx, &query, time.Now())
+	if err != nil || row == nil {
+		return row, err
+	}
+	if row.Status == schedulerenum.TaskExecutionStatusCanceled {
+		_ = u.scheduleRepo.Cancel(ctx, u.delayedTaskScheduleSubject(row.ID))
+	}
+	u.runningMu.Lock()
+	cancel := u.runningCancel[row.ID]
+	u.runningMu.Unlock()
+	if cancel != nil {
+		cancel()
+	}
+	return row, nil
+}
+
+func (u *DelayedTaskUsecase) HandleDelayedTaskMessage(ctx context.Context, message *repo.DelayedTaskScheduleMessage) (*repo.MessageHandleResult, error) {
+	if message == nil {
+		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
+	}
+	record, err := u.executionRepo.Get(ctx, &repo.DelayedTaskExecutionRecordGetReq{ID: &message.ExecutionRecordID})
 	if err != nil {
-		return err
+		return nil, err
 	}
-	for _, row := range rows {
-		if ctx.Err() != nil {
-			return ctx.Err()
-		}
-		claimed, claimedRow, err := u.repo.MarkRunning(ctx, row.ID, u.workerID, time.Now().Add(time.Duration(row.TimeoutSeconds)*time.Second))
+	if record == nil {
+		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
+	}
+	if record.Status == schedulerenum.TaskExecutionStatusSuccess ||
+		record.Status == schedulerenum.TaskExecutionStatusFailed ||
+		record.Status == schedulerenum.TaskExecutionStatusTimeout ||
+		record.Status == schedulerenum.TaskExecutionStatusCanceled ||
+		record.Status == schedulerenum.TaskExecutionStatusSkipped {
+		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
+	}
+	// 延迟任务每条执行记录都是独立业务意图，只有跳过策略会因过期直接跳过。
+	if record.StaleAfter != nil && record.MisfirePolicy == schedulerenum.TaskMisfirePolicySkip && time.Since(record.ScheduledAt) > *record.StaleAfter+u.clockSkewGrace {
+		finishedAt := time.Now()
+		_, err = u.executionRepo.MarkFinished(ctx, &repo.DelayedTaskExecutionRecordMarkFinishedReq{
+			ID:         record.ID,
+			WorkerID:   record.WorkerID,
+			Attempt:    record.Attempt,
+			Status:     schedulerenum.TaskExecutionStatusSkipped,
+			FinishedAt: finishedAt,
+			Duration:   0,
+			LastError:  "scheduler delayed task message is stale",
+		})
 		if err != nil {
-			u.logger.ErrorContext(ctx, "claim delayed task failed", "delayed_task_id", row.ID, "err", err)
-			continue
+			return nil, err
 		}
-		if !claimed || claimedRow == nil {
-			continue
-		}
-		go func(item *model.DelayedTask) {
-			if err := u.Execute(context.WithoutCancel(ctx), item); err != nil {
-				u.logger.ErrorContext(context.WithoutCancel(ctx), "execute delayed task failed", "delayed_task_id", item.ID, "err", err)
-			}
-		}(claimedRow)
+		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
 	}
-	return nil
+	// 运行中记录未超时时延迟重投，超时后由新消费者接管或终结为超时。
+	if record.Status == schedulerenum.TaskExecutionStatusRunning {
+		if record.StartedAt != nil && record.StartedAt.Add(record.Timeout).After(time.Now()) {
+			return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionRetry, RetryAfter: time.Until(record.StartedAt.Add(record.Timeout))}, nil
+		}
+		if record.Attempt >= record.MaxAttempts {
+			finishedAt := time.Now()
+			duration := time.Duration(0)
+			if record.StartedAt != nil {
+				duration = finishedAt.Sub(*record.StartedAt)
+			}
+			_, err = u.executionRepo.MarkFinished(ctx, &repo.DelayedTaskExecutionRecordMarkFinishedReq{
+				ID:         record.ID,
+				WorkerID:   record.WorkerID,
+				Attempt:    record.Attempt,
+				Status:     schedulerenum.TaskExecutionStatusTimeout,
+				FinishedAt: finishedAt,
+				Duration:   duration,
+				LastError:  "scheduler delayed task running lease expired",
+			})
+			if err != nil {
+				return nil, err
+			}
+			return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionDiscard}, nil
+		}
+	}
+	claim, err := u.executionRepo.Claim(ctx, &repo.DelayedTaskExecutionRecordClaimReq{ID: record.ID, WorkerID: u.workerID, StartedAt: time.Now()})
+	if err != nil {
+		return nil, err
+	}
+	if claim == nil || !claim.Claimed || claim.Row == nil {
+		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionRetry, RetryAfter: 5 * time.Second}, nil
+	}
+	updated, err := u.executeDelayedRecord(ctx, claim.Row, message.DelayedTaskTitle)
+	if err != nil {
+		return nil, err
+	}
+	if updated == nil {
+		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
+	}
+	// 执行失败但未达到最大次数时，返回重试结果交给 NATS 延迟重投。
+	if updated.Status == schedulerenum.TaskExecutionStatusRetryPending {
+		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionRetry, RetryAfter: u.retryBackoff(updated.Attempt)}, nil
+	}
+	return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
 }
 
-func (u *DelayedTaskUsecase) Execute(ctx context.Context, row *model.DelayedTask) error {
-	if row == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *model.DelayedTaskExecutionRecord, title string) (*model.DelayedTaskExecutionRecord, error) {
+	var taskConfig *model.DelayedTask
+	var err error
+	if title != "" {
+		taskConfig, err = u.Get(ctx, &DelayedTaskGetReq{Title: title})
+	} else {
+		taskConfig, err = u.Get(ctx, &DelayedTaskGetReq{ID: record.DelayedTaskID})
 	}
-	task, ok := u.tasks[row.TaskName]
+	if err != nil || taskConfig == nil || !taskConfig.Enabled || taskConfig.Version != record.DelayedTaskVersion {
+		return u.executionRepo.MarkFinished(context.WithoutCancel(ctx), &repo.DelayedTaskExecutionRecordMarkFinishedReq{
+			ID:         record.ID,
+			WorkerID:   record.WorkerID,
+			Attempt:    record.Attempt,
+			Status:     schedulerenum.TaskExecutionStatusFailed,
+			FinishedAt: time.Now(),
+			Duration:   0,
+			LastError:  "scheduler delayed task config is unavailable",
+		})
+	}
+	task, ok := u.tasks[taskConfig.Name]
 	if !ok {
-		return u.markDelayedTaskFailed(ctx, row, fmt.Errorf("unknown delayed task: %s", row.TaskName))
+		return u.executionRepo.MarkFinished(context.WithoutCancel(ctx), &repo.DelayedTaskExecutionRecordMarkFinishedReq{
+			ID:         record.ID,
+			WorkerID:   record.WorkerID,
+			Attempt:    record.Attempt,
+			Status:     schedulerenum.TaskExecutionStatusFailed,
+			FinishedAt: time.Now(),
+			Duration:   0,
+			LastError:  fmt.Sprintf("unknown delayed task: %s", taskConfig.Name),
+		})
 	}
-	timeout := time.Duration(row.TimeoutSeconds) * time.Second
+	timeout := record.Timeout
 	if timeout <= 0 {
 		timeout = 30 * time.Second
 	}
-	callCtx, cancel := context.WithTimeout(ctx, timeout)
+	execCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
-	if err := task.Execute(callCtx, row.Payload); err != nil {
-		return u.markDelayedTaskFailed(ctx, row, err)
+	u.runningMu.Lock()
+	u.runningCancel[record.ID] = cancel
+	u.runningMu.Unlock()
+	defer func() {
+		u.runningMu.Lock()
+		delete(u.runningCancel, record.ID)
+		u.runningMu.Unlock()
+	}()
+	startedAt := time.Now()
+	err = task.Execute(execCtx, record.Payload)
+	duration := time.Since(startedAt)
+	statusValue := schedulerenum.TaskExecutionStatusSuccess
+	lastError := ""
+	if errors.Is(execCtx.Err(), context.Canceled) {
+		statusValue = schedulerenum.TaskExecutionStatusCanceled
+		lastError = execCtx.Err().Error()
+	} else if errors.Is(execCtx.Err(), context.DeadlineExceeded) {
+		statusValue = schedulerenum.TaskExecutionStatusTimeout
+		lastError = execCtx.Err().Error()
+		if record.Attempt < record.MaxAttempts {
+			statusValue = schedulerenum.TaskExecutionStatusRetryPending
+		}
+	} else if err != nil {
+		statusValue = schedulerenum.TaskExecutionStatusFailed
+		lastError = err.Error()
+		if record.Attempt < record.MaxAttempts {
+			statusValue = schedulerenum.TaskExecutionStatusRetryPending
+		}
 	}
-	_, err := u.repo.MarkSuccess(ctx, row.ID, time.Now())
-	return err
-}
-
-func (u *DelayedTaskUsecase) markDelayedTaskFailed(ctx context.Context, row *model.DelayedTask, execErr error) error {
-	attempt := row.Attempt + 1
-	final := attempt >= row.MaxAttempts
-	next := time.Now().Add(time.Duration(attempt) * time.Minute)
-	lastError := execErr.Error()
 	if len(lastError) > 2048 {
 		lastError = lastError[:2048]
 	}
-	_, err := u.repo.MarkFailed(ctx, row.ID, attempt, final, next, lastError)
-	if err != nil {
-		return err
+	return u.executionRepo.MarkFinished(context.WithoutCancel(ctx), &repo.DelayedTaskExecutionRecordMarkFinishedReq{
+		ID:         record.ID,
+		WorkerID:   record.WorkerID,
+		Attempt:    record.Attempt,
+		Status:     statusValue,
+		FinishedAt: time.Now(),
+		Duration:   duration,
+		LastError:  lastError,
+	})
+}
+
+type DelayedTaskExecutionRecordPageReq struct {
+	Page           *common.PageReq
+	DelayedTaskID  *int64
+	IdempotencyKey *string
+	Status         *schedulerenum.TaskExecutionStatus
+	TriggerType    *schedulerenum.TaskTriggerType
+}
+
+type DelayedTaskExecutionRecordPageResp struct {
+	Rows []*model.DelayedTaskExecutionRecord
+	Page *common.PageResp
+}
+
+func (u *DelayedTaskUsecase) PageExecutionRecords(ctx context.Context, req *DelayedTaskExecutionRecordPageReq) (*DelayedTaskExecutionRecordPageResp, error) {
+	if req == nil {
+		req = &DelayedTaskExecutionRecordPageReq{}
 	}
-	return execErr
+	resp, err := u.executionRepo.Page(ctx, &repo.DelayedTaskExecutionRecordPageReq{
+		Page: req.Page,
+		DelayedTaskExecutionRecordGetReq: repo.DelayedTaskExecutionRecordGetReq{
+			DelayedTaskID:  req.DelayedTaskID,
+			IdempotencyKey: req.IdempotencyKey,
+			Status:         req.Status,
+			TriggerType:    req.TriggerType,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &DelayedTaskExecutionRecordPageResp{Rows: resp.Rows, Page: resp.Page}, nil
+}
+
+func (u *DelayedTaskUsecase) EnsureSchedule(ctx context.Context) error {
+	return u.scheduleRepo.Ensure(ctx)
+}
+
+func (u *DelayedTaskUsecase) StartConsuming(ctx context.Context) error {
+	return u.scheduleRepo.Consume(ctx, u.HandleDelayedTaskMessage)
+}
+
+func (u *DelayedTaskUsecase) StopConsuming(ctx context.Context) error {
+	return u.scheduleRepo.Stop(ctx)
+}
+
+func (u *DelayedTaskUsecase) delayedTaskScheduleSubject(executionRecordID int64) string {
+	prefix := "scheduler.schedule.delayed_task_execution"
+	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
+		prefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
+	}
+	return fmt.Sprintf("%s.%d", prefix, executionRecordID)
+}
+
+func (u *DelayedTaskUsecase) delayedTaskExecuteSubject() string {
+	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskExecuteSubject() != "" {
+		return u.conf.GetScheduler().GetDelayedTaskExecuteSubject()
+	}
+	return "scheduler.execute.delayed_task"
+}
+
+func (u *DelayedTaskUsecase) retryBackoff(attempt int32) time.Duration {
+	base := 5 * time.Second
+	capValue := 5 * time.Minute
+	factor := 1 << max(0, int(attempt)-1)
+	delay := time.Duration(factor) * base
+	if delay > capValue {
+		delay = capValue
+	}
+	return delay + time.Duration(rand.Int64N(int64(delay/2)+1))
 }

@@ -47,7 +47,7 @@ nats:
   reconnect_wait: 2s
   ping_interval: 30s
   flusher_timeout: 5s
-  enable_jet_stream: false
+  enable_jet_stream: true
   stream_name: ""
   jet_stream_domain: ""
 trace:
@@ -57,11 +57,18 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
-alert:
-  lark_webhook:
-    base_url: ${ALERT_LARK_BASE_URL:https://open.larksuite.com/open-apis/bot/v2/hook/}
-    token: ${ALERT_LARK_TOKEN:}
-    secret: ${ALERT_LARK_SECRET:}
-    timeout: 10s
 scheduler:
-  task_timeout: 30s
+  default_execution_timeout: 30s # 30s
+  stream_name: SCHEDULER
+  scheduled_task_consumer_durable: scheduler-scheduled-task-executor
+  delayed_task_consumer_durable: scheduler-delayed-task-executor
+  scheduled_task_schedule_subject_prefix: scheduler.schedule.scheduled_task
+  delayed_task_schedule_subject_prefix: scheduler.schedule.delayed_task_execution
+  scheduled_task_execute_subject: scheduler.execute.scheduled_task
+  delayed_task_execute_subject: scheduler.execute.delayed_task
+  ack_wait: 60s # 1min
+  fetch_batch: 16
+  fetch_wait: 2s # 2s
+  scheduled_task_concurrency: 8
+  delayed_task_concurrency: 16
+  reconcile_interval: 60s # 1min

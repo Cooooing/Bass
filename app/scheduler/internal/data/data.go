@@ -22,24 +22,32 @@ var DataProviderSet = wire.NewSet(
 	rpc.ProvideUserClient,
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
-	commonClient.NewLarkWebhookClient,
-	repo.NewTaskRepo,
-	repo.NewTaskVersionRepo,
-	repo.NewTaskExecutionRecordRepo,
-	repo.NewTaskLockRepo,
-	repo.NewTaskEventBus,
-	repo.NewTaskAlert,
+	repo.NewScheduledTaskCacheRepo,
+	repo.NewDelayedTaskCacheRepo,
+	repo.NewScheduledTaskRepo,
+	repo.NewScheduledTaskVersionRepo,
+	repo.NewScheduledTaskExecutionRecordRepo,
+	repo.NewScheduledTaskScheduleNatsRepo,
+	repo.NewDelayedTaskScheduleNatsRepo,
 	repo.NewDelayedTaskRepo,
+	repo.NewDelayedTaskVersionRepo,
+	repo.NewDelayedTaskExecutionRecordRepo,
 )
 
-func ProvideRedis(c *config.Bootstrap) *common.Redis {
+func ProvideRedis(
+	c *config.Bootstrap,
+) *common.Redis {
 	return c.Redis
 }
 
-func ProvideNats(c *config.Bootstrap) *common.Nats {
+func ProvideNats(
+	c *config.Bootstrap,
+) *common.Nats {
 	return c.Nats
 }
 
-func ProvideConsul(c *config.Bootstrap) *common.Consul {
+func ProvideConsul(
+	c *config.Bootstrap,
+) *common.Consul {
 	return c.Consul
 }

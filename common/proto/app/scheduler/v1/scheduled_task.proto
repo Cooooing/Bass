@@ -1,0 +1,241 @@
+﻿syntax = "proto3";
+
+package common.api.app.scheduler.v1;
+
+import "common/common.proto";
+import "google/protobuf/timestamp.proto";
+import "scheduler/v1/enum/task_execution_status.proto";
+import "scheduler/v1/enum/task_misfire_policy.proto";
+import "scheduler/v1/enum/task_trigger_type.proto";
+
+option go_package = "common/proto/gen/scheduler/v1;v1";
+
+service SchedulerScheduledTaskService {
+  rpc Upsert(UpsertSchedulerScheduledTask.Req) returns (UpsertSchedulerScheduledTask.Resp) {} // 创建或更新定时任务配置。
+  rpc Get(GetSchedulerScheduledTask.Req) returns (GetSchedulerScheduledTask.Resp) {} // 获取定时任务配置。
+  rpc Page(PageSchedulerScheduledTasks.Req) returns (PageSchedulerScheduledTasks.Resp) {} // 分页查询定时任务配置。
+  rpc ListAvailableTasks(ListSchedulerAvailableScheduledTasks.Req) returns (ListSchedulerAvailableScheduledTasks.Resp) {} // 查询代码中可用任务。
+  rpc PageExecutionRecords(PageSchedulerScheduledTaskExecutionRecords.Req) returns (PageSchedulerScheduledTaskExecutionRecords.Resp) {} // 分页查询定时任务执行记录。
+  rpc Trigger(TriggerSchedulerScheduledTask.Req) returns (TriggerSchedulerScheduledTask.Resp) {} // 手动触发一次定时任务。
+  rpc CancelExecution(CancelSchedulerScheduledTaskExecution.Req) returns (CancelSchedulerScheduledTaskExecution.Resp) {} // 取消执行中的定时任务记录。
+}
+
+message UpsertSchedulerScheduledTask {
+  message Req {
+    int64 id = 1; // 定时任务 ID，创建时为空。
+    string name = 2; // 代码内任务名称。
+    string title = 3; // 展示标题。
+    string description = 4; // 任务说明。
+    bool enabled = 5; // 是否启用调度。
+    string cron_spec = 6; // cron 表达式。
+    string payload = 7; // 默认执行参数，JSON 字符串。
+    int32 timeout_seconds = 8; // 单次执行超时秒数。
+    bool allow_overlap = 9; // 是否允许重叠执行。
+    int32 max_attempts = 10; // 最大尝试次数，默认 1。
+    SchedulerTaskMisfirePolicy misfire_policy = 11; // 错过计划时间后的处理策略。
+    optional int32 stale_after_seconds = 12; // 过期判断秒数，空值表示不过期。
+  }
+  message Resp {
+    message ScheduledTask {
+      int64 id = 1; // 定时任务 ID。
+      string name = 2; // 代码内任务名称。
+      string title = 3; // 展示标题。
+      string description = 4; // 任务说明。
+      bool enabled = 5; // 是否启用调度。
+      string cron_spec = 6; // cron 表达式。
+      string payload = 7; // 默认执行参数，JSON 字符串。
+      int32 timeout_seconds = 8; // 单次执行超时秒数。
+      bool allow_overlap = 9; // 是否允许重叠执行。
+      int32 max_attempts = 10; // 最大尝试次数。
+      int64 version = 11; // 配置版本。
+      SchedulerTaskMisfirePolicy misfire_policy = 12; // 错过计划时间后的处理策略。
+      optional int32 stale_after_seconds = 13; // 过期判断秒数，空值表示不过期。
+      google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+    }
+    ScheduledTask row = 1; // 定时任务配置。
+  }
+}
+
+message GetSchedulerScheduledTask {
+  message Req {
+    int64 id = 1; // 定时任务 ID。
+  }
+  message Resp {
+    message ScheduledTask {
+      int64 id = 1; // 定时任务 ID。
+      string name = 2; // 代码内任务名称。
+      string title = 3; // 展示标题。
+      string description = 4; // 任务说明。
+      bool enabled = 5; // 是否启用调度。
+      string cron_spec = 6; // cron 表达式。
+      string payload = 7; // 默认执行参数，JSON 字符串。
+      int32 timeout_seconds = 8; // 单次执行超时秒数。
+      bool allow_overlap = 9; // 是否允许重叠执行。
+      int32 max_attempts = 10; // 最大尝试次数。
+      int64 version = 11; // 配置版本。
+      SchedulerTaskMisfirePolicy misfire_policy = 12; // 错过计划时间后的处理策略。
+      optional int32 stale_after_seconds = 13; // 过期判断秒数，空值表示不过期。
+      google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+    }
+    ScheduledTask row = 1; // 定时任务配置。
+  }
+}
+
+message PageSchedulerScheduledTasks {
+  message Req {
+    message Query {
+      repeated int64 ids = 1; // 定时任务 ID 列表。
+      optional string name = 2; // 代码内任务名称。
+      optional string title = 3; // 展示标题。
+      optional bool enabled = 4; // 是否启用调度。
+    }
+    .common.api.app.common.PageReq page = 1; // 分页参数。
+    Query query = 2; // 查询条件。
+  }
+  message Resp {
+    message ScheduledTask {
+      int64 id = 1; // 定时任务 ID。
+      string name = 2; // 代码内任务名称。
+      string title = 3; // 展示标题。
+      string description = 4; // 任务说明。
+      bool enabled = 5; // 是否启用调度。
+      string cron_spec = 6; // cron 表达式。
+      string payload = 7; // 默认执行参数，JSON 字符串。
+      int32 timeout_seconds = 8; // 单次执行超时秒数。
+      bool allow_overlap = 9; // 是否允许重叠执行。
+      int32 max_attempts = 10; // 最大尝试次数。
+      int64 version = 11; // 配置版本。
+      SchedulerTaskMisfirePolicy misfire_policy = 12; // 错过计划时间后的处理策略。
+      optional int32 stale_after_seconds = 13; // 过期判断秒数，空值表示不过期。
+      google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+    }
+    .common.api.app.common.PageResp page = 1; // 分页结果。
+    repeated ScheduledTask rows = 2; // 定时任务列表。
+  }
+}
+
+message ListSchedulerAvailableScheduledTasks {
+  message Req {
+    message Query {
+      optional string keyword = 1; // 搜索关键字。
+    }
+    Query query = 1; // 查询条件。
+  }
+  message Resp {
+    message AvailableTask {
+      string name = 1; // 代码内任务名称。
+      string title = 2; // 展示标题。
+      string description = 3; // 任务说明。
+    }
+    repeated AvailableTask rows = 1; // 可用任务列表。
+  }
+}
+
+message PageSchedulerScheduledTaskExecutionRecords {
+  message Req {
+    message Query {
+      repeated int64 ids = 1; // 执行记录 ID 列表。
+      optional int64 scheduled_task_id = 2; // 定时任务 ID。
+      optional SchedulerTaskExecutionStatus status = 3; // 执行状态。
+      optional SchedulerTaskTriggerType trigger_type = 4; // 触发类型。
+    }
+    .common.api.app.common.PageReq page = 1; // 分页参数。
+    Query query = 2; // 查询条件。
+  }
+  message Resp {
+    message ExecutionRecord {
+      int64 id = 1; // 执行记录 ID。
+      int64 scheduled_task_id = 2; // 定时任务 ID。
+      int64 scheduled_task_version = 3; // 定时任务配置版本。
+      SchedulerTaskTriggerType trigger_type = 4; // 触发类型。
+      string schedule_key = 5; // 调度消息唯一键。
+      google.protobuf.Timestamp scheduled_at = 6; // 计划执行时间。
+      optional google.protobuf.Timestamp started_at = 7; // 开始时间。
+      optional google.protobuf.Timestamp finished_at = 8; // 结束时间。
+      optional int64 duration_ms = 9; // 执行耗时毫秒。
+      SchedulerTaskExecutionStatus status = 10; // 执行状态。
+      int32 attempt = 11; // 当前尝试次数。
+      int32 max_attempts = 12; // 最大尝试次数。
+      int32 timeout_seconds = 13; // 执行超时秒数。
+      SchedulerTaskMisfirePolicy misfire_policy = 18; // 错过计划时间后的处理策略。
+      optional int32 stale_after_seconds = 19; // 过期判断秒数，空值表示不过期。
+      string worker_id = 14; // 执行节点标识。
+      string payload = 15; // 执行参数快照。
+      string last_error = 16; // 最近错误摘要。
+      string trace_id = 17; // 链路追踪标识。
+      google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+    }
+    .common.api.app.common.PageResp page = 1; // 分页结果。
+    repeated ExecutionRecord rows = 2; // 执行记录列表。
+  }
+}
+
+message TriggerSchedulerScheduledTask {
+  message Req {
+    int64 id = 1; // 定时任务 ID。
+    string payload = 2; // 手动触发参数，空值使用默认参数。
+  }
+  message Resp {
+    message ExecutionRecord {
+      int64 id = 1; // 执行记录 ID。
+      int64 scheduled_task_id = 2; // 定时任务 ID。
+      int64 scheduled_task_version = 3; // 定时任务配置版本。
+      SchedulerTaskTriggerType trigger_type = 4; // 触发类型。
+      string schedule_key = 5; // 调度消息唯一键。
+      google.protobuf.Timestamp scheduled_at = 6; // 计划执行时间。
+      optional google.protobuf.Timestamp started_at = 7; // 开始时间。
+      optional google.protobuf.Timestamp finished_at = 8; // 结束时间。
+      optional int64 duration_ms = 9; // 执行耗时毫秒。
+      SchedulerTaskExecutionStatus status = 10; // 执行状态。
+      int32 attempt = 11; // 当前尝试次数。
+      int32 max_attempts = 12; // 最大尝试次数。
+      int32 timeout_seconds = 13; // 执行超时秒数。
+      SchedulerTaskMisfirePolicy misfire_policy = 18; // 错过计划时间后的处理策略。
+      optional int32 stale_after_seconds = 19; // 过期判断秒数，空值表示不过期。
+      string worker_id = 14; // 执行节点标识。
+      string payload = 15; // 执行参数快照。
+      string last_error = 16; // 最近错误摘要。
+      string trace_id = 17; // 链路追踪标识。
+      google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+    }
+    ExecutionRecord row = 1; // 执行记录。
+  }
+}
+
+message CancelSchedulerScheduledTaskExecution {
+  message Req {
+    int64 id = 1; // 执行记录 ID。
+  }
+  message Resp {
+    message ExecutionRecord {
+      int64 id = 1; // 执行记录 ID。
+      int64 scheduled_task_id = 2; // 定时任务 ID。
+      int64 scheduled_task_version = 3; // 定时任务配置版本。
+      SchedulerTaskTriggerType trigger_type = 4; // 触发类型。
+      string schedule_key = 5; // 调度消息唯一键。
+      google.protobuf.Timestamp scheduled_at = 6; // 计划执行时间。
+      optional google.protobuf.Timestamp started_at = 7; // 开始时间。
+      optional google.protobuf.Timestamp finished_at = 8; // 结束时间。
+      optional int64 duration_ms = 9; // 执行耗时毫秒。
+      SchedulerTaskExecutionStatus status = 10; // 执行状态。
+      int32 attempt = 11; // 当前尝试次数。
+      int32 max_attempts = 12; // 最大尝试次数。
+      int32 timeout_seconds = 13; // 执行超时秒数。
+      SchedulerTaskMisfirePolicy misfire_policy = 18; // 错过计划时间后的处理策略。
+      optional int32 stale_after_seconds = 19; // 过期判断秒数，空值表示不过期。
+      string worker_id = 14; // 执行节点标识。
+      string payload = 15; // 执行参数快照。
+      string last_error = 16; // 最近错误摘要。
+      string trace_id = 17; // 链路追踪标识。
+      google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+    }
+    ExecutionRecord row = 1; // 执行记录。
+  }
+}
+

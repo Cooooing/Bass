@@ -5,6 +5,7 @@ import (
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"encoding/json"
+	schedulerenum "scheduler/internal/enum"
 	"strings"
 	"time"
 
@@ -27,8 +28,8 @@ func NewUserOutboxPublishBatch(
 	return &UserOutboxPublishBatch{
 		userClient:     userClient,
 		name:           "user.outbox_publish_batch",
-		title:          "User outbox publish batch",
-		description:    "Call user.OutboxService.PublishBatch to publish pending outbox events.",
+		title:          "用户 Outbox 批量投递",
+		description:    "调用 user.OutboxService.PublishBatch 投递待发送 outbox 事件。",
 		defaultLimit:   1000,
 		defaultTimeout: 1 * time.Minute,
 		defaultRetry:   3,
@@ -47,25 +48,39 @@ func (t *UserOutboxPublishBatch) Description() string {
 	return t.description
 }
 
-func (t *UserOutboxPublishBatch) DefaultSchedules() []*DefaultSchedule {
-	return []*DefaultSchedule{
+func (t *UserOutboxPublishBatch) DefaultScheduledTasks() []*DefaultScheduledTask {
+	return []*DefaultScheduledTask{
 		{
-			Title:          t.Title(),
-			Description:    t.Description(),
-			Enabled:        true,
-			CronSpec:       "0/10 * * * * ?",
-			Payload:        `{"limit":1000,"publish_timeout_seconds":300,"max_retry":10}`,
-			TimeoutSeconds: 30,
-			AllowOverlap:   false,
-			AlertEnabled:   false,
+			Title:         t.Title(),
+			Description:   t.Description(),
+			Enabled:       true,
+			CronSpec:      "0 0/1 * * * ?",
+			Payload:       `{"limit":1000,"max_retry":1}`,
+			Timeout:       30 * time.Second,
+			MaxAttempts:   1,
+			MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteLatest,
+			AllowOverlap:  false,
+		},
+	}
+}
+
+func (t *UserOutboxPublishBatch) DefaultDelayedTasks() []*DefaultDelayedTask {
+	return []*DefaultDelayedTask{
+		{
+			Title:         "延迟用户 Outbox 批量投递",
+			Description:   t.Description(),
+			Enabled:       true,
+			Timeout:       1 * time.Minute,
+			MaxAttempts:   3,
+			MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll,
 		},
 	}
 }
 
 type userOutboxPublishBatchPayload struct {
-	Limit                 int32 `json:"limit"`
-	PublishTimeoutSeconds int64 `json:"publish_timeout_seconds"`
-	MaxRetry              int32 `json:"max_retry"`
+	Limit          int32         `json:"limit"`
+	PublishTimeout time.Duration `json:"publish_timeout"`
+	MaxRetry       int32         `json:"max_retry"`
 }
 
 func (t *UserOutboxPublishBatch) Execute(ctx context.Context, payload string) error {
@@ -81,8 +96,8 @@ func (t *UserOutboxPublishBatch) Execute(ctx context.Context, payload string) er
 		if data.Limit > 0 {
 			limit = data.Limit
 		}
-		if data.PublishTimeoutSeconds > 0 {
-			publishTimeout = time.Duration(data.PublishTimeoutSeconds) * time.Second
+		if data.PublishTimeout > 0 {
+			publishTimeout = data.PublishTimeout
 		}
 		if data.MaxRetry > 0 {
 			maxRetry = data.MaxRetry

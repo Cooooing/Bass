@@ -1,24 +1,25 @@
-fullnameOverride: bass-nats
+﻿fullnameOverride: bass-nats
 
 config:
+  jetstream:
+    enabled: true
+    fileStore:
+      enabled: true
+      dir: /data
+      pvc:
+        enabled: true
+        size: 5Gi
+    merge:
+      max_memory_store: 1G
+      max_file_store: 10G
+  monitor:
+    enabled: true
+    port: 8222
   merge:
     authorization:
       users:
         - user: << $NATS_USER >>
           password: << $NATS_PASSWORD >>
-
-jetstream:
-  enabled: true
-  fileStore:
-    pvc:
-      enabled: true
-      size: 5Gi
-  merge:
-    max_mem: "1G"
-    max_file: "10G"
-
-http:
-  port: 8222
 
 statefulSet:
   replicas: 1
@@ -27,8 +28,11 @@ promExporter:
   enabled: false
 
 service:
-  # 仅集群内访问
+  # 仅集群内访问。
   enabled: true
+  ports:
+    monitor:
+      enabled: true
 
 container:
   image:

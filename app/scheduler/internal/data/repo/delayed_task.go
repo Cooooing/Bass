@@ -1,7 +1,11 @@
 package repo
 
 import (
+	"common/pkg/apperror"
+	"common/pkg/server"
+	utilent "common/pkg/util/ent"
 	"common/proto/gen/common"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"scheduler/internal/biz/model"
 	bizrepo "scheduler/internal/biz/repo"
@@ -10,20 +14,126 @@ import (
 	schedulerenum "scheduler/internal/enum"
 	"time"
 
-	"common/pkg/server"
-	utilent "common/pkg/util/ent"
+	"entgo.io/ent/dialect/sql"
 )
 
-var _ bizrepo.DelayedTaskRepo = (*DelayedTaskRepo)(nil)
-
-type DelayedTaskRepo struct{ db *gen.Client }
+type DelayedTaskRepo struct {
+	db *gen.Client
+}
 
 func NewDelayedTaskRepo(
 	db *gen.Client,
 ) bizrepo.DelayedTaskRepo {
-	return &DelayedTaskRepo{
-		db: db,
+	return &DelayedTaskRepo{db: db}
+}
+
+func (r *DelayedTaskRepo) Get(ctx context.Context, req *bizrepo.DelayedTaskGetReq) (*model.DelayedTask, error) {
+	query := r.getClient(ctx).DelayedTask.Query().Where(delayedtask.DeletedAtIsNil())
+	row, err := r.getQuery(query, req).Only(ctx)
+	if gen.IsNotFound(err) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
+	if err != nil {
+		return nil, err
+	}
+	return r.model(row), nil
+}
+
+func (r *DelayedTaskRepo) List(ctx context.Context, req *bizrepo.DelayedTaskGetReq) ([]*model.DelayedTask, error) {
+	query := r.getClient(ctx).DelayedTask.Query().Where(delayedtask.DeletedAtIsNil())
+	rows, err := r.getQuery(query, req).Order(delayedtask.ByID()).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*model.DelayedTask, 0, len(rows))
+	for _, row := range rows {
+		result = append(result, r.model(row))
+	}
+	return result, nil
+}
+
+func (r *DelayedTaskRepo) Page(ctx context.Context, req *bizrepo.DelayedTaskPageReq) (*bizrepo.DelayedTaskPageResp, error) {
+	page := server.PageValid(req.Page)
+	query := r.getClient(ctx).DelayedTask.Query().Where(delayedtask.DeletedAtIsNil())
+	query = r.getQuery(query, &req.DelayedTaskGetReq)
+	total, err := query.Clone().Count(ctx)
+	if err != nil {
+		return nil, err
+	}
+	rows, err := query.Order(delayedtask.ByID()).Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*model.DelayedTask, 0, len(rows))
+	for _, row := range rows {
+		result = append(result, r.model(row))
+	}
+	return &bizrepo.DelayedTaskPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
+}
+
+func (r *DelayedTaskRepo) MapByTitle(ctx context.Context, titles []string) (map[string]*model.DelayedTask, error) {
+	if len(titles) == 0 {
+		return map[string]*model.DelayedTask{}, nil
+	}
+	rows, err := r.List(ctx, &bizrepo.DelayedTaskGetReq{Titles: titles})
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[string]*model.DelayedTask, len(rows))
+	for _, row := range rows {
+		result[row.Title] = row
+	}
+	return result, nil
+}
+
+func (r *DelayedTaskRepo) Upsert(ctx context.Context, row *model.DelayedTask) (*model.DelayedTask, error) {
+	var staleAfterSeconds *int32
+	if row.StaleAfter != nil {
+		staleAfterSeconds = new(int32(*row.StaleAfter / time.Second))
+	}
+	if row.ID > 0 {
+		current, err := r.getClient(ctx).DelayedTask.Query().Where(delayedtask.ID(row.ID), delayedtask.DeletedAtIsNil()).Only(ctx)
+		if gen.IsNotFound(err) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		if err != nil {
+			return nil, err
+		}
+		updated, err := r.getClient(ctx).DelayedTask.UpdateOneID(row.ID).
+			SetName(row.Name).
+			SetTitle(row.Title).
+			SetDescription(row.Description).
+			SetEnabled(row.Enabled).
+			SetTimeoutSeconds(int32(row.Timeout / time.Second)).
+			SetNillableStaleAfterSeconds(staleAfterSeconds).
+			SetMaxAttempts(row.MaxAttempts).
+			SetMisfirePolicy(delayedtask.MisfirePolicy(row.MisfirePolicy)).
+			SetVersion(current.Version + 1).
+			Save(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return r.model(updated), nil
+	}
+	created, err := r.getClient(ctx).DelayedTask.Create().
+		SetName(row.Name).
+		SetTitle(row.Title).
+		SetDescription(row.Description).
+		SetEnabled(row.Enabled).
+		SetTimeoutSeconds(int32(row.Timeout / time.Second)).
+		SetNillableStaleAfterSeconds(staleAfterSeconds).
+		SetMaxAttempts(row.MaxAttempts).
+		SetMisfirePolicy(delayedtask.MisfirePolicy(row.MisfirePolicy)).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return r.model(created), nil
+}
+
+func (r *DelayedTaskRepo) Lock(ctx context.Context, id int64) error {
+	_, err := r.getClient(ctx).DelayedTask.Query().Where(delayedtask.ID(id), delayedtask.DeletedAtIsNil(), func(s *sql.Selector) { s.ForUpdate() }).Only(ctx)
+	return err
 }
 
 func (r *DelayedTaskRepo) getClient(ctx context.Context) *gen.Client {
@@ -33,189 +143,48 @@ func (r *DelayedTaskRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
-func (r *DelayedTaskRepo) Register(ctx context.Context, row *model.DelayedTask) (*model.DelayedTask, error) {
-	if existing, err := r.Get(ctx, &bizrepo.DelayedTaskGetReq{
-		IdempotencyKey: new(row.IdempotencyKey),
-	}); err != nil || existing != nil {
-		return existing, err
-	}
-	created, err := r.getClient(ctx).DelayedTask.Create().
-		SetIdempotencyKey(row.IdempotencyKey).
-		SetTaskName(row.TaskName).
-		SetPayload(row.Payload).
-		SetExecuteAt(row.ExecuteAt).
-		SetNextRunAt(row.NextRunAt).
-		SetStatus(delayedtask.Status(row.Status)).
-		SetAttempt(row.Attempt).
-		SetMaxAttempts(row.MaxAttempts).
-		SetTimeoutSeconds(row.TimeoutSeconds).
-		Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return r.delayedTask(created), nil
-}
-
-func (r *DelayedTaskRepo) Get(ctx context.Context, req *bizrepo.DelayedTaskGetReq) (*model.DelayedTask, error) {
-	query := r.getClient(ctx).DelayedTask.Query()
-	query = r.delayedTaskQuery(query, req)
-	row, err := query.First(ctx)
-	if gen.IsNotFound(err) {
-		return nil, nil
-	}
-	if err != nil {
-		return nil, err
-	}
-	return r.delayedTask(row), nil
-}
-
-func (r *DelayedTaskRepo) Page(ctx context.Context, req *bizrepo.DelayedTaskPageReq) (*bizrepo.DelayedTaskPageResp, error) {
-	page := server.PageValid(req.Page)
-	query := r.getClient(ctx).DelayedTask.Query()
-	query = r.delayedTaskQuery(query, &req.DelayedTaskGetReq)
-	total, err := query.Clone().Count(ctx)
-	if err != nil {
-		return nil, err
-	}
-	rows, err := query.Order(gen.Desc(delayedtask.FieldCreatedAt)).Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
-	if err != nil {
-		return nil, err
-	}
-	result := make([]*model.DelayedTask, 0, len(rows))
-	for _, row := range rows {
-		result = append(result, r.delayedTask(row))
-	}
-	return &bizrepo.DelayedTaskPageResp{
-		Rows: result,
-		Page: &common.PageResp{
-			Total: uint32(total),
-			Page:  page.Page,
-			Size:  page.Size,
-		},
-	}, nil
-}
-
-func (r *DelayedTaskRepo) Cancel(ctx context.Context, req *bizrepo.DelayedTaskGetReq) (bool, error) {
-	row, err := r.Get(ctx, req)
-	if err != nil || row == nil {
-		return false, err
-	}
-	if row.Status != schedulerenum.DelayedTaskStatusPending {
-		return false, nil
-	}
-	affected, err := r.getClient(ctx).DelayedTask.Update().Where(delayedtask.ID(row.ID), delayedtask.StatusEQ(delayedtask.Status(schedulerenum.DelayedTaskStatusPending))).SetStatus(delayedtask.Status(schedulerenum.DelayedTaskStatusCancelled)).SetFinishedAt(time.Now()).Save(ctx)
-	return affected > 0, err
-}
-
-func (r *DelayedTaskRepo) ListDue(ctx context.Context, now time.Time, limit int) ([]*model.DelayedTask, error) {
-	if limit <= 0 {
-		limit = 100
-	}
-	rows, err := r.getClient(ctx).DelayedTask.Query().Where(delayedtask.Or(
-		delayedtask.And(
-			delayedtask.StatusEQ(delayedtask.Status(schedulerenum.DelayedTaskStatusPending)),
-			delayedtask.NextRunAtLTE(now),
-		),
-		delayedtask.And(
-			delayedtask.StatusEQ(delayedtask.Status(schedulerenum.DelayedTaskStatusRunning)),
-			delayedtask.LockExpiresAtNotNil(),
-			delayedtask.LockExpiresAtLTE(now),
-		),
-	)).Order(gen.Asc(delayedtask.FieldNextRunAt)).Limit(limit).All(ctx)
-	if err != nil {
-		return nil, err
-	}
-	result := make([]*model.DelayedTask, 0, len(rows))
-	for _, row := range rows {
-		result = append(result, r.delayedTask(row))
-	}
-	return result, nil
-}
-
-func (r *DelayedTaskRepo) MarkRunning(ctx context.Context, id int64, workerID string, lockExpiresAt time.Time) (bool, *model.DelayedTask, error) {
-	now := time.Now()
-	affected, err := r.getClient(ctx).DelayedTask.Update().Where(
-		delayedtask.ID(id),
-		delayedtask.Or(
-			delayedtask.StatusEQ(delayedtask.Status(schedulerenum.DelayedTaskStatusPending)),
-			delayedtask.And(
-				delayedtask.StatusEQ(delayedtask.Status(schedulerenum.DelayedTaskStatusRunning)),
-				delayedtask.LockExpiresAtNotNil(),
-				delayedtask.LockExpiresAtLTE(now),
-			),
-		),
-	).SetStatus(delayedtask.Status(schedulerenum.DelayedTaskStatusRunning)).SetLockedBy(workerID).SetLockExpiresAt(lockExpiresAt).SetStartedAt(now).Save(ctx)
-	if err != nil || affected == 0 {
-		return false, nil, err
-	}
-	row, err := r.Get(ctx, &bizrepo.DelayedTaskGetReq{
-		ID: new(id),
-	})
-	return true, row, err
-}
-
-func (r *DelayedTaskRepo) MarkSuccess(ctx context.Context, id int64, finishedAt time.Time) (*model.DelayedTask, error) {
-	row, err := r.getClient(ctx).DelayedTask.UpdateOneID(id).SetStatus(delayedtask.Status(schedulerenum.DelayedTaskStatusSuccess)).SetFinishedAt(finishedAt).ClearLockExpiresAt().SetLockedBy("").SetLastError("").Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return r.delayedTask(row), nil
-}
-
-func (r *DelayedTaskRepo) MarkFailed(ctx context.Context, id int64, attempt int32, final bool, nextRunAt time.Time, lastError string) (*model.DelayedTask, error) {
-	update := r.getClient(ctx).DelayedTask.UpdateOneID(id).SetAttempt(attempt).SetLastError(lastError).ClearLockExpiresAt().SetLockedBy("")
-	if final {
-		update.SetStatus(delayedtask.Status(schedulerenum.DelayedTaskStatusFailed)).SetFinishedAt(time.Now())
-	} else {
-		update.SetStatus(delayedtask.Status(schedulerenum.DelayedTaskStatusPending)).SetNextRunAt(nextRunAt)
-	}
-	row, err := update.Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return r.delayedTask(row), nil
-}
-
-func (r *DelayedTaskRepo) delayedTaskQuery(query *gen.DelayedTaskQuery, req *bizrepo.DelayedTaskGetReq) *gen.DelayedTaskQuery {
+func (r *DelayedTaskRepo) getQuery(query *gen.DelayedTaskQuery, req *bizrepo.DelayedTaskGetReq) *gen.DelayedTaskQuery {
 	if req == nil {
 		return query
 	}
 	if req.ID != nil {
 		query = query.Where(delayedtask.ID(*req.ID))
 	}
-	if req.IdempotencyKey != nil {
-		query = query.Where(delayedtask.IdempotencyKey(*req.IdempotencyKey))
+	if len(req.IDs) > 0 {
+		query = query.Where(delayedtask.IDIn(req.IDs...))
 	}
-	if req.TaskName != nil {
-		query = query.Where(delayedtask.TaskName(*req.TaskName))
+	if req.Name != nil {
+		query = query.Where(delayedtask.NameContains(*req.Name))
 	}
-	if req.Status != nil {
-		query = query.Where(delayedtask.StatusEQ(delayedtask.Status(*req.Status)))
+	if req.Title != nil {
+		query = query.Where(delayedtask.TitleContains(*req.Title))
+	}
+	if len(req.Titles) > 0 {
+		query = query.Where(delayedtask.TitleIn(req.Titles...))
+	}
+	if req.Enabled != nil {
+		query = query.Where(delayedtask.Enabled(*req.Enabled))
 	}
 	return query
 }
 
-func (r *DelayedTaskRepo) delayedTask(row *gen.DelayedTask) *model.DelayedTask {
-	if row == nil {
-		return nil
+func (r *DelayedTaskRepo) model(row *gen.DelayedTask) *model.DelayedTask {
+	var staleAfter *time.Duration
+	if row.StaleAfterSeconds != nil {
+		staleAfter = new(time.Duration(*row.StaleAfterSeconds) * time.Second)
 	}
 	return &model.DelayedTask{
-		ID:             row.ID,
-		IdempotencyKey: row.IdempotencyKey,
-		TaskName:       row.TaskName,
-		Payload:        row.Payload,
-		ExecuteAt:      row.ExecuteAt,
-		NextRunAt:      row.NextRunAt,
-		Status:         schedulerenum.DelayedTaskStatus(row.Status),
-		Attempt:        row.Attempt,
-		MaxAttempts:    row.MaxAttempts,
-		TimeoutSeconds: row.TimeoutSeconds,
-		LockedBy:       row.LockedBy,
-		LockExpiresAt:  row.LockExpiresAt,
-		StartedAt:      row.StartedAt,
-		FinishedAt:     row.FinishedAt,
-		LastError:      row.LastError,
-		CreatedAt:      row.CreatedAt,
-		UpdatedAt:      row.UpdatedAt,
+		ID:            row.ID,
+		Name:          row.Name,
+		Title:         row.Title,
+		Description:   row.Description,
+		Enabled:       row.Enabled,
+		Timeout:       time.Duration(row.TimeoutSeconds) * time.Second,
+		StaleAfter:    staleAfter,
+		MaxAttempts:   row.MaxAttempts,
+		MisfirePolicy: schedulerenum.TaskMisfirePolicy(row.MisfirePolicy),
+		Version:       row.Version,
+		CreatedAt:     row.CreatedAt,
+		UpdatedAt:     row.UpdatedAt,
 	}
 }

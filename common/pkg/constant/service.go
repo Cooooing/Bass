@@ -37,9 +37,7 @@ const (
 )
 
 const (
-	SchedulerTaskChangedSubject           = "scheduler.task.changed"
-	SchedulerTaskExecutionCanceledSubject = "scheduler.task.execution.canceled"
-	PushNodeSubjectPrefix                 = "push.node."
+	PushNodeSubjectPrefix = "push.node."
 )
 
 func GetPushNodeSubject(nodeID string) string {

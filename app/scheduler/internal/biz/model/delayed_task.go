@@ -6,21 +6,16 @@ import (
 )
 
 type DelayedTask struct {
-	ID             int64
-	IdempotencyKey string
-	TaskName       string
-	Payload        string
-	ExecuteAt      time.Time
-	NextRunAt      time.Time
-	Status         schedulerenum.DelayedTaskStatus
-	Attempt        int32
-	MaxAttempts    int32
-	TimeoutSeconds int32
-	LockedBy       string
-	LockExpiresAt  *time.Time
-	StartedAt      *time.Time
-	FinishedAt     *time.Time
-	LastError      string
-	CreatedAt      *time.Time
-	UpdatedAt      *time.Time
+	ID            int64
+	Name          string
+	Title         string
+	Description   string
+	Enabled       bool
+	Timeout       time.Duration
+	StaleAfter    *time.Duration
+	MaxAttempts   int32
+	MisfirePolicy schedulerenum.TaskMisfirePolicy
+	Version       int64
+	CreatedAt     *time.Time
+	UpdatedAt     *time.Time
 }

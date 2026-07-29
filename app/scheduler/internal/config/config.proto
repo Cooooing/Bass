@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 package kratos.api.config;
 
 import "common/config.proto";
@@ -16,10 +16,22 @@ message Bootstrap {
   common.api.app.common.Nats nats = 7;
   common.api.app.common.Trace trace = 8;
   common.api.app.common.Observability observability = 9;
-  common.api.app.common.Alert alert = 10;
   Scheduler scheduler = 21;
 }
 
 message Scheduler {
-  google.protobuf.Duration task_timeout = 4;
+  google.protobuf.Duration default_execution_timeout = 4; // 默认任务执行超时时间，例如 30s。
+  string stream_name = 5; // 调度消息流名称。
+  string scheduled_task_consumer_durable = 6; // 定时任务持久消费者名称。
+  string delayed_task_consumer_durable = 7; // 延迟任务持久消费者名称。
+  string scheduled_task_schedule_subject_prefix = 8; // 定时任务调度源 subject 前缀。
+  string delayed_task_schedule_subject_prefix = 9; // 延迟任务调度源 subject 前缀。
+  string scheduled_task_execute_subject = 10; // 定时任务执行目标 subject。
+  string delayed_task_execute_subject = 11; // 延迟任务执行目标 subject。
+  google.protobuf.Duration ack_wait = 12; // NATS 消息确认等待时间，例如 60s。
+  int32 fetch_batch = 13; // 拉取消费者单次拉取批量大小。
+  google.protobuf.Duration fetch_wait = 14; // 拉取消费者单次拉取最大等待时间，例如 2s。
+  int32 scheduled_task_concurrency = 15; // 定时任务 worker 并发数。
+  int32 delayed_task_concurrency = 16; // 延迟任务 worker 并发数。
+  google.protobuf.Duration reconcile_interval = 17; // 调度补偿间隔，例如 60s。
 }

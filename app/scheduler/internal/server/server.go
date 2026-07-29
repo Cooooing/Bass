@@ -1,8 +1,6 @@
 package server
 
 import (
-	"scheduler/internal/biz/usecase"
-
 	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -13,8 +11,17 @@ var ServerProviderSet = wire.NewSet(
 	ProvideServers,
 	NewGRPCServer,
 	NewHTTPServer,
+	NewSchedulerBootstrapServer,
+	NewScheduledTaskConsumerServer,
+	NewDelayedTaskConsumerServer,
 )
 
-func ProvideServers(grpcServer *grpc.Server, httpServer *http.Server, schedulerRunner *usecase.SchedulerRunner, delayedTaskRunner *usecase.DelayedTaskRunner) []transport.Server {
-	return []transport.Server{grpcServer, httpServer, schedulerRunner, delayedTaskRunner}
+func ProvideServers(
+	grpcServer *grpc.Server,
+	httpServer *http.Server,
+) []transport.Server {
+	return []transport.Server{
+		grpcServer,
+		httpServer,
+	}
 }

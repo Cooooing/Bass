@@ -12,10 +12,8 @@ var BizProviderSet = wire.NewSet(
 	task.NewUserUnbanAccounts,
 	task.NewUserOutboxPublishBatch,
 	ProvideTasks,
-	usecase.NewTaskUsecase,
+	usecase.NewScheduledTaskUsecase,
 	usecase.NewDelayedTaskUsecase,
-	usecase.NewSchedulerRunner,
-	usecase.NewDelayedTaskRunner,
 )
 
 func ProvideTasks(

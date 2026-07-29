@@ -67,7 +67,7 @@ func (t *UserOutboxPublishBatch) DefaultScheduledTasks() []*DefaultScheduledTask
 func (t *UserOutboxPublishBatch) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return []*DefaultDelayedTask{
 		{
-			Title:         "延迟用户 Outbox 批量投递",
+			Title:         t.Title(),
 			Description:   t.Description(),
 			Enabled:       true,
 			Timeout:       1 * time.Minute,

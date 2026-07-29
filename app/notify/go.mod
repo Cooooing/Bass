@@ -12,7 +12,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.7.0
 	github.com/lib/pq v1.10.9
-	github.com/nats-io/nats.go v1.51.0
+	github.com/nats-io/nats.go v1.52.0
 	github.com/redis/go-redis/v9 v9.17.2
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.102
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.3.93

@@ -3,6 +3,7 @@ package usecase
 import (
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"log/slog"
 	"time"
 
 	"common/pkg/apperror"
@@ -17,6 +18,7 @@ import (
 )
 
 type ArticleUsecase struct {
+	log  *slog.Logger
 	conf *config.Bootstrap
 	tx   base.Tx
 
@@ -26,10 +28,12 @@ type ArticleUsecase struct {
 	commentRepo          repo.CommentRepo
 	tagRepo              repo.TagRepo
 	outboxRepo           repo.OutboxEventRepo
+	outboxUsecase        *OutboxUsecase
 	moderationRecordRepo repo.ContentModerationRecordRepo
 }
 
 func NewArticleUsecase(
+	logger *slog.Logger,
 	conf *config.Bootstrap,
 	tx base.Tx,
 	articleRepo repo.ArticleRepo,
@@ -38,9 +42,11 @@ func NewArticleUsecase(
 	commentRepo repo.CommentRepo,
 	tagRepo repo.TagRepo,
 	outboxRepo repo.OutboxEventRepo,
+	outboxUsecase *OutboxUsecase,
 	moderationRecordRepo repo.ContentModerationRecordRepo,
 ) *ArticleUsecase {
 	return &ArticleUsecase{
+		log:                  logger,
 		conf:                 conf,
 		tx:                   tx,
 		articleRepo:          articleRepo,
@@ -49,6 +55,7 @@ func NewArticleUsecase(
 		commentRepo:          commentRepo,
 		tagRepo:              tagRepo,
 		outboxRepo:           outboxRepo,
+		outboxUsecase:        outboxUsecase,
 		moderationRecordRepo: moderationRecordRepo,
 	}
 }
@@ -120,7 +127,10 @@ func (d *ArticleUsecase) AddPostscript(ctx context.Context, req *ArticleAddPosts
 	articleId := req.ArticleID
 	content := req.Content
 	userId := req.UserID
-	var save *model.ArticlePostscript
+	var (
+		save        *model.ArticlePostscript
+		outboxEvent *repo.OutboxEvent
+	)
 	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
@@ -158,7 +168,7 @@ func (d *ArticleUsecase) AddPostscript(ctx context.Context, req *ArticleAddPosts
 		}); err != nil {
 			return err
 		}
-		err = d.outboxRepo.Save(ctx, &commonenums.Event{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_POSTSCRIPT_ADDED,
 			Payload: &commonenums.Event_ArticlePostscriptAdded{
@@ -174,6 +184,11 @@ func (d *ArticleUsecase) AddPostscript(ctx context.Context, req *ArticleAddPosts
 	})
 	if err != nil {
 		return nil, err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
 	}
 	return save, nil
 }
@@ -277,6 +292,7 @@ func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, e
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
+	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
@@ -309,7 +325,7 @@ func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, e
 			}); err != nil {
 				return err
 			}
-			err = d.outboxRepo.Save(ctx, &commonenums.Event{
+			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_LIKED,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED,
 				Payload: &commonenums.Event_ArticleLiked{
@@ -319,6 +335,7 @@ func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, e
 					},
 				},
 			})
+			return err
 		}
 
 		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
@@ -343,6 +360,11 @@ func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, e
 	if err != nil {
 		return false, err
 	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
 	return active, nil
 }
 
@@ -356,6 +378,7 @@ func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool,
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
+	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
@@ -388,7 +411,7 @@ func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool,
 			}); err != nil {
 				return err
 			}
-			err = d.outboxRepo.Save(ctx, &commonenums.Event{
+			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_THANKED,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED,
 				Payload: &commonenums.Event_ArticleThanked{
@@ -398,6 +421,7 @@ func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool,
 					},
 				},
 			})
+			return err
 		}
 
 		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
@@ -422,6 +446,11 @@ func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool,
 	if err != nil {
 		return false, err
 	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
 	return active, nil
 }
 
@@ -435,6 +464,7 @@ func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (b
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
+	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
@@ -467,7 +497,7 @@ func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (b
 			}); err != nil {
 				return err
 			}
-			err = d.outboxRepo.Save(ctx, &commonenums.Event{
+			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_COLLECTED,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED,
 				Payload: &commonenums.Event_ArticleCollected{
@@ -477,6 +507,7 @@ func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (b
 					},
 				},
 			})
+			return err
 		}
 
 		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
@@ -501,6 +532,11 @@ func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (b
 	if err != nil {
 		return false, err
 	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
 	return active, nil
 }
 
@@ -514,6 +550,7 @@ func (d *ArticleUsecase) Watch(ctx context.Context, req *ArticleWatchReq) (bool,
 	articleId := req.ArticleID
 	userId := req.UserID
 	active := req.Active
+	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
@@ -546,7 +583,7 @@ func (d *ArticleUsecase) Watch(ctx context.Context, req *ArticleWatchReq) (bool,
 			}); err != nil {
 				return err
 			}
-			err = d.outboxRepo.Save(ctx, &commonenums.Event{
+			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_WATCHED,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED,
 				Payload: &commonenums.Event_ArticleWatched{
@@ -556,6 +593,7 @@ func (d *ArticleUsecase) Watch(ctx context.Context, req *ArticleWatchReq) (bool,
 					},
 				},
 			})
+			return err
 		}
 
 		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
@@ -579,6 +617,11 @@ func (d *ArticleUsecase) Watch(ctx context.Context, req *ArticleWatchReq) (bool,
 	})
 	if err != nil {
 		return false, err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
 	}
 	return active, nil
 }
@@ -626,7 +669,8 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 	articleId := req.ArticleID
 	userId := req.UserID
 	visibility := req.Visibility
-	return d.tx(ctx, func(ctx context.Context) error {
+	var outboxEvent *repo.OutboxEvent
+	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
 		})
@@ -655,7 +699,7 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		}); err != nil {
 			return err
 		}
-		err = d.outboxRepo.Save(ctx, &commonenums.Event{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_PUBLISHED,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_PUBLISHED,
 			Payload: &commonenums.Event_ArticlePublished{
@@ -667,6 +711,15 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		)
 		return err
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
+	return nil
 }
 
 type ArticleAcceptAnswerReq struct {
@@ -679,7 +732,8 @@ func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, req *ArticleAcceptAns
 	articleId := req.ArticleID
 	commentId := req.CommentID
 	userId := req.UserID
-	return d.tx(ctx, func(ctx context.Context) error {
+	var outboxEvent *repo.OutboxEvent
+	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
 		})
@@ -715,7 +769,7 @@ func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, req *ArticleAcceptAns
 		}); err != nil {
 			return err
 		}
-		err = d.outboxRepo.Save(ctx, &commonenums.Event{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER,
 			Payload: &commonenums.Event_ArticleAcceptedAnswer{
@@ -729,6 +783,15 @@ func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, req *ArticleAcceptAns
 		)
 		return err
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
+	return nil
 }
 
 type ArticleMakePrivateReq struct {
@@ -771,7 +834,8 @@ func (d *ArticleUsecase) updateVisibility(ctx context.Context, req *articleUpdat
 	articleId := req.ArticleID
 	visibility := req.Visibility
 	userId := req.UserID
-	return d.tx(ctx, func(ctx context.Context) error {
+	var outboxEvent *repo.OutboxEvent
+	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
 		})
@@ -792,7 +856,7 @@ func (d *ArticleUsecase) updateVisibility(ctx context.Context, req *articleUpdat
 		}); err != nil {
 			return err
 		}
-		err = d.outboxRepo.Save(ctx, &commonenums.Event{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
 			Payload: &commonenums.Event_ArticleStatusUpdated{
@@ -809,6 +873,15 @@ func (d *ArticleUsecase) updateVisibility(ctx context.Context, req *articleUpdat
 		)
 		return err
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
+	return nil
 }
 
 type ArticleArchiveReq struct {
@@ -863,7 +936,8 @@ func (d *ArticleUsecase) updatePublishStatus(ctx context.Context, req *articleUp
 	userId := req.UserID
 	action := req.Action
 	reason := req.Reason
-	return d.tx(ctx, func(ctx context.Context) error {
+	var outboxEvent *repo.OutboxEvent
+	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
 		})
@@ -892,7 +966,7 @@ func (d *ArticleUsecase) updatePublishStatus(ctx context.Context, req *articleUp
 		}); err != nil {
 			return err
 		}
-		err = d.outboxRepo.Save(ctx, &commonenums.Event{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
 			Payload: &commonenums.Event_ArticleStatusUpdated{
@@ -910,6 +984,15 @@ func (d *ArticleUsecase) updatePublishStatus(ctx context.Context, req *articleUp
 		)
 		return err
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
+	return nil
 }
 
 type ArticleHideReq struct {
@@ -1002,7 +1085,8 @@ func (d *ArticleUsecase) updateRestriction(ctx context.Context, req *articleUpda
 	userId := req.UserID
 	action := req.Action
 	reason := req.Reason
-	return d.tx(ctx, func(ctx context.Context) error {
+	var outboxEvent *repo.OutboxEvent
+	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(articleId),
 		})
@@ -1049,7 +1133,7 @@ func (d *ArticleUsecase) updateRestriction(ctx context.Context, req *articleUpda
 		}); err != nil {
 			return err
 		}
-		err = d.outboxRepo.Save(ctx, &commonenums.Event{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED,
 			Payload: &commonenums.Event_ArticleStatusUpdated{
@@ -1067,6 +1151,15 @@ func (d *ArticleUsecase) updateRestriction(ctx context.Context, req *articleUpda
 		)
 		return err
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
+	return nil
 }
 
 func (d *ArticleUsecase) Get(ctx context.Context, articleID int64) (*model.Article, error) {

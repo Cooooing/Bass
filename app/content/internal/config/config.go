@@ -14,9 +14,6 @@ func LoadConfig(bootstrapPath string, path string) (*Bootstrap, *common.Bootstra
 
 	if err := hot.BindProtoHotFields(
 		&c.Business.Article,
-		&c.Alert.LarkWebhook,
-		&c.Event.Outbox,
-		&c.Event.DeadLetter,
 	); err != nil {
 		cleanup()
 		return nil, nil, cleanup, err

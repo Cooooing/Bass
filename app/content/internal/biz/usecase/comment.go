@@ -24,6 +24,7 @@ type CommentUsecase struct {
 	commentActionRecordRepo repo.CommentActionRecordRepo
 	articleRepo             repo.ArticleRepo
 	outboxRepo              repo.OutboxEventRepo
+	outboxUsecase           *OutboxUsecase
 	moderationRecordRepo    repo.ContentModerationRecordRepo
 }
 
@@ -34,6 +35,7 @@ func NewCommentUsecase(
 	commentActionRecordRepo repo.CommentActionRecordRepo,
 	articleRepo repo.ArticleRepo,
 	outboxRepo repo.OutboxEventRepo,
+	outboxUsecase *OutboxUsecase,
 	moderationRecordRepo repo.ContentModerationRecordRepo,
 ) *CommentUsecase {
 	return &CommentUsecase{
@@ -43,12 +45,16 @@ func NewCommentUsecase(
 		commentActionRecordRepo: commentActionRecordRepo,
 		articleRepo:             articleRepo,
 		outboxRepo:              outboxRepo,
+		outboxUsecase:           outboxUsecase,
 		moderationRecordRepo:    moderationRecordRepo,
 	}
 }
 
 func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*model.Comment, error) {
-	var c *model.Comment
+	var (
+		c           *model.Comment
+		outboxEvent *repo.OutboxEvent
+	)
 	err := d.tx(ctx, func(ctx context.Context) error {
 		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(comment.ArticleID),
@@ -125,7 +131,7 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*mode
 			return err
 		}
 		c.ReplyUserID = replyComment.CreatedBy
-		err = d.outboxRepo.Save(ctx, &commonenums.Event{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_COMMENT_PUBLISHED,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_PUBLISHED,
 			Payload: &commonenums.Event_CommentPublished{
@@ -138,6 +144,11 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*mode
 	})
 	if err != nil {
 		return nil, err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
 	}
 	return c, nil
 }
@@ -340,7 +351,8 @@ func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpda
 	userId := req.UserID
 	action := req.Action
 	reason := req.Reason
-	return d.tx(ctx, func(ctx context.Context) error {
+	var outboxEvent *repo.OutboxEvent
+	err := d.tx(ctx, func(ctx context.Context) error {
 		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
 			CommentId: new(commentId),
 		})
@@ -378,7 +390,7 @@ func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpda
 		}); err != nil {
 			return err
 		}
-		err = d.outboxRepo.Save(ctx, &commonenums.Event{
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_COMMENT_STATUS_UPDATED,
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_STATUS_UPDATED,
 			Payload: &commonenums.Event_CommentStatusUpdated{
@@ -393,6 +405,15 @@ func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpda
 		})
 		return err
 	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
+	return nil
 }
 
 type CommentLikeReq struct {
@@ -405,6 +426,7 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 	commentId := req.CommentID
 	userId := req.UserID
 	active := req.Active
+	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
 			CommentId: new(commentId),
@@ -448,7 +470,7 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 			}); err != nil {
 				return err
 			}
-			err = d.outboxRepo.Save(ctx, &commonenums.Event{
+			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_COMMENT_LIKED,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_LIKED,
 				Payload: &commonenums.Event_CommentLiked{
@@ -458,6 +480,7 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 					},
 				},
 			})
+			return err
 		}
 
 		deletedResp, err := d.commentActionRecordRepo.Delete(ctx, &repo.CommentActionRecordDeleteReq{
@@ -482,6 +505,11 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 	if err != nil {
 		return false, err
 	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
 	return active, nil
 }
 
@@ -495,6 +523,7 @@ func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool,
 	commentId := req.CommentID
 	userId := req.UserID
 	active := req.Active
+	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
 			CommentId: new(commentId),
@@ -538,7 +567,7 @@ func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool,
 			}); err != nil {
 				return err
 			}
-			err = d.outboxRepo.Save(ctx, &commonenums.Event{
+			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 				Type:    commonenums.EventType_EVENT_TYPE_COMMENT_THANKED,
 				Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_THANKED,
 				Payload: &commonenums.Event_CommentThanked{
@@ -548,6 +577,7 @@ func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool,
 					},
 				},
 			})
+			return err
 		}
 
 		deletedResp, err := d.commentActionRecordRepo.Delete(ctx, &repo.CommentActionRecordDeleteReq{
@@ -571,6 +601,11 @@ func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool,
 	})
 	if err != nil {
 		return false, err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
 	}
 	return active, nil
 }

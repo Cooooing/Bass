@@ -1,8 +1,6 @@
 package server
 
 import (
-	"content/internal/biz/usecase"
-
 	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -16,11 +14,9 @@ var ServerProviderSet = wire.NewSet(
 	NewHTTPServer,
 )
 
-func ProvideServers(grpcServer *grpc.Server, httpServer *http.Server, outboxPublisher *usecase.OutboxPublisher, outboxDeadLetterScanner *usecase.OutboxDeadLetterScanner) []transport.Server {
+func ProvideServers(grpcServer *grpc.Server, httpServer *http.Server) []transport.Server {
 	return []transport.Server{
 		grpcServer,
 		httpServer,
-		outboxPublisher,
-		outboxDeadLetterScanner,
 	}
 }

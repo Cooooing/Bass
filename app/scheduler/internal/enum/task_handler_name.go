@@ -9,9 +9,10 @@ import (
 type TaskHandlerName string
 
 const (
-	TaskHandlerNameNoop                   TaskHandlerName = "noop"
-	TaskHandlerNameUserOutboxPublishBatch TaskHandlerName = "user.outbox_publish_batch"
-	TaskHandlerNameUserUnbanAccounts      TaskHandlerName = "user.unban_accounts"
+	TaskHandlerNameNoop                      TaskHandlerName = "noop"
+	TaskHandlerNameUserOutboxPublishBatch    TaskHandlerName = "user.outbox_publish_batch"
+	TaskHandlerNameUserUnbanAccounts         TaskHandlerName = "user.unban_accounts"
+	TaskHandlerNameContentOutboxPublishBatch TaskHandlerName = "content.outbox_publish_batch"
 )
 
 // TaskHandlerNameMap 将内部任务处理器名称映射到 proto 枚举。
@@ -25,6 +26,9 @@ var TaskHandlerNameMap = commonenum.NewMapping[TaskHandlerName, schedulerv1.Sche
 		},
 		TaskHandlerNameUserUnbanAccounts: {
 			Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_USER_UNBAN_ACCOUNTS,
+		},
+		TaskHandlerNameContentOutboxPublishBatch: {
+			Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_OUTBOX_PUBLISH_BATCH,
 		},
 	},
 )

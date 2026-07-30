@@ -8,11 +8,6 @@ import (
 	"time"
 )
 
-// OutboxEventSave 定义一条待持久化的 outbox 事件。
-type OutboxEventSave struct {
-	Event *commonenums.Event
-}
-
 type OutboxEvent struct {
 	ID         int64
 	EventID    string
@@ -27,12 +22,13 @@ type OutboxEvent struct {
 }
 
 type OutboxEventRepo interface {
-	Save(ctx context.Context, event *commonenums.Event) error
+	Save(ctx context.Context, event *commonenums.Event) (*OutboxEvent, error)
 	Get(ctx context.Context, req *OutboxEventGetReq) (*OutboxEvent, error)
 	List(ctx context.Context, req *OutboxEventGetReq) ([]*OutboxEvent, error)
 	Map(ctx context.Context, req *OutboxEventGetReq) (map[int64]*OutboxEvent, error)
 	Count(ctx context.Context, req *OutboxEventGetReq) (int, error)
 	Page(ctx context.Context, req *OutboxEventGetReq) (*OutboxEventPageResp, error)
+	ClaimOneForPublish(ctx context.Context, req *OutboxEventClaimOneForPublishReq) (*OutboxEvent, error)
 	ClaimForPublish(ctx context.Context, req *OutboxEventClaimForPublishReq) ([]*OutboxEvent, error)
 	MarkPublished(ctx context.Context, req *OutboxEventMarkPublishedReq) error
 	MarkFailed(ctx context.Context, req *OutboxEventMarkFailedReq) error
@@ -55,12 +51,17 @@ type OutboxEventGetReq struct {
 
 type OutboxEventClaimForPublishReq struct {
 	Limit       int
-	StaleBefore time.Time
+	StaleBefore *time.Time
+}
+
+type OutboxEventClaimOneForPublishReq struct {
+	ID          int64
+	StaleBefore *time.Time
 }
 
 type OutboxEventMarkPublishedReq struct {
 	ID          int64
-	PublishedAt time.Time
+	PublishedAt *time.Time
 }
 
 type OutboxEventMarkFailedReq struct {

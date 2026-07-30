@@ -12,15 +12,17 @@ var ServiceProviderSet = wire.NewSet(
 	NewArticleService,
 	NewCommentService,
 	NewDomainService,
+	NewOutboxService,
 	NewTagService,
 )
 
-func ProvideServices(commonSystemService *CommonSystemService, articleService *ArticleService, domainService *DomainService, commentService *CommentService, tagService *TagService) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, articleService *ArticleService, domainService *DomainService, commentService *CommentService, tagService *TagService, outboxService *OutboxService) []server.Service {
 	return []server.Service{
 		commonSystemService,
 		articleService,
 		domainService,
 		commentService,
 		tagService,
+		outboxService,
 	}
 }

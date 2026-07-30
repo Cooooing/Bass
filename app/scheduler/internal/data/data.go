@@ -19,6 +19,7 @@ var DataProviderSet = wire.NewSet(
 	ProvideConsul,
 	commonClient.NewObservability,
 	commonClient.NewConsulClient,
+	rpc.ProvideContentClient,
 	rpc.ProvideUserClient,
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,

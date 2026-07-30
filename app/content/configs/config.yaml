@@ -57,24 +57,6 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
-alert:
-  lark_webhook:
-    base_url: ${ALERT_LARK_BASE_URL:https://open.larksuite.com/open-apis/bot/v2/hook/}
-    token: ${ALERT_LARK_TOKEN:}
-    secret: ${ALERT_LARK_SECRET:}
-    timeout: 10s
-event:
-  outbox:
-    max_retry: 10
-    publish_timeout: 300s
-    poll_lock_ttl: 60s
-    publish_limit: 1000
-    min_poll_interval: 1s
-    max_poll_interval: 8s
-  dead_letter:
-    enable_alert: false
-    scan_interval: 60s
-    alert_dedup_window: 3600s
 business:
   article:
     published_edit_window: 600s

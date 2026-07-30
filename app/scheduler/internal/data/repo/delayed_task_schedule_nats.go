@@ -109,18 +109,18 @@ func (r *DelayedTaskScheduleNatsRepo) Ensure(ctx context.Context) error {
 	}); err != nil {
 		return err
 	}
-	if err := r.js.DeleteConsumer(ctx, r.streamName, r.consumerDurable); err != nil && !errors.Is(err, jetstream.ErrConsumerNotFound) {
-		return err
+	consumer, err := r.js.Consumer(ctx, r.streamName, r.consumerDurable)
+	if errors.Is(err, jetstream.ErrConsumerNotFound) {
+		consumer, err = r.js.CreateConsumer(ctx, r.streamName, jetstream.ConsumerConfig{
+			Durable:       r.consumerDurable,
+			Name:          r.consumerDurable,
+			DeliverPolicy: jetstream.DeliverAllPolicy,
+			AckPolicy:     jetstream.AckExplicitPolicy,
+			AckWait:       r.ackWait,
+			FilterSubject: r.executeSubject,
+			MaxAckPending: r.fetchBatch * 4,
+		})
 	}
-	consumer, err := r.js.CreateConsumer(ctx, r.streamName, jetstream.ConsumerConfig{
-		Durable:       r.consumerDurable,
-		Name:          r.consumerDurable,
-		DeliverPolicy: jetstream.DeliverNewPolicy,
-		AckPolicy:     jetstream.AckExplicitPolicy,
-		AckWait:       r.ackWait,
-		FilterSubject: r.executeSubject,
-		MaxAckPending: r.fetchBatch * 4,
-	})
 	if err != nil {
 		return err
 	}
@@ -136,7 +136,7 @@ func (r *DelayedTaskScheduleNatsRepo) Schedule(ctx context.Context, req *repo.De
 	if err != nil {
 		return err
 	}
-	// 延迟执行记录按独立调度源主题注册，幂等重建时先清理旧调度。
+	// 延迟执行记录按独立调度源 subject 注册，幂等重建时先清理旧调度。
 	if err = stream.Purge(ctx, jetstream.WithPurgeSubject(req.Subject)); err != nil {
 		return err
 	}
@@ -154,6 +154,22 @@ func (r *DelayedTaskScheduleNatsRepo) Schedule(ctx context.Context, req *repo.De
 		jetstream.WithScheduleTTL(r.scheduleTTL),
 	}
 	_, err = r.js.Publish(ctx, req.Subject, body, opts...)
+	return err
+}
+
+func (r *DelayedTaskScheduleNatsRepo) Publish(ctx context.Context, req *repo.DelayedTaskScheduleReq) error {
+	if req == nil || req.DelayedTask == nil || req.Record == nil || req.Target == "" {
+		return fmt.Errorf("delayed task publish request is invalid")
+	}
+	body, err := json.Marshal(repo.DelayedTaskScheduleMessage{
+		ExecutionRecordID: req.Record.ID,
+		DelayedTaskKey:    req.DelayedTask.TaskKey,
+		TriggerType:       req.Record.TriggerType,
+	})
+	if err != nil {
+		return err
+	}
+	_, err = r.js.Publish(ctx, req.Target, body)
 	return err
 }
 
@@ -179,11 +195,15 @@ func (r *DelayedTaskScheduleNatsRepo) Consume(ctx context.Context, handler func(
 		_ = json.Unmarshal(msg.Data(), payload)
 		meta, _ := msg.Metadata()
 		if meta != nil {
-			payload.ScheduleKey = uuid.NewSHA1(
-				uuid.NameSpaceOID,
-				[]byte(fmt.Sprintf("%s:%d", meta.Stream, meta.Sequence.Stream)),
-			).String()
-			payload.ScheduledAt = meta.Timestamp.Truncate(time.Second)
+			if payload.ScheduleKey == "" {
+				payload.ScheduleKey = uuid.NewSHA1(
+					uuid.NameSpaceOID,
+					[]byte(fmt.Sprintf("%s:%d", meta.Stream, meta.Sequence.Stream)),
+				).String()
+			}
+			if payload.ScheduledAt.IsZero() {
+				payload.ScheduledAt = meta.Timestamp.Truncate(time.Second)
+			}
 			payload.NumDelivered = meta.NumDelivered
 		}
 		if payload.ScheduledAt.IsZero() {
@@ -249,7 +269,6 @@ func (r *DelayedTaskScheduleNatsRepo) Consume(ctx context.Context, handler func(
 	r.consume = consume
 	return nil
 }
-
 func (r *DelayedTaskScheduleNatsRepo) Stop(ctx context.Context) error {
 	if r.consume != nil {
 		r.consume.Stop()

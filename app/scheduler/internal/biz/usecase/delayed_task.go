@@ -302,25 +302,48 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 	err = u.tx(ctx, func(txCtx context.Context) error {
 		var err error
 		created, err = u.executionRepo.CreatePending(txCtx, record)
-		if err != nil || created == nil || created.Row == nil || !created.Created {
-			return err
-		}
-		return u.scheduleRepo.Schedule(txCtx, &repo.DelayedTaskScheduleReq{
-			DelayedTask: task,
-			Record:      created.Row,
-			Subject:     u.delayedTaskScheduleSubject(created.Row.ID),
-			Target:      u.delayedTaskExecuteSubject(),
-		})
+		return err
 	})
 	if err != nil {
-		if created != nil && created.Created && created.Row != nil {
-			_ = u.scheduleRepo.Cancel(context.WithoutCancel(ctx), u.delayedTaskScheduleSubject(created.Row.ID))
-		}
 		return nil, err
+	}
+	if created == nil || created.Row == nil {
+		return nil, nil
+	}
+	if created.Conflict {
+		return created.Row, nil
+	}
+	schedulePrefix := "scheduler.schedule.delayed_task_execution"
+	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
+		schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
+	}
+	executeSubject := "scheduler.execute.delayed_task"
+	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskExecuteSubject() != "" {
+		executeSubject = u.conf.GetScheduler().GetDelayedTaskExecuteSubject()
+	}
+	scheduleReq := &repo.DelayedTaskScheduleReq{
+		DelayedTask: task,
+		Record:      created.Row,
+		Subject:     fmt.Sprintf("%s.%d", schedulePrefix, created.Row.ID),
+		Target:      executeSubject,
+	}
+	if created.Row.ScheduledAt.After(time.Now()) && created.Row.TriggerType == schedulerenum.TaskTriggerTypeSchedule {
+		err = u.scheduleRepo.Schedule(context.WithoutCancel(ctx), scheduleReq)
+	} else {
+		err = u.scheduleRepo.Publish(context.WithoutCancel(ctx), scheduleReq)
+	}
+	if err != nil {
+		u.logger.WarnContext(
+			ctx,
+			"同步延迟任务 NATS 调度失败，后续由启动补偿修复",
+			"error",
+			err,
+			"execution_record_id",
+			created.Row.ID,
+		)
 	}
 	return created.Row, nil
 }
-
 func (u *DelayedTaskUsecase) Trigger(ctx context.Context, taskKey string, payload string) (*model.DelayedTaskExecutionRecord, error) {
 	return u.Schedule(ctx, &DelayedTaskScheduleReq{
 		TaskKey:     taskKey,
@@ -342,7 +365,11 @@ func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idem
 		return row, err
 	}
 	if row.Status == schedulerenum.TaskExecutionStatusCanceled {
-		_ = u.scheduleRepo.Cancel(ctx, u.delayedTaskScheduleSubject(row.ID))
+		schedulePrefix := "scheduler.schedule.delayed_task_execution"
+		if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
+			schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
+		}
+		_ = u.scheduleRepo.Cancel(ctx, fmt.Sprintf("%s.%d", schedulePrefix, row.ID))
 	}
 	u.runningMu.Lock()
 	cancel := u.runningCancel[row.ID]
@@ -352,7 +379,6 @@ func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idem
 	}
 	return row, nil
 }
-
 func (u *DelayedTaskUsecase) HandleDelayedTaskMessage(ctx context.Context, message *repo.DelayedTaskScheduleMessage) (*repo.MessageHandleResult, error) {
 	if message == nil {
 		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
@@ -430,7 +456,17 @@ func (u *DelayedTaskUsecase) HandleDelayedTaskMessage(ctx context.Context, messa
 	}
 	// 执行失败但未达到最大次数时，返回重试结果交给 NATS 延迟重投。
 	if updated.Status == schedulerenum.TaskExecutionStatusRetryPending {
-		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionRetry, RetryAfter: u.retryBackoff(updated.Attempt)}, nil
+		base := 5 * time.Second
+		capValue := 5 * time.Minute
+		factor := 1 << max(0, int(updated.Attempt)-1)
+		delay := time.Duration(factor) * base
+		if delay > capValue {
+			delay = capValue
+		}
+		return &repo.MessageHandleResult{
+			Action:     schedulerenum.MessageHandleActionRetry,
+			RetryAfter: delay + time.Duration(rand.Int64N(int64(delay/2)+1)),
+		}, nil
 	}
 	return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
 }
@@ -444,24 +480,26 @@ func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *m
 		taskConfig, err = u.Get(ctx, &DelayedTaskGetReq{ID: record.DelayedTaskID})
 	}
 	if err != nil || taskConfig == nil || !taskConfig.Enabled || taskConfig.Version != record.DelayedTaskVersion {
+		finishedAt := time.Now()
 		return u.executionRepo.MarkFinished(context.WithoutCancel(ctx), &repo.DelayedTaskExecutionRecordMarkFinishedReq{
 			ID:         record.ID,
 			WorkerID:   record.WorkerID,
 			Attempt:    record.Attempt,
 			Status:     schedulerenum.TaskExecutionStatusFailed,
-			FinishedAt: time.Now(),
+			FinishedAt: finishedAt,
 			Duration:   0,
 			LastError:  "scheduler delayed task config is unavailable",
 		})
 	}
 	task, ok := u.tasks[taskConfig.HandlerName.String()]
 	if !ok {
+		finishedAt := time.Now()
 		return u.executionRepo.MarkFinished(context.WithoutCancel(ctx), &repo.DelayedTaskExecutionRecordMarkFinishedReq{
 			ID:         record.ID,
 			WorkerID:   record.WorkerID,
 			Attempt:    record.Attempt,
 			Status:     schedulerenum.TaskExecutionStatusFailed,
-			FinishedAt: time.Now(),
+			FinishedAt: finishedAt,
 			Duration:   0,
 			LastError:  fmt.Sprintf("unknown delayed task handler: %s", taskConfig.HandlerName),
 		})
@@ -482,7 +520,8 @@ func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *m
 	}()
 	startedAt := time.Now()
 	err = task.Execute(execCtx, record.Payload)
-	duration := time.Since(startedAt)
+	finishedAt := time.Now()
+	duration := finishedAt.Sub(startedAt)
 	statusValue := schedulerenum.TaskExecutionStatusSuccess
 	lastError := ""
 	if errors.Is(execCtx.Err(), context.Canceled) {
@@ -509,7 +548,7 @@ func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *m
 		WorkerID:   record.WorkerID,
 		Attempt:    record.Attempt,
 		Status:     statusValue,
-		FinishedAt: time.Now(),
+		FinishedAt: finishedAt,
 		Duration:   duration,
 		LastError:  lastError,
 	})
@@ -550,37 +589,10 @@ func (u *DelayedTaskUsecase) PageExecutionRecords(ctx context.Context, req *Dela
 func (u *DelayedTaskUsecase) EnsureSchedule(ctx context.Context) error {
 	return u.scheduleRepo.Ensure(ctx)
 }
-
 func (u *DelayedTaskUsecase) StartConsuming(ctx context.Context) error {
 	return u.scheduleRepo.Consume(ctx, u.HandleDelayedTaskMessage)
 }
 
 func (u *DelayedTaskUsecase) StopConsuming(ctx context.Context) error {
 	return u.scheduleRepo.Stop(ctx)
-}
-
-func (u *DelayedTaskUsecase) delayedTaskScheduleSubject(executionRecordID int64) string {
-	prefix := "scheduler.schedule.delayed_task_execution"
-	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
-		prefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
-	}
-	return fmt.Sprintf("%s.%d", prefix, executionRecordID)
-}
-
-func (u *DelayedTaskUsecase) delayedTaskExecuteSubject() string {
-	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskExecuteSubject() != "" {
-		return u.conf.GetScheduler().GetDelayedTaskExecuteSubject()
-	}
-	return "scheduler.execute.delayed_task"
-}
-
-func (u *DelayedTaskUsecase) retryBackoff(attempt int32) time.Duration {
-	base := 5 * time.Second
-	capValue := 5 * time.Minute
-	factor := 1 << max(0, int(attempt)-1)
-	delay := time.Duration(factor) * base
-	if delay > capValue {
-		delay = capValue
-	}
-	return delay + time.Duration(rand.Int64N(int64(delay/2)+1))
 }

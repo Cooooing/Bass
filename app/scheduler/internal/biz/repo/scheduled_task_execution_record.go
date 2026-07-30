@@ -18,7 +18,6 @@ type ScheduledTaskExecutionRecordRepo interface {
 	MarkFinished(ctx context.Context, req *ScheduledTaskExecutionRecordMarkFinishedReq) (*ScheduledTaskExecutionRecordMarkFinishedResp, error)
 	MarkCanceled(ctx context.Context, id int64, finishedAt time.Time) (*model.ScheduledTaskExecutionRecord, error)
 }
-
 type ScheduledTaskExecutionRecordGetReq struct {
 	ID              *int64
 	IDs             []int64

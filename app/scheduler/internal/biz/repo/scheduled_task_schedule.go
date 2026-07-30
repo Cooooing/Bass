@@ -20,7 +20,6 @@ type ScheduledTaskScheduleReq struct {
 	Subject       string
 	Target        string
 }
-
 type ScheduledTaskScheduleMessage struct {
 	ScheduledTaskID      int64
 	ScheduledTaskKey     string

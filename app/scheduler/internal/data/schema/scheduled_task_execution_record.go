@@ -39,7 +39,7 @@ func (ScheduledTaskExecutionRecord) Fields() []ent.Field {
 		field.Int32("attempt").Comment("当前尝试次数").Default(0).NonNegative(),
 		field.Int32("max_attempts").Comment("最大尝试次数").Default(1).Positive(),
 		field.Int32("timeout_seconds").Comment("执行超时秒数").Default(300).Positive(),
-		field.Int32("stale_after_seconds").Comment("超过计划时间后的过期判断秒数，空值表示不过期").Optional().Nillable().Positive(),
+		field.Int32("stale_after_seconds").Comment("过期判断秒数，空值表示不过期").Optional().Nillable().Positive(),
 		field.Enum("misfire_policy").Values(schedulerenum.TaskMisfirePolicyMap.EnumValues()...).Default(schedulerenum.TaskMisfirePolicyExecuteLatest.String()).Comment("错过计划时间后的处理策略"),
 		field.String("worker_id").Comment("执行节点标识").MaxLen(128).Default(""),
 		field.Text("payload").Comment("JSON 编码后的执行参数快照"),

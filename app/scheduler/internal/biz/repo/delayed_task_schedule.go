@@ -10,6 +10,7 @@ import (
 type DelayedTaskScheduleRepo interface {
 	Ensure(ctx context.Context) error
 	Schedule(ctx context.Context, req *DelayedTaskScheduleReq) error
+	Publish(ctx context.Context, req *DelayedTaskScheduleReq) error
 	Cancel(ctx context.Context, subject string) error
 	Consume(ctx context.Context, handler func(context.Context, *DelayedTaskScheduleMessage) (*MessageHandleResult, error)) error
 	Stop(ctx context.Context) error

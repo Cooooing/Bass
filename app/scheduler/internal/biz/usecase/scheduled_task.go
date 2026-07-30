@@ -114,10 +114,6 @@ func (u *ScheduledTaskUsecase) Upsert(ctx context.Context, row *model.ScheduledT
 		row.StaleAfter = new(time.Duration)
 		*row.StaleAfter = 5 * time.Minute
 	}
-	var previous *model.ScheduledTask
-	if row.ID > 0 {
-		previous, _ = u.scheduledTaskRepo.Get(ctx, &repo.ScheduledTaskGetReq{ID: &row.ID})
-	}
 	var saved *model.ScheduledTask
 	err := u.tx(ctx, func(txCtx context.Context) error {
 		var err error
@@ -125,38 +121,46 @@ func (u *ScheduledTaskUsecase) Upsert(ctx context.Context, row *model.ScheduledT
 		if err != nil {
 			return err
 		}
-		if _, err = u.scheduledTaskVersionRepo.Create(txCtx, saved); err != nil {
-			return err
-		}
-		subject := u.scheduledTaskScheduleSubject(saved.ID)
-		if saved.Enabled {
-			return u.scheduledTaskScheduleRepo.Schedule(txCtx, &repo.ScheduledTaskScheduleReq{ScheduledTask: saved, Subject: subject, Target: u.scheduledTaskExecuteSubject()})
-		}
-		return u.scheduledTaskScheduleRepo.Cancel(txCtx, subject)
+		_, err = u.scheduledTaskVersionRepo.Create(txCtx, saved)
+		return err
 	})
 	if err != nil {
-		if previous != nil {
-			if previous.Enabled {
-				_ = u.scheduledTaskScheduleRepo.Schedule(context.WithoutCancel(ctx), &repo.ScheduledTaskScheduleReq{
-					ScheduledTask: previous,
-					Subject:       u.scheduledTaskScheduleSubject(previous.ID),
-					Target:        u.scheduledTaskExecuteSubject(),
-				})
-			} else {
-				_ = u.scheduledTaskScheduleRepo.Cancel(context.WithoutCancel(ctx), u.scheduledTaskScheduleSubject(previous.ID))
-			}
-		} else if saved != nil {
-			_ = u.scheduledTaskScheduleRepo.Cancel(context.WithoutCancel(ctx), u.scheduledTaskScheduleSubject(saved.ID))
-		}
 		return nil, err
 	}
-	if previous != nil && previous.TaskKey != saved.TaskKey {
-		_ = u.scheduledTaskCacheRepo.DeleteScheduledTask(ctx, previous.TaskKey)
-	}
 	_ = u.scheduledTaskCacheRepo.DeleteScheduledTask(ctx, saved.TaskKey)
+	schedulePrefix := "scheduler.schedule.scheduled_task"
+	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix() != "" {
+		schedulePrefix = u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix()
+	}
+	executeSubject := "scheduler.execute.scheduled_task"
+	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetScheduledTaskExecuteSubject() != "" {
+		executeSubject = u.conf.GetScheduler().GetScheduledTaskExecuteSubject()
+	}
+	subject := fmt.Sprintf("%s.%d", schedulePrefix, saved.ID)
+	if saved.Enabled {
+		err = u.scheduledTaskScheduleRepo.Schedule(
+			context.WithoutCancel(ctx),
+			&repo.ScheduledTaskScheduleReq{
+				ScheduledTask: saved,
+				Subject:       subject,
+				Target:        executeSubject,
+			},
+		)
+	} else {
+		err = u.scheduledTaskScheduleRepo.Cancel(context.WithoutCancel(ctx), subject)
+	}
+	if err != nil {
+		u.logger.WarnContext(
+			ctx,
+			"同步定时任务 NATS 调度失败，后续由启动补偿修复",
+			"error",
+			err,
+			"task_id",
+			saved.ID,
+		)
+	}
 	return saved, nil
 }
-
 func (u *ScheduledTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
 	handlerNames := make([]string, 0, len(u.tasks))
 	for handlerName := range u.tasks {
@@ -207,16 +211,6 @@ func (u *ScheduledTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
 	}
 	for _, row := range defaultTasks {
 		if existingTasks[row.TaskKey] != nil {
-			current := existingTasks[row.TaskKey]
-			if current.Enabled {
-				if err = u.scheduledTaskScheduleRepo.Schedule(ctx, &repo.ScheduledTaskScheduleReq{
-					ScheduledTask: current,
-					Subject:       u.scheduledTaskScheduleSubject(current.ID),
-					Target:        u.scheduledTaskExecuteSubject(),
-				}); err != nil {
-					return err
-				}
-			}
 			continue
 		}
 		if _, err = u.Upsert(ctx, row); err != nil {
@@ -417,6 +411,8 @@ func (u *ScheduledTaskUsecase) createScheduledExecution(
 			return nil, err
 		}
 		if running {
+			finishedAt := time.Now()
+			duration := time.Duration(0)
 			resp, err := u.scheduledTaskExecutionRecordRepo.Create(ctx, &repo.ScheduledTaskExecutionRecordCreateReq{
 				Status: schedulerenum.TaskExecutionStatusSkipped,
 				Record: &model.ScheduledTaskExecutionRecord{
@@ -425,8 +421,8 @@ func (u *ScheduledTaskUsecase) createScheduledExecution(
 					TriggerType:          triggerType,
 					ScheduleKey:          scheduleKey,
 					ScheduledAt:          scheduledAt,
-					FinishedAt:           new(time.Now()),
-					Duration:             new(time.Duration(0)),
+					FinishedAt:           &finishedAt,
+					Duration:             &duration,
 					Status:               schedulerenum.TaskExecutionStatusSkipped,
 					Attempt:              0,
 					MaxAttempts:          task.MaxAttempts,
@@ -444,6 +440,7 @@ func (u *ScheduledTaskUsecase) createScheduledExecution(
 			return resp.Row, nil
 		}
 	}
+	startedAt := time.Now()
 	resp, err := u.scheduledTaskExecutionRecordRepo.Create(ctx, &repo.ScheduledTaskExecutionRecordCreateReq{
 		Status: schedulerenum.TaskExecutionStatusRunning,
 		Record: &model.ScheduledTaskExecutionRecord{
@@ -452,7 +449,7 @@ func (u *ScheduledTaskUsecase) createScheduledExecution(
 			TriggerType:          triggerType,
 			ScheduleKey:          scheduleKey,
 			ScheduledAt:          scheduledAt,
-			StartedAt:            new(time.Now()),
+			StartedAt:            &startedAt,
 			Status:               schedulerenum.TaskExecutionStatusRunning,
 			Attempt:              1,
 			MaxAttempts:          task.MaxAttempts,
@@ -564,6 +561,8 @@ func (u *ScheduledTaskUsecase) HandleScheduledTaskMessage(ctx context.Context, m
 	// 过期消息按任务策略处理：跳过、只补最新一次或逐条补齐。
 	if task.StaleAfter != nil && time.Since(message.ScheduledAt) > *task.StaleAfter+u.clockSkewGrace {
 		if task.MisfirePolicy == schedulerenum.TaskMisfirePolicySkip || task.MisfirePolicy == schedulerenum.TaskMisfirePolicyExecuteLatest && !message.LatestForSubject {
+			finishedAt := time.Now()
+			duration := time.Duration(0)
 			_, _ = u.scheduledTaskExecutionRecordRepo.Create(ctx, &repo.ScheduledTaskExecutionRecordCreateReq{
 				Status: schedulerenum.TaskExecutionStatusSkipped,
 				Record: &model.ScheduledTaskExecutionRecord{
@@ -572,8 +571,8 @@ func (u *ScheduledTaskUsecase) HandleScheduledTaskMessage(ctx context.Context, m
 					TriggerType:          schedulerenum.TaskTriggerTypeSchedule,
 					ScheduleKey:          message.ScheduleKey,
 					ScheduledAt:          message.ScheduledAt,
-					FinishedAt:           new(time.Now()),
-					Duration:             new(time.Duration(0)),
+					FinishedAt:           &finishedAt,
+					Duration:             &duration,
 					Status:               schedulerenum.TaskExecutionStatusSkipped,
 					Attempt:              0,
 					MaxAttempts:          task.MaxAttempts,
@@ -649,42 +648,56 @@ func (u *ScheduledTaskUsecase) HandleScheduledTaskMessage(ctx context.Context, m
 	}
 	// 业务重试由执行记录状态决定，NATS 只负责按退避时间重新投递。
 	if updated.Status == schedulerenum.TaskExecutionStatusRetryPending {
-		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionRetry, RetryAfter: u.retryBackoff(updated.Attempt)}, nil
+		base := 5 * time.Second
+		capValue := 5 * time.Minute
+		factor := 1 << max(0, int(updated.Attempt)-1)
+		delay := time.Duration(factor) * base
+		if delay > capValue {
+			delay = capValue
+		}
+		return &repo.MessageHandleResult{
+			Action:     schedulerenum.MessageHandleActionRetry,
+			RetryAfter: delay + time.Duration(rand.Int64N(int64(delay/2)+1)),
+		}, nil
 	}
 	return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
 }
 
 func (u *ScheduledTaskUsecase) EnsureSchedule(ctx context.Context) error {
-	// 启动时重建调度源，避免 NATS 残留旧配置继续投递。
+	// 启动时只重建调度源，不清理已投递的 target 消息和 durable cursor。
 	if err := u.scheduledTaskScheduleRepo.Ensure(ctx); err != nil {
 		return err
 	}
-	prefix := "scheduler.schedule.scheduled_task"
+	schedulePrefix := "scheduler.schedule.scheduled_task"
 	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix() != "" {
-		prefix = u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix()
+		schedulePrefix = u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix()
 	}
-	if err := u.scheduledTaskScheduleRepo.Cancel(ctx, prefix+".>"); err != nil {
+	if err := u.scheduledTaskScheduleRepo.Cancel(ctx, schedulePrefix+".>"); err != nil {
 		return err
 	}
-	rows, err := u.scheduledTaskRepo.List(ctx, &repo.ScheduledTaskGetReq{Enabled: new(true)})
+	executeSubject := "scheduler.execute.scheduled_task"
+	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetScheduledTaskExecuteSubject() != "" {
+		executeSubject = u.conf.GetScheduler().GetScheduledTaskExecuteSubject()
+	}
+	enabled := true
+	rows, err := u.scheduledTaskRepo.List(ctx, &repo.ScheduledTaskGetReq{Enabled: &enabled})
 	if err != nil {
 		return err
 	}
 	for _, row := range rows {
-		if row == nil {
+		if row == nil || !row.Enabled {
 			continue
 		}
 		if err = u.scheduledTaskScheduleRepo.Schedule(ctx, &repo.ScheduledTaskScheduleReq{
 			ScheduledTask: row,
-			Subject:       u.scheduledTaskScheduleSubject(row.ID),
-			Target:        u.scheduledTaskExecuteSubject(),
+			Subject:       fmt.Sprintf("%s.%d", schedulePrefix, row.ID),
+			Target:        executeSubject,
 		}); err != nil {
 			return err
 		}
 	}
 	return nil
 }
-
 func (u *ScheduledTaskUsecase) StartConsuming(ctx context.Context) error {
 	return u.scheduledTaskScheduleRepo.Consume(ctx, u.HandleScheduledTaskMessage)
 }
@@ -693,38 +706,6 @@ func (u *ScheduledTaskUsecase) StopConsuming(ctx context.Context) error {
 	if err := u.scheduledTaskScheduleRepo.Stop(ctx); err != nil {
 		return err
 	}
-	stopRunningCtx, cancel := context.WithTimeout(ctx, 100*time.Millisecond)
-	defer cancel()
-	return u.stopRunning(stopRunningCtx)
-}
-
-func (u *ScheduledTaskUsecase) scheduledTaskScheduleSubject(taskID int64) string {
-	prefix := "scheduler.schedule.scheduled_task"
-	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix() != "" {
-		prefix = u.conf.GetScheduler().GetScheduledTaskScheduleSubjectPrefix()
-	}
-	return fmt.Sprintf("%s.%d", prefix, taskID)
-}
-
-func (u *ScheduledTaskUsecase) scheduledTaskExecuteSubject() string {
-	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetScheduledTaskExecuteSubject() != "" {
-		return u.conf.GetScheduler().GetScheduledTaskExecuteSubject()
-	}
-	return "scheduler.execute.scheduled_task"
-}
-
-func (u *ScheduledTaskUsecase) retryBackoff(attempt int32) time.Duration {
-	base := 5 * time.Second
-	capValue := 5 * time.Minute
-	factor := 1 << max(0, int(attempt)-1)
-	delay := time.Duration(factor) * base
-	if delay > capValue {
-		delay = capValue
-	}
-	return delay + time.Duration(rand.Int64N(int64(delay/2)+1))
-}
-
-func (u *ScheduledTaskUsecase) stopRunning(ctx context.Context) error {
 	u.runningCancelMu.Lock()
 	cancels := make([]context.CancelFunc, 0, len(u.runningCancels))
 	for _, cancel := range u.runningCancels {
@@ -739,10 +720,12 @@ func (u *ScheduledTaskUsecase) stopRunning(ctx context.Context) error {
 		u.runningWG.Wait()
 		close(done)
 	}()
+	stopRunningCtx, cancel := context.WithTimeout(ctx, 100*time.Millisecond)
+	defer cancel()
 	select {
 	case <-done:
 		return nil
-	case <-ctx.Done():
-		return ctx.Err()
+	case <-stopRunningCtx.Done():
+		return stopRunningCtx.Err()
 	}
 }

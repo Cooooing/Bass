@@ -100,32 +100,27 @@ func NewScheduledTaskScheduleNatsRepo(
 }
 
 func (r *ScheduledTaskScheduleNatsRepo) Ensure(ctx context.Context) error {
-	stream, err := r.js.CreateOrUpdateStream(ctx, jetstream.StreamConfig{
+	if _, err := r.js.CreateOrUpdateStream(ctx, jetstream.StreamConfig{
 		Name:              r.streamName,
 		Subjects:          r.allSubjects,
 		AllowMsgSchedules: true,
 		AllowMsgTTL:       true,
 		AllowRollup:       true,
-	})
-	if err != nil {
+	}); err != nil {
 		return err
 	}
-	// 消费者重建后只接收新投递，避免旧执行消息干扰当前调度配置。
-	if err = stream.Purge(ctx, jetstream.WithPurgeSubject(r.executeSubject+".>")); err != nil {
-		return err
+	consumer, err := r.js.Consumer(ctx, r.streamName, r.consumerDurable)
+	if errors.Is(err, jetstream.ErrConsumerNotFound) {
+		consumer, err = r.js.CreateConsumer(ctx, r.streamName, jetstream.ConsumerConfig{
+			Durable:       r.consumerDurable,
+			Name:          r.consumerDurable,
+			DeliverPolicy: jetstream.DeliverAllPolicy,
+			AckPolicy:     jetstream.AckExplicitPolicy,
+			AckWait:       r.ackWait,
+			FilterSubject: r.executeSubject + ".>",
+			MaxAckPending: r.fetchBatch * 4,
+		})
 	}
-	if err = r.js.DeleteConsumer(ctx, r.streamName, r.consumerDurable); err != nil && !errors.Is(err, jetstream.ErrConsumerNotFound) {
-		return err
-	}
-	consumer, err := r.js.CreateConsumer(ctx, r.streamName, jetstream.ConsumerConfig{
-		Durable:       r.consumerDurable,
-		Name:          r.consumerDurable,
-		DeliverPolicy: jetstream.DeliverNewPolicy,
-		AckPolicy:     jetstream.AckExplicitPolicy,
-		AckWait:       r.ackWait,
-		FilterSubject: r.executeSubject + ".>",
-		MaxAckPending: r.fetchBatch * 4,
-	})
 	if err != nil {
 		return err
 	}
@@ -141,7 +136,7 @@ func (r *ScheduledTaskScheduleNatsRepo) Schedule(ctx context.Context, req *repo.
 	if err != nil {
 		return err
 	}
-	// 同一个调度源主题只保留一份调度定义，更新时先清理旧调度。
+	// 同一个调度源 subject 只保留一份调度定义，更新时先清理旧调度。
 	if err = stream.Purge(ctx, jetstream.WithPurgeSubject(req.Subject)); err != nil {
 		return err
 	}
@@ -184,16 +179,20 @@ func (r *ScheduledTaskScheduleNatsRepo) Consume(ctx context.Context, handler fun
 		_ = json.Unmarshal(msg.Data(), payload)
 		meta, _ := msg.Metadata()
 		if meta != nil {
-			payload.ScheduleKey = uuid.NewSHA1(
-				uuid.NameSpaceOID,
-				[]byte(fmt.Sprintf("%s:%d", meta.Stream, meta.Sequence.Stream)),
-			).String()
-			payload.ScheduledAt = meta.Timestamp.Truncate(time.Second)
+			if payload.ScheduleKey == "" {
+				payload.ScheduleKey = uuid.NewSHA1(
+					uuid.NameSpaceOID,
+					[]byte(fmt.Sprintf("%s:%d", meta.Stream, meta.Sequence.Stream)),
+				).String()
+			}
+			if payload.ScheduledAt.IsZero() {
+				payload.ScheduledAt = meta.Timestamp.Truncate(time.Second)
+			}
 			payload.NumDelivered = meta.NumDelivered
 			payload.StreamSequence = meta.Sequence.Stream
 			stream, streamErr := r.js.Stream(ctx, r.streamName)
 			if streamErr == nil {
-				// 只补最新策略依赖主题最新序列判断是否只补最近一次。
+				// 只补最新策略依赖 subject 最新序列判断是否只补最近一次。
 				last, lastErr := stream.GetLastMsgForSubject(ctx, msg.Subject())
 				payload.LatestForSubject = lastErr == nil && last != nil && last.Sequence == meta.Sequence.Stream
 			}
@@ -201,6 +200,7 @@ func (r *ScheduledTaskScheduleNatsRepo) Consume(ctx context.Context, handler fun
 		if payload.ScheduledAt.IsZero() {
 			payload.ScheduledAt = time.Now().Truncate(time.Second)
 		}
+		// 长任务处理期间定期续约 NATS 确认等待时间，避免确认超时后误重投。
 		done := make(chan struct{})
 		go func() {
 			interval := r.ackWait / 2
@@ -260,7 +260,6 @@ func (r *ScheduledTaskScheduleNatsRepo) Consume(ctx context.Context, handler fun
 	r.consume = consume
 	return nil
 }
-
 func (r *ScheduledTaskScheduleNatsRepo) Stop(ctx context.Context) error {
 	if r.consume != nil {
 		r.consume.Stop()

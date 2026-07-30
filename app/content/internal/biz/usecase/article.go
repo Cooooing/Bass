@@ -26,7 +26,6 @@ type ArticleUsecase struct {
 	postscriptRepo       repo.ArticlePostscriptRepo
 	actionRecordRepo     repo.ArticleActionRecordRepo
 	commentRepo          repo.CommentRepo
-	tagRepo              repo.TagRepo
 	outboxRepo           repo.OutboxEventRepo
 	outboxUsecase        *OutboxUsecase
 	moderationRecordRepo repo.ContentModerationRecordRepo
@@ -40,7 +39,6 @@ func NewArticleUsecase(
 	postscriptRepo repo.ArticlePostscriptRepo,
 	actionRecordRepo repo.ArticleActionRecordRepo,
 	commentRepo repo.CommentRepo,
-	tagRepo repo.TagRepo,
 	outboxRepo repo.OutboxEventRepo,
 	outboxUsecase *OutboxUsecase,
 	moderationRecordRepo repo.ContentModerationRecordRepo,
@@ -53,7 +51,6 @@ func NewArticleUsecase(
 		postscriptRepo:       postscriptRepo,
 		actionRecordRepo:     actionRecordRepo,
 		commentRepo:          commentRepo,
-		tagRepo:              tagRepo,
 		outboxRepo:           outboxRepo,
 		outboxUsecase:        outboxUsecase,
 		moderationRecordRepo: moderationRecordRepo,
@@ -62,7 +59,6 @@ func NewArticleUsecase(
 
 type ArticleAddReq struct {
 	Article *model.Article
-	TagIDs  []int64
 }
 
 func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Article, error) {
@@ -72,19 +68,6 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 		err  error
 	)
 	err = d.tx(ctx, func(ctx context.Context) error {
-		bindTagIDs := lo.Uniq(req.TagIDs)
-		if len(bindTagIDs) > 0 {
-			countResp, err := d.tagRepo.Count(ctx, &repo.TagGetReq{
-				TagIds: bindTagIDs,
-				Status: new(enum.TagStatusEnabled),
-			})
-			if err != nil {
-				return err
-			}
-			if countResp != len(bindTagIDs) {
-				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_NOT_FOUND)
-			}
-		}
 		now := time.Now()
 		article.PublishStatus = enum.ArticlePublishStatusDraft
 		if article.Visibility == "" {
@@ -100,14 +83,6 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 		save = saveResp
 		if err != nil {
 			return err
-		}
-		if len(bindTagIDs) > 0 {
-			if err = d.articleRepo.ReplaceTags(ctx, &repo.ArticleReplaceTagsReq{
-				ArticleID: save.ID,
-				TagIDs:    bindTagIDs,
-			}); err != nil {
-				return err
-			}
 		}
 		return nil
 	})

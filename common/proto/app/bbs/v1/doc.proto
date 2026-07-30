@@ -9,6 +9,5 @@ option (gnostic.openapi.v3.document) = {
   info: {
     title: "Bass BBS API"
     description: "Bass 社区 HTTP/JSON API"
-    version: "1.0.0"
-  }
+    version: "1.0.0"}
 };

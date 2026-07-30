@@ -13,16 +13,14 @@ service LocationService {
   rpc GetCurrent(GetCurrentLocation.Req) returns (GetCurrentLocation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/location/get-current"
-      body: "*"
-    };
+      body: "*"};
   }
 
   // 更新当前账号的地理资料。
   rpc UpsertCurrent(UpsertCurrentLocation.Req) returns (UpsertCurrentLocation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/location/upsert-current"
-      body: "*"
-    };
+      body: "*"};
   }
 }
 
@@ -31,42 +29,29 @@ message GetCurrentLocation {
   message Req {}
   message Resp {
     message Location {
-      // 账号 ID。
-      int64 user_id = 1;
-      // 国家或地区。
-      optional string country = 2;
-      // 省份或州。
-      optional string province = 3;
-      // 城市。
-      optional string city = 4;
+      int64 user_id = 1; // 账号 ID
+      optional string country = 2; // 国家或地区
+      optional string province = 3; // 省份或州
+      optional string city = 4; // 城市
     }
-    // 当前账号地理资料。
-    Location location = 1;
+    Location location = 1; // 当前账号地理资料
   }
 }
 
 // 更新当前账号的地理资料。
 message UpsertCurrentLocation {
   message Req {
-    // 国家或地区。
-    optional string country = 1;
-    // 省份或州。
-    optional string province = 2;
-    // 城市。
-    optional string city = 3;
+    optional string country = 1; // 国家或地区
+    optional string province = 2; // 省份或州
+    optional string city = 3; // 城市
   }
   message Resp {
     message Location {
-      // 账号 ID。
-      int64 user_id = 1;
-      // 国家或地区。
-      optional string country = 2;
-      // 省份或州。
-      optional string province = 3;
-      // 城市。
-      optional string city = 4;
+      int64 user_id = 1; // 账号 ID
+      optional string country = 2; // 国家或地区
+      optional string province = 3; // 省份或州
+      optional string city = 4; // 城市
     }
-    // 更新后的账号地理资料。
-    Location location = 1;
+    Location location = 1; // 更新后的账号地理资料
   }
 }

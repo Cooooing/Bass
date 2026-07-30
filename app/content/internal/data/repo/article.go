@@ -313,6 +313,84 @@ func (r *ArticleRepo) ReplaceTags(ctx context.Context, req *repo.ArticleReplaceT
 	return nil
 }
 
+func (r *ArticleRepo) BindTags(ctx context.Context, req *repo.ArticleTagBindReq) ([]int64, error) {
+	article, err := r.getClient(ctx).Article.Get(ctx, req.ArticleID)
+	if gen.IsNotFound(err) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	if err != nil {
+		return nil, err
+	}
+	currentIDs, err := article.QueryTags().IDs(ctx)
+	if err != nil {
+		return nil, err
+	}
+	bindIDs, _ := lo.Difference(lo.Uniq(req.TagIDs), currentIDs)
+	if len(bindIDs) == 0 {
+		return []int64{}, nil
+	}
+	if err = r.getClient(ctx).Article.UpdateOneID(req.ArticleID).AddTagIDs(bindIDs...).Exec(ctx); err != nil {
+		return nil, err
+	}
+	return bindIDs, nil
+}
+
+func (r *ArticleRepo) UnbindTags(ctx context.Context, req *repo.ArticleTagBindReq) ([]int64, error) {
+	article, err := r.getClient(ctx).Article.Get(ctx, req.ArticleID)
+	if gen.IsNotFound(err) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	if err != nil {
+		return nil, err
+	}
+	currentIDs, err := article.QueryTags().IDs(ctx)
+	if err != nil {
+		return nil, err
+	}
+	removeIDs := lo.Intersect(lo.Uniq(req.TagIDs), currentIDs)
+	if len(removeIDs) == 0 {
+		return []int64{}, nil
+	}
+	if err = r.getClient(ctx).Article.UpdateOneID(req.ArticleID).RemoveTagIDs(removeIDs...).Exec(ctx); err != nil {
+		return nil, err
+	}
+	return removeIDs, nil
+}
+
+func (r *ArticleRepo) ListTags(ctx context.Context, articleID int64) ([]*model.Tag, error) {
+	article, err := r.getClient(ctx).Article.Get(ctx, articleID)
+	if gen.IsNotFound(err) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	if err != nil {
+		return nil, err
+	}
+	tags, err := article.QueryTags().
+		Where(tagent.DeletedAtIsNil()).
+		Order(gen.Asc(tagent.FieldSort), gen.Asc(tagent.FieldID)).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return lo.Map(tags, func(item *gen.Tag, _ int) *model.Tag {
+		return &model.Tag{
+			ID:           item.ID,
+			Code:         item.Code,
+			Name:         item.Name,
+			Description:  item.Description,
+			DomainID:     item.DomainID,
+			Icon:         item.Icon,
+			Sort:         item.Sort,
+			ArticleCount: item.ArticleCount,
+			Status:       enum.TagStatus(item.Status),
+			CreatedAt:    item.CreatedAt,
+			UpdatedAt:    item.UpdatedAt,
+			CreatedBy:    item.CreatedBy,
+			UpdatedBy:    item.UpdatedBy,
+		}
+	}), nil
+}
+
 func (r *ArticleRepo) Exist(ctx context.Context, req *repo.ArticleGetReq) (bool, error) {
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)

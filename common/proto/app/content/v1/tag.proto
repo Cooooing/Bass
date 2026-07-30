@@ -8,131 +8,210 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";
 
-// 标签服务
+// 标签服务。
 service ContentTagService {
-  rpc BatchCreate(BatchCreateTags.Req) returns (BatchCreateTags.Resp) {} // 批量创建标签
-
-  rpc Update(UpdateTag.Req) returns (UpdateTag.Resp) {} // 更新标签
-
-  rpc List(ListTags.Req) returns (ListTags.Resp) {} // 查询标签列表
-  rpc Page(PageTags.Req) returns (PageTags.Resp) {} // 分页查询标签
+  rpc BatchCreate(BatchCreateTags.Req) returns (BatchCreateTags.Resp) {} // 批量创建标签。
+  rpc Update(UpdateTag.Req) returns (UpdateTag.Resp) {} // 更新标签。
+  rpc BindArticle(BindArticleTags.Req) returns (BindArticleTags.Resp) {} // 绑定文章标签。
+  rpc UnbindArticle(UnbindArticleTags.Req) returns (UnbindArticleTags.Resp) {} // 解绑文章标签。
+  rpc ListArticleTags(ListArticleTags.Req) returns (ListArticleTags.Resp) {} // 查询文章标签列表。
+  rpc List(ListTags.Req) returns (ListTags.Resp) {} // 查询标签列表。
+  rpc Page(PageTags.Req) returns (PageTags.Resp) {} // 分页查询标签。
 }
 
 message BatchCreateTags {
   message Req {
-    repeated Tag tags = 1; // 标签信息列表
-    int64 user_id = 2; // 用户 ID
+    repeated Tag tags = 1; // 标签列表。
+    int64 user_id = 2; // 操作用户 ID。
 
     message Tag {
-      optional int64 domain_id = 1; // 领域 ID
-      optional TagStatus status = 2; // 启停状态
-      string name = 3; // 标签名称
-      optional string description = 4; // 标签描述
+      optional int64 domain_id = 1; // 领域 ID。
+      optional TagStatus status = 2; // 启停状态。
+      string name = 3; // 标签名称。
+      optional string description = 4; // 描述。
+      string code = 5; // 稳定编码。
+      optional string icon = 6; // 图标。
+      int32 sort = 7; // 排序值，越小越靠前。
     }
   }
+
   message Resp {
     message Tag {
-      optional google.protobuf.Timestamp created_at = 1000; // 创建时间
-      optional google.protobuf.Timestamp updated_at = 1001; // 更新时间
-      optional int64 created_by = 1002; // 创建人
-      optional int64 updated_by = 1003; // 更新人
-
-      int64 id = 1; // 主键
-      string name = 3; // 标签名称
-      optional string description = 4; // 描述
-      optional int64 domain_id = 5; // 所属领域 ID
-      optional TagStatus status = 6; // 标签启停状态
+      int64 id = 1; // 标签 ID。
+      optional int64 domain_id = 2; // 领域 ID。
+      optional TagStatus status = 3; // 启停状态。
+      string name = 4; // 标签名称。
+      optional string description = 5; // 描述。
+      string code = 6; // 稳定编码。
+      optional string icon = 7; // 图标。
+      int32 sort = 8; // 排序值，越小越靠前。
+      int32 article_count = 9; // 文章数量。
+      optional int64 created_by = 1002; // 创建用户 ID。
+      optional int64 updated_by = 1003; // 更新用户 ID。
+      optional google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      optional google.protobuf.Timestamp updated_at = 1001; // 更新时间。
     }
-    repeated Tag rows = 1; // 标签信息列表
+
+    repeated Tag rows = 1; // 标签列表。
   }
 }
 
 message UpdateTag {
   message Req {
-    int64 tag_id = 1; // 标签 ID
-    Tag tag = 2; // 标签信息
-    int64 user_id = 3; // 用户 ID
+    int64 tag_id = 1; // 标签 ID。
+    Tag tag = 2; // 标签信息。
+    int64 user_id = 3; // 操作用户 ID。
 
     message Tag {
-      optional int64 domain_id = 1; // 领域 ID
-      optional TagStatus status = 2; // 启停状态
-      string name = 3; // 标签名称
-      optional string description = 4; // 标签描述
+      optional int64 domain_id = 1; // 领域 ID。
+      optional TagStatus status = 2; // 启停状态。
+      string name = 3; // 标签名称。
+      optional string description = 4; // 描述。
+      string code = 5; // 稳定编码。
+      optional string icon = 6; // 图标。
+      int32 sort = 7; // 排序值，越小越靠前。
     }
   }
+
   message Resp {
     message Tag {
-      optional google.protobuf.Timestamp created_at = 1000; // 创建时间
-      optional google.protobuf.Timestamp updated_at = 1001; // 更新时间
-      optional int64 created_by = 1002; // 创建人
-      optional int64 updated_by = 1003; // 更新人
-
-      int64 id = 1; // 主键
-      string name = 3; // 标签名称
-      optional string description = 4; // 描述
-      optional int64 domain_id = 5; // 所属领域 ID
-      optional TagStatus status = 6; // 标签启停状态
+      int64 id = 1; // 标签 ID。
+      optional int64 domain_id = 2; // 领域 ID。
+      optional TagStatus status = 3; // 启停状态。
+      string name = 4; // 标签名称。
+      optional string description = 5; // 描述。
+      string code = 6; // 稳定编码。
+      optional string icon = 7; // 图标。
+      int32 sort = 8; // 排序值，越小越靠前。
+      int32 article_count = 9; // 文章数量。
+      optional int64 created_by = 1002; // 创建用户 ID。
+      optional int64 updated_by = 1003; // 更新用户 ID。
+      optional google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      optional google.protobuf.Timestamp updated_at = 1001; // 更新时间。
     }
-    Tag tag = 1; // 标签信息
+
+    Tag tag = 1; // 标签信息。
+  }
+}
+
+message BindArticleTags {
+  message Req {
+    int64 article_id = 1; // 文章 ID。
+    repeated int64 tag_ids = 2; // 标签 ID 列表。
+    int64 user_id = 3; // 操作用户 ID。
+    bool manager = 4; // 是否管理端操作。
+  }
+
+  message Resp {}
+}
+
+message UnbindArticleTags {
+  message Req {
+    int64 article_id = 1; // 文章 ID。
+    repeated int64 tag_ids = 2; // 标签 ID 列表。
+    int64 user_id = 3; // 操作用户 ID。
+    bool manager = 4; // 是否管理端操作。
+  }
+
+  message Resp {}
+}
+
+message ListArticleTags {
+  message Req {
+    int64 article_id = 1; // 文章 ID。
+  }
+
+  message Resp {
+    message Tag {
+      int64 id = 1; // 标签 ID。
+      optional int64 domain_id = 2; // 领域 ID。
+      optional TagStatus status = 3; // 启停状态。
+      string name = 4; // 标签名称。
+      optional string description = 5; // 描述。
+      string code = 6; // 稳定编码。
+      optional string icon = 7; // 图标。
+      int32 sort = 8; // 排序值，越小越靠前。
+      int32 article_count = 9; // 文章数量。
+      optional int64 created_by = 1002; // 创建用户 ID。
+      optional int64 updated_by = 1003; // 更新用户 ID。
+      optional google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      optional google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+    }
+
+    repeated Tag rows = 1; // 标签列表。
   }
 }
 
 message ListTags {
   message Req {
-    message TagQueryParams {
-      repeated int64 ids = 1; // 标签 ID 列表
-      optional string name = 2; // 标签名称
-      repeated string names = 3; // 标签名称列表
-      optional string description = 4; // 标签描述
-      optional TagStatus status = 5; // 标签状态
-      optional int64 domain_id = 6; // 领域 ID
+    Query query = 1; // 查询条件。
+
+    message Query {
+      repeated int64 ids = 1; // 标签 ID 列表。
+      optional string name = 2; // 标签名称。
+      repeated string names = 3; // 标签名称列表。
+      optional string description = 4; // 描述。
+      optional TagStatus status = 5; // 启停状态。
+      optional int64 domain_id = 6; // 领域 ID。
+      optional string code = 7; // 稳定编码。
     }
-    TagQueryParams query = 1; // 查询参数
   }
+
   message Resp {
     message Tag {
-      optional google.protobuf.Timestamp created_at = 1000; // 创建时间
-      optional google.protobuf.Timestamp updated_at = 1001; // 更新时间
-      optional int64 created_by = 1002; // 创建人
-      optional int64 updated_by = 1003; // 更新人
-
-      int64 id = 1; // 主键
-      string name = 3; // 标签名称
-      optional string description = 4; // 描述
-      optional int64 domain_id = 5; // 所属领域 ID
-      optional TagStatus status = 6; // 标签启停状态
+      int64 id = 1; // 标签 ID。
+      optional int64 domain_id = 2; // 领域 ID。
+      optional TagStatus status = 3; // 启停状态。
+      string name = 4; // 标签名称。
+      optional string description = 5; // 描述。
+      string code = 6; // 稳定编码。
+      optional string icon = 7; // 图标。
+      int32 sort = 8; // 排序值，越小越靠前。
+      int32 article_count = 9; // 文章数量。
+      optional int64 created_by = 1002; // 创建用户 ID。
+      optional int64 updated_by = 1003; // 更新用户 ID。
+      optional google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      optional google.protobuf.Timestamp updated_at = 1001; // 更新时间。
     }
-    repeated Tag rows = 1; // 标签列表
+
+    repeated Tag rows = 1; // 标签列表。
   }
 }
 
 message PageTags {
   message Req {
-    message TagQueryParams {
-      repeated int64 ids = 1; // 标签 ID 列表
-      optional string name = 2; // 标签名称
-      repeated string names = 3; // 标签名称列表
-      optional string description = 4; // 标签描述
-      optional TagStatus status = 5; // 标签状态
-      optional int64 domain_id = 6; // 领域 ID
+    Query query = 1; // 查询条件。
+    optional .common.api.app.common.PageReq page = 2; // 分页参数。
+
+    message Query {
+      repeated int64 ids = 1; // 标签 ID 列表。
+      optional string name = 2; // 标签名称。
+      repeated string names = 3; // 标签名称列表。
+      optional string description = 4; // 描述。
+      optional TagStatus status = 5; // 启停状态。
+      optional int64 domain_id = 6; // 领域 ID。
+      optional string code = 7; // 稳定编码。
     }
-    TagQueryParams query = 1; // 查询参数
-    optional .common.api.app.common.PageReq page = 2; // 分页参数
   }
+
   message Resp {
     message Tag {
-      optional google.protobuf.Timestamp created_at = 1000; // 创建时间
-      optional google.protobuf.Timestamp updated_at = 1001; // 更新时间
-      optional int64 created_by = 1002; // 创建人
-      optional int64 updated_by = 1003; // 更新人
-
-      int64 id = 1; // 主键
-      string name = 3; // 标签名称
-      optional string description = 4; // 描述
-      optional int64 domain_id = 5; // 所属领域 ID
-      optional TagStatus status = 6; // 标签启停状态
+      int64 id = 1; // 标签 ID。
+      optional int64 domain_id = 2; // 领域 ID。
+      optional TagStatus status = 3; // 启停状态。
+      string name = 4; // 标签名称。
+      optional string description = 5; // 描述。
+      string code = 6; // 稳定编码。
+      optional string icon = 7; // 图标。
+      int32 sort = 8; // 排序值，越小越靠前。
+      int32 article_count = 9; // 文章数量。
+      optional int64 created_by = 1002; // 创建用户 ID。
+      optional int64 updated_by = 1003; // 更新用户 ID。
+      optional google.protobuf.Timestamp created_at = 1000; // 创建时间。
+      optional google.protobuf.Timestamp updated_at = 1001; // 更新时间。
     }
-    repeated Tag rows = 1; // 标签列表
-    .common.api.app.common.PageResp page = 2; // 分页信息
+
+    .common.api.app.common.PageResp page = 1; // 分页结果。
+    repeated Tag rows = 2; // 标签列表。
   }
 }

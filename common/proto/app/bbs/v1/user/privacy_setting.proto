@@ -13,16 +13,14 @@ service PrivacySettingService {
   rpc GetCurrent(GetCurrentPrivacySetting.Req) returns (GetCurrentPrivacySetting.Resp) {
     option (google.api.http) = {
       post: "/v1/user/privacy-setting/get-current"
-      body: "*"
-    };
+      body: "*"};
   }
 
   // 更新当前账号的隐私设置。
   rpc UpdateCurrent(UpdateCurrentPrivacySetting.Req) returns (UpdateCurrentPrivacySetting.Resp) {
     option (google.api.http) = {
       post: "/v1/user/privacy-setting/update-current"
-      body: "*"
-    };
+      body: "*"};
   }
 }
 
@@ -31,60 +29,38 @@ message GetCurrentPrivacySetting {
   message Req {}
   message Resp {
     message PrivacySetting {
-      // 账号 ID。
-      int64 user_id = 1;
-      // 是否公开积分。
-      optional bool public_points = 2;
-      // 是否公开粉丝列表。
-      optional bool public_followers = 3;
-      // 是否公开文章列表。
-      optional bool public_articles = 4;
-      // 是否公开评论列表。
-      optional bool public_comments = 5;
-      // 是否公开在线状态。
-      optional bool public_online_status = 6;
-      // 是否公开地理资料。
-      optional bool public_location = 7;
+      int64 user_id = 1; // 账号 ID
+      optional bool public_points = 2; // 是否公开积分
+      optional bool public_followers = 3; // 是否公开粉丝列表
+      optional bool public_articles = 4; // 是否公开文章列表
+      optional bool public_comments = 5; // 是否公开评论列表
+      optional bool public_online_status = 6; // 是否公开在线状态
+      optional bool public_location = 7; // 是否公开地理资料
     }
-    // 当前账号隐私设置。
-    PrivacySetting privacy_setting = 1;
+    PrivacySetting privacy_setting = 1; // 当前账号隐私设置
   }
 }
 
 // 更新当前账号的隐私设置。
 message UpdateCurrentPrivacySetting {
   message Req {
-    // 是否公开积分。
-    optional bool public_points = 1;
-    // 是否公开粉丝列表。
-    optional bool public_followers = 2;
-    // 是否公开文章列表。
-    optional bool public_articles = 3;
-    // 是否公开评论列表。
-    optional bool public_comments = 4;
-    // 是否公开在线状态。
-    optional bool public_online_status = 5;
-    // 是否公开地理资料。
-    optional bool public_location = 6;
+    optional bool public_points = 1; // 是否公开积分
+    optional bool public_followers = 2; // 是否公开粉丝列表
+    optional bool public_articles = 3; // 是否公开文章列表
+    optional bool public_comments = 4; // 是否公开评论列表
+    optional bool public_online_status = 5; // 是否公开在线状态
+    optional bool public_location = 6; // 是否公开地理资料
   }
   message Resp {
     message PrivacySetting {
-      // 账号 ID。
-      int64 user_id = 1;
-      // 是否公开积分。
-      optional bool public_points = 2;
-      // 是否公开粉丝列表。
-      optional bool public_followers = 3;
-      // 是否公开文章列表。
-      optional bool public_articles = 4;
-      // 是否公开评论列表。
-      optional bool public_comments = 5;
-      // 是否公开在线状态。
-      optional bool public_online_status = 6;
-      // 是否公开地理资料。
-      optional bool public_location = 7;
+      int64 user_id = 1; // 账号 ID
+      optional bool public_points = 2; // 是否公开积分
+      optional bool public_followers = 3; // 是否公开粉丝列表
+      optional bool public_articles = 4; // 是否公开文章列表
+      optional bool public_comments = 5; // 是否公开评论列表
+      optional bool public_online_status = 6; // 是否公开在线状态
+      optional bool public_location = 7; // 是否公开地理资料
     }
-    // 更新后的账号隐私设置。
-    PrivacySetting privacy_setting = 1;
+    PrivacySetting privacy_setting = 1; // 更新后的账号隐私设置
   }
 }

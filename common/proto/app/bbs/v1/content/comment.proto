@@ -19,56 +19,49 @@ service CommentService {
   rpc Create(CreateComment.Req) returns (CreateComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/create"
-      body: "*"
-    };
+      body: "*"};
   }
 
   // 分页查询评论列表。
   rpc List(ListComments.Req) returns (ListComments.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list"
-      body: "*"
-    };
+      body: "*"};
   }
 
   // 分页查询评论楼层。
   rpc ListThreads(ListCommentThreads.Req) returns (ListCommentThreads.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-threads"
-      body: "*"
-    };
+      body: "*"};
   }
 
   // 分页查询评论回复。
   rpc ListReplies(ListCommentReplies.Req) returns (ListCommentReplies.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-replies"
-      body: "*"
-    };
+      body: "*"};
   }
 
   // 分页查询评论时间线。
   rpc ListTimeline(ListCommentTimeline.Req) returns (ListCommentTimeline.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-timeline"
-      body: "*"
-    };
+      body: "*"};
   }
 
   // 点赞或取消点赞评论。
   rpc Like(LikeComment.Req) returns (LikeComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/like"
-      body: "*"
-    };
+      body: "*"};
   }
 
   // 感谢或取消感谢评论。
   rpc Thank(ThankComment.Req) returns (ThankComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/thank"
-      body: "*"
-    };
+      body: "*"};
   }
 }
 
@@ -113,30 +106,18 @@ message ListCommentThreads {
     }
 
     message AccountProfile {
-      // 账号 ID。
-      int64 id = 1;
-      // 账号名。
-      string name = 2;
-      // 昵称。
-      optional string nickname = 3;
-      // 个人主页 URL。
-      optional string url = 4;
-      // 头像 URL。
-      optional string avatar_url = 5;
-      // 个人简介。
-      optional string introduction = 6;
-      // MBTI 类型。
-      .common.api.app.bbs.v1.user.MBTI mbti = 7;
-      // 账号状态。
-      .common.api.app.bbs.v1.user.AccountStatus status = 8;
-      // 关注数量。
-      optional int32 follow_count = 10;
-      // 粉丝数量。
-      optional int32 follower_count = 11;
-      // 创建时间。
-      google.protobuf.Timestamp created_at = 1000;
-      // 更新时间。
-      google.protobuf.Timestamp updated_at = 1001;
+      int64 id = 1; // 账号 ID
+      string name = 2; // 账号名
+      optional string nickname = 3; // 昵称
+      optional string url = 4; // 个人主页 URL
+      optional string avatar_url = 5; // 头像 URL
+      optional string introduction = 6; // 个人简介
+      .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
+      .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
+      optional int32 follow_count = 10; // 关注数量
+      optional int32 follower_count = 11; // 粉丝数量
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message CommentViewerActionState {
@@ -171,10 +152,8 @@ message ListCommentReplies {
     int64 article_id = 2; // 文章 ID
     int64 parent_id = 3; // 顶层评论 ID
     optional CommentOrder order = 4; // 排序方式
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-      required: "parent_id"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"
+      required: "parent_id"};
   }
   message Resp {
     message CommentListItem {
@@ -201,30 +180,18 @@ message ListCommentReplies {
     }
 
     message AccountProfile {
-      // 账号 ID。
-      int64 id = 1;
-      // 账号名。
-      string name = 2;
-      // 昵称。
-      optional string nickname = 3;
-      // 个人主页 URL。
-      optional string url = 4;
-      // 头像 URL。
-      optional string avatar_url = 5;
-      // 个人简介。
-      optional string introduction = 6;
-      // MBTI 类型。
-      .common.api.app.bbs.v1.user.MBTI mbti = 7;
-      // 账号状态。
-      .common.api.app.bbs.v1.user.AccountStatus status = 8;
-      // 关注数量。
-      optional int32 follow_count = 10;
-      // 粉丝数量。
-      optional int32 follower_count = 11;
-      // 创建时间。
-      google.protobuf.Timestamp created_at = 1000;
-      // 更新时间。
-      google.protobuf.Timestamp updated_at = 1001;
+      int64 id = 1; // 账号 ID
+      string name = 2; // 账号名
+      optional string nickname = 3; // 昵称
+      optional string url = 4; // 个人主页 URL
+      optional string avatar_url = 5; // 头像 URL
+      optional string introduction = 6; // 个人简介
+      .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
+      .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
+      optional int32 follow_count = 10; // 关注数量
+      optional int32 follower_count = 11; // 粉丝数量
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message CommentViewerActionState {
@@ -285,30 +252,18 @@ message ListCommentTimeline {
     }
 
     message AccountProfile {
-      // 账号 ID。
-      int64 id = 1;
-      // 账号名。
-      string name = 2;
-      // 昵称。
-      optional string nickname = 3;
-      // 个人主页 URL。
-      optional string url = 4;
-      // 头像 URL。
-      optional string avatar_url = 5;
-      // 个人简介。
-      optional string introduction = 6;
-      // MBTI 类型。
-      .common.api.app.bbs.v1.user.MBTI mbti = 7;
-      // 账号状态。
-      .common.api.app.bbs.v1.user.AccountStatus status = 8;
-      // 关注数量。
-      optional int32 follow_count = 10;
-      // 粉丝数量。
-      optional int32 follower_count = 11;
-      // 创建时间。
-      google.protobuf.Timestamp created_at = 1000;
-      // 更新时间。
-      google.protobuf.Timestamp updated_at = 1001;
+      int64 id = 1; // 账号 ID
+      string name = 2; // 账号名
+      optional string nickname = 3; // 昵称
+      optional string url = 4; // 个人主页 URL
+      optional string avatar_url = 5; // 头像 URL
+      optional string introduction = 6; // 个人简介
+      .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
+      .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
+      optional int32 follow_count = 10; // 关注数量
+      optional int32 follower_count = 11; // 粉丝数量
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message CommentViewerActionState {
@@ -342,10 +297,8 @@ message CreateComment {
     int64 article_id = 1; // 文章 ID
     string content = 2; // 评论内容
     int64 reply_id = 3; // 回复的评论 ID
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-      required: "content"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"
+      required: "content"};
   }
   message Resp {
     message CommentDetail {
@@ -372,30 +325,18 @@ message CreateComment {
     }
 
     message AccountProfile {
-      // 账号 ID。
-      int64 id = 1;
-      // 账号名。
-      string name = 2;
-      // 昵称。
-      optional string nickname = 3;
-      // 个人主页 URL。
-      optional string url = 4;
-      // 头像 URL。
-      optional string avatar_url = 5;
-      // 个人简介。
-      optional string introduction = 6;
-      // MBTI 类型。
-      .common.api.app.bbs.v1.user.MBTI mbti = 7;
-      // 账号状态。
-      .common.api.app.bbs.v1.user.AccountStatus status = 8;
-      // 关注数量。
-      optional int32 follow_count = 10;
-      // 粉丝数量。
-      optional int32 follower_count = 11;
-      // 创建时间。
-      google.protobuf.Timestamp created_at = 1000;
-      // 更新时间。
-      google.protobuf.Timestamp updated_at = 1001;
+      int64 id = 1; // 账号 ID
+      string name = 2; // 账号名
+      optional string nickname = 3; // 昵称
+      optional string url = 4; // 个人主页 URL
+      optional string avatar_url = 5; // 头像 URL
+      optional string introduction = 6; // 个人简介
+      .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
+      .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
+      optional int32 follow_count = 10; // 关注数量
+      optional int32 follower_count = 11; // 粉丝数量
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message ArticleBrief {
@@ -464,30 +405,18 @@ message ListComments {
     }
 
     message AccountProfile {
-      // 账号 ID。
-      int64 id = 1;
-      // 账号名。
-      string name = 2;
-      // 昵称。
-      optional string nickname = 3;
-      // 个人主页 URL。
-      optional string url = 4;
-      // 头像 URL。
-      optional string avatar_url = 5;
-      // 个人简介。
-      optional string introduction = 6;
-      // MBTI 类型。
-      .common.api.app.bbs.v1.user.MBTI mbti = 7;
-      // 账号状态。
-      .common.api.app.bbs.v1.user.AccountStatus status = 8;
-      // 关注数量。
-      optional int32 follow_count = 10;
-      // 粉丝数量。
-      optional int32 follower_count = 11;
-      // 创建时间。
-      google.protobuf.Timestamp created_at = 1000;
-      // 更新时间。
-      google.protobuf.Timestamp updated_at = 1001;
+      int64 id = 1; // 账号 ID
+      string name = 2; // 账号名
+      optional string nickname = 3; // 昵称
+      optional string url = 4; // 个人主页 URL
+      optional string avatar_url = 5; // 头像 URL
+      optional string introduction = 6; // 个人简介
+      .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
+      .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
+      optional int32 follow_count = 10; // 关注数量
+      optional int32 follower_count = 11; // 粉丝数量
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message CommentViewerActionState {
@@ -520,10 +449,8 @@ message LikeComment {
   message Req {
     int64 id = 1; // 评论 ID
     bool active = 2; // 是否点赞
-    option (gnostic.openapi.v3.schema) = {
-      required: "id"
-      required: "active"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "id"
+      required: "active"};
   }
   message Resp {
     bool liked = 1; // 是否已点赞
@@ -535,10 +462,8 @@ message ThankComment {
   message Req {
     int64 id = 1; // 评论 ID
     bool active = 2; // 是否感谢
-    option (gnostic.openapi.v3.schema) = {
-      required: "id"
-      required: "active"
-    };
+    option (gnostic.openapi.v3.schema) = {required: "id"
+      required: "active"};
   }
   message Resp {
     bool thanked = 1; // 是否已感谢

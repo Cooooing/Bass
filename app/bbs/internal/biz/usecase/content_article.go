@@ -43,7 +43,6 @@ type ContentArticleSave struct {
 	Statement     *string
 	Commentable   *bool
 	Anonymous     *bool
-	TagIDs        []int64
 }
 
 type CreateArticleReq struct {
@@ -71,7 +70,6 @@ func (u *ContentArticleUsecase) CreateArticle(ctx context.Context, req *CreateAr
 			Statement:     article.Statement,
 			Commentable:   article.Commentable,
 			Anonymous:     article.Anonymous,
-			TagIDs:        article.TagIDs,
 		},
 	})
 	if err != nil {
@@ -107,7 +105,6 @@ func (u *ContentArticleUsecase) UpdateArticle(ctx context.Context, req *UpdateAr
 			Statement:     article.Statement,
 			Commentable:   article.Commentable,
 			Anonymous:     article.Anonymous,
-			TagIDs:        article.TagIDs,
 		},
 	})
 	if err != nil {

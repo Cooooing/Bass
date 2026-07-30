@@ -39,183 +39,278 @@ func NewTagService(
 }
 
 func (s *TagService) BatchCreate(ctx context.Context, req *v1.BatchCreateTags_Req) (*v1.BatchCreateTags_Resp, error) {
-	if req.UserId <= 0 {
+	if req.UserId <= 0 || len(req.Tags) == 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	tags := make([]*model.Tag, 0, len(req.Tags))
-	for _, tagSave := range req.Tags {
-		tagStatus, ok := enum.TagStatusMap.ToEnum(util.DerefOrDefault(tagSave.Status, contentv1enum.TagStatus_TAG_STATUS_ENABLED))
+	for _, item := range req.Tags {
+		tagStatus, ok := enum.TagStatusMap.ToEnum(util.DerefOrDefault(item.Status, contentv1enum.TagStatus_TAG_STATUS_ENABLED))
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 		}
 		tags = append(tags, &model.Tag{
-			Name:        tagSave.Name,
-			Description: tagSave.Description,
-			DomainID:    tagSave.DomainId,
+			Code:        item.GetCode(),
+			Name:        item.GetName(),
+			Description: item.Description,
+			DomainID:    item.DomainId,
+			Icon:        item.Icon,
+			Sort:        item.GetSort(),
 			Status:      tagStatus,
-			CreatedBy:   new(req.UserId),
-			UpdatedBy:   new(req.UserId),
+			CreatedBy:   &req.UserId,
+			UpdatedBy:   &req.UserId,
 		})
 	}
-	savesResp, err := s.tagUsecase.Saves(ctx, tags)
+	saves, err := s.tagUsecase.Saves(ctx, tags)
 	if err != nil {
 		return nil, err
 	}
-	saves := savesResp
-	reply := make([]*v1.BatchCreateTags_Resp_Tag, len(saves))
-	for i, save := range saves {
-		reply[i] = &v1.BatchCreateTags_Resp_Tag{
-			CreatedAt:   timestamppb.New(*save.CreatedAt),
-			UpdatedAt:   timestamppb.New(*save.UpdatedAt),
-			CreatedBy:   save.CreatedBy,
-			UpdatedBy:   save.UpdatedBy,
-			Id:          save.ID,
-			Name:        save.Name,
-			Description: save.Description,
-			DomainId:    save.DomainID,
-			Status:      new(enum.TagStatusMap.MustToProto(save.Status)),
+	rows := make([]*v1.BatchCreateTags_Resp_Tag, 0, len(saves))
+	for _, save := range saves {
+		row := &v1.BatchCreateTags_Resp_Tag{
+			Id:           save.ID,
+			Code:         save.Code,
+			Name:         save.Name,
+			Description:  save.Description,
+			DomainId:     save.DomainID,
+			Icon:         save.Icon,
+			Sort:         save.Sort,
+			ArticleCount: save.ArticleCount,
+			Status:       new(enum.TagStatusMap.MustToProto(save.Status)),
+			CreatedBy:    save.CreatedBy,
+			UpdatedBy:    save.UpdatedBy,
 		}
+		if save.CreatedAt != nil {
+			row.CreatedAt = timestamppb.New(*save.CreatedAt)
+		}
+		if save.UpdatedAt != nil {
+			row.UpdatedAt = timestamppb.New(*save.UpdatedAt)
+		}
+		rows = append(rows, row)
 	}
-	return &v1.BatchCreateTags_Resp{
-		Rows: reply,
-	}, err
+	return &v1.BatchCreateTags_Resp{Rows: rows}, nil
 }
 
 func (s *TagService) Update(ctx context.Context, req *v1.UpdateTag_Req) (*v1.UpdateTag_Resp, error) {
-	if req.Tag == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
-	}
-	if req.TagId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
-	}
-	if req.UserId <= 0 {
+	if req.Tag == nil || req.TagId <= 0 || req.UserId <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	updateTagStatus, ok := enum.TagStatusMap.ToEnum(req.Tag.GetStatus())
+	tagStatus, ok := enum.TagStatusMap.ToEnum(util.DerefOrDefault(req.Tag.Status, contentv1enum.TagStatus_TAG_STATUS_ENABLED))
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
-	updateResp, err := s.tagUsecase.Update(ctx, &model.Tag{
+	data, err := s.tagUsecase.Update(ctx, &model.Tag{
 		ID:          req.TagId,
-		Name:        req.Tag.Name,
+		Code:        req.Tag.GetCode(),
+		Name:        req.Tag.GetName(),
 		Description: req.Tag.Description,
 		DomainID:    req.Tag.DomainId,
-		Status:      updateTagStatus,
-		UpdatedBy:   new(req.UserId),
+		Icon:        req.Tag.Icon,
+		Sort:        req.Tag.GetSort(),
+		Status:      tagStatus,
+		UpdatedBy:   &req.UserId,
 	})
 	if err != nil {
 		return nil, err
 	}
-	update := updateResp
-	return &v1.UpdateTag_Resp{
-		Tag: &v1.UpdateTag_Resp_Tag{
-			CreatedAt:   timestamppb.New(*update.CreatedAt),
-			UpdatedAt:   timestamppb.New(*update.UpdatedAt),
-			CreatedBy:   update.CreatedBy,
-			UpdatedBy:   update.UpdatedBy,
-			Id:          update.ID,
-			Name:        update.Name,
-			Description: update.Description,
-			DomainId:    update.DomainID,
-			Status:      new(enum.TagStatusMap.MustToProto(update.Status)),
-		},
-	}, nil
+	reply := &v1.UpdateTag_Resp_Tag{
+		Id:           data.ID,
+		Code:         data.Code,
+		Name:         data.Name,
+		Description:  data.Description,
+		DomainId:     data.DomainID,
+		Icon:         data.Icon,
+		Sort:         data.Sort,
+		ArticleCount: data.ArticleCount,
+		Status:       new(enum.TagStatusMap.MustToProto(data.Status)),
+		CreatedBy:    data.CreatedBy,
+		UpdatedBy:    data.UpdatedBy,
+	}
+	if data.CreatedAt != nil {
+		reply.CreatedAt = timestamppb.New(*data.CreatedAt)
+	}
+	if data.UpdatedAt != nil {
+		reply.UpdatedAt = timestamppb.New(*data.UpdatedAt)
+	}
+	return &v1.UpdateTag_Resp{Tag: reply}, nil
+}
+
+func (s *TagService) BindArticle(ctx context.Context, req *v1.BindArticleTags_Req) (*v1.BindArticleTags_Resp, error) {
+	if req.ArticleId <= 0 || req.UserId <= 0 || len(req.TagIds) == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	if err := s.tagUsecase.BindArticle(ctx, &usecase.ArticleTagReq{
+		ArticleID: req.GetArticleId(),
+		TagIDs:    req.GetTagIds(),
+		UserID:    req.GetUserId(),
+		Manager:   req.GetManager(),
+	}); err != nil {
+		return nil, err
+	}
+	return &v1.BindArticleTags_Resp{}, nil
+}
+
+func (s *TagService) UnbindArticle(ctx context.Context, req *v1.UnbindArticleTags_Req) (*v1.UnbindArticleTags_Resp, error) {
+	if req.ArticleId <= 0 || req.UserId <= 0 || len(req.TagIds) == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	if err := s.tagUsecase.UnbindArticle(ctx, &usecase.ArticleTagReq{
+		ArticleID: req.GetArticleId(),
+		TagIDs:    req.GetTagIds(),
+		UserID:    req.GetUserId(),
+		Manager:   req.GetManager(),
+	}); err != nil {
+		return nil, err
+	}
+	return &v1.UnbindArticleTags_Resp{}, nil
+}
+
+func (s *TagService) ListArticleTags(ctx context.Context, req *v1.ListArticleTags_Req) (*v1.ListArticleTags_Resp, error) {
+	if req.ArticleId <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	rows, err := s.tagUsecase.ListArticleTags(ctx, req.GetArticleId())
+	if err != nil {
+		return nil, err
+	}
+	reply := make([]*v1.ListArticleTags_Resp_Tag, 0, len(rows))
+	for _, item := range rows {
+		row := &v1.ListArticleTags_Resp_Tag{
+			Id:           item.ID,
+			Code:         item.Code,
+			Name:         item.Name,
+			Description:  item.Description,
+			DomainId:     item.DomainID,
+			Icon:         item.Icon,
+			Sort:         item.Sort,
+			ArticleCount: item.ArticleCount,
+			Status:       new(enum.TagStatusMap.MustToProto(item.Status)),
+			CreatedBy:    item.CreatedBy,
+			UpdatedBy:    item.UpdatedBy,
+		}
+		if item.CreatedAt != nil {
+			row.CreatedAt = timestamppb.New(*item.CreatedAt)
+		}
+		if item.UpdatedAt != nil {
+			row.UpdatedAt = timestamppb.New(*item.UpdatedAt)
+		}
+		reply = append(reply, row)
+	}
+	return &v1.ListArticleTags_Resp{Rows: reply}, nil
 }
 
 func (s *TagService) List(ctx context.Context, req *v1.ListTags_Req) (*v1.ListTags_Resp, error) {
-	req.Query = util.OrDefault(req.Query, &v1.ListTags_Req_TagQueryParams{})
+	query := req.GetQuery()
+	if query == nil {
+		query = &v1.ListTags_Req_Query{}
+	}
 	var tagStatus *enum.TagStatus
-	if req.Query.Status != nil {
-		status, ok := enum.TagStatusMap.ToEnum(*req.Query.Status)
+	if query.Status != nil {
+		status, ok := enum.TagStatusMap.ToEnum(*query.Status)
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 		}
-		tagStatus = new(status)
+		tagStatus = &status
 	}
-	getReq := &usecase.TagPageReq{
-		TagIDs:      req.Query.Ids,
-		Name:        req.Query.Name,
-		Names:       req.Query.Names,
-		Description: req.Query.Description,
+	pageResp, err := s.tagUsecase.Page(ctx, &usecase.TagPageReq{
+		Page: &base.PageRequest{
+			Page: 1,
+			Size: 1000,
+		},
+		TagIDs:      query.GetIds(),
+		Code:        query.Code,
+		Name:        query.Name,
+		Names:       query.GetNames(),
+		Description: query.Description,
 		Status:      tagStatus,
-		DomainID:    req.Query.DomainId,
-	}
-	getReq.Page = &base.PageRequest{
-		Page: 1,
-		Size: 1000,
-	}
-	pageResp, err := s.tagUsecase.Page(ctx, getReq)
+		DomainID:    query.DomainId,
+	})
 	if err != nil {
 		return nil, err
 	}
-	data := pageResp.Rows
-	reply := make([]*v1.ListTags_Resp_Tag, len(data))
-	for i, datum := range data {
-		reply[i] = &v1.ListTags_Resp_Tag{
-			CreatedAt:   timestamppb.New(*datum.CreatedAt),
-			UpdatedAt:   timestamppb.New(*datum.UpdatedAt),
-			CreatedBy:   datum.CreatedBy,
-			UpdatedBy:   datum.UpdatedBy,
-			Id:          datum.ID,
-			Name:        datum.Name,
-			Description: datum.Description,
-			DomainId:    datum.DomainID,
-			Status:      new(enum.TagStatusMap.MustToProto(datum.Status)),
+	reply := make([]*v1.ListTags_Resp_Tag, 0, len(pageResp.Rows))
+	for _, item := range pageResp.Rows {
+		row := &v1.ListTags_Resp_Tag{
+			Id:           item.ID,
+			Code:         item.Code,
+			Name:         item.Name,
+			Description:  item.Description,
+			DomainId:     item.DomainID,
+			Icon:         item.Icon,
+			Sort:         item.Sort,
+			ArticleCount: item.ArticleCount,
+			Status:       new(enum.TagStatusMap.MustToProto(item.Status)),
+			CreatedBy:    item.CreatedBy,
+			UpdatedBy:    item.UpdatedBy,
 		}
+		if item.CreatedAt != nil {
+			row.CreatedAt = timestamppb.New(*item.CreatedAt)
+		}
+		if item.UpdatedAt != nil {
+			row.UpdatedAt = timestamppb.New(*item.UpdatedAt)
+		}
+		reply = append(reply, row)
 	}
-	return &v1.ListTags_Resp{
-		Rows: reply,
-	}, err
+	return &v1.ListTags_Resp{Rows: reply}, nil
 }
 
 func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Req) (*v1.PageTags_Resp, error) {
-	req.Query = util.OrDefault(req.Query, &v1.PageTags_Req_TagQueryParams{})
+	query := req.GetQuery()
+	if query == nil {
+		query = &v1.PageTags_Req_Query{}
+	}
 	var tagStatus *enum.TagStatus
-	if req.Query.Status != nil {
-		status, ok := enum.TagStatusMap.ToEnum(*req.Query.Status)
+	if query.Status != nil {
+		status, ok := enum.TagStatusMap.ToEnum(*query.Status)
 		if !ok {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 		}
-		tagStatus = new(status)
+		tagStatus = &status
 	}
-	getReq := &usecase.TagPageReq{
-		TagIDs:      req.Query.Ids,
-		Name:        req.Query.Name,
-		Names:       req.Query.Names,
-		Description: req.Query.Description,
+	pageResp, err := s.tagUsecase.Page(ctx, &usecase.TagPageReq{
+		Page: &base.PageRequest{
+			Page: int64(req.GetPage().GetPage()),
+			Size: int64(req.GetPage().GetSize()),
+		},
+		TagIDs:      query.GetIds(),
+		Code:        query.Code,
+		Name:        query.Name,
+		Names:       query.GetNames(),
+		Description: query.Description,
 		Status:      tagStatus,
-		DomainID:    req.Query.DomainId,
-	}
-	getReq.Page = &base.PageRequest{
-		Page: int64(req.GetPage().GetPage()),
-		Size: int64(req.GetPage().GetSize()),
-	}
-	pageResp, err := s.tagUsecase.Page(ctx, getReq)
+		DomainID:    query.DomainId,
+	})
 	if err != nil {
 		return nil, err
 	}
-	data := pageResp.Rows
-	page := pageResp.Page
-	reply := make([]*v1.PageTags_Resp_Tag, len(data))
-	for i, datum := range data {
-		reply[i] = &v1.PageTags_Resp_Tag{
-			CreatedAt:   timestamppb.New(*datum.CreatedAt),
-			UpdatedAt:   timestamppb.New(*datum.UpdatedAt),
-			CreatedBy:   datum.CreatedBy,
-			UpdatedBy:   datum.UpdatedBy,
-			Id:          datum.ID,
-			Name:        datum.Name,
-			Description: datum.Description,
-			DomainId:    datum.DomainID,
-			Status:      new(enum.TagStatusMap.MustToProto(datum.Status)),
+	reply := make([]*v1.PageTags_Resp_Tag, 0, len(pageResp.Rows))
+	for _, item := range pageResp.Rows {
+		row := &v1.PageTags_Resp_Tag{
+			Id:           item.ID,
+			Code:         item.Code,
+			Name:         item.Name,
+			Description:  item.Description,
+			DomainId:     item.DomainID,
+			Icon:         item.Icon,
+			Sort:         item.Sort,
+			ArticleCount: item.ArticleCount,
+			Status:       new(enum.TagStatusMap.MustToProto(item.Status)),
+			CreatedBy:    item.CreatedBy,
+			UpdatedBy:    item.UpdatedBy,
 		}
+		if item.CreatedAt != nil {
+			row.CreatedAt = timestamppb.New(*item.CreatedAt)
+		}
+		if item.UpdatedAt != nil {
+			row.UpdatedAt = timestamppb.New(*item.UpdatedAt)
+		}
+		reply = append(reply, row)
 	}
 	return &v1.PageTags_Resp{
 		Page: &common.PageResp{
-			Page:  uint32(page.Page),
-			Size:  uint32(page.Size),
-			Total: uint32(page.Total),
+			Page:  uint32(pageResp.Page.Page),
+			Size:  uint32(pageResp.Page.Size),
+			Total: uint32(pageResp.Page.Total),
 		},
 		Rows: reply,
-	}, err
+	}, nil
 }

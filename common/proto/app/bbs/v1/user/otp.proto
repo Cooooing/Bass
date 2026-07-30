@@ -8,8 +8,9 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
-// OtpService 统一提供 TOTP、邮箱 OTP、手机 OTP 发码能力。
+// OTP 接口。
 service OtpService {
+  // 开始启用 TOTP。
   rpc BeginEnableTotp(BeginEnableTotp.Req) returns (BeginEnableTotp.Resp) {
     option (google.api.http) = {
       post: "/v1/user/otp/totp/begin-enable"
@@ -17,6 +18,7 @@ service OtpService {
     };
   }
 
+  // 确认启用 TOTP。
   rpc ConfirmEnableTotp(ConfirmEnableTotp.Req) returns (ConfirmEnableTotp.Resp) {
     option (google.api.http) = {
       post: "/v1/user/otp/totp/confirm-enable"
@@ -24,6 +26,7 @@ service OtpService {
     };
   }
 
+  // 关闭 TOTP。
   rpc DisableTotp(DisableTotp.Req) returns (DisableTotp.Resp) {
     option (google.api.http) = {
       post: "/v1/user/otp/totp/disable"
@@ -31,6 +34,7 @@ service OtpService {
     };
   }
 
+  // 获取当前账号 TOTP 状态。
   rpc GetCurrentTotp(GetCurrentTotp.Req) returns (GetCurrentTotp.Resp) {
     option (google.api.http) = {
       post: "/v1/user/otp/totp/get-current"
@@ -38,6 +42,7 @@ service OtpService {
     };
   }
 
+  // 发送邮箱 OTP。
   rpc SendEmailOtp(SendEmailOtp.Req) returns (SendEmailOtp.Resp) {
     option (google.api.http) = {
       post: "/v1/user/otp/email/send"
@@ -45,6 +50,7 @@ service OtpService {
     };
   }
 
+  // 发送手机 OTP。
   rpc SendPhoneOtp(SendPhoneOtp.Req) returns (SendPhoneOtp.Resp) {
     option (google.api.http) = {
       post: "/v1/user/otp/phone/send"
@@ -53,58 +59,64 @@ service OtpService {
   }
 }
 
+// 开始启用 TOTP。
 message BeginEnableTotp {
   message Req {}
   message Resp {
-    string url = 1; // TOTP 绑定 URL。
-    bytes qr_code = 2; // TOTP 二维码图片数据。
+    string url = 1; // TOTP 绑定 URL
+    bytes qr_code = 2; // TOTP 二维码图片数据
   }
 }
 
+// 确认启用 TOTP。
 message ConfirmEnableTotp {
   message Req {
-    string code = 1; // TOTP 验证码。
-    option (gnostic.openapi.v3.schema) = { required: "code" };
+    string code = 1; // TOTP 验证码
+    option (gnostic.openapi.v3.schema) = {required: "code"};
   }
   message Resp {}
 }
 
+// 关闭 TOTP。
 message DisableTotp {
   message Req {
-    string code = 1; // TOTP 验证码。
-    option (gnostic.openapi.v3.schema) = { required: "code" };
+    string code = 1; // TOTP 验证码
+    option (gnostic.openapi.v3.schema) = {required: "code"};
   }
   message Resp {}
 }
 
+// 获取当前账号 TOTP 状态。
 message GetCurrentTotp {
   message Req {}
   message Resp {
     message Totp {
-      int64 user_id = 1; // 账号 ID。
-      bool enable = 2; // 是否启用 TOTP。
-      google.protobuf.Timestamp enable_time = 3; // 启用时间。
+      int64 user_id = 1; // 账号 ID
+      bool enable = 2; // 是否启用 TOTP
+      google.protobuf.Timestamp enable_time = 3; // 启用时间
     }
-    Totp totp = 1; // TOTP 状态。
+    Totp totp = 1; // TOTP 状态
   }
 }
 
+// 发送邮箱 OTP。
 message SendEmailOtp {
   message Req {
-    string email = 1; // 邮箱地址。
-    option (gnostic.openapi.v3.schema) = { required: "email" };
+    string email = 1; // 邮箱地址
+    option (gnostic.openapi.v3.schema) = {required: "email"};
   }
   message Resp {
-    optional string code = 1; // 非生产环境返回验证码，生产环境为空。
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
+// 发送手机 OTP。
 message SendPhoneOtp {
   message Req {
-    string phone = 1; // 手机号。
-    option (gnostic.openapi.v3.schema) = { required: "phone" };
+    string phone = 1; // 手机号
+    option (gnostic.openapi.v3.schema) = {required: "phone"};
   }
   message Resp {
-    optional string code = 1; // 非生产环境返回验证码，生产环境为空。
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }

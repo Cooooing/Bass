@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
@@ -10,8 +10,9 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
-// AuthService 提供注册、登录、会话认证能力。
+// 认证接口。
 service AuthService {
+  // 开始邮箱注册。
   rpc StartEmailRegistration(StartEmailRegistration.Req) returns (StartEmailRegistration.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/start-email-registration"
@@ -19,6 +20,7 @@ service AuthService {
     };
   }
 
+  // 校验邮箱注册验证码。
   rpc VerifyEmailRegistration(VerifyEmailRegistration.Req) returns (VerifyEmailRegistration.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/verify-email-registration"
@@ -26,6 +28,7 @@ service AuthService {
     };
   }
 
+  // 开始手机注册。
   rpc StartPhoneRegistration(StartPhoneRegistration.Req) returns (StartPhoneRegistration.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/start-phone-registration"
@@ -33,6 +36,7 @@ service AuthService {
     };
   }
 
+  // 校验手机注册验证码。
   rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Req) returns (VerifyPhoneRegistration.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/verify-phone-registration"
@@ -40,6 +44,7 @@ service AuthService {
     };
   }
 
+  // 登录账号。
   rpc Login(Login.Req) returns (Login.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/login"
@@ -47,6 +52,7 @@ service AuthService {
     };
   }
 
+  // 刷新登录令牌。
   rpc RefreshToken(RefreshToken.Req) returns (RefreshToken.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/refresh-token"
@@ -54,6 +60,7 @@ service AuthService {
     };
   }
 
+  // 退出登录。
   rpc Logout(Logout.Req) returns (Logout.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/logout"
@@ -61,6 +68,7 @@ service AuthService {
     };
   }
 
+  // 注销账号。
   rpc CancelAccount(CancelAccount.Req) returns (CancelAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/auth/cancel-account"
@@ -69,150 +77,151 @@ service AuthService {
   }
 }
 
+// 开始邮箱注册。
 message StartEmailRegistration {
   message Req {
-    string email = 1; // 邮箱地址。
-    string password = 2; // 账号密码。
-    string name = 3; // 账号名。
-    optional string nickname = 4; // 昵称。
-    option (gnostic.openapi.v3.schema) = {
-      required: "email"
+    string email = 1; // 邮箱地址
+    string password = 2; // 账号密码
+    string name = 3; // 账号名
+    optional string nickname = 4; // 昵称
+    option (gnostic.openapi.v3.schema) = {required: "email"
       required: "password"
-      required: "name"
-    };
+      required: "name"};
   }
   message Resp {
-    optional string code = 1; // 非生产环境返回验证码，生产环境为空。
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
+// 校验邮箱注册验证码。
 message VerifyEmailRegistration {
   message Req {
-    string email = 1; // 邮箱地址。
-    string code = 2; // 邮箱 OTP。
-    option (gnostic.openapi.v3.schema) = {
-      required: "email"
-      required: "code"
-    };
+    string email = 1; // 邮箱地址
+    string code = 2; // 邮箱 OTP
+    option (gnostic.openapi.v3.schema) = {required: "email"
+      required: "code"};
   }
   message Resp {}
 }
 
+// 开始手机注册。
 message StartPhoneRegistration {
   message Req {
-    string phone = 1; // 手机号。
-    string password = 2; // 账号密码。
-    string name = 3; // 账号名。
-    optional string nickname = 4; // 昵称。
-    option (gnostic.openapi.v3.schema) = {
-      required: "phone"
+    string phone = 1; // 手机号
+    string password = 2; // 账号密码
+    string name = 3; // 账号名
+    optional string nickname = 4; // 昵称
+    option (gnostic.openapi.v3.schema) = {required: "phone"
       required: "password"
-      required: "name"
-    };
+      required: "name"};
   }
   message Resp {
-    optional string code = 1; // 非生产环境返回验证码，生产环境为空。
+    optional string code = 1; // 非生产环境返回验证码，生产环境为空
   }
 }
 
+// 校验手机注册验证码。
 message VerifyPhoneRegistration {
   message Req {
-    string phone = 1; // 手机号。
-    string code = 2; // 手机 OTP。
-    option (gnostic.openapi.v3.schema) = {
-      required: "phone"
-      required: "code"
-    };
+    string phone = 1; // 手机号
+    string code = 2; // 手机 OTP
+    option (gnostic.openapi.v3.schema) = {required: "phone"
+      required: "code"};
   }
   message Resp {}
 }
 
+// 登录账号。
 message Login {
   message Req {
     message PasswordCredential {
-      string account = 1; // 账号名、邮箱或手机号。
-      string password = 2; // 密码。
-      string code = 3; // 账号启用 TOTP 时作为 TOTP code。
+      string account = 1; // 账号名、邮箱或手机号
+      string password = 2; // 密码
+      string code = 3; // 账号启用 TOTP 时作为 TOTP code
     }
 
     message EmailCredential {
-      string email = 1; // 邮箱地址。
-      string code = 2; // 邮箱 OTP。
+      string email = 1; // 邮箱地址
+      string code = 2; // 邮箱 OTP
     }
 
     message PhoneCredential {
-      string phone = 1; // 手机号。
-      string code = 2; // 手机 OTP。
+      string phone = 1; // 手机号
+      string code = 2; // 手机 OTP
     }
 
-    LoginType type = 1; // 登录方式。
+    LoginType type = 1; // 登录方式
+    option (gnostic.openapi.v3.schema) = {required: "type"};
 
     oneof credential {
-      PasswordCredential password_credential = 10; // 密码登录凭证。
-      EmailCredential email_credential = 11; // 邮箱登录凭证。
-      PhoneCredential phone_credential = 12; // 手机登录凭证。
+      PasswordCredential password_credential = 10; // 密码登录凭证
+      EmailCredential email_credential = 11; // 邮箱登录凭证
+      PhoneCredential phone_credential = 12; // 手机登录凭证
     }
   }
   message Resp {
     message Account {
-      AccountBasic basic = 1; // 基础信息。
-      AccountContact contact = 2; // 联系方式。
+      AccountBasic basic = 1; // 基础信息
+      AccountContact contact = 2; // 联系方式
     }
 
     message AccountBasic {
-      int64 id = 1; // 账号 ID。
-      string name = 2; // 账号名。
-      optional string nickname = 3; // 昵称。
-      optional string url = 4; // 个人主页 URL。
-      optional string avatar_url = 5; // 头像 URL。
-      optional string introduction = 6; // 个人简介。
-      MBTI mbti = 7; // MBTI 类型。
-      AccountStatus status = 8; // 账号状态。
-      optional int32 follow_count = 10; // 关注数。
-      optional int32 follower_count = 11; // 粉丝数。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+      int64 id = 1; // 账号 ID
+      string name = 2; // 账号名
+      optional string nickname = 3; // 昵称
+      optional string url = 4; // 个人主页 URL
+      optional string avatar_url = 5; // 头像 URL
+      optional string introduction = 6; // 个人简介
+      MBTI mbti = 7; // MBTI 类型
+      AccountStatus status = 8; // 账号状态
+      optional int32 follow_count = 10; // 关注数
+      optional int32 follower_count = 11; // 粉丝数
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
 
     message AccountContact {
-      int64 user_id = 1; // 账号 ID。
-      optional string email = 2; // 邮箱。
-      optional string phone = 3; // 手机号。
+      int64 user_id = 1; // 账号 ID
+      optional string email = 2; // 邮箱
+      optional string phone = 3; // 手机号
     }
 
-    string access_token = 1; // access token。
-    string refresh_token = 2; // refresh token。
-    google.protobuf.Timestamp access_token_expires_at = 3; // access token 过期时间。
-    google.protobuf.Timestamp refresh_token_expires_at = 4; // refresh token 空闲过期时间。
-    google.protobuf.Timestamp session_expires_at = 5; // session 绝对过期时间。
-    Account account = 6; // 当前账号完整资料。
+    string access_token = 1; // access token
+    string refresh_token = 2; // refresh token
+    google.protobuf.Timestamp access_token_expires_at = 3; // access token 过期时间
+    google.protobuf.Timestamp refresh_token_expires_at = 4; // refresh token 空闲过期时间
+    google.protobuf.Timestamp session_expires_at = 5; // session 绝对过期时间
+    Account account = 6; // 当前账号完整资料
   }
 }
 
+// 刷新登录令牌。
 message RefreshToken {
   message Req {
-    string refresh_token = 1; // refresh token。
-    option (gnostic.openapi.v3.schema) = { required: "refresh_token" };
+    string refresh_token = 1; // refresh token
+    option (gnostic.openapi.v3.schema) = {required: "refresh_token"};
   }
   message Resp {
-    string access_token = 1; // 新 access token。
-    string refresh_token = 2; // 新 refresh token。
-    google.protobuf.Timestamp access_token_expires_at = 3; // access token 过期时间。
-    google.protobuf.Timestamp refresh_token_expires_at = 4; // refresh token 空闲过期时间。
-    google.protobuf.Timestamp session_expires_at = 5; // session 绝对过期时间。
+    string access_token = 1; // 新 access token
+    string refresh_token = 2; // 新 refresh token
+    google.protobuf.Timestamp access_token_expires_at = 3; // access token 过期时间
+    google.protobuf.Timestamp refresh_token_expires_at = 4; // refresh token 空闲过期时间
+    google.protobuf.Timestamp session_expires_at = 5; // session 绝对过期时间
   }
 }
 
+// 退出登录。
 message Logout {
   message Req {}
   message Resp {}
 }
 
+// 注销账号。
 message CancelAccount {
   message Req {
-    string password = 1; // 当前密码。
-    string code = 2; // 启用 TOTP 时作为 TOTP code。
-    option (gnostic.openapi.v3.schema) = { required: "password" };
+    string password = 1; // 当前密码
+    string code = 2; // 启用 TOTP 时作为 TOTP code
+    option (gnostic.openapi.v3.schema) = {required: "password"};
   }
   message Resp {}
 }

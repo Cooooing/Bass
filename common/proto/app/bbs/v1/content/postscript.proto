@@ -15,22 +15,17 @@ service PostscriptService {
   rpc Add(AddPostscript.Req) returns (AddPostscript.Resp) {
     option (google.api.http) = {
       post: "/v1/content/postscript/add"
-      body: "*"
-    };
+      body: "*"};
   }
 }
 
 // 添加文章附言。
 message AddPostscript {
   message Req {
-    // 文章 ID。
-    int64 article_id = 1;
-    // 附言内容。
-    string content = 2;
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-      required: "content"
-    };
+    int64 article_id = 1; // 文章 ID
+    string content = 2; // 附言内容
+    option (gnostic.openapi.v3.schema) = {required: "article_id"
+      required: "content"};
   }
   message Resp {
     message ArticlePostscript {
@@ -44,7 +39,6 @@ message AddPostscript {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
-    // 创建后的文章附言。
-    ArticlePostscript postscript = 1;
+    ArticlePostscript postscript = 1; // 创建后的文章附言
   }
 }

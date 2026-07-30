@@ -19,6 +19,9 @@ type ArticleRepo interface {
 	AddStats(ctx context.Context, req *ArticleAddStatsReq) error
 	UpdateAcceptedAnswerID(ctx context.Context, req *ArticleUpdateAcceptedAnswerIDReq) (*model.Article, error)
 	ReplaceTags(ctx context.Context, req *ArticleReplaceTagsReq) error
+	BindTags(ctx context.Context, req *ArticleTagBindReq) ([]int64, error)
+	UnbindTags(ctx context.Context, req *ArticleTagBindReq) ([]int64, error)
+	ListTags(ctx context.Context, articleID int64) ([]*model.Tag, error)
 	Exist(ctx context.Context, req *ArticleGetReq) (bool, error)
 	Get(ctx context.Context, req *ArticleGetReq) (*model.Article, error)
 	List(ctx context.Context, req *ArticleGetReq) ([]*model.Article, error)
@@ -66,6 +69,11 @@ type ArticleUpdateAcceptedAnswerIDReq struct {
 }
 
 type ArticleReplaceTagsReq struct {
+	ArticleID int64
+	TagIDs    []int64
+}
+
+type ArticleTagBindReq struct {
 	ArticleID int64
 	TagIDs    []int64
 }

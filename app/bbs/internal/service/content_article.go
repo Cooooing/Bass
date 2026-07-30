@@ -68,7 +68,6 @@ func (s *ContentArticleService) Create(ctx context.Context, req *bbscontentv1.Cr
 			Statement:     row.Statement,
 			Commentable:   row.Commentable,
 			Anonymous:     row.Anonymous,
-			TagIDs:        row.GetTagIds(),
 		}
 	}
 	resp, err := s.contentArticleUsecase.CreateArticle(ctx, &usecase.CreateArticleReq{
@@ -100,7 +99,6 @@ func (s *ContentArticleService) Update(ctx context.Context, req *bbscontentv1.Up
 			Statement:     row.Statement,
 			Commentable:   row.Commentable,
 			Anonymous:     row.Anonymous,
-			TagIDs:        row.GetTagIds(),
 		}
 	}
 	resp, err := s.contentArticleUsecase.UpdateArticle(ctx, &usecase.UpdateArticleReq{
@@ -133,7 +131,6 @@ func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontent
 			Statement:     row.Statement,
 			Commentable:   row.Commentable,
 			Anonymous:     row.Anonymous,
-			TagIDs:        row.GetTagIds(),
 		}
 	}
 	resp, err := s.contentArticleUsecase.UpdateDraftArticle(ctx, &usecase.UpdateDraftArticleReq{

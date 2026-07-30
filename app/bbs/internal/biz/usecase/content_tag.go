@@ -23,10 +23,13 @@ func NewContentTagUsecase(
 }
 
 type ContentTagSave struct {
+	Code        string
 	Name        string
 	Description *string
 	DomainID    *int64
 	Status      *bbscontentv1enum.TagStatus
+	Icon        *string
+	Sort        int32
 }
 
 type CreateTagReq struct {
@@ -45,10 +48,13 @@ func (u *ContentTagUsecase) CreateTag(ctx context.Context, req *CreateTagReq) (*
 	resp, err := u.contentTagClient.CreateTag(ctx, &repo.CreateTagReq{
 		UserID: req.UserID,
 		Tag: &repo.TagSave{
+			Code:        req.Tag.Code,
 			Name:        req.Tag.Name,
 			Description: req.Tag.Description,
 			DomainID:    req.Tag.DomainID,
 			Status:      status,
+			Icon:        req.Tag.Icon,
+			Sort:        req.Tag.Sort,
 		},
 	})
 	if err != nil {
@@ -75,10 +81,13 @@ func (u *ContentTagUsecase) UpdateTag(ctx context.Context, req *UpdateTagReq) (*
 		UserID: req.UserID,
 		TagID:  req.TagID,
 		Tag: &repo.TagSave{
+			Code:        req.Tag.Code,
 			Name:        req.Tag.Name,
 			Description: req.Tag.Description,
 			DomainID:    req.Tag.DomainID,
 			Status:      status,
+			Icon:        req.Tag.Icon,
+			Sort:        req.Tag.Sort,
 		},
 	})
 	if err != nil {
@@ -111,6 +120,7 @@ func (u *ContentTagUsecase) ListTags(ctx context.Context, req *ListTagsReq) (*Li
 	query := &repo.TagQuery{}
 	if req.Query != nil {
 		query.IDs = req.Query.GetIds()
+		query.Code = req.Query.Code
 		query.Name = req.Query.Name
 		query.Names = req.Query.GetNames()
 		query.Description = req.Query.Description
@@ -133,4 +143,55 @@ func (u *ContentTagUsecase) ListTags(ctx context.Context, req *ListTagsReq) (*Li
 		Page: resp.Page,
 		Rows: resp.Rows,
 	}, nil
+}
+
+type BindArticleTagsReq struct {
+	UserID    int64
+	ArticleID int64
+	TagIDs    []int64
+}
+
+func (u *ContentTagUsecase) BindArticleTags(ctx context.Context, req *BindArticleTagsReq) error {
+	if req == nil || req.ArticleID <= 0 || len(req.TagIDs) == 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return u.contentTagClient.BindArticleTags(ctx, &repo.BindArticleTagsReq{
+		UserID:    req.UserID,
+		ArticleID: req.ArticleID,
+		TagIDs:    req.TagIDs,
+	})
+}
+
+type UnbindArticleTagsReq struct {
+	UserID    int64
+	ArticleID int64
+	TagIDs    []int64
+}
+
+func (u *ContentTagUsecase) UnbindArticleTags(ctx context.Context, req *UnbindArticleTagsReq) error {
+	if req == nil || req.ArticleID <= 0 || len(req.TagIDs) == 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return u.contentTagClient.UnbindArticleTags(ctx, &repo.UnbindArticleTagsReq{
+		UserID:    req.UserID,
+		ArticleID: req.ArticleID,
+		TagIDs:    req.TagIDs,
+	})
+}
+
+type ListArticleTagsReq struct {
+	ArticleID int64
+}
+
+func (u *ContentTagUsecase) ListArticleTags(ctx context.Context, req *ListArticleTagsReq) ([]*repo.Tag, error) {
+	if req == nil || req.ArticleID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	resp, err := u.contentTagClient.ListArticleTags(ctx, &repo.ListArticleTagsReq{
+		ArticleID: req.ArticleID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }

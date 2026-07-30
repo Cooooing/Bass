@@ -8,8 +8,10 @@ require (
 	github.com/go-kratos/kratos/contrib/middleware/validate/v3 v3.0.0-20260626125723-668db92c2c00
 	github.com/go-kratos/kratos/v3 v3.0.0
 	github.com/google/wire v0.7.0
+	github.com/mileusna/useragent v1.3.5
 	github.com/prometheus/client_golang v1.23.2
 	github.com/samber/lo v1.53.0
+	google.golang.org/grpc v1.81.0
 	google.golang.org/protobuf v1.36.11
 )
 
@@ -57,7 +59,6 @@ require (
 	github.com/klauspost/compress v1.18.5 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.22 // indirect
-	github.com/mileusna/useragent v1.3.5 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/nats-io/nats.go v1.52.0 // indirect
@@ -89,7 +90,6 @@ require (
 	golang.org/x/time v0.8.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260511170946-3700d4141b60 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260511170946-3700d4141b60 // indirect
-	google.golang.org/grpc v1.81.0 // indirect
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.5.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

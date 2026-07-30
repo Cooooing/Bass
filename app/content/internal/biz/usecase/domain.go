@@ -65,6 +65,7 @@ func (d *ContentUsecase) Update(ctx context.Context, domain *model.Domain) (*mod
 type DomainPageReq struct {
 	Page        *base.PageRequest
 	DomainIDs   []int64
+	Code        *string
 	Name        *string
 	Description *string
 	Status      *enum.DomainStatus
@@ -85,6 +86,7 @@ func (d *ContentUsecase) Page(ctx context.Context, req *DomainPageReq) (*DomainP
 	pageResp, err := d.domainRepo.Page(ctx, &repo.DomainGetReq{
 		Page:        req.Page,
 		DomainIds:   req.DomainIDs,
+		Code:        req.Code,
 		Name:        req.Name,
 		Description: req.Description,
 		Status:      req.Status,

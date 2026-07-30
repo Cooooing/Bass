@@ -108,7 +108,6 @@ type ArticleSave struct {
 	Statement     *string
 	Commentable   *bool
 	Anonymous     *bool
-	TagIDs        []int64
 }
 
 type ArticleQuery struct {

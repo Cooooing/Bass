@@ -59,7 +59,6 @@ func (r *ContentArticleClient) CreateArticle(ctx context.Context, req *repo.Crea
 		save.Statement = article.Statement
 		save.Commentable = article.Commentable
 		save.Anonymous = article.Anonymous
-		save.TagIds = article.TagIDs
 		switch contentv1enum.ArticleType(article.Type) {
 		case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
 			if article.BountyPoints != nil {
@@ -102,7 +101,6 @@ func (r *ContentArticleClient) UpdateArticle(ctx context.Context, req *repo.Upda
 		save.Statement = article.Statement
 		save.Commentable = article.Commentable
 		save.Anonymous = article.Anonymous
-		save.TagIds = article.TagIDs
 		switch contentv1enum.ArticleType(article.Type) {
 		case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
 			if article.BountyPoints != nil {

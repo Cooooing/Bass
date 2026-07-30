@@ -40,9 +40,12 @@ func (r *TagRepo) getClient(ctx context.Context) *gen.Client {
 
 func (r *TagRepo) Save(ctx context.Context, tag *model.Tag) (*model.Tag, error) {
 	save, err := r.getClient(ctx).Tag.Create().
+		SetCode(tag.Code).
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
 		SetNillableDomainID(tag.DomainID).
+		SetNillableIcon(tag.Icon).
+		SetSort(tag.Sort).
 		SetStatus(tagent.Status(tag.Status)).
 		SetNillableCreatedBy(tag.CreatedBy).
 		SetNillableUpdatedBy(tag.UpdatedBy).
@@ -51,15 +54,19 @@ func (r *TagRepo) Save(ctx context.Context, tag *model.Tag) (*model.Tag, error) 
 		return nil, err
 	}
 	return &model.Tag{
-		ID:          save.ID,
-		Name:        save.Name,
-		Description: save.Description,
-		DomainID:    save.DomainID,
-		Status:      enum.TagStatus(save.Status),
-		CreatedAt:   save.CreatedAt,
-		UpdatedAt:   save.UpdatedAt,
-		CreatedBy:   save.CreatedBy,
-		UpdatedBy:   save.UpdatedBy,
+		ID:           save.ID,
+		Code:         save.Code,
+		Name:         save.Name,
+		Description:  save.Description,
+		DomainID:     save.DomainID,
+		Icon:         save.Icon,
+		Sort:         save.Sort,
+		ArticleCount: save.ArticleCount,
+		Status:       enum.TagStatus(save.Status),
+		CreatedAt:    save.CreatedAt,
+		UpdatedAt:    save.UpdatedAt,
+		CreatedBy:    save.CreatedBy,
+		UpdatedBy:    save.UpdatedBy,
 	}, nil
 }
 
@@ -70,8 +77,11 @@ func (r *TagRepo) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag, e
 		creates = append(creates,
 			client.Tag.Create().
 				SetName(tags[i].Name).
+				SetCode(tags[i].Code).
 				SetNillableDescription(tags[i].Description).
 				SetNillableDomainID(tags[i].DomainID).
+				SetNillableIcon(tags[i].Icon).
+				SetSort(tags[i].Sort).
 				SetStatus(tagent.Status(tags[i].Status)).
 				SetNillableCreatedBy(tags[i].CreatedBy).
 				SetNillableUpdatedBy(tags[i].UpdatedBy),
@@ -84,15 +94,19 @@ func (r *TagRepo) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag, e
 	res := make([]*model.Tag, 0, len(save))
 	for _, item := range save {
 		res = append(res, &model.Tag{
-			ID:          item.ID,
-			Name:        item.Name,
-			Description: item.Description,
-			DomainID:    item.DomainID,
-			Status:      enum.TagStatus(item.Status),
-			CreatedAt:   item.CreatedAt,
-			UpdatedAt:   item.UpdatedAt,
-			CreatedBy:   item.CreatedBy,
-			UpdatedBy:   item.UpdatedBy,
+			ID:           item.ID,
+			Code:         item.Code,
+			Name:         item.Name,
+			Description:  item.Description,
+			DomainID:     item.DomainID,
+			Icon:         item.Icon,
+			Sort:         item.Sort,
+			ArticleCount: item.ArticleCount,
+			Status:       enum.TagStatus(item.Status),
+			CreatedAt:    item.CreatedAt,
+			UpdatedAt:    item.UpdatedAt,
+			CreatedBy:    item.CreatedBy,
+			UpdatedBy:    item.UpdatedBy,
 		})
 	}
 	return res, nil
@@ -100,9 +114,12 @@ func (r *TagRepo) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag, e
 
 func (r *TagRepo) Update(ctx context.Context, tag *model.Tag) (*model.Tag, error) {
 	save, err := r.getClient(ctx).Tag.UpdateOneID(tag.ID).
+		SetCode(tag.Code).
 		SetName(tag.Name).
 		SetNillableDescription(tag.Description).
 		SetNillableDomainID(tag.DomainID).
+		SetNillableIcon(tag.Icon).
+		SetSort(tag.Sort).
 		SetStatus(tagent.Status(tag.Status)).
 		SetNillableUpdatedBy(tag.UpdatedBy).
 		Save(ctx)
@@ -110,15 +127,19 @@ func (r *TagRepo) Update(ctx context.Context, tag *model.Tag) (*model.Tag, error
 		return nil, err
 	}
 	return &model.Tag{
-		ID:          save.ID,
-		Name:        save.Name,
-		Description: save.Description,
-		DomainID:    save.DomainID,
-		Status:      enum.TagStatus(save.Status),
-		CreatedAt:   save.CreatedAt,
-		UpdatedAt:   save.UpdatedAt,
-		CreatedBy:   save.CreatedBy,
-		UpdatedBy:   save.UpdatedBy,
+		ID:           save.ID,
+		Code:         save.Code,
+		Name:         save.Name,
+		Description:  save.Description,
+		DomainID:     save.DomainID,
+		Icon:         save.Icon,
+		Sort:         save.Sort,
+		ArticleCount: save.ArticleCount,
+		Status:       enum.TagStatus(save.Status),
+		CreatedAt:    save.CreatedAt,
+		UpdatedAt:    save.UpdatedAt,
+		CreatedBy:    save.CreatedBy,
+		UpdatedBy:    save.UpdatedBy,
 	}, nil
 }
 
@@ -133,15 +154,19 @@ func (r *TagRepo) Get(ctx context.Context, req *repo.TagGetReq) (*model.Tag, err
 		return nil, err
 	}
 	return &model.Tag{
-		ID:          t.ID,
-		Name:        t.Name,
-		Description: t.Description,
-		DomainID:    t.DomainID,
-		Status:      enum.TagStatus(t.Status),
-		CreatedAt:   t.CreatedAt,
-		UpdatedAt:   t.UpdatedAt,
-		CreatedBy:   t.CreatedBy,
-		UpdatedBy:   t.UpdatedBy,
+		ID:           t.ID,
+		Code:         t.Code,
+		Name:         t.Name,
+		Description:  t.Description,
+		DomainID:     t.DomainID,
+		Icon:         t.Icon,
+		Sort:         t.Sort,
+		ArticleCount: t.ArticleCount,
+		Status:       enum.TagStatus(t.Status),
+		CreatedAt:    t.CreatedAt,
+		UpdatedAt:    t.UpdatedAt,
+		CreatedBy:    t.CreatedBy,
+		UpdatedBy:    t.UpdatedBy,
 	}, nil
 }
 
@@ -156,15 +181,19 @@ func (r *TagRepo) List(ctx context.Context, req *repo.TagGetReq) ([]*model.Tag, 
 	tags := make([]*model.Tag, 0, len(list))
 	for _, item := range list {
 		tags = append(tags, &model.Tag{
-			ID:          item.ID,
-			Name:        item.Name,
-			Description: item.Description,
-			DomainID:    item.DomainID,
-			Status:      enum.TagStatus(item.Status),
-			CreatedAt:   item.CreatedAt,
-			UpdatedAt:   item.UpdatedAt,
-			CreatedBy:   item.CreatedBy,
-			UpdatedBy:   item.UpdatedBy,
+			ID:           item.ID,
+			Code:         item.Code,
+			Name:         item.Name,
+			Description:  item.Description,
+			DomainID:     item.DomainID,
+			Icon:         item.Icon,
+			Sort:         item.Sort,
+			ArticleCount: item.ArticleCount,
+			Status:       enum.TagStatus(item.Status),
+			CreatedAt:    item.CreatedAt,
+			UpdatedAt:    item.UpdatedAt,
+			CreatedBy:    item.CreatedBy,
+			UpdatedBy:    item.UpdatedBy,
 		})
 	}
 	return tags, nil
@@ -190,6 +219,19 @@ func (r *TagRepo) Count(ctx context.Context, req *repo.TagGetReq) (int, error) {
 	return count, nil
 }
 
+func (r *TagRepo) AddArticleCount(ctx context.Context, req *repo.TagAddArticleCountReq) error {
+	if len(req.TagIDs) == 0 || req.Delta == 0 {
+		return nil
+	}
+	if err := r.getClient(ctx).Tag.Update().
+		Where(tagent.IDIn(req.TagIDs...), tagent.DeletedAtIsNil()).
+		AddArticleCount(req.Delta).
+		Exec(ctx); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (r *TagRepo) Page(ctx context.Context, req *repo.TagGetReq) (*repo.TagPageResp, error) {
 	page := r.normalizePage(req.Page)
 	query := r.getClient(ctx).Tag.Query()
@@ -207,15 +249,19 @@ func (r *TagRepo) Page(ctx context.Context, req *repo.TagGetReq) (*repo.TagPageR
 	tags := make([]*model.Tag, 0, len(list))
 	for _, item := range list {
 		tags = append(tags, &model.Tag{
-			ID:          item.ID,
-			Name:        item.Name,
-			Description: item.Description,
-			DomainID:    item.DomainID,
-			Status:      enum.TagStatus(item.Status),
-			CreatedAt:   item.CreatedAt,
-			UpdatedAt:   item.UpdatedAt,
-			CreatedBy:   item.CreatedBy,
-			UpdatedBy:   item.UpdatedBy,
+			ID:           item.ID,
+			Code:         item.Code,
+			Name:         item.Name,
+			Description:  item.Description,
+			DomainID:     item.DomainID,
+			Icon:         item.Icon,
+			Sort:         item.Sort,
+			ArticleCount: item.ArticleCount,
+			Status:       enum.TagStatus(item.Status),
+			CreatedAt:    item.CreatedAt,
+			UpdatedAt:    item.UpdatedAt,
+			CreatedBy:    item.CreatedBy,
+			UpdatedBy:    item.UpdatedBy,
 		})
 	}
 	return &repo.TagPageResp{
@@ -242,6 +288,9 @@ func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQue
 	if req.UserId != nil {
 		query = query.Where(tagent.CreatedBy(*req.UserId))
 	}
+	if req.Code != nil {
+		query = query.Where(tagent.CodeContains(*req.Code))
+	}
 	if req.Name != nil {
 		query = query.Where(tagent.NameContains(*req.Name))
 	}
@@ -257,5 +306,6 @@ func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQue
 	if req.DomainId != nil {
 		query = query.Where(tagent.DomainIDEQ(*req.DomainId))
 	}
+	query = query.Order(gen.Asc(tagent.FieldSort), gen.Asc(tagent.FieldID))
 	return query
 }

@@ -15,6 +15,7 @@ type TagRepo interface {
 	List(ctx context.Context, req *TagGetReq) ([]*model.Tag, error)
 	Map(ctx context.Context, req *TagGetReq) (map[int64]*model.Tag, error)
 	Count(ctx context.Context, req *TagGetReq) (int, error)
+	AddArticleCount(ctx context.Context, req *TagAddArticleCountReq) error
 	Page(ctx context.Context, req *TagGetReq) (*TagPageResp, error)
 }
 
@@ -28,9 +29,15 @@ type TagGetReq struct {
 	TagId       *int64
 	TagIds      []int64
 	UserId      *int64
+	Code        *string
 	Name        *string
 	Names       []string
 	Description *string
 	Status      *enum.TagStatus
 	DomainId    *int64
+}
+
+type TagAddArticleCountReq struct {
+	TagIDs []int64
+	Delta  int32
 }

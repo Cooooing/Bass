@@ -27,6 +27,7 @@ type DomainGetReq struct {
 	Page        *base.PageRequest
 	DomainId    *int64
 	DomainIds   []int64
+	Code        *string
 	Name        *string
 	Description *string
 	Status      *enum.DomainStatus

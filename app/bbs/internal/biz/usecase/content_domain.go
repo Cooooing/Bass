@@ -2,9 +2,11 @@ package usecase
 
 import (
 	"bbs/internal/biz/repo"
+	"common/pkg/apperror"
 	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	"common/proto/gen/common"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 )
 
@@ -18,6 +20,85 @@ func NewContentDomainUsecase(
 	return &ContentDomainUsecase{
 		contentDomainClient: contentDomainClient,
 	}
+}
+
+type ContentDomainSave struct {
+	Code        string
+	Name        string
+	Description *string
+	Status      *bbscontentv1enum.DomainStatus
+	URL         *string
+	Icon        *string
+	IsNav       bool
+	Sort        int32
+}
+
+type CreateDomainReq struct {
+	UserID int64
+	Domain *ContentDomainSave
+}
+
+func (u *ContentDomainUsecase) CreateDomain(ctx context.Context, req *CreateDomainReq) (*repo.Domain, error) {
+	if req == nil || req.Domain == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	domain := req.Domain
+	var status *int32
+	if domain.Status != nil {
+		status = new(int32(*domain.Status))
+	}
+	resp, err := u.contentDomainClient.CreateDomain(ctx, &repo.CreateDomainReq{
+		UserID: req.UserID,
+		Domain: &repo.DomainSave{
+			Code:        domain.Code,
+			Name:        domain.Name,
+			Description: domain.Description,
+			Status:      status,
+			URL:         domain.URL,
+			Icon:        domain.Icon,
+			IsNav:       domain.IsNav,
+			Sort:        domain.Sort,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+type UpdateDomainReq struct {
+	UserID   int64
+	DomainID int64
+	Domain   *ContentDomainSave
+}
+
+func (u *ContentDomainUsecase) UpdateDomain(ctx context.Context, req *UpdateDomainReq) (*repo.Domain, error) {
+	if req == nil || req.Domain == nil || req.DomainID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	domain := req.Domain
+	var status *int32
+	if domain.Status != nil {
+		status = new(int32(*domain.Status))
+	}
+	resp, err := u.contentDomainClient.UpdateDomain(ctx, &repo.UpdateDomainReq{
+		UserID:   req.UserID,
+		DomainID: req.DomainID,
+		Domain: &repo.DomainSave{
+			Code:        domain.Code,
+			Name:        domain.Name,
+			Description: domain.Description,
+			Status:      status,
+			URL:         domain.URL,
+			Icon:        domain.Icon,
+			IsNav:       domain.IsNav,
+			Sort:        domain.Sort,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
 }
 
 type ListDomainsReq struct {
@@ -44,6 +125,7 @@ func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomains
 	query := &repo.DomainQuery{}
 	if req.Query != nil {
 		query.IDs = req.Query.GetIds()
+		query.Code = req.Query.Code
 		query.Name = req.Query.Name
 		query.Description = req.Query.Description
 		query.URL = req.Query.Url

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 type Tag struct {
@@ -26,16 +27,27 @@ func (Tag) Annotations() []schema.Annotation {
 }
 
 func (Tag) Fields() []ent.Field {
-	fields := []ent.Field{
+	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
+		field.String("code").Comment("稳定编码").NotEmpty(),
 		field.String("name").Comment("标签名称").NotEmpty(),
 		field.String("description").Comment("标签描述").Optional().Nillable(),
-		field.Int64("domain_id").Comment("所属领域id").Optional().Nillable(),
+		field.Int64("domain_id").Comment("所属领域 ID").Optional().Nillable(),
+		field.String("icon").Comment("图标").Optional().Nillable(),
+		field.Int32("sort").Comment("排序值").Default(0),
+		field.Int32("article_count").Comment("文章数量").Default(0),
 		field.Enum("status").Values(contentenum.TagStatusMap.EnumValues()...).Default(contentenum.TagStatusEnabled.String()).Comment("标签启停状态"),
-		field.Int64("created_by").Comment("创建人ID").Nillable().Optional(),
-		field.Int64("updated_by").Comment("更新人ID").Nillable().Optional(),
+		field.Int64("created_by").Comment("创建人 ID").Nillable().Optional(),
+		field.Int64("updated_by").Comment("更新人 ID").Nillable().Optional(),
 	}
-	return fields
+}
+
+func (Tag) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("domain_id", "code").Unique().Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+		index.Fields("domain_id", "name").Unique().Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+		index.Fields("domain_id", "status", "sort").Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+	}
 }
 
 func (Tag) Mixin() []ent.Mixin {
@@ -47,9 +59,7 @@ func (Tag) Mixin() []ent.Mixin {
 
 func (Tag) Edges() []ent.Edge {
 	return []ent.Edge{
-		// 关联文章 多对多
 		edge.From("article", Article.Type).Ref("tags"),
-		// 关联领域 多对一
 		edge.From("domain", Domain.Type).Ref("tags").Field("domain_id").Unique(),
 	}
 }

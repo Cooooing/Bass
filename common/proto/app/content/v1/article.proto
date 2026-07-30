@@ -56,7 +56,6 @@ message CreateArticle {
       optional string statement = 10; // 创作声明
       optional bool commentable = 11; // 是否允许评论
       optional bool anonymous = 12; // 是否匿名
-      repeated int64 tag_ids = 20; // 绑定标签 ID
 
       oneof type_params {
         QA qa = 100; // 问答参数
@@ -181,7 +180,6 @@ message UpdateArticle {
       optional string statement = 10; // 创作声明
       optional bool commentable = 11; // 是否允许评论
       optional bool anonymous = 12; // 是否匿名
-      repeated int64 tag_ids = 20; // 绑定标签 ID
 
       oneof type_params {
         QA qa = 100; // 问答参数

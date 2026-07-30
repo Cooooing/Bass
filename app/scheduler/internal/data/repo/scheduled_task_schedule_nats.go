@@ -147,7 +147,7 @@ func (r *ScheduledTaskScheduleNatsRepo) Schedule(ctx context.Context, req *repo.
 	}
 	body, err := json.Marshal(repo.ScheduledTaskScheduleMessage{
 		ScheduledTaskID:      req.ScheduledTask.ID,
-		ScheduledTaskTitle:   req.ScheduledTask.Title,
+		ScheduledTaskKey:     req.ScheduledTask.TaskKey,
 		ScheduledTaskVersion: req.ScheduledTask.Version,
 		TriggerType:          schedulerenum.TaskTriggerTypeSchedule,
 	})
@@ -226,7 +226,7 @@ func (r *ScheduledTaskScheduleNatsRepo) Consume(ctx context.Context, handler fun
 				"定时任务消息处理失败",
 				"error", handleErr,
 				"scheduled_task_id", payload.ScheduledTaskID,
-				"scheduled_task_title", payload.ScheduledTaskTitle,
+				"scheduled_task_key", payload.ScheduledTaskKey,
 				"schedule_key", payload.ScheduleKey,
 			)
 			delay := r.ackWait / 2

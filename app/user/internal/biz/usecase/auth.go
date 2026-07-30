@@ -855,7 +855,7 @@ func (s *AuthUsecase) BanAccount(ctx context.Context, req *BanAccountReq) (*BanA
 		}
 	}
 	if req.BannedUntil != nil {
-		if err := s.delayedTaskClient.RegisterUnbanAccounts(ctx, req.UserID, record.ID, req.BannedUntil); err != nil {
+		if err := s.delayedTaskClient.RegisterUnbanAccounts(ctx, req.UserID, req.BannedUntil); err != nil {
 			return nil, err
 		}
 	}

@@ -1,4 +1,4 @@
-﻿package repo
+package repo
 
 import (
 	"common/pkg/apperror"
@@ -61,7 +61,8 @@ func (r *ScheduledTaskVersionRepo) Create(ctx context.Context, task *model.Sched
 	created, err := r.getClient(ctx).ScheduledTaskVersion.Create().
 		SetScheduledTaskID(task.ID).
 		SetVersion(task.Version).
-		SetName(task.Name).
+		SetTaskKey(task.TaskKey).
+		SetHandlerName(task.HandlerName.String()).
 		SetTitle(task.Title).
 		SetDescription(task.Description).
 		SetEnabled(task.Enabled).
@@ -120,7 +121,8 @@ func (r *ScheduledTaskVersionRepo) model(row *gen.ScheduledTaskVersion) *model.S
 		ID:              row.ID,
 		ScheduledTaskID: row.ScheduledTaskID,
 		Version:         row.Version,
-		Name:            row.Name,
+		TaskKey:         row.TaskKey,
+		HandlerName:     schedulerenum.TaskHandlerName(row.HandlerName),
 		Title:           row.Title,
 		Description:     row.Description,
 		Enabled:         row.Enabled,

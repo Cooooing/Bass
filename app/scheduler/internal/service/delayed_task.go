@@ -39,7 +39,11 @@ func (s *SchedulerDelayedTaskService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *SchedulerDelayedTaskService) Upsert(ctx context.Context, req *schedulerv1.UpsertSchedulerDelayedTask_Req) (*schedulerv1.UpsertSchedulerDelayedTask_Resp, error) {
-	if req == nil || strings.TrimSpace(req.GetName()) == "" || strings.TrimSpace(req.GetTitle()) == "" {
+	if req == nil || strings.TrimSpace(req.GetTitle()) == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	handlerName, ok := schedulerenum.TaskHandlerNameMap.ToEnum(req.GetHandlerName())
+	if req.GetHandlerName() == schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_UNSPECIFIED || !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	misfirePolicy, ok := schedulerenum.TaskMisfirePolicyMap.ToEnum(req.GetMisfirePolicy())
@@ -53,7 +57,8 @@ func (s *SchedulerDelayedTaskService) Upsert(ctx context.Context, req *scheduler
 	}
 	row, err := s.usecase.Upsert(ctx, &model.DelayedTask{
 		ID:            req.GetId(),
-		Name:          req.GetName(),
+		TaskKey:       req.GetTaskKey(),
+		HandlerName:   handlerName,
 		Title:         req.GetTitle(),
 		Description:   req.GetDescription(),
 		Enabled:       req.GetEnabled(),
@@ -65,9 +70,10 @@ func (s *SchedulerDelayedTaskService) Upsert(ctx context.Context, req *scheduler
 	if err != nil {
 		return nil, err
 	}
-	item := &schedulerv1.UpsertSchedulerDelayedTask_Resp_DelayedTask{
+	item := &schedulerv1.DelayedTask{
 		Id:             row.ID,
-		Name:           row.Name,
+		TaskKey:        row.TaskKey,
+		HandlerName:    schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 		Title:          row.Title,
 		Description:    row.Description,
 		Enabled:        row.Enabled,
@@ -88,16 +94,17 @@ func (s *SchedulerDelayedTaskService) Upsert(ctx context.Context, req *scheduler
 }
 
 func (s *SchedulerDelayedTaskService) Get(ctx context.Context, req *schedulerv1.GetSchedulerDelayedTask_Req) (*schedulerv1.GetSchedulerDelayedTask_Resp, error) {
-	if req == nil || req.GetId() == 0 {
+	if req == nil || req.GetId() == 0 && strings.TrimSpace(req.GetTaskKey()) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	row, err := s.usecase.Get(ctx, &usecase.DelayedTaskGetReq{ID: req.GetId()})
+	row, err := s.usecase.Get(ctx, &usecase.DelayedTaskGetReq{ID: req.GetId(), TaskKey: req.GetTaskKey()})
 	if err != nil {
 		return nil, err
 	}
-	item := &schedulerv1.GetSchedulerDelayedTask_Resp_DelayedTask{
+	item := &schedulerv1.DelayedTask{
 		Id:             row.ID,
-		Name:           row.Name,
+		TaskKey:        row.TaskKey,
+		HandlerName:    schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 		Title:          row.Title,
 		Description:    row.Description,
 		Enabled:        row.Enabled,
@@ -123,7 +130,14 @@ func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1
 		query.Page = req.GetPage()
 		if req.GetQuery() != nil {
 			query.IDs = req.GetQuery().GetIds()
-			query.Name = req.GetQuery().Name
+			query.TaskKey = req.GetQuery().TaskKey
+			if req.GetQuery().HandlerName != nil && req.GetQuery().GetHandlerName() != schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_UNSPECIFIED {
+				handlerName, ok := schedulerenum.TaskHandlerNameMap.ToEnum(req.GetQuery().GetHandlerName())
+				if !ok {
+					return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+				}
+				query.HandlerName = &handlerName
+			}
 			query.Title = req.GetQuery().Title
 			query.Enabled = req.GetQuery().Enabled
 		}
@@ -132,11 +146,12 @@ func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*schedulerv1.PageSchedulerDelayedTasks_Resp_DelayedTask, 0, len(resp.Rows))
+	rows := make([]*schedulerv1.DelayedTask, 0, len(resp.Rows))
 	for _, row := range resp.Rows {
-		item := &schedulerv1.PageSchedulerDelayedTasks_Resp_DelayedTask{
+		item := &schedulerv1.DelayedTask{
 			Id:             row.ID,
-			Name:           row.Name,
+			TaskKey:        row.TaskKey,
+			HandlerName:    schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 			Title:          row.Title,
 			Description:    row.Description,
 			Enabled:        row.Enabled,
@@ -174,7 +189,7 @@ func (s *SchedulerDelayedTaskService) ListAvailableTasks(
 	replyRows := make([]*schedulerv1.ListSchedulerAvailableDelayedTasks_Resp_AvailableTask, 0, len(rows))
 	for _, row := range rows {
 		replyRows = append(replyRows, &schedulerv1.ListSchedulerAvailableDelayedTasks_Resp_AvailableTask{
-			Name:        row.Name,
+			HandlerName: schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 			Title:       row.Title,
 			Description: row.Description,
 		})
@@ -185,23 +200,21 @@ func (s *SchedulerDelayedTaskService) ListAvailableTasks(
 }
 
 func (s *SchedulerDelayedTaskService) Schedule(ctx context.Context, req *schedulerv1.ScheduleSchedulerDelayedTask_Req) (*schedulerv1.ScheduleSchedulerDelayedTask_Resp, error) {
-	if req == nil || strings.TrimSpace(req.GetIdempotencyKey()) == "" || req.GetScheduledAt() == nil {
+	if req == nil || strings.TrimSpace(req.GetTaskKey()) == "" || req.GetScheduledAt() == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	if req.GetPayload() != "" && !json.Valid([]byte(req.GetPayload())) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	row, err := s.usecase.Schedule(ctx, &usecase.DelayedTaskScheduleReq{
-		ID:             req.GetId(),
-		Title:          req.GetTitle(),
-		IdempotencyKey: req.GetIdempotencyKey(),
-		Payload:        req.GetPayload(),
-		ScheduledAt:    req.GetScheduledAt().AsTime(),
+		TaskKey:     req.GetTaskKey(),
+		Payload:     req.GetPayload(),
+		ScheduledAt: req.GetScheduledAt().AsTime(),
 	})
 	if err != nil {
 		return nil, err
 	}
-	item := &schedulerv1.ScheduleSchedulerDelayedTask_Resp_ExecutionRecord{
+	item := &schedulerv1.DelayedTaskExecutionRecord{
 		Id:                 row.ID,
 		DelayedTaskId:      row.DelayedTaskID,
 		DelayedTaskVersion: row.DelayedTaskVersion,
@@ -230,14 +243,14 @@ func (s *SchedulerDelayedTaskService) Schedule(ctx context.Context, req *schedul
 }
 
 func (s *SchedulerDelayedTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerDelayedTask_Req) (*schedulerv1.TriggerSchedulerDelayedTask_Resp, error) {
-	if req == nil || req.GetId() == 0 {
+	if req == nil || strings.TrimSpace(req.GetTaskKey()) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	row, err := s.usecase.Trigger(ctx, req.GetId(), req.GetPayload())
+	row, err := s.usecase.Trigger(ctx, req.GetTaskKey(), req.GetPayload())
 	if err != nil {
 		return nil, err
 	}
-	item := &schedulerv1.TriggerSchedulerDelayedTask_Resp_ExecutionRecord{
+	item := &schedulerv1.DelayedTaskExecutionRecord{
 		Id:                 row.ID,
 		DelayedTaskId:      row.DelayedTaskID,
 		DelayedTaskVersion: row.DelayedTaskVersion,
@@ -270,7 +283,7 @@ func (s *SchedulerDelayedTaskService) CancelExecution(
 	if err != nil {
 		return nil, err
 	}
-	item := &schedulerv1.CancelSchedulerDelayedTaskExecution_Resp_ExecutionRecord{
+	item := &schedulerv1.DelayedTaskExecutionRecord{
 		Id:                 row.ID,
 		DelayedTaskId:      row.DelayedTaskID,
 		DelayedTaskVersion: row.DelayedTaskVersion,
@@ -322,9 +335,9 @@ func (s *SchedulerDelayedTaskService) PageExecutionRecords(
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*schedulerv1.PageSchedulerDelayedTaskExecutionRecords_Resp_ExecutionRecord, 0, len(resp.Rows))
+	rows := make([]*schedulerv1.DelayedTaskExecutionRecord, 0, len(resp.Rows))
 	for _, row := range resp.Rows {
-		item := &schedulerv1.PageSchedulerDelayedTaskExecutionRecords_Resp_ExecutionRecord{
+		item := &schedulerv1.DelayedTaskExecutionRecord{
 			Id:                 row.ID,
 			DelayedTaskId:      row.DelayedTaskID,
 			DelayedTaskVersion: row.DelayedTaskVersion,

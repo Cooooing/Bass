@@ -25,7 +25,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/robfig/cron/v3"
-	"github.com/samber/lo"
 )
 
 type ScheduledTaskUsecase struct {
@@ -79,8 +78,15 @@ func NewScheduledTaskUsecase(
 }
 
 func (u *ScheduledTaskUsecase) Upsert(ctx context.Context, row *model.ScheduledTask) (*model.ScheduledTask, error) {
-	if row == nil || strings.TrimSpace(row.Name) == "" || strings.TrimSpace(row.Title) == "" || strings.TrimSpace(row.CronSpec) == "" {
+	if row == nil ||
+		row.HandlerName == "" ||
+		strings.TrimSpace(row.Title) == "" ||
+		strings.TrimSpace(row.CronSpec) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	row.TaskKey = strings.TrimSpace(row.TaskKey)
+	if row.TaskKey == "" {
+		row.TaskKey = uuid.NewString()
 	}
 	if _, err := u.cronParser.Parse(row.CronSpec); err != nil {
 		return nil, err
@@ -144,22 +150,22 @@ func (u *ScheduledTaskUsecase) Upsert(ctx context.Context, row *model.ScheduledT
 		}
 		return nil, err
 	}
-	if previous != nil && previous.Title != saved.Title {
-		_ = u.scheduledTaskCacheRepo.DeleteScheduledTask(ctx, previous.Title)
+	if previous != nil && previous.TaskKey != saved.TaskKey {
+		_ = u.scheduledTaskCacheRepo.DeleteScheduledTask(ctx, previous.TaskKey)
 	}
-	_ = u.scheduledTaskCacheRepo.DeleteScheduledTask(ctx, saved.Title)
+	_ = u.scheduledTaskCacheRepo.DeleteScheduledTask(ctx, saved.TaskKey)
 	return saved, nil
 }
 
 func (u *ScheduledTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
-	names := make([]string, 0, len(u.tasks))
-	for name := range u.tasks {
-		names = append(names, name)
+	handlerNames := make([]string, 0, len(u.tasks))
+	for handlerName := range u.tasks {
+		handlerNames = append(handlerNames, handlerName)
 	}
-	sort.Strings(names)
+	sort.Strings(handlerNames)
 	defaultTasks := make([]*model.ScheduledTask, 0)
-	for _, name := range names {
-		item := u.tasks[name]
+	for _, handlerName := range handlerNames {
+		item := u.tasks[handlerName]
 		for _, schedule := range item.DefaultScheduledTasks() {
 			if schedule == nil {
 				continue
@@ -173,7 +179,8 @@ func (u *ScheduledTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
 				description = item.Description()
 			}
 			defaultTasks = append(defaultTasks, &model.ScheduledTask{
-				Name:          item.Name(),
+				TaskKey:       schedule.TaskKey.String(),
+				HandlerName:   item.HandlerName(),
 				Title:         title,
 				Description:   description,
 				Enabled:       schedule.Enabled,
@@ -190,17 +197,17 @@ func (u *ScheduledTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
 	if len(defaultTasks) == 0 {
 		return nil
 	}
-	titles := lo.Map(defaultTasks, func(row *model.ScheduledTask, _ int) string { return row.Title })
-	if duplicatedTitles := lo.FindDuplicates(titles); len(duplicatedTitles) > 0 {
-		return fmt.Errorf("scheduler default task title duplicated: %s", strings.Join(duplicatedTitles, ","))
+	taskKeys := make([]string, 0, len(defaultTasks))
+	for _, row := range defaultTasks {
+		taskKeys = append(taskKeys, row.TaskKey)
 	}
-	existingTasks, err := u.scheduledTaskRepo.MapByTitle(ctx, titles)
+	existingTasks, err := u.scheduledTaskRepo.MapByTaskKey(ctx, taskKeys)
 	if err != nil {
 		return err
 	}
 	for _, row := range defaultTasks {
-		if existingTasks[row.Title] != nil {
-			current := existingTasks[row.Title]
+		if existingTasks[row.TaskKey] != nil {
+			current := existingTasks[row.TaskKey]
 			if current.Enabled {
 				if err = u.scheduledTaskScheduleRepo.Schedule(ctx, &repo.ScheduledTaskScheduleReq{
 					ScheduledTask: current,
@@ -220,21 +227,21 @@ func (u *ScheduledTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
 }
 
 type ScheduledTaskGetReq struct {
-	ID    int64
-	Title string
+	ID      int64
+	TaskKey string
 }
 
 func (u *ScheduledTaskUsecase) Get(ctx context.Context, req *ScheduledTaskGetReq) (*model.ScheduledTask, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	title := strings.TrimSpace(req.Title)
-	if title != "" {
-		row, err := u.scheduledTaskCacheRepo.GetScheduledTask(ctx, title)
+	taskKey := strings.TrimSpace(req.TaskKey)
+	if taskKey != "" {
+		row, err := u.scheduledTaskCacheRepo.GetScheduledTask(ctx, taskKey)
 		if err != nil || row != nil {
 			return row, err
 		}
-		row, err = u.scheduledTaskRepo.Get(ctx, &repo.ScheduledTaskGetReq{Title: &title})
+		row, err = u.scheduledTaskRepo.Get(ctx, &repo.ScheduledTaskGetReq{TaskKey: &taskKey})
 		if err == nil && row != nil {
 			_ = u.scheduledTaskCacheRepo.SetScheduledTask(ctx, row)
 		}
@@ -251,11 +258,12 @@ func (u *ScheduledTaskUsecase) Get(ctx context.Context, req *ScheduledTaskGetReq
 }
 
 type ScheduledTaskPageReq struct {
-	Page    *common.PageReq
-	IDs     []int64
-	Name    *string
-	Title   *string
-	Enabled *bool
+	Page        *common.PageReq
+	IDs         []int64
+	TaskKey     *string
+	HandlerName *schedulerenum.TaskHandlerName
+	Title       *string
+	Enabled     *bool
 }
 
 type ScheduledTaskPageResp struct {
@@ -270,10 +278,11 @@ func (u *ScheduledTaskUsecase) Page(ctx context.Context, req *ScheduledTaskPageR
 	pageResp, err := u.scheduledTaskRepo.Page(ctx, &repo.ScheduledTaskPageReq{
 		Page: req.Page,
 		ScheduledTaskGetReq: repo.ScheduledTaskGetReq{
-			IDs:     req.IDs,
-			Name:    req.Name,
-			Title:   req.Title,
-			Enabled: req.Enabled,
+			IDs:         req.IDs,
+			TaskKey:     req.TaskKey,
+			HandlerName: req.HandlerName,
+			Title:       req.Title,
+			Enabled:     req.Enabled,
 		},
 	})
 	if err != nil {
@@ -287,15 +296,19 @@ func (u *ScheduledTaskUsecase) ListAvailableTasks(ctx context.Context, keyword s
 	keyword = strings.ToLower(strings.TrimSpace(keyword))
 	rows := make([]*model.AvailableTask, 0, len(u.tasks))
 	for _, item := range u.tasks {
-		row := &model.AvailableTask{Name: item.Name(), Title: item.Title(), Description: item.Description()}
+		row := &model.AvailableTask{
+			HandlerName: item.HandlerName(),
+			Title:       item.Title(),
+			Description: item.Description(),
+		}
 		if keyword == "" ||
-			strings.Contains(strings.ToLower(row.Name), keyword) ||
+			strings.Contains(strings.ToLower(row.HandlerName.String()), keyword) ||
 			strings.Contains(strings.ToLower(row.Title), keyword) ||
 			strings.Contains(strings.ToLower(row.Description), keyword) {
 			rows = append(rows, row)
 		}
 	}
-	sort.Slice(rows, func(i, j int) bool { return rows[i].Name < rows[j].Name })
+	sort.Slice(rows, func(i, j int) bool { return rows[i].HandlerName < rows[j].HandlerName })
 	return rows, nil
 }
 
@@ -332,15 +345,15 @@ func (u *ScheduledTaskUsecase) PageExecutionRecords(ctx context.Context, req *Sc
 }
 
 type TaskTriggerReq struct {
-	ID      int64
+	TaskKey string
 	Payload string
 }
 
 func (u *ScheduledTaskUsecase) Trigger(ctx context.Context, req *TaskTriggerReq) (*model.ScheduledTaskExecutionRecord, error) {
-	if req == nil || req.ID == 0 {
+	if req == nil || strings.TrimSpace(req.TaskKey) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	task, err := u.Get(ctx, &ScheduledTaskGetReq{ID: req.ID})
+	task, err := u.Get(ctx, &ScheduledTaskGetReq{TaskKey: req.TaskKey})
 	if err != nil {
 		return nil, err
 	}
@@ -479,12 +492,12 @@ func (u *ScheduledTaskUsecase) executeScheduledRecord(
 		delete(u.runningCancels, record.ID)
 		u.runningCancelMu.Unlock()
 	}()
-	currentTask, ok := u.tasks[task.Name]
+	currentTask, ok := u.tasks[task.HandlerName.String()]
 	var err error
 	if ok {
 		err = currentTask.Execute(execCtx, record.Payload)
 	} else {
-		err = fmt.Errorf("unknown scheduler task: %s", task.Name)
+		err = fmt.Errorf("unknown scheduler task handler: %s", task.HandlerName)
 	}
 	finishedAt := time.Now()
 	duration := time.Duration(0)
@@ -538,7 +551,10 @@ func (u *ScheduledTaskUsecase) HandleScheduledTaskMessage(ctx context.Context, m
 	if message == nil {
 		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
 	}
-	task, err := u.Get(ctx, &ScheduledTaskGetReq{ID: message.ScheduledTaskID, Title: message.ScheduledTaskTitle})
+	task, err := u.Get(ctx, &ScheduledTaskGetReq{
+		ID:      message.ScheduledTaskID,
+		TaskKey: message.ScheduledTaskKey,
+	})
 	if err != nil {
 		return nil, err
 	}

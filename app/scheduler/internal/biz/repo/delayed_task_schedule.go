@@ -24,7 +24,7 @@ type DelayedTaskScheduleReq struct {
 
 type DelayedTaskScheduleMessage struct {
 	ExecutionRecordID int64
-	DelayedTaskTitle  string
+	DelayedTaskKey    string
 	ScheduleKey       string
 	ScheduledAt       time.Time
 	TriggerType       schedulerenum.TaskTriggerType

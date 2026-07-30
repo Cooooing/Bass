@@ -5,6 +5,7 @@ package common.api.app.scheduler.v1;
 import "common/common.proto";
 import "google/protobuf/timestamp.proto";
 import "scheduler/v1/enum/task_execution_status.proto";
+import "scheduler/v1/enum/task_handler_name.proto";
 import "scheduler/v1/enum/task_misfire_policy.proto";
 import "scheduler/v1/enum/task_trigger_type.proto";
 
@@ -24,30 +25,17 @@ service SchedulerDelayedTaskService {
 message UpsertSchedulerDelayedTask {
   message Req {
     int64 id = 1; // 延迟任务 ID，创建时为空。
-    string name = 2; // 代码内任务名称。
-    string title = 3; // 展示标题。
-    string description = 4; // 任务说明。
-    bool enabled = 5; // 是否启用。
-    int32 timeout_seconds = 6; // 单次执行超时秒数。
-    int32 max_attempts = 7; // 最大尝试次数，默认 3。
-    SchedulerTaskMisfirePolicy misfire_policy = 8; // 错过计划时间后的处理策略。
-    optional int32 stale_after_seconds = 9; // 过期判断秒数，空值表示不过期。
+    string task_key = 2; // 任务配置唯一键；为空时由服务生成 UUID。
+    SchedulerTaskHandlerName handler_name = 3; // 代码内任务处理器。
+    string title = 4; // 展示标题。
+    string description = 5; // 任务说明。
+    bool enabled = 6; // 是否启用。
+    int32 timeout_seconds = 7; // 单次执行超时秒数。
+    int32 max_attempts = 8; // 最大尝试次数，默认 3。
+    SchedulerTaskMisfirePolicy misfire_policy = 9; // 错过计划时间后的处理策略。
+    optional int32 stale_after_seconds = 10; // 过期判断秒数；空值表示不过期。
   }
   message Resp {
-    message DelayedTask {
-      int64 id = 1; // 延迟任务 ID。
-      string name = 2; // 代码内任务名称。
-      string title = 3; // 展示标题。
-      string description = 4; // 任务说明。
-      bool enabled = 5; // 是否启用。
-      int32 timeout_seconds = 6; // 单次执行超时秒数。
-      int32 max_attempts = 7; // 最大尝试次数。
-      int64 version = 8; // 配置版本。
-      SchedulerTaskMisfirePolicy misfire_policy = 9; // 错过计划时间后的处理策略。
-      optional int32 stale_after_seconds = 10; // 过期判断秒数，空值表示不过期。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
-    }
     DelayedTask row = 1; // 延迟任务配置。
   }
 }
@@ -55,22 +43,9 @@ message UpsertSchedulerDelayedTask {
 message GetSchedulerDelayedTask {
   message Req {
     int64 id = 1; // 延迟任务 ID。
+    string task_key = 2; // 任务配置唯一键，未传 ID 时使用。
   }
   message Resp {
-    message DelayedTask {
-      int64 id = 1; // 延迟任务 ID。
-      string name = 2; // 代码内任务名称。
-      string title = 3; // 展示标题。
-      string description = 4; // 任务说明。
-      bool enabled = 5; // 是否启用。
-      int32 timeout_seconds = 6; // 单次执行超时秒数。
-      int32 max_attempts = 7; // 最大尝试次数。
-      int64 version = 8; // 配置版本。
-      SchedulerTaskMisfirePolicy misfire_policy = 9; // 错过计划时间后的处理策略。
-      optional int32 stale_after_seconds = 10; // 过期判断秒数，空值表示不过期。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
-    }
     DelayedTask row = 1; // 延迟任务配置。
   }
 }
@@ -79,28 +54,15 @@ message PageSchedulerDelayedTasks {
   message Req {
     message Query {
       repeated int64 ids = 1; // 延迟任务 ID 列表。
-      optional string name = 2; // 代码内任务名称。
-      optional string title = 3; // 展示标题。
-      optional bool enabled = 4; // 是否启用。
+      optional string task_key = 2; // 任务配置唯一键。
+      optional SchedulerTaskHandlerName handler_name = 3; // 代码内任务处理器。
+      optional string title = 4; // 展示标题。
+      optional bool enabled = 5; // 是否启用。
     }
     .common.api.app.common.PageReq page = 1; // 分页参数。
     Query query = 2; // 查询条件。
   }
   message Resp {
-    message DelayedTask {
-      int64 id = 1; // 延迟任务 ID。
-      string name = 2; // 代码内任务名称。
-      string title = 3; // 展示标题。
-      string description = 4; // 任务说明。
-      bool enabled = 5; // 是否启用。
-      int32 timeout_seconds = 6; // 单次执行超时秒数。
-      int32 max_attempts = 7; // 最大尝试次数。
-      int64 version = 8; // 配置版本。
-      SchedulerTaskMisfirePolicy misfire_policy = 9; // 错过计划时间后的处理策略。
-      optional int32 stale_after_seconds = 10; // 过期判断秒数，空值表示不过期。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
-    }
     .common.api.app.common.PageResp page = 1; // 分页结果。
     repeated DelayedTask rows = 2; // 延迟任务配置列表。
   }
@@ -115,7 +77,7 @@ message ListSchedulerAvailableDelayedTasks {
   }
   message Resp {
     message AvailableTask {
-      string name = 1; // 代码内任务名称。
+      SchedulerTaskHandlerName handler_name = 1; // 代码内任务处理器。
       string title = 2; // 展示标题。
       string description = 3; // 任务说明。
     }
@@ -125,72 +87,22 @@ message ListSchedulerAvailableDelayedTasks {
 
 message ScheduleSchedulerDelayedTask {
   message Req {
-    int64 id = 1; // 延迟任务 ID。
-    string title = 2; // 展示标题，未传 ID 时使用。
-    string idempotency_key = 3; // 本次延迟执行幂等键。
-    string payload = 4; // 本次执行参数，JSON 字符串。
-    google.protobuf.Timestamp scheduled_at = 5; // 计划执行时间。
+    string task_key = 1; // 任务配置唯一键。
+    string payload = 2; // 本次执行参数，JSON 字符串。
+    google.protobuf.Timestamp scheduled_at = 3; // 计划执行时间。
   }
   message Resp {
-    message ExecutionRecord {
-      int64 id = 1; // 执行记录 ID。
-      int64 delayed_task_id = 2; // 延迟任务 ID。
-      int64 delayed_task_version = 3; // 延迟任务配置版本。
-      string idempotency_key = 4; // 本次延迟执行幂等键。
-      SchedulerTaskTriggerType trigger_type = 5; // 触发类型。
-      string schedule_key = 6; // 调度消息唯一键。
-      google.protobuf.Timestamp scheduled_at = 7; // 计划执行时间。
-      optional google.protobuf.Timestamp started_at = 8; // 开始时间。
-      optional google.protobuf.Timestamp finished_at = 9; // 结束时间。
-      optional int64 duration_ms = 10; // 执行耗时毫秒。
-      SchedulerTaskExecutionStatus status = 11; // 执行状态。
-      int32 attempt = 12; // 当前尝试次数。
-      int32 max_attempts = 13; // 最大尝试次数。
-      int32 timeout_seconds = 14; // 执行超时秒数。
-      SchedulerTaskMisfirePolicy misfire_policy = 19; // 错过计划时间后的处理策略。
-      optional int32 stale_after_seconds = 20; // 过期判断秒数，空值表示不过期。
-      string worker_id = 15; // 执行节点标识。
-      string payload = 16; // 执行参数快照。
-      string last_error = 17; // 最近错误摘要。
-      string trace_id = 18; // 链路追踪标识。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
-    }
-    ExecutionRecord row = 1; // 执行记录。
+    DelayedTaskExecutionRecord row = 1; // 执行记录。
   }
 }
 
 message TriggerSchedulerDelayedTask {
   message Req {
-    int64 id = 1; // 延迟任务 ID。
+    string task_key = 1; // 任务配置唯一键。
     string payload = 2; // 手动触发参数，空值使用空对象。
   }
   message Resp {
-    message ExecutionRecord {
-      int64 id = 1; // 执行记录 ID。
-      int64 delayed_task_id = 2; // 延迟任务 ID。
-      int64 delayed_task_version = 3; // 延迟任务配置版本。
-      string idempotency_key = 4; // 本次延迟执行幂等键。
-      SchedulerTaskTriggerType trigger_type = 5; // 触发类型。
-      string schedule_key = 6; // 调度消息唯一键。
-      google.protobuf.Timestamp scheduled_at = 7; // 计划执行时间。
-      optional google.protobuf.Timestamp started_at = 8; // 开始时间。
-      optional google.protobuf.Timestamp finished_at = 9; // 结束时间。
-      optional int64 duration_ms = 10; // 执行耗时毫秒。
-      SchedulerTaskExecutionStatus status = 11; // 执行状态。
-      int32 attempt = 12; // 当前尝试次数。
-      int32 max_attempts = 13; // 最大尝试次数。
-      int32 timeout_seconds = 14; // 执行超时秒数。
-      SchedulerTaskMisfirePolicy misfire_policy = 19; // 错过计划时间后的处理策略。
-      optional int32 stale_after_seconds = 20; // 过期判断秒数，空值表示不过期。
-      string worker_id = 15; // 执行节点标识。
-      string payload = 16; // 执行参数快照。
-      string last_error = 17; // 最近错误摘要。
-      string trace_id = 18; // 链路追踪标识。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
-    }
-    ExecutionRecord row = 1; // 执行记录。
+    DelayedTaskExecutionRecord row = 1; // 执行记录。
   }
 }
 
@@ -200,31 +112,7 @@ message CancelSchedulerDelayedTaskExecution {
     string idempotency_key = 2; // 本次延迟执行幂等键。
   }
   message Resp {
-    message ExecutionRecord {
-      int64 id = 1; // 执行记录 ID。
-      int64 delayed_task_id = 2; // 延迟任务 ID。
-      int64 delayed_task_version = 3; // 延迟任务配置版本。
-      string idempotency_key = 4; // 本次延迟执行幂等键。
-      SchedulerTaskTriggerType trigger_type = 5; // 触发类型。
-      string schedule_key = 6; // 调度消息唯一键。
-      google.protobuf.Timestamp scheduled_at = 7; // 计划执行时间。
-      optional google.protobuf.Timestamp started_at = 8; // 开始时间。
-      optional google.protobuf.Timestamp finished_at = 9; // 结束时间。
-      optional int64 duration_ms = 10; // 执行耗时毫秒。
-      SchedulerTaskExecutionStatus status = 11; // 执行状态。
-      int32 attempt = 12; // 当前尝试次数。
-      int32 max_attempts = 13; // 最大尝试次数。
-      int32 timeout_seconds = 14; // 执行超时秒数。
-      SchedulerTaskMisfirePolicy misfire_policy = 19; // 错过计划时间后的处理策略。
-      optional int32 stale_after_seconds = 20; // 过期判断秒数，空值表示不过期。
-      string worker_id = 15; // 执行节点标识。
-      string payload = 16; // 执行参数快照。
-      string last_error = 17; // 最近错误摘要。
-      string trace_id = 18; // 链路追踪标识。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
-    }
-    ExecutionRecord row = 1; // 执行记录。
+    DelayedTaskExecutionRecord row = 1; // 执行记录。
   }
 }
 
@@ -240,31 +128,48 @@ message PageSchedulerDelayedTaskExecutionRecords {
     Query query = 2; // 查询条件。
   }
   message Resp {
-    message ExecutionRecord {
-      int64 id = 1; // 执行记录 ID。
-      int64 delayed_task_id = 2; // 延迟任务 ID。
-      int64 delayed_task_version = 3; // 延迟任务配置版本。
-      string idempotency_key = 4; // 本次延迟执行幂等键。
-      SchedulerTaskTriggerType trigger_type = 5; // 触发类型。
-      string schedule_key = 6; // 调度消息唯一键。
-      google.protobuf.Timestamp scheduled_at = 7; // 计划执行时间。
-      optional google.protobuf.Timestamp started_at = 8; // 开始时间。
-      optional google.protobuf.Timestamp finished_at = 9; // 结束时间。
-      optional int64 duration_ms = 10; // 执行耗时毫秒。
-      SchedulerTaskExecutionStatus status = 11; // 执行状态。
-      int32 attempt = 12; // 当前尝试次数。
-      int32 max_attempts = 13; // 最大尝试次数。
-      int32 timeout_seconds = 14; // 执行超时秒数。
-      SchedulerTaskMisfirePolicy misfire_policy = 19; // 错过计划时间后的处理策略。
-      optional int32 stale_after_seconds = 20; // 过期判断秒数，空值表示不过期。
-      string worker_id = 15; // 执行节点标识。
-      string payload = 16; // 执行参数快照。
-      string last_error = 17; // 最近错误摘要。
-      string trace_id = 18; // 链路追踪标识。
-      google.protobuf.Timestamp created_at = 1000; // 创建时间。
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间。
-    }
     .common.api.app.common.PageResp page = 1; // 分页结果。
-    repeated ExecutionRecord rows = 2; // 执行记录列表。
+    repeated DelayedTaskExecutionRecord rows = 2; // 执行记录列表。
   }
+}
+
+message DelayedTask {
+  int64 id = 1; // 延迟任务 ID。
+  string task_key = 2; // 任务配置唯一键。
+  SchedulerTaskHandlerName handler_name = 3; // 代码内任务处理器。
+  string title = 4; // 展示标题。
+  string description = 5; // 任务说明。
+  bool enabled = 6; // 是否启用。
+  int32 timeout_seconds = 7; // 单次执行超时秒数。
+  int32 max_attempts = 8; // 最大尝试次数。
+  int64 version = 9; // 配置版本。
+  SchedulerTaskMisfirePolicy misfire_policy = 10; // 错过计划时间后的处理策略。
+  optional int32 stale_after_seconds = 11; // 过期判断秒数；空值表示不过期。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+}
+
+message DelayedTaskExecutionRecord {
+  int64 id = 1; // 执行记录 ID。
+  int64 delayed_task_id = 2; // 延迟任务 ID。
+  int64 delayed_task_version = 3; // 延迟任务配置版本。
+  string idempotency_key = 4; // 本次延迟执行幂等键。
+  SchedulerTaskTriggerType trigger_type = 5; // 触发类型。
+  string schedule_key = 6; // 调度消息唯一键。
+  google.protobuf.Timestamp scheduled_at = 7; // 计划执行时间。
+  optional google.protobuf.Timestamp started_at = 8; // 开始时间。
+  optional google.protobuf.Timestamp finished_at = 9; // 结束时间。
+  optional int64 duration_ms = 10; // 执行耗时毫秒。
+  SchedulerTaskExecutionStatus status = 11; // 执行状态。
+  int32 attempt = 12; // 当前尝试次数。
+  int32 max_attempts = 13; // 最大尝试次数。
+  int32 timeout_seconds = 14; // 执行超时秒数。
+  string worker_id = 15; // 执行节点标识。
+  string payload = 16; // 执行参数快照。
+  string last_error = 17; // 最近错误摘要。
+  string trace_id = 18; // 链路追踪标识。
+  SchedulerTaskMisfirePolicy misfire_policy = 19; // 错过计划时间后的处理策略。
+  optional int32 stale_after_seconds = 20; // 过期判断秒数；空值表示不过期。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间。
 }

@@ -20,8 +20,8 @@ func NewNoop(
 	}
 }
 
-func (n *Noop) Name() string {
-	return "noop"
+func (n *Noop) HandlerName() schedulerenum.TaskHandlerName {
+	return schedulerenum.TaskHandlerNameNoop
 }
 
 func (n *Noop) Title() string {
@@ -37,6 +37,7 @@ func (n *Noop) DefaultScheduledTasks() []*DefaultScheduledTask {
 	*staleAfter = 5 * time.Minute
 	return []*DefaultScheduledTask{
 		{
+			TaskKey:       schedulerenum.TaskKeyNoopScheduledDefault,
 			Title:         n.Title(),
 			Description:   n.Description(),
 			Enabled:       false,
@@ -54,6 +55,7 @@ func (n *Noop) DefaultScheduledTasks() []*DefaultScheduledTask {
 func (n *Noop) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return []*DefaultDelayedTask{
 		{
+			TaskKey:       schedulerenum.TaskKeyNoopDelayedDefault,
 			Title:         n.Title(),
 			Description:   n.Description(),
 			Enabled:       false,

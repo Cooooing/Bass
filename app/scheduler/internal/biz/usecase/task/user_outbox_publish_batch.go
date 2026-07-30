@@ -14,7 +14,6 @@ import (
 
 type UserOutboxPublishBatch struct {
 	userClient     *rpc.UserClient
-	name           string
 	title          string
 	description    string
 	defaultLimit   int32
@@ -27,7 +26,6 @@ func NewUserOutboxPublishBatch(
 ) *UserOutboxPublishBatch {
 	return &UserOutboxPublishBatch{
 		userClient:     userClient,
-		name:           "user.outbox_publish_batch",
 		title:          "用户 Outbox 批量投递",
 		description:    "调用 user.OutboxService.PublishBatch 投递待发送 outbox 事件。",
 		defaultLimit:   1000,
@@ -36,8 +34,8 @@ func NewUserOutboxPublishBatch(
 	}
 }
 
-func (t *UserOutboxPublishBatch) Name() string {
-	return t.name
+func (t *UserOutboxPublishBatch) HandlerName() schedulerenum.TaskHandlerName {
+	return schedulerenum.TaskHandlerNameUserOutboxPublishBatch
 }
 
 func (t *UserOutboxPublishBatch) Title() string {
@@ -51,6 +49,7 @@ func (t *UserOutboxPublishBatch) Description() string {
 func (t *UserOutboxPublishBatch) DefaultScheduledTasks() []*DefaultScheduledTask {
 	return []*DefaultScheduledTask{
 		{
+			TaskKey:       schedulerenum.TaskKeyUserOutboxPublishBatchDefault,
 			Title:         t.Title(),
 			Description:   t.Description(),
 			Enabled:       true,
@@ -67,6 +66,7 @@ func (t *UserOutboxPublishBatch) DefaultScheduledTasks() []*DefaultScheduledTask
 func (t *UserOutboxPublishBatch) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return []*DefaultDelayedTask{
 		{
+			TaskKey:       schedulerenum.TaskKeyUserOutboxPublishBatchDelayedDefault,
 			Title:         t.Title(),
 			Description:   t.Description(),
 			Enabled:       true,

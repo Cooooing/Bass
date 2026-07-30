@@ -6,7 +6,7 @@ import (
 )
 
 type DelayedTaskCacheRepo interface {
-	GetDelayedTask(ctx context.Context, title string) (*model.DelayedTask, error)
+	GetDelayedTask(ctx context.Context, taskKey string) (*model.DelayedTask, error)
 	SetDelayedTask(ctx context.Context, row *model.DelayedTask) error
-	DeleteDelayedTask(ctx context.Context, title string) error
+	DeleteDelayedTask(ctx context.Context, taskKey string) error
 }

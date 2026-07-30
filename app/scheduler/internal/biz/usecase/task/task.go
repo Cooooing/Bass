@@ -7,7 +7,7 @@ import (
 )
 
 type Task interface {
-	Name() string
+	HandlerName() schedulerenum.TaskHandlerName
 	Title() string
 	Description() string
 	DefaultScheduledTasks() []*DefaultScheduledTask
@@ -16,6 +16,7 @@ type Task interface {
 }
 
 type DefaultScheduledTask struct {
+	TaskKey       schedulerenum.TaskKey
 	Title         string
 	Description   string
 	Enabled       bool
@@ -29,6 +30,7 @@ type DefaultScheduledTask struct {
 }
 
 type DefaultDelayedTask struct {
+	TaskKey       schedulerenum.TaskKey
 	Title         string
 	Description   string
 	Enabled       bool

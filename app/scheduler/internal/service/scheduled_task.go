@@ -37,7 +37,11 @@ func (s *SchedulerScheduledTaskService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *SchedulerScheduledTaskService) Upsert(ctx context.Context, req *schedulerv1.UpsertSchedulerScheduledTask_Req) (*schedulerv1.UpsertSchedulerScheduledTask_Resp, error) {
-	if req == nil || req.GetName() == "" || req.GetTitle() == "" || req.GetCronSpec() == "" {
+	if req == nil || req.GetTitle() == "" || req.GetCronSpec() == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	handlerName, ok := schedulerenum.TaskHandlerNameMap.ToEnum(req.GetHandlerName())
+	if req.GetHandlerName() == schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_UNSPECIFIED || !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	misfirePolicy, ok := schedulerenum.TaskMisfirePolicyMap.ToEnum(req.GetMisfirePolicy())
@@ -51,7 +55,8 @@ func (s *SchedulerScheduledTaskService) Upsert(ctx context.Context, req *schedul
 	}
 	row, err := s.scheduledTaskUsecase.Upsert(ctx, &model.ScheduledTask{
 		ID:            req.GetId(),
-		Name:          req.GetName(),
+		TaskKey:       req.GetTaskKey(),
+		HandlerName:   handlerName,
 		Title:         req.GetTitle(),
 		Description:   req.GetDescription(),
 		Enabled:       req.GetEnabled(),
@@ -67,9 +72,10 @@ func (s *SchedulerScheduledTaskService) Upsert(ctx context.Context, req *schedul
 		return nil, err
 	}
 	resp := &schedulerv1.UpsertSchedulerScheduledTask_Resp{
-		Row: &schedulerv1.UpsertSchedulerScheduledTask_Resp_ScheduledTask{
+		Row: &schedulerv1.ScheduledTask{
 			Id:             row.ID,
-			Name:           row.Name,
+			TaskKey:        row.TaskKey,
+			HandlerName:    schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 			Title:          row.Title,
 			Description:    row.Description,
 			Enabled:        row.Enabled,
@@ -92,14 +98,15 @@ func (s *SchedulerScheduledTaskService) Upsert(ctx context.Context, req *schedul
 }
 
 func (s *SchedulerScheduledTaskService) Get(ctx context.Context, req *schedulerv1.GetSchedulerScheduledTask_Req) (*schedulerv1.GetSchedulerScheduledTask_Resp, error) {
-	row, err := s.scheduledTaskUsecase.Get(ctx, &usecase.ScheduledTaskGetReq{ID: req.GetId()})
+	row, err := s.scheduledTaskUsecase.Get(ctx, &usecase.ScheduledTaskGetReq{ID: req.GetId(), TaskKey: req.GetTaskKey()})
 	if err != nil {
 		return nil, err
 	}
 	resp := &schedulerv1.GetSchedulerScheduledTask_Resp{
-		Row: &schedulerv1.GetSchedulerScheduledTask_Resp_ScheduledTask{
+		Row: &schedulerv1.ScheduledTask{
 			Id:             row.ID,
-			Name:           row.Name,
+			TaskKey:        row.TaskKey,
+			HandlerName:    schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 			Title:          row.Title,
 			Description:    row.Description,
 			Enabled:        row.Enabled,
@@ -125,7 +132,14 @@ func (s *SchedulerScheduledTaskService) Page(ctx context.Context, req *scheduler
 	query := &usecase.ScheduledTaskPageReq{}
 	if req.GetQuery() != nil {
 		query.IDs = req.GetQuery().GetIds()
-		query.Name = req.GetQuery().Name
+		query.TaskKey = req.GetQuery().TaskKey
+		if req.GetQuery().HandlerName != nil && req.GetQuery().GetHandlerName() != schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_UNSPECIFIED {
+			handlerName, ok := schedulerenum.TaskHandlerNameMap.ToEnum(req.GetQuery().GetHandlerName())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			query.HandlerName = &handlerName
+		}
 		query.Title = req.GetQuery().Title
 		query.Enabled = req.GetQuery().Enabled
 	}
@@ -134,11 +148,12 @@ func (s *SchedulerScheduledTaskService) Page(ctx context.Context, req *scheduler
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*schedulerv1.PageSchedulerScheduledTasks_Resp_ScheduledTask, 0, len(pageResp.Rows))
+	rows := make([]*schedulerv1.ScheduledTask, 0, len(pageResp.Rows))
 	for _, row := range pageResp.Rows {
-		item := &schedulerv1.PageSchedulerScheduledTasks_Resp_ScheduledTask{
+		item := &schedulerv1.ScheduledTask{
 			Id:             row.ID,
-			Name:           row.Name,
+			TaskKey:        row.TaskKey,
+			HandlerName:    schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 			Title:          row.Title,
 			Description:    row.Description,
 			Enabled:        row.Enabled,
@@ -179,7 +194,7 @@ func (s *SchedulerScheduledTaskService) ListAvailableTasks(
 	replyRows := make([]*schedulerv1.ListSchedulerAvailableScheduledTasks_Resp_AvailableTask, 0, len(rows))
 	for _, row := range rows {
 		replyRows = append(replyRows, &schedulerv1.ListSchedulerAvailableScheduledTasks_Resp_AvailableTask{
-			Name:        row.Name,
+			HandlerName: schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 			Title:       row.Title,
 			Description: row.Description,
 		})
@@ -217,9 +232,9 @@ func (s *SchedulerScheduledTaskService) PageExecutionRecords(
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*schedulerv1.PageSchedulerScheduledTaskExecutionRecords_Resp_ExecutionRecord, 0, len(pageResp.Rows))
+	rows := make([]*schedulerv1.ScheduledTaskExecutionRecord, 0, len(pageResp.Rows))
 	for _, row := range pageResp.Rows {
-		item := &schedulerv1.PageSchedulerScheduledTaskExecutionRecords_Resp_ExecutionRecord{
+		item := &schedulerv1.ScheduledTaskExecutionRecord{
 			Id:                   row.ID,
 			ScheduledTaskId:      row.ScheduledTaskID,
 			ScheduledTaskVersion: row.ScheduledTaskVersion,
@@ -259,14 +274,17 @@ func (s *SchedulerScheduledTaskService) PageExecutionRecords(
 }
 
 func (s *SchedulerScheduledTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerScheduledTask_Req) (*schedulerv1.TriggerSchedulerScheduledTask_Resp, error) {
+	if req == nil || req.GetTaskKey() == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	row, err := s.scheduledTaskUsecase.Trigger(ctx, &usecase.TaskTriggerReq{
-		ID:      req.GetId(),
+		TaskKey: req.GetTaskKey(),
 		Payload: req.GetPayload(),
 	})
 	if err != nil {
 		return nil, err
 	}
-	item := &schedulerv1.TriggerSchedulerScheduledTask_Resp_ExecutionRecord{
+	item := &schedulerv1.ScheduledTaskExecutionRecord{
 		Id:                   row.ID,
 		ScheduledTaskId:      row.ScheduledTaskID,
 		ScheduledTaskVersion: row.ScheduledTaskVersion,
@@ -310,7 +328,7 @@ func (s *SchedulerScheduledTaskService) CancelExecution(
 	if err != nil {
 		return nil, err
 	}
-	item := &schedulerv1.CancelSchedulerScheduledTaskExecution_Resp_ExecutionRecord{
+	item := &schedulerv1.ScheduledTaskExecutionRecord{
 		Id:                   row.ID,
 		ScheduledTaskId:      row.ScheduledTaskID,
 		ScheduledTaskVersion: row.ScheduledTaskVersion,

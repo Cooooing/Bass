@@ -6,13 +6,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	schedulerenum "scheduler/internal/enum"
 	"strings"
 	"time"
 )
 
 type UserUnbanAccounts struct {
 	userClient  *rpc.UserClient
-	name        string
 	title       string
 	description string
 }
@@ -22,14 +22,13 @@ func NewUserUnbanAccounts(
 ) *UserUnbanAccounts {
 	return &UserUnbanAccounts{
 		userClient:  userClient,
-		name:        "user.unban_accounts",
 		title:       "用户批量解封",
 		description: "调用 user.UnbanAccounts 解封过期临时封禁账号。",
 	}
 }
 
-func (t *UserUnbanAccounts) Name() string {
-	return t.name
+func (t *UserUnbanAccounts) HandlerName() schedulerenum.TaskHandlerName {
+	return schedulerenum.TaskHandlerNameUserUnbanAccounts
 }
 
 func (t *UserUnbanAccounts) Title() string {
@@ -47,11 +46,13 @@ func (t *UserUnbanAccounts) DefaultScheduledTasks() []*DefaultScheduledTask {
 func (t *UserUnbanAccounts) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return []*DefaultDelayedTask{
 		{
-			Title:       t.Title(),
-			Description: t.Description(),
-			Enabled:     true,
-			Timeout:     30 * time.Second,
-			MaxAttempts: 3,
+			TaskKey:       schedulerenum.TaskKeyUserUnbanAccountsDefault,
+			Title:         t.Title(),
+			Description:   t.Description(),
+			Enabled:       true,
+			Timeout:       30 * time.Second,
+			MaxAttempts:   3,
+			MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll,
 		},
 	}
 }

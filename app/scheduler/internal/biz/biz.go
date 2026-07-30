@@ -21,16 +21,9 @@ func ProvideTasks(
 	userUnbanAccounts *task.UserUnbanAccounts,
 	userOutboxPublishBatch *task.UserOutboxPublishBatch,
 ) map[string]task.Task {
-	tasks := map[string]task.Task{}
-	for _, item := range []task.Task{noop, userUnbanAccounts, userOutboxPublishBatch} {
-		name := item.Name()
-		if name == "" {
-			panic("scheduler task name is empty")
-		}
-		if _, ok := tasks[name]; ok {
-			panic("scheduler task name duplicated: " + name)
-		}
-		tasks[name] = item
+	return map[string]task.Task{
+		noop.HandlerName().String():                   noop,
+		userUnbanAccounts.HandlerName().String():      userUnbanAccounts,
+		userOutboxPublishBatch.HandlerName().String(): userOutboxPublishBatch,
 	}
-	return tasks
 }

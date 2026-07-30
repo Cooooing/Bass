@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.scheduler.v1;
+
+option go_package = "common/proto/gen/scheduler/v1/enum;enum";
+
+enum SchedulerTaskHandlerName {
+  SCHEDULER_TASK_HANDLER_NAME_UNSPECIFIED = 0; // 未指定。
+  SCHEDULER_TASK_HANDLER_NAME_NOOP = 1; // 空任务。
+  SCHEDULER_TASK_HANDLER_NAME_USER_OUTBOX_PUBLISH_BATCH = 2; // 用户 Outbox 批量投递。
+  SCHEDULER_TASK_HANDLER_NAME_USER_UNBAN_ACCOUNTS = 3; // 用户批量解封。
+}

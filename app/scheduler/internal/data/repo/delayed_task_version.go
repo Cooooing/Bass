@@ -1,4 +1,4 @@
-﻿package repo
+package repo
 
 import (
 	"common/pkg/apperror"
@@ -56,7 +56,8 @@ func (r *DelayedTaskVersionRepo) Create(ctx context.Context, task *model.Delayed
 	created, err := r.getClient(ctx).DelayedTaskVersion.Create().
 		SetDelayedTaskID(task.ID).
 		SetVersion(task.Version).
-		SetName(task.Name).
+		SetTaskKey(task.TaskKey).
+		SetHandlerName(task.HandlerName.String()).
 		SetTitle(task.Title).
 		SetDescription(task.Description).
 		SetEnabled(task.Enabled).
@@ -112,7 +113,8 @@ func (r *DelayedTaskVersionRepo) model(row *gen.DelayedTaskVersion) *model.Delay
 		ID:            row.ID,
 		DelayedTaskID: row.DelayedTaskID,
 		Version:       row.Version,
-		Name:          row.Name,
+		TaskKey:       row.TaskKey,
+		HandlerName:   schedulerenum.TaskHandlerName(row.HandlerName),
 		Title:         row.Title,
 		Description:   row.Description,
 		Enabled:       row.Enabled,

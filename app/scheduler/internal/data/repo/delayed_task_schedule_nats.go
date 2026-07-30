@@ -142,7 +142,7 @@ func (r *DelayedTaskScheduleNatsRepo) Schedule(ctx context.Context, req *repo.De
 	}
 	body, err := json.Marshal(repo.DelayedTaskScheduleMessage{
 		ExecutionRecordID: req.Record.ID,
-		DelayedTaskTitle:  req.DelayedTask.Title,
+		DelayedTaskKey:    req.DelayedTask.TaskKey,
 		TriggerType:       req.Record.TriggerType,
 	})
 	if err != nil {
@@ -215,7 +215,7 @@ func (r *DelayedTaskScheduleNatsRepo) Consume(ctx context.Context, handler func(
 				"延迟任务消息处理失败",
 				"error", handleErr,
 				"execution_record_id", payload.ExecutionRecordID,
-				"delayed_task_title", payload.DelayedTaskTitle,
+				"delayed_task_key", payload.DelayedTaskKey,
 				"schedule_key", payload.ScheduleKey,
 			)
 			delay := r.ackWait / 2

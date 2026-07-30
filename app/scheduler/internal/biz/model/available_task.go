@@ -1,7 +1,9 @@
 package model
 
+import schedulerenum "scheduler/internal/enum"
+
 type AvailableTask struct {
-	Name        string
+	HandlerName schedulerenum.TaskHandlerName
 	Title       string
 	Description string
 }

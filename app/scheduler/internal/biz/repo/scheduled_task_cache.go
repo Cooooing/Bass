@@ -6,7 +6,7 @@ import (
 )
 
 type ScheduledTaskCacheRepo interface {
-	GetScheduledTask(ctx context.Context, title string) (*model.ScheduledTask, error)
+	GetScheduledTask(ctx context.Context, taskKey string) (*model.ScheduledTask, error)
 	SetScheduledTask(ctx context.Context, row *model.ScheduledTask) error
-	DeleteScheduledTask(ctx context.Context, title string) error
+	DeleteScheduledTask(ctx context.Context, taskKey string) error
 }

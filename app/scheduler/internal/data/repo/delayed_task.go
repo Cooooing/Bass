@@ -71,17 +71,17 @@ func (r *DelayedTaskRepo) Page(ctx context.Context, req *bizrepo.DelayedTaskPage
 	return &bizrepo.DelayedTaskPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
 }
 
-func (r *DelayedTaskRepo) MapByTitle(ctx context.Context, titles []string) (map[string]*model.DelayedTask, error) {
-	if len(titles) == 0 {
+func (r *DelayedTaskRepo) MapByTaskKey(ctx context.Context, taskKeys []string) (map[string]*model.DelayedTask, error) {
+	if len(taskKeys) == 0 {
 		return map[string]*model.DelayedTask{}, nil
 	}
-	rows, err := r.List(ctx, &bizrepo.DelayedTaskGetReq{Titles: titles})
+	rows, err := r.List(ctx, &bizrepo.DelayedTaskGetReq{TaskKeys: taskKeys})
 	if err != nil {
 		return nil, err
 	}
 	result := make(map[string]*model.DelayedTask, len(rows))
 	for _, row := range rows {
-		result[row.Title] = row
+		result[row.TaskKey] = row
 	}
 	return result, nil
 }
@@ -100,7 +100,8 @@ func (r *DelayedTaskRepo) Upsert(ctx context.Context, row *model.DelayedTask) (*
 			return nil, err
 		}
 		updated, err := r.getClient(ctx).DelayedTask.UpdateOneID(row.ID).
-			SetName(row.Name).
+			SetTaskKey(row.TaskKey).
+			SetHandlerName(row.HandlerName.String()).
 			SetTitle(row.Title).
 			SetDescription(row.Description).
 			SetEnabled(row.Enabled).
@@ -116,7 +117,8 @@ func (r *DelayedTaskRepo) Upsert(ctx context.Context, row *model.DelayedTask) (*
 		return r.model(updated), nil
 	}
 	created, err := r.getClient(ctx).DelayedTask.Create().
-		SetName(row.Name).
+		SetTaskKey(row.TaskKey).
+		SetHandlerName(row.HandlerName.String()).
 		SetTitle(row.Title).
 		SetDescription(row.Description).
 		SetEnabled(row.Enabled).
@@ -153,14 +155,17 @@ func (r *DelayedTaskRepo) getQuery(query *gen.DelayedTaskQuery, req *bizrepo.Del
 	if len(req.IDs) > 0 {
 		query = query.Where(delayedtask.IDIn(req.IDs...))
 	}
-	if req.Name != nil {
-		query = query.Where(delayedtask.NameContains(*req.Name))
+	if req.TaskKey != nil {
+		query = query.Where(delayedtask.TaskKeyEQ(*req.TaskKey))
+	}
+	if len(req.TaskKeys) > 0 {
+		query = query.Where(delayedtask.TaskKeyIn(req.TaskKeys...))
+	}
+	if req.HandlerName != nil {
+		query = query.Where(delayedtask.HandlerNameEQ(req.HandlerName.String()))
 	}
 	if req.Title != nil {
 		query = query.Where(delayedtask.TitleContains(*req.Title))
-	}
-	if len(req.Titles) > 0 {
-		query = query.Where(delayedtask.TitleIn(req.Titles...))
 	}
 	if req.Enabled != nil {
 		query = query.Where(delayedtask.Enabled(*req.Enabled))
@@ -175,7 +180,8 @@ func (r *DelayedTaskRepo) model(row *gen.DelayedTask) *model.DelayedTask {
 	}
 	return &model.DelayedTask{
 		ID:            row.ID,
-		Name:          row.Name,
+		TaskKey:       row.TaskKey,
+		HandlerName:   schedulerenum.TaskHandlerName(row.HandlerName),
 		Title:         row.Title,
 		Description:   row.Description,
 		Enabled:       row.Enabled,

@@ -116,12 +116,13 @@ func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.Cr
 }
 
 func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.ListComments_Req) (*bbscontentv1.ListComments_Resp, error) {
+	var userID int64
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	if ok && user != nil {
+		userID = user.ID
 	}
 	resp, err := s.contentCommentUsecase.ListComments(ctx, &usecase.ListCommentsReq{
-		UserID: user.ID,
+		UserID: userID,
 		Page:   req.GetPage(),
 		Query:  req.GetQuery(),
 	})
@@ -206,12 +207,13 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 }
 
 func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontentv1.ListCommentThreads_Req) (*bbscontentv1.ListCommentThreads_Resp, error) {
+	var userID int64
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	if ok && user != nil {
+		userID = user.ID
 	}
 	resp, err := s.contentCommentUsecase.ListCommentThreads(ctx, &usecase.ListCommentThreadsReq{
-		UserID:            user.ID,
+		UserID:            userID,
 		Page:              req.GetPage(),
 		ArticleID:         req.GetArticleId(),
 		Order:             req.Order,
@@ -367,12 +369,13 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 }
 
 func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontentv1.ListCommentReplies_Req) (*bbscontentv1.ListCommentReplies_Resp, error) {
+	var userID int64
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	if ok && user != nil {
+		userID = user.ID
 	}
 	resp, err := s.contentCommentUsecase.ListCommentReplies(ctx, &usecase.ListCommentRepliesReq{
-		UserID:    user.ID,
+		UserID:    userID,
 		Page:      req.GetPage(),
 		ArticleID: req.GetArticleId(),
 		ParentID:  req.GetParentId(),
@@ -459,12 +462,13 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 }
 
 func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbscontentv1.ListCommentTimeline_Req) (*bbscontentv1.ListCommentTimeline_Resp, error) {
+	var userID int64
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	if ok && user != nil {
+		userID = user.ID
 	}
 	resp, err := s.contentCommentUsecase.ListCommentTimeline(ctx, &usecase.ListCommentTimelineReq{
-		UserID:    user.ID,
+		UserID:    userID,
 		Page:      req.GetPage(),
 		ArticleID: req.GetArticleId(),
 		Order:     req.Order,

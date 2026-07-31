@@ -301,10 +301,13 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 }
 
 func (r *ContentArticleClient) ViewArticle(ctx context.Context, req *repo.ViewArticleReq) error {
-	_, err := r.contentClient.Article.View(ctx, &contentv1.ViewArticle_Req{
-		ArticleId:    req.ArticleID,
-		ViewerUserId: new(req.UserID),
-	})
+	viewReq := &contentv1.ViewArticle_Req{
+		ArticleId: req.ArticleID,
+	}
+	if req.UserID > 0 {
+		viewReq.ViewerUserId = new(req.UserID)
+	}
+	_, err := r.contentClient.Article.View(ctx, viewReq)
 	if err != nil {
 		return err
 	}
@@ -393,14 +396,18 @@ func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs 
 	if err != nil {
 		return nil, nil, err
 	}
-	stateResp, err := r.contentClient.Article.MapViewerActionStates(ctx, &contentv1.MapArticleViewerActionStates_Req{
-		ArticleIds: articleIDs,
-		UserId:     userID,
-	})
-	if err != nil {
-		return nil, nil, err
+	states := map[int64]*repo.ArticleViewerActionState{}
+	if userID > 0 {
+		stateResp, err := r.contentClient.Article.MapViewerActionStates(ctx, &contentv1.MapArticleViewerActionStates_Req{
+			ArticleIds: articleIDs,
+			UserId:     userID,
+		})
+		if err != nil {
+			return nil, nil, err
+		}
+		states = r.articleViewerActionStates(stateResp.GetStates())
 	}
-	return commentResp.GetComments(), r.articleViewerActionStates(stateResp.GetStates()), nil
+	return commentResp.GetComments(), states, nil
 }
 
 func (r *ContentArticleClient) articleViewerActionStates(states map[int64]*contentv1.MapArticleViewerActionStates_Resp_ArticleViewerActionState) map[int64]*repo.ArticleViewerActionState {

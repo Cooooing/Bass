@@ -211,7 +211,11 @@ func (s *RelationService) ListBlocked(ctx context.Context, req *bbsuserv1.ListBl
 func (s *RelationService) GetStatus(ctx context.Context, req *bbsuserv1.GetStatusRelation_Req) (*bbsuserv1.GetStatusRelation_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+		return &bbsuserv1.GetStatusRelation_Resp{
+			Status: &bbsuserv1.GetStatusRelation_Resp_RelationStatus{
+				TargetId: req.GetTargetId(),
+			},
+		}, nil
 	}
 	resp, err := s.relationUsecase.GetStatus(ctx, &usecase.GetStatusReq{
 		ActorID:  user.ID,

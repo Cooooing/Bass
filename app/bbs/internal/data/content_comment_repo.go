@@ -393,7 +393,7 @@ func (r *ContentCommentClient) ThankComment(ctx context.Context, req *repo.Thank
 
 func (r *ContentCommentClient) loadCommentViewerActionStates(ctx context.Context, userID int64, commentIDs []int64) (map[int64]*repo.CommentViewerActionState, error) {
 	commentIDs = lo.Uniq(commentIDs)
-	if len(commentIDs) == 0 {
+	if userID <= 0 || len(commentIDs) == 0 {
 		return map[int64]*repo.CommentViewerActionState{}, nil
 	}
 	reply, err := r.contentClient.Comment.MapViewerActionStates(ctx, &contentv1.MapCommentViewerActionStates_Req{

@@ -13,14 +13,23 @@ import (
 	"context"
 	"encoding/json"
 	"log/slog"
+	"net"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/felixge/httpsnoop"
 	kratoslog "github.com/go-kratos/kratos/v3/log"
 	"github.com/go-kratos/kratos/v3/middleware"
 	"github.com/go-kratos/kratos/v3/transport"
+	kratoshttp "github.com/go-kratos/kratos/v3/transport/http"
+	"github.com/google/uuid"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/propagation"
+	oteltrace "go.opentelemetry.io/otel/trace"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
@@ -67,7 +76,6 @@ func HttpRespEncoder(w http.ResponseWriter, r *http.Request, data any) error {
 func HttpErrorEncoder(resolve func(r *http.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string) func(w http.ResponseWriter, r *http.Request, err error) {
 	return func(w http.ResponseWriter, r *http.Request, err error) {
 		w.Header().Set("Content-Type", "application/json")
-
 		businessCode, ok := apperror.BusinessCode(err)
 		if !ok || businessCode == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_SUCCESS {
 			businessCode = cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_UNKNOWN
@@ -82,9 +90,140 @@ func HttpErrorEncoder(resolve func(r *http.Request, code cerrors.BusinessErrorCo
 			}
 		}
 
+		span := oteltrace.SpanFromContext(r.Context())
+		if span.SpanContext().IsValid() {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, err.Error())
+			span.SetAttributes(attribute.Int("http.response.status_code", statusCode), attribute.Int("bass.business_code", int(businessCode)))
+		}
+		kratoslog.ErrorContext(r.Context(), "http error",
+			constant.LogFieldErr, err,
+			"method", r.Method,
+			constant.LogFieldPath, r.URL.Path,
+			"query", r.URL.RawQuery,
+			"remote_addr", r.RemoteAddr,
+			"host", r.Host,
+			"request_uri", r.RequestURI,
+			constant.LogFieldStatusCode, statusCode,
+			"business_code", int(businessCode),
+			"business_reason", businessCode.String(),
+			"message", message,
+			"error_data", string(errorData),
+		)
+
 		w.WriteHeader(statusCode)
 		res := NewResult[any](int(businessCode), message, errorData)
 		_ = json.NewEncoder(w).Encode(res)
+	}
+}
+
+func HTTPTraceMiddleware() kratoshttp.FilterFunc {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := otel.GetTextMapPropagator().Extract(r.Context(), propagation.HeaderCarrier(r.Header))
+			requestID := strings.TrimSpace(r.Header.Get(constant.HeaderRequestID))
+			if requestID == "" {
+				requestID = uuid.NewString()
+			}
+			w.Header().Set(constant.HeaderRequestID, requestID)
+			r.Header.Set(constant.HeaderRequestID, requestID)
+			clientIP := ""
+			for _, header := range [...]string{constant.HeaderForwardedFor, constant.HeaderRealIP, constant.HeaderClientIP} {
+				for _, item := range strings.Split(r.Header.Get(header), ",") {
+					if ip := strings.TrimSpace(item); ip != "" {
+						clientIP = ip
+						break
+					}
+				}
+				if clientIP != "" {
+					break
+				}
+			}
+			if clientIP == "" {
+				if host, _, err := net.SplitHostPort(r.RemoteAddr); err == nil {
+					clientIP = host
+				} else {
+					clientIP = r.RemoteAddr
+				}
+			}
+			ctx = kratoslog.ContextWithAttrs(ctx, slog.String(constant.LogFieldRequestID, requestID), slog.String(constant.LogFieldClientIP, clientIP))
+			spanName := r.Method
+			if r.URL != nil && r.URL.Path != "" {
+				spanName += " " + r.URL.Path
+			}
+			ctx, span := otel.Tracer("common.http.server").Start(ctx, spanName, oteltrace.WithSpanKind(oteltrace.SpanKindServer), oteltrace.WithAttributes(
+				attribute.String("http.request.method", r.Method),
+				attribute.String("url.path", r.URL.Path),
+				attribute.String("url.query", r.URL.RawQuery),
+				attribute.String("server.address", r.Host),
+				attribute.String("client.address", clientIP),
+				attribute.String(constant.LogFieldRequestID, requestID),
+			))
+			defer span.End()
+
+			metrics := httpsnoop.CaptureMetrics(next, w, r.WithContext(ctx))
+			statusCode := metrics.Code
+			if statusCode == 0 {
+				statusCode = http.StatusOK
+			}
+			span.SetAttributes(attribute.Int("http.response.status_code", statusCode), attribute.Int64("http.response.body.size", metrics.Written))
+			if statusCode >= http.StatusInternalServerError {
+				span.SetStatus(codes.Error, http.StatusText(statusCode))
+			}
+		})
+	}
+}
+
+func HTTPAccessLogMiddleware(logger *slog.Logger) kratoshttp.FilterFunc {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			start := time.Now()
+			metrics := httpsnoop.CaptureMetrics(next, w, r)
+			statusCode := metrics.Code
+			if statusCode == 0 {
+				statusCode = http.StatusOK
+			}
+			level := slog.LevelInfo
+			if statusCode >= http.StatusInternalServerError {
+				level = slog.LevelError
+			} else if statusCode >= http.StatusBadRequest {
+				level = slog.LevelWarn
+			}
+			requestHeaders := make(map[string][]string, len(r.Header))
+			for key, values := range r.Header {
+				if strings.EqualFold(key, constant.LogFieldAuthorization) || strings.EqualFold(key, constant.LogFieldCookie) || strings.EqualFold(key, "Set-Cookie") {
+					requestHeaders[key] = []string{"***"}
+					continue
+				}
+				copied := make([]string, len(values))
+				copy(copied, values)
+				requestHeaders[key] = copied
+			}
+			responseHeaders := make(map[string][]string, len(w.Header()))
+			for key, values := range w.Header() {
+				if strings.EqualFold(key, constant.LogFieldAuthorization) || strings.EqualFold(key, constant.LogFieldCookie) || strings.EqualFold(key, "Set-Cookie") {
+					responseHeaders[key] = []string{"***"}
+					continue
+				}
+				copied := make([]string, len(values))
+				copy(copied, values)
+				responseHeaders[key] = copied
+			}
+			logger.LogAttrs(r.Context(), level, "http access",
+				slog.String(constant.LogFieldKind, constant.LogKindServer),
+				slog.String("method", r.Method),
+				slog.String(constant.LogFieldPath, r.URL.Path),
+				slog.String("query", r.URL.RawQuery),
+				slog.String("remote_addr", r.RemoteAddr),
+				slog.String("host", r.Host),
+				slog.String("request_uri", r.RequestURI),
+				slog.Int(constant.LogFieldStatusCode, statusCode),
+				slog.Int(constant.LogFieldLatencyMS, int(time.Since(start).Milliseconds())),
+				slog.Int64("response_bytes", metrics.Written),
+				slog.Any("request_headers", requestHeaders),
+				slog.Any("response_headers", responseHeaders),
+			)
+		})
 	}
 }
 

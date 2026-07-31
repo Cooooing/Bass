@@ -6,6 +6,7 @@ import (
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
 	"common/pkg/server"
+	bbscontentv1 "common/proto/gen/bbs/v1/content"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	cerrors "common/proto/gen/common/errors"
 	userv1 "common/proto/gen/user/v1"
@@ -22,21 +23,30 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-var bbsHTTPAuthOperationWhitelist = map[string]struct{}{
+var bbsHTTPPublicOperations = map[string]struct{}{
 	bbsuserv1.OperationAuthServiceStartEmailRegistration:  {},
 	bbsuserv1.OperationAuthServiceVerifyEmailRegistration: {},
 	bbsuserv1.OperationAuthServiceStartPhoneRegistration:  {},
 	bbsuserv1.OperationAuthServiceVerifyPhoneRegistration: {},
-	bbsuserv1.OperationOtpServiceSendEmailOtp:             {},
-	bbsuserv1.OperationOtpServiceSendPhoneOtp:             {},
 	bbsuserv1.OperationAuthServiceLogin:                   {},
 	bbsuserv1.OperationAuthServiceRefreshToken:            {},
 	bbsuserv1.OperationAccountServiceAvatar:               {},
+	bbsuserv1.OperationAccountServiceGetProfile:           {},
 }
 
 var bbsHTTPOptionalAuthOperations = map[string]struct{}{
-	bbsuserv1.OperationOtpServiceSendEmailOtp: {},
-	bbsuserv1.OperationOtpServiceSendPhoneOtp: {},
+	bbscontentv1.OperationArticleServiceList:         {},
+	bbscontentv1.OperationArticleServiceGet:          {},
+	bbscontentv1.OperationCommentServiceList:         {},
+	bbscontentv1.OperationCommentServiceListThreads:  {},
+	bbscontentv1.OperationCommentServiceListReplies:  {},
+	bbscontentv1.OperationCommentServiceListTimeline: {},
+	bbscontentv1.OperationDomainServiceList:          {},
+	bbscontentv1.OperationTagServiceList:             {},
+	bbscontentv1.OperationTagServiceListArticleTags:  {},
+	bbsuserv1.OperationOtpServiceSendEmailOtp:        {},
+	bbsuserv1.OperationOtpServiceSendPhoneOtp:        {},
+	bbsuserv1.OperationRelationServiceGetStatus:      {},
 }
 
 func NewHTTPServer(
@@ -46,9 +56,24 @@ func NewHTTPServer(
 	services []server.Service,
 	authClient userv1.AuthServiceClient,
 ) *kratoshttp.Server {
+	operationAuthGroups := map[string]string{}
+	for operation := range bbsHTTPPublicOperations {
+		operationAuthGroups[operation] = "public"
+	}
+	for operation := range bbsHTTPOptionalAuthOperations {
+		if group, ok := operationAuthGroups[operation]; ok {
+			panic(fmt.Sprintf("bbs http operation auth group conflict: %s in %s and optional", operation, group))
+		}
+		operationAuthGroups[operation] = "optional"
+	}
 	authRequiredMatch := func(_ context.Context, operation string) bool {
-		_, ok := bbsHTTPAuthOperationWhitelist[operation]
-		return !ok
+		if _, ok := bbsHTTPPublicOperations[operation]; ok {
+			return false
+		}
+		if _, ok := bbsHTTPOptionalAuthOperations[operation]; ok {
+			return false
+		}
+		return true
 	}
 	optionalAuthMatch := func(_ context.Context, operation string) bool {
 		_, ok := bbsHTTPOptionalAuthOperations[operation]
@@ -56,12 +81,13 @@ func NewHTTPServer(
 	}
 
 	var opts = []kratoshttp.ServerOption{
+		kratoshttp.Filter(server.HTTPTraceMiddleware(), server.HTTPAccessLogMiddleware(logger)),
 		kratoshttp.Middleware(
 			server.RequestLogContextMiddleware(),
-			selector.Server(server.OptionalUserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(optionalAuthMatch).Build(),
-			selector.Server(server.UserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(authRequiredMatch).Build(),
 			obs.ServerMiddleware(),
 			recovery.Recovery(),
+			selector.Server(server.OptionalUserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(optionalAuthMatch).Build(),
+			selector.Server(server.UserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(authRequiredMatch).Build(),
 			validate.ProtoValidate(),
 		),
 		kratoshttp.ResponseEncoder(server.HttpRespEncoder),

@@ -172,12 +172,13 @@ func (s *ContentArticleService) DiscardDraft(ctx context.Context, req *bbsconten
 }
 
 func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Req) (*bbscontentv1.ListArticles_Resp, error) {
+	var userID int64
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	if ok && user != nil {
+		userID = user.ID
 	}
 	resp, err := s.contentArticleUsecase.ListArticles(ctx, &usecase.ListArticlesReq{
-		UserID: user.ID,
+		UserID: userID,
 		Page:   req.GetPage(),
 		Query:  req.GetQuery(),
 	})
@@ -203,12 +204,13 @@ func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.List
 }
 
 func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetArticle_Req) (*bbscontentv1.GetArticle_Resp, error) {
+	var userID int64
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	if ok && user != nil {
+		userID = user.ID
 	}
 	resp, err := s.contentArticleUsecase.GetArticle(ctx, &usecase.GetArticleReq{
-		UserID:    user.ID,
+		UserID:    userID,
 		ArticleID: req.GetArticleId(),
 	})
 	if err != nil {
@@ -217,7 +219,7 @@ func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetAr
 	article := resp
 	if article.PublishStatus == int32(bbscontentv1enum.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED) && article.Visibility == int32(bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC) && article.Restriction == int32(bbscontentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE) {
 		if err := s.contentArticleUsecase.ViewArticle(ctx, &usecase.ViewArticleReq{
-			UserID:    user.ID,
+			UserID:    userID,
 			ArticleID: req.GetArticleId(),
 		}); err != nil {
 			return nil, err

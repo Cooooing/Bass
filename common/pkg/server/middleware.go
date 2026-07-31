@@ -146,7 +146,6 @@ func HTTPTraceMiddleware() kratoshttp.FilterFunc {
 					clientIP = r.RemoteAddr
 				}
 			}
-			ctx = kratoslog.ContextWithAttrs(ctx, slog.String(constant.LogFieldRequestID, requestID), slog.String(constant.LogFieldClientIP, clientIP))
 			spanName := r.Method
 			if r.URL != nil && r.URL.Path != "" {
 				spanName += " " + r.URL.Path

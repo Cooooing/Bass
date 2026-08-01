@@ -30,13 +30,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * 当前查看账号的文章行为状态。
+ * ArticleViewerActionState
  */
 @JsonPropertyOrder({
   ArticleViewerActionState.JSON_PROPERTY_LIKED,
   ArticleViewerActionState.JSON_PROPERTY_THANKED,
   ArticleViewerActionState.JSON_PROPERTY_COLLECTED,
-  ArticleViewerActionState.JSON_PROPERTY_WATCHED
+  ArticleViewerActionState.JSON_PROPERTY_REWARDED
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ArticleViewerActionState {
@@ -52,9 +52,9 @@ public class ArticleViewerActionState {
   @javax.annotation.Nullable
   private Boolean collected;
 
-  public static final String JSON_PROPERTY_WATCHED = "watched";
+  public static final String JSON_PROPERTY_REWARDED = "rewarded";
   @javax.annotation.Nullable
-  private Boolean watched;
+  private Boolean rewarded;
 
   public ArticleViewerActionState() { 
   }
@@ -131,27 +131,27 @@ public class ArticleViewerActionState {
   }
 
 
-  public ArticleViewerActionState watched(@javax.annotation.Nullable Boolean watched) {
-    this.watched = watched;
+  public ArticleViewerActionState rewarded(@javax.annotation.Nullable Boolean rewarded) {
+    this.rewarded = rewarded;
     return this;
   }
 
   /**
-   * Get watched
-   * @return watched
+   * Get rewarded
+   * @return rewarded
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_WATCHED, required = false)
+  @JsonProperty(value = JSON_PROPERTY_REWARDED, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getWatched() {
-    return watched;
+  public Boolean getRewarded() {
+    return rewarded;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_WATCHED, required = false)
+  @JsonProperty(value = JSON_PROPERTY_REWARDED, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWatched(@javax.annotation.Nullable Boolean watched) {
-    this.watched = watched;
+  public void setRewarded(@javax.annotation.Nullable Boolean rewarded) {
+    this.rewarded = rewarded;
   }
 
 
@@ -170,12 +170,12 @@ public class ArticleViewerActionState {
     return Objects.equals(this.liked, articleViewerActionState.liked) &&
         Objects.equals(this.thanked, articleViewerActionState.thanked) &&
         Objects.equals(this.collected, articleViewerActionState.collected) &&
-        Objects.equals(this.watched, articleViewerActionState.watched);
+        Objects.equals(this.rewarded, articleViewerActionState.rewarded);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(liked, thanked, collected, watched);
+    return Objects.hash(liked, thanked, collected, rewarded);
   }
 
   @Override
@@ -185,7 +185,7 @@ public class ArticleViewerActionState {
     sb.append("    liked: ").append(toIndentedString(liked)).append("\n");
     sb.append("    thanked: ").append(toIndentedString(thanked)).append("\n");
     sb.append("    collected: ").append(toIndentedString(collected)).append("\n");
-    sb.append("    watched: ").append(toIndentedString(watched)).append("\n");
+    sb.append("    rewarded: ").append(toIndentedString(rewarded)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -245,9 +245,9 @@ public class ArticleViewerActionState {
       joiner.add(String.format(java.util.Locale.ROOT, "%scollected%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCollected()))));
     }
 
-    // add `watched` to the URL query string
-    if (getWatched() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%swatched%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getWatched()))));
+    // add `rewarded` to the URL query string
+    if (getRewarded() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%srewarded%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getRewarded()))));
     }
 
     return joiner.toString();

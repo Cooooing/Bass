@@ -18,18 +18,18 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
-import com.bass.bbs.model.BlockRelationRequest;
-import com.bass.bbs.model.FollowRelationRequest;
-import com.bass.bbs.model.GetStatusRelationReply;
-import com.bass.bbs.model.GetStatusRelationRequest;
-import com.bass.bbs.model.ListBlockedRelationsReply;
-import com.bass.bbs.model.ListBlockedRelationsRequest;
-import com.bass.bbs.model.ListFollowersRelationsReply;
-import com.bass.bbs.model.ListFollowersRelationsRequest;
-import com.bass.bbs.model.ListFollowingRelationsReply;
-import com.bass.bbs.model.ListFollowingRelationsRequest;
-import com.bass.bbs.model.UnblockRelationRequest;
-import com.bass.bbs.model.UnfollowRelationRequest;
+import com.bass.bbs.model.BlockRelationReq;
+import com.bass.bbs.model.FollowRelationReq;
+import com.bass.bbs.model.GetStatusRelationReq;
+import com.bass.bbs.model.GetStatusRelationResp;
+import com.bass.bbs.model.ListBlockedRelationsReq;
+import com.bass.bbs.model.ListBlockedRelationsResp;
+import com.bass.bbs.model.ListFollowersRelationsReq;
+import com.bass.bbs.model.ListFollowersRelationsResp;
+import com.bass.bbs.model.ListFollowingRelationsReq;
+import com.bass.bbs.model.ListFollowingRelationsResp;
+import com.bass.bbs.model.UnblockRelationReq;
+import com.bass.bbs.model.UnfollowRelationReq;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -194,8 +194,8 @@ public class RelationService {
    */
   public Object block(APIBlockRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    BlockRelationRequest blockRelationRequest = apiRequest.blockRelationRequest();
-    return block(blockRelationRequest, headers);
+    BlockRelationReq blockRelationReq = apiRequest.blockRelationReq();
+    return block(blockRelationReq, headers);
   }
 
   /**
@@ -218,55 +218,55 @@ public class RelationService {
    * @throws ApiException if fails to make API call
    */
   public ApiResponse<Object> blockWithHttpInfo(APIBlockRequest apiRequest, Map<String, String> headers) throws ApiException {
-    BlockRelationRequest blockRelationRequest = apiRequest.blockRelationRequest();
-    return blockWithHttpInfo(blockRelationRequest, headers);
+    BlockRelationReq blockRelationReq = apiRequest.blockRelationReq();
+    return blockWithHttpInfo(blockRelationReq, headers);
   }
 
   /**
    * 
    * 当前账号拉黑目标账号。
-   * @param blockRelationRequest  (required)
+   * @param blockRelationReq  (required)
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object block(@javax.annotation.Nonnull BlockRelationRequest blockRelationRequest) throws ApiException {
-    return block(blockRelationRequest, null);
+  public Object block(@javax.annotation.Nonnull BlockRelationReq blockRelationReq) throws ApiException {
+    return block(blockRelationReq, null);
   }
 
   /**
    * 
    * 当前账号拉黑目标账号。
-   * @param blockRelationRequest  (required)
+   * @param blockRelationReq  (required)
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object block(@javax.annotation.Nonnull BlockRelationRequest blockRelationRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = blockWithHttpInfo(blockRelationRequest, headers);
+  public Object block(@javax.annotation.Nonnull BlockRelationReq blockRelationReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = blockWithHttpInfo(blockRelationReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 当前账号拉黑目标账号。
-   * @param blockRelationRequest  (required)
+   * @param blockRelationReq  (required)
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> blockWithHttpInfo(@javax.annotation.Nonnull BlockRelationRequest blockRelationRequest) throws ApiException {
-    return blockWithHttpInfo(blockRelationRequest, null);
+  public ApiResponse<Object> blockWithHttpInfo(@javax.annotation.Nonnull BlockRelationReq blockRelationReq) throws ApiException {
+    return blockWithHttpInfo(blockRelationReq, null);
   }
 
   /**
    * 
    * 当前账号拉黑目标账号。
-   * @param blockRelationRequest  (required)
+   * @param blockRelationReq  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> blockWithHttpInfo(@javax.annotation.Nonnull BlockRelationRequest blockRelationRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = blockRequestBuilder(blockRelationRequest, headers);
+  public ApiResponse<Object> blockWithHttpInfo(@javax.annotation.Nonnull BlockRelationReq blockRelationReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = blockRequestBuilder(blockRelationReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -313,10 +313,10 @@ public class RelationService {
     }
   }
 
-  private HttpRequest.Builder blockRequestBuilder(@javax.annotation.Nonnull BlockRelationRequest blockRelationRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'blockRelationRequest' is set
-    if (blockRelationRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'blockRelationRequest' when calling block");
+  private HttpRequest.Builder blockRequestBuilder(@javax.annotation.Nonnull BlockRelationReq blockRelationReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'blockRelationReq' is set
+    if (blockRelationReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'blockRelationReq' when calling block");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -329,7 +329,7 @@ public class RelationService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(blockRelationRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(blockRelationReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -348,24 +348,24 @@ public class RelationService {
 
   public static final class APIBlockRequest {
     @javax.annotation.Nonnull
-    private BlockRelationRequest blockRelationRequest; //  (required)
+    private BlockRelationReq blockRelationReq; //  (required)
 
     private APIBlockRequest(Builder builder) {
-      this.blockRelationRequest = builder.blockRelationRequest;
+      this.blockRelationReq = builder.blockRelationReq;
     }
     @javax.annotation.Nonnull
-    public BlockRelationRequest blockRelationRequest() {
-      return blockRelationRequest;
+    public BlockRelationReq blockRelationReq() {
+      return blockRelationReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private BlockRelationRequest blockRelationRequest;
+      private BlockRelationReq blockRelationReq;
 
-      public Builder blockRelationRequest(@javax.annotation.Nonnull BlockRelationRequest blockRelationRequest) {
-        this.blockRelationRequest = blockRelationRequest;
+      public Builder blockRelationReq(@javax.annotation.Nonnull BlockRelationReq blockRelationReq) {
+        this.blockRelationReq = blockRelationReq;
         return this;
       }
       public APIBlockRequest build() {
@@ -395,8 +395,8 @@ public class RelationService {
    */
   public Object follow(APIFollowRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    FollowRelationRequest followRelationRequest = apiRequest.followRelationRequest();
-    return follow(followRelationRequest, headers);
+    FollowRelationReq followRelationReq = apiRequest.followRelationReq();
+    return follow(followRelationReq, headers);
   }
 
   /**
@@ -419,55 +419,55 @@ public class RelationService {
    * @throws ApiException if fails to make API call
    */
   public ApiResponse<Object> followWithHttpInfo(APIFollowRequest apiRequest, Map<String, String> headers) throws ApiException {
-    FollowRelationRequest followRelationRequest = apiRequest.followRelationRequest();
-    return followWithHttpInfo(followRelationRequest, headers);
+    FollowRelationReq followRelationReq = apiRequest.followRelationReq();
+    return followWithHttpInfo(followRelationReq, headers);
   }
 
   /**
    * 
    * 当前账号关注目标账号。
-   * @param followRelationRequest  (required)
+   * @param followRelationReq  (required)
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object follow(@javax.annotation.Nonnull FollowRelationRequest followRelationRequest) throws ApiException {
-    return follow(followRelationRequest, null);
+  public Object follow(@javax.annotation.Nonnull FollowRelationReq followRelationReq) throws ApiException {
+    return follow(followRelationReq, null);
   }
 
   /**
    * 
    * 当前账号关注目标账号。
-   * @param followRelationRequest  (required)
+   * @param followRelationReq  (required)
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object follow(@javax.annotation.Nonnull FollowRelationRequest followRelationRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = followWithHttpInfo(followRelationRequest, headers);
+  public Object follow(@javax.annotation.Nonnull FollowRelationReq followRelationReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = followWithHttpInfo(followRelationReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 当前账号关注目标账号。
-   * @param followRelationRequest  (required)
+   * @param followRelationReq  (required)
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> followWithHttpInfo(@javax.annotation.Nonnull FollowRelationRequest followRelationRequest) throws ApiException {
-    return followWithHttpInfo(followRelationRequest, null);
+  public ApiResponse<Object> followWithHttpInfo(@javax.annotation.Nonnull FollowRelationReq followRelationReq) throws ApiException {
+    return followWithHttpInfo(followRelationReq, null);
   }
 
   /**
    * 
    * 当前账号关注目标账号。
-   * @param followRelationRequest  (required)
+   * @param followRelationReq  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> followWithHttpInfo(@javax.annotation.Nonnull FollowRelationRequest followRelationRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = followRequestBuilder(followRelationRequest, headers);
+  public ApiResponse<Object> followWithHttpInfo(@javax.annotation.Nonnull FollowRelationReq followRelationReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = followRequestBuilder(followRelationReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -514,10 +514,10 @@ public class RelationService {
     }
   }
 
-  private HttpRequest.Builder followRequestBuilder(@javax.annotation.Nonnull FollowRelationRequest followRelationRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'followRelationRequest' is set
-    if (followRelationRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'followRelationRequest' when calling follow");
+  private HttpRequest.Builder followRequestBuilder(@javax.annotation.Nonnull FollowRelationReq followRelationReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'followRelationReq' is set
+    if (followRelationReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'followRelationReq' when calling follow");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -530,7 +530,7 @@ public class RelationService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(followRelationRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(followRelationReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -549,24 +549,24 @@ public class RelationService {
 
   public static final class APIFollowRequest {
     @javax.annotation.Nonnull
-    private FollowRelationRequest followRelationRequest; //  (required)
+    private FollowRelationReq followRelationReq; //  (required)
 
     private APIFollowRequest(Builder builder) {
-      this.followRelationRequest = builder.followRelationRequest;
+      this.followRelationReq = builder.followRelationReq;
     }
     @javax.annotation.Nonnull
-    public FollowRelationRequest followRelationRequest() {
-      return followRelationRequest;
+    public FollowRelationReq followRelationReq() {
+      return followRelationReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private FollowRelationRequest followRelationRequest;
+      private FollowRelationReq followRelationReq;
 
-      public Builder followRelationRequest(@javax.annotation.Nonnull FollowRelationRequest followRelationRequest) {
-        this.followRelationRequest = followRelationRequest;
+      public Builder followRelationReq(@javax.annotation.Nonnull FollowRelationReq followRelationReq) {
+        this.followRelationReq = followRelationReq;
         return this;
       }
       public APIFollowRequest build() {
@@ -579,10 +579,10 @@ public class RelationService {
    * 
    * 查询当前账号与目标账号之间的关系。
    * @param apiRequest {@link APIGetStatusRequest}
-   * @return GetStatusRelationReply
+   * @return GetStatusRelationResp
    * @throws ApiException if fails to make API call
    */
-  public GetStatusRelationReply getStatus(APIGetStatusRequest apiRequest) throws ApiException {
+  public GetStatusRelationResp getStatus(APIGetStatusRequest apiRequest) throws ApiException {
     return getStatus(apiRequest, null);
   }
 
@@ -591,23 +591,23 @@ public class RelationService {
    * 查询当前账号与目标账号之间的关系。
    * @param apiRequest {@link APIGetStatusRequest}
    * @param headers Optional headers to include in the request
-   * @return GetStatusRelationReply
+   * @return GetStatusRelationResp
    * @throws ApiException if fails to make API call
    */
-  public GetStatusRelationReply getStatus(APIGetStatusRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public GetStatusRelationResp getStatus(APIGetStatusRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    GetStatusRelationRequest getStatusRelationRequest = apiRequest.getStatusRelationRequest();
-    return getStatus(getStatusRelationRequest, headers);
+    GetStatusRelationReq getStatusRelationReq = apiRequest.getStatusRelationReq();
+    return getStatus(getStatusRelationReq, headers);
   }
 
   /**
    * 
    * 查询当前账号与目标账号之间的关系。
    * @param apiRequest {@link APIGetStatusRequest}
-   * @return ApiResponse&lt;GetStatusRelationReply&gt;
+   * @return ApiResponse&lt;GetStatusRelationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetStatusRelationReply> getStatusWithHttpInfo(APIGetStatusRequest apiRequest) throws ApiException {
+  public ApiResponse<GetStatusRelationResp> getStatusWithHttpInfo(APIGetStatusRequest apiRequest) throws ApiException {
     return getStatusWithHttpInfo(apiRequest, null);
   }
 
@@ -616,59 +616,59 @@ public class RelationService {
    * 查询当前账号与目标账号之间的关系。
    * @param apiRequest {@link APIGetStatusRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetStatusRelationReply&gt;
+   * @return ApiResponse&lt;GetStatusRelationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetStatusRelationReply> getStatusWithHttpInfo(APIGetStatusRequest apiRequest, Map<String, String> headers) throws ApiException {
-    GetStatusRelationRequest getStatusRelationRequest = apiRequest.getStatusRelationRequest();
-    return getStatusWithHttpInfo(getStatusRelationRequest, headers);
+  public ApiResponse<GetStatusRelationResp> getStatusWithHttpInfo(APIGetStatusRequest apiRequest, Map<String, String> headers) throws ApiException {
+    GetStatusRelationReq getStatusRelationReq = apiRequest.getStatusRelationReq();
+    return getStatusWithHttpInfo(getStatusRelationReq, headers);
   }
 
   /**
    * 
    * 查询当前账号与目标账号之间的关系。
-   * @param getStatusRelationRequest  (required)
-   * @return GetStatusRelationReply
+   * @param getStatusRelationReq  (required)
+   * @return GetStatusRelationResp
    * @throws ApiException if fails to make API call
    */
-  public GetStatusRelationReply getStatus(@javax.annotation.Nonnull GetStatusRelationRequest getStatusRelationRequest) throws ApiException {
-    return getStatus(getStatusRelationRequest, null);
+  public GetStatusRelationResp getStatus(@javax.annotation.Nonnull GetStatusRelationReq getStatusRelationReq) throws ApiException {
+    return getStatus(getStatusRelationReq, null);
   }
 
   /**
    * 
    * 查询当前账号与目标账号之间的关系。
-   * @param getStatusRelationRequest  (required)
+   * @param getStatusRelationReq  (required)
    * @param headers Optional headers to include in the request
-   * @return GetStatusRelationReply
+   * @return GetStatusRelationResp
    * @throws ApiException if fails to make API call
    */
-  public GetStatusRelationReply getStatus(@javax.annotation.Nonnull GetStatusRelationRequest getStatusRelationRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<GetStatusRelationReply> localVarResponse = getStatusWithHttpInfo(getStatusRelationRequest, headers);
+  public GetStatusRelationResp getStatus(@javax.annotation.Nonnull GetStatusRelationReq getStatusRelationReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<GetStatusRelationResp> localVarResponse = getStatusWithHttpInfo(getStatusRelationReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 查询当前账号与目标账号之间的关系。
-   * @param getStatusRelationRequest  (required)
-   * @return ApiResponse&lt;GetStatusRelationReply&gt;
+   * @param getStatusRelationReq  (required)
+   * @return ApiResponse&lt;GetStatusRelationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetStatusRelationReply> getStatusWithHttpInfo(@javax.annotation.Nonnull GetStatusRelationRequest getStatusRelationRequest) throws ApiException {
-    return getStatusWithHttpInfo(getStatusRelationRequest, null);
+  public ApiResponse<GetStatusRelationResp> getStatusWithHttpInfo(@javax.annotation.Nonnull GetStatusRelationReq getStatusRelationReq) throws ApiException {
+    return getStatusWithHttpInfo(getStatusRelationReq, null);
   }
 
   /**
    * 
    * 查询当前账号与目标账号之间的关系。
-   * @param getStatusRelationRequest  (required)
+   * @param getStatusRelationReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetStatusRelationReply&gt;
+   * @return ApiResponse&lt;GetStatusRelationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetStatusRelationReply> getStatusWithHttpInfo(@javax.annotation.Nonnull GetStatusRelationRequest getStatusRelationRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = getStatusRequestBuilder(getStatusRelationRequest, headers);
+  public ApiResponse<GetStatusRelationResp> getStatusWithHttpInfo(@javax.annotation.Nonnull GetStatusRelationReq getStatusRelationReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getStatusRequestBuilder(getStatusRelationReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -683,7 +683,7 @@ public class RelationService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<GetStatusRelationReply>(
+          return new ApiResponse<GetStatusRelationResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -693,10 +693,10 @@ public class RelationService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        GetStatusRelationReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetStatusRelationReply>() {});
+        GetStatusRelationResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetStatusRelationResp>() {});
         
 
-        return new ApiResponse<GetStatusRelationReply>(
+        return new ApiResponse<GetStatusRelationResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -715,10 +715,10 @@ public class RelationService {
     }
   }
 
-  private HttpRequest.Builder getStatusRequestBuilder(@javax.annotation.Nonnull GetStatusRelationRequest getStatusRelationRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'getStatusRelationRequest' is set
-    if (getStatusRelationRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'getStatusRelationRequest' when calling getStatus");
+  private HttpRequest.Builder getStatusRequestBuilder(@javax.annotation.Nonnull GetStatusRelationReq getStatusRelationReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'getStatusRelationReq' is set
+    if (getStatusRelationReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'getStatusRelationReq' when calling getStatus");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -731,7 +731,7 @@ public class RelationService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(getStatusRelationRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(getStatusRelationReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -750,24 +750,24 @@ public class RelationService {
 
   public static final class APIGetStatusRequest {
     @javax.annotation.Nonnull
-    private GetStatusRelationRequest getStatusRelationRequest; //  (required)
+    private GetStatusRelationReq getStatusRelationReq; //  (required)
 
     private APIGetStatusRequest(Builder builder) {
-      this.getStatusRelationRequest = builder.getStatusRelationRequest;
+      this.getStatusRelationReq = builder.getStatusRelationReq;
     }
     @javax.annotation.Nonnull
-    public GetStatusRelationRequest getStatusRelationRequest() {
-      return getStatusRelationRequest;
+    public GetStatusRelationReq getStatusRelationReq() {
+      return getStatusRelationReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private GetStatusRelationRequest getStatusRelationRequest;
+      private GetStatusRelationReq getStatusRelationReq;
 
-      public Builder getStatusRelationRequest(@javax.annotation.Nonnull GetStatusRelationRequest getStatusRelationRequest) {
-        this.getStatusRelationRequest = getStatusRelationRequest;
+      public Builder getStatusRelationReq(@javax.annotation.Nonnull GetStatusRelationReq getStatusRelationReq) {
+        this.getStatusRelationReq = getStatusRelationReq;
         return this;
       }
       public APIGetStatusRequest build() {
@@ -780,10 +780,10 @@ public class RelationService {
    * 
    * 分页查询当前账号拉黑的账号列表。
    * @param apiRequest {@link APIListBlockedRequest}
-   * @return ListBlockedRelationsReply
+   * @return ListBlockedRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListBlockedRelationsReply listBlocked(APIListBlockedRequest apiRequest) throws ApiException {
+  public ListBlockedRelationsResp listBlocked(APIListBlockedRequest apiRequest) throws ApiException {
     return listBlocked(apiRequest, null);
   }
 
@@ -792,23 +792,23 @@ public class RelationService {
    * 分页查询当前账号拉黑的账号列表。
    * @param apiRequest {@link APIListBlockedRequest}
    * @param headers Optional headers to include in the request
-   * @return ListBlockedRelationsReply
+   * @return ListBlockedRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListBlockedRelationsReply listBlocked(APIListBlockedRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListBlockedRelationsResp listBlocked(APIListBlockedRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    ListBlockedRelationsRequest listBlockedRelationsRequest = apiRequest.listBlockedRelationsRequest();
-    return listBlocked(listBlockedRelationsRequest, headers);
+    ListBlockedRelationsReq listBlockedRelationsReq = apiRequest.listBlockedRelationsReq();
+    return listBlocked(listBlockedRelationsReq, headers);
   }
 
   /**
    * 
    * 分页查询当前账号拉黑的账号列表。
    * @param apiRequest {@link APIListBlockedRequest}
-   * @return ApiResponse&lt;ListBlockedRelationsReply&gt;
+   * @return ApiResponse&lt;ListBlockedRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListBlockedRelationsReply> listBlockedWithHttpInfo(APIListBlockedRequest apiRequest) throws ApiException {
+  public ApiResponse<ListBlockedRelationsResp> listBlockedWithHttpInfo(APIListBlockedRequest apiRequest) throws ApiException {
     return listBlockedWithHttpInfo(apiRequest, null);
   }
 
@@ -817,59 +817,59 @@ public class RelationService {
    * 分页查询当前账号拉黑的账号列表。
    * @param apiRequest {@link APIListBlockedRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListBlockedRelationsReply&gt;
+   * @return ApiResponse&lt;ListBlockedRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListBlockedRelationsReply> listBlockedWithHttpInfo(APIListBlockedRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListBlockedRelationsRequest listBlockedRelationsRequest = apiRequest.listBlockedRelationsRequest();
-    return listBlockedWithHttpInfo(listBlockedRelationsRequest, headers);
+  public ApiResponse<ListBlockedRelationsResp> listBlockedWithHttpInfo(APIListBlockedRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListBlockedRelationsReq listBlockedRelationsReq = apiRequest.listBlockedRelationsReq();
+    return listBlockedWithHttpInfo(listBlockedRelationsReq, headers);
   }
 
   /**
    * 
    * 分页查询当前账号拉黑的账号列表。
-   * @param listBlockedRelationsRequest  (required)
-   * @return ListBlockedRelationsReply
+   * @param listBlockedRelationsReq  (required)
+   * @return ListBlockedRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListBlockedRelationsReply listBlocked(@javax.annotation.Nonnull ListBlockedRelationsRequest listBlockedRelationsRequest) throws ApiException {
-    return listBlocked(listBlockedRelationsRequest, null);
+  public ListBlockedRelationsResp listBlocked(@javax.annotation.Nonnull ListBlockedRelationsReq listBlockedRelationsReq) throws ApiException {
+    return listBlocked(listBlockedRelationsReq, null);
   }
 
   /**
    * 
    * 分页查询当前账号拉黑的账号列表。
-   * @param listBlockedRelationsRequest  (required)
+   * @param listBlockedRelationsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ListBlockedRelationsReply
+   * @return ListBlockedRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListBlockedRelationsReply listBlocked(@javax.annotation.Nonnull ListBlockedRelationsRequest listBlockedRelationsRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListBlockedRelationsReply> localVarResponse = listBlockedWithHttpInfo(listBlockedRelationsRequest, headers);
+  public ListBlockedRelationsResp listBlocked(@javax.annotation.Nonnull ListBlockedRelationsReq listBlockedRelationsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListBlockedRelationsResp> localVarResponse = listBlockedWithHttpInfo(listBlockedRelationsReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 分页查询当前账号拉黑的账号列表。
-   * @param listBlockedRelationsRequest  (required)
-   * @return ApiResponse&lt;ListBlockedRelationsReply&gt;
+   * @param listBlockedRelationsReq  (required)
+   * @return ApiResponse&lt;ListBlockedRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListBlockedRelationsReply> listBlockedWithHttpInfo(@javax.annotation.Nonnull ListBlockedRelationsRequest listBlockedRelationsRequest) throws ApiException {
-    return listBlockedWithHttpInfo(listBlockedRelationsRequest, null);
+  public ApiResponse<ListBlockedRelationsResp> listBlockedWithHttpInfo(@javax.annotation.Nonnull ListBlockedRelationsReq listBlockedRelationsReq) throws ApiException {
+    return listBlockedWithHttpInfo(listBlockedRelationsReq, null);
   }
 
   /**
    * 
    * 分页查询当前账号拉黑的账号列表。
-   * @param listBlockedRelationsRequest  (required)
+   * @param listBlockedRelationsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListBlockedRelationsReply&gt;
+   * @return ApiResponse&lt;ListBlockedRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListBlockedRelationsReply> listBlockedWithHttpInfo(@javax.annotation.Nonnull ListBlockedRelationsRequest listBlockedRelationsRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = listBlockedRequestBuilder(listBlockedRelationsRequest, headers);
+  public ApiResponse<ListBlockedRelationsResp> listBlockedWithHttpInfo(@javax.annotation.Nonnull ListBlockedRelationsReq listBlockedRelationsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listBlockedRequestBuilder(listBlockedRelationsReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -884,7 +884,7 @@ public class RelationService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ListBlockedRelationsReply>(
+          return new ApiResponse<ListBlockedRelationsResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -894,10 +894,10 @@ public class RelationService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListBlockedRelationsReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListBlockedRelationsReply>() {});
+        ListBlockedRelationsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListBlockedRelationsResp>() {});
         
 
-        return new ApiResponse<ListBlockedRelationsReply>(
+        return new ApiResponse<ListBlockedRelationsResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -916,10 +916,10 @@ public class RelationService {
     }
   }
 
-  private HttpRequest.Builder listBlockedRequestBuilder(@javax.annotation.Nonnull ListBlockedRelationsRequest listBlockedRelationsRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listBlockedRelationsRequest' is set
-    if (listBlockedRelationsRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'listBlockedRelationsRequest' when calling listBlocked");
+  private HttpRequest.Builder listBlockedRequestBuilder(@javax.annotation.Nonnull ListBlockedRelationsReq listBlockedRelationsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listBlockedRelationsReq' is set
+    if (listBlockedRelationsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listBlockedRelationsReq' when calling listBlocked");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -932,7 +932,7 @@ public class RelationService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listBlockedRelationsRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listBlockedRelationsReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -951,24 +951,24 @@ public class RelationService {
 
   public static final class APIListBlockedRequest {
     @javax.annotation.Nonnull
-    private ListBlockedRelationsRequest listBlockedRelationsRequest; //  (required)
+    private ListBlockedRelationsReq listBlockedRelationsReq; //  (required)
 
     private APIListBlockedRequest(Builder builder) {
-      this.listBlockedRelationsRequest = builder.listBlockedRelationsRequest;
+      this.listBlockedRelationsReq = builder.listBlockedRelationsReq;
     }
     @javax.annotation.Nonnull
-    public ListBlockedRelationsRequest listBlockedRelationsRequest() {
-      return listBlockedRelationsRequest;
+    public ListBlockedRelationsReq listBlockedRelationsReq() {
+      return listBlockedRelationsReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private ListBlockedRelationsRequest listBlockedRelationsRequest;
+      private ListBlockedRelationsReq listBlockedRelationsReq;
 
-      public Builder listBlockedRelationsRequest(@javax.annotation.Nonnull ListBlockedRelationsRequest listBlockedRelationsRequest) {
-        this.listBlockedRelationsRequest = listBlockedRelationsRequest;
+      public Builder listBlockedRelationsReq(@javax.annotation.Nonnull ListBlockedRelationsReq listBlockedRelationsReq) {
+        this.listBlockedRelationsReq = listBlockedRelationsReq;
         return this;
       }
       public APIListBlockedRequest build() {
@@ -981,10 +981,10 @@ public class RelationService {
    * 
    * 分页查询当前账号的粉丝账号列表。
    * @param apiRequest {@link APIListFollowersRequest}
-   * @return ListFollowersRelationsReply
+   * @return ListFollowersRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowersRelationsReply listFollowers(APIListFollowersRequest apiRequest) throws ApiException {
+  public ListFollowersRelationsResp listFollowers(APIListFollowersRequest apiRequest) throws ApiException {
     return listFollowers(apiRequest, null);
   }
 
@@ -993,23 +993,23 @@ public class RelationService {
    * 分页查询当前账号的粉丝账号列表。
    * @param apiRequest {@link APIListFollowersRequest}
    * @param headers Optional headers to include in the request
-   * @return ListFollowersRelationsReply
+   * @return ListFollowersRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowersRelationsReply listFollowers(APIListFollowersRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListFollowersRelationsResp listFollowers(APIListFollowersRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    ListFollowersRelationsRequest listFollowersRelationsRequest = apiRequest.listFollowersRelationsRequest();
-    return listFollowers(listFollowersRelationsRequest, headers);
+    ListFollowersRelationsReq listFollowersRelationsReq = apiRequest.listFollowersRelationsReq();
+    return listFollowers(listFollowersRelationsReq, headers);
   }
 
   /**
    * 
    * 分页查询当前账号的粉丝账号列表。
    * @param apiRequest {@link APIListFollowersRequest}
-   * @return ApiResponse&lt;ListFollowersRelationsReply&gt;
+   * @return ApiResponse&lt;ListFollowersRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowersRelationsReply> listFollowersWithHttpInfo(APIListFollowersRequest apiRequest) throws ApiException {
+  public ApiResponse<ListFollowersRelationsResp> listFollowersWithHttpInfo(APIListFollowersRequest apiRequest) throws ApiException {
     return listFollowersWithHttpInfo(apiRequest, null);
   }
 
@@ -1018,59 +1018,59 @@ public class RelationService {
    * 分页查询当前账号的粉丝账号列表。
    * @param apiRequest {@link APIListFollowersRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListFollowersRelationsReply&gt;
+   * @return ApiResponse&lt;ListFollowersRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowersRelationsReply> listFollowersWithHttpInfo(APIListFollowersRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListFollowersRelationsRequest listFollowersRelationsRequest = apiRequest.listFollowersRelationsRequest();
-    return listFollowersWithHttpInfo(listFollowersRelationsRequest, headers);
+  public ApiResponse<ListFollowersRelationsResp> listFollowersWithHttpInfo(APIListFollowersRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListFollowersRelationsReq listFollowersRelationsReq = apiRequest.listFollowersRelationsReq();
+    return listFollowersWithHttpInfo(listFollowersRelationsReq, headers);
   }
 
   /**
    * 
    * 分页查询当前账号的粉丝账号列表。
-   * @param listFollowersRelationsRequest  (required)
-   * @return ListFollowersRelationsReply
+   * @param listFollowersRelationsReq  (required)
+   * @return ListFollowersRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowersRelationsReply listFollowers(@javax.annotation.Nonnull ListFollowersRelationsRequest listFollowersRelationsRequest) throws ApiException {
-    return listFollowers(listFollowersRelationsRequest, null);
+  public ListFollowersRelationsResp listFollowers(@javax.annotation.Nonnull ListFollowersRelationsReq listFollowersRelationsReq) throws ApiException {
+    return listFollowers(listFollowersRelationsReq, null);
   }
 
   /**
    * 
    * 分页查询当前账号的粉丝账号列表。
-   * @param listFollowersRelationsRequest  (required)
+   * @param listFollowersRelationsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ListFollowersRelationsReply
+   * @return ListFollowersRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowersRelationsReply listFollowers(@javax.annotation.Nonnull ListFollowersRelationsRequest listFollowersRelationsRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListFollowersRelationsReply> localVarResponse = listFollowersWithHttpInfo(listFollowersRelationsRequest, headers);
+  public ListFollowersRelationsResp listFollowers(@javax.annotation.Nonnull ListFollowersRelationsReq listFollowersRelationsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListFollowersRelationsResp> localVarResponse = listFollowersWithHttpInfo(listFollowersRelationsReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 分页查询当前账号的粉丝账号列表。
-   * @param listFollowersRelationsRequest  (required)
-   * @return ApiResponse&lt;ListFollowersRelationsReply&gt;
+   * @param listFollowersRelationsReq  (required)
+   * @return ApiResponse&lt;ListFollowersRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowersRelationsReply> listFollowersWithHttpInfo(@javax.annotation.Nonnull ListFollowersRelationsRequest listFollowersRelationsRequest) throws ApiException {
-    return listFollowersWithHttpInfo(listFollowersRelationsRequest, null);
+  public ApiResponse<ListFollowersRelationsResp> listFollowersWithHttpInfo(@javax.annotation.Nonnull ListFollowersRelationsReq listFollowersRelationsReq) throws ApiException {
+    return listFollowersWithHttpInfo(listFollowersRelationsReq, null);
   }
 
   /**
    * 
    * 分页查询当前账号的粉丝账号列表。
-   * @param listFollowersRelationsRequest  (required)
+   * @param listFollowersRelationsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListFollowersRelationsReply&gt;
+   * @return ApiResponse&lt;ListFollowersRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowersRelationsReply> listFollowersWithHttpInfo(@javax.annotation.Nonnull ListFollowersRelationsRequest listFollowersRelationsRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = listFollowersRequestBuilder(listFollowersRelationsRequest, headers);
+  public ApiResponse<ListFollowersRelationsResp> listFollowersWithHttpInfo(@javax.annotation.Nonnull ListFollowersRelationsReq listFollowersRelationsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listFollowersRequestBuilder(listFollowersRelationsReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1085,7 +1085,7 @@ public class RelationService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ListFollowersRelationsReply>(
+          return new ApiResponse<ListFollowersRelationsResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -1095,10 +1095,10 @@ public class RelationService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListFollowersRelationsReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListFollowersRelationsReply>() {});
+        ListFollowersRelationsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListFollowersRelationsResp>() {});
         
 
-        return new ApiResponse<ListFollowersRelationsReply>(
+        return new ApiResponse<ListFollowersRelationsResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -1117,10 +1117,10 @@ public class RelationService {
     }
   }
 
-  private HttpRequest.Builder listFollowersRequestBuilder(@javax.annotation.Nonnull ListFollowersRelationsRequest listFollowersRelationsRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listFollowersRelationsRequest' is set
-    if (listFollowersRelationsRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'listFollowersRelationsRequest' when calling listFollowers");
+  private HttpRequest.Builder listFollowersRequestBuilder(@javax.annotation.Nonnull ListFollowersRelationsReq listFollowersRelationsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listFollowersRelationsReq' is set
+    if (listFollowersRelationsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listFollowersRelationsReq' when calling listFollowers");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1133,7 +1133,7 @@ public class RelationService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listFollowersRelationsRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listFollowersRelationsReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -1152,24 +1152,24 @@ public class RelationService {
 
   public static final class APIListFollowersRequest {
     @javax.annotation.Nonnull
-    private ListFollowersRelationsRequest listFollowersRelationsRequest; //  (required)
+    private ListFollowersRelationsReq listFollowersRelationsReq; //  (required)
 
     private APIListFollowersRequest(Builder builder) {
-      this.listFollowersRelationsRequest = builder.listFollowersRelationsRequest;
+      this.listFollowersRelationsReq = builder.listFollowersRelationsReq;
     }
     @javax.annotation.Nonnull
-    public ListFollowersRelationsRequest listFollowersRelationsRequest() {
-      return listFollowersRelationsRequest;
+    public ListFollowersRelationsReq listFollowersRelationsReq() {
+      return listFollowersRelationsReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private ListFollowersRelationsRequest listFollowersRelationsRequest;
+      private ListFollowersRelationsReq listFollowersRelationsReq;
 
-      public Builder listFollowersRelationsRequest(@javax.annotation.Nonnull ListFollowersRelationsRequest listFollowersRelationsRequest) {
-        this.listFollowersRelationsRequest = listFollowersRelationsRequest;
+      public Builder listFollowersRelationsReq(@javax.annotation.Nonnull ListFollowersRelationsReq listFollowersRelationsReq) {
+        this.listFollowersRelationsReq = listFollowersRelationsReq;
         return this;
       }
       public APIListFollowersRequest build() {
@@ -1182,10 +1182,10 @@ public class RelationService {
    * 
    * 分页查询当前账号关注的账号列表。
    * @param apiRequest {@link APIListFollowingRequest}
-   * @return ListFollowingRelationsReply
+   * @return ListFollowingRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowingRelationsReply listFollowing(APIListFollowingRequest apiRequest) throws ApiException {
+  public ListFollowingRelationsResp listFollowing(APIListFollowingRequest apiRequest) throws ApiException {
     return listFollowing(apiRequest, null);
   }
 
@@ -1194,23 +1194,23 @@ public class RelationService {
    * 分页查询当前账号关注的账号列表。
    * @param apiRequest {@link APIListFollowingRequest}
    * @param headers Optional headers to include in the request
-   * @return ListFollowingRelationsReply
+   * @return ListFollowingRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowingRelationsReply listFollowing(APIListFollowingRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListFollowingRelationsResp listFollowing(APIListFollowingRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    ListFollowingRelationsRequest listFollowingRelationsRequest = apiRequest.listFollowingRelationsRequest();
-    return listFollowing(listFollowingRelationsRequest, headers);
+    ListFollowingRelationsReq listFollowingRelationsReq = apiRequest.listFollowingRelationsReq();
+    return listFollowing(listFollowingRelationsReq, headers);
   }
 
   /**
    * 
    * 分页查询当前账号关注的账号列表。
    * @param apiRequest {@link APIListFollowingRequest}
-   * @return ApiResponse&lt;ListFollowingRelationsReply&gt;
+   * @return ApiResponse&lt;ListFollowingRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowingRelationsReply> listFollowingWithHttpInfo(APIListFollowingRequest apiRequest) throws ApiException {
+  public ApiResponse<ListFollowingRelationsResp> listFollowingWithHttpInfo(APIListFollowingRequest apiRequest) throws ApiException {
     return listFollowingWithHttpInfo(apiRequest, null);
   }
 
@@ -1219,59 +1219,59 @@ public class RelationService {
    * 分页查询当前账号关注的账号列表。
    * @param apiRequest {@link APIListFollowingRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListFollowingRelationsReply&gt;
+   * @return ApiResponse&lt;ListFollowingRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowingRelationsReply> listFollowingWithHttpInfo(APIListFollowingRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListFollowingRelationsRequest listFollowingRelationsRequest = apiRequest.listFollowingRelationsRequest();
-    return listFollowingWithHttpInfo(listFollowingRelationsRequest, headers);
+  public ApiResponse<ListFollowingRelationsResp> listFollowingWithHttpInfo(APIListFollowingRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListFollowingRelationsReq listFollowingRelationsReq = apiRequest.listFollowingRelationsReq();
+    return listFollowingWithHttpInfo(listFollowingRelationsReq, headers);
   }
 
   /**
    * 
    * 分页查询当前账号关注的账号列表。
-   * @param listFollowingRelationsRequest  (required)
-   * @return ListFollowingRelationsReply
+   * @param listFollowingRelationsReq  (required)
+   * @return ListFollowingRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowingRelationsReply listFollowing(@javax.annotation.Nonnull ListFollowingRelationsRequest listFollowingRelationsRequest) throws ApiException {
-    return listFollowing(listFollowingRelationsRequest, null);
+  public ListFollowingRelationsResp listFollowing(@javax.annotation.Nonnull ListFollowingRelationsReq listFollowingRelationsReq) throws ApiException {
+    return listFollowing(listFollowingRelationsReq, null);
   }
 
   /**
    * 
    * 分页查询当前账号关注的账号列表。
-   * @param listFollowingRelationsRequest  (required)
+   * @param listFollowingRelationsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ListFollowingRelationsReply
+   * @return ListFollowingRelationsResp
    * @throws ApiException if fails to make API call
    */
-  public ListFollowingRelationsReply listFollowing(@javax.annotation.Nonnull ListFollowingRelationsRequest listFollowingRelationsRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListFollowingRelationsReply> localVarResponse = listFollowingWithHttpInfo(listFollowingRelationsRequest, headers);
+  public ListFollowingRelationsResp listFollowing(@javax.annotation.Nonnull ListFollowingRelationsReq listFollowingRelationsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListFollowingRelationsResp> localVarResponse = listFollowingWithHttpInfo(listFollowingRelationsReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 分页查询当前账号关注的账号列表。
-   * @param listFollowingRelationsRequest  (required)
-   * @return ApiResponse&lt;ListFollowingRelationsReply&gt;
+   * @param listFollowingRelationsReq  (required)
+   * @return ApiResponse&lt;ListFollowingRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowingRelationsReply> listFollowingWithHttpInfo(@javax.annotation.Nonnull ListFollowingRelationsRequest listFollowingRelationsRequest) throws ApiException {
-    return listFollowingWithHttpInfo(listFollowingRelationsRequest, null);
+  public ApiResponse<ListFollowingRelationsResp> listFollowingWithHttpInfo(@javax.annotation.Nonnull ListFollowingRelationsReq listFollowingRelationsReq) throws ApiException {
+    return listFollowingWithHttpInfo(listFollowingRelationsReq, null);
   }
 
   /**
    * 
    * 分页查询当前账号关注的账号列表。
-   * @param listFollowingRelationsRequest  (required)
+   * @param listFollowingRelationsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListFollowingRelationsReply&gt;
+   * @return ApiResponse&lt;ListFollowingRelationsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListFollowingRelationsReply> listFollowingWithHttpInfo(@javax.annotation.Nonnull ListFollowingRelationsRequest listFollowingRelationsRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = listFollowingRequestBuilder(listFollowingRelationsRequest, headers);
+  public ApiResponse<ListFollowingRelationsResp> listFollowingWithHttpInfo(@javax.annotation.Nonnull ListFollowingRelationsReq listFollowingRelationsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listFollowingRequestBuilder(listFollowingRelationsReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1286,7 +1286,7 @@ public class RelationService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ListFollowingRelationsReply>(
+          return new ApiResponse<ListFollowingRelationsResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -1296,10 +1296,10 @@ public class RelationService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListFollowingRelationsReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListFollowingRelationsReply>() {});
+        ListFollowingRelationsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListFollowingRelationsResp>() {});
         
 
-        return new ApiResponse<ListFollowingRelationsReply>(
+        return new ApiResponse<ListFollowingRelationsResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -1318,10 +1318,10 @@ public class RelationService {
     }
   }
 
-  private HttpRequest.Builder listFollowingRequestBuilder(@javax.annotation.Nonnull ListFollowingRelationsRequest listFollowingRelationsRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listFollowingRelationsRequest' is set
-    if (listFollowingRelationsRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'listFollowingRelationsRequest' when calling listFollowing");
+  private HttpRequest.Builder listFollowingRequestBuilder(@javax.annotation.Nonnull ListFollowingRelationsReq listFollowingRelationsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listFollowingRelationsReq' is set
+    if (listFollowingRelationsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listFollowingRelationsReq' when calling listFollowing");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1334,7 +1334,7 @@ public class RelationService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listFollowingRelationsRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listFollowingRelationsReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -1353,24 +1353,24 @@ public class RelationService {
 
   public static final class APIListFollowingRequest {
     @javax.annotation.Nonnull
-    private ListFollowingRelationsRequest listFollowingRelationsRequest; //  (required)
+    private ListFollowingRelationsReq listFollowingRelationsReq; //  (required)
 
     private APIListFollowingRequest(Builder builder) {
-      this.listFollowingRelationsRequest = builder.listFollowingRelationsRequest;
+      this.listFollowingRelationsReq = builder.listFollowingRelationsReq;
     }
     @javax.annotation.Nonnull
-    public ListFollowingRelationsRequest listFollowingRelationsRequest() {
-      return listFollowingRelationsRequest;
+    public ListFollowingRelationsReq listFollowingRelationsReq() {
+      return listFollowingRelationsReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private ListFollowingRelationsRequest listFollowingRelationsRequest;
+      private ListFollowingRelationsReq listFollowingRelationsReq;
 
-      public Builder listFollowingRelationsRequest(@javax.annotation.Nonnull ListFollowingRelationsRequest listFollowingRelationsRequest) {
-        this.listFollowingRelationsRequest = listFollowingRelationsRequest;
+      public Builder listFollowingRelationsReq(@javax.annotation.Nonnull ListFollowingRelationsReq listFollowingRelationsReq) {
+        this.listFollowingRelationsReq = listFollowingRelationsReq;
         return this;
       }
       public APIListFollowingRequest build() {
@@ -1400,8 +1400,8 @@ public class RelationService {
    */
   public Object unblock(APIUnblockRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    UnblockRelationRequest unblockRelationRequest = apiRequest.unblockRelationRequest();
-    return unblock(unblockRelationRequest, headers);
+    UnblockRelationReq unblockRelationReq = apiRequest.unblockRelationReq();
+    return unblock(unblockRelationReq, headers);
   }
 
   /**
@@ -1424,55 +1424,55 @@ public class RelationService {
    * @throws ApiException if fails to make API call
    */
   public ApiResponse<Object> unblockWithHttpInfo(APIUnblockRequest apiRequest, Map<String, String> headers) throws ApiException {
-    UnblockRelationRequest unblockRelationRequest = apiRequest.unblockRelationRequest();
-    return unblockWithHttpInfo(unblockRelationRequest, headers);
+    UnblockRelationReq unblockRelationReq = apiRequest.unblockRelationReq();
+    return unblockWithHttpInfo(unblockRelationReq, headers);
   }
 
   /**
    * 
    * 当前账号取消拉黑目标账号。
-   * @param unblockRelationRequest  (required)
+   * @param unblockRelationReq  (required)
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object unblock(@javax.annotation.Nonnull UnblockRelationRequest unblockRelationRequest) throws ApiException {
-    return unblock(unblockRelationRequest, null);
+  public Object unblock(@javax.annotation.Nonnull UnblockRelationReq unblockRelationReq) throws ApiException {
+    return unblock(unblockRelationReq, null);
   }
 
   /**
    * 
    * 当前账号取消拉黑目标账号。
-   * @param unblockRelationRequest  (required)
+   * @param unblockRelationReq  (required)
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object unblock(@javax.annotation.Nonnull UnblockRelationRequest unblockRelationRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = unblockWithHttpInfo(unblockRelationRequest, headers);
+  public Object unblock(@javax.annotation.Nonnull UnblockRelationReq unblockRelationReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = unblockWithHttpInfo(unblockRelationReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 当前账号取消拉黑目标账号。
-   * @param unblockRelationRequest  (required)
+   * @param unblockRelationReq  (required)
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> unblockWithHttpInfo(@javax.annotation.Nonnull UnblockRelationRequest unblockRelationRequest) throws ApiException {
-    return unblockWithHttpInfo(unblockRelationRequest, null);
+  public ApiResponse<Object> unblockWithHttpInfo(@javax.annotation.Nonnull UnblockRelationReq unblockRelationReq) throws ApiException {
+    return unblockWithHttpInfo(unblockRelationReq, null);
   }
 
   /**
    * 
    * 当前账号取消拉黑目标账号。
-   * @param unblockRelationRequest  (required)
+   * @param unblockRelationReq  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> unblockWithHttpInfo(@javax.annotation.Nonnull UnblockRelationRequest unblockRelationRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = unblockRequestBuilder(unblockRelationRequest, headers);
+  public ApiResponse<Object> unblockWithHttpInfo(@javax.annotation.Nonnull UnblockRelationReq unblockRelationReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = unblockRequestBuilder(unblockRelationReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1519,10 +1519,10 @@ public class RelationService {
     }
   }
 
-  private HttpRequest.Builder unblockRequestBuilder(@javax.annotation.Nonnull UnblockRelationRequest unblockRelationRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'unblockRelationRequest' is set
-    if (unblockRelationRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'unblockRelationRequest' when calling unblock");
+  private HttpRequest.Builder unblockRequestBuilder(@javax.annotation.Nonnull UnblockRelationReq unblockRelationReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'unblockRelationReq' is set
+    if (unblockRelationReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'unblockRelationReq' when calling unblock");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1535,7 +1535,7 @@ public class RelationService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(unblockRelationRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(unblockRelationReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -1554,24 +1554,24 @@ public class RelationService {
 
   public static final class APIUnblockRequest {
     @javax.annotation.Nonnull
-    private UnblockRelationRequest unblockRelationRequest; //  (required)
+    private UnblockRelationReq unblockRelationReq; //  (required)
 
     private APIUnblockRequest(Builder builder) {
-      this.unblockRelationRequest = builder.unblockRelationRequest;
+      this.unblockRelationReq = builder.unblockRelationReq;
     }
     @javax.annotation.Nonnull
-    public UnblockRelationRequest unblockRelationRequest() {
-      return unblockRelationRequest;
+    public UnblockRelationReq unblockRelationReq() {
+      return unblockRelationReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private UnblockRelationRequest unblockRelationRequest;
+      private UnblockRelationReq unblockRelationReq;
 
-      public Builder unblockRelationRequest(@javax.annotation.Nonnull UnblockRelationRequest unblockRelationRequest) {
-        this.unblockRelationRequest = unblockRelationRequest;
+      public Builder unblockRelationReq(@javax.annotation.Nonnull UnblockRelationReq unblockRelationReq) {
+        this.unblockRelationReq = unblockRelationReq;
         return this;
       }
       public APIUnblockRequest build() {
@@ -1601,8 +1601,8 @@ public class RelationService {
    */
   public Object unfollow(APIUnfollowRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    UnfollowRelationRequest unfollowRelationRequest = apiRequest.unfollowRelationRequest();
-    return unfollow(unfollowRelationRequest, headers);
+    UnfollowRelationReq unfollowRelationReq = apiRequest.unfollowRelationReq();
+    return unfollow(unfollowRelationReq, headers);
   }
 
   /**
@@ -1625,55 +1625,55 @@ public class RelationService {
    * @throws ApiException if fails to make API call
    */
   public ApiResponse<Object> unfollowWithHttpInfo(APIUnfollowRequest apiRequest, Map<String, String> headers) throws ApiException {
-    UnfollowRelationRequest unfollowRelationRequest = apiRequest.unfollowRelationRequest();
-    return unfollowWithHttpInfo(unfollowRelationRequest, headers);
+    UnfollowRelationReq unfollowRelationReq = apiRequest.unfollowRelationReq();
+    return unfollowWithHttpInfo(unfollowRelationReq, headers);
   }
 
   /**
    * 
    * 当前账号取消关注目标账号。
-   * @param unfollowRelationRequest  (required)
+   * @param unfollowRelationReq  (required)
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object unfollow(@javax.annotation.Nonnull UnfollowRelationRequest unfollowRelationRequest) throws ApiException {
-    return unfollow(unfollowRelationRequest, null);
+  public Object unfollow(@javax.annotation.Nonnull UnfollowRelationReq unfollowRelationReq) throws ApiException {
+    return unfollow(unfollowRelationReq, null);
   }
 
   /**
    * 
    * 当前账号取消关注目标账号。
-   * @param unfollowRelationRequest  (required)
+   * @param unfollowRelationReq  (required)
    * @param headers Optional headers to include in the request
    * @return Object
    * @throws ApiException if fails to make API call
    */
-  public Object unfollow(@javax.annotation.Nonnull UnfollowRelationRequest unfollowRelationRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = unfollowWithHttpInfo(unfollowRelationRequest, headers);
+  public Object unfollow(@javax.annotation.Nonnull UnfollowRelationReq unfollowRelationReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = unfollowWithHttpInfo(unfollowRelationReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 当前账号取消关注目标账号。
-   * @param unfollowRelationRequest  (required)
+   * @param unfollowRelationReq  (required)
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> unfollowWithHttpInfo(@javax.annotation.Nonnull UnfollowRelationRequest unfollowRelationRequest) throws ApiException {
-    return unfollowWithHttpInfo(unfollowRelationRequest, null);
+  public ApiResponse<Object> unfollowWithHttpInfo(@javax.annotation.Nonnull UnfollowRelationReq unfollowRelationReq) throws ApiException {
+    return unfollowWithHttpInfo(unfollowRelationReq, null);
   }
 
   /**
    * 
    * 当前账号取消关注目标账号。
-   * @param unfollowRelationRequest  (required)
+   * @param unfollowRelationReq  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<Object> unfollowWithHttpInfo(@javax.annotation.Nonnull UnfollowRelationRequest unfollowRelationRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = unfollowRequestBuilder(unfollowRelationRequest, headers);
+  public ApiResponse<Object> unfollowWithHttpInfo(@javax.annotation.Nonnull UnfollowRelationReq unfollowRelationReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = unfollowRequestBuilder(unfollowRelationReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1720,10 +1720,10 @@ public class RelationService {
     }
   }
 
-  private HttpRequest.Builder unfollowRequestBuilder(@javax.annotation.Nonnull UnfollowRelationRequest unfollowRelationRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'unfollowRelationRequest' is set
-    if (unfollowRelationRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'unfollowRelationRequest' when calling unfollow");
+  private HttpRequest.Builder unfollowRequestBuilder(@javax.annotation.Nonnull UnfollowRelationReq unfollowRelationReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'unfollowRelationReq' is set
+    if (unfollowRelationReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'unfollowRelationReq' when calling unfollow");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1736,7 +1736,7 @@ public class RelationService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(unfollowRelationRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(unfollowRelationReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -1755,24 +1755,24 @@ public class RelationService {
 
   public static final class APIUnfollowRequest {
     @javax.annotation.Nonnull
-    private UnfollowRelationRequest unfollowRelationRequest; //  (required)
+    private UnfollowRelationReq unfollowRelationReq; //  (required)
 
     private APIUnfollowRequest(Builder builder) {
-      this.unfollowRelationRequest = builder.unfollowRelationRequest;
+      this.unfollowRelationReq = builder.unfollowRelationReq;
     }
     @javax.annotation.Nonnull
-    public UnfollowRelationRequest unfollowRelationRequest() {
-      return unfollowRelationRequest;
+    public UnfollowRelationReq unfollowRelationReq() {
+      return unfollowRelationReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private UnfollowRelationRequest unfollowRelationRequest;
+      private UnfollowRelationReq unfollowRelationReq;
 
-      public Builder unfollowRelationRequest(@javax.annotation.Nonnull UnfollowRelationRequest unfollowRelationRequest) {
-        this.unfollowRelationRequest = unfollowRelationRequest;
+      public Builder unfollowRelationReq(@javax.annotation.Nonnull UnfollowRelationReq unfollowRelationReq) {
+        this.unfollowRelationReq = unfollowRelationReq;
         return this;
       }
       public APIUnfollowRequest build() {

@@ -13,7 +13,7 @@ All URIs are relative to *http://localhost*
 
 ## getCurrent
 
-> GetCurrentPrivacySettingReply getCurrent(getCurrentRequest)
+> GetCurrentPrivacySettingResp getCurrent(getCurrentRequest)
 
 
 
@@ -41,7 +41,7 @@ public class Example {
             APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
                 .body(body)
                 .build();
-            GetCurrentPrivacySettingReply result = apiInstance.getCurrent(request);
+            GetCurrentPrivacySettingResp result = apiInstance.getCurrent(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling PrivacySettingService#getCurrent");
@@ -62,7 +62,7 @@ public class Example {
 
 ### Return type
 
-[**GetCurrentPrivacySettingReply**](GetCurrentPrivacySettingReply.md)
+[**GetCurrentPrivacySettingResp**](GetCurrentPrivacySettingResp.md)
 
 
 ### Authorization
@@ -81,7 +81,7 @@ No authorization required
 
 ## getCurrentWithHttpInfo
 
-> ApiResponse<GetCurrentPrivacySettingReply> getCurrentWithHttpInfo(getCurrentRequest)
+> ApiResponse<GetCurrentPrivacySettingResp> getCurrentWithHttpInfo(getCurrentRequest)
 
 
 
@@ -110,7 +110,7 @@ public class Example {
             APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<GetCurrentPrivacySettingReply> response = apiInstance.getCurrentWithHttpInfo(request);
+            ApiResponse<GetCurrentPrivacySettingResp> response = apiInstance.getCurrentWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -133,7 +133,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**GetCurrentPrivacySettingReply**](GetCurrentPrivacySettingReply.md)>
+ApiResponse<[**GetCurrentPrivacySettingResp**](GetCurrentPrivacySettingResp.md)>
 
 
 ### Authorization
@@ -163,7 +163,7 @@ No authorization required
 
 ## updateCurrent
 
-> UpdateCurrentPrivacySettingReply updateCurrent(updateCurrentRequest)
+> UpdateCurrentPrivacySettingResp updateCurrent(updateCurrentRequest)
 
 
 
@@ -186,12 +186,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         PrivacySettingService apiInstance = new PrivacySettingService(defaultClient);
-        UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest = new UpdateCurrentPrivacySettingRequest(); // UpdateCurrentPrivacySettingRequest | 
+        UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq = new UpdateCurrentPrivacySettingReq(); // UpdateCurrentPrivacySettingReq | 
         try {
             APIupdateCurrentRequest request = APIupdateCurrentRequest.newBuilder()
-                .updateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest)
+                .updateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq)
                 .build();
-            UpdateCurrentPrivacySettingReply result = apiInstance.updateCurrent(request);
+            UpdateCurrentPrivacySettingResp result = apiInstance.updateCurrent(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling PrivacySettingService#updateCurrent");
@@ -212,7 +212,7 @@ public class Example {
 
 ### Return type
 
-[**UpdateCurrentPrivacySettingReply**](UpdateCurrentPrivacySettingReply.md)
+[**UpdateCurrentPrivacySettingResp**](UpdateCurrentPrivacySettingResp.md)
 
 
 ### Authorization
@@ -231,7 +231,7 @@ No authorization required
 
 ## updateCurrentWithHttpInfo
 
-> ApiResponse<UpdateCurrentPrivacySettingReply> updateCurrentWithHttpInfo(updateCurrentRequest)
+> ApiResponse<UpdateCurrentPrivacySettingResp> updateCurrentWithHttpInfo(updateCurrentRequest)
 
 
 
@@ -255,12 +255,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         PrivacySettingService apiInstance = new PrivacySettingService(defaultClient);
-        UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest = new UpdateCurrentPrivacySettingRequest(); // UpdateCurrentPrivacySettingRequest | 
+        UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq = new UpdateCurrentPrivacySettingReq(); // UpdateCurrentPrivacySettingReq | 
         try {
             APIupdateCurrentRequest request = APIupdateCurrentRequest.newBuilder()
-                .updateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest)
+                .updateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq)
                 .build();
-            ApiResponse<UpdateCurrentPrivacySettingReply> response = apiInstance.updateCurrentWithHttpInfo(request);
+            ApiResponse<UpdateCurrentPrivacySettingResp> response = apiInstance.updateCurrentWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -283,7 +283,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**UpdateCurrentPrivacySettingReply**](UpdateCurrentPrivacySettingReply.md)>
+ApiResponse<[**UpdateCurrentPrivacySettingResp**](UpdateCurrentPrivacySettingResp.md)>
 
 
 ### Authorization
@@ -307,6 +307,6 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **updateCurrentPrivacySettingRequest** | [**UpdateCurrentPrivacySettingRequest**](UpdateCurrentPrivacySettingRequest.md) |  | |
+| **updateCurrentPrivacySettingReq** | [**UpdateCurrentPrivacySettingReq**](UpdateCurrentPrivacySettingReq.md) |  | |
 
 

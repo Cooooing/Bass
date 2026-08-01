@@ -14,12 +14,12 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.GetCurrentAccountReply;
-import com.bass.bbs.model.GetProfileAccountReply;
-import com.bass.bbs.model.GetProfileAccountRequest;
-import com.bass.bbs.model.ImageReply;
-import com.bass.bbs.model.UpdateProfileAccountReply;
-import com.bass.bbs.model.UpdateProfileAccountRequest;
+import com.bass.bbs.model.GetCurrentAccountResp;
+import com.bass.bbs.model.GetProfileAccountReq;
+import com.bass.bbs.model.GetProfileAccountResp;
+import com.bass.bbs.model.ImageResp;
+import com.bass.bbs.model.UpdateProfileAccountReq;
+import com.bass.bbs.model.UpdateProfileAccountResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -54,7 +54,7 @@ public class AccountServiceTest {
         AccountService.APIavatarRequest request = AccountService.APIavatarRequest.newBuilder()
           .name(name)
           .build();
-        ImageReply response = 
+        ImageResp response = 
         api.avatar(request);
 
         // TODO: test validations
@@ -75,7 +75,7 @@ public class AccountServiceTest {
         AccountService.APIgetCurrentRequest request = AccountService.APIgetCurrentRequest.newBuilder()
           .body(body)
           .build();
-        GetCurrentAccountReply response = 
+        GetCurrentAccountResp response = 
         api.getCurrent(request);
 
         // TODO: test validations
@@ -91,12 +91,12 @@ public class AccountServiceTest {
      */
     @Test
     public void getProfileTest() throws ApiException {
-        GetProfileAccountRequest getProfileAccountRequest = null;
+        GetProfileAccountReq getProfileAccountReq = null;
         
         AccountService.APIgetProfileRequest request = AccountService.APIgetProfileRequest.newBuilder()
-          .getProfileAccountRequest(getProfileAccountRequest)
+          .getProfileAccountReq(getProfileAccountReq)
           .build();
-        GetProfileAccountReply response = 
+        GetProfileAccountResp response = 
         api.getProfile(request);
 
         // TODO: test validations
@@ -112,12 +112,12 @@ public class AccountServiceTest {
      */
     @Test
     public void updateProfileTest() throws ApiException {
-        UpdateProfileAccountRequest updateProfileAccountRequest = null;
+        UpdateProfileAccountReq updateProfileAccountReq = null;
         
         AccountService.APIupdateProfileRequest request = AccountService.APIupdateProfileRequest.newBuilder()
-          .updateProfileAccountRequest(updateProfileAccountRequest)
+          .updateProfileAccountReq(updateProfileAccountReq)
           .build();
-        UpdateProfileAccountReply response = 
+        UpdateProfileAccountResp response = 
         api.updateProfile(request);
 
         // TODO: test validations

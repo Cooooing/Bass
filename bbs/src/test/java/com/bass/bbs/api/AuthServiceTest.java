@@ -14,14 +14,17 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.LoginByPasswordReply;
-import com.bass.bbs.model.LoginByPasswordRequest;
-import com.bass.bbs.model.StartEmailRegistrationReply;
-import com.bass.bbs.model.StartEmailRegistrationRequest;
-import com.bass.bbs.model.StartPhoneRegistrationReply;
-import com.bass.bbs.model.StartPhoneRegistrationRequest;
-import com.bass.bbs.model.VerifyEmailRegistrationRequest;
-import com.bass.bbs.model.VerifyPhoneRegistrationRequest;
+import com.bass.bbs.model.CancelAccountReq;
+import com.bass.bbs.model.LoginReq;
+import com.bass.bbs.model.LoginResp;
+import com.bass.bbs.model.RefreshTokenReq;
+import com.bass.bbs.model.RefreshTokenResp;
+import com.bass.bbs.model.StartEmailRegistrationReq;
+import com.bass.bbs.model.StartEmailRegistrationResp;
+import com.bass.bbs.model.StartPhoneRegistrationReq;
+import com.bass.bbs.model.StartPhoneRegistrationResp;
+import com.bass.bbs.model.VerifyEmailRegistrationReq;
+import com.bass.bbs.model.VerifyPhoneRegistrationReq;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -44,20 +47,20 @@ public class AuthServiceTest {
     /**
      * 
      *
-     * 使用密码登录账号。
+     * 注销账号。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void loginByPasswordTest() throws ApiException {
-        LoginByPasswordRequest loginByPasswordRequest = null;
+    public void cancelAccountTest() throws ApiException {
+        CancelAccountReq cancelAccountReq = null;
         
-        AuthService.APIloginByPasswordRequest request = AuthService.APIloginByPasswordRequest.newBuilder()
-          .loginByPasswordRequest(loginByPasswordRequest)
+        AuthService.APIcancelAccountRequest request = AuthService.APIcancelAccountRequest.newBuilder()
+          .cancelAccountReq(cancelAccountReq)
           .build();
-        LoginByPasswordReply response = 
-        api.loginByPassword(request);
+        Object response = 
+        api.cancelAccount(request);
 
         // TODO: test validations
     }
@@ -65,7 +68,28 @@ public class AuthServiceTest {
     /**
      * 
      *
-     * 登出当前账号。
+     * 登录账号。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void loginTest() throws ApiException {
+        LoginReq loginReq = null;
+        
+        AuthService.APIloginRequest request = AuthService.APIloginRequest.newBuilder()
+          .loginReq(loginReq)
+          .build();
+        LoginResp response = 
+        api.login(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 退出登录。
      *
      * @throws ApiException
      *          if the Api call fails
@@ -86,19 +110,40 @@ public class AuthServiceTest {
     /**
      * 
      *
-     * 使用邮箱发起账号注册。
+     * 刷新登录令牌。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void refreshTokenTest() throws ApiException {
+        RefreshTokenReq refreshTokenReq = null;
+        
+        AuthService.APIrefreshTokenRequest request = AuthService.APIrefreshTokenRequest.newBuilder()
+          .refreshTokenReq(refreshTokenReq)
+          .build();
+        RefreshTokenResp response = 
+        api.refreshToken(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 开始邮箱注册。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
     public void startEmailRegistrationTest() throws ApiException {
-        StartEmailRegistrationRequest startEmailRegistrationRequest = null;
+        StartEmailRegistrationReq startEmailRegistrationReq = null;
         
         AuthService.APIstartEmailRegistrationRequest request = AuthService.APIstartEmailRegistrationRequest.newBuilder()
-          .startEmailRegistrationRequest(startEmailRegistrationRequest)
+          .startEmailRegistrationReq(startEmailRegistrationReq)
           .build();
-        StartEmailRegistrationReply response = 
+        StartEmailRegistrationResp response = 
         api.startEmailRegistration(request);
 
         // TODO: test validations
@@ -107,19 +152,19 @@ public class AuthServiceTest {
     /**
      * 
      *
-     * 使用手机号发起账号注册。
+     * 开始手机注册。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
     public void startPhoneRegistrationTest() throws ApiException {
-        StartPhoneRegistrationRequest startPhoneRegistrationRequest = null;
+        StartPhoneRegistrationReq startPhoneRegistrationReq = null;
         
         AuthService.APIstartPhoneRegistrationRequest request = AuthService.APIstartPhoneRegistrationRequest.newBuilder()
-          .startPhoneRegistrationRequest(startPhoneRegistrationRequest)
+          .startPhoneRegistrationReq(startPhoneRegistrationReq)
           .build();
-        StartPhoneRegistrationReply response = 
+        StartPhoneRegistrationResp response = 
         api.startPhoneRegistration(request);
 
         // TODO: test validations
@@ -135,10 +180,10 @@ public class AuthServiceTest {
      */
     @Test
     public void verifyEmailRegistrationTest() throws ApiException {
-        VerifyEmailRegistrationRequest verifyEmailRegistrationRequest = null;
+        VerifyEmailRegistrationReq verifyEmailRegistrationReq = null;
         
         AuthService.APIverifyEmailRegistrationRequest request = AuthService.APIverifyEmailRegistrationRequest.newBuilder()
-          .verifyEmailRegistrationRequest(verifyEmailRegistrationRequest)
+          .verifyEmailRegistrationReq(verifyEmailRegistrationReq)
           .build();
         Object response = 
         api.verifyEmailRegistration(request);
@@ -149,17 +194,17 @@ public class AuthServiceTest {
     /**
      * 
      *
-     * 校验手机号注册验证码。
+     * 校验手机注册验证码。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
     public void verifyPhoneRegistrationTest() throws ApiException {
-        VerifyPhoneRegistrationRequest verifyPhoneRegistrationRequest = null;
+        VerifyPhoneRegistrationReq verifyPhoneRegistrationReq = null;
         
         AuthService.APIverifyPhoneRegistrationRequest request = AuthService.APIverifyPhoneRegistrationRequest.newBuilder()
-          .verifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest)
+          .verifyPhoneRegistrationReq(verifyPhoneRegistrationReq)
           .build();
         Object response = 
         api.verifyPhoneRegistration(request);

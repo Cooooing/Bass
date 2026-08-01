@@ -48,10 +48,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        BlockRelationRequest blockRelationRequest = new BlockRelationRequest(); // BlockRelationRequest | 
+        BlockRelationReq blockRelationReq = new BlockRelationReq(); // BlockRelationReq | 
         try {
             APIblockRequest request = APIblockRequest.newBuilder()
-                .blockRelationRequest(blockRelationRequest)
+                .blockRelationReq(blockRelationReq)
                 .build();
             Object result = apiInstance.block(request);
             System.out.println(result);
@@ -117,10 +117,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        BlockRelationRequest blockRelationRequest = new BlockRelationRequest(); // BlockRelationRequest | 
+        BlockRelationReq blockRelationReq = new BlockRelationReq(); // BlockRelationReq | 
         try {
             APIblockRequest request = APIblockRequest.newBuilder()
-                .blockRelationRequest(blockRelationRequest)
+                .blockRelationReq(blockRelationReq)
                 .build();
             ApiResponse<Object> response = apiInstance.blockWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
@@ -169,7 +169,7 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **blockRelationRequest** | [**BlockRelationRequest**](BlockRelationRequest.md) |  | |
+| **blockRelationReq** | [**BlockRelationReq**](BlockRelationReq.md) |  | |
 
 
 
@@ -198,10 +198,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        FollowRelationRequest followRelationRequest = new FollowRelationRequest(); // FollowRelationRequest | 
+        FollowRelationReq followRelationReq = new FollowRelationReq(); // FollowRelationReq | 
         try {
             APIfollowRequest request = APIfollowRequest.newBuilder()
-                .followRelationRequest(followRelationRequest)
+                .followRelationReq(followRelationReq)
                 .build();
             Object result = apiInstance.follow(request);
             System.out.println(result);
@@ -267,10 +267,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        FollowRelationRequest followRelationRequest = new FollowRelationRequest(); // FollowRelationRequest | 
+        FollowRelationReq followRelationReq = new FollowRelationReq(); // FollowRelationReq | 
         try {
             APIfollowRequest request = APIfollowRequest.newBuilder()
-                .followRelationRequest(followRelationRequest)
+                .followRelationReq(followRelationReq)
                 .build();
             ApiResponse<Object> response = apiInstance.followWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
@@ -319,13 +319,13 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **followRelationRequest** | [**FollowRelationRequest**](FollowRelationRequest.md) |  | |
+| **followRelationReq** | [**FollowRelationReq**](FollowRelationReq.md) |  | |
 
 
 
 ## getStatus
 
-> GetStatusRelationReply getStatus(getStatusRequest)
+> GetStatusRelationResp getStatus(getStatusRequest)
 
 
 
@@ -348,12 +348,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        GetStatusRelationRequest getStatusRelationRequest = new GetStatusRelationRequest(); // GetStatusRelationRequest | 
+        GetStatusRelationReq getStatusRelationReq = new GetStatusRelationReq(); // GetStatusRelationReq | 
         try {
             APIgetStatusRequest request = APIgetStatusRequest.newBuilder()
-                .getStatusRelationRequest(getStatusRelationRequest)
+                .getStatusRelationReq(getStatusRelationReq)
                 .build();
-            GetStatusRelationReply result = apiInstance.getStatus(request);
+            GetStatusRelationResp result = apiInstance.getStatus(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RelationService#getStatus");
@@ -374,7 +374,7 @@ public class Example {
 
 ### Return type
 
-[**GetStatusRelationReply**](GetStatusRelationReply.md)
+[**GetStatusRelationResp**](GetStatusRelationResp.md)
 
 
 ### Authorization
@@ -393,7 +393,7 @@ No authorization required
 
 ## getStatusWithHttpInfo
 
-> ApiResponse<GetStatusRelationReply> getStatusWithHttpInfo(getStatusRequest)
+> ApiResponse<GetStatusRelationResp> getStatusWithHttpInfo(getStatusRequest)
 
 
 
@@ -417,12 +417,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        GetStatusRelationRequest getStatusRelationRequest = new GetStatusRelationRequest(); // GetStatusRelationRequest | 
+        GetStatusRelationReq getStatusRelationReq = new GetStatusRelationReq(); // GetStatusRelationReq | 
         try {
             APIgetStatusRequest request = APIgetStatusRequest.newBuilder()
-                .getStatusRelationRequest(getStatusRelationRequest)
+                .getStatusRelationReq(getStatusRelationReq)
                 .build();
-            ApiResponse<GetStatusRelationReply> response = apiInstance.getStatusWithHttpInfo(request);
+            ApiResponse<GetStatusRelationResp> response = apiInstance.getStatusWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -445,7 +445,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**GetStatusRelationReply**](GetStatusRelationReply.md)>
+ApiResponse<[**GetStatusRelationResp**](GetStatusRelationResp.md)>
 
 
 ### Authorization
@@ -469,13 +469,13 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **getStatusRelationRequest** | [**GetStatusRelationRequest**](GetStatusRelationRequest.md) |  | |
+| **getStatusRelationReq** | [**GetStatusRelationReq**](GetStatusRelationReq.md) |  | |
 
 
 
 ## listBlocked
 
-> ListBlockedRelationsReply listBlocked(listBlockedRequest)
+> ListBlockedRelationsResp listBlocked(listBlockedRequest)
 
 
 
@@ -498,12 +498,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        ListBlockedRelationsRequest listBlockedRelationsRequest = new ListBlockedRelationsRequest(); // ListBlockedRelationsRequest | 
+        ListBlockedRelationsReq listBlockedRelationsReq = new ListBlockedRelationsReq(); // ListBlockedRelationsReq | 
         try {
             APIlistBlockedRequest request = APIlistBlockedRequest.newBuilder()
-                .listBlockedRelationsRequest(listBlockedRelationsRequest)
+                .listBlockedRelationsReq(listBlockedRelationsReq)
                 .build();
-            ListBlockedRelationsReply result = apiInstance.listBlocked(request);
+            ListBlockedRelationsResp result = apiInstance.listBlocked(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RelationService#listBlocked");
@@ -524,7 +524,7 @@ public class Example {
 
 ### Return type
 
-[**ListBlockedRelationsReply**](ListBlockedRelationsReply.md)
+[**ListBlockedRelationsResp**](ListBlockedRelationsResp.md)
 
 
 ### Authorization
@@ -543,7 +543,7 @@ No authorization required
 
 ## listBlockedWithHttpInfo
 
-> ApiResponse<ListBlockedRelationsReply> listBlockedWithHttpInfo(listBlockedRequest)
+> ApiResponse<ListBlockedRelationsResp> listBlockedWithHttpInfo(listBlockedRequest)
 
 
 
@@ -567,12 +567,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        ListBlockedRelationsRequest listBlockedRelationsRequest = new ListBlockedRelationsRequest(); // ListBlockedRelationsRequest | 
+        ListBlockedRelationsReq listBlockedRelationsReq = new ListBlockedRelationsReq(); // ListBlockedRelationsReq | 
         try {
             APIlistBlockedRequest request = APIlistBlockedRequest.newBuilder()
-                .listBlockedRelationsRequest(listBlockedRelationsRequest)
+                .listBlockedRelationsReq(listBlockedRelationsReq)
                 .build();
-            ApiResponse<ListBlockedRelationsReply> response = apiInstance.listBlockedWithHttpInfo(request);
+            ApiResponse<ListBlockedRelationsResp> response = apiInstance.listBlockedWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -595,7 +595,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**ListBlockedRelationsReply**](ListBlockedRelationsReply.md)>
+ApiResponse<[**ListBlockedRelationsResp**](ListBlockedRelationsResp.md)>
 
 
 ### Authorization
@@ -619,13 +619,13 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **listBlockedRelationsRequest** | [**ListBlockedRelationsRequest**](ListBlockedRelationsRequest.md) |  | |
+| **listBlockedRelationsReq** | [**ListBlockedRelationsReq**](ListBlockedRelationsReq.md) |  | |
 
 
 
 ## listFollowers
 
-> ListFollowersRelationsReply listFollowers(listFollowersRequest)
+> ListFollowersRelationsResp listFollowers(listFollowersRequest)
 
 
 
@@ -648,12 +648,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        ListFollowersRelationsRequest listFollowersRelationsRequest = new ListFollowersRelationsRequest(); // ListFollowersRelationsRequest | 
+        ListFollowersRelationsReq listFollowersRelationsReq = new ListFollowersRelationsReq(); // ListFollowersRelationsReq | 
         try {
             APIlistFollowersRequest request = APIlistFollowersRequest.newBuilder()
-                .listFollowersRelationsRequest(listFollowersRelationsRequest)
+                .listFollowersRelationsReq(listFollowersRelationsReq)
                 .build();
-            ListFollowersRelationsReply result = apiInstance.listFollowers(request);
+            ListFollowersRelationsResp result = apiInstance.listFollowers(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RelationService#listFollowers");
@@ -674,7 +674,7 @@ public class Example {
 
 ### Return type
 
-[**ListFollowersRelationsReply**](ListFollowersRelationsReply.md)
+[**ListFollowersRelationsResp**](ListFollowersRelationsResp.md)
 
 
 ### Authorization
@@ -693,7 +693,7 @@ No authorization required
 
 ## listFollowersWithHttpInfo
 
-> ApiResponse<ListFollowersRelationsReply> listFollowersWithHttpInfo(listFollowersRequest)
+> ApiResponse<ListFollowersRelationsResp> listFollowersWithHttpInfo(listFollowersRequest)
 
 
 
@@ -717,12 +717,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        ListFollowersRelationsRequest listFollowersRelationsRequest = new ListFollowersRelationsRequest(); // ListFollowersRelationsRequest | 
+        ListFollowersRelationsReq listFollowersRelationsReq = new ListFollowersRelationsReq(); // ListFollowersRelationsReq | 
         try {
             APIlistFollowersRequest request = APIlistFollowersRequest.newBuilder()
-                .listFollowersRelationsRequest(listFollowersRelationsRequest)
+                .listFollowersRelationsReq(listFollowersRelationsReq)
                 .build();
-            ApiResponse<ListFollowersRelationsReply> response = apiInstance.listFollowersWithHttpInfo(request);
+            ApiResponse<ListFollowersRelationsResp> response = apiInstance.listFollowersWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -745,7 +745,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**ListFollowersRelationsReply**](ListFollowersRelationsReply.md)>
+ApiResponse<[**ListFollowersRelationsResp**](ListFollowersRelationsResp.md)>
 
 
 ### Authorization
@@ -769,13 +769,13 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **listFollowersRelationsRequest** | [**ListFollowersRelationsRequest**](ListFollowersRelationsRequest.md) |  | |
+| **listFollowersRelationsReq** | [**ListFollowersRelationsReq**](ListFollowersRelationsReq.md) |  | |
 
 
 
 ## listFollowing
 
-> ListFollowingRelationsReply listFollowing(listFollowingRequest)
+> ListFollowingRelationsResp listFollowing(listFollowingRequest)
 
 
 
@@ -798,12 +798,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        ListFollowingRelationsRequest listFollowingRelationsRequest = new ListFollowingRelationsRequest(); // ListFollowingRelationsRequest | 
+        ListFollowingRelationsReq listFollowingRelationsReq = new ListFollowingRelationsReq(); // ListFollowingRelationsReq | 
         try {
             APIlistFollowingRequest request = APIlistFollowingRequest.newBuilder()
-                .listFollowingRelationsRequest(listFollowingRelationsRequest)
+                .listFollowingRelationsReq(listFollowingRelationsReq)
                 .build();
-            ListFollowingRelationsReply result = apiInstance.listFollowing(request);
+            ListFollowingRelationsResp result = apiInstance.listFollowing(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling RelationService#listFollowing");
@@ -824,7 +824,7 @@ public class Example {
 
 ### Return type
 
-[**ListFollowingRelationsReply**](ListFollowingRelationsReply.md)
+[**ListFollowingRelationsResp**](ListFollowingRelationsResp.md)
 
 
 ### Authorization
@@ -843,7 +843,7 @@ No authorization required
 
 ## listFollowingWithHttpInfo
 
-> ApiResponse<ListFollowingRelationsReply> listFollowingWithHttpInfo(listFollowingRequest)
+> ApiResponse<ListFollowingRelationsResp> listFollowingWithHttpInfo(listFollowingRequest)
 
 
 
@@ -867,12 +867,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        ListFollowingRelationsRequest listFollowingRelationsRequest = new ListFollowingRelationsRequest(); // ListFollowingRelationsRequest | 
+        ListFollowingRelationsReq listFollowingRelationsReq = new ListFollowingRelationsReq(); // ListFollowingRelationsReq | 
         try {
             APIlistFollowingRequest request = APIlistFollowingRequest.newBuilder()
-                .listFollowingRelationsRequest(listFollowingRelationsRequest)
+                .listFollowingRelationsReq(listFollowingRelationsReq)
                 .build();
-            ApiResponse<ListFollowingRelationsReply> response = apiInstance.listFollowingWithHttpInfo(request);
+            ApiResponse<ListFollowingRelationsResp> response = apiInstance.listFollowingWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -895,7 +895,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**ListFollowingRelationsReply**](ListFollowingRelationsReply.md)>
+ApiResponse<[**ListFollowingRelationsResp**](ListFollowingRelationsResp.md)>
 
 
 ### Authorization
@@ -919,7 +919,7 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **listFollowingRelationsRequest** | [**ListFollowingRelationsRequest**](ListFollowingRelationsRequest.md) |  | |
+| **listFollowingRelationsReq** | [**ListFollowingRelationsReq**](ListFollowingRelationsReq.md) |  | |
 
 
 
@@ -948,10 +948,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        UnblockRelationRequest unblockRelationRequest = new UnblockRelationRequest(); // UnblockRelationRequest | 
+        UnblockRelationReq unblockRelationReq = new UnblockRelationReq(); // UnblockRelationReq | 
         try {
             APIunblockRequest request = APIunblockRequest.newBuilder()
-                .unblockRelationRequest(unblockRelationRequest)
+                .unblockRelationReq(unblockRelationReq)
                 .build();
             Object result = apiInstance.unblock(request);
             System.out.println(result);
@@ -1017,10 +1017,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        UnblockRelationRequest unblockRelationRequest = new UnblockRelationRequest(); // UnblockRelationRequest | 
+        UnblockRelationReq unblockRelationReq = new UnblockRelationReq(); // UnblockRelationReq | 
         try {
             APIunblockRequest request = APIunblockRequest.newBuilder()
-                .unblockRelationRequest(unblockRelationRequest)
+                .unblockRelationReq(unblockRelationReq)
                 .build();
             ApiResponse<Object> response = apiInstance.unblockWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
@@ -1069,7 +1069,7 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **unblockRelationRequest** | [**UnblockRelationRequest**](UnblockRelationRequest.md) |  | |
+| **unblockRelationReq** | [**UnblockRelationReq**](UnblockRelationReq.md) |  | |
 
 
 
@@ -1098,10 +1098,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        UnfollowRelationRequest unfollowRelationRequest = new UnfollowRelationRequest(); // UnfollowRelationRequest | 
+        UnfollowRelationReq unfollowRelationReq = new UnfollowRelationReq(); // UnfollowRelationReq | 
         try {
             APIunfollowRequest request = APIunfollowRequest.newBuilder()
-                .unfollowRelationRequest(unfollowRelationRequest)
+                .unfollowRelationReq(unfollowRelationReq)
                 .build();
             Object result = apiInstance.unfollow(request);
             System.out.println(result);
@@ -1167,10 +1167,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         RelationService apiInstance = new RelationService(defaultClient);
-        UnfollowRelationRequest unfollowRelationRequest = new UnfollowRelationRequest(); // UnfollowRelationRequest | 
+        UnfollowRelationReq unfollowRelationReq = new UnfollowRelationReq(); // UnfollowRelationReq | 
         try {
             APIunfollowRequest request = APIunfollowRequest.newBuilder()
-                .unfollowRelationRequest(unfollowRelationRequest)
+                .unfollowRelationReq(unfollowRelationReq)
                 .build();
             ApiResponse<Object> response = apiInstance.unfollowWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
@@ -1219,6 +1219,6 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **unfollowRelationRequest** | [**UnfollowRelationRequest**](UnfollowRelationRequest.md) |  | |
+| **unfollowRelationReq** | [**UnfollowRelationReq**](UnfollowRelationReq.md) |  | |
 
 

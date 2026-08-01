@@ -14,9 +14,9 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.GetCurrentLocationReply;
-import com.bass.bbs.model.UpsertCurrentLocationReply;
-import com.bass.bbs.model.UpsertCurrentLocationRequest;
+import com.bass.bbs.model.GetCurrentLocationResp;
+import com.bass.bbs.model.UpsertCurrentLocationReq;
+import com.bass.bbs.model.UpsertCurrentLocationResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +51,7 @@ public class LocationServiceTest {
         LocationService.APIgetCurrentRequest request = LocationService.APIgetCurrentRequest.newBuilder()
           .body(body)
           .build();
-        GetCurrentLocationReply response = 
+        GetCurrentLocationResp response = 
         api.getCurrent(request);
 
         // TODO: test validations
@@ -67,12 +67,12 @@ public class LocationServiceTest {
      */
     @Test
     public void upsertCurrentTest() throws ApiException {
-        UpsertCurrentLocationRequest upsertCurrentLocationRequest = null;
+        UpsertCurrentLocationReq upsertCurrentLocationReq = null;
         
         LocationService.APIupsertCurrentRequest request = LocationService.APIupsertCurrentRequest.newBuilder()
-          .upsertCurrentLocationRequest(upsertCurrentLocationRequest)
+          .upsertCurrentLocationReq(upsertCurrentLocationReq)
           .build();
-        UpsertCurrentLocationReply response = 
+        UpsertCurrentLocationResp response = 
         api.upsertCurrent(request);
 
         // TODO: test validations

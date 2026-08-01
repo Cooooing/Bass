@@ -18,9 +18,9 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
-import com.bass.bbs.model.GetCurrentPrivacySettingReply;
-import com.bass.bbs.model.UpdateCurrentPrivacySettingReply;
-import com.bass.bbs.model.UpdateCurrentPrivacySettingRequest;
+import com.bass.bbs.model.GetCurrentPrivacySettingResp;
+import com.bass.bbs.model.UpdateCurrentPrivacySettingReq;
+import com.bass.bbs.model.UpdateCurrentPrivacySettingResp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -168,10 +168,10 @@ public class PrivacySettingService {
    * 
    * 获取当前账号的隐私设置。
    * @param apiRequest {@link APIGetCurrentRequest}
-   * @return GetCurrentPrivacySettingReply
+   * @return GetCurrentPrivacySettingResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentPrivacySettingReply getCurrent(APIGetCurrentRequest apiRequest) throws ApiException {
+  public GetCurrentPrivacySettingResp getCurrent(APIGetCurrentRequest apiRequest) throws ApiException {
     return getCurrent(apiRequest, null);
   }
 
@@ -180,10 +180,10 @@ public class PrivacySettingService {
    * 获取当前账号的隐私设置。
    * @param apiRequest {@link APIGetCurrentRequest}
    * @param headers Optional headers to include in the request
-   * @return GetCurrentPrivacySettingReply
+   * @return GetCurrentPrivacySettingResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentPrivacySettingReply getCurrent(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public GetCurrentPrivacySettingResp getCurrent(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
     return getCurrent(body, headers);
@@ -193,10 +193,10 @@ public class PrivacySettingService {
    * 
    * 获取当前账号的隐私设置。
    * @param apiRequest {@link APIGetCurrentRequest}
-   * @return ApiResponse&lt;GetCurrentPrivacySettingReply&gt;
+   * @return ApiResponse&lt;GetCurrentPrivacySettingResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentPrivacySettingReply> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest) throws ApiException {
+  public ApiResponse<GetCurrentPrivacySettingResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest) throws ApiException {
     return getCurrentWithHttpInfo(apiRequest, null);
   }
 
@@ -205,10 +205,10 @@ public class PrivacySettingService {
    * 获取当前账号的隐私设置。
    * @param apiRequest {@link APIGetCurrentRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetCurrentPrivacySettingReply&gt;
+   * @return ApiResponse&lt;GetCurrentPrivacySettingResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentPrivacySettingReply> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<GetCurrentPrivacySettingResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
     return getCurrentWithHttpInfo(body, headers);
   }
@@ -217,10 +217,10 @@ public class PrivacySettingService {
    * 
    * 获取当前账号的隐私设置。
    * @param body  (required)
-   * @return GetCurrentPrivacySettingReply
+   * @return GetCurrentPrivacySettingResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentPrivacySettingReply getCurrent(@javax.annotation.Nonnull Object body) throws ApiException {
+  public GetCurrentPrivacySettingResp getCurrent(@javax.annotation.Nonnull Object body) throws ApiException {
     return getCurrent(body, null);
   }
 
@@ -229,11 +229,11 @@ public class PrivacySettingService {
    * 获取当前账号的隐私设置。
    * @param body  (required)
    * @param headers Optional headers to include in the request
-   * @return GetCurrentPrivacySettingReply
+   * @return GetCurrentPrivacySettingResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentPrivacySettingReply getCurrent(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<GetCurrentPrivacySettingReply> localVarResponse = getCurrentWithHttpInfo(body, headers);
+  public GetCurrentPrivacySettingResp getCurrent(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<GetCurrentPrivacySettingResp> localVarResponse = getCurrentWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
@@ -241,10 +241,10 @@ public class PrivacySettingService {
    * 
    * 获取当前账号的隐私设置。
    * @param body  (required)
-   * @return ApiResponse&lt;GetCurrentPrivacySettingReply&gt;
+   * @return ApiResponse&lt;GetCurrentPrivacySettingResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentPrivacySettingReply> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+  public ApiResponse<GetCurrentPrivacySettingResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
     return getCurrentWithHttpInfo(body, null);
   }
 
@@ -253,10 +253,10 @@ public class PrivacySettingService {
    * 获取当前账号的隐私设置。
    * @param body  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetCurrentPrivacySettingReply&gt;
+   * @return ApiResponse&lt;GetCurrentPrivacySettingResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentPrivacySettingReply> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  public ApiResponse<GetCurrentPrivacySettingResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = getCurrentRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -272,7 +272,7 @@ public class PrivacySettingService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<GetCurrentPrivacySettingReply>(
+          return new ApiResponse<GetCurrentPrivacySettingResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -282,10 +282,10 @@ public class PrivacySettingService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        GetCurrentPrivacySettingReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetCurrentPrivacySettingReply>() {});
+        GetCurrentPrivacySettingResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetCurrentPrivacySettingResp>() {});
         
 
-        return new ApiResponse<GetCurrentPrivacySettingReply>(
+        return new ApiResponse<GetCurrentPrivacySettingResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -369,10 +369,10 @@ public class PrivacySettingService {
    * 
    * 更新当前账号的隐私设置。
    * @param apiRequest {@link APIUpdateCurrentRequest}
-   * @return UpdateCurrentPrivacySettingReply
+   * @return UpdateCurrentPrivacySettingResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateCurrentPrivacySettingReply updateCurrent(APIUpdateCurrentRequest apiRequest) throws ApiException {
+  public UpdateCurrentPrivacySettingResp updateCurrent(APIUpdateCurrentRequest apiRequest) throws ApiException {
     return updateCurrent(apiRequest, null);
   }
 
@@ -381,23 +381,23 @@ public class PrivacySettingService {
    * 更新当前账号的隐私设置。
    * @param apiRequest {@link APIUpdateCurrentRequest}
    * @param headers Optional headers to include in the request
-   * @return UpdateCurrentPrivacySettingReply
+   * @return UpdateCurrentPrivacySettingResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateCurrentPrivacySettingReply updateCurrent(APIUpdateCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public UpdateCurrentPrivacySettingResp updateCurrent(APIUpdateCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest = apiRequest.updateCurrentPrivacySettingRequest();
-    return updateCurrent(updateCurrentPrivacySettingRequest, headers);
+    UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq = apiRequest.updateCurrentPrivacySettingReq();
+    return updateCurrent(updateCurrentPrivacySettingReq, headers);
   }
 
   /**
    * 
    * 更新当前账号的隐私设置。
    * @param apiRequest {@link APIUpdateCurrentRequest}
-   * @return ApiResponse&lt;UpdateCurrentPrivacySettingReply&gt;
+   * @return ApiResponse&lt;UpdateCurrentPrivacySettingResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateCurrentPrivacySettingReply> updateCurrentWithHttpInfo(APIUpdateCurrentRequest apiRequest) throws ApiException {
+  public ApiResponse<UpdateCurrentPrivacySettingResp> updateCurrentWithHttpInfo(APIUpdateCurrentRequest apiRequest) throws ApiException {
     return updateCurrentWithHttpInfo(apiRequest, null);
   }
 
@@ -406,59 +406,59 @@ public class PrivacySettingService {
    * 更新当前账号的隐私设置。
    * @param apiRequest {@link APIUpdateCurrentRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;UpdateCurrentPrivacySettingReply&gt;
+   * @return ApiResponse&lt;UpdateCurrentPrivacySettingResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateCurrentPrivacySettingReply> updateCurrentWithHttpInfo(APIUpdateCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
-    UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest = apiRequest.updateCurrentPrivacySettingRequest();
-    return updateCurrentWithHttpInfo(updateCurrentPrivacySettingRequest, headers);
+  public ApiResponse<UpdateCurrentPrivacySettingResp> updateCurrentWithHttpInfo(APIUpdateCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+    UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq = apiRequest.updateCurrentPrivacySettingReq();
+    return updateCurrentWithHttpInfo(updateCurrentPrivacySettingReq, headers);
   }
 
   /**
    * 
    * 更新当前账号的隐私设置。
-   * @param updateCurrentPrivacySettingRequest  (required)
-   * @return UpdateCurrentPrivacySettingReply
+   * @param updateCurrentPrivacySettingReq  (required)
+   * @return UpdateCurrentPrivacySettingResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateCurrentPrivacySettingReply updateCurrent(@javax.annotation.Nonnull UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest) throws ApiException {
-    return updateCurrent(updateCurrentPrivacySettingRequest, null);
+  public UpdateCurrentPrivacySettingResp updateCurrent(@javax.annotation.Nonnull UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq) throws ApiException {
+    return updateCurrent(updateCurrentPrivacySettingReq, null);
   }
 
   /**
    * 
    * 更新当前账号的隐私设置。
-   * @param updateCurrentPrivacySettingRequest  (required)
+   * @param updateCurrentPrivacySettingReq  (required)
    * @param headers Optional headers to include in the request
-   * @return UpdateCurrentPrivacySettingReply
+   * @return UpdateCurrentPrivacySettingResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateCurrentPrivacySettingReply updateCurrent(@javax.annotation.Nonnull UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<UpdateCurrentPrivacySettingReply> localVarResponse = updateCurrentWithHttpInfo(updateCurrentPrivacySettingRequest, headers);
+  public UpdateCurrentPrivacySettingResp updateCurrent(@javax.annotation.Nonnull UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<UpdateCurrentPrivacySettingResp> localVarResponse = updateCurrentWithHttpInfo(updateCurrentPrivacySettingReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 更新当前账号的隐私设置。
-   * @param updateCurrentPrivacySettingRequest  (required)
-   * @return ApiResponse&lt;UpdateCurrentPrivacySettingReply&gt;
+   * @param updateCurrentPrivacySettingReq  (required)
+   * @return ApiResponse&lt;UpdateCurrentPrivacySettingResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateCurrentPrivacySettingReply> updateCurrentWithHttpInfo(@javax.annotation.Nonnull UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest) throws ApiException {
-    return updateCurrentWithHttpInfo(updateCurrentPrivacySettingRequest, null);
+  public ApiResponse<UpdateCurrentPrivacySettingResp> updateCurrentWithHttpInfo(@javax.annotation.Nonnull UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq) throws ApiException {
+    return updateCurrentWithHttpInfo(updateCurrentPrivacySettingReq, null);
   }
 
   /**
    * 
    * 更新当前账号的隐私设置。
-   * @param updateCurrentPrivacySettingRequest  (required)
+   * @param updateCurrentPrivacySettingReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;UpdateCurrentPrivacySettingReply&gt;
+   * @return ApiResponse&lt;UpdateCurrentPrivacySettingResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateCurrentPrivacySettingReply> updateCurrentWithHttpInfo(@javax.annotation.Nonnull UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = updateCurrentRequestBuilder(updateCurrentPrivacySettingRequest, headers);
+  public ApiResponse<UpdateCurrentPrivacySettingResp> updateCurrentWithHttpInfo(@javax.annotation.Nonnull UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = updateCurrentRequestBuilder(updateCurrentPrivacySettingReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -473,7 +473,7 @@ public class PrivacySettingService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<UpdateCurrentPrivacySettingReply>(
+          return new ApiResponse<UpdateCurrentPrivacySettingResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -483,10 +483,10 @@ public class PrivacySettingService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        UpdateCurrentPrivacySettingReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<UpdateCurrentPrivacySettingReply>() {});
+        UpdateCurrentPrivacySettingResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<UpdateCurrentPrivacySettingResp>() {});
         
 
-        return new ApiResponse<UpdateCurrentPrivacySettingReply>(
+        return new ApiResponse<UpdateCurrentPrivacySettingResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -505,10 +505,10 @@ public class PrivacySettingService {
     }
   }
 
-  private HttpRequest.Builder updateCurrentRequestBuilder(@javax.annotation.Nonnull UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'updateCurrentPrivacySettingRequest' is set
-    if (updateCurrentPrivacySettingRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'updateCurrentPrivacySettingRequest' when calling updateCurrent");
+  private HttpRequest.Builder updateCurrentRequestBuilder(@javax.annotation.Nonnull UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'updateCurrentPrivacySettingReq' is set
+    if (updateCurrentPrivacySettingReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'updateCurrentPrivacySettingReq' when calling updateCurrent");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -521,7 +521,7 @@ public class PrivacySettingService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(updateCurrentPrivacySettingRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(updateCurrentPrivacySettingReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -540,24 +540,24 @@ public class PrivacySettingService {
 
   public static final class APIUpdateCurrentRequest {
     @javax.annotation.Nonnull
-    private UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest; //  (required)
+    private UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq; //  (required)
 
     private APIUpdateCurrentRequest(Builder builder) {
-      this.updateCurrentPrivacySettingRequest = builder.updateCurrentPrivacySettingRequest;
+      this.updateCurrentPrivacySettingReq = builder.updateCurrentPrivacySettingReq;
     }
     @javax.annotation.Nonnull
-    public UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest() {
-      return updateCurrentPrivacySettingRequest;
+    public UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq() {
+      return updateCurrentPrivacySettingReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest;
+      private UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq;
 
-      public Builder updateCurrentPrivacySettingRequest(@javax.annotation.Nonnull UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest) {
-        this.updateCurrentPrivacySettingRequest = updateCurrentPrivacySettingRequest;
+      public Builder updateCurrentPrivacySettingReq(@javax.annotation.Nonnull UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq) {
+        this.updateCurrentPrivacySettingReq = updateCurrentPrivacySettingReq;
         return this;
       }
       public APIUpdateCurrentRequest build() {

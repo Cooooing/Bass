@@ -14,12 +14,16 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.CreateTagReply;
-import com.bass.bbs.model.CreateTagRequest;
-import com.bass.bbs.model.ListTagsReply;
-import com.bass.bbs.model.ListTagsRequest;
-import com.bass.bbs.model.UpdateTagReply;
-import com.bass.bbs.model.UpdateTagRequest;
+import com.bass.bbs.model.BindArticleTagsReq;
+import com.bass.bbs.model.CreateTagReq;
+import com.bass.bbs.model.CreateTagResp;
+import com.bass.bbs.model.ListArticleTagsReq;
+import com.bass.bbs.model.ListArticleTagsResp;
+import com.bass.bbs.model.ListTagsReq;
+import com.bass.bbs.model.ListTagsResp;
+import com.bass.bbs.model.UnbindArticleTagsReq;
+import com.bass.bbs.model.UpdateTagReq;
+import com.bass.bbs.model.UpdateTagResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -42,19 +46,40 @@ public class TagServiceTest {
     /**
      * 
      *
-     * 分页查询标签列表。
+     * 绑定文章标签。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void bindArticleTest() throws ApiException {
+        BindArticleTagsReq bindArticleTagsReq = null;
+        
+        TagService.APIbindArticleRequest request = TagService.APIbindArticleRequest.newBuilder()
+          .bindArticleTagsReq(bindArticleTagsReq)
+          .build();
+        Object response = 
+        api.bindArticle(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 查询标签列表。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
     public void callListTest() throws ApiException {
-        ListTagsRequest listTagsRequest = null;
+        ListTagsReq listTagsReq = null;
         
         TagService.APIcallListRequest request = TagService.APIcallListRequest.newBuilder()
-          .listTagsRequest(listTagsRequest)
+          .listTagsReq(listTagsReq)
           .build();
-        ListTagsReply response = 
+        ListTagsResp response = 
         api.callList(request);
 
         // TODO: test validations
@@ -70,13 +95,55 @@ public class TagServiceTest {
      */
     @Test
     public void createTest() throws ApiException {
-        CreateTagRequest createTagRequest = null;
+        CreateTagReq createTagReq = null;
         
         TagService.APIcreateRequest request = TagService.APIcreateRequest.newBuilder()
-          .createTagRequest(createTagRequest)
+          .createTagReq(createTagReq)
           .build();
-        CreateTagReply response = 
+        CreateTagResp response = 
         api.create(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 查询文章标签列表。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listArticleTagsTest() throws ApiException {
+        ListArticleTagsReq listArticleTagsReq = null;
+        
+        TagService.APIlistArticleTagsRequest request = TagService.APIlistArticleTagsRequest.newBuilder()
+          .listArticleTagsReq(listArticleTagsReq)
+          .build();
+        ListArticleTagsResp response = 
+        api.listArticleTags(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 解绑文章标签。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void unbindArticleTest() throws ApiException {
+        UnbindArticleTagsReq unbindArticleTagsReq = null;
+        
+        TagService.APIunbindArticleRequest request = TagService.APIunbindArticleRequest.newBuilder()
+          .unbindArticleTagsReq(unbindArticleTagsReq)
+          .build();
+        Object response = 
+        api.unbindArticle(request);
 
         // TODO: test validations
     }
@@ -91,12 +158,12 @@ public class TagServiceTest {
      */
     @Test
     public void updateTest() throws ApiException {
-        UpdateTagRequest updateTagRequest = null;
+        UpdateTagReq updateTagReq = null;
         
         TagService.APIupdateRequest request = TagService.APIupdateRequest.newBuilder()
-          .updateTagRequest(updateTagRequest)
+          .updateTagReq(updateTagReq)
           .build();
-        UpdateTagReply response = 
+        UpdateTagResp response = 
         api.update(request);
 
         // TODO: test validations

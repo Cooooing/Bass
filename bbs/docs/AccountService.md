@@ -17,7 +17,7 @@ All URIs are relative to *http://localhost*
 
 ## avatar
 
-> ImageReply avatar(avatarRequest)
+> ImageResp avatar(avatarRequest)
 
 
 
@@ -40,12 +40,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AccountService apiInstance = new AccountService(defaultClient);
-        String name = "name_example"; // String | 用于生成头像的账号名。
+        String name = "name_example"; // String | 
         try {
             APIavatarRequest request = APIavatarRequest.newBuilder()
                 .name(name)
                 .build();
-            ImageReply result = apiInstance.avatar(request);
+            ImageResp result = apiInstance.avatar(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling AccountService#avatar");
@@ -66,7 +66,7 @@ public class Example {
 
 ### Return type
 
-[**ImageReply**](ImageReply.md)
+[**ImageResp**](ImageResp.md)
 
 
 ### Authorization
@@ -85,7 +85,7 @@ No authorization required
 
 ## avatarWithHttpInfo
 
-> ApiResponse<ImageReply> avatarWithHttpInfo(avatarRequest)
+> ApiResponse<ImageResp> avatarWithHttpInfo(avatarRequest)
 
 
 
@@ -109,12 +109,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AccountService apiInstance = new AccountService(defaultClient);
-        String name = "name_example"; // String | 用于生成头像的账号名。
+        String name = "name_example"; // String | 
         try {
             APIavatarRequest request = APIavatarRequest.newBuilder()
                 .name(name)
                 .build();
-            ApiResponse<ImageReply> response = apiInstance.avatarWithHttpInfo(request);
+            ApiResponse<ImageResp> response = apiInstance.avatarWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -137,7 +137,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**ImageReply**](ImageReply.md)>
+ApiResponse<[**ImageResp**](ImageResp.md)>
 
 
 ### Authorization
@@ -161,13 +161,13 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **name** | **String** | 用于生成头像的账号名。 | [optional] |
+| **name** | **String** |  | [optional] |
 
 
 
 ## getCurrent
 
-> GetCurrentAccountReply getCurrent(getCurrentRequest)
+> GetCurrentAccountResp getCurrent(getCurrentRequest)
 
 
 
@@ -195,7 +195,7 @@ public class Example {
             APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
                 .body(body)
                 .build();
-            GetCurrentAccountReply result = apiInstance.getCurrent(request);
+            GetCurrentAccountResp result = apiInstance.getCurrent(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling AccountService#getCurrent");
@@ -216,7 +216,7 @@ public class Example {
 
 ### Return type
 
-[**GetCurrentAccountReply**](GetCurrentAccountReply.md)
+[**GetCurrentAccountResp**](GetCurrentAccountResp.md)
 
 
 ### Authorization
@@ -235,7 +235,7 @@ No authorization required
 
 ## getCurrentWithHttpInfo
 
-> ApiResponse<GetCurrentAccountReply> getCurrentWithHttpInfo(getCurrentRequest)
+> ApiResponse<GetCurrentAccountResp> getCurrentWithHttpInfo(getCurrentRequest)
 
 
 
@@ -264,7 +264,7 @@ public class Example {
             APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<GetCurrentAccountReply> response = apiInstance.getCurrentWithHttpInfo(request);
+            ApiResponse<GetCurrentAccountResp> response = apiInstance.getCurrentWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -287,7 +287,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**GetCurrentAccountReply**](GetCurrentAccountReply.md)>
+ApiResponse<[**GetCurrentAccountResp**](GetCurrentAccountResp.md)>
 
 
 ### Authorization
@@ -317,7 +317,7 @@ No authorization required
 
 ## getProfile
 
-> GetProfileAccountReply getProfile(getProfileRequest)
+> GetProfileAccountResp getProfile(getProfileRequest)
 
 
 
@@ -340,12 +340,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AccountService apiInstance = new AccountService(defaultClient);
-        GetProfileAccountRequest getProfileAccountRequest = new GetProfileAccountRequest(); // GetProfileAccountRequest | 
+        GetProfileAccountReq getProfileAccountReq = new GetProfileAccountReq(); // GetProfileAccountReq | 
         try {
             APIgetProfileRequest request = APIgetProfileRequest.newBuilder()
-                .getProfileAccountRequest(getProfileAccountRequest)
+                .getProfileAccountReq(getProfileAccountReq)
                 .build();
-            GetProfileAccountReply result = apiInstance.getProfile(request);
+            GetProfileAccountResp result = apiInstance.getProfile(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling AccountService#getProfile");
@@ -366,7 +366,7 @@ public class Example {
 
 ### Return type
 
-[**GetProfileAccountReply**](GetProfileAccountReply.md)
+[**GetProfileAccountResp**](GetProfileAccountResp.md)
 
 
 ### Authorization
@@ -385,7 +385,7 @@ No authorization required
 
 ## getProfileWithHttpInfo
 
-> ApiResponse<GetProfileAccountReply> getProfileWithHttpInfo(getProfileRequest)
+> ApiResponse<GetProfileAccountResp> getProfileWithHttpInfo(getProfileRequest)
 
 
 
@@ -409,12 +409,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AccountService apiInstance = new AccountService(defaultClient);
-        GetProfileAccountRequest getProfileAccountRequest = new GetProfileAccountRequest(); // GetProfileAccountRequest | 
+        GetProfileAccountReq getProfileAccountReq = new GetProfileAccountReq(); // GetProfileAccountReq | 
         try {
             APIgetProfileRequest request = APIgetProfileRequest.newBuilder()
-                .getProfileAccountRequest(getProfileAccountRequest)
+                .getProfileAccountReq(getProfileAccountReq)
                 .build();
-            ApiResponse<GetProfileAccountReply> response = apiInstance.getProfileWithHttpInfo(request);
+            ApiResponse<GetProfileAccountResp> response = apiInstance.getProfileWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -437,7 +437,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**GetProfileAccountReply**](GetProfileAccountReply.md)>
+ApiResponse<[**GetProfileAccountResp**](GetProfileAccountResp.md)>
 
 
 ### Authorization
@@ -461,13 +461,13 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **getProfileAccountRequest** | [**GetProfileAccountRequest**](GetProfileAccountRequest.md) |  | |
+| **getProfileAccountReq** | [**GetProfileAccountReq**](GetProfileAccountReq.md) |  | |
 
 
 
 ## updateProfile
 
-> UpdateProfileAccountReply updateProfile(updateProfileRequest)
+> UpdateProfileAccountResp updateProfile(updateProfileRequest)
 
 
 
@@ -490,12 +490,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AccountService apiInstance = new AccountService(defaultClient);
-        UpdateProfileAccountRequest updateProfileAccountRequest = new UpdateProfileAccountRequest(); // UpdateProfileAccountRequest | 
+        UpdateProfileAccountReq updateProfileAccountReq = new UpdateProfileAccountReq(); // UpdateProfileAccountReq | 
         try {
             APIupdateProfileRequest request = APIupdateProfileRequest.newBuilder()
-                .updateProfileAccountRequest(updateProfileAccountRequest)
+                .updateProfileAccountReq(updateProfileAccountReq)
                 .build();
-            UpdateProfileAccountReply result = apiInstance.updateProfile(request);
+            UpdateProfileAccountResp result = apiInstance.updateProfile(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling AccountService#updateProfile");
@@ -516,7 +516,7 @@ public class Example {
 
 ### Return type
 
-[**UpdateProfileAccountReply**](UpdateProfileAccountReply.md)
+[**UpdateProfileAccountResp**](UpdateProfileAccountResp.md)
 
 
 ### Authorization
@@ -535,7 +535,7 @@ No authorization required
 
 ## updateProfileWithHttpInfo
 
-> ApiResponse<UpdateProfileAccountReply> updateProfileWithHttpInfo(updateProfileRequest)
+> ApiResponse<UpdateProfileAccountResp> updateProfileWithHttpInfo(updateProfileRequest)
 
 
 
@@ -559,12 +559,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AccountService apiInstance = new AccountService(defaultClient);
-        UpdateProfileAccountRequest updateProfileAccountRequest = new UpdateProfileAccountRequest(); // UpdateProfileAccountRequest | 
+        UpdateProfileAccountReq updateProfileAccountReq = new UpdateProfileAccountReq(); // UpdateProfileAccountReq | 
         try {
             APIupdateProfileRequest request = APIupdateProfileRequest.newBuilder()
-                .updateProfileAccountRequest(updateProfileAccountRequest)
+                .updateProfileAccountReq(updateProfileAccountReq)
                 .build();
-            ApiResponse<UpdateProfileAccountReply> response = apiInstance.updateProfileWithHttpInfo(request);
+            ApiResponse<UpdateProfileAccountResp> response = apiInstance.updateProfileWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -587,7 +587,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**UpdateProfileAccountReply**](UpdateProfileAccountReply.md)>
+ApiResponse<[**UpdateProfileAccountResp**](UpdateProfileAccountResp.md)>
 
 
 ### Authorization
@@ -611,6 +611,6 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **updateProfileAccountRequest** | [**UpdateProfileAccountRequest**](UpdateProfileAccountRequest.md) |  | |
+| **updateProfileAccountReq** | [**UpdateProfileAccountReq**](UpdateProfileAccountReq.md) |  | |
 
 

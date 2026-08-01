@@ -26,13 +26,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 import com.bass.bbs.ApiClient;
 /**
- * 文章列表项。
+ * ArticleListItem
  */
 @JsonPropertyOrder({
   ArticleListItem.JSON_PROPERTY_ID,
@@ -44,15 +45,12 @@ import com.bass.bbs.ApiClient;
   ArticleListItem.JSON_PROPERTY_TYPE,
   ArticleListItem.JSON_PROPERTY_STATEMENT,
   ArticleListItem.JSON_PROPERTY_COMMENTABLE,
-  ArticleListItem.JSON_PROPERTY_ANONYMOUS,
   ArticleListItem.JSON_PROPERTY_VIEW_COUNT,
   ArticleListItem.JSON_PROPERTY_THANK_COUNT,
   ArticleListItem.JSON_PROPERTY_LIKE_COUNT,
   ArticleListItem.JSON_PROPERTY_COLLECT_COUNT,
-  ArticleListItem.JSON_PROPERTY_WATCH_COUNT,
+  ArticleListItem.JSON_PROPERTY_REWARD_COUNT,
   ArticleListItem.JSON_PROPERTY_REPLY_COUNT,
-  ArticleListItem.JSON_PROPERTY_BOUNTY_POINTS,
-  ArticleListItem.JSON_PROPERTY_ACCEPTED_ANSWER_ID,
   ArticleListItem.JSON_PROPERTY_AUTHOR_USER,
   ArticleListItem.JSON_PROPERTY_LAST_REPLY_USER,
   ArticleListItem.JSON_PROPERTY_LAST_REPLY_AT,
@@ -102,7 +100,13 @@ public class ArticleListItem {
     
     ARTICLE_TYPE_NORMAL(String.valueOf("ARTICLE_TYPE_NORMAL")),
     
-    ARTICLE_TYPE_QA(String.valueOf("ARTICLE_TYPE_QA"));
+    ARTICLE_TYPE_QA(String.valueOf("ARTICLE_TYPE_QA")),
+    
+    ARTICLE_TYPE_LOTTERY(String.valueOf("ARTICLE_TYPE_LOTTERY")),
+    
+    ARTICLE_TYPE_POLL(String.valueOf("ARTICLE_TYPE_POLL")),
+    
+    ARTICLE_TYPE_COLUMN(String.valueOf("ARTICLE_TYPE_COLUMN"));
 
     private String value;
 
@@ -143,10 +147,6 @@ public class ArticleListItem {
   @javax.annotation.Nullable
   private Boolean commentable;
 
-  public static final String JSON_PROPERTY_ANONYMOUS = "anonymous";
-  @javax.annotation.Nullable
-  private Boolean anonymous;
-
   public static final String JSON_PROPERTY_VIEW_COUNT = "view_count";
   @javax.annotation.Nullable
   private Integer viewCount;
@@ -163,21 +163,13 @@ public class ArticleListItem {
   @javax.annotation.Nullable
   private Integer collectCount;
 
-  public static final String JSON_PROPERTY_WATCH_COUNT = "watch_count";
+  public static final String JSON_PROPERTY_REWARD_COUNT = "reward_count";
   @javax.annotation.Nullable
-  private Integer watchCount;
+  private Integer rewardCount;
 
   public static final String JSON_PROPERTY_REPLY_COUNT = "reply_count";
   @javax.annotation.Nullable
   private Integer replyCount;
-
-  public static final String JSON_PROPERTY_BOUNTY_POINTS = "bounty_points";
-  @javax.annotation.Nullable
-  private Integer bountyPoints;
-
-  public static final String JSON_PROPERTY_ACCEPTED_ANSWER_ID = "accepted_answer_id";
-  @javax.annotation.Nullable
-  private String acceptedAnswerId;
 
   public static final String JSON_PROPERTY_AUTHOR_USER = "author_user";
   @javax.annotation.Nullable
@@ -189,7 +181,7 @@ public class ArticleListItem {
 
   public static final String JSON_PROPERTY_LAST_REPLY_AT = "last_reply_at";
   @javax.annotation.Nullable
-  private String lastReplyAt;
+  private OffsetDateTime lastReplyAt;
 
   public static final String JSON_PROPERTY_COVER_IMAGE_URL = "cover_image_url";
   @javax.annotation.Nullable
@@ -201,7 +193,7 @@ public class ArticleListItem {
 
   public static final String JSON_PROPERTY_PUBLISHED_AT = "published_at";
   @javax.annotation.Nullable
-  private String publishedAt;
+  private OffsetDateTime publishedAt;
 
   /**
    * Gets or Sets publishStatus
@@ -213,7 +205,9 @@ public class ArticleListItem {
     
     ARTICLE_PUBLISH_STATUS_PUBLISHED(String.valueOf("ARTICLE_PUBLISH_STATUS_PUBLISHED")),
     
-    ARTICLE_PUBLISH_STATUS_ARCHIVED(String.valueOf("ARTICLE_PUBLISH_STATUS_ARCHIVED"));
+    ARTICLE_PUBLISH_STATUS_ARCHIVED(String.valueOf("ARTICLE_PUBLISH_STATUS_ARCHIVED")),
+    
+    ARTICLE_PUBLISH_STATUS_SCHEDULED(String.valueOf("ARTICLE_PUBLISH_STATUS_SCHEDULED"));
 
     private String value;
 
@@ -332,7 +326,7 @@ public class ArticleListItem {
 
   public static final String JSON_PROPERTY_EDITED_AT = "edited_at";
   @javax.annotation.Nullable
-  private String editedAt;
+  private OffsetDateTime editedAt;
 
   public static final String JSON_PROPERTY_CREATED_BY = "created_by";
   @javax.annotation.Nullable
@@ -344,11 +338,11 @@ public class ArticleListItem {
 
   public static final String JSON_PROPERTY_CREATED_AT = "created_at";
   @javax.annotation.Nullable
-  private String createdAt;
+  private OffsetDateTime createdAt;
 
   public static final String JSON_PROPERTY_UPDATED_AT = "updated_at";
   @javax.annotation.Nullable
-  private String updatedAt;
+  private OffsetDateTime updatedAt;
 
   public ArticleListItem() { 
   }
@@ -569,30 +563,6 @@ public class ArticleListItem {
   }
 
 
-  public ArticleListItem anonymous(@javax.annotation.Nullable Boolean anonymous) {
-    this.anonymous = anonymous;
-    return this;
-  }
-
-  /**
-   * Get anonymous
-   * @return anonymous
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ANONYMOUS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getAnonymous() {
-    return anonymous;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_ANONYMOUS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAnonymous(@javax.annotation.Nullable Boolean anonymous) {
-    this.anonymous = anonymous;
-  }
-
-
   public ArticleListItem viewCount(@javax.annotation.Nullable Integer viewCount) {
     this.viewCount = viewCount;
     return this;
@@ -689,27 +659,27 @@ public class ArticleListItem {
   }
 
 
-  public ArticleListItem watchCount(@javax.annotation.Nullable Integer watchCount) {
-    this.watchCount = watchCount;
+  public ArticleListItem rewardCount(@javax.annotation.Nullable Integer rewardCount) {
+    this.rewardCount = rewardCount;
     return this;
   }
 
   /**
-   * Get watchCount
-   * @return watchCount
+   * Get rewardCount
+   * @return rewardCount
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_WATCH_COUNT, required = false)
+  @JsonProperty(value = JSON_PROPERTY_REWARD_COUNT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Integer getWatchCount() {
-    return watchCount;
+  public Integer getRewardCount() {
+    return rewardCount;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_WATCH_COUNT, required = false)
+  @JsonProperty(value = JSON_PROPERTY_REWARD_COUNT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setWatchCount(@javax.annotation.Nullable Integer watchCount) {
-    this.watchCount = watchCount;
+  public void setRewardCount(@javax.annotation.Nullable Integer rewardCount) {
+    this.rewardCount = rewardCount;
   }
 
 
@@ -734,54 +704,6 @@ public class ArticleListItem {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setReplyCount(@javax.annotation.Nullable Integer replyCount) {
     this.replyCount = replyCount;
-  }
-
-
-  public ArticleListItem bountyPoints(@javax.annotation.Nullable Integer bountyPoints) {
-    this.bountyPoints = bountyPoints;
-    return this;
-  }
-
-  /**
-   * Get bountyPoints
-   * @return bountyPoints
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_BOUNTY_POINTS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Integer getBountyPoints() {
-    return bountyPoints;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_BOUNTY_POINTS, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBountyPoints(@javax.annotation.Nullable Integer bountyPoints) {
-    this.bountyPoints = bountyPoints;
-  }
-
-
-  public ArticleListItem acceptedAnswerId(@javax.annotation.Nullable String acceptedAnswerId) {
-    this.acceptedAnswerId = acceptedAnswerId;
-    return this;
-  }
-
-  /**
-   * Get acceptedAnswerId
-   * @return acceptedAnswerId
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ACCEPTED_ANSWER_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getAcceptedAnswerId() {
-    return acceptedAnswerId;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_ACCEPTED_ANSWER_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAcceptedAnswerId(@javax.annotation.Nullable String acceptedAnswerId) {
-    this.acceptedAnswerId = acceptedAnswerId;
   }
 
 
@@ -833,7 +755,7 @@ public class ArticleListItem {
   }
 
 
-  public ArticleListItem lastReplyAt(@javax.annotation.Nullable String lastReplyAt) {
+  public ArticleListItem lastReplyAt(@javax.annotation.Nullable OffsetDateTime lastReplyAt) {
     this.lastReplyAt = lastReplyAt;
     return this;
   }
@@ -845,14 +767,14 @@ public class ArticleListItem {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_LAST_REPLY_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getLastReplyAt() {
+  public OffsetDateTime getLastReplyAt() {
     return lastReplyAt;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_LAST_REPLY_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setLastReplyAt(@javax.annotation.Nullable String lastReplyAt) {
+  public void setLastReplyAt(@javax.annotation.Nullable OffsetDateTime lastReplyAt) {
     this.lastReplyAt = lastReplyAt;
   }
 
@@ -905,7 +827,7 @@ public class ArticleListItem {
   }
 
 
-  public ArticleListItem publishedAt(@javax.annotation.Nullable String publishedAt) {
+  public ArticleListItem publishedAt(@javax.annotation.Nullable OffsetDateTime publishedAt) {
     this.publishedAt = publishedAt;
     return this;
   }
@@ -917,14 +839,14 @@ public class ArticleListItem {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_PUBLISHED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getPublishedAt() {
+  public OffsetDateTime getPublishedAt() {
     return publishedAt;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_PUBLISHED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPublishedAt(@javax.annotation.Nullable String publishedAt) {
+  public void setPublishedAt(@javax.annotation.Nullable OffsetDateTime publishedAt) {
     this.publishedAt = publishedAt;
   }
 
@@ -1001,7 +923,7 @@ public class ArticleListItem {
   }
 
 
-  public ArticleListItem editedAt(@javax.annotation.Nullable String editedAt) {
+  public ArticleListItem editedAt(@javax.annotation.Nullable OffsetDateTime editedAt) {
     this.editedAt = editedAt;
     return this;
   }
@@ -1013,14 +935,14 @@ public class ArticleListItem {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_EDITED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getEditedAt() {
+  public OffsetDateTime getEditedAt() {
     return editedAt;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_EDITED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEditedAt(@javax.annotation.Nullable String editedAt) {
+  public void setEditedAt(@javax.annotation.Nullable OffsetDateTime editedAt) {
     this.editedAt = editedAt;
   }
 
@@ -1073,7 +995,7 @@ public class ArticleListItem {
   }
 
 
-  public ArticleListItem createdAt(@javax.annotation.Nullable String createdAt) {
+  public ArticleListItem createdAt(@javax.annotation.Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -1085,19 +1007,19 @@ public class ArticleListItem {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_CREATED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getCreatedAt() {
+  public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_CREATED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCreatedAt(@javax.annotation.Nullable String createdAt) {
+  public void setCreatedAt(@javax.annotation.Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
   }
 
 
-  public ArticleListItem updatedAt(@javax.annotation.Nullable String updatedAt) {
+  public ArticleListItem updatedAt(@javax.annotation.Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -1109,14 +1031,14 @@ public class ArticleListItem {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_UPDATED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getUpdatedAt() {
+  public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_UPDATED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUpdatedAt(@javax.annotation.Nullable String updatedAt) {
+  public void setUpdatedAt(@javax.annotation.Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
   }
 
@@ -1142,15 +1064,12 @@ public class ArticleListItem {
         Objects.equals(this.type, articleListItem.type) &&
         Objects.equals(this.statement, articleListItem.statement) &&
         Objects.equals(this.commentable, articleListItem.commentable) &&
-        Objects.equals(this.anonymous, articleListItem.anonymous) &&
         Objects.equals(this.viewCount, articleListItem.viewCount) &&
         Objects.equals(this.thankCount, articleListItem.thankCount) &&
         Objects.equals(this.likeCount, articleListItem.likeCount) &&
         Objects.equals(this.collectCount, articleListItem.collectCount) &&
-        Objects.equals(this.watchCount, articleListItem.watchCount) &&
+        Objects.equals(this.rewardCount, articleListItem.rewardCount) &&
         Objects.equals(this.replyCount, articleListItem.replyCount) &&
-        Objects.equals(this.bountyPoints, articleListItem.bountyPoints) &&
-        Objects.equals(this.acceptedAnswerId, articleListItem.acceptedAnswerId) &&
         Objects.equals(this.authorUser, articleListItem.authorUser) &&
         Objects.equals(this.lastReplyUser, articleListItem.lastReplyUser) &&
         Objects.equals(this.lastReplyAt, articleListItem.lastReplyAt) &&
@@ -1169,7 +1088,7 @@ public class ArticleListItem {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, content, contentRender, hasPostscript, hasReward, type, statement, commentable, anonymous, viewCount, thankCount, likeCount, collectCount, watchCount, replyCount, bountyPoints, acceptedAnswerId, authorUser, lastReplyUser, lastReplyAt, coverImageUrl, viewerActionState, publishedAt, publishStatus, visibility, restriction, editedAt, createdBy, updatedBy, createdAt, updatedAt);
+    return Objects.hash(id, title, content, contentRender, hasPostscript, hasReward, type, statement, commentable, viewCount, thankCount, likeCount, collectCount, rewardCount, replyCount, authorUser, lastReplyUser, lastReplyAt, coverImageUrl, viewerActionState, publishedAt, publishStatus, visibility, restriction, editedAt, createdBy, updatedBy, createdAt, updatedAt);
   }
 
   @Override
@@ -1185,15 +1104,12 @@ public class ArticleListItem {
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    statement: ").append(toIndentedString(statement)).append("\n");
     sb.append("    commentable: ").append(toIndentedString(commentable)).append("\n");
-    sb.append("    anonymous: ").append(toIndentedString(anonymous)).append("\n");
     sb.append("    viewCount: ").append(toIndentedString(viewCount)).append("\n");
     sb.append("    thankCount: ").append(toIndentedString(thankCount)).append("\n");
     sb.append("    likeCount: ").append(toIndentedString(likeCount)).append("\n");
     sb.append("    collectCount: ").append(toIndentedString(collectCount)).append("\n");
-    sb.append("    watchCount: ").append(toIndentedString(watchCount)).append("\n");
+    sb.append("    rewardCount: ").append(toIndentedString(rewardCount)).append("\n");
     sb.append("    replyCount: ").append(toIndentedString(replyCount)).append("\n");
-    sb.append("    bountyPoints: ").append(toIndentedString(bountyPoints)).append("\n");
-    sb.append("    acceptedAnswerId: ").append(toIndentedString(acceptedAnswerId)).append("\n");
     sb.append("    authorUser: ").append(toIndentedString(authorUser)).append("\n");
     sb.append("    lastReplyUser: ").append(toIndentedString(lastReplyUser)).append("\n");
     sb.append("    lastReplyAt: ").append(toIndentedString(lastReplyAt)).append("\n");
@@ -1297,11 +1213,6 @@ public class ArticleListItem {
       joiner.add(String.format(java.util.Locale.ROOT, "%scommentable%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCommentable()))));
     }
 
-    // add `anonymous` to the URL query string
-    if (getAnonymous() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sanonymous%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getAnonymous()))));
-    }
-
     // add `view_count` to the URL query string
     if (getViewCount() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sview_count%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getViewCount()))));
@@ -1322,24 +1233,14 @@ public class ArticleListItem {
       joiner.add(String.format(java.util.Locale.ROOT, "%scollect_count%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCollectCount()))));
     }
 
-    // add `watch_count` to the URL query string
-    if (getWatchCount() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%swatch_count%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getWatchCount()))));
+    // add `reward_count` to the URL query string
+    if (getRewardCount() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sreward_count%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getRewardCount()))));
     }
 
     // add `reply_count` to the URL query string
     if (getReplyCount() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sreply_count%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getReplyCount()))));
-    }
-
-    // add `bounty_points` to the URL query string
-    if (getBountyPoints() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sbounty_points%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getBountyPoints()))));
-    }
-
-    // add `accepted_answer_id` to the URL query string
-    if (getAcceptedAnswerId() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%saccepted_answer_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getAcceptedAnswerId()))));
     }
 
     // add `author_user` to the URL query string

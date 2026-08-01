@@ -2,7 +2,6 @@
 
 # ArticlePostscript
 
-文章附言。
 
 ## Properties
 
@@ -15,8 +14,8 @@
 |**restriction** | [**RestrictionEnum**](#RestrictionEnum) |  |  [optional] |
 |**createdBy** | **String** |  |  [optional] |
 |**updatedBy** | **String** |  |  [optional] |
-|**createdAt** | **String** |  |  [optional] |
-|**updatedAt** | **String** |  |  [optional] |
+|**createdAt** | **OffsetDateTime** |  |  [optional] |
+|**updatedAt** | **OffsetDateTime** |  |  [optional] |
 
 
 

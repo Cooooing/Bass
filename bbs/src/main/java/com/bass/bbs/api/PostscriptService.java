@@ -18,8 +18,10 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
-import com.bass.bbs.model.AddPostscriptReply;
-import com.bass.bbs.model.AddPostscriptRequest;
+import com.bass.bbs.model.AddPostscriptReq;
+import com.bass.bbs.model.AddPostscriptResp;
+import com.bass.bbs.model.ListPostscriptsReq;
+import com.bass.bbs.model.ListPostscriptsResp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -167,10 +169,10 @@ public class PostscriptService {
    * 
    * 添加文章附言。
    * @param apiRequest {@link APIAddRequest}
-   * @return AddPostscriptReply
+   * @return AddPostscriptResp
    * @throws ApiException if fails to make API call
    */
-  public AddPostscriptReply add(APIAddRequest apiRequest) throws ApiException {
+  public AddPostscriptResp add(APIAddRequest apiRequest) throws ApiException {
     return add(apiRequest, null);
   }
 
@@ -179,23 +181,23 @@ public class PostscriptService {
    * 添加文章附言。
    * @param apiRequest {@link APIAddRequest}
    * @param headers Optional headers to include in the request
-   * @return AddPostscriptReply
+   * @return AddPostscriptResp
    * @throws ApiException if fails to make API call
    */
-  public AddPostscriptReply add(APIAddRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public AddPostscriptResp add(APIAddRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    AddPostscriptRequest addPostscriptRequest = apiRequest.addPostscriptRequest();
-    return add(addPostscriptRequest, headers);
+    AddPostscriptReq addPostscriptReq = apiRequest.addPostscriptReq();
+    return add(addPostscriptReq, headers);
   }
 
   /**
    * 
    * 添加文章附言。
    * @param apiRequest {@link APIAddRequest}
-   * @return ApiResponse&lt;AddPostscriptReply&gt;
+   * @return ApiResponse&lt;AddPostscriptResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<AddPostscriptReply> addWithHttpInfo(APIAddRequest apiRequest) throws ApiException {
+  public ApiResponse<AddPostscriptResp> addWithHttpInfo(APIAddRequest apiRequest) throws ApiException {
     return addWithHttpInfo(apiRequest, null);
   }
 
@@ -204,59 +206,59 @@ public class PostscriptService {
    * 添加文章附言。
    * @param apiRequest {@link APIAddRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;AddPostscriptReply&gt;
+   * @return ApiResponse&lt;AddPostscriptResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<AddPostscriptReply> addWithHttpInfo(APIAddRequest apiRequest, Map<String, String> headers) throws ApiException {
-    AddPostscriptRequest addPostscriptRequest = apiRequest.addPostscriptRequest();
-    return addWithHttpInfo(addPostscriptRequest, headers);
+  public ApiResponse<AddPostscriptResp> addWithHttpInfo(APIAddRequest apiRequest, Map<String, String> headers) throws ApiException {
+    AddPostscriptReq addPostscriptReq = apiRequest.addPostscriptReq();
+    return addWithHttpInfo(addPostscriptReq, headers);
   }
 
   /**
    * 
    * 添加文章附言。
-   * @param addPostscriptRequest  (required)
-   * @return AddPostscriptReply
+   * @param addPostscriptReq  (required)
+   * @return AddPostscriptResp
    * @throws ApiException if fails to make API call
    */
-  public AddPostscriptReply add(@javax.annotation.Nonnull AddPostscriptRequest addPostscriptRequest) throws ApiException {
-    return add(addPostscriptRequest, null);
+  public AddPostscriptResp add(@javax.annotation.Nonnull AddPostscriptReq addPostscriptReq) throws ApiException {
+    return add(addPostscriptReq, null);
   }
 
   /**
    * 
    * 添加文章附言。
-   * @param addPostscriptRequest  (required)
+   * @param addPostscriptReq  (required)
    * @param headers Optional headers to include in the request
-   * @return AddPostscriptReply
+   * @return AddPostscriptResp
    * @throws ApiException if fails to make API call
    */
-  public AddPostscriptReply add(@javax.annotation.Nonnull AddPostscriptRequest addPostscriptRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<AddPostscriptReply> localVarResponse = addWithHttpInfo(addPostscriptRequest, headers);
+  public AddPostscriptResp add(@javax.annotation.Nonnull AddPostscriptReq addPostscriptReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<AddPostscriptResp> localVarResponse = addWithHttpInfo(addPostscriptReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 添加文章附言。
-   * @param addPostscriptRequest  (required)
-   * @return ApiResponse&lt;AddPostscriptReply&gt;
+   * @param addPostscriptReq  (required)
+   * @return ApiResponse&lt;AddPostscriptResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<AddPostscriptReply> addWithHttpInfo(@javax.annotation.Nonnull AddPostscriptRequest addPostscriptRequest) throws ApiException {
-    return addWithHttpInfo(addPostscriptRequest, null);
+  public ApiResponse<AddPostscriptResp> addWithHttpInfo(@javax.annotation.Nonnull AddPostscriptReq addPostscriptReq) throws ApiException {
+    return addWithHttpInfo(addPostscriptReq, null);
   }
 
   /**
    * 
    * 添加文章附言。
-   * @param addPostscriptRequest  (required)
+   * @param addPostscriptReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;AddPostscriptReply&gt;
+   * @return ApiResponse&lt;AddPostscriptResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<AddPostscriptReply> addWithHttpInfo(@javax.annotation.Nonnull AddPostscriptRequest addPostscriptRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = addRequestBuilder(addPostscriptRequest, headers);
+  public ApiResponse<AddPostscriptResp> addWithHttpInfo(@javax.annotation.Nonnull AddPostscriptReq addPostscriptReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = addRequestBuilder(addPostscriptReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -271,7 +273,7 @@ public class PostscriptService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<AddPostscriptReply>(
+          return new ApiResponse<AddPostscriptResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -281,10 +283,10 @@ public class PostscriptService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        AddPostscriptReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<AddPostscriptReply>() {});
+        AddPostscriptResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<AddPostscriptResp>() {});
         
 
-        return new ApiResponse<AddPostscriptReply>(
+        return new ApiResponse<AddPostscriptResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -303,10 +305,10 @@ public class PostscriptService {
     }
   }
 
-  private HttpRequest.Builder addRequestBuilder(@javax.annotation.Nonnull AddPostscriptRequest addPostscriptRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'addPostscriptRequest' is set
-    if (addPostscriptRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'addPostscriptRequest' when calling add");
+  private HttpRequest.Builder addRequestBuilder(@javax.annotation.Nonnull AddPostscriptReq addPostscriptReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'addPostscriptReq' is set
+    if (addPostscriptReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'addPostscriptReq' when calling add");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -319,7 +321,7 @@ public class PostscriptService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(addPostscriptRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(addPostscriptReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -338,28 +340,229 @@ public class PostscriptService {
 
   public static final class APIAddRequest {
     @javax.annotation.Nonnull
-    private AddPostscriptRequest addPostscriptRequest; //  (required)
+    private AddPostscriptReq addPostscriptReq; //  (required)
 
     private APIAddRequest(Builder builder) {
-      this.addPostscriptRequest = builder.addPostscriptRequest;
+      this.addPostscriptReq = builder.addPostscriptReq;
     }
     @javax.annotation.Nonnull
-    public AddPostscriptRequest addPostscriptRequest() {
-      return addPostscriptRequest;
+    public AddPostscriptReq addPostscriptReq() {
+      return addPostscriptReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private AddPostscriptRequest addPostscriptRequest;
+      private AddPostscriptReq addPostscriptReq;
 
-      public Builder addPostscriptRequest(@javax.annotation.Nonnull AddPostscriptRequest addPostscriptRequest) {
-        this.addPostscriptRequest = addPostscriptRequest;
+      public Builder addPostscriptReq(@javax.annotation.Nonnull AddPostscriptReq addPostscriptReq) {
+        this.addPostscriptReq = addPostscriptReq;
         return this;
       }
       public APIAddRequest build() {
         return new APIAddRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 查询文章附言列表。
+   * @param apiRequest {@link APICallListRequest}
+   * @return ListPostscriptsResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListPostscriptsResp callList(APICallListRequest apiRequest) throws ApiException {
+    return callList(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询文章附言列表。
+   * @param apiRequest {@link APICallListRequest}
+   * @param headers Optional headers to include in the request
+   * @return ListPostscriptsResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListPostscriptsResp callList(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    ListPostscriptsReq listPostscriptsReq = apiRequest.listPostscriptsReq();
+    return callList(listPostscriptsReq, headers);
+  }
+
+  /**
+   * 
+   * 查询文章附言列表。
+   * @param apiRequest {@link APICallListRequest}
+   * @return ApiResponse&lt;ListPostscriptsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListPostscriptsResp> callListWithHttpInfo(APICallListRequest apiRequest) throws ApiException {
+    return callListWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询文章附言列表。
+   * @param apiRequest {@link APICallListRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListPostscriptsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListPostscriptsResp> callListWithHttpInfo(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListPostscriptsReq listPostscriptsReq = apiRequest.listPostscriptsReq();
+    return callListWithHttpInfo(listPostscriptsReq, headers);
+  }
+
+  /**
+   * 
+   * 查询文章附言列表。
+   * @param listPostscriptsReq  (required)
+   * @return ListPostscriptsResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListPostscriptsResp callList(@javax.annotation.Nonnull ListPostscriptsReq listPostscriptsReq) throws ApiException {
+    return callList(listPostscriptsReq, null);
+  }
+
+  /**
+   * 
+   * 查询文章附言列表。
+   * @param listPostscriptsReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ListPostscriptsResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListPostscriptsResp callList(@javax.annotation.Nonnull ListPostscriptsReq listPostscriptsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListPostscriptsResp> localVarResponse = callListWithHttpInfo(listPostscriptsReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询文章附言列表。
+   * @param listPostscriptsReq  (required)
+   * @return ApiResponse&lt;ListPostscriptsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListPostscriptsResp> callListWithHttpInfo(@javax.annotation.Nonnull ListPostscriptsReq listPostscriptsReq) throws ApiException {
+    return callListWithHttpInfo(listPostscriptsReq, null);
+  }
+
+  /**
+   * 
+   * 查询文章附言列表。
+   * @param listPostscriptsReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListPostscriptsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListPostscriptsResp> callListWithHttpInfo(@javax.annotation.Nonnull ListPostscriptsReq listPostscriptsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = callListRequestBuilder(listPostscriptsReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("callList", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<ListPostscriptsResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        ListPostscriptsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListPostscriptsResp>() {});
+        
+
+        return new ApiResponse<ListPostscriptsResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder callListRequestBuilder(@javax.annotation.Nonnull ListPostscriptsReq listPostscriptsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listPostscriptsReq' is set
+    if (listPostscriptsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listPostscriptsReq' when calling callList");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/postscript/list";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listPostscriptsReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APICallListRequest {
+    @javax.annotation.Nonnull
+    private ListPostscriptsReq listPostscriptsReq; //  (required)
+
+    private APICallListRequest(Builder builder) {
+      this.listPostscriptsReq = builder.listPostscriptsReq;
+    }
+    @javax.annotation.Nonnull
+    public ListPostscriptsReq listPostscriptsReq() {
+      return listPostscriptsReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private ListPostscriptsReq listPostscriptsReq;
+
+      public Builder listPostscriptsReq(@javax.annotation.Nonnull ListPostscriptsReq listPostscriptsReq) {
+        this.listPostscriptsReq = listPostscriptsReq;
+        return this;
+      }
+      public APICallListRequest build() {
+        return new APICallListRequest(this);
       }
     }
   }

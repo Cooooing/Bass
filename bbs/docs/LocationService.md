@@ -13,7 +13,7 @@ All URIs are relative to *http://localhost*
 
 ## getCurrent
 
-> GetCurrentLocationReply getCurrent(getCurrentRequest)
+> GetCurrentLocationResp getCurrent(getCurrentRequest)
 
 
 
@@ -41,7 +41,7 @@ public class Example {
             APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
                 .body(body)
                 .build();
-            GetCurrentLocationReply result = apiInstance.getCurrent(request);
+            GetCurrentLocationResp result = apiInstance.getCurrent(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling LocationService#getCurrent");
@@ -62,7 +62,7 @@ public class Example {
 
 ### Return type
 
-[**GetCurrentLocationReply**](GetCurrentLocationReply.md)
+[**GetCurrentLocationResp**](GetCurrentLocationResp.md)
 
 
 ### Authorization
@@ -81,7 +81,7 @@ No authorization required
 
 ## getCurrentWithHttpInfo
 
-> ApiResponse<GetCurrentLocationReply> getCurrentWithHttpInfo(getCurrentRequest)
+> ApiResponse<GetCurrentLocationResp> getCurrentWithHttpInfo(getCurrentRequest)
 
 
 
@@ -110,7 +110,7 @@ public class Example {
             APIgetCurrentRequest request = APIgetCurrentRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<GetCurrentLocationReply> response = apiInstance.getCurrentWithHttpInfo(request);
+            ApiResponse<GetCurrentLocationResp> response = apiInstance.getCurrentWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -133,7 +133,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**GetCurrentLocationReply**](GetCurrentLocationReply.md)>
+ApiResponse<[**GetCurrentLocationResp**](GetCurrentLocationResp.md)>
 
 
 ### Authorization
@@ -163,7 +163,7 @@ No authorization required
 
 ## upsertCurrent
 
-> UpsertCurrentLocationReply upsertCurrent(upsertCurrentRequest)
+> UpsertCurrentLocationResp upsertCurrent(upsertCurrentRequest)
 
 
 
@@ -186,12 +186,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         LocationService apiInstance = new LocationService(defaultClient);
-        UpsertCurrentLocationRequest upsertCurrentLocationRequest = new UpsertCurrentLocationRequest(); // UpsertCurrentLocationRequest | 
+        UpsertCurrentLocationReq upsertCurrentLocationReq = new UpsertCurrentLocationReq(); // UpsertCurrentLocationReq | 
         try {
             APIupsertCurrentRequest request = APIupsertCurrentRequest.newBuilder()
-                .upsertCurrentLocationRequest(upsertCurrentLocationRequest)
+                .upsertCurrentLocationReq(upsertCurrentLocationReq)
                 .build();
-            UpsertCurrentLocationReply result = apiInstance.upsertCurrent(request);
+            UpsertCurrentLocationResp result = apiInstance.upsertCurrent(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling LocationService#upsertCurrent");
@@ -212,7 +212,7 @@ public class Example {
 
 ### Return type
 
-[**UpsertCurrentLocationReply**](UpsertCurrentLocationReply.md)
+[**UpsertCurrentLocationResp**](UpsertCurrentLocationResp.md)
 
 
 ### Authorization
@@ -231,7 +231,7 @@ No authorization required
 
 ## upsertCurrentWithHttpInfo
 
-> ApiResponse<UpsertCurrentLocationReply> upsertCurrentWithHttpInfo(upsertCurrentRequest)
+> ApiResponse<UpsertCurrentLocationResp> upsertCurrentWithHttpInfo(upsertCurrentRequest)
 
 
 
@@ -255,12 +255,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         LocationService apiInstance = new LocationService(defaultClient);
-        UpsertCurrentLocationRequest upsertCurrentLocationRequest = new UpsertCurrentLocationRequest(); // UpsertCurrentLocationRequest | 
+        UpsertCurrentLocationReq upsertCurrentLocationReq = new UpsertCurrentLocationReq(); // UpsertCurrentLocationReq | 
         try {
             APIupsertCurrentRequest request = APIupsertCurrentRequest.newBuilder()
-                .upsertCurrentLocationRequest(upsertCurrentLocationRequest)
+                .upsertCurrentLocationReq(upsertCurrentLocationReq)
                 .build();
-            ApiResponse<UpsertCurrentLocationReply> response = apiInstance.upsertCurrentWithHttpInfo(request);
+            ApiResponse<UpsertCurrentLocationResp> response = apiInstance.upsertCurrentWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -283,7 +283,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**UpsertCurrentLocationReply**](UpsertCurrentLocationReply.md)>
+ApiResponse<[**UpsertCurrentLocationResp**](UpsertCurrentLocationResp.md)>
 
 
 ### Authorization
@@ -307,6 +307,6 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **upsertCurrentLocationRequest** | [**UpsertCurrentLocationRequest**](UpsertCurrentLocationRequest.md) |  | |
+| **upsertCurrentLocationReq** | [**UpsertCurrentLocationReq**](UpsertCurrentLocationReq.md) |  | |
 
 

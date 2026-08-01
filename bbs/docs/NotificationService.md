@@ -15,7 +15,7 @@ All URIs are relative to *http://localhost*
 
 ## callList
 
-> ListNotificationsReply callList(callListRequest)
+> ListNotificationsResp callList(callListRequest)
 
 
 
@@ -38,12 +38,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         NotificationService apiInstance = new NotificationService(defaultClient);
-        ListNotificationsRequest listNotificationsRequest = new ListNotificationsRequest(); // ListNotificationsRequest | 
+        ListNotificationsReq listNotificationsReq = new ListNotificationsReq(); // ListNotificationsReq | 
         try {
             APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listNotificationsRequest(listNotificationsRequest)
+                .listNotificationsReq(listNotificationsReq)
                 .build();
-            ListNotificationsReply result = apiInstance.callList(request);
+            ListNotificationsResp result = apiInstance.callList(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling NotificationService#callList");
@@ -64,7 +64,7 @@ public class Example {
 
 ### Return type
 
-[**ListNotificationsReply**](ListNotificationsReply.md)
+[**ListNotificationsResp**](ListNotificationsResp.md)
 
 
 ### Authorization
@@ -83,7 +83,7 @@ No authorization required
 
 ## callListWithHttpInfo
 
-> ApiResponse<ListNotificationsReply> callListWithHttpInfo(callListRequest)
+> ApiResponse<ListNotificationsResp> callListWithHttpInfo(callListRequest)
 
 
 
@@ -107,12 +107,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         NotificationService apiInstance = new NotificationService(defaultClient);
-        ListNotificationsRequest listNotificationsRequest = new ListNotificationsRequest(); // ListNotificationsRequest | 
+        ListNotificationsReq listNotificationsReq = new ListNotificationsReq(); // ListNotificationsReq | 
         try {
             APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listNotificationsRequest(listNotificationsRequest)
+                .listNotificationsReq(listNotificationsReq)
                 .build();
-            ApiResponse<ListNotificationsReply> response = apiInstance.callListWithHttpInfo(request);
+            ApiResponse<ListNotificationsResp> response = apiInstance.callListWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -135,7 +135,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**ListNotificationsReply**](ListNotificationsReply.md)>
+ApiResponse<[**ListNotificationsResp**](ListNotificationsResp.md)>
 
 
 ### Authorization
@@ -159,13 +159,13 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **listNotificationsRequest** | [**ListNotificationsRequest**](ListNotificationsRequest.md) |  | |
+| **listNotificationsReq** | [**ListNotificationsReq**](ListNotificationsReq.md) |  | |
 
 
 
 ## countUnread
 
-> CountUnreadNotificationsReply countUnread(countUnreadRequest)
+> CountUnreadNotificationsResp countUnread(countUnreadRequest)
 
 
 
@@ -193,7 +193,7 @@ public class Example {
             APIcountUnreadRequest request = APIcountUnreadRequest.newBuilder()
                 .body(body)
                 .build();
-            CountUnreadNotificationsReply result = apiInstance.countUnread(request);
+            CountUnreadNotificationsResp result = apiInstance.countUnread(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling NotificationService#countUnread");
@@ -214,7 +214,7 @@ public class Example {
 
 ### Return type
 
-[**CountUnreadNotificationsReply**](CountUnreadNotificationsReply.md)
+[**CountUnreadNotificationsResp**](CountUnreadNotificationsResp.md)
 
 
 ### Authorization
@@ -233,7 +233,7 @@ No authorization required
 
 ## countUnreadWithHttpInfo
 
-> ApiResponse<CountUnreadNotificationsReply> countUnreadWithHttpInfo(countUnreadRequest)
+> ApiResponse<CountUnreadNotificationsResp> countUnreadWithHttpInfo(countUnreadRequest)
 
 
 
@@ -262,7 +262,7 @@ public class Example {
             APIcountUnreadRequest request = APIcountUnreadRequest.newBuilder()
                 .body(body)
                 .build();
-            ApiResponse<CountUnreadNotificationsReply> response = apiInstance.countUnreadWithHttpInfo(request);
+            ApiResponse<CountUnreadNotificationsResp> response = apiInstance.countUnreadWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -285,7 +285,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**CountUnreadNotificationsReply**](CountUnreadNotificationsReply.md)>
+ApiResponse<[**CountUnreadNotificationsResp**](CountUnreadNotificationsResp.md)>
 
 
 ### Authorization
@@ -315,7 +315,7 @@ No authorization required
 
 ## markRead
 
-> MarkReadNotificationReply markRead(markReadRequest)
+> MarkReadNotificationResp markRead(markReadRequest)
 
 
 
@@ -338,12 +338,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         NotificationService apiInstance = new NotificationService(defaultClient);
-        MarkReadNotificationRequest markReadNotificationRequest = new MarkReadNotificationRequest(); // MarkReadNotificationRequest | 
+        MarkReadNotificationReq markReadNotificationReq = new MarkReadNotificationReq(); // MarkReadNotificationReq | 
         try {
             APImarkReadRequest request = APImarkReadRequest.newBuilder()
-                .markReadNotificationRequest(markReadNotificationRequest)
+                .markReadNotificationReq(markReadNotificationReq)
                 .build();
-            MarkReadNotificationReply result = apiInstance.markRead(request);
+            MarkReadNotificationResp result = apiInstance.markRead(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling NotificationService#markRead");
@@ -364,7 +364,7 @@ public class Example {
 
 ### Return type
 
-[**MarkReadNotificationReply**](MarkReadNotificationReply.md)
+[**MarkReadNotificationResp**](MarkReadNotificationResp.md)
 
 
 ### Authorization
@@ -383,7 +383,7 @@ No authorization required
 
 ## markReadWithHttpInfo
 
-> ApiResponse<MarkReadNotificationReply> markReadWithHttpInfo(markReadRequest)
+> ApiResponse<MarkReadNotificationResp> markReadWithHttpInfo(markReadRequest)
 
 
 
@@ -407,12 +407,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         NotificationService apiInstance = new NotificationService(defaultClient);
-        MarkReadNotificationRequest markReadNotificationRequest = new MarkReadNotificationRequest(); // MarkReadNotificationRequest | 
+        MarkReadNotificationReq markReadNotificationReq = new MarkReadNotificationReq(); // MarkReadNotificationReq | 
         try {
             APImarkReadRequest request = APImarkReadRequest.newBuilder()
-                .markReadNotificationRequest(markReadNotificationRequest)
+                .markReadNotificationReq(markReadNotificationReq)
                 .build();
-            ApiResponse<MarkReadNotificationReply> response = apiInstance.markReadWithHttpInfo(request);
+            ApiResponse<MarkReadNotificationResp> response = apiInstance.markReadWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -435,7 +435,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**MarkReadNotificationReply**](MarkReadNotificationReply.md)>
+ApiResponse<[**MarkReadNotificationResp**](MarkReadNotificationResp.md)>
 
 
 ### Authorization
@@ -459,6 +459,6 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **markReadNotificationRequest** | [**MarkReadNotificationRequest**](MarkReadNotificationRequest.md) |  | |
+| **markReadNotificationReq** | [**MarkReadNotificationReq**](MarkReadNotificationReq.md) |  | |
 
 

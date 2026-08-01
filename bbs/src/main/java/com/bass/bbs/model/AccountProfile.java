@@ -24,13 +24,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 import com.bass.bbs.ApiClient;
 /**
- * 账号展示资料。
+ * AccountProfile
  */
 @JsonPropertyOrder({
   AccountProfile.JSON_PROPERTY_ID,
@@ -73,7 +74,7 @@ public class AccountProfile {
   private String introduction;
 
   /**
-   * MBTI 类型。
+   * Gets or Sets mbti
    */
   public enum MbtiEnum {
     MBTI_UNSPECIFIED(String.valueOf("MBTI_UNSPECIFIED")),
@@ -142,7 +143,7 @@ public class AccountProfile {
   private MbtiEnum mbti;
 
   /**
-   * 账号状态。
+   * Gets or Sets status
    */
   public enum StatusEnum {
     ACCOUNT_STATUS_UNSPECIFIED(String.valueOf("ACCOUNT_STATUS_UNSPECIFIED")),
@@ -151,7 +152,7 @@ public class AccountProfile {
     
     ACCOUNT_STATUS_BANNED(String.valueOf("ACCOUNT_STATUS_BANNED")),
     
-    ACCOUNT_STATUS_DELETED(String.valueOf("ACCOUNT_STATUS_DELETED"));
+    ACCOUNT_STATUS_CANCELLED(String.valueOf("ACCOUNT_STATUS_CANCELLED"));
 
     private String value;
 
@@ -194,11 +195,11 @@ public class AccountProfile {
 
   public static final String JSON_PROPERTY_CREATED_AT = "created_at";
   @javax.annotation.Nullable
-  private String createdAt;
+  private OffsetDateTime createdAt;
 
   public static final String JSON_PROPERTY_UPDATED_AT = "updated_at";
   @javax.annotation.Nullable
-  private String updatedAt;
+  private OffsetDateTime updatedAt;
 
   public AccountProfile() { 
   }
@@ -209,7 +210,7 @@ public class AccountProfile {
   }
 
   /**
-   * 账号 ID。
+   * Get id
    * @return id
    */
   @javax.annotation.Nullable
@@ -233,7 +234,7 @@ public class AccountProfile {
   }
 
   /**
-   * 账号名。
+   * Get name
    * @return name
    */
   @javax.annotation.Nullable
@@ -257,7 +258,7 @@ public class AccountProfile {
   }
 
   /**
-   * 昵称。
+   * Get nickname
    * @return nickname
    */
   @javax.annotation.Nullable
@@ -281,7 +282,7 @@ public class AccountProfile {
   }
 
   /**
-   * 个人主页 URL。
+   * Get url
    * @return url
    */
   @javax.annotation.Nullable
@@ -305,7 +306,7 @@ public class AccountProfile {
   }
 
   /**
-   * 头像 URL。
+   * Get avatarUrl
    * @return avatarUrl
    */
   @javax.annotation.Nullable
@@ -329,7 +330,7 @@ public class AccountProfile {
   }
 
   /**
-   * 个人简介。
+   * Get introduction
    * @return introduction
    */
   @javax.annotation.Nullable
@@ -353,7 +354,7 @@ public class AccountProfile {
   }
 
   /**
-   * MBTI 类型。
+   * Get mbti
    * @return mbti
    */
   @javax.annotation.Nullable
@@ -377,7 +378,7 @@ public class AccountProfile {
   }
 
   /**
-   * 账号状态。
+   * Get status
    * @return status
    */
   @javax.annotation.Nullable
@@ -401,7 +402,7 @@ public class AccountProfile {
   }
 
   /**
-   * 关注数量。
+   * Get followCount
    * @return followCount
    */
   @javax.annotation.Nullable
@@ -425,7 +426,7 @@ public class AccountProfile {
   }
 
   /**
-   * 粉丝数量。
+   * Get followerCount
    * @return followerCount
    */
   @javax.annotation.Nullable
@@ -443,50 +444,50 @@ public class AccountProfile {
   }
 
 
-  public AccountProfile createdAt(@javax.annotation.Nullable String createdAt) {
+  public AccountProfile createdAt(@javax.annotation.Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
 
   /**
-   * 创建时间。
+   * Get createdAt
    * @return createdAt
    */
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_CREATED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getCreatedAt() {
+  public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_CREATED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCreatedAt(@javax.annotation.Nullable String createdAt) {
+  public void setCreatedAt(@javax.annotation.Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
   }
 
 
-  public AccountProfile updatedAt(@javax.annotation.Nullable String updatedAt) {
+  public AccountProfile updatedAt(@javax.annotation.Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
 
   /**
-   * 更新时间。
+   * Get updatedAt
    * @return updatedAt
    */
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_UPDATED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getUpdatedAt() {
+  public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_UPDATED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUpdatedAt(@javax.annotation.Nullable String updatedAt) {
+  public void setUpdatedAt(@javax.annotation.Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
   }
 

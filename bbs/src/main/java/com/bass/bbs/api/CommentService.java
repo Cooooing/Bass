@@ -18,20 +18,20 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
-import com.bass.bbs.model.CreateCommentReply;
-import com.bass.bbs.model.CreateCommentRequest;
-import com.bass.bbs.model.LikeCommentReply;
-import com.bass.bbs.model.LikeCommentRequest;
-import com.bass.bbs.model.ListCommentRepliesReply;
-import com.bass.bbs.model.ListCommentRepliesRequest;
-import com.bass.bbs.model.ListCommentThreadsReply;
-import com.bass.bbs.model.ListCommentThreadsRequest;
-import com.bass.bbs.model.ListCommentTimelineReply;
-import com.bass.bbs.model.ListCommentTimelineRequest;
-import com.bass.bbs.model.ListCommentsReply;
-import com.bass.bbs.model.ListCommentsRequest;
-import com.bass.bbs.model.ThankCommentReply;
-import com.bass.bbs.model.ThankCommentRequest;
+import com.bass.bbs.model.CreateCommentReq;
+import com.bass.bbs.model.CreateCommentResp;
+import com.bass.bbs.model.LikeCommentReq;
+import com.bass.bbs.model.LikeCommentResp;
+import com.bass.bbs.model.ListCommentRepliesReq;
+import com.bass.bbs.model.ListCommentRepliesResp;
+import com.bass.bbs.model.ListCommentThreadsReq;
+import com.bass.bbs.model.ListCommentThreadsResp;
+import com.bass.bbs.model.ListCommentTimelineReq;
+import com.bass.bbs.model.ListCommentTimelineResp;
+import com.bass.bbs.model.ListCommentsReq;
+import com.bass.bbs.model.ListCommentsResp;
+import com.bass.bbs.model.ThankCommentReq;
+import com.bass.bbs.model.ThankCommentResp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -179,10 +179,10 @@ public class CommentService {
    * 
    * 分页查询评论列表。
    * @param apiRequest {@link APICallListRequest}
-   * @return ListCommentsReply
+   * @return ListCommentsResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentsReply callList(APICallListRequest apiRequest) throws ApiException {
+  public ListCommentsResp callList(APICallListRequest apiRequest) throws ApiException {
     return callList(apiRequest, null);
   }
 
@@ -191,23 +191,23 @@ public class CommentService {
    * 分页查询评论列表。
    * @param apiRequest {@link APICallListRequest}
    * @param headers Optional headers to include in the request
-   * @return ListCommentsReply
+   * @return ListCommentsResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentsReply callList(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListCommentsResp callList(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    ListCommentsRequest listCommentsRequest = apiRequest.listCommentsRequest();
-    return callList(listCommentsRequest, headers);
+    ListCommentsReq listCommentsReq = apiRequest.listCommentsReq();
+    return callList(listCommentsReq, headers);
   }
 
   /**
    * 
    * 分页查询评论列表。
    * @param apiRequest {@link APICallListRequest}
-   * @return ApiResponse&lt;ListCommentsReply&gt;
+   * @return ApiResponse&lt;ListCommentsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentsReply> callListWithHttpInfo(APICallListRequest apiRequest) throws ApiException {
+  public ApiResponse<ListCommentsResp> callListWithHttpInfo(APICallListRequest apiRequest) throws ApiException {
     return callListWithHttpInfo(apiRequest, null);
   }
 
@@ -216,59 +216,59 @@ public class CommentService {
    * 分页查询评论列表。
    * @param apiRequest {@link APICallListRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListCommentsReply&gt;
+   * @return ApiResponse&lt;ListCommentsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentsReply> callListWithHttpInfo(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListCommentsRequest listCommentsRequest = apiRequest.listCommentsRequest();
-    return callListWithHttpInfo(listCommentsRequest, headers);
+  public ApiResponse<ListCommentsResp> callListWithHttpInfo(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListCommentsReq listCommentsReq = apiRequest.listCommentsReq();
+    return callListWithHttpInfo(listCommentsReq, headers);
   }
 
   /**
    * 
    * 分页查询评论列表。
-   * @param listCommentsRequest  (required)
-   * @return ListCommentsReply
+   * @param listCommentsReq  (required)
+   * @return ListCommentsResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentsReply callList(@javax.annotation.Nonnull ListCommentsRequest listCommentsRequest) throws ApiException {
-    return callList(listCommentsRequest, null);
+  public ListCommentsResp callList(@javax.annotation.Nonnull ListCommentsReq listCommentsReq) throws ApiException {
+    return callList(listCommentsReq, null);
   }
 
   /**
    * 
    * 分页查询评论列表。
-   * @param listCommentsRequest  (required)
+   * @param listCommentsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ListCommentsReply
+   * @return ListCommentsResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentsReply callList(@javax.annotation.Nonnull ListCommentsRequest listCommentsRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListCommentsReply> localVarResponse = callListWithHttpInfo(listCommentsRequest, headers);
+  public ListCommentsResp callList(@javax.annotation.Nonnull ListCommentsReq listCommentsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListCommentsResp> localVarResponse = callListWithHttpInfo(listCommentsReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 分页查询评论列表。
-   * @param listCommentsRequest  (required)
-   * @return ApiResponse&lt;ListCommentsReply&gt;
+   * @param listCommentsReq  (required)
+   * @return ApiResponse&lt;ListCommentsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentsReply> callListWithHttpInfo(@javax.annotation.Nonnull ListCommentsRequest listCommentsRequest) throws ApiException {
-    return callListWithHttpInfo(listCommentsRequest, null);
+  public ApiResponse<ListCommentsResp> callListWithHttpInfo(@javax.annotation.Nonnull ListCommentsReq listCommentsReq) throws ApiException {
+    return callListWithHttpInfo(listCommentsReq, null);
   }
 
   /**
    * 
    * 分页查询评论列表。
-   * @param listCommentsRequest  (required)
+   * @param listCommentsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListCommentsReply&gt;
+   * @return ApiResponse&lt;ListCommentsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentsReply> callListWithHttpInfo(@javax.annotation.Nonnull ListCommentsRequest listCommentsRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = callListRequestBuilder(listCommentsRequest, headers);
+  public ApiResponse<ListCommentsResp> callListWithHttpInfo(@javax.annotation.Nonnull ListCommentsReq listCommentsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = callListRequestBuilder(listCommentsReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -283,7 +283,7 @@ public class CommentService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ListCommentsReply>(
+          return new ApiResponse<ListCommentsResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -293,10 +293,10 @@ public class CommentService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListCommentsReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListCommentsReply>() {});
+        ListCommentsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListCommentsResp>() {});
         
 
-        return new ApiResponse<ListCommentsReply>(
+        return new ApiResponse<ListCommentsResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -315,10 +315,10 @@ public class CommentService {
     }
   }
 
-  private HttpRequest.Builder callListRequestBuilder(@javax.annotation.Nonnull ListCommentsRequest listCommentsRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listCommentsRequest' is set
-    if (listCommentsRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'listCommentsRequest' when calling callList");
+  private HttpRequest.Builder callListRequestBuilder(@javax.annotation.Nonnull ListCommentsReq listCommentsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listCommentsReq' is set
+    if (listCommentsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listCommentsReq' when calling callList");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -331,7 +331,7 @@ public class CommentService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listCommentsRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listCommentsReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -350,24 +350,24 @@ public class CommentService {
 
   public static final class APICallListRequest {
     @javax.annotation.Nonnull
-    private ListCommentsRequest listCommentsRequest; //  (required)
+    private ListCommentsReq listCommentsReq; //  (required)
 
     private APICallListRequest(Builder builder) {
-      this.listCommentsRequest = builder.listCommentsRequest;
+      this.listCommentsReq = builder.listCommentsReq;
     }
     @javax.annotation.Nonnull
-    public ListCommentsRequest listCommentsRequest() {
-      return listCommentsRequest;
+    public ListCommentsReq listCommentsReq() {
+      return listCommentsReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private ListCommentsRequest listCommentsRequest;
+      private ListCommentsReq listCommentsReq;
 
-      public Builder listCommentsRequest(@javax.annotation.Nonnull ListCommentsRequest listCommentsRequest) {
-        this.listCommentsRequest = listCommentsRequest;
+      public Builder listCommentsReq(@javax.annotation.Nonnull ListCommentsReq listCommentsReq) {
+        this.listCommentsReq = listCommentsReq;
         return this;
       }
       public APICallListRequest build() {
@@ -380,10 +380,10 @@ public class CommentService {
    * 
    * 创建评论。
    * @param apiRequest {@link APICreateRequest}
-   * @return CreateCommentReply
+   * @return CreateCommentResp
    * @throws ApiException if fails to make API call
    */
-  public CreateCommentReply create(APICreateRequest apiRequest) throws ApiException {
+  public CreateCommentResp create(APICreateRequest apiRequest) throws ApiException {
     return create(apiRequest, null);
   }
 
@@ -392,23 +392,23 @@ public class CommentService {
    * 创建评论。
    * @param apiRequest {@link APICreateRequest}
    * @param headers Optional headers to include in the request
-   * @return CreateCommentReply
+   * @return CreateCommentResp
    * @throws ApiException if fails to make API call
    */
-  public CreateCommentReply create(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public CreateCommentResp create(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    CreateCommentRequest createCommentRequest = apiRequest.createCommentRequest();
-    return create(createCommentRequest, headers);
+    CreateCommentReq createCommentReq = apiRequest.createCommentReq();
+    return create(createCommentReq, headers);
   }
 
   /**
    * 
    * 创建评论。
    * @param apiRequest {@link APICreateRequest}
-   * @return ApiResponse&lt;CreateCommentReply&gt;
+   * @return ApiResponse&lt;CreateCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateCommentReply> createWithHttpInfo(APICreateRequest apiRequest) throws ApiException {
+  public ApiResponse<CreateCommentResp> createWithHttpInfo(APICreateRequest apiRequest) throws ApiException {
     return createWithHttpInfo(apiRequest, null);
   }
 
@@ -417,59 +417,59 @@ public class CommentService {
    * 创建评论。
    * @param apiRequest {@link APICreateRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;CreateCommentReply&gt;
+   * @return ApiResponse&lt;CreateCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateCommentReply> createWithHttpInfo(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
-    CreateCommentRequest createCommentRequest = apiRequest.createCommentRequest();
-    return createWithHttpInfo(createCommentRequest, headers);
+  public ApiResponse<CreateCommentResp> createWithHttpInfo(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
+    CreateCommentReq createCommentReq = apiRequest.createCommentReq();
+    return createWithHttpInfo(createCommentReq, headers);
   }
 
   /**
    * 
    * 创建评论。
-   * @param createCommentRequest  (required)
-   * @return CreateCommentReply
+   * @param createCommentReq  (required)
+   * @return CreateCommentResp
    * @throws ApiException if fails to make API call
    */
-  public CreateCommentReply create(@javax.annotation.Nonnull CreateCommentRequest createCommentRequest) throws ApiException {
-    return create(createCommentRequest, null);
+  public CreateCommentResp create(@javax.annotation.Nonnull CreateCommentReq createCommentReq) throws ApiException {
+    return create(createCommentReq, null);
   }
 
   /**
    * 
    * 创建评论。
-   * @param createCommentRequest  (required)
+   * @param createCommentReq  (required)
    * @param headers Optional headers to include in the request
-   * @return CreateCommentReply
+   * @return CreateCommentResp
    * @throws ApiException if fails to make API call
    */
-  public CreateCommentReply create(@javax.annotation.Nonnull CreateCommentRequest createCommentRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<CreateCommentReply> localVarResponse = createWithHttpInfo(createCommentRequest, headers);
+  public CreateCommentResp create(@javax.annotation.Nonnull CreateCommentReq createCommentReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CreateCommentResp> localVarResponse = createWithHttpInfo(createCommentReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 创建评论。
-   * @param createCommentRequest  (required)
-   * @return ApiResponse&lt;CreateCommentReply&gt;
+   * @param createCommentReq  (required)
+   * @return ApiResponse&lt;CreateCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateCommentReply> createWithHttpInfo(@javax.annotation.Nonnull CreateCommentRequest createCommentRequest) throws ApiException {
-    return createWithHttpInfo(createCommentRequest, null);
+  public ApiResponse<CreateCommentResp> createWithHttpInfo(@javax.annotation.Nonnull CreateCommentReq createCommentReq) throws ApiException {
+    return createWithHttpInfo(createCommentReq, null);
   }
 
   /**
    * 
    * 创建评论。
-   * @param createCommentRequest  (required)
+   * @param createCommentReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;CreateCommentReply&gt;
+   * @return ApiResponse&lt;CreateCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<CreateCommentReply> createWithHttpInfo(@javax.annotation.Nonnull CreateCommentRequest createCommentRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = createRequestBuilder(createCommentRequest, headers);
+  public ApiResponse<CreateCommentResp> createWithHttpInfo(@javax.annotation.Nonnull CreateCommentReq createCommentReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createRequestBuilder(createCommentReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -484,7 +484,7 @@ public class CommentService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<CreateCommentReply>(
+          return new ApiResponse<CreateCommentResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -494,10 +494,10 @@ public class CommentService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        CreateCommentReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<CreateCommentReply>() {});
+        CreateCommentResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<CreateCommentResp>() {});
         
 
-        return new ApiResponse<CreateCommentReply>(
+        return new ApiResponse<CreateCommentResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -516,10 +516,10 @@ public class CommentService {
     }
   }
 
-  private HttpRequest.Builder createRequestBuilder(@javax.annotation.Nonnull CreateCommentRequest createCommentRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'createCommentRequest' is set
-    if (createCommentRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'createCommentRequest' when calling create");
+  private HttpRequest.Builder createRequestBuilder(@javax.annotation.Nonnull CreateCommentReq createCommentReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'createCommentReq' is set
+    if (createCommentReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'createCommentReq' when calling create");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -532,7 +532,7 @@ public class CommentService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(createCommentRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(createCommentReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -551,24 +551,24 @@ public class CommentService {
 
   public static final class APICreateRequest {
     @javax.annotation.Nonnull
-    private CreateCommentRequest createCommentRequest; //  (required)
+    private CreateCommentReq createCommentReq; //  (required)
 
     private APICreateRequest(Builder builder) {
-      this.createCommentRequest = builder.createCommentRequest;
+      this.createCommentReq = builder.createCommentReq;
     }
     @javax.annotation.Nonnull
-    public CreateCommentRequest createCommentRequest() {
-      return createCommentRequest;
+    public CreateCommentReq createCommentReq() {
+      return createCommentReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private CreateCommentRequest createCommentRequest;
+      private CreateCommentReq createCommentReq;
 
-      public Builder createCommentRequest(@javax.annotation.Nonnull CreateCommentRequest createCommentRequest) {
-        this.createCommentRequest = createCommentRequest;
+      public Builder createCommentReq(@javax.annotation.Nonnull CreateCommentReq createCommentReq) {
+        this.createCommentReq = createCommentReq;
         return this;
       }
       public APICreateRequest build() {
@@ -581,10 +581,10 @@ public class CommentService {
    * 
    * 点赞或取消点赞评论。
    * @param apiRequest {@link APILikeRequest}
-   * @return LikeCommentReply
+   * @return LikeCommentResp
    * @throws ApiException if fails to make API call
    */
-  public LikeCommentReply like(APILikeRequest apiRequest) throws ApiException {
+  public LikeCommentResp like(APILikeRequest apiRequest) throws ApiException {
     return like(apiRequest, null);
   }
 
@@ -593,23 +593,23 @@ public class CommentService {
    * 点赞或取消点赞评论。
    * @param apiRequest {@link APILikeRequest}
    * @param headers Optional headers to include in the request
-   * @return LikeCommentReply
+   * @return LikeCommentResp
    * @throws ApiException if fails to make API call
    */
-  public LikeCommentReply like(APILikeRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public LikeCommentResp like(APILikeRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    LikeCommentRequest likeCommentRequest = apiRequest.likeCommentRequest();
-    return like(likeCommentRequest, headers);
+    LikeCommentReq likeCommentReq = apiRequest.likeCommentReq();
+    return like(likeCommentReq, headers);
   }
 
   /**
    * 
    * 点赞或取消点赞评论。
    * @param apiRequest {@link APILikeRequest}
-   * @return ApiResponse&lt;LikeCommentReply&gt;
+   * @return ApiResponse&lt;LikeCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LikeCommentReply> likeWithHttpInfo(APILikeRequest apiRequest) throws ApiException {
+  public ApiResponse<LikeCommentResp> likeWithHttpInfo(APILikeRequest apiRequest) throws ApiException {
     return likeWithHttpInfo(apiRequest, null);
   }
 
@@ -618,59 +618,59 @@ public class CommentService {
    * 点赞或取消点赞评论。
    * @param apiRequest {@link APILikeRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;LikeCommentReply&gt;
+   * @return ApiResponse&lt;LikeCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LikeCommentReply> likeWithHttpInfo(APILikeRequest apiRequest, Map<String, String> headers) throws ApiException {
-    LikeCommentRequest likeCommentRequest = apiRequest.likeCommentRequest();
-    return likeWithHttpInfo(likeCommentRequest, headers);
+  public ApiResponse<LikeCommentResp> likeWithHttpInfo(APILikeRequest apiRequest, Map<String, String> headers) throws ApiException {
+    LikeCommentReq likeCommentReq = apiRequest.likeCommentReq();
+    return likeWithHttpInfo(likeCommentReq, headers);
   }
 
   /**
    * 
    * 点赞或取消点赞评论。
-   * @param likeCommentRequest  (required)
-   * @return LikeCommentReply
+   * @param likeCommentReq  (required)
+   * @return LikeCommentResp
    * @throws ApiException if fails to make API call
    */
-  public LikeCommentReply like(@javax.annotation.Nonnull LikeCommentRequest likeCommentRequest) throws ApiException {
-    return like(likeCommentRequest, null);
+  public LikeCommentResp like(@javax.annotation.Nonnull LikeCommentReq likeCommentReq) throws ApiException {
+    return like(likeCommentReq, null);
   }
 
   /**
    * 
    * 点赞或取消点赞评论。
-   * @param likeCommentRequest  (required)
+   * @param likeCommentReq  (required)
    * @param headers Optional headers to include in the request
-   * @return LikeCommentReply
+   * @return LikeCommentResp
    * @throws ApiException if fails to make API call
    */
-  public LikeCommentReply like(@javax.annotation.Nonnull LikeCommentRequest likeCommentRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<LikeCommentReply> localVarResponse = likeWithHttpInfo(likeCommentRequest, headers);
+  public LikeCommentResp like(@javax.annotation.Nonnull LikeCommentReq likeCommentReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<LikeCommentResp> localVarResponse = likeWithHttpInfo(likeCommentReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 点赞或取消点赞评论。
-   * @param likeCommentRequest  (required)
-   * @return ApiResponse&lt;LikeCommentReply&gt;
+   * @param likeCommentReq  (required)
+   * @return ApiResponse&lt;LikeCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LikeCommentReply> likeWithHttpInfo(@javax.annotation.Nonnull LikeCommentRequest likeCommentRequest) throws ApiException {
-    return likeWithHttpInfo(likeCommentRequest, null);
+  public ApiResponse<LikeCommentResp> likeWithHttpInfo(@javax.annotation.Nonnull LikeCommentReq likeCommentReq) throws ApiException {
+    return likeWithHttpInfo(likeCommentReq, null);
   }
 
   /**
    * 
    * 点赞或取消点赞评论。
-   * @param likeCommentRequest  (required)
+   * @param likeCommentReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;LikeCommentReply&gt;
+   * @return ApiResponse&lt;LikeCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<LikeCommentReply> likeWithHttpInfo(@javax.annotation.Nonnull LikeCommentRequest likeCommentRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = likeRequestBuilder(likeCommentRequest, headers);
+  public ApiResponse<LikeCommentResp> likeWithHttpInfo(@javax.annotation.Nonnull LikeCommentReq likeCommentReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = likeRequestBuilder(likeCommentReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -685,7 +685,7 @@ public class CommentService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<LikeCommentReply>(
+          return new ApiResponse<LikeCommentResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -695,10 +695,10 @@ public class CommentService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        LikeCommentReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<LikeCommentReply>() {});
+        LikeCommentResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<LikeCommentResp>() {});
         
 
-        return new ApiResponse<LikeCommentReply>(
+        return new ApiResponse<LikeCommentResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -717,10 +717,10 @@ public class CommentService {
     }
   }
 
-  private HttpRequest.Builder likeRequestBuilder(@javax.annotation.Nonnull LikeCommentRequest likeCommentRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'likeCommentRequest' is set
-    if (likeCommentRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'likeCommentRequest' when calling like");
+  private HttpRequest.Builder likeRequestBuilder(@javax.annotation.Nonnull LikeCommentReq likeCommentReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'likeCommentReq' is set
+    if (likeCommentReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'likeCommentReq' when calling like");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -733,7 +733,7 @@ public class CommentService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(likeCommentRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(likeCommentReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -752,24 +752,24 @@ public class CommentService {
 
   public static final class APILikeRequest {
     @javax.annotation.Nonnull
-    private LikeCommentRequest likeCommentRequest; //  (required)
+    private LikeCommentReq likeCommentReq; //  (required)
 
     private APILikeRequest(Builder builder) {
-      this.likeCommentRequest = builder.likeCommentRequest;
+      this.likeCommentReq = builder.likeCommentReq;
     }
     @javax.annotation.Nonnull
-    public LikeCommentRequest likeCommentRequest() {
-      return likeCommentRequest;
+    public LikeCommentReq likeCommentReq() {
+      return likeCommentReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private LikeCommentRequest likeCommentRequest;
+      private LikeCommentReq likeCommentReq;
 
-      public Builder likeCommentRequest(@javax.annotation.Nonnull LikeCommentRequest likeCommentRequest) {
-        this.likeCommentRequest = likeCommentRequest;
+      public Builder likeCommentReq(@javax.annotation.Nonnull LikeCommentReq likeCommentReq) {
+        this.likeCommentReq = likeCommentReq;
         return this;
       }
       public APILikeRequest build() {
@@ -782,10 +782,10 @@ public class CommentService {
    * 
    * 分页查询评论回复。
    * @param apiRequest {@link APIListRepliesRequest}
-   * @return ListCommentRepliesReply
+   * @return ListCommentRepliesResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentRepliesReply listReplies(APIListRepliesRequest apiRequest) throws ApiException {
+  public ListCommentRepliesResp listReplies(APIListRepliesRequest apiRequest) throws ApiException {
     return listReplies(apiRequest, null);
   }
 
@@ -794,23 +794,23 @@ public class CommentService {
    * 分页查询评论回复。
    * @param apiRequest {@link APIListRepliesRequest}
    * @param headers Optional headers to include in the request
-   * @return ListCommentRepliesReply
+   * @return ListCommentRepliesResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentRepliesReply listReplies(APIListRepliesRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListCommentRepliesResp listReplies(APIListRepliesRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    ListCommentRepliesRequest listCommentRepliesRequest = apiRequest.listCommentRepliesRequest();
-    return listReplies(listCommentRepliesRequest, headers);
+    ListCommentRepliesReq listCommentRepliesReq = apiRequest.listCommentRepliesReq();
+    return listReplies(listCommentRepliesReq, headers);
   }
 
   /**
    * 
    * 分页查询评论回复。
    * @param apiRequest {@link APIListRepliesRequest}
-   * @return ApiResponse&lt;ListCommentRepliesReply&gt;
+   * @return ApiResponse&lt;ListCommentRepliesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentRepliesReply> listRepliesWithHttpInfo(APIListRepliesRequest apiRequest) throws ApiException {
+  public ApiResponse<ListCommentRepliesResp> listRepliesWithHttpInfo(APIListRepliesRequest apiRequest) throws ApiException {
     return listRepliesWithHttpInfo(apiRequest, null);
   }
 
@@ -819,59 +819,59 @@ public class CommentService {
    * 分页查询评论回复。
    * @param apiRequest {@link APIListRepliesRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListCommentRepliesReply&gt;
+   * @return ApiResponse&lt;ListCommentRepliesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentRepliesReply> listRepliesWithHttpInfo(APIListRepliesRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListCommentRepliesRequest listCommentRepliesRequest = apiRequest.listCommentRepliesRequest();
-    return listRepliesWithHttpInfo(listCommentRepliesRequest, headers);
+  public ApiResponse<ListCommentRepliesResp> listRepliesWithHttpInfo(APIListRepliesRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListCommentRepliesReq listCommentRepliesReq = apiRequest.listCommentRepliesReq();
+    return listRepliesWithHttpInfo(listCommentRepliesReq, headers);
   }
 
   /**
    * 
    * 分页查询评论回复。
-   * @param listCommentRepliesRequest  (required)
-   * @return ListCommentRepliesReply
+   * @param listCommentRepliesReq  (required)
+   * @return ListCommentRepliesResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentRepliesReply listReplies(@javax.annotation.Nonnull ListCommentRepliesRequest listCommentRepliesRequest) throws ApiException {
-    return listReplies(listCommentRepliesRequest, null);
+  public ListCommentRepliesResp listReplies(@javax.annotation.Nonnull ListCommentRepliesReq listCommentRepliesReq) throws ApiException {
+    return listReplies(listCommentRepliesReq, null);
   }
 
   /**
    * 
    * 分页查询评论回复。
-   * @param listCommentRepliesRequest  (required)
+   * @param listCommentRepliesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ListCommentRepliesReply
+   * @return ListCommentRepliesResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentRepliesReply listReplies(@javax.annotation.Nonnull ListCommentRepliesRequest listCommentRepliesRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListCommentRepliesReply> localVarResponse = listRepliesWithHttpInfo(listCommentRepliesRequest, headers);
+  public ListCommentRepliesResp listReplies(@javax.annotation.Nonnull ListCommentRepliesReq listCommentRepliesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListCommentRepliesResp> localVarResponse = listRepliesWithHttpInfo(listCommentRepliesReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 分页查询评论回复。
-   * @param listCommentRepliesRequest  (required)
-   * @return ApiResponse&lt;ListCommentRepliesReply&gt;
+   * @param listCommentRepliesReq  (required)
+   * @return ApiResponse&lt;ListCommentRepliesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentRepliesReply> listRepliesWithHttpInfo(@javax.annotation.Nonnull ListCommentRepliesRequest listCommentRepliesRequest) throws ApiException {
-    return listRepliesWithHttpInfo(listCommentRepliesRequest, null);
+  public ApiResponse<ListCommentRepliesResp> listRepliesWithHttpInfo(@javax.annotation.Nonnull ListCommentRepliesReq listCommentRepliesReq) throws ApiException {
+    return listRepliesWithHttpInfo(listCommentRepliesReq, null);
   }
 
   /**
    * 
    * 分页查询评论回复。
-   * @param listCommentRepliesRequest  (required)
+   * @param listCommentRepliesReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListCommentRepliesReply&gt;
+   * @return ApiResponse&lt;ListCommentRepliesResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentRepliesReply> listRepliesWithHttpInfo(@javax.annotation.Nonnull ListCommentRepliesRequest listCommentRepliesRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = listRepliesRequestBuilder(listCommentRepliesRequest, headers);
+  public ApiResponse<ListCommentRepliesResp> listRepliesWithHttpInfo(@javax.annotation.Nonnull ListCommentRepliesReq listCommentRepliesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listRepliesRequestBuilder(listCommentRepliesReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -886,7 +886,7 @@ public class CommentService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ListCommentRepliesReply>(
+          return new ApiResponse<ListCommentRepliesResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -896,10 +896,10 @@ public class CommentService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListCommentRepliesReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListCommentRepliesReply>() {});
+        ListCommentRepliesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListCommentRepliesResp>() {});
         
 
-        return new ApiResponse<ListCommentRepliesReply>(
+        return new ApiResponse<ListCommentRepliesResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -918,10 +918,10 @@ public class CommentService {
     }
   }
 
-  private HttpRequest.Builder listRepliesRequestBuilder(@javax.annotation.Nonnull ListCommentRepliesRequest listCommentRepliesRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listCommentRepliesRequest' is set
-    if (listCommentRepliesRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'listCommentRepliesRequest' when calling listReplies");
+  private HttpRequest.Builder listRepliesRequestBuilder(@javax.annotation.Nonnull ListCommentRepliesReq listCommentRepliesReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listCommentRepliesReq' is set
+    if (listCommentRepliesReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listCommentRepliesReq' when calling listReplies");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -934,7 +934,7 @@ public class CommentService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listCommentRepliesRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listCommentRepliesReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -953,24 +953,24 @@ public class CommentService {
 
   public static final class APIListRepliesRequest {
     @javax.annotation.Nonnull
-    private ListCommentRepliesRequest listCommentRepliesRequest; //  (required)
+    private ListCommentRepliesReq listCommentRepliesReq; //  (required)
 
     private APIListRepliesRequest(Builder builder) {
-      this.listCommentRepliesRequest = builder.listCommentRepliesRequest;
+      this.listCommentRepliesReq = builder.listCommentRepliesReq;
     }
     @javax.annotation.Nonnull
-    public ListCommentRepliesRequest listCommentRepliesRequest() {
-      return listCommentRepliesRequest;
+    public ListCommentRepliesReq listCommentRepliesReq() {
+      return listCommentRepliesReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private ListCommentRepliesRequest listCommentRepliesRequest;
+      private ListCommentRepliesReq listCommentRepliesReq;
 
-      public Builder listCommentRepliesRequest(@javax.annotation.Nonnull ListCommentRepliesRequest listCommentRepliesRequest) {
-        this.listCommentRepliesRequest = listCommentRepliesRequest;
+      public Builder listCommentRepliesReq(@javax.annotation.Nonnull ListCommentRepliesReq listCommentRepliesReq) {
+        this.listCommentRepliesReq = listCommentRepliesReq;
         return this;
       }
       public APIListRepliesRequest build() {
@@ -983,10 +983,10 @@ public class CommentService {
    * 
    * 分页查询评论楼层。
    * @param apiRequest {@link APIListThreadsRequest}
-   * @return ListCommentThreadsReply
+   * @return ListCommentThreadsResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentThreadsReply listThreads(APIListThreadsRequest apiRequest) throws ApiException {
+  public ListCommentThreadsResp listThreads(APIListThreadsRequest apiRequest) throws ApiException {
     return listThreads(apiRequest, null);
   }
 
@@ -995,23 +995,23 @@ public class CommentService {
    * 分页查询评论楼层。
    * @param apiRequest {@link APIListThreadsRequest}
    * @param headers Optional headers to include in the request
-   * @return ListCommentThreadsReply
+   * @return ListCommentThreadsResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentThreadsReply listThreads(APIListThreadsRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListCommentThreadsResp listThreads(APIListThreadsRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    ListCommentThreadsRequest listCommentThreadsRequest = apiRequest.listCommentThreadsRequest();
-    return listThreads(listCommentThreadsRequest, headers);
+    ListCommentThreadsReq listCommentThreadsReq = apiRequest.listCommentThreadsReq();
+    return listThreads(listCommentThreadsReq, headers);
   }
 
   /**
    * 
    * 分页查询评论楼层。
    * @param apiRequest {@link APIListThreadsRequest}
-   * @return ApiResponse&lt;ListCommentThreadsReply&gt;
+   * @return ApiResponse&lt;ListCommentThreadsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentThreadsReply> listThreadsWithHttpInfo(APIListThreadsRequest apiRequest) throws ApiException {
+  public ApiResponse<ListCommentThreadsResp> listThreadsWithHttpInfo(APIListThreadsRequest apiRequest) throws ApiException {
     return listThreadsWithHttpInfo(apiRequest, null);
   }
 
@@ -1020,59 +1020,59 @@ public class CommentService {
    * 分页查询评论楼层。
    * @param apiRequest {@link APIListThreadsRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListCommentThreadsReply&gt;
+   * @return ApiResponse&lt;ListCommentThreadsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentThreadsReply> listThreadsWithHttpInfo(APIListThreadsRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListCommentThreadsRequest listCommentThreadsRequest = apiRequest.listCommentThreadsRequest();
-    return listThreadsWithHttpInfo(listCommentThreadsRequest, headers);
+  public ApiResponse<ListCommentThreadsResp> listThreadsWithHttpInfo(APIListThreadsRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListCommentThreadsReq listCommentThreadsReq = apiRequest.listCommentThreadsReq();
+    return listThreadsWithHttpInfo(listCommentThreadsReq, headers);
   }
 
   /**
    * 
    * 分页查询评论楼层。
-   * @param listCommentThreadsRequest  (required)
-   * @return ListCommentThreadsReply
+   * @param listCommentThreadsReq  (required)
+   * @return ListCommentThreadsResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentThreadsReply listThreads(@javax.annotation.Nonnull ListCommentThreadsRequest listCommentThreadsRequest) throws ApiException {
-    return listThreads(listCommentThreadsRequest, null);
+  public ListCommentThreadsResp listThreads(@javax.annotation.Nonnull ListCommentThreadsReq listCommentThreadsReq) throws ApiException {
+    return listThreads(listCommentThreadsReq, null);
   }
 
   /**
    * 
    * 分页查询评论楼层。
-   * @param listCommentThreadsRequest  (required)
+   * @param listCommentThreadsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ListCommentThreadsReply
+   * @return ListCommentThreadsResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentThreadsReply listThreads(@javax.annotation.Nonnull ListCommentThreadsRequest listCommentThreadsRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListCommentThreadsReply> localVarResponse = listThreadsWithHttpInfo(listCommentThreadsRequest, headers);
+  public ListCommentThreadsResp listThreads(@javax.annotation.Nonnull ListCommentThreadsReq listCommentThreadsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListCommentThreadsResp> localVarResponse = listThreadsWithHttpInfo(listCommentThreadsReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 分页查询评论楼层。
-   * @param listCommentThreadsRequest  (required)
-   * @return ApiResponse&lt;ListCommentThreadsReply&gt;
+   * @param listCommentThreadsReq  (required)
+   * @return ApiResponse&lt;ListCommentThreadsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentThreadsReply> listThreadsWithHttpInfo(@javax.annotation.Nonnull ListCommentThreadsRequest listCommentThreadsRequest) throws ApiException {
-    return listThreadsWithHttpInfo(listCommentThreadsRequest, null);
+  public ApiResponse<ListCommentThreadsResp> listThreadsWithHttpInfo(@javax.annotation.Nonnull ListCommentThreadsReq listCommentThreadsReq) throws ApiException {
+    return listThreadsWithHttpInfo(listCommentThreadsReq, null);
   }
 
   /**
    * 
    * 分页查询评论楼层。
-   * @param listCommentThreadsRequest  (required)
+   * @param listCommentThreadsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListCommentThreadsReply&gt;
+   * @return ApiResponse&lt;ListCommentThreadsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentThreadsReply> listThreadsWithHttpInfo(@javax.annotation.Nonnull ListCommentThreadsRequest listCommentThreadsRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = listThreadsRequestBuilder(listCommentThreadsRequest, headers);
+  public ApiResponse<ListCommentThreadsResp> listThreadsWithHttpInfo(@javax.annotation.Nonnull ListCommentThreadsReq listCommentThreadsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listThreadsRequestBuilder(listCommentThreadsReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1087,7 +1087,7 @@ public class CommentService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ListCommentThreadsReply>(
+          return new ApiResponse<ListCommentThreadsResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -1097,10 +1097,10 @@ public class CommentService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListCommentThreadsReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListCommentThreadsReply>() {});
+        ListCommentThreadsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListCommentThreadsResp>() {});
         
 
-        return new ApiResponse<ListCommentThreadsReply>(
+        return new ApiResponse<ListCommentThreadsResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -1119,10 +1119,10 @@ public class CommentService {
     }
   }
 
-  private HttpRequest.Builder listThreadsRequestBuilder(@javax.annotation.Nonnull ListCommentThreadsRequest listCommentThreadsRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listCommentThreadsRequest' is set
-    if (listCommentThreadsRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'listCommentThreadsRequest' when calling listThreads");
+  private HttpRequest.Builder listThreadsRequestBuilder(@javax.annotation.Nonnull ListCommentThreadsReq listCommentThreadsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listCommentThreadsReq' is set
+    if (listCommentThreadsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listCommentThreadsReq' when calling listThreads");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1135,7 +1135,7 @@ public class CommentService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listCommentThreadsRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listCommentThreadsReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -1154,24 +1154,24 @@ public class CommentService {
 
   public static final class APIListThreadsRequest {
     @javax.annotation.Nonnull
-    private ListCommentThreadsRequest listCommentThreadsRequest; //  (required)
+    private ListCommentThreadsReq listCommentThreadsReq; //  (required)
 
     private APIListThreadsRequest(Builder builder) {
-      this.listCommentThreadsRequest = builder.listCommentThreadsRequest;
+      this.listCommentThreadsReq = builder.listCommentThreadsReq;
     }
     @javax.annotation.Nonnull
-    public ListCommentThreadsRequest listCommentThreadsRequest() {
-      return listCommentThreadsRequest;
+    public ListCommentThreadsReq listCommentThreadsReq() {
+      return listCommentThreadsReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private ListCommentThreadsRequest listCommentThreadsRequest;
+      private ListCommentThreadsReq listCommentThreadsReq;
 
-      public Builder listCommentThreadsRequest(@javax.annotation.Nonnull ListCommentThreadsRequest listCommentThreadsRequest) {
-        this.listCommentThreadsRequest = listCommentThreadsRequest;
+      public Builder listCommentThreadsReq(@javax.annotation.Nonnull ListCommentThreadsReq listCommentThreadsReq) {
+        this.listCommentThreadsReq = listCommentThreadsReq;
         return this;
       }
       public APIListThreadsRequest build() {
@@ -1184,10 +1184,10 @@ public class CommentService {
    * 
    * 分页查询评论时间线。
    * @param apiRequest {@link APIListTimelineRequest}
-   * @return ListCommentTimelineReply
+   * @return ListCommentTimelineResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentTimelineReply listTimeline(APIListTimelineRequest apiRequest) throws ApiException {
+  public ListCommentTimelineResp listTimeline(APIListTimelineRequest apiRequest) throws ApiException {
     return listTimeline(apiRequest, null);
   }
 
@@ -1196,23 +1196,23 @@ public class CommentService {
    * 分页查询评论时间线。
    * @param apiRequest {@link APIListTimelineRequest}
    * @param headers Optional headers to include in the request
-   * @return ListCommentTimelineReply
+   * @return ListCommentTimelineResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentTimelineReply listTimeline(APIListTimelineRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListCommentTimelineResp listTimeline(APIListTimelineRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    ListCommentTimelineRequest listCommentTimelineRequest = apiRequest.listCommentTimelineRequest();
-    return listTimeline(listCommentTimelineRequest, headers);
+    ListCommentTimelineReq listCommentTimelineReq = apiRequest.listCommentTimelineReq();
+    return listTimeline(listCommentTimelineReq, headers);
   }
 
   /**
    * 
    * 分页查询评论时间线。
    * @param apiRequest {@link APIListTimelineRequest}
-   * @return ApiResponse&lt;ListCommentTimelineReply&gt;
+   * @return ApiResponse&lt;ListCommentTimelineResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentTimelineReply> listTimelineWithHttpInfo(APIListTimelineRequest apiRequest) throws ApiException {
+  public ApiResponse<ListCommentTimelineResp> listTimelineWithHttpInfo(APIListTimelineRequest apiRequest) throws ApiException {
     return listTimelineWithHttpInfo(apiRequest, null);
   }
 
@@ -1221,59 +1221,59 @@ public class CommentService {
    * 分页查询评论时间线。
    * @param apiRequest {@link APIListTimelineRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListCommentTimelineReply&gt;
+   * @return ApiResponse&lt;ListCommentTimelineResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentTimelineReply> listTimelineWithHttpInfo(APIListTimelineRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListCommentTimelineRequest listCommentTimelineRequest = apiRequest.listCommentTimelineRequest();
-    return listTimelineWithHttpInfo(listCommentTimelineRequest, headers);
+  public ApiResponse<ListCommentTimelineResp> listTimelineWithHttpInfo(APIListTimelineRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListCommentTimelineReq listCommentTimelineReq = apiRequest.listCommentTimelineReq();
+    return listTimelineWithHttpInfo(listCommentTimelineReq, headers);
   }
 
   /**
    * 
    * 分页查询评论时间线。
-   * @param listCommentTimelineRequest  (required)
-   * @return ListCommentTimelineReply
+   * @param listCommentTimelineReq  (required)
+   * @return ListCommentTimelineResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentTimelineReply listTimeline(@javax.annotation.Nonnull ListCommentTimelineRequest listCommentTimelineRequest) throws ApiException {
-    return listTimeline(listCommentTimelineRequest, null);
+  public ListCommentTimelineResp listTimeline(@javax.annotation.Nonnull ListCommentTimelineReq listCommentTimelineReq) throws ApiException {
+    return listTimeline(listCommentTimelineReq, null);
   }
 
   /**
    * 
    * 分页查询评论时间线。
-   * @param listCommentTimelineRequest  (required)
+   * @param listCommentTimelineReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ListCommentTimelineReply
+   * @return ListCommentTimelineResp
    * @throws ApiException if fails to make API call
    */
-  public ListCommentTimelineReply listTimeline(@javax.annotation.Nonnull ListCommentTimelineRequest listCommentTimelineRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListCommentTimelineReply> localVarResponse = listTimelineWithHttpInfo(listCommentTimelineRequest, headers);
+  public ListCommentTimelineResp listTimeline(@javax.annotation.Nonnull ListCommentTimelineReq listCommentTimelineReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListCommentTimelineResp> localVarResponse = listTimelineWithHttpInfo(listCommentTimelineReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 分页查询评论时间线。
-   * @param listCommentTimelineRequest  (required)
-   * @return ApiResponse&lt;ListCommentTimelineReply&gt;
+   * @param listCommentTimelineReq  (required)
+   * @return ApiResponse&lt;ListCommentTimelineResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentTimelineReply> listTimelineWithHttpInfo(@javax.annotation.Nonnull ListCommentTimelineRequest listCommentTimelineRequest) throws ApiException {
-    return listTimelineWithHttpInfo(listCommentTimelineRequest, null);
+  public ApiResponse<ListCommentTimelineResp> listTimelineWithHttpInfo(@javax.annotation.Nonnull ListCommentTimelineReq listCommentTimelineReq) throws ApiException {
+    return listTimelineWithHttpInfo(listCommentTimelineReq, null);
   }
 
   /**
    * 
    * 分页查询评论时间线。
-   * @param listCommentTimelineRequest  (required)
+   * @param listCommentTimelineReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListCommentTimelineReply&gt;
+   * @return ApiResponse&lt;ListCommentTimelineResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListCommentTimelineReply> listTimelineWithHttpInfo(@javax.annotation.Nonnull ListCommentTimelineRequest listCommentTimelineRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = listTimelineRequestBuilder(listCommentTimelineRequest, headers);
+  public ApiResponse<ListCommentTimelineResp> listTimelineWithHttpInfo(@javax.annotation.Nonnull ListCommentTimelineReq listCommentTimelineReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listTimelineRequestBuilder(listCommentTimelineReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1288,7 +1288,7 @@ public class CommentService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ListCommentTimelineReply>(
+          return new ApiResponse<ListCommentTimelineResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -1298,10 +1298,10 @@ public class CommentService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListCommentTimelineReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListCommentTimelineReply>() {});
+        ListCommentTimelineResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListCommentTimelineResp>() {});
         
 
-        return new ApiResponse<ListCommentTimelineReply>(
+        return new ApiResponse<ListCommentTimelineResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -1320,10 +1320,10 @@ public class CommentService {
     }
   }
 
-  private HttpRequest.Builder listTimelineRequestBuilder(@javax.annotation.Nonnull ListCommentTimelineRequest listCommentTimelineRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listCommentTimelineRequest' is set
-    if (listCommentTimelineRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'listCommentTimelineRequest' when calling listTimeline");
+  private HttpRequest.Builder listTimelineRequestBuilder(@javax.annotation.Nonnull ListCommentTimelineReq listCommentTimelineReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listCommentTimelineReq' is set
+    if (listCommentTimelineReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listCommentTimelineReq' when calling listTimeline");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1336,7 +1336,7 @@ public class CommentService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listCommentTimelineRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listCommentTimelineReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -1355,24 +1355,24 @@ public class CommentService {
 
   public static final class APIListTimelineRequest {
     @javax.annotation.Nonnull
-    private ListCommentTimelineRequest listCommentTimelineRequest; //  (required)
+    private ListCommentTimelineReq listCommentTimelineReq; //  (required)
 
     private APIListTimelineRequest(Builder builder) {
-      this.listCommentTimelineRequest = builder.listCommentTimelineRequest;
+      this.listCommentTimelineReq = builder.listCommentTimelineReq;
     }
     @javax.annotation.Nonnull
-    public ListCommentTimelineRequest listCommentTimelineRequest() {
-      return listCommentTimelineRequest;
+    public ListCommentTimelineReq listCommentTimelineReq() {
+      return listCommentTimelineReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private ListCommentTimelineRequest listCommentTimelineRequest;
+      private ListCommentTimelineReq listCommentTimelineReq;
 
-      public Builder listCommentTimelineRequest(@javax.annotation.Nonnull ListCommentTimelineRequest listCommentTimelineRequest) {
-        this.listCommentTimelineRequest = listCommentTimelineRequest;
+      public Builder listCommentTimelineReq(@javax.annotation.Nonnull ListCommentTimelineReq listCommentTimelineReq) {
+        this.listCommentTimelineReq = listCommentTimelineReq;
         return this;
       }
       public APIListTimelineRequest build() {
@@ -1385,10 +1385,10 @@ public class CommentService {
    * 
    * 感谢或取消感谢评论。
    * @param apiRequest {@link APIThankRequest}
-   * @return ThankCommentReply
+   * @return ThankCommentResp
    * @throws ApiException if fails to make API call
    */
-  public ThankCommentReply thank(APIThankRequest apiRequest) throws ApiException {
+  public ThankCommentResp thank(APIThankRequest apiRequest) throws ApiException {
     return thank(apiRequest, null);
   }
 
@@ -1397,23 +1397,23 @@ public class CommentService {
    * 感谢或取消感谢评论。
    * @param apiRequest {@link APIThankRequest}
    * @param headers Optional headers to include in the request
-   * @return ThankCommentReply
+   * @return ThankCommentResp
    * @throws ApiException if fails to make API call
    */
-  public ThankCommentReply thank(APIThankRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ThankCommentResp thank(APIThankRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    ThankCommentRequest thankCommentRequest = apiRequest.thankCommentRequest();
-    return thank(thankCommentRequest, headers);
+    ThankCommentReq thankCommentReq = apiRequest.thankCommentReq();
+    return thank(thankCommentReq, headers);
   }
 
   /**
    * 
    * 感谢或取消感谢评论。
    * @param apiRequest {@link APIThankRequest}
-   * @return ApiResponse&lt;ThankCommentReply&gt;
+   * @return ApiResponse&lt;ThankCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ThankCommentReply> thankWithHttpInfo(APIThankRequest apiRequest) throws ApiException {
+  public ApiResponse<ThankCommentResp> thankWithHttpInfo(APIThankRequest apiRequest) throws ApiException {
     return thankWithHttpInfo(apiRequest, null);
   }
 
@@ -1422,59 +1422,59 @@ public class CommentService {
    * 感谢或取消感谢评论。
    * @param apiRequest {@link APIThankRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ThankCommentReply&gt;
+   * @return ApiResponse&lt;ThankCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ThankCommentReply> thankWithHttpInfo(APIThankRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ThankCommentRequest thankCommentRequest = apiRequest.thankCommentRequest();
-    return thankWithHttpInfo(thankCommentRequest, headers);
+  public ApiResponse<ThankCommentResp> thankWithHttpInfo(APIThankRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ThankCommentReq thankCommentReq = apiRequest.thankCommentReq();
+    return thankWithHttpInfo(thankCommentReq, headers);
   }
 
   /**
    * 
    * 感谢或取消感谢评论。
-   * @param thankCommentRequest  (required)
-   * @return ThankCommentReply
+   * @param thankCommentReq  (required)
+   * @return ThankCommentResp
    * @throws ApiException if fails to make API call
    */
-  public ThankCommentReply thank(@javax.annotation.Nonnull ThankCommentRequest thankCommentRequest) throws ApiException {
-    return thank(thankCommentRequest, null);
+  public ThankCommentResp thank(@javax.annotation.Nonnull ThankCommentReq thankCommentReq) throws ApiException {
+    return thank(thankCommentReq, null);
   }
 
   /**
    * 
    * 感谢或取消感谢评论。
-   * @param thankCommentRequest  (required)
+   * @param thankCommentReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ThankCommentReply
+   * @return ThankCommentResp
    * @throws ApiException if fails to make API call
    */
-  public ThankCommentReply thank(@javax.annotation.Nonnull ThankCommentRequest thankCommentRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<ThankCommentReply> localVarResponse = thankWithHttpInfo(thankCommentRequest, headers);
+  public ThankCommentResp thank(@javax.annotation.Nonnull ThankCommentReq thankCommentReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ThankCommentResp> localVarResponse = thankWithHttpInfo(thankCommentReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 感谢或取消感谢评论。
-   * @param thankCommentRequest  (required)
-   * @return ApiResponse&lt;ThankCommentReply&gt;
+   * @param thankCommentReq  (required)
+   * @return ApiResponse&lt;ThankCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ThankCommentReply> thankWithHttpInfo(@javax.annotation.Nonnull ThankCommentRequest thankCommentRequest) throws ApiException {
-    return thankWithHttpInfo(thankCommentRequest, null);
+  public ApiResponse<ThankCommentResp> thankWithHttpInfo(@javax.annotation.Nonnull ThankCommentReq thankCommentReq) throws ApiException {
+    return thankWithHttpInfo(thankCommentReq, null);
   }
 
   /**
    * 
    * 感谢或取消感谢评论。
-   * @param thankCommentRequest  (required)
+   * @param thankCommentReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ThankCommentReply&gt;
+   * @return ApiResponse&lt;ThankCommentResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ThankCommentReply> thankWithHttpInfo(@javax.annotation.Nonnull ThankCommentRequest thankCommentRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = thankRequestBuilder(thankCommentRequest, headers);
+  public ApiResponse<ThankCommentResp> thankWithHttpInfo(@javax.annotation.Nonnull ThankCommentReq thankCommentReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = thankRequestBuilder(thankCommentReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1489,7 +1489,7 @@ public class CommentService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ThankCommentReply>(
+          return new ApiResponse<ThankCommentResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -1499,10 +1499,10 @@ public class CommentService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ThankCommentReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ThankCommentReply>() {});
+        ThankCommentResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ThankCommentResp>() {});
         
 
-        return new ApiResponse<ThankCommentReply>(
+        return new ApiResponse<ThankCommentResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -1521,10 +1521,10 @@ public class CommentService {
     }
   }
 
-  private HttpRequest.Builder thankRequestBuilder(@javax.annotation.Nonnull ThankCommentRequest thankCommentRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'thankCommentRequest' is set
-    if (thankCommentRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'thankCommentRequest' when calling thank");
+  private HttpRequest.Builder thankRequestBuilder(@javax.annotation.Nonnull ThankCommentReq thankCommentReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'thankCommentReq' is set
+    if (thankCommentReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'thankCommentReq' when calling thank");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -1537,7 +1537,7 @@ public class CommentService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(thankCommentRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(thankCommentReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -1556,24 +1556,24 @@ public class CommentService {
 
   public static final class APIThankRequest {
     @javax.annotation.Nonnull
-    private ThankCommentRequest thankCommentRequest; //  (required)
+    private ThankCommentReq thankCommentReq; //  (required)
 
     private APIThankRequest(Builder builder) {
-      this.thankCommentRequest = builder.thankCommentRequest;
+      this.thankCommentReq = builder.thankCommentReq;
     }
     @javax.annotation.Nonnull
-    public ThankCommentRequest thankCommentRequest() {
-      return thankCommentRequest;
+    public ThankCommentReq thankCommentReq() {
+      return thankCommentReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private ThankCommentRequest thankCommentRequest;
+      private ThankCommentReq thankCommentReq;
 
-      public Builder thankCommentRequest(@javax.annotation.Nonnull ThankCommentRequest thankCommentRequest) {
-        this.thankCommentRequest = thankCommentRequest;
+      public Builder thankCommentReq(@javax.annotation.Nonnull ThankCommentReq thankCommentReq) {
+        this.thankCommentReq = thankCommentReq;
         return this;
       }
       public APIThankRequest build() {

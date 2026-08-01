@@ -18,12 +18,12 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
-import com.bass.bbs.model.GetCurrentAccountReply;
-import com.bass.bbs.model.GetProfileAccountReply;
-import com.bass.bbs.model.GetProfileAccountRequest;
-import com.bass.bbs.model.ImageReply;
-import com.bass.bbs.model.UpdateProfileAccountReply;
-import com.bass.bbs.model.UpdateProfileAccountRequest;
+import com.bass.bbs.model.GetCurrentAccountResp;
+import com.bass.bbs.model.GetProfileAccountReq;
+import com.bass.bbs.model.GetProfileAccountResp;
+import com.bass.bbs.model.ImageResp;
+import com.bass.bbs.model.UpdateProfileAccountReq;
+import com.bass.bbs.model.UpdateProfileAccountResp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -171,10 +171,10 @@ public class AccountService {
    * 
    * 生成默认账号头像。
    * @param apiRequest {@link APIAvatarRequest}
-   * @return ImageReply
+   * @return ImageResp
    * @throws ApiException if fails to make API call
    */
-  public ImageReply avatar(APIAvatarRequest apiRequest) throws ApiException {
+  public ImageResp avatar(APIAvatarRequest apiRequest) throws ApiException {
     return avatar(apiRequest, null);
   }
 
@@ -183,10 +183,10 @@ public class AccountService {
    * 生成默认账号头像。
    * @param apiRequest {@link APIAvatarRequest}
    * @param headers Optional headers to include in the request
-   * @return ImageReply
+   * @return ImageResp
    * @throws ApiException if fails to make API call
    */
-  public ImageReply avatar(APIAvatarRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ImageResp avatar(APIAvatarRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nullable
     String name = apiRequest.name();
     return avatar(name, headers);
@@ -196,10 +196,10 @@ public class AccountService {
    * 
    * 生成默认账号头像。
    * @param apiRequest {@link APIAvatarRequest}
-   * @return ApiResponse&lt;ImageReply&gt;
+   * @return ApiResponse&lt;ImageResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageReply> avatarWithHttpInfo(APIAvatarRequest apiRequest) throws ApiException {
+  public ApiResponse<ImageResp> avatarWithHttpInfo(APIAvatarRequest apiRequest) throws ApiException {
     return avatarWithHttpInfo(apiRequest, null);
   }
 
@@ -208,10 +208,10 @@ public class AccountService {
    * 生成默认账号头像。
    * @param apiRequest {@link APIAvatarRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ImageReply&gt;
+   * @return ApiResponse&lt;ImageResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageReply> avatarWithHttpInfo(APIAvatarRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<ImageResp> avatarWithHttpInfo(APIAvatarRequest apiRequest, Map<String, String> headers) throws ApiException {
     String name = apiRequest.name();
     return avatarWithHttpInfo(name, headers);
   }
@@ -219,47 +219,47 @@ public class AccountService {
   /**
    * 
    * 生成默认账号头像。
-   * @param name 用于生成头像的账号名。 (optional)
-   * @return ImageReply
+   * @param name  (optional)
+   * @return ImageResp
    * @throws ApiException if fails to make API call
    */
-  public ImageReply avatar(@javax.annotation.Nullable String name) throws ApiException {
+  public ImageResp avatar(@javax.annotation.Nullable String name) throws ApiException {
     return avatar(name, null);
   }
 
   /**
    * 
    * 生成默认账号头像。
-   * @param name 用于生成头像的账号名。 (optional)
+   * @param name  (optional)
    * @param headers Optional headers to include in the request
-   * @return ImageReply
+   * @return ImageResp
    * @throws ApiException if fails to make API call
    */
-  public ImageReply avatar(@javax.annotation.Nullable String name, Map<String, String> headers) throws ApiException {
-    ApiResponse<ImageReply> localVarResponse = avatarWithHttpInfo(name, headers);
+  public ImageResp avatar(@javax.annotation.Nullable String name, Map<String, String> headers) throws ApiException {
+    ApiResponse<ImageResp> localVarResponse = avatarWithHttpInfo(name, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 生成默认账号头像。
-   * @param name 用于生成头像的账号名。 (optional)
-   * @return ApiResponse&lt;ImageReply&gt;
+   * @param name  (optional)
+   * @return ApiResponse&lt;ImageResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageReply> avatarWithHttpInfo(@javax.annotation.Nullable String name) throws ApiException {
+  public ApiResponse<ImageResp> avatarWithHttpInfo(@javax.annotation.Nullable String name) throws ApiException {
     return avatarWithHttpInfo(name, null);
   }
 
   /**
    * 
    * 生成默认账号头像。
-   * @param name 用于生成头像的账号名。 (optional)
+   * @param name  (optional)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ImageReply&gt;
+   * @return ApiResponse&lt;ImageResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ImageReply> avatarWithHttpInfo(@javax.annotation.Nullable String name, Map<String, String> headers) throws ApiException {
+  public ApiResponse<ImageResp> avatarWithHttpInfo(@javax.annotation.Nullable String name, Map<String, String> headers) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = avatarRequestBuilder(name, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -275,7 +275,7 @@ public class AccountService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ImageReply>(
+          return new ApiResponse<ImageResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -285,10 +285,10 @@ public class AccountService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ImageReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ImageReply>() {});
+        ImageResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ImageResp>() {});
         
 
-        return new ApiResponse<ImageReply>(
+        return new ApiResponse<ImageResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -347,7 +347,7 @@ public class AccountService {
 
   public static final class APIAvatarRequest {
     @javax.annotation.Nullable
-    private String name; // 用于生成头像的账号名。 (optional)
+    private String name; //  (optional)
 
     private APIAvatarRequest(Builder builder) {
       this.name = builder.name;
@@ -377,10 +377,10 @@ public class AccountService {
    * 
    * 获取当前账号的完整资料。
    * @param apiRequest {@link APIGetCurrentRequest}
-   * @return GetCurrentAccountReply
+   * @return GetCurrentAccountResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentAccountReply getCurrent(APIGetCurrentRequest apiRequest) throws ApiException {
+  public GetCurrentAccountResp getCurrent(APIGetCurrentRequest apiRequest) throws ApiException {
     return getCurrent(apiRequest, null);
   }
 
@@ -389,10 +389,10 @@ public class AccountService {
    * 获取当前账号的完整资料。
    * @param apiRequest {@link APIGetCurrentRequest}
    * @param headers Optional headers to include in the request
-   * @return GetCurrentAccountReply
+   * @return GetCurrentAccountResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentAccountReply getCurrent(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public GetCurrentAccountResp getCurrent(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
     return getCurrent(body, headers);
@@ -402,10 +402,10 @@ public class AccountService {
    * 
    * 获取当前账号的完整资料。
    * @param apiRequest {@link APIGetCurrentRequest}
-   * @return ApiResponse&lt;GetCurrentAccountReply&gt;
+   * @return ApiResponse&lt;GetCurrentAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentAccountReply> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest) throws ApiException {
+  public ApiResponse<GetCurrentAccountResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest) throws ApiException {
     return getCurrentWithHttpInfo(apiRequest, null);
   }
 
@@ -414,10 +414,10 @@ public class AccountService {
    * 获取当前账号的完整资料。
    * @param apiRequest {@link APIGetCurrentRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetCurrentAccountReply&gt;
+   * @return ApiResponse&lt;GetCurrentAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentAccountReply> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<GetCurrentAccountResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
     return getCurrentWithHttpInfo(body, headers);
   }
@@ -426,10 +426,10 @@ public class AccountService {
    * 
    * 获取当前账号的完整资料。
    * @param body  (required)
-   * @return GetCurrentAccountReply
+   * @return GetCurrentAccountResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentAccountReply getCurrent(@javax.annotation.Nonnull Object body) throws ApiException {
+  public GetCurrentAccountResp getCurrent(@javax.annotation.Nonnull Object body) throws ApiException {
     return getCurrent(body, null);
   }
 
@@ -438,11 +438,11 @@ public class AccountService {
    * 获取当前账号的完整资料。
    * @param body  (required)
    * @param headers Optional headers to include in the request
-   * @return GetCurrentAccountReply
+   * @return GetCurrentAccountResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentAccountReply getCurrent(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<GetCurrentAccountReply> localVarResponse = getCurrentWithHttpInfo(body, headers);
+  public GetCurrentAccountResp getCurrent(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<GetCurrentAccountResp> localVarResponse = getCurrentWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
@@ -450,10 +450,10 @@ public class AccountService {
    * 
    * 获取当前账号的完整资料。
    * @param body  (required)
-   * @return ApiResponse&lt;GetCurrentAccountReply&gt;
+   * @return ApiResponse&lt;GetCurrentAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentAccountReply> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+  public ApiResponse<GetCurrentAccountResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
     return getCurrentWithHttpInfo(body, null);
   }
 
@@ -462,10 +462,10 @@ public class AccountService {
    * 获取当前账号的完整资料。
    * @param body  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetCurrentAccountReply&gt;
+   * @return ApiResponse&lt;GetCurrentAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentAccountReply> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  public ApiResponse<GetCurrentAccountResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = getCurrentRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -481,7 +481,7 @@ public class AccountService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<GetCurrentAccountReply>(
+          return new ApiResponse<GetCurrentAccountResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -491,10 +491,10 @@ public class AccountService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        GetCurrentAccountReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetCurrentAccountReply>() {});
+        GetCurrentAccountResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetCurrentAccountResp>() {});
         
 
-        return new ApiResponse<GetCurrentAccountReply>(
+        return new ApiResponse<GetCurrentAccountResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -578,10 +578,10 @@ public class AccountService {
    * 
    * 按账号 ID 获取账号展示资料。
    * @param apiRequest {@link APIGetProfileRequest}
-   * @return GetProfileAccountReply
+   * @return GetProfileAccountResp
    * @throws ApiException if fails to make API call
    */
-  public GetProfileAccountReply getProfile(APIGetProfileRequest apiRequest) throws ApiException {
+  public GetProfileAccountResp getProfile(APIGetProfileRequest apiRequest) throws ApiException {
     return getProfile(apiRequest, null);
   }
 
@@ -590,23 +590,23 @@ public class AccountService {
    * 按账号 ID 获取账号展示资料。
    * @param apiRequest {@link APIGetProfileRequest}
    * @param headers Optional headers to include in the request
-   * @return GetProfileAccountReply
+   * @return GetProfileAccountResp
    * @throws ApiException if fails to make API call
    */
-  public GetProfileAccountReply getProfile(APIGetProfileRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public GetProfileAccountResp getProfile(APIGetProfileRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    GetProfileAccountRequest getProfileAccountRequest = apiRequest.getProfileAccountRequest();
-    return getProfile(getProfileAccountRequest, headers);
+    GetProfileAccountReq getProfileAccountReq = apiRequest.getProfileAccountReq();
+    return getProfile(getProfileAccountReq, headers);
   }
 
   /**
    * 
    * 按账号 ID 获取账号展示资料。
    * @param apiRequest {@link APIGetProfileRequest}
-   * @return ApiResponse&lt;GetProfileAccountReply&gt;
+   * @return ApiResponse&lt;GetProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetProfileAccountReply> getProfileWithHttpInfo(APIGetProfileRequest apiRequest) throws ApiException {
+  public ApiResponse<GetProfileAccountResp> getProfileWithHttpInfo(APIGetProfileRequest apiRequest) throws ApiException {
     return getProfileWithHttpInfo(apiRequest, null);
   }
 
@@ -615,59 +615,59 @@ public class AccountService {
    * 按账号 ID 获取账号展示资料。
    * @param apiRequest {@link APIGetProfileRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetProfileAccountReply&gt;
+   * @return ApiResponse&lt;GetProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetProfileAccountReply> getProfileWithHttpInfo(APIGetProfileRequest apiRequest, Map<String, String> headers) throws ApiException {
-    GetProfileAccountRequest getProfileAccountRequest = apiRequest.getProfileAccountRequest();
-    return getProfileWithHttpInfo(getProfileAccountRequest, headers);
+  public ApiResponse<GetProfileAccountResp> getProfileWithHttpInfo(APIGetProfileRequest apiRequest, Map<String, String> headers) throws ApiException {
+    GetProfileAccountReq getProfileAccountReq = apiRequest.getProfileAccountReq();
+    return getProfileWithHttpInfo(getProfileAccountReq, headers);
   }
 
   /**
    * 
    * 按账号 ID 获取账号展示资料。
-   * @param getProfileAccountRequest  (required)
-   * @return GetProfileAccountReply
+   * @param getProfileAccountReq  (required)
+   * @return GetProfileAccountResp
    * @throws ApiException if fails to make API call
    */
-  public GetProfileAccountReply getProfile(@javax.annotation.Nonnull GetProfileAccountRequest getProfileAccountRequest) throws ApiException {
-    return getProfile(getProfileAccountRequest, null);
+  public GetProfileAccountResp getProfile(@javax.annotation.Nonnull GetProfileAccountReq getProfileAccountReq) throws ApiException {
+    return getProfile(getProfileAccountReq, null);
   }
 
   /**
    * 
    * 按账号 ID 获取账号展示资料。
-   * @param getProfileAccountRequest  (required)
+   * @param getProfileAccountReq  (required)
    * @param headers Optional headers to include in the request
-   * @return GetProfileAccountReply
+   * @return GetProfileAccountResp
    * @throws ApiException if fails to make API call
    */
-  public GetProfileAccountReply getProfile(@javax.annotation.Nonnull GetProfileAccountRequest getProfileAccountRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<GetProfileAccountReply> localVarResponse = getProfileWithHttpInfo(getProfileAccountRequest, headers);
+  public GetProfileAccountResp getProfile(@javax.annotation.Nonnull GetProfileAccountReq getProfileAccountReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<GetProfileAccountResp> localVarResponse = getProfileWithHttpInfo(getProfileAccountReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 按账号 ID 获取账号展示资料。
-   * @param getProfileAccountRequest  (required)
-   * @return ApiResponse&lt;GetProfileAccountReply&gt;
+   * @param getProfileAccountReq  (required)
+   * @return ApiResponse&lt;GetProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetProfileAccountReply> getProfileWithHttpInfo(@javax.annotation.Nonnull GetProfileAccountRequest getProfileAccountRequest) throws ApiException {
-    return getProfileWithHttpInfo(getProfileAccountRequest, null);
+  public ApiResponse<GetProfileAccountResp> getProfileWithHttpInfo(@javax.annotation.Nonnull GetProfileAccountReq getProfileAccountReq) throws ApiException {
+    return getProfileWithHttpInfo(getProfileAccountReq, null);
   }
 
   /**
    * 
    * 按账号 ID 获取账号展示资料。
-   * @param getProfileAccountRequest  (required)
+   * @param getProfileAccountReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetProfileAccountReply&gt;
+   * @return ApiResponse&lt;GetProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetProfileAccountReply> getProfileWithHttpInfo(@javax.annotation.Nonnull GetProfileAccountRequest getProfileAccountRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = getProfileRequestBuilder(getProfileAccountRequest, headers);
+  public ApiResponse<GetProfileAccountResp> getProfileWithHttpInfo(@javax.annotation.Nonnull GetProfileAccountReq getProfileAccountReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = getProfileRequestBuilder(getProfileAccountReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -682,7 +682,7 @@ public class AccountService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<GetProfileAccountReply>(
+          return new ApiResponse<GetProfileAccountResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -692,10 +692,10 @@ public class AccountService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        GetProfileAccountReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetProfileAccountReply>() {});
+        GetProfileAccountResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetProfileAccountResp>() {});
         
 
-        return new ApiResponse<GetProfileAccountReply>(
+        return new ApiResponse<GetProfileAccountResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -714,10 +714,10 @@ public class AccountService {
     }
   }
 
-  private HttpRequest.Builder getProfileRequestBuilder(@javax.annotation.Nonnull GetProfileAccountRequest getProfileAccountRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'getProfileAccountRequest' is set
-    if (getProfileAccountRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'getProfileAccountRequest' when calling getProfile");
+  private HttpRequest.Builder getProfileRequestBuilder(@javax.annotation.Nonnull GetProfileAccountReq getProfileAccountReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'getProfileAccountReq' is set
+    if (getProfileAccountReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'getProfileAccountReq' when calling getProfile");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -730,7 +730,7 @@ public class AccountService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(getProfileAccountRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(getProfileAccountReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -749,24 +749,24 @@ public class AccountService {
 
   public static final class APIGetProfileRequest {
     @javax.annotation.Nonnull
-    private GetProfileAccountRequest getProfileAccountRequest; //  (required)
+    private GetProfileAccountReq getProfileAccountReq; //  (required)
 
     private APIGetProfileRequest(Builder builder) {
-      this.getProfileAccountRequest = builder.getProfileAccountRequest;
+      this.getProfileAccountReq = builder.getProfileAccountReq;
     }
     @javax.annotation.Nonnull
-    public GetProfileAccountRequest getProfileAccountRequest() {
-      return getProfileAccountRequest;
+    public GetProfileAccountReq getProfileAccountReq() {
+      return getProfileAccountReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private GetProfileAccountRequest getProfileAccountRequest;
+      private GetProfileAccountReq getProfileAccountReq;
 
-      public Builder getProfileAccountRequest(@javax.annotation.Nonnull GetProfileAccountRequest getProfileAccountRequest) {
-        this.getProfileAccountRequest = getProfileAccountRequest;
+      public Builder getProfileAccountReq(@javax.annotation.Nonnull GetProfileAccountReq getProfileAccountReq) {
+        this.getProfileAccountReq = getProfileAccountReq;
         return this;
       }
       public APIGetProfileRequest build() {
@@ -779,10 +779,10 @@ public class AccountService {
    * 
    * 更新当前账号的展示资料。
    * @param apiRequest {@link APIUpdateProfileRequest}
-   * @return UpdateProfileAccountReply
+   * @return UpdateProfileAccountResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateProfileAccountReply updateProfile(APIUpdateProfileRequest apiRequest) throws ApiException {
+  public UpdateProfileAccountResp updateProfile(APIUpdateProfileRequest apiRequest) throws ApiException {
     return updateProfile(apiRequest, null);
   }
 
@@ -791,23 +791,23 @@ public class AccountService {
    * 更新当前账号的展示资料。
    * @param apiRequest {@link APIUpdateProfileRequest}
    * @param headers Optional headers to include in the request
-   * @return UpdateProfileAccountReply
+   * @return UpdateProfileAccountResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateProfileAccountReply updateProfile(APIUpdateProfileRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public UpdateProfileAccountResp updateProfile(APIUpdateProfileRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    UpdateProfileAccountRequest updateProfileAccountRequest = apiRequest.updateProfileAccountRequest();
-    return updateProfile(updateProfileAccountRequest, headers);
+    UpdateProfileAccountReq updateProfileAccountReq = apiRequest.updateProfileAccountReq();
+    return updateProfile(updateProfileAccountReq, headers);
   }
 
   /**
    * 
    * 更新当前账号的展示资料。
    * @param apiRequest {@link APIUpdateProfileRequest}
-   * @return ApiResponse&lt;UpdateProfileAccountReply&gt;
+   * @return ApiResponse&lt;UpdateProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateProfileAccountReply> updateProfileWithHttpInfo(APIUpdateProfileRequest apiRequest) throws ApiException {
+  public ApiResponse<UpdateProfileAccountResp> updateProfileWithHttpInfo(APIUpdateProfileRequest apiRequest) throws ApiException {
     return updateProfileWithHttpInfo(apiRequest, null);
   }
 
@@ -816,59 +816,59 @@ public class AccountService {
    * 更新当前账号的展示资料。
    * @param apiRequest {@link APIUpdateProfileRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;UpdateProfileAccountReply&gt;
+   * @return ApiResponse&lt;UpdateProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateProfileAccountReply> updateProfileWithHttpInfo(APIUpdateProfileRequest apiRequest, Map<String, String> headers) throws ApiException {
-    UpdateProfileAccountRequest updateProfileAccountRequest = apiRequest.updateProfileAccountRequest();
-    return updateProfileWithHttpInfo(updateProfileAccountRequest, headers);
+  public ApiResponse<UpdateProfileAccountResp> updateProfileWithHttpInfo(APIUpdateProfileRequest apiRequest, Map<String, String> headers) throws ApiException {
+    UpdateProfileAccountReq updateProfileAccountReq = apiRequest.updateProfileAccountReq();
+    return updateProfileWithHttpInfo(updateProfileAccountReq, headers);
   }
 
   /**
    * 
    * 更新当前账号的展示资料。
-   * @param updateProfileAccountRequest  (required)
-   * @return UpdateProfileAccountReply
+   * @param updateProfileAccountReq  (required)
+   * @return UpdateProfileAccountResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateProfileAccountReply updateProfile(@javax.annotation.Nonnull UpdateProfileAccountRequest updateProfileAccountRequest) throws ApiException {
-    return updateProfile(updateProfileAccountRequest, null);
+  public UpdateProfileAccountResp updateProfile(@javax.annotation.Nonnull UpdateProfileAccountReq updateProfileAccountReq) throws ApiException {
+    return updateProfile(updateProfileAccountReq, null);
   }
 
   /**
    * 
    * 更新当前账号的展示资料。
-   * @param updateProfileAccountRequest  (required)
+   * @param updateProfileAccountReq  (required)
    * @param headers Optional headers to include in the request
-   * @return UpdateProfileAccountReply
+   * @return UpdateProfileAccountResp
    * @throws ApiException if fails to make API call
    */
-  public UpdateProfileAccountReply updateProfile(@javax.annotation.Nonnull UpdateProfileAccountRequest updateProfileAccountRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<UpdateProfileAccountReply> localVarResponse = updateProfileWithHttpInfo(updateProfileAccountRequest, headers);
+  public UpdateProfileAccountResp updateProfile(@javax.annotation.Nonnull UpdateProfileAccountReq updateProfileAccountReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<UpdateProfileAccountResp> localVarResponse = updateProfileWithHttpInfo(updateProfileAccountReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 更新当前账号的展示资料。
-   * @param updateProfileAccountRequest  (required)
-   * @return ApiResponse&lt;UpdateProfileAccountReply&gt;
+   * @param updateProfileAccountReq  (required)
+   * @return ApiResponse&lt;UpdateProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateProfileAccountReply> updateProfileWithHttpInfo(@javax.annotation.Nonnull UpdateProfileAccountRequest updateProfileAccountRequest) throws ApiException {
-    return updateProfileWithHttpInfo(updateProfileAccountRequest, null);
+  public ApiResponse<UpdateProfileAccountResp> updateProfileWithHttpInfo(@javax.annotation.Nonnull UpdateProfileAccountReq updateProfileAccountReq) throws ApiException {
+    return updateProfileWithHttpInfo(updateProfileAccountReq, null);
   }
 
   /**
    * 
    * 更新当前账号的展示资料。
-   * @param updateProfileAccountRequest  (required)
+   * @param updateProfileAccountReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;UpdateProfileAccountReply&gt;
+   * @return ApiResponse&lt;UpdateProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpdateProfileAccountReply> updateProfileWithHttpInfo(@javax.annotation.Nonnull UpdateProfileAccountRequest updateProfileAccountRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = updateProfileRequestBuilder(updateProfileAccountRequest, headers);
+  public ApiResponse<UpdateProfileAccountResp> updateProfileWithHttpInfo(@javax.annotation.Nonnull UpdateProfileAccountReq updateProfileAccountReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = updateProfileRequestBuilder(updateProfileAccountReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -883,7 +883,7 @@ public class AccountService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<UpdateProfileAccountReply>(
+          return new ApiResponse<UpdateProfileAccountResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -893,10 +893,10 @@ public class AccountService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        UpdateProfileAccountReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<UpdateProfileAccountReply>() {});
+        UpdateProfileAccountResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<UpdateProfileAccountResp>() {});
         
 
-        return new ApiResponse<UpdateProfileAccountReply>(
+        return new ApiResponse<UpdateProfileAccountResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -915,10 +915,10 @@ public class AccountService {
     }
   }
 
-  private HttpRequest.Builder updateProfileRequestBuilder(@javax.annotation.Nonnull UpdateProfileAccountRequest updateProfileAccountRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'updateProfileAccountRequest' is set
-    if (updateProfileAccountRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'updateProfileAccountRequest' when calling updateProfile");
+  private HttpRequest.Builder updateProfileRequestBuilder(@javax.annotation.Nonnull UpdateProfileAccountReq updateProfileAccountReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'updateProfileAccountReq' is set
+    if (updateProfileAccountReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'updateProfileAccountReq' when calling updateProfile");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -931,7 +931,7 @@ public class AccountService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(updateProfileAccountRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(updateProfileAccountReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -950,24 +950,24 @@ public class AccountService {
 
   public static final class APIUpdateProfileRequest {
     @javax.annotation.Nonnull
-    private UpdateProfileAccountRequest updateProfileAccountRequest; //  (required)
+    private UpdateProfileAccountReq updateProfileAccountReq; //  (required)
 
     private APIUpdateProfileRequest(Builder builder) {
-      this.updateProfileAccountRequest = builder.updateProfileAccountRequest;
+      this.updateProfileAccountReq = builder.updateProfileAccountReq;
     }
     @javax.annotation.Nonnull
-    public UpdateProfileAccountRequest updateProfileAccountRequest() {
-      return updateProfileAccountRequest;
+    public UpdateProfileAccountReq updateProfileAccountReq() {
+      return updateProfileAccountReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private UpdateProfileAccountRequest updateProfileAccountRequest;
+      private UpdateProfileAccountReq updateProfileAccountReq;
 
-      public Builder updateProfileAccountRequest(@javax.annotation.Nonnull UpdateProfileAccountRequest updateProfileAccountRequest) {
-        this.updateProfileAccountRequest = updateProfileAccountRequest;
+      public Builder updateProfileAccountReq(@javax.annotation.Nonnull UpdateProfileAccountReq updateProfileAccountReq) {
+        this.updateProfileAccountReq = updateProfileAccountReq;
         return this;
       }
       public APIUpdateProfileRequest build() {

@@ -14,9 +14,9 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.GetCurrentPrivacySettingReply;
-import com.bass.bbs.model.UpdateCurrentPrivacySettingReply;
-import com.bass.bbs.model.UpdateCurrentPrivacySettingRequest;
+import com.bass.bbs.model.GetCurrentPrivacySettingResp;
+import com.bass.bbs.model.UpdateCurrentPrivacySettingReq;
+import com.bass.bbs.model.UpdateCurrentPrivacySettingResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +51,7 @@ public class PrivacySettingServiceTest {
         PrivacySettingService.APIgetCurrentRequest request = PrivacySettingService.APIgetCurrentRequest.newBuilder()
           .body(body)
           .build();
-        GetCurrentPrivacySettingReply response = 
+        GetCurrentPrivacySettingResp response = 
         api.getCurrent(request);
 
         // TODO: test validations
@@ -67,12 +67,12 @@ public class PrivacySettingServiceTest {
      */
     @Test
     public void updateCurrentTest() throws ApiException {
-        UpdateCurrentPrivacySettingRequest updateCurrentPrivacySettingRequest = null;
+        UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq = null;
         
         PrivacySettingService.APIupdateCurrentRequest request = PrivacySettingService.APIupdateCurrentRequest.newBuilder()
-          .updateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest)
+          .updateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq)
           .build();
-        UpdateCurrentPrivacySettingReply response = 
+        UpdateCurrentPrivacySettingResp response = 
         api.updateCurrent(request);
 
         // TODO: test validations

@@ -18,8 +18,12 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
-import com.bass.bbs.model.ListDomainsReply;
-import com.bass.bbs.model.ListDomainsRequest;
+import com.bass.bbs.model.CreateDomainReq;
+import com.bass.bbs.model.CreateDomainResp;
+import com.bass.bbs.model.ListDomainsReq;
+import com.bass.bbs.model.ListDomainsResp;
+import com.bass.bbs.model.UpdateDomainReq;
+import com.bass.bbs.model.UpdateDomainResp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -165,98 +169,98 @@ public class DomainService {
 
   /**
    * 
-   * 分页查询内容板块列表。
+   * 查询领域列表。
    * @param apiRequest {@link APICallListRequest}
-   * @return ListDomainsReply
+   * @return ListDomainsResp
    * @throws ApiException if fails to make API call
    */
-  public ListDomainsReply callList(APICallListRequest apiRequest) throws ApiException {
+  public ListDomainsResp callList(APICallListRequest apiRequest) throws ApiException {
     return callList(apiRequest, null);
   }
 
   /**
    * 
-   * 分页查询内容板块列表。
+   * 查询领域列表。
    * @param apiRequest {@link APICallListRequest}
    * @param headers Optional headers to include in the request
-   * @return ListDomainsReply
+   * @return ListDomainsResp
    * @throws ApiException if fails to make API call
    */
-  public ListDomainsReply callList(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ListDomainsResp callList(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    ListDomainsRequest listDomainsRequest = apiRequest.listDomainsRequest();
-    return callList(listDomainsRequest, headers);
+    ListDomainsReq listDomainsReq = apiRequest.listDomainsReq();
+    return callList(listDomainsReq, headers);
   }
 
   /**
    * 
-   * 分页查询内容板块列表。
+   * 查询领域列表。
    * @param apiRequest {@link APICallListRequest}
-   * @return ApiResponse&lt;ListDomainsReply&gt;
+   * @return ApiResponse&lt;ListDomainsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListDomainsReply> callListWithHttpInfo(APICallListRequest apiRequest) throws ApiException {
+  public ApiResponse<ListDomainsResp> callListWithHttpInfo(APICallListRequest apiRequest) throws ApiException {
     return callListWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 分页查询内容板块列表。
+   * 查询领域列表。
    * @param apiRequest {@link APICallListRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListDomainsReply&gt;
+   * @return ApiResponse&lt;ListDomainsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListDomainsReply> callListWithHttpInfo(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
-    ListDomainsRequest listDomainsRequest = apiRequest.listDomainsRequest();
-    return callListWithHttpInfo(listDomainsRequest, headers);
+  public ApiResponse<ListDomainsResp> callListWithHttpInfo(APICallListRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListDomainsReq listDomainsReq = apiRequest.listDomainsReq();
+    return callListWithHttpInfo(listDomainsReq, headers);
   }
 
   /**
    * 
-   * 分页查询内容板块列表。
-   * @param listDomainsRequest  (required)
-   * @return ListDomainsReply
+   * 查询领域列表。
+   * @param listDomainsReq  (required)
+   * @return ListDomainsResp
    * @throws ApiException if fails to make API call
    */
-  public ListDomainsReply callList(@javax.annotation.Nonnull ListDomainsRequest listDomainsRequest) throws ApiException {
-    return callList(listDomainsRequest, null);
+  public ListDomainsResp callList(@javax.annotation.Nonnull ListDomainsReq listDomainsReq) throws ApiException {
+    return callList(listDomainsReq, null);
   }
 
   /**
    * 
-   * 分页查询内容板块列表。
-   * @param listDomainsRequest  (required)
+   * 查询领域列表。
+   * @param listDomainsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ListDomainsReply
+   * @return ListDomainsResp
    * @throws ApiException if fails to make API call
    */
-  public ListDomainsReply callList(@javax.annotation.Nonnull ListDomainsRequest listDomainsRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<ListDomainsReply> localVarResponse = callListWithHttpInfo(listDomainsRequest, headers);
+  public ListDomainsResp callList(@javax.annotation.Nonnull ListDomainsReq listDomainsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListDomainsResp> localVarResponse = callListWithHttpInfo(listDomainsReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 分页查询内容板块列表。
-   * @param listDomainsRequest  (required)
-   * @return ApiResponse&lt;ListDomainsReply&gt;
+   * 查询领域列表。
+   * @param listDomainsReq  (required)
+   * @return ApiResponse&lt;ListDomainsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListDomainsReply> callListWithHttpInfo(@javax.annotation.Nonnull ListDomainsRequest listDomainsRequest) throws ApiException {
-    return callListWithHttpInfo(listDomainsRequest, null);
+  public ApiResponse<ListDomainsResp> callListWithHttpInfo(@javax.annotation.Nonnull ListDomainsReq listDomainsReq) throws ApiException {
+    return callListWithHttpInfo(listDomainsReq, null);
   }
 
   /**
    * 
-   * 分页查询内容板块列表。
-   * @param listDomainsRequest  (required)
+   * 查询领域列表。
+   * @param listDomainsReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;ListDomainsReply&gt;
+   * @return ApiResponse&lt;ListDomainsResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<ListDomainsReply> callListWithHttpInfo(@javax.annotation.Nonnull ListDomainsRequest listDomainsRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = callListRequestBuilder(listDomainsRequest, headers);
+  public ApiResponse<ListDomainsResp> callListWithHttpInfo(@javax.annotation.Nonnull ListDomainsReq listDomainsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = callListRequestBuilder(listDomainsReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -271,7 +275,7 @@ public class DomainService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<ListDomainsReply>(
+          return new ApiResponse<ListDomainsResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -281,10 +285,10 @@ public class DomainService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        ListDomainsReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListDomainsReply>() {});
+        ListDomainsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListDomainsResp>() {});
         
 
-        return new ApiResponse<ListDomainsReply>(
+        return new ApiResponse<ListDomainsResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -303,10 +307,10 @@ public class DomainService {
     }
   }
 
-  private HttpRequest.Builder callListRequestBuilder(@javax.annotation.Nonnull ListDomainsRequest listDomainsRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'listDomainsRequest' is set
-    if (listDomainsRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'listDomainsRequest' when calling callList");
+  private HttpRequest.Builder callListRequestBuilder(@javax.annotation.Nonnull ListDomainsReq listDomainsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listDomainsReq' is set
+    if (listDomainsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listDomainsReq' when calling callList");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -319,7 +323,7 @@ public class DomainService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listDomainsRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listDomainsReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -338,28 +342,430 @@ public class DomainService {
 
   public static final class APICallListRequest {
     @javax.annotation.Nonnull
-    private ListDomainsRequest listDomainsRequest; //  (required)
+    private ListDomainsReq listDomainsReq; //  (required)
 
     private APICallListRequest(Builder builder) {
-      this.listDomainsRequest = builder.listDomainsRequest;
+      this.listDomainsReq = builder.listDomainsReq;
     }
     @javax.annotation.Nonnull
-    public ListDomainsRequest listDomainsRequest() {
-      return listDomainsRequest;
+    public ListDomainsReq listDomainsReq() {
+      return listDomainsReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private ListDomainsRequest listDomainsRequest;
+      private ListDomainsReq listDomainsReq;
 
-      public Builder listDomainsRequest(@javax.annotation.Nonnull ListDomainsRequest listDomainsRequest) {
-        this.listDomainsRequest = listDomainsRequest;
+      public Builder listDomainsReq(@javax.annotation.Nonnull ListDomainsReq listDomainsReq) {
+        this.listDomainsReq = listDomainsReq;
         return this;
       }
       public APICallListRequest build() {
         return new APICallListRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 创建领域。
+   * @param apiRequest {@link APICreateRequest}
+   * @return CreateDomainResp
+   * @throws ApiException if fails to make API call
+   */
+  public CreateDomainResp create(APICreateRequest apiRequest) throws ApiException {
+    return create(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 创建领域。
+   * @param apiRequest {@link APICreateRequest}
+   * @param headers Optional headers to include in the request
+   * @return CreateDomainResp
+   * @throws ApiException if fails to make API call
+   */
+  public CreateDomainResp create(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    CreateDomainReq createDomainReq = apiRequest.createDomainReq();
+    return create(createDomainReq, headers);
+  }
+
+  /**
+   * 
+   * 创建领域。
+   * @param apiRequest {@link APICreateRequest}
+   * @return ApiResponse&lt;CreateDomainResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CreateDomainResp> createWithHttpInfo(APICreateRequest apiRequest) throws ApiException {
+    return createWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 创建领域。
+   * @param apiRequest {@link APICreateRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CreateDomainResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CreateDomainResp> createWithHttpInfo(APICreateRequest apiRequest, Map<String, String> headers) throws ApiException {
+    CreateDomainReq createDomainReq = apiRequest.createDomainReq();
+    return createWithHttpInfo(createDomainReq, headers);
+  }
+
+  /**
+   * 
+   * 创建领域。
+   * @param createDomainReq  (required)
+   * @return CreateDomainResp
+   * @throws ApiException if fails to make API call
+   */
+  public CreateDomainResp create(@javax.annotation.Nonnull CreateDomainReq createDomainReq) throws ApiException {
+    return create(createDomainReq, null);
+  }
+
+  /**
+   * 
+   * 创建领域。
+   * @param createDomainReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return CreateDomainResp
+   * @throws ApiException if fails to make API call
+   */
+  public CreateDomainResp create(@javax.annotation.Nonnull CreateDomainReq createDomainReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CreateDomainResp> localVarResponse = createWithHttpInfo(createDomainReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 创建领域。
+   * @param createDomainReq  (required)
+   * @return ApiResponse&lt;CreateDomainResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CreateDomainResp> createWithHttpInfo(@javax.annotation.Nonnull CreateDomainReq createDomainReq) throws ApiException {
+    return createWithHttpInfo(createDomainReq, null);
+  }
+
+  /**
+   * 
+   * 创建领域。
+   * @param createDomainReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CreateDomainResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CreateDomainResp> createWithHttpInfo(@javax.annotation.Nonnull CreateDomainReq createDomainReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = createRequestBuilder(createDomainReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("create", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<CreateDomainResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        CreateDomainResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<CreateDomainResp>() {});
+        
+
+        return new ApiResponse<CreateDomainResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder createRequestBuilder(@javax.annotation.Nonnull CreateDomainReq createDomainReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'createDomainReq' is set
+    if (createDomainReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'createDomainReq' when calling create");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/domain/create";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(createDomainReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APICreateRequest {
+    @javax.annotation.Nonnull
+    private CreateDomainReq createDomainReq; //  (required)
+
+    private APICreateRequest(Builder builder) {
+      this.createDomainReq = builder.createDomainReq;
+    }
+    @javax.annotation.Nonnull
+    public CreateDomainReq createDomainReq() {
+      return createDomainReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private CreateDomainReq createDomainReq;
+
+      public Builder createDomainReq(@javax.annotation.Nonnull CreateDomainReq createDomainReq) {
+        this.createDomainReq = createDomainReq;
+        return this;
+      }
+      public APICreateRequest build() {
+        return new APICreateRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 更新领域。
+   * @param apiRequest {@link APIUpdateRequest}
+   * @return UpdateDomainResp
+   * @throws ApiException if fails to make API call
+   */
+  public UpdateDomainResp update(APIUpdateRequest apiRequest) throws ApiException {
+    return update(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 更新领域。
+   * @param apiRequest {@link APIUpdateRequest}
+   * @param headers Optional headers to include in the request
+   * @return UpdateDomainResp
+   * @throws ApiException if fails to make API call
+   */
+  public UpdateDomainResp update(APIUpdateRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    UpdateDomainReq updateDomainReq = apiRequest.updateDomainReq();
+    return update(updateDomainReq, headers);
+  }
+
+  /**
+   * 
+   * 更新领域。
+   * @param apiRequest {@link APIUpdateRequest}
+   * @return ApiResponse&lt;UpdateDomainResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UpdateDomainResp> updateWithHttpInfo(APIUpdateRequest apiRequest) throws ApiException {
+    return updateWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 更新领域。
+   * @param apiRequest {@link APIUpdateRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;UpdateDomainResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UpdateDomainResp> updateWithHttpInfo(APIUpdateRequest apiRequest, Map<String, String> headers) throws ApiException {
+    UpdateDomainReq updateDomainReq = apiRequest.updateDomainReq();
+    return updateWithHttpInfo(updateDomainReq, headers);
+  }
+
+  /**
+   * 
+   * 更新领域。
+   * @param updateDomainReq  (required)
+   * @return UpdateDomainResp
+   * @throws ApiException if fails to make API call
+   */
+  public UpdateDomainResp update(@javax.annotation.Nonnull UpdateDomainReq updateDomainReq) throws ApiException {
+    return update(updateDomainReq, null);
+  }
+
+  /**
+   * 
+   * 更新领域。
+   * @param updateDomainReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return UpdateDomainResp
+   * @throws ApiException if fails to make API call
+   */
+  public UpdateDomainResp update(@javax.annotation.Nonnull UpdateDomainReq updateDomainReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<UpdateDomainResp> localVarResponse = updateWithHttpInfo(updateDomainReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 更新领域。
+   * @param updateDomainReq  (required)
+   * @return ApiResponse&lt;UpdateDomainResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UpdateDomainResp> updateWithHttpInfo(@javax.annotation.Nonnull UpdateDomainReq updateDomainReq) throws ApiException {
+    return updateWithHttpInfo(updateDomainReq, null);
+  }
+
+  /**
+   * 
+   * 更新领域。
+   * @param updateDomainReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;UpdateDomainResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<UpdateDomainResp> updateWithHttpInfo(@javax.annotation.Nonnull UpdateDomainReq updateDomainReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = updateRequestBuilder(updateDomainReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("update", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<UpdateDomainResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        UpdateDomainResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<UpdateDomainResp>() {});
+        
+
+        return new ApiResponse<UpdateDomainResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder updateRequestBuilder(@javax.annotation.Nonnull UpdateDomainReq updateDomainReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'updateDomainReq' is set
+    if (updateDomainReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'updateDomainReq' when calling update");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/domain/update";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(updateDomainReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIUpdateRequest {
+    @javax.annotation.Nonnull
+    private UpdateDomainReq updateDomainReq; //  (required)
+
+    private APIUpdateRequest(Builder builder) {
+      this.updateDomainReq = builder.updateDomainReq;
+    }
+    @javax.annotation.Nonnull
+    public UpdateDomainReq updateDomainReq() {
+      return updateDomainReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private UpdateDomainReq updateDomainReq;
+
+      public Builder updateDomainReq(@javax.annotation.Nonnull UpdateDomainReq updateDomainReq) {
+        this.updateDomainReq = updateDomainReq;
+        return this;
+      }
+      public APIUpdateRequest build() {
+        return new APIUpdateRequest(this);
       }
     }
   }

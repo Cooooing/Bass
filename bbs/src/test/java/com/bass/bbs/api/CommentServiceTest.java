@@ -14,20 +14,20 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.CreateCommentReply;
-import com.bass.bbs.model.CreateCommentRequest;
-import com.bass.bbs.model.LikeCommentReply;
-import com.bass.bbs.model.LikeCommentRequest;
-import com.bass.bbs.model.ListCommentRepliesReply;
-import com.bass.bbs.model.ListCommentRepliesRequest;
-import com.bass.bbs.model.ListCommentThreadsReply;
-import com.bass.bbs.model.ListCommentThreadsRequest;
-import com.bass.bbs.model.ListCommentTimelineReply;
-import com.bass.bbs.model.ListCommentTimelineRequest;
-import com.bass.bbs.model.ListCommentsReply;
-import com.bass.bbs.model.ListCommentsRequest;
-import com.bass.bbs.model.ThankCommentReply;
-import com.bass.bbs.model.ThankCommentRequest;
+import com.bass.bbs.model.CreateCommentReq;
+import com.bass.bbs.model.CreateCommentResp;
+import com.bass.bbs.model.LikeCommentReq;
+import com.bass.bbs.model.LikeCommentResp;
+import com.bass.bbs.model.ListCommentRepliesReq;
+import com.bass.bbs.model.ListCommentRepliesResp;
+import com.bass.bbs.model.ListCommentThreadsReq;
+import com.bass.bbs.model.ListCommentThreadsResp;
+import com.bass.bbs.model.ListCommentTimelineReq;
+import com.bass.bbs.model.ListCommentTimelineResp;
+import com.bass.bbs.model.ListCommentsReq;
+import com.bass.bbs.model.ListCommentsResp;
+import com.bass.bbs.model.ThankCommentReq;
+import com.bass.bbs.model.ThankCommentResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -57,12 +57,12 @@ public class CommentServiceTest {
      */
     @Test
     public void callListTest() throws ApiException {
-        ListCommentsRequest listCommentsRequest = null;
+        ListCommentsReq listCommentsReq = null;
         
         CommentService.APIcallListRequest request = CommentService.APIcallListRequest.newBuilder()
-          .listCommentsRequest(listCommentsRequest)
+          .listCommentsReq(listCommentsReq)
           .build();
-        ListCommentsReply response = 
+        ListCommentsResp response = 
         api.callList(request);
 
         // TODO: test validations
@@ -78,12 +78,12 @@ public class CommentServiceTest {
      */
     @Test
     public void createTest() throws ApiException {
-        CreateCommentRequest createCommentRequest = null;
+        CreateCommentReq createCommentReq = null;
         
         CommentService.APIcreateRequest request = CommentService.APIcreateRequest.newBuilder()
-          .createCommentRequest(createCommentRequest)
+          .createCommentReq(createCommentReq)
           .build();
-        CreateCommentReply response = 
+        CreateCommentResp response = 
         api.create(request);
 
         // TODO: test validations
@@ -99,12 +99,12 @@ public class CommentServiceTest {
      */
     @Test
     public void likeTest() throws ApiException {
-        LikeCommentRequest likeCommentRequest = null;
+        LikeCommentReq likeCommentReq = null;
         
         CommentService.APIlikeRequest request = CommentService.APIlikeRequest.newBuilder()
-          .likeCommentRequest(likeCommentRequest)
+          .likeCommentReq(likeCommentReq)
           .build();
-        LikeCommentReply response = 
+        LikeCommentResp response = 
         api.like(request);
 
         // TODO: test validations
@@ -120,12 +120,12 @@ public class CommentServiceTest {
      */
     @Test
     public void listRepliesTest() throws ApiException {
-        ListCommentRepliesRequest listCommentRepliesRequest = null;
+        ListCommentRepliesReq listCommentRepliesReq = null;
         
         CommentService.APIlistRepliesRequest request = CommentService.APIlistRepliesRequest.newBuilder()
-          .listCommentRepliesRequest(listCommentRepliesRequest)
+          .listCommentRepliesReq(listCommentRepliesReq)
           .build();
-        ListCommentRepliesReply response = 
+        ListCommentRepliesResp response = 
         api.listReplies(request);
 
         // TODO: test validations
@@ -141,12 +141,12 @@ public class CommentServiceTest {
      */
     @Test
     public void listThreadsTest() throws ApiException {
-        ListCommentThreadsRequest listCommentThreadsRequest = null;
+        ListCommentThreadsReq listCommentThreadsReq = null;
         
         CommentService.APIlistThreadsRequest request = CommentService.APIlistThreadsRequest.newBuilder()
-          .listCommentThreadsRequest(listCommentThreadsRequest)
+          .listCommentThreadsReq(listCommentThreadsReq)
           .build();
-        ListCommentThreadsReply response = 
+        ListCommentThreadsResp response = 
         api.listThreads(request);
 
         // TODO: test validations
@@ -162,12 +162,12 @@ public class CommentServiceTest {
      */
     @Test
     public void listTimelineTest() throws ApiException {
-        ListCommentTimelineRequest listCommentTimelineRequest = null;
+        ListCommentTimelineReq listCommentTimelineReq = null;
         
         CommentService.APIlistTimelineRequest request = CommentService.APIlistTimelineRequest.newBuilder()
-          .listCommentTimelineRequest(listCommentTimelineRequest)
+          .listCommentTimelineReq(listCommentTimelineReq)
           .build();
-        ListCommentTimelineReply response = 
+        ListCommentTimelineResp response = 
         api.listTimeline(request);
 
         // TODO: test validations
@@ -183,12 +183,12 @@ public class CommentServiceTest {
      */
     @Test
     public void thankTest() throws ApiException {
-        ThankCommentRequest thankCommentRequest = null;
+        ThankCommentReq thankCommentReq = null;
         
         CommentService.APIthankRequest request = CommentService.APIthankRequest.newBuilder()
-          .thankCommentRequest(thankCommentRequest)
+          .thankCommentReq(thankCommentReq)
           .build();
-        ThankCommentReply response = 
+        ThankCommentResp response = 
         api.thank(request);
 
         // TODO: test validations

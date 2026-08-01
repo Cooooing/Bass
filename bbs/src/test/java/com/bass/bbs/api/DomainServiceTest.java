@@ -14,8 +14,12 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.ListDomainsReply;
-import com.bass.bbs.model.ListDomainsRequest;
+import com.bass.bbs.model.CreateDomainReq;
+import com.bass.bbs.model.CreateDomainResp;
+import com.bass.bbs.model.ListDomainsReq;
+import com.bass.bbs.model.ListDomainsResp;
+import com.bass.bbs.model.UpdateDomainReq;
+import com.bass.bbs.model.UpdateDomainResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -38,20 +42,62 @@ public class DomainServiceTest {
     /**
      * 
      *
-     * 分页查询内容板块列表。
+     * 查询领域列表。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
     public void callListTest() throws ApiException {
-        ListDomainsRequest listDomainsRequest = null;
+        ListDomainsReq listDomainsReq = null;
         
         DomainService.APIcallListRequest request = DomainService.APIcallListRequest.newBuilder()
-          .listDomainsRequest(listDomainsRequest)
+          .listDomainsReq(listDomainsReq)
           .build();
-        ListDomainsReply response = 
+        ListDomainsResp response = 
         api.callList(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 创建领域。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void createTest() throws ApiException {
+        CreateDomainReq createDomainReq = null;
+        
+        DomainService.APIcreateRequest request = DomainService.APIcreateRequest.newBuilder()
+          .createDomainReq(createDomainReq)
+          .build();
+        CreateDomainResp response = 
+        api.create(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 更新领域。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void updateTest() throws ApiException {
+        UpdateDomainReq updateDomainReq = null;
+        
+        DomainService.APIupdateRequest request = DomainService.APIupdateRequest.newBuilder()
+          .updateDomainReq(updateDomainReq)
+          .build();
+        UpdateDomainResp response = 
+        api.update(request);
 
         // TODO: test validations
     }

@@ -18,9 +18,9 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
-import com.bass.bbs.model.GetCurrentLocationReply;
-import com.bass.bbs.model.UpsertCurrentLocationReply;
-import com.bass.bbs.model.UpsertCurrentLocationRequest;
+import com.bass.bbs.model.GetCurrentLocationResp;
+import com.bass.bbs.model.UpsertCurrentLocationReq;
+import com.bass.bbs.model.UpsertCurrentLocationResp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -168,10 +168,10 @@ public class LocationService {
    * 
    * 获取当前账号的地理资料。
    * @param apiRequest {@link APIGetCurrentRequest}
-   * @return GetCurrentLocationReply
+   * @return GetCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentLocationReply getCurrent(APIGetCurrentRequest apiRequest) throws ApiException {
+  public GetCurrentLocationResp getCurrent(APIGetCurrentRequest apiRequest) throws ApiException {
     return getCurrent(apiRequest, null);
   }
 
@@ -180,10 +180,10 @@ public class LocationService {
    * 获取当前账号的地理资料。
    * @param apiRequest {@link APIGetCurrentRequest}
    * @param headers Optional headers to include in the request
-   * @return GetCurrentLocationReply
+   * @return GetCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentLocationReply getCurrent(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public GetCurrentLocationResp getCurrent(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
     Object body = apiRequest.body();
     return getCurrent(body, headers);
@@ -193,10 +193,10 @@ public class LocationService {
    * 
    * 获取当前账号的地理资料。
    * @param apiRequest {@link APIGetCurrentRequest}
-   * @return ApiResponse&lt;GetCurrentLocationReply&gt;
+   * @return ApiResponse&lt;GetCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentLocationReply> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest) throws ApiException {
+  public ApiResponse<GetCurrentLocationResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest) throws ApiException {
     return getCurrentWithHttpInfo(apiRequest, null);
   }
 
@@ -205,10 +205,10 @@ public class LocationService {
    * 获取当前账号的地理资料。
    * @param apiRequest {@link APIGetCurrentRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetCurrentLocationReply&gt;
+   * @return ApiResponse&lt;GetCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentLocationReply> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public ApiResponse<GetCurrentLocationResp> getCurrentWithHttpInfo(APIGetCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
     Object body = apiRequest.body();
     return getCurrentWithHttpInfo(body, headers);
   }
@@ -217,10 +217,10 @@ public class LocationService {
    * 
    * 获取当前账号的地理资料。
    * @param body  (required)
-   * @return GetCurrentLocationReply
+   * @return GetCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentLocationReply getCurrent(@javax.annotation.Nonnull Object body) throws ApiException {
+  public GetCurrentLocationResp getCurrent(@javax.annotation.Nonnull Object body) throws ApiException {
     return getCurrent(body, null);
   }
 
@@ -229,11 +229,11 @@ public class LocationService {
    * 获取当前账号的地理资料。
    * @param body  (required)
    * @param headers Optional headers to include in the request
-   * @return GetCurrentLocationReply
+   * @return GetCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public GetCurrentLocationReply getCurrent(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
-    ApiResponse<GetCurrentLocationReply> localVarResponse = getCurrentWithHttpInfo(body, headers);
+  public GetCurrentLocationResp getCurrent(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<GetCurrentLocationResp> localVarResponse = getCurrentWithHttpInfo(body, headers);
     return localVarResponse.getData();
   }
 
@@ -241,10 +241,10 @@ public class LocationService {
    * 
    * 获取当前账号的地理资料。
    * @param body  (required)
-   * @return ApiResponse&lt;GetCurrentLocationReply&gt;
+   * @return ApiResponse&lt;GetCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentLocationReply> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+  public ApiResponse<GetCurrentLocationResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
     return getCurrentWithHttpInfo(body, null);
   }
 
@@ -253,10 +253,10 @@ public class LocationService {
    * 获取当前账号的地理资料。
    * @param body  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;GetCurrentLocationReply&gt;
+   * @return ApiResponse&lt;GetCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<GetCurrentLocationReply> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+  public ApiResponse<GetCurrentLocationResp> getCurrentWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
     HttpRequest.Builder localVarRequestBuilder = getCurrentRequestBuilder(body, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
@@ -272,7 +272,7 @@ public class LocationService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<GetCurrentLocationReply>(
+          return new ApiResponse<GetCurrentLocationResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -282,10 +282,10 @@ public class LocationService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        GetCurrentLocationReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetCurrentLocationReply>() {});
+        GetCurrentLocationResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<GetCurrentLocationResp>() {});
         
 
-        return new ApiResponse<GetCurrentLocationReply>(
+        return new ApiResponse<GetCurrentLocationResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -369,10 +369,10 @@ public class LocationService {
    * 
    * 更新当前账号的地理资料。
    * @param apiRequest {@link APIUpsertCurrentRequest}
-   * @return UpsertCurrentLocationReply
+   * @return UpsertCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public UpsertCurrentLocationReply upsertCurrent(APIUpsertCurrentRequest apiRequest) throws ApiException {
+  public UpsertCurrentLocationResp upsertCurrent(APIUpsertCurrentRequest apiRequest) throws ApiException {
     return upsertCurrent(apiRequest, null);
   }
 
@@ -381,23 +381,23 @@ public class LocationService {
    * 更新当前账号的地理资料。
    * @param apiRequest {@link APIUpsertCurrentRequest}
    * @param headers Optional headers to include in the request
-   * @return UpsertCurrentLocationReply
+   * @return UpsertCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public UpsertCurrentLocationReply upsertCurrent(APIUpsertCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public UpsertCurrentLocationResp upsertCurrent(APIUpsertCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    UpsertCurrentLocationRequest upsertCurrentLocationRequest = apiRequest.upsertCurrentLocationRequest();
-    return upsertCurrent(upsertCurrentLocationRequest, headers);
+    UpsertCurrentLocationReq upsertCurrentLocationReq = apiRequest.upsertCurrentLocationReq();
+    return upsertCurrent(upsertCurrentLocationReq, headers);
   }
 
   /**
    * 
    * 更新当前账号的地理资料。
    * @param apiRequest {@link APIUpsertCurrentRequest}
-   * @return ApiResponse&lt;UpsertCurrentLocationReply&gt;
+   * @return ApiResponse&lt;UpsertCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpsertCurrentLocationReply> upsertCurrentWithHttpInfo(APIUpsertCurrentRequest apiRequest) throws ApiException {
+  public ApiResponse<UpsertCurrentLocationResp> upsertCurrentWithHttpInfo(APIUpsertCurrentRequest apiRequest) throws ApiException {
     return upsertCurrentWithHttpInfo(apiRequest, null);
   }
 
@@ -406,59 +406,59 @@ public class LocationService {
    * 更新当前账号的地理资料。
    * @param apiRequest {@link APIUpsertCurrentRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;UpsertCurrentLocationReply&gt;
+   * @return ApiResponse&lt;UpsertCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpsertCurrentLocationReply> upsertCurrentWithHttpInfo(APIUpsertCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
-    UpsertCurrentLocationRequest upsertCurrentLocationRequest = apiRequest.upsertCurrentLocationRequest();
-    return upsertCurrentWithHttpInfo(upsertCurrentLocationRequest, headers);
+  public ApiResponse<UpsertCurrentLocationResp> upsertCurrentWithHttpInfo(APIUpsertCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+    UpsertCurrentLocationReq upsertCurrentLocationReq = apiRequest.upsertCurrentLocationReq();
+    return upsertCurrentWithHttpInfo(upsertCurrentLocationReq, headers);
   }
 
   /**
    * 
    * 更新当前账号的地理资料。
-   * @param upsertCurrentLocationRequest  (required)
-   * @return UpsertCurrentLocationReply
+   * @param upsertCurrentLocationReq  (required)
+   * @return UpsertCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public UpsertCurrentLocationReply upsertCurrent(@javax.annotation.Nonnull UpsertCurrentLocationRequest upsertCurrentLocationRequest) throws ApiException {
-    return upsertCurrent(upsertCurrentLocationRequest, null);
+  public UpsertCurrentLocationResp upsertCurrent(@javax.annotation.Nonnull UpsertCurrentLocationReq upsertCurrentLocationReq) throws ApiException {
+    return upsertCurrent(upsertCurrentLocationReq, null);
   }
 
   /**
    * 
    * 更新当前账号的地理资料。
-   * @param upsertCurrentLocationRequest  (required)
+   * @param upsertCurrentLocationReq  (required)
    * @param headers Optional headers to include in the request
-   * @return UpsertCurrentLocationReply
+   * @return UpsertCurrentLocationResp
    * @throws ApiException if fails to make API call
    */
-  public UpsertCurrentLocationReply upsertCurrent(@javax.annotation.Nonnull UpsertCurrentLocationRequest upsertCurrentLocationRequest, Map<String, String> headers) throws ApiException {
-    ApiResponse<UpsertCurrentLocationReply> localVarResponse = upsertCurrentWithHttpInfo(upsertCurrentLocationRequest, headers);
+  public UpsertCurrentLocationResp upsertCurrent(@javax.annotation.Nonnull UpsertCurrentLocationReq upsertCurrentLocationReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<UpsertCurrentLocationResp> localVarResponse = upsertCurrentWithHttpInfo(upsertCurrentLocationReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
    * 更新当前账号的地理资料。
-   * @param upsertCurrentLocationRequest  (required)
-   * @return ApiResponse&lt;UpsertCurrentLocationReply&gt;
+   * @param upsertCurrentLocationReq  (required)
+   * @return ApiResponse&lt;UpsertCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpsertCurrentLocationReply> upsertCurrentWithHttpInfo(@javax.annotation.Nonnull UpsertCurrentLocationRequest upsertCurrentLocationRequest) throws ApiException {
-    return upsertCurrentWithHttpInfo(upsertCurrentLocationRequest, null);
+  public ApiResponse<UpsertCurrentLocationResp> upsertCurrentWithHttpInfo(@javax.annotation.Nonnull UpsertCurrentLocationReq upsertCurrentLocationReq) throws ApiException {
+    return upsertCurrentWithHttpInfo(upsertCurrentLocationReq, null);
   }
 
   /**
    * 
    * 更新当前账号的地理资料。
-   * @param upsertCurrentLocationRequest  (required)
+   * @param upsertCurrentLocationReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;UpsertCurrentLocationReply&gt;
+   * @return ApiResponse&lt;UpsertCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<UpsertCurrentLocationReply> upsertCurrentWithHttpInfo(@javax.annotation.Nonnull UpsertCurrentLocationRequest upsertCurrentLocationRequest, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = upsertCurrentRequestBuilder(upsertCurrentLocationRequest, headers);
+  public ApiResponse<UpsertCurrentLocationResp> upsertCurrentWithHttpInfo(@javax.annotation.Nonnull UpsertCurrentLocationReq upsertCurrentLocationReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = upsertCurrentRequestBuilder(upsertCurrentLocationReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -473,7 +473,7 @@ public class LocationService {
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
-          return new ApiResponse<UpsertCurrentLocationReply>(
+          return new ApiResponse<UpsertCurrentLocationResp>(
               localVarResponse.statusCode(),
               localVarResponse.headers().map(),
               null
@@ -483,10 +483,10 @@ public class LocationService {
         
         
         String responseBody = new String(localVarResponseBody.readAllBytes());
-        UpsertCurrentLocationReply responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<UpsertCurrentLocationReply>() {});
+        UpsertCurrentLocationResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<UpsertCurrentLocationResp>() {});
         
 
-        return new ApiResponse<UpsertCurrentLocationReply>(
+        return new ApiResponse<UpsertCurrentLocationResp>(
             localVarResponse.statusCode(),
             localVarResponse.headers().map(),
             responseValue
@@ -505,10 +505,10 @@ public class LocationService {
     }
   }
 
-  private HttpRequest.Builder upsertCurrentRequestBuilder(@javax.annotation.Nonnull UpsertCurrentLocationRequest upsertCurrentLocationRequest, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'upsertCurrentLocationRequest' is set
-    if (upsertCurrentLocationRequest == null) {
-      throw new ApiException(400, "Missing the required parameter 'upsertCurrentLocationRequest' when calling upsertCurrent");
+  private HttpRequest.Builder upsertCurrentRequestBuilder(@javax.annotation.Nonnull UpsertCurrentLocationReq upsertCurrentLocationReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'upsertCurrentLocationReq' is set
+    if (upsertCurrentLocationReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'upsertCurrentLocationReq' when calling upsertCurrent");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
@@ -521,7 +521,7 @@ public class LocationService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(upsertCurrentLocationRequest);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(upsertCurrentLocationReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -540,24 +540,24 @@ public class LocationService {
 
   public static final class APIUpsertCurrentRequest {
     @javax.annotation.Nonnull
-    private UpsertCurrentLocationRequest upsertCurrentLocationRequest; //  (required)
+    private UpsertCurrentLocationReq upsertCurrentLocationReq; //  (required)
 
     private APIUpsertCurrentRequest(Builder builder) {
-      this.upsertCurrentLocationRequest = builder.upsertCurrentLocationRequest;
+      this.upsertCurrentLocationReq = builder.upsertCurrentLocationReq;
     }
     @javax.annotation.Nonnull
-    public UpsertCurrentLocationRequest upsertCurrentLocationRequest() {
-      return upsertCurrentLocationRequest;
+    public UpsertCurrentLocationReq upsertCurrentLocationReq() {
+      return upsertCurrentLocationReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private UpsertCurrentLocationRequest upsertCurrentLocationRequest;
+      private UpsertCurrentLocationReq upsertCurrentLocationReq;
 
-      public Builder upsertCurrentLocationRequest(@javax.annotation.Nonnull UpsertCurrentLocationRequest upsertCurrentLocationRequest) {
-        this.upsertCurrentLocationRequest = upsertCurrentLocationRequest;
+      public Builder upsertCurrentLocationReq(@javax.annotation.Nonnull UpsertCurrentLocationReq upsertCurrentLocationReq) {
+        this.upsertCurrentLocationReq = upsertCurrentLocationReq;
         return this;
       }
       public APIUpsertCurrentRequest build() {

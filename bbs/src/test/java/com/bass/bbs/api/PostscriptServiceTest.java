@@ -14,8 +14,10 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.AddPostscriptReply;
-import com.bass.bbs.model.AddPostscriptRequest;
+import com.bass.bbs.model.AddPostscriptReq;
+import com.bass.bbs.model.AddPostscriptResp;
+import com.bass.bbs.model.ListPostscriptsReq;
+import com.bass.bbs.model.ListPostscriptsResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -45,13 +47,34 @@ public class PostscriptServiceTest {
      */
     @Test
     public void addTest() throws ApiException {
-        AddPostscriptRequest addPostscriptRequest = null;
+        AddPostscriptReq addPostscriptReq = null;
         
         PostscriptService.APIaddRequest request = PostscriptService.APIaddRequest.newBuilder()
-          .addPostscriptRequest(addPostscriptRequest)
+          .addPostscriptReq(addPostscriptReq)
           .build();
-        AddPostscriptReply response = 
+        AddPostscriptResp response = 
         api.add(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 查询文章附言列表。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void callListTest() throws ApiException {
+        ListPostscriptsReq listPostscriptsReq = null;
+        
+        PostscriptService.APIcallListRequest request = PostscriptService.APIcallListRequest.newBuilder()
+          .listPostscriptsReq(listPostscriptsReq)
+          .build();
+        ListPostscriptsResp response = 
+        api.callList(request);
 
         // TODO: test validations
     }

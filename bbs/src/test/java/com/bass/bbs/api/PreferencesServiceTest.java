@@ -14,9 +14,9 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.GetCurrentPreferencesReply;
-import com.bass.bbs.model.UpdateCurrentPreferencesReply;
-import com.bass.bbs.model.UpdateCurrentPreferencesRequest;
+import com.bass.bbs.model.GetCurrentPreferencesResp;
+import com.bass.bbs.model.UpdateCurrentPreferencesReq;
+import com.bass.bbs.model.UpdateCurrentPreferencesResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +51,7 @@ public class PreferencesServiceTest {
         PreferencesService.APIgetCurrentRequest request = PreferencesService.APIgetCurrentRequest.newBuilder()
           .body(body)
           .build();
-        GetCurrentPreferencesReply response = 
+        GetCurrentPreferencesResp response = 
         api.getCurrent(request);
 
         // TODO: test validations
@@ -67,12 +67,12 @@ public class PreferencesServiceTest {
      */
     @Test
     public void updateCurrentTest() throws ApiException {
-        UpdateCurrentPreferencesRequest updateCurrentPreferencesRequest = null;
+        UpdateCurrentPreferencesReq updateCurrentPreferencesReq = null;
         
         PreferencesService.APIupdateCurrentRequest request = PreferencesService.APIupdateCurrentRequest.newBuilder()
-          .updateCurrentPreferencesRequest(updateCurrentPreferencesRequest)
+          .updateCurrentPreferencesReq(updateCurrentPreferencesReq)
           .build();
-        UpdateCurrentPreferencesReply response = 
+        UpdateCurrentPreferencesResp response = 
         api.updateCurrent(request);
 
         // TODO: test validations

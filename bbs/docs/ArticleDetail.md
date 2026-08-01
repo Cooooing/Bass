@@ -2,7 +2,6 @@
 
 # ArticleDetail
 
-文章详情。
 
 ## Properties
 
@@ -20,30 +19,27 @@
 |**type** | [**TypeEnum**](#TypeEnum) |  |  [optional] |
 |**statement** | **String** |  |  [optional] |
 |**commentable** | **Boolean** |  |  [optional] |
-|**anonymous** | **Boolean** |  |  [optional] |
 |**viewCount** | **Integer** |  |  [optional] |
 |**thankCount** | **Integer** |  |  [optional] |
 |**likeCount** | **Integer** |  |  [optional] |
 |**collectCount** | **Integer** |  |  [optional] |
-|**watchCount** | **Integer** |  |  [optional] |
+|**rewardCount** | **Integer** |  |  [optional] |
 |**replyCount** | **Integer** |  |  [optional] |
-|**bountyPoints** | **Integer** |  |  [optional] |
-|**acceptedAnswerId** | **String** |  |  [optional] |
 |**authorUser** | [**AccountProfile**](AccountProfile.md) |  |  [optional] |
 |**lastReplyUser** | [**AccountProfile**](AccountProfile.md) |  |  [optional] |
-|**lastReplyAt** | **String** |  |  [optional] |
+|**lastReplyAt** | **OffsetDateTime** |  |  [optional] |
 |**coverImageUrl** | **String** |  |  [optional] |
 |**viewerActionState** | [**ArticleViewerActionState**](ArticleViewerActionState.md) |  |  [optional] |
-|**publishedAt** | **String** |  |  [optional] |
+|**publishedAt** | **OffsetDateTime** |  |  [optional] |
 |**postscripts** | [**List&lt;ArticlePostscript&gt;**](ArticlePostscript.md) |  |  [optional] |
 |**publishStatus** | [**PublishStatusEnum**](#PublishStatusEnum) |  |  [optional] |
 |**visibility** | [**VisibilityEnum**](#VisibilityEnum) |  |  [optional] |
 |**restriction** | [**RestrictionEnum**](#RestrictionEnum) |  |  [optional] |
-|**editedAt** | **String** |  |  [optional] |
+|**editedAt** | **OffsetDateTime** |  |  [optional] |
 |**createdBy** | **String** |  |  [optional] |
 |**updatedBy** | **String** |  |  [optional] |
-|**createdAt** | **String** |  |  [optional] |
-|**updatedAt** | **String** |  |  [optional] |
+|**createdAt** | **OffsetDateTime** |  |  [optional] |
+|**updatedAt** | **OffsetDateTime** |  |  [optional] |
 
 
 
@@ -54,6 +50,9 @@
 | ARTICLE_TYPE_UNSPECIFIED | &quot;ARTICLE_TYPE_UNSPECIFIED&quot; |
 | ARTICLE_TYPE_NORMAL | &quot;ARTICLE_TYPE_NORMAL&quot; |
 | ARTICLE_TYPE_QA | &quot;ARTICLE_TYPE_QA&quot; |
+| ARTICLE_TYPE_LOTTERY | &quot;ARTICLE_TYPE_LOTTERY&quot; |
+| ARTICLE_TYPE_POLL | &quot;ARTICLE_TYPE_POLL&quot; |
+| ARTICLE_TYPE_COLUMN | &quot;ARTICLE_TYPE_COLUMN&quot; |
 
 
 
@@ -65,6 +64,7 @@
 | ARTICLE_PUBLISH_STATUS_DRAFT | &quot;ARTICLE_PUBLISH_STATUS_DRAFT&quot; |
 | ARTICLE_PUBLISH_STATUS_PUBLISHED | &quot;ARTICLE_PUBLISH_STATUS_PUBLISHED&quot; |
 | ARTICLE_PUBLISH_STATUS_ARCHIVED | &quot;ARTICLE_PUBLISH_STATUS_ARCHIVED&quot; |
+| ARTICLE_PUBLISH_STATUS_SCHEDULED | &quot;ARTICLE_PUBLISH_STATUS_SCHEDULED&quot; |
 
 
 

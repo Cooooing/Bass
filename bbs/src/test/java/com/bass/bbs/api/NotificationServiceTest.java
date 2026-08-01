@@ -14,11 +14,11 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.CountUnreadNotificationsReply;
-import com.bass.bbs.model.ListNotificationsReply;
-import com.bass.bbs.model.ListNotificationsRequest;
-import com.bass.bbs.model.MarkReadNotificationReply;
-import com.bass.bbs.model.MarkReadNotificationRequest;
+import com.bass.bbs.model.CountUnreadNotificationsResp;
+import com.bass.bbs.model.ListNotificationsReq;
+import com.bass.bbs.model.ListNotificationsResp;
+import com.bass.bbs.model.MarkReadNotificationReq;
+import com.bass.bbs.model.MarkReadNotificationResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -48,12 +48,12 @@ public class NotificationServiceTest {
      */
     @Test
     public void callListTest() throws ApiException {
-        ListNotificationsRequest listNotificationsRequest = null;
+        ListNotificationsReq listNotificationsReq = null;
         
         NotificationService.APIcallListRequest request = NotificationService.APIcallListRequest.newBuilder()
-          .listNotificationsRequest(listNotificationsRequest)
+          .listNotificationsReq(listNotificationsReq)
           .build();
-        ListNotificationsReply response = 
+        ListNotificationsResp response = 
         api.callList(request);
 
         // TODO: test validations
@@ -74,7 +74,7 @@ public class NotificationServiceTest {
         NotificationService.APIcountUnreadRequest request = NotificationService.APIcountUnreadRequest.newBuilder()
           .body(body)
           .build();
-        CountUnreadNotificationsReply response = 
+        CountUnreadNotificationsResp response = 
         api.countUnread(request);
 
         // TODO: test validations
@@ -90,12 +90,12 @@ public class NotificationServiceTest {
      */
     @Test
     public void markReadTest() throws ApiException {
-        MarkReadNotificationRequest markReadNotificationRequest = null;
+        MarkReadNotificationReq markReadNotificationReq = null;
         
         NotificationService.APImarkReadRequest request = NotificationService.APImarkReadRequest.newBuilder()
-          .markReadNotificationRequest(markReadNotificationRequest)
+          .markReadNotificationReq(markReadNotificationReq)
           .build();
-        MarkReadNotificationReply response = 
+        MarkReadNotificationResp response = 
         api.markRead(request);
 
         // TODO: test validations

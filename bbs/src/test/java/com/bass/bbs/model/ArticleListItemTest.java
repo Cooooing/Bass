@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -112,14 +113,6 @@ class ArticleListItemTest {
     }
 
     /**
-     * Test the property 'anonymous'
-     */
-    @Test
-    void anonymousTest() {
-        // TODO: test anonymous
-    }
-
-    /**
      * Test the property 'viewCount'
      */
     @Test
@@ -152,11 +145,11 @@ class ArticleListItemTest {
     }
 
     /**
-     * Test the property 'watchCount'
+     * Test the property 'rewardCount'
      */
     @Test
-    void watchCountTest() {
-        // TODO: test watchCount
+    void rewardCountTest() {
+        // TODO: test rewardCount
     }
 
     /**
@@ -165,22 +158,6 @@ class ArticleListItemTest {
     @Test
     void replyCountTest() {
         // TODO: test replyCount
-    }
-
-    /**
-     * Test the property 'bountyPoints'
-     */
-    @Test
-    void bountyPointsTest() {
-        // TODO: test bountyPoints
-    }
-
-    /**
-     * Test the property 'acceptedAnswerId'
-     */
-    @Test
-    void acceptedAnswerIdTest() {
-        // TODO: test acceptedAnswerId
     }
 
     /**

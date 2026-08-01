@@ -14,18 +14,18 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.BlockRelationRequest;
-import com.bass.bbs.model.FollowRelationRequest;
-import com.bass.bbs.model.GetStatusRelationReply;
-import com.bass.bbs.model.GetStatusRelationRequest;
-import com.bass.bbs.model.ListBlockedRelationsReply;
-import com.bass.bbs.model.ListBlockedRelationsRequest;
-import com.bass.bbs.model.ListFollowersRelationsReply;
-import com.bass.bbs.model.ListFollowersRelationsRequest;
-import com.bass.bbs.model.ListFollowingRelationsReply;
-import com.bass.bbs.model.ListFollowingRelationsRequest;
-import com.bass.bbs.model.UnblockRelationRequest;
-import com.bass.bbs.model.UnfollowRelationRequest;
+import com.bass.bbs.model.BlockRelationReq;
+import com.bass.bbs.model.FollowRelationReq;
+import com.bass.bbs.model.GetStatusRelationReq;
+import com.bass.bbs.model.GetStatusRelationResp;
+import com.bass.bbs.model.ListBlockedRelationsReq;
+import com.bass.bbs.model.ListBlockedRelationsResp;
+import com.bass.bbs.model.ListFollowersRelationsReq;
+import com.bass.bbs.model.ListFollowersRelationsResp;
+import com.bass.bbs.model.ListFollowingRelationsReq;
+import com.bass.bbs.model.ListFollowingRelationsResp;
+import com.bass.bbs.model.UnblockRelationReq;
+import com.bass.bbs.model.UnfollowRelationReq;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -55,10 +55,10 @@ public class RelationServiceTest {
      */
     @Test
     public void blockTest() throws ApiException {
-        BlockRelationRequest blockRelationRequest = null;
+        BlockRelationReq blockRelationReq = null;
         
         RelationService.APIblockRequest request = RelationService.APIblockRequest.newBuilder()
-          .blockRelationRequest(blockRelationRequest)
+          .blockRelationReq(blockRelationReq)
           .build();
         Object response = 
         api.block(request);
@@ -76,10 +76,10 @@ public class RelationServiceTest {
      */
     @Test
     public void followTest() throws ApiException {
-        FollowRelationRequest followRelationRequest = null;
+        FollowRelationReq followRelationReq = null;
         
         RelationService.APIfollowRequest request = RelationService.APIfollowRequest.newBuilder()
-          .followRelationRequest(followRelationRequest)
+          .followRelationReq(followRelationReq)
           .build();
         Object response = 
         api.follow(request);
@@ -97,12 +97,12 @@ public class RelationServiceTest {
      */
     @Test
     public void getStatusTest() throws ApiException {
-        GetStatusRelationRequest getStatusRelationRequest = null;
+        GetStatusRelationReq getStatusRelationReq = null;
         
         RelationService.APIgetStatusRequest request = RelationService.APIgetStatusRequest.newBuilder()
-          .getStatusRelationRequest(getStatusRelationRequest)
+          .getStatusRelationReq(getStatusRelationReq)
           .build();
-        GetStatusRelationReply response = 
+        GetStatusRelationResp response = 
         api.getStatus(request);
 
         // TODO: test validations
@@ -118,12 +118,12 @@ public class RelationServiceTest {
      */
     @Test
     public void listBlockedTest() throws ApiException {
-        ListBlockedRelationsRequest listBlockedRelationsRequest = null;
+        ListBlockedRelationsReq listBlockedRelationsReq = null;
         
         RelationService.APIlistBlockedRequest request = RelationService.APIlistBlockedRequest.newBuilder()
-          .listBlockedRelationsRequest(listBlockedRelationsRequest)
+          .listBlockedRelationsReq(listBlockedRelationsReq)
           .build();
-        ListBlockedRelationsReply response = 
+        ListBlockedRelationsResp response = 
         api.listBlocked(request);
 
         // TODO: test validations
@@ -139,12 +139,12 @@ public class RelationServiceTest {
      */
     @Test
     public void listFollowersTest() throws ApiException {
-        ListFollowersRelationsRequest listFollowersRelationsRequest = null;
+        ListFollowersRelationsReq listFollowersRelationsReq = null;
         
         RelationService.APIlistFollowersRequest request = RelationService.APIlistFollowersRequest.newBuilder()
-          .listFollowersRelationsRequest(listFollowersRelationsRequest)
+          .listFollowersRelationsReq(listFollowersRelationsReq)
           .build();
-        ListFollowersRelationsReply response = 
+        ListFollowersRelationsResp response = 
         api.listFollowers(request);
 
         // TODO: test validations
@@ -160,12 +160,12 @@ public class RelationServiceTest {
      */
     @Test
     public void listFollowingTest() throws ApiException {
-        ListFollowingRelationsRequest listFollowingRelationsRequest = null;
+        ListFollowingRelationsReq listFollowingRelationsReq = null;
         
         RelationService.APIlistFollowingRequest request = RelationService.APIlistFollowingRequest.newBuilder()
-          .listFollowingRelationsRequest(listFollowingRelationsRequest)
+          .listFollowingRelationsReq(listFollowingRelationsReq)
           .build();
-        ListFollowingRelationsReply response = 
+        ListFollowingRelationsResp response = 
         api.listFollowing(request);
 
         // TODO: test validations
@@ -181,10 +181,10 @@ public class RelationServiceTest {
      */
     @Test
     public void unblockTest() throws ApiException {
-        UnblockRelationRequest unblockRelationRequest = null;
+        UnblockRelationReq unblockRelationReq = null;
         
         RelationService.APIunblockRequest request = RelationService.APIunblockRequest.newBuilder()
-          .unblockRelationRequest(unblockRelationRequest)
+          .unblockRelationReq(unblockRelationReq)
           .build();
         Object response = 
         api.unblock(request);
@@ -202,10 +202,10 @@ public class RelationServiceTest {
      */
     @Test
     public void unfollowTest() throws ApiException {
-        UnfollowRelationRequest unfollowRelationRequest = null;
+        UnfollowRelationReq unfollowRelationReq = null;
         
         RelationService.APIunfollowRequest request = RelationService.APIunfollowRequest.newBuilder()
-          .unfollowRelationRequest(unfollowRelationRequest)
+          .unfollowRelationReq(unfollowRelationReq)
           .build();
         Object response = 
         api.unfollow(request);

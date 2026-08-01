@@ -4,16 +4,18 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**acceptAnswer**](ArticleService.md#acceptAnswer) | **POST** /v1/content/article/accept-answer |  |
-| [**acceptAnswerWithHttpInfo**](ArticleService.md#acceptAnswerWithHttpInfo) | **POST** /v1/content/article/accept-answer |  |
+| [**archive**](ArticleService.md#archive) | **POST** /v1/content/article/archive |  |
+| [**archiveWithHttpInfo**](ArticleService.md#archiveWithHttpInfo) | **POST** /v1/content/article/archive |  |
 | [**callList**](ArticleService.md#callList) | **POST** /v1/content/article/list |  |
 | [**callListWithHttpInfo**](ArticleService.md#callListWithHttpInfo) | **POST** /v1/content/article/list |  |
+| [**cancelPublish**](ArticleService.md#cancelPublish) | **POST** /v1/content/article/publish/cancel |  |
+| [**cancelPublishWithHttpInfo**](ArticleService.md#cancelPublishWithHttpInfo) | **POST** /v1/content/article/publish/cancel |  |
 | [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect |  |
 | [**collectWithHttpInfo**](ArticleService.md#collectWithHttpInfo) | **POST** /v1/content/article/collect |  |
-| [**create**](ArticleService.md#create) | **POST** /v1/content/article/create |  |
-| [**createWithHttpInfo**](ArticleService.md#createWithHttpInfo) | **POST** /v1/content/article/create |  |
-| [**discardDraft**](ArticleService.md#discardDraft) | **POST** /v1/content/article/discard-draft |  |
-| [**discardDraftWithHttpInfo**](ArticleService.md#discardDraftWithHttpInfo) | **POST** /v1/content/article/discard-draft |  |
+| [**createDraft**](ArticleService.md#createDraft) | **POST** /v1/content/article/draft/create |  |
+| [**createDraftWithHttpInfo**](ArticleService.md#createDraftWithHttpInfo) | **POST** /v1/content/article/draft/create |  |
+| [**discardDraft**](ArticleService.md#discardDraft) | **POST** /v1/content/article/draft/discard |  |
+| [**discardDraftWithHttpInfo**](ArticleService.md#discardDraftWithHttpInfo) | **POST** /v1/content/article/draft/discard |  |
 | [**get**](ArticleService.md#get) | **POST** /v1/content/article/get |  |
 | [**getWithHttpInfo**](ArticleService.md#getWithHttpInfo) | **POST** /v1/content/article/get |  |
 | [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
@@ -22,24 +24,22 @@ All URIs are relative to *http://localhost*
 | [**publishWithHttpInfo**](ArticleService.md#publishWithHttpInfo) | **POST** /v1/content/article/publish |  |
 | [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
 | [**rewardWithHttpInfo**](ArticleService.md#rewardWithHttpInfo) | **POST** /v1/content/article/reward |  |
+| [**schedulePublish**](ArticleService.md#schedulePublish) | **POST** /v1/content/article/publish/schedule |  |
+| [**schedulePublishWithHttpInfo**](ArticleService.md#schedulePublishWithHttpInfo) | **POST** /v1/content/article/publish/schedule |  |
 | [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
 | [**thankWithHttpInfo**](ArticleService.md#thankWithHttpInfo) | **POST** /v1/content/article/thank |  |
-| [**update**](ArticleService.md#update) | **POST** /v1/content/article/update |  |
-| [**updateWithHttpInfo**](ArticleService.md#updateWithHttpInfo) | **POST** /v1/content/article/update |  |
-| [**updateDraft**](ArticleService.md#updateDraft) | **POST** /v1/content/article/update-draft |  |
-| [**updateDraftWithHttpInfo**](ArticleService.md#updateDraftWithHttpInfo) | **POST** /v1/content/article/update-draft |  |
-| [**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch |  |
-| [**watchWithHttpInfo**](ArticleService.md#watchWithHttpInfo) | **POST** /v1/content/article/watch |  |
+| [**updateDraft**](ArticleService.md#updateDraft) | **POST** /v1/content/article/draft/update |  |
+| [**updateDraftWithHttpInfo**](ArticleService.md#updateDraftWithHttpInfo) | **POST** /v1/content/article/draft/update |  |
 
 
 
-## acceptAnswer
+## archive
 
-> Object acceptAnswer(acceptAnswerRequest)
+> Object archive(archiveRequest)
 
 
 
-采纳文章评论为答案。
+归档文章
 
 ### Example
 
@@ -58,15 +58,15 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        AcceptAnswerArticleRequest acceptAnswerArticleRequest = new AcceptAnswerArticleRequest(); // AcceptAnswerArticleRequest | 
+        ArchiveArticleReq archiveArticleReq = new ArchiveArticleReq(); // ArchiveArticleReq | 
         try {
-            APIacceptAnswerRequest request = APIacceptAnswerRequest.newBuilder()
-                .acceptAnswerArticleRequest(acceptAnswerArticleRequest)
+            APIarchiveRequest request = APIarchiveRequest.newBuilder()
+                .archiveArticleReq(archiveArticleReq)
                 .build();
-            Object result = apiInstance.acceptAnswer(request);
+            Object result = apiInstance.archive(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#acceptAnswer");
+            System.err.println("Exception when calling ArticleService#archive");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -80,7 +80,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| acceptAnswerRequest | [**APIacceptAnswerRequest**](ArticleService.md#APIacceptAnswerRequest)|-|-|
+| archiveRequest | [**APIarchiveRequest**](ArticleService.md#APIarchiveRequest)|-|-|
 
 ### Return type
 
@@ -101,13 +101,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## acceptAnswerWithHttpInfo
+## archiveWithHttpInfo
 
-> ApiResponse<Object> acceptAnswerWithHttpInfo(acceptAnswerRequest)
+> ApiResponse<Object> archiveWithHttpInfo(archiveRequest)
 
 
 
-采纳文章评论为答案。
+归档文章
 
 ### Example
 
@@ -127,17 +127,17 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        AcceptAnswerArticleRequest acceptAnswerArticleRequest = new AcceptAnswerArticleRequest(); // AcceptAnswerArticleRequest | 
+        ArchiveArticleReq archiveArticleReq = new ArchiveArticleReq(); // ArchiveArticleReq | 
         try {
-            APIacceptAnswerRequest request = APIacceptAnswerRequest.newBuilder()
-                .acceptAnswerArticleRequest(acceptAnswerArticleRequest)
+            APIarchiveRequest request = APIarchiveRequest.newBuilder()
+                .archiveArticleReq(archiveArticleReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.acceptAnswerWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.archiveWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#acceptAnswer");
+            System.err.println("Exception when calling ArticleService#archive");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -151,7 +151,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| acceptAnswerRequest | [**APIacceptAnswerRequest**](ArticleService.md#APIacceptAnswerRequest)|-|-|
+| archiveRequest | [**APIarchiveRequest**](ArticleService.md#APIarchiveRequest)|-|-|
 
 ### Return type
 
@@ -173,23 +173,23 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIacceptAnswerRequest"></a>
-## APIacceptAnswerRequest
+<a id="APIarchiveRequest"></a>
+## APIarchiveRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **acceptAnswerArticleRequest** | [**AcceptAnswerArticleRequest**](AcceptAnswerArticleRequest.md) |  | |
+| **archiveArticleReq** | [**ArchiveArticleReq**](ArchiveArticleReq.md) |  | |
 
 
 
 ## callList
 
-> ListArticlesReply callList(callListRequest)
+> ListArticlesResp callList(callListRequest)
 
 
 
-分页查询文章列表。
+查询文章列表
 
 ### Example
 
@@ -208,12 +208,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        ListArticlesRequest listArticlesRequest = new ListArticlesRequest(); // ListArticlesRequest | 
+        ListArticlesReq listArticlesReq = new ListArticlesReq(); // ListArticlesReq | 
         try {
             APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listArticlesRequest(listArticlesRequest)
+                .listArticlesReq(listArticlesReq)
                 .build();
-            ListArticlesReply result = apiInstance.callList(request);
+            ListArticlesResp result = apiInstance.callList(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#callList");
@@ -234,7 +234,7 @@ public class Example {
 
 ### Return type
 
-[**ListArticlesReply**](ListArticlesReply.md)
+[**ListArticlesResp**](ListArticlesResp.md)
 
 
 ### Authorization
@@ -253,11 +253,11 @@ No authorization required
 
 ## callListWithHttpInfo
 
-> ApiResponse<ListArticlesReply> callListWithHttpInfo(callListRequest)
+> ApiResponse<ListArticlesResp> callListWithHttpInfo(callListRequest)
 
 
 
-分页查询文章列表。
+查询文章列表
 
 ### Example
 
@@ -277,12 +277,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        ListArticlesRequest listArticlesRequest = new ListArticlesRequest(); // ListArticlesRequest | 
+        ListArticlesReq listArticlesReq = new ListArticlesReq(); // ListArticlesReq | 
         try {
             APIcallListRequest request = APIcallListRequest.newBuilder()
-                .listArticlesRequest(listArticlesRequest)
+                .listArticlesReq(listArticlesReq)
                 .build();
-            ApiResponse<ListArticlesReply> response = apiInstance.callListWithHttpInfo(request);
+            ApiResponse<ListArticlesResp> response = apiInstance.callListWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -305,7 +305,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**ListArticlesReply**](ListArticlesReply.md)>
+ApiResponse<[**ListArticlesResp**](ListArticlesResp.md)>
 
 
 ### Authorization
@@ -329,17 +329,17 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **listArticlesRequest** | [**ListArticlesRequest**](ListArticlesRequest.md) |  | |
+| **listArticlesReq** | [**ListArticlesReq**](ListArticlesReq.md) |  | |
 
 
 
-## collect
+## cancelPublish
 
-> CollectArticleReply collect(collectRequest)
+> Object cancelPublish(cancelPublishRequest)
 
 
 
-收藏或取消收藏文章。
+取消定时发布
 
 ### Example
 
@@ -358,12 +358,162 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        CollectArticleRequest collectArticleRequest = new CollectArticleRequest(); // CollectArticleRequest | 
+        CancelPublishArticleReq cancelPublishArticleReq = new CancelPublishArticleReq(); // CancelPublishArticleReq | 
+        try {
+            APIcancelPublishRequest request = APIcancelPublishRequest.newBuilder()
+                .cancelPublishArticleReq(cancelPublishArticleReq)
+                .build();
+            Object result = apiInstance.cancelPublish(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#cancelPublish");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| cancelPublishRequest | [**APIcancelPublishRequest**](ArticleService.md#APIcancelPublishRequest)|-|-|
+
+### Return type
+
+**Object**
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## cancelPublishWithHttpInfo
+
+> ApiResponse<Object> cancelPublishWithHttpInfo(cancelPublishRequest)
+
+
+
+取消定时发布
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        CancelPublishArticleReq cancelPublishArticleReq = new CancelPublishArticleReq(); // CancelPublishArticleReq | 
+        try {
+            APIcancelPublishRequest request = APIcancelPublishRequest.newBuilder()
+                .cancelPublishArticleReq(cancelPublishArticleReq)
+                .build();
+            ApiResponse<Object> response = apiInstance.cancelPublishWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#cancelPublish");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| cancelPublishRequest | [**APIcancelPublishRequest**](ArticleService.md#APIcancelPublishRequest)|-|-|
+
+### Return type
+
+ApiResponse<**Object**>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIcancelPublishRequest"></a>
+## APIcancelPublishRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **cancelPublishArticleReq** | [**CancelPublishArticleReq**](CancelPublishArticleReq.md) |  | |
+
+
+
+## collect
+
+> CollectArticleResp collect(collectRequest)
+
+
+
+收藏文章
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        CollectArticleReq collectArticleReq = new CollectArticleReq(); // CollectArticleReq | 
         try {
             APIcollectRequest request = APIcollectRequest.newBuilder()
-                .collectArticleRequest(collectArticleRequest)
+                .collectArticleReq(collectArticleReq)
                 .build();
-            CollectArticleReply result = apiInstance.collect(request);
+            CollectArticleResp result = apiInstance.collect(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#collect");
@@ -384,7 +534,7 @@ public class Example {
 
 ### Return type
 
-[**CollectArticleReply**](CollectArticleReply.md)
+[**CollectArticleResp**](CollectArticleResp.md)
 
 
 ### Authorization
@@ -403,11 +553,11 @@ No authorization required
 
 ## collectWithHttpInfo
 
-> ApiResponse<CollectArticleReply> collectWithHttpInfo(collectRequest)
+> ApiResponse<CollectArticleResp> collectWithHttpInfo(collectRequest)
 
 
 
-收藏或取消收藏文章。
+收藏文章
 
 ### Example
 
@@ -427,12 +577,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        CollectArticleRequest collectArticleRequest = new CollectArticleRequest(); // CollectArticleRequest | 
+        CollectArticleReq collectArticleReq = new CollectArticleReq(); // CollectArticleReq | 
         try {
             APIcollectRequest request = APIcollectRequest.newBuilder()
-                .collectArticleRequest(collectArticleRequest)
+                .collectArticleReq(collectArticleReq)
                 .build();
-            ApiResponse<CollectArticleReply> response = apiInstance.collectWithHttpInfo(request);
+            ApiResponse<CollectArticleResp> response = apiInstance.collectWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -455,7 +605,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**CollectArticleReply**](CollectArticleReply.md)>
+ApiResponse<[**CollectArticleResp**](CollectArticleResp.md)>
 
 
 ### Authorization
@@ -479,17 +629,17 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **collectArticleRequest** | [**CollectArticleRequest**](CollectArticleRequest.md) |  | |
+| **collectArticleReq** | [**CollectArticleReq**](CollectArticleReq.md) |  | |
 
 
 
-## create
+## createDraft
 
-> CreateArticleReply create(createRequest)
+> CreateDraftArticleResp createDraft(createDraftRequest)
 
 
 
-创建文章草稿。
+创建文章草稿
 
 ### Example
 
@@ -508,15 +658,15 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        CreateArticleRequest createArticleRequest = new CreateArticleRequest(); // CreateArticleRequest | 
+        CreateDraftArticleReq createDraftArticleReq = new CreateDraftArticleReq(); // CreateDraftArticleReq | 
         try {
-            APIcreateRequest request = APIcreateRequest.newBuilder()
-                .createArticleRequest(createArticleRequest)
+            APIcreateDraftRequest request = APIcreateDraftRequest.newBuilder()
+                .createDraftArticleReq(createDraftArticleReq)
                 .build();
-            CreateArticleReply result = apiInstance.create(request);
+            CreateDraftArticleResp result = apiInstance.createDraft(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#create");
+            System.err.println("Exception when calling ArticleService#createDraft");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -530,11 +680,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createRequest | [**APIcreateRequest**](ArticleService.md#APIcreateRequest)|-|-|
+| createDraftRequest | [**APIcreateDraftRequest**](ArticleService.md#APIcreateDraftRequest)|-|-|
 
 ### Return type
 
-[**CreateArticleReply**](CreateArticleReply.md)
+[**CreateDraftArticleResp**](CreateDraftArticleResp.md)
 
 
 ### Authorization
@@ -551,13 +701,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## createWithHttpInfo
+## createDraftWithHttpInfo
 
-> ApiResponse<CreateArticleReply> createWithHttpInfo(createRequest)
+> ApiResponse<CreateDraftArticleResp> createDraftWithHttpInfo(createDraftRequest)
 
 
 
-创建文章草稿。
+创建文章草稿
 
 ### Example
 
@@ -577,17 +727,17 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        CreateArticleRequest createArticleRequest = new CreateArticleRequest(); // CreateArticleRequest | 
+        CreateDraftArticleReq createDraftArticleReq = new CreateDraftArticleReq(); // CreateDraftArticleReq | 
         try {
-            APIcreateRequest request = APIcreateRequest.newBuilder()
-                .createArticleRequest(createArticleRequest)
+            APIcreateDraftRequest request = APIcreateDraftRequest.newBuilder()
+                .createDraftArticleReq(createDraftArticleReq)
                 .build();
-            ApiResponse<CreateArticleReply> response = apiInstance.createWithHttpInfo(request);
+            ApiResponse<CreateDraftArticleResp> response = apiInstance.createDraftWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#create");
+            System.err.println("Exception when calling ArticleService#createDraft");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -601,11 +751,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| createRequest | [**APIcreateRequest**](ArticleService.md#APIcreateRequest)|-|-|
+| createDraftRequest | [**APIcreateDraftRequest**](ArticleService.md#APIcreateDraftRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**CreateArticleReply**](CreateArticleReply.md)>
+ApiResponse<[**CreateDraftArticleResp**](CreateDraftArticleResp.md)>
 
 
 ### Authorization
@@ -623,13 +773,13 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcreateRequest"></a>
-## APIcreateRequest
+<a id="APIcreateDraftRequest"></a>
+## APIcreateDraftRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **createArticleRequest** | [**CreateArticleRequest**](CreateArticleRequest.md) |  | |
+| **createDraftArticleReq** | [**CreateDraftArticleReq**](CreateDraftArticleReq.md) |  | |
 
 
 
@@ -639,7 +789,7 @@ No authorization required
 
 
 
-丢弃草稿。
+丢弃文章草稿
 
 ### Example
 
@@ -658,10 +808,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        DiscardDraftArticleRequest discardDraftArticleRequest = new DiscardDraftArticleRequest(); // DiscardDraftArticleRequest | 
+        DiscardDraftArticleReq discardDraftArticleReq = new DiscardDraftArticleReq(); // DiscardDraftArticleReq | 
         try {
             APIdiscardDraftRequest request = APIdiscardDraftRequest.newBuilder()
-                .discardDraftArticleRequest(discardDraftArticleRequest)
+                .discardDraftArticleReq(discardDraftArticleReq)
                 .build();
             Object result = apiInstance.discardDraft(request);
             System.out.println(result);
@@ -707,7 +857,7 @@ No authorization required
 
 
 
-丢弃草稿。
+丢弃文章草稿
 
 ### Example
 
@@ -727,10 +877,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        DiscardDraftArticleRequest discardDraftArticleRequest = new DiscardDraftArticleRequest(); // DiscardDraftArticleRequest | 
+        DiscardDraftArticleReq discardDraftArticleReq = new DiscardDraftArticleReq(); // DiscardDraftArticleReq | 
         try {
             APIdiscardDraftRequest request = APIdiscardDraftRequest.newBuilder()
-                .discardDraftArticleRequest(discardDraftArticleRequest)
+                .discardDraftArticleReq(discardDraftArticleReq)
                 .build();
             ApiResponse<Object> response = apiInstance.discardDraftWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
@@ -779,17 +929,17 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **discardDraftArticleRequest** | [**DiscardDraftArticleRequest**](DiscardDraftArticleRequest.md) |  | |
+| **discardDraftArticleReq** | [**DiscardDraftArticleReq**](DiscardDraftArticleReq.md) |  | |
 
 
 
 ## get
 
-> GetArticleReply get(getRequest)
+> GetArticleResp get(getRequest)
 
 
 
-获取文章详情。
+查询文章详情
 
 ### Example
 
@@ -808,12 +958,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        GetArticleRequest getArticleRequest = new GetArticleRequest(); // GetArticleRequest | 
+        GetArticleReq getArticleReq = new GetArticleReq(); // GetArticleReq | 
         try {
             APIgetRequest request = APIgetRequest.newBuilder()
-                .getArticleRequest(getArticleRequest)
+                .getArticleReq(getArticleReq)
                 .build();
-            GetArticleReply result = apiInstance.get(request);
+            GetArticleResp result = apiInstance.get(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#get");
@@ -834,7 +984,7 @@ public class Example {
 
 ### Return type
 
-[**GetArticleReply**](GetArticleReply.md)
+[**GetArticleResp**](GetArticleResp.md)
 
 
 ### Authorization
@@ -853,11 +1003,11 @@ No authorization required
 
 ## getWithHttpInfo
 
-> ApiResponse<GetArticleReply> getWithHttpInfo(getRequest)
+> ApiResponse<GetArticleResp> getWithHttpInfo(getRequest)
 
 
 
-获取文章详情。
+查询文章详情
 
 ### Example
 
@@ -877,12 +1027,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        GetArticleRequest getArticleRequest = new GetArticleRequest(); // GetArticleRequest | 
+        GetArticleReq getArticleReq = new GetArticleReq(); // GetArticleReq | 
         try {
             APIgetRequest request = APIgetRequest.newBuilder()
-                .getArticleRequest(getArticleRequest)
+                .getArticleReq(getArticleReq)
                 .build();
-            ApiResponse<GetArticleReply> response = apiInstance.getWithHttpInfo(request);
+            ApiResponse<GetArticleResp> response = apiInstance.getWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -905,7 +1055,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**GetArticleReply**](GetArticleReply.md)>
+ApiResponse<[**GetArticleResp**](GetArticleResp.md)>
 
 
 ### Authorization
@@ -929,17 +1079,17 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **getArticleRequest** | [**GetArticleRequest**](GetArticleRequest.md) |  | |
+| **getArticleReq** | [**GetArticleReq**](GetArticleReq.md) |  | |
 
 
 
 ## like
 
-> LikeArticleReply like(likeRequest)
+> LikeArticleResp like(likeRequest)
 
 
 
-点赞或取消点赞文章。
+点赞文章
 
 ### Example
 
@@ -958,12 +1108,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        LikeArticleRequest likeArticleRequest = new LikeArticleRequest(); // LikeArticleRequest | 
+        LikeArticleReq likeArticleReq = new LikeArticleReq(); // LikeArticleReq | 
         try {
             APIlikeRequest request = APIlikeRequest.newBuilder()
-                .likeArticleRequest(likeArticleRequest)
+                .likeArticleReq(likeArticleReq)
                 .build();
-            LikeArticleReply result = apiInstance.like(request);
+            LikeArticleResp result = apiInstance.like(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#like");
@@ -984,7 +1134,7 @@ public class Example {
 
 ### Return type
 
-[**LikeArticleReply**](LikeArticleReply.md)
+[**LikeArticleResp**](LikeArticleResp.md)
 
 
 ### Authorization
@@ -1003,11 +1153,11 @@ No authorization required
 
 ## likeWithHttpInfo
 
-> ApiResponse<LikeArticleReply> likeWithHttpInfo(likeRequest)
+> ApiResponse<LikeArticleResp> likeWithHttpInfo(likeRequest)
 
 
 
-点赞或取消点赞文章。
+点赞文章
 
 ### Example
 
@@ -1027,12 +1177,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        LikeArticleRequest likeArticleRequest = new LikeArticleRequest(); // LikeArticleRequest | 
+        LikeArticleReq likeArticleReq = new LikeArticleReq(); // LikeArticleReq | 
         try {
             APIlikeRequest request = APIlikeRequest.newBuilder()
-                .likeArticleRequest(likeArticleRequest)
+                .likeArticleReq(likeArticleReq)
                 .build();
-            ApiResponse<LikeArticleReply> response = apiInstance.likeWithHttpInfo(request);
+            ApiResponse<LikeArticleResp> response = apiInstance.likeWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -1055,7 +1205,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**LikeArticleReply**](LikeArticleReply.md)>
+ApiResponse<[**LikeArticleResp**](LikeArticleResp.md)>
 
 
 ### Authorization
@@ -1079,7 +1229,7 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **likeArticleRequest** | [**LikeArticleRequest**](LikeArticleRequest.md) |  | |
+| **likeArticleReq** | [**LikeArticleReq**](LikeArticleReq.md) |  | |
 
 
 
@@ -1089,7 +1239,7 @@ No authorization required
 
 
 
-发布文章。
+发布文章
 
 ### Example
 
@@ -1108,10 +1258,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        PublishArticleRequest publishArticleRequest = new PublishArticleRequest(); // PublishArticleRequest | 
+        PublishArticleReq publishArticleReq = new PublishArticleReq(); // PublishArticleReq | 
         try {
             APIpublishRequest request = APIpublishRequest.newBuilder()
-                .publishArticleRequest(publishArticleRequest)
+                .publishArticleReq(publishArticleReq)
                 .build();
             Object result = apiInstance.publish(request);
             System.out.println(result);
@@ -1157,7 +1307,7 @@ No authorization required
 
 
 
-发布文章。
+发布文章
 
 ### Example
 
@@ -1177,10 +1327,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        PublishArticleRequest publishArticleRequest = new PublishArticleRequest(); // PublishArticleRequest | 
+        PublishArticleReq publishArticleReq = new PublishArticleReq(); // PublishArticleReq | 
         try {
             APIpublishRequest request = APIpublishRequest.newBuilder()
-                .publishArticleRequest(publishArticleRequest)
+                .publishArticleReq(publishArticleReq)
                 .build();
             ApiResponse<Object> response = apiInstance.publishWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
@@ -1229,7 +1379,7 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **publishArticleRequest** | [**PublishArticleRequest**](PublishArticleRequest.md) |  | |
+| **publishArticleReq** | [**PublishArticleReq**](PublishArticleReq.md) |  | |
 
 
 
@@ -1239,7 +1389,7 @@ No authorization required
 
 
 
-打赏文章。
+打赏文章
 
 ### Example
 
@@ -1258,10 +1408,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        RewardArticleRequest rewardArticleRequest = new RewardArticleRequest(); // RewardArticleRequest | 
+        RewardArticleReq rewardArticleReq = new RewardArticleReq(); // RewardArticleReq | 
         try {
             APIrewardRequest request = APIrewardRequest.newBuilder()
-                .rewardArticleRequest(rewardArticleRequest)
+                .rewardArticleReq(rewardArticleReq)
                 .build();
             Object result = apiInstance.reward(request);
             System.out.println(result);
@@ -1307,7 +1457,7 @@ No authorization required
 
 
 
-打赏文章。
+打赏文章
 
 ### Example
 
@@ -1327,10 +1477,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        RewardArticleRequest rewardArticleRequest = new RewardArticleRequest(); // RewardArticleRequest | 
+        RewardArticleReq rewardArticleReq = new RewardArticleReq(); // RewardArticleReq | 
         try {
             APIrewardRequest request = APIrewardRequest.newBuilder()
-                .rewardArticleRequest(rewardArticleRequest)
+                .rewardArticleReq(rewardArticleReq)
                 .build();
             ApiResponse<Object> response = apiInstance.rewardWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
@@ -1379,17 +1529,17 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **rewardArticleRequest** | [**RewardArticleRequest**](RewardArticleRequest.md) |  | |
+| **rewardArticleReq** | [**RewardArticleReq**](RewardArticleReq.md) |  | |
 
 
 
-## thank
+## schedulePublish
 
-> ThankArticleReply thank(thankRequest)
+> Object schedulePublish(schedulePublishRequest)
 
 
 
-感谢或取消感谢文章。
+设置定时发布
 
 ### Example
 
@@ -1408,12 +1558,162 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        ThankArticleRequest thankArticleRequest = new ThankArticleRequest(); // ThankArticleRequest | 
+        SchedulePublishArticleReq schedulePublishArticleReq = new SchedulePublishArticleReq(); // SchedulePublishArticleReq | 
+        try {
+            APIschedulePublishRequest request = APIschedulePublishRequest.newBuilder()
+                .schedulePublishArticleReq(schedulePublishArticleReq)
+                .build();
+            Object result = apiInstance.schedulePublish(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#schedulePublish");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| schedulePublishRequest | [**APIschedulePublishRequest**](ArticleService.md#APIschedulePublishRequest)|-|-|
+
+### Return type
+
+**Object**
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## schedulePublishWithHttpInfo
+
+> ApiResponse<Object> schedulePublishWithHttpInfo(schedulePublishRequest)
+
+
+
+设置定时发布
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        SchedulePublishArticleReq schedulePublishArticleReq = new SchedulePublishArticleReq(); // SchedulePublishArticleReq | 
+        try {
+            APIschedulePublishRequest request = APIschedulePublishRequest.newBuilder()
+                .schedulePublishArticleReq(schedulePublishArticleReq)
+                .build();
+            ApiResponse<Object> response = apiInstance.schedulePublishWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#schedulePublish");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| schedulePublishRequest | [**APIschedulePublishRequest**](ArticleService.md#APIschedulePublishRequest)|-|-|
+
+### Return type
+
+ApiResponse<**Object**>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIschedulePublishRequest"></a>
+## APIschedulePublishRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **schedulePublishArticleReq** | [**SchedulePublishArticleReq**](SchedulePublishArticleReq.md) |  | |
+
+
+
+## thank
+
+> ThankArticleResp thank(thankRequest)
+
+
+
+感谢文章
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        ThankArticleReq thankArticleReq = new ThankArticleReq(); // ThankArticleReq | 
         try {
             APIthankRequest request = APIthankRequest.newBuilder()
-                .thankArticleRequest(thankArticleRequest)
+                .thankArticleReq(thankArticleReq)
                 .build();
-            ThankArticleReply result = apiInstance.thank(request);
+            ThankArticleResp result = apiInstance.thank(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#thank");
@@ -1434,7 +1734,7 @@ public class Example {
 
 ### Return type
 
-[**ThankArticleReply**](ThankArticleReply.md)
+[**ThankArticleResp**](ThankArticleResp.md)
 
 
 ### Authorization
@@ -1453,11 +1753,11 @@ No authorization required
 
 ## thankWithHttpInfo
 
-> ApiResponse<ThankArticleReply> thankWithHttpInfo(thankRequest)
+> ApiResponse<ThankArticleResp> thankWithHttpInfo(thankRequest)
 
 
 
-感谢或取消感谢文章。
+感谢文章
 
 ### Example
 
@@ -1477,12 +1777,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        ThankArticleRequest thankArticleRequest = new ThankArticleRequest(); // ThankArticleRequest | 
+        ThankArticleReq thankArticleReq = new ThankArticleReq(); // ThankArticleReq | 
         try {
             APIthankRequest request = APIthankRequest.newBuilder()
-                .thankArticleRequest(thankArticleRequest)
+                .thankArticleReq(thankArticleReq)
                 .build();
-            ApiResponse<ThankArticleReply> response = apiInstance.thankWithHttpInfo(request);
+            ApiResponse<ThankArticleResp> response = apiInstance.thankWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -1505,7 +1805,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**ThankArticleReply**](ThankArticleReply.md)>
+ApiResponse<[**ThankArticleResp**](ThankArticleResp.md)>
 
 
 ### Authorization
@@ -1529,167 +1829,17 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **thankArticleRequest** | [**ThankArticleRequest**](ThankArticleRequest.md) |  | |
-
-
-
-## update
-
-> UpdateArticleReply update(updateRequest)
-
-
-
-更新文章内容。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ArticleService;
-import com.bass.bbs.api.ArticleService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ArticleService apiInstance = new ArticleService(defaultClient);
-        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(); // UpdateArticleRequest | 
-        try {
-            APIupdateRequest request = APIupdateRequest.newBuilder()
-                .updateArticleRequest(updateArticleRequest)
-                .build();
-            UpdateArticleReply result = apiInstance.update(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#update");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| updateRequest | [**APIupdateRequest**](ArticleService.md#APIupdateRequest)|-|-|
-
-### Return type
-
-[**UpdateArticleReply**](UpdateArticleReply.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## updateWithHttpInfo
-
-> ApiResponse<UpdateArticleReply> updateWithHttpInfo(updateRequest)
-
-
-
-更新文章内容。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ArticleService;
-import com.bass.bbs.api.ArticleService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ArticleService apiInstance = new ArticleService(defaultClient);
-        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(); // UpdateArticleRequest | 
-        try {
-            APIupdateRequest request = APIupdateRequest.newBuilder()
-                .updateArticleRequest(updateArticleRequest)
-                .build();
-            ApiResponse<UpdateArticleReply> response = apiInstance.updateWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#update");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| updateRequest | [**APIupdateRequest**](ArticleService.md#APIupdateRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**UpdateArticleReply**](UpdateArticleReply.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIupdateRequest"></a>
-## APIupdateRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **updateArticleRequest** | [**UpdateArticleRequest**](UpdateArticleRequest.md) |  | |
+| **thankArticleReq** | [**ThankArticleReq**](ThankArticleReq.md) |  | |
 
 
 
 ## updateDraft
 
-> UpdateDraftArticleReply updateDraft(updateDraftRequest)
+> UpdateDraftArticleResp updateDraft(updateDraftRequest)
 
 
 
-更新文章内容。兼容旧草稿更新接口。
+编辑文章草稿
 
 ### Example
 
@@ -1708,12 +1858,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        UpdateDraftArticleRequest updateDraftArticleRequest = new UpdateDraftArticleRequest(); // UpdateDraftArticleRequest | 
+        UpdateDraftArticleReq updateDraftArticleReq = new UpdateDraftArticleReq(); // UpdateDraftArticleReq | 
         try {
             APIupdateDraftRequest request = APIupdateDraftRequest.newBuilder()
-                .updateDraftArticleRequest(updateDraftArticleRequest)
+                .updateDraftArticleReq(updateDraftArticleReq)
                 .build();
-            UpdateDraftArticleReply result = apiInstance.updateDraft(request);
+            UpdateDraftArticleResp result = apiInstance.updateDraft(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ArticleService#updateDraft");
@@ -1734,7 +1884,7 @@ public class Example {
 
 ### Return type
 
-[**UpdateDraftArticleReply**](UpdateDraftArticleReply.md)
+[**UpdateDraftArticleResp**](UpdateDraftArticleResp.md)
 
 
 ### Authorization
@@ -1753,11 +1903,11 @@ No authorization required
 
 ## updateDraftWithHttpInfo
 
-> ApiResponse<UpdateDraftArticleReply> updateDraftWithHttpInfo(updateDraftRequest)
+> ApiResponse<UpdateDraftArticleResp> updateDraftWithHttpInfo(updateDraftRequest)
 
 
 
-更新文章内容。兼容旧草稿更新接口。
+编辑文章草稿
 
 ### Example
 
@@ -1777,12 +1927,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         ArticleService apiInstance = new ArticleService(defaultClient);
-        UpdateDraftArticleRequest updateDraftArticleRequest = new UpdateDraftArticleRequest(); // UpdateDraftArticleRequest | 
+        UpdateDraftArticleReq updateDraftArticleReq = new UpdateDraftArticleReq(); // UpdateDraftArticleReq | 
         try {
             APIupdateDraftRequest request = APIupdateDraftRequest.newBuilder()
-                .updateDraftArticleRequest(updateDraftArticleRequest)
+                .updateDraftArticleReq(updateDraftArticleReq)
                 .build();
-            ApiResponse<UpdateDraftArticleReply> response = apiInstance.updateDraftWithHttpInfo(request);
+            ApiResponse<UpdateDraftArticleResp> response = apiInstance.updateDraftWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -1805,7 +1955,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**UpdateDraftArticleReply**](UpdateDraftArticleReply.md)>
+ApiResponse<[**UpdateDraftArticleResp**](UpdateDraftArticleResp.md)>
 
 
 ### Authorization
@@ -1829,156 +1979,6 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **updateDraftArticleRequest** | [**UpdateDraftArticleRequest**](UpdateDraftArticleRequest.md) |  | |
-
-
-
-## watch
-
-> WatchArticleReply watch(watchRequest)
-
-
-
-关注或取消关注文章。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ArticleService;
-import com.bass.bbs.api.ArticleService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ArticleService apiInstance = new ArticleService(defaultClient);
-        WatchArticleRequest watchArticleRequest = new WatchArticleRequest(); // WatchArticleRequest | 
-        try {
-            APIwatchRequest request = APIwatchRequest.newBuilder()
-                .watchArticleRequest(watchArticleRequest)
-                .build();
-            WatchArticleReply result = apiInstance.watch(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#watch");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| watchRequest | [**APIwatchRequest**](ArticleService.md#APIwatchRequest)|-|-|
-
-### Return type
-
-[**WatchArticleReply**](WatchArticleReply.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## watchWithHttpInfo
-
-> ApiResponse<WatchArticleReply> watchWithHttpInfo(watchRequest)
-
-
-
-关注或取消关注文章。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ArticleService;
-import com.bass.bbs.api.ArticleService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ArticleService apiInstance = new ArticleService(defaultClient);
-        WatchArticleRequest watchArticleRequest = new WatchArticleRequest(); // WatchArticleRequest | 
-        try {
-            APIwatchRequest request = APIwatchRequest.newBuilder()
-                .watchArticleRequest(watchArticleRequest)
-                .build();
-            ApiResponse<WatchArticleReply> response = apiInstance.watchWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ArticleService#watch");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| watchRequest | [**APIwatchRequest**](ArticleService.md#APIwatchRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**WatchArticleReply**](WatchArticleReply.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIwatchRequest"></a>
-## APIwatchRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **watchArticleRequest** | [**WatchArticleRequest**](WatchArticleRequest.md) |  | |
+| **updateDraftArticleReq** | [**UpdateDraftArticleReq**](UpdateDraftArticleReq.md) |  | |
 
 

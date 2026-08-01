@@ -4,10 +4,14 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**loginByPassword**](AuthService.md#loginByPassword) | **POST** /v1/user/auth/login-by-password |  |
-| [**loginByPasswordWithHttpInfo**](AuthService.md#loginByPasswordWithHttpInfo) | **POST** /v1/user/auth/login-by-password |  |
+| [**cancelAccount**](AuthService.md#cancelAccount) | **POST** /v1/user/auth/cancel-account |  |
+| [**cancelAccountWithHttpInfo**](AuthService.md#cancelAccountWithHttpInfo) | **POST** /v1/user/auth/cancel-account |  |
+| [**login**](AuthService.md#login) | **POST** /v1/user/auth/login |  |
+| [**loginWithHttpInfo**](AuthService.md#loginWithHttpInfo) | **POST** /v1/user/auth/login |  |
 | [**logout**](AuthService.md#logout) | **POST** /v1/user/auth/logout |  |
 | [**logoutWithHttpInfo**](AuthService.md#logoutWithHttpInfo) | **POST** /v1/user/auth/logout |  |
+| [**refreshToken**](AuthService.md#refreshToken) | **POST** /v1/user/auth/refresh-token |  |
+| [**refreshTokenWithHttpInfo**](AuthService.md#refreshTokenWithHttpInfo) | **POST** /v1/user/auth/refresh-token |  |
 | [**startEmailRegistration**](AuthService.md#startEmailRegistration) | **POST** /v1/user/auth/start-email-registration |  |
 | [**startEmailRegistrationWithHttpInfo**](AuthService.md#startEmailRegistrationWithHttpInfo) | **POST** /v1/user/auth/start-email-registration |  |
 | [**startPhoneRegistration**](AuthService.md#startPhoneRegistration) | **POST** /v1/user/auth/start-phone-registration |  |
@@ -19,13 +23,13 @@ All URIs are relative to *http://localhost*
 
 
 
-## loginByPassword
+## cancelAccount
 
-> LoginByPasswordReply loginByPassword(loginByPasswordRequest)
+> Object cancelAccount(cancelAccountRequest)
 
 
 
-使用密码登录账号。
+注销账号。
 
 ### Example
 
@@ -44,15 +48,15 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        LoginByPasswordRequest loginByPasswordRequest = new LoginByPasswordRequest(); // LoginByPasswordRequest | 
+        CancelAccountReq cancelAccountReq = new CancelAccountReq(); // CancelAccountReq | 
         try {
-            APIloginByPasswordRequest request = APIloginByPasswordRequest.newBuilder()
-                .loginByPasswordRequest(loginByPasswordRequest)
+            APIcancelAccountRequest request = APIcancelAccountRequest.newBuilder()
+                .cancelAccountReq(cancelAccountReq)
                 .build();
-            LoginByPasswordReply result = apiInstance.loginByPassword(request);
+            Object result = apiInstance.cancelAccount(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling AuthService#loginByPassword");
+            System.err.println("Exception when calling AuthService#cancelAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -66,11 +70,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| loginByPasswordRequest | [**APIloginByPasswordRequest**](AuthService.md#APIloginByPasswordRequest)|-|-|
+| cancelAccountRequest | [**APIcancelAccountRequest**](AuthService.md#APIcancelAccountRequest)|-|-|
 
 ### Return type
 
-[**LoginByPasswordReply**](LoginByPasswordReply.md)
+**Object**
 
 
 ### Authorization
@@ -87,13 +91,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## loginByPasswordWithHttpInfo
+## cancelAccountWithHttpInfo
 
-> ApiResponse<LoginByPasswordReply> loginByPasswordWithHttpInfo(loginByPasswordRequest)
+> ApiResponse<Object> cancelAccountWithHttpInfo(cancelAccountRequest)
 
 
 
-使用密码登录账号。
+注销账号。
 
 ### Example
 
@@ -113,17 +117,17 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        LoginByPasswordRequest loginByPasswordRequest = new LoginByPasswordRequest(); // LoginByPasswordRequest | 
+        CancelAccountReq cancelAccountReq = new CancelAccountReq(); // CancelAccountReq | 
         try {
-            APIloginByPasswordRequest request = APIloginByPasswordRequest.newBuilder()
-                .loginByPasswordRequest(loginByPasswordRequest)
+            APIcancelAccountRequest request = APIcancelAccountRequest.newBuilder()
+                .cancelAccountReq(cancelAccountReq)
                 .build();
-            ApiResponse<LoginByPasswordReply> response = apiInstance.loginByPasswordWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.cancelAccountWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling AuthService#loginByPassword");
+            System.err.println("Exception when calling AuthService#cancelAccount");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -137,11 +141,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| loginByPasswordRequest | [**APIloginByPasswordRequest**](AuthService.md#APIloginByPasswordRequest)|-|-|
+| cancelAccountRequest | [**APIcancelAccountRequest**](AuthService.md#APIcancelAccountRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**LoginByPasswordReply**](LoginByPasswordReply.md)>
+ApiResponse<**Object**>
 
 
 ### Authorization
@@ -159,13 +163,163 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIloginByPasswordRequest"></a>
-## APIloginByPasswordRequest
+<a id="APIcancelAccountRequest"></a>
+## APIcancelAccountRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **loginByPasswordRequest** | [**LoginByPasswordRequest**](LoginByPasswordRequest.md) |  | |
+| **cancelAccountReq** | [**CancelAccountReq**](CancelAccountReq.md) |  | |
+
+
+
+## login
+
+> LoginResp login(loginRequest)
+
+
+
+登录账号。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        LoginReq loginReq = new LoginReq(); // LoginReq | 
+        try {
+            APIloginRequest request = APIloginRequest.newBuilder()
+                .loginReq(loginReq)
+                .build();
+            LoginResp result = apiInstance.login(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#login");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| loginRequest | [**APIloginRequest**](AuthService.md#APIloginRequest)|-|-|
+
+### Return type
+
+[**LoginResp**](LoginResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## loginWithHttpInfo
+
+> ApiResponse<LoginResp> loginWithHttpInfo(loginRequest)
+
+
+
+登录账号。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        LoginReq loginReq = new LoginReq(); // LoginReq | 
+        try {
+            APIloginRequest request = APIloginRequest.newBuilder()
+                .loginReq(loginReq)
+                .build();
+            ApiResponse<LoginResp> response = apiInstance.loginWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#login");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| loginRequest | [**APIloginRequest**](AuthService.md#APIloginRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**LoginResp**](LoginResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIloginRequest"></a>
+## APIloginRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **loginReq** | [**LoginReq**](LoginReq.md) |  | |
 
 
 
@@ -175,7 +329,7 @@ No authorization required
 
 
 
-登出当前账号。
+退出登录。
 
 ### Example
 
@@ -243,7 +397,7 @@ No authorization required
 
 
 
-登出当前账号。
+退出登录。
 
 ### Example
 
@@ -319,13 +473,13 @@ No authorization required
 
 
 
-## startEmailRegistration
+## refreshToken
 
-> StartEmailRegistrationReply startEmailRegistration(startEmailRegistrationRequest)
+> RefreshTokenResp refreshToken(refreshTokenRequest)
 
 
 
-使用邮箱发起账号注册。
+刷新登录令牌。
 
 ### Example
 
@@ -344,12 +498,162 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        StartEmailRegistrationRequest startEmailRegistrationRequest = new StartEmailRegistrationRequest(); // StartEmailRegistrationRequest | 
+        RefreshTokenReq refreshTokenReq = new RefreshTokenReq(); // RefreshTokenReq | 
+        try {
+            APIrefreshTokenRequest request = APIrefreshTokenRequest.newBuilder()
+                .refreshTokenReq(refreshTokenReq)
+                .build();
+            RefreshTokenResp result = apiInstance.refreshToken(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#refreshToken");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| refreshTokenRequest | [**APIrefreshTokenRequest**](AuthService.md#APIrefreshTokenRequest)|-|-|
+
+### Return type
+
+[**RefreshTokenResp**](RefreshTokenResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## refreshTokenWithHttpInfo
+
+> ApiResponse<RefreshTokenResp> refreshTokenWithHttpInfo(refreshTokenRequest)
+
+
+
+刷新登录令牌。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        RefreshTokenReq refreshTokenReq = new RefreshTokenReq(); // RefreshTokenReq | 
+        try {
+            APIrefreshTokenRequest request = APIrefreshTokenRequest.newBuilder()
+                .refreshTokenReq(refreshTokenReq)
+                .build();
+            ApiResponse<RefreshTokenResp> response = apiInstance.refreshTokenWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#refreshToken");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| refreshTokenRequest | [**APIrefreshTokenRequest**](AuthService.md#APIrefreshTokenRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**RefreshTokenResp**](RefreshTokenResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIrefreshTokenRequest"></a>
+## APIrefreshTokenRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **refreshTokenReq** | [**RefreshTokenReq**](RefreshTokenReq.md) |  | |
+
+
+
+## startEmailRegistration
+
+> StartEmailRegistrationResp startEmailRegistration(startEmailRegistrationRequest)
+
+
+
+开始邮箱注册。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        StartEmailRegistrationReq startEmailRegistrationReq = new StartEmailRegistrationReq(); // StartEmailRegistrationReq | 
         try {
             APIstartEmailRegistrationRequest request = APIstartEmailRegistrationRequest.newBuilder()
-                .startEmailRegistrationRequest(startEmailRegistrationRequest)
+                .startEmailRegistrationReq(startEmailRegistrationReq)
                 .build();
-            StartEmailRegistrationReply result = apiInstance.startEmailRegistration(request);
+            StartEmailRegistrationResp result = apiInstance.startEmailRegistration(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling AuthService#startEmailRegistration");
@@ -370,7 +674,7 @@ public class Example {
 
 ### Return type
 
-[**StartEmailRegistrationReply**](StartEmailRegistrationReply.md)
+[**StartEmailRegistrationResp**](StartEmailRegistrationResp.md)
 
 
 ### Authorization
@@ -389,11 +693,11 @@ No authorization required
 
 ## startEmailRegistrationWithHttpInfo
 
-> ApiResponse<StartEmailRegistrationReply> startEmailRegistrationWithHttpInfo(startEmailRegistrationRequest)
+> ApiResponse<StartEmailRegistrationResp> startEmailRegistrationWithHttpInfo(startEmailRegistrationRequest)
 
 
 
-使用邮箱发起账号注册。
+开始邮箱注册。
 
 ### Example
 
@@ -413,12 +717,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        StartEmailRegistrationRequest startEmailRegistrationRequest = new StartEmailRegistrationRequest(); // StartEmailRegistrationRequest | 
+        StartEmailRegistrationReq startEmailRegistrationReq = new StartEmailRegistrationReq(); // StartEmailRegistrationReq | 
         try {
             APIstartEmailRegistrationRequest request = APIstartEmailRegistrationRequest.newBuilder()
-                .startEmailRegistrationRequest(startEmailRegistrationRequest)
+                .startEmailRegistrationReq(startEmailRegistrationReq)
                 .build();
-            ApiResponse<StartEmailRegistrationReply> response = apiInstance.startEmailRegistrationWithHttpInfo(request);
+            ApiResponse<StartEmailRegistrationResp> response = apiInstance.startEmailRegistrationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -441,7 +745,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**StartEmailRegistrationReply**](StartEmailRegistrationReply.md)>
+ApiResponse<[**StartEmailRegistrationResp**](StartEmailRegistrationResp.md)>
 
 
 ### Authorization
@@ -465,17 +769,17 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **startEmailRegistrationRequest** | [**StartEmailRegistrationRequest**](StartEmailRegistrationRequest.md) |  | |
+| **startEmailRegistrationReq** | [**StartEmailRegistrationReq**](StartEmailRegistrationReq.md) |  | |
 
 
 
 ## startPhoneRegistration
 
-> StartPhoneRegistrationReply startPhoneRegistration(startPhoneRegistrationRequest)
+> StartPhoneRegistrationResp startPhoneRegistration(startPhoneRegistrationRequest)
 
 
 
-使用手机号发起账号注册。
+开始手机注册。
 
 ### Example
 
@@ -494,12 +798,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        StartPhoneRegistrationRequest startPhoneRegistrationRequest = new StartPhoneRegistrationRequest(); // StartPhoneRegistrationRequest | 
+        StartPhoneRegistrationReq startPhoneRegistrationReq = new StartPhoneRegistrationReq(); // StartPhoneRegistrationReq | 
         try {
             APIstartPhoneRegistrationRequest request = APIstartPhoneRegistrationRequest.newBuilder()
-                .startPhoneRegistrationRequest(startPhoneRegistrationRequest)
+                .startPhoneRegistrationReq(startPhoneRegistrationReq)
                 .build();
-            StartPhoneRegistrationReply result = apiInstance.startPhoneRegistration(request);
+            StartPhoneRegistrationResp result = apiInstance.startPhoneRegistration(request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling AuthService#startPhoneRegistration");
@@ -520,7 +824,7 @@ public class Example {
 
 ### Return type
 
-[**StartPhoneRegistrationReply**](StartPhoneRegistrationReply.md)
+[**StartPhoneRegistrationResp**](StartPhoneRegistrationResp.md)
 
 
 ### Authorization
@@ -539,11 +843,11 @@ No authorization required
 
 ## startPhoneRegistrationWithHttpInfo
 
-> ApiResponse<StartPhoneRegistrationReply> startPhoneRegistrationWithHttpInfo(startPhoneRegistrationRequest)
+> ApiResponse<StartPhoneRegistrationResp> startPhoneRegistrationWithHttpInfo(startPhoneRegistrationRequest)
 
 
 
-使用手机号发起账号注册。
+开始手机注册。
 
 ### Example
 
@@ -563,12 +867,12 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        StartPhoneRegistrationRequest startPhoneRegistrationRequest = new StartPhoneRegistrationRequest(); // StartPhoneRegistrationRequest | 
+        StartPhoneRegistrationReq startPhoneRegistrationReq = new StartPhoneRegistrationReq(); // StartPhoneRegistrationReq | 
         try {
             APIstartPhoneRegistrationRequest request = APIstartPhoneRegistrationRequest.newBuilder()
-                .startPhoneRegistrationRequest(startPhoneRegistrationRequest)
+                .startPhoneRegistrationReq(startPhoneRegistrationReq)
                 .build();
-            ApiResponse<StartPhoneRegistrationReply> response = apiInstance.startPhoneRegistrationWithHttpInfo(request);
+            ApiResponse<StartPhoneRegistrationResp> response = apiInstance.startPhoneRegistrationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
@@ -591,7 +895,7 @@ public class Example {
 
 ### Return type
 
-ApiResponse<[**StartPhoneRegistrationReply**](StartPhoneRegistrationReply.md)>
+ApiResponse<[**StartPhoneRegistrationResp**](StartPhoneRegistrationResp.md)>
 
 
 ### Authorization
@@ -615,7 +919,7 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **startPhoneRegistrationRequest** | [**StartPhoneRegistrationRequest**](StartPhoneRegistrationRequest.md) |  | |
+| **startPhoneRegistrationReq** | [**StartPhoneRegistrationReq**](StartPhoneRegistrationReq.md) |  | |
 
 
 
@@ -644,10 +948,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        VerifyEmailRegistrationRequest verifyEmailRegistrationRequest = new VerifyEmailRegistrationRequest(); // VerifyEmailRegistrationRequest | 
+        VerifyEmailRegistrationReq verifyEmailRegistrationReq = new VerifyEmailRegistrationReq(); // VerifyEmailRegistrationReq | 
         try {
             APIverifyEmailRegistrationRequest request = APIverifyEmailRegistrationRequest.newBuilder()
-                .verifyEmailRegistrationRequest(verifyEmailRegistrationRequest)
+                .verifyEmailRegistrationReq(verifyEmailRegistrationReq)
                 .build();
             Object result = apiInstance.verifyEmailRegistration(request);
             System.out.println(result);
@@ -713,10 +1017,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        VerifyEmailRegistrationRequest verifyEmailRegistrationRequest = new VerifyEmailRegistrationRequest(); // VerifyEmailRegistrationRequest | 
+        VerifyEmailRegistrationReq verifyEmailRegistrationReq = new VerifyEmailRegistrationReq(); // VerifyEmailRegistrationReq | 
         try {
             APIverifyEmailRegistrationRequest request = APIverifyEmailRegistrationRequest.newBuilder()
-                .verifyEmailRegistrationRequest(verifyEmailRegistrationRequest)
+                .verifyEmailRegistrationReq(verifyEmailRegistrationReq)
                 .build();
             ApiResponse<Object> response = apiInstance.verifyEmailRegistrationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
@@ -765,7 +1069,7 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **verifyEmailRegistrationRequest** | [**VerifyEmailRegistrationRequest**](VerifyEmailRegistrationRequest.md) |  | |
+| **verifyEmailRegistrationReq** | [**VerifyEmailRegistrationReq**](VerifyEmailRegistrationReq.md) |  | |
 
 
 
@@ -775,7 +1079,7 @@ No authorization required
 
 
 
-校验手机号注册验证码。
+校验手机注册验证码。
 
 ### Example
 
@@ -794,10 +1098,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        VerifyPhoneRegistrationRequest verifyPhoneRegistrationRequest = new VerifyPhoneRegistrationRequest(); // VerifyPhoneRegistrationRequest | 
+        VerifyPhoneRegistrationReq verifyPhoneRegistrationReq = new VerifyPhoneRegistrationReq(); // VerifyPhoneRegistrationReq | 
         try {
             APIverifyPhoneRegistrationRequest request = APIverifyPhoneRegistrationRequest.newBuilder()
-                .verifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest)
+                .verifyPhoneRegistrationReq(verifyPhoneRegistrationReq)
                 .build();
             Object result = apiInstance.verifyPhoneRegistration(request);
             System.out.println(result);
@@ -843,7 +1147,7 @@ No authorization required
 
 
 
-校验手机号注册验证码。
+校验手机注册验证码。
 
 ### Example
 
@@ -863,10 +1167,10 @@ public class Example {
         defaultClient.setBasePath("http://localhost");
 
         AuthService apiInstance = new AuthService(defaultClient);
-        VerifyPhoneRegistrationRequest verifyPhoneRegistrationRequest = new VerifyPhoneRegistrationRequest(); // VerifyPhoneRegistrationRequest | 
+        VerifyPhoneRegistrationReq verifyPhoneRegistrationReq = new VerifyPhoneRegistrationReq(); // VerifyPhoneRegistrationReq | 
         try {
             APIverifyPhoneRegistrationRequest request = APIverifyPhoneRegistrationRequest.newBuilder()
-                .verifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest)
+                .verifyPhoneRegistrationReq(verifyPhoneRegistrationReq)
                 .build();
             ApiResponse<Object> response = apiInstance.verifyPhoneRegistrationWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
@@ -915,6 +1219,6 @@ No authorization required
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **verifyPhoneRegistrationRequest** | [**VerifyPhoneRegistrationRequest**](VerifyPhoneRegistrationRequest.md) |  | |
+| **verifyPhoneRegistrationReq** | [**VerifyPhoneRegistrationReq**](VerifyPhoneRegistrationReq.md) |  | |
 
 

@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 package kratos.api.config;
 
 import "common/config.proto";
@@ -37,6 +37,7 @@ message Business {
     google.protobuf.Duration access_token_ttl = 2; // access token 有效期，例如 900s 表示 15min。
     google.protobuf.Duration refresh_token_ttl = 3; // refresh token 空闲有效期，例如 2592000s 表示 30d。
     google.protobuf.Duration session_ttl = 4; // session 最长生命周期，例如 15552000s 表示 180d。
+    int32 max_sessions = 5; // 同一用户同一 realm 最大 session 数，未配置或小于等于 0 时默认 5。
   }
 
   message VerificationCode {

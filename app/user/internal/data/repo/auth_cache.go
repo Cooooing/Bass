@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -24,7 +25,9 @@ type AuthCacheRepo struct {
 	authOtpUserKey         string
 	authRegisterDraftKey   string
 	authRefreshSessionKey  string
+	authRefreshSessionHead string
 	authUserSessionsKey    string
+	authUserSessionsScan   string
 	authRbacPermissionsKey string
 }
 
@@ -36,8 +39,10 @@ func NewAuthCacheRepo(
 		authOtpGuestKey:        "Auth:Otp:%s:guest:%s",
 		authOtpUserKey:         "Auth:Otp:%s:user:%d:%s",
 		authRegisterDraftKey:   "Auth:RegisterDraft:{%s}:{%s}",
-		authRefreshSessionKey:  "Auth:Refresh:{%s}",
-		authUserSessionsKey:    "Auth:UserSessions:{%d}",
+		authRefreshSessionKey:  "Auth:Refresh:{%s}:{%s}",
+		authRefreshSessionHead: "Auth:Refresh:{%s}:",
+		authUserSessionsKey:    "Auth:UserSessions:{%s}:{%d}",
+		authUserSessionsScan:   "Auth:UserSessions:*:{%d}",
 		authRbacPermissionsKey: "Auth:Rbac:{%s}:{%d}",
 	}
 }
@@ -53,12 +58,20 @@ func (r *AuthCacheRepo) authRegisterDraftRedisKey(draftType enum.VerificationTyp
 	return fmt.Sprintf(r.authRegisterDraftKey, draftType.String(), account)
 }
 
-func (r *AuthCacheRepo) authRefreshSessionRedisKey(sessionID string) string {
-	return fmt.Sprintf(r.authRefreshSessionKey, sessionID)
+func (r *AuthCacheRepo) authRefreshSessionRedisKey(realm commonenum.LoginRealm, sessionID string) string {
+	return fmt.Sprintf(r.authRefreshSessionKey, realm.String(), sessionID)
 }
 
-func (r *AuthCacheRepo) authUserSessionsRedisKey(userID int64) string {
-	return fmt.Sprintf(r.authUserSessionsKey, userID)
+func (r *AuthCacheRepo) authRefreshSessionRedisHead(realm commonenum.LoginRealm) string {
+	return fmt.Sprintf(r.authRefreshSessionHead, realm.String())
+}
+
+func (r *AuthCacheRepo) authUserSessionsRedisKey(realm commonenum.LoginRealm, userID int64) string {
+	return fmt.Sprintf(r.authUserSessionsKey, realm.String(), userID)
+}
+
+func (r *AuthCacheRepo) authUserSessionsRedisScan(userID int64) string {
+	return fmt.Sprintf(r.authUserSessionsScan, userID)
 }
 
 func (r *AuthCacheRepo) authRbacPermissionsRedisKey(realm string, userID int64) string {
@@ -190,16 +203,41 @@ func (r *AuthCacheRepo) DeleteRegisterDraft(ctx context.Context, draftType enum.
 	return r.redisClient.Client.Del(ctx, r.authRegisterDraftRedisKey(draftType, account)).Err()
 }
 
-func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration) error {
+func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration, maxSessions int) error {
 	if session == nil || session.CreatedAt == nil || session.LastSeenAt == nil || session.SessionExpiresAt == nil {
 		return errors.New("refresh session time is required")
 	}
-	key := r.authRefreshSessionRedisKey(session.SessionID)
+	key := r.authRefreshSessionRedisKey(session.Realm, session.SessionID)
 	expiresAt := time.Now().Add(ttl)
-	pipe := r.redisClient.Client.TxPipeline()
-	pipe.HSet(
+	script := redis.NewScript(`
+redis.call('HSET', KEYS[1], unpack(ARGV, 7))
+redis.call('PEXPIRE', KEYS[1], ARGV[1])
+redis.call('ZREMRANGEBYSCORE', KEYS[2], '-inf', ARGV[6])
+redis.call('ZADD', KEYS[2], ARGV[2], ARGV[3])
+local max_sessions = tonumber(ARGV[4])
+if max_sessions and max_sessions > 0 then
+  local count = redis.call('ZCARD', KEYS[2])
+  if count > max_sessions then
+    local overflow = count - max_sessions
+    local sids = redis.call('ZRANGE', KEYS[2], 0, overflow - 1)
+    for _, sid in ipairs(sids) do
+      redis.call('DEL', ARGV[5] .. '{' .. sid .. '}')
+      redis.call('ZREM', KEYS[2], sid)
+    end
+  end
+end
+return 1
+`)
+	return script.Run(
 		ctx,
-		key,
+		r.redisClient.Client,
+		[]string{key, r.authUserSessionsRedisKey(session.Realm, session.UserID)},
+		strconv.FormatInt(ttl.Milliseconds(), 10),
+		strconv.FormatInt(expiresAt.Unix(), 10),
+		session.SessionID,
+		strconv.FormatInt(int64(maxSessions), 10),
+		r.authRefreshSessionRedisHead(session.Realm),
+		strconv.FormatInt(time.Now().Unix(), 10),
 		"user_id",
 		strconv.FormatInt(session.UserID, 10),
 		"realm",
@@ -230,18 +268,11 @@ func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshS
 		session.Client.AppVersion,
 		"user_agent",
 		session.Client.UserAgent,
-	)
-	pipe.Expire(ctx, key, ttl)
-	pipe.ZAdd(ctx, r.authUserSessionsRedisKey(session.UserID), redis.Z{
-		Score:  float64(expiresAt.Unix()),
-		Member: session.SessionID,
-	})
-	_, err := pipe.Exec(ctx)
-	return err
+	).Err()
 }
 
-func (r *AuthCacheRepo) GetSession(ctx context.Context, sessionID string) (*model.RefreshSession, error) {
-	values, err := r.redisClient.Client.HGetAll(ctx, r.authRefreshSessionRedisKey(sessionID)).Result()
+func (r *AuthCacheRepo) GetSession(ctx context.Context, realm commonenum.LoginRealm, sessionID string) (*model.RefreshSession, error) {
+	values, err := r.redisClient.Client.HGetAll(ctx, r.authRefreshSessionRedisKey(realm, sessionID)).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -290,12 +321,12 @@ func (r *AuthCacheRepo) TouchSession(ctx context.Context, session *model.Refresh
 	if session == nil || session.LastSeenAt == nil {
 		return errors.New("refresh session last_seen_at is required")
 	}
-	key := r.authRefreshSessionRedisKey(session.SessionID)
+	key := r.authRefreshSessionRedisKey(session.Realm, session.SessionID)
 	expiresAt := time.Now().Add(ttl)
 	pipe := r.redisClient.Client.TxPipeline()
 	pipe.HSet(ctx, key, "last_seen_at", session.LastSeenAt.Format(time.RFC3339Nano))
 	pipe.Expire(ctx, key, ttl)
-	pipe.ZAdd(ctx, r.authUserSessionsRedisKey(session.UserID), redis.Z{
+	pipe.ZAdd(ctx, r.authUserSessionsRedisKey(session.Realm, session.UserID), redis.Z{
 		Score:  float64(expiresAt.Unix()),
 		Member: session.SessionID,
 	})
@@ -303,11 +334,11 @@ func (r *AuthCacheRepo) TouchSession(ctx context.Context, session *model.Refresh
 	return err
 }
 
-func (r *AuthCacheRepo) RotateSessionJTI(ctx context.Context, sessionID string, oldJTI string, newJTI string, lastSeenAt *time.Time, ttl time.Duration) (bool, error) {
+func (r *AuthCacheRepo) RotateSessionJTI(ctx context.Context, realm commonenum.LoginRealm, sessionID string, oldJTI string, newJTI string, lastSeenAt *time.Time, ttl time.Duration) (bool, error) {
 	if lastSeenAt == nil {
 		return false, errors.New("refresh session last_seen_at is required")
 	}
-	key := r.authRefreshSessionRedisKey(sessionID)
+	key := r.authRefreshSessionRedisKey(realm, sessionID)
 	script := redis.NewScript(`
 local current = redis.call('HGET', KEYS[1], 'current_jti')
 if not current then
@@ -330,31 +361,53 @@ return 1
 	return result == 1, nil
 }
 
-func (r *AuthCacheRepo) DeleteSession(ctx context.Context, userID int64, sessionID string) error {
+func (r *AuthCacheRepo) DeleteSession(ctx context.Context, realm commonenum.LoginRealm, userID int64, sessionID string) error {
 	pipe := r.redisClient.Client.TxPipeline()
-	pipe.Del(ctx, r.authRefreshSessionRedisKey(sessionID))
+	pipe.Del(ctx, r.authRefreshSessionRedisKey(realm, sessionID))
 	if userID > 0 {
-		pipe.ZRem(ctx, r.authUserSessionsRedisKey(userID), sessionID)
+		pipe.ZRem(ctx, r.authUserSessionsRedisKey(realm, userID), sessionID)
 	}
 	_, err := pipe.Exec(ctx)
 	return err
 }
 
 func (r *AuthCacheRepo) DeleteUserSessions(ctx context.Context, userID int64) error {
-	indexKey := r.authUserSessionsRedisKey(userID)
-	sids, err := r.redisClient.Client.ZRange(ctx, indexKey, 0, -1).Result()
-	if err != nil {
-		return err
+	var cursor uint64
+	for {
+		indexKeys, next, err := r.redisClient.Client.Scan(ctx, cursor, r.authUserSessionsRedisScan(userID), 100).Result()
+		if err != nil {
+			return err
+		}
+		for _, indexKey := range indexKeys {
+			sids, err := r.redisClient.Client.ZRange(ctx, indexKey, 0, -1).Result()
+			if err != nil {
+				return err
+			}
+			realm := ""
+			if strings.HasPrefix(indexKey, "Auth:UserSessions:{") {
+				value := strings.TrimPrefix(indexKey, "Auth:UserSessions:{")
+				end := strings.Index(value, "}")
+				if end > 0 {
+					realm = value[:end]
+				}
+			}
+			pipe := r.redisClient.Client.TxPipeline()
+			if realm != "" {
+				for _, sid := range sids {
+					pipe.Del(ctx, r.authRefreshSessionRedisKey(commonenum.LoginRealm(realm), sid))
+				}
+			}
+			pipe.Del(ctx, indexKey)
+			if _, err = pipe.Exec(ctx); err != nil {
+				return err
+			}
+		}
+		if next == 0 {
+			return nil
+		}
+		cursor = next
 	}
-	pipe := r.redisClient.Client.TxPipeline()
-	for _, sid := range sids {
-		pipe.Del(ctx, r.authRefreshSessionRedisKey(sid))
-	}
-	pipe.Del(ctx, indexKey)
-	_, err = pipe.Exec(ctx)
-	return err
 }
-
 func (r *AuthCacheRepo) SaveRbacPermissions(ctx context.Context, realm string, userID int64, permissions []string, ttl time.Duration) error {
 	data, err := json.Marshal(permissions)
 	if err != nil {

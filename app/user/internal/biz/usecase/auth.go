@@ -479,7 +479,11 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 	if refreshTokenTTL := s.tokenUsecase.RefreshTokenTTL(); refreshTokenTTL < sessionRedisTTL {
 		sessionRedisTTL = refreshTokenTTL
 	}
-	if err := s.authCacheRepo.SaveSession(ctx, session, sessionRedisTTL); err != nil {
+	maxSessions := int(s.conf.GetBusiness().GetAuth().GetSession().GetMaxSessions())
+	if maxSessions <= 0 {
+		maxSessions = 5
+	}
+	if err := s.authCacheRepo.SaveSession(ctx, session, sessionRedisTTL, maxSessions); err != nil {
 		audit.FailureReason = new(enum.LoginFailureReasonInternal)
 		return nil, err
 	}
@@ -539,7 +543,7 @@ func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, rea
 	if err != nil || claims.Type != enum.TokenTypeRefresh || claims.Realm != realm || claims.SessionID == "" || claims.JTI == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
-	session, err := s.authCacheRepo.GetSession(ctx, claims.SessionID)
+	session, err := s.authCacheRepo.GetSession(ctx, realm, claims.SessionID)
 	if err != nil {
 		return nil, err
 	}
@@ -561,7 +565,7 @@ func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, rea
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
 	if session.CurrentJTI != claims.JTI {
-		_ = s.authCacheRepo.DeleteSession(ctx, claims.UserID, claims.SessionID)
+		_ = s.authCacheRepo.DeleteSession(ctx, realm, claims.UserID, claims.SessionID)
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
 	newJTI := uuid.NewString()
@@ -572,12 +576,12 @@ func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, rea
 	if refreshTokenTTL := s.tokenUsecase.RefreshTokenTTL(); refreshTokenTTL < sessionRedisTTL {
 		sessionRedisTTL = refreshTokenTTL
 	}
-	rotated, err := s.authCacheRepo.RotateSessionJTI(ctx, claims.SessionID, claims.JTI, newJTI, new(now), sessionRedisTTL)
+	rotated, err := s.authCacheRepo.RotateSessionJTI(ctx, realm, claims.SessionID, claims.JTI, newJTI, new(now), sessionRedisTTL)
 	if err != nil {
 		return nil, err
 	}
 	if !rotated {
-		_ = s.authCacheRepo.DeleteSession(ctx, claims.UserID, claims.SessionID)
+		_ = s.authCacheRepo.DeleteSession(ctx, realm, claims.UserID, claims.SessionID)
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
 	session.CurrentJTI = newJTI
@@ -646,7 +650,7 @@ func (s *AuthUsecase) Logout(ctx context.Context, accessToken string, realm comm
 	if err != nil || claims.Type != enum.TokenTypeAccess || claims.Realm != realm || claims.SessionID == "" {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
-	if err := s.authCacheRepo.DeleteSession(ctx, claims.UserID, claims.SessionID); err != nil {
+	if err := s.authCacheRepo.DeleteSession(ctx, realm, claims.UserID, claims.SessionID); err != nil {
 		return err
 	}
 	outboxEvent, err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
@@ -690,7 +694,7 @@ func (s *AuthUsecase) ParseToken(ctx context.Context, accessToken string, realm 
 	if err != nil || claims.Type != enum.TokenTypeAccess || claims.Realm != realm || claims.SessionID == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_INVALID)
 	}
-	session, err := s.authCacheRepo.GetSession(ctx, claims.SessionID)
+	session, err := s.authCacheRepo.GetSession(ctx, realm, claims.SessionID)
 	if err != nil {
 		return nil, err
 	}

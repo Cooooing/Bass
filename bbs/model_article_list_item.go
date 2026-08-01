@@ -12,12 +12,13 @@ package bbs
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // checks if the ArticleListItem type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticleListItem{}
 
-// ArticleListItem 文章列表项。
+// ArticleListItem struct for ArticleListItem
 type ArticleListItem struct {
 	Id *string `json:"id,omitempty"`
 	Title *string `json:"title,omitempty"`
@@ -28,29 +29,26 @@ type ArticleListItem struct {
 	Type *string `json:"type,omitempty"`
 	Statement *string `json:"statement,omitempty"`
 	Commentable *bool `json:"commentable,omitempty"`
-	Anonymous *bool `json:"anonymous,omitempty"`
 	ViewCount *int32 `json:"view_count,omitempty"`
 	ThankCount *int32 `json:"thank_count,omitempty"`
 	LikeCount *int32 `json:"like_count,omitempty"`
 	CollectCount *int32 `json:"collect_count,omitempty"`
-	WatchCount *int32 `json:"watch_count,omitempty"`
+	RewardCount *int32 `json:"reward_count,omitempty"`
 	ReplyCount *int32 `json:"reply_count,omitempty"`
-	BountyPoints *int32 `json:"bounty_points,omitempty"`
-	AcceptedAnswerId *string `json:"accepted_answer_id,omitempty"`
 	AuthorUser *AccountProfile `json:"author_user,omitempty"`
 	LastReplyUser *AccountProfile `json:"last_reply_user,omitempty"`
-	LastReplyAt *string `json:"last_reply_at,omitempty"`
+	LastReplyAt *time.Time `json:"last_reply_at,omitempty"`
 	CoverImageUrl *string `json:"cover_image_url,omitempty"`
 	ViewerActionState *ArticleViewerActionState `json:"viewer_action_state,omitempty"`
-	PublishedAt *string `json:"published_at,omitempty"`
+	PublishedAt *time.Time `json:"published_at,omitempty"`
 	PublishStatus *string `json:"publish_status,omitempty"`
 	Visibility *string `json:"visibility,omitempty"`
 	Restriction *string `json:"restriction,omitempty"`
-	EditedAt *string `json:"edited_at,omitempty"`
+	EditedAt *time.Time `json:"edited_at,omitempty"`
 	CreatedBy *string `json:"created_by,omitempty"`
 	UpdatedBy *string `json:"updated_by,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
-	UpdatedAt *string `json:"updated_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
 // NewArticleListItem instantiates a new ArticleListItem object
@@ -358,38 +356,6 @@ func (o *ArticleListItem) SetCommentable(v bool) {
 	o.Commentable = &v
 }
 
-// GetAnonymous returns the Anonymous field value if set, zero value otherwise.
-func (o *ArticleListItem) GetAnonymous() bool {
-	if o == nil || IsNil(o.Anonymous) {
-		var ret bool
-		return ret
-	}
-	return *o.Anonymous
-}
-
-// GetAnonymousOk returns a tuple with the Anonymous field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ArticleListItem) GetAnonymousOk() (*bool, bool) {
-	if o == nil || IsNil(o.Anonymous) {
-		return nil, false
-	}
-	return o.Anonymous, true
-}
-
-// HasAnonymous returns a boolean if a field has been set.
-func (o *ArticleListItem) HasAnonymous() bool {
-	if o != nil && !IsNil(o.Anonymous) {
-		return true
-	}
-
-	return false
-}
-
-// SetAnonymous gets a reference to the given bool and assigns it to the Anonymous field.
-func (o *ArticleListItem) SetAnonymous(v bool) {
-	o.Anonymous = &v
-}
-
 // GetViewCount returns the ViewCount field value if set, zero value otherwise.
 func (o *ArticleListItem) GetViewCount() int32 {
 	if o == nil || IsNil(o.ViewCount) {
@@ -518,36 +484,36 @@ func (o *ArticleListItem) SetCollectCount(v int32) {
 	o.CollectCount = &v
 }
 
-// GetWatchCount returns the WatchCount field value if set, zero value otherwise.
-func (o *ArticleListItem) GetWatchCount() int32 {
-	if o == nil || IsNil(o.WatchCount) {
+// GetRewardCount returns the RewardCount field value if set, zero value otherwise.
+func (o *ArticleListItem) GetRewardCount() int32 {
+	if o == nil || IsNil(o.RewardCount) {
 		var ret int32
 		return ret
 	}
-	return *o.WatchCount
+	return *o.RewardCount
 }
 
-// GetWatchCountOk returns a tuple with the WatchCount field value if set, nil otherwise
+// GetRewardCountOk returns a tuple with the RewardCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ArticleListItem) GetWatchCountOk() (*int32, bool) {
-	if o == nil || IsNil(o.WatchCount) {
+func (o *ArticleListItem) GetRewardCountOk() (*int32, bool) {
+	if o == nil || IsNil(o.RewardCount) {
 		return nil, false
 	}
-	return o.WatchCount, true
+	return o.RewardCount, true
 }
 
-// HasWatchCount returns a boolean if a field has been set.
-func (o *ArticleListItem) HasWatchCount() bool {
-	if o != nil && !IsNil(o.WatchCount) {
+// HasRewardCount returns a boolean if a field has been set.
+func (o *ArticleListItem) HasRewardCount() bool {
+	if o != nil && !IsNil(o.RewardCount) {
 		return true
 	}
 
 	return false
 }
 
-// SetWatchCount gets a reference to the given int32 and assigns it to the WatchCount field.
-func (o *ArticleListItem) SetWatchCount(v int32) {
-	o.WatchCount = &v
+// SetRewardCount gets a reference to the given int32 and assigns it to the RewardCount field.
+func (o *ArticleListItem) SetRewardCount(v int32) {
+	o.RewardCount = &v
 }
 
 // GetReplyCount returns the ReplyCount field value if set, zero value otherwise.
@@ -580,70 +546,6 @@ func (o *ArticleListItem) HasReplyCount() bool {
 // SetReplyCount gets a reference to the given int32 and assigns it to the ReplyCount field.
 func (o *ArticleListItem) SetReplyCount(v int32) {
 	o.ReplyCount = &v
-}
-
-// GetBountyPoints returns the BountyPoints field value if set, zero value otherwise.
-func (o *ArticleListItem) GetBountyPoints() int32 {
-	if o == nil || IsNil(o.BountyPoints) {
-		var ret int32
-		return ret
-	}
-	return *o.BountyPoints
-}
-
-// GetBountyPointsOk returns a tuple with the BountyPoints field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ArticleListItem) GetBountyPointsOk() (*int32, bool) {
-	if o == nil || IsNil(o.BountyPoints) {
-		return nil, false
-	}
-	return o.BountyPoints, true
-}
-
-// HasBountyPoints returns a boolean if a field has been set.
-func (o *ArticleListItem) HasBountyPoints() bool {
-	if o != nil && !IsNil(o.BountyPoints) {
-		return true
-	}
-
-	return false
-}
-
-// SetBountyPoints gets a reference to the given int32 and assigns it to the BountyPoints field.
-func (o *ArticleListItem) SetBountyPoints(v int32) {
-	o.BountyPoints = &v
-}
-
-// GetAcceptedAnswerId returns the AcceptedAnswerId field value if set, zero value otherwise.
-func (o *ArticleListItem) GetAcceptedAnswerId() string {
-	if o == nil || IsNil(o.AcceptedAnswerId) {
-		var ret string
-		return ret
-	}
-	return *o.AcceptedAnswerId
-}
-
-// GetAcceptedAnswerIdOk returns a tuple with the AcceptedAnswerId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ArticleListItem) GetAcceptedAnswerIdOk() (*string, bool) {
-	if o == nil || IsNil(o.AcceptedAnswerId) {
-		return nil, false
-	}
-	return o.AcceptedAnswerId, true
-}
-
-// HasAcceptedAnswerId returns a boolean if a field has been set.
-func (o *ArticleListItem) HasAcceptedAnswerId() bool {
-	if o != nil && !IsNil(o.AcceptedAnswerId) {
-		return true
-	}
-
-	return false
-}
-
-// SetAcceptedAnswerId gets a reference to the given string and assigns it to the AcceptedAnswerId field.
-func (o *ArticleListItem) SetAcceptedAnswerId(v string) {
-	o.AcceptedAnswerId = &v
 }
 
 // GetAuthorUser returns the AuthorUser field value if set, zero value otherwise.
@@ -711,9 +613,9 @@ func (o *ArticleListItem) SetLastReplyUser(v AccountProfile) {
 }
 
 // GetLastReplyAt returns the LastReplyAt field value if set, zero value otherwise.
-func (o *ArticleListItem) GetLastReplyAt() string {
+func (o *ArticleListItem) GetLastReplyAt() time.Time {
 	if o == nil || IsNil(o.LastReplyAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.LastReplyAt
@@ -721,7 +623,7 @@ func (o *ArticleListItem) GetLastReplyAt() string {
 
 // GetLastReplyAtOk returns a tuple with the LastReplyAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ArticleListItem) GetLastReplyAtOk() (*string, bool) {
+func (o *ArticleListItem) GetLastReplyAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.LastReplyAt) {
 		return nil, false
 	}
@@ -737,8 +639,8 @@ func (o *ArticleListItem) HasLastReplyAt() bool {
 	return false
 }
 
-// SetLastReplyAt gets a reference to the given string and assigns it to the LastReplyAt field.
-func (o *ArticleListItem) SetLastReplyAt(v string) {
+// SetLastReplyAt gets a reference to the given time.Time and assigns it to the LastReplyAt field.
+func (o *ArticleListItem) SetLastReplyAt(v time.Time) {
 	o.LastReplyAt = &v
 }
 
@@ -807,9 +709,9 @@ func (o *ArticleListItem) SetViewerActionState(v ArticleViewerActionState) {
 }
 
 // GetPublishedAt returns the PublishedAt field value if set, zero value otherwise.
-func (o *ArticleListItem) GetPublishedAt() string {
+func (o *ArticleListItem) GetPublishedAt() time.Time {
 	if o == nil || IsNil(o.PublishedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.PublishedAt
@@ -817,7 +719,7 @@ func (o *ArticleListItem) GetPublishedAt() string {
 
 // GetPublishedAtOk returns a tuple with the PublishedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ArticleListItem) GetPublishedAtOk() (*string, bool) {
+func (o *ArticleListItem) GetPublishedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.PublishedAt) {
 		return nil, false
 	}
@@ -833,8 +735,8 @@ func (o *ArticleListItem) HasPublishedAt() bool {
 	return false
 }
 
-// SetPublishedAt gets a reference to the given string and assigns it to the PublishedAt field.
-func (o *ArticleListItem) SetPublishedAt(v string) {
+// SetPublishedAt gets a reference to the given time.Time and assigns it to the PublishedAt field.
+func (o *ArticleListItem) SetPublishedAt(v time.Time) {
 	o.PublishedAt = &v
 }
 
@@ -935,9 +837,9 @@ func (o *ArticleListItem) SetRestriction(v string) {
 }
 
 // GetEditedAt returns the EditedAt field value if set, zero value otherwise.
-func (o *ArticleListItem) GetEditedAt() string {
+func (o *ArticleListItem) GetEditedAt() time.Time {
 	if o == nil || IsNil(o.EditedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.EditedAt
@@ -945,7 +847,7 @@ func (o *ArticleListItem) GetEditedAt() string {
 
 // GetEditedAtOk returns a tuple with the EditedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ArticleListItem) GetEditedAtOk() (*string, bool) {
+func (o *ArticleListItem) GetEditedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.EditedAt) {
 		return nil, false
 	}
@@ -961,8 +863,8 @@ func (o *ArticleListItem) HasEditedAt() bool {
 	return false
 }
 
-// SetEditedAt gets a reference to the given string and assigns it to the EditedAt field.
-func (o *ArticleListItem) SetEditedAt(v string) {
+// SetEditedAt gets a reference to the given time.Time and assigns it to the EditedAt field.
+func (o *ArticleListItem) SetEditedAt(v time.Time) {
 	o.EditedAt = &v
 }
 
@@ -1031,9 +933,9 @@ func (o *ArticleListItem) SetUpdatedBy(v string) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *ArticleListItem) GetCreatedAt() string {
+func (o *ArticleListItem) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.CreatedAt
@@ -1041,7 +943,7 @@ func (o *ArticleListItem) GetCreatedAt() string {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ArticleListItem) GetCreatedAtOk() (*string, bool) {
+func (o *ArticleListItem) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -1057,15 +959,15 @@ func (o *ArticleListItem) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
-func (o *ArticleListItem) SetCreatedAt(v string) {
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *ArticleListItem) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *ArticleListItem) GetUpdatedAt() string {
+func (o *ArticleListItem) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.UpdatedAt
@@ -1073,7 +975,7 @@ func (o *ArticleListItem) GetUpdatedAt() string {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ArticleListItem) GetUpdatedAtOk() (*string, bool) {
+func (o *ArticleListItem) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -1089,8 +991,8 @@ func (o *ArticleListItem) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
-func (o *ArticleListItem) SetUpdatedAt(v string) {
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *ArticleListItem) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 
@@ -1131,9 +1033,6 @@ func (o ArticleListItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Commentable) {
 		toSerialize["commentable"] = o.Commentable
 	}
-	if !IsNil(o.Anonymous) {
-		toSerialize["anonymous"] = o.Anonymous
-	}
 	if !IsNil(o.ViewCount) {
 		toSerialize["view_count"] = o.ViewCount
 	}
@@ -1146,17 +1045,11 @@ func (o ArticleListItem) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CollectCount) {
 		toSerialize["collect_count"] = o.CollectCount
 	}
-	if !IsNil(o.WatchCount) {
-		toSerialize["watch_count"] = o.WatchCount
+	if !IsNil(o.RewardCount) {
+		toSerialize["reward_count"] = o.RewardCount
 	}
 	if !IsNil(o.ReplyCount) {
 		toSerialize["reply_count"] = o.ReplyCount
-	}
-	if !IsNil(o.BountyPoints) {
-		toSerialize["bounty_points"] = o.BountyPoints
-	}
-	if !IsNil(o.AcceptedAnswerId) {
-		toSerialize["accepted_answer_id"] = o.AcceptedAnswerId
 	}
 	if !IsNil(o.AuthorUser) {
 		toSerialize["author_user"] = o.AuthorUser

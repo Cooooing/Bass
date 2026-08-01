@@ -32,8 +32,8 @@ type PrivacySettingService interface {
 	GetCurrent(ctx context.Context) ApiGetCurrentRequest
 
 	// GetCurrentExecute executes the request
-	//  @return GetCurrentPrivacySettingReply
-	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentPrivacySettingReply, *http.Response, error)
+	//  @return GetCurrentPrivacySettingResp
+	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentPrivacySettingResp, *http.Response, error)
 
 	/*
 	UpdateCurrent Method for UpdateCurrent
@@ -46,8 +46,8 @@ type PrivacySettingService interface {
 	UpdateCurrent(ctx context.Context) ApiUpdateCurrentRequest
 
 	// UpdateCurrentExecute executes the request
-	//  @return UpdateCurrentPrivacySettingReply
-	UpdateCurrentExecute(r ApiUpdateCurrentRequest) (*UpdateCurrentPrivacySettingReply, *http.Response, error)
+	//  @return UpdateCurrentPrivacySettingResp
+	UpdateCurrentExecute(r ApiUpdateCurrentRequest) (*UpdateCurrentPrivacySettingResp, *http.Response, error)
 }
 
 // PrivacySettingServiceService PrivacySettingService service
@@ -64,7 +64,7 @@ func (r ApiGetCurrentRequest) Body(body map[string]interface{}) ApiGetCurrentReq
 	return r
 }
 
-func (r ApiGetCurrentRequest) Execute() (*GetCurrentPrivacySettingReply, *http.Response, error) {
+func (r ApiGetCurrentRequest) Execute() (*GetCurrentPrivacySettingResp, *http.Response, error) {
 	return r.ApiService.GetCurrentExecute(r)
 }
 
@@ -84,13 +84,13 @@ func (a *PrivacySettingServiceService) GetCurrent(ctx context.Context) ApiGetCur
 }
 
 // Execute executes the request
-//  @return GetCurrentPrivacySettingReply
-func (a *PrivacySettingServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentPrivacySettingReply, *http.Response, error) {
+//  @return GetCurrentPrivacySettingResp
+func (a *PrivacySettingServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentPrivacySettingResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetCurrentPrivacySettingReply
+		localVarReturnValue  *GetCurrentPrivacySettingResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PrivacySettingServiceService.GetCurrent")
@@ -166,15 +166,15 @@ func (a *PrivacySettingServiceService) GetCurrentExecute(r ApiGetCurrentRequest)
 type ApiUpdateCurrentRequest struct {
 	ctx context.Context
 	ApiService PrivacySettingService
-	updateCurrentPrivacySettingRequest *UpdateCurrentPrivacySettingRequest
+	updateCurrentPrivacySettingReq *UpdateCurrentPrivacySettingReq
 }
 
-func (r ApiUpdateCurrentRequest) UpdateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest UpdateCurrentPrivacySettingRequest) ApiUpdateCurrentRequest {
-	r.updateCurrentPrivacySettingRequest = &updateCurrentPrivacySettingRequest
+func (r ApiUpdateCurrentRequest) UpdateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq UpdateCurrentPrivacySettingReq) ApiUpdateCurrentRequest {
+	r.updateCurrentPrivacySettingReq = &updateCurrentPrivacySettingReq
 	return r
 }
 
-func (r ApiUpdateCurrentRequest) Execute() (*UpdateCurrentPrivacySettingReply, *http.Response, error) {
+func (r ApiUpdateCurrentRequest) Execute() (*UpdateCurrentPrivacySettingResp, *http.Response, error) {
 	return r.ApiService.UpdateCurrentExecute(r)
 }
 
@@ -194,13 +194,13 @@ func (a *PrivacySettingServiceService) UpdateCurrent(ctx context.Context) ApiUpd
 }
 
 // Execute executes the request
-//  @return UpdateCurrentPrivacySettingReply
-func (a *PrivacySettingServiceService) UpdateCurrentExecute(r ApiUpdateCurrentRequest) (*UpdateCurrentPrivacySettingReply, *http.Response, error) {
+//  @return UpdateCurrentPrivacySettingResp
+func (a *PrivacySettingServiceService) UpdateCurrentExecute(r ApiUpdateCurrentRequest) (*UpdateCurrentPrivacySettingResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *UpdateCurrentPrivacySettingReply
+		localVarReturnValue  *UpdateCurrentPrivacySettingResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PrivacySettingServiceService.UpdateCurrent")
@@ -213,8 +213,8 @@ func (a *PrivacySettingServiceService) UpdateCurrentExecute(r ApiUpdateCurrentRe
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.updateCurrentPrivacySettingRequest == nil {
-		return localVarReturnValue, nil, reportError("updateCurrentPrivacySettingRequest is required and must be specified")
+	if r.updateCurrentPrivacySettingReq == nil {
+		return localVarReturnValue, nil, reportError("updateCurrentPrivacySettingReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -235,7 +235,7 @@ func (a *PrivacySettingServiceService) UpdateCurrentExecute(r ApiUpdateCurrentRe
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.updateCurrentPrivacySettingRequest
+	localVarPostBody = r.updateCurrentPrivacySettingReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

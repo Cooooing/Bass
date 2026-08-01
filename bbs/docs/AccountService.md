@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 ## Avatar
 
-> ImageReply Avatar(ctx).Name(name).Execute()
+> ImageResp Avatar(ctx).Name(name).Execute()
 
 
 
@@ -32,7 +32,7 @@ import (
 )
 
 func main() {
-	name := "name_example" // string | 用于生成头像的账号名。 (optional)
+	name := "name_example" // string |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -41,7 +41,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.Avatar``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Avatar`: ImageReply
+	// response from `Avatar`: ImageResp
 	fmt.Fprintf(os.Stdout, "Response from `AccountService.Avatar`: %v\n", resp)
 }
 ```
@@ -57,11 +57,11 @@ Other parameters are passed through a pointer to a apiAvatarRequest struct via t
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **name** | **string** | 用于生成头像的账号名。 | 
+ **name** | **string** |  | 
 
 ### Return type
 
-[**ImageReply**](ImageReply.md)
+[**ImageResp**](ImageResp.md)
 
 ### Authorization
 
@@ -79,7 +79,7 @@ No authorization required
 
 ## GetCurrent
 
-> GetCurrentAccountReply GetCurrent(ctx).Body(body).Execute()
+> GetCurrentAccountResp GetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -107,7 +107,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.GetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetCurrent`: GetCurrentAccountReply
+	// response from `GetCurrent`: GetCurrentAccountResp
 	fmt.Fprintf(os.Stdout, "Response from `AccountService.GetCurrent`: %v\n", resp)
 }
 ```
@@ -127,7 +127,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCurrentAccountReply**](GetCurrentAccountReply.md)
+[**GetCurrentAccountResp**](GetCurrentAccountResp.md)
 
 ### Authorization
 
@@ -145,7 +145,7 @@ No authorization required
 
 ## GetProfile
 
-> GetProfileAccountReply GetProfile(ctx).GetProfileAccountRequest(getProfileAccountRequest).Execute()
+> GetProfileAccountResp GetProfile(ctx).GetProfileAccountReq(getProfileAccountReq).Execute()
 
 
 
@@ -164,16 +164,16 @@ import (
 )
 
 func main() {
-	getProfileAccountRequest := *openapiclient.NewGetProfileAccountRequest("UserId_example") // GetProfileAccountRequest | 
+	getProfileAccountReq := *openapiclient.NewGetProfileAccountReq("UserId_example") // GetProfileAccountReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AccountService.GetProfile(context.Background()).GetProfileAccountRequest(getProfileAccountRequest).Execute()
+	resp, r, err := apiClient.AccountService.GetProfile(context.Background()).GetProfileAccountReq(getProfileAccountReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.GetProfile``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetProfile`: GetProfileAccountReply
+	// response from `GetProfile`: GetProfileAccountResp
 	fmt.Fprintf(os.Stdout, "Response from `AccountService.GetProfile`: %v\n", resp)
 }
 ```
@@ -189,11 +189,11 @@ Other parameters are passed through a pointer to a apiGetProfileRequest struct v
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **getProfileAccountRequest** | [**GetProfileAccountRequest**](GetProfileAccountRequest.md) |  | 
+ **getProfileAccountReq** | [**GetProfileAccountReq**](GetProfileAccountReq.md) |  | 
 
 ### Return type
 
-[**GetProfileAccountReply**](GetProfileAccountReply.md)
+[**GetProfileAccountResp**](GetProfileAccountResp.md)
 
 ### Authorization
 
@@ -211,7 +211,7 @@ No authorization required
 
 ## UpdateProfile
 
-> UpdateProfileAccountReply UpdateProfile(ctx).UpdateProfileAccountRequest(updateProfileAccountRequest).Execute()
+> UpdateProfileAccountResp UpdateProfile(ctx).UpdateProfileAccountReq(updateProfileAccountReq).Execute()
 
 
 
@@ -230,16 +230,16 @@ import (
 )
 
 func main() {
-	updateProfileAccountRequest := *openapiclient.NewUpdateProfileAccountRequest() // UpdateProfileAccountRequest | 
+	updateProfileAccountReq := *openapiclient.NewUpdateProfileAccountReq() // UpdateProfileAccountReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AccountService.UpdateProfile(context.Background()).UpdateProfileAccountRequest(updateProfileAccountRequest).Execute()
+	resp, r, err := apiClient.AccountService.UpdateProfile(context.Background()).UpdateProfileAccountReq(updateProfileAccountReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.UpdateProfile``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UpdateProfile`: UpdateProfileAccountReply
+	// response from `UpdateProfile`: UpdateProfileAccountResp
 	fmt.Fprintf(os.Stdout, "Response from `AccountService.UpdateProfile`: %v\n", resp)
 }
 ```
@@ -255,11 +255,11 @@ Other parameters are passed through a pointer to a apiUpdateProfileRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **updateProfileAccountRequest** | [**UpdateProfileAccountRequest**](UpdateProfileAccountRequest.md) |  | 
+ **updateProfileAccountReq** | [**UpdateProfileAccountReq**](UpdateProfileAccountReq.md) |  | 
 
 ### Return type
 
-[**UpdateProfileAccountReply**](UpdateProfileAccountReply.md)
+[**UpdateProfileAccountResp**](UpdateProfileAccountResp.md)
 
 ### Authorization
 

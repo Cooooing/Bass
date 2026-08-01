@@ -32,8 +32,8 @@ type PreferencesService interface {
 	GetCurrent(ctx context.Context) ApiGetCurrentRequest
 
 	// GetCurrentExecute executes the request
-	//  @return GetCurrentPreferencesReply
-	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentPreferencesReply, *http.Response, error)
+	//  @return GetCurrentPreferencesResp
+	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentPreferencesResp, *http.Response, error)
 
 	/*
 	UpdateCurrent Method for UpdateCurrent
@@ -46,8 +46,8 @@ type PreferencesService interface {
 	UpdateCurrent(ctx context.Context) ApiUpdateCurrentRequest
 
 	// UpdateCurrentExecute executes the request
-	//  @return UpdateCurrentPreferencesReply
-	UpdateCurrentExecute(r ApiUpdateCurrentRequest) (*UpdateCurrentPreferencesReply, *http.Response, error)
+	//  @return UpdateCurrentPreferencesResp
+	UpdateCurrentExecute(r ApiUpdateCurrentRequest) (*UpdateCurrentPreferencesResp, *http.Response, error)
 }
 
 // PreferencesServiceService PreferencesService service
@@ -64,7 +64,7 @@ func (r ApiGetCurrentRequest) Body(body map[string]interface{}) ApiGetCurrentReq
 	return r
 }
 
-func (r ApiGetCurrentRequest) Execute() (*GetCurrentPreferencesReply, *http.Response, error) {
+func (r ApiGetCurrentRequest) Execute() (*GetCurrentPreferencesResp, *http.Response, error) {
 	return r.ApiService.GetCurrentExecute(r)
 }
 
@@ -84,13 +84,13 @@ func (a *PreferencesServiceService) GetCurrent(ctx context.Context) ApiGetCurren
 }
 
 // Execute executes the request
-//  @return GetCurrentPreferencesReply
-func (a *PreferencesServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentPreferencesReply, *http.Response, error) {
+//  @return GetCurrentPreferencesResp
+func (a *PreferencesServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentPreferencesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetCurrentPreferencesReply
+		localVarReturnValue  *GetCurrentPreferencesResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PreferencesServiceService.GetCurrent")
@@ -166,15 +166,15 @@ func (a *PreferencesServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*
 type ApiUpdateCurrentRequest struct {
 	ctx context.Context
 	ApiService PreferencesService
-	updateCurrentPreferencesRequest *UpdateCurrentPreferencesRequest
+	updateCurrentPreferencesReq *UpdateCurrentPreferencesReq
 }
 
-func (r ApiUpdateCurrentRequest) UpdateCurrentPreferencesRequest(updateCurrentPreferencesRequest UpdateCurrentPreferencesRequest) ApiUpdateCurrentRequest {
-	r.updateCurrentPreferencesRequest = &updateCurrentPreferencesRequest
+func (r ApiUpdateCurrentRequest) UpdateCurrentPreferencesReq(updateCurrentPreferencesReq UpdateCurrentPreferencesReq) ApiUpdateCurrentRequest {
+	r.updateCurrentPreferencesReq = &updateCurrentPreferencesReq
 	return r
 }
 
-func (r ApiUpdateCurrentRequest) Execute() (*UpdateCurrentPreferencesReply, *http.Response, error) {
+func (r ApiUpdateCurrentRequest) Execute() (*UpdateCurrentPreferencesResp, *http.Response, error) {
 	return r.ApiService.UpdateCurrentExecute(r)
 }
 
@@ -194,13 +194,13 @@ func (a *PreferencesServiceService) UpdateCurrent(ctx context.Context) ApiUpdate
 }
 
 // Execute executes the request
-//  @return UpdateCurrentPreferencesReply
-func (a *PreferencesServiceService) UpdateCurrentExecute(r ApiUpdateCurrentRequest) (*UpdateCurrentPreferencesReply, *http.Response, error) {
+//  @return UpdateCurrentPreferencesResp
+func (a *PreferencesServiceService) UpdateCurrentExecute(r ApiUpdateCurrentRequest) (*UpdateCurrentPreferencesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *UpdateCurrentPreferencesReply
+		localVarReturnValue  *UpdateCurrentPreferencesResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PreferencesServiceService.UpdateCurrent")
@@ -213,8 +213,8 @@ func (a *PreferencesServiceService) UpdateCurrentExecute(r ApiUpdateCurrentReque
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.updateCurrentPreferencesRequest == nil {
-		return localVarReturnValue, nil, reportError("updateCurrentPreferencesRequest is required and must be specified")
+	if r.updateCurrentPreferencesReq == nil {
+		return localVarReturnValue, nil, reportError("updateCurrentPreferencesReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -235,7 +235,7 @@ func (a *PreferencesServiceService) UpdateCurrentExecute(r ApiUpdateCurrentReque
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.updateCurrentPreferencesRequest
+	localVarPostBody = r.updateCurrentPreferencesReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

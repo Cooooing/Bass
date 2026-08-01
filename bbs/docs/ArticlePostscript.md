@@ -11,8 +11,8 @@ Name | Type | Description | Notes
 **Restriction** | Pointer to **string** |  | [optional] 
 **CreatedBy** | Pointer to **string** |  | [optional] 
 **UpdatedBy** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **string** |  | [optional] 
-**UpdatedAt** | Pointer to **string** |  | [optional] 
+**CreatedAt** | Pointer to **time.Time** |  | [optional] 
+**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
 
 ## Methods
 
@@ -210,20 +210,20 @@ HasUpdatedBy returns a boolean if a field has been set.
 
 ### GetCreatedAt
 
-`func (o *ArticlePostscript) GetCreatedAt() string`
+`func (o *ArticlePostscript) GetCreatedAt() time.Time`
 
 GetCreatedAt returns the CreatedAt field if non-nil, zero value otherwise.
 
 ### GetCreatedAtOk
 
-`func (o *ArticlePostscript) GetCreatedAtOk() (*string, bool)`
+`func (o *ArticlePostscript) GetCreatedAtOk() (*time.Time, bool)`
 
 GetCreatedAtOk returns a tuple with the CreatedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCreatedAt
 
-`func (o *ArticlePostscript) SetCreatedAt(v string)`
+`func (o *ArticlePostscript) SetCreatedAt(v time.Time)`
 
 SetCreatedAt sets CreatedAt field to given value.
 
@@ -235,20 +235,20 @@ HasCreatedAt returns a boolean if a field has been set.
 
 ### GetUpdatedAt
 
-`func (o *ArticlePostscript) GetUpdatedAt() string`
+`func (o *ArticlePostscript) GetUpdatedAt() time.Time`
 
 GetUpdatedAt returns the UpdatedAt field if non-nil, zero value otherwise.
 
 ### GetUpdatedAtOk
 
-`func (o *ArticlePostscript) GetUpdatedAtOk() (*string, bool)`
+`func (o *ArticlePostscript) GetUpdatedAtOk() (*time.Time, bool)`
 
 GetUpdatedAtOk returns a tuple with the UpdatedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetUpdatedAt
 
-`func (o *ArticlePostscript) SetUpdatedAt(v string)`
+`func (o *ArticlePostscript) SetUpdatedAt(v time.Time)`
 
 SetUpdatedAt sets UpdatedAt field to given value.
 

@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## GetCurrent
 
-> GetCurrentPreferencesReply GetCurrent(ctx).Body(body).Execute()
+> GetCurrentPreferencesResp GetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -39,7 +39,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesService.GetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetCurrent`: GetCurrentPreferencesReply
+	// response from `GetCurrent`: GetCurrentPreferencesResp
 	fmt.Fprintf(os.Stdout, "Response from `PreferencesService.GetCurrent`: %v\n", resp)
 }
 ```
@@ -59,7 +59,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCurrentPreferencesReply**](GetCurrentPreferencesReply.md)
+[**GetCurrentPreferencesResp**](GetCurrentPreferencesResp.md)
 
 ### Authorization
 
@@ -77,7 +77,7 @@ No authorization required
 
 ## UpdateCurrent
 
-> UpdateCurrentPreferencesReply UpdateCurrent(ctx).UpdateCurrentPreferencesRequest(updateCurrentPreferencesRequest).Execute()
+> UpdateCurrentPreferencesResp UpdateCurrent(ctx).UpdateCurrentPreferencesReq(updateCurrentPreferencesReq).Execute()
 
 
 
@@ -96,16 +96,16 @@ import (
 )
 
 func main() {
-	updateCurrentPreferencesRequest := *openapiclient.NewUpdateCurrentPreferencesRequest() // UpdateCurrentPreferencesRequest | 
+	updateCurrentPreferencesReq := *openapiclient.NewUpdateCurrentPreferencesReq() // UpdateCurrentPreferencesReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PreferencesService.UpdateCurrent(context.Background()).UpdateCurrentPreferencesRequest(updateCurrentPreferencesRequest).Execute()
+	resp, r, err := apiClient.PreferencesService.UpdateCurrent(context.Background()).UpdateCurrentPreferencesReq(updateCurrentPreferencesReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `PreferencesService.UpdateCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UpdateCurrent`: UpdateCurrentPreferencesReply
+	// response from `UpdateCurrent`: UpdateCurrentPreferencesResp
 	fmt.Fprintf(os.Stdout, "Response from `PreferencesService.UpdateCurrent`: %v\n", resp)
 }
 ```
@@ -121,11 +121,11 @@ Other parameters are passed through a pointer to a apiUpdateCurrentRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **updateCurrentPreferencesRequest** | [**UpdateCurrentPreferencesRequest**](UpdateCurrentPreferencesRequest.md) |  | 
+ **updateCurrentPreferencesReq** | [**UpdateCurrentPreferencesReq**](UpdateCurrentPreferencesReq.md) |  | 
 
 ### Return type
 
-[**UpdateCurrentPreferencesReply**](UpdateCurrentPreferencesReply.md)
+[**UpdateCurrentPreferencesResp**](UpdateCurrentPreferencesResp.md)
 
 ### Authorization
 

@@ -32,8 +32,8 @@ type CommentService interface {
 	Create(ctx context.Context) ApiCreateRequest
 
 	// CreateExecute executes the request
-	//  @return CreateCommentReply
-	CreateExecute(r ApiCreateRequest) (*CreateCommentReply, *http.Response, error)
+	//  @return CreateCommentResp
+	CreateExecute(r ApiCreateRequest) (*CreateCommentResp, *http.Response, error)
 
 	/*
 	Like Method for Like
@@ -46,8 +46,8 @@ type CommentService interface {
 	Like(ctx context.Context) ApiLikeRequest
 
 	// LikeExecute executes the request
-	//  @return LikeCommentReply
-	LikeExecute(r ApiLikeRequest) (*LikeCommentReply, *http.Response, error)
+	//  @return LikeCommentResp
+	LikeExecute(r ApiLikeRequest) (*LikeCommentResp, *http.Response, error)
 
 	/*
 	List Method for List
@@ -60,8 +60,8 @@ type CommentService interface {
 	List(ctx context.Context) ApiListRequest
 
 	// ListExecute executes the request
-	//  @return ListCommentsReply
-	ListExecute(r ApiListRequest) (*ListCommentsReply, *http.Response, error)
+	//  @return ListCommentsResp
+	ListExecute(r ApiListRequest) (*ListCommentsResp, *http.Response, error)
 
 	/*
 	ListReplies Method for ListReplies
@@ -74,8 +74,8 @@ type CommentService interface {
 	ListReplies(ctx context.Context) ApiListRepliesRequest
 
 	// ListRepliesExecute executes the request
-	//  @return ListCommentRepliesReply
-	ListRepliesExecute(r ApiListRepliesRequest) (*ListCommentRepliesReply, *http.Response, error)
+	//  @return ListCommentRepliesResp
+	ListRepliesExecute(r ApiListRepliesRequest) (*ListCommentRepliesResp, *http.Response, error)
 
 	/*
 	ListThreads Method for ListThreads
@@ -88,8 +88,8 @@ type CommentService interface {
 	ListThreads(ctx context.Context) ApiListThreadsRequest
 
 	// ListThreadsExecute executes the request
-	//  @return ListCommentThreadsReply
-	ListThreadsExecute(r ApiListThreadsRequest) (*ListCommentThreadsReply, *http.Response, error)
+	//  @return ListCommentThreadsResp
+	ListThreadsExecute(r ApiListThreadsRequest) (*ListCommentThreadsResp, *http.Response, error)
 
 	/*
 	ListTimeline Method for ListTimeline
@@ -102,8 +102,8 @@ type CommentService interface {
 	ListTimeline(ctx context.Context) ApiListTimelineRequest
 
 	// ListTimelineExecute executes the request
-	//  @return ListCommentTimelineReply
-	ListTimelineExecute(r ApiListTimelineRequest) (*ListCommentTimelineReply, *http.Response, error)
+	//  @return ListCommentTimelineResp
+	ListTimelineExecute(r ApiListTimelineRequest) (*ListCommentTimelineResp, *http.Response, error)
 
 	/*
 	Thank Method for Thank
@@ -116,8 +116,8 @@ type CommentService interface {
 	Thank(ctx context.Context) ApiThankRequest
 
 	// ThankExecute executes the request
-	//  @return ThankCommentReply
-	ThankExecute(r ApiThankRequest) (*ThankCommentReply, *http.Response, error)
+	//  @return ThankCommentResp
+	ThankExecute(r ApiThankRequest) (*ThankCommentResp, *http.Response, error)
 }
 
 // CommentServiceService CommentService service
@@ -126,15 +126,15 @@ type CommentServiceService service
 type ApiCreateRequest struct {
 	ctx context.Context
 	ApiService CommentService
-	createCommentRequest *CreateCommentRequest
+	createCommentReq *CreateCommentReq
 }
 
-func (r ApiCreateRequest) CreateCommentRequest(createCommentRequest CreateCommentRequest) ApiCreateRequest {
-	r.createCommentRequest = &createCommentRequest
+func (r ApiCreateRequest) CreateCommentReq(createCommentReq CreateCommentReq) ApiCreateRequest {
+	r.createCommentReq = &createCommentReq
 	return r
 }
 
-func (r ApiCreateRequest) Execute() (*CreateCommentReply, *http.Response, error) {
+func (r ApiCreateRequest) Execute() (*CreateCommentResp, *http.Response, error) {
 	return r.ApiService.CreateExecute(r)
 }
 
@@ -154,13 +154,13 @@ func (a *CommentServiceService) Create(ctx context.Context) ApiCreateRequest {
 }
 
 // Execute executes the request
-//  @return CreateCommentReply
-func (a *CommentServiceService) CreateExecute(r ApiCreateRequest) (*CreateCommentReply, *http.Response, error) {
+//  @return CreateCommentResp
+func (a *CommentServiceService) CreateExecute(r ApiCreateRequest) (*CreateCommentResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *CreateCommentReply
+		localVarReturnValue  *CreateCommentResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.Create")
@@ -173,8 +173,8 @@ func (a *CommentServiceService) CreateExecute(r ApiCreateRequest) (*CreateCommen
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.createCommentRequest == nil {
-		return localVarReturnValue, nil, reportError("createCommentRequest is required and must be specified")
+	if r.createCommentReq == nil {
+		return localVarReturnValue, nil, reportError("createCommentReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -195,7 +195,7 @@ func (a *CommentServiceService) CreateExecute(r ApiCreateRequest) (*CreateCommen
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.createCommentRequest
+	localVarPostBody = r.createCommentReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -236,15 +236,15 @@ func (a *CommentServiceService) CreateExecute(r ApiCreateRequest) (*CreateCommen
 type ApiLikeRequest struct {
 	ctx context.Context
 	ApiService CommentService
-	likeCommentRequest *LikeCommentRequest
+	likeCommentReq *LikeCommentReq
 }
 
-func (r ApiLikeRequest) LikeCommentRequest(likeCommentRequest LikeCommentRequest) ApiLikeRequest {
-	r.likeCommentRequest = &likeCommentRequest
+func (r ApiLikeRequest) LikeCommentReq(likeCommentReq LikeCommentReq) ApiLikeRequest {
+	r.likeCommentReq = &likeCommentReq
 	return r
 }
 
-func (r ApiLikeRequest) Execute() (*LikeCommentReply, *http.Response, error) {
+func (r ApiLikeRequest) Execute() (*LikeCommentResp, *http.Response, error) {
 	return r.ApiService.LikeExecute(r)
 }
 
@@ -264,13 +264,13 @@ func (a *CommentServiceService) Like(ctx context.Context) ApiLikeRequest {
 }
 
 // Execute executes the request
-//  @return LikeCommentReply
-func (a *CommentServiceService) LikeExecute(r ApiLikeRequest) (*LikeCommentReply, *http.Response, error) {
+//  @return LikeCommentResp
+func (a *CommentServiceService) LikeExecute(r ApiLikeRequest) (*LikeCommentResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *LikeCommentReply
+		localVarReturnValue  *LikeCommentResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.Like")
@@ -283,8 +283,8 @@ func (a *CommentServiceService) LikeExecute(r ApiLikeRequest) (*LikeCommentReply
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.likeCommentRequest == nil {
-		return localVarReturnValue, nil, reportError("likeCommentRequest is required and must be specified")
+	if r.likeCommentReq == nil {
+		return localVarReturnValue, nil, reportError("likeCommentReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -305,7 +305,7 @@ func (a *CommentServiceService) LikeExecute(r ApiLikeRequest) (*LikeCommentReply
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.likeCommentRequest
+	localVarPostBody = r.likeCommentReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -346,15 +346,15 @@ func (a *CommentServiceService) LikeExecute(r ApiLikeRequest) (*LikeCommentReply
 type ApiListRequest struct {
 	ctx context.Context
 	ApiService CommentService
-	listCommentsRequest *ListCommentsRequest
+	listCommentsReq *ListCommentsReq
 }
 
-func (r ApiListRequest) ListCommentsRequest(listCommentsRequest ListCommentsRequest) ApiListRequest {
-	r.listCommentsRequest = &listCommentsRequest
+func (r ApiListRequest) ListCommentsReq(listCommentsReq ListCommentsReq) ApiListRequest {
+	r.listCommentsReq = &listCommentsReq
 	return r
 }
 
-func (r ApiListRequest) Execute() (*ListCommentsReply, *http.Response, error) {
+func (r ApiListRequest) Execute() (*ListCommentsResp, *http.Response, error) {
 	return r.ApiService.ListExecute(r)
 }
 
@@ -374,13 +374,13 @@ func (a *CommentServiceService) List(ctx context.Context) ApiListRequest {
 }
 
 // Execute executes the request
-//  @return ListCommentsReply
-func (a *CommentServiceService) ListExecute(r ApiListRequest) (*ListCommentsReply, *http.Response, error) {
+//  @return ListCommentsResp
+func (a *CommentServiceService) ListExecute(r ApiListRequest) (*ListCommentsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ListCommentsReply
+		localVarReturnValue  *ListCommentsResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.List")
@@ -393,8 +393,8 @@ func (a *CommentServiceService) ListExecute(r ApiListRequest) (*ListCommentsRepl
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.listCommentsRequest == nil {
-		return localVarReturnValue, nil, reportError("listCommentsRequest is required and must be specified")
+	if r.listCommentsReq == nil {
+		return localVarReturnValue, nil, reportError("listCommentsReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -415,7 +415,7 @@ func (a *CommentServiceService) ListExecute(r ApiListRequest) (*ListCommentsRepl
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.listCommentsRequest
+	localVarPostBody = r.listCommentsReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -456,15 +456,15 @@ func (a *CommentServiceService) ListExecute(r ApiListRequest) (*ListCommentsRepl
 type ApiListRepliesRequest struct {
 	ctx context.Context
 	ApiService CommentService
-	listCommentRepliesRequest *ListCommentRepliesRequest
+	listCommentRepliesReq *ListCommentRepliesReq
 }
 
-func (r ApiListRepliesRequest) ListCommentRepliesRequest(listCommentRepliesRequest ListCommentRepliesRequest) ApiListRepliesRequest {
-	r.listCommentRepliesRequest = &listCommentRepliesRequest
+func (r ApiListRepliesRequest) ListCommentRepliesReq(listCommentRepliesReq ListCommentRepliesReq) ApiListRepliesRequest {
+	r.listCommentRepliesReq = &listCommentRepliesReq
 	return r
 }
 
-func (r ApiListRepliesRequest) Execute() (*ListCommentRepliesReply, *http.Response, error) {
+func (r ApiListRepliesRequest) Execute() (*ListCommentRepliesResp, *http.Response, error) {
 	return r.ApiService.ListRepliesExecute(r)
 }
 
@@ -484,13 +484,13 @@ func (a *CommentServiceService) ListReplies(ctx context.Context) ApiListRepliesR
 }
 
 // Execute executes the request
-//  @return ListCommentRepliesReply
-func (a *CommentServiceService) ListRepliesExecute(r ApiListRepliesRequest) (*ListCommentRepliesReply, *http.Response, error) {
+//  @return ListCommentRepliesResp
+func (a *CommentServiceService) ListRepliesExecute(r ApiListRepliesRequest) (*ListCommentRepliesResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ListCommentRepliesReply
+		localVarReturnValue  *ListCommentRepliesResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.ListReplies")
@@ -503,8 +503,8 @@ func (a *CommentServiceService) ListRepliesExecute(r ApiListRepliesRequest) (*Li
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.listCommentRepliesRequest == nil {
-		return localVarReturnValue, nil, reportError("listCommentRepliesRequest is required and must be specified")
+	if r.listCommentRepliesReq == nil {
+		return localVarReturnValue, nil, reportError("listCommentRepliesReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -525,7 +525,7 @@ func (a *CommentServiceService) ListRepliesExecute(r ApiListRepliesRequest) (*Li
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.listCommentRepliesRequest
+	localVarPostBody = r.listCommentRepliesReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -566,15 +566,15 @@ func (a *CommentServiceService) ListRepliesExecute(r ApiListRepliesRequest) (*Li
 type ApiListThreadsRequest struct {
 	ctx context.Context
 	ApiService CommentService
-	listCommentThreadsRequest *ListCommentThreadsRequest
+	listCommentThreadsReq *ListCommentThreadsReq
 }
 
-func (r ApiListThreadsRequest) ListCommentThreadsRequest(listCommentThreadsRequest ListCommentThreadsRequest) ApiListThreadsRequest {
-	r.listCommentThreadsRequest = &listCommentThreadsRequest
+func (r ApiListThreadsRequest) ListCommentThreadsReq(listCommentThreadsReq ListCommentThreadsReq) ApiListThreadsRequest {
+	r.listCommentThreadsReq = &listCommentThreadsReq
 	return r
 }
 
-func (r ApiListThreadsRequest) Execute() (*ListCommentThreadsReply, *http.Response, error) {
+func (r ApiListThreadsRequest) Execute() (*ListCommentThreadsResp, *http.Response, error) {
 	return r.ApiService.ListThreadsExecute(r)
 }
 
@@ -594,13 +594,13 @@ func (a *CommentServiceService) ListThreads(ctx context.Context) ApiListThreadsR
 }
 
 // Execute executes the request
-//  @return ListCommentThreadsReply
-func (a *CommentServiceService) ListThreadsExecute(r ApiListThreadsRequest) (*ListCommentThreadsReply, *http.Response, error) {
+//  @return ListCommentThreadsResp
+func (a *CommentServiceService) ListThreadsExecute(r ApiListThreadsRequest) (*ListCommentThreadsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ListCommentThreadsReply
+		localVarReturnValue  *ListCommentThreadsResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.ListThreads")
@@ -613,8 +613,8 @@ func (a *CommentServiceService) ListThreadsExecute(r ApiListThreadsRequest) (*Li
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.listCommentThreadsRequest == nil {
-		return localVarReturnValue, nil, reportError("listCommentThreadsRequest is required and must be specified")
+	if r.listCommentThreadsReq == nil {
+		return localVarReturnValue, nil, reportError("listCommentThreadsReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -635,7 +635,7 @@ func (a *CommentServiceService) ListThreadsExecute(r ApiListThreadsRequest) (*Li
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.listCommentThreadsRequest
+	localVarPostBody = r.listCommentThreadsReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -676,15 +676,15 @@ func (a *CommentServiceService) ListThreadsExecute(r ApiListThreadsRequest) (*Li
 type ApiListTimelineRequest struct {
 	ctx context.Context
 	ApiService CommentService
-	listCommentTimelineRequest *ListCommentTimelineRequest
+	listCommentTimelineReq *ListCommentTimelineReq
 }
 
-func (r ApiListTimelineRequest) ListCommentTimelineRequest(listCommentTimelineRequest ListCommentTimelineRequest) ApiListTimelineRequest {
-	r.listCommentTimelineRequest = &listCommentTimelineRequest
+func (r ApiListTimelineRequest) ListCommentTimelineReq(listCommentTimelineReq ListCommentTimelineReq) ApiListTimelineRequest {
+	r.listCommentTimelineReq = &listCommentTimelineReq
 	return r
 }
 
-func (r ApiListTimelineRequest) Execute() (*ListCommentTimelineReply, *http.Response, error) {
+func (r ApiListTimelineRequest) Execute() (*ListCommentTimelineResp, *http.Response, error) {
 	return r.ApiService.ListTimelineExecute(r)
 }
 
@@ -704,13 +704,13 @@ func (a *CommentServiceService) ListTimeline(ctx context.Context) ApiListTimelin
 }
 
 // Execute executes the request
-//  @return ListCommentTimelineReply
-func (a *CommentServiceService) ListTimelineExecute(r ApiListTimelineRequest) (*ListCommentTimelineReply, *http.Response, error) {
+//  @return ListCommentTimelineResp
+func (a *CommentServiceService) ListTimelineExecute(r ApiListTimelineRequest) (*ListCommentTimelineResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ListCommentTimelineReply
+		localVarReturnValue  *ListCommentTimelineResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.ListTimeline")
@@ -723,8 +723,8 @@ func (a *CommentServiceService) ListTimelineExecute(r ApiListTimelineRequest) (*
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.listCommentTimelineRequest == nil {
-		return localVarReturnValue, nil, reportError("listCommentTimelineRequest is required and must be specified")
+	if r.listCommentTimelineReq == nil {
+		return localVarReturnValue, nil, reportError("listCommentTimelineReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -745,7 +745,7 @@ func (a *CommentServiceService) ListTimelineExecute(r ApiListTimelineRequest) (*
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.listCommentTimelineRequest
+	localVarPostBody = r.listCommentTimelineReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -786,15 +786,15 @@ func (a *CommentServiceService) ListTimelineExecute(r ApiListTimelineRequest) (*
 type ApiThankRequest struct {
 	ctx context.Context
 	ApiService CommentService
-	thankCommentRequest *ThankCommentRequest
+	thankCommentReq *ThankCommentReq
 }
 
-func (r ApiThankRequest) ThankCommentRequest(thankCommentRequest ThankCommentRequest) ApiThankRequest {
-	r.thankCommentRequest = &thankCommentRequest
+func (r ApiThankRequest) ThankCommentReq(thankCommentReq ThankCommentReq) ApiThankRequest {
+	r.thankCommentReq = &thankCommentReq
 	return r
 }
 
-func (r ApiThankRequest) Execute() (*ThankCommentReply, *http.Response, error) {
+func (r ApiThankRequest) Execute() (*ThankCommentResp, *http.Response, error) {
 	return r.ApiService.ThankExecute(r)
 }
 
@@ -814,13 +814,13 @@ func (a *CommentServiceService) Thank(ctx context.Context) ApiThankRequest {
 }
 
 // Execute executes the request
-//  @return ThankCommentReply
-func (a *CommentServiceService) ThankExecute(r ApiThankRequest) (*ThankCommentReply, *http.Response, error) {
+//  @return ThankCommentResp
+func (a *CommentServiceService) ThankExecute(r ApiThankRequest) (*ThankCommentResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ThankCommentReply
+		localVarReturnValue  *ThankCommentResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "CommentServiceService.Thank")
@@ -833,8 +833,8 @@ func (a *CommentServiceService) ThankExecute(r ApiThankRequest) (*ThankCommentRe
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.thankCommentRequest == nil {
-		return localVarReturnValue, nil, reportError("thankCommentRequest is required and must be specified")
+	if r.thankCommentReq == nil {
+		return localVarReturnValue, nil, reportError("thankCommentReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -855,7 +855,7 @@ func (a *CommentServiceService) ThankExecute(r ApiThankRequest) (*ThankCommentRe
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.thankCommentRequest
+	localVarPostBody = r.thankCommentReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

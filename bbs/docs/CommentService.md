@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 ## Create
 
-> CreateCommentReply Create(ctx).CreateCommentRequest(createCommentRequest).Execute()
+> CreateCommentResp Create(ctx).CreateCommentReq(createCommentReq).Execute()
 
 
 
@@ -35,16 +35,16 @@ import (
 )
 
 func main() {
-	createCommentRequest := *openapiclient.NewCreateCommentRequest("ArticleId_example", "Content_example") // CreateCommentRequest | 
+	createCommentReq := *openapiclient.NewCreateCommentReq("ArticleId_example", "Content_example") // CreateCommentReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentService.Create(context.Background()).CreateCommentRequest(createCommentRequest).Execute()
+	resp, r, err := apiClient.CommentService.Create(context.Background()).CreateCommentReq(createCommentReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.Create``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Create`: CreateCommentReply
+	// response from `Create`: CreateCommentResp
 	fmt.Fprintf(os.Stdout, "Response from `CommentService.Create`: %v\n", resp)
 }
 ```
@@ -60,11 +60,11 @@ Other parameters are passed through a pointer to a apiCreateRequest struct via t
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **createCommentRequest** | [**CreateCommentRequest**](CreateCommentRequest.md) |  | 
+ **createCommentReq** | [**CreateCommentReq**](CreateCommentReq.md) |  | 
 
 ### Return type
 
-[**CreateCommentReply**](CreateCommentReply.md)
+[**CreateCommentResp**](CreateCommentResp.md)
 
 ### Authorization
 
@@ -82,7 +82,7 @@ No authorization required
 
 ## Like
 
-> LikeCommentReply Like(ctx).LikeCommentRequest(likeCommentRequest).Execute()
+> LikeCommentResp Like(ctx).LikeCommentReq(likeCommentReq).Execute()
 
 
 
@@ -101,16 +101,16 @@ import (
 )
 
 func main() {
-	likeCommentRequest := *openapiclient.NewLikeCommentRequest("Id_example", false) // LikeCommentRequest | 
+	likeCommentReq := *openapiclient.NewLikeCommentReq("Id_example", false) // LikeCommentReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentService.Like(context.Background()).LikeCommentRequest(likeCommentRequest).Execute()
+	resp, r, err := apiClient.CommentService.Like(context.Background()).LikeCommentReq(likeCommentReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.Like``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Like`: LikeCommentReply
+	// response from `Like`: LikeCommentResp
 	fmt.Fprintf(os.Stdout, "Response from `CommentService.Like`: %v\n", resp)
 }
 ```
@@ -126,11 +126,11 @@ Other parameters are passed through a pointer to a apiLikeRequest struct via the
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **likeCommentRequest** | [**LikeCommentRequest**](LikeCommentRequest.md) |  | 
+ **likeCommentReq** | [**LikeCommentReq**](LikeCommentReq.md) |  | 
 
 ### Return type
 
-[**LikeCommentReply**](LikeCommentReply.md)
+[**LikeCommentResp**](LikeCommentResp.md)
 
 ### Authorization
 
@@ -148,7 +148,7 @@ No authorization required
 
 ## List
 
-> ListCommentsReply List(ctx).ListCommentsRequest(listCommentsRequest).Execute()
+> ListCommentsResp List(ctx).ListCommentsReq(listCommentsReq).Execute()
 
 
 
@@ -167,16 +167,16 @@ import (
 )
 
 func main() {
-	listCommentsRequest := *openapiclient.NewListCommentsRequest() // ListCommentsRequest | 
+	listCommentsReq := *openapiclient.NewListCommentsReq() // ListCommentsReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentService.List(context.Background()).ListCommentsRequest(listCommentsRequest).Execute()
+	resp, r, err := apiClient.CommentService.List(context.Background()).ListCommentsReq(listCommentsReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.List``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `List`: ListCommentsReply
+	// response from `List`: ListCommentsResp
 	fmt.Fprintf(os.Stdout, "Response from `CommentService.List`: %v\n", resp)
 }
 ```
@@ -192,11 +192,11 @@ Other parameters are passed through a pointer to a apiListRequest struct via the
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listCommentsRequest** | [**ListCommentsRequest**](ListCommentsRequest.md) |  | 
+ **listCommentsReq** | [**ListCommentsReq**](ListCommentsReq.md) |  | 
 
 ### Return type
 
-[**ListCommentsReply**](ListCommentsReply.md)
+[**ListCommentsResp**](ListCommentsResp.md)
 
 ### Authorization
 
@@ -214,7 +214,7 @@ No authorization required
 
 ## ListReplies
 
-> ListCommentRepliesReply ListReplies(ctx).ListCommentRepliesRequest(listCommentRepliesRequest).Execute()
+> ListCommentRepliesResp ListReplies(ctx).ListCommentRepliesReq(listCommentRepliesReq).Execute()
 
 
 
@@ -233,16 +233,16 @@ import (
 )
 
 func main() {
-	listCommentRepliesRequest := *openapiclient.NewListCommentRepliesRequest("ArticleId_example", "ParentId_example") // ListCommentRepliesRequest | 
+	listCommentRepliesReq := *openapiclient.NewListCommentRepliesReq("ArticleId_example", "ParentId_example") // ListCommentRepliesReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentService.ListReplies(context.Background()).ListCommentRepliesRequest(listCommentRepliesRequest).Execute()
+	resp, r, err := apiClient.CommentService.ListReplies(context.Background()).ListCommentRepliesReq(listCommentRepliesReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.ListReplies``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ListReplies`: ListCommentRepliesReply
+	// response from `ListReplies`: ListCommentRepliesResp
 	fmt.Fprintf(os.Stdout, "Response from `CommentService.ListReplies`: %v\n", resp)
 }
 ```
@@ -258,11 +258,11 @@ Other parameters are passed through a pointer to a apiListRepliesRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listCommentRepliesRequest** | [**ListCommentRepliesRequest**](ListCommentRepliesRequest.md) |  | 
+ **listCommentRepliesReq** | [**ListCommentRepliesReq**](ListCommentRepliesReq.md) |  | 
 
 ### Return type
 
-[**ListCommentRepliesReply**](ListCommentRepliesReply.md)
+[**ListCommentRepliesResp**](ListCommentRepliesResp.md)
 
 ### Authorization
 
@@ -280,7 +280,7 @@ No authorization required
 
 ## ListThreads
 
-> ListCommentThreadsReply ListThreads(ctx).ListCommentThreadsRequest(listCommentThreadsRequest).Execute()
+> ListCommentThreadsResp ListThreads(ctx).ListCommentThreadsReq(listCommentThreadsReq).Execute()
 
 
 
@@ -299,16 +299,16 @@ import (
 )
 
 func main() {
-	listCommentThreadsRequest := *openapiclient.NewListCommentThreadsRequest("ArticleId_example") // ListCommentThreadsRequest | 
+	listCommentThreadsReq := *openapiclient.NewListCommentThreadsReq("ArticleId_example") // ListCommentThreadsReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentService.ListThreads(context.Background()).ListCommentThreadsRequest(listCommentThreadsRequest).Execute()
+	resp, r, err := apiClient.CommentService.ListThreads(context.Background()).ListCommentThreadsReq(listCommentThreadsReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.ListThreads``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ListThreads`: ListCommentThreadsReply
+	// response from `ListThreads`: ListCommentThreadsResp
 	fmt.Fprintf(os.Stdout, "Response from `CommentService.ListThreads`: %v\n", resp)
 }
 ```
@@ -324,11 +324,11 @@ Other parameters are passed through a pointer to a apiListThreadsRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listCommentThreadsRequest** | [**ListCommentThreadsRequest**](ListCommentThreadsRequest.md) |  | 
+ **listCommentThreadsReq** | [**ListCommentThreadsReq**](ListCommentThreadsReq.md) |  | 
 
 ### Return type
 
-[**ListCommentThreadsReply**](ListCommentThreadsReply.md)
+[**ListCommentThreadsResp**](ListCommentThreadsResp.md)
 
 ### Authorization
 
@@ -346,7 +346,7 @@ No authorization required
 
 ## ListTimeline
 
-> ListCommentTimelineReply ListTimeline(ctx).ListCommentTimelineRequest(listCommentTimelineRequest).Execute()
+> ListCommentTimelineResp ListTimeline(ctx).ListCommentTimelineReq(listCommentTimelineReq).Execute()
 
 
 
@@ -365,16 +365,16 @@ import (
 )
 
 func main() {
-	listCommentTimelineRequest := *openapiclient.NewListCommentTimelineRequest("ArticleId_example") // ListCommentTimelineRequest | 
+	listCommentTimelineReq := *openapiclient.NewListCommentTimelineReq("ArticleId_example") // ListCommentTimelineReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentService.ListTimeline(context.Background()).ListCommentTimelineRequest(listCommentTimelineRequest).Execute()
+	resp, r, err := apiClient.CommentService.ListTimeline(context.Background()).ListCommentTimelineReq(listCommentTimelineReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.ListTimeline``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ListTimeline`: ListCommentTimelineReply
+	// response from `ListTimeline`: ListCommentTimelineResp
 	fmt.Fprintf(os.Stdout, "Response from `CommentService.ListTimeline`: %v\n", resp)
 }
 ```
@@ -390,11 +390,11 @@ Other parameters are passed through a pointer to a apiListTimelineRequest struct
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listCommentTimelineRequest** | [**ListCommentTimelineRequest**](ListCommentTimelineRequest.md) |  | 
+ **listCommentTimelineReq** | [**ListCommentTimelineReq**](ListCommentTimelineReq.md) |  | 
 
 ### Return type
 
-[**ListCommentTimelineReply**](ListCommentTimelineReply.md)
+[**ListCommentTimelineResp**](ListCommentTimelineResp.md)
 
 ### Authorization
 
@@ -412,7 +412,7 @@ No authorization required
 
 ## Thank
 
-> ThankCommentReply Thank(ctx).ThankCommentRequest(thankCommentRequest).Execute()
+> ThankCommentResp Thank(ctx).ThankCommentReq(thankCommentReq).Execute()
 
 
 
@@ -431,16 +431,16 @@ import (
 )
 
 func main() {
-	thankCommentRequest := *openapiclient.NewThankCommentRequest("Id_example", false) // ThankCommentRequest | 
+	thankCommentReq := *openapiclient.NewThankCommentReq("Id_example", false) // ThankCommentReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CommentService.Thank(context.Background()).ThankCommentRequest(thankCommentRequest).Execute()
+	resp, r, err := apiClient.CommentService.Thank(context.Background()).ThankCommentReq(thankCommentReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CommentService.Thank``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Thank`: ThankCommentReply
+	// response from `Thank`: ThankCommentResp
 	fmt.Fprintf(os.Stdout, "Response from `CommentService.Thank`: %v\n", resp)
 }
 ```
@@ -456,11 +456,11 @@ Other parameters are passed through a pointer to a apiThankRequest struct via th
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **thankCommentRequest** | [**ThankCommentRequest**](ThankCommentRequest.md) |  | 
+ **thankCommentReq** | [**ThankCommentReq**](ThankCommentReq.md) |  | 
 
 ### Return type
 
-[**ThankCommentReply**](ThankCommentReply.md)
+[**ThankCommentResp**](ThankCommentResp.md)
 
 ### Authorization
 

@@ -60,8 +60,8 @@ type RelationService interface {
 	GetStatus(ctx context.Context) ApiGetStatusRequest
 
 	// GetStatusExecute executes the request
-	//  @return GetStatusRelationReply
-	GetStatusExecute(r ApiGetStatusRequest) (*GetStatusRelationReply, *http.Response, error)
+	//  @return GetStatusRelationResp
+	GetStatusExecute(r ApiGetStatusRequest) (*GetStatusRelationResp, *http.Response, error)
 
 	/*
 	ListBlocked Method for ListBlocked
@@ -74,8 +74,8 @@ type RelationService interface {
 	ListBlocked(ctx context.Context) ApiListBlockedRequest
 
 	// ListBlockedExecute executes the request
-	//  @return ListBlockedRelationsReply
-	ListBlockedExecute(r ApiListBlockedRequest) (*ListBlockedRelationsReply, *http.Response, error)
+	//  @return ListBlockedRelationsResp
+	ListBlockedExecute(r ApiListBlockedRequest) (*ListBlockedRelationsResp, *http.Response, error)
 
 	/*
 	ListFollowers Method for ListFollowers
@@ -88,8 +88,8 @@ type RelationService interface {
 	ListFollowers(ctx context.Context) ApiListFollowersRequest
 
 	// ListFollowersExecute executes the request
-	//  @return ListFollowersRelationsReply
-	ListFollowersExecute(r ApiListFollowersRequest) (*ListFollowersRelationsReply, *http.Response, error)
+	//  @return ListFollowersRelationsResp
+	ListFollowersExecute(r ApiListFollowersRequest) (*ListFollowersRelationsResp, *http.Response, error)
 
 	/*
 	ListFollowing Method for ListFollowing
@@ -102,8 +102,8 @@ type RelationService interface {
 	ListFollowing(ctx context.Context) ApiListFollowingRequest
 
 	// ListFollowingExecute executes the request
-	//  @return ListFollowingRelationsReply
-	ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingRelationsReply, *http.Response, error)
+	//  @return ListFollowingRelationsResp
+	ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingRelationsResp, *http.Response, error)
 
 	/*
 	Unblock Method for Unblock
@@ -140,11 +140,11 @@ type RelationServiceService service
 type ApiBlockRequest struct {
 	ctx context.Context
 	ApiService RelationService
-	blockRelationRequest *BlockRelationRequest
+	blockRelationReq *BlockRelationReq
 }
 
-func (r ApiBlockRequest) BlockRelationRequest(blockRelationRequest BlockRelationRequest) ApiBlockRequest {
-	r.blockRelationRequest = &blockRelationRequest
+func (r ApiBlockRequest) BlockRelationReq(blockRelationReq BlockRelationReq) ApiBlockRequest {
+	r.blockRelationReq = &blockRelationReq
 	return r
 }
 
@@ -187,8 +187,8 @@ func (a *RelationServiceService) BlockExecute(r ApiBlockRequest) (map[string]int
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.blockRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("blockRelationRequest is required and must be specified")
+	if r.blockRelationReq == nil {
+		return localVarReturnValue, nil, reportError("blockRelationReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -209,7 +209,7 @@ func (a *RelationServiceService) BlockExecute(r ApiBlockRequest) (map[string]int
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.blockRelationRequest
+	localVarPostBody = r.blockRelationReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -250,11 +250,11 @@ func (a *RelationServiceService) BlockExecute(r ApiBlockRequest) (map[string]int
 type ApiFollowRequest struct {
 	ctx context.Context
 	ApiService RelationService
-	followRelationRequest *FollowRelationRequest
+	followRelationReq *FollowRelationReq
 }
 
-func (r ApiFollowRequest) FollowRelationRequest(followRelationRequest FollowRelationRequest) ApiFollowRequest {
-	r.followRelationRequest = &followRelationRequest
+func (r ApiFollowRequest) FollowRelationReq(followRelationReq FollowRelationReq) ApiFollowRequest {
+	r.followRelationReq = &followRelationReq
 	return r
 }
 
@@ -297,8 +297,8 @@ func (a *RelationServiceService) FollowExecute(r ApiFollowRequest) (map[string]i
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.followRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("followRelationRequest is required and must be specified")
+	if r.followRelationReq == nil {
+		return localVarReturnValue, nil, reportError("followRelationReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -319,7 +319,7 @@ func (a *RelationServiceService) FollowExecute(r ApiFollowRequest) (map[string]i
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.followRelationRequest
+	localVarPostBody = r.followRelationReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -360,15 +360,15 @@ func (a *RelationServiceService) FollowExecute(r ApiFollowRequest) (map[string]i
 type ApiGetStatusRequest struct {
 	ctx context.Context
 	ApiService RelationService
-	getStatusRelationRequest *GetStatusRelationRequest
+	getStatusRelationReq *GetStatusRelationReq
 }
 
-func (r ApiGetStatusRequest) GetStatusRelationRequest(getStatusRelationRequest GetStatusRelationRequest) ApiGetStatusRequest {
-	r.getStatusRelationRequest = &getStatusRelationRequest
+func (r ApiGetStatusRequest) GetStatusRelationReq(getStatusRelationReq GetStatusRelationReq) ApiGetStatusRequest {
+	r.getStatusRelationReq = &getStatusRelationReq
 	return r
 }
 
-func (r ApiGetStatusRequest) Execute() (*GetStatusRelationReply, *http.Response, error) {
+func (r ApiGetStatusRequest) Execute() (*GetStatusRelationResp, *http.Response, error) {
 	return r.ApiService.GetStatusExecute(r)
 }
 
@@ -388,13 +388,13 @@ func (a *RelationServiceService) GetStatus(ctx context.Context) ApiGetStatusRequ
 }
 
 // Execute executes the request
-//  @return GetStatusRelationReply
-func (a *RelationServiceService) GetStatusExecute(r ApiGetStatusRequest) (*GetStatusRelationReply, *http.Response, error) {
+//  @return GetStatusRelationResp
+func (a *RelationServiceService) GetStatusExecute(r ApiGetStatusRequest) (*GetStatusRelationResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetStatusRelationReply
+		localVarReturnValue  *GetStatusRelationResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.GetStatus")
@@ -407,8 +407,8 @@ func (a *RelationServiceService) GetStatusExecute(r ApiGetStatusRequest) (*GetSt
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.getStatusRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("getStatusRelationRequest is required and must be specified")
+	if r.getStatusRelationReq == nil {
+		return localVarReturnValue, nil, reportError("getStatusRelationReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -429,7 +429,7 @@ func (a *RelationServiceService) GetStatusExecute(r ApiGetStatusRequest) (*GetSt
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.getStatusRelationRequest
+	localVarPostBody = r.getStatusRelationReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -470,15 +470,15 @@ func (a *RelationServiceService) GetStatusExecute(r ApiGetStatusRequest) (*GetSt
 type ApiListBlockedRequest struct {
 	ctx context.Context
 	ApiService RelationService
-	listBlockedRelationsRequest *ListBlockedRelationsRequest
+	listBlockedRelationsReq *ListBlockedRelationsReq
 }
 
-func (r ApiListBlockedRequest) ListBlockedRelationsRequest(listBlockedRelationsRequest ListBlockedRelationsRequest) ApiListBlockedRequest {
-	r.listBlockedRelationsRequest = &listBlockedRelationsRequest
+func (r ApiListBlockedRequest) ListBlockedRelationsReq(listBlockedRelationsReq ListBlockedRelationsReq) ApiListBlockedRequest {
+	r.listBlockedRelationsReq = &listBlockedRelationsReq
 	return r
 }
 
-func (r ApiListBlockedRequest) Execute() (*ListBlockedRelationsReply, *http.Response, error) {
+func (r ApiListBlockedRequest) Execute() (*ListBlockedRelationsResp, *http.Response, error) {
 	return r.ApiService.ListBlockedExecute(r)
 }
 
@@ -498,13 +498,13 @@ func (a *RelationServiceService) ListBlocked(ctx context.Context) ApiListBlocked
 }
 
 // Execute executes the request
-//  @return ListBlockedRelationsReply
-func (a *RelationServiceService) ListBlockedExecute(r ApiListBlockedRequest) (*ListBlockedRelationsReply, *http.Response, error) {
+//  @return ListBlockedRelationsResp
+func (a *RelationServiceService) ListBlockedExecute(r ApiListBlockedRequest) (*ListBlockedRelationsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ListBlockedRelationsReply
+		localVarReturnValue  *ListBlockedRelationsResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.ListBlocked")
@@ -517,8 +517,8 @@ func (a *RelationServiceService) ListBlockedExecute(r ApiListBlockedRequest) (*L
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.listBlockedRelationsRequest == nil {
-		return localVarReturnValue, nil, reportError("listBlockedRelationsRequest is required and must be specified")
+	if r.listBlockedRelationsReq == nil {
+		return localVarReturnValue, nil, reportError("listBlockedRelationsReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -539,7 +539,7 @@ func (a *RelationServiceService) ListBlockedExecute(r ApiListBlockedRequest) (*L
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.listBlockedRelationsRequest
+	localVarPostBody = r.listBlockedRelationsReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -580,15 +580,15 @@ func (a *RelationServiceService) ListBlockedExecute(r ApiListBlockedRequest) (*L
 type ApiListFollowersRequest struct {
 	ctx context.Context
 	ApiService RelationService
-	listFollowersRelationsRequest *ListFollowersRelationsRequest
+	listFollowersRelationsReq *ListFollowersRelationsReq
 }
 
-func (r ApiListFollowersRequest) ListFollowersRelationsRequest(listFollowersRelationsRequest ListFollowersRelationsRequest) ApiListFollowersRequest {
-	r.listFollowersRelationsRequest = &listFollowersRelationsRequest
+func (r ApiListFollowersRequest) ListFollowersRelationsReq(listFollowersRelationsReq ListFollowersRelationsReq) ApiListFollowersRequest {
+	r.listFollowersRelationsReq = &listFollowersRelationsReq
 	return r
 }
 
-func (r ApiListFollowersRequest) Execute() (*ListFollowersRelationsReply, *http.Response, error) {
+func (r ApiListFollowersRequest) Execute() (*ListFollowersRelationsResp, *http.Response, error) {
 	return r.ApiService.ListFollowersExecute(r)
 }
 
@@ -608,13 +608,13 @@ func (a *RelationServiceService) ListFollowers(ctx context.Context) ApiListFollo
 }
 
 // Execute executes the request
-//  @return ListFollowersRelationsReply
-func (a *RelationServiceService) ListFollowersExecute(r ApiListFollowersRequest) (*ListFollowersRelationsReply, *http.Response, error) {
+//  @return ListFollowersRelationsResp
+func (a *RelationServiceService) ListFollowersExecute(r ApiListFollowersRequest) (*ListFollowersRelationsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ListFollowersRelationsReply
+		localVarReturnValue  *ListFollowersRelationsResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.ListFollowers")
@@ -627,8 +627,8 @@ func (a *RelationServiceService) ListFollowersExecute(r ApiListFollowersRequest)
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.listFollowersRelationsRequest == nil {
-		return localVarReturnValue, nil, reportError("listFollowersRelationsRequest is required and must be specified")
+	if r.listFollowersRelationsReq == nil {
+		return localVarReturnValue, nil, reportError("listFollowersRelationsReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -649,7 +649,7 @@ func (a *RelationServiceService) ListFollowersExecute(r ApiListFollowersRequest)
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.listFollowersRelationsRequest
+	localVarPostBody = r.listFollowersRelationsReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -690,15 +690,15 @@ func (a *RelationServiceService) ListFollowersExecute(r ApiListFollowersRequest)
 type ApiListFollowingRequest struct {
 	ctx context.Context
 	ApiService RelationService
-	listFollowingRelationsRequest *ListFollowingRelationsRequest
+	listFollowingRelationsReq *ListFollowingRelationsReq
 }
 
-func (r ApiListFollowingRequest) ListFollowingRelationsRequest(listFollowingRelationsRequest ListFollowingRelationsRequest) ApiListFollowingRequest {
-	r.listFollowingRelationsRequest = &listFollowingRelationsRequest
+func (r ApiListFollowingRequest) ListFollowingRelationsReq(listFollowingRelationsReq ListFollowingRelationsReq) ApiListFollowingRequest {
+	r.listFollowingRelationsReq = &listFollowingRelationsReq
 	return r
 }
 
-func (r ApiListFollowingRequest) Execute() (*ListFollowingRelationsReply, *http.Response, error) {
+func (r ApiListFollowingRequest) Execute() (*ListFollowingRelationsResp, *http.Response, error) {
 	return r.ApiService.ListFollowingExecute(r)
 }
 
@@ -718,13 +718,13 @@ func (a *RelationServiceService) ListFollowing(ctx context.Context) ApiListFollo
 }
 
 // Execute executes the request
-//  @return ListFollowingRelationsReply
-func (a *RelationServiceService) ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingRelationsReply, *http.Response, error) {
+//  @return ListFollowingRelationsResp
+func (a *RelationServiceService) ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingRelationsResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ListFollowingRelationsReply
+		localVarReturnValue  *ListFollowingRelationsResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "RelationServiceService.ListFollowing")
@@ -737,8 +737,8 @@ func (a *RelationServiceService) ListFollowingExecute(r ApiListFollowingRequest)
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.listFollowingRelationsRequest == nil {
-		return localVarReturnValue, nil, reportError("listFollowingRelationsRequest is required and must be specified")
+	if r.listFollowingRelationsReq == nil {
+		return localVarReturnValue, nil, reportError("listFollowingRelationsReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -759,7 +759,7 @@ func (a *RelationServiceService) ListFollowingExecute(r ApiListFollowingRequest)
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.listFollowingRelationsRequest
+	localVarPostBody = r.listFollowingRelationsReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -800,11 +800,11 @@ func (a *RelationServiceService) ListFollowingExecute(r ApiListFollowingRequest)
 type ApiUnblockRequest struct {
 	ctx context.Context
 	ApiService RelationService
-	unblockRelationRequest *UnblockRelationRequest
+	unblockRelationReq *UnblockRelationReq
 }
 
-func (r ApiUnblockRequest) UnblockRelationRequest(unblockRelationRequest UnblockRelationRequest) ApiUnblockRequest {
-	r.unblockRelationRequest = &unblockRelationRequest
+func (r ApiUnblockRequest) UnblockRelationReq(unblockRelationReq UnblockRelationReq) ApiUnblockRequest {
+	r.unblockRelationReq = &unblockRelationReq
 	return r
 }
 
@@ -847,8 +847,8 @@ func (a *RelationServiceService) UnblockExecute(r ApiUnblockRequest) (map[string
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.unblockRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("unblockRelationRequest is required and must be specified")
+	if r.unblockRelationReq == nil {
+		return localVarReturnValue, nil, reportError("unblockRelationReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -869,7 +869,7 @@ func (a *RelationServiceService) UnblockExecute(r ApiUnblockRequest) (map[string
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.unblockRelationRequest
+	localVarPostBody = r.unblockRelationReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -910,11 +910,11 @@ func (a *RelationServiceService) UnblockExecute(r ApiUnblockRequest) (map[string
 type ApiUnfollowRequest struct {
 	ctx context.Context
 	ApiService RelationService
-	unfollowRelationRequest *UnfollowRelationRequest
+	unfollowRelationReq *UnfollowRelationReq
 }
 
-func (r ApiUnfollowRequest) UnfollowRelationRequest(unfollowRelationRequest UnfollowRelationRequest) ApiUnfollowRequest {
-	r.unfollowRelationRequest = &unfollowRelationRequest
+func (r ApiUnfollowRequest) UnfollowRelationReq(unfollowRelationReq UnfollowRelationReq) ApiUnfollowRequest {
+	r.unfollowRelationReq = &unfollowRelationReq
 	return r
 }
 
@@ -957,8 +957,8 @@ func (a *RelationServiceService) UnfollowExecute(r ApiUnfollowRequest) (map[stri
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.unfollowRelationRequest == nil {
-		return localVarReturnValue, nil, reportError("unfollowRelationRequest is required and must be specified")
+	if r.unfollowRelationReq == nil {
+		return localVarReturnValue, nil, reportError("unfollowRelationReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -979,7 +979,7 @@ func (a *RelationServiceService) UnfollowExecute(r ApiUnfollowRequest) (map[stri
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.unfollowRelationRequest
+	localVarPostBody = r.unfollowRelationReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

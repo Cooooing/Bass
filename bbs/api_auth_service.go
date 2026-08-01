@@ -22,23 +22,37 @@ import (
 type AuthService interface {
 
 	/*
-	LoginByPassword Method for LoginByPassword
+	CancelAccount Method for CancelAccount
 
-	使用密码登录账号。
+	注销账号。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-	@return ApiLoginByPasswordRequest
+	@return ApiCancelAccountRequest
 	*/
-	LoginByPassword(ctx context.Context) ApiLoginByPasswordRequest
+	CancelAccount(ctx context.Context) ApiCancelAccountRequest
 
-	// LoginByPasswordExecute executes the request
-	//  @return LoginByPasswordReply
-	LoginByPasswordExecute(r ApiLoginByPasswordRequest) (*LoginByPasswordReply, *http.Response, error)
+	// CancelAccountExecute executes the request
+	//  @return map[string]interface{}
+	CancelAccountExecute(r ApiCancelAccountRequest) (map[string]interface{}, *http.Response, error)
+
+	/*
+	Login Method for Login
+
+	登录账号。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiLoginRequest
+	*/
+	Login(ctx context.Context) ApiLoginRequest
+
+	// LoginExecute executes the request
+	//  @return LoginResp
+	LoginExecute(r ApiLoginRequest) (*LoginResp, *http.Response, error)
 
 	/*
 	Logout Method for Logout
 
-	登出当前账号。
+	退出登录。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiLogoutRequest
@@ -50,9 +64,23 @@ type AuthService interface {
 	LogoutExecute(r ApiLogoutRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
+	RefreshToken Method for RefreshToken
+
+	刷新登录令牌。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiRefreshTokenRequest
+	*/
+	RefreshToken(ctx context.Context) ApiRefreshTokenRequest
+
+	// RefreshTokenExecute executes the request
+	//  @return RefreshTokenResp
+	RefreshTokenExecute(r ApiRefreshTokenRequest) (*RefreshTokenResp, *http.Response, error)
+
+	/*
 	StartEmailRegistration Method for StartEmailRegistration
 
-	使用邮箱发起账号注册。
+	开始邮箱注册。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiStartEmailRegistrationRequest
@@ -60,13 +88,13 @@ type AuthService interface {
 	StartEmailRegistration(ctx context.Context) ApiStartEmailRegistrationRequest
 
 	// StartEmailRegistrationExecute executes the request
-	//  @return StartEmailRegistrationReply
-	StartEmailRegistrationExecute(r ApiStartEmailRegistrationRequest) (*StartEmailRegistrationReply, *http.Response, error)
+	//  @return StartEmailRegistrationResp
+	StartEmailRegistrationExecute(r ApiStartEmailRegistrationRequest) (*StartEmailRegistrationResp, *http.Response, error)
 
 	/*
 	StartPhoneRegistration Method for StartPhoneRegistration
 
-	使用手机号发起账号注册。
+	开始手机注册。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiStartPhoneRegistrationRequest
@@ -74,8 +102,8 @@ type AuthService interface {
 	StartPhoneRegistration(ctx context.Context) ApiStartPhoneRegistrationRequest
 
 	// StartPhoneRegistrationExecute executes the request
-	//  @return StartPhoneRegistrationReply
-	StartPhoneRegistrationExecute(r ApiStartPhoneRegistrationRequest) (*StartPhoneRegistrationReply, *http.Response, error)
+	//  @return StartPhoneRegistrationResp
+	StartPhoneRegistrationExecute(r ApiStartPhoneRegistrationRequest) (*StartPhoneRegistrationResp, *http.Response, error)
 
 	/*
 	VerifyEmailRegistration Method for VerifyEmailRegistration
@@ -94,7 +122,7 @@ type AuthService interface {
 	/*
 	VerifyPhoneRegistration Method for VerifyPhoneRegistration
 
-	校验手机号注册验证码。
+	校验手机注册验证码。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiVerifyPhoneRegistrationRequest
@@ -109,58 +137,58 @@ type AuthService interface {
 // AuthServiceService AuthService service
 type AuthServiceService service
 
-type ApiLoginByPasswordRequest struct {
+type ApiCancelAccountRequest struct {
 	ctx context.Context
 	ApiService AuthService
-	loginByPasswordRequest *LoginByPasswordRequest
+	cancelAccountReq *CancelAccountReq
 }
 
-func (r ApiLoginByPasswordRequest) LoginByPasswordRequest(loginByPasswordRequest LoginByPasswordRequest) ApiLoginByPasswordRequest {
-	r.loginByPasswordRequest = &loginByPasswordRequest
+func (r ApiCancelAccountRequest) CancelAccountReq(cancelAccountReq CancelAccountReq) ApiCancelAccountRequest {
+	r.cancelAccountReq = &cancelAccountReq
 	return r
 }
 
-func (r ApiLoginByPasswordRequest) Execute() (*LoginByPasswordReply, *http.Response, error) {
-	return r.ApiService.LoginByPasswordExecute(r)
+func (r ApiCancelAccountRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.CancelAccountExecute(r)
 }
 
 /*
-LoginByPassword Method for LoginByPassword
+CancelAccount Method for CancelAccount
 
-使用密码登录账号。
+注销账号。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiLoginByPasswordRequest
+ @return ApiCancelAccountRequest
 */
-func (a *AuthServiceService) LoginByPassword(ctx context.Context) ApiLoginByPasswordRequest {
-	return ApiLoginByPasswordRequest{
+func (a *AuthServiceService) CancelAccount(ctx context.Context) ApiCancelAccountRequest {
+	return ApiCancelAccountRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return LoginByPasswordReply
-func (a *AuthServiceService) LoginByPasswordExecute(r ApiLoginByPasswordRequest) (*LoginByPasswordReply, *http.Response, error) {
+//  @return map[string]interface{}
+func (a *AuthServiceService) CancelAccountExecute(r ApiCancelAccountRequest) (map[string]interface{}, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *LoginByPasswordReply
+		localVarReturnValue  map[string]interface{}
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.LoginByPassword")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.CancelAccount")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/auth/login-by-password"
+	localVarPath := localBasePath + "/v1/user/auth/cancel-account"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.loginByPasswordRequest == nil {
-		return localVarReturnValue, nil, reportError("loginByPasswordRequest is required and must be specified")
+	if r.cancelAccountReq == nil {
+		return localVarReturnValue, nil, reportError("cancelAccountReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -181,7 +209,117 @@ func (a *AuthServiceService) LoginByPasswordExecute(r ApiLoginByPasswordRequest)
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.loginByPasswordRequest
+	localVarPostBody = r.cancelAccountReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiLoginRequest struct {
+	ctx context.Context
+	ApiService AuthService
+	loginReq *LoginReq
+}
+
+func (r ApiLoginRequest) LoginReq(loginReq LoginReq) ApiLoginRequest {
+	r.loginReq = &loginReq
+	return r
+}
+
+func (r ApiLoginRequest) Execute() (*LoginResp, *http.Response, error) {
+	return r.ApiService.LoginExecute(r)
+}
+
+/*
+Login Method for Login
+
+登录账号。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiLoginRequest
+*/
+func (a *AuthServiceService) Login(ctx context.Context) ApiLoginRequest {
+	return ApiLoginRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return LoginResp
+func (a *AuthServiceService) LoginExecute(r ApiLoginRequest) (*LoginResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *LoginResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.Login")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/auth/login"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.loginReq == nil {
+		return localVarReturnValue, nil, reportError("loginReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.loginReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -237,7 +375,7 @@ func (r ApiLogoutRequest) Execute() (map[string]interface{}, *http.Response, err
 /*
 Logout Method for Logout
 
-登出当前账号。
+退出登录。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiLogoutRequest
@@ -329,58 +467,58 @@ func (a *AuthServiceService) LogoutExecute(r ApiLogoutRequest) (map[string]inter
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-type ApiStartEmailRegistrationRequest struct {
+type ApiRefreshTokenRequest struct {
 	ctx context.Context
 	ApiService AuthService
-	startEmailRegistrationRequest *StartEmailRegistrationRequest
+	refreshTokenReq *RefreshTokenReq
 }
 
-func (r ApiStartEmailRegistrationRequest) StartEmailRegistrationRequest(startEmailRegistrationRequest StartEmailRegistrationRequest) ApiStartEmailRegistrationRequest {
-	r.startEmailRegistrationRequest = &startEmailRegistrationRequest
+func (r ApiRefreshTokenRequest) RefreshTokenReq(refreshTokenReq RefreshTokenReq) ApiRefreshTokenRequest {
+	r.refreshTokenReq = &refreshTokenReq
 	return r
 }
 
-func (r ApiStartEmailRegistrationRequest) Execute() (*StartEmailRegistrationReply, *http.Response, error) {
-	return r.ApiService.StartEmailRegistrationExecute(r)
+func (r ApiRefreshTokenRequest) Execute() (*RefreshTokenResp, *http.Response, error) {
+	return r.ApiService.RefreshTokenExecute(r)
 }
 
 /*
-StartEmailRegistration Method for StartEmailRegistration
+RefreshToken Method for RefreshToken
 
-使用邮箱发起账号注册。
+刷新登录令牌。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiStartEmailRegistrationRequest
+ @return ApiRefreshTokenRequest
 */
-func (a *AuthServiceService) StartEmailRegistration(ctx context.Context) ApiStartEmailRegistrationRequest {
-	return ApiStartEmailRegistrationRequest{
+func (a *AuthServiceService) RefreshToken(ctx context.Context) ApiRefreshTokenRequest {
+	return ApiRefreshTokenRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return StartEmailRegistrationReply
-func (a *AuthServiceService) StartEmailRegistrationExecute(r ApiStartEmailRegistrationRequest) (*StartEmailRegistrationReply, *http.Response, error) {
+//  @return RefreshTokenResp
+func (a *AuthServiceService) RefreshTokenExecute(r ApiRefreshTokenRequest) (*RefreshTokenResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *StartEmailRegistrationReply
+		localVarReturnValue  *RefreshTokenResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.StartEmailRegistration")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.RefreshToken")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/auth/start-email-registration"
+	localVarPath := localBasePath + "/v1/user/auth/refresh-token"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.startEmailRegistrationRequest == nil {
-		return localVarReturnValue, nil, reportError("startEmailRegistrationRequest is required and must be specified")
+	if r.refreshTokenReq == nil {
+		return localVarReturnValue, nil, reportError("refreshTokenReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -401,7 +539,117 @@ func (a *AuthServiceService) StartEmailRegistrationExecute(r ApiStartEmailRegist
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.startEmailRegistrationRequest
+	localVarPostBody = r.refreshTokenReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiStartEmailRegistrationRequest struct {
+	ctx context.Context
+	ApiService AuthService
+	startEmailRegistrationReq *StartEmailRegistrationReq
+}
+
+func (r ApiStartEmailRegistrationRequest) StartEmailRegistrationReq(startEmailRegistrationReq StartEmailRegistrationReq) ApiStartEmailRegistrationRequest {
+	r.startEmailRegistrationReq = &startEmailRegistrationReq
+	return r
+}
+
+func (r ApiStartEmailRegistrationRequest) Execute() (*StartEmailRegistrationResp, *http.Response, error) {
+	return r.ApiService.StartEmailRegistrationExecute(r)
+}
+
+/*
+StartEmailRegistration Method for StartEmailRegistration
+
+开始邮箱注册。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiStartEmailRegistrationRequest
+*/
+func (a *AuthServiceService) StartEmailRegistration(ctx context.Context) ApiStartEmailRegistrationRequest {
+	return ApiStartEmailRegistrationRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return StartEmailRegistrationResp
+func (a *AuthServiceService) StartEmailRegistrationExecute(r ApiStartEmailRegistrationRequest) (*StartEmailRegistrationResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *StartEmailRegistrationResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.StartEmailRegistration")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/auth/start-email-registration"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.startEmailRegistrationReq == nil {
+		return localVarReturnValue, nil, reportError("startEmailRegistrationReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.startEmailRegistrationReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -442,22 +690,22 @@ func (a *AuthServiceService) StartEmailRegistrationExecute(r ApiStartEmailRegist
 type ApiStartPhoneRegistrationRequest struct {
 	ctx context.Context
 	ApiService AuthService
-	startPhoneRegistrationRequest *StartPhoneRegistrationRequest
+	startPhoneRegistrationReq *StartPhoneRegistrationReq
 }
 
-func (r ApiStartPhoneRegistrationRequest) StartPhoneRegistrationRequest(startPhoneRegistrationRequest StartPhoneRegistrationRequest) ApiStartPhoneRegistrationRequest {
-	r.startPhoneRegistrationRequest = &startPhoneRegistrationRequest
+func (r ApiStartPhoneRegistrationRequest) StartPhoneRegistrationReq(startPhoneRegistrationReq StartPhoneRegistrationReq) ApiStartPhoneRegistrationRequest {
+	r.startPhoneRegistrationReq = &startPhoneRegistrationReq
 	return r
 }
 
-func (r ApiStartPhoneRegistrationRequest) Execute() (*StartPhoneRegistrationReply, *http.Response, error) {
+func (r ApiStartPhoneRegistrationRequest) Execute() (*StartPhoneRegistrationResp, *http.Response, error) {
 	return r.ApiService.StartPhoneRegistrationExecute(r)
 }
 
 /*
 StartPhoneRegistration Method for StartPhoneRegistration
 
-使用手机号发起账号注册。
+开始手机注册。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiStartPhoneRegistrationRequest
@@ -470,13 +718,13 @@ func (a *AuthServiceService) StartPhoneRegistration(ctx context.Context) ApiStar
 }
 
 // Execute executes the request
-//  @return StartPhoneRegistrationReply
-func (a *AuthServiceService) StartPhoneRegistrationExecute(r ApiStartPhoneRegistrationRequest) (*StartPhoneRegistrationReply, *http.Response, error) {
+//  @return StartPhoneRegistrationResp
+func (a *AuthServiceService) StartPhoneRegistrationExecute(r ApiStartPhoneRegistrationRequest) (*StartPhoneRegistrationResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *StartPhoneRegistrationReply
+		localVarReturnValue  *StartPhoneRegistrationResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.StartPhoneRegistration")
@@ -489,8 +737,8 @@ func (a *AuthServiceService) StartPhoneRegistrationExecute(r ApiStartPhoneRegist
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.startPhoneRegistrationRequest == nil {
-		return localVarReturnValue, nil, reportError("startPhoneRegistrationRequest is required and must be specified")
+	if r.startPhoneRegistrationReq == nil {
+		return localVarReturnValue, nil, reportError("startPhoneRegistrationReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -511,7 +759,7 @@ func (a *AuthServiceService) StartPhoneRegistrationExecute(r ApiStartPhoneRegist
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.startPhoneRegistrationRequest
+	localVarPostBody = r.startPhoneRegistrationReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -552,11 +800,11 @@ func (a *AuthServiceService) StartPhoneRegistrationExecute(r ApiStartPhoneRegist
 type ApiVerifyEmailRegistrationRequest struct {
 	ctx context.Context
 	ApiService AuthService
-	verifyEmailRegistrationRequest *VerifyEmailRegistrationRequest
+	verifyEmailRegistrationReq *VerifyEmailRegistrationReq
 }
 
-func (r ApiVerifyEmailRegistrationRequest) VerifyEmailRegistrationRequest(verifyEmailRegistrationRequest VerifyEmailRegistrationRequest) ApiVerifyEmailRegistrationRequest {
-	r.verifyEmailRegistrationRequest = &verifyEmailRegistrationRequest
+func (r ApiVerifyEmailRegistrationRequest) VerifyEmailRegistrationReq(verifyEmailRegistrationReq VerifyEmailRegistrationReq) ApiVerifyEmailRegistrationRequest {
+	r.verifyEmailRegistrationReq = &verifyEmailRegistrationReq
 	return r
 }
 
@@ -599,8 +847,8 @@ func (a *AuthServiceService) VerifyEmailRegistrationExecute(r ApiVerifyEmailRegi
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.verifyEmailRegistrationRequest == nil {
-		return localVarReturnValue, nil, reportError("verifyEmailRegistrationRequest is required and must be specified")
+	if r.verifyEmailRegistrationReq == nil {
+		return localVarReturnValue, nil, reportError("verifyEmailRegistrationReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -621,7 +869,7 @@ func (a *AuthServiceService) VerifyEmailRegistrationExecute(r ApiVerifyEmailRegi
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.verifyEmailRegistrationRequest
+	localVarPostBody = r.verifyEmailRegistrationReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -662,11 +910,11 @@ func (a *AuthServiceService) VerifyEmailRegistrationExecute(r ApiVerifyEmailRegi
 type ApiVerifyPhoneRegistrationRequest struct {
 	ctx context.Context
 	ApiService AuthService
-	verifyPhoneRegistrationRequest *VerifyPhoneRegistrationRequest
+	verifyPhoneRegistrationReq *VerifyPhoneRegistrationReq
 }
 
-func (r ApiVerifyPhoneRegistrationRequest) VerifyPhoneRegistrationRequest(verifyPhoneRegistrationRequest VerifyPhoneRegistrationRequest) ApiVerifyPhoneRegistrationRequest {
-	r.verifyPhoneRegistrationRequest = &verifyPhoneRegistrationRequest
+func (r ApiVerifyPhoneRegistrationRequest) VerifyPhoneRegistrationReq(verifyPhoneRegistrationReq VerifyPhoneRegistrationReq) ApiVerifyPhoneRegistrationRequest {
+	r.verifyPhoneRegistrationReq = &verifyPhoneRegistrationReq
 	return r
 }
 
@@ -677,7 +925,7 @@ func (r ApiVerifyPhoneRegistrationRequest) Execute() (map[string]interface{}, *h
 /*
 VerifyPhoneRegistration Method for VerifyPhoneRegistration
 
-校验手机号注册验证码。
+校验手机注册验证码。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiVerifyPhoneRegistrationRequest
@@ -709,8 +957,8 @@ func (a *AuthServiceService) VerifyPhoneRegistrationExecute(r ApiVerifyPhoneRegi
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.verifyPhoneRegistrationRequest == nil {
-		return localVarReturnValue, nil, reportError("verifyPhoneRegistrationRequest is required and must be specified")
+	if r.verifyPhoneRegistrationReq == nil {
+		return localVarReturnValue, nil, reportError("verifyPhoneRegistrationReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -731,7 +979,7 @@ func (a *AuthServiceService) VerifyPhoneRegistrationExecute(r ApiVerifyPhoneRegi
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.verifyPhoneRegistrationRequest
+	localVarPostBody = r.verifyPhoneRegistrationReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## GetCurrent
 
-> GetCurrentPrivacySettingReply GetCurrent(ctx).Body(body).Execute()
+> GetCurrentPrivacySettingResp GetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -39,7 +39,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingService.GetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetCurrent`: GetCurrentPrivacySettingReply
+	// response from `GetCurrent`: GetCurrentPrivacySettingResp
 	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingService.GetCurrent`: %v\n", resp)
 }
 ```
@@ -59,7 +59,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCurrentPrivacySettingReply**](GetCurrentPrivacySettingReply.md)
+[**GetCurrentPrivacySettingResp**](GetCurrentPrivacySettingResp.md)
 
 ### Authorization
 
@@ -77,7 +77,7 @@ No authorization required
 
 ## UpdateCurrent
 
-> UpdateCurrentPrivacySettingReply UpdateCurrent(ctx).UpdateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest).Execute()
+> UpdateCurrentPrivacySettingResp UpdateCurrent(ctx).UpdateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq).Execute()
 
 
 
@@ -96,16 +96,16 @@ import (
 )
 
 func main() {
-	updateCurrentPrivacySettingRequest := *openapiclient.NewUpdateCurrentPrivacySettingRequest() // UpdateCurrentPrivacySettingRequest | 
+	updateCurrentPrivacySettingReq := *openapiclient.NewUpdateCurrentPrivacySettingReq() // UpdateCurrentPrivacySettingReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PrivacySettingService.UpdateCurrent(context.Background()).UpdateCurrentPrivacySettingRequest(updateCurrentPrivacySettingRequest).Execute()
+	resp, r, err := apiClient.PrivacySettingService.UpdateCurrent(context.Background()).UpdateCurrentPrivacySettingReq(updateCurrentPrivacySettingReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `PrivacySettingService.UpdateCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UpdateCurrent`: UpdateCurrentPrivacySettingReply
+	// response from `UpdateCurrent`: UpdateCurrentPrivacySettingResp
 	fmt.Fprintf(os.Stdout, "Response from `PrivacySettingService.UpdateCurrent`: %v\n", resp)
 }
 ```
@@ -121,11 +121,11 @@ Other parameters are passed through a pointer to a apiUpdateCurrentRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **updateCurrentPrivacySettingRequest** | [**UpdateCurrentPrivacySettingRequest**](UpdateCurrentPrivacySettingRequest.md) |  | 
+ **updateCurrentPrivacySettingReq** | [**UpdateCurrentPrivacySettingReq**](UpdateCurrentPrivacySettingReq.md) |  | 
 
 ### Return type
 
-[**UpdateCurrentPrivacySettingReply**](UpdateCurrentPrivacySettingReply.md)
+[**UpdateCurrentPrivacySettingResp**](UpdateCurrentPrivacySettingResp.md)
 
 ### Authorization
 

@@ -16,30 +16,27 @@ Name | Type | Description | Notes
 **Type** | Pointer to **string** |  | [optional] 
 **Statement** | Pointer to **string** |  | [optional] 
 **Commentable** | Pointer to **bool** |  | [optional] 
-**Anonymous** | Pointer to **bool** |  | [optional] 
 **ViewCount** | Pointer to **int32** |  | [optional] 
 **ThankCount** | Pointer to **int32** |  | [optional] 
 **LikeCount** | Pointer to **int32** |  | [optional] 
 **CollectCount** | Pointer to **int32** |  | [optional] 
-**WatchCount** | Pointer to **int32** |  | [optional] 
+**RewardCount** | Pointer to **int32** |  | [optional] 
 **ReplyCount** | Pointer to **int32** |  | [optional] 
-**BountyPoints** | Pointer to **int32** |  | [optional] 
-**AcceptedAnswerId** | Pointer to **string** |  | [optional] 
 **AuthorUser** | Pointer to [**AccountProfile**](AccountProfile.md) |  | [optional] 
 **LastReplyUser** | Pointer to [**AccountProfile**](AccountProfile.md) |  | [optional] 
-**LastReplyAt** | Pointer to **string** |  | [optional] 
+**LastReplyAt** | Pointer to **time.Time** |  | [optional] 
 **CoverImageUrl** | Pointer to **string** |  | [optional] 
 **ViewerActionState** | Pointer to [**ArticleViewerActionState**](ArticleViewerActionState.md) |  | [optional] 
-**PublishedAt** | Pointer to **string** |  | [optional] 
+**PublishedAt** | Pointer to **time.Time** |  | [optional] 
 **Postscripts** | Pointer to [**[]ArticlePostscript**](ArticlePostscript.md) |  | [optional] 
 **PublishStatus** | Pointer to **string** |  | [optional] 
 **Visibility** | Pointer to **string** |  | [optional] 
 **Restriction** | Pointer to **string** |  | [optional] 
-**EditedAt** | Pointer to **string** |  | [optional] 
+**EditedAt** | Pointer to **time.Time** |  | [optional] 
 **CreatedBy** | Pointer to **string** |  | [optional] 
 **UpdatedBy** | Pointer to **string** |  | [optional] 
-**CreatedAt** | Pointer to **string** |  | [optional] 
-**UpdatedAt** | Pointer to **string** |  | [optional] 
+**CreatedAt** | Pointer to **time.Time** |  | [optional] 
+**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
 
 ## Methods
 
@@ -360,31 +357,6 @@ SetCommentable sets Commentable field to given value.
 
 HasCommentable returns a boolean if a field has been set.
 
-### GetAnonymous
-
-`func (o *ArticleDetail) GetAnonymous() bool`
-
-GetAnonymous returns the Anonymous field if non-nil, zero value otherwise.
-
-### GetAnonymousOk
-
-`func (o *ArticleDetail) GetAnonymousOk() (*bool, bool)`
-
-GetAnonymousOk returns a tuple with the Anonymous field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetAnonymous
-
-`func (o *ArticleDetail) SetAnonymous(v bool)`
-
-SetAnonymous sets Anonymous field to given value.
-
-### HasAnonymous
-
-`func (o *ArticleDetail) HasAnonymous() bool`
-
-HasAnonymous returns a boolean if a field has been set.
-
 ### GetViewCount
 
 `func (o *ArticleDetail) GetViewCount() int32`
@@ -485,30 +457,30 @@ SetCollectCount sets CollectCount field to given value.
 
 HasCollectCount returns a boolean if a field has been set.
 
-### GetWatchCount
+### GetRewardCount
 
-`func (o *ArticleDetail) GetWatchCount() int32`
+`func (o *ArticleDetail) GetRewardCount() int32`
 
-GetWatchCount returns the WatchCount field if non-nil, zero value otherwise.
+GetRewardCount returns the RewardCount field if non-nil, zero value otherwise.
 
-### GetWatchCountOk
+### GetRewardCountOk
 
-`func (o *ArticleDetail) GetWatchCountOk() (*int32, bool)`
+`func (o *ArticleDetail) GetRewardCountOk() (*int32, bool)`
 
-GetWatchCountOk returns a tuple with the WatchCount field if it's non-nil, zero value otherwise
+GetRewardCountOk returns a tuple with the RewardCount field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetWatchCount
+### SetRewardCount
 
-`func (o *ArticleDetail) SetWatchCount(v int32)`
+`func (o *ArticleDetail) SetRewardCount(v int32)`
 
-SetWatchCount sets WatchCount field to given value.
+SetRewardCount sets RewardCount field to given value.
 
-### HasWatchCount
+### HasRewardCount
 
-`func (o *ArticleDetail) HasWatchCount() bool`
+`func (o *ArticleDetail) HasRewardCount() bool`
 
-HasWatchCount returns a boolean if a field has been set.
+HasRewardCount returns a boolean if a field has been set.
 
 ### GetReplyCount
 
@@ -534,56 +506,6 @@ SetReplyCount sets ReplyCount field to given value.
 `func (o *ArticleDetail) HasReplyCount() bool`
 
 HasReplyCount returns a boolean if a field has been set.
-
-### GetBountyPoints
-
-`func (o *ArticleDetail) GetBountyPoints() int32`
-
-GetBountyPoints returns the BountyPoints field if non-nil, zero value otherwise.
-
-### GetBountyPointsOk
-
-`func (o *ArticleDetail) GetBountyPointsOk() (*int32, bool)`
-
-GetBountyPointsOk returns a tuple with the BountyPoints field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetBountyPoints
-
-`func (o *ArticleDetail) SetBountyPoints(v int32)`
-
-SetBountyPoints sets BountyPoints field to given value.
-
-### HasBountyPoints
-
-`func (o *ArticleDetail) HasBountyPoints() bool`
-
-HasBountyPoints returns a boolean if a field has been set.
-
-### GetAcceptedAnswerId
-
-`func (o *ArticleDetail) GetAcceptedAnswerId() string`
-
-GetAcceptedAnswerId returns the AcceptedAnswerId field if non-nil, zero value otherwise.
-
-### GetAcceptedAnswerIdOk
-
-`func (o *ArticleDetail) GetAcceptedAnswerIdOk() (*string, bool)`
-
-GetAcceptedAnswerIdOk returns a tuple with the AcceptedAnswerId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetAcceptedAnswerId
-
-`func (o *ArticleDetail) SetAcceptedAnswerId(v string)`
-
-SetAcceptedAnswerId sets AcceptedAnswerId field to given value.
-
-### HasAcceptedAnswerId
-
-`func (o *ArticleDetail) HasAcceptedAnswerId() bool`
-
-HasAcceptedAnswerId returns a boolean if a field has been set.
 
 ### GetAuthorUser
 
@@ -637,20 +559,20 @@ HasLastReplyUser returns a boolean if a field has been set.
 
 ### GetLastReplyAt
 
-`func (o *ArticleDetail) GetLastReplyAt() string`
+`func (o *ArticleDetail) GetLastReplyAt() time.Time`
 
 GetLastReplyAt returns the LastReplyAt field if non-nil, zero value otherwise.
 
 ### GetLastReplyAtOk
 
-`func (o *ArticleDetail) GetLastReplyAtOk() (*string, bool)`
+`func (o *ArticleDetail) GetLastReplyAtOk() (*time.Time, bool)`
 
 GetLastReplyAtOk returns a tuple with the LastReplyAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetLastReplyAt
 
-`func (o *ArticleDetail) SetLastReplyAt(v string)`
+`func (o *ArticleDetail) SetLastReplyAt(v time.Time)`
 
 SetLastReplyAt sets LastReplyAt field to given value.
 
@@ -712,20 +634,20 @@ HasViewerActionState returns a boolean if a field has been set.
 
 ### GetPublishedAt
 
-`func (o *ArticleDetail) GetPublishedAt() string`
+`func (o *ArticleDetail) GetPublishedAt() time.Time`
 
 GetPublishedAt returns the PublishedAt field if non-nil, zero value otherwise.
 
 ### GetPublishedAtOk
 
-`func (o *ArticleDetail) GetPublishedAtOk() (*string, bool)`
+`func (o *ArticleDetail) GetPublishedAtOk() (*time.Time, bool)`
 
 GetPublishedAtOk returns a tuple with the PublishedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetPublishedAt
 
-`func (o *ArticleDetail) SetPublishedAt(v string)`
+`func (o *ArticleDetail) SetPublishedAt(v time.Time)`
 
 SetPublishedAt sets PublishedAt field to given value.
 
@@ -837,20 +759,20 @@ HasRestriction returns a boolean if a field has been set.
 
 ### GetEditedAt
 
-`func (o *ArticleDetail) GetEditedAt() string`
+`func (o *ArticleDetail) GetEditedAt() time.Time`
 
 GetEditedAt returns the EditedAt field if non-nil, zero value otherwise.
 
 ### GetEditedAtOk
 
-`func (o *ArticleDetail) GetEditedAtOk() (*string, bool)`
+`func (o *ArticleDetail) GetEditedAtOk() (*time.Time, bool)`
 
 GetEditedAtOk returns a tuple with the EditedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetEditedAt
 
-`func (o *ArticleDetail) SetEditedAt(v string)`
+`func (o *ArticleDetail) SetEditedAt(v time.Time)`
 
 SetEditedAt sets EditedAt field to given value.
 
@@ -912,20 +834,20 @@ HasUpdatedBy returns a boolean if a field has been set.
 
 ### GetCreatedAt
 
-`func (o *ArticleDetail) GetCreatedAt() string`
+`func (o *ArticleDetail) GetCreatedAt() time.Time`
 
 GetCreatedAt returns the CreatedAt field if non-nil, zero value otherwise.
 
 ### GetCreatedAtOk
 
-`func (o *ArticleDetail) GetCreatedAtOk() (*string, bool)`
+`func (o *ArticleDetail) GetCreatedAtOk() (*time.Time, bool)`
 
 GetCreatedAtOk returns a tuple with the CreatedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCreatedAt
 
-`func (o *ArticleDetail) SetCreatedAt(v string)`
+`func (o *ArticleDetail) SetCreatedAt(v time.Time)`
 
 SetCreatedAt sets CreatedAt field to given value.
 
@@ -937,20 +859,20 @@ HasCreatedAt returns a boolean if a field has been set.
 
 ### GetUpdatedAt
 
-`func (o *ArticleDetail) GetUpdatedAt() string`
+`func (o *ArticleDetail) GetUpdatedAt() time.Time`
 
 GetUpdatedAt returns the UpdatedAt field if non-nil, zero value otherwise.
 
 ### GetUpdatedAtOk
 
-`func (o *ArticleDetail) GetUpdatedAtOk() (*string, bool)`
+`func (o *ArticleDetail) GetUpdatedAtOk() (*time.Time, bool)`
 
 GetUpdatedAtOk returns a tuple with the UpdatedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetUpdatedAt
 
-`func (o *ArticleDetail) SetUpdatedAt(v string)`
+`func (o *ArticleDetail) SetUpdatedAt(v time.Time)`
 
 SetUpdatedAt sets UpdatedAt field to given value.
 

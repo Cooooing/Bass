@@ -32,8 +32,8 @@ type AccountService interface {
 	Avatar(ctx context.Context) ApiAvatarRequest
 
 	// AvatarExecute executes the request
-	//  @return ImageReply
-	AvatarExecute(r ApiAvatarRequest) (*ImageReply, *http.Response, error)
+	//  @return ImageResp
+	AvatarExecute(r ApiAvatarRequest) (*ImageResp, *http.Response, error)
 
 	/*
 	GetCurrent Method for GetCurrent
@@ -46,8 +46,8 @@ type AccountService interface {
 	GetCurrent(ctx context.Context) ApiGetCurrentRequest
 
 	// GetCurrentExecute executes the request
-	//  @return GetCurrentAccountReply
-	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentAccountReply, *http.Response, error)
+	//  @return GetCurrentAccountResp
+	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentAccountResp, *http.Response, error)
 
 	/*
 	GetProfile Method for GetProfile
@@ -60,8 +60,8 @@ type AccountService interface {
 	GetProfile(ctx context.Context) ApiGetProfileRequest
 
 	// GetProfileExecute executes the request
-	//  @return GetProfileAccountReply
-	GetProfileExecute(r ApiGetProfileRequest) (*GetProfileAccountReply, *http.Response, error)
+	//  @return GetProfileAccountResp
+	GetProfileExecute(r ApiGetProfileRequest) (*GetProfileAccountResp, *http.Response, error)
 
 	/*
 	UpdateProfile Method for UpdateProfile
@@ -74,8 +74,8 @@ type AccountService interface {
 	UpdateProfile(ctx context.Context) ApiUpdateProfileRequest
 
 	// UpdateProfileExecute executes the request
-	//  @return UpdateProfileAccountReply
-	UpdateProfileExecute(r ApiUpdateProfileRequest) (*UpdateProfileAccountReply, *http.Response, error)
+	//  @return UpdateProfileAccountResp
+	UpdateProfileExecute(r ApiUpdateProfileRequest) (*UpdateProfileAccountResp, *http.Response, error)
 }
 
 // AccountServiceService AccountService service
@@ -87,13 +87,12 @@ type ApiAvatarRequest struct {
 	name *string
 }
 
-// 用于生成头像的账号名。
 func (r ApiAvatarRequest) Name(name string) ApiAvatarRequest {
 	r.name = &name
 	return r
 }
 
-func (r ApiAvatarRequest) Execute() (*ImageReply, *http.Response, error) {
+func (r ApiAvatarRequest) Execute() (*ImageResp, *http.Response, error) {
 	return r.ApiService.AvatarExecute(r)
 }
 
@@ -113,13 +112,13 @@ func (a *AccountServiceService) Avatar(ctx context.Context) ApiAvatarRequest {
 }
 
 // Execute executes the request
-//  @return ImageReply
-func (a *AccountServiceService) AvatarExecute(r ApiAvatarRequest) (*ImageReply, *http.Response, error) {
+//  @return ImageResp
+func (a *AccountServiceService) AvatarExecute(r ApiAvatarRequest) (*ImageResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ImageReply
+		localVarReturnValue  *ImageResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.Avatar")
@@ -201,7 +200,7 @@ func (r ApiGetCurrentRequest) Body(body map[string]interface{}) ApiGetCurrentReq
 	return r
 }
 
-func (r ApiGetCurrentRequest) Execute() (*GetCurrentAccountReply, *http.Response, error) {
+func (r ApiGetCurrentRequest) Execute() (*GetCurrentAccountResp, *http.Response, error) {
 	return r.ApiService.GetCurrentExecute(r)
 }
 
@@ -221,13 +220,13 @@ func (a *AccountServiceService) GetCurrent(ctx context.Context) ApiGetCurrentReq
 }
 
 // Execute executes the request
-//  @return GetCurrentAccountReply
-func (a *AccountServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentAccountReply, *http.Response, error) {
+//  @return GetCurrentAccountResp
+func (a *AccountServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentAccountResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetCurrentAccountReply
+		localVarReturnValue  *GetCurrentAccountResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.GetCurrent")
@@ -303,15 +302,15 @@ func (a *AccountServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetC
 type ApiGetProfileRequest struct {
 	ctx context.Context
 	ApiService AccountService
-	getProfileAccountRequest *GetProfileAccountRequest
+	getProfileAccountReq *GetProfileAccountReq
 }
 
-func (r ApiGetProfileRequest) GetProfileAccountRequest(getProfileAccountRequest GetProfileAccountRequest) ApiGetProfileRequest {
-	r.getProfileAccountRequest = &getProfileAccountRequest
+func (r ApiGetProfileRequest) GetProfileAccountReq(getProfileAccountReq GetProfileAccountReq) ApiGetProfileRequest {
+	r.getProfileAccountReq = &getProfileAccountReq
 	return r
 }
 
-func (r ApiGetProfileRequest) Execute() (*GetProfileAccountReply, *http.Response, error) {
+func (r ApiGetProfileRequest) Execute() (*GetProfileAccountResp, *http.Response, error) {
 	return r.ApiService.GetProfileExecute(r)
 }
 
@@ -331,13 +330,13 @@ func (a *AccountServiceService) GetProfile(ctx context.Context) ApiGetProfileReq
 }
 
 // Execute executes the request
-//  @return GetProfileAccountReply
-func (a *AccountServiceService) GetProfileExecute(r ApiGetProfileRequest) (*GetProfileAccountReply, *http.Response, error) {
+//  @return GetProfileAccountResp
+func (a *AccountServiceService) GetProfileExecute(r ApiGetProfileRequest) (*GetProfileAccountResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetProfileAccountReply
+		localVarReturnValue  *GetProfileAccountResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.GetProfile")
@@ -350,8 +349,8 @@ func (a *AccountServiceService) GetProfileExecute(r ApiGetProfileRequest) (*GetP
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.getProfileAccountRequest == nil {
-		return localVarReturnValue, nil, reportError("getProfileAccountRequest is required and must be specified")
+	if r.getProfileAccountReq == nil {
+		return localVarReturnValue, nil, reportError("getProfileAccountReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -372,7 +371,7 @@ func (a *AccountServiceService) GetProfileExecute(r ApiGetProfileRequest) (*GetP
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.getProfileAccountRequest
+	localVarPostBody = r.getProfileAccountReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -413,15 +412,15 @@ func (a *AccountServiceService) GetProfileExecute(r ApiGetProfileRequest) (*GetP
 type ApiUpdateProfileRequest struct {
 	ctx context.Context
 	ApiService AccountService
-	updateProfileAccountRequest *UpdateProfileAccountRequest
+	updateProfileAccountReq *UpdateProfileAccountReq
 }
 
-func (r ApiUpdateProfileRequest) UpdateProfileAccountRequest(updateProfileAccountRequest UpdateProfileAccountRequest) ApiUpdateProfileRequest {
-	r.updateProfileAccountRequest = &updateProfileAccountRequest
+func (r ApiUpdateProfileRequest) UpdateProfileAccountReq(updateProfileAccountReq UpdateProfileAccountReq) ApiUpdateProfileRequest {
+	r.updateProfileAccountReq = &updateProfileAccountReq
 	return r
 }
 
-func (r ApiUpdateProfileRequest) Execute() (*UpdateProfileAccountReply, *http.Response, error) {
+func (r ApiUpdateProfileRequest) Execute() (*UpdateProfileAccountResp, *http.Response, error) {
 	return r.ApiService.UpdateProfileExecute(r)
 }
 
@@ -441,13 +440,13 @@ func (a *AccountServiceService) UpdateProfile(ctx context.Context) ApiUpdateProf
 }
 
 // Execute executes the request
-//  @return UpdateProfileAccountReply
-func (a *AccountServiceService) UpdateProfileExecute(r ApiUpdateProfileRequest) (*UpdateProfileAccountReply, *http.Response, error) {
+//  @return UpdateProfileAccountResp
+func (a *AccountServiceService) UpdateProfileExecute(r ApiUpdateProfileRequest) (*UpdateProfileAccountResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *UpdateProfileAccountReply
+		localVarReturnValue  *UpdateProfileAccountResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdateProfile")
@@ -460,8 +459,8 @@ func (a *AccountServiceService) UpdateProfileExecute(r ApiUpdateProfileRequest) 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.updateProfileAccountRequest == nil {
-		return localVarReturnValue, nil, reportError("updateProfileAccountRequest is required and must be specified")
+	if r.updateProfileAccountReq == nil {
+		return localVarReturnValue, nil, reportError("updateProfileAccountReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -482,7 +481,7 @@ func (a *AccountServiceService) UpdateProfileExecute(r ApiUpdateProfileRequest) 
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.updateProfileAccountRequest
+	localVarPostBody = r.updateProfileAccountReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

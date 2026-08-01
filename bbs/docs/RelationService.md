@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 ## Block
 
-> map[string]interface{} Block(ctx).BlockRelationRequest(blockRelationRequest).Execute()
+> map[string]interface{} Block(ctx).BlockRelationReq(blockRelationReq).Execute()
 
 
 
@@ -36,11 +36,11 @@ import (
 )
 
 func main() {
-	blockRelationRequest := *openapiclient.NewBlockRelationRequest("TargetId_example") // BlockRelationRequest | 
+	blockRelationReq := *openapiclient.NewBlockRelationReq("TargetId_example") // BlockRelationReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationService.Block(context.Background()).BlockRelationRequest(blockRelationRequest).Execute()
+	resp, r, err := apiClient.RelationService.Block(context.Background()).BlockRelationReq(blockRelationReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.Block``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -61,7 +61,7 @@ Other parameters are passed through a pointer to a apiBlockRequest struct via th
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **blockRelationRequest** | [**BlockRelationRequest**](BlockRelationRequest.md) |  | 
+ **blockRelationReq** | [**BlockRelationReq**](BlockRelationReq.md) |  | 
 
 ### Return type
 
@@ -83,7 +83,7 @@ No authorization required
 
 ## Follow
 
-> map[string]interface{} Follow(ctx).FollowRelationRequest(followRelationRequest).Execute()
+> map[string]interface{} Follow(ctx).FollowRelationReq(followRelationReq).Execute()
 
 
 
@@ -102,11 +102,11 @@ import (
 )
 
 func main() {
-	followRelationRequest := *openapiclient.NewFollowRelationRequest("TargetId_example") // FollowRelationRequest | 
+	followRelationReq := *openapiclient.NewFollowRelationReq("TargetId_example") // FollowRelationReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationService.Follow(context.Background()).FollowRelationRequest(followRelationRequest).Execute()
+	resp, r, err := apiClient.RelationService.Follow(context.Background()).FollowRelationReq(followRelationReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.Follow``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -127,7 +127,7 @@ Other parameters are passed through a pointer to a apiFollowRequest struct via t
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **followRelationRequest** | [**FollowRelationRequest**](FollowRelationRequest.md) |  | 
+ **followRelationReq** | [**FollowRelationReq**](FollowRelationReq.md) |  | 
 
 ### Return type
 
@@ -149,7 +149,7 @@ No authorization required
 
 ## GetStatus
 
-> GetStatusRelationReply GetStatus(ctx).GetStatusRelationRequest(getStatusRelationRequest).Execute()
+> GetStatusRelationResp GetStatus(ctx).GetStatusRelationReq(getStatusRelationReq).Execute()
 
 
 
@@ -168,16 +168,16 @@ import (
 )
 
 func main() {
-	getStatusRelationRequest := *openapiclient.NewGetStatusRelationRequest("TargetId_example") // GetStatusRelationRequest | 
+	getStatusRelationReq := *openapiclient.NewGetStatusRelationReq("TargetId_example") // GetStatusRelationReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationService.GetStatus(context.Background()).GetStatusRelationRequest(getStatusRelationRequest).Execute()
+	resp, r, err := apiClient.RelationService.GetStatus(context.Background()).GetStatusRelationReq(getStatusRelationReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.GetStatus``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetStatus`: GetStatusRelationReply
+	// response from `GetStatus`: GetStatusRelationResp
 	fmt.Fprintf(os.Stdout, "Response from `RelationService.GetStatus`: %v\n", resp)
 }
 ```
@@ -193,11 +193,11 @@ Other parameters are passed through a pointer to a apiGetStatusRequest struct vi
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **getStatusRelationRequest** | [**GetStatusRelationRequest**](GetStatusRelationRequest.md) |  | 
+ **getStatusRelationReq** | [**GetStatusRelationReq**](GetStatusRelationReq.md) |  | 
 
 ### Return type
 
-[**GetStatusRelationReply**](GetStatusRelationReply.md)
+[**GetStatusRelationResp**](GetStatusRelationResp.md)
 
 ### Authorization
 
@@ -215,7 +215,7 @@ No authorization required
 
 ## ListBlocked
 
-> ListBlockedRelationsReply ListBlocked(ctx).ListBlockedRelationsRequest(listBlockedRelationsRequest).Execute()
+> ListBlockedRelationsResp ListBlocked(ctx).ListBlockedRelationsReq(listBlockedRelationsReq).Execute()
 
 
 
@@ -234,16 +234,16 @@ import (
 )
 
 func main() {
-	listBlockedRelationsRequest := *openapiclient.NewListBlockedRelationsRequest() // ListBlockedRelationsRequest | 
+	listBlockedRelationsReq := *openapiclient.NewListBlockedRelationsReq() // ListBlockedRelationsReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationService.ListBlocked(context.Background()).ListBlockedRelationsRequest(listBlockedRelationsRequest).Execute()
+	resp, r, err := apiClient.RelationService.ListBlocked(context.Background()).ListBlockedRelationsReq(listBlockedRelationsReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.ListBlocked``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ListBlocked`: ListBlockedRelationsReply
+	// response from `ListBlocked`: ListBlockedRelationsResp
 	fmt.Fprintf(os.Stdout, "Response from `RelationService.ListBlocked`: %v\n", resp)
 }
 ```
@@ -259,11 +259,11 @@ Other parameters are passed through a pointer to a apiListBlockedRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listBlockedRelationsRequest** | [**ListBlockedRelationsRequest**](ListBlockedRelationsRequest.md) |  | 
+ **listBlockedRelationsReq** | [**ListBlockedRelationsReq**](ListBlockedRelationsReq.md) |  | 
 
 ### Return type
 
-[**ListBlockedRelationsReply**](ListBlockedRelationsReply.md)
+[**ListBlockedRelationsResp**](ListBlockedRelationsResp.md)
 
 ### Authorization
 
@@ -281,7 +281,7 @@ No authorization required
 
 ## ListFollowers
 
-> ListFollowersRelationsReply ListFollowers(ctx).ListFollowersRelationsRequest(listFollowersRelationsRequest).Execute()
+> ListFollowersRelationsResp ListFollowers(ctx).ListFollowersRelationsReq(listFollowersRelationsReq).Execute()
 
 
 
@@ -300,16 +300,16 @@ import (
 )
 
 func main() {
-	listFollowersRelationsRequest := *openapiclient.NewListFollowersRelationsRequest() // ListFollowersRelationsRequest | 
+	listFollowersRelationsReq := *openapiclient.NewListFollowersRelationsReq() // ListFollowersRelationsReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationService.ListFollowers(context.Background()).ListFollowersRelationsRequest(listFollowersRelationsRequest).Execute()
+	resp, r, err := apiClient.RelationService.ListFollowers(context.Background()).ListFollowersRelationsReq(listFollowersRelationsReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.ListFollowers``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ListFollowers`: ListFollowersRelationsReply
+	// response from `ListFollowers`: ListFollowersRelationsResp
 	fmt.Fprintf(os.Stdout, "Response from `RelationService.ListFollowers`: %v\n", resp)
 }
 ```
@@ -325,11 +325,11 @@ Other parameters are passed through a pointer to a apiListFollowersRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listFollowersRelationsRequest** | [**ListFollowersRelationsRequest**](ListFollowersRelationsRequest.md) |  | 
+ **listFollowersRelationsReq** | [**ListFollowersRelationsReq**](ListFollowersRelationsReq.md) |  | 
 
 ### Return type
 
-[**ListFollowersRelationsReply**](ListFollowersRelationsReply.md)
+[**ListFollowersRelationsResp**](ListFollowersRelationsResp.md)
 
 ### Authorization
 
@@ -347,7 +347,7 @@ No authorization required
 
 ## ListFollowing
 
-> ListFollowingRelationsReply ListFollowing(ctx).ListFollowingRelationsRequest(listFollowingRelationsRequest).Execute()
+> ListFollowingRelationsResp ListFollowing(ctx).ListFollowingRelationsReq(listFollowingRelationsReq).Execute()
 
 
 
@@ -366,16 +366,16 @@ import (
 )
 
 func main() {
-	listFollowingRelationsRequest := *openapiclient.NewListFollowingRelationsRequest() // ListFollowingRelationsRequest | 
+	listFollowingRelationsReq := *openapiclient.NewListFollowingRelationsReq() // ListFollowingRelationsReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationService.ListFollowing(context.Background()).ListFollowingRelationsRequest(listFollowingRelationsRequest).Execute()
+	resp, r, err := apiClient.RelationService.ListFollowing(context.Background()).ListFollowingRelationsReq(listFollowingRelationsReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.ListFollowing``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ListFollowing`: ListFollowingRelationsReply
+	// response from `ListFollowing`: ListFollowingRelationsResp
 	fmt.Fprintf(os.Stdout, "Response from `RelationService.ListFollowing`: %v\n", resp)
 }
 ```
@@ -391,11 +391,11 @@ Other parameters are passed through a pointer to a apiListFollowingRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listFollowingRelationsRequest** | [**ListFollowingRelationsRequest**](ListFollowingRelationsRequest.md) |  | 
+ **listFollowingRelationsReq** | [**ListFollowingRelationsReq**](ListFollowingRelationsReq.md) |  | 
 
 ### Return type
 
-[**ListFollowingRelationsReply**](ListFollowingRelationsReply.md)
+[**ListFollowingRelationsResp**](ListFollowingRelationsResp.md)
 
 ### Authorization
 
@@ -413,7 +413,7 @@ No authorization required
 
 ## Unblock
 
-> map[string]interface{} Unblock(ctx).UnblockRelationRequest(unblockRelationRequest).Execute()
+> map[string]interface{} Unblock(ctx).UnblockRelationReq(unblockRelationReq).Execute()
 
 
 
@@ -432,11 +432,11 @@ import (
 )
 
 func main() {
-	unblockRelationRequest := *openapiclient.NewUnblockRelationRequest("TargetId_example") // UnblockRelationRequest | 
+	unblockRelationReq := *openapiclient.NewUnblockRelationReq("TargetId_example") // UnblockRelationReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationService.Unblock(context.Background()).UnblockRelationRequest(unblockRelationRequest).Execute()
+	resp, r, err := apiClient.RelationService.Unblock(context.Background()).UnblockRelationReq(unblockRelationReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.Unblock``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -457,7 +457,7 @@ Other parameters are passed through a pointer to a apiUnblockRequest struct via 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **unblockRelationRequest** | [**UnblockRelationRequest**](UnblockRelationRequest.md) |  | 
+ **unblockRelationReq** | [**UnblockRelationReq**](UnblockRelationReq.md) |  | 
 
 ### Return type
 
@@ -479,7 +479,7 @@ No authorization required
 
 ## Unfollow
 
-> map[string]interface{} Unfollow(ctx).UnfollowRelationRequest(unfollowRelationRequest).Execute()
+> map[string]interface{} Unfollow(ctx).UnfollowRelationReq(unfollowRelationReq).Execute()
 
 
 
@@ -498,11 +498,11 @@ import (
 )
 
 func main() {
-	unfollowRelationRequest := *openapiclient.NewUnfollowRelationRequest("TargetId_example") // UnfollowRelationRequest | 
+	unfollowRelationReq := *openapiclient.NewUnfollowRelationReq("TargetId_example") // UnfollowRelationReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.RelationService.Unfollow(context.Background()).UnfollowRelationRequest(unfollowRelationRequest).Execute()
+	resp, r, err := apiClient.RelationService.Unfollow(context.Background()).UnfollowRelationReq(unfollowRelationReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `RelationService.Unfollow``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -523,7 +523,7 @@ Other parameters are passed through a pointer to a apiUnfollowRequest struct via
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **unfollowRelationRequest** | [**UnfollowRelationRequest**](UnfollowRelationRequest.md) |  | 
+ **unfollowRelationReq** | [**UnfollowRelationReq**](UnfollowRelationReq.md) |  | 
 
 ### Return type
 

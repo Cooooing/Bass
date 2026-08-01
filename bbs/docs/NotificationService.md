@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## CountUnread
 
-> CountUnreadNotificationsReply CountUnread(ctx).Body(body).Execute()
+> CountUnreadNotificationsResp CountUnread(ctx).Body(body).Execute()
 
 
 
@@ -40,7 +40,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `NotificationService.CountUnread``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `CountUnread`: CountUnreadNotificationsReply
+	// response from `CountUnread`: CountUnreadNotificationsResp
 	fmt.Fprintf(os.Stdout, "Response from `NotificationService.CountUnread`: %v\n", resp)
 }
 ```
@@ -60,7 +60,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**CountUnreadNotificationsReply**](CountUnreadNotificationsReply.md)
+[**CountUnreadNotificationsResp**](CountUnreadNotificationsResp.md)
 
 ### Authorization
 
@@ -78,7 +78,7 @@ No authorization required
 
 ## List
 
-> ListNotificationsReply List(ctx).ListNotificationsRequest(listNotificationsRequest).Execute()
+> ListNotificationsResp List(ctx).ListNotificationsReq(listNotificationsReq).Execute()
 
 
 
@@ -97,16 +97,16 @@ import (
 )
 
 func main() {
-	listNotificationsRequest := *openapiclient.NewListNotificationsRequest() // ListNotificationsRequest | 
+	listNotificationsReq := *openapiclient.NewListNotificationsReq() // ListNotificationsReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NotificationService.List(context.Background()).ListNotificationsRequest(listNotificationsRequest).Execute()
+	resp, r, err := apiClient.NotificationService.List(context.Background()).ListNotificationsReq(listNotificationsReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `NotificationService.List``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `List`: ListNotificationsReply
+	// response from `List`: ListNotificationsResp
 	fmt.Fprintf(os.Stdout, "Response from `NotificationService.List`: %v\n", resp)
 }
 ```
@@ -122,11 +122,11 @@ Other parameters are passed through a pointer to a apiListRequest struct via the
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listNotificationsRequest** | [**ListNotificationsRequest**](ListNotificationsRequest.md) |  | 
+ **listNotificationsReq** | [**ListNotificationsReq**](ListNotificationsReq.md) |  | 
 
 ### Return type
 
-[**ListNotificationsReply**](ListNotificationsReply.md)
+[**ListNotificationsResp**](ListNotificationsResp.md)
 
 ### Authorization
 
@@ -144,7 +144,7 @@ No authorization required
 
 ## MarkRead
 
-> MarkReadNotificationReply MarkRead(ctx).MarkReadNotificationRequest(markReadNotificationRequest).Execute()
+> MarkReadNotificationResp MarkRead(ctx).MarkReadNotificationReq(markReadNotificationReq).Execute()
 
 
 
@@ -163,16 +163,16 @@ import (
 )
 
 func main() {
-	markReadNotificationRequest := *openapiclient.NewMarkReadNotificationRequest() // MarkReadNotificationRequest | 
+	markReadNotificationReq := *openapiclient.NewMarkReadNotificationReq([]string{"Ids_example"}) // MarkReadNotificationReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NotificationService.MarkRead(context.Background()).MarkReadNotificationRequest(markReadNotificationRequest).Execute()
+	resp, r, err := apiClient.NotificationService.MarkRead(context.Background()).MarkReadNotificationReq(markReadNotificationReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `NotificationService.MarkRead``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `MarkRead`: MarkReadNotificationReply
+	// response from `MarkRead`: MarkReadNotificationResp
 	fmt.Fprintf(os.Stdout, "Response from `NotificationService.MarkRead`: %v\n", resp)
 }
 ```
@@ -188,11 +188,11 @@ Other parameters are passed through a pointer to a apiMarkReadRequest struct via
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **markReadNotificationRequest** | [**MarkReadNotificationRequest**](MarkReadNotificationRequest.md) |  | 
+ **markReadNotificationReq** | [**MarkReadNotificationReq**](MarkReadNotificationReq.md) |  | 
 
 ### Return type
 
-[**MarkReadNotificationReply**](MarkReadNotificationReply.md)
+[**MarkReadNotificationResp**](MarkReadNotificationResp.md)
 
 ### Authorization
 

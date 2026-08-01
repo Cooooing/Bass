@@ -22,9 +22,23 @@ import (
 type DomainService interface {
 
 	/*
+	Create Method for Create
+
+	创建领域。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCreateRequest
+	*/
+	Create(ctx context.Context) ApiCreateRequest
+
+	// CreateExecute executes the request
+	//  @return CreateDomainResp
+	CreateExecute(r ApiCreateRequest) (*CreateDomainResp, *http.Response, error)
+
+	/*
 	List Method for List
 
-	分页查询内容板块列表。
+	查询领域列表。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiListRequest
@@ -32,65 +46,79 @@ type DomainService interface {
 	List(ctx context.Context) ApiListRequest
 
 	// ListExecute executes the request
-	//  @return ListDomainsReply
-	ListExecute(r ApiListRequest) (*ListDomainsReply, *http.Response, error)
+	//  @return ListDomainsResp
+	ListExecute(r ApiListRequest) (*ListDomainsResp, *http.Response, error)
+
+	/*
+	Update Method for Update
+
+	更新领域。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUpdateRequest
+	*/
+	Update(ctx context.Context) ApiUpdateRequest
+
+	// UpdateExecute executes the request
+	//  @return UpdateDomainResp
+	UpdateExecute(r ApiUpdateRequest) (*UpdateDomainResp, *http.Response, error)
 }
 
 // DomainServiceService DomainService service
 type DomainServiceService service
 
-type ApiListRequest struct {
+type ApiCreateRequest struct {
 	ctx context.Context
 	ApiService DomainService
-	listDomainsRequest *ListDomainsRequest
+	createDomainReq *CreateDomainReq
 }
 
-func (r ApiListRequest) ListDomainsRequest(listDomainsRequest ListDomainsRequest) ApiListRequest {
-	r.listDomainsRequest = &listDomainsRequest
+func (r ApiCreateRequest) CreateDomainReq(createDomainReq CreateDomainReq) ApiCreateRequest {
+	r.createDomainReq = &createDomainReq
 	return r
 }
 
-func (r ApiListRequest) Execute() (*ListDomainsReply, *http.Response, error) {
-	return r.ApiService.ListExecute(r)
+func (r ApiCreateRequest) Execute() (*CreateDomainResp, *http.Response, error) {
+	return r.ApiService.CreateExecute(r)
 }
 
 /*
-List Method for List
+Create Method for Create
 
-分页查询内容板块列表。
+创建领域。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- @return ApiListRequest
+ @return ApiCreateRequest
 */
-func (a *DomainServiceService) List(ctx context.Context) ApiListRequest {
-	return ApiListRequest{
+func (a *DomainServiceService) Create(ctx context.Context) ApiCreateRequest {
+	return ApiCreateRequest{
 		ApiService: a,
 		ctx: ctx,
 	}
 }
 
 // Execute executes the request
-//  @return ListDomainsReply
-func (a *DomainServiceService) ListExecute(r ApiListRequest) (*ListDomainsReply, *http.Response, error) {
+//  @return CreateDomainResp
+func (a *DomainServiceService) CreateExecute(r ApiCreateRequest) (*CreateDomainResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *ListDomainsReply
+		localVarReturnValue  *CreateDomainResp
 	)
 
-	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.List")
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.Create")
 	if err != nil {
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/content/domain/list"
+	localVarPath := localBasePath + "/v1/content/domain/create"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.listDomainsRequest == nil {
-		return localVarReturnValue, nil, reportError("listDomainsRequest is required and must be specified")
+	if r.createDomainReq == nil {
+		return localVarReturnValue, nil, reportError("createDomainReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -111,7 +139,227 @@ func (a *DomainServiceService) ListExecute(r ApiListRequest) (*ListDomainsReply,
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.listDomainsRequest
+	localVarPostBody = r.createDomainReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListRequest struct {
+	ctx context.Context
+	ApiService DomainService
+	listDomainsReq *ListDomainsReq
+}
+
+func (r ApiListRequest) ListDomainsReq(listDomainsReq ListDomainsReq) ApiListRequest {
+	r.listDomainsReq = &listDomainsReq
+	return r
+}
+
+func (r ApiListRequest) Execute() (*ListDomainsResp, *http.Response, error) {
+	return r.ApiService.ListExecute(r)
+}
+
+/*
+List Method for List
+
+查询领域列表。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListRequest
+*/
+func (a *DomainServiceService) List(ctx context.Context) ApiListRequest {
+	return ApiListRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListDomainsResp
+func (a *DomainServiceService) ListExecute(r ApiListRequest) (*ListDomainsResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListDomainsResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.List")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/domain/list"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listDomainsReq == nil {
+		return localVarReturnValue, nil, reportError("listDomainsReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listDomainsReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiUpdateRequest struct {
+	ctx context.Context
+	ApiService DomainService
+	updateDomainReq *UpdateDomainReq
+}
+
+func (r ApiUpdateRequest) UpdateDomainReq(updateDomainReq UpdateDomainReq) ApiUpdateRequest {
+	r.updateDomainReq = &updateDomainReq
+	return r
+}
+
+func (r ApiUpdateRequest) Execute() (*UpdateDomainResp, *http.Response, error) {
+	return r.ApiService.UpdateExecute(r)
+}
+
+/*
+Update Method for Update
+
+更新领域。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiUpdateRequest
+*/
+func (a *DomainServiceService) Update(ctx context.Context) ApiUpdateRequest {
+	return ApiUpdateRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return UpdateDomainResp
+func (a *DomainServiceService) UpdateExecute(r ApiUpdateRequest) (*UpdateDomainResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *UpdateDomainResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DomainServiceService.Update")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/domain/update"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.updateDomainReq == nil {
+		return localVarReturnValue, nil, reportError("updateDomainReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.updateDomainReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

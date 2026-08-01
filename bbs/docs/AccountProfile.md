@@ -4,18 +4,18 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Id** | Pointer to **string** | 账号 ID。 | [optional] 
-**Name** | Pointer to **string** | 账号名。 | [optional] 
-**Nickname** | Pointer to **string** | 昵称。 | [optional] 
-**Url** | Pointer to **string** | 个人主页 URL。 | [optional] 
-**AvatarUrl** | Pointer to **string** | 头像 URL。 | [optional] 
-**Introduction** | Pointer to **string** | 个人简介。 | [optional] 
-**Mbti** | Pointer to **string** | MBTI 类型。 | [optional] 
-**Status** | Pointer to **string** | 账号状态。 | [optional] 
-**FollowCount** | Pointer to **int32** | 关注数量。 | [optional] 
-**FollowerCount** | Pointer to **int32** | 粉丝数量。 | [optional] 
-**CreatedAt** | Pointer to **string** | 创建时间。 | [optional] 
-**UpdatedAt** | Pointer to **string** | 更新时间。 | [optional] 
+**Id** | Pointer to **string** |  | [optional] 
+**Name** | Pointer to **string** |  | [optional] 
+**Nickname** | Pointer to **string** |  | [optional] 
+**Url** | Pointer to **string** |  | [optional] 
+**AvatarUrl** | Pointer to **string** |  | [optional] 
+**Introduction** | Pointer to **string** |  | [optional] 
+**Mbti** | Pointer to **string** |  | [optional] 
+**Status** | Pointer to **string** |  | [optional] 
+**FollowCount** | Pointer to **int32** |  | [optional] 
+**FollowerCount** | Pointer to **int32** |  | [optional] 
+**CreatedAt** | Pointer to **time.Time** |  | [optional] 
+**UpdatedAt** | Pointer to **time.Time** |  | [optional] 
 
 ## Methods
 
@@ -288,20 +288,20 @@ HasFollowerCount returns a boolean if a field has been set.
 
 ### GetCreatedAt
 
-`func (o *AccountProfile) GetCreatedAt() string`
+`func (o *AccountProfile) GetCreatedAt() time.Time`
 
 GetCreatedAt returns the CreatedAt field if non-nil, zero value otherwise.
 
 ### GetCreatedAtOk
 
-`func (o *AccountProfile) GetCreatedAtOk() (*string, bool)`
+`func (o *AccountProfile) GetCreatedAtOk() (*time.Time, bool)`
 
 GetCreatedAtOk returns a tuple with the CreatedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCreatedAt
 
-`func (o *AccountProfile) SetCreatedAt(v string)`
+`func (o *AccountProfile) SetCreatedAt(v time.Time)`
 
 SetCreatedAt sets CreatedAt field to given value.
 
@@ -313,20 +313,20 @@ HasCreatedAt returns a boolean if a field has been set.
 
 ### GetUpdatedAt
 
-`func (o *AccountProfile) GetUpdatedAt() string`
+`func (o *AccountProfile) GetUpdatedAt() time.Time`
 
 GetUpdatedAt returns the UpdatedAt field if non-nil, zero value otherwise.
 
 ### GetUpdatedAtOk
 
-`func (o *AccountProfile) GetUpdatedAtOk() (*string, bool)`
+`func (o *AccountProfile) GetUpdatedAtOk() (*time.Time, bool)`
 
 GetUpdatedAtOk returns a tuple with the UpdatedAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetUpdatedAt
 
-`func (o *AccountProfile) SetUpdatedAt(v string)`
+`func (o *AccountProfile) SetUpdatedAt(v time.Time)`
 
 SetUpdatedAt sets UpdatedAt field to given value.
 

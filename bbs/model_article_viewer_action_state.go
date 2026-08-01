@@ -17,12 +17,12 @@ import (
 // checks if the ArticleViewerActionState type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticleViewerActionState{}
 
-// ArticleViewerActionState 当前查看账号的文章行为状态。
+// ArticleViewerActionState struct for ArticleViewerActionState
 type ArticleViewerActionState struct {
 	Liked *bool `json:"liked,omitempty"`
 	Thanked *bool `json:"thanked,omitempty"`
 	Collected *bool `json:"collected,omitempty"`
-	Watched *bool `json:"watched,omitempty"`
+	Rewarded *bool `json:"rewarded,omitempty"`
 }
 
 // NewArticleViewerActionState instantiates a new ArticleViewerActionState object
@@ -138,36 +138,36 @@ func (o *ArticleViewerActionState) SetCollected(v bool) {
 	o.Collected = &v
 }
 
-// GetWatched returns the Watched field value if set, zero value otherwise.
-func (o *ArticleViewerActionState) GetWatched() bool {
-	if o == nil || IsNil(o.Watched) {
+// GetRewarded returns the Rewarded field value if set, zero value otherwise.
+func (o *ArticleViewerActionState) GetRewarded() bool {
+	if o == nil || IsNil(o.Rewarded) {
 		var ret bool
 		return ret
 	}
-	return *o.Watched
+	return *o.Rewarded
 }
 
-// GetWatchedOk returns a tuple with the Watched field value if set, nil otherwise
+// GetRewardedOk returns a tuple with the Rewarded field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ArticleViewerActionState) GetWatchedOk() (*bool, bool) {
-	if o == nil || IsNil(o.Watched) {
+func (o *ArticleViewerActionState) GetRewardedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Rewarded) {
 		return nil, false
 	}
-	return o.Watched, true
+	return o.Rewarded, true
 }
 
-// HasWatched returns a boolean if a field has been set.
-func (o *ArticleViewerActionState) HasWatched() bool {
-	if o != nil && !IsNil(o.Watched) {
+// HasRewarded returns a boolean if a field has been set.
+func (o *ArticleViewerActionState) HasRewarded() bool {
+	if o != nil && !IsNil(o.Rewarded) {
 		return true
 	}
 
 	return false
 }
 
-// SetWatched gets a reference to the given bool and assigns it to the Watched field.
-func (o *ArticleViewerActionState) SetWatched(v bool) {
-	o.Watched = &v
+// SetRewarded gets a reference to the given bool and assigns it to the Rewarded field.
+func (o *ArticleViewerActionState) SetRewarded(v bool) {
+	o.Rewarded = &v
 }
 
 func (o ArticleViewerActionState) MarshalJSON() ([]byte, error) {
@@ -189,8 +189,8 @@ func (o ArticleViewerActionState) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Collected) {
 		toSerialize["collected"] = o.Collected
 	}
-	if !IsNil(o.Watched) {
-		toSerialize["watched"] = o.Watched
+	if !IsNil(o.Rewarded) {
+		toSerialize["rewarded"] = o.Rewarded
 	}
 	return toSerialize, nil
 }

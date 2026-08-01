@@ -32,8 +32,8 @@ type LocationService interface {
 	GetCurrent(ctx context.Context) ApiGetCurrentRequest
 
 	// GetCurrentExecute executes the request
-	//  @return GetCurrentLocationReply
-	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentLocationReply, *http.Response, error)
+	//  @return GetCurrentLocationResp
+	GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentLocationResp, *http.Response, error)
 
 	/*
 	UpsertCurrent Method for UpsertCurrent
@@ -46,8 +46,8 @@ type LocationService interface {
 	UpsertCurrent(ctx context.Context) ApiUpsertCurrentRequest
 
 	// UpsertCurrentExecute executes the request
-	//  @return UpsertCurrentLocationReply
-	UpsertCurrentExecute(r ApiUpsertCurrentRequest) (*UpsertCurrentLocationReply, *http.Response, error)
+	//  @return UpsertCurrentLocationResp
+	UpsertCurrentExecute(r ApiUpsertCurrentRequest) (*UpsertCurrentLocationResp, *http.Response, error)
 }
 
 // LocationServiceService LocationService service
@@ -64,7 +64,7 @@ func (r ApiGetCurrentRequest) Body(body map[string]interface{}) ApiGetCurrentReq
 	return r
 }
 
-func (r ApiGetCurrentRequest) Execute() (*GetCurrentLocationReply, *http.Response, error) {
+func (r ApiGetCurrentRequest) Execute() (*GetCurrentLocationResp, *http.Response, error) {
 	return r.ApiService.GetCurrentExecute(r)
 }
 
@@ -84,13 +84,13 @@ func (a *LocationServiceService) GetCurrent(ctx context.Context) ApiGetCurrentRe
 }
 
 // Execute executes the request
-//  @return GetCurrentLocationReply
-func (a *LocationServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentLocationReply, *http.Response, error) {
+//  @return GetCurrentLocationResp
+func (a *LocationServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetCurrentLocationResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetCurrentLocationReply
+		localVarReturnValue  *GetCurrentLocationResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LocationServiceService.GetCurrent")
@@ -166,15 +166,15 @@ func (a *LocationServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*Get
 type ApiUpsertCurrentRequest struct {
 	ctx context.Context
 	ApiService LocationService
-	upsertCurrentLocationRequest *UpsertCurrentLocationRequest
+	upsertCurrentLocationReq *UpsertCurrentLocationReq
 }
 
-func (r ApiUpsertCurrentRequest) UpsertCurrentLocationRequest(upsertCurrentLocationRequest UpsertCurrentLocationRequest) ApiUpsertCurrentRequest {
-	r.upsertCurrentLocationRequest = &upsertCurrentLocationRequest
+func (r ApiUpsertCurrentRequest) UpsertCurrentLocationReq(upsertCurrentLocationReq UpsertCurrentLocationReq) ApiUpsertCurrentRequest {
+	r.upsertCurrentLocationReq = &upsertCurrentLocationReq
 	return r
 }
 
-func (r ApiUpsertCurrentRequest) Execute() (*UpsertCurrentLocationReply, *http.Response, error) {
+func (r ApiUpsertCurrentRequest) Execute() (*UpsertCurrentLocationResp, *http.Response, error) {
 	return r.ApiService.UpsertCurrentExecute(r)
 }
 
@@ -194,13 +194,13 @@ func (a *LocationServiceService) UpsertCurrent(ctx context.Context) ApiUpsertCur
 }
 
 // Execute executes the request
-//  @return UpsertCurrentLocationReply
-func (a *LocationServiceService) UpsertCurrentExecute(r ApiUpsertCurrentRequest) (*UpsertCurrentLocationReply, *http.Response, error) {
+//  @return UpsertCurrentLocationResp
+func (a *LocationServiceService) UpsertCurrentExecute(r ApiUpsertCurrentRequest) (*UpsertCurrentLocationResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *UpsertCurrentLocationReply
+		localVarReturnValue  *UpsertCurrentLocationResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "LocationServiceService.UpsertCurrent")
@@ -213,8 +213,8 @@ func (a *LocationServiceService) UpsertCurrentExecute(r ApiUpsertCurrentRequest)
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.upsertCurrentLocationRequest == nil {
-		return localVarReturnValue, nil, reportError("upsertCurrentLocationRequest is required and must be specified")
+	if r.upsertCurrentLocationReq == nil {
+		return localVarReturnValue, nil, reportError("upsertCurrentLocationReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -235,7 +235,7 @@ func (a *LocationServiceService) UpsertCurrentExecute(r ApiUpsertCurrentRequest)
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.upsertCurrentLocationRequest
+	localVarPostBody = r.upsertCurrentLocationReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

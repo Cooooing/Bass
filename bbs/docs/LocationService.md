@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## GetCurrent
 
-> GetCurrentLocationReply GetCurrent(ctx).Body(body).Execute()
+> GetCurrentLocationResp GetCurrent(ctx).Body(body).Execute()
 
 
 
@@ -39,7 +39,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `LocationService.GetCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetCurrent`: GetCurrentLocationReply
+	// response from `GetCurrent`: GetCurrentLocationResp
 	fmt.Fprintf(os.Stdout, "Response from `LocationService.GetCurrent`: %v\n", resp)
 }
 ```
@@ -59,7 +59,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**GetCurrentLocationReply**](GetCurrentLocationReply.md)
+[**GetCurrentLocationResp**](GetCurrentLocationResp.md)
 
 ### Authorization
 
@@ -77,7 +77,7 @@ No authorization required
 
 ## UpsertCurrent
 
-> UpsertCurrentLocationReply UpsertCurrent(ctx).UpsertCurrentLocationRequest(upsertCurrentLocationRequest).Execute()
+> UpsertCurrentLocationResp UpsertCurrent(ctx).UpsertCurrentLocationReq(upsertCurrentLocationReq).Execute()
 
 
 
@@ -96,16 +96,16 @@ import (
 )
 
 func main() {
-	upsertCurrentLocationRequest := *openapiclient.NewUpsertCurrentLocationRequest() // UpsertCurrentLocationRequest | 
+	upsertCurrentLocationReq := *openapiclient.NewUpsertCurrentLocationReq() // UpsertCurrentLocationReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LocationService.UpsertCurrent(context.Background()).UpsertCurrentLocationRequest(upsertCurrentLocationRequest).Execute()
+	resp, r, err := apiClient.LocationService.UpsertCurrent(context.Background()).UpsertCurrentLocationReq(upsertCurrentLocationReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LocationService.UpsertCurrent``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UpsertCurrent`: UpsertCurrentLocationReply
+	// response from `UpsertCurrent`: UpsertCurrentLocationResp
 	fmt.Fprintf(os.Stdout, "Response from `LocationService.UpsertCurrent`: %v\n", resp)
 }
 ```
@@ -121,11 +121,11 @@ Other parameters are passed through a pointer to a apiUpsertCurrentRequest struc
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **upsertCurrentLocationRequest** | [**UpsertCurrentLocationRequest**](UpsertCurrentLocationRequest.md) |  | 
+ **upsertCurrentLocationReq** | [**UpsertCurrentLocationReq**](UpsertCurrentLocationReq.md) |  | 
 
 ### Return type
 
-[**UpsertCurrentLocationReply**](UpsertCurrentLocationReply.md)
+[**UpsertCurrentLocationResp**](UpsertCurrentLocationResp.md)
 
 ### Authorization
 

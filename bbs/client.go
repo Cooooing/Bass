@@ -63,6 +63,8 @@ type APIClient struct {
 
 	NotificationService NotificationService
 
+	OtpService OtpService
+
 	PostscriptService PostscriptService
 
 	PreferencesService PreferencesService
@@ -72,8 +74,6 @@ type APIClient struct {
 	RelationService RelationService
 
 	TagService TagService
-
-	TotpService TotpService
 }
 
 type service struct {
@@ -99,12 +99,12 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.DomainService = (*DomainServiceService)(&c.common)
 	c.LocationService = (*LocationServiceService)(&c.common)
 	c.NotificationService = (*NotificationServiceService)(&c.common)
+	c.OtpService = (*OtpServiceService)(&c.common)
 	c.PostscriptService = (*PostscriptServiceService)(&c.common)
 	c.PreferencesService = (*PreferencesServiceService)(&c.common)
 	c.PrivacySettingService = (*PrivacySettingServiceService)(&c.common)
 	c.RelationService = (*RelationServiceService)(&c.common)
 	c.TagService = (*TagServiceService)(&c.common)
-	c.TotpService = (*TotpServiceService)(&c.common)
 
 	return c
 }

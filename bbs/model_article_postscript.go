@@ -12,12 +12,13 @@ package bbs
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // checks if the ArticlePostscript type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &ArticlePostscript{}
 
-// ArticlePostscript 文章附言。
+// ArticlePostscript struct for ArticlePostscript
 type ArticlePostscript struct {
 	Id *string `json:"id,omitempty"`
 	ArticleId *string `json:"article_id,omitempty"`
@@ -26,8 +27,8 @@ type ArticlePostscript struct {
 	Restriction *string `json:"restriction,omitempty"`
 	CreatedBy *string `json:"created_by,omitempty"`
 	UpdatedBy *string `json:"updated_by,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
-	UpdatedAt *string `json:"updated_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
 // NewArticlePostscript instantiates a new ArticlePostscript object
@@ -272,9 +273,9 @@ func (o *ArticlePostscript) SetUpdatedBy(v string) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *ArticlePostscript) GetCreatedAt() string {
+func (o *ArticlePostscript) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.CreatedAt
@@ -282,7 +283,7 @@ func (o *ArticlePostscript) GetCreatedAt() string {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ArticlePostscript) GetCreatedAtOk() (*string, bool) {
+func (o *ArticlePostscript) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -298,15 +299,15 @@ func (o *ArticlePostscript) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
-func (o *ArticlePostscript) SetCreatedAt(v string) {
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *ArticlePostscript) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *ArticlePostscript) GetUpdatedAt() string {
+func (o *ArticlePostscript) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.UpdatedAt
@@ -314,7 +315,7 @@ func (o *ArticlePostscript) GetUpdatedAt() string {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ArticlePostscript) GetUpdatedAtOk() (*string, bool) {
+func (o *ArticlePostscript) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -330,8 +331,8 @@ func (o *ArticlePostscript) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
-func (o *ArticlePostscript) SetUpdatedAt(v string) {
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *ArticlePostscript) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 

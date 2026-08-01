@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **Liked** | Pointer to **bool** |  | [optional] 
 **Thanked** | Pointer to **bool** |  | [optional] 
 **Collected** | Pointer to **bool** |  | [optional] 
-**Watched** | Pointer to **bool** |  | [optional] 
+**Rewarded** | Pointer to **bool** |  | [optional] 
 
 ## Methods
 
@@ -103,30 +103,30 @@ SetCollected sets Collected field to given value.
 
 HasCollected returns a boolean if a field has been set.
 
-### GetWatched
+### GetRewarded
 
-`func (o *ArticleViewerActionState) GetWatched() bool`
+`func (o *ArticleViewerActionState) GetRewarded() bool`
 
-GetWatched returns the Watched field if non-nil, zero value otherwise.
+GetRewarded returns the Rewarded field if non-nil, zero value otherwise.
 
-### GetWatchedOk
+### GetRewardedOk
 
-`func (o *ArticleViewerActionState) GetWatchedOk() (*bool, bool)`
+`func (o *ArticleViewerActionState) GetRewardedOk() (*bool, bool)`
 
-GetWatchedOk returns a tuple with the Watched field if it's non-nil, zero value otherwise
+GetRewardedOk returns a tuple with the Rewarded field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetWatched
+### SetRewarded
 
-`func (o *ArticleViewerActionState) SetWatched(v bool)`
+`func (o *ArticleViewerActionState) SetRewarded(v bool)`
 
-SetWatched sets Watched field to given value.
+SetRewarded sets Rewarded field to given value.
 
-### HasWatched
+### HasRewarded
 
-`func (o *ArticleViewerActionState) HasWatched() bool`
+`func (o *ArticleViewerActionState) HasRewarded() bool`
 
-HasWatched returns a boolean if a field has been set.
+HasRewarded returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

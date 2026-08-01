@@ -12,37 +12,26 @@ package bbs
 
 import (
 	"encoding/json"
+	"time"
 )
 
 // checks if the AccountProfile type satisfies the MappedNullable interface at compile time
 var _ MappedNullable = &AccountProfile{}
 
-// AccountProfile 账号展示资料。
+// AccountProfile struct for AccountProfile
 type AccountProfile struct {
-	// 账号 ID。
 	Id *string `json:"id,omitempty"`
-	// 账号名。
 	Name *string `json:"name,omitempty"`
-	// 昵称。
 	Nickname *string `json:"nickname,omitempty"`
-	// 个人主页 URL。
 	Url *string `json:"url,omitempty"`
-	// 头像 URL。
 	AvatarUrl *string `json:"avatar_url,omitempty"`
-	// 个人简介。
 	Introduction *string `json:"introduction,omitempty"`
-	// MBTI 类型。
 	Mbti *string `json:"mbti,omitempty"`
-	// 账号状态。
 	Status *string `json:"status,omitempty"`
-	// 关注数量。
 	FollowCount *int32 `json:"follow_count,omitempty"`
-	// 粉丝数量。
 	FollowerCount *int32 `json:"follower_count,omitempty"`
-	// 创建时间。
-	CreatedAt *string `json:"created_at,omitempty"`
-	// 更新时间。
-	UpdatedAt *string `json:"updated_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
 // NewAccountProfile instantiates a new AccountProfile object
@@ -383,9 +372,9 @@ func (o *AccountProfile) SetFollowerCount(v int32) {
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *AccountProfile) GetCreatedAt() string {
+func (o *AccountProfile) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.CreatedAt
@@ -393,7 +382,7 @@ func (o *AccountProfile) GetCreatedAt() string {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AccountProfile) GetCreatedAtOk() (*string, bool) {
+func (o *AccountProfile) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -409,15 +398,15 @@ func (o *AccountProfile) HasCreatedAt() bool {
 	return false
 }
 
-// SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
-func (o *AccountProfile) SetCreatedAt(v string) {
+// SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
+func (o *AccountProfile) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *AccountProfile) GetUpdatedAt() string {
+func (o *AccountProfile) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
-		var ret string
+		var ret time.Time
 		return ret
 	}
 	return *o.UpdatedAt
@@ -425,7 +414,7 @@ func (o *AccountProfile) GetUpdatedAt() string {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *AccountProfile) GetUpdatedAtOk() (*string, bool) {
+func (o *AccountProfile) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -441,8 +430,8 @@ func (o *AccountProfile) HasUpdatedAt() bool {
 	return false
 }
 
-// SetUpdatedAt gets a reference to the given string and assigns it to the UpdatedAt field.
-func (o *AccountProfile) SetUpdatedAt(v string) {
+// SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
+func (o *AccountProfile) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 

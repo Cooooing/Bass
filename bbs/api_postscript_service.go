@@ -32,8 +32,22 @@ type PostscriptService interface {
 	Add(ctx context.Context) ApiAddRequest
 
 	// AddExecute executes the request
-	//  @return AddPostscriptReply
-	AddExecute(r ApiAddRequest) (*AddPostscriptReply, *http.Response, error)
+	//  @return AddPostscriptResp
+	AddExecute(r ApiAddRequest) (*AddPostscriptResp, *http.Response, error)
+
+	/*
+	List Method for List
+
+	查询文章附言列表。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListRequest
+	*/
+	List(ctx context.Context) ApiListRequest
+
+	// ListExecute executes the request
+	//  @return ListPostscriptsResp
+	ListExecute(r ApiListRequest) (*ListPostscriptsResp, *http.Response, error)
 }
 
 // PostscriptServiceService PostscriptService service
@@ -42,15 +56,15 @@ type PostscriptServiceService service
 type ApiAddRequest struct {
 	ctx context.Context
 	ApiService PostscriptService
-	addPostscriptRequest *AddPostscriptRequest
+	addPostscriptReq *AddPostscriptReq
 }
 
-func (r ApiAddRequest) AddPostscriptRequest(addPostscriptRequest AddPostscriptRequest) ApiAddRequest {
-	r.addPostscriptRequest = &addPostscriptRequest
+func (r ApiAddRequest) AddPostscriptReq(addPostscriptReq AddPostscriptReq) ApiAddRequest {
+	r.addPostscriptReq = &addPostscriptReq
 	return r
 }
 
-func (r ApiAddRequest) Execute() (*AddPostscriptReply, *http.Response, error) {
+func (r ApiAddRequest) Execute() (*AddPostscriptResp, *http.Response, error) {
 	return r.ApiService.AddExecute(r)
 }
 
@@ -70,13 +84,13 @@ func (a *PostscriptServiceService) Add(ctx context.Context) ApiAddRequest {
 }
 
 // Execute executes the request
-//  @return AddPostscriptReply
-func (a *PostscriptServiceService) AddExecute(r ApiAddRequest) (*AddPostscriptReply, *http.Response, error) {
+//  @return AddPostscriptResp
+func (a *PostscriptServiceService) AddExecute(r ApiAddRequest) (*AddPostscriptResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *AddPostscriptReply
+		localVarReturnValue  *AddPostscriptResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PostscriptServiceService.Add")
@@ -89,8 +103,8 @@ func (a *PostscriptServiceService) AddExecute(r ApiAddRequest) (*AddPostscriptRe
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.addPostscriptRequest == nil {
-		return localVarReturnValue, nil, reportError("addPostscriptRequest is required and must be specified")
+	if r.addPostscriptReq == nil {
+		return localVarReturnValue, nil, reportError("addPostscriptReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -111,7 +125,117 @@ func (a *PostscriptServiceService) AddExecute(r ApiAddRequest) (*AddPostscriptRe
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.addPostscriptRequest
+	localVarPostBody = r.addPostscriptReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListRequest struct {
+	ctx context.Context
+	ApiService PostscriptService
+	listPostscriptsReq *ListPostscriptsReq
+}
+
+func (r ApiListRequest) ListPostscriptsReq(listPostscriptsReq ListPostscriptsReq) ApiListRequest {
+	r.listPostscriptsReq = &listPostscriptsReq
+	return r
+}
+
+func (r ApiListRequest) Execute() (*ListPostscriptsResp, *http.Response, error) {
+	return r.ApiService.ListExecute(r)
+}
+
+/*
+List Method for List
+
+查询文章附言列表。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListRequest
+*/
+func (a *PostscriptServiceService) List(ctx context.Context) ApiListRequest {
+	return ApiListRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListPostscriptsResp
+func (a *PostscriptServiceService) ListExecute(r ApiListRequest) (*ListPostscriptsResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListPostscriptsResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "PostscriptServiceService.List")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/postscript/list"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listPostscriptsReq == nil {
+		return localVarReturnValue, nil, reportError("listPostscriptsReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listPostscriptsReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

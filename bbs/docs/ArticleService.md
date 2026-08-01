@@ -4,25 +4,25 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**AcceptAnswer**](ArticleService.md#AcceptAnswer) | **Post** /v1/content/article/accept-answer | 
+[**Archive**](ArticleService.md#Archive) | **Post** /v1/content/article/archive | 
+[**CancelPublish**](ArticleService.md#CancelPublish) | **Post** /v1/content/article/publish/cancel | 
 [**Collect**](ArticleService.md#Collect) | **Post** /v1/content/article/collect | 
-[**Create**](ArticleService.md#Create) | **Post** /v1/content/article/create | 
-[**DiscardDraft**](ArticleService.md#DiscardDraft) | **Post** /v1/content/article/discard-draft | 
+[**CreateDraft**](ArticleService.md#CreateDraft) | **Post** /v1/content/article/draft/create | 
+[**DiscardDraft**](ArticleService.md#DiscardDraft) | **Post** /v1/content/article/draft/discard | 
 [**Get**](ArticleService.md#Get) | **Post** /v1/content/article/get | 
 [**Like**](ArticleService.md#Like) | **Post** /v1/content/article/like | 
 [**List**](ArticleService.md#List) | **Post** /v1/content/article/list | 
 [**Publish**](ArticleService.md#Publish) | **Post** /v1/content/article/publish | 
 [**Reward**](ArticleService.md#Reward) | **Post** /v1/content/article/reward | 
+[**SchedulePublish**](ArticleService.md#SchedulePublish) | **Post** /v1/content/article/publish/schedule | 
 [**Thank**](ArticleService.md#Thank) | **Post** /v1/content/article/thank | 
-[**Update**](ArticleService.md#Update) | **Post** /v1/content/article/update | 
-[**UpdateDraft**](ArticleService.md#UpdateDraft) | **Post** /v1/content/article/update-draft | 
-[**Watch**](ArticleService.md#Watch) | **Post** /v1/content/article/watch | 
+[**UpdateDraft**](ArticleService.md#UpdateDraft) | **Post** /v1/content/article/draft/update | 
 
 
 
-## AcceptAnswer
+## Archive
 
-> map[string]interface{} AcceptAnswer(ctx).AcceptAnswerArticleRequest(acceptAnswerArticleRequest).Execute()
+> map[string]interface{} Archive(ctx).ArchiveArticleReq(archiveArticleReq).Execute()
 
 
 
@@ -41,17 +41,17 @@ import (
 )
 
 func main() {
-	acceptAnswerArticleRequest := *openapiclient.NewAcceptAnswerArticleRequest("ArticleId_example", "CommentId_example") // AcceptAnswerArticleRequest | 
+	archiveArticleReq := *openapiclient.NewArchiveArticleReq("ArticleId_example") // ArchiveArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.AcceptAnswer(context.Background()).AcceptAnswerArticleRequest(acceptAnswerArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.Archive(context.Background()).ArchiveArticleReq(archiveArticleReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.AcceptAnswer``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Archive``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `AcceptAnswer`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `ArticleService.AcceptAnswer`: %v\n", resp)
+	// response from `Archive`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Archive`: %v\n", resp)
 }
 ```
 
@@ -61,12 +61,78 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiAcceptAnswerRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiArchiveRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **acceptAnswerArticleRequest** | [**AcceptAnswerArticleRequest**](AcceptAnswerArticleRequest.md) |  | 
+ **archiveArticleReq** | [**ArchiveArticleReq**](ArchiveArticleReq.md) |  | 
+
+### Return type
+
+**map[string]interface{}**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CancelPublish
+
+> map[string]interface{} CancelPublish(ctx).CancelPublishArticleReq(cancelPublishArticleReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	cancelPublishArticleReq := *openapiclient.NewCancelPublishArticleReq("ArticleId_example") // CancelPublishArticleReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.CancelPublish(context.Background()).CancelPublishArticleReq(cancelPublishArticleReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.CancelPublish``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `CancelPublish`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.CancelPublish`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCancelPublishRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **cancelPublishArticleReq** | [**CancelPublishArticleReq**](CancelPublishArticleReq.md) |  | 
 
 ### Return type
 
@@ -88,7 +154,7 @@ No authorization required
 
 ## Collect
 
-> CollectArticleReply Collect(ctx).CollectArticleRequest(collectArticleRequest).Execute()
+> CollectArticleResp Collect(ctx).CollectArticleReq(collectArticleReq).Execute()
 
 
 
@@ -107,16 +173,16 @@ import (
 )
 
 func main() {
-	collectArticleRequest := *openapiclient.NewCollectArticleRequest("ArticleId_example", false) // CollectArticleRequest | 
+	collectArticleReq := *openapiclient.NewCollectArticleReq("ArticleId_example", false) // CollectArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.Collect(context.Background()).CollectArticleRequest(collectArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.Collect(context.Background()).CollectArticleReq(collectArticleReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Collect``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Collect`: CollectArticleReply
+	// response from `Collect`: CollectArticleResp
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Collect`: %v\n", resp)
 }
 ```
@@ -132,11 +198,11 @@ Other parameters are passed through a pointer to a apiCollectRequest struct via 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **collectArticleRequest** | [**CollectArticleRequest**](CollectArticleRequest.md) |  | 
+ **collectArticleReq** | [**CollectArticleReq**](CollectArticleReq.md) |  | 
 
 ### Return type
 
-[**CollectArticleReply**](CollectArticleReply.md)
+[**CollectArticleResp**](CollectArticleResp.md)
 
 ### Authorization
 
@@ -152,9 +218,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## Create
+## CreateDraft
 
-> CreateArticleReply Create(ctx).CreateArticleRequest(createArticleRequest).Execute()
+> CreateDraftArticleResp CreateDraft(ctx).CreateDraftArticleReq(createDraftArticleReq).Execute()
 
 
 
@@ -173,17 +239,17 @@ import (
 )
 
 func main() {
-	createArticleRequest := *openapiclient.NewCreateArticleRequest(*openapiclient.NewRequestArticle("Title_example", "Content_example", "Type_example")) // CreateArticleRequest | 
+	createDraftArticleReq := *openapiclient.NewCreateDraftArticleReq(*openapiclient.NewReqArticle("Title_example", "Content_example", "Type_example")) // CreateDraftArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.Create(context.Background()).CreateArticleRequest(createArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.CreateDraft(context.Background()).CreateDraftArticleReq(createDraftArticleReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Create``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.CreateDraft``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Create`: CreateArticleReply
-	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Create`: %v\n", resp)
+	// response from `CreateDraft`: CreateDraftArticleResp
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.CreateDraft`: %v\n", resp)
 }
 ```
 
@@ -193,16 +259,16 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiCreateRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiCreateDraftRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **createArticleRequest** | [**CreateArticleRequest**](CreateArticleRequest.md) |  | 
+ **createDraftArticleReq** | [**CreateDraftArticleReq**](CreateDraftArticleReq.md) |  | 
 
 ### Return type
 
-[**CreateArticleReply**](CreateArticleReply.md)
+[**CreateDraftArticleResp**](CreateDraftArticleResp.md)
 
 ### Authorization
 
@@ -220,7 +286,7 @@ No authorization required
 
 ## DiscardDraft
 
-> map[string]interface{} DiscardDraft(ctx).DiscardDraftArticleRequest(discardDraftArticleRequest).Execute()
+> map[string]interface{} DiscardDraft(ctx).DiscardDraftArticleReq(discardDraftArticleReq).Execute()
 
 
 
@@ -239,11 +305,11 @@ import (
 )
 
 func main() {
-	discardDraftArticleRequest := *openapiclient.NewDiscardDraftArticleRequest("ArticleId_example") // DiscardDraftArticleRequest | 
+	discardDraftArticleReq := *openapiclient.NewDiscardDraftArticleReq("ArticleId_example") // DiscardDraftArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.DiscardDraft(context.Background()).DiscardDraftArticleRequest(discardDraftArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.DiscardDraft(context.Background()).DiscardDraftArticleReq(discardDraftArticleReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.DiscardDraft``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -264,7 +330,7 @@ Other parameters are passed through a pointer to a apiDiscardDraftRequest struct
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **discardDraftArticleRequest** | [**DiscardDraftArticleRequest**](DiscardDraftArticleRequest.md) |  | 
+ **discardDraftArticleReq** | [**DiscardDraftArticleReq**](DiscardDraftArticleReq.md) |  | 
 
 ### Return type
 
@@ -286,7 +352,7 @@ No authorization required
 
 ## Get
 
-> GetArticleReply Get(ctx).GetArticleRequest(getArticleRequest).Execute()
+> GetArticleResp Get(ctx).GetArticleReq(getArticleReq).Execute()
 
 
 
@@ -305,16 +371,16 @@ import (
 )
 
 func main() {
-	getArticleRequest := *openapiclient.NewGetArticleRequest("ArticleId_example") // GetArticleRequest | 
+	getArticleReq := *openapiclient.NewGetArticleReq("ArticleId_example") // GetArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.Get(context.Background()).GetArticleRequest(getArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.Get(context.Background()).GetArticleReq(getArticleReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Get``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Get`: GetArticleReply
+	// response from `Get`: GetArticleResp
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Get`: %v\n", resp)
 }
 ```
@@ -330,11 +396,11 @@ Other parameters are passed through a pointer to a apiGetRequest struct via the 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **getArticleRequest** | [**GetArticleRequest**](GetArticleRequest.md) |  | 
+ **getArticleReq** | [**GetArticleReq**](GetArticleReq.md) |  | 
 
 ### Return type
 
-[**GetArticleReply**](GetArticleReply.md)
+[**GetArticleResp**](GetArticleResp.md)
 
 ### Authorization
 
@@ -352,7 +418,7 @@ No authorization required
 
 ## Like
 
-> LikeArticleReply Like(ctx).LikeArticleRequest(likeArticleRequest).Execute()
+> LikeArticleResp Like(ctx).LikeArticleReq(likeArticleReq).Execute()
 
 
 
@@ -371,16 +437,16 @@ import (
 )
 
 func main() {
-	likeArticleRequest := *openapiclient.NewLikeArticleRequest("ArticleId_example", false) // LikeArticleRequest | 
+	likeArticleReq := *openapiclient.NewLikeArticleReq("ArticleId_example", false) // LikeArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.Like(context.Background()).LikeArticleRequest(likeArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.Like(context.Background()).LikeArticleReq(likeArticleReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Like``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Like`: LikeArticleReply
+	// response from `Like`: LikeArticleResp
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Like`: %v\n", resp)
 }
 ```
@@ -396,11 +462,11 @@ Other parameters are passed through a pointer to a apiLikeRequest struct via the
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **likeArticleRequest** | [**LikeArticleRequest**](LikeArticleRequest.md) |  | 
+ **likeArticleReq** | [**LikeArticleReq**](LikeArticleReq.md) |  | 
 
 ### Return type
 
-[**LikeArticleReply**](LikeArticleReply.md)
+[**LikeArticleResp**](LikeArticleResp.md)
 
 ### Authorization
 
@@ -418,7 +484,7 @@ No authorization required
 
 ## List
 
-> ListArticlesReply List(ctx).ListArticlesRequest(listArticlesRequest).Execute()
+> ListArticlesResp List(ctx).ListArticlesReq(listArticlesReq).Execute()
 
 
 
@@ -437,16 +503,16 @@ import (
 )
 
 func main() {
-	listArticlesRequest := *openapiclient.NewListArticlesRequest() // ListArticlesRequest | 
+	listArticlesReq := *openapiclient.NewListArticlesReq() // ListArticlesReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.List(context.Background()).ListArticlesRequest(listArticlesRequest).Execute()
+	resp, r, err := apiClient.ArticleService.List(context.Background()).ListArticlesReq(listArticlesReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.List``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `List`: ListArticlesReply
+	// response from `List`: ListArticlesResp
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.List`: %v\n", resp)
 }
 ```
@@ -462,11 +528,11 @@ Other parameters are passed through a pointer to a apiListRequest struct via the
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listArticlesRequest** | [**ListArticlesRequest**](ListArticlesRequest.md) |  | 
+ **listArticlesReq** | [**ListArticlesReq**](ListArticlesReq.md) |  | 
 
 ### Return type
 
-[**ListArticlesReply**](ListArticlesReply.md)
+[**ListArticlesResp**](ListArticlesResp.md)
 
 ### Authorization
 
@@ -484,7 +550,7 @@ No authorization required
 
 ## Publish
 
-> map[string]interface{} Publish(ctx).PublishArticleRequest(publishArticleRequest).Execute()
+> map[string]interface{} Publish(ctx).PublishArticleReq(publishArticleReq).Execute()
 
 
 
@@ -503,11 +569,11 @@ import (
 )
 
 func main() {
-	publishArticleRequest := *openapiclient.NewPublishArticleRequest("ArticleId_example") // PublishArticleRequest | 
+	publishArticleReq := *openapiclient.NewPublishArticleReq("ArticleId_example") // PublishArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.Publish(context.Background()).PublishArticleRequest(publishArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.Publish(context.Background()).PublishArticleReq(publishArticleReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Publish``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -528,7 +594,7 @@ Other parameters are passed through a pointer to a apiPublishRequest struct via 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **publishArticleRequest** | [**PublishArticleRequest**](PublishArticleRequest.md) |  | 
+ **publishArticleReq** | [**PublishArticleReq**](PublishArticleReq.md) |  | 
 
 ### Return type
 
@@ -550,7 +616,7 @@ No authorization required
 
 ## Reward
 
-> map[string]interface{} Reward(ctx).RewardArticleRequest(rewardArticleRequest).Execute()
+> map[string]interface{} Reward(ctx).RewardArticleReq(rewardArticleReq).Execute()
 
 
 
@@ -569,11 +635,11 @@ import (
 )
 
 func main() {
-	rewardArticleRequest := *openapiclient.NewRewardArticleRequest("ArticleId_example") // RewardArticleRequest | 
+	rewardArticleReq := *openapiclient.NewRewardArticleReq("ArticleId_example", int32(123)) // RewardArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.Reward(context.Background()).RewardArticleRequest(rewardArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.Reward(context.Background()).RewardArticleReq(rewardArticleReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Reward``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -594,7 +660,74 @@ Other parameters are passed through a pointer to a apiRewardRequest struct via t
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **rewardArticleRequest** | [**RewardArticleRequest**](RewardArticleRequest.md) |  | 
+ **rewardArticleReq** | [**RewardArticleReq**](RewardArticleReq.md) |  | 
+
+### Return type
+
+**map[string]interface{}**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## SchedulePublish
+
+> map[string]interface{} SchedulePublish(ctx).SchedulePublishArticleReq(schedulePublishArticleReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+    "time"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	schedulePublishArticleReq := *openapiclient.NewSchedulePublishArticleReq("ArticleId_example", time.Now()) // SchedulePublishArticleReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.SchedulePublish(context.Background()).SchedulePublishArticleReq(schedulePublishArticleReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.SchedulePublish``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `SchedulePublish`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.SchedulePublish`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSchedulePublishRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **schedulePublishArticleReq** | [**SchedulePublishArticleReq**](SchedulePublishArticleReq.md) |  | 
 
 ### Return type
 
@@ -616,7 +749,7 @@ No authorization required
 
 ## Thank
 
-> ThankArticleReply Thank(ctx).ThankArticleRequest(thankArticleRequest).Execute()
+> ThankArticleResp Thank(ctx).ThankArticleReq(thankArticleReq).Execute()
 
 
 
@@ -635,16 +768,16 @@ import (
 )
 
 func main() {
-	thankArticleRequest := *openapiclient.NewThankArticleRequest("ArticleId_example", false) // ThankArticleRequest | 
+	thankArticleReq := *openapiclient.NewThankArticleReq("ArticleId_example", false) // ThankArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.Thank(context.Background()).ThankArticleRequest(thankArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.Thank(context.Background()).ThankArticleReq(thankArticleReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Thank``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `Thank`: ThankArticleReply
+	// response from `Thank`: ThankArticleResp
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Thank`: %v\n", resp)
 }
 ```
@@ -660,77 +793,11 @@ Other parameters are passed through a pointer to a apiThankRequest struct via th
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **thankArticleRequest** | [**ThankArticleRequest**](ThankArticleRequest.md) |  | 
+ **thankArticleReq** | [**ThankArticleReq**](ThankArticleReq.md) |  | 
 
 ### Return type
 
-[**ThankArticleReply**](ThankArticleReply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## Update
-
-> UpdateArticleReply Update(ctx).UpdateArticleRequest(updateArticleRequest).Execute()
-
-
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
-)
-
-func main() {
-	updateArticleRequest := *openapiclient.NewUpdateArticleRequest("ArticleId_example", *openapiclient.NewRequestArticle("Title_example", "Content_example", "Type_example")) // UpdateArticleRequest | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.Update(context.Background()).UpdateArticleRequest(updateArticleRequest).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Update``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `Update`: UpdateArticleReply
-	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Update`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiUpdateRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **updateArticleRequest** | [**UpdateArticleRequest**](UpdateArticleRequest.md) |  | 
-
-### Return type
-
-[**UpdateArticleReply**](UpdateArticleReply.md)
+[**ThankArticleResp**](ThankArticleResp.md)
 
 ### Authorization
 
@@ -748,7 +815,7 @@ No authorization required
 
 ## UpdateDraft
 
-> UpdateDraftArticleReply UpdateDraft(ctx).UpdateDraftArticleRequest(updateDraftArticleRequest).Execute()
+> UpdateDraftArticleResp UpdateDraft(ctx).UpdateDraftArticleReq(updateDraftArticleReq).Execute()
 
 
 
@@ -767,16 +834,16 @@ import (
 )
 
 func main() {
-	updateDraftArticleRequest := *openapiclient.NewUpdateDraftArticleRequest("ArticleId_example", *openapiclient.NewRequestArticle("Title_example", "Content_example", "Type_example")) // UpdateDraftArticleRequest | 
+	updateDraftArticleReq := *openapiclient.NewUpdateDraftArticleReq("ArticleId_example", *openapiclient.NewReqArticle("Title_example", "Content_example", "Type_example")) // UpdateDraftArticleReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.UpdateDraft(context.Background()).UpdateDraftArticleRequest(updateDraftArticleRequest).Execute()
+	resp, r, err := apiClient.ArticleService.UpdateDraft(context.Background()).UpdateDraftArticleReq(updateDraftArticleReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.UpdateDraft``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `UpdateDraft`: UpdateDraftArticleReply
+	// response from `UpdateDraft`: UpdateDraftArticleResp
 	fmt.Fprintf(os.Stdout, "Response from `ArticleService.UpdateDraft`: %v\n", resp)
 }
 ```
@@ -792,77 +859,11 @@ Other parameters are passed through a pointer to a apiUpdateDraftRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **updateDraftArticleRequest** | [**UpdateDraftArticleRequest**](UpdateDraftArticleRequest.md) |  | 
+ **updateDraftArticleReq** | [**UpdateDraftArticleReq**](UpdateDraftArticleReq.md) |  | 
 
 ### Return type
 
-[**UpdateDraftArticleReply**](UpdateDraftArticleReply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## Watch
-
-> WatchArticleReply Watch(ctx).WatchArticleRequest(watchArticleRequest).Execute()
-
-
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
-)
-
-func main() {
-	watchArticleRequest := *openapiclient.NewWatchArticleRequest("ArticleId_example", false) // WatchArticleRequest | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.Watch(context.Background()).WatchArticleRequest(watchArticleRequest).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.Watch``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `Watch`: WatchArticleReply
-	fmt.Fprintf(os.Stdout, "Response from `ArticleService.Watch`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiWatchRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **watchArticleRequest** | [**WatchArticleRequest**](WatchArticleRequest.md) |  | 
-
-### Return type
-
-[**WatchArticleReply**](WatchArticleReply.md)
+[**UpdateDraftArticleResp**](UpdateDraftArticleResp.md)
 
 ### Authorization
 

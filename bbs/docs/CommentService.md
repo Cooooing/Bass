@@ -13,7 +13,7 @@ All URIs are relative to *http://localhost*
 |[**thank**](#thank) | **POST** /v1/content/comment/thank | |
 
 # **create**
-> CreateCommentReply create(createCommentRequest)
+> CreateCommentResp create(createCommentReq)
 
 创建评论。
 
@@ -23,16 +23,16 @@ All URIs are relative to *http://localhost*
 import {
     CommentService,
     Configuration,
-    CreateCommentRequest
+    CreateCommentReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new CommentService(configuration);
 
-let createCommentRequest: CreateCommentRequest; //
+let createCommentReq: CreateCommentReq; //
 
 const { status, data } = await apiInstance.create(
-    createCommentRequest
+    createCommentReq
 );
 ```
 
@@ -40,12 +40,12 @@ const { status, data } = await apiInstance.create(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **createCommentRequest** | **CreateCommentRequest**|  | |
+| **createCommentReq** | **CreateCommentReq**|  | |
 
 
 ### Return type
 
-**CreateCommentReply**
+**CreateCommentResp**
 
 ### Authorization
 
@@ -65,7 +65,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **like**
-> LikeCommentReply like(likeCommentRequest)
+> LikeCommentResp like(likeCommentReq)
 
 点赞或取消点赞评论。
 
@@ -75,16 +75,16 @@ No authorization required
 import {
     CommentService,
     Configuration,
-    LikeCommentRequest
+    LikeCommentReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new CommentService(configuration);
 
-let likeCommentRequest: LikeCommentRequest; //
+let likeCommentReq: LikeCommentReq; //
 
 const { status, data } = await apiInstance.like(
-    likeCommentRequest
+    likeCommentReq
 );
 ```
 
@@ -92,12 +92,12 @@ const { status, data } = await apiInstance.like(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **likeCommentRequest** | **LikeCommentRequest**|  | |
+| **likeCommentReq** | **LikeCommentReq**|  | |
 
 
 ### Return type
 
-**LikeCommentReply**
+**LikeCommentResp**
 
 ### Authorization
 
@@ -117,7 +117,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list**
-> ListCommentsReply list(listCommentsRequest)
+> ListCommentsResp list(listCommentsReq)
 
 分页查询评论列表。
 
@@ -127,16 +127,16 @@ No authorization required
 import {
     CommentService,
     Configuration,
-    ListCommentsRequest
+    ListCommentsReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new CommentService(configuration);
 
-let listCommentsRequest: ListCommentsRequest; //
+let listCommentsReq: ListCommentsReq; //
 
 const { status, data } = await apiInstance.list(
-    listCommentsRequest
+    listCommentsReq
 );
 ```
 
@@ -144,12 +144,12 @@ const { status, data } = await apiInstance.list(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listCommentsRequest** | **ListCommentsRequest**|  | |
+| **listCommentsReq** | **ListCommentsReq**|  | |
 
 
 ### Return type
 
-**ListCommentsReply**
+**ListCommentsResp**
 
 ### Authorization
 
@@ -169,7 +169,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listReplies**
-> ListCommentRepliesReply listReplies(listCommentRepliesRequest)
+> ListCommentRepliesResp listReplies(listCommentRepliesReq)
 
 分页查询评论回复。
 
@@ -179,16 +179,16 @@ No authorization required
 import {
     CommentService,
     Configuration,
-    ListCommentRepliesRequest
+    ListCommentRepliesReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new CommentService(configuration);
 
-let listCommentRepliesRequest: ListCommentRepliesRequest; //
+let listCommentRepliesReq: ListCommentRepliesReq; //
 
 const { status, data } = await apiInstance.listReplies(
-    listCommentRepliesRequest
+    listCommentRepliesReq
 );
 ```
 
@@ -196,12 +196,12 @@ const { status, data } = await apiInstance.listReplies(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listCommentRepliesRequest** | **ListCommentRepliesRequest**|  | |
+| **listCommentRepliesReq** | **ListCommentRepliesReq**|  | |
 
 
 ### Return type
 
-**ListCommentRepliesReply**
+**ListCommentRepliesResp**
 
 ### Authorization
 
@@ -221,7 +221,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listThreads**
-> ListCommentThreadsReply listThreads(listCommentThreadsRequest)
+> ListCommentThreadsResp listThreads(listCommentThreadsReq)
 
 分页查询评论楼层。
 
@@ -231,16 +231,16 @@ No authorization required
 import {
     CommentService,
     Configuration,
-    ListCommentThreadsRequest
+    ListCommentThreadsReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new CommentService(configuration);
 
-let listCommentThreadsRequest: ListCommentThreadsRequest; //
+let listCommentThreadsReq: ListCommentThreadsReq; //
 
 const { status, data } = await apiInstance.listThreads(
-    listCommentThreadsRequest
+    listCommentThreadsReq
 );
 ```
 
@@ -248,12 +248,12 @@ const { status, data } = await apiInstance.listThreads(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listCommentThreadsRequest** | **ListCommentThreadsRequest**|  | |
+| **listCommentThreadsReq** | **ListCommentThreadsReq**|  | |
 
 
 ### Return type
 
-**ListCommentThreadsReply**
+**ListCommentThreadsResp**
 
 ### Authorization
 
@@ -273,7 +273,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listTimeline**
-> ListCommentTimelineReply listTimeline(listCommentTimelineRequest)
+> ListCommentTimelineResp listTimeline(listCommentTimelineReq)
 
 分页查询评论时间线。
 
@@ -283,16 +283,16 @@ No authorization required
 import {
     CommentService,
     Configuration,
-    ListCommentTimelineRequest
+    ListCommentTimelineReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new CommentService(configuration);
 
-let listCommentTimelineRequest: ListCommentTimelineRequest; //
+let listCommentTimelineReq: ListCommentTimelineReq; //
 
 const { status, data } = await apiInstance.listTimeline(
-    listCommentTimelineRequest
+    listCommentTimelineReq
 );
 ```
 
@@ -300,12 +300,12 @@ const { status, data } = await apiInstance.listTimeline(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listCommentTimelineRequest** | **ListCommentTimelineRequest**|  | |
+| **listCommentTimelineReq** | **ListCommentTimelineReq**|  | |
 
 
 ### Return type
 
-**ListCommentTimelineReply**
+**ListCommentTimelineResp**
 
 ### Authorization
 
@@ -325,7 +325,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **thank**
-> ThankCommentReply thank(thankCommentRequest)
+> ThankCommentResp thank(thankCommentReq)
 
 感谢或取消感谢评论。
 
@@ -335,16 +335,16 @@ No authorization required
 import {
     CommentService,
     Configuration,
-    ThankCommentRequest
+    ThankCommentReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new CommentService(configuration);
 
-let thankCommentRequest: ThankCommentRequest; //
+let thankCommentReq: ThankCommentReq; //
 
 const { status, data } = await apiInstance.thank(
-    thankCommentRequest
+    thankCommentReq
 );
 ```
 
@@ -352,12 +352,12 @@ const { status, data } = await apiInstance.thank(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **thankCommentRequest** | **ThankCommentRequest**|  | |
+| **thankCommentReq** | **ThankCommentReq**|  | |
 
 
 ### Return type
 
-**ThankCommentReply**
+**ThankCommentResp**
 
 ### Authorization
 

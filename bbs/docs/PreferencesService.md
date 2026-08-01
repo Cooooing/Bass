@@ -8,7 +8,7 @@ All URIs are relative to *http://localhost*
 |[**updateCurrent**](#updatecurrent) | **POST** /v1/user/preference/update-current | |
 
 # **getCurrent**
-> GetCurrentPreferencesReply getCurrent(body)
+> GetCurrentPreferencesResp getCurrent(body)
 
 获取当前账号的偏好设置。
 
@@ -39,7 +39,7 @@ const { status, data } = await apiInstance.getCurrent(
 
 ### Return type
 
-**GetCurrentPreferencesReply**
+**GetCurrentPreferencesResp**
 
 ### Authorization
 
@@ -59,7 +59,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updateCurrent**
-> UpdateCurrentPreferencesReply updateCurrent(updateCurrentPreferencesRequest)
+> UpdateCurrentPreferencesResp updateCurrent(updateCurrentPreferencesReq)
 
 更新当前账号的偏好设置。
 
@@ -69,16 +69,16 @@ No authorization required
 import {
     PreferencesService,
     Configuration,
-    UpdateCurrentPreferencesRequest
+    UpdateCurrentPreferencesReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new PreferencesService(configuration);
 
-let updateCurrentPreferencesRequest: UpdateCurrentPreferencesRequest; //
+let updateCurrentPreferencesReq: UpdateCurrentPreferencesReq; //
 
 const { status, data } = await apiInstance.updateCurrent(
-    updateCurrentPreferencesRequest
+    updateCurrentPreferencesReq
 );
 ```
 
@@ -86,12 +86,12 @@ const { status, data } = await apiInstance.updateCurrent(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **updateCurrentPreferencesRequest** | **UpdateCurrentPreferencesRequest**|  | |
+| **updateCurrentPreferencesReq** | **UpdateCurrentPreferencesReq**|  | |
 
 
 ### Return type
 
-**UpdateCurrentPreferencesReply**
+**UpdateCurrentPreferencesResp**
 
 ### Authorization
 

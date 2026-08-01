@@ -8,7 +8,7 @@ All URIs are relative to *http://localhost*
 |[**upsertCurrent**](#upsertcurrent) | **POST** /v1/user/location/upsert-current | |
 
 # **getCurrent**
-> GetCurrentLocationReply getCurrent(body)
+> GetCurrentLocationResp getCurrent(body)
 
 获取当前账号的地理资料。
 
@@ -39,7 +39,7 @@ const { status, data } = await apiInstance.getCurrent(
 
 ### Return type
 
-**GetCurrentLocationReply**
+**GetCurrentLocationResp**
 
 ### Authorization
 
@@ -59,7 +59,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **upsertCurrent**
-> UpsertCurrentLocationReply upsertCurrent(upsertCurrentLocationRequest)
+> UpsertCurrentLocationResp upsertCurrent(upsertCurrentLocationReq)
 
 更新当前账号的地理资料。
 
@@ -69,16 +69,16 @@ No authorization required
 import {
     LocationService,
     Configuration,
-    UpsertCurrentLocationRequest
+    UpsertCurrentLocationReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new LocationService(configuration);
 
-let upsertCurrentLocationRequest: UpsertCurrentLocationRequest; //
+let upsertCurrentLocationReq: UpsertCurrentLocationReq; //
 
 const { status, data } = await apiInstance.upsertCurrent(
-    upsertCurrentLocationRequest
+    upsertCurrentLocationReq
 );
 ```
 
@@ -86,12 +86,12 @@ const { status, data } = await apiInstance.upsertCurrent(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **upsertCurrentLocationRequest** | **UpsertCurrentLocationRequest**|  | |
+| **upsertCurrentLocationReq** | **UpsertCurrentLocationReq**|  | |
 
 
 ### Return type
 
-**UpsertCurrentLocationReply**
+**UpsertCurrentLocationResp**
 
 ### Authorization
 

@@ -1,6 +1,5 @@
 # ArticleViewerActionState
 
-当前查看账号的文章行为状态。
 
 ## Properties
 
@@ -9,7 +8,7 @@ Name | Type | Description | Notes
 **liked** | **boolean** |  | [optional] [default to undefined]
 **thanked** | **boolean** |  | [optional] [default to undefined]
 **collected** | **boolean** |  | [optional] [default to undefined]
-**watched** | **boolean** |  | [optional] [default to undefined]
+**rewarded** | **boolean** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -20,7 +19,7 @@ const instance: ArticleViewerActionState = {
     liked,
     thanked,
     collected,
-    watched,
+    rewarded,
 };
 ```
 

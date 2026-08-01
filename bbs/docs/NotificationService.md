@@ -9,7 +9,7 @@ All URIs are relative to *http://localhost*
 |[**markRead**](#markread) | **POST** /v1/notify/notification/mark-read | |
 
 # **countUnread**
-> CountUnreadNotificationsReply countUnread(body)
+> CountUnreadNotificationsResp countUnread(body)
 
 统计未读通知数量。
 
@@ -40,7 +40,7 @@ const { status, data } = await apiInstance.countUnread(
 
 ### Return type
 
-**CountUnreadNotificationsReply**
+**CountUnreadNotificationsResp**
 
 ### Authorization
 
@@ -60,7 +60,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list**
-> ListNotificationsReply list(listNotificationsRequest)
+> ListNotificationsResp list(listNotificationsReq)
 
 分页查询通知列表。
 
@@ -70,16 +70,16 @@ No authorization required
 import {
     NotificationService,
     Configuration,
-    ListNotificationsRequest
+    ListNotificationsReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new NotificationService(configuration);
 
-let listNotificationsRequest: ListNotificationsRequest; //
+let listNotificationsReq: ListNotificationsReq; //
 
 const { status, data } = await apiInstance.list(
-    listNotificationsRequest
+    listNotificationsReq
 );
 ```
 
@@ -87,12 +87,12 @@ const { status, data } = await apiInstance.list(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listNotificationsRequest** | **ListNotificationsRequest**|  | |
+| **listNotificationsReq** | **ListNotificationsReq**|  | |
 
 
 ### Return type
 
-**ListNotificationsReply**
+**ListNotificationsResp**
 
 ### Authorization
 
@@ -112,7 +112,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **markRead**
-> MarkReadNotificationReply markRead(markReadNotificationRequest)
+> MarkReadNotificationResp markRead(markReadNotificationReq)
 
 标记通知为已读。
 
@@ -122,16 +122,16 @@ No authorization required
 import {
     NotificationService,
     Configuration,
-    MarkReadNotificationRequest
+    MarkReadNotificationReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new NotificationService(configuration);
 
-let markReadNotificationRequest: MarkReadNotificationRequest; //
+let markReadNotificationReq: MarkReadNotificationReq; //
 
 const { status, data } = await apiInstance.markRead(
-    markReadNotificationRequest
+    markReadNotificationReq
 );
 ```
 
@@ -139,12 +139,12 @@ const { status, data } = await apiInstance.markRead(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **markReadNotificationRequest** | **MarkReadNotificationRequest**|  | |
+| **markReadNotificationReq** | **MarkReadNotificationReq**|  | |
 
 
 ### Return type
 
-**MarkReadNotificationReply**
+**MarkReadNotificationResp**
 
 ### Authorization
 

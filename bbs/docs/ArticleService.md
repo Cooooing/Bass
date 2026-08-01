@@ -4,24 +4,24 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**acceptAnswer**](#acceptanswer) | **POST** /v1/content/article/accept-answer | |
+|[**archive**](#archive) | **POST** /v1/content/article/archive | |
+|[**cancelPublish**](#cancelpublish) | **POST** /v1/content/article/publish/cancel | |
 |[**collect**](#collect) | **POST** /v1/content/article/collect | |
-|[**create**](#create) | **POST** /v1/content/article/create | |
-|[**discardDraft**](#discarddraft) | **POST** /v1/content/article/discard-draft | |
+|[**createDraft**](#createdraft) | **POST** /v1/content/article/draft/create | |
+|[**discardDraft**](#discarddraft) | **POST** /v1/content/article/draft/discard | |
 |[**get**](#get) | **POST** /v1/content/article/get | |
 |[**like**](#like) | **POST** /v1/content/article/like | |
 |[**list**](#list) | **POST** /v1/content/article/list | |
 |[**publish**](#publish) | **POST** /v1/content/article/publish | |
 |[**reward**](#reward) | **POST** /v1/content/article/reward | |
+|[**schedulePublish**](#schedulepublish) | **POST** /v1/content/article/publish/schedule | |
 |[**thank**](#thank) | **POST** /v1/content/article/thank | |
-|[**update**](#update) | **POST** /v1/content/article/update | |
-|[**updateDraft**](#updatedraft) | **POST** /v1/content/article/update-draft | |
-|[**watch**](#watch) | **POST** /v1/content/article/watch | |
+|[**updateDraft**](#updatedraft) | **POST** /v1/content/article/draft/update | |
 
-# **acceptAnswer**
-> object acceptAnswer(acceptAnswerArticleRequest)
+# **archive**
+> object archive(archiveArticleReq)
 
-采纳文章评论为答案。
+归档文章
 
 ### Example
 
@@ -29,16 +29,16 @@ All URIs are relative to *http://localhost*
 import {
     ArticleService,
     Configuration,
-    AcceptAnswerArticleRequest
+    ArchiveArticleReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let acceptAnswerArticleRequest: AcceptAnswerArticleRequest; //
+let archiveArticleReq: ArchiveArticleReq; //
 
-const { status, data } = await apiInstance.acceptAnswer(
-    acceptAnswerArticleRequest
+const { status, data } = await apiInstance.archive(
+    archiveArticleReq
 );
 ```
 
@@ -46,7 +46,59 @@ const { status, data } = await apiInstance.acceptAnswer(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **acceptAnswerArticleRequest** | **AcceptAnswerArticleRequest**|  | |
+| **archiveArticleReq** | **ArchiveArticleReq**|  | |
+
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **cancelPublish**
+> object cancelPublish(cancelPublishArticleReq)
+
+取消定时发布
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    CancelPublishArticleReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let cancelPublishArticleReq: CancelPublishArticleReq; //
+
+const { status, data } = await apiInstance.cancelPublish(
+    cancelPublishArticleReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **cancelPublishArticleReq** | **CancelPublishArticleReq**|  | |
 
 
 ### Return type
@@ -71,9 +123,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **collect**
-> CollectArticleReply collect(collectArticleRequest)
+> CollectArticleResp collect(collectArticleReq)
 
-收藏或取消收藏文章。
+收藏文章
 
 ### Example
 
@@ -81,16 +133,16 @@ No authorization required
 import {
     ArticleService,
     Configuration,
-    CollectArticleRequest
+    CollectArticleReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let collectArticleRequest: CollectArticleRequest; //
+let collectArticleReq: CollectArticleReq; //
 
 const { status, data } = await apiInstance.collect(
-    collectArticleRequest
+    collectArticleReq
 );
 ```
 
@@ -98,12 +150,12 @@ const { status, data } = await apiInstance.collect(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **collectArticleRequest** | **CollectArticleRequest**|  | |
+| **collectArticleReq** | **CollectArticleReq**|  | |
 
 
 ### Return type
 
-**CollectArticleReply**
+**CollectArticleResp**
 
 ### Authorization
 
@@ -122,10 +174,10 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **create**
-> CreateArticleReply create(createArticleRequest)
+# **createDraft**
+> CreateDraftArticleResp createDraft(createDraftArticleReq)
 
-创建文章草稿。
+创建文章草稿
 
 ### Example
 
@@ -133,16 +185,16 @@ No authorization required
 import {
     ArticleService,
     Configuration,
-    CreateArticleRequest
+    CreateDraftArticleReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let createArticleRequest: CreateArticleRequest; //
+let createDraftArticleReq: CreateDraftArticleReq; //
 
-const { status, data } = await apiInstance.create(
-    createArticleRequest
+const { status, data } = await apiInstance.createDraft(
+    createDraftArticleReq
 );
 ```
 
@@ -150,12 +202,12 @@ const { status, data } = await apiInstance.create(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **createArticleRequest** | **CreateArticleRequest**|  | |
+| **createDraftArticleReq** | **CreateDraftArticleReq**|  | |
 
 
 ### Return type
 
-**CreateArticleReply**
+**CreateDraftArticleResp**
 
 ### Authorization
 
@@ -175,9 +227,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **discardDraft**
-> object discardDraft(discardDraftArticleRequest)
+> object discardDraft(discardDraftArticleReq)
 
-丢弃草稿。
+丢弃文章草稿
 
 ### Example
 
@@ -185,16 +237,16 @@ No authorization required
 import {
     ArticleService,
     Configuration,
-    DiscardDraftArticleRequest
+    DiscardDraftArticleReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let discardDraftArticleRequest: DiscardDraftArticleRequest; //
+let discardDraftArticleReq: DiscardDraftArticleReq; //
 
 const { status, data } = await apiInstance.discardDraft(
-    discardDraftArticleRequest
+    discardDraftArticleReq
 );
 ```
 
@@ -202,7 +254,7 @@ const { status, data } = await apiInstance.discardDraft(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **discardDraftArticleRequest** | **DiscardDraftArticleRequest**|  | |
+| **discardDraftArticleReq** | **DiscardDraftArticleReq**|  | |
 
 
 ### Return type
@@ -227,9 +279,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get**
-> GetArticleReply get(getArticleRequest)
+> GetArticleResp get(getArticleReq)
 
-获取文章详情。
+查询文章详情
 
 ### Example
 
@@ -237,16 +289,16 @@ No authorization required
 import {
     ArticleService,
     Configuration,
-    GetArticleRequest
+    GetArticleReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let getArticleRequest: GetArticleRequest; //
+let getArticleReq: GetArticleReq; //
 
 const { status, data } = await apiInstance.get(
-    getArticleRequest
+    getArticleReq
 );
 ```
 
@@ -254,12 +306,12 @@ const { status, data } = await apiInstance.get(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **getArticleRequest** | **GetArticleRequest**|  | |
+| **getArticleReq** | **GetArticleReq**|  | |
 
 
 ### Return type
 
-**GetArticleReply**
+**GetArticleResp**
 
 ### Authorization
 
@@ -279,9 +331,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **like**
-> LikeArticleReply like(likeArticleRequest)
+> LikeArticleResp like(likeArticleReq)
 
-点赞或取消点赞文章。
+点赞文章
 
 ### Example
 
@@ -289,16 +341,16 @@ No authorization required
 import {
     ArticleService,
     Configuration,
-    LikeArticleRequest
+    LikeArticleReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let likeArticleRequest: LikeArticleRequest; //
+let likeArticleReq: LikeArticleReq; //
 
 const { status, data } = await apiInstance.like(
-    likeArticleRequest
+    likeArticleReq
 );
 ```
 
@@ -306,12 +358,12 @@ const { status, data } = await apiInstance.like(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **likeArticleRequest** | **LikeArticleRequest**|  | |
+| **likeArticleReq** | **LikeArticleReq**|  | |
 
 
 ### Return type
 
-**LikeArticleReply**
+**LikeArticleResp**
 
 ### Authorization
 
@@ -331,9 +383,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list**
-> ListArticlesReply list(listArticlesRequest)
+> ListArticlesResp list(listArticlesReq)
 
-分页查询文章列表。
+查询文章列表
 
 ### Example
 
@@ -341,16 +393,16 @@ No authorization required
 import {
     ArticleService,
     Configuration,
-    ListArticlesRequest
+    ListArticlesReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let listArticlesRequest: ListArticlesRequest; //
+let listArticlesReq: ListArticlesReq; //
 
 const { status, data } = await apiInstance.list(
-    listArticlesRequest
+    listArticlesReq
 );
 ```
 
@@ -358,12 +410,12 @@ const { status, data } = await apiInstance.list(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listArticlesRequest** | **ListArticlesRequest**|  | |
+| **listArticlesReq** | **ListArticlesReq**|  | |
 
 
 ### Return type
 
-**ListArticlesReply**
+**ListArticlesResp**
 
 ### Authorization
 
@@ -383,9 +435,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **publish**
-> object publish(publishArticleRequest)
+> object publish(publishArticleReq)
 
-发布文章。
+发布文章
 
 ### Example
 
@@ -393,16 +445,16 @@ No authorization required
 import {
     ArticleService,
     Configuration,
-    PublishArticleRequest
+    PublishArticleReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let publishArticleRequest: PublishArticleRequest; //
+let publishArticleReq: PublishArticleReq; //
 
 const { status, data } = await apiInstance.publish(
-    publishArticleRequest
+    publishArticleReq
 );
 ```
 
@@ -410,7 +462,7 @@ const { status, data } = await apiInstance.publish(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **publishArticleRequest** | **PublishArticleRequest**|  | |
+| **publishArticleReq** | **PublishArticleReq**|  | |
 
 
 ### Return type
@@ -435,9 +487,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **reward**
-> object reward(rewardArticleRequest)
+> object reward(rewardArticleReq)
 
-打赏文章。
+打赏文章
 
 ### Example
 
@@ -445,16 +497,16 @@ No authorization required
 import {
     ArticleService,
     Configuration,
-    RewardArticleRequest
+    RewardArticleReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let rewardArticleRequest: RewardArticleRequest; //
+let rewardArticleReq: RewardArticleReq; //
 
 const { status, data } = await apiInstance.reward(
-    rewardArticleRequest
+    rewardArticleReq
 );
 ```
 
@@ -462,7 +514,59 @@ const { status, data } = await apiInstance.reward(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **rewardArticleRequest** | **RewardArticleRequest**|  | |
+| **rewardArticleReq** | **RewardArticleReq**|  | |
+
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **schedulePublish**
+> object schedulePublish(schedulePublishArticleReq)
+
+设置定时发布
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    SchedulePublishArticleReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let schedulePublishArticleReq: SchedulePublishArticleReq; //
+
+const { status, data } = await apiInstance.schedulePublish(
+    schedulePublishArticleReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **schedulePublishArticleReq** | **SchedulePublishArticleReq**|  | |
 
 
 ### Return type
@@ -487,9 +591,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **thank**
-> ThankArticleReply thank(thankArticleRequest)
+> ThankArticleResp thank(thankArticleReq)
 
-感谢或取消感谢文章。
+感谢文章
 
 ### Example
 
@@ -497,16 +601,16 @@ No authorization required
 import {
     ArticleService,
     Configuration,
-    ThankArticleRequest
+    ThankArticleReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let thankArticleRequest: ThankArticleRequest; //
+let thankArticleReq: ThankArticleReq; //
 
 const { status, data } = await apiInstance.thank(
-    thankArticleRequest
+    thankArticleReq
 );
 ```
 
@@ -514,64 +618,12 @@ const { status, data } = await apiInstance.thank(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **thankArticleRequest** | **ThankArticleRequest**|  | |
+| **thankArticleReq** | **ThankArticleReq**|  | |
 
 
 ### Return type
 
-**ThankArticleReply**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **update**
-> UpdateArticleReply update(updateArticleRequest)
-
-更新文章内容。
-
-### Example
-
-```typescript
-import {
-    ArticleService,
-    Configuration,
-    UpdateArticleRequest
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new ArticleService(configuration);
-
-let updateArticleRequest: UpdateArticleRequest; //
-
-const { status, data } = await apiInstance.update(
-    updateArticleRequest
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **updateArticleRequest** | **UpdateArticleRequest**|  | |
-
-
-### Return type
-
-**UpdateArticleReply**
+**ThankArticleResp**
 
 ### Authorization
 
@@ -591,9 +643,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updateDraft**
-> UpdateDraftArticleReply updateDraft(updateDraftArticleRequest)
+> UpdateDraftArticleResp updateDraft(updateDraftArticleReq)
 
-更新文章内容。兼容旧草稿更新接口。
+编辑文章草稿
 
 ### Example
 
@@ -601,16 +653,16 @@ No authorization required
 import {
     ArticleService,
     Configuration,
-    UpdateDraftArticleRequest
+    UpdateDraftArticleReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new ArticleService(configuration);
 
-let updateDraftArticleRequest: UpdateDraftArticleRequest; //
+let updateDraftArticleReq: UpdateDraftArticleReq; //
 
 const { status, data } = await apiInstance.updateDraft(
-    updateDraftArticleRequest
+    updateDraftArticleReq
 );
 ```
 
@@ -618,64 +670,12 @@ const { status, data } = await apiInstance.updateDraft(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **updateDraftArticleRequest** | **UpdateDraftArticleRequest**|  | |
+| **updateDraftArticleReq** | **UpdateDraftArticleReq**|  | |
 
 
 ### Return type
 
-**UpdateDraftArticleReply**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **watch**
-> WatchArticleReply watch(watchArticleRequest)
-
-关注或取消关注文章。
-
-### Example
-
-```typescript
-import {
-    ArticleService,
-    Configuration,
-    WatchArticleRequest
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new ArticleService(configuration);
-
-let watchArticleRequest: WatchArticleRequest; //
-
-const { status, data } = await apiInstance.watch(
-    watchArticleRequest
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **watchArticleRequest** | **WatchArticleRequest**|  | |
-
-
-### Return type
-
-**WatchArticleReply**
+**UpdateDraftArticleResp**
 
 ### Authorization
 

@@ -8,7 +8,7 @@ All URIs are relative to *http://localhost*
 |[**updateCurrent**](#updatecurrent) | **POST** /v1/user/privacy-setting/update-current | |
 
 # **getCurrent**
-> GetCurrentPrivacySettingReply getCurrent(body)
+> GetCurrentPrivacySettingResp getCurrent(body)
 
 获取当前账号的隐私设置。
 
@@ -39,7 +39,7 @@ const { status, data } = await apiInstance.getCurrent(
 
 ### Return type
 
-**GetCurrentPrivacySettingReply**
+**GetCurrentPrivacySettingResp**
 
 ### Authorization
 
@@ -59,7 +59,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **updateCurrent**
-> UpdateCurrentPrivacySettingReply updateCurrent(updateCurrentPrivacySettingRequest)
+> UpdateCurrentPrivacySettingResp updateCurrent(updateCurrentPrivacySettingReq)
 
 更新当前账号的隐私设置。
 
@@ -69,16 +69,16 @@ No authorization required
 import {
     PrivacySettingService,
     Configuration,
-    UpdateCurrentPrivacySettingRequest
+    UpdateCurrentPrivacySettingReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new PrivacySettingService(configuration);
 
-let updateCurrentPrivacySettingRequest: UpdateCurrentPrivacySettingRequest; //
+let updateCurrentPrivacySettingReq: UpdateCurrentPrivacySettingReq; //
 
 const { status, data } = await apiInstance.updateCurrent(
-    updateCurrentPrivacySettingRequest
+    updateCurrentPrivacySettingReq
 );
 ```
 
@@ -86,12 +86,12 @@ const { status, data } = await apiInstance.updateCurrent(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **updateCurrentPrivacySettingRequest** | **UpdateCurrentPrivacySettingRequest**|  | |
+| **updateCurrentPrivacySettingReq** | **UpdateCurrentPrivacySettingReq**|  | |
 
 
 ### Return type
 
-**UpdateCurrentPrivacySettingReply**
+**UpdateCurrentPrivacySettingResp**
 
 ### Authorization
 

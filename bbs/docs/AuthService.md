@@ -4,17 +4,19 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**loginByPassword**](#loginbypassword) | **POST** /v1/user/auth/login-by-password | |
+|[**cancelAccount**](#cancelaccount) | **POST** /v1/user/auth/cancel-account | |
+|[**login**](#login) | **POST** /v1/user/auth/login | |
 |[**logout**](#logout) | **POST** /v1/user/auth/logout | |
+|[**refreshToken**](#refreshtoken) | **POST** /v1/user/auth/refresh-token | |
 |[**startEmailRegistration**](#startemailregistration) | **POST** /v1/user/auth/start-email-registration | |
 |[**startPhoneRegistration**](#startphoneregistration) | **POST** /v1/user/auth/start-phone-registration | |
 |[**verifyEmailRegistration**](#verifyemailregistration) | **POST** /v1/user/auth/verify-email-registration | |
 |[**verifyPhoneRegistration**](#verifyphoneregistration) | **POST** /v1/user/auth/verify-phone-registration | |
 
-# **loginByPassword**
-> LoginByPasswordReply loginByPassword(loginByPasswordRequest)
+# **cancelAccount**
+> object cancelAccount(cancelAccountReq)
 
-使用密码登录账号。
+注销账号。
 
 ### Example
 
@@ -22,16 +24,16 @@ All URIs are relative to *http://localhost*
 import {
     AuthService,
     Configuration,
-    LoginByPasswordRequest
+    CancelAccountReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new AuthService(configuration);
 
-let loginByPasswordRequest: LoginByPasswordRequest; //
+let cancelAccountReq: CancelAccountReq; //
 
-const { status, data } = await apiInstance.loginByPassword(
-    loginByPasswordRequest
+const { status, data } = await apiInstance.cancelAccount(
+    cancelAccountReq
 );
 ```
 
@@ -39,12 +41,64 @@ const { status, data } = await apiInstance.loginByPassword(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **loginByPasswordRequest** | **LoginByPasswordRequest**|  | |
+| **cancelAccountReq** | **CancelAccountReq**|  | |
 
 
 ### Return type
 
-**LoginByPasswordReply**
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **login**
+> LoginResp login(loginReq)
+
+登录账号。
+
+### Example
+
+```typescript
+import {
+    AuthService,
+    Configuration,
+    LoginReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AuthService(configuration);
+
+let loginReq: LoginReq; //
+
+const { status, data } = await apiInstance.login(
+    loginReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **loginReq** | **LoginReq**|  | |
+
+
+### Return type
+
+**LoginResp**
 
 ### Authorization
 
@@ -66,7 +120,7 @@ No authorization required
 # **logout**
 > object logout(body)
 
-登出当前账号。
+退出登录。
 
 ### Example
 
@@ -114,10 +168,10 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **startEmailRegistration**
-> StartEmailRegistrationReply startEmailRegistration(startEmailRegistrationRequest)
+# **refreshToken**
+> RefreshTokenResp refreshToken(refreshTokenReq)
 
-使用邮箱发起账号注册。
+刷新登录令牌。
 
 ### Example
 
@@ -125,16 +179,16 @@ No authorization required
 import {
     AuthService,
     Configuration,
-    StartEmailRegistrationRequest
+    RefreshTokenReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new AuthService(configuration);
 
-let startEmailRegistrationRequest: StartEmailRegistrationRequest; //
+let refreshTokenReq: RefreshTokenReq; //
 
-const { status, data } = await apiInstance.startEmailRegistration(
-    startEmailRegistrationRequest
+const { status, data } = await apiInstance.refreshToken(
+    refreshTokenReq
 );
 ```
 
@@ -142,12 +196,64 @@ const { status, data } = await apiInstance.startEmailRegistration(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **startEmailRegistrationRequest** | **StartEmailRegistrationRequest**|  | |
+| **refreshTokenReq** | **RefreshTokenReq**|  | |
 
 
 ### Return type
 
-**StartEmailRegistrationReply**
+**RefreshTokenResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **startEmailRegistration**
+> StartEmailRegistrationResp startEmailRegistration(startEmailRegistrationReq)
+
+开始邮箱注册。
+
+### Example
+
+```typescript
+import {
+    AuthService,
+    Configuration,
+    StartEmailRegistrationReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AuthService(configuration);
+
+let startEmailRegistrationReq: StartEmailRegistrationReq; //
+
+const { status, data } = await apiInstance.startEmailRegistration(
+    startEmailRegistrationReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **startEmailRegistrationReq** | **StartEmailRegistrationReq**|  | |
+
+
+### Return type
+
+**StartEmailRegistrationResp**
 
 ### Authorization
 
@@ -167,9 +273,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **startPhoneRegistration**
-> StartPhoneRegistrationReply startPhoneRegistration(startPhoneRegistrationRequest)
+> StartPhoneRegistrationResp startPhoneRegistration(startPhoneRegistrationReq)
 
-使用手机号发起账号注册。
+开始手机注册。
 
 ### Example
 
@@ -177,16 +283,16 @@ No authorization required
 import {
     AuthService,
     Configuration,
-    StartPhoneRegistrationRequest
+    StartPhoneRegistrationReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new AuthService(configuration);
 
-let startPhoneRegistrationRequest: StartPhoneRegistrationRequest; //
+let startPhoneRegistrationReq: StartPhoneRegistrationReq; //
 
 const { status, data } = await apiInstance.startPhoneRegistration(
-    startPhoneRegistrationRequest
+    startPhoneRegistrationReq
 );
 ```
 
@@ -194,12 +300,12 @@ const { status, data } = await apiInstance.startPhoneRegistration(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **startPhoneRegistrationRequest** | **StartPhoneRegistrationRequest**|  | |
+| **startPhoneRegistrationReq** | **StartPhoneRegistrationReq**|  | |
 
 
 ### Return type
 
-**StartPhoneRegistrationReply**
+**StartPhoneRegistrationResp**
 
 ### Authorization
 
@@ -219,7 +325,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **verifyEmailRegistration**
-> object verifyEmailRegistration(verifyEmailRegistrationRequest)
+> object verifyEmailRegistration(verifyEmailRegistrationReq)
 
 校验邮箱注册验证码。
 
@@ -229,16 +335,16 @@ No authorization required
 import {
     AuthService,
     Configuration,
-    VerifyEmailRegistrationRequest
+    VerifyEmailRegistrationReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new AuthService(configuration);
 
-let verifyEmailRegistrationRequest: VerifyEmailRegistrationRequest; //
+let verifyEmailRegistrationReq: VerifyEmailRegistrationReq; //
 
 const { status, data } = await apiInstance.verifyEmailRegistration(
-    verifyEmailRegistrationRequest
+    verifyEmailRegistrationReq
 );
 ```
 
@@ -246,7 +352,7 @@ const { status, data } = await apiInstance.verifyEmailRegistration(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **verifyEmailRegistrationRequest** | **VerifyEmailRegistrationRequest**|  | |
+| **verifyEmailRegistrationReq** | **VerifyEmailRegistrationReq**|  | |
 
 
 ### Return type
@@ -271,9 +377,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **verifyPhoneRegistration**
-> object verifyPhoneRegistration(verifyPhoneRegistrationRequest)
+> object verifyPhoneRegistration(verifyPhoneRegistrationReq)
 
-校验手机号注册验证码。
+校验手机注册验证码。
 
 ### Example
 
@@ -281,16 +387,16 @@ No authorization required
 import {
     AuthService,
     Configuration,
-    VerifyPhoneRegistrationRequest
+    VerifyPhoneRegistrationReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new AuthService(configuration);
 
-let verifyPhoneRegistrationRequest: VerifyPhoneRegistrationRequest; //
+let verifyPhoneRegistrationReq: VerifyPhoneRegistrationReq; //
 
 const { status, data } = await apiInstance.verifyPhoneRegistration(
-    verifyPhoneRegistrationRequest
+    verifyPhoneRegistrationReq
 );
 ```
 
@@ -298,7 +404,7 @@ const { status, data } = await apiInstance.verifyPhoneRegistration(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **verifyPhoneRegistrationRequest** | **VerifyPhoneRegistrationRequest**|  | |
+| **verifyPhoneRegistrationReq** | **VerifyPhoneRegistrationReq**|  | |
 
 
 ### Return type

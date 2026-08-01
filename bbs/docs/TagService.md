@@ -4,12 +4,67 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**bindArticle**](#bindarticle) | **POST** /v1/content/tag/bind-article | |
 |[**create**](#create) | **POST** /v1/content/tag/create | |
 |[**list**](#list) | **POST** /v1/content/tag/list | |
+|[**listArticleTags**](#listarticletags) | **POST** /v1/content/tag/list-article-tags | |
+|[**unbindArticle**](#unbindarticle) | **POST** /v1/content/tag/unbind-article | |
 |[**update**](#update) | **POST** /v1/content/tag/update | |
 
+# **bindArticle**
+> object bindArticle(bindArticleTagsReq)
+
+绑定文章标签。
+
+### Example
+
+```typescript
+import {
+    TagService,
+    Configuration,
+    BindArticleTagsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new TagService(configuration);
+
+let bindArticleTagsReq: BindArticleTagsReq; //
+
+const { status, data } = await apiInstance.bindArticle(
+    bindArticleTagsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **bindArticleTagsReq** | **BindArticleTagsReq**|  | |
+
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **create**
-> CreateTagReply create(createTagRequest)
+> CreateTagResp create(createTagReq)
 
 创建标签。
 
@@ -19,16 +74,16 @@ All URIs are relative to *http://localhost*
 import {
     TagService,
     Configuration,
-    CreateTagRequest
+    CreateTagReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new TagService(configuration);
 
-let createTagRequest: CreateTagRequest; //
+let createTagReq: CreateTagReq; //
 
 const { status, data } = await apiInstance.create(
-    createTagRequest
+    createTagReq
 );
 ```
 
@@ -36,12 +91,12 @@ const { status, data } = await apiInstance.create(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **createTagRequest** | **CreateTagRequest**|  | |
+| **createTagReq** | **CreateTagReq**|  | |
 
 
 ### Return type
 
-**CreateTagReply**
+**CreateTagResp**
 
 ### Authorization
 
@@ -61,9 +116,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list**
-> ListTagsReply list(listTagsRequest)
+> ListTagsResp list(listTagsReq)
 
-分页查询标签列表。
+查询标签列表。
 
 ### Example
 
@@ -71,16 +126,16 @@ No authorization required
 import {
     TagService,
     Configuration,
-    ListTagsRequest
+    ListTagsReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new TagService(configuration);
 
-let listTagsRequest: ListTagsRequest; //
+let listTagsReq: ListTagsReq; //
 
 const { status, data } = await apiInstance.list(
-    listTagsRequest
+    listTagsReq
 );
 ```
 
@@ -88,12 +143,116 @@ const { status, data } = await apiInstance.list(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listTagsRequest** | **ListTagsRequest**|  | |
+| **listTagsReq** | **ListTagsReq**|  | |
 
 
 ### Return type
 
-**ListTagsReply**
+**ListTagsResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **listArticleTags**
+> ListArticleTagsResp listArticleTags(listArticleTagsReq)
+
+查询文章标签列表。
+
+### Example
+
+```typescript
+import {
+    TagService,
+    Configuration,
+    ListArticleTagsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new TagService(configuration);
+
+let listArticleTagsReq: ListArticleTagsReq; //
+
+const { status, data } = await apiInstance.listArticleTags(
+    listArticleTagsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **listArticleTagsReq** | **ListArticleTagsReq**|  | |
+
+
+### Return type
+
+**ListArticleTagsResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **unbindArticle**
+> object unbindArticle(unbindArticleTagsReq)
+
+解绑文章标签。
+
+### Example
+
+```typescript
+import {
+    TagService,
+    Configuration,
+    UnbindArticleTagsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new TagService(configuration);
+
+let unbindArticleTagsReq: UnbindArticleTagsReq; //
+
+const { status, data } = await apiInstance.unbindArticle(
+    unbindArticleTagsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **unbindArticleTagsReq** | **UnbindArticleTagsReq**|  | |
+
+
+### Return type
+
+**object**
 
 ### Authorization
 
@@ -113,7 +272,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update**
-> UpdateTagReply update(updateTagRequest)
+> UpdateTagResp update(updateTagReq)
 
 更新标签。
 
@@ -123,16 +282,16 @@ No authorization required
 import {
     TagService,
     Configuration,
-    UpdateTagRequest
+    UpdateTagReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new TagService(configuration);
 
-let updateTagRequest: UpdateTagRequest; //
+let updateTagReq: UpdateTagReq; //
 
 const { status, data } = await apiInstance.update(
-    updateTagRequest
+    updateTagReq
 );
 ```
 
@@ -140,12 +299,12 @@ const { status, data } = await apiInstance.update(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **updateTagRequest** | **UpdateTagRequest**|  | |
+| **updateTagReq** | **UpdateTagReq**|  | |
 
 
 ### Return type
 
-**UpdateTagReply**
+**UpdateTagResp**
 
 ### Authorization
 

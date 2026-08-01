@@ -23,91 +23,18 @@ import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
-export interface AcceptAnswerArticleRequest {
-    'article_id': string;
-    'comment_id': string;
-}
-/**
- * 当前账号完整资料。
- */
-export interface Account {
-    /**
-     * 账号展示资料。
-     */
-    'profile'?: AccountProfile;
-    /**
-     * 账号联系方式。
-     */
-    'contact'?: AccountContact;
-}
-/**
- * 当前账号联系方式。
- */
-export interface AccountContact {
-    /**
-     * 账号 ID。
-     */
-    'user_id'?: string;
-    /**
-     * 邮箱地址。
-     */
-    'email'?: string;
-    /**
-     * 手机号。
-     */
-    'phone'?: string;
-}
-/**
- * 账号展示资料。
- */
 export interface AccountProfile {
-    /**
-     * 账号 ID。
-     */
     'id'?: string;
-    /**
-     * 账号名。
-     */
     'name'?: string;
-    /**
-     * 昵称。
-     */
     'nickname'?: string;
-    /**
-     * 个人主页 URL。
-     */
     'url'?: string;
-    /**
-     * 头像 URL。
-     */
     'avatar_url'?: string;
-    /**
-     * 个人简介。
-     */
     'introduction'?: string;
-    /**
-     * MBTI 类型。
-     */
     'mbti'?: AccountProfileMbtiEnum;
-    /**
-     * 账号状态。
-     */
     'status'?: AccountProfileStatusEnum;
-    /**
-     * 关注数量。
-     */
     'follow_count'?: number;
-    /**
-     * 粉丝数量。
-     */
     'follower_count'?: number;
-    /**
-     * 创建时间。
-     */
     'created_at'?: string;
-    /**
-     * 更新时间。
-     */
     'updated_at'?: string;
 }
 
@@ -136,80 +63,22 @@ export const AccountProfileStatusEnum = {
     ACCOUNT_STATUS_UNSPECIFIED: 'ACCOUNT_STATUS_UNSPECIFIED',
     ACCOUNT_STATUS_NORMAL: 'ACCOUNT_STATUS_NORMAL',
     ACCOUNT_STATUS_BANNED: 'ACCOUNT_STATUS_BANNED',
-    ACCOUNT_STATUS_DELETED: 'ACCOUNT_STATUS_DELETED',
+    ACCOUNT_STATUS_CANCELLED: 'ACCOUNT_STATUS_CANCELLED',
 } as const;
 
 export type AccountProfileStatusEnum = typeof AccountProfileStatusEnum[keyof typeof AccountProfileStatusEnum];
 
-export interface AddPostscriptReply {
-    /**
-     * 创建后的文章附言。
-     */
-    'postscript'?: ArticlePostscript;
-}
-export interface AddPostscriptRequest {
-    /**
-     * 文章 ID。
-     */
+export interface AddPostscriptReq {
     'article_id': string;
-    /**
-     * 附言内容。
-     */
     'content': string;
 }
-/**
- * 文章摘要。
- */
-export interface ArticleBrief {
-    'id'?: string;
-    'title'?: string;
-    'type'?: ArticleBriefTypeEnum;
-    'anonymous'?: boolean;
-    'author_user'?: AccountProfile;
-    'cover_image_url'?: string;
-    'publish_status'?: ArticleBriefPublishStatusEnum;
-    'visibility'?: ArticleBriefVisibilityEnum;
-    'restriction'?: ArticleBriefRestrictionEnum;
-    'created_by'?: string;
-    'updated_by'?: string;
-    'created_at'?: string;
-    'updated_at'?: string;
+export interface AddPostscriptResp {
+    'postscript'?: ArticlePostscript;
 }
-
-export const ArticleBriefTypeEnum = {
-    ARTICLE_TYPE_UNSPECIFIED: 'ARTICLE_TYPE_UNSPECIFIED',
-    ARTICLE_TYPE_NORMAL: 'ARTICLE_TYPE_NORMAL',
-    ARTICLE_TYPE_QA: 'ARTICLE_TYPE_QA',
-} as const;
-
-export type ArticleBriefTypeEnum = typeof ArticleBriefTypeEnum[keyof typeof ArticleBriefTypeEnum];
-export const ArticleBriefPublishStatusEnum = {
-    ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
-    ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
-    ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
-    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
-} as const;
-
-export type ArticleBriefPublishStatusEnum = typeof ArticleBriefPublishStatusEnum[keyof typeof ArticleBriefPublishStatusEnum];
-export const ArticleBriefVisibilityEnum = {
-    ARTICLE_VISIBILITY_UNSPECIFIED: 'ARTICLE_VISIBILITY_UNSPECIFIED',
-    ARTICLE_VISIBILITY_PUBLIC: 'ARTICLE_VISIBILITY_PUBLIC',
-    ARTICLE_VISIBILITY_PRIVATE: 'ARTICLE_VISIBILITY_PRIVATE',
-} as const;
-
-export type ArticleBriefVisibilityEnum = typeof ArticleBriefVisibilityEnum[keyof typeof ArticleBriefVisibilityEnum];
-export const ArticleBriefRestrictionEnum = {
-    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
-    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
-    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
-    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
-} as const;
-
-export type ArticleBriefRestrictionEnum = typeof ArticleBriefRestrictionEnum[keyof typeof ArticleBriefRestrictionEnum];
-
-/**
- * 文章详情。
- */
+export interface ArchiveArticleReq {
+    'article_id': string;
+    'reason'?: string;
+}
 export interface ArticleDetail {
     'id'?: string;
     'title'?: string;
@@ -223,15 +92,12 @@ export interface ArticleDetail {
     'type'?: ArticleDetailTypeEnum;
     'statement'?: string;
     'commentable'?: boolean;
-    'anonymous'?: boolean;
     'view_count'?: number;
     'thank_count'?: number;
     'like_count'?: number;
     'collect_count'?: number;
-    'watch_count'?: number;
+    'reward_count'?: number;
     'reply_count'?: number;
-    'bounty_points'?: number;
-    'accepted_answer_id'?: string;
     'author_user'?: AccountProfile;
     'last_reply_user'?: AccountProfile;
     'last_reply_at'?: string;
@@ -253,6 +119,9 @@ export const ArticleDetailTypeEnum = {
     ARTICLE_TYPE_UNSPECIFIED: 'ARTICLE_TYPE_UNSPECIFIED',
     ARTICLE_TYPE_NORMAL: 'ARTICLE_TYPE_NORMAL',
     ARTICLE_TYPE_QA: 'ARTICLE_TYPE_QA',
+    ARTICLE_TYPE_LOTTERY: 'ARTICLE_TYPE_LOTTERY',
+    ARTICLE_TYPE_POLL: 'ARTICLE_TYPE_POLL',
+    ARTICLE_TYPE_COLUMN: 'ARTICLE_TYPE_COLUMN',
 } as const;
 
 export type ArticleDetailTypeEnum = typeof ArticleDetailTypeEnum[keyof typeof ArticleDetailTypeEnum];
@@ -261,6 +130,7 @@ export const ArticleDetailPublishStatusEnum = {
     ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
     ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
     ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
+    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED',
 } as const;
 
 export type ArticleDetailPublishStatusEnum = typeof ArticleDetailPublishStatusEnum[keyof typeof ArticleDetailPublishStatusEnum];
@@ -280,9 +150,6 @@ export const ArticleDetailRestrictionEnum = {
 
 export type ArticleDetailRestrictionEnum = typeof ArticleDetailRestrictionEnum[keyof typeof ArticleDetailRestrictionEnum];
 
-/**
- * 文章列表项。
- */
 export interface ArticleListItem {
     'id'?: string;
     'title'?: string;
@@ -293,15 +160,12 @@ export interface ArticleListItem {
     'type'?: ArticleListItemTypeEnum;
     'statement'?: string;
     'commentable'?: boolean;
-    'anonymous'?: boolean;
     'view_count'?: number;
     'thank_count'?: number;
     'like_count'?: number;
     'collect_count'?: number;
-    'watch_count'?: number;
+    'reward_count'?: number;
     'reply_count'?: number;
-    'bounty_points'?: number;
-    'accepted_answer_id'?: string;
     'author_user'?: AccountProfile;
     'last_reply_user'?: AccountProfile;
     'last_reply_at'?: string;
@@ -322,6 +186,9 @@ export const ArticleListItemTypeEnum = {
     ARTICLE_TYPE_UNSPECIFIED: 'ARTICLE_TYPE_UNSPECIFIED',
     ARTICLE_TYPE_NORMAL: 'ARTICLE_TYPE_NORMAL',
     ARTICLE_TYPE_QA: 'ARTICLE_TYPE_QA',
+    ARTICLE_TYPE_LOTTERY: 'ARTICLE_TYPE_LOTTERY',
+    ARTICLE_TYPE_POLL: 'ARTICLE_TYPE_POLL',
+    ARTICLE_TYPE_COLUMN: 'ARTICLE_TYPE_COLUMN',
 } as const;
 
 export type ArticleListItemTypeEnum = typeof ArticleListItemTypeEnum[keyof typeof ArticleListItemTypeEnum];
@@ -330,6 +197,7 @@ export const ArticleListItemPublishStatusEnum = {
     ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
     ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
     ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
+    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED',
 } as const;
 
 export type ArticleListItemPublishStatusEnum = typeof ArticleListItemPublishStatusEnum[keyof typeof ArticleListItemPublishStatusEnum];
@@ -349,9 +217,6 @@ export const ArticleListItemRestrictionEnum = {
 
 export type ArticleListItemRestrictionEnum = typeof ArticleListItemRestrictionEnum[keyof typeof ArticleListItemRestrictionEnum];
 
-/**
- * 文章附言。
- */
 export interface ArticlePostscript {
     'id'?: string;
     'article_id'?: string;
@@ -373,424 +238,112 @@ export const ArticlePostscriptRestrictionEnum = {
 
 export type ArticlePostscriptRestrictionEnum = typeof ArticlePostscriptRestrictionEnum[keyof typeof ArticlePostscriptRestrictionEnum];
 
-/**
- * 文章查询条件。
- */
-export interface ArticleQuery {
-    'tag_id'?: string;
-    'domain_id'?: string;
-    'type'?: ArticleQueryTypeEnum;
-    'order'?: ArticleQueryOrderEnum;
-    'keyword'?: string;
-    'author_id'?: string;
-    'publish_status'?: ArticleQueryPublishStatusEnum;
-    'publish_statuses'?: Array<ArticleQueryPublishStatusesEnum>;
-    'visibility'?: ArticleQueryVisibilityEnum;
-    'visibilities'?: Array<ArticleQueryVisibilitiesEnum>;
-    'restriction'?: ArticleQueryRestrictionEnum;
-    'restrictions'?: Array<ArticleQueryRestrictionsEnum>;
-}
-
-export const ArticleQueryTypeEnum = {
-    ARTICLE_TYPE_UNSPECIFIED: 'ARTICLE_TYPE_UNSPECIFIED',
-    ARTICLE_TYPE_NORMAL: 'ARTICLE_TYPE_NORMAL',
-    ARTICLE_TYPE_QA: 'ARTICLE_TYPE_QA',
-} as const;
-
-export type ArticleQueryTypeEnum = typeof ArticleQueryTypeEnum[keyof typeof ArticleQueryTypeEnum];
-export const ArticleQueryOrderEnum = {
-    ARTICLE_ORDER_UNSPECIFIED: 'ARTICLE_ORDER_UNSPECIFIED',
-    ARTICLE_ORDER_NEWEST: 'ARTICLE_ORDER_NEWEST',
-    ARTICLE_ORDER_HOTTEST: 'ARTICLE_ORDER_HOTTEST',
-} as const;
-
-export type ArticleQueryOrderEnum = typeof ArticleQueryOrderEnum[keyof typeof ArticleQueryOrderEnum];
-export const ArticleQueryPublishStatusEnum = {
-    ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
-    ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
-    ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
-    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
-} as const;
-
-export type ArticleQueryPublishStatusEnum = typeof ArticleQueryPublishStatusEnum[keyof typeof ArticleQueryPublishStatusEnum];
-export const ArticleQueryPublishStatusesEnum = {
-    ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
-    ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
-    ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
-    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
-} as const;
-
-export type ArticleQueryPublishStatusesEnum = typeof ArticleQueryPublishStatusesEnum[keyof typeof ArticleQueryPublishStatusesEnum];
-export const ArticleQueryVisibilityEnum = {
-    ARTICLE_VISIBILITY_UNSPECIFIED: 'ARTICLE_VISIBILITY_UNSPECIFIED',
-    ARTICLE_VISIBILITY_PUBLIC: 'ARTICLE_VISIBILITY_PUBLIC',
-    ARTICLE_VISIBILITY_PRIVATE: 'ARTICLE_VISIBILITY_PRIVATE',
-} as const;
-
-export type ArticleQueryVisibilityEnum = typeof ArticleQueryVisibilityEnum[keyof typeof ArticleQueryVisibilityEnum];
-export const ArticleQueryVisibilitiesEnum = {
-    ARTICLE_VISIBILITY_UNSPECIFIED: 'ARTICLE_VISIBILITY_UNSPECIFIED',
-    ARTICLE_VISIBILITY_PUBLIC: 'ARTICLE_VISIBILITY_PUBLIC',
-    ARTICLE_VISIBILITY_PRIVATE: 'ARTICLE_VISIBILITY_PRIVATE',
-} as const;
-
-export type ArticleQueryVisibilitiesEnum = typeof ArticleQueryVisibilitiesEnum[keyof typeof ArticleQueryVisibilitiesEnum];
-export const ArticleQueryRestrictionEnum = {
-    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
-    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
-    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
-    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
-} as const;
-
-export type ArticleQueryRestrictionEnum = typeof ArticleQueryRestrictionEnum[keyof typeof ArticleQueryRestrictionEnum];
-export const ArticleQueryRestrictionsEnum = {
-    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
-    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
-    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
-    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
-} as const;
-
-export type ArticleQueryRestrictionsEnum = typeof ArticleQueryRestrictionsEnum[keyof typeof ArticleQueryRestrictionsEnum];
-
-/**
- * 当前查看账号的文章行为状态。
- */
 export interface ArticleViewerActionState {
     'liked'?: boolean;
     'thanked'?: boolean;
     'collected'?: boolean;
-    'watched'?: boolean;
+    'rewarded'?: boolean;
 }
-export interface BeginEnableTotpReply {
-    /**
-     * TOTP 绑定 URL。
-     */
+export interface BeginEnableTotpResp {
     'url'?: string;
-    /**
-     * TOTP 二维码图片数据。
-     */
     'qr_code'?: string;
 }
-export interface BlockRelationRequest {
-    /**
-     * 目标账号 ID。
-     */
+export interface BindArticleTagsReq {
+    'article_id': string;
+    'tag_ids': Array<string>;
+}
+export interface BlockRelationReq {
     'target_id': string;
 }
-export interface CollectArticleReply {
-    'collected'?: boolean;
+export interface CancelAccountReq {
+    'password': string;
+    'code'?: string;
 }
-export interface CollectArticleRequest {
+export interface CancelPublishArticleReq {
+    'article_id': string;
+}
+export interface CollectArticleReq {
     'article_id': string;
     'active': boolean;
 }
-/**
- * 评论详情。
- */
-export interface CommentDetail {
-    'id'?: string;
-    'article_id'?: string;
-    'content'?: string;
-    'content_render'?: string;
-    'level'?: number;
-    'parent_id'?: string;
-    'reply_id'?: string;
-    'reply_count'?: number;
-    'like_count'?: number;
-    'thank_count'?: number;
-    'user'?: AccountProfile;
-    'reply_user'?: AccountProfile;
-    'article'?: ArticleBrief;
-    'viewer_action_state'?: CommentViewerActionState;
-    'restriction'?: CommentDetailRestrictionEnum;
-    'deleted_at'?: string;
-    'created_by'?: string;
-    'updated_by'?: string;
-    'created_at'?: string;
-    'updated_at'?: string;
+export interface CollectArticleResp {
+    'collected'?: boolean;
 }
-
-export const CommentDetailRestrictionEnum = {
-    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
-    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
-    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
-    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
-} as const;
-
-export type CommentDetailRestrictionEnum = typeof CommentDetailRestrictionEnum[keyof typeof CommentDetailRestrictionEnum];
-
-/**
- * 评论列表项。
- */
-export interface CommentListItem {
-    'id'?: string;
-    'article_id'?: string;
-    'content'?: string;
-    'content_render'?: string;
-    'level'?: number;
-    'parent_id'?: string;
-    'reply_id'?: string;
-    'reply_count'?: number;
-    'like_count'?: number;
-    'thank_count'?: number;
-    'user'?: AccountProfile;
-    'reply_user'?: AccountProfile;
-    'article'?: ArticleBrief;
-    'viewer_action_state'?: CommentViewerActionState;
-    'restriction'?: CommentListItemRestrictionEnum;
-    'deleted_at'?: string;
-    'created_by'?: string;
-    'updated_by'?: string;
-    'created_at'?: string;
-    'updated_at'?: string;
-}
-
-export const CommentListItemRestrictionEnum = {
-    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
-    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
-    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
-    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
-} as const;
-
-export type CommentListItemRestrictionEnum = typeof CommentListItemRestrictionEnum[keyof typeof CommentListItemRestrictionEnum];
-
-/**
- * 评论查询条件。
- */
-export interface CommentQuery {
-    'comment_id'?: string;
-    'article_id'?: string;
-    'parent_id'?: string;
-    'reply_id'?: string;
-    'order'?: CommentQueryOrderEnum;
-    'user_id'?: string;
-    'level'?: number;
-    'restriction'?: CommentQueryRestrictionEnum;
-    'restrictions'?: Array<CommentQueryRestrictionsEnum>;
-}
-
-export const CommentQueryOrderEnum = {
-    COMMENT_ORDER_UNSPECIFIED: 'COMMENT_ORDER_UNSPECIFIED',
-    COMMENT_ORDER_NEWEST: 'COMMENT_ORDER_NEWEST',
-    COMMENT_ORDER_HOTTEST: 'COMMENT_ORDER_HOTTEST',
-    COMMENT_ORDER_OLDEST: 'COMMENT_ORDER_OLDEST',
-} as const;
-
-export type CommentQueryOrderEnum = typeof CommentQueryOrderEnum[keyof typeof CommentQueryOrderEnum];
-export const CommentQueryRestrictionEnum = {
-    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
-    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
-    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
-    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
-} as const;
-
-export type CommentQueryRestrictionEnum = typeof CommentQueryRestrictionEnum[keyof typeof CommentQueryRestrictionEnum];
-export const CommentQueryRestrictionsEnum = {
-    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
-    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
-    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
-    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
-} as const;
-
-export type CommentQueryRestrictionsEnum = typeof CommentQueryRestrictionsEnum[keyof typeof CommentQueryRestrictionsEnum];
-
-/**
- * 评论楼层项。
- */
-export interface CommentThread {
-    'root'?: CommentListItem;
-    'preview_replies'?: Array<CommentListItem>;
-    'reply_count'?: number;
-    'has_more_replies'?: boolean;
-}
-/**
- * 当前查看账号的评论行为状态。
- */
-export interface CommentViewerActionState {
-    'liked'?: boolean;
-    'thanked'?: boolean;
-}
-export interface ConfirmEnableTotpRequest {
-    /**
-     * TOTP 验证码。
-     */
+export interface ConfirmEnableTotpReq {
     'code': string;
 }
-export interface CountUnreadNotificationsReply {
-    /**
-     * 未读通知数量。
-     */
+export interface CountUnreadNotificationsResp {
     'count'?: string;
 }
-export interface CreateArticleReply {
-    'article'?: ArticleDetail;
-}
-export interface CreateArticleRequest {
-    'article': RequestArticle;
-}
-export interface CreateCommentReply {
-    'comment'?: CommentDetail;
-}
-export interface CreateCommentRequest {
+export interface CreateCommentReq {
     'article_id': string;
     'content': string;
     'reply_id'?: string;
 }
-export interface CreateTagReply {
-    /**
-     * 创建后的标签。
-     */
-    'tag'?: Tag;
+export interface CreateCommentResp {
+    'comment'?: RespCommentDetail;
 }
-export interface CreateTagRequest {
-    /**
-     * 标签保存内容。
-     */
-    'tag': RequestTag;
+export interface CreateDomainReq {
+    'domain': ReqDomain;
 }
-export interface DisableTotpRequest {
-    /**
-     * TOTP 验证码。
-     */
-    'code': string;
+export interface CreateDomainResp {
+    'domain'?: RespDomain;
 }
-export interface DiscardDraftArticleRequest {
-    'article_id': string;
+export interface CreateDraftArticleReq {
+    'article': ReqArticle;
 }
-/**
- * 内容板块。
- */
-export interface Domain {
-    'id'?: string;
-    'name'?: string;
-    'description'?: string;
-    'status'?: DomainStatusEnum;
-    'url'?: string;
-    'icon'?: string;
-    'is_nav'?: boolean;
-    'created_by'?: string;
-    'updated_by'?: string;
-    'created_at'?: string;
-    'updated_at'?: string;
-}
-
-export const DomainStatusEnum = {
-    DOMAIN_STATUS_UNSPECIFIED: 'DOMAIN_STATUS_UNSPECIFIED',
-    DOMAIN_STATUS_ENABLED: 'DOMAIN_STATUS_ENABLED',
-    DOMAIN_STATUS_DISABLED: 'DOMAIN_STATUS_DISABLED',
-} as const;
-
-export type DomainStatusEnum = typeof DomainStatusEnum[keyof typeof DomainStatusEnum];
-
-/**
- * 内容板块查询条件。
- */
-export interface DomainQuery {
-    /**
-     * 板块 ID 列表。
-     */
-    'ids'?: Array<string>;
-    /**
-     * 板块名称。
-     */
-    'name'?: string;
-    /**
-     * 板块描述。
-     */
-    'description'?: string;
-    /**
-     * 板块启停状态。
-     */
-    'status'?: DomainQueryStatusEnum;
-    /**
-     * 板块 URL。
-     */
-    'url'?: string;
-    /**
-     * 板块图标。
-     */
-    'icon'?: string;
-    /**
-     * 是否在导航中展示。
-     */
-    'is_nav'?: boolean;
-}
-
-export const DomainQueryStatusEnum = {
-    DOMAIN_STATUS_UNSPECIFIED: 'DOMAIN_STATUS_UNSPECIFIED',
-    DOMAIN_STATUS_ENABLED: 'DOMAIN_STATUS_ENABLED',
-    DOMAIN_STATUS_DISABLED: 'DOMAIN_STATUS_DISABLED',
-} as const;
-
-export type DomainQueryStatusEnum = typeof DomainQueryStatusEnum[keyof typeof DomainQueryStatusEnum];
-
-export interface FollowRelationRequest {
-    /**
-     * 目标账号 ID。
-     */
-    'target_id': string;
-}
-export interface GetArticleReply {
+export interface CreateDraftArticleResp {
     'article'?: ArticleDetail;
 }
-export interface GetArticleRequest {
+export interface CreateTagReq {
+    'tag': ReqTag;
+}
+export interface CreateTagResp {
+    'tag'?: RespTag;
+}
+export interface DisableTotpReq {
+    'code': string;
+}
+export interface DiscardDraftArticleReq {
     'article_id': string;
 }
-export interface GetCurrentAccountReply {
-    /**
-     * 当前账号完整资料。
-     */
-    'account'?: Account;
-}
-export interface GetCurrentLocationReply {
-    /**
-     * 当前账号地理资料。
-     */
-    'location'?: Location;
-}
-export interface GetCurrentPreferencesReply {
-    /**
-     * 当前账号偏好设置。
-     */
-    'preference'?: Preference;
-}
-export interface GetCurrentPrivacySettingReply {
-    /**
-     * 当前账号隐私设置。
-     */
-    'privacy_setting'?: PrivacySetting;
-}
-export interface GetCurrentTotpReply {
-    /**
-     * TOTP 认证状态。
-     */
-    'totp'?: Totp;
-}
-export interface GetProfileAccountReply {
-    /**
-     * 账号展示资料。
-     */
-    'profile'?: AccountProfile;
-}
-export interface GetProfileAccountRequest {
-    /**
-     * 账号 ID。
-     */
-    'user_id': string;
-}
-export interface GetStatusRelationReply {
-    /**
-     * 关系状态。
-     */
-    'status'?: RelationStatus;
-}
-export interface GetStatusRelationRequest {
-    /**
-     * 目标账号 ID。
-     */
+export interface FollowRelationReq {
     'target_id': string;
 }
-export interface ImageReply {
+export interface GetArticleReq {
+    'article_id': string;
+}
+export interface GetArticleResp {
+    'article'?: ArticleDetail;
+}
+export interface GetCurrentAccountResp {
+    'account'?: RespAccount;
+}
+export interface GetCurrentLocationResp {
+    'location'?: RespLocation;
+}
+export interface GetCurrentPreferencesResp {
+    'preference'?: RespPreference;
+}
+export interface GetCurrentPrivacySettingResp {
+    'privacy_setting'?: RespPrivacySetting;
+}
+export interface GetCurrentTotpResp {
+    'totp'?: RespTotp;
+}
+export interface GetProfileAccountReq {
+    'user_id': string;
+}
+export interface GetProfileAccountResp {
+    'profile'?: RespAccountProfile;
+}
+export interface GetStatusRelationReq {
+    'target_id': string;
+}
+export interface GetStatusRelationResp {
+    'status'?: RespRelationStatus;
+}
+export interface ImageResp {
     /**
      * 图片数据
      */
@@ -800,324 +353,192 @@ export interface ImageReply {
      */
     'content_type'?: string;
 }
-export interface LikeArticleReply {
-    'liked'?: boolean;
-}
-export interface LikeArticleRequest {
+export interface LikeArticleReq {
     'article_id': string;
     'active': boolean;
 }
-export interface LikeCommentReply {
+export interface LikeArticleResp {
     'liked'?: boolean;
 }
-export interface LikeCommentRequest {
+export interface LikeCommentReq {
     'id': string;
     'active': boolean;
 }
-export interface ListArticlesReply {
-    'page'?: PageReply;
+export interface LikeCommentResp {
+    'liked'?: boolean;
+}
+export interface ListArticleTagsReq {
+    'article_id': string;
+}
+export interface ListArticleTagsResp {
+    'rows'?: Array<RespTag>;
+}
+export interface ListArticlesReq {
+    'page'?: PageReq;
+    'query'?: ReqArticleQuery;
+}
+export interface ListArticlesResp {
+    'page'?: PageResp;
     'rows'?: Array<ArticleListItem>;
 }
-export interface ListArticlesRequest {
-    'page'?: PageRequest;
-    'query'?: ArticleQuery;
+export interface ListBlockedRelationsReq {
+    'page'?: PageReq;
 }
-export interface ListBlockedRelationsReply {
-    /**
-     * 分页结果。
-     */
-    'page'?: PageReply;
-    /**
-     * 账号关系列表。
-     */
-    'rows'?: Array<Relation>;
+export interface ListBlockedRelationsResp {
+    'page'?: PageResp;
+    'rows'?: Array<RespRelation>;
 }
-export interface ListBlockedRelationsRequest {
-    /**
-     * 分页参数。
-     */
-    'page'?: PageRequest;
-}
-export interface ListCommentRepliesReply {
-    'page'?: PageReply;
-    'rows'?: Array<CommentListItem>;
-}
-export interface ListCommentRepliesRequest {
-    'page'?: PageRequest;
+export interface ListCommentRepliesReq {
+    'page'?: PageReq;
     'article_id': string;
     'parent_id': string;
-    'order'?: ListCommentRepliesRequestOrderEnum;
+    'order'?: ListCommentRepliesReqOrderEnum;
 }
 
-export const ListCommentRepliesRequestOrderEnum = {
+export const ListCommentRepliesReqOrderEnum = {
     COMMENT_ORDER_UNSPECIFIED: 'COMMENT_ORDER_UNSPECIFIED',
     COMMENT_ORDER_NEWEST: 'COMMENT_ORDER_NEWEST',
     COMMENT_ORDER_HOTTEST: 'COMMENT_ORDER_HOTTEST',
     COMMENT_ORDER_OLDEST: 'COMMENT_ORDER_OLDEST',
 } as const;
 
-export type ListCommentRepliesRequestOrderEnum = typeof ListCommentRepliesRequestOrderEnum[keyof typeof ListCommentRepliesRequestOrderEnum];
+export type ListCommentRepliesReqOrderEnum = typeof ListCommentRepliesReqOrderEnum[keyof typeof ListCommentRepliesReqOrderEnum];
 
-export interface ListCommentThreadsReply {
-    'page'?: PageReply;
-    'rows'?: Array<CommentThread>;
+export interface ListCommentRepliesResp {
+    'page'?: PageResp;
+    'rows'?: Array<RespCommentListItem>;
 }
-export interface ListCommentThreadsRequest {
-    'page'?: PageRequest;
+export interface ListCommentThreadsReq {
+    'page'?: PageReq;
     'article_id': string;
-    'order'?: ListCommentThreadsRequestOrderEnum;
+    'order'?: ListCommentThreadsReqOrderEnum;
     'reply_preview_limit'?: number;
 }
 
-export const ListCommentThreadsRequestOrderEnum = {
+export const ListCommentThreadsReqOrderEnum = {
     COMMENT_ORDER_UNSPECIFIED: 'COMMENT_ORDER_UNSPECIFIED',
     COMMENT_ORDER_NEWEST: 'COMMENT_ORDER_NEWEST',
     COMMENT_ORDER_HOTTEST: 'COMMENT_ORDER_HOTTEST',
     COMMENT_ORDER_OLDEST: 'COMMENT_ORDER_OLDEST',
 } as const;
 
-export type ListCommentThreadsRequestOrderEnum = typeof ListCommentThreadsRequestOrderEnum[keyof typeof ListCommentThreadsRequestOrderEnum];
+export type ListCommentThreadsReqOrderEnum = typeof ListCommentThreadsReqOrderEnum[keyof typeof ListCommentThreadsReqOrderEnum];
 
-export interface ListCommentTimelineReply {
-    'page'?: PageReply;
-    'rows'?: Array<CommentListItem>;
+export interface ListCommentThreadsResp {
+    'page'?: PageResp;
+    'rows'?: Array<RespCommentThread>;
 }
-export interface ListCommentTimelineRequest {
-    'page'?: PageRequest;
+export interface ListCommentTimelineReq {
+    'page'?: PageReq;
     'article_id': string;
-    'order'?: ListCommentTimelineRequestOrderEnum;
+    'order'?: ListCommentTimelineReqOrderEnum;
 }
 
-export const ListCommentTimelineRequestOrderEnum = {
+export const ListCommentTimelineReqOrderEnum = {
     COMMENT_ORDER_UNSPECIFIED: 'COMMENT_ORDER_UNSPECIFIED',
     COMMENT_ORDER_NEWEST: 'COMMENT_ORDER_NEWEST',
     COMMENT_ORDER_HOTTEST: 'COMMENT_ORDER_HOTTEST',
     COMMENT_ORDER_OLDEST: 'COMMENT_ORDER_OLDEST',
 } as const;
 
-export type ListCommentTimelineRequestOrderEnum = typeof ListCommentTimelineRequestOrderEnum[keyof typeof ListCommentTimelineRequestOrderEnum];
+export type ListCommentTimelineReqOrderEnum = typeof ListCommentTimelineReqOrderEnum[keyof typeof ListCommentTimelineReqOrderEnum];
 
-export interface ListCommentsReply {
-    'page'?: PageReply;
-    'rows'?: Array<CommentListItem>;
+export interface ListCommentTimelineResp {
+    'page'?: PageResp;
+    'rows'?: Array<RespCommentListItem>;
 }
-export interface ListCommentsRequest {
-    'page'?: PageRequest;
-    'query'?: CommentQuery;
+export interface ListCommentsReq {
+    'page'?: PageReq;
+    'query'?: ReqCommentQuery;
 }
-export interface ListDomainsReply {
-    /**
-     * 分页结果。
-     */
-    'page'?: PageReply;
-    /**
-     * 内容板块列表。
-     */
-    'rows'?: Array<Domain>;
+export interface ListCommentsResp {
+    'page'?: PageResp;
+    'rows'?: Array<RespCommentListItem>;
 }
-export interface ListDomainsRequest {
-    /**
-     * 分页参数。
-     */
-    'page'?: PageRequest;
-    /**
-     * 查询条件。
-     */
-    'query'?: DomainQuery;
+export interface ListDomainsReq {
+    'page'?: PageReq;
+    'query'?: ReqDomainQuery;
 }
-export interface ListFollowersRelationsReply {
-    /**
-     * 分页结果。
-     */
-    'page'?: PageReply;
-    /**
-     * 账号关系列表。
-     */
-    'rows'?: Array<Relation>;
+export interface ListDomainsResp {
+    'page'?: PageResp;
+    'rows'?: Array<RespDomain>;
 }
-export interface ListFollowersRelationsRequest {
-    /**
-     * 分页参数。
-     */
-    'page'?: PageRequest;
+export interface ListFollowersRelationsReq {
+    'page'?: PageReq;
 }
-export interface ListFollowingRelationsReply {
-    /**
-     * 分页结果。
-     */
-    'page'?: PageReply;
-    /**
-     * 账号关系列表。
-     */
-    'rows'?: Array<Relation>;
+export interface ListFollowersRelationsResp {
+    'page'?: PageResp;
+    'rows'?: Array<RespRelation>;
 }
-export interface ListFollowingRelationsRequest {
-    /**
-     * 分页参数。
-     */
-    'page'?: PageRequest;
+export interface ListFollowingRelationsReq {
+    'page'?: PageReq;
 }
-export interface ListNotificationsReply {
-    /**
-     * 分页结果。
-     */
-    'page'?: PageReply;
-    /**
-     * 通知列表。
-     */
-    'rows'?: Array<Notification>;
+export interface ListFollowingRelationsResp {
+    'page'?: PageResp;
+    'rows'?: Array<RespRelation>;
 }
-export interface ListNotificationsRequest {
-    /**
-     * 分页参数。
-     */
-    'page'?: PageRequest;
+export interface ListNotificationsReq {
+    'page'?: PageReq;
 }
-export interface ListTagsReply {
-    /**
-     * 分页结果。
-     */
-    'page'?: PageReply;
-    /**
-     * 标签列表。
-     */
-    'rows'?: Array<Tag>;
+export interface ListNotificationsResp {
+    'page'?: PageResp;
+    'rows'?: Array<RespNotification>;
 }
-export interface ListTagsRequest {
-    /**
-     * 分页参数。
-     */
-    'page'?: PageRequest;
-    /**
-     * 查询条件。
-     */
-    'query'?: TagQuery;
+export interface ListPostscriptsReq {
+    'article_id': string;
 }
-/**
- * 账号地理资料。
- */
-export interface Location {
-    /**
-     * 账号 ID。
-     */
-    'user_id'?: string;
-    /**
-     * 国家或地区。
-     */
-    'country'?: string;
-    /**
-     * 省份或州。
-     */
-    'province'?: string;
-    /**
-     * 城市。
-     */
-    'city'?: string;
+export interface ListPostscriptsResp {
+    'rows'?: Array<ArticlePostscript>;
 }
-export interface LoginByPasswordReply {
-    /**
-     * 登录令牌。
-     */
-    'token'?: string;
-    /**
-     * 当前账号完整资料。
-     */
-    'account'?: Account;
+export interface ListTagsReq {
+    'page'?: PageReq;
+    'query'?: ReqTagQuery;
 }
-export interface LoginByPasswordRequest {
-    /**
-     * 账号、邮箱或手机号。
-     */
-    'account': string;
-    /**
-     * 账号密码。
-     */
-    'password': string;
+export interface ListTagsResp {
+    'page'?: PageResp;
+    'rows'?: Array<RespTag>;
 }
-export interface MarkReadNotificationReply {
-    /**
-     * 成功标记的通知数量。
-     */
+export interface LoginReq {
+    'type': LoginReqTypeEnum;
+    'password_credential'?: ReqPasswordCredential;
+    'email_credential'?: ReqEmailCredential;
+    'phone_credential'?: ReqPhoneCredential;
+}
+
+export const LoginReqTypeEnum = {
+    LOGIN_TYPE_UNSPECIFIED: 'LOGIN_TYPE_UNSPECIFIED',
+    LOGIN_TYPE_PASSWORD: 'LOGIN_TYPE_PASSWORD',
+    LOGIN_TYPE_EMAIL: 'LOGIN_TYPE_EMAIL',
+    LOGIN_TYPE_PHONE: 'LOGIN_TYPE_PHONE',
+} as const;
+
+export type LoginReqTypeEnum = typeof LoginReqTypeEnum[keyof typeof LoginReqTypeEnum];
+
+export interface LoginResp {
+    'access_token'?: string;
+    'refresh_token'?: string;
+    'access_token_expires_at'?: string;
+    'refresh_token_expires_at'?: string;
+    'session_expires_at'?: string;
+    'account'?: RespAccount;
+}
+export interface MarkReadNotificationReq {
+    'ids': Array<string>;
+}
+export interface MarkReadNotificationResp {
     'count'?: number;
 }
-export interface MarkReadNotificationRequest {
+export interface PageReq {
     /**
-     * 通知 ID 列表。
+     * 页码
      */
-    'ids'?: Array<string>;
+    'page'?: number;
+    /**
+     * 页大小
+     */
+    'size'?: number;
 }
-/**
- * 通知记录。
- */
-export interface Notification {
-    /**
-     * 通知 ID。
-     */
-    'id'?: string;
-    /**
-     * 来源事件 ID。
-     */
-    'event_id'?: string;
-    /**
-     * 接收账号 ID。
-     */
-    'receiver_id'?: string;
-    /**
-     * 来源事件类型。
-     */
-    'event_type'?: NotificationEventTypeEnum;
-    /**
-     * 通知标题。
-     */
-    'title'?: string;
-    /**
-     * 通知内容。
-     */
-    'content'?: string;
-    /**
-     * 已读时间。
-     */
-    'read_at'?: string;
-    /**
-     * 创建时间。
-     */
-    'created_at'?: string;
-    /**
-     * 更新时间。
-     */
-    'updated_at'?: string;
-}
-
-export const NotificationEventTypeEnum = {
-    EVENT_TYPE_UNSPECIFIED: 'EVENT_TYPE_UNSPECIFIED',
-    EVENT_TYPE_USER_FOLLOW: 'EVENT_TYPE_USER_FOLLOW',
-    EVENT_TYPE_USER_UNFOLLOW: 'EVENT_TYPE_USER_UNFOLLOW',
-    EVENT_TYPE_USER_REGISTER: 'EVENT_TYPE_USER_REGISTER',
-    EVENT_TYPE_USER_LOGIN: 'EVENT_TYPE_USER_LOGIN',
-    EVENT_TYPE_USER_LOGOUT: 'EVENT_TYPE_USER_LOGOUT',
-    EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE: 'EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE',
-    EVENT_TYPE_USER_PHONE_VERIFICATION_CODE: 'EVENT_TYPE_USER_PHONE_VERIFICATION_CODE',
-    EVENT_TYPE_USER_BLOCK: 'EVENT_TYPE_USER_BLOCK',
-    EVENT_TYPE_USER_UNBLOCK: 'EVENT_TYPE_USER_UNBLOCK',
-    EVENT_TYPE_USER_TOTP_ENABLE: 'EVENT_TYPE_USER_TOTP_ENABLE',
-    EVENT_TYPE_USER_TOTP_DISABLE: 'EVENT_TYPE_USER_TOTP_DISABLE',
-    EVENT_TYPE_ARTICLE_PUBLISHED: 'EVENT_TYPE_ARTICLE_PUBLISHED',
-    EVENT_TYPE_ARTICLE_LIKED: 'EVENT_TYPE_ARTICLE_LIKED',
-    EVENT_TYPE_ARTICLE_THANKED: 'EVENT_TYPE_ARTICLE_THANKED',
-    EVENT_TYPE_ARTICLE_COLLECTED: 'EVENT_TYPE_ARTICLE_COLLECTED',
-    EVENT_TYPE_ARTICLE_WATCHED: 'EVENT_TYPE_ARTICLE_WATCHED',
-    EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER: 'EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER',
-    EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED: 'EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED',
-    EVENT_TYPE_ARTICLE_STATUS_UPDATED: 'EVENT_TYPE_ARTICLE_STATUS_UPDATED',
-    EVENT_TYPE_COMMENT_PUBLISHED: 'EVENT_TYPE_COMMENT_PUBLISHED',
-    EVENT_TYPE_COMMENT_LIKED: 'EVENT_TYPE_COMMENT_LIKED',
-    EVENT_TYPE_COMMENT_THANKED: 'EVENT_TYPE_COMMENT_THANKED',
-    EVENT_TYPE_COMMENT_STATUS_UPDATED: 'EVENT_TYPE_COMMENT_STATUS_UPDATED',
-} as const;
-
-export type NotificationEventTypeEnum = typeof NotificationEventTypeEnum[keyof typeof NotificationEventTypeEnum];
-
-export interface PageReply {
+export interface PageResp {
     /**
      * 总数
      */
@@ -1131,473 +552,275 @@ export interface PageReply {
      */
     'size'?: number;
 }
-export interface PageRequest {
-    /**
-     * 页码
-     */
-    'page'?: number;
-    /**
-     * 页大小
-     */
-    'size'?: number;
-}
-/**
- * 账号偏好设置。
- */
-export interface Preference {
-    /**
-     * 账号 ID。
-     */
-    'user_id'?: string;
-    /**
-     * 时区。
-     */
-    'timezone'?: string;
-    /**
-     * 桌面端主题。
-     */
-    'theme'?: string;
-    /**
-     * 移动端主题。
-     */
-    'mobile_theme'?: string;
-    /**
-     * 界面语言。
-     */
-    'language'?: PreferenceLanguageEnum;
-}
-
-export const PreferenceLanguageEnum = {
-    LANGUAGE_UNSPECIFIED: 'LANGUAGE_UNSPECIFIED',
-    LANGUAGE_ZH_CN: 'LANGUAGE_ZH_CN',
-    LANGUAGE_ZH_TW: 'LANGUAGE_ZH_TW',
-    LANGUAGE_EN: 'LANGUAGE_EN',
-} as const;
-
-export type PreferenceLanguageEnum = typeof PreferenceLanguageEnum[keyof typeof PreferenceLanguageEnum];
-
-/**
- * 账号隐私设置。
- */
-export interface PrivacySetting {
-    /**
-     * 账号 ID。
-     */
-    'user_id'?: string;
-    /**
-     * 是否公开积分。
-     */
-    'public_points'?: boolean;
-    /**
-     * 是否公开粉丝列表。
-     */
-    'public_followers'?: boolean;
-    /**
-     * 是否公开文章列表。
-     */
-    'public_articles'?: boolean;
-    /**
-     * 是否公开评论列表。
-     */
-    'public_comments'?: boolean;
-    /**
-     * 是否公开在线状态。
-     */
-    'public_online_status'?: boolean;
-    /**
-     * 是否公开地理资料。
-     */
-    'public_location'?: boolean;
-}
-export interface PublishArticleRequest {
+export interface PublishArticleReq {
     'article_id': string;
-    'visibility'?: PublishArticleRequestVisibilityEnum;
+    'visibility'?: PublishArticleReqVisibilityEnum;
 }
 
-export const PublishArticleRequestVisibilityEnum = {
+export const PublishArticleReqVisibilityEnum = {
     ARTICLE_VISIBILITY_UNSPECIFIED: 'ARTICLE_VISIBILITY_UNSPECIFIED',
     ARTICLE_VISIBILITY_PUBLIC: 'ARTICLE_VISIBILITY_PUBLIC',
     ARTICLE_VISIBILITY_PRIVATE: 'ARTICLE_VISIBILITY_PRIVATE',
 } as const;
 
-export type PublishArticleRequestVisibilityEnum = typeof PublishArticleRequestVisibilityEnum[keyof typeof PublishArticleRequestVisibilityEnum];
+export type PublishArticleReqVisibilityEnum = typeof PublishArticleReqVisibilityEnum[keyof typeof PublishArticleReqVisibilityEnum];
 
-/**
- * 账号关系记录。
- */
-export interface Relation {
-    /**
-     * 关系记录 ID。
-     */
-    'id'?: string;
-    /**
-     * 关系类型。
-     */
-    'type'?: number;
-    /**
-     * 发起账号 ID。
-     */
-    'actor_id'?: string;
-    /**
-     * 目标账号 ID。
-     */
-    'target_id'?: string;
-    /**
-     * 创建时间。
-     */
-    'created_at'?: string;
-    /**
-     * 更新时间。
-     */
-    'updated_at'?: string;
+export interface RefreshTokenReq {
+    'refresh_token': string;
 }
-/**
- * 当前账号与目标账号的关系状态。
- */
-export interface RelationStatus {
-    /**
-     * 目标账号 ID。
-     */
-    'target_id'?: string;
-    /**
-     * 当前账号是否关注目标账号。
-     */
-    'following'?: boolean;
-    /**
-     * 目标账号是否关注当前账号。
-     */
-    'followed_by'?: boolean;
-    /**
-     * 当前账号是否拉黑目标账号。
-     */
-    'blocking'?: boolean;
-    /**
-     * 目标账号是否拉黑当前账号。
-     */
-    'blocked_by'?: boolean;
+export interface RefreshTokenResp {
+    'access_token'?: string;
+    'refresh_token'?: string;
+    'access_token_expires_at'?: string;
+    'refresh_token_expires_at'?: string;
+    'session_expires_at'?: string;
 }
-export interface RequestArticle {
+export interface ReqArticle {
     'title': string;
     'content': string;
     'reward_content'?: string;
     'reward_points'?: number;
-    'type': RequestArticleTypeEnum;
-    'bounty_points'?: number;
+    'type': ReqArticleTypeEnum;
     'statement'?: string;
     'commentable'?: boolean;
-    'anonymous'?: boolean;
-    'tag_ids'?: Array<string>;
 }
 
-export const RequestArticleTypeEnum = {
+export const ReqArticleTypeEnum = {
     ARTICLE_TYPE_UNSPECIFIED: 'ARTICLE_TYPE_UNSPECIFIED',
     ARTICLE_TYPE_NORMAL: 'ARTICLE_TYPE_NORMAL',
     ARTICLE_TYPE_QA: 'ARTICLE_TYPE_QA',
+    ARTICLE_TYPE_LOTTERY: 'ARTICLE_TYPE_LOTTERY',
+    ARTICLE_TYPE_POLL: 'ARTICLE_TYPE_POLL',
+    ARTICLE_TYPE_COLUMN: 'ARTICLE_TYPE_COLUMN',
 } as const;
 
-export type RequestArticleTypeEnum = typeof RequestArticleTypeEnum[keyof typeof RequestArticleTypeEnum];
+export type ReqArticleTypeEnum = typeof ReqArticleTypeEnum[keyof typeof ReqArticleTypeEnum];
 
-export interface RequestTag {
-    /**
-     * 标签名称。
-     */
-    'name': string;
-    /**
-     * 标签描述。
-     */
-    'description'?: string;
-    /**
-     * 所属板块 ID。
-     */
+export interface ReqArticleQuery {
+    'tag_id'?: string;
     'domain_id'?: string;
-    /**
-     * 标签启停状态。
-     */
-    'status'?: RequestTagStatusEnum;
+    'type'?: ReqArticleQueryTypeEnum;
+    'order'?: ReqArticleQueryOrderEnum;
+    'keyword'?: string;
+    'author_id'?: string;
+    'publish_status'?: ReqArticleQueryPublishStatusEnum;
+    'publish_statuses'?: Array<ReqArticleQueryPublishStatusesEnum>;
+    'visibility'?: ReqArticleQueryVisibilityEnum;
+    'visibilities'?: Array<ReqArticleQueryVisibilitiesEnum>;
+    'restriction'?: ReqArticleQueryRestrictionEnum;
+    'restrictions'?: Array<ReqArticleQueryRestrictionsEnum>;
 }
 
-export const RequestTagStatusEnum = {
+export const ReqArticleQueryTypeEnum = {
+    ARTICLE_TYPE_UNSPECIFIED: 'ARTICLE_TYPE_UNSPECIFIED',
+    ARTICLE_TYPE_NORMAL: 'ARTICLE_TYPE_NORMAL',
+    ARTICLE_TYPE_QA: 'ARTICLE_TYPE_QA',
+    ARTICLE_TYPE_LOTTERY: 'ARTICLE_TYPE_LOTTERY',
+    ARTICLE_TYPE_POLL: 'ARTICLE_TYPE_POLL',
+    ARTICLE_TYPE_COLUMN: 'ARTICLE_TYPE_COLUMN',
+} as const;
+
+export type ReqArticleQueryTypeEnum = typeof ReqArticleQueryTypeEnum[keyof typeof ReqArticleQueryTypeEnum];
+export const ReqArticleQueryOrderEnum = {
+    ARTICLE_ORDER_UNSPECIFIED: 'ARTICLE_ORDER_UNSPECIFIED',
+    ARTICLE_ORDER_NEWEST: 'ARTICLE_ORDER_NEWEST',
+    ARTICLE_ORDER_HOTTEST: 'ARTICLE_ORDER_HOTTEST',
+} as const;
+
+export type ReqArticleQueryOrderEnum = typeof ReqArticleQueryOrderEnum[keyof typeof ReqArticleQueryOrderEnum];
+export const ReqArticleQueryPublishStatusEnum = {
+    ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
+    ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
+    ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
+    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
+    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED',
+} as const;
+
+export type ReqArticleQueryPublishStatusEnum = typeof ReqArticleQueryPublishStatusEnum[keyof typeof ReqArticleQueryPublishStatusEnum];
+export const ReqArticleQueryPublishStatusesEnum = {
+    ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
+    ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
+    ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
+    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
+    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED',
+} as const;
+
+export type ReqArticleQueryPublishStatusesEnum = typeof ReqArticleQueryPublishStatusesEnum[keyof typeof ReqArticleQueryPublishStatusesEnum];
+export const ReqArticleQueryVisibilityEnum = {
+    ARTICLE_VISIBILITY_UNSPECIFIED: 'ARTICLE_VISIBILITY_UNSPECIFIED',
+    ARTICLE_VISIBILITY_PUBLIC: 'ARTICLE_VISIBILITY_PUBLIC',
+    ARTICLE_VISIBILITY_PRIVATE: 'ARTICLE_VISIBILITY_PRIVATE',
+} as const;
+
+export type ReqArticleQueryVisibilityEnum = typeof ReqArticleQueryVisibilityEnum[keyof typeof ReqArticleQueryVisibilityEnum];
+export const ReqArticleQueryVisibilitiesEnum = {
+    ARTICLE_VISIBILITY_UNSPECIFIED: 'ARTICLE_VISIBILITY_UNSPECIFIED',
+    ARTICLE_VISIBILITY_PUBLIC: 'ARTICLE_VISIBILITY_PUBLIC',
+    ARTICLE_VISIBILITY_PRIVATE: 'ARTICLE_VISIBILITY_PRIVATE',
+} as const;
+
+export type ReqArticleQueryVisibilitiesEnum = typeof ReqArticleQueryVisibilitiesEnum[keyof typeof ReqArticleQueryVisibilitiesEnum];
+export const ReqArticleQueryRestrictionEnum = {
+    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
+    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
+    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
+    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
+} as const;
+
+export type ReqArticleQueryRestrictionEnum = typeof ReqArticleQueryRestrictionEnum[keyof typeof ReqArticleQueryRestrictionEnum];
+export const ReqArticleQueryRestrictionsEnum = {
+    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
+    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
+    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
+    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
+} as const;
+
+export type ReqArticleQueryRestrictionsEnum = typeof ReqArticleQueryRestrictionsEnum[keyof typeof ReqArticleQueryRestrictionsEnum];
+
+export interface ReqCommentQuery {
+    'comment_id'?: string;
+    'article_id'?: string;
+    'parent_id'?: string;
+    'reply_id'?: string;
+    'order'?: ReqCommentQueryOrderEnum;
+    'user_id'?: string;
+    'level'?: number;
+    'restriction'?: ReqCommentQueryRestrictionEnum;
+    'restrictions'?: Array<ReqCommentQueryRestrictionsEnum>;
+}
+
+export const ReqCommentQueryOrderEnum = {
+    COMMENT_ORDER_UNSPECIFIED: 'COMMENT_ORDER_UNSPECIFIED',
+    COMMENT_ORDER_NEWEST: 'COMMENT_ORDER_NEWEST',
+    COMMENT_ORDER_HOTTEST: 'COMMENT_ORDER_HOTTEST',
+    COMMENT_ORDER_OLDEST: 'COMMENT_ORDER_OLDEST',
+} as const;
+
+export type ReqCommentQueryOrderEnum = typeof ReqCommentQueryOrderEnum[keyof typeof ReqCommentQueryOrderEnum];
+export const ReqCommentQueryRestrictionEnum = {
+    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
+    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
+    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
+    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
+} as const;
+
+export type ReqCommentQueryRestrictionEnum = typeof ReqCommentQueryRestrictionEnum[keyof typeof ReqCommentQueryRestrictionEnum];
+export const ReqCommentQueryRestrictionsEnum = {
+    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
+    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
+    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
+    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
+} as const;
+
+export type ReqCommentQueryRestrictionsEnum = typeof ReqCommentQueryRestrictionsEnum[keyof typeof ReqCommentQueryRestrictionsEnum];
+
+export interface ReqDomain {
+    'code': string;
+    'name': string;
+    'description'?: string;
+    'status'?: ReqDomainStatusEnum;
+    'url'?: string;
+    'icon'?: string;
+    'is_nav'?: boolean;
+    'sort'?: number;
+}
+
+export const ReqDomainStatusEnum = {
+    DOMAIN_STATUS_UNSPECIFIED: 'DOMAIN_STATUS_UNSPECIFIED',
+    DOMAIN_STATUS_ENABLED: 'DOMAIN_STATUS_ENABLED',
+    DOMAIN_STATUS_DISABLED: 'DOMAIN_STATUS_DISABLED',
+} as const;
+
+export type ReqDomainStatusEnum = typeof ReqDomainStatusEnum[keyof typeof ReqDomainStatusEnum];
+
+export interface ReqDomainQuery {
+    'ids'?: Array<string>;
+    'code'?: string;
+    'name'?: string;
+    'description'?: string;
+    'status'?: ReqDomainQueryStatusEnum;
+    'url'?: string;
+    'icon'?: string;
+    'is_nav'?: boolean;
+}
+
+export const ReqDomainQueryStatusEnum = {
+    DOMAIN_STATUS_UNSPECIFIED: 'DOMAIN_STATUS_UNSPECIFIED',
+    DOMAIN_STATUS_ENABLED: 'DOMAIN_STATUS_ENABLED',
+    DOMAIN_STATUS_DISABLED: 'DOMAIN_STATUS_DISABLED',
+} as const;
+
+export type ReqDomainQueryStatusEnum = typeof ReqDomainQueryStatusEnum[keyof typeof ReqDomainQueryStatusEnum];
+
+export interface ReqEmailCredential {
+    'email'?: string;
+    'code'?: string;
+}
+export interface ReqPasswordCredential {
+    'account'?: string;
+    'password'?: string;
+    'code'?: string;
+}
+export interface ReqPhoneCredential {
+    'phone'?: string;
+    'code'?: string;
+}
+export interface ReqTag {
+    'code': string;
+    'name': string;
+    'description'?: string;
+    'domain_id': string;
+    'status'?: ReqTagStatusEnum;
+    'icon'?: string;
+    'sort'?: number;
+}
+
+export const ReqTagStatusEnum = {
     TAG_STATUS_UNSPECIFIED: 'TAG_STATUS_UNSPECIFIED',
     TAG_STATUS_ENABLED: 'TAG_STATUS_ENABLED',
     TAG_STATUS_DISABLED: 'TAG_STATUS_DISABLED',
 } as const;
 
-export type RequestTagStatusEnum = typeof RequestTagStatusEnum[keyof typeof RequestTagStatusEnum];
+export type ReqTagStatusEnum = typeof ReqTagStatusEnum[keyof typeof ReqTagStatusEnum];
 
-export interface RewardArticleRequest {
-    'article_id': string;
-    'points'?: number;
-}
-export interface StartEmailRegistrationReply {
-    /**
-     * 验证码令牌。
-     */
-    'code_token'?: string;
-    /**
-     * 验证码。
-     */
+export interface ReqTagQuery {
+    'ids'?: Array<string>;
     'code'?: string;
+    'name'?: string;
+    'names'?: Array<string>;
+    'description'?: string;
+    'status'?: ReqTagQueryStatusEnum;
+    'domain_id'?: string;
 }
-export interface StartEmailRegistrationRequest {
-    /**
-     * 邮箱地址。
-     */
-    'email': string;
-    /**
-     * 账号密码。
-     */
-    'password': string;
-    /**
-     * 账号名。
-     */
-    'name': string;
-    /**
-     * 昵称。
-     */
-    'nickname'?: string;
+
+export const ReqTagQueryStatusEnum = {
+    TAG_STATUS_UNSPECIFIED: 'TAG_STATUS_UNSPECIFIED',
+    TAG_STATUS_ENABLED: 'TAG_STATUS_ENABLED',
+    TAG_STATUS_DISABLED: 'TAG_STATUS_DISABLED',
+} as const;
+
+export type ReqTagQueryStatusEnum = typeof ReqTagQueryStatusEnum[keyof typeof ReqTagQueryStatusEnum];
+
+export interface RespAccount {
+    'basic'?: RespAccountBasic;
+    'contact'?: RespAccountContact;
 }
-export interface StartPhoneRegistrationReply {
-    /**
-     * 验证码令牌。
-     */
-    'code_token'?: string;
-    /**
-     * 验证码。
-     */
-    'code'?: string;
-}
-export interface StartPhoneRegistrationRequest {
-    /**
-     * 手机号。
-     */
-    'phone': string;
-    /**
-     * 账号密码。
-     */
-    'password': string;
-    /**
-     * 账号名。
-     */
-    'name': string;
-    /**
-     * 昵称。
-     */
-    'nickname'?: string;
-}
-/**
- * 标签。
- */
-export interface Tag {
+export interface RespAccountBasic {
     'id'?: string;
     'name'?: string;
-    'description'?: string;
-    'domain_id'?: string;
-    'status'?: TagStatusEnum;
-    'created_by'?: string;
-    'updated_by'?: string;
+    'nickname'?: string;
+    'url'?: string;
+    'avatar_url'?: string;
+    'introduction'?: string;
+    'mbti'?: RespAccountBasicMbtiEnum;
+    'status'?: RespAccountBasicStatusEnum;
+    'follow_count'?: number;
+    'follower_count'?: number;
     'created_at'?: string;
     'updated_at'?: string;
 }
 
-export const TagStatusEnum = {
-    TAG_STATUS_UNSPECIFIED: 'TAG_STATUS_UNSPECIFIED',
-    TAG_STATUS_ENABLED: 'TAG_STATUS_ENABLED',
-    TAG_STATUS_DISABLED: 'TAG_STATUS_DISABLED',
-} as const;
-
-export type TagStatusEnum = typeof TagStatusEnum[keyof typeof TagStatusEnum];
-
-/**
- * 标签查询条件。
- */
-export interface TagQuery {
-    /**
-     * 标签 ID 列表。
-     */
-    'ids'?: Array<string>;
-    /**
-     * 标签名称。
-     */
-    'name'?: string;
-    /**
-     * 标签名称列表。
-     */
-    'names'?: Array<string>;
-    /**
-     * 标签描述。
-     */
-    'description'?: string;
-    /**
-     * 标签启停状态。
-     */
-    'status'?: TagQueryStatusEnum;
-    /**
-     * 所属板块 ID。
-     */
-    'domain_id'?: string;
-}
-
-export const TagQueryStatusEnum = {
-    TAG_STATUS_UNSPECIFIED: 'TAG_STATUS_UNSPECIFIED',
-    TAG_STATUS_ENABLED: 'TAG_STATUS_ENABLED',
-    TAG_STATUS_DISABLED: 'TAG_STATUS_DISABLED',
-} as const;
-
-export type TagQueryStatusEnum = typeof TagQueryStatusEnum[keyof typeof TagQueryStatusEnum];
-
-export interface ThankArticleReply {
-    'thanked'?: boolean;
-}
-export interface ThankArticleRequest {
-    'article_id': string;
-    'active': boolean;
-}
-export interface ThankCommentReply {
-    'thanked'?: boolean;
-}
-export interface ThankCommentRequest {
-    'id': string;
-    'active': boolean;
-}
-/**
- * TOTP 认证状态。
- */
-export interface Totp {
-    /**
-     * 账号 ID。
-     */
-    'user_id'?: string;
-    /**
-     * 是否启用 TOTP。
-     */
-    'enable'?: boolean;
-    /**
-     * 启用时间。
-     */
-    'enable_time'?: string;
-}
-export interface UnblockRelationRequest {
-    /**
-     * 目标账号 ID。
-     */
-    'target_id': string;
-}
-export interface UnfollowRelationRequest {
-    /**
-     * 目标账号 ID。
-     */
-    'target_id': string;
-}
-export interface UpdateArticleReply {
-    'article'?: ArticleDetail;
-}
-export interface UpdateArticleRequest {
-    'article_id': string;
-    'article': RequestArticle;
-}
-export interface UpdateCurrentPreferencesReply {
-    /**
-     * 更新后的账号偏好设置。
-     */
-    'preference'?: Preference;
-}
-export interface UpdateCurrentPreferencesRequest {
-    /**
-     * 时区。
-     */
-    'timezone'?: string;
-    /**
-     * 桌面端主题。
-     */
-    'theme'?: string;
-    /**
-     * 移动端主题。
-     */
-    'mobile_theme'?: string;
-    /**
-     * 界面语言。
-     */
-    'language'?: UpdateCurrentPreferencesRequestLanguageEnum;
-}
-
-export const UpdateCurrentPreferencesRequestLanguageEnum = {
-    LANGUAGE_UNSPECIFIED: 'LANGUAGE_UNSPECIFIED',
-    LANGUAGE_ZH_CN: 'LANGUAGE_ZH_CN',
-    LANGUAGE_ZH_TW: 'LANGUAGE_ZH_TW',
-    LANGUAGE_EN: 'LANGUAGE_EN',
-} as const;
-
-export type UpdateCurrentPreferencesRequestLanguageEnum = typeof UpdateCurrentPreferencesRequestLanguageEnum[keyof typeof UpdateCurrentPreferencesRequestLanguageEnum];
-
-export interface UpdateCurrentPrivacySettingReply {
-    /**
-     * 更新后的账号隐私设置。
-     */
-    'privacy_setting'?: PrivacySetting;
-}
-export interface UpdateCurrentPrivacySettingRequest {
-    /**
-     * 是否公开积分。
-     */
-    'public_points'?: boolean;
-    /**
-     * 是否公开粉丝列表。
-     */
-    'public_followers'?: boolean;
-    /**
-     * 是否公开文章列表。
-     */
-    'public_articles'?: boolean;
-    /**
-     * 是否公开评论列表。
-     */
-    'public_comments'?: boolean;
-    /**
-     * 是否公开在线状态。
-     */
-    'public_online_status'?: boolean;
-    /**
-     * 是否公开地理资料。
-     */
-    'public_location'?: boolean;
-}
-export interface UpdateDraftArticleReply {
-    'article'?: ArticleDetail;
-}
-export interface UpdateDraftArticleRequest {
-    'article_id': string;
-    'article': RequestArticle;
-}
-export interface UpdateProfileAccountReply {
-    /**
-     * 更新后的账号展示资料。
-     */
-    'profile'?: AccountProfile;
-}
-export interface UpdateProfileAccountRequest {
-    /**
-     * 头像 URL。
-     */
-    'avatar_url'?: string;
-    /**
-     * 昵称。
-     */
-    'nickname'?: string;
-    /**
-     * 个人主页 URL。
-     */
-    'url'?: string;
-    /**
-     * 个人简介。
-     */
-    'introduction'?: string;
-    /**
-     * MBTI 类型。
-     */
-    'mbti'?: UpdateProfileAccountRequestMbtiEnum;
-}
-
-export const UpdateProfileAccountRequestMbtiEnum = {
+export const RespAccountBasicMbtiEnum = {
     MBTI_UNSPECIFIED: 'MBTI_UNSPECIFIED',
     MBTI_INTJ: 'MBTI_INTJ',
     MBTI_INTP: 'MBTI_INTP',
@@ -1617,70 +840,504 @@ export const UpdateProfileAccountRequestMbtiEnum = {
     MBTI_ESFP: 'MBTI_ESFP',
 } as const;
 
-export type UpdateProfileAccountRequestMbtiEnum = typeof UpdateProfileAccountRequestMbtiEnum[keyof typeof UpdateProfileAccountRequestMbtiEnum];
+export type RespAccountBasicMbtiEnum = typeof RespAccountBasicMbtiEnum[keyof typeof RespAccountBasicMbtiEnum];
+export const RespAccountBasicStatusEnum = {
+    ACCOUNT_STATUS_UNSPECIFIED: 'ACCOUNT_STATUS_UNSPECIFIED',
+    ACCOUNT_STATUS_NORMAL: 'ACCOUNT_STATUS_NORMAL',
+    ACCOUNT_STATUS_BANNED: 'ACCOUNT_STATUS_BANNED',
+    ACCOUNT_STATUS_CANCELLED: 'ACCOUNT_STATUS_CANCELLED',
+} as const;
 
-export interface UpdateTagReply {
-    /**
-     * 更新后的标签。
-     */
-    'tag'?: Tag;
+export type RespAccountBasicStatusEnum = typeof RespAccountBasicStatusEnum[keyof typeof RespAccountBasicStatusEnum];
+
+export interface RespAccountContact {
+    'user_id'?: string;
+    'email'?: string;
+    'phone'?: string;
 }
-export interface UpdateTagRequest {
-    /**
-     * 标签 ID。
-     */
-    'tag_id': string;
-    /**
-     * 标签保存内容。
-     */
-    'tag': RequestTag;
+export interface RespAccountProfile {
+    'id'?: string;
+    'name'?: string;
+    'nickname'?: string;
+    'url'?: string;
+    'avatar_url'?: string;
+    'introduction'?: string;
+    'mbti'?: RespAccountProfileMbtiEnum;
+    'status'?: RespAccountProfileStatusEnum;
+    'follow_count'?: number;
+    'follower_count'?: number;
+    'created_at'?: string;
+    'updated_at'?: string;
 }
-export interface UpsertCurrentLocationReply {
-    /**
-     * 更新后的账号地理资料。
-     */
-    'location'?: Location;
+
+export const RespAccountProfileMbtiEnum = {
+    MBTI_UNSPECIFIED: 'MBTI_UNSPECIFIED',
+    MBTI_INTJ: 'MBTI_INTJ',
+    MBTI_INTP: 'MBTI_INTP',
+    MBTI_ENTJ: 'MBTI_ENTJ',
+    MBTI_ENTP: 'MBTI_ENTP',
+    MBTI_INFJ: 'MBTI_INFJ',
+    MBTI_INFP: 'MBTI_INFP',
+    MBTI_ENFJ: 'MBTI_ENFJ',
+    MBTI_ENFP: 'MBTI_ENFP',
+    MBTI_ISTJ: 'MBTI_ISTJ',
+    MBTI_ISFJ: 'MBTI_ISFJ',
+    MBTI_ESTJ: 'MBTI_ESTJ',
+    MBTI_ESFJ: 'MBTI_ESFJ',
+    MBTI_ISTP: 'MBTI_ISTP',
+    MBTI_ISFP: 'MBTI_ISFP',
+    MBTI_ESTP: 'MBTI_ESTP',
+    MBTI_ESFP: 'MBTI_ESFP',
+} as const;
+
+export type RespAccountProfileMbtiEnum = typeof RespAccountProfileMbtiEnum[keyof typeof RespAccountProfileMbtiEnum];
+export const RespAccountProfileStatusEnum = {
+    ACCOUNT_STATUS_UNSPECIFIED: 'ACCOUNT_STATUS_UNSPECIFIED',
+    ACCOUNT_STATUS_NORMAL: 'ACCOUNT_STATUS_NORMAL',
+    ACCOUNT_STATUS_BANNED: 'ACCOUNT_STATUS_BANNED',
+    ACCOUNT_STATUS_CANCELLED: 'ACCOUNT_STATUS_CANCELLED',
+} as const;
+
+export type RespAccountProfileStatusEnum = typeof RespAccountProfileStatusEnum[keyof typeof RespAccountProfileStatusEnum];
+
+export interface RespArticleBrief {
+    'id'?: string;
+    'title'?: string;
+    'type'?: RespArticleBriefTypeEnum;
+    'author_user'?: RespAccountProfile;
+    'cover_image_url'?: string;
+    'publish_status'?: RespArticleBriefPublishStatusEnum;
+    'visibility'?: RespArticleBriefVisibilityEnum;
+    'restriction'?: RespArticleBriefRestrictionEnum;
+    'created_by'?: string;
+    'updated_by'?: string;
+    'created_at'?: string;
+    'updated_at'?: string;
 }
-export interface UpsertCurrentLocationRequest {
-    /**
-     * 国家或地区。
-     */
+
+export const RespArticleBriefTypeEnum = {
+    ARTICLE_TYPE_UNSPECIFIED: 'ARTICLE_TYPE_UNSPECIFIED',
+    ARTICLE_TYPE_NORMAL: 'ARTICLE_TYPE_NORMAL',
+    ARTICLE_TYPE_QA: 'ARTICLE_TYPE_QA',
+    ARTICLE_TYPE_LOTTERY: 'ARTICLE_TYPE_LOTTERY',
+    ARTICLE_TYPE_POLL: 'ARTICLE_TYPE_POLL',
+    ARTICLE_TYPE_COLUMN: 'ARTICLE_TYPE_COLUMN',
+} as const;
+
+export type RespArticleBriefTypeEnum = typeof RespArticleBriefTypeEnum[keyof typeof RespArticleBriefTypeEnum];
+export const RespArticleBriefPublishStatusEnum = {
+    ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
+    ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
+    ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
+    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
+    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED',
+} as const;
+
+export type RespArticleBriefPublishStatusEnum = typeof RespArticleBriefPublishStatusEnum[keyof typeof RespArticleBriefPublishStatusEnum];
+export const RespArticleBriefVisibilityEnum = {
+    ARTICLE_VISIBILITY_UNSPECIFIED: 'ARTICLE_VISIBILITY_UNSPECIFIED',
+    ARTICLE_VISIBILITY_PUBLIC: 'ARTICLE_VISIBILITY_PUBLIC',
+    ARTICLE_VISIBILITY_PRIVATE: 'ARTICLE_VISIBILITY_PRIVATE',
+} as const;
+
+export type RespArticleBriefVisibilityEnum = typeof RespArticleBriefVisibilityEnum[keyof typeof RespArticleBriefVisibilityEnum];
+export const RespArticleBriefRestrictionEnum = {
+    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
+    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
+    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
+    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
+} as const;
+
+export type RespArticleBriefRestrictionEnum = typeof RespArticleBriefRestrictionEnum[keyof typeof RespArticleBriefRestrictionEnum];
+
+export interface RespCommentDetail {
+    'id'?: string;
+    'article_id'?: string;
+    'content'?: string;
+    'content_render'?: string;
+    'level'?: number;
+    'parent_id'?: string;
+    'reply_id'?: string;
+    'reply_count'?: number;
+    'like_count'?: number;
+    'thank_count'?: number;
+    'user'?: RespAccountProfile;
+    'reply_user'?: RespAccountProfile;
+    'article'?: RespArticleBrief;
+    'viewer_action_state'?: RespCommentViewerActionState;
+    'restriction'?: RespCommentDetailRestrictionEnum;
+    'deleted_at'?: string;
+    'created_by'?: string;
+    'updated_by'?: string;
+    'created_at'?: string;
+    'updated_at'?: string;
+}
+
+export const RespCommentDetailRestrictionEnum = {
+    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
+    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
+    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
+    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
+} as const;
+
+export type RespCommentDetailRestrictionEnum = typeof RespCommentDetailRestrictionEnum[keyof typeof RespCommentDetailRestrictionEnum];
+
+export interface RespCommentListItem {
+    'id'?: string;
+    'article_id'?: string;
+    'content'?: string;
+    'content_render'?: string;
+    'level'?: number;
+    'parent_id'?: string;
+    'reply_id'?: string;
+    'reply_count'?: number;
+    'like_count'?: number;
+    'thank_count'?: number;
+    'user'?: RespAccountProfile;
+    'reply_user'?: RespAccountProfile;
+    'article'?: RespArticleBrief;
+    'viewer_action_state'?: RespCommentViewerActionState;
+    'restriction'?: RespCommentListItemRestrictionEnum;
+    'deleted_at'?: string;
+    'created_by'?: string;
+    'updated_by'?: string;
+    'created_at'?: string;
+    'updated_at'?: string;
+}
+
+export const RespCommentListItemRestrictionEnum = {
+    CONTENT_RESTRICTION_UNSPECIFIED: 'CONTENT_RESTRICTION_UNSPECIFIED',
+    CONTENT_RESTRICTION_NONE: 'CONTENT_RESTRICTION_NONE',
+    CONTENT_RESTRICTION_HIDDEN: 'CONTENT_RESTRICTION_HIDDEN',
+    CONTENT_RESTRICTION_LOCKED: 'CONTENT_RESTRICTION_LOCKED',
+} as const;
+
+export type RespCommentListItemRestrictionEnum = typeof RespCommentListItemRestrictionEnum[keyof typeof RespCommentListItemRestrictionEnum];
+
+export interface RespCommentThread {
+    'root'?: RespCommentListItem;
+    'preview_replies'?: Array<RespCommentListItem>;
+    'reply_count'?: number;
+    'has_more_replies'?: boolean;
+}
+export interface RespCommentViewerActionState {
+    'liked'?: boolean;
+    'thanked'?: boolean;
+}
+export interface RespDomain {
+    'id'?: string;
+    'code'?: string;
+    'name'?: string;
+    'description'?: string;
+    'status'?: RespDomainStatusEnum;
+    'url'?: string;
+    'icon'?: string;
+    'is_nav'?: boolean;
+    'sort'?: number;
+    'created_by'?: string;
+    'updated_by'?: string;
+    'created_at'?: string;
+    'updated_at'?: string;
+}
+
+export const RespDomainStatusEnum = {
+    DOMAIN_STATUS_UNSPECIFIED: 'DOMAIN_STATUS_UNSPECIFIED',
+    DOMAIN_STATUS_ENABLED: 'DOMAIN_STATUS_ENABLED',
+    DOMAIN_STATUS_DISABLED: 'DOMAIN_STATUS_DISABLED',
+} as const;
+
+export type RespDomainStatusEnum = typeof RespDomainStatusEnum[keyof typeof RespDomainStatusEnum];
+
+export interface RespLocation {
+    'user_id'?: string;
     'country'?: string;
-    /**
-     * 省份或州。
-     */
     'province'?: string;
-    /**
-     * 城市。
-     */
     'city'?: string;
 }
-export interface VerifyEmailRegistrationRequest {
-    /**
-     * 验证码。
-     */
-    'code': string;
-    /**
-     * 验证码令牌。
-     */
-    'code_token': string;
+export interface RespNotification {
+    'id'?: string;
+    'event_id'?: string;
+    'receiver_id'?: string;
+    'event_type'?: RespNotificationEventTypeEnum;
+    'title'?: string;
+    'content'?: string;
+    'read_at'?: string;
+    'created_at'?: string;
+    'updated_at'?: string;
 }
-export interface VerifyPhoneRegistrationRequest {
-    /**
-     * 验证码。
-     */
-    'code': string;
-    /**
-     * 验证码令牌。
-     */
-    'code_token': string;
+
+export const RespNotificationEventTypeEnum = {
+    EVENT_TYPE_UNSPECIFIED: 'EVENT_TYPE_UNSPECIFIED',
+    EVENT_TYPE_USER_FOLLOW: 'EVENT_TYPE_USER_FOLLOW',
+    EVENT_TYPE_USER_UNFOLLOW: 'EVENT_TYPE_USER_UNFOLLOW',
+    EVENT_TYPE_USER_REGISTER: 'EVENT_TYPE_USER_REGISTER',
+    EVENT_TYPE_USER_LOGIN: 'EVENT_TYPE_USER_LOGIN',
+    EVENT_TYPE_USER_LOGOUT: 'EVENT_TYPE_USER_LOGOUT',
+    EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE: 'EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE',
+    EVENT_TYPE_USER_PHONE_VERIFICATION_CODE: 'EVENT_TYPE_USER_PHONE_VERIFICATION_CODE',
+    EVENT_TYPE_USER_BLOCK: 'EVENT_TYPE_USER_BLOCK',
+    EVENT_TYPE_USER_UNBLOCK: 'EVENT_TYPE_USER_UNBLOCK',
+    EVENT_TYPE_USER_TOTP_ENABLE: 'EVENT_TYPE_USER_TOTP_ENABLE',
+    EVENT_TYPE_USER_TOTP_DISABLE: 'EVENT_TYPE_USER_TOTP_DISABLE',
+    EVENT_TYPE_USER_ACCOUNT_CANCELLED: 'EVENT_TYPE_USER_ACCOUNT_CANCELLED',
+    EVENT_TYPE_USER_ACCOUNT_BANNED: 'EVENT_TYPE_USER_ACCOUNT_BANNED',
+    EVENT_TYPE_USER_ACCOUNT_UNBANNED: 'EVENT_TYPE_USER_ACCOUNT_UNBANNED',
+    EVENT_TYPE_ARTICLE_PUBLISHED: 'EVENT_TYPE_ARTICLE_PUBLISHED',
+    EVENT_TYPE_ARTICLE_LIKED: 'EVENT_TYPE_ARTICLE_LIKED',
+    EVENT_TYPE_ARTICLE_THANKED: 'EVENT_TYPE_ARTICLE_THANKED',
+    EVENT_TYPE_ARTICLE_COLLECTED: 'EVENT_TYPE_ARTICLE_COLLECTED',
+    EVENT_TYPE_ARTICLE_WATCHED: 'EVENT_TYPE_ARTICLE_WATCHED',
+    EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER: 'EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER',
+    EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED: 'EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED',
+    EVENT_TYPE_ARTICLE_STATUS_UPDATED: 'EVENT_TYPE_ARTICLE_STATUS_UPDATED',
+    EVENT_TYPE_COMMENT_PUBLISHED: 'EVENT_TYPE_COMMENT_PUBLISHED',
+    EVENT_TYPE_COMMENT_LIKED: 'EVENT_TYPE_COMMENT_LIKED',
+    EVENT_TYPE_COMMENT_THANKED: 'EVENT_TYPE_COMMENT_THANKED',
+    EVENT_TYPE_COMMENT_STATUS_UPDATED: 'EVENT_TYPE_COMMENT_STATUS_UPDATED',
+} as const;
+
+export type RespNotificationEventTypeEnum = typeof RespNotificationEventTypeEnum[keyof typeof RespNotificationEventTypeEnum];
+
+export interface RespPreference {
+    'user_id'?: string;
+    'timezone'?: string;
+    'theme'?: string;
+    'mobile_theme'?: string;
+    'language'?: RespPreferenceLanguageEnum;
 }
-export interface WatchArticleReply {
-    'watched'?: boolean;
+
+export const RespPreferenceLanguageEnum = {
+    LANGUAGE_UNSPECIFIED: 'LANGUAGE_UNSPECIFIED',
+    LANGUAGE_ZH_CN: 'LANGUAGE_ZH_CN',
+    LANGUAGE_ZH_TW: 'LANGUAGE_ZH_TW',
+    LANGUAGE_EN: 'LANGUAGE_EN',
+} as const;
+
+export type RespPreferenceLanguageEnum = typeof RespPreferenceLanguageEnum[keyof typeof RespPreferenceLanguageEnum];
+
+export interface RespPrivacySetting {
+    'user_id'?: string;
+    'public_points'?: boolean;
+    'public_followers'?: boolean;
+    'public_articles'?: boolean;
+    'public_comments'?: boolean;
+    'public_online_status'?: boolean;
+    'public_location'?: boolean;
 }
-export interface WatchArticleRequest {
+export interface RespRelation {
+    'id'?: string;
+    'type'?: RespRelationTypeEnum;
+    'actor_id'?: string;
+    'target_id'?: string;
+    'created_at'?: string;
+    'updated_at'?: string;
+}
+
+export const RespRelationTypeEnum = {
+    RELATION_TYPE_UNSPECIFIED: 'RELATION_TYPE_UNSPECIFIED',
+    RELATION_TYPE_FOLLOW: 'RELATION_TYPE_FOLLOW',
+    RELATION_TYPE_BLOCK: 'RELATION_TYPE_BLOCK',
+} as const;
+
+export type RespRelationTypeEnum = typeof RespRelationTypeEnum[keyof typeof RespRelationTypeEnum];
+
+export interface RespRelationStatus {
+    'target_id'?: string;
+    'following'?: boolean;
+    'followed_by'?: boolean;
+    'blocking'?: boolean;
+    'blocked_by'?: boolean;
+}
+export interface RespTag {
+    'id'?: string;
+    'code'?: string;
+    'name'?: string;
+    'description'?: string;
+    'domain_id'?: string;
+    'status'?: RespTagStatusEnum;
+    'icon'?: string;
+    'sort'?: number;
+    'article_count'?: number;
+    'created_by'?: string;
+    'updated_by'?: string;
+    'created_at'?: string;
+    'updated_at'?: string;
+}
+
+export const RespTagStatusEnum = {
+    TAG_STATUS_UNSPECIFIED: 'TAG_STATUS_UNSPECIFIED',
+    TAG_STATUS_ENABLED: 'TAG_STATUS_ENABLED',
+    TAG_STATUS_DISABLED: 'TAG_STATUS_DISABLED',
+} as const;
+
+export type RespTagStatusEnum = typeof RespTagStatusEnum[keyof typeof RespTagStatusEnum];
+
+export interface RespTotp {
+    'user_id'?: string;
+    'enable'?: boolean;
+    'enable_time'?: string;
+}
+export interface RewardArticleReq {
+    'article_id': string;
+    'points': number;
+}
+export interface SchedulePublishArticleReq {
+    'article_id': string;
+    'publish_at': string;
+}
+export interface SendEmailOtpReq {
+    'email': string;
+}
+export interface SendEmailOtpResp {
+    'code'?: string;
+}
+export interface SendPhoneOtpReq {
+    'phone': string;
+}
+export interface SendPhoneOtpResp {
+    'code'?: string;
+}
+export interface StartEmailRegistrationReq {
+    'email': string;
+    'password': string;
+    'name': string;
+    'nickname'?: string;
+}
+export interface StartEmailRegistrationResp {
+    'code'?: string;
+}
+export interface StartPhoneRegistrationReq {
+    'phone': string;
+    'password': string;
+    'name': string;
+    'nickname'?: string;
+}
+export interface StartPhoneRegistrationResp {
+    'code'?: string;
+}
+export interface ThankArticleReq {
     'article_id': string;
     'active': boolean;
+}
+export interface ThankArticleResp {
+    'thanked'?: boolean;
+}
+export interface ThankCommentReq {
+    'id': string;
+    'active': boolean;
+}
+export interface ThankCommentResp {
+    'thanked'?: boolean;
+}
+export interface UnbindArticleTagsReq {
+    'article_id': string;
+    'tag_ids': Array<string>;
+}
+export interface UnblockRelationReq {
+    'target_id': string;
+}
+export interface UnfollowRelationReq {
+    'target_id': string;
+}
+export interface UpdateCurrentPreferencesReq {
+    'timezone'?: string;
+    'theme'?: string;
+    'mobile_theme'?: string;
+    'language'?: UpdateCurrentPreferencesReqLanguageEnum;
+}
+
+export const UpdateCurrentPreferencesReqLanguageEnum = {
+    LANGUAGE_UNSPECIFIED: 'LANGUAGE_UNSPECIFIED',
+    LANGUAGE_ZH_CN: 'LANGUAGE_ZH_CN',
+    LANGUAGE_ZH_TW: 'LANGUAGE_ZH_TW',
+    LANGUAGE_EN: 'LANGUAGE_EN',
+} as const;
+
+export type UpdateCurrentPreferencesReqLanguageEnum = typeof UpdateCurrentPreferencesReqLanguageEnum[keyof typeof UpdateCurrentPreferencesReqLanguageEnum];
+
+export interface UpdateCurrentPreferencesResp {
+    'preference'?: RespPreference;
+}
+export interface UpdateCurrentPrivacySettingReq {
+    'public_points'?: boolean;
+    'public_followers'?: boolean;
+    'public_articles'?: boolean;
+    'public_comments'?: boolean;
+    'public_online_status'?: boolean;
+    'public_location'?: boolean;
+}
+export interface UpdateCurrentPrivacySettingResp {
+    'privacy_setting'?: RespPrivacySetting;
+}
+export interface UpdateDomainReq {
+    'domain_id': string;
+    'domain': ReqDomain;
+}
+export interface UpdateDomainResp {
+    'domain'?: RespDomain;
+}
+export interface UpdateDraftArticleReq {
+    'article_id': string;
+    'article': ReqArticle;
+}
+export interface UpdateDraftArticleResp {
+    'article'?: ArticleDetail;
+}
+export interface UpdateProfileAccountReq {
+    'avatar_url'?: string;
+    'nickname'?: string;
+    'url'?: string;
+    'introduction'?: string;
+    'mbti'?: UpdateProfileAccountReqMbtiEnum;
+}
+
+export const UpdateProfileAccountReqMbtiEnum = {
+    MBTI_UNSPECIFIED: 'MBTI_UNSPECIFIED',
+    MBTI_INTJ: 'MBTI_INTJ',
+    MBTI_INTP: 'MBTI_INTP',
+    MBTI_ENTJ: 'MBTI_ENTJ',
+    MBTI_ENTP: 'MBTI_ENTP',
+    MBTI_INFJ: 'MBTI_INFJ',
+    MBTI_INFP: 'MBTI_INFP',
+    MBTI_ENFJ: 'MBTI_ENFJ',
+    MBTI_ENFP: 'MBTI_ENFP',
+    MBTI_ISTJ: 'MBTI_ISTJ',
+    MBTI_ISFJ: 'MBTI_ISFJ',
+    MBTI_ESTJ: 'MBTI_ESTJ',
+    MBTI_ESFJ: 'MBTI_ESFJ',
+    MBTI_ISTP: 'MBTI_ISTP',
+    MBTI_ISFP: 'MBTI_ISFP',
+    MBTI_ESTP: 'MBTI_ESTP',
+    MBTI_ESFP: 'MBTI_ESFP',
+} as const;
+
+export type UpdateProfileAccountReqMbtiEnum = typeof UpdateProfileAccountReqMbtiEnum[keyof typeof UpdateProfileAccountReqMbtiEnum];
+
+export interface UpdateProfileAccountResp {
+    'profile'?: RespAccountProfile;
+}
+export interface UpdateTagReq {
+    'tag_id': string;
+    'tag': ReqTag;
+}
+export interface UpdateTagResp {
+    'tag'?: RespTag;
+}
+export interface UpsertCurrentLocationReq {
+    'country'?: string;
+    'province'?: string;
+    'city'?: string;
+}
+export interface UpsertCurrentLocationResp {
+    'location'?: RespLocation;
+}
+export interface VerifyEmailRegistrationReq {
+    'email': string;
+    'code': string;
+}
+export interface VerifyPhoneRegistrationReq {
+    'phone': string;
+    'code': string;
 }
 
 /**
@@ -1690,7 +1347,7 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 生成默认账号头像。
-         * @param {string} [name] 用于生成头像的账号名。
+         * @param {string} [name] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1758,13 +1415,13 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 按账号 ID 获取账号展示资料。
-         * @param {GetProfileAccountRequest} getProfileAccountRequest 
+         * @param {GetProfileAccountReq} getProfileAccountReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProfile: async (getProfileAccountRequest: GetProfileAccountRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'getProfileAccountRequest' is not null or undefined
-            assertParamExists('getProfile', 'getProfileAccountRequest', getProfileAccountRequest)
+        getProfile: async (getProfileAccountReq: GetProfileAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'getProfileAccountReq' is not null or undefined
+            assertParamExists('getProfile', 'getProfileAccountReq', getProfileAccountReq)
             const localVarPath = `/v1/user/account/get-profile`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1783,7 +1440,7 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(getProfileAccountRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(getProfileAccountReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1792,13 +1449,13 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 更新当前账号的展示资料。
-         * @param {UpdateProfileAccountRequest} updateProfileAccountRequest 
+         * @param {UpdateProfileAccountReq} updateProfileAccountReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateProfile: async (updateProfileAccountRequest: UpdateProfileAccountRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'updateProfileAccountRequest' is not null or undefined
-            assertParamExists('updateProfile', 'updateProfileAccountRequest', updateProfileAccountRequest)
+        updateProfile: async (updateProfileAccountReq: UpdateProfileAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateProfileAccountReq' is not null or undefined
+            assertParamExists('updateProfile', 'updateProfileAccountReq', updateProfileAccountReq)
             const localVarPath = `/v1/user/account/update-profile`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1817,7 +1474,7 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileAccountRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateProfileAccountReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1835,11 +1492,11 @@ export const AccountServiceFp = function(configuration?: Configuration) {
     return {
         /**
          * 生成默认账号头像。
-         * @param {string} [name] 用于生成头像的账号名。
+         * @param {string} [name] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async avatar(name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageReply>> {
+        async avatar(name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ImageResp>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.avatar(name, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountService.avatar']?.[localVarOperationServerIndex]?.url;
@@ -1851,7 +1508,7 @@ export const AccountServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentAccountReply>> {
+        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentAccountResp>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrent(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountService.getCurrent']?.[localVarOperationServerIndex]?.url;
@@ -1859,24 +1516,24 @@ export const AccountServiceFp = function(configuration?: Configuration) {
         },
         /**
          * 按账号 ID 获取账号展示资料。
-         * @param {GetProfileAccountRequest} getProfileAccountRequest 
+         * @param {GetProfileAccountReq} getProfileAccountReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProfile(getProfileAccountRequest: GetProfileAccountRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProfileAccountReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProfile(getProfileAccountRequest, options);
+        async getProfile(getProfileAccountReq: GetProfileAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProfileAccountResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProfile(getProfileAccountReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountService.getProfile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 更新当前账号的展示资料。
-         * @param {UpdateProfileAccountRequest} updateProfileAccountRequest 
+         * @param {UpdateProfileAccountReq} updateProfileAccountReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateProfile(updateProfileAccountRequest: UpdateProfileAccountRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateProfileAccountReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProfile(updateProfileAccountRequest, options);
+        async updateProfile(updateProfileAccountReq: UpdateProfileAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateProfileAccountResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateProfile(updateProfileAccountReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountService.updateProfile']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1896,7 +1553,7 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        avatar(requestParameters: AccountServiceAvatarRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<ImageReply> {
+        avatar(requestParameters: AccountServiceAvatarRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<ImageResp> {
             return localVarFp.avatar(requestParameters.name, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1905,7 +1562,7 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrent(requestParameters: AccountServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentAccountReply> {
+        getCurrent(requestParameters: AccountServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentAccountResp> {
             return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1914,8 +1571,8 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetProfileAccountReply> {
-            return localVarFp.getProfile(requestParameters.getProfileAccountRequest, options).then((request) => request(axios, basePath));
+        getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetProfileAccountResp> {
+            return localVarFp.getProfile(requestParameters.getProfileAccountReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 更新当前账号的展示资料。
@@ -1923,8 +1580,8 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateProfile(requestParameters: AccountServiceUpdateProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateProfileAccountReply> {
-            return localVarFp.updateProfile(requestParameters.updateProfileAccountRequest, options).then((request) => request(axios, basePath));
+        updateProfile(requestParameters: AccountServiceUpdateProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateProfileAccountResp> {
+            return localVarFp.updateProfile(requestParameters.updateProfileAccountReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -1939,7 +1596,7 @@ export interface AccountServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    avatar(requestParameters?: AccountServiceAvatarRequest, options?: RawAxiosRequestConfig): AxiosPromise<ImageReply>;
+    avatar(requestParameters?: AccountServiceAvatarRequest, options?: RawAxiosRequestConfig): AxiosPromise<ImageResp>;
 
     /**
      * 获取当前账号的完整资料。
@@ -1947,7 +1604,7 @@ export interface AccountServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getCurrent(requestParameters: AccountServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentAccountReply>;
+    getCurrent(requestParameters: AccountServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentAccountResp>;
 
     /**
      * 按账号 ID 获取账号展示资料。
@@ -1955,7 +1612,7 @@ export interface AccountServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetProfileAccountReply>;
+    getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetProfileAccountResp>;
 
     /**
      * 更新当前账号的展示资料。
@@ -1963,7 +1620,7 @@ export interface AccountServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateProfile(requestParameters: AccountServiceUpdateProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateProfileAccountReply>;
+    updateProfile(requestParameters: AccountServiceUpdateProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateProfileAccountResp>;
 
 }
 
@@ -1971,9 +1628,6 @@ export interface AccountServiceInterface {
  * Request parameters for avatar operation in AccountService.
  */
 export interface AccountServiceAvatarRequest {
-    /**
-     * 用于生成头像的账号名。
-     */
     readonly name?: string
 }
 
@@ -1988,14 +1642,14 @@ export interface AccountServiceGetCurrentRequest {
  * Request parameters for getProfile operation in AccountService.
  */
 export interface AccountServiceGetProfileRequest {
-    readonly getProfileAccountRequest: GetProfileAccountRequest
+    readonly getProfileAccountReq: GetProfileAccountReq
 }
 
 /**
  * Request parameters for updateProfile operation in AccountService.
  */
 export interface AccountServiceUpdateProfileRequest {
-    readonly updateProfileAccountRequest: UpdateProfileAccountRequest
+    readonly updateProfileAccountReq: UpdateProfileAccountReq
 }
 
 /**
@@ -2029,7 +1683,7 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
      * @throws {RequiredError}
      */
     public getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig) {
-        return AccountServiceFp(this.configuration).getProfile(requestParameters.getProfileAccountRequest, options).then((request) => request(this.axios, this.basePath));
+        return AccountServiceFp(this.configuration).getProfile(requestParameters.getProfileAccountReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2039,7 +1693,7 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
      * @throws {RequiredError}
      */
     public updateProfile(requestParameters: AccountServiceUpdateProfileRequest, options?: RawAxiosRequestConfig) {
-        return AccountServiceFp(this.configuration).updateProfile(requestParameters.updateProfileAccountRequest, options).then((request) => request(this.axios, this.basePath));
+        return AccountServiceFp(this.configuration).updateProfile(requestParameters.updateProfileAccountReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -2051,15 +1705,15 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
 export const ArticleServiceAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 采纳文章评论为答案。
-         * @param {AcceptAnswerArticleRequest} acceptAnswerArticleRequest 
+         * 归档文章
+         * @param {ArchiveArticleReq} archiveArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        acceptAnswer: async (acceptAnswerArticleRequest: AcceptAnswerArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'acceptAnswerArticleRequest' is not null or undefined
-            assertParamExists('acceptAnswer', 'acceptAnswerArticleRequest', acceptAnswerArticleRequest)
-            const localVarPath = `/v1/content/article/accept-answer`;
+        archive: async (archiveArticleReq: ArchiveArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'archiveArticleReq' is not null or undefined
+            assertParamExists('archive', 'archiveArticleReq', archiveArticleReq)
+            const localVarPath = `/v1/content/article/archive`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2077,7 +1731,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(acceptAnswerArticleRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(archiveArticleReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2085,14 +1739,48 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 收藏或取消收藏文章。
-         * @param {CollectArticleRequest} collectArticleRequest 
+         * 取消定时发布
+         * @param {CancelPublishArticleReq} cancelPublishArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        collect: async (collectArticleRequest: CollectArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'collectArticleRequest' is not null or undefined
-            assertParamExists('collect', 'collectArticleRequest', collectArticleRequest)
+        cancelPublish: async (cancelPublishArticleReq: CancelPublishArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cancelPublishArticleReq' is not null or undefined
+            assertParamExists('cancelPublish', 'cancelPublishArticleReq', cancelPublishArticleReq)
+            const localVarPath = `/v1/content/article/publish/cancel`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(cancelPublishArticleReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 收藏文章
+         * @param {CollectArticleReq} collectArticleReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        collect: async (collectArticleReq: CollectArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'collectArticleReq' is not null or undefined
+            assertParamExists('collect', 'collectArticleReq', collectArticleReq)
             const localVarPath = `/v1/content/article/collect`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2111,7 +1799,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(collectArticleRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(collectArticleReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2119,15 +1807,15 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 创建文章草稿。
-         * @param {CreateArticleRequest} createArticleRequest 
+         * 创建文章草稿
+         * @param {CreateDraftArticleReq} createDraftArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create: async (createArticleRequest: CreateArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createArticleRequest' is not null or undefined
-            assertParamExists('create', 'createArticleRequest', createArticleRequest)
-            const localVarPath = `/v1/content/article/create`;
+        createDraft: async (createDraftArticleReq: CreateDraftArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createDraftArticleReq' is not null or undefined
+            assertParamExists('createDraft', 'createDraftArticleReq', createDraftArticleReq)
+            const localVarPath = `/v1/content/article/draft/create`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2145,7 +1833,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createArticleRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createDraftArticleReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2153,15 +1841,15 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 丢弃草稿。
-         * @param {DiscardDraftArticleRequest} discardDraftArticleRequest 
+         * 丢弃文章草稿
+         * @param {DiscardDraftArticleReq} discardDraftArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        discardDraft: async (discardDraftArticleRequest: DiscardDraftArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'discardDraftArticleRequest' is not null or undefined
-            assertParamExists('discardDraft', 'discardDraftArticleRequest', discardDraftArticleRequest)
-            const localVarPath = `/v1/content/article/discard-draft`;
+        discardDraft: async (discardDraftArticleReq: DiscardDraftArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'discardDraftArticleReq' is not null or undefined
+            assertParamExists('discardDraft', 'discardDraftArticleReq', discardDraftArticleReq)
+            const localVarPath = `/v1/content/article/draft/discard`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2179,7 +1867,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(discardDraftArticleRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(discardDraftArticleReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2187,14 +1875,14 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 获取文章详情。
-         * @param {GetArticleRequest} getArticleRequest 
+         * 查询文章详情
+         * @param {GetArticleReq} getArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        get: async (getArticleRequest: GetArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'getArticleRequest' is not null or undefined
-            assertParamExists('get', 'getArticleRequest', getArticleRequest)
+        get: async (getArticleReq: GetArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'getArticleReq' is not null or undefined
+            assertParamExists('get', 'getArticleReq', getArticleReq)
             const localVarPath = `/v1/content/article/get`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2213,7 +1901,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(getArticleRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(getArticleReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2221,14 +1909,14 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 点赞或取消点赞文章。
-         * @param {LikeArticleRequest} likeArticleRequest 
+         * 点赞文章
+         * @param {LikeArticleReq} likeArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        like: async (likeArticleRequest: LikeArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'likeArticleRequest' is not null or undefined
-            assertParamExists('like', 'likeArticleRequest', likeArticleRequest)
+        like: async (likeArticleReq: LikeArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'likeArticleReq' is not null or undefined
+            assertParamExists('like', 'likeArticleReq', likeArticleReq)
             const localVarPath = `/v1/content/article/like`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2247,7 +1935,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(likeArticleRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(likeArticleReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2255,14 +1943,14 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 分页查询文章列表。
-         * @param {ListArticlesRequest} listArticlesRequest 
+         * 查询文章列表
+         * @param {ListArticlesReq} listArticlesReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (listArticlesRequest: ListArticlesRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listArticlesRequest' is not null or undefined
-            assertParamExists('list', 'listArticlesRequest', listArticlesRequest)
+        list: async (listArticlesReq: ListArticlesReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listArticlesReq' is not null or undefined
+            assertParamExists('list', 'listArticlesReq', listArticlesReq)
             const localVarPath = `/v1/content/article/list`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2281,7 +1969,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listArticlesRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listArticlesReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2289,14 +1977,14 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 发布文章。
-         * @param {PublishArticleRequest} publishArticleRequest 
+         * 发布文章
+         * @param {PublishArticleReq} publishArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        publish: async (publishArticleRequest: PublishArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'publishArticleRequest' is not null or undefined
-            assertParamExists('publish', 'publishArticleRequest', publishArticleRequest)
+        publish: async (publishArticleReq: PublishArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'publishArticleReq' is not null or undefined
+            assertParamExists('publish', 'publishArticleReq', publishArticleReq)
             const localVarPath = `/v1/content/article/publish`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2315,7 +2003,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(publishArticleRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(publishArticleReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2323,14 +2011,14 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 打赏文章。
-         * @param {RewardArticleRequest} rewardArticleRequest 
+         * 打赏文章
+         * @param {RewardArticleReq} rewardArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        reward: async (rewardArticleRequest: RewardArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'rewardArticleRequest' is not null or undefined
-            assertParamExists('reward', 'rewardArticleRequest', rewardArticleRequest)
+        reward: async (rewardArticleReq: RewardArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'rewardArticleReq' is not null or undefined
+            assertParamExists('reward', 'rewardArticleReq', rewardArticleReq)
             const localVarPath = `/v1/content/article/reward`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2349,7 +2037,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(rewardArticleRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(rewardArticleReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2357,14 +2045,48 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 感谢或取消感谢文章。
-         * @param {ThankArticleRequest} thankArticleRequest 
+         * 设置定时发布
+         * @param {SchedulePublishArticleReq} schedulePublishArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        thank: async (thankArticleRequest: ThankArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'thankArticleRequest' is not null or undefined
-            assertParamExists('thank', 'thankArticleRequest', thankArticleRequest)
+        schedulePublish: async (schedulePublishArticleReq: SchedulePublishArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schedulePublishArticleReq' is not null or undefined
+            assertParamExists('schedulePublish', 'schedulePublishArticleReq', schedulePublishArticleReq)
+            const localVarPath = `/v1/content/article/publish/schedule`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(schedulePublishArticleReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 感谢文章
+         * @param {ThankArticleReq} thankArticleReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        thank: async (thankArticleReq: ThankArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'thankArticleReq' is not null or undefined
+            assertParamExists('thank', 'thankArticleReq', thankArticleReq)
             const localVarPath = `/v1/content/article/thank`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -2383,7 +2105,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(thankArticleRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(thankArticleReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2391,15 +2113,15 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 更新文章内容。
-         * @param {UpdateArticleRequest} updateArticleRequest 
+         * 编辑文章草稿
+         * @param {UpdateDraftArticleReq} updateDraftArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (updateArticleRequest: UpdateArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'updateArticleRequest' is not null or undefined
-            assertParamExists('update', 'updateArticleRequest', updateArticleRequest)
-            const localVarPath = `/v1/content/article/update`;
+        updateDraft: async (updateDraftArticleReq: UpdateDraftArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateDraftArticleReq' is not null or undefined
+            assertParamExists('updateDraft', 'updateDraftArticleReq', updateDraftArticleReq)
+            const localVarPath = `/v1/content/article/draft/update`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2417,75 +2139,7 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateArticleRequest, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 更新文章内容。兼容旧草稿更新接口。
-         * @param {UpdateDraftArticleRequest} updateDraftArticleRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateDraft: async (updateDraftArticleRequest: UpdateDraftArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'updateDraftArticleRequest' is not null or undefined
-            assertParamExists('updateDraft', 'updateDraftArticleRequest', updateDraftArticleRequest)
-            const localVarPath = `/v1/content/article/update-draft`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateDraftArticleRequest, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 关注或取消关注文章。
-         * @param {WatchArticleRequest} watchArticleRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        watch: async (watchArticleRequest: WatchArticleRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'watchArticleRequest' is not null or undefined
-            assertParamExists('watch', 'watchArticleRequest', watchArticleRequest)
-            const localVarPath = `/v1/content/article/watch`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(watchArticleRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateDraftArticleReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -2502,159 +2156,159 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ArticleServiceAxiosParamCreator(configuration)
     return {
         /**
-         * 采纳文章评论为答案。
-         * @param {AcceptAnswerArticleRequest} acceptAnswerArticleRequest 
+         * 归档文章
+         * @param {ArchiveArticleReq} archiveArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async acceptAnswer(acceptAnswerArticleRequest: AcceptAnswerArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.acceptAnswer(acceptAnswerArticleRequest, options);
+        async archive(archiveArticleReq: ArchiveArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.archive(archiveArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ArticleService.acceptAnswer']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.archive']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 收藏或取消收藏文章。
-         * @param {CollectArticleRequest} collectArticleRequest 
+         * 取消定时发布
+         * @param {CancelPublishArticleReq} cancelPublishArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async collect(collectArticleRequest: CollectArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectArticleReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.collect(collectArticleRequest, options);
+        async cancelPublish(cancelPublishArticleReq: CancelPublishArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cancelPublish(cancelPublishArticleReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.cancelPublish']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 收藏文章
+         * @param {CollectArticleReq} collectArticleReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async collect(collectArticleReq: CollectArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollectArticleResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.collect(collectArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.collect']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 创建文章草稿。
-         * @param {CreateArticleRequest} createArticleRequest 
+         * 创建文章草稿
+         * @param {CreateDraftArticleReq} createDraftArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async create(createArticleRequest: CreateArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateArticleReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.create(createArticleRequest, options);
+        async createDraft(createDraftArticleReq: CreateDraftArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateDraftArticleResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createDraft(createDraftArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ArticleService.create']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.createDraft']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 丢弃草稿。
-         * @param {DiscardDraftArticleRequest} discardDraftArticleRequest 
+         * 丢弃文章草稿
+         * @param {DiscardDraftArticleReq} discardDraftArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async discardDraft(discardDraftArticleRequest: DiscardDraftArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.discardDraft(discardDraftArticleRequest, options);
+        async discardDraft(discardDraftArticleReq: DiscardDraftArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.discardDraft(discardDraftArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.discardDraft']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 获取文章详情。
-         * @param {GetArticleRequest} getArticleRequest 
+         * 查询文章详情
+         * @param {GetArticleReq} getArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async get(getArticleRequest: GetArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetArticleReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.get(getArticleRequest, options);
+        async get(getArticleReq: GetArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetArticleResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.get(getArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.get']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 点赞或取消点赞文章。
-         * @param {LikeArticleRequest} likeArticleRequest 
+         * 点赞文章
+         * @param {LikeArticleReq} likeArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async like(likeArticleRequest: LikeArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LikeArticleReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.like(likeArticleRequest, options);
+        async like(likeArticleReq: LikeArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LikeArticleResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.like(likeArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.like']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 分页查询文章列表。
-         * @param {ListArticlesRequest} listArticlesRequest 
+         * 查询文章列表
+         * @param {ListArticlesReq} listArticlesReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list(listArticlesRequest: ListArticlesRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListArticlesReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listArticlesRequest, options);
+        async list(listArticlesReq: ListArticlesReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListArticlesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listArticlesReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.list']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 发布文章。
-         * @param {PublishArticleRequest} publishArticleRequest 
+         * 发布文章
+         * @param {PublishArticleReq} publishArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async publish(publishArticleRequest: PublishArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.publish(publishArticleRequest, options);
+        async publish(publishArticleReq: PublishArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.publish(publishArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.publish']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 打赏文章。
-         * @param {RewardArticleRequest} rewardArticleRequest 
+         * 打赏文章
+         * @param {RewardArticleReq} rewardArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async reward(rewardArticleRequest: RewardArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.reward(rewardArticleRequest, options);
+        async reward(rewardArticleReq: RewardArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.reward(rewardArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.reward']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 感谢或取消感谢文章。
-         * @param {ThankArticleRequest} thankArticleRequest 
+         * 设置定时发布
+         * @param {SchedulePublishArticleReq} schedulePublishArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async thank(thankArticleRequest: ThankArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ThankArticleReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.thank(thankArticleRequest, options);
+        async schedulePublish(schedulePublishArticleReq: SchedulePublishArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schedulePublish(schedulePublishArticleReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.schedulePublish']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 感谢文章
+         * @param {ThankArticleReq} thankArticleReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async thank(thankArticleReq: ThankArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ThankArticleResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.thank(thankArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.thank']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 更新文章内容。
-         * @param {UpdateArticleRequest} updateArticleRequest 
+         * 编辑文章草稿
+         * @param {UpdateDraftArticleReq} updateDraftArticleReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(updateArticleRequest: UpdateArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateArticleReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(updateArticleRequest, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ArticleService.update']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 更新文章内容。兼容旧草稿更新接口。
-         * @param {UpdateDraftArticleRequest} updateDraftArticleRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateDraft(updateDraftArticleRequest: UpdateDraftArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateDraftArticleReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateDraft(updateDraftArticleRequest, options);
+        async updateDraft(updateDraftArticleReq: UpdateDraftArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateDraftArticleResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateDraft(updateDraftArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.updateDraft']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 关注或取消关注文章。
-         * @param {WatchArticleRequest} watchArticleRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async watch(watchArticleRequest: WatchArticleRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WatchArticleReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.watch(watchArticleRequest, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ArticleService.watch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -2667,121 +2321,121 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
     const localVarFp = ArticleServiceFp(configuration)
     return {
         /**
-         * 采纳文章评论为答案。
-         * @param {ArticleServiceAcceptAnswerRequest} requestParameters Request parameters.
+         * 归档文章
+         * @param {ArticleServiceArchiveRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        acceptAnswer(requestParameters: ArticleServiceAcceptAnswerRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.acceptAnswer(requestParameters.acceptAnswerArticleRequest, options).then((request) => request(axios, basePath));
+        archive(requestParameters: ArticleServiceArchiveRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.archive(requestParameters.archiveArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 收藏或取消收藏文章。
+         * 取消定时发布
+         * @param {ArticleServiceCancelPublishRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cancelPublish(requestParameters: ArticleServiceCancelPublishRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.cancelPublish(requestParameters.cancelPublishArticleReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 收藏文章
          * @param {ArticleServiceCollectRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        collect(requestParameters: ArticleServiceCollectRequest, options?: RawAxiosRequestConfig): AxiosPromise<CollectArticleReply> {
-            return localVarFp.collect(requestParameters.collectArticleRequest, options).then((request) => request(axios, basePath));
+        collect(requestParameters: ArticleServiceCollectRequest, options?: RawAxiosRequestConfig): AxiosPromise<CollectArticleResp> {
+            return localVarFp.collect(requestParameters.collectArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 创建文章草稿。
-         * @param {ArticleServiceCreateRequest} requestParameters Request parameters.
+         * 创建文章草稿
+         * @param {ArticleServiceCreateDraftRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create(requestParameters: ArticleServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateArticleReply> {
-            return localVarFp.create(requestParameters.createArticleRequest, options).then((request) => request(axios, basePath));
+        createDraft(requestParameters: ArticleServiceCreateDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateDraftArticleResp> {
+            return localVarFp.createDraft(requestParameters.createDraftArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 丢弃草稿。
+         * 丢弃文章草稿
          * @param {ArticleServiceDiscardDraftRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         discardDraft(requestParameters: ArticleServiceDiscardDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.discardDraft(requestParameters.discardDraftArticleRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.discardDraft(requestParameters.discardDraftArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 获取文章详情。
+         * 查询文章详情
          * @param {ArticleServiceGetRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        get(requestParameters: ArticleServiceGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetArticleReply> {
-            return localVarFp.get(requestParameters.getArticleRequest, options).then((request) => request(axios, basePath));
+        get(requestParameters: ArticleServiceGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetArticleResp> {
+            return localVarFp.get(requestParameters.getArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 点赞或取消点赞文章。
+         * 点赞文章
          * @param {ArticleServiceLikeRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        like(requestParameters: ArticleServiceLikeRequest, options?: RawAxiosRequestConfig): AxiosPromise<LikeArticleReply> {
-            return localVarFp.like(requestParameters.likeArticleRequest, options).then((request) => request(axios, basePath));
+        like(requestParameters: ArticleServiceLikeRequest, options?: RawAxiosRequestConfig): AxiosPromise<LikeArticleResp> {
+            return localVarFp.like(requestParameters.likeArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 分页查询文章列表。
+         * 查询文章列表
          * @param {ArticleServiceListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list(requestParameters: ArticleServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListArticlesReply> {
-            return localVarFp.list(requestParameters.listArticlesRequest, options).then((request) => request(axios, basePath));
+        list(requestParameters: ArticleServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListArticlesResp> {
+            return localVarFp.list(requestParameters.listArticlesReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 发布文章。
+         * 发布文章
          * @param {ArticleServicePublishRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         publish(requestParameters: ArticleServicePublishRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.publish(requestParameters.publishArticleRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.publish(requestParameters.publishArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 打赏文章。
+         * 打赏文章
          * @param {ArticleServiceRewardRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         reward(requestParameters: ArticleServiceRewardRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.reward(requestParameters.rewardArticleRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.reward(requestParameters.rewardArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 感谢或取消感谢文章。
+         * 设置定时发布
+         * @param {ArticleServiceSchedulePublishRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schedulePublish(requestParameters: ArticleServiceSchedulePublishRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.schedulePublish(requestParameters.schedulePublishArticleReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 感谢文章
          * @param {ArticleServiceThankRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        thank(requestParameters: ArticleServiceThankRequest, options?: RawAxiosRequestConfig): AxiosPromise<ThankArticleReply> {
-            return localVarFp.thank(requestParameters.thankArticleRequest, options).then((request) => request(axios, basePath));
+        thank(requestParameters: ArticleServiceThankRequest, options?: RawAxiosRequestConfig): AxiosPromise<ThankArticleResp> {
+            return localVarFp.thank(requestParameters.thankArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 更新文章内容。
-         * @param {ArticleServiceUpdateRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        update(requestParameters: ArticleServiceUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateArticleReply> {
-            return localVarFp.update(requestParameters.updateArticleRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 更新文章内容。兼容旧草稿更新接口。
+         * 编辑文章草稿
          * @param {ArticleServiceUpdateDraftRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateDraft(requestParameters: ArticleServiceUpdateDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateDraftArticleReply> {
-            return localVarFp.updateDraft(requestParameters.updateDraftArticleRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 关注或取消关注文章。
-         * @param {ArticleServiceWatchRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        watch(requestParameters: ArticleServiceWatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<WatchArticleReply> {
-            return localVarFp.watch(requestParameters.watchArticleRequest, options).then((request) => request(axios, basePath));
+        updateDraft(requestParameters: ArticleServiceUpdateDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateDraftArticleResp> {
+            return localVarFp.updateDraft(requestParameters.updateDraftArticleReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2791,31 +2445,39 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
  */
 export interface ArticleServiceInterface {
     /**
-     * 采纳文章评论为答案。
-     * @param {ArticleServiceAcceptAnswerRequest} requestParameters Request parameters.
+     * 归档文章
+     * @param {ArticleServiceArchiveRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    acceptAnswer(requestParameters: ArticleServiceAcceptAnswerRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    archive(requestParameters: ArticleServiceArchiveRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 收藏或取消收藏文章。
+     * 取消定时发布
+     * @param {ArticleServiceCancelPublishRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    cancelPublish(requestParameters: ArticleServiceCancelPublishRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * 收藏文章
      * @param {ArticleServiceCollectRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    collect(requestParameters: ArticleServiceCollectRequest, options?: RawAxiosRequestConfig): AxiosPromise<CollectArticleReply>;
+    collect(requestParameters: ArticleServiceCollectRequest, options?: RawAxiosRequestConfig): AxiosPromise<CollectArticleResp>;
 
     /**
-     * 创建文章草稿。
-     * @param {ArticleServiceCreateRequest} requestParameters Request parameters.
+     * 创建文章草稿
+     * @param {ArticleServiceCreateDraftRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    create(requestParameters: ArticleServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateArticleReply>;
+    createDraft(requestParameters: ArticleServiceCreateDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateDraftArticleResp>;
 
     /**
-     * 丢弃草稿。
+     * 丢弃文章草稿
      * @param {ArticleServiceDiscardDraftRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2823,31 +2485,31 @@ export interface ArticleServiceInterface {
     discardDraft(requestParameters: ArticleServiceDiscardDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 获取文章详情。
+     * 查询文章详情
      * @param {ArticleServiceGetRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    get(requestParameters: ArticleServiceGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetArticleReply>;
+    get(requestParameters: ArticleServiceGetRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetArticleResp>;
 
     /**
-     * 点赞或取消点赞文章。
+     * 点赞文章
      * @param {ArticleServiceLikeRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    like(requestParameters: ArticleServiceLikeRequest, options?: RawAxiosRequestConfig): AxiosPromise<LikeArticleReply>;
+    like(requestParameters: ArticleServiceLikeRequest, options?: RawAxiosRequestConfig): AxiosPromise<LikeArticleResp>;
 
     /**
-     * 分页查询文章列表。
+     * 查询文章列表
      * @param {ArticleServiceListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    list(requestParameters: ArticleServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListArticlesReply>;
+    list(requestParameters: ArticleServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListArticlesResp>;
 
     /**
-     * 发布文章。
+     * 发布文章
      * @param {ArticleServicePublishRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2855,7 +2517,7 @@ export interface ArticleServiceInterface {
     publish(requestParameters: ArticleServicePublishRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 打赏文章。
+     * 打赏文章
      * @param {ArticleServiceRewardRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2863,128 +2525,120 @@ export interface ArticleServiceInterface {
     reward(requestParameters: ArticleServiceRewardRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 感谢或取消感谢文章。
+     * 设置定时发布
+     * @param {ArticleServiceSchedulePublishRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    schedulePublish(requestParameters: ArticleServiceSchedulePublishRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * 感谢文章
      * @param {ArticleServiceThankRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    thank(requestParameters: ArticleServiceThankRequest, options?: RawAxiosRequestConfig): AxiosPromise<ThankArticleReply>;
+    thank(requestParameters: ArticleServiceThankRequest, options?: RawAxiosRequestConfig): AxiosPromise<ThankArticleResp>;
 
     /**
-     * 更新文章内容。
-     * @param {ArticleServiceUpdateRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    update(requestParameters: ArticleServiceUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateArticleReply>;
-
-    /**
-     * 更新文章内容。兼容旧草稿更新接口。
+     * 编辑文章草稿
      * @param {ArticleServiceUpdateDraftRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateDraft(requestParameters: ArticleServiceUpdateDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateDraftArticleReply>;
-
-    /**
-     * 关注或取消关注文章。
-     * @param {ArticleServiceWatchRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    watch(requestParameters: ArticleServiceWatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<WatchArticleReply>;
+    updateDraft(requestParameters: ArticleServiceUpdateDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateDraftArticleResp>;
 
 }
 
 /**
- * Request parameters for acceptAnswer operation in ArticleService.
+ * Request parameters for archive operation in ArticleService.
  */
-export interface ArticleServiceAcceptAnswerRequest {
-    readonly acceptAnswerArticleRequest: AcceptAnswerArticleRequest
+export interface ArticleServiceArchiveRequest {
+    readonly archiveArticleReq: ArchiveArticleReq
+}
+
+/**
+ * Request parameters for cancelPublish operation in ArticleService.
+ */
+export interface ArticleServiceCancelPublishRequest {
+    readonly cancelPublishArticleReq: CancelPublishArticleReq
 }
 
 /**
  * Request parameters for collect operation in ArticleService.
  */
 export interface ArticleServiceCollectRequest {
-    readonly collectArticleRequest: CollectArticleRequest
+    readonly collectArticleReq: CollectArticleReq
 }
 
 /**
- * Request parameters for create operation in ArticleService.
+ * Request parameters for createDraft operation in ArticleService.
  */
-export interface ArticleServiceCreateRequest {
-    readonly createArticleRequest: CreateArticleRequest
+export interface ArticleServiceCreateDraftRequest {
+    readonly createDraftArticleReq: CreateDraftArticleReq
 }
 
 /**
  * Request parameters for discardDraft operation in ArticleService.
  */
 export interface ArticleServiceDiscardDraftRequest {
-    readonly discardDraftArticleRequest: DiscardDraftArticleRequest
+    readonly discardDraftArticleReq: DiscardDraftArticleReq
 }
 
 /**
  * Request parameters for get operation in ArticleService.
  */
 export interface ArticleServiceGetRequest {
-    readonly getArticleRequest: GetArticleRequest
+    readonly getArticleReq: GetArticleReq
 }
 
 /**
  * Request parameters for like operation in ArticleService.
  */
 export interface ArticleServiceLikeRequest {
-    readonly likeArticleRequest: LikeArticleRequest
+    readonly likeArticleReq: LikeArticleReq
 }
 
 /**
  * Request parameters for list operation in ArticleService.
  */
 export interface ArticleServiceListRequest {
-    readonly listArticlesRequest: ListArticlesRequest
+    readonly listArticlesReq: ListArticlesReq
 }
 
 /**
  * Request parameters for publish operation in ArticleService.
  */
 export interface ArticleServicePublishRequest {
-    readonly publishArticleRequest: PublishArticleRequest
+    readonly publishArticleReq: PublishArticleReq
 }
 
 /**
  * Request parameters for reward operation in ArticleService.
  */
 export interface ArticleServiceRewardRequest {
-    readonly rewardArticleRequest: RewardArticleRequest
+    readonly rewardArticleReq: RewardArticleReq
+}
+
+/**
+ * Request parameters for schedulePublish operation in ArticleService.
+ */
+export interface ArticleServiceSchedulePublishRequest {
+    readonly schedulePublishArticleReq: SchedulePublishArticleReq
 }
 
 /**
  * Request parameters for thank operation in ArticleService.
  */
 export interface ArticleServiceThankRequest {
-    readonly thankArticleRequest: ThankArticleRequest
-}
-
-/**
- * Request parameters for update operation in ArticleService.
- */
-export interface ArticleServiceUpdateRequest {
-    readonly updateArticleRequest: UpdateArticleRequest
+    readonly thankArticleReq: ThankArticleReq
 }
 
 /**
  * Request parameters for updateDraft operation in ArticleService.
  */
 export interface ArticleServiceUpdateDraftRequest {
-    readonly updateDraftArticleRequest: UpdateDraftArticleRequest
-}
-
-/**
- * Request parameters for watch operation in ArticleService.
- */
-export interface ArticleServiceWatchRequest {
-    readonly watchArticleRequest: WatchArticleRequest
+    readonly updateDraftArticleReq: UpdateDraftArticleReq
 }
 
 /**
@@ -2992,133 +2646,133 @@ export interface ArticleServiceWatchRequest {
  */
 export class ArticleService extends BaseAPI implements ArticleServiceInterface {
     /**
-     * 采纳文章评论为答案。
-     * @param {ArticleServiceAcceptAnswerRequest} requestParameters Request parameters.
+     * 归档文章
+     * @param {ArticleServiceArchiveRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public acceptAnswer(requestParameters: ArticleServiceAcceptAnswerRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).acceptAnswer(requestParameters.acceptAnswerArticleRequest, options).then((request) => request(this.axios, this.basePath));
+    public archive(requestParameters: ArticleServiceArchiveRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).archive(requestParameters.archiveArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 收藏或取消收藏文章。
+     * 取消定时发布
+     * @param {ArticleServiceCancelPublishRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public cancelPublish(requestParameters: ArticleServiceCancelPublishRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).cancelPublish(requestParameters.cancelPublishArticleReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 收藏文章
      * @param {ArticleServiceCollectRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public collect(requestParameters: ArticleServiceCollectRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).collect(requestParameters.collectArticleRequest, options).then((request) => request(this.axios, this.basePath));
+        return ArticleServiceFp(this.configuration).collect(requestParameters.collectArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 创建文章草稿。
-     * @param {ArticleServiceCreateRequest} requestParameters Request parameters.
+     * 创建文章草稿
+     * @param {ArticleServiceCreateDraftRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public create(requestParameters: ArticleServiceCreateRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).create(requestParameters.createArticleRequest, options).then((request) => request(this.axios, this.basePath));
+    public createDraft(requestParameters: ArticleServiceCreateDraftRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).createDraft(requestParameters.createDraftArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 丢弃草稿。
+     * 丢弃文章草稿
      * @param {ArticleServiceDiscardDraftRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public discardDraft(requestParameters: ArticleServiceDiscardDraftRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).discardDraft(requestParameters.discardDraftArticleRequest, options).then((request) => request(this.axios, this.basePath));
+        return ArticleServiceFp(this.configuration).discardDraft(requestParameters.discardDraftArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 获取文章详情。
+     * 查询文章详情
      * @param {ArticleServiceGetRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public get(requestParameters: ArticleServiceGetRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).get(requestParameters.getArticleRequest, options).then((request) => request(this.axios, this.basePath));
+        return ArticleServiceFp(this.configuration).get(requestParameters.getArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 点赞或取消点赞文章。
+     * 点赞文章
      * @param {ArticleServiceLikeRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public like(requestParameters: ArticleServiceLikeRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).like(requestParameters.likeArticleRequest, options).then((request) => request(this.axios, this.basePath));
+        return ArticleServiceFp(this.configuration).like(requestParameters.likeArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 分页查询文章列表。
+     * 查询文章列表
      * @param {ArticleServiceListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public list(requestParameters: ArticleServiceListRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).list(requestParameters.listArticlesRequest, options).then((request) => request(this.axios, this.basePath));
+        return ArticleServiceFp(this.configuration).list(requestParameters.listArticlesReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 发布文章。
+     * 发布文章
      * @param {ArticleServicePublishRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public publish(requestParameters: ArticleServicePublishRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).publish(requestParameters.publishArticleRequest, options).then((request) => request(this.axios, this.basePath));
+        return ArticleServiceFp(this.configuration).publish(requestParameters.publishArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 打赏文章。
+     * 打赏文章
      * @param {ArticleServiceRewardRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public reward(requestParameters: ArticleServiceRewardRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).reward(requestParameters.rewardArticleRequest, options).then((request) => request(this.axios, this.basePath));
+        return ArticleServiceFp(this.configuration).reward(requestParameters.rewardArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 感谢或取消感谢文章。
+     * 设置定时发布
+     * @param {ArticleServiceSchedulePublishRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public schedulePublish(requestParameters: ArticleServiceSchedulePublishRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).schedulePublish(requestParameters.schedulePublishArticleReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 感谢文章
      * @param {ArticleServiceThankRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public thank(requestParameters: ArticleServiceThankRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).thank(requestParameters.thankArticleRequest, options).then((request) => request(this.axios, this.basePath));
+        return ArticleServiceFp(this.configuration).thank(requestParameters.thankArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 更新文章内容。
-     * @param {ArticleServiceUpdateRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public update(requestParameters: ArticleServiceUpdateRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).update(requestParameters.updateArticleRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 更新文章内容。兼容旧草稿更新接口。
+     * 编辑文章草稿
      * @param {ArticleServiceUpdateDraftRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public updateDraft(requestParameters: ArticleServiceUpdateDraftRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).updateDraft(requestParameters.updateDraftArticleRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 关注或取消关注文章。
-     * @param {ArticleServiceWatchRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public watch(requestParameters: ArticleServiceWatchRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).watch(requestParameters.watchArticleRequest, options).then((request) => request(this.axios, this.basePath));
+        return ArticleServiceFp(this.configuration).updateDraft(requestParameters.updateDraftArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3130,15 +2784,15 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
 export const AuthServiceAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 使用密码登录账号。
-         * @param {LoginByPasswordRequest} loginByPasswordRequest 
+         * 注销账号。
+         * @param {CancelAccountReq} cancelAccountReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginByPassword: async (loginByPasswordRequest: LoginByPasswordRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'loginByPasswordRequest' is not null or undefined
-            assertParamExists('loginByPassword', 'loginByPasswordRequest', loginByPasswordRequest)
-            const localVarPath = `/v1/user/auth/login-by-password`;
+        cancelAccount: async (cancelAccountReq: CancelAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cancelAccountReq' is not null or undefined
+            assertParamExists('cancelAccount', 'cancelAccountReq', cancelAccountReq)
+            const localVarPath = `/v1/user/auth/cancel-account`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -3156,7 +2810,7 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(loginByPasswordRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(cancelAccountReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3164,7 +2818,41 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * 登出当前账号。
+         * 登录账号。
+         * @param {LoginReq} loginReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        login: async (loginReq: LoginReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'loginReq' is not null or undefined
+            assertParamExists('login', 'loginReq', loginReq)
+            const localVarPath = `/v1/user/auth/login`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(loginReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 退出登录。
          * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3198,14 +2886,48 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * 使用邮箱发起账号注册。
-         * @param {StartEmailRegistrationRequest} startEmailRegistrationRequest 
+         * 刷新登录令牌。
+         * @param {RefreshTokenReq} refreshTokenReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startEmailRegistration: async (startEmailRegistrationRequest: StartEmailRegistrationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'startEmailRegistrationRequest' is not null or undefined
-            assertParamExists('startEmailRegistration', 'startEmailRegistrationRequest', startEmailRegistrationRequest)
+        refreshToken: async (refreshTokenReq: RefreshTokenReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'refreshTokenReq' is not null or undefined
+            assertParamExists('refreshToken', 'refreshTokenReq', refreshTokenReq)
+            const localVarPath = `/v1/user/auth/refresh-token`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(refreshTokenReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 开始邮箱注册。
+         * @param {StartEmailRegistrationReq} startEmailRegistrationReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        startEmailRegistration: async (startEmailRegistrationReq: StartEmailRegistrationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'startEmailRegistrationReq' is not null or undefined
+            assertParamExists('startEmailRegistration', 'startEmailRegistrationReq', startEmailRegistrationReq)
             const localVarPath = `/v1/user/auth/start-email-registration`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3224,7 +2946,7 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(startEmailRegistrationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(startEmailRegistrationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3232,14 +2954,14 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * 使用手机号发起账号注册。
-         * @param {StartPhoneRegistrationRequest} startPhoneRegistrationRequest 
+         * 开始手机注册。
+         * @param {StartPhoneRegistrationReq} startPhoneRegistrationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startPhoneRegistration: async (startPhoneRegistrationRequest: StartPhoneRegistrationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'startPhoneRegistrationRequest' is not null or undefined
-            assertParamExists('startPhoneRegistration', 'startPhoneRegistrationRequest', startPhoneRegistrationRequest)
+        startPhoneRegistration: async (startPhoneRegistrationReq: StartPhoneRegistrationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'startPhoneRegistrationReq' is not null or undefined
+            assertParamExists('startPhoneRegistration', 'startPhoneRegistrationReq', startPhoneRegistrationReq)
             const localVarPath = `/v1/user/auth/start-phone-registration`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3258,7 +2980,7 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(startPhoneRegistrationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(startPhoneRegistrationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3267,13 +2989,13 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * 校验邮箱注册验证码。
-         * @param {VerifyEmailRegistrationRequest} verifyEmailRegistrationRequest 
+         * @param {VerifyEmailRegistrationReq} verifyEmailRegistrationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        verifyEmailRegistration: async (verifyEmailRegistrationRequest: VerifyEmailRegistrationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'verifyEmailRegistrationRequest' is not null or undefined
-            assertParamExists('verifyEmailRegistration', 'verifyEmailRegistrationRequest', verifyEmailRegistrationRequest)
+        verifyEmailRegistration: async (verifyEmailRegistrationReq: VerifyEmailRegistrationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'verifyEmailRegistrationReq' is not null or undefined
+            assertParamExists('verifyEmailRegistration', 'verifyEmailRegistrationReq', verifyEmailRegistrationReq)
             const localVarPath = `/v1/user/auth/verify-email-registration`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3292,7 +3014,7 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(verifyEmailRegistrationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(verifyEmailRegistrationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3300,14 +3022,14 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * 校验手机号注册验证码。
-         * @param {VerifyPhoneRegistrationRequest} verifyPhoneRegistrationRequest 
+         * 校验手机注册验证码。
+         * @param {VerifyPhoneRegistrationReq} verifyPhoneRegistrationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        verifyPhoneRegistration: async (verifyPhoneRegistrationRequest: VerifyPhoneRegistrationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'verifyPhoneRegistrationRequest' is not null or undefined
-            assertParamExists('verifyPhoneRegistration', 'verifyPhoneRegistrationRequest', verifyPhoneRegistrationRequest)
+        verifyPhoneRegistration: async (verifyPhoneRegistrationReq: VerifyPhoneRegistrationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'verifyPhoneRegistrationReq' is not null or undefined
+            assertParamExists('verifyPhoneRegistration', 'verifyPhoneRegistrationReq', verifyPhoneRegistrationReq)
             const localVarPath = `/v1/user/auth/verify-phone-registration`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3326,7 +3048,7 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(verifyPhoneRegistrationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(verifyPhoneRegistrationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3343,19 +3065,31 @@ export const AuthServiceFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AuthServiceAxiosParamCreator(configuration)
     return {
         /**
-         * 使用密码登录账号。
-         * @param {LoginByPasswordRequest} loginByPasswordRequest 
+         * 注销账号。
+         * @param {CancelAccountReq} cancelAccountReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async loginByPassword(loginByPasswordRequest: LoginByPasswordRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginByPasswordReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.loginByPassword(loginByPasswordRequest, options);
+        async cancelAccount(cancelAccountReq: CancelAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cancelAccount(cancelAccountReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthService.loginByPassword']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AuthService.cancelAccount']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 登出当前账号。
+         * 登录账号。
+         * @param {LoginReq} loginReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async login(loginReq: LoginReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.login(loginReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthService.login']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 退出登录。
          * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3367,49 +3101,61 @@ export const AuthServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 使用邮箱发起账号注册。
-         * @param {StartEmailRegistrationRequest} startEmailRegistrationRequest 
+         * 刷新登录令牌。
+         * @param {RefreshTokenReq} refreshTokenReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async startEmailRegistration(startEmailRegistrationRequest: StartEmailRegistrationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StartEmailRegistrationReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.startEmailRegistration(startEmailRegistrationRequest, options);
+        async refreshToken(refreshTokenReq: RefreshTokenReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RefreshTokenResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.refreshToken(refreshTokenReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthService.refreshToken']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 开始邮箱注册。
+         * @param {StartEmailRegistrationReq} startEmailRegistrationReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async startEmailRegistration(startEmailRegistrationReq: StartEmailRegistrationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StartEmailRegistrationResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startEmailRegistration(startEmailRegistrationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthService.startEmailRegistration']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 使用手机号发起账号注册。
-         * @param {StartPhoneRegistrationRequest} startPhoneRegistrationRequest 
+         * 开始手机注册。
+         * @param {StartPhoneRegistrationReq} startPhoneRegistrationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async startPhoneRegistration(startPhoneRegistrationRequest: StartPhoneRegistrationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StartPhoneRegistrationReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.startPhoneRegistration(startPhoneRegistrationRequest, options);
+        async startPhoneRegistration(startPhoneRegistrationReq: StartPhoneRegistrationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StartPhoneRegistrationResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.startPhoneRegistration(startPhoneRegistrationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthService.startPhoneRegistration']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 校验邮箱注册验证码。
-         * @param {VerifyEmailRegistrationRequest} verifyEmailRegistrationRequest 
+         * @param {VerifyEmailRegistrationReq} verifyEmailRegistrationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async verifyEmailRegistration(verifyEmailRegistrationRequest: VerifyEmailRegistrationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.verifyEmailRegistration(verifyEmailRegistrationRequest, options);
+        async verifyEmailRegistration(verifyEmailRegistrationReq: VerifyEmailRegistrationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.verifyEmailRegistration(verifyEmailRegistrationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthService.verifyEmailRegistration']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 校验手机号注册验证码。
-         * @param {VerifyPhoneRegistrationRequest} verifyPhoneRegistrationRequest 
+         * 校验手机注册验证码。
+         * @param {VerifyPhoneRegistrationReq} verifyPhoneRegistrationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async verifyPhoneRegistration(verifyPhoneRegistrationRequest: VerifyPhoneRegistrationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.verifyPhoneRegistration(verifyPhoneRegistrationRequest, options);
+        async verifyPhoneRegistration(verifyPhoneRegistrationReq: VerifyPhoneRegistrationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.verifyPhoneRegistration(verifyPhoneRegistrationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AuthService.verifyPhoneRegistration']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3424,16 +3170,25 @@ export const AuthServiceFactory = function (configuration?: Configuration, baseP
     const localVarFp = AuthServiceFp(configuration)
     return {
         /**
-         * 使用密码登录账号。
-         * @param {AuthServiceLoginByPasswordRequest} requestParameters Request parameters.
+         * 注销账号。
+         * @param {AuthServiceCancelAccountRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        loginByPassword(requestParameters: AuthServiceLoginByPasswordRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginByPasswordReply> {
-            return localVarFp.loginByPassword(requestParameters.loginByPasswordRequest, options).then((request) => request(axios, basePath));
+        cancelAccount(requestParameters: AuthServiceCancelAccountRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.cancelAccount(requestParameters.cancelAccountReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 登出当前账号。
+         * 登录账号。
+         * @param {AuthServiceLoginRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        login(requestParameters: AuthServiceLoginRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginResp> {
+            return localVarFp.login(requestParameters.loginReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 退出登录。
          * @param {AuthServiceLogoutRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3442,22 +3197,31 @@ export const AuthServiceFactory = function (configuration?: Configuration, baseP
             return localVarFp.logout(requestParameters.body, options).then((request) => request(axios, basePath));
         },
         /**
-         * 使用邮箱发起账号注册。
+         * 刷新登录令牌。
+         * @param {AuthServiceRefreshTokenRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        refreshToken(requestParameters: AuthServiceRefreshTokenRequest, options?: RawAxiosRequestConfig): AxiosPromise<RefreshTokenResp> {
+            return localVarFp.refreshToken(requestParameters.refreshTokenReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 开始邮箱注册。
          * @param {AuthServiceStartEmailRegistrationRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startEmailRegistration(requestParameters: AuthServiceStartEmailRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartEmailRegistrationReply> {
-            return localVarFp.startEmailRegistration(requestParameters.startEmailRegistrationRequest, options).then((request) => request(axios, basePath));
+        startEmailRegistration(requestParameters: AuthServiceStartEmailRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartEmailRegistrationResp> {
+            return localVarFp.startEmailRegistration(requestParameters.startEmailRegistrationReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 使用手机号发起账号注册。
+         * 开始手机注册。
          * @param {AuthServiceStartPhoneRegistrationRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startPhoneRegistration(requestParameters: AuthServiceStartPhoneRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartPhoneRegistrationReply> {
-            return localVarFp.startPhoneRegistration(requestParameters.startPhoneRegistrationRequest, options).then((request) => request(axios, basePath));
+        startPhoneRegistration(requestParameters: AuthServiceStartPhoneRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartPhoneRegistrationResp> {
+            return localVarFp.startPhoneRegistration(requestParameters.startPhoneRegistrationReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 校验邮箱注册验证码。
@@ -3466,16 +3230,16 @@ export const AuthServiceFactory = function (configuration?: Configuration, baseP
          * @throws {RequiredError}
          */
         verifyEmailRegistration(requestParameters: AuthServiceVerifyEmailRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.verifyEmailRegistration(requestParameters.verifyEmailRegistrationRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.verifyEmailRegistration(requestParameters.verifyEmailRegistrationReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 校验手机号注册验证码。
+         * 校验手机注册验证码。
          * @param {AuthServiceVerifyPhoneRegistrationRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         verifyPhoneRegistration(requestParameters: AuthServiceVerifyPhoneRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.verifyPhoneRegistration(requestParameters.verifyPhoneRegistrationRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.verifyPhoneRegistration(requestParameters.verifyPhoneRegistrationReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3485,15 +3249,23 @@ export const AuthServiceFactory = function (configuration?: Configuration, baseP
  */
 export interface AuthServiceInterface {
     /**
-     * 使用密码登录账号。
-     * @param {AuthServiceLoginByPasswordRequest} requestParameters Request parameters.
+     * 注销账号。
+     * @param {AuthServiceCancelAccountRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    loginByPassword(requestParameters: AuthServiceLoginByPasswordRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginByPasswordReply>;
+    cancelAccount(requestParameters: AuthServiceCancelAccountRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 登出当前账号。
+     * 登录账号。
+     * @param {AuthServiceLoginRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    login(requestParameters: AuthServiceLoginRequest, options?: RawAxiosRequestConfig): AxiosPromise<LoginResp>;
+
+    /**
+     * 退出登录。
      * @param {AuthServiceLogoutRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3501,20 +3273,28 @@ export interface AuthServiceInterface {
     logout(requestParameters: AuthServiceLogoutRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 使用邮箱发起账号注册。
+     * 刷新登录令牌。
+     * @param {AuthServiceRefreshTokenRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    refreshToken(requestParameters: AuthServiceRefreshTokenRequest, options?: RawAxiosRequestConfig): AxiosPromise<RefreshTokenResp>;
+
+    /**
+     * 开始邮箱注册。
      * @param {AuthServiceStartEmailRegistrationRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    startEmailRegistration(requestParameters: AuthServiceStartEmailRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartEmailRegistrationReply>;
+    startEmailRegistration(requestParameters: AuthServiceStartEmailRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartEmailRegistrationResp>;
 
     /**
-     * 使用手机号发起账号注册。
+     * 开始手机注册。
      * @param {AuthServiceStartPhoneRegistrationRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    startPhoneRegistration(requestParameters: AuthServiceStartPhoneRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartPhoneRegistrationReply>;
+    startPhoneRegistration(requestParameters: AuthServiceStartPhoneRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartPhoneRegistrationResp>;
 
     /**
      * 校验邮箱注册验证码。
@@ -3525,7 +3305,7 @@ export interface AuthServiceInterface {
     verifyEmailRegistration(requestParameters: AuthServiceVerifyEmailRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 校验手机号注册验证码。
+     * 校验手机注册验证码。
      * @param {AuthServiceVerifyPhoneRegistrationRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3535,10 +3315,17 @@ export interface AuthServiceInterface {
 }
 
 /**
- * Request parameters for loginByPassword operation in AuthService.
+ * Request parameters for cancelAccount operation in AuthService.
  */
-export interface AuthServiceLoginByPasswordRequest {
-    readonly loginByPasswordRequest: LoginByPasswordRequest
+export interface AuthServiceCancelAccountRequest {
+    readonly cancelAccountReq: CancelAccountReq
+}
+
+/**
+ * Request parameters for login operation in AuthService.
+ */
+export interface AuthServiceLoginRequest {
+    readonly loginReq: LoginReq
 }
 
 /**
@@ -3549,31 +3336,38 @@ export interface AuthServiceLogoutRequest {
 }
 
 /**
+ * Request parameters for refreshToken operation in AuthService.
+ */
+export interface AuthServiceRefreshTokenRequest {
+    readonly refreshTokenReq: RefreshTokenReq
+}
+
+/**
  * Request parameters for startEmailRegistration operation in AuthService.
  */
 export interface AuthServiceStartEmailRegistrationRequest {
-    readonly startEmailRegistrationRequest: StartEmailRegistrationRequest
+    readonly startEmailRegistrationReq: StartEmailRegistrationReq
 }
 
 /**
  * Request parameters for startPhoneRegistration operation in AuthService.
  */
 export interface AuthServiceStartPhoneRegistrationRequest {
-    readonly startPhoneRegistrationRequest: StartPhoneRegistrationRequest
+    readonly startPhoneRegistrationReq: StartPhoneRegistrationReq
 }
 
 /**
  * Request parameters for verifyEmailRegistration operation in AuthService.
  */
 export interface AuthServiceVerifyEmailRegistrationRequest {
-    readonly verifyEmailRegistrationRequest: VerifyEmailRegistrationRequest
+    readonly verifyEmailRegistrationReq: VerifyEmailRegistrationReq
 }
 
 /**
  * Request parameters for verifyPhoneRegistration operation in AuthService.
  */
 export interface AuthServiceVerifyPhoneRegistrationRequest {
-    readonly verifyPhoneRegistrationRequest: VerifyPhoneRegistrationRequest
+    readonly verifyPhoneRegistrationReq: VerifyPhoneRegistrationReq
 }
 
 /**
@@ -3581,17 +3375,27 @@ export interface AuthServiceVerifyPhoneRegistrationRequest {
  */
 export class AuthService extends BaseAPI implements AuthServiceInterface {
     /**
-     * 使用密码登录账号。
-     * @param {AuthServiceLoginByPasswordRequest} requestParameters Request parameters.
+     * 注销账号。
+     * @param {AuthServiceCancelAccountRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public loginByPassword(requestParameters: AuthServiceLoginByPasswordRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).loginByPassword(requestParameters.loginByPasswordRequest, options).then((request) => request(this.axios, this.basePath));
+    public cancelAccount(requestParameters: AuthServiceCancelAccountRequest, options?: RawAxiosRequestConfig) {
+        return AuthServiceFp(this.configuration).cancelAccount(requestParameters.cancelAccountReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 登出当前账号。
+     * 登录账号。
+     * @param {AuthServiceLoginRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public login(requestParameters: AuthServiceLoginRequest, options?: RawAxiosRequestConfig) {
+        return AuthServiceFp(this.configuration).login(requestParameters.loginReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 退出登录。
      * @param {AuthServiceLogoutRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3601,23 +3405,33 @@ export class AuthService extends BaseAPI implements AuthServiceInterface {
     }
 
     /**
-     * 使用邮箱发起账号注册。
+     * 刷新登录令牌。
+     * @param {AuthServiceRefreshTokenRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public refreshToken(requestParameters: AuthServiceRefreshTokenRequest, options?: RawAxiosRequestConfig) {
+        return AuthServiceFp(this.configuration).refreshToken(requestParameters.refreshTokenReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 开始邮箱注册。
      * @param {AuthServiceStartEmailRegistrationRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public startEmailRegistration(requestParameters: AuthServiceStartEmailRegistrationRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).startEmailRegistration(requestParameters.startEmailRegistrationRequest, options).then((request) => request(this.axios, this.basePath));
+        return AuthServiceFp(this.configuration).startEmailRegistration(requestParameters.startEmailRegistrationReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 使用手机号发起账号注册。
+     * 开始手机注册。
      * @param {AuthServiceStartPhoneRegistrationRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public startPhoneRegistration(requestParameters: AuthServiceStartPhoneRegistrationRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).startPhoneRegistration(requestParameters.startPhoneRegistrationRequest, options).then((request) => request(this.axios, this.basePath));
+        return AuthServiceFp(this.configuration).startPhoneRegistration(requestParameters.startPhoneRegistrationReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3627,17 +3441,17 @@ export class AuthService extends BaseAPI implements AuthServiceInterface {
      * @throws {RequiredError}
      */
     public verifyEmailRegistration(requestParameters: AuthServiceVerifyEmailRegistrationRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).verifyEmailRegistration(requestParameters.verifyEmailRegistrationRequest, options).then((request) => request(this.axios, this.basePath));
+        return AuthServiceFp(this.configuration).verifyEmailRegistration(requestParameters.verifyEmailRegistrationReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 校验手机号注册验证码。
+     * 校验手机注册验证码。
      * @param {AuthServiceVerifyPhoneRegistrationRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public verifyPhoneRegistration(requestParameters: AuthServiceVerifyPhoneRegistrationRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).verifyPhoneRegistration(requestParameters.verifyPhoneRegistrationRequest, options).then((request) => request(this.axios, this.basePath));
+        return AuthServiceFp(this.configuration).verifyPhoneRegistration(requestParameters.verifyPhoneRegistrationReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -3650,13 +3464,13 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
     return {
         /**
          * 创建评论。
-         * @param {CreateCommentRequest} createCommentRequest 
+         * @param {CreateCommentReq} createCommentReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create: async (createCommentRequest: CreateCommentRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createCommentRequest' is not null or undefined
-            assertParamExists('create', 'createCommentRequest', createCommentRequest)
+        create: async (createCommentReq: CreateCommentReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createCommentReq' is not null or undefined
+            assertParamExists('create', 'createCommentReq', createCommentReq)
             const localVarPath = `/v1/content/comment/create`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3675,7 +3489,7 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createCommentRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createCommentReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3684,13 +3498,13 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 点赞或取消点赞评论。
-         * @param {LikeCommentRequest} likeCommentRequest 
+         * @param {LikeCommentReq} likeCommentReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        like: async (likeCommentRequest: LikeCommentRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'likeCommentRequest' is not null or undefined
-            assertParamExists('like', 'likeCommentRequest', likeCommentRequest)
+        like: async (likeCommentReq: LikeCommentReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'likeCommentReq' is not null or undefined
+            assertParamExists('like', 'likeCommentReq', likeCommentReq)
             const localVarPath = `/v1/content/comment/like`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3709,7 +3523,7 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(likeCommentRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(likeCommentReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3718,13 +3532,13 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 分页查询评论列表。
-         * @param {ListCommentsRequest} listCommentsRequest 
+         * @param {ListCommentsReq} listCommentsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (listCommentsRequest: ListCommentsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listCommentsRequest' is not null or undefined
-            assertParamExists('list', 'listCommentsRequest', listCommentsRequest)
+        list: async (listCommentsReq: ListCommentsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listCommentsReq' is not null or undefined
+            assertParamExists('list', 'listCommentsReq', listCommentsReq)
             const localVarPath = `/v1/content/comment/list`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3743,7 +3557,7 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listCommentsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listCommentsReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3752,13 +3566,13 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 分页查询评论回复。
-         * @param {ListCommentRepliesRequest} listCommentRepliesRequest 
+         * @param {ListCommentRepliesReq} listCommentRepliesReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listReplies: async (listCommentRepliesRequest: ListCommentRepliesRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listCommentRepliesRequest' is not null or undefined
-            assertParamExists('listReplies', 'listCommentRepliesRequest', listCommentRepliesRequest)
+        listReplies: async (listCommentRepliesReq: ListCommentRepliesReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listCommentRepliesReq' is not null or undefined
+            assertParamExists('listReplies', 'listCommentRepliesReq', listCommentRepliesReq)
             const localVarPath = `/v1/content/comment/list-replies`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3777,7 +3591,7 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listCommentRepliesRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listCommentRepliesReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3786,13 +3600,13 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 分页查询评论楼层。
-         * @param {ListCommentThreadsRequest} listCommentThreadsRequest 
+         * @param {ListCommentThreadsReq} listCommentThreadsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listThreads: async (listCommentThreadsRequest: ListCommentThreadsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listCommentThreadsRequest' is not null or undefined
-            assertParamExists('listThreads', 'listCommentThreadsRequest', listCommentThreadsRequest)
+        listThreads: async (listCommentThreadsReq: ListCommentThreadsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listCommentThreadsReq' is not null or undefined
+            assertParamExists('listThreads', 'listCommentThreadsReq', listCommentThreadsReq)
             const localVarPath = `/v1/content/comment/list-threads`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3811,7 +3625,7 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listCommentThreadsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listCommentThreadsReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3820,13 +3634,13 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 分页查询评论时间线。
-         * @param {ListCommentTimelineRequest} listCommentTimelineRequest 
+         * @param {ListCommentTimelineReq} listCommentTimelineReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTimeline: async (listCommentTimelineRequest: ListCommentTimelineRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listCommentTimelineRequest' is not null or undefined
-            assertParamExists('listTimeline', 'listCommentTimelineRequest', listCommentTimelineRequest)
+        listTimeline: async (listCommentTimelineReq: ListCommentTimelineReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listCommentTimelineReq' is not null or undefined
+            assertParamExists('listTimeline', 'listCommentTimelineReq', listCommentTimelineReq)
             const localVarPath = `/v1/content/comment/list-timeline`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3845,7 +3659,7 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listCommentTimelineRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listCommentTimelineReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3854,13 +3668,13 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * 感谢或取消感谢评论。
-         * @param {ThankCommentRequest} thankCommentRequest 
+         * @param {ThankCommentReq} thankCommentReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        thank: async (thankCommentRequest: ThankCommentRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'thankCommentRequest' is not null or undefined
-            assertParamExists('thank', 'thankCommentRequest', thankCommentRequest)
+        thank: async (thankCommentReq: ThankCommentReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'thankCommentReq' is not null or undefined
+            assertParamExists('thank', 'thankCommentReq', thankCommentReq)
             const localVarPath = `/v1/content/comment/thank`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -3879,7 +3693,7 @@ export const CommentServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(thankCommentRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(thankCommentReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3897,84 +3711,84 @@ export const CommentServiceFp = function(configuration?: Configuration) {
     return {
         /**
          * 创建评论。
-         * @param {CreateCommentRequest} createCommentRequest 
+         * @param {CreateCommentReq} createCommentReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async create(createCommentRequest: CreateCommentRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateCommentReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.create(createCommentRequest, options);
+        async create(createCommentReq: CreateCommentReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateCommentResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create(createCommentReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommentService.create']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 点赞或取消点赞评论。
-         * @param {LikeCommentRequest} likeCommentRequest 
+         * @param {LikeCommentReq} likeCommentReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async like(likeCommentRequest: LikeCommentRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LikeCommentReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.like(likeCommentRequest, options);
+        async like(likeCommentReq: LikeCommentReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LikeCommentResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.like(likeCommentReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommentService.like']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 分页查询评论列表。
-         * @param {ListCommentsRequest} listCommentsRequest 
+         * @param {ListCommentsReq} listCommentsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list(listCommentsRequest: ListCommentsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCommentsReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listCommentsRequest, options);
+        async list(listCommentsReq: ListCommentsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCommentsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listCommentsReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommentService.list']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 分页查询评论回复。
-         * @param {ListCommentRepliesRequest} listCommentRepliesRequest 
+         * @param {ListCommentRepliesReq} listCommentRepliesReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listReplies(listCommentRepliesRequest: ListCommentRepliesRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCommentRepliesReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listReplies(listCommentRepliesRequest, options);
+        async listReplies(listCommentRepliesReq: ListCommentRepliesReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCommentRepliesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listReplies(listCommentRepliesReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommentService.listReplies']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 分页查询评论楼层。
-         * @param {ListCommentThreadsRequest} listCommentThreadsRequest 
+         * @param {ListCommentThreadsReq} listCommentThreadsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listThreads(listCommentThreadsRequest: ListCommentThreadsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCommentThreadsReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listThreads(listCommentThreadsRequest, options);
+        async listThreads(listCommentThreadsReq: ListCommentThreadsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCommentThreadsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listThreads(listCommentThreadsReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommentService.listThreads']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 分页查询评论时间线。
-         * @param {ListCommentTimelineRequest} listCommentTimelineRequest 
+         * @param {ListCommentTimelineReq} listCommentTimelineReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listTimeline(listCommentTimelineRequest: ListCommentTimelineRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCommentTimelineReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listTimeline(listCommentTimelineRequest, options);
+        async listTimeline(listCommentTimelineReq: ListCommentTimelineReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListCommentTimelineResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listTimeline(listCommentTimelineReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommentService.listTimeline']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 感谢或取消感谢评论。
-         * @param {ThankCommentRequest} thankCommentRequest 
+         * @param {ThankCommentReq} thankCommentReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async thank(thankCommentRequest: ThankCommentRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ThankCommentReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.thank(thankCommentRequest, options);
+        async thank(thankCommentReq: ThankCommentReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ThankCommentResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.thank(thankCommentReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CommentService.thank']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -3994,8 +3808,8 @@ export const CommentServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create(requestParameters: CommentServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateCommentReply> {
-            return localVarFp.create(requestParameters.createCommentRequest, options).then((request) => request(axios, basePath));
+        create(requestParameters: CommentServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateCommentResp> {
+            return localVarFp.create(requestParameters.createCommentReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 点赞或取消点赞评论。
@@ -4003,8 +3817,8 @@ export const CommentServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        like(requestParameters: CommentServiceLikeRequest, options?: RawAxiosRequestConfig): AxiosPromise<LikeCommentReply> {
-            return localVarFp.like(requestParameters.likeCommentRequest, options).then((request) => request(axios, basePath));
+        like(requestParameters: CommentServiceLikeRequest, options?: RawAxiosRequestConfig): AxiosPromise<LikeCommentResp> {
+            return localVarFp.like(requestParameters.likeCommentReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 分页查询评论列表。
@@ -4012,8 +3826,8 @@ export const CommentServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list(requestParameters: CommentServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentsReply> {
-            return localVarFp.list(requestParameters.listCommentsRequest, options).then((request) => request(axios, basePath));
+        list(requestParameters: CommentServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentsResp> {
+            return localVarFp.list(requestParameters.listCommentsReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 分页查询评论回复。
@@ -4021,8 +3835,8 @@ export const CommentServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listReplies(requestParameters: CommentServiceListRepliesRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentRepliesReply> {
-            return localVarFp.listReplies(requestParameters.listCommentRepliesRequest, options).then((request) => request(axios, basePath));
+        listReplies(requestParameters: CommentServiceListRepliesRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentRepliesResp> {
+            return localVarFp.listReplies(requestParameters.listCommentRepliesReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 分页查询评论楼层。
@@ -4030,8 +3844,8 @@ export const CommentServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listThreads(requestParameters: CommentServiceListThreadsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentThreadsReply> {
-            return localVarFp.listThreads(requestParameters.listCommentThreadsRequest, options).then((request) => request(axios, basePath));
+        listThreads(requestParameters: CommentServiceListThreadsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentThreadsResp> {
+            return localVarFp.listThreads(requestParameters.listCommentThreadsReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 分页查询评论时间线。
@@ -4039,8 +3853,8 @@ export const CommentServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTimeline(requestParameters: CommentServiceListTimelineRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentTimelineReply> {
-            return localVarFp.listTimeline(requestParameters.listCommentTimelineRequest, options).then((request) => request(axios, basePath));
+        listTimeline(requestParameters: CommentServiceListTimelineRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentTimelineResp> {
+            return localVarFp.listTimeline(requestParameters.listCommentTimelineReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 感谢或取消感谢评论。
@@ -4048,8 +3862,8 @@ export const CommentServiceFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        thank(requestParameters: CommentServiceThankRequest, options?: RawAxiosRequestConfig): AxiosPromise<ThankCommentReply> {
-            return localVarFp.thank(requestParameters.thankCommentRequest, options).then((request) => request(axios, basePath));
+        thank(requestParameters: CommentServiceThankRequest, options?: RawAxiosRequestConfig): AxiosPromise<ThankCommentResp> {
+            return localVarFp.thank(requestParameters.thankCommentReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4064,7 +3878,7 @@ export interface CommentServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    create(requestParameters: CommentServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateCommentReply>;
+    create(requestParameters: CommentServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateCommentResp>;
 
     /**
      * 点赞或取消点赞评论。
@@ -4072,7 +3886,7 @@ export interface CommentServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    like(requestParameters: CommentServiceLikeRequest, options?: RawAxiosRequestConfig): AxiosPromise<LikeCommentReply>;
+    like(requestParameters: CommentServiceLikeRequest, options?: RawAxiosRequestConfig): AxiosPromise<LikeCommentResp>;
 
     /**
      * 分页查询评论列表。
@@ -4080,7 +3894,7 @@ export interface CommentServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    list(requestParameters: CommentServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentsReply>;
+    list(requestParameters: CommentServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentsResp>;
 
     /**
      * 分页查询评论回复。
@@ -4088,7 +3902,7 @@ export interface CommentServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listReplies(requestParameters: CommentServiceListRepliesRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentRepliesReply>;
+    listReplies(requestParameters: CommentServiceListRepliesRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentRepliesResp>;
 
     /**
      * 分页查询评论楼层。
@@ -4096,7 +3910,7 @@ export interface CommentServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listThreads(requestParameters: CommentServiceListThreadsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentThreadsReply>;
+    listThreads(requestParameters: CommentServiceListThreadsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentThreadsResp>;
 
     /**
      * 分页查询评论时间线。
@@ -4104,7 +3918,7 @@ export interface CommentServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listTimeline(requestParameters: CommentServiceListTimelineRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentTimelineReply>;
+    listTimeline(requestParameters: CommentServiceListTimelineRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListCommentTimelineResp>;
 
     /**
      * 感谢或取消感谢评论。
@@ -4112,7 +3926,7 @@ export interface CommentServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    thank(requestParameters: CommentServiceThankRequest, options?: RawAxiosRequestConfig): AxiosPromise<ThankCommentReply>;
+    thank(requestParameters: CommentServiceThankRequest, options?: RawAxiosRequestConfig): AxiosPromise<ThankCommentResp>;
 
 }
 
@@ -4120,49 +3934,49 @@ export interface CommentServiceInterface {
  * Request parameters for create operation in CommentService.
  */
 export interface CommentServiceCreateRequest {
-    readonly createCommentRequest: CreateCommentRequest
+    readonly createCommentReq: CreateCommentReq
 }
 
 /**
  * Request parameters for like operation in CommentService.
  */
 export interface CommentServiceLikeRequest {
-    readonly likeCommentRequest: LikeCommentRequest
+    readonly likeCommentReq: LikeCommentReq
 }
 
 /**
  * Request parameters for list operation in CommentService.
  */
 export interface CommentServiceListRequest {
-    readonly listCommentsRequest: ListCommentsRequest
+    readonly listCommentsReq: ListCommentsReq
 }
 
 /**
  * Request parameters for listReplies operation in CommentService.
  */
 export interface CommentServiceListRepliesRequest {
-    readonly listCommentRepliesRequest: ListCommentRepliesRequest
+    readonly listCommentRepliesReq: ListCommentRepliesReq
 }
 
 /**
  * Request parameters for listThreads operation in CommentService.
  */
 export interface CommentServiceListThreadsRequest {
-    readonly listCommentThreadsRequest: ListCommentThreadsRequest
+    readonly listCommentThreadsReq: ListCommentThreadsReq
 }
 
 /**
  * Request parameters for listTimeline operation in CommentService.
  */
 export interface CommentServiceListTimelineRequest {
-    readonly listCommentTimelineRequest: ListCommentTimelineRequest
+    readonly listCommentTimelineReq: ListCommentTimelineReq
 }
 
 /**
  * Request parameters for thank operation in CommentService.
  */
 export interface CommentServiceThankRequest {
-    readonly thankCommentRequest: ThankCommentRequest
+    readonly thankCommentReq: ThankCommentReq
 }
 
 /**
@@ -4176,7 +3990,7 @@ export class CommentService extends BaseAPI implements CommentServiceInterface {
      * @throws {RequiredError}
      */
     public create(requestParameters: CommentServiceCreateRequest, options?: RawAxiosRequestConfig) {
-        return CommentServiceFp(this.configuration).create(requestParameters.createCommentRequest, options).then((request) => request(this.axios, this.basePath));
+        return CommentServiceFp(this.configuration).create(requestParameters.createCommentReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4186,7 +4000,7 @@ export class CommentService extends BaseAPI implements CommentServiceInterface {
      * @throws {RequiredError}
      */
     public like(requestParameters: CommentServiceLikeRequest, options?: RawAxiosRequestConfig) {
-        return CommentServiceFp(this.configuration).like(requestParameters.likeCommentRequest, options).then((request) => request(this.axios, this.basePath));
+        return CommentServiceFp(this.configuration).like(requestParameters.likeCommentReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4196,7 +4010,7 @@ export class CommentService extends BaseAPI implements CommentServiceInterface {
      * @throws {RequiredError}
      */
     public list(requestParameters: CommentServiceListRequest, options?: RawAxiosRequestConfig) {
-        return CommentServiceFp(this.configuration).list(requestParameters.listCommentsRequest, options).then((request) => request(this.axios, this.basePath));
+        return CommentServiceFp(this.configuration).list(requestParameters.listCommentsReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4206,7 +4020,7 @@ export class CommentService extends BaseAPI implements CommentServiceInterface {
      * @throws {RequiredError}
      */
     public listReplies(requestParameters: CommentServiceListRepliesRequest, options?: RawAxiosRequestConfig) {
-        return CommentServiceFp(this.configuration).listReplies(requestParameters.listCommentRepliesRequest, options).then((request) => request(this.axios, this.basePath));
+        return CommentServiceFp(this.configuration).listReplies(requestParameters.listCommentRepliesReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4216,7 +4030,7 @@ export class CommentService extends BaseAPI implements CommentServiceInterface {
      * @throws {RequiredError}
      */
     public listThreads(requestParameters: CommentServiceListThreadsRequest, options?: RawAxiosRequestConfig) {
-        return CommentServiceFp(this.configuration).listThreads(requestParameters.listCommentThreadsRequest, options).then((request) => request(this.axios, this.basePath));
+        return CommentServiceFp(this.configuration).listThreads(requestParameters.listCommentThreadsReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4226,7 +4040,7 @@ export class CommentService extends BaseAPI implements CommentServiceInterface {
      * @throws {RequiredError}
      */
     public listTimeline(requestParameters: CommentServiceListTimelineRequest, options?: RawAxiosRequestConfig) {
-        return CommentServiceFp(this.configuration).listTimeline(requestParameters.listCommentTimelineRequest, options).then((request) => request(this.axios, this.basePath));
+        return CommentServiceFp(this.configuration).listTimeline(requestParameters.listCommentTimelineReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4236,7 +4050,7 @@ export class CommentService extends BaseAPI implements CommentServiceInterface {
      * @throws {RequiredError}
      */
     public thank(requestParameters: CommentServiceThankRequest, options?: RawAxiosRequestConfig) {
-        return CommentServiceFp(this.configuration).thank(requestParameters.thankCommentRequest, options).then((request) => request(this.axios, this.basePath));
+        return CommentServiceFp(this.configuration).thank(requestParameters.thankCommentReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4248,14 +4062,48 @@ export class CommentService extends BaseAPI implements CommentServiceInterface {
 export const DomainServiceAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 分页查询内容板块列表。
-         * @param {ListDomainsRequest} listDomainsRequest 
+         * 创建领域。
+         * @param {CreateDomainReq} createDomainReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (listDomainsRequest: ListDomainsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listDomainsRequest' is not null or undefined
-            assertParamExists('list', 'listDomainsRequest', listDomainsRequest)
+        create: async (createDomainReq: CreateDomainReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createDomainReq' is not null or undefined
+            assertParamExists('create', 'createDomainReq', createDomainReq)
+            const localVarPath = `/v1/content/domain/create`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createDomainReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询领域列表。
+         * @param {ListDomainsReq} listDomainsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list: async (listDomainsReq: ListDomainsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listDomainsReq' is not null or undefined
+            assertParamExists('list', 'listDomainsReq', listDomainsReq)
             const localVarPath = `/v1/content/domain/list`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4274,7 +4122,41 @@ export const DomainServiceAxiosParamCreator = function (configuration?: Configur
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listDomainsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listDomainsReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 更新领域。
+         * @param {UpdateDomainReq} updateDomainReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        update: async (updateDomainReq: UpdateDomainReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateDomainReq' is not null or undefined
+            assertParamExists('update', 'updateDomainReq', updateDomainReq)
+            const localVarPath = `/v1/content/domain/update`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateDomainReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4291,15 +4173,39 @@ export const DomainServiceFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DomainServiceAxiosParamCreator(configuration)
     return {
         /**
-         * 分页查询内容板块列表。
-         * @param {ListDomainsRequest} listDomainsRequest 
+         * 创建领域。
+         * @param {CreateDomainReq} createDomainReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list(listDomainsRequest: ListDomainsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDomainsReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listDomainsRequest, options);
+        async create(createDomainReq: CreateDomainReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateDomainResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create(createDomainReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DomainService.create']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 查询领域列表。
+         * @param {ListDomainsReq} listDomainsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async list(listDomainsReq: ListDomainsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListDomainsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listDomainsReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DomainService.list']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 更新领域。
+         * @param {UpdateDomainReq} updateDomainReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async update(updateDomainReq: UpdateDomainReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateDomainResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(updateDomainReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DomainService.update']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -4312,13 +4218,31 @@ export const DomainServiceFactory = function (configuration?: Configuration, bas
     const localVarFp = DomainServiceFp(configuration)
     return {
         /**
-         * 分页查询内容板块列表。
+         * 创建领域。
+         * @param {DomainServiceCreateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create(requestParameters: DomainServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateDomainResp> {
+            return localVarFp.create(requestParameters.createDomainReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询领域列表。
          * @param {DomainServiceListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list(requestParameters: DomainServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListDomainsReply> {
-            return localVarFp.list(requestParameters.listDomainsRequest, options).then((request) => request(axios, basePath));
+        list(requestParameters: DomainServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListDomainsResp> {
+            return localVarFp.list(requestParameters.listDomainsReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 更新领域。
+         * @param {DomainServiceUpdateRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        update(requestParameters: DomainServiceUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateDomainResp> {
+            return localVarFp.update(requestParameters.updateDomainReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4328,20 +4252,50 @@ export const DomainServiceFactory = function (configuration?: Configuration, bas
  */
 export interface DomainServiceInterface {
     /**
-     * 分页查询内容板块列表。
+     * 创建领域。
+     * @param {DomainServiceCreateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    create(requestParameters: DomainServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateDomainResp>;
+
+    /**
+     * 查询领域列表。
      * @param {DomainServiceListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    list(requestParameters: DomainServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListDomainsReply>;
+    list(requestParameters: DomainServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListDomainsResp>;
 
+    /**
+     * 更新领域。
+     * @param {DomainServiceUpdateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    update(requestParameters: DomainServiceUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateDomainResp>;
+
+}
+
+/**
+ * Request parameters for create operation in DomainService.
+ */
+export interface DomainServiceCreateRequest {
+    readonly createDomainReq: CreateDomainReq
 }
 
 /**
  * Request parameters for list operation in DomainService.
  */
 export interface DomainServiceListRequest {
-    readonly listDomainsRequest: ListDomainsRequest
+    readonly listDomainsReq: ListDomainsReq
+}
+
+/**
+ * Request parameters for update operation in DomainService.
+ */
+export interface DomainServiceUpdateRequest {
+    readonly updateDomainReq: UpdateDomainReq
 }
 
 /**
@@ -4349,13 +4303,33 @@ export interface DomainServiceListRequest {
  */
 export class DomainService extends BaseAPI implements DomainServiceInterface {
     /**
-     * 分页查询内容板块列表。
+     * 创建领域。
+     * @param {DomainServiceCreateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public create(requestParameters: DomainServiceCreateRequest, options?: RawAxiosRequestConfig) {
+        return DomainServiceFp(this.configuration).create(requestParameters.createDomainReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询领域列表。
      * @param {DomainServiceListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public list(requestParameters: DomainServiceListRequest, options?: RawAxiosRequestConfig) {
-        return DomainServiceFp(this.configuration).list(requestParameters.listDomainsRequest, options).then((request) => request(this.axios, this.basePath));
+        return DomainServiceFp(this.configuration).list(requestParameters.listDomainsReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 更新领域。
+     * @param {DomainServiceUpdateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public update(requestParameters: DomainServiceUpdateRequest, options?: RawAxiosRequestConfig) {
+        return DomainServiceFp(this.configuration).update(requestParameters.updateDomainReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4402,13 +4376,13 @@ export const LocationServiceAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 更新当前账号的地理资料。
-         * @param {UpsertCurrentLocationRequest} upsertCurrentLocationRequest 
+         * @param {UpsertCurrentLocationReq} upsertCurrentLocationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        upsertCurrent: async (upsertCurrentLocationRequest: UpsertCurrentLocationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'upsertCurrentLocationRequest' is not null or undefined
-            assertParamExists('upsertCurrent', 'upsertCurrentLocationRequest', upsertCurrentLocationRequest)
+        upsertCurrent: async (upsertCurrentLocationReq: UpsertCurrentLocationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'upsertCurrentLocationReq' is not null or undefined
+            assertParamExists('upsertCurrent', 'upsertCurrentLocationReq', upsertCurrentLocationReq)
             const localVarPath = `/v1/user/location/upsert-current`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4427,7 +4401,7 @@ export const LocationServiceAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(upsertCurrentLocationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(upsertCurrentLocationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4449,7 +4423,7 @@ export const LocationServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentLocationReply>> {
+        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentLocationResp>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrent(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['LocationService.getCurrent']?.[localVarOperationServerIndex]?.url;
@@ -4457,12 +4431,12 @@ export const LocationServiceFp = function(configuration?: Configuration) {
         },
         /**
          * 更新当前账号的地理资料。
-         * @param {UpsertCurrentLocationRequest} upsertCurrentLocationRequest 
+         * @param {UpsertCurrentLocationReq} upsertCurrentLocationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async upsertCurrent(upsertCurrentLocationRequest: UpsertCurrentLocationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpsertCurrentLocationReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.upsertCurrent(upsertCurrentLocationRequest, options);
+        async upsertCurrent(upsertCurrentLocationReq: UpsertCurrentLocationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpsertCurrentLocationResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.upsertCurrent(upsertCurrentLocationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['LocationService.upsertCurrent']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4482,7 +4456,7 @@ export const LocationServiceFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrent(requestParameters: LocationServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentLocationReply> {
+        getCurrent(requestParameters: LocationServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentLocationResp> {
             return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4491,8 +4465,8 @@ export const LocationServiceFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        upsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpsertCurrentLocationReply> {
-            return localVarFp.upsertCurrent(requestParameters.upsertCurrentLocationRequest, options).then((request) => request(axios, basePath));
+        upsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpsertCurrentLocationResp> {
+            return localVarFp.upsertCurrent(requestParameters.upsertCurrentLocationReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4507,7 +4481,7 @@ export interface LocationServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getCurrent(requestParameters: LocationServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentLocationReply>;
+    getCurrent(requestParameters: LocationServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentLocationResp>;
 
     /**
      * 更新当前账号的地理资料。
@@ -4515,7 +4489,7 @@ export interface LocationServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    upsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpsertCurrentLocationReply>;
+    upsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpsertCurrentLocationResp>;
 
 }
 
@@ -4530,7 +4504,7 @@ export interface LocationServiceGetCurrentRequest {
  * Request parameters for upsertCurrent operation in LocationService.
  */
 export interface LocationServiceUpsertCurrentRequest {
-    readonly upsertCurrentLocationRequest: UpsertCurrentLocationRequest
+    readonly upsertCurrentLocationReq: UpsertCurrentLocationReq
 }
 
 /**
@@ -4554,7 +4528,7 @@ export class LocationService extends BaseAPI implements LocationServiceInterface
      * @throws {RequiredError}
      */
     public upsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, options?: RawAxiosRequestConfig) {
-        return LocationServiceFp(this.configuration).upsertCurrent(requestParameters.upsertCurrentLocationRequest, options).then((request) => request(this.axios, this.basePath));
+        return LocationServiceFp(this.configuration).upsertCurrent(requestParameters.upsertCurrentLocationReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4601,13 +4575,13 @@ export const NotificationServiceAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 分页查询通知列表。
-         * @param {ListNotificationsRequest} listNotificationsRequest 
+         * @param {ListNotificationsReq} listNotificationsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (listNotificationsRequest: ListNotificationsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listNotificationsRequest' is not null or undefined
-            assertParamExists('list', 'listNotificationsRequest', listNotificationsRequest)
+        list: async (listNotificationsReq: ListNotificationsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listNotificationsReq' is not null or undefined
+            assertParamExists('list', 'listNotificationsReq', listNotificationsReq)
             const localVarPath = `/v1/notify/notification/list`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4626,7 +4600,7 @@ export const NotificationServiceAxiosParamCreator = function (configuration?: Co
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listNotificationsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listNotificationsReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4635,13 +4609,13 @@ export const NotificationServiceAxiosParamCreator = function (configuration?: Co
         },
         /**
          * 标记通知为已读。
-         * @param {MarkReadNotificationRequest} markReadNotificationRequest 
+         * @param {MarkReadNotificationReq} markReadNotificationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        markRead: async (markReadNotificationRequest: MarkReadNotificationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'markReadNotificationRequest' is not null or undefined
-            assertParamExists('markRead', 'markReadNotificationRequest', markReadNotificationRequest)
+        markRead: async (markReadNotificationReq: MarkReadNotificationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'markReadNotificationReq' is not null or undefined
+            assertParamExists('markRead', 'markReadNotificationReq', markReadNotificationReq)
             const localVarPath = `/v1/notify/notification/mark-read`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4660,7 +4634,7 @@ export const NotificationServiceAxiosParamCreator = function (configuration?: Co
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(markReadNotificationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(markReadNotificationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4682,7 +4656,7 @@ export const NotificationServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async countUnread(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountUnreadNotificationsReply>> {
+        async countUnread(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountUnreadNotificationsResp>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.countUnread(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['NotificationService.countUnread']?.[localVarOperationServerIndex]?.url;
@@ -4690,24 +4664,24 @@ export const NotificationServiceFp = function(configuration?: Configuration) {
         },
         /**
          * 分页查询通知列表。
-         * @param {ListNotificationsRequest} listNotificationsRequest 
+         * @param {ListNotificationsReq} listNotificationsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list(listNotificationsRequest: ListNotificationsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListNotificationsReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listNotificationsRequest, options);
+        async list(listNotificationsReq: ListNotificationsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListNotificationsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listNotificationsReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['NotificationService.list']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 标记通知为已读。
-         * @param {MarkReadNotificationRequest} markReadNotificationRequest 
+         * @param {MarkReadNotificationReq} markReadNotificationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async markRead(markReadNotificationRequest: MarkReadNotificationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MarkReadNotificationReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.markRead(markReadNotificationRequest, options);
+        async markRead(markReadNotificationReq: MarkReadNotificationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MarkReadNotificationResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.markRead(markReadNotificationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['NotificationService.markRead']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -4727,7 +4701,7 @@ export const NotificationServiceFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        countUnread(requestParameters: NotificationServiceCountUnreadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CountUnreadNotificationsReply> {
+        countUnread(requestParameters: NotificationServiceCountUnreadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CountUnreadNotificationsResp> {
             return localVarFp.countUnread(requestParameters.body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -4736,8 +4710,8 @@ export const NotificationServiceFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list(requestParameters: NotificationServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListNotificationsReply> {
-            return localVarFp.list(requestParameters.listNotificationsRequest, options).then((request) => request(axios, basePath));
+        list(requestParameters: NotificationServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListNotificationsResp> {
+            return localVarFp.list(requestParameters.listNotificationsReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 标记通知为已读。
@@ -4745,8 +4719,8 @@ export const NotificationServiceFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        markRead(requestParameters: NotificationServiceMarkReadRequest, options?: RawAxiosRequestConfig): AxiosPromise<MarkReadNotificationReply> {
-            return localVarFp.markRead(requestParameters.markReadNotificationRequest, options).then((request) => request(axios, basePath));
+        markRead(requestParameters: NotificationServiceMarkReadRequest, options?: RawAxiosRequestConfig): AxiosPromise<MarkReadNotificationResp> {
+            return localVarFp.markRead(requestParameters.markReadNotificationReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4761,7 +4735,7 @@ export interface NotificationServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    countUnread(requestParameters: NotificationServiceCountUnreadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CountUnreadNotificationsReply>;
+    countUnread(requestParameters: NotificationServiceCountUnreadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CountUnreadNotificationsResp>;
 
     /**
      * 分页查询通知列表。
@@ -4769,7 +4743,7 @@ export interface NotificationServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    list(requestParameters: NotificationServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListNotificationsReply>;
+    list(requestParameters: NotificationServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListNotificationsResp>;
 
     /**
      * 标记通知为已读。
@@ -4777,7 +4751,7 @@ export interface NotificationServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    markRead(requestParameters: NotificationServiceMarkReadRequest, options?: RawAxiosRequestConfig): AxiosPromise<MarkReadNotificationReply>;
+    markRead(requestParameters: NotificationServiceMarkReadRequest, options?: RawAxiosRequestConfig): AxiosPromise<MarkReadNotificationResp>;
 
 }
 
@@ -4792,14 +4766,14 @@ export interface NotificationServiceCountUnreadRequest {
  * Request parameters for list operation in NotificationService.
  */
 export interface NotificationServiceListRequest {
-    readonly listNotificationsRequest: ListNotificationsRequest
+    readonly listNotificationsReq: ListNotificationsReq
 }
 
 /**
  * Request parameters for markRead operation in NotificationService.
  */
 export interface NotificationServiceMarkReadRequest {
-    readonly markReadNotificationRequest: MarkReadNotificationRequest
+    readonly markReadNotificationReq: MarkReadNotificationReq
 }
 
 /**
@@ -4823,7 +4797,7 @@ export class NotificationService extends BaseAPI implements NotificationServiceI
      * @throws {RequiredError}
      */
     public list(requestParameters: NotificationServiceListRequest, options?: RawAxiosRequestConfig) {
-        return NotificationServiceFp(this.configuration).list(requestParameters.listNotificationsRequest, options).then((request) => request(this.axios, this.basePath));
+        return NotificationServiceFp(this.configuration).list(requestParameters.listNotificationsReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4833,7 +4807,526 @@ export class NotificationService extends BaseAPI implements NotificationServiceI
      * @throws {RequiredError}
      */
     public markRead(requestParameters: NotificationServiceMarkReadRequest, options?: RawAxiosRequestConfig) {
-        return NotificationServiceFp(this.configuration).markRead(requestParameters.markReadNotificationRequest, options).then((request) => request(this.axios, this.basePath));
+        return NotificationServiceFp(this.configuration).markRead(requestParameters.markReadNotificationReq, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * OtpService - axios parameter creator
+ */
+export const OtpServiceAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 开始启用 TOTP。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        beginEnableTotp: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('beginEnableTotp', 'body', body)
+            const localVarPath = `/v1/user/otp/totp/begin-enable`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 确认启用 TOTP。
+         * @param {ConfirmEnableTotpReq} confirmEnableTotpReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        confirmEnableTotp: async (confirmEnableTotpReq: ConfirmEnableTotpReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'confirmEnableTotpReq' is not null or undefined
+            assertParamExists('confirmEnableTotp', 'confirmEnableTotpReq', confirmEnableTotpReq)
+            const localVarPath = `/v1/user/otp/totp/confirm-enable`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(confirmEnableTotpReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 关闭 TOTP。
+         * @param {DisableTotpReq} disableTotpReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        disableTotp: async (disableTotpReq: DisableTotpReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'disableTotpReq' is not null or undefined
+            assertParamExists('disableTotp', 'disableTotpReq', disableTotpReq)
+            const localVarPath = `/v1/user/otp/totp/disable`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(disableTotpReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 获取当前账号 TOTP 状态。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCurrentTotp: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('getCurrentTotp', 'body', body)
+            const localVarPath = `/v1/user/otp/totp/get-current`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 发送邮箱 OTP。
+         * @param {SendEmailOtpReq} sendEmailOtpReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendEmailOtp: async (sendEmailOtpReq: SendEmailOtpReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sendEmailOtpReq' is not null or undefined
+            assertParamExists('sendEmailOtp', 'sendEmailOtpReq', sendEmailOtpReq)
+            const localVarPath = `/v1/user/otp/email/send`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(sendEmailOtpReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 发送手机 OTP。
+         * @param {SendPhoneOtpReq} sendPhoneOtpReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendPhoneOtp: async (sendPhoneOtpReq: SendPhoneOtpReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sendPhoneOtpReq' is not null or undefined
+            assertParamExists('sendPhoneOtp', 'sendPhoneOtpReq', sendPhoneOtpReq)
+            const localVarPath = `/v1/user/otp/phone/send`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(sendPhoneOtpReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * OtpService - functional programming interface
+ */
+export const OtpServiceFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = OtpServiceAxiosParamCreator(configuration)
+    return {
+        /**
+         * 开始启用 TOTP。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async beginEnableTotp(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BeginEnableTotpResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.beginEnableTotp(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OtpService.beginEnableTotp']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 确认启用 TOTP。
+         * @param {ConfirmEnableTotpReq} confirmEnableTotpReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async confirmEnableTotp(confirmEnableTotpReq: ConfirmEnableTotpReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.confirmEnableTotp(confirmEnableTotpReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OtpService.confirmEnableTotp']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 关闭 TOTP。
+         * @param {DisableTotpReq} disableTotpReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async disableTotp(disableTotpReq: DisableTotpReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.disableTotp(disableTotpReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OtpService.disableTotp']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 获取当前账号 TOTP 状态。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCurrentTotp(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentTotpResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrentTotp(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OtpService.getCurrentTotp']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 发送邮箱 OTP。
+         * @param {SendEmailOtpReq} sendEmailOtpReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sendEmailOtp(sendEmailOtpReq: SendEmailOtpReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SendEmailOtpResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sendEmailOtp(sendEmailOtpReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OtpService.sendEmailOtp']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 发送手机 OTP。
+         * @param {SendPhoneOtpReq} sendPhoneOtpReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sendPhoneOtp(sendPhoneOtpReq: SendPhoneOtpReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SendPhoneOtpResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sendPhoneOtp(sendPhoneOtpReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OtpService.sendPhoneOtp']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * OtpService - factory interface
+ */
+export const OtpServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = OtpServiceFp(configuration)
+    return {
+        /**
+         * 开始启用 TOTP。
+         * @param {OtpServiceBeginEnableTotpRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        beginEnableTotp(requestParameters: OtpServiceBeginEnableTotpRequest, options?: RawAxiosRequestConfig): AxiosPromise<BeginEnableTotpResp> {
+            return localVarFp.beginEnableTotp(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 确认启用 TOTP。
+         * @param {OtpServiceConfirmEnableTotpRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        confirmEnableTotp(requestParameters: OtpServiceConfirmEnableTotpRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.confirmEnableTotp(requestParameters.confirmEnableTotpReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 关闭 TOTP。
+         * @param {OtpServiceDisableTotpRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        disableTotp(requestParameters: OtpServiceDisableTotpRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.disableTotp(requestParameters.disableTotpReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 获取当前账号 TOTP 状态。
+         * @param {OtpServiceGetCurrentTotpRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCurrentTotp(requestParameters: OtpServiceGetCurrentTotpRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentTotpResp> {
+            return localVarFp.getCurrentTotp(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 发送邮箱 OTP。
+         * @param {OtpServiceSendEmailOtpRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendEmailOtp(requestParameters: OtpServiceSendEmailOtpRequest, options?: RawAxiosRequestConfig): AxiosPromise<SendEmailOtpResp> {
+            return localVarFp.sendEmailOtp(requestParameters.sendEmailOtpReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 发送手机 OTP。
+         * @param {OtpServiceSendPhoneOtpRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendPhoneOtp(requestParameters: OtpServiceSendPhoneOtpRequest, options?: RawAxiosRequestConfig): AxiosPromise<SendPhoneOtpResp> {
+            return localVarFp.sendPhoneOtp(requestParameters.sendPhoneOtpReq, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * OtpService - interface
+ */
+export interface OtpServiceInterface {
+    /**
+     * 开始启用 TOTP。
+     * @param {OtpServiceBeginEnableTotpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    beginEnableTotp(requestParameters: OtpServiceBeginEnableTotpRequest, options?: RawAxiosRequestConfig): AxiosPromise<BeginEnableTotpResp>;
+
+    /**
+     * 确认启用 TOTP。
+     * @param {OtpServiceConfirmEnableTotpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    confirmEnableTotp(requestParameters: OtpServiceConfirmEnableTotpRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * 关闭 TOTP。
+     * @param {OtpServiceDisableTotpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    disableTotp(requestParameters: OtpServiceDisableTotpRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * 获取当前账号 TOTP 状态。
+     * @param {OtpServiceGetCurrentTotpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCurrentTotp(requestParameters: OtpServiceGetCurrentTotpRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentTotpResp>;
+
+    /**
+     * 发送邮箱 OTP。
+     * @param {OtpServiceSendEmailOtpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sendEmailOtp(requestParameters: OtpServiceSendEmailOtpRequest, options?: RawAxiosRequestConfig): AxiosPromise<SendEmailOtpResp>;
+
+    /**
+     * 发送手机 OTP。
+     * @param {OtpServiceSendPhoneOtpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sendPhoneOtp(requestParameters: OtpServiceSendPhoneOtpRequest, options?: RawAxiosRequestConfig): AxiosPromise<SendPhoneOtpResp>;
+
+}
+
+/**
+ * Request parameters for beginEnableTotp operation in OtpService.
+ */
+export interface OtpServiceBeginEnableTotpRequest {
+    readonly body: object
+}
+
+/**
+ * Request parameters for confirmEnableTotp operation in OtpService.
+ */
+export interface OtpServiceConfirmEnableTotpRequest {
+    readonly confirmEnableTotpReq: ConfirmEnableTotpReq
+}
+
+/**
+ * Request parameters for disableTotp operation in OtpService.
+ */
+export interface OtpServiceDisableTotpRequest {
+    readonly disableTotpReq: DisableTotpReq
+}
+
+/**
+ * Request parameters for getCurrentTotp operation in OtpService.
+ */
+export interface OtpServiceGetCurrentTotpRequest {
+    readonly body: object
+}
+
+/**
+ * Request parameters for sendEmailOtp operation in OtpService.
+ */
+export interface OtpServiceSendEmailOtpRequest {
+    readonly sendEmailOtpReq: SendEmailOtpReq
+}
+
+/**
+ * Request parameters for sendPhoneOtp operation in OtpService.
+ */
+export interface OtpServiceSendPhoneOtpRequest {
+    readonly sendPhoneOtpReq: SendPhoneOtpReq
+}
+
+/**
+ * OtpService - object-oriented interface
+ */
+export class OtpService extends BaseAPI implements OtpServiceInterface {
+    /**
+     * 开始启用 TOTP。
+     * @param {OtpServiceBeginEnableTotpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public beginEnableTotp(requestParameters: OtpServiceBeginEnableTotpRequest, options?: RawAxiosRequestConfig) {
+        return OtpServiceFp(this.configuration).beginEnableTotp(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 确认启用 TOTP。
+     * @param {OtpServiceConfirmEnableTotpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public confirmEnableTotp(requestParameters: OtpServiceConfirmEnableTotpRequest, options?: RawAxiosRequestConfig) {
+        return OtpServiceFp(this.configuration).confirmEnableTotp(requestParameters.confirmEnableTotpReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 关闭 TOTP。
+     * @param {OtpServiceDisableTotpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public disableTotp(requestParameters: OtpServiceDisableTotpRequest, options?: RawAxiosRequestConfig) {
+        return OtpServiceFp(this.configuration).disableTotp(requestParameters.disableTotpReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 获取当前账号 TOTP 状态。
+     * @param {OtpServiceGetCurrentTotpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getCurrentTotp(requestParameters: OtpServiceGetCurrentTotpRequest, options?: RawAxiosRequestConfig) {
+        return OtpServiceFp(this.configuration).getCurrentTotp(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 发送邮箱 OTP。
+     * @param {OtpServiceSendEmailOtpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sendEmailOtp(requestParameters: OtpServiceSendEmailOtpRequest, options?: RawAxiosRequestConfig) {
+        return OtpServiceFp(this.configuration).sendEmailOtp(requestParameters.sendEmailOtpReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 发送手机 OTP。
+     * @param {OtpServiceSendPhoneOtpRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sendPhoneOtp(requestParameters: OtpServiceSendPhoneOtpRequest, options?: RawAxiosRequestConfig) {
+        return OtpServiceFp(this.configuration).sendPhoneOtp(requestParameters.sendPhoneOtpReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4846,13 +5339,13 @@ export const PostscriptServiceAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * 添加文章附言。
-         * @param {AddPostscriptRequest} addPostscriptRequest 
+         * @param {AddPostscriptReq} addPostscriptReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        add: async (addPostscriptRequest: AddPostscriptRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'addPostscriptRequest' is not null or undefined
-            assertParamExists('add', 'addPostscriptRequest', addPostscriptRequest)
+        add: async (addPostscriptReq: AddPostscriptReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'addPostscriptReq' is not null or undefined
+            assertParamExists('add', 'addPostscriptReq', addPostscriptReq)
             const localVarPath = `/v1/content/postscript/add`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -4871,7 +5364,41 @@ export const PostscriptServiceAxiosParamCreator = function (configuration?: Conf
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(addPostscriptRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(addPostscriptReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询文章附言列表。
+         * @param {ListPostscriptsReq} listPostscriptsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list: async (listPostscriptsReq: ListPostscriptsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listPostscriptsReq' is not null or undefined
+            assertParamExists('list', 'listPostscriptsReq', listPostscriptsReq)
+            const localVarPath = `/v1/content/postscript/list`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(listPostscriptsReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -4889,14 +5416,26 @@ export const PostscriptServiceFp = function(configuration?: Configuration) {
     return {
         /**
          * 添加文章附言。
-         * @param {AddPostscriptRequest} addPostscriptRequest 
+         * @param {AddPostscriptReq} addPostscriptReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async add(addPostscriptRequest: AddPostscriptRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AddPostscriptReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.add(addPostscriptRequest, options);
+        async add(addPostscriptReq: AddPostscriptReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AddPostscriptResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.add(addPostscriptReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PostscriptService.add']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 查询文章附言列表。
+         * @param {ListPostscriptsReq} listPostscriptsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async list(listPostscriptsReq: ListPostscriptsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListPostscriptsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listPostscriptsReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['PostscriptService.list']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -4914,8 +5453,17 @@ export const PostscriptServiceFactory = function (configuration?: Configuration,
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        add(requestParameters: PostscriptServiceAddRequest, options?: RawAxiosRequestConfig): AxiosPromise<AddPostscriptReply> {
-            return localVarFp.add(requestParameters.addPostscriptRequest, options).then((request) => request(axios, basePath));
+        add(requestParameters: PostscriptServiceAddRequest, options?: RawAxiosRequestConfig): AxiosPromise<AddPostscriptResp> {
+            return localVarFp.add(requestParameters.addPostscriptReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询文章附言列表。
+         * @param {PostscriptServiceListRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list(requestParameters: PostscriptServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListPostscriptsResp> {
+            return localVarFp.list(requestParameters.listPostscriptsReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -4930,7 +5478,15 @@ export interface PostscriptServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    add(requestParameters: PostscriptServiceAddRequest, options?: RawAxiosRequestConfig): AxiosPromise<AddPostscriptReply>;
+    add(requestParameters: PostscriptServiceAddRequest, options?: RawAxiosRequestConfig): AxiosPromise<AddPostscriptResp>;
+
+    /**
+     * 查询文章附言列表。
+     * @param {PostscriptServiceListRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    list(requestParameters: PostscriptServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListPostscriptsResp>;
 
 }
 
@@ -4938,7 +5494,14 @@ export interface PostscriptServiceInterface {
  * Request parameters for add operation in PostscriptService.
  */
 export interface PostscriptServiceAddRequest {
-    readonly addPostscriptRequest: AddPostscriptRequest
+    readonly addPostscriptReq: AddPostscriptReq
+}
+
+/**
+ * Request parameters for list operation in PostscriptService.
+ */
+export interface PostscriptServiceListRequest {
+    readonly listPostscriptsReq: ListPostscriptsReq
 }
 
 /**
@@ -4952,7 +5515,17 @@ export class PostscriptService extends BaseAPI implements PostscriptServiceInter
      * @throws {RequiredError}
      */
     public add(requestParameters: PostscriptServiceAddRequest, options?: RawAxiosRequestConfig) {
-        return PostscriptServiceFp(this.configuration).add(requestParameters.addPostscriptRequest, options).then((request) => request(this.axios, this.basePath));
+        return PostscriptServiceFp(this.configuration).add(requestParameters.addPostscriptReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询文章附言列表。
+     * @param {PostscriptServiceListRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public list(requestParameters: PostscriptServiceListRequest, options?: RawAxiosRequestConfig) {
+        return PostscriptServiceFp(this.configuration).list(requestParameters.listPostscriptsReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -4999,13 +5572,13 @@ export const PreferencesServiceAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 更新当前账号的偏好设置。
-         * @param {UpdateCurrentPreferencesRequest} updateCurrentPreferencesRequest 
+         * @param {UpdateCurrentPreferencesReq} updateCurrentPreferencesReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateCurrent: async (updateCurrentPreferencesRequest: UpdateCurrentPreferencesRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'updateCurrentPreferencesRequest' is not null or undefined
-            assertParamExists('updateCurrent', 'updateCurrentPreferencesRequest', updateCurrentPreferencesRequest)
+        updateCurrent: async (updateCurrentPreferencesReq: UpdateCurrentPreferencesReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateCurrentPreferencesReq' is not null or undefined
+            assertParamExists('updateCurrent', 'updateCurrentPreferencesReq', updateCurrentPreferencesReq)
             const localVarPath = `/v1/user/preference/update-current`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5024,7 +5597,7 @@ export const PreferencesServiceAxiosParamCreator = function (configuration?: Con
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateCurrentPreferencesRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateCurrentPreferencesReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5046,7 +5619,7 @@ export const PreferencesServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentPreferencesReply>> {
+        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentPreferencesResp>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrent(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PreferencesService.getCurrent']?.[localVarOperationServerIndex]?.url;
@@ -5054,12 +5627,12 @@ export const PreferencesServiceFp = function(configuration?: Configuration) {
         },
         /**
          * 更新当前账号的偏好设置。
-         * @param {UpdateCurrentPreferencesRequest} updateCurrentPreferencesRequest 
+         * @param {UpdateCurrentPreferencesReq} updateCurrentPreferencesReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateCurrent(updateCurrentPreferencesRequest: UpdateCurrentPreferencesRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateCurrentPreferencesReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateCurrent(updateCurrentPreferencesRequest, options);
+        async updateCurrent(updateCurrentPreferencesReq: UpdateCurrentPreferencesReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateCurrentPreferencesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateCurrent(updateCurrentPreferencesReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PreferencesService.updateCurrent']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -5079,7 +5652,7 @@ export const PreferencesServiceFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrent(requestParameters: PreferencesServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentPreferencesReply> {
+        getCurrent(requestParameters: PreferencesServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentPreferencesResp> {
             return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -5088,8 +5661,8 @@ export const PreferencesServiceFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateCurrent(requestParameters: PreferencesServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateCurrentPreferencesReply> {
-            return localVarFp.updateCurrent(requestParameters.updateCurrentPreferencesRequest, options).then((request) => request(axios, basePath));
+        updateCurrent(requestParameters: PreferencesServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateCurrentPreferencesResp> {
+            return localVarFp.updateCurrent(requestParameters.updateCurrentPreferencesReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5104,7 +5677,7 @@ export interface PreferencesServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getCurrent(requestParameters: PreferencesServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentPreferencesReply>;
+    getCurrent(requestParameters: PreferencesServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentPreferencesResp>;
 
     /**
      * 更新当前账号的偏好设置。
@@ -5112,7 +5685,7 @@ export interface PreferencesServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateCurrent(requestParameters: PreferencesServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateCurrentPreferencesReply>;
+    updateCurrent(requestParameters: PreferencesServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateCurrentPreferencesResp>;
 
 }
 
@@ -5127,7 +5700,7 @@ export interface PreferencesServiceGetCurrentRequest {
  * Request parameters for updateCurrent operation in PreferencesService.
  */
 export interface PreferencesServiceUpdateCurrentRequest {
-    readonly updateCurrentPreferencesRequest: UpdateCurrentPreferencesRequest
+    readonly updateCurrentPreferencesReq: UpdateCurrentPreferencesReq
 }
 
 /**
@@ -5151,7 +5724,7 @@ export class PreferencesService extends BaseAPI implements PreferencesServiceInt
      * @throws {RequiredError}
      */
     public updateCurrent(requestParameters: PreferencesServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig) {
-        return PreferencesServiceFp(this.configuration).updateCurrent(requestParameters.updateCurrentPreferencesRequest, options).then((request) => request(this.axios, this.basePath));
+        return PreferencesServiceFp(this.configuration).updateCurrent(requestParameters.updateCurrentPreferencesReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -5198,13 +5771,13 @@ export const PrivacySettingServiceAxiosParamCreator = function (configuration?: 
         },
         /**
          * 更新当前账号的隐私设置。
-         * @param {UpdateCurrentPrivacySettingRequest} updateCurrentPrivacySettingRequest 
+         * @param {UpdateCurrentPrivacySettingReq} updateCurrentPrivacySettingReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateCurrent: async (updateCurrentPrivacySettingRequest: UpdateCurrentPrivacySettingRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'updateCurrentPrivacySettingRequest' is not null or undefined
-            assertParamExists('updateCurrent', 'updateCurrentPrivacySettingRequest', updateCurrentPrivacySettingRequest)
+        updateCurrent: async (updateCurrentPrivacySettingReq: UpdateCurrentPrivacySettingReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateCurrentPrivacySettingReq' is not null or undefined
+            assertParamExists('updateCurrent', 'updateCurrentPrivacySettingReq', updateCurrentPrivacySettingReq)
             const localVarPath = `/v1/user/privacy-setting/update-current`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5223,7 +5796,7 @@ export const PrivacySettingServiceAxiosParamCreator = function (configuration?: 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateCurrentPrivacySettingRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateCurrentPrivacySettingReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5245,7 +5818,7 @@ export const PrivacySettingServiceFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentPrivacySettingReply>> {
+        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentPrivacySettingResp>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrent(body, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PrivacySettingService.getCurrent']?.[localVarOperationServerIndex]?.url;
@@ -5253,12 +5826,12 @@ export const PrivacySettingServiceFp = function(configuration?: Configuration) {
         },
         /**
          * 更新当前账号的隐私设置。
-         * @param {UpdateCurrentPrivacySettingRequest} updateCurrentPrivacySettingRequest 
+         * @param {UpdateCurrentPrivacySettingReq} updateCurrentPrivacySettingReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateCurrent(updateCurrentPrivacySettingRequest: UpdateCurrentPrivacySettingRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateCurrentPrivacySettingReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateCurrent(updateCurrentPrivacySettingRequest, options);
+        async updateCurrent(updateCurrentPrivacySettingReq: UpdateCurrentPrivacySettingReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateCurrentPrivacySettingResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateCurrent(updateCurrentPrivacySettingReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['PrivacySettingService.updateCurrent']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -5278,7 +5851,7 @@ export const PrivacySettingServiceFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrent(requestParameters: PrivacySettingServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentPrivacySettingReply> {
+        getCurrent(requestParameters: PrivacySettingServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentPrivacySettingResp> {
             return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -5287,8 +5860,8 @@ export const PrivacySettingServiceFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateCurrent(requestParameters: PrivacySettingServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateCurrentPrivacySettingReply> {
-            return localVarFp.updateCurrent(requestParameters.updateCurrentPrivacySettingRequest, options).then((request) => request(axios, basePath));
+        updateCurrent(requestParameters: PrivacySettingServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateCurrentPrivacySettingResp> {
+            return localVarFp.updateCurrent(requestParameters.updateCurrentPrivacySettingReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5303,7 +5876,7 @@ export interface PrivacySettingServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getCurrent(requestParameters: PrivacySettingServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentPrivacySettingReply>;
+    getCurrent(requestParameters: PrivacySettingServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentPrivacySettingResp>;
 
     /**
      * 更新当前账号的隐私设置。
@@ -5311,7 +5884,7 @@ export interface PrivacySettingServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateCurrent(requestParameters: PrivacySettingServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateCurrentPrivacySettingReply>;
+    updateCurrent(requestParameters: PrivacySettingServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateCurrentPrivacySettingResp>;
 
 }
 
@@ -5326,7 +5899,7 @@ export interface PrivacySettingServiceGetCurrentRequest {
  * Request parameters for updateCurrent operation in PrivacySettingService.
  */
 export interface PrivacySettingServiceUpdateCurrentRequest {
-    readonly updateCurrentPrivacySettingRequest: UpdateCurrentPrivacySettingRequest
+    readonly updateCurrentPrivacySettingReq: UpdateCurrentPrivacySettingReq
 }
 
 /**
@@ -5350,7 +5923,7 @@ export class PrivacySettingService extends BaseAPI implements PrivacySettingServ
      * @throws {RequiredError}
      */
     public updateCurrent(requestParameters: PrivacySettingServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig) {
-        return PrivacySettingServiceFp(this.configuration).updateCurrent(requestParameters.updateCurrentPrivacySettingRequest, options).then((request) => request(this.axios, this.basePath));
+        return PrivacySettingServiceFp(this.configuration).updateCurrent(requestParameters.updateCurrentPrivacySettingReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -5363,13 +5936,13 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
     return {
         /**
          * 当前账号拉黑目标账号。
-         * @param {BlockRelationRequest} blockRelationRequest 
+         * @param {BlockRelationReq} blockRelationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        block: async (blockRelationRequest: BlockRelationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'blockRelationRequest' is not null or undefined
-            assertParamExists('block', 'blockRelationRequest', blockRelationRequest)
+        block: async (blockRelationReq: BlockRelationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'blockRelationReq' is not null or undefined
+            assertParamExists('block', 'blockRelationReq', blockRelationReq)
             const localVarPath = `/v1/user/relation/block`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5388,7 +5961,7 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(blockRelationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(blockRelationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5397,13 +5970,13 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 当前账号关注目标账号。
-         * @param {FollowRelationRequest} followRelationRequest 
+         * @param {FollowRelationReq} followRelationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        follow: async (followRelationRequest: FollowRelationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'followRelationRequest' is not null or undefined
-            assertParamExists('follow', 'followRelationRequest', followRelationRequest)
+        follow: async (followRelationReq: FollowRelationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'followRelationReq' is not null or undefined
+            assertParamExists('follow', 'followRelationReq', followRelationReq)
             const localVarPath = `/v1/user/relation/follow`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5422,7 +5995,7 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(followRelationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(followRelationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5431,13 +6004,13 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 查询当前账号与目标账号之间的关系。
-         * @param {GetStatusRelationRequest} getStatusRelationRequest 
+         * @param {GetStatusRelationReq} getStatusRelationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStatus: async (getStatusRelationRequest: GetStatusRelationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'getStatusRelationRequest' is not null or undefined
-            assertParamExists('getStatus', 'getStatusRelationRequest', getStatusRelationRequest)
+        getStatus: async (getStatusRelationReq: GetStatusRelationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'getStatusRelationReq' is not null or undefined
+            assertParamExists('getStatus', 'getStatusRelationReq', getStatusRelationReq)
             const localVarPath = `/v1/user/relation/get-status`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5456,7 +6029,7 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(getStatusRelationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(getStatusRelationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5465,13 +6038,13 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 分页查询当前账号拉黑的账号列表。
-         * @param {ListBlockedRelationsRequest} listBlockedRelationsRequest 
+         * @param {ListBlockedRelationsReq} listBlockedRelationsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listBlocked: async (listBlockedRelationsRequest: ListBlockedRelationsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listBlockedRelationsRequest' is not null or undefined
-            assertParamExists('listBlocked', 'listBlockedRelationsRequest', listBlockedRelationsRequest)
+        listBlocked: async (listBlockedRelationsReq: ListBlockedRelationsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listBlockedRelationsReq' is not null or undefined
+            assertParamExists('listBlocked', 'listBlockedRelationsReq', listBlockedRelationsReq)
             const localVarPath = `/v1/user/relation/list-blocked`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5490,7 +6063,7 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listBlockedRelationsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listBlockedRelationsReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5499,13 +6072,13 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 分页查询当前账号的粉丝账号列表。
-         * @param {ListFollowersRelationsRequest} listFollowersRelationsRequest 
+         * @param {ListFollowersRelationsReq} listFollowersRelationsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listFollowers: async (listFollowersRelationsRequest: ListFollowersRelationsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listFollowersRelationsRequest' is not null or undefined
-            assertParamExists('listFollowers', 'listFollowersRelationsRequest', listFollowersRelationsRequest)
+        listFollowers: async (listFollowersRelationsReq: ListFollowersRelationsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listFollowersRelationsReq' is not null or undefined
+            assertParamExists('listFollowers', 'listFollowersRelationsReq', listFollowersRelationsReq)
             const localVarPath = `/v1/user/relation/list-followers`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5524,7 +6097,7 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listFollowersRelationsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listFollowersRelationsReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5533,13 +6106,13 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 分页查询当前账号关注的账号列表。
-         * @param {ListFollowingRelationsRequest} listFollowingRelationsRequest 
+         * @param {ListFollowingRelationsReq} listFollowingRelationsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listFollowing: async (listFollowingRelationsRequest: ListFollowingRelationsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listFollowingRelationsRequest' is not null or undefined
-            assertParamExists('listFollowing', 'listFollowingRelationsRequest', listFollowingRelationsRequest)
+        listFollowing: async (listFollowingRelationsReq: ListFollowingRelationsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listFollowingRelationsReq' is not null or undefined
+            assertParamExists('listFollowing', 'listFollowingRelationsReq', listFollowingRelationsReq)
             const localVarPath = `/v1/user/relation/list-following`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5558,7 +6131,7 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listFollowingRelationsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listFollowingRelationsReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5567,13 +6140,13 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 当前账号取消拉黑目标账号。
-         * @param {UnblockRelationRequest} unblockRelationRequest 
+         * @param {UnblockRelationReq} unblockRelationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        unblock: async (unblockRelationRequest: UnblockRelationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'unblockRelationRequest' is not null or undefined
-            assertParamExists('unblock', 'unblockRelationRequest', unblockRelationRequest)
+        unblock: async (unblockRelationReq: UnblockRelationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'unblockRelationReq' is not null or undefined
+            assertParamExists('unblock', 'unblockRelationReq', unblockRelationReq)
             const localVarPath = `/v1/user/relation/unblock`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5592,7 +6165,7 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(unblockRelationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(unblockRelationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5601,13 +6174,13 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 当前账号取消关注目标账号。
-         * @param {UnfollowRelationRequest} unfollowRelationRequest 
+         * @param {UnfollowRelationReq} unfollowRelationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        unfollow: async (unfollowRelationRequest: UnfollowRelationRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'unfollowRelationRequest' is not null or undefined
-            assertParamExists('unfollow', 'unfollowRelationRequest', unfollowRelationRequest)
+        unfollow: async (unfollowRelationReq: UnfollowRelationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'unfollowRelationReq' is not null or undefined
+            assertParamExists('unfollow', 'unfollowRelationReq', unfollowRelationReq)
             const localVarPath = `/v1/user/relation/unfollow`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -5626,7 +6199,7 @@ export const RelationServiceAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(unfollowRelationRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(unfollowRelationReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5644,96 +6217,96 @@ export const RelationServiceFp = function(configuration?: Configuration) {
     return {
         /**
          * 当前账号拉黑目标账号。
-         * @param {BlockRelationRequest} blockRelationRequest 
+         * @param {BlockRelationReq} blockRelationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async block(blockRelationRequest: BlockRelationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.block(blockRelationRequest, options);
+        async block(blockRelationReq: BlockRelationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.block(blockRelationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationService.block']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 当前账号关注目标账号。
-         * @param {FollowRelationRequest} followRelationRequest 
+         * @param {FollowRelationReq} followRelationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async follow(followRelationRequest: FollowRelationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.follow(followRelationRequest, options);
+        async follow(followRelationReq: FollowRelationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.follow(followRelationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationService.follow']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 查询当前账号与目标账号之间的关系。
-         * @param {GetStatusRelationRequest} getStatusRelationRequest 
+         * @param {GetStatusRelationReq} getStatusRelationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getStatus(getStatusRelationRequest: GetStatusRelationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStatusRelationReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getStatus(getStatusRelationRequest, options);
+        async getStatus(getStatusRelationReq: GetStatusRelationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetStatusRelationResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStatus(getStatusRelationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationService.getStatus']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 分页查询当前账号拉黑的账号列表。
-         * @param {ListBlockedRelationsRequest} listBlockedRelationsRequest 
+         * @param {ListBlockedRelationsReq} listBlockedRelationsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listBlocked(listBlockedRelationsRequest: ListBlockedRelationsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListBlockedRelationsReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listBlocked(listBlockedRelationsRequest, options);
+        async listBlocked(listBlockedRelationsReq: ListBlockedRelationsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListBlockedRelationsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listBlocked(listBlockedRelationsReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationService.listBlocked']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 分页查询当前账号的粉丝账号列表。
-         * @param {ListFollowersRelationsRequest} listFollowersRelationsRequest 
+         * @param {ListFollowersRelationsReq} listFollowersRelationsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listFollowers(listFollowersRelationsRequest: ListFollowersRelationsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListFollowersRelationsReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listFollowers(listFollowersRelationsRequest, options);
+        async listFollowers(listFollowersRelationsReq: ListFollowersRelationsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListFollowersRelationsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listFollowers(listFollowersRelationsReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationService.listFollowers']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 分页查询当前账号关注的账号列表。
-         * @param {ListFollowingRelationsRequest} listFollowingRelationsRequest 
+         * @param {ListFollowingRelationsReq} listFollowingRelationsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listFollowing(listFollowingRelationsRequest: ListFollowingRelationsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListFollowingRelationsReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listFollowing(listFollowingRelationsRequest, options);
+        async listFollowing(listFollowingRelationsReq: ListFollowingRelationsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListFollowingRelationsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listFollowing(listFollowingRelationsReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationService.listFollowing']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 当前账号取消拉黑目标账号。
-         * @param {UnblockRelationRequest} unblockRelationRequest 
+         * @param {UnblockRelationReq} unblockRelationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async unblock(unblockRelationRequest: UnblockRelationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.unblock(unblockRelationRequest, options);
+        async unblock(unblockRelationReq: UnblockRelationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unblock(unblockRelationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationService.unblock']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 当前账号取消关注目标账号。
-         * @param {UnfollowRelationRequest} unfollowRelationRequest 
+         * @param {UnfollowRelationReq} unfollowRelationReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async unfollow(unfollowRelationRequest: UnfollowRelationRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.unfollow(unfollowRelationRequest, options);
+        async unfollow(unfollowRelationReq: UnfollowRelationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unfollow(unfollowRelationReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RelationService.unfollow']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -5754,7 +6327,7 @@ export const RelationServiceFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         block(requestParameters: RelationServiceBlockRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.block(requestParameters.blockRelationRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.block(requestParameters.blockRelationReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 当前账号关注目标账号。
@@ -5763,7 +6336,7 @@ export const RelationServiceFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         follow(requestParameters: RelationServiceFollowRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.follow(requestParameters.followRelationRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.follow(requestParameters.followRelationReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 查询当前账号与目标账号之间的关系。
@@ -5771,8 +6344,8 @@ export const RelationServiceFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getStatus(requestParameters: RelationServiceGetStatusRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetStatusRelationReply> {
-            return localVarFp.getStatus(requestParameters.getStatusRelationRequest, options).then((request) => request(axios, basePath));
+        getStatus(requestParameters: RelationServiceGetStatusRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetStatusRelationResp> {
+            return localVarFp.getStatus(requestParameters.getStatusRelationReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 分页查询当前账号拉黑的账号列表。
@@ -5780,8 +6353,8 @@ export const RelationServiceFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listBlocked(requestParameters: RelationServiceListBlockedRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListBlockedRelationsReply> {
-            return localVarFp.listBlocked(requestParameters.listBlockedRelationsRequest, options).then((request) => request(axios, basePath));
+        listBlocked(requestParameters: RelationServiceListBlockedRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListBlockedRelationsResp> {
+            return localVarFp.listBlocked(requestParameters.listBlockedRelationsReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 分页查询当前账号的粉丝账号列表。
@@ -5789,8 +6362,8 @@ export const RelationServiceFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listFollowers(requestParameters: RelationServiceListFollowersRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowersRelationsReply> {
-            return localVarFp.listFollowers(requestParameters.listFollowersRelationsRequest, options).then((request) => request(axios, basePath));
+        listFollowers(requestParameters: RelationServiceListFollowersRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowersRelationsResp> {
+            return localVarFp.listFollowers(requestParameters.listFollowersRelationsReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 分页查询当前账号关注的账号列表。
@@ -5798,8 +6371,8 @@ export const RelationServiceFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listFollowing(requestParameters: RelationServiceListFollowingRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowingRelationsReply> {
-            return localVarFp.listFollowing(requestParameters.listFollowingRelationsRequest, options).then((request) => request(axios, basePath));
+        listFollowing(requestParameters: RelationServiceListFollowingRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowingRelationsResp> {
+            return localVarFp.listFollowing(requestParameters.listFollowingRelationsReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 当前账号取消拉黑目标账号。
@@ -5808,7 +6381,7 @@ export const RelationServiceFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         unblock(requestParameters: RelationServiceUnblockRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.unblock(requestParameters.unblockRelationRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.unblock(requestParameters.unblockRelationReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 当前账号取消关注目标账号。
@@ -5817,7 +6390,7 @@ export const RelationServiceFactory = function (configuration?: Configuration, b
          * @throws {RequiredError}
          */
         unfollow(requestParameters: RelationServiceUnfollowRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.unfollow(requestParameters.unfollowRelationRequest, options).then((request) => request(axios, basePath));
+            return localVarFp.unfollow(requestParameters.unfollowRelationReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -5848,7 +6421,7 @@ export interface RelationServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getStatus(requestParameters: RelationServiceGetStatusRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetStatusRelationReply>;
+    getStatus(requestParameters: RelationServiceGetStatusRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetStatusRelationResp>;
 
     /**
      * 分页查询当前账号拉黑的账号列表。
@@ -5856,7 +6429,7 @@ export interface RelationServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listBlocked(requestParameters: RelationServiceListBlockedRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListBlockedRelationsReply>;
+    listBlocked(requestParameters: RelationServiceListBlockedRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListBlockedRelationsResp>;
 
     /**
      * 分页查询当前账号的粉丝账号列表。
@@ -5864,7 +6437,7 @@ export interface RelationServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listFollowers(requestParameters: RelationServiceListFollowersRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowersRelationsReply>;
+    listFollowers(requestParameters: RelationServiceListFollowersRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowersRelationsResp>;
 
     /**
      * 分页查询当前账号关注的账号列表。
@@ -5872,7 +6445,7 @@ export interface RelationServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listFollowing(requestParameters: RelationServiceListFollowingRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowingRelationsReply>;
+    listFollowing(requestParameters: RelationServiceListFollowingRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowingRelationsResp>;
 
     /**
      * 当前账号取消拉黑目标账号。
@@ -5896,56 +6469,56 @@ export interface RelationServiceInterface {
  * Request parameters for block operation in RelationService.
  */
 export interface RelationServiceBlockRequest {
-    readonly blockRelationRequest: BlockRelationRequest
+    readonly blockRelationReq: BlockRelationReq
 }
 
 /**
  * Request parameters for follow operation in RelationService.
  */
 export interface RelationServiceFollowRequest {
-    readonly followRelationRequest: FollowRelationRequest
+    readonly followRelationReq: FollowRelationReq
 }
 
 /**
  * Request parameters for getStatus operation in RelationService.
  */
 export interface RelationServiceGetStatusRequest {
-    readonly getStatusRelationRequest: GetStatusRelationRequest
+    readonly getStatusRelationReq: GetStatusRelationReq
 }
 
 /**
  * Request parameters for listBlocked operation in RelationService.
  */
 export interface RelationServiceListBlockedRequest {
-    readonly listBlockedRelationsRequest: ListBlockedRelationsRequest
+    readonly listBlockedRelationsReq: ListBlockedRelationsReq
 }
 
 /**
  * Request parameters for listFollowers operation in RelationService.
  */
 export interface RelationServiceListFollowersRequest {
-    readonly listFollowersRelationsRequest: ListFollowersRelationsRequest
+    readonly listFollowersRelationsReq: ListFollowersRelationsReq
 }
 
 /**
  * Request parameters for listFollowing operation in RelationService.
  */
 export interface RelationServiceListFollowingRequest {
-    readonly listFollowingRelationsRequest: ListFollowingRelationsRequest
+    readonly listFollowingRelationsReq: ListFollowingRelationsReq
 }
 
 /**
  * Request parameters for unblock operation in RelationService.
  */
 export interface RelationServiceUnblockRequest {
-    readonly unblockRelationRequest: UnblockRelationRequest
+    readonly unblockRelationReq: UnblockRelationReq
 }
 
 /**
  * Request parameters for unfollow operation in RelationService.
  */
 export interface RelationServiceUnfollowRequest {
-    readonly unfollowRelationRequest: UnfollowRelationRequest
+    readonly unfollowRelationReq: UnfollowRelationReq
 }
 
 /**
@@ -5959,7 +6532,7 @@ export class RelationService extends BaseAPI implements RelationServiceInterface
      * @throws {RequiredError}
      */
     public block(requestParameters: RelationServiceBlockRequest, options?: RawAxiosRequestConfig) {
-        return RelationServiceFp(this.configuration).block(requestParameters.blockRelationRequest, options).then((request) => request(this.axios, this.basePath));
+        return RelationServiceFp(this.configuration).block(requestParameters.blockRelationReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5969,7 +6542,7 @@ export class RelationService extends BaseAPI implements RelationServiceInterface
      * @throws {RequiredError}
      */
     public follow(requestParameters: RelationServiceFollowRequest, options?: RawAxiosRequestConfig) {
-        return RelationServiceFp(this.configuration).follow(requestParameters.followRelationRequest, options).then((request) => request(this.axios, this.basePath));
+        return RelationServiceFp(this.configuration).follow(requestParameters.followRelationReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5979,7 +6552,7 @@ export class RelationService extends BaseAPI implements RelationServiceInterface
      * @throws {RequiredError}
      */
     public getStatus(requestParameters: RelationServiceGetStatusRequest, options?: RawAxiosRequestConfig) {
-        return RelationServiceFp(this.configuration).getStatus(requestParameters.getStatusRelationRequest, options).then((request) => request(this.axios, this.basePath));
+        return RelationServiceFp(this.configuration).getStatus(requestParameters.getStatusRelationReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5989,7 +6562,7 @@ export class RelationService extends BaseAPI implements RelationServiceInterface
      * @throws {RequiredError}
      */
     public listBlocked(requestParameters: RelationServiceListBlockedRequest, options?: RawAxiosRequestConfig) {
-        return RelationServiceFp(this.configuration).listBlocked(requestParameters.listBlockedRelationsRequest, options).then((request) => request(this.axios, this.basePath));
+        return RelationServiceFp(this.configuration).listBlocked(requestParameters.listBlockedRelationsReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -5999,7 +6572,7 @@ export class RelationService extends BaseAPI implements RelationServiceInterface
      * @throws {RequiredError}
      */
     public listFollowers(requestParameters: RelationServiceListFollowersRequest, options?: RawAxiosRequestConfig) {
-        return RelationServiceFp(this.configuration).listFollowers(requestParameters.listFollowersRelationsRequest, options).then((request) => request(this.axios, this.basePath));
+        return RelationServiceFp(this.configuration).listFollowers(requestParameters.listFollowersRelationsReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6009,7 +6582,7 @@ export class RelationService extends BaseAPI implements RelationServiceInterface
      * @throws {RequiredError}
      */
     public listFollowing(requestParameters: RelationServiceListFollowingRequest, options?: RawAxiosRequestConfig) {
-        return RelationServiceFp(this.configuration).listFollowing(requestParameters.listFollowingRelationsRequest, options).then((request) => request(this.axios, this.basePath));
+        return RelationServiceFp(this.configuration).listFollowing(requestParameters.listFollowingRelationsReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6019,7 +6592,7 @@ export class RelationService extends BaseAPI implements RelationServiceInterface
      * @throws {RequiredError}
      */
     public unblock(requestParameters: RelationServiceUnblockRequest, options?: RawAxiosRequestConfig) {
-        return RelationServiceFp(this.configuration).unblock(requestParameters.unblockRelationRequest, options).then((request) => request(this.axios, this.basePath));
+        return RelationServiceFp(this.configuration).unblock(requestParameters.unblockRelationReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6029,7 +6602,7 @@ export class RelationService extends BaseAPI implements RelationServiceInterface
      * @throws {RequiredError}
      */
     public unfollow(requestParameters: RelationServiceUnfollowRequest, options?: RawAxiosRequestConfig) {
-        return RelationServiceFp(this.configuration).unfollow(requestParameters.unfollowRelationRequest, options).then((request) => request(this.axios, this.basePath));
+        return RelationServiceFp(this.configuration).unfollow(requestParameters.unfollowRelationReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -6041,14 +6614,48 @@ export class RelationService extends BaseAPI implements RelationServiceInterface
 export const TagServiceAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 创建标签。
-         * @param {CreateTagRequest} createTagRequest 
+         * 绑定文章标签。
+         * @param {BindArticleTagsReq} bindArticleTagsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create: async (createTagRequest: CreateTagRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'createTagRequest' is not null or undefined
-            assertParamExists('create', 'createTagRequest', createTagRequest)
+        bindArticle: async (bindArticleTagsReq: BindArticleTagsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'bindArticleTagsReq' is not null or undefined
+            assertParamExists('bindArticle', 'bindArticleTagsReq', bindArticleTagsReq)
+            const localVarPath = `/v1/content/tag/bind-article`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(bindArticleTagsReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 创建标签。
+         * @param {CreateTagReq} createTagReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create: async (createTagReq: CreateTagReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createTagReq' is not null or undefined
+            assertParamExists('create', 'createTagReq', createTagReq)
             const localVarPath = `/v1/content/tag/create`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6067,7 +6674,7 @@ export const TagServiceAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createTagRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createTagReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6075,14 +6682,14 @@ export const TagServiceAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
-         * 分页查询标签列表。
-         * @param {ListTagsRequest} listTagsRequest 
+         * 查询标签列表。
+         * @param {ListTagsReq} listTagsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (listTagsRequest: ListTagsRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'listTagsRequest' is not null or undefined
-            assertParamExists('list', 'listTagsRequest', listTagsRequest)
+        list: async (listTagsReq: ListTagsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listTagsReq' is not null or undefined
+            assertParamExists('list', 'listTagsReq', listTagsReq)
             const localVarPath = `/v1/content/tag/list`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6101,7 +6708,75 @@ export const TagServiceAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(listTagsRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(listTagsReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询文章标签列表。
+         * @param {ListArticleTagsReq} listArticleTagsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listArticleTags: async (listArticleTagsReq: ListArticleTagsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listArticleTagsReq' is not null or undefined
+            assertParamExists('listArticleTags', 'listArticleTagsReq', listArticleTagsReq)
+            const localVarPath = `/v1/content/tag/list-article-tags`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(listArticleTagsReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 解绑文章标签。
+         * @param {UnbindArticleTagsReq} unbindArticleTagsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unbindArticle: async (unbindArticleTagsReq: UnbindArticleTagsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'unbindArticleTagsReq' is not null or undefined
+            assertParamExists('unbindArticle', 'unbindArticleTagsReq', unbindArticleTagsReq)
+            const localVarPath = `/v1/content/tag/unbind-article`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(unbindArticleTagsReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6110,13 +6785,13 @@ export const TagServiceAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 更新标签。
-         * @param {UpdateTagRequest} updateTagRequest 
+         * @param {UpdateTagReq} updateTagReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (updateTagRequest: UpdateTagRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'updateTagRequest' is not null or undefined
-            assertParamExists('update', 'updateTagRequest', updateTagRequest)
+        update: async (updateTagReq: UpdateTagReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateTagReq' is not null or undefined
+            assertParamExists('update', 'updateTagReq', updateTagReq)
             const localVarPath = `/v1/content/tag/update`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -6135,7 +6810,7 @@ export const TagServiceAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateTagRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateTagReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -6152,37 +6827,73 @@ export const TagServiceFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TagServiceAxiosParamCreator(configuration)
     return {
         /**
-         * 创建标签。
-         * @param {CreateTagRequest} createTagRequest 
+         * 绑定文章标签。
+         * @param {BindArticleTagsReq} bindArticleTagsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async create(createTagRequest: CreateTagRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateTagReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.create(createTagRequest, options);
+        async bindArticle(bindArticleTagsReq: BindArticleTagsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.bindArticle(bindArticleTagsReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TagService.bindArticle']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 创建标签。
+         * @param {CreateTagReq} createTagReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async create(createTagReq: CreateTagReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateTagResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create(createTagReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TagService.create']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 分页查询标签列表。
-         * @param {ListTagsRequest} listTagsRequest 
+         * 查询标签列表。
+         * @param {ListTagsReq} listTagsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list(listTagsRequest: ListTagsRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListTagsReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listTagsRequest, options);
+        async list(listTagsReq: ListTagsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListTagsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(listTagsReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TagService.list']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 更新标签。
-         * @param {UpdateTagRequest} updateTagRequest 
+         * 查询文章标签列表。
+         * @param {ListArticleTagsReq} listArticleTagsReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(updateTagRequest: UpdateTagRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateTagReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(updateTagRequest, options);
+        async listArticleTags(listArticleTagsReq: ListArticleTagsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListArticleTagsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listArticleTags(listArticleTagsReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TagService.listArticleTags']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 解绑文章标签。
+         * @param {UnbindArticleTagsReq} unbindArticleTagsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async unbindArticle(unbindArticleTagsReq: UnbindArticleTagsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.unbindArticle(unbindArticleTagsReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TagService.unbindArticle']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 更新标签。
+         * @param {UpdateTagReq} updateTagReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async update(updateTagReq: UpdateTagReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpdateTagResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(updateTagReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TagService.update']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -6197,22 +6908,49 @@ export const TagServiceFactory = function (configuration?: Configuration, basePa
     const localVarFp = TagServiceFp(configuration)
     return {
         /**
+         * 绑定文章标签。
+         * @param {TagServiceBindArticleRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bindArticle(requestParameters: TagServiceBindArticleRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.bindArticle(requestParameters.bindArticleTagsReq, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 创建标签。
          * @param {TagServiceCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create(requestParameters: TagServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateTagReply> {
-            return localVarFp.create(requestParameters.createTagRequest, options).then((request) => request(axios, basePath));
+        create(requestParameters: TagServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateTagResp> {
+            return localVarFp.create(requestParameters.createTagReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 分页查询标签列表。
+         * 查询标签列表。
          * @param {TagServiceListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list(requestParameters: TagServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListTagsReply> {
-            return localVarFp.list(requestParameters.listTagsRequest, options).then((request) => request(axios, basePath));
+        list(requestParameters: TagServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListTagsResp> {
+            return localVarFp.list(requestParameters.listTagsReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询文章标签列表。
+         * @param {TagServiceListArticleTagsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listArticleTags(requestParameters: TagServiceListArticleTagsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListArticleTagsResp> {
+            return localVarFp.listArticleTags(requestParameters.listArticleTagsReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 解绑文章标签。
+         * @param {TagServiceUnbindArticleRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unbindArticle(requestParameters: TagServiceUnbindArticleRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.unbindArticle(requestParameters.unbindArticleTagsReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 更新标签。
@@ -6220,8 +6958,8 @@ export const TagServiceFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(requestParameters: TagServiceUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateTagReply> {
-            return localVarFp.update(requestParameters.updateTagRequest, options).then((request) => request(axios, basePath));
+        update(requestParameters: TagServiceUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateTagResp> {
+            return localVarFp.update(requestParameters.updateTagReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -6231,20 +6969,44 @@ export const TagServiceFactory = function (configuration?: Configuration, basePa
  */
 export interface TagServiceInterface {
     /**
+     * 绑定文章标签。
+     * @param {TagServiceBindArticleRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    bindArticle(requestParameters: TagServiceBindArticleRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
      * 创建标签。
      * @param {TagServiceCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    create(requestParameters: TagServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateTagReply>;
+    create(requestParameters: TagServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateTagResp>;
 
     /**
-     * 分页查询标签列表。
+     * 查询标签列表。
      * @param {TagServiceListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    list(requestParameters: TagServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListTagsReply>;
+    list(requestParameters: TagServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListTagsResp>;
+
+    /**
+     * 查询文章标签列表。
+     * @param {TagServiceListArticleTagsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listArticleTags(requestParameters: TagServiceListArticleTagsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListArticleTagsResp>;
+
+    /**
+     * 解绑文章标签。
+     * @param {TagServiceUnbindArticleRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    unbindArticle(requestParameters: TagServiceUnbindArticleRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
      * 更新标签。
@@ -6252,29 +7014,50 @@ export interface TagServiceInterface {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    update(requestParameters: TagServiceUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateTagReply>;
+    update(requestParameters: TagServiceUpdateRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateTagResp>;
 
+}
+
+/**
+ * Request parameters for bindArticle operation in TagService.
+ */
+export interface TagServiceBindArticleRequest {
+    readonly bindArticleTagsReq: BindArticleTagsReq
 }
 
 /**
  * Request parameters for create operation in TagService.
  */
 export interface TagServiceCreateRequest {
-    readonly createTagRequest: CreateTagRequest
+    readonly createTagReq: CreateTagReq
 }
 
 /**
  * Request parameters for list operation in TagService.
  */
 export interface TagServiceListRequest {
-    readonly listTagsRequest: ListTagsRequest
+    readonly listTagsReq: ListTagsReq
+}
+
+/**
+ * Request parameters for listArticleTags operation in TagService.
+ */
+export interface TagServiceListArticleTagsRequest {
+    readonly listArticleTagsReq: ListArticleTagsReq
+}
+
+/**
+ * Request parameters for unbindArticle operation in TagService.
+ */
+export interface TagServiceUnbindArticleRequest {
+    readonly unbindArticleTagsReq: UnbindArticleTagsReq
 }
 
 /**
  * Request parameters for update operation in TagService.
  */
 export interface TagServiceUpdateRequest {
-    readonly updateTagRequest: UpdateTagRequest
+    readonly updateTagReq: UpdateTagReq
 }
 
 /**
@@ -6282,23 +7065,53 @@ export interface TagServiceUpdateRequest {
  */
 export class TagService extends BaseAPI implements TagServiceInterface {
     /**
+     * 绑定文章标签。
+     * @param {TagServiceBindArticleRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public bindArticle(requestParameters: TagServiceBindArticleRequest, options?: RawAxiosRequestConfig) {
+        return TagServiceFp(this.configuration).bindArticle(requestParameters.bindArticleTagsReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 创建标签。
      * @param {TagServiceCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public create(requestParameters: TagServiceCreateRequest, options?: RawAxiosRequestConfig) {
-        return TagServiceFp(this.configuration).create(requestParameters.createTagRequest, options).then((request) => request(this.axios, this.basePath));
+        return TagServiceFp(this.configuration).create(requestParameters.createTagReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 分页查询标签列表。
+     * 查询标签列表。
      * @param {TagServiceListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public list(requestParameters: TagServiceListRequest, options?: RawAxiosRequestConfig) {
-        return TagServiceFp(this.configuration).list(requestParameters.listTagsRequest, options).then((request) => request(this.axios, this.basePath));
+        return TagServiceFp(this.configuration).list(requestParameters.listTagsReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询文章标签列表。
+     * @param {TagServiceListArticleTagsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listArticleTags(requestParameters: TagServiceListArticleTagsRequest, options?: RawAxiosRequestConfig) {
+        return TagServiceFp(this.configuration).listArticleTags(requestParameters.listArticleTagsReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 解绑文章标签。
+     * @param {TagServiceUnbindArticleRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public unbindArticle(requestParameters: TagServiceUnbindArticleRequest, options?: RawAxiosRequestConfig) {
+        return TagServiceFp(this.configuration).unbindArticle(requestParameters.unbindArticleTagsReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -6308,366 +7121,7 @@ export class TagService extends BaseAPI implements TagServiceInterface {
      * @throws {RequiredError}
      */
     public update(requestParameters: TagServiceUpdateRequest, options?: RawAxiosRequestConfig) {
-        return TagServiceFp(this.configuration).update(requestParameters.updateTagRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-
-/**
- * TotpService - axios parameter creator
- */
-export const TotpServiceAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 开始启用 TOTP。
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        beginEnable: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('beginEnable', 'body', body)
-            const localVarPath = `/v1/user/totp/begin-enable`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 确认 TOTP 验证码并正式启用 TOTP。
-         * @param {ConfirmEnableTotpRequest} confirmEnableTotpRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        confirmEnable: async (confirmEnableTotpRequest: ConfirmEnableTotpRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'confirmEnableTotpRequest' is not null or undefined
-            assertParamExists('confirmEnable', 'confirmEnableTotpRequest', confirmEnableTotpRequest)
-            const localVarPath = `/v1/user/totp/confirm-enable`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(confirmEnableTotpRequest, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 校验 TOTP 验证码并关闭 TOTP。
-         * @param {DisableTotpRequest} disableTotpRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        disable: async (disableTotpRequest: DisableTotpRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'disableTotpRequest' is not null or undefined
-            assertParamExists('disable', 'disableTotpRequest', disableTotpRequest)
-            const localVarPath = `/v1/user/totp/disable`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(disableTotpRequest, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 获取当前账号的 TOTP 状态。
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getCurrent: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('getCurrent', 'body', body)
-            const localVarPath = `/v1/user/totp/get-current`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * TotpService - functional programming interface
- */
-export const TotpServiceFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = TotpServiceAxiosParamCreator(configuration)
-    return {
-        /**
-         * 开始启用 TOTP。
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async beginEnable(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<BeginEnableTotpReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.beginEnable(body, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TotpService.beginEnable']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 确认 TOTP 验证码并正式启用 TOTP。
-         * @param {ConfirmEnableTotpRequest} confirmEnableTotpRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async confirmEnable(confirmEnableTotpRequest: ConfirmEnableTotpRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.confirmEnable(confirmEnableTotpRequest, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TotpService.confirmEnable']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 校验 TOTP 验证码并关闭 TOTP。
-         * @param {DisableTotpRequest} disableTotpRequest 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async disable(disableTotpRequest: DisableTotpRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.disable(disableTotpRequest, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TotpService.disable']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 获取当前账号的 TOTP 状态。
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentTotpReply>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrent(body, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['TotpService.getCurrent']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-    }
-};
-
-/**
- * TotpService - factory interface
- */
-export const TotpServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = TotpServiceFp(configuration)
-    return {
-        /**
-         * 开始启用 TOTP。
-         * @param {TotpServiceBeginEnableRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        beginEnable(requestParameters: TotpServiceBeginEnableRequest, options?: RawAxiosRequestConfig): AxiosPromise<BeginEnableTotpReply> {
-            return localVarFp.beginEnable(requestParameters.body, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 确认 TOTP 验证码并正式启用 TOTP。
-         * @param {TotpServiceConfirmEnableRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        confirmEnable(requestParameters: TotpServiceConfirmEnableRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.confirmEnable(requestParameters.confirmEnableTotpRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 校验 TOTP 验证码并关闭 TOTP。
-         * @param {TotpServiceDisableRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        disable(requestParameters: TotpServiceDisableRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.disable(requestParameters.disableTotpRequest, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 获取当前账号的 TOTP 状态。
-         * @param {TotpServiceGetCurrentRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getCurrent(requestParameters: TotpServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentTotpReply> {
-            return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * TotpService - interface
- */
-export interface TotpServiceInterface {
-    /**
-     * 开始启用 TOTP。
-     * @param {TotpServiceBeginEnableRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    beginEnable(requestParameters: TotpServiceBeginEnableRequest, options?: RawAxiosRequestConfig): AxiosPromise<BeginEnableTotpReply>;
-
-    /**
-     * 确认 TOTP 验证码并正式启用 TOTP。
-     * @param {TotpServiceConfirmEnableRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    confirmEnable(requestParameters: TotpServiceConfirmEnableRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
-
-    /**
-     * 校验 TOTP 验证码并关闭 TOTP。
-     * @param {TotpServiceDisableRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    disable(requestParameters: TotpServiceDisableRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
-
-    /**
-     * 获取当前账号的 TOTP 状态。
-     * @param {TotpServiceGetCurrentRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getCurrent(requestParameters: TotpServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentTotpReply>;
-
-}
-
-/**
- * Request parameters for beginEnable operation in TotpService.
- */
-export interface TotpServiceBeginEnableRequest {
-    readonly body: object
-}
-
-/**
- * Request parameters for confirmEnable operation in TotpService.
- */
-export interface TotpServiceConfirmEnableRequest {
-    readonly confirmEnableTotpRequest: ConfirmEnableTotpRequest
-}
-
-/**
- * Request parameters for disable operation in TotpService.
- */
-export interface TotpServiceDisableRequest {
-    readonly disableTotpRequest: DisableTotpRequest
-}
-
-/**
- * Request parameters for getCurrent operation in TotpService.
- */
-export interface TotpServiceGetCurrentRequest {
-    readonly body: object
-}
-
-/**
- * TotpService - object-oriented interface
- */
-export class TotpService extends BaseAPI implements TotpServiceInterface {
-    /**
-     * 开始启用 TOTP。
-     * @param {TotpServiceBeginEnableRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public beginEnable(requestParameters: TotpServiceBeginEnableRequest, options?: RawAxiosRequestConfig) {
-        return TotpServiceFp(this.configuration).beginEnable(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 确认 TOTP 验证码并正式启用 TOTP。
-     * @param {TotpServiceConfirmEnableRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public confirmEnable(requestParameters: TotpServiceConfirmEnableRequest, options?: RawAxiosRequestConfig) {
-        return TotpServiceFp(this.configuration).confirmEnable(requestParameters.confirmEnableTotpRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 校验 TOTP 验证码并关闭 TOTP。
-     * @param {TotpServiceDisableRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public disable(requestParameters: TotpServiceDisableRequest, options?: RawAxiosRequestConfig) {
-        return TotpServiceFp(this.configuration).disable(requestParameters.disableTotpRequest, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 获取当前账号的 TOTP 状态。
-     * @param {TotpServiceGetCurrentRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public getCurrent(requestParameters: TotpServiceGetCurrentRequest, options?: RawAxiosRequestConfig) {
-        return TotpServiceFp(this.configuration).getCurrent(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+        return TagServiceFp(this.configuration).update(requestParameters.updateTagReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

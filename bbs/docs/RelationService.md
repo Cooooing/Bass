@@ -14,7 +14,7 @@ All URIs are relative to *http://localhost*
 |[**unfollow**](#unfollow) | **POST** /v1/user/relation/unfollow | |
 
 # **block**
-> object block(blockRelationRequest)
+> object block(blockRelationReq)
 
 当前账号拉黑目标账号。
 
@@ -24,16 +24,16 @@ All URIs are relative to *http://localhost*
 import {
     RelationService,
     Configuration,
-    BlockRelationRequest
+    BlockRelationReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new RelationService(configuration);
 
-let blockRelationRequest: BlockRelationRequest; //
+let blockRelationReq: BlockRelationReq; //
 
 const { status, data } = await apiInstance.block(
-    blockRelationRequest
+    blockRelationReq
 );
 ```
 
@@ -41,7 +41,7 @@ const { status, data } = await apiInstance.block(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **blockRelationRequest** | **BlockRelationRequest**|  | |
+| **blockRelationReq** | **BlockRelationReq**|  | |
 
 
 ### Return type
@@ -66,7 +66,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **follow**
-> object follow(followRelationRequest)
+> object follow(followRelationReq)
 
 当前账号关注目标账号。
 
@@ -76,16 +76,16 @@ No authorization required
 import {
     RelationService,
     Configuration,
-    FollowRelationRequest
+    FollowRelationReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new RelationService(configuration);
 
-let followRelationRequest: FollowRelationRequest; //
+let followRelationReq: FollowRelationReq; //
 
 const { status, data } = await apiInstance.follow(
-    followRelationRequest
+    followRelationReq
 );
 ```
 
@@ -93,7 +93,7 @@ const { status, data } = await apiInstance.follow(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **followRelationRequest** | **FollowRelationRequest**|  | |
+| **followRelationReq** | **FollowRelationReq**|  | |
 
 
 ### Return type
@@ -118,7 +118,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getStatus**
-> GetStatusRelationReply getStatus(getStatusRelationRequest)
+> GetStatusRelationResp getStatus(getStatusRelationReq)
 
 查询当前账号与目标账号之间的关系。
 
@@ -128,16 +128,16 @@ No authorization required
 import {
     RelationService,
     Configuration,
-    GetStatusRelationRequest
+    GetStatusRelationReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new RelationService(configuration);
 
-let getStatusRelationRequest: GetStatusRelationRequest; //
+let getStatusRelationReq: GetStatusRelationReq; //
 
 const { status, data } = await apiInstance.getStatus(
-    getStatusRelationRequest
+    getStatusRelationReq
 );
 ```
 
@@ -145,12 +145,12 @@ const { status, data } = await apiInstance.getStatus(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **getStatusRelationRequest** | **GetStatusRelationRequest**|  | |
+| **getStatusRelationReq** | **GetStatusRelationReq**|  | |
 
 
 ### Return type
 
-**GetStatusRelationReply**
+**GetStatusRelationResp**
 
 ### Authorization
 
@@ -170,7 +170,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listBlocked**
-> ListBlockedRelationsReply listBlocked(listBlockedRelationsRequest)
+> ListBlockedRelationsResp listBlocked(listBlockedRelationsReq)
 
 分页查询当前账号拉黑的账号列表。
 
@@ -180,16 +180,16 @@ No authorization required
 import {
     RelationService,
     Configuration,
-    ListBlockedRelationsRequest
+    ListBlockedRelationsReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new RelationService(configuration);
 
-let listBlockedRelationsRequest: ListBlockedRelationsRequest; //
+let listBlockedRelationsReq: ListBlockedRelationsReq; //
 
 const { status, data } = await apiInstance.listBlocked(
-    listBlockedRelationsRequest
+    listBlockedRelationsReq
 );
 ```
 
@@ -197,12 +197,12 @@ const { status, data } = await apiInstance.listBlocked(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listBlockedRelationsRequest** | **ListBlockedRelationsRequest**|  | |
+| **listBlockedRelationsReq** | **ListBlockedRelationsReq**|  | |
 
 
 ### Return type
 
-**ListBlockedRelationsReply**
+**ListBlockedRelationsResp**
 
 ### Authorization
 
@@ -222,7 +222,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listFollowers**
-> ListFollowersRelationsReply listFollowers(listFollowersRelationsRequest)
+> ListFollowersRelationsResp listFollowers(listFollowersRelationsReq)
 
 分页查询当前账号的粉丝账号列表。
 
@@ -232,16 +232,16 @@ No authorization required
 import {
     RelationService,
     Configuration,
-    ListFollowersRelationsRequest
+    ListFollowersRelationsReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new RelationService(configuration);
 
-let listFollowersRelationsRequest: ListFollowersRelationsRequest; //
+let listFollowersRelationsReq: ListFollowersRelationsReq; //
 
 const { status, data } = await apiInstance.listFollowers(
-    listFollowersRelationsRequest
+    listFollowersRelationsReq
 );
 ```
 
@@ -249,12 +249,12 @@ const { status, data } = await apiInstance.listFollowers(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listFollowersRelationsRequest** | **ListFollowersRelationsRequest**|  | |
+| **listFollowersRelationsReq** | **ListFollowersRelationsReq**|  | |
 
 
 ### Return type
 
-**ListFollowersRelationsReply**
+**ListFollowersRelationsResp**
 
 ### Authorization
 
@@ -274,7 +274,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **listFollowing**
-> ListFollowingRelationsReply listFollowing(listFollowingRelationsRequest)
+> ListFollowingRelationsResp listFollowing(listFollowingRelationsReq)
 
 分页查询当前账号关注的账号列表。
 
@@ -284,16 +284,16 @@ No authorization required
 import {
     RelationService,
     Configuration,
-    ListFollowingRelationsRequest
+    ListFollowingRelationsReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new RelationService(configuration);
 
-let listFollowingRelationsRequest: ListFollowingRelationsRequest; //
+let listFollowingRelationsReq: ListFollowingRelationsReq; //
 
 const { status, data } = await apiInstance.listFollowing(
-    listFollowingRelationsRequest
+    listFollowingRelationsReq
 );
 ```
 
@@ -301,12 +301,12 @@ const { status, data } = await apiInstance.listFollowing(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **listFollowingRelationsRequest** | **ListFollowingRelationsRequest**|  | |
+| **listFollowingRelationsReq** | **ListFollowingRelationsReq**|  | |
 
 
 ### Return type
 
-**ListFollowingRelationsReply**
+**ListFollowingRelationsResp**
 
 ### Authorization
 
@@ -326,7 +326,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **unblock**
-> object unblock(unblockRelationRequest)
+> object unblock(unblockRelationReq)
 
 当前账号取消拉黑目标账号。
 
@@ -336,16 +336,16 @@ No authorization required
 import {
     RelationService,
     Configuration,
-    UnblockRelationRequest
+    UnblockRelationReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new RelationService(configuration);
 
-let unblockRelationRequest: UnblockRelationRequest; //
+let unblockRelationReq: UnblockRelationReq; //
 
 const { status, data } = await apiInstance.unblock(
-    unblockRelationRequest
+    unblockRelationReq
 );
 ```
 
@@ -353,7 +353,7 @@ const { status, data } = await apiInstance.unblock(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **unblockRelationRequest** | **UnblockRelationRequest**|  | |
+| **unblockRelationReq** | **UnblockRelationReq**|  | |
 
 
 ### Return type
@@ -378,7 +378,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **unfollow**
-> object unfollow(unfollowRelationRequest)
+> object unfollow(unfollowRelationReq)
 
 当前账号取消关注目标账号。
 
@@ -388,16 +388,16 @@ No authorization required
 import {
     RelationService,
     Configuration,
-    UnfollowRelationRequest
+    UnfollowRelationReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new RelationService(configuration);
 
-let unfollowRelationRequest: UnfollowRelationRequest; //
+let unfollowRelationReq: UnfollowRelationReq; //
 
 const { status, data } = await apiInstance.unfollow(
-    unfollowRelationRequest
+    unfollowRelationReq
 );
 ```
 
@@ -405,7 +405,7 @@ const { status, data } = await apiInstance.unfollow(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **unfollowRelationRequest** | **UnfollowRelationRequest**|  | |
+| **unfollowRelationReq** | **UnfollowRelationReq**|  | |
 
 
 ### Return type

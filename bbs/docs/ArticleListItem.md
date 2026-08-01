@@ -1,6 +1,5 @@
 # ArticleListItem
 
-文章列表项。
 
 ## Properties
 
@@ -15,15 +14,12 @@ Name | Type | Description | Notes
 **type** | **string** |  | [optional] [default to undefined]
 **statement** | **string** |  | [optional] [default to undefined]
 **commentable** | **boolean** |  | [optional] [default to undefined]
-**anonymous** | **boolean** |  | [optional] [default to undefined]
 **view_count** | **number** |  | [optional] [default to undefined]
 **thank_count** | **number** |  | [optional] [default to undefined]
 **like_count** | **number** |  | [optional] [default to undefined]
 **collect_count** | **number** |  | [optional] [default to undefined]
-**watch_count** | **number** |  | [optional] [default to undefined]
+**reward_count** | **number** |  | [optional] [default to undefined]
 **reply_count** | **number** |  | [optional] [default to undefined]
-**bounty_points** | **number** |  | [optional] [default to undefined]
-**accepted_answer_id** | **string** |  | [optional] [default to undefined]
 **author_user** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
 **last_reply_user** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
 **last_reply_at** | **string** |  | [optional] [default to undefined]
@@ -54,15 +50,12 @@ const instance: ArticleListItem = {
     type,
     statement,
     commentable,
-    anonymous,
     view_count,
     thank_count,
     like_count,
     collect_count,
-    watch_count,
+    reward_count,
     reply_count,
-    bounty_points,
-    accepted_answer_id,
     author_user,
     last_reply_user,
     last_reply_at,

@@ -4,29 +4,29 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**acceptAnswer**](ArticleService.md#acceptanswer) | **POST** /v1/content/article/accept-answer |  |
+| [**archive**](ArticleService.md#archive) | **POST** /v1/content/article/archive |  |
+| [**cancelPublish**](ArticleService.md#cancelpublish) | **POST** /v1/content/article/publish/cancel |  |
 | [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect |  |
-| [**create**](ArticleService.md#create) | **POST** /v1/content/article/create |  |
-| [**discardDraft**](ArticleService.md#discarddraft) | **POST** /v1/content/article/discard-draft |  |
+| [**createDraft**](ArticleService.md#createdraft) | **POST** /v1/content/article/draft/create |  |
+| [**discardDraft**](ArticleService.md#discarddraft) | **POST** /v1/content/article/draft/discard |  |
 | [**get**](ArticleService.md#get) | **POST** /v1/content/article/get |  |
 | [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
 | [**list**](ArticleService.md#list) | **POST** /v1/content/article/list |  |
 | [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish |  |
 | [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
+| [**schedulePublish**](ArticleService.md#schedulepublish) | **POST** /v1/content/article/publish/schedule |  |
 | [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
-| [**update**](ArticleService.md#update) | **POST** /v1/content/article/update |  |
-| [**updateDraft**](ArticleService.md#updatedraft) | **POST** /v1/content/article/update-draft |  |
-| [**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch |  |
+| [**updateDraft**](ArticleService.md#updatedraft) | **POST** /v1/content/article/draft/update |  |
 
 
 
-## acceptAnswer
+## archive
 
-> object acceptAnswer(acceptAnswerArticleRequest)
+> object archive(archiveArticleReq)
 
 
 
-采纳文章评论为答案。
+归档文章
 
 ### Example
 
@@ -35,19 +35,19 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { AcceptAnswerRequest } from '@bass/bbs-sdk-fetch';
+import type { ArchiveRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
   const api = new ArticleService();
 
   const body = {
-    // AcceptAnswerArticleRequest
-    acceptAnswerArticleRequest: ...,
-  } satisfies AcceptAnswerRequest;
+    // ArchiveArticleReq
+    archiveArticleReq: ...,
+  } satisfies ArchiveRequest;
 
   try {
-    const data = await api.acceptAnswer(body);
+    const data = await api.archive(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -63,7 +63,74 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **acceptAnswerArticleRequest** | [AcceptAnswerArticleRequest](AcceptAnswerArticleRequest.md) |  | |
+| **archiveArticleReq** | [ArchiveArticleReq](ArchiveArticleReq.md) |  | |
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## cancelPublish
+
+> object cancelPublish(cancelPublishArticleReq)
+
+
+
+取消定时发布
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { CancelPublishRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // CancelPublishArticleReq
+    cancelPublishArticleReq: ...,
+  } satisfies CancelPublishRequest;
+
+  try {
+    const data = await api.cancelPublish(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **cancelPublishArticleReq** | [CancelPublishArticleReq](CancelPublishArticleReq.md) |  | |
 
 ### Return type
 
@@ -89,11 +156,11 @@ No authorization required
 
 ## collect
 
-> CollectArticleReply collect(collectArticleRequest)
+> CollectArticleResp collect(collectArticleReq)
 
 
 
-收藏或取消收藏文章。
+收藏文章
 
 ### Example
 
@@ -109,8 +176,8 @@ async function example() {
   const api = new ArticleService();
 
   const body = {
-    // CollectArticleRequest
-    collectArticleRequest: ...,
+    // CollectArticleReq
+    collectArticleReq: ...,
   } satisfies CollectRequest;
 
   try {
@@ -130,11 +197,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **collectArticleRequest** | [CollectArticleRequest](CollectArticleRequest.md) |  | |
+| **collectArticleReq** | [CollectArticleReq](CollectArticleReq.md) |  | |
 
 ### Return type
 
-[**CollectArticleReply**](CollectArticleReply.md)
+[**CollectArticleResp**](CollectArticleResp.md)
 
 ### Authorization
 
@@ -154,13 +221,13 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## create
+## createDraft
 
-> CreateArticleReply create(createArticleRequest)
+> CreateDraftArticleResp createDraft(createDraftArticleReq)
 
 
 
-创建文章草稿。
+创建文章草稿
 
 ### Example
 
@@ -169,19 +236,19 @@ import {
   Configuration,
   ArticleService,
 } from '@bass/bbs-sdk-fetch';
-import type { CreateRequest } from '@bass/bbs-sdk-fetch';
+import type { CreateDraftRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
   const api = new ArticleService();
 
   const body = {
-    // CreateArticleRequest
-    createArticleRequest: ...,
-  } satisfies CreateRequest;
+    // CreateDraftArticleReq
+    createDraftArticleReq: ...,
+  } satisfies CreateDraftRequest;
 
   try {
-    const data = await api.create(body);
+    const data = await api.createDraft(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -197,11 +264,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **createArticleRequest** | [CreateArticleRequest](CreateArticleRequest.md) |  | |
+| **createDraftArticleReq** | [CreateDraftArticleReq](CreateDraftArticleReq.md) |  | |
 
 ### Return type
 
-[**CreateArticleReply**](CreateArticleReply.md)
+[**CreateDraftArticleResp**](CreateDraftArticleResp.md)
 
 ### Authorization
 
@@ -223,11 +290,11 @@ No authorization required
 
 ## discardDraft
 
-> object discardDraft(discardDraftArticleRequest)
+> object discardDraft(discardDraftArticleReq)
 
 
 
-丢弃草稿。
+丢弃文章草稿
 
 ### Example
 
@@ -243,8 +310,8 @@ async function example() {
   const api = new ArticleService();
 
   const body = {
-    // DiscardDraftArticleRequest
-    discardDraftArticleRequest: ...,
+    // DiscardDraftArticleReq
+    discardDraftArticleReq: ...,
   } satisfies DiscardDraftRequest;
 
   try {
@@ -264,7 +331,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **discardDraftArticleRequest** | [DiscardDraftArticleRequest](DiscardDraftArticleRequest.md) |  | |
+| **discardDraftArticleReq** | [DiscardDraftArticleReq](DiscardDraftArticleReq.md) |  | |
 
 ### Return type
 
@@ -290,11 +357,11 @@ No authorization required
 
 ## get
 
-> GetArticleReply get(getArticleRequest)
+> GetArticleResp get(getArticleReq)
 
 
 
-获取文章详情。
+查询文章详情
 
 ### Example
 
@@ -310,8 +377,8 @@ async function example() {
   const api = new ArticleService();
 
   const body = {
-    // GetArticleRequest
-    getArticleRequest: ...,
+    // GetArticleReq
+    getArticleReq: ...,
   } satisfies GetRequest;
 
   try {
@@ -331,11 +398,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **getArticleRequest** | [GetArticleRequest](GetArticleRequest.md) |  | |
+| **getArticleReq** | [GetArticleReq](GetArticleReq.md) |  | |
 
 ### Return type
 
-[**GetArticleReply**](GetArticleReply.md)
+[**GetArticleResp**](GetArticleResp.md)
 
 ### Authorization
 
@@ -357,11 +424,11 @@ No authorization required
 
 ## like
 
-> LikeArticleReply like(likeArticleRequest)
+> LikeArticleResp like(likeArticleReq)
 
 
 
-点赞或取消点赞文章。
+点赞文章
 
 ### Example
 
@@ -377,8 +444,8 @@ async function example() {
   const api = new ArticleService();
 
   const body = {
-    // LikeArticleRequest
-    likeArticleRequest: ...,
+    // LikeArticleReq
+    likeArticleReq: ...,
   } satisfies LikeRequest;
 
   try {
@@ -398,11 +465,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **likeArticleRequest** | [LikeArticleRequest](LikeArticleRequest.md) |  | |
+| **likeArticleReq** | [LikeArticleReq](LikeArticleReq.md) |  | |
 
 ### Return type
 
-[**LikeArticleReply**](LikeArticleReply.md)
+[**LikeArticleResp**](LikeArticleResp.md)
 
 ### Authorization
 
@@ -424,11 +491,11 @@ No authorization required
 
 ## list
 
-> ListArticlesReply list(listArticlesRequest)
+> ListArticlesResp list(listArticlesReq)
 
 
 
-分页查询文章列表。
+查询文章列表
 
 ### Example
 
@@ -444,8 +511,8 @@ async function example() {
   const api = new ArticleService();
 
   const body = {
-    // ListArticlesRequest
-    listArticlesRequest: ...,
+    // ListArticlesReq
+    listArticlesReq: ...,
   } satisfies ListRequest;
 
   try {
@@ -465,11 +532,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **listArticlesRequest** | [ListArticlesRequest](ListArticlesRequest.md) |  | |
+| **listArticlesReq** | [ListArticlesReq](ListArticlesReq.md) |  | |
 
 ### Return type
 
-[**ListArticlesReply**](ListArticlesReply.md)
+[**ListArticlesResp**](ListArticlesResp.md)
 
 ### Authorization
 
@@ -491,11 +558,11 @@ No authorization required
 
 ## publish
 
-> object publish(publishArticleRequest)
+> object publish(publishArticleReq)
 
 
 
-发布文章。
+发布文章
 
 ### Example
 
@@ -511,8 +578,8 @@ async function example() {
   const api = new ArticleService();
 
   const body = {
-    // PublishArticleRequest
-    publishArticleRequest: ...,
+    // PublishArticleReq
+    publishArticleReq: ...,
   } satisfies PublishRequest;
 
   try {
@@ -532,7 +599,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **publishArticleRequest** | [PublishArticleRequest](PublishArticleRequest.md) |  | |
+| **publishArticleReq** | [PublishArticleReq](PublishArticleReq.md) |  | |
 
 ### Return type
 
@@ -558,11 +625,11 @@ No authorization required
 
 ## reward
 
-> object reward(rewardArticleRequest)
+> object reward(rewardArticleReq)
 
 
 
-打赏文章。
+打赏文章
 
 ### Example
 
@@ -578,8 +645,8 @@ async function example() {
   const api = new ArticleService();
 
   const body = {
-    // RewardArticleRequest
-    rewardArticleRequest: ...,
+    // RewardArticleReq
+    rewardArticleReq: ...,
   } satisfies RewardRequest;
 
   try {
@@ -599,7 +666,74 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **rewardArticleRequest** | [RewardArticleRequest](RewardArticleRequest.md) |  | |
+| **rewardArticleReq** | [RewardArticleReq](RewardArticleReq.md) |  | |
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## schedulePublish
+
+> object schedulePublish(schedulePublishArticleReq)
+
+
+
+设置定时发布
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { SchedulePublishRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // SchedulePublishArticleReq
+    schedulePublishArticleReq: ...,
+  } satisfies SchedulePublishRequest;
+
+  try {
+    const data = await api.schedulePublish(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **schedulePublishArticleReq** | [SchedulePublishArticleReq](SchedulePublishArticleReq.md) |  | |
 
 ### Return type
 
@@ -625,11 +759,11 @@ No authorization required
 
 ## thank
 
-> ThankArticleReply thank(thankArticleRequest)
+> ThankArticleResp thank(thankArticleReq)
 
 
 
-感谢或取消感谢文章。
+感谢文章
 
 ### Example
 
@@ -645,8 +779,8 @@ async function example() {
   const api = new ArticleService();
 
   const body = {
-    // ThankArticleRequest
-    thankArticleRequest: ...,
+    // ThankArticleReq
+    thankArticleReq: ...,
   } satisfies ThankRequest;
 
   try {
@@ -666,78 +800,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **thankArticleRequest** | [ThankArticleRequest](ThankArticleRequest.md) |  | |
+| **thankArticleReq** | [ThankArticleReq](ThankArticleReq.md) |  | |
 
 ### Return type
 
-[**ThankArticleReply**](ThankArticleReply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## update
-
-> UpdateArticleReply update(updateArticleRequest)
-
-
-
-更新文章内容。
-
-### Example
-
-```ts
-import {
-  Configuration,
-  ArticleService,
-} from '@bass/bbs-sdk-fetch';
-import type { UpdateRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new ArticleService();
-
-  const body = {
-    // UpdateArticleRequest
-    updateArticleRequest: ...,
-  } satisfies UpdateRequest;
-
-  try {
-    const data = await api.update(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **updateArticleRequest** | [UpdateArticleRequest](UpdateArticleRequest.md) |  | |
-
-### Return type
-
-[**UpdateArticleReply**](UpdateArticleReply.md)
+[**ThankArticleResp**](ThankArticleResp.md)
 
 ### Authorization
 
@@ -759,11 +826,11 @@ No authorization required
 
 ## updateDraft
 
-> UpdateDraftArticleReply updateDraft(updateDraftArticleRequest)
+> UpdateDraftArticleResp updateDraft(updateDraftArticleReq)
 
 
 
-更新文章内容。兼容旧草稿更新接口。
+编辑文章草稿
 
 ### Example
 
@@ -779,8 +846,8 @@ async function example() {
   const api = new ArticleService();
 
   const body = {
-    // UpdateDraftArticleRequest
-    updateDraftArticleRequest: ...,
+    // UpdateDraftArticleReq
+    updateDraftArticleReq: ...,
   } satisfies UpdateDraftRequest;
 
   try {
@@ -800,78 +867,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **updateDraftArticleRequest** | [UpdateDraftArticleRequest](UpdateDraftArticleRequest.md) |  | |
+| **updateDraftArticleReq** | [UpdateDraftArticleReq](UpdateDraftArticleReq.md) |  | |
 
 ### Return type
 
-[**UpdateDraftArticleReply**](UpdateDraftArticleReply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## watch
-
-> WatchArticleReply watch(watchArticleRequest)
-
-
-
-关注或取消关注文章。
-
-### Example
-
-```ts
-import {
-  Configuration,
-  ArticleService,
-} from '@bass/bbs-sdk-fetch';
-import type { WatchRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new ArticleService();
-
-  const body = {
-    // WatchArticleRequest
-    watchArticleRequest: ...,
-  } satisfies WatchRequest;
-
-  try {
-    const data = await api.watch(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **watchArticleRequest** | [WatchArticleRequest](WatchArticleRequest.md) |  | |
-
-### Return type
-
-[**WatchArticleReply**](WatchArticleReply.md)
+[**UpdateDraftArticleResp**](UpdateDraftArticleResp.md)
 
 ### Authorization
 

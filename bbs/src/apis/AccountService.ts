@@ -14,35 +14,35 @@
 
 import * as runtime from '../runtime';
 import {
-    type GetCurrentAccountReply,
-    GetCurrentAccountReplyFromJSON,
-    GetCurrentAccountReplyToJSON,
-} from '../models/GetCurrentAccountReply';
+    type GetCurrentAccountResp,
+    GetCurrentAccountRespFromJSON,
+    GetCurrentAccountRespToJSON,
+} from '../models/GetCurrentAccountResp';
 import {
-    type GetProfileAccountReply,
-    GetProfileAccountReplyFromJSON,
-    GetProfileAccountReplyToJSON,
-} from '../models/GetProfileAccountReply';
+    type GetProfileAccountReq,
+    GetProfileAccountReqFromJSON,
+    GetProfileAccountReqToJSON,
+} from '../models/GetProfileAccountReq';
 import {
-    type GetProfileAccountRequest,
-    GetProfileAccountRequestFromJSON,
-    GetProfileAccountRequestToJSON,
-} from '../models/GetProfileAccountRequest';
+    type GetProfileAccountResp,
+    GetProfileAccountRespFromJSON,
+    GetProfileAccountRespToJSON,
+} from '../models/GetProfileAccountResp';
 import {
-    type ImageReply,
-    ImageReplyFromJSON,
-    ImageReplyToJSON,
-} from '../models/ImageReply';
+    type ImageResp,
+    ImageRespFromJSON,
+    ImageRespToJSON,
+} from '../models/ImageResp';
 import {
-    type UpdateProfileAccountReply,
-    UpdateProfileAccountReplyFromJSON,
-    UpdateProfileAccountReplyToJSON,
-} from '../models/UpdateProfileAccountReply';
+    type UpdateProfileAccountReq,
+    UpdateProfileAccountReqFromJSON,
+    UpdateProfileAccountReqToJSON,
+} from '../models/UpdateProfileAccountReq';
 import {
-    type UpdateProfileAccountRequest,
-    UpdateProfileAccountRequestFromJSON,
-    UpdateProfileAccountRequestToJSON,
-} from '../models/UpdateProfileAccountRequest';
+    type UpdateProfileAccountResp,
+    UpdateProfileAccountRespFromJSON,
+    UpdateProfileAccountRespToJSON,
+} from '../models/UpdateProfileAccountResp';
 
 export interface AvatarRequest {
     name?: string;
@@ -53,11 +53,11 @@ export interface GetCurrentRequest {
 }
 
 export interface GetProfileRequest {
-    getProfileAccountRequest: GetProfileAccountRequest;
+    getProfileAccountReq: GetProfileAccountReq;
 }
 
 export interface UpdateProfileRequest {
-    updateProfileAccountRequest: UpdateProfileAccountRequest;
+    updateProfileAccountReq: UpdateProfileAccountReq;
 }
 
 /**
@@ -69,7 +69,7 @@ export interface UpdateProfileRequest {
 export interface AccountServiceInterface {
     /**
      * Creates request options for avatar without sending the request
-     * @param {string} [name] 用于生成头像的账号名。
+     * @param {string} [name] 
      * @throws {RequiredError}
      * @memberof AccountServiceInterface
      */
@@ -77,17 +77,17 @@ export interface AccountServiceInterface {
 
     /**
      * 生成默认账号头像。
-     * @param {string} [name] 用于生成头像的账号名。
+     * @param {string} [name] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountServiceInterface
      */
-    avatarRaw(requestParameters: AvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageReply>>;
+    avatarRaw(requestParameters: AvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageResp>>;
 
     /**
      * 生成默认账号头像。
      */
-    avatar(requestParameters: AvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageReply>;
+    avatar(requestParameters: AvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageResp>;
 
     /**
      * Creates request options for getCurrent without sending the request
@@ -104,16 +104,16 @@ export interface AccountServiceInterface {
      * @throws {RequiredError}
      * @memberof AccountServiceInterface
      */
-    getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentAccountReply>>;
+    getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentAccountResp>>;
 
     /**
      * 获取当前账号的完整资料。
      */
-    getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentAccountReply>;
+    getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentAccountResp>;
 
     /**
      * Creates request options for getProfile without sending the request
-     * @param {GetProfileAccountRequest} getProfileAccountRequest 
+     * @param {GetProfileAccountReq} getProfileAccountReq 
      * @throws {RequiredError}
      * @memberof AccountServiceInterface
      */
@@ -121,21 +121,21 @@ export interface AccountServiceInterface {
 
     /**
      * 按账号 ID 获取账号展示资料。
-     * @param {GetProfileAccountRequest} getProfileAccountRequest 
+     * @param {GetProfileAccountReq} getProfileAccountReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountServiceInterface
      */
-    getProfileRaw(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileAccountReply>>;
+    getProfileRaw(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileAccountResp>>;
 
     /**
      * 按账号 ID 获取账号展示资料。
      */
-    getProfile(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileAccountReply>;
+    getProfile(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileAccountResp>;
 
     /**
      * Creates request options for updateProfile without sending the request
-     * @param {UpdateProfileAccountRequest} updateProfileAccountRequest 
+     * @param {UpdateProfileAccountReq} updateProfileAccountReq 
      * @throws {RequiredError}
      * @memberof AccountServiceInterface
      */
@@ -143,17 +143,17 @@ export interface AccountServiceInterface {
 
     /**
      * 更新当前账号的展示资料。
-     * @param {UpdateProfileAccountRequest} updateProfileAccountRequest 
+     * @param {UpdateProfileAccountReq} updateProfileAccountReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountServiceInterface
      */
-    updateProfileRaw(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateProfileAccountReply>>;
+    updateProfileRaw(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateProfileAccountResp>>;
 
     /**
      * 更新当前账号的展示资料。
      */
-    updateProfile(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateProfileAccountReply>;
+    updateProfile(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateProfileAccountResp>;
 
 }
 
@@ -188,17 +188,17 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     /**
      * 生成默认账号头像。
      */
-    async avatarRaw(requestParameters: AvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageReply>> {
+    async avatarRaw(requestParameters: AvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageResp>> {
         const requestOptions = await this.avatarRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ImageReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ImageRespFromJSON(jsonValue));
     }
 
     /**
      * 生成默认账号头像。
      */
-    async avatar(requestParameters: AvatarRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageReply> {
+    async avatar(requestParameters: AvatarRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageResp> {
         const response = await this.avatarRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -235,17 +235,17 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     /**
      * 获取当前账号的完整资料。
      */
-    async getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentAccountReply>> {
+    async getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentAccountResp>> {
         const requestOptions = await this.getCurrentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetCurrentAccountReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetCurrentAccountRespFromJSON(jsonValue));
     }
 
     /**
      * 获取当前账号的完整资料。
      */
-    async getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentAccountReply> {
+    async getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentAccountResp> {
         const response = await this.getCurrentRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -254,10 +254,10 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
      * Creates request options for getProfile without sending the request
      */
     async getProfileRequestOpts(requestParameters: GetProfileRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['getProfileAccountRequest'] == null) {
+        if (requestParameters['getProfileAccountReq'] == null) {
             throw new runtime.RequiredError(
-                'getProfileAccountRequest',
-                'Required parameter "getProfileAccountRequest" was null or undefined when calling getProfile().'
+                'getProfileAccountReq',
+                'Required parameter "getProfileAccountReq" was null or undefined when calling getProfile().'
             );
         }
 
@@ -275,24 +275,24 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: GetProfileAccountRequestToJSON(requestParameters['getProfileAccountRequest']),
+            body: GetProfileAccountReqToJSON(requestParameters['getProfileAccountReq']),
         };
     }
 
     /**
      * 按账号 ID 获取账号展示资料。
      */
-    async getProfileRaw(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileAccountReply>> {
+    async getProfileRaw(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileAccountResp>> {
         const requestOptions = await this.getProfileRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetProfileAccountReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetProfileAccountRespFromJSON(jsonValue));
     }
 
     /**
      * 按账号 ID 获取账号展示资料。
      */
-    async getProfile(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileAccountReply> {
+    async getProfile(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileAccountResp> {
         const response = await this.getProfileRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -301,10 +301,10 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
      * Creates request options for updateProfile without sending the request
      */
     async updateProfileRequestOpts(requestParameters: UpdateProfileRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['updateProfileAccountRequest'] == null) {
+        if (requestParameters['updateProfileAccountReq'] == null) {
             throw new runtime.RequiredError(
-                'updateProfileAccountRequest',
-                'Required parameter "updateProfileAccountRequest" was null or undefined when calling updateProfile().'
+                'updateProfileAccountReq',
+                'Required parameter "updateProfileAccountReq" was null or undefined when calling updateProfile().'
             );
         }
 
@@ -322,24 +322,24 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateProfileAccountRequestToJSON(requestParameters['updateProfileAccountRequest']),
+            body: UpdateProfileAccountReqToJSON(requestParameters['updateProfileAccountReq']),
         };
     }
 
     /**
      * 更新当前账号的展示资料。
      */
-    async updateProfileRaw(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateProfileAccountReply>> {
+    async updateProfileRaw(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateProfileAccountResp>> {
         const requestOptions = await this.updateProfileRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateProfileAccountReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateProfileAccountRespFromJSON(jsonValue));
     }
 
     /**
      * 更新当前账号的展示资料。
      */
-    async updateProfile(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateProfileAccountReply> {
+    async updateProfile(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateProfileAccountResp> {
         const response = await this.updateProfileRaw(requestParameters, initOverrides);
         return await response.value();
     }

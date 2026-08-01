@@ -14,7 +14,7 @@
 
 import { mapValues } from '../runtime';
 /**
- * 当前查看账号的文章行为状态。
+ * 
  * @export
  * @interface ArticleViewerActionState
  */
@@ -42,7 +42,7 @@ export interface ArticleViewerActionState {
      * @type {boolean}
      * @memberof ArticleViewerActionState
      */
-    watched?: boolean;
+    rewarded?: boolean;
 }
 
 /**
@@ -65,7 +65,7 @@ export function ArticleViewerActionStateFromJSONTyped(json: any, ignoreDiscrimin
         'liked': json['liked'] == null ? undefined : json['liked'],
         'thanked': json['thanked'] == null ? undefined : json['thanked'],
         'collected': json['collected'] == null ? undefined : json['collected'],
-        'watched': json['watched'] == null ? undefined : json['watched'],
+        'rewarded': json['rewarded'] == null ? undefined : json['rewarded'],
     };
 }
 
@@ -83,7 +83,7 @@ export function ArticleViewerActionStateToJSONTyped(value?: ArticleViewerActionS
         'liked': value['liked'],
         'thanked': value['thanked'],
         'collected': value['collected'],
-        'watched': value['watched'],
+        'rewarded': value['rewarded'],
     };
 }
 

@@ -12,7 +12,7 @@ All URIs are relative to *http://localhost*
 
 ## countUnread
 
-> CountUnreadNotificationsReply countUnread(body)
+> CountUnreadNotificationsResp countUnread(body)
 
 
 
@@ -57,7 +57,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**CountUnreadNotificationsReply**](CountUnreadNotificationsReply.md)
+[**CountUnreadNotificationsResp**](CountUnreadNotificationsResp.md)
 
 ### Authorization
 
@@ -79,7 +79,7 @@ No authorization required
 
 ## list
 
-> ListNotificationsReply list(listNotificationsRequest)
+> ListNotificationsResp list(listNotificationsReq)
 
 
 
@@ -99,8 +99,8 @@ async function example() {
   const api = new NotificationService();
 
   const body = {
-    // ListNotificationsRequest
-    listNotificationsRequest: ...,
+    // ListNotificationsReq
+    listNotificationsReq: ...,
   } satisfies ListRequest;
 
   try {
@@ -120,11 +120,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **listNotificationsRequest** | [ListNotificationsRequest](ListNotificationsRequest.md) |  | |
+| **listNotificationsReq** | [ListNotificationsReq](ListNotificationsReq.md) |  | |
 
 ### Return type
 
-[**ListNotificationsReply**](ListNotificationsReply.md)
+[**ListNotificationsResp**](ListNotificationsResp.md)
 
 ### Authorization
 
@@ -146,7 +146,7 @@ No authorization required
 
 ## markRead
 
-> MarkReadNotificationReply markRead(markReadNotificationRequest)
+> MarkReadNotificationResp markRead(markReadNotificationReq)
 
 
 
@@ -166,8 +166,8 @@ async function example() {
   const api = new NotificationService();
 
   const body = {
-    // MarkReadNotificationRequest
-    markReadNotificationRequest: ...,
+    // MarkReadNotificationReq
+    markReadNotificationReq: ...,
   } satisfies MarkReadRequest;
 
   try {
@@ -187,11 +187,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **markReadNotificationRequest** | [MarkReadNotificationRequest](MarkReadNotificationRequest.md) |  | |
+| **markReadNotificationReq** | [MarkReadNotificationReq](MarkReadNotificationReq.md) |  | |
 
 ### Return type
 
-[**MarkReadNotificationReply**](MarkReadNotificationReply.md)
+[**MarkReadNotificationResp**](MarkReadNotificationResp.md)
 
 ### Authorization
 

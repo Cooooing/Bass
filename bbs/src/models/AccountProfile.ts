@@ -14,83 +14,83 @@
 
 import { mapValues } from '../runtime';
 /**
- * 账号展示资料。
+ * 
  * @export
  * @interface AccountProfile
  */
 export interface AccountProfile {
     /**
-     * 账号 ID。
+     * 
      * @type {string}
      * @memberof AccountProfile
      */
     id?: string;
     /**
-     * 账号名。
+     * 
      * @type {string}
      * @memberof AccountProfile
      */
     name?: string;
     /**
-     * 昵称。
+     * 
      * @type {string}
      * @memberof AccountProfile
      */
     nickname?: string;
     /**
-     * 个人主页 URL。
+     * 
      * @type {string}
      * @memberof AccountProfile
      */
     url?: string;
     /**
-     * 头像 URL。
+     * 
      * @type {string}
      * @memberof AccountProfile
      */
     avatarUrl?: string;
     /**
-     * 个人简介。
+     * 
      * @type {string}
      * @memberof AccountProfile
      */
     introduction?: string;
     /**
-     * MBTI 类型。
+     * 
      * @type {AccountProfileMbtiEnum}
      * @memberof AccountProfile
      */
     mbti?: AccountProfileMbtiEnum;
     /**
-     * 账号状态。
+     * 
      * @type {AccountProfileStatusEnum}
      * @memberof AccountProfile
      */
     status?: AccountProfileStatusEnum;
     /**
-     * 关注数量。
+     * 
      * @type {number}
      * @memberof AccountProfile
      */
     followCount?: number;
     /**
-     * 粉丝数量。
+     * 
      * @type {number}
      * @memberof AccountProfile
      */
     followerCount?: number;
     /**
-     * 创建时间。
-     * @type {string}
+     * 
+     * @type {Date}
      * @memberof AccountProfile
      */
-    createdAt?: string;
+    createdAt?: Date;
     /**
-     * 更新时间。
-     * @type {string}
+     * 
+     * @type {Date}
      * @memberof AccountProfile
      */
-    updatedAt?: string;
+    updatedAt?: Date;
 }
 
 
@@ -125,7 +125,7 @@ export const AccountProfileStatusEnum = {
     ACCOUNT_STATUS_UNSPECIFIED: 'ACCOUNT_STATUS_UNSPECIFIED',
     ACCOUNT_STATUS_NORMAL: 'ACCOUNT_STATUS_NORMAL',
     ACCOUNT_STATUS_BANNED: 'ACCOUNT_STATUS_BANNED',
-    ACCOUNT_STATUS_DELETED: 'ACCOUNT_STATUS_DELETED'
+    ACCOUNT_STATUS_CANCELLED: 'ACCOUNT_STATUS_CANCELLED'
 } as const;
 export type AccountProfileStatusEnum = typeof AccountProfileStatusEnum[keyof typeof AccountProfileStatusEnum];
 
@@ -157,8 +157,8 @@ export function AccountProfileFromJSONTyped(json: any, ignoreDiscriminator: bool
         'status': json['status'] == null ? undefined : json['status'],
         'followCount': json['follow_count'] == null ? undefined : json['follow_count'],
         'followerCount': json['follower_count'] == null ? undefined : json['follower_count'],
-        'createdAt': json['created_at'] == null ? undefined : json['created_at'],
-        'updatedAt': json['updated_at'] == null ? undefined : json['updated_at'],
+        'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
+        'updatedAt': json['updated_at'] == null ? undefined : (new Date(json['updated_at'])),
     };
 }
 
@@ -183,8 +183,8 @@ export function AccountProfileToJSONTyped(value?: AccountProfile | null, ignoreD
         'status': value['status'],
         'follow_count': value['followCount'],
         'follower_count': value['followerCount'],
-        'created_at': value['createdAt'],
-        'updated_at': value['updatedAt'],
+        'created_at': value['createdAt'] == null ? value['createdAt'] : value['createdAt'].toISOString(),
+        'updated_at': value['updatedAt'] == null ? value['updatedAt'] : value['updatedAt'].toISOString(),
     };
 }
 

@@ -4,15 +4,85 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
+| [**bindArticle**](TagService.md#bindarticle) | **POST** /v1/content/tag/bind-article |  |
 | [**create**](TagService.md#create) | **POST** /v1/content/tag/create |  |
 | [**list**](TagService.md#list) | **POST** /v1/content/tag/list |  |
+| [**listArticleTags**](TagService.md#listarticletags) | **POST** /v1/content/tag/list-article-tags |  |
+| [**unbindArticle**](TagService.md#unbindarticle) | **POST** /v1/content/tag/unbind-article |  |
 | [**update**](TagService.md#update) | **POST** /v1/content/tag/update |  |
 
 
 
+## bindArticle
+
+> object bindArticle(bindArticleTagsReq)
+
+
+
+绑定文章标签。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  TagService,
+} from '@bass/bbs-sdk-fetch';
+import type { BindArticleRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new TagService();
+
+  const body = {
+    // BindArticleTagsReq
+    bindArticleTagsReq: ...,
+  } satisfies BindArticleRequest;
+
+  try {
+    const data = await api.bindArticle(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **bindArticleTagsReq** | [BindArticleTagsReq](BindArticleTagsReq.md) |  | |
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## create
 
-> CreateTagReply create(createTagRequest)
+> CreateTagResp create(createTagReq)
 
 
 
@@ -32,8 +102,8 @@ async function example() {
   const api = new TagService();
 
   const body = {
-    // CreateTagRequest
-    createTagRequest: ...,
+    // CreateTagReq
+    createTagReq: ...,
   } satisfies CreateRequest;
 
   try {
@@ -53,11 +123,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **createTagRequest** | [CreateTagRequest](CreateTagRequest.md) |  | |
+| **createTagReq** | [CreateTagReq](CreateTagReq.md) |  | |
 
 ### Return type
 
-[**CreateTagReply**](CreateTagReply.md)
+[**CreateTagResp**](CreateTagResp.md)
 
 ### Authorization
 
@@ -79,11 +149,11 @@ No authorization required
 
 ## list
 
-> ListTagsReply list(listTagsRequest)
+> ListTagsResp list(listTagsReq)
 
 
 
-分页查询标签列表。
+查询标签列表。
 
 ### Example
 
@@ -99,8 +169,8 @@ async function example() {
   const api = new TagService();
 
   const body = {
-    // ListTagsRequest
-    listTagsRequest: ...,
+    // ListTagsReq
+    listTagsReq: ...,
   } satisfies ListRequest;
 
   try {
@@ -120,11 +190,145 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **listTagsRequest** | [ListTagsRequest](ListTagsRequest.md) |  | |
+| **listTagsReq** | [ListTagsReq](ListTagsReq.md) |  | |
 
 ### Return type
 
-[**ListTagsReply**](ListTagsReply.md)
+[**ListTagsResp**](ListTagsResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## listArticleTags
+
+> ListArticleTagsResp listArticleTags(listArticleTagsReq)
+
+
+
+查询文章标签列表。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  TagService,
+} from '@bass/bbs-sdk-fetch';
+import type { ListArticleTagsRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new TagService();
+
+  const body = {
+    // ListArticleTagsReq
+    listArticleTagsReq: ...,
+  } satisfies ListArticleTagsRequest;
+
+  try {
+    const data = await api.listArticleTags(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **listArticleTagsReq** | [ListArticleTagsReq](ListArticleTagsReq.md) |  | |
+
+### Return type
+
+[**ListArticleTagsResp**](ListArticleTagsResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## unbindArticle
+
+> object unbindArticle(unbindArticleTagsReq)
+
+
+
+解绑文章标签。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  TagService,
+} from '@bass/bbs-sdk-fetch';
+import type { UnbindArticleRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new TagService();
+
+  const body = {
+    // UnbindArticleTagsReq
+    unbindArticleTagsReq: ...,
+  } satisfies UnbindArticleRequest;
+
+  try {
+    const data = await api.unbindArticle(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **unbindArticleTagsReq** | [UnbindArticleTagsReq](UnbindArticleTagsReq.md) |  | |
+
+### Return type
+
+**object**
 
 ### Authorization
 
@@ -146,7 +350,7 @@ No authorization required
 
 ## update
 
-> UpdateTagReply update(updateTagRequest)
+> UpdateTagResp update(updateTagReq)
 
 
 
@@ -166,8 +370,8 @@ async function example() {
   const api = new TagService();
 
   const body = {
-    // UpdateTagRequest
-    updateTagRequest: ...,
+    // UpdateTagReq
+    updateTagReq: ...,
   } satisfies UpdateRequest;
 
   try {
@@ -187,11 +391,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **updateTagRequest** | [UpdateTagRequest](UpdateTagRequest.md) |  | |
+| **updateTagReq** | [UpdateTagReq](UpdateTagReq.md) |  | |
 
 ### Return type
 
-[**UpdateTagReply**](UpdateTagReply.md)
+[**UpdateTagResp**](UpdateTagResp.md)
 
 ### Authorization
 

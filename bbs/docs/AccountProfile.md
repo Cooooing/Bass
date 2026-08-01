@@ -1,7 +1,6 @@
 
 # AccountProfile
 
-账号展示资料。
 
 ## Properties
 
@@ -17,8 +16,8 @@ Name | Type
 `status` | string
 `followCount` | number
 `followerCount` | number
-`createdAt` | string
-`updatedAt` | string
+`createdAt` | Date
+`updatedAt` | Date
 
 ## Example
 

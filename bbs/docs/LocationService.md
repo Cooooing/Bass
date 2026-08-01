@@ -11,7 +11,7 @@ All URIs are relative to *http://localhost*
 
 ## getCurrent
 
-> GetCurrentLocationReply getCurrent(body)
+> GetCurrentLocationResp getCurrent(body)
 
 
 
@@ -56,7 +56,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**GetCurrentLocationReply**](GetCurrentLocationReply.md)
+[**GetCurrentLocationResp**](GetCurrentLocationResp.md)
 
 ### Authorization
 
@@ -78,7 +78,7 @@ No authorization required
 
 ## upsertCurrent
 
-> UpsertCurrentLocationReply upsertCurrent(upsertCurrentLocationRequest)
+> UpsertCurrentLocationResp upsertCurrent(upsertCurrentLocationReq)
 
 
 
@@ -98,8 +98,8 @@ async function example() {
   const api = new LocationService();
 
   const body = {
-    // UpsertCurrentLocationRequest
-    upsertCurrentLocationRequest: ...,
+    // UpsertCurrentLocationReq
+    upsertCurrentLocationReq: ...,
   } satisfies UpsertCurrentRequest;
 
   try {
@@ -119,11 +119,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **upsertCurrentLocationRequest** | [UpsertCurrentLocationRequest](UpsertCurrentLocationRequest.md) |  | |
+| **upsertCurrentLocationReq** | [UpsertCurrentLocationReq](UpsertCurrentLocationReq.md) |  | |
 
 ### Return type
 
-[**UpsertCurrentLocationReply**](UpsertCurrentLocationReply.md)
+[**UpsertCurrentLocationResp**](UpsertCurrentLocationResp.md)
 
 ### Authorization
 

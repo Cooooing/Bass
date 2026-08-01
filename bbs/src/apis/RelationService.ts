@@ -14,96 +14,96 @@
 
 import * as runtime from '../runtime';
 import {
-    type BlockRelationRequest,
-    BlockRelationRequestFromJSON,
-    BlockRelationRequestToJSON,
-} from '../models/BlockRelationRequest';
+    type BlockRelationReq,
+    BlockRelationReqFromJSON,
+    BlockRelationReqToJSON,
+} from '../models/BlockRelationReq';
 import {
-    type FollowRelationRequest,
-    FollowRelationRequestFromJSON,
-    FollowRelationRequestToJSON,
-} from '../models/FollowRelationRequest';
+    type FollowRelationReq,
+    FollowRelationReqFromJSON,
+    FollowRelationReqToJSON,
+} from '../models/FollowRelationReq';
 import {
-    type GetStatusRelationReply,
-    GetStatusRelationReplyFromJSON,
-    GetStatusRelationReplyToJSON,
-} from '../models/GetStatusRelationReply';
+    type GetStatusRelationReq,
+    GetStatusRelationReqFromJSON,
+    GetStatusRelationReqToJSON,
+} from '../models/GetStatusRelationReq';
 import {
-    type GetStatusRelationRequest,
-    GetStatusRelationRequestFromJSON,
-    GetStatusRelationRequestToJSON,
-} from '../models/GetStatusRelationRequest';
+    type GetStatusRelationResp,
+    GetStatusRelationRespFromJSON,
+    GetStatusRelationRespToJSON,
+} from '../models/GetStatusRelationResp';
 import {
-    type ListBlockedRelationsReply,
-    ListBlockedRelationsReplyFromJSON,
-    ListBlockedRelationsReplyToJSON,
-} from '../models/ListBlockedRelationsReply';
+    type ListBlockedRelationsReq,
+    ListBlockedRelationsReqFromJSON,
+    ListBlockedRelationsReqToJSON,
+} from '../models/ListBlockedRelationsReq';
 import {
-    type ListBlockedRelationsRequest,
-    ListBlockedRelationsRequestFromJSON,
-    ListBlockedRelationsRequestToJSON,
-} from '../models/ListBlockedRelationsRequest';
+    type ListBlockedRelationsResp,
+    ListBlockedRelationsRespFromJSON,
+    ListBlockedRelationsRespToJSON,
+} from '../models/ListBlockedRelationsResp';
 import {
-    type ListFollowersRelationsReply,
-    ListFollowersRelationsReplyFromJSON,
-    ListFollowersRelationsReplyToJSON,
-} from '../models/ListFollowersRelationsReply';
+    type ListFollowersRelationsReq,
+    ListFollowersRelationsReqFromJSON,
+    ListFollowersRelationsReqToJSON,
+} from '../models/ListFollowersRelationsReq';
 import {
-    type ListFollowersRelationsRequest,
-    ListFollowersRelationsRequestFromJSON,
-    ListFollowersRelationsRequestToJSON,
-} from '../models/ListFollowersRelationsRequest';
+    type ListFollowersRelationsResp,
+    ListFollowersRelationsRespFromJSON,
+    ListFollowersRelationsRespToJSON,
+} from '../models/ListFollowersRelationsResp';
 import {
-    type ListFollowingRelationsReply,
-    ListFollowingRelationsReplyFromJSON,
-    ListFollowingRelationsReplyToJSON,
-} from '../models/ListFollowingRelationsReply';
+    type ListFollowingRelationsReq,
+    ListFollowingRelationsReqFromJSON,
+    ListFollowingRelationsReqToJSON,
+} from '../models/ListFollowingRelationsReq';
 import {
-    type ListFollowingRelationsRequest,
-    ListFollowingRelationsRequestFromJSON,
-    ListFollowingRelationsRequestToJSON,
-} from '../models/ListFollowingRelationsRequest';
+    type ListFollowingRelationsResp,
+    ListFollowingRelationsRespFromJSON,
+    ListFollowingRelationsRespToJSON,
+} from '../models/ListFollowingRelationsResp';
 import {
-    type UnblockRelationRequest,
-    UnblockRelationRequestFromJSON,
-    UnblockRelationRequestToJSON,
-} from '../models/UnblockRelationRequest';
+    type UnblockRelationReq,
+    UnblockRelationReqFromJSON,
+    UnblockRelationReqToJSON,
+} from '../models/UnblockRelationReq';
 import {
-    type UnfollowRelationRequest,
-    UnfollowRelationRequestFromJSON,
-    UnfollowRelationRequestToJSON,
-} from '../models/UnfollowRelationRequest';
+    type UnfollowRelationReq,
+    UnfollowRelationReqFromJSON,
+    UnfollowRelationReqToJSON,
+} from '../models/UnfollowRelationReq';
 
 export interface BlockRequest {
-    blockRelationRequest: BlockRelationRequest;
+    blockRelationReq: BlockRelationReq;
 }
 
 export interface FollowRequest {
-    followRelationRequest: FollowRelationRequest;
+    followRelationReq: FollowRelationReq;
 }
 
 export interface GetStatusRequest {
-    getStatusRelationRequest: GetStatusRelationRequest;
+    getStatusRelationReq: GetStatusRelationReq;
 }
 
 export interface ListBlockedRequest {
-    listBlockedRelationsRequest: ListBlockedRelationsRequest;
+    listBlockedRelationsReq: ListBlockedRelationsReq;
 }
 
 export interface ListFollowersRequest {
-    listFollowersRelationsRequest: ListFollowersRelationsRequest;
+    listFollowersRelationsReq: ListFollowersRelationsReq;
 }
 
 export interface ListFollowingRequest {
-    listFollowingRelationsRequest: ListFollowingRelationsRequest;
+    listFollowingRelationsReq: ListFollowingRelationsReq;
 }
 
 export interface UnblockRequest {
-    unblockRelationRequest: UnblockRelationRequest;
+    unblockRelationReq: UnblockRelationReq;
 }
 
 export interface UnfollowRequest {
-    unfollowRelationRequest: UnfollowRelationRequest;
+    unfollowRelationReq: UnfollowRelationReq;
 }
 
 /**
@@ -115,7 +115,7 @@ export interface UnfollowRequest {
 export interface RelationServiceInterface {
     /**
      * Creates request options for block without sending the request
-     * @param {BlockRelationRequest} blockRelationRequest 
+     * @param {BlockRelationReq} blockRelationReq 
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
@@ -123,7 +123,7 @@ export interface RelationServiceInterface {
 
     /**
      * 当前账号拉黑目标账号。
-     * @param {BlockRelationRequest} blockRelationRequest 
+     * @param {BlockRelationReq} blockRelationReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
@@ -137,7 +137,7 @@ export interface RelationServiceInterface {
 
     /**
      * Creates request options for follow without sending the request
-     * @param {FollowRelationRequest} followRelationRequest 
+     * @param {FollowRelationReq} followRelationReq 
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
@@ -145,7 +145,7 @@ export interface RelationServiceInterface {
 
     /**
      * 当前账号关注目标账号。
-     * @param {FollowRelationRequest} followRelationRequest 
+     * @param {FollowRelationReq} followRelationReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
@@ -159,7 +159,7 @@ export interface RelationServiceInterface {
 
     /**
      * Creates request options for getStatus without sending the request
-     * @param {GetStatusRelationRequest} getStatusRelationRequest 
+     * @param {GetStatusRelationReq} getStatusRelationReq 
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
@@ -167,21 +167,21 @@ export interface RelationServiceInterface {
 
     /**
      * 查询当前账号与目标账号之间的关系。
-     * @param {GetStatusRelationRequest} getStatusRelationRequest 
+     * @param {GetStatusRelationReq} getStatusRelationReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
-    getStatusRaw(requestParameters: GetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetStatusRelationReply>>;
+    getStatusRaw(requestParameters: GetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetStatusRelationResp>>;
 
     /**
      * 查询当前账号与目标账号之间的关系。
      */
-    getStatus(requestParameters: GetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetStatusRelationReply>;
+    getStatus(requestParameters: GetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetStatusRelationResp>;
 
     /**
      * Creates request options for listBlocked without sending the request
-     * @param {ListBlockedRelationsRequest} listBlockedRelationsRequest 
+     * @param {ListBlockedRelationsReq} listBlockedRelationsReq 
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
@@ -189,21 +189,21 @@ export interface RelationServiceInterface {
 
     /**
      * 分页查询当前账号拉黑的账号列表。
-     * @param {ListBlockedRelationsRequest} listBlockedRelationsRequest 
+     * @param {ListBlockedRelationsReq} listBlockedRelationsReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
-    listBlockedRaw(requestParameters: ListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBlockedRelationsReply>>;
+    listBlockedRaw(requestParameters: ListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBlockedRelationsResp>>;
 
     /**
      * 分页查询当前账号拉黑的账号列表。
      */
-    listBlocked(requestParameters: ListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBlockedRelationsReply>;
+    listBlocked(requestParameters: ListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBlockedRelationsResp>;
 
     /**
      * Creates request options for listFollowers without sending the request
-     * @param {ListFollowersRelationsRequest} listFollowersRelationsRequest 
+     * @param {ListFollowersRelationsReq} listFollowersRelationsReq 
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
@@ -211,21 +211,21 @@ export interface RelationServiceInterface {
 
     /**
      * 分页查询当前账号的粉丝账号列表。
-     * @param {ListFollowersRelationsRequest} listFollowersRelationsRequest 
+     * @param {ListFollowersRelationsReq} listFollowersRelationsReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
-    listFollowersRaw(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowersRelationsReply>>;
+    listFollowersRaw(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowersRelationsResp>>;
 
     /**
      * 分页查询当前账号的粉丝账号列表。
      */
-    listFollowers(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowersRelationsReply>;
+    listFollowers(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowersRelationsResp>;
 
     /**
      * Creates request options for listFollowing without sending the request
-     * @param {ListFollowingRelationsRequest} listFollowingRelationsRequest 
+     * @param {ListFollowingRelationsReq} listFollowingRelationsReq 
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
@@ -233,21 +233,21 @@ export interface RelationServiceInterface {
 
     /**
      * 分页查询当前账号关注的账号列表。
-     * @param {ListFollowingRelationsRequest} listFollowingRelationsRequest 
+     * @param {ListFollowingRelationsReq} listFollowingRelationsReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
-    listFollowingRaw(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowingRelationsReply>>;
+    listFollowingRaw(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowingRelationsResp>>;
 
     /**
      * 分页查询当前账号关注的账号列表。
      */
-    listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingRelationsReply>;
+    listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingRelationsResp>;
 
     /**
      * Creates request options for unblock without sending the request
-     * @param {UnblockRelationRequest} unblockRelationRequest 
+     * @param {UnblockRelationReq} unblockRelationReq 
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
@@ -255,7 +255,7 @@ export interface RelationServiceInterface {
 
     /**
      * 当前账号取消拉黑目标账号。
-     * @param {UnblockRelationRequest} unblockRelationRequest 
+     * @param {UnblockRelationReq} unblockRelationReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
@@ -269,7 +269,7 @@ export interface RelationServiceInterface {
 
     /**
      * Creates request options for unfollow without sending the request
-     * @param {UnfollowRelationRequest} unfollowRelationRequest 
+     * @param {UnfollowRelationReq} unfollowRelationReq 
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
      */
@@ -277,7 +277,7 @@ export interface RelationServiceInterface {
 
     /**
      * 当前账号取消关注目标账号。
-     * @param {UnfollowRelationRequest} unfollowRelationRequest 
+     * @param {UnfollowRelationReq} unfollowRelationReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RelationServiceInterface
@@ -300,10 +300,10 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
      * Creates request options for block without sending the request
      */
     async blockRequestOpts(requestParameters: BlockRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['blockRelationRequest'] == null) {
+        if (requestParameters['blockRelationReq'] == null) {
             throw new runtime.RequiredError(
-                'blockRelationRequest',
-                'Required parameter "blockRelationRequest" was null or undefined when calling block().'
+                'blockRelationReq',
+                'Required parameter "blockRelationReq" was null or undefined when calling block().'
             );
         }
 
@@ -321,7 +321,7 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: BlockRelationRequestToJSON(requestParameters['blockRelationRequest']),
+            body: BlockRelationReqToJSON(requestParameters['blockRelationReq']),
         };
     }
 
@@ -347,10 +347,10 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
      * Creates request options for follow without sending the request
      */
     async followRequestOpts(requestParameters: FollowRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['followRelationRequest'] == null) {
+        if (requestParameters['followRelationReq'] == null) {
             throw new runtime.RequiredError(
-                'followRelationRequest',
-                'Required parameter "followRelationRequest" was null or undefined when calling follow().'
+                'followRelationReq',
+                'Required parameter "followRelationReq" was null or undefined when calling follow().'
             );
         }
 
@@ -368,7 +368,7 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: FollowRelationRequestToJSON(requestParameters['followRelationRequest']),
+            body: FollowRelationReqToJSON(requestParameters['followRelationReq']),
         };
     }
 
@@ -394,10 +394,10 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
      * Creates request options for getStatus without sending the request
      */
     async getStatusRequestOpts(requestParameters: GetStatusRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['getStatusRelationRequest'] == null) {
+        if (requestParameters['getStatusRelationReq'] == null) {
             throw new runtime.RequiredError(
-                'getStatusRelationRequest',
-                'Required parameter "getStatusRelationRequest" was null or undefined when calling getStatus().'
+                'getStatusRelationReq',
+                'Required parameter "getStatusRelationReq" was null or undefined when calling getStatus().'
             );
         }
 
@@ -415,24 +415,24 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: GetStatusRelationRequestToJSON(requestParameters['getStatusRelationRequest']),
+            body: GetStatusRelationReqToJSON(requestParameters['getStatusRelationReq']),
         };
     }
 
     /**
      * 查询当前账号与目标账号之间的关系。
      */
-    async getStatusRaw(requestParameters: GetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetStatusRelationReply>> {
+    async getStatusRaw(requestParameters: GetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetStatusRelationResp>> {
         const requestOptions = await this.getStatusRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetStatusRelationReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetStatusRelationRespFromJSON(jsonValue));
     }
 
     /**
      * 查询当前账号与目标账号之间的关系。
      */
-    async getStatus(requestParameters: GetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetStatusRelationReply> {
+    async getStatus(requestParameters: GetStatusRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetStatusRelationResp> {
         const response = await this.getStatusRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -441,10 +441,10 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
      * Creates request options for listBlocked without sending the request
      */
     async listBlockedRequestOpts(requestParameters: ListBlockedRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['listBlockedRelationsRequest'] == null) {
+        if (requestParameters['listBlockedRelationsReq'] == null) {
             throw new runtime.RequiredError(
-                'listBlockedRelationsRequest',
-                'Required parameter "listBlockedRelationsRequest" was null or undefined when calling listBlocked().'
+                'listBlockedRelationsReq',
+                'Required parameter "listBlockedRelationsReq" was null or undefined when calling listBlocked().'
             );
         }
 
@@ -462,24 +462,24 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ListBlockedRelationsRequestToJSON(requestParameters['listBlockedRelationsRequest']),
+            body: ListBlockedRelationsReqToJSON(requestParameters['listBlockedRelationsReq']),
         };
     }
 
     /**
      * 分页查询当前账号拉黑的账号列表。
      */
-    async listBlockedRaw(requestParameters: ListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBlockedRelationsReply>> {
+    async listBlockedRaw(requestParameters: ListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListBlockedRelationsResp>> {
         const requestOptions = await this.listBlockedRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListBlockedRelationsReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListBlockedRelationsRespFromJSON(jsonValue));
     }
 
     /**
      * 分页查询当前账号拉黑的账号列表。
      */
-    async listBlocked(requestParameters: ListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBlockedRelationsReply> {
+    async listBlocked(requestParameters: ListBlockedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListBlockedRelationsResp> {
         const response = await this.listBlockedRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -488,10 +488,10 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
      * Creates request options for listFollowers without sending the request
      */
     async listFollowersRequestOpts(requestParameters: ListFollowersRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['listFollowersRelationsRequest'] == null) {
+        if (requestParameters['listFollowersRelationsReq'] == null) {
             throw new runtime.RequiredError(
-                'listFollowersRelationsRequest',
-                'Required parameter "listFollowersRelationsRequest" was null or undefined when calling listFollowers().'
+                'listFollowersRelationsReq',
+                'Required parameter "listFollowersRelationsReq" was null or undefined when calling listFollowers().'
             );
         }
 
@@ -509,24 +509,24 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ListFollowersRelationsRequestToJSON(requestParameters['listFollowersRelationsRequest']),
+            body: ListFollowersRelationsReqToJSON(requestParameters['listFollowersRelationsReq']),
         };
     }
 
     /**
      * 分页查询当前账号的粉丝账号列表。
      */
-    async listFollowersRaw(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowersRelationsReply>> {
+    async listFollowersRaw(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowersRelationsResp>> {
         const requestOptions = await this.listFollowersRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListFollowersRelationsReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListFollowersRelationsRespFromJSON(jsonValue));
     }
 
     /**
      * 分页查询当前账号的粉丝账号列表。
      */
-    async listFollowers(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowersRelationsReply> {
+    async listFollowers(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowersRelationsResp> {
         const response = await this.listFollowersRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -535,10 +535,10 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
      * Creates request options for listFollowing without sending the request
      */
     async listFollowingRequestOpts(requestParameters: ListFollowingRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['listFollowingRelationsRequest'] == null) {
+        if (requestParameters['listFollowingRelationsReq'] == null) {
             throw new runtime.RequiredError(
-                'listFollowingRelationsRequest',
-                'Required parameter "listFollowingRelationsRequest" was null or undefined when calling listFollowing().'
+                'listFollowingRelationsReq',
+                'Required parameter "listFollowingRelationsReq" was null or undefined when calling listFollowing().'
             );
         }
 
@@ -556,24 +556,24 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ListFollowingRelationsRequestToJSON(requestParameters['listFollowingRelationsRequest']),
+            body: ListFollowingRelationsReqToJSON(requestParameters['listFollowingRelationsReq']),
         };
     }
 
     /**
      * 分页查询当前账号关注的账号列表。
      */
-    async listFollowingRaw(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowingRelationsReply>> {
+    async listFollowingRaw(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowingRelationsResp>> {
         const requestOptions = await this.listFollowingRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListFollowingRelationsReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListFollowingRelationsRespFromJSON(jsonValue));
     }
 
     /**
      * 分页查询当前账号关注的账号列表。
      */
-    async listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingRelationsReply> {
+    async listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingRelationsResp> {
         const response = await this.listFollowingRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -582,10 +582,10 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
      * Creates request options for unblock without sending the request
      */
     async unblockRequestOpts(requestParameters: UnblockRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['unblockRelationRequest'] == null) {
+        if (requestParameters['unblockRelationReq'] == null) {
             throw new runtime.RequiredError(
-                'unblockRelationRequest',
-                'Required parameter "unblockRelationRequest" was null or undefined when calling unblock().'
+                'unblockRelationReq',
+                'Required parameter "unblockRelationReq" was null or undefined when calling unblock().'
             );
         }
 
@@ -603,7 +603,7 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UnblockRelationRequestToJSON(requestParameters['unblockRelationRequest']),
+            body: UnblockRelationReqToJSON(requestParameters['unblockRelationReq']),
         };
     }
 
@@ -629,10 +629,10 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
      * Creates request options for unfollow without sending the request
      */
     async unfollowRequestOpts(requestParameters: UnfollowRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['unfollowRelationRequest'] == null) {
+        if (requestParameters['unfollowRelationReq'] == null) {
             throw new runtime.RequiredError(
-                'unfollowRelationRequest',
-                'Required parameter "unfollowRelationRequest" was null or undefined when calling unfollow().'
+                'unfollowRelationReq',
+                'Required parameter "unfollowRelationReq" was null or undefined when calling unfollow().'
             );
         }
 
@@ -650,7 +650,7 @@ export class RelationService extends runtime.BaseAPI implements RelationServiceI
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UnfollowRelationRequestToJSON(requestParameters['unfollowRelationRequest']),
+            body: UnfollowRelationReqToJSON(requestParameters['unfollowRelationReq']),
         };
     }
 

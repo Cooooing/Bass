@@ -14,46 +14,78 @@
 
 import * as runtime from '../runtime';
 import {
-    type CreateTagReply,
-    CreateTagReplyFromJSON,
-    CreateTagReplyToJSON,
-} from '../models/CreateTagReply';
+    type BindArticleTagsReq,
+    BindArticleTagsReqFromJSON,
+    BindArticleTagsReqToJSON,
+} from '../models/BindArticleTagsReq';
 import {
-    type CreateTagRequest,
-    CreateTagRequestFromJSON,
-    CreateTagRequestToJSON,
-} from '../models/CreateTagRequest';
+    type CreateTagReq,
+    CreateTagReqFromJSON,
+    CreateTagReqToJSON,
+} from '../models/CreateTagReq';
 import {
-    type ListTagsReply,
-    ListTagsReplyFromJSON,
-    ListTagsReplyToJSON,
-} from '../models/ListTagsReply';
+    type CreateTagResp,
+    CreateTagRespFromJSON,
+    CreateTagRespToJSON,
+} from '../models/CreateTagResp';
 import {
-    type ListTagsRequest,
-    ListTagsRequestFromJSON,
-    ListTagsRequestToJSON,
-} from '../models/ListTagsRequest';
+    type ListArticleTagsReq,
+    ListArticleTagsReqFromJSON,
+    ListArticleTagsReqToJSON,
+} from '../models/ListArticleTagsReq';
 import {
-    type UpdateTagReply,
-    UpdateTagReplyFromJSON,
-    UpdateTagReplyToJSON,
-} from '../models/UpdateTagReply';
+    type ListArticleTagsResp,
+    ListArticleTagsRespFromJSON,
+    ListArticleTagsRespToJSON,
+} from '../models/ListArticleTagsResp';
 import {
-    type UpdateTagRequest,
-    UpdateTagRequestFromJSON,
-    UpdateTagRequestToJSON,
-} from '../models/UpdateTagRequest';
+    type ListTagsReq,
+    ListTagsReqFromJSON,
+    ListTagsReqToJSON,
+} from '../models/ListTagsReq';
+import {
+    type ListTagsResp,
+    ListTagsRespFromJSON,
+    ListTagsRespToJSON,
+} from '../models/ListTagsResp';
+import {
+    type UnbindArticleTagsReq,
+    UnbindArticleTagsReqFromJSON,
+    UnbindArticleTagsReqToJSON,
+} from '../models/UnbindArticleTagsReq';
+import {
+    type UpdateTagReq,
+    UpdateTagReqFromJSON,
+    UpdateTagReqToJSON,
+} from '../models/UpdateTagReq';
+import {
+    type UpdateTagResp,
+    UpdateTagRespFromJSON,
+    UpdateTagRespToJSON,
+} from '../models/UpdateTagResp';
+
+export interface BindArticleRequest {
+    bindArticleTagsReq: BindArticleTagsReq;
+}
 
 export interface CreateRequest {
-    createTagRequest: CreateTagRequest;
+    createTagReq: CreateTagReq;
 }
 
 export interface ListRequest {
-    listTagsRequest: ListTagsRequest;
+    listTagsReq: ListTagsReq;
+}
+
+export interface ListArticleTagsRequest {
+    listArticleTagsReq: ListArticleTagsReq;
+}
+
+export interface UnbindArticleRequest {
+    unbindArticleTagsReq: UnbindArticleTagsReq;
 }
 
 export interface UpdateRequest {
-    updateTagRequest: UpdateTagRequest;
+    updateTagReq: UpdateTagReq;
 }
 
 /**
@@ -64,8 +96,30 @@ export interface UpdateRequest {
  */
 export interface TagServiceInterface {
     /**
+     * Creates request options for bindArticle without sending the request
+     * @param {BindArticleTagsReq} bindArticleTagsReq 
+     * @throws {RequiredError}
+     * @memberof TagServiceInterface
+     */
+    bindArticleRequestOpts(requestParameters: BindArticleRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 绑定文章标签。
+     * @param {BindArticleTagsReq} bindArticleTagsReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagServiceInterface
+     */
+    bindArticleRaw(requestParameters: BindArticleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 绑定文章标签。
+     */
+    bindArticle(requestParameters: BindArticleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
+    /**
      * Creates request options for create without sending the request
-     * @param {CreateTagRequest} createTagRequest 
+     * @param {CreateTagReq} createTagReq 
      * @throws {RequiredError}
      * @memberof TagServiceInterface
      */
@@ -73,43 +127,87 @@ export interface TagServiceInterface {
 
     /**
      * 创建标签。
-     * @param {CreateTagRequest} createTagRequest 
+     * @param {CreateTagReq} createTagReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TagServiceInterface
      */
-    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateTagReply>>;
+    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateTagResp>>;
 
     /**
      * 创建标签。
      */
-    create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateTagReply>;
+    create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateTagResp>;
 
     /**
      * Creates request options for list without sending the request
-     * @param {ListTagsRequest} listTagsRequest 
+     * @param {ListTagsReq} listTagsReq 
      * @throws {RequiredError}
      * @memberof TagServiceInterface
      */
     listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 分页查询标签列表。
-     * @param {ListTagsRequest} listTagsRequest 
+     * 查询标签列表。
+     * @param {ListTagsReq} listTagsReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TagServiceInterface
      */
-    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListTagsReply>>;
+    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListTagsResp>>;
 
     /**
-     * 分页查询标签列表。
+     * 查询标签列表。
      */
-    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListTagsReply>;
+    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListTagsResp>;
+
+    /**
+     * Creates request options for listArticleTags without sending the request
+     * @param {ListArticleTagsReq} listArticleTagsReq 
+     * @throws {RequiredError}
+     * @memberof TagServiceInterface
+     */
+    listArticleTagsRequestOpts(requestParameters: ListArticleTagsRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询文章标签列表。
+     * @param {ListArticleTagsReq} listArticleTagsReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagServiceInterface
+     */
+    listArticleTagsRaw(requestParameters: ListArticleTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListArticleTagsResp>>;
+
+    /**
+     * 查询文章标签列表。
+     */
+    listArticleTags(requestParameters: ListArticleTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListArticleTagsResp>;
+
+    /**
+     * Creates request options for unbindArticle without sending the request
+     * @param {UnbindArticleTagsReq} unbindArticleTagsReq 
+     * @throws {RequiredError}
+     * @memberof TagServiceInterface
+     */
+    unbindArticleRequestOpts(requestParameters: UnbindArticleRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 解绑文章标签。
+     * @param {UnbindArticleTagsReq} unbindArticleTagsReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagServiceInterface
+     */
+    unbindArticleRaw(requestParameters: UnbindArticleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 解绑文章标签。
+     */
+    unbindArticle(requestParameters: UnbindArticleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
      * Creates request options for update without sending the request
-     * @param {UpdateTagRequest} updateTagRequest 
+     * @param {UpdateTagReq} updateTagReq 
      * @throws {RequiredError}
      * @memberof TagServiceInterface
      */
@@ -117,17 +215,17 @@ export interface TagServiceInterface {
 
     /**
      * 更新标签。
-     * @param {UpdateTagRequest} updateTagRequest 
+     * @param {UpdateTagReq} updateTagReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TagServiceInterface
      */
-    updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateTagReply>>;
+    updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateTagResp>>;
 
     /**
      * 更新标签。
      */
-    update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateTagReply>;
+    update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateTagResp>;
 
 }
 
@@ -137,13 +235,60 @@ export interface TagServiceInterface {
 export class TagService extends runtime.BaseAPI implements TagServiceInterface {
 
     /**
+     * Creates request options for bindArticle without sending the request
+     */
+    async bindArticleRequestOpts(requestParameters: BindArticleRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['bindArticleTagsReq'] == null) {
+            throw new runtime.RequiredError(
+                'bindArticleTagsReq',
+                'Required parameter "bindArticleTagsReq" was null or undefined when calling bindArticle().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/tag/bind-article`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: BindArticleTagsReqToJSON(requestParameters['bindArticleTagsReq']),
+        };
+    }
+
+    /**
+     * 绑定文章标签。
+     */
+    async bindArticleRaw(requestParameters: BindArticleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.bindArticleRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 绑定文章标签。
+     */
+    async bindArticle(requestParameters: BindArticleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.bindArticleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for create without sending the request
      */
     async createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['createTagRequest'] == null) {
+        if (requestParameters['createTagReq'] == null) {
             throw new runtime.RequiredError(
-                'createTagRequest',
-                'Required parameter "createTagRequest" was null or undefined when calling create().'
+                'createTagReq',
+                'Required parameter "createTagReq" was null or undefined when calling create().'
             );
         }
 
@@ -161,24 +306,24 @@ export class TagService extends runtime.BaseAPI implements TagServiceInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateTagRequestToJSON(requestParameters['createTagRequest']),
+            body: CreateTagReqToJSON(requestParameters['createTagReq']),
         };
     }
 
     /**
      * 创建标签。
      */
-    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateTagReply>> {
+    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateTagResp>> {
         const requestOptions = await this.createRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreateTagReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CreateTagRespFromJSON(jsonValue));
     }
 
     /**
      * 创建标签。
      */
-    async create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateTagReply> {
+    async create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateTagResp> {
         const response = await this.createRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -187,10 +332,10 @@ export class TagService extends runtime.BaseAPI implements TagServiceInterface {
      * Creates request options for list without sending the request
      */
     async listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['listTagsRequest'] == null) {
+        if (requestParameters['listTagsReq'] == null) {
             throw new runtime.RequiredError(
-                'listTagsRequest',
-                'Required parameter "listTagsRequest" was null or undefined when calling list().'
+                'listTagsReq',
+                'Required parameter "listTagsReq" was null or undefined when calling list().'
             );
         }
 
@@ -208,25 +353,119 @@ export class TagService extends runtime.BaseAPI implements TagServiceInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ListTagsRequestToJSON(requestParameters['listTagsRequest']),
+            body: ListTagsReqToJSON(requestParameters['listTagsReq']),
         };
     }
 
     /**
-     * 分页查询标签列表。
+     * 查询标签列表。
      */
-    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListTagsReply>> {
+    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListTagsResp>> {
         const requestOptions = await this.listRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListTagsReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListTagsRespFromJSON(jsonValue));
     }
 
     /**
-     * 分页查询标签列表。
+     * 查询标签列表。
      */
-    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListTagsReply> {
+    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListTagsResp> {
         const response = await this.listRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for listArticleTags without sending the request
+     */
+    async listArticleTagsRequestOpts(requestParameters: ListArticleTagsRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['listArticleTagsReq'] == null) {
+            throw new runtime.RequiredError(
+                'listArticleTagsReq',
+                'Required parameter "listArticleTagsReq" was null or undefined when calling listArticleTags().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/tag/list-article-tags`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ListArticleTagsReqToJSON(requestParameters['listArticleTagsReq']),
+        };
+    }
+
+    /**
+     * 查询文章标签列表。
+     */
+    async listArticleTagsRaw(requestParameters: ListArticleTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListArticleTagsResp>> {
+        const requestOptions = await this.listArticleTagsRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListArticleTagsRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询文章标签列表。
+     */
+    async listArticleTags(requestParameters: ListArticleTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListArticleTagsResp> {
+        const response = await this.listArticleTagsRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for unbindArticle without sending the request
+     */
+    async unbindArticleRequestOpts(requestParameters: UnbindArticleRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['unbindArticleTagsReq'] == null) {
+            throw new runtime.RequiredError(
+                'unbindArticleTagsReq',
+                'Required parameter "unbindArticleTagsReq" was null or undefined when calling unbindArticle().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/tag/unbind-article`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UnbindArticleTagsReqToJSON(requestParameters['unbindArticleTagsReq']),
+        };
+    }
+
+    /**
+     * 解绑文章标签。
+     */
+    async unbindArticleRaw(requestParameters: UnbindArticleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.unbindArticleRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 解绑文章标签。
+     */
+    async unbindArticle(requestParameters: UnbindArticleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.unbindArticleRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -234,10 +473,10 @@ export class TagService extends runtime.BaseAPI implements TagServiceInterface {
      * Creates request options for update without sending the request
      */
     async updateRequestOpts(requestParameters: UpdateRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['updateTagRequest'] == null) {
+        if (requestParameters['updateTagReq'] == null) {
             throw new runtime.RequiredError(
-                'updateTagRequest',
-                'Required parameter "updateTagRequest" was null or undefined when calling update().'
+                'updateTagReq',
+                'Required parameter "updateTagReq" was null or undefined when calling update().'
             );
         }
 
@@ -255,24 +494,24 @@ export class TagService extends runtime.BaseAPI implements TagServiceInterface {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateTagRequestToJSON(requestParameters['updateTagRequest']),
+            body: UpdateTagReqToJSON(requestParameters['updateTagReq']),
         };
     }
 
     /**
      * 更新标签。
      */
-    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateTagReply>> {
+    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateTagResp>> {
         const requestOptions = await this.updateRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateTagReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateTagRespFromJSON(jsonValue));
     }
 
     /**
      * 更新标签。
      */
-    async update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateTagReply> {
+    async update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateTagResp> {
         const response = await this.updateRaw(requestParameters, initOverrides);
         return await response.value();
     }

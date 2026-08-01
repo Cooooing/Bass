@@ -14,7 +14,7 @@
 
 import { mapValues } from '../runtime';
 /**
- * 文章附言。
+ * 
  * @export
  * @interface ArticlePostscript
  */
@@ -63,16 +63,16 @@ export interface ArticlePostscript {
     updatedBy?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof ArticlePostscript
      */
-    createdAt?: string;
+    createdAt?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof ArticlePostscript
      */
-    updatedAt?: string;
+    updatedAt?: Date;
 }
 
 
@@ -112,8 +112,8 @@ export function ArticlePostscriptFromJSONTyped(json: any, ignoreDiscriminator: b
         'restriction': json['restriction'] == null ? undefined : json['restriction'],
         'createdBy': json['created_by'] == null ? undefined : json['created_by'],
         'updatedBy': json['updated_by'] == null ? undefined : json['updated_by'],
-        'createdAt': json['created_at'] == null ? undefined : json['created_at'],
-        'updatedAt': json['updated_at'] == null ? undefined : json['updated_at'],
+        'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
+        'updatedAt': json['updated_at'] == null ? undefined : (new Date(json['updated_at'])),
     };
 }
 
@@ -135,8 +135,8 @@ export function ArticlePostscriptToJSONTyped(value?: ArticlePostscript | null, i
         'restriction': value['restriction'],
         'created_by': value['createdBy'],
         'updated_by': value['updatedBy'],
-        'created_at': value['createdAt'],
-        'updated_at': value['updatedAt'],
+        'created_at': value['createdAt'] == null ? value['createdAt'] : value['createdAt'].toISOString(),
+        'updated_at': value['updatedAt'] == null ? value['updatedAt'] : value['updatedAt'].toISOString(),
     };
 }
 

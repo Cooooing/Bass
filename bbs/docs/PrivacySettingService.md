@@ -11,7 +11,7 @@ All URIs are relative to *http://localhost*
 
 ## getCurrent
 
-> GetCurrentPrivacySettingReply getCurrent(body)
+> GetCurrentPrivacySettingResp getCurrent(body)
 
 
 
@@ -56,7 +56,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**GetCurrentPrivacySettingReply**](GetCurrentPrivacySettingReply.md)
+[**GetCurrentPrivacySettingResp**](GetCurrentPrivacySettingResp.md)
 
 ### Authorization
 
@@ -78,7 +78,7 @@ No authorization required
 
 ## updateCurrent
 
-> UpdateCurrentPrivacySettingReply updateCurrent(updateCurrentPrivacySettingRequest)
+> UpdateCurrentPrivacySettingResp updateCurrent(updateCurrentPrivacySettingReq)
 
 
 
@@ -98,8 +98,8 @@ async function example() {
   const api = new PrivacySettingService();
 
   const body = {
-    // UpdateCurrentPrivacySettingRequest
-    updateCurrentPrivacySettingRequest: ...,
+    // UpdateCurrentPrivacySettingReq
+    updateCurrentPrivacySettingReq: ...,
   } satisfies UpdateCurrentRequest;
 
   try {
@@ -119,11 +119,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **updateCurrentPrivacySettingRequest** | [UpdateCurrentPrivacySettingRequest](UpdateCurrentPrivacySettingRequest.md) |  | |
+| **updateCurrentPrivacySettingReq** | [UpdateCurrentPrivacySettingReq](UpdateCurrentPrivacySettingReq.md) |  | |
 
 ### Return type
 
-[**UpdateCurrentPrivacySettingReply**](UpdateCurrentPrivacySettingReply.md)
+[**UpdateCurrentPrivacySettingResp**](UpdateCurrentPrivacySettingResp.md)
 
 ### Authorization
 

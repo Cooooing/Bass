@@ -17,7 +17,7 @@ All URIs are relative to *http://localhost*
 
 ## block
 
-> object block(blockRelationRequest)
+> object block(blockRelationReq)
 
 
 
@@ -37,8 +37,8 @@ async function example() {
   const api = new RelationService();
 
   const body = {
-    // BlockRelationRequest
-    blockRelationRequest: ...,
+    // BlockRelationReq
+    blockRelationReq: ...,
   } satisfies BlockRequest;
 
   try {
@@ -58,7 +58,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **blockRelationRequest** | [BlockRelationRequest](BlockRelationRequest.md) |  | |
+| **blockRelationReq** | [BlockRelationReq](BlockRelationReq.md) |  | |
 
 ### Return type
 
@@ -84,7 +84,7 @@ No authorization required
 
 ## follow
 
-> object follow(followRelationRequest)
+> object follow(followRelationReq)
 
 
 
@@ -104,8 +104,8 @@ async function example() {
   const api = new RelationService();
 
   const body = {
-    // FollowRelationRequest
-    followRelationRequest: ...,
+    // FollowRelationReq
+    followRelationReq: ...,
   } satisfies FollowRequest;
 
   try {
@@ -125,7 +125,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **followRelationRequest** | [FollowRelationRequest](FollowRelationRequest.md) |  | |
+| **followRelationReq** | [FollowRelationReq](FollowRelationReq.md) |  | |
 
 ### Return type
 
@@ -151,7 +151,7 @@ No authorization required
 
 ## getStatus
 
-> GetStatusRelationReply getStatus(getStatusRelationRequest)
+> GetStatusRelationResp getStatus(getStatusRelationReq)
 
 
 
@@ -171,8 +171,8 @@ async function example() {
   const api = new RelationService();
 
   const body = {
-    // GetStatusRelationRequest
-    getStatusRelationRequest: ...,
+    // GetStatusRelationReq
+    getStatusRelationReq: ...,
   } satisfies GetStatusRequest;
 
   try {
@@ -192,11 +192,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **getStatusRelationRequest** | [GetStatusRelationRequest](GetStatusRelationRequest.md) |  | |
+| **getStatusRelationReq** | [GetStatusRelationReq](GetStatusRelationReq.md) |  | |
 
 ### Return type
 
-[**GetStatusRelationReply**](GetStatusRelationReply.md)
+[**GetStatusRelationResp**](GetStatusRelationResp.md)
 
 ### Authorization
 
@@ -218,7 +218,7 @@ No authorization required
 
 ## listBlocked
 
-> ListBlockedRelationsReply listBlocked(listBlockedRelationsRequest)
+> ListBlockedRelationsResp listBlocked(listBlockedRelationsReq)
 
 
 
@@ -238,8 +238,8 @@ async function example() {
   const api = new RelationService();
 
   const body = {
-    // ListBlockedRelationsRequest
-    listBlockedRelationsRequest: ...,
+    // ListBlockedRelationsReq
+    listBlockedRelationsReq: ...,
   } satisfies ListBlockedRequest;
 
   try {
@@ -259,11 +259,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **listBlockedRelationsRequest** | [ListBlockedRelationsRequest](ListBlockedRelationsRequest.md) |  | |
+| **listBlockedRelationsReq** | [ListBlockedRelationsReq](ListBlockedRelationsReq.md) |  | |
 
 ### Return type
 
-[**ListBlockedRelationsReply**](ListBlockedRelationsReply.md)
+[**ListBlockedRelationsResp**](ListBlockedRelationsResp.md)
 
 ### Authorization
 
@@ -285,7 +285,7 @@ No authorization required
 
 ## listFollowers
 
-> ListFollowersRelationsReply listFollowers(listFollowersRelationsRequest)
+> ListFollowersRelationsResp listFollowers(listFollowersRelationsReq)
 
 
 
@@ -305,8 +305,8 @@ async function example() {
   const api = new RelationService();
 
   const body = {
-    // ListFollowersRelationsRequest
-    listFollowersRelationsRequest: ...,
+    // ListFollowersRelationsReq
+    listFollowersRelationsReq: ...,
   } satisfies ListFollowersRequest;
 
   try {
@@ -326,11 +326,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **listFollowersRelationsRequest** | [ListFollowersRelationsRequest](ListFollowersRelationsRequest.md) |  | |
+| **listFollowersRelationsReq** | [ListFollowersRelationsReq](ListFollowersRelationsReq.md) |  | |
 
 ### Return type
 
-[**ListFollowersRelationsReply**](ListFollowersRelationsReply.md)
+[**ListFollowersRelationsResp**](ListFollowersRelationsResp.md)
 
 ### Authorization
 
@@ -352,7 +352,7 @@ No authorization required
 
 ## listFollowing
 
-> ListFollowingRelationsReply listFollowing(listFollowingRelationsRequest)
+> ListFollowingRelationsResp listFollowing(listFollowingRelationsReq)
 
 
 
@@ -372,8 +372,8 @@ async function example() {
   const api = new RelationService();
 
   const body = {
-    // ListFollowingRelationsRequest
-    listFollowingRelationsRequest: ...,
+    // ListFollowingRelationsReq
+    listFollowingRelationsReq: ...,
   } satisfies ListFollowingRequest;
 
   try {
@@ -393,11 +393,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **listFollowingRelationsRequest** | [ListFollowingRelationsRequest](ListFollowingRelationsRequest.md) |  | |
+| **listFollowingRelationsReq** | [ListFollowingRelationsReq](ListFollowingRelationsReq.md) |  | |
 
 ### Return type
 
-[**ListFollowingRelationsReply**](ListFollowingRelationsReply.md)
+[**ListFollowingRelationsResp**](ListFollowingRelationsResp.md)
 
 ### Authorization
 
@@ -419,7 +419,7 @@ No authorization required
 
 ## unblock
 
-> object unblock(unblockRelationRequest)
+> object unblock(unblockRelationReq)
 
 
 
@@ -439,8 +439,8 @@ async function example() {
   const api = new RelationService();
 
   const body = {
-    // UnblockRelationRequest
-    unblockRelationRequest: ...,
+    // UnblockRelationReq
+    unblockRelationReq: ...,
   } satisfies UnblockRequest;
 
   try {
@@ -460,7 +460,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **unblockRelationRequest** | [UnblockRelationRequest](UnblockRelationRequest.md) |  | |
+| **unblockRelationReq** | [UnblockRelationReq](UnblockRelationReq.md) |  | |
 
 ### Return type
 
@@ -486,7 +486,7 @@ No authorization required
 
 ## unfollow
 
-> object unfollow(unfollowRelationRequest)
+> object unfollow(unfollowRelationReq)
 
 
 
@@ -506,8 +506,8 @@ async function example() {
   const api = new RelationService();
 
   const body = {
-    // UnfollowRelationRequest
-    unfollowRelationRequest: ...,
+    // UnfollowRelationReq
+    unfollowRelationReq: ...,
   } satisfies UnfollowRequest;
 
   try {
@@ -527,7 +527,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **unfollowRelationRequest** | [UnfollowRelationRequest](UnfollowRelationRequest.md) |  | |
+| **unfollowRelationReq** | [UnfollowRelationReq](UnfollowRelationReq.md) |  | |
 
 ### Return type
 

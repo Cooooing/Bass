@@ -1,7 +1,6 @@
 
 # ArticlePostscript
 
-文章附言。
 
 ## Properties
 
@@ -14,8 +13,8 @@ Name | Type
 `restriction` | string
 `createdBy` | string
 `updatedBy` | string
-`createdAt` | string
-`updatedAt` | string
+`createdAt` | Date
+`updatedAt` | Date
 
 ## Example
 

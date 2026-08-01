@@ -14,41 +14,41 @@
 
 import * as runtime from '../runtime';
 import {
-    type CountUnreadNotificationsReply,
-    CountUnreadNotificationsReplyFromJSON,
-    CountUnreadNotificationsReplyToJSON,
-} from '../models/CountUnreadNotificationsReply';
+    type CountUnreadNotificationsResp,
+    CountUnreadNotificationsRespFromJSON,
+    CountUnreadNotificationsRespToJSON,
+} from '../models/CountUnreadNotificationsResp';
 import {
-    type ListNotificationsReply,
-    ListNotificationsReplyFromJSON,
-    ListNotificationsReplyToJSON,
-} from '../models/ListNotificationsReply';
+    type ListNotificationsReq,
+    ListNotificationsReqFromJSON,
+    ListNotificationsReqToJSON,
+} from '../models/ListNotificationsReq';
 import {
-    type ListNotificationsRequest,
-    ListNotificationsRequestFromJSON,
-    ListNotificationsRequestToJSON,
-} from '../models/ListNotificationsRequest';
+    type ListNotificationsResp,
+    ListNotificationsRespFromJSON,
+    ListNotificationsRespToJSON,
+} from '../models/ListNotificationsResp';
 import {
-    type MarkReadNotificationReply,
-    MarkReadNotificationReplyFromJSON,
-    MarkReadNotificationReplyToJSON,
-} from '../models/MarkReadNotificationReply';
+    type MarkReadNotificationReq,
+    MarkReadNotificationReqFromJSON,
+    MarkReadNotificationReqToJSON,
+} from '../models/MarkReadNotificationReq';
 import {
-    type MarkReadNotificationRequest,
-    MarkReadNotificationRequestFromJSON,
-    MarkReadNotificationRequestToJSON,
-} from '../models/MarkReadNotificationRequest';
+    type MarkReadNotificationResp,
+    MarkReadNotificationRespFromJSON,
+    MarkReadNotificationRespToJSON,
+} from '../models/MarkReadNotificationResp';
 
 export interface CountUnreadRequest {
     body: object;
 }
 
 export interface ListRequest {
-    listNotificationsRequest: ListNotificationsRequest;
+    listNotificationsReq: ListNotificationsReq;
 }
 
 export interface MarkReadRequest {
-    markReadNotificationRequest: MarkReadNotificationRequest;
+    markReadNotificationReq: MarkReadNotificationReq;
 }
 
 /**
@@ -73,16 +73,16 @@ export interface NotificationServiceInterface {
      * @throws {RequiredError}
      * @memberof NotificationServiceInterface
      */
-    countUnreadRaw(requestParameters: CountUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CountUnreadNotificationsReply>>;
+    countUnreadRaw(requestParameters: CountUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CountUnreadNotificationsResp>>;
 
     /**
      * 统计未读通知数量。
      */
-    countUnread(requestParameters: CountUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CountUnreadNotificationsReply>;
+    countUnread(requestParameters: CountUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CountUnreadNotificationsResp>;
 
     /**
      * Creates request options for list without sending the request
-     * @param {ListNotificationsRequest} listNotificationsRequest 
+     * @param {ListNotificationsReq} listNotificationsReq 
      * @throws {RequiredError}
      * @memberof NotificationServiceInterface
      */
@@ -90,21 +90,21 @@ export interface NotificationServiceInterface {
 
     /**
      * 分页查询通知列表。
-     * @param {ListNotificationsRequest} listNotificationsRequest 
+     * @param {ListNotificationsReq} listNotificationsReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NotificationServiceInterface
      */
-    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListNotificationsReply>>;
+    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListNotificationsResp>>;
 
     /**
      * 分页查询通知列表。
      */
-    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListNotificationsReply>;
+    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListNotificationsResp>;
 
     /**
      * Creates request options for markRead without sending the request
-     * @param {MarkReadNotificationRequest} markReadNotificationRequest 
+     * @param {MarkReadNotificationReq} markReadNotificationReq 
      * @throws {RequiredError}
      * @memberof NotificationServiceInterface
      */
@@ -112,17 +112,17 @@ export interface NotificationServiceInterface {
 
     /**
      * 标记通知为已读。
-     * @param {MarkReadNotificationRequest} markReadNotificationRequest 
+     * @param {MarkReadNotificationReq} markReadNotificationReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof NotificationServiceInterface
      */
-    markReadRaw(requestParameters: MarkReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarkReadNotificationReply>>;
+    markReadRaw(requestParameters: MarkReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarkReadNotificationResp>>;
 
     /**
      * 标记通知为已读。
      */
-    markRead(requestParameters: MarkReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarkReadNotificationReply>;
+    markRead(requestParameters: MarkReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarkReadNotificationResp>;
 
 }
 
@@ -163,17 +163,17 @@ export class NotificationService extends runtime.BaseAPI implements Notification
     /**
      * 统计未读通知数量。
      */
-    async countUnreadRaw(requestParameters: CountUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CountUnreadNotificationsReply>> {
+    async countUnreadRaw(requestParameters: CountUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CountUnreadNotificationsResp>> {
         const requestOptions = await this.countUnreadRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CountUnreadNotificationsReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CountUnreadNotificationsRespFromJSON(jsonValue));
     }
 
     /**
      * 统计未读通知数量。
      */
-    async countUnread(requestParameters: CountUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CountUnreadNotificationsReply> {
+    async countUnread(requestParameters: CountUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CountUnreadNotificationsResp> {
         const response = await this.countUnreadRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -182,10 +182,10 @@ export class NotificationService extends runtime.BaseAPI implements Notification
      * Creates request options for list without sending the request
      */
     async listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['listNotificationsRequest'] == null) {
+        if (requestParameters['listNotificationsReq'] == null) {
             throw new runtime.RequiredError(
-                'listNotificationsRequest',
-                'Required parameter "listNotificationsRequest" was null or undefined when calling list().'
+                'listNotificationsReq',
+                'Required parameter "listNotificationsReq" was null or undefined when calling list().'
             );
         }
 
@@ -203,24 +203,24 @@ export class NotificationService extends runtime.BaseAPI implements Notification
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ListNotificationsRequestToJSON(requestParameters['listNotificationsRequest']),
+            body: ListNotificationsReqToJSON(requestParameters['listNotificationsReq']),
         };
     }
 
     /**
      * 分页查询通知列表。
      */
-    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListNotificationsReply>> {
+    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListNotificationsResp>> {
         const requestOptions = await this.listRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListNotificationsReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListNotificationsRespFromJSON(jsonValue));
     }
 
     /**
      * 分页查询通知列表。
      */
-    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListNotificationsReply> {
+    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListNotificationsResp> {
         const response = await this.listRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -229,10 +229,10 @@ export class NotificationService extends runtime.BaseAPI implements Notification
      * Creates request options for markRead without sending the request
      */
     async markReadRequestOpts(requestParameters: MarkReadRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['markReadNotificationRequest'] == null) {
+        if (requestParameters['markReadNotificationReq'] == null) {
             throw new runtime.RequiredError(
-                'markReadNotificationRequest',
-                'Required parameter "markReadNotificationRequest" was null or undefined when calling markRead().'
+                'markReadNotificationReq',
+                'Required parameter "markReadNotificationReq" was null or undefined when calling markRead().'
             );
         }
 
@@ -250,24 +250,24 @@ export class NotificationService extends runtime.BaseAPI implements Notification
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: MarkReadNotificationRequestToJSON(requestParameters['markReadNotificationRequest']),
+            body: MarkReadNotificationReqToJSON(requestParameters['markReadNotificationReq']),
         };
     }
 
     /**
      * 标记通知为已读。
      */
-    async markReadRaw(requestParameters: MarkReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarkReadNotificationReply>> {
+    async markReadRaw(requestParameters: MarkReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarkReadNotificationResp>> {
         const requestOptions = await this.markReadRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => MarkReadNotificationReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => MarkReadNotificationRespFromJSON(jsonValue));
     }
 
     /**
      * 标记通知为已读。
      */
-    async markRead(requestParameters: MarkReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarkReadNotificationReply> {
+    async markRead(requestParameters: MarkReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<MarkReadNotificationResp> {
         const response = await this.markReadRaw(requestParameters, initOverrides);
         return await response.value();
     }

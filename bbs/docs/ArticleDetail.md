@@ -1,7 +1,6 @@
 
 # ArticleDetail
 
-文章详情。
 
 ## Properties
 
@@ -19,30 +18,27 @@ Name | Type
 `type` | string
 `statement` | string
 `commentable` | boolean
-`anonymous` | boolean
 `viewCount` | number
 `thankCount` | number
 `likeCount` | number
 `collectCount` | number
-`watchCount` | number
+`rewardCount` | number
 `replyCount` | number
-`bountyPoints` | number
-`acceptedAnswerId` | string
 `authorUser` | [AccountProfile](AccountProfile.md)
 `lastReplyUser` | [AccountProfile](AccountProfile.md)
-`lastReplyAt` | string
+`lastReplyAt` | Date
 `coverImageUrl` | string
 `viewerActionState` | [ArticleViewerActionState](ArticleViewerActionState.md)
-`publishedAt` | string
+`publishedAt` | Date
 `postscripts` | [Array&lt;ArticlePostscript&gt;](ArticlePostscript.md)
 `publishStatus` | string
 `visibility` | string
 `restriction` | string
-`editedAt` | string
+`editedAt` | Date
 `createdBy` | string
 `updatedBy` | string
-`createdAt` | string
-`updatedAt` | string
+`createdAt` | Date
+`updatedAt` | Date
 
 ## Example
 
@@ -63,15 +59,12 @@ const example = {
   "type": null,
   "statement": null,
   "commentable": null,
-  "anonymous": null,
   "viewCount": null,
   "thankCount": null,
   "likeCount": null,
   "collectCount": null,
-  "watchCount": null,
+  "rewardCount": null,
   "replyCount": null,
-  "bountyPoints": null,
-  "acceptedAnswerId": null,
   "authorUser": null,
   "lastReplyUser": null,
   "lastReplyAt": null,

@@ -14,18 +14,46 @@
 
 import * as runtime from '../runtime';
 import {
-    type ListDomainsReply,
-    ListDomainsReplyFromJSON,
-    ListDomainsReplyToJSON,
-} from '../models/ListDomainsReply';
+    type CreateDomainReq,
+    CreateDomainReqFromJSON,
+    CreateDomainReqToJSON,
+} from '../models/CreateDomainReq';
 import {
-    type ListDomainsRequest,
-    ListDomainsRequestFromJSON,
-    ListDomainsRequestToJSON,
-} from '../models/ListDomainsRequest';
+    type CreateDomainResp,
+    CreateDomainRespFromJSON,
+    CreateDomainRespToJSON,
+} from '../models/CreateDomainResp';
+import {
+    type ListDomainsReq,
+    ListDomainsReqFromJSON,
+    ListDomainsReqToJSON,
+} from '../models/ListDomainsReq';
+import {
+    type ListDomainsResp,
+    ListDomainsRespFromJSON,
+    ListDomainsRespToJSON,
+} from '../models/ListDomainsResp';
+import {
+    type UpdateDomainReq,
+    UpdateDomainReqFromJSON,
+    UpdateDomainReqToJSON,
+} from '../models/UpdateDomainReq';
+import {
+    type UpdateDomainResp,
+    UpdateDomainRespFromJSON,
+    UpdateDomainRespToJSON,
+} from '../models/UpdateDomainResp';
+
+export interface CreateRequest {
+    createDomainReq: CreateDomainReq;
+}
 
 export interface ListRequest {
-    listDomainsRequest: ListDomainsRequest;
+    listDomainsReq: ListDomainsReq;
+}
+
+export interface UpdateRequest {
+    updateDomainReq: UpdateDomainReq;
 }
 
 /**
@@ -36,26 +64,70 @@ export interface ListRequest {
  */
 export interface DomainServiceInterface {
     /**
+     * Creates request options for create without sending the request
+     * @param {CreateDomainReq} createDomainReq 
+     * @throws {RequiredError}
+     * @memberof DomainServiceInterface
+     */
+    createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 创建领域。
+     * @param {CreateDomainReq} createDomainReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DomainServiceInterface
+     */
+    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateDomainResp>>;
+
+    /**
+     * 创建领域。
+     */
+    create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateDomainResp>;
+
+    /**
      * Creates request options for list without sending the request
-     * @param {ListDomainsRequest} listDomainsRequest 
+     * @param {ListDomainsReq} listDomainsReq 
      * @throws {RequiredError}
      * @memberof DomainServiceInterface
      */
     listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 分页查询内容板块列表。
-     * @param {ListDomainsRequest} listDomainsRequest 
+     * 查询领域列表。
+     * @param {ListDomainsReq} listDomainsReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DomainServiceInterface
      */
-    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListDomainsReply>>;
+    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListDomainsResp>>;
 
     /**
-     * 分页查询内容板块列表。
+     * 查询领域列表。
      */
-    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDomainsReply>;
+    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDomainsResp>;
+
+    /**
+     * Creates request options for update without sending the request
+     * @param {UpdateDomainReq} updateDomainReq 
+     * @throws {RequiredError}
+     * @memberof DomainServiceInterface
+     */
+    updateRequestOpts(requestParameters: UpdateRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 更新领域。
+     * @param {UpdateDomainReq} updateDomainReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DomainServiceInterface
+     */
+    updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateDomainResp>>;
+
+    /**
+     * 更新领域。
+     */
+    update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDomainResp>;
 
 }
 
@@ -65,13 +137,60 @@ export interface DomainServiceInterface {
 export class DomainService extends runtime.BaseAPI implements DomainServiceInterface {
 
     /**
+     * Creates request options for create without sending the request
+     */
+    async createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['createDomainReq'] == null) {
+            throw new runtime.RequiredError(
+                'createDomainReq',
+                'Required parameter "createDomainReq" was null or undefined when calling create().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/domain/create`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateDomainReqToJSON(requestParameters['createDomainReq']),
+        };
+    }
+
+    /**
+     * 创建领域。
+     */
+    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateDomainResp>> {
+        const requestOptions = await this.createRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CreateDomainRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 创建领域。
+     */
+    async create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateDomainResp> {
+        const response = await this.createRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for list without sending the request
      */
     async listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['listDomainsRequest'] == null) {
+        if (requestParameters['listDomainsReq'] == null) {
             throw new runtime.RequiredError(
-                'listDomainsRequest',
-                'Required parameter "listDomainsRequest" was null or undefined when calling list().'
+                'listDomainsReq',
+                'Required parameter "listDomainsReq" was null or undefined when calling list().'
             );
         }
 
@@ -89,25 +208,72 @@ export class DomainService extends runtime.BaseAPI implements DomainServiceInter
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ListDomainsRequestToJSON(requestParameters['listDomainsRequest']),
+            body: ListDomainsReqToJSON(requestParameters['listDomainsReq']),
         };
     }
 
     /**
-     * 分页查询内容板块列表。
+     * 查询领域列表。
      */
-    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListDomainsReply>> {
+    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListDomainsResp>> {
         const requestOptions = await this.listRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListDomainsReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListDomainsRespFromJSON(jsonValue));
     }
 
     /**
-     * 分页查询内容板块列表。
+     * 查询领域列表。
      */
-    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDomainsReply> {
+    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListDomainsResp> {
         const response = await this.listRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for update without sending the request
+     */
+    async updateRequestOpts(requestParameters: UpdateRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['updateDomainReq'] == null) {
+            throw new runtime.RequiredError(
+                'updateDomainReq',
+                'Required parameter "updateDomainReq" was null or undefined when calling update().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/domain/update`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateDomainReqToJSON(requestParameters['updateDomainReq']),
+        };
+    }
+
+    /**
+     * 更新领域。
+     */
+    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateDomainResp>> {
+        const requestOptions = await this.updateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateDomainRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 更新领域。
+     */
+    async update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDomainResp> {
+        const response = await this.updateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

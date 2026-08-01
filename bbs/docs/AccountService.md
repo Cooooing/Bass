@@ -13,7 +13,7 @@ All URIs are relative to *http://localhost*
 
 ## avatar
 
-> ImageReply avatar(name)
+> ImageResp avatar(name)
 
 
 
@@ -33,7 +33,7 @@ async function example() {
   const api = new AccountService();
 
   const body = {
-    // string | 用于生成头像的账号名。 (optional)
+    // string (optional)
     name: name_example,
   } satisfies AvatarRequest;
 
@@ -54,11 +54,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **name** | `string` | 用于生成头像的账号名。 | [Optional] [Defaults to `undefined`] |
+| **name** | `string` |  | [Optional] [Defaults to `undefined`] |
 
 ### Return type
 
-[**ImageReply**](ImageReply.md)
+[**ImageResp**](ImageResp.md)
 
 ### Authorization
 
@@ -80,7 +80,7 @@ No authorization required
 
 ## getCurrent
 
-> GetCurrentAccountReply getCurrent(body)
+> GetCurrentAccountResp getCurrent(body)
 
 
 
@@ -125,7 +125,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**GetCurrentAccountReply**](GetCurrentAccountReply.md)
+[**GetCurrentAccountResp**](GetCurrentAccountResp.md)
 
 ### Authorization
 
@@ -147,7 +147,7 @@ No authorization required
 
 ## getProfile
 
-> GetProfileAccountReply getProfile(getProfileAccountRequest)
+> GetProfileAccountResp getProfile(getProfileAccountReq)
 
 
 
@@ -167,8 +167,8 @@ async function example() {
   const api = new AccountService();
 
   const body = {
-    // GetProfileAccountRequest
-    getProfileAccountRequest: ...,
+    // GetProfileAccountReq
+    getProfileAccountReq: ...,
   } satisfies GetProfileRequest;
 
   try {
@@ -188,11 +188,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **getProfileAccountRequest** | [GetProfileAccountRequest](GetProfileAccountRequest.md) |  | |
+| **getProfileAccountReq** | [GetProfileAccountReq](GetProfileAccountReq.md) |  | |
 
 ### Return type
 
-[**GetProfileAccountReply**](GetProfileAccountReply.md)
+[**GetProfileAccountResp**](GetProfileAccountResp.md)
 
 ### Authorization
 
@@ -214,7 +214,7 @@ No authorization required
 
 ## updateProfile
 
-> UpdateProfileAccountReply updateProfile(updateProfileAccountRequest)
+> UpdateProfileAccountResp updateProfile(updateProfileAccountReq)
 
 
 
@@ -234,8 +234,8 @@ async function example() {
   const api = new AccountService();
 
   const body = {
-    // UpdateProfileAccountRequest
-    updateProfileAccountRequest: ...,
+    // UpdateProfileAccountReq
+    updateProfileAccountReq: ...,
   } satisfies UpdateProfileRequest;
 
   try {
@@ -255,11 +255,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **updateProfileAccountRequest** | [UpdateProfileAccountRequest](UpdateProfileAccountRequest.md) |  | |
+| **updateProfileAccountReq** | [UpdateProfileAccountReq](UpdateProfileAccountReq.md) |  | |
 
 ### Return type
 
-[**UpdateProfileAccountReply**](UpdateProfileAccountReply.md)
+[**UpdateProfileAccountResp**](UpdateProfileAccountResp.md)
 
 ### Authorization
 

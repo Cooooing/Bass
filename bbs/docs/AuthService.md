@@ -4,22 +4,24 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**loginByPassword**](AuthService.md#loginbypasswordoperation) | **POST** /v1/user/auth/login-by-password |  |
+| [**cancelAccount**](AuthService.md#cancelaccount) | **POST** /v1/user/auth/cancel-account |  |
+| [**login**](AuthService.md#login) | **POST** /v1/user/auth/login |  |
 | [**logout**](AuthService.md#logout) | **POST** /v1/user/auth/logout |  |
-| [**startEmailRegistration**](AuthService.md#startemailregistrationoperation) | **POST** /v1/user/auth/start-email-registration |  |
-| [**startPhoneRegistration**](AuthService.md#startphoneregistrationoperation) | **POST** /v1/user/auth/start-phone-registration |  |
-| [**verifyEmailRegistration**](AuthService.md#verifyemailregistrationoperation) | **POST** /v1/user/auth/verify-email-registration |  |
-| [**verifyPhoneRegistration**](AuthService.md#verifyphoneregistrationoperation) | **POST** /v1/user/auth/verify-phone-registration |  |
+| [**refreshToken**](AuthService.md#refreshtoken) | **POST** /v1/user/auth/refresh-token |  |
+| [**startEmailRegistration**](AuthService.md#startemailregistration) | **POST** /v1/user/auth/start-email-registration |  |
+| [**startPhoneRegistration**](AuthService.md#startphoneregistration) | **POST** /v1/user/auth/start-phone-registration |  |
+| [**verifyEmailRegistration**](AuthService.md#verifyemailregistration) | **POST** /v1/user/auth/verify-email-registration |  |
+| [**verifyPhoneRegistration**](AuthService.md#verifyphoneregistration) | **POST** /v1/user/auth/verify-phone-registration |  |
 
 
 
-## loginByPassword
+## cancelAccount
 
-> LoginByPasswordReply loginByPassword(loginByPasswordRequest)
+> object cancelAccount(cancelAccountReq)
 
 
 
-使用密码登录账号。
+注销账号。
 
 ### Example
 
@@ -28,19 +30,19 @@ import {
   Configuration,
   AuthService,
 } from '@bass/bbs-sdk-fetch';
-import type { LoginByPasswordOperationRequest } from '@bass/bbs-sdk-fetch';
+import type { CancelAccountRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
   const api = new AuthService();
 
   const body = {
-    // LoginByPasswordRequest
-    loginByPasswordRequest: ...,
-  } satisfies LoginByPasswordOperationRequest;
+    // CancelAccountReq
+    cancelAccountReq: ...,
+  } satisfies CancelAccountRequest;
 
   try {
-    const data = await api.loginByPassword(body);
+    const data = await api.cancelAccount(body);
     console.log(data);
   } catch (error) {
     console.error(error);
@@ -56,11 +58,78 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **loginByPasswordRequest** | [LoginByPasswordRequest](LoginByPasswordRequest.md) |  | |
+| **cancelAccountReq** | [CancelAccountReq](CancelAccountReq.md) |  | |
 
 ### Return type
 
-[**LoginByPasswordReply**](LoginByPasswordReply.md)
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## login
+
+> LoginResp login(loginReq)
+
+
+
+登录账号。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AuthService,
+} from '@bass/bbs-sdk-fetch';
+import type { LoginRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AuthService();
+
+  const body = {
+    // LoginReq
+    loginReq: ...,
+  } satisfies LoginRequest;
+
+  try {
+    const data = await api.login(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **loginReq** | [LoginReq](LoginReq.md) |  | |
+
+### Return type
+
+[**LoginResp**](LoginResp.md)
 
 ### Authorization
 
@@ -86,7 +155,7 @@ No authorization required
 
 
 
-登出当前账号。
+退出登录。
 
 ### Example
 
@@ -147,13 +216,13 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## startEmailRegistration
+## refreshToken
 
-> StartEmailRegistrationReply startEmailRegistration(startEmailRegistrationRequest)
+> RefreshTokenResp refreshToken(refreshTokenReq)
 
 
 
-使用邮箱发起账号注册。
+刷新登录令牌。
 
 ### Example
 
@@ -162,16 +231,83 @@ import {
   Configuration,
   AuthService,
 } from '@bass/bbs-sdk-fetch';
-import type { StartEmailRegistrationOperationRequest } from '@bass/bbs-sdk-fetch';
+import type { RefreshTokenRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
   const api = new AuthService();
 
   const body = {
-    // StartEmailRegistrationRequest
-    startEmailRegistrationRequest: ...,
-  } satisfies StartEmailRegistrationOperationRequest;
+    // RefreshTokenReq
+    refreshTokenReq: ...,
+  } satisfies RefreshTokenRequest;
+
+  try {
+    const data = await api.refreshToken(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **refreshTokenReq** | [RefreshTokenReq](RefreshTokenReq.md) |  | |
+
+### Return type
+
+[**RefreshTokenResp**](RefreshTokenResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## startEmailRegistration
+
+> StartEmailRegistrationResp startEmailRegistration(startEmailRegistrationReq)
+
+
+
+开始邮箱注册。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AuthService,
+} from '@bass/bbs-sdk-fetch';
+import type { StartEmailRegistrationRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AuthService();
+
+  const body = {
+    // StartEmailRegistrationReq
+    startEmailRegistrationReq: ...,
+  } satisfies StartEmailRegistrationRequest;
 
   try {
     const data = await api.startEmailRegistration(body);
@@ -190,11 +326,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **startEmailRegistrationRequest** | [StartEmailRegistrationRequest](StartEmailRegistrationRequest.md) |  | |
+| **startEmailRegistrationReq** | [StartEmailRegistrationReq](StartEmailRegistrationReq.md) |  | |
 
 ### Return type
 
-[**StartEmailRegistrationReply**](StartEmailRegistrationReply.md)
+[**StartEmailRegistrationResp**](StartEmailRegistrationResp.md)
 
 ### Authorization
 
@@ -216,11 +352,11 @@ No authorization required
 
 ## startPhoneRegistration
 
-> StartPhoneRegistrationReply startPhoneRegistration(startPhoneRegistrationRequest)
+> StartPhoneRegistrationResp startPhoneRegistration(startPhoneRegistrationReq)
 
 
 
-使用手机号发起账号注册。
+开始手机注册。
 
 ### Example
 
@@ -229,16 +365,16 @@ import {
   Configuration,
   AuthService,
 } from '@bass/bbs-sdk-fetch';
-import type { StartPhoneRegistrationOperationRequest } from '@bass/bbs-sdk-fetch';
+import type { StartPhoneRegistrationRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
   const api = new AuthService();
 
   const body = {
-    // StartPhoneRegistrationRequest
-    startPhoneRegistrationRequest: ...,
-  } satisfies StartPhoneRegistrationOperationRequest;
+    // StartPhoneRegistrationReq
+    startPhoneRegistrationReq: ...,
+  } satisfies StartPhoneRegistrationRequest;
 
   try {
     const data = await api.startPhoneRegistration(body);
@@ -257,11 +393,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **startPhoneRegistrationRequest** | [StartPhoneRegistrationRequest](StartPhoneRegistrationRequest.md) |  | |
+| **startPhoneRegistrationReq** | [StartPhoneRegistrationReq](StartPhoneRegistrationReq.md) |  | |
 
 ### Return type
 
-[**StartPhoneRegistrationReply**](StartPhoneRegistrationReply.md)
+[**StartPhoneRegistrationResp**](StartPhoneRegistrationResp.md)
 
 ### Authorization
 
@@ -283,7 +419,7 @@ No authorization required
 
 ## verifyEmailRegistration
 
-> object verifyEmailRegistration(verifyEmailRegistrationRequest)
+> object verifyEmailRegistration(verifyEmailRegistrationReq)
 
 
 
@@ -296,16 +432,16 @@ import {
   Configuration,
   AuthService,
 } from '@bass/bbs-sdk-fetch';
-import type { VerifyEmailRegistrationOperationRequest } from '@bass/bbs-sdk-fetch';
+import type { VerifyEmailRegistrationRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
   const api = new AuthService();
 
   const body = {
-    // VerifyEmailRegistrationRequest
-    verifyEmailRegistrationRequest: ...,
-  } satisfies VerifyEmailRegistrationOperationRequest;
+    // VerifyEmailRegistrationReq
+    verifyEmailRegistrationReq: ...,
+  } satisfies VerifyEmailRegistrationRequest;
 
   try {
     const data = await api.verifyEmailRegistration(body);
@@ -324,7 +460,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **verifyEmailRegistrationRequest** | [VerifyEmailRegistrationRequest](VerifyEmailRegistrationRequest.md) |  | |
+| **verifyEmailRegistrationReq** | [VerifyEmailRegistrationReq](VerifyEmailRegistrationReq.md) |  | |
 
 ### Return type
 
@@ -350,11 +486,11 @@ No authorization required
 
 ## verifyPhoneRegistration
 
-> object verifyPhoneRegistration(verifyPhoneRegistrationRequest)
+> object verifyPhoneRegistration(verifyPhoneRegistrationReq)
 
 
 
-校验手机号注册验证码。
+校验手机注册验证码。
 
 ### Example
 
@@ -363,16 +499,16 @@ import {
   Configuration,
   AuthService,
 } from '@bass/bbs-sdk-fetch';
-import type { VerifyPhoneRegistrationOperationRequest } from '@bass/bbs-sdk-fetch';
+import type { VerifyPhoneRegistrationRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
   const api = new AuthService();
 
   const body = {
-    // VerifyPhoneRegistrationRequest
-    verifyPhoneRegistrationRequest: ...,
-  } satisfies VerifyPhoneRegistrationOperationRequest;
+    // VerifyPhoneRegistrationReq
+    verifyPhoneRegistrationReq: ...,
+  } satisfies VerifyPhoneRegistrationRequest;
 
   try {
     const data = await api.verifyPhoneRegistration(body);
@@ -391,7 +527,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **verifyPhoneRegistrationRequest** | [VerifyPhoneRegistrationRequest](VerifyPhoneRegistrationRequest.md) |  | |
+| **verifyPhoneRegistrationReq** | [VerifyPhoneRegistrationReq](VerifyPhoneRegistrationReq.md) |  | |
 
 ### Return type
 

@@ -1,7 +1,6 @@
 
 # ArticleViewerActionState
 
-当前查看账号的文章行为状态。
 
 ## Properties
 
@@ -10,7 +9,7 @@ Name | Type
 `liked` | boolean
 `thanked` | boolean
 `collected` | boolean
-`watched` | boolean
+`rewarded` | boolean
 
 ## Example
 
@@ -22,7 +21,7 @@ const example = {
   "liked": null,
   "thanked": null,
   "collected": null,
-  "watched": null,
+  "rewarded": null,
 } satisfies ArticleViewerActionState
 
 console.log(example)

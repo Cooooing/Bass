@@ -14,27 +14,27 @@
 
 import * as runtime from '../runtime';
 import {
-    type GetCurrentPreferencesReply,
-    GetCurrentPreferencesReplyFromJSON,
-    GetCurrentPreferencesReplyToJSON,
-} from '../models/GetCurrentPreferencesReply';
+    type GetCurrentPreferencesResp,
+    GetCurrentPreferencesRespFromJSON,
+    GetCurrentPreferencesRespToJSON,
+} from '../models/GetCurrentPreferencesResp';
 import {
-    type UpdateCurrentPreferencesReply,
-    UpdateCurrentPreferencesReplyFromJSON,
-    UpdateCurrentPreferencesReplyToJSON,
-} from '../models/UpdateCurrentPreferencesReply';
+    type UpdateCurrentPreferencesReq,
+    UpdateCurrentPreferencesReqFromJSON,
+    UpdateCurrentPreferencesReqToJSON,
+} from '../models/UpdateCurrentPreferencesReq';
 import {
-    type UpdateCurrentPreferencesRequest,
-    UpdateCurrentPreferencesRequestFromJSON,
-    UpdateCurrentPreferencesRequestToJSON,
-} from '../models/UpdateCurrentPreferencesRequest';
+    type UpdateCurrentPreferencesResp,
+    UpdateCurrentPreferencesRespFromJSON,
+    UpdateCurrentPreferencesRespToJSON,
+} from '../models/UpdateCurrentPreferencesResp';
 
 export interface GetCurrentRequest {
     body: object;
 }
 
 export interface UpdateCurrentRequest {
-    updateCurrentPreferencesRequest: UpdateCurrentPreferencesRequest;
+    updateCurrentPreferencesReq: UpdateCurrentPreferencesReq;
 }
 
 /**
@@ -59,16 +59,16 @@ export interface PreferencesServiceInterface {
      * @throws {RequiredError}
      * @memberof PreferencesServiceInterface
      */
-    getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentPreferencesReply>>;
+    getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentPreferencesResp>>;
 
     /**
      * 获取当前账号的偏好设置。
      */
-    getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentPreferencesReply>;
+    getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentPreferencesResp>;
 
     /**
      * Creates request options for updateCurrent without sending the request
-     * @param {UpdateCurrentPreferencesRequest} updateCurrentPreferencesRequest 
+     * @param {UpdateCurrentPreferencesReq} updateCurrentPreferencesReq 
      * @throws {RequiredError}
      * @memberof PreferencesServiceInterface
      */
@@ -76,17 +76,17 @@ export interface PreferencesServiceInterface {
 
     /**
      * 更新当前账号的偏好设置。
-     * @param {UpdateCurrentPreferencesRequest} updateCurrentPreferencesRequest 
+     * @param {UpdateCurrentPreferencesReq} updateCurrentPreferencesReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof PreferencesServiceInterface
      */
-    updateCurrentRaw(requestParameters: UpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateCurrentPreferencesReply>>;
+    updateCurrentRaw(requestParameters: UpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateCurrentPreferencesResp>>;
 
     /**
      * 更新当前账号的偏好设置。
      */
-    updateCurrent(requestParameters: UpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCurrentPreferencesReply>;
+    updateCurrent(requestParameters: UpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCurrentPreferencesResp>;
 
 }
 
@@ -127,17 +127,17 @@ export class PreferencesService extends runtime.BaseAPI implements PreferencesSe
     /**
      * 获取当前账号的偏好设置。
      */
-    async getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentPreferencesReply>> {
+    async getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentPreferencesResp>> {
         const requestOptions = await this.getCurrentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetCurrentPreferencesReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetCurrentPreferencesRespFromJSON(jsonValue));
     }
 
     /**
      * 获取当前账号的偏好设置。
      */
-    async getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentPreferencesReply> {
+    async getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentPreferencesResp> {
         const response = await this.getCurrentRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -146,10 +146,10 @@ export class PreferencesService extends runtime.BaseAPI implements PreferencesSe
      * Creates request options for updateCurrent without sending the request
      */
     async updateCurrentRequestOpts(requestParameters: UpdateCurrentRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['updateCurrentPreferencesRequest'] == null) {
+        if (requestParameters['updateCurrentPreferencesReq'] == null) {
             throw new runtime.RequiredError(
-                'updateCurrentPreferencesRequest',
-                'Required parameter "updateCurrentPreferencesRequest" was null or undefined when calling updateCurrent().'
+                'updateCurrentPreferencesReq',
+                'Required parameter "updateCurrentPreferencesReq" was null or undefined when calling updateCurrent().'
             );
         }
 
@@ -167,24 +167,24 @@ export class PreferencesService extends runtime.BaseAPI implements PreferencesSe
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateCurrentPreferencesRequestToJSON(requestParameters['updateCurrentPreferencesRequest']),
+            body: UpdateCurrentPreferencesReqToJSON(requestParameters['updateCurrentPreferencesReq']),
         };
     }
 
     /**
      * 更新当前账号的偏好设置。
      */
-    async updateCurrentRaw(requestParameters: UpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateCurrentPreferencesReply>> {
+    async updateCurrentRaw(requestParameters: UpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateCurrentPreferencesResp>> {
         const requestOptions = await this.updateCurrentRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateCurrentPreferencesReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateCurrentPreferencesRespFromJSON(jsonValue));
     }
 
     /**
      * 更新当前账号的偏好设置。
      */
-    async updateCurrent(requestParameters: UpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCurrentPreferencesReply> {
+    async updateCurrent(requestParameters: UpdateCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCurrentPreferencesResp> {
         const response = await this.updateCurrentRaw(requestParameters, initOverrides);
         return await response.value();
     }

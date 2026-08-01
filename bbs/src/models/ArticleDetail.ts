@@ -36,7 +36,7 @@ import {
 } from './AccountProfile';
 
 /**
- * 文章详情。
+ * 
  * @export
  * @interface ArticleDetail
  */
@@ -115,12 +115,6 @@ export interface ArticleDetail {
     commentable?: boolean;
     /**
      * 
-     * @type {boolean}
-     * @memberof ArticleDetail
-     */
-    anonymous?: boolean;
-    /**
-     * 
      * @type {number}
      * @memberof ArticleDetail
      */
@@ -148,25 +142,13 @@ export interface ArticleDetail {
      * @type {number}
      * @memberof ArticleDetail
      */
-    watchCount?: number;
+    rewardCount?: number;
     /**
      * 
      * @type {number}
      * @memberof ArticleDetail
      */
     replyCount?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ArticleDetail
-     */
-    bountyPoints?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof ArticleDetail
-     */
-    acceptedAnswerId?: string;
     /**
      * 
      * @type {AccountProfile}
@@ -181,10 +163,10 @@ export interface ArticleDetail {
     lastReplyUser?: AccountProfile;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof ArticleDetail
      */
-    lastReplyAt?: string;
+    lastReplyAt?: Date;
     /**
      * 
      * @type {string}
@@ -199,10 +181,10 @@ export interface ArticleDetail {
     viewerActionState?: ArticleViewerActionState;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof ArticleDetail
      */
-    publishedAt?: string;
+    publishedAt?: Date;
     /**
      * 
      * @type {Array<ArticlePostscript>}
@@ -229,10 +211,10 @@ export interface ArticleDetail {
     restriction?: ArticleDetailRestrictionEnum;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof ArticleDetail
      */
-    editedAt?: string;
+    editedAt?: Date;
     /**
      * 
      * @type {string}
@@ -247,16 +229,16 @@ export interface ArticleDetail {
     updatedBy?: string;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof ArticleDetail
      */
-    createdAt?: string;
+    createdAt?: Date;
     /**
      * 
-     * @type {string}
+     * @type {Date}
      * @memberof ArticleDetail
      */
-    updatedAt?: string;
+    updatedAt?: Date;
 }
 
 
@@ -266,7 +248,10 @@ export interface ArticleDetail {
 export const ArticleDetailTypeEnum = {
     ARTICLE_TYPE_UNSPECIFIED: 'ARTICLE_TYPE_UNSPECIFIED',
     ARTICLE_TYPE_NORMAL: 'ARTICLE_TYPE_NORMAL',
-    ARTICLE_TYPE_QA: 'ARTICLE_TYPE_QA'
+    ARTICLE_TYPE_QA: 'ARTICLE_TYPE_QA',
+    ARTICLE_TYPE_LOTTERY: 'ARTICLE_TYPE_LOTTERY',
+    ARTICLE_TYPE_POLL: 'ARTICLE_TYPE_POLL',
+    ARTICLE_TYPE_COLUMN: 'ARTICLE_TYPE_COLUMN'
 } as const;
 export type ArticleDetailTypeEnum = typeof ArticleDetailTypeEnum[keyof typeof ArticleDetailTypeEnum];
 
@@ -277,7 +262,8 @@ export const ArticleDetailPublishStatusEnum = {
     ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
     ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
     ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
-    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED'
+    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
+    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED'
 } as const;
 export type ArticleDetailPublishStatusEnum = typeof ArticleDetailPublishStatusEnum[keyof typeof ArticleDetailPublishStatusEnum];
 
@@ -332,30 +318,27 @@ export function ArticleDetailFromJSONTyped(json: any, ignoreDiscriminator: boole
         'type': json['type'] == null ? undefined : json['type'],
         'statement': json['statement'] == null ? undefined : json['statement'],
         'commentable': json['commentable'] == null ? undefined : json['commentable'],
-        'anonymous': json['anonymous'] == null ? undefined : json['anonymous'],
         'viewCount': json['view_count'] == null ? undefined : json['view_count'],
         'thankCount': json['thank_count'] == null ? undefined : json['thank_count'],
         'likeCount': json['like_count'] == null ? undefined : json['like_count'],
         'collectCount': json['collect_count'] == null ? undefined : json['collect_count'],
-        'watchCount': json['watch_count'] == null ? undefined : json['watch_count'],
+        'rewardCount': json['reward_count'] == null ? undefined : json['reward_count'],
         'replyCount': json['reply_count'] == null ? undefined : json['reply_count'],
-        'bountyPoints': json['bounty_points'] == null ? undefined : json['bounty_points'],
-        'acceptedAnswerId': json['accepted_answer_id'] == null ? undefined : json['accepted_answer_id'],
         'authorUser': json['author_user'] == null ? undefined : AccountProfileFromJSON(json['author_user']),
         'lastReplyUser': json['last_reply_user'] == null ? undefined : AccountProfileFromJSON(json['last_reply_user']),
-        'lastReplyAt': json['last_reply_at'] == null ? undefined : json['last_reply_at'],
+        'lastReplyAt': json['last_reply_at'] == null ? undefined : (new Date(json['last_reply_at'])),
         'coverImageUrl': json['cover_image_url'] == null ? undefined : json['cover_image_url'],
         'viewerActionState': json['viewer_action_state'] == null ? undefined : ArticleViewerActionStateFromJSON(json['viewer_action_state']),
-        'publishedAt': json['published_at'] == null ? undefined : json['published_at'],
+        'publishedAt': json['published_at'] == null ? undefined : (new Date(json['published_at'])),
         'postscripts': json['postscripts'] == null ? undefined : ((json['postscripts'] as Array<any>).map(ArticlePostscriptFromJSON)),
         'publishStatus': json['publish_status'] == null ? undefined : json['publish_status'],
         'visibility': json['visibility'] == null ? undefined : json['visibility'],
         'restriction': json['restriction'] == null ? undefined : json['restriction'],
-        'editedAt': json['edited_at'] == null ? undefined : json['edited_at'],
+        'editedAt': json['edited_at'] == null ? undefined : (new Date(json['edited_at'])),
         'createdBy': json['created_by'] == null ? undefined : json['created_by'],
         'updatedBy': json['updated_by'] == null ? undefined : json['updated_by'],
-        'createdAt': json['created_at'] == null ? undefined : json['created_at'],
-        'updatedAt': json['updated_at'] == null ? undefined : json['updated_at'],
+        'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
+        'updatedAt': json['updated_at'] == null ? undefined : (new Date(json['updated_at'])),
     };
 }
 
@@ -382,30 +365,27 @@ export function ArticleDetailToJSONTyped(value?: ArticleDetail | null, ignoreDis
         'type': value['type'],
         'statement': value['statement'],
         'commentable': value['commentable'],
-        'anonymous': value['anonymous'],
         'view_count': value['viewCount'],
         'thank_count': value['thankCount'],
         'like_count': value['likeCount'],
         'collect_count': value['collectCount'],
-        'watch_count': value['watchCount'],
+        'reward_count': value['rewardCount'],
         'reply_count': value['replyCount'],
-        'bounty_points': value['bountyPoints'],
-        'accepted_answer_id': value['acceptedAnswerId'],
         'author_user': AccountProfileToJSON(value['authorUser']),
         'last_reply_user': AccountProfileToJSON(value['lastReplyUser']),
-        'last_reply_at': value['lastReplyAt'],
+        'last_reply_at': value['lastReplyAt'] == null ? value['lastReplyAt'] : value['lastReplyAt'].toISOString(),
         'cover_image_url': value['coverImageUrl'],
         'viewer_action_state': ArticleViewerActionStateToJSON(value['viewerActionState']),
-        'published_at': value['publishedAt'],
+        'published_at': value['publishedAt'] == null ? value['publishedAt'] : value['publishedAt'].toISOString(),
         'postscripts': value['postscripts'] == null ? undefined : ((value['postscripts'] as Array<any>).map(ArticlePostscriptToJSON)),
         'publish_status': value['publishStatus'],
         'visibility': value['visibility'],
         'restriction': value['restriction'],
-        'edited_at': value['editedAt'],
+        'edited_at': value['editedAt'] == null ? value['editedAt'] : value['editedAt'].toISOString(),
         'created_by': value['createdBy'],
         'updated_by': value['updatedBy'],
-        'created_at': value['createdAt'],
-        'updated_at': value['updatedAt'],
+        'created_at': value['createdAt'] == null ? value['createdAt'] : value['createdAt'].toISOString(),
+        'updated_at': value['updatedAt'] == null ? value['updatedAt'] : value['updatedAt'].toISOString(),
     };
 }
 

@@ -16,7 +16,7 @@ All URIs are relative to *http://localhost*
 
 ## create
 
-> CreateCommentReply create(createCommentRequest)
+> CreateCommentResp create(createCommentReq)
 
 
 
@@ -36,8 +36,8 @@ async function example() {
   const api = new CommentService();
 
   const body = {
-    // CreateCommentRequest
-    createCommentRequest: ...,
+    // CreateCommentReq
+    createCommentReq: ...,
   } satisfies CreateRequest;
 
   try {
@@ -57,11 +57,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **createCommentRequest** | [CreateCommentRequest](CreateCommentRequest.md) |  | |
+| **createCommentReq** | [CreateCommentReq](CreateCommentReq.md) |  | |
 
 ### Return type
 
-[**CreateCommentReply**](CreateCommentReply.md)
+[**CreateCommentResp**](CreateCommentResp.md)
 
 ### Authorization
 
@@ -83,7 +83,7 @@ No authorization required
 
 ## like
 
-> LikeCommentReply like(likeCommentRequest)
+> LikeCommentResp like(likeCommentReq)
 
 
 
@@ -103,8 +103,8 @@ async function example() {
   const api = new CommentService();
 
   const body = {
-    // LikeCommentRequest
-    likeCommentRequest: ...,
+    // LikeCommentReq
+    likeCommentReq: ...,
   } satisfies LikeRequest;
 
   try {
@@ -124,11 +124,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **likeCommentRequest** | [LikeCommentRequest](LikeCommentRequest.md) |  | |
+| **likeCommentReq** | [LikeCommentReq](LikeCommentReq.md) |  | |
 
 ### Return type
 
-[**LikeCommentReply**](LikeCommentReply.md)
+[**LikeCommentResp**](LikeCommentResp.md)
 
 ### Authorization
 
@@ -150,7 +150,7 @@ No authorization required
 
 ## list
 
-> ListCommentsReply list(listCommentsRequest)
+> ListCommentsResp list(listCommentsReq)
 
 
 
@@ -170,8 +170,8 @@ async function example() {
   const api = new CommentService();
 
   const body = {
-    // ListCommentsRequest
-    listCommentsRequest: ...,
+    // ListCommentsReq
+    listCommentsReq: ...,
   } satisfies ListRequest;
 
   try {
@@ -191,11 +191,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **listCommentsRequest** | [ListCommentsRequest](ListCommentsRequest.md) |  | |
+| **listCommentsReq** | [ListCommentsReq](ListCommentsReq.md) |  | |
 
 ### Return type
 
-[**ListCommentsReply**](ListCommentsReply.md)
+[**ListCommentsResp**](ListCommentsResp.md)
 
 ### Authorization
 
@@ -217,7 +217,7 @@ No authorization required
 
 ## listReplies
 
-> ListCommentRepliesReply listReplies(listCommentRepliesRequest)
+> ListCommentRepliesResp listReplies(listCommentRepliesReq)
 
 
 
@@ -237,8 +237,8 @@ async function example() {
   const api = new CommentService();
 
   const body = {
-    // ListCommentRepliesRequest
-    listCommentRepliesRequest: ...,
+    // ListCommentRepliesReq
+    listCommentRepliesReq: ...,
   } satisfies ListRepliesRequest;
 
   try {
@@ -258,11 +258,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **listCommentRepliesRequest** | [ListCommentRepliesRequest](ListCommentRepliesRequest.md) |  | |
+| **listCommentRepliesReq** | [ListCommentRepliesReq](ListCommentRepliesReq.md) |  | |
 
 ### Return type
 
-[**ListCommentRepliesReply**](ListCommentRepliesReply.md)
+[**ListCommentRepliesResp**](ListCommentRepliesResp.md)
 
 ### Authorization
 
@@ -284,7 +284,7 @@ No authorization required
 
 ## listThreads
 
-> ListCommentThreadsReply listThreads(listCommentThreadsRequest)
+> ListCommentThreadsResp listThreads(listCommentThreadsReq)
 
 
 
@@ -304,8 +304,8 @@ async function example() {
   const api = new CommentService();
 
   const body = {
-    // ListCommentThreadsRequest
-    listCommentThreadsRequest: ...,
+    // ListCommentThreadsReq
+    listCommentThreadsReq: ...,
   } satisfies ListThreadsRequest;
 
   try {
@@ -325,11 +325,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **listCommentThreadsRequest** | [ListCommentThreadsRequest](ListCommentThreadsRequest.md) |  | |
+| **listCommentThreadsReq** | [ListCommentThreadsReq](ListCommentThreadsReq.md) |  | |
 
 ### Return type
 
-[**ListCommentThreadsReply**](ListCommentThreadsReply.md)
+[**ListCommentThreadsResp**](ListCommentThreadsResp.md)
 
 ### Authorization
 
@@ -351,7 +351,7 @@ No authorization required
 
 ## listTimeline
 
-> ListCommentTimelineReply listTimeline(listCommentTimelineRequest)
+> ListCommentTimelineResp listTimeline(listCommentTimelineReq)
 
 
 
@@ -371,8 +371,8 @@ async function example() {
   const api = new CommentService();
 
   const body = {
-    // ListCommentTimelineRequest
-    listCommentTimelineRequest: ...,
+    // ListCommentTimelineReq
+    listCommentTimelineReq: ...,
   } satisfies ListTimelineRequest;
 
   try {
@@ -392,11 +392,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **listCommentTimelineRequest** | [ListCommentTimelineRequest](ListCommentTimelineRequest.md) |  | |
+| **listCommentTimelineReq** | [ListCommentTimelineReq](ListCommentTimelineReq.md) |  | |
 
 ### Return type
 
-[**ListCommentTimelineReply**](ListCommentTimelineReply.md)
+[**ListCommentTimelineResp**](ListCommentTimelineResp.md)
 
 ### Authorization
 
@@ -418,7 +418,7 @@ No authorization required
 
 ## thank
 
-> ThankCommentReply thank(thankCommentRequest)
+> ThankCommentResp thank(thankCommentReq)
 
 
 
@@ -438,8 +438,8 @@ async function example() {
   const api = new CommentService();
 
   const body = {
-    // ThankCommentRequest
-    thankCommentRequest: ...,
+    // ThankCommentReq
+    thankCommentReq: ...,
   } satisfies ThankRequest;
 
   try {
@@ -459,11 +459,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **thankCommentRequest** | [ThankCommentRequest](ThankCommentRequest.md) |  | |
+| **thankCommentReq** | [ThankCommentReq](ThankCommentReq.md) |  | |
 
 ### Return type
 
-[**ThankCommentReply**](ThankCommentReply.md)
+[**ThankCommentResp**](ThankCommentResp.md)
 
 ### Authorization
 

@@ -14,166 +14,156 @@
 
 import * as runtime from '../runtime';
 import {
-    type AcceptAnswerArticleRequest,
-    AcceptAnswerArticleRequestFromJSON,
-    AcceptAnswerArticleRequestToJSON,
-} from '../models/AcceptAnswerArticleRequest';
+    type ArchiveArticleReq,
+    ArchiveArticleReqFromJSON,
+    ArchiveArticleReqToJSON,
+} from '../models/ArchiveArticleReq';
 import {
-    type CollectArticleReply,
-    CollectArticleReplyFromJSON,
-    CollectArticleReplyToJSON,
-} from '../models/CollectArticleReply';
+    type CancelPublishArticleReq,
+    CancelPublishArticleReqFromJSON,
+    CancelPublishArticleReqToJSON,
+} from '../models/CancelPublishArticleReq';
 import {
-    type CollectArticleRequest,
-    CollectArticleRequestFromJSON,
-    CollectArticleRequestToJSON,
-} from '../models/CollectArticleRequest';
+    type CollectArticleReq,
+    CollectArticleReqFromJSON,
+    CollectArticleReqToJSON,
+} from '../models/CollectArticleReq';
 import {
-    type CreateArticleReply,
-    CreateArticleReplyFromJSON,
-    CreateArticleReplyToJSON,
-} from '../models/CreateArticleReply';
+    type CollectArticleResp,
+    CollectArticleRespFromJSON,
+    CollectArticleRespToJSON,
+} from '../models/CollectArticleResp';
 import {
-    type CreateArticleRequest,
-    CreateArticleRequestFromJSON,
-    CreateArticleRequestToJSON,
-} from '../models/CreateArticleRequest';
+    type CreateDraftArticleReq,
+    CreateDraftArticleReqFromJSON,
+    CreateDraftArticleReqToJSON,
+} from '../models/CreateDraftArticleReq';
 import {
-    type DiscardDraftArticleRequest,
-    DiscardDraftArticleRequestFromJSON,
-    DiscardDraftArticleRequestToJSON,
-} from '../models/DiscardDraftArticleRequest';
+    type CreateDraftArticleResp,
+    CreateDraftArticleRespFromJSON,
+    CreateDraftArticleRespToJSON,
+} from '../models/CreateDraftArticleResp';
 import {
-    type GetArticleReply,
-    GetArticleReplyFromJSON,
-    GetArticleReplyToJSON,
-} from '../models/GetArticleReply';
+    type DiscardDraftArticleReq,
+    DiscardDraftArticleReqFromJSON,
+    DiscardDraftArticleReqToJSON,
+} from '../models/DiscardDraftArticleReq';
 import {
-    type GetArticleRequest,
-    GetArticleRequestFromJSON,
-    GetArticleRequestToJSON,
-} from '../models/GetArticleRequest';
+    type GetArticleReq,
+    GetArticleReqFromJSON,
+    GetArticleReqToJSON,
+} from '../models/GetArticleReq';
 import {
-    type LikeArticleReply,
-    LikeArticleReplyFromJSON,
-    LikeArticleReplyToJSON,
-} from '../models/LikeArticleReply';
+    type GetArticleResp,
+    GetArticleRespFromJSON,
+    GetArticleRespToJSON,
+} from '../models/GetArticleResp';
 import {
-    type LikeArticleRequest,
-    LikeArticleRequestFromJSON,
-    LikeArticleRequestToJSON,
-} from '../models/LikeArticleRequest';
+    type LikeArticleReq,
+    LikeArticleReqFromJSON,
+    LikeArticleReqToJSON,
+} from '../models/LikeArticleReq';
 import {
-    type ListArticlesReply,
-    ListArticlesReplyFromJSON,
-    ListArticlesReplyToJSON,
-} from '../models/ListArticlesReply';
+    type LikeArticleResp,
+    LikeArticleRespFromJSON,
+    LikeArticleRespToJSON,
+} from '../models/LikeArticleResp';
 import {
-    type ListArticlesRequest,
-    ListArticlesRequestFromJSON,
-    ListArticlesRequestToJSON,
-} from '../models/ListArticlesRequest';
+    type ListArticlesReq,
+    ListArticlesReqFromJSON,
+    ListArticlesReqToJSON,
+} from '../models/ListArticlesReq';
 import {
-    type PublishArticleRequest,
-    PublishArticleRequestFromJSON,
-    PublishArticleRequestToJSON,
-} from '../models/PublishArticleRequest';
+    type ListArticlesResp,
+    ListArticlesRespFromJSON,
+    ListArticlesRespToJSON,
+} from '../models/ListArticlesResp';
 import {
-    type RewardArticleRequest,
-    RewardArticleRequestFromJSON,
-    RewardArticleRequestToJSON,
-} from '../models/RewardArticleRequest';
+    type PublishArticleReq,
+    PublishArticleReqFromJSON,
+    PublishArticleReqToJSON,
+} from '../models/PublishArticleReq';
 import {
-    type ThankArticleReply,
-    ThankArticleReplyFromJSON,
-    ThankArticleReplyToJSON,
-} from '../models/ThankArticleReply';
+    type RewardArticleReq,
+    RewardArticleReqFromJSON,
+    RewardArticleReqToJSON,
+} from '../models/RewardArticleReq';
 import {
-    type ThankArticleRequest,
-    ThankArticleRequestFromJSON,
-    ThankArticleRequestToJSON,
-} from '../models/ThankArticleRequest';
+    type SchedulePublishArticleReq,
+    SchedulePublishArticleReqFromJSON,
+    SchedulePublishArticleReqToJSON,
+} from '../models/SchedulePublishArticleReq';
 import {
-    type UpdateArticleReply,
-    UpdateArticleReplyFromJSON,
-    UpdateArticleReplyToJSON,
-} from '../models/UpdateArticleReply';
+    type ThankArticleReq,
+    ThankArticleReqFromJSON,
+    ThankArticleReqToJSON,
+} from '../models/ThankArticleReq';
 import {
-    type UpdateArticleRequest,
-    UpdateArticleRequestFromJSON,
-    UpdateArticleRequestToJSON,
-} from '../models/UpdateArticleRequest';
+    type ThankArticleResp,
+    ThankArticleRespFromJSON,
+    ThankArticleRespToJSON,
+} from '../models/ThankArticleResp';
 import {
-    type UpdateDraftArticleReply,
-    UpdateDraftArticleReplyFromJSON,
-    UpdateDraftArticleReplyToJSON,
-} from '../models/UpdateDraftArticleReply';
+    type UpdateDraftArticleReq,
+    UpdateDraftArticleReqFromJSON,
+    UpdateDraftArticleReqToJSON,
+} from '../models/UpdateDraftArticleReq';
 import {
-    type UpdateDraftArticleRequest,
-    UpdateDraftArticleRequestFromJSON,
-    UpdateDraftArticleRequestToJSON,
-} from '../models/UpdateDraftArticleRequest';
-import {
-    type WatchArticleReply,
-    WatchArticleReplyFromJSON,
-    WatchArticleReplyToJSON,
-} from '../models/WatchArticleReply';
-import {
-    type WatchArticleRequest,
-    WatchArticleRequestFromJSON,
-    WatchArticleRequestToJSON,
-} from '../models/WatchArticleRequest';
+    type UpdateDraftArticleResp,
+    UpdateDraftArticleRespFromJSON,
+    UpdateDraftArticleRespToJSON,
+} from '../models/UpdateDraftArticleResp';
 
-export interface AcceptAnswerRequest {
-    acceptAnswerArticleRequest: AcceptAnswerArticleRequest;
+export interface ArchiveRequest {
+    archiveArticleReq: ArchiveArticleReq;
+}
+
+export interface CancelPublishRequest {
+    cancelPublishArticleReq: CancelPublishArticleReq;
 }
 
 export interface CollectRequest {
-    collectArticleRequest: CollectArticleRequest;
+    collectArticleReq: CollectArticleReq;
 }
 
-export interface CreateRequest {
-    createArticleRequest: CreateArticleRequest;
+export interface CreateDraftRequest {
+    createDraftArticleReq: CreateDraftArticleReq;
 }
 
 export interface DiscardDraftRequest {
-    discardDraftArticleRequest: DiscardDraftArticleRequest;
+    discardDraftArticleReq: DiscardDraftArticleReq;
 }
 
 export interface GetRequest {
-    getArticleRequest: GetArticleRequest;
+    getArticleReq: GetArticleReq;
 }
 
 export interface LikeRequest {
-    likeArticleRequest: LikeArticleRequest;
+    likeArticleReq: LikeArticleReq;
 }
 
 export interface ListRequest {
-    listArticlesRequest: ListArticlesRequest;
+    listArticlesReq: ListArticlesReq;
 }
 
 export interface PublishRequest {
-    publishArticleRequest: PublishArticleRequest;
+    publishArticleReq: PublishArticleReq;
 }
 
 export interface RewardRequest {
-    rewardArticleRequest: RewardArticleRequest;
+    rewardArticleReq: RewardArticleReq;
+}
+
+export interface SchedulePublishRequest {
+    schedulePublishArticleReq: SchedulePublishArticleReq;
 }
 
 export interface ThankRequest {
-    thankArticleRequest: ThankArticleRequest;
-}
-
-export interface UpdateRequest {
-    updateArticleRequest: UpdateArticleRequest;
+    thankArticleReq: ThankArticleReq;
 }
 
 export interface UpdateDraftRequest {
-    updateDraftArticleRequest: UpdateDraftArticleRequest;
-}
-
-export interface WatchRequest {
-    watchArticleRequest: WatchArticleRequest;
+    updateDraftArticleReq: UpdateDraftArticleReq;
 }
 
 /**
@@ -184,82 +174,104 @@ export interface WatchRequest {
  */
 export interface ArticleServiceInterface {
     /**
-     * Creates request options for acceptAnswer without sending the request
-     * @param {AcceptAnswerArticleRequest} acceptAnswerArticleRequest 
+     * Creates request options for archive without sending the request
+     * @param {ArchiveArticleReq} archiveArticleReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    acceptAnswerRequestOpts(requestParameters: AcceptAnswerRequest): Promise<runtime.RequestOpts>;
+    archiveRequestOpts(requestParameters: ArchiveRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 采纳文章评论为答案。
-     * @param {AcceptAnswerArticleRequest} acceptAnswerArticleRequest 
+     * 归档文章
+     * @param {ArchiveArticleReq} archiveArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    acceptAnswerRaw(requestParameters: AcceptAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+    archiveRaw(requestParameters: ArchiveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
-     * 采纳文章评论为答案。
+     * 归档文章
      */
-    acceptAnswer(requestParameters: AcceptAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    archive(requestParameters: ArchiveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
+    /**
+     * Creates request options for cancelPublish without sending the request
+     * @param {CancelPublishArticleReq} cancelPublishArticleReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    cancelPublishRequestOpts(requestParameters: CancelPublishRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 取消定时发布
+     * @param {CancelPublishArticleReq} cancelPublishArticleReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    cancelPublishRaw(requestParameters: CancelPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 取消定时发布
+     */
+    cancelPublish(requestParameters: CancelPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
      * Creates request options for collect without sending the request
-     * @param {CollectArticleRequest} collectArticleRequest 
+     * @param {CollectArticleReq} collectArticleReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
     collectRequestOpts(requestParameters: CollectRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 收藏或取消收藏文章。
-     * @param {CollectArticleRequest} collectArticleRequest 
+     * 收藏文章
+     * @param {CollectArticleReq} collectArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    collectRaw(requestParameters: CollectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CollectArticleReply>>;
+    collectRaw(requestParameters: CollectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CollectArticleResp>>;
 
     /**
-     * 收藏或取消收藏文章。
+     * 收藏文章
      */
-    collect(requestParameters: CollectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CollectArticleReply>;
+    collect(requestParameters: CollectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CollectArticleResp>;
 
     /**
-     * Creates request options for create without sending the request
-     * @param {CreateArticleRequest} createArticleRequest 
+     * Creates request options for createDraft without sending the request
+     * @param {CreateDraftArticleReq} createDraftArticleReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts>;
+    createDraftRequestOpts(requestParameters: CreateDraftRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 创建文章草稿。
-     * @param {CreateArticleRequest} createArticleRequest 
+     * 创建文章草稿
+     * @param {CreateDraftArticleReq} createDraftArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateArticleReply>>;
+    createDraftRaw(requestParameters: CreateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateDraftArticleResp>>;
 
     /**
-     * 创建文章草稿。
+     * 创建文章草稿
      */
-    create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateArticleReply>;
+    createDraft(requestParameters: CreateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateDraftArticleResp>;
 
     /**
      * Creates request options for discardDraft without sending the request
-     * @param {DiscardDraftArticleRequest} discardDraftArticleRequest 
+     * @param {DiscardDraftArticleReq} discardDraftArticleReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
     discardDraftRequestOpts(requestParameters: DiscardDraftRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 丢弃草稿。
-     * @param {DiscardDraftArticleRequest} discardDraftArticleRequest 
+     * 丢弃文章草稿
+     * @param {DiscardDraftArticleReq} discardDraftArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
@@ -267,87 +279,87 @@ export interface ArticleServiceInterface {
     discardDraftRaw(requestParameters: DiscardDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
-     * 丢弃草稿。
+     * 丢弃文章草稿
      */
     discardDraft(requestParameters: DiscardDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
      * Creates request options for get without sending the request
-     * @param {GetArticleRequest} getArticleRequest 
+     * @param {GetArticleReq} getArticleReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
     getRequestOpts(requestParameters: GetRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 获取文章详情。
-     * @param {GetArticleRequest} getArticleRequest 
+     * 查询文章详情
+     * @param {GetArticleReq} getArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    getRaw(requestParameters: GetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetArticleReply>>;
+    getRaw(requestParameters: GetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetArticleResp>>;
 
     /**
-     * 获取文章详情。
+     * 查询文章详情
      */
-    get(requestParameters: GetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetArticleReply>;
+    get(requestParameters: GetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetArticleResp>;
 
     /**
      * Creates request options for like without sending the request
-     * @param {LikeArticleRequest} likeArticleRequest 
+     * @param {LikeArticleReq} likeArticleReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
     likeRequestOpts(requestParameters: LikeRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 点赞或取消点赞文章。
-     * @param {LikeArticleRequest} likeArticleRequest 
+     * 点赞文章
+     * @param {LikeArticleReq} likeArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    likeRaw(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LikeArticleReply>>;
+    likeRaw(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LikeArticleResp>>;
 
     /**
-     * 点赞或取消点赞文章。
+     * 点赞文章
      */
-    like(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LikeArticleReply>;
+    like(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LikeArticleResp>;
 
     /**
      * Creates request options for list without sending the request
-     * @param {ListArticlesRequest} listArticlesRequest 
+     * @param {ListArticlesReq} listArticlesReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
     listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 分页查询文章列表。
-     * @param {ListArticlesRequest} listArticlesRequest 
+     * 查询文章列表
+     * @param {ListArticlesReq} listArticlesReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListArticlesReply>>;
+    listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListArticlesResp>>;
 
     /**
-     * 分页查询文章列表。
+     * 查询文章列表
      */
-    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListArticlesReply>;
+    list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListArticlesResp>;
 
     /**
      * Creates request options for publish without sending the request
-     * @param {PublishArticleRequest} publishArticleRequest 
+     * @param {PublishArticleReq} publishArticleReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
     publishRequestOpts(requestParameters: PublishRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 发布文章。
-     * @param {PublishArticleRequest} publishArticleRequest 
+     * 发布文章
+     * @param {PublishArticleReq} publishArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
@@ -355,21 +367,21 @@ export interface ArticleServiceInterface {
     publishRaw(requestParameters: PublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
-     * 发布文章。
+     * 发布文章
      */
     publish(requestParameters: PublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
      * Creates request options for reward without sending the request
-     * @param {RewardArticleRequest} rewardArticleRequest 
+     * @param {RewardArticleReq} rewardArticleReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
     rewardRequestOpts(requestParameters: RewardRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 打赏文章。
-     * @param {RewardArticleRequest} rewardArticleRequest 
+     * 打赏文章
+     * @param {RewardArticleReq} rewardArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
@@ -377,97 +389,75 @@ export interface ArticleServiceInterface {
     rewardRaw(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
-     * 打赏文章。
+     * 打赏文章
      */
     reward(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
+     * Creates request options for schedulePublish without sending the request
+     * @param {SchedulePublishArticleReq} schedulePublishArticleReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    schedulePublishRequestOpts(requestParameters: SchedulePublishRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 设置定时发布
+     * @param {SchedulePublishArticleReq} schedulePublishArticleReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    schedulePublishRaw(requestParameters: SchedulePublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 设置定时发布
+     */
+    schedulePublish(requestParameters: SchedulePublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
+    /**
      * Creates request options for thank without sending the request
-     * @param {ThankArticleRequest} thankArticleRequest 
+     * @param {ThankArticleReq} thankArticleReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
     thankRequestOpts(requestParameters: ThankRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 感谢或取消感谢文章。
-     * @param {ThankArticleRequest} thankArticleRequest 
+     * 感谢文章
+     * @param {ThankArticleReq} thankArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    thankRaw(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ThankArticleReply>>;
+    thankRaw(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ThankArticleResp>>;
 
     /**
-     * 感谢或取消感谢文章。
+     * 感谢文章
      */
-    thank(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ThankArticleReply>;
-
-    /**
-     * Creates request options for update without sending the request
-     * @param {UpdateArticleRequest} updateArticleRequest 
-     * @throws {RequiredError}
-     * @memberof ArticleServiceInterface
-     */
-    updateRequestOpts(requestParameters: UpdateRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 更新文章内容。
-     * @param {UpdateArticleRequest} updateArticleRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ArticleServiceInterface
-     */
-    updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateArticleReply>>;
-
-    /**
-     * 更新文章内容。
-     */
-    update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateArticleReply>;
+    thank(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ThankArticleResp>;
 
     /**
      * Creates request options for updateDraft without sending the request
-     * @param {UpdateDraftArticleRequest} updateDraftArticleRequest 
+     * @param {UpdateDraftArticleReq} updateDraftArticleReq 
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
     updateDraftRequestOpts(requestParameters: UpdateDraftRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 更新文章内容。兼容旧草稿更新接口。
-     * @param {UpdateDraftArticleRequest} updateDraftArticleRequest 
+     * 编辑文章草稿
+     * @param {UpdateDraftArticleReq} updateDraftArticleReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ArticleServiceInterface
      */
-    updateDraftRaw(requestParameters: UpdateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateDraftArticleReply>>;
+    updateDraftRaw(requestParameters: UpdateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateDraftArticleResp>>;
 
     /**
-     * 更新文章内容。兼容旧草稿更新接口。
+     * 编辑文章草稿
      */
-    updateDraft(requestParameters: UpdateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDraftArticleReply>;
-
-    /**
-     * Creates request options for watch without sending the request
-     * @param {WatchArticleRequest} watchArticleRequest 
-     * @throws {RequiredError}
-     * @memberof ArticleServiceInterface
-     */
-    watchRequestOpts(requestParameters: WatchRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 关注或取消关注文章。
-     * @param {WatchArticleRequest} watchArticleRequest 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ArticleServiceInterface
-     */
-    watchRaw(requestParameters: WatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WatchArticleReply>>;
-
-    /**
-     * 关注或取消关注文章。
-     */
-    watch(requestParameters: WatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WatchArticleReply>;
+    updateDraft(requestParameters: UpdateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDraftArticleResp>;
 
 }
 
@@ -477,13 +467,13 @@ export interface ArticleServiceInterface {
 export class ArticleService extends runtime.BaseAPI implements ArticleServiceInterface {
 
     /**
-     * Creates request options for acceptAnswer without sending the request
+     * Creates request options for archive without sending the request
      */
-    async acceptAnswerRequestOpts(requestParameters: AcceptAnswerRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['acceptAnswerArticleRequest'] == null) {
+    async archiveRequestOpts(requestParameters: ArchiveRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['archiveArticleReq'] == null) {
             throw new runtime.RequiredError(
-                'acceptAnswerArticleRequest',
-                'Required parameter "acceptAnswerArticleRequest" was null or undefined when calling acceptAnswer().'
+                'archiveArticleReq',
+                'Required parameter "archiveArticleReq" was null or undefined when calling archive().'
             );
         }
 
@@ -494,32 +484,79 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/content/article/accept-answer`;
+        let urlPath = `/v1/content/article/archive`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: AcceptAnswerArticleRequestToJSON(requestParameters['acceptAnswerArticleRequest']),
+            body: ArchiveArticleReqToJSON(requestParameters['archiveArticleReq']),
         };
     }
 
     /**
-     * 采纳文章评论为答案。
+     * 归档文章
      */
-    async acceptAnswerRaw(requestParameters: AcceptAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.acceptAnswerRequestOpts(requestParameters);
+    async archiveRaw(requestParameters: ArchiveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.archiveRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
     }
 
     /**
-     * 采纳文章评论为答案。
+     * 归档文章
      */
-    async acceptAnswer(requestParameters: AcceptAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.acceptAnswerRaw(requestParameters, initOverrides);
+    async archive(requestParameters: ArchiveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.archiveRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for cancelPublish without sending the request
+     */
+    async cancelPublishRequestOpts(requestParameters: CancelPublishRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['cancelPublishArticleReq'] == null) {
+            throw new runtime.RequiredError(
+                'cancelPublishArticleReq',
+                'Required parameter "cancelPublishArticleReq" was null or undefined when calling cancelPublish().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/publish/cancel`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CancelPublishArticleReqToJSON(requestParameters['cancelPublishArticleReq']),
+        };
+    }
+
+    /**
+     * 取消定时发布
+     */
+    async cancelPublishRaw(requestParameters: CancelPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.cancelPublishRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 取消定时发布
+     */
+    async cancelPublish(requestParameters: CancelPublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.cancelPublishRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -527,10 +564,10 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      * Creates request options for collect without sending the request
      */
     async collectRequestOpts(requestParameters: CollectRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['collectArticleRequest'] == null) {
+        if (requestParameters['collectArticleReq'] == null) {
             throw new runtime.RequiredError(
-                'collectArticleRequest',
-                'Required parameter "collectArticleRequest" was null or undefined when calling collect().'
+                'collectArticleReq',
+                'Required parameter "collectArticleReq" was null or undefined when calling collect().'
             );
         }
 
@@ -548,36 +585,36 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CollectArticleRequestToJSON(requestParameters['collectArticleRequest']),
+            body: CollectArticleReqToJSON(requestParameters['collectArticleReq']),
         };
     }
 
     /**
-     * 收藏或取消收藏文章。
+     * 收藏文章
      */
-    async collectRaw(requestParameters: CollectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CollectArticleReply>> {
+    async collectRaw(requestParameters: CollectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CollectArticleResp>> {
         const requestOptions = await this.collectRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CollectArticleReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CollectArticleRespFromJSON(jsonValue));
     }
 
     /**
-     * 收藏或取消收藏文章。
+     * 收藏文章
      */
-    async collect(requestParameters: CollectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CollectArticleReply> {
+    async collect(requestParameters: CollectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CollectArticleResp> {
         const response = await this.collectRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Creates request options for create without sending the request
+     * Creates request options for createDraft without sending the request
      */
-    async createRequestOpts(requestParameters: CreateRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['createArticleRequest'] == null) {
+    async createDraftRequestOpts(requestParameters: CreateDraftRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['createDraftArticleReq'] == null) {
             throw new runtime.RequiredError(
-                'createArticleRequest',
-                'Required parameter "createArticleRequest" was null or undefined when calling create().'
+                'createDraftArticleReq',
+                'Required parameter "createDraftArticleReq" was null or undefined when calling createDraft().'
             );
         }
 
@@ -588,32 +625,32 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/content/article/create`;
+        let urlPath = `/v1/content/article/draft/create`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateArticleRequestToJSON(requestParameters['createArticleRequest']),
+            body: CreateDraftArticleReqToJSON(requestParameters['createDraftArticleReq']),
         };
     }
 
     /**
-     * 创建文章草稿。
+     * 创建文章草稿
      */
-    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateArticleReply>> {
-        const requestOptions = await this.createRequestOpts(requestParameters);
+    async createDraftRaw(requestParameters: CreateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateDraftArticleResp>> {
+        const requestOptions = await this.createDraftRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreateArticleReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CreateDraftArticleRespFromJSON(jsonValue));
     }
 
     /**
-     * 创建文章草稿。
+     * 创建文章草稿
      */
-    async create(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateArticleReply> {
-        const response = await this.createRaw(requestParameters, initOverrides);
+    async createDraft(requestParameters: CreateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateDraftArticleResp> {
+        const response = await this.createDraftRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -621,10 +658,10 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      * Creates request options for discardDraft without sending the request
      */
     async discardDraftRequestOpts(requestParameters: DiscardDraftRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['discardDraftArticleRequest'] == null) {
+        if (requestParameters['discardDraftArticleReq'] == null) {
             throw new runtime.RequiredError(
-                'discardDraftArticleRequest',
-                'Required parameter "discardDraftArticleRequest" was null or undefined when calling discardDraft().'
+                'discardDraftArticleReq',
+                'Required parameter "discardDraftArticleReq" was null or undefined when calling discardDraft().'
             );
         }
 
@@ -635,19 +672,19 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/content/article/discard-draft`;
+        let urlPath = `/v1/content/article/draft/discard`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: DiscardDraftArticleRequestToJSON(requestParameters['discardDraftArticleRequest']),
+            body: DiscardDraftArticleReqToJSON(requestParameters['discardDraftArticleReq']),
         };
     }
 
     /**
-     * 丢弃草稿。
+     * 丢弃文章草稿
      */
     async discardDraftRaw(requestParameters: DiscardDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         const requestOptions = await this.discardDraftRequestOpts(requestParameters);
@@ -657,7 +694,7 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
     }
 
     /**
-     * 丢弃草稿。
+     * 丢弃文章草稿
      */
     async discardDraft(requestParameters: DiscardDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.discardDraftRaw(requestParameters, initOverrides);
@@ -668,10 +705,10 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      * Creates request options for get without sending the request
      */
     async getRequestOpts(requestParameters: GetRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['getArticleRequest'] == null) {
+        if (requestParameters['getArticleReq'] == null) {
             throw new runtime.RequiredError(
-                'getArticleRequest',
-                'Required parameter "getArticleRequest" was null or undefined when calling get().'
+                'getArticleReq',
+                'Required parameter "getArticleReq" was null or undefined when calling get().'
             );
         }
 
@@ -689,24 +726,24 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: GetArticleRequestToJSON(requestParameters['getArticleRequest']),
+            body: GetArticleReqToJSON(requestParameters['getArticleReq']),
         };
     }
 
     /**
-     * 获取文章详情。
+     * 查询文章详情
      */
-    async getRaw(requestParameters: GetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetArticleReply>> {
+    async getRaw(requestParameters: GetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetArticleResp>> {
         const requestOptions = await this.getRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetArticleReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetArticleRespFromJSON(jsonValue));
     }
 
     /**
-     * 获取文章详情。
+     * 查询文章详情
      */
-    async get(requestParameters: GetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetArticleReply> {
+    async get(requestParameters: GetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetArticleResp> {
         const response = await this.getRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -715,10 +752,10 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      * Creates request options for like without sending the request
      */
     async likeRequestOpts(requestParameters: LikeRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['likeArticleRequest'] == null) {
+        if (requestParameters['likeArticleReq'] == null) {
             throw new runtime.RequiredError(
-                'likeArticleRequest',
-                'Required parameter "likeArticleRequest" was null or undefined when calling like().'
+                'likeArticleReq',
+                'Required parameter "likeArticleReq" was null or undefined when calling like().'
             );
         }
 
@@ -736,24 +773,24 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: LikeArticleRequestToJSON(requestParameters['likeArticleRequest']),
+            body: LikeArticleReqToJSON(requestParameters['likeArticleReq']),
         };
     }
 
     /**
-     * 点赞或取消点赞文章。
+     * 点赞文章
      */
-    async likeRaw(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LikeArticleReply>> {
+    async likeRaw(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<LikeArticleResp>> {
         const requestOptions = await this.likeRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => LikeArticleReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => LikeArticleRespFromJSON(jsonValue));
     }
 
     /**
-     * 点赞或取消点赞文章。
+     * 点赞文章
      */
-    async like(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LikeArticleReply> {
+    async like(requestParameters: LikeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<LikeArticleResp> {
         const response = await this.likeRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -762,10 +799,10 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      * Creates request options for list without sending the request
      */
     async listRequestOpts(requestParameters: ListRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['listArticlesRequest'] == null) {
+        if (requestParameters['listArticlesReq'] == null) {
             throw new runtime.RequiredError(
-                'listArticlesRequest',
-                'Required parameter "listArticlesRequest" was null or undefined when calling list().'
+                'listArticlesReq',
+                'Required parameter "listArticlesReq" was null or undefined when calling list().'
             );
         }
 
@@ -783,24 +820,24 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ListArticlesRequestToJSON(requestParameters['listArticlesRequest']),
+            body: ListArticlesReqToJSON(requestParameters['listArticlesReq']),
         };
     }
 
     /**
-     * 分页查询文章列表。
+     * 查询文章列表
      */
-    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListArticlesReply>> {
+    async listRaw(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListArticlesResp>> {
         const requestOptions = await this.listRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListArticlesReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListArticlesRespFromJSON(jsonValue));
     }
 
     /**
-     * 分页查询文章列表。
+     * 查询文章列表
      */
-    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListArticlesReply> {
+    async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListArticlesResp> {
         const response = await this.listRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -809,10 +846,10 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      * Creates request options for publish without sending the request
      */
     async publishRequestOpts(requestParameters: PublishRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['publishArticleRequest'] == null) {
+        if (requestParameters['publishArticleReq'] == null) {
             throw new runtime.RequiredError(
-                'publishArticleRequest',
-                'Required parameter "publishArticleRequest" was null or undefined when calling publish().'
+                'publishArticleReq',
+                'Required parameter "publishArticleReq" was null or undefined when calling publish().'
             );
         }
 
@@ -830,12 +867,12 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PublishArticleRequestToJSON(requestParameters['publishArticleRequest']),
+            body: PublishArticleReqToJSON(requestParameters['publishArticleReq']),
         };
     }
 
     /**
-     * 发布文章。
+     * 发布文章
      */
     async publishRaw(requestParameters: PublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         const requestOptions = await this.publishRequestOpts(requestParameters);
@@ -845,7 +882,7 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
     }
 
     /**
-     * 发布文章。
+     * 发布文章
      */
     async publish(requestParameters: PublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.publishRaw(requestParameters, initOverrides);
@@ -856,10 +893,10 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      * Creates request options for reward without sending the request
      */
     async rewardRequestOpts(requestParameters: RewardRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['rewardArticleRequest'] == null) {
+        if (requestParameters['rewardArticleReq'] == null) {
             throw new runtime.RequiredError(
-                'rewardArticleRequest',
-                'Required parameter "rewardArticleRequest" was null or undefined when calling reward().'
+                'rewardArticleReq',
+                'Required parameter "rewardArticleReq" was null or undefined when calling reward().'
             );
         }
 
@@ -877,12 +914,12 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: RewardArticleRequestToJSON(requestParameters['rewardArticleRequest']),
+            body: RewardArticleReqToJSON(requestParameters['rewardArticleReq']),
         };
     }
 
     /**
-     * 打赏文章。
+     * 打赏文章
      */
     async rewardRaw(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
         const requestOptions = await this.rewardRequestOpts(requestParameters);
@@ -892,7 +929,7 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
     }
 
     /**
-     * 打赏文章。
+     * 打赏文章
      */
     async reward(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.rewardRaw(requestParameters, initOverrides);
@@ -900,13 +937,60 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
     }
 
     /**
+     * Creates request options for schedulePublish without sending the request
+     */
+    async schedulePublishRequestOpts(requestParameters: SchedulePublishRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['schedulePublishArticleReq'] == null) {
+            throw new runtime.RequiredError(
+                'schedulePublishArticleReq',
+                'Required parameter "schedulePublishArticleReq" was null or undefined when calling schedulePublish().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/publish/schedule`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: SchedulePublishArticleReqToJSON(requestParameters['schedulePublishArticleReq']),
+        };
+    }
+
+    /**
+     * 设置定时发布
+     */
+    async schedulePublishRaw(requestParameters: SchedulePublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.schedulePublishRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 设置定时发布
+     */
+    async schedulePublish(requestParameters: SchedulePublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.schedulePublishRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for thank without sending the request
      */
     async thankRequestOpts(requestParameters: ThankRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['thankArticleRequest'] == null) {
+        if (requestParameters['thankArticleReq'] == null) {
             throw new runtime.RequiredError(
-                'thankArticleRequest',
-                'Required parameter "thankArticleRequest" was null or undefined when calling thank().'
+                'thankArticleReq',
+                'Required parameter "thankArticleReq" was null or undefined when calling thank().'
             );
         }
 
@@ -924,72 +1008,25 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ThankArticleRequestToJSON(requestParameters['thankArticleRequest']),
+            body: ThankArticleReqToJSON(requestParameters['thankArticleReq']),
         };
     }
 
     /**
-     * 感谢或取消感谢文章。
+     * 感谢文章
      */
-    async thankRaw(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ThankArticleReply>> {
+    async thankRaw(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ThankArticleResp>> {
         const requestOptions = await this.thankRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ThankArticleReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ThankArticleRespFromJSON(jsonValue));
     }
 
     /**
-     * 感谢或取消感谢文章。
+     * 感谢文章
      */
-    async thank(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ThankArticleReply> {
+    async thank(requestParameters: ThankRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ThankArticleResp> {
         const response = await this.thankRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for update without sending the request
-     */
-    async updateRequestOpts(requestParameters: UpdateRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['updateArticleRequest'] == null) {
-            throw new runtime.RequiredError(
-                'updateArticleRequest',
-                'Required parameter "updateArticleRequest" was null or undefined when calling update().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/content/article/update`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: UpdateArticleRequestToJSON(requestParameters['updateArticleRequest']),
-        };
-    }
-
-    /**
-     * 更新文章内容。
-     */
-    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateArticleReply>> {
-        const requestOptions = await this.updateRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateArticleReplyFromJSON(jsonValue));
-    }
-
-    /**
-     * 更新文章内容。
-     */
-    async update(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateArticleReply> {
-        const response = await this.updateRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -997,10 +1034,10 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      * Creates request options for updateDraft without sending the request
      */
     async updateDraftRequestOpts(requestParameters: UpdateDraftRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['updateDraftArticleRequest'] == null) {
+        if (requestParameters['updateDraftArticleReq'] == null) {
             throw new runtime.RequiredError(
-                'updateDraftArticleRequest',
-                'Required parameter "updateDraftArticleRequest" was null or undefined when calling updateDraft().'
+                'updateDraftArticleReq',
+                'Required parameter "updateDraftArticleReq" was null or undefined when calling updateDraft().'
             );
         }
 
@@ -1011,79 +1048,32 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/content/article/update-draft`;
+        let urlPath = `/v1/content/article/draft/update`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateDraftArticleRequestToJSON(requestParameters['updateDraftArticleRequest']),
+            body: UpdateDraftArticleReqToJSON(requestParameters['updateDraftArticleReq']),
         };
     }
 
     /**
-     * 更新文章内容。兼容旧草稿更新接口。
+     * 编辑文章草稿
      */
-    async updateDraftRaw(requestParameters: UpdateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateDraftArticleReply>> {
+    async updateDraftRaw(requestParameters: UpdateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateDraftArticleResp>> {
         const requestOptions = await this.updateDraftRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateDraftArticleReplyFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateDraftArticleRespFromJSON(jsonValue));
     }
 
     /**
-     * 更新文章内容。兼容旧草稿更新接口。
+     * 编辑文章草稿
      */
-    async updateDraft(requestParameters: UpdateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDraftArticleReply> {
+    async updateDraft(requestParameters: UpdateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDraftArticleResp> {
         const response = await this.updateDraftRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for watch without sending the request
-     */
-    async watchRequestOpts(requestParameters: WatchRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['watchArticleRequest'] == null) {
-            throw new runtime.RequiredError(
-                'watchArticleRequest',
-                'Required parameter "watchArticleRequest" was null or undefined when calling watch().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/content/article/watch`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: WatchArticleRequestToJSON(requestParameters['watchArticleRequest']),
-        };
-    }
-
-    /**
-     * 关注或取消关注文章。
-     */
-    async watchRaw(requestParameters: WatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WatchArticleReply>> {
-        const requestOptions = await this.watchRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => WatchArticleReplyFromJSON(jsonValue));
-    }
-
-    /**
-     * 关注或取消关注文章。
-     */
-    async watch(requestParameters: WatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WatchArticleReply> {
-        const response = await this.watchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

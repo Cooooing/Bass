@@ -11,7 +11,7 @@ All URIs are relative to *http://localhost*
 
 ## getCurrent
 
-> GetCurrentPreferencesReply getCurrent(body)
+> GetCurrentPreferencesResp getCurrent(body)
 
 
 
@@ -56,7 +56,7 @@ example().catch(console.error);
 
 ### Return type
 
-[**GetCurrentPreferencesReply**](GetCurrentPreferencesReply.md)
+[**GetCurrentPreferencesResp**](GetCurrentPreferencesResp.md)
 
 ### Authorization
 
@@ -78,7 +78,7 @@ No authorization required
 
 ## updateCurrent
 
-> UpdateCurrentPreferencesReply updateCurrent(updateCurrentPreferencesRequest)
+> UpdateCurrentPreferencesResp updateCurrent(updateCurrentPreferencesReq)
 
 
 
@@ -98,8 +98,8 @@ async function example() {
   const api = new PreferencesService();
 
   const body = {
-    // UpdateCurrentPreferencesRequest
-    updateCurrentPreferencesRequest: ...,
+    // UpdateCurrentPreferencesReq
+    updateCurrentPreferencesReq: ...,
   } satisfies UpdateCurrentRequest;
 
   try {
@@ -119,11 +119,11 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **updateCurrentPreferencesRequest** | [UpdateCurrentPreferencesRequest](UpdateCurrentPreferencesRequest.md) |  | |
+| **updateCurrentPreferencesReq** | [UpdateCurrentPreferencesReq](UpdateCurrentPreferencesReq.md) |  | |
 
 ### Return type
 
-[**UpdateCurrentPreferencesReply**](UpdateCurrentPreferencesReply.md)
+[**UpdateCurrentPreferencesResp**](UpdateCurrentPreferencesResp.md)
 
 ### Authorization
 

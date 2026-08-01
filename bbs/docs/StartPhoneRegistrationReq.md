@@ -1,0 +1,14 @@
+# StartPhoneRegistrationReq
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**phone** | **String** |  | 
+**password** | **String** |  | 
+**name** | **String** |  | 
+**nickname** | Option<**String**> |  | [optional]
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

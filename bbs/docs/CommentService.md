@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 ## create
 
-> models::CreateCommentReply create(create_comment_request)
+> models::CreateCommentResp create(create_comment_req)
 
 
 创建评论。
@@ -26,11 +26,11 @@ Method | HTTP request | Description
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**create_comment_request** | [**CreateCommentRequest**](CreateCommentRequest.md) |  | [required] |
+**create_comment_req** | [**CreateCommentReq**](CreateCommentReq.md) |  | [required] |
 
 ### Return type
 
-[**models::CreateCommentReply**](CreateComment_Reply.md)
+[**models::CreateCommentResp**](CreateComment_Resp.md)
 
 ### Authorization
 
@@ -46,7 +46,7 @@ No authorization required
 
 ## like
 
-> models::LikeCommentReply like(like_comment_request)
+> models::LikeCommentResp like(like_comment_req)
 
 
 点赞或取消点赞评论。
@@ -56,11 +56,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**like_comment_request** | [**LikeCommentRequest**](LikeCommentRequest.md) |  | [required] |
+**like_comment_req** | [**LikeCommentReq**](LikeCommentReq.md) |  | [required] |
 
 ### Return type
 
-[**models::LikeCommentReply**](LikeComment_Reply.md)
+[**models::LikeCommentResp**](LikeComment_Resp.md)
 
 ### Authorization
 
@@ -76,7 +76,7 @@ No authorization required
 
 ## list
 
-> models::ListCommentsReply list(list_comments_request)
+> models::ListCommentsResp list(list_comments_req)
 
 
 分页查询评论列表。
@@ -86,11 +86,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_comments_request** | [**ListCommentsRequest**](ListCommentsRequest.md) |  | [required] |
+**list_comments_req** | [**ListCommentsReq**](ListCommentsReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ListCommentsReply**](ListComments_Reply.md)
+[**models::ListCommentsResp**](ListComments_Resp.md)
 
 ### Authorization
 
@@ -106,7 +106,7 @@ No authorization required
 
 ## list_replies
 
-> models::ListCommentRepliesReply list_replies(list_comment_replies_request)
+> models::ListCommentRepliesResp list_replies(list_comment_replies_req)
 
 
 分页查询评论回复。
@@ -116,11 +116,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_comment_replies_request** | [**ListCommentRepliesRequest**](ListCommentRepliesRequest.md) |  | [required] |
+**list_comment_replies_req** | [**ListCommentRepliesReq**](ListCommentRepliesReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ListCommentRepliesReply**](ListCommentReplies_Reply.md)
+[**models::ListCommentRepliesResp**](ListCommentReplies_Resp.md)
 
 ### Authorization
 
@@ -136,7 +136,7 @@ No authorization required
 
 ## list_threads
 
-> models::ListCommentThreadsReply list_threads(list_comment_threads_request)
+> models::ListCommentThreadsResp list_threads(list_comment_threads_req)
 
 
 分页查询评论楼层。
@@ -146,11 +146,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_comment_threads_request** | [**ListCommentThreadsRequest**](ListCommentThreadsRequest.md) |  | [required] |
+**list_comment_threads_req** | [**ListCommentThreadsReq**](ListCommentThreadsReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ListCommentThreadsReply**](ListCommentThreads_Reply.md)
+[**models::ListCommentThreadsResp**](ListCommentThreads_Resp.md)
 
 ### Authorization
 
@@ -166,7 +166,7 @@ No authorization required
 
 ## list_timeline
 
-> models::ListCommentTimelineReply list_timeline(list_comment_timeline_request)
+> models::ListCommentTimelineResp list_timeline(list_comment_timeline_req)
 
 
 分页查询评论时间线。
@@ -176,11 +176,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_comment_timeline_request** | [**ListCommentTimelineRequest**](ListCommentTimelineRequest.md) |  | [required] |
+**list_comment_timeline_req** | [**ListCommentTimelineReq**](ListCommentTimelineReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ListCommentTimelineReply**](ListCommentTimeline_Reply.md)
+[**models::ListCommentTimelineResp**](ListCommentTimeline_Resp.md)
 
 ### Authorization
 
@@ -196,7 +196,7 @@ No authorization required
 
 ## thank
 
-> models::ThankCommentReply thank(thank_comment_request)
+> models::ThankCommentResp thank(thank_comment_req)
 
 
 感谢或取消感谢评论。
@@ -206,11 +206,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**thank_comment_request** | [**ThankCommentRequest**](ThankCommentRequest.md) |  | [required] |
+**thank_comment_req** | [**ThankCommentReq**](ThankCommentReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ThankCommentReply**](ThankComment_Reply.md)
+[**models::ThankCommentResp**](ThankComment_Resp.md)
 
 ### Authorization
 

@@ -23,12 +23,12 @@ pub trait LocationService: Send + Sync {
     /// POST /v1/user/location/get-current
     ///
     /// 获取当前账号的地理资料。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentLocationReply, Error<GetCurrentError>>;
+    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentLocationResp, Error<GetCurrentError>>;
 
     /// POST /v1/user/location/upsert-current
     ///
     /// 更新当前账号的地理资料。
-    async fn upsert_current<'upsert_current_location_request>(&self, upsert_current_location_request: models::UpsertCurrentLocationRequest) -> Result<models::UpsertCurrentLocationReply, Error<UpsertCurrentError>>;
+    async fn upsert_current<'upsert_current_location_req>(&self, upsert_current_location_req: models::UpsertCurrentLocationReq) -> Result<models::UpsertCurrentLocationResp, Error<UpsertCurrentError>>;
 }
 
 pub struct LocationServiceClient {
@@ -46,7 +46,7 @@ impl LocationServiceClient {
 #[async_trait]
 impl LocationService for LocationServiceClient {
     /// 获取当前账号的地理资料。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentLocationReply, Error<GetCurrentError>> {
+    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentLocationResp, Error<GetCurrentError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -74,8 +74,8 @@ impl LocationService for LocationServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentLocationReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentLocationReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentLocationResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentLocationResp`")))),
             }
         } else {
             let local_var_entity: Option<GetCurrentError> = serde_json::from_str(&local_var_content).ok();
@@ -85,7 +85,7 @@ impl LocationService for LocationServiceClient {
     }
 
     /// 更新当前账号的地理资料。
-    async fn upsert_current<'upsert_current_location_request>(&self, upsert_current_location_request: models::UpsertCurrentLocationRequest) -> Result<models::UpsertCurrentLocationReply, Error<UpsertCurrentError>> {
+    async fn upsert_current<'upsert_current_location_req>(&self, upsert_current_location_req: models::UpsertCurrentLocationReq) -> Result<models::UpsertCurrentLocationResp, Error<UpsertCurrentError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -96,7 +96,7 @@ impl LocationService for LocationServiceClient {
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&upsert_current_location_request);
+        local_var_req_builder = local_var_req_builder.json(&upsert_current_location_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -113,8 +113,8 @@ impl LocationService for LocationServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpsertCurrentLocationReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpsertCurrentLocationReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpsertCurrentLocationResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpsertCurrentLocationResp`")))),
             }
         } else {
             let local_var_entity: Option<UpsertCurrentError> = serde_json::from_str(&local_var_content).ok();

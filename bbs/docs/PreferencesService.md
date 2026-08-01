@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## get_current
 
-> models::GetCurrentPreferencesReply get_current(body)
+> models::GetCurrentPreferencesResp get_current(body)
 
 
 获取当前账号的偏好设置。
@@ -25,7 +25,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetCurrentPreferencesReply**](GetCurrentPreferences_Reply.md)
+[**models::GetCurrentPreferencesResp**](GetCurrentPreferences_Resp.md)
 
 ### Authorization
 
@@ -41,7 +41,7 @@ No authorization required
 
 ## update_current
 
-> models::UpdateCurrentPreferencesReply update_current(update_current_preferences_request)
+> models::UpdateCurrentPreferencesResp update_current(update_current_preferences_req)
 
 
 更新当前账号的偏好设置。
@@ -51,11 +51,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**update_current_preferences_request** | [**UpdateCurrentPreferencesRequest**](UpdateCurrentPreferencesRequest.md) |  | [required] |
+**update_current_preferences_req** | [**UpdateCurrentPreferencesReq**](UpdateCurrentPreferencesReq.md) |  | [required] |
 
 ### Return type
 
-[**models::UpdateCurrentPreferencesReply**](UpdateCurrentPreferences_Reply.md)
+[**models::UpdateCurrentPreferencesResp**](UpdateCurrentPreferences_Resp.md)
 
 ### Authorization
 

@@ -4,15 +4,48 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**bind_article**](TagService.md#bind_article) | **POST** /v1/content/tag/bind-article | 
 [**create**](TagService.md#create) | **POST** /v1/content/tag/create | 
 [**list**](TagService.md#list) | **POST** /v1/content/tag/list | 
+[**list_article_tags**](TagService.md#list_article_tags) | **POST** /v1/content/tag/list-article-tags | 
+[**unbind_article**](TagService.md#unbind_article) | **POST** /v1/content/tag/unbind-article | 
 [**update**](TagService.md#update) | **POST** /v1/content/tag/update | 
 
 
 
+## bind_article
+
+> serde_json::Value bind_article(bind_article_tags_req)
+
+
+绑定文章标签。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**bind_article_tags_req** | [**BindArticleTagsReq**](BindArticleTagsReq.md) |  | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
 ## create
 
-> models::CreateTagReply create(create_tag_request)
+> models::CreateTagResp create(create_tag_req)
 
 
 创建标签。
@@ -22,11 +55,11 @@ Method | HTTP request | Description
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**create_tag_request** | [**CreateTagRequest**](CreateTagRequest.md) |  | [required] |
+**create_tag_req** | [**CreateTagReq**](CreateTagReq.md) |  | [required] |
 
 ### Return type
 
-[**models::CreateTagReply**](CreateTag_Reply.md)
+[**models::CreateTagResp**](CreateTag_Resp.md)
 
 ### Authorization
 
@@ -42,21 +75,81 @@ No authorization required
 
 ## list
 
-> models::ListTagsReply list(list_tags_request)
+> models::ListTagsResp list(list_tags_req)
 
 
-分页查询标签列表。
+查询标签列表。
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_tags_request** | [**ListTagsRequest**](ListTagsRequest.md) |  | [required] |
+**list_tags_req** | [**ListTagsReq**](ListTagsReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ListTagsReply**](ListTags_Reply.md)
+[**models::ListTagsResp**](ListTags_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## list_article_tags
+
+> models::ListArticleTagsResp list_article_tags(list_article_tags_req)
+
+
+查询文章标签列表。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**list_article_tags_req** | [**ListArticleTagsReq**](ListArticleTagsReq.md) |  | [required] |
+
+### Return type
+
+[**models::ListArticleTagsResp**](ListArticleTags_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## unbind_article
+
+> serde_json::Value unbind_article(unbind_article_tags_req)
+
+
+解绑文章标签。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**unbind_article_tags_req** | [**UnbindArticleTagsReq**](UnbindArticleTagsReq.md) |  | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
 
 ### Authorization
 
@@ -72,7 +165,7 @@ No authorization required
 
 ## update
 
-> models::UpdateTagReply update(update_tag_request)
+> models::UpdateTagResp update(update_tag_req)
 
 
 更新标签。
@@ -82,11 +175,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**update_tag_request** | [**UpdateTagRequest**](UpdateTagRequest.md) |  | [required] |
+**update_tag_req** | [**UpdateTagReq**](UpdateTagReq.md) |  | [required] |
 
 ### Return type
 
-[**models::UpdateTagReply**](UpdateTag_Reply.md)
+[**models::UpdateTagResp**](UpdateTag_Resp.md)
 
 ### Authorization
 

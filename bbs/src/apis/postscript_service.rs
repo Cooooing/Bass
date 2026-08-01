@@ -23,7 +23,12 @@ pub trait PostscriptService: Send + Sync {
     /// POST /v1/content/postscript/add
     ///
     /// 添加文章附言。
-    async fn add<'add_postscript_request>(&self, add_postscript_request: models::AddPostscriptRequest) -> Result<models::AddPostscriptReply, Error<AddError>>;
+    async fn add<'add_postscript_req>(&self, add_postscript_req: models::AddPostscriptReq) -> Result<models::AddPostscriptResp, Error<AddError>>;
+
+    /// POST /v1/content/postscript/list
+    ///
+    /// 查询文章附言列表。
+    async fn list<'list_postscripts_req>(&self, list_postscripts_req: models::ListPostscriptsReq) -> Result<models::ListPostscriptsResp, Error<ListError>>;
 }
 
 pub struct PostscriptServiceClient {
@@ -41,7 +46,7 @@ impl PostscriptServiceClient {
 #[async_trait]
 impl PostscriptService for PostscriptServiceClient {
     /// 添加文章附言。
-    async fn add<'add_postscript_request>(&self, add_postscript_request: models::AddPostscriptRequest) -> Result<models::AddPostscriptReply, Error<AddError>> {
+    async fn add<'add_postscript_req>(&self, add_postscript_req: models::AddPostscriptReq) -> Result<models::AddPostscriptResp, Error<AddError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -52,7 +57,7 @@ impl PostscriptService for PostscriptServiceClient {
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&add_postscript_request);
+        local_var_req_builder = local_var_req_builder.json(&add_postscript_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -69,11 +74,50 @@ impl PostscriptService for PostscriptServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::AddPostscriptReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::AddPostscriptReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::AddPostscriptResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::AddPostscriptResp`")))),
             }
         } else {
             let local_var_entity: Option<AddError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 查询文章附言列表。
+    async fn list<'list_postscripts_req>(&self, list_postscripts_req: models::ListPostscriptsReq) -> Result<models::ListPostscriptsResp, Error<ListError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/postscript/list", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_postscripts_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListPostscriptsResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListPostscriptsResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -85,6 +129,13 @@ impl PostscriptService for PostscriptServiceClient {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum AddError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`PostscriptService::list`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ListError {
     UnknownValue(serde_json::Value),
 }
 

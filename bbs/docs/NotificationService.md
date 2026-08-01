@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## count_unread
 
-> models::CountUnreadNotificationsReply count_unread(body)
+> models::CountUnreadNotificationsResp count_unread(body)
 
 
 统计未读通知数量。
@@ -26,7 +26,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::CountUnreadNotificationsReply**](CountUnreadNotifications_Reply.md)
+[**models::CountUnreadNotificationsResp**](CountUnreadNotifications_Resp.md)
 
 ### Authorization
 
@@ -42,7 +42,7 @@ No authorization required
 
 ## list
 
-> models::ListNotificationsReply list(list_notifications_request)
+> models::ListNotificationsResp list(list_notifications_req)
 
 
 分页查询通知列表。
@@ -52,11 +52,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_notifications_request** | [**ListNotificationsRequest**](ListNotificationsRequest.md) |  | [required] |
+**list_notifications_req** | [**ListNotificationsReq**](ListNotificationsReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ListNotificationsReply**](ListNotifications_Reply.md)
+[**models::ListNotificationsResp**](ListNotifications_Resp.md)
 
 ### Authorization
 
@@ -72,7 +72,7 @@ No authorization required
 
 ## mark_read
 
-> models::MarkReadNotificationReply mark_read(mark_read_notification_request)
+> models::MarkReadNotificationResp mark_read(mark_read_notification_req)
 
 
 标记通知为已读。
@@ -82,11 +82,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**mark_read_notification_request** | [**MarkReadNotificationRequest**](MarkReadNotificationRequest.md) |  | [required] |
+**mark_read_notification_req** | [**MarkReadNotificationReq**](MarkReadNotificationReq.md) |  | [required] |
 
 ### Return type
 
-[**models::MarkReadNotificationReply**](MarkReadNotification_Reply.md)
+[**models::MarkReadNotificationResp**](MarkReadNotification_Resp.md)
 
 ### Authorization
 

@@ -4,35 +4,65 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**accept_answer**](ArticleService.md#accept_answer) | **POST** /v1/content/article/accept-answer | 
+[**archive**](ArticleService.md#archive) | **POST** /v1/content/article/archive | 
+[**cancel_publish**](ArticleService.md#cancel_publish) | **POST** /v1/content/article/publish/cancel | 
 [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect | 
-[**create**](ArticleService.md#create) | **POST** /v1/content/article/create | 
-[**discard_draft**](ArticleService.md#discard_draft) | **POST** /v1/content/article/discard-draft | 
+[**create_draft**](ArticleService.md#create_draft) | **POST** /v1/content/article/draft/create | 
+[**discard_draft**](ArticleService.md#discard_draft) | **POST** /v1/content/article/draft/discard | 
 [**get**](ArticleService.md#get) | **POST** /v1/content/article/get | 
 [**like**](ArticleService.md#like) | **POST** /v1/content/article/like | 
 [**list**](ArticleService.md#list) | **POST** /v1/content/article/list | 
 [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward | 
+[**schedule_publish**](ArticleService.md#schedule_publish) | **POST** /v1/content/article/publish/schedule | 
 [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank | 
-[**update**](ArticleService.md#update) | **POST** /v1/content/article/update | 
-[**update_draft**](ArticleService.md#update_draft) | **POST** /v1/content/article/update-draft | 
-[**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch | 
+[**update_draft**](ArticleService.md#update_draft) | **POST** /v1/content/article/draft/update | 
 
 
 
-## accept_answer
+## archive
 
-> serde_json::Value accept_answer(accept_answer_article_request)
+> serde_json::Value archive(archive_article_req)
 
 
-采纳文章评论为答案。
+归档文章
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**accept_answer_article_request** | [**AcceptAnswerArticleRequest**](AcceptAnswerArticleRequest.md) |  | [required] |
+**archive_article_req** | [**ArchiveArticleReq**](ArchiveArticleReq.md) |  | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## cancel_publish
+
+> serde_json::Value cancel_publish(cancel_publish_article_req)
+
+
+取消定时发布
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**cancel_publish_article_req** | [**CancelPublishArticleReq**](CancelPublishArticleReq.md) |  | [required] |
 
 ### Return type
 
@@ -52,21 +82,21 @@ No authorization required
 
 ## collect
 
-> models::CollectArticleReply collect(collect_article_request)
+> models::CollectArticleResp collect(collect_article_req)
 
 
-收藏或取消收藏文章。
+收藏文章
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**collect_article_request** | [**CollectArticleRequest**](CollectArticleRequest.md) |  | [required] |
+**collect_article_req** | [**CollectArticleReq**](CollectArticleReq.md) |  | [required] |
 
 ### Return type
 
-[**models::CollectArticleReply**](CollectArticle_Reply.md)
+[**models::CollectArticleResp**](CollectArticle_Resp.md)
 
 ### Authorization
 
@@ -80,23 +110,23 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## create
+## create_draft
 
-> models::CreateArticleReply create(create_article_request)
+> models::CreateDraftArticleResp create_draft(create_draft_article_req)
 
 
-创建文章草稿。
+创建文章草稿
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**create_article_request** | [**CreateArticleRequest**](CreateArticleRequest.md) |  | [required] |
+**create_draft_article_req** | [**CreateDraftArticleReq**](CreateDraftArticleReq.md) |  | [required] |
 
 ### Return type
 
-[**models::CreateArticleReply**](CreateArticle_Reply.md)
+[**models::CreateDraftArticleResp**](CreateDraftArticle_Resp.md)
 
 ### Authorization
 
@@ -112,17 +142,17 @@ No authorization required
 
 ## discard_draft
 
-> serde_json::Value discard_draft(discard_draft_article_request)
+> serde_json::Value discard_draft(discard_draft_article_req)
 
 
-丢弃草稿。
+丢弃文章草稿
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**discard_draft_article_request** | [**DiscardDraftArticleRequest**](DiscardDraftArticleRequest.md) |  | [required] |
+**discard_draft_article_req** | [**DiscardDraftArticleReq**](DiscardDraftArticleReq.md) |  | [required] |
 
 ### Return type
 
@@ -142,21 +172,21 @@ No authorization required
 
 ## get
 
-> models::GetArticleReply get(get_article_request)
+> models::GetArticleResp get(get_article_req)
 
 
-获取文章详情。
+查询文章详情
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**get_article_request** | [**GetArticleRequest**](GetArticleRequest.md) |  | [required] |
+**get_article_req** | [**GetArticleReq**](GetArticleReq.md) |  | [required] |
 
 ### Return type
 
-[**models::GetArticleReply**](GetArticle_Reply.md)
+[**models::GetArticleResp**](GetArticle_Resp.md)
 
 ### Authorization
 
@@ -172,21 +202,21 @@ No authorization required
 
 ## like
 
-> models::LikeArticleReply like(like_article_request)
+> models::LikeArticleResp like(like_article_req)
 
 
-点赞或取消点赞文章。
+点赞文章
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**like_article_request** | [**LikeArticleRequest**](LikeArticleRequest.md) |  | [required] |
+**like_article_req** | [**LikeArticleReq**](LikeArticleReq.md) |  | [required] |
 
 ### Return type
 
-[**models::LikeArticleReply**](LikeArticle_Reply.md)
+[**models::LikeArticleResp**](LikeArticle_Resp.md)
 
 ### Authorization
 
@@ -202,21 +232,21 @@ No authorization required
 
 ## list
 
-> models::ListArticlesReply list(list_articles_request)
+> models::ListArticlesResp list(list_articles_req)
 
 
-分页查询文章列表。
+查询文章列表
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_articles_request** | [**ListArticlesRequest**](ListArticlesRequest.md) |  | [required] |
+**list_articles_req** | [**ListArticlesReq**](ListArticlesReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ListArticlesReply**](ListArticles_Reply.md)
+[**models::ListArticlesResp**](ListArticles_Resp.md)
 
 ### Authorization
 
@@ -232,17 +262,17 @@ No authorization required
 
 ## publish
 
-> serde_json::Value publish(publish_article_request)
+> serde_json::Value publish(publish_article_req)
 
 
-发布文章。
+发布文章
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**publish_article_request** | [**PublishArticleRequest**](PublishArticleRequest.md) |  | [required] |
+**publish_article_req** | [**PublishArticleReq**](PublishArticleReq.md) |  | [required] |
 
 ### Return type
 
@@ -262,17 +292,47 @@ No authorization required
 
 ## reward
 
-> serde_json::Value reward(reward_article_request)
+> serde_json::Value reward(reward_article_req)
 
 
-打赏文章。
+打赏文章
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**reward_article_request** | [**RewardArticleRequest**](RewardArticleRequest.md) |  | [required] |
+**reward_article_req** | [**RewardArticleReq**](RewardArticleReq.md) |  | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## schedule_publish
+
+> serde_json::Value schedule_publish(schedule_publish_article_req)
+
+
+设置定时发布
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**schedule_publish_article_req** | [**SchedulePublishArticleReq**](SchedulePublishArticleReq.md) |  | [required] |
 
 ### Return type
 
@@ -292,51 +352,21 @@ No authorization required
 
 ## thank
 
-> models::ThankArticleReply thank(thank_article_request)
+> models::ThankArticleResp thank(thank_article_req)
 
 
-感谢或取消感谢文章。
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**thank_article_request** | [**ThankArticleRequest**](ThankArticleRequest.md) |  | [required] |
-
-### Return type
-
-[**models::ThankArticleReply**](ThankArticle_Reply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## update
-
-> models::UpdateArticleReply update(update_article_request)
-
-
-更新文章内容。
+感谢文章
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**update_article_request** | [**UpdateArticleRequest**](UpdateArticleRequest.md) |  | [required] |
+**thank_article_req** | [**ThankArticleReq**](ThankArticleReq.md) |  | [required] |
 
 ### Return type
 
-[**models::UpdateArticleReply**](UpdateArticle_Reply.md)
+[**models::ThankArticleResp**](ThankArticle_Resp.md)
 
 ### Authorization
 
@@ -352,51 +382,21 @@ No authorization required
 
 ## update_draft
 
-> models::UpdateDraftArticleReply update_draft(update_draft_article_request)
+> models::UpdateDraftArticleResp update_draft(update_draft_article_req)
 
 
-更新文章内容。兼容旧草稿更新接口。
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**update_draft_article_request** | [**UpdateDraftArticleRequest**](UpdateDraftArticleRequest.md) |  | [required] |
-
-### Return type
-
-[**models::UpdateDraftArticleReply**](UpdateDraftArticle_Reply.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## watch
-
-> models::WatchArticleReply watch(watch_article_request)
-
-
-关注或取消关注文章。
+编辑文章草稿
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**watch_article_request** | [**WatchArticleRequest**](WatchArticleRequest.md) |  | [required] |
+**update_draft_article_req** | [**UpdateDraftArticleReq**](UpdateDraftArticleReq.md) |  | [required] |
 
 ### Return type
 
-[**models::WatchArticleReply**](WatchArticle_Reply.md)
+[**models::UpdateDraftArticleResp**](UpdateDraftArticle_Resp.md)
 
 ### Authorization
 

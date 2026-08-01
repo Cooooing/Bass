@@ -118,12 +118,12 @@ pub mod comment_service;
 pub mod domain_service;
 pub mod location_service;
 pub mod notification_service;
+pub mod otp_service;
 pub mod postscript_service;
 pub mod preferences_service;
 pub mod privacy_setting_service;
 pub mod relation_service;
 pub mod tag_service;
-pub mod totp_service;
 
 pub mod configuration;
 
@@ -137,12 +137,12 @@ pub trait Api {
     fn domain_service(&self) -> &dyn domain_service::DomainService;
     fn location_service(&self) -> &dyn location_service::LocationService;
     fn notification_service(&self) -> &dyn notification_service::NotificationService;
+    fn otp_service(&self) -> &dyn otp_service::OtpService;
     fn postscript_service(&self) -> &dyn postscript_service::PostscriptService;
     fn preferences_service(&self) -> &dyn preferences_service::PreferencesService;
     fn privacy_setting_service(&self) -> &dyn privacy_setting_service::PrivacySettingService;
     fn relation_service(&self) -> &dyn relation_service::RelationService;
     fn tag_service(&self) -> &dyn tag_service::TagService;
-    fn totp_service(&self) -> &dyn totp_service::TotpService;
 }
 
 pub struct ApiClient {
@@ -153,12 +153,12 @@ pub struct ApiClient {
     domain_service: Box<dyn domain_service::DomainService>,
     location_service: Box<dyn location_service::LocationService>,
     notification_service: Box<dyn notification_service::NotificationService>,
+    otp_service: Box<dyn otp_service::OtpService>,
     postscript_service: Box<dyn postscript_service::PostscriptService>,
     preferences_service: Box<dyn preferences_service::PreferencesService>,
     privacy_setting_service: Box<dyn privacy_setting_service::PrivacySettingService>,
     relation_service: Box<dyn relation_service::RelationService>,
     tag_service: Box<dyn tag_service::TagService>,
-    totp_service: Box<dyn totp_service::TotpService>,
 }
 
 impl ApiClient {
@@ -171,12 +171,12 @@ impl ApiClient {
             domain_service: Box::new(domain_service::DomainServiceClient::new(configuration.clone())),
             location_service: Box::new(location_service::LocationServiceClient::new(configuration.clone())),
             notification_service: Box::new(notification_service::NotificationServiceClient::new(configuration.clone())),
+            otp_service: Box::new(otp_service::OtpServiceClient::new(configuration.clone())),
             postscript_service: Box::new(postscript_service::PostscriptServiceClient::new(configuration.clone())),
             preferences_service: Box::new(preferences_service::PreferencesServiceClient::new(configuration.clone())),
             privacy_setting_service: Box::new(privacy_setting_service::PrivacySettingServiceClient::new(configuration.clone())),
             relation_service: Box::new(relation_service::RelationServiceClient::new(configuration.clone())),
             tag_service: Box::new(tag_service::TagServiceClient::new(configuration.clone())),
-            totp_service: Box::new(totp_service::TotpServiceClient::new(configuration.clone())),
         }
     }
 }
@@ -203,6 +203,9 @@ impl Api for ApiClient {
     fn notification_service(&self) -> &dyn notification_service::NotificationService {
         self.notification_service.as_ref()
     }
+    fn otp_service(&self) -> &dyn otp_service::OtpService {
+        self.otp_service.as_ref()
+    }
     fn postscript_service(&self) -> &dyn postscript_service::PostscriptService {
         self.postscript_service.as_ref()
     }
@@ -217,9 +220,6 @@ impl Api for ApiClient {
     }
     fn tag_service(&self) -> &dyn tag_service::TagService {
         self.tag_service.as_ref()
-    }
-    fn totp_service(&self) -> &dyn totp_service::TotpService {
-        self.totp_service.as_ref()
     }
 }
 

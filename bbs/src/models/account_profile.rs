@@ -11,49 +11,35 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// AccountProfile : 账号展示资料。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct AccountProfile {
-    /// 账号 ID。
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// 账号名。
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// 昵称。
     #[serde(rename = "nickname", skip_serializing_if = "Option::is_none")]
     pub nickname: Option<String>,
-    /// 个人主页 URL。
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
-    /// 头像 URL。
     #[serde(rename = "avatar_url", skip_serializing_if = "Option::is_none")]
     pub avatar_url: Option<String>,
-    /// 个人简介。
     #[serde(rename = "introduction", skip_serializing_if = "Option::is_none")]
     pub introduction: Option<String>,
-    /// MBTI 类型。
     #[serde(rename = "mbti", skip_serializing_if = "Option::is_none")]
     pub mbti: Option<Mbti>,
-    /// 账号状态。
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
-    /// 关注数量。
     #[serde(rename = "follow_count", skip_serializing_if = "Option::is_none")]
     pub follow_count: Option<i32>,
-    /// 粉丝数量。
     #[serde(rename = "follower_count", skip_serializing_if = "Option::is_none")]
     pub follower_count: Option<i32>,
-    /// 创建时间。
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<String>,
-    /// 更新时间。
+    pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<String>,
+    pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl AccountProfile {
-    /// 账号展示资料。
     pub fn new() -> AccountProfile {
         AccountProfile {
             id: None,
@@ -71,7 +57,7 @@ impl AccountProfile {
         }
     }
 }
-/// MBTI 类型。
+/// 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Mbti {
     #[serde(rename = "MBTI_UNSPECIFIED")]
@@ -115,7 +101,7 @@ impl Default for Mbti {
         Self::MbtiUnspecified
     }
 }
-/// 账号状态。
+/// 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum Status {
     #[serde(rename = "ACCOUNT_STATUS_UNSPECIFIED")]
@@ -124,8 +110,8 @@ pub enum Status {
     AccountStatusNormal,
     #[serde(rename = "ACCOUNT_STATUS_BANNED")]
     AccountStatusBanned,
-    #[serde(rename = "ACCOUNT_STATUS_DELETED")]
-    AccountStatusDeleted,
+    #[serde(rename = "ACCOUNT_STATUS_CANCELLED")]
+    AccountStatusCancelled,
 }
 
 impl Default for Status {

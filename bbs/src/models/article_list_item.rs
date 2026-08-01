@@ -11,7 +11,6 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// ArticleListItem : 文章列表项。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticleListItem {
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
@@ -32,8 +31,6 @@ pub struct ArticleListItem {
     pub statement: Option<String>,
     #[serde(rename = "commentable", skip_serializing_if = "Option::is_none")]
     pub commentable: Option<bool>,
-    #[serde(rename = "anonymous", skip_serializing_if = "Option::is_none")]
-    pub anonymous: Option<bool>,
     #[serde(rename = "view_count", skip_serializing_if = "Option::is_none")]
     pub view_count: Option<i32>,
     #[serde(rename = "thank_count", skip_serializing_if = "Option::is_none")]
@@ -42,26 +39,22 @@ pub struct ArticleListItem {
     pub like_count: Option<i32>,
     #[serde(rename = "collect_count", skip_serializing_if = "Option::is_none")]
     pub collect_count: Option<i32>,
-    #[serde(rename = "watch_count", skip_serializing_if = "Option::is_none")]
-    pub watch_count: Option<i32>,
+    #[serde(rename = "reward_count", skip_serializing_if = "Option::is_none")]
+    pub reward_count: Option<i32>,
     #[serde(rename = "reply_count", skip_serializing_if = "Option::is_none")]
     pub reply_count: Option<i32>,
-    #[serde(rename = "bounty_points", skip_serializing_if = "Option::is_none")]
-    pub bounty_points: Option<i32>,
-    #[serde(rename = "accepted_answer_id", skip_serializing_if = "Option::is_none")]
-    pub accepted_answer_id: Option<String>,
     #[serde(rename = "author_user", skip_serializing_if = "Option::is_none")]
     pub author_user: Option<models::AccountProfile>,
     #[serde(rename = "last_reply_user", skip_serializing_if = "Option::is_none")]
     pub last_reply_user: Option<models::AccountProfile>,
     #[serde(rename = "last_reply_at", skip_serializing_if = "Option::is_none")]
-    pub last_reply_at: Option<String>,
+    pub last_reply_at: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "cover_image_url", skip_serializing_if = "Option::is_none")]
     pub cover_image_url: Option<String>,
     #[serde(rename = "viewer_action_state", skip_serializing_if = "Option::is_none")]
     pub viewer_action_state: Option<models::ArticleViewerActionState>,
     #[serde(rename = "published_at", skip_serializing_if = "Option::is_none")]
-    pub published_at: Option<String>,
+    pub published_at: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "publish_status", skip_serializing_if = "Option::is_none")]
     pub publish_status: Option<PublishStatus>,
     #[serde(rename = "visibility", skip_serializing_if = "Option::is_none")]
@@ -69,19 +62,18 @@ pub struct ArticleListItem {
     #[serde(rename = "restriction", skip_serializing_if = "Option::is_none")]
     pub restriction: Option<Restriction>,
     #[serde(rename = "edited_at", skip_serializing_if = "Option::is_none")]
-    pub edited_at: Option<String>,
+    pub edited_at: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
     pub updated_by: Option<String>,
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
-    pub created_at: Option<String>,
+    pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<String>,
+    pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl ArticleListItem {
-    /// 文章列表项。
     pub fn new() -> ArticleListItem {
         ArticleListItem {
             id: None,
@@ -93,15 +85,12 @@ impl ArticleListItem {
             r#type: None,
             statement: None,
             commentable: None,
-            anonymous: None,
             view_count: None,
             thank_count: None,
             like_count: None,
             collect_count: None,
-            watch_count: None,
+            reward_count: None,
             reply_count: None,
-            bounty_points: None,
-            accepted_answer_id: None,
             author_user: None,
             last_reply_user: None,
             last_reply_at: None,
@@ -128,6 +117,12 @@ pub enum Type {
     ArticleTypeNormal,
     #[serde(rename = "ARTICLE_TYPE_QA")]
     ArticleTypeQa,
+    #[serde(rename = "ARTICLE_TYPE_LOTTERY")]
+    ArticleTypeLottery,
+    #[serde(rename = "ARTICLE_TYPE_POLL")]
+    ArticleTypePoll,
+    #[serde(rename = "ARTICLE_TYPE_COLUMN")]
+    ArticleTypeColumn,
 }
 
 impl Default for Type {
@@ -146,6 +141,8 @@ pub enum PublishStatus {
     ArticlePublishStatusPublished,
     #[serde(rename = "ARTICLE_PUBLISH_STATUS_ARCHIVED")]
     ArticlePublishStatusArchived,
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_SCHEDULED")]
+    ArticlePublishStatusScheduled,
 }
 
 impl Default for PublishStatus {

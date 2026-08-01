@@ -23,12 +23,12 @@ pub trait PreferencesService: Send + Sync {
     /// POST /v1/user/preference/get-current
     ///
     /// 获取当前账号的偏好设置。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPreferencesReply, Error<GetCurrentError>>;
+    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPreferencesResp, Error<GetCurrentError>>;
 
     /// POST /v1/user/preference/update-current
     ///
     /// 更新当前账号的偏好设置。
-    async fn update_current<'update_current_preferences_request>(&self, update_current_preferences_request: models::UpdateCurrentPreferencesRequest) -> Result<models::UpdateCurrentPreferencesReply, Error<UpdateCurrentError>>;
+    async fn update_current<'update_current_preferences_req>(&self, update_current_preferences_req: models::UpdateCurrentPreferencesReq) -> Result<models::UpdateCurrentPreferencesResp, Error<UpdateCurrentError>>;
 }
 
 pub struct PreferencesServiceClient {
@@ -46,7 +46,7 @@ impl PreferencesServiceClient {
 #[async_trait]
 impl PreferencesService for PreferencesServiceClient {
     /// 获取当前账号的偏好设置。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPreferencesReply, Error<GetCurrentError>> {
+    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentPreferencesResp, Error<GetCurrentError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -74,8 +74,8 @@ impl PreferencesService for PreferencesServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentPreferencesReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentPreferencesReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentPreferencesResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentPreferencesResp`")))),
             }
         } else {
             let local_var_entity: Option<GetCurrentError> = serde_json::from_str(&local_var_content).ok();
@@ -85,7 +85,7 @@ impl PreferencesService for PreferencesServiceClient {
     }
 
     /// 更新当前账号的偏好设置。
-    async fn update_current<'update_current_preferences_request>(&self, update_current_preferences_request: models::UpdateCurrentPreferencesRequest) -> Result<models::UpdateCurrentPreferencesReply, Error<UpdateCurrentError>> {
+    async fn update_current<'update_current_preferences_req>(&self, update_current_preferences_req: models::UpdateCurrentPreferencesReq) -> Result<models::UpdateCurrentPreferencesResp, Error<UpdateCurrentError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -96,7 +96,7 @@ impl PreferencesService for PreferencesServiceClient {
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&update_current_preferences_request);
+        local_var_req_builder = local_var_req_builder.json(&update_current_preferences_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -113,8 +113,8 @@ impl PreferencesService for PreferencesServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateCurrentPreferencesReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateCurrentPreferencesReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateCurrentPreferencesResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateCurrentPreferencesResp`")))),
             }
         } else {
             let local_var_entity: Option<UpdateCurrentError> = serde_json::from_str(&local_var_content).ok();

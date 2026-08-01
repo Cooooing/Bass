@@ -11,7 +11,6 @@
 use crate::models;
 use serde::{Deserialize, Serialize};
 
-/// ArticleViewerActionState : 当前查看账号的文章行为状态。
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ArticleViewerActionState {
     #[serde(rename = "liked", skip_serializing_if = "Option::is_none")]
@@ -20,18 +19,17 @@ pub struct ArticleViewerActionState {
     pub thanked: Option<bool>,
     #[serde(rename = "collected", skip_serializing_if = "Option::is_none")]
     pub collected: Option<bool>,
-    #[serde(rename = "watched", skip_serializing_if = "Option::is_none")]
-    pub watched: Option<bool>,
+    #[serde(rename = "rewarded", skip_serializing_if = "Option::is_none")]
+    pub rewarded: Option<bool>,
 }
 
 impl ArticleViewerActionState {
-    /// 当前查看账号的文章行为状态。
     pub fn new() -> ArticleViewerActionState {
         ArticleViewerActionState {
             liked: None,
             thanked: None,
             collected: None,
-            watched: None,
+            rewarded: None,
         }
     }
 }

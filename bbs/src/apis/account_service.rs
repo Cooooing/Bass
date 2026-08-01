@@ -23,22 +23,22 @@ pub trait AccountService: Send + Sync {
     /// GET /v1/user/account/avatar
     ///
     /// 生成默认账号头像。
-    async fn avatar<'name>(&self, name: Option<&'name str>) -> Result<models::ImageReply, Error<AvatarError>>;
+    async fn avatar<'name>(&self, name: Option<&'name str>) -> Result<models::ImageResp, Error<AvatarError>>;
 
     /// POST /v1/user/account/get-current
     ///
     /// 获取当前账号的完整资料。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountReply, Error<GetCurrentError>>;
+    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountResp, Error<GetCurrentError>>;
 
     /// POST /v1/user/account/get-profile
     ///
     /// 按账号 ID 获取账号展示资料。
-    async fn get_profile<'get_profile_account_request>(&self, get_profile_account_request: models::GetProfileAccountRequest) -> Result<models::GetProfileAccountReply, Error<GetProfileError>>;
+    async fn get_profile<'get_profile_account_req>(&self, get_profile_account_req: models::GetProfileAccountReq) -> Result<models::GetProfileAccountResp, Error<GetProfileError>>;
 
     /// POST /v1/user/account/update-profile
     ///
     /// 更新当前账号的展示资料。
-    async fn update_profile<'update_profile_account_request>(&self, update_profile_account_request: models::UpdateProfileAccountRequest) -> Result<models::UpdateProfileAccountReply, Error<UpdateProfileError>>;
+    async fn update_profile<'update_profile_account_req>(&self, update_profile_account_req: models::UpdateProfileAccountReq) -> Result<models::UpdateProfileAccountResp, Error<UpdateProfileError>>;
 }
 
 pub struct AccountServiceClient {
@@ -56,7 +56,7 @@ impl AccountServiceClient {
 #[async_trait]
 impl AccountService for AccountServiceClient {
     /// 生成默认账号头像。
-    async fn avatar<'name>(&self, name: Option<&'name str>) -> Result<models::ImageReply, Error<AvatarError>> {
+    async fn avatar<'name>(&self, name: Option<&'name str>) -> Result<models::ImageResp, Error<AvatarError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -86,8 +86,8 @@ impl AccountService for AccountServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ImageReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ImageReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ImageResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ImageResp`")))),
             }
         } else {
             let local_var_entity: Option<AvatarError> = serde_json::from_str(&local_var_content).ok();
@@ -97,7 +97,7 @@ impl AccountService for AccountServiceClient {
     }
 
     /// 获取当前账号的完整资料。
-    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountReply, Error<GetCurrentError>> {
+    async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountResp, Error<GetCurrentError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -125,8 +125,8 @@ impl AccountService for AccountServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentAccountReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentAccountReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetCurrentAccountResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetCurrentAccountResp`")))),
             }
         } else {
             let local_var_entity: Option<GetCurrentError> = serde_json::from_str(&local_var_content).ok();
@@ -136,7 +136,7 @@ impl AccountService for AccountServiceClient {
     }
 
     /// 按账号 ID 获取账号展示资料。
-    async fn get_profile<'get_profile_account_request>(&self, get_profile_account_request: models::GetProfileAccountRequest) -> Result<models::GetProfileAccountReply, Error<GetProfileError>> {
+    async fn get_profile<'get_profile_account_req>(&self, get_profile_account_req: models::GetProfileAccountReq) -> Result<models::GetProfileAccountResp, Error<GetProfileError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -147,7 +147,7 @@ impl AccountService for AccountServiceClient {
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&get_profile_account_request);
+        local_var_req_builder = local_var_req_builder.json(&get_profile_account_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -164,8 +164,8 @@ impl AccountService for AccountServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetProfileAccountReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetProfileAccountReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::GetProfileAccountResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::GetProfileAccountResp`")))),
             }
         } else {
             let local_var_entity: Option<GetProfileError> = serde_json::from_str(&local_var_content).ok();
@@ -175,7 +175,7 @@ impl AccountService for AccountServiceClient {
     }
 
     /// 更新当前账号的展示资料。
-    async fn update_profile<'update_profile_account_request>(&self, update_profile_account_request: models::UpdateProfileAccountRequest) -> Result<models::UpdateProfileAccountReply, Error<UpdateProfileError>> {
+    async fn update_profile<'update_profile_account_req>(&self, update_profile_account_req: models::UpdateProfileAccountReq) -> Result<models::UpdateProfileAccountResp, Error<UpdateProfileError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -186,7 +186,7 @@ impl AccountService for AccountServiceClient {
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&update_profile_account_request);
+        local_var_req_builder = local_var_req_builder.json(&update_profile_account_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -203,8 +203,8 @@ impl AccountService for AccountServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateProfileAccountReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateProfileAccountReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateProfileAccountResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateProfileAccountResp`")))),
             }
         } else {
             let local_var_entity: Option<UpdateProfileError> = serde_json::from_str(&local_var_content).ok();

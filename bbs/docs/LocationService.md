@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## get_current
 
-> models::GetCurrentLocationReply get_current(body)
+> models::GetCurrentLocationResp get_current(body)
 
 
 获取当前账号的地理资料。
@@ -25,7 +25,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetCurrentLocationReply**](GetCurrentLocation_Reply.md)
+[**models::GetCurrentLocationResp**](GetCurrentLocation_Resp.md)
 
 ### Authorization
 
@@ -41,7 +41,7 @@ No authorization required
 
 ## upsert_current
 
-> models::UpsertCurrentLocationReply upsert_current(upsert_current_location_request)
+> models::UpsertCurrentLocationResp upsert_current(upsert_current_location_req)
 
 
 更新当前账号的地理资料。
@@ -51,11 +51,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**upsert_current_location_request** | [**UpsertCurrentLocationRequest**](UpsertCurrentLocationRequest.md) |  | [required] |
+**upsert_current_location_req** | [**UpsertCurrentLocationReq**](UpsertCurrentLocationReq.md) |  | [required] |
 
 ### Return type
 
-[**models::UpsertCurrentLocationReply**](UpsertCurrentLocation_Reply.md)
+[**models::UpsertCurrentLocationResp**](UpsertCurrentLocation_Resp.md)
 
 ### Authorization
 

@@ -20,10 +20,20 @@ use crate::apis::ContentType;
 #[async_trait]
 pub trait DomainService: Send + Sync {
 
+    /// POST /v1/content/domain/create
+    ///
+    /// 创建领域。
+    async fn create<'create_domain_req>(&self, create_domain_req: models::CreateDomainReq) -> Result<models::CreateDomainResp, Error<CreateError>>;
+
     /// POST /v1/content/domain/list
     ///
-    /// 分页查询内容板块列表。
-    async fn list<'list_domains_request>(&self, list_domains_request: models::ListDomainsRequest) -> Result<models::ListDomainsReply, Error<ListError>>;
+    /// 查询领域列表。
+    async fn list<'list_domains_req>(&self, list_domains_req: models::ListDomainsReq) -> Result<models::ListDomainsResp, Error<ListError>>;
+
+    /// POST /v1/content/domain/update
+    ///
+    /// 更新领域。
+    async fn update<'update_domain_req>(&self, update_domain_req: models::UpdateDomainReq) -> Result<models::UpdateDomainResp, Error<UpdateError>>;
 }
 
 pub struct DomainServiceClient {
@@ -40,19 +50,19 @@ impl DomainServiceClient {
 
 #[async_trait]
 impl DomainService for DomainServiceClient {
-    /// 分页查询内容板块列表。
-    async fn list<'list_domains_request>(&self, list_domains_request: models::ListDomainsRequest) -> Result<models::ListDomainsReply, Error<ListError>> {
+    /// 创建领域。
+    async fn create<'create_domain_req>(&self, create_domain_req: models::CreateDomainReq) -> Result<models::CreateDomainResp, Error<CreateError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
 
-        let local_var_uri_str = format!("{}/v1/content/domain/list", local_var_configuration.base_path);
+        let local_var_uri_str = format!("{}/v1/content/domain/create", local_var_configuration.base_path);
         let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&list_domains_request);
+        local_var_req_builder = local_var_req_builder.json(&create_domain_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -69,8 +79,47 @@ impl DomainService for DomainServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListDomainsReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListDomainsReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CreateDomainResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateDomainResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<CreateError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 查询领域列表。
+    async fn list<'list_domains_req>(&self, list_domains_req: models::ListDomainsReq) -> Result<models::ListDomainsResp, Error<ListError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/domain/list", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_domains_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListDomainsResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListDomainsResp`")))),
             }
         } else {
             let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
@@ -79,12 +128,65 @@ impl DomainService for DomainServiceClient {
         }
     }
 
+    /// 更新领域。
+    async fn update<'update_domain_req>(&self, update_domain_req: models::UpdateDomainReq) -> Result<models::UpdateDomainResp, Error<UpdateError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/domain/update", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&update_domain_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateDomainResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateDomainResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<UpdateError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+}
+
+/// struct for typed errors of method [`DomainService::create`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum CreateError {
+    UnknownValue(serde_json::Value),
 }
 
 /// struct for typed errors of method [`DomainService::list`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ListError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`DomainService::update`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdateError {
     UnknownValue(serde_json::Value),
 }
 

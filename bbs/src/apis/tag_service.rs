@@ -20,20 +20,35 @@ use crate::apis::ContentType;
 #[async_trait]
 pub trait TagService: Send + Sync {
 
+    /// POST /v1/content/tag/bind-article
+    ///
+    /// 绑定文章标签。
+    async fn bind_article<'bind_article_tags_req>(&self, bind_article_tags_req: models::BindArticleTagsReq) -> Result<serde_json::Value, Error<BindArticleError>>;
+
     /// POST /v1/content/tag/create
     ///
     /// 创建标签。
-    async fn create<'create_tag_request>(&self, create_tag_request: models::CreateTagRequest) -> Result<models::CreateTagReply, Error<CreateError>>;
+    async fn create<'create_tag_req>(&self, create_tag_req: models::CreateTagReq) -> Result<models::CreateTagResp, Error<CreateError>>;
 
     /// POST /v1/content/tag/list
     ///
-    /// 分页查询标签列表。
-    async fn list<'list_tags_request>(&self, list_tags_request: models::ListTagsRequest) -> Result<models::ListTagsReply, Error<ListError>>;
+    /// 查询标签列表。
+    async fn list<'list_tags_req>(&self, list_tags_req: models::ListTagsReq) -> Result<models::ListTagsResp, Error<ListError>>;
+
+    /// POST /v1/content/tag/list-article-tags
+    ///
+    /// 查询文章标签列表。
+    async fn list_article_tags<'list_article_tags_req>(&self, list_article_tags_req: models::ListArticleTagsReq) -> Result<models::ListArticleTagsResp, Error<ListArticleTagsError>>;
+
+    /// POST /v1/content/tag/unbind-article
+    ///
+    /// 解绑文章标签。
+    async fn unbind_article<'unbind_article_tags_req>(&self, unbind_article_tags_req: models::UnbindArticleTagsReq) -> Result<serde_json::Value, Error<UnbindArticleError>>;
 
     /// POST /v1/content/tag/update
     ///
     /// 更新标签。
-    async fn update<'update_tag_request>(&self, update_tag_request: models::UpdateTagRequest) -> Result<models::UpdateTagReply, Error<UpdateError>>;
+    async fn update<'update_tag_req>(&self, update_tag_req: models::UpdateTagReq) -> Result<models::UpdateTagResp, Error<UpdateError>>;
 }
 
 pub struct TagServiceClient {
@@ -50,8 +65,47 @@ impl TagServiceClient {
 
 #[async_trait]
 impl TagService for TagServiceClient {
+    /// 绑定文章标签。
+    async fn bind_article<'bind_article_tags_req>(&self, bind_article_tags_req: models::BindArticleTagsReq) -> Result<serde_json::Value, Error<BindArticleError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/tag/bind-article", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&bind_article_tags_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<BindArticleError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 创建标签。
-    async fn create<'create_tag_request>(&self, create_tag_request: models::CreateTagRequest) -> Result<models::CreateTagReply, Error<CreateError>> {
+    async fn create<'create_tag_req>(&self, create_tag_req: models::CreateTagReq) -> Result<models::CreateTagResp, Error<CreateError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -62,7 +116,7 @@ impl TagService for TagServiceClient {
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&create_tag_request);
+        local_var_req_builder = local_var_req_builder.json(&create_tag_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -79,8 +133,8 @@ impl TagService for TagServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CreateTagReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateTagReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CreateTagResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CreateTagResp`")))),
             }
         } else {
             let local_var_entity: Option<CreateError> = serde_json::from_str(&local_var_content).ok();
@@ -89,8 +143,8 @@ impl TagService for TagServiceClient {
         }
     }
 
-    /// 分页查询标签列表。
-    async fn list<'list_tags_request>(&self, list_tags_request: models::ListTagsRequest) -> Result<models::ListTagsReply, Error<ListError>> {
+    /// 查询标签列表。
+    async fn list<'list_tags_req>(&self, list_tags_req: models::ListTagsReq) -> Result<models::ListTagsResp, Error<ListError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -101,7 +155,7 @@ impl TagService for TagServiceClient {
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&list_tags_request);
+        local_var_req_builder = local_var_req_builder.json(&list_tags_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -118,8 +172,8 @@ impl TagService for TagServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListTagsReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListTagsReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListTagsResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListTagsResp`")))),
             }
         } else {
             let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
@@ -128,8 +182,86 @@ impl TagService for TagServiceClient {
         }
     }
 
+    /// 查询文章标签列表。
+    async fn list_article_tags<'list_article_tags_req>(&self, list_article_tags_req: models::ListArticleTagsReq) -> Result<models::ListArticleTagsResp, Error<ListArticleTagsError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/tag/list-article-tags", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_article_tags_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListArticleTagsResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListArticleTagsResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<ListArticleTagsError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 解绑文章标签。
+    async fn unbind_article<'unbind_article_tags_req>(&self, unbind_article_tags_req: models::UnbindArticleTagsReq) -> Result<serde_json::Value, Error<UnbindArticleError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/tag/unbind-article", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&unbind_article_tags_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<UnbindArticleError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 更新标签。
-    async fn update<'update_tag_request>(&self, update_tag_request: models::UpdateTagRequest) -> Result<models::UpdateTagReply, Error<UpdateError>> {
+    async fn update<'update_tag_req>(&self, update_tag_req: models::UpdateTagReq) -> Result<models::UpdateTagResp, Error<UpdateError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -140,7 +272,7 @@ impl TagService for TagServiceClient {
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&update_tag_request);
+        local_var_req_builder = local_var_req_builder.json(&update_tag_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -157,8 +289,8 @@ impl TagService for TagServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateTagReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateTagReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::UpdateTagResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::UpdateTagResp`")))),
             }
         } else {
             let local_var_entity: Option<UpdateError> = serde_json::from_str(&local_var_content).ok();
@@ -167,6 +299,13 @@ impl TagService for TagServiceClient {
         }
     }
 
+}
+
+/// struct for typed errors of method [`TagService::bind_article`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BindArticleError {
+    UnknownValue(serde_json::Value),
 }
 
 /// struct for typed errors of method [`TagService::create`]
@@ -180,6 +319,20 @@ pub enum CreateError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ListError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`TagService::list_article_tags`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ListArticleTagsError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`TagService::unbind_article`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UnbindArticleError {
     UnknownValue(serde_json::Value),
 }
 

@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 ## avatar
 
-> models::ImageReply avatar(name)
+> models::ImageResp avatar(name)
 
 
 生成默认账号头像。
@@ -23,11 +23,11 @@ Method | HTTP request | Description
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**name** | Option<**String**> | 用于生成头像的账号名。 |  |
+**name** | Option<**String**> |  |  |
 
 ### Return type
 
-[**models::ImageReply**](ImageReply.md)
+[**models::ImageResp**](ImageResp.md)
 
 ### Authorization
 
@@ -43,7 +43,7 @@ No authorization required
 
 ## get_current
 
-> models::GetCurrentAccountReply get_current(body)
+> models::GetCurrentAccountResp get_current(body)
 
 
 获取当前账号的完整资料。
@@ -57,7 +57,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetCurrentAccountReply**](GetCurrentAccount_Reply.md)
+[**models::GetCurrentAccountResp**](GetCurrentAccount_Resp.md)
 
 ### Authorization
 
@@ -73,7 +73,7 @@ No authorization required
 
 ## get_profile
 
-> models::GetProfileAccountReply get_profile(get_profile_account_request)
+> models::GetProfileAccountResp get_profile(get_profile_account_req)
 
 
 按账号 ID 获取账号展示资料。
@@ -83,11 +83,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**get_profile_account_request** | [**GetProfileAccountRequest**](GetProfileAccountRequest.md) |  | [required] |
+**get_profile_account_req** | [**GetProfileAccountReq**](GetProfileAccountReq.md) |  | [required] |
 
 ### Return type
 
-[**models::GetProfileAccountReply**](GetProfileAccount_Reply.md)
+[**models::GetProfileAccountResp**](GetProfileAccount_Resp.md)
 
 ### Authorization
 
@@ -103,7 +103,7 @@ No authorization required
 
 ## update_profile
 
-> models::UpdateProfileAccountReply update_profile(update_profile_account_request)
+> models::UpdateProfileAccountResp update_profile(update_profile_account_req)
 
 
 更新当前账号的展示资料。
@@ -113,11 +113,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**update_profile_account_request** | [**UpdateProfileAccountRequest**](UpdateProfileAccountRequest.md) |  | [required] |
+**update_profile_account_req** | [**UpdateProfileAccountReq**](UpdateProfileAccountReq.md) |  | [required] |
 
 ### Return type
 
-[**models::UpdateProfileAccountReply**](UpdateProfileAccount_Reply.md)
+[**models::UpdateProfileAccountResp**](UpdateProfileAccount_Resp.md)
 
 ### Authorization
 

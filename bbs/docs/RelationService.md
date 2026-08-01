@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 ## block
 
-> serde_json::Value block(block_relation_request)
+> serde_json::Value block(block_relation_req)
 
 
 当前账号拉黑目标账号。
@@ -27,7 +27,7 @@ Method | HTTP request | Description
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**block_relation_request** | [**BlockRelationRequest**](BlockRelationRequest.md) |  | [required] |
+**block_relation_req** | [**BlockRelationReq**](BlockRelationReq.md) |  | [required] |
 
 ### Return type
 
@@ -47,7 +47,7 @@ No authorization required
 
 ## follow
 
-> serde_json::Value follow(follow_relation_request)
+> serde_json::Value follow(follow_relation_req)
 
 
 当前账号关注目标账号。
@@ -57,7 +57,7 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**follow_relation_request** | [**FollowRelationRequest**](FollowRelationRequest.md) |  | [required] |
+**follow_relation_req** | [**FollowRelationReq**](FollowRelationReq.md) |  | [required] |
 
 ### Return type
 
@@ -77,7 +77,7 @@ No authorization required
 
 ## get_status
 
-> models::GetStatusRelationReply get_status(get_status_relation_request)
+> models::GetStatusRelationResp get_status(get_status_relation_req)
 
 
 查询当前账号与目标账号之间的关系。
@@ -87,11 +87,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**get_status_relation_request** | [**GetStatusRelationRequest**](GetStatusRelationRequest.md) |  | [required] |
+**get_status_relation_req** | [**GetStatusRelationReq**](GetStatusRelationReq.md) |  | [required] |
 
 ### Return type
 
-[**models::GetStatusRelationReply**](GetStatusRelation_Reply.md)
+[**models::GetStatusRelationResp**](GetStatusRelation_Resp.md)
 
 ### Authorization
 
@@ -107,7 +107,7 @@ No authorization required
 
 ## list_blocked
 
-> models::ListBlockedRelationsReply list_blocked(list_blocked_relations_request)
+> models::ListBlockedRelationsResp list_blocked(list_blocked_relations_req)
 
 
 分页查询当前账号拉黑的账号列表。
@@ -117,11 +117,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_blocked_relations_request** | [**ListBlockedRelationsRequest**](ListBlockedRelationsRequest.md) |  | [required] |
+**list_blocked_relations_req** | [**ListBlockedRelationsReq**](ListBlockedRelationsReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ListBlockedRelationsReply**](ListBlockedRelations_Reply.md)
+[**models::ListBlockedRelationsResp**](ListBlockedRelations_Resp.md)
 
 ### Authorization
 
@@ -137,7 +137,7 @@ No authorization required
 
 ## list_followers
 
-> models::ListFollowersRelationsReply list_followers(list_followers_relations_request)
+> models::ListFollowersRelationsResp list_followers(list_followers_relations_req)
 
 
 分页查询当前账号的粉丝账号列表。
@@ -147,11 +147,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_followers_relations_request** | [**ListFollowersRelationsRequest**](ListFollowersRelationsRequest.md) |  | [required] |
+**list_followers_relations_req** | [**ListFollowersRelationsReq**](ListFollowersRelationsReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ListFollowersRelationsReply**](ListFollowersRelations_Reply.md)
+[**models::ListFollowersRelationsResp**](ListFollowersRelations_Resp.md)
 
 ### Authorization
 
@@ -167,7 +167,7 @@ No authorization required
 
 ## list_following
 
-> models::ListFollowingRelationsReply list_following(list_following_relations_request)
+> models::ListFollowingRelationsResp list_following(list_following_relations_req)
 
 
 分页查询当前账号关注的账号列表。
@@ -177,11 +177,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**list_following_relations_request** | [**ListFollowingRelationsRequest**](ListFollowingRelationsRequest.md) |  | [required] |
+**list_following_relations_req** | [**ListFollowingRelationsReq**](ListFollowingRelationsReq.md) |  | [required] |
 
 ### Return type
 
-[**models::ListFollowingRelationsReply**](ListFollowingRelations_Reply.md)
+[**models::ListFollowingRelationsResp**](ListFollowingRelations_Resp.md)
 
 ### Authorization
 
@@ -197,7 +197,7 @@ No authorization required
 
 ## unblock
 
-> serde_json::Value unblock(unblock_relation_request)
+> serde_json::Value unblock(unblock_relation_req)
 
 
 当前账号取消拉黑目标账号。
@@ -207,7 +207,7 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**unblock_relation_request** | [**UnblockRelationRequest**](UnblockRelationRequest.md) |  | [required] |
+**unblock_relation_req** | [**UnblockRelationReq**](UnblockRelationReq.md) |  | [required] |
 
 ### Return type
 
@@ -227,7 +227,7 @@ No authorization required
 
 ## unfollow
 
-> serde_json::Value unfollow(unfollow_relation_request)
+> serde_json::Value unfollow(unfollow_relation_req)
 
 
 当前账号取消关注目标账号。
@@ -237,7 +237,7 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**unfollow_relation_request** | [**UnfollowRelationRequest**](UnfollowRelationRequest.md) |  | [required] |
+**unfollow_relation_req** | [**UnfollowRelationReq**](UnfollowRelationReq.md) |  | [required] |
 
 ### Return type
 

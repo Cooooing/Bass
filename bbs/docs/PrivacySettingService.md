@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## get_current
 
-> models::GetCurrentPrivacySettingReply get_current(body)
+> models::GetCurrentPrivacySettingResp get_current(body)
 
 
 获取当前账号的隐私设置。
@@ -25,7 +25,7 @@ Name | Type | Description  | Required | Notes
 
 ### Return type
 
-[**models::GetCurrentPrivacySettingReply**](GetCurrentPrivacySetting_Reply.md)
+[**models::GetCurrentPrivacySettingResp**](GetCurrentPrivacySetting_Resp.md)
 
 ### Authorization
 
@@ -41,7 +41,7 @@ No authorization required
 
 ## update_current
 
-> models::UpdateCurrentPrivacySettingReply update_current(update_current_privacy_setting_request)
+> models::UpdateCurrentPrivacySettingResp update_current(update_current_privacy_setting_req)
 
 
 更新当前账号的隐私设置。
@@ -51,11 +51,11 @@ No authorization required
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**update_current_privacy_setting_request** | [**UpdateCurrentPrivacySettingRequest**](UpdateCurrentPrivacySettingRequest.md) |  | [required] |
+**update_current_privacy_setting_req** | [**UpdateCurrentPrivacySettingReq**](UpdateCurrentPrivacySettingReq.md) |  | [required] |
 
 ### Return type
 
-[**models::UpdateCurrentPrivacySettingReply**](UpdateCurrentPrivacySetting_Reply.md)
+[**models::UpdateCurrentPrivacySettingResp**](UpdateCurrentPrivacySetting_Resp.md)
 
 ### Authorization
 

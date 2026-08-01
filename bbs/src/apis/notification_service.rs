@@ -23,17 +23,17 @@ pub trait NotificationService: Send + Sync {
     /// POST /v1/notify/notification/count-unread
     ///
     /// 统计未读通知数量。
-    async fn count_unread<'body>(&self, body: serde_json::Value) -> Result<models::CountUnreadNotificationsReply, Error<CountUnreadError>>;
+    async fn count_unread<'body>(&self, body: serde_json::Value) -> Result<models::CountUnreadNotificationsResp, Error<CountUnreadError>>;
 
     /// POST /v1/notify/notification/list
     ///
     /// 分页查询通知列表。
-    async fn list<'list_notifications_request>(&self, list_notifications_request: models::ListNotificationsRequest) -> Result<models::ListNotificationsReply, Error<ListError>>;
+    async fn list<'list_notifications_req>(&self, list_notifications_req: models::ListNotificationsReq) -> Result<models::ListNotificationsResp, Error<ListError>>;
 
     /// POST /v1/notify/notification/mark-read
     ///
     /// 标记通知为已读。
-    async fn mark_read<'mark_read_notification_request>(&self, mark_read_notification_request: models::MarkReadNotificationRequest) -> Result<models::MarkReadNotificationReply, Error<MarkReadError>>;
+    async fn mark_read<'mark_read_notification_req>(&self, mark_read_notification_req: models::MarkReadNotificationReq) -> Result<models::MarkReadNotificationResp, Error<MarkReadError>>;
 }
 
 pub struct NotificationServiceClient {
@@ -51,7 +51,7 @@ impl NotificationServiceClient {
 #[async_trait]
 impl NotificationService for NotificationServiceClient {
     /// 统计未读通知数量。
-    async fn count_unread<'body>(&self, body: serde_json::Value) -> Result<models::CountUnreadNotificationsReply, Error<CountUnreadError>> {
+    async fn count_unread<'body>(&self, body: serde_json::Value) -> Result<models::CountUnreadNotificationsResp, Error<CountUnreadError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -79,8 +79,8 @@ impl NotificationService for NotificationServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CountUnreadNotificationsReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CountUnreadNotificationsReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CountUnreadNotificationsResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CountUnreadNotificationsResp`")))),
             }
         } else {
             let local_var_entity: Option<CountUnreadError> = serde_json::from_str(&local_var_content).ok();
@@ -90,7 +90,7 @@ impl NotificationService for NotificationServiceClient {
     }
 
     /// 分页查询通知列表。
-    async fn list<'list_notifications_request>(&self, list_notifications_request: models::ListNotificationsRequest) -> Result<models::ListNotificationsReply, Error<ListError>> {
+    async fn list<'list_notifications_req>(&self, list_notifications_req: models::ListNotificationsReq) -> Result<models::ListNotificationsResp, Error<ListError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -101,7 +101,7 @@ impl NotificationService for NotificationServiceClient {
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&list_notifications_request);
+        local_var_req_builder = local_var_req_builder.json(&list_notifications_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -118,8 +118,8 @@ impl NotificationService for NotificationServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListNotificationsReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListNotificationsReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListNotificationsResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListNotificationsResp`")))),
             }
         } else {
             let local_var_entity: Option<ListError> = serde_json::from_str(&local_var_content).ok();
@@ -129,7 +129,7 @@ impl NotificationService for NotificationServiceClient {
     }
 
     /// 标记通知为已读。
-    async fn mark_read<'mark_read_notification_request>(&self, mark_read_notification_request: models::MarkReadNotificationRequest) -> Result<models::MarkReadNotificationReply, Error<MarkReadError>> {
+    async fn mark_read<'mark_read_notification_req>(&self, mark_read_notification_req: models::MarkReadNotificationReq) -> Result<models::MarkReadNotificationResp, Error<MarkReadError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
@@ -140,7 +140,7 @@ impl NotificationService for NotificationServiceClient {
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&mark_read_notification_request);
+        local_var_req_builder = local_var_req_builder.json(&mark_read_notification_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -157,8 +157,8 @@ impl NotificationService for NotificationServiceClient {
         if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
             match local_var_content_type {
                 ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::MarkReadNotificationReply`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::MarkReadNotificationReply`")))),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::MarkReadNotificationResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::MarkReadNotificationResp`")))),
             }
         } else {
             let local_var_entity: Option<MarkReadError> = serde_json::from_str(&local_var_content).ok();

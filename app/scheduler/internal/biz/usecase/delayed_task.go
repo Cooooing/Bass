@@ -251,10 +251,11 @@ func (u *DelayedTaskUsecase) ListAvailableTasks(ctx context.Context, keyword str
 }
 
 type DelayedTaskScheduleReq struct {
-	TaskKey     string
-	Payload     string
-	ScheduledAt time.Time
-	TriggerType schedulerenum.TaskTriggerType
+	TaskKey        string
+	Payload        string
+	ScheduledAt    time.Time
+	IdempotencyKey string
+	TriggerType    schedulerenum.TaskTriggerType
 }
 
 func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskScheduleReq) (*model.DelayedTaskExecutionRecord, error) {
@@ -282,11 +283,15 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 	if triggerType == "" {
 		triggerType = schedulerenum.TaskTriggerTypeSchedule
 	}
+	idempotencyKey := strings.TrimSpace(req.IdempotencyKey)
+	if idempotencyKey == "" {
+		idempotencyKey = uuid.NewString()
+	}
 	// 延迟任务配置不保存单次执行参数，执行实例在记录表中保存完整快照。
 	record := &model.DelayedTaskExecutionRecord{
 		DelayedTaskID:      task.ID,
 		DelayedTaskVersion: task.Version,
-		IdempotencyKey:     uuid.NewString(),
+		IdempotencyKey:     idempotencyKey,
 		TriggerType:        triggerType,
 		ScheduleKey:        uuid.NewString(),
 		ScheduledAt:        req.ScheduledAt.Truncate(time.Second),

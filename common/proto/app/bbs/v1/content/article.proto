@@ -5,660 +5,419 @@ package common.api.app.bbs.v1.content;
 import "bbs/v1/content/enum/article.proto";
 import "bbs/v1/user/enum/account.proto";
 import "common/common.proto";
-import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
-// 文章接口。
+// ArticleService 提供 BBS 文章接口
 service ArticleService {
-  // 创建文章草稿。
-  rpc Create(CreateArticle.Req) returns (CreateArticle.Resp) {
+  // 创建文章草稿
+  rpc CreateDraft(CreateDraftArticle.Req) returns (CreateDraftArticle.Resp) {
     option (google.api.http) = {
-      post: "/v1/content/article/create"
-      body: "*"};
+      post: "/v1/content/article/draft/create"
+      body: "*"
+    };
   }
 
-  // 更新文章内容。
-  rpc Update(UpdateArticle.Req) returns (UpdateArticle.Resp) {
-    option (google.api.http) = {
-      post: "/v1/content/article/update"
-      body: "*"};
-  }
-
-  // 更新文章内容。兼容旧草稿更新接口。
+  // 编辑文章草稿
   rpc UpdateDraft(UpdateDraftArticle.Req) returns (UpdateDraftArticle.Resp) {
     option (google.api.http) = {
-      post: "/v1/content/article/update-draft"
-      body: "*"};
+      post: "/v1/content/article/draft/update"
+      body: "*"
+    };
   }
 
-  // 发布文章。
+  // 发布文章
   rpc Publish(PublishArticle.Req) returns (PublishArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/publish"
-      body: "*"};
+      body: "*"
+    };
   }
 
-  // 丢弃草稿。
+  // 设置定时发布
+  rpc SchedulePublish(SchedulePublishArticle.Req) returns (SchedulePublishArticle.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/publish/schedule"
+      body: "*"
+    };
+  }
+
+  // 取消定时发布
+  rpc CancelPublish(CancelPublishArticle.Req) returns (CancelPublishArticle.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/publish/cancel"
+      body: "*"
+    };
+  }
+
+  // 丢弃文章草稿
   rpc DiscardDraft(DiscardDraftArticle.Req) returns (DiscardDraftArticle.Resp) {
     option (google.api.http) = {
-      post: "/v1/content/article/discard-draft"
-      body: "*"};
+      post: "/v1/content/article/draft/discard"
+      body: "*"
+    };
   }
 
-  // 分页查询文章列表。
+  // 归档文章
+  rpc Archive(ArchiveArticle.Req) returns (ArchiveArticle.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/archive"
+      body: "*"
+    };
+  }
+
+  // 查询文章列表
   rpc List(ListArticles.Req) returns (ListArticles.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/list"
-      body: "*"};
+      body: "*"
+    };
   }
 
-  // 获取文章详情。
+  // 查询文章详情
   rpc Get(GetArticle.Req) returns (GetArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/get"
-      body: "*"};
+      body: "*"
+    };
   }
 
-  // 点赞或取消点赞文章。
+  // 点赞文章
   rpc Like(LikeArticle.Req) returns (LikeArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/like"
-      body: "*"};
+      body: "*"
+    };
   }
 
-  // 感谢或取消感谢文章。
+  // 感谢文章
   rpc Thank(ThankArticle.Req) returns (ThankArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/thank"
-      body: "*"};
+      body: "*"
+    };
   }
 
-  // 收藏或取消收藏文章。
+  // 收藏文章
   rpc Collect(CollectArticle.Req) returns (CollectArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/collect"
-      body: "*"};
+      body: "*"
+    };
   }
 
-  // 关注或取消关注文章。
-  rpc Watch(WatchArticle.Req) returns (WatchArticle.Resp) {
-    option (google.api.http) = {
-      post: "/v1/content/article/watch"
-      body: "*"};
-  }
-
-  // 打赏文章。
+  // 打赏文章
   rpc Reward(RewardArticle.Req) returns (RewardArticle.Resp) {
     option (google.api.http) = {
       post: "/v1/content/article/reward"
-      body: "*"};
-  }
-
-  // 采纳文章评论为答案。
-  rpc AcceptAnswer(AcceptAnswerArticle.Req) returns (AcceptAnswerArticle.Resp) {
-    option (google.api.http) = {
-      post: "/v1/content/article/accept-answer"
-      body: "*"};
+      body: "*"
+    };
   }
 }
 
-// 创建文章草稿。
-message CreateArticle {
+message CreateDraftArticle {
   message Req {
-    Article article = 1; // 文章保存内容
-    option (gnostic.openapi.v3.schema) = {required: "article"};
+    Article article = 1; // 必填，草稿内容
+    option (gnostic.openapi.v3.schema) = {
+      required: "article"
+    };
 
     message Article {
-      string title = 1; // 标题
-      string content = 2; // 原始内容
-      optional string reward_content = 4; // 打赏后可见内容
-      optional int32 reward_points = 5; // 打赏所需积分
-      ArticleType type = 7; // 文章类型
-      optional int32 bounty_points = 8; // 悬赏积分
-      optional string statement = 9; // 文章声明
-      optional bool commentable = 10; // 是否允许评论
-      optional bool anonymous = 11; // 是否匿名展示
-      option (gnostic.openapi.v3.schema) = {required: "title"
+      string title = 1; // 必填，标题
+      string content = 2; // 必填，正文
+      optional string reward_content = 3; // 可选，打赏区内容
+      optional int32 reward_points = 4; // 可选，打赏积分
+      ArticleType type = 5; // 必填，文章类型
+      optional string statement = 6; // 可选，创作声明
+      optional bool commentable = 7; // 可选，是否允许评论
+      option (gnostic.openapi.v3.schema) = {
+        required: "title"
         required: "content"
-        required: "type"};
+        required: "type"
+      };
     }
   }
   message Resp {
-    message ArticleDetail {
-      int64 id = 1; // 文章 ID
-      string title = 2; // 标题
-      string content = 3; // 原始内容
-      string content_render = 4; // 渲染后的内容
-      bool has_postscript = 5; // 是否有附言
-      bool has_reward = 6; // 是否有打赏内容
-      optional string reward_content = 7; // 打赏后可见内容
-      optional string reward_content_render = 8; // 渲染后的打赏内容
-      optional int32 reward_points = 9; // 打赏所需积分
-      ArticleType type = 11; // 文章类型
-      optional string statement = 12; // 文章声明
-      bool commentable = 13; // 是否允许评论
-      bool anonymous = 14; // 是否匿名展示
-      int32 view_count = 16; // 浏览数量
-      int32 thank_count = 17; // 感谢数量
-      int32 like_count = 18; // 点赞数量
-      int32 collect_count = 19; // 收藏数量
-      int32 watch_count = 20; // 关注数量
-      int32 reply_count = 21; // 回复数量
-      optional int32 bounty_points = 22; // 悬赏积分
-      optional int64 accepted_answer_id = 23; // 已采纳答案评论 ID
-      AccountProfile author_user = 24; // 作者展示资料
-      AccountProfile last_reply_user = 25; // 最后回复账号展示资料
-      google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
-      optional string cover_image_url = 27; // 封面图片 URL
-      ArticleViewerActionState viewer_action_state = 28; // 当前查看账号的文章行为状态
-      google.protobuf.Timestamp published_at = 29; // 发布时间
-      repeated ArticlePostscript postscripts = 30; // 附言列表
-      ArticlePublishStatus publish_status = 31; // 发布状态
-      ArticleVisibility visibility = 32; // 可见范围
-      ContentRestriction restriction = 33; // 管理限制
-      google.protobuf.Timestamp edited_at = 34; // 内容编辑时间
-      optional int64 created_by = 1002; // 创建账号 ID
-      optional int64 updated_by = 1003; // 更新账号 ID
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message ArticlePostscript {
-      int64 id = 1; // 附言 ID
-      int64 article_id = 2; // 文章 ID
-      string content = 3; // 原始内容
-      string content_render = 4; // 渲染后的内容
-      ContentRestriction restriction = 5; // 管理限制
-      optional int64 created_by = 1002; // 创建账号 ID
-      optional int64 updated_by = 1003; // 更新账号 ID
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message AccountProfile {
-      int64 id = 1; // 账号 ID
-      string name = 2; // 账号名
-      optional string nickname = 3; // 昵称
-      optional string url = 4; // 个人主页 URL
-      optional string avatar_url = 5; // 头像 URL
-      optional string introduction = 6; // 个人简介
-      .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
-      .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
-      optional int32 follow_count = 10; // 关注数量
-      optional int32 follower_count = 11; // 粉丝数量
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message ArticleViewerActionState {
-      bool liked = 1; // 是否已点赞
-      bool thanked = 2; // 是否已感谢
-      bool collected = 3; // 是否已收藏
-      bool watched = 4; // 是否已关注
-    }
-    ArticleDetail article = 1; // 创建后的文章
+    ArticleDetail article = 1; // 文章详情
   }
 }
 
-// 更新文章内容。
-message UpdateArticle {
-  message Req {
-    int64 article_id = 1; // 文章 ID
-    Article article = 2; // 文章保存内容
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "article"};
-
-    message Article {
-      string title = 1; // 标题
-      string content = 2; // 原始内容
-      optional string reward_content = 4; // 打赏后可见内容
-      optional int32 reward_points = 5; // 打赏所需积分
-      ArticleType type = 7; // 文章类型
-      optional int32 bounty_points = 8; // 悬赏积分
-      optional string statement = 9; // 文章声明
-      optional bool commentable = 10; // 是否允许评论
-      optional bool anonymous = 11; // 是否匿名展示
-      option (gnostic.openapi.v3.schema) = {required: "title"
-        required: "content"
-        required: "type"};
-    }
-  }
-  message Resp {
-    message ArticleDetail {
-      int64 id = 1; // 文章 ID
-      string title = 2; // 标题
-      string content = 3; // 原始内容
-      string content_render = 4; // 渲染后的内容
-      bool has_postscript = 5; // 是否有附言
-      bool has_reward = 6; // 是否有打赏内容
-      optional string reward_content = 7; // 打赏后可见内容
-      optional string reward_content_render = 8; // 渲染后的打赏内容
-      optional int32 reward_points = 9; // 打赏所需积分
-      ArticleType type = 11; // 文章类型
-      optional string statement = 12; // 文章声明
-      bool commentable = 13; // 是否允许评论
-      bool anonymous = 14; // 是否匿名展示
-      int32 view_count = 16; // 浏览数量
-      int32 thank_count = 17; // 感谢数量
-      int32 like_count = 18; // 点赞数量
-      int32 collect_count = 19; // 收藏数量
-      int32 watch_count = 20; // 关注数量
-      int32 reply_count = 21; // 回复数量
-      optional int32 bounty_points = 22; // 悬赏积分
-      optional int64 accepted_answer_id = 23; // 已采纳答案评论 ID
-      AccountProfile author_user = 24; // 作者展示资料
-      AccountProfile last_reply_user = 25; // 最后回复账号展示资料
-      google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
-      optional string cover_image_url = 27; // 封面图片 URL
-      ArticleViewerActionState viewer_action_state = 28; // 当前查看账号的文章行为状态
-      google.protobuf.Timestamp published_at = 29; // 发布时间
-      repeated ArticlePostscript postscripts = 30; // 附言列表
-      ArticlePublishStatus publish_status = 31; // 发布状态
-      ArticleVisibility visibility = 32; // 可见范围
-      ContentRestriction restriction = 33; // 管理限制
-      google.protobuf.Timestamp edited_at = 34; // 内容编辑时间
-      optional int64 created_by = 1002; // 创建账号 ID
-      optional int64 updated_by = 1003; // 更新账号 ID
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message ArticlePostscript {
-      int64 id = 1; // 附言 ID
-      int64 article_id = 2; // 文章 ID
-      string content = 3; // 原始内容
-      string content_render = 4; // 渲染后的内容
-      ContentRestriction restriction = 5; // 管理限制
-      optional int64 created_by = 1002; // 创建账号 ID
-      optional int64 updated_by = 1003; // 更新账号 ID
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message AccountProfile {
-      int64 id = 1; // 账号 ID
-      string name = 2; // 账号名
-      optional string nickname = 3; // 昵称
-      optional string url = 4; // 个人主页 URL
-      optional string avatar_url = 5; // 头像 URL
-      optional string introduction = 6; // 个人简介
-      .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
-      .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
-      optional int32 follow_count = 10; // 关注数量
-      optional int32 follower_count = 11; // 粉丝数量
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message ArticleViewerActionState {
-      bool liked = 1; // 是否已点赞
-      bool thanked = 2; // 是否已感谢
-      bool collected = 3; // 是否已收藏
-      bool watched = 4; // 是否已关注
-    }
-    ArticleDetail article = 1; // 更新后的文章
-  }
-}
-
-// 更新文章内容。兼容旧草稿更新接口。
 message UpdateDraftArticle {
   message Req {
-    int64 article_id = 1; // 文章 ID
-    Article article = 2; // 文章保存内容
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "article"};
+    int64 article_id = 1; // 必填，文章 ID
+    Article article = 2; // 必填，草稿内容
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "article"
+    };
 
     message Article {
-      string title = 1; // 标题
-      string content = 2; // 原始内容
-      optional string reward_content = 4; // 打赏后可见内容
-      optional int32 reward_points = 5; // 打赏所需积分
-      ArticleType type = 7; // 文章类型
-      optional int32 bounty_points = 8; // 悬赏积分
-      optional string statement = 9; // 文章声明
-      optional bool commentable = 10; // 是否允许评论
-      optional bool anonymous = 11; // 是否匿名展示
-      option (gnostic.openapi.v3.schema) = {required: "title"
+      string title = 1; // 必填，标题
+      string content = 2; // 必填，正文
+      optional string reward_content = 3; // 可选，打赏区内容
+      optional int32 reward_points = 4; // 可选，打赏积分
+      ArticleType type = 5; // 必填，文章类型
+      optional string statement = 6; // 可选，创作声明
+      optional bool commentable = 7; // 可选，是否允许评论
+      option (gnostic.openapi.v3.schema) = {
+        required: "title"
         required: "content"
-        required: "type"};
+        required: "type"
+      };
     }
   }
   message Resp {
-    message ArticleDetail {
-      int64 id = 1; // 文章 ID
-      string title = 2; // 标题
-      string content = 3; // 原始内容
-      string content_render = 4; // 渲染后的内容
-      bool has_postscript = 5; // 是否有附言
-      bool has_reward = 6; // 是否有打赏内容
-      optional string reward_content = 7; // 打赏后可见内容
-      optional string reward_content_render = 8; // 渲染后的打赏内容
-      optional int32 reward_points = 9; // 打赏所需积分
-      ArticleType type = 11; // 文章类型
-      optional string statement = 12; // 文章声明
-      bool commentable = 13; // 是否允许评论
-      bool anonymous = 14; // 是否匿名展示
-      int32 view_count = 16; // 浏览数量
-      int32 thank_count = 17; // 感谢数量
-      int32 like_count = 18; // 点赞数量
-      int32 collect_count = 19; // 收藏数量
-      int32 watch_count = 20; // 关注数量
-      int32 reply_count = 21; // 回复数量
-      optional int32 bounty_points = 22; // 悬赏积分
-      optional int64 accepted_answer_id = 23; // 已采纳答案评论 ID
-      AccountProfile author_user = 24; // 作者展示资料
-      AccountProfile last_reply_user = 25; // 最后回复账号展示资料
-      google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
-      optional string cover_image_url = 27; // 封面图片 URL
-      ArticleViewerActionState viewer_action_state = 28; // 当前查看账号的文章行为状态
-      google.protobuf.Timestamp published_at = 29; // 发布时间
-      repeated ArticlePostscript postscripts = 30; // 附言列表
-      ArticlePublishStatus publish_status = 31; // 发布状态
-      ArticleVisibility visibility = 32; // 可见范围
-      ContentRestriction restriction = 33; // 管理限制
-      google.protobuf.Timestamp edited_at = 34; // 内容编辑时间
-      optional int64 created_by = 1002; // 创建账号 ID
-      optional int64 updated_by = 1003; // 更新账号 ID
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message ArticlePostscript {
-      int64 id = 1; // 附言 ID
-      int64 article_id = 2; // 文章 ID
-      string content = 3; // 原始内容
-      string content_render = 4; // 渲染后的内容
-      ContentRestriction restriction = 5; // 管理限制
-      optional int64 created_by = 1002; // 创建账号 ID
-      optional int64 updated_by = 1003; // 更新账号 ID
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message AccountProfile {
-      int64 id = 1; // 账号 ID
-      string name = 2; // 账号名
-      optional string nickname = 3; // 昵称
-      optional string url = 4; // 个人主页 URL
-      optional string avatar_url = 5; // 头像 URL
-      optional string introduction = 6; // 个人简介
-      .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
-      .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
-      optional int32 follow_count = 10; // 关注数量
-      optional int32 follower_count = 11; // 粉丝数量
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message ArticleViewerActionState {
-      bool liked = 1; // 是否已点赞
-      bool thanked = 2; // 是否已感谢
-      bool collected = 3; // 是否已收藏
-      bool watched = 4; // 是否已关注
-    }
-    ArticleDetail article = 1; // 更新后的文章
+    ArticleDetail article = 1; // 文章详情
   }
 }
 
-// 发布文章。
 message PublishArticle {
   message Req {
-    int64 article_id = 1; // 文章 ID
-    ArticleVisibility visibility = 2; // 发布后的可见范围
-    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+    int64 article_id = 1; // 必填，文章 ID
+    ArticleVisibility visibility = 2; // 可选，可见范围
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+    };
   }
   message Resp {}
 }
 
-// 丢弃草稿。
+message SchedulePublishArticle {
+  message Req {
+    int64 article_id = 1; // 必填，文章 ID
+    google.protobuf.Timestamp publish_at = 2; // 必填，定时发布时间
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "publish_at"
+    };
+  }
+  message Resp {}
+}
+
+message CancelPublishArticle {
+  message Req {
+    int64 article_id = 1; // 必填，文章 ID
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+    };
+  }
+  message Resp {}
+}
+
 message DiscardDraftArticle {
   message Req {
-    int64 article_id = 1; // 文章 ID
-    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+    int64 article_id = 1; // 必填，文章 ID
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+    };
   }
   message Resp {}
 }
 
-// 分页查询文章列表。
+message ArchiveArticle {
+  message Req {
+    int64 article_id = 1; // 必填，文章 ID
+    optional string reason = 2; // 可选，归档原因
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+    };
+  }
+  message Resp {}
+}
+
 message ListArticles {
   message Req {
+    .common.api.app.common.PageReq page = 1; // 可选，分页参数
+    ArticleQuery query = 2; // 可选，查询条件
+
     message ArticleQuery {
-      optional int64 tag_id = 1; // 标签 ID
-      optional int64 domain_id = 2; // 板块 ID
-      optional ArticleType type = 4; // 文章类型
-      optional ArticleOrder order = 5; // 排序方式
-      optional string keyword = 6; // 搜索关键词
-      optional int64 author_id = 7; // 作者账号 ID
-      optional ArticlePublishStatus publish_status = 9; // 发布状态
-      repeated ArticlePublishStatus publish_statuses = 10; // 发布状态列表
-      optional ArticleVisibility visibility = 11; // 可见范围
-      repeated ArticleVisibility visibilities = 12; // 可见范围列表
-      optional ContentRestriction restriction = 13; // 管理限制
-      repeated ContentRestriction restrictions = 14; // 管理限制列表
+      optional int64 tag_id = 1; // 可选，标签 ID
+      optional int64 domain_id = 2; // 可选，领域 ID
+      optional ArticleType type = 4; // 可选，文章类型
+      optional ArticleOrder order = 5; // 可选，排序方式
+      optional string keyword = 6; // 可选，关键词
+      optional int64 author_id = 7; // 可选，作者账号 ID
+      optional ArticlePublishStatus publish_status = 10; // 可选，发布状态
+      repeated ArticlePublishStatus publish_statuses = 11; // 可选，发布状态列表
+      optional ArticleVisibility visibility = 12; // 可选，可见范围
+      repeated ArticleVisibility visibilities = 13; // 可选，可见范围列表
+      optional ContentRestriction restriction = 14; // 可选，治理限制
+      repeated ContentRestriction restrictions = 15; // 可选，治理限制列表
     }
-    .common.api.app.common.PageReq page = 1; // 分页参数
-    ArticleQuery query = 2; // 查询条件
   }
   message Resp {
-    message ArticleListItem {
-      int64 id = 1; // 文章 ID
-      string title = 2; // 标题
-      string content = 3; // 摘要原始内容
-      string content_render = 4; // 摘要渲染内容
-      bool has_postscript = 5; // 是否有附言
-      bool has_reward = 6; // 是否有打赏内容
-      ArticleType type = 11; // 文章类型
-      optional string statement = 12; // 文章声明
-      bool commentable = 13; // 是否允许评论
-      bool anonymous = 14; // 是否匿名展示
-      int32 view_count = 16; // 浏览数量
-      int32 thank_count = 17; // 感谢数量
-      int32 like_count = 18; // 点赞数量
-      int32 collect_count = 19; // 收藏数量
-      int32 watch_count = 20; // 关注数量
-      int32 reply_count = 21; // 回复数量
-      optional int32 bounty_points = 22; // 悬赏积分
-      optional int64 accepted_answer_id = 23; // 已采纳答案评论 ID
-      AccountProfile author_user = 24; // 作者展示资料
-      AccountProfile last_reply_user = 25; // 最后回复账号展示资料
-      google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
-      optional string cover_image_url = 27; // 封面图片 URL
-      ArticleViewerActionState viewer_action_state = 28; // 当前查看账号的文章行为状态
-      google.protobuf.Timestamp published_at = 29; // 发布时间
-      ArticlePublishStatus publish_status = 30; // 发布状态
-      ArticleVisibility visibility = 31; // 可见范围
-      ContentRestriction restriction = 32; // 管理限制
-      google.protobuf.Timestamp edited_at = 33; // 内容编辑时间
-      optional int64 created_by = 1002; // 创建账号 ID
-      optional int64 updated_by = 1003; // 更新账号 ID
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message AccountProfile {
-      int64 id = 1; // 账号 ID
-      string name = 2; // 账号名
-      optional string nickname = 3; // 昵称
-      optional string url = 4; // 个人主页 URL
-      optional string avatar_url = 5; // 头像 URL
-      optional string introduction = 6; // 个人简介
-      .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
-      .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
-      optional int32 follow_count = 10; // 关注数量
-      optional int32 follower_count = 11; // 粉丝数量
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message ArticleViewerActionState {
-      bool liked = 1; // 是否已点赞
-      bool thanked = 2; // 是否已感谢
-      bool collected = 3; // 是否已收藏
-      bool watched = 4; // 是否已关注
-    }
     .common.api.app.common.PageResp page = 1; // 分页结果
     repeated ArticleListItem rows = 2; // 文章列表
   }
 }
 
-// 获取文章详情。
 message GetArticle {
   message Req {
-    int64 article_id = 1; // 文章 ID
-    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+    int64 article_id = 1; // 必填，文章 ID
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+    };
   }
   message Resp {
-    message ArticleDetail {
-      int64 id = 1; // 文章 ID
-      string title = 2; // 标题
-      string content = 3; // 原始内容
-      string content_render = 4; // 渲染后的内容
-      bool has_postscript = 5; // 是否有附言
-      bool has_reward = 6; // 是否有打赏内容
-      optional string reward_content = 7; // 打赏后可见内容
-      optional string reward_content_render = 8; // 渲染后的打赏内容
-      optional int32 reward_points = 9; // 打赏所需积分
-      ArticleType type = 11; // 文章类型
-      optional string statement = 12; // 文章声明
-      bool commentable = 13; // 是否允许评论
-      bool anonymous = 14; // 是否匿名展示
-      int32 view_count = 16; // 浏览数量
-      int32 thank_count = 17; // 感谢数量
-      int32 like_count = 18; // 点赞数量
-      int32 collect_count = 19; // 收藏数量
-      int32 watch_count = 20; // 关注数量
-      int32 reply_count = 21; // 回复数量
-      optional int32 bounty_points = 22; // 悬赏积分
-      optional int64 accepted_answer_id = 23; // 已采纳答案评论 ID
-      AccountProfile author_user = 24; // 作者展示资料
-      AccountProfile last_reply_user = 25; // 最后回复账号展示资料
-      google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
-      optional string cover_image_url = 27; // 封面图片 URL
-      ArticleViewerActionState viewer_action_state = 28; // 当前查看账号的文章行为状态
-      google.protobuf.Timestamp published_at = 29; // 发布时间
-      repeated ArticlePostscript postscripts = 30; // 附言列表
-      ArticlePublishStatus publish_status = 31; // 发布状态
-      ArticleVisibility visibility = 32; // 可见范围
-      ContentRestriction restriction = 33; // 管理限制
-      google.protobuf.Timestamp edited_at = 34; // 内容编辑时间
-      optional int64 created_by = 1002; // 创建账号 ID
-      optional int64 updated_by = 1003; // 更新账号 ID
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message ArticlePostscript {
-      int64 id = 1; // 附言 ID
-      int64 article_id = 2; // 文章 ID
-      string content = 3; // 原始内容
-      string content_render = 4; // 渲染后的内容
-      ContentRestriction restriction = 5; // 管理限制
-      optional int64 created_by = 1002; // 创建账号 ID
-      optional int64 updated_by = 1003; // 更新账号 ID
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message AccountProfile {
-      int64 id = 1; // 账号 ID
-      string name = 2; // 账号名
-      optional string nickname = 3; // 昵称
-      optional string url = 4; // 个人主页 URL
-      optional string avatar_url = 5; // 头像 URL
-      optional string introduction = 6; // 个人简介
-      .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
-      .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
-      optional int32 follow_count = 10; // 关注数量
-      optional int32 follower_count = 11; // 粉丝数量
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-
-    message ArticleViewerActionState {
-      bool liked = 1; // 是否已点赞
-      bool thanked = 2; // 是否已感谢
-      bool collected = 3; // 是否已收藏
-      bool watched = 4; // 是否已关注
-    }
     ArticleDetail article = 1; // 文章详情
   }
 }
 
-// 点赞或取消点赞文章。
 message LikeArticle {
   message Req {
-    int64 article_id = 1; // 文章 ID
-    bool active = 2; // 是否点赞
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "active"};
+    int64 article_id = 1; // 必填，文章 ID
+    bool active = 2; // 必填，是否点赞
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "active"
+    };
   }
   message Resp {
     bool liked = 1; // 是否已点赞
   }
 }
 
-// 感谢或取消感谢文章。
 message ThankArticle {
   message Req {
-    int64 article_id = 1; // 文章 ID
-    bool active = 2; // 是否感谢
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "active"};
+    int64 article_id = 1; // 必填，文章 ID
+    bool active = 2; // 必填，是否感谢
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "active"
+    };
   }
   message Resp {
     bool thanked = 1; // 是否已感谢
   }
 }
 
-// 收藏或取消收藏文章。
 message CollectArticle {
   message Req {
-    int64 article_id = 1; // 文章 ID
-    bool active = 2; // 是否收藏
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "active"};
+    int64 article_id = 1; // 必填，文章 ID
+    bool active = 2; // 必填，是否收藏
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "active"
+    };
   }
   message Resp {
     bool collected = 1; // 是否已收藏
   }
 }
 
-// 关注或取消关注文章。
-message WatchArticle {
-  message Req {
-    int64 article_id = 1; // 文章 ID
-    bool active = 2; // 是否关注
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "active"};
-  }
-  message Resp {
-    bool watched = 1; // 是否已关注
-  }
-}
-
-// 打赏文章。
 message RewardArticle {
   message Req {
-    int64 article_id = 1; // 文章 ID
-    int32 points = 2; // 积分
-    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+    int64 article_id = 1; // 必填，文章 ID
+    int32 points = 2; // 必填，打赏积分
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "points"
+    };
   }
   message Resp {}
 }
 
-// 采纳文章评论为答案。
-message AcceptAnswerArticle {
-  message Req {
-    int64 article_id = 1; // 文章 ID
-    int64 comment_id = 2; // 评论 ID
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "comment_id"};
-  }
-  message Resp {}
+message ArticleViewerActionState {
+  bool liked = 1; // 是否已点赞
+  bool thanked = 2; // 是否已感谢
+  bool collected = 3; // 是否已收藏
+  bool rewarded = 4; // 是否已打赏
 }
 
-// 文章查询条件。
+message ArticlePostscript {
+  int64 id = 1; // 附言 ID
+  int64 article_id = 2; // 文章 ID
+  string content = 3; // 原始内容
+  string content_render = 4; // 渲染内容
+  ContentRestriction restriction = 5; // 治理限制
+  optional int64 created_by = 1002; // 创建账号 ID
+  optional int64 updated_by = 1003; // 更新账号 ID
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}
+
+message AccountProfile {
+  int64 id = 1; // 账号 ID
+  string name = 2; // 账号名
+  optional string nickname = 3; // 昵称
+  optional string url = 4; // 个人主页
+  optional string avatar_url = 5; // 头像 URL
+  optional string introduction = 6; // 个人简介
+  .common.api.app.bbs.v1.user.MBTI mbti = 7; // MBTI 类型
+  .common.api.app.bbs.v1.user.AccountStatus status = 8; // 账号状态
+  optional int32 follow_count = 10; // 关注数
+  optional int32 follower_count = 11; // 粉丝数
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}
+
+message ArticleListItem {
+  int64 id = 1; // 文章 ID
+  string title = 2; // 标题
+  string content = 3; // 摘要原文
+  string content_render = 4; // 摘要渲染内容
+  bool has_postscript = 5; // 是否有附言
+  bool has_reward = 6; // 是否有打赏区
+  ArticleType type = 7; // 文章类型
+  optional string statement = 8; // 创作声明
+  bool commentable = 9; // 是否允许评论
+  int32 view_count = 16; // 浏览数
+  int32 thank_count = 17; // 感谢数
+  int32 like_count = 18; // 点赞数
+  int32 collect_count = 19; // 收藏数
+  int32 reward_count = 20; // 打赏数
+  int32 reply_count = 21; // 回复数
+  AccountProfile author_user = 24; // 作者资料
+  AccountProfile last_reply_user = 25; // 最后回复用户
+  google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
+  optional string cover_image_url = 27; // 封面图片 URL
+  ArticleViewerActionState viewer_action_state = 28; // 当前用户互动状态
+  google.protobuf.Timestamp published_at = 29; // 发布时间
+  ArticlePublishStatus publish_status = 31; // 发布状态
+  ArticleVisibility visibility = 32; // 可见范围
+  ContentRestriction restriction = 33; // 治理限制
+  google.protobuf.Timestamp edited_at = 34; // 编辑时间
+  optional int64 created_by = 1002; // 创建账号 ID
+  optional int64 updated_by = 1003; // 更新账号 ID
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}
+
+message ArticleDetail {
+  int64 id = 1; // 文章 ID
+  string title = 2; // 标题
+  string content = 3; // 原始内容
+  string content_render = 4; // 渲染内容
+  bool has_postscript = 5; // 是否有附言
+  bool has_reward = 6; // 是否有打赏区
+  optional string reward_content = 7; // 打赏后可见内容
+  optional string reward_content_render = 8; // 渲染打赏内容
+  optional int32 reward_points = 9; // 打赏积分
+  ArticleType type = 11; // 文章类型
+  optional string statement = 12; // 创作声明
+  bool commentable = 13; // 是否允许评论
+  int32 view_count = 16; // 浏览数
+  int32 thank_count = 17; // 感谢数
+  int32 like_count = 18; // 点赞数
+  int32 collect_count = 19; // 收藏数
+  int32 reward_count = 20; // 打赏数
+  int32 reply_count = 21; // 回复数
+  AccountProfile author_user = 24; // 作者资料
+  AccountProfile last_reply_user = 25; // 最后回复用户
+  google.protobuf.Timestamp last_reply_at = 26; // 最后回复时间
+  optional string cover_image_url = 27; // 封面图片 URL
+  ArticleViewerActionState viewer_action_state = 28; // 当前用户互动状态
+  google.protobuf.Timestamp published_at = 29; // 发布时间
+  repeated ArticlePostscript postscripts = 30; // 附言列表
+  ArticlePublishStatus publish_status = 31; // 发布状态
+  ArticleVisibility visibility = 32; // 可见范围
+  ContentRestriction restriction = 33; // 治理限制
+  google.protobuf.Timestamp edited_at = 34; // 编辑时间
+  optional int64 created_by = 1002; // 创建账号 ID
+  optional int64 updated_by = 1003; // 更新账号 ID
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}

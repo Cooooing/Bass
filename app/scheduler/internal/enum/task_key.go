@@ -16,6 +16,8 @@ const (
 	TaskKeyUserUnbanAccountsDefault                TaskKey = "user.unban_accounts.default"
 	TaskKeyContentOutboxPublishBatchDefault        TaskKey = "content.outbox_publish_batch.default"
 	TaskKeyContentOutboxPublishBatchDelayedDefault TaskKey = "content.outbox_publish_batch.delayed.default"
+	TaskKeyContentPublishScheduledArticlesDefault  TaskKey = "content.publish_scheduled_articles.default"
+	TaskKeyContentFlushArticleViewsDefault         TaskKey = "content.flush_article_views.default"
 )
 
 // TaskKeyMap 将内部默认任务配置键映射到 proto 枚举。
@@ -41,6 +43,12 @@ var TaskKeyMap = commonenum.NewMapping[TaskKey, schedulerv1.SchedulerTaskKey](
 		},
 		TaskKeyContentOutboxPublishBatchDelayedDefault: {
 			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_OUTBOX_PUBLISH_BATCH_DELAYED_DEFAULT,
+		},
+		TaskKeyContentPublishScheduledArticlesDefault: {
+			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_PUBLISH_SCHEDULED_ARTICLES_DEFAULT,
+		},
+		TaskKeyContentFlushArticleViewsDefault: {
+			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_FLUSH_ARTICLE_VIEWS_DEFAULT,
 		},
 	},
 )

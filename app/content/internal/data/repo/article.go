@@ -51,10 +51,8 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article) (*model.
 		SetVisibility(articleent.Visibility(article.Visibility)).
 		SetRestriction(articleent.Restriction(article.Restriction)).
 		SetType(articleent.Type(article.Type)).
-		SetNillableBountyPoints(article.BountyPoints).
 		SetNillableStatement(article.Statement).
 		SetCommentable(article.Commentable).
-		SetAnonymous(article.Anonymous).
 		SetNillablePublishedAt(article.PublishedAt).
 		SetNillableEditedAt(article.EditedAt).
 		SetNillableCreatedBy(article.CreatedBy).
@@ -64,34 +62,31 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article) (*model.
 		return nil, err
 	}
 	return &model.Article{
-		ID:               save.ID,
-		Title:            save.Title,
-		Content:          save.Content,
-		HasPostscript:    save.HasPostscript,
-		RewardContent:    save.RewardContent,
-		RewardPoints:     save.RewardPoints,
-		PublishStatus:    enum.ArticlePublishStatus(save.PublishStatus),
-		Visibility:       enum.ArticleVisibility(save.Visibility),
-		Restriction:      enum.ContentRestriction(save.Restriction),
-		Type:             enum.ArticleType(save.Type),
-		Statement:        save.Statement,
-		Commentable:      save.Commentable,
-		Anonymous:        save.Anonymous,
-		PublishedAt:      save.PublishedAt,
-		EditedAt:         save.EditedAt,
-		ViewCount:        save.ViewCount,
-		ThankCount:       save.ThankCount,
-		LikeCount:        save.LikeCount,
-		CollectCount:     save.CollectCount,
-		WatchCount:       save.WatchCount,
-		ReplyCount:       save.ReplyCount,
-		BountyPoints:     save.BountyPoints,
-		AcceptedAnswerID: save.AcceptedAnswerID,
-		CreatedAt:        save.CreatedAt,
-		UpdatedAt:        save.UpdatedAt,
-		CreatedBy:        save.CreatedBy,
-		UpdatedBy:        save.UpdatedBy,
-		DeletedAt:        save.DeletedAt,
+		ID:            save.ID,
+		Title:         save.Title,
+		Content:       save.Content,
+		HasPostscript: save.HasPostscript,
+		RewardContent: save.RewardContent,
+		RewardPoints:  save.RewardPoints,
+		PublishStatus: enum.ArticlePublishStatus(save.PublishStatus),
+		Visibility:    enum.ArticleVisibility(save.Visibility),
+		Restriction:   enum.ContentRestriction(save.Restriction),
+		Type:          enum.ArticleType(save.Type),
+		Statement:     save.Statement,
+		Commentable:   save.Commentable,
+		PublishedAt:   save.PublishedAt,
+		EditedAt:      save.EditedAt,
+		ViewCount:     save.ViewCount,
+		ThankCount:    save.ThankCount,
+		LikeCount:     save.LikeCount,
+		CollectCount:  save.CollectCount,
+		RewardCount:   save.RewardCount,
+		ReplyCount:    save.ReplyCount,
+		CreatedAt:     save.CreatedAt,
+		UpdatedAt:     save.UpdatedAt,
+		CreatedBy:     save.CreatedBy,
+		UpdatedBy:     save.UpdatedBy,
+		DeletedAt:     save.DeletedAt,
 	}, nil
 }
 
@@ -106,10 +101,8 @@ func (r *ArticleRepo) Update(ctx context.Context, article *model.Article) (*mode
 		SetVisibility(articleent.Visibility(updateArticle.Visibility)).
 		SetRestriction(articleent.Restriction(updateArticle.Restriction)).
 		SetType(articleent.Type(updateArticle.Type)).
-		SetNillableBountyPoints(updateArticle.BountyPoints).
 		SetNillableStatement(updateArticle.Statement).
 		SetCommentable(updateArticle.Commentable).
-		SetAnonymous(updateArticle.Anonymous).
 		SetNillablePublishedAt(updateArticle.PublishedAt).
 		SetNillableEditedAt(updateArticle.EditedAt).
 		SetNillableUpdatedBy(updateArticle.UpdatedBy).
@@ -118,43 +111,36 @@ func (r *ArticleRepo) Update(ctx context.Context, article *model.Article) (*mode
 		return nil, err
 	}
 	return &model.Article{
-		ID:               save.ID,
-		Title:            save.Title,
-		Content:          save.Content,
-		HasPostscript:    save.HasPostscript,
-		RewardContent:    save.RewardContent,
-		RewardPoints:     save.RewardPoints,
-		PublishStatus:    enum.ArticlePublishStatus(save.PublishStatus),
-		Visibility:       enum.ArticleVisibility(save.Visibility),
-		Restriction:      enum.ContentRestriction(save.Restriction),
-		Type:             enum.ArticleType(save.Type),
-		Statement:        save.Statement,
-		Commentable:      save.Commentable,
-		Anonymous:        save.Anonymous,
-		PublishedAt:      save.PublishedAt,
-		EditedAt:         save.EditedAt,
-		ViewCount:        save.ViewCount,
-		ThankCount:       save.ThankCount,
-		LikeCount:        save.LikeCount,
-		CollectCount:     save.CollectCount,
-		WatchCount:       save.WatchCount,
-		ReplyCount:       save.ReplyCount,
-		BountyPoints:     save.BountyPoints,
-		AcceptedAnswerID: save.AcceptedAnswerID,
-		CreatedAt:        save.CreatedAt,
-		UpdatedAt:        save.UpdatedAt,
-		CreatedBy:        save.CreatedBy,
-		UpdatedBy:        save.UpdatedBy,
-		DeletedAt:        save.DeletedAt,
+		ID:            save.ID,
+		Title:         save.Title,
+		Content:       save.Content,
+		HasPostscript: save.HasPostscript,
+		RewardContent: save.RewardContent,
+		RewardPoints:  save.RewardPoints,
+		PublishStatus: enum.ArticlePublishStatus(save.PublishStatus),
+		Visibility:    enum.ArticleVisibility(save.Visibility),
+		Restriction:   enum.ContentRestriction(save.Restriction),
+		Type:          enum.ArticleType(save.Type),
+		Statement:     save.Statement,
+		Commentable:   save.Commentable,
+		PublishedAt:   save.PublishedAt,
+		EditedAt:      save.EditedAt,
+		ViewCount:     save.ViewCount,
+		ThankCount:    save.ThankCount,
+		LikeCount:     save.LikeCount,
+		CollectCount:  save.CollectCount,
+		RewardCount:   save.RewardCount,
+		ReplyCount:    save.ReplyCount,
+		CreatedAt:     save.CreatedAt,
+		UpdatedAt:     save.UpdatedAt,
+		CreatedBy:     save.CreatedBy,
+		UpdatedBy:     save.UpdatedBy,
+		DeletedAt:     save.DeletedAt,
 	}, nil
 }
 
 func (r *ArticleRepo) UpdatePublishStatus(ctx context.Context, req *repo.ArticleUpdatePublishStatusReq) error {
 	articleId := req.ArticleID
-	publishStatus := req.PublishStatus
-	visibility := req.Visibility
-	publishedAt := req.PublishedAt
-	updatedBy := req.UpdatedBy
 	_, err := r.getClient(ctx).Article.Get(ctx, articleId)
 	if gen.IsNotFound(err) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
@@ -163,72 +149,50 @@ func (r *ArticleRepo) UpdatePublishStatus(ctx context.Context, req *repo.Article
 		return err
 	}
 	update := r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetPublishStatus(articleent.PublishStatus(publishStatus)).
-		SetVisibility(articleent.Visibility(visibility)).
-		SetUpdatedBy(updatedBy)
-	if publishedAt != nil {
-		update.SetPublishedAt(*publishedAt)
+		SetPublishStatus(articleent.PublishStatus(req.PublishStatus)).
+		SetVisibility(articleent.Visibility(req.Visibility))
+	if req.PublishedAt != nil {
+		update.SetPublishedAt(*req.PublishedAt)
 	}
-	if err := update.Exec(ctx); err != nil {
-		return err
+	if req.ClearPublished {
+		update.ClearPublishedAt()
 	}
-	return nil
+	if req.UpdatedBy != nil {
+		update.SetUpdatedBy(*req.UpdatedBy)
+	}
+	return update.Exec(ctx)
 }
-
 func (r *ArticleRepo) UpdateVisibility(ctx context.Context, req *repo.ArticleUpdateVisibilityReq) error {
-	articleId := req.ArticleID
-	visibility := req.Visibility
-	updatedBy := req.UpdatedBy
-	if err := r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetVisibility(articleent.Visibility(visibility)).
-		SetUpdatedBy(updatedBy).
-		Exec(ctx); err != nil {
-		return err
-	}
-	return nil
+	return r.getClient(ctx).Article.UpdateOneID(req.ArticleID).
+		SetVisibility(articleent.Visibility(req.Visibility)).
+		SetUpdatedBy(req.UpdatedBy).
+		Exec(ctx)
 }
 
 func (r *ArticleRepo) UpdateRestriction(ctx context.Context, req *repo.ArticleUpdateRestrictionReq) error {
-	articleId := req.ArticleID
-	restriction := req.Restriction
-	updatedBy := req.UpdatedBy
-	_, err := r.getClient(ctx).Article.Get(ctx, articleId)
+	_, err := r.getClient(ctx).Article.Get(ctx, req.ArticleID)
 	if gen.IsNotFound(err) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
 	if err != nil {
 		return err
 	}
-	if err := r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetRestriction(articleent.Restriction(restriction)).
-		SetUpdatedBy(updatedBy).
-		Exec(ctx); err != nil {
-		return err
-	}
-	return nil
+	return r.getClient(ctx).Article.UpdateOneID(req.ArticleID).
+		SetRestriction(articleent.Restriction(req.Restriction)).
+		SetUpdatedBy(req.UpdatedBy).
+		Exec(ctx)
 }
 
 func (r *ArticleRepo) DiscardDraft(ctx context.Context, articleID int64) error {
-	articleId := articleID
-	if err := r.getClient(ctx).Article.DeleteOneID(articleId).Exec(ctx); err != nil {
-		return err
-	}
-	return nil
+	return r.getClient(ctx).Article.DeleteOneID(articleID).Exec(ctx)
 }
 
 func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, req *repo.ArticleUpdateHasPostscriptReq) error {
-	articleId := req.ArticleID
-	hasPostscript := req.HasPostscript
-	updatedBy := req.UpdatedBy
-	if err := r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetHasPostscript(hasPostscript).
-		SetUpdatedBy(updatedBy).
-		Exec(ctx); err != nil {
-		return err
-	}
-	return nil
+	return r.getClient(ctx).Article.UpdateOneID(req.ArticleID).
+		SetHasPostscript(req.HasPostscript).
+		SetUpdatedBy(req.UpdatedBy).
+		Exec(ctx)
 }
-
 func (r *ArticleRepo) AddStats(ctx context.Context, req *repo.ArticleAddStatsReq) error {
 	articleId := req.ArticleID
 	stats := req.Stats
@@ -245,8 +209,8 @@ func (r *ArticleRepo) AddStats(ctx context.Context, req *repo.ArticleAddStatsReq
 	if stats.CollectCount != 0 {
 		updateOne.AddCollectCount(stats.CollectCount)
 	}
-	if stats.WatchCount != 0 {
-		updateOne.AddWatchCount(stats.WatchCount)
+	if stats.RewardCount != 0 {
+		updateOne.AddRewardCount(stats.RewardCount)
 	}
 	if stats.ReplyCount != 0 {
 		updateOne.AddReplyCount(stats.ReplyCount)
@@ -255,49 +219,6 @@ func (r *ArticleRepo) AddStats(ctx context.Context, req *repo.ArticleAddStatsReq
 		return err
 	}
 	return nil
-}
-
-func (r *ArticleRepo) UpdateAcceptedAnswerID(ctx context.Context, req *repo.ArticleUpdateAcceptedAnswerIDReq) (*model.Article, error) {
-	articleId := req.ArticleID
-	commentId := req.CommentID
-	updatedBy := req.UpdatedBy
-	a, err := r.getClient(ctx).Article.UpdateOneID(articleId).
-		SetAcceptedAnswerID(commentId).
-		SetUpdatedBy(updatedBy).
-		Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-	return &model.Article{
-		ID:               a.ID,
-		Title:            a.Title,
-		Content:          a.Content,
-		HasPostscript:    a.HasPostscript,
-		RewardContent:    a.RewardContent,
-		RewardPoints:     a.RewardPoints,
-		PublishStatus:    enum.ArticlePublishStatus(a.PublishStatus),
-		Visibility:       enum.ArticleVisibility(a.Visibility),
-		Restriction:      enum.ContentRestriction(a.Restriction),
-		Type:             enum.ArticleType(a.Type),
-		Statement:        a.Statement,
-		Commentable:      a.Commentable,
-		Anonymous:        a.Anonymous,
-		PublishedAt:      a.PublishedAt,
-		EditedAt:         a.EditedAt,
-		ViewCount:        a.ViewCount,
-		ThankCount:       a.ThankCount,
-		LikeCount:        a.LikeCount,
-		CollectCount:     a.CollectCount,
-		WatchCount:       a.WatchCount,
-		ReplyCount:       a.ReplyCount,
-		BountyPoints:     a.BountyPoints,
-		AcceptedAnswerID: a.AcceptedAnswerID,
-		CreatedAt:        a.CreatedAt,
-		UpdatedAt:        a.UpdatedAt,
-		CreatedBy:        a.CreatedBy,
-		UpdatedBy:        a.UpdatedBy,
-		DeletedAt:        a.DeletedAt,
-	}, nil
 }
 
 func (r *ArticleRepo) ReplaceTags(ctx context.Context, req *repo.ArticleReplaceTagsReq) error {
@@ -412,34 +333,31 @@ func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.
 		return nil, err
 	}
 	return &model.Article{
-		ID:               a.ID,
-		Title:            a.Title,
-		Content:          a.Content,
-		HasPostscript:    a.HasPostscript,
-		RewardContent:    a.RewardContent,
-		RewardPoints:     a.RewardPoints,
-		PublishStatus:    enum.ArticlePublishStatus(a.PublishStatus),
-		Visibility:       enum.ArticleVisibility(a.Visibility),
-		Restriction:      enum.ContentRestriction(a.Restriction),
-		Type:             enum.ArticleType(a.Type),
-		Statement:        a.Statement,
-		Commentable:      a.Commentable,
-		Anonymous:        a.Anonymous,
-		PublishedAt:      a.PublishedAt,
-		EditedAt:         a.EditedAt,
-		ViewCount:        a.ViewCount,
-		ThankCount:       a.ThankCount,
-		LikeCount:        a.LikeCount,
-		CollectCount:     a.CollectCount,
-		WatchCount:       a.WatchCount,
-		ReplyCount:       a.ReplyCount,
-		BountyPoints:     a.BountyPoints,
-		AcceptedAnswerID: a.AcceptedAnswerID,
-		CreatedAt:        a.CreatedAt,
-		UpdatedAt:        a.UpdatedAt,
-		CreatedBy:        a.CreatedBy,
-		UpdatedBy:        a.UpdatedBy,
-		DeletedAt:        a.DeletedAt,
+		ID:            a.ID,
+		Title:         a.Title,
+		Content:       a.Content,
+		HasPostscript: a.HasPostscript,
+		RewardContent: a.RewardContent,
+		RewardPoints:  a.RewardPoints,
+		PublishStatus: enum.ArticlePublishStatus(a.PublishStatus),
+		Visibility:    enum.ArticleVisibility(a.Visibility),
+		Restriction:   enum.ContentRestriction(a.Restriction),
+		Type:          enum.ArticleType(a.Type),
+		Statement:     a.Statement,
+		Commentable:   a.Commentable,
+		PublishedAt:   a.PublishedAt,
+		EditedAt:      a.EditedAt,
+		ViewCount:     a.ViewCount,
+		ThankCount:    a.ThankCount,
+		LikeCount:     a.LikeCount,
+		CollectCount:  a.CollectCount,
+		RewardCount:   a.RewardCount,
+		ReplyCount:    a.ReplyCount,
+		CreatedAt:     a.CreatedAt,
+		UpdatedAt:     a.UpdatedAt,
+		CreatedBy:     a.CreatedBy,
+		UpdatedBy:     a.UpdatedBy,
+		DeletedAt:     a.DeletedAt,
 	}, nil
 }
 
@@ -452,34 +370,31 @@ func (r *ArticleRepo) List(ctx context.Context, req *repo.ArticleGetReq) ([]*mod
 	}
 	return lo.Map(list, func(item *gen.Article, _ int) *model.Article {
 		return &model.Article{
-			ID:               item.ID,
-			Title:            item.Title,
-			Content:          item.Content,
-			HasPostscript:    item.HasPostscript,
-			RewardContent:    item.RewardContent,
-			RewardPoints:     item.RewardPoints,
-			PublishStatus:    enum.ArticlePublishStatus(item.PublishStatus),
-			Visibility:       enum.ArticleVisibility(item.Visibility),
-			Restriction:      enum.ContentRestriction(item.Restriction),
-			Type:             enum.ArticleType(item.Type),
-			Statement:        item.Statement,
-			Commentable:      item.Commentable,
-			Anonymous:        item.Anonymous,
-			PublishedAt:      item.PublishedAt,
-			EditedAt:         item.EditedAt,
-			ViewCount:        item.ViewCount,
-			ThankCount:       item.ThankCount,
-			LikeCount:        item.LikeCount,
-			CollectCount:     item.CollectCount,
-			WatchCount:       item.WatchCount,
-			ReplyCount:       item.ReplyCount,
-			BountyPoints:     item.BountyPoints,
-			AcceptedAnswerID: item.AcceptedAnswerID,
-			CreatedAt:        item.CreatedAt,
-			UpdatedAt:        item.UpdatedAt,
-			CreatedBy:        item.CreatedBy,
-			UpdatedBy:        item.UpdatedBy,
-			DeletedAt:        item.DeletedAt,
+			ID:            item.ID,
+			Title:         item.Title,
+			Content:       item.Content,
+			HasPostscript: item.HasPostscript,
+			RewardContent: item.RewardContent,
+			RewardPoints:  item.RewardPoints,
+			PublishStatus: enum.ArticlePublishStatus(item.PublishStatus),
+			Visibility:    enum.ArticleVisibility(item.Visibility),
+			Restriction:   enum.ContentRestriction(item.Restriction),
+			Type:          enum.ArticleType(item.Type),
+			Statement:     item.Statement,
+			Commentable:   item.Commentable,
+			PublishedAt:   item.PublishedAt,
+			EditedAt:      item.EditedAt,
+			ViewCount:     item.ViewCount,
+			ThankCount:    item.ThankCount,
+			LikeCount:     item.LikeCount,
+			CollectCount:  item.CollectCount,
+			RewardCount:   item.RewardCount,
+			ReplyCount:    item.ReplyCount,
+			CreatedAt:     item.CreatedAt,
+			UpdatedAt:     item.UpdatedAt,
+			CreatedBy:     item.CreatedBy,
+			UpdatedBy:     item.UpdatedBy,
+			DeletedAt:     item.DeletedAt,
 		}
 	}), nil
 }
@@ -518,34 +433,31 @@ func (r *ArticleRepo) Page(ctx context.Context, req *repo.ArticleGetReq) (*repo.
 	}
 	articles := lo.Map(list, func(item *gen.Article, _ int) *model.Article {
 		return &model.Article{
-			ID:               item.ID,
-			Title:            item.Title,
-			Content:          item.Content,
-			HasPostscript:    item.HasPostscript,
-			RewardContent:    item.RewardContent,
-			RewardPoints:     item.RewardPoints,
-			PublishStatus:    enum.ArticlePublishStatus(item.PublishStatus),
-			Visibility:       enum.ArticleVisibility(item.Visibility),
-			Restriction:      enum.ContentRestriction(item.Restriction),
-			Type:             enum.ArticleType(item.Type),
-			Statement:        item.Statement,
-			Commentable:      item.Commentable,
-			Anonymous:        item.Anonymous,
-			PublishedAt:      item.PublishedAt,
-			EditedAt:         item.EditedAt,
-			ViewCount:        item.ViewCount,
-			ThankCount:       item.ThankCount,
-			LikeCount:        item.LikeCount,
-			CollectCount:     item.CollectCount,
-			WatchCount:       item.WatchCount,
-			ReplyCount:       item.ReplyCount,
-			BountyPoints:     item.BountyPoints,
-			AcceptedAnswerID: item.AcceptedAnswerID,
-			CreatedAt:        item.CreatedAt,
-			UpdatedAt:        item.UpdatedAt,
-			CreatedBy:        item.CreatedBy,
-			UpdatedBy:        item.UpdatedBy,
-			DeletedAt:        item.DeletedAt,
+			ID:            item.ID,
+			Title:         item.Title,
+			Content:       item.Content,
+			HasPostscript: item.HasPostscript,
+			RewardContent: item.RewardContent,
+			RewardPoints:  item.RewardPoints,
+			PublishStatus: enum.ArticlePublishStatus(item.PublishStatus),
+			Visibility:    enum.ArticleVisibility(item.Visibility),
+			Restriction:   enum.ContentRestriction(item.Restriction),
+			Type:          enum.ArticleType(item.Type),
+			Statement:     item.Statement,
+			Commentable:   item.Commentable,
+			PublishedAt:   item.PublishedAt,
+			EditedAt:      item.EditedAt,
+			ViewCount:     item.ViewCount,
+			ThankCount:    item.ThankCount,
+			LikeCount:     item.LikeCount,
+			CollectCount:  item.CollectCount,
+			RewardCount:   item.RewardCount,
+			ReplyCount:    item.ReplyCount,
+			CreatedAt:     item.CreatedAt,
+			UpdatedAt:     item.UpdatedAt,
+			CreatedBy:     item.CreatedBy,
+			UpdatedBy:     item.UpdatedBy,
+			DeletedAt:     item.DeletedAt,
 		}
 	})
 	return &repo.ArticlePageResp{
@@ -606,6 +518,9 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 	if req.Type != nil {
 		query = query.Where(articleent.TypeEQ(articleent.Type(*req.Type)))
 	}
+	if req.PublishedAtEnd != nil {
+		query = query.Where(articleent.PublishedAtLTE(*req.PublishedAtEnd))
+	}
 	if req.Keyword != nil {
 		query = query.Where(
 			articleent.Or(
@@ -623,7 +538,7 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 				Order(func(s *sql.Selector) {
 					s.OrderExpr(sql.Expr(`
         (
-            (reply_count * 8 + like_count * 4 + collect_count * 6 + thank_count * 2 + watch_count * 1)
+            (reply_count * 8 + like_count * 4 + collect_count * 6 + thank_count * 2 + reward_count * 3)
             /
             pow((extract(epoch from (now() - created_at)) / 3600) + 2 , 1.3)
         ) DESC`))

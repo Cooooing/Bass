@@ -416,14 +416,14 @@ func (r *ContentCommentClient) loadCommentViewerActionStates(ctx context.Context
 	return states, nil
 }
 
-func (r *ContentCommentClient) loadCommentArticles(ctx context.Context, comments []*contentv1.PageComments_Resp_Comment, viewerUserID int64) (map[int64]*contentv1.GetArticle_Resp_Article, error) {
+func (r *ContentCommentClient) loadCommentArticles(ctx context.Context, comments []*contentv1.PageComments_Resp_Comment, viewerUserID int64) (map[int64]*contentv1.Article, error) {
 	articleIDs := lo.Uniq(lo.FilterMap(comments, func(item *contentv1.PageComments_Resp_Comment, _ int) (int64, bool) {
 		if item == nil || item.GetArticleId() == 0 {
 			return 0, false
 		}
 		return item.GetArticleId(), true
 	}))
-	articles := make(map[int64]*contentv1.GetArticle_Resp_Article, len(articleIDs))
+	articles := make(map[int64]*contentv1.Article, len(articleIDs))
 	for _, articleID := range articleIDs {
 		reply, err := r.contentClient.Article.Get(ctx, &contentv1.GetArticle_Req{
 			ArticleId: articleID,
@@ -438,21 +438,21 @@ func (r *ContentCommentClient) loadCommentArticles(ctx context.Context, comments
 	return articles, nil
 }
 
-func (r *ContentCommentClient) commentProfileIDs(item *contentv1.PageComments_Resp_Comment, article *contentv1.GetArticle_Resp_Article) []int64 {
+func (r *ContentCommentClient) commentProfileIDs(item *contentv1.PageComments_Resp_Comment, article *contentv1.Article) []int64 {
 	if item == nil {
 		return nil
 	}
 	userIDs := make([]int64, 0, 2)
-	if item.CreatedBy != nil && !r.anonymousArticleUser(article, item.CreatedBy) {
+	if item.CreatedBy != nil {
 		userIDs = append(userIDs, *item.CreatedBy)
 	}
-	if item.ReplyUserId != nil && !r.anonymousArticleUser(article, item.ReplyUserId) {
+	if item.ReplyUserId != nil {
 		userIDs = append(userIDs, *item.ReplyUserId)
 	}
 	return userIDs
 }
 
-func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp_Comment, article *contentv1.GetArticle_Resp_Article, profiles map[int64]*repo.AccountProfile, state *repo.CommentViewerActionState) *repo.CommentListItem {
+func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp_Comment, article *contentv1.Article, profiles map[int64]*repo.AccountProfile, state *repo.CommentViewerActionState) *repo.CommentListItem {
 	if item == nil {
 		return nil
 	}
@@ -478,20 +478,18 @@ func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp
 	if item.GetDeletedAt() != nil {
 		out.DeletedAt = new(item.GetDeletedAt().AsTime())
 	}
-	if !r.anonymousArticleUser(article, item.CreatedBy) {
-		out.CreatedBy = item.CreatedBy
-		out.UpdatedBy = item.UpdatedBy
-	}
-	if item.CreatedBy != nil && !r.anonymousArticleUser(article, item.CreatedBy) {
+	out.CreatedBy = item.CreatedBy
+	out.UpdatedBy = item.UpdatedBy
+	if item.CreatedBy != nil {
 		out.User = profiles[*item.CreatedBy]
 	}
-	if item.ReplyUserId != nil && !r.anonymousArticleUser(article, item.ReplyUserId) {
+	if item.ReplyUserId != nil {
 		out.ReplyUser = profiles[*item.ReplyUserId]
 	}
 	return out
 }
 
-func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_Comment, article *contentv1.GetArticle_Resp_Article, profiles map[int64]*repo.AccountProfile) *repo.CommentDetail {
+func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_Comment, article *contentv1.Article, profiles map[int64]*repo.AccountProfile) *repo.CommentDetail {
 	if item == nil {
 		return nil
 	}
@@ -514,21 +512,15 @@ func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_C
 	if item.GetDeletedAt() != nil {
 		out.DeletedAt = new(item.GetDeletedAt().AsTime())
 	}
-	if !r.anonymousArticleUser(article, item.CreatedBy) {
-		out.CreatedBy = item.CreatedBy
-		out.UpdatedBy = item.UpdatedBy
-	}
-	if item.CreatedBy != nil && !r.anonymousArticleUser(article, item.CreatedBy) {
+	out.CreatedBy = item.CreatedBy
+	out.UpdatedBy = item.UpdatedBy
+	if item.CreatedBy != nil {
 		out.User = profiles[*item.CreatedBy]
 	}
-	if item.ReplyUserId != nil && !r.anonymousArticleUser(article, item.ReplyUserId) {
+	if item.ReplyUserId != nil {
 		out.ReplyUser = profiles[*item.ReplyUserId]
 	}
 	return out
-}
-
-func (r *ContentCommentClient) anonymousArticleUser(article *contentv1.GetArticle_Resp_Article, userID *int64) bool {
-	return article != nil && article.GetAnonymous() && userID != nil && article.CreatedBy != nil && *article.CreatedBy == *userID
 }
 
 func (r *ContentCommentClient) commentContentRender(commentID int64, content string) string {

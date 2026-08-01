@@ -89,7 +89,8 @@ message ScheduleSchedulerDelayedTask {
   message Req {
     string task_key = 1; // 任务配置唯一键。
     string payload = 2; // 本次执行参数，JSON 字符串。
-    google.protobuf.Timestamp scheduled_at = 3; // 计划执行时间。
+    google.protobuf.Timestamp scheduled_at = 3; // 计划执行时间
+    string idempotency_key = 4; // 本次延迟执行幂等键
   }
   message Resp {
     DelayedTaskExecutionRecord row = 1; // 执行记录。

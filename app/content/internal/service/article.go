@@ -5,13 +5,12 @@ import (
 	"common/pkg/util"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
+	v1 "common/proto/gen/content/v1"
 	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/usecase"
 	"content/internal/enum"
 	"context"
-
-	v1 "common/proto/gen/content/v1"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -24,13 +23,6 @@ type ArticleService struct {
 	articleUsecase *usecase.ArticleUsecase
 }
 
-func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
-	v1.RegisterContentArticleServiceServer(gs, s)
-}
-
-func (s *ArticleService) RegisterHttp(hs *http.Server) {
-}
-
 func NewArticleService(
 	articleUsecase *usecase.ArticleUsecase,
 ) *ArticleService {
@@ -39,36 +31,31 @@ func NewArticleService(
 	}
 }
 
-func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Req) (rsp *v1.CreateArticle_Resp, err error) {
-	article := req.Article
-	if article == nil {
+func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
+	v1.RegisterContentArticleServiceServer(gs, s)
+}
+
+func (s *ArticleService) RegisterHttp(hs *http.Server) {
+}
+
+func (s *ArticleService) CreateDraft(ctx context.Context, req *v1.CreateDraftArticle_Req) (*v1.CreateDraftArticle_Resp, error) {
+	article := req.GetArticle()
+	if article == nil || req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	dbType, ok := enum.ArticleTypeMap.ToEnum(article.Type)
+	articleType, ok := enum.ArticleTypeMap.ToEnum(article.GetType())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
 	}
-	var bountyPoints *int32
-	switch dbType {
-	case enum.ArticleTypeQA:
-		if qa := article.GetQa(); qa != nil {
-			bountyPoints = new(qa.GetBountyPoints())
-		}
-	}
-	addResp, err := s.articleUsecase.Add(ctx, &usecase.ArticleAddReq{
+	row, err := s.articleUsecase.Add(ctx, &usecase.ArticleAddReq{
 		Article: &model.Article{
-			Title:         article.Title,
-			Content:       article.Content,
+			Title:         article.GetTitle(),
+			Content:       article.GetContent(),
 			RewardContent: article.RewardContent,
 			RewardPoints:  article.RewardPoints,
-			Type:          dbType,
-			BountyPoints:  bountyPoints,
+			Type:          articleType,
 			Statement:     article.Statement,
 			Commentable:   util.DerefOrDefault(article.Commentable, true),
-			Anonymous:     util.DerefOrDefault(article.Anonymous, false),
 			CreatedBy:     new(req.UserId),
 			UpdatedBy:     new(req.UserId),
 		},
@@ -76,755 +63,235 @@ func (s *ArticleService) Create(ctx context.Context, req *v1.CreateArticle_Req) 
 	if err != nil {
 		return nil, err
 	}
-	save := addResp
-	articleReply := &v1.CreateArticle_Resp_Article{
-		CreatedAt:     timestamppb.New(*save.CreatedAt),
-		UpdatedAt:     timestamppb.New(*save.UpdatedAt),
-		CreatedBy:     save.CreatedBy,
-		UpdatedBy:     save.UpdatedBy,
-		Id:            save.ID,
-		Title:         save.Title,
-		Content:       save.Content,
-		RewardContent: save.RewardContent,
-		HasPostscript: save.HasPostscript,
-		HasReward:     util.IsNotNil(save.RewardPoints),
-		RewardPoints:  save.RewardPoints,
-		PublishStatus: enum.ArticlePublishStatusMap.MustToProto(save.PublishStatus),
-		Visibility:    enum.ArticleVisibilityMap.MustToProto(save.Visibility),
-		Restriction:   enum.ContentRestrictionMap.MustToProto(save.Restriction),
-		Type:          enum.ArticleTypeMap.MustToProto(save.Type),
-		Statement:     save.Statement,
-		Commentable:   save.Commentable,
-		Anonymous:     save.Anonymous,
-		ViewCount:     save.ViewCount,
-		ThankCount:    save.ThankCount,
-		LikeCount:     save.LikeCount,
-		CollectCount:  save.CollectCount,
-		WatchCount:    save.WatchCount,
-		ReplyCount:    save.ReplyCount,
-	}
-	switch save.Type {
-	case enum.ArticleTypeQA:
-		articleReply.TypeParams = &v1.CreateArticle_Resp_Article_Qa{
-			Qa: &v1.CreateArticle_Resp_Article_QA{
-				BountyPoints:     save.BountyPoints,
-				AcceptedAnswerId: save.AcceptedAnswerID,
-			},
-		}
-	}
-	if save.PublishedAt != nil {
-		articleReply.PublishedAt = timestamppb.New(*save.PublishedAt)
-	}
-	if save.EditedAt != nil {
-		articleReply.EditedAt = timestamppb.New(*save.EditedAt)
-	}
-	return &v1.CreateArticle_Resp{
-		Article: articleReply,
-	}, nil
+	return &v1.CreateDraftArticle_Resp{Article: s.article(row)}, nil
 }
 
-func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req) (rsp *v1.PublishArticle_Resp, err error) {
-	if req.UserId <= 0 {
+func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArticle_Req) (*v1.UpdateDraftArticle_Resp, error) {
+	article := req.GetArticle()
+	if article == nil || req.GetUserId() <= 0 || req.GetArticleId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	visibility, ok := enum.ArticleVisibilityMap.ToEnum(req.Visibility)
-	if !ok {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-	}
-	err = s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{
-		ArticleID:  req.ArticleId,
-		UserID:     req.UserId,
-		Visibility: visibility,
-	})
-	return &v1.PublishArticle_Resp{}, err
-}
-
-func (s *ArticleService) AddPostscript(ctx context.Context, req *v1.AddPostscriptArticle_Req) (rsp *v1.AddPostscriptArticle_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	addPostscriptResp, err := s.articleUsecase.AddPostscript(ctx, &usecase.ArticleAddPostscriptReq{
-		ArticleID: req.ArticleId,
-		Content:   req.Content,
-		UserID:    req.UserId,
-	})
-	if err != nil {
-		return nil, err
-	}
-	save := addPostscriptResp
-	return &v1.AddPostscriptArticle_Resp{
-		ArticlePostscript: &v1.AddPostscriptArticle_Resp_ArticlePostscript{
-			CreatedAt:   timestamppb.New(*save.CreatedAt),
-			UpdatedAt:   timestamppb.New(*save.UpdatedAt),
-			CreatedBy:   save.CreatedBy,
-			UpdatedBy:   save.UpdatedBy,
-			Id:          save.ID,
-			ArticleId:   save.ArticleID,
-			Content:     save.Content,
-			Restriction: enum.ContentRestrictionMap.MustToProto(save.Restriction),
-		},
-	}, err
-}
-
-func (s *ArticleService) ListPostscripts(ctx context.Context, req *v1.ListArticlePostscripts_Req) (rsp *v1.ListArticlePostscripts_Resp, err error) {
-	listPostscriptsResp, err := s.articleUsecase.ListPostscripts(ctx, req.ArticleId)
-	if err != nil {
-		return nil, err
-	}
-	rows := listPostscriptsResp
-	reply := make([]*v1.ListArticlePostscripts_Resp_ArticlePostscript, 0, len(rows))
-	for _, item := range rows {
-		reply = append(reply, &v1.ListArticlePostscripts_Resp_ArticlePostscript{
-			CreatedAt:   timestamppb.New(*item.CreatedAt),
-			UpdatedAt:   timestamppb.New(*item.UpdatedAt),
-			CreatedBy:   item.CreatedBy,
-			UpdatedBy:   item.UpdatedBy,
-			Id:          item.ID,
-			ArticleId:   item.ArticleID,
-			Content:     item.Content,
-			Restriction: enum.ContentRestrictionMap.MustToProto(item.Restriction),
-		})
-	}
-	return &v1.ListArticlePostscripts_Resp{
-		Rows: reply,
-	}, nil
-}
-
-func (s *ArticleService) Update(ctx context.Context, req *v1.UpdateArticle_Req) (rsp *v1.UpdateArticle_Resp, err error) {
-	article := req.Article
-	if article == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	dbType, ok := enum.ArticleTypeMap.ToEnum(article.Type)
+	articleType, ok := enum.ArticleTypeMap.ToEnum(article.GetType())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
 	}
-	var bountyPoints *int32
-	switch dbType {
-	case enum.ArticleTypeQA:
-		if qa := article.GetQa(); qa != nil {
-			bountyPoints = new(qa.GetBountyPoints())
-		}
-	}
-	updateResp, err := s.articleUsecase.Update(ctx, &model.Article{
-		ID:            req.ArticleId,
-		Title:         article.Title,
-		Content:       article.Content,
+	row, err := s.articleUsecase.Update(ctx, &model.Article{
+		ID:            req.GetArticleId(),
+		Title:         article.GetTitle(),
+		Content:       article.GetContent(),
 		RewardContent: article.RewardContent,
 		RewardPoints:  article.RewardPoints,
-		Type:          dbType,
-		BountyPoints:  bountyPoints,
+		Type:          articleType,
 		Statement:     article.Statement,
 		Commentable:   util.DerefOrDefault(article.Commentable, true),
-		Anonymous:     util.DerefOrDefault(article.Anonymous, false),
 		UpdatedBy:     new(req.UserId),
 	})
 	if err != nil {
 		return nil, err
 	}
-	update := updateResp
-	articleReply := &v1.UpdateArticle_Resp_Article{
-		CreatedAt:     timestamppb.New(*update.CreatedAt),
-		UpdatedAt:     timestamppb.New(*update.UpdatedAt),
-		CreatedBy:     update.CreatedBy,
-		UpdatedBy:     update.UpdatedBy,
-		Id:            update.ID,
-		Title:         update.Title,
-		Content:       update.Content,
-		RewardContent: update.RewardContent,
-		HasPostscript: update.HasPostscript,
-		HasReward:     util.IsNotNil(update.RewardPoints),
-		RewardPoints:  update.RewardPoints,
-		PublishStatus: enum.ArticlePublishStatusMap.MustToProto(update.PublishStatus),
-		Visibility:    enum.ArticleVisibilityMap.MustToProto(update.Visibility),
-		Restriction:   enum.ContentRestrictionMap.MustToProto(update.Restriction),
-		Type:          enum.ArticleTypeMap.MustToProto(update.Type),
-		Statement:     update.Statement,
-		Commentable:   update.Commentable,
-		Anonymous:     update.Anonymous,
-		ViewCount:     update.ViewCount,
-		ThankCount:    update.ThankCount,
-		LikeCount:     update.LikeCount,
-		CollectCount:  update.CollectCount,
-		WatchCount:    update.WatchCount,
-		ReplyCount:    update.ReplyCount,
-	}
-	switch update.Type {
-	case enum.ArticleTypeQA:
-		articleReply.TypeParams = &v1.UpdateArticle_Resp_Article_Qa{
-			Qa: &v1.UpdateArticle_Resp_Article_QA{
-				BountyPoints:     update.BountyPoints,
-				AcceptedAnswerId: update.AcceptedAnswerID,
-			},
-		}
-	}
-	if update.PublishedAt != nil {
-		articleReply.PublishedAt = timestamppb.New(*update.PublishedAt)
-	}
-	if update.EditedAt != nil {
-		articleReply.EditedAt = timestamppb.New(*update.EditedAt)
-	}
-	return &v1.UpdateArticle_Resp{
-		Article: articleReply,
-	}, nil
+	return &v1.UpdateDraftArticle_Resp{Article: s.article(row)}, nil
 }
 
-func (s *ArticleService) DiscardDraft(ctx context.Context, req *v1.DiscardDraftArticle_Req) (rsp *v1.DiscardDraftArticle_Resp, err error) {
-	if req.UserId <= 0 {
+func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req) (*v1.PublishArticle_Resp, error) {
+	visibility := enum.ArticleVisibilityPublic
+	if req.Visibility != 0 {
+		item, ok := enum.ArticleVisibilityMap.ToEnum(req.Visibility)
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+		}
+		visibility = item
+	}
+	if err := s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{ArticleID: req.GetArticleId(), OperatorUserID: req.OperatorUserId, Visibility: visibility}); err != nil {
+		return nil, err
+	}
+	return &v1.PublishArticle_Resp{}, nil
+}
+
+func (s *ArticleService) SchedulePublish(ctx context.Context, req *v1.SchedulePublishArticle_Req) (*v1.SchedulePublishArticle_Resp, error) {
+	if req.GetOperatorUserId() <= 0 || req.GetPublishAt() == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	err = s.articleUsecase.DiscardDraft(ctx, &usecase.ArticleDiscardDraftReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-	})
-	return &v1.DiscardDraftArticle_Resp{}, err
+	if err := s.articleUsecase.SchedulePublish(ctx, &usecase.ArticleSchedulePublishReq{ArticleID: req.GetArticleId(), OperatorUserID: req.GetOperatorUserId(), PublishAt: req.GetPublishAt().AsTime()}); err != nil {
+		return nil, err
+	}
+	return &v1.SchedulePublishArticle_Resp{}, nil
+}
+
+func (s *ArticleService) CancelPublish(ctx context.Context, req *v1.CancelPublishArticle_Req) (*v1.CancelPublishArticle_Resp, error) {
+	if req.GetOperatorUserId() <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	if err := s.articleUsecase.CancelPublish(ctx, &usecase.ArticleCancelPublishReq{ArticleID: req.GetArticleId(), OperatorUserID: req.GetOperatorUserId()}); err != nil {
+		return nil, err
+	}
+	return &v1.CancelPublishArticle_Resp{}, nil
+}
+
+func (s *ArticleService) DiscardDraft(ctx context.Context, req *v1.DiscardDraftArticle_Req) (*v1.DiscardDraftArticle_Resp, error) {
+	if req.GetUserId() <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return &v1.DiscardDraftArticle_Resp{}, s.articleUsecase.DiscardDraft(ctx, &usecase.ArticleDiscardDraftReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId()})
 }
 
 func (s *ArticleService) MakePrivate(ctx context.Context, req *v1.MakePrivateArticle_Req) (*v1.MakePrivateArticle_Resp, error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	err := s.articleUsecase.MakePrivate(ctx, &usecase.ArticleMakePrivateReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-	})
-	return &v1.MakePrivateArticle_Resp{}, err
+	return &v1.MakePrivateArticle_Resp{}, s.articleUsecase.MakePrivate(ctx, &usecase.ArticleMakePrivateReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId()})
 }
 
 func (s *ArticleService) MakePublic(ctx context.Context, req *v1.MakePublicArticle_Req) (*v1.MakePublicArticle_Resp, error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	err := s.articleUsecase.MakePublic(ctx, &usecase.ArticleMakePublicReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-	})
-	return &v1.MakePublicArticle_Resp{}, err
+	return &v1.MakePublicArticle_Resp{}, s.articleUsecase.MakePublic(ctx, &usecase.ArticleMakePublicReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId()})
 }
 
 func (s *ArticleService) Archive(ctx context.Context, req *v1.ArchiveArticle_Req) (*v1.ArchiveArticle_Resp, error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	err := s.articleUsecase.Archive(ctx, &usecase.ArticleArchiveReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Reason:    req.Reason,
-	})
-	return &v1.ArchiveArticle_Resp{}, err
+	return &v1.ArchiveArticle_Resp{}, s.articleUsecase.Archive(ctx, &usecase.ArticleArchiveReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId(), Reason: req.Reason})
 }
 
 func (s *ArticleService) Unarchive(ctx context.Context, req *v1.UnarchiveArticle_Req) (*v1.UnarchiveArticle_Resp, error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	err := s.articleUsecase.Unarchive(ctx, &usecase.ArticleUnarchiveReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Reason:    req.Reason,
-	})
-	return &v1.UnarchiveArticle_Resp{}, err
+	return &v1.UnarchiveArticle_Resp{}, s.articleUsecase.Unarchive(ctx, &usecase.ArticleUnarchiveReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId(), Reason: req.Reason})
 }
 
-func (s *ArticleService) Hide(ctx context.Context, req *v1.HideArticle_Req) (rsp *v1.HideArticle_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	err = s.articleUsecase.Hide(ctx, &usecase.ArticleHideReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Reason:    req.Reason,
-	})
-	return &v1.HideArticle_Resp{}, err
+func (s *ArticleService) Hide(ctx context.Context, req *v1.HideArticle_Req) (*v1.HideArticle_Resp, error) {
+	return &v1.HideArticle_Resp{}, s.articleUsecase.Hide(ctx, &usecase.ArticleHideReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId(), Reason: req.Reason})
 }
 
 func (s *ArticleService) Unhide(ctx context.Context, req *v1.UnhideArticle_Req) (*v1.UnhideArticle_Resp, error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	err := s.articleUsecase.Unhide(ctx, &usecase.ArticleUnhideReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Reason:    req.Reason,
-	})
-	return &v1.UnhideArticle_Resp{}, err
+	return &v1.UnhideArticle_Resp{}, s.articleUsecase.Unhide(ctx, &usecase.ArticleUnhideReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId(), Reason: req.Reason})
 }
 
-func (s *ArticleService) Lock(ctx context.Context, req *v1.LockArticle_Req) (rsp *v1.LockArticle_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	err = s.articleUsecase.Lock(ctx, &usecase.ArticleLockReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Reason:    req.Reason,
-	})
-	return &v1.LockArticle_Resp{}, err
+func (s *ArticleService) Lock(ctx context.Context, req *v1.LockArticle_Req) (*v1.LockArticle_Resp, error) {
+	return &v1.LockArticle_Resp{}, s.articleUsecase.Lock(ctx, &usecase.ArticleLockReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId(), Reason: req.Reason})
 }
 
-func (s *ArticleService) Unlock(ctx context.Context, req *v1.UnlockArticle_Req) (rsp *v1.UnlockArticle_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	err = s.articleUsecase.Unlock(ctx, &usecase.ArticleUnlockReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Reason:    req.Reason,
-	})
-	return &v1.UnlockArticle_Resp{}, err
+func (s *ArticleService) Unlock(ctx context.Context, req *v1.UnlockArticle_Req) (*v1.UnlockArticle_Resp, error) {
+	return &v1.UnlockArticle_Resp{}, s.articleUsecase.Unlock(ctx, &usecase.ArticleUnlockReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId(), Reason: req.Reason})
 }
 
-func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Req) (rsp *v1.ListArticles_Resp, err error) {
-	req.Query = util.OrDefault(req.Query, &v1.ListArticles_Req_ArticleQueryParams{})
-	var publishStatus *enum.ArticlePublishStatus
-	if req.Query.PublishStatus != nil {
-		status, ok := enum.ArticlePublishStatusMap.ToEnum(*req.Query.PublishStatus)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		publishStatus = new(status)
-	}
-	publishStatuses := make([]enum.ArticlePublishStatus, 0, len(req.Query.PublishStatuses))
-	for _, item := range req.Query.PublishStatuses {
-		status, ok := enum.ArticlePublishStatusMap.ToEnum(item)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		publishStatuses = append(publishStatuses, status)
-	}
-	var visibility *enum.ArticleVisibility
-	if req.Query.Visibility != nil {
-		item, ok := enum.ArticleVisibilityMap.ToEnum(*req.Query.Visibility)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		visibility = new(item)
-	}
-	visibilities := make([]enum.ArticleVisibility, 0, len(req.Query.Visibilities))
-	for _, item := range req.Query.Visibilities {
-		visibility, ok := enum.ArticleVisibilityMap.ToEnum(item)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		visibilities = append(visibilities, visibility)
-	}
-	var restriction *enum.ContentRestriction
-	if req.Query.Restriction != nil {
-		status, ok := enum.ContentRestrictionMap.ToEnum(*req.Query.Restriction)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		restriction = new(status)
-	}
-	restrictions := make([]enum.ContentRestriction, 0, len(req.Query.Restrictions))
-	for _, item := range req.Query.Restrictions {
-		status, ok := enum.ContentRestrictionMap.ToEnum(item)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		restrictions = append(restrictions, status)
-	}
-	var dbType *enum.ArticleType
-	if req.Query.Type != nil {
-		articleType, ok := enum.ArticleTypeMap.ToEnum(*req.Query.Type)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
-		}
-		dbType = new(articleType)
-	}
-	var dbOrder *enum.ArticleOrder
-	if req.Query.Order != nil {
-		order, ok := enum.ArticleOrderMap.ToEnum(*req.Query.Order)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-		}
-		dbOrder = new(order)
-	}
+func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticle_Req) (*v1.LikeArticle_Resp, error) {
+	liked, err := s.articleUsecase.Like(ctx, &usecase.ArticleLikeReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId(), Active: req.GetLiked()})
+	return &v1.LikeArticle_Resp{Liked: liked}, err
+}
 
-	query := &usecase.ArticlePageReq{
-		TagID:           req.Query.TagId,
-		DomainID:        req.Query.DomainId,
-		PublishStatus:   publishStatus,
-		PublishStatuses: publishStatuses,
-		Visibility:      visibility,
-		Visibilities:    visibilities,
-		Restriction:     restriction,
-		Restrictions:    restrictions,
-		AuthorID:        req.Query.AuthorId,
-		Order:           dbOrder,
-		Type:            dbType,
-		Keyword:         req.Query.Keyword,
-	}
-	query.Page = &base.PageRequest{
-		Page: 1,
-		Size: 1000,
-	}
-	pageResp, err := s.articleUsecase.Page(ctx, query)
+func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Req) (*v1.ThankArticle_Resp, error) {
+	thanked, err := s.articleUsecase.Thank(ctx, &usecase.ArticleThankReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId(), Active: req.GetThanked()})
+	return &v1.ThankArticle_Resp{Thanked: thanked}, err
+}
+
+func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Req) (*v1.CollectArticle_Resp, error) {
+	collected, err := s.articleUsecase.Collect(ctx, &usecase.ArticleCollectReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId(), Active: req.GetCollected()})
+	return &v1.CollectArticle_Resp{Collected: collected}, err
+}
+
+func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Req) (*v1.RewardArticle_Resp, error) {
+	return &v1.RewardArticle_Resp{}, s.articleUsecase.Reward(ctx, &usecase.ArticleRewardReq{ArticleID: req.GetArticleId(), UserID: req.GetUserId(), Points: req.GetPoints()})
+}
+
+func (s *ArticleService) View(ctx context.Context, req *v1.ViewArticle_Req) (*v1.ViewArticle_Resp, error) {
+	return &v1.ViewArticle_Resp{}, s.articleUsecase.View(ctx, &usecase.ArticleViewReq{ArticleID: req.GetArticleId(), ViewerUserID: req.ViewerUserId, IP: req.Ip, UserAgent: req.UserAgent, BrowserFingerprint: req.BrowserFingerprint})
+}
+
+func (s *ArticleService) FlushViews(ctx context.Context, req *v1.FlushArticleViews_Req) (*v1.FlushArticleViews_Resp, error) {
+	flushed, err := s.articleUsecase.FlushViews(ctx, &usecase.ArticleFlushViewsReq{Limit: req.GetLimit()})
 	if err != nil {
 		return nil, err
 	}
-	reply := pageResp.Rows
-	rows := make([]*v1.ListArticles_Resp_Article, 0, len(reply))
-	for _, item := range reply {
-		row := &v1.ListArticles_Resp_Article{
-			CreatedAt:     timestamppb.New(*item.CreatedAt),
-			UpdatedAt:     timestamppb.New(*item.UpdatedAt),
-			CreatedBy:     item.CreatedBy,
-			UpdatedBy:     item.UpdatedBy,
-			Id:            item.ID,
-			Title:         item.Title,
-			Content:       item.Content,
-			RewardContent: item.RewardContent,
-			HasPostscript: item.HasPostscript,
-			HasReward:     util.IsNotNil(item.RewardPoints),
-			RewardPoints:  item.RewardPoints,
-			PublishStatus: enum.ArticlePublishStatusMap.MustToProto(item.PublishStatus),
-			Visibility:    enum.ArticleVisibilityMap.MustToProto(item.Visibility),
-			Restriction:   enum.ContentRestrictionMap.MustToProto(item.Restriction),
-			Type:          enum.ArticleTypeMap.MustToProto(item.Type),
-			Statement:     item.Statement,
-			Commentable:   item.Commentable,
-			Anonymous:     item.Anonymous,
-			ViewCount:     item.ViewCount,
-			ThankCount:    item.ThankCount,
-			LikeCount:     item.LikeCount,
-			CollectCount:  item.CollectCount,
-			WatchCount:    item.WatchCount,
-			ReplyCount:    item.ReplyCount,
-		}
-		switch item.Type {
-		case enum.ArticleTypeQA:
-			row.TypeParams = &v1.ListArticles_Resp_Article_Qa{
-				Qa: &v1.ListArticles_Resp_Article_QA{
-					BountyPoints:     item.BountyPoints,
-					AcceptedAnswerId: item.AcceptedAnswerID,
-				},
-			}
-		}
-		if item.PublishedAt != nil {
-			row.PublishedAt = timestamppb.New(*item.PublishedAt)
-		}
-		if item.EditedAt != nil {
-			row.EditedAt = timestamppb.New(*item.EditedAt)
-		}
-		rows = append(rows, row)
-	}
-	return &v1.ListArticles_Resp{
-		Rows: rows,
-	}, err
+	return &v1.FlushArticleViews_Resp{Flushed: flushed}, nil
 }
 
-func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (rsp *v1.PageArticles_Resp, err error) {
-	req.Query = util.OrDefault(req.Query, &v1.PageArticles_Req_ArticleQueryParams{})
-	var publishStatus *enum.ArticlePublishStatus
-	if req.Query.PublishStatus != nil {
-		status, ok := enum.ArticlePublishStatusMap.ToEnum(*req.Query.PublishStatus)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		publishStatus = new(status)
-	}
-	publishStatuses := make([]enum.ArticlePublishStatus, 0, len(req.Query.PublishStatuses))
-	for _, item := range req.Query.PublishStatuses {
-		status, ok := enum.ArticlePublishStatusMap.ToEnum(item)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		publishStatuses = append(publishStatuses, status)
-	}
-	var visibility *enum.ArticleVisibility
-	if req.Query.Visibility != nil {
-		item, ok := enum.ArticleVisibilityMap.ToEnum(*req.Query.Visibility)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		visibility = new(item)
-	}
-	visibilities := make([]enum.ArticleVisibility, 0, len(req.Query.Visibilities))
-	for _, item := range req.Query.Visibilities {
-		visibility, ok := enum.ArticleVisibilityMap.ToEnum(item)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		visibilities = append(visibilities, visibility)
-	}
-	var restriction *enum.ContentRestriction
-	if req.Query.Restriction != nil {
-		status, ok := enum.ContentRestrictionMap.ToEnum(*req.Query.Restriction)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		restriction = new(status)
-	}
-	restrictions := make([]enum.ContentRestriction, 0, len(req.Query.Restrictions))
-	for _, item := range req.Query.Restrictions {
-		status, ok := enum.ContentRestrictionMap.ToEnum(item)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		restrictions = append(restrictions, status)
-	}
-	var dbType *enum.ArticleType
-	if req.Query.Type != nil {
-		articleType, ok := enum.ArticleTypeMap.ToEnum(*req.Query.Type)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
-		}
-		dbType = new(articleType)
-	}
-	var dbOrder *enum.ArticleOrder
-	if req.Query.Order != nil {
-		order, ok := enum.ArticleOrderMap.ToEnum(*req.Query.Order)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-		}
-		dbOrder = new(order)
-	}
-
-	query := &usecase.ArticlePageReq{
-		TagID:           req.Query.TagId,
-		DomainID:        req.Query.DomainId,
-		PublishStatus:   publishStatus,
-		PublishStatuses: publishStatuses,
-		Visibility:      visibility,
-		Visibilities:    visibilities,
-		Restriction:     restriction,
-		Restrictions:    restrictions,
-		AuthorID:        req.Query.AuthorId,
-		Order:           dbOrder,
-		Type:            dbType,
-		Keyword:         req.Query.Keyword,
-	}
-	query.Page = &base.PageRequest{
-		Page: int64(req.GetPage().GetPage()),
-		Size: int64(req.GetPage().GetSize()),
-	}
-	pageResp, err := s.articleUsecase.Page(ctx, query)
+func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.GetArticle_Resp, error) {
+	row, err := s.articleUsecase.Get(ctx, req.GetArticleId())
 	if err != nil {
 		return nil, err
 	}
-	reply := pageResp.Rows
-	page := pageResp.Page
-	rows := make([]*v1.PageArticles_Resp_Article, 0, len(reply))
-	for _, item := range reply {
-		row := &v1.PageArticles_Resp_Article{
-			CreatedAt:     timestamppb.New(*item.CreatedAt),
-			UpdatedAt:     timestamppb.New(*item.UpdatedAt),
-			CreatedBy:     item.CreatedBy,
-			UpdatedBy:     item.UpdatedBy,
-			Id:            item.ID,
-			Title:         item.Title,
-			Content:       item.Content,
-			RewardContent: item.RewardContent,
-			HasPostscript: item.HasPostscript,
-			HasReward:     util.IsNotNil(item.RewardPoints),
-			RewardPoints:  item.RewardPoints,
-			PublishStatus: enum.ArticlePublishStatusMap.MustToProto(item.PublishStatus),
-			Visibility:    enum.ArticleVisibilityMap.MustToProto(item.Visibility),
-			Restriction:   enum.ContentRestrictionMap.MustToProto(item.Restriction),
-			Type:          enum.ArticleTypeMap.MustToProto(item.Type),
-			Statement:     item.Statement,
-			Commentable:   item.Commentable,
-			Anonymous:     item.Anonymous,
-			ViewCount:     item.ViewCount,
-			ThankCount:    item.ThankCount,
-			LikeCount:     item.LikeCount,
-			CollectCount:  item.CollectCount,
-			WatchCount:    item.WatchCount,
-			ReplyCount:    item.ReplyCount,
-		}
-		switch item.Type {
-		case enum.ArticleTypeQA:
-			row.TypeParams = &v1.PageArticles_Resp_Article_Qa{
-				Qa: &v1.PageArticles_Resp_Article_QA{
-					BountyPoints:     item.BountyPoints,
-					AcceptedAnswerId: item.AcceptedAnswerID,
-				},
-			}
-		}
-		if item.PublishedAt != nil {
-			row.PublishedAt = timestamppb.New(*item.PublishedAt)
-		}
-		if item.EditedAt != nil {
-			row.EditedAt = timestamppb.New(*item.EditedAt)
-		}
-		rows = append(rows, row)
-	}
-	return &v1.PageArticles_Resp{
-		Page: &common.PageResp{
-			Page:  uint32(page.Page),
-			Size:  uint32(page.Size),
-			Total: uint32(page.Total),
-		},
-		Rows: rows,
-	}, err
+	return &v1.GetArticle_Resp{Article: s.article(row)}, nil
 }
 
-func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (rsp *v1.GetArticle_Resp, err error) {
-	getResp, err := s.articleUsecase.Get(ctx, req.ArticleId)
+func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Req) (*v1.ListArticles_Resp, error) {
+	pageResp, err := s.articleUsecase.Page(ctx, &usecase.ArticlePageReq{Page: &base.PageRequest{Page: 1, Size: 1000}})
 	if err != nil {
 		return nil, err
 	}
-	one := getResp
-	article := &v1.GetArticle_Resp_Article{
-		CreatedAt:     timestamppb.New(*one.CreatedAt),
-		UpdatedAt:     timestamppb.New(*one.UpdatedAt),
-		CreatedBy:     one.CreatedBy,
-		UpdatedBy:     one.UpdatedBy,
-		Id:            one.ID,
-		Title:         one.Title,
-		Content:       one.Content,
-		RewardContent: one.RewardContent,
-		HasPostscript: one.HasPostscript,
-		HasReward:     util.IsNotNil(one.RewardPoints),
-		RewardPoints:  one.RewardPoints,
-		PublishStatus: enum.ArticlePublishStatusMap.MustToProto(one.PublishStatus),
-		Visibility:    enum.ArticleVisibilityMap.MustToProto(one.Visibility),
-		Restriction:   enum.ContentRestrictionMap.MustToProto(one.Restriction),
-		Type:          enum.ArticleTypeMap.MustToProto(one.Type),
-		Statement:     one.Statement,
-		Commentable:   one.Commentable,
-		Anonymous:     one.Anonymous,
-		ViewCount:     one.ViewCount,
-		ThankCount:    one.ThankCount,
-		LikeCount:     one.LikeCount,
-		CollectCount:  one.CollectCount,
-		WatchCount:    one.WatchCount,
-		ReplyCount:    one.ReplyCount,
+	rows := make([]*v1.Article, 0, len(pageResp.Rows))
+	for _, row := range pageResp.Rows {
+		rows = append(rows, s.article(row))
 	}
-	switch one.Type {
-	case enum.ArticleTypeQA:
-		article.TypeParams = &v1.GetArticle_Resp_Article_Qa{
-			Qa: &v1.GetArticle_Resp_Article_QA{
-				BountyPoints:     one.BountyPoints,
-				AcceptedAnswerId: one.AcceptedAnswerID,
-			},
-		}
-	}
-	if one.PublishedAt != nil {
-		article.PublishedAt = timestamppb.New(*one.PublishedAt)
-	}
-	if one.EditedAt != nil {
-		article.EditedAt = timestamppb.New(*one.EditedAt)
-	}
-	return &v1.GetArticle_Resp{
-		Article: article,
-	}, err
+	return &v1.ListArticles_Resp{Rows: rows}, nil
 }
 
-func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapArticleViewerActionStates_Req) (rsp *v1.MapArticleViewerActionStates_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v1.PageArticles_Resp, error) {
+	query := req.GetQuery()
+	pageReq := req.GetPage()
+	usecaseReq := &usecase.ArticlePageReq{Page: &base.PageRequest{Page: int64(pageReq.GetPage()), Size: int64(pageReq.GetSize())}}
+	if query != nil {
+		usecaseReq.TagID = query.TagId
+		usecaseReq.DomainID = query.DomainId
+		usecaseReq.AuthorID = query.AuthorId
+		usecaseReq.Keyword = query.Keyword
+		if query.GetPublishedAtEnd() != nil {
+			end := query.GetPublishedAtEnd().AsTime()
+			usecaseReq.PublishedAtEnd = new(end)
+		}
 	}
-	statesResp, err := s.articleUsecase.MapViewerActionStates(ctx, &usecase.ArticleMapViewerActionStatesReq{
-		ArticleIDs: req.GetArticleIds(),
-		UserID:     req.UserId,
-	})
+	pageResp, err := s.articleUsecase.Page(ctx, usecaseReq)
 	if err != nil {
 		return nil, err
 	}
-	states := statesResp
+	rows := make([]*v1.Article, 0, len(pageResp.Rows))
+	for _, row := range pageResp.Rows {
+		rows = append(rows, s.article(row))
+	}
+	return &v1.PageArticles_Resp{Rows: rows, Page: &common.PageResp{Page: uint32(pageResp.Page.Page), Size: uint32(pageResp.Page.Size), Total: uint32(pageResp.Page.Total)}}, nil
+}
+
+func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapArticleViewerActionStates_Req) (*v1.MapArticleViewerActionStates_Resp, error) {
+	states, err := s.articleUsecase.MapViewerActionStates(ctx, &usecase.ArticleMapViewerActionStatesReq{ArticleIDs: req.GetArticleIds(), UserID: req.GetUserId()})
+	if err != nil {
+		return nil, err
+	}
 	reply := make(map[int64]*v1.MapArticleViewerActionStates_Resp_ArticleViewerActionState, len(states))
 	for articleID, state := range states {
-		reply[articleID] = &v1.MapArticleViewerActionStates_Resp_ArticleViewerActionState{
-			Liked:     state.Liked,
-			Thanked:   state.Thanked,
-			Collected: state.Collected,
-			Watched:   state.Watched,
-		}
+		reply[articleID] = &v1.MapArticleViewerActionStates_Resp_ArticleViewerActionState{Liked: state.Liked, Thanked: state.Thanked, Collected: state.Collected, Rewarded: state.Rewarded}
 	}
-	return &v1.MapArticleViewerActionStates_Resp{
-		States: reply,
-	}, nil
+	return &v1.MapArticleViewerActionStates_Resp{States: reply}, nil
 }
 
-func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Req) (rsp *v1.RewardArticle_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+func (s *ArticleService) article(row *model.Article) *v1.Article {
+	if row == nil {
+		return nil
 	}
-	err = s.articleUsecase.Reward(ctx, &usecase.ArticleRewardReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Points:    req.Points,
-	})
-	return &v1.RewardArticle_Resp{}, err
-}
-
-func (s *ArticleService) View(ctx context.Context, req *v1.ViewArticle_Req) (rsp *v1.ViewArticle_Resp, err error) {
-	err = s.articleUsecase.View(ctx, &usecase.ArticleViewReq{
-		ArticleID:    req.ArticleId,
-		ViewerUserID: req.ViewerUserId,
-	})
-	return &v1.ViewArticle_Resp{}, err
-}
-
-func (s *ArticleService) Like(ctx context.Context, req *v1.LikeArticle_Req) (rsp *v1.LikeArticle_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	out := &v1.Article{
+		Id:            row.ID,
+		Title:         row.Title,
+		Content:       row.Content,
+		RewardContent: row.RewardContent,
+		RewardPoints:  row.RewardPoints,
+		HasPostscript: row.HasPostscript,
+		HasReward:     row.RewardPoints != nil,
+		Type:          enum.ArticleTypeMap.MustToProto(row.Type),
+		Statement:     row.Statement,
+		Commentable:   row.Commentable,
+		PublishStatus: enum.ArticlePublishStatusMap.MustToProto(row.PublishStatus),
+		Visibility:    enum.ArticleVisibilityMap.MustToProto(row.Visibility),
+		Restriction:   enum.ContentRestrictionMap.MustToProto(row.Restriction),
+		ViewCount:     row.ViewCount,
+		ThankCount:    row.ThankCount,
+		LikeCount:     row.LikeCount,
+		CollectCount:  row.CollectCount,
+		RewardCount:   row.RewardCount,
+		ReplyCount:    row.ReplyCount,
+		CreatedBy:     row.CreatedBy,
+		UpdatedBy:     row.UpdatedBy,
 	}
-	likeResp, err := s.articleUsecase.Like(ctx, &usecase.ArticleLikeReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Active:    req.Liked,
-	})
-	return &v1.LikeArticle_Resp{
-		Liked: likeResp,
-	}, err
-}
-
-func (s *ArticleService) Thank(ctx context.Context, req *v1.ThankArticle_Req) (rsp *v1.ThankArticle_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	if row.CreatedAt != nil {
+		out.CreatedAt = timestamppb.New(*row.CreatedAt)
 	}
-	thankResp, err := s.articleUsecase.Thank(ctx, &usecase.ArticleThankReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Active:    req.Thanked,
-	})
-	return &v1.ThankArticle_Resp{
-		Thanked: thankResp,
-	}, err
-}
-
-func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Req) (rsp *v1.CollectArticle_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	if row.UpdatedAt != nil {
+		out.UpdatedAt = timestamppb.New(*row.UpdatedAt)
 	}
-	collectResp, err := s.articleUsecase.Collect(ctx, &usecase.ArticleCollectReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Active:    req.Collected,
-	})
-	return &v1.CollectArticle_Resp{
-		Collected: collectResp,
-	}, err
-}
-
-func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticle_Req) (rsp *v1.WatchArticle_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	if row.PublishedAt != nil {
+		out.PublishedAt = timestamppb.New(*row.PublishedAt)
 	}
-	watchResp, err := s.articleUsecase.Watch(ctx, &usecase.ArticleWatchReq{
-		ArticleID: req.ArticleId,
-		UserID:    req.UserId,
-		Active:    req.Watched,
-	})
-	return &v1.WatchArticle_Resp{
-		Watched: watchResp,
-	}, err
-}
-
-func (s *ArticleService) AcceptAnswer(ctx context.Context, req *v1.AcceptAnswerArticle_Req) (rsp *v1.AcceptAnswerArticle_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	if row.EditedAt != nil {
+		out.EditedAt = timestamppb.New(*row.EditedAt)
 	}
-	err = s.articleUsecase.AcceptAnswer(ctx, &usecase.ArticleAcceptAnswerReq{
-		ArticleID: req.ArticleId,
-		CommentID: req.CommentId,
-		UserID:    req.UserId,
-	})
-	return &v1.AcceptAnswerArticle_Resp{}, err
+	return out
 }

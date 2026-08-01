@@ -17,7 +17,6 @@ type ArticleRepo interface {
 	DiscardDraft(ctx context.Context, articleID int64) error
 	UpdateHasPostscript(ctx context.Context, req *ArticleUpdateHasPostscriptReq) error
 	AddStats(ctx context.Context, req *ArticleAddStatsReq) error
-	UpdateAcceptedAnswerID(ctx context.Context, req *ArticleUpdateAcceptedAnswerIDReq) (*model.Article, error)
 	ReplaceTags(ctx context.Context, req *ArticleReplaceTagsReq) error
 	BindTags(ctx context.Context, req *ArticleTagBindReq) ([]int64, error)
 	UnbindTags(ctx context.Context, req *ArticleTagBindReq) ([]int64, error)
@@ -31,11 +30,12 @@ type ArticleRepo interface {
 }
 
 type ArticleUpdatePublishStatusReq struct {
-	ArticleID     int64
-	PublishStatus enum.ArticlePublishStatus
-	Visibility    enum.ArticleVisibility
-	PublishedAt   *time.Time
-	UpdatedBy     int64
+	ArticleID      int64
+	PublishStatus  enum.ArticlePublishStatus
+	Visibility     enum.ArticleVisibility
+	PublishedAt    *time.Time
+	ClearPublished bool
+	UpdatedBy      *int64
 }
 
 type ArticleUpdateVisibilityReq struct {
@@ -62,12 +62,6 @@ type ArticleAddStatsReq struct {
 	UpdatedBy *int64
 }
 
-type ArticleUpdateAcceptedAnswerIDReq struct {
-	ArticleID int64
-	CommentID int64
-	UpdatedBy int64
-}
-
 type ArticleReplaceTagsReq struct {
 	ArticleID int64
 	TagIDs    []int64
@@ -83,7 +77,7 @@ type ArticleStatUpdate struct {
 	ThankCount   int32
 	LikeCount    int32
 	CollectCount int32
-	WatchCount   int32
+	RewardCount  int32
 	ReplyCount   int32
 }
 
@@ -109,31 +103,8 @@ type ArticleGetReq struct {
 	Order           *enum.ArticleOrder
 	Type            *enum.ArticleType
 	Keyword         *string
+	PublishedAtEnd  *time.Time
 }
-type ArticlePostscriptRepo interface {
-	Save(ctx context.Context, articlePostscript *model.ArticlePostscript) (*model.ArticlePostscript, error)
-	Get(ctx context.Context, req *ArticlePostscriptGetReq) (*model.ArticlePostscript, error)
-	List(ctx context.Context, req *ArticlePostscriptGetReq) ([]*model.ArticlePostscript, error)
-	Map(ctx context.Context, req *ArticlePostscriptGetReq) (map[int64]*model.ArticlePostscript, error)
-	Count(ctx context.Context, req *ArticlePostscriptGetReq) (int, error)
-	Page(ctx context.Context, req *ArticlePostscriptGetReq) (*ArticlePostscriptPageResp, error)
-}
-
-type ArticlePostscriptPageResp struct {
-	Rows []*model.ArticlePostscript
-	Page *base.PageResp
-}
-
-type ArticlePostscriptGetReq struct {
-	Page        *base.PageRequest
-	ID          *int64
-	IDs         []int64
-	ArticleID   *int64
-	ArticleIDs  []int64
-	CreatedBy   *int64
-	Restriction *enum.ContentRestriction
-}
-
 type ArticleActionRecordRepo interface {
 	Save(ctx context.Context, record *model.ArticleActionRecord) (bool, error)
 	Delete(ctx context.Context, req *ArticleActionRecordDeleteReq) (int, error)

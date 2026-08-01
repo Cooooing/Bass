@@ -10,7 +10,9 @@ option go_package = "common/proto/gen/common/v1;v1";
 service CommonSystemService {
   // 健康检查。
   rpc Health(HealthSystem.Req) returns (HealthSystem.Resp) {
-    option (google.api.http) = {get: "/v1/system/health"};
+    option (google.api.http) = {
+      get: "/v1/system/health"
+    };
   }
 }
 

@@ -9,7 +9,7 @@ type ArticleViewerActionState struct {
 	Liked     bool
 	Thanked   bool
 	Collected bool
-	Watched   bool
+	Rewarded  bool
 }
 
 type ArticlePostscript struct {
@@ -35,16 +35,13 @@ type ArticleListItem struct {
 	Visibility        int32
 	Restriction       int32
 	Type              int32
-	BountyPoints      *int32
-	AcceptedAnswerID  *int64
 	Statement         *string
 	Commentable       bool
-	Anonymous         bool
 	ViewCount         int32
 	ThankCount        int32
 	LikeCount         int32
 	CollectCount      int32
-	WatchCount        int32
+	RewardCount       int32
 	ReplyCount        int32
 	CoverImageURL     *string
 	ViewerActionState *ArticleViewerActionState
@@ -73,16 +70,13 @@ type ArticleDetail struct {
 	Visibility          int32
 	Restriction         int32
 	Type                int32
-	BountyPoints        *int32
-	AcceptedAnswerID    *int64
 	Statement           *string
 	Commentable         bool
-	Anonymous           bool
 	ViewCount           int32
 	ThankCount          int32
 	LikeCount           int32
 	CollectCount        int32
-	WatchCount          int32
+	RewardCount         int32
 	ReplyCount          int32
 	CoverImageURL       *string
 	ViewerActionState   *ArticleViewerActionState
@@ -104,10 +98,8 @@ type ArticleSave struct {
 	RewardContent *string
 	RewardPoints  *int32
 	Type          int32
-	BountyPoints  *int32
 	Statement     *string
 	Commentable   *bool
-	Anonymous     *bool
 }
 
 type ArticleQuery struct {
@@ -123,15 +115,9 @@ type ArticleQuery struct {
 	Visibilities    []int32
 }
 
-type CreateArticleReq struct {
+type CreateDraftArticleReq struct {
 	UserID  int64
 	Article *ArticleSave
-}
-
-type UpdateArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	Article   *ArticleSave
 }
 
 type UpdateDraftArticleReq struct {
@@ -146,9 +132,26 @@ type PublishArticleReq struct {
 	Visibility int32
 }
 
+type SchedulePublishArticleReq struct {
+	UserID    int64
+	ArticleID int64
+	PublishAt time.Time
+}
+
+type CancelPublishArticleReq struct {
+	UserID    int64
+	ArticleID int64
+}
+
 type DiscardDraftArticleReq struct {
 	UserID    int64
 	ArticleID int64
+}
+
+type ArchiveArticleReq struct {
+	UserID    int64
+	ArticleID int64
+	Reason    *string
 }
 
 type ListArticlesReq struct {
@@ -170,6 +173,8 @@ type GetArticleReq struct {
 type ViewArticleReq struct {
 	UserID    int64
 	ArticleID int64
+	IP        *string
+	UserAgent *string
 }
 
 type LikeArticleReq struct {
@@ -190,37 +195,25 @@ type CollectArticleReq struct {
 	Active    bool
 }
 
-type WatchArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	Active    bool
-}
-
 type RewardArticleReq struct {
 	UserID    int64
 	ArticleID int64
 	Points    int32
 }
 
-type AcceptAnswerArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	CommentID int64
-}
-
 type ContentArticleClient interface {
-	CreateArticle(ctx context.Context, req *CreateArticleReq) (*ArticleDetail, error)
-	UpdateArticle(ctx context.Context, req *UpdateArticleReq) (*ArticleDetail, error)
+	CreateDraftArticle(ctx context.Context, req *CreateDraftArticleReq) (*ArticleDetail, error)
 	UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (*ArticleDetail, error)
 	PublishArticle(ctx context.Context, req *PublishArticleReq) error
+	SchedulePublishArticle(ctx context.Context, req *SchedulePublishArticleReq) error
+	CancelPublishArticle(ctx context.Context, req *CancelPublishArticleReq) error
 	DiscardDraftArticle(ctx context.Context, req *DiscardDraftArticleReq) error
+	ArchiveArticle(ctx context.Context, req *ArchiveArticleReq) error
 	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error)
 	GetArticle(ctx context.Context, req *GetArticleReq) (*ArticleDetail, error)
 	ViewArticle(ctx context.Context, req *ViewArticleReq) error
 	LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error)
 	ThankArticle(ctx context.Context, req *ThankArticleReq) (bool, error)
 	CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error)
-	WatchArticle(ctx context.Context, req *WatchArticleReq) (bool, error)
 	RewardArticle(ctx context.Context, req *RewardArticleReq) error
-	AcceptAnswerArticle(ctx context.Context, req *AcceptAnswerArticleReq) error
 }

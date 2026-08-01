@@ -14,29 +14,29 @@ import (
 	"github.com/samber/lo"
 )
 
-var _ repo.ArticlePostscriptRepo = (*ArticlePostscriptRepo)(nil)
+var _ repo.PostscriptRepo = (*PostscriptRepo)(nil)
 
-type ArticlePostscriptRepo struct {
+type PostscriptRepo struct {
 	pageNormalizer
 	db *gen.Client
 }
 
-func NewArticlePostscriptRepo(
+func NewPostscriptRepo(
 	db *gen.Client,
-) repo.ArticlePostscriptRepo {
-	return &ArticlePostscriptRepo{
+) repo.PostscriptRepo {
+	return &PostscriptRepo{
 		db: db,
 	}
 }
 
-func (r *ArticlePostscriptRepo) getClient(ctx context.Context) *gen.Client {
+func (r *PostscriptRepo) getClient(ctx context.Context) *gen.Client {
 	if tx, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return tx
 	}
 	return r.db
 }
 
-func (r *ArticlePostscriptRepo) Save(ctx context.Context, articlePostscript *model.ArticlePostscript) (*model.ArticlePostscript, error) {
+func (r *PostscriptRepo) Save(ctx context.Context, articlePostscript *model.Postscript) (*model.Postscript, error) {
 	postscript := articlePostscript
 	save, err := r.getClient(ctx).ArticlePostscript.Create().
 		SetArticleID(postscript.ArticleID).
@@ -48,7 +48,7 @@ func (r *ArticlePostscriptRepo) Save(ctx context.Context, articlePostscript *mod
 	if err != nil {
 		return nil, err
 	}
-	return &model.ArticlePostscript{
+	return &model.Postscript{
 		ID:          save.ID,
 		ArticleID:   save.ArticleID,
 		Content:     save.Content,
@@ -60,7 +60,7 @@ func (r *ArticlePostscriptRepo) Save(ctx context.Context, articlePostscript *mod
 	}, nil
 }
 
-func (r *ArticlePostscriptRepo) Get(ctx context.Context, req *repo.ArticlePostscriptGetReq) (*model.ArticlePostscript, error) {
+func (r *PostscriptRepo) Get(ctx context.Context, req *repo.PostscriptGetReq) (*model.Postscript, error) {
 	query := r.getClient(ctx).ArticlePostscript.Query()
 	query = r.getQuery(query, req)
 	row, err := query.First(ctx)
@@ -70,7 +70,7 @@ func (r *ArticlePostscriptRepo) Get(ctx context.Context, req *repo.ArticlePostsc
 	if err != nil {
 		return nil, err
 	}
-	return &model.ArticlePostscript{
+	return &model.Postscript{
 		ID:          row.ID,
 		ArticleID:   row.ArticleID,
 		Content:     row.Content,
@@ -82,16 +82,16 @@ func (r *ArticlePostscriptRepo) Get(ctx context.Context, req *repo.ArticlePostsc
 	}, nil
 }
 
-func (r *ArticlePostscriptRepo) List(ctx context.Context, req *repo.ArticlePostscriptGetReq) ([]*model.ArticlePostscript, error) {
+func (r *PostscriptRepo) List(ctx context.Context, req *repo.PostscriptGetReq) ([]*model.Postscript, error) {
 	query := r.getClient(ctx).ArticlePostscript.Query()
 	query = r.getQuery(query, req)
 	list, err := query.All(ctx)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]*model.ArticlePostscript, 0, len(list))
+	result := make([]*model.Postscript, 0, len(list))
 	for _, row := range list {
-		result = append(result, &model.ArticlePostscript{
+		result = append(result, &model.Postscript{
 			ID:          row.ID,
 			ArticleID:   row.ArticleID,
 			Content:     row.Content,
@@ -105,18 +105,18 @@ func (r *ArticlePostscriptRepo) List(ctx context.Context, req *repo.ArticlePosts
 	return result, nil
 }
 
-func (r *ArticlePostscriptRepo) Map(ctx context.Context, req *repo.ArticlePostscriptGetReq) (map[int64]*model.
-	ArticlePostscript, error) {
+func (r *PostscriptRepo) Map(ctx context.Context, req *repo.PostscriptGetReq) (map[int64]*model.
+	Postscript, error) {
 	listResp, err := r.List(ctx, req)
 	if err != nil {
 		return nil, err
 	}
-	return lo.SliceToMap(listResp, func(item *model.ArticlePostscript) (int64, *model.ArticlePostscript) {
+	return lo.SliceToMap(listResp, func(item *model.Postscript) (int64, *model.Postscript) {
 		return item.ID, item
 	}), nil
 }
 
-func (r *ArticlePostscriptRepo) Count(ctx context.Context, req *repo.ArticlePostscriptGetReq) (int, error) {
+func (r *PostscriptRepo) Count(ctx context.Context, req *repo.PostscriptGetReq) (int, error) {
 	query := r.getClient(ctx).ArticlePostscript.Query()
 	query = r.getQuery(query, req)
 	count, err := query.Count(ctx)
@@ -126,7 +126,7 @@ func (r *ArticlePostscriptRepo) Count(ctx context.Context, req *repo.ArticlePost
 	return count, nil
 }
 
-func (r *ArticlePostscriptRepo) Page(ctx context.Context, req *repo.ArticlePostscriptGetReq) (*repo.ArticlePostscriptPageResp, error) {
+func (r *PostscriptRepo) Page(ctx context.Context, req *repo.PostscriptGetReq) (*repo.PostscriptPageResp, error) {
 	page := r.normalizePage(req.Page)
 	query := r.getClient(ctx).ArticlePostscript.Query()
 	query = r.getQuery(query, req)
@@ -141,9 +141,9 @@ func (r *ArticlePostscriptRepo) Page(ctx context.Context, req *repo.ArticlePosts
 	if err != nil {
 		return nil, err
 	}
-	result := make([]*model.ArticlePostscript, 0, len(list))
+	result := make([]*model.Postscript, 0, len(list))
 	for _, row := range list {
-		result = append(result, &model.ArticlePostscript{
+		result = append(result, &model.Postscript{
 			ID:          row.ID,
 			ArticleID:   row.ArticleID,
 			Content:     row.Content,
@@ -154,7 +154,7 @@ func (r *ArticlePostscriptRepo) Page(ctx context.Context, req *repo.ArticlePosts
 			UpdatedBy:   row.UpdatedBy,
 		})
 	}
-	return &repo.ArticlePostscriptPageResp{
+	return &repo.PostscriptPageResp{
 		Rows: result,
 		Page: &base.PageResp{
 			Total: int64(total),
@@ -164,7 +164,7 @@ func (r *ArticlePostscriptRepo) Page(ctx context.Context, req *repo.ArticlePosts
 	}, nil
 }
 
-func (r *ArticlePostscriptRepo) getQuery(query *gen.ArticlePostscriptQuery, req *repo.ArticlePostscriptGetReq) *gen.ArticlePostscriptQuery {
+func (r *PostscriptRepo) getQuery(query *gen.ArticlePostscriptQuery, req *repo.PostscriptGetReq) *gen.ArticlePostscriptQuery {
 	query = query.Where(articlepostscript.DeletedAtIsNil())
 	if req == nil {
 		return query

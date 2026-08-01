@@ -13,14 +13,16 @@ service PrivacySettingService {
   rpc GetCurrent(GetCurrentPrivacySetting.Req) returns (GetCurrentPrivacySetting.Resp) {
     option (google.api.http) = {
       post: "/v1/user/privacy-setting/get-current"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 更新当前账号的隐私设置。
   rpc UpdateCurrent(UpdateCurrentPrivacySetting.Req) returns (UpdateCurrentPrivacySetting.Resp) {
     option (google.api.http) = {
       post: "/v1/user/privacy-setting/update-current"
-      body: "*"};
+      body: "*"
+    };
   }
 }
 

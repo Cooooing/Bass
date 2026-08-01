@@ -37,11 +37,7 @@ func (t *TagUsecase) Saves(ctx context.Context, tags []*model.Tag) ([]*model.Tag
 		err  error
 	)
 	err = t.tx(ctx, func(ctx context.Context) error {
-		savesResp, saveErr := t.tagRepo.Saves(ctx, tags)
-		if saveErr != nil {
-			return saveErr
-		}
-		rows = savesResp
+		rows, err = t.tagRepo.Saves(ctx, tags)
 		return err
 	})
 	if err != nil {
@@ -56,11 +52,7 @@ func (t *TagUsecase) Update(ctx context.Context, tag *model.Tag) (*model.Tag, er
 		err     error
 	)
 	err = t.tx(ctx, func(ctx context.Context) error {
-		updateResp, updateErr := t.tagRepo.Update(ctx, tag)
-		if updateErr != nil {
-			return updateErr
-		}
-		updated = updateResp
+		updated, err = t.tagRepo.Update(ctx, tag)
 		return err
 	})
 	if err != nil {

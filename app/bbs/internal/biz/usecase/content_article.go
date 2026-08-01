@@ -3,11 +3,10 @@ package usecase
 import (
 	"bbs/internal/biz/repo"
 	"common/pkg/apperror"
-	bbscontentv1 "common/proto/gen/bbs/v1/content"
-	bbscontentv1enum "common/proto/gen/bbs/v1/content/enum"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"time"
 )
 
 type ContentArticleUsecase struct {
@@ -23,94 +22,32 @@ func NewContentArticleUsecase(
 }
 
 type ContentArticleViewerActionState = repo.ArticleViewerActionState
-
 type ContentArticlePostscript = repo.ArticlePostscript
-
 type ContentArticleListItem = repo.ArticleListItem
-
 type ContentArticleDetail = repo.ArticleDetail
-
 type ContentAccountProfile = repo.AccountProfile
-
 type ContentPageResp = repo.PageResp
+
 type ContentArticleSave struct {
 	Title         string
 	Content       string
 	RewardContent *string
 	RewardPoints  *int32
-	Type          bbscontentv1enum.ArticleType
-	BountyPoints  *int32
+	Type          int32
 	Statement     *string
 	Commentable   *bool
-	Anonymous     *bool
 }
 
-type CreateArticleReq struct {
+type CreateDraftArticleReq struct {
 	UserID  int64
 	Article *ContentArticleSave
 }
 
-func (u *ContentArticleUsecase) CreateArticle(ctx context.Context, req *CreateArticleReq) (*ContentArticleDetail, error) {
+func (u *ContentArticleUsecase) CreateDraftArticle(ctx context.Context, req *CreateDraftArticleReq) (*ContentArticleDetail, error) {
 	if req == nil || req.Article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	article := req.Article
-	if err := u.validateArticleType(article.Type, article.BountyPoints); err != nil {
-		return nil, err
-	}
-	resp, err := u.contentArticleClient.CreateArticle(ctx, &repo.CreateArticleReq{
-		UserID: req.UserID,
-		Article: &repo.ArticleSave{
-			Title:         article.Title,
-			Content:       article.Content,
-			RewardContent: article.RewardContent,
-			RewardPoints:  article.RewardPoints,
-			Type:          int32(article.Type),
-			BountyPoints:  article.BountyPoints,
-			Statement:     article.Statement,
-			Commentable:   article.Commentable,
-			Anonymous:     article.Anonymous,
-		},
-	})
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
-type UpdateArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	Article   *ContentArticleSave
-}
-
-func (u *ContentArticleUsecase) UpdateArticle(ctx context.Context, req *UpdateArticleReq) (*ContentArticleDetail, error) {
-	if req == nil || req.Article == nil || req.ArticleID <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	article := req.Article
-	if err := u.validateArticleType(article.Type, article.BountyPoints); err != nil {
-		return nil, err
-	}
-	resp, err := u.contentArticleClient.UpdateArticle(ctx, &repo.UpdateArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-		Article: &repo.ArticleSave{
-			Title:         article.Title,
-			Content:       article.Content,
-			RewardContent: article.RewardContent,
-			RewardPoints:  article.RewardPoints,
-			Type:          int32(article.Type),
-			BountyPoints:  article.BountyPoints,
-			Statement:     article.Statement,
-			Commentable:   article.Commentable,
-			Anonymous:     article.Anonymous,
-		},
-	})
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return u.contentArticleClient.CreateDraftArticle(ctx, &repo.CreateDraftArticleReq{UserID: req.UserID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
 }
 
 type UpdateDraftArticleReq struct {
@@ -120,43 +57,48 @@ type UpdateDraftArticleReq struct {
 }
 
 func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (*ContentArticleDetail, error) {
-	if req == nil {
+	if req == nil || req.Article == nil || req.ArticleID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	reply, err := u.UpdateArticle(ctx, &UpdateArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-		Article:   req.Article,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return reply, nil
+	return u.contentArticleClient.UpdateDraftArticle(ctx, &repo.UpdateDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
 }
 
 type PublishArticleReq struct {
 	UserID     int64
 	ArticleID  int64
-	Visibility bbscontentv1enum.ArticleVisibility
+	Visibility int32
 }
 
 func (u *ContentArticleUsecase) PublishArticle(ctx context.Context, req *PublishArticleReq) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	visibility := req.Visibility
-	switch visibility {
-	case bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_UNSPECIFIED:
-		visibility = bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC
-	case bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC, bbscontentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PRIVATE:
-	default:
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Visibility: req.Visibility})
+}
+
+type SchedulePublishArticleReq struct {
+	UserID    int64
+	ArticleID int64
+	PublishAt time.Time
+}
+
+func (u *ContentArticleUsecase) SchedulePublishArticle(ctx context.Context, req *SchedulePublishArticleReq) error {
+	if req == nil || req.PublishAt.IsZero() {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{
-		UserID:     req.UserID,
-		ArticleID:  req.ArticleID,
-		Visibility: int32(visibility),
-	})
+	return u.contentArticleClient.SchedulePublishArticle(ctx, &repo.SchedulePublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, PublishAt: req.PublishAt})
+}
+
+type CancelPublishArticleReq struct {
+	UserID    int64
+	ArticleID int64
+}
+
+func (u *ContentArticleUsecase) CancelPublishArticle(ctx context.Context, req *CancelPublishArticleReq) error {
+	if req == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return u.contentArticleClient.CancelPublishArticle(ctx, &repo.CancelPublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
 }
 
 type DiscardDraftArticleReq struct {
@@ -168,16 +110,39 @@ func (u *ContentArticleUsecase) DiscardDraftArticle(ctx context.Context, req *Di
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	return u.contentArticleClient.DiscardDraftArticle(ctx, &repo.DiscardDraftArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-	})
+	return u.contentArticleClient.DiscardDraftArticle(ctx, &repo.DiscardDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
+}
+
+type ArchiveArticleReq struct {
+	UserID    int64
+	ArticleID int64
+	Reason    *string
+}
+
+func (u *ContentArticleUsecase) ArchiveArticle(ctx context.Context, req *ArchiveArticleReq) error {
+	if req == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return u.contentArticleClient.ArchiveArticle(ctx, &repo.ArchiveArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Reason: req.Reason})
 }
 
 type ListArticlesReq struct {
 	UserID int64
 	Page   *common.PageReq
-	Query  *bbscontentv1.ListArticles_Req_ArticleQuery
+	Query  *ArticleQuery
+}
+
+type ArticleQuery struct {
+	TagID           *int64
+	DomainID        *int64
+	Keyword         *string
+	AuthorID        *int64
+	Type            *int32
+	Order           *int32
+	PublishStatus   *int32
+	PublishStatuses []int32
+	Visibility      *int32
+	Visibilities    []int32
 }
 
 type ListArticlesResp struct {
@@ -191,50 +156,17 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 	}
 	var page *repo.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
-		}
+		page = &repo.PageReq{Page: req.Page.GetPage(), Size: req.Page.GetSize()}
 	}
 	var query *repo.ArticleQuery
 	if req.Query != nil {
-		query = &repo.ArticleQuery{
-			TagID:    req.Query.TagId,
-			DomainID: req.Query.DomainId,
-			Keyword:  req.Query.Keyword,
-			AuthorID: req.Query.AuthorId,
-		}
-		if req.Query.Type != nil {
-			query.Type = new(int32(*req.Query.Type))
-		}
-		if req.Query.Order != nil {
-			query.Order = new(int32(*req.Query.Order))
-		}
-		if req.Query.PublishStatus != nil {
-			query.PublishStatus = new(int32(*req.Query.PublishStatus))
-		}
-		for _, item := range req.Query.PublishStatuses {
-			query.PublishStatuses = append(query.PublishStatuses, int32(item))
-		}
-		if req.Query.Visibility != nil {
-			query.Visibility = new(int32(*req.Query.Visibility))
-		}
-		for _, item := range req.Query.Visibilities {
-			query.Visibilities = append(query.Visibilities, int32(item))
-		}
+		query = &repo.ArticleQuery{TagID: req.Query.TagID, DomainID: req.Query.DomainID, Keyword: req.Query.Keyword, AuthorID: req.Query.AuthorID, Type: req.Query.Type, Order: req.Query.Order, PublishStatus: req.Query.PublishStatus, PublishStatuses: req.Query.PublishStatuses, Visibility: req.Query.Visibility, Visibilities: req.Query.Visibilities}
 	}
-	resp, err := u.contentArticleClient.ListArticles(ctx, &repo.ListArticlesReq{
-		UserID: req.UserID,
-		Page:   page,
-		Query:  query,
-	})
+	resp, err := u.contentArticleClient.ListArticles(ctx, &repo.ListArticlesReq{UserID: req.UserID, Page: page, Query: query})
 	if err != nil {
 		return nil, err
 	}
-	return &ListArticlesResp{
-		Page: resp.Page,
-		Rows: resp.Rows,
-	}, nil
+	return &ListArticlesResp{Page: resp.Page, Rows: resp.Rows}, nil
 }
 
 type GetArticleReq struct {
@@ -246,29 +178,21 @@ func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleR
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	resp, err := u.contentArticleClient.GetArticle(ctx, &repo.GetArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
+	return u.contentArticleClient.GetArticle(ctx, &repo.GetArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
 }
 
 type ViewArticleReq struct {
 	UserID    int64
 	ArticleID int64
+	IP        *string
+	UserAgent *string
 }
 
 func (u *ContentArticleUsecase) ViewArticle(ctx context.Context, req *ViewArticleReq) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	return u.contentArticleClient.ViewArticle(ctx, &repo.ViewArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-	})
+	return u.contentArticleClient.ViewArticle(ctx, &repo.ViewArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, IP: req.IP, UserAgent: req.UserAgent})
 }
 
 type LikeArticleReq struct {
@@ -276,127 +200,34 @@ type LikeArticleReq struct {
 	ArticleID int64
 	Active    bool
 }
-
-func (u *ContentArticleUsecase) LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error) {
-	if req == nil {
-		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	resp, err := u.contentArticleClient.LikeArticle(ctx, &repo.LikeArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-		Active:    req.Active,
-	})
-	if err != nil {
-		return false, err
-	}
-	return resp, nil
-}
-
 type ThankArticleReq struct {
 	UserID    int64
 	ArticleID int64
 	Active    bool
 }
-
-func (u *ContentArticleUsecase) ThankArticle(ctx context.Context, req *ThankArticleReq) (bool, error) {
-	if req == nil {
-		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	resp, err := u.contentArticleClient.ThankArticle(ctx, &repo.ThankArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-		Active:    req.Active,
-	})
-	if err != nil {
-		return false, err
-	}
-	return resp, nil
-}
-
 type CollectArticleReq struct {
 	UserID    int64
 	ArticleID int64
 	Active    bool
 }
-
-func (u *ContentArticleUsecase) CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error) {
-	if req == nil {
-		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	resp, err := u.contentArticleClient.CollectArticle(ctx, &repo.CollectArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-		Active:    req.Active,
-	})
-	if err != nil {
-		return false, err
-	}
-	return resp, nil
-}
-
-type WatchArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	Active    bool
-}
-
-func (u *ContentArticleUsecase) WatchArticle(ctx context.Context, req *WatchArticleReq) (bool, error) {
-	if req == nil {
-		return false, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	resp, err := u.contentArticleClient.WatchArticle(ctx, &repo.WatchArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-		Active:    req.Active,
-	})
-	if err != nil {
-		return false, err
-	}
-	return resp, nil
-}
-
 type RewardArticleReq struct {
 	UserID    int64
 	ArticleID int64
 	Points    int32
 }
 
+func (u *ContentArticleUsecase) LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error) {
+	return u.contentArticleClient.LikeArticle(ctx, &repo.LikeArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
+}
+
+func (u *ContentArticleUsecase) ThankArticle(ctx context.Context, req *ThankArticleReq) (bool, error) {
+	return u.contentArticleClient.ThankArticle(ctx, &repo.ThankArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
+}
+
+func (u *ContentArticleUsecase) CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error) {
+	return u.contentArticleClient.CollectArticle(ctx, &repo.CollectArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
+}
+
 func (u *ContentArticleUsecase) RewardArticle(ctx context.Context, req *RewardArticleReq) error {
-	if req == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	return u.contentArticleClient.RewardArticle(ctx, &repo.RewardArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-		Points:    req.Points,
-	})
-}
-
-type AcceptAnswerArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	CommentID int64
-}
-
-func (u *ContentArticleUsecase) AcceptAnswerArticle(ctx context.Context, req *AcceptAnswerArticleReq) error {
-	if req == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	return u.contentArticleClient.AcceptAnswerArticle(ctx, &repo.AcceptAnswerArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-		CommentID: req.CommentID,
-	})
-}
-
-func (u *ContentArticleUsecase) validateArticleType(articleType bbscontentv1enum.ArticleType, bountyPoints *int32) error {
-	switch articleType {
-	case bbscontentv1enum.ArticleType_ARTICLE_TYPE_NORMAL, bbscontentv1enum.ArticleType_ARTICLE_TYPE_QA:
-	default:
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
-	}
-	if articleType != bbscontentv1enum.ArticleType_ARTICLE_TYPE_QA && bountyPoints != nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
-	}
-	return nil
+	return u.contentArticleClient.RewardArticle(ctx, &repo.RewardArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Points: req.Points})
 }

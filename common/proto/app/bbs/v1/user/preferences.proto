@@ -13,14 +13,16 @@ service PreferencesService {
   rpc GetCurrent(GetCurrentPreferences.Req) returns (GetCurrentPreferences.Resp) {
     option (google.api.http) = {
       post: "/v1/user/preference/get-current"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 更新当前账号的偏好设置。
   rpc UpdateCurrent(UpdateCurrentPreferences.Req) returns (UpdateCurrentPreferences.Resp) {
     option (google.api.http) = {
       post: "/v1/user/preference/update-current"
-      body: "*"};
+      body: "*"
+    };
   }
 }
 

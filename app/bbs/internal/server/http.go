@@ -44,6 +44,7 @@ var bbsHTTPOptionalAuthOperations = map[string]struct{}{
 	bbscontentv1.OperationDomainServiceList:          {},
 	bbscontentv1.OperationTagServiceList:             {},
 	bbscontentv1.OperationTagServiceListArticleTags:  {},
+	bbscontentv1.OperationPostscriptServiceList:      {},
 	bbsuserv1.OperationOtpServiceSendEmailOtp:        {},
 	bbsuserv1.OperationOtpServiceSendPhoneOtp:        {},
 	bbsuserv1.OperationRelationServiceGetStatus:      {},

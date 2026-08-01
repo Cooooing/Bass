@@ -49,21 +49,53 @@ func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.Ad
 	if err != nil {
 		return nil, err
 	}
-	var postscript *bbscontentv1.AddPostscript_Resp_ArticlePostscript
-	if resp != nil {
-		postscript = &bbscontentv1.AddPostscript_Resp_ArticlePostscript{
-			Id:            resp.ID,
-			ArticleId:     resp.ArticleID,
-			Content:       resp.Content,
-			ContentRender: resp.ContentRender,
-			Restriction:   bbscontentv1enum.ContentRestriction(resp.Restriction),
-			CreatedBy:     resp.CreatedBy,
-			UpdatedBy:     resp.UpdatedBy,
-			CreatedAt:     timestamppb.New(*resp.CreatedAt),
-			UpdatedAt:     timestamppb.New(*resp.UpdatedAt),
-		}
+	postscript := &bbscontentv1.ArticlePostscript{
+		Id:            resp.ID,
+		ArticleId:     resp.ArticleID,
+		Content:       resp.Content,
+		ContentRender: resp.ContentRender,
+		Restriction:   bbscontentv1enum.ContentRestriction(resp.Restriction),
+		CreatedBy:     resp.CreatedBy,
+		UpdatedBy:     resp.UpdatedBy,
+	}
+	if resp.CreatedAt != nil {
+		postscript.CreatedAt = timestamppb.New(*resp.CreatedAt)
+	}
+	if resp.UpdatedAt != nil {
+		postscript.UpdatedAt = timestamppb.New(*resp.UpdatedAt)
 	}
 	return &bbscontentv1.AddPostscript_Resp{
 		Postscript: postscript,
+	}, nil
+}
+
+func (s *ContentPostscriptService) List(ctx context.Context, req *bbscontentv1.ListPostscripts_Req) (*bbscontentv1.ListPostscripts_Resp, error) {
+	resp, err := s.contentPostscriptUsecase.ListPostscripts(ctx, &usecase.ListPostscriptsReq{
+		ArticleID: req.GetArticleId(),
+	})
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*bbscontentv1.ArticlePostscript, 0, len(resp))
+	for _, item := range resp {
+		row := &bbscontentv1.ArticlePostscript{
+			Id:            item.ID,
+			ArticleId:     item.ArticleID,
+			Content:       item.Content,
+			ContentRender: item.ContentRender,
+			Restriction:   bbscontentv1enum.ContentRestriction(item.Restriction),
+			CreatedBy:     item.CreatedBy,
+			UpdatedBy:     item.UpdatedBy,
+		}
+		if item.CreatedAt != nil {
+			row.CreatedAt = timestamppb.New(*item.CreatedAt)
+		}
+		if item.UpdatedAt != nil {
+			row.UpdatedAt = timestamppb.New(*item.UpdatedAt)
+		}
+		rows = append(rows, row)
+	}
+	return &bbscontentv1.ListPostscripts_Resp{
+		Rows: rows,
 	}, nil
 }

@@ -1,4 +1,4 @@
-package enum
+﻿package enum
 
 import (
 	"common/pkg/enum"
@@ -15,8 +15,6 @@ const (
 	ArticleActionThank ArticleAction = "thank"
 	// ArticleActionCollect 表示收藏文章。
 	ArticleActionCollect ArticleAction = "collect"
-	// ArticleActionWatch 表示关注文章。
-	ArticleActionWatch ArticleAction = "watch"
 	// ArticleActionReward 表示打赏文章。
 	ArticleActionReward ArticleAction = "reward"
 	// ArticleActionReply 表示回复文章。
@@ -28,7 +26,6 @@ var ArticleActionMap = enum.NewMapping[ArticleAction, v1.ArticleAction](map[Arti
 	ArticleActionLike:    {Proto: v1.ArticleAction_ARTICLE_ACTION_LIKE},
 	ArticleActionThank:   {Proto: v1.ArticleAction_ARTICLE_ACTION_THANK},
 	ArticleActionCollect: {Proto: v1.ArticleAction_ARTICLE_ACTION_COLLECT},
-	ArticleActionWatch:   {Proto: v1.ArticleAction_ARTICLE_ACTION_WATCH},
 	ArticleActionReward:  {Proto: v1.ArticleAction_ARTICLE_ACTION_REWARD},
 	ArticleActionReply:   {Proto: v1.ArticleAction_ARTICLE_ACTION_REPLY},
 })

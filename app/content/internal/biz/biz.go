@@ -6,10 +6,11 @@ import (
 	"github.com/google/wire"
 )
 
-// BizProviderSet 是 biz 层依赖集合。
+// BizProviderSet 提供 biz 层依赖集合
 var BizProviderSet = wire.NewSet(
 	usecase.NewArticleUsecase,
 	usecase.NewCommentUsecase,
+	usecase.NewPostscriptUsecase,
 	usecase.NewContentUsecase,
 	usecase.NewTagUsecase,
 	usecase.NewOutboxUsecase,

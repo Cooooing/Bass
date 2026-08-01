@@ -8,7 +8,7 @@ import (
 	"content/internal/enum"
 )
 
-type ArticlePostscript struct {
+type Postscript struct {
 	ID          int64
 	ArticleID   int64
 	Content     string
@@ -19,6 +19,6 @@ type ArticlePostscript struct {
 	UpdatedBy   *int64
 }
 
-func (p *ArticlePostscript) FormatContent() {
+func (p *Postscript) FormatContent() {
 	p.Content = util.LuteEngine.FormatStr(fmt.Sprintf("article_postscript_%d", p.ID), p.Content)
 }

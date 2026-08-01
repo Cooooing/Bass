@@ -17,26 +17,31 @@ service AccountService {
   rpc GetCurrent(GetCurrentAccount.Req) returns (GetCurrentAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/get-current"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 按账号 ID 获取账号展示资料。
   rpc GetProfile(GetProfileAccount.Req) returns (GetProfileAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/get-profile"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 更新当前账号的展示资料。
   rpc UpdateProfile(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/update-profile"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 生成默认账号头像。
   rpc Avatar(AvatarAccount.Req) returns (.common.api.app.common.ImageResp) {
-    option (google.api.http) = {get: "/v1/user/account/avatar"};
+    option (google.api.http) = {
+      get: "/v1/user/account/avatar"
+    };
   }
 }
 
@@ -77,7 +82,9 @@ message GetCurrentAccount {
 message GetProfileAccount {
   message Req {
     int64 user_id = 1; // 账号 ID
-    option (gnostic.openapi.v3.schema) = {required: "user_id"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "user_id"
+    };
   }
   message Resp {
     message AccountProfile {
@@ -130,6 +137,8 @@ message UpdateProfileAccount {
 message AvatarAccount {
   message Req {
     string name = 1; // 用于生成头像的账号名
-    option (gnostic.openapi.v3.schema) = {required: "name"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "name"
+    };
   }
 }

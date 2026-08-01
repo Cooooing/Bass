@@ -41,7 +41,9 @@ service DomainService {
 message CreateDomain {
   message Req {
     Domain domain = 1; // 领域信息
-    option (gnostic.openapi.v3.schema) = {required: "domain"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "domain"
+    };
 
     message Domain {
       string code = 1; // 稳定编码
@@ -52,8 +54,10 @@ message CreateDomain {
       optional string icon = 6; // 图标
       bool is_nav = 7; // 是否在导航中展示
       int32 sort = 8; // 排序值，越小越靠前
-      option (gnostic.openapi.v3.schema) = {required: "code"
-        required: "name"};
+      option (gnostic.openapi.v3.schema) = {
+        required: "code"
+        required: "name"
+      };
     }
   }
 
@@ -83,8 +87,10 @@ message UpdateDomain {
   message Req {
     int64 domain_id = 1; // 领域 ID
     Domain domain = 2; // 领域信息
-    option (gnostic.openapi.v3.schema) = {required: "domain_id"
-      required: "domain"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "domain_id"
+      required: "domain"
+    };
 
     message Domain {
       string code = 1; // 稳定编码
@@ -95,8 +101,10 @@ message UpdateDomain {
       optional string icon = 6; // 图标
       bool is_nav = 7; // 是否在导航中展示
       int32 sort = 8; // 排序值，越小越靠前
-      option (gnostic.openapi.v3.schema) = {required: "code"
-        required: "name"};
+      option (gnostic.openapi.v3.schema) = {
+        required: "code"
+        required: "name"
+      };
     }
   }
 

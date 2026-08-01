@@ -2,43 +2,53 @@ syntax = "proto3";
 
 package common.api.app.bbs.v1.content;
 
-import "bbs/v1/content/enum/article.proto";
+import "bbs/v1/content/article.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/content;content";
 
-// 文章附言接口。
+// PostscriptService 提供 BBS 文章附言接口。
 service PostscriptService {
   // 添加文章附言。
   rpc Add(AddPostscript.Req) returns (AddPostscript.Resp) {
     option (google.api.http) = {
       post: "/v1/content/postscript/add"
-      body: "*"};
+      body: "*"
+    };
+  }
+
+  // 查询文章附言列表。
+  rpc List(ListPostscripts.Req) returns (ListPostscripts.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/postscript/list"
+      body: "*"
+    };
   }
 }
 
-// 添加文章附言。
 message AddPostscript {
   message Req {
-    int64 article_id = 1; // 文章 ID
-    string content = 2; // 附言内容
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "content"};
+    int64 article_id = 1; // 必填，文章 ID。
+    string content = 2; // 必填，附言内容。
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "content"
+    };
   }
   message Resp {
-    message ArticlePostscript {
-      int64 id = 1; // 附言 ID
-      int64 article_id = 2; // 文章 ID
-      string content = 3; // 原始内容
-      string content_render = 4; // 渲染后的内容
-      ContentRestriction restriction = 5; // 管理限制
-      optional int64 created_by = 1002; // 创建账号 ID
-      optional int64 updated_by = 1003; // 更新账号 ID
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-    ArticlePostscript postscript = 1; // 创建后的文章附言
+    ArticlePostscript postscript = 1; // 创建后的文章附言。
+  }
+}
+
+message ListPostscripts {
+  message Req {
+    int64 article_id = 1; // 必填，文章 ID。
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+    };
+  }
+  message Resp {
+    repeated ArticlePostscript rows = 1; // 文章附言列表。
   }
 }

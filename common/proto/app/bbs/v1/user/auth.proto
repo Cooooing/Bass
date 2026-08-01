@@ -84,9 +84,11 @@ message StartEmailRegistration {
     string password = 2; // 账号密码
     string name = 3; // 账号名
     optional string nickname = 4; // 昵称
-    option (gnostic.openapi.v3.schema) = {required: "email"
+    option (gnostic.openapi.v3.schema) = {
+      required: "email"
       required: "password"
-      required: "name"};
+      required: "name"
+    };
   }
   message Resp {
     optional string code = 1; // 非生产环境返回验证码，生产环境为空
@@ -98,8 +100,10 @@ message VerifyEmailRegistration {
   message Req {
     string email = 1; // 邮箱地址
     string code = 2; // 邮箱 OTP
-    option (gnostic.openapi.v3.schema) = {required: "email"
-      required: "code"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "email"
+      required: "code"
+    };
   }
   message Resp {}
 }
@@ -111,9 +115,11 @@ message StartPhoneRegistration {
     string password = 2; // 账号密码
     string name = 3; // 账号名
     optional string nickname = 4; // 昵称
-    option (gnostic.openapi.v3.schema) = {required: "phone"
+    option (gnostic.openapi.v3.schema) = {
+      required: "phone"
       required: "password"
-      required: "name"};
+      required: "name"
+    };
   }
   message Resp {
     optional string code = 1; // 非生产环境返回验证码，生产环境为空
@@ -125,8 +131,10 @@ message VerifyPhoneRegistration {
   message Req {
     string phone = 1; // 手机号
     string code = 2; // 手机 OTP
-    option (gnostic.openapi.v3.schema) = {required: "phone"
-      required: "code"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "phone"
+      required: "code"
+    };
   }
   message Resp {}
 }
@@ -151,7 +159,9 @@ message Login {
     }
 
     LoginType type = 1; // 登录方式
-    option (gnostic.openapi.v3.schema) = {required: "type"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "type"
+    };
 
     oneof credential {
       PasswordCredential password_credential = 10; // 密码登录凭证
@@ -199,7 +209,9 @@ message Login {
 message RefreshToken {
   message Req {
     string refresh_token = 1; // refresh token
-    option (gnostic.openapi.v3.schema) = {required: "refresh_token"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "refresh_token"
+    };
   }
   message Resp {
     string access_token = 1; // 新 access token
@@ -221,7 +233,9 @@ message CancelAccount {
   message Req {
     string password = 1; // 当前密码
     string code = 2; // 启用 TOTP 时作为 TOTP code
-    option (gnostic.openapi.v3.schema) = {required: "password"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "password"
+    };
   }
   message Resp {}
 }

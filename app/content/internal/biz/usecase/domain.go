@@ -30,11 +30,7 @@ func (d *ContentUsecase) Adds(ctx context.Context, domains []*model.Domain) ([]*
 		err  error
 	)
 	err = d.tx(ctx, func(ctx context.Context) error {
-		savesResp, saveErr := d.domainRepo.Saves(ctx, domains)
-		if saveErr != nil {
-			return saveErr
-		}
-		rows = savesResp
+		rows, err = d.domainRepo.Saves(ctx, domains)
 		return err
 	})
 	if err != nil {
@@ -49,11 +45,7 @@ func (d *ContentUsecase) Update(ctx context.Context, domain *model.Domain) (*mod
 		err     error
 	)
 	err = d.tx(ctx, func(ctx context.Context) error {
-		updateResp, updateErr := d.domainRepo.Update(ctx, domain)
-		if updateErr != nil {
-			return updateErr
-		}
-		updated = updateResp
+		updated, err = d.domainRepo.Update(ctx, domain)
 		return err
 	})
 	if err != nil {

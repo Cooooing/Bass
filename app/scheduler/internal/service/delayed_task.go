@@ -207,9 +207,10 @@ func (s *SchedulerDelayedTaskService) Schedule(ctx context.Context, req *schedul
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	row, err := s.usecase.Schedule(ctx, &usecase.DelayedTaskScheduleReq{
-		TaskKey:     req.GetTaskKey(),
-		Payload:     req.GetPayload(),
-		ScheduledAt: req.GetScheduledAt().AsTime(),
+		TaskKey:        req.GetTaskKey(),
+		Payload:        req.GetPayload(),
+		ScheduledAt:    req.GetScheduledAt().AsTime(),
+		IdempotencyKey: req.GetIdempotencyKey(),
 	})
 	if err != nil {
 		return nil, err

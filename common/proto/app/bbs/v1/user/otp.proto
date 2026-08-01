@@ -72,7 +72,9 @@ message BeginEnableTotp {
 message ConfirmEnableTotp {
   message Req {
     string code = 1; // TOTP 验证码
-    option (gnostic.openapi.v3.schema) = {required: "code"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "code"
+    };
   }
   message Resp {}
 }
@@ -81,7 +83,9 @@ message ConfirmEnableTotp {
 message DisableTotp {
   message Req {
     string code = 1; // TOTP 验证码
-    option (gnostic.openapi.v3.schema) = {required: "code"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "code"
+    };
   }
   message Resp {}
 }
@@ -103,7 +107,9 @@ message GetCurrentTotp {
 message SendEmailOtp {
   message Req {
     string email = 1; // 邮箱地址
-    option (gnostic.openapi.v3.schema) = {required: "email"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "email"
+    };
   }
   message Resp {
     optional string code = 1; // 非生产环境返回验证码，生产环境为空
@@ -114,7 +120,9 @@ message SendEmailOtp {
 message SendPhoneOtp {
   message Req {
     string phone = 1; // 手机号
-    option (gnostic.openapi.v3.schema) = {required: "phone"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "phone"
+    };
   }
   message Resp {
     optional string code = 1; // 非生产环境返回验证码，生产环境为空

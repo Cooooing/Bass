@@ -56,10 +56,9 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*mode
 		outboxEvent *repo.OutboxEvent
 	)
 	err := d.tx(ctx, func(ctx context.Context) error {
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(comment.ArticleID),
 		})
-		article := articleResp
 		if err != nil {
 			return err
 		}
@@ -75,15 +74,14 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*mode
 		replyComment := &model.Comment{}
 		var parentID *int64
 		if comment.ReplyID != nil {
-			replyCommentResp, replyCommentErr := d.commentRepo.Get(ctx, &repo.CommentGetReq{
+			replyComment, err = d.commentRepo.Get(ctx, &repo.CommentGetReq{
 				CommentId:   comment.ReplyID,
 				ArticleId:   new(comment.ArticleID),
 				Restriction: new(enum.ContentRestrictionNone),
 			})
-			if replyCommentErr != nil {
-				return replyCommentErr
+			if err != nil {
+				return err
 			}
-			replyComment = replyCommentResp
 			if replyComment.ParentID == nil {
 				parentID = new(replyComment.ID)
 			} else {
@@ -438,10 +436,9 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 		if comment.Restriction != enum.ContentRestrictionNone {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
 		}
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(comment.ArticleID),
 		})
-		article := articleResp
 		if err != nil {
 			return err
 		}
@@ -535,10 +532,9 @@ func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool,
 		if comment.Restriction != enum.ContentRestrictionNone {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
 		}
-		articleResp, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			ArticleId: new(comment.ArticleID),
 		})
-		article := articleResp
 		if err != nil {
 			return err
 		}

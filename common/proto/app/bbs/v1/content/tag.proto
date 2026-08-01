@@ -65,7 +65,9 @@ service TagService {
 message CreateTag {
   message Req {
     Tag tag = 1; // 标签信息
-    option (gnostic.openapi.v3.schema) = {required: "tag"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "tag"
+    };
 
     message Tag {
       string code = 1; // 稳定编码
@@ -75,9 +77,11 @@ message CreateTag {
       optional TagStatus status = 5; // 启停状态
       optional string icon = 6; // 图标
       int32 sort = 7; // 排序值，越小越靠前
-      option (gnostic.openapi.v3.schema) = {required: "code"
+      option (gnostic.openapi.v3.schema) = {
+        required: "code"
         required: "name"
-        required: "domain_id"};
+        required: "domain_id"
+      };
     }
   }
 
@@ -107,8 +111,10 @@ message UpdateTag {
   message Req {
     int64 tag_id = 1; // 标签 ID
     Tag tag = 2; // 标签信息
-    option (gnostic.openapi.v3.schema) = {required: "tag_id"
-      required: "tag"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "tag_id"
+      required: "tag"
+    };
 
     message Tag {
       string code = 1; // 稳定编码
@@ -118,9 +124,11 @@ message UpdateTag {
       optional TagStatus status = 5; // 启停状态
       optional string icon = 6; // 图标
       int32 sort = 7; // 排序值，越小越靠前
-      option (gnostic.openapi.v3.schema) = {required: "code"
+      option (gnostic.openapi.v3.schema) = {
+        required: "code"
         required: "name"
-        required: "domain_id"};
+        required: "domain_id"
+      };
     }
   }
 
@@ -150,8 +158,10 @@ message BindArticleTags {
   message Req {
     int64 article_id = 1; // 文章 ID
     repeated int64 tag_ids = 2; // 标签 ID 列表
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "tag_ids"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "tag_ids"
+    };
   }
 
   message Resp {}
@@ -162,8 +172,10 @@ message UnbindArticleTags {
   message Req {
     int64 article_id = 1; // 文章 ID
     repeated int64 tag_ids = 2; // 标签 ID 列表
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "tag_ids"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "tag_ids"
+    };
   }
 
   message Resp {}
@@ -173,7 +185,9 @@ message UnbindArticleTags {
 message ListArticleTags {
   message Req {
     int64 article_id = 1; // 文章 ID
-    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+    };
   }
 
   message Resp {

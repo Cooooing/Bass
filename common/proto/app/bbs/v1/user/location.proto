@@ -13,14 +13,16 @@ service LocationService {
   rpc GetCurrent(GetCurrentLocation.Req) returns (GetCurrentLocation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/location/get-current"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 更新当前账号的地理资料。
   rpc UpsertCurrent(UpsertCurrentLocation.Req) returns (UpsertCurrentLocation.Resp) {
     option (google.api.http) = {
       post: "/v1/user/location/upsert-current"
-      body: "*"};
+      body: "*"
+    };
   }
 }
 

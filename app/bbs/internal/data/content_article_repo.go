@@ -11,6 +11,8 @@ import (
 	"context"
 	"fmt"
 
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	"google.golang.org/protobuf/proto"
 
 	"github.com/88250/lute/ast"
@@ -47,8 +49,8 @@ func NewContentArticleClient(
 	}
 }
 
-func (r *ContentArticleClient) CreateArticle(ctx context.Context, req *repo.CreateArticleReq) (*repo.ArticleDetail, error) {
-	save := &contentv1.CreateArticle_Req_Article{}
+func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo.CreateDraftArticleReq) (*repo.ArticleDetail, error) {
+	save := &contentv1.CreateDraftArticle_Req_Article{}
 	if req != nil && req.Article != nil {
 		article := req.Article
 		save.Title = article.Title
@@ -58,69 +60,15 @@ func (r *ContentArticleClient) CreateArticle(ctx context.Context, req *repo.Crea
 		save.Type = contentv1enum.ArticleType(article.Type)
 		save.Statement = article.Statement
 		save.Commentable = article.Commentable
-		save.Anonymous = article.Anonymous
-		switch contentv1enum.ArticleType(article.Type) {
-		case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
-			if article.BountyPoints != nil {
-				save.TypeParams = &contentv1.CreateArticle_Req_Article_Qa{
-					Qa: &contentv1.CreateArticle_Req_Article_QA{
-						BountyPoints: *article.BountyPoints,
-					},
-				}
-			}
-		}
 	}
-	reply, err := r.contentClient.Article.Create(ctx, &contentv1.CreateArticle_Req{
+	reply, err := r.contentClient.Article.CreateDraft(ctx, &contentv1.CreateDraftArticle_Req{
 		Article: save,
 		UserId:  req.UserID,
 	})
 	if err != nil {
 		return nil, err
 	}
-	item := cloneDataMessage(reply.GetArticle(), &contentv1.PageArticles_Resp_Article{})
-	lastComments, states, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
-	if err != nil {
-		return nil, err
-	}
-	profiles, err := r.loadAccountProfiles(ctx, r.articleProfileIDs(item, lastComments[item.GetId()])...)
-	if err != nil {
-		return nil, err
-	}
-	return r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()]), nil
-}
-
-func (r *ContentArticleClient) UpdateArticle(ctx context.Context, req *repo.UpdateArticleReq) (*repo.ArticleDetail, error) {
-	save := &contentv1.UpdateArticle_Req_Article{}
-	if req != nil && req.Article != nil {
-		article := req.Article
-		save.Title = article.Title
-		save.Content = article.Content
-		save.RewardContent = article.RewardContent
-		save.RewardPoints = article.RewardPoints
-		save.Type = contentv1enum.ArticleType(article.Type)
-		save.Statement = article.Statement
-		save.Commentable = article.Commentable
-		save.Anonymous = article.Anonymous
-		switch contentv1enum.ArticleType(article.Type) {
-		case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
-			if article.BountyPoints != nil {
-				save.TypeParams = &contentv1.UpdateArticle_Req_Article_Qa{
-					Qa: &contentv1.UpdateArticle_Req_Article_QA{
-						BountyPoints: *article.BountyPoints,
-					},
-				}
-			}
-		}
-	}
-	reply, err := r.contentClient.Article.Update(ctx, &contentv1.UpdateArticle_Req{
-		ArticleId: req.ArticleID,
-		Article:   save,
-		UserId:    req.UserID,
-	})
-	if err != nil {
-		return nil, err
-	}
-	item := cloneDataMessage(reply.GetArticle(), &contentv1.PageArticles_Resp_Article{})
+	item := reply.GetArticle()
 	lastComments, states, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
 	if err != nil {
 		return nil, err
@@ -133,22 +81,42 @@ func (r *ContentArticleClient) UpdateArticle(ctx context.Context, req *repo.Upda
 }
 
 func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo.UpdateDraftArticleReq) (*repo.ArticleDetail, error) {
-	reply, err := r.UpdateArticle(ctx, &repo.UpdateArticleReq{
-		UserID:    req.UserID,
-		ArticleID: req.ArticleID,
-		Article:   req.Article,
+	save := &contentv1.UpdateDraftArticle_Req_Article{}
+	if req != nil && req.Article != nil {
+		article := req.Article
+		save.Title = article.Title
+		save.Content = article.Content
+		save.RewardContent = article.RewardContent
+		save.RewardPoints = article.RewardPoints
+		save.Type = contentv1enum.ArticleType(article.Type)
+		save.Statement = article.Statement
+		save.Commentable = article.Commentable
+	}
+	reply, err := r.contentClient.Article.UpdateDraft(ctx, &contentv1.UpdateDraftArticle_Req{
+		ArticleId: req.ArticleID,
+		Article:   save,
+		UserId:    req.UserID,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return reply, nil
+	item := reply.GetArticle()
+	lastComments, states, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	profiles, err := r.loadAccountProfiles(ctx, r.articleProfileIDs(item, lastComments[item.GetId()])...)
+	if err != nil {
+		return nil, err
+	}
+	return r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()]), nil
 }
 
 func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.PublishArticleReq) error {
 	_, err := r.contentClient.Article.Publish(ctx, &contentv1.PublishArticle_Req{
-		ArticleId:  req.ArticleID,
-		UserId:     req.UserID,
-		Visibility: contentv1enum.ArticleVisibility(req.Visibility),
+		ArticleId:      req.ArticleID,
+		OperatorUserId: new(req.UserID),
+		Visibility:     contentv1enum.ArticleVisibility(req.Visibility),
 	})
 	if err != nil {
 		return err
@@ -156,6 +124,40 @@ func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.Pub
 	return nil
 }
 
+func (r *ContentArticleClient) SchedulePublishArticle(ctx context.Context, req *repo.SchedulePublishArticleReq) error {
+	_, err := r.contentClient.Article.SchedulePublish(ctx, &contentv1.SchedulePublishArticle_Req{
+		ArticleId:      req.ArticleID,
+		OperatorUserId: req.UserID,
+		PublishAt:      timestamppb.New(req.PublishAt),
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *ContentArticleClient) CancelPublishArticle(ctx context.Context, req *repo.CancelPublishArticleReq) error {
+	_, err := r.contentClient.Article.CancelPublish(ctx, &contentv1.CancelPublishArticle_Req{
+		ArticleId:      req.ArticleID,
+		OperatorUserId: req.UserID,
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *ContentArticleClient) ArchiveArticle(ctx context.Context, req *repo.ArchiveArticleReq) error {
+	_, err := r.contentClient.Article.Archive(ctx, &contentv1.ArchiveArticle_Req{
+		ArticleId: req.ArticleID,
+		UserId:    req.UserID,
+		Reason:    req.Reason,
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func (r *ContentArticleClient) DiscardDraftArticle(ctx context.Context, req *repo.DiscardDraftArticleReq) error {
 	_, err := r.contentClient.Article.DiscardDraft(ctx, &contentv1.DiscardDraftArticle_Req{
 		ArticleId: req.ArticleID,
@@ -172,7 +174,7 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	if query == nil {
 		query = &repo.ArticleQuery{}
 	}
-	contentQuery := &contentv1.PageArticles_Req_ArticleQueryParams{
+	contentQuery := &contentv1.ArticleQueryParams{
 		TagId:    query.TagID,
 		DomainId: query.DomainID,
 		Keyword:  query.Keyword,
@@ -264,7 +266,7 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 	if err != nil {
 		return nil, err
 	}
-	item := cloneDataMessage(reply.GetArticle(), &contentv1.PageArticles_Resp_Article{})
+	item := reply.GetArticle()
 
 	lastComments, states, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
 	if err != nil {
@@ -276,7 +278,7 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 	}
 	detail := r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()])
 	if item.GetHasPostscript() {
-		postscriptResp, err := r.contentClient.Article.ListPostscripts(ctx, &contentv1.ListArticlePostscripts_Req{
+		postscriptResp, err := r.contentClient.Postscript.List(ctx, &contentv1.ListPostscripts_Req{
 			ArticleId: item.GetId(),
 		})
 		if err != nil {
@@ -350,34 +352,10 @@ func (r *ContentArticleClient) CollectArticle(ctx context.Context, req *repo.Col
 	return reply.GetCollected(), nil
 }
 
-func (r *ContentArticleClient) WatchArticle(ctx context.Context, req *repo.WatchArticleReq) (bool, error) {
-	reply, err := r.contentClient.Article.Watch(ctx, &contentv1.WatchArticle_Req{
-		ArticleId: req.ArticleID,
-		Watched:   req.Active,
-		UserId:    req.UserID,
-	})
-	if err != nil {
-		return false, err
-	}
-	return reply.GetWatched(), nil
-}
-
 func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.RewardArticleReq) error {
 	_, err := r.contentClient.Article.Reward(ctx, &contentv1.RewardArticle_Req{
 		ArticleId: req.ArticleID,
 		Points:    req.Points,
-		UserId:    req.UserID,
-	})
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (r *ContentArticleClient) AcceptAnswerArticle(ctx context.Context, req *repo.AcceptAnswerArticleReq) error {
-	_, err := r.contentClient.Article.AcceptAnswer(ctx, &contentv1.AcceptAnswerArticle_Req{
-		ArticleId: req.ArticleID,
-		CommentId: req.CommentID,
 		UserId:    req.UserID,
 	})
 	if err != nil {
@@ -417,30 +395,28 @@ func (r *ContentArticleClient) articleViewerActionStates(states map[int64]*conte
 			Liked:     state.GetLiked(),
 			Thanked:   state.GetThanked(),
 			Collected: state.GetCollected(),
-			Watched:   state.GetWatched(),
+			Rewarded:  state.GetRewarded(),
 		}
 	}
 	return reply
 }
 
-func (r *ContentArticleClient) articleProfileIDs(item *contentv1.PageArticles_Resp_Article, lastComment *contentv1.MapArticleLastComments_Resp_Comment) []int64 {
+func (r *ContentArticleClient) articleProfileIDs(item *contentv1.Article, lastComment *contentv1.MapArticleLastComments_Resp_Comment) []int64 {
 	if item == nil {
 		return nil
 	}
 	userIDs := make([]int64, 0, 2)
-	if !item.GetAnonymous() && item.CreatedBy != nil {
+	if item.CreatedBy != nil {
 		userIDs = append(userIDs, *item.CreatedBy)
 	}
 	if lastComment != nil && lastComment.CreatedBy != nil {
-		if item.GetAnonymous() && item.CreatedBy != nil && *lastComment.CreatedBy == *item.CreatedBy {
-			return userIDs
-		}
+
 		userIDs = append(userIDs, *lastComment.CreatedBy)
 	}
 	return userIDs
 }
 
-func (r *ContentArticleClient) articleListItem(item *contentv1.PageArticles_Resp_Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState) *repo.ArticleListItem {
+func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState) *repo.ArticleListItem {
 	if item == nil {
 		return nil
 	}
@@ -461,12 +437,11 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.PageArticles_Resp
 		Type:              int32(item.GetType()),
 		Statement:         item.Statement,
 		Commentable:       item.GetCommentable(),
-		Anonymous:         item.GetAnonymous(),
 		ViewCount:         item.GetViewCount(),
 		ThankCount:        item.GetThankCount(),
 		LikeCount:         item.GetLikeCount(),
 		CollectCount:      item.GetCollectCount(),
-		WatchCount:        item.GetWatchCount(),
+		RewardCount:       item.GetRewardCount(),
 		ReplyCount:        item.GetReplyCount(),
 		CoverImageURL:     r.articleCoverImageURL(item),
 		ViewerActionState: state,
@@ -479,24 +454,15 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.PageArticles_Resp
 	if item.GetEditedAt() != nil {
 		out.EditedAt = new(item.GetEditedAt().AsTime())
 	}
-	switch item.GetType() {
-	case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
-		if qa := item.GetQa(); qa != nil {
-			out.BountyPoints = qa.BountyPoints
-			out.AcceptedAnswerID = qa.AcceptedAnswerId
-		}
-	}
-	if !item.GetAnonymous() {
-		out.CreatedBy = item.CreatedBy
-		out.UpdatedBy = item.UpdatedBy
-	}
-	if !item.GetAnonymous() && item.CreatedBy != nil {
+	out.CreatedBy = item.CreatedBy
+	out.UpdatedBy = item.UpdatedBy
+	if item.CreatedBy != nil {
 		out.AuthorUser = profiles[*item.CreatedBy]
 	}
 	if lastComment != nil {
 		out.LastReplyAt = new(lastComment.GetCreatedAt().AsTime())
 		if lastComment.CreatedBy != nil {
-			if !item.GetAnonymous() || item.CreatedBy == nil || *lastComment.CreatedBy != *item.CreatedBy {
+			if item.CreatedBy == nil || *lastComment.CreatedBy != *item.CreatedBy {
 				out.LastReplyUser = profiles[*lastComment.CreatedBy]
 			}
 		}
@@ -504,7 +470,7 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.PageArticles_Resp
 	return out
 }
 
-func (r *ContentArticleClient) articleDetail(item *contentv1.PageArticles_Resp_Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState) *repo.ArticleDetail {
+func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState) *repo.ArticleDetail {
 	if item == nil {
 		return nil
 	}
@@ -527,12 +493,11 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.PageArticles_Resp_A
 		Type:                int32(item.GetType()),
 		Statement:           item.Statement,
 		Commentable:         item.GetCommentable(),
-		Anonymous:           item.GetAnonymous(),
 		ViewCount:           item.GetViewCount(),
 		ThankCount:          item.GetThankCount(),
 		LikeCount:           item.GetLikeCount(),
 		CollectCount:        item.GetCollectCount(),
-		WatchCount:          item.GetWatchCount(),
+		RewardCount:         item.GetRewardCount(),
 		ReplyCount:          item.GetReplyCount(),
 		CoverImageURL:       r.articleCoverImageURL(item),
 		ViewerActionState:   state,
@@ -545,24 +510,15 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.PageArticles_Resp_A
 	if item.GetEditedAt() != nil {
 		out.EditedAt = new(item.GetEditedAt().AsTime())
 	}
-	switch item.GetType() {
-	case contentv1enum.ArticleType_ARTICLE_TYPE_QA:
-		if qa := item.GetQa(); qa != nil {
-			out.BountyPoints = qa.BountyPoints
-			out.AcceptedAnswerID = qa.AcceptedAnswerId
-		}
-	}
-	if !item.GetAnonymous() {
-		out.CreatedBy = item.CreatedBy
-		out.UpdatedBy = item.UpdatedBy
-	}
-	if !item.GetAnonymous() && item.CreatedBy != nil {
+	out.CreatedBy = item.CreatedBy
+	out.UpdatedBy = item.UpdatedBy
+	if item.CreatedBy != nil {
 		out.AuthorUser = profiles[*item.CreatedBy]
 	}
 	if lastComment != nil {
 		out.LastReplyAt = new(lastComment.GetCreatedAt().AsTime())
 		if lastComment.CreatedBy != nil {
-			if !item.GetAnonymous() || item.CreatedBy == nil || *lastComment.CreatedBy != *item.CreatedBy {
+			if item.CreatedBy == nil || *lastComment.CreatedBy != *item.CreatedBy {
 				out.LastReplyUser = profiles[*lastComment.CreatedBy]
 			}
 		}
@@ -593,7 +549,7 @@ func (r *ContentArticleClient) articlePostscriptContentRender(postscriptID int64
 	return util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_postscript", postscriptID), content)
 }
 
-func (r *ContentArticleClient) articleCoverImageURL(item *contentv1.PageArticles_Resp_Article) *string {
+func (r *ContentArticleClient) articleCoverImageURL(item *contentv1.Article) *string {
 	if item == nil || item.GetContent() == "" {
 		return nil
 	}

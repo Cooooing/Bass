@@ -19,49 +19,56 @@ service CommentService {
   rpc Create(CreateComment.Req) returns (CreateComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/create"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 分页查询评论列表。
   rpc List(ListComments.Req) returns (ListComments.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 分页查询评论楼层。
   rpc ListThreads(ListCommentThreads.Req) returns (ListCommentThreads.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-threads"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 分页查询评论回复。
   rpc ListReplies(ListCommentReplies.Req) returns (ListCommentReplies.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-replies"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 分页查询评论时间线。
   rpc ListTimeline(ListCommentTimeline.Req) returns (ListCommentTimeline.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/list-timeline"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 点赞或取消点赞评论。
   rpc Like(LikeComment.Req) returns (LikeComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/like"
-      body: "*"};
+      body: "*"
+    };
   }
 
   // 感谢或取消感谢评论。
   rpc Thank(ThankComment.Req) returns (ThankComment.Resp) {
     option (google.api.http) = {
       post: "/v1/content/comment/thank"
-      body: "*"};
+      body: "*"
+    };
   }
 }
 
@@ -72,7 +79,9 @@ message ListCommentThreads {
     int64 article_id = 2; // 文章 ID
     optional CommentOrder order = 3; // 顶层评论排序方式
     optional int32 reply_preview_limit = 4; // 每个楼层返回的回复预览数量
-    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+    };
   }
   message Resp {
     message CommentThread {
@@ -129,7 +138,6 @@ message ListCommentThreads {
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       ArticleType type = 4; // 文章类型
-      bool anonymous = 5; // 是否匿名展示
       AccountProfile author_user = 6; // 作者展示资料
       optional string cover_image_url = 7; // 封面图片 URL
       ArticlePublishStatus publish_status = 8; // 发布状态
@@ -152,8 +160,10 @@ message ListCommentReplies {
     int64 article_id = 2; // 文章 ID
     int64 parent_id = 3; // 顶层评论 ID
     optional CommentOrder order = 4; // 排序方式
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "parent_id"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "parent_id"
+    };
   }
   message Resp {
     message CommentListItem {
@@ -203,7 +213,6 @@ message ListCommentReplies {
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       ArticleType type = 4; // 文章类型
-      bool anonymous = 5; // 是否匿名展示
       AccountProfile author_user = 6; // 作者展示资料
       optional string cover_image_url = 7; // 封面图片 URL
       ArticlePublishStatus publish_status = 8; // 发布状态
@@ -225,7 +234,9 @@ message ListCommentTimeline {
     .common.api.app.common.PageReq page = 1; // 分页参数
     int64 article_id = 2; // 文章 ID
     optional CommentOrder order = 3; // 排序方式
-    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+    };
   }
   message Resp {
     message CommentListItem {
@@ -275,7 +286,6 @@ message ListCommentTimeline {
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       ArticleType type = 4; // 文章类型
-      bool anonymous = 5; // 是否匿名展示
       AccountProfile author_user = 6; // 作者展示资料
       optional string cover_image_url = 7; // 封面图片 URL
       ArticlePublishStatus publish_status = 8; // 发布状态
@@ -297,8 +307,10 @@ message CreateComment {
     int64 article_id = 1; // 文章 ID
     string content = 2; // 评论内容
     int64 reply_id = 3; // 回复的评论 ID
-    option (gnostic.openapi.v3.schema) = {required: "article_id"
-      required: "content"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "content"
+    };
   }
   message Resp {
     message CommentDetail {
@@ -343,7 +355,6 @@ message CreateComment {
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       ArticleType type = 4; // 文章类型
-      bool anonymous = 5; // 是否匿名展示
       AccountProfile author_user = 6; // 作者展示资料
       optional string cover_image_url = 7; // 封面图片 URL
       ArticlePublishStatus publish_status = 8; // 发布状态
@@ -428,7 +439,6 @@ message ListComments {
       int64 id = 1; // 文章 ID
       string title = 2; // 标题
       ArticleType type = 4; // 文章类型
-      bool anonymous = 5; // 是否匿名展示
       AccountProfile author_user = 6; // 作者展示资料
       optional string cover_image_url = 7; // 封面图片 URL
       ArticlePublishStatus publish_status = 8; // 发布状态
@@ -449,8 +459,10 @@ message LikeComment {
   message Req {
     int64 id = 1; // 评论 ID
     bool active = 2; // 是否点赞
-    option (gnostic.openapi.v3.schema) = {required: "id"
-      required: "active"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "id"
+      required: "active"
+    };
   }
   message Resp {
     bool liked = 1; // 是否已点赞
@@ -462,8 +474,10 @@ message ThankComment {
   message Req {
     int64 id = 1; // 评论 ID
     bool active = 2; // 是否感谢
-    option (gnostic.openapi.v3.schema) = {required: "id"
-      required: "active"};
+    option (gnostic.openapi.v3.schema) = {
+      required: "id"
+      required: "active"
+    };
   }
   message Resp {
     bool thanked = 1; // 是否已感谢

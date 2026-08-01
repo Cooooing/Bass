@@ -24,8 +24,8 @@ services:
     env_file:
       - .env
     ports:
-      - "8000:8000"
-      - "9000:9000"
+      - "8001:8001"
+      - "9001:9001"
     networks:
       - bass
 
@@ -36,8 +36,8 @@ services:
     env_file:
       - .env
     ports:
-      - "8002:8000"
-      - "9002:9000"
+      - "8101:8101"
+      - "9101:9101"
     networks:
       - bass
 
@@ -48,8 +48,8 @@ services:
     env_file:
       - .env
     ports:
-      - "8003:8000"
-      - "9003:9000"
+      - "8102:8102"
+      - "9102:9102"
     networks:
       - bass
 
@@ -60,8 +60,8 @@ services:
     env_file:
       - .env
     ports:
-      - "8004:8000"
-      - "9004:9000"
+      - "8103:8103"
+      - "9103:9103"
     networks:
       - bass
 
@@ -72,8 +72,31 @@ services:
     env_file:
       - .env
     ports:
-      - "8005:8000"
-      - "9005:9000"
+      - "8104:8104"
+      - "9104:9104"
     networks:
       - bass
 
+  platform:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/platform:latest
+    container_name: platform
+    restart: on-failure:3
+    env_file:
+      - .env
+    ports:
+      - "8201:8201"
+      - "9201:9201"
+    networks:
+      - bass
+
+  scheduler:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/scheduler:latest
+    container_name: scheduler
+    restart: on-failure:3
+    env_file:
+      - .env
+    ports:
+      - "8203:8203"
+      - "9203:9203"
+    networks:
+      - bass

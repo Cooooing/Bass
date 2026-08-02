@@ -31,11 +31,11 @@ redis:
   db: 0
   read_timeout: 5s
   write_timeout: 5s
-  pool_size: 150
-  min_idle_conns: 30
+  pool_size: 10
+  min_idle_conns: 1
   pool_timeout: 2s
-  conn_max_idle_time: 600s
-  conn_max_life_time: 1800s
+  conn_max_idle_time: 300s
+  conn_max_life_time: 900s
 nats:
   host: ${NATS_HOST:127.0.0.1}
   port: ${NATS_PORT:4222}

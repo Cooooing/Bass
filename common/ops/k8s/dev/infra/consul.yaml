@@ -1,4 +1,4 @@
-global:
+﻿global:
   name: bass-consul
   datacenter: dc1
   image: hashicorp/consul:2.0.0
@@ -24,3 +24,4 @@ ui:
 
 connectInject:
   enabled: false
+

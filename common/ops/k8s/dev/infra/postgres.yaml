@@ -3,8 +3,8 @@ fullnameOverride: bass-postgresql
 image:
   registry: registry-1.docker.io
   repository: bitnami/postgresql
-  tag: ""
-  digest: sha256:db2312d9b243afa8c3b3f5496e478d17d0dff9791d06f3b93b9567abd86ae92f
+  tag: sha256-db2312d9b243afa8c3b3f5496e478d17d0dff9791d06f3b93b9567abd86ae92f
+  digest: ""
 
 auth:
   enablePostgresUser: true

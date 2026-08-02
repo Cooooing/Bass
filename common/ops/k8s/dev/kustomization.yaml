@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - namespace.yaml
-  - secrets.yaml
-  - ingress.yaml
-  - ingress-tcp.yaml
+  - manifests/namespace.yaml
+  - manifests/secrets.yaml
+  - manifests/ingress.yaml
+  - manifests/ingress-tcp.yaml

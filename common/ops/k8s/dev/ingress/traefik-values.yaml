@@ -1,0 +1,172 @@
+﻿# Traefik Helm values for Bass ingress.
+# Public entrypoints use 31000-31999. Private API/TCP/debug entrypoints bind to host 127.0.0.1 for SSH tunneling.
+
+deployment:
+  kind: DaemonSet
+  healthchecksHost: 127.0.0.1
+
+image:
+  registry: swr.cn-north-4.myhuaweicloud.com
+  repository: ddn-k8s/docker.io/traefik
+  tag: v3.7.5
+
+hostNetwork: true
+
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 0
+    maxUnavailable: 1
+
+tolerations:
+  - operator: Exists
+
+api:
+  dashboard: false
+  insecure: false
+
+metrics:
+  prometheus: null
+
+providers:
+  kubernetesCRD:
+    enabled: true
+    allowEmptyServices: true
+  kubernetesIngress:
+    enabled: true
+    allowEmptyServices: true
+    publishedService:
+      enabled: false
+
+ingressClass:
+  enabled: true
+  isDefaultClass: true
+
+ports:
+  web:
+    port: 8000
+    exposedPort: 8000
+    hostIP: 127.0.0.1
+    protocol: TCP
+    expose:
+      default: false
+  websecure:
+    port: 8443
+    exposedPort: 8443
+    hostIP: 127.0.0.1
+    protocol: TCP
+    expose:
+      default: false
+  traefik:
+    port: 8080
+    exposedPort: 8080
+    hostIP: 127.0.0.1
+    protocol: TCP
+    expose:
+      default: false
+  metrics:
+    port: 9101
+    exposedPort: 9101
+    hostIP: 127.0.0.1
+    protocol: TCP
+    expose:
+      default: false
+  consul-ui:
+    port: 31050
+    exposedPort: 31050
+    hostPort: 31050
+    protocol: TCP
+    expose:
+      default: true
+  consul-api:
+    port: 31051
+    exposedPort: 31051
+    hostPort: 31051
+    protocol: TCP
+    expose:
+      default: true
+  minio-s3:
+    port: 31090
+    exposedPort: 31090
+    hostIP: 127.0.0.1
+    hostPort: 31090
+    protocol: TCP
+    expose:
+      default: false
+  minio-console:
+    port: 31091
+    exposedPort: 31091
+    hostPort: 31091
+    protocol: TCP
+    expose:
+      default: true
+  postgresql:
+    port: 31432
+    exposedPort: 31432
+    hostIP: 127.0.0.1
+    hostPort: 31432
+    protocol: TCP
+    expose:
+      default: false
+  redis:
+    port: 31379
+    exposedPort: 31379
+    hostIP: 127.0.0.1
+    hostPort: 31379
+    protocol: TCP
+    expose:
+      default: false
+  nats:
+    port: 31222
+    exposedPort: 31222
+    hostIP: 127.0.0.1
+    hostPort: 31222
+    protocol: TCP
+    expose:
+      default: false
+  nats-monitor:
+    port: 31822
+    exposedPort: 31822
+    hostIP: 127.0.0.1
+    hostPort: 31822
+    protocol: TCP
+    expose:
+      default: false
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+securityContext:
+  capabilities:
+    drop: [ALL]
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  runAsGroup: 0
+  runAsUser: 0
+  runAsNonRoot: false
+
+podSecurityContext:
+  runAsGroup: 0
+  runAsUser: 0
+  runAsNonRoot: false
+
+additionalArguments:
+  - "--log.level=INFO"
+  - "--ping=true"
+
+service:
+  enabled: true
+  spec:
+    type: ClusterIP
+
+
+
+
+
+
+

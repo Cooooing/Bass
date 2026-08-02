@@ -1,0 +1,92 @@
+﻿# HTTP middleware entrypoints. Public routes are protected by RateLimit.
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: bass-ui-rate-limit
+  namespace: bass-dev
+spec:
+  rateLimit:
+    average: 30
+    burst: 10
+    period: 1m
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: consul-ui
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - consul-ui
+  routes:
+    - match: PathPrefix(`/`)
+      kind: Rule
+      middlewares:
+        - name: bass-ui-rate-limit
+      services:
+        - name: bass-consul-ui
+          port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: consul-api
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - consul-api
+  routes:
+    - match: PathPrefix(`/`)
+      kind: Rule
+      middlewares:
+        - name: bass-ui-rate-limit
+      services:
+        - name: bass-consul-server
+          port: 8500
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: minio-s3
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - minio-s3
+  routes:
+    - match: PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: bass-minio
+          port: 9000
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: minio-console
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - minio-console
+  routes:
+    - match: PathPrefix(`/`)
+      kind: Rule
+      middlewares:
+        - name: bass-ui-rate-limit
+      services:
+        - name: bass-minio-console
+          port: 9001
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nats-monitor
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - nats-monitor
+  routes:
+    - match: PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: bass-nats-headless
+          port: 8222

@@ -51,7 +51,7 @@ Thumbs.db
 /app/**/configs/ip2region/*.xdb
 
 # Local environment and scratch files
-/common/ops/docker/.env
+/common/ops/docker/*.env
 /common/ops/tools/
 /deploy/
 temp.md
@@ -62,3 +62,8 @@ temp.md
 .agents
 AGENTS.md
 CLAUDE.md
+
+# Environment-local sensitive Kubernetes configs
+/common/ops/k8s/test/
+/common/ops/k8s/prod/
+

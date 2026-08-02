@@ -6,23 +6,23 @@ networks:
     external: true
 
 services:
-  treble:
-    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/treble:latest
-    container_name: treble
-    restart: on-failure:3
-    env_file:
-      - .env
-    ports:
-      - "2324:2324"
-    networks:
-      - bass
+#  treble:
+#    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/treble:latest
+#    container_name: treble
+#    restart: on-failure:3
+#    env_file:
+#      - .test.env
+#    ports:
+#      - "2324:2324"
+#    networks:
+#      - bass
 
   bbs:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/bbs:latest
     container_name: bbs
     restart: on-failure:3
     env_file:
-      - .env
+      - .test.env
     ports:
       - "8001:8001"
       - "9001:9001"
@@ -34,7 +34,7 @@ services:
     container_name: user
     restart: on-failure:3
     env_file:
-      - .env
+      - .test.env
     ports:
       - "8101:8101"
       - "9101:9101"
@@ -46,7 +46,7 @@ services:
     container_name: content
     restart: on-failure:3
     env_file:
-      - .env
+      - .test.env
     ports:
       - "8102:8102"
       - "9102:9102"
@@ -58,7 +58,7 @@ services:
     container_name: notify
     restart: on-failure:3
     env_file:
-      - .env
+      - .test.env
     ports:
       - "8103:8103"
       - "9103:9103"
@@ -70,7 +70,7 @@ services:
     container_name: im
     restart: on-failure:3
     env_file:
-      - .env
+      - .test.env
     ports:
       - "8104:8104"
       - "9104:9104"
@@ -82,7 +82,7 @@ services:
     container_name: platform
     restart: on-failure:3
     env_file:
-      - .env
+      - .test.env
     ports:
       - "8201:8201"
       - "9201:9201"
@@ -94,7 +94,7 @@ services:
     container_name: scheduler
     restart: on-failure:3
     env_file:
-      - .env
+      - .test.env
     ports:
       - "8203:8203"
       - "9203:9203"

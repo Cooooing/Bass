@@ -11,9 +11,9 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/bbs/v1/user;user";
 
-// 账号接口。
+// AccountService 提供 BBS 账号接口
 service AccountService {
-  // 获取当前账号的完整资料。
+  // 获取当前账号完整资料
   rpc GetCurrent(GetCurrentAccount.Req) returns (GetCurrentAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/get-current"
@@ -21,7 +21,7 @@ service AccountService {
     };
   }
 
-  // 按账号 ID 获取账号展示资料。
+  // 按账号 ID 获取展示资料
   rpc GetProfile(GetProfileAccount.Req) returns (GetProfileAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/get-profile"
@@ -29,7 +29,7 @@ service AccountService {
     };
   }
 
-  // 更新当前账号的展示资料。
+  // 更新当前账号展示资料
   rpc UpdateProfile(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/update-profile"
@@ -37,7 +37,31 @@ service AccountService {
     };
   }
 
-  // 生成默认账号头像。
+  // 更新当前账号密码
+  rpc UpdatePassword(UpdatePasswordAccount.Req) returns (UpdatePasswordAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/update-password"
+      body: "*"
+    };
+  }
+
+  // 更新当前账号邮箱
+  rpc UpdateEmail(UpdateEmailAccount.Req) returns (UpdateEmailAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/update-email"
+      body: "*"
+    };
+  }
+
+  // 更新当前账号手机号
+  rpc UpdatePhone(UpdatePhoneAccount.Req) returns (UpdatePhoneAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/update-phone"
+      body: "*"
+    };
+  }
+
+  // 生成默认账号头像
   rpc Avatar(AvatarAccount.Req) returns (.common.api.app.common.ImageResp) {
     option (google.api.http) = {
       get: "/v1/user/account/avatar"
@@ -45,7 +69,7 @@ service AccountService {
   }
 }
 
-// 获取当前账号的完整资料。
+// 获取当前账号完整资料
 message GetCurrentAccount {
   message Req {}
   message Resp {
@@ -78,10 +102,10 @@ message GetCurrentAccount {
   }
 }
 
-// 按账号 ID 获取账号展示资料。
+// 按账号 ID 获取展示资料
 message GetProfileAccount {
   message Req {
-    int64 user_id = 1; // 账号 ID
+    int64 user_id = 1; // 账号 ID，必填
     option (gnostic.openapi.v3.schema) = {
       required: "user_id"
     };
@@ -105,14 +129,14 @@ message GetProfileAccount {
   }
 }
 
-// 更新当前账号的展示资料。
+// 更新当前账号展示资料
 message UpdateProfileAccount {
   message Req {
-    optional string avatar_url = 1; // 头像 URL
-    optional string nickname = 2; // 昵称
-    optional string url = 3; // 个人主页 URL
-    optional string introduction = 4; // 个人简介
-    optional MBTI mbti = 5; // MBTI 类型
+    optional string avatar_url = 1; // 头像 URL，选填
+    optional string nickname = 2; // 昵称，选填
+    optional string url = 3; // 个人主页 URL，选填
+    optional string introduction = 4; // 个人简介，选填
+    optional MBTI mbti = 5; // MBTI 类型，选填
   }
   message Resp {
     message AccountProfile {
@@ -133,10 +157,49 @@ message UpdateProfileAccount {
   }
 }
 
-// 生成默认账号头像。
+// 更新当前账号密码
+message UpdatePasswordAccount {
+  message Req {
+    string old_password = 1; // 旧密码，必填
+    string new_password = 2; // 新密码，必填
+    option (gnostic.openapi.v3.schema) = {
+      required: "old_password"
+      required: "new_password"
+    };
+  }
+  message Resp {}
+}
+
+// 更新当前账号邮箱
+message UpdateEmailAccount {
+  message Req {
+    string email = 1; // 新邮箱地址，必填
+    string code = 2; // 邮箱 OTP，必填
+    option (gnostic.openapi.v3.schema) = {
+      required: "email"
+      required: "code"
+    };
+  }
+  message Resp {}
+}
+
+// 更新当前账号手机号
+message UpdatePhoneAccount {
+  message Req {
+    string phone = 1; // 新手机号，必填
+    string code = 2; // 手机 OTP，必填
+    option (gnostic.openapi.v3.schema) = {
+      required: "phone"
+      required: "code"
+    };
+  }
+  message Resp {}
+}
+
+// 生成默认账号头像
 message AvatarAccount {
   message Req {
-    string name = 1; // 用于生成头像的账号名
+    string name = 1; // 账号名，必填
     option (gnostic.openapi.v3.schema) = {
       required: "name"
     };

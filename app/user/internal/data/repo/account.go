@@ -53,6 +53,35 @@ func (r *AccountRepo) UpdateProfile(ctx context.Context, profile *model.AccountP
 	return r.updateProfile(ctx, profile)
 }
 
+func (r *AccountRepo) UpdatePassword(ctx context.Context, userID int64, passwordHash string) error {
+	_, err := r.getClient(ctx).Account.UpdateOneID(userID).
+		SetPassword(passwordHash).
+		Save(ctx)
+	if gen.IsNotFound(err) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND)
+	}
+	return err
+}
+
+func (r *AccountRepo) UpdateEmail(ctx context.Context, userID int64, email string) error {
+	_, err := r.getClient(ctx).Account.UpdateOneID(userID).
+		SetEmail(email).
+		Save(ctx)
+	if gen.IsNotFound(err) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND)
+	}
+	return err
+}
+
+func (r *AccountRepo) UpdatePhone(ctx context.Context, userID int64, phone string) error {
+	_, err := r.getClient(ctx).Account.UpdateOneID(userID).
+		SetPhone(phone).
+		Save(ctx)
+	if gen.IsNotFound(err) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND)
+	}
+	return err
+}
 func (r *AccountRepo) AddStat(ctx context.Context, req *repo.AccountAddStatReq) (*model.Account, error) {
 	return r.addStat(ctx, req.UserID, req.StatType, req.Num)
 }

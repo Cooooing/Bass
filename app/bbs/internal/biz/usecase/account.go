@@ -138,6 +138,48 @@ func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdatePr
 	return profile, nil
 }
 
+type UpdatePasswordAccountReq struct {
+	UserID      int64
+	OldPassword string
+	NewPassword string
+}
+
+func (u *AccountUsecase) UpdatePasswordAccount(ctx context.Context, req *UpdatePasswordAccountReq) error {
+	return u.accountClient.UpdatePasswordAccount(ctx, &repo.UpdatePasswordAccountReq{
+		UserID:      req.UserID,
+		OldPassword: req.OldPassword,
+		NewPassword: req.NewPassword,
+	})
+}
+
+type UpdateEmailAccountReq struct {
+	UserID int64
+	Email  string
+	Code   string
+}
+
+func (u *AccountUsecase) UpdateEmailAccount(ctx context.Context, req *UpdateEmailAccountReq) error {
+	return u.accountClient.UpdateEmailAccount(ctx, &repo.UpdateEmailAccountReq{
+		UserID: req.UserID,
+		Email:  req.Email,
+		Code:   req.Code,
+	})
+}
+
+type UpdatePhoneAccountReq struct {
+	UserID int64
+	Phone  string
+	Code   string
+}
+
+func (u *AccountUsecase) UpdatePhoneAccount(ctx context.Context, req *UpdatePhoneAccountReq) error {
+	return u.accountClient.UpdatePhoneAccount(ctx, &repo.UpdatePhoneAccountReq{
+		UserID: req.UserID,
+		Phone:  req.Phone,
+		Code:   req.Code,
+	})
+}
+
 type AvatarAccountResp struct {
 	Data        []byte
 	ContentType string

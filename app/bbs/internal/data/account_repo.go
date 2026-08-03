@@ -124,6 +124,32 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 	return profile, nil
 }
 
+func (r *AccountClient) UpdatePasswordAccount(ctx context.Context, req *repo.UpdatePasswordAccountReq) error {
+	_, err := r.userClient.Account.UpdatePassword(ctx, &userv1.UpdatePasswordAccount_Req{
+		UserId:      req.UserID,
+		OldPassword: req.OldPassword,
+		NewPassword: req.NewPassword,
+	})
+	return err
+}
+
+func (r *AccountClient) UpdateEmailAccount(ctx context.Context, req *repo.UpdateEmailAccountReq) error {
+	_, err := r.userClient.Account.UpdateEmail(ctx, &userv1.UpdateEmailAccount_Req{
+		UserId: req.UserID,
+		Email:  req.Email,
+		Code:   req.Code,
+	})
+	return err
+}
+
+func (r *AccountClient) UpdatePhoneAccount(ctx context.Context, req *repo.UpdatePhoneAccountReq) error {
+	_, err := r.userClient.Account.UpdatePhone(ctx, &userv1.UpdatePhoneAccount_Req{
+		UserId: req.UserID,
+		Phone:  req.Phone,
+		Code:   req.Code,
+	})
+	return err
+}
 func (r *AccountClient) AvatarAccount(ctx context.Context, name string) (*repo.AvatarAccountResp, error) {
 	reply, err := r.userClient.Account.Avatar(ctx, &userv1.AvatarAccount_Req{
 		Name: name,

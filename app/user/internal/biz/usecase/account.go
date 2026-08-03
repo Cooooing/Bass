@@ -2,14 +2,18 @@ package usecase
 
 import (
 	"bytes"
+	"common/pkg/apperror"
+	"common/pkg/util/str"
+	commonerrors "common/proto/gen/common/errors"
 	"context"
 	"image/png"
+	"log/slog"
+	"strings"
 	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/config"
-
-	"log/slog"
+	"user/internal/enum"
 
 	"github.com/MuhammadSaim/goavatar"
 )
@@ -19,6 +23,9 @@ type AccountUsecase struct {
 	tx              base.Tx
 	accountRepo     repo.AccountRepo
 	preferencesRepo repo.PreferencesRepo
+	authCacheRepo   repo.AuthCacheRepo
+	emailOtpUsecase *EmailOtpUsecase
+	smsOtpUsecase   *SmsOtpUsecase
 }
 
 func NewAccountUsecase(
@@ -27,12 +34,18 @@ func NewAccountUsecase(
 	tx base.Tx,
 	accountRepo repo.AccountRepo,
 	preferencesRepo repo.PreferencesRepo,
+	authCacheRepo repo.AuthCacheRepo,
+	emailOtpUsecase *EmailOtpUsecase,
+	smsOtpUsecase *SmsOtpUsecase,
 ) (*AccountUsecase, error) {
 	return &AccountUsecase{
 		conf:            conf,
 		tx:              tx,
 		accountRepo:     accountRepo,
 		preferencesRepo: preferencesRepo,
+		authCacheRepo:   authCacheRepo,
+		emailOtpUsecase: emailOtpUsecase,
+		smsOtpUsecase:   smsOtpUsecase,
 	}, nil
 }
 
@@ -91,6 +104,114 @@ func (s *AccountUsecase) MapByUserIDs(ctx context.Context, userIDs []int64) (map
 
 func (s *AccountUsecase) UpdateProfile(ctx context.Context, profile *model.AccountProfileUpdate) (*model.Account, error) {
 	return s.accountRepo.UpdateProfile(ctx, profile)
+}
+
+type UpdateAccountPasswordReq struct {
+	UserID      int64
+	OldPassword string
+	NewPassword string
+}
+
+func (s *AccountUsecase) UpdatePassword(ctx context.Context, req *UpdateAccountPasswordReq) error {
+	account, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
+		UserID: new(req.UserID),
+	})
+	if err != nil {
+		return err
+	}
+	if account.Status == nil || *account.Status != enum.AccountStatusNormal {
+		switch {
+		case account.Status != nil && *account.Status == enum.AccountStatusBanned:
+			return apperror.New(commonerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_BANNED)
+		case account.Status != nil && *account.Status == enum.AccountStatusCancelled:
+			return apperror.New(commonerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_CANCELLED)
+		default:
+			return apperror.New(commonerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
+		}
+	}
+	if !str.VerifyPassword(account.Password, req.OldPassword) {
+		return apperror.New(commonerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+	}
+	passwordHash, err := str.HashPassword(req.NewPassword)
+	if err != nil {
+		return err
+	}
+	if err := s.accountRepo.UpdatePassword(ctx, req.UserID, passwordHash); err != nil {
+		return err
+	}
+	return s.authCacheRepo.DeleteUserSessions(ctx, req.UserID)
+}
+
+type UpdateAccountEmailReq struct {
+	UserID int64
+	Email  string
+	Code   string
+}
+
+func (s *AccountUsecase) UpdateEmail(ctx context.Context, req *UpdateAccountEmailReq) error {
+	email := strings.ToLower(strings.TrimSpace(req.Email))
+	account, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
+		UserID: new(req.UserID),
+	})
+	if err != nil {
+		return err
+	}
+	if account.Status == nil || *account.Status != enum.AccountStatusNormal {
+		return apperror.New(commonerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+	}
+	if account.Email == nil || *account.Email != email {
+		exists, err := s.accountRepo.ExistsByAccount(ctx, email)
+		if err != nil {
+			return err
+		}
+		if exists {
+			return apperror.New(commonerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
+		}
+	}
+	if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{
+		UserID: new(req.UserID),
+		Email:  email,
+		Code:   req.Code,
+	}); err != nil {
+		return err
+	}
+	return s.accountRepo.UpdateEmail(ctx, req.UserID, email)
+}
+
+type UpdateAccountPhoneReq struct {
+	UserID int64
+	Phone  string
+	Code   string
+}
+
+func (s *AccountUsecase) UpdatePhone(ctx context.Context, req *UpdateAccountPhoneReq) error {
+	phone := strings.TrimSpace(req.Phone)
+	account, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
+		UserID: new(req.UserID),
+	})
+	if err != nil {
+		return err
+	}
+	if account.Status == nil || *account.Status != enum.AccountStatusNormal {
+		return apperror.New(commonerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+	}
+	if account.Phone == nil || *account.Phone != phone {
+		exists, err := s.accountRepo.ExistsByAccount(ctx, phone)
+		if err != nil {
+			return err
+		}
+		if exists {
+			return apperror.New(commonerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
+		}
+	}
+	if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{
+		UserID: new(req.UserID),
+		Phone:  phone,
+		Code:   req.Code,
+	}); err != nil {
+		return err
+	}
+	return s.accountRepo.UpdatePhone(ctx, req.UserID, phone)
 }
 
 type UpdateAccountSettingReq struct {

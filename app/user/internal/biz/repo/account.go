@@ -11,6 +11,9 @@ type AccountRepo interface {
 
 	Update(ctx context.Context, account *model.Account) (*model.Account, error)
 	UpdateProfile(ctx context.Context, profile *model.AccountProfileUpdate) (*model.Account, error)
+	UpdatePassword(ctx context.Context, userID int64, passwordHash string) error
+	UpdateEmail(ctx context.Context, userID int64, email string) error
+	UpdatePhone(ctx context.Context, userID int64, phone string) error
 	AddStat(ctx context.Context, req *AccountAddStatReq) (*model.Account, error)
 
 	UpdateStatus(ctx context.Context, userID int64, status enum.AccountStatus) (*model.Account, error)

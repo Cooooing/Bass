@@ -67,3 +67,4 @@ CLAUDE.md
 /common/ops/k8s/test/
 /common/ops/k8s/prod/
 
+/common/ops/k8s/dev/cicd/secrets.local.yaml

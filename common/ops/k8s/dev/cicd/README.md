@@ -1,71 +1,56 @@
-﻿# Bass dev CI/CD
+# Bass dev CI/CD
 
-`cicd` 目录用于在本地 Kubernetes 集群运行 Woodpecker CI。当前目标是本地过渡使用：本地 `microk8s` 负责 UI、流水线调度和构建，远程 `vm-microk8s` 测试集群只负责部署运行。
+`cicd` directory runs Jenkins in the local Kubernetes cluster. The current goal is a local, UI-driven CI/CD transition: manually choose a service module in Jenkins, pull code, build an image, then push to the registry or deploy to the remote `vm-microk8s` test cluster.
 
-## 文件
+## Files
 
 ```text
 cicd/
 |-- README.md
-|-- secrets.example.yaml      # forge/OAuth Secret 示例，不直接部署
-|-- woodpecker-nodeport.yaml  # 本地固定 NodePort 入口
-`-- woodpecker-values.yaml    # Woodpecker Helm values
+|-- jenkins.yaml          # Jenkins controller, PVC, services, NodePort
+`-- secrets.example.yaml  # credential placeholders, do not deploy directly
 ```
 
-## 部署
+## Deploy
 
-先切到本地集群：
+Switch to the local cluster first:
 
 ```bash
 kubectl config use-context microk8s
 ```
 
-创建 namespace：
+Deploy Jenkins:
 
 ```bash
-kubectl create namespace cicd
+kubectl apply -f common/ops/k8s/dev/cicd/jenkins.yaml
+kubectl rollout status deployment/jenkins -n cicd --timeout=5m
 ```
 
-复制 `secrets.example.yaml`，填入本地 OAuth 配置后再 apply。包含真实密钥的 `secrets.local.yaml` 不应提交到 Git。
+## Access
+
+Prefer port-forward on Windows + local MicroK8s:
 
 ```bash
-kubectl apply -f common/ops/k8s/dev/cicd/secrets.local.yaml
+kubectl port-forward -n cicd svc/jenkins 31980:8080
 ```
 
-安装 Woodpecker：
-
-```bash
-helm upgrade --install woodpecker oci://ghcr.io/woodpecker-ci/helm/woodpecker \
-  --version 3.3.0 \
-  -n cicd \
-  --timeout 10m \
-  -f common/ops/k8s/dev/cicd/woodpecker-values.yaml \
-  --wait
-
-kubectl apply -f common/ops/k8s/dev/cicd/woodpecker-nodeport.yaml
-```
-
-## 访问
-
-优先使用 port-forward，本机最稳定：
-
-```bash
-kubectl port-forward -n cicd svc/woodpecker-server 31980:80
-```
-
-访问地址：
+Open:
 
 ```text
 http://127.0.0.1:31980
 ```
 
-`woodpecker-nodeport.yaml` 也固定了 `31980` 端口，但在 Windows + 本地 MicroK8s 场景下，NodePort 是否能从 Windows 直接访问取决于本地集群网络实现。
+`jenkins.yaml` also reserves NodePort `31980`. Direct Windows access to NodePort depends on the local Kubernetes networking implementation.
 
-如果需要给团队成员访问，建议通过 Tailscale、Cloudflare Tunnel 或 frp 暴露本地 `31980`，不要直接裸露到公网。
+Initial admin password:
 
-## 后续流水线
+```bash
+kubectl exec -n cicd deploy/jenkins -- cat /var/jenkins_home/secrets/initialAdminPassword
+```
 
-流水线配置建议放到仓库 `.woodpecker/` 下，按服务手动触发：
+## Manual Pipeline Shape
+
+Create a parameterized Jenkins job with one service parameter:
 
 ```text
 SERVICE=bbs
@@ -77,4 +62,30 @@ SERVICE=platform
 SERVICE=scheduler
 ```
 
-构建完成后推送到阿里云 ACR，再通过 SSH 或受限 kubeconfig 部署到远程 `vm-microk8s` 的 `bass-test` namespace。
+This phase does not require GitHub webhooks, so Jenkins does not need to be publicly reachable. The pipeline should use Jenkins credentials to pull the repository manually.
+
+Recommended credentials to add in Jenkins UI later:
+
+```text
+Git token or SSH key
+Aliyun ACR username/password
+Remote test kubeconfig or SSH key
+```
+
+## Resources
+
+Jenkins controller uses a fixed image tag:
+
+```text
+dockerproxy.net/jenkins/jenkins:2.516.3-lts-jdk21
+```
+
+Resource profile:
+
+```text
+requests: 200m CPU / 768Mi memory
+limits:   1 CPU / 1536Mi memory
+PVC:      10Gi
+```
+
+Jenkins is heavier than Woodpecker. For real Go and image builds, prefer dedicated build pods or remote build nodes instead of putting build load inside the controller process.

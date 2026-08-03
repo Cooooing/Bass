@@ -22,7 +22,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/pquerna/otp/totp"
 	"github.com/samber/lo"
-	"github.com/sony/sonyflake/v2"
 )
 
 type AuthUsecase struct {
@@ -41,8 +40,6 @@ type AuthUsecase struct {
 	ipClient          repo.IPClient
 	delayedTaskClient repo.DelayedTaskClient
 	tokenUsecase      *TokenUsecase
-
-	sf *sonyflake.Sonyflake
 }
 
 func NewAuthUsecase(
@@ -61,11 +58,7 @@ func NewAuthUsecase(
 	ipClient repo.IPClient,
 	delayedTaskClient repo.DelayedTaskClient,
 	tokenUsecase *TokenUsecase,
-) (*AuthUsecase, error) {
-	sf, err := str.NewSonyflake()
-	if err != nil {
-		return nil, err
-	}
+) *AuthUsecase {
 	return &AuthUsecase{
 		conf:              conf,
 		logger:            logger,
@@ -82,187 +75,83 @@ func NewAuthUsecase(
 		ipClient:          ipClient,
 		delayedTaskClient: delayedTaskClient,
 		tokenUsecase:      tokenUsecase,
-		sf:                sf,
-	}, nil
+	}
 }
 
-type StartEmailRegistrationResp struct {
-	Code string
+type RegisterReq struct {
+	Type     enum.RegisterType
+	Name     string
+	Password string
+	Nickname *string
+	Email    string
+	Phone    string
+	Code     string
 }
 
-func (s *AuthUsecase) StartEmailRegistration(ctx context.Context, account *model.Account) (*StartEmailRegistrationResp, error) {
-	if account == nil || account.Email == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	email := strings.ToLower(strings.TrimSpace(*account.Email))
-	if exists, err := s.accountRepo.ExistsByAccount(ctx, account.Name); err != nil {
-		return nil, err
-	} else if exists {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN)
-	}
-	if exists, err := s.accountRepo.ExistsByAccount(ctx, email); err != nil {
-		return nil, err
-	} else if exists {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
-	}
-	passwordHash, err := str.HashPassword(account.Password)
-	if err != nil {
-		return nil, err
-	}
-	now := time.Now()
-	verificationCodeConf := s.conf.GetBusiness().GetAuth().GetVerificationCode()
-	codeTTL := 5 * time.Minute
-	if verificationCodeConf.GetCodeTtl() != nil && verificationCodeConf.GetCodeTtl().AsDuration() > 0 {
-		codeTTL = verificationCodeConf.GetCodeTtl().AsDuration()
-	}
-	draftTTL := 30 * time.Minute
-	if verificationCodeConf.GetRegisterDraftTtl() != nil && verificationCodeConf.GetRegisterDraftTtl().AsDuration() > 0 {
-		draftTTL = verificationCodeConf.GetRegisterDraftTtl().AsDuration()
-	}
-	maxAttempts := verificationCodeConf.GetMaxAttempts()
-	if maxAttempts <= 0 {
-		maxAttempts = 5
-	}
-	code := str.RandStr(s.sf, 6, true, true, true, false)
-	if err := s.authCacheRepo.SaveRegisterDraft(ctx, enum.VerificationTypeEmail, email, &model.RegisterDraft{
-		Name:         account.Name,
-		Nickname:     account.Nickname,
-		PasswordHash: passwordHash,
-		Email:        new(email),
-		CreatedAt:    new(now),
-		ExpiresAt:    new(now.Add(draftTTL)),
-	}, draftTTL); err != nil {
-		return nil, err
-	}
-	if err := s.authCacheRepo.SaveCode(ctx, &model.VerificationCode{
-		Type:        enum.VerificationTypeEmail,
-		Account:     email,
-		Code:        code,
-		MaxAttempts: maxAttempts,
-		CreatedAt:   new(now),
-		ExpiresAt:   new(now.Add(codeTTL)),
-	}, codeTTL); err != nil {
-		return nil, err
-	}
-	outboxEvent, err := s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-		Event: &commonenums.Event{
-			Type:    commonenums.EventType_EVENT_TYPE_USER_EMAIL_VERIFICATION_CODE,
-			Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_EMAIL_VERIFICATION_CODE,
-			Payload: &commonenums.Event_UserEmailVerificationCode{
-				UserEmailVerificationCode: &commonenums.UserEmailVerificationCodePayload{
-					Email:          email,
-					Code:           code,
-					ExpiresSeconds: int64(codeTTL.Seconds()),
-				},
-			},
-		},
-	})
-	if err != nil {
-		_ = s.authCacheRepo.DeleteCode(ctx, &repo.VerificationCodeKeyReq{
-			Type:    enum.VerificationTypeEmail,
-			Account: email,
-		})
-		_ = s.authCacheRepo.DeleteRegisterDraft(ctx, enum.VerificationTypeEmail, email)
-		return nil, err
-	}
-	if outboxEvent != nil {
-		if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
-			ID: outboxEvent.ID,
+func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
+	switch req.Type {
+	case enum.RegisterTypeEmail:
+		email := strings.ToLower(strings.TrimSpace(req.Email))
+		if exists, err := s.accountRepo.ExistsByAccount(ctx, req.Name); err != nil {
+			return err
+		} else if exists {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN)
+		}
+		if exists, err := s.accountRepo.ExistsByAccount(ctx, email); err != nil {
+			return err
+		} else if exists {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
+		}
+		if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{
+			Email: email,
+			Code:  req.Code,
 		}); err != nil {
-			s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+			return err
 		}
-	}
-	return &StartEmailRegistrationResp{
-		Code: code,
-	}, nil
-}
-
-type VerifyEmailRegistrationReq struct {
-	Email string
-	Code  string
-}
-
-func (s *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEmailRegistrationReq) error {
-	email := strings.ToLower(strings.TrimSpace(req.Email))
-	key := &repo.VerificationCodeKeyReq{
-		Type:    enum.VerificationTypeEmail,
-		Account: email,
-	}
-	row, err := s.authCacheRepo.GetCode(ctx, key)
-	if err != nil {
-		return err
-	}
-	if row == nil || row.ExpiresAt == nil || !row.ExpiresAt.After(time.Now()) || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
-		if row != nil && row.Attempts < row.MaxAttempts {
-			_, _ = s.authCacheRepo.IncrCodeAttempts(ctx, key)
+		passwordHash, err := str.HashPassword(req.Password)
+		if err != nil {
+			return err
 		}
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED)
-	}
-	draft, err := s.authCacheRepo.GetRegisterDraft(ctx, enum.VerificationTypeEmail, email)
-	if err != nil {
-		return err
-	}
-	if draft == nil || draft.PasswordHash == "" || draft.Email == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED)
-	}
-	var outboxEvent *model.OutboxEvent
-	err = s.tx(ctx, func(ctx context.Context) error {
-		created, err := s.accountRepo.Create(ctx, &model.Account{
-			Name:     draft.Name,
-			Nickname: draft.Nickname,
-			Password: draft.PasswordHash,
-			Email:    draft.Email,
+		var outboxEvent *model.OutboxEvent
+		err = s.tx(ctx, func(ctx context.Context) error {
+			created, err := s.accountRepo.Create(ctx, &model.Account{
+				Name:     req.Name,
+				Nickname: req.Nickname,
+				Password: passwordHash,
+				Email:    new(email),
+			})
+			if err != nil {
+				return err
+			}
+			outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				Event: &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_USER_REGISTER,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_REGISTER,
+					Payload: &commonenums.Event_UserRegister{
+						UserRegister: &commonenums.UserRegisterPayload{
+							UserId: created.ID,
+						},
+					},
+				},
+			})
+			return err
 		})
 		if err != nil {
 			return err
 		}
-		if err := s.authCacheRepo.DeleteCode(ctx, key); err != nil {
-			return err
+		if outboxEvent != nil {
+			if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
+				ID: outboxEvent.ID,
+			}); err != nil {
+				s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+			}
 		}
-		if err := s.authCacheRepo.DeleteRegisterDraft(ctx, enum.VerificationTypeEmail, email); err != nil {
-			return err
-		}
-		outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
-			Event: &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_USER_REGISTER,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_REGISTER,
-				Payload: &commonenums.Event_UserRegister{
-					UserRegister: &commonenums.UserRegisterPayload{
-						UserId: created.ID,
-					},
-				},
-			},
-		})
-		return err
-	})
-	if err != nil {
-		return err
+		return nil
+	case enum.RegisterTypePhone:
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
+	default:
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	if outboxEvent != nil {
-		if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{
-			ID: outboxEvent.ID,
-		}); err != nil {
-			s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
-		}
-	}
-	return nil
-}
-
-type StartPhoneRegistrationResp struct {
-	Code string
-}
-
-func (s *AuthUsecase) StartPhoneRegistration(ctx context.Context, account *model.Account) (*StartPhoneRegistrationResp, error) {
-	return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
-}
-
-type VerifyPhoneRegistrationReq struct {
-	Phone string
-	Code  string
-}
-
-func (s *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, req *VerifyPhoneRegistrationReq) error {
-	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
 }
 
 type LoginReq struct {

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.user;
+
+option go_package = "common/proto/gen/bbs/v1/user/enum;enum";
+
+// RegisterType 表示 BBS 端对外注册方式。
+enum RegisterType {
+  REGISTER_TYPE_UNSPECIFIED = 0; // 未指定
+  REGISTER_TYPE_EMAIL = 1; // 邮箱注册
+  REGISTER_TYPE_PHONE = 2; // 手机号注册
+}

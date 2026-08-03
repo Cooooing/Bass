@@ -44,7 +44,7 @@ message Business {
     google.protobuf.Duration code_ttl = 1; // 验证码有效期，例如 300s 表示 5min。
     google.protobuf.Duration resend_interval = 2; // 同账号重复发送间隔，例如 60s 表示 1min。
     int32 max_attempts = 3; // 单个验证码最大校验次数。
-    google.protobuf.Duration register_draft_ttl = 4; // 注册草稿有效期，例如 1800s 表示 30min。
+    reserved 4;
   }
 
   message Totp {

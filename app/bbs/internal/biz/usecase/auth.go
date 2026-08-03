@@ -18,73 +18,25 @@ func NewAuthUsecase(
 	}
 }
 
-type StartEmailRegistrationReq struct {
+type RegisterReq struct {
+	Type     enum.RegisterType
+	Name     string
+	Password string
+	Nickname *string
 	Email    string
-	Password string
-	Name     string
-	Nickname *string
-}
-type StartEmailRegistrationResp struct{ Code string }
-
-func (u *AuthUsecase) StartEmailRegistration(ctx context.Context, req *StartEmailRegistrationReq) (*StartEmailRegistrationResp, error) {
-	reply, err := u.authRepo.StartEmailRegistration(ctx, &repo.StartEmailRegistrationReq{
-		Email:    req.Email,
-		Password: req.Password,
-		Name:     req.Name,
-		Nickname: req.Nickname,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &StartEmailRegistrationResp{
-		Code: reply.Code,
-	}, nil
-}
-
-type VerifyEmailRegistrationReq struct {
-	Email string
-	Code  string
-}
-
-func (u *AuthUsecase) VerifyEmailRegistration(ctx context.Context, req *VerifyEmailRegistrationReq) error {
-	return u.authRepo.VerifyEmailRegistration(ctx, &repo.VerifyEmailRegistrationReq{
-		Email: req.Email,
-		Code:  req.Code,
-	})
-}
-
-type StartPhoneRegistrationReq struct {
 	Phone    string
-	Password string
-	Name     string
-	Nickname *string
+	Code     string
 }
-type StartPhoneRegistrationResp struct{ Code string }
 
-func (u *AuthUsecase) StartPhoneRegistration(ctx context.Context, req *StartPhoneRegistrationReq) (*StartPhoneRegistrationResp, error) {
-	reply, err := u.authRepo.StartPhoneRegistration(ctx, &repo.StartPhoneRegistrationReq{
-		Phone:    req.Phone,
-		Password: req.Password,
+func (u *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
+	return u.authRepo.Register(ctx, &repo.RegisterReq{
+		Type:     req.Type,
 		Name:     req.Name,
+		Password: req.Password,
 		Nickname: req.Nickname,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &StartPhoneRegistrationResp{
-		Code: reply.Code,
-	}, nil
-}
-
-type VerifyPhoneRegistrationReq struct {
-	Phone string
-	Code  string
-}
-
-func (u *AuthUsecase) VerifyPhoneRegistration(ctx context.Context, req *VerifyPhoneRegistrationReq) error {
-	return u.authRepo.VerifyPhoneRegistration(ctx, &repo.VerifyPhoneRegistrationReq{
-		Phone: req.Phone,
-		Code:  req.Code,
+		Email:    req.Email,
+		Phone:    req.Phone,
+		Code:     req.Code,
 	})
 }
 

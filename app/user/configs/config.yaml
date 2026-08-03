@@ -71,6 +71,5 @@ business:
       code_ttl: 300s # 5min
       resend_interval: 60s # 1min
       max_attempts: 5
-      register_draft_ttl: 1800s # 30min
     totp:
       temporary_secret_ttl: 300s # 5min

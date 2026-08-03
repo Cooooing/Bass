@@ -35,61 +35,34 @@ func NewAuthClient(
 	return NewAuthRepo(userClient)
 }
 
-func (r *AuthRepo) StartEmailRegistration(ctx context.Context, req *repo.StartEmailRegistrationReq) (*repo.StartEmailRegistrationResp, error) {
-	reply, err := r.userClient.Auth.StartEmailRegistration(ctx, &userv1.StartEmailRegistration_Req{
-		Email:    req.Email,
-		Password: req.Password,
+func (r *AuthRepo) Register(ctx context.Context, req *repo.RegisterReq) error {
+	registerReq := &userv1.Register_Req{
+		Type:     req.Type.ToUserProto(),
 		Name:     req.Name,
-		Nickname: req.Nickname,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &repo.StartEmailRegistrationResp{
-		Code: reply.GetCode(),
-	}, nil
-}
-
-func (r *AuthRepo) VerifyEmailRegistration(ctx context.Context, req *repo.VerifyEmailRegistrationReq) error {
-	_, err := r.userClient.Auth.VerifyEmailRegistration(ctx, &userv1.VerifyEmailRegistration_Req{
-		Email: req.Email,
-		Code:  req.Code,
-	})
-	return err
-}
-
-func (r *AuthRepo) StartPhoneRegistration(ctx context.Context, req *repo.StartPhoneRegistrationReq) (*repo.StartPhoneRegistrationResp, error) {
-	reply, err := r.userClient.Auth.StartPhoneRegistration(ctx, &userv1.StartPhoneRegistration_Req{
-		Phone:    req.Phone,
 		Password: req.Password,
-		Name:     req.Name,
 		Nickname: req.Nickname,
-	})
-	if err != nil {
-		return nil, err
 	}
-	return &repo.StartPhoneRegistrationResp{
-		Code: reply.GetCode(),
-	}, nil
-}
-
-func (r *AuthRepo) VerifyPhoneRegistration(ctx context.Context, req *repo.VerifyPhoneRegistrationReq) error {
-	_, err := r.userClient.Auth.VerifyPhoneRegistration(ctx, &userv1.VerifyPhoneRegistration_Req{
-		Phone: req.Phone,
-		Code:  req.Code,
-	})
+	switch req.Type {
+	case enum.RegisterTypeEmail:
+		registerReq.Credential = &userv1.Register_Req_EmailCredential_{
+			EmailCredential: &userv1.Register_Req_EmailCredential{
+				Email: req.Email,
+				Code:  req.Code,
+			},
+		}
+	case enum.RegisterTypePhone:
+		registerReq.Credential = &userv1.Register_Req_PhoneCredential_{
+			PhoneCredential: &userv1.Register_Req_PhoneCredential{
+				Phone: req.Phone,
+				Code:  req.Code,
+			},
+		}
+	}
+	_, err := r.userClient.Auth.Register(ctx, registerReq)
 	return err
 }
 
 func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginResp, error) {
-	loginType := userenum.LoginType_LOGIN_TYPE_PASSWORD
-	switch req.Type {
-	case enum.LoginTypeEmail:
-		loginType = userenum.LoginType_LOGIN_TYPE_EMAIL
-	case enum.LoginTypePhone:
-		loginType = userenum.LoginType_LOGIN_TYPE_PHONE
-	}
-
 	uaRaw := server.GetHeader(ctx, constant.HeaderUserAgent)
 	ua := useragent.Parse(uaRaw)
 	deviceType := userenum.DeviceType_DEVICE_TYPE_DESKTOP
@@ -102,7 +75,7 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 	}
 
 	loginReq := &userv1.Login_Req{
-		Type:  loginType,
+		Type:  req.Type.ToUserProto(),
 		Realm: commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmBBS),
 		Client: &userv1.Login_Req_ClientInfo{
 			Ip:             server.ClientIP(ctx),

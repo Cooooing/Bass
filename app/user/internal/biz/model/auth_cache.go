@@ -15,13 +15,3 @@ type VerificationCode struct {
 	CreatedAt   *time.Time            `json:"created_at,omitempty"`
 	ExpiresAt   *time.Time            `json:"expires_at,omitempty"`
 }
-
-type RegisterDraft struct {
-	Name         string     `json:"name"`
-	Nickname     *string    `json:"nickname,omitempty"`
-	PasswordHash string     `json:"password_hash"`
-	Email        *string    `json:"email,omitempty"`
-	Phone        *string    `json:"phone,omitempty"`
-	CreatedAt    *time.Time `json:"created_at,omitempty"`
-	ExpiresAt    *time.Time `json:"expires_at,omitempty"`
-}

@@ -74,7 +74,7 @@ event:
 
 notify:
   email:
-    enable: true
+    enable: false
     smtp_host: ${EMAIL_SMTP_HOST:smtp.qq.com}
     smtp_port: ${EMAIL_SMTP_PORT:465}
     username: ${EMAIL_USERNAME:example}

@@ -14,10 +14,6 @@ type AuthCacheRepo interface {
 	IncrCodeAttempts(ctx context.Context, req *VerificationCodeKeyReq) (int64, error)
 	DeleteCode(ctx context.Context, req *VerificationCodeKeyReq) error
 
-	SaveRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string, draft *model.RegisterDraft, ttl time.Duration) error
-	GetRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string) (*model.RegisterDraft, error)
-	DeleteRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string) error
-
 	SaveSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration, maxSessions int) error
 	GetSession(ctx context.Context, realm commonenum.LoginRealm, sessionID string) (*model.RefreshSession, error)
 	TouchSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration) error

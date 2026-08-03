@@ -53,12 +53,15 @@ func (messages ErrorMessages) Resolve(r *http.Request, code cerrors.BusinessErro
 		}
 	}
 
-	message := messages[cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_UNKNOWN]
-	if value, ok := messages[code]; ok {
-		message = value
+	message, ok := messages[code]
+	if !ok {
+		message = messages[cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_UNKNOWN]
 	}
 	if text := message.Render(language, data); text != "" {
 		return text
+	}
+	if ok {
+		return code.String()
 	}
 	return cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_UNKNOWN.String()
 }

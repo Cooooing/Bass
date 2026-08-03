@@ -30,6 +30,7 @@ func NewTencentSMSClient(
 			conf: conf,
 		}, nil
 	}
+
 	if conf.Notify.Sms.Tencent == nil {
 		return nil, errors.New("tencent sms config is required")
 	}
@@ -66,7 +67,8 @@ func (c *TencentSMSClient) SendTencentSMS(ctx context.Context, req *bizrepo.Tenc
 	}
 	if c.conf == nil || c.conf.Notify == nil || c.conf.Notify.Sms == nil || !c.conf.Notify.Sms.Enable {
 		return &bizrepo.TencentSMSSendResult{
-			Status: notifyenum.NotificationChannelStatusSkipped,
+			Status:       notifyenum.NotificationChannelStatusSucceeded,
+			ProviderResp: new("sms channel disabled, skipped provider call"),
 		}, nil
 	}
 	if c.conf.Notify.Sms.Tencent == nil || c.client == nil {

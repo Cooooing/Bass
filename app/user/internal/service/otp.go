@@ -6,7 +6,10 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/user/v1"
 	"context"
+	"net/mail"
+	"regexp"
 	"strings"
+	"unicode/utf8"
 	"user/internal/biz/usecase"
 	"user/internal/config"
 
@@ -21,6 +24,7 @@ type OtpService struct {
 	totpUsecase     *usecase.TotpUsecase
 	emailOtpUsecase *usecase.EmailOtpUsecase
 	smsOtpUsecase   *usecase.SmsOtpUsecase
+	phoneRe         *regexp.Regexp
 }
 
 func NewOtpService(
@@ -34,6 +38,7 @@ func NewOtpService(
 		totpUsecase:     totpUsecase,
 		emailOtpUsecase: emailOtpUsecase,
 		smsOtpUsecase:   smsOtpUsecase,
+		phoneRe:         regexp.MustCompile("^1[3-9]\\d{9}$"),
 	}
 }
 
@@ -122,12 +127,17 @@ func (s *OtpService) GetTotp(ctx context.Context, req *v1.GetTotp_Req) (*v1.GetT
 }
 
 func (s *OtpService) SendEmailOtp(ctx context.Context, req *v1.SendEmailOtp_Req) (*v1.SendEmailOtp_Resp, error) {
-	if req == nil || strings.TrimSpace(req.GetEmail()) == "" || (req.UserId != nil && req.GetUserId() == 0) {
+	if req == nil || (req.UserId != nil && req.GetUserId() == 0) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	email := strings.ToLower(strings.TrimSpace(req.GetEmail()))
+	parsed, err := mail.ParseAddress(email)
+	if err != nil || parsed.Address != email || !strings.Contains(email, "@") || utf8.RuneCountInString(email) > 254 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	resp, err := s.emailOtpUsecase.SendEmailOtp(ctx, &usecase.SendEmailOtpReq{
 		UserID: req.UserId,
-		Email:  req.GetEmail(),
+		Email:  email,
 	})
 	if err != nil {
 		return nil, err
@@ -152,12 +162,16 @@ func (s *OtpService) VerifyEmailOtp(ctx context.Context, req *v1.VerifyEmailOtp_
 }
 
 func (s *OtpService) SendPhoneOtp(ctx context.Context, req *v1.SendPhoneOtp_Req) (*v1.SendPhoneOtp_Resp, error) {
-	if req == nil || strings.TrimSpace(req.GetPhone()) == "" || (req.UserId != nil && req.GetUserId() == 0) {
+	if req == nil || (req.UserId != nil && req.GetUserId() == 0) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	phone := strings.TrimSpace(req.GetPhone())
+	if !s.phoneRe.MatchString(phone) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	resp, err := s.smsOtpUsecase.SendPhoneOtp(ctx, &usecase.SendPhoneOtpReq{
 		UserID: req.UserId,
-		Phone:  req.GetPhone(),
+		Phone:  phone,
 	})
 	if err != nil {
 		return nil, err

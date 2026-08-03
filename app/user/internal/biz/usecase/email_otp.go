@@ -19,35 +19,35 @@ import (
 )
 
 type EmailOtpUsecase struct {
-	logger        *slog.Logger
-	conf          *config.Bootstrap
-	accountRepo   repo.AccountRepo
-	authCacheRepo repo.AuthCacheRepo
-	outboxRepo    repo.OutboxEventRepo
-	outboxUsecase *OutboxUsecase
-	sf            *sonyflake.Sonyflake
+	logger                      *slog.Logger
+	conf                        *config.Bootstrap
+	authCacheRepo               repo.AuthCacheRepo
+	outboxRepo                  repo.OutboxEventRepo
+	outboxUsecase               *OutboxUsecase
+	notificationRateLimitClient repo.NotificationRateLimitClient
+	sf                          *sonyflake.Sonyflake
 }
 
 func NewEmailOtpUsecase(
 	logger *slog.Logger,
 	conf *config.Bootstrap,
-	accountRepo repo.AccountRepo,
 	authCacheRepo repo.AuthCacheRepo,
 	outboxRepo repo.OutboxEventRepo,
 	outboxUsecase *OutboxUsecase,
+	notificationRateLimitClient repo.NotificationRateLimitClient,
 ) (*EmailOtpUsecase, error) {
 	sf, err := str.NewSonyflake()
 	if err != nil {
 		return nil, err
 	}
 	return &EmailOtpUsecase{
-		logger:        logger,
-		conf:          conf,
-		accountRepo:   accountRepo,
-		authCacheRepo: authCacheRepo,
-		outboxRepo:    outboxRepo,
-		outboxUsecase: outboxUsecase,
-		sf:            sf,
+		logger:                      logger,
+		conf:                        conf,
+		authCacheRepo:               authCacheRepo,
+		outboxRepo:                  outboxRepo,
+		outboxUsecase:               outboxUsecase,
+		notificationRateLimitClient: notificationRateLimitClient,
+		sf:                          sf,
 	}, nil
 }
 
@@ -62,19 +62,18 @@ type SendEmailOtpResp struct {
 
 func (u *EmailOtpUsecase) SendEmailOtp(ctx context.Context, req *SendEmailOtpReq) (*SendEmailOtpResp, error) {
 	email := strings.ToLower(strings.TrimSpace(req.Email))
-	if req.UserID == nil {
-		user, err := u.accountRepo.Get(ctx, &repo.AccountGetReq{
-			Account: new(email),
-		})
-		if err != nil {
-			code, ok := apperror.BusinessCode(err)
-			if !(ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND) {
-				return nil, err
-			}
-		}
-		if user == nil || user.Status == nil || *user.Status != enum.AccountStatusNormal {
-			return &SendEmailOtpResp{}, nil
-		}
+
+	rateLimitState, err := u.notificationRateLimitClient.CheckEmail(ctx, email)
+	if err != nil {
+		return nil, err
+	}
+	if rateLimitState != nil && rateLimitState.Limited {
+		return nil, apperror.New(
+			cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_SEND_TOO_FREQUENT,
+			apperror.WithData(&cerrors.RetryAfterErrorData{
+				RetryAfterSeconds: rateLimitState.RetryAfterSeconds,
+			}),
+		)
 	}
 
 	verificationCodeConf := u.conf.GetBusiness().GetAuth().GetVerificationCode()

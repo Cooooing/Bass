@@ -24,14 +24,11 @@ import (
 )
 
 var bbsHTTPPublicOperations = map[string]struct{}{
-	bbsuserv1.OperationAuthServiceStartEmailRegistration:  {},
-	bbsuserv1.OperationAuthServiceVerifyEmailRegistration: {},
-	bbsuserv1.OperationAuthServiceStartPhoneRegistration:  {},
-	bbsuserv1.OperationAuthServiceVerifyPhoneRegistration: {},
-	bbsuserv1.OperationAuthServiceLogin:                   {},
-	bbsuserv1.OperationAuthServiceRefreshToken:            {},
-	bbsuserv1.OperationAccountServiceAvatar:               {},
-	bbsuserv1.OperationAccountServiceGetProfile:           {},
+	bbsuserv1.OperationAuthServiceRegister:      {},
+	bbsuserv1.OperationAuthServiceLogin:         {},
+	bbsuserv1.OperationAuthServiceRefreshToken:  {},
+	bbsuserv1.OperationAccountServiceAvatar:     {},
+	bbsuserv1.OperationAccountServiceGetProfile: {},
 }
 
 var bbsHTTPOptionalAuthOperations = map[string]struct{}{

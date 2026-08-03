@@ -23,7 +23,6 @@ type AuthCacheRepo struct {
 	redisClient            *client.RedisClient
 	authOtpGuestKey        string
 	authOtpUserKey         string
-	authRegisterDraftKey   string
 	authRefreshSessionKey  string
 	authRefreshSessionHead string
 	authUserSessionsKey    string
@@ -35,10 +34,10 @@ func NewAuthCacheRepo(
 	redisClient *client.RedisClient,
 ) repo.AuthCacheRepo {
 	return &AuthCacheRepo{
-		redisClient:            redisClient,
-		authOtpGuestKey:        "Auth:Otp:%s:guest:%s",
-		authOtpUserKey:         "Auth:Otp:%s:user:%d:%s",
-		authRegisterDraftKey:   "Auth:RegisterDraft:{%s}:{%s}",
+		redisClient:     redisClient,
+		authOtpGuestKey: "Auth:Otp:%s:guest:%s",
+		authOtpUserKey:  "Auth:Otp:%s:user:%d:%s",
+
 		authRefreshSessionKey:  "Auth:Refresh:{%s}:{%s}",
 		authRefreshSessionHead: "Auth:Refresh:{%s}:",
 		authUserSessionsKey:    "Auth:UserSessions:{%s}:{%d}",
@@ -52,10 +51,6 @@ func (r *AuthCacheRepo) authCodeRedisKey(req *repo.VerificationCodeKeyReq) strin
 		return fmt.Sprintf(r.authOtpUserKey, req.Type.String(), *req.UserID, req.Account)
 	}
 	return fmt.Sprintf(r.authOtpGuestKey, req.Type.String(), req.Account)
-}
-
-func (r *AuthCacheRepo) authRegisterDraftRedisKey(draftType enum.VerificationType, account string) string {
-	return fmt.Sprintf(r.authRegisterDraftKey, draftType.String(), account)
 }
 
 func (r *AuthCacheRepo) authRefreshSessionRedisKey(realm commonenum.LoginRealm, sessionID string) string {
@@ -174,33 +169,6 @@ func (r *AuthCacheRepo) IncrCodeAttempts(ctx context.Context, req *repo.Verifica
 
 func (r *AuthCacheRepo) DeleteCode(ctx context.Context, req *repo.VerificationCodeKeyReq) error {
 	return r.redisClient.Client.Del(ctx, r.authCodeRedisKey(req)).Err()
-}
-
-func (r *AuthCacheRepo) SaveRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string, draft *model.RegisterDraft, ttl time.Duration) error {
-	data, err := json.Marshal(draft)
-	if err != nil {
-		return err
-	}
-	return r.redisClient.Client.Set(ctx, r.authRegisterDraftRedisKey(draftType, account), data, ttl).Err()
-}
-
-func (r *AuthCacheRepo) GetRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string) (*model.RegisterDraft, error) {
-	data, err := r.redisClient.Client.Get(ctx, r.authRegisterDraftRedisKey(draftType, account)).Bytes()
-	if errors.Is(err, redis.Nil) {
-		return nil, nil
-	}
-	if err != nil {
-		return nil, err
-	}
-	draft := new(model.RegisterDraft)
-	if err := json.Unmarshal(data, draft); err != nil {
-		return nil, err
-	}
-	return draft, nil
-}
-
-func (r *AuthCacheRepo) DeleteRegisterDraft(ctx context.Context, draftType enum.VerificationType, account string) error {
-	return r.redisClient.Client.Del(ctx, r.authRegisterDraftRedisKey(draftType, account)).Err()
 }
 
 func (r *AuthCacheRepo) SaveSession(ctx context.Context, session *model.RefreshSession, ttl time.Duration, maxSessions int) error {

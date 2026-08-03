@@ -9,16 +9,14 @@ import "user/v1/enum/account_status.proto";
 import "user/v1/enum/client_type.proto";
 import "user/v1/enum/device_type.proto";
 import "user/v1/enum/login_type.proto";
+import "user/v1/enum/register_type.proto";
 import "user/v1/enum/mbti.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
 
 // AuthService 提供注册、登录、会话和账号状态认证能力。
 service AuthService {
-  rpc StartEmailRegistration(StartEmailRegistration.Req) returns (StartEmailRegistration.Resp) {} // 使用邮箱发起账号注册。
-  rpc VerifyEmailRegistration(VerifyEmailRegistration.Req) returns (VerifyEmailRegistration.Resp) {} // 校验邮箱注册 OTP 并创建账号。
-  rpc StartPhoneRegistration(StartPhoneRegistration.Req) returns (StartPhoneRegistration.Resp) {} // 使用手机号发起账号注册，P0 返回未实现。
-  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Req) returns (VerifyPhoneRegistration.Resp) {} // 校验手机号注册 OTP，P0 返回未实现。
+  rpc Register(Register.Req) returns (Register.Resp) {} // 注册账号。
   rpc Login(Login.Req) returns (Login.Resp) {} // 使用密码、邮箱 OTP 或手机号 OTP 登录。
   rpc RefreshToken(RefreshToken.Req) returns (RefreshToken.Resp) {} // 使用 refresh token 刷新会话令牌。
   rpc Logout(Logout.Req) returns (Logout.Resp) {} // 登出当前会话。
@@ -28,46 +26,31 @@ service AuthService {
   rpc UnbanAccounts(UnbanAccounts.Req) returns (UnbanAccounts.Resp) {} // 批量解封账号。
 }
 
-message StartEmailRegistration {
+message Register {
   message Req {
-    string email = 1; // 邮箱地址。
-    string password = 2; // 账号密码。
-    string name = 3; // 账号名。
-    optional string nickname = 4; // 昵称。
-  }
-  message Resp {
-    optional string code = 1; // 非生产环境返回验证码，生产环境为空。
-  }
-}
+    message EmailCredential {
+      string email = 1; // 邮箱。
+      string code = 2; // 邮箱 OTP。
+    }
 
-message VerifyEmailRegistration {
-  message Req {
-    string email = 1; // 邮箱地址。
-    string code = 2; // 邮箱 OTP。
+    message PhoneCredential {
+      string phone = 1; // 手机号。
+      string code = 2; // 手机 OTP。
+    }
+
+    RegisterType type = 1; // 注册方式。
+    string name = 2; // 账号名。
+    string password = 3; // 密码。
+    optional string nickname = 4; // 昵称。
+
+    oneof credential {
+      EmailCredential email_credential = 10; // 邮箱注册凭证。
+      PhoneCredential phone_credential = 11; // 手机注册凭证。
+    }
   }
+
   message Resp {}
 }
-
-message StartPhoneRegistration {
-  message Req {
-    string phone = 1; // 手机号。
-    string password = 2; // 账号密码。
-    string name = 3; // 账号名。
-    optional string nickname = 4; // 昵称。
-  }
-  message Resp {
-    optional string code = 1; // 非生产环境返回验证码，生产环境为空。
-  }
-}
-
-message VerifyPhoneRegistration {
-  message Req {
-    string phone = 1; // 手机号。
-    string code = 2; // 手机 OTP。
-  }
-  message Resp {}
-}
-
 message Login {
   message Req {
     message ClientInfo {

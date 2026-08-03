@@ -4,12 +4,20 @@ import (
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"strings"
+	"user/internal/biz/repo"
 )
 
-type SmsOtpUsecase struct{}
+type SmsOtpUsecase struct {
+	notificationRateLimitClient repo.NotificationRateLimitClient
+}
 
-func NewSmsOtpUsecase() *SmsOtpUsecase {
-	return &SmsOtpUsecase{}
+func NewSmsOtpUsecase(
+	notificationRateLimitClient repo.NotificationRateLimitClient,
+) *SmsOtpUsecase {
+	return &SmsOtpUsecase{
+		notificationRateLimitClient: notificationRateLimitClient,
+	}
 }
 
 type SendPhoneOtpReq struct {
@@ -22,6 +30,18 @@ type SendPhoneOtpResp struct {
 }
 
 func (u *SmsOtpUsecase) SendPhoneOtp(ctx context.Context, req *SendPhoneOtpReq) (*SendPhoneOtpResp, error) {
+	rateLimitState, err := u.notificationRateLimitClient.CheckPhone(ctx, strings.TrimSpace(req.Phone))
+	if err != nil {
+		return nil, err
+	}
+	if rateLimitState != nil && rateLimitState.Limited {
+		return nil, apperror.New(
+			cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_SEND_TOO_FREQUENT,
+			apperror.WithData(&cerrors.RetryAfterErrorData{
+				RetryAfterSeconds: rateLimitState.RetryAfterSeconds,
+			}),
+		)
+	}
 	return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
 }
 

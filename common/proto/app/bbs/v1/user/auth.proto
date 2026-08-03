@@ -4,6 +4,7 @@ package common.api.app.bbs.v1.user;
 
 import "bbs/v1/user/enum/account.proto";
 import "bbs/v1/user/enum/login_type.proto";
+import "bbs/v1/user/enum/register_type.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
@@ -12,38 +13,13 @@ option go_package = "common/proto/gen/bbs/v1/user;user";
 
 // 认证接口。
 service AuthService {
-  // 开始邮箱注册。
-  rpc StartEmailRegistration(StartEmailRegistration.Req) returns (StartEmailRegistration.Resp) {
+  // 注册账号。
+  rpc Register(Register.Req) returns (Register.Resp) {
     option (google.api.http) = {
-      post: "/v1/user/auth/start-email-registration"
+      post: "/v1/user/auth/register"
       body: "*"
     };
   }
-
-  // 校验邮箱注册验证码。
-  rpc VerifyEmailRegistration(VerifyEmailRegistration.Req) returns (VerifyEmailRegistration.Resp) {
-    option (google.api.http) = {
-      post: "/v1/user/auth/verify-email-registration"
-      body: "*"
-    };
-  }
-
-  // 开始手机注册。
-  rpc StartPhoneRegistration(StartPhoneRegistration.Req) returns (StartPhoneRegistration.Resp) {
-    option (google.api.http) = {
-      post: "/v1/user/auth/start-phone-registration"
-      body: "*"
-    };
-  }
-
-  // 校验手机注册验证码。
-  rpc VerifyPhoneRegistration(VerifyPhoneRegistration.Req) returns (VerifyPhoneRegistration.Resp) {
-    option (google.api.http) = {
-      post: "/v1/user/auth/verify-phone-registration"
-      body: "*"
-    };
-  }
-
   // 登录账号。
   rpc Login(Login.Req) returns (Login.Resp) {
     option (google.api.http) = {
@@ -77,68 +53,36 @@ service AuthService {
   }
 }
 
-// 开始邮箱注册。
-message StartEmailRegistration {
+// 注册账号。
+message Register {
   message Req {
-    string email = 1; // 邮箱地址
-    string password = 2; // 账号密码
-    string name = 3; // 账号名
+    message EmailCredential {
+      string email = 1; // 邮箱地址
+      string code = 2; // 邮箱 OTP
+    }
+
+    message PhoneCredential {
+      string phone = 1; // 手机号
+      string code = 2; // 手机 OTP
+    }
+
+    RegisterType type = 1; // 注册方式
+    string name = 2; // 账号名
+    string password = 3; // 账号密码
     optional string nickname = 4; // 昵称
     option (gnostic.openapi.v3.schema) = {
-      required: "email"
-      required: "password"
+      required: "type"
       required: "name"
+      required: "password"
     };
-  }
-  message Resp {
-    optional string code = 1; // 非生产环境返回验证码，生产环境为空
-  }
-}
 
-// 校验邮箱注册验证码。
-message VerifyEmailRegistration {
-  message Req {
-    string email = 1; // 邮箱地址
-    string code = 2; // 邮箱 OTP
-    option (gnostic.openapi.v3.schema) = {
-      required: "email"
-      required: "code"
-    };
+    oneof credential {
+      EmailCredential email_credential = 10; // 邮箱注册凭证
+      PhoneCredential phone_credential = 11; // 手机注册凭证
+    }
   }
   message Resp {}
 }
-
-// 开始手机注册。
-message StartPhoneRegistration {
-  message Req {
-    string phone = 1; // 手机号
-    string password = 2; // 账号密码
-    string name = 3; // 账号名
-    optional string nickname = 4; // 昵称
-    option (gnostic.openapi.v3.schema) = {
-      required: "phone"
-      required: "password"
-      required: "name"
-    };
-  }
-  message Resp {
-    optional string code = 1; // 非生产环境返回验证码，生产环境为空
-  }
-}
-
-// 校验手机注册验证码。
-message VerifyPhoneRegistration {
-  message Req {
-    string phone = 1; // 手机号
-    string code = 2; // 手机 OTP
-    option (gnostic.openapi.v3.schema) = {
-      required: "phone"
-      required: "code"
-    };
-  }
-  message Resp {}
-}
-
 // 登录账号。
 message Login {
   message Req {

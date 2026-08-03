@@ -2,7 +2,6 @@ package channel
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	bizrepo "notify/internal/biz/repo"
@@ -41,7 +40,10 @@ func (c *EmailClient) SendEmail(ctx context.Context, req *bizrepo.EmailRequest) 
 		}, nil
 	}
 	if c.conf == nil || c.conf.Notify == nil || c.conf.Notify.Email == nil || !c.conf.Notify.Email.Enable {
-		return nil, errors.New("email sender is disabled")
+		return &bizrepo.EmailSendResult{
+			Status:       notifyenum.NotificationChannelStatusSucceeded,
+			ProviderResp: new("email channel disabled, skipped provider call"),
+		}, nil
 	}
 	email := c.conf.Notify.Email
 

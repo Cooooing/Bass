@@ -18,6 +18,9 @@ rules:
   - apiGroups: [""]
     resources: ["pods", "pods/log", "pods/exec", "services", "configmaps", "secrets", "persistentvolumeclaims"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets"]
+    verbs: ["get", "list", "watch"]
   - apiGroups: ["batch"]
     resources: ["jobs"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
@@ -35,6 +38,22 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: jenkins
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jenkins-init-groovy
+  namespace: cicd
+data:
+  update-center.groovy: |-
+    import hudson.model.UpdateSite
+    import jenkins.model.Jenkins
+
+    def instance = Jenkins.get()
+    def updateCenter = instance.getUpdateCenter()
+    updateCenter.getSites().clear()
+    updateCenter.getSites().add(new UpdateSite('default', 'https://updates.jenkins.io/current/update-center.json'))
+    instance.save()
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -72,11 +91,13 @@ spec:
         app.kubernetes.io/component: controller
     spec:
       serviceAccountName: jenkins
+      imagePullSecrets:
+        - name: aliyun-registry-secret
       securityContext:
         fsGroup: 1000
       containers:
         - name: jenkins
-          image: dockerproxy.net/jenkins/jenkins:2.516.3-lts-jdk21
+          image: jenkins/jenkins:2.568.1-lts-jdk21
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -92,6 +113,10 @@ spec:
                 -Djenkins.install.runSetupWizard=true
             - name: JENKINS_OPTS
               value: "--httpPort=8080"
+            - name: JENKINS_UC
+              value: "https://updates.jenkins.io/current"
+            - name: JENKINS_UC_DOWNLOAD
+              value: "https://updates.jenkins.io"
           readinessProbe:
             httpGet:
               path: /login
@@ -118,10 +143,16 @@ spec:
           volumeMounts:
             - name: jenkins-home
               mountPath: /var/jenkins_home
+            - name: jenkins-init-groovy
+              mountPath: /var/jenkins_home/init.groovy.d/update-center.groovy
+              subPath: update-center.groovy
       volumes:
         - name: jenkins-home
           persistentVolumeClaim:
             claimName: jenkins-home
+        - name: jenkins-init-groovy
+          configMap:
+            name: jenkins-init-groovy
 ---
 apiVersion: v1
 kind: Service

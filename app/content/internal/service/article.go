@@ -198,7 +198,7 @@ func (s *ArticleService) FlushViews(ctx context.Context, req *v1.FlushArticleVie
 }
 
 func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.GetArticle_Resp, error) {
-	row, err := s.articleUsecase.Get(ctx, req.GetArticleId())
+	row, err := s.articleUsecase.GetVisible(ctx, &usecase.ArticleGetVisibleReq{ArticleID: req.GetArticleId(), ViewerUserID: req.GetViewerUserId()})
 	if err != nil {
 		return nil, err
 	}
@@ -206,7 +206,76 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.G
 }
 
 func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Req) (*v1.ListArticles_Resp, error) {
-	pageResp, err := s.articleUsecase.Page(ctx, &usecase.ArticlePageReq{Page: &base.PageRequest{Page: 1, Size: 1000}})
+	query := req.GetQuery()
+	usecaseReq := &usecase.ArticlePageReq{Page: &base.PageRequest{Page: 1, Size: 1000}}
+	if query != nil {
+		usecaseReq.TagID = query.TagId
+		usecaseReq.DomainID = query.DomainId
+		usecaseReq.ArticleIDs = query.GetArticleIds()
+		usecaseReq.AuthorID = query.AuthorId
+		usecaseReq.Keyword = query.Keyword
+		if query.Type != nil {
+			articleType, ok := enum.ArticleTypeMap.ToEnum(query.GetType())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
+			}
+			usecaseReq.Type = new(articleType)
+		}
+		if query.Order != nil {
+			order, ok := enum.ArticleOrderMap.ToEnum(query.GetOrder())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			usecaseReq.Order = new(order)
+		}
+		if query.PublishStatus != nil {
+			status, ok := enum.ArticlePublishStatusMap.ToEnum(query.GetPublishStatus())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+			}
+			usecaseReq.PublishStatus = new(status)
+		}
+		for _, item := range query.GetPublishStatuses() {
+			status, ok := enum.ArticlePublishStatusMap.ToEnum(item)
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+			}
+			usecaseReq.PublishStatuses = append(usecaseReq.PublishStatuses, status)
+		}
+		if query.Visibility != nil {
+			visibility, ok := enum.ArticleVisibilityMap.ToEnum(query.GetVisibility())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+			}
+			usecaseReq.Visibility = new(visibility)
+		}
+		for _, item := range query.GetVisibilities() {
+			visibility, ok := enum.ArticleVisibilityMap.ToEnum(item)
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+			}
+			usecaseReq.Visibilities = append(usecaseReq.Visibilities, visibility)
+		}
+		if query.Restriction != nil {
+			restriction, ok := enum.ContentRestrictionMap.ToEnum(query.GetRestriction())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			usecaseReq.Restriction = new(restriction)
+		}
+		for _, item := range query.GetRestrictions() {
+			restriction, ok := enum.ContentRestrictionMap.ToEnum(item)
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			usecaseReq.Restrictions = append(usecaseReq.Restrictions, restriction)
+		}
+		if query.GetPublishedAtEnd() != nil {
+			end := query.GetPublishedAtEnd().AsTime()
+			usecaseReq.PublishedAtEnd = new(end)
+		}
+	}
+	pageResp, err := s.articleUsecase.Page(ctx, usecaseReq)
 	if err != nil {
 		return nil, err
 	}
@@ -224,8 +293,65 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v
 	if query != nil {
 		usecaseReq.TagID = query.TagId
 		usecaseReq.DomainID = query.DomainId
+		usecaseReq.ArticleIDs = query.GetArticleIds()
 		usecaseReq.AuthorID = query.AuthorId
 		usecaseReq.Keyword = query.Keyword
+		if query.Type != nil {
+			articleType, ok := enum.ArticleTypeMap.ToEnum(query.GetType())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
+			}
+			usecaseReq.Type = new(articleType)
+		}
+		if query.Order != nil {
+			order, ok := enum.ArticleOrderMap.ToEnum(query.GetOrder())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			usecaseReq.Order = new(order)
+		}
+		if query.PublishStatus != nil {
+			status, ok := enum.ArticlePublishStatusMap.ToEnum(query.GetPublishStatus())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+			}
+			usecaseReq.PublishStatus = new(status)
+		}
+		for _, item := range query.GetPublishStatuses() {
+			status, ok := enum.ArticlePublishStatusMap.ToEnum(item)
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+			}
+			usecaseReq.PublishStatuses = append(usecaseReq.PublishStatuses, status)
+		}
+		if query.Visibility != nil {
+			visibility, ok := enum.ArticleVisibilityMap.ToEnum(query.GetVisibility())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+			}
+			usecaseReq.Visibility = new(visibility)
+		}
+		for _, item := range query.GetVisibilities() {
+			visibility, ok := enum.ArticleVisibilityMap.ToEnum(item)
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+			}
+			usecaseReq.Visibilities = append(usecaseReq.Visibilities, visibility)
+		}
+		if query.Restriction != nil {
+			restriction, ok := enum.ContentRestrictionMap.ToEnum(query.GetRestriction())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			usecaseReq.Restriction = new(restriction)
+		}
+		for _, item := range query.GetRestrictions() {
+			restriction, ok := enum.ContentRestrictionMap.ToEnum(item)
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			usecaseReq.Restrictions = append(usecaseReq.Restrictions, restriction)
+		}
 		if query.GetPublishedAtEnd() != nil {
 			end := query.GetPublishedAtEnd().AsTime()
 			usecaseReq.PublishedAtEnd = new(end)
@@ -241,7 +367,6 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v
 	}
 	return &v1.PageArticles_Resp{Rows: rows, Page: &common.PageResp{Page: uint32(pageResp.Page.Page), Size: uint32(pageResp.Page.Size), Total: uint32(pageResp.Page.Total)}}, nil
 }
-
 func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapArticleViewerActionStates_Req) (*v1.MapArticleViewerActionStates_Resp, error) {
 	states, err := s.articleUsecase.MapViewerActionStates(ctx, &usecase.ArticleMapViewerActionStatesReq{ArticleIDs: req.GetArticleIds(), UserID: req.GetUserId()})
 	if err != nil {

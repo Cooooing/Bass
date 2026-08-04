@@ -139,6 +139,21 @@ func (r *RbacRepo) RevokeRole(ctx context.Context, userID int64, roleID int64) e
 	return err
 }
 
+func (r *RbacRepo) HasAnyRole(ctx context.Context, userID int64, realm commonenum.LoginRealm, now *time.Time) (bool, error) {
+	if now == nil {
+		now = new(time.Now())
+	}
+	client := r.getClient(ctx)
+	userRoles, err := client.RbacUserRole.Query().Where(rbacuserrole.UserID(userID), rbacuserrole.Or(rbacuserrole.ExpiresAtIsNil(), rbacuserrole.ExpiresAtGT(*now))).All(ctx)
+	if err != nil || len(userRoles) == 0 {
+		return false, err
+	}
+	roleIDs := make([]int64, 0, len(userRoles))
+	for _, row := range userRoles {
+		roleIDs = append(roleIDs, row.RoleID)
+	}
+	return client.RbacRole.Query().Where(rbacrole.IDIn(roleIDs...), rbacrole.RealmEQ(rbacrole.Realm(realm)), rbacrole.Enabled(true)).Exist(ctx)
+}
 func (r *RbacRepo) HasPermission(ctx context.Context, userID int64, realm commonenum.LoginRealm, permissionCode string, now *time.Time) (bool, error) {
 	codes, err := r.PermissionCodes(ctx, userID, realm, now)
 	if err != nil {

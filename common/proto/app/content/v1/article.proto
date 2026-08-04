@@ -263,6 +263,7 @@ message MapArticleViewerActionStates {
 message GetArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
+    optional int64 viewer_user_id = 2; // 可选，浏览用户 ID
   }
   message Resp {
     Article article = 1; // 文章详情

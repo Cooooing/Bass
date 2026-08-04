@@ -259,9 +259,13 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 }
 
 func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArticleReq) (*repo.ArticleDetail, error) {
-	reply, err := r.contentClient.Article.Get(ctx, &contentv1.GetArticle_Req{
+	getReq := &contentv1.GetArticle_Req{
 		ArticleId: req.ArticleID,
-	})
+	}
+	if req.UserID > 0 {
+		getReq.ViewerUserId = new(req.UserID)
+	}
+	reply, err := r.contentClient.Article.Get(ctx, getReq)
 	if err != nil {
 		return nil, err
 	}

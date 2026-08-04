@@ -998,6 +998,24 @@ func (d *ArticleUsecase) Get(ctx context.Context, articleID int64) (*model.Artic
 	return article, nil
 }
 
+type ArticleGetVisibleReq struct {
+	ArticleID    int64
+	ViewerUserID int64
+}
+
+func (d *ArticleUsecase) GetVisible(ctx context.Context, req *ArticleGetVisibleReq) (*model.Article, error) {
+	article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
+		ArticleId: new(req.ArticleID),
+	})
+	if err != nil {
+		return nil, err
+	}
+	if err := article.CanViewByBBS(req.ViewerUserID); err != nil {
+		return nil, err
+	}
+	return article, nil
+}
+
 type ArticlePageReq struct {
 	Page            *base.PageRequest
 	TagID           *int64
@@ -1013,6 +1031,7 @@ type ArticlePageReq struct {
 	Type            *enum.ArticleType
 	Keyword         *string
 	PublishedAtEnd  *time.Time
+	ArticleIDs      []int64
 }
 
 type ArticlePageResp struct {
@@ -1039,6 +1058,7 @@ func (d *ArticleUsecase) Page(ctx context.Context, req *ArticlePageReq) (*Articl
 		Type:            req.Type,
 		Keyword:         req.Keyword,
 		PublishedAtEnd:  req.PublishedAtEnd,
+		ArticleIds:      req.ArticleIDs,
 	})
 	if err != nil {
 		return nil, err

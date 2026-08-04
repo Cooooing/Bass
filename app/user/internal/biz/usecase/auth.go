@@ -40,6 +40,7 @@ type AuthUsecase struct {
 	ipClient          repo.IPClient
 	delayedTaskClient repo.DelayedTaskClient
 	tokenUsecase      *TokenUsecase
+	rbacUsecase       *RbacUsecase
 }
 
 func NewAuthUsecase(
@@ -58,6 +59,7 @@ func NewAuthUsecase(
 	ipClient repo.IPClient,
 	delayedTaskClient repo.DelayedTaskClient,
 	tokenUsecase *TokenUsecase,
+	rbacUsecase *RbacUsecase,
 ) *AuthUsecase {
 	return &AuthUsecase{
 		conf:              conf,
@@ -75,6 +77,7 @@ func NewAuthUsecase(
 		ipClient:          ipClient,
 		delayedTaskClient: delayedTaskClient,
 		tokenUsecase:      tokenUsecase,
+		rbacUsecase:       rbacUsecase,
 	}
 }
 
@@ -301,6 +304,16 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 	default:
 		audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+
+	allowed, err := s.rbacUsecase.CheckRealmAccess(ctx, account.ID, req.Realm)
+	if err != nil {
+		audit.FailureReason = new(enum.LoginFailureReasonInternal)
+		return nil, err
+	}
+	if !allowed {
+		audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RBAC_PERMISSION_DENIED)
 	}
 
 	now := time.Now()

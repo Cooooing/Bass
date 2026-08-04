@@ -96,6 +96,16 @@ func (u *RbacUsecase) RevokeRole(ctx context.Context, userID int64, roleID int64
 	return nil
 }
 
+func (u *RbacUsecase) CheckRealmAccess(ctx context.Context, userID int64, realm commonenum.LoginRealm) (bool, error) {
+	switch realm {
+	case commonenum.LoginRealmBBS, commonenum.LoginRealmGame:
+		return true, nil
+	case commonenum.LoginRealmBBSAdmin, commonenum.LoginRealmGameAdmin:
+		return u.rbacRepo.HasAnyRole(ctx, userID, realm, new(time.Now()))
+	default:
+		return false, nil
+	}
+}
 func (u *RbacUsecase) CheckPermission(ctx context.Context, userID int64, realm commonenum.LoginRealm, permissionCode string) (bool, error) {
 	code := strings.TrimSpace(permissionCode)
 	account, err := u.accountRepo.Get(ctx, &repo.AccountGetReq{

@@ -146,6 +146,31 @@ func (a *Article) CanComment() error {
 	return nil
 }
 
+func (a *Article) CanViewByBBS(viewerID int64) error {
+	if a == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	if a.IsAuthor(viewerID) {
+		return nil
+	}
+	if a.Restriction == enum.ContentRestrictionHidden {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+	}
+	if a.PublishStatus == enum.ArticlePublishStatusPublished && a.Visibility == enum.ArticleVisibilityPublic {
+		return nil
+	}
+	if a.PublishStatus == enum.ArticlePublishStatusArchived && a.Visibility == enum.ArticleVisibilityPublic {
+		return nil
+	}
+	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+}
+
+func (a *Article) CanViewByAdmin() error {
+	if a == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	return nil
+}
 func (a *Article) CanView(viewerID int64) error {
 	if a == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)

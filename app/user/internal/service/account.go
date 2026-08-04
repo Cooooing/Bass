@@ -51,12 +51,12 @@ func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.G
 		return nil, err
 	}
 	account := res
-	basic := &v1.GetAccount_Resp_AccountBasic{
+	basic := &v1.AccountBasic{
 		Id:            account.ID,
 		Name:          account.Name,
 		Nickname:      account.Nickname,
 		Url:           account.URL,
-		AvatarUrl:     account.AvatarURL,
+		AvatarAssetId: account.AvatarAssetID,
 		Introduction:  account.Introduction,
 		FollowCount:   account.FollowCount,
 		FollowerCount: account.FollowerCount,
@@ -73,9 +73,9 @@ func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.G
 	if account.UpdatedAt != nil {
 		basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 	}
-	replyAccount := &v1.GetAccount_Resp_Account{
+	replyAccount := &v1.AccountInfo{
 		Basic: basic,
-		Contact: &v1.GetAccount_Resp_AccountContact{
+		Contact: &v1.AccountContact{
 			UserId: account.ID,
 			Email:  account.Email,
 			Phone:  account.Phone,
@@ -91,7 +91,7 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v
 	query := util.OrDefault(req.Query, &v1.ListAccounts_Req_AccountQuery{})
 	if len(query.UserIds) == 0 {
 		return &v1.ListAccounts_Resp{
-			Rows: []*v1.ListAccounts_Resp_Account{},
+			Rows: []*v1.AccountInfo{},
 		}, nil
 	}
 	res, err := s.accountUsecase.ListByUserIDs(ctx, query.UserIds)
@@ -99,14 +99,14 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v
 		return nil, err
 	}
 	accounts := res
-	rows := make([]*v1.ListAccounts_Resp_Account, 0, len(accounts))
+	rows := make([]*v1.AccountInfo, 0, len(accounts))
 	for _, account := range accounts {
-		basic := &v1.ListAccounts_Resp_AccountBasic{
+		basic := &v1.AccountBasic{
 			Id:            account.ID,
 			Name:          account.Name,
 			Nickname:      account.Nickname,
 			Url:           account.URL,
-			AvatarUrl:     account.AvatarURL,
+			AvatarAssetId: account.AvatarAssetID,
 			Introduction:  account.Introduction,
 			FollowCount:   account.FollowCount,
 			FollowerCount: account.FollowerCount,
@@ -123,9 +123,9 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v
 		if account.UpdatedAt != nil {
 			basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 		}
-		replyAccount := &v1.ListAccounts_Resp_Account{
+		replyAccount := &v1.AccountInfo{
 			Basic: basic,
-			Contact: &v1.ListAccounts_Resp_AccountContact{
+			Contact: &v1.AccountContact{
 				UserId: account.ID,
 				Email:  account.Email,
 				Phone:  account.Phone,
@@ -143,7 +143,7 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.
 	query := util.OrDefault(req.Query, &v1.MapAccounts_Req_AccountQuery{})
 	if len(query.UserIds) == 0 {
 		return &v1.MapAccounts_Resp{
-			Accounts: map[int64]*v1.MapAccounts_Resp_Account{},
+			Accounts: map[int64]*v1.AccountInfo{},
 		}, nil
 	}
 	res, err := s.accountUsecase.MapByUserIDs(ctx, query.UserIds)
@@ -151,14 +151,14 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.
 		return nil, err
 	}
 	accounts := res
-	rows := make(map[int64]*v1.MapAccounts_Resp_Account, len(accounts))
+	rows := make(map[int64]*v1.AccountInfo, len(accounts))
 	for userID, account := range accounts {
-		basic := &v1.MapAccounts_Resp_AccountBasic{
+		basic := &v1.AccountBasic{
 			Id:            account.ID,
 			Name:          account.Name,
 			Nickname:      account.Nickname,
 			Url:           account.URL,
-			AvatarUrl:     account.AvatarURL,
+			AvatarAssetId: account.AvatarAssetID,
 			Introduction:  account.Introduction,
 			FollowCount:   account.FollowCount,
 			FollowerCount: account.FollowerCount,
@@ -175,9 +175,9 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.
 		if account.UpdatedAt != nil {
 			basic.UpdatedAt = timestamppb.New(*account.UpdatedAt)
 		}
-		replyAccount := &v1.MapAccounts_Resp_Account{
+		replyAccount := &v1.AccountInfo{
 			Basic: basic,
-			Contact: &v1.MapAccounts_Resp_AccountContact{
+			Contact: &v1.AccountContact{
 				UserId: account.ID,
 				Email:  account.Email,
 				Phone:  account.Phone,
@@ -206,24 +206,24 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 		}
 	}
 	res, err := s.accountUsecase.UpdateProfile(ctx, &model.AccountProfileUpdate{
-		UserID:       req.GetUserId(),
-		AvatarURL:    req.AvatarUrl,
-		Nickname:     req.Nickname,
-		URL:          req.Url,
-		Introduction: req.Introduction,
-		Mbti:         mbti,
-		ClearMBTI:    clearMBTI,
+		UserID:        req.GetUserId(),
+		AvatarAssetID: req.AvatarAssetId,
+		Nickname:      req.Nickname,
+		URL:           req.Url,
+		Introduction:  req.Introduction,
+		Mbti:          mbti,
+		ClearMBTI:     clearMBTI,
 	})
 	if err != nil {
 		return nil, err
 	}
 	account := res
-	basic := &v1.UpdateProfileAccount_Resp_AccountBasic{
+	basic := &v1.AccountBasic{
 		Id:            account.ID,
 		Name:          account.Name,
 		Nickname:      account.Nickname,
 		Url:           account.URL,
-		AvatarUrl:     account.AvatarURL,
+		AvatarAssetId: account.AvatarAssetID,
 		Introduction:  account.Introduction,
 		FollowCount:   account.FollowCount,
 		FollowerCount: account.FollowerCount,

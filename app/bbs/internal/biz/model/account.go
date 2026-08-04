@@ -8,6 +8,7 @@ type AccountProfile struct {
 	Nickname      *string
 	URL           *string
 	AvatarURL     *string
+	AvatarAssetID *int64
 	Introduction  *string
 	Status        int32
 	MBTI          int32

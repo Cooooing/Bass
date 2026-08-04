@@ -31,21 +31,21 @@ func NewChatGroupUsecase(
 }
 
 type CreateReq struct {
-	Name         string
-	Avatar       *string
-	Introduction *string
-	OwnerID      int64
+	Name          string
+	AvatarAssetID *int64
+	Introduction  *string
+	OwnerID       int64
 }
 
 func (u *ChatGroupUsecase) Create(ctx context.Context, req *CreateReq) (int64, error) {
 	group, err := u.chatGroupRepo.Save(ctx, &model.ChatGroup{
-		Name:         req.Name,
-		Avatar:       req.Avatar,
-		Introduction: req.Introduction,
-		OwnerID:      req.OwnerID,
-		MemberCount:  1,
-		CreatedBy:    &req.OwnerID,
-		UpdatedBy:    &req.OwnerID,
+		Name:          req.Name,
+		AvatarAssetID: req.AvatarAssetID,
+		Introduction:  req.Introduction,
+		OwnerID:       req.OwnerID,
+		MemberCount:   1,
+		CreatedBy:     &req.OwnerID,
+		UpdatedBy:     &req.OwnerID,
 	})
 	if err != nil {
 		return 0, err

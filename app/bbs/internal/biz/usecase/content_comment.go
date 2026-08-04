@@ -10,13 +10,16 @@ import (
 
 type ContentCommentUsecase struct {
 	contentCommentClient repo.ContentCommentClient
+	assetClient          repo.AssetClient
 }
 
 func NewContentCommentUsecase(
 	contentCommentClient repo.ContentCommentClient,
+	assetClient repo.AssetClient,
 ) *ContentCommentUsecase {
 	return &ContentCommentUsecase{
 		contentCommentClient: contentCommentClient,
+		assetClient:          assetClient,
 	}
 }
 
@@ -36,6 +39,40 @@ func (u *ContentCommentUsecase) CreateComment(ctx context.Context, req *CreateCo
 	})
 	if err != nil {
 		return nil, err
+	}
+	if resp != nil {
+		profiles := []*repo.AccountProfile{resp.User, resp.ReplyUser}
+		assetIDs := make([]int64, 0, len(profiles))
+		seen := map[int64]struct{}{}
+		for _, profile := range profiles {
+			if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+				continue
+			}
+			if _, ok := seen[*profile.AvatarAssetID]; ok {
+				continue
+			}
+			seen[*profile.AvatarAssetID] = struct{}{}
+			assetIDs = append(assetIDs, *profile.AvatarAssetID)
+		}
+		assets := map[int64]*repo.Asset{}
+		if len(assetIDs) > 0 && u.assetClient != nil {
+			assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+			if err != nil {
+				return nil, err
+			}
+		}
+		for _, profile := range profiles {
+			if profile == nil {
+				continue
+			}
+			avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+			if profile.AvatarAssetID != nil {
+				if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+					avatarURL = asset.URL
+				}
+			}
+			profile.AvatarURL = &avatarURL
+		}
 	}
 	return resp, nil
 }
@@ -87,6 +124,44 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 	if err != nil {
 		return nil, err
 	}
+	profiles := make([]*repo.AccountProfile, 0, len(resp.Rows)*2)
+	for _, row := range resp.Rows {
+		if row == nil {
+			continue
+		}
+		profiles = append(profiles, row.User, row.ReplyUser)
+	}
+	assetIDs := make([]int64, 0, len(profiles))
+	seen := map[int64]struct{}{}
+	for _, profile := range profiles {
+		if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+			continue
+		}
+		if _, ok := seen[*profile.AvatarAssetID]; ok {
+			continue
+		}
+		seen[*profile.AvatarAssetID] = struct{}{}
+		assetIDs = append(assetIDs, *profile.AvatarAssetID)
+	}
+	assets := map[int64]*repo.Asset{}
+	if len(assetIDs) > 0 && u.assetClient != nil {
+		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+		if err != nil {
+			return nil, err
+		}
+	}
+	for _, profile := range profiles {
+		if profile == nil {
+			continue
+		}
+		avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+		if profile.AvatarAssetID != nil {
+			if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
+			}
+		}
+		profile.AvatarURL = &avatarURL
+	}
 	return &ListCommentsResp{
 		Page: resp.Page,
 		Rows: resp.Rows,
@@ -127,6 +202,52 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 	})
 	if err != nil {
 		return nil, err
+	}
+	profiles := make([]*repo.AccountProfile, 0, len(resp.Rows)*4)
+	for _, row := range resp.Rows {
+		if row == nil {
+			continue
+		}
+		if row.Root != nil {
+			profiles = append(profiles, row.Root.User, row.Root.ReplyUser)
+		}
+		for _, reply := range row.PreviewReplies {
+			if reply == nil {
+				continue
+			}
+			profiles = append(profiles, reply.User, reply.ReplyUser)
+		}
+	}
+	assetIDs := make([]int64, 0, len(profiles))
+	seen := map[int64]struct{}{}
+	for _, profile := range profiles {
+		if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+			continue
+		}
+		if _, ok := seen[*profile.AvatarAssetID]; ok {
+			continue
+		}
+		seen[*profile.AvatarAssetID] = struct{}{}
+		assetIDs = append(assetIDs, *profile.AvatarAssetID)
+	}
+	assets := map[int64]*repo.Asset{}
+	if len(assetIDs) > 0 && u.assetClient != nil {
+		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+		if err != nil {
+			return nil, err
+		}
+	}
+	for _, profile := range profiles {
+		if profile == nil {
+			continue
+		}
+		avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+		if profile.AvatarAssetID != nil {
+			if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
+			}
+		}
+		profile.AvatarURL = &avatarURL
 	}
 	return &ListCommentThreadsResp{
 		Page: resp.Page,
@@ -169,6 +290,44 @@ func (u *ContentCommentUsecase) ListCommentReplies(ctx context.Context, req *Lis
 	if err != nil {
 		return nil, err
 	}
+	profiles := make([]*repo.AccountProfile, 0, len(resp.Rows)*2)
+	for _, row := range resp.Rows {
+		if row == nil {
+			continue
+		}
+		profiles = append(profiles, row.User, row.ReplyUser)
+	}
+	assetIDs := make([]int64, 0, len(profiles))
+	seen := map[int64]struct{}{}
+	for _, profile := range profiles {
+		if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+			continue
+		}
+		if _, ok := seen[*profile.AvatarAssetID]; ok {
+			continue
+		}
+		seen[*profile.AvatarAssetID] = struct{}{}
+		assetIDs = append(assetIDs, *profile.AvatarAssetID)
+	}
+	assets := map[int64]*repo.Asset{}
+	if len(assetIDs) > 0 && u.assetClient != nil {
+		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+		if err != nil {
+			return nil, err
+		}
+	}
+	for _, profile := range profiles {
+		if profile == nil {
+			continue
+		}
+		avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+		if profile.AvatarAssetID != nil {
+			if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
+			}
+		}
+		profile.AvatarURL = &avatarURL
+	}
 	return &ListCommentRepliesResp{
 		Page: resp.Page,
 		Rows: resp.Rows,
@@ -207,6 +366,44 @@ func (u *ContentCommentUsecase) ListCommentTimeline(ctx context.Context, req *Li
 	})
 	if err != nil {
 		return nil, err
+	}
+	profiles := make([]*repo.AccountProfile, 0, len(resp.Rows)*2)
+	for _, row := range resp.Rows {
+		if row == nil {
+			continue
+		}
+		profiles = append(profiles, row.User, row.ReplyUser)
+	}
+	assetIDs := make([]int64, 0, len(profiles))
+	seen := map[int64]struct{}{}
+	for _, profile := range profiles {
+		if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+			continue
+		}
+		if _, ok := seen[*profile.AvatarAssetID]; ok {
+			continue
+		}
+		seen[*profile.AvatarAssetID] = struct{}{}
+		assetIDs = append(assetIDs, *profile.AvatarAssetID)
+	}
+	assets := map[int64]*repo.Asset{}
+	if len(assetIDs) > 0 && u.assetClient != nil {
+		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+		if err != nil {
+			return nil, err
+		}
+	}
+	for _, profile := range profiles {
+		if profile == nil {
+			continue
+		}
+		avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+		if profile.AvatarAssetID != nil {
+			if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
+			}
+		}
+		profile.AvatarURL = &avatarURL
 	}
 	return &ListCommentTimelineResp{
 		Page: resp.Page,

@@ -8,13 +8,18 @@ import (
 	"time"
 )
 
-type AuthUsecase struct{ authRepo repo.AuthRepo }
+type AuthUsecase struct {
+	authRepo    repo.AuthRepo
+	assetClient repo.AssetClient
+}
 
 func NewAuthUsecase(
 	authRepo repo.AuthRepo,
+	assetClient repo.AssetClient,
 ) *AuthUsecase {
 	return &AuthUsecase{
-		authRepo: authRepo,
+		authRepo:    authRepo,
+		assetClient: assetClient,
 	}
 }
 
@@ -79,6 +84,7 @@ func (u *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 				Nickname:      profile.Nickname,
 				URL:           profile.URL,
 				AvatarURL:     profile.AvatarURL,
+				AvatarAssetID: profile.AvatarAssetID,
 				Introduction:  profile.Introduction,
 				Status:        profile.Status,
 				MBTI:          profile.MBTI,
@@ -95,6 +101,19 @@ func (u *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 				Phone:  contact.Phone,
 			}
 		}
+	}
+	if account != nil && account.Profile != nil {
+		avatarURL := "/v1/user/account/avatar?name=" + account.Profile.Name
+		if account.Profile.AvatarAssetID != nil && *account.Profile.AvatarAssetID > 0 && u.assetClient != nil {
+			asset, err := u.assetClient.Get(ctx, *account.Profile.AvatarAssetID)
+			if err != nil {
+				return nil, err
+			}
+			if asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
+			}
+		}
+		account.Profile.AvatarURL = &avatarURL
 	}
 	return &LoginResp{
 		AccessToken:           reply.Token.AccessToken,

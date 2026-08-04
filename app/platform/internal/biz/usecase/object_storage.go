@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"strings"
 
 	"platform/internal/biz/base"
 	"platform/internal/biz/model"
@@ -320,4 +321,62 @@ func (d *ObjectStorageUsecase) QiniuIncrementAuditCallback(ctx context.Context, 
 		})
 		return err
 	})
+}
+
+type ResolveAssetsReq struct {
+	AssetIDs []int64
+}
+
+type ResolveAssetsResp struct {
+	Assets map[int64]*model.ObjectStorage
+}
+
+func (d *ObjectStorageUsecase) ResolveAssets(ctx context.Context, req *ResolveAssetsReq) (*ResolveAssetsResp, error) {
+	if req == nil || len(req.AssetIDs) == 0 {
+		return &ResolveAssetsResp{Assets: map[int64]*model.ObjectStorage{}}, nil
+	}
+	rows, err := d.objectStorageRepo.Map(ctx, &repo.ObjectStorageGetReq{IDs: req.AssetIDs})
+	if err != nil {
+		return nil, err
+	}
+	for _, row := range rows {
+		row.URL = d.BuildPublicURL(row)
+	}
+	return &ResolveAssetsResp{Assets: rows}, nil
+}
+
+type ValidateAssetReq struct {
+	AssetID int64
+	UserID  int64
+}
+
+func (d *ObjectStorageUsecase) ValidateAsset(ctx context.Context, req *ValidateAssetReq) error {
+	if req == nil || req.AssetID == 0 || req.UserID == 0 {
+		return fmt.Errorf("asset validate argument is invalid")
+	}
+	row, err := d.objectStorageRepo.Get(ctx, &repo.ObjectStorageGetReq{ID: new(req.AssetID)})
+	if err != nil {
+		return err
+	}
+	if row == nil {
+		return fmt.Errorf("asset not found")
+	}
+	if row.UploadBy != req.UserID || row.Status != enum.ObjectStorageStatusAvailable || row.Blocked {
+		return fmt.Errorf("asset is not bindable")
+	}
+	return nil
+}
+
+func (d *ObjectStorageUsecase) BuildPublicURL(row *model.ObjectStorage) string {
+	if row == nil || row.Key == "" {
+		return ""
+	}
+	baseURL := ""
+	if row.Provider == enum.ObjectStorageProviderMinio && d.conf.Platform.Oss.Minio != nil {
+		baseURL = strings.TrimRight(d.conf.Platform.Oss.Minio.Endpoint, "/") + "/" + strings.Trim(d.conf.Platform.Oss.Minio.Bucket, "/")
+	}
+	if baseURL == "" {
+		return row.Key
+	}
+	return baseURL + "/" + strings.TrimLeft(row.Key, "/")
 }

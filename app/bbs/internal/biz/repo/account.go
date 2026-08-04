@@ -21,6 +21,7 @@ type AccountProfile struct {
 	Nickname      *string
 	URL           *string
 	AvatarURL     *string
+	AvatarAssetID *int64
 	Introduction  *string
 	Status        int32
 	MBTI          int32
@@ -42,12 +43,12 @@ type Account struct {
 }
 
 type UpdateProfileAccountReq struct {
-	UserID       int64
-	AvatarURL    *string
-	Nickname     *string
-	URL          *string
-	Introduction *string
-	MBTI         *int32
+	UserID        int64
+	AvatarAssetID *int64
+	Nickname      *string
+	URL           *string
+	Introduction  *string
+	MBTI          *int32
 }
 
 type UpdatePasswordAccountReq struct {

@@ -27,6 +27,7 @@ type ObjectStorageGetReq struct {
 	Bucket   *string
 	Key      *string
 	MimeType *string
+	Status   *enum.ObjectStorageStatus
 	Size     *common.Int64Range
 	Blocked  *bool
 }

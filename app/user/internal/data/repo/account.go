@@ -5,7 +5,6 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
-	"fmt"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/config"
@@ -144,7 +143,6 @@ func (r *AccountRepo) create(ctx context.Context, u *model.Account) (*model.Acco
 		SetNillableEmail(u.Email).
 		SetNillablePhone(u.Phone).
 		SetNillableNickname(u.Nickname).
-		SetAvatarURL(fmt.Sprintf(r.conf.Business.Avatar, u.Name)).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -157,7 +155,7 @@ func (r *AccountRepo) create(ctx context.Context, u *model.Account) (*model.Acco
 		Email:         created.Email,
 		Phone:         created.Phone,
 		URL:           created.URL,
-		AvatarURL:     created.AvatarURL,
+		AvatarAssetID: created.AvatarAssetID,
 		Introduction:  created.Introduction,
 		Mbti:          (*enum.MBTI)(created.Mbti),
 		Status:        new(enum.AccountStatus(created.Status)),
@@ -171,7 +169,7 @@ func (r *AccountRepo) create(ctx context.Context, u *model.Account) (*model.Acco
 func (r *AccountRepo) update(ctx context.Context, u *model.Account) (*model.Account, error) {
 	tx := r.getClient(ctx)
 	updated, err := tx.Account.UpdateOneID(u.ID).
-		SetNillableAvatarURL(u.AvatarURL).
+		SetNillableAvatarAssetID(u.AvatarAssetID).
 		SetNillableNickname(u.Nickname).
 		Save(ctx)
 	if err != nil {
@@ -185,7 +183,7 @@ func (r *AccountRepo) update(ctx context.Context, u *model.Account) (*model.Acco
 		Email:         updated.Email,
 		Phone:         updated.Phone,
 		URL:           updated.URL,
-		AvatarURL:     updated.AvatarURL,
+		AvatarAssetID: updated.AvatarAssetID,
 		Introduction:  updated.Introduction,
 		Mbti:          (*enum.MBTI)(updated.Mbti),
 		Status:        new(enum.AccountStatus(updated.Status)),
@@ -197,7 +195,7 @@ func (r *AccountRepo) update(ctx context.Context, u *model.Account) (*model.Acco
 }
 
 func (r *AccountRepo) updateProfile(ctx context.Context, req *model.AccountProfileUpdate) (*model.Account, error) {
-	if req.AvatarURL == nil && req.Nickname == nil && req.URL == nil && req.Introduction == nil && req.Mbti == nil && !req.ClearMBTI {
+	if req.AvatarAssetID == nil && req.Nickname == nil && req.URL == nil && req.Introduction == nil && req.Mbti == nil && !req.ClearMBTI {
 		return r.get(ctx, &repo.AccountGetReq{
 			UserID: &req.UserID,
 		})
@@ -205,11 +203,11 @@ func (r *AccountRepo) updateProfile(ctx context.Context, req *model.AccountProfi
 
 	tx := r.getClient(ctx)
 	update := tx.Account.UpdateOneID(req.UserID)
-	if req.AvatarURL != nil {
-		if *req.AvatarURL == "" {
-			update.ClearAvatarURL()
+	if req.AvatarAssetID != nil {
+		if *req.AvatarAssetID == 0 {
+			update.ClearAvatarAssetID()
 		} else {
-			update.SetAvatarURL(*req.AvatarURL)
+			update.SetAvatarAssetID(*req.AvatarAssetID)
 		}
 	}
 	if req.Nickname != nil {
@@ -251,7 +249,7 @@ func (r *AccountRepo) updateProfile(ctx context.Context, req *model.AccountProfi
 		Email:         updated.Email,
 		Phone:         updated.Phone,
 		URL:           updated.URL,
-		AvatarURL:     updated.AvatarURL,
+		AvatarAssetID: updated.AvatarAssetID,
 		Introduction:  updated.Introduction,
 		Mbti:          (*enum.MBTI)(updated.Mbti),
 		Status:        new(enum.AccountStatus(updated.Status)),
@@ -285,7 +283,7 @@ func (r *AccountRepo) addStat(ctx context.Context, userId int64, statType enum.A
 		Email:         saved.Email,
 		Phone:         saved.Phone,
 		URL:           saved.URL,
-		AvatarURL:     saved.AvatarURL,
+		AvatarAssetID: saved.AvatarAssetID,
 		Introduction:  saved.Introduction,
 		Mbti:          (*enum.MBTI)(saved.Mbti),
 		Status:        new(enum.AccountStatus(saved.Status)),
@@ -311,7 +309,7 @@ func (r *AccountRepo) updateStatus(ctx context.Context, userID int64, status enu
 		Email:         saved.Email,
 		Phone:         saved.Phone,
 		URL:           saved.URL,
-		AvatarURL:     saved.AvatarURL,
+		AvatarAssetID: saved.AvatarAssetID,
 		Introduction:  saved.Introduction,
 		Mbti:          (*enum.MBTI)(saved.Mbti),
 		Status:        new(enum.AccountStatus(saved.Status)),
@@ -363,7 +361,7 @@ func (r *AccountRepo) get(ctx context.Context, req *repo.AccountGetReq) (*model.
 		Email:         u.Email,
 		Phone:         u.Phone,
 		URL:           u.URL,
-		AvatarURL:     u.AvatarURL,
+		AvatarAssetID: u.AvatarAssetID,
 		Introduction:  u.Introduction,
 		Mbti:          (*enum.MBTI)(u.Mbti),
 		Status:        new(enum.AccountStatus(u.Status)),
@@ -392,7 +390,7 @@ func (r *AccountRepo) list(ctx context.Context, req *repo.AccountGetReq) ([]*mod
 			Email:         u.Email,
 			Phone:         u.Phone,
 			URL:           u.URL,
-			AvatarURL:     u.AvatarURL,
+			AvatarAssetID: u.AvatarAssetID,
 			Introduction:  u.Introduction,
 			Mbti:          (*enum.MBTI)(u.Mbti),
 			Status:        new(enum.AccountStatus(u.Status)),
@@ -453,7 +451,7 @@ func (r *AccountRepo) page(ctx context.Context, page *common.PageReq, req *repo.
 			Email:         u.Email,
 			Phone:         u.Phone,
 			URL:           u.URL,
-			AvatarURL:     u.AvatarURL,
+			AvatarAssetID: u.AvatarAssetID,
 			Introduction:  u.Introduction,
 			Mbti:          (*enum.MBTI)(u.Mbti),
 			Status:        new(enum.AccountStatus(u.Status)),

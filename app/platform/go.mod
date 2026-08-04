@@ -41,6 +41,7 @@ require (
 	github.com/dlclark/regexp2 v1.12.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fatih/color v1.19.0 // indirect
+	github.com/felixge/httpsnoop v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/gammazero/toposort v0.1.1 // indirect
 	github.com/go-kratos/kratos/contrib/config/consul/v3 v3.0.0-20260626125723-668db92c2c00 // indirect

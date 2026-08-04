@@ -21,7 +21,6 @@ func NewAccountClient(
 		userClient: userClient,
 	}
 }
-
 func (r *AccountClient) GetCurrentAccount(ctx context.Context, userID int64) (*repo.Account, error) {
 	reply, err := r.userClient.Account.Get(ctx, &userv1.GetAccount_Req{
 		UserId: userID,
@@ -39,7 +38,7 @@ func (r *AccountClient) GetCurrentAccount(ctx context.Context, userID int64) (*r
 				Name:          basic.GetName(),
 				Nickname:      basic.Nickname,
 				URL:           basic.Url,
-				AvatarURL:     basic.AvatarUrl,
+				AvatarAssetID: basic.AvatarAssetId,
 				Introduction:  basic.Introduction,
 				Status:        int32(basic.GetStatus()),
 				MBTI:          int32(basic.GetMbti()),
@@ -75,7 +74,7 @@ func (r *AccountClient) GetProfileAccount(ctx context.Context, userID int64) (*r
 			Name:          account.GetName(),
 			Nickname:      account.Nickname,
 			URL:           account.Url,
-			AvatarURL:     account.AvatarUrl,
+			AvatarAssetID: account.AvatarAssetId,
 			Introduction:  account.Introduction,
 			Status:        int32(account.GetStatus()),
 			MBTI:          int32(account.GetMbti()),
@@ -90,11 +89,11 @@ func (r *AccountClient) GetProfileAccount(ctx context.Context, userID int64) (*r
 
 func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.UpdateProfileAccountReq) (*repo.AccountProfile, error) {
 	updateReq := &userv1.UpdateProfileAccount_Req{
-		UserId:       req.UserID,
-		AvatarUrl:    req.AvatarURL,
-		Nickname:     req.Nickname,
-		Url:          req.URL,
-		Introduction: req.Introduction,
+		UserId:        req.UserID,
+		AvatarAssetId: req.AvatarAssetID,
+		Nickname:      req.Nickname,
+		Url:           req.URL,
+		Introduction:  req.Introduction,
 	}
 	if req.MBTI != nil {
 		updateReq.Mbti = new(userv1enum.MBTI(*req.MBTI))
@@ -111,7 +110,7 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 			Name:          account.GetName(),
 			Nickname:      account.Nickname,
 			URL:           account.Url,
-			AvatarURL:     account.AvatarUrl,
+			AvatarAssetID: account.AvatarAssetId,
 			Introduction:  account.Introduction,
 			Status:        int32(account.GetStatus()),
 			MBTI:          int32(account.GetMbti()),

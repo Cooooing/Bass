@@ -24,9 +24,9 @@ type ChatGroupRepo interface {
 }
 
 type ChatGroupUpdateAvatarReq struct {
-	ChatGroupID int64
-	Avatar      string
-	UpdatedBy   int64
+	ChatGroupID   int64
+	AvatarAssetID int64
+	UpdatedBy     int64
 }
 
 type ChatGroupUpdateOwnerReq struct {

@@ -206,7 +206,7 @@ func (r *ChatSessionRepo) toModel(t *gen.ChatSession) *model.ChatSession {
 		item.Group = &model.ChatGroup{
 			ID:            t.Edges.Group.ID,
 			Name:          t.Edges.Group.Name,
-			Avatar:        t.Edges.Group.Avatar,
+			AvatarAssetID: t.Edges.Group.AvatarAssetID,
 			Introduction:  t.Edges.Group.Introduction,
 			OwnerID:       t.Edges.Group.OwnerID,
 			Status:        enum.ChatGroupStatus(t.Edges.Group.Status),

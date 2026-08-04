@@ -35,16 +35,16 @@ func (s *ChatGroupService) RegisterGrpc(gs *grpc.Server) {
 func (s *ChatGroupService) RegisterHttp(hs *http.Server) {
 }
 
-// Create 创建群组。
+// Create 创建群组
 func (s *ChatGroupService) Create(ctx context.Context, req *v1.CreateChatGroup_Req) (*v1.CreateChatGroup_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	_, err := s.chatGroupUsecase.Create(ctx, &usecase.CreateReq{
-		Name:         req.GetName(),
-		Avatar:       req.Avatar,
-		Introduction: req.Introduction,
-		OwnerID:      req.GetUserId(),
+		Name:          req.GetName(),
+		AvatarAssetID: req.AvatarAssetId,
+		Introduction:  req.Introduction,
+		OwnerID:       req.GetUserId(),
 	})
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (s *ChatGroupService) Create(ctx context.Context, req *v1.CreateChatGroup_R
 	return &v1.CreateChatGroup_Resp{}, nil
 }
 
-// Dismiss 解散群组。
+// Dismiss 解散群组
 func (s *ChatGroupService) Dismiss(ctx context.Context, req *v1.DismissChatGroup_Req) (*v1.DismissChatGroup_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -67,7 +67,7 @@ func (s *ChatGroupService) Dismiss(ctx context.Context, req *v1.DismissChatGroup
 	return &v1.DismissChatGroup_Resp{}, nil
 }
 
-// List 查询群组列表。
+// List 查询群组列表
 func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Req) (*v1.ListChatGroups_Resp, error) {
 	var ids []int64
 	var status *enum.ChatGroupStatus
@@ -96,12 +96,12 @@ func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Req)
 	for _, item := range resp.List {
 		status := enum.ChatGroupStatusMap.MustToProto(item.Status)
 		rows = append(rows, &v1.ListChatGroups_Resp_ChatGroup{
-			Id:           item.ID,
-			Name:         item.Name,
-			Avatar:       item.Avatar,
-			Introduction: item.Introduction,
-			Status:       status,
-			MemberCount:  item.MemberCount,
+			Id:            item.ID,
+			Name:          item.Name,
+			AvatarAssetId: item.AvatarAssetID,
+			Introduction:  item.Introduction,
+			Status:        status,
+			MemberCount:   item.MemberCount,
 		})
 	}
 	return &v1.ListChatGroups_Resp{

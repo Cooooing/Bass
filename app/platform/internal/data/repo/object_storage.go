@@ -4,8 +4,6 @@ import (
 	"common/proto/gen/common"
 	"context"
 	"fmt"
-
-	entsql "entgo.io/ent/dialect/sql"
 	"platform/internal/biz/model"
 	"platform/internal/biz/repo"
 	"platform/internal/data/gen"
@@ -14,6 +12,8 @@ import (
 
 	"common/pkg/server"
 	utilent "common/pkg/util/ent"
+
+	entsql "entgo.io/ent/dialect/sql"
 )
 
 var _ repo.ObjectStorageRepo = (*ObjectStorageRepo)(nil)
@@ -41,39 +41,29 @@ func (r *ObjectStorageRepo) Save(ctx context.Context, row *model.ObjectStorage) 
 	if row == nil {
 		return nil, fmt.Errorf("object storage row is nil")
 	}
-	err := r.getClient(ctx).ObjectStorage.Create().
+	status := row.Status
+	if status == "" {
+		status = enum.ObjectStorageStatusAvailable
+	}
+	id, err := r.getClient(ctx).ObjectStorage.Create().
 		SetProvider(objectstorage.Provider(row.Provider)).
 		SetBucket(row.Bucket).
 		SetKey(row.Key).
 		SetMimeType(row.MimeType).
 		SetSize(row.Size).
 		SetHash(row.Hash).
+		SetStatus(objectstorage.Status(status)).
 		SetUploadBy(row.UploadBy).
 		OnConflict(
 			entsql.ConflictColumns(objectstorage.FieldProvider, objectstorage.FieldBucket, objectstorage.FieldKey),
 			entsql.ConflictWhere(entsql.IsNull(objectstorage.FieldDeletedAt)),
 		).
-		UpdateMimeType().
-		UpdateSize().
-		UpdateHash().
-		UpdateUploadBy().
-		UpdateUpdatedAt().
-		Exec(ctx)
+		UpdateNewValues().
+		ID(ctx)
 	if err != nil {
 		return nil, err
 	}
-	result, err := r.Get(ctx, &repo.ObjectStorageGetReq{
-		Provider: new(row.Provider),
-		Bucket:   new(row.Bucket),
-		Key:      new(row.Key),
-	})
-	if err != nil {
-		return nil, err
-	}
-	if result == nil {
-		return nil, fmt.Errorf("object storage row not found after save")
-	}
-	return result, nil
+	return r.Get(ctx, &repo.ObjectStorageGetReq{ID: new(id)})
 }
 
 func (r *ObjectStorageRepo) UpdateAudit(ctx context.Context, row *model.ObjectStorage) error {
@@ -139,6 +129,7 @@ func (r *ObjectStorageRepo) Get(ctx context.Context, req *repo.ObjectStorageGetR
 		MimeType:           row.MimeType,
 		Size:               row.Size,
 		Hash:               row.Hash,
+		Status:             enum.ObjectStorageStatus(row.Status),
 		UploadBy:           row.UploadBy,
 		AuditCallbackReply: row.AuditCallbackReply,
 		Blocked:            row.Blocked,
@@ -167,6 +158,7 @@ func (r *ObjectStorageRepo) List(ctx context.Context, req *repo.ObjectStorageGet
 			MimeType:           row.MimeType,
 			Size:               row.Size,
 			Hash:               row.Hash,
+			Status:             enum.ObjectStorageStatus(row.Status),
 			UploadBy:           row.UploadBy,
 			AuditCallbackReply: row.AuditCallbackReply,
 			Blocked:            row.Blocked,
@@ -228,6 +220,7 @@ func (r *ObjectStorageRepo) Page(ctx context.Context, req *repo.ObjectStoragePag
 			MimeType:           row.MimeType,
 			Size:               row.Size,
 			Hash:               row.Hash,
+			Status:             enum.ObjectStorageStatus(row.Status),
 			UploadBy:           row.UploadBy,
 			AuditCallbackReply: row.AuditCallbackReply,
 			Blocked:            row.Blocked,
@@ -270,6 +263,9 @@ func (r *ObjectStorageRepo) getQuery(query *gen.ObjectStorageQuery, req *repo.Ob
 	}
 	if req.MimeType != nil {
 		query = query.Where(objectstorage.MimeTypeEQ(*req.MimeType))
+	}
+	if req.Status != nil {
+		query = query.Where(objectstorage.StatusEQ(objectstorage.Status(*req.Status)))
 	}
 	if req.Size != nil {
 		if req.Size.Start != nil {

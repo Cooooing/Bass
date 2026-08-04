@@ -8,7 +8,7 @@ import (
 type ChatGroup struct {
 	ID            int64
 	Name          string
-	Avatar        *string
+	AvatarAssetID *int64
 	Introduction  *string
 	OwnerID       int64
 	Status        enum.ChatGroupStatus

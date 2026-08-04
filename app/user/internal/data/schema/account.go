@@ -13,16 +13,14 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// Account 定义账号核心表，登录历史和可选扩展资料拆分到独立业务表。
+// Account 定义账号核心表
 type Account struct {
 	ent.Schema
 }
 
 func (Account) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{
-			Table: constant.TablePrefixUser.String() + "accounts",
-		},
+		entsql.Annotation{Table: constant.TablePrefixUser.String() + "accounts"},
 		entsql.WithComments(true),
 	}
 }
@@ -36,19 +34,17 @@ func (Account) Fields() []ent.Field {
 		field.String("email").Comment("邮箱地址").Optional().Nillable(),
 		field.String("phone").Comment("手机号").Optional().Nillable(),
 		field.String("url").Comment("个人主页 URL").Optional().Nillable(),
-		field.String("avatar_url").Comment("头像 URL").Optional().Nillable(),
+		field.Int64("avatar_asset_id").Comment("头像资源 ID").Optional().Nillable(),
 		field.String("introduction").Comment("个人简介").Optional().Nillable(),
 		field.Enum("mbti").Values(userenum.MBTIMap.EnumValues()...).Comment("MBTI 类型").Optional().Nillable(),
 		field.Enum("status").Values(userenum.AccountStatusMap.EnumValues()...).Default(userenum.AccountStatusNormal.String()).Comment("账号状态"),
-		field.Int32("follow_count").Comment("关注数").Default(0),
-		field.Int32("follower_count").Comment("粉丝数").Default(0),
+		field.Int32("follow_count").Comment("关注数量").Default(0),
+		field.Int32("follower_count").Comment("粉丝数量").Default(0),
 	}
 }
 
 func (Account) Mixin() []ent.Mixin {
-	return []ent.Mixin{
-		utilent.TimeAuditMixin{},
-	}
+	return []ent.Mixin{utilent.TimeAuditMixin{}}
 }
 
 func (Account) Indexes() []ent.Index {

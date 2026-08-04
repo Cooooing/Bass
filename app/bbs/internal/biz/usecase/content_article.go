@@ -11,13 +11,16 @@ import (
 
 type ContentArticleUsecase struct {
 	contentArticleClient repo.ContentArticleClient
+	assetClient          repo.AssetClient
 }
 
 func NewContentArticleUsecase(
 	contentArticleClient repo.ContentArticleClient,
+	assetClient repo.AssetClient,
 ) *ContentArticleUsecase {
 	return &ContentArticleUsecase{
 		contentArticleClient: contentArticleClient,
+		assetClient:          assetClient,
 	}
 }
 
@@ -47,7 +50,46 @@ func (u *ContentArticleUsecase) CreateDraftArticle(ctx context.Context, req *Cre
 	if req == nil || req.Article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	return u.contentArticleClient.CreateDraftArticle(ctx, &repo.CreateDraftArticleReq{UserID: req.UserID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
+	resp, err := u.contentArticleClient.CreateDraftArticle(ctx, &repo.CreateDraftArticleReq{UserID: req.UserID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
+	if err != nil {
+		return nil, err
+	}
+	if resp != nil {
+		profiles := []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}
+		assetIDs := make([]int64, 0, len(profiles))
+		seen := map[int64]struct{}{}
+		for _, profile := range profiles {
+			if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+				continue
+			}
+			if _, ok := seen[*profile.AvatarAssetID]; ok {
+				continue
+			}
+			seen[*profile.AvatarAssetID] = struct{}{}
+			assetIDs = append(assetIDs, *profile.AvatarAssetID)
+		}
+		assets := map[int64]*repo.Asset{}
+		if len(assetIDs) > 0 && u.assetClient != nil {
+			var err error
+			assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+			if err != nil {
+				return nil, err
+			}
+		}
+		for _, profile := range profiles {
+			if profile == nil {
+				continue
+			}
+			avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+			if profile.AvatarAssetID != nil {
+				if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+					avatarURL = asset.URL
+				}
+			}
+			profile.AvatarURL = &avatarURL
+		}
+	}
+	return resp, nil
 }
 
 type UpdateDraftArticleReq struct {
@@ -60,7 +102,46 @@ func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *Upd
 	if req == nil || req.Article == nil || req.ArticleID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	return u.contentArticleClient.UpdateDraftArticle(ctx, &repo.UpdateDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
+	resp, err := u.contentArticleClient.UpdateDraftArticle(ctx, &repo.UpdateDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
+	if err != nil {
+		return nil, err
+	}
+	if resp != nil {
+		profiles := []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}
+		assetIDs := make([]int64, 0, len(profiles))
+		seen := map[int64]struct{}{}
+		for _, profile := range profiles {
+			if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+				continue
+			}
+			if _, ok := seen[*profile.AvatarAssetID]; ok {
+				continue
+			}
+			seen[*profile.AvatarAssetID] = struct{}{}
+			assetIDs = append(assetIDs, *profile.AvatarAssetID)
+		}
+		assets := map[int64]*repo.Asset{}
+		if len(assetIDs) > 0 && u.assetClient != nil {
+			var err error
+			assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+			if err != nil {
+				return nil, err
+			}
+		}
+		for _, profile := range profiles {
+			if profile == nil {
+				continue
+			}
+			avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+			if profile.AvatarAssetID != nil {
+				if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+					avatarURL = asset.URL
+				}
+			}
+			profile.AvatarURL = &avatarURL
+		}
+	}
+	return resp, nil
 }
 
 type PublishArticleReq struct {
@@ -166,6 +247,44 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 	if err != nil {
 		return nil, err
 	}
+	profiles := make([]*repo.AccountProfile, 0, len(resp.Rows)*2)
+	for _, row := range resp.Rows {
+		if row == nil {
+			continue
+		}
+		profiles = append(profiles, row.AuthorUser, row.LastReplyUser)
+	}
+	assetIDs := make([]int64, 0, len(profiles))
+	seen := map[int64]struct{}{}
+	for _, profile := range profiles {
+		if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+			continue
+		}
+		if _, ok := seen[*profile.AvatarAssetID]; ok {
+			continue
+		}
+		seen[*profile.AvatarAssetID] = struct{}{}
+		assetIDs = append(assetIDs, *profile.AvatarAssetID)
+	}
+	assets := map[int64]*repo.Asset{}
+	if len(assetIDs) > 0 && u.assetClient != nil {
+		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+		if err != nil {
+			return nil, err
+		}
+	}
+	for _, profile := range profiles {
+		if profile == nil {
+			continue
+		}
+		avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+		if profile.AvatarAssetID != nil {
+			if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
+			}
+		}
+		profile.AvatarURL = &avatarURL
+	}
 	return &ListArticlesResp{Page: resp.Page, Rows: resp.Rows}, nil
 }
 
@@ -178,7 +297,46 @@ func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleR
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	return u.contentArticleClient.GetArticle(ctx, &repo.GetArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
+	resp, err := u.contentArticleClient.GetArticle(ctx, &repo.GetArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
+	if err != nil {
+		return nil, err
+	}
+	if resp != nil {
+		profiles := []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}
+		assetIDs := make([]int64, 0, len(profiles))
+		seen := map[int64]struct{}{}
+		for _, profile := range profiles {
+			if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+				continue
+			}
+			if _, ok := seen[*profile.AvatarAssetID]; ok {
+				continue
+			}
+			seen[*profile.AvatarAssetID] = struct{}{}
+			assetIDs = append(assetIDs, *profile.AvatarAssetID)
+		}
+		assets := map[int64]*repo.Asset{}
+		if len(assetIDs) > 0 && u.assetClient != nil {
+			var err error
+			assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+			if err != nil {
+				return nil, err
+			}
+		}
+		for _, profile := range profiles {
+			if profile == nil {
+				continue
+			}
+			avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+			if profile.AvatarAssetID != nil {
+				if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+					avatarURL = asset.URL
+				}
+			}
+			profile.AvatarURL = &avatarURL
+		}
+	}
+	return resp, nil
 }
 
 type ViewArticleReq struct {

@@ -1,30 +1,31 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.im.v1;
 
 import "common/common.proto";
-import "common/enums/language.proto";
 import "google/protobuf/timestamp.proto";
 import "im/v1/enum/chat_group.proto";
 import "im/v1/enum/message.proto";
 import "user/v1/enum/account_status.proto";
 import "user/v1/enum/mbti.proto";
-import "user/v1/enum/relation.proto";
 
 option go_package = "common/proto/gen/im/v1;v1";
 
-// ChatGroup 服务
+// IMChatGroupService 提供群组能力
 service IMChatGroupService {
-  rpc Create(CreateChatGroup.Req) returns (CreateChatGroup.Resp) {} // 创建群组
-  rpc Dismiss(DismissChatGroup.Req) returns (DismissChatGroup.Resp) {} // 解散群组
-  rpc List(ListChatGroups.Req) returns (ListChatGroups.Resp) {} // 查询群组列表
+  // 创建群组
+  rpc Create(CreateChatGroup.Req) returns (CreateChatGroup.Resp) {}
+  // 解散群组
+  rpc Dismiss(DismissChatGroup.Req) returns (DismissChatGroup.Resp) {}
+  // 查询群组列表
+  rpc List(ListChatGroups.Req) returns (ListChatGroups.Resp) {}
 }
 
 message CreateChatGroup {
   message Req {
     int64 user_id = 1; // 用户 ID
     string name = 2; // 群名称
-    optional string avatar = 3; // 群头像
+    optional int64 avatar_asset_id = 3; // 群头像资源 ID
     optional string introduction = 4; // 群简介
   }
   message Resp {}
@@ -32,7 +33,7 @@ message CreateChatGroup {
 
 message DismissChatGroup {
   message Req {
-    int64 id = 1; // 群组ID
+    int64 id = 1; // 群组 ID
     int64 user_id = 2; // 用户 ID
   }
   message Resp {}
@@ -41,50 +42,48 @@ message DismissChatGroup {
 message ListChatGroups {
   message Req {
     message ChatGroupQueryParams {
-      repeated int64 ids = 2; // 主键
+      repeated int64 ids = 2; // 群组 ID 列表
       repeated string uuids = 3; // UUID 列表
       optional int32 notification_type = 5; // 通知类型
-      repeated int64 sender_ids = 6; // 发送者ID
-      optional ChatGroupStatus status = 8; // 状态
+      repeated int64 sender_ids = 6; // 发送者 ID 列表
+      optional ChatGroupStatus status = 8; // 群组状态
     }
     .common.api.app.common.PageReq page = 1; // 分页参数
     ChatGroupQueryParams query = 2; // 查询参数
   }
   message Resp {
+    message AccountBasic {
+      int64 id = 1; // 账号 ID
+      string name = 2; // 账号名
+      optional string nickname = 3; // 昵称
+      optional string url = 4; // 个人主页 URL
+      optional string avatar_url = 5; // 头像 URL
+      optional string introduction = 6; // 个人简介
+      .common.api.app.user.v1.MBTI mbti = 7; // MBTI 类型
+      .common.api.app.user.v1.AccountStatus status = 8; // 账号状态
+      optional int32 follow_count = 10; // 关注数量
+      optional int32 follower_count = 11; // 粉丝数量
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+      google.protobuf.Timestamp updated_at = 1001; // 更新时间
+    }
     message ChatGroup {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
-      int64 id = 1; // 主键
+      int64 id = 1; // 群组 ID
       string name = 2; // 群名称
-      optional string avatar = 3; // 群头像
+      optional int64 avatar_asset_id = 3; // 群头像资源 ID
       optional string introduction = 4; // 群简介
-      ChatGroupStatus status = 5; // 群状态
+      ChatGroupStatus status = 5; // 群组状态
       AccountBasic owner = 6; // 群主信息
-      uint32 member_count = 7; // 群成员数
+      uint32 member_count = 7; // 成员数量
       ChatMessage last_message = 9; // 最后一条消息
     }
-
-    message AccountBasic {
-      int64 id = 1;
-      string name = 2;
-      optional string nickname = 3;
-      optional string url = 4;
-      optional string avatar_url = 5;
-      optional string introduction = 6;
-      .common.api.app.user.v1.MBTI mbti = 7;
-      .common.api.app.user.v1.AccountStatus status = 8;
-      optional int32 follow_count = 10;
-      optional int32 follower_count = 11;
-      google.protobuf.Timestamp created_at = 1000;
-      google.protobuf.Timestamp updated_at = 1001;
-    }
-
     message ChatMessage {
       google.protobuf.Timestamp created_at = 1000; // 创建时间
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
       optional int64 created_by = 1002; // 创建人
       optional int64 updated_by = 1003; // 更新人
-      int64 id = 1; // 主键
+      int64 id = 1; // 消息 ID
       AccountBasic sender = 2; // 发送者
       int64 receiver_user_id = 3; // 接收用户 ID
       AccountBasic receiver_user = 4; // 接收用户
@@ -92,7 +91,7 @@ message ListChatGroups {
       ChatGroup receiver_group = 6; // 接收群组
       MessageType type = 7; // 消息类型
       string content = 8; // 内容
-      MessageStatus status = 9; // 状态
+      MessageStatus status = 9; // 消息状态
     }
     .common.api.app.common.PageResp page = 1; // 分页信息
     repeated ChatGroup rows = 2; // 群组列表

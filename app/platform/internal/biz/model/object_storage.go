@@ -13,6 +13,7 @@ type ObjectStorage struct {
 	MimeType           string
 	Size               int64
 	Hash               string
+	Status             enum.ObjectStorageStatus
 	UploadBy           int64
 	AuditCallbackReply *string
 	Blocked            bool
@@ -21,6 +22,7 @@ type ObjectStorage struct {
 	BlockedBy          *int64
 	CreatedAt          *time.Time
 	UpdatedAt          *time.Time
+	URL                string
 }
 
 type UploadToken struct {

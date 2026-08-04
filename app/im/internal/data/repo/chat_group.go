@@ -39,7 +39,7 @@ func (r *ChatGroupRepo) getClient(ctx context.Context) *gen.Client {
 func (r *ChatGroupRepo) Save(ctx context.Context, chatGroup *model.ChatGroup) (*model.ChatGroup, error) {
 	save, err := r.getClient(ctx).ChatGroup.Create().
 		SetName(chatGroup.Name).
-		SetNillableAvatar(chatGroup.Avatar).
+		SetNillableAvatarAssetID(chatGroup.AvatarAssetID).
 		SetNillableIntroduction(chatGroup.Introduction).
 		SetOwnerID(chatGroup.OwnerID).
 		SetStatus(chatgroup.Status(enum.ChatGroupStatusNormal)).
@@ -55,7 +55,7 @@ func (r *ChatGroupRepo) Save(ctx context.Context, chatGroup *model.ChatGroup) (*
 
 func (r *ChatGroupRepo) UpdateAvatar(ctx context.Context, req *repo.ChatGroupUpdateAvatarReq) (*model.ChatGroup, error) {
 	update, err := r.getClient(ctx).ChatGroup.UpdateOneID(req.ChatGroupID).
-		SetAvatar(req.Avatar).
+		SetAvatarAssetID(req.AvatarAssetID).
 		SetUpdatedBy(req.UpdatedBy).
 		Save(ctx)
 	if err != nil {
@@ -206,7 +206,7 @@ func (r *ChatGroupRepo) toModel(t *gen.ChatGroup) *model.ChatGroup {
 	return &model.ChatGroup{
 		ID:            t.ID,
 		Name:          t.Name,
-		Avatar:        t.Avatar,
+		AvatarAssetID: t.AvatarAssetID,
 		Introduction:  t.Introduction,
 		OwnerID:       t.OwnerID,
 		Status:        enum.ChatGroupStatus(t.Status),

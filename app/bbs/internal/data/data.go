@@ -20,6 +20,8 @@ var DataProviderSet = wire.NewSet(
 	ProvideUserAuthClient,
 	rpc.ProvideContentClient,
 	rpc.ProvideNotifyClient,
+	rpc.ProvidePlatformClient,
+	NewAssetClient,
 	NewAuthClient,
 	NewAccountClient,
 	NewPreferencesClient,

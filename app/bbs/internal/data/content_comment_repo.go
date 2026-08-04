@@ -30,7 +30,6 @@ func NewContentCommentClient(
 		userClient:    userClient,
 	}
 }
-
 func (r *ContentCommentClient) CreateComment(ctx context.Context, req *repo.CreateCommentReq) (*repo.CommentDetail, error) {
 	var replyID *int64
 	if req.ReplyID != 0 {
@@ -556,7 +555,7 @@ func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs 
 			Name:          basic.GetName(),
 			Nickname:      basic.Nickname,
 			URL:           basic.Url,
-			AvatarURL:     basic.AvatarUrl,
+			AvatarAssetID: basic.AvatarAssetId,
 			Introduction:  basic.Introduction,
 			MBTI:          int32(basic.GetMbti()),
 			Status:        int32(basic.GetStatus()),

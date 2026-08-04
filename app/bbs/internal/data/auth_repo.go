@@ -7,7 +7,6 @@ import (
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
 	"common/pkg/server"
-
 	userv1 "common/proto/gen/user/v1"
 	userenum "common/proto/gen/user/v1/enum"
 	"context"
@@ -21,20 +20,13 @@ type AuthRepo struct {
 	userClient *rpc.UserClient
 }
 
-func NewAuthRepo(
+func NewAuthClient(
 	userClient *rpc.UserClient,
 ) repo.AuthRepo {
 	return &AuthRepo{
 		userClient: userClient,
 	}
 }
-
-func NewAuthClient(
-	userClient *rpc.UserClient,
-) repo.AuthRepo {
-	return NewAuthRepo(userClient)
-}
-
 func (r *AuthRepo) Register(ctx context.Context, req *repo.RegisterReq) error {
 	registerReq := &userv1.Register_Req{
 		Type:     req.Type.ToUserProto(),
@@ -129,7 +121,7 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 				Name:          basic.GetName(),
 				Nickname:      basic.Nickname,
 				URL:           basic.Url,
-				AvatarURL:     basic.AvatarUrl,
+				AvatarAssetID: basic.AvatarAssetId,
 				Introduction:  basic.Introduction,
 				Status:        int32(basic.GetStatus()),
 				MBTI:          int32(basic.GetMbti()),

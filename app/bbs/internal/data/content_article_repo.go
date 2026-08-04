@@ -48,7 +48,6 @@ func NewContentArticleClient(
 		userClient:    userClient,
 	}
 }
-
 func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo.CreateDraftArticleReq) (*repo.ArticleDetail, error) {
 	save := &contentv1.CreateDraftArticle_Req_Article{}
 	if req != nil && req.Article != nil {
@@ -593,7 +592,7 @@ func (r *ContentArticleClient) loadAccountProfiles(ctx context.Context, userIDs 
 			Name:          basic.GetName(),
 			Nickname:      basic.Nickname,
 			URL:           basic.Url,
-			AvatarURL:     basic.AvatarUrl,
+			AvatarAssetID: basic.AvatarAssetId,
 			Introduction:  basic.Introduction,
 			MBTI:          int32(basic.GetMbti()),
 			Status:        int32(basic.GetStatus()),

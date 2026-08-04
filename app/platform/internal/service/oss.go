@@ -54,13 +54,14 @@ func (s *OssService) Upload(ctx context.Context, req *v1.UploadOss_Req) (*v1.Upl
 		return nil, err
 	}
 	return &v1.UploadOss_Resp{
-		Id:       row.ID,
+		AssetId:  row.ID,
 		Provider: enum.ObjectStorageProviderMap.MustToProto(row.Provider),
 		Bucket:   row.Bucket,
 		Key:      row.Key,
 		MimeType: row.MimeType,
 		Size:     row.Size,
 		Hash:     row.Hash,
+		Status:   enum.ObjectStorageStatusMap.MustToProto(row.Status),
 	}, nil
 }
 
@@ -116,13 +117,14 @@ func (s *OssService) StreamUpload(stream v1.PlatformOssService_StreamUploadServe
 		return err
 	}
 	return stream.SendAndClose(&v1.StreamUploadOss_Resp{
-		Id:       row.ID,
+		AssetId:  row.ID,
 		Provider: enum.ObjectStorageProviderMap.MustToProto(row.Provider),
 		Bucket:   row.Bucket,
 		Key:      row.Key,
 		MimeType: row.MimeType,
 		Size:     row.Size,
 		Hash:     row.Hash,
+		Status:   enum.ObjectStorageStatusMap.MustToProto(row.Status),
 	})
 }
 
@@ -229,7 +231,7 @@ func (s *OssService) List(ctx context.Context, req *v1.ListOss_Req) (*v1.ListOss
 		row := &v1.ListOss_Resp_Oss{
 			CreatedAt:          timestamppb.New(*item.CreatedAt),
 			UpdatedAt:          timestamppb.New(*item.UpdatedAt),
-			Id:                 item.ID,
+			AssetId:            item.ID,
 			Provider:           enum.ObjectStorageProviderMap.MustToProto(item.Provider),
 			Bucket:             item.Bucket,
 			Key:                item.Key,
@@ -240,6 +242,8 @@ func (s *OssService) List(ctx context.Context, req *v1.ListOss_Req) (*v1.ListOss
 			Blocked:            item.Blocked,
 			BlockedReason:      item.BlockedReason,
 			BlockedBy:          item.BlockedBy,
+			Status:             enum.ObjectStorageStatusMap.MustToProto(item.Status),
+			Url:                s.objectStorageUsecase.BuildPublicURL(item),
 		}
 		if item.BlockedAt != nil {
 			row.BlockedAt = timestamppb.New(*item.BlockedAt)
@@ -269,6 +273,7 @@ func (s *OssService) QiniuUploadCallback(ctx context.Context, req *v1.QiniuUploa
 		Size:     req.Size,
 		Hash:     req.Hash,
 		UploadBy: req.UploadBy,
+		Status:   enum.ObjectStorageStatusAvailable,
 	})
 	return &v1.QiniuUploadCallbackOss_Resp{}, err
 }
@@ -301,4 +306,29 @@ func (s *OssService) QiniuIncrementAuditCallback(ctx context.Context, req *v1.Qi
 		return &v1.QiniuIncrementAuditCallbackOss_Resp{}, err
 	}
 	return &v1.QiniuIncrementAuditCallbackOss_Resp{}, err
+}
+
+func (s *OssService) ResolveAssets(ctx context.Context, req *v1.ResolveAssetsOss_Req) (*v1.ResolveAssetsOss_Resp, error) {
+	res, err := s.objectStorageUsecase.ResolveAssets(ctx, &usecase.ResolveAssetsReq{AssetIDs: req.GetAssetIds()})
+	if err != nil {
+		return nil, err
+	}
+	assets := make(map[int64]*v1.ResolveAssetsOss_Resp_Asset, len(res.Assets))
+	for assetID, item := range res.Assets {
+		assets[assetID] = &v1.ResolveAssetsOss_Resp_Asset{
+			AssetId:  item.ID,
+			Url:      item.URL,
+			MimeType: item.MimeType,
+			Size:     item.Size,
+			Status:   enum.ObjectStorageStatusMap.MustToProto(item.Status),
+		}
+	}
+	return &v1.ResolveAssetsOss_Resp{Assets: assets}, nil
+}
+
+func (s *OssService) ValidateAsset(ctx context.Context, req *v1.ValidateAssetOss_Req) (*v1.ValidateAssetOss_Resp, error) {
+	if err := s.objectStorageUsecase.ValidateAsset(ctx, &usecase.ValidateAssetReq{AssetID: req.GetAssetId(), UserID: req.GetUserId()}); err != nil {
+		return nil, err
+	}
+	return &v1.ValidateAssetOss_Resp{}, nil
 }

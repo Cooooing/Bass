@@ -11,13 +11,16 @@ import (
 
 type AccountUsecase struct {
 	accountClient repo.AccountClient
+	assetClient   repo.AssetClient
 }
 
 func NewAccountUsecase(
 	accountClient repo.AccountClient,
+	assetClient repo.AssetClient,
 ) *AccountUsecase {
 	return &AccountUsecase{
 		accountClient: accountClient,
+		assetClient:   assetClient,
 	}
 }
 
@@ -28,9 +31,22 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*
 	}
 	var account *bbsuserv1.GetCurrentAccount_Resp_Account
 	if reply != nil {
+		if reply.Profile != nil {
+			avatarURL := "/v1/user/account/avatar?name=" + reply.Profile.Name
+			if reply.Profile.AvatarAssetID != nil && *reply.Profile.AvatarAssetID > 0 && u.assetClient != nil {
+				asset, err := u.assetClient.Get(ctx, *reply.Profile.AvatarAssetID)
+				if err != nil {
+					return nil, err
+				}
+				if asset != nil && asset.URL != "" {
+					avatarURL = asset.URL
+				}
+			}
+			reply.Profile.AvatarURL = &avatarURL
+		}
 		account = &bbsuserv1.GetCurrentAccount_Resp_Account{}
 		if profile := reply.Profile; profile != nil {
-			account.Profile = &bbsuserv1.GetCurrentAccount_Resp_AccountProfile{
+			account.Profile = &bbsuserv1.AccountProfile{
 				Id:            profile.ID,
 				Name:          profile.Name,
 				Nickname:      profile.Nickname,
@@ -50,7 +66,7 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*
 			}
 		}
 		if contact := reply.Contact; contact != nil {
-			account.Contact = &bbsuserv1.GetCurrentAccount_Resp_AccountContact{
+			account.Contact = &bbsuserv1.AccountContact{
 				UserId: contact.UserID,
 				Email:  contact.Email,
 				Phone:  contact.Phone,
@@ -60,14 +76,25 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*
 	return account, nil
 }
 
-func (u *AccountUsecase) GetProfileAccount(ctx context.Context, userID int64) (*bbsuserv1.GetProfileAccount_Resp_AccountProfile, error) {
+func (u *AccountUsecase) GetProfileAccount(ctx context.Context, userID int64) (*bbsuserv1.AccountProfile, error) {
 	reply, err := u.accountClient.GetProfileAccount(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
-	var profile *bbsuserv1.GetProfileAccount_Resp_AccountProfile
+	var profile *bbsuserv1.AccountProfile
 	if row := reply; row != nil {
-		profile = &bbsuserv1.GetProfileAccount_Resp_AccountProfile{
+		avatarURL := "/v1/user/account/avatar?name=" + row.Name
+		if row.AvatarAssetID != nil && *row.AvatarAssetID > 0 && u.assetClient != nil {
+			asset, err := u.assetClient.Get(ctx, *row.AvatarAssetID)
+			if err != nil {
+				return nil, err
+			}
+			if asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
+			}
+		}
+		row.AvatarURL = &avatarURL
+		profile = &bbsuserv1.AccountProfile{
 			Id:            row.ID,
 			Name:          row.Name,
 			Nickname:      row.Nickname,
@@ -90,33 +117,44 @@ func (u *AccountUsecase) GetProfileAccount(ctx context.Context, userID int64) (*
 }
 
 type UpdateProfileAccountReq struct {
-	UserID       int64
-	AvatarURL    *string
-	Nickname     *string
-	URL          *string
-	Introduction *string
-	Mbti         *bbsuserv1enum.MBTI
+	UserID        int64
+	AvatarAssetID *int64
+	Nickname      *string
+	URL           *string
+	Introduction  *string
+	Mbti          *bbsuserv1enum.MBTI
 }
 
-func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*bbsuserv1.UpdateProfileAccount_Resp_AccountProfile, error) {
+func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*bbsuserv1.AccountProfile, error) {
 	var mbti *int32
 	if req.Mbti != nil {
 		mbti = new(int32(*req.Mbti))
 	}
 	reply, err := u.accountClient.UpdateProfileAccount(ctx, &repo.UpdateProfileAccountReq{
-		UserID:       req.UserID,
-		AvatarURL:    req.AvatarURL,
-		Nickname:     req.Nickname,
-		URL:          req.URL,
-		Introduction: req.Introduction,
-		MBTI:         mbti,
+		UserID:        req.UserID,
+		AvatarAssetID: req.AvatarAssetID,
+		Nickname:      req.Nickname,
+		URL:           req.URL,
+		Introduction:  req.Introduction,
+		MBTI:          mbti,
 	})
 	if err != nil {
 		return nil, err
 	}
-	var profile *bbsuserv1.UpdateProfileAccount_Resp_AccountProfile
+	var profile *bbsuserv1.AccountProfile
 	if row := reply; row != nil {
-		profile = &bbsuserv1.UpdateProfileAccount_Resp_AccountProfile{
+		avatarURL := "/v1/user/account/avatar?name=" + row.Name
+		if row.AvatarAssetID != nil && *row.AvatarAssetID > 0 && u.assetClient != nil {
+			asset, err := u.assetClient.Get(ctx, *row.AvatarAssetID)
+			if err != nil {
+				return nil, err
+			}
+			if asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
+			}
+		}
+		row.AvatarURL = &avatarURL
+		profile = &bbsuserv1.AccountProfile{
 			Id:            row.ID,
 			Name:          row.Name,
 			Nickname:      row.Nickname,

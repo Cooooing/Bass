@@ -9,25 +9,29 @@ import "platform/v1/enum/object_storage.proto";
 
 option go_package = "common/proto/gen/platform/v1;v1";
 
-// OSS 服务。
+// PlatformOssService 提供平台对象存储能力
 service PlatformOssService {
-  // 获取上传凭证。
+  // 获取上传凭证
   rpc GetUploadToken(GetUploadTokenOss.Req) returns (GetUploadTokenOss.Resp) {}
-  // 直接上传对象。
+  // 直接上传对象
   rpc Upload(UploadOss.Req) returns (UploadOss.Resp) {}
-  // 流式上传对象。
+  // 流式上传对象
   rpc StreamUpload(stream StreamUploadOss.Req) returns (StreamUploadOss.Resp) {}
-  // 直接下载对象。
+  // 直接下载对象
   rpc Download(DownloadOss.Req) returns (DownloadOss.Resp) {}
-  // 流式下载对象。
+  // 流式下载对象
   rpc StreamDownload(StreamDownloadOss.Req) returns (stream StreamDownloadOss.Resp) {}
-  // 审核对象。
+  // 审核对象
   rpc Audit(AuditOss.Req) returns (AuditOss.Resp) {}
-  // 查询对象列表。
+  // 查询对象列表
   rpc List(ListOss.Req) returns (ListOss.Resp) {}
-  // 七牛上传回调。
+  // 批量解析资源访问地址
+  rpc ResolveAssets(ResolveAssetsOss.Req) returns (ResolveAssetsOss.Resp) {}
+  // 校验资源是否可绑定
+  rpc ValidateAsset(ValidateAssetOss.Req) returns (ValidateAssetOss.Resp) {}
+  // 七牛上传回调
   rpc QiniuUploadCallback(QiniuUploadCallbackOss.Req) returns (QiniuUploadCallbackOss.Resp) {}
-  // 七牛增量审核回调。
+  // 七牛增量审核回调
   rpc QiniuIncrementAuditCallback(QiniuIncrementAuditCallbackOss.Req) returns (QiniuIncrementAuditCallbackOss.Resp) {}
 }
 
@@ -54,13 +58,14 @@ message UploadOss {
     bytes content = 6;
   }
   message Resp {
-    int64 id = 1;
+    int64 asset_id = 1;
     ObjectStorageProvider provider = 2;
     string bucket = 3;
     string key = 4;
     string mime_type = 5;
     int64 size = 6;
     string hash = 7;
+    ObjectStorageStatus status = 9;
   }
 }
 
@@ -79,13 +84,14 @@ message StreamUploadOss {
     }
   }
   message Resp {
-    int64 id = 1;
+    int64 asset_id = 1;
     ObjectStorageProvider provider = 2;
     string bucket = 3;
     string key = 4;
     string mime_type = 5;
     int64 size = 6;
     string hash = 7;
+    ObjectStorageStatus status = 9;
   }
 }
 
@@ -112,6 +118,7 @@ message StreamDownloadOss {
     bytes chunk = 4;
   }
 }
+
 message AuditOss {
   message Req {
     int64 user_id = 1;
@@ -131,6 +138,7 @@ message ListOss {
       optional string mime_type = 4;
       optional bool blocked = 5;
       common.Int64Range size = 7;
+      optional ObjectStorageStatus status = 8;
     }
     .common.api.app.common.PageReq page = 1;
     OssQueryParams query = 2;
@@ -139,7 +147,7 @@ message ListOss {
     message Oss {
       google.protobuf.Timestamp created_at = 1000;
       google.protobuf.Timestamp updated_at = 1001;
-      int64 id = 1;
+      int64 asset_id = 1;
       ObjectStorageProvider provider = 2;
       string bucket = 3;
       string key = 4;
@@ -151,10 +159,36 @@ message ListOss {
       optional string blocked_reason = 10;
       google.protobuf.Timestamp blocked_at = 11;
       optional int64 blocked_by = 12;
+      ObjectStorageStatus status = 14;
+      string url = 15;
     }
     .common.api.app.common.PageResp page = 1;
     repeated Oss rows = 2;
   }
+}
+
+message ResolveAssetsOss {
+  message Req {
+    repeated int64 asset_ids = 1;
+  }
+  message Resp {
+    message Asset {
+      int64 asset_id = 1;
+      string url = 2;
+      string mime_type = 3;
+      int64 size = 4;
+      ObjectStorageStatus status = 5;
+    }
+    map<int64, Asset> assets = 1;
+  }
+}
+
+message ValidateAssetOss {
+  message Req {
+    int64 asset_id = 1;
+    int64 user_id = 3;
+  }
+  message Resp {}
 }
 
 message QiniuUploadCallbackOss {

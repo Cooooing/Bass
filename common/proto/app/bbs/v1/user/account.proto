@@ -1,10 +1,9 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
 import "bbs/v1/user/enum/account.proto";
 import "common/common.proto";
-import "common/enums/language.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
@@ -20,7 +19,6 @@ service AccountService {
       body: "*"
     };
   }
-
   // 按账号 ID 获取展示资料
   rpc GetProfile(GetProfileAccount.Req) returns (GetProfileAccount.Resp) {
     option (google.api.http) = {
@@ -28,7 +26,6 @@ service AccountService {
       body: "*"
     };
   }
-
   // 更新当前账号展示资料
   rpc UpdateProfile(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {
     option (google.api.http) = {
@@ -36,7 +33,6 @@ service AccountService {
       body: "*"
     };
   }
-
   // 更新当前账号密码
   rpc UpdatePassword(UpdatePasswordAccount.Req) returns (UpdatePasswordAccount.Resp) {
     option (google.api.http) = {
@@ -44,7 +40,6 @@ service AccountService {
       body: "*"
     };
   }
-
   // 更新当前账号邮箱
   rpc UpdateEmail(UpdateEmailAccount.Req) returns (UpdateEmailAccount.Resp) {
     option (google.api.http) = {
@@ -52,7 +47,6 @@ service AccountService {
       body: "*"
     };
   }
-
   // 更新当前账号手机号
   rpc UpdatePhone(UpdatePhoneAccount.Req) returns (UpdatePhoneAccount.Resp) {
     option (google.api.http) = {
@@ -60,7 +54,6 @@ service AccountService {
       body: "*"
     };
   }
-
   // 生成默认账号头像
   rpc Avatar(AvatarAccount.Req) returns (.common.api.app.common.ImageResp) {
     option (google.api.http) = {
@@ -69,7 +62,27 @@ service AccountService {
   }
 }
 
-// 获取当前账号完整资料
+message AccountProfile {
+  int64 id = 1; // 账号 ID
+  string name = 2; // 账号名
+  optional string nickname = 3; // 昵称
+  optional string url = 4; // 个人主页 URL
+  optional string avatar_url = 5; // 头像 URL
+  optional string introduction = 6; // 个人简介
+  MBTI mbti = 7; // MBTI 类型
+  AccountStatus status = 8; // 账号状态
+  optional int32 follow_count = 10; // 关注数量
+  optional int32 follower_count = 11; // 粉丝数量
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}
+
+message AccountContact {
+  int64 user_id = 1; // 账号 ID
+  optional string email = 2; // 邮箱地址
+  optional string phone = 3; // 手机号
+}
+
 message GetCurrentAccount {
   message Req {}
   message Resp {
@@ -77,32 +90,10 @@ message GetCurrentAccount {
       AccountProfile profile = 1; // 账号展示资料
       AccountContact contact = 2; // 账号联系方式
     }
-
-    message AccountContact {
-      int64 user_id = 1; // 账号 ID
-      optional string email = 2; // 邮箱地址
-      optional string phone = 3; // 手机号
-    }
-
-    message AccountProfile {
-      int64 id = 1; // 账号 ID
-      string name = 2; // 账号名
-      optional string nickname = 3; // 昵称
-      optional string url = 4; // 个人主页 URL
-      optional string avatar_url = 5; // 头像 URL
-      optional string introduction = 6; // 个人简介
-      MBTI mbti = 7; // MBTI 类型
-      AccountStatus status = 8; // 账号状态
-      optional int32 follow_count = 10; // 关注数量
-      optional int32 follower_count = 11; // 粉丝数量
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
     Account account = 1; // 当前账号完整资料
   }
 }
 
-// 按账号 ID 获取展示资料
 message GetProfileAccount {
   message Req {
     int64 user_id = 1; // 账号 ID，必填
@@ -111,53 +102,23 @@ message GetProfileAccount {
     };
   }
   message Resp {
-    message AccountProfile {
-      int64 id = 1; // 账号 ID
-      string name = 2; // 账号名
-      optional string nickname = 3; // 昵称
-      optional string url = 4; // 个人主页 URL
-      optional string avatar_url = 5; // 头像 URL
-      optional string introduction = 6; // 个人简介
-      MBTI mbti = 7; // MBTI 类型
-      AccountStatus status = 8; // 账号状态
-      optional int32 follow_count = 10; // 关注数量
-      optional int32 follower_count = 11; // 粉丝数量
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
     AccountProfile profile = 1; // 账号展示资料
   }
 }
 
-// 更新当前账号展示资料
 message UpdateProfileAccount {
   message Req {
-    optional string avatar_url = 1; // 头像 URL，选填
+    optional int64 avatar_asset_id = 1; // 头像资源 ID，选填
     optional string nickname = 2; // 昵称，选填
     optional string url = 3; // 个人主页 URL，选填
     optional string introduction = 4; // 个人简介，选填
     optional MBTI mbti = 5; // MBTI 类型，选填
   }
   message Resp {
-    message AccountProfile {
-      int64 id = 1; // 账号 ID
-      string name = 2; // 账号名
-      optional string nickname = 3; // 昵称
-      optional string url = 4; // 个人主页 URL
-      optional string avatar_url = 5; // 头像 URL
-      optional string introduction = 6; // 个人简介
-      MBTI mbti = 7; // MBTI 类型
-      AccountStatus status = 8; // 账号状态
-      optional int32 follow_count = 10; // 关注数量
-      optional int32 follower_count = 11; // 粉丝数量
-      google.protobuf.Timestamp created_at = 1000; // 创建时间
-      google.protobuf.Timestamp updated_at = 1001; // 更新时间
-    }
-    AccountProfile profile = 1; // 更新后的账号展示资料
+    AccountProfile profile = 1; // 更新后的账号资料
   }
 }
 
-// 更新当前账号密码
 message UpdatePasswordAccount {
   message Req {
     string old_password = 1; // 旧密码，必填
@@ -170,7 +131,6 @@ message UpdatePasswordAccount {
   message Resp {}
 }
 
-// 更新当前账号邮箱
 message UpdateEmailAccount {
   message Req {
     string email = 1; // 新邮箱地址，必填
@@ -183,7 +143,6 @@ message UpdateEmailAccount {
   message Resp {}
 }
 
-// 更新当前账号手机号
 message UpdatePhoneAccount {
   message Req {
     string phone = 1; // 新手机号，必填
@@ -196,7 +155,6 @@ message UpdatePhoneAccount {
   message Resp {}
 }
 
-// 生成默认账号头像
 message AvatarAccount {
   message Req {
     string name = 1; // 账号名，必填

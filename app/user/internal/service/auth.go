@@ -226,7 +226,7 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 			Name:          res.Account.Name,
 			Nickname:      res.Account.Nickname,
 			Url:           res.Account.URL,
-			AvatarUrl:     res.Account.AvatarURL,
+			AvatarAssetId: res.Account.AvatarAssetID,
 			Introduction:  res.Account.Introduction,
 			FollowCount:   res.Account.FollowCount,
 			FollowerCount: res.Account.FollowerCount,

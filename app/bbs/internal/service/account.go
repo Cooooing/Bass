@@ -76,13 +76,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 	}
-	if req.AvatarUrl != nil {
-		value := strings.TrimSpace(*req.AvatarUrl)
-		if utf8.RuneCountInString(value) > 2048 {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
-		}
-		req.AvatarUrl = new(value)
-	}
+
 	if req.Nickname != nil {
 		value := strings.TrimSpace(*req.Nickname)
 		if value != "" {
@@ -119,12 +113,12 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 		}
 	}
 	profile, err := s.accountUsecase.UpdateProfileAccount(ctx, &usecase.UpdateProfileAccountReq{
-		UserID:       user.ID,
-		AvatarURL:    req.AvatarUrl,
-		Nickname:     req.Nickname,
-		URL:          req.Url,
-		Introduction: req.Introduction,
-		Mbti:         req.Mbti,
+		UserID:        user.ID,
+		AvatarAssetID: req.AvatarAssetId,
+		Nickname:      req.Nickname,
+		URL:           req.Url,
+		Introduction:  req.Introduction,
+		Mbti:          req.Mbti,
 	})
 	if err != nil {
 		return nil, err

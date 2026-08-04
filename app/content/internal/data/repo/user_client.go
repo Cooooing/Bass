@@ -46,10 +46,10 @@ func (c *UserClient) MapAccounts(ctx context.Context, userIDs []int64) (map[int6
 			continue
 		}
 		result[userID] = &model.UserAccountBasic{
-			UserID:   userID,
-			Username: basic.GetName(),
-			Nickname: basic.GetNickname(),
-			Avatar:   basic.GetAvatarUrl(),
+			UserID:        userID,
+			Username:      basic.GetName(),
+			Nickname:      basic.GetNickname(),
+			AvatarAssetID: basic.AvatarAssetId,
 		}
 	}
 	return result, nil

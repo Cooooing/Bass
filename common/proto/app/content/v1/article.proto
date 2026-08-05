@@ -1,8 +1,9 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.content.v1;
 
 import "common/common.proto";
+import "content/v1/access.proto";
 import "content/v1/enum/article.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -38,17 +39,17 @@ service ContentArticleService {
 
 message CreateDraftArticle {
   message Req {
-    Article article = 1; // 必填，草稿内容
-    int64 user_id = 2; // 必填，作者账号 ID
+    Article article = 1; // 草稿内容
+    ContentAccess access = 2; // 访问上下文
 
     message Article {
-      string title = 1; // 必填，标题
-      string content = 2; // 必填，正文
-      optional string reward_content = 3; // 可选，打赏区内容
-      optional int32 reward_points = 4; // 可选，打赏积分
-      ArticleType type = 5; // 必填，文章类型
-      optional string statement = 6; // 可选，创作声明
-      optional bool commentable = 7; // 可选，是否允许评论
+      string title = 1; // 标题
+      string content = 2; // 正文
+      optional string reward_content = 3; // 打赏区内容
+      optional int32 reward_points = 4; // 打赏积分
+      ArticleType type = 5; // 文章类型
+      optional string statement = 6; // 创作声明
+      optional bool commentable = 7; // 是否允许评论
     }
   }
   message Resp {
@@ -58,18 +59,18 @@ message CreateDraftArticle {
 
 message UpdateDraftArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    Article article = 2; // 必填，草稿内容
-    int64 user_id = 3; // 必填，作者账号 ID
+    int64 article_id = 1; // 文章 ID
+    Article article = 2; // 草稿内容
+    ContentAccess access = 3; // 访问上下文
 
     message Article {
-      string title = 1; // 必填，标题
-      string content = 2; // 必填，正文
-      optional string reward_content = 3; // 可选，打赏区内容
-      optional int32 reward_points = 4; // 可选，打赏积分
-      ArticleType type = 5; // 必填，文章类型
-      optional string statement = 6; // 可选，创作声明
-      optional bool commentable = 7; // 可选，是否允许评论
+      string title = 1; // 标题
+      string content = 2; // 正文
+      optional string reward_content = 3; // 打赏区内容
+      optional int32 reward_points = 4; // 打赏积分
+      ArticleType type = 5; // 文章类型
+      optional string statement = 6; // 创作声明
+      optional bool commentable = 7; // 是否允许评论
     }
   }
   message Resp {
@@ -79,113 +80,113 @@ message UpdateDraftArticle {
 
 message PublishArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    optional int64 operator_user_id = 2; // 可选，操作者账号 ID
-    ArticleVisibility visibility = 3; // 可选，可见范围
+    int64 article_id = 1; // 文章 ID
+    optional ContentAccess access = 2; // 访问上下文
+    ArticleVisibility visibility = 3; // 可见范围
   }
   message Resp {}
 }
 
 message SchedulePublishArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 operator_user_id = 2; // 必填，操作者账号 ID
-    google.protobuf.Timestamp publish_at = 3; // 必填，定时发布时间
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
+    google.protobuf.Timestamp publish_at = 3; // 定时发布时间
   }
   message Resp {}
 }
 
 message CancelPublishArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 operator_user_id = 2; // 必填，操作者账号 ID
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
   }
   message Resp {}
 }
 
 message DiscardDraftArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 user_id = 2; // 必填，作者账号 ID
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
   }
   message Resp {}
 }
 
 message MakePrivateArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 user_id = 2; // 必填，作者账号 ID
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
   }
   message Resp {}
 }
 
 message MakePublicArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 user_id = 2; // 必填，作者账号 ID
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
   }
   message Resp {}
 }
 
 message ArchiveArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 user_id = 2; // 必填，操作者账号 ID
-    optional string reason = 3; // 可选，操作原因
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
+    optional string reason = 3; // 操作原因
   }
   message Resp {}
 }
 
 message UnarchiveArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 user_id = 2; // 必填，操作者账号 ID
-    optional string reason = 3; // 可选，操作原因
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
+    optional string reason = 3; // 操作原因
   }
   message Resp {}
 }
 
 message HideArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 user_id = 2; // 必填，操作者账号 ID
-    optional string reason = 3; // 可选，操作原因
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
+    optional string reason = 3; // 操作原因
   }
   message Resp {}
 }
 
 message UnhideArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 user_id = 2; // 必填，操作者账号 ID
-    optional string reason = 3; // 可选，操作原因
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
+    optional string reason = 3; // 操作原因
   }
   message Resp {}
 }
 
 message LockArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 user_id = 2; // 必填，操作者账号 ID
-    optional string reason = 3; // 可选，操作原因
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
+    optional string reason = 3; // 操作原因
   }
   message Resp {}
 }
 
 message UnlockArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int64 user_id = 2; // 必填，操作者账号 ID
-    optional string reason = 3; // 可选，操作原因
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
+    optional string reason = 3; // 操作原因
   }
   message Resp {}
 }
 
 message LikeArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    bool liked = 2; // 必填，是否点赞
-    int64 user_id = 3; // 必填，用户账号 ID
+    int64 article_id = 1; // 文章 ID
+    bool liked = 2; // 是否点赞
+    ContentAccess access = 3; // 访问上下文
   }
   message Resp {
     bool liked = 1; // 是否已点赞
@@ -194,9 +195,9 @@ message LikeArticle {
 
 message ThankArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    bool thanked = 2; // 必填，是否感谢
-    int64 user_id = 3; // 必填，用户账号 ID
+    int64 article_id = 1; // 文章 ID
+    bool thanked = 2; // 是否感谢
+    ContentAccess access = 3; // 访问上下文
   }
   message Resp {
     bool thanked = 1; // 是否已感谢
@@ -205,9 +206,9 @@ message ThankArticle {
 
 message CollectArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    bool collected = 2; // 必填，是否收藏
-    int64 user_id = 3; // 必填，用户账号 ID
+    int64 article_id = 1; // 文章 ID
+    bool collected = 2; // 是否收藏
+    ContentAccess access = 3; // 访问上下文
   }
   message Resp {
     bool collected = 1; // 是否已收藏
@@ -216,27 +217,27 @@ message CollectArticle {
 
 message RewardArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    int32 points = 2; // 必填，打赏积分
-    int64 user_id = 3; // 必填，用户账号 ID
+    int64 article_id = 1; // 文章 ID
+    int32 points = 2; // 打赏积分
+    ContentAccess access = 3; // 访问上下文
   }
   message Resp {}
 }
 
 message ViewArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    optional int64 viewer_user_id = 2; // 可选，浏览用户 ID
-    optional string ip = 3; // 可选，浏览 IP
-    optional string user_agent = 4; // 可选，浏览 UA
-    optional string browser_fingerprint = 5; // 可选，浏览器指纹
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
+    optional string ip = 3; // 浏览 IP
+    optional string user_agent = 4; // 浏览 UA
+    optional string browser_fingerprint = 5; // 浏览器指纹
   }
   message Resp {}
 }
 
 message FlushArticleViews {
   message Req {
-    int32 limit = 1; // 可选，刷新数量上限
+    int32 limit = 1; // 刷新数量上限
   }
   message Resp {
     int32 flushed = 1; // 已刷新文章数
@@ -245,12 +246,11 @@ message FlushArticleViews {
 
 message MapArticleViewerActionStates {
   message Req {
-    repeated int64 article_ids = 1; // 必填，文章 ID 列表
-    int64 user_id = 2; // 必填，用户账号 ID
+    repeated int64 article_ids = 1; // 文章 ID 列表
+    int64 user_id = 2; // 用户账号 ID
   }
   message Resp {
     map<int64, ArticleViewerActionState> states = 1; // 互动状态映射
-
     message ArticleViewerActionState {
       bool liked = 1; // 是否已点赞
       bool thanked = 2; // 是否已感谢
@@ -262,8 +262,8 @@ message MapArticleViewerActionStates {
 
 message GetArticle {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    optional int64 viewer_user_id = 2; // 可选，浏览用户 ID
+    int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
   }
   message Resp {
     Article article = 1; // 文章详情
@@ -272,7 +272,8 @@ message GetArticle {
 
 message ListArticles {
   message Req {
-    ArticleQueryParams query = 1; // 可选，查询参数
+    ArticleQueryParams query = 1; // 查询参数
+    ContentAccess access = 2; // 访问上下文
   }
   message Resp {
     repeated Article rows = 1; // 文章列表
@@ -281,8 +282,9 @@ message ListArticles {
 
 message PageArticles {
   message Req {
-    ArticleQueryParams query = 1; // 可选，查询参数
-    .common.api.app.common.PageReq page = 2; // 可选，分页参数
+    ArticleQueryParams query = 1; // 查询参数
+    .common.api.app.common.PageReq page = 2; // 分页参数
+    ContentAccess access = 3; // 访问上下文
   }
   message Resp {
     repeated Article rows = 1; // 文章列表
@@ -291,23 +293,23 @@ message PageArticles {
 }
 
 message ArticleQueryParams {
-  optional int64 tag_id = 1; // 可选，标签 ID
-  optional int64 domain_id = 2; // 可选，领域 ID
-  repeated int64 article_ids = 3; // 可选，文章 ID 列表
-  optional ArticleType type = 4; // 可选，文章类型
-  optional ArticleOrder order = 5; // 可选，排序方式
-  optional string keyword = 6; // 可选，关键词
-  optional int64 author_id = 7; // 可选，作者账号 ID
-  optional ArticlePublishStatus publish_status = 10; // 可选，发布状态
-  repeated ArticlePublishStatus publish_statuses = 11; // 可选，发布状态列表
-  optional ArticleVisibility visibility = 12; // 可选，可见范围
-  repeated ArticleVisibility visibilities = 13; // 可选，可见范围列表
-  optional ContentRestriction restriction = 14; // 可选，治理限制
-  repeated ContentRestriction restrictions = 15; // 可选，治理限制列表
-  optional google.protobuf.Timestamp created_at_start = 20; // 可选，创建时间起点
-  optional google.protobuf.Timestamp created_at_end = 21; // 可选，创建时间终点
-  optional google.protobuf.Timestamp published_at_start = 22; // 可选，发布时间起点
-  optional google.protobuf.Timestamp published_at_end = 23; // 可选，发布时间终点
+  optional int64 tag_id = 1; // 标签 ID
+  optional int64 domain_id = 2; // 领域 ID
+  repeated int64 article_ids = 3; // 文章 ID 列表
+  optional ArticleType type = 4; // 文章类型
+  optional ArticleOrder order = 5; // 排序方式
+  optional string keyword = 6; // 关键词
+  optional int64 author_id = 7; // 作者账号 ID
+  optional ArticlePublishStatus publish_status = 10; // 发布状态
+  repeated ArticlePublishStatus publish_statuses = 11; // 发布状态列表
+  optional ArticleVisibility visibility = 12; // 可见范围
+  repeated ArticleVisibility visibilities = 13; // 可见范围列表
+  optional ContentRestriction restriction = 14; // 治理限制
+  repeated ContentRestriction restrictions = 15; // 治理限制列表
+  optional google.protobuf.Timestamp created_at_start = 20; // 创建时间起点
+  optional google.protobuf.Timestamp created_at_end = 21; // 创建时间终点
+  optional google.protobuf.Timestamp published_at_start = 22; // 发布时间起点
+  optional google.protobuf.Timestamp published_at_end = 23; // 发布时间终点
 }
 
 message Article {

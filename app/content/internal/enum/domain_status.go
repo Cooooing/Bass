@@ -20,3 +20,7 @@ var DomainStatusMap = enum.NewMapping[DomainStatus, v1.DomainStatus](map[DomainS
 	DomainStatusEnabled:  {Proto: v1.DomainStatus_DOMAIN_STATUS_ENABLED},
 	DomainStatusDisabled: {Proto: v1.DomainStatus_DOMAIN_STATUS_DISABLED},
 })
+
+func (e DomainStatus) String() string {
+	return string(e)
+}

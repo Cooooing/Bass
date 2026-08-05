@@ -87,23 +87,9 @@ type ArticlePageResp struct {
 }
 
 type ArticleGetReq struct {
-	Page            *base.PageRequest
-	ArticleId       *int64
-	ArticleIds      []int64
-	CreatedBy       *int64
-	TagId           *int64
-	DomainId        *int64
-	PublishStatus   *enum.ArticlePublishStatus
-	PublishStatuses []enum.ArticlePublishStatus
-	Visibility      *enum.ArticleVisibility
-	Visibilities    []enum.ArticleVisibility
-	Restriction     *enum.ContentRestriction
-	Restrictions    []enum.ContentRestriction
-	AuthorId        *int64
-	Order           *enum.ArticleOrder
-	Type            *enum.ArticleType
-	Keyword         *string
-	PublishedAtEnd  *time.Time
+	Page   *base.PageRequest
+	Filter *model.ArticleFilter
+	Scope  *model.ArticleScopeFilter
 }
 type ArticleActionRecordRepo interface {
 	Save(ctx context.Context, record *model.ArticleActionRecord) (bool, error)

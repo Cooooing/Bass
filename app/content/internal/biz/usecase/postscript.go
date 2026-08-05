@@ -64,7 +64,7 @@ func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*mo
 	)
 	err = d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
@@ -109,7 +109,7 @@ func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*mo
 
 func (d *PostscriptUsecase) List(ctx context.Context, articleID int64) ([]*model.Postscript, error) {
 	articleId := articleID
-	if _, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{ArticleId: new(articleId)}); err != nil {
+	if _, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleId)}}); err != nil {
 		return nil, err
 	}
 	rows, err := d.postscriptRepo.List(ctx, &repo.PostscriptGetReq{

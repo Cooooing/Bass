@@ -23,3 +23,7 @@ var CommentOrderMap = enum.NewMapping[CommentOrder, v1.CommentOrder](map[Comment
 	CommentOrderHottest: {Proto: v1.CommentOrder_COMMENT_ORDER_HOTTEST},
 	CommentOrderOldest:  {Proto: v1.CommentOrder_COMMENT_ORDER_OLDEST},
 })
+
+func (e CommentOrder) String() string {
+	return string(e)
+}

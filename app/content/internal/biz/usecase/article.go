@@ -31,6 +31,7 @@ type ArticleUsecase struct {
 	viewCacheRepo        repo.ArticleViewCacheRepo
 	viewRecordRepo       repo.ArticleViewRecordRepo
 	delayedTaskClient    repo.DelayedTaskClient
+	articleAccessUsecase *ArticleAccessUsecase
 }
 
 func NewArticleUsecase(
@@ -46,6 +47,7 @@ func NewArticleUsecase(
 	viewCacheRepo repo.ArticleViewCacheRepo,
 	viewRecordRepo repo.ArticleViewRecordRepo,
 	delayedTaskClient repo.DelayedTaskClient,
+	articleAccessUsecase *ArticleAccessUsecase,
 ) *ArticleUsecase {
 	return &ArticleUsecase{
 		log:                  logger,
@@ -60,15 +62,24 @@ func NewArticleUsecase(
 		viewCacheRepo:        viewCacheRepo,
 		viewRecordRepo:       viewRecordRepo,
 		delayedTaskClient:    delayedTaskClient,
+		articleAccessUsecase: articleAccessUsecase,
 	}
 }
 
 type ArticleAddReq struct {
+	Access  *model.ContentAccess
 	Article *model.Article
 }
 
 func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Article, error) {
 	article := req.Article
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	if err = d.articleAccessUsecase.CanCreateDraft(access); err != nil {
+		return nil, err
+	}
 	if err := article.CanCreateDraft(); err != nil {
 		return nil, err
 	}
@@ -78,12 +89,11 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 	}
 	article.Restriction = enum.ContentRestrictionNone
 	article.EditedAt = new(time.Now())
+	article.CreatedBy = new(access.ActorUserID)
+	article.UpdatedBy = new(access.ActorUserID)
 	article.FormatContent()
 
-	var (
-		save *model.Article
-		err  error
-	)
+	var save *model.Article
 	err = d.tx(ctx, func(ctx context.Context) error {
 		save, err = d.articleRepo.Save(ctx, article)
 		return err
@@ -94,31 +104,35 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 	return save, nil
 }
 
-func (d *ArticleUsecase) Update(ctx context.Context, article *model.Article) (*model.Article, error) {
-	if article.UpdatedBy == nil {
+type ArticleUpdateDraftReq struct {
+	Access  *model.ContentAccess
+	Article *model.Article
+}
+
+func (d *ArticleUsecase) Update(ctx context.Context, req *ArticleUpdateDraftReq) (*model.Article, error) {
+	article := req.Article
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-
-	var (
-		save *model.Article
-		err  error
-	)
+	var save *model.Article
 	err = d.tx(ctx, func(ctx context.Context) error {
-		current, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(article.ID),
-		})
+		current, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(article.ID)}})
 		if err != nil {
 			return err
 		}
-		if err = current.CanEditDraft(*article.UpdatedBy); err != nil {
+		if err = d.articleAccessUsecase.CanUpdateDraft(access, current); err != nil {
 			return err
 		}
-
 		article.PublishStatus = current.PublishStatus
 		article.Visibility = current.Visibility
 		article.Restriction = current.Restriction
 		article.PublishedAt = current.PublishedAt
 		article.EditedAt = new(time.Now())
+		article.UpdatedBy = new(access.ActorUserID)
 		article.FormatContent()
 		save, err = d.articleRepo.Update(ctx, article)
 		return err
@@ -130,6 +144,7 @@ func (d *ArticleUsecase) Update(ctx context.Context, article *model.Article) (*m
 }
 
 type ArticleLikeReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
 	UserID    int64
 	Active    bool
@@ -137,12 +152,12 @@ type ArticleLikeReq struct {
 
 func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, error) {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	active := req.Active
 	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
@@ -215,6 +230,7 @@ func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, e
 }
 
 type ArticleThankReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
 	UserID    int64
 	Active    bool
@@ -222,12 +238,12 @@ type ArticleThankReq struct {
 
 func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool, error) {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	active := req.Active
 	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
@@ -300,6 +316,7 @@ func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool,
 }
 
 type ArticleCollectReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
 	UserID    int64
 	Active    bool
@@ -307,12 +324,12 @@ type ArticleCollectReq struct {
 
 func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (bool, error) {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	active := req.Active
 	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
@@ -385,6 +402,7 @@ func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (b
 }
 
 type ArticleRewardReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
 	UserID    int64
 	Points    int32
@@ -392,15 +410,15 @@ type ArticleRewardReq struct {
 
 func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) error {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	return d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
 		}
-		if err = article.CanInteract(); err != nil {
+		if err = d.articleAccessUsecase.CanInteract(req.Access, article); err != nil {
 			return err
 		}
 		created, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
@@ -421,6 +439,7 @@ func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) erro
 }
 
 type ArticleViewReq struct {
+	Access             *model.ContentAccess
 	ArticleID          int64
 	ViewerUserID       *int64
 	IP                 *string
@@ -430,7 +449,7 @@ type ArticleViewReq struct {
 
 func (d *ArticleUsecase) View(ctx context.Context, req *ArticleViewReq) error {
 	article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-		ArticleId: new(req.ArticleID),
+		Filter: &model.ArticleFilter{ArticleID: new(req.ArticleID)},
 	})
 	if err != nil {
 		return err
@@ -493,31 +512,32 @@ func (d *ArticleUsecase) FlushViews(ctx context.Context, req *ArticleFlushViewsR
 }
 
 type ArticlePublishReq struct {
-	ArticleID      int64
-	OperatorUserID *int64
-	Visibility     enum.ArticleVisibility
+	Access     *model.ContentAccess
+	ArticleID  int64
+	Visibility enum.ArticleVisibility
 }
 
 func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) error {
 	articleId := req.ArticleID
-	operatorUserId := req.OperatorUserID
+	access, err := req.Access.Normalize(enum.ContentAccessScopeInternalTask)
+	if err != nil {
+		return err
+	}
+	var operatorUserId *int64
+	if access.ActorUserID > 0 {
+		operatorUserId = new(access.ActorUserID)
+	}
 	visibility := req.Visibility
 	var outboxEvent *repo.OutboxEvent
-	err := d.tx(ctx, func(ctx context.Context) error {
+	err = d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
 		}
-		if operatorUserId != nil {
-			if err = article.CanPublishByAuthor(*operatorUserId); err != nil {
-				return err
-			}
-		} else {
-			if err = article.CanPublishByScheduler(time.Now()); err != nil {
-				return err
-			}
+		if err = article.CanPublish(access, nil, time.Now()); err != nil {
+			return err
 		}
 		switch visibility {
 		case enum.ArticleVisibilityPublic, enum.ArticleVisibilityPrivate:
@@ -541,8 +561,7 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 					ArticleId: articleId,
 				},
 			},
-		},
-		)
+		})
 		return err
 	})
 	if err != nil {
@@ -557,23 +576,27 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 }
 
 type ArticleSchedulePublishReq struct {
-	ArticleID      int64
-	OperatorUserID int64
-	PublishAt      time.Time
+	Access    *model.ContentAccess
+	ArticleID int64
+	PublishAt time.Time
 }
 
 func (d *ArticleUsecase) SchedulePublish(ctx context.Context, req *ArticleSchedulePublishReq) error {
 	articleId := req.ArticleID
-	operatorUserId := req.OperatorUserID
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return err
+	}
+	operatorUserId := access.ActorUserID
 	publishAt := req.PublishAt
-	err := d.tx(ctx, func(ctx context.Context) error {
+	err = d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
 		}
-		if err = article.CanSchedulePublish(operatorUserId, publishAt, time.Now()); err != nil {
+		if err = article.CanPublish(access, new(publishAt), time.Now()); err != nil {
 			return err
 		}
 		return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
@@ -591,16 +614,20 @@ func (d *ArticleUsecase) SchedulePublish(ctx context.Context, req *ArticleSchedu
 }
 
 type ArticleCancelPublishReq struct {
-	ArticleID      int64
-	OperatorUserID int64
+	Access    *model.ContentAccess
+	ArticleID int64
 }
 
 func (d *ArticleUsecase) CancelPublish(ctx context.Context, req *ArticleCancelPublishReq) error {
 	articleId := req.ArticleID
-	operatorUserId := req.OperatorUserID
-	err := d.tx(ctx, func(ctx context.Context) error {
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return err
+	}
+	operatorUserId := access.ActorUserID
+	err = d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
@@ -623,13 +650,13 @@ func (d *ArticleUsecase) CancelPublish(ctx context.Context, req *ArticleCancelPu
 }
 
 type ArticleMakePrivateReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
-	UserID    int64
 }
 
 func (d *ArticleUsecase) MakePrivate(ctx context.Context, req *ArticleMakePrivateReq) error {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	return d.updateVisibility(ctx, &articleUpdateVisibilityReq{
 		ArticleID:  articleId,
 		Visibility: enum.ArticleVisibilityPrivate,
@@ -638,13 +665,13 @@ func (d *ArticleUsecase) MakePrivate(ctx context.Context, req *ArticleMakePrivat
 }
 
 type ArticleMakePublicReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
-	UserID    int64
 }
 
 func (d *ArticleUsecase) MakePublic(ctx context.Context, req *ArticleMakePublicReq) error {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	return d.updateVisibility(ctx, &articleUpdateVisibilityReq{
 		ArticleID:  articleId,
 		Visibility: enum.ArticleVisibilityPublic,
@@ -665,7 +692,7 @@ func (d *ArticleUsecase) updateVisibility(ctx context.Context, req *articleUpdat
 	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
@@ -712,14 +739,14 @@ func (d *ArticleUsecase) updateVisibility(ctx context.Context, req *articleUpdat
 }
 
 type ArticleArchiveReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
-	UserID    int64
 	Reason    *string
 }
 
 func (d *ArticleUsecase) Archive(ctx context.Context, req *ArticleArchiveReq) error {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	reason := req.Reason
 	return d.updatePublishStatus(ctx, &articleUpdatePublishStatusReq{
 		ArticleID:     articleId,
@@ -731,14 +758,14 @@ func (d *ArticleUsecase) Archive(ctx context.Context, req *ArticleArchiveReq) er
 }
 
 type ArticleUnarchiveReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
-	UserID    int64
 	Reason    *string
 }
 
 func (d *ArticleUsecase) Unarchive(ctx context.Context, req *ArticleUnarchiveReq) error {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	reason := req.Reason
 	return d.updatePublishStatus(ctx, &articleUpdatePublishStatusReq{
 		ArticleID:     articleId,
@@ -766,7 +793,7 @@ func (d *ArticleUsecase) updatePublishStatus(ctx context.Context, req *articleUp
 	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
@@ -822,14 +849,14 @@ func (d *ArticleUsecase) updatePublishStatus(ctx context.Context, req *articleUp
 }
 
 type ArticleHideReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
-	UserID    int64
 	Reason    *string
 }
 
 func (d *ArticleUsecase) Hide(ctx context.Context, req *ArticleHideReq) error {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	reason := req.Reason
 	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{
 		ArticleID:   articleId,
@@ -841,14 +868,14 @@ func (d *ArticleUsecase) Hide(ctx context.Context, req *ArticleHideReq) error {
 }
 
 type ArticleUnhideReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
-	UserID    int64
 	Reason    *string
 }
 
 func (d *ArticleUsecase) Unhide(ctx context.Context, req *ArticleUnhideReq) error {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	reason := req.Reason
 	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{
 		ArticleID:   articleId,
@@ -860,14 +887,14 @@ func (d *ArticleUsecase) Unhide(ctx context.Context, req *ArticleUnhideReq) erro
 }
 
 type ArticleLockReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
-	UserID    int64
 	Reason    *string
 }
 
 func (d *ArticleUsecase) Lock(ctx context.Context, req *ArticleLockReq) error {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	reason := req.Reason
 	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{
 		ArticleID:   articleId,
@@ -879,14 +906,14 @@ func (d *ArticleUsecase) Lock(ctx context.Context, req *ArticleLockReq) error {
 }
 
 type ArticleUnlockReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
-	UserID    int64
 	Reason    *string
 }
 
 func (d *ArticleUsecase) Unlock(ctx context.Context, req *ArticleUnlockReq) error {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	reason := req.Reason
 	return d.updateRestriction(ctx, &articleUpdateRestrictionReq{
 		ArticleID:   articleId,
@@ -914,7 +941,7 @@ func (d *ArticleUsecase) updateRestriction(ctx context.Context, req *articleUpda
 	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err
@@ -990,7 +1017,7 @@ func (d *ArticleUsecase) updateRestriction(ctx context.Context, req *articleUpda
 func (d *ArticleUsecase) Get(ctx context.Context, articleID int64) (*model.Article, error) {
 	articleId := articleID
 	article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-		ArticleId: new(articleId),
+		Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 	})
 	if err != nil {
 		return nil, err
@@ -998,22 +1025,96 @@ func (d *ArticleUsecase) Get(ctx context.Context, articleID int64) (*model.Artic
 	return article, nil
 }
 
-type ArticleGetVisibleReq struct {
-	ArticleID    int64
-	ViewerUserID int64
+type ArticleGetByAccessReq struct {
+	ArticleID int64
+	Access    *model.ContentAccess
 }
 
-func (d *ArticleUsecase) GetVisible(ctx context.Context, req *ArticleGetVisibleReq) (*model.Article, error) {
-	article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-		ArticleId: new(req.ArticleID),
-	})
+func (d *ArticleUsecase) GetByAccess(ctx context.Context, req *ArticleGetByAccessReq) (*model.Article, error) {
+	article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(req.ArticleID)}})
 	if err != nil {
 		return nil, err
 	}
-	if err := article.CanViewByBBS(req.ViewerUserID); err != nil {
+	if err = d.articleAccessUsecase.CanGet(req.Access, article); err != nil {
 		return nil, err
 	}
 	return article, nil
+}
+
+type ArticleListByAccessReq struct {
+	Access *model.ContentAccess
+	Filter *model.ArticleFilter
+}
+
+func (d *ArticleUsecase) ListByAccess(ctx context.Context, req *ArticleListByAccessReq) ([]*model.Article, error) {
+	if req == nil {
+		req = &ArticleListByAccessReq{}
+	}
+	scope, err := d.articleAccessUsecase.BuildScope(req.Access)
+	if err != nil {
+		return nil, err
+	}
+	return d.articleRepo.List(ctx, &repo.ArticleGetReq{Filter: req.Filter, Scope: scope})
+}
+
+type ArticlePageByAccessReq struct {
+	Access *model.ContentAccess
+	Filter *model.ArticleFilter
+	Page   *base.PageRequest
+}
+
+func (d *ArticleUsecase) PageByAccess(ctx context.Context, req *ArticlePageByAccessReq) (*ArticlePageResp, error) {
+	if req == nil {
+		req = &ArticlePageByAccessReq{}
+	}
+	scope, err := d.articleAccessUsecase.BuildScope(req.Access)
+	if err != nil {
+		return nil, err
+	}
+	pageResp, err := d.articleRepo.Page(ctx, &repo.ArticleGetReq{Page: req.Page, Filter: req.Filter, Scope: scope})
+	if err != nil {
+		return nil, err
+	}
+	return &ArticlePageResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
+}
+
+type ArticleListReq struct {
+	TagID           *int64
+	DomainID        *int64
+	PublishStatus   *enum.ArticlePublishStatus
+	PublishStatuses []enum.ArticlePublishStatus
+	Visibility      *enum.ArticleVisibility
+	Visibilities    []enum.ArticleVisibility
+	Restriction     *enum.ContentRestriction
+	Restrictions    []enum.ContentRestriction
+	AuthorID        *int64
+	Order           *enum.ArticleOrder
+	Type            *enum.ArticleType
+	Keyword         *string
+	PublishedAtEnd  *time.Time
+	ArticleIDs      []int64
+}
+
+func (d *ArticleUsecase) List(ctx context.Context, req *ArticleListReq) ([]*model.Article, error) {
+	if req == nil {
+		req = &ArticleListReq{}
+	}
+	return d.articleRepo.List(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{
+		TagID:           req.TagID,
+		DomainID:        req.DomainID,
+		ArticleIDs:      req.ArticleIDs,
+		PublishStatus:   req.PublishStatus,
+		PublishStatuses: req.PublishStatuses,
+		Visibility:      req.Visibility,
+		Visibilities:    req.Visibilities,
+		Restriction:     req.Restriction,
+		Restrictions:    req.Restrictions,
+		AuthorID:        req.AuthorID,
+		Order:           req.Order,
+		Type:            req.Type,
+		Keyword:         req.Keyword,
+		PublishedAtEnd:  req.PublishedAtEnd,
+	}})
 }
 
 type ArticlePageReq struct {
@@ -1043,30 +1144,26 @@ func (d *ArticleUsecase) Page(ctx context.Context, req *ArticlePageReq) (*Articl
 	if req == nil {
 		req = &ArticlePageReq{}
 	}
-	pageResp, err := d.articleRepo.Page(ctx, &repo.ArticleGetReq{
-		Page:            req.Page,
-		TagId:           req.TagID,
-		DomainId:        req.DomainID,
+	pageResp, err := d.articleRepo.Page(ctx, &repo.ArticleGetReq{Page: req.Page, Filter: &model.ArticleFilter{
+		TagID:           req.TagID,
+		DomainID:        req.DomainID,
+		ArticleIDs:      req.ArticleIDs,
 		PublishStatus:   req.PublishStatus,
 		PublishStatuses: req.PublishStatuses,
 		Visibility:      req.Visibility,
 		Visibilities:    req.Visibilities,
 		Restriction:     req.Restriction,
 		Restrictions:    req.Restrictions,
-		AuthorId:        req.AuthorID,
+		AuthorID:        req.AuthorID,
 		Order:           req.Order,
 		Type:            req.Type,
 		Keyword:         req.Keyword,
 		PublishedAtEnd:  req.PublishedAtEnd,
-		ArticleIds:      req.ArticleIDs,
-	})
+	}})
 	if err != nil {
 		return nil, err
 	}
-	return &ArticlePageResp{
-		Rows: pageResp.Rows,
-		Page: pageResp.Page,
-	}, nil
+	return &ArticlePageResp{Rows: pageResp.Rows, Page: pageResp.Page}, nil
 }
 
 type ArticleMapViewerActionStatesReq struct {
@@ -1118,16 +1215,16 @@ func (d *ArticleUsecase) MapViewerActionStates(ctx context.Context, req *Article
 }
 
 type ArticleDiscardDraftReq struct {
+	Access    *model.ContentAccess
 	ArticleID int64
-	UserID    int64
 }
 
 func (d *ArticleUsecase) DiscardDraft(ctx context.Context, req *ArticleDiscardDraftReq) error {
 	articleId := req.ArticleID
-	userId := req.UserID
+	userId := req.Access.ActorUserID
 	return d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(articleId),
+			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
 			return err

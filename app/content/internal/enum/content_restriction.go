@@ -23,3 +23,7 @@ var ContentRestrictionMap = enum.NewMapping[ContentRestriction, v1.ContentRestri
 	ContentRestrictionHidden: {Proto: v1.ContentRestriction_CONTENT_RESTRICTION_HIDDEN},
 	ContentRestrictionLocked: {Proto: v1.ContentRestriction_CONTENT_RESTRICTION_LOCKED},
 })
+
+func (e ContentRestriction) String() string {
+	return string(e)
+}

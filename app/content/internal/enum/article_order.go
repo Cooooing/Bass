@@ -20,3 +20,7 @@ var ArticleOrderMap = enum.NewMapping[ArticleOrder, v1.ArticleOrder](map[Article
 	ArticleOrderNewest:  {Proto: v1.ArticleOrder_ARTICLE_ORDER_NEWEST},
 	ArticleOrderHottest: {Proto: v1.ArticleOrder_ARTICLE_ORDER_HOTTEST},
 })
+
+func (e ArticleOrder) String() string {
+	return string(e)
+}

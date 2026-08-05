@@ -111,7 +111,7 @@ func (t *TagUsecase) BindArticle(ctx context.Context, req *ArticleTagReq) error 
 	tagIDs := lo.Uniq(req.TagIDs)
 	err := t.tx(ctx, func(ctx context.Context) error {
 		article, err := t.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: &req.ArticleID,
+			Filter: &model.ArticleFilter{ArticleID: &req.ArticleID},
 		})
 		if err != nil {
 			return err
@@ -167,7 +167,7 @@ func (t *TagUsecase) UnbindArticle(ctx context.Context, req *ArticleTagReq) erro
 	tagIDs := lo.Uniq(req.TagIDs)
 	err := t.tx(ctx, func(ctx context.Context) error {
 		article, err := t.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: &req.ArticleID,
+			Filter: &model.ArticleFilter{ArticleID: &req.ArticleID},
 		})
 		if err != nil {
 			return err

@@ -21,6 +21,7 @@ type CommentUsecase struct {
 	tx  base.Tx
 
 	commentRepo             repo.CommentRepo
+	commentAccessUsecase    *CommentAccessUsecase
 	commentActionRecordRepo repo.CommentActionRecordRepo
 	articleRepo             repo.ArticleRepo
 	outboxRepo              repo.OutboxEventRepo
@@ -32,6 +33,7 @@ func NewCommentUsecase(
 	logger *slog.Logger,
 	tx base.Tx,
 	commentRepo repo.CommentRepo,
+	commentAccessUsecase *CommentAccessUsecase,
 	commentActionRecordRepo repo.CommentActionRecordRepo,
 	articleRepo repo.ArticleRepo,
 	outboxRepo repo.OutboxEventRepo,
@@ -42,6 +44,7 @@ func NewCommentUsecase(
 		log:                     logger,
 		tx:                      tx,
 		commentRepo:             commentRepo,
+		commentAccessUsecase:    commentAccessUsecase,
 		commentActionRecordRepo: commentActionRecordRepo,
 		articleRepo:             articleRepo,
 		outboxRepo:              outboxRepo,
@@ -50,34 +53,41 @@ func NewCommentUsecase(
 	}
 }
 
-func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*model.Comment, error) {
+type CommentAddReq struct {
+	Access  *model.ContentAccess
+	Comment *model.Comment
+}
+
+func (d *CommentUsecase) Add(ctx context.Context, req *CommentAddReq) (*model.Comment, error) {
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	comment := req.Comment
 	var (
 		c           *model.Comment
 		outboxEvent *repo.OutboxEvent
 	)
-	err := d.tx(ctx, func(ctx context.Context) error {
+	err = d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(comment.ArticleID),
+			Filter: &model.ArticleFilter{ArticleID: new(comment.ArticleID)},
 		})
 		if err != nil {
 			return err
 		}
-		if article.PublishStatus != enum.ArticlePublishStatusPublished ||
-			article.Visibility != enum.ArticleVisibilityPublic ||
-			article.Restriction != enum.ContentRestrictionNone {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-		}
-		if !article.Commentable {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_COMMENTABLE)
+		if err := d.commentAccessUsecase.CanCreate(access, article); err != nil {
+			return err
 		}
 
 		replyComment := &model.Comment{}
 		var parentID *int64
 		if comment.ReplyID != nil {
 			replyComment, err = d.commentRepo.Get(ctx, &repo.CommentGetReq{
-				CommentId:   comment.ReplyID,
-				ArticleId:   new(comment.ArticleID),
-				Restriction: new(enum.ContentRestrictionNone),
+				Filter: &model.CommentFilter{
+					CommentID:   comment.ReplyID,
+					ArticleID:   new(comment.ArticleID),
+					Restriction: new(enum.ContentRestrictionNone),
+				},
 			})
 			if err != nil {
 				return err
@@ -116,8 +126,8 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*mode
 			ReplyID:     comment.ReplyID,
 			Restriction: enum.ContentRestrictionNone,
 			ReplyUserID: replyComment.CreatedBy,
-			CreatedBy:   comment.CreatedBy,
-			UpdatedBy:   comment.UpdatedBy,
+			CreatedBy:   new(access.ActorUserID),
+			UpdatedBy:   new(access.ActorUserID),
 		}
 		save.FormatContent()
 		commentResp, commentErr := d.commentRepo.Save(ctx, save)
@@ -125,9 +135,6 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*mode
 			return commentErr
 		}
 		c = commentResp
-		if err != nil {
-			return err
-		}
 		c.ReplyUserID = replyComment.CreatedBy
 		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
 			Type:    commonenums.EventType_EVENT_TYPE_COMMENT_PUBLISHED,
@@ -152,16 +159,9 @@ func (d *CommentUsecase) Add(ctx context.Context, comment *model.Comment) (*mode
 }
 
 type CommentPageReq struct {
-	Page         *base.PageRequest
-	CommentID    *int64
-	ParentID     *int64
-	ReplyID      *int64
-	ArticleID    *int64
-	CreatedBy    *int64
-	Restriction  *enum.ContentRestriction
-	Restrictions []enum.ContentRestriction
-	Level        *int32
-	Order        *enum.CommentOrder
+	Access *model.ContentAccess
+	Page   *base.PageRequest
+	Filter *model.CommentFilter
 }
 
 type CommentPageResp struct {
@@ -173,17 +173,14 @@ func (d *CommentUsecase) Page(ctx context.Context, req *CommentPageReq) (*Commen
 	if req == nil {
 		req = &CommentPageReq{}
 	}
+	scope, err := d.commentAccessUsecase.BuildScope(req.Access)
+	if err != nil {
+		return nil, err
+	}
 	pageResp, err := d.commentRepo.Page(ctx, &repo.CommentGetReq{
-		Page:         req.Page,
-		CommentId:    req.CommentID,
-		ParentId:     req.ParentID,
-		ReplyId:      req.ReplyID,
-		ArticleId:    req.ArticleID,
-		CreatedBy:    req.CreatedBy,
-		Restriction:  req.Restriction,
-		Restrictions: req.Restrictions,
-		Level:        req.Level,
-		Order:        req.Order,
+		Page:   req.Page,
+		Filter: req.Filter,
+		Scope:  scope,
 	})
 	if err != nil {
 		return nil, err
@@ -195,6 +192,7 @@ func (d *CommentUsecase) Page(ctx context.Context, req *CommentPageReq) (*Commen
 }
 
 type CommentListReplyPreviewsReq struct {
+	Access         *model.ContentAccess
 	ArticleID      int64
 	ParentIDs      []int64
 	LimitPerParent int32
@@ -210,23 +208,20 @@ type CommentChildPreview struct {
 
 func (d *CommentUsecase) ListReplyPreviews(ctx context.Context, req *CommentListReplyPreviewsReq) ([]*CommentChildPreview, error) {
 	articleID := req.ArticleID
-	parentIDs := req.ParentIDs
-	limitPerParent := req.LimitPerParent
-	restriction := req.Restriction
-	restrictions := req.Restrictions
-	order := req.Order
-	if _, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-		ArticleId: new(articleID),
-	}); err != nil {
+	scope, err := d.commentAccessUsecase.BuildScope(req.Access)
+	if err != nil {
 		return nil, err
 	}
 	previews, err := d.commentRepo.ListReplyPreviews(ctx, &repo.CommentReplyPreviewReq{
-		ArticleId:      articleID,
-		ParentIds:      parentIDs,
-		LimitPerParent: limitPerParent,
-		Restriction:    restriction,
-		Restrictions:   restrictions,
-		Order:          order,
+		Filter: &model.CommentFilter{
+			ArticleID:    new(articleID),
+			Restriction:  req.Restriction,
+			Restrictions: req.Restrictions,
+			Order:        req.Order,
+		},
+		Scope:          scope,
+		ParentIDs:      req.ParentIDs,
+		LimitPerParent: req.LimitPerParent,
 	})
 	if err != nil {
 		return nil, err
@@ -247,10 +242,12 @@ func (d *CommentUsecase) MapArticleLastComments(ctx context.Context, articleIDs 
 		return map[int64]*model.Comment{}, nil
 	}
 	comments, err := d.commentRepo.MapArticleLastComments(ctx, &repo.CommentGetReq{
-		ArticleIds: lo.Uniq(articleIds),
-		Restrictions: []enum.ContentRestriction{
-			enum.ContentRestrictionNone,
-			enum.ContentRestrictionLocked,
+		Filter: &model.CommentFilter{
+			ArticleIDs: lo.Uniq(articleIds),
+			Restrictions: []enum.ContentRestriction{
+				enum.ContentRestrictionNone,
+				enum.ContentRestrictionLocked,
+			},
 		},
 	})
 	if err != nil {
@@ -261,18 +258,21 @@ func (d *CommentUsecase) MapArticleLastComments(ctx context.Context, articleIDs 
 
 type CommentHideReq struct {
 	CommentID int64
-	UserID    int64
+	Access    *model.ContentAccess
 	Reason    *string
 }
 
 func (d *CommentUsecase) Hide(ctx context.Context, req *CommentHideReq) error {
 	commentId := req.CommentID
-	userId := req.UserID
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return err
+	}
 	reason := req.Reason
 	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{
 		CommentID:   commentId,
 		Restriction: enum.ContentRestrictionHidden,
-		UserID:      userId,
+		Access:      access,
 		Action:      enum.ContentModerationActionHide,
 		Reason:      reason,
 	})
@@ -280,18 +280,21 @@ func (d *CommentUsecase) Hide(ctx context.Context, req *CommentHideReq) error {
 
 type CommentUnhideReq struct {
 	CommentID int64
-	UserID    int64
+	Access    *model.ContentAccess
 	Reason    *string
 }
 
 func (d *CommentUsecase) Unhide(ctx context.Context, req *CommentUnhideReq) error {
 	commentId := req.CommentID
-	userId := req.UserID
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return err
+	}
 	reason := req.Reason
 	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{
 		CommentID:   commentId,
 		Restriction: enum.ContentRestrictionNone,
-		UserID:      userId,
+		Access:      access,
 		Action:      enum.ContentModerationActionUnhide,
 		Reason:      reason,
 	})
@@ -299,18 +302,21 @@ func (d *CommentUsecase) Unhide(ctx context.Context, req *CommentUnhideReq) erro
 
 type CommentLockReq struct {
 	CommentID int64
-	UserID    int64
+	Access    *model.ContentAccess
 	Reason    *string
 }
 
 func (d *CommentUsecase) Lock(ctx context.Context, req *CommentLockReq) error {
 	commentId := req.CommentID
-	userId := req.UserID
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return err
+	}
 	reason := req.Reason
 	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{
 		CommentID:   commentId,
 		Restriction: enum.ContentRestrictionLocked,
-		UserID:      userId,
+		Access:      access,
 		Action:      enum.ContentModerationActionLock,
 		Reason:      reason,
 	})
@@ -318,18 +324,21 @@ func (d *CommentUsecase) Lock(ctx context.Context, req *CommentLockReq) error {
 
 type CommentUnlockReq struct {
 	CommentID int64
-	UserID    int64
+	Access    *model.ContentAccess
 	Reason    *string
 }
 
 func (d *CommentUsecase) Unlock(ctx context.Context, req *CommentUnlockReq) error {
 	commentId := req.CommentID
-	userId := req.UserID
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return err
+	}
 	reason := req.Reason
 	return d.updateRestriction(ctx, &commentUpdateRestrictionReq{
 		CommentID:   commentId,
 		Restriction: enum.ContentRestrictionNone,
-		UserID:      userId,
+		Access:      access,
 		Action:      enum.ContentModerationActionUnlock,
 		Reason:      reason,
 	})
@@ -338,7 +347,7 @@ func (d *CommentUsecase) Unlock(ctx context.Context, req *CommentUnlockReq) erro
 type commentUpdateRestrictionReq struct {
 	CommentID   int64
 	Restriction enum.ContentRestriction
-	UserID      int64
+	Access      *model.ContentAccess
 	Action      enum.ContentModerationAction
 	Reason      *string
 }
@@ -346,13 +355,16 @@ type commentUpdateRestrictionReq struct {
 func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpdateRestrictionReq) error {
 	commentId := req.CommentID
 	restriction := req.Restriction
-	userId := req.UserID
+	access := req.Access
 	action := req.Action
 	reason := req.Reason
+	if err := d.commentAccessUsecase.CanManage(access); err != nil {
+		return err
+	}
 	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
-			CommentId: new(commentId),
+			Filter: &model.CommentFilter{CommentID: new(commentId)},
 		})
 		comment := commentResp
 		if err != nil {
@@ -375,7 +387,7 @@ func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpda
 		if err := d.commentRepo.UpdateRestriction(ctx, &repo.CommentUpdateRestrictionReq{
 			CommentID:   commentId,
 			Restriction: restriction,
-			UpdatedBy:   userId,
+			UpdatedBy:   access.ActorUserID,
 		}); err != nil {
 			return err
 		}
@@ -384,7 +396,7 @@ func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpda
 			TargetID:   commentId,
 			Action:     action,
 			Reason:     reason,
-			OperatorID: userId,
+			OperatorID: access.ActorUserID,
 		}); err != nil {
 			return err
 		}
@@ -393,7 +405,7 @@ func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpda
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_STATUS_UPDATED,
 			Payload: &commonenums.Event_CommentStatusUpdated{
 				CommentStatusUpdated: &commonenums.CommentStatusUpdatedPayload{
-					SenderId:    userId,
+					SenderId:    access.ActorUserID,
 					CommentId:   commentId,
 					Action:      action.String(),
 					Restriction: restriction.String(),
@@ -416,36 +428,35 @@ func (d *CommentUsecase) updateRestriction(ctx context.Context, req *commentUpda
 
 type CommentLikeReq struct {
 	CommentID int64
-	UserID    int64
+	Access    *model.ContentAccess
 	Active    bool
 }
 
 func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, error) {
 	commentId := req.CommentID
-	userId := req.UserID
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return false, err
+	}
+	userId := access.ActorUserID
 	active := req.Active
 	var outboxEvent *repo.OutboxEvent
-	err := d.tx(ctx, func(ctx context.Context) error {
+	err = d.tx(ctx, func(ctx context.Context) error {
 		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
-			CommentId: new(commentId),
+			Filter: &model.CommentFilter{CommentID: new(commentId)},
 		})
 		comment := commentResp
 		if err != nil {
 			return err
 		}
-		if comment.Restriction != enum.ContentRestrictionNone {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
-		}
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(comment.ArticleID),
+			Filter: &model.ArticleFilter{ArticleID: new(comment.ArticleID)},
 		})
 		if err != nil {
 			return err
 		}
-		if article.PublishStatus != enum.ArticlePublishStatusPublished ||
-			article.Visibility != enum.ArticleVisibilityPublic ||
-			article.Restriction != enum.ContentRestrictionNone {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
+		if err := d.commentAccessUsecase.CanInteract(access, comment, article); err != nil {
+			return err
 		}
 		if active {
 			createdResp, err := d.commentActionRecordRepo.Save(ctx, &model.CommentActionRecord{
@@ -512,36 +523,35 @@ func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, e
 
 type CommentThankReq struct {
 	CommentID int64
-	UserID    int64
+	Access    *model.ContentAccess
 	Active    bool
 }
 
 func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool, error) {
 	commentId := req.CommentID
-	userId := req.UserID
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return false, err
+	}
+	userId := access.ActorUserID
 	active := req.Active
 	var outboxEvent *repo.OutboxEvent
-	err := d.tx(ctx, func(ctx context.Context) error {
+	err = d.tx(ctx, func(ctx context.Context) error {
 		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
-			CommentId: new(commentId),
+			Filter: &model.CommentFilter{CommentID: new(commentId)},
 		})
 		comment := commentResp
 		if err != nil {
 			return err
 		}
-		if comment.Restriction != enum.ContentRestrictionNone {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
-		}
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			ArticleId: new(comment.ArticleID),
+			Filter: &model.ArticleFilter{ArticleID: new(comment.ArticleID)},
 		})
 		if err != nil {
 			return err
 		}
-		if article.PublishStatus != enum.ArticlePublishStatusPublished ||
-			article.Visibility != enum.ArticleVisibilityPublic ||
-			article.Restriction != enum.ContentRestrictionNone {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
+		if err := d.commentAccessUsecase.CanInteract(access, comment, article); err != nil {
+			return err
 		}
 		if active {
 			createdResp, err := d.commentActionRecordRepo.Save(ctx, &model.CommentActionRecord{

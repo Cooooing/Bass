@@ -46,27 +46,16 @@ type CommentPageResp struct {
 }
 
 type CommentGetReq struct {
-	Page         *base.PageRequest
-	CommentId    *int64
-	CommentIds   []int64
-	ParentId     *int64
-	ReplyId      *int64
-	ArticleId    *int64
-	ArticleIds   []int64
-	CreatedBy    *int64
-	Restriction  *enum.ContentRestriction
-	Restrictions []enum.ContentRestriction
-	Level        *int32
-	Order        *enum.CommentOrder
+	Page   *base.PageRequest
+	Filter *model.CommentFilter
+	Scope  *model.CommentScopeFilter
 }
 
 type CommentReplyPreviewReq struct {
-	ArticleId      int64
-	ParentIds      []int64
+	Filter         *model.CommentFilter
+	Scope          *model.CommentScopeFilter
+	ParentIDs      []int64
 	LimitPerParent int32
-	Restriction    *enum.ContentRestriction
-	Restrictions   []enum.ContentRestriction
-	Order          *enum.CommentOrder
 }
 
 type CommentReplyPreview struct {

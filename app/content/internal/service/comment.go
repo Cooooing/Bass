@@ -39,15 +39,30 @@ func NewCommentService(
 }
 
 func (s *CommentService) Create(ctx context.Context, req *v1.CreateComment_Req) (rsp *v1.CreateComment_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
 	}
-	addResp, err := s.commentUsecase.Add(ctx, &model.Comment{
-		ArticleID: req.ArticleId,
-		Content:   req.Content,
-		ReplyID:   req.ReplyId,
-		CreatedBy: new(req.UserId),
-		UpdatedBy: new(req.UserId),
+	access, err = access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	addResp, err := s.commentUsecase.Add(ctx, &usecase.CommentAddReq{
+		Access: access,
+		Comment: &model.Comment{
+			ArticleID: req.ArticleId,
+			Content:   req.Content,
+			ReplyID:   req.ReplyId,
+		},
 	})
 	if err != nil {
 		return nil, err
@@ -79,54 +94,127 @@ func (s *CommentService) Create(ctx context.Context, req *v1.CreateComment_Req) 
 }
 
 func (s *CommentService) Hide(ctx context.Context, req *v1.HideComment_Req) (*v1.HideComment_Resp, error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
 	}
-	err := s.commentUsecase.Hide(ctx, &usecase.CommentHideReq{
+	access, err := access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	err = s.commentUsecase.Hide(ctx, &usecase.CommentHideReq{
 		CommentID: req.Id,
-		UserID:    req.UserId,
+		Access:    access,
 		Reason:    req.Reason,
 	})
 	return &v1.HideComment_Resp{}, err
 }
 
 func (s *CommentService) Unhide(ctx context.Context, req *v1.UnhideComment_Req) (*v1.UnhideComment_Resp, error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
 	}
-	err := s.commentUsecase.Unhide(ctx, &usecase.CommentUnhideReq{
+	access, err := access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	err = s.commentUsecase.Unhide(ctx, &usecase.CommentUnhideReq{
 		CommentID: req.Id,
-		UserID:    req.UserId,
+		Access:    access,
 		Reason:    req.Reason,
 	})
 	return &v1.UnhideComment_Resp{}, err
 }
 
 func (s *CommentService) Lock(ctx context.Context, req *v1.LockComment_Req) (*v1.LockComment_Resp, error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
 	}
-	err := s.commentUsecase.Lock(ctx, &usecase.CommentLockReq{
+	access, err := access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	err = s.commentUsecase.Lock(ctx, &usecase.CommentLockReq{
 		CommentID: req.Id,
-		UserID:    req.UserId,
+		Access:    access,
 		Reason:    req.Reason,
 	})
 	return &v1.LockComment_Resp{}, err
 }
 
 func (s *CommentService) Unlock(ctx context.Context, req *v1.UnlockComment_Req) (*v1.UnlockComment_Resp, error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
 	}
-	err := s.commentUsecase.Unlock(ctx, &usecase.CommentUnlockReq{
+	access, err := access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	err = s.commentUsecase.Unlock(ctx, &usecase.CommentUnlockReq{
 		CommentID: req.Id,
-		UserID:    req.UserId,
+		Access:    access,
 		Reason:    req.Reason,
 	})
 	return &v1.UnlockComment_Resp{}, err
 }
 
 func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Req) (*v1.ListComments_Resp, error) {
+	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	access, err := access.Normalize(enum.ContentAccessScopeGuest)
+	if err != nil {
+		return nil, err
+	}
 	req.Query = util.OrDefault(req.Query, &v1.ListComments_Req_CommentQueryParams{})
 	var restriction *enum.ContentRestriction
 	if req.Query.Restriction != nil {
@@ -153,19 +241,22 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Req) (*v
 		dbOrder = new(order)
 	}
 	pageResp, err := s.commentUsecase.Page(ctx, &usecase.CommentPageReq{
+		Access: access,
 		Page: &base.PageRequest{
 			Page: 1,
 			Size: 1000,
 		},
-		CommentID:    req.Query.CommentId,
-		ParentID:     req.Query.ParentId,
-		ReplyID:      req.Query.ReplyId,
-		ArticleID:    req.Query.ArticleId,
-		CreatedBy:    req.Query.UserId,
-		Restriction:  restriction,
-		Restrictions: restrictions,
-		Level:        req.Query.Level,
-		Order:        dbOrder,
+		Filter: &model.CommentFilter{
+			CommentID:    req.Query.CommentId,
+			ParentID:     req.Query.ParentId,
+			ReplyID:      req.Query.ReplyId,
+			ArticleID:    req.Query.ArticleId,
+			CreatedBy:    req.Query.UserId,
+			Restriction:  restriction,
+			Restrictions: restrictions,
+			Level:        req.Query.Level,
+			Order:        dbOrder,
+		},
 	})
 	if err != nil {
 		return nil, err
@@ -201,6 +292,23 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Req) (*v
 }
 
 func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v1.PageComments_Resp, error) {
+	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	access, err := access.Normalize(enum.ContentAccessScopeGuest)
+	if err != nil {
+		return nil, err
+	}
 	req.Query = util.OrDefault(req.Query, &v1.PageComments_Req_CommentQueryParams{})
 	var restriction *enum.ContentRestriction
 	if req.Query.Restriction != nil {
@@ -227,19 +335,22 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v
 		dbOrder = new(order)
 	}
 	pageResp, err := s.commentUsecase.Page(ctx, &usecase.CommentPageReq{
+		Access: access,
 		Page: &base.PageRequest{
 			Page: int64(req.GetPage().GetPage()),
 			Size: int64(req.GetPage().GetSize()),
 		},
-		CommentID:    req.Query.CommentId,
-		ParentID:     req.Query.ParentId,
-		ReplyID:      req.Query.ReplyId,
-		ArticleID:    req.Query.ArticleId,
-		CreatedBy:    req.Query.UserId,
-		Restriction:  restriction,
-		Restrictions: restrictions,
-		Level:        req.Query.Level,
-		Order:        dbOrder,
+		Filter: &model.CommentFilter{
+			CommentID:    req.Query.CommentId,
+			ParentID:     req.Query.ParentId,
+			ReplyID:      req.Query.ReplyId,
+			ArticleID:    req.Query.ArticleId,
+			CreatedBy:    req.Query.UserId,
+			Restriction:  restriction,
+			Restrictions: restrictions,
+			Level:        req.Query.Level,
+			Order:        dbOrder,
+		},
 	})
 	if err != nil {
 		return nil, err
@@ -280,6 +391,23 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v
 }
 
 func (s *CommentService) ListReplyPreviews(ctx context.Context, req *v1.ListCommentReplyPreviews_Req) (*v1.ListCommentReplyPreviews_Resp, error) {
+	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	access, err := access.Normalize(enum.ContentAccessScopeGuest)
+	if err != nil {
+		return nil, err
+	}
 	var restriction *enum.ContentRestriction
 	if req.Restriction != nil {
 		status, ok := enum.ContentRestrictionMap.ToEnum(*req.Restriction)
@@ -305,6 +433,7 @@ func (s *CommentService) ListReplyPreviews(ctx context.Context, req *v1.ListComm
 		dbOrder = new(order)
 	}
 	previewsResp, err := s.commentUsecase.ListReplyPreviews(ctx, &usecase.CommentListReplyPreviewsReq{
+		Access:         access,
 		ArticleID:      req.ArticleId,
 		ParentIDs:      req.ParentIds,
 		LimitPerParent: req.LimitPerParent,
@@ -410,12 +539,26 @@ func (s *CommentService) MapArticleLastComments(ctx context.Context, req *v1.Map
 }
 
 func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Req) (rsp *v1.LikeComment_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	access, err = access.Normalize("")
+	if err != nil {
+		return nil, err
 	}
 	likeResp, err := s.commentUsecase.Like(ctx, &usecase.CommentLikeReq{
 		CommentID: req.Id,
-		UserID:    req.UserId,
+		Access:    access,
 		Active:    req.Liked,
 	})
 	return &v1.LikeComment_Resp{
@@ -424,12 +567,26 @@ func (s *CommentService) Like(ctx context.Context, req *v1.LikeComment_Req) (rsp
 }
 
 func (s *CommentService) Thank(ctx context.Context, req *v1.ThankComment_Req) (rsp *v1.ThankComment_Resp, err error) {
-	if req.UserId <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	access, err = access.Normalize("")
+	if err != nil {
+		return nil, err
 	}
 	thankResp, err := s.commentUsecase.Thank(ctx, &usecase.CommentThankReq{
 		CommentID: req.Id,
-		UserID:    req.UserId,
+		Access:    access,
 		Active:    req.Thanked,
 	})
 	return &v1.ThankComment_Resp{

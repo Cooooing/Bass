@@ -1,0 +1,15 @@
+﻿syntax = "proto3";
+
+package common.api.app.content.v1;
+
+option go_package = "common/proto/gen/content/v1/enum;enum";
+
+// ContentAccessScope 表示内容访问身份视角
+enum ContentAccessScope {
+  CONTENT_ACCESS_SCOPE_UNSPECIFIED = 0; // 未指定
+  CONTENT_ACCESS_SCOPE_GUEST = 1; // 游客视角
+  CONTENT_ACCESS_SCOPE_USER = 2; // 普通用户视角
+  CONTENT_ACCESS_SCOPE_AUTHOR = 3; // 作者视角
+  CONTENT_ACCESS_SCOPE_ADMIN = 4; // 后台管理视角
+  CONTENT_ACCESS_SCOPE_INTERNAL_TASK = 5; // 内部任务视角
+}

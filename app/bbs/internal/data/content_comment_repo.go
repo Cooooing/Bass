@@ -39,12 +39,34 @@ func (r *ContentCommentClient) CreateComment(ctx context.Context, req *repo.Crea
 		ArticleId: req.ArticleID,
 		Content:   req.Content,
 		ReplyId:   replyID,
-		UserId:    req.UserID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return nil, err
 	}
-	item := cloneDataMessage(reply.GetComment(), &contentv1.PageComments_Resp_Comment{})
+	comment := reply.GetComment()
+	item := &contentv1.PageComments_Resp_Comment{}
+	if comment != nil {
+		item.CreatedAt = comment.GetCreatedAt()
+		item.UpdatedAt = comment.GetUpdatedAt()
+		item.CreatedBy = comment.CreatedBy
+		item.UpdatedBy = comment.UpdatedBy
+		item.Id = comment.GetId()
+		item.ArticleId = comment.GetArticleId()
+		item.Content = comment.GetContent()
+		item.Level = comment.GetLevel()
+		item.ParentId = comment.ParentId
+		item.ReplyId = comment.ReplyId
+		item.ThankCount = comment.GetThankCount()
+		item.LikeCount = comment.GetLikeCount()
+		item.ReplyCount = comment.GetReplyCount()
+		item.ReplyUserId = comment.ReplyUserId
+		item.Restriction = comment.GetRestriction()
+		item.DeletedAt = comment.GetDeletedAt()
+	}
 	articles, err := r.loadCommentArticles(ctx, []*contentv1.PageComments_Resp_Comment{item}, req.UserID)
 	if err != nil {
 		return nil, err
@@ -87,9 +109,16 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListC
 	if query.Order != nil {
 		contentQuery.Order = new(contentv1enum.CommentOrder(*query.Order))
 	}
+	accessScope := contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST
+	contentAccess := &contentv1.ContentAccess{Scope: accessScope}
+	if req.UserID > 0 {
+		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
+		contentAccess = &contentv1.ContentAccess{Scope: accessScope, ActorUserId: new(req.UserID)}
+	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
-		Page:  pageReq,
-		Query: contentQuery,
+		Page:   pageReq,
+		Query:  contentQuery,
+		Access: contentAccess,
 	})
 	if err != nil {
 		return nil, err
@@ -138,9 +167,6 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 			Size: req.Page.Size,
 		}
 	}
-	normal := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE
-	locked := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_LOCKED
-	restrictions := []contentv1enum.ContentRestriction{normal, locked}
 	order := contentv1enum.CommentOrder_COMMENT_ORDER_HOTTEST
 	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
 		order = contentv1enum.CommentOrder(*req.Order)
@@ -148,11 +174,11 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page: pageReq,
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
-			ArticleId:    new(req.ArticleID),
-			Level:        new(int32(1)),
-			Restrictions: restrictions,
-			Order:        new(order),
+			ArticleId: new(req.ArticleID),
+			Level:     new(int32(1)),
+			Order:     new(order),
 		},
+		Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
 	})
 	if err != nil {
 		return nil, err
@@ -177,14 +203,31 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 			ParentIds:      rootIDs,
 			LimitPerParent: previewLimit,
 			Order:          new(contentv1enum.CommentOrder_COMMENT_ORDER_OLDEST),
-			Restrictions:   restrictions,
+			Access:         &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
 		})
 		if err != nil {
 			return nil, err
 		}
 		previewMap = lo.SliceToMap(previews.GetRows(), func(item *contentv1.ListCommentReplyPreviews_Resp_CommentReplyPreview) (int64, []*contentv1.PageComments_Resp_Comment) {
 			rows := lo.Map(item.GetRows(), func(row *contentv1.ListCommentReplyPreviews_Resp_Comment, _ int) *contentv1.PageComments_Resp_Comment {
-				return cloneDataMessage(row, &contentv1.PageComments_Resp_Comment{})
+				return &contentv1.PageComments_Resp_Comment{
+					CreatedAt:   row.GetCreatedAt(),
+					UpdatedAt:   row.GetUpdatedAt(),
+					CreatedBy:   row.CreatedBy,
+					UpdatedBy:   row.UpdatedBy,
+					Id:          row.GetId(),
+					ArticleId:   row.GetArticleId(),
+					Content:     row.GetContent(),
+					Level:       row.GetLevel(),
+					ParentId:    row.ParentId,
+					ReplyId:     row.ReplyId,
+					ThankCount:  row.GetThankCount(),
+					LikeCount:   row.GetLikeCount(),
+					ReplyCount:  row.GetReplyCount(),
+					ReplyUserId: row.ReplyUserId,
+					Restriction: row.GetRestriction(),
+					DeletedAt:   row.GetDeletedAt(),
+				}
 			})
 			return item.GetParentId(), rows
 		})
@@ -253,9 +296,6 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo
 			Size: req.Page.Size,
 		}
 	}
-	normal := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE
-	locked := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_LOCKED
-	restrictions := []contentv1enum.ContentRestriction{normal, locked}
 	order := contentv1enum.CommentOrder_COMMENT_ORDER_OLDEST
 	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
 		order = contentv1enum.CommentOrder(*req.Order)
@@ -263,11 +303,11 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page: pageReq,
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
-			ArticleId:    new(req.ArticleID),
-			ParentId:     new(req.ParentID),
-			Restrictions: restrictions,
-			Order:        new(order),
+			ArticleId: new(req.ArticleID),
+			ParentId:  new(req.ParentID),
+			Order:     new(order),
 		},
+		Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
 	})
 	if err != nil {
 		return nil, err
@@ -314,9 +354,6 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 			Size: req.Page.Size,
 		}
 	}
-	normal := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE
-	locked := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_LOCKED
-	restrictions := []contentv1enum.ContentRestriction{normal, locked}
 	order := contentv1enum.CommentOrder_COMMENT_ORDER_NEWEST
 	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
 		order = contentv1enum.CommentOrder(*req.Order)
@@ -324,10 +361,10 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page: pageReq,
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
-			ArticleId:    new(req.ArticleID),
-			Restrictions: restrictions,
-			Order:        new(order),
+			ArticleId: new(req.ArticleID),
+			Order:     new(order),
 		},
+		Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
 	})
 	if err != nil {
 		return nil, err
@@ -368,9 +405,12 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 
 func (r *ContentCommentClient) LikeComment(ctx context.Context, req *repo.LikeCommentReq) (bool, error) {
 	reply, err := r.contentClient.Comment.Like(ctx, &contentv1.LikeComment_Req{
-		Id:     req.ID,
-		Liked:  req.Active,
-		UserId: req.UserID,
+		Id:    req.ID,
+		Liked: req.Active,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return false, err
@@ -382,7 +422,10 @@ func (r *ContentCommentClient) ThankComment(ctx context.Context, req *repo.Thank
 	reply, err := r.contentClient.Comment.Thank(ctx, &contentv1.ThankComment_Req{
 		Id:      req.ID,
 		Thanked: req.Active,
-		UserId:  req.UserID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return false, err

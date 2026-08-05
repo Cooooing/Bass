@@ -7,39 +7,39 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";
 
-// ContentPostscriptService 提供文章附言能力。
+// ContentPostscriptService 提供文章附言能力
 service ContentPostscriptService {
-  rpc Add(AddPostscript.Req) returns (AddPostscript.Resp) {} // 添加文章附言。
-  rpc List(ListPostscripts.Req) returns (ListPostscripts.Resp) {} // 查询文章附言列表。
+  rpc Add(AddPostscript.Req) returns (AddPostscript.Resp) {} // 添加文章附言
+  rpc List(ListPostscripts.Req) returns (ListPostscripts.Resp) {} // 查询文章附言列表
 }
 
 message AddPostscript {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID。
-    string content = 2; // 必填，附言内容。
-    int64 user_id = 3; // 必填，作者账号 ID。
+    int64 article_id = 1; // 文章 ID
+    string content = 2; // 附言内容
+    int64 user_id = 3; // 作者账号 ID
   }
   message Resp {
-    Postscript postscript = 1; // 创建后的附言。
+    Postscript postscript = 1; // 创建后的附言
   }
 }
 
 message ListPostscripts {
   message Req {
-    int64 article_id = 1; // 必填，文章 ID。
+    int64 article_id = 1; // 文章 ID
   }
   message Resp {
-    repeated Postscript rows = 1; // 附言列表。
+    repeated Postscript rows = 1; // 附言列表
   }
 }
 
 message Postscript {
-  int64 id = 1; // 附言 ID。
-  int64 article_id = 2; // 文章 ID。
-  string content = 3; // 附言内容。
-  ContentRestriction restriction = 4; // 治理限制。
-  optional int64 created_by = 1002; // 创建账号 ID。
-  optional int64 updated_by = 1003; // 更新账号 ID。
-  google.protobuf.Timestamp created_at = 1000; // 创建时间。
-  google.protobuf.Timestamp updated_at = 1001; // 更新时间。
+  int64 id = 1; // 附言 ID
+  int64 article_id = 2; // 文章 ID
+  string content = 3; // 附言内容
+  ContentRestriction restriction = 4; // 治理限制
+  optional int64 created_by = 1002; // 创建账号 ID
+  optional int64 updated_by = 1003; // 更新账号 ID
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
 }

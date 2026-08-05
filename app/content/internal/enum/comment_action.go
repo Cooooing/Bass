@@ -23,3 +23,7 @@ var CommentActionMap = enum.NewMapping[CommentAction, v1.CommentAction](map[Comm
 	CommentActionReply: {Proto: v1.CommentAction_COMMENT_ACTION_REPLY},
 	CommentActionThank: {Proto: v1.CommentAction_COMMENT_ACTION_THANK},
 })
+
+func (e CommentAction) String() string {
+	return string(e)
+}

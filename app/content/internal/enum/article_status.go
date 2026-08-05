@@ -1,4 +1,4 @@
-﻿package enum
+package enum
 
 import (
 	"common/pkg/enum"
@@ -42,3 +42,11 @@ var ArticleVisibilityMap = enum.NewMapping[ArticleVisibility, v1.ArticleVisibili
 	ArticleVisibilityPublic:  {Proto: v1.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC},
 	ArticleVisibilityPrivate: {Proto: v1.ArticleVisibility_ARTICLE_VISIBILITY_PRIVATE},
 })
+
+func (e ArticlePublishStatus) String() string {
+	return string(e)
+}
+
+func (e ArticleVisibility) String() string {
+	return string(e)
+}

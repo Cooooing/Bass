@@ -13,24 +13,10 @@ import (
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"google.golang.org/protobuf/proto"
-
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
 	"github.com/samber/lo"
 )
-
-func cloneDataMessage[T proto.Message](src proto.Message, dst T) T {
-	if src == nil {
-		return dst
-	}
-	data, err := proto.Marshal(src)
-	if err != nil {
-		return dst
-	}
-	_ = proto.Unmarshal(data, dst)
-	return dst
-}
 
 var _ repo.ContentArticleClient = (*ContentArticleClient)(nil)
 
@@ -48,6 +34,7 @@ func NewContentArticleClient(
 		userClient:    userClient,
 	}
 }
+
 func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo.CreateDraftArticleReq) (*repo.ArticleDetail, error) {
 	save := &contentv1.CreateDraftArticle_Req_Article{}
 	if req != nil && req.Article != nil {
@@ -62,7 +49,10 @@ func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo
 	}
 	reply, err := r.contentClient.Article.CreateDraft(ctx, &contentv1.CreateDraftArticle_Req{
 		Article: save,
-		UserId:  req.UserID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return nil, err
@@ -94,7 +84,10 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 	reply, err := r.contentClient.Article.UpdateDraft(ctx, &contentv1.UpdateDraftArticle_Req{
 		ArticleId: req.ArticleID,
 		Article:   save,
-		UserId:    req.UserID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return nil, err
@@ -113,9 +106,12 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 
 func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.PublishArticleReq) error {
 	_, err := r.contentClient.Article.Publish(ctx, &contentv1.PublishArticle_Req{
-		ArticleId:      req.ArticleID,
-		OperatorUserId: new(req.UserID),
-		Visibility:     contentv1enum.ArticleVisibility(req.Visibility),
+		ArticleId: req.ArticleID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
+			ActorUserId: new(req.UserID),
+		},
+		Visibility: contentv1enum.ArticleVisibility(req.Visibility),
 	})
 	if err != nil {
 		return err
@@ -125,9 +121,12 @@ func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.Pub
 
 func (r *ContentArticleClient) SchedulePublishArticle(ctx context.Context, req *repo.SchedulePublishArticleReq) error {
 	_, err := r.contentClient.Article.SchedulePublish(ctx, &contentv1.SchedulePublishArticle_Req{
-		ArticleId:      req.ArticleID,
-		OperatorUserId: req.UserID,
-		PublishAt:      timestamppb.New(req.PublishAt),
+		ArticleId: req.ArticleID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
+			ActorUserId: new(req.UserID),
+		},
+		PublishAt: timestamppb.New(req.PublishAt),
 	})
 	if err != nil {
 		return err
@@ -137,8 +136,11 @@ func (r *ContentArticleClient) SchedulePublishArticle(ctx context.Context, req *
 
 func (r *ContentArticleClient) CancelPublishArticle(ctx context.Context, req *repo.CancelPublishArticleReq) error {
 	_, err := r.contentClient.Article.CancelPublish(ctx, &contentv1.CancelPublishArticle_Req{
-		ArticleId:      req.ArticleID,
-		OperatorUserId: req.UserID,
+		ArticleId: req.ArticleID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return err
@@ -149,8 +151,11 @@ func (r *ContentArticleClient) CancelPublishArticle(ctx context.Context, req *re
 func (r *ContentArticleClient) ArchiveArticle(ctx context.Context, req *repo.ArchiveArticleReq) error {
 	_, err := r.contentClient.Article.Archive(ctx, &contentv1.ArchiveArticle_Req{
 		ArticleId: req.ArticleID,
-		UserId:    req.UserID,
-		Reason:    req.Reason,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
+			ActorUserId: new(req.UserID),
+		},
+		Reason: req.Reason,
 	})
 	if err != nil {
 		return err
@@ -160,7 +165,10 @@ func (r *ContentArticleClient) ArchiveArticle(ctx context.Context, req *repo.Arc
 func (r *ContentArticleClient) DiscardDraftArticle(ctx context.Context, req *repo.DiscardDraftArticleReq) error {
 	_, err := r.contentClient.Article.DiscardDraft(ctx, &contentv1.DiscardDraftArticle_Req{
 		ArticleId: req.ArticleID,
-		UserId:    req.UserID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return err
@@ -185,10 +193,12 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	if query.Order != nil {
 		contentQuery.Order = new(contentv1enum.ArticleOrder(*query.Order))
 	}
-	normal := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_NONE
-	locked := contentv1enum.ContentRestriction_CONTENT_RESTRICTION_LOCKED
-	contentQuery.Restrictions = []contentv1enum.ContentRestriction{normal, locked}
+	accessScope := contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST
+	if req.UserID > 0 {
+		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
+	}
 	if query.AuthorID != nil && *query.AuthorID == req.UserID {
+		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR
 		if query.PublishStatus != nil {
 			contentQuery.PublishStatus = new(contentv1enum.ArticlePublishStatus(*query.PublishStatus))
 		}
@@ -205,10 +215,10 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 				return contentv1enum.ArticleVisibility(item)
 			})
 		}
-	} else {
-
-		contentQuery.PublishStatus = new(contentv1enum.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED)
-		contentQuery.Visibility = new(contentv1enum.ArticleVisibility_ARTICLE_VISIBILITY_PUBLIC)
+	}
+	contentAccess := &contentv1.ContentAccess{Scope: accessScope}
+	if req.UserID > 0 {
+		contentAccess.ActorUserId = new(req.UserID)
 	}
 	var pageReq *common.PageReq
 	if req.Page != nil {
@@ -218,8 +228,9 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 		}
 	}
 	reply, err := r.contentClient.Article.Page(ctx, &contentv1.PageArticles_Req{
-		Page:  pageReq,
-		Query: contentQuery,
+		Page:   pageReq,
+		Query:  contentQuery,
+		Access: contentAccess,
 	})
 	if err != nil {
 		return nil, err
@@ -259,13 +270,18 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 }
 
 func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArticleReq) (*repo.ArticleDetail, error) {
-	getReq := &contentv1.GetArticle_Req{
-		ArticleId: req.ArticleID,
-	}
+	accessScope := contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST
 	if req.UserID > 0 {
-		getReq.ViewerUserId = new(req.UserID)
+		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
 	}
-	reply, err := r.contentClient.Article.Get(ctx, getReq)
+	contentAccess := &contentv1.ContentAccess{Scope: accessScope}
+	if req.UserID > 0 {
+		contentAccess.ActorUserId = new(req.UserID)
+	}
+	reply, err := r.contentClient.Article.Get(ctx, &contentv1.GetArticle_Req{
+		ArticleId: req.ArticleID,
+		Access:    contentAccess,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -308,9 +324,15 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 func (r *ContentArticleClient) ViewArticle(ctx context.Context, req *repo.ViewArticleReq) error {
 	viewReq := &contentv1.ViewArticle_Req{
 		ArticleId: req.ArticleID,
+		Access: &contentv1.ContentAccess{
+			Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST,
+		},
 	}
 	if req.UserID > 0 {
-		viewReq.ViewerUserId = new(req.UserID)
+		viewReq.Access = &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(req.UserID),
+		}
 	}
 	_, err := r.contentClient.Article.View(ctx, viewReq)
 	if err != nil {
@@ -323,7 +345,10 @@ func (r *ContentArticleClient) LikeArticle(ctx context.Context, req *repo.LikeAr
 	reply, err := r.contentClient.Article.Like(ctx, &contentv1.LikeArticle_Req{
 		ArticleId: req.ArticleID,
 		Liked:     req.Active,
-		UserId:    req.UserID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return false, err
@@ -335,7 +360,10 @@ func (r *ContentArticleClient) ThankArticle(ctx context.Context, req *repo.Thank
 	reply, err := r.contentClient.Article.Thank(ctx, &contentv1.ThankArticle_Req{
 		ArticleId: req.ArticleID,
 		Thanked:   req.Active,
-		UserId:    req.UserID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return false, err
@@ -347,7 +375,10 @@ func (r *ContentArticleClient) CollectArticle(ctx context.Context, req *repo.Col
 	reply, err := r.contentClient.Article.Collect(ctx, &contentv1.CollectArticle_Req{
 		ArticleId: req.ArticleID,
 		Collected: req.Active,
-		UserId:    req.UserID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return false, err
@@ -359,7 +390,10 @@ func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.Rewa
 	_, err := r.contentClient.Article.Reward(ctx, &contentv1.RewardArticle_Req{
 		ArticleId: req.ArticleID,
 		Points:    req.Points,
-		UserId:    req.UserID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return err

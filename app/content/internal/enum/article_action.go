@@ -1,4 +1,4 @@
-﻿package enum
+package enum
 
 import (
 	"common/pkg/enum"
@@ -29,3 +29,7 @@ var ArticleActionMap = enum.NewMapping[ArticleAction, v1.ArticleAction](map[Arti
 	ArticleActionReward:  {Proto: v1.ArticleAction_ARTICLE_ACTION_REWARD},
 	ArticleActionReply:   {Proto: v1.ArticleAction_ARTICLE_ACTION_REPLY},
 })
+
+func (e ArticleAction) String() string {
+	return string(e)
+}

@@ -1,4 +1,4 @@
-﻿package enum
+package enum
 
 import (
 	"common/pkg/enum"
@@ -29,3 +29,7 @@ var ArticleTypeMap = enum.NewMapping[ArticleType, v1.ArticleType](map[ArticleTyp
 	ArticleTypePoll:    {Proto: v1.ArticleType_ARTICLE_TYPE_POLL},
 	ArticleTypeColumn:  {Proto: v1.ArticleType_ARTICLE_TYPE_COLUMN},
 })
+
+func (e ArticleType) String() string {
+	return string(e)
+}

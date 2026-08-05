@@ -46,6 +46,16 @@ func (a *Article) IsAuthor(userID int64) bool {
 	return a != nil && a.CreatedBy != nil && *a.CreatedBy == userID
 }
 
+func (a *Article) IsPublicVisible() bool {
+	if a == nil || a.DeletedAt != nil || a.Visibility != enum.ArticleVisibilityPublic {
+		return false
+	}
+	if a.PublishStatus != enum.ArticlePublishStatusPublished && a.PublishStatus != enum.ArticlePublishStatusArchived {
+		return false
+	}
+	return a.Restriction == enum.ContentRestrictionNone || a.Restriction == enum.ContentRestrictionLocked
+}
+
 func (a *Article) CanCreateDraft() error {
 	if a == nil || a.Type != enum.ArticleTypeNormal {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
@@ -63,40 +73,40 @@ func (a *Article) CanEditDraft(operatorID int64) error {
 	return nil
 }
 
-func (a *Article) CanPublishByAuthor(operatorID int64) error {
-	if a == nil || !a.IsAuthor(operatorID) {
+func (a *Article) CanPublish(access *ContentAccess, publishAt *time.Time, now time.Time) error {
+	access, err := access.Normalize("")
+	if err != nil {
+		return err
+	}
+	if a == nil || a.Type != enum.ArticleTypeNormal || a.Restriction != enum.ContentRestrictionNone {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+	}
+	switch access.Scope {
+	case enum.ContentAccessScopeAuthor:
+		if !a.IsAuthor(access.ActorUserID) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+		}
+		if publishAt != nil {
+			if a.PublishStatus != enum.ArticlePublishStatusDraft {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+			}
+			if !publishAt.After(now) {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+			}
+			return nil
+		}
+		if a.PublishStatus != enum.ArticlePublishStatusDraft && a.PublishStatus != enum.ArticlePublishStatusScheduled {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		return nil
+	case enum.ContentAccessScopeInternalTask:
+		if a.PublishStatus != enum.ArticlePublishStatusScheduled {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		return nil
+	default:
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
-	if a.Type != enum.ArticleTypeNormal || a.Restriction != enum.ContentRestrictionNone {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-	}
-	if a.PublishStatus != enum.ArticlePublishStatusDraft && a.PublishStatus != enum.ArticlePublishStatusScheduled {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-	}
-	return nil
-}
-
-func (a *Article) CanPublishByScheduler(now time.Time) error {
-	if a == nil || a.Type != enum.ArticleTypeNormal || a.PublishStatus != enum.ArticlePublishStatusScheduled || a.Restriction != enum.ContentRestrictionNone {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-	}
-	if a.PublishedAt == nil || a.PublishedAt.After(now) {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-	}
-	return nil
-}
-
-func (a *Article) CanSchedulePublish(operatorID int64, scheduledAt time.Time, now time.Time) error {
-	if a == nil || !a.IsAuthor(operatorID) {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
-	}
-	if a.Type != enum.ArticleTypeNormal || a.PublishStatus != enum.ArticlePublishStatusDraft || a.Restriction != enum.ContentRestrictionNone {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-	}
-	if !scheduledAt.After(now) {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-	}
-	return nil
 }
 
 func (a *Article) CanCancelSchedule(operatorID int64) error {
@@ -146,31 +156,6 @@ func (a *Article) CanComment() error {
 	return nil
 }
 
-func (a *Article) CanViewByBBS(viewerID int64) error {
-	if a == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
-	}
-	if a.IsAuthor(viewerID) {
-		return nil
-	}
-	if a.Restriction == enum.ContentRestrictionHidden {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-	}
-	if a.PublishStatus == enum.ArticlePublishStatusPublished && a.Visibility == enum.ArticleVisibilityPublic {
-		return nil
-	}
-	if a.PublishStatus == enum.ArticlePublishStatusArchived && a.Visibility == enum.ArticleVisibilityPublic {
-		return nil
-	}
-	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
-}
-
-func (a *Article) CanViewByAdmin() error {
-	if a == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
-	}
-	return nil
-}
 func (a *Article) CanView(viewerID int64) error {
 	if a == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)

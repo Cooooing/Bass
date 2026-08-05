@@ -1,8 +1,9 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.content.v1;
 
 import "common/common.proto";
+import "content/v1/access.proto";
 import "content/v1/enum/article.proto";
 import "content/v1/enum/comment.proto";
 import "google/protobuf/timestamp.proto";
@@ -31,7 +32,7 @@ message CreateComment {
     int64 article_id = 1; // 文章 ID
     string content = 2; // 评论内容
     optional int64 reply_id = 3; // 回复评论 ID
-    int64 user_id = 4; // 用户 ID
+    ContentAccess access = 4; // 访问上下文
   }
   message Resp {
     message Comment {
@@ -60,7 +61,7 @@ message CreateComment {
 message HideComment {
   message Req {
     int64 id = 1; // 评论 ID
-    int64 user_id = 2; // 操作用户 ID
+    ContentAccess access = 2; // 访问上下文
     optional string reason = 3; // 操作原因
   }
   message Resp {}
@@ -69,7 +70,7 @@ message HideComment {
 message UnhideComment {
   message Req {
     int64 id = 1; // 评论 ID
-    int64 user_id = 2; // 操作用户 ID
+    ContentAccess access = 2; // 访问上下文
     optional string reason = 3; // 操作原因
   }
   message Resp {}
@@ -78,7 +79,7 @@ message UnhideComment {
 message LockComment {
   message Req {
     int64 id = 1; // 评论 ID
-    int64 user_id = 2; // 操作用户 ID
+    ContentAccess access = 2; // 访问上下文
     optional string reason = 3; // 操作原因
   }
   message Resp {}
@@ -87,7 +88,7 @@ message LockComment {
 message UnlockComment {
   message Req {
     int64 id = 1; // 评论 ID
-    int64 user_id = 2; // 操作用户 ID
+    ContentAccess access = 2; // 访问上下文
     optional string reason = 3; // 操作原因
   }
   message Resp {}
@@ -97,7 +98,7 @@ message LikeComment {
   message Req {
     int64 id = 1; // 评论 ID
     bool liked = 2; // 是否点赞
-    int64 user_id = 3; // 用户 ID
+    ContentAccess access = 3; // 访问上下文
   }
   message Resp {
     bool liked = 1; // 是否点赞
@@ -108,7 +109,7 @@ message ThankComment {
   message Req {
     int64 id = 1; // 评论 ID
     bool thanked = 2; // 是否感谢
-    int64 user_id = 3; // 用户 ID
+    ContentAccess access = 3; // 访问上下文
   }
   message Resp {
     bool thanked = 1; // 是否感谢
@@ -129,6 +130,7 @@ message ListComments {
       repeated ContentRestriction restrictions = 11; // 管理限制列表
     }
     CommentQueryParams query = 1; // 查询参数
+    ContentAccess access = 2; // 访问上下文
   }
   message Resp {
     message Comment {
@@ -169,6 +171,7 @@ message PageComments {
     }
     CommentQueryParams query = 1; // 查询参数
     optional .common.api.app.common.PageReq page = 2; // 分页参数
+    ContentAccess access = 3; // 访问上下文
   }
   message Resp {
     message Comment {
@@ -217,6 +220,7 @@ message ListCommentReplyPreviews {
     optional CommentOrder order = 4; // 排序
     optional ContentRestriction restriction = 7; // 管理限制
     repeated ContentRestriction restrictions = 8; // 管理限制列表
+    ContentAccess access = 9; // 访问上下文
   }
   message Resp {
     message CommentReplyPreview {

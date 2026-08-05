@@ -20,3 +20,7 @@ var TagStatusMap = enum.NewMapping[TagStatus, v1.TagStatus](map[TagStatus]enum.E
 	TagStatusEnabled:  {Proto: v1.TagStatus_TAG_STATUS_ENABLED},
 	TagStatusDisabled: {Proto: v1.TagStatus_TAG_STATUS_DISABLED},
 })
+
+func (e TagStatus) String() string {
+	return string(e)
+}

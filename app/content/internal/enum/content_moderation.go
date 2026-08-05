@@ -51,3 +51,11 @@ var ContentModerationActionMap = enum.NewMapping[ContentModerationAction, v1.Con
 	ContentModerationActionDelete:  {Proto: v1.ContentModerationAction_CONTENT_MODERATION_ACTION_DELETE},
 	ContentModerationActionRestore: {Proto: v1.ContentModerationAction_CONTENT_MODERATION_ACTION_RESTORE},
 })
+
+func (e ContentModerationAction) String() string {
+	return string(e)
+}
+
+func (e ContentModerationTarget) String() string {
+	return string(e)
+}

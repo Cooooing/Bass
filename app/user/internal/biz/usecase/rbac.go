@@ -98,9 +98,9 @@ func (u *RbacUsecase) RevokeRole(ctx context.Context, userID int64, roleID int64
 
 func (u *RbacUsecase) CheckRealmAccess(ctx context.Context, userID int64, realm commonenum.LoginRealm) (bool, error) {
 	switch realm {
-	case commonenum.LoginRealmBBS, commonenum.LoginRealmGame:
+	case commonenum.LoginRealmBBS:
 		return true, nil
-	case commonenum.LoginRealmBBSAdmin, commonenum.LoginRealmGameAdmin:
+	case commonenum.LoginRealmBBSAdmin:
 		return u.rbacRepo.HasAnyRole(ctx, userID, realm, new(time.Now()))
 	default:
 		return false, nil

@@ -379,35 +379,6 @@ func OptionalUserAuthMiddleware(authClient userv1.AuthServiceClient, realm commo
 	}
 }
 
-func OperationPermissionMiddleware(rbacClient userv1.RbacServiceClient, realm commonenum.LoginRealm) middleware.Middleware {
-	return func(handler middleware.Handler) middleware.Handler {
-		return func(ctx context.Context, req interface{}) (interface{}, error) {
-			userInfo, ok := util.GetContextValue[*model.User](ctx, constant.CtxUserInfo)
-			if !ok || userInfo == nil || userInfo.ID == 0 {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
-			}
-			operation := ""
-			if tr, ok := transport.FromServerContext(ctx); ok {
-				operation = tr.Operation()
-			}
-			if strings.TrimSpace(operation) == "" {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
-			}
-			reply, err := rbacClient.CheckPermission(ctx, &userv1.CheckRbacPermission_Req{
-				UserId:         userInfo.ID,
-				Realm:          commonenum.LoginRealmMap.MustToProto(realm),
-				PermissionCode: operation,
-			})
-			if err != nil {
-				return nil, err
-			}
-			if !reply.GetAllowed() {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RBAC_PERMISSION_DENIED)
-			}
-			return handler(ctx, req)
-		}
-	}
-}
 func GetHeader(ctx context.Context, key string) string {
 	var v string
 	if md, ok := metadata.FromIncomingContext(ctx); ok {

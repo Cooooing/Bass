@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bbs/internal/biz/repo"
 	"bbs/internal/biz/usecase"
 	"common/pkg/apperror"
 	"common/pkg/constant"
@@ -19,6 +20,7 @@ import (
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type AccountService struct {
@@ -223,4 +225,43 @@ func (s *AccountService) Avatar(ctx context.Context, req *bbsuserv1.AvatarAccoun
 		Data:        resp.Data,
 		ContentType: resp.ContentType,
 	}, nil
+}
+
+func (s *AccountService) GetEconomyAccount(ctx context.Context, req *bbsuserv1.GetAccountEconomy_Req) (*bbsuserv1.GetAccountEconomy_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	account, err := s.accountUsecase.GetEconomyAccount(ctx, user.ID)
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.GetAccountEconomy_Resp{Balance: account.Balance, TotalIncome: account.TotalIncome, TotalExpense: account.TotalExpense}, nil
+}
+
+func (s *AccountService) ListEconomyRecords(ctx context.Context, req *bbsuserv1.ListAccountEconomyRecords_Req) (*bbsuserv1.ListAccountEconomyRecords_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	if req == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	resp, err := s.accountUsecase.ListEconomyRecords(ctx, &usecase.ListAccountEconomyRecordsReq{UserID: user.ID, Page: &repo.PageReq{Page: req.GetPage().GetPage(), Size: req.GetPage().GetSize()}, Direction: req.Direction, RecordType: req.RecordType})
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*bbsuserv1.ListAccountEconomyRecords_Resp_Record, 0, len(resp.Rows))
+	for _, row := range resp.Rows {
+		item := &bbsuserv1.ListAccountEconomyRecords_Resp_Record{Id: row.ID, TransactionNo: row.TransactionNo, RecordType: row.RecordType, Direction: row.Direction, Amount: row.Amount, BalanceBefore: row.BalanceBefore, BalanceAfter: row.BalanceAfter, Remark: row.Remark}
+		if row.CreatedAt != nil {
+			item.CreatedAt = timestamppb.New(*row.CreatedAt)
+		}
+		rows = append(rows, item)
+	}
+	var page *common.PageResp
+	if resp.Page != nil {
+		page = &common.PageResp{Page: resp.Page.Page, Size: resp.Page.Size, Total: resp.Page.Total}
+	}
+	return &bbsuserv1.ListAccountEconomyRecords_Resp{Rows: rows, Page: page}, nil
 }

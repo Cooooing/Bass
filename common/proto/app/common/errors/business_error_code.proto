@@ -77,4 +77,10 @@ enum BusinessErrorCode {
   BUSINESS_ERROR_CODE_GAME_TOWN_COMMAND_INVALID = 16008 [(errors.code) = 400]; // 游戏命令无效
   BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_FAILED = 16009 [(errors.code) = 500]; // 游戏 Agent 执行失败
   BUSINESS_ERROR_CODE_GAME_TOWN_AGENT_CONFIG_NOT_FOUND = 16010 [(errors.code) = 404]; // 游戏 Agent 配置不存在
+  BUSINESS_ERROR_CODE_ECONOMY_AMOUNT_INVALID = 17001 [(errors.code) = 400]; // 经济积分数量非法
+  BUSINESS_ERROR_CODE_ECONOMY_INSUFFICIENT_BALANCE = 17002 [(errors.code) = 409]; // 经济积分余额不足
+  BUSINESS_ERROR_CODE_ECONOMY_IDEMPOTENCY_CONFLICT = 17003 [(errors.code) = 409]; // 经济幂等键冲突
+  BUSINESS_ERROR_CODE_ECONOMY_TRANSFER_SELF_NOT_ALLOWED = 17004 [(errors.code) = 400]; // 经济不允许给自己转积分
+  BUSINESS_ERROR_CODE_ECONOMY_RECORD_NOT_FOUND = 17005 [(errors.code) = 404]; // 经济积分流水不存在
+  BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID = 17006 [(errors.code) = 400]; // 经济流水类型非法
 }

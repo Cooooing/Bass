@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package common.api.app.economy.v1.enum;
+
+option go_package = "common/proto/gen/economy/v1/enum;enum";
+
+// EconomyRecordDirection 表示积分流水方向
+enum EconomyRecordDirection {
+  ECONOMY_RECORD_DIRECTION_UNSPECIFIED = 0;
+  ECONOMY_RECORD_DIRECTION_INCOME = 1; // 收入
+  ECONOMY_RECORD_DIRECTION_EXPENSE = 2; // 支出
+}
+
+// EconomyRecordType 表示积分流水类型
+enum EconomyRecordType {
+  ECONOMY_RECORD_TYPE_UNSPECIFIED = 0;
+  ECONOMY_RECORD_TYPE_SIGN_IN_REWARD = 1; // 签到奖励
+  ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD = 2; // 文章感谢奖励
+  ECONOMY_RECORD_TYPE_COMMENT_THANK_REWARD = 3; // 评论感谢奖励
+  ECONOMY_RECORD_TYPE_ARTICLE_REWARD_OUT = 4; // 文章打赏支出
+  ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN = 5; // 文章打赏收入
+  ECONOMY_RECORD_TYPE_ADMIN_ADD = 6; // 后台增加
+  ECONOMY_RECORD_TYPE_ADMIN_DEDUCT = 7; // 后台扣减
+}

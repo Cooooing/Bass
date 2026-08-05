@@ -15,6 +15,10 @@ func ProvideContentClient(consul *client.ConsulClient) (*ContentClient, error) {
 	return newServiceClient(consul, constant.ContentServiceName.String(), NewContentClient)
 }
 
+func ProvideEconomyClient(consul *client.ConsulClient) (*EconomyClient, error) {
+	return newServiceClient(consul, constant.EconomyServiceName.String(), NewEconomyClient)
+}
+
 func ProvideIMClient(consul *client.ConsulClient) (*IMClient, error) {
 	return newServiceClient(consul, constant.IMServiceName.String(), NewIMClient)
 }

@@ -4,6 +4,7 @@ import (
 	"bbs/internal/biz/repo"
 	bbsuserv1 "common/proto/gen/bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bbs/v1/user/enum"
+	economyv1enum "common/proto/gen/economy/v1/enum"
 	"context"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -12,18 +13,20 @@ import (
 type AccountUsecase struct {
 	accountClient repo.AccountClient
 	assetClient   repo.AssetClient
+	economyClient repo.EconomyClient
 }
 
 func NewAccountUsecase(
 	accountClient repo.AccountClient,
 	assetClient repo.AssetClient,
+	economyClient repo.EconomyClient,
 ) *AccountUsecase {
 	return &AccountUsecase{
 		accountClient: accountClient,
 		assetClient:   assetClient,
+		economyClient: economyClient,
 	}
 }
-
 func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentAccount_Resp_Account, error) {
 	reply, err := u.accountClient.GetCurrentAccount(ctx, userID)
 	if err != nil {
@@ -232,4 +235,38 @@ func (u *AccountUsecase) AvatarAccount(ctx context.Context, name string) (*Avata
 		Data:        reply.Data,
 		ContentType: reply.ContentType,
 	}, nil
+}
+
+type AccountEconomyResp struct {
+	Balance      int64
+	TotalIncome  int64
+	TotalExpense int64
+}
+
+func (u *AccountUsecase) GetEconomyAccount(ctx context.Context, userID int64) (*AccountEconomyResp, error) {
+	account, err := u.economyClient.GetAccount(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	return &AccountEconomyResp{Balance: account.Balance, TotalIncome: account.TotalIncome, TotalExpense: account.TotalExpense}, nil
+}
+
+type ListAccountEconomyRecordsReq struct {
+	UserID     int64
+	Page       *repo.PageReq
+	Direction  *economyv1enum.EconomyRecordDirection
+	RecordType *economyv1enum.EconomyRecordType
+}
+
+type ListAccountEconomyRecordsResp struct {
+	Rows []*repo.EconomyRecord
+	Page *repo.PageResp
+}
+
+func (u *AccountUsecase) ListEconomyRecords(ctx context.Context, req *ListAccountEconomyRecordsReq) (*ListAccountEconomyRecordsResp, error) {
+	resp, err := u.economyClient.ListRecords(ctx, &repo.ListEconomyRecordsReq{UserID: req.UserID, Page: req.Page, Direction: req.Direction, RecordType: req.RecordType})
+	if err != nil {
+		return nil, err
+	}
+	return &ListAccountEconomyRecordsResp{Rows: resp.Rows, Page: resp.Page}, nil
 }

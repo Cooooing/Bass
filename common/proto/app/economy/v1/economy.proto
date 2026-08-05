@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package common.api.app.economy.v1;
+
+import "common/common.proto";
+import "economy/v1/enum/economy.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/economy/v1;v1";
+
+// EconomyService 提供积分账户与流水能力
+service EconomyService {
+  rpc GetAccount(GetEconomyAccount.Req) returns (GetEconomyAccount.Resp) {} // 查询积分账户
+  rpc MapAccounts(MapEconomyAccounts.Req) returns (MapEconomyAccounts.Resp) {} // 批量查询积分账户
+  rpc AddPoints(AddEconomyPoints.Req) returns (AddEconomyPoints.Resp) {} // 增加积分
+  rpc DeductPoints(DeductEconomyPoints.Req) returns (DeductEconomyPoints.Resp) {} // 扣减积分
+  rpc TransferPoints(TransferEconomyPoints.Req) returns (TransferEconomyPoints.Resp) {} // 转移积分
+  rpc ListRecords(ListEconomyRecords.Req) returns (ListEconomyRecords.Resp) {} // 查询积分流水
+}
+
+// EconomyAccount 表示用户积分账户
+message EconomyAccount {
+  int64 id = 1; // 账户 ID
+  int64 user_id = 2; // 用户 ID
+  int64 balance = 3; // 当前积分
+  int64 total_income = 4; // 累计获得
+  int64 total_expense = 5; // 累计消耗
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}
+
+// EconomyRecord 表示积分流水
+message EconomyRecord {
+  int64 id = 1; // 流水 ID
+  string transaction_no = 2; // 交易号
+  int64 user_id = 3; // 用户 ID
+  .common.api.app.economy.v1.enum.EconomyRecordType record_type = 4; // 流水类型
+  .common.api.app.economy.v1.enum.EconomyRecordDirection direction = 5; // 流水方向
+  int64 amount = 6; // 积分数量
+  int64 balance_before = 7; // 变动前积分
+  int64 balance_after = 8; // 变动后积分
+  optional string source_id = 9; // 来源对象 ID
+  string idempotency_key = 10; // 幂等键
+  optional string remark = 11; // 备注
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+}
+
+message GetEconomyAccount {
+  message Req {
+    int64 user_id = 1; // 用户 ID
+  }
+  message Resp {
+    EconomyAccount account = 1; // 积分账户
+  }
+}
+
+message MapEconomyAccounts {
+  message Req {
+    repeated int64 user_ids = 1; // 用户 ID 列表
+  }
+  message Resp {
+    map<int64, EconomyAccount> accounts = 1; // 积分账户映射
+  }
+}
+
+message AddEconomyPoints {
+  message Req {
+    int64 user_id = 1; // 用户 ID
+    int64 amount = 2; // 积分数量
+    .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 流水类型
+    optional string source_id = 4; // 来源对象 ID
+    string idempotency_key = 5; // 幂等键
+    optional string remark = 6; // 备注
+  }
+  message Resp {
+    EconomyAccount account = 1; // 最新账户
+    EconomyRecord record = 2; // 积分流水
+  }
+}
+
+message DeductEconomyPoints {
+  message Req {
+    int64 user_id = 1; // 用户 ID
+    int64 amount = 2; // 积分数量
+    .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 流水类型
+    optional string source_id = 4; // 来源对象 ID
+    string idempotency_key = 5; // 幂等键
+    optional string remark = 6; // 备注
+  }
+  message Resp {
+    EconomyAccount account = 1; // 最新账户
+    EconomyRecord record = 2; // 积分流水
+  }
+}
+
+message TransferEconomyPoints {
+  message Req {
+    int64 from_user_id = 1; // 转出用户 ID
+    int64 to_user_id = 2; // 接收用户 ID
+    int64 amount = 3; // 积分数量
+    .common.api.app.economy.v1.enum.EconomyRecordType out_record_type = 4; // 转出流水类型
+    .common.api.app.economy.v1.enum.EconomyRecordType in_record_type = 5; // 转入流水类型
+    optional string source_id = 6; // 来源对象 ID
+    string idempotency_key = 7; // 幂等键
+    optional string remark = 8; // 备注
+  }
+  message Resp {
+    EconomyAccount from_account = 1; // 转出账户
+    EconomyAccount to_account = 2; // 接收账户
+    EconomyRecord out_record = 3; // 转出流水
+    EconomyRecord in_record = 4; // 转入流水
+  }
+}
+
+message ListEconomyRecords {
+  message Req {
+    int64 user_id = 1; // 用户 ID
+    .common.api.app.common.PageReq page = 2; // 分页参数
+    optional .common.api.app.economy.v1.enum.EconomyRecordDirection direction = 3; // 流水方向
+    optional .common.api.app.economy.v1.enum.EconomyRecordType record_type = 4; // 流水类型
+  }
+  message Resp {
+    repeated EconomyRecord rows = 1; // 流水列表
+    .common.api.app.common.PageResp page = 2; // 分页信息
+  }
+}
+
+

@@ -1,0 +1,18 @@
+syntax = "proto3";
+package kratos.api.config;
+
+import "common/config.proto";
+
+option go_package = "economy/internal/config;config";
+
+message Bootstrap {
+  common.api.app.common.Server server = 1;
+  common.api.app.common.HTTP http = 2;
+  common.api.app.common.GRPC grpc = 3;
+  common.api.app.common.Consul consul = 4;
+  common.api.app.common.Database database = 5;
+  common.api.app.common.Redis redis = 6;
+  common.api.app.common.Nats nats = 7;
+  common.api.app.common.Trace trace = 8;
+  common.api.app.common.Observability observability = 9;
+}

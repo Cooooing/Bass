@@ -1,9 +1,10 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.bbs.v1.user;
 
 import "bbs/v1/user/enum/account.proto";
 import "common/common.proto";
+import "economy/v1/enum/economy.proto";
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
@@ -153,6 +154,38 @@ message UpdatePhoneAccount {
     };
   }
   message Resp {}
+}
+
+message GetAccountEconomy {
+  message Req {}
+  message Resp {
+    int64 balance = 1; // 当前积分
+    int64 total_income = 2; // 累计获得
+    int64 total_expense = 3; // 累计消耗
+  }
+}
+
+message ListAccountEconomyRecords {
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数
+    optional .common.api.app.economy.v1.enum.EconomyRecordDirection direction = 2; // 流水方向
+    optional .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 流水类型
+  }
+  message Resp {
+    message Record {
+      int64 id = 1; // 流水 ID
+      string transaction_no = 2; // 交易号
+      .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 流水类型
+      .common.api.app.economy.v1.enum.EconomyRecordDirection direction = 4; // 流水方向
+      int64 amount = 5; // 积分数量
+      int64 balance_before = 6; // 变动前积分
+      int64 balance_after = 7; // 变动后积分
+      optional string remark = 8; // 备注
+      google.protobuf.Timestamp created_at = 1000; // 创建时间
+    }
+    repeated Record rows = 1; // 流水列表
+    .common.api.app.common.PageResp page = 2; // 分页信息
+  }
 }
 
 message AvatarAccount {

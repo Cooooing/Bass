@@ -5,6 +5,7 @@ type ServiceName string
 const (
 	UserServiceName      ServiceName = "user"
 	ContentServiceName   ServiceName = "content"
+	EconomyServiceName   ServiceName = "economy"
 	NotifyServiceName    ServiceName = "notify"
 	IMServiceName        ServiceName = "im"
 	PushHubServiceName   ServiceName = "push_hub"
@@ -27,6 +28,7 @@ func (t TablePrefix) String() string {
 const (
 	TablePrefixUser      TablePrefix = TablePrefix(UserServiceName + "_")
 	TablePrefixContent   TablePrefix = TablePrefix(ContentServiceName + "_")
+	TablePrefixEconomy   TablePrefix = TablePrefix(EconomyServiceName + "_")
 	TablePrefixNotify    TablePrefix = TablePrefix(NotifyServiceName + "_")
 	TablePrefixIM        TablePrefix = TablePrefix(IMServiceName + "_")
 	TablePrefixPushHub   TablePrefix = TablePrefix(PushHubServiceName + "_")

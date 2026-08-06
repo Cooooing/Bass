@@ -34,6 +34,21 @@ import {
     ImageRespToJSON,
 } from '../models/ImageResp';
 import {
+    type UpdateEmailAccountReq,
+    UpdateEmailAccountReqFromJSON,
+    UpdateEmailAccountReqToJSON,
+} from '../models/UpdateEmailAccountReq';
+import {
+    type UpdatePasswordAccountReq,
+    UpdatePasswordAccountReqFromJSON,
+    UpdatePasswordAccountReqToJSON,
+} from '../models/UpdatePasswordAccountReq';
+import {
+    type UpdatePhoneAccountReq,
+    UpdatePhoneAccountReqFromJSON,
+    UpdatePhoneAccountReqToJSON,
+} from '../models/UpdatePhoneAccountReq';
+import {
     type UpdateProfileAccountReq,
     UpdateProfileAccountReqFromJSON,
     UpdateProfileAccountReqToJSON,
@@ -56,6 +71,18 @@ export interface GetProfileRequest {
     getProfileAccountReq: GetProfileAccountReq;
 }
 
+export interface UpdateEmailRequest {
+    updateEmailAccountReq: UpdateEmailAccountReq;
+}
+
+export interface UpdatePasswordRequest {
+    updatePasswordAccountReq: UpdatePasswordAccountReq;
+}
+
+export interface UpdatePhoneRequest {
+    updatePhoneAccountReq: UpdatePhoneAccountReq;
+}
+
 export interface UpdateProfileRequest {
     updateProfileAccountReq: UpdateProfileAccountReq;
 }
@@ -76,7 +103,7 @@ export interface AccountServiceInterface {
     avatarRequestOpts(requestParameters: AvatarRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 生成默认账号头像。
+     * 生成默认账号头像
      * @param {string} [name] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -85,7 +112,7 @@ export interface AccountServiceInterface {
     avatarRaw(requestParameters: AvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageResp>>;
 
     /**
-     * 生成默认账号头像。
+     * 生成默认账号头像
      */
     avatar(requestParameters: AvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageResp>;
 
@@ -98,7 +125,7 @@ export interface AccountServiceInterface {
     getCurrentRequestOpts(requestParameters: GetCurrentRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 获取当前账号的完整资料。
+     * 获取当前账号完整资料
      * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -107,7 +134,7 @@ export interface AccountServiceInterface {
     getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentAccountResp>>;
 
     /**
-     * 获取当前账号的完整资料。
+     * 获取当前账号完整资料
      */
     getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentAccountResp>;
 
@@ -120,7 +147,7 @@ export interface AccountServiceInterface {
     getProfileRequestOpts(requestParameters: GetProfileRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 按账号 ID 获取账号展示资料。
+     * 按账号 ID 获取展示资料
      * @param {GetProfileAccountReq} getProfileAccountReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -129,9 +156,75 @@ export interface AccountServiceInterface {
     getProfileRaw(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileAccountResp>>;
 
     /**
-     * 按账号 ID 获取账号展示资料。
+     * 按账号 ID 获取展示资料
      */
     getProfile(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileAccountResp>;
+
+    /**
+     * Creates request options for updateEmail without sending the request
+     * @param {UpdateEmailAccountReq} updateEmailAccountReq 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    updateEmailRequestOpts(requestParameters: UpdateEmailRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 更新当前账号邮箱
+     * @param {UpdateEmailAccountReq} updateEmailAccountReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    updateEmailRaw(requestParameters: UpdateEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 更新当前账号邮箱
+     */
+    updateEmail(requestParameters: UpdateEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
+    /**
+     * Creates request options for updatePassword without sending the request
+     * @param {UpdatePasswordAccountReq} updatePasswordAccountReq 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    updatePasswordRequestOpts(requestParameters: UpdatePasswordRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 更新当前账号密码
+     * @param {UpdatePasswordAccountReq} updatePasswordAccountReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    updatePasswordRaw(requestParameters: UpdatePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 更新当前账号密码
+     */
+    updatePassword(requestParameters: UpdatePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
+    /**
+     * Creates request options for updatePhone without sending the request
+     * @param {UpdatePhoneAccountReq} updatePhoneAccountReq 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    updatePhoneRequestOpts(requestParameters: UpdatePhoneRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 更新当前账号手机号
+     * @param {UpdatePhoneAccountReq} updatePhoneAccountReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    updatePhoneRaw(requestParameters: UpdatePhoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 更新当前账号手机号
+     */
+    updatePhone(requestParameters: UpdatePhoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
      * Creates request options for updateProfile without sending the request
@@ -142,7 +235,7 @@ export interface AccountServiceInterface {
     updateProfileRequestOpts(requestParameters: UpdateProfileRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 更新当前账号的展示资料。
+     * 更新当前账号展示资料
      * @param {UpdateProfileAccountReq} updateProfileAccountReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -151,7 +244,7 @@ export interface AccountServiceInterface {
     updateProfileRaw(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateProfileAccountResp>>;
 
     /**
-     * 更新当前账号的展示资料。
+     * 更新当前账号展示资料
      */
     updateProfile(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateProfileAccountResp>;
 
@@ -186,7 +279,7 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     }
 
     /**
-     * 生成默认账号头像。
+     * 生成默认账号头像
      */
     async avatarRaw(requestParameters: AvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ImageResp>> {
         const requestOptions = await this.avatarRequestOpts(requestParameters);
@@ -196,7 +289,7 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     }
 
     /**
-     * 生成默认账号头像。
+     * 生成默认账号头像
      */
     async avatar(requestParameters: AvatarRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageResp> {
         const response = await this.avatarRaw(requestParameters, initOverrides);
@@ -233,7 +326,7 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     }
 
     /**
-     * 获取当前账号的完整资料。
+     * 获取当前账号完整资料
      */
     async getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentAccountResp>> {
         const requestOptions = await this.getCurrentRequestOpts(requestParameters);
@@ -243,7 +336,7 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     }
 
     /**
-     * 获取当前账号的完整资料。
+     * 获取当前账号完整资料
      */
     async getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentAccountResp> {
         const response = await this.getCurrentRaw(requestParameters, initOverrides);
@@ -280,7 +373,7 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     }
 
     /**
-     * 按账号 ID 获取账号展示资料。
+     * 按账号 ID 获取展示资料
      */
     async getProfileRaw(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileAccountResp>> {
         const requestOptions = await this.getProfileRequestOpts(requestParameters);
@@ -290,10 +383,151 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     }
 
     /**
-     * 按账号 ID 获取账号展示资料。
+     * 按账号 ID 获取展示资料
      */
     async getProfile(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileAccountResp> {
         const response = await this.getProfileRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for updateEmail without sending the request
+     */
+    async updateEmailRequestOpts(requestParameters: UpdateEmailRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['updateEmailAccountReq'] == null) {
+            throw new runtime.RequiredError(
+                'updateEmailAccountReq',
+                'Required parameter "updateEmailAccountReq" was null or undefined when calling updateEmail().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/update-email`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateEmailAccountReqToJSON(requestParameters['updateEmailAccountReq']),
+        };
+    }
+
+    /**
+     * 更新当前账号邮箱
+     */
+    async updateEmailRaw(requestParameters: UpdateEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.updateEmailRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 更新当前账号邮箱
+     */
+    async updateEmail(requestParameters: UpdateEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.updateEmailRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for updatePassword without sending the request
+     */
+    async updatePasswordRequestOpts(requestParameters: UpdatePasswordRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['updatePasswordAccountReq'] == null) {
+            throw new runtime.RequiredError(
+                'updatePasswordAccountReq',
+                'Required parameter "updatePasswordAccountReq" was null or undefined when calling updatePassword().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/update-password`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdatePasswordAccountReqToJSON(requestParameters['updatePasswordAccountReq']),
+        };
+    }
+
+    /**
+     * 更新当前账号密码
+     */
+    async updatePasswordRaw(requestParameters: UpdatePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.updatePasswordRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 更新当前账号密码
+     */
+    async updatePassword(requestParameters: UpdatePasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.updatePasswordRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for updatePhone without sending the request
+     */
+    async updatePhoneRequestOpts(requestParameters: UpdatePhoneRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['updatePhoneAccountReq'] == null) {
+            throw new runtime.RequiredError(
+                'updatePhoneAccountReq',
+                'Required parameter "updatePhoneAccountReq" was null or undefined when calling updatePhone().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/update-phone`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdatePhoneAccountReqToJSON(requestParameters['updatePhoneAccountReq']),
+        };
+    }
+
+    /**
+     * 更新当前账号手机号
+     */
+    async updatePhoneRaw(requestParameters: UpdatePhoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.updatePhoneRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 更新当前账号手机号
+     */
+    async updatePhone(requestParameters: UpdatePhoneRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.updatePhoneRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -327,7 +561,7 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     }
 
     /**
-     * 更新当前账号的展示资料。
+     * 更新当前账号展示资料
      */
     async updateProfileRaw(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateProfileAccountResp>> {
         const requestOptions = await this.updateProfileRequestOpts(requestParameters);
@@ -337,7 +571,7 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
     }
 
     /**
-     * 更新当前账号的展示资料。
+     * 更新当前账号展示资料
      */
     async updateProfile(requestParameters: UpdateProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateProfileAccountResp> {
         const response = await this.updateProfileRaw(requestParameters, initOverrides);

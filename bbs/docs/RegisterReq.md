@@ -1,28 +1,32 @@
 
-# StartEmailRegistrationReq
+# RegisterReq
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`email` | string
-`password` | string
+`type` | string
 `name` | string
+`password` | string
 `nickname` | string
+`emailCredential` | [ReqEmailCredential](ReqEmailCredential.md)
+`phoneCredential` | [ReqPhoneCredential](ReqPhoneCredential.md)
 
 ## Example
 
 ```typescript
-import type { StartEmailRegistrationReq } from '@bass/bbs-sdk-fetch'
+import type { RegisterReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "email": null,
-  "password": null,
+  "type": null,
   "name": null,
+  "password": null,
   "nickname": null,
-} satisfies StartEmailRegistrationReq
+  "emailCredential": null,
+  "phoneCredential": null,
+} satisfies RegisterReq
 
 console.log(example)
 
@@ -31,7 +35,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as StartEmailRegistrationReq
+const exampleParsed = JSON.parse(exampleJSON) as RegisterReq
 console.log(exampleParsed)
 ```
 

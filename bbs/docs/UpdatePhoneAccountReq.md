@@ -1,5 +1,5 @@
 
-# StartPhoneRegistrationReq
+# UpdatePhoneAccountReq
 
 
 ## Properties
@@ -7,22 +7,18 @@
 Name | Type
 ------------ | -------------
 `phone` | string
-`password` | string
-`name` | string
-`nickname` | string
+`code` | string
 
 ## Example
 
 ```typescript
-import type { StartPhoneRegistrationReq } from '@bass/bbs-sdk-fetch'
+import type { UpdatePhoneAccountReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
   "phone": null,
-  "password": null,
-  "name": null,
-  "nickname": null,
-} satisfies StartPhoneRegistrationReq
+  "code": null,
+} satisfies UpdatePhoneAccountReq
 
 console.log(example)
 
@@ -31,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as StartPhoneRegistrationReq
+const exampleParsed = JSON.parse(exampleJSON) as UpdatePhoneAccountReq
 console.log(exampleParsed)
 ```
 

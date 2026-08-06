@@ -6,7 +6,7 @@
 
 Name | Type
 ------------ | -------------
-`avatarUrl` | string
+`avatarAssetId` | string
 `nickname` | string
 `url` | string
 `introduction` | string
@@ -19,7 +19,7 @@ import type { UpdateProfileAccountReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "avatarUrl": null,
+  "avatarAssetId": null,
   "nickname": null,
   "url": null,
   "introduction": null,

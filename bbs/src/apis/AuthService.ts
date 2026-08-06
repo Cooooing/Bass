@@ -39,35 +39,10 @@ import {
     RefreshTokenRespToJSON,
 } from '../models/RefreshTokenResp';
 import {
-    type StartEmailRegistrationReq,
-    StartEmailRegistrationReqFromJSON,
-    StartEmailRegistrationReqToJSON,
-} from '../models/StartEmailRegistrationReq';
-import {
-    type StartEmailRegistrationResp,
-    StartEmailRegistrationRespFromJSON,
-    StartEmailRegistrationRespToJSON,
-} from '../models/StartEmailRegistrationResp';
-import {
-    type StartPhoneRegistrationReq,
-    StartPhoneRegistrationReqFromJSON,
-    StartPhoneRegistrationReqToJSON,
-} from '../models/StartPhoneRegistrationReq';
-import {
-    type StartPhoneRegistrationResp,
-    StartPhoneRegistrationRespFromJSON,
-    StartPhoneRegistrationRespToJSON,
-} from '../models/StartPhoneRegistrationResp';
-import {
-    type VerifyEmailRegistrationReq,
-    VerifyEmailRegistrationReqFromJSON,
-    VerifyEmailRegistrationReqToJSON,
-} from '../models/VerifyEmailRegistrationReq';
-import {
-    type VerifyPhoneRegistrationReq,
-    VerifyPhoneRegistrationReqFromJSON,
-    VerifyPhoneRegistrationReqToJSON,
-} from '../models/VerifyPhoneRegistrationReq';
+    type RegisterReq,
+    RegisterReqFromJSON,
+    RegisterReqToJSON,
+} from '../models/RegisterReq';
 
 export interface CancelAccountRequest {
     cancelAccountReq: CancelAccountReq;
@@ -85,20 +60,8 @@ export interface RefreshTokenRequest {
     refreshTokenReq: RefreshTokenReq;
 }
 
-export interface StartEmailRegistrationRequest {
-    startEmailRegistrationReq: StartEmailRegistrationReq;
-}
-
-export interface StartPhoneRegistrationRequest {
-    startPhoneRegistrationReq: StartPhoneRegistrationReq;
-}
-
-export interface VerifyEmailRegistrationRequest {
-    verifyEmailRegistrationReq: VerifyEmailRegistrationReq;
-}
-
-export interface VerifyPhoneRegistrationRequest {
-    verifyPhoneRegistrationReq: VerifyPhoneRegistrationReq;
+export interface RegisterRequest {
+    registerReq: RegisterReq;
 }
 
 /**
@@ -197,92 +160,26 @@ export interface AuthServiceInterface {
     refreshToken(requestParameters: RefreshTokenRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RefreshTokenResp>;
 
     /**
-     * Creates request options for startEmailRegistration without sending the request
-     * @param {StartEmailRegistrationReq} startEmailRegistrationReq 
+     * Creates request options for register without sending the request
+     * @param {RegisterReq} registerReq 
      * @throws {RequiredError}
      * @memberof AuthServiceInterface
      */
-    startEmailRegistrationRequestOpts(requestParameters: StartEmailRegistrationRequest): Promise<runtime.RequestOpts>;
+    registerRequestOpts(requestParameters: RegisterRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 开始邮箱注册。
-     * @param {StartEmailRegistrationReq} startEmailRegistrationReq 
+     * 注册账号。
+     * @param {RegisterReq} registerReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthServiceInterface
      */
-    startEmailRegistrationRaw(requestParameters: StartEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartEmailRegistrationResp>>;
+    registerRaw(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
     /**
-     * 开始邮箱注册。
+     * 注册账号。
      */
-    startEmailRegistration(requestParameters: StartEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartEmailRegistrationResp>;
-
-    /**
-     * Creates request options for startPhoneRegistration without sending the request
-     * @param {StartPhoneRegistrationReq} startPhoneRegistrationReq 
-     * @throws {RequiredError}
-     * @memberof AuthServiceInterface
-     */
-    startPhoneRegistrationRequestOpts(requestParameters: StartPhoneRegistrationRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 开始手机注册。
-     * @param {StartPhoneRegistrationReq} startPhoneRegistrationReq 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthServiceInterface
-     */
-    startPhoneRegistrationRaw(requestParameters: StartPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartPhoneRegistrationResp>>;
-
-    /**
-     * 开始手机注册。
-     */
-    startPhoneRegistration(requestParameters: StartPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartPhoneRegistrationResp>;
-
-    /**
-     * Creates request options for verifyEmailRegistration without sending the request
-     * @param {VerifyEmailRegistrationReq} verifyEmailRegistrationReq 
-     * @throws {RequiredError}
-     * @memberof AuthServiceInterface
-     */
-    verifyEmailRegistrationRequestOpts(requestParameters: VerifyEmailRegistrationRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 校验邮箱注册验证码。
-     * @param {VerifyEmailRegistrationReq} verifyEmailRegistrationReq 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthServiceInterface
-     */
-    verifyEmailRegistrationRaw(requestParameters: VerifyEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
-
-    /**
-     * 校验邮箱注册验证码。
-     */
-    verifyEmailRegistration(requestParameters: VerifyEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
-
-    /**
-     * Creates request options for verifyPhoneRegistration without sending the request
-     * @param {VerifyPhoneRegistrationReq} verifyPhoneRegistrationReq 
-     * @throws {RequiredError}
-     * @memberof AuthServiceInterface
-     */
-    verifyPhoneRegistrationRequestOpts(requestParameters: VerifyPhoneRegistrationRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 校验手机注册验证码。
-     * @param {VerifyPhoneRegistrationReq} verifyPhoneRegistrationReq 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof AuthServiceInterface
-     */
-    verifyPhoneRegistrationRaw(requestParameters: VerifyPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
-
-    /**
-     * 校验手机注册验证码。
-     */
-    verifyPhoneRegistration(requestParameters: VerifyPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+    register(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
 }
 
@@ -480,13 +377,13 @@ export class AuthService extends runtime.BaseAPI implements AuthServiceInterface
     }
 
     /**
-     * Creates request options for startEmailRegistration without sending the request
+     * Creates request options for register without sending the request
      */
-    async startEmailRegistrationRequestOpts(requestParameters: StartEmailRegistrationRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['startEmailRegistrationReq'] == null) {
+    async registerRequestOpts(requestParameters: RegisterRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['registerReq'] == null) {
             throw new runtime.RequiredError(
-                'startEmailRegistrationReq',
-                'Required parameter "startEmailRegistrationReq" was null or undefined when calling startEmailRegistration().'
+                'registerReq',
+                'Required parameter "registerReq" was null or undefined when calling register().'
             );
         }
 
@@ -497,173 +394,32 @@ export class AuthService extends runtime.BaseAPI implements AuthServiceInterface
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/user/auth/start-email-registration`;
+        let urlPath = `/v1/user/auth/register`;
 
         return {
             path: urlPath,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: StartEmailRegistrationReqToJSON(requestParameters['startEmailRegistrationReq']),
+            body: RegisterReqToJSON(requestParameters['registerReq']),
         };
     }
 
     /**
-     * 开始邮箱注册。
+     * 注册账号。
      */
-    async startEmailRegistrationRaw(requestParameters: StartEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartEmailRegistrationResp>> {
-        const requestOptions = await this.startEmailRegistrationRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => StartEmailRegistrationRespFromJSON(jsonValue));
-    }
-
-    /**
-     * 开始邮箱注册。
-     */
-    async startEmailRegistration(requestParameters: StartEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartEmailRegistrationResp> {
-        const response = await this.startEmailRegistrationRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for startPhoneRegistration without sending the request
-     */
-    async startPhoneRegistrationRequestOpts(requestParameters: StartPhoneRegistrationRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['startPhoneRegistrationReq'] == null) {
-            throw new runtime.RequiredError(
-                'startPhoneRegistrationReq',
-                'Required parameter "startPhoneRegistrationReq" was null or undefined when calling startPhoneRegistration().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/user/auth/start-phone-registration`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: StartPhoneRegistrationReqToJSON(requestParameters['startPhoneRegistrationReq']),
-        };
-    }
-
-    /**
-     * 开始手机注册。
-     */
-    async startPhoneRegistrationRaw(requestParameters: StartPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StartPhoneRegistrationResp>> {
-        const requestOptions = await this.startPhoneRegistrationRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => StartPhoneRegistrationRespFromJSON(jsonValue));
-    }
-
-    /**
-     * 开始手机注册。
-     */
-    async startPhoneRegistration(requestParameters: StartPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StartPhoneRegistrationResp> {
-        const response = await this.startPhoneRegistrationRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for verifyEmailRegistration without sending the request
-     */
-    async verifyEmailRegistrationRequestOpts(requestParameters: VerifyEmailRegistrationRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['verifyEmailRegistrationReq'] == null) {
-            throw new runtime.RequiredError(
-                'verifyEmailRegistrationReq',
-                'Required parameter "verifyEmailRegistrationReq" was null or undefined when calling verifyEmailRegistration().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/user/auth/verify-email-registration`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: VerifyEmailRegistrationReqToJSON(requestParameters['verifyEmailRegistrationReq']),
-        };
-    }
-
-    /**
-     * 校验邮箱注册验证码。
-     */
-    async verifyEmailRegistrationRaw(requestParameters: VerifyEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.verifyEmailRegistrationRequestOpts(requestParameters);
+    async registerRaw(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.registerRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
     }
 
     /**
-     * 校验邮箱注册验证码。
+     * 注册账号。
      */
-    async verifyEmailRegistration(requestParameters: VerifyEmailRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.verifyEmailRegistrationRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for verifyPhoneRegistration without sending the request
-     */
-    async verifyPhoneRegistrationRequestOpts(requestParameters: VerifyPhoneRegistrationRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['verifyPhoneRegistrationReq'] == null) {
-            throw new runtime.RequiredError(
-                'verifyPhoneRegistrationReq',
-                'Required parameter "verifyPhoneRegistrationReq" was null or undefined when calling verifyPhoneRegistration().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/user/auth/verify-phone-registration`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: VerifyPhoneRegistrationReqToJSON(requestParameters['verifyPhoneRegistrationReq']),
-        };
-    }
-
-    /**
-     * 校验手机注册验证码。
-     */
-    async verifyPhoneRegistrationRaw(requestParameters: VerifyPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.verifyPhoneRegistrationRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * 校验手机注册验证码。
-     */
-    async verifyPhoneRegistration(requestParameters: VerifyPhoneRegistrationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.verifyPhoneRegistrationRaw(requestParameters, initOverrides);
+    async register(requestParameters: RegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.registerRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

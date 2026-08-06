@@ -16,37 +16,37 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface VerifyPhoneRegistrationReq
+ * @interface UpdatePhoneAccountReq
  */
-export interface VerifyPhoneRegistrationReq {
+export interface UpdatePhoneAccountReq {
     /**
      * 
      * @type {string}
-     * @memberof VerifyPhoneRegistrationReq
+     * @memberof UpdatePhoneAccountReq
      */
     phone: string;
     /**
      * 
      * @type {string}
-     * @memberof VerifyPhoneRegistrationReq
+     * @memberof UpdatePhoneAccountReq
      */
     code: string;
 }
 
 /**
- * Check if a given object implements the VerifyPhoneRegistrationReq interface.
+ * Check if a given object implements the UpdatePhoneAccountReq interface.
  */
-export function instanceOfVerifyPhoneRegistrationReq(value: object): value is VerifyPhoneRegistrationReq {
+export function instanceOfUpdatePhoneAccountReq(value: object): value is UpdatePhoneAccountReq {
     if (!('phone' in value) || value['phone'] === undefined) return false;
     if (!('code' in value) || value['code'] === undefined) return false;
     return true;
 }
 
-export function VerifyPhoneRegistrationReqFromJSON(json: any): VerifyPhoneRegistrationReq {
-    return VerifyPhoneRegistrationReqFromJSONTyped(json, false);
+export function UpdatePhoneAccountReqFromJSON(json: any): UpdatePhoneAccountReq {
+    return UpdatePhoneAccountReqFromJSONTyped(json, false);
 }
 
-export function VerifyPhoneRegistrationReqFromJSONTyped(json: any, ignoreDiscriminator: boolean): VerifyPhoneRegistrationReq {
+export function UpdatePhoneAccountReqFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdatePhoneAccountReq {
     if (json == null) {
         return json;
     }
@@ -57,11 +57,11 @@ export function VerifyPhoneRegistrationReqFromJSONTyped(json: any, ignoreDiscrim
     };
 }
 
-export function VerifyPhoneRegistrationReqToJSON(json: any): VerifyPhoneRegistrationReq {
-    return VerifyPhoneRegistrationReqToJSONTyped(json, false);
+export function UpdatePhoneAccountReqToJSON(json: any): UpdatePhoneAccountReq {
+    return UpdatePhoneAccountReqToJSONTyped(json, false);
 }
 
-export function VerifyPhoneRegistrationReqToJSONTyped(value?: VerifyPhoneRegistrationReq | null, ignoreDiscriminator: boolean = false): any {
+export function UpdatePhoneAccountReqToJSONTyped(value?: UpdatePhoneAccountReq | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -16,37 +16,37 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface VerifyEmailRegistrationReq
+ * @interface UpdateEmailAccountReq
  */
-export interface VerifyEmailRegistrationReq {
+export interface UpdateEmailAccountReq {
     /**
      * 
      * @type {string}
-     * @memberof VerifyEmailRegistrationReq
+     * @memberof UpdateEmailAccountReq
      */
     email: string;
     /**
      * 
      * @type {string}
-     * @memberof VerifyEmailRegistrationReq
+     * @memberof UpdateEmailAccountReq
      */
     code: string;
 }
 
 /**
- * Check if a given object implements the VerifyEmailRegistrationReq interface.
+ * Check if a given object implements the UpdateEmailAccountReq interface.
  */
-export function instanceOfVerifyEmailRegistrationReq(value: object): value is VerifyEmailRegistrationReq {
+export function instanceOfUpdateEmailAccountReq(value: object): value is UpdateEmailAccountReq {
     if (!('email' in value) || value['email'] === undefined) return false;
     if (!('code' in value) || value['code'] === undefined) return false;
     return true;
 }
 
-export function VerifyEmailRegistrationReqFromJSON(json: any): VerifyEmailRegistrationReq {
-    return VerifyEmailRegistrationReqFromJSONTyped(json, false);
+export function UpdateEmailAccountReqFromJSON(json: any): UpdateEmailAccountReq {
+    return UpdateEmailAccountReqFromJSONTyped(json, false);
 }
 
-export function VerifyEmailRegistrationReqFromJSONTyped(json: any, ignoreDiscriminator: boolean): VerifyEmailRegistrationReq {
+export function UpdateEmailAccountReqFromJSONTyped(json: any, ignoreDiscriminator: boolean): UpdateEmailAccountReq {
     if (json == null) {
         return json;
     }
@@ -57,11 +57,11 @@ export function VerifyEmailRegistrationReqFromJSONTyped(json: any, ignoreDiscrim
     };
 }
 
-export function VerifyEmailRegistrationReqToJSON(json: any): VerifyEmailRegistrationReq {
-    return VerifyEmailRegistrationReqToJSONTyped(json, false);
+export function UpdateEmailAccountReqToJSON(json: any): UpdateEmailAccountReq {
+    return UpdateEmailAccountReqToJSONTyped(json, false);
 }
 
-export function VerifyEmailRegistrationReqToJSONTyped(value?: VerifyEmailRegistrationReq | null, ignoreDiscriminator: boolean = false): any {
+export function UpdateEmailAccountReqToJSONTyped(value?: UpdateEmailAccountReq | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { RespAccountProfile } from './RespAccountProfile';
+import type { AccountProfile } from './AccountProfile';
 import {
-    RespAccountProfileFromJSON,
-    RespAccountProfileFromJSONTyped,
-    RespAccountProfileToJSON,
-    RespAccountProfileToJSONTyped,
-} from './RespAccountProfile';
+    AccountProfileFromJSON,
+    AccountProfileFromJSONTyped,
+    AccountProfileToJSON,
+    AccountProfileToJSONTyped,
+} from './AccountProfile';
 
 /**
  * 
@@ -29,10 +29,10 @@ import {
 export interface GetProfileAccountResp {
     /**
      * 
-     * @type {RespAccountProfile}
+     * @type {AccountProfile}
      * @memberof GetProfileAccountResp
      */
-    profile?: RespAccountProfile;
+    profile?: AccountProfile;
 }
 
 /**
@@ -52,7 +52,7 @@ export function GetProfileAccountRespFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'profile': json['profile'] == null ? undefined : RespAccountProfileFromJSON(json['profile']),
+        'profile': json['profile'] == null ? undefined : AccountProfileFromJSON(json['profile']),
     };
 }
 
@@ -67,7 +67,7 @@ export function GetProfileAccountRespToJSONTyped(value?: GetProfileAccountResp |
 
     return {
         
-        'profile': RespAccountProfileToJSON(value['profile']),
+        'profile': AccountProfileToJSON(value['profile']),
     };
 }
 

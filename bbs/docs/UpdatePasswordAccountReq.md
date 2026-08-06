@@ -1,22 +1,24 @@
 
-# StartEmailRegistrationResp
+# UpdatePasswordAccountReq
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`code` | string
+`oldPassword` | string
+`newPassword` | string
 
 ## Example
 
 ```typescript
-import type { StartEmailRegistrationResp } from '@bass/bbs-sdk-fetch'
+import type { UpdatePasswordAccountReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "code": null,
-} satisfies StartEmailRegistrationResp
+  "oldPassword": null,
+  "newPassword": null,
+} satisfies UpdatePasswordAccountReq
 
 console.log(example)
 
@@ -25,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as StartEmailRegistrationResp
+const exampleParsed = JSON.parse(exampleJSON) as UpdatePasswordAccountReq
 console.log(exampleParsed)
 ```
 

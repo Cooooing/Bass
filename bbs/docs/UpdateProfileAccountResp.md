@@ -6,7 +6,7 @@
 
 Name | Type
 ------------ | -------------
-`profile` | [RespAccountProfile](RespAccountProfile.md)
+`profile` | [AccountProfile](AccountProfile.md)
 
 ## Example
 

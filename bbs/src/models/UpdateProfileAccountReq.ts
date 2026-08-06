@@ -24,7 +24,7 @@ export interface UpdateProfileAccountReq {
      * @type {string}
      * @memberof UpdateProfileAccountReq
      */
-    avatarUrl?: string;
+    avatarAssetId?: string;
     /**
      * 
      * @type {string}
@@ -94,7 +94,7 @@ export function UpdateProfileAccountReqFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'avatarUrl': json['avatar_url'] == null ? undefined : json['avatar_url'],
+        'avatarAssetId': json['avatar_asset_id'] == null ? undefined : json['avatar_asset_id'],
         'nickname': json['nickname'] == null ? undefined : json['nickname'],
         'url': json['url'] == null ? undefined : json['url'],
         'introduction': json['introduction'] == null ? undefined : json['introduction'],
@@ -113,7 +113,7 @@ export function UpdateProfileAccountReqToJSONTyped(value?: UpdateProfileAccountR
 
     return {
         
-        'avatar_url': value['avatarUrl'],
+        'avatar_asset_id': value['avatarAssetId'],
         'nickname': value['nickname'],
         'url': value['url'],
         'introduction': value['introduction'],

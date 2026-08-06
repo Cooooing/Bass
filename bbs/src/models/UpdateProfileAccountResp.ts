@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { RespAccountProfile } from './RespAccountProfile';
+import type { AccountProfile } from './AccountProfile';
 import {
-    RespAccountProfileFromJSON,
-    RespAccountProfileFromJSONTyped,
-    RespAccountProfileToJSON,
-    RespAccountProfileToJSONTyped,
-} from './RespAccountProfile';
+    AccountProfileFromJSON,
+    AccountProfileFromJSONTyped,
+    AccountProfileToJSON,
+    AccountProfileToJSONTyped,
+} from './AccountProfile';
 
 /**
  * 
@@ -29,10 +29,10 @@ import {
 export interface UpdateProfileAccountResp {
     /**
      * 
-     * @type {RespAccountProfile}
+     * @type {AccountProfile}
      * @memberof UpdateProfileAccountResp
      */
-    profile?: RespAccountProfile;
+    profile?: AccountProfile;
 }
 
 /**
@@ -52,7 +52,7 @@ export function UpdateProfileAccountRespFromJSONTyped(json: any, ignoreDiscrimin
     }
     return {
         
-        'profile': json['profile'] == null ? undefined : RespAccountProfileFromJSON(json['profile']),
+        'profile': json['profile'] == null ? undefined : AccountProfileFromJSON(json['profile']),
     };
 }
 
@@ -67,7 +67,7 @@ export function UpdateProfileAccountRespToJSONTyped(value?: UpdateProfileAccount
 
     return {
         
-        'profile': RespAccountProfileToJSON(value['profile']),
+        'profile': AccountProfileToJSON(value['profile']),
     };
 }
 

@@ -24,7 +24,7 @@ type AccountService interface {
 	/*
 	Avatar Method for Avatar
 
-	生成默认账号头像。
+	生成默认账号头像
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiAvatarRequest
@@ -38,7 +38,7 @@ type AccountService interface {
 	/*
 	GetCurrent Method for GetCurrent
 
-	获取当前账号的完整资料。
+	获取当前账号完整资料
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetCurrentRequest
@@ -52,7 +52,7 @@ type AccountService interface {
 	/*
 	GetProfile Method for GetProfile
 
-	按账号 ID 获取账号展示资料。
+	按账号 ID 获取展示资料
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetProfileRequest
@@ -64,9 +64,51 @@ type AccountService interface {
 	GetProfileExecute(r ApiGetProfileRequest) (*GetProfileAccountResp, *http.Response, error)
 
 	/*
+	UpdateEmail Method for UpdateEmail
+
+	更新当前账号邮箱
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUpdateEmailRequest
+	*/
+	UpdateEmail(ctx context.Context) ApiUpdateEmailRequest
+
+	// UpdateEmailExecute executes the request
+	//  @return map[string]interface{}
+	UpdateEmailExecute(r ApiUpdateEmailRequest) (map[string]interface{}, *http.Response, error)
+
+	/*
+	UpdatePassword Method for UpdatePassword
+
+	更新当前账号密码
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUpdatePasswordRequest
+	*/
+	UpdatePassword(ctx context.Context) ApiUpdatePasswordRequest
+
+	// UpdatePasswordExecute executes the request
+	//  @return map[string]interface{}
+	UpdatePasswordExecute(r ApiUpdatePasswordRequest) (map[string]interface{}, *http.Response, error)
+
+	/*
+	UpdatePhone Method for UpdatePhone
+
+	更新当前账号手机号
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiUpdatePhoneRequest
+	*/
+	UpdatePhone(ctx context.Context) ApiUpdatePhoneRequest
+
+	// UpdatePhoneExecute executes the request
+	//  @return map[string]interface{}
+	UpdatePhoneExecute(r ApiUpdatePhoneRequest) (map[string]interface{}, *http.Response, error)
+
+	/*
 	UpdateProfile Method for UpdateProfile
 
-	更新当前账号的展示资料。
+	更新当前账号展示资料
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiUpdateProfileRequest
@@ -99,7 +141,7 @@ func (r ApiAvatarRequest) Execute() (*ImageResp, *http.Response, error) {
 /*
 Avatar Method for Avatar
 
-生成默认账号头像。
+生成默认账号头像
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiAvatarRequest
@@ -207,7 +249,7 @@ func (r ApiGetCurrentRequest) Execute() (*GetCurrentAccountResp, *http.Response,
 /*
 GetCurrent Method for GetCurrent
 
-获取当前账号的完整资料。
+获取当前账号完整资料
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetCurrentRequest
@@ -317,7 +359,7 @@ func (r ApiGetProfileRequest) Execute() (*GetProfileAccountResp, *http.Response,
 /*
 GetProfile Method for GetProfile
 
-按账号 ID 获取账号展示资料。
+按账号 ID 获取展示资料
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetProfileRequest
@@ -409,6 +451,336 @@ func (a *AccountServiceService) GetProfileExecute(r ApiGetProfileRequest) (*GetP
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiUpdateEmailRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	updateEmailAccountReq *UpdateEmailAccountReq
+}
+
+func (r ApiUpdateEmailRequest) UpdateEmailAccountReq(updateEmailAccountReq UpdateEmailAccountReq) ApiUpdateEmailRequest {
+	r.updateEmailAccountReq = &updateEmailAccountReq
+	return r
+}
+
+func (r ApiUpdateEmailRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.UpdateEmailExecute(r)
+}
+
+/*
+UpdateEmail Method for UpdateEmail
+
+更新当前账号邮箱
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiUpdateEmailRequest
+*/
+func (a *AccountServiceService) UpdateEmail(ctx context.Context) ApiUpdateEmailRequest {
+	return ApiUpdateEmailRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return map[string]interface{}
+func (a *AccountServiceService) UpdateEmailExecute(r ApiUpdateEmailRequest) (map[string]interface{}, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdateEmail")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/update-email"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.updateEmailAccountReq == nil {
+		return localVarReturnValue, nil, reportError("updateEmailAccountReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.updateEmailAccountReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiUpdatePasswordRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	updatePasswordAccountReq *UpdatePasswordAccountReq
+}
+
+func (r ApiUpdatePasswordRequest) UpdatePasswordAccountReq(updatePasswordAccountReq UpdatePasswordAccountReq) ApiUpdatePasswordRequest {
+	r.updatePasswordAccountReq = &updatePasswordAccountReq
+	return r
+}
+
+func (r ApiUpdatePasswordRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.UpdatePasswordExecute(r)
+}
+
+/*
+UpdatePassword Method for UpdatePassword
+
+更新当前账号密码
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiUpdatePasswordRequest
+*/
+func (a *AccountServiceService) UpdatePassword(ctx context.Context) ApiUpdatePasswordRequest {
+	return ApiUpdatePasswordRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return map[string]interface{}
+func (a *AccountServiceService) UpdatePasswordExecute(r ApiUpdatePasswordRequest) (map[string]interface{}, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdatePassword")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/update-password"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.updatePasswordAccountReq == nil {
+		return localVarReturnValue, nil, reportError("updatePasswordAccountReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.updatePasswordAccountReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiUpdatePhoneRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	updatePhoneAccountReq *UpdatePhoneAccountReq
+}
+
+func (r ApiUpdatePhoneRequest) UpdatePhoneAccountReq(updatePhoneAccountReq UpdatePhoneAccountReq) ApiUpdatePhoneRequest {
+	r.updatePhoneAccountReq = &updatePhoneAccountReq
+	return r
+}
+
+func (r ApiUpdatePhoneRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.UpdatePhoneExecute(r)
+}
+
+/*
+UpdatePhone Method for UpdatePhone
+
+更新当前账号手机号
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiUpdatePhoneRequest
+*/
+func (a *AccountServiceService) UpdatePhone(ctx context.Context) ApiUpdatePhoneRequest {
+	return ApiUpdatePhoneRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return map[string]interface{}
+func (a *AccountServiceService) UpdatePhoneExecute(r ApiUpdatePhoneRequest) (map[string]interface{}, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.UpdatePhone")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/update-phone"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.updatePhoneAccountReq == nil {
+		return localVarReturnValue, nil, reportError("updatePhoneAccountReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.updatePhoneAccountReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiUpdateProfileRequest struct {
 	ctx context.Context
 	ApiService AccountService
@@ -427,7 +799,7 @@ func (r ApiUpdateProfileRequest) Execute() (*UpdateProfileAccountResp, *http.Res
 /*
 UpdateProfile Method for UpdateProfile
 
-更新当前账号的展示资料。
+更新当前账号展示资料
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiUpdateProfileRequest

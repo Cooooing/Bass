@@ -16,38 +16,38 @@ import (
 	"fmt"
 )
 
-// checks if the VerifyEmailRegistrationReq type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &VerifyEmailRegistrationReq{}
+// checks if the UpdateEmailAccountReq type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdateEmailAccountReq{}
 
-// VerifyEmailRegistrationReq struct for VerifyEmailRegistrationReq
-type VerifyEmailRegistrationReq struct {
+// UpdateEmailAccountReq struct for UpdateEmailAccountReq
+type UpdateEmailAccountReq struct {
 	Email string `json:"email"`
 	Code string `json:"code"`
 }
 
-type _VerifyEmailRegistrationReq VerifyEmailRegistrationReq
+type _UpdateEmailAccountReq UpdateEmailAccountReq
 
-// NewVerifyEmailRegistrationReq instantiates a new VerifyEmailRegistrationReq object
+// NewUpdateEmailAccountReq instantiates a new UpdateEmailAccountReq object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewVerifyEmailRegistrationReq(email string, code string) *VerifyEmailRegistrationReq {
-	this := VerifyEmailRegistrationReq{}
+func NewUpdateEmailAccountReq(email string, code string) *UpdateEmailAccountReq {
+	this := UpdateEmailAccountReq{}
 	this.Email = email
 	this.Code = code
 	return &this
 }
 
-// NewVerifyEmailRegistrationReqWithDefaults instantiates a new VerifyEmailRegistrationReq object
+// NewUpdateEmailAccountReqWithDefaults instantiates a new UpdateEmailAccountReq object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewVerifyEmailRegistrationReqWithDefaults() *VerifyEmailRegistrationReq {
-	this := VerifyEmailRegistrationReq{}
+func NewUpdateEmailAccountReqWithDefaults() *UpdateEmailAccountReq {
+	this := UpdateEmailAccountReq{}
 	return &this
 }
 
 // GetEmail returns the Email field value
-func (o *VerifyEmailRegistrationReq) GetEmail() string {
+func (o *UpdateEmailAccountReq) GetEmail() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -58,7 +58,7 @@ func (o *VerifyEmailRegistrationReq) GetEmail() string {
 
 // GetEmailOk returns a tuple with the Email field value
 // and a boolean to check if the value has been set.
-func (o *VerifyEmailRegistrationReq) GetEmailOk() (*string, bool) {
+func (o *UpdateEmailAccountReq) GetEmailOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -66,12 +66,12 @@ func (o *VerifyEmailRegistrationReq) GetEmailOk() (*string, bool) {
 }
 
 // SetEmail sets field value
-func (o *VerifyEmailRegistrationReq) SetEmail(v string) {
+func (o *UpdateEmailAccountReq) SetEmail(v string) {
 	o.Email = v
 }
 
 // GetCode returns the Code field value
-func (o *VerifyEmailRegistrationReq) GetCode() string {
+func (o *UpdateEmailAccountReq) GetCode() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -82,7 +82,7 @@ func (o *VerifyEmailRegistrationReq) GetCode() string {
 
 // GetCodeOk returns a tuple with the Code field value
 // and a boolean to check if the value has been set.
-func (o *VerifyEmailRegistrationReq) GetCodeOk() (*string, bool) {
+func (o *UpdateEmailAccountReq) GetCodeOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -90,11 +90,11 @@ func (o *VerifyEmailRegistrationReq) GetCodeOk() (*string, bool) {
 }
 
 // SetCode sets field value
-func (o *VerifyEmailRegistrationReq) SetCode(v string) {
+func (o *UpdateEmailAccountReq) SetCode(v string) {
 	o.Code = v
 }
 
-func (o VerifyEmailRegistrationReq) MarshalJSON() ([]byte, error) {
+func (o UpdateEmailAccountReq) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -102,14 +102,14 @@ func (o VerifyEmailRegistrationReq) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o VerifyEmailRegistrationReq) ToMap() (map[string]interface{}, error) {
+func (o UpdateEmailAccountReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["email"] = o.Email
 	toSerialize["code"] = o.Code
 	return toSerialize, nil
 }
 
-func (o *VerifyEmailRegistrationReq) UnmarshalJSON(data []byte) (err error) {
+func (o *UpdateEmailAccountReq) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -132,53 +132,53 @@ func (o *VerifyEmailRegistrationReq) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varVerifyEmailRegistrationReq := _VerifyEmailRegistrationReq{}
+	varUpdateEmailAccountReq := _UpdateEmailAccountReq{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVerifyEmailRegistrationReq)
+	err = decoder.Decode(&varUpdateEmailAccountReq)
 
 	if err != nil {
 		return err
 	}
 
-	*o = VerifyEmailRegistrationReq(varVerifyEmailRegistrationReq)
+	*o = UpdateEmailAccountReq(varUpdateEmailAccountReq)
 
 	return err
 }
 
-type NullableVerifyEmailRegistrationReq struct {
-	value *VerifyEmailRegistrationReq
+type NullableUpdateEmailAccountReq struct {
+	value *UpdateEmailAccountReq
 	isSet bool
 }
 
-func (v NullableVerifyEmailRegistrationReq) Get() *VerifyEmailRegistrationReq {
+func (v NullableUpdateEmailAccountReq) Get() *UpdateEmailAccountReq {
 	return v.value
 }
 
-func (v *NullableVerifyEmailRegistrationReq) Set(val *VerifyEmailRegistrationReq) {
+func (v *NullableUpdateEmailAccountReq) Set(val *UpdateEmailAccountReq) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableVerifyEmailRegistrationReq) IsSet() bool {
+func (v NullableUpdateEmailAccountReq) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableVerifyEmailRegistrationReq) Unset() {
+func (v *NullableUpdateEmailAccountReq) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableVerifyEmailRegistrationReq(val *VerifyEmailRegistrationReq) *NullableVerifyEmailRegistrationReq {
-	return &NullableVerifyEmailRegistrationReq{value: val, isSet: true}
+func NewNullableUpdateEmailAccountReq(val *UpdateEmailAccountReq) *NullableUpdateEmailAccountReq {
+	return &NullableUpdateEmailAccountReq{value: val, isSet: true}
 }
 
-func (v NullableVerifyEmailRegistrationReq) MarshalJSON() ([]byte, error) {
+func (v NullableUpdateEmailAccountReq) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableVerifyEmailRegistrationReq) UnmarshalJSON(src []byte) error {
+func (v *NullableUpdateEmailAccountReq) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

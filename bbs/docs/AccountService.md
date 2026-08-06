@@ -7,6 +7,9 @@ Method | HTTP request | Description
 [**Avatar**](AccountService.md#Avatar) | **Get** /v1/user/account/avatar | 
 [**GetCurrent**](AccountService.md#GetCurrent) | **Post** /v1/user/account/get-current | 
 [**GetProfile**](AccountService.md#GetProfile) | **Post** /v1/user/account/get-profile | 
+[**UpdateEmail**](AccountService.md#UpdateEmail) | **Post** /v1/user/account/update-email | 
+[**UpdatePassword**](AccountService.md#UpdatePassword) | **Post** /v1/user/account/update-password | 
+[**UpdatePhone**](AccountService.md#UpdatePhone) | **Post** /v1/user/account/update-phone | 
 [**UpdateProfile**](AccountService.md#UpdateProfile) | **Post** /v1/user/account/update-profile | 
 
 
@@ -194,6 +197,204 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GetProfileAccountResp**](GetProfileAccountResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdateEmail
+
+> map[string]interface{} UpdateEmail(ctx).UpdateEmailAccountReq(updateEmailAccountReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	updateEmailAccountReq := *openapiclient.NewUpdateEmailAccountReq("Email_example", "Code_example") // UpdateEmailAccountReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.UpdateEmail(context.Background()).UpdateEmailAccountReq(updateEmailAccountReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.UpdateEmail``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `UpdateEmail`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.UpdateEmail`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdateEmailRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **updateEmailAccountReq** | [**UpdateEmailAccountReq**](UpdateEmailAccountReq.md) |  | 
+
+### Return type
+
+**map[string]interface{}**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdatePassword
+
+> map[string]interface{} UpdatePassword(ctx).UpdatePasswordAccountReq(updatePasswordAccountReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	updatePasswordAccountReq := *openapiclient.NewUpdatePasswordAccountReq("OldPassword_example", "NewPassword_example") // UpdatePasswordAccountReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.UpdatePassword(context.Background()).UpdatePasswordAccountReq(updatePasswordAccountReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.UpdatePassword``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `UpdatePassword`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.UpdatePassword`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdatePasswordRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **updatePasswordAccountReq** | [**UpdatePasswordAccountReq**](UpdatePasswordAccountReq.md) |  | 
+
+### Return type
+
+**map[string]interface{}**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdatePhone
+
+> map[string]interface{} UpdatePhone(ctx).UpdatePhoneAccountReq(updatePhoneAccountReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	updatePhoneAccountReq := *openapiclient.NewUpdatePhoneAccountReq("Phone_example", "Code_example") // UpdatePhoneAccountReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.UpdatePhone(context.Background()).UpdatePhoneAccountReq(updatePhoneAccountReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.UpdatePhone``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `UpdatePhone`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.UpdatePhone`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdatePhoneRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **updatePhoneAccountReq** | [**UpdatePhoneAccountReq**](UpdatePhoneAccountReq.md) |  | 
+
+### Return type
+
+**map[string]interface{}**
 
 ### Authorization
 

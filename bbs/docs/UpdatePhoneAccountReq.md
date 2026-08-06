@@ -1,4 +1,4 @@
-# VerifyPhoneRegistrationReq
+# UpdatePhoneAccountReq
 
 ## Properties
 
@@ -9,59 +9,59 @@ Name | Type | Description | Notes
 
 ## Methods
 
-### NewVerifyPhoneRegistrationReq
+### NewUpdatePhoneAccountReq
 
-`func NewVerifyPhoneRegistrationReq(phone string, code string, ) *VerifyPhoneRegistrationReq`
+`func NewUpdatePhoneAccountReq(phone string, code string, ) *UpdatePhoneAccountReq`
 
-NewVerifyPhoneRegistrationReq instantiates a new VerifyPhoneRegistrationReq object
+NewUpdatePhoneAccountReq instantiates a new UpdatePhoneAccountReq object
 This constructor will assign default values to properties that have it defined,
 and makes sure properties required by API are set, but the set of arguments
 will change when the set of required properties is changed
 
-### NewVerifyPhoneRegistrationReqWithDefaults
+### NewUpdatePhoneAccountReqWithDefaults
 
-`func NewVerifyPhoneRegistrationReqWithDefaults() *VerifyPhoneRegistrationReq`
+`func NewUpdatePhoneAccountReqWithDefaults() *UpdatePhoneAccountReq`
 
-NewVerifyPhoneRegistrationReqWithDefaults instantiates a new VerifyPhoneRegistrationReq object
+NewUpdatePhoneAccountReqWithDefaults instantiates a new UpdatePhoneAccountReq object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
 ### GetPhone
 
-`func (o *VerifyPhoneRegistrationReq) GetPhone() string`
+`func (o *UpdatePhoneAccountReq) GetPhone() string`
 
 GetPhone returns the Phone field if non-nil, zero value otherwise.
 
 ### GetPhoneOk
 
-`func (o *VerifyPhoneRegistrationReq) GetPhoneOk() (*string, bool)`
+`func (o *UpdatePhoneAccountReq) GetPhoneOk() (*string, bool)`
 
 GetPhoneOk returns a tuple with the Phone field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetPhone
 
-`func (o *VerifyPhoneRegistrationReq) SetPhone(v string)`
+`func (o *UpdatePhoneAccountReq) SetPhone(v string)`
 
 SetPhone sets Phone field to given value.
 
 
 ### GetCode
 
-`func (o *VerifyPhoneRegistrationReq) GetCode() string`
+`func (o *UpdatePhoneAccountReq) GetCode() string`
 
 GetCode returns the Code field if non-nil, zero value otherwise.
 
 ### GetCodeOk
 
-`func (o *VerifyPhoneRegistrationReq) GetCodeOk() (*string, bool)`
+`func (o *UpdatePhoneAccountReq) GetCodeOk() (*string, bool)`
 
 GetCodeOk returns a tuple with the Code field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCode
 
-`func (o *VerifyPhoneRegistrationReq) SetCode(v string)`
+`func (o *UpdatePhoneAccountReq) SetCode(v string)`
 
 SetCode sets Code field to given value.
 

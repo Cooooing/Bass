@@ -16,38 +16,38 @@ import (
 	"fmt"
 )
 
-// checks if the VerifyPhoneRegistrationReq type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &VerifyPhoneRegistrationReq{}
+// checks if the UpdatePhoneAccountReq type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &UpdatePhoneAccountReq{}
 
-// VerifyPhoneRegistrationReq struct for VerifyPhoneRegistrationReq
-type VerifyPhoneRegistrationReq struct {
+// UpdatePhoneAccountReq struct for UpdatePhoneAccountReq
+type UpdatePhoneAccountReq struct {
 	Phone string `json:"phone"`
 	Code string `json:"code"`
 }
 
-type _VerifyPhoneRegistrationReq VerifyPhoneRegistrationReq
+type _UpdatePhoneAccountReq UpdatePhoneAccountReq
 
-// NewVerifyPhoneRegistrationReq instantiates a new VerifyPhoneRegistrationReq object
+// NewUpdatePhoneAccountReq instantiates a new UpdatePhoneAccountReq object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewVerifyPhoneRegistrationReq(phone string, code string) *VerifyPhoneRegistrationReq {
-	this := VerifyPhoneRegistrationReq{}
+func NewUpdatePhoneAccountReq(phone string, code string) *UpdatePhoneAccountReq {
+	this := UpdatePhoneAccountReq{}
 	this.Phone = phone
 	this.Code = code
 	return &this
 }
 
-// NewVerifyPhoneRegistrationReqWithDefaults instantiates a new VerifyPhoneRegistrationReq object
+// NewUpdatePhoneAccountReqWithDefaults instantiates a new UpdatePhoneAccountReq object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewVerifyPhoneRegistrationReqWithDefaults() *VerifyPhoneRegistrationReq {
-	this := VerifyPhoneRegistrationReq{}
+func NewUpdatePhoneAccountReqWithDefaults() *UpdatePhoneAccountReq {
+	this := UpdatePhoneAccountReq{}
 	return &this
 }
 
 // GetPhone returns the Phone field value
-func (o *VerifyPhoneRegistrationReq) GetPhone() string {
+func (o *UpdatePhoneAccountReq) GetPhone() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -58,7 +58,7 @@ func (o *VerifyPhoneRegistrationReq) GetPhone() string {
 
 // GetPhoneOk returns a tuple with the Phone field value
 // and a boolean to check if the value has been set.
-func (o *VerifyPhoneRegistrationReq) GetPhoneOk() (*string, bool) {
+func (o *UpdatePhoneAccountReq) GetPhoneOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -66,12 +66,12 @@ func (o *VerifyPhoneRegistrationReq) GetPhoneOk() (*string, bool) {
 }
 
 // SetPhone sets field value
-func (o *VerifyPhoneRegistrationReq) SetPhone(v string) {
+func (o *UpdatePhoneAccountReq) SetPhone(v string) {
 	o.Phone = v
 }
 
 // GetCode returns the Code field value
-func (o *VerifyPhoneRegistrationReq) GetCode() string {
+func (o *UpdatePhoneAccountReq) GetCode() string {
 	if o == nil {
 		var ret string
 		return ret
@@ -82,7 +82,7 @@ func (o *VerifyPhoneRegistrationReq) GetCode() string {
 
 // GetCodeOk returns a tuple with the Code field value
 // and a boolean to check if the value has been set.
-func (o *VerifyPhoneRegistrationReq) GetCodeOk() (*string, bool) {
+func (o *UpdatePhoneAccountReq) GetCodeOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
@@ -90,11 +90,11 @@ func (o *VerifyPhoneRegistrationReq) GetCodeOk() (*string, bool) {
 }
 
 // SetCode sets field value
-func (o *VerifyPhoneRegistrationReq) SetCode(v string) {
+func (o *UpdatePhoneAccountReq) SetCode(v string) {
 	o.Code = v
 }
 
-func (o VerifyPhoneRegistrationReq) MarshalJSON() ([]byte, error) {
+func (o UpdatePhoneAccountReq) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -102,14 +102,14 @@ func (o VerifyPhoneRegistrationReq) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o VerifyPhoneRegistrationReq) ToMap() (map[string]interface{}, error) {
+func (o UpdatePhoneAccountReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["phone"] = o.Phone
 	toSerialize["code"] = o.Code
 	return toSerialize, nil
 }
 
-func (o *VerifyPhoneRegistrationReq) UnmarshalJSON(data []byte) (err error) {
+func (o *UpdatePhoneAccountReq) UnmarshalJSON(data []byte) (err error) {
 	// This validates that all required properties are included in the JSON object
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
@@ -132,53 +132,53 @@ func (o *VerifyPhoneRegistrationReq) UnmarshalJSON(data []byte) (err error) {
 		}
 	}
 
-	varVerifyPhoneRegistrationReq := _VerifyPhoneRegistrationReq{}
+	varUpdatePhoneAccountReq := _UpdatePhoneAccountReq{}
 
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varVerifyPhoneRegistrationReq)
+	err = decoder.Decode(&varUpdatePhoneAccountReq)
 
 	if err != nil {
 		return err
 	}
 
-	*o = VerifyPhoneRegistrationReq(varVerifyPhoneRegistrationReq)
+	*o = UpdatePhoneAccountReq(varUpdatePhoneAccountReq)
 
 	return err
 }
 
-type NullableVerifyPhoneRegistrationReq struct {
-	value *VerifyPhoneRegistrationReq
+type NullableUpdatePhoneAccountReq struct {
+	value *UpdatePhoneAccountReq
 	isSet bool
 }
 
-func (v NullableVerifyPhoneRegistrationReq) Get() *VerifyPhoneRegistrationReq {
+func (v NullableUpdatePhoneAccountReq) Get() *UpdatePhoneAccountReq {
 	return v.value
 }
 
-func (v *NullableVerifyPhoneRegistrationReq) Set(val *VerifyPhoneRegistrationReq) {
+func (v *NullableUpdatePhoneAccountReq) Set(val *UpdatePhoneAccountReq) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableVerifyPhoneRegistrationReq) IsSet() bool {
+func (v NullableUpdatePhoneAccountReq) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableVerifyPhoneRegistrationReq) Unset() {
+func (v *NullableUpdatePhoneAccountReq) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableVerifyPhoneRegistrationReq(val *VerifyPhoneRegistrationReq) *NullableVerifyPhoneRegistrationReq {
-	return &NullableVerifyPhoneRegistrationReq{value: val, isSet: true}
+func NewNullableUpdatePhoneAccountReq(val *UpdatePhoneAccountReq) *NullableUpdatePhoneAccountReq {
+	return &NullableUpdatePhoneAccountReq{value: val, isSet: true}
 }
 
-func (v NullableVerifyPhoneRegistrationReq) MarshalJSON() ([]byte, error) {
+func (v NullableUpdatePhoneAccountReq) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableVerifyPhoneRegistrationReq) UnmarshalJSON(src []byte) error {
+func (v *NullableUpdatePhoneAccountReq) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

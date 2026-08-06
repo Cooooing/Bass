@@ -19,7 +19,7 @@ var _ MappedNullable = &GetProfileAccountResp{}
 
 // GetProfileAccountResp struct for GetProfileAccountResp
 type GetProfileAccountResp struct {
-	Profile *RespAccountProfile `json:"profile,omitempty"`
+	Profile *AccountProfile `json:"profile,omitempty"`
 }
 
 // NewGetProfileAccountResp instantiates a new GetProfileAccountResp object
@@ -40,9 +40,9 @@ func NewGetProfileAccountRespWithDefaults() *GetProfileAccountResp {
 }
 
 // GetProfile returns the Profile field value if set, zero value otherwise.
-func (o *GetProfileAccountResp) GetProfile() RespAccountProfile {
+func (o *GetProfileAccountResp) GetProfile() AccountProfile {
 	if o == nil || IsNil(o.Profile) {
-		var ret RespAccountProfile
+		var ret AccountProfile
 		return ret
 	}
 	return *o.Profile
@@ -50,7 +50,7 @@ func (o *GetProfileAccountResp) GetProfile() RespAccountProfile {
 
 // GetProfileOk returns a tuple with the Profile field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *GetProfileAccountResp) GetProfileOk() (*RespAccountProfile, bool) {
+func (o *GetProfileAccountResp) GetProfileOk() (*AccountProfile, bool) {
 	if o == nil || IsNil(o.Profile) {
 		return nil, false
 	}
@@ -66,8 +66,8 @@ func (o *GetProfileAccountResp) HasProfile() bool {
 	return false
 }
 
-// SetProfile gets a reference to the given RespAccountProfile and assigns it to the Profile field.
-func (o *GetProfileAccountResp) SetProfile(v RespAccountProfile) {
+// SetProfile gets a reference to the given AccountProfile and assigns it to the Profile field.
+func (o *GetProfileAccountResp) SetProfile(v AccountProfile) {
 	o.Profile = &v
 }
 

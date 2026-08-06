@@ -70,47 +70,11 @@ func Test_bbs_AuthServiceService(t *testing.T) {
 
 	})
 
-	t.Run("Test AuthServiceService StartEmailRegistration", func(t *testing.T) {
+	t.Run("Test AuthServiceService Register", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
 
-		resp, httpRes, err := apiClient.AuthService.StartEmailRegistration(context.Background()).Execute()
-
-		require.Nil(t, err)
-		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
-
-	})
-
-	t.Run("Test AuthServiceService StartPhoneRegistration", func(t *testing.T) {
-
-		t.Skip("skip test")  // remove to run test
-
-		resp, httpRes, err := apiClient.AuthService.StartPhoneRegistration(context.Background()).Execute()
-
-		require.Nil(t, err)
-		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
-
-	})
-
-	t.Run("Test AuthServiceService VerifyEmailRegistration", func(t *testing.T) {
-
-		t.Skip("skip test")  // remove to run test
-
-		resp, httpRes, err := apiClient.AuthService.VerifyEmailRegistration(context.Background()).Execute()
-
-		require.Nil(t, err)
-		require.NotNil(t, resp)
-		assert.Equal(t, 200, httpRes.StatusCode)
-
-	})
-
-	t.Run("Test AuthServiceService VerifyPhoneRegistration", func(t *testing.T) {
-
-		t.Skip("skip test")  // remove to run test
-
-		resp, httpRes, err := apiClient.AuthService.VerifyPhoneRegistration(context.Background()).Execute()
+		resp, httpRes, err := apiClient.AuthService.Register(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

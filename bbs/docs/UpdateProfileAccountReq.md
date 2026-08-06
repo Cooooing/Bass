@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AvatarUrl** | Pointer to **string** |  | [optional] 
+**AvatarAssetId** | Pointer to **string** |  | [optional] 
 **Nickname** | Pointer to **string** |  | [optional] 
 **Url** | Pointer to **string** |  | [optional] 
 **Introduction** | Pointer to **string** |  | [optional] 
@@ -29,30 +29,30 @@ NewUpdateProfileAccountReqWithDefaults instantiates a new UpdateProfileAccountRe
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetAvatarUrl
+### GetAvatarAssetId
 
-`func (o *UpdateProfileAccountReq) GetAvatarUrl() string`
+`func (o *UpdateProfileAccountReq) GetAvatarAssetId() string`
 
-GetAvatarUrl returns the AvatarUrl field if non-nil, zero value otherwise.
+GetAvatarAssetId returns the AvatarAssetId field if non-nil, zero value otherwise.
 
-### GetAvatarUrlOk
+### GetAvatarAssetIdOk
 
-`func (o *UpdateProfileAccountReq) GetAvatarUrlOk() (*string, bool)`
+`func (o *UpdateProfileAccountReq) GetAvatarAssetIdOk() (*string, bool)`
 
-GetAvatarUrlOk returns a tuple with the AvatarUrl field if it's non-nil, zero value otherwise
+GetAvatarAssetIdOk returns a tuple with the AvatarAssetId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetAvatarUrl
+### SetAvatarAssetId
 
-`func (o *UpdateProfileAccountReq) SetAvatarUrl(v string)`
+`func (o *UpdateProfileAccountReq) SetAvatarAssetId(v string)`
 
-SetAvatarUrl sets AvatarUrl field to given value.
+SetAvatarAssetId sets AvatarAssetId field to given value.
 
-### HasAvatarUrl
+### HasAvatarAssetId
 
-`func (o *UpdateProfileAccountReq) HasAvatarUrl() bool`
+`func (o *UpdateProfileAccountReq) HasAvatarAssetId() bool`
 
-HasAvatarUrl returns a boolean if a field has been set.
+HasAvatarAssetId returns a boolean if a field has been set.
 
 ### GetNickname
 

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Profile** | Pointer to [**RespAccountProfile**](RespAccountProfile.md) |  | [optional] 
+**Profile** | Pointer to [**AccountProfile**](AccountProfile.md) |  | [optional] 
 
 ## Methods
 
@@ -27,20 +27,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetProfile
 
-`func (o *UpdateProfileAccountResp) GetProfile() RespAccountProfile`
+`func (o *UpdateProfileAccountResp) GetProfile() AccountProfile`
 
 GetProfile returns the Profile field if non-nil, zero value otherwise.
 
 ### GetProfileOk
 
-`func (o *UpdateProfileAccountResp) GetProfileOk() (*RespAccountProfile, bool)`
+`func (o *UpdateProfileAccountResp) GetProfileOk() (*AccountProfile, bool)`
 
 GetProfileOk returns a tuple with the Profile field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetProfile
 
-`func (o *UpdateProfileAccountResp) SetProfile(v RespAccountProfile)`
+`func (o *UpdateProfileAccountResp) SetProfile(v AccountProfile)`
 
 SetProfile sets Profile field to given value.
 

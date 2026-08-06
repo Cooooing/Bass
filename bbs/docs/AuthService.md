@@ -8,10 +8,7 @@ Method | HTTP request | Description
 [**Login**](AuthService.md#Login) | **Post** /v1/user/auth/login | 
 [**Logout**](AuthService.md#Logout) | **Post** /v1/user/auth/logout | 
 [**RefreshToken**](AuthService.md#RefreshToken) | **Post** /v1/user/auth/refresh-token | 
-[**StartEmailRegistration**](AuthService.md#StartEmailRegistration) | **Post** /v1/user/auth/start-email-registration | 
-[**StartPhoneRegistration**](AuthService.md#StartPhoneRegistration) | **Post** /v1/user/auth/start-phone-registration | 
-[**VerifyEmailRegistration**](AuthService.md#VerifyEmailRegistration) | **Post** /v1/user/auth/verify-email-registration | 
-[**VerifyPhoneRegistration**](AuthService.md#VerifyPhoneRegistration) | **Post** /v1/user/auth/verify-phone-registration | 
+[**Register**](AuthService.md#Register) | **Post** /v1/user/auth/register | 
 
 
 
@@ -279,75 +276,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## StartEmailRegistration
+## Register
 
-> StartEmailRegistrationResp StartEmailRegistration(ctx).StartEmailRegistrationReq(startEmailRegistrationReq).Execute()
-
-
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
-)
-
-func main() {
-	startEmailRegistrationReq := *openapiclient.NewStartEmailRegistrationReq("Email_example", "Password_example", "Name_example") // StartEmailRegistrationReq | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthService.StartEmailRegistration(context.Background()).StartEmailRegistrationReq(startEmailRegistrationReq).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.StartEmailRegistration``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `StartEmailRegistration`: StartEmailRegistrationResp
-	fmt.Fprintf(os.Stdout, "Response from `AuthService.StartEmailRegistration`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiStartEmailRegistrationRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **startEmailRegistrationReq** | [**StartEmailRegistrationReq**](StartEmailRegistrationReq.md) |  | 
-
-### Return type
-
-[**StartEmailRegistrationResp**](StartEmailRegistrationResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## StartPhoneRegistration
-
-> StartPhoneRegistrationResp StartPhoneRegistration(ctx).StartPhoneRegistrationReq(startPhoneRegistrationReq).Execute()
+> map[string]interface{} Register(ctx).RegisterReq(registerReq).Execute()
 
 
 
@@ -366,17 +297,17 @@ import (
 )
 
 func main() {
-	startPhoneRegistrationReq := *openapiclient.NewStartPhoneRegistrationReq("Phone_example", "Password_example", "Name_example") // StartPhoneRegistrationReq | 
+	registerReq := *openapiclient.NewRegisterReq("Type_example", "Name_example", "Password_example") // RegisterReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthService.StartPhoneRegistration(context.Background()).StartPhoneRegistrationReq(startPhoneRegistrationReq).Execute()
+	resp, r, err := apiClient.AuthService.Register(context.Background()).RegisterReq(registerReq).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.StartPhoneRegistration``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.Register``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `StartPhoneRegistration`: StartPhoneRegistrationResp
-	fmt.Fprintf(os.Stdout, "Response from `AuthService.StartPhoneRegistration`: %v\n", resp)
+	// response from `Register`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `AuthService.Register`: %v\n", resp)
 }
 ```
 
@@ -386,144 +317,12 @@ func main() {
 
 ### Other Parameters
 
-Other parameters are passed through a pointer to a apiStartPhoneRegistrationRequest struct via the builder pattern
+Other parameters are passed through a pointer to a apiRegisterRequest struct via the builder pattern
 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **startPhoneRegistrationReq** | [**StartPhoneRegistrationReq**](StartPhoneRegistrationReq.md) |  | 
-
-### Return type
-
-[**StartPhoneRegistrationResp**](StartPhoneRegistrationResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## VerifyEmailRegistration
-
-> map[string]interface{} VerifyEmailRegistration(ctx).VerifyEmailRegistrationReq(verifyEmailRegistrationReq).Execute()
-
-
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
-)
-
-func main() {
-	verifyEmailRegistrationReq := *openapiclient.NewVerifyEmailRegistrationReq("Email_example", "Code_example") // VerifyEmailRegistrationReq | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthService.VerifyEmailRegistration(context.Background()).VerifyEmailRegistrationReq(verifyEmailRegistrationReq).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.VerifyEmailRegistration``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `VerifyEmailRegistration`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `AuthService.VerifyEmailRegistration`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiVerifyEmailRegistrationRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **verifyEmailRegistrationReq** | [**VerifyEmailRegistrationReq**](VerifyEmailRegistrationReq.md) |  | 
-
-### Return type
-
-**map[string]interface{}**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## VerifyPhoneRegistration
-
-> map[string]interface{} VerifyPhoneRegistration(ctx).VerifyPhoneRegistrationReq(verifyPhoneRegistrationReq).Execute()
-
-
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
-)
-
-func main() {
-	verifyPhoneRegistrationReq := *openapiclient.NewVerifyPhoneRegistrationReq("Phone_example", "Code_example") // VerifyPhoneRegistrationReq | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthService.VerifyPhoneRegistration(context.Background()).VerifyPhoneRegistrationReq(verifyPhoneRegistrationReq).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.VerifyPhoneRegistration``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `VerifyPhoneRegistration`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `AuthService.VerifyPhoneRegistration`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiVerifyPhoneRegistrationRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **verifyPhoneRegistrationReq** | [**VerifyPhoneRegistrationReq**](VerifyPhoneRegistrationReq.md) |  | 
+ **registerReq** | [**RegisterReq**](RegisterReq.md) |  | 
 
 ### Return type
 

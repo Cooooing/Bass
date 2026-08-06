@@ -19,7 +19,7 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
-import com.bass.bbs.model.RespAccountProfile;
+import com.bass.bbs.model.AccountProfile;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -40,12 +40,12 @@ import com.bass.bbs.ApiClient;
 public class UpdateProfileAccountResp {
   public static final String JSON_PROPERTY_PROFILE = "profile";
   @javax.annotation.Nullable
-  private RespAccountProfile profile;
+  private AccountProfile profile;
 
   public UpdateProfileAccountResp() { 
   }
 
-  public UpdateProfileAccountResp profile(@javax.annotation.Nullable RespAccountProfile profile) {
+  public UpdateProfileAccountResp profile(@javax.annotation.Nullable AccountProfile profile) {
     this.profile = profile;
     return this;
   }
@@ -57,14 +57,14 @@ public class UpdateProfileAccountResp {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_PROFILE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public RespAccountProfile getProfile() {
+  public AccountProfile getProfile() {
     return profile;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_PROFILE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setProfile(@javax.annotation.Nullable RespAccountProfile profile) {
+  public void setProfile(@javax.annotation.Nullable AccountProfile profile) {
     this.profile = profile;
   }
 

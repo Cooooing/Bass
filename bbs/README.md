@@ -117,6 +117,12 @@ Class | Method | HTTP request | Description
 *AccountService* | [**getCurrentWithHttpInfo**](docs/AccountService.md#getCurrentWithHttpInfo) | **POST** /v1/user/account/get-current | 
 *AccountService* | [**getProfile**](docs/AccountService.md#getProfile) | **POST** /v1/user/account/get-profile | 
 *AccountService* | [**getProfileWithHttpInfo**](docs/AccountService.md#getProfileWithHttpInfo) | **POST** /v1/user/account/get-profile | 
+*AccountService* | [**updateEmail**](docs/AccountService.md#updateEmail) | **POST** /v1/user/account/update-email | 
+*AccountService* | [**updateEmailWithHttpInfo**](docs/AccountService.md#updateEmailWithHttpInfo) | **POST** /v1/user/account/update-email | 
+*AccountService* | [**updatePassword**](docs/AccountService.md#updatePassword) | **POST** /v1/user/account/update-password | 
+*AccountService* | [**updatePasswordWithHttpInfo**](docs/AccountService.md#updatePasswordWithHttpInfo) | **POST** /v1/user/account/update-password | 
+*AccountService* | [**updatePhone**](docs/AccountService.md#updatePhone) | **POST** /v1/user/account/update-phone | 
+*AccountService* | [**updatePhoneWithHttpInfo**](docs/AccountService.md#updatePhoneWithHttpInfo) | **POST** /v1/user/account/update-phone | 
 *AccountService* | [**updateProfile**](docs/AccountService.md#updateProfile) | **POST** /v1/user/account/update-profile | 
 *AccountService* | [**updateProfileWithHttpInfo**](docs/AccountService.md#updateProfileWithHttpInfo) | **POST** /v1/user/account/update-profile | 
 *ArticleService* | [**archive**](docs/ArticleService.md#archive) | **POST** /v1/content/article/archive | 
@@ -153,14 +159,8 @@ Class | Method | HTTP request | Description
 *AuthService* | [**logoutWithHttpInfo**](docs/AuthService.md#logoutWithHttpInfo) | **POST** /v1/user/auth/logout | 
 *AuthService* | [**refreshToken**](docs/AuthService.md#refreshToken) | **POST** /v1/user/auth/refresh-token | 
 *AuthService* | [**refreshTokenWithHttpInfo**](docs/AuthService.md#refreshTokenWithHttpInfo) | **POST** /v1/user/auth/refresh-token | 
-*AuthService* | [**startEmailRegistration**](docs/AuthService.md#startEmailRegistration) | **POST** /v1/user/auth/start-email-registration | 
-*AuthService* | [**startEmailRegistrationWithHttpInfo**](docs/AuthService.md#startEmailRegistrationWithHttpInfo) | **POST** /v1/user/auth/start-email-registration | 
-*AuthService* | [**startPhoneRegistration**](docs/AuthService.md#startPhoneRegistration) | **POST** /v1/user/auth/start-phone-registration | 
-*AuthService* | [**startPhoneRegistrationWithHttpInfo**](docs/AuthService.md#startPhoneRegistrationWithHttpInfo) | **POST** /v1/user/auth/start-phone-registration | 
-*AuthService* | [**verifyEmailRegistration**](docs/AuthService.md#verifyEmailRegistration) | **POST** /v1/user/auth/verify-email-registration | 
-*AuthService* | [**verifyEmailRegistrationWithHttpInfo**](docs/AuthService.md#verifyEmailRegistrationWithHttpInfo) | **POST** /v1/user/auth/verify-email-registration | 
-*AuthService* | [**verifyPhoneRegistration**](docs/AuthService.md#verifyPhoneRegistration) | **POST** /v1/user/auth/verify-phone-registration | 
-*AuthService* | [**verifyPhoneRegistrationWithHttpInfo**](docs/AuthService.md#verifyPhoneRegistrationWithHttpInfo) | **POST** /v1/user/auth/verify-phone-registration | 
+*AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/user/auth/register | 
+*AuthService* | [**registerWithHttpInfo**](docs/AuthService.md#registerWithHttpInfo) | **POST** /v1/user/auth/register | 
 *CommentService* | [**callList**](docs/CommentService.md#callList) | **POST** /v1/content/comment/list | 
 *CommentService* | [**callListWithHttpInfo**](docs/CommentService.md#callListWithHttpInfo) | **POST** /v1/content/comment/list | 
 *CommentService* | [**create**](docs/CommentService.md#create) | **POST** /v1/content/comment/create | 
@@ -326,6 +326,7 @@ Class | Method | HTTP request | Description
  - [PublishArticleReq](docs/PublishArticleReq.md)
  - [RefreshTokenReq](docs/RefreshTokenReq.md)
  - [RefreshTokenResp](docs/RefreshTokenResp.md)
+ - [RegisterReq](docs/RegisterReq.md)
  - [ReqArticle](docs/ReqArticle.md)
  - [ReqArticleQuery](docs/ReqArticleQuery.md)
  - [ReqCommentQuery](docs/ReqCommentQuery.md)
@@ -360,10 +361,6 @@ Class | Method | HTTP request | Description
  - [SendEmailOtpResp](docs/SendEmailOtpResp.md)
  - [SendPhoneOtpReq](docs/SendPhoneOtpReq.md)
  - [SendPhoneOtpResp](docs/SendPhoneOtpResp.md)
- - [StartEmailRegistrationReq](docs/StartEmailRegistrationReq.md)
- - [StartEmailRegistrationResp](docs/StartEmailRegistrationResp.md)
- - [StartPhoneRegistrationReq](docs/StartPhoneRegistrationReq.md)
- - [StartPhoneRegistrationResp](docs/StartPhoneRegistrationResp.md)
  - [ThankArticleReq](docs/ThankArticleReq.md)
  - [ThankArticleResp](docs/ThankArticleResp.md)
  - [ThankCommentReq](docs/ThankCommentReq.md)
@@ -379,14 +376,15 @@ Class | Method | HTTP request | Description
  - [UpdateDomainResp](docs/UpdateDomainResp.md)
  - [UpdateDraftArticleReq](docs/UpdateDraftArticleReq.md)
  - [UpdateDraftArticleResp](docs/UpdateDraftArticleResp.md)
+ - [UpdateEmailAccountReq](docs/UpdateEmailAccountReq.md)
+ - [UpdatePasswordAccountReq](docs/UpdatePasswordAccountReq.md)
+ - [UpdatePhoneAccountReq](docs/UpdatePhoneAccountReq.md)
  - [UpdateProfileAccountReq](docs/UpdateProfileAccountReq.md)
  - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
  - [UpsertCurrentLocationReq](docs/UpsertCurrentLocationReq.md)
  - [UpsertCurrentLocationResp](docs/UpsertCurrentLocationResp.md)
- - [VerifyEmailRegistrationReq](docs/VerifyEmailRegistrationReq.md)
- - [VerifyPhoneRegistrationReq](docs/VerifyPhoneRegistrationReq.md)
 
 
 <a id="documentation-for-authorization"></a>

@@ -18,6 +18,9 @@ import com.bass.bbs.model.GetCurrentAccountResp;
 import com.bass.bbs.model.GetProfileAccountReq;
 import com.bass.bbs.model.GetProfileAccountResp;
 import com.bass.bbs.model.ImageResp;
+import com.bass.bbs.model.UpdateEmailAccountReq;
+import com.bass.bbs.model.UpdatePasswordAccountReq;
+import com.bass.bbs.model.UpdatePhoneAccountReq;
 import com.bass.bbs.model.UpdateProfileAccountReq;
 import com.bass.bbs.model.UpdateProfileAccountResp;
 import org.junit.jupiter.api.Disabled;
@@ -42,7 +45,7 @@ public class AccountServiceTest {
     /**
      * 
      *
-     * 生成默认账号头像。
+     * 生成默认账号头像
      *
      * @throws ApiException
      *          if the Api call fails
@@ -63,7 +66,7 @@ public class AccountServiceTest {
     /**
      * 
      *
-     * 获取当前账号的完整资料。
+     * 获取当前账号完整资料
      *
      * @throws ApiException
      *          if the Api call fails
@@ -84,7 +87,7 @@ public class AccountServiceTest {
     /**
      * 
      *
-     * 按账号 ID 获取账号展示资料。
+     * 按账号 ID 获取展示资料
      *
      * @throws ApiException
      *          if the Api call fails
@@ -105,7 +108,70 @@ public class AccountServiceTest {
     /**
      * 
      *
-     * 更新当前账号的展示资料。
+     * 更新当前账号邮箱
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void updateEmailTest() throws ApiException {
+        UpdateEmailAccountReq updateEmailAccountReq = null;
+        
+        AccountService.APIupdateEmailRequest request = AccountService.APIupdateEmailRequest.newBuilder()
+          .updateEmailAccountReq(updateEmailAccountReq)
+          .build();
+        Object response = 
+        api.updateEmail(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 更新当前账号密码
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void updatePasswordTest() throws ApiException {
+        UpdatePasswordAccountReq updatePasswordAccountReq = null;
+        
+        AccountService.APIupdatePasswordRequest request = AccountService.APIupdatePasswordRequest.newBuilder()
+          .updatePasswordAccountReq(updatePasswordAccountReq)
+          .build();
+        Object response = 
+        api.updatePassword(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 更新当前账号手机号
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void updatePhoneTest() throws ApiException {
+        UpdatePhoneAccountReq updatePhoneAccountReq = null;
+        
+        AccountService.APIupdatePhoneRequest request = AccountService.APIupdatePhoneRequest.newBuilder()
+          .updatePhoneAccountReq(updatePhoneAccountReq)
+          .build();
+        Object response = 
+        api.updatePhone(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 更新当前账号展示资料
      *
      * @throws ApiException
      *          if the Api call fails

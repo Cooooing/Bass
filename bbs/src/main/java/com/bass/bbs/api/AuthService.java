@@ -23,12 +23,7 @@ import com.bass.bbs.model.LoginReq;
 import com.bass.bbs.model.LoginResp;
 import com.bass.bbs.model.RefreshTokenReq;
 import com.bass.bbs.model.RefreshTokenResp;
-import com.bass.bbs.model.StartEmailRegistrationReq;
-import com.bass.bbs.model.StartEmailRegistrationResp;
-import com.bass.bbs.model.StartPhoneRegistrationReq;
-import com.bass.bbs.model.StartPhoneRegistrationResp;
-import com.bass.bbs.model.VerifyEmailRegistrationReq;
-import com.bass.bbs.model.VerifyPhoneRegistrationReq;
+import com.bass.bbs.model.RegisterReq;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -978,98 +973,98 @@ public class AuthService {
 
   /**
    * 
-   * 开始邮箱注册。
-   * @param apiRequest {@link APIStartEmailRegistrationRequest}
-   * @return StartEmailRegistrationResp
+   * 注册账号。
+   * @param apiRequest {@link APIRegisterRequest}
+   * @return Object
    * @throws ApiException if fails to make API call
    */
-  public StartEmailRegistrationResp startEmailRegistration(APIStartEmailRegistrationRequest apiRequest) throws ApiException {
-    return startEmailRegistration(apiRequest, null);
+  public Object register(APIRegisterRequest apiRequest) throws ApiException {
+    return register(apiRequest, null);
   }
 
   /**
    * 
-   * 开始邮箱注册。
-   * @param apiRequest {@link APIStartEmailRegistrationRequest}
+   * 注册账号。
+   * @param apiRequest {@link APIRegisterRequest}
    * @param headers Optional headers to include in the request
-   * @return StartEmailRegistrationResp
+   * @return Object
    * @throws ApiException if fails to make API call
    */
-  public StartEmailRegistrationResp startEmailRegistration(APIStartEmailRegistrationRequest apiRequest, Map<String, String> headers) throws ApiException {
+  public Object register(APIRegisterRequest apiRequest, Map<String, String> headers) throws ApiException {
     @javax.annotation.Nonnull
-    StartEmailRegistrationReq startEmailRegistrationReq = apiRequest.startEmailRegistrationReq();
-    return startEmailRegistration(startEmailRegistrationReq, headers);
+    RegisterReq registerReq = apiRequest.registerReq();
+    return register(registerReq, headers);
   }
 
   /**
    * 
-   * 开始邮箱注册。
-   * @param apiRequest {@link APIStartEmailRegistrationRequest}
-   * @return ApiResponse&lt;StartEmailRegistrationResp&gt;
+   * 注册账号。
+   * @param apiRequest {@link APIRegisterRequest}
+   * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<StartEmailRegistrationResp> startEmailRegistrationWithHttpInfo(APIStartEmailRegistrationRequest apiRequest) throws ApiException {
-    return startEmailRegistrationWithHttpInfo(apiRequest, null);
+  public ApiResponse<Object> registerWithHttpInfo(APIRegisterRequest apiRequest) throws ApiException {
+    return registerWithHttpInfo(apiRequest, null);
   }
 
   /**
    * 
-   * 开始邮箱注册。
-   * @param apiRequest {@link APIStartEmailRegistrationRequest}
+   * 注册账号。
+   * @param apiRequest {@link APIRegisterRequest}
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;StartEmailRegistrationResp&gt;
+   * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<StartEmailRegistrationResp> startEmailRegistrationWithHttpInfo(APIStartEmailRegistrationRequest apiRequest, Map<String, String> headers) throws ApiException {
-    StartEmailRegistrationReq startEmailRegistrationReq = apiRequest.startEmailRegistrationReq();
-    return startEmailRegistrationWithHttpInfo(startEmailRegistrationReq, headers);
+  public ApiResponse<Object> registerWithHttpInfo(APIRegisterRequest apiRequest, Map<String, String> headers) throws ApiException {
+    RegisterReq registerReq = apiRequest.registerReq();
+    return registerWithHttpInfo(registerReq, headers);
   }
 
   /**
    * 
-   * 开始邮箱注册。
-   * @param startEmailRegistrationReq  (required)
-   * @return StartEmailRegistrationResp
+   * 注册账号。
+   * @param registerReq  (required)
+   * @return Object
    * @throws ApiException if fails to make API call
    */
-  public StartEmailRegistrationResp startEmailRegistration(@javax.annotation.Nonnull StartEmailRegistrationReq startEmailRegistrationReq) throws ApiException {
-    return startEmailRegistration(startEmailRegistrationReq, null);
+  public Object register(@javax.annotation.Nonnull RegisterReq registerReq) throws ApiException {
+    return register(registerReq, null);
   }
 
   /**
    * 
-   * 开始邮箱注册。
-   * @param startEmailRegistrationReq  (required)
+   * 注册账号。
+   * @param registerReq  (required)
    * @param headers Optional headers to include in the request
-   * @return StartEmailRegistrationResp
+   * @return Object
    * @throws ApiException if fails to make API call
    */
-  public StartEmailRegistrationResp startEmailRegistration(@javax.annotation.Nonnull StartEmailRegistrationReq startEmailRegistrationReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<StartEmailRegistrationResp> localVarResponse = startEmailRegistrationWithHttpInfo(startEmailRegistrationReq, headers);
+  public Object register(@javax.annotation.Nonnull RegisterReq registerReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = registerWithHttpInfo(registerReq, headers);
     return localVarResponse.getData();
   }
 
   /**
    * 
-   * 开始邮箱注册。
-   * @param startEmailRegistrationReq  (required)
-   * @return ApiResponse&lt;StartEmailRegistrationResp&gt;
+   * 注册账号。
+   * @param registerReq  (required)
+   * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<StartEmailRegistrationResp> startEmailRegistrationWithHttpInfo(@javax.annotation.Nonnull StartEmailRegistrationReq startEmailRegistrationReq) throws ApiException {
-    return startEmailRegistrationWithHttpInfo(startEmailRegistrationReq, null);
+  public ApiResponse<Object> registerWithHttpInfo(@javax.annotation.Nonnull RegisterReq registerReq) throws ApiException {
+    return registerWithHttpInfo(registerReq, null);
   }
 
   /**
    * 
-   * 开始邮箱注册。
-   * @param startEmailRegistrationReq  (required)
+   * 注册账号。
+   * @param registerReq  (required)
    * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;StartEmailRegistrationResp&gt;
+   * @return ApiResponse&lt;Object&gt;
    * @throws ApiException if fails to make API call
    */
-  public ApiResponse<StartEmailRegistrationResp> startEmailRegistrationWithHttpInfo(@javax.annotation.Nonnull StartEmailRegistrationReq startEmailRegistrationReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = startEmailRegistrationRequestBuilder(startEmailRegistrationReq, headers);
+  public ApiResponse<Object> registerWithHttpInfo(@javax.annotation.Nonnull RegisterReq registerReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = registerRequestBuilder(registerReq, headers);
     try {
       HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
           localVarRequestBuilder.build(),
@@ -1080,409 +1075,7 @@ public class AuthService {
       InputStream localVarResponseBody = null;
       try {
         if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("startEmailRegistration", localVarResponse);
-        }
-        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
-        if (localVarResponseBody == null) {
-          return new ApiResponse<StartEmailRegistrationResp>(
-              localVarResponse.statusCode(),
-              localVarResponse.headers().map(),
-              null
-          );
-        }
-
-        
-        
-        String responseBody = new String(localVarResponseBody.readAllBytes());
-        StartEmailRegistrationResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<StartEmailRegistrationResp>() {});
-        
-
-        return new ApiResponse<StartEmailRegistrationResp>(
-            localVarResponse.statusCode(),
-            localVarResponse.headers().map(),
-            responseValue
-        );
-      } finally {
-        if (localVarResponseBody != null) {
-          localVarResponseBody.close();
-        }
-      }
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new ApiException(e);
-    }
-  }
-
-  private HttpRequest.Builder startEmailRegistrationRequestBuilder(@javax.annotation.Nonnull StartEmailRegistrationReq startEmailRegistrationReq, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'startEmailRegistrationReq' is set
-    if (startEmailRegistrationReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'startEmailRegistrationReq' when calling startEmailRegistration");
-    }
-
-    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
-
-    String localVarPath = "/v1/user/auth/start-email-registration";
-
-    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
-
-    localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json");
-
-    try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(startEmailRegistrationReq);
-      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    if (memberVarReadTimeout != null) {
-      localVarRequestBuilder.timeout(memberVarReadTimeout);
-    }
-    // Add custom headers if provided
-    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
-    if (memberVarInterceptor != null) {
-      memberVarInterceptor.accept(localVarRequestBuilder);
-    }
-    return localVarRequestBuilder;
-  }
-
-
-  public static final class APIStartEmailRegistrationRequest {
-    @javax.annotation.Nonnull
-    private StartEmailRegistrationReq startEmailRegistrationReq; //  (required)
-
-    private APIStartEmailRegistrationRequest(Builder builder) {
-      this.startEmailRegistrationReq = builder.startEmailRegistrationReq;
-    }
-    @javax.annotation.Nonnull
-    public StartEmailRegistrationReq startEmailRegistrationReq() {
-      return startEmailRegistrationReq;
-    }
-    public static Builder newBuilder() {
-      return new Builder();
-    }
-
-    public static class Builder {
-      private StartEmailRegistrationReq startEmailRegistrationReq;
-
-      public Builder startEmailRegistrationReq(@javax.annotation.Nonnull StartEmailRegistrationReq startEmailRegistrationReq) {
-        this.startEmailRegistrationReq = startEmailRegistrationReq;
-        return this;
-      }
-      public APIStartEmailRegistrationRequest build() {
-        return new APIStartEmailRegistrationRequest(this);
-      }
-    }
-  }
-
-  /**
-   * 
-   * 开始手机注册。
-   * @param apiRequest {@link APIStartPhoneRegistrationRequest}
-   * @return StartPhoneRegistrationResp
-   * @throws ApiException if fails to make API call
-   */
-  public StartPhoneRegistrationResp startPhoneRegistration(APIStartPhoneRegistrationRequest apiRequest) throws ApiException {
-    return startPhoneRegistration(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 开始手机注册。
-   * @param apiRequest {@link APIStartPhoneRegistrationRequest}
-   * @param headers Optional headers to include in the request
-   * @return StartPhoneRegistrationResp
-   * @throws ApiException if fails to make API call
-   */
-  public StartPhoneRegistrationResp startPhoneRegistration(APIStartPhoneRegistrationRequest apiRequest, Map<String, String> headers) throws ApiException {
-    @javax.annotation.Nonnull
-    StartPhoneRegistrationReq startPhoneRegistrationReq = apiRequest.startPhoneRegistrationReq();
-    return startPhoneRegistration(startPhoneRegistrationReq, headers);
-  }
-
-  /**
-   * 
-   * 开始手机注册。
-   * @param apiRequest {@link APIStartPhoneRegistrationRequest}
-   * @return ApiResponse&lt;StartPhoneRegistrationResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<StartPhoneRegistrationResp> startPhoneRegistrationWithHttpInfo(APIStartPhoneRegistrationRequest apiRequest) throws ApiException {
-    return startPhoneRegistrationWithHttpInfo(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 开始手机注册。
-   * @param apiRequest {@link APIStartPhoneRegistrationRequest}
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;StartPhoneRegistrationResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<StartPhoneRegistrationResp> startPhoneRegistrationWithHttpInfo(APIStartPhoneRegistrationRequest apiRequest, Map<String, String> headers) throws ApiException {
-    StartPhoneRegistrationReq startPhoneRegistrationReq = apiRequest.startPhoneRegistrationReq();
-    return startPhoneRegistrationWithHttpInfo(startPhoneRegistrationReq, headers);
-  }
-
-  /**
-   * 
-   * 开始手机注册。
-   * @param startPhoneRegistrationReq  (required)
-   * @return StartPhoneRegistrationResp
-   * @throws ApiException if fails to make API call
-   */
-  public StartPhoneRegistrationResp startPhoneRegistration(@javax.annotation.Nonnull StartPhoneRegistrationReq startPhoneRegistrationReq) throws ApiException {
-    return startPhoneRegistration(startPhoneRegistrationReq, null);
-  }
-
-  /**
-   * 
-   * 开始手机注册。
-   * @param startPhoneRegistrationReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return StartPhoneRegistrationResp
-   * @throws ApiException if fails to make API call
-   */
-  public StartPhoneRegistrationResp startPhoneRegistration(@javax.annotation.Nonnull StartPhoneRegistrationReq startPhoneRegistrationReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<StartPhoneRegistrationResp> localVarResponse = startPhoneRegistrationWithHttpInfo(startPhoneRegistrationReq, headers);
-    return localVarResponse.getData();
-  }
-
-  /**
-   * 
-   * 开始手机注册。
-   * @param startPhoneRegistrationReq  (required)
-   * @return ApiResponse&lt;StartPhoneRegistrationResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<StartPhoneRegistrationResp> startPhoneRegistrationWithHttpInfo(@javax.annotation.Nonnull StartPhoneRegistrationReq startPhoneRegistrationReq) throws ApiException {
-    return startPhoneRegistrationWithHttpInfo(startPhoneRegistrationReq, null);
-  }
-
-  /**
-   * 
-   * 开始手机注册。
-   * @param startPhoneRegistrationReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;StartPhoneRegistrationResp&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<StartPhoneRegistrationResp> startPhoneRegistrationWithHttpInfo(@javax.annotation.Nonnull StartPhoneRegistrationReq startPhoneRegistrationReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = startPhoneRegistrationRequestBuilder(startPhoneRegistrationReq, headers);
-    try {
-      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
-          localVarRequestBuilder.build(),
-          HttpResponse.BodyHandlers.ofInputStream());
-      if (memberVarResponseInterceptor != null) {
-        memberVarResponseInterceptor.accept(localVarResponse);
-      }
-      InputStream localVarResponseBody = null;
-      try {
-        if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("startPhoneRegistration", localVarResponse);
-        }
-        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
-        if (localVarResponseBody == null) {
-          return new ApiResponse<StartPhoneRegistrationResp>(
-              localVarResponse.statusCode(),
-              localVarResponse.headers().map(),
-              null
-          );
-        }
-
-        
-        
-        String responseBody = new String(localVarResponseBody.readAllBytes());
-        StartPhoneRegistrationResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<StartPhoneRegistrationResp>() {});
-        
-
-        return new ApiResponse<StartPhoneRegistrationResp>(
-            localVarResponse.statusCode(),
-            localVarResponse.headers().map(),
-            responseValue
-        );
-      } finally {
-        if (localVarResponseBody != null) {
-          localVarResponseBody.close();
-        }
-      }
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new ApiException(e);
-    }
-  }
-
-  private HttpRequest.Builder startPhoneRegistrationRequestBuilder(@javax.annotation.Nonnull StartPhoneRegistrationReq startPhoneRegistrationReq, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'startPhoneRegistrationReq' is set
-    if (startPhoneRegistrationReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'startPhoneRegistrationReq' when calling startPhoneRegistration");
-    }
-
-    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
-
-    String localVarPath = "/v1/user/auth/start-phone-registration";
-
-    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
-
-    localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json");
-
-    try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(startPhoneRegistrationReq);
-      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    if (memberVarReadTimeout != null) {
-      localVarRequestBuilder.timeout(memberVarReadTimeout);
-    }
-    // Add custom headers if provided
-    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
-    if (memberVarInterceptor != null) {
-      memberVarInterceptor.accept(localVarRequestBuilder);
-    }
-    return localVarRequestBuilder;
-  }
-
-
-  public static final class APIStartPhoneRegistrationRequest {
-    @javax.annotation.Nonnull
-    private StartPhoneRegistrationReq startPhoneRegistrationReq; //  (required)
-
-    private APIStartPhoneRegistrationRequest(Builder builder) {
-      this.startPhoneRegistrationReq = builder.startPhoneRegistrationReq;
-    }
-    @javax.annotation.Nonnull
-    public StartPhoneRegistrationReq startPhoneRegistrationReq() {
-      return startPhoneRegistrationReq;
-    }
-    public static Builder newBuilder() {
-      return new Builder();
-    }
-
-    public static class Builder {
-      private StartPhoneRegistrationReq startPhoneRegistrationReq;
-
-      public Builder startPhoneRegistrationReq(@javax.annotation.Nonnull StartPhoneRegistrationReq startPhoneRegistrationReq) {
-        this.startPhoneRegistrationReq = startPhoneRegistrationReq;
-        return this;
-      }
-      public APIStartPhoneRegistrationRequest build() {
-        return new APIStartPhoneRegistrationRequest(this);
-      }
-    }
-  }
-
-  /**
-   * 
-   * 校验邮箱注册验证码。
-   * @param apiRequest {@link APIVerifyEmailRegistrationRequest}
-   * @return Object
-   * @throws ApiException if fails to make API call
-   */
-  public Object verifyEmailRegistration(APIVerifyEmailRegistrationRequest apiRequest) throws ApiException {
-    return verifyEmailRegistration(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 校验邮箱注册验证码。
-   * @param apiRequest {@link APIVerifyEmailRegistrationRequest}
-   * @param headers Optional headers to include in the request
-   * @return Object
-   * @throws ApiException if fails to make API call
-   */
-  public Object verifyEmailRegistration(APIVerifyEmailRegistrationRequest apiRequest, Map<String, String> headers) throws ApiException {
-    @javax.annotation.Nonnull
-    VerifyEmailRegistrationReq verifyEmailRegistrationReq = apiRequest.verifyEmailRegistrationReq();
-    return verifyEmailRegistration(verifyEmailRegistrationReq, headers);
-  }
-
-  /**
-   * 
-   * 校验邮箱注册验证码。
-   * @param apiRequest {@link APIVerifyEmailRegistrationRequest}
-   * @return ApiResponse&lt;Object&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<Object> verifyEmailRegistrationWithHttpInfo(APIVerifyEmailRegistrationRequest apiRequest) throws ApiException {
-    return verifyEmailRegistrationWithHttpInfo(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 校验邮箱注册验证码。
-   * @param apiRequest {@link APIVerifyEmailRegistrationRequest}
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;Object&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<Object> verifyEmailRegistrationWithHttpInfo(APIVerifyEmailRegistrationRequest apiRequest, Map<String, String> headers) throws ApiException {
-    VerifyEmailRegistrationReq verifyEmailRegistrationReq = apiRequest.verifyEmailRegistrationReq();
-    return verifyEmailRegistrationWithHttpInfo(verifyEmailRegistrationReq, headers);
-  }
-
-  /**
-   * 
-   * 校验邮箱注册验证码。
-   * @param verifyEmailRegistrationReq  (required)
-   * @return Object
-   * @throws ApiException if fails to make API call
-   */
-  public Object verifyEmailRegistration(@javax.annotation.Nonnull VerifyEmailRegistrationReq verifyEmailRegistrationReq) throws ApiException {
-    return verifyEmailRegistration(verifyEmailRegistrationReq, null);
-  }
-
-  /**
-   * 
-   * 校验邮箱注册验证码。
-   * @param verifyEmailRegistrationReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return Object
-   * @throws ApiException if fails to make API call
-   */
-  public Object verifyEmailRegistration(@javax.annotation.Nonnull VerifyEmailRegistrationReq verifyEmailRegistrationReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = verifyEmailRegistrationWithHttpInfo(verifyEmailRegistrationReq, headers);
-    return localVarResponse.getData();
-  }
-
-  /**
-   * 
-   * 校验邮箱注册验证码。
-   * @param verifyEmailRegistrationReq  (required)
-   * @return ApiResponse&lt;Object&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<Object> verifyEmailRegistrationWithHttpInfo(@javax.annotation.Nonnull VerifyEmailRegistrationReq verifyEmailRegistrationReq) throws ApiException {
-    return verifyEmailRegistrationWithHttpInfo(verifyEmailRegistrationReq, null);
-  }
-
-  /**
-   * 
-   * 校验邮箱注册验证码。
-   * @param verifyEmailRegistrationReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;Object&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<Object> verifyEmailRegistrationWithHttpInfo(@javax.annotation.Nonnull VerifyEmailRegistrationReq verifyEmailRegistrationReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = verifyEmailRegistrationRequestBuilder(verifyEmailRegistrationReq, headers);
-    try {
-      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
-          localVarRequestBuilder.build(),
-          HttpResponse.BodyHandlers.ofInputStream());
-      if (memberVarResponseInterceptor != null) {
-        memberVarResponseInterceptor.accept(localVarResponse);
-      }
-      InputStream localVarResponseBody = null;
-      try {
-        if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("verifyEmailRegistration", localVarResponse);
+          throw getApiException("register", localVarResponse);
         }
         localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
         if (localVarResponseBody == null) {
@@ -1518,15 +1111,15 @@ public class AuthService {
     }
   }
 
-  private HttpRequest.Builder verifyEmailRegistrationRequestBuilder(@javax.annotation.Nonnull VerifyEmailRegistrationReq verifyEmailRegistrationReq, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'verifyEmailRegistrationReq' is set
-    if (verifyEmailRegistrationReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'verifyEmailRegistrationReq' when calling verifyEmailRegistration");
+  private HttpRequest.Builder registerRequestBuilder(@javax.annotation.Nonnull RegisterReq registerReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'registerReq' is set
+    if (registerReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'registerReq' when calling register");
     }
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-    String localVarPath = "/v1/user/auth/verify-email-registration";
+    String localVarPath = "/v1/user/auth/register";
 
     localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
 
@@ -1534,7 +1127,7 @@ public class AuthService {
     localVarRequestBuilder.header("Accept", "application/json");
 
     try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(verifyEmailRegistrationReq);
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(registerReq);
       localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
     } catch (IOException e) {
       throw new ApiException(e);
@@ -1551,231 +1144,30 @@ public class AuthService {
   }
 
 
-  public static final class APIVerifyEmailRegistrationRequest {
+  public static final class APIRegisterRequest {
     @javax.annotation.Nonnull
-    private VerifyEmailRegistrationReq verifyEmailRegistrationReq; //  (required)
+    private RegisterReq registerReq; //  (required)
 
-    private APIVerifyEmailRegistrationRequest(Builder builder) {
-      this.verifyEmailRegistrationReq = builder.verifyEmailRegistrationReq;
+    private APIRegisterRequest(Builder builder) {
+      this.registerReq = builder.registerReq;
     }
     @javax.annotation.Nonnull
-    public VerifyEmailRegistrationReq verifyEmailRegistrationReq() {
-      return verifyEmailRegistrationReq;
+    public RegisterReq registerReq() {
+      return registerReq;
     }
     public static Builder newBuilder() {
       return new Builder();
     }
 
     public static class Builder {
-      private VerifyEmailRegistrationReq verifyEmailRegistrationReq;
+      private RegisterReq registerReq;
 
-      public Builder verifyEmailRegistrationReq(@javax.annotation.Nonnull VerifyEmailRegistrationReq verifyEmailRegistrationReq) {
-        this.verifyEmailRegistrationReq = verifyEmailRegistrationReq;
+      public Builder registerReq(@javax.annotation.Nonnull RegisterReq registerReq) {
+        this.registerReq = registerReq;
         return this;
       }
-      public APIVerifyEmailRegistrationRequest build() {
-        return new APIVerifyEmailRegistrationRequest(this);
-      }
-    }
-  }
-
-  /**
-   * 
-   * 校验手机注册验证码。
-   * @param apiRequest {@link APIVerifyPhoneRegistrationRequest}
-   * @return Object
-   * @throws ApiException if fails to make API call
-   */
-  public Object verifyPhoneRegistration(APIVerifyPhoneRegistrationRequest apiRequest) throws ApiException {
-    return verifyPhoneRegistration(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 校验手机注册验证码。
-   * @param apiRequest {@link APIVerifyPhoneRegistrationRequest}
-   * @param headers Optional headers to include in the request
-   * @return Object
-   * @throws ApiException if fails to make API call
-   */
-  public Object verifyPhoneRegistration(APIVerifyPhoneRegistrationRequest apiRequest, Map<String, String> headers) throws ApiException {
-    @javax.annotation.Nonnull
-    VerifyPhoneRegistrationReq verifyPhoneRegistrationReq = apiRequest.verifyPhoneRegistrationReq();
-    return verifyPhoneRegistration(verifyPhoneRegistrationReq, headers);
-  }
-
-  /**
-   * 
-   * 校验手机注册验证码。
-   * @param apiRequest {@link APIVerifyPhoneRegistrationRequest}
-   * @return ApiResponse&lt;Object&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<Object> verifyPhoneRegistrationWithHttpInfo(APIVerifyPhoneRegistrationRequest apiRequest) throws ApiException {
-    return verifyPhoneRegistrationWithHttpInfo(apiRequest, null);
-  }
-
-  /**
-   * 
-   * 校验手机注册验证码。
-   * @param apiRequest {@link APIVerifyPhoneRegistrationRequest}
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;Object&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<Object> verifyPhoneRegistrationWithHttpInfo(APIVerifyPhoneRegistrationRequest apiRequest, Map<String, String> headers) throws ApiException {
-    VerifyPhoneRegistrationReq verifyPhoneRegistrationReq = apiRequest.verifyPhoneRegistrationReq();
-    return verifyPhoneRegistrationWithHttpInfo(verifyPhoneRegistrationReq, headers);
-  }
-
-  /**
-   * 
-   * 校验手机注册验证码。
-   * @param verifyPhoneRegistrationReq  (required)
-   * @return Object
-   * @throws ApiException if fails to make API call
-   */
-  public Object verifyPhoneRegistration(@javax.annotation.Nonnull VerifyPhoneRegistrationReq verifyPhoneRegistrationReq) throws ApiException {
-    return verifyPhoneRegistration(verifyPhoneRegistrationReq, null);
-  }
-
-  /**
-   * 
-   * 校验手机注册验证码。
-   * @param verifyPhoneRegistrationReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return Object
-   * @throws ApiException if fails to make API call
-   */
-  public Object verifyPhoneRegistration(@javax.annotation.Nonnull VerifyPhoneRegistrationReq verifyPhoneRegistrationReq, Map<String, String> headers) throws ApiException {
-    ApiResponse<Object> localVarResponse = verifyPhoneRegistrationWithHttpInfo(verifyPhoneRegistrationReq, headers);
-    return localVarResponse.getData();
-  }
-
-  /**
-   * 
-   * 校验手机注册验证码。
-   * @param verifyPhoneRegistrationReq  (required)
-   * @return ApiResponse&lt;Object&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<Object> verifyPhoneRegistrationWithHttpInfo(@javax.annotation.Nonnull VerifyPhoneRegistrationReq verifyPhoneRegistrationReq) throws ApiException {
-    return verifyPhoneRegistrationWithHttpInfo(verifyPhoneRegistrationReq, null);
-  }
-
-  /**
-   * 
-   * 校验手机注册验证码。
-   * @param verifyPhoneRegistrationReq  (required)
-   * @param headers Optional headers to include in the request
-   * @return ApiResponse&lt;Object&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public ApiResponse<Object> verifyPhoneRegistrationWithHttpInfo(@javax.annotation.Nonnull VerifyPhoneRegistrationReq verifyPhoneRegistrationReq, Map<String, String> headers) throws ApiException {
-    HttpRequest.Builder localVarRequestBuilder = verifyPhoneRegistrationRequestBuilder(verifyPhoneRegistrationReq, headers);
-    try {
-      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
-          localVarRequestBuilder.build(),
-          HttpResponse.BodyHandlers.ofInputStream());
-      if (memberVarResponseInterceptor != null) {
-        memberVarResponseInterceptor.accept(localVarResponse);
-      }
-      InputStream localVarResponseBody = null;
-      try {
-        if (localVarResponse.statusCode()/ 100 != 2) {
-          throw getApiException("verifyPhoneRegistration", localVarResponse);
-        }
-        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
-        if (localVarResponseBody == null) {
-          return new ApiResponse<Object>(
-              localVarResponse.statusCode(),
-              localVarResponse.headers().map(),
-              null
-          );
-        }
-
-        
-        
-        String responseBody = new String(localVarResponseBody.readAllBytes());
-        Object responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<Object>() {});
-        
-
-        return new ApiResponse<Object>(
-            localVarResponse.statusCode(),
-            localVarResponse.headers().map(),
-            responseValue
-        );
-      } finally {
-        if (localVarResponseBody != null) {
-          localVarResponseBody.close();
-        }
-      }
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      throw new ApiException(e);
-    }
-  }
-
-  private HttpRequest.Builder verifyPhoneRegistrationRequestBuilder(@javax.annotation.Nonnull VerifyPhoneRegistrationReq verifyPhoneRegistrationReq, Map<String, String> headers) throws ApiException {
-    // verify the required parameter 'verifyPhoneRegistrationReq' is set
-    if (verifyPhoneRegistrationReq == null) {
-      throw new ApiException(400, "Missing the required parameter 'verifyPhoneRegistrationReq' when calling verifyPhoneRegistration");
-    }
-
-    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
-
-    String localVarPath = "/v1/user/auth/verify-phone-registration";
-
-    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
-
-    localVarRequestBuilder.header("Content-Type", "application/json");
-    localVarRequestBuilder.header("Accept", "application/json");
-
-    try {
-      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(verifyPhoneRegistrationReq);
-      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
-    } catch (IOException e) {
-      throw new ApiException(e);
-    }
-    if (memberVarReadTimeout != null) {
-      localVarRequestBuilder.timeout(memberVarReadTimeout);
-    }
-    // Add custom headers if provided
-    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
-    if (memberVarInterceptor != null) {
-      memberVarInterceptor.accept(localVarRequestBuilder);
-    }
-    return localVarRequestBuilder;
-  }
-
-
-  public static final class APIVerifyPhoneRegistrationRequest {
-    @javax.annotation.Nonnull
-    private VerifyPhoneRegistrationReq verifyPhoneRegistrationReq; //  (required)
-
-    private APIVerifyPhoneRegistrationRequest(Builder builder) {
-      this.verifyPhoneRegistrationReq = builder.verifyPhoneRegistrationReq;
-    }
-    @javax.annotation.Nonnull
-    public VerifyPhoneRegistrationReq verifyPhoneRegistrationReq() {
-      return verifyPhoneRegistrationReq;
-    }
-    public static Builder newBuilder() {
-      return new Builder();
-    }
-
-    public static class Builder {
-      private VerifyPhoneRegistrationReq verifyPhoneRegistrationReq;
-
-      public Builder verifyPhoneRegistrationReq(@javax.annotation.Nonnull VerifyPhoneRegistrationReq verifyPhoneRegistrationReq) {
-        this.verifyPhoneRegistrationReq = verifyPhoneRegistrationReq;
-        return this;
-      }
-      public APIVerifyPhoneRegistrationRequest build() {
-        return new APIVerifyPhoneRegistrationRequest(this);
+      public APIRegisterRequest build() {
+        return new APIRegisterRequest(this);
       }
     }
   }

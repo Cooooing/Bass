@@ -30,21 +30,50 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * StartEmailRegistrationResp
+ * UpdateEmailAccountReq
  */
 @JsonPropertyOrder({
-  StartEmailRegistrationResp.JSON_PROPERTY_CODE
+  UpdateEmailAccountReq.JSON_PROPERTY_EMAIL,
+  UpdateEmailAccountReq.JSON_PROPERTY_CODE
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class StartEmailRegistrationResp {
+public class UpdateEmailAccountReq {
+  public static final String JSON_PROPERTY_EMAIL = "email";
+  @javax.annotation.Nonnull
+  private String email;
+
   public static final String JSON_PROPERTY_CODE = "code";
-  @javax.annotation.Nullable
+  @javax.annotation.Nonnull
   private String code;
 
-  public StartEmailRegistrationResp() { 
+  public UpdateEmailAccountReq() { 
   }
 
-  public StartEmailRegistrationResp code(@javax.annotation.Nullable String code) {
+  public UpdateEmailAccountReq email(@javax.annotation.Nonnull String email) {
+    this.email = email;
+    return this;
+  }
+
+  /**
+   * Get email
+   * @return email
+   */
+  @javax.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_EMAIL, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public String getEmail() {
+    return email;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_EMAIL, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEmail(@javax.annotation.Nonnull String email) {
+    this.email = email;
+  }
+
+
+  public UpdateEmailAccountReq code(@javax.annotation.Nonnull String code) {
     this.code = code;
     return this;
   }
@@ -53,23 +82,23 @@ public class StartEmailRegistrationResp {
    * Get code
    * @return code
    */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @javax.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public String getCode() {
     return code;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCode(@javax.annotation.Nullable String code) {
+  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCode(@javax.annotation.Nonnull String code) {
     this.code = code;
   }
 
 
   /**
-   * Return true if this StartEmailRegistration_Resp object is equal to o.
+   * Return true if this UpdateEmailAccount_Req object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -79,19 +108,21 @@ public class StartEmailRegistrationResp {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StartEmailRegistrationResp startEmailRegistrationResp = (StartEmailRegistrationResp) o;
-    return Objects.equals(this.code, startEmailRegistrationResp.code);
+    UpdateEmailAccountReq updateEmailAccountReq = (UpdateEmailAccountReq) o;
+    return Objects.equals(this.email, updateEmailAccountReq.email) &&
+        Objects.equals(this.code, updateEmailAccountReq.code);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code);
+    return Objects.hash(email, code);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class StartEmailRegistrationResp {\n");
+    sb.append("class UpdateEmailAccountReq {\n");
+    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -136,6 +167,11 @@ public class StartEmailRegistrationResp {
     }
 
     StringJoiner joiner = new StringJoiner("&");
+
+    // add `email` to the URL query string
+    if (getEmail() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%semail%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getEmail()))));
+    }
 
     // add `code` to the URL query string
     if (getCode() != null) {

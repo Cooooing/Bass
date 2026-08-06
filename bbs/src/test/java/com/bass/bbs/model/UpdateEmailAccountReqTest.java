@@ -24,49 +24,33 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for StartPhoneRegistrationReq
+ * Model tests for UpdateEmailAccountReq
  */
-class StartPhoneRegistrationReqTest {
-    private final StartPhoneRegistrationReq model = new StartPhoneRegistrationReq();
+class UpdateEmailAccountReqTest {
+    private final UpdateEmailAccountReq model = new UpdateEmailAccountReq();
 
     /**
-     * Model tests for StartPhoneRegistrationReq
+     * Model tests for UpdateEmailAccountReq
      */
     @Test
-    void testStartPhoneRegistrationReq() {
-        // TODO: test StartPhoneRegistrationReq
+    void testUpdateEmailAccountReq() {
+        // TODO: test UpdateEmailAccountReq
     }
 
     /**
-     * Test the property 'phone'
+     * Test the property 'email'
      */
     @Test
-    void phoneTest() {
-        // TODO: test phone
+    void emailTest() {
+        // TODO: test email
     }
 
     /**
-     * Test the property 'password'
+     * Test the property 'code'
      */
     @Test
-    void passwordTest() {
-        // TODO: test password
-    }
-
-    /**
-     * Test the property 'name'
-     */
-    @Test
-    void nameTest() {
-        // TODO: test name
-    }
-
-    /**
-     * Test the property 'nickname'
-     */
-    @Test
-    void nicknameTest() {
-        // TODO: test nickname
+    void codeTest() {
+        // TODO: test code
     }
 
 }

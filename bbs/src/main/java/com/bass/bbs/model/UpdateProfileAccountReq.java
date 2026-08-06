@@ -33,7 +33,7 @@ import com.bass.bbs.ApiClient;
  * UpdateProfileAccountReq
  */
 @JsonPropertyOrder({
-  UpdateProfileAccountReq.JSON_PROPERTY_AVATAR_URL,
+  UpdateProfileAccountReq.JSON_PROPERTY_AVATAR_ASSET_ID,
   UpdateProfileAccountReq.JSON_PROPERTY_NICKNAME,
   UpdateProfileAccountReq.JSON_PROPERTY_URL,
   UpdateProfileAccountReq.JSON_PROPERTY_INTRODUCTION,
@@ -41,9 +41,9 @@ import com.bass.bbs.ApiClient;
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class UpdateProfileAccountReq {
-  public static final String JSON_PROPERTY_AVATAR_URL = "avatar_url";
+  public static final String JSON_PROPERTY_AVATAR_ASSET_ID = "avatar_asset_id";
   @javax.annotation.Nullable
-  private String avatarUrl;
+  private String avatarAssetId;
 
   public static final String JSON_PROPERTY_NICKNAME = "nickname";
   @javax.annotation.Nullable
@@ -129,27 +129,27 @@ public class UpdateProfileAccountReq {
   public UpdateProfileAccountReq() { 
   }
 
-  public UpdateProfileAccountReq avatarUrl(@javax.annotation.Nullable String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public UpdateProfileAccountReq avatarAssetId(@javax.annotation.Nullable String avatarAssetId) {
+    this.avatarAssetId = avatarAssetId;
     return this;
   }
 
   /**
-   * Get avatarUrl
-   * @return avatarUrl
+   * Get avatarAssetId
+   * @return avatarAssetId
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_AVATAR_URL, required = false)
+  @JsonProperty(value = JSON_PROPERTY_AVATAR_ASSET_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getAvatarUrl() {
-    return avatarUrl;
+  public String getAvatarAssetId() {
+    return avatarAssetId;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_AVATAR_URL, required = false)
+  @JsonProperty(value = JSON_PROPERTY_AVATAR_ASSET_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAvatarUrl(@javax.annotation.Nullable String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public void setAvatarAssetId(@javax.annotation.Nullable String avatarAssetId) {
+    this.avatarAssetId = avatarAssetId;
   }
 
 
@@ -261,7 +261,7 @@ public class UpdateProfileAccountReq {
       return false;
     }
     UpdateProfileAccountReq updateProfileAccountReq = (UpdateProfileAccountReq) o;
-    return Objects.equals(this.avatarUrl, updateProfileAccountReq.avatarUrl) &&
+    return Objects.equals(this.avatarAssetId, updateProfileAccountReq.avatarAssetId) &&
         Objects.equals(this.nickname, updateProfileAccountReq.nickname) &&
         Objects.equals(this.url, updateProfileAccountReq.url) &&
         Objects.equals(this.introduction, updateProfileAccountReq.introduction) &&
@@ -270,14 +270,14 @@ public class UpdateProfileAccountReq {
 
   @Override
   public int hashCode() {
-    return Objects.hash(avatarUrl, nickname, url, introduction, mbti);
+    return Objects.hash(avatarAssetId, nickname, url, introduction, mbti);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class UpdateProfileAccountReq {\n");
-    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    avatarAssetId: ").append(toIndentedString(avatarAssetId)).append("\n");
     sb.append("    nickname: ").append(toIndentedString(nickname)).append("\n");
     sb.append("    url: ").append(toIndentedString(url)).append("\n");
     sb.append("    introduction: ").append(toIndentedString(introduction)).append("\n");
@@ -326,9 +326,9 @@ public class UpdateProfileAccountReq {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `avatar_url` to the URL query string
-    if (getAvatarUrl() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%savatar_url%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getAvatarUrl()))));
+    // add `avatar_asset_id` to the URL query string
+    if (getAvatarAssetId() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%savatar_asset_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getAvatarAssetId()))));
     }
 
     // add `nickname` to the URL query string

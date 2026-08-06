@@ -1,6 +1,6 @@
 
 
-# VerifyEmailRegistrationReq
+# UpdateEmailAccountReq
 
 
 ## Properties

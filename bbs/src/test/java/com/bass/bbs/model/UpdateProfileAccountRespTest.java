@@ -13,7 +13,7 @@
 
 package com.bass.bbs.model;
 
-import com.bass.bbs.model.RespAccountProfile;
+import com.bass.bbs.model.AccountProfile;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;

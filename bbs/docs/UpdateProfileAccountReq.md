@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**avatarUrl** | **String** |  |  [optional] |
+|**avatarAssetId** | **String** |  |  [optional] |
 |**nickname** | **String** |  |  [optional] |
 |**url** | **String** |  |  [optional] |
 |**introduction** | **String** |  |  [optional] |

@@ -13,6 +13,8 @@
 
 package com.bass.bbs.model;
 
+import com.bass.bbs.model.ReqEmailCredential;
+import com.bass.bbs.model.ReqPhoneCredential;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,25 +26,41 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for UpdateProfileAccountReq
+ * Model tests for RegisterReq
  */
-class UpdateProfileAccountReqTest {
-    private final UpdateProfileAccountReq model = new UpdateProfileAccountReq();
+class RegisterReqTest {
+    private final RegisterReq model = new RegisterReq();
 
     /**
-     * Model tests for UpdateProfileAccountReq
+     * Model tests for RegisterReq
      */
     @Test
-    void testUpdateProfileAccountReq() {
-        // TODO: test UpdateProfileAccountReq
+    void testRegisterReq() {
+        // TODO: test RegisterReq
     }
 
     /**
-     * Test the property 'avatarAssetId'
+     * Test the property 'type'
      */
     @Test
-    void avatarAssetIdTest() {
-        // TODO: test avatarAssetId
+    void typeTest() {
+        // TODO: test type
+    }
+
+    /**
+     * Test the property 'name'
+     */
+    @Test
+    void nameTest() {
+        // TODO: test name
+    }
+
+    /**
+     * Test the property 'password'
+     */
+    @Test
+    void passwordTest() {
+        // TODO: test password
     }
 
     /**
@@ -54,27 +72,19 @@ class UpdateProfileAccountReqTest {
     }
 
     /**
-     * Test the property 'url'
+     * Test the property 'emailCredential'
      */
     @Test
-    void urlTest() {
-        // TODO: test url
+    void emailCredentialTest() {
+        // TODO: test emailCredential
     }
 
     /**
-     * Test the property 'introduction'
+     * Test the property 'phoneCredential'
      */
     @Test
-    void introductionTest() {
-        // TODO: test introduction
-    }
-
-    /**
-     * Test the property 'mbti'
-     */
-    @Test
-    void mbtiTest() {
-        // TODO: test mbti
+    void phoneCredentialTest() {
+        // TODO: test phoneCredential
     }
 
 }

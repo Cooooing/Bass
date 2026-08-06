@@ -30,21 +30,50 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * StartPhoneRegistrationResp
+ * UpdatePhoneAccountReq
  */
 @JsonPropertyOrder({
-  StartPhoneRegistrationResp.JSON_PROPERTY_CODE
+  UpdatePhoneAccountReq.JSON_PROPERTY_PHONE,
+  UpdatePhoneAccountReq.JSON_PROPERTY_CODE
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class StartPhoneRegistrationResp {
+public class UpdatePhoneAccountReq {
+  public static final String JSON_PROPERTY_PHONE = "phone";
+  @javax.annotation.Nonnull
+  private String phone;
+
   public static final String JSON_PROPERTY_CODE = "code";
-  @javax.annotation.Nullable
+  @javax.annotation.Nonnull
   private String code;
 
-  public StartPhoneRegistrationResp() { 
+  public UpdatePhoneAccountReq() { 
   }
 
-  public StartPhoneRegistrationResp code(@javax.annotation.Nullable String code) {
+  public UpdatePhoneAccountReq phone(@javax.annotation.Nonnull String phone) {
+    this.phone = phone;
+    return this;
+  }
+
+  /**
+   * Get phone
+   * @return phone
+   */
+  @javax.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_PHONE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public String getPhone() {
+    return phone;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PHONE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPhone(@javax.annotation.Nonnull String phone) {
+    this.phone = phone;
+  }
+
+
+  public UpdatePhoneAccountReq code(@javax.annotation.Nonnull String code) {
     this.code = code;
     return this;
   }
@@ -53,23 +82,23 @@ public class StartPhoneRegistrationResp {
    * Get code
    * @return code
    */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @javax.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public String getCode() {
     return code;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCode(@javax.annotation.Nullable String code) {
+  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCode(@javax.annotation.Nonnull String code) {
     this.code = code;
   }
 
 
   /**
-   * Return true if this StartPhoneRegistration_Resp object is equal to o.
+   * Return true if this UpdatePhoneAccount_Req object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -79,19 +108,21 @@ public class StartPhoneRegistrationResp {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StartPhoneRegistrationResp startPhoneRegistrationResp = (StartPhoneRegistrationResp) o;
-    return Objects.equals(this.code, startPhoneRegistrationResp.code);
+    UpdatePhoneAccountReq updatePhoneAccountReq = (UpdatePhoneAccountReq) o;
+    return Objects.equals(this.phone, updatePhoneAccountReq.phone) &&
+        Objects.equals(this.code, updatePhoneAccountReq.code);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code);
+    return Objects.hash(phone, code);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class StartPhoneRegistrationResp {\n");
+    sb.append("class UpdatePhoneAccountReq {\n");
+    sb.append("    phone: ").append(toIndentedString(phone)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -136,6 +167,11 @@ public class StartPhoneRegistrationResp {
     }
 
     StringJoiner joiner = new StringJoiner("&");
+
+    // add `phone` to the URL query string
+    if (getPhone() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sphone%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPhone()))));
+    }
 
     // add `code` to the URL query string
     if (getCode() != null) {

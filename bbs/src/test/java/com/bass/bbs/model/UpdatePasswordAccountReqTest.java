@@ -24,33 +24,33 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for VerifyEmailRegistrationReq
+ * Model tests for UpdatePasswordAccountReq
  */
-class VerifyEmailRegistrationReqTest {
-    private final VerifyEmailRegistrationReq model = new VerifyEmailRegistrationReq();
+class UpdatePasswordAccountReqTest {
+    private final UpdatePasswordAccountReq model = new UpdatePasswordAccountReq();
 
     /**
-     * Model tests for VerifyEmailRegistrationReq
+     * Model tests for UpdatePasswordAccountReq
      */
     @Test
-    void testVerifyEmailRegistrationReq() {
-        // TODO: test VerifyEmailRegistrationReq
+    void testUpdatePasswordAccountReq() {
+        // TODO: test UpdatePasswordAccountReq
     }
 
     /**
-     * Test the property 'email'
+     * Test the property 'oldPassword'
      */
     @Test
-    void emailTest() {
-        // TODO: test email
+    void oldPasswordTest() {
+        // TODO: test oldPassword
     }
 
     /**
-     * Test the property 'code'
+     * Test the property 'newPassword'
      */
     @Test
-    void codeTest() {
-        // TODO: test code
+    void newPasswordTest() {
+        // TODO: test newPassword
     }
 
 }

@@ -7,7 +7,7 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**profile** | [**RespAccountProfile**](RespAccountProfile.md) |  |  [optional] |
+|**profile** | [**AccountProfile**](AccountProfile.md) |  |  [optional] |
 
 
 

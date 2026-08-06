@@ -19,12 +19,7 @@ import com.bass.bbs.model.LoginReq;
 import com.bass.bbs.model.LoginResp;
 import com.bass.bbs.model.RefreshTokenReq;
 import com.bass.bbs.model.RefreshTokenResp;
-import com.bass.bbs.model.StartEmailRegistrationReq;
-import com.bass.bbs.model.StartEmailRegistrationResp;
-import com.bass.bbs.model.StartPhoneRegistrationReq;
-import com.bass.bbs.model.StartPhoneRegistrationResp;
-import com.bass.bbs.model.VerifyEmailRegistrationReq;
-import com.bass.bbs.model.VerifyPhoneRegistrationReq;
+import com.bass.bbs.model.RegisterReq;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -131,83 +126,20 @@ public class AuthServiceTest {
     /**
      * 
      *
-     * 开始邮箱注册。
+     * 注册账号。
      *
      * @throws ApiException
      *          if the Api call fails
      */
     @Test
-    public void startEmailRegistrationTest() throws ApiException {
-        StartEmailRegistrationReq startEmailRegistrationReq = null;
+    public void registerTest() throws ApiException {
+        RegisterReq registerReq = null;
         
-        AuthService.APIstartEmailRegistrationRequest request = AuthService.APIstartEmailRegistrationRequest.newBuilder()
-          .startEmailRegistrationReq(startEmailRegistrationReq)
-          .build();
-        StartEmailRegistrationResp response = 
-        api.startEmailRegistration(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 开始手机注册。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void startPhoneRegistrationTest() throws ApiException {
-        StartPhoneRegistrationReq startPhoneRegistrationReq = null;
-        
-        AuthService.APIstartPhoneRegistrationRequest request = AuthService.APIstartPhoneRegistrationRequest.newBuilder()
-          .startPhoneRegistrationReq(startPhoneRegistrationReq)
-          .build();
-        StartPhoneRegistrationResp response = 
-        api.startPhoneRegistration(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 校验邮箱注册验证码。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void verifyEmailRegistrationTest() throws ApiException {
-        VerifyEmailRegistrationReq verifyEmailRegistrationReq = null;
-        
-        AuthService.APIverifyEmailRegistrationRequest request = AuthService.APIverifyEmailRegistrationRequest.newBuilder()
-          .verifyEmailRegistrationReq(verifyEmailRegistrationReq)
+        AuthService.APIregisterRequest request = AuthService.APIregisterRequest.newBuilder()
+          .registerReq(registerReq)
           .build();
         Object response = 
-        api.verifyEmailRegistration(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 校验手机注册验证码。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void verifyPhoneRegistrationTest() throws ApiException {
-        VerifyPhoneRegistrationReq verifyPhoneRegistrationReq = null;
-        
-        AuthService.APIverifyPhoneRegistrationRequest request = AuthService.APIverifyPhoneRegistrationRequest.newBuilder()
-          .verifyPhoneRegistrationReq(verifyPhoneRegistrationReq)
-          .build();
-        Object response = 
-        api.verifyPhoneRegistration(request);
+        api.register(request);
 
         // TODO: test validations
     }

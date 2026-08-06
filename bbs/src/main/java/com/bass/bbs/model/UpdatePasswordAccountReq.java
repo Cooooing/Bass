@@ -30,75 +30,75 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * VerifyPhoneRegistrationReq
+ * UpdatePasswordAccountReq
  */
 @JsonPropertyOrder({
-  VerifyPhoneRegistrationReq.JSON_PROPERTY_PHONE,
-  VerifyPhoneRegistrationReq.JSON_PROPERTY_CODE
+  UpdatePasswordAccountReq.JSON_PROPERTY_OLD_PASSWORD,
+  UpdatePasswordAccountReq.JSON_PROPERTY_NEW_PASSWORD
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class VerifyPhoneRegistrationReq {
-  public static final String JSON_PROPERTY_PHONE = "phone";
+public class UpdatePasswordAccountReq {
+  public static final String JSON_PROPERTY_OLD_PASSWORD = "old_password";
   @javax.annotation.Nonnull
-  private String phone;
+  private String oldPassword;
 
-  public static final String JSON_PROPERTY_CODE = "code";
+  public static final String JSON_PROPERTY_NEW_PASSWORD = "new_password";
   @javax.annotation.Nonnull
-  private String code;
+  private String newPassword;
 
-  public VerifyPhoneRegistrationReq() { 
+  public UpdatePasswordAccountReq() { 
   }
 
-  public VerifyPhoneRegistrationReq phone(@javax.annotation.Nonnull String phone) {
-    this.phone = phone;
+  public UpdatePasswordAccountReq oldPassword(@javax.annotation.Nonnull String oldPassword) {
+    this.oldPassword = oldPassword;
     return this;
   }
 
   /**
-   * Get phone
-   * @return phone
+   * Get oldPassword
+   * @return oldPassword
    */
   @javax.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_PHONE, required = true)
+  @JsonProperty(value = JSON_PROPERTY_OLD_PASSWORD, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public String getPhone() {
-    return phone;
+  public String getOldPassword() {
+    return oldPassword;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_PHONE, required = true)
+  @JsonProperty(value = JSON_PROPERTY_OLD_PASSWORD, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPhone(@javax.annotation.Nonnull String phone) {
-    this.phone = phone;
+  public void setOldPassword(@javax.annotation.Nonnull String oldPassword) {
+    this.oldPassword = oldPassword;
   }
 
 
-  public VerifyPhoneRegistrationReq code(@javax.annotation.Nonnull String code) {
-    this.code = code;
+  public UpdatePasswordAccountReq newPassword(@javax.annotation.Nonnull String newPassword) {
+    this.newPassword = newPassword;
     return this;
   }
 
   /**
-   * Get code
-   * @return code
+   * Get newPassword
+   * @return newPassword
    */
   @javax.annotation.Nonnull
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
+  @JsonProperty(value = JSON_PROPERTY_NEW_PASSWORD, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public String getCode() {
-    return code;
+  public String getNewPassword() {
+    return newPassword;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_CODE, required = true)
+  @JsonProperty(value = JSON_PROPERTY_NEW_PASSWORD, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCode(@javax.annotation.Nonnull String code) {
-    this.code = code;
+  public void setNewPassword(@javax.annotation.Nonnull String newPassword) {
+    this.newPassword = newPassword;
   }
 
 
   /**
-   * Return true if this VerifyPhoneRegistration_Req object is equal to o.
+   * Return true if this UpdatePasswordAccount_Req object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -108,22 +108,22 @@ public class VerifyPhoneRegistrationReq {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    VerifyPhoneRegistrationReq verifyPhoneRegistrationReq = (VerifyPhoneRegistrationReq) o;
-    return Objects.equals(this.phone, verifyPhoneRegistrationReq.phone) &&
-        Objects.equals(this.code, verifyPhoneRegistrationReq.code);
+    UpdatePasswordAccountReq updatePasswordAccountReq = (UpdatePasswordAccountReq) o;
+    return Objects.equals(this.oldPassword, updatePasswordAccountReq.oldPassword) &&
+        Objects.equals(this.newPassword, updatePasswordAccountReq.newPassword);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(phone, code);
+    return Objects.hash(oldPassword, newPassword);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class VerifyPhoneRegistrationReq {\n");
-    sb.append("    phone: ").append(toIndentedString(phone)).append("\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("class UpdatePasswordAccountReq {\n");
+    sb.append("    oldPassword: ").append(toIndentedString(oldPassword)).append("\n");
+    sb.append("    newPassword: ").append(toIndentedString(newPassword)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -168,14 +168,14 @@ public class VerifyPhoneRegistrationReq {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `phone` to the URL query string
-    if (getPhone() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sphone%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPhone()))));
+    // add `old_password` to the URL query string
+    if (getOldPassword() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sold_password%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getOldPassword()))));
     }
 
-    // add `code` to the URL query string
-    if (getCode() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%scode%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCode()))));
+    // add `new_password` to the URL query string
+    if (getNewPassword() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%snew_password%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getNewPassword()))));
     }
 
     return joiner.toString();

@@ -1,13 +1,14 @@
 
 
-# StartEmailRegistrationResp
+# UpdatePasswordAccountReq
 
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**code** | **String** |  |  [optional] |
+|**oldPassword** | **String** |  |  |
+|**newPassword** | **String** |  |  |
 
 
 

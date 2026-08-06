@@ -6,7 +6,7 @@ info:
 servers:
 - url: /
 tags:
-- description: 账号接口。
+- description: AccountService 提供 BBS 账号接口
   name: AccountService
 - description: ArticleService 提供 BBS 文章接口
   name: ArticleService
@@ -783,7 +783,7 @@ paths:
       - application/json
   /v1/user/account/avatar:
     get:
-      description: 生成默认账号头像。
+      description: 生成默认账号头像
       operationId: AccountService_Avatar
       parameters:
       - explode: true
@@ -806,7 +806,7 @@ paths:
       - application/json
   /v1/user/account/get-current:
     post:
-      description: 获取当前账号的完整资料。
+      description: 获取当前账号完整资料
       operationId: AccountService_GetCurrent
       requestBody:
         content:
@@ -828,7 +828,7 @@ paths:
       - application/json
   /v1/user/account/get-profile:
     post:
-      description: 按账号 ID 获取账号展示资料。
+      description: 按账号 ID 获取展示资料
       operationId: AccountService_GetProfile
       requestBody:
         content:
@@ -848,9 +848,75 @@ paths:
       x-content-type: application/json
       x-accepts:
       - application/json
+  /v1/user/account/update-email:
+    post:
+      description: 更新当前账号邮箱
+      operationId: AccountService_UpdateEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEmailAccount_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateEmailAccount_Resp"
+          description: OK
+      tags:
+      - AccountService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/user/account/update-password:
+    post:
+      description: 更新当前账号密码
+      operationId: AccountService_UpdatePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePasswordAccount_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdatePasswordAccount_Resp"
+          description: OK
+      tags:
+      - AccountService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/user/account/update-phone:
+    post:
+      description: 更新当前账号手机号
+      operationId: AccountService_UpdatePhone
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePhoneAccount_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdatePhoneAccount_Resp"
+          description: OK
+      tags:
+      - AccountService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
   /v1/user/account/update-profile:
     post:
-      description: 更新当前账号的展示资料。
+      description: 更新当前账号展示资料
       operationId: AccountService_UpdateProfile
       requestBody:
         content:
@@ -958,88 +1024,22 @@ paths:
       x-content-type: application/json
       x-accepts:
       - application/json
-  /v1/user/auth/start-email-registration:
+  /v1/user/auth/register:
     post:
-      description: 开始邮箱注册。
-      operationId: AuthService_StartEmailRegistration
+      description: 注册账号。
+      operationId: AuthService_Register
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/StartEmailRegistration_Req"
+              $ref: "#/components/schemas/Register_Req"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/StartEmailRegistration_Resp"
-          description: OK
-      tags:
-      - AuthService
-      x-content-type: application/json
-      x-accepts:
-      - application/json
-  /v1/user/auth/start-phone-registration:
-    post:
-      description: 开始手机注册。
-      operationId: AuthService_StartPhoneRegistration
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/StartPhoneRegistration_Req"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/StartPhoneRegistration_Resp"
-          description: OK
-      tags:
-      - AuthService
-      x-content-type: application/json
-      x-accepts:
-      - application/json
-  /v1/user/auth/verify-email-registration:
-    post:
-      description: 校验邮箱注册验证码。
-      operationId: AuthService_VerifyEmailRegistration
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/VerifyEmailRegistration_Req"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/VerifyEmailRegistration_Resp"
-          description: OK
-      tags:
-      - AuthService
-      x-content-type: application/json
-      x-accepts:
-      - application/json
-  /v1/user/auth/verify-phone-registration:
-    post:
-      description: 校验手机注册验证码。
-      operationId: AuthService_VerifyPhoneRegistration
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/VerifyPhoneRegistration_Req"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/VerifyPhoneRegistration_Resp"
+                $ref: "#/components/schemas/Register_Resp"
           description: OK
       tags:
       - AuthService
@@ -2550,19 +2550,19 @@ components:
         profile:
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 5
+          follow_count: 9
           name: name
           nickname: nickname
           mbti: MBTI_UNSPECIFIED
           created_at: 2000-01-23T04:56:07.000+00:00
           id: id
-          follower_count: 2
+          follower_count: 3
           url: url
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
       properties:
         profile:
-          $ref: "#/components/schemas/Resp_AccountProfile"
+          $ref: "#/components/schemas/AccountProfile"
       type: object
     GetStatusRelation_Req:
       properties:
@@ -4204,6 +4204,33 @@ components:
           format: date-time
           type: string
       type: object
+    Register_Req:
+      properties:
+        type:
+          enum:
+          - REGISTER_TYPE_UNSPECIFIED
+          - REGISTER_TYPE_EMAIL
+          - REGISTER_TYPE_PHONE
+          format: enum
+          type: string
+        name:
+          type: string
+        password:
+          type: string
+        nickname:
+          type: string
+        email_credential:
+          $ref: "#/components/schemas/Req_EmailCredential"
+        phone_credential:
+          $ref: "#/components/schemas/Req_PhoneCredential"
+      required:
+      - name
+      - password
+      - type
+      type: object
+    Register_Resp:
+      properties: {}
+      type: object
     Req_Article:
       properties:
         title:
@@ -5587,50 +5614,6 @@ components:
         code:
           type: string
       type: object
-    StartEmailRegistration_Req:
-      properties:
-        email:
-          type: string
-        password:
-          type: string
-        name:
-          type: string
-        nickname:
-          type: string
-      required:
-      - email
-      - name
-      - password
-      type: object
-    StartEmailRegistration_Resp:
-      example:
-        code: code
-      properties:
-        code:
-          type: string
-      type: object
-    StartPhoneRegistration_Req:
-      properties:
-        phone:
-          type: string
-        password:
-          type: string
-        name:
-          type: string
-        nickname:
-          type: string
-      required:
-      - name
-      - password
-      - phone
-      type: object
-    StartPhoneRegistration_Resp:
-      example:
-        code: code
-      properties:
-        code:
-          type: string
-      type: object
     ThankArticle_Req:
       properties:
         article_id:
@@ -5884,9 +5867,48 @@ components:
         article:
           $ref: "#/components/schemas/ArticleDetail"
       type: object
+    UpdateEmailAccount_Req:
+      properties:
+        email:
+          type: string
+        code:
+          type: string
+      required:
+      - code
+      - email
+      type: object
+    UpdateEmailAccount_Resp:
+      properties: {}
+      type: object
+    UpdatePasswordAccount_Req:
+      properties:
+        old_password:
+          type: string
+        new_password:
+          type: string
+      required:
+      - new_password
+      - old_password
+      type: object
+    UpdatePasswordAccount_Resp:
+      properties: {}
+      type: object
+    UpdatePhoneAccount_Req:
+      properties:
+        phone:
+          type: string
+        code:
+          type: string
+      required:
+      - code
+      - phone
+      type: object
+    UpdatePhoneAccount_Resp:
+      properties: {}
+      type: object
     UpdateProfileAccount_Req:
       properties:
-        avatar_url:
+        avatar_asset_id:
           type: string
         nickname:
           type: string
@@ -5921,19 +5943,19 @@ components:
         profile:
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 5
+          follow_count: 9
           name: name
           nickname: nickname
           mbti: MBTI_UNSPECIFIED
           created_at: 2000-01-23T04:56:07.000+00:00
           id: id
-          follower_count: 2
+          follower_count: 3
           url: url
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
       properties:
         profile:
-          $ref: "#/components/schemas/Resp_AccountProfile"
+          $ref: "#/components/schemas/AccountProfile"
       type: object
     UpdateTag_Req:
       properties:
@@ -5984,31 +6006,5 @@ components:
       properties:
         location:
           $ref: "#/components/schemas/Resp_Location"
-      type: object
-    VerifyEmailRegistration_Req:
-      properties:
-        email:
-          type: string
-        code:
-          type: string
-      required:
-      - code
-      - email
-      type: object
-    VerifyEmailRegistration_Resp:
-      properties: {}
-      type: object
-    VerifyPhoneRegistration_Req:
-      properties:
-        phone:
-          type: string
-        code:
-          type: string
-      required:
-      - code
-      - phone
-      type: object
-    VerifyPhoneRegistration_Resp:
-      properties: {}
       type: object
 

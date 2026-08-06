@@ -22,6 +22,9 @@ import com.bass.bbs.model.GetCurrentAccountResp;
 import com.bass.bbs.model.GetProfileAccountReq;
 import com.bass.bbs.model.GetProfileAccountResp;
 import com.bass.bbs.model.ImageResp;
+import com.bass.bbs.model.UpdateEmailAccountReq;
+import com.bass.bbs.model.UpdatePasswordAccountReq;
+import com.bass.bbs.model.UpdatePhoneAccountReq;
 import com.bass.bbs.model.UpdateProfileAccountReq;
 import com.bass.bbs.model.UpdateProfileAccountResp;
 
@@ -169,7 +172,7 @@ public class AccountService {
 
   /**
    * 
-   * 生成默认账号头像。
+   * 生成默认账号头像
    * @param apiRequest {@link APIAvatarRequest}
    * @return ImageResp
    * @throws ApiException if fails to make API call
@@ -180,7 +183,7 @@ public class AccountService {
 
   /**
    * 
-   * 生成默认账号头像。
+   * 生成默认账号头像
    * @param apiRequest {@link APIAvatarRequest}
    * @param headers Optional headers to include in the request
    * @return ImageResp
@@ -194,7 +197,7 @@ public class AccountService {
 
   /**
    * 
-   * 生成默认账号头像。
+   * 生成默认账号头像
    * @param apiRequest {@link APIAvatarRequest}
    * @return ApiResponse&lt;ImageResp&gt;
    * @throws ApiException if fails to make API call
@@ -205,7 +208,7 @@ public class AccountService {
 
   /**
    * 
-   * 生成默认账号头像。
+   * 生成默认账号头像
    * @param apiRequest {@link APIAvatarRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;ImageResp&gt;
@@ -218,7 +221,7 @@ public class AccountService {
 
   /**
    * 
-   * 生成默认账号头像。
+   * 生成默认账号头像
    * @param name  (optional)
    * @return ImageResp
    * @throws ApiException if fails to make API call
@@ -229,7 +232,7 @@ public class AccountService {
 
   /**
    * 
-   * 生成默认账号头像。
+   * 生成默认账号头像
    * @param name  (optional)
    * @param headers Optional headers to include in the request
    * @return ImageResp
@@ -242,7 +245,7 @@ public class AccountService {
 
   /**
    * 
-   * 生成默认账号头像。
+   * 生成默认账号头像
    * @param name  (optional)
    * @return ApiResponse&lt;ImageResp&gt;
    * @throws ApiException if fails to make API call
@@ -253,7 +256,7 @@ public class AccountService {
 
   /**
    * 
-   * 生成默认账号头像。
+   * 生成默认账号头像
    * @param name  (optional)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;ImageResp&gt;
@@ -375,7 +378,7 @@ public class AccountService {
 
   /**
    * 
-   * 获取当前账号的完整资料。
+   * 获取当前账号完整资料
    * @param apiRequest {@link APIGetCurrentRequest}
    * @return GetCurrentAccountResp
    * @throws ApiException if fails to make API call
@@ -386,7 +389,7 @@ public class AccountService {
 
   /**
    * 
-   * 获取当前账号的完整资料。
+   * 获取当前账号完整资料
    * @param apiRequest {@link APIGetCurrentRequest}
    * @param headers Optional headers to include in the request
    * @return GetCurrentAccountResp
@@ -400,7 +403,7 @@ public class AccountService {
 
   /**
    * 
-   * 获取当前账号的完整资料。
+   * 获取当前账号完整资料
    * @param apiRequest {@link APIGetCurrentRequest}
    * @return ApiResponse&lt;GetCurrentAccountResp&gt;
    * @throws ApiException if fails to make API call
@@ -411,7 +414,7 @@ public class AccountService {
 
   /**
    * 
-   * 获取当前账号的完整资料。
+   * 获取当前账号完整资料
    * @param apiRequest {@link APIGetCurrentRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetCurrentAccountResp&gt;
@@ -424,7 +427,7 @@ public class AccountService {
 
   /**
    * 
-   * 获取当前账号的完整资料。
+   * 获取当前账号完整资料
    * @param body  (required)
    * @return GetCurrentAccountResp
    * @throws ApiException if fails to make API call
@@ -435,7 +438,7 @@ public class AccountService {
 
   /**
    * 
-   * 获取当前账号的完整资料。
+   * 获取当前账号完整资料
    * @param body  (required)
    * @param headers Optional headers to include in the request
    * @return GetCurrentAccountResp
@@ -448,7 +451,7 @@ public class AccountService {
 
   /**
    * 
-   * 获取当前账号的完整资料。
+   * 获取当前账号完整资料
    * @param body  (required)
    * @return ApiResponse&lt;GetCurrentAccountResp&gt;
    * @throws ApiException if fails to make API call
@@ -459,7 +462,7 @@ public class AccountService {
 
   /**
    * 
-   * 获取当前账号的完整资料。
+   * 获取当前账号完整资料
    * @param body  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetCurrentAccountResp&gt;
@@ -576,7 +579,7 @@ public class AccountService {
 
   /**
    * 
-   * 按账号 ID 获取账号展示资料。
+   * 按账号 ID 获取展示资料
    * @param apiRequest {@link APIGetProfileRequest}
    * @return GetProfileAccountResp
    * @throws ApiException if fails to make API call
@@ -587,7 +590,7 @@ public class AccountService {
 
   /**
    * 
-   * 按账号 ID 获取账号展示资料。
+   * 按账号 ID 获取展示资料
    * @param apiRequest {@link APIGetProfileRequest}
    * @param headers Optional headers to include in the request
    * @return GetProfileAccountResp
@@ -601,7 +604,7 @@ public class AccountService {
 
   /**
    * 
-   * 按账号 ID 获取账号展示资料。
+   * 按账号 ID 获取展示资料
    * @param apiRequest {@link APIGetProfileRequest}
    * @return ApiResponse&lt;GetProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
@@ -612,7 +615,7 @@ public class AccountService {
 
   /**
    * 
-   * 按账号 ID 获取账号展示资料。
+   * 按账号 ID 获取展示资料
    * @param apiRequest {@link APIGetProfileRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetProfileAccountResp&gt;
@@ -625,7 +628,7 @@ public class AccountService {
 
   /**
    * 
-   * 按账号 ID 获取账号展示资料。
+   * 按账号 ID 获取展示资料
    * @param getProfileAccountReq  (required)
    * @return GetProfileAccountResp
    * @throws ApiException if fails to make API call
@@ -636,7 +639,7 @@ public class AccountService {
 
   /**
    * 
-   * 按账号 ID 获取账号展示资料。
+   * 按账号 ID 获取展示资料
    * @param getProfileAccountReq  (required)
    * @param headers Optional headers to include in the request
    * @return GetProfileAccountResp
@@ -649,7 +652,7 @@ public class AccountService {
 
   /**
    * 
-   * 按账号 ID 获取账号展示资料。
+   * 按账号 ID 获取展示资料
    * @param getProfileAccountReq  (required)
    * @return ApiResponse&lt;GetProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
@@ -660,7 +663,7 @@ public class AccountService {
 
   /**
    * 
-   * 按账号 ID 获取账号展示资料。
+   * 按账号 ID 获取展示资料
    * @param getProfileAccountReq  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetProfileAccountResp&gt;
@@ -777,7 +780,610 @@ public class AccountService {
 
   /**
    * 
-   * 更新当前账号的展示资料。
+   * 更新当前账号邮箱
+   * @param apiRequest {@link APIUpdateEmailRequest}
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updateEmail(APIUpdateEmailRequest apiRequest) throws ApiException {
+    return updateEmail(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号邮箱
+   * @param apiRequest {@link APIUpdateEmailRequest}
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updateEmail(APIUpdateEmailRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    UpdateEmailAccountReq updateEmailAccountReq = apiRequest.updateEmailAccountReq();
+    return updateEmail(updateEmailAccountReq, headers);
+  }
+
+  /**
+   * 
+   * 更新当前账号邮箱
+   * @param apiRequest {@link APIUpdateEmailRequest}
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updateEmailWithHttpInfo(APIUpdateEmailRequest apiRequest) throws ApiException {
+    return updateEmailWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号邮箱
+   * @param apiRequest {@link APIUpdateEmailRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updateEmailWithHttpInfo(APIUpdateEmailRequest apiRequest, Map<String, String> headers) throws ApiException {
+    UpdateEmailAccountReq updateEmailAccountReq = apiRequest.updateEmailAccountReq();
+    return updateEmailWithHttpInfo(updateEmailAccountReq, headers);
+  }
+
+  /**
+   * 
+   * 更新当前账号邮箱
+   * @param updateEmailAccountReq  (required)
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updateEmail(@javax.annotation.Nonnull UpdateEmailAccountReq updateEmailAccountReq) throws ApiException {
+    return updateEmail(updateEmailAccountReq, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号邮箱
+   * @param updateEmailAccountReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updateEmail(@javax.annotation.Nonnull UpdateEmailAccountReq updateEmailAccountReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = updateEmailWithHttpInfo(updateEmailAccountReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 更新当前账号邮箱
+   * @param updateEmailAccountReq  (required)
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updateEmailWithHttpInfo(@javax.annotation.Nonnull UpdateEmailAccountReq updateEmailAccountReq) throws ApiException {
+    return updateEmailWithHttpInfo(updateEmailAccountReq, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号邮箱
+   * @param updateEmailAccountReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updateEmailWithHttpInfo(@javax.annotation.Nonnull UpdateEmailAccountReq updateEmailAccountReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = updateEmailRequestBuilder(updateEmailAccountReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("updateEmail", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<Object>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        Object responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<Object>() {});
+        
+
+        return new ApiResponse<Object>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder updateEmailRequestBuilder(@javax.annotation.Nonnull UpdateEmailAccountReq updateEmailAccountReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'updateEmailAccountReq' is set
+    if (updateEmailAccountReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'updateEmailAccountReq' when calling updateEmail");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/user/account/update-email";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(updateEmailAccountReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIUpdateEmailRequest {
+    @javax.annotation.Nonnull
+    private UpdateEmailAccountReq updateEmailAccountReq; //  (required)
+
+    private APIUpdateEmailRequest(Builder builder) {
+      this.updateEmailAccountReq = builder.updateEmailAccountReq;
+    }
+    @javax.annotation.Nonnull
+    public UpdateEmailAccountReq updateEmailAccountReq() {
+      return updateEmailAccountReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private UpdateEmailAccountReq updateEmailAccountReq;
+
+      public Builder updateEmailAccountReq(@javax.annotation.Nonnull UpdateEmailAccountReq updateEmailAccountReq) {
+        this.updateEmailAccountReq = updateEmailAccountReq;
+        return this;
+      }
+      public APIUpdateEmailRequest build() {
+        return new APIUpdateEmailRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 更新当前账号密码
+   * @param apiRequest {@link APIUpdatePasswordRequest}
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updatePassword(APIUpdatePasswordRequest apiRequest) throws ApiException {
+    return updatePassword(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号密码
+   * @param apiRequest {@link APIUpdatePasswordRequest}
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updatePassword(APIUpdatePasswordRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    UpdatePasswordAccountReq updatePasswordAccountReq = apiRequest.updatePasswordAccountReq();
+    return updatePassword(updatePasswordAccountReq, headers);
+  }
+
+  /**
+   * 
+   * 更新当前账号密码
+   * @param apiRequest {@link APIUpdatePasswordRequest}
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updatePasswordWithHttpInfo(APIUpdatePasswordRequest apiRequest) throws ApiException {
+    return updatePasswordWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号密码
+   * @param apiRequest {@link APIUpdatePasswordRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updatePasswordWithHttpInfo(APIUpdatePasswordRequest apiRequest, Map<String, String> headers) throws ApiException {
+    UpdatePasswordAccountReq updatePasswordAccountReq = apiRequest.updatePasswordAccountReq();
+    return updatePasswordWithHttpInfo(updatePasswordAccountReq, headers);
+  }
+
+  /**
+   * 
+   * 更新当前账号密码
+   * @param updatePasswordAccountReq  (required)
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updatePassword(@javax.annotation.Nonnull UpdatePasswordAccountReq updatePasswordAccountReq) throws ApiException {
+    return updatePassword(updatePasswordAccountReq, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号密码
+   * @param updatePasswordAccountReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updatePassword(@javax.annotation.Nonnull UpdatePasswordAccountReq updatePasswordAccountReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = updatePasswordWithHttpInfo(updatePasswordAccountReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 更新当前账号密码
+   * @param updatePasswordAccountReq  (required)
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updatePasswordWithHttpInfo(@javax.annotation.Nonnull UpdatePasswordAccountReq updatePasswordAccountReq) throws ApiException {
+    return updatePasswordWithHttpInfo(updatePasswordAccountReq, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号密码
+   * @param updatePasswordAccountReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updatePasswordWithHttpInfo(@javax.annotation.Nonnull UpdatePasswordAccountReq updatePasswordAccountReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = updatePasswordRequestBuilder(updatePasswordAccountReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("updatePassword", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<Object>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        Object responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<Object>() {});
+        
+
+        return new ApiResponse<Object>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder updatePasswordRequestBuilder(@javax.annotation.Nonnull UpdatePasswordAccountReq updatePasswordAccountReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'updatePasswordAccountReq' is set
+    if (updatePasswordAccountReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'updatePasswordAccountReq' when calling updatePassword");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/user/account/update-password";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(updatePasswordAccountReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIUpdatePasswordRequest {
+    @javax.annotation.Nonnull
+    private UpdatePasswordAccountReq updatePasswordAccountReq; //  (required)
+
+    private APIUpdatePasswordRequest(Builder builder) {
+      this.updatePasswordAccountReq = builder.updatePasswordAccountReq;
+    }
+    @javax.annotation.Nonnull
+    public UpdatePasswordAccountReq updatePasswordAccountReq() {
+      return updatePasswordAccountReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private UpdatePasswordAccountReq updatePasswordAccountReq;
+
+      public Builder updatePasswordAccountReq(@javax.annotation.Nonnull UpdatePasswordAccountReq updatePasswordAccountReq) {
+        this.updatePasswordAccountReq = updatePasswordAccountReq;
+        return this;
+      }
+      public APIUpdatePasswordRequest build() {
+        return new APIUpdatePasswordRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 更新当前账号手机号
+   * @param apiRequest {@link APIUpdatePhoneRequest}
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updatePhone(APIUpdatePhoneRequest apiRequest) throws ApiException {
+    return updatePhone(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号手机号
+   * @param apiRequest {@link APIUpdatePhoneRequest}
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updatePhone(APIUpdatePhoneRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    UpdatePhoneAccountReq updatePhoneAccountReq = apiRequest.updatePhoneAccountReq();
+    return updatePhone(updatePhoneAccountReq, headers);
+  }
+
+  /**
+   * 
+   * 更新当前账号手机号
+   * @param apiRequest {@link APIUpdatePhoneRequest}
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updatePhoneWithHttpInfo(APIUpdatePhoneRequest apiRequest) throws ApiException {
+    return updatePhoneWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号手机号
+   * @param apiRequest {@link APIUpdatePhoneRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updatePhoneWithHttpInfo(APIUpdatePhoneRequest apiRequest, Map<String, String> headers) throws ApiException {
+    UpdatePhoneAccountReq updatePhoneAccountReq = apiRequest.updatePhoneAccountReq();
+    return updatePhoneWithHttpInfo(updatePhoneAccountReq, headers);
+  }
+
+  /**
+   * 
+   * 更新当前账号手机号
+   * @param updatePhoneAccountReq  (required)
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updatePhone(@javax.annotation.Nonnull UpdatePhoneAccountReq updatePhoneAccountReq) throws ApiException {
+    return updatePhone(updatePhoneAccountReq, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号手机号
+   * @param updatePhoneAccountReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object updatePhone(@javax.annotation.Nonnull UpdatePhoneAccountReq updatePhoneAccountReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = updatePhoneWithHttpInfo(updatePhoneAccountReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 更新当前账号手机号
+   * @param updatePhoneAccountReq  (required)
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updatePhoneWithHttpInfo(@javax.annotation.Nonnull UpdatePhoneAccountReq updatePhoneAccountReq) throws ApiException {
+    return updatePhoneWithHttpInfo(updatePhoneAccountReq, null);
+  }
+
+  /**
+   * 
+   * 更新当前账号手机号
+   * @param updatePhoneAccountReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> updatePhoneWithHttpInfo(@javax.annotation.Nonnull UpdatePhoneAccountReq updatePhoneAccountReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = updatePhoneRequestBuilder(updatePhoneAccountReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("updatePhone", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<Object>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        Object responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<Object>() {});
+        
+
+        return new ApiResponse<Object>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder updatePhoneRequestBuilder(@javax.annotation.Nonnull UpdatePhoneAccountReq updatePhoneAccountReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'updatePhoneAccountReq' is set
+    if (updatePhoneAccountReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'updatePhoneAccountReq' when calling updatePhone");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/user/account/update-phone";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(updatePhoneAccountReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIUpdatePhoneRequest {
+    @javax.annotation.Nonnull
+    private UpdatePhoneAccountReq updatePhoneAccountReq; //  (required)
+
+    private APIUpdatePhoneRequest(Builder builder) {
+      this.updatePhoneAccountReq = builder.updatePhoneAccountReq;
+    }
+    @javax.annotation.Nonnull
+    public UpdatePhoneAccountReq updatePhoneAccountReq() {
+      return updatePhoneAccountReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private UpdatePhoneAccountReq updatePhoneAccountReq;
+
+      public Builder updatePhoneAccountReq(@javax.annotation.Nonnull UpdatePhoneAccountReq updatePhoneAccountReq) {
+        this.updatePhoneAccountReq = updatePhoneAccountReq;
+        return this;
+      }
+      public APIUpdatePhoneRequest build() {
+        return new APIUpdatePhoneRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 更新当前账号展示资料
    * @param apiRequest {@link APIUpdateProfileRequest}
    * @return UpdateProfileAccountResp
    * @throws ApiException if fails to make API call
@@ -788,7 +1394,7 @@ public class AccountService {
 
   /**
    * 
-   * 更新当前账号的展示资料。
+   * 更新当前账号展示资料
    * @param apiRequest {@link APIUpdateProfileRequest}
    * @param headers Optional headers to include in the request
    * @return UpdateProfileAccountResp
@@ -802,7 +1408,7 @@ public class AccountService {
 
   /**
    * 
-   * 更新当前账号的展示资料。
+   * 更新当前账号展示资料
    * @param apiRequest {@link APIUpdateProfileRequest}
    * @return ApiResponse&lt;UpdateProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
@@ -813,7 +1419,7 @@ public class AccountService {
 
   /**
    * 
-   * 更新当前账号的展示资料。
+   * 更新当前账号展示资料
    * @param apiRequest {@link APIUpdateProfileRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;UpdateProfileAccountResp&gt;
@@ -826,7 +1432,7 @@ public class AccountService {
 
   /**
    * 
-   * 更新当前账号的展示资料。
+   * 更新当前账号展示资料
    * @param updateProfileAccountReq  (required)
    * @return UpdateProfileAccountResp
    * @throws ApiException if fails to make API call
@@ -837,7 +1443,7 @@ public class AccountService {
 
   /**
    * 
-   * 更新当前账号的展示资料。
+   * 更新当前账号展示资料
    * @param updateProfileAccountReq  (required)
    * @param headers Optional headers to include in the request
    * @return UpdateProfileAccountResp
@@ -850,7 +1456,7 @@ public class AccountService {
 
   /**
    * 
-   * 更新当前账号的展示资料。
+   * 更新当前账号展示资料
    * @param updateProfileAccountReq  (required)
    * @return ApiResponse&lt;UpdateProfileAccountResp&gt;
    * @throws ApiException if fails to make API call
@@ -861,7 +1467,7 @@ public class AccountService {
 
   /**
    * 
-   * 更新当前账号的展示资料。
+   * 更新当前账号展示资料
    * @param updateProfileAccountReq  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;UpdateProfileAccountResp&gt;

@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: bass-dtm-init
+  namespace: bass-dev
+  labels:
+    app.kubernetes.io/name: dtm
+    app.kubernetes.io/part-of: bass
+    app.kubernetes.io/component: middleware
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: dtm-init
+        app.kubernetes.io/part-of: bass
+        app.kubernetes.io/component: middleware
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: postgresql
+              topologyKey: kubernetes.io/hostname
+      restartPolicy: OnFailure
+      containers:
+        - name: postgres
+          image: registry-1.docker.io/bitnami/postgresql@sha256:db2312d9b243afa8c3b3f5496e478d17d0dff9791d06f3b93b9567abd86ae92f
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bass-postgres-secret
+                  key: password
+          command:
+            - sh
+            - -c
+            - psql -h bass-postgresql.bass-dev.svc.cluster.local -p 5432 -U admin -d bass -f /sql/init.sql
+          volumeMounts:
+            - name: init-sql
+              mountPath: /sql
+              readOnly: true
+      volumes:
+        - name: init-sql
+          configMap:
+            name: bass-dtm-init-sql

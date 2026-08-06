@@ -123,6 +123,47 @@ services:
       timeout: 10s
       retries: 5
 
+
+  dtm-init:
+    image: postgres:18.4
+    restart: "no"
+    env_file:
+      - .test.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ../sql/dtm/postgres/v1.19.0-init.sql:/sql/init.sql:ro
+    command: >
+      sh -c "psql -h postgres -p 5432 -U ${POSTGRES_USER} -d ${POSTGRES_DB} -f /sql/init.sql"
+    networks:
+      - bass
+
+  dtm:
+    image: yedf/dtm:1.19.0
+    restart: on-failure:3
+    env_file:
+      - .test.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dtm-init:
+        condition: service_completed_successfully
+    environment:
+      STORE_DRIVER: postgres
+      STORE_HOST: postgres
+      STORE_PORT: 5432
+      STORE_USER: ${POSTGRES_USER}
+      STORE_PASSWORD: ${POSTGRES_PASSWORD}
+      STORE_DB: ${POSTGRES_DB}
+      STORE_SCHEMA: dtm
+    ports:
+      - "${DTM_HTTP_PORT:-36789}:36789"
+      - "${DTM_GRPC_PORT:-36790}:36790"
+    networks:
+      - bass
 volumes:
   postgres_data:
   redis_data:

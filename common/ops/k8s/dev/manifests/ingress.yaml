@@ -1,15 +1,4 @@
-﻿# HTTP middleware entrypoints. Public routes are protected by RateLimit.
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: bass-ui-rate-limit
-  namespace: bass-dev
-spec:
-  rateLimit:
-    average: 30
-    burst: 10
-    period: 1m
----
+# HTTP middleware entrypoints for dev environment.
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -21,8 +10,21 @@ spec:
   routes:
     - match: PathPrefix(`/`)
       kind: Rule
-      middlewares:
-        - name: bass-ui-rate-limit
+      services:
+        - name: bass-consul-ui
+          port: 80
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: consul-ui-web
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - web-public
+  routes:
+    - match: Host(`consul.dev.bass.local`) && PathPrefix(`/`)
+      kind: Rule
       services:
         - name: bass-consul-ui
           port: 80
@@ -38,8 +40,6 @@ spec:
   routes:
     - match: PathPrefix(`/`)
       kind: Rule
-      middlewares:
-        - name: bass-ui-rate-limit
       services:
         - name: bass-consul-server
           port: 8500
@@ -70,8 +70,21 @@ spec:
   routes:
     - match: PathPrefix(`/`)
       kind: Rule
-      middlewares:
-        - name: bass-ui-rate-limit
+      services:
+        - name: bass-minio-console
+          port: 9001
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: minio-console-web
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - web-public
+  routes:
+    - match: Host(`minio.dev.bass.local`) && PathPrefix(`/`)
+      kind: Rule
       services:
         - name: bass-minio-console
           port: 9001
@@ -90,3 +103,48 @@ spec:
       services:
         - name: bass-nats-headless
           port: 8222
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nats-monitor-web
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - web-public
+  routes:
+    - match: Host(`nats.dev.bass.local`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: bass-nats-headless
+          port: 8222
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dtm-http
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - dtm-http
+  routes:
+    - match: PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: bass-dtm
+          port: 36789
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dtm-http-web
+  namespace: bass-dev
+spec:
+  entryPoints:
+    - web-public
+  routes:
+    - match: Host(`dtm.dev.bass.local`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: bass-dtm
+          port: 36789

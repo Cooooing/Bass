@@ -1,4 +1,4 @@
-# VerifyEmailRegistrationReq
+# UpdateEmailAccountReq
 
 
 ## Properties
@@ -11,9 +11,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { VerifyEmailRegistrationReq } from '@bass/bbs-sdk-axios';
+import { UpdateEmailAccountReq } from '@bass/bbs-sdk-axios';
 
-const instance: VerifyEmailRegistrationReq = {
+const instance: UpdateEmailAccountReq = {
     email,
     code,
 };

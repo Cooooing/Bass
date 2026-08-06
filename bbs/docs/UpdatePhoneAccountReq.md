@@ -1,18 +1,20 @@
-# StartPhoneRegistrationResp
+# UpdatePhoneAccountReq
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**code** | **string** |  | [optional] [default to undefined]
+**phone** | **string** |  | [default to undefined]
+**code** | **string** |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { StartPhoneRegistrationResp } from '@bass/bbs-sdk-axios';
+import { UpdatePhoneAccountReq } from '@bass/bbs-sdk-axios';
 
-const instance: StartPhoneRegistrationResp = {
+const instance: UpdatePhoneAccountReq = {
+    phone,
     code,
 };
 ```

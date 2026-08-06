@@ -335,7 +335,7 @@ export interface GetProfileAccountReq {
     'user_id': string;
 }
 export interface GetProfileAccountResp {
-    'profile'?: RespAccountProfile;
+    'profile'?: AccountProfile;
 }
 export interface GetStatusRelationReq {
     'target_id': string;
@@ -575,6 +575,23 @@ export interface RefreshTokenResp {
     'refresh_token_expires_at'?: string;
     'session_expires_at'?: string;
 }
+export interface RegisterReq {
+    'type': RegisterReqTypeEnum;
+    'name': string;
+    'password': string;
+    'nickname'?: string;
+    'email_credential'?: ReqEmailCredential;
+    'phone_credential'?: ReqPhoneCredential;
+}
+
+export const RegisterReqTypeEnum = {
+    REGISTER_TYPE_UNSPECIFIED: 'REGISTER_TYPE_UNSPECIFIED',
+    REGISTER_TYPE_EMAIL: 'REGISTER_TYPE_EMAIL',
+    REGISTER_TYPE_PHONE: 'REGISTER_TYPE_PHONE',
+} as const;
+
+export type RegisterReqTypeEnum = typeof RegisterReqTypeEnum[keyof typeof RegisterReqTypeEnum];
+
 export interface ReqArticle {
     'title': string;
     'content': string;
@@ -1197,24 +1214,6 @@ export interface SendPhoneOtpReq {
 export interface SendPhoneOtpResp {
     'code'?: string;
 }
-export interface StartEmailRegistrationReq {
-    'email': string;
-    'password': string;
-    'name': string;
-    'nickname'?: string;
-}
-export interface StartEmailRegistrationResp {
-    'code'?: string;
-}
-export interface StartPhoneRegistrationReq {
-    'phone': string;
-    'password': string;
-    'name': string;
-    'nickname'?: string;
-}
-export interface StartPhoneRegistrationResp {
-    'code'?: string;
-}
 export interface ThankArticleReq {
     'article_id': string;
     'active': boolean;
@@ -1283,8 +1282,20 @@ export interface UpdateDraftArticleReq {
 export interface UpdateDraftArticleResp {
     'article'?: ArticleDetail;
 }
+export interface UpdateEmailAccountReq {
+    'email': string;
+    'code': string;
+}
+export interface UpdatePasswordAccountReq {
+    'old_password': string;
+    'new_password': string;
+}
+export interface UpdatePhoneAccountReq {
+    'phone': string;
+    'code': string;
+}
 export interface UpdateProfileAccountReq {
-    'avatar_url'?: string;
+    'avatar_asset_id'?: string;
     'nickname'?: string;
     'url'?: string;
     'introduction'?: string;
@@ -1314,7 +1325,7 @@ export const UpdateProfileAccountReqMbtiEnum = {
 export type UpdateProfileAccountReqMbtiEnum = typeof UpdateProfileAccountReqMbtiEnum[keyof typeof UpdateProfileAccountReqMbtiEnum];
 
 export interface UpdateProfileAccountResp {
-    'profile'?: RespAccountProfile;
+    'profile'?: AccountProfile;
 }
 export interface UpdateTagReq {
     'tag_id': string;
@@ -1331,14 +1342,6 @@ export interface UpsertCurrentLocationReq {
 export interface UpsertCurrentLocationResp {
     'location'?: RespLocation;
 }
-export interface VerifyEmailRegistrationReq {
-    'email': string;
-    'code': string;
-}
-export interface VerifyPhoneRegistrationReq {
-    'phone': string;
-    'code': string;
-}
 
 /**
  * AccountService - axios parameter creator
@@ -1346,7 +1349,7 @@ export interface VerifyPhoneRegistrationReq {
 export const AccountServiceAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 生成默认账号头像。
+         * 生成默认账号头像
          * @param {string} [name] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1380,7 +1383,7 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 获取当前账号的完整资料。
+         * 获取当前账号完整资料
          * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1414,7 +1417,7 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 按账号 ID 获取账号展示资料。
+         * 按账号 ID 获取展示资料
          * @param {GetProfileAccountReq} getProfileAccountReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1448,7 +1451,109 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 更新当前账号的展示资料。
+         * 更新当前账号邮箱
+         * @param {UpdateEmailAccountReq} updateEmailAccountReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateEmail: async (updateEmailAccountReq: UpdateEmailAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateEmailAccountReq' is not null or undefined
+            assertParamExists('updateEmail', 'updateEmailAccountReq', updateEmailAccountReq)
+            const localVarPath = `/v1/user/account/update-email`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateEmailAccountReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 更新当前账号密码
+         * @param {UpdatePasswordAccountReq} updatePasswordAccountReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePassword: async (updatePasswordAccountReq: UpdatePasswordAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updatePasswordAccountReq' is not null or undefined
+            assertParamExists('updatePassword', 'updatePasswordAccountReq', updatePasswordAccountReq)
+            const localVarPath = `/v1/user/account/update-password`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updatePasswordAccountReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 更新当前账号手机号
+         * @param {UpdatePhoneAccountReq} updatePhoneAccountReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePhone: async (updatePhoneAccountReq: UpdatePhoneAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updatePhoneAccountReq' is not null or undefined
+            assertParamExists('updatePhone', 'updatePhoneAccountReq', updatePhoneAccountReq)
+            const localVarPath = `/v1/user/account/update-phone`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updatePhoneAccountReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 更新当前账号展示资料
          * @param {UpdateProfileAccountReq} updateProfileAccountReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1491,7 +1596,7 @@ export const AccountServiceFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AccountServiceAxiosParamCreator(configuration)
     return {
         /**
-         * 生成默认账号头像。
+         * 生成默认账号头像
          * @param {string} [name] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1503,7 +1608,7 @@ export const AccountServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 获取当前账号的完整资料。
+         * 获取当前账号完整资料
          * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1515,7 +1620,7 @@ export const AccountServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 按账号 ID 获取账号展示资料。
+         * 按账号 ID 获取展示资料
          * @param {GetProfileAccountReq} getProfileAccountReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1527,7 +1632,43 @@ export const AccountServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 更新当前账号的展示资料。
+         * 更新当前账号邮箱
+         * @param {UpdateEmailAccountReq} updateEmailAccountReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateEmail(updateEmailAccountReq: UpdateEmailAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateEmail(updateEmailAccountReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.updateEmail']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 更新当前账号密码
+         * @param {UpdatePasswordAccountReq} updatePasswordAccountReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updatePassword(updatePasswordAccountReq: UpdatePasswordAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePassword(updatePasswordAccountReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.updatePassword']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 更新当前账号手机号
+         * @param {UpdatePhoneAccountReq} updatePhoneAccountReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updatePhone(updatePhoneAccountReq: UpdatePhoneAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePhone(updatePhoneAccountReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.updatePhone']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 更新当前账号展示资料
          * @param {UpdateProfileAccountReq} updateProfileAccountReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1548,7 +1689,7 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
     const localVarFp = AccountServiceFp(configuration)
     return {
         /**
-         * 生成默认账号头像。
+         * 生成默认账号头像
          * @param {AccountServiceAvatarRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1557,7 +1698,7 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.avatar(requestParameters.name, options).then((request) => request(axios, basePath));
         },
         /**
-         * 获取当前账号的完整资料。
+         * 获取当前账号完整资料
          * @param {AccountServiceGetCurrentRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1566,7 +1707,7 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
         },
         /**
-         * 按账号 ID 获取账号展示资料。
+         * 按账号 ID 获取展示资料
          * @param {AccountServiceGetProfileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1575,7 +1716,34 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.getProfile(requestParameters.getProfileAccountReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 更新当前账号的展示资料。
+         * 更新当前账号邮箱
+         * @param {AccountServiceUpdateEmailRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateEmail(requestParameters: AccountServiceUpdateEmailRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.updateEmail(requestParameters.updateEmailAccountReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 更新当前账号密码
+         * @param {AccountServiceUpdatePasswordRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePassword(requestParameters: AccountServiceUpdatePasswordRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.updatePassword(requestParameters.updatePasswordAccountReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 更新当前账号手机号
+         * @param {AccountServiceUpdatePhoneRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePhone(requestParameters: AccountServiceUpdatePhoneRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.updatePhone(requestParameters.updatePhoneAccountReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 更新当前账号展示资料
          * @param {AccountServiceUpdateProfileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1591,7 +1759,7 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
  */
 export interface AccountServiceInterface {
     /**
-     * 生成默认账号头像。
+     * 生成默认账号头像
      * @param {AccountServiceAvatarRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1599,7 +1767,7 @@ export interface AccountServiceInterface {
     avatar(requestParameters?: AccountServiceAvatarRequest, options?: RawAxiosRequestConfig): AxiosPromise<ImageResp>;
 
     /**
-     * 获取当前账号的完整资料。
+     * 获取当前账号完整资料
      * @param {AccountServiceGetCurrentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1607,7 +1775,7 @@ export interface AccountServiceInterface {
     getCurrent(requestParameters: AccountServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentAccountResp>;
 
     /**
-     * 按账号 ID 获取账号展示资料。
+     * 按账号 ID 获取展示资料
      * @param {AccountServiceGetProfileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1615,7 +1783,31 @@ export interface AccountServiceInterface {
     getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetProfileAccountResp>;
 
     /**
-     * 更新当前账号的展示资料。
+     * 更新当前账号邮箱
+     * @param {AccountServiceUpdateEmailRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateEmail(requestParameters: AccountServiceUpdateEmailRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * 更新当前账号密码
+     * @param {AccountServiceUpdatePasswordRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updatePassword(requestParameters: AccountServiceUpdatePasswordRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * 更新当前账号手机号
+     * @param {AccountServiceUpdatePhoneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updatePhone(requestParameters: AccountServiceUpdatePhoneRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * 更新当前账号展示资料
      * @param {AccountServiceUpdateProfileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1646,6 +1838,27 @@ export interface AccountServiceGetProfileRequest {
 }
 
 /**
+ * Request parameters for updateEmail operation in AccountService.
+ */
+export interface AccountServiceUpdateEmailRequest {
+    readonly updateEmailAccountReq: UpdateEmailAccountReq
+}
+
+/**
+ * Request parameters for updatePassword operation in AccountService.
+ */
+export interface AccountServiceUpdatePasswordRequest {
+    readonly updatePasswordAccountReq: UpdatePasswordAccountReq
+}
+
+/**
+ * Request parameters for updatePhone operation in AccountService.
+ */
+export interface AccountServiceUpdatePhoneRequest {
+    readonly updatePhoneAccountReq: UpdatePhoneAccountReq
+}
+
+/**
  * Request parameters for updateProfile operation in AccountService.
  */
 export interface AccountServiceUpdateProfileRequest {
@@ -1657,7 +1870,7 @@ export interface AccountServiceUpdateProfileRequest {
  */
 export class AccountService extends BaseAPI implements AccountServiceInterface {
     /**
-     * 生成默认账号头像。
+     * 生成默认账号头像
      * @param {AccountServiceAvatarRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1667,7 +1880,7 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
     }
 
     /**
-     * 获取当前账号的完整资料。
+     * 获取当前账号完整资料
      * @param {AccountServiceGetCurrentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1677,7 +1890,7 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
     }
 
     /**
-     * 按账号 ID 获取账号展示资料。
+     * 按账号 ID 获取展示资料
      * @param {AccountServiceGetProfileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1687,7 +1900,37 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
     }
 
     /**
-     * 更新当前账号的展示资料。
+     * 更新当前账号邮箱
+     * @param {AccountServiceUpdateEmailRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public updateEmail(requestParameters: AccountServiceUpdateEmailRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).updateEmail(requestParameters.updateEmailAccountReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 更新当前账号密码
+     * @param {AccountServiceUpdatePasswordRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public updatePassword(requestParameters: AccountServiceUpdatePasswordRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).updatePassword(requestParameters.updatePasswordAccountReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 更新当前账号手机号
+     * @param {AccountServiceUpdatePhoneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public updatePhone(requestParameters: AccountServiceUpdatePhoneRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).updatePhone(requestParameters.updatePhoneAccountReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 更新当前账号展示资料
      * @param {AccountServiceUpdateProfileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -2920,15 +3163,15 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * 开始邮箱注册。
-         * @param {StartEmailRegistrationReq} startEmailRegistrationReq 
+         * 注册账号。
+         * @param {RegisterReq} registerReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startEmailRegistration: async (startEmailRegistrationReq: StartEmailRegistrationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'startEmailRegistrationReq' is not null or undefined
-            assertParamExists('startEmailRegistration', 'startEmailRegistrationReq', startEmailRegistrationReq)
-            const localVarPath = `/v1/user/auth/start-email-registration`;
+        register: async (registerReq: RegisterReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'registerReq' is not null or undefined
+            assertParamExists('register', 'registerReq', registerReq)
+            const localVarPath = `/v1/user/auth/register`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2946,109 +3189,7 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(startEmailRegistrationReq, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 开始手机注册。
-         * @param {StartPhoneRegistrationReq} startPhoneRegistrationReq 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        startPhoneRegistration: async (startPhoneRegistrationReq: StartPhoneRegistrationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'startPhoneRegistrationReq' is not null or undefined
-            assertParamExists('startPhoneRegistration', 'startPhoneRegistrationReq', startPhoneRegistrationReq)
-            const localVarPath = `/v1/user/auth/start-phone-registration`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(startPhoneRegistrationReq, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 校验邮箱注册验证码。
-         * @param {VerifyEmailRegistrationReq} verifyEmailRegistrationReq 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        verifyEmailRegistration: async (verifyEmailRegistrationReq: VerifyEmailRegistrationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'verifyEmailRegistrationReq' is not null or undefined
-            assertParamExists('verifyEmailRegistration', 'verifyEmailRegistrationReq', verifyEmailRegistrationReq)
-            const localVarPath = `/v1/user/auth/verify-email-registration`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(verifyEmailRegistrationReq, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 校验手机注册验证码。
-         * @param {VerifyPhoneRegistrationReq} verifyPhoneRegistrationReq 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        verifyPhoneRegistration: async (verifyPhoneRegistrationReq: VerifyPhoneRegistrationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'verifyPhoneRegistrationReq' is not null or undefined
-            assertParamExists('verifyPhoneRegistration', 'verifyPhoneRegistrationReq', verifyPhoneRegistrationReq)
-            const localVarPath = `/v1/user/auth/verify-phone-registration`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(verifyPhoneRegistrationReq, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(registerReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3113,51 +3254,15 @@ export const AuthServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 开始邮箱注册。
-         * @param {StartEmailRegistrationReq} startEmailRegistrationReq 
+         * 注册账号。
+         * @param {RegisterReq} registerReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async startEmailRegistration(startEmailRegistrationReq: StartEmailRegistrationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StartEmailRegistrationResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.startEmailRegistration(startEmailRegistrationReq, options);
+        async register(registerReq: RegisterReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.register(registerReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthService.startEmailRegistration']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 开始手机注册。
-         * @param {StartPhoneRegistrationReq} startPhoneRegistrationReq 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async startPhoneRegistration(startPhoneRegistrationReq: StartPhoneRegistrationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StartPhoneRegistrationResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.startPhoneRegistration(startPhoneRegistrationReq, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthService.startPhoneRegistration']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 校验邮箱注册验证码。
-         * @param {VerifyEmailRegistrationReq} verifyEmailRegistrationReq 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async verifyEmailRegistration(verifyEmailRegistrationReq: VerifyEmailRegistrationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.verifyEmailRegistration(verifyEmailRegistrationReq, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthService.verifyEmailRegistration']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 校验手机注册验证码。
-         * @param {VerifyPhoneRegistrationReq} verifyPhoneRegistrationReq 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async verifyPhoneRegistration(verifyPhoneRegistrationReq: VerifyPhoneRegistrationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.verifyPhoneRegistration(verifyPhoneRegistrationReq, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AuthService.verifyPhoneRegistration']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AuthService.register']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -3206,40 +3311,13 @@ export const AuthServiceFactory = function (configuration?: Configuration, baseP
             return localVarFp.refreshToken(requestParameters.refreshTokenReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 开始邮箱注册。
-         * @param {AuthServiceStartEmailRegistrationRequest} requestParameters Request parameters.
+         * 注册账号。
+         * @param {AuthServiceRegisterRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        startEmailRegistration(requestParameters: AuthServiceStartEmailRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartEmailRegistrationResp> {
-            return localVarFp.startEmailRegistration(requestParameters.startEmailRegistrationReq, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 开始手机注册。
-         * @param {AuthServiceStartPhoneRegistrationRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        startPhoneRegistration(requestParameters: AuthServiceStartPhoneRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartPhoneRegistrationResp> {
-            return localVarFp.startPhoneRegistration(requestParameters.startPhoneRegistrationReq, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 校验邮箱注册验证码。
-         * @param {AuthServiceVerifyEmailRegistrationRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        verifyEmailRegistration(requestParameters: AuthServiceVerifyEmailRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.verifyEmailRegistration(requestParameters.verifyEmailRegistrationReq, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 校验手机注册验证码。
-         * @param {AuthServiceVerifyPhoneRegistrationRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        verifyPhoneRegistration(requestParameters: AuthServiceVerifyPhoneRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.verifyPhoneRegistration(requestParameters.verifyPhoneRegistrationReq, options).then((request) => request(axios, basePath));
+        register(requestParameters: AuthServiceRegisterRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.register(requestParameters.registerReq, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -3281,36 +3359,12 @@ export interface AuthServiceInterface {
     refreshToken(requestParameters: AuthServiceRefreshTokenRequest, options?: RawAxiosRequestConfig): AxiosPromise<RefreshTokenResp>;
 
     /**
-     * 开始邮箱注册。
-     * @param {AuthServiceStartEmailRegistrationRequest} requestParameters Request parameters.
+     * 注册账号。
+     * @param {AuthServiceRegisterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    startEmailRegistration(requestParameters: AuthServiceStartEmailRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartEmailRegistrationResp>;
-
-    /**
-     * 开始手机注册。
-     * @param {AuthServiceStartPhoneRegistrationRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    startPhoneRegistration(requestParameters: AuthServiceStartPhoneRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<StartPhoneRegistrationResp>;
-
-    /**
-     * 校验邮箱注册验证码。
-     * @param {AuthServiceVerifyEmailRegistrationRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    verifyEmailRegistration(requestParameters: AuthServiceVerifyEmailRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
-
-    /**
-     * 校验手机注册验证码。
-     * @param {AuthServiceVerifyPhoneRegistrationRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    verifyPhoneRegistration(requestParameters: AuthServiceVerifyPhoneRegistrationRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+    register(requestParameters: AuthServiceRegisterRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
 }
 
@@ -3343,31 +3397,10 @@ export interface AuthServiceRefreshTokenRequest {
 }
 
 /**
- * Request parameters for startEmailRegistration operation in AuthService.
+ * Request parameters for register operation in AuthService.
  */
-export interface AuthServiceStartEmailRegistrationRequest {
-    readonly startEmailRegistrationReq: StartEmailRegistrationReq
-}
-
-/**
- * Request parameters for startPhoneRegistration operation in AuthService.
- */
-export interface AuthServiceStartPhoneRegistrationRequest {
-    readonly startPhoneRegistrationReq: StartPhoneRegistrationReq
-}
-
-/**
- * Request parameters for verifyEmailRegistration operation in AuthService.
- */
-export interface AuthServiceVerifyEmailRegistrationRequest {
-    readonly verifyEmailRegistrationReq: VerifyEmailRegistrationReq
-}
-
-/**
- * Request parameters for verifyPhoneRegistration operation in AuthService.
- */
-export interface AuthServiceVerifyPhoneRegistrationRequest {
-    readonly verifyPhoneRegistrationReq: VerifyPhoneRegistrationReq
+export interface AuthServiceRegisterRequest {
+    readonly registerReq: RegisterReq
 }
 
 /**
@@ -3415,43 +3448,13 @@ export class AuthService extends BaseAPI implements AuthServiceInterface {
     }
 
     /**
-     * 开始邮箱注册。
-     * @param {AuthServiceStartEmailRegistrationRequest} requestParameters Request parameters.
+     * 注册账号。
+     * @param {AuthServiceRegisterRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public startEmailRegistration(requestParameters: AuthServiceStartEmailRegistrationRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).startEmailRegistration(requestParameters.startEmailRegistrationReq, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 开始手机注册。
-     * @param {AuthServiceStartPhoneRegistrationRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public startPhoneRegistration(requestParameters: AuthServiceStartPhoneRegistrationRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).startPhoneRegistration(requestParameters.startPhoneRegistrationReq, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 校验邮箱注册验证码。
-     * @param {AuthServiceVerifyEmailRegistrationRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public verifyEmailRegistration(requestParameters: AuthServiceVerifyEmailRegistrationRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).verifyEmailRegistration(requestParameters.verifyEmailRegistrationReq, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 校验手机注册验证码。
-     * @param {AuthServiceVerifyPhoneRegistrationRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public verifyPhoneRegistration(requestParameters: AuthServiceVerifyPhoneRegistrationRequest, options?: RawAxiosRequestConfig) {
-        return AuthServiceFp(this.configuration).verifyPhoneRegistration(requestParameters.verifyPhoneRegistrationReq, options).then((request) => request(this.axios, this.basePath));
+    public register(requestParameters: AuthServiceRegisterRequest, options?: RawAxiosRequestConfig) {
+        return AuthServiceFp(this.configuration).register(requestParameters.registerReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

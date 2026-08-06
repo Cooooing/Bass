@@ -1,21 +1,21 @@
-# VerifyPhoneRegistrationReq
+# UpdatePasswordAccountReq
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**phone** | **string** |  | [default to undefined]
-**code** | **string** |  | [default to undefined]
+**old_password** | **string** |  | [default to undefined]
+**new_password** | **string** |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { VerifyPhoneRegistrationReq } from '@bass/bbs-sdk-axios';
+import { UpdatePasswordAccountReq } from '@bass/bbs-sdk-axios';
 
-const instance: VerifyPhoneRegistrationReq = {
-    phone,
-    code,
+const instance: UpdatePasswordAccountReq = {
+    old_password,
+    new_password,
 };
 ```
 

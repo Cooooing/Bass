@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**profile** | [**RespAccountProfile**](RespAccountProfile.md) |  | [optional] [default to undefined]
+**profile** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
 
 ## Example
 

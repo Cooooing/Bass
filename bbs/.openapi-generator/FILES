@@ -96,6 +96,7 @@ docs/PrivacySettingService.md
 docs/PublishArticleReq.md
 docs/RefreshTokenReq.md
 docs/RefreshTokenResp.md
+docs/RegisterReq.md
 docs/RelationService.md
 docs/ReqArticle.md
 docs/ReqArticleQuery.md
@@ -131,10 +132,6 @@ docs/SendEmailOtpReq.md
 docs/SendEmailOtpResp.md
 docs/SendPhoneOtpReq.md
 docs/SendPhoneOtpResp.md
-docs/StartEmailRegistrationReq.md
-docs/StartEmailRegistrationResp.md
-docs/StartPhoneRegistrationReq.md
-docs/StartPhoneRegistrationResp.md
 docs/TagService.md
 docs/ThankArticleReq.md
 docs/ThankArticleResp.md
@@ -151,14 +148,15 @@ docs/UpdateDomainReq.md
 docs/UpdateDomainResp.md
 docs/UpdateDraftArticleReq.md
 docs/UpdateDraftArticleResp.md
+docs/UpdateEmailAccountReq.md
+docs/UpdatePasswordAccountReq.md
+docs/UpdatePhoneAccountReq.md
 docs/UpdateProfileAccountReq.md
 docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
 docs/UpsertCurrentLocationReq.md
 docs/UpsertCurrentLocationResp.md
-docs/VerifyEmailRegistrationReq.md
-docs/VerifyPhoneRegistrationReq.md
 git_push.sh
 index.ts
 package.json

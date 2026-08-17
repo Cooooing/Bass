@@ -101,6 +101,13 @@ message Nats {
   string jet_stream_domain = 13; // JetStream 域名，用于多域隔离
 }
 
+message DTM {
+  string grpc_endpoint = 1; // gRPC 接入地址
+  google.protobuf.Duration timeout = 2; // 请求超时
+  int32 max_retry_times = 3; // 最大重试次数
+  google.protobuf.Duration retry_interval = 4; // 重试间隔
+}
+
 message Alert {
   LarkWebhook lark_webhook = 1; // Lark Webhook 告警通道配置
 

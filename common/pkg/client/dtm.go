@@ -62,6 +62,7 @@ func (c *DTMClient) InTCC(ctx context.Context, gid string, fn dtmgrpc.TccGlobalF
 		ctx = context.Background()
 	}
 	return dtmgrpc.TccGlobalTransaction2(endpoint, gid, func(tcc *dtmgrpc.TccGrpc) {
+		tcc.WaitResult = true
 		if c.conf != nil && c.conf.GetTimeout() != nil && c.conf.GetTimeout().AsDuration() > 0 {
 			tcc.WithGlobalTransRequestTimeout(int64(c.conf.GetTimeout().AsDuration().Seconds()))
 		}

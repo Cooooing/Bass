@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 
 package common.api.app.economy.v1;
 
@@ -23,8 +23,9 @@ message EconomyAccount {
   int64 id = 1; // 账户 ID
   int64 user_id = 2; // 用户 ID
   int64 balance = 3; // 当前积分
-  int64 total_income = 4; // 累计获得
-  int64 total_expense = 5; // 累计消耗
+  int64 frozen_balance = 4; // 冻结积分
+  int64 total_income = 5; // 累计获得
+  int64 total_expense = 6; // 累计消耗
   google.protobuf.Timestamp created_at = 1000; // 创建时间
   google.protobuf.Timestamp updated_at = 1001; // 更新时间
 }
@@ -39,9 +40,7 @@ message EconomyRecord {
   int64 amount = 6; // 积分数量
   int64 balance_before = 7; // 变动前积分
   int64 balance_after = 8; // 变动后积分
-  optional string source_id = 9; // 来源对象 ID
-  string idempotency_key = 10; // 幂等键
-  optional string remark = 11; // 备注
+  optional string remark = 9; // 备注
   google.protobuf.Timestamp created_at = 1000; // 创建时间
 }
 
@@ -68,9 +67,7 @@ message AddEconomyPoints {
     int64 user_id = 1; // 用户 ID
     int64 amount = 2; // 积分数量
     .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 流水类型
-    optional string source_id = 4; // 来源对象 ID
-    string idempotency_key = 5; // 幂等键
-    optional string remark = 6; // 备注
+    optional string remark = 4; // 备注
   }
   message Resp {
     EconomyAccount account = 1; // 最新账户
@@ -83,9 +80,7 @@ message DeductEconomyPoints {
     int64 user_id = 1; // 用户 ID
     int64 amount = 2; // 积分数量
     .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 流水类型
-    optional string source_id = 4; // 来源对象 ID
-    string idempotency_key = 5; // 幂等键
-    optional string remark = 6; // 备注
+    optional string remark = 4; // 备注
   }
   message Resp {
     EconomyAccount account = 1; // 最新账户
@@ -100,9 +95,7 @@ message TransferEconomyPoints {
     int64 amount = 3; // 积分数量
     .common.api.app.economy.v1.enum.EconomyRecordType out_record_type = 4; // 转出流水类型
     .common.api.app.economy.v1.enum.EconomyRecordType in_record_type = 5; // 转入流水类型
-    optional string source_id = 6; // 来源对象 ID
-    string idempotency_key = 7; // 幂等键
-    optional string remark = 8; // 备注
+    optional string remark = 6; // 备注
   }
   message Resp {
     EconomyAccount from_account = 1; // 转出账户
@@ -124,5 +117,3 @@ message ListEconomyRecords {
     .common.api.app.common.PageResp page = 2; // 分页信息
   }
 }
-
-

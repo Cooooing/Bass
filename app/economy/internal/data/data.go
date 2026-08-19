@@ -15,6 +15,7 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewObservability,
 	commonClient.NewConsulClient,
 	client.ProvideTx,
+	client.NewTransactionNoGenerator,
 	repo.NewAccountRepo,
 	repo.NewRecordRepo,
 	ProvideConsul,

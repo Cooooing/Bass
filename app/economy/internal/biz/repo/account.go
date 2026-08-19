@@ -27,8 +27,12 @@ type AccountGetReq struct {
 type AccountUpdateBalanceReq struct {
 	UserID       int64
 	BalanceDelta int64
+	FrozenDelta  int64
 	IncomeDelta  int64
 	ExpenseDelta int64
+	BalanceMin   *int64
+	FrozenMin    *int64
+	AvailableMin *int64
 }
 
 type AccountPageResp struct {

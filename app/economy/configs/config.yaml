@@ -57,4 +57,9 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
+dtm:
+  grpc_endpoint: ${DTM_GRPC_ENDPOINT:127.0.0.1:36790}
+  timeout: 5s
+  max_retry_times: ${DTM_MAX_RETRY_TIMES:3}
+  retry_interval: ${DTM_RETRY_INTERVAL:1s}
 

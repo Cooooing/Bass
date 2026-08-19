@@ -34,8 +34,6 @@ func (Record) Fields() []ent.Field {
 		field.Int64("amount").Positive().Comment("积分数量"),
 		field.Int64("balance_before").NonNegative().Comment("变动前积分"),
 		field.Int64("balance_after").NonNegative().Comment("变动后积分"),
-		field.String("source_id").Nillable().Optional().Comment("来源对象 ID"),
-		field.String("idempotency_key").NotEmpty().Comment("幂等键"),
 		field.String("remark").Nillable().Optional().Comment("备注"),
 	}
 }
@@ -48,9 +46,8 @@ func (Record) Mixin() []ent.Mixin {
 
 func (Record) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("idempotency_key").Unique(),
 		index.Fields("transaction_no"),
 		index.Fields("user_id", "created_at", "id"),
-		index.Fields("record_type", "source_id"),
+		index.Fields("record_type", "user_id", "created_at", "id"),
 	}
 }

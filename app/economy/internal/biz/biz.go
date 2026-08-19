@@ -6,7 +6,7 @@ import (
 	"github.com/google/wire"
 )
 
-// BizProviderSet 提供业务依赖
+// BizProviderSet 鎻愪緵涓氬姟渚濊禆
 var BizProviderSet = wire.NewSet(
-	usecase.NewEconomyUsecase,
+	usecase.NewPointsUsecase,
 )

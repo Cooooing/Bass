@@ -9,12 +9,16 @@ import (
 var ServiceProviderSet = wire.NewSet(
 	ProvideServices,
 	NewCommonSystemService,
-	NewEconomyService,
+	NewPointsService,
+	NewPointsTccService,
+	NewPointsTransferTccService,
 )
 
-func ProvideServices(commonSystemService *CommonSystemService, economyService *EconomyService) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, pointsService *PointsService, pointsTccService *PointsTccService, pointsTransferTccService *PointsTransferTccService) []server.Service {
 	return []server.Service{
 		commonSystemService,
-		economyService,
+		pointsService,
+		pointsTccService,
+		pointsTransferTccService,
 	}
 }

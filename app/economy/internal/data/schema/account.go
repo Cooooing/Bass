@@ -28,6 +28,7 @@ func (Account) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("用户 ID"),
 		field.Int64("balance").Default(0).NonNegative().Comment("当前积分"),
+		field.Int64("frozen_balance").Default(0).NonNegative().Comment("冻结积分"),
 		field.Int64("total_income").Default(0).NonNegative().Comment("累计获得"),
 		field.Int64("total_expense").Default(0).NonNegative().Comment("累计消耗"),
 	}

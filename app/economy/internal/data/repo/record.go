@@ -42,14 +42,23 @@ func (r *RecordRepo) Save(ctx context.Context, record *model.Record) (*model.Rec
 		SetAmount(record.Amount).
 		SetBalanceBefore(record.BalanceBefore).
 		SetBalanceAfter(record.BalanceAfter).
-		SetNillableSourceID(record.SourceID).
-		SetIdempotencyKey(record.IdempotencyKey).
 		SetNillableRemark(record.Remark).
 		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return r.model(save), nil
+	return &model.Record{
+		ID:            save.ID,
+		TransactionNo: save.TransactionNo,
+		UserID:        save.UserID,
+		RecordType:    enum.EconomyRecordType(save.RecordType),
+		Direction:     enum.EconomyRecordDirection(save.Direction),
+		Amount:        save.Amount,
+		BalanceBefore: save.BalanceBefore,
+		BalanceAfter:  save.BalanceAfter,
+		Remark:        save.Remark,
+		CreatedAt:     save.CreatedAt,
+	}, nil
 }
 
 func (r *RecordRepo) Get(ctx context.Context, req *bizrepo.RecordGetReq) (*model.Record, error) {
@@ -62,7 +71,18 @@ func (r *RecordRepo) Get(ctx context.Context, req *bizrepo.RecordGetReq) (*model
 	if err != nil {
 		return nil, err
 	}
-	return r.model(row), nil
+	return &model.Record{
+		ID:            row.ID,
+		TransactionNo: row.TransactionNo,
+		UserID:        row.UserID,
+		RecordType:    enum.EconomyRecordType(row.RecordType),
+		Direction:     enum.EconomyRecordDirection(row.Direction),
+		Amount:        row.Amount,
+		BalanceBefore: row.BalanceBefore,
+		BalanceAfter:  row.BalanceAfter,
+		Remark:        row.Remark,
+		CreatedAt:     row.CreatedAt,
+	}, nil
 }
 
 func (r *RecordRepo) List(ctx context.Context, req *bizrepo.RecordGetReq) ([]*model.Record, error) {
@@ -72,7 +92,20 @@ func (r *RecordRepo) List(ctx context.Context, req *bizrepo.RecordGetReq) ([]*mo
 	if err != nil {
 		return nil, err
 	}
-	return lo.Map(rows, func(row *gen.Record, _ int) *model.Record { return r.model(row) }), nil
+	return lo.Map(rows, func(row *gen.Record, _ int) *model.Record {
+		return &model.Record{
+			ID:            row.ID,
+			TransactionNo: row.TransactionNo,
+			UserID:        row.UserID,
+			RecordType:    enum.EconomyRecordType(row.RecordType),
+			Direction:     enum.EconomyRecordDirection(row.Direction),
+			Amount:        row.Amount,
+			BalanceBefore: row.BalanceBefore,
+			BalanceAfter:  row.BalanceAfter,
+			Remark:        row.Remark,
+			CreatedAt:     row.CreatedAt,
+		}
+	}), nil
 }
 
 func (r *RecordRepo) Map(ctx context.Context, req *bizrepo.RecordGetReq) (map[int64]*model.Record, error) {
@@ -102,7 +135,20 @@ func (r *RecordRepo) Page(ctx context.Context, req *bizrepo.RecordGetReq) (*bizr
 		return nil, err
 	}
 	return &bizrepo.RecordPageResp{
-		Rows: lo.Map(rows, func(row *gen.Record, _ int) *model.Record { return r.model(row) }),
+		Rows: lo.Map(rows, func(row *gen.Record, _ int) *model.Record {
+			return &model.Record{
+				ID:            row.ID,
+				TransactionNo: row.TransactionNo,
+				UserID:        row.UserID,
+				RecordType:    enum.EconomyRecordType(row.RecordType),
+				Direction:     enum.EconomyRecordDirection(row.Direction),
+				Amount:        row.Amount,
+				BalanceBefore: row.BalanceBefore,
+				BalanceAfter:  row.BalanceAfter,
+				Remark:        row.Remark,
+				CreatedAt:     row.CreatedAt,
+			}
+		}),
 		Page: &base.PageResp{Total: int64(total), Page: page.Page, Size: page.Size},
 	}, nil
 }
@@ -132,18 +178,5 @@ func (r *RecordRepo) getQuery(query *gen.RecordQuery, req *bizrepo.RecordGetReq)
 	if req.Direction != nil {
 		query = query.Where(recordent.DirectionEQ(recordent.Direction(*req.Direction)))
 	}
-	if req.SourceID != nil {
-		query = query.Where(recordent.SourceIDEQ(*req.SourceID))
-	}
-	if req.IdempotencyKey != nil {
-		query = query.Where(recordent.IdempotencyKeyEQ(*req.IdempotencyKey))
-	}
 	return query.Order(gen.Desc(recordent.FieldCreatedAt, recordent.FieldID))
-}
-
-func (r *RecordRepo) model(row *gen.Record) *model.Record {
-	return &model.Record{
-		ID: row.ID, TransactionNo: row.TransactionNo, UserID: row.UserID, RecordType: enum.EconomyRecordType(row.RecordType), Direction: enum.EconomyRecordDirection(row.Direction),
-		Amount: row.Amount, BalanceBefore: row.BalanceBefore, BalanceAfter: row.BalanceAfter, SourceID: row.SourceID, IdempotencyKey: row.IdempotencyKey, Remark: row.Remark, CreatedAt: row.CreatedAt,
-	}
 }

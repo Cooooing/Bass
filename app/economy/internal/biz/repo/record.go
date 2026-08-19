@@ -17,16 +17,14 @@ type RecordRepo interface {
 }
 
 type RecordGetReq struct {
-	Page           *base.PageRequest
-	ID             *int64
-	IDs            []int64
-	TransactionNo  *string
-	UserID         *int64
-	UserIDs        []int64
-	RecordType     *enum.EconomyRecordType
-	Direction      *enum.EconomyRecordDirection
-	SourceID       *string
-	IdempotencyKey *string
+	Page          *base.PageRequest
+	ID            *int64
+	IDs           []int64
+	TransactionNo *string
+	UserID        *int64
+	UserIDs       []int64
+	RecordType    *enum.EconomyRecordType
+	Direction     *enum.EconomyRecordDirection
 }
 
 type RecordPageResp struct {

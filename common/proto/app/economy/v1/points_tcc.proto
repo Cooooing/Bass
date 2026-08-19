@@ -1,0 +1,27 @@
+﻿syntax = "proto3";
+
+package common.api.app.economy.v1;
+
+import "economy/v1/economy.proto";
+import "economy/v1/enum/economy.proto";
+
+option go_package = "common/proto/gen/economy/v1;v1";
+
+service PointsTccService {
+  rpc Try(PointsTccReq) returns (PointsTccResp) {}
+  rpc Comfirm(PointsTccReq) returns (PointsTccResp) {}
+  rpc Cancel(PointsTccReq) returns (PointsTccResp) {}
+}
+
+message PointsTccReq {
+  int64 user_id = 1; // 用户 ID
+  int64 amount = 2; // 积分数量
+  .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 流水类型
+  optional string remark = 4; // 备注
+}
+
+message PointsTccResp {
+  EconomyAccount account = 1;
+  EconomyRecord record = 2;
+}
+

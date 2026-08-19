@@ -1,6 +1,8 @@
 package repo
 
 import (
+	"common/pkg/apperror"
+	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"economy/internal/biz/base"
@@ -9,8 +11,6 @@ import (
 	"economy/internal/data/gen"
 	accountent "economy/internal/data/gen/account"
 
-	"common/pkg/apperror"
-	utilent "common/pkg/util/ent"
 	"github.com/samber/lo"
 )
 
@@ -39,13 +39,35 @@ func (r *AccountRepo) Save(ctx context.Context, account *model.Account) (*model.
 	if err != nil {
 		return nil, err
 	}
-	return r.model(save), nil
+	return &model.Account{
+		ID:            save.ID,
+		UserID:        save.UserID,
+		Balance:       save.Balance,
+		FrozenBalance: save.FrozenBalance,
+		TotalIncome:   save.TotalIncome,
+		TotalExpense:  save.TotalExpense,
+		CreatedAt:     save.CreatedAt,
+		UpdatedAt:     save.UpdatedAt,
+		DeletedAt:     save.DeletedAt,
+	}, nil
 }
 
 func (r *AccountRepo) UpdateBalance(ctx context.Context, req *bizrepo.AccountUpdateBalanceReq) (*model.Account, error) {
 	update := r.getClient(ctx).Account.Update().Where(accountent.UserIDEQ(req.UserID), accountent.DeletedAtIsNil())
+	if req.BalanceMin != nil {
+		update = update.Where(accountent.BalanceGTE(*req.BalanceMin))
+	}
+	if req.FrozenMin != nil {
+		update = update.Where(accountent.FrozenBalanceGTE(*req.FrozenMin))
+	}
+	if req.AvailableMin != nil {
+		update = update.Where(accountent.AvailableBalanceGTE(*req.AvailableMin))
+	}
 	if req.BalanceDelta != 0 {
 		update = update.AddBalance(req.BalanceDelta)
+	}
+	if req.FrozenDelta != 0 {
+		update = update.AddFrozenBalance(req.FrozenDelta)
 	}
 	if req.IncomeDelta != 0 {
 		update = update.AddTotalIncome(req.IncomeDelta)
@@ -53,8 +75,12 @@ func (r *AccountRepo) UpdateBalance(ctx context.Context, req *bizrepo.AccountUpd
 	if req.ExpenseDelta != 0 {
 		update = update.AddTotalExpense(req.ExpenseDelta)
 	}
-	if _, err := update.Save(ctx); err != nil {
+	count, err := update.Save(ctx)
+	if err != nil {
 		return nil, err
+	}
+	if count == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_INSUFFICIENT_BALANCE)
 	}
 	return r.Get(ctx, &bizrepo.AccountGetReq{UserID: new(req.UserID)})
 }
@@ -69,7 +95,17 @@ func (r *AccountRepo) Get(ctx context.Context, req *bizrepo.AccountGetReq) (*mod
 	if err != nil {
 		return nil, err
 	}
-	return r.model(row), nil
+	return &model.Account{
+		ID:            row.ID,
+		UserID:        row.UserID,
+		Balance:       row.Balance,
+		FrozenBalance: row.FrozenBalance,
+		TotalIncome:   row.TotalIncome,
+		TotalExpense:  row.TotalExpense,
+		CreatedAt:     row.CreatedAt,
+		UpdatedAt:     row.UpdatedAt,
+		DeletedAt:     row.DeletedAt,
+	}, nil
 }
 
 func (r *AccountRepo) List(ctx context.Context, req *bizrepo.AccountGetReq) ([]*model.Account, error) {
@@ -79,7 +115,19 @@ func (r *AccountRepo) List(ctx context.Context, req *bizrepo.AccountGetReq) ([]*
 	if err != nil {
 		return nil, err
 	}
-	return lo.Map(rows, func(row *gen.Account, _ int) *model.Account { return r.model(row) }), nil
+	return lo.Map(rows, func(row *gen.Account, _ int) *model.Account {
+		return &model.Account{
+			ID:            row.ID,
+			UserID:        row.UserID,
+			Balance:       row.Balance,
+			FrozenBalance: row.FrozenBalance,
+			TotalIncome:   row.TotalIncome,
+			TotalExpense:  row.TotalExpense,
+			CreatedAt:     row.CreatedAt,
+			UpdatedAt:     row.UpdatedAt,
+			DeletedAt:     row.DeletedAt,
+		}
+	}), nil
 }
 
 func (r *AccountRepo) Map(ctx context.Context, req *bizrepo.AccountGetReq) (map[int64]*model.Account, error) {
@@ -109,7 +157,19 @@ func (r *AccountRepo) Page(ctx context.Context, req *bizrepo.AccountGetReq) (*bi
 		return nil, err
 	}
 	return &bizrepo.AccountPageResp{
-		Rows: lo.Map(rows, func(row *gen.Account, _ int) *model.Account { return r.model(row) }),
+		Rows: lo.Map(rows, func(row *gen.Account, _ int) *model.Account {
+			return &model.Account{
+				ID:            row.ID,
+				UserID:        row.UserID,
+				Balance:       row.Balance,
+				FrozenBalance: row.FrozenBalance,
+				TotalIncome:   row.TotalIncome,
+				TotalExpense:  row.TotalExpense,
+				CreatedAt:     row.CreatedAt,
+				UpdatedAt:     row.UpdatedAt,
+				DeletedAt:     row.DeletedAt,
+			}
+		}),
 		Page: &base.PageResp{Total: int64(total), Page: page.Page, Size: page.Size},
 	}, nil
 }
@@ -132,8 +192,4 @@ func (r *AccountRepo) getQuery(query *gen.AccountQuery, req *bizrepo.AccountGetR
 		query = query.Where(accountent.UserIDIn(req.UserIDs...))
 	}
 	return query
-}
-
-func (r *AccountRepo) model(row *gen.Account) *model.Account {
-	return &model.Account{ID: row.ID, UserID: row.UserID, Balance: row.Balance, TotalIncome: row.TotalIncome, TotalExpense: row.TotalExpense, CreatedAt: row.CreatedAt, UpdatedAt: row.UpdatedAt, DeletedAt: row.DeletedAt}
 }

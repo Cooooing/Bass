@@ -1,4 +1,4 @@
-﻿syntax = "proto3";
+syntax = "proto3";
 
 package common.api.app.economy.v1;
 
@@ -24,4 +24,3 @@ message PointsTccResp {
   EconomyAccount account = 1;
   EconomyRecord record = 2;
 }
-

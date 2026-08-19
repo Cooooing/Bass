@@ -156,22 +156,25 @@ func (a *Article) CanComment() error {
 	return nil
 }
 
-func (a *Article) CanView(viewerID int64) error {
-	if a == nil {
+func (a *Article) CanView(access *ContentAccess) error {
+	access, err := access.Normalize(enum.ContentAccessScopeGuest)
+	if err != nil {
+		return err
+	}
+	if a == nil || a.DeletedAt != nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
+	if access.Scope == enum.ContentAccessScopeAdmin || access.Scope == enum.ContentAccessScopeInternalTask {
+		return nil
+	}
 	if a.Restriction == enum.ContentRestrictionHidden {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
-	if a.PublishStatus == enum.ArticlePublishStatusPublished || a.PublishStatus == enum.ArticlePublishStatusArchived {
-		if a.Visibility == enum.ArticleVisibilityPublic || a.IsAuthor(viewerID) {
-			return nil
-		}
+	if a.IsPublicVisible() {
+		return nil
 	}
-	if a.PublishStatus == enum.ArticlePublishStatusDraft || a.PublishStatus == enum.ArticlePublishStatusScheduled {
-		if a.IsAuthor(viewerID) {
-			return nil
-		}
+	if (access.Scope == enum.ContentAccessScopeUser || access.Scope == enum.ContentAccessScopeAuthor) && a.IsAuthor(access.ActorUserID) {
+		return nil
 	}
 	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 }

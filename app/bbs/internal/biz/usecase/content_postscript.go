@@ -25,6 +25,7 @@ type AddPostscriptReq struct {
 
 type ListPostscriptsReq struct {
 	ArticleID int64
+	UserID    int64
 }
 
 func (u *ContentPostscriptUsecase) AddPostscript(ctx context.Context, req *AddPostscriptReq) (*repo.ArticlePostscript, error) {
@@ -42,6 +43,7 @@ func (u *ContentPostscriptUsecase) AddPostscript(ctx context.Context, req *AddPo
 func (u *ContentPostscriptUsecase) ListPostscripts(ctx context.Context, req *ListPostscriptsReq) ([]*repo.ArticlePostscript, error) {
 	resp, err := u.contentPostscriptClient.ListPostscripts(ctx, &repo.ListPostscriptsReq{
 		ArticleID: req.ArticleID,
+		UserID:    req.UserID,
 	})
 	if err != nil {
 		return nil, err

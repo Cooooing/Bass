@@ -10,6 +10,7 @@ type AddPostscriptReq struct {
 
 type ListPostscriptsReq struct {
 	ArticleID int64
+	UserID    int64
 }
 
 type ContentPostscriptClient interface {

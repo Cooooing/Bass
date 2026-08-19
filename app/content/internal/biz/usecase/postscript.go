@@ -4,7 +4,9 @@ import (
 	"context"
 	"log/slog"
 
+	"common/pkg/apperror"
 	commonenums "common/proto/gen/common/enums"
+	cerrors "common/proto/gen/common/errors"
 	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
@@ -42,12 +44,19 @@ func NewPostscriptUsecase(
 type PostscriptAddReq struct {
 	ArticleID int64
 	Content   string
-	UserID    int64
+	Access    *model.ContentAccess
 }
 
 func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*model.Postscript, error) {
 	articleId := req.ArticleID
-	userId := req.UserID
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	if access.Scope != enum.ContentAccessScopeAuthor {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+	}
+	userId := access.ActorUserID
 	postscript := &model.Postscript{
 		ArticleID:   articleId,
 		Content:     req.Content,
@@ -107,15 +116,29 @@ func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*mo
 	return save, nil
 }
 
-func (d *PostscriptUsecase) List(ctx context.Context, articleID int64) ([]*model.Postscript, error) {
-	articleId := articleID
-	if _, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleId)}}); err != nil {
+type PostscriptListReq struct {
+	ArticleID int64
+	Access    *model.ContentAccess
+}
+
+func (d *PostscriptUsecase) List(ctx context.Context, req *PostscriptListReq) ([]*model.Postscript, error) {
+	access, err := req.Access.Normalize(enum.ContentAccessScopeGuest)
+	if err != nil {
 		return nil, err
 	}
-	rows, err := d.postscriptRepo.List(ctx, &repo.PostscriptGetReq{
-		ArticleID:   new(articleId),
-		Restriction: new(enum.ContentRestrictionNone),
-	})
+	articleId := req.ArticleID
+	article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleId)}})
+	if err != nil {
+		return nil, err
+	}
+	if err = article.CanView(access); err != nil {
+		return nil, err
+	}
+	postscriptReq := &repo.PostscriptGetReq{ArticleID: new(articleId)}
+	if access.Scope != enum.ContentAccessScopeAdmin && access.Scope != enum.ContentAccessScopeInternalTask {
+		postscriptReq.Restrictions = []enum.ContentRestriction{enum.ContentRestrictionNone, enum.ContentRestrictionLocked}
+	}
+	rows, err := d.postscriptRepo.List(ctx, postscriptReq)
 	if err != nil {
 		return nil, err
 	}

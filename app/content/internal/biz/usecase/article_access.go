@@ -14,14 +14,23 @@ func NewArticleAccessUsecase() *ArticleAccessUsecase {
 	return &ArticleAccessUsecase{}
 }
 
-func (u *ArticleAccessUsecase) BuildScope(access *model.ContentAccess) (*model.ArticleScopeFilter, error) {
+func (u *ArticleAccessUsecase) BuildScope(access *model.ContentAccess, _ *model.ArticleFilter) (*model.ArticleScopeFilter, error) {
 	access, err := access.Normalize(enum.ContentAccessScopeGuest)
 	if err != nil {
 		return nil, err
 	}
 	scope := &model.ArticleScopeFilter{}
 	switch access.Scope {
-	case enum.ContentAccessScopeGuest, enum.ContentAccessScopeUser:
+	case enum.ContentAccessScopeGuest:
+		published := enum.ArticlePublishStatusPublished
+		public := enum.ArticleVisibilityPublic
+		none := enum.ContentRestrictionNone
+		locked := enum.ContentRestrictionLocked
+		scope.PublishStatus = new(published)
+		scope.Visibility = new(public)
+		scope.Restrictions = []enum.ContentRestriction{none, locked}
+		scope.PublicVisibleOnly = true
+	case enum.ContentAccessScopeUser:
 		published := enum.ArticlePublishStatusPublished
 		public := enum.ArticleVisibilityPublic
 		none := enum.ContentRestrictionNone
@@ -47,19 +56,7 @@ func (u *ArticleAccessUsecase) CanGet(access *model.ContentAccess, article *mode
 	if article == nil || article.DeletedAt != nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
-	switch access.Scope {
-	case enum.ContentAccessScopeGuest, enum.ContentAccessScopeUser:
-		if article.IsPublicVisible() {
-			return nil
-		}
-	case enum.ContentAccessScopeAuthor:
-		if article.IsAuthor(access.ActorUserID) {
-			return nil
-		}
-	case enum.ContentAccessScopeAdmin, enum.ContentAccessScopeInternalTask:
-		return nil
-	}
-	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+	return article.CanView(access)
 }
 
 func (u *ArticleAccessUsecase) CanCreateDraft(access *model.ContentAccess) error {
@@ -141,7 +138,7 @@ func (u *ArticleAccessUsecase) CanInteract(access *model.ContentAccess, article 
 	if err != nil {
 		return err
 	}
-	if access.Scope != enum.ContentAccessScopeUser {
+	if access.Scope != enum.ContentAccessScopeAuthor {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
 	if article.IsAuthor(access.ActorUserID) {
@@ -169,7 +166,7 @@ func (u *ArticleAccessUsecase) CanAddPostscript(access *model.ContentAccess, art
 	if err != nil {
 		return err
 	}
-	if access.Scope != enum.ContentAccessScopeAuthor {
+	if access.Scope != enum.ContentAccessScopeUser {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
 	return article.CanAddPostscript(access.ActorUserID)

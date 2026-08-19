@@ -4,6 +4,7 @@ import (
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/content/v1"
+	"content/internal/biz/model"
 	"content/internal/biz/usecase"
 	"content/internal/enum"
 	"context"
@@ -35,10 +36,18 @@ func (s *PostscriptService) RegisterHttp(hs *http.Server) {
 }
 
 func (s *PostscriptService) Add(ctx context.Context, req *v1.AddPostscript_Req) (*v1.AddPostscript_Resp, error) {
-	if req.GetArticleId() <= 0 || req.GetUserId() <= 0 || req.GetContent() == "" {
+	if req.GetArticleId() <= 0 || req.GetContent() == "" || req.GetAccess() == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	row, err := s.postscriptUsecase.Add(ctx, &usecase.PostscriptAddReq{ArticleID: req.GetArticleId(), Content: req.GetContent(), UserID: req.GetUserId()})
+	scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+	if !ok || req.GetAccess().ActorUserId == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	row, err := s.postscriptUsecase.Add(ctx, &usecase.PostscriptAddReq{
+		ArticleID: req.GetArticleId(),
+		Content:   req.GetContent(),
+		Access:    &model.ContentAccess{Scope: scope, ActorUserID: req.GetAccess().GetActorUserId()},
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +65,18 @@ func (s *PostscriptService) List(ctx context.Context, req *v1.ListPostscripts_Re
 	if req.GetArticleId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	rows, err := s.postscriptUsecase.List(ctx, req.GetArticleId())
+	access := &model.ContentAccess{Scope: enum.ContentAccessScopeGuest}
+	if req.GetAccess() != nil {
+		scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		access.Scope = scope
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	rows, err := s.postscriptUsecase.List(ctx, &usecase.PostscriptListReq{ArticleID: req.GetArticleId(), Access: access})
 	if err != nil {
 		return nil, err
 	}

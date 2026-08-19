@@ -25,8 +25,6 @@ func (u *CommentAccessUsecase) BuildScope(access *model.ContentAccess) (*model.C
 		locked := enum.ContentRestrictionLocked
 		scope.Restrictions = []enum.ContentRestriction{none, locked}
 		scope.ArticlePublicVisible = true
-	case enum.ContentAccessScopeAuthor:
-		scope.CreatedBy = new(access.ActorUserID)
 	case enum.ContentAccessScopeAdmin, enum.ContentAccessScopeInternalTask:
 	default:
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

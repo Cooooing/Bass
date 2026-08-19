@@ -3,6 +3,7 @@ syntax = "proto3";
 package common.api.app.content.v1;
 
 import "content/v1/enum/article.proto";
+import "content/v1/access.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";
@@ -17,7 +18,7 @@ message AddPostscript {
   message Req {
     int64 article_id = 1; // 文章 ID
     string content = 2; // 附言内容
-    int64 user_id = 3; // 作者账号 ID
+    ContentAccess access = 3; // 访问上下文
   }
   message Resp {
     Postscript postscript = 1; // 创建后的附言
@@ -27,6 +28,7 @@ message AddPostscript {
 message ListPostscripts {
   message Req {
     int64 article_id = 1; // 文章 ID
+    ContentAccess access = 2; // 访问上下文
   }
   message Resp {
     repeated Postscript rows = 1; // 附言列表

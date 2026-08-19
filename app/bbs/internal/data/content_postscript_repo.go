@@ -5,6 +5,7 @@ import (
 	"common/pkg/client/rpc"
 	"common/pkg/util"
 	contentv1 "common/proto/gen/content/v1"
+	contentv1enum "common/proto/gen/content/v1/enum"
 	"context"
 	"fmt"
 )
@@ -27,7 +28,10 @@ func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *repo.A
 	reply, err := r.contentClient.Postscript.Add(ctx, &contentv1.AddPostscript_Req{
 		ArticleId: req.ArticleID,
 		Content:   req.Content,
-		UserId:    req.UserID,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
+			ActorUserId: new(req.UserID),
+		},
 	})
 	if err != nil {
 		return nil, err
@@ -47,9 +51,12 @@ func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *repo.A
 }
 
 func (r *ContentPostscriptClient) ListPostscripts(ctx context.Context, req *repo.ListPostscriptsReq) ([]*repo.ArticlePostscript, error) {
-	reply, err := r.contentClient.Postscript.List(ctx, &contentv1.ListPostscripts_Req{
-		ArticleId: req.ArticleID,
-	})
+	access := &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST}
+	if req.UserID > 0 {
+		access.Scope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
+		access.ActorUserId = new(req.UserID)
+	}
+	reply, err := r.contentClient.Postscript.List(ctx, &contentv1.ListPostscripts_Req{ArticleId: req.ArticleID, Access: access})
 	if err != nil {
 		return nil, err
 	}

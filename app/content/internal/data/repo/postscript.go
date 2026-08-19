@@ -187,5 +187,10 @@ func (r *PostscriptRepo) getQuery(query *gen.ArticlePostscriptQuery, req *repo.P
 	if req.Restriction != nil {
 		query = query.Where(articlepostscript.RestrictionEQ(articlepostscript.Restriction(*req.Restriction)))
 	}
+	if len(req.Restrictions) > 0 {
+		query = query.Where(articlepostscript.RestrictionIn(lo.Map(req.Restrictions, func(item enum.ContentRestriction, _ int) articlepostscript.Restriction {
+			return articlepostscript.Restriction(item)
+		})...))
+	}
 	return query
 }

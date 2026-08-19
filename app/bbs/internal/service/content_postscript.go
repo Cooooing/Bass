@@ -70,8 +70,13 @@ func (s *ContentPostscriptService) Add(ctx context.Context, req *bbscontentv1.Ad
 }
 
 func (s *ContentPostscriptService) List(ctx context.Context, req *bbscontentv1.ListPostscripts_Req) (*bbscontentv1.ListPostscripts_Resp, error) {
+	userID := int64(0)
+	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {
+		userID = user.ID
+	}
 	resp, err := s.contentPostscriptUsecase.ListPostscripts(ctx, &usecase.ListPostscriptsReq{
 		ArticleID: req.GetArticleId(),
+		UserID:    userID,
 	})
 	if err != nil {
 		return nil, err

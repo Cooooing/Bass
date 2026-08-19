@@ -6,8 +6,8 @@ import "content/v1/enum/access.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";
 
-// ContentAccess 表示内容访问上下文
+// ContentAccess 表示可信调用方传递的访问主体
 message ContentAccess {
-  ContentAccessScope scope = 1; // 访问身份视角
-  optional int64 actor_user_id = 2; // 访问账号 ID
+  ContentAccessScope scope = 1; // 主体类型
+  optional int64 actor_user_id = 2; // 操作账号 ID
 }

@@ -22,11 +22,12 @@ type PostscriptPageResp struct {
 }
 
 type PostscriptGetReq struct {
-	Page        *base.PageRequest
-	ID          *int64
-	IDs         []int64
-	ArticleID   *int64
-	ArticleIDs  []int64
-	CreatedBy   *int64
-	Restriction *enum.ContentRestriction
+	Page         *base.PageRequest
+	ID           *int64
+	IDs          []int64
+	ArticleID    *int64
+	ArticleIDs   []int64
+	CreatedBy    *int64
+	Restriction  *enum.ContentRestriction
+	Restrictions []enum.ContentRestriction
 }

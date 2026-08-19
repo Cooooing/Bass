@@ -195,10 +195,10 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	}
 	accessScope := contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST
 	if req.UserID > 0 {
-		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
+		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR
 	}
 	if query.AuthorID != nil && *query.AuthorID == req.UserID {
-		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR
+		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
 		if query.PublishStatus != nil {
 			contentQuery.PublishStatus = new(contentv1enum.ArticlePublishStatus(*query.PublishStatus))
 		}
@@ -299,6 +299,7 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 	if item.GetHasPostscript() {
 		postscriptResp, err := r.contentClient.Postscript.List(ctx, &contentv1.ListPostscripts_Req{
 			ArticleId: item.GetId(),
+			Access:    contentAccess,
 		})
 		if err != nil {
 			return nil, err

@@ -441,7 +441,6 @@ func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) erro
 type ArticleViewReq struct {
 	Access             *model.ContentAccess
 	ArticleID          int64
-	ViewerUserID       *int64
 	IP                 *string
 	UserAgent          *string
 	BrowserFingerprint *string
@@ -454,16 +453,16 @@ func (d *ArticleUsecase) View(ctx context.Context, req *ArticleViewReq) error {
 	if err != nil {
 		return err
 	}
-	viewerID := int64(0)
-	if req.ViewerUserID != nil {
-		viewerID = *req.ViewerUserID
+	access, err := req.Access.Normalize(enum.ContentAccessScopeGuest)
+	if err != nil {
+		return err
 	}
-	if err = article.CanView(viewerID); err != nil {
+	if err = article.CanView(access); err != nil {
 		return err
 	}
 	created, err := d.viewCacheRepo.Record(ctx, &repo.ArticleViewCacheRecordReq{
 		ArticleID:          req.ArticleID,
-		ViewerUserID:       req.ViewerUserID,
+		ViewerUserID:       new(access.ActorUserID),
 		IP:                 req.IP,
 		UserAgent:          req.UserAgent,
 		BrowserFingerprint: req.BrowserFingerprint,
@@ -471,12 +470,12 @@ func (d *ArticleUsecase) View(ctx context.Context, req *ArticleViewReq) error {
 	if err != nil || !created {
 		return err
 	}
-	if viewerID <= 0 {
+	if access.ActorUserID <= 0 {
 		return nil
 	}
 	return d.viewRecordRepo.Save(ctx, &model.ArticleViewRecord{
 		ArticleID:          req.ArticleID,
-		UserID:             viewerID,
+		UserID:             access.ActorUserID,
 		IP:                 req.IP,
 		UserAgent:          req.UserAgent,
 		BrowserFingerprint: req.BrowserFingerprint,
@@ -1050,7 +1049,7 @@ func (d *ArticleUsecase) ListByAccess(ctx context.Context, req *ArticleListByAcc
 	if req == nil {
 		req = &ArticleListByAccessReq{}
 	}
-	scope, err := d.articleAccessUsecase.BuildScope(req.Access)
+	scope, err := d.articleAccessUsecase.BuildScope(req.Access, req.Filter)
 	if err != nil {
 		return nil, err
 	}
@@ -1067,7 +1066,7 @@ func (d *ArticleUsecase) PageByAccess(ctx context.Context, req *ArticlePageByAcc
 	if req == nil {
 		req = &ArticlePageByAccessReq{}
 	}
-	scope, err := d.articleAccessUsecase.BuildScope(req.Access)
+	scope, err := d.articleAccessUsecase.BuildScope(req.Access, req.Filter)
 	if err != nil {
 		return nil, err
 	}

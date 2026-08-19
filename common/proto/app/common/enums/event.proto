@@ -26,6 +26,7 @@ enum EventType {
   EVENT_TYPE_USER_ACCOUNT_CANCELLED = 1014; // 用户账号注销
   EVENT_TYPE_USER_ACCOUNT_BANNED = 1015; // 用户账号封禁
   EVENT_TYPE_USER_ACCOUNT_UNBANNED = 1016; // 用户账号解封
+  EVENT_TYPE_USER_CHECKIN_COMPLETED = 1017; // 用户完成签到
 
   // 内容文章事件（2000-2099）
   EVENT_TYPE_ARTICLE_PUBLISHED = 2001; // 发布文章
@@ -67,6 +68,7 @@ enum EventSubject {
   EVENT_SUBJECT_USER_ACCOUNT_CANCELLED = 1014; // user.account.cancelled
   EVENT_SUBJECT_USER_ACCOUNT_BANNED = 1015; // user.account.banned
   EVENT_SUBJECT_USER_ACCOUNT_UNBANNED = 1016; // user.account.unbanned
+  EVENT_SUBJECT_USER_CHECKIN_COMPLETED = 1017; // user.checkin.completed
 
   // 内容文章事件（2000-2099）
   EVENT_SUBJECT_ARTICLE_PUBLISHED = 2001; // content.article.published
@@ -141,6 +143,7 @@ message Event {
     UserAccountCancelledPayload user_account_cancelled = 1014;
     UserAccountBannedPayload user_account_banned = 1015;
     UserAccountUnbannedPayload user_account_unbanned = 1016;
+    UserCheckinCompletedPayload user_checkin_completed = 1017;
     ArticlePublishedPayload article_published = 2001;
     ArticleLikedPayload article_liked = 2002;
     ArticleThankedPayload article_thanked = 2003;

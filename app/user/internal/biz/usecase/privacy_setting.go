@@ -19,9 +19,22 @@ func NewPrivacySettingUsecase(
 }
 
 func (s *PrivacySettingUsecase) GetByUserID(ctx context.Context, userID int64) (*model.PrivacySetting, error) {
-	return s.privacySettingRepo.Get(ctx, &repo.PrivacySettingGetReq{
+	setting, err := s.privacySettingRepo.Get(ctx, &repo.PrivacySettingGetReq{
 		UserID: &userID,
 	})
+	if err != nil || setting != nil {
+		return setting, err
+	}
+	public := true
+	return &model.PrivacySetting{
+		UserID:             userID,
+		PublicPoints:       &public,
+		PublicFollowers:    &public,
+		PublicArticles:     &public,
+		PublicComments:     &public,
+		PublicOnlineStatus: &public,
+		PublicLocation:     &public,
+	}, nil
 }
 
 func (s *PrivacySettingUsecase) UpsertByUserID(ctx context.Context, setting *model.PrivacySetting) (*model.PrivacySetting, error) {

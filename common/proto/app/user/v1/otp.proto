@@ -15,8 +15,8 @@ service OtpService {
   rpc GetTotp(GetTotp.Req) returns (GetTotp.Resp) {} // 获取账号 TOTP 状态。
   rpc SendEmailOtp(SendEmailOtp.Req) returns (SendEmailOtp.Resp) {} // 发送邮箱 OTP，按 user_id 是否存在区分登录态 key。
   rpc VerifyEmailOtp(VerifyEmailOtp.Req) returns (VerifyEmailOtp.Resp) {} // 校验邮箱 OTP，成功后失效。
-  rpc SendPhoneOtp(SendPhoneOtp.Req) returns (SendPhoneOtp.Resp) {} // 发送手机 OTP，P0 返回未实现。
-  rpc VerifyPhoneOtp(VerifyPhoneOtp.Req) returns (VerifyPhoneOtp.Resp) {} // 校验手机 OTP，P0 返回未实现。
+  rpc SendPhoneOtp(SendPhoneOtp.Req) returns (SendPhoneOtp.Resp) {} // 发送手机 OTP。
+  rpc VerifyPhoneOtp(VerifyPhoneOtp.Req) returns (VerifyPhoneOtp.Resp) {} // 校验手机 OTP。
 }
 
 message ValidateTotp {

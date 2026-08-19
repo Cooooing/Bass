@@ -35,6 +35,7 @@ type AuthUsecase struct {
 	outboxUsecase     *OutboxUsecase
 	authCacheRepo     repo.AuthCacheRepo
 	emailOtpUsecase   *EmailOtpUsecase
+	smsOtpUsecase     *SmsOtpUsecase
 	totpRepo          repo.TotpRepo
 	banRecordRepo     repo.BanRecordRepo
 	ipClient          repo.IPClient
@@ -54,6 +55,7 @@ func NewAuthUsecase(
 	outboxUsecase *OutboxUsecase,
 	authCacheRepo repo.AuthCacheRepo,
 	emailOtpUsecase *EmailOtpUsecase,
+	smsOtpUsecase *SmsOtpUsecase,
 	totpRepo repo.TotpRepo,
 	banRecordRepo repo.BanRecordRepo,
 	ipClient repo.IPClient,
@@ -72,6 +74,7 @@ func NewAuthUsecase(
 		outboxUsecase:     outboxUsecase,
 		authCacheRepo:     authCacheRepo,
 		emailOtpUsecase:   emailOtpUsecase,
+		smsOtpUsecase:     smsOtpUsecase,
 		totpRepo:          totpRepo,
 		banRecordRepo:     banRecordRepo,
 		ipClient:          ipClient,
@@ -151,7 +154,58 @@ func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
 		}
 		return nil
 	case enum.RegisterTypePhone:
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
+		phone := strings.TrimSpace(req.Phone)
+		if exists, err := s.accountRepo.ExistsByAccount(ctx, req.Name); err != nil {
+			return err
+		} else if exists {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN)
+		}
+		if exists, err := s.accountRepo.ExistsByAccount(ctx, phone); err != nil {
+			return err
+		} else if exists {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
+		}
+		if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{
+			Phone: phone,
+			Code:  req.Code,
+		}); err != nil {
+			return err
+		}
+		passwordHash, err := str.HashPassword(req.Password)
+		if err != nil {
+			return err
+		}
+		var outboxEvent *model.OutboxEvent
+		err = s.tx(ctx, func(ctx context.Context) error {
+			created, err := s.accountRepo.Create(ctx, &model.Account{
+				Name:     req.Name,
+				Nickname: req.Nickname,
+				Password: passwordHash,
+				Phone:    new(phone),
+			})
+			if err != nil {
+				return err
+			}
+			outboxEvent, err = s.outboxRepo.Save(ctx, &repo.OutboxEventSave{
+				Event: &commonenums.Event{
+					Type:    commonenums.EventType_EVENT_TYPE_USER_REGISTER,
+					Subject: commonenums.EventSubject_EVENT_SUBJECT_USER_REGISTER,
+					Payload: &commonenums.Event_UserRegister{
+						UserRegister: &commonenums.UserRegisterPayload{UserId: created.ID},
+					},
+				},
+			})
+			return err
+		})
+		if err != nil {
+			return err
+		}
+		if outboxEvent != nil {
+			if _, err := s.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); err != nil {
+				s.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+			}
+		}
+		return nil
 	default:
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -298,9 +352,28 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		audit.UserID = new(user.ID)
 		account = user
 	case enum.LoginTypePhone:
-		audit.AccountInput = req.Phone
-		audit.FailureReason = new(enum.LoginFailureReasonNotImplemented)
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED)
+		phone := strings.TrimSpace(req.Phone)
+		audit.AccountInput = phone
+		if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{
+			Phone: phone,
+			Code:  req.Code,
+		}); err != nil {
+			audit.FailureReason = new(enum.LoginFailureReasonCodeInvalidOrExpired)
+			return nil, err
+		}
+		user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{Account: new(phone)})
+		if err != nil || user == nil || user.Status == nil || *user.Status != enum.AccountStatusNormal {
+			if err != nil {
+				code, ok := apperror.BusinessCode(err)
+				if !(ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND) {
+					return nil, err
+				}
+			}
+			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+		}
+		audit.UserID = new(user.ID)
+		account = user
 	default:
 		audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

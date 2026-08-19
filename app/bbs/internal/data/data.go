@@ -31,6 +31,7 @@ var DataProviderSet = wire.NewSet(
 	NewLocationClient,
 	NewRelationClient,
 	NewOtpClient,
+	NewCheckinClient,
 	NewContentArticleClient,
 	NewContentPostscriptClient,
 	NewContentCommentClient,

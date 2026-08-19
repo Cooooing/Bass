@@ -16,6 +16,7 @@ type UserClient struct {
 	Location       userv1.LocationServiceClient
 	Otp            userv1.OtpServiceClient
 	Outbox         userv1.OutboxServiceClient
+	Checkin        userv1.CheckinServiceClient
 }
 
 func NewUserClient(
@@ -31,5 +32,6 @@ func NewUserClient(
 		Location:       userv1.NewLocationServiceClient(conn),
 		Otp:            userv1.NewOtpServiceClient(conn),
 		Outbox:         userv1.NewOutboxServiceClient(conn),
+		Checkin:        userv1.NewCheckinServiceClient(conn),
 	}
 }

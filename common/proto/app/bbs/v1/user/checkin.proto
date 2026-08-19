@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package common.api.app.bbs.v1.user;
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/bbs/v1/user;user";
+
+service CheckinService {
+  rpc CheckIn(CheckIn.Req) returns (CheckIn.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/checkin/check-in"
+      body: "*"
+    };
+  }
+  rpc GetOverview(GetCheckinOverview.Req) returns (GetCheckinOverview.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/checkin/get-overview"
+      body: "*"
+    };
+  }
+}
+
+message CheckIn {
+  message Req {}
+  message Resp {
+    int64 record_id = 1;
+    google.protobuf.Timestamp date = 2;
+    int32 current_streak = 3;
+    int32 longest_streak = 4;
+  }
+}
+
+message GetCheckinOverview {
+  message Req {
+    string month = 1;
+  }
+  message Resp {
+    message Record {
+      int64 id = 1;
+      google.protobuf.Timestamp date = 2;
+      bool checked = 3;
+    }
+    repeated Record records = 1;
+    int32 current_streak = 2;
+    int32 longest_streak = 3;
+  }
+}

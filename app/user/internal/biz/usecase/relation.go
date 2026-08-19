@@ -58,6 +58,12 @@ type FollowRelationReq struct {
 }
 
 func (d *RelationUsecase) Follow(ctx context.Context, req *FollowRelationReq) error {
+	if req.ActorID <= 0 || req.TargetID <= 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
+	}
+	if req.ActorID == req.TargetID {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
 	var outboxEvent *model.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
@@ -71,6 +77,9 @@ func (d *RelationUsecase) Follow(ctx context.Context, req *FollowRelationReq) er
 		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{
 			UserID: &req.ActorID,
 		}); err != nil {
+			return err
+		}
+		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.TargetID}); err != nil {
 			return err
 		}
 		if exists {
@@ -130,8 +139,20 @@ type UnfollowRelationReq struct {
 }
 
 func (d *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowRelationReq) error {
+	if req.ActorID <= 0 || req.TargetID <= 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
+	}
+	if req.ActorID == req.TargetID {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
 	var outboxEvent *model.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
+		if _, err := d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.ActorID}); err != nil {
+			return err
+		}
+		if _, err := d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.TargetID}); err != nil {
+			return err
+		}
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
 			TargetId: &req.TargetID,
@@ -201,6 +222,12 @@ type BlockRelationReq struct {
 }
 
 func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) error {
+	if req.ActorID <= 0 || req.TargetID <= 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
+	}
+	if req.ActorID == req.TargetID {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
 	var outboxEvent *model.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
@@ -214,6 +241,9 @@ func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) erro
 		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{
 			UserID: &req.ActorID,
 		}); err != nil {
+			return err
+		}
+		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.TargetID}); err != nil {
 			return err
 		}
 		if exists {
@@ -259,8 +289,20 @@ type UnblockRelationReq struct {
 }
 
 func (d *RelationUsecase) Unblock(ctx context.Context, req *UnblockRelationReq) error {
+	if req.ActorID <= 0 || req.TargetID <= 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
+	}
+	if req.ActorID == req.TargetID {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
+	}
 	var outboxEvent *model.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
+		if _, err := d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.ActorID}); err != nil {
+			return err
+		}
+		if _, err := d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.TargetID}); err != nil {
+			return err
+		}
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
 			TargetId: &req.TargetID,

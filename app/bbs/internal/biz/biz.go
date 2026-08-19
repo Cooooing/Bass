@@ -14,6 +14,7 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewLocationUsecase,
 	usecase.NewRelationUsecase,
 	usecase.NewOtpUsecase,
+	usecase.NewCheckinUsecase,
 	usecase.NewContentArticleUsecase,
 	usecase.NewContentPostscriptUsecase,
 	usecase.NewContentCommentUsecase,

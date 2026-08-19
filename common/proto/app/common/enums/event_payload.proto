@@ -93,6 +93,13 @@ message UserAccountUnbannedPayload {
   int64 ban_record_id = 2;
 }
 
+message UserCheckinCompletedPayload {
+  int64 user_id = 1;
+  int64 checkin_record_id = 2;
+  string local_date = 3;
+  int32 current_streak = 4;
+}
+
 // ==================== article ====================
 
 message ArticlePublishedPayload {

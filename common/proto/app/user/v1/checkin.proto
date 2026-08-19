@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package common.api.app.user.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/user/v1;v1";
+
+service CheckinService {
+  rpc CheckIn(CheckIn.Req) returns (CheckIn.Resp) {}
+  rpc GetOverview(GetCheckinOverview.Req) returns (GetCheckinOverview.Resp) {}
+}
+
+message CheckinRecord {
+  int64 id = 1;
+  int64 user_id = 2;
+  google.protobuf.Timestamp date = 3;
+  bool checked = 4;
+}
+
+message CheckinStat {
+  int64 user_id = 1;
+  int32 current_streak = 2;
+  int32 longest_streak = 3;
+}
+
+message CheckIn {
+  message Req {
+    int64 user_id = 1;
+  }
+  message Resp {
+    CheckinRecord record = 1;
+    CheckinStat stat = 2;
+  }
+}
+
+message GetCheckinOverview {
+  message Req {
+    int64 user_id = 1;
+    string month = 2;
+  }
+  message Resp {
+    repeated CheckinRecord records = 1;
+    CheckinStat stat = 2;
+  }
+}

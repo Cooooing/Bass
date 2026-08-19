@@ -20,7 +20,7 @@ consul:
 database:
   driver: postgres
   source: postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable
-  merge: true
+  merge: false
   debug: false
   slow_sql_threshold: 1s
   sample_rate: 1

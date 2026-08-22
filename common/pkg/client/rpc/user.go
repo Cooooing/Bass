@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"common/pkg/client/localrpc"
 	userv1 "common/proto/gen/user/v1"
 
 	"google.golang.org/grpc"
@@ -20,7 +21,7 @@ type UserClient struct {
 }
 
 func NewUserClient(
-	conn *grpc.ClientConn,
+	conn grpc.ClientConnInterface,
 ) *UserClient {
 	return &UserClient{
 		Account:        userv1.NewAccountServiceClient(conn),
@@ -33,5 +34,26 @@ func NewUserClient(
 		Otp:            userv1.NewOtpServiceClient(conn),
 		Outbox:         userv1.NewOutboxServiceClient(conn),
 		Checkin:        userv1.NewCheckinServiceClient(conn),
+	}
+}
+
+func NewLocalUserClient[T any](services []T) *UserClient {
+	conn := localrpc.NewConn()
+	MountUserServices(conn, services)
+	return NewUserClient(conn)
+}
+
+func MountUserServices[T any](conn *localrpc.Conn, services []T) {
+	for _, service := range services {
+		conn.RegisterMatching(&userv1.AuthService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.AccountService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.RbacService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.RelationService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.PreferencesService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.PrivacySettingService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.LocationService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.OtpService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.OutboxService_ServiceDesc, service)
+		conn.RegisterMatching(&userv1.CheckinService_ServiceDesc, service)
 	}
 }

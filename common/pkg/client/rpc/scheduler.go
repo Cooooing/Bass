@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"common/pkg/client/localrpc"
 	schedulerv1 "common/proto/gen/scheduler/v1"
 
 	"google.golang.org/grpc"
@@ -12,10 +13,23 @@ type SchedulerClient struct {
 }
 
 func NewSchedulerClient(
-	conn *grpc.ClientConn,
+	conn grpc.ClientConnInterface,
 ) *SchedulerClient {
 	return &SchedulerClient{
 		ScheduledTask: schedulerv1.NewSchedulerScheduledTaskServiceClient(conn),
 		DelayedTask:   schedulerv1.NewSchedulerDelayedTaskServiceClient(conn),
+	}
+}
+
+func NewLocalSchedulerClient[T any](services []T) *SchedulerClient {
+	conn := localrpc.NewConn()
+	MountSchedulerServices(conn, services)
+	return NewSchedulerClient(conn)
+}
+
+func MountSchedulerServices[T any](conn *localrpc.Conn, services []T) {
+	for _, service := range services {
+		conn.RegisterMatching(&schedulerv1.SchedulerScheduledTaskService_ServiceDesc, service)
+		conn.RegisterMatching(&schedulerv1.SchedulerDelayedTaskService_ServiceDesc, service)
 	}
 }

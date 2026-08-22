@@ -51,12 +51,14 @@ config: config-clean
 .PHONY: wire-clean
 wire-clean:
 	@echo "[wire-clean] cleaning wire_gen.go..."
-	@cd $(APP_DIR)/cmd 2>/dev/null && find . -type f -name "wire_gen.go" -delete 2>/dev/null; true
+	@find $(APP_DIR) -type f -name "wire_gen.go" -delete; true
 
 .PHONY: wire
 wire: wire-clean
 	@echo "[wire] wire..."
-	$(call run,cd $(APP_DIR)/cmd && wire,[wire] wire)
+	@find $(APP_DIR) -type f -name "wire.go" -exec dirname {} \; | sort -u | while read dir; do \
+		(cd "$$dir" && wire) || exit 1; \
+	done
 
 .PHONY: build
 build:

@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"common/pkg/client/localrpc"
 	contentv1 "common/proto/gen/content/v1"
 
 	"google.golang.org/grpc"
@@ -16,7 +17,7 @@ type ContentClient struct {
 }
 
 func NewContentClient(
-	conn *grpc.ClientConn,
+	conn grpc.ClientConnInterface,
 ) *ContentClient {
 	return &ContentClient{
 		Article:    contentv1.NewContentArticleServiceClient(conn),
@@ -25,5 +26,22 @@ func NewContentClient(
 		Outbox:     contentv1.NewOutboxServiceClient(conn),
 		Postscript: contentv1.NewContentPostscriptServiceClient(conn),
 		Tag:        contentv1.NewContentTagServiceClient(conn),
+	}
+}
+
+func NewLocalContentClient[T any](services []T) *ContentClient {
+	conn := localrpc.NewConn()
+	MountContentServices(conn, services)
+	return NewContentClient(conn)
+}
+
+func MountContentServices[T any](conn *localrpc.Conn, services []T) {
+	for _, service := range services {
+		conn.RegisterMatching(&contentv1.ContentArticleService_ServiceDesc, service)
+		conn.RegisterMatching(&contentv1.ContentCommentService_ServiceDesc, service)
+		conn.RegisterMatching(&contentv1.ContentDomainService_ServiceDesc, service)
+		conn.RegisterMatching(&contentv1.OutboxService_ServiceDesc, service)
+		conn.RegisterMatching(&contentv1.ContentPostscriptService_ServiceDesc, service)
+		conn.RegisterMatching(&contentv1.ContentTagService_ServiceDesc, service)
 	}
 }

@@ -9,8 +9,6 @@ import (
 	pushhubv1 "common/proto/gen/push_hub/v1"
 	"push_node/internal/biz/repo"
 	"push_node/internal/config"
-
-	"google.golang.org/grpc"
 )
 
 type NodeUsecase struct {
@@ -19,7 +17,6 @@ type NodeUsecase struct {
 	registry   repo.ConnectionRegistry
 	nodeID     string
 	hubClient  pushhubv1.PushHubNodeServiceClient
-	hubConn    *grpc.ClientConn
 	cancelLoop context.CancelFunc
 }
 
@@ -27,20 +24,22 @@ func NewNodeUsecase(
 	conf *config.Bootstrap,
 	logger *slog.Logger,
 	registry repo.ConnectionRegistry,
-	nodeID string,
-	hubConn *grpc.ClientConn,
+	hubClient pushhubv1.PushHubNodeServiceClient,
 ) *NodeUsecase {
 	return &NodeUsecase{
 		conf:      conf,
 		log:       logger,
 		registry:  registry,
-		nodeID:    nodeID,
-		hubConn:   hubConn,
-		hubClient: pushhubv1.NewPushHubNodeServiceClient(hubConn),
+		hubClient: hubClient,
 	}
 }
 
 func (uc *NodeUsecase) ConnectHub(ctx context.Context) error {
+	nodeID, err := RegisterWithHub(ctx, uc.hubClient, uc.conf)
+	if err != nil {
+		return err
+	}
+	uc.nodeID = nodeID
 	uc.log.Info(fmt.Sprintf("start heartbeat loop: node_id=%s", uc.nodeID))
 	loopCtx, cancel := context.WithCancel(ctx)
 	uc.cancelLoop = cancel
@@ -88,8 +87,7 @@ func (uc *NodeUsecase) sendHeartbeat(ctx context.Context) {
 	uc.log.Debug(fmt.Sprintf("heartbeat sent: node_id=%s connections=%d", uc.nodeID, connectionCount))
 }
 
-func RegisterWithHub(ctx context.Context, conn *grpc.ClientConn, conf *config.Bootstrap) (string, error) {
-	client := pushhubv1.NewPushHubNodeServiceClient(conn)
+func RegisterWithHub(ctx context.Context, client pushhubv1.PushHubNodeServiceClient, conf *config.Bootstrap) (string, error) {
 	var nodeID string
 	var lastErr error
 	for i := 0; i < 3; i++ {

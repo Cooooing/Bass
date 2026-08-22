@@ -27,7 +27,6 @@ type SSEUsecase struct {
 	log      *slog.Logger
 	registry repo.ConnectionRegistry
 	natsSub  client.Subscriber
-	nodeID   string
 	tokenGen *jwt.TokenGenerator[sseToken]
 	writers  sync.Map
 }
@@ -37,14 +36,12 @@ func NewSEEUsecase(
 	logger *slog.Logger,
 	registry repo.ConnectionRegistry,
 	natsSub client.Subscriber,
-	nodeID string,
 ) *SSEUsecase {
 	return &SSEUsecase{
 		conf:     conf,
 		log:      logger,
 		registry: registry,
 		natsSub:  natsSub,
-		nodeID:   nodeID,
 		tokenGen: jwt.NewTokenGenerator[sseToken](conf.PushNode.JwtSecret),
 	}
 }

@@ -1,30 +1,30 @@
 ifndef APP_MK_INCLUDED
 APP_MK_INCLUDED := 1
 
-# Include common.mk for one-time targets and shared variables.
+# 引入一次性目标和共享变量。
 MAKE_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 include $(MAKE_DIR)/common.mk
 
-# --- Module variables ---
+# --- 模块变量 ---
 SERVER := $(notdir $(CURDIR))
 APP_DIR := $(ROOT_DIR)/app/$(SERVER)
 INTERNAL_DIR := $(APP_DIR)/internal
 APP_PROTO_FILES := $(shell find $(INTERNAL_DIR) -type f -name "*.proto" | sort)
-BUF_SERVICE_CONFIG := '{"version":"v2","modules":[{"path":"common/proto/app"},{"path":"app/$(SERVER)"}],"deps":["buf.build/googleapis/googleapis"],"lint":{"use":["MINIMAL"],"except":["PACKAGE_DIRECTORY_MATCH","PACKAGE_SAME_DIRECTORY"]},"breaking":{"use":["FILE"]}}'
+BUF_SERVICE_CONFIG := '{"version":"v2","modules":[{"path":"common/proto/app"},{"path":"app"}],"deps":["buf.build/googleapis/googleapis"],"lint":{"use":["MINIMAL"],"except":["PACKAGE_DIRECTORY_MATCH","PACKAGE_SAME_DIRECTORY"]},"breaking":{"use":["FILE"]}}'
 
 IGNORE_ERROR ?= 0
 MODULE_GEN_TARGETS := config wire
 
-# run is an error handling wrapper selected at parse time by ifeq.
-# Usage: $(call run,command,error-label)
-# Commands are hidden by default. Failures print labels to stderr.
+# run 在解析阶段根据 IGNORE_ERROR 选择错误处理方式。
+# 用法：$(call run,command,error-label)
+# 命令默认隐藏，失败时向 stderr 输出标签。
 ifeq ($(IGNORE_ERROR),1)
 run = @$(1) || echo "[ERROR] $(2) failed" >&2
 else
 run = @$(1) || { echo "[ERROR] $(2) failed" >&2; exit 1; }
 endif
 
-# --- Module targets ---
+# --- 模块目标 ---
 
 .PHONY: tidy
 tidy:
@@ -41,12 +41,12 @@ format:
 .PHONY: config-clean
 config-clean:
 	@echo "[config-clean] cleaning proto generated Go files..."
-	@cd $(APP_DIR) 2>/dev/null && find . -type f \( -name "*.pb.go" -o -name "*.pb.validate.go" -o -name "*.pb.gw.go" \) -delete 2>/dev/null; true
+	@cd $(APP_DIR) && find . -type f \( -name "*.pb.go" -o -name "*.pb.validate.go" -o -name "*.pb.gw.go" \) -delete; true
 
 .PHONY: config
 config: config-clean
 	@echo "[config] buf generate..."
-	$(call run,cd $(ROOT_DIR) && $(BUF) generate --config $(BUF_SERVICE_CONFIG) --template $(BUF_GEN_CONFIG) --path app/$(SERVER)/internal/config/config.proto --output app/$(SERVER),[config] buf generate)
+	$(call run,cd $(ROOT_DIR) && $(BUF) generate --config $(BUF_SERVICE_CONFIG) --template $(BUF_GEN_CONFIG) --path app/$(SERVER)/internal/config/config.proto --output app,[config] buf generate)
 
 .PHONY: wire-clean
 wire-clean:
@@ -68,7 +68,7 @@ build:
 .PHONY: build-clean
 build-clean:
 	@echo "[build-clean] cleaning service binary..."
-	@rm -f $(APP_DIR)/server 2>/dev/null; true
+	@rm -f $(APP_DIR)/server; true
 
 .PHONY: clean
 clean: config-clean

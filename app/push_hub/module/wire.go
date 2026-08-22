@@ -4,11 +4,12 @@
 package module
 
 import (
+	commonmodule "common/pkg/module"
 	"log/slog"
 
 	"github.com/google/wire"
 )
 
-func New(*Config, *slog.Logger) (*Module, func(), error) {
+func wireModule(*Config, *slog.Logger, *commonmodule.Infrastructure) (*Module, func(), error) {
 	panic(wire.Build(ProviderSet))
 }

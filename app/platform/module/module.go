@@ -1,16 +1,12 @@
 package module
 
 import (
-	commonclient "common/pkg/client"
 	"common/pkg/client/rpc"
+	commonmodule "common/pkg/module"
 	"common/pkg/server"
-	"common/proto/gen/common"
-	"fmt"
 	"platform/internal/biz"
 	"platform/internal/config"
-	dataclient "platform/internal/data/client"
-	"platform/internal/data/oss"
-	"platform/internal/data/repo"
+	"platform/internal/data"
 	"platform/internal/service"
 
 	"github.com/google/wire"
@@ -19,56 +15,46 @@ import (
 // ProviderSet 提供平台模块的依赖项。
 var ProviderSet = wire.NewSet(
 	provideBootstrap,
-	commonclient.NewHttpClient,
-	dataclient.NewDataBaseClient,
-	dataclient.ProvideTx,
-	repo.NewObjectStorageRepo,
-	oss.ProviderSet,
+	data.ModuleProviderSet,
 	biz.BizProviderSet,
 	service.ServiceProviderSet,
-	newClients,
 	newModule,
 )
 
-type Config struct {
-	bootstrap *config.Bootstrap
-}
+type Config = commonmodule.Config[*config.Bootstrap]
 
 type Module struct {
 	Name     string
 	Services []server.Service
-	Clients  *Clients
 }
 
-type Clients struct {
-	Platform *rpc.PlatformClient
+func newModule(config *Config, services []server.Service) *Module {
+	return &Module{Name: config.Server().GetName(), Services: services}
 }
 
-func newModule(config *Config, services []server.Service, clients *Clients) *Module {
-	return &Module{Name: config.Server().GetName(), Services: services, Clients: clients}
-}
+func provideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
 
-func LoadConfig(bootstrapPath string, path string) (*Config, *common.Bootstrap, func(), error) {
-	c, bc, cleanup, err := config.LoadConfig(bootstrapPath, path)
+// Build 构造平台模块并返回单体可收集的模块能力。
+func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, func(), error) {
+	values, err := runtime.Values(name)
 	if err != nil {
-		return nil, nil, cleanup, err
+		return commonmodule.Mounted{}, func() {}, err
 	}
-	return &Config{bootstrap: c}, bc, cleanup, nil
+	moduleConfig, err := commonmodule.NewConfig(runtime.Config, values, name, func() *config.Bootstrap { return &config.Bootstrap{} })
+	if err != nil {
+		return commonmodule.Mounted{}, func() {}, err
+	}
+	module, cleanup, err := wireModule(moduleConfig, runtime.Logger)
+	if err != nil {
+		return commonmodule.Mounted{}, cleanup, err
+	}
+	return commonmodule.Mounted{Module: module, Services: module.Services}, cleanup, nil
 }
 
-func LoadRequiredConfig(name string, bootstrapPath string, path string) (*Config, func(), error) {
-	if bootstrapPath == "" || path == "" {
-		return nil, func() {}, fmt.Errorf("%s module config path is required", name)
-	}
-	c, _, cleanup, err := LoadConfig(bootstrapPath, path)
-	return c, cleanup, err
-}
-
-func (c *Config) Server() *common.Server { return c.bootstrap.GetServer() }
-func (c *Config) Trace() *common.Trace   { return c.bootstrap.GetTrace() }
-
-func provideBootstrap(c *Config) *config.Bootstrap { return c.bootstrap }
-
-func newClients(services []server.Service) *Clients {
-	return &Clients{Platform: rpc.NewLocalPlatformClient(services)}
+func Descriptor() commonmodule.Descriptor {
+	return commonmodule.NewDescriptor(
+		Build,
+		commonmodule.WithLocalClient(rpc.NewPlatformClient),
+		commonmodule.WithMount(rpc.MountPlatformServices[server.Service]),
+	)
 }

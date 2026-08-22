@@ -4,12 +4,12 @@
 package module
 
 import (
-	"common/pkg/client/rpc"
+	commonmodule "common/pkg/module"
 	"log/slog"
 
 	"github.com/google/wire"
 )
 
-func New(*Config, *slog.Logger, *rpc.SchedulerClient) (*Module, func(), error) {
+func wireModule(*Config, *slog.Logger, *commonmodule.Clients, *commonmodule.Infrastructure) (*Module, func(), error) {
 	panic(wire.Build(ProviderSet))
 }

@@ -11,17 +11,23 @@ import (
 	"github.com/google/wire"
 )
 
+// DataProviderSet 提供微服务模式的数据层依赖。
 var DataProviderSet = wire.NewSet(
-	client.NewDataBaseClient,
-	ProvideRedis,
-	ProvideConsul,
-	ProvideNats,
+	ModuleProviderSet,
 	commonClient.NewObservability,
-	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
+	ProvideConsul,
+	commonClient.NewConsulClient,
 	rpc.ProvideUserClient,
 	rpc.ProvideSchedulerClient,
+)
+
+// ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
+var ModuleProviderSet = wire.NewSet(
+	client.NewDataBaseClient,
+	ProvideRedis,
+	ProvideNats,
 	client.ProvideTx,
 	repo.NewArticleRepo,
 	repo.NewCommentRepo,

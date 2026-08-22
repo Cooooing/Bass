@@ -10,17 +10,23 @@ import (
 	"github.com/google/wire"
 )
 
+// DataProviderSet 提供微服务模式的数据层依赖。
 var DataProviderSet = wire.NewSet(
-	ProvideRedis,
-	ProvideConsul,
-	ProvideNats,
+	ModuleProviderSet,
 	commonClient.NewObservability,
-	commonClient.NewConsulClient,
 	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
+	ProvideConsul,
+	commonClient.NewConsulClient,
+)
+
+// ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
+var ModuleProviderSet = wire.NewSet(
+	ProvideRedis,
+	ProvideNats,
 	repo.NewNodeRegistryRepo,
 	wire.Bind(new(bizrepo.NodeRegistry), new(*repo.NodeRegistryRepo)),
-	wire.Bind(new(commonClient.Publisher), new(*commonClient.NatsClient)),
+	ProvidePublisher,
 )
 
 func ProvideRedis(c *config.Bootstrap) *common.Redis {
@@ -33,4 +39,8 @@ func ProvideConsul(c *config.Bootstrap) *common.Consul {
 
 func ProvideNats(c *config.Bootstrap) *common.Nats {
 	return c.Nats
+}
+
+func ProvidePublisher(natsClient *commonClient.NatsClient) commonClient.Publisher {
+	return natsClient
 }

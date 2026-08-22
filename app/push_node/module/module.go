@@ -1,10 +1,13 @@
 package module
 
 import (
+	"common/pkg/client/rpc"
+	commonmodule "common/pkg/module"
 	"common/pkg/server"
-	"common/proto/gen/common"
-	"fmt"
+	pushhubv1 "common/proto/gen/push_hub/v1"
+	"push_node/internal/biz"
 	"push_node/internal/config"
+	"push_node/internal/data"
 	"push_node/internal/service"
 
 	"github.com/google/wire"
@@ -12,46 +15,52 @@ import (
 
 // ProviderSet 提供推送节点模块的依赖项。
 var ProviderSet = wire.NewSet(
+	provideBootstrap,
+	rpc.LocalProviderSet,
+	commonmodule.InfrastructureProviderSet,
+	providePushHubNodeClient,
+	data.ModuleProviderSet,
+	biz.BizProviderSet,
 	service.ServiceProviderSet,
-	newClients,
 	newModule,
 )
 
-type Config struct {
-	bootstrap *config.Bootstrap
-}
+type Config = commonmodule.Config[*config.Bootstrap]
 
 type Module struct {
 	Name     string
 	Services []server.Service
-	Clients  *Clients
 }
 
-type Clients struct{}
-
-func newModule(config *Config, services []server.Service, clients *Clients) *Module {
-	return &Module{Name: config.Server().GetName(), Services: services, Clients: clients}
+func newModule(config *Config, services []server.Service) *Module {
+	return &Module{Name: config.Server().GetName(), Services: services}
 }
 
-func LoadConfig(bootstrapPath string, path string) (*Config, *common.Bootstrap, func(), error) {
-	c, bc, cleanup, err := config.LoadConfig(bootstrapPath, path)
+func provideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
+
+func providePushHubNodeClient(client *rpc.PushHubClient) pushhubv1.PushHubNodeServiceClient {
+	return client.Node
+}
+
+// Build 构造推送节点模块并返回单体可收集的模块能力。
+func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, func(), error) {
+	values, err := runtime.Values(name)
 	if err != nil {
-		return nil, nil, cleanup, err
+		return commonmodule.Mounted{}, func() {}, err
 	}
-	return &Config{bootstrap: c}, bc, cleanup, nil
+	moduleConfig, err := commonmodule.NewConfig(runtime.Config, values, name, func() *config.Bootstrap { return &config.Bootstrap{} })
+	if err != nil {
+		return commonmodule.Mounted{}, func() {}, err
+	}
+	module, cleanup, err := wireModule(moduleConfig, runtime.Logger, runtime.Clients, runtime.Infrastructure)
+	if err != nil {
+		return commonmodule.Mounted{}, cleanup, err
+	}
+	return commonmodule.Mounted{Module: module, Services: module.Services}, cleanup, nil
 }
 
-func LoadRequiredConfig(name string, bootstrapPath string, path string) (*Config, func(), error) {
-	if bootstrapPath == "" || path == "" {
-		return nil, func() {}, fmt.Errorf("%s module config path is required", name)
-	}
-	c, _, cleanup, err := LoadConfig(bootstrapPath, path)
-	return c, cleanup, err
+func Descriptor() commonmodule.Descriptor {
+	return commonmodule.NewDescriptor(
+		Build,
+	)
 }
-
-func (c *Config) Server() *common.Server { return c.bootstrap.GetServer() }
-func (c *Config) Trace() *common.Trace   { return c.bootstrap.GetTrace() }
-
-func provideBootstrap(c *Config) *config.Bootstrap { return c.bootstrap }
-
-func newClients() *Clients { return &Clients{} }

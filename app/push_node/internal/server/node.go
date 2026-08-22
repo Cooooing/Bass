@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
-	"log/slog"
 
+	pushhubv1 "common/proto/gen/push_hub/v1"
 	"push_node/internal/biz/usecase"
 	"push_node/internal/config"
 
@@ -29,13 +29,8 @@ func NewPushHubConn(
 	return conn, cleanup, nil
 }
 
-func ProvideNodeID(conf *config.Bootstrap, conn *grpc.ClientConn) (string, error) {
-	nodeID, err := usecase.RegisterWithHub(context.Background(), conn, conf)
-	if err != nil {
-		return "", err
-	}
-	slog.Info("node registered", "node_id", nodeID)
-	return nodeID, nil
+func NewPushHubNodeClient(conn *grpc.ClientConn) pushhubv1.PushHubNodeServiceClient {
+	return pushhubv1.NewPushHubNodeServiceClient(conn)
 }
 
 func NewNodeServer(

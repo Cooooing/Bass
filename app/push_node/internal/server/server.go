@@ -13,7 +13,7 @@ var ServerProviderSet = wire.NewSet(
 	NewGRPCServer,
 	NewHTTPServer,
 	NewPushHubConn,
-	ProvideNodeID,
+	NewPushHubNodeClient,
 	NewNodeServer,
 )
 

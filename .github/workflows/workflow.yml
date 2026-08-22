@@ -13,7 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-push:
+  build-services:
+    name: Build Services
     runs-on: ubuntu-latest
     strategy:
       # 矩阵配置：列出所有需要打包的服务名
@@ -51,6 +52,27 @@ jobs:
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/${{ matrix.service }}:latest
             ghcr.io/cooooing/${{ matrix.service }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  build-monolith:
+    name: Build Monolith
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Monolith Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: monolith/Dockerfile
+          push: false
+          tags: monolith:ci
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

@@ -17,6 +17,7 @@ import (
 	stdhttp "net/http"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
+	"github.com/go-kratos/kratos/v3/middleware"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
 	"github.com/go-kratos/kratos/v3/middleware/selector"
 	kratoshttp "github.com/go-kratos/kratos/v3/transport/http"
@@ -47,13 +48,7 @@ var bbsHTTPOptionalAuthOperations = map[string]struct{}{
 	bbsuserv1.OperationRelationServiceGetStatus:      {},
 }
 
-func NewHTTPServer(
-	c *config.Bootstrap,
-	logger *slog.Logger,
-	obs *commonClient.Observer,
-	services []server.Service,
-	authClient userv1.AuthServiceClient,
-) *kratoshttp.Server {
+func NewHTTPAuthMiddlewares(authClient userv1.AuthServiceClient) []middleware.Middleware {
 	operationAuthGroups := map[string]string{}
 	for operation := range bbsHTTPPublicOperations {
 		operationAuthGroups[operation] = "public"
@@ -78,16 +73,30 @@ func NewHTTPServer(
 		return ok
 	}
 
+	return []middleware.Middleware{
+		selector.Server(server.OptionalUserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(optionalAuthMatch).Build(),
+		selector.Server(server.UserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(authRequiredMatch).Build(),
+	}
+}
+
+func NewHTTPServer(
+	c *config.Bootstrap,
+	logger *slog.Logger,
+	obs *commonClient.Observer,
+	services []server.Service,
+	authClient userv1.AuthServiceClient,
+) *kratoshttp.Server {
+	middlewares := []middleware.Middleware{
+		server.RequestLogContextMiddleware(),
+		obs.ServerMiddleware(),
+		recovery.Recovery(),
+	}
+	middlewares = append(middlewares, NewHTTPAuthMiddlewares(authClient)...)
+	middlewares = append(middlewares, validate.ProtoValidate())
+
 	var opts = []kratoshttp.ServerOption{
 		kratoshttp.Filter(server.HTTPTraceMiddleware(), server.HTTPAccessLogMiddleware(logger)),
-		kratoshttp.Middleware(
-			server.RequestLogContextMiddleware(),
-			obs.ServerMiddleware(),
-			recovery.Recovery(),
-			selector.Server(server.OptionalUserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(optionalAuthMatch).Build(),
-			selector.Server(server.UserAuthMiddleware(authClient, commonenum.LoginRealmBBS)).Match(authRequiredMatch).Build(),
-			validate.ProtoValidate(),
-		),
+		kratoshttp.Middleware(middlewares...),
 		kratoshttp.RequestDecoder(server.ProtoJSONRequestDecoder),
 		kratoshttp.ResponseEncoder(server.HttpRespEncoder),
 		kratoshttp.ErrorEncoder(server.HttpErrorEncoder(func(r *stdhttp.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string {

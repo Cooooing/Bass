@@ -1,0 +1,34 @@
+syntax = "proto3";
+package kratos.api.monolith.config;
+
+import "common/config.proto";
+
+option go_package = "monolith/internal/config;config";
+
+message Bootstrap {
+  common.api.app.common.Server server = 1;
+  common.api.app.common.HTTP http = 2;
+  common.api.app.common.GRPC grpc = 3;
+  common.api.app.common.Consul consul = 4;
+  Modules modules = 21;
+}
+
+message Modules {
+  Module user = 1;
+  Module bbs = 2;
+  Module content = 3;
+  Module economy = 4;
+  Module game_town = 5;
+  Module im = 6;
+  Module notify = 7;
+  Module platform = 8;
+  Module push_hub = 9;
+  Module push_node = 10;
+  Module scheduler = 11;
+}
+
+message Module {
+  bool enabled = 1;
+  string bootstrap = 2;
+  string config = 3;
+}

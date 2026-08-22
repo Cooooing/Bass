@@ -15,6 +15,7 @@ import (
 	"log/slog"
 	"net"
 	"net/http"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
@@ -96,7 +97,7 @@ func HttpErrorEncoder(resolve func(r *http.Request, code cerrors.BusinessErrorCo
 			span.SetStatus(codes.Error, err.Error())
 			span.SetAttributes(attribute.Int("http.response.status_code", statusCode), attribute.Int("bass.business_code", int(businessCode)))
 		}
-		kratoslog.ErrorContext(r.Context(), "http error",
+		logArgs := []any{
 			constant.LogFieldErr, err,
 			"method", r.Method,
 			constant.LogFieldPath, r.URL.Path,
@@ -109,7 +110,11 @@ func HttpErrorEncoder(resolve func(r *http.Request, code cerrors.BusinessErrorCo
 			"business_reason", businessCode.String(),
 			"message", message,
 			"error_data", string(errorData),
-		)
+		}
+		if statusCode >= http.StatusInternalServerError {
+			logArgs = append(logArgs, "stack", string(debug.Stack()))
+		}
+		kratoslog.ErrorContext(r.Context(), "http error", logArgs...)
 
 		w.WriteHeader(statusCode)
 		res := NewResult[any](int(businessCode), message, errorData)

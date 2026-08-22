@@ -165,26 +165,26 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace bbs => ../bbs
+replace bbs => ../app/bbs
 
-replace common => ../../common
+replace common => ../common
 
-replace user => ../user
+replace user => ../app/user
 
-replace content => ../content
+replace content => ../app/content
 
-replace economy => ../economy
+replace economy => ../app/economy
 
-replace game_town => ../game_town
+replace game_town => ../app/game_town
 
-replace im => ../im
+replace im => ../app/im
 
-replace notify => ../notify
+replace notify => ../app/notify
 
-replace platform => ../platform
+replace platform => ../app/platform
 
-replace push_hub => ../push_hub
+replace push_hub => ../app/push_hub
 
-replace push_node => ../push_node
+replace push_node => ../app/push_node
 
-replace scheduler => ../scheduler
+replace scheduler => ../app/scheduler

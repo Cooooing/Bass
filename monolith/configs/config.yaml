@@ -1,0 +1,189 @@
+server:
+  name: monolith
+  version: 1.0.0
+  mode: ${SERVICE_MODE:dev}
+http:
+  network: tcp
+  host: ${MONOLITH_HTTP_HOST:0.0.0.0}
+  port: ${MONOLITH_HTTP_PORT:8000}
+  timeout: 5s
+grpc:
+  network: tcp
+  host: ${MONOLITH_GRPC_HOST:0.0.0.0}
+  port: ${MONOLITH_GRPC_PORT:9000}
+  timeout: 5s
+consul:
+  address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
+  datacenter: dc1
+  token: ${CONSUL_ACL_APP_TOKEN:token}
+  dial_timeout: 5s
+database:
+  driver: postgres
+  source: postgresql://${POSTGRES_USER:admin}:${POSTGRES_PASSWORD:123456}@${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:bass}?sslmode=disable
+  merge: true
+  debug: false
+  slow_sql_threshold: 1s
+  sample_rate: 1
+redis:
+  addr: ${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}
+  password: ${REDIS_PASSWORD:"123456"}
+  dial_timeout: 5s
+  db: 0
+  read_timeout: 5s
+  write_timeout: 5s
+  pool_size: 10
+  min_idle_conns: 1
+  pool_timeout: 2s
+  conn_max_idle_time: 300s
+  conn_max_life_time: 900s
+nats:
+  host: ${NATS_HOST:127.0.0.1}
+  port: ${NATS_PORT:4222}
+  user: ${NATS_USER:admin}
+  password: ${NATS_PASSWORD:"123456"}
+  name: nats-monolith
+  timeout: 5s
+  max_reconnects: 10
+  reconnect_wait: 2s
+  ping_interval: 30s
+  flusher_timeout: 5s
+  enable_jet_stream: true
+trace:
+  enable_otel: false
+  endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
+  insecure: true
+  sampler: 1
+observability:
+  enable_metrics: true
+dtm:
+  grpc_endpoint: ${DTM_GRPC_ENDPOINT:127.0.0.1:36790}
+  timeout: 5s
+  max_retry_times: 3
+  retry_interval: 1s
+alert:
+  lark_webhook:
+    base_url: ${ALERT_LARK_BASE_URL:https://open.larksuite.com/open-apis/bot/v2/hook/}
+    token: ${ALERT_LARK_TOKEN:}
+    secret: ${ALERT_LARK_SECRET:}
+    timeout: 10s
+event:
+  outbox:
+    max_retry: 10
+    publish_timeout: 60s
+    poll_lock_ttl: 30s
+    publish_limit: 100
+    min_poll_interval: 1s
+    max_poll_interval: 30s
+  inbox:
+    max_retry: 10
+    processing_timeout: 600s
+  dead_letter:
+    enable_alert: false
+    scan_interval: 60s
+    alert_dedup_window: 3600s
+modules:
+  user:
+    app: FishPi
+    avatar: https://treble.sxisa.com/api/user/v1/user/avatar/%s
+    auth:
+      session:
+        secret: ${USER_JWT_SECRET:your-jwt-secret-here}
+        access_token_ttl: 900s
+        refresh_token_ttl: 2592000s
+        session_ttl: 15552000s
+        max_sessions: 5
+      verification_code:
+        code_ttl: 300s
+        resend_interval: 60s
+        max_attempts: 5
+      totp:
+        temporary_secret_ttl: 300s
+  bbs: {}
+  content:
+    article:
+      published_edit_window: 600s
+      published_edit_max_view_count: 100
+  economy: {}
+  game_town:
+    agent:
+      global_concurrency: 4
+      model_concurrency: 2
+      world_concurrency: 2
+      max_retry: 2
+      retry_base_delay: 5s
+      tick_interval: ${GAME_TOWN_TICK_INTERVAL:60s}
+      recent_event_limit: 20
+    world:
+      max_npc_count: 12
+      max_location_count: 20
+      time_scale: 24
+      max_catch_up_changes: 100
+    memory:
+      embedding_enabled: false
+      base_url: http://192.168.100.10:31434
+      model: bge-m3
+      dimensions: 1024
+      timeout: 30s
+      candidate_limit: 32
+      result_limit: 8
+  im: {}
+  notify:
+    email:
+      enable: false
+      smtp_host: ${EMAIL_SMTP_HOST:smtp.qq.com}
+      smtp_port: ${EMAIL_SMTP_PORT:465}
+      username: ${EMAIL_USERNAME:example}
+      password: ${EMAIL_PASSWORD:example}
+      from_email: ${EMAIL_FROM_EMAIL:example@example.com}
+      from_name: ${EMAIL_FROM_NAME:example}
+    sms:
+      enable: false
+      provider: tencent
+      tencent:
+        secret_id: ${TENCENT_SMS_SECRET_ID:}
+        secret_key: ${TENCENT_SMS_SECRET_KEY:}
+        diyu: ap-beijing
+        sms_sdk_app_id: ${TENCENT_SMS_APP_ID:}
+        sign_name: ${TENCENT_SMS_SIGN_NAME:}
+        template_id: ${TENCENT_SMS_TEMPLATE_ID:}
+    lark_webhook:
+      base_url: ${LARK_WEBHOOK_BASE_URL:https://open.larksuite.com/open-apis/bot/v2/hook/}
+    notification_rate_limit:
+      enable: true
+      window: 300s
+      max_count: 1
+  platform:
+    ip_data:
+      enable: true
+      ipv4_xdb_path: configs/ip2region/ipv4.xdb
+      ipv6_xdb_path: configs/ip2region/ipv6.xdb
+      cache_policy: vectorindex
+      ipv4_source_url: https://github.com/lionsoul2014/ip2region/raw/refs/heads/master/data/ip2region_v4.xdb
+      ipv6_source_url: https://github.com/lionsoul2014/ip2region/raw/refs/heads/master/data/ip2region_v6.xdb
+    oss:
+      provider: minio
+      minio:
+        endpoint: ${MINIO_HOST:s3.dev.bass.local}:${MINIO_PORT:80}
+        access_key: ${MINIO_ROOT_USER:admin}
+        secret_key: ${MINIO_ROOT_PASSWORD:changemechangeme}
+        bucket: ${MINIO_BUCKET:bass-assets}
+        use_ssl: false
+        timeout: ${MINIO_TIMEOUT:30s}
+  push_hub: {}
+  push_node:
+    jwt_secret: ${JWT_SECRET:your-jwt-secret-here}
+  scheduler:
+    default_execution_timeout: 30s
+    stream_name: SCHEDULER
+    scheduled_task_consumer_durable: scheduler-scheduled-task-executor
+    delayed_task_consumer_durable: scheduler-delayed-task-executor
+    scheduled_task_schedule_subject_prefix: scheduler.schedule.scheduled_task
+    delayed_task_schedule_subject_prefix: scheduler.schedule.delayed_task_execution
+    scheduled_task_execute_subject: scheduler.execute.scheduled_task
+    delayed_task_execute_subject: scheduler.execute.delayed_task
+    ack_wait: 60s
+    fetch_batch: 16
+    fetch_wait: 2s
+    scheduled_task_concurrency: 8
+    delayed_task_concurrency: 16
+    reconcile_interval: 60s

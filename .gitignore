@@ -48,6 +48,10 @@ Thumbs.db
 !/app/**/server/
 /app/**/test/
 /app/**/configs/ip2region/*.xdb
+/monolith/**/wire_gen.go
+/monolith/**/config.pb.go
+/monolith/server
+/monolith/configs/ip2region/*.xdb
 
 # Local environment and scratch files
 /common/ops/docker/*.env

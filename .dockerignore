@@ -36,6 +36,8 @@ deploy/
 tmp/
 .cache/
 app/**/configs/ip2region/*.xdb
+monolith/server
+monolith/configs/ip2region/*.xdb
 
 # OS
 .DS_Store

@@ -21,12 +21,6 @@ func NewEconomyClient(conn grpc.ClientConnInterface) *EconomyClient {
 	}
 }
 
-func NewLocalEconomyClient[T any](services []T) *EconomyClient {
-	conn := localrpc.NewConn()
-	MountEconomyServices(conn, services)
-	return NewEconomyClient(conn)
-}
-
 func MountEconomyServices[T any](conn *localrpc.Conn, services []T) {
 	for _, service := range services {
 		conn.RegisterMatching(&economyv1.EconomyService_ServiceDesc, service)

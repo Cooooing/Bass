@@ -23,12 +23,6 @@ func NewIMClient(
 	}
 }
 
-func NewLocalIMClient[T any](services []T) *IMClient {
-	conn := localrpc.NewConn()
-	MountIMServices(conn, services)
-	return NewIMClient(conn)
-}
-
 func MountIMServices[T any](conn *localrpc.Conn, services []T) {
 	for _, service := range services {
 		conn.RegisterMatching(&imv1.IMChatGroupService_ServiceDesc, service)

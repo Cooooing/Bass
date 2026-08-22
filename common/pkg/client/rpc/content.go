@@ -29,12 +29,6 @@ func NewContentClient(
 	}
 }
 
-func NewLocalContentClient[T any](services []T) *ContentClient {
-	conn := localrpc.NewConn()
-	MountContentServices(conn, services)
-	return NewContentClient(conn)
-}
-
 func MountContentServices[T any](conn *localrpc.Conn, services []T) {
 	for _, service := range services {
 		conn.RegisterMatching(&contentv1.ContentArticleService_ServiceDesc, service)

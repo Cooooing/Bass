@@ -21,12 +21,6 @@ func NewSchedulerClient(
 	}
 }
 
-func NewLocalSchedulerClient[T any](services []T) *SchedulerClient {
-	conn := localrpc.NewConn()
-	MountSchedulerServices(conn, services)
-	return NewSchedulerClient(conn)
-}
-
 func MountSchedulerServices[T any](conn *localrpc.Conn, services []T) {
 	for _, service := range services {
 		conn.RegisterMatching(&schedulerv1.SchedulerScheduledTaskService_ServiceDesc, service)

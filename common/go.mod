@@ -14,6 +14,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/google/gnostic v0.7.1
 	github.com/google/uuid v1.6.0
+	github.com/google/wire v0.7.0
 	github.com/hashicorp/consul/api v1.34.2
 	github.com/hibiken/asynq v0.25.1
 	github.com/nats-io/nats.go v1.52.0

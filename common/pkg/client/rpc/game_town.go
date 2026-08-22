@@ -36,12 +36,6 @@ func NewGameTownClient(
 	}
 }
 
-func NewLocalGameTownClient[T any](services []T) *GameTownClient {
-	conn := localrpc.NewConn()
-	MountGameTownServices(conn, services)
-	return NewGameTownClient(conn)
-}
-
 func MountGameTownServices[T any](conn *localrpc.Conn, services []T) {
 	for _, service := range services {
 		conn.RegisterMatching(&commonv1.CommonSystemService_ServiceDesc, service)

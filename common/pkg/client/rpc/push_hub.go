@@ -21,12 +21,6 @@ func NewPushHubClient(
 	}
 }
 
-func NewLocalPushHubClient[T any](services []T) *PushHubClient {
-	conn := localrpc.NewConn()
-	MountPushHubServices(conn, services)
-	return NewPushHubClient(conn)
-}
-
 func MountPushHubServices[T any](conn *localrpc.Conn, services []T) {
 	for _, service := range services {
 		conn.RegisterMatching(&pushhubv1.PushHubEventService_ServiceDesc, service)

@@ -3,8 +3,23 @@ package rpc
 import (
 	"common/pkg/client"
 	"common/pkg/constant"
+	commonmodule "common/pkg/module"
 
+	"github.com/google/wire"
 	"google.golang.org/grpc"
+)
+
+// LocalProviderSet 提供模块化单体模式下的本地 RPC 客户端。
+var LocalProviderSet = wire.NewSet(
+	ProvideLocalUserClient,
+	ProvideLocalContentClient,
+	ProvideLocalEconomyClient,
+	ProvideLocalIMClient,
+	ProvideLocalNotifyClient,
+	ProvideLocalPlatformClient,
+	ProvideLocalPushHubClient,
+	ProvideLocalSchedulerClient,
+	ProvideLocalGameTownClient,
 )
 
 func ProvideUserClient(consul *client.ConsulClient) (*UserClient, error) {
@@ -49,4 +64,40 @@ func newServiceClient[T any](consul *client.ConsulClient, service string, newFn 
 		return zero, err
 	}
 	return newFn(conn), nil
+}
+
+func ProvideLocalUserClient(clients *commonmodule.Clients) (*UserClient, error) {
+	return commonmodule.Client[*UserClient](clients)
+}
+
+func ProvideLocalContentClient(clients *commonmodule.Clients) (*ContentClient, error) {
+	return commonmodule.Client[*ContentClient](clients)
+}
+
+func ProvideLocalEconomyClient(clients *commonmodule.Clients) (*EconomyClient, error) {
+	return commonmodule.Client[*EconomyClient](clients)
+}
+
+func ProvideLocalIMClient(clients *commonmodule.Clients) (*IMClient, error) {
+	return commonmodule.Client[*IMClient](clients)
+}
+
+func ProvideLocalNotifyClient(clients *commonmodule.Clients) (*NotifyClient, error) {
+	return commonmodule.Client[*NotifyClient](clients)
+}
+
+func ProvideLocalPlatformClient(clients *commonmodule.Clients) (*PlatformClient, error) {
+	return commonmodule.Client[*PlatformClient](clients)
+}
+
+func ProvideLocalPushHubClient(clients *commonmodule.Clients) (*PushHubClient, error) {
+	return commonmodule.Client[*PushHubClient](clients)
+}
+
+func ProvideLocalSchedulerClient(clients *commonmodule.Clients) (*SchedulerClient, error) {
+	return commonmodule.Client[*SchedulerClient](clients)
+}
+
+func ProvideLocalGameTownClient(clients *commonmodule.Clients) (*GameTownClient, error) {
+	return commonmodule.Client[*GameTownClient](clients)
 }

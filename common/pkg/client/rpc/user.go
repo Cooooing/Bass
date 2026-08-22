@@ -37,12 +37,6 @@ func NewUserClient(
 	}
 }
 
-func NewLocalUserClient[T any](services []T) *UserClient {
-	conn := localrpc.NewConn()
-	MountUserServices(conn, services)
-	return NewUserClient(conn)
-}
-
 func MountUserServices[T any](conn *localrpc.Conn, services []T) {
 	for _, service := range services {
 		conn.RegisterMatching(&userv1.AuthService_ServiceDesc, service)

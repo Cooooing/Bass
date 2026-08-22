@@ -23,12 +23,6 @@ func NewNotifyClient(
 	}
 }
 
-func NewLocalNotifyClient[T any](services []T) *NotifyClient {
-	conn := localrpc.NewConn()
-	MountNotifyServices(conn, services)
-	return NewNotifyClient(conn)
-}
-
 func MountNotifyServices[T any](conn *localrpc.Conn, services []T) {
 	for _, service := range services {
 		conn.RegisterMatching(&notifyv1.NotifyStationMessageService_ServiceDesc, service)

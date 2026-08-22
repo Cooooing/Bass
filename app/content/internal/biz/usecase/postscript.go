@@ -69,7 +69,6 @@ func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*mo
 	var (
 		save        *model.Postscript
 		outboxEvent *repo.OutboxEvent
-		err         error
 	)
 	err = d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{

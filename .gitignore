@@ -28,7 +28,6 @@ Thumbs.db
 # IDE files
 .vscode/
 .idea/
-*.iml
 *.swp
 
 # Proto docs and SDK generated artifacts

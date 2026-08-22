@@ -1,5 +1,5 @@
 syntax = "proto3";
-package kratos.api.config;
+package kratos.api.im.config;
 
 import "common/config.proto";
 

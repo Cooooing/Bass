@@ -1,5 +1,5 @@
 syntax = "proto3";
-package kratos.api.config;
+package kratos.api.user.config;
 
 import "common/config.proto";
 import "google/protobuf/duration.proto";

@@ -3,12 +3,14 @@ package module
 import (
 	"common/pkg/client/rpc"
 	commonmodule "common/pkg/module"
-	"common/pkg/server"
+	commonserver "common/pkg/server"
 	"notify/internal/biz"
 	"notify/internal/config"
 	"notify/internal/data"
+	notifyserver "notify/internal/server"
 	"notify/internal/service"
 
+	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/google/wire"
 )
 
@@ -20,6 +22,9 @@ var ProviderSet = wire.NewSet(
 	data.ModuleProviderSet,
 	biz.BizProviderSet,
 	service.ServiceProviderSet,
+	notifyserver.NewTemplateInitializationServer,
+	notifyserver.NewConsumer,
+	provideServers,
 	newModule,
 )
 
@@ -27,14 +32,25 @@ type Config = commonmodule.Config[*config.Bootstrap]
 
 type Module struct {
 	Name     string
-	Services []server.Service
+	Services []commonserver.Service
+	Servers  []transport.Server
 }
 
-func newModule(config *Config, services []server.Service) *Module {
-	return &Module{Name: config.Server().GetName(), Services: services}
+func newModule(config *Config, services []commonserver.Service, servers []transport.Server) *Module {
+	return &Module{Name: config.Server().GetName(), Services: services, Servers: servers}
 }
 
 func provideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
+
+func provideServers(
+	templateInitializationServer *notifyserver.TemplateInitializationServer,
+	consumerServer *notifyserver.Consumer,
+) []transport.Server {
+	return []transport.Server{
+		templateInitializationServer,
+		consumerServer,
+	}
+}
 
 // Build 构造通知模块并返回单体可收集的模块能力。
 func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, func(), error) {
@@ -50,13 +66,13 @@ func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, fu
 	if err != nil {
 		return commonmodule.Mounted{}, cleanup, err
 	}
-	return commonmodule.Mounted{Module: module, Services: module.Services}, cleanup, nil
+	return commonmodule.Mounted{Module: module, Services: module.Services, Servers: module.Servers}, cleanup, nil
 }
 
 func Descriptor() commonmodule.Descriptor {
 	return commonmodule.NewDescriptor(
 		Build,
 		commonmodule.WithLocalClient(rpc.NewNotifyClient),
-		commonmodule.WithMount(rpc.MountNotifyServices[server.Service]),
+		commonmodule.WithMount(rpc.MountNotifyServices[commonserver.Service]),
 	)
 }

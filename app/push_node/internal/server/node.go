@@ -14,6 +14,7 @@ import (
 
 type NodeServer struct {
 	nodeUsecase *usecase.NodeUsecase
+	sseUsecase  *usecase.SSEUsecase
 }
 
 func NewPushHubConn(
@@ -35,16 +36,32 @@ func NewPushHubNodeClient(conn *grpc.ClientConn) pushhubv1.PushHubNodeServiceCli
 
 func NewNodeServer(
 	nodeUsecase *usecase.NodeUsecase,
+	sseUsecase *usecase.SSEUsecase,
 ) *NodeServer {
 	return &NodeServer{
 		nodeUsecase: nodeUsecase,
+		sseUsecase:  sseUsecase,
 	}
 }
 
 func (s *NodeServer) Start(ctx context.Context) error {
-	return s.nodeUsecase.ConnectHub(ctx)
+	if err := s.nodeUsecase.ConnectHub(ctx); err != nil {
+		return err
+	}
+	if err := s.sseUsecase.StartConsuming(ctx, s.nodeUsecase.NodeID()); err != nil {
+		_ = s.nodeUsecase.Stop(ctx)
+		return err
+	}
+	return nil
 }
 
 func (s *NodeServer) Stop(ctx context.Context) error {
-	return s.nodeUsecase.Stop(ctx)
+	var err error
+	if stopErr := s.sseUsecase.StopConsuming(ctx); stopErr != nil {
+		err = stopErr
+	}
+	if stopErr := s.nodeUsecase.Stop(ctx); stopErr != nil && err == nil {
+		err = stopErr
+	}
+	return err
 }

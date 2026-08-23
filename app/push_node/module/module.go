@@ -3,13 +3,15 @@ package module
 import (
 	"common/pkg/client/rpc"
 	commonmodule "common/pkg/module"
-	"common/pkg/server"
+	commonserver "common/pkg/server"
 	pushhubv1 "common/proto/gen/push_hub/v1"
 	"push_node/internal/biz"
 	"push_node/internal/config"
 	"push_node/internal/data"
+	pushnodeserver "push_node/internal/server"
 	"push_node/internal/service"
 
+	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/google/wire"
 )
 
@@ -22,6 +24,8 @@ var ProviderSet = wire.NewSet(
 	data.ModuleProviderSet,
 	biz.BizProviderSet,
 	service.ServiceProviderSet,
+	pushnodeserver.NewNodeServer,
+	provideServers,
 	newModule,
 )
 
@@ -29,17 +33,22 @@ type Config = commonmodule.Config[*config.Bootstrap]
 
 type Module struct {
 	Name     string
-	Services []server.Service
+	Services []commonserver.Service
+	Servers  []transport.Server
 }
 
-func newModule(config *Config, services []server.Service) *Module {
-	return &Module{Name: config.Server().GetName(), Services: services}
+func newModule(config *Config, services []commonserver.Service, servers []transport.Server) *Module {
+	return &Module{Name: config.Server().GetName(), Services: services, Servers: servers}
 }
 
 func provideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
 
 func providePushHubNodeClient(client *rpc.PushHubClient) pushhubv1.PushHubNodeServiceClient {
 	return client.Node
+}
+
+func provideServers(nodeServer *pushnodeserver.NodeServer) []transport.Server {
+	return []transport.Server{nodeServer}
 }
 
 // Build 构造推送节点模块并返回单体可收集的模块能力。
@@ -56,7 +65,7 @@ func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, fu
 	if err != nil {
 		return commonmodule.Mounted{}, cleanup, err
 	}
-	return commonmodule.Mounted{Module: module, Services: module.Services}, cleanup, nil
+	return commonmodule.Mounted{Module: module, Services: module.Services, Servers: module.Servers}, cleanup, nil
 }
 
 func Descriptor() commonmodule.Descriptor {

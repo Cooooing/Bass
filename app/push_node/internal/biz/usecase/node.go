@@ -47,6 +47,11 @@ func (uc *NodeUsecase) ConnectHub(ctx context.Context) error {
 	return nil
 }
 
+// NodeID 返回当前节点在 push_hub 注册后的节点编号。
+func (uc *NodeUsecase) NodeID() string {
+	return uc.nodeID
+}
+
 func (uc *NodeUsecase) Stop(ctx context.Context) error {
 	_ = ctx
 	if uc.cancelLoop != nil {

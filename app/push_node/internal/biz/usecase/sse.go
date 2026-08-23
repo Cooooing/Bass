@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"common/pkg/client"
+	"common/pkg/constant"
 	"common/pkg/util/jwt"
 	"push_node/internal/biz/model"
 	"push_node/internal/biz/repo"
@@ -29,6 +30,8 @@ type SSEUsecase struct {
 	natsSub  client.Subscriber
 	tokenGen *jwt.TokenGenerator[sseToken]
 	writers  sync.Map
+	subMu    sync.Mutex
+	sub      client.Unsubscriber
 }
 
 func NewSEEUsecase(
@@ -44,6 +47,42 @@ func NewSEEUsecase(
 		natsSub:  natsSub,
 		tokenGen: jwt.NewTokenGenerator[sseToken](conf.PushNode.JwtSecret),
 	}
+}
+
+// StartConsuming 订阅当前推送节点的 NATS 消息。
+func (uc *SSEUsecase) StartConsuming(ctx context.Context, nodeID string) error {
+	if nodeID == "" {
+		return fmt.Errorf("push node id is required")
+	}
+	if uc.natsSub == nil {
+		return fmt.Errorf("push node nats subscriber is required")
+	}
+	uc.subMu.Lock()
+	defer uc.subMu.Unlock()
+	if uc.sub != nil {
+		return nil
+	}
+	subject := constant.GetPushNodeSubject(nodeID)
+	sub, err := uc.natsSub.Subscribe(ctx, subject, uc.HandleNATSMessage)
+	if err != nil {
+		return err
+	}
+	uc.sub = sub
+	uc.log.Info(fmt.Sprintf("push node subscribed: node_id=%s subject=%s", nodeID, subject))
+	return nil
+}
+
+// StopConsuming 取消当前推送节点的 NATS 消息订阅。
+func (uc *SSEUsecase) StopConsuming(ctx context.Context) error {
+	_ = ctx
+	uc.subMu.Lock()
+	defer uc.subMu.Unlock()
+	if uc.sub == nil {
+		return nil
+	}
+	err := uc.sub.Unsubscribe()
+	uc.sub = nil
+	return err
 }
 
 type ConnectReq struct {

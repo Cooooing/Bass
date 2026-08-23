@@ -3,13 +3,15 @@ package module
 import (
 	"common/pkg/client/rpc"
 	commonmodule "common/pkg/module"
-	"common/pkg/server"
+	commonserver "common/pkg/server"
 	"common/proto/gen/common"
 	"scheduler/internal/biz"
 	"scheduler/internal/config"
 	"scheduler/internal/data"
+	schedulerserver "scheduler/internal/server"
 	"scheduler/internal/service"
 
+	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/google/wire"
 )
 
@@ -22,6 +24,10 @@ var ProviderSet = wire.NewSet(
 	data.ModuleProviderSet,
 	biz.BizProviderSet,
 	service.ServiceProviderSet,
+	schedulerserver.NewSchedulerBootstrapServer,
+	schedulerserver.NewScheduledTaskConsumerServer,
+	schedulerserver.NewDelayedTaskConsumerServer,
+	provideServers,
 	newModule,
 )
 
@@ -29,15 +35,28 @@ type Config = commonmodule.Config[*config.Bootstrap]
 
 type Module struct {
 	Name     string
-	Services []server.Service
+	Services []commonserver.Service
+	Servers  []transport.Server
 }
 
-func newModule(config *Config, services []server.Service) *Module {
-	return &Module{Name: config.Server().GetName(), Services: services}
+func newModule(config *Config, services []commonserver.Service, servers []transport.Server) *Module {
+	return &Module{Name: config.Server().GetName(), Services: services, Servers: servers}
 }
 
 func provideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
 func provideCommonServer(c *Config) *common.Server { return c.Server() }
+
+func provideServers(
+	bootstrapServer *schedulerserver.SchedulerBootstrapServer,
+	scheduledTaskConsumerServer *schedulerserver.ScheduledTaskConsumerServer,
+	delayedTaskConsumerServer *schedulerserver.DelayedTaskConsumerServer,
+) []transport.Server {
+	return []transport.Server{
+		bootstrapServer,
+		scheduledTaskConsumerServer,
+		delayedTaskConsumerServer,
+	}
+}
 
 // Build 构造调度模块并返回单体可收集的模块能力。
 func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, func(), error) {
@@ -53,13 +72,13 @@ func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, fu
 	if err != nil {
 		return commonmodule.Mounted{}, cleanup, err
 	}
-	return commonmodule.Mounted{Module: module, Services: module.Services}, cleanup, nil
+	return commonmodule.Mounted{Module: module, Services: module.Services, Servers: module.Servers}, cleanup, nil
 }
 
 func Descriptor() commonmodule.Descriptor {
 	return commonmodule.NewDescriptor(
 		Build,
 		commonmodule.WithLocalClient(rpc.NewSchedulerClient),
-		commonmodule.WithMount(rpc.MountSchedulerServices[server.Service]),
+		commonmodule.WithMount(rpc.MountSchedulerServices[commonserver.Service]),
 	)
 }

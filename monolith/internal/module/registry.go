@@ -10,6 +10,7 @@ import (
 	"monolith/internal/config"
 
 	"github.com/go-kratos/kratos/v3/middleware"
+	"github.com/go-kratos/kratos/v3/transport"
 	"github.com/google/wire"
 	"google.golang.org/protobuf/types/known/structpb"
 )
@@ -27,6 +28,7 @@ type Registry struct {
 	conns           map[string]*localrpc.Conn
 	clients         *commonmodule.Clients
 	services        []commonserver.Service
+	servers         []transport.Server
 	httpMiddlewares []middleware.Middleware
 }
 
@@ -148,6 +150,7 @@ func (r *Registry) Mount(descriptor commonmodule.Descriptor, mounted commonmodul
 	if descriptor.Mount != nil {
 		descriptor.Mount(r.conns[descriptor.Name], mounted.Services)
 	}
+	r.servers = append(r.servers, mounted.Servers...)
 	if mounted.External {
 		r.services = append(r.services, mounted.Services...)
 		r.httpMiddlewares = append(r.httpMiddlewares, mounted.HTTPMiddlewares...)
@@ -157,6 +160,11 @@ func (r *Registry) Mount(descriptor commonmodule.Descriptor, mounted commonmodul
 // Services 返回单体统一端口需要注册的对外服务。
 func (r *Registry) Services() []commonserver.Service {
 	return r.services
+}
+
+// Servers 返回模块内部需要跟随单体启停的后台服务。
+func (r *Registry) Servers() []transport.Server {
+	return r.servers
 }
 
 // HTTPMiddlewares 返回对外 HTTP 服务需要追加的模块中间件。

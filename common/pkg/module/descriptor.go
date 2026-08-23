@@ -7,6 +7,7 @@ import (
 	"log/slog"
 
 	"github.com/go-kratos/kratos/v3/middleware"
+	"github.com/go-kratos/kratos/v3/transport"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/structpb"
 )
@@ -83,6 +84,7 @@ func (r *Runtime) Values(name string) (*structpb.Struct, error) {
 type Mounted struct {
 	Module          any
 	Services        []server.Service
+	Servers         []transport.Server
 	External        bool
 	HTTPMiddlewares []middleware.Middleware
 }

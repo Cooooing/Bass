@@ -1,4 +1,4 @@
-name: Service Build
+name: Image Build
 permissions:
   contents: write
   packages: write
@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   build-services:
-    name: Build Services
+    name: Build and Push Services
     runs-on: ubuntu-latest
     strategy:
       # 矩阵配置：列出所有需要打包的服务名
@@ -27,12 +27,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.26'
-          cache: true
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -41,7 +35,7 @@ jobs:
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login registry.cn-hangzhou.aliyuncs.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
-      - name: Build and Push
+      - name: Build and Push Service Image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -56,7 +50,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   build-monolith:
-    name: Build Monolith
+    name: Build and Push Monolith
     runs-on: ubuntu-latest
 
     steps:
@@ -66,13 +60,20 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Monolith Image
+      - name: Docker Login (Aliyun & GHCR)
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login registry.cn-hangzhou.aliyuncs.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Build and Push Monolith Image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: monolith/Dockerfile
-          push: false
-          tags: monolith:ci
+          push: true
+          tags: |
+            registry.cn-hangzhou.aliyuncs.com/docker-cooooing/monolith:latest
+            ghcr.io/cooooing/monolith:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

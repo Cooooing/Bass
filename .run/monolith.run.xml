@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="monolith" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="monolith" />
-    <working_directory value="$PROJECT_DIR$/app/monolith" />
+    <working_directory value="$PROJECT_DIR$/monolith" />
     <EXTENSION ID="net.ashald.envfile">
       <option name="IS_ENABLED" value="true" />
       <option name="IS_SUBST" value="false" />
@@ -15,8 +15,8 @@
     </EXTENSION>
     <kind value="DIRECTORY" />
     <package value="monolith" />
-    <directory value="$PROJECT_DIR$/app/monolith/cmd" />
-    <filePath value="$PROJECT_DIR$/app/monolith/cmd/main.go" />
+    <directory value="$PROJECT_DIR$/monolith/cmd" />
+    <filePath value="$PROJECT_DIR$/monolith/cmd/main.go" />
     <method v="2" />
   </configuration>
 </component>

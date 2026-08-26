@@ -48,6 +48,9 @@ Thumbs.db
 !/app/**/server/
 /app/**/test/
 /app/**/configs/ip2region/*.xdb
+/app/game_idle/configs/init.sql
+/app/game_idle/configs/resources/
+/app/game_idle/docs/
 /monolith/**/wire_gen.go
 /monolith/**/config.pb.go
 /monolith/server

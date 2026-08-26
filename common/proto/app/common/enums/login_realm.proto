@@ -9,4 +9,5 @@ enum LoginRealm {
   LOGIN_REALM_UNSPECIFIED = 0;
   LOGIN_REALM_BBS = 1; // 社区前台
   LOGIN_REALM_BBS_ADMIN = 2; // 社区管理后台
+  LOGIN_REALM_GAME_IDLE = 3; // 摸鱼放置前台
 }

@@ -13,6 +13,7 @@ type GameIdleClient struct {
 	Character   gameidlev1.GameIdleCharacterServiceClient
 	Backpack    gameidlev1.GameIdleBackpackServiceClient
 	ActionQueue gameidlev1.GameIdleActionQueueServiceClient
+	Chat        gameidlev1.GameIdleChatServiceClient
 }
 
 func NewGameIdleClient(conn grpc.ClientConnInterface) *GameIdleClient {
@@ -21,6 +22,7 @@ func NewGameIdleClient(conn grpc.ClientConnInterface) *GameIdleClient {
 		Character:   gameidlev1.NewGameIdleCharacterServiceClient(conn),
 		Backpack:    gameidlev1.NewGameIdleBackpackServiceClient(conn),
 		ActionQueue: gameidlev1.NewGameIdleActionQueueServiceClient(conn),
+		Chat:        gameidlev1.NewGameIdleChatServiceClient(conn),
 	}
 }
 
@@ -30,5 +32,6 @@ func MountGameIdleServices[T any](conn *localrpc.Conn, services []T) {
 		conn.RegisterMatching(&gameidlev1.GameIdleCharacterService_ServiceDesc, service)
 		conn.RegisterMatching(&gameidlev1.GameIdleBackpackService_ServiceDesc, service)
 		conn.RegisterMatching(&gameidlev1.GameIdleActionQueueService_ServiceDesc, service)
+		conn.RegisterMatching(&gameidlev1.GameIdleChatService_ServiceDesc, service)
 	}
 }

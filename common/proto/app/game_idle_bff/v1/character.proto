@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package common.api.app.game_idle_bff.v1;
+
+import "game_idle/v1/enum/character.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/game_idle_bff/v1;v1";
+
+// GameIdleBffCharacterService 提供摸鱼放置角色入口。
+service GameIdleBffCharacterService {
+  // 创建角色。
+  rpc Create(CreateGameIdleBffCharacter.Req) returns (CreateGameIdleBffCharacter.Resp) {
+    option (google.api.http) = {
+      post: "/v1/game-idle/character/create"
+      body: "*"
+    };
+  }
+
+  // 查询当前账号角色列表。
+  rpc List(ListGameIdleBffCharacter.Req) returns (ListGameIdleBffCharacter.Resp) {
+    option (google.api.http) = {
+      post: "/v1/game-idle/character/list"
+      body: "*"
+    };
+  }
+}
+
+message CreateGameIdleBffCharacter {
+  message Req {
+    string name = 1; // 角色名称
+  }
+
+  message Resp {
+    Character row = 1; // 角色
+  }
+}
+
+message ListGameIdleBffCharacter {
+  message Req {}
+
+  message Resp {
+    repeated Character rows = 1; // 角色列表
+  }
+}
+
+message Character {
+  int64 id = 1; // 角色 ID
+  string name = 2; // 角色名称
+  common.api.app.game_idle.v1.enum.GameIdleCharacterStatus status = 3; // 角色状态
+  int32 slot = 4; // 角色槽位
+  int32 action_queue_capacity = 5; // 行动队列容量上限
+  int64 max_offline_seconds = 6; // 最大离线收益结算秒数
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}

@@ -46,6 +46,9 @@ enum EventType {
 
   // 即时通讯事件（3000-3999）
 
+  // 挂机游戏事件（5000-5999）
+  EVENT_TYPE_GAME_IDLE_CHAT_WORLD_MESSAGE = 5001; // 挂机游戏世界聊天消息
+
   // 平台事件（4000-4999）
 }
 
@@ -87,6 +90,9 @@ enum EventSubject {
   EVENT_SUBJECT_COMMENT_STATUS_UPDATED = 2104; // content.comment.status_updated
 
   // 即时通讯事件（3000-3999）
+
+  // 挂机游戏事件（5000-5999）
+  EVENT_SUBJECT_GAME_IDLE_CHAT_WORLD_MESSAGE = 5001; // game_idle.chat.world.message
 
   // 平台事件（4000-4999）
 }
@@ -156,5 +162,6 @@ message Event {
     CommentLikedPayload comment_liked = 2102;
     CommentThankedPayload comment_thanked = 2103;
     CommentStatusUpdatedPayload comment_status_updated = 2104;
+    GameIdleChatWorldMessagePayload game_idle_chat_world_message = 5001;
   }
 }

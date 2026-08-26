@@ -173,3 +173,12 @@ message CommentStatusUpdatedPayload {
   string restriction = 6;
   optional string reason = 7;
 }
+
+// ==================== game_idle ====================
+
+message GameIdleChatWorldMessagePayload {
+  int64 message_id = 1;
+  string channel_id = 2;
+  int64 sender_character_id = 3;
+  string content = 4;
+}

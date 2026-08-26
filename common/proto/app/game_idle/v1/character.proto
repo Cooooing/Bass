@@ -15,7 +15,7 @@ service GameIdleCharacterService {
 message CreateGameIdleCharacter {
   message Request {
     int64 user_id = 1; // 用户 ID
-    string nickname = 2; // 角色昵称
+    string name = 2; // 角色名称
   }
 
   message Resp {
@@ -36,7 +36,7 @@ message GetGameIdleCharacter {
 message Character {
   int64 id = 1; // 角色 ID
   int64 user_id = 2; // 用户 ID
-  string nickname = 3; // 角色昵称
+  string name = 3; // 角色名称
   common.api.app.game_idle.v1.enum.GameIdleCharacterStatus status = 4; // 角色状态
   int32 slot = 5; // 角色槽位
   int32 action_queue_capacity = 6; // 行动队列容量上限

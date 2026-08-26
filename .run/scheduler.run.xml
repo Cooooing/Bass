@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="scheduler" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="service">
-    <module name="platform" />
+    <module name="scheduler" />
     <working_directory value="$PROJECT_DIR$/app/scheduler" />
     <EXTENSION ID="net.ashald.envfile">
       <option name="IS_ENABLED" value="true" />
@@ -14,9 +14,9 @@
       </ENTRIES>
     </EXTENSION>
     <kind value="DIRECTORY" />
-    <package value="platform" />
+    <package value="scheduler" />
     <directory value="$PROJECT_DIR$/app/scheduler/cmd" />
-    <filePath value="$PROJECT_DIR$/app/platform/cmd/main.go" />
+    <filePath value="$PROJECT_DIR$/app/scheduler/cmd/main.go" />
     <method v="2" />
   </configuration>
 </component>

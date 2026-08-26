@@ -28,6 +28,16 @@ Thumbs.db
 # IDE files
 .vscode/
 .idea/
+!.idea/
+.idea/*
+!.idea/encodings.xml
+!.idea/go.imports.xml
+!.idea/modules.xml
+!.idea/protoeditor.xml
+!.idea/sqldialects.xml
+!.idea/vcs.xml
+!.run/
+!.run/*.run.xml
 *.swp
 
 # Proto docs and SDK generated artifacts

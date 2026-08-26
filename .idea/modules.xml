@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Bass.iml" filepath="$PROJECT_DIR$/Bass.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/bbs/bbs.iml" filepath="$PROJECT_DIR$/app/bbs/bbs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/content/content.iml" filepath="$PROJECT_DIR$/app/content/content.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/economy/economy.iml" filepath="$PROJECT_DIR$/app/economy/economy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/game_idle/game_idle.iml" filepath="$PROJECT_DIR$/app/game_idle/game_idle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/game_idle_bff/game_idle_bff.iml" filepath="$PROJECT_DIR$/app/game_idle_bff/game_idle_bff.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/game_town/game_town.iml" filepath="$PROJECT_DIR$/app/game_town/game_town.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/im/im.iml" filepath="$PROJECT_DIR$/app/im/im.iml" />
+      <module fileurl="file://$PROJECT_DIR$/monolith/monolith.iml" filepath="$PROJECT_DIR$/monolith/monolith.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/notify/notify.iml" filepath="$PROJECT_DIR$/app/notify/notify.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/platform/platform.iml" filepath="$PROJECT_DIR$/app/platform/platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/push_hub/push_hub.iml" filepath="$PROJECT_DIR$/app/push_hub/push_hub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/push_node/push_node.iml" filepath="$PROJECT_DIR$/app/push_node/push_node.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/scheduler/scheduler.iml" filepath="$PROJECT_DIR$/app/scheduler/scheduler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/user/user.iml" filepath="$PROJECT_DIR$/app/user/user.iml" />
+    </modules>
+  </component>
+</project>

@@ -10,8 +10,8 @@ type Character struct {
 	ID                  int64
 	UserID              int64
 	Slot                int32
-	Nickname            string
-	NicknameKey         string
+	Name                string
+	NameKey             string
 	ActionQueueCapacity int32
 	MaxOfflineDuration  time.Duration
 	Status              enum.CharacterStatus

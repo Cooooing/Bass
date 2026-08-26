@@ -53,12 +53,10 @@ func provideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
 func ProvideModuleServers(
 	timeWheelServer *gameidleserver.TimeWheelServer,
 	actionQueueServer *gameidleserver.ActionQueueServer,
-	webSocketService *service.WebSocketService,
 ) []transport.Server {
 	return []transport.Server{
 		timeWheelServer,
 		actionQueueServer,
-		webSocketService,
 	}
 }
 

@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-var characterNicknamePattern = regexp.MustCompile("^[A-Za-z0-9_]{4,32}$")
+var characterNamePattern = regexp.MustCompile("^[A-Za-z0-9_]{4,32}$")
 
 type CharacterUsecase struct {
 	characterRepo              repo.CharacterRepo
@@ -42,12 +42,12 @@ func NewCharacterUsecase(conf *config.Bootstrap, characterRepo repo.CharacterRep
 }
 
 type CreateCharacterReq struct {
-	UserID   int64
-	Nickname string
+	UserID int64
+	Name   string
 }
 
 func (u *CharacterUsecase) Create(ctx context.Context, req *CreateCharacterReq) (*model.Character, error) {
-	if req.UserID <= 0 || !characterNicknamePattern.MatchString(req.Nickname) {
+	if req.UserID <= 0 || !characterNamePattern.MatchString(req.Name) {
 		return nil, model.ErrCharacterInvalid
 	}
 	rows, err := u.characterRepo.ListByUserID(ctx, req.UserID)
@@ -76,8 +76,8 @@ func (u *CharacterUsecase) Create(ctx context.Context, req *CreateCharacterReq) 
 	return u.characterRepo.Save(ctx, &model.Character{
 		UserID:              req.UserID,
 		Slot:                slot,
-		Nickname:            req.Nickname,
-		NicknameKey:         strings.ToLower(req.Nickname),
+		Name:                req.Name,
+		NameKey:             strings.ToLower(req.Name),
 		ActionQueueCapacity: u.defaultActionQueueCapacity,
 		MaxOfflineDuration:  u.defaultMaxOfflineDuration,
 		Status:              enum.CharacterStatusActive,

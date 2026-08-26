@@ -33,12 +33,12 @@ func (s *CharacterService) RegisterHttp(*http.Server) {
 }
 
 func (s *CharacterService) Create(ctx context.Context, req *v1.CreateGameIdleCharacter_Request) (*v1.CreateGameIdleCharacter_Resp, error) {
-	if req.GetUserId() <= 0 || req.GetNickname() == "" {
+	if req.GetUserId() <= 0 || req.GetName() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	row, err := s.characterUsecase.Create(ctx, &usecase.CreateCharacterReq{
-		UserID:   req.GetUserId(),
-		Nickname: req.GetNickname(),
+		UserID: req.GetUserId(),
+		Name:   req.GetName(),
 	})
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (s *CharacterService) Create(ctx context.Context, req *v1.CreateGameIdleCha
 	character := &v1.Character{
 		Id:                  row.ID,
 		UserId:              row.UserID,
-		Nickname:            row.Nickname,
+		Name:                row.Name,
 		Status:              enum.CharacterStatusMap.MustToProto(row.Status),
 		Slot:                row.Slot,
 		ActionQueueCapacity: row.ActionQueueCapacity,
@@ -74,7 +74,7 @@ func (s *CharacterService) Get(ctx context.Context, req *v1.GetGameIdleCharacter
 		character := &v1.Character{
 			Id:                  row.ID,
 			UserId:              row.UserID,
-			Nickname:            row.Nickname,
+			Name:                row.Name,
 			Status:              enum.CharacterStatusMap.MustToProto(row.Status),
 			Slot:                row.Slot,
 			ActionQueueCapacity: row.ActionQueueCapacity,

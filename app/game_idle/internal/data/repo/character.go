@@ -24,7 +24,7 @@ func NewCharacterRepo(db *gen.Client) bizrepo.CharacterRepo {
 }
 
 func (r *CharacterRepo) Save(ctx context.Context, character *model.Character) (*model.Character, error) {
-	if character == nil || character.UserID <= 0 || character.Nickname == "" || character.NicknameKey == "" {
+	if character == nil || character.UserID <= 0 || character.Name == "" || character.NameKey == "" {
 		return nil, model.ErrCharacterInvalid
 	}
 	if character.Slot <= 0 || character.ActionQueueCapacity <= 0 || character.MaxOfflineDuration <= 0 {
@@ -37,8 +37,8 @@ func (r *CharacterRepo) Save(ctx context.Context, character *model.Character) (*
 	row, err := r.db.Character.Create().
 		SetUserID(character.UserID).
 		SetSlot(character.Slot).
-		SetNickname(character.Nickname).
-		SetNicknameKey(character.NicknameKey).
+		SetName(character.Name).
+		SetNameKey(character.NameKey).
 		SetActionQueueCapacity(character.ActionQueueCapacity).
 		SetMaxOfflineSeconds(int64(character.MaxOfflineDuration / time.Second)).
 		SetStatus(characterent.Status(status)).
@@ -46,8 +46,8 @@ func (r *CharacterRepo) Save(ctx context.Context, character *model.Character) (*
 	if gen.IsConstraintError(err) && strings.Contains(err.Error(), "game_idle_characters_user_slot_active_unique") {
 		return nil, model.ErrCharacterLimitExceeded
 	}
-	if gen.IsConstraintError(err) && strings.Contains(err.Error(), "game_idle_characters_nickname_key_active_unique") {
-		return nil, model.ErrCharacterNicknameDuplicate
+	if gen.IsConstraintError(err) && strings.Contains(err.Error(), "game_idle_characters_name_key_active_unique") {
+		return nil, model.ErrCharacterNameDuplicate
 	}
 	if err != nil {
 		return nil, err
@@ -56,8 +56,8 @@ func (r *CharacterRepo) Save(ctx context.Context, character *model.Character) (*
 		ID:                  row.ID,
 		UserID:              row.UserID,
 		Slot:                row.Slot,
-		Nickname:            row.Nickname,
-		NicknameKey:         row.NicknameKey,
+		Name:                row.Name,
+		NameKey:             row.NameKey,
 		ActionQueueCapacity: row.ActionQueueCapacity,
 		MaxOfflineDuration:  time.Duration(row.MaxOfflineSeconds) * time.Second,
 		Status:              enum.CharacterStatus(row.Status),
@@ -81,8 +81,8 @@ func (r *CharacterRepo) Get(ctx context.Context, characterID int64) (*model.Char
 		ID:                  row.ID,
 		UserID:              row.UserID,
 		Slot:                row.Slot,
-		Nickname:            row.Nickname,
-		NicknameKey:         row.NicknameKey,
+		Name:                row.Name,
+		NameKey:             row.NameKey,
 		ActionQueueCapacity: row.ActionQueueCapacity,
 		MaxOfflineDuration:  time.Duration(row.MaxOfflineSeconds) * time.Second,
 		Status:              enum.CharacterStatus(row.Status),
@@ -109,8 +109,8 @@ func (r *CharacterRepo) ListByUserID(ctx context.Context, userID int64) ([]*mode
 			ID:                  row.ID,
 			UserID:              row.UserID,
 			Slot:                row.Slot,
-			Nickname:            row.Nickname,
-			NicknameKey:         row.NicknameKey,
+			Name:                row.Name,
+			NameKey:             row.NameKey,
 			ActionQueueCapacity: row.ActionQueueCapacity,
 			MaxOfflineDuration:  time.Duration(row.MaxOfflineSeconds) * time.Second,
 			Status:              enum.CharacterStatus(row.Status),

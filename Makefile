@@ -5,7 +5,7 @@ APP_DIR := $(ROOT_DIR)/app
 
 # Auto-discover modules with Makefile under app.
 MODULES ?= $(sort $(patsubst $(APP_DIR)/%/Makefile,%,$(wildcard $(APP_DIR)/*/Makefile)))
-BFF_SERVERS ?= bbs
+BFF_SERVERS ?= bbs game_idle_bff
 
 IGNORE_ERROR ?= 1
 

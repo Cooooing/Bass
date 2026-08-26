@@ -9,24 +9,18 @@ import (
 var ServiceProviderSet = wire.NewSet(
 	ProvideServices,
 	NewCommonSystemService,
+	NewAuthService,
 	NewCharacterService,
-	NewBackpackService,
-	NewActionQueueService,
-	NewChatService,
 )
 
 func ProvideServices(
 	commonSystemService *CommonSystemService,
+	authService *AuthService,
 	characterService *CharacterService,
-	backpackService *BackpackService,
-	actionQueueService *ActionQueueService,
-	chatService *ChatService,
 ) []server.Service {
 	return []server.Service{
 		commonSystemService,
+		authService,
 		characterService,
-		backpackService,
-		actionQueueService,
-		chatService,
 	}
 }

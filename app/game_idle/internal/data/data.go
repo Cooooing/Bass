@@ -14,6 +14,7 @@ import (
 // DataProviderSet 提供微服务模式的数据层依赖。
 var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
+	commonClient.NewNatsClient,
 	commonClient.NewRedisClient,
 	ProvideConsul,
 	commonClient.NewConsulClient,
@@ -24,6 +25,7 @@ var ModuleProviderSet = wire.NewSet(
 	client.NewDataBaseClient,
 	timewheel.NewTimeWheel,
 	ProvideRedis,
+	ProvideNats,
 	ProvideTimeWheel,
 	client.ProvideTx,
 	repo.NewCharacterRepo,
@@ -32,6 +34,8 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewRecipeRepo,
 	repo.NewActionRepo,
 	repo.NewActionQueueRepo,
+	repo.NewChatMessageRepo,
+	repo.NewChatMessageEventRepo,
 )
 
 func ProvideTimeWheel(c *config.Bootstrap) *common.TimeWheel {
@@ -40,6 +44,10 @@ func ProvideTimeWheel(c *config.Bootstrap) *common.TimeWheel {
 
 func ProvideRedis(c *config.Bootstrap) *common.Redis {
 	return c.Redis
+}
+
+func ProvideNats(c *config.Bootstrap) *common.Nats {
+	return c.Nats
 }
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {

@@ -21,9 +21,10 @@ type WebSocketChatMessage struct {
 }
 
 type WebSocketEvent struct {
-	Type         commonenum.EventType
-	ChatMessage  *WebSocketChatMessage
-	CloseSession *WebSocketCloseSession
+	Type            commonenum.EventType
+	ChatMessage     *WebSocketChatMessage
+	CloseSession    *WebSocketCloseSession
+	ActionCompleted *WebSocketActionCompleted
 }
 
 type WebSocketCloseSession struct {
@@ -31,4 +32,24 @@ type WebSocketCloseSession struct {
 	Reason          string `json:"reason"`
 	Message         string `json:"message,omitempty"`
 	ShouldReconnect bool   `json:"should_reconnect"`
+}
+
+type WebSocketActionCompleted struct {
+	CharacterID int64                     `json:"character_id"`
+	Action      *WebSocketCompletedAction `json:"action"`
+	ItemChanges []*WebSocketItemChange    `json:"item_changes"`
+}
+
+type WebSocketCompletedAction struct {
+	ActionID               string `json:"action_id"`
+	TimesFinished          int64  `json:"times_finished"`
+	TimesRemaining         int64  `json:"times_remaining"`
+	StartedAtUnixSeconds   int64  `json:"started_at_unix_seconds"`
+	CompletedAtUnixSeconds int64  `json:"completed_at_unix_seconds"`
+}
+
+type WebSocketItemChange struct {
+	ItemID        string `json:"item_id"`
+	QuantityDelta int64  `json:"quantity_delta"`
+	QuantityAfter int64  `json:"quantity_after"`
 }

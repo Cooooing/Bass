@@ -65,6 +65,31 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 					ShouldReconnect: payload.GetShouldReconnect(),
 				},
 			})
+		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED:
+			payload := event.GetGameIdleActionCompleted()
+			action := payload.GetAction()
+			itemChanges := make([]*model.WebSocketItemChange, 0, len(payload.GetItemChanges()))
+			for _, item := range payload.GetItemChanges() {
+				itemChanges = append(itemChanges, &model.WebSocketItemChange{
+					ItemID:        item.GetItemId(),
+					QuantityDelta: item.GetQuantityDelta(),
+					QuantityAfter: item.GetQuantityAfter(),
+				})
+			}
+			return handler(ctx, &model.WebSocketEvent{
+				Type: commonenum.EventTypeGameIdleActionCompleted,
+				ActionCompleted: &model.WebSocketActionCompleted{
+					CharacterID: payload.GetCharacterId(),
+					Action: &model.WebSocketCompletedAction{
+						ActionID:               action.GetActionId(),
+						TimesFinished:          action.GetTimesFinished(),
+						TimesRemaining:         action.GetTimesRemaining(),
+						StartedAtUnixSeconds:   action.GetStartedAtUnixSeconds(),
+						CompletedAtUnixSeconds: action.GetCompletedAtUnixSeconds(),
+					},
+					ItemChanges: itemChanges,
+				},
+			})
 		default:
 			return nil
 		}

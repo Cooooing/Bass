@@ -27,17 +27,20 @@ var BizProviderSet = wire.NewSet(
 	command.NewQueueListHandler,
 	command.NewQueueMoveHandler,
 	command.NewQueueRemoveHandler,
+	event.NewActionCompletedHandler,
 	event.NewChatMessageHandler,
 	event.NewCloseSessionHandler,
 )
 
 func ProvideWebSocketEventHandlers(
+	actionCompletedHandler *event.ActionCompletedHandler,
 	chatMessageHandler *event.ChatMessageHandler,
 	closeSessionHandler *event.CloseSessionHandler,
 ) usecase.WebSocketEventHandlers {
 	return usecase.WebSocketEventHandlers{
-		chatMessageHandler.Type():  chatMessageHandler,
-		closeSessionHandler.Type(): closeSessionHandler,
+		actionCompletedHandler.Type(): actionCompletedHandler,
+		chatMessageHandler.Type():     chatMessageHandler,
+		closeSessionHandler.Type():    closeSessionHandler,
 	}
 }
 

@@ -82,6 +82,31 @@ func (r *GameIdleEventRepo) Publish(ctx context.Context, event *model.GameIdleEv
 			},
 		}
 		message.Header["session_id"] = event.CloseSession.SessionID
+	} else if event.ActionCompleted != nil {
+		itemChanges := make([]*commonenums.GameIdleItemChange, 0, len(event.ActionCompleted.ItemChanges))
+		for _, item := range event.ActionCompleted.ItemChanges {
+			itemChanges = append(itemChanges, &commonenums.GameIdleItemChange{
+				ItemId:        item.ItemID,
+				QuantityDelta: item.QuantityDelta,
+				QuantityAfter: item.QuantityAfter,
+			})
+		}
+		envelope.Type = commonenums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED
+		envelope.Timestamp = timestamppb.New(event.ActionCompleted.CompletedAt)
+		envelope.Payload = &commonenums.Event_GameIdleActionCompleted{
+			GameIdleActionCompleted: &commonenums.GameIdleActionCompletedPayload{
+				CharacterId: event.ActionCompleted.CharacterID,
+				Action: &commonenums.GameIdleActionCompletedAction{
+					ActionId:               event.ActionCompleted.ActionID,
+					TimesFinished:          event.ActionCompleted.TimesFinished,
+					TimesRemaining:         event.ActionCompleted.TimesRemaining,
+					StartedAtUnixSeconds:   event.ActionCompleted.StartedAt.Unix(),
+					CompletedAtUnixSeconds: event.ActionCompleted.CompletedAt.Unix(),
+				},
+				ItemChanges: itemChanges,
+			},
+		}
+		message.Header["character_id"] = strconv.FormatInt(event.ActionCompleted.CharacterID, 10)
 	} else {
 		return model.ErrChatMessageInvalid
 	}

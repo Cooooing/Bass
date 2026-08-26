@@ -89,7 +89,17 @@ for index = 1, #ARGV, 2 do
     end
   end
 end
-return redis.call('INCRBY', KEYS[4], #ARGV / 2)
+local result = {redis.call('INCRBY', KEYS[4], #ARGV / 2)}
+local returned = {}
+for index = 1, #ARGV, 2 do
+  local item_id = ARGV[index]
+  if returned[item_id] == nil then
+    returned[item_id] = true
+    table.insert(result, item_id)
+    table.insert(result, redis.call('HGET', KEYS[1], item_id) or '0')
+  end
+end
+return result
 `),
 	}, nil
 }
@@ -286,21 +296,21 @@ func (r *BackpackRepo) CheckItems(ctx context.Context, req *bizrepo.BackpackChec
 	return nil
 }
 
-func (r *BackpackRepo) ChangeItems(ctx context.Context, req *bizrepo.BackpackChangeReq) error {
+func (r *BackpackRepo) ChangeItems(ctx context.Context, req *bizrepo.BackpackChangeReq) (map[string]int64, error) {
 	args := make([]any, 0, len(req.Items)*2)
 	for _, item := range req.Items {
 		args = append(args, item.ItemID, item.Quantity)
 	}
 	loaded, err := r.redisClient.Client.Exists(ctx, r.loadedRedisKey(req.CharacterID)).Result()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if loaded == 0 {
 		if err := r.LoadItems(ctx, req.CharacterID); err != nil {
-			return err
+			return nil, err
 		}
 	}
-	count, err := r.changeScript.Run(
+	result, err := r.changeScript.Run(
 		ctx,
 		r.redisClient.Client,
 		[]string{
@@ -310,17 +320,34 @@ func (r *BackpackRepo) ChangeItems(ctx context.Context, req *bizrepo.BackpackCha
 			r.operationCountRedisKey(req.CharacterID),
 		},
 		args...,
-	).Int64()
+	).Result()
 	if err != nil {
 		if strings.Contains(err.Error(), "backpack_insufficient") {
-			return model.ErrBackpackInsufficient
+			return nil, model.ErrBackpackInsufficient
 		}
-		return err
+		return nil, err
+	}
+	values, ok := result.([]any)
+	if !ok || len(values) == 0 {
+		return nil, fmt.Errorf("game idle backpack change result invalid")
+	}
+	count, err := strconv.ParseInt(fmt.Sprint(values[0]), 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	quantityAfter := make(map[string]int64, len(values)/2)
+	for index := 1; index+1 < len(values); index += 2 {
+		itemID := fmt.Sprint(values[index])
+		quantity, err := strconv.ParseInt(fmt.Sprint(values[index+1]), 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		quantityAfter[itemID] = quantity
 	}
 	if r.persistThreshold > 0 && count >= r.persistThreshold {
-		return r.PersistItems(ctx, req.CharacterID)
+		return quantityAfter, r.PersistItems(ctx, req.CharacterID)
 	}
-	return nil
+	return quantityAfter, nil
 }
 
 func (r *BackpackRepo) quantityRedisKey(characterID int64) string {

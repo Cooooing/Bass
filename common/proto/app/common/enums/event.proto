@@ -51,6 +51,7 @@ enum EventType {
   // 挂机游戏事件（5000-5999）
   EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE = 5001; // 挂机游戏聊天消息
   EVENT_TYPE_GAME_IDLE_CLOSE_SESSION = 5002; // 挂机游戏关闭会话
+  EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED = 5003; // 挂机游戏行动完成
 
   // 平台事件（4000-4999）
 }
@@ -167,5 +168,6 @@ message Event {
     CommentStatusUpdatedPayload comment_status_updated = 2104;
     GameIdleChatMessagePayload game_idle_chat_message = 5001;
     GameIdleCloseSessionPayload game_idle_close_session = 5002;
+    GameIdleActionCompletedPayload game_idle_action_completed = 5003;
   }
 }

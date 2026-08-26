@@ -15,18 +15,18 @@ import (
 )
 
 type ActionQueueUsecase struct {
-	mutex           sync.Mutex
-	logger          *slog.Logger
-	characterRepo   repo.CharacterRepo
-	actionRepo      repo.ActionRepo
-	actionQueueRepo repo.ActionQueueRepo
-	timeWheel       *timewheel.TimeWheel
-	actionTasks     map[enum.ActionKind]ActionTask
-	pendingTasks    chan *PendingActionTask
-	offlineTasks    chan *OfflineActionTask
-	resultEvents    chan *ActionResultEvent
-	stop            context.CancelFunc
-	running         bool
+	mutex             sync.Mutex
+	logger            *slog.Logger
+	characterRepo     repo.CharacterRepo
+	actionRepo        repo.ActionRepo
+	actionQueueRepo   repo.ActionQueueRepo
+	gameIdleEventRepo repo.GameIdleEventRepo
+	timeWheel         *timewheel.TimeWheel
+	actionTasks       map[enum.ActionKind]ActionTask
+	pendingTasks      chan *PendingActionTask
+	offlineTasks      chan *OfflineActionTask
+	stop              context.CancelFunc
+	running           bool
 }
 
 func NewActionQueueUsecase(
@@ -34,19 +34,20 @@ func NewActionQueueUsecase(
 	characterRepo repo.CharacterRepo,
 	actionRepo repo.ActionRepo,
 	actionQueueRepo repo.ActionQueueRepo,
+	gameIdleEventRepo repo.GameIdleEventRepo,
 	timeWheel *timewheel.TimeWheel,
 	actionTasks map[enum.ActionKind]ActionTask,
 ) *ActionQueueUsecase {
 	return &ActionQueueUsecase{
-		logger:          logger,
-		characterRepo:   characterRepo,
-		actionRepo:      actionRepo,
-		actionQueueRepo: actionQueueRepo,
-		timeWheel:       timeWheel,
-		actionTasks:     actionTasks,
-		pendingTasks:    make(chan *PendingActionTask, 1024),
-		offlineTasks:    make(chan *OfflineActionTask, 1024),
-		resultEvents:    make(chan *ActionResultEvent, 1024),
+		logger:            logger,
+		characterRepo:     characterRepo,
+		actionRepo:        actionRepo,
+		actionQueueRepo:   actionQueueRepo,
+		gameIdleEventRepo: gameIdleEventRepo,
+		timeWheel:         timeWheel,
+		actionTasks:       actionTasks,
+		pendingTasks:      make(chan *PendingActionTask, 1024),
+		offlineTasks:      make(chan *OfflineActionTask, 1024),
 	}
 }
 
@@ -102,27 +103,35 @@ func (u *ActionQueueUsecase) Start(ctx context.Context) error {
 				}
 
 				current := queue.Items[0]
+				timesRemaining := current.Times
 				finishCurrent := task.StopReason != enum.ActionStopReasonNone
 				if !finishCurrent && current.Times != -1 {
 					current.Times--
+					timesRemaining = current.Times
 					finishCurrent = current.Times <= 0
 				}
 				if finishCurrent {
 					queue.Items = queue.Items[1:]
+					timesRemaining = 0
 				}
 				if err = u.actionQueueRepo.Save(runCtx, queue); err != nil {
 					u.logger.ErrorContext(runCtx, "game idle save action queue failed", constant.LogFieldErr, err, "character_id", task.CharacterID)
 					continue
 				}
-				if len(task.Items) > 0 {
-					select {
-					case u.resultEvents <- &ActionResultEvent{
-						CharacterID: task.CharacterID,
-						ActionID:    task.ActionID,
-						Items:       task.Items,
-					}:
-					default:
-						u.logger.WarnContext(runCtx, "game idle action result dropped", "character_id", task.CharacterID, "action_id", task.ActionID)
+				if task.StopReason == enum.ActionStopReasonNone {
+					err = u.gameIdleEventRepo.Publish(runCtx, &model.GameIdleEvent{
+						ActionCompleted: &model.ActionCompletedEvent{
+							CharacterID:    task.CharacterID,
+							ActionID:       task.ActionID,
+							TimesFinished:  1,
+							TimesRemaining: timesRemaining,
+							StartedAt:      task.StartedAt,
+							CompletedAt:    task.CompletedAt,
+							ItemChanges:    task.ItemChanges,
+						},
+					})
+					if err != nil {
+						u.logger.ErrorContext(runCtx, "game idle action completed event publish failed", constant.LogFieldErr, err, "character_id", task.CharacterID)
 					}
 				}
 				if len(queue.Items) > 0 {
@@ -156,11 +165,6 @@ func (u *ActionQueueUsecase) Start(ctx context.Context) error {
 	}()
 
 	return nil
-}
-
-func (u *ActionQueueUsecase) ResultEvents(ctx context.Context) <-chan *ActionResultEvent {
-	_ = ctx
-	return u.resultEvents
 }
 
 func (u *ActionQueueUsecase) Stop(ctx context.Context) error {

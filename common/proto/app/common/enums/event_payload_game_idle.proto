@@ -25,3 +25,23 @@ message GameIdleCloseSessionPayload {
   string message = 3; // 客户端提示
   bool should_reconnect = 4; // 是否建议自动重连
 }
+
+message GameIdleActionCompletedPayload {
+  int64 character_id = 1;
+  GameIdleActionCompletedAction action = 2;
+  repeated GameIdleItemChange item_changes = 3;
+}
+
+message GameIdleActionCompletedAction {
+  string action_id = 1;
+  int64 times_finished = 2;
+  int64 times_remaining = 3;
+  int64 started_at_unix_seconds = 4;
+  int64 completed_at_unix_seconds = 5;
+}
+
+message GameIdleItemChange {
+  string item_id = 1;
+  int64 quantity_delta = 2;
+  int64 quantity_after = 3;
+}

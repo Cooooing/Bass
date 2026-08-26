@@ -26,14 +26,10 @@ type PendingActionTask struct {
 	CharacterID int64
 	TaskID      string
 	ActionID    string
-	Items       map[string]int64
 	StopReason  enum.ActionStopReason
-}
-
-type ActionResultEvent struct {
-	CharacterID int64            `json:"character_id"`
-	ActionID    string           `json:"action_id"`
-	Items       map[string]int64 `json:"items"`
+	StartedAt   time.Time
+	CompletedAt time.Time
+	ItemChanges []*model.ActionCompletedItemChange
 }
 
 type OfflineActionTask struct {

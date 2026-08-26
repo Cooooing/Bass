@@ -2,16 +2,20 @@ package task
 
 import (
 	"common/pkg/client/timewheel"
+	"common/pkg/constant"
 	"context"
 	"errors"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/repo"
 	"game_idle/internal/biz/usecase"
 	"game_idle/internal/enum"
+	"log/slog"
+	"time"
 )
 
 // RecipeActionTask 构建基于配方结算的行动任务。
 type RecipeActionTask struct {
+	logger          *slog.Logger
 	recipeRepo      repo.RecipeRepo
 	backpackRepo    repo.BackpackRepo
 	actionQueueRepo repo.ActionQueueRepo
@@ -19,12 +23,14 @@ type RecipeActionTask struct {
 }
 
 func NewRecipeActionTask(
+	logger *slog.Logger,
 	recipeRepo repo.RecipeRepo,
 	backpackRepo repo.BackpackRepo,
 	actionQueueRepo repo.ActionQueueRepo,
 	recipeUsecase *usecase.RecipeUsecase,
 ) *RecipeActionTask {
 	return &RecipeActionTask{
+		logger:          logger,
 		recipeRepo:      recipeRepo,
 		backpackRepo:    backpackRepo,
 		actionQueueRepo: actionQueueRepo,
@@ -110,29 +116,46 @@ func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActi
 			}
 
 			items := make([]*model.BackpackItemChange, 0, len(inputQuantities)+len(outputQuantities))
+			itemDeltas := make(map[string]int64, len(inputQuantities)+len(outputQuantities))
 			for itemID, quantity := range inputQuantities {
 				items = append(items, &model.BackpackItemChange{
 					ItemID:   itemID,
 					Quantity: -quantity,
 				})
+				itemDeltas[itemID] -= quantity
 			}
 			for itemID, quantity := range outputQuantities {
 				items = append(items, &model.BackpackItemChange{
 					ItemID:   itemID,
 					Quantity: quantity,
 				})
+				itemDeltas[itemID] += quantity
 			}
 			// 原子变更是最终防线，任意物品变更后为负数则整次结算失败。
 			// TODO 后续在这里接入钓鱼速度、产量、稀有率等 Buff 对结算的影响。
-			if err := t.backpackRepo.ChangeItems(jobCtx, &repo.BackpackChangeReq{
+			quantityAfter, err := t.backpackRepo.ChangeItems(jobCtx, &repo.BackpackChangeReq{
 				CharacterID: req.CharacterID,
 				Items:       items,
-			}); err != nil {
+			})
+			if err != nil {
 				if !errors.Is(err, model.ErrBackpackInsufficient) {
-					return err
+					if len(quantityAfter) == 0 {
+						return err
+					}
+					t.logger.ErrorContext(jobCtx, "game idle backpack persist after change failed", constant.LogFieldErr, err, "character_id", req.CharacterID)
 				}
-				stopReason = enum.ActionStopReasonInsufficientItems
-				outputQuantities = nil
+				if errors.Is(err, model.ErrBackpackInsufficient) {
+					stopReason = enum.ActionStopReasonInsufficientItems
+					itemDeltas = nil
+				}
+			}
+			itemChanges := make([]*model.ActionCompletedItemChange, 0, len(itemDeltas))
+			for itemID, quantityDelta := range itemDeltas {
+				itemChanges = append(itemChanges, &model.ActionCompletedItemChange{
+					ItemID:        itemID,
+					QuantityDelta: quantityDelta,
+					QuantityAfter: quantityAfter[itemID],
+				})
 			}
 			select {
 			case <-jobCtx.Done():
@@ -141,8 +164,10 @@ func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActi
 				CharacterID: req.CharacterID,
 				TaskID:      task.TaskID,
 				ActionID:    task.ActionID,
-				Items:       outputQuantities,
 				StopReason:  stopReason,
+				StartedAt:   req.Now,
+				CompletedAt: time.Now(),
+				ItemChanges: itemChanges,
 			}:
 				return nil
 			}

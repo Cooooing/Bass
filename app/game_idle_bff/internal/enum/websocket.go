@@ -10,7 +10,6 @@ const (
 	WebSocketMessageTypeChatMessageListed   WebSocketMessageType = "chat.message.listed"   // 聊天消息列表
 	WebSocketMessageTypeActionCompleted     WebSocketMessageType = "action.completed"      // 行动完成
 	WebSocketMessageTypeActionListed        WebSocketMessageType = "action.listed"         // 行动列表
-	WebSocketMessageTypeBackpackUpdated     WebSocketMessageType = "backpack.updated"      // 背包变化
 	WebSocketMessageTypeBackpackItemsListed WebSocketMessageType = "backpack.items.listed" // 背包物品列表
 	WebSocketMessageTypeSessionClose        WebSocketMessageType = "session.close"         // 关闭会话
 	WebSocketMessageTypeCommandFailed       WebSocketMessageType = "command.failed"        // 命令失败

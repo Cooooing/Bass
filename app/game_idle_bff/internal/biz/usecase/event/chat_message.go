@@ -20,7 +20,7 @@ func (h *ChatMessageHandler) Type() commonenum.EventType {
 
 func (h *ChatMessageHandler) Handle(ctx context.Context, req *usecase.WebSocketEventReq) (*usecase.WebSocketEventResult, error) {
 	return &usecase.WebSocketEventResult{
-		Type:              enum.WebSocketMessageTypeChatMessage,
+		Type:              enum.WebSocketMessageTypeChatMessageReceived,
 		Payload:           req.Event.ChatMessage,
 		TargetCharacterID: req.Event.ChatMessage.ReceiverCharacterID,
 		Broadcast:         req.Event.ChatMessage.ReceiverCharacterID == 0,

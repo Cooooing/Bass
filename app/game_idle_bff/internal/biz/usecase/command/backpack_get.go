@@ -38,7 +38,7 @@ func (h *BackpackGetHandler) Handle(ctx context.Context, req *usecase.WebSocketC
 		return err
 	}
 	req.Connection.Send(ctx, &usecase.WebSocketSendMessage{
-		Type:    enum.WebSocketMessageTypeBackpackGet,
+		Type:    enum.WebSocketMessageTypeBackpackItemsListed,
 		Payload: items,
 	})
 	return nil

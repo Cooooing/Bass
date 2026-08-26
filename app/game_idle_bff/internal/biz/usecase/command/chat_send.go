@@ -18,7 +18,7 @@ func NewChatSendHandler(chatUsecase *usecase.ChatUsecase) *ChatSendHandler {
 }
 
 func (h *ChatSendHandler) Type() enum.WebSocketMessageType {
-	return enum.WebSocketMessageTypeChatSend
+	return enum.WebSocketMessageTypeChatMessageSend
 }
 
 func (h *ChatSendHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
@@ -52,7 +52,7 @@ func NewChatListHandler(chatUsecase *usecase.ChatUsecase) *ChatListHandler {
 }
 
 func (h *ChatListHandler) Type() enum.WebSocketMessageType {
-	return enum.WebSocketMessageTypeChatList
+	return enum.WebSocketMessageTypeChatMessageList
 }
 
 func (h *ChatListHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
@@ -75,7 +75,7 @@ func (h *ChatListHandler) Handle(ctx context.Context, req *usecase.WebSocketComm
 		return err
 	}
 	req.Connection.Send(ctx, &usecase.WebSocketSendMessage{
-		Type:    enum.WebSocketMessageTypeChatList,
+		Type:    enum.WebSocketMessageTypeChatMessageListed,
 		Payload: rows,
 	})
 	return nil

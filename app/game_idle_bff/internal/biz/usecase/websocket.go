@@ -255,7 +255,7 @@ func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSoc
 	handler, ok := u.commandHandlers[command.Type]
 	if !ok {
 		connection.Send(ctx, &WebSocketSendMessage{
-			Type: enum.WebSocketMessageTypeError,
+			Type: enum.WebSocketMessageTypeCommandFailed,
 			Payload: &WebSocketCommandError{
 				Message: apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT).Error(),
 			},
@@ -270,7 +270,7 @@ func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSoc
 			Command:     command,
 		}); err != nil {
 			connection.Send(ctx, &WebSocketSendMessage{
-				Type: enum.WebSocketMessageTypeError,
+				Type: enum.WebSocketMessageTypeCommandFailed,
 				Payload: &WebSocketCommandError{
 					Message: err.Error(),
 				},
@@ -279,7 +279,7 @@ func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSoc
 	})
 	if err != nil {
 		connection.Send(ctx, &WebSocketSendMessage{
-			Type: enum.WebSocketMessageTypeError,
+			Type: enum.WebSocketMessageTypeCommandFailed,
 			Payload: &WebSocketCommandError{
 				Message: err.Error(),
 			},

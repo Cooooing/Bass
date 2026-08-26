@@ -18,7 +18,7 @@ func NewQueueListHandler(actionQueueUsecase *usecase.ActionQueueUsecase) *QueueL
 }
 
 func (h *QueueListHandler) Type() enum.WebSocketMessageType {
-	return enum.WebSocketMessageTypeQueueList
+	return enum.WebSocketMessageTypeActionList
 }
 
 func (h *QueueListHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
@@ -27,7 +27,7 @@ func (h *QueueListHandler) Handle(ctx context.Context, req *usecase.WebSocketCom
 		return err
 	}
 	req.Connection.Send(ctx, &usecase.WebSocketSendMessage{
-		Type:    enum.WebSocketMessageTypeQueueList,
+		Type:    enum.WebSocketMessageTypeActionListed,
 		Payload: queue,
 	})
 	return nil
@@ -44,7 +44,7 @@ func NewQueueAddHandler(actionQueueUsecase *usecase.ActionQueueUsecase) *QueueAd
 }
 
 func (h *QueueAddHandler) Type() enum.WebSocketMessageType {
-	return enum.WebSocketMessageTypeQueueAdd
+	return enum.WebSocketMessageTypeActionAdd
 }
 
 func (h *QueueAddHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
@@ -75,7 +75,7 @@ func NewQueueMoveHandler(actionQueueUsecase *usecase.ActionQueueUsecase) *QueueM
 }
 
 func (h *QueueMoveHandler) Type() enum.WebSocketMessageType {
-	return enum.WebSocketMessageTypeQueueMove
+	return enum.WebSocketMessageTypeActionMove
 }
 
 func (h *QueueMoveHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
@@ -104,7 +104,7 @@ func NewQueueRemoveHandler(actionQueueUsecase *usecase.ActionQueueUsecase) *Queu
 }
 
 func (h *QueueRemoveHandler) Type() enum.WebSocketMessageType {
-	return enum.WebSocketMessageTypeQueueRemove
+	return enum.WebSocketMessageTypeActionRemove
 }
 
 func (h *QueueRemoveHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
@@ -131,7 +131,7 @@ func NewQueueClearHandler(actionQueueUsecase *usecase.ActionQueueUsecase) *Queue
 }
 
 func (h *QueueClearHandler) Type() enum.WebSocketMessageType {
-	return enum.WebSocketMessageTypeQueueClear
+	return enum.WebSocketMessageTypeActionClear
 }
 
 func (h *QueueClearHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {

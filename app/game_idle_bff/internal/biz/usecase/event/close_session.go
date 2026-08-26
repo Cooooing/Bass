@@ -25,7 +25,7 @@ func (h *CloseSessionHandler) Handle(ctx context.Context, req *usecase.WebSocket
 		payload = nil
 	}
 	return &usecase.WebSocketEventResult{
-		Type:            enum.WebSocketMessageTypeCloseSession,
+		Type:            enum.WebSocketMessageTypeSessionClose,
 		Payload:         payload,
 		TargetSessionID: req.Event.CloseSession.SessionID,
 		Close:           true,

@@ -125,7 +125,7 @@ func (s *WebSocketService) readPump(
 		command := &usecase.WebSocketCommand{}
 		if err := json.Unmarshal(data, command); err != nil {
 			connection.Send(ctx, &usecase.WebSocketSendMessage{
-				Type: enum.WebSocketMessageTypeError,
+				Type: enum.WebSocketMessageTypeCommandFailed,
 				Payload: &usecase.WebSocketCommandError{
 					Message: err.Error(),
 				},

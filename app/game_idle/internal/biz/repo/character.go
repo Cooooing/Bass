@@ -9,5 +9,10 @@ import (
 type CharacterRepo interface {
 	Save(ctx context.Context, character *model.Character) (*model.Character, error)
 	Get(ctx context.Context, characterID int64) (*model.Character, error)
-	ListByUserID(ctx context.Context, userID int64) ([]*model.Character, error)
+	List(ctx context.Context, req *ListCharacterReq) ([]*model.Character, error)
+}
+
+type ListCharacterReq struct {
+	UserID      *int64
+	CharacterID *int64
 }

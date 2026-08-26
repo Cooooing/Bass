@@ -5,6 +5,7 @@ import "errors"
 var (
 	ErrCharacterNotFound        = errors.New("game idle character not found")
 	ErrCharacterInvalid         = errors.New("game idle character invalid")
+	ErrCharacterSessionInvalid  = errors.New("game idle character session invalid")
 	ErrCharacterLimitExceeded   = errors.New("game idle character limit exceeded")
 	ErrCharacterNameDuplicate   = errors.New("game idle character name duplicate")
 	ErrBackpackChangeInvalid    = errors.New("game idle backpack change invalid")

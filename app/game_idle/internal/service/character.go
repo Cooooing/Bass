@@ -65,7 +65,10 @@ func (s *CharacterService) Get(ctx context.Context, req *v1.GetGameIdleCharacter
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	rows, err := s.characterUsecase.Get(ctx, req.GetUserId())
+	rows, err := s.characterUsecase.Get(ctx, &usecase.GetCharacterReq{
+		UserID:      req.GetUserId(),
+		CharacterID: req.GetCharacterId(),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -89,4 +92,51 @@ func (s *CharacterService) Get(ctx context.Context, req *v1.GetGameIdleCharacter
 		characters = append(characters, character)
 	}
 	return &v1.GetGameIdleCharacter_Resp{Rows: characters}, nil
+}
+
+func (s *CharacterService) Online(ctx context.Context, req *v1.OnlineGameIdleCharacter_Request) (*v1.OnlineGameIdleCharacter_Resp, error) {
+	if req.GetUserId() <= 0 || req.GetCharacterId() <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	session, err := s.characterUsecase.Online(ctx, &usecase.OnlineCharacterReq{
+		UserID:      req.GetUserId(),
+		CharacterID: req.GetCharacterId(),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &v1.OnlineGameIdleCharacter_Resp{
+		SessionId:        session.SessionID,
+		ExpiresInSeconds: int64(session.ExpiresIn / time.Second),
+	}, nil
+}
+
+func (s *CharacterService) Offline(ctx context.Context, req *v1.OfflineGameIdleCharacter_Request) (*v1.OfflineGameIdleCharacter_Resp, error) {
+	if req.GetCharacterId() <= 0 || req.GetSessionId() == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	if err := s.characterUsecase.Offline(ctx, &usecase.OfflineCharacterReq{
+		CharacterID: req.GetCharacterId(),
+		SessionID:   req.GetSessionId(),
+		Timeout:     req.GetTimeout(),
+	}); err != nil {
+		return nil, err
+	}
+	return &v1.OfflineGameIdleCharacter_Resp{}, nil
+}
+
+func (s *CharacterService) Ping(ctx context.Context, req *v1.PingGameIdleCharacter_Request) (*v1.PingGameIdleCharacter_Resp, error) {
+	if req.GetCharacterId() <= 0 || req.GetSessionId() == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	session, err := s.characterUsecase.Ping(ctx, &usecase.PingCharacterReq{
+		CharacterID: req.GetCharacterId(),
+		SessionID:   req.GetSessionId(),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &v1.PingGameIdleCharacter_Resp{
+		ExpiresInSeconds: int64(session.ExpiresIn / time.Second),
+	}, nil
 }

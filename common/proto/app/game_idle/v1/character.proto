@@ -10,6 +10,9 @@ option go_package = "common/proto/gen/game_idle/v1;v1";
 service GameIdleCharacterService {
   rpc Create(CreateGameIdleCharacter.Request) returns (CreateGameIdleCharacter.Resp) {}
   rpc Get(GetGameIdleCharacter.Request) returns (GetGameIdleCharacter.Resp) {}
+  rpc Online(OnlineGameIdleCharacter.Request) returns (OnlineGameIdleCharacter.Resp) {}
+  rpc Offline(OfflineGameIdleCharacter.Request) returns (OfflineGameIdleCharacter.Resp) {}
+  rpc Ping(PingGameIdleCharacter.Request) returns (PingGameIdleCharacter.Resp) {}
 }
 
 message CreateGameIdleCharacter {
@@ -26,10 +29,44 @@ message CreateGameIdleCharacter {
 message GetGameIdleCharacter {
   message Request {
     int64 user_id = 1; // 用户 ID
+    int64 character_id = 2; // 角色 ID
   }
 
   message Resp {
     repeated Character rows = 1; // 角色列表
+  }
+}
+
+message OnlineGameIdleCharacter {
+  message Request {
+    int64 user_id = 1; // 用户 ID
+    int64 character_id = 2; // 角色 ID
+  }
+
+  message Resp {
+    string session_id = 1; // 角色在线会话 ID
+    int64 expires_in_seconds = 2; // 剩余有效秒数
+  }
+}
+
+message OfflineGameIdleCharacter {
+  message Request {
+    int64 character_id = 1; // 角色 ID
+    string session_id = 2; // 角色在线会话 ID
+    bool timeout = 3; // 是否心跳超时下线
+  }
+
+  message Resp {}
+}
+
+message PingGameIdleCharacter {
+  message Request {
+    int64 character_id = 1; // 角色 ID
+    string session_id = 2; // 角色在线会话 ID
+  }
+
+  message Resp {
+    int64 expires_in_seconds = 1; // 剩余有效秒数
   }
 }
 

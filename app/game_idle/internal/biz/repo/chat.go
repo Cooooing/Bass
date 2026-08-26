@@ -12,11 +12,6 @@ type ChatMessageRepo interface {
 	List(ctx context.Context, req *ChatMessageListReq) ([]*model.ChatMessage, error)
 }
 
-// ChatMessageEventRepo 发布聊天消息事件。
-type ChatMessageEventRepo interface {
-	PublishWorldMessage(ctx context.Context, message *model.ChatMessage) error
-}
-
 type ChatMessageListReq struct {
 	ChannelType enum.ChatChannelType
 	ChannelID   string

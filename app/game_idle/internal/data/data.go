@@ -29,13 +29,14 @@ var ModuleProviderSet = wire.NewSet(
 	ProvideTimeWheel,
 	client.ProvideTx,
 	repo.NewCharacterRepo,
+	repo.NewCharacterSessionRepo,
+	repo.NewGameIdleEventRepo,
 	repo.NewBackpackRepo,
 	repo.NewItemRepo,
 	repo.NewRecipeRepo,
 	repo.NewActionRepo,
 	repo.NewActionQueueRepo,
 	repo.NewChatMessageRepo,
-	repo.NewChatMessageEventRepo,
 )
 
 func ProvideTimeWheel(c *config.Bootstrap) *common.TimeWheel {

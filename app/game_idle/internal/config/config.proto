@@ -24,6 +24,7 @@ message GameIdle {
   Shard shard = 2;
   Backpack backpack = 3;
   Character character = 4;
+  WebSocket websocket = 5;
 }
 
 message Shard {
@@ -40,4 +41,8 @@ message Character {
   uint32 max_count_per_user = 1;
   uint32 default_action_queue_capacity = 2;
   google.protobuf.Duration default_max_offline_duration = 3;
+}
+
+message WebSocket {
+  google.protobuf.Duration online_ttl = 1; // 角色在线会话 TTL
 }

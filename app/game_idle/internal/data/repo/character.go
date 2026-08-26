@@ -92,12 +92,16 @@ func (r *CharacterRepo) Get(ctx context.Context, characterID int64) (*model.Char
 	}, nil
 }
 
-func (r *CharacterRepo) ListByUserID(ctx context.Context, userID int64) ([]*model.Character, error) {
-	if userID <= 0 {
-		return nil, model.ErrCharacterInvalid
+func (r *CharacterRepo) List(ctx context.Context, req *bizrepo.ListCharacterReq) ([]*model.Character, error) {
+	query := r.db.Character.Query().
+		Where(characterent.DeletedAtIsNil())
+	if req.UserID != nil {
+		query = query.Where(characterent.UserIDEQ(*req.UserID))
 	}
-	rows, err := r.db.Character.Query().
-		Where(characterent.UserIDEQ(userID), characterent.DeletedAtIsNil()).
+	if req.CharacterID != nil && *req.CharacterID > 0 {
+		query = query.Where(characterent.IDEQ(*req.CharacterID))
+	}
+	rows, err := query.
 		Order(characterent.BySlot()).
 		All(ctx)
 	if err != nil {

@@ -29,13 +29,24 @@ func (s *ChatService) RegisterGrpc(server *grpc.Server) {
 func (s *ChatService) RegisterHttp(*http.Server) {
 }
 
-func (s *ChatService) SendWorldMessage(ctx context.Context, req *v1.SendGameIdleWorldMessage_Request) (*v1.SendGameIdleWorldMessage_Resp, error) {
+func (s *ChatService) Send(ctx context.Context, req *v1.SendGameIdleChatMessage_Request) (*v1.SendGameIdleChatMessage_Resp, error) {
 	if req.GetCharacterId() <= 0 || req.GetContent() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	row, err := s.chatUsecase.SendWorldMessage(ctx, &usecase.SendWorldMessageReq{
-		CharacterID: req.GetCharacterId(),
-		Content:     req.GetContent(),
+	channelType, ok := enum.ChatChannelTypeMap.ToEnum(req.GetChannelType())
+	if !ok {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	var receiverCharacterID *int64
+	if req.GetReceiverCharacterId() > 0 {
+		receiverCharacterID = new(req.GetReceiverCharacterId())
+	}
+	row, err := s.chatUsecase.Send(ctx, &usecase.SendMessageReq{
+		CharacterID:         req.GetCharacterId(),
+		ChannelType:         channelType,
+		ChannelID:           req.GetChannelId(),
+		ReceiverCharacterID: receiverCharacterID,
+		Content:             req.GetContent(),
 	})
 	if err != nil {
 		return nil, err
@@ -55,13 +66,19 @@ func (s *ChatService) SendWorldMessage(ctx context.Context, req *v1.SendGameIdle
 	if row.CreatedAt != nil {
 		message.CreatedAt = timestamppb.New(*row.CreatedAt)
 	}
-	return &v1.SendGameIdleWorldMessage_Resp{Row: message}, nil
+	return &v1.SendGameIdleChatMessage_Resp{Row: message}, nil
 }
 
-func (s *ChatService) ListWorldMessages(ctx context.Context, req *v1.ListGameIdleWorldMessages_Request) (*v1.ListGameIdleWorldMessages_Resp, error) {
-	rows, err := s.chatUsecase.ListWorldMessages(ctx, &usecase.ListWorldMessagesReq{
-		BeforeID: req.GetBeforeId(),
-		Size:     int(req.GetSize()),
+func (s *ChatService) List(ctx context.Context, req *v1.ListGameIdleChatMessages_Request) (*v1.ListGameIdleChatMessages_Resp, error) {
+	channelType, ok := enum.ChatChannelTypeMap.ToEnum(req.GetChannelType())
+	if !ok {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	rows, err := s.chatUsecase.List(ctx, &usecase.ListMessagesReq{
+		ChannelType: channelType,
+		ChannelID:   req.GetChannelId(),
+		BeforeID:    req.GetBeforeId(),
+		Size:        int(req.GetSize()),
 	})
 	if err != nil {
 		return nil, err
@@ -85,5 +102,5 @@ func (s *ChatService) ListWorldMessages(ctx context.Context, req *v1.ListGameIdl
 		}
 		messages = append(messages, message)
 	}
-	return &v1.ListGameIdleWorldMessages_Resp{Rows: messages}, nil
+	return &v1.ListGameIdleChatMessages_Resp{Rows: messages}, nil
 }

@@ -6,6 +6,7 @@ import (
 	"context"
 	"game_idle_bff/internal/biz/model"
 	"game_idle_bff/internal/biz/repo"
+	"time"
 )
 
 var _ repo.CharacterRepo = (*CharacterRepo)(nil)
@@ -48,9 +49,10 @@ func (r *CharacterRepo) Create(ctx context.Context, req *repo.CreateCharacterReq
 	return out, nil
 }
 
-func (r *CharacterRepo) List(ctx context.Context, userID int64) ([]*model.Character, error) {
+func (r *CharacterRepo) List(ctx context.Context, req *repo.ListCharacterReq) ([]*model.Character, error) {
 	reply, err := r.gameIdleClient.Character.Get(ctx, &gameidlev1.GetGameIdleCharacter_Request{
-		UserId: userID,
+		UserId:      req.UserID,
+		CharacterId: req.CharacterID,
 	})
 	if err != nil {
 		return nil, err
@@ -74,4 +76,43 @@ func (r *CharacterRepo) List(ctx context.Context, userID int64) ([]*model.Charac
 		rows = append(rows, item)
 	}
 	return rows, nil
+}
+
+func (r *CharacterRepo) Online(ctx context.Context, req *repo.OnlineCharacterReq) (*model.WebSocketSession, error) {
+	reply, err := r.gameIdleClient.Character.Online(ctx, &gameidlev1.OnlineGameIdleCharacter_Request{
+		UserId:      req.UserID,
+		CharacterId: req.CharacterID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &model.WebSocketSession{
+		CharacterID:       req.CharacterID,
+		SessionID:         reply.GetSessionId(),
+		RemainingDuration: time.Duration(reply.GetExpiresInSeconds()) * time.Second,
+	}, nil
+}
+
+func (r *CharacterRepo) Ping(ctx context.Context, req *repo.PingCharacterReq) (*model.WebSocketSession, error) {
+	reply, err := r.gameIdleClient.Character.Ping(ctx, &gameidlev1.PingGameIdleCharacter_Request{
+		CharacterId: req.CharacterID,
+		SessionId:   req.SessionID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &model.WebSocketSession{
+		CharacterID:       req.CharacterID,
+		SessionID:         req.SessionID,
+		RemainingDuration: time.Duration(reply.GetExpiresInSeconds()) * time.Second,
+	}, nil
+}
+
+func (r *CharacterRepo) Offline(ctx context.Context, req *repo.OfflineCharacterReq) error {
+	_, err := r.gameIdleClient.Character.Offline(ctx, &gameidlev1.OfflineGameIdleCharacter_Request{
+		CharacterId: req.CharacterID,
+		SessionId:   req.SessionID,
+		Timeout:     req.Timeout,
+	})
+	return err
 }

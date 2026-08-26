@@ -14,7 +14,9 @@ import (
 var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
 	ProvideConsul,
+	ProvideNats,
 	commonClient.NewConsulClient,
+	commonClient.NewNatsClient,
 	rpc.ProvideUserClient,
 	rpc.ProvideGameIdleClient,
 )
@@ -26,7 +28,13 @@ var ModuleProviderSet = wire.NewSet(
 	NewCharacterRepo,
 	NewBackpackRepo,
 	NewActionQueueRepo,
+	NewChatRepo,
+	NewWebSocketEventRepo,
 )
+
+func ProvideNats(c *config.Bootstrap) *common.Nats {
+	return c.Nats
+}
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul

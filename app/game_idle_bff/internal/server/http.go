@@ -52,8 +52,7 @@ func NewHTTPServer(
 		obs.ServerMiddleware(),
 		recovery.Recovery(),
 	}
-	// 本地开发阶段暂不启用 HTTP 鉴权，后续接入正式前台登录态后再打开。
-	// middlewares = append(middlewares, NewHTTPAuthMiddlewares(userClient)...)
+	middlewares = append(middlewares, NewHTTPAuthMiddlewares(userClient)...)
 	middlewares = append(middlewares, validate.ProtoValidate())
 
 	opts := []kratoshttp.ServerOption{

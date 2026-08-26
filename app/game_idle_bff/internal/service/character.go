@@ -69,7 +69,9 @@ func (s *CharacterService) List(ctx context.Context, req *v1.ListGameIdleBffChar
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	rows, err := s.characterUsecase.List(ctx, user.ID)
+	rows, err := s.characterUsecase.List(ctx, &usecase.ListCharacterReq{
+		UserID: user.ID,
+	})
 	if err != nil {
 		return nil, err
 	}

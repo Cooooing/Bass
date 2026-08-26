@@ -1,0 +1,43 @@
+server:
+  name: game_idle_bff
+  version: 1.0.0
+  mode: ${SERVICE_MODE:dev}
+http:
+  network: tcp
+  host: ${HTTP_HOST:0.0.0.0}
+  port: ${HTTP_PORT:8107}
+  timeout: 5s
+grpc:
+  network: tcp
+  host: ${GRPC_HOST:0.0.0.0}
+  port: ${GRPC_PORT:9107}
+  timeout: 5s
+consul:
+  address: ${CONSUL_HOST:127.0.0.1}:${CONSUL_PORT:8500}
+  datacenter: dc1
+  token: ${CONSUL_ACL_APP_TOKEN:token}
+  dial_timeout: 5s
+nats:
+  host: ${NATS_HOST:127.0.0.1}
+  port: ${NATS_PORT:4222}
+  user: ${NATS_USER:admin}
+  password: ${NATS_PASSWORD:"123456"}
+  name: nats-game-idle
+  timeout: 5s
+  max_reconnects: 10
+  reconnect_wait: 2s
+  ping_interval: 30s
+  flusher_timeout: 5s
+  enable_jet_stream: false
+  stream_name: ""
+  jet_stream_domain: ""
+websocket:
+  ping_interval: 30s
+  write_timeout: 5s
+trace:
+  enable_otel: false
+  endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
+  insecure: true
+  sampler: 1
+observability:
+  enable_metrics: true

@@ -10,12 +10,18 @@ import (
 // ServerProviderSet 是 server 层依赖集合。
 var ServerProviderSet = wire.NewSet(
 	ProvideServers,
+	NewWebSocketManagerServer,
 	NewGRPCServer,
 	NewHTTPServer,
 )
 
-func ProvideServers(grpcServer *grpc.Server, httpServer *http.Server) []transport.Server {
+func ProvideServers(
+	webSocketManagerServer *WebSocketManagerServer,
+	grpcServer *grpc.Server,
+	httpServer *http.Server,
+) []transport.Server {
 	return []transport.Server{
+		webSocketManagerServer,
 		grpcServer,
 		httpServer,
 	}

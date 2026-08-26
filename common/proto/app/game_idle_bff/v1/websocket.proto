@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package common.api.app.game_idle_bff.v1;
+
+import "google/api/annotations.proto";
+option go_package = "common/proto/gen/game_idle_bff/v1;v1";
+
+// GameIdleBffWebSocketService 提供摸鱼放置 WS 辅助入口。
+service GameIdleBffWebSocketService {
+  // 创建角色 WS session。
+  rpc CreateSession(CreateGameIdleBffWebSocketSession.Req) returns (CreateGameIdleBffWebSocketSession.Resp) {
+    option (google.api.http) = {
+      post: "/v1/game-idle/ws/create-session"
+      body: "*"
+    };
+  }
+}
+
+message CreateGameIdleBffWebSocketSession {
+  message Req {
+    int64 character_id = 1; // 角色 ID
+  }
+
+  message Resp {
+    string session_id = 1; // 角色 WS session
+    int64 expires_in_seconds = 2; // 剩余有效秒数
+    string path = 3; // WS 连接路径
+  }
+}

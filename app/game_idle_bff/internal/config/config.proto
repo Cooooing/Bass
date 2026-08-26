@@ -2,6 +2,7 @@ syntax = "proto3";
 package kratos.api.game_idle_bff.config;
 
 import "common/config.proto";
+import "google/protobuf/duration.proto";
 
 option go_package = "game_idle_bff/internal/config;config";
 
@@ -10,7 +11,13 @@ message Bootstrap {
   common.api.app.common.HTTP http = 2;
   common.api.app.common.GRPC grpc = 3;
   common.api.app.common.Consul consul = 4;
-  common.api.app.common.Redis redis = 6;
+  common.api.app.common.Nats nats = 7;
   common.api.app.common.Trace trace = 8;
   common.api.app.common.Observability observability = 9;
+  WebSocket websocket = 10;
+}
+
+message WebSocket {
+  google.protobuf.Duration ping_interval = 1; // WS 协议层 ping 间隔
+  google.protobuf.Duration write_timeout = 2; // WS 写超时
 }

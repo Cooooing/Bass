@@ -1,0 +1,43 @@
+syntax = "proto3";
+package kratos.api.game_idle.config;
+
+import "common/config.proto";
+import "google/protobuf/duration.proto";
+
+option go_package = "game_idle/internal/config;config";
+
+message Bootstrap {
+  common.api.app.common.Server server = 1;
+  common.api.app.common.HTTP http = 2;
+  common.api.app.common.GRPC grpc = 3;
+  common.api.app.common.Consul consul = 4;
+  common.api.app.common.Database database = 5;
+  common.api.app.common.Redis redis = 6;
+  common.api.app.common.Nats nats = 7;
+  common.api.app.common.Trace trace = 8;
+  common.api.app.common.Observability observability = 9;
+  common.api.app.common.TimeWheel timewheel = 10;
+  GameIdle game_idle = 21;
+}
+
+message GameIdle {
+  Shard shard = 2;
+  Backpack backpack = 3;
+  Character character = 4;
+}
+
+message Shard {
+  uint32 total = 1;
+  google.protobuf.Duration lease_ttl = 2;
+  google.protobuf.Duration renew_interval = 3;
+}
+
+message Backpack {
+  uint32 persist_threshold = 1;
+}
+
+message Character {
+  uint32 max_count_per_user = 1;
+  uint32 default_action_queue_capacity = 2;
+  google.protobuf.Duration default_max_offline_duration = 3;
+}

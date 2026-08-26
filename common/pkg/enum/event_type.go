@@ -31,7 +31,8 @@ const (
 	EventTypeContentCommentLike          EventType = "content_comment_like"
 	EventTypeContentCommentThank         EventType = "content_comment_thank"
 	EventTypeContentCommentStatusUpdate  EventType = "content_comment_status_update"
-	EventTypeGameIdleChatWorldMessage    EventType = "game_idle_chat_world_message"
+	EventTypeGameIdleChatMessage         EventType = "game_idle_chat_message"
+	EventTypeGameIdleCloseSession        EventType = "game_idle_close_session"
 )
 
 var EventTypeMap = NewMapping[EventType, enums.EventType](map[EventType]Entry[EventType, enums.EventType]{
@@ -61,7 +62,8 @@ var EventTypeMap = NewMapping[EventType, enums.EventType](map[EventType]Entry[Ev
 	EventTypeContentCommentLike:          {Proto: enums.EventType_EVENT_TYPE_COMMENT_LIKED},
 	EventTypeContentCommentThank:         {Proto: enums.EventType_EVENT_TYPE_COMMENT_THANKED},
 	EventTypeContentCommentStatusUpdate:  {Proto: enums.EventType_EVENT_TYPE_COMMENT_STATUS_UPDATED},
-	EventTypeGameIdleChatWorldMessage:    {Proto: enums.EventType_EVENT_TYPE_GAME_IDLE_CHAT_WORLD_MESSAGE},
+	EventTypeGameIdleChatMessage:         {Proto: enums.EventType_EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE},
+	EventTypeGameIdleCloseSession:        {Proto: enums.EventType_EVENT_TYPE_GAME_IDLE_CLOSE_SESSION},
 })
 
 func (e EventType) String() string {

@@ -19,7 +19,7 @@ func NewEventPool(
 	size := 16
 	pool, err := ants.NewPool(
 		size,
-		ants.WithNonblocking(false),
+		ants.WithNonblocking(true),
 		ants.WithPanicHandler(func(err interface{}) {
 			logger.Error("event worker panic recovered", constant.LogFieldKind, constant.LogKindSystem, "panic", err, "stack", string(debug.Stack()))
 		}),

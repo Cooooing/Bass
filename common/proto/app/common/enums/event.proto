@@ -2,7 +2,9 @@ syntax = "proto3";
 
 package common.api.app.common.enums;
 
-import "common/enums/event_payload.proto";
+import "common/enums/event_payload_content.proto";
+import "common/enums/event_payload_game_idle.proto";
+import "common/enums/event_payload_user.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/common/enums;enums";
@@ -47,12 +49,13 @@ enum EventType {
   // 即时通讯事件（3000-3999）
 
   // 挂机游戏事件（5000-5999）
-  EVENT_TYPE_GAME_IDLE_CHAT_WORLD_MESSAGE = 5001; // 挂机游戏世界聊天消息
+  EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE = 5001; // 挂机游戏聊天消息
+  EVENT_TYPE_GAME_IDLE_CLOSE_SESSION = 5002; // 挂机游戏关闭会话
 
   // 平台事件（4000-4999）
 }
 
-// 事件主题 — 数值与对应 EventType 保持一致，内部映射为实际 MQ subject。
+// 事件主题 — 内部映射为实际 MQ subject。
 enum EventSubject {
   EVENT_SUBJECT_UNSPECIFIED = 0;
 
@@ -92,7 +95,7 @@ enum EventSubject {
   // 即时通讯事件（3000-3999）
 
   // 挂机游戏事件（5000-5999）
-  EVENT_SUBJECT_GAME_IDLE_CHAT_WORLD_MESSAGE = 5001; // game_idle.chat.world.message
+  EVENT_SUBJECT_GAME_IDLE = 5000; // game_idle
 
   // 平台事件（4000-4999）
 }
@@ -162,6 +165,7 @@ message Event {
     CommentLikedPayload comment_liked = 2102;
     CommentThankedPayload comment_thanked = 2103;
     CommentStatusUpdatedPayload comment_status_updated = 2104;
-    GameIdleChatWorldMessagePayload game_idle_chat_world_message = 5001;
+    GameIdleChatMessagePayload game_idle_chat_message = 5001;
+    GameIdleCloseSessionPayload game_idle_close_session = 5002;
   }
 }

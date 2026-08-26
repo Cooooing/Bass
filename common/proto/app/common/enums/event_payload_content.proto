@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package common.api.app.common.enums;
+
+option go_package = "common/proto/gen/common/enums;enums";
+
+message ArticlePublishedPayload {
+  int64 article_id = 3;
+}
+
+message ArticleLikedPayload {
+  int64 sender_id = 1;
+  int64 article_id = 3;
+}
+
+message ArticleThankedPayload {
+  int64 sender_id = 1;
+  int64 article_id = 3;
+}
+
+message ArticleCollectedPayload {
+  int64 sender_id = 1;
+  int64 article_id = 3;
+}
+
+message ArticleWatchedPayload {
+  int64 sender_id = 1;
+  int64 article_id = 3;
+}
+
+message ArticleAcceptedAnswerPayload {
+  int64 sender_id = 1;
+  int64 article_id = 3;
+  int64 comment_id = 4;
+}
+
+message ArticlePostscriptAddedPayload {
+  int64 sender_id = 1;
+  int64 article_id = 3;
+  int64 postscript_id = 4;
+}
+
+message ArticleStatusUpdatedPayload {
+  int64 sender_id = 1;
+  int64 article_id = 3;
+  string status = 4 [deprecated = true];
+  string action = 5;
+  string publish_status = 6;
+  string visibility = 7;
+  string restriction = 8;
+  optional string reason = 9;
+}
+
+message CommentPublishedPayload {
+  int64 comment_id = 3;
+}
+
+message CommentLikedPayload {
+  int64 sender_id = 1;
+  int64 comment_id = 3;
+}
+
+message CommentThankedPayload {
+  int64 sender_id = 1;
+  int64 comment_id = 3;
+}
+
+message CommentStatusUpdatedPayload {
+  int64 sender_id = 1;
+  int64 comment_id = 3;
+  string status = 4 [deprecated = true];
+  string action = 5;
+  string restriction = 6;
+  optional string reason = 7;
+}

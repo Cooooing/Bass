@@ -31,7 +31,7 @@ const (
 	EventSubjectContentCommentLike          EventSubject = "content.comment.liked"
 	EventSubjectContentCommentThank         EventSubject = "content.comment.thanked"
 	EventSubjectContentCommentStatusUpdate  EventSubject = "content.comment.status_updated"
-	EventSubjectGameIdleChatWorldMessage    EventSubject = "game_idle.chat.world.message"
+	EventSubjectGameIdle                    EventSubject = "game_idle"
 )
 
 var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubject]Entry[EventSubject, enums.EventSubject]{
@@ -61,7 +61,7 @@ var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubj
 	EventSubjectContentCommentLike:          {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_LIKED},
 	EventSubjectContentCommentThank:         {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_THANKED},
 	EventSubjectContentCommentStatusUpdate:  {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_STATUS_UPDATED},
-	EventSubjectGameIdleChatWorldMessage:    {Proto: enums.EventSubject_EVENT_SUBJECT_GAME_IDLE_CHAT_WORLD_MESSAGE},
+	EventSubjectGameIdle:                    {Proto: enums.EventSubject_EVENT_SUBJECT_GAME_IDLE},
 })
 
 func (EventSubject) Values() []string {

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package common.api.app.common.enums;
+
+option go_package = "common/proto/gen/common/enums;enums";
+
+message GameIdleChatMessagePayload {
+  int64 message_id = 1;
+  string channel_type = 2;
+  string channel_id = 3;
+  int64 sender_character_id = 4;
+  int64 receiver_character_id = 5;
+  string content = 6;
+}
+
+enum GameIdleCloseSessionReason {
+  GAME_IDLE_CLOSE_SESSION_REASON_UNSPECIFIED = 0; // 未指定
+  GAME_IDLE_CLOSE_SESSION_REASON_OCCUPIED = 1; // 被其他连接挤占
+  GAME_IDLE_CLOSE_SESSION_REASON_TIMEOUT = 2; // 心跳超时
+}
+
+message GameIdleCloseSessionPayload {
+  string session_id = 1; // 会话 ID
+  GameIdleCloseSessionReason reason = 2; // 关闭原因
+  string message = 3; // 客户端提示
+  bool should_reconnect = 4; // 是否建议自动重连
+}

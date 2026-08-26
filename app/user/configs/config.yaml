@@ -63,7 +63,7 @@ business:
   auth:
     session:
       secret: ${USER_JWT_SECRET:your-jwt-secret-here}
-      access_token_ttl: 900s # 15min
+      access_token_ttl: 2592000s # 30d
       refresh_token_ttl: 2592000s # 30d
       session_ttl: 15552000s # 180d
       max_sessions: 5 # 同一用户同一 realm 最多保留 5 个 session

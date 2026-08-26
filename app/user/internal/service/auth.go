@@ -39,7 +39,7 @@ func NewAuthService(
 		conf:        conf,
 		authUsecase: authUsecase,
 		phoneRe:     regexp.MustCompile("^1[3-9]\\d{9}$"),
-		nameRe:      regexp.MustCompile("^[a-z0-9]+(?:-[a-z0-9]+)*$"),
+		nameRe:      regexp.MustCompile("^[a-z0-9]+(?:[-_][a-z0-9]+)*$"),
 		codeRe:      regexp.MustCompile("^[A-Za-z0-9]{6}$"),
 	}
 }

@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package common.api.app.game_idle.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/game_idle/v1;v1";
+
+service GameIdleActionQueueService {
+  rpc List(ListGameIdleActionQueue.Request) returns (ListGameIdleActionQueue.Resp) {}
+  rpc Add(AddGameIdleAction.Request) returns (AddGameIdleAction.Resp) {}
+  rpc Move(MoveGameIdleAction.Request) returns (MoveGameIdleAction.Resp) {}
+  rpc Remove(RemoveGameIdleAction.Request) returns (RemoveGameIdleAction.Resp) {}
+  rpc Clear(ClearGameIdleActionQueue.Request) returns (ClearGameIdleActionQueue.Resp) {}
+}
+
+message ListGameIdleActionQueue {
+  message Request {
+    int64 character_id = 1; // 角色 ID
+  }
+
+  message Resp {
+    ActionQueue queue = 1; // 行动队列
+  }
+}
+
+message AddGameIdleAction {
+  message Request {
+    int64 character_id = 1; // 角色 ID
+    string action_id = 2; // 行动编码
+    int64 times = 3; // 执行次数，-1 表示无限
+    optional int32 position = 4; // 插入位置，从 0 开始；空值表示追加到队尾
+  }
+
+  message Resp {}
+}
+
+message MoveGameIdleAction {
+  message Request {
+    int64 character_id = 1; // 角色 ID
+    int32 current_position = 2; // 当前位置，从 0 开始
+    int32 target_position = 3; // 目标位置，从 0 开始
+  }
+
+  message Resp {}
+}
+
+message RemoveGameIdleAction {
+  message Request {
+    int64 character_id = 1; // 角色 ID
+    int32 position = 2; // 移除位置，从 0 开始
+  }
+
+  message Resp {}
+}
+
+message ClearGameIdleActionQueue {
+  message Request {
+    int64 character_id = 1; // 角色 ID
+  }
+
+  message Resp {}
+}
+
+message ActionQueue {
+  int64 character_id = 1; // 角色 ID
+  repeated ActionQueueItem items = 2; // 有序行动列表
+}
+
+message ActionQueueItem {
+  string action_id = 1; // 行动编码
+  int64 times = 2; // 剩余执行次数
+  google.protobuf.Timestamp created_at = 3; // 创建时间
+}

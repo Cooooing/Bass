@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package common.api.app.game_idle.v1;
+
+option go_package = "common/proto/gen/game_idle/v1;v1";
+
+service GameIdleBackpackService {
+  rpc Get(GetGameIdleBackpack.Request) returns (GetGameIdleBackpack.Resp) {}
+}
+
+message GetGameIdleBackpack {
+  message Request {
+    int64 character_id = 1; // 角色 ID
+    repeated string item_ids = 2; // 物品编码，为空时返回全部
+  }
+
+  message Resp {
+    repeated CharacterItem rows = 1; // 背包物品
+  }
+}
+
+message CharacterItem {
+  string item_id = 1; // 物品编码
+  int64 quantity = 2; // 当前数量
+}

@@ -108,6 +108,13 @@ message DTM {
   google.protobuf.Duration retry_interval = 4; // 重试间隔
 }
 
+message TimeWheel {
+  google.protobuf.Duration interval = 1; // 时间轮 tick 间隔
+  uint32 wheel_slots = 2; // 时间轮槽位数
+  uint32 worker_pool_size = 3; // 任务执行 worker 池大小
+  uint32 max_worker_pool_size = 4; // 最大任务执行 worker 池大小
+}
+
 message Alert {
   LarkWebhook lark_webhook = 1; // Lark Webhook 告警通道配置
 

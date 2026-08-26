@@ -20,6 +20,7 @@ var LocalProviderSet = wire.NewSet(
 	ProvideLocalPushHubClient,
 	ProvideLocalSchedulerClient,
 	ProvideLocalGameTownClient,
+	ProvideLocalGameIdleClient,
 )
 
 func ProvideUserClient(consul *client.ConsulClient) (*UserClient, error) {
@@ -49,12 +50,17 @@ func ProvidePlatformClient(consul *client.ConsulClient) (*PlatformClient, error)
 func ProvidePushHubClient(consul *client.ConsulClient) (*PushHubClient, error) {
 	return newServiceClient(consul, constant.PushHubServiceName.String(), NewPushHubClient)
 }
+
 func ProvideSchedulerClient(consul *client.ConsulClient) (*SchedulerClient, error) {
 	return newServiceClient(consul, constant.SchedulerServiceName.String(), NewSchedulerClient)
 }
 
 func ProvideGameTownClient(consul *client.ConsulClient) (*GameTownClient, error) {
 	return newServiceClient(consul, constant.GameTownServiceName.String(), NewGameTownClient)
+}
+
+func ProvideGameIdleClient(consul *client.ConsulClient) (*GameIdleClient, error) {
+	return newServiceClient(consul, constant.GameIdleServiceName.String(), NewGameIdleClient)
 }
 
 func newServiceClient[T any](consul *client.ConsulClient, service string, newFn func(grpc.ClientConnInterface) T) (T, error) {
@@ -100,4 +106,8 @@ func ProvideLocalSchedulerClient(clients *commonmodule.Clients) (*SchedulerClien
 
 func ProvideLocalGameTownClient(clients *commonmodule.Clients) (*GameTownClient, error) {
 	return commonmodule.Client[*GameTownClient](clients)
+}
+
+func ProvideLocalGameIdleClient(clients *commonmodule.Clients) (*GameIdleClient, error) {
+	return commonmodule.Client[*GameIdleClient](clients)
 }

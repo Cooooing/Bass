@@ -1,6 +1,8 @@
 package timewheel
 
 import (
+	"common/proto/gen/common"
+	"context"
 	"fmt"
 	"sync"
 	"time"
@@ -14,28 +16,95 @@ type TimeWheel struct {
 	tasks       map[string]*Task
 	currentTick int64
 	currentTime time.Time
+	stop        context.CancelFunc
+	running     bool
 }
 
 // NewTimeWheel 创建时间轮。
-func NewTimeWheel(tick time.Duration, slotCount int, startAt time.Time) (*TimeWheel, error) {
-	if tick <= 0 {
-		return nil, fmt.Errorf("time wheel tick must be positive")
+func NewTimeWheel(config *common.TimeWheel) (*TimeWheel, error) {
+	if config == nil {
+		return nil, fmt.Errorf("time wheel config is required")
 	}
-	if slotCount <= 0 {
+	if config.GetInterval() == nil {
+		return nil, fmt.Errorf("time wheel interval is required")
+	}
+	interval := config.GetInterval().AsDuration()
+	if interval <= 0 {
+		return nil, fmt.Errorf("time wheel interval must be positive")
+	}
+	if config.GetWheelSlots() == 0 {
 		return nil, fmt.Errorf("time wheel slot count must be positive")
 	}
 
-	slots := make([]map[string]*Task, slotCount)
+	slots := make([]map[string]*Task, config.GetWheelSlots())
 	for index := range slots {
 		slots[index] = make(map[string]*Task)
 	}
 
 	return &TimeWheel{
-		tick:        tick,
+		tick:        interval,
 		slots:       slots,
 		tasks:       make(map[string]*Task),
-		currentTime: startAt,
+		currentTime: time.Now(),
 	}, nil
+}
+
+// Start 启动时间轮自动推进。
+func (w *TimeWheel) Start(ctx context.Context) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	w.mutex.Lock()
+	if w.running {
+		w.mutex.Unlock()
+		return nil
+	}
+
+	runCtx, cancel := context.WithCancel(ctx)
+	ticker := time.NewTicker(w.tick)
+	w.stop = cancel
+	w.running = true
+	w.mutex.Unlock()
+
+	go func() {
+		defer ticker.Stop()
+
+		for {
+			select {
+			case <-runCtx.Done():
+				return
+			case now := <-ticker.C:
+				for _, task := range w.Advance(now) {
+					if task.Job != nil {
+						go func(item *Task) {
+							_ = item.Job(runCtx, item)
+						}(task)
+					}
+				}
+			}
+		}
+	}()
+
+	return nil
+}
+
+// Stop 停止时间轮自动推进。
+func (w *TimeWheel) Stop(ctx context.Context) error {
+	w.mutex.Lock()
+	if !w.running {
+		w.mutex.Unlock()
+		return nil
+	}
+
+	stop := w.stop
+	w.stop = nil
+	w.running = false
+	w.mutex.Unlock()
+
+	if stop != nil {
+		stop()
+	}
+	return nil
 }
 
 // Add 新增或替换任务，同一个任务 ID 只会保留一个调度位置。
@@ -55,7 +124,14 @@ func (w *TimeWheel) Add(task *Task) error {
 		delete(w.tasks, task.ID)
 	}
 
-	delayTicks := w.delayTicks(task.DueAt)
+	delayTicks := int64(0)
+	if task.DueAt.After(w.currentTime) {
+		delay := task.DueAt.Sub(w.currentTime)
+		delayTicks = int64(delay / w.tick)
+		if delay%w.tick != 0 {
+			delayTicks++
+		}
+	}
 	slotCount := int64(len(w.slots))
 	task.slot = (w.currentTick + delayTicks) % slotCount
 	task.rounds = delayTicks / slotCount
@@ -117,10 +193,6 @@ func (w *TimeWheel) DelayTicks(dueAt time.Time) int64 {
 	w.mutex.Lock()
 	defer w.mutex.Unlock()
 
-	return w.delayTicks(dueAt)
-}
-
-func (w *TimeWheel) delayTicks(dueAt time.Time) int64 {
 	if !dueAt.After(w.currentTime) {
 		return 0
 	}

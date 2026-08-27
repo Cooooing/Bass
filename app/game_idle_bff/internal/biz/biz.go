@@ -18,18 +18,17 @@ var BizProviderSet = wire.NewSet(
 	ProvideWebSocketWorkerPool,
 	usecase.NewAuthUsecase,
 	usecase.NewCharacterUsecase,
+	usecase.NewCharacterAbilityUsecase,
 	usecase.NewBackpackUsecase,
 	usecase.NewActionQueueUsecase,
 	usecase.NewChatUsecase,
 	usecase.NewWebSocketUsecase,
-	command.NewBackpackGetHandler,
-	command.NewChatMessageListHandler,
 	command.NewChatMessageSendHandler,
 	command.NewActionAddHandler,
 	command.NewActionClearHandler,
-	command.NewActionListHandler,
 	command.NewActionMoveHandler,
 	command.NewActionRemoveHandler,
+	command.NewInitGetHandler,
 	event.NewActionCompletedHandler,
 	event.NewAbilityLeveledUpHandler,
 	event.NewChatMessageHandler,
@@ -55,23 +54,19 @@ func ProvideWebSocketEventHandlers(
 }
 
 func ProvideWebSocketCommandHandlers(
-	backpackGetHandler *command.BackpackGetHandler,
-	chatMessageListHandler *command.ChatMessageListHandler,
 	chatMessageSendHandler *command.ChatMessageSendHandler,
 	actionAddHandler *command.ActionAddHandler,
 	actionClearHandler *command.ActionClearHandler,
-	actionListHandler *command.ActionListHandler,
 	actionMoveHandler *command.ActionMoveHandler,
 	actionRemoveHandler *command.ActionRemoveHandler,
+	initGetHandler *command.InitGetHandler,
 ) usecase.WebSocketCommandHandlers {
 	return usecase.WebSocketCommandHandlers{
-		backpackGetHandler.Type():     backpackGetHandler,
-		chatMessageListHandler.Type(): chatMessageListHandler,
 		chatMessageSendHandler.Type(): chatMessageSendHandler,
 		actionAddHandler.Type():       actionAddHandler,
 		actionClearHandler.Type():     actionClearHandler,
-		actionListHandler.Type():      actionListHandler,
 		actionMoveHandler.Type():      actionMoveHandler,
 		actionRemoveHandler.Type():    actionRemoveHandler,
+		initGetHandler.Type():         initGetHandler,
 	}
 }

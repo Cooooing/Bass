@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package common.api.app.game_idle.v1;
+
+option go_package = "common/proto/gen/game_idle/v1;v1";
+
+service CharacterAbilityService {
+  rpc Get(GetCharacterAbility.Request) returns (GetCharacterAbility.Resp) {}
+}
+
+message GetCharacterAbility {
+  message Request {
+    int64 character_id = 1; // 角色 ID
+  }
+
+  message Resp {
+    repeated CharacterAbility rows = 1; // 能力列表
+  }
+}
+
+message CharacterAbility {
+  string ability_id = 1; // 能力编码
+  int32 level = 2; // 当前等级
+  int64 exp = 3; // 当前经验
+  int64 next_level_exp = 4; // 下一级所需经验
+}

@@ -17,6 +17,31 @@ func NewCharacterAbilityUsecase(characterAbilityRepo repo.CharacterAbilityRepo) 
 	}
 }
 
+func (u *CharacterAbilityUsecase) Map(
+	ctx context.Context,
+	characterID int64,
+) (map[enum.Ability]*model.CharacterAbility, error) {
+	rows, err := u.characterAbilityRepo.Map(ctx, &repo.CharacterAbilityMapReq{
+		CharacterID: characterID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for _, abilityID := range enum.AbilityValues() {
+		ability := enum.Ability(abilityID)
+		if rows[ability] == nil {
+			rows[ability] = &model.CharacterAbility{
+				CharacterID:  characterID,
+				AbilityID:    ability,
+				Level:        1,
+				Exp:          0,
+				NextLevelExp: 100,
+			}
+		}
+	}
+	return rows, nil
+}
+
 func (u *CharacterAbilityUsecase) CheckLevel(
 	ctx context.Context,
 	characterID int64,

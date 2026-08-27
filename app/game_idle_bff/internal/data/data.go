@@ -26,6 +26,7 @@ var ModuleProviderSet = wire.NewSet(
 	ProvideUserAuthClient,
 	NewAuthRepo,
 	NewCharacterRepo,
+	NewCharacterAbilityRepo,
 	NewBackpackRepo,
 	NewActionQueueRepo,
 	NewChatRepo,

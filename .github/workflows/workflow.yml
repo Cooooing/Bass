@@ -41,6 +41,8 @@ jobs:
           context: .
           file: common/build/docker/service.Dockerfile
           push: true
+          provenance: false
+          sbom: false
           build-args: |
             APP_NAME=${{ matrix.service }}
           tags: |
@@ -71,6 +73,8 @@ jobs:
           context: .
           file: monolith/Dockerfile
           push: true
+          provenance: false
+          sbom: false
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/monolith:latest
             ghcr.io/cooooing/monolith:latest
@@ -136,7 +140,9 @@ jobs:
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Generate SDK
-        run: make -C app/bbs ${{ matrix.make-target }}
+        run: |
+          make -C app/bbs ${{ matrix.make-target }}
+          make -C app/game_idle_bff ${{ matrix.make-target }}
 
       - name: Push SDK Branch
         shell: bash

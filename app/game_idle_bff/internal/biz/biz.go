@@ -22,6 +22,7 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewBackpackUsecase,
 	usecase.NewActionQueueUsecase,
 	usecase.NewChatUsecase,
+	usecase.NewConfigUsecase,
 	usecase.NewWebSocketUsecase,
 	command.NewChatMessageSendHandler,
 	command.NewActionAddHandler,
@@ -29,6 +30,8 @@ var BizProviderSet = wire.NewSet(
 	command.NewActionMoveHandler,
 	command.NewActionRemoveHandler,
 	command.NewInitGetHandler,
+	command.NewConfigGetHandler,
+	command.NewActionDetailGetHandler,
 	event.NewActionCompletedHandler,
 	event.NewAbilityLeveledUpHandler,
 	event.NewChatMessageHandler,
@@ -60,6 +63,8 @@ func ProvideWebSocketCommandHandlers(
 	actionMoveHandler *command.ActionMoveHandler,
 	actionRemoveHandler *command.ActionRemoveHandler,
 	initGetHandler *command.InitGetHandler,
+	configGetHandler *command.ConfigGetHandler,
+	actionDetailGetHandler *command.ActionDetailGetHandler,
 ) usecase.WebSocketCommandHandlers {
 	return usecase.WebSocketCommandHandlers{
 		chatMessageSendHandler.Type(): chatMessageSendHandler,
@@ -68,5 +73,7 @@ func ProvideWebSocketCommandHandlers(
 		actionMoveHandler.Type():      actionMoveHandler,
 		actionRemoveHandler.Type():    actionRemoveHandler,
 		initGetHandler.Type():         initGetHandler,
+		configGetHandler.Type():       configGetHandler,
+		actionDetailGetHandler.Type(): actionDetailGetHandler,
 	}
 }

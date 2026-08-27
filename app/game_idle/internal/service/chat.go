@@ -19,7 +19,9 @@ type ChatService struct {
 }
 
 func NewChatService(chatUsecase *usecase.ChatUsecase) *ChatService {
-	return &ChatService{chatUsecase: chatUsecase}
+	return &ChatService{
+		chatUsecase: chatUsecase,
+	}
 }
 
 func (s *ChatService) RegisterGrpc(server *grpc.Server) {

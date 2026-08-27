@@ -18,6 +18,7 @@ type Action struct {
 	Duration             time.Duration
 	ExpReward            int64
 	Enabled              bool
+	Sort                 int32
 }
 
 // ActionRecipe 是行动与配方的绑定关系，允许一个行动顺序执行多个配方。

@@ -41,6 +41,7 @@ message WebSocketCommandPayload {
     ActionAddWebSocketPayload action_add = 4;
     ActionMoveWebSocketPayload action_move = 5;
     ActionRemoveWebSocketPayload action_remove = 6;
+    ActionDetailGetWebSocketPayload action_detail_get = 7;
   }
 }
 
@@ -64,4 +65,8 @@ message ActionMoveWebSocketPayload {
 
 message ActionRemoveWebSocketPayload {
   int32 position = 1; // 移除位置，从 0 开始
+}
+
+message ActionDetailGetWebSocketPayload {
+  string action_id = 1; // 行动编码
 }

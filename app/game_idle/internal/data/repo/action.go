@@ -69,6 +69,7 @@ func (r *ActionRepo) Refresh(ctx context.Context) ([]*model.Action, error) {
 			Duration:             time.Duration(row.DurationSeconds) * time.Second,
 			ExpReward:            row.ExpReward,
 			Enabled:              row.Enabled,
+			Sort:                 row.Sort,
 		}
 		if action.Enabled && (action.ID == "" || action.Duration <= 0 || len(row.Edges.Recipes) == 0) {
 			return nil, model.ErrActionInvalid

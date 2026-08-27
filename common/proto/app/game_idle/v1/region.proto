@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package common.api.app.game_idle.v1;
+
+option go_package = "common/proto/gen/game_idle/v1;v1";
+
+service RegionService {
+  rpc List(ListRegions.Request) returns (ListRegions.Resp) {}
+}
+
+message ListRegions {
+  message Request {}
+
+  message Resp {
+    repeated Region rows = 1; // 区域列表
+  }
+}
+
+message Region {
+  string region_id = 1; // 区域编码
+  string name = 2; // 区域名称
+  string description = 3; // 区域描述
+  bool enabled = 4; // 是否启用
+  int32 sort = 5; // 排序值
+}

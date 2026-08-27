@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package common.api.app.game_idle.v1;
+
+option go_package = "common/proto/gen/game_idle/v1;v1";
+
+service ActionService {
+  rpc List(ListActions.Request) returns (ListActions.Resp) {}
+  rpc GetDetail(GetActionDetail.Request) returns (GetActionDetail.Resp) {}
+}
+
+message ListActions {
+  message Request {}
+
+  message Resp {
+    repeated Action rows = 1; // 行动列表
+  }
+}
+
+message GetActionDetail {
+  message Request {
+    string action_id = 1; // 行动编码
+  }
+
+  message Resp {
+    ActionDetail row = 1; // 行动详情
+  }
+}
+
+message Action {
+  string action_id = 1; // 行动编码
+  string name = 2; // 行动名称
+  string description = 3; // 行动描述
+  string region_id = 4; // 展示区域编码
+  string action_kind = 5; // 行动类型
+  string ability_id = 6; // 对应能力编码
+  int32 required_ability_level = 7; // 要求能力等级
+  int64 duration_seconds = 8; // 基础耗时秒数
+  int64 exp_reward = 9; // 完成经验
+  bool enabled = 10; // 是否启用
+  int32 sort = 11; // 排序值
+}
+
+message ActionDetail {
+  Action action = 1; // 行动基础信息
+  repeated ActionRecipeDetail recipes = 2; // 行动绑定配方
+}
+
+message ActionRecipeDetail {
+  string recipe_id = 1; // 配方编码
+  string name = 2; // 配方名称
+  string description = 3; // 配方描述
+  string recipe_type = 4; // 配方类型
+  int32 generation_times = 5; // 产出生成次数
+  repeated RecipeInputDetail inputs = 6; // 消耗物品
+  repeated RecipeOutputDetail outputs = 7; // 产出物品
+}
+
+message RecipeInputDetail {
+  string item_id = 1; // 物品编码
+  string item_name = 2; // 物品名称
+  string item_type = 3; // 物品类型
+  int64 quantity = 4; // 消耗数量
+}
+
+message RecipeOutputDetail {
+  string item_id = 1; // 物品编码
+  string item_name = 2; // 物品名称
+  string item_type = 3; // 物品类型
+  int64 min_quantity = 4; // 最小数量
+  int64 max_quantity = 5; // 最大数量
+  int32 weight = 6; // 权重
+  double probability = 7; // 单次命中概率
+}

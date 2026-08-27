@@ -37,6 +37,7 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewItemRepo,
 	repo.NewRecipeRepo,
 	repo.NewActionRepo,
+	repo.NewRegionRepo,
 	repo.NewActionQueueRepo,
 	repo.NewChatMessageRepo,
 )

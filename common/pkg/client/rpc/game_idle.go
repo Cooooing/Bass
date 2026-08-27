@@ -9,22 +9,26 @@ import (
 )
 
 type GameIdleClient struct {
-	System      commonv1.CommonSystemServiceClient
-	Character   gameidlev1.CharacterServiceClient
-	Ability     gameidlev1.CharacterAbilityServiceClient
-	Backpack    gameidlev1.BackpackServiceClient
-	ActionQueue gameidlev1.ActionQueueServiceClient
-	Chat        gameidlev1.ChatServiceClient
+	System           commonv1.CommonSystemServiceClient
+	Character        gameidlev1.CharacterServiceClient
+	CharacterAbility gameidlev1.CharacterAbilityServiceClient
+	Backpack         gameidlev1.BackpackServiceClient
+	ActionQueue      gameidlev1.ActionQueueServiceClient
+	Chat             gameidlev1.ChatServiceClient
+	Region           gameidlev1.RegionServiceClient
+	Action           gameidlev1.ActionServiceClient
 }
 
 func NewGameIdleClient(conn grpc.ClientConnInterface) *GameIdleClient {
 	return &GameIdleClient{
-		System:      commonv1.NewCommonSystemServiceClient(conn),
-		Character:   gameidlev1.NewCharacterServiceClient(conn),
-		Ability:     gameidlev1.NewCharacterAbilityServiceClient(conn),
-		Backpack:    gameidlev1.NewBackpackServiceClient(conn),
-		ActionQueue: gameidlev1.NewActionQueueServiceClient(conn),
-		Chat:        gameidlev1.NewChatServiceClient(conn),
+		System:           commonv1.NewCommonSystemServiceClient(conn),
+		Character:        gameidlev1.NewCharacterServiceClient(conn),
+		CharacterAbility: gameidlev1.NewCharacterAbilityServiceClient(conn),
+		Backpack:         gameidlev1.NewBackpackServiceClient(conn),
+		ActionQueue:      gameidlev1.NewActionQueueServiceClient(conn),
+		Chat:             gameidlev1.NewChatServiceClient(conn),
+		Region:           gameidlev1.NewRegionServiceClient(conn),
+		Action:           gameidlev1.NewActionServiceClient(conn),
 	}
 }
 
@@ -36,5 +40,7 @@ func MountGameIdleServices[T any](conn *localrpc.Conn, services []T) {
 		conn.RegisterMatching(&gameidlev1.BackpackService_ServiceDesc, service)
 		conn.RegisterMatching(&gameidlev1.ActionQueueService_ServiceDesc, service)
 		conn.RegisterMatching(&gameidlev1.ChatService_ServiceDesc, service)
+		conn.RegisterMatching(&gameidlev1.RegionService_ServiceDesc, service)
+		conn.RegisterMatching(&gameidlev1.ActionService_ServiceDesc, service)
 	}
 }

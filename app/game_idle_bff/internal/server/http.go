@@ -56,7 +56,7 @@ func NewHTTPServer(
 	middlewares = append(middlewares, validate.ProtoValidate())
 
 	opts := []kratoshttp.ServerOption{
-		kratoshttp.Filter(server.HTTPTraceMiddleware(), server.HTTPAccessLogMiddleware(logger)),
+		kratoshttp.Filter(server.HTTPCORSFilter(), server.HTTPTraceMiddleware(), server.HTTPAccessLogMiddleware(logger)),
 		kratoshttp.Middleware(middlewares...),
 		kratoshttp.RequestDecoder(server.ProtoJSONRequestDecoder),
 		kratoshttp.ResponseEncoder(server.HttpRespEncoder),

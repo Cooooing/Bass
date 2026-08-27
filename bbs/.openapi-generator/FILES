@@ -6,6 +6,7 @@ api/openapi.yaml
 api_account_service.go
 api_article_service.go
 api_auth_service.go
+api_checkin_service.go
 api_comment_service.go
 api_domain_service.go
 api_location_service.go
@@ -34,6 +35,8 @@ docs/BindArticleTagsReq.md
 docs/BlockRelationReq.md
 docs/CancelAccountReq.md
 docs/CancelPublishArticleReq.md
+docs/CheckInResp.md
+docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
 docs/CommentService.md
@@ -53,6 +56,8 @@ docs/DomainService.md
 docs/FollowRelationReq.md
 docs/GetArticleReq.md
 docs/GetArticleResp.md
+docs/GetCheckinOverviewReq.md
+docs/GetCheckinOverviewResp.md
 docs/GetCurrentAccountResp.md
 docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
@@ -134,6 +139,7 @@ docs/RespLocation.md
 docs/RespNotification.md
 docs/RespPreference.md
 docs/RespPrivacySetting.md
+docs/RespRecord.md
 docs/RespRelation.md
 docs/RespRelationStatus.md
 docs/RespTag.md
@@ -185,6 +191,7 @@ model_bind_article_tags_req.go
 model_block_relation_req.go
 model_cancel_account_req.go
 model_cancel_publish_article_req.go
+model_check_in_resp.go
 model_collect_article_req.go
 model_collect_article_resp.go
 model_confirm_enable_totp_req.go
@@ -202,6 +209,8 @@ model_discard_draft_article_req.go
 model_follow_relation_req.go
 model_get_article_req.go
 model_get_article_resp.go
+model_get_checkin_overview_req.go
+model_get_checkin_overview_resp.go
 model_get_current_account_resp.go
 model_get_current_location_resp.go
 model_get_current_preferences_resp.go
@@ -276,6 +285,7 @@ model_resp_location.go
 model_resp_notification.go
 model_resp_preference.go
 model_resp_privacy_setting.go
+model_resp_record.go
 model_resp_relation.go
 model_resp_relation_status.go
 model_resp_tag.go
@@ -314,6 +324,7 @@ response.go
 test/api_account_service_test.go
 test/api_article_service_test.go
 test/api_auth_service_test.go
+test/api_checkin_service_test.go
 test/api_comment_service_test.go
 test/api_domain_service_test.go
 test/api_location_service_test.go

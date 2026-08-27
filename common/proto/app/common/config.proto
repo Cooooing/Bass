@@ -99,6 +99,7 @@ message Nats {
   bool enable_jet_stream = 11; // 是否启用 JetStream 持久化
   string stream_name = 12; // JetStream 流名称，启用后发布和订阅均走 JetStream
   string jet_stream_domain = 13; // JetStream 域名，用于多域隔离
+  WorkerPool worker_pool = 14; // 消息消费协程池
 }
 
 message DTM {
@@ -111,8 +112,15 @@ message DTM {
 message TimeWheel {
   google.protobuf.Duration interval = 1; // 时间轮 tick 间隔
   uint32 wheel_slots = 2; // 时间轮槽位数
-  uint32 worker_pool_size = 3; // 任务执行 worker 池大小
-  uint32 max_worker_pool_size = 4; // 最大任务执行 worker 池大小
+  WorkerPool worker_pool = 3; // 到期任务执行协程池
+}
+
+message WorkerPool {
+  uint32 core_size = 1; // 常驻 worker 数量
+  uint32 max_size = 2; // 最大 worker 数量
+  uint32 queue_size = 3; // 等待队列长度
+  google.protobuf.Duration idle_timeout = 4; // 临时 worker 空闲回收时间
+  bool nonblocking = 5; // 队列满时是否立即返回错误
 }
 
 message Alert {

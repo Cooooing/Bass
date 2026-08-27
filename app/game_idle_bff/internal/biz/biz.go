@@ -1,10 +1,12 @@
 package biz
 
 import (
-	"common/pkg/util"
+	commonclient "common/pkg/client"
+	"common/proto/gen/common"
 	"game_idle_bff/internal/biz/usecase"
 	"game_idle_bff/internal/biz/usecase/command"
 	"game_idle_bff/internal/biz/usecase/event"
+	"game_idle_bff/internal/config"
 
 	"github.com/google/wire"
 )
@@ -12,7 +14,8 @@ import (
 var BizProviderSet = wire.NewSet(
 	ProvideWebSocketEventHandlers,
 	ProvideWebSocketCommandHandlers,
-	util.NewEventPool,
+	commonclient.NewWorkerPool,
+	ProvideWebSocketWorkerPool,
 	usecase.NewAuthUsecase,
 	usecase.NewCharacterUsecase,
 	usecase.NewBackpackUsecase,
@@ -31,6 +34,10 @@ var BizProviderSet = wire.NewSet(
 	event.NewChatMessageHandler,
 	event.NewCloseSessionHandler,
 )
+
+func ProvideWebSocketWorkerPool(c *config.Bootstrap) *common.WorkerPool {
+	return c.GetWebsocket().GetWorkerPool()
+}
 
 func ProvideWebSocketEventHandlers(
 	actionCompletedHandler *event.ActionCompletedHandler,

@@ -31,9 +31,21 @@ nats:
   enable_jet_stream: false
   stream_name: ""
   jet_stream_domain: ""
+  worker_pool:
+    core_size: 16
+    max_size: 256
+    queue_size: 1024
+    idle_timeout: 60s
+    nonblocking: true
 websocket:
   ping_interval: 30s
   write_timeout: 5s
+  worker_pool:
+    core_size: 16
+    max_size: 256
+    queue_size: 1024
+    idle_timeout: 60s
+    nonblocking: true
 trace:
   enable_otel: false
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}

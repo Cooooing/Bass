@@ -54,6 +54,7 @@ type NatsClient struct {
 	service string
 	tracer  oteltrace.Tracer
 	subs    []*nats.Subscription
+	pool    *WorkerPool
 }
 
 func NewNatsClient(
@@ -92,6 +93,11 @@ func NewNatsClient(
 		conf.FlusherTimeout = durationpb.New(5 * time.Second)
 	}
 
+	pool, poolCleanup, err := NewWorkerPool(logger, conf.GetWorkerPool())
+	if err != nil {
+		return nil, nil, err
+	}
+
 	opts := []nats.Option{
 		nats.Name(conf.Name),
 		nats.MaxReconnects(int(conf.MaxReconnects)),
@@ -122,6 +128,7 @@ func NewNatsClient(
 	address := fmt.Sprintf("nats://%s:%d", conf.Host, conf.Port)
 	nc, err := nats.Connect(address, opts...)
 	if err != nil {
+		poolCleanup()
 		return nil, nil, fmt.Errorf("nats connect [%s]: %w", address, err)
 	}
 
@@ -138,11 +145,13 @@ func NewNatsClient(
 		logger:  logger,
 		service: service,
 		tracer:  otel.Tracer(service + ".message"),
+		pool:    pool,
 	}
 
 	if conf.EnableJetStream {
 		js, err := nc.JetStream()
 		if err != nil {
+			poolCleanup()
 			nc.Close()
 			return nil, nil, fmt.Errorf("nats jetstream: %w", err)
 		}
@@ -188,6 +197,9 @@ func (c *NatsClient) Close() error {
 		time.Sleep(500 * time.Millisecond)
 		c.conn.Close()
 	}
+	if c.pool != nil {
+		c.pool.Release()
+	}
 
 	c.logger.Info("nats client closed", constant.LogFieldKind, constant.LogKindMessage)
 	return nil
@@ -211,7 +223,7 @@ func (c *NatsClient) Publish(ctx context.Context, subject string, msg *Message) 
 	))
 	defer func() {
 		status := "ok"
-		level := slog.LevelInfo
+		level := slog.LevelDebug
 		if err != nil {
 			status = "error"
 			level = slog.LevelWarn
@@ -295,7 +307,7 @@ func (c *NatsClient) Subscribe(ctx context.Context, subject string, handler Mess
 
 	if c.js != nil && c.conf.StreamName != "" {
 		sub, err := c.js.Subscribe(subject, func(m *nats.Msg) {
-			c.handleMsg(ctx, m, handler, true, "")
+			c.submitMsg(ctx, m, handler, true, "")
 		}, nats.DeliverAll(), nats.AckExplicit())
 		if err != nil {
 			return nil, fmt.Errorf("jetstream subscribe %s: %w", subject, err)
@@ -307,7 +319,7 @@ func (c *NatsClient) Subscribe(ctx context.Context, subject string, handler Mess
 	}
 
 	sub, err := c.conn.Subscribe(subject, func(m *nats.Msg) {
-		c.handleMsg(ctx, m, handler, false, "")
+		c.submitMsg(ctx, m, handler, false, "")
 	})
 	if err != nil {
 		return nil, fmt.Errorf("nats subscribe %s: %w", subject, err)
@@ -330,7 +342,7 @@ func (c *NatsClient) QueueSubscribe(ctx context.Context, subject, queue string, 
 
 	if c.js != nil && c.conf.StreamName != "" {
 		sub, err := c.js.QueueSubscribe(subject, queue, func(m *nats.Msg) {
-			c.handleMsg(ctx, m, handler, true, queue)
+			c.submitMsg(ctx, m, handler, true, queue)
 		}, nats.DeliverAll(), nats.AckExplicit())
 		if err != nil {
 			return nil, fmt.Errorf("jetstream queue subscribe %s[%s]: %w", subject, queue, err)
@@ -342,7 +354,7 @@ func (c *NatsClient) QueueSubscribe(ctx context.Context, subject, queue string, 
 	}
 
 	sub, err := c.conn.QueueSubscribe(subject, queue, func(m *nats.Msg) {
-		c.handleMsg(ctx, m, handler, false, queue)
+		c.submitMsg(ctx, m, handler, false, queue)
 	})
 	if err != nil {
 		return nil, fmt.Errorf("nats queue subscribe %s[%s]: %w", subject, queue, err)
@@ -353,6 +365,29 @@ func (c *NatsClient) QueueSubscribe(ctx context.Context, subject, queue string, 
 	return &subscription{
 		sub: sub,
 	}, nil
+}
+
+func (c *NatsClient) submitMsg(ctx context.Context, m *nats.Msg, handler MessageHandler, isJetStream bool, queue string) {
+	if err := c.pool.Submit(func() {
+		c.handleMsg(ctx, m, handler, isJetStream, queue)
+	}); err != nil {
+		if isJetStream && m != nil {
+			_ = m.Nak()
+		}
+		subject := "unknown"
+		if m != nil && m.Subject != "" {
+			subject = m.Subject
+		}
+		c.logger.Warn(
+			"nats consume worker pool submit failed",
+			constant.LogFieldKind,
+			constant.LogKindMessage,
+			constant.LogFieldSubject,
+			subject,
+			constant.LogFieldErr,
+			err,
+		)
+	}
 }
 
 func (c *NatsClient) handleMsg(ctx context.Context, m *nats.Msg, handler MessageHandler, isJetStream bool, queue string) {
@@ -395,7 +430,7 @@ func (c *NatsClient) handleMsg(ctx context.Context, m *nats.Msg, handler Message
 	var err error
 	defer func() {
 		status := "ok"
-		level := slog.LevelInfo
+		level := slog.LevelDebug
 		if err != nil {
 			status = "error"
 			level = slog.LevelWarn

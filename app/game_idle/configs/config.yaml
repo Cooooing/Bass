@@ -50,6 +50,12 @@ nats:
   enable_jet_stream: false
   stream_name: ""
   jet_stream_domain: ""
+  worker_pool:
+    core_size: 16
+    max_size: 256
+    queue_size: 1024
+    idle_timeout: 60s
+    nonblocking: false
 trace:
   enable_otel: false
   endpoint: ${OTEL_ENDPOINT:127.0.0.1:4317}
@@ -58,15 +64,15 @@ trace:
 observability:
   enable_metrics: true
 timewheel:
-  interval: 1s
-  wheel_slots: 3600
-  worker_pool_size: 256
-  max_worker_pool_size: 2048
+  interval: 0.05s
+  wheel_slots: 36000
+  worker_pool:
+    core_size: 16
+    max_size: 2048
+    queue_size: 8192
+    idle_timeout: 60s
+    nonblocking: false
 game_idle:
-  shard:
-    total: 16
-    lease_ttl: 15s
-    renew_interval: 5s
   backpack:
     persist_threshold: 100
   character:

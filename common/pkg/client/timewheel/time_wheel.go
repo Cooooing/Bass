@@ -1,9 +1,12 @@
 package timewheel
 
 import (
+	commonclient "common/pkg/client"
+	"common/pkg/constant"
 	"common/proto/gen/common"
 	"context"
 	"fmt"
+	"log/slog"
 	"sync"
 	"time"
 )
@@ -18,22 +21,27 @@ type TimeWheel struct {
 	currentTime time.Time
 	stop        context.CancelFunc
 	running     bool
+	pool        *commonclient.WorkerPool
+	logger      *slog.Logger
 }
 
 // NewTimeWheel 创建时间轮。
-func NewTimeWheel(config *common.TimeWheel) (*TimeWheel, error) {
+func NewTimeWheel(config *common.TimeWheel, logger *slog.Logger) (*TimeWheel, func(), error) {
+	if logger == nil {
+		logger = slog.Default()
+	}
 	if config == nil {
-		return nil, fmt.Errorf("time wheel config is required")
+		return nil, nil, fmt.Errorf("time wheel config is required")
 	}
 	if config.GetInterval() == nil {
-		return nil, fmt.Errorf("time wheel interval is required")
+		return nil, nil, fmt.Errorf("time wheel interval is required")
 	}
 	interval := config.GetInterval().AsDuration()
 	if interval <= 0 {
-		return nil, fmt.Errorf("time wheel interval must be positive")
+		return nil, nil, fmt.Errorf("time wheel interval must be positive")
 	}
 	if config.GetWheelSlots() == 0 {
-		return nil, fmt.Errorf("time wheel slot count must be positive")
+		return nil, nil, fmt.Errorf("time wheel slot count must be positive")
 	}
 
 	slots := make([]map[string]*Task, config.GetWheelSlots())
@@ -41,12 +49,19 @@ func NewTimeWheel(config *common.TimeWheel) (*TimeWheel, error) {
 		slots[index] = make(map[string]*Task)
 	}
 
+	pool, cleanup, err := commonclient.NewWorkerPool(logger, config.GetWorkerPool())
+	if err != nil {
+		return nil, nil, err
+	}
+
 	return &TimeWheel{
 		tick:        interval,
 		slots:       slots,
 		tasks:       make(map[string]*Task),
 		currentTime: time.Now(),
-	}, nil
+		pool:        pool,
+		logger:      logger,
+	}, cleanup, nil
 }
 
 // Start 启动时间轮自动推进。
@@ -76,9 +91,19 @@ func (w *TimeWheel) Start(ctx context.Context) error {
 			case now := <-ticker.C:
 				for _, task := range w.Advance(now) {
 					if task.Job != nil {
-						go func(item *Task) {
+						item := task
+						err := w.pool.Submit(func() {
 							_ = item.Job(runCtx, item)
-						}(task)
+						})
+						if err != nil {
+							w.logger.Warn(
+								"time wheel worker pool submit failed",
+								constant.LogFieldKind,
+								constant.LogKindSystem,
+								constant.LogFieldErr,
+								err,
+							)
+						}
 					}
 				}
 			}

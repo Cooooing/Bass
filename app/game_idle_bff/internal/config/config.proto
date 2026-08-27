@@ -20,4 +20,5 @@ message Bootstrap {
 message WebSocket {
   google.protobuf.Duration ping_interval = 1; // WS 协议层 ping 间隔
   google.protobuf.Duration write_timeout = 2; // WS 写超时
+  common.api.app.common.WorkerPool worker_pool = 3; // WS 命令和事件处理协程池
 }

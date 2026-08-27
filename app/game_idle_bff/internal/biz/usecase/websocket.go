@@ -2,8 +2,8 @@ package usecase
 
 import (
 	"common/pkg/apperror"
+	commonclient "common/pkg/client"
 	"common/pkg/constant"
-	commonutil "common/pkg/util"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"game_idle_bff/internal/biz/model"
@@ -18,7 +18,7 @@ import (
 type WebSocketUsecase struct {
 	logger           *slog.Logger
 	eventRepo        repo.WebSocketEventRepo
-	eventPool        *commonutil.EventPool
+	workerPool       *commonclient.WorkerPool
 	characterUsecase *CharacterUsecase
 	eventHandlers    WebSocketEventHandlers
 	commandHandlers  WebSocketCommandHandlers
@@ -36,7 +36,7 @@ func NewWebSocketUsecase(
 	logger *slog.Logger,
 	conf *config.Bootstrap,
 	eventRepo repo.WebSocketEventRepo,
-	eventPool *commonutil.EventPool,
+	workerPool *commonclient.WorkerPool,
 	characterUsecase *CharacterUsecase,
 	eventHandlers WebSocketEventHandlers,
 	commandHandlers WebSocketCommandHandlers,
@@ -52,7 +52,7 @@ func NewWebSocketUsecase(
 	return &WebSocketUsecase{
 		logger:           logger,
 		eventRepo:        eventRepo,
-		eventPool:        eventPool,
+		workerPool:       workerPool,
 		characterUsecase: characterUsecase,
 		eventHandlers:    eventHandlers,
 		commandHandlers:  commandHandlers,
@@ -119,7 +119,7 @@ func (u *WebSocketUsecase) Start(ctx context.Context) error {
 	}
 	runCtx, cancel := context.WithCancel(ctx)
 	subscription, err := u.eventRepo.Subscribe(runCtx, func(ctx context.Context, event *model.WebSocketEvent) error {
-		err := u.eventPool.Submit(func() {
+		err := u.workerPool.Submit(func() {
 			result, err := u.HandleEvent(ctx, event)
 			if err != nil {
 				u.logger.Error("game idle bff websocket event handle failed", constant.LogFieldErr, err)
@@ -262,7 +262,7 @@ func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSoc
 		})
 		return
 	}
-	err := u.eventPool.Submit(func() {
+	err := u.workerPool.Submit(func() {
 		if err := handler.Handle(ctx, &WebSocketCommandReq{
 			CharacterID: connection.CharacterID,
 			SessionID:   connection.SessionID,

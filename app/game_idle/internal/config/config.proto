@@ -21,16 +21,9 @@ message Bootstrap {
 }
 
 message GameIdle {
-  Shard shard = 2;
   Backpack backpack = 3;
   Character character = 4;
   WebSocket websocket = 5;
-}
-
-message Shard {
-  uint32 total = 1;
-  google.protobuf.Duration lease_ttl = 2;
-  google.protobuf.Duration renew_interval = 3;
 }
 
 message Backpack {

@@ -1,0 +1,284 @@
+openapi: 3.0.3
+info:
+  title: ""
+  version: 0.0.1
+servers:
+- url: /
+tags:
+- description: AuthService 提供摸鱼放置前台认证入口。
+  name: AuthService
+- description: CharacterService 提供摸鱼放置角色入口。
+  name: CharacterService
+- description: WebSocketService 提供摸鱼放置 WS 辅助入口。
+  name: WebSocketService
+paths:
+  /v1/game-idle/auth/login:
+    post:
+      description: 登录账号。
+      operationId: AuthService_Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginAccount_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginAccount_Resp"
+          description: OK
+      tags:
+      - AuthService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/game-idle/auth/register:
+    post:
+      description: 注册账号。
+      operationId: AuthService_Register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterAccount_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterAccount_Resp"
+          description: OK
+      tags:
+      - AuthService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/game-idle/character/create:
+    post:
+      description: 创建角色。
+      operationId: CharacterService_Create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCharacter_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCharacter_Resp"
+          description: OK
+      tags:
+      - CharacterService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/game-idle/character/list:
+    post:
+      description: 查询当前账号角色列表。
+      operationId: CharacterService_List
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListCharacter_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListCharacter_Resp"
+          description: OK
+      tags:
+      - CharacterService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/game-idle/ws/create-session:
+    post:
+      description: 创建角色 WS session。
+      operationId: WebSocketService_CreateSession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateWebSocketSession_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateWebSocketSession_Resp"
+          description: OK
+      tags:
+      - WebSocketService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+components:
+  schemas:
+    Character:
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        name: name
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: id
+        slot: 0
+        action_queue_capacity: 6
+        max_offline_seconds: max_offline_seconds
+        status: CHARACTER_STATUS_UNSPECIFIED
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        status:
+          enum:
+          - CHARACTER_STATUS_UNSPECIFIED
+          - CHARACTER_STATUS_ACTIVE
+          - CHARACTER_STATUS_DISABLED
+          format: enum
+          type: string
+        slot:
+          format: int32
+          type: integer
+        action_queue_capacity:
+          format: int32
+          type: integer
+        max_offline_seconds:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      type: object
+    CreateCharacter_Req:
+      properties:
+        name:
+          type: string
+      type: object
+    CreateCharacter_Resp:
+      example:
+        row:
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          slot: 0
+          action_queue_capacity: 6
+          max_offline_seconds: max_offline_seconds
+          status: CHARACTER_STATUS_UNSPECIFIED
+      properties:
+        row:
+          $ref: "#/components/schemas/Character"
+      type: object
+    CreateWebSocketSession_Req:
+      properties:
+        character_id:
+          type: string
+      type: object
+    CreateWebSocketSession_Resp:
+      example:
+        path: path
+        expires_in_seconds: expires_in_seconds
+        session_id: session_id
+      properties:
+        session_id:
+          type: string
+        expires_in_seconds:
+          type: string
+        path:
+          type: string
+      type: object
+    ListCharacter_Req:
+      properties: {}
+      type: object
+    ListCharacter_Resp:
+      example:
+        rows:
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          slot: 0
+          action_queue_capacity: 6
+          max_offline_seconds: max_offline_seconds
+          status: CHARACTER_STATUS_UNSPECIFIED
+        - updated_at: 2000-01-23T04:56:07.000+00:00
+          name: name
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          slot: 0
+          action_queue_capacity: 6
+          max_offline_seconds: max_offline_seconds
+          status: CHARACTER_STATUS_UNSPECIFIED
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/Character"
+          type: array
+      type: object
+    LoginAccount_Req:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+      - email
+      - password
+      type: object
+    LoginAccount_Resp:
+      example:
+        access_token: access_token
+        access_token_expires_at: 2000-01-23T04:56:07.000+00:00
+        refresh_token: refresh_token
+        refresh_token_expires_at: 2000-01-23T04:56:07.000+00:00
+        user_id: user_id
+        name: name
+        nickname: nickname
+        session_expires_at: 2000-01-23T04:56:07.000+00:00
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        access_token_expires_at:
+          format: date-time
+          type: string
+        refresh_token_expires_at:
+          format: date-time
+          type: string
+        session_expires_at:
+          format: date-time
+          type: string
+        user_id:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+      type: object
+    RegisterAccount_Req:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+      - email
+      - password
+      type: object
+    RegisterAccount_Resp:
+      properties: {}
+      type: object
+

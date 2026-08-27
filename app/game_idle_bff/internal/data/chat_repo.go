@@ -24,14 +24,14 @@ func NewChatRepo(gameIdleClient *rpc.GameIdleClient) repo.ChatRepo {
 }
 
 func (r *ChatRepo) Send(ctx context.Context, req *repo.SendChatMessageReq) (*model.WebSocketChatMessage, error) {
-	channelType := gameidleenum.GameIdleChatChannelType_GAME_IDLE_CHAT_CHANNEL_TYPE_UNSPECIFIED
+	channelType := gameidleenum.ChatChannelType_CHAT_CHANNEL_TYPE_UNSPECIFIED
 	switch req.ChannelType {
 	case "world":
-		channelType = gameidleenum.GameIdleChatChannelType_GAME_IDLE_CHAT_CHANNEL_TYPE_WORLD
+		channelType = gameidleenum.ChatChannelType_CHAT_CHANNEL_TYPE_WORLD
 	default:
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	reply, err := r.gameIdleClient.Chat.Send(ctx, &gameidlev1.SendGameIdleChatMessage_Request{
+	reply, err := r.gameIdleClient.Chat.Send(ctx, &gameidlev1.SendChatMessage_Request{
 		CharacterId:         req.CharacterID,
 		ChannelType:         channelType,
 		ChannelId:           req.ChannelID,
@@ -53,14 +53,14 @@ func (r *ChatRepo) Send(ctx context.Context, req *repo.SendChatMessageReq) (*mod
 }
 
 func (r *ChatRepo) List(ctx context.Context, req *repo.ListChatMessagesReq) ([]*model.WebSocketChatMessage, error) {
-	channelType := gameidleenum.GameIdleChatChannelType_GAME_IDLE_CHAT_CHANNEL_TYPE_UNSPECIFIED
+	channelType := gameidleenum.ChatChannelType_CHAT_CHANNEL_TYPE_UNSPECIFIED
 	switch req.ChannelType {
 	case "world":
-		channelType = gameidleenum.GameIdleChatChannelType_GAME_IDLE_CHAT_CHANNEL_TYPE_WORLD
+		channelType = gameidleenum.ChatChannelType_CHAT_CHANNEL_TYPE_WORLD
 	default:
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	reply, err := r.gameIdleClient.Chat.List(ctx, &gameidlev1.ListGameIdleChatMessages_Request{
+	reply, err := r.gameIdleClient.Chat.List(ctx, &gameidlev1.ListChatMessages_Request{
 		ChannelType: channelType,
 		ChannelId:   req.ChannelID,
 		BeforeId:    req.BeforeID,

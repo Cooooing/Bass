@@ -5,10 +5,10 @@ package common.api.app.game_idle_bff.v1;
 import "google/api/annotations.proto";
 option go_package = "common/proto/gen/game_idle_bff/v1;v1";
 
-// GameIdleBffWebSocketService 提供摸鱼放置 WS 辅助入口。
-service GameIdleBffWebSocketService {
+// WebSocketService 提供摸鱼放置 WS 辅助入口。
+service WebSocketService {
   // 创建角色 WS session。
-  rpc CreateSession(CreateGameIdleBffWebSocketSession.Req) returns (CreateGameIdleBffWebSocketSession.Resp) {
+  rpc CreateSession(CreateWebSocketSession.Req) returns (CreateWebSocketSession.Resp) {
     option (google.api.http) = {
       post: "/v1/game-idle/ws/create-session"
       body: "*"
@@ -16,7 +16,7 @@ service GameIdleBffWebSocketService {
   }
 }
 
-message CreateGameIdleBffWebSocketSession {
+message CreateWebSocketSession {
   message Req {
     int64 character_id = 1; // 角色 ID
   }

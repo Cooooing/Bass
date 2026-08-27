@@ -15,7 +15,7 @@ import (
 )
 
 type WebSocketSessionService struct {
-	v1.UnimplementedGameIdleBffWebSocketServiceServer
+	v1.UnimplementedWebSocketServiceServer
 	webSocketUsecase *usecase.WebSocketUsecase
 }
 
@@ -31,10 +31,10 @@ func (s *WebSocketSessionService) RegisterGrpc(*grpc.Server) {
 }
 
 func (s *WebSocketSessionService) RegisterHttp(hs *http.Server) {
-	v1.RegisterGameIdleBffWebSocketServiceHTTPServer(hs, s)
+	v1.RegisterWebSocketServiceHTTPServer(hs, s)
 }
 
-func (s *WebSocketSessionService) CreateSession(ctx context.Context, req *v1.CreateGameIdleBffWebSocketSession_Req) (*v1.CreateGameIdleBffWebSocketSession_Resp, error) {
+func (s *WebSocketSessionService) CreateSession(ctx context.Context, req *v1.CreateWebSocketSession_Req) (*v1.CreateWebSocketSession_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -46,7 +46,7 @@ func (s *WebSocketSessionService) CreateSession(ctx context.Context, req *v1.Cre
 	if err != nil {
 		return nil, err
 	}
-	return &v1.CreateGameIdleBffWebSocketSession_Resp{
+	return &v1.CreateWebSocketSession_Resp{
 		SessionId:        session.SessionID,
 		ExpiresInSeconds: int64(session.RemainingDuration.Seconds()),
 		Path:             webSocketPath,

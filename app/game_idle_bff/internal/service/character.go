@@ -16,7 +16,7 @@ import (
 )
 
 type CharacterService struct {
-	v1.UnimplementedGameIdleBffCharacterServiceServer
+	v1.UnimplementedCharacterServiceServer
 	characterUsecase *usecase.CharacterUsecase
 }
 
@@ -32,10 +32,10 @@ func (s *CharacterService) RegisterGrpc(*grpc.Server) {
 }
 
 func (s *CharacterService) RegisterHttp(hs *http.Server) {
-	v1.RegisterGameIdleBffCharacterServiceHTTPServer(hs, s)
+	v1.RegisterCharacterServiceHTTPServer(hs, s)
 }
 
-func (s *CharacterService) Create(ctx context.Context, req *v1.CreateGameIdleBffCharacter_Req) (*v1.CreateGameIdleBffCharacter_Resp, error) {
+func (s *CharacterService) Create(ctx context.Context, req *v1.CreateCharacter_Req) (*v1.CreateCharacter_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -61,10 +61,10 @@ func (s *CharacterService) Create(ctx context.Context, req *v1.CreateGameIdleBff
 	if row.UpdatedAt != nil {
 		character.UpdatedAt = timestamppb.New(*row.UpdatedAt)
 	}
-	return &v1.CreateGameIdleBffCharacter_Resp{Row: character}, nil
+	return &v1.CreateCharacter_Resp{Row: character}, nil
 }
 
-func (s *CharacterService) List(ctx context.Context, req *v1.ListGameIdleBffCharacter_Req) (*v1.ListGameIdleBffCharacter_Resp, error) {
+func (s *CharacterService) List(ctx context.Context, req *v1.ListCharacter_Req) (*v1.ListCharacter_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -93,7 +93,7 @@ func (s *CharacterService) List(ctx context.Context, req *v1.ListGameIdleBffChar
 		}
 		characters = append(characters, character)
 	}
-	return &v1.ListGameIdleBffCharacter_Resp{
+	return &v1.ListCharacter_Resp{
 		Rows: characters,
 	}, nil
 }

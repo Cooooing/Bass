@@ -12,10 +12,10 @@ const (
 	ChatChannelTypeWorld ChatChannelType = "world" // 世界频道
 )
 
-var ChatChannelTypeMap = commonenum.NewMapping[ChatChannelType, v1.GameIdleChatChannelType](
-	map[ChatChannelType]commonenum.Entry[ChatChannelType, v1.GameIdleChatChannelType]{
+var ChatChannelTypeMap = commonenum.NewMapping[ChatChannelType, v1.ChatChannelType](
+	map[ChatChannelType]commonenum.Entry[ChatChannelType, v1.ChatChannelType]{
 		ChatChannelTypeWorld: {
-			Proto: v1.GameIdleChatChannelType_GAME_IDLE_CHAT_CHANNEL_TYPE_WORLD,
+			Proto: v1.ChatChannelType_CHAT_CHANNEL_TYPE_WORLD,
 		},
 	},
 )

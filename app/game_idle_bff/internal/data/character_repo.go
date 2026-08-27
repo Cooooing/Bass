@@ -24,7 +24,7 @@ func NewCharacterRepo(
 }
 
 func (r *CharacterRepo) Create(ctx context.Context, req *repo.CreateCharacterReq) (*model.Character, error) {
-	reply, err := r.gameIdleClient.Character.Create(ctx, &gameidlev1.CreateGameIdleCharacter_Request{
+	reply, err := r.gameIdleClient.Character.Create(ctx, &gameidlev1.CreateCharacter_Request{
 		UserId: req.UserID,
 		Name:   req.Name,
 	})
@@ -50,7 +50,7 @@ func (r *CharacterRepo) Create(ctx context.Context, req *repo.CreateCharacterReq
 }
 
 func (r *CharacterRepo) List(ctx context.Context, req *repo.ListCharacterReq) ([]*model.Character, error) {
-	reply, err := r.gameIdleClient.Character.Get(ctx, &gameidlev1.GetGameIdleCharacter_Request{
+	reply, err := r.gameIdleClient.Character.Get(ctx, &gameidlev1.GetCharacter_Request{
 		UserId:      req.UserID,
 		CharacterId: req.CharacterID,
 	})
@@ -79,7 +79,7 @@ func (r *CharacterRepo) List(ctx context.Context, req *repo.ListCharacterReq) ([
 }
 
 func (r *CharacterRepo) Online(ctx context.Context, req *repo.OnlineCharacterReq) (*model.WebSocketSession, error) {
-	reply, err := r.gameIdleClient.Character.Online(ctx, &gameidlev1.OnlineGameIdleCharacter_Request{
+	reply, err := r.gameIdleClient.Character.Online(ctx, &gameidlev1.OnlineCharacter_Request{
 		UserId:      req.UserID,
 		CharacterId: req.CharacterID,
 	})
@@ -94,7 +94,7 @@ func (r *CharacterRepo) Online(ctx context.Context, req *repo.OnlineCharacterReq
 }
 
 func (r *CharacterRepo) Ping(ctx context.Context, req *repo.PingCharacterReq) (*model.WebSocketSession, error) {
-	reply, err := r.gameIdleClient.Character.Ping(ctx, &gameidlev1.PingGameIdleCharacter_Request{
+	reply, err := r.gameIdleClient.Character.Ping(ctx, &gameidlev1.PingCharacter_Request{
 		CharacterId: req.CharacterID,
 		SessionId:   req.SessionID,
 	})
@@ -109,7 +109,7 @@ func (r *CharacterRepo) Ping(ctx context.Context, req *repo.PingCharacterReq) (*
 }
 
 func (r *CharacterRepo) Offline(ctx context.Context, req *repo.OfflineCharacterReq) error {
-	_, err := r.gameIdleClient.Character.Offline(ctx, &gameidlev1.OfflineGameIdleCharacter_Request{
+	_, err := r.gameIdleClient.Character.Offline(ctx, &gameidlev1.OfflineCharacter_Request{
 		CharacterId: req.CharacterID,
 		SessionId:   req.SessionID,
 		Timeout:     req.Timeout,

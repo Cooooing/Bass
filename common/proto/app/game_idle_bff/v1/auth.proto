@@ -8,10 +8,10 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/game_idle_bff/v1;v1";
 
-// GameIdleBffAuthService 提供摸鱼放置前台认证入口。
-service GameIdleBffAuthService {
+// AuthService 提供摸鱼放置前台认证入口。
+service AuthService {
   // 注册账号。
-  rpc Register(RegisterGameIdleBffAccount.Req) returns (RegisterGameIdleBffAccount.Resp) {
+  rpc Register(RegisterAccount.Req) returns (RegisterAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/game-idle/auth/register"
       body: "*"
@@ -19,7 +19,7 @@ service GameIdleBffAuthService {
   }
 
   // 登录账号。
-  rpc Login(LoginGameIdleBffAccount.Req) returns (LoginGameIdleBffAccount.Resp) {
+  rpc Login(LoginAccount.Req) returns (LoginAccount.Resp) {
     option (google.api.http) = {
       post: "/v1/game-idle/auth/login"
       body: "*"
@@ -27,7 +27,7 @@ service GameIdleBffAuthService {
   }
 }
 
-message RegisterGameIdleBffAccount {
+message RegisterAccount {
   message Req {
     string email = 1; // 邮箱
     string password = 2; // 账号密码
@@ -40,7 +40,7 @@ message RegisterGameIdleBffAccount {
   message Resp {}
 }
 
-message LoginGameIdleBffAccount {
+message LoginAccount {
   message Req {
     string email = 1; // 邮箱
     string password = 2; // 账号密码

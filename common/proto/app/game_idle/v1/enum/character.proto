@@ -4,9 +4,9 @@ package common.api.app.game_idle.v1.enum;
 
 option go_package = "common/proto/gen/game_idle/v1/enum;enum";
 
-// GameIdleCharacterStatus 表示挂机游戏角色状态。
-enum GameIdleCharacterStatus {
-  GAME_IDLE_CHARACTER_STATUS_UNSPECIFIED = 0; // 未指定
-  GAME_IDLE_CHARACTER_STATUS_ACTIVE = 1; // 正常
-  GAME_IDLE_CHARACTER_STATUS_DISABLED = 2; // 禁用
+// CharacterStatus 表示挂机游戏角色状态。
+enum CharacterStatus {
+  CHARACTER_STATUS_UNSPECIFIED = 0; // 未指定
+  CHARACTER_STATUS_ACTIVE = 1; // 正常
+  CHARACTER_STATUS_DISABLED = 2; // 禁用
 }

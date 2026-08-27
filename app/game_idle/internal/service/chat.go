@@ -14,7 +14,7 @@ import (
 )
 
 type ChatService struct {
-	v1.UnimplementedGameIdleChatServiceServer
+	v1.UnimplementedChatServiceServer
 	chatUsecase *usecase.ChatUsecase
 }
 
@@ -23,13 +23,13 @@ func NewChatService(chatUsecase *usecase.ChatUsecase) *ChatService {
 }
 
 func (s *ChatService) RegisterGrpc(server *grpc.Server) {
-	v1.RegisterGameIdleChatServiceServer(server, s)
+	v1.RegisterChatServiceServer(server, s)
 }
 
 func (s *ChatService) RegisterHttp(*http.Server) {
 }
 
-func (s *ChatService) Send(ctx context.Context, req *v1.SendGameIdleChatMessage_Request) (*v1.SendGameIdleChatMessage_Resp, error) {
+func (s *ChatService) Send(ctx context.Context, req *v1.SendChatMessage_Request) (*v1.SendChatMessage_Resp, error) {
 	if req.GetCharacterId() <= 0 || req.GetContent() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -66,10 +66,10 @@ func (s *ChatService) Send(ctx context.Context, req *v1.SendGameIdleChatMessage_
 	if row.CreatedAt != nil {
 		message.CreatedAt = timestamppb.New(*row.CreatedAt)
 	}
-	return &v1.SendGameIdleChatMessage_Resp{Row: message}, nil
+	return &v1.SendChatMessage_Resp{Row: message}, nil
 }
 
-func (s *ChatService) List(ctx context.Context, req *v1.ListGameIdleChatMessages_Request) (*v1.ListGameIdleChatMessages_Resp, error) {
+func (s *ChatService) List(ctx context.Context, req *v1.ListChatMessages_Request) (*v1.ListChatMessages_Resp, error) {
 	channelType, ok := enum.ChatChannelTypeMap.ToEnum(req.GetChannelType())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
@@ -102,5 +102,5 @@ func (s *ChatService) List(ctx context.Context, req *v1.ListGameIdleChatMessages
 		}
 		messages = append(messages, message)
 	}
-	return &v1.ListGameIdleChatMessages_Resp{Rows: messages}, nil
+	return &v1.ListChatMessages_Resp{Rows: messages}, nil
 }

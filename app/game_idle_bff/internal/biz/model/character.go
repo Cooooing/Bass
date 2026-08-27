@@ -8,7 +8,7 @@ import (
 type Character struct {
 	ID                  int64
 	Name                string
-	Status              gameidleenum.GameIdleCharacterStatus
+	Status              gameidleenum.CharacterStatus
 	Slot                int32
 	ActionQueueCapacity int32
 	MaxOfflineSeconds   int64

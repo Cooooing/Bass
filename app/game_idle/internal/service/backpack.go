@@ -13,7 +13,7 @@ import (
 )
 
 type BackpackService struct {
-	v1.UnimplementedGameIdleBackpackServiceServer
+	v1.UnimplementedBackpackServiceServer
 	backpackUsecase *usecase.BackpackUsecase
 }
 
@@ -24,13 +24,13 @@ func NewBackpackService(backpackUsecase *usecase.BackpackUsecase) *BackpackServi
 }
 
 func (s *BackpackService) RegisterGrpc(server *grpc.Server) {
-	v1.RegisterGameIdleBackpackServiceServer(server, s)
+	v1.RegisterBackpackServiceServer(server, s)
 }
 
 func (s *BackpackService) RegisterHttp(*http.Server) {
 }
 
-func (s *BackpackService) Get(ctx context.Context, req *v1.GetGameIdleBackpack_Request) (*v1.GetGameIdleBackpack_Resp, error) {
+func (s *BackpackService) Get(ctx context.Context, req *v1.GetBackpack_Request) (*v1.GetBackpack_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -54,5 +54,5 @@ func (s *BackpackService) Get(ctx context.Context, req *v1.GetGameIdleBackpack_R
 			Quantity: row.Quantity,
 		})
 	}
-	return &v1.GetGameIdleBackpack_Resp{Rows: items}, nil
+	return &v1.GetBackpack_Resp{Rows: items}, nil
 }

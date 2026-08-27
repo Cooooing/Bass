@@ -13,7 +13,7 @@ import (
 )
 
 type ActionQueueService struct {
-	v1.UnimplementedGameIdleActionQueueServiceServer
+	v1.UnimplementedActionQueueServiceServer
 	actionQueueUsecase *usecase.ActionQueueUsecase
 }
 
@@ -24,13 +24,13 @@ func NewActionQueueService(actionQueueUsecase *usecase.ActionQueueUsecase) *Acti
 }
 
 func (s *ActionQueueService) RegisterGrpc(server *grpc.Server) {
-	v1.RegisterGameIdleActionQueueServiceServer(server, s)
+	v1.RegisterActionQueueServiceServer(server, s)
 }
 
 func (s *ActionQueueService) RegisterHttp(*http.Server) {
 }
 
-func (s *ActionQueueService) List(ctx context.Context, req *v1.ListGameIdleActionQueue_Request) (*v1.ListGameIdleActionQueue_Resp, error) {
+func (s *ActionQueueService) List(ctx context.Context, req *v1.ListActionQueue_Request) (*v1.ListActionQueue_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -49,10 +49,10 @@ func (s *ActionQueueService) List(ctx context.Context, req *v1.ListGameIdleActio
 			CreatedAt: timestamppb.New(item.CreatedAt),
 		})
 	}
-	return &v1.ListGameIdleActionQueue_Resp{Queue: queue}, nil
+	return &v1.ListActionQueue_Resp{Queue: queue}, nil
 }
 
-func (s *ActionQueueService) Add(ctx context.Context, req *v1.AddGameIdleAction_Request) (*v1.AddGameIdleAction_Resp, error) {
+func (s *ActionQueueService) Add(ctx context.Context, req *v1.AddAction_Request) (*v1.AddAction_Resp, error) {
 	if req.GetCharacterId() <= 0 || req.GetActionId() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -64,10 +64,10 @@ func (s *ActionQueueService) Add(ctx context.Context, req *v1.AddGameIdleAction_
 	}); err != nil {
 		return nil, err
 	}
-	return &v1.AddGameIdleAction_Resp{}, nil
+	return &v1.AddAction_Resp{}, nil
 }
 
-func (s *ActionQueueService) Move(ctx context.Context, req *v1.MoveGameIdleAction_Request) (*v1.MoveGameIdleAction_Resp, error) {
+func (s *ActionQueueService) Move(ctx context.Context, req *v1.MoveAction_Request) (*v1.MoveAction_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -78,10 +78,10 @@ func (s *ActionQueueService) Move(ctx context.Context, req *v1.MoveGameIdleActio
 	}); err != nil {
 		return nil, err
 	}
-	return &v1.MoveGameIdleAction_Resp{}, nil
+	return &v1.MoveAction_Resp{}, nil
 }
 
-func (s *ActionQueueService) Remove(ctx context.Context, req *v1.RemoveGameIdleAction_Request) (*v1.RemoveGameIdleAction_Resp, error) {
+func (s *ActionQueueService) Remove(ctx context.Context, req *v1.RemoveAction_Request) (*v1.RemoveAction_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -91,15 +91,15 @@ func (s *ActionQueueService) Remove(ctx context.Context, req *v1.RemoveGameIdleA
 	}); err != nil {
 		return nil, err
 	}
-	return &v1.RemoveGameIdleAction_Resp{}, nil
+	return &v1.RemoveAction_Resp{}, nil
 }
 
-func (s *ActionQueueService) Clear(ctx context.Context, req *v1.ClearGameIdleActionQueue_Request) (*v1.ClearGameIdleActionQueue_Resp, error) {
+func (s *ActionQueueService) Clear(ctx context.Context, req *v1.ClearActionQueue_Request) (*v1.ClearActionQueue_Resp, error) {
 	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	if err := s.actionQueueUsecase.Clear(ctx, req.GetCharacterId()); err != nil {
 		return nil, err
 	}
-	return &v1.ClearGameIdleActionQueue_Resp{}, nil
+	return &v1.ClearActionQueue_Resp{}, nil
 }

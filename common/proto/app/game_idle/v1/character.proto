@@ -7,15 +7,15 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
-service GameIdleCharacterService {
-  rpc Create(CreateGameIdleCharacter.Request) returns (CreateGameIdleCharacter.Resp) {}
-  rpc Get(GetGameIdleCharacter.Request) returns (GetGameIdleCharacter.Resp) {}
-  rpc Online(OnlineGameIdleCharacter.Request) returns (OnlineGameIdleCharacter.Resp) {}
-  rpc Offline(OfflineGameIdleCharacter.Request) returns (OfflineGameIdleCharacter.Resp) {}
-  rpc Ping(PingGameIdleCharacter.Request) returns (PingGameIdleCharacter.Resp) {}
+service CharacterService {
+  rpc Create(CreateCharacter.Request) returns (CreateCharacter.Resp) {}
+  rpc Get(GetCharacter.Request) returns (GetCharacter.Resp) {}
+  rpc Online(OnlineCharacter.Request) returns (OnlineCharacter.Resp) {}
+  rpc Offline(OfflineCharacter.Request) returns (OfflineCharacter.Resp) {}
+  rpc Ping(PingCharacter.Request) returns (PingCharacter.Resp) {}
 }
 
-message CreateGameIdleCharacter {
+message CreateCharacter {
   message Request {
     int64 user_id = 1; // 用户 ID
     string name = 2; // 角色名称
@@ -26,7 +26,7 @@ message CreateGameIdleCharacter {
   }
 }
 
-message GetGameIdleCharacter {
+message GetCharacter {
   message Request {
     int64 user_id = 1; // 用户 ID
     int64 character_id = 2; // 角色 ID
@@ -37,7 +37,7 @@ message GetGameIdleCharacter {
   }
 }
 
-message OnlineGameIdleCharacter {
+message OnlineCharacter {
   message Request {
     int64 user_id = 1; // 用户 ID
     int64 character_id = 2; // 角色 ID
@@ -49,7 +49,7 @@ message OnlineGameIdleCharacter {
   }
 }
 
-message OfflineGameIdleCharacter {
+message OfflineCharacter {
   message Request {
     int64 character_id = 1; // 角色 ID
     string session_id = 2; // 角色在线会话 ID
@@ -59,7 +59,7 @@ message OfflineGameIdleCharacter {
   message Resp {}
 }
 
-message PingGameIdleCharacter {
+message PingCharacter {
   message Request {
     int64 character_id = 1; // 角色 ID
     string session_id = 2; // 角色在线会话 ID
@@ -74,7 +74,7 @@ message Character {
   int64 id = 1; // 角色 ID
   int64 user_id = 2; // 用户 ID
   string name = 3; // 角色名称
-  common.api.app.game_idle.v1.enum.GameIdleCharacterStatus status = 4; // 角色状态
+  common.api.app.game_idle.v1.enum.CharacterStatus status = 4; // 角色状态
   int32 slot = 5; // 角色槽位
   int32 action_queue_capacity = 6; // 行动队列容量上限
   int64 max_offline_seconds = 7; // 最大离线收益结算秒数

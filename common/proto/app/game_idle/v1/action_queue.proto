@@ -6,15 +6,15 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
-service GameIdleActionQueueService {
-  rpc List(ListGameIdleActionQueue.Request) returns (ListGameIdleActionQueue.Resp) {}
-  rpc Add(AddGameIdleAction.Request) returns (AddGameIdleAction.Resp) {}
-  rpc Move(MoveGameIdleAction.Request) returns (MoveGameIdleAction.Resp) {}
-  rpc Remove(RemoveGameIdleAction.Request) returns (RemoveGameIdleAction.Resp) {}
-  rpc Clear(ClearGameIdleActionQueue.Request) returns (ClearGameIdleActionQueue.Resp) {}
+service ActionQueueService {
+  rpc List(ListActionQueue.Request) returns (ListActionQueue.Resp) {}
+  rpc Add(AddAction.Request) returns (AddAction.Resp) {}
+  rpc Move(MoveAction.Request) returns (MoveAction.Resp) {}
+  rpc Remove(RemoveAction.Request) returns (RemoveAction.Resp) {}
+  rpc Clear(ClearActionQueue.Request) returns (ClearActionQueue.Resp) {}
 }
 
-message ListGameIdleActionQueue {
+message ListActionQueue {
   message Request {
     int64 character_id = 1; // 角色 ID
   }
@@ -24,7 +24,7 @@ message ListGameIdleActionQueue {
   }
 }
 
-message AddGameIdleAction {
+message AddAction {
   message Request {
     int64 character_id = 1; // 角色 ID
     string action_id = 2; // 行动编码
@@ -35,7 +35,7 @@ message AddGameIdleAction {
   message Resp {}
 }
 
-message MoveGameIdleAction {
+message MoveAction {
   message Request {
     int64 character_id = 1; // 角色 ID
     int32 current_position = 2; // 当前位置，从 0 开始
@@ -45,7 +45,7 @@ message MoveGameIdleAction {
   message Resp {}
 }
 
-message RemoveGameIdleAction {
+message RemoveAction {
   message Request {
     int64 character_id = 1; // 角色 ID
     int32 position = 2; // 移除位置，从 0 开始
@@ -54,7 +54,7 @@ message RemoveGameIdleAction {
   message Resp {}
 }
 
-message ClearGameIdleActionQueue {
+message ClearActionQueue {
   message Request {
     int64 character_id = 1; // 角色 ID
   }

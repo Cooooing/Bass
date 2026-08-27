@@ -13,13 +13,13 @@ const (
 	ChatMessageStatusDeleted ChatMessageStatus = "deleted" // 已删除
 )
 
-var ChatMessageStatusMap = commonenum.NewMapping[ChatMessageStatus, v1.GameIdleChatMessageStatus](
-	map[ChatMessageStatus]commonenum.Entry[ChatMessageStatus, v1.GameIdleChatMessageStatus]{
+var ChatMessageStatusMap = commonenum.NewMapping[ChatMessageStatus, v1.ChatMessageStatus](
+	map[ChatMessageStatus]commonenum.Entry[ChatMessageStatus, v1.ChatMessageStatus]{
 		ChatMessageStatusNormal: {
-			Proto: v1.GameIdleChatMessageStatus_GAME_IDLE_CHAT_MESSAGE_STATUS_NORMAL,
+			Proto: v1.ChatMessageStatus_CHAT_MESSAGE_STATUS_NORMAL,
 		},
 		ChatMessageStatusDeleted: {
-			Proto: v1.GameIdleChatMessageStatus_GAME_IDLE_CHAT_MESSAGE_STATUS_DELETED,
+			Proto: v1.ChatMessageStatus_CHAT_MESSAGE_STATUS_DELETED,
 		},
 	},
 )

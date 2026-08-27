@@ -4,11 +4,11 @@ package common.api.app.game_idle.v1;
 
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
-service GameIdleBackpackService {
-  rpc Get(GetGameIdleBackpack.Request) returns (GetGameIdleBackpack.Resp) {}
+service BackpackService {
+  rpc Get(GetBackpack.Request) returns (GetBackpack.Resp) {}
 }
 
-message GetGameIdleBackpack {
+message GetBackpack {
   message Request {
     int64 character_id = 1; // 角色 ID
     repeated string item_ids = 2; // 物品编码，为空时返回全部

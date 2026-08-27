@@ -15,7 +15,7 @@ import (
 )
 
 type CharacterService struct {
-	v1.UnimplementedGameIdleCharacterServiceServer
+	v1.UnimplementedCharacterServiceServer
 	characterUsecase *usecase.CharacterUsecase
 }
 
@@ -26,13 +26,13 @@ func NewCharacterService(characterUsecase *usecase.CharacterUsecase) *CharacterS
 }
 
 func (s *CharacterService) RegisterGrpc(server *grpc.Server) {
-	v1.RegisterGameIdleCharacterServiceServer(server, s)
+	v1.RegisterCharacterServiceServer(server, s)
 }
 
 func (s *CharacterService) RegisterHttp(*http.Server) {
 }
 
-func (s *CharacterService) Create(ctx context.Context, req *v1.CreateGameIdleCharacter_Request) (*v1.CreateGameIdleCharacter_Resp, error) {
+func (s *CharacterService) Create(ctx context.Context, req *v1.CreateCharacter_Request) (*v1.CreateCharacter_Resp, error) {
 	if req.GetUserId() <= 0 || req.GetName() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -58,10 +58,10 @@ func (s *CharacterService) Create(ctx context.Context, req *v1.CreateGameIdleCha
 	if row.UpdatedAt != nil {
 		character.UpdatedAt = timestamppb.New(*row.UpdatedAt)
 	}
-	return &v1.CreateGameIdleCharacter_Resp{Row: character}, nil
+	return &v1.CreateCharacter_Resp{Row: character}, nil
 }
 
-func (s *CharacterService) Get(ctx context.Context, req *v1.GetGameIdleCharacter_Request) (*v1.GetGameIdleCharacter_Resp, error) {
+func (s *CharacterService) Get(ctx context.Context, req *v1.GetCharacter_Request) (*v1.GetCharacter_Resp, error) {
 	if req.GetUserId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -91,10 +91,10 @@ func (s *CharacterService) Get(ctx context.Context, req *v1.GetGameIdleCharacter
 		}
 		characters = append(characters, character)
 	}
-	return &v1.GetGameIdleCharacter_Resp{Rows: characters}, nil
+	return &v1.GetCharacter_Resp{Rows: characters}, nil
 }
 
-func (s *CharacterService) Online(ctx context.Context, req *v1.OnlineGameIdleCharacter_Request) (*v1.OnlineGameIdleCharacter_Resp, error) {
+func (s *CharacterService) Online(ctx context.Context, req *v1.OnlineCharacter_Request) (*v1.OnlineCharacter_Resp, error) {
 	if req.GetUserId() <= 0 || req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -105,13 +105,13 @@ func (s *CharacterService) Online(ctx context.Context, req *v1.OnlineGameIdleCha
 	if err != nil {
 		return nil, err
 	}
-	return &v1.OnlineGameIdleCharacter_Resp{
+	return &v1.OnlineCharacter_Resp{
 		SessionId:        session.SessionID,
 		ExpiresInSeconds: int64(session.ExpiresIn / time.Second),
 	}, nil
 }
 
-func (s *CharacterService) Offline(ctx context.Context, req *v1.OfflineGameIdleCharacter_Request) (*v1.OfflineGameIdleCharacter_Resp, error) {
+func (s *CharacterService) Offline(ctx context.Context, req *v1.OfflineCharacter_Request) (*v1.OfflineCharacter_Resp, error) {
 	if req.GetCharacterId() <= 0 || req.GetSessionId() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -122,10 +122,10 @@ func (s *CharacterService) Offline(ctx context.Context, req *v1.OfflineGameIdleC
 	}); err != nil {
 		return nil, err
 	}
-	return &v1.OfflineGameIdleCharacter_Resp{}, nil
+	return &v1.OfflineCharacter_Resp{}, nil
 }
 
-func (s *CharacterService) Ping(ctx context.Context, req *v1.PingGameIdleCharacter_Request) (*v1.PingGameIdleCharacter_Resp, error) {
+func (s *CharacterService) Ping(ctx context.Context, req *v1.PingCharacter_Request) (*v1.PingCharacter_Resp, error) {
 	if req.GetCharacterId() <= 0 || req.GetSessionId() == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -136,7 +136,7 @@ func (s *CharacterService) Ping(ctx context.Context, req *v1.PingGameIdleCharact
 	if err != nil {
 		return nil, err
 	}
-	return &v1.PingGameIdleCharacter_Resp{
+	return &v1.PingCharacter_Resp{
 		ExpiresInSeconds: int64(session.ExpiresIn / time.Second),
 	}, nil
 }

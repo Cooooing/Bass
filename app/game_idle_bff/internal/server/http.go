@@ -24,8 +24,8 @@ import (
 )
 
 var gameIdleBffHTTPPublicOperations = map[string]struct{}{
-	v1.OperationGameIdleBffAuthServiceRegister: {},
-	v1.OperationGameIdleBffAuthServiceLogin:    {},
+	v1.OperationAuthServiceRegister: {},
+	v1.OperationAuthServiceLogin:    {},
 }
 
 func NewHTTPAuthMiddlewares(authClient *rpc.UserClient) []middleware.Middleware {

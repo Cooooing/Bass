@@ -13,13 +13,13 @@ const (
 	CharacterStatusDisabled CharacterStatus = "disabled" // 禁用
 )
 
-var CharacterStatusMap = commonenum.NewMapping[CharacterStatus, v1.GameIdleCharacterStatus](
-	map[CharacterStatus]commonenum.Entry[CharacterStatus, v1.GameIdleCharacterStatus]{
+var CharacterStatusMap = commonenum.NewMapping[CharacterStatus, v1.CharacterStatus](
+	map[CharacterStatus]commonenum.Entry[CharacterStatus, v1.CharacterStatus]{
 		CharacterStatusActive: {
-			Proto: v1.GameIdleCharacterStatus_GAME_IDLE_CHARACTER_STATUS_ACTIVE,
+			Proto: v1.CharacterStatus_CHARACTER_STATUS_ACTIVE,
 		},
 		CharacterStatusDisabled: {
-			Proto: v1.GameIdleCharacterStatus_GAME_IDLE_CHARACTER_STATUS_DISABLED,
+			Proto: v1.CharacterStatus_CHARACTER_STATUS_DISABLED,
 		},
 	},
 )

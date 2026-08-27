@@ -7,15 +7,15 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/game_idle/v1;v1";
 
-service GameIdleChatService {
-  rpc Send(SendGameIdleChatMessage.Request) returns (SendGameIdleChatMessage.Resp) {}
-  rpc List(ListGameIdleChatMessages.Request) returns (ListGameIdleChatMessages.Resp) {}
+service ChatService {
+  rpc Send(SendChatMessage.Request) returns (SendChatMessage.Resp) {}
+  rpc List(ListChatMessages.Request) returns (ListChatMessages.Resp) {}
 }
 
-message SendGameIdleChatMessage {
+message SendChatMessage {
   message Request {
     int64 character_id = 1; // 发送角色 ID
-    common.api.app.game_idle.v1.enum.GameIdleChatChannelType channel_type = 2; // 频道类型
+    common.api.app.game_idle.v1.enum.ChatChannelType channel_type = 2; // 频道类型
     string channel_id = 3; // 频道标识
     int64 receiver_character_id = 4; // 接收角色 ID，非私聊为 0
     string content = 5; // 消息内容
@@ -26,9 +26,9 @@ message SendGameIdleChatMessage {
   }
 }
 
-message ListGameIdleChatMessages {
+message ListChatMessages {
   message Request {
-    common.api.app.game_idle.v1.enum.GameIdleChatChannelType channel_type = 1; // 频道类型
+    common.api.app.game_idle.v1.enum.ChatChannelType channel_type = 1; // 频道类型
     string channel_id = 2; // 频道标识
     int64 before_id = 3; // 查询该 ID 之前的消息，为 0 时从最新开始
     int32 size = 4; // 查询数量
@@ -41,11 +41,11 @@ message ListGameIdleChatMessages {
 
 message ChatMessage {
   int64 id = 1; // 自增 ID
-  common.api.app.game_idle.v1.enum.GameIdleChatChannelType channel_type = 2; // 频道类型
+  common.api.app.game_idle.v1.enum.ChatChannelType channel_type = 2; // 频道类型
   string channel_id = 3; // 频道标识
   int64 sender_character_id = 4; // 发送角色 ID
   int64 receiver_character_id = 5; // 接收角色 ID，非私聊为 0
   string content = 6; // 消息内容
-  common.api.app.game_idle.v1.enum.GameIdleChatMessageStatus status = 7; // 消息状态
+  common.api.app.game_idle.v1.enum.ChatMessageStatus status = 7; // 消息状态
   google.protobuf.Timestamp created_at = 1000; // 创建时间
 }

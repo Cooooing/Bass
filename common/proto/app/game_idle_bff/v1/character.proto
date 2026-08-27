@@ -8,10 +8,10 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/game_idle_bff/v1;v1";
 
-// GameIdleBffCharacterService 提供摸鱼放置角色入口。
-service GameIdleBffCharacterService {
+// CharacterService 提供摸鱼放置角色入口。
+service CharacterService {
   // 创建角色。
-  rpc Create(CreateGameIdleBffCharacter.Req) returns (CreateGameIdleBffCharacter.Resp) {
+  rpc Create(CreateCharacter.Req) returns (CreateCharacter.Resp) {
     option (google.api.http) = {
       post: "/v1/game-idle/character/create"
       body: "*"
@@ -19,7 +19,7 @@ service GameIdleBffCharacterService {
   }
 
   // 查询当前账号角色列表。
-  rpc List(ListGameIdleBffCharacter.Req) returns (ListGameIdleBffCharacter.Resp) {
+  rpc List(ListCharacter.Req) returns (ListCharacter.Resp) {
     option (google.api.http) = {
       post: "/v1/game-idle/character/list"
       body: "*"
@@ -27,7 +27,7 @@ service GameIdleBffCharacterService {
   }
 }
 
-message CreateGameIdleBffCharacter {
+message CreateCharacter {
   message Req {
     string name = 1; // 角色名称
   }
@@ -37,7 +37,7 @@ message CreateGameIdleBffCharacter {
   }
 }
 
-message ListGameIdleBffCharacter {
+message ListCharacter {
   message Req {}
 
   message Resp {
@@ -48,7 +48,7 @@ message ListGameIdleBffCharacter {
 message Character {
   int64 id = 1; // 角色 ID
   string name = 2; // 角色名称
-  common.api.app.game_idle.v1.enum.GameIdleCharacterStatus status = 3; // 角色状态
+  common.api.app.game_idle.v1.enum.CharacterStatus status = 3; // 角色状态
   int32 slot = 4; // 角色槽位
   int32 action_queue_capacity = 5; // 行动队列容量上限
   int64 max_offline_seconds = 6; // 最大离线收益结算秒数

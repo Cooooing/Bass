@@ -3,6 +3,7 @@
 export * from './AccountService';
 export * from './ArticleService';
 export * from './AuthService';
+export * from './CheckinService';
 export * from './CommentService';
 export * from './DomainService';
 export * from './LocationService';

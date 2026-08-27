@@ -18,6 +18,8 @@ docs/BindArticleTagsReq.md
 docs/BlockRelationReq.md
 docs/CancelAccountReq.md
 docs/CancelPublishArticleReq.md
+docs/CheckInResp.md
+docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
 docs/CommentService.md
@@ -37,6 +39,8 @@ docs/DomainService.md
 docs/FollowRelationReq.md
 docs/GetArticleReq.md
 docs/GetArticleResp.md
+docs/GetCheckinOverviewReq.md
+docs/GetCheckinOverviewResp.md
 docs/GetCurrentAccountResp.md
 docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
@@ -118,6 +122,7 @@ docs/RespLocation.md
 docs/RespNotification.md
 docs/RespPreference.md
 docs/RespPrivacySetting.md
+docs/RespRecord.md
 docs/RespRelation.md
 docs/RespRelationStatus.md
 docs/RespTag.md
@@ -157,6 +162,7 @@ package.json
 src/apis/AccountService.ts
 src/apis/ArticleService.ts
 src/apis/AuthService.ts
+src/apis/CheckinService.ts
 src/apis/CommentService.ts
 src/apis/DomainService.ts
 src/apis/LocationService.ts
@@ -182,6 +188,7 @@ src/models/BindArticleTagsReq.ts
 src/models/BlockRelationReq.ts
 src/models/CancelAccountReq.ts
 src/models/CancelPublishArticleReq.ts
+src/models/CheckInResp.ts
 src/models/CollectArticleReq.ts
 src/models/CollectArticleResp.ts
 src/models/ConfirmEnableTotpReq.ts
@@ -199,6 +206,8 @@ src/models/DiscardDraftArticleReq.ts
 src/models/FollowRelationReq.ts
 src/models/GetArticleReq.ts
 src/models/GetArticleResp.ts
+src/models/GetCheckinOverviewReq.ts
+src/models/GetCheckinOverviewResp.ts
 src/models/GetCurrentAccountResp.ts
 src/models/GetCurrentLocationResp.ts
 src/models/GetCurrentPreferencesResp.ts
@@ -273,6 +282,7 @@ src/models/RespLocation.ts
 src/models/RespNotification.ts
 src/models/RespPreference.ts
 src/models/RespPrivacySetting.ts
+src/models/RespRecord.ts
 src/models/RespRelation.ts
 src/models/RespRelationStatus.ts
 src/models/RespTag.ts

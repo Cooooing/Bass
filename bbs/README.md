@@ -29,6 +29,9 @@ Class | Method | HTTP request | Description
 *AccountService* | [**avatar**](docs/AccountService.md#avatar) | **GET** /v1/user/account/avatar | 
 *AccountService* | [**get_current**](docs/AccountService.md#get_current) | **POST** /v1/user/account/get-current | 
 *AccountService* | [**get_profile**](docs/AccountService.md#get_profile) | **POST** /v1/user/account/get-profile | 
+*AccountService* | [**update_email**](docs/AccountService.md#update_email) | **POST** /v1/user/account/update-email | 
+*AccountService* | [**update_password**](docs/AccountService.md#update_password) | **POST** /v1/user/account/update-password | 
+*AccountService* | [**update_phone**](docs/AccountService.md#update_phone) | **POST** /v1/user/account/update-phone | 
 *AccountService* | [**update_profile**](docs/AccountService.md#update_profile) | **POST** /v1/user/account/update-profile | 
 *ArticleService* | [**archive**](docs/ArticleService.md#archive) | **POST** /v1/content/article/archive | 
 *ArticleService* | [**cancel_publish**](docs/ArticleService.md#cancel_publish) | **POST** /v1/content/article/publish/cancel | 
@@ -47,10 +50,9 @@ Class | Method | HTTP request | Description
 *AuthService* | [**login**](docs/AuthService.md#login) | **POST** /v1/user/auth/login | 
 *AuthService* | [**logout**](docs/AuthService.md#logout) | **POST** /v1/user/auth/logout | 
 *AuthService* | [**refresh_token**](docs/AuthService.md#refresh_token) | **POST** /v1/user/auth/refresh-token | 
-*AuthService* | [**start_email_registration**](docs/AuthService.md#start_email_registration) | **POST** /v1/user/auth/start-email-registration | 
-*AuthService* | [**start_phone_registration**](docs/AuthService.md#start_phone_registration) | **POST** /v1/user/auth/start-phone-registration | 
-*AuthService* | [**verify_email_registration**](docs/AuthService.md#verify_email_registration) | **POST** /v1/user/auth/verify-email-registration | 
-*AuthService* | [**verify_phone_registration**](docs/AuthService.md#verify_phone_registration) | **POST** /v1/user/auth/verify-phone-registration | 
+*AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/user/auth/register | 
+*CheckinService* | [**check_in**](docs/CheckinService.md#check_in) | **POST** /v1/user/checkin/check-in | 
+*CheckinService* | [**get_overview**](docs/CheckinService.md#get_overview) | **POST** /v1/user/checkin/get-overview | 
 *CommentService* | [**create**](docs/CommentService.md#create) | **POST** /v1/content/comment/create | 
 *CommentService* | [**like**](docs/CommentService.md#like) | **POST** /v1/content/comment/like | 
 *CommentService* | [**list**](docs/CommentService.md#list) | **POST** /v1/content/comment/list | 
@@ -109,6 +111,7 @@ Class | Method | HTTP request | Description
  - [BlockRelationReq](docs/BlockRelationReq.md)
  - [CancelAccountReq](docs/CancelAccountReq.md)
  - [CancelPublishArticleReq](docs/CancelPublishArticleReq.md)
+ - [CheckInResp](docs/CheckInResp.md)
  - [CollectArticleReq](docs/CollectArticleReq.md)
  - [CollectArticleResp](docs/CollectArticleResp.md)
  - [ConfirmEnableTotpReq](docs/ConfirmEnableTotpReq.md)
@@ -126,6 +129,8 @@ Class | Method | HTTP request | Description
  - [FollowRelationReq](docs/FollowRelationReq.md)
  - [GetArticleReq](docs/GetArticleReq.md)
  - [GetArticleResp](docs/GetArticleResp.md)
+ - [GetCheckinOverviewReq](docs/GetCheckinOverviewReq.md)
+ - [GetCheckinOverviewResp](docs/GetCheckinOverviewResp.md)
  - [GetCurrentAccountResp](docs/GetCurrentAccountResp.md)
  - [GetCurrentLocationResp](docs/GetCurrentLocationResp.md)
  - [GetCurrentPreferencesResp](docs/GetCurrentPreferencesResp.md)
@@ -175,6 +180,7 @@ Class | Method | HTTP request | Description
  - [PublishArticleReq](docs/PublishArticleReq.md)
  - [RefreshTokenReq](docs/RefreshTokenReq.md)
  - [RefreshTokenResp](docs/RefreshTokenResp.md)
+ - [RegisterReq](docs/RegisterReq.md)
  - [ReqArticle](docs/ReqArticle.md)
  - [ReqArticleQuery](docs/ReqArticleQuery.md)
  - [ReqCommentQuery](docs/ReqCommentQuery.md)
@@ -199,6 +205,7 @@ Class | Method | HTTP request | Description
  - [RespNotification](docs/RespNotification.md)
  - [RespPreference](docs/RespPreference.md)
  - [RespPrivacySetting](docs/RespPrivacySetting.md)
+ - [RespRecord](docs/RespRecord.md)
  - [RespRelation](docs/RespRelation.md)
  - [RespRelationStatus](docs/RespRelationStatus.md)
  - [RespTag](docs/RespTag.md)
@@ -209,10 +216,6 @@ Class | Method | HTTP request | Description
  - [SendEmailOtpResp](docs/SendEmailOtpResp.md)
  - [SendPhoneOtpReq](docs/SendPhoneOtpReq.md)
  - [SendPhoneOtpResp](docs/SendPhoneOtpResp.md)
- - [StartEmailRegistrationReq](docs/StartEmailRegistrationReq.md)
- - [StartEmailRegistrationResp](docs/StartEmailRegistrationResp.md)
- - [StartPhoneRegistrationReq](docs/StartPhoneRegistrationReq.md)
- - [StartPhoneRegistrationResp](docs/StartPhoneRegistrationResp.md)
  - [ThankArticleReq](docs/ThankArticleReq.md)
  - [ThankArticleResp](docs/ThankArticleResp.md)
  - [ThankCommentReq](docs/ThankCommentReq.md)
@@ -228,14 +231,15 @@ Class | Method | HTTP request | Description
  - [UpdateDomainResp](docs/UpdateDomainResp.md)
  - [UpdateDraftArticleReq](docs/UpdateDraftArticleReq.md)
  - [UpdateDraftArticleResp](docs/UpdateDraftArticleResp.md)
+ - [UpdateEmailAccountReq](docs/UpdateEmailAccountReq.md)
+ - [UpdatePasswordAccountReq](docs/UpdatePasswordAccountReq.md)
+ - [UpdatePhoneAccountReq](docs/UpdatePhoneAccountReq.md)
  - [UpdateProfileAccountReq](docs/UpdateProfileAccountReq.md)
  - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
  - [UpsertCurrentLocationReq](docs/UpsertCurrentLocationReq.md)
  - [UpsertCurrentLocationResp](docs/UpsertCurrentLocationResp.md)
- - [VerifyEmailRegistrationReq](docs/VerifyEmailRegistrationReq.md)
- - [VerifyPhoneRegistrationReq](docs/VerifyPhoneRegistrationReq.md)
 
 
 To get access to the crate's generated documentation, use:

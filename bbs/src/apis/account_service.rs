@@ -22,22 +22,37 @@ pub trait AccountService: Send + Sync {
 
     /// GET /v1/user/account/avatar
     ///
-    /// 生成默认账号头像。
+    /// 生成默认账号头像
     async fn avatar<'name>(&self, name: Option<&'name str>) -> Result<models::ImageResp, Error<AvatarError>>;
 
     /// POST /v1/user/account/get-current
     ///
-    /// 获取当前账号的完整资料。
+    /// 获取当前账号完整资料
     async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountResp, Error<GetCurrentError>>;
 
     /// POST /v1/user/account/get-profile
     ///
-    /// 按账号 ID 获取账号展示资料。
+    /// 按账号 ID 获取展示资料
     async fn get_profile<'get_profile_account_req>(&self, get_profile_account_req: models::GetProfileAccountReq) -> Result<models::GetProfileAccountResp, Error<GetProfileError>>;
+
+    /// POST /v1/user/account/update-email
+    ///
+    /// 更新当前账号邮箱
+    async fn update_email<'update_email_account_req>(&self, update_email_account_req: models::UpdateEmailAccountReq) -> Result<serde_json::Value, Error<UpdateEmailError>>;
+
+    /// POST /v1/user/account/update-password
+    ///
+    /// 更新当前账号密码
+    async fn update_password<'update_password_account_req>(&self, update_password_account_req: models::UpdatePasswordAccountReq) -> Result<serde_json::Value, Error<UpdatePasswordError>>;
+
+    /// POST /v1/user/account/update-phone
+    ///
+    /// 更新当前账号手机号
+    async fn update_phone<'update_phone_account_req>(&self, update_phone_account_req: models::UpdatePhoneAccountReq) -> Result<serde_json::Value, Error<UpdatePhoneError>>;
 
     /// POST /v1/user/account/update-profile
     ///
-    /// 更新当前账号的展示资料。
+    /// 更新当前账号展示资料
     async fn update_profile<'update_profile_account_req>(&self, update_profile_account_req: models::UpdateProfileAccountReq) -> Result<models::UpdateProfileAccountResp, Error<UpdateProfileError>>;
 }
 
@@ -55,7 +70,7 @@ impl AccountServiceClient {
 
 #[async_trait]
 impl AccountService for AccountServiceClient {
-    /// 生成默认账号头像。
+    /// 生成默认账号头像
     async fn avatar<'name>(&self, name: Option<&'name str>) -> Result<models::ImageResp, Error<AvatarError>> {
         let local_var_configuration = &self.configuration;
 
@@ -96,7 +111,7 @@ impl AccountService for AccountServiceClient {
         }
     }
 
-    /// 获取当前账号的完整资料。
+    /// 获取当前账号完整资料
     async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentAccountResp, Error<GetCurrentError>> {
         let local_var_configuration = &self.configuration;
 
@@ -135,7 +150,7 @@ impl AccountService for AccountServiceClient {
         }
     }
 
-    /// 按账号 ID 获取账号展示资料。
+    /// 按账号 ID 获取展示资料
     async fn get_profile<'get_profile_account_req>(&self, get_profile_account_req: models::GetProfileAccountReq) -> Result<models::GetProfileAccountResp, Error<GetProfileError>> {
         let local_var_configuration = &self.configuration;
 
@@ -174,7 +189,124 @@ impl AccountService for AccountServiceClient {
         }
     }
 
-    /// 更新当前账号的展示资料。
+    /// 更新当前账号邮箱
+    async fn update_email<'update_email_account_req>(&self, update_email_account_req: models::UpdateEmailAccountReq) -> Result<serde_json::Value, Error<UpdateEmailError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/account/update-email", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&update_email_account_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<UpdateEmailError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 更新当前账号密码
+    async fn update_password<'update_password_account_req>(&self, update_password_account_req: models::UpdatePasswordAccountReq) -> Result<serde_json::Value, Error<UpdatePasswordError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/account/update-password", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&update_password_account_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<UpdatePasswordError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 更新当前账号手机号
+    async fn update_phone<'update_phone_account_req>(&self, update_phone_account_req: models::UpdatePhoneAccountReq) -> Result<serde_json::Value, Error<UpdatePhoneError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/account/update-phone", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&update_phone_account_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<UpdatePhoneError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 更新当前账号展示资料
     async fn update_profile<'update_profile_account_req>(&self, update_profile_account_req: models::UpdateProfileAccountReq) -> Result<models::UpdateProfileAccountResp, Error<UpdateProfileError>> {
         let local_var_configuration = &self.configuration;
 
@@ -233,6 +365,27 @@ pub enum GetCurrentError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum GetProfileError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`AccountService::update_email`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdateEmailError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`AccountService::update_password`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdatePasswordError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`AccountService::update_phone`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UpdatePhoneError {
     UnknownValue(serde_json::Value),
 }
 

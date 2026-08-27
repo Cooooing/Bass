@@ -12,15 +12,15 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct StartEmailRegistrationResp {
-    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
-    pub code: Option<String>,
+pub struct GetCheckinOverviewReq {
+    #[serde(rename = "month", skip_serializing_if = "Option::is_none")]
+    pub month: Option<String>,
 }
 
-impl StartEmailRegistrationResp {
-    pub fn new() -> StartEmailRegistrationResp {
-        StartEmailRegistrationResp {
-            code: None,
+impl GetCheckinOverviewReq {
+    pub fn new() -> GetCheckinOverviewReq {
+        GetCheckinOverviewReq {
+            month: None,
         }
     }
 }

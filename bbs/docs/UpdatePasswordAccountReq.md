@@ -1,13 +1,11 @@
-# StartEmailRegistrationReq
+# UpdatePasswordAccountReq
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **String** |  | 
-**password** | **String** |  | 
-**name** | **String** |  | 
-**nickname** | Option<**String**> |  | [optional]
+**old_password** | **String** |  | 
+**new_password** | **String** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

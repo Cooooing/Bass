@@ -13,8 +13,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateProfileAccountReq {
-    #[serde(rename = "avatar_url", skip_serializing_if = "Option::is_none")]
-    pub avatar_url: Option<String>,
+    #[serde(rename = "avatar_asset_id", skip_serializing_if = "Option::is_none")]
+    pub avatar_asset_id: Option<String>,
     #[serde(rename = "nickname", skip_serializing_if = "Option::is_none")]
     pub nickname: Option<String>,
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
@@ -28,7 +28,7 @@ pub struct UpdateProfileAccountReq {
 impl UpdateProfileAccountReq {
     pub fn new() -> UpdateProfileAccountReq {
         UpdateProfileAccountReq {
-            avatar_url: None,
+            avatar_asset_id: None,
             nickname: None,
             url: None,
             introduction: None,

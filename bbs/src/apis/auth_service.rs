@@ -40,25 +40,10 @@ pub trait AuthService: Send + Sync {
     /// 刷新登录令牌。
     async fn refresh_token<'refresh_token_req>(&self, refresh_token_req: models::RefreshTokenReq) -> Result<models::RefreshTokenResp, Error<RefreshTokenError>>;
 
-    /// POST /v1/user/auth/start-email-registration
+    /// POST /v1/user/auth/register
     ///
-    /// 开始邮箱注册。
-    async fn start_email_registration<'start_email_registration_req>(&self, start_email_registration_req: models::StartEmailRegistrationReq) -> Result<models::StartEmailRegistrationResp, Error<StartEmailRegistrationError>>;
-
-    /// POST /v1/user/auth/start-phone-registration
-    ///
-    /// 开始手机注册。
-    async fn start_phone_registration<'start_phone_registration_req>(&self, start_phone_registration_req: models::StartPhoneRegistrationReq) -> Result<models::StartPhoneRegistrationResp, Error<StartPhoneRegistrationError>>;
-
-    /// POST /v1/user/auth/verify-email-registration
-    ///
-    /// 校验邮箱注册验证码。
-    async fn verify_email_registration<'verify_email_registration_req>(&self, verify_email_registration_req: models::VerifyEmailRegistrationReq) -> Result<serde_json::Value, Error<VerifyEmailRegistrationError>>;
-
-    /// POST /v1/user/auth/verify-phone-registration
-    ///
-    /// 校验手机注册验证码。
-    async fn verify_phone_registration<'verify_phone_registration_req>(&self, verify_phone_registration_req: models::VerifyPhoneRegistrationReq) -> Result<serde_json::Value, Error<VerifyPhoneRegistrationError>>;
+    /// 注册账号。
+    async fn register<'register_req>(&self, register_req: models::RegisterReq) -> Result<serde_json::Value, Error<RegisterError>>;
 }
 
 pub struct AuthServiceClient {
@@ -231,97 +216,19 @@ impl AuthService for AuthServiceClient {
         }
     }
 
-    /// 开始邮箱注册。
-    async fn start_email_registration<'start_email_registration_req>(&self, start_email_registration_req: models::StartEmailRegistrationReq) -> Result<models::StartEmailRegistrationResp, Error<StartEmailRegistrationError>> {
+    /// 注册账号。
+    async fn register<'register_req>(&self, register_req: models::RegisterReq) -> Result<serde_json::Value, Error<RegisterError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
 
-        let local_var_uri_str = format!("{}/v1/user/auth/start-email-registration", local_var_configuration.base_path);
+        let local_var_uri_str = format!("{}/v1/user/auth/register", local_var_configuration.base_path);
         let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
             local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
         }
-        local_var_req_builder = local_var_req_builder.json(&start_email_registration_req);
-
-        let local_var_req = local_var_req_builder.build()?;
-        let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-        let local_var_status = local_var_resp.status();
-        let local_var_content_type = local_var_resp
-            .headers()
-            .get("content-type")
-            .and_then(|v| v.to_str().ok())
-            .unwrap_or("application/octet-stream");
-        let local_var_content_type = super::ContentType::from(local_var_content_type);
-        let local_var_content = local_var_resp.text().await?;
-
-        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-            match local_var_content_type {
-                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::StartEmailRegistrationResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::StartEmailRegistrationResp`")))),
-            }
-        } else {
-            let local_var_entity: Option<StartEmailRegistrationError> = serde_json::from_str(&local_var_content).ok();
-            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
-            Err(Error::ResponseError(local_var_error))
-        }
-    }
-
-    /// 开始手机注册。
-    async fn start_phone_registration<'start_phone_registration_req>(&self, start_phone_registration_req: models::StartPhoneRegistrationReq) -> Result<models::StartPhoneRegistrationResp, Error<StartPhoneRegistrationError>> {
-        let local_var_configuration = &self.configuration;
-
-        let local_var_client = &local_var_configuration.client;
-
-        let local_var_uri_str = format!("{}/v1/user/auth/start-phone-registration", local_var_configuration.base_path);
-        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
-
-        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-        }
-        local_var_req_builder = local_var_req_builder.json(&start_phone_registration_req);
-
-        let local_var_req = local_var_req_builder.build()?;
-        let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-        let local_var_status = local_var_resp.status();
-        let local_var_content_type = local_var_resp
-            .headers()
-            .get("content-type")
-            .and_then(|v| v.to_str().ok())
-            .unwrap_or("application/octet-stream");
-        let local_var_content_type = super::ContentType::from(local_var_content_type);
-        let local_var_content = local_var_resp.text().await?;
-
-        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-            match local_var_content_type {
-                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::StartPhoneRegistrationResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::StartPhoneRegistrationResp`")))),
-            }
-        } else {
-            let local_var_entity: Option<StartPhoneRegistrationError> = serde_json::from_str(&local_var_content).ok();
-            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
-            Err(Error::ResponseError(local_var_error))
-        }
-    }
-
-    /// 校验邮箱注册验证码。
-    async fn verify_email_registration<'verify_email_registration_req>(&self, verify_email_registration_req: models::VerifyEmailRegistrationReq) -> Result<serde_json::Value, Error<VerifyEmailRegistrationError>> {
-        let local_var_configuration = &self.configuration;
-
-        let local_var_client = &local_var_configuration.client;
-
-        let local_var_uri_str = format!("{}/v1/user/auth/verify-email-registration", local_var_configuration.base_path);
-        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
-
-        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-        }
-        local_var_req_builder = local_var_req_builder.json(&verify_email_registration_req);
+        local_var_req_builder = local_var_req_builder.json(&register_req);
 
         let local_var_req = local_var_req_builder.build()?;
         let local_var_resp = local_var_client.execute(local_var_req).await?;
@@ -342,46 +249,7 @@ impl AuthService for AuthServiceClient {
                 ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
             }
         } else {
-            let local_var_entity: Option<VerifyEmailRegistrationError> = serde_json::from_str(&local_var_content).ok();
-            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
-            Err(Error::ResponseError(local_var_error))
-        }
-    }
-
-    /// 校验手机注册验证码。
-    async fn verify_phone_registration<'verify_phone_registration_req>(&self, verify_phone_registration_req: models::VerifyPhoneRegistrationReq) -> Result<serde_json::Value, Error<VerifyPhoneRegistrationError>> {
-        let local_var_configuration = &self.configuration;
-
-        let local_var_client = &local_var_configuration.client;
-
-        let local_var_uri_str = format!("{}/v1/user/auth/verify-phone-registration", local_var_configuration.base_path);
-        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
-
-        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-        }
-        local_var_req_builder = local_var_req_builder.json(&verify_phone_registration_req);
-
-        let local_var_req = local_var_req_builder.build()?;
-        let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-        let local_var_status = local_var_resp.status();
-        let local_var_content_type = local_var_resp
-            .headers()
-            .get("content-type")
-            .and_then(|v| v.to_str().ok())
-            .unwrap_or("application/octet-stream");
-        let local_var_content_type = super::ContentType::from(local_var_content_type);
-        let local_var_content = local_var_resp.text().await?;
-
-        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-            match local_var_content_type {
-                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
-            }
-        } else {
-            let local_var_entity: Option<VerifyPhoneRegistrationError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_entity: Option<RegisterError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -417,31 +285,10 @@ pub enum RefreshTokenError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`AuthService::start_email_registration`]
+/// struct for typed errors of method [`AuthService::register`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum StartEmailRegistrationError {
-    UnknownValue(serde_json::Value),
-}
-
-/// struct for typed errors of method [`AuthService::start_phone_registration`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum StartPhoneRegistrationError {
-    UnknownValue(serde_json::Value),
-}
-
-/// struct for typed errors of method [`AuthService::verify_email_registration`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum VerifyEmailRegistrationError {
-    UnknownValue(serde_json::Value),
-}
-
-/// struct for typed errors of method [`AuthService::verify_phone_registration`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum VerifyPhoneRegistrationError {
+pub enum RegisterError {
     UnknownValue(serde_json::Value),
 }
 

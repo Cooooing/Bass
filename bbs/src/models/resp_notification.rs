@@ -81,6 +81,8 @@ pub enum EventType {
     EventTypeUserAccountBanned,
     #[serde(rename = "EVENT_TYPE_USER_ACCOUNT_UNBANNED")]
     EventTypeUserAccountUnbanned,
+    #[serde(rename = "EVENT_TYPE_USER_CHECKIN_COMPLETED")]
+    EventTypeUserCheckinCompleted,
     #[serde(rename = "EVENT_TYPE_ARTICLE_PUBLISHED")]
     EventTypeArticlePublished,
     #[serde(rename = "EVENT_TYPE_ARTICLE_LIKED")]
@@ -105,6 +107,14 @@ pub enum EventType {
     EventTypeCommentThanked,
     #[serde(rename = "EVENT_TYPE_COMMENT_STATUS_UPDATED")]
     EventTypeCommentStatusUpdated,
+    #[serde(rename = "EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE")]
+    EventTypeGameIdleChatMessage,
+    #[serde(rename = "EVENT_TYPE_GAME_IDLE_CLOSE_SESSION")]
+    EventTypeGameIdleCloseSession,
+    #[serde(rename = "EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED")]
+    EventTypeGameIdleActionCompleted,
+    #[serde(rename = "EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP")]
+    EventTypeGameIdleAbilityLeveledUp,
 }
 
 impl Default for EventType {

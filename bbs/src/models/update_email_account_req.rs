@@ -12,16 +12,16 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct VerifyEmailRegistrationReq {
+pub struct UpdateEmailAccountReq {
     #[serde(rename = "email")]
     pub email: String,
     #[serde(rename = "code")]
     pub code: String,
 }
 
-impl VerifyEmailRegistrationReq {
-    pub fn new(email: String, code: String) -> VerifyEmailRegistrationReq {
-        VerifyEmailRegistrationReq {
+impl UpdateEmailAccountReq {
+    pub fn new(email: String, code: String) -> UpdateEmailAccountReq {
+        UpdateEmailAccountReq {
             email,
             code,
         }

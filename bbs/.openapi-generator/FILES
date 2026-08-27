@@ -19,6 +19,8 @@ docs/BindArticleTagsReq.md
 docs/BlockRelationReq.md
 docs/CancelAccountReq.md
 docs/CancelPublishArticleReq.md
+docs/CheckInResp.md
+docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
 docs/CommentService.md
@@ -38,6 +40,8 @@ docs/DomainService.md
 docs/FollowRelationReq.md
 docs/GetArticleReq.md
 docs/GetArticleResp.md
+docs/GetCheckinOverviewReq.md
+docs/GetCheckinOverviewResp.md
 docs/GetCurrentAccountResp.md
 docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
@@ -93,6 +97,7 @@ docs/PrivacySettingService.md
 docs/PublishArticleReq.md
 docs/RefreshTokenReq.md
 docs/RefreshTokenResp.md
+docs/RegisterReq.md
 docs/RelationService.md
 docs/ReqArticle.md
 docs/ReqArticleQuery.md
@@ -118,6 +123,7 @@ docs/RespLocation.md
 docs/RespNotification.md
 docs/RespPreference.md
 docs/RespPrivacySetting.md
+docs/RespRecord.md
 docs/RespRelation.md
 docs/RespRelationStatus.md
 docs/RespTag.md
@@ -128,10 +134,6 @@ docs/SendEmailOtpReq.md
 docs/SendEmailOtpResp.md
 docs/SendPhoneOtpReq.md
 docs/SendPhoneOtpResp.md
-docs/StartEmailRegistrationReq.md
-docs/StartEmailRegistrationResp.md
-docs/StartPhoneRegistrationReq.md
-docs/StartPhoneRegistrationResp.md
 docs/TagService.md
 docs/ThankArticleReq.md
 docs/ThankArticleResp.md
@@ -148,18 +150,20 @@ docs/UpdateDomainReq.md
 docs/UpdateDomainResp.md
 docs/UpdateDraftArticleReq.md
 docs/UpdateDraftArticleResp.md
+docs/UpdateEmailAccountReq.md
+docs/UpdatePasswordAccountReq.md
+docs/UpdatePhoneAccountReq.md
 docs/UpdateProfileAccountReq.md
 docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
 docs/UpsertCurrentLocationReq.md
 docs/UpsertCurrentLocationResp.md
-docs/VerifyEmailRegistrationReq.md
-docs/VerifyPhoneRegistrationReq.md
 git_push.sh
 src/apis/account_service.rs
 src/apis/article_service.rs
 src/apis/auth_service.rs
+src/apis/checkin_service.rs
 src/apis/comment_service.rs
 src/apis/configuration.rs
 src/apis/domain_service.rs
@@ -186,6 +190,7 @@ src/models/bind_article_tags_req.rs
 src/models/block_relation_req.rs
 src/models/cancel_account_req.rs
 src/models/cancel_publish_article_req.rs
+src/models/check_in_resp.rs
 src/models/collect_article_req.rs
 src/models/collect_article_resp.rs
 src/models/confirm_enable_totp_req.rs
@@ -203,6 +208,8 @@ src/models/discard_draft_article_req.rs
 src/models/follow_relation_req.rs
 src/models/get_article_req.rs
 src/models/get_article_resp.rs
+src/models/get_checkin_overview_req.rs
+src/models/get_checkin_overview_resp.rs
 src/models/get_current_account_resp.rs
 src/models/get_current_location_resp.rs
 src/models/get_current_preferences_resp.rs
@@ -253,6 +260,7 @@ src/models/page_resp.rs
 src/models/publish_article_req.rs
 src/models/refresh_token_req.rs
 src/models/refresh_token_resp.rs
+src/models/register_req.rs
 src/models/req_article.rs
 src/models/req_article_query.rs
 src/models/req_comment_query.rs
@@ -277,6 +285,7 @@ src/models/resp_location.rs
 src/models/resp_notification.rs
 src/models/resp_preference.rs
 src/models/resp_privacy_setting.rs
+src/models/resp_record.rs
 src/models/resp_relation.rs
 src/models/resp_relation_status.rs
 src/models/resp_tag.rs
@@ -287,10 +296,6 @@ src/models/send_email_otp_req.rs
 src/models/send_email_otp_resp.rs
 src/models/send_phone_otp_req.rs
 src/models/send_phone_otp_resp.rs
-src/models/start_email_registration_req.rs
-src/models/start_email_registration_resp.rs
-src/models/start_phone_registration_req.rs
-src/models/start_phone_registration_resp.rs
 src/models/thank_article_req.rs
 src/models/thank_article_resp.rs
 src/models/thank_comment_req.rs
@@ -306,11 +311,12 @@ src/models/update_domain_req.rs
 src/models/update_domain_resp.rs
 src/models/update_draft_article_req.rs
 src/models/update_draft_article_resp.rs
+src/models/update_email_account_req.rs
+src/models/update_password_account_req.rs
+src/models/update_phone_account_req.rs
 src/models/update_profile_account_req.rs
 src/models/update_profile_account_resp.rs
 src/models/update_tag_req.rs
 src/models/update_tag_resp.rs
 src/models/upsert_current_location_req.rs
 src/models/upsert_current_location_resp.rs
-src/models/verify_email_registration_req.rs
-src/models/verify_phone_registration_req.rs

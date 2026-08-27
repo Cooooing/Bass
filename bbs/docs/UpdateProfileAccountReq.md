@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**avatar_url** | Option<**String**> |  | [optional]
+**avatar_asset_id** | Option<**String**> |  | [optional]
 **nickname** | Option<**String**> |  | [optional]
 **url** | Option<**String**> |  | [optional]
 **introduction** | Option<**String**> |  | [optional]

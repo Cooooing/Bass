@@ -114,6 +114,7 @@ impl From<&str> for ContentType {
 pub mod account_service;
 pub mod article_service;
 pub mod auth_service;
+pub mod checkin_service;
 pub mod comment_service;
 pub mod domain_service;
 pub mod location_service;
@@ -133,6 +134,7 @@ pub trait Api {
     fn account_service(&self) -> &dyn account_service::AccountService;
     fn article_service(&self) -> &dyn article_service::ArticleService;
     fn auth_service(&self) -> &dyn auth_service::AuthService;
+    fn checkin_service(&self) -> &dyn checkin_service::CheckinService;
     fn comment_service(&self) -> &dyn comment_service::CommentService;
     fn domain_service(&self) -> &dyn domain_service::DomainService;
     fn location_service(&self) -> &dyn location_service::LocationService;
@@ -149,6 +151,7 @@ pub struct ApiClient {
     account_service: Box<dyn account_service::AccountService>,
     article_service: Box<dyn article_service::ArticleService>,
     auth_service: Box<dyn auth_service::AuthService>,
+    checkin_service: Box<dyn checkin_service::CheckinService>,
     comment_service: Box<dyn comment_service::CommentService>,
     domain_service: Box<dyn domain_service::DomainService>,
     location_service: Box<dyn location_service::LocationService>,
@@ -167,6 +170,7 @@ impl ApiClient {
             account_service: Box::new(account_service::AccountServiceClient::new(configuration.clone())),
             article_service: Box::new(article_service::ArticleServiceClient::new(configuration.clone())),
             auth_service: Box::new(auth_service::AuthServiceClient::new(configuration.clone())),
+            checkin_service: Box::new(checkin_service::CheckinServiceClient::new(configuration.clone())),
             comment_service: Box::new(comment_service::CommentServiceClient::new(configuration.clone())),
             domain_service: Box::new(domain_service::DomainServiceClient::new(configuration.clone())),
             location_service: Box::new(location_service::LocationServiceClient::new(configuration.clone())),
@@ -190,6 +194,9 @@ impl Api for ApiClient {
     }
     fn auth_service(&self) -> &dyn auth_service::AuthService {
         self.auth_service.as_ref()
+    }
+    fn checkin_service(&self) -> &dyn checkin_service::CheckinService {
+        self.checkin_service.as_ref()
     }
     fn comment_service(&self) -> &dyn comment_service::CommentService {
         self.comment_service.as_ref()

@@ -8,10 +8,7 @@ Method | HTTP request | Description
 [**login**](AuthService.md#login) | **POST** /v1/user/auth/login | 
 [**logout**](AuthService.md#logout) | **POST** /v1/user/auth/logout | 
 [**refresh_token**](AuthService.md#refresh_token) | **POST** /v1/user/auth/refresh-token | 
-[**start_email_registration**](AuthService.md#start_email_registration) | **POST** /v1/user/auth/start-email-registration | 
-[**start_phone_registration**](AuthService.md#start_phone_registration) | **POST** /v1/user/auth/start-phone-registration | 
-[**verify_email_registration**](AuthService.md#verify_email_registration) | **POST** /v1/user/auth/verify-email-registration | 
-[**verify_phone_registration**](AuthService.md#verify_phone_registration) | **POST** /v1/user/auth/verify-phone-registration | 
+[**register**](AuthService.md#register) | **POST** /v1/user/auth/register | 
 
 
 
@@ -135,109 +132,19 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## start_email_registration
+## register
 
-> models::StartEmailRegistrationResp start_email_registration(start_email_registration_req)
-
-
-开始邮箱注册。
-
-### Parameters
+> serde_json::Value register(register_req)
 
 
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**start_email_registration_req** | [**StartEmailRegistrationReq**](StartEmailRegistrationReq.md) |  | [required] |
-
-### Return type
-
-[**models::StartEmailRegistrationResp**](StartEmailRegistration_Resp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## start_phone_registration
-
-> models::StartPhoneRegistrationResp start_phone_registration(start_phone_registration_req)
-
-
-开始手机注册。
+注册账号。
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**start_phone_registration_req** | [**StartPhoneRegistrationReq**](StartPhoneRegistrationReq.md) |  | [required] |
-
-### Return type
-
-[**models::StartPhoneRegistrationResp**](StartPhoneRegistration_Resp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## verify_email_registration
-
-> serde_json::Value verify_email_registration(verify_email_registration_req)
-
-
-校验邮箱注册验证码。
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**verify_email_registration_req** | [**VerifyEmailRegistrationReq**](VerifyEmailRegistrationReq.md) |  | [required] |
-
-### Return type
-
-[**serde_json::Value**](serde_json::Value.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## verify_phone_registration
-
-> serde_json::Value verify_phone_registration(verify_phone_registration_req)
-
-
-校验手机注册验证码。
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**verify_phone_registration_req** | [**VerifyPhoneRegistrationReq**](VerifyPhoneRegistrationReq.md) |  | [required] |
+**register_req** | [**RegisterReq**](RegisterReq.md) |  | [required] |
 
 ### Return type
 

@@ -76,6 +76,8 @@ Class | Method | HTTP request | Description
 *AuthService* | [**logout**](docs/AuthService.md#logout) | **POST** /v1/user/auth/logout | 
 *AuthService* | [**refreshToken**](docs/AuthService.md#refreshtoken) | **POST** /v1/user/auth/refresh-token | 
 *AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/user/auth/register | 
+*CheckinService* | [**checkIn**](docs/CheckinService.md#checkin) | **POST** /v1/user/checkin/check-in | 
+*CheckinService* | [**getOverview**](docs/CheckinService.md#getoverview) | **POST** /v1/user/checkin/get-overview | 
 *CommentService* | [**create**](docs/CommentService.md#create) | **POST** /v1/content/comment/create | 
 *CommentService* | [**like**](docs/CommentService.md#like) | **POST** /v1/content/comment/like | 
 *CommentService* | [**list**](docs/CommentService.md#list) | **POST** /v1/content/comment/list | 
@@ -134,6 +136,7 @@ Class | Method | HTTP request | Description
  - [BlockRelationReq](docs/BlockRelationReq.md)
  - [CancelAccountReq](docs/CancelAccountReq.md)
  - [CancelPublishArticleReq](docs/CancelPublishArticleReq.md)
+ - [CheckInResp](docs/CheckInResp.md)
  - [CollectArticleReq](docs/CollectArticleReq.md)
  - [CollectArticleResp](docs/CollectArticleResp.md)
  - [ConfirmEnableTotpReq](docs/ConfirmEnableTotpReq.md)
@@ -151,6 +154,8 @@ Class | Method | HTTP request | Description
  - [FollowRelationReq](docs/FollowRelationReq.md)
  - [GetArticleReq](docs/GetArticleReq.md)
  - [GetArticleResp](docs/GetArticleResp.md)
+ - [GetCheckinOverviewReq](docs/GetCheckinOverviewReq.md)
+ - [GetCheckinOverviewResp](docs/GetCheckinOverviewResp.md)
  - [GetCurrentAccountResp](docs/GetCurrentAccountResp.md)
  - [GetCurrentLocationResp](docs/GetCurrentLocationResp.md)
  - [GetCurrentPreferencesResp](docs/GetCurrentPreferencesResp.md)
@@ -225,6 +230,7 @@ Class | Method | HTTP request | Description
  - [RespNotification](docs/RespNotification.md)
  - [RespPreference](docs/RespPreference.md)
  - [RespPrivacySetting](docs/RespPrivacySetting.md)
+ - [RespRecord](docs/RespRecord.md)
  - [RespRelation](docs/RespRelation.md)
  - [RespRelationStatus](docs/RespRelationStatus.md)
  - [RespTag](docs/RespTag.md)

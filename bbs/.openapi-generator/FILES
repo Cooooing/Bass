@@ -22,6 +22,8 @@ docs/BindArticleTagsReq.md
 docs/BlockRelationReq.md
 docs/CancelAccountReq.md
 docs/CancelPublishArticleReq.md
+docs/CheckInResp.md
+docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
 docs/CommentService.md
@@ -41,6 +43,8 @@ docs/DomainService.md
 docs/FollowRelationReq.md
 docs/GetArticleReq.md
 docs/GetArticleResp.md
+docs/GetCheckinOverviewReq.md
+docs/GetCheckinOverviewResp.md
 docs/GetCurrentAccountResp.md
 docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
@@ -122,6 +126,7 @@ docs/RespLocation.md
 docs/RespNotification.md
 docs/RespPreference.md
 docs/RespPrivacySetting.md
+docs/RespRecord.md
 docs/RespRelation.md
 docs/RespRelationStatus.md
 docs/RespTag.md

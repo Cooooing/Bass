@@ -262,6 +262,12 @@ export interface CancelAccountReq {
 export interface CancelPublishArticleReq {
     'article_id': string;
 }
+export interface CheckInResp {
+    'record_id'?: string;
+    'date'?: string;
+    'current_streak'?: number;
+    'longest_streak'?: number;
+}
 export interface CollectArticleReq {
     'article_id': string;
     'active': boolean;
@@ -315,6 +321,14 @@ export interface GetArticleReq {
 }
 export interface GetArticleResp {
     'article'?: ArticleDetail;
+}
+export interface GetCheckinOverviewReq {
+    'month'?: string;
+}
+export interface GetCheckinOverviewResp {
+    'records'?: Array<RespRecord>;
+    'current_streak'?: number;
+    'longest_streak'?: number;
 }
 export interface GetCurrentAccountResp {
     'account'?: RespAccount;
@@ -1099,6 +1113,7 @@ export const RespNotificationEventTypeEnum = {
     EVENT_TYPE_USER_ACCOUNT_CANCELLED: 'EVENT_TYPE_USER_ACCOUNT_CANCELLED',
     EVENT_TYPE_USER_ACCOUNT_BANNED: 'EVENT_TYPE_USER_ACCOUNT_BANNED',
     EVENT_TYPE_USER_ACCOUNT_UNBANNED: 'EVENT_TYPE_USER_ACCOUNT_UNBANNED',
+    EVENT_TYPE_USER_CHECKIN_COMPLETED: 'EVENT_TYPE_USER_CHECKIN_COMPLETED',
     EVENT_TYPE_ARTICLE_PUBLISHED: 'EVENT_TYPE_ARTICLE_PUBLISHED',
     EVENT_TYPE_ARTICLE_LIKED: 'EVENT_TYPE_ARTICLE_LIKED',
     EVENT_TYPE_ARTICLE_THANKED: 'EVENT_TYPE_ARTICLE_THANKED',
@@ -1111,6 +1126,10 @@ export const RespNotificationEventTypeEnum = {
     EVENT_TYPE_COMMENT_LIKED: 'EVENT_TYPE_COMMENT_LIKED',
     EVENT_TYPE_COMMENT_THANKED: 'EVENT_TYPE_COMMENT_THANKED',
     EVENT_TYPE_COMMENT_STATUS_UPDATED: 'EVENT_TYPE_COMMENT_STATUS_UPDATED',
+    EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE: 'EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE',
+    EVENT_TYPE_GAME_IDLE_CLOSE_SESSION: 'EVENT_TYPE_GAME_IDLE_CLOSE_SESSION',
+    EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED: 'EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED',
+    EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP: 'EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP',
 } as const;
 
 export type RespNotificationEventTypeEnum = typeof RespNotificationEventTypeEnum[keyof typeof RespNotificationEventTypeEnum];
@@ -1141,6 +1160,38 @@ export interface RespPrivacySetting {
     'public_online_status'?: boolean;
     'public_location'?: boolean;
 }
+export interface RespRecord {
+    'id'?: string;
+    'transaction_no'?: string;
+    'record_type'?: RespRecordRecordTypeEnum;
+    'direction'?: RespRecordDirectionEnum;
+    'amount'?: string;
+    'balance_before'?: string;
+    'balance_after'?: string;
+    'remark'?: string;
+    'created_at'?: string;
+}
+
+export const RespRecordRecordTypeEnum = {
+    ECONOMY_RECORD_TYPE_UNSPECIFIED: 'ECONOMY_RECORD_TYPE_UNSPECIFIED',
+    ECONOMY_RECORD_TYPE_SIGN_IN_REWARD: 'ECONOMY_RECORD_TYPE_SIGN_IN_REWARD',
+    ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD: 'ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD',
+    ECONOMY_RECORD_TYPE_COMMENT_THANK_REWARD: 'ECONOMY_RECORD_TYPE_COMMENT_THANK_REWARD',
+    ECONOMY_RECORD_TYPE_ARTICLE_REWARD_OUT: 'ECONOMY_RECORD_TYPE_ARTICLE_REWARD_OUT',
+    ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN: 'ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN',
+    ECONOMY_RECORD_TYPE_ADMIN_ADD: 'ECONOMY_RECORD_TYPE_ADMIN_ADD',
+    ECONOMY_RECORD_TYPE_ADMIN_DEDUCT: 'ECONOMY_RECORD_TYPE_ADMIN_DEDUCT',
+} as const;
+
+export type RespRecordRecordTypeEnum = typeof RespRecordRecordTypeEnum[keyof typeof RespRecordRecordTypeEnum];
+export const RespRecordDirectionEnum = {
+    ECONOMY_RECORD_DIRECTION_UNSPECIFIED: 'ECONOMY_RECORD_DIRECTION_UNSPECIFIED',
+    ECONOMY_RECORD_DIRECTION_INCOME: 'ECONOMY_RECORD_DIRECTION_INCOME',
+    ECONOMY_RECORD_DIRECTION_EXPENSE: 'ECONOMY_RECORD_DIRECTION_EXPENSE',
+} as const;
+
+export type RespRecordDirectionEnum = typeof RespRecordDirectionEnum[keyof typeof RespRecordDirectionEnum];
+
 export interface RespRelation {
     'id'?: string;
     'type'?: RespRelationTypeEnum;
@@ -3455,6 +3506,205 @@ export class AuthService extends BaseAPI implements AuthServiceInterface {
      */
     public register(requestParameters: AuthServiceRegisterRequest, options?: RawAxiosRequestConfig) {
         return AuthServiceFp(this.configuration).register(requestParameters.registerReq, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * CheckinService - axios parameter creator
+ */
+export const CheckinServiceAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkIn: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('checkIn', 'body', body)
+            const localVarPath = `/v1/user/checkin/check-in`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {GetCheckinOverviewReq} getCheckinOverviewReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getOverview: async (getCheckinOverviewReq: GetCheckinOverviewReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'getCheckinOverviewReq' is not null or undefined
+            assertParamExists('getOverview', 'getCheckinOverviewReq', getCheckinOverviewReq)
+            const localVarPath = `/v1/user/checkin/get-overview`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(getCheckinOverviewReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CheckinService - functional programming interface
+ */
+export const CheckinServiceFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CheckinServiceAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async checkIn(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CheckInResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.checkIn(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CheckinService.checkIn']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {GetCheckinOverviewReq} getCheckinOverviewReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getOverview(getCheckinOverviewReq: GetCheckinOverviewReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCheckinOverviewResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getOverview(getCheckinOverviewReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CheckinService.getOverview']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * CheckinService - factory interface
+ */
+export const CheckinServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CheckinServiceFp(configuration)
+    return {
+        /**
+         * 
+         * @param {CheckinServiceCheckInRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkIn(requestParameters: CheckinServiceCheckInRequest, options?: RawAxiosRequestConfig): AxiosPromise<CheckInResp> {
+            return localVarFp.checkIn(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {CheckinServiceGetOverviewRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getOverview(requestParameters: CheckinServiceGetOverviewRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCheckinOverviewResp> {
+            return localVarFp.getOverview(requestParameters.getCheckinOverviewReq, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CheckinService - interface
+ */
+export interface CheckinServiceInterface {
+    /**
+     * 
+     * @param {CheckinServiceCheckInRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    checkIn(requestParameters: CheckinServiceCheckInRequest, options?: RawAxiosRequestConfig): AxiosPromise<CheckInResp>;
+
+    /**
+     * 
+     * @param {CheckinServiceGetOverviewRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getOverview(requestParameters: CheckinServiceGetOverviewRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCheckinOverviewResp>;
+
+}
+
+/**
+ * Request parameters for checkIn operation in CheckinService.
+ */
+export interface CheckinServiceCheckInRequest {
+    readonly body: object
+}
+
+/**
+ * Request parameters for getOverview operation in CheckinService.
+ */
+export interface CheckinServiceGetOverviewRequest {
+    readonly getCheckinOverviewReq: GetCheckinOverviewReq
+}
+
+/**
+ * CheckinService - object-oriented interface
+ */
+export class CheckinService extends BaseAPI implements CheckinServiceInterface {
+    /**
+     * 
+     * @param {CheckinServiceCheckInRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public checkIn(requestParameters: CheckinServiceCheckInRequest, options?: RawAxiosRequestConfig) {
+        return CheckinServiceFp(this.configuration).checkIn(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {CheckinServiceGetOverviewRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getOverview(requestParameters: CheckinServiceGetOverviewRequest, options?: RawAxiosRequestConfig) {
+        return CheckinServiceFp(this.configuration).getOverview(requestParameters.getCheckinOverviewReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

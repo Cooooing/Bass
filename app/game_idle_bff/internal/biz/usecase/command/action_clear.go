@@ -26,5 +26,16 @@ func (h *ActionClearHandler) Validate(command *v1.WebSocketCommand) bool {
 }
 
 func (h *ActionClearHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
-	return h.actionQueueUsecase.Clear(ctx, req.CharacterID)
+	if err := h.actionQueueUsecase.Clear(ctx, req.CharacterID); err != nil {
+		return err
+	}
+	queue, err := h.actionQueueUsecase.List(ctx, req.CharacterID)
+	if err != nil {
+		return err
+	}
+	req.Connection.Send(ctx, &usecase.WebSocketSendMessage{
+		Type:    enum.WebSocketMessageTypeActionQueueUpdated,
+		Payload: queue,
+	})
+	return nil
 }

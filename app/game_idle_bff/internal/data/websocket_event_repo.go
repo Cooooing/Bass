@@ -37,6 +37,10 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 		switch event.GetType() {
 		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE:
 			payload := event.GetGameIdleChatMessage()
+			var createdAt *time.Time
+			if payload.GetCreatedAt() != nil {
+				createdAt = new(payload.GetCreatedAt().AsTime())
+			}
 			return handler(ctx, &model.WebSocketEvent{
 				Type: commonenum.EventTypeGameIdleChatMessage,
 				ChatMessage: &model.WebSocketChatMessage{
@@ -44,8 +48,10 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 					ChannelType:         payload.GetChannelType(),
 					ChannelID:           payload.GetChannelId(),
 					SenderCharacterID:   payload.GetSenderCharacterId(),
+					SenderName:          payload.GetSenderName(),
 					ReceiverCharacterID: payload.GetReceiverCharacterId(),
 					Content:             payload.GetContent(),
+					CreatedAt:           createdAt,
 				},
 			})
 		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_CLOSE_SESSION:

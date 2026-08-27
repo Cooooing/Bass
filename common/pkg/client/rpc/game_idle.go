@@ -17,6 +17,7 @@ type GameIdleClient struct {
 	Chat             gameidlev1.ChatServiceClient
 	Region           gameidlev1.RegionServiceClient
 	Action           gameidlev1.ActionServiceClient
+	Item             gameidlev1.ItemServiceClient
 }
 
 func NewGameIdleClient(conn grpc.ClientConnInterface) *GameIdleClient {
@@ -29,6 +30,7 @@ func NewGameIdleClient(conn grpc.ClientConnInterface) *GameIdleClient {
 		Chat:             gameidlev1.NewChatServiceClient(conn),
 		Region:           gameidlev1.NewRegionServiceClient(conn),
 		Action:           gameidlev1.NewActionServiceClient(conn),
+		Item:             gameidlev1.NewItemServiceClient(conn),
 	}
 }
 
@@ -42,5 +44,6 @@ func MountGameIdleServices[T any](conn *localrpc.Conn, services []T) {
 		conn.RegisterMatching(&gameidlev1.ChatService_ServiceDesc, service)
 		conn.RegisterMatching(&gameidlev1.RegionService_ServiceDesc, service)
 		conn.RegisterMatching(&gameidlev1.ActionService_ServiceDesc, service)
+		conn.RegisterMatching(&gameidlev1.ItemService_ServiceDesc, service)
 	}
 }

@@ -61,6 +61,8 @@ func (r *GameIdleEventRepo) Publish(ctx context.Context, event *model.GameIdleEv
 				SenderCharacterId:   event.ChatMessage.SenderCharacterID,
 				ReceiverCharacterId: receiverCharacterID,
 				Content:             event.ChatMessage.Content,
+				SenderName:          event.ChatMessage.SenderName,
+				CreatedAt:           timestamppb.New(createdAt),
 			},
 		}
 		message.Header["message_id"] = strconv.FormatInt(event.ChatMessage.ID, 10)

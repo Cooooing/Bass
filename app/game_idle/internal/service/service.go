@@ -16,6 +16,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewChatService,
 	NewRegionService,
 	NewActionService,
+	NewItemService,
 )
 
 func ProvideServices(
@@ -27,6 +28,7 @@ func ProvideServices(
 	chatService *ChatService,
 	regionService *RegionService,
 	actionService *ActionService,
+	itemService *ItemService,
 ) []server.Service {
 	return []server.Service{
 		commonSystemService,
@@ -37,5 +39,6 @@ func ProvideServices(
 		chatService,
 		regionService,
 		actionService,
+		itemService,
 	}
 }

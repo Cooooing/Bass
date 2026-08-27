@@ -27,8 +27,19 @@ func (h *ActionRemoveHandler) Validate(command *v1.WebSocketCommand) bool {
 
 func (h *ActionRemoveHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
 	payload := req.Command.GetPayload().GetActionRemove()
-	return h.actionQueueUsecase.Remove(ctx, &usecase.RemoveActionReq{
+	if err := h.actionQueueUsecase.Remove(ctx, &usecase.RemoveActionReq{
 		CharacterID: req.CharacterID,
 		Position:    payload.GetPosition(),
+	}); err != nil {
+		return err
+	}
+	queue, err := h.actionQueueUsecase.List(ctx, req.CharacterID)
+	if err != nil {
+		return err
+	}
+	req.Connection.Send(ctx, &usecase.WebSocketSendMessage{
+		Type:    enum.WebSocketMessageTypeActionQueueUpdated,
+		Payload: queue,
 	})
+	return nil
 }

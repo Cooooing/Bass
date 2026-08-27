@@ -11,6 +11,7 @@ type ChatMessage struct {
 	ChannelType         enum.ChatChannelType
 	ChannelID           string
 	SenderCharacterID   int64
+	SenderName          string
 	ReceiverCharacterID *int64
 	Content             string
 	Status              enum.ChatMessageStatus

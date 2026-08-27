@@ -9,6 +9,7 @@ import (
 	"context"
 	"game_idle_bff/internal/biz/model"
 	"game_idle_bff/internal/biz/repo"
+	"time"
 )
 
 var _ repo.ChatRepo = (*ChatRepo)(nil)
@@ -42,13 +43,19 @@ func (r *ChatRepo) Send(ctx context.Context, req *repo.SendChatMessageReq) (*mod
 		return nil, err
 	}
 	row := reply.GetRow()
+	var createdAt *time.Time
+	if row.GetCreatedAt() != nil {
+		createdAt = new(row.GetCreatedAt().AsTime())
+	}
 	return &model.WebSocketChatMessage{
 		MessageID:           row.GetId(),
 		ChannelType:         req.ChannelType,
 		ChannelID:           row.GetChannelId(),
 		SenderCharacterID:   row.GetSenderCharacterId(),
+		SenderName:          row.GetSenderName(),
 		ReceiverCharacterID: row.GetReceiverCharacterId(),
 		Content:             row.GetContent(),
+		CreatedAt:           createdAt,
 	}, nil
 }
 
@@ -71,13 +78,19 @@ func (r *ChatRepo) List(ctx context.Context, req *repo.ListChatMessagesReq) ([]*
 	}
 	rows := make([]*model.WebSocketChatMessage, 0, len(reply.GetRows()))
 	for _, row := range reply.GetRows() {
+		var createdAt *time.Time
+		if row.GetCreatedAt() != nil {
+			createdAt = new(row.GetCreatedAt().AsTime())
+		}
 		rows = append(rows, &model.WebSocketChatMessage{
 			MessageID:           row.GetId(),
 			ChannelType:         req.ChannelType,
 			ChannelID:           row.GetChannelId(),
 			SenderCharacterID:   row.GetSenderCharacterId(),
+			SenderName:          row.GetSenderName(),
 			ReceiverCharacterID: row.GetReceiverCharacterId(),
 			Content:             row.GetContent(),
+			CreatedAt:           createdAt,
 		})
 	}
 	return rows, nil

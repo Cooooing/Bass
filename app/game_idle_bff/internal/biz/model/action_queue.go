@@ -3,12 +3,12 @@ package model
 import "time"
 
 type ActionQueue struct {
-	CharacterID int64
-	Items       []*ActionQueueItem
+	CharacterID int64              `json:"character_id"`
+	Items       []*ActionQueueItem `json:"items"`
 }
 
 type ActionQueueItem struct {
-	ActionID  string
-	Times     int64
-	CreatedAt time.Time
+	ActionID  string    `json:"action_id"`
+	Times     int64     `json:"times"`
+	CreatedAt time.Time `json:"created_at"`
 }

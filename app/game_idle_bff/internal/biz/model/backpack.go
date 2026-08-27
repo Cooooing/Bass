@@ -1,6 +1,6 @@
 package model
 
 type CharacterItem struct {
-	ItemID   string
-	Quantity int64
+	ItemID   string `json:"item_id"`
+	Quantity int64  `json:"quantity"`
 }

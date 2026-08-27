@@ -10,6 +10,7 @@ const (
 	WebSocketMessageTypeCommandFailed         WebSocketMessageType = "command.failed"          // 命令失败
 	WebSocketMessageTypeChatMessageReceived   WebSocketMessageType = "chat.message.received"   // 收到聊天消息
 	WebSocketMessageTypeActionCompleted       WebSocketMessageType = "action.completed"        // 行动完成
+	WebSocketMessageTypeActionQueueUpdated    WebSocketMessageType = "action.queue.updated"    // 行动队列更新
 	WebSocketMessageTypeAbilityLeveledUp      WebSocketMessageType = "ability.level.increased" // 能力升级
 	WebSocketMessageTypeInitCompleted         WebSocketMessageType = "init.completed"          // 初始化完成
 	WebSocketMessageTypeConfigCompleted       WebSocketMessageType = "config.completed"        // 配置查询完成

@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package common.api.app.game_idle.v1;
+
+option go_package = "common/proto/gen/game_idle/v1;v1";
+
+service ItemService {
+  rpc List(ListItems.Request) returns (ListItems.Resp) {}
+}
+
+message ListItems {
+  message Request {}
+
+  message Resp {
+    repeated Item rows = 1; // 物品列表
+  }
+}
+
+message Item {
+  string item_id = 1; // 物品编码
+  string name = 2; // 物品名称
+  string item_type = 3; // 物品类型
+  string description = 4; // 物品描述
+  bool enabled = 5; // 是否启用
+  int32 sort = 6; // 排序值
+}

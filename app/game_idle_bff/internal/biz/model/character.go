@@ -6,12 +6,12 @@ import (
 )
 
 type Character struct {
-	ID                  int64
-	Name                string
-	Status              gameidleenum.CharacterStatus
-	Slot                int32
-	ActionQueueCapacity int32
-	MaxOfflineSeconds   int64
-	CreatedAt           *time.Time
-	UpdatedAt           *time.Time
+	ID                  int64                        `json:"id"`
+	Name                string                       `json:"name"`
+	Status              gameidleenum.CharacterStatus `json:"status"`
+	Slot                int32                        `json:"slot"`
+	ActionQueueCapacity int32                        `json:"action_queue_capacity"`
+	MaxOfflineSeconds   int64                        `json:"max_offline_seconds"`
+	CreatedAt           *time.Time                   `json:"created_at,omitempty"`
+	UpdatedAt           *time.Time                   `json:"updated_at,omitempty"`
 }

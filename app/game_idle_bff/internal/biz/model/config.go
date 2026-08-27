@@ -4,6 +4,7 @@ package model
 type GameConfig struct {
 	Regions    []*RegionConfig `json:"regions"`
 	Actions    []*ActionConfig `json:"actions"`
+	Items      []*ItemConfig   `json:"items"`
 	ServerTime int64           `json:"server_time"`
 }
 
@@ -27,6 +28,16 @@ type ActionConfig struct {
 	ExpReward            int64  `json:"exp_reward"`
 	Enabled              bool   `json:"enabled"`
 	Sort                 int32  `json:"sort"`
+}
+
+type ItemConfig struct {
+	ItemID      string `json:"item_id"`
+	Name        string `json:"name"`
+	ItemType    string `json:"item_type"`
+	Category    string `json:"category"`
+	Description string `json:"description"`
+	Enabled     bool   `json:"enabled"`
+	Sort        int32  `json:"sort"`
 }
 
 // ActionDetailConfig 是前端行动详情配置。

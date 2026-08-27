@@ -8,18 +8,24 @@ import (
 	characterent "game_idle/internal/data/gen/character"
 	"game_idle/internal/enum"
 	"strings"
+	"sync"
 	"time"
 )
 
 var _ bizrepo.CharacterRepo = (*CharacterRepo)(nil)
 
 type CharacterRepo struct {
-	db *gen.Client
+	db         *gen.Client
+	mutex      sync.RWMutex
+	characters map[int64]*model.Character
+	names      map[int64]string
 }
 
 func NewCharacterRepo(db *gen.Client) bizrepo.CharacterRepo {
 	return &CharacterRepo{
-		db: db,
+		db:         db,
+		characters: make(map[int64]*model.Character),
+		names:      make(map[int64]string),
 	}
 }
 
@@ -52,7 +58,7 @@ func (r *CharacterRepo) Save(ctx context.Context, character *model.Character) (*
 	if err != nil {
 		return nil, err
 	}
-	return &model.Character{
+	character = &model.Character{
 		ID:                  row.ID,
 		UserID:              row.UserID,
 		Slot:                row.Slot,
@@ -64,10 +70,18 @@ func (r *CharacterRepo) Save(ctx context.Context, character *model.Character) (*
 		CreatedAt:           row.CreatedAt,
 		UpdatedAt:           row.UpdatedAt,
 		DeletedAt:           row.DeletedAt,
-	}, nil
+	}
+	r.cache(character)
+	return character, nil
 }
 
 func (r *CharacterRepo) Get(ctx context.Context, characterID int64) (*model.Character, error) {
+	r.mutex.RLock()
+	character := r.characters[characterID]
+	r.mutex.RUnlock()
+	if character != nil {
+		return character, nil
+	}
 	row, err := r.db.Character.Query().
 		Where(characterent.IDEQ(characterID), characterent.DeletedAtIsNil()).
 		First(ctx)
@@ -77,7 +91,7 @@ func (r *CharacterRepo) Get(ctx context.Context, characterID int64) (*model.Char
 	if err != nil {
 		return nil, err
 	}
-	return &model.Character{
+	character = &model.Character{
 		ID:                  row.ID,
 		UserID:              row.UserID,
 		Slot:                row.Slot,
@@ -89,7 +103,23 @@ func (r *CharacterRepo) Get(ctx context.Context, characterID int64) (*model.Char
 		CreatedAt:           row.CreatedAt,
 		UpdatedAt:           row.UpdatedAt,
 		DeletedAt:           row.DeletedAt,
-	}, nil
+	}
+	r.cache(character)
+	return character, nil
+}
+
+func (r *CharacterRepo) GetName(ctx context.Context, characterID int64) (string, error) {
+	r.mutex.RLock()
+	name := r.names[characterID]
+	r.mutex.RUnlock()
+	if name != "" {
+		return name, nil
+	}
+	character, err := r.Get(ctx, characterID)
+	if err != nil {
+		return "", err
+	}
+	return character.Name, nil
 }
 
 func (r *CharacterRepo) List(ctx context.Context, req *bizrepo.ListCharacterReq) ([]*model.Character, error) {
@@ -109,7 +139,7 @@ func (r *CharacterRepo) List(ctx context.Context, req *bizrepo.ListCharacterReq)
 	}
 	characters := make([]*model.Character, 0, len(rows))
 	for _, row := range rows {
-		characters = append(characters, &model.Character{
+		character := &model.Character{
 			ID:                  row.ID,
 			UserID:              row.UserID,
 			Slot:                row.Slot,
@@ -121,7 +151,16 @@ func (r *CharacterRepo) List(ctx context.Context, req *bizrepo.ListCharacterReq)
 			CreatedAt:           row.CreatedAt,
 			UpdatedAt:           row.UpdatedAt,
 			DeletedAt:           row.DeletedAt,
-		})
+		}
+		characters = append(characters, character)
+		r.cache(character)
 	}
 	return characters, nil
+}
+
+func (r *CharacterRepo) cache(character *model.Character) {
+	r.mutex.Lock()
+	r.characters[character.ID] = character
+	r.names[character.ID] = character.Name
+	r.mutex.Unlock()
 }

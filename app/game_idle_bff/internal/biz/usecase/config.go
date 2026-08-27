@@ -10,15 +10,18 @@ import (
 type ConfigUsecase struct {
 	regionRepo repo.RegionRepo
 	actionRepo repo.ActionRepo
+	itemRepo   repo.ItemRepo
 }
 
 func NewConfigUsecase(
 	regionRepo repo.RegionRepo,
 	actionRepo repo.ActionRepo,
+	itemRepo repo.ItemRepo,
 ) *ConfigUsecase {
 	return &ConfigUsecase{
 		regionRepo: regionRepo,
 		actionRepo: actionRepo,
+		itemRepo:   itemRepo,
 	}
 }
 
@@ -31,9 +34,14 @@ func (u *ConfigUsecase) Get(ctx context.Context) (*model.GameConfig, error) {
 	if err != nil {
 		return nil, err
 	}
+	items, err := u.itemRepo.List(ctx)
+	if err != nil {
+		return nil, err
+	}
 	return &model.GameConfig{
 		Regions:    regions,
 		Actions:    actions,
+		Items:      items,
 		ServerTime: time.Now().Unix(),
 	}, nil
 }

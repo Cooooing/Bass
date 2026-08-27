@@ -27,10 +27,21 @@ func (h *ActionAddHandler) Validate(command *v1.WebSocketCommand) bool {
 
 func (h *ActionAddHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
 	payload := req.Command.GetPayload().GetActionAdd()
-	return h.actionQueueUsecase.Add(ctx, &usecase.AddActionReq{
+	if err := h.actionQueueUsecase.Add(ctx, &usecase.AddActionReq{
 		CharacterID: req.CharacterID,
 		ActionID:    payload.GetActionId(),
 		Times:       payload.GetTimes(),
 		Position:    payload.Position,
+	}); err != nil {
+		return err
+	}
+	queue, err := h.actionQueueUsecase.List(ctx, req.CharacterID)
+	if err != nil {
+		return err
+	}
+	req.Connection.Send(ctx, &usecase.WebSocketSendMessage{
+		Type:    enum.WebSocketMessageTypeActionQueueUpdated,
+		Payload: queue,
 	})
+	return nil
 }

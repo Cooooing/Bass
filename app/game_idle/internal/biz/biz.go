@@ -20,6 +20,7 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewChatUsecase,
 	usecase.NewRegionUsecase,
 	usecase.NewActionUsecase,
+	usecase.NewItemUsecase,
 )
 
 func ProvideActionTasks(

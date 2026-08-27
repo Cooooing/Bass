@@ -41,7 +41,8 @@ func (u *ChatUsecase) Send(ctx context.Context, req *SendMessageReq) (*model.Cha
 	if content == "" || len([]rune(content)) > chatMessageMaxRuneLen {
 		return nil, model.ErrChatMessageInvalid
 	}
-	if _, err := u.characterRepo.Get(ctx, req.CharacterID); err != nil {
+	senderName, err := u.characterRepo.GetName(ctx, req.CharacterID)
+	if err != nil {
 		return nil, err
 	}
 	channelType := req.ChannelType
@@ -60,6 +61,7 @@ func (u *ChatUsecase) Send(ctx context.Context, req *SendMessageReq) (*model.Cha
 	if err != nil {
 		return nil, err
 	}
+	message.SenderName = senderName
 	return message, u.gameIdleEventRepo.Publish(ctx, &model.GameIdleEvent{
 		ChatMessage: message,
 	})
@@ -82,10 +84,28 @@ func (u *ChatUsecase) List(ctx context.Context, req *ListMessagesReq) ([]*model.
 	if channelType == "" || channelID == "" {
 		return nil, model.ErrChatMessageInvalid
 	}
-	return u.chatMessageRepo.List(ctx, &repo.ChatMessageListReq{
+	messages, err := u.chatMessageRepo.List(ctx, &repo.ChatMessageListReq{
 		ChannelType: channelType,
 		ChannelID:   channelID,
 		BeforeID:    req.BeforeID,
 		Size:        size,
 	})
+	if err != nil {
+		return nil, err
+	}
+	characterNames := make(map[int64]string)
+	for _, message := range messages {
+		if _, ok := characterNames[message.SenderCharacterID]; ok {
+			continue
+		}
+		name, err := u.characterRepo.GetName(ctx, message.SenderCharacterID)
+		if err != nil {
+			return nil, err
+		}
+		characterNames[message.SenderCharacterID] = name
+	}
+	for _, message := range messages {
+		message.SenderName = characterNames[message.SenderCharacterID]
+	}
+	return messages, nil
 }

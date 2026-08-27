@@ -6,18 +6,20 @@ import (
 )
 
 type WebSocketSession struct {
-	CharacterID       int64
-	SessionID         string
-	RemainingDuration time.Duration
+	CharacterID       int64         `json:"character_id"`
+	SessionID         string        `json:"session_id"`
+	RemainingDuration time.Duration `json:"remaining_duration"`
 }
 
 type WebSocketChatMessage struct {
-	MessageID           int64  `json:"message_id"`
-	ChannelType         string `json:"channel_type"`
-	ChannelID           string `json:"channel_id"`
-	SenderCharacterID   int64  `json:"sender_character_id"`
-	ReceiverCharacterID int64  `json:"receiver_character_id,omitempty"`
-	Content             string `json:"content"`
+	MessageID           int64      `json:"message_id"`
+	ChannelType         string     `json:"channel_type"`
+	ChannelID           string     `json:"channel_id"`
+	SenderCharacterID   int64      `json:"sender_character_id"`
+	SenderName          string     `json:"sender_name"`
+	ReceiverCharacterID int64      `json:"receiver_character_id,omitempty"`
+	Content             string     `json:"content"`
+	CreatedAt           *time.Time `json:"created_at,omitempty"`
 }
 
 type WebSocketEvent struct {

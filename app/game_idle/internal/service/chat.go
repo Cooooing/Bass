@@ -61,6 +61,7 @@ func (s *ChatService) Send(ctx context.Context, req *v1.SendChatMessage_Request)
 		ReceiverCharacterId: 0,
 		Content:             row.Content,
 		Status:              enum.ChatMessageStatusMap.MustToProto(row.Status),
+		SenderName:          row.SenderName,
 	}
 	if row.ReceiverCharacterID != nil {
 		message.ReceiverCharacterId = *row.ReceiverCharacterID
@@ -95,6 +96,7 @@ func (s *ChatService) List(ctx context.Context, req *v1.ListChatMessages_Request
 			ReceiverCharacterId: 0,
 			Content:             row.Content,
 			Status:              enum.ChatMessageStatusMap.MustToProto(row.Status),
+			SenderName:          row.SenderName,
 		}
 		if row.ReceiverCharacterID != nil {
 			message.ReceiverCharacterId = *row.ReceiverCharacterID

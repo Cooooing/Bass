@@ -254,23 +254,19 @@ func (s *AccountService) UpdatePassword(ctx context.Context, req *v1.UpdatePassw
 	if len(oldPassword) < 6 || len(oldPassword) > 64 || len(newPassword) < 6 || len(newPassword) > 64 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	var hasUpper, hasLower, hasDigit, hasSpecial bool
+	var hasLetter, hasDigit bool
 	for _, r := range newPassword {
 		if r < '!' || r > '~' {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		switch {
-		case r >= 'A' && r <= 'Z':
-			hasUpper = true
-		case r >= 'a' && r <= 'z':
-			hasLower = true
+		case (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z'):
+			hasLetter = true
 		case r >= '0' && r <= '9':
 			hasDigit = true
-		default:
-			hasSpecial = true
 		}
 	}
-	if !hasUpper || !hasLower || !hasDigit || !hasSpecial {
+	if !hasLetter || !hasDigit {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	if err := s.accountUsecase.UpdatePassword(ctx, &usecase.UpdateAccountPasswordReq{

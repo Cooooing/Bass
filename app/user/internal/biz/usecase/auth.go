@@ -92,6 +92,7 @@ type RegisterReq struct {
 	Email    string
 	Phone    string
 	Code     string
+	SkipOtp  bool
 }
 
 func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
@@ -108,11 +109,13 @@ func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
 		} else if exists {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
 		}
-		if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{
-			Email: email,
-			Code:  req.Code,
-		}); err != nil {
-			return err
+		if !req.SkipOtp {
+			if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{
+				Email: email,
+				Code:  req.Code,
+			}); err != nil {
+				return err
+			}
 		}
 		passwordHash, err := str.HashPassword(req.Password)
 		if err != nil {
@@ -165,11 +168,13 @@ func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
 		} else if exists {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
 		}
-		if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{
-			Phone: phone,
-			Code:  req.Code,
-		}); err != nil {
-			return err
+		if !req.SkipOtp {
+			if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{
+				Phone: phone,
+				Code:  req.Code,
+			}); err != nil {
+				return err
+			}
 		}
 		passwordHash, err := str.HashPassword(req.Password)
 		if err != nil {
@@ -220,6 +225,7 @@ type LoginReq struct {
 	Code            string
 	Email           string
 	Phone           string
+	SkipOtp         bool
 }
 
 type LoginResp struct {
@@ -319,7 +325,7 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		if err != nil {
 			return nil, err
 		}
-		if totpRow != nil && totpRow.Enable {
+		if !req.SkipOtp && totpRow != nil && totpRow.Enable {
 			if strings.TrimSpace(req.Code) == "" || !totp.Validate(req.Code, totpRow.Secret) {
 				audit.FailureReason = new(enum.LoginFailureReasonTotpInvalid)
 				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
@@ -329,12 +335,14 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 	case enum.LoginTypeEmail:
 		email := strings.ToLower(strings.TrimSpace(req.Email))
 		audit.AccountInput = email
-		if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{
-			Email: email,
-			Code:  req.Code,
-		}); err != nil {
-			audit.FailureReason = new(enum.LoginFailureReasonCodeInvalidOrExpired)
-			return nil, err
+		if !req.SkipOtp {
+			if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{
+				Email: email,
+				Code:  req.Code,
+			}); err != nil {
+				audit.FailureReason = new(enum.LoginFailureReasonCodeInvalidOrExpired)
+				return nil, err
+			}
 		}
 		user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
 			Account: new(email),
@@ -354,12 +362,14 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 	case enum.LoginTypePhone:
 		phone := strings.TrimSpace(req.Phone)
 		audit.AccountInput = phone
-		if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{
-			Phone: phone,
-			Code:  req.Code,
-		}); err != nil {
-			audit.FailureReason = new(enum.LoginFailureReasonCodeInvalidOrExpired)
-			return nil, err
+		if !req.SkipOtp {
+			if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{
+				Phone: phone,
+				Code:  req.Code,
+			}); err != nil {
+				audit.FailureReason = new(enum.LoginFailureReasonCodeInvalidOrExpired)
+				return nil, err
+			}
 		}
 		user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{Account: new(phone)})
 		if err != nil || user == nil || user.Status == nil || *user.Status != enum.AccountStatusNormal {

@@ -48,6 +48,7 @@ message Register {
     string name = 2; // 账号名
     string password = 3; // 密码
     optional string nickname = 4; // 昵称
+    bool skip_otp = 5; // 跳过 OTP 校验，仅供内部调试或测试阶段使用
     oneof credential {
       EmailCredential email_credential = 10; // 邮箱注册凭证
       PhoneCredential phone_credential = 11; // 手机注册凭证
@@ -86,6 +87,7 @@ message Login {
     LoginType type = 1; // 登录方式
     common.enums.LoginRealm realm = 2; // 登录域
     ClientInfo client = 3; // 客户端信息
+    bool skip_otp = 4; // 跳过 OTP 校验，仅供内部调试或测试阶段使用
     oneof credential {
       PasswordCredential password_credential = 10; // 密码登录凭证
       EmailCredential email_credential = 11; // 邮箱登录凭证

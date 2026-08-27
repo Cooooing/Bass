@@ -35,6 +35,7 @@ func (r *AuthRepo) Register(ctx context.Context, req *repo.RegisterReq) error {
 		Type:     userenum.RegisterType_REGISTER_TYPE_EMAIL,
 		Name:     "idle_" + hex.EncodeToString(sum[:])[:20],
 		Password: req.Password,
+		SkipOtp:  true,
 		Credential: &userv1.Register_Req_EmailCredential_{
 			EmailCredential: &userv1.Register_Req_EmailCredential{
 				Email: req.Email,
@@ -56,8 +57,9 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*model.LoginT
 		deviceType = userenum.DeviceType_DEVICE_TYPE_MOBILE
 	}
 	reply, err := r.userClient.Auth.Login(ctx, &userv1.Login_Req{
-		Type:  userenum.LoginType_LOGIN_TYPE_PASSWORD,
-		Realm: commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmGameIdle),
+		Type:    userenum.LoginType_LOGIN_TYPE_PASSWORD,
+		Realm:   commonenum.LoginRealmMap.MustToProto(commonenum.LoginRealmGameIdle),
+		SkipOtp: true,
 		Client: &userv1.Login_Req_ClientInfo{
 			Ip:             server.ClientIP(ctx),
 			UserAgent:      uaRaw,

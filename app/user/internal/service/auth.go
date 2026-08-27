@@ -10,7 +10,6 @@ import (
 	"regexp"
 	"strings"
 	"time"
-	"unicode"
 	"unicode/utf8"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
@@ -68,23 +67,19 @@ func (s *AuthService) Register(ctx context.Context, req *v1.Register_Req) (*v1.R
 	if len(password) < 6 || len(password) > 64 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	var hasUpper, hasLower, hasDigit, hasSpecial bool
+	var hasLetter, hasDigit bool
 	for _, r := range password {
 		if r < '!' || r > '~' {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		switch {
-		case r >= 'A' && r <= 'Z':
-			hasUpper = true
-		case r >= 'a' && r <= 'z':
-			hasLower = true
+		case (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z'):
+			hasLetter = true
 		case r >= '0' && r <= '9':
 			hasDigit = true
-		default:
-			hasSpecial = true
 		}
 	}
-	if !hasUpper || !hasLower || !hasDigit || !hasSpecial {
+	if !hasLetter || !hasDigit {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	var nickname *string
@@ -94,16 +89,6 @@ func (s *AuthService) Register(ctx context.Context, req *v1.Register_Req) (*v1.R
 		if length < 2 || length > 32 {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
-		onlyDigits := true
-		for _, r := range value {
-			if !unicode.IsDigit(r) {
-				onlyDigits = false
-				break
-			}
-		}
-		if onlyDigits {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-		}
 		nickname = new(value)
 	}
 	ucReq := &usecase.RegisterReq{
@@ -111,6 +96,7 @@ func (s *AuthService) Register(ctx context.Context, req *v1.Register_Req) (*v1.R
 		Name:     name,
 		Password: password,
 		Nickname: nickname,
+		SkipOtp:  req.GetSkipOtp(),
 	}
 	switch registerType {
 	case enum.RegisterTypeEmail:
@@ -124,7 +110,7 @@ func (s *AuthService) Register(ctx context.Context, req *v1.Register_Req) (*v1.R
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		code := strings.TrimSpace(cred.GetCode())
-		if !s.codeRe.MatchString(code) {
+		if !req.GetSkipOtp() && !s.codeRe.MatchString(code) {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		ucReq.Email = email
@@ -136,7 +122,7 @@ func (s *AuthService) Register(ctx context.Context, req *v1.Register_Req) (*v1.R
 		}
 		phone := strings.TrimSpace(cred.GetPhone())
 		code := strings.TrimSpace(cred.GetCode())
-		if !s.phoneRe.MatchString(phone) || !s.codeRe.MatchString(code) {
+		if !s.phoneRe.MatchString(phone) || (!req.GetSkipOtp() && !s.codeRe.MatchString(code)) {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		ucReq.Phone = phone
@@ -187,9 +173,10 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 		}
 	}
 	ucReq := &usecase.LoginReq{
-		Type:   loginType,
-		Realm:  realm,
-		Client: clientContext,
+		Type:    loginType,
+		Realm:   realm,
+		Client:  clientContext,
+		SkipOtp: req.GetSkipOtp(),
 	}
 	switch loginType {
 	case enum.LoginTypePassword:

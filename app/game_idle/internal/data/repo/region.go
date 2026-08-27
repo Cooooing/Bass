@@ -6,6 +6,7 @@ import (
 	bizrepo "game_idle/internal/biz/repo"
 	"game_idle/internal/data/gen"
 	regionent "game_idle/internal/data/gen/region"
+	"game_idle/internal/enum"
 	"sync"
 )
 
@@ -44,6 +45,7 @@ func (r *RegionRepo) Refresh(ctx context.Context) ([]*model.Region, error) {
 			ID:          row.ID,
 			Name:        row.Name,
 			Description: row.Description,
+			ActionKind:  enum.ActionKind(row.ActionKind),
 			Enabled:     row.Enabled,
 			Sort:        row.Sort,
 		}

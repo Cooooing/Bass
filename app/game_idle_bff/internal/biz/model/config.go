@@ -12,6 +12,7 @@ type RegionConfig struct {
 	RegionID    string `json:"region_id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
+	ActionKind  string `json:"action_kind"`
 	Enabled     bool   `json:"enabled"`
 	Sort        int32  `json:"sort"`
 }

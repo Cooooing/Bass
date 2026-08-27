@@ -38,6 +38,7 @@ func (s *RegionService) List(ctx context.Context, req *v1.ListRegions_Request) (
 			RegionId:    row.ID,
 			Name:        row.Name,
 			Description: row.Description,
+			ActionKind:  row.ActionKind.String(),
 			Enabled:     row.Enabled,
 			Sort:        row.Sort,
 		})

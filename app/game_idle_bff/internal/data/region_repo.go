@@ -31,6 +31,7 @@ func (r *RegionRepo) List(ctx context.Context) ([]*model.RegionConfig, error) {
 			RegionID:    row.GetRegionId(),
 			Name:        row.GetName(),
 			Description: row.GetDescription(),
+			ActionKind:  row.GetActionKind(),
 			Enabled:     row.GetEnabled(),
 			Sort:        row.GetSort(),
 		})

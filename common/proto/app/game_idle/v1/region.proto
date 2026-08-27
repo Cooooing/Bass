@@ -20,6 +20,7 @@ message Region {
   string region_id = 1; // 区域编码
   string name = 2; // 区域名称
   string description = 3; // 区域描述
-  bool enabled = 4; // 是否启用
-  int32 sort = 5; // 排序值
+  string action_kind = 4; // 归属行动类型
+  bool enabled = 5; // 是否启用
+  int32 sort = 6; // 排序值
 }

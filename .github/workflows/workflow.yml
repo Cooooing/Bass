@@ -19,7 +19,7 @@ jobs:
     strategy:
       # 矩阵配置：列出所有需要打包的服务名
       matrix:
-        service: [bbs, user, content, economy, notify, im, platform, scheduler]
+        service: [bbs, user, content, economy, notify, im, platform, scheduler, game_idle, game_idle_bff]
       # 即使一个服务失败，其他服务也继续构建
       fail-fast: false
 

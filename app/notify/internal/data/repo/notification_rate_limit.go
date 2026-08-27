@@ -61,7 +61,7 @@ return {1, retry_after, 0}
 
 type NotificationRateLimitCache struct {
 	redisClient *client.RedisClient
-	keyPrefix   string
+	keyFormat   string
 }
 
 func NewNotificationRateLimitCache(
@@ -69,7 +69,7 @@ func NewNotificationRateLimitCache(
 ) bizrepo.NotificationRateLimitCache {
 	return &NotificationRateLimitCache{
 		redisClient: redisClient,
-		keyPrefix:   "notify:rate_limit",
+		keyFormat:   "notify:rate_limit:{channel:%s}:{recipient:%s}",
 	}
 }
 
@@ -134,5 +134,5 @@ func (c *NotificationRateLimitCache) notificationRateLimitKey(spec *bizrepo.Noti
 	if recipient == "" {
 		return "", fmt.Errorf("notification rate limit recipient is empty")
 	}
-	return fmt.Sprintf("%s:%s:%s", c.keyPrefix, spec.Channel, recipient), nil
+	return fmt.Sprintf(c.keyFormat, spec.Channel, recipient), nil
 }

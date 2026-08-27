@@ -16,7 +16,7 @@ var _ repo.ArticleViewCacheRepo = (*ArticleViewCacheRepo)(nil)
 type ArticleViewCacheRepo struct {
 	redisClient     *client.RedisClient
 	countKey        string
-	recordKeyPrefix string
+	recordKeyFormat string
 	recordTTL       time.Duration
 }
 
@@ -25,8 +25,8 @@ func NewArticleViewCacheRepo(
 ) repo.ArticleViewCacheRepo {
 	return &ArticleViewCacheRepo{
 		redisClient:     redisClient,
-		countKey:        "Content:ArticleViewCount",
-		recordKeyPrefix: "Content:ArticleViewRecord",
+		countKey:        "content:article_view:count",
+		recordKeyFormat: "content:article_view:record:{article_id:%d}",
 		recordTTL:       24 * time.Hour,
 	}
 }
@@ -34,9 +34,9 @@ func NewArticleViewCacheRepo(
 func (r *ArticleViewCacheRepo) Record(ctx context.Context, req *repo.ArticleViewCacheRecordReq) (bool, error) {
 	viewerKey := ""
 	if req.ViewerUserID != nil && *req.ViewerUserID > 0 {
-		viewerKey = fmt.Sprintf("user:%d", *req.ViewerUserID)
+		viewerKey = fmt.Sprintf("viewer:{user_id:%d}", *req.ViewerUserID)
 	} else if req.BrowserFingerprint != nil && *req.BrowserFingerprint != "" {
-		viewerKey = fmt.Sprintf("fp:%s", *req.BrowserFingerprint)
+		viewerKey = fmt.Sprintf("viewer:{fingerprint:%s}", *req.BrowserFingerprint)
 	} else {
 		ip := ""
 		if req.IP != nil {
@@ -46,12 +46,12 @@ func (r *ArticleViewCacheRepo) Record(ctx context.Context, req *repo.ArticleView
 		if req.UserAgent != nil {
 			userAgent = *req.UserAgent
 		}
-		viewerKey = fmt.Sprintf("ipua:%s:%s", ip, userAgent)
+		viewerKey = fmt.Sprintf("viewer:{ip:%s}:ua:{user_agent:%s}", ip, userAgent)
 	}
-	if viewerKey == "ipua::" {
+	if viewerKey == "viewer:{ip:}:ua:{user_agent:}" {
 		return false, nil
 	}
-	recordKey := fmt.Sprintf("%s:%d", r.recordKeyPrefix, req.ArticleID)
+	recordKey := r.recordKey(req.ArticleID)
 	ok, err := r.redisClient.Client.HSetNX(ctx, recordKey, viewerKey, time.Now().Format(time.RFC3339Nano)).Result()
 	if err != nil || !ok {
 		return ok, err
@@ -63,6 +63,10 @@ func (r *ArticleViewCacheRepo) Record(ctx context.Context, req *repo.ArticleView
 		return false, err
 	}
 	return true, nil
+}
+
+func (r *ArticleViewCacheRepo) recordKey(articleID int64) string {
+	return fmt.Sprintf(r.recordKeyFormat, articleID)
 }
 
 func (r *ArticleViewCacheRepo) PopCounts(ctx context.Context, limit int32) (map[int64]int32, error) {

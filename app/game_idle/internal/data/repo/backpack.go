@@ -43,11 +43,11 @@ func NewBackpackRepo(
 		db:                           db,
 		redisClient:                  redisClient,
 		persistThreshold:             persistThreshold,
-		quantityRedisKeyFormat:       "game_idle:character_backpack:%d:quantity",
-		totalObtainedRedisKeyFormat:  "game_idle:character_backpack:%d:total_obtained",
-		totalConsumedRedisKeyFormat:  "game_idle:character_backpack:%d:total_consumed",
-		loadedRedisKeyFormat:         "game_idle:character_backpack:%d:loaded",
-		operationCountRedisKeyFormat: "game_idle:character_backpack:%d:operation_count",
+		quantityRedisKeyFormat:       "game_idle:backpack:{character_id:%d}:quantity",
+		totalObtainedRedisKeyFormat:  "game_idle:backpack:{character_id:%d}:total_obtained",
+		totalConsumedRedisKeyFormat:  "game_idle:backpack:{character_id:%d}:total_consumed",
+		loadedRedisKeyFormat:         "game_idle:backpack:{character_id:%d}:loaded",
+		operationCountRedisKeyFormat: "game_idle:backpack:{character_id:%d}:operation_count",
 		checkScript: redis.NewScript(`
 for index = 1, #ARGV, 2 do
   local item_id = ARGV[index]

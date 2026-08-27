@@ -16,18 +16,18 @@ import (
 var _ bizrepo.ActionQueueRepo = (*ActionQueueRepo)(nil)
 
 type ActionQueueRepo struct {
-	redisClient                  *commonclient.RedisClient
-	queueRedisKeyFormat          string
-	queueRedisKeyPattern         string
-	queueRedisKeyCharacterPrefix string
+	redisClient                *commonclient.RedisClient
+	queueRedisKeyFormat        string
+	queueRedisKeyPattern       string
+	queueRedisKeyCharacterHead string
 }
 
 func NewActionQueueRepo(redisClient *commonclient.RedisClient) bizrepo.ActionQueueRepo {
 	return &ActionQueueRepo{
-		redisClient:                  redisClient,
-		queueRedisKeyFormat:          "game_idle:character_action_queue:%d",
-		queueRedisKeyPattern:         "game_idle:character_action_queue:*",
-		queueRedisKeyCharacterPrefix: "game_idle:character_action_queue:",
+		redisClient:                redisClient,
+		queueRedisKeyFormat:        "game_idle:action_queue:{character_id:%d}",
+		queueRedisKeyPattern:       "game_idle:action_queue:{character_id:*}",
+		queueRedisKeyCharacterHead: "game_idle:action_queue:{character_id:",
 	}
 }
 
@@ -36,7 +36,7 @@ func (r *ActionQueueRepo) ListCharacterIDs(ctx context.Context) ([]int64, error)
 	iter := r.redisClient.Client.Scan(ctx, 0, r.queueRedisKeyPattern, 0).Iterator()
 	for iter.Next(ctx) {
 		characterID, err := strconv.ParseInt(
-			strings.TrimPrefix(iter.Val(), r.queueRedisKeyCharacterPrefix),
+			strings.TrimSuffix(strings.TrimPrefix(iter.Val(), r.queueRedisKeyCharacterHead), "}"),
 			10,
 			64,
 		)

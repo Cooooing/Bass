@@ -53,14 +53,14 @@ func NewActionSettlementRepo(
 		characterAbilityRepo:                characterAbilityRepo,
 		backpackPersistThreshold:            backpackPersistThreshold,
 		abilityPersistThreshold:             abilityPersistThreshold,
-		backpackQuantityRedisKeyFormat:      "game_idle:character_backpack:%d:quantity",
-		backpackObtainedRedisKeyFormat:      "game_idle:character_backpack:%d:total_obtained",
-		backpackConsumedRedisKeyFormat:      "game_idle:character_backpack:%d:total_consumed",
-		backpackOperationRedisKeyFormat:     "game_idle:character_backpack:%d:operation_count",
-		abilityExpRedisKeyFormat:            "game_idle:character_ability:%d:exp",
-		abilityLevelRedisKeyFormat:          "game_idle:character_ability:%d:level",
-		abilityNextLevelExpRedisKeyFormat:   "game_idle:character_ability:%d:next_level_exp",
-		abilityOperationCountRedisKeyFormat: "game_idle:character_ability:%d:operation_count",
+		backpackQuantityRedisKeyFormat:      "game_idle:backpack:{character_id:%d}:quantity",
+		backpackObtainedRedisKeyFormat:      "game_idle:backpack:{character_id:%d}:total_obtained",
+		backpackConsumedRedisKeyFormat:      "game_idle:backpack:{character_id:%d}:total_consumed",
+		backpackOperationRedisKeyFormat:     "game_idle:backpack:{character_id:%d}:operation_count",
+		abilityExpRedisKeyFormat:            "game_idle:ability:{character_id:%d}:exp",
+		abilityLevelRedisKeyFormat:          "game_idle:ability:{character_id:%d}:level",
+		abilityNextLevelExpRedisKeyFormat:   "game_idle:ability:{character_id:%d}:next_level_exp",
+		abilityOperationCountRedisKeyFormat: "game_idle:ability:{character_id:%d}:operation_count",
 		settlementScript: redis.NewScript(`
 local function next_level_exp(level)
   return level * level * 100

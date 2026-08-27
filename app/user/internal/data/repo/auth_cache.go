@@ -35,14 +35,14 @@ func NewAuthCacheRepo(
 ) repo.AuthCacheRepo {
 	return &AuthCacheRepo{
 		redisClient:     redisClient,
-		authOtpGuestKey: "Auth:Otp:%s:guest:%s",
-		authOtpUserKey:  "Auth:Otp:%s:user:%d:%s",
+		authOtpGuestKey: "user:auth:otp:{type:%s}:guest:{account:%s}",
+		authOtpUserKey:  "user:auth:otp:{type:%s}:user:{user_id:%d}:account:{account:%s}",
 
-		authRefreshSessionKey:  "Auth:Refresh:{%s}:{%s}",
-		authRefreshSessionHead: "Auth:Refresh:{%s}:",
-		authUserSessionsKey:    "Auth:UserSessions:{%s}:{%d}",
-		authUserSessionsScan:   "Auth:UserSessions:*:{%d}",
-		authRbacPermissionsKey: "Auth:Rbac:{%s}:{%d}",
+		authRefreshSessionKey:  "user:auth:refresh:{realm:%s}:{session_id:%s}",
+		authRefreshSessionHead: "user:auth:refresh:{realm:%s}:",
+		authUserSessionsKey:    "user:auth:sessions:{realm:%s}:{user_id:%d}",
+		authUserSessionsScan:   "user:auth:sessions:{realm:*}:{user_id:%d}",
+		authRbacPermissionsKey: "user:auth:rbac_permissions:{realm:%s}:{user_id:%d}",
 	}
 }
 
@@ -74,11 +74,11 @@ func (r *AuthCacheRepo) authRbacPermissionsRedisKey(realm string, userID int64) 
 }
 
 func (r *AuthCacheRepo) authUserRbacPermissionsPattern(userID int64) string {
-	return fmt.Sprintf("Auth:Rbac:*:{%d}", userID)
+	return fmt.Sprintf("user:auth:rbac_permissions:{realm:*}:{user_id:%d}", userID)
 }
 
 func (r *AuthCacheRepo) authRealmRbacPermissionsPattern(realm string) string {
-	return fmt.Sprintf("Auth:Rbac:%s:*", realm)
+	return fmt.Sprintf("user:auth:rbac_permissions:{realm:%s}:{user_id:*}", realm)
 }
 
 func (r *AuthCacheRepo) SaveCode(ctx context.Context, code *model.VerificationCode, ttl time.Duration) error {
@@ -189,7 +189,7 @@ if max_sessions and max_sessions > 0 then
     local overflow = count - max_sessions
     local sids = redis.call('ZRANGE', KEYS[2], 0, overflow - 1)
     for _, sid in ipairs(sids) do
-      redis.call('DEL', ARGV[5] .. '{' .. sid .. '}')
+      redis.call('DEL', ARGV[5] .. '{session_id:' .. sid .. '}')
       redis.call('ZREM', KEYS[2], sid)
     end
   end
@@ -352,8 +352,8 @@ func (r *AuthCacheRepo) DeleteUserSessions(ctx context.Context, userID int64) er
 				return err
 			}
 			realm := ""
-			if strings.HasPrefix(indexKey, "Auth:UserSessions:{") {
-				value := strings.TrimPrefix(indexKey, "Auth:UserSessions:{")
+			if strings.HasPrefix(indexKey, "user:auth:sessions:{realm:") {
+				value := strings.TrimPrefix(indexKey, "user:auth:sessions:{realm:")
 				end := strings.Index(value, "}")
 				if end > 0 {
 					realm = value[:end]

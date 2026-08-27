@@ -23,7 +23,7 @@ func NewDelayedTaskCacheRepo(
 ) bizrepo.DelayedTaskCacheRepo {
 	return &DelayedTaskCacheRepo{
 		redis: redisClient,
-		key:   "Scheduler:DelayedTasks",
+		key:   "scheduler:delayed_task:definitions",
 		ttl:   24 * time.Hour,
 	}
 }

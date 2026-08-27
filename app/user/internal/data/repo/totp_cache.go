@@ -22,7 +22,7 @@ func NewTotpSecretCache(
 ) repo.TotpSecretCache {
 	return &TotpSecretCache{
 		redisClient:       redisClient,
-		authTotpSecretKey: "Auth:TotpSecret:{%d}",
+		authTotpSecretKey: "user:auth:totp_secret:{user_id:%d}",
 	}
 }
 

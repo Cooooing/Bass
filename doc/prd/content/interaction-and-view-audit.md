@@ -100,8 +100,8 @@
 
 | Key | 类型 | 字段 | 值 | TTL |
 | --- | --- | --- | --- | --- |
-| `Content:ArticleViewCount` | Hash | `article_id` | 待刷新的浏览增量 | 不设置或按刷库策略设置 |
-| `Content:ArticleViewRecord:{article_id}` | Hash | `viewer_key` | 浏览时间 | 24h |
+| `content:article_view:count` | Hash | `article_id` | 待刷新的浏览增量 | 不设置或按刷库策略设置 |
+| `content:article_view:record:{article_id:%d}` | Hash | `viewer_key` | 浏览时间 | 24h |
 
 ## 12. Viewer Key 生成
 
@@ -116,10 +116,10 @@
 1. 用户或游客访问文章。
 2. content 校验文章可见性。
 3. 根据登录态、浏览器指纹、IP、UA 生成 `viewer_key`。
-4. 查询 `Content:ArticleViewRecord:{article_id}` 是否已有该 `viewer_key`。
+4. 查询 `content:article_view:record:{article_id:%d}` 是否已有该 `viewer_key`。
 5. 24h 内已存在时，不增加浏览量。
 6. 不存在时，写入去重 hash。
-7. 对 `Content:ArticleViewCount` 的 `article_id` 字段自增。
+7. 对 `content:article_view:count` 的 `article_id` 字段自增。
 8. 登录用户写入或更新 `content_article_view_records`。
 9. scheduler 或同步任务定期将浏览增量刷入 `content_articles.view_count`。
 

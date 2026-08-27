@@ -79,5 +79,7 @@ game_idle:
     max_count_per_user: 3
     default_action_queue_capacity: 3
     default_max_offline_duration: 86400s
+  character_ability:
+    persist_threshold: 100
   websocket:
     online_ttl: 300s

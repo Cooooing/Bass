@@ -122,4 +122,7 @@
 ## 运行边界
 
 - Redis 只用于限流、短期幂等、短期缓存、验证码、会话临时态和防刷计数，不能作为领域事实来源。
+- Redis key 必须以模块名开头，使用小写 `snake_case` 和 `:` 分隔；公共组件使用 `common` 前缀，业务模块使用服务模块名前缀。
+- Redis key 中的动态参数必须写成 `{name:%s}`、`{name:%d}` 这类带语义的占位格式，例如 `game_idle:ability:{character_id:%d}:exp`。
+- Redis key 的方法内部负责 `fmt.Sprintf`，业务代码不得拼接前缀和 ID；需要 `SCAN` 时使用同结构的 glob，例如 `game_idle:action_queue:{character_id:*}`。
 - 对外可感知业务错误使用业务错误码；BFF 负责生成用户可见文案。

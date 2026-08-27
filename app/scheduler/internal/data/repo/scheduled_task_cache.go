@@ -23,7 +23,7 @@ func NewScheduledTaskCacheRepo(
 ) bizrepo.ScheduledTaskCacheRepo {
 	return &ScheduledTaskCacheRepo{
 		redis: redisClient,
-		key:   "Scheduler:ScheduledTasks",
+		key:   "scheduler:scheduled_task:definitions",
 		ttl:   24 * time.Hour,
 	}
 }

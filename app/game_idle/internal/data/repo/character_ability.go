@@ -41,11 +41,11 @@ func NewCharacterAbilityRepo(
 		db:                           db,
 		redisClient:                  redisClient,
 		persistThreshold:             persistThreshold,
-		expRedisKeyFormat:            "game_idle:character_ability:%d:exp",
-		levelRedisKeyFormat:          "game_idle:character_ability:%d:level",
-		nextLevelExpRedisKeyFormat:   "game_idle:character_ability:%d:next_level_exp",
-		loadedRedisKeyFormat:         "game_idle:character_ability:%d:loaded",
-		operationCountRedisKeyFormat: "game_idle:character_ability:%d:operation_count",
+		expRedisKeyFormat:            "game_idle:ability:{character_id:%d}:exp",
+		levelRedisKeyFormat:          "game_idle:ability:{character_id:%d}:level",
+		nextLevelExpRedisKeyFormat:   "game_idle:ability:{character_id:%d}:next_level_exp",
+		loadedRedisKeyFormat:         "game_idle:ability:{character_id:%d}:loaded",
+		operationCountRedisKeyFormat: "game_idle:ability:{character_id:%d}:operation_count",
 	}
 }
 

@@ -22,7 +22,7 @@ type CharacterSessionRepo struct {
 func NewCharacterSessionRepo(redisClient *commonclient.RedisClient) bizrepo.CharacterSessionRepo {
 	return &CharacterSessionRepo{
 		redisClient:          redisClient,
-		onlineRedisKeyFormat: "game_idle:character:online:%d",
+		onlineRedisKeyFormat: "game_idle:character:online:{character_id:%d}",
 		onlineScript: redis.NewScript(`
 local old_session_id = redis.call('GET', KEYS[1])
 redis.call('SET', KEYS[1], ARGV[1], 'EX', ARGV[2])

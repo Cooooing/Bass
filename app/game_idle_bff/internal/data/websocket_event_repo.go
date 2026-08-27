@@ -7,6 +7,7 @@ import (
 	"context"
 	"game_idle_bff/internal/biz/model"
 	"game_idle_bff/internal/biz/repo"
+	"time"
 
 	"google.golang.org/protobuf/proto"
 )
@@ -68,6 +69,14 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED:
 			payload := event.GetGameIdleActionCompleted()
 			action := payload.GetAction()
+			var startedAt *time.Time
+			if action.GetStartedAt() != nil {
+				startedAt = new(action.GetStartedAt().AsTime())
+			}
+			var completedAt *time.Time
+			if action.GetCompletedAt() != nil {
+				completedAt = new(action.GetCompletedAt().AsTime())
+			}
 			itemChanges := make([]*model.WebSocketItemChange, 0, len(payload.GetItemChanges()))
 			for _, item := range payload.GetItemChanges() {
 				itemChanges = append(itemChanges, &model.WebSocketItemChange{
@@ -81,11 +90,11 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 				ActionCompleted: &model.WebSocketActionCompleted{
 					CharacterID: payload.GetCharacterId(),
 					Action: &model.WebSocketCompletedAction{
-						ActionID:               action.GetActionId(),
-						TimesFinished:          action.GetTimesFinished(),
-						TimesRemaining:         action.GetTimesRemaining(),
-						StartedAtUnixSeconds:   action.GetStartedAtUnixSeconds(),
-						CompletedAtUnixSeconds: action.GetCompletedAtUnixSeconds(),
+						ActionID:       action.GetActionId(),
+						TimesFinished:  action.GetTimesFinished(),
+						TimesRemaining: action.GetTimesRemaining(),
+						StartedAt:      startedAt,
+						CompletedAt:    completedAt,
 					},
 					ItemChanges: itemChanges,
 				},

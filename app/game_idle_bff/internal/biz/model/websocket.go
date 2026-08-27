@@ -41,11 +41,11 @@ type WebSocketActionCompleted struct {
 }
 
 type WebSocketCompletedAction struct {
-	ActionID               string `json:"action_id"`
-	TimesFinished          int64  `json:"times_finished"`
-	TimesRemaining         int64  `json:"times_remaining"`
-	StartedAtUnixSeconds   int64  `json:"started_at_unix_seconds"`
-	CompletedAtUnixSeconds int64  `json:"completed_at_unix_seconds"`
+	ActionID       string     `json:"action_id"`
+	TimesFinished  int64      `json:"times_finished"`
+	TimesRemaining int64      `json:"times_remaining"`
+	StartedAt      *time.Time `json:"started_at,omitempty"`
+	CompletedAt    *time.Time `json:"completed_at,omitempty"`
 }
 
 type WebSocketItemChange struct {

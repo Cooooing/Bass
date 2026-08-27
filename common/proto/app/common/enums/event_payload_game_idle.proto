@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package common.api.app.common.enums;
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "common/proto/gen/common/enums;enums";
 
 message GameIdleChatMessagePayload {
@@ -36,8 +38,8 @@ message GameIdleActionCompletedAction {
   string action_id = 1;
   int64 times_finished = 2;
   int64 times_remaining = 3;
-  int64 started_at_unix_seconds = 4;
-  int64 completed_at_unix_seconds = 5;
+  google.protobuf.Timestamp started_at = 4;
+  google.protobuf.Timestamp completed_at = 5;
 }
 
 message GameIdleItemChange {

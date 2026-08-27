@@ -97,11 +97,11 @@ func (r *GameIdleEventRepo) Publish(ctx context.Context, event *model.GameIdleEv
 			GameIdleActionCompleted: &commonenums.GameIdleActionCompletedPayload{
 				CharacterId: event.ActionCompleted.CharacterID,
 				Action: &commonenums.GameIdleActionCompletedAction{
-					ActionId:               event.ActionCompleted.ActionID,
-					TimesFinished:          event.ActionCompleted.TimesFinished,
-					TimesRemaining:         event.ActionCompleted.TimesRemaining,
-					StartedAtUnixSeconds:   event.ActionCompleted.StartedAt.Unix(),
-					CompletedAtUnixSeconds: event.ActionCompleted.CompletedAt.Unix(),
+					ActionId:       event.ActionCompleted.ActionID,
+					TimesFinished:  event.ActionCompleted.TimesFinished,
+					TimesRemaining: event.ActionCompleted.TimesRemaining,
+					StartedAt:      timestamppb.New(event.ActionCompleted.StartedAt),
+					CompletedAt:    timestamppb.New(event.ActionCompleted.CompletedAt),
 				},
 				ItemChanges: itemChanges,
 			},

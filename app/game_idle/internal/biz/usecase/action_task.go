@@ -23,13 +23,15 @@ type BuildActionTaskReq struct {
 }
 
 type PendingActionTask struct {
-	CharacterID int64
-	TaskID      string
-	ActionID    string
-	StopReason  enum.ActionStopReason
-	StartedAt   time.Time
-	CompletedAt time.Time
-	ItemChanges []*model.ActionCompletedItemChange
+	CharacterID      int64
+	TaskID           string
+	ActionID         string
+	StopReason       enum.ActionStopReason
+	StartedAt        time.Time
+	CompletedAt      time.Time
+	ItemChanges      []*model.ActionCompletedItemChange
+	AbilityChanges   []*model.ActionCompletedAbilityChange
+	AbilityLeveledUp *model.AbilityLeveledUpEvent
 }
 
 type OfflineActionTask struct {

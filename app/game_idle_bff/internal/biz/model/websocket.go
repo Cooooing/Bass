@@ -21,10 +21,11 @@ type WebSocketChatMessage struct {
 }
 
 type WebSocketEvent struct {
-	Type            commonenum.EventType
-	ChatMessage     *WebSocketChatMessage
-	CloseSession    *WebSocketCloseSession
-	ActionCompleted *WebSocketActionCompleted
+	Type             commonenum.EventType
+	ChatMessage      *WebSocketChatMessage
+	CloseSession     *WebSocketCloseSession
+	ActionCompleted  *WebSocketActionCompleted
+	AbilityLeveledUp *WebSocketAbilityLeveledUp
 }
 
 type WebSocketCloseSession struct {
@@ -35,9 +36,10 @@ type WebSocketCloseSession struct {
 }
 
 type WebSocketActionCompleted struct {
-	CharacterID int64                     `json:"character_id"`
-	Action      *WebSocketCompletedAction `json:"action"`
-	ItemChanges []*WebSocketItemChange    `json:"item_changes"`
+	CharacterID    int64                     `json:"character_id"`
+	Action         *WebSocketCompletedAction `json:"action"`
+	ItemChanges    []*WebSocketItemChange    `json:"item_changes"`
+	AbilityChanges []*WebSocketAbilityChange `json:"ability_changes"`
 }
 
 type WebSocketCompletedAction struct {
@@ -52,4 +54,18 @@ type WebSocketItemChange struct {
 	ItemID        string `json:"item_id"`
 	QuantityDelta int64  `json:"quantity_delta"`
 	QuantityAfter int64  `json:"quantity_after"`
+}
+
+type WebSocketAbilityChange struct {
+	AbilityID string `json:"ability_id"`
+	ExpDelta  int64  `json:"exp_delta"`
+	ExpAfter  int64  `json:"exp_after"`
+}
+
+type WebSocketAbilityLeveledUp struct {
+	CharacterID  int64  `json:"character_id"`
+	AbilityID    string `json:"ability_id"`
+	Level        int32  `json:"level"`
+	Exp          int64  `json:"exp"`
+	NextLevelExp int64  `json:"next_level_exp"`
 }

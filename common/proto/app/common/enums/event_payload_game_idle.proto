@@ -32,6 +32,7 @@ message GameIdleActionCompletedPayload {
   int64 character_id = 1;
   GameIdleActionCompletedAction action = 2;
   repeated GameIdleItemChange item_changes = 3;
+  repeated GameIdleAbilityChange ability_changes = 4;
 }
 
 message GameIdleActionCompletedAction {
@@ -46,4 +47,18 @@ message GameIdleItemChange {
   string item_id = 1;
   int64 quantity_delta = 2;
   int64 quantity_after = 3;
+}
+
+message GameIdleAbilityChange {
+  string ability_id = 1;
+  int64 exp_delta = 2;
+  int64 exp_after = 3;
+}
+
+message GameIdleAbilityLeveledUpPayload {
+  int64 character_id = 1;
+  string ability_id = 2;
+  int32 level = 3;
+  int64 exp = 4;
+  int64 next_level_exp = 5;
 }

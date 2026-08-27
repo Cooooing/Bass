@@ -2,8 +2,8 @@ package service
 
 import (
 	"common/pkg/constant"
+	v1 "common/proto/gen/game_idle_bff/v1"
 	"context"
-	"encoding/json"
 	"game_idle_bff/internal/biz/usecase"
 	"game_idle_bff/internal/enum"
 	"log/slog"
@@ -16,6 +16,7 @@ import (
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 	"github.com/gorilla/websocket"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 const webSocketPath = "/ws"
@@ -122,8 +123,8 @@ func (s *WebSocketService) readPump(
 			}
 			return
 		}
-		command := &usecase.WebSocketCommand{}
-		if err := json.Unmarshal(data, command); err != nil {
+		command := &v1.WebSocketCommand{}
+		if err := protojson.Unmarshal(data, command); err != nil {
 			connection.Send(ctx, &usecase.WebSocketSendMessage{
 				Type: enum.WebSocketMessageTypeCommandFailed,
 				Payload: &usecase.WebSocketCommandError{

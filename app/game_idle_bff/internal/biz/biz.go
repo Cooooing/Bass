@@ -23,14 +23,15 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewChatUsecase,
 	usecase.NewWebSocketUsecase,
 	command.NewBackpackGetHandler,
-	command.NewChatListHandler,
-	command.NewChatSendHandler,
-	command.NewQueueAddHandler,
-	command.NewQueueClearHandler,
-	command.NewQueueListHandler,
-	command.NewQueueMoveHandler,
-	command.NewQueueRemoveHandler,
+	command.NewChatMessageListHandler,
+	command.NewChatMessageSendHandler,
+	command.NewActionAddHandler,
+	command.NewActionClearHandler,
+	command.NewActionListHandler,
+	command.NewActionMoveHandler,
+	command.NewActionRemoveHandler,
 	event.NewActionCompletedHandler,
+	event.NewAbilityLeveledUpHandler,
 	event.NewChatMessageHandler,
 	event.NewCloseSessionHandler,
 )
@@ -41,34 +42,36 @@ func ProvideWebSocketWorkerPool(c *config.Bootstrap) *common.WorkerPool {
 
 func ProvideWebSocketEventHandlers(
 	actionCompletedHandler *event.ActionCompletedHandler,
+	abilityLeveledUpHandler *event.AbilityLeveledUpHandler,
 	chatMessageHandler *event.ChatMessageHandler,
 	closeSessionHandler *event.CloseSessionHandler,
 ) usecase.WebSocketEventHandlers {
 	return usecase.WebSocketEventHandlers{
-		actionCompletedHandler.Type(): actionCompletedHandler,
-		chatMessageHandler.Type():     chatMessageHandler,
-		closeSessionHandler.Type():    closeSessionHandler,
+		actionCompletedHandler.Type():  actionCompletedHandler,
+		abilityLeveledUpHandler.Type(): abilityLeveledUpHandler,
+		chatMessageHandler.Type():      chatMessageHandler,
+		closeSessionHandler.Type():     closeSessionHandler,
 	}
 }
 
 func ProvideWebSocketCommandHandlers(
 	backpackGetHandler *command.BackpackGetHandler,
-	chatListHandler *command.ChatListHandler,
-	chatSendHandler *command.ChatSendHandler,
-	queueAddHandler *command.QueueAddHandler,
-	queueClearHandler *command.QueueClearHandler,
-	queueListHandler *command.QueueListHandler,
-	queueMoveHandler *command.QueueMoveHandler,
-	queueRemoveHandler *command.QueueRemoveHandler,
+	chatMessageListHandler *command.ChatMessageListHandler,
+	chatMessageSendHandler *command.ChatMessageSendHandler,
+	actionAddHandler *command.ActionAddHandler,
+	actionClearHandler *command.ActionClearHandler,
+	actionListHandler *command.ActionListHandler,
+	actionMoveHandler *command.ActionMoveHandler,
+	actionRemoveHandler *command.ActionRemoveHandler,
 ) usecase.WebSocketCommandHandlers {
 	return usecase.WebSocketCommandHandlers{
-		backpackGetHandler.Type(): backpackGetHandler,
-		chatListHandler.Type():    chatListHandler,
-		chatSendHandler.Type():    chatSendHandler,
-		queueAddHandler.Type():    queueAddHandler,
-		queueClearHandler.Type():  queueClearHandler,
-		queueListHandler.Type():   queueListHandler,
-		queueMoveHandler.Type():   queueMoveHandler,
-		queueRemoveHandler.Type(): queueRemoveHandler,
+		backpackGetHandler.Type():     backpackGetHandler,
+		chatMessageListHandler.Type(): chatMessageListHandler,
+		chatMessageSendHandler.Type(): chatMessageSendHandler,
+		actionAddHandler.Type():       actionAddHandler,
+		actionClearHandler.Type():     actionClearHandler,
+		actionListHandler.Type():      actionListHandler,
+		actionMoveHandler.Type():      actionMoveHandler,
+		actionRemoveHandler.Type():    actionRemoveHandler,
 	}
 }

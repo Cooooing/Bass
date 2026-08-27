@@ -32,6 +32,8 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewCharacterSessionRepo,
 	repo.NewGameIdleEventRepo,
 	repo.NewBackpackRepo,
+	repo.NewCharacterAbilityRepo,
+	repo.NewActionSettlementRepo,
 	repo.NewItemRepo,
 	repo.NewRecipeRepo,
 	repo.NewActionRepo,

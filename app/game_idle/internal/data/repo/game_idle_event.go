@@ -91,6 +91,14 @@ func (r *GameIdleEventRepo) Publish(ctx context.Context, event *model.GameIdleEv
 				QuantityAfter: item.QuantityAfter,
 			})
 		}
+		abilityChanges := make([]*commonenums.GameIdleAbilityChange, 0, len(event.ActionCompleted.AbilityChanges))
+		for _, ability := range event.ActionCompleted.AbilityChanges {
+			abilityChanges = append(abilityChanges, &commonenums.GameIdleAbilityChange{
+				AbilityId: ability.AbilityID,
+				ExpDelta:  ability.ExpDelta,
+				ExpAfter:  ability.ExpAfter,
+			})
+		}
 		envelope.Type = commonenums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED
 		envelope.Timestamp = timestamppb.New(event.ActionCompleted.CompletedAt)
 		envelope.Payload = &commonenums.Event_GameIdleActionCompleted{
@@ -103,10 +111,23 @@ func (r *GameIdleEventRepo) Publish(ctx context.Context, event *model.GameIdleEv
 					StartedAt:      timestamppb.New(event.ActionCompleted.StartedAt),
 					CompletedAt:    timestamppb.New(event.ActionCompleted.CompletedAt),
 				},
-				ItemChanges: itemChanges,
+				ItemChanges:    itemChanges,
+				AbilityChanges: abilityChanges,
 			},
 		}
 		message.Header["character_id"] = strconv.FormatInt(event.ActionCompleted.CharacterID, 10)
+	} else if event.AbilityLeveledUp != nil {
+		envelope.Type = commonenums.EventType_EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP
+		envelope.Payload = &commonenums.Event_GameIdleAbilityLeveledUp{
+			GameIdleAbilityLeveledUp: &commonenums.GameIdleAbilityLeveledUpPayload{
+				CharacterId:  event.AbilityLeveledUp.CharacterID,
+				AbilityId:    event.AbilityLeveledUp.AbilityID,
+				Level:        event.AbilityLeveledUp.Level,
+				Exp:          event.AbilityLeveledUp.Exp,
+				NextLevelExp: event.AbilityLeveledUp.NextLevelExp,
+			},
+		}
+		message.Header["character_id"] = strconv.FormatInt(event.AbilityLeveledUp.CharacterID, 10)
 	} else {
 		return model.ErrChatMessageInvalid
 	}

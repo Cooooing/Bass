@@ -85,6 +85,14 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 					QuantityAfter: item.GetQuantityAfter(),
 				})
 			}
+			abilityChanges := make([]*model.WebSocketAbilityChange, 0, len(payload.GetAbilityChanges()))
+			for _, ability := range payload.GetAbilityChanges() {
+				abilityChanges = append(abilityChanges, &model.WebSocketAbilityChange{
+					AbilityID: ability.GetAbilityId(),
+					ExpDelta:  ability.GetExpDelta(),
+					ExpAfter:  ability.GetExpAfter(),
+				})
+			}
 			return handler(ctx, &model.WebSocketEvent{
 				Type: commonenum.EventTypeGameIdleActionCompleted,
 				ActionCompleted: &model.WebSocketActionCompleted{
@@ -96,7 +104,20 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 						StartedAt:      startedAt,
 						CompletedAt:    completedAt,
 					},
-					ItemChanges: itemChanges,
+					ItemChanges:    itemChanges,
+					AbilityChanges: abilityChanges,
+				},
+			})
+		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP:
+			payload := event.GetGameIdleAbilityLeveledUp()
+			return handler(ctx, &model.WebSocketEvent{
+				Type: commonenum.EventTypeGameIdleAbilityLeveledUp,
+				AbilityLeveledUp: &model.WebSocketAbilityLeveledUp{
+					CharacterID:  payload.GetCharacterId(),
+					AbilityID:    payload.GetAbilityId(),
+					Level:        payload.GetLevel(),
+					Exp:          payload.GetExp(),
+					NextLevelExp: payload.GetNextLevelExp(),
 				},
 			})
 		default:

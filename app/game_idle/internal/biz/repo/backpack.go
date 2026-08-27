@@ -9,6 +9,7 @@ import (
 type BackpackRepo interface {
 	MapItems(ctx context.Context, req *BackpackMapReq) (map[string]*model.CharacterItem, error)
 	PersistItems(ctx context.Context, characterID int64) error
+	EnsureLoaded(ctx context.Context, characterID int64) error
 	CheckItems(ctx context.Context, req *BackpackCheckReq) error
 	ChangeItems(ctx context.Context, req *BackpackChangeReq) (map[string]int64, error)
 }

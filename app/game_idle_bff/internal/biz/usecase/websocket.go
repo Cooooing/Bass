@@ -5,6 +5,7 @@ import (
 	commonclient "common/pkg/client"
 	"common/pkg/constant"
 	cerrors "common/proto/gen/common/errors"
+	v1 "common/proto/gen/game_idle_bff/v1"
 	"context"
 	"game_idle_bff/internal/biz/model"
 	"game_idle_bff/internal/biz/repo"
@@ -251,9 +252,19 @@ func (c *WebSocketConnection) Send(ctx context.Context, message *WebSocketSendMe
 	}
 }
 
-func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSocketConnection, command *WebSocketCommand) {
-	handler, ok := u.commandHandlers[command.Type]
+func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSocketConnection, command *v1.WebSocketCommand) {
+	commandType := enum.WebSocketMessageType(command.GetType())
+	handler, ok := u.commandHandlers[commandType]
 	if !ok {
+		connection.Send(ctx, &WebSocketSendMessage{
+			Type: enum.WebSocketMessageTypeCommandFailed,
+			Payload: &WebSocketCommandError{
+				Message: apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT).Error(),
+			},
+		})
+		return
+	}
+	if !handler.Validate(command) {
 		connection.Send(ctx, &WebSocketSendMessage{
 			Type: enum.WebSocketMessageTypeCommandFailed,
 			Payload: &WebSocketCommandError{

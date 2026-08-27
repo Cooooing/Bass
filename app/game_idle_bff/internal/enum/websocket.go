@@ -6,13 +6,14 @@ type WebSocketMessageType string
 
 const (
 	// 服务端发送给客户端的事件。
-	WebSocketMessageTypeChatMessageReceived WebSocketMessageType = "chat.message.received" // 收到聊天消息
-	WebSocketMessageTypeChatMessageListed   WebSocketMessageType = "chat.message.listed"   // 聊天消息列表
-	WebSocketMessageTypeActionCompleted     WebSocketMessageType = "action.completed"      // 行动完成
-	WebSocketMessageTypeActionListed        WebSocketMessageType = "action.listed"         // 行动列表
-	WebSocketMessageTypeBackpackItemsListed WebSocketMessageType = "backpack.items.listed" // 背包物品列表
-	WebSocketMessageTypeSessionClose        WebSocketMessageType = "session.close"         // 关闭会话
-	WebSocketMessageTypeCommandFailed       WebSocketMessageType = "command.failed"        // 命令失败
+	WebSocketMessageTypeChatMessageReceived WebSocketMessageType = "chat.message.received"   // 收到聊天消息
+	WebSocketMessageTypeChatMessageListed   WebSocketMessageType = "chat.message.listed"     // 聊天消息列表
+	WebSocketMessageTypeActionCompleted     WebSocketMessageType = "action.completed"        // 行动完成
+	WebSocketMessageTypeAbilityLeveledUp    WebSocketMessageType = "ability.level.increased" // 能力升级
+	WebSocketMessageTypeActionListed        WebSocketMessageType = "action.listed"           // 行动列表
+	WebSocketMessageTypeBackpackItemsListed WebSocketMessageType = "backpack.items.listed"   // 背包物品列表
+	WebSocketMessageTypeSessionClose        WebSocketMessageType = "session.close"           // 关闭会话
+	WebSocketMessageTypeCommandFailed       WebSocketMessageType = "command.failed"          // 命令失败
 
 	// 客户端发送给服务端的命令。
 	WebSocketMessageTypeChatMessageSend WebSocketMessageType = "chat.message.send" // 发送聊天消息

@@ -21,6 +21,7 @@ type ActionQueueUsecase struct {
 	actionRepo        repo.ActionRepo
 	actionQueueRepo   repo.ActionQueueRepo
 	gameIdleEventRepo repo.GameIdleEventRepo
+	abilityUsecase    *CharacterAbilityUsecase
 	timeWheel         *timewheel.TimeWheel
 	actionTasks       map[enum.ActionKind]ActionTask
 	pendingTasks      chan *PendingActionTask
@@ -35,6 +36,7 @@ func NewActionQueueUsecase(
 	actionRepo repo.ActionRepo,
 	actionQueueRepo repo.ActionQueueRepo,
 	gameIdleEventRepo repo.GameIdleEventRepo,
+	abilityUsecase *CharacterAbilityUsecase,
 	timeWheel *timewheel.TimeWheel,
 	actionTasks map[enum.ActionKind]ActionTask,
 ) *ActionQueueUsecase {
@@ -44,6 +46,7 @@ func NewActionQueueUsecase(
 		actionRepo:        actionRepo,
 		actionQueueRepo:   actionQueueRepo,
 		gameIdleEventRepo: gameIdleEventRepo,
+		abilityUsecase:    abilityUsecase,
 		timeWheel:         timeWheel,
 		actionTasks:       actionTasks,
 		pendingTasks:      make(chan *PendingActionTask, 1024),
@@ -76,14 +79,7 @@ func (u *ActionQueueUsecase) Start(ctx context.Context) error {
 	}
 	for _, characterID := range characterIDs {
 		if err = u.startCurrent(runCtx, characterID); err != nil {
-			u.logger.ErrorContext(
-				runCtx,
-				"game idle restore action queue failed",
-				constant.LogFieldErr,
-				err,
-				"character_id",
-				characterID,
-			)
+			u.logger.ErrorContext(runCtx, "game idle restore action queue failed", constant.LogFieldErr, err, "character_id", characterID)
 		}
 	}
 
@@ -128,10 +124,19 @@ func (u *ActionQueueUsecase) Start(ctx context.Context) error {
 							StartedAt:      task.StartedAt,
 							CompletedAt:    task.CompletedAt,
 							ItemChanges:    task.ItemChanges,
+							AbilityChanges: task.AbilityChanges,
 						},
 					})
 					if err != nil {
 						u.logger.ErrorContext(runCtx, "game idle action completed event publish failed", constant.LogFieldErr, err, "character_id", task.CharacterID)
+					}
+					if task.AbilityLeveledUp != nil {
+						err = u.gameIdleEventRepo.Publish(runCtx, &model.GameIdleEvent{
+							AbilityLeveledUp: task.AbilityLeveledUp,
+						})
+						if err != nil {
+							u.logger.ErrorContext(runCtx, "game idle ability leveled up event publish failed", constant.LogFieldErr, err, "character_id", task.CharacterID)
+						}
 					}
 				}
 				if len(queue.Items) > 0 {
@@ -218,6 +223,14 @@ func (u *ActionQueueUsecase) Add(ctx context.Context, req *AddActionReq) error {
 	}
 	if u.actionTasks[actionConfig.ActionKind] == nil {
 		return fmt.Errorf("game idle action task is required: %s", actionConfig.ActionKind)
+	}
+	if err = u.abilityUsecase.CheckLevel(
+		ctx,
+		req.CharacterID,
+		enum.Ability(actionConfig.AbilityID),
+		actionConfig.RequiredAbilityLevel,
+	); err != nil {
+		return err
 	}
 
 	queue, err := u.actionQueueRepo.Load(ctx, req.CharacterID)
@@ -398,6 +411,14 @@ func (u *ActionQueueUsecase) startCurrent(ctx context.Context, characterID int64
 		}
 		if !actionConfig.Enabled {
 			return model.ErrActionInvalid
+		}
+		if err = u.abilityUsecase.CheckLevel(
+			ctx,
+			characterID,
+			enum.Ability(actionConfig.AbilityID),
+			actionConfig.RequiredAbilityLevel,
+		); err != nil {
+			return err
 		}
 		actionTask := u.actionTasks[actionConfig.ActionKind]
 		if actionTask == nil {

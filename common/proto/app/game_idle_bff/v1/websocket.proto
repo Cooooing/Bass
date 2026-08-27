@@ -27,3 +27,54 @@ message CreateWebSocketSession {
     string path = 3; // WS 连接路径
   }
 }
+
+// WebSocketCommand 是客户端上行命令。
+message WebSocketCommand {
+  string type = 1; // 命令类型
+  WebSocketCommandPayload payload = 2; // 命令参数
+}
+
+// WebSocketCommandPayload 是客户端上行命令参数。
+message WebSocketCommandPayload {
+  oneof data {
+    ChatMessageSendWebSocketPayload chat_message_send = 1;
+    ChatMessageListWebSocketPayload chat_message_list = 2;
+    BackpackGetWebSocketPayload backpack_get = 3;
+    ActionAddWebSocketPayload action_add = 4;
+    ActionMoveWebSocketPayload action_move = 5;
+    ActionRemoveWebSocketPayload action_remove = 6;
+  }
+}
+
+message ChatMessageSendWebSocketPayload {
+  string channel_type = 1; // 频道类型
+  string channel_id = 2; // 频道标识
+  int64 receiver_character_id = 3; // 接收角色 ID，非私聊为 0
+  string content = 4; // 消息内容
+}
+
+message ChatMessageListWebSocketPayload {
+  string channel_type = 1; // 频道类型
+  string channel_id = 2; // 频道标识
+  int64 before_id = 3; // 查询该 ID 之前的消息，为 0 时从最新开始
+  int32 size = 4; // 查询数量
+}
+
+message BackpackGetWebSocketPayload {
+  repeated string item_ids = 1; // 物品 ID 列表，空表示查询全部
+}
+
+message ActionAddWebSocketPayload {
+  string action_id = 1; // 行动编码
+  int64 times = 2; // 执行次数，-1 表示无限
+  optional int32 position = 3; // 插入位置，从 0 开始；空值表示追加到队尾
+}
+
+message ActionMoveWebSocketPayload {
+  int32 current_position = 1; // 当前位置，从 0 开始
+  int32 target_position = 2; // 目标位置，从 0 开始
+}
+
+message ActionRemoveWebSocketPayload {
+  int32 position = 1; // 移除位置，从 0 开始
+}

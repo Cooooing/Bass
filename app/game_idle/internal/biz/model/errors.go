@@ -16,5 +16,6 @@ var (
 	ErrActionInvalid            = errors.New("game idle action invalid")
 	ErrActionQueueFull          = errors.New("game idle action queue full")
 	ErrActionQueueStateConflict = errors.New("game idle action queue state conflict")
+	ErrAbilityLevelInsufficient = errors.New("game idle ability level insufficient")
 	ErrChatMessageInvalid       = errors.New("game idle chat message invalid")
 )

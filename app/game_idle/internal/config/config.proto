@@ -24,6 +24,7 @@ message GameIdle {
   Backpack backpack = 3;
   Character character = 4;
   WebSocket websocket = 5;
+  CharacterAbility character_ability = 6;
 }
 
 message Backpack {
@@ -38,4 +39,8 @@ message Character {
 
 message WebSocket {
   google.protobuf.Duration online_ttl = 1; // 角色在线会话 TTL
+}
+
+message CharacterAbility {
+  uint32 persist_threshold = 1; // 能力经验缓存持久化阈值
 }

@@ -14,6 +14,7 @@ var BizProviderSet = wire.NewSet(
 	ProvideActionTasks,
 	usecase.NewCharacterUsecase,
 	usecase.NewBackpackUsecase,
+	usecase.NewCharacterAbilityUsecase,
 	usecase.NewRecipeUsecase,
 	usecase.NewActionQueueUsecase,
 	usecase.NewChatUsecase,

@@ -1,8 +1,8 @@
 package command
 
 import (
+	v1 "common/proto/gen/game_idle_bff/v1"
 	"context"
-	"encoding/json"
 	"game_idle_bff/internal/biz/usecase"
 	"game_idle_bff/internal/enum"
 )
@@ -21,18 +21,15 @@ func (h *BackpackGetHandler) Type() enum.WebSocketMessageType {
 	return enum.WebSocketMessageTypeBackpackGet
 }
 
+func (h *BackpackGetHandler) Validate(command *v1.WebSocketCommand) bool {
+	return command.GetPayload().GetBackpackGet() != nil
+}
+
 func (h *BackpackGetHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
-	payload := struct {
-		ItemIDs []string `json:"item_ids,omitempty"`
-	}{}
-	if len(req.Command.Payload) > 0 {
-		if err := json.Unmarshal(req.Command.Payload, &payload); err != nil {
-			return err
-		}
-	}
+	payload := req.Command.GetPayload().GetBackpackGet()
 	items, err := h.backpackUsecase.Map(ctx, &usecase.BackpackMapReq{
 		CharacterID: req.CharacterID,
-		ItemIDs:     payload.ItemIDs,
+		ItemIDs:     payload.GetItemIds(),
 	})
 	if err != nil {
 		return err

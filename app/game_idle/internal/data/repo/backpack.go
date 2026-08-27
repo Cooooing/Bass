@@ -12,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 
-	"entgo.io/ent/dialect/sql"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -131,14 +130,8 @@ func (r *BackpackRepo) LoadItems(ctx context.Context, characterID int64) error {
 }
 
 func (r *BackpackRepo) MapItems(ctx context.Context, req *bizrepo.BackpackMapReq) (map[string]*model.CharacterItem, error) {
-	loaded, err := r.redisClient.Client.Exists(ctx, r.loadedRedisKey(req.CharacterID)).Result()
-	if err != nil {
+	if err := r.EnsureLoaded(ctx, req.CharacterID); err != nil {
 		return nil, err
-	}
-	if loaded == 0 {
-		if err := r.LoadItems(ctx, req.CharacterID); err != nil {
-			return nil, err
-		}
 	}
 	quantityValues, err := r.redisClient.Client.HGetAll(ctx, r.quantityRedisKey(req.CharacterID)).Result()
 	if err != nil {
@@ -195,14 +188,8 @@ func (r *BackpackRepo) MapItems(ctx context.Context, req *bizrepo.BackpackMapReq
 }
 
 func (r *BackpackRepo) PersistItems(ctx context.Context, characterID int64) error {
-	loaded, err := r.redisClient.Client.Exists(ctx, r.loadedRedisKey(characterID)).Result()
-	if err != nil {
+	if err := r.EnsureLoaded(ctx, characterID); err != nil {
 		return err
-	}
-	if loaded == 0 {
-		if err := r.LoadItems(ctx, characterID); err != nil {
-			return err
-		}
 	}
 	quantityValues, err := r.redisClient.Client.HGetAll(ctx, r.quantityRedisKey(characterID)).Result()
 	if err != nil {
@@ -226,6 +213,7 @@ func (r *BackpackRepo) PersistItems(ctx context.Context, characterID int64) erro
 	for itemID := range consumedValues {
 		itemIDs[itemID] = struct{}{}
 	}
+	creates := make([]*gen.CharacterItemCreate, 0, len(itemIDs))
 	for itemID := range itemIDs {
 		quantity := int64(0)
 		if value, ok := quantityValues[itemID]; ok {
@@ -248,20 +236,22 @@ func (r *BackpackRepo) PersistItems(ctx context.Context, characterID int64) erro
 				return err
 			}
 		}
-		if err := r.db.CharacterItem.Create().
+		creates = append(creates, r.db.CharacterItem.Create().
 			SetCharacterID(characterID).
 			SetItemID(itemID).
 			SetQuantity(quantity).
 			SetTotalObtained(totalObtained).
-			SetTotalConsumed(totalConsumed).
-			OnConflict(sql.ConflictColumns(characteritement.FieldCharacterID, characteritement.FieldItemID)).
-			Update(func(update *gen.CharacterItemUpsert) {
-				update.SetQuantity(quantity)
-				update.SetTotalObtained(totalObtained)
-				update.SetTotalConsumed(totalConsumed)
-				update.UpdateUpdatedAt()
-			}).
-			Exec(ctx); err != nil {
+			SetTotalConsumed(totalConsumed))
+	}
+	if len(creates) > 0 {
+		err = r.db.CharacterItem.CreateBulk(creates...).
+			OnConflictColumns(characteritement.FieldCharacterID, characteritement.FieldItemID).
+			UpdateQuantity().
+			UpdateTotalObtained().
+			UpdateTotalConsumed().
+			UpdateUpdatedAt().
+			Exec(ctx)
+		if err != nil {
 			return err
 		}
 	}
@@ -273,14 +263,8 @@ func (r *BackpackRepo) CheckItems(ctx context.Context, req *bizrepo.BackpackChec
 	for itemID, quantity := range req.Items {
 		args = append(args, itemID, quantity)
 	}
-	loaded, err := r.redisClient.Client.Exists(ctx, r.loadedRedisKey(req.CharacterID)).Result()
-	if err != nil {
+	if err := r.EnsureLoaded(ctx, req.CharacterID); err != nil {
 		return err
-	}
-	if loaded == 0 {
-		if err := r.LoadItems(ctx, req.CharacterID); err != nil {
-			return err
-		}
 	}
 	if err := r.checkScript.Run(
 		ctx,
@@ -301,14 +285,8 @@ func (r *BackpackRepo) ChangeItems(ctx context.Context, req *bizrepo.BackpackCha
 	for _, item := range req.Items {
 		args = append(args, item.ItemID, item.Quantity)
 	}
-	loaded, err := r.redisClient.Client.Exists(ctx, r.loadedRedisKey(req.CharacterID)).Result()
-	if err != nil {
+	if err := r.EnsureLoaded(ctx, req.CharacterID); err != nil {
 		return nil, err
-	}
-	if loaded == 0 {
-		if err := r.LoadItems(ctx, req.CharacterID); err != nil {
-			return nil, err
-		}
 	}
 	result, err := r.changeScript.Run(
 		ctx,
@@ -348,6 +326,17 @@ func (r *BackpackRepo) ChangeItems(ctx context.Context, req *bizrepo.BackpackCha
 		return quantityAfter, r.PersistItems(ctx, req.CharacterID)
 	}
 	return quantityAfter, nil
+}
+
+func (r *BackpackRepo) EnsureLoaded(ctx context.Context, characterID int64) error {
+	loaded, err := r.redisClient.Client.Exists(ctx, r.loadedRedisKey(characterID)).Result()
+	if err != nil {
+		return err
+	}
+	if loaded > 0 {
+		return nil
+	}
+	return r.LoadItems(ctx, characterID)
 }
 
 func (r *BackpackRepo) quantityRedisKey(characterID int64) string {

@@ -12,6 +12,7 @@ tags:
   name: ArticleService
 - description: 认证接口。
   name: AuthService
+- name: CheckinService
 - description: 评论接口。
   name: CommentService
 - description: 领域 HTTP 接口。
@@ -1046,6 +1047,48 @@ paths:
       x-content-type: application/json
       x-accepts:
       - application/json
+  /v1/user/checkin/check-in:
+    post:
+      operationId: CheckinService_CheckIn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckIn_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckIn_Resp"
+          description: OK
+      tags:
+      - CheckinService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/user/checkin/get-overview:
+    post:
+      operationId: CheckinService_GetOverview
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetCheckinOverview_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCheckinOverview_Resp"
+          description: OK
+      tags:
+      - CheckinService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
   /v1/user/location/get-current:
     post:
       description: 获取当前账号的地理资料。
@@ -2056,6 +2099,28 @@ components:
     CancelPublishArticle_Resp:
       properties: {}
       type: object
+    CheckIn_Req:
+      properties: {}
+      type: object
+    CheckIn_Resp:
+      example:
+        date: 2000-01-23T04:56:07.000+00:00
+        record_id: record_id
+        current_streak: 0
+        longest_streak: 6
+      properties:
+        record_id:
+          type: string
+        date:
+          format: date-time
+          type: string
+        current_streak:
+          format: int32
+          type: integer
+        longest_streak:
+          format: int32
+          type: integer
+      type: object
     CollectArticle_Req:
       properties:
         article_id:
@@ -2451,6 +2516,46 @@ components:
       properties:
         article:
           $ref: "#/components/schemas/ArticleDetail"
+      type: object
+    GetCheckinOverview_Req:
+      properties:
+        month:
+          type: string
+      type: object
+    GetCheckinOverview_Resp:
+      example:
+        records:
+        - amount: amount
+          balance_after: balance_after
+          created_at: 2000-01-23T04:56:07.000+00:00
+          remark: remark
+          id: id
+          transaction_no: transaction_no
+          record_type: ECONOMY_RECORD_TYPE_UNSPECIFIED
+          balance_before: balance_before
+          direction: ECONOMY_RECORD_DIRECTION_UNSPECIFIED
+        - amount: amount
+          balance_after: balance_after
+          created_at: 2000-01-23T04:56:07.000+00:00
+          remark: remark
+          id: id
+          transaction_no: transaction_no
+          record_type: ECONOMY_RECORD_TYPE_UNSPECIFIED
+          balance_before: balance_before
+          direction: ECONOMY_RECORD_DIRECTION_UNSPECIFIED
+        current_streak: 0
+        longest_streak: 6
+      properties:
+        records:
+          items:
+            $ref: "#/components/schemas/Resp_Record"
+          type: array
+        current_streak:
+          format: int32
+          type: integer
+        longest_streak:
+          format: int32
+          type: integer
       type: object
     GetCurrentAccount_Req:
       properties: {}
@@ -5366,6 +5471,7 @@ components:
           - EVENT_TYPE_USER_ACCOUNT_CANCELLED
           - EVENT_TYPE_USER_ACCOUNT_BANNED
           - EVENT_TYPE_USER_ACCOUNT_UNBANNED
+          - EVENT_TYPE_USER_CHECKIN_COMPLETED
           - EVENT_TYPE_ARTICLE_PUBLISHED
           - EVENT_TYPE_ARTICLE_LIKED
           - EVENT_TYPE_ARTICLE_THANKED
@@ -5378,6 +5484,10 @@ components:
           - EVENT_TYPE_COMMENT_LIKED
           - EVENT_TYPE_COMMENT_THANKED
           - EVENT_TYPE_COMMENT_STATUS_UPDATED
+          - EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE
+          - EVENT_TYPE_GAME_IDLE_CLOSE_SESSION
+          - EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED
+          - EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP
           format: enum
           type: string
         title:
@@ -5443,6 +5553,53 @@ components:
           type: boolean
         public_location:
           type: boolean
+      type: object
+    Resp_Record:
+      example:
+        amount: amount
+        balance_after: balance_after
+        created_at: 2000-01-23T04:56:07.000+00:00
+        remark: remark
+        id: id
+        transaction_no: transaction_no
+        record_type: ECONOMY_RECORD_TYPE_UNSPECIFIED
+        balance_before: balance_before
+        direction: ECONOMY_RECORD_DIRECTION_UNSPECIFIED
+      properties:
+        id:
+          type: string
+        transaction_no:
+          type: string
+        record_type:
+          enum:
+          - ECONOMY_RECORD_TYPE_UNSPECIFIED
+          - ECONOMY_RECORD_TYPE_SIGN_IN_REWARD
+          - ECONOMY_RECORD_TYPE_ARTICLE_THANK_REWARD
+          - ECONOMY_RECORD_TYPE_COMMENT_THANK_REWARD
+          - ECONOMY_RECORD_TYPE_ARTICLE_REWARD_OUT
+          - ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN
+          - ECONOMY_RECORD_TYPE_ADMIN_ADD
+          - ECONOMY_RECORD_TYPE_ADMIN_DEDUCT
+          format: enum
+          type: string
+        direction:
+          enum:
+          - ECONOMY_RECORD_DIRECTION_UNSPECIFIED
+          - ECONOMY_RECORD_DIRECTION_INCOME
+          - ECONOMY_RECORD_DIRECTION_EXPENSE
+          format: enum
+          type: string
+        amount:
+          type: string
+        balance_before:
+          type: string
+        balance_after:
+          type: string
+        remark:
+          type: string
+        created_at:
+          format: date-time
+          type: string
       type: object
     Resp_Relation:
       example:

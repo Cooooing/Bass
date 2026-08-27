@@ -161,6 +161,10 @@ Class | Method | HTTP request | Description
 *AuthService* | [**refreshTokenWithHttpInfo**](docs/AuthService.md#refreshTokenWithHttpInfo) | **POST** /v1/user/auth/refresh-token | 
 *AuthService* | [**register**](docs/AuthService.md#register) | **POST** /v1/user/auth/register | 
 *AuthService* | [**registerWithHttpInfo**](docs/AuthService.md#registerWithHttpInfo) | **POST** /v1/user/auth/register | 
+*CheckinService* | [**checkIn**](docs/CheckinService.md#checkIn) | **POST** /v1/user/checkin/check-in | 
+*CheckinService* | [**checkInWithHttpInfo**](docs/CheckinService.md#checkInWithHttpInfo) | **POST** /v1/user/checkin/check-in | 
+*CheckinService* | [**getOverview**](docs/CheckinService.md#getOverview) | **POST** /v1/user/checkin/get-overview | 
+*CheckinService* | [**getOverviewWithHttpInfo**](docs/CheckinService.md#getOverviewWithHttpInfo) | **POST** /v1/user/checkin/get-overview | 
 *CommentService* | [**callList**](docs/CommentService.md#callList) | **POST** /v1/content/comment/list | 
 *CommentService* | [**callListWithHttpInfo**](docs/CommentService.md#callListWithHttpInfo) | **POST** /v1/content/comment/list | 
 *CommentService* | [**create**](docs/CommentService.md#create) | **POST** /v1/content/comment/create | 
@@ -260,6 +264,7 @@ Class | Method | HTTP request | Description
  - [BlockRelationReq](docs/BlockRelationReq.md)
  - [CancelAccountReq](docs/CancelAccountReq.md)
  - [CancelPublishArticleReq](docs/CancelPublishArticleReq.md)
+ - [CheckInResp](docs/CheckInResp.md)
  - [CollectArticleReq](docs/CollectArticleReq.md)
  - [CollectArticleResp](docs/CollectArticleResp.md)
  - [ConfirmEnableTotpReq](docs/ConfirmEnableTotpReq.md)
@@ -277,6 +282,8 @@ Class | Method | HTTP request | Description
  - [FollowRelationReq](docs/FollowRelationReq.md)
  - [GetArticleReq](docs/GetArticleReq.md)
  - [GetArticleResp](docs/GetArticleResp.md)
+ - [GetCheckinOverviewReq](docs/GetCheckinOverviewReq.md)
+ - [GetCheckinOverviewResp](docs/GetCheckinOverviewResp.md)
  - [GetCurrentAccountResp](docs/GetCurrentAccountResp.md)
  - [GetCurrentLocationResp](docs/GetCurrentLocationResp.md)
  - [GetCurrentPreferencesResp](docs/GetCurrentPreferencesResp.md)
@@ -351,6 +358,7 @@ Class | Method | HTTP request | Description
  - [RespNotification](docs/RespNotification.md)
  - [RespPreference](docs/RespPreference.md)
  - [RespPrivacySetting](docs/RespPrivacySetting.md)
+ - [RespRecord](docs/RespRecord.md)
  - [RespRelation](docs/RespRelation.md)
  - [RespRelationStatus](docs/RespRelationStatus.md)
  - [RespTag](docs/RespTag.md)

@@ -22,6 +22,8 @@ docs/BindArticleTagsReq.md
 docs/BlockRelationReq.md
 docs/CancelAccountReq.md
 docs/CancelPublishArticleReq.md
+docs/CheckInResp.md
+docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
 docs/CommentService.md
@@ -41,6 +43,8 @@ docs/DomainService.md
 docs/FollowRelationReq.md
 docs/GetArticleReq.md
 docs/GetArticleResp.md
+docs/GetCheckinOverviewReq.md
+docs/GetCheckinOverviewResp.md
 docs/GetCurrentAccountResp.md
 docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
@@ -122,6 +126,7 @@ docs/RespLocation.md
 docs/RespNotification.md
 docs/RespPreference.md
 docs/RespPrivacySetting.md
+docs/RespRecord.md
 docs/RespRelation.md
 docs/RespRelationStatus.md
 docs/RespTag.md
@@ -180,6 +185,7 @@ src/main/java/com/bass/bbs/ServerVariable.java
 src/main/java/com/bass/bbs/api/AccountService.java
 src/main/java/com/bass/bbs/api/ArticleService.java
 src/main/java/com/bass/bbs/api/AuthService.java
+src/main/java/com/bass/bbs/api/CheckinService.java
 src/main/java/com/bass/bbs/api/CommentService.java
 src/main/java/com/bass/bbs/api/DomainService.java
 src/main/java/com/bass/bbs/api/LocationService.java
@@ -204,6 +210,7 @@ src/main/java/com/bass/bbs/model/BindArticleTagsReq.java
 src/main/java/com/bass/bbs/model/BlockRelationReq.java
 src/main/java/com/bass/bbs/model/CancelAccountReq.java
 src/main/java/com/bass/bbs/model/CancelPublishArticleReq.java
+src/main/java/com/bass/bbs/model/CheckInResp.java
 src/main/java/com/bass/bbs/model/CollectArticleReq.java
 src/main/java/com/bass/bbs/model/CollectArticleResp.java
 src/main/java/com/bass/bbs/model/ConfirmEnableTotpReq.java
@@ -221,6 +228,8 @@ src/main/java/com/bass/bbs/model/DiscardDraftArticleReq.java
 src/main/java/com/bass/bbs/model/FollowRelationReq.java
 src/main/java/com/bass/bbs/model/GetArticleReq.java
 src/main/java/com/bass/bbs/model/GetArticleResp.java
+src/main/java/com/bass/bbs/model/GetCheckinOverviewReq.java
+src/main/java/com/bass/bbs/model/GetCheckinOverviewResp.java
 src/main/java/com/bass/bbs/model/GetCurrentAccountResp.java
 src/main/java/com/bass/bbs/model/GetCurrentLocationResp.java
 src/main/java/com/bass/bbs/model/GetCurrentPreferencesResp.java
@@ -295,6 +304,7 @@ src/main/java/com/bass/bbs/model/RespLocation.java
 src/main/java/com/bass/bbs/model/RespNotification.java
 src/main/java/com/bass/bbs/model/RespPreference.java
 src/main/java/com/bass/bbs/model/RespPrivacySetting.java
+src/main/java/com/bass/bbs/model/RespRecord.java
 src/main/java/com/bass/bbs/model/RespRelation.java
 src/main/java/com/bass/bbs/model/RespRelationStatus.java
 src/main/java/com/bass/bbs/model/RespTag.java
@@ -332,6 +342,7 @@ src/main/java/com/bass/bbs/model/UpsertCurrentLocationResp.java
 src/test/java/com/bass/bbs/api/AccountServiceTest.java
 src/test/java/com/bass/bbs/api/ArticleServiceTest.java
 src/test/java/com/bass/bbs/api/AuthServiceTest.java
+src/test/java/com/bass/bbs/api/CheckinServiceTest.java
 src/test/java/com/bass/bbs/api/CommentServiceTest.java
 src/test/java/com/bass/bbs/api/DomainServiceTest.java
 src/test/java/com/bass/bbs/api/LocationServiceTest.java
@@ -355,6 +366,7 @@ src/test/java/com/bass/bbs/model/BindArticleTagsReqTest.java
 src/test/java/com/bass/bbs/model/BlockRelationReqTest.java
 src/test/java/com/bass/bbs/model/CancelAccountReqTest.java
 src/test/java/com/bass/bbs/model/CancelPublishArticleReqTest.java
+src/test/java/com/bass/bbs/model/CheckInRespTest.java
 src/test/java/com/bass/bbs/model/CollectArticleReqTest.java
 src/test/java/com/bass/bbs/model/CollectArticleRespTest.java
 src/test/java/com/bass/bbs/model/ConfirmEnableTotpReqTest.java
@@ -372,6 +384,8 @@ src/test/java/com/bass/bbs/model/DiscardDraftArticleReqTest.java
 src/test/java/com/bass/bbs/model/FollowRelationReqTest.java
 src/test/java/com/bass/bbs/model/GetArticleReqTest.java
 src/test/java/com/bass/bbs/model/GetArticleRespTest.java
+src/test/java/com/bass/bbs/model/GetCheckinOverviewReqTest.java
+src/test/java/com/bass/bbs/model/GetCheckinOverviewRespTest.java
 src/test/java/com/bass/bbs/model/GetCurrentAccountRespTest.java
 src/test/java/com/bass/bbs/model/GetCurrentLocationRespTest.java
 src/test/java/com/bass/bbs/model/GetCurrentPreferencesRespTest.java
@@ -446,6 +460,7 @@ src/test/java/com/bass/bbs/model/RespLocationTest.java
 src/test/java/com/bass/bbs/model/RespNotificationTest.java
 src/test/java/com/bass/bbs/model/RespPreferenceTest.java
 src/test/java/com/bass/bbs/model/RespPrivacySettingTest.java
+src/test/java/com/bass/bbs/model/RespRecordTest.java
 src/test/java/com/bass/bbs/model/RespRelationStatusTest.java
 src/test/java/com/bass/bbs/model/RespRelationTest.java
 src/test/java/com/bass/bbs/model/RespTagTest.java

@@ -61,33 +61,18 @@ func (s *AuthService) Register(ctx context.Context, req *v1.Register_Req) (*v1.R
 	name := strings.ToLower(strings.TrimSpace(req.GetName()))
 	nameLength := utf8.RuneCountInString(name)
 	if nameLength < 4 || nameLength > 32 || !s.nameRe.MatchString(name) {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_INVALID)
 	}
 	password := req.GetPassword()
-	if len(password) < 6 || len(password) > 64 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	var hasLetter, hasDigit bool
-	for _, r := range password {
-		if r < '!' || r > '~' {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-		}
-		switch {
-		case (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z'):
-			hasLetter = true
-		case r >= '0' && r <= '9':
-			hasDigit = true
-		}
-	}
-	if !hasLetter || !hasDigit {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	if !s.validatePassword(password) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PASSWORD_INVALID)
 	}
 	var nickname *string
 	if req.Nickname != nil {
 		value := strings.TrimSpace(req.GetNickname())
 		length := utf8.RuneCountInString(value)
 		if length < 2 || length > 32 {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_NICKNAME_INVALID)
 		}
 		nickname = new(value)
 	}
@@ -105,13 +90,12 @@ func (s *AuthService) Register(ctx context.Context, req *v1.Register_Req) (*v1.R
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		email := strings.ToLower(strings.TrimSpace(cred.GetEmail()))
-		parsed, err := mail.ParseAddress(email)
-		if err != nil || parsed.Address != email || !strings.Contains(email, "@") || utf8.RuneCountInString(email) > 254 {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		if !s.validateEmail(email) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID)
 		}
 		code := strings.TrimSpace(cred.GetCode())
 		if !req.GetSkipOtp() && !s.codeRe.MatchString(code) {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID)
 		}
 		ucReq.Email = email
 		ucReq.Code = code
@@ -122,8 +106,11 @@ func (s *AuthService) Register(ctx context.Context, req *v1.Register_Req) (*v1.R
 		}
 		phone := strings.TrimSpace(cred.GetPhone())
 		code := strings.TrimSpace(cred.GetCode())
-		if !s.phoneRe.MatchString(phone) || (!req.GetSkipOtp() && !s.codeRe.MatchString(code)) {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		if !s.phoneRe.MatchString(phone) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PHONE_INVALID)
+		}
+		if !req.GetSkipOtp() && !s.codeRe.MatchString(code) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID)
 		}
 		ucReq.Phone = phone
 		ucReq.Code = code
@@ -184,7 +171,17 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 		if cred == nil {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
-		ucReq.PasswordAccount = cred.GetAccount()
+		account := strings.ToLower(strings.TrimSpace(cred.GetAccount()))
+		if account == "" {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+		}
+		if strings.Contains(account, "@") && !s.validateEmail(account) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID)
+		}
+		if !s.validatePassword(cred.GetPassword()) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PASSWORD_INVALID)
+		}
+		ucReq.PasswordAccount = account
 		ucReq.Password = cred.GetPassword()
 		ucReq.Code = cred.GetCode()
 	case enum.LoginTypeEmail:
@@ -192,15 +189,31 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 		if cred == nil {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
-		ucReq.Email = cred.GetEmail()
-		ucReq.Code = cred.GetCode()
+		email := strings.ToLower(strings.TrimSpace(cred.GetEmail()))
+		if !s.validateEmail(email) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID)
+		}
+		code := strings.TrimSpace(cred.GetCode())
+		if !req.GetSkipOtp() && !s.codeRe.MatchString(code) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID)
+		}
+		ucReq.Email = email
+		ucReq.Code = code
 	case enum.LoginTypePhone:
 		cred := req.GetPhoneCredential()
 		if cred == nil {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
-		ucReq.Phone = cred.GetPhone()
-		ucReq.Code = cred.GetCode()
+		phone := strings.TrimSpace(cred.GetPhone())
+		if !s.phoneRe.MatchString(phone) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PHONE_INVALID)
+		}
+		code := strings.TrimSpace(cred.GetCode())
+		if !req.GetSkipOtp() && !s.codeRe.MatchString(code) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID)
+		}
+		ucReq.Phone = phone
+		ucReq.Code = code
 	}
 	res, err := s.authUsecase.Login(ctx, ucReq)
 	if err != nil {
@@ -254,6 +267,30 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 		reply.SessionExpiresAt = timestamppb.New(*res.TokenPair.SessionExpiresAt)
 	}
 	return reply, nil
+}
+
+func (s *AuthService) validatePassword(password string) bool {
+	if len(password) < 6 || len(password) > 64 {
+		return false
+	}
+	var hasLetter, hasDigit bool
+	for _, r := range password {
+		if r < '!' || r > '~' {
+			return false
+		}
+		switch {
+		case (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z'):
+			hasLetter = true
+		case r >= '0' && r <= '9':
+			hasDigit = true
+		}
+	}
+	return hasLetter && hasDigit
+}
+
+func (s *AuthService) validateEmail(email string) bool {
+	parsed, err := mail.ParseAddress(email)
+	return err == nil && parsed.Address == email && strings.Contains(email, "@") && utf8.RuneCountInString(email) <= 254
 }
 
 func (s *AuthService) RefreshToken(ctx context.Context, req *v1.RefreshToken_Req) (*v1.RefreshToken_Resp, error) {

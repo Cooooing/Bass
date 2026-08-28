@@ -127,6 +127,48 @@ var bbsErrorMessages = serverutil.ErrorMessages{
 			commonenums.Language_LANGUAGE_EN:    "Account already exists",
 		},
 	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "账号名格式不正确",
+			commonenums.Language_LANGUAGE_ZH_TW: "帳號名格式不正確",
+			commonenums.Language_LANGUAGE_EN:    "Invalid account name format",
+		},
+	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PASSWORD_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "密码格式不正确",
+			commonenums.Language_LANGUAGE_ZH_TW: "密碼格式不正確",
+			commonenums.Language_LANGUAGE_EN:    "Invalid password format",
+		},
+	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "邮箱格式不正确",
+			commonenums.Language_LANGUAGE_ZH_TW: "信箱格式不正確",
+			commonenums.Language_LANGUAGE_EN:    "Invalid email format",
+		},
+	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PHONE_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "手机号格式不正确",
+			commonenums.Language_LANGUAGE_ZH_TW: "手機號格式不正確",
+			commonenums.Language_LANGUAGE_EN:    "Invalid phone number format",
+		},
+	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_NICKNAME_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "昵称格式不正确",
+			commonenums.Language_LANGUAGE_ZH_TW: "暱稱格式不正確",
+			commonenums.Language_LANGUAGE_EN:    "Invalid nickname format",
+		},
+	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "验证码格式不正确",
+			commonenums.Language_LANGUAGE_ZH_TW: "驗證碼格式不正確",
+			commonenums.Language_LANGUAGE_EN:    "Invalid verification code format",
+		},
+	},
 	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED: {
 		Text: map[commonenums.Language]string{
 			commonenums.Language_LANGUAGE_ZH_CN: "验证码无效或已过期",

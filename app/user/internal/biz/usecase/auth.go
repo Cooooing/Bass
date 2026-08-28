@@ -99,15 +99,15 @@ func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
 	switch req.Type {
 	case enum.RegisterTypeEmail:
 		email := strings.ToLower(strings.TrimSpace(req.Email))
-		if exists, err := s.accountRepo.ExistsByAccount(ctx, req.Name); err != nil {
-			return err
-		} else if exists {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN)
-		}
 		if exists, err := s.accountRepo.ExistsByAccount(ctx, email); err != nil {
 			return err
 		} else if exists {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
+		}
+		if exists, err := s.accountRepo.ExistsByAccount(ctx, req.Name); err != nil {
+			return err
+		} else if exists {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN)
 		}
 		if !req.SkipOtp {
 			if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{
@@ -158,15 +158,15 @@ func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
 		return nil
 	case enum.RegisterTypePhone:
 		phone := strings.TrimSpace(req.Phone)
-		if exists, err := s.accountRepo.ExistsByAccount(ctx, req.Name); err != nil {
-			return err
-		} else if exists {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN)
-		}
 		if exists, err := s.accountRepo.ExistsByAccount(ctx, phone); err != nil {
 			return err
 		} else if exists {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_ALREADY_EXISTS)
+		}
+		if exists, err := s.accountRepo.ExistsByAccount(ctx, req.Name); err != nil {
+			return err
+		} else if exists {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_TAKEN)
 		}
 		if !req.SkipOtp {
 			if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{
@@ -308,13 +308,30 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
 			Account: new(accountInput),
 		})
-		if err != nil || user == nil || user.Status == nil || *user.Status != enum.AccountStatusNormal || !str.VerifyPassword(user.Password, req.Password) {
+		if err != nil || user == nil {
 			if err != nil {
 				code, ok := apperror.BusinessCode(err)
 				if !(ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND) {
 					s.logger.WarnContext(ctx, "password login account lookup failed", constant.LogFieldErr, err)
 				}
 			}
+			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+		}
+		if user.Status == nil || *user.Status != enum.AccountStatusNormal {
+			audit.UserID = new(user.ID)
+			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+			switch {
+			case user.Status != nil && *user.Status == enum.AccountStatusBanned:
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_BANNED)
+			case user.Status != nil && *user.Status == enum.AccountStatusCancelled:
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_CANCELLED)
+			default:
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+			}
+		}
+		if !str.VerifyPassword(user.Password, req.Password) {
+			audit.UserID = new(user.ID)
 			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
 		}
@@ -347,7 +364,7 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
 			Account: new(email),
 		})
-		if err != nil || user == nil || user.Status == nil || *user.Status != enum.AccountStatusNormal {
+		if err != nil || user == nil {
 			if err != nil {
 				code, ok := apperror.BusinessCode(err)
 				if !(ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND) {
@@ -356,6 +373,18 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 			}
 			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+		}
+		if user.Status == nil || *user.Status != enum.AccountStatusNormal {
+			audit.UserID = new(user.ID)
+			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+			switch {
+			case user.Status != nil && *user.Status == enum.AccountStatusBanned:
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_BANNED)
+			case user.Status != nil && *user.Status == enum.AccountStatusCancelled:
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_CANCELLED)
+			default:
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+			}
 		}
 		audit.UserID = new(user.ID)
 		account = user
@@ -372,7 +401,7 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 			}
 		}
 		user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{Account: new(phone)})
-		if err != nil || user == nil || user.Status == nil || *user.Status != enum.AccountStatusNormal {
+		if err != nil || user == nil {
 			if err != nil {
 				code, ok := apperror.BusinessCode(err)
 				if !(ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND) {
@@ -381,6 +410,18 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 			}
 			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+		}
+		if user.Status == nil || *user.Status != enum.AccountStatusNormal {
+			audit.UserID = new(user.ID)
+			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+			switch {
+			case user.Status != nil && *user.Status == enum.AccountStatusBanned:
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_BANNED)
+			case user.Status != nil && *user.Status == enum.AccountStatusCancelled:
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_CANCELLED)
+			default:
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+			}
 		}
 		audit.UserID = new(user.ID)
 		account = user

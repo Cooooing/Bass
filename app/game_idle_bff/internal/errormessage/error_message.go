@@ -130,6 +130,48 @@ var messages = serverutil.ErrorMessages{
 			commonenums.Language_LANGUAGE_EN:    "Account already exists",
 		},
 	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "账号名需为 4-32 位小写字母、数字、短横线或下划线",
+			commonenums.Language_LANGUAGE_ZH_TW: "帳號名需為 4-32 位小寫字母、數字、短橫線或底線",
+			commonenums.Language_LANGUAGE_EN:    "Account name must be 4-32 lowercase letters, digits, hyphens, or underscores",
+		},
+	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PASSWORD_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "密码需为 6-64 位可见 ASCII 字符，且包含字母和数字",
+			commonenums.Language_LANGUAGE_ZH_TW: "密碼需為 6-64 位可見 ASCII 字元，且包含字母和數字",
+			commonenums.Language_LANGUAGE_EN:    "Password must be 6-64 visible ASCII characters and include letters and digits",
+		},
+	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "邮箱格式不正确",
+			commonenums.Language_LANGUAGE_ZH_TW: "信箱格式不正確",
+			commonenums.Language_LANGUAGE_EN:    "Invalid email format",
+		},
+	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PHONE_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "手机号格式不正确",
+			commonenums.Language_LANGUAGE_ZH_TW: "手機號格式不正確",
+			commonenums.Language_LANGUAGE_EN:    "Invalid phone number format",
+		},
+	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_NICKNAME_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "昵称需为 2-32 个字符",
+			commonenums.Language_LANGUAGE_ZH_TW: "暱稱需為 2-32 個字元",
+			commonenums.Language_LANGUAGE_EN:    "Nickname must be 2-32 characters",
+		},
+	},
+	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID: {
+		Text: map[commonenums.Language]string{
+			commonenums.Language_LANGUAGE_ZH_CN: "验证码格式不正确",
+			commonenums.Language_LANGUAGE_ZH_TW: "驗證碼格式不正確",
+			commonenums.Language_LANGUAGE_EN:    "Invalid verification code format",
+		},
+	},
 	cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED: {
 		Text: map[commonenums.Language]string{
 			commonenums.Language_LANGUAGE_ZH_CN: "验证码无效或已过期",

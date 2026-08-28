@@ -44,6 +44,12 @@ enum BusinessErrorCode {
   BUSINESS_ERROR_CODE_USER_BAN_RECORD_NOT_FOUND = 11021 [(errors.code) = 404]; // 用户封禁记录不存在
   BUSINESS_ERROR_CODE_USER_RBAC_INVALID = 11022 [(errors.code) = 400]; // 用户权限配置无效
   BUSINESS_ERROR_CODE_USER_CHECKIN_ALREADY_COMPLETED = 11023 [(errors.code) = 409]; // 用户今日已签到
+  BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_INVALID = 11024 [(errors.code) = 400]; // 用户账号名格式无效
+  BUSINESS_ERROR_CODE_USER_PASSWORD_INVALID = 11025 [(errors.code) = 400]; // 用户密码格式无效
+  BUSINESS_ERROR_CODE_USER_EMAIL_INVALID = 11026 [(errors.code) = 400]; // 用户邮箱格式无效
+  BUSINESS_ERROR_CODE_USER_PHONE_INVALID = 11027 [(errors.code) = 400]; // 用户手机号格式无效
+  BUSINESS_ERROR_CODE_USER_NICKNAME_INVALID = 11028 [(errors.code) = 400]; // 用户昵称格式无效
+  BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID = 11029 [(errors.code) = 400]; // 用户验证码格式无效
   BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND = 12001 [(errors.code) = 404]; // 内容文章不存在
   BUSINESS_ERROR_CODE_CONTENT_TAG_NOT_FOUND = 12002 [(errors.code) = 404]; // 内容标签不存在
   BUSINESS_ERROR_CODE_CONTENT_DOMAIN_NOT_FOUND = 12003 [(errors.code) = 404]; // 内容领域不存在

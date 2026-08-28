@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"game_idle/internal/biz/repo"
+	"game_idle/internal/enum"
 	"math/rand"
 )
 
@@ -40,6 +41,9 @@ func (u *RecipeUsecase) RollNormal(ctx context.Context, req *RollRecipeReq) (map
 			}
 		}
 		selected := outputs[left]
+		if selected.ItemID == enum.ItemIDEmpty.String() {
+			continue
+		}
 		itemQuantities[selected.ItemID] += selected.MinQuantity + rand.Int63n(selected.MaxQuantity-selected.MinQuantity+1)
 	}
 	return itemQuantities, nil

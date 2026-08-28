@@ -7,6 +7,7 @@ import (
 	"context"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/usecase"
+	"game_idle/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -74,6 +75,9 @@ func (s *ActionService) GetDetail(ctx context.Context, req *v1.GetActionDetail_R
 			})
 		}
 		for _, output := range recipe.Outputs {
+			if output.ItemID == enum.ItemIDEmpty.String() {
+				continue
+			}
 			item := row.Items[output.ItemID]
 			probability := 0.0
 			if recipe.TotalWeight > 0 {

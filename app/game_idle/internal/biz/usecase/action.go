@@ -4,6 +4,7 @@ import (
 	"context"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/repo"
+	"game_idle/internal/enum"
 	"sort"
 )
 
@@ -68,6 +69,9 @@ func (u *ActionUsecase) GetDetail(ctx context.Context, actionID string) (*model.
 			itemIDs = append(itemIDs, input.ItemID)
 		}
 		for _, output := range recipe.Outputs {
+			if output.ItemID == enum.ItemIDEmpty.String() {
+				continue
+			}
 			itemIDs = append(itemIDs, output.ItemID)
 		}
 	}

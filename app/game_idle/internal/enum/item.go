@@ -1,5 +1,16 @@
 package enum
 
+// ItemID 表示有特殊业务语义的物品编码。
+type ItemID string
+
+const (
+	ItemIDEmpty ItemID = "empty" // 空产出
+)
+
+func (e ItemID) String() string {
+	return string(e)
+}
+
 // ItemType 表示物品类型，货币、资源、装备等资产统一作为物品。
 type ItemType string
 

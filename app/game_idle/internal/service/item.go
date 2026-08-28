@@ -4,6 +4,7 @@ import (
 	v1 "common/proto/gen/game_idle/v1"
 	"context"
 	"game_idle/internal/biz/usecase"
+	"game_idle/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -34,6 +35,9 @@ func (s *ItemService) List(ctx context.Context, req *v1.ListItems_Request) (*v1.
 	}
 	out := make([]*v1.Item, 0, len(rows))
 	for _, row := range rows {
+		if row.ID == enum.ItemIDEmpty.String() {
+			continue
+		}
 		out = append(out, &v1.Item{
 			ItemId:      row.ID,
 			Name:        row.Name,

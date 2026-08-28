@@ -44,6 +44,10 @@ func (u *CharacterAbilityUsecase) Map(
 	return rows, nil
 }
 
+func (u *CharacterAbilityUsecase) Persist(ctx context.Context, characterID int64) error {
+	return u.characterAbilityRepo.Persist(ctx, characterID)
+}
+
 func (u *CharacterAbilityUsecase) CheckLevel(
 	ctx context.Context,
 	characterID int64,

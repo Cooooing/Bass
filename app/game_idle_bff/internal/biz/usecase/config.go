@@ -20,6 +20,7 @@ type ConfigUsecase struct {
 	regionRepo     repo.RegionRepo
 	actionRepo     repo.ActionRepo
 	itemRepo       repo.ItemRepo
+	versionRepo    repo.ConfigVersionRepo
 	cache          *model.GameConfig
 	cacheExpiresAt time.Time
 	lock           sync.RWMutex
@@ -30,12 +31,14 @@ func NewConfigUsecase(
 	regionRepo repo.RegionRepo,
 	actionRepo repo.ActionRepo,
 	itemRepo repo.ItemRepo,
+	versionRepo repo.ConfigVersionRepo,
 ) *ConfigUsecase {
 	return &ConfigUsecase{
-		logger:     logger,
-		regionRepo: regionRepo,
-		actionRepo: actionRepo,
-		itemRepo:   itemRepo,
+		logger:      logger,
+		regionRepo:  regionRepo,
+		actionRepo:  actionRepo,
+		itemRepo:    itemRepo,
+		versionRepo: versionRepo,
 	}
 }
 
@@ -53,7 +56,17 @@ func (u *ConfigUsecase) Get(ctx context.Context) (*model.GameConfig, error) {
 }
 
 func (u *ConfigUsecase) Version(ctx context.Context) (*model.GameConfigVersion, error) {
-	row, err := u.current(ctx)
+	version, err := u.versionRepo.Get(ctx)
+	if err != nil {
+		u.logger.WarnContext(ctx, "game idle bff config version get failed", "err", err)
+	}
+	if version != "" {
+		return &model.GameConfigVersion{
+			ConfigVersion: version,
+			ServerTime:    time.Now().Unix(),
+		}, nil
+	}
+	row, err := u.reload(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -85,6 +98,24 @@ func (u *ConfigUsecase) current(ctx context.Context) (*model.GameConfig, error) 
 	}
 	u.cache = row
 	u.cacheExpiresAt = now.Add(configCacheTTL)
+	if err = u.versionRepo.Save(ctx, row.ConfigVersion); err != nil {
+		u.logger.WarnContext(ctx, "game idle bff config version save failed", "err", err)
+	}
+	return row, nil
+}
+
+func (u *ConfigUsecase) reload(ctx context.Context) (*model.GameConfig, error) {
+	row, err := u.load(ctx)
+	if err != nil {
+		return nil, err
+	}
+	u.lock.Lock()
+	u.cache = row
+	u.cacheExpiresAt = time.Now().Add(configCacheTTL)
+	u.lock.Unlock()
+	if err = u.versionRepo.Save(ctx, row.ConfigVersion); err != nil {
+		u.logger.WarnContext(ctx, "game idle bff config version save failed", "err", err)
+	}
 	return row, nil
 }
 

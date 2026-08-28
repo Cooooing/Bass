@@ -263,6 +263,17 @@ func (r *BackpackRepo) PersistItems(ctx context.Context, characterID int64) erro
 	return r.redisClient.Client.Set(ctx, r.operationCountRedisKey(characterID), 0, 0).Err()
 }
 
+func (r *BackpackRepo) Clear(ctx context.Context, characterID int64) error {
+	return r.redisClient.Client.Del(
+		ctx,
+		r.quantityRedisKey(characterID),
+		r.totalObtainedRedisKey(characterID),
+		r.totalConsumedRedisKey(characterID),
+		r.loadedRedisKey(characterID),
+		r.operationCountRedisKey(characterID),
+	).Err()
+}
+
 func (r *BackpackRepo) CheckItems(ctx context.Context, req *bizrepo.BackpackCheckReq) error {
 	args := make([]any, 0, len(req.Items)*2)
 	for itemID, quantity := range req.Items {

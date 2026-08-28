@@ -5,9 +5,11 @@ import (
 	"game_idle/internal/biz/model"
 )
 
-// ActionQueueRepo 管理玩家运行时行动队列；数据层使用 Redis 承载缓存和持久化，不写业务数据库。
+// ActionQueueRepo 管理玩家运行时行动队列；Redis 承载热状态，数据库保存冷备快照。
 type ActionQueueRepo interface {
 	ListCharacterIDs(ctx context.Context) ([]int64, error)
 	Load(ctx context.Context, characterID int64) (*model.ActionQueue, error)
 	Save(ctx context.Context, queue *model.ActionQueue) error
+	Persist(ctx context.Context, characterID int64) error
+	Clear(ctx context.Context, characterID int64) error
 }

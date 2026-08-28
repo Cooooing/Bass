@@ -46,3 +46,7 @@ func (u *BackpackUsecase) Map(ctx context.Context, req *BackpackMapReq) (map[str
 		ItemIDs:     req.ItemIDs,
 	})
 }
+
+func (u *BackpackUsecase) Persist(ctx context.Context, characterID int64) error {
+	return u.backpackRepo.PersistItems(ctx, characterID)
+}

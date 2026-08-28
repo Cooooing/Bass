@@ -184,6 +184,17 @@ func (r *CharacterAbilityRepo) Persist(ctx context.Context, characterID int64) e
 	return r.redisClient.Client.Set(ctx, r.operationCountRedisKey(characterID), 0, 0).Err()
 }
 
+func (r *CharacterAbilityRepo) Clear(ctx context.Context, characterID int64) error {
+	return r.redisClient.Client.Del(
+		ctx,
+		r.expRedisKey(characterID),
+		r.levelRedisKey(characterID),
+		r.nextLevelExpRedisKey(characterID),
+		r.loadedRedisKey(characterID),
+		r.operationCountRedisKey(characterID),
+	).Err()
+}
+
 func (r *CharacterAbilityRepo) ensureLoaded(ctx context.Context, characterID int64) error {
 	loaded, err := r.redisClient.Client.Exists(ctx, r.loadedRedisKey(characterID)).Result()
 	if err != nil {

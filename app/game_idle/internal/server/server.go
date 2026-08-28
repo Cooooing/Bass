@@ -12,6 +12,7 @@ var ServerProviderSet = wire.NewSet(
 	NewGRPCServer,
 	NewHTTPServer,
 	NewTimeWheelServer,
+	NewMetadataCacheServer,
 	NewActionQueueServer,
 )
 
@@ -19,12 +20,14 @@ func ProvideServers(
 	grpcServer *grpc.Server,
 	httpServer *http.Server,
 	timeWheelServer *TimeWheelServer,
+	metadataCacheServer *MetadataCacheServer,
 	actionQueueServer *ActionQueueServer,
 ) []transport.Server {
 	return []transport.Server{
 		grpcServer,
 		httpServer,
 		timeWheelServer,
+		metadataCacheServer,
 		actionQueueServer,
 	}
 }

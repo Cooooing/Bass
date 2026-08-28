@@ -22,6 +22,8 @@ type ActionQueueUsecase struct {
 	characterRepo     repo.CharacterRepo
 	actionRepo        repo.ActionRepo
 	actionQueueRepo   repo.ActionQueueRepo
+	backpackRepo      repo.BackpackRepo
+	abilityRepo       repo.CharacterAbilityRepo
 	gameIdleEventRepo repo.GameIdleEventRepo
 	abilityUsecase    *CharacterAbilityUsecase
 	timeWheel         *timewheel.TimeWheel
@@ -43,6 +45,8 @@ func NewActionQueueUsecase(
 	characterRepo repo.CharacterRepo,
 	actionRepo repo.ActionRepo,
 	actionQueueRepo repo.ActionQueueRepo,
+	backpackRepo repo.BackpackRepo,
+	abilityRepo repo.CharacterAbilityRepo,
 	gameIdleEventRepo repo.GameIdleEventRepo,
 	abilityUsecase *CharacterAbilityUsecase,
 	timeWheel *timewheel.TimeWheel,
@@ -53,6 +57,8 @@ func NewActionQueueUsecase(
 		characterRepo:     characterRepo,
 		actionRepo:        actionRepo,
 		actionQueueRepo:   actionQueueRepo,
+		backpackRepo:      backpackRepo,
+		abilityRepo:       abilityRepo,
 		gameIdleEventRepo: gameIdleEventRepo,
 		abilityUsecase:    abilityUsecase,
 		timeWheel:         timeWheel,
@@ -180,7 +186,9 @@ func (u *ActionQueueUsecase) Start(ctx context.Context) error {
 				}
 				if err = u.stopCurrent(runCtx, task.CharacterID); err != nil {
 					u.logger.ErrorContext(runCtx, "game idle stop current action failed", constant.LogFieldErr, err, "character_id", task.CharacterID)
+					continue
 				}
+				u.flushAndClearState(runCtx, task.CharacterID)
 			}
 		}
 	}()
@@ -189,7 +197,6 @@ func (u *ActionQueueUsecase) Start(ctx context.Context) error {
 }
 
 func (u *ActionQueueUsecase) Stop(ctx context.Context) error {
-	_ = ctx
 	u.mutex.Lock()
 	if !u.running {
 		u.mutex.Unlock()
@@ -200,6 +207,18 @@ func (u *ActionQueueUsecase) Stop(ctx context.Context) error {
 	u.running = false
 	u.mutex.Unlock()
 	stop()
+	characterIDs, err := u.actionQueueRepo.ListCharacterIDs(ctx)
+	if err != nil {
+		u.logger.ErrorContext(ctx, "game idle list action queue characters failed", constant.LogFieldErr, err)
+		return nil
+	}
+	for _, characterID := range characterIDs {
+		if err = u.stopCurrent(ctx, characterID); err != nil {
+			u.logger.ErrorContext(ctx, "game idle stop current action failed", constant.LogFieldErr, err, "character_id", characterID)
+			continue
+		}
+		u.flushAndClearState(ctx, characterID)
+	}
 	return nil
 }
 
@@ -213,6 +232,14 @@ func (u *ActionQueueUsecase) List(ctx context.Context, characterID int64) (*List
 		return nil, err
 	}
 	return &ListActionQueueResp{Queue: queue}, nil
+}
+
+func (u *ActionQueueUsecase) Resume(ctx context.Context, characterID int64) error {
+	return u.startCurrent(ctx, characterID)
+}
+
+func (u *ActionQueueUsecase) Persist(ctx context.Context, characterID int64) error {
+	return u.actionQueueRepo.Persist(ctx, characterID)
 }
 
 type AddActionReq struct {
@@ -496,5 +523,31 @@ func (u *ActionQueueUsecase) publishActionQueueUpdated(ctx context.Context, queu
 	})
 	if err != nil {
 		u.logger.ErrorContext(ctx, "game idle action queue updated event publish failed", constant.LogFieldErr, err, "character_id", queue.CharacterID)
+	}
+}
+
+func (u *ActionQueueUsecase) flushAndClearState(ctx context.Context, characterID int64) {
+	if err := u.actionQueueRepo.Persist(ctx, characterID); err != nil {
+		u.logger.ErrorContext(ctx, "game idle persist action queue failed", constant.LogFieldErr, err, "character_id", characterID)
+		return
+	}
+	if err := u.backpackRepo.PersistItems(ctx, characterID); err != nil {
+		u.logger.ErrorContext(ctx, "game idle persist backpack failed", constant.LogFieldErr, err, "character_id", characterID)
+		return
+	}
+	if err := u.abilityRepo.Persist(ctx, characterID); err != nil {
+		u.logger.ErrorContext(ctx, "game idle persist character ability failed", constant.LogFieldErr, err, "character_id", characterID)
+		return
+	}
+	if err := u.actionQueueRepo.Clear(ctx, characterID); err != nil {
+		u.logger.ErrorContext(ctx, "game idle clear action queue cache failed", constant.LogFieldErr, err, "character_id", characterID)
+		return
+	}
+	if err := u.backpackRepo.Clear(ctx, characterID); err != nil {
+		u.logger.ErrorContext(ctx, "game idle clear backpack cache failed", constant.LogFieldErr, err, "character_id", characterID)
+		return
+	}
+	if err := u.abilityRepo.Clear(ctx, characterID); err != nil {
+		u.logger.ErrorContext(ctx, "game idle clear character ability cache failed", constant.LogFieldErr, err, "character_id", characterID)
 	}
 }

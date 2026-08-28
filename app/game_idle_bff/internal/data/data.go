@@ -15,7 +15,9 @@ var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
 	ProvideConsul,
 	ProvideNats,
+	ProvideRedis,
 	commonClient.NewConsulClient,
+	commonClient.NewRedisClient,
 	commonClient.NewNatsClient,
 	rpc.ProvideUserClient,
 	rpc.ProvideGameIdleClient,
@@ -34,6 +36,7 @@ var ModuleProviderSet = wire.NewSet(
 	NewActionRepo,
 	NewItemRepo,
 	NewWebSocketEventRepo,
+	NewConfigVersionRepo,
 )
 
 func ProvideNats(c *config.Bootstrap) *common.Nats {
@@ -42,6 +45,10 @@ func ProvideNats(c *config.Bootstrap) *common.Nats {
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul
+}
+
+func ProvideRedis(c *config.Bootstrap) *common.Redis {
+	return c.Redis
 }
 
 func ProvideUserAuthClient(userClient *rpc.UserClient) userv1.AuthServiceClient {

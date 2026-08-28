@@ -16,6 +16,7 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewBackpackUsecase,
 	usecase.NewCharacterAbilityUsecase,
 	usecase.NewRecipeUsecase,
+	usecase.NewMetadataCacheUsecase,
 	usecase.NewActionQueueUsecase,
 	usecase.NewChatUsecase,
 	usecase.NewRegionUsecase,

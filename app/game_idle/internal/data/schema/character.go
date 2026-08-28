@@ -75,5 +75,6 @@ func (Character) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("items", CharacterItem.Type),
 		edge.To("abilities", CharacterAbility.Type),
+		edge.To("action_queues", CharacterActionQueue.Type),
 	}
 }

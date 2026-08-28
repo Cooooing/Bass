@@ -77,5 +77,6 @@ func (Action) Edges() []ent.Edge {
 			Field("region_id").
 			Unique(),
 		edge.To("recipes", ActionRecipe.Type),
+		edge.To("character_action_queues", CharacterActionQueue.Type),
 	}
 }

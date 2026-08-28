@@ -16,12 +16,17 @@ import (
 
 type CharacterService struct {
 	v1.UnimplementedCharacterServiceServer
-	characterUsecase *usecase.CharacterUsecase
+	characterUsecase   *usecase.CharacterUsecase
+	actionQueueUsecase *usecase.ActionQueueUsecase
 }
 
-func NewCharacterService(characterUsecase *usecase.CharacterUsecase) *CharacterService {
+func NewCharacterService(
+	characterUsecase *usecase.CharacterUsecase,
+	actionQueueUsecase *usecase.ActionQueueUsecase,
+) *CharacterService {
 	return &CharacterService{
-		characterUsecase: characterUsecase,
+		characterUsecase:   characterUsecase,
+		actionQueueUsecase: actionQueueUsecase,
 	}
 }
 
@@ -109,6 +114,9 @@ func (s *CharacterService) Online(ctx context.Context, req *v1.OnlineCharacter_R
 		CharacterID: req.GetCharacterId(),
 	})
 	if err != nil {
+		return nil, err
+	}
+	if err = s.actionQueueUsecase.Resume(ctx, req.GetCharacterId()); err != nil {
 		return nil, err
 	}
 	return &v1.OnlineCharacter_Resp{

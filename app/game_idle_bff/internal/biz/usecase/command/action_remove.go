@@ -5,6 +5,8 @@ import (
 	"context"
 	"game_idle_bff/internal/biz/usecase"
 	"game_idle_bff/internal/enum"
+
+	"google.golang.org/protobuf/proto"
 )
 
 type ActionRemoveHandler struct {
@@ -21,12 +23,12 @@ func (h *ActionRemoveHandler) Type() enum.WebSocketMessageType {
 	return enum.WebSocketMessageTypeActionRemove
 }
 
-func (h *ActionRemoveHandler) Validate(command *v1.WebSocketCommand) bool {
-	return command.GetPayload().GetActionRemove() != nil
+func (h *ActionRemoveHandler) Payload() proto.Message {
+	return &v1.ActionRemoveWebSocketPayload{}
 }
 
 func (h *ActionRemoveHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
-	payload := req.Command.GetPayload().GetActionRemove()
+	payload := req.Payload.(*v1.ActionRemoveWebSocketPayload)
 	if err := h.actionQueueUsecase.Remove(ctx, &usecase.RemoveActionReq{
 		CharacterID: req.CharacterID,
 		Position:    payload.GetPosition(),

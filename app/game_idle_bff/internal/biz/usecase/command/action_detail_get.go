@@ -5,6 +5,8 @@ import (
 	"context"
 	"game_idle_bff/internal/biz/usecase"
 	"game_idle_bff/internal/enum"
+
+	"google.golang.org/protobuf/proto"
 )
 
 type ActionDetailGetHandler struct {
@@ -21,12 +23,12 @@ func (h *ActionDetailGetHandler) Type() enum.WebSocketMessageType {
 	return enum.WebSocketMessageTypeActionDetailGet
 }
 
-func (h *ActionDetailGetHandler) Validate(command *v1.WebSocketCommand) bool {
-	return command.GetPayload().GetActionDetailGet() != nil
+func (h *ActionDetailGetHandler) Payload() proto.Message {
+	return &v1.ActionDetailGetWebSocketPayload{}
 }
 
 func (h *ActionDetailGetHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
-	payload := req.Command.GetPayload().GetActionDetailGet()
+	payload := req.Payload.(*v1.ActionDetailGetWebSocketPayload)
 	row, err := h.configUsecase.GetActionDetail(ctx, payload.GetActionId())
 	if err != nil {
 		return err

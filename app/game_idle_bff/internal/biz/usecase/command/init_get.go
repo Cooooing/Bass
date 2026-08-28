@@ -1,12 +1,13 @@
 package command
 
 import (
-	v1 "common/proto/gen/game_idle_bff/v1"
 	"context"
 	"game_idle_bff/internal/biz/model"
 	"game_idle_bff/internal/biz/usecase"
 	"game_idle_bff/internal/enum"
 	"time"
+
+	"google.golang.org/protobuf/proto"
 )
 
 type InitGetHandler struct {
@@ -34,8 +35,8 @@ func (h *InitGetHandler) Type() enum.WebSocketMessageType {
 	return enum.WebSocketMessageTypeInitGet
 }
 
-func (h *InitGetHandler) Validate(command *v1.WebSocketCommand) bool {
-	return true
+func (h *InitGetHandler) Payload() proto.Message {
+	return nil
 }
 
 func (h *InitGetHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {

@@ -1,9 +1,10 @@
 package usecase
 
 import (
-	v1 "common/proto/gen/game_idle_bff/v1"
 	"context"
 	"game_idle_bff/internal/enum"
+
+	"google.golang.org/protobuf/proto"
 )
 
 // WebSocketCommandReq 是客户端上行命令上下文。
@@ -11,13 +12,13 @@ type WebSocketCommandReq struct {
 	CharacterID int64
 	SessionID   string
 	Connection  *WebSocketConnection
-	Command     *v1.WebSocketCommand
+	Payload     proto.Message
 }
 
 // WebSocketCommandHandler 处理一种客户端上行命令。
 type WebSocketCommandHandler interface {
 	Type() enum.WebSocketMessageType
-	Validate(command *v1.WebSocketCommand) bool
+	Payload() proto.Message
 	Handle(ctx context.Context, req *WebSocketCommandReq) error
 }
 

@@ -5,6 +5,8 @@ import (
 	"context"
 	"game_idle_bff/internal/biz/usecase"
 	"game_idle_bff/internal/enum"
+
+	"google.golang.org/protobuf/proto"
 )
 
 type ChatMessageSendHandler struct {
@@ -21,12 +23,12 @@ func (h *ChatMessageSendHandler) Type() enum.WebSocketMessageType {
 	return enum.WebSocketMessageTypeChatMessageSend
 }
 
-func (h *ChatMessageSendHandler) Validate(command *v1.WebSocketCommand) bool {
-	return command.GetPayload().GetChatMessageSend() != nil
+func (h *ChatMessageSendHandler) Payload() proto.Message {
+	return &v1.ChatMessageSendWebSocketPayload{}
 }
 
 func (h *ChatMessageSendHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
-	payload := req.Command.GetPayload().GetChatMessageSend()
+	payload := req.Payload.(*v1.ChatMessageSendWebSocketPayload)
 	_, err := h.chatUsecase.Send(ctx, &usecase.SendChatMessageReq{
 		CharacterID:         req.CharacterID,
 		ChannelType:         payload.GetChannelType(),

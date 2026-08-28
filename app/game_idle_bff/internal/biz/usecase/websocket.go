@@ -5,8 +5,8 @@ import (
 	commonclient "common/pkg/client"
 	"common/pkg/constant"
 	cerrors "common/proto/gen/common/errors"
-	v1 "common/proto/gen/game_idle_bff/v1"
 	"context"
+	"encoding/json"
 	"game_idle_bff/internal/biz/model"
 	"game_idle_bff/internal/biz/repo"
 	"game_idle_bff/internal/config"
@@ -14,6 +14,8 @@ import (
 	"log/slog"
 	"sync"
 	"time"
+
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type WebSocketUsecase struct {
@@ -252,8 +254,7 @@ func (c *WebSocketConnection) Send(ctx context.Context, message *WebSocketSendMe
 	}
 }
 
-func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSocketConnection, command *v1.WebSocketCommand) {
-	commandType := enum.WebSocketMessageType(command.GetType())
+func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSocketConnection, commandType enum.WebSocketMessageType, payloadData json.RawMessage) {
 	handler, ok := u.commandHandlers[commandType]
 	if !ok {
 		connection.Send(ctx, &WebSocketSendMessage{
@@ -264,21 +265,33 @@ func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSoc
 		})
 		return
 	}
-	if !handler.Validate(command) {
-		connection.Send(ctx, &WebSocketSendMessage{
-			Type: enum.WebSocketMessageTypeCommandFailed,
-			Payload: &WebSocketCommandError{
-				Message: apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT).Error(),
-			},
-		})
-		return
+	payload := handler.Payload()
+	if payload != nil {
+		if len(payloadData) == 0 {
+			connection.Send(ctx, &WebSocketSendMessage{
+				Type: enum.WebSocketMessageTypeCommandFailed,
+				Payload: &WebSocketCommandError{
+					Message: apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT).Error(),
+				},
+			})
+			return
+		}
+		if err := (protojson.UnmarshalOptions{}).Unmarshal(payloadData, payload); err != nil {
+			connection.Send(ctx, &WebSocketSendMessage{
+				Type: enum.WebSocketMessageTypeCommandFailed,
+				Payload: &WebSocketCommandError{
+					Message: err.Error(),
+				},
+			})
+			return
+		}
 	}
 	err := u.workerPool.Submit(func() {
 		if err := handler.Handle(ctx, &WebSocketCommandReq{
 			CharacterID: connection.CharacterID,
 			SessionID:   connection.SessionID,
 			Connection:  connection,
-			Command:     command,
+			Payload:     payload,
 		}); err != nil {
 			connection.Send(ctx, &WebSocketSendMessage{
 				Type: enum.WebSocketMessageTypeCommandFailed,

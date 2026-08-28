@@ -1,10 +1,11 @@
 package command
 
 import (
-	v1 "common/proto/gen/game_idle_bff/v1"
 	"context"
 	"game_idle_bff/internal/biz/usecase"
 	"game_idle_bff/internal/enum"
+
+	"google.golang.org/protobuf/proto"
 )
 
 type ActionClearHandler struct {
@@ -21,8 +22,8 @@ func (h *ActionClearHandler) Type() enum.WebSocketMessageType {
 	return enum.WebSocketMessageTypeActionClear
 }
 
-func (h *ActionClearHandler) Validate(command *v1.WebSocketCommand) bool {
-	return true
+func (h *ActionClearHandler) Payload() proto.Message {
+	return nil
 }
 
 func (h *ActionClearHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {

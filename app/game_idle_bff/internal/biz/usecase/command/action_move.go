@@ -5,6 +5,8 @@ import (
 	"context"
 	"game_idle_bff/internal/biz/usecase"
 	"game_idle_bff/internal/enum"
+
+	"google.golang.org/protobuf/proto"
 )
 
 type ActionMoveHandler struct {
@@ -21,12 +23,12 @@ func (h *ActionMoveHandler) Type() enum.WebSocketMessageType {
 	return enum.WebSocketMessageTypeActionMove
 }
 
-func (h *ActionMoveHandler) Validate(command *v1.WebSocketCommand) bool {
-	return command.GetPayload().GetActionMove() != nil
+func (h *ActionMoveHandler) Payload() proto.Message {
+	return &v1.ActionMoveWebSocketPayload{}
 }
 
 func (h *ActionMoveHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
-	payload := req.Command.GetPayload().GetActionMove()
+	payload := req.Payload.(*v1.ActionMoveWebSocketPayload)
 	if err := h.actionQueueUsecase.Move(ctx, &usecase.MoveActionReq{
 		CharacterID:     req.CharacterID,
 		CurrentPosition: payload.GetCurrentPosition(),

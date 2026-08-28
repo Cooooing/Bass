@@ -15,6 +15,7 @@
 |**maxOfflineSeconds** | **String** |  |  [optional] |
 |**createdAt** | **OffsetDateTime** |  |  [optional] |
 |**updatedAt** | **OffsetDateTime** |  |  [optional] |
+|**lastOfflineAt** | **OffsetDateTime** |  |  [optional] |
 
 
 

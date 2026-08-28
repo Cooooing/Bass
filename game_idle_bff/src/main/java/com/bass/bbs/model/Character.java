@@ -41,7 +41,8 @@ import com.bass.bbs.ApiClient;
   Character.JSON_PROPERTY_ACTION_QUEUE_CAPACITY,
   Character.JSON_PROPERTY_MAX_OFFLINE_SECONDS,
   Character.JSON_PROPERTY_CREATED_AT,
-  Character.JSON_PROPERTY_UPDATED_AT
+  Character.JSON_PROPERTY_UPDATED_AT,
+  Character.JSON_PROPERTY_LAST_OFFLINE_AT
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class Character {
@@ -113,6 +114,10 @@ public class Character {
   public static final String JSON_PROPERTY_UPDATED_AT = "updated_at";
   @javax.annotation.Nullable
   private OffsetDateTime updatedAt;
+
+  public static final String JSON_PROPERTY_LAST_OFFLINE_AT = "last_offline_at";
+  @javax.annotation.Nullable
+  private OffsetDateTime lastOfflineAt;
 
   public Character() { 
   }
@@ -309,6 +314,30 @@ public class Character {
   }
 
 
+  public Character lastOfflineAt(@javax.annotation.Nullable OffsetDateTime lastOfflineAt) {
+    this.lastOfflineAt = lastOfflineAt;
+    return this;
+  }
+
+  /**
+   * Get lastOfflineAt
+   * @return lastOfflineAt
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_LAST_OFFLINE_AT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public OffsetDateTime getLastOfflineAt() {
+    return lastOfflineAt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_LAST_OFFLINE_AT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLastOfflineAt(@javax.annotation.Nullable OffsetDateTime lastOfflineAt) {
+    this.lastOfflineAt = lastOfflineAt;
+  }
+
+
   /**
    * Return true if this Character object is equal to o.
    */
@@ -328,12 +357,13 @@ public class Character {
         Objects.equals(this.actionQueueCapacity, character.actionQueueCapacity) &&
         Objects.equals(this.maxOfflineSeconds, character.maxOfflineSeconds) &&
         Objects.equals(this.createdAt, character.createdAt) &&
-        Objects.equals(this.updatedAt, character.updatedAt);
+        Objects.equals(this.updatedAt, character.updatedAt) &&
+        Objects.equals(this.lastOfflineAt, character.lastOfflineAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, status, slot, actionQueueCapacity, maxOfflineSeconds, createdAt, updatedAt);
+    return Objects.hash(id, name, status, slot, actionQueueCapacity, maxOfflineSeconds, createdAt, updatedAt, lastOfflineAt);
   }
 
   @Override
@@ -348,6 +378,7 @@ public class Character {
     sb.append("    maxOfflineSeconds: ").append(toIndentedString(maxOfflineSeconds)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
+    sb.append("    lastOfflineAt: ").append(toIndentedString(lastOfflineAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -430,6 +461,11 @@ public class Character {
     // add `updated_at` to the URL query string
     if (getUpdatedAt() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%supdated_at%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getUpdatedAt()))));
+    }
+
+    // add `last_offline_at` to the URL query string
+    if (getLastOfflineAt() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%slast_offline_at%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getLastOfflineAt()))));
     }
 
     return joiner.toString();

@@ -102,4 +102,12 @@ class CharacterTest {
         // TODO: test updatedAt
     }
 
+    /**
+     * Test the property 'lastOfflineAt'
+     */
+    @Test
+    void lastOfflineAtTest() {
+        // TODO: test lastOfflineAt
+    }
+
 }

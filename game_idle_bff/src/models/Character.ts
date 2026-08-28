@@ -67,6 +67,12 @@ export interface Character {
      * @memberof Character
      */
     updatedAt?: Date;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Character
+     */
+    lastOfflineAt?: Date;
 }
 
 
@@ -106,6 +112,7 @@ export function CharacterFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'maxOfflineSeconds': json['max_offline_seconds'] == null ? undefined : json['max_offline_seconds'],
         'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
         'updatedAt': json['updated_at'] == null ? undefined : (new Date(json['updated_at'])),
+        'lastOfflineAt': json['last_offline_at'] == null ? undefined : (new Date(json['last_offline_at'])),
     };
 }
 
@@ -128,6 +135,7 @@ export function CharacterToJSONTyped(value?: Character | null, ignoreDiscriminat
         'max_offline_seconds': value['maxOfflineSeconds'],
         'created_at': value['createdAt'] == null ? value['createdAt'] : value['createdAt'].toISOString(),
         'updated_at': value['updatedAt'] == null ? value['updatedAt'] : value['updatedAt'].toISOString(),
+        'last_offline_at': value['lastOfflineAt'] == null ? value['lastOfflineAt'] : value['lastOfflineAt'].toISOString(),
     };
 }
 

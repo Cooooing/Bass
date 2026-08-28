@@ -14,6 +14,7 @@ Name | Type
 `maxOfflineSeconds` | string
 `createdAt` | Date
 `updatedAt` | Date
+`lastOfflineAt` | Date
 
 ## Example
 
@@ -30,6 +31,7 @@ const example = {
   "maxOfflineSeconds": null,
   "createdAt": null,
   "updatedAt": null,
+  "lastOfflineAt": null,
 } satisfies Character
 
 console.log(example)

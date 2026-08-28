@@ -31,6 +31,7 @@ var BizProviderSet = wire.NewSet(
 	command.NewActionRemoveHandler,
 	command.NewInitGetHandler,
 	command.NewConfigGetHandler,
+	command.NewConfigVersionHandler,
 	command.NewActionDetailGetHandler,
 	event.NewActionCompletedHandler,
 	event.NewAbilityLeveledUpHandler,
@@ -64,6 +65,7 @@ func ProvideWebSocketCommandHandlers(
 	actionRemoveHandler *command.ActionRemoveHandler,
 	initGetHandler *command.InitGetHandler,
 	configGetHandler *command.ConfigGetHandler,
+	configVersionHandler *command.ConfigVersionHandler,
 	actionDetailGetHandler *command.ActionDetailGetHandler,
 ) usecase.WebSocketCommandHandlers {
 	return usecase.WebSocketCommandHandlers{
@@ -74,6 +76,7 @@ func ProvideWebSocketCommandHandlers(
 		actionRemoveHandler.Type():    actionRemoveHandler,
 		initGetHandler.Type():         initGetHandler,
 		configGetHandler.Type():       configGetHandler,
+		configVersionHandler.Type():   configVersionHandler,
 		actionDetailGetHandler.Type(): actionDetailGetHandler,
 	}
 }

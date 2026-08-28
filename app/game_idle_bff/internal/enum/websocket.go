@@ -6,19 +6,21 @@ type WebSocketMessageType string
 
 const (
 	// 服务端发送给客户端的事件。
-	WebSocketMessageTypeSessionClose          WebSocketMessageType = "session.close"           // 关闭会话
-	WebSocketMessageTypeCommandFailed         WebSocketMessageType = "command.failed"          // 命令失败
-	WebSocketMessageTypeChatMessageReceived   WebSocketMessageType = "chat.message.received"   // 收到聊天消息
-	WebSocketMessageTypeActionCompleted       WebSocketMessageType = "action.completed"        // 行动完成
-	WebSocketMessageTypeActionQueueUpdated    WebSocketMessageType = "action.queue.updated"    // 行动队列更新
-	WebSocketMessageTypeAbilityLeveledUp      WebSocketMessageType = "ability.level.increased" // 能力升级
-	WebSocketMessageTypeInitCompleted         WebSocketMessageType = "init.completed"          // 初始化完成
-	WebSocketMessageTypeConfigCompleted       WebSocketMessageType = "config.completed"        // 配置查询完成
-	WebSocketMessageTypeActionDetailCompleted WebSocketMessageType = "action.detail.completed" // 行动详情查询完成
+	WebSocketMessageTypeSessionClose           WebSocketMessageType = "session.close"            // 关闭会话
+	WebSocketMessageTypeCommandFailed          WebSocketMessageType = "command.failed"           // 命令失败
+	WebSocketMessageTypeChatMessageReceived    WebSocketMessageType = "chat.message.received"    // 收到聊天消息
+	WebSocketMessageTypeActionCompleted        WebSocketMessageType = "action.completed"         // 行动完成
+	WebSocketMessageTypeActionQueueUpdated     WebSocketMessageType = "action.queue.updated"     // 行动队列更新
+	WebSocketMessageTypeAbilityLeveledUp       WebSocketMessageType = "ability.level.increased"  // 能力升级
+	WebSocketMessageTypeInitCompleted          WebSocketMessageType = "init.completed"           // 初始化完成
+	WebSocketMessageTypeConfigCompleted        WebSocketMessageType = "config.completed"         // 配置查询完成
+	WebSocketMessageTypeConfigVersionCompleted WebSocketMessageType = "config.version.completed" // 配置版本查询完成
+	WebSocketMessageTypeActionDetailCompleted  WebSocketMessageType = "action.detail.completed"  // 行动详情查询完成
 
 	// 客户端发送给服务端的命令。
 	WebSocketMessageTypeInitGet         WebSocketMessageType = "init.get"          // 初始化页面数据
 	WebSocketMessageTypeConfigGet       WebSocketMessageType = "config.get"        // 查询静态配置
+	WebSocketMessageTypeConfigVersion   WebSocketMessageType = "config.version"    // 查询静态配置版本
 	WebSocketMessageTypeActionDetailGet WebSocketMessageType = "action.detail.get" // 查询行动详情
 	WebSocketMessageTypeChatMessageSend WebSocketMessageType = "chat.message.send" // 发送聊天消息
 	WebSocketMessageTypeActionAdd       WebSocketMessageType = "action.add"        // 添加行动

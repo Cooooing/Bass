@@ -2,10 +2,17 @@ package model
 
 // GameConfig 是前端低频配置快照。
 type GameConfig struct {
-	Regions    []*RegionConfig `json:"regions"`
-	Actions    []*ActionConfig `json:"actions"`
-	Items      []*ItemConfig   `json:"items"`
-	ServerTime int64           `json:"server_time"`
+	ConfigVersion string          `json:"config_version"`
+	Regions       []*RegionConfig `json:"regions"`
+	Actions       []*ActionConfig `json:"actions"`
+	Items         []*ItemConfig   `json:"items"`
+	ServerTime    int64           `json:"server_time"`
+}
+
+// GameConfigVersion 是前端低频配置版本。
+type GameConfigVersion struct {
+	ConfigVersion string `json:"config_version"`
+	ServerTime    int64  `json:"server_time"`
 }
 
 type RegionConfig struct {

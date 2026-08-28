@@ -35,6 +35,7 @@ const (
 	EventTypeGameIdleCloseSession        EventType = "game_idle_close_session"
 	EventTypeGameIdleActionCompleted     EventType = "game_idle_action_completed"
 	EventTypeGameIdleAbilityLeveledUp    EventType = "game_idle_ability_leveled_up"
+	EventTypeGameIdleActionQueueUpdated  EventType = "game_idle_action_queue_updated"
 )
 
 var EventTypeMap = NewMapping[EventType, enums.EventType](map[EventType]Entry[EventType, enums.EventType]{
@@ -68,6 +69,7 @@ var EventTypeMap = NewMapping[EventType, enums.EventType](map[EventType]Entry[Ev
 	EventTypeGameIdleCloseSession:        {Proto: enums.EventType_EVENT_TYPE_GAME_IDLE_CLOSE_SESSION},
 	EventTypeGameIdleActionCompleted:     {Proto: enums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED},
 	EventTypeGameIdleAbilityLeveledUp:    {Proto: enums.EventType_EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP},
+	EventTypeGameIdleActionQueueUpdated:  {Proto: enums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED},
 })
 
 func (e EventType) String() string {

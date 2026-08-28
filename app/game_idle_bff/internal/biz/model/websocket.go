@@ -23,11 +23,12 @@ type WebSocketChatMessage struct {
 }
 
 type WebSocketEvent struct {
-	Type             commonenum.EventType
-	ChatMessage      *WebSocketChatMessage
-	CloseSession     *WebSocketCloseSession
-	ActionCompleted  *WebSocketActionCompleted
-	AbilityLeveledUp *WebSocketAbilityLeveledUp
+	Type               commonenum.EventType
+	ChatMessage        *WebSocketChatMessage
+	CloseSession       *WebSocketCloseSession
+	ActionCompleted    *WebSocketActionCompleted
+	AbilityLeveledUp   *WebSocketAbilityLeveledUp
+	ActionQueueUpdated *ActionQueue
 }
 
 type WebSocketCloseSession struct {

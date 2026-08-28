@@ -126,6 +126,23 @@ func (r *WebSocketEventRepo) Subscribe(ctx context.Context, handler repo.WebSock
 					NextLevelExp: payload.GetNextLevelExp(),
 				},
 			})
+		case commonenums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED:
+			payload := event.GetGameIdleActionQueueUpdated()
+			items := make([]*model.ActionQueueItem, 0, len(payload.GetItems()))
+			for _, item := range payload.GetItems() {
+				items = append(items, &model.ActionQueueItem{
+					ActionID:  item.GetActionId(),
+					Times:     item.GetTimes(),
+					CreatedAt: item.GetCreatedAt().AsTime(),
+				})
+			}
+			return handler(ctx, &model.WebSocketEvent{
+				Type: commonenum.EventTypeGameIdleActionQueueUpdated,
+				ActionQueueUpdated: &model.ActionQueue{
+					CharacterID: payload.GetCharacterId(),
+					Items:       items,
+				},
+			})
 		default:
 			return nil
 		}

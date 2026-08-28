@@ -32,6 +32,12 @@ type ActionQueueUsecase struct {
 	running           bool
 }
 
+const (
+	actionQueueUpdateReasonManualChanged     = "manual_changed"
+	actionQueueUpdateReasonActionCompleted   = "action_completed"
+	actionQueueUpdateReasonInsufficientItems = "insufficient_items"
+)
+
 func NewActionQueueUsecase(
 	logger *slog.Logger,
 	characterRepo repo.CharacterRepo,
@@ -103,6 +109,7 @@ func (u *ActionQueueUsecase) Start(ctx context.Context) error {
 				current := queue.Items[0]
 				timesRemaining := current.Times
 				finishCurrent := task.StopReason != enum.ActionStopReasonNone
+				queueChanged := finishCurrent || current.Times != -1
 				if !finishCurrent && current.Times != -1 {
 					current.Times--
 					timesRemaining = current.Times
@@ -140,6 +147,13 @@ func (u *ActionQueueUsecase) Start(ctx context.Context) error {
 							u.logger.ErrorContext(runCtx, "game idle ability leveled up event publish failed", constant.LogFieldErr, err, "character_id", task.CharacterID)
 						}
 					}
+				}
+				if queueChanged {
+					reason := actionQueueUpdateReasonActionCompleted
+					if task.StopReason == enum.ActionStopReasonInsufficientItems {
+						reason = actionQueueUpdateReasonInsufficientItems
+					}
+					u.publishActionQueueUpdated(runCtx, queue, reason)
 				}
 				if len(queue.Items) > 0 {
 					if err = u.startCurrent(runCtx, task.CharacterID); err != nil && !errors.Is(err, context.Canceled) {
@@ -282,9 +296,12 @@ func (u *ActionQueueUsecase) Add(ctx context.Context, req *AddActionReq) error {
 		}
 		return err
 	}
+	u.publishActionQueueUpdated(ctx, queue, actionQueueUpdateReasonManualChanged)
 
 	if headChanged {
-		return u.startCurrent(ctx, req.CharacterID)
+		if err = u.startCurrent(ctx, req.CharacterID); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -331,9 +348,12 @@ func (u *ActionQueueUsecase) Move(ctx context.Context, req *MoveActionReq) error
 		}
 		return err
 	}
+	u.publishActionQueueUpdated(ctx, queue, actionQueueUpdateReasonManualChanged)
 
 	if headChanged {
-		return u.startCurrent(ctx, req.CharacterID)
+		if err = u.startCurrent(ctx, req.CharacterID); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -371,9 +391,12 @@ func (u *ActionQueueUsecase) Remove(ctx context.Context, req *RemoveActionReq) e
 		}
 		return err
 	}
+	u.publishActionQueueUpdated(ctx, queue, actionQueueUpdateReasonManualChanged)
 
 	if headChanged && len(queue.Items) > 0 {
-		return u.startCurrent(ctx, req.CharacterID)
+		if err = u.startCurrent(ctx, req.CharacterID); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -393,6 +416,7 @@ func (u *ActionQueueUsecase) Clear(ctx context.Context, characterID int64) error
 		_ = u.startCurrent(ctx, characterID)
 		return err
 	}
+	u.publishActionQueueUpdated(ctx, queue, actionQueueUpdateReasonManualChanged)
 	return nil
 }
 
@@ -439,6 +463,7 @@ func (u *ActionQueueUsecase) startCurrent(ctx context.Context, characterID int64
 			if err = u.actionQueueRepo.Save(ctx, queue); err != nil {
 				return err
 			}
+			u.publishActionQueueUpdated(ctx, queue, actionQueueUpdateReasonInsufficientItems)
 			continue
 		}
 		if err != nil {
@@ -458,4 +483,18 @@ func (u *ActionQueueUsecase) stopCurrent(ctx context.Context, characterID int64)
 		u.timeWheel.Remove(queue.Items[0].ID)
 	}
 	return nil
+}
+
+func (u *ActionQueueUsecase) publishActionQueueUpdated(ctx context.Context, queue *model.ActionQueue, reason string) {
+	err := u.gameIdleEventRepo.Publish(ctx, &model.GameIdleEvent{
+		ActionQueueUpdated: &model.ActionQueueUpdatedEvent{
+			CharacterID: queue.CharacterID,
+			Items:       queue.Items,
+			Reason:      reason,
+			UpdatedAt:   time.Now(),
+		},
+	})
+	if err != nil {
+		u.logger.ErrorContext(ctx, "game idle action queue updated event publish failed", constant.LogFieldErr, err, "character_id", queue.CharacterID)
+	}
 }

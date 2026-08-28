@@ -164,6 +164,9 @@ func (r *BackpackRepo) MapItems(ctx context.Context, req *bizrepo.BackpackMapReq
 		if err != nil {
 			return nil, err
 		}
+		if quantity <= 0 {
+			continue
+		}
 		totalObtained := int64(0)
 		if value, ok := obtainedValues[itemID]; ok {
 			totalObtained, err = strconv.ParseInt(value, 10, 64)

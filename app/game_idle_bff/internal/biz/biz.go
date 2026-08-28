@@ -34,6 +34,7 @@ var BizProviderSet = wire.NewSet(
 	command.NewConfigVersionHandler,
 	command.NewActionDetailGetHandler,
 	event.NewActionCompletedHandler,
+	event.NewActionQueueUpdatedHandler,
 	event.NewAbilityLeveledUpHandler,
 	event.NewChatMessageHandler,
 	event.NewCloseSessionHandler,
@@ -45,15 +46,17 @@ func ProvideWebSocketWorkerPool(c *config.Bootstrap) *common.WorkerPool {
 
 func ProvideWebSocketEventHandlers(
 	actionCompletedHandler *event.ActionCompletedHandler,
+	actionQueueUpdatedHandler *event.ActionQueueUpdatedHandler,
 	abilityLeveledUpHandler *event.AbilityLeveledUpHandler,
 	chatMessageHandler *event.ChatMessageHandler,
 	closeSessionHandler *event.CloseSessionHandler,
 ) usecase.WebSocketEventHandlers {
 	return usecase.WebSocketEventHandlers{
-		actionCompletedHandler.Type():  actionCompletedHandler,
-		abilityLeveledUpHandler.Type(): abilityLeveledUpHandler,
-		chatMessageHandler.Type():      chatMessageHandler,
-		closeSessionHandler.Type():     closeSessionHandler,
+		actionCompletedHandler.Type():    actionCompletedHandler,
+		actionQueueUpdatedHandler.Type(): actionQueueUpdatedHandler,
+		abilityLeveledUpHandler.Type():   abilityLeveledUpHandler,
+		chatMessageHandler.Type():        chatMessageHandler,
+		closeSessionHandler.Type():       closeSessionHandler,
 	}
 }
 

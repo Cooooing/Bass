@@ -53,6 +53,7 @@ enum EventType {
   EVENT_TYPE_GAME_IDLE_CLOSE_SESSION = 5002; // 挂机游戏关闭会话
   EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED = 5003; // 挂机游戏行动完成
   EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP = 5004; // 挂机游戏能力升级
+  EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED = 5005; // 挂机游戏行动队列更新
 
   // 平台事件（4000-4999）
 }
@@ -171,5 +172,6 @@ message Event {
     GameIdleCloseSessionPayload game_idle_close_session = 5002;
     GameIdleActionCompletedPayload game_idle_action_completed = 5003;
     GameIdleAbilityLeveledUpPayload game_idle_ability_leveled_up = 5004;
+    GameIdleActionQueueUpdatedPayload game_idle_action_queue_updated = 5005;
   }
 }

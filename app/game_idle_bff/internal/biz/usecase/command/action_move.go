@@ -29,20 +29,9 @@ func (h *ActionMoveHandler) Payload() proto.Message {
 
 func (h *ActionMoveHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
 	payload := req.Payload.(*v1.ActionMoveWebSocketPayload)
-	if err := h.actionQueueUsecase.Move(ctx, &usecase.MoveActionReq{
+	return h.actionQueueUsecase.Move(ctx, &usecase.MoveActionReq{
 		CharacterID:     req.CharacterID,
 		CurrentPosition: payload.GetCurrentPosition(),
 		TargetPosition:  payload.GetTargetPosition(),
-	}); err != nil {
-		return err
-	}
-	queue, err := h.actionQueueUsecase.List(ctx, req.CharacterID)
-	if err != nil {
-		return err
-	}
-	req.Connection.Send(ctx, &usecase.WebSocketSendMessage{
-		Type:    enum.WebSocketMessageTypeActionQueueUpdated,
-		Payload: queue,
 	})
-	return nil
 }

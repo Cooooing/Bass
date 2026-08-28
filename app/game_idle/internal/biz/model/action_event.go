@@ -36,3 +36,11 @@ type AbilityLeveledUpEvent struct {
 	Exp          int64
 	NextLevelExp int64
 }
+
+// ActionQueueUpdatedEvent 表示行动队列已发生变化，需要同步前端快照。
+type ActionQueueUpdatedEvent struct {
+	CharacterID int64
+	Items       []*ActionQueueItem
+	Reason      string
+	UpdatedAt   time.Time
+}

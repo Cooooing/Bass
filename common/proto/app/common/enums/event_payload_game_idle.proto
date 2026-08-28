@@ -64,3 +64,16 @@ message GameIdleAbilityLeveledUpPayload {
   int64 exp = 4;
   int64 next_level_exp = 5;
 }
+
+message GameIdleActionQueueUpdatedPayload {
+  int64 character_id = 1;
+  repeated GameIdleActionQueueItem items = 2;
+  string reason = 3;
+  google.protobuf.Timestamp updated_at = 4;
+}
+
+message GameIdleActionQueueItem {
+  string action_id = 1;
+  int64 times = 2;
+  google.protobuf.Timestamp created_at = 3;
+}

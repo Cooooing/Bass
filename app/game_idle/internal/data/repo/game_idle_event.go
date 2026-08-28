@@ -132,6 +132,30 @@ func (r *GameIdleEventRepo) Publish(ctx context.Context, event *model.GameIdleEv
 			},
 		}
 		message.Header["character_id"] = strconv.FormatInt(event.AbilityLeveledUp.CharacterID, 10)
+	} else if event.ActionQueueUpdated != nil {
+		items := make([]*commonenums.GameIdleActionQueueItem, 0, len(event.ActionQueueUpdated.Items))
+		for _, item := range event.ActionQueueUpdated.Items {
+			items = append(items, &commonenums.GameIdleActionQueueItem{
+				ActionId:  item.ActionID,
+				Times:     item.Times,
+				CreatedAt: timestamppb.New(item.CreatedAt),
+			})
+		}
+		updatedAt := time.Now()
+		if !event.ActionQueueUpdated.UpdatedAt.IsZero() {
+			updatedAt = event.ActionQueueUpdated.UpdatedAt
+		}
+		envelope.Type = commonenums.EventType_EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED
+		envelope.Timestamp = timestamppb.New(updatedAt)
+		envelope.Payload = &commonenums.Event_GameIdleActionQueueUpdated{
+			GameIdleActionQueueUpdated: &commonenums.GameIdleActionQueueUpdatedPayload{
+				CharacterId: event.ActionQueueUpdated.CharacterID,
+				Items:       items,
+				Reason:      event.ActionQueueUpdated.Reason,
+				UpdatedAt:   timestamppb.New(updatedAt),
+			},
+		}
+		message.Header["character_id"] = strconv.FormatInt(event.ActionQueueUpdated.CharacterID, 10)
 	} else {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHAT_MESSAGE_INVALID)
 	}

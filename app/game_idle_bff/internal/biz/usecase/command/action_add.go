@@ -29,21 +29,10 @@ func (h *ActionAddHandler) Payload() proto.Message {
 
 func (h *ActionAddHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
 	payload := req.Payload.(*v1.ActionAddWebSocketPayload)
-	if err := h.actionQueueUsecase.Add(ctx, &usecase.AddActionReq{
+	return h.actionQueueUsecase.Add(ctx, &usecase.AddActionReq{
 		CharacterID: req.CharacterID,
 		ActionID:    payload.GetActionId(),
 		Times:       payload.GetTimes(),
 		Position:    payload.Position,
-	}); err != nil {
-		return err
-	}
-	queue, err := h.actionQueueUsecase.List(ctx, req.CharacterID)
-	if err != nil {
-		return err
-	}
-	req.Connection.Send(ctx, &usecase.WebSocketSendMessage{
-		Type:    enum.WebSocketMessageTypeActionQueueUpdated,
-		Payload: queue,
 	})
-	return nil
 }

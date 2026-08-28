@@ -32,6 +32,7 @@ export interface Character {
     'max_offline_seconds'?: string;
     'created_at'?: string;
     'updated_at'?: string;
+    'last_offline_at'?: string;
 }
 
 export const CharacterStatusEnum = {

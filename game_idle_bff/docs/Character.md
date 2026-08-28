@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **max_offline_seconds** | **string** |  | [optional] [default to undefined]
 **created_at** | **string** |  | [optional] [default to undefined]
 **updated_at** | **string** |  | [optional] [default to undefined]
+**last_offline_at** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -28,6 +29,7 @@ const instance: Character = {
     max_offline_seconds,
     created_at,
     updated_at,
+    last_offline_at,
 };
 ```
 

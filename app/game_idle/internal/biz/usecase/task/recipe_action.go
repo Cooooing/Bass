@@ -1,10 +1,11 @@
 package task
 
 import (
+	"common/pkg/apperror"
 	"common/pkg/client/timewheel"
 	"common/pkg/constant"
+	cerrors "common/proto/gen/common/errors"
 	"context"
-	"errors"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/repo"
 	"game_idle/internal/biz/usecase"
@@ -88,7 +89,7 @@ func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActi
 					CharacterID: req.CharacterID,
 					Items:       inputQuantities,
 				}); err != nil {
-					if !errors.Is(err, model.ErrBackpackInsufficient) {
+					if code, ok := apperror.BusinessCode(err); !ok || code != cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT {
 						return err
 					}
 					select {
@@ -140,7 +141,7 @@ func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActi
 				ExpReward:   req.Action.ExpReward,
 			})
 			if err != nil {
-				if errors.Is(err, model.ErrBackpackInsufficient) {
+				if code, ok := apperror.BusinessCode(err); ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT {
 					stopReason = enum.ActionStopReasonInsufficientItems
 					settlement = &model.ActionSettlement{}
 				} else if settlement == nil {

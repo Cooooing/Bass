@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"common/pkg/apperror"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/repo"
@@ -62,7 +64,7 @@ func (u *ActionUsecase) GetDetail(ctx context.Context, actionID string) (*model.
 	for _, recipeID := range recipeIDs {
 		recipe := recipes[recipeID]
 		if recipe == nil {
-			return nil, model.ErrRecipeInvalid
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_RECIPE_INVALID)
 		}
 		recipeRows = append(recipeRows, recipe)
 		for _, input := range recipe.Inputs {

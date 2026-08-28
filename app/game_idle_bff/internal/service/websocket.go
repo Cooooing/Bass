@@ -1,7 +1,9 @@
 package service
 
 import (
+	"common/pkg/apperror"
 	"common/pkg/constant"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"encoding/json"
 	"game_idle_bff/internal/biz/usecase"
@@ -129,12 +131,7 @@ func (s *WebSocketService) readPump(
 		}
 		command := &WebSocketRequest{}
 		if err := json.Unmarshal(data, command); err != nil {
-			connection.Send(ctx, &usecase.WebSocketSendMessage{
-				Type: enum.WebSocketMessageTypeCommandFailed,
-				Payload: &usecase.WebSocketCommandError{
-					Message: err.Error(),
-				},
-			})
+			s.webSocketUsecase.SendCommandFailed(ctx, connection, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT))
 			continue
 		}
 		s.webSocketUsecase.HandleCommand(ctx, connection, command.Type, command.Payload)

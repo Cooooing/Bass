@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"common/pkg/apperror"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/repo"
@@ -63,10 +65,10 @@ func (u *CharacterAbilityUsecase) CheckLevel(
 		if requiredLevel <= 1 {
 			return nil
 		}
-		return model.ErrAbilityLevelInsufficient
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ABILITY_LEVEL_INSUFFICIENT)
 	}
 	if ability.Level < requiredLevel {
-		return model.ErrAbilityLevelInsufficient
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ABILITY_LEVEL_INSUFFICIENT)
 	}
 	return nil
 }

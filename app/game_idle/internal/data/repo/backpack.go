@@ -1,7 +1,9 @@
 package repo
 
 import (
+	"common/pkg/apperror"
 	commonclient "common/pkg/client"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"fmt"
 	"game_idle/internal/biz/model"
@@ -273,7 +275,7 @@ func (r *BackpackRepo) CheckItems(ctx context.Context, req *bizrepo.BackpackChec
 		args...,
 	).Err(); err != nil {
 		if strings.Contains(err.Error(), "backpack_insufficient") {
-			return model.ErrBackpackInsufficient
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT)
 		}
 		return err
 	}
@@ -301,7 +303,7 @@ func (r *BackpackRepo) ChangeItems(ctx context.Context, req *bizrepo.BackpackCha
 	).Result()
 	if err != nil {
 		if strings.Contains(err.Error(), "backpack_insufficient") {
-			return nil, model.ErrBackpackInsufficient
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT)
 		}
 		return nil, err
 	}

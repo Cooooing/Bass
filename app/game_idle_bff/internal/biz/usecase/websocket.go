@@ -11,6 +11,7 @@ import (
 	"game_idle_bff/internal/biz/repo"
 	"game_idle_bff/internal/config"
 	"game_idle_bff/internal/enum"
+	"game_idle_bff/internal/errormessage"
 	"log/slog"
 	"sync"
 	"time"
@@ -257,32 +258,17 @@ func (c *WebSocketConnection) Send(ctx context.Context, message *WebSocketSendMe
 func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSocketConnection, commandType enum.WebSocketMessageType, payloadData json.RawMessage) {
 	handler, ok := u.commandHandlers[commandType]
 	if !ok {
-		connection.Send(ctx, &WebSocketSendMessage{
-			Type: enum.WebSocketMessageTypeCommandFailed,
-			Payload: &WebSocketCommandError{
-				Message: apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT).Error(),
-			},
-		})
+		u.SendCommandFailed(ctx, connection, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT))
 		return
 	}
 	payload := handler.Payload()
 	if payload != nil {
 		if len(payloadData) == 0 {
-			connection.Send(ctx, &WebSocketSendMessage{
-				Type: enum.WebSocketMessageTypeCommandFailed,
-				Payload: &WebSocketCommandError{
-					Message: apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT).Error(),
-				},
-			})
+			u.SendCommandFailed(ctx, connection, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT))
 			return
 		}
 		if err := (protojson.UnmarshalOptions{}).Unmarshal(payloadData, payload); err != nil {
-			connection.Send(ctx, &WebSocketSendMessage{
-				Type: enum.WebSocketMessageTypeCommandFailed,
-				Payload: &WebSocketCommandError{
-					Message: err.Error(),
-				},
-			})
+			u.SendCommandFailed(ctx, connection, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT))
 			return
 		}
 	}
@@ -293,22 +279,23 @@ func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSoc
 			Connection:  connection,
 			Payload:     payload,
 		}); err != nil {
-			connection.Send(ctx, &WebSocketSendMessage{
-				Type: enum.WebSocketMessageTypeCommandFailed,
-				Payload: &WebSocketCommandError{
-					Message: err.Error(),
-				},
-			})
+			u.SendCommandFailed(ctx, connection, err)
 		}
 	})
 	if err != nil {
-		connection.Send(ctx, &WebSocketSendMessage{
-			Type: enum.WebSocketMessageTypeCommandFailed,
-			Payload: &WebSocketCommandError{
-				Message: err.Error(),
-			},
-		})
+		u.SendCommandFailed(ctx, connection, err)
 	}
+}
+
+func (u *WebSocketUsecase) SendCommandFailed(ctx context.Context, connection *WebSocketConnection, err error) {
+	code, message := errormessage.ResolveError(err)
+	connection.Send(ctx, &WebSocketSendMessage{
+		Type: enum.WebSocketMessageTypeCommandFailed,
+		Payload: &WebSocketCommandError{
+			Code:    int(code),
+			Message: message,
+		},
+	})
 }
 
 func (u *WebSocketUsecase) consumeEvents(ctx context.Context, subscription repo.WebSocketEventSubscription) {

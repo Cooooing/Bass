@@ -1,7 +1,9 @@
 package repo
 
 import (
+	"common/pkg/apperror"
 	commonclient "common/pkg/client"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"fmt"
 	"game_idle/internal/biz/model"
@@ -187,7 +189,7 @@ func (r *ActionSettlementRepo) Apply(
 	).Result()
 	if err != nil {
 		if strings.Contains(err.Error(), "backpack_insufficient") {
-			return nil, model.ErrBackpackInsufficient
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT)
 		}
 		return nil, err
 	}

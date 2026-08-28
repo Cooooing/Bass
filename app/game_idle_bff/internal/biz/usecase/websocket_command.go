@@ -27,5 +27,6 @@ type WebSocketCommandHandlers map[enum.WebSocketMessageType]WebSocketCommandHand
 
 // WebSocketCommandError 是客户端命令失败提示。
 type WebSocketCommandError struct {
+	Code    int    `json:"code"`
 	Message string `json:"message"`
 }

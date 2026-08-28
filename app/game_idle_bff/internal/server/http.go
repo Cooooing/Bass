@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"game_idle_bff/internal/config"
+	"game_idle_bff/internal/errormessage"
 	"log/slog"
 	stdhttp "net/http"
 
@@ -61,7 +62,7 @@ func NewHTTPServer(
 		kratoshttp.RequestDecoder(server.ProtoJSONRequestDecoder),
 		kratoshttp.ResponseEncoder(server.HttpRespEncoder),
 		kratoshttp.ErrorEncoder(server.HttpErrorEncoder(func(r *stdhttp.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string {
-			return code.String()
+			return errormessage.ResolveHTTP(r, code, data)
 		})),
 	}
 	if c.GetHttp().GetNetwork() != "" {

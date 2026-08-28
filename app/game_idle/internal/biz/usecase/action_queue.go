@@ -1,8 +1,10 @@
 package usecase
 
 import (
+	"common/pkg/apperror"
 	"common/pkg/client/timewheel"
 	"common/pkg/constant"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"errors"
 	"fmt"
@@ -212,14 +214,14 @@ func (u *ActionQueueUsecase) Add(ctx context.Context, req *AddActionReq) error {
 		return err
 	}
 	if character.Status != enum.CharacterStatusActive {
-		return model.ErrCharacterInvalid
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
 	}
 	actionConfig, err := u.actionRepo.Get(ctx, req.ActionID)
 	if err != nil {
 		return err
 	}
 	if !actionConfig.Enabled || req.Times == 0 || req.Times < -1 {
-		return model.ErrActionInvalid
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
 	}
 	if u.actionTasks[actionConfig.ActionKind] == nil {
 		return fmt.Errorf("game idle action task is required: %s", actionConfig.ActionKind)
@@ -238,7 +240,7 @@ func (u *ActionQueueUsecase) Add(ctx context.Context, req *AddActionReq) error {
 		return err
 	}
 	if len(queue.Items) >= int(character.ActionQueueCapacity) {
-		return model.ErrActionQueueFull
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_QUEUE_FULL)
 	}
 
 	position := len(queue.Items)
@@ -246,7 +248,7 @@ func (u *ActionQueueUsecase) Add(ctx context.Context, req *AddActionReq) error {
 		position = int(*req.Position)
 	}
 	if position < 0 || position > len(queue.Items) {
-		return model.ErrActionInvalid
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
 	}
 
 	now := time.Now()
@@ -304,7 +306,7 @@ func (u *ActionQueueUsecase) Move(ctx context.Context, req *MoveActionReq) error
 		targetPosition < 0 ||
 		currentPosition >= len(queue.Items) ||
 		targetPosition >= len(queue.Items) {
-		return model.ErrActionInvalid
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
 	}
 
 	oldTaskID := queue.Items[0].ID
@@ -347,12 +349,12 @@ func (u *ActionQueueUsecase) Remove(ctx context.Context, req *RemoveActionReq) e
 		return err
 	}
 	if len(queue.Items) == 0 {
-		return model.ErrActionInvalid
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
 	}
 
 	oldTaskID := queue.Items[0].ID
 	if req.Position < 0 || int(req.Position) >= len(queue.Items) {
-		return model.ErrActionInvalid
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
 	}
 
 	position := int(req.Position)
@@ -410,7 +412,7 @@ func (u *ActionQueueUsecase) startCurrent(ctx context.Context, characterID int64
 			return err
 		}
 		if !actionConfig.Enabled {
-			return model.ErrActionInvalid
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
 		}
 		if err = u.abilityUsecase.CheckLevel(
 			ctx,
@@ -432,7 +434,7 @@ func (u *ActionQueueUsecase) startCurrent(ctx context.Context, characterID int64
 			PendingTasks: u.pendingTasks,
 			OfflineTasks: u.offlineTasks,
 		})
-		if errors.Is(err, model.ErrBackpackInsufficient) {
+		if code, ok := apperror.BusinessCode(err); ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT {
 			queue.Items = queue.Items[1:]
 			if err = u.actionQueueRepo.Save(ctx, queue); err != nil {
 				return err

@@ -1,6 +1,8 @@
 package repo
 
 import (
+	"common/pkg/apperror"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"game_idle/internal/biz/model"
 	bizrepo "game_idle/internal/biz/repo"
@@ -72,11 +74,11 @@ func (r *ActionRepo) Refresh(ctx context.Context) ([]*model.Action, error) {
 			Sort:                 row.Sort,
 		}
 		if action.Enabled && (action.ID == "" || action.Duration <= 0 || len(row.Edges.Recipes) == 0) {
-			return nil, model.ErrActionInvalid
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
 		}
 		for _, relation := range row.Edges.Recipes {
 			if relation.RecipeID == "" {
-				return nil, model.ErrActionInvalid
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
 			}
 			action.Recipes = append(action.Recipes, &model.ActionRecipe{
 				ID:       relation.ID,
@@ -105,7 +107,7 @@ func (r *ActionRepo) Get(ctx context.Context, actionID string) (*model.Action, e
 		return action, nil
 	}
 	if loaded {
-		return nil, model.ErrActionInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
 	}
 	if _, err := r.Refresh(ctx); err != nil {
 		return nil, err
@@ -114,7 +116,7 @@ func (r *ActionRepo) Get(ctx context.Context, actionID string) (*model.Action, e
 	action = r.actions[actionID]
 	r.mutex.RUnlock()
 	if action == nil {
-		return nil, model.ErrActionInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
 	}
 	return action, nil
 }

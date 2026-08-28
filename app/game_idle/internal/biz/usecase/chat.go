@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"common/pkg/apperror"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/repo"
@@ -39,7 +41,7 @@ type SendMessageReq struct {
 func (u *ChatUsecase) Send(ctx context.Context, req *SendMessageReq) (*model.ChatMessage, error) {
 	content := strings.TrimSpace(req.Content)
 	if content == "" || len([]rune(content)) > chatMessageMaxRuneLen {
-		return nil, model.ErrChatMessageInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHAT_MESSAGE_INVALID)
 	}
 	senderName, err := u.characterRepo.GetName(ctx, req.CharacterID)
 	if err != nil {
@@ -48,7 +50,7 @@ func (u *ChatUsecase) Send(ctx context.Context, req *SendMessageReq) (*model.Cha
 	channelType := req.ChannelType
 	channelID := strings.TrimSpace(req.ChannelID)
 	if channelType == "" || channelID == "" {
-		return nil, model.ErrChatMessageInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHAT_MESSAGE_INVALID)
 	}
 	message, err := u.chatMessageRepo.Create(ctx, &model.ChatMessage{
 		ChannelType:         channelType,
@@ -82,7 +84,7 @@ func (u *ChatUsecase) List(ctx context.Context, req *ListMessagesReq) ([]*model.
 	channelType := req.ChannelType
 	channelID := strings.TrimSpace(req.ChannelID)
 	if channelType == "" || channelID == "" {
-		return nil, model.ErrChatMessageInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHAT_MESSAGE_INVALID)
 	}
 	messages, err := u.chatMessageRepo.List(ctx, &repo.ChatMessageListReq{
 		ChannelType: channelType,

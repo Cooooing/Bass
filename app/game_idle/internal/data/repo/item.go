@@ -1,7 +1,9 @@
 package repo
 
 import (
+	"common/pkg/apperror"
 	commonclient "common/pkg/client"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"encoding/json"
 	"game_idle/internal/biz/model"
@@ -79,7 +81,7 @@ func (r *ItemRepo) Get(ctx context.Context, itemID string) (*model.Item, error) 
 	}
 	item, ok := items[itemID]
 	if !ok {
-		return nil, model.ErrItemInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ITEM_INVALID)
 	}
 	return item, nil
 }

@@ -1,6 +1,8 @@
 package repo
 
 import (
+	"common/pkg/apperror"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"game_idle/internal/biz/model"
 	bizrepo "game_idle/internal/biz/repo"
@@ -31,10 +33,10 @@ func NewCharacterRepo(db *gen.Client) bizrepo.CharacterRepo {
 
 func (r *CharacterRepo) Save(ctx context.Context, character *model.Character) (*model.Character, error) {
 	if character == nil || character.UserID <= 0 || character.Name == "" || character.NameKey == "" {
-		return nil, model.ErrCharacterInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
 	}
 	if character.Slot <= 0 || character.ActionQueueCapacity <= 0 || character.MaxOfflineDuration <= 0 {
-		return nil, model.ErrCharacterInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
 	}
 	status := character.Status
 	if status == "" {
@@ -50,10 +52,10 @@ func (r *CharacterRepo) Save(ctx context.Context, character *model.Character) (*
 		SetStatus(characterent.Status(status)).
 		Save(ctx)
 	if gen.IsConstraintError(err) && strings.Contains(err.Error(), "game_idle_characters_user_slot_active_unique") {
-		return nil, model.ErrCharacterLimitExceeded
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_LIMIT_EXCEEDED)
 	}
 	if gen.IsConstraintError(err) && strings.Contains(err.Error(), "game_idle_characters_name_key_active_unique") {
-		return nil, model.ErrCharacterNameDuplicate
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_NAME_TAKEN)
 	}
 	if err != nil {
 		return nil, err
@@ -86,7 +88,7 @@ func (r *CharacterRepo) Get(ctx context.Context, characterID int64) (*model.Char
 		Where(characterent.IDEQ(characterID), characterent.DeletedAtIsNil()).
 		First(ctx)
 	if gen.IsNotFound(err) {
-		return nil, model.ErrCharacterNotFound
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_NOT_FOUND)
 	}
 	if err != nil {
 		return nil, err

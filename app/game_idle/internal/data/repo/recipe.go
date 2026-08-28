@@ -1,7 +1,9 @@
 package repo
 
 import (
+	"common/pkg/apperror"
 	commonclient "common/pkg/client"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"encoding/json"
 	"game_idle/internal/biz/model"
@@ -73,11 +75,11 @@ func (r *RecipeRepo) Refresh(ctx context.Context) ([]*model.Recipe, error) {
 			Outputs:         make([]*model.RecipeOutput, 0, len(row.Edges.Outputs)),
 		}
 		if recipe.ID == "" || recipe.GenerationTimes <= 0 || len(row.Edges.Outputs) == 0 {
-			return nil, model.ErrRecipeInvalid
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_RECIPE_INVALID)
 		}
 		for _, input := range row.Edges.Inputs {
 			if input.ItemID == "" || input.Quantity <= 0 {
-				return nil, model.ErrRecipeInvalid
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_RECIPE_INVALID)
 			}
 			recipe.Inputs = append(recipe.Inputs, &model.RecipeInput{
 				ID:       input.ID,
@@ -89,7 +91,7 @@ func (r *RecipeRepo) Refresh(ctx context.Context) ([]*model.Recipe, error) {
 		}
 		for _, output := range row.Edges.Outputs {
 			if output.ItemID == "" || output.MinQuantity <= 0 || output.MaxQuantity < output.MinQuantity || output.Weight <= 0 {
-				return nil, model.ErrRecipeInvalid
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_RECIPE_INVALID)
 			}
 			recipe.TotalWeight += int64(output.Weight)
 			recipe.Outputs = append(recipe.Outputs, &model.RecipeOutput{
@@ -104,7 +106,7 @@ func (r *RecipeRepo) Refresh(ctx context.Context) ([]*model.Recipe, error) {
 			})
 		}
 		if recipe.TotalWeight <= 0 {
-			return nil, model.ErrRecipeInvalid
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_RECIPE_INVALID)
 		}
 		data, err := json.Marshal(recipe)
 		if err != nil {
@@ -141,7 +143,7 @@ func (r *RecipeRepo) Get(ctx context.Context, recipeID string) (*model.Recipe, e
 		return recipe, nil
 	}
 	if loaded {
-		return nil, model.ErrRecipeInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_RECIPE_INVALID)
 	}
 	if _, err := r.Refresh(ctx); err != nil {
 		return nil, err
@@ -150,7 +152,7 @@ func (r *RecipeRepo) Get(ctx context.Context, recipeID string) (*model.Recipe, e
 	recipe = r.recipes[recipeID]
 	r.mutex.RUnlock()
 	if recipe == nil {
-		return nil, model.ErrRecipeInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_RECIPE_INVALID)
 	}
 	return recipe, nil
 }

@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"common/pkg/apperror"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/repo"
@@ -65,7 +67,7 @@ type CreateCharacterReq struct {
 
 func (u *CharacterUsecase) Create(ctx context.Context, req *CreateCharacterReq) (*model.Character, error) {
 	if req.UserID <= 0 || !characterNamePattern.MatchString(req.Name) {
-		return nil, model.ErrCharacterInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
 	}
 	rows, err := u.characterRepo.List(ctx, &repo.ListCharacterReq{
 		UserID: &req.UserID,
@@ -74,7 +76,7 @@ func (u *CharacterUsecase) Create(ctx context.Context, req *CreateCharacterReq) 
 		return nil, err
 	}
 	if len(rows) >= int(u.maxCharacterCountPerUser) {
-		return nil, model.ErrCharacterLimitExceeded
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_LIMIT_EXCEEDED)
 	}
 	usedSlots := make(map[int32]struct{}, len(rows))
 	for _, row := range rows {
@@ -90,7 +92,7 @@ func (u *CharacterUsecase) Create(ctx context.Context, req *CreateCharacterReq) 
 		}
 	}
 	if slot == 0 {
-		return nil, model.ErrCharacterLimitExceeded
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_LIMIT_EXCEEDED)
 	}
 	return u.characterRepo.Save(ctx, &model.Character{
 		UserID:              req.UserID,
@@ -110,7 +112,7 @@ type GetCharacterReq struct {
 
 func (u *CharacterUsecase) Get(ctx context.Context, req *GetCharacterReq) ([]*model.Character, error) {
 	if req.UserID <= 0 {
-		return nil, model.ErrCharacterInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
 	}
 	return u.characterRepo.List(ctx, &repo.ListCharacterReq{
 		UserID:      &req.UserID,
@@ -129,7 +131,7 @@ func (u *CharacterUsecase) Online(ctx context.Context, req *OnlineCharacterReq) 
 		return nil, err
 	}
 	if character.UserID != req.UserID {
-		return nil, model.ErrCharacterInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
 	}
 	sessionID := uuid.NewString()
 	oldSessionID, err := u.characterSessionRepo.Online(
@@ -177,7 +179,7 @@ func (u *CharacterUsecase) Ping(ctx context.Context, req *PingCharacterReq) (*mo
 		return nil, err
 	}
 	if !ok {
-		return nil, model.ErrCharacterSessionInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_SESSION_INVALID)
 	}
 	return &model.CharacterSession{
 		CharacterID: req.CharacterID,

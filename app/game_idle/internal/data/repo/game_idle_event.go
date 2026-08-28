@@ -1,9 +1,11 @@
 package repo
 
 import (
+	"common/pkg/apperror"
 	"common/pkg/client"
 	commonenum "common/pkg/enum"
 	commonenums "common/proto/gen/common/enums"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"game_idle/internal/biz/model"
 	bizrepo "game_idle/internal/biz/repo"
@@ -131,7 +133,7 @@ func (r *GameIdleEventRepo) Publish(ctx context.Context, event *model.GameIdleEv
 		}
 		message.Header["character_id"] = strconv.FormatInt(event.AbilityLeveledUp.CharacterID, 10)
 	} else {
-		return model.ErrChatMessageInvalid
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHAT_MESSAGE_INVALID)
 	}
 	payload, err := proto.Marshal(envelope)
 	if err != nil {

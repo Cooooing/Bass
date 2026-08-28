@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"common/pkg/apperror"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/repo"
@@ -30,14 +32,14 @@ type BackpackMapReq struct {
 
 func (u *BackpackUsecase) Map(ctx context.Context, req *BackpackMapReq) (map[string]*model.CharacterItem, error) {
 	if req.CharacterID <= 0 {
-		return nil, model.ErrCharacterInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
 	}
 	character, err := u.characterRepo.Get(ctx, req.CharacterID)
 	if err != nil {
 		return nil, err
 	}
 	if character.Status != enum.CharacterStatusActive {
-		return nil, model.ErrCharacterInvalid
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
 	}
 	return u.backpackRepo.MapItems(ctx, &repo.BackpackMapReq{
 		CharacterID: req.CharacterID,

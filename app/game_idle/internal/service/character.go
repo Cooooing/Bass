@@ -58,6 +58,9 @@ func (s *CharacterService) Create(ctx context.Context, req *v1.CreateCharacter_R
 	if row.UpdatedAt != nil {
 		character.UpdatedAt = timestamppb.New(*row.UpdatedAt)
 	}
+	if row.LastOfflineAt != nil {
+		character.LastOfflineAt = timestamppb.New(*row.LastOfflineAt)
+	}
 	return &v1.CreateCharacter_Resp{Row: character}, nil
 }
 
@@ -88,6 +91,9 @@ func (s *CharacterService) Get(ctx context.Context, req *v1.GetCharacter_Request
 		}
 		if row.UpdatedAt != nil {
 			character.UpdatedAt = timestamppb.New(*row.UpdatedAt)
+		}
+		if row.LastOfflineAt != nil {
+			character.LastOfflineAt = timestamppb.New(*row.LastOfflineAt)
 		}
 		characters = append(characters, character)
 	}

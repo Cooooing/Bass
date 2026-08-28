@@ -71,6 +71,7 @@ func (r *CharacterRepo) Save(ctx context.Context, character *model.Character) (*
 		Status:              enum.CharacterStatus(row.Status),
 		CreatedAt:           row.CreatedAt,
 		UpdatedAt:           row.UpdatedAt,
+		LastOfflineAt:       row.LastOfflineAt,
 		DeletedAt:           row.DeletedAt,
 	}
 	r.cache(character)
@@ -104,6 +105,7 @@ func (r *CharacterRepo) Get(ctx context.Context, characterID int64) (*model.Char
 		Status:              enum.CharacterStatus(row.Status),
 		CreatedAt:           row.CreatedAt,
 		UpdatedAt:           row.UpdatedAt,
+		LastOfflineAt:       row.LastOfflineAt,
 		DeletedAt:           row.DeletedAt,
 	}
 	r.cache(character)
@@ -152,12 +154,33 @@ func (r *CharacterRepo) List(ctx context.Context, req *bizrepo.ListCharacterReq)
 			Status:              enum.CharacterStatus(row.Status),
 			CreatedAt:           row.CreatedAt,
 			UpdatedAt:           row.UpdatedAt,
+			LastOfflineAt:       row.LastOfflineAt,
 			DeletedAt:           row.DeletedAt,
 		}
 		characters = append(characters, character)
 		r.cache(character)
 	}
 	return characters, nil
+}
+
+func (r *CharacterRepo) UpdateLastOfflineAt(ctx context.Context, characterID int64, at time.Time) error {
+	affected, err := r.db.Character.Update().
+		Where(characterent.IDEQ(characterID), characterent.DeletedAtIsNil()).
+		SetLastOfflineAt(at).
+		Save(ctx)
+	if err != nil {
+		return err
+	}
+	if affected == 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_NOT_FOUND)
+	}
+	r.mutex.Lock()
+	if character := r.characters[characterID]; character != nil {
+		offlineAt := at
+		character.LastOfflineAt = &offlineAt
+	}
+	r.mutex.Unlock()
+	return nil
 }
 
 func (r *CharacterRepo) cache(character *model.Character) {

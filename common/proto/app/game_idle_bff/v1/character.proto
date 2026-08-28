@@ -54,4 +54,5 @@ message Character {
   int64 max_offline_seconds = 6; // 最大离线收益结算秒数
   google.protobuf.Timestamp created_at = 1000; // 创建时间
   google.protobuf.Timestamp updated_at = 1001; // 更新时间
+  google.protobuf.Timestamp last_offline_at = 1002; // 最近离线时间
 }

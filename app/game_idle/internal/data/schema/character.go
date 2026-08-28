@@ -36,6 +36,7 @@ func (Character) Fields() []ent.Field {
 		field.String("name_key").Comment("小写角色名称，用于大小写不敏感唯一约束").MaxLen(32).NotEmpty(),
 		field.Int32("action_queue_capacity").Comment("行动队列容量上限").Positive().Default(3),
 		field.Int64("max_offline_seconds").Comment("最大离线收益结算秒数").Positive().Default(28800),
+		field.Time("last_offline_at").Comment("最近离线时间").Optional().Nillable(),
 		field.Enum("status").
 			Values(gameenum.CharacterStatusValues()...).
 			Default(gameenum.CharacterStatusActive.String()).

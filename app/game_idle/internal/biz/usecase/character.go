@@ -195,9 +195,14 @@ type OfflineCharacterReq struct {
 }
 
 func (u *CharacterUsecase) Offline(ctx context.Context, req *OfflineCharacterReq) error {
-	_, err := u.characterSessionRepo.Offline(ctx, req.CharacterID, req.SessionID)
+	offline, err := u.characterSessionRepo.Offline(ctx, req.CharacterID, req.SessionID)
 	if err != nil {
 		return err
+	}
+	if offline {
+		if err = u.characterRepo.UpdateLastOfflineAt(ctx, req.CharacterID, time.Now()); err != nil {
+			return err
+		}
 	}
 	if req.Timeout {
 		return u.gameIdleEventRepo.Publish(ctx, &model.GameIdleEvent{

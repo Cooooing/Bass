@@ -14,4 +14,5 @@ type Character struct {
 	MaxOfflineSeconds   int64                        `json:"max_offline_seconds"`
 	CreatedAt           *time.Time                   `json:"created_at,omitempty"`
 	UpdatedAt           *time.Time                   `json:"updated_at,omitempty"`
+	LastOfflineAt       *time.Time                   `json:"last_offline_at,omitempty"`
 }

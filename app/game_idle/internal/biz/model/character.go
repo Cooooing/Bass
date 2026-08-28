@@ -17,5 +17,6 @@ type Character struct {
 	Status              enum.CharacterStatus
 	CreatedAt           *time.Time
 	UpdatedAt           *time.Time
+	LastOfflineAt       *time.Time
 	DeletedAt           *time.Time
 }

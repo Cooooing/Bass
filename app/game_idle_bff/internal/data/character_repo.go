@@ -46,6 +46,9 @@ func (r *CharacterRepo) Create(ctx context.Context, req *repo.CreateCharacterReq
 	if row.UpdatedAt != nil {
 		out.UpdatedAt = new(row.UpdatedAt.AsTime())
 	}
+	if row.LastOfflineAt != nil {
+		out.LastOfflineAt = new(row.LastOfflineAt.AsTime())
+	}
 	return out, nil
 }
 
@@ -72,6 +75,9 @@ func (r *CharacterRepo) List(ctx context.Context, req *repo.ListCharacterReq) ([
 		}
 		if row.UpdatedAt != nil {
 			item.UpdatedAt = new(row.UpdatedAt.AsTime())
+		}
+		if row.LastOfflineAt != nil {
+			item.LastOfflineAt = new(row.LastOfflineAt.AsTime())
 		}
 		rows = append(rows, item)
 	}

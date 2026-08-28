@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **MaxOfflineSeconds** | Pointer to **string** |  | [optional] 
 **CreatedAt** | Pointer to **time.Time** |  | [optional] 
 **UpdatedAt** | Pointer to **time.Time** |  | [optional] 
+**LastOfflineAt** | Pointer to **time.Time** |  | [optional] 
 
 ## Methods
 
@@ -231,6 +232,31 @@ SetUpdatedAt sets UpdatedAt field to given value.
 `func (o *Character) HasUpdatedAt() bool`
 
 HasUpdatedAt returns a boolean if a field has been set.
+
+### GetLastOfflineAt
+
+`func (o *Character) GetLastOfflineAt() time.Time`
+
+GetLastOfflineAt returns the LastOfflineAt field if non-nil, zero value otherwise.
+
+### GetLastOfflineAtOk
+
+`func (o *Character) GetLastOfflineAtOk() (*time.Time, bool)`
+
+GetLastOfflineAtOk returns a tuple with the LastOfflineAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLastOfflineAt
+
+`func (o *Character) SetLastOfflineAt(v time.Time)`
+
+SetLastOfflineAt sets LastOfflineAt field to given value.
+
+### HasLastOfflineAt
+
+`func (o *Character) HasLastOfflineAt() bool`
+
+HasLastOfflineAt returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

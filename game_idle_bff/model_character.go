@@ -28,6 +28,7 @@ type Character struct {
 	MaxOfflineSeconds *string `json:"max_offline_seconds,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	LastOfflineAt *time.Time `json:"last_offline_at,omitempty"`
 }
 
 // NewCharacter instantiates a new Character object
@@ -303,6 +304,38 @@ func (o *Character) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 
+// GetLastOfflineAt returns the LastOfflineAt field value if set, zero value otherwise.
+func (o *Character) GetLastOfflineAt() time.Time {
+	if o == nil || IsNil(o.LastOfflineAt) {
+		var ret time.Time
+		return ret
+	}
+	return *o.LastOfflineAt
+}
+
+// GetLastOfflineAtOk returns a tuple with the LastOfflineAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Character) GetLastOfflineAtOk() (*time.Time, bool) {
+	if o == nil || IsNil(o.LastOfflineAt) {
+		return nil, false
+	}
+	return o.LastOfflineAt, true
+}
+
+// HasLastOfflineAt returns a boolean if a field has been set.
+func (o *Character) HasLastOfflineAt() bool {
+	if o != nil && !IsNil(o.LastOfflineAt) {
+		return true
+	}
+
+	return false
+}
+
+// SetLastOfflineAt gets a reference to the given time.Time and assigns it to the LastOfflineAt field.
+func (o *Character) SetLastOfflineAt(v time.Time) {
+	o.LastOfflineAt = &v
+}
+
 func (o Character) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -336,6 +369,9 @@ func (o Character) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.UpdatedAt) {
 		toSerialize["updated_at"] = o.UpdatedAt
+	}
+	if !IsNil(o.LastOfflineAt) {
+		toSerialize["last_offline_at"] = o.LastOfflineAt
 	}
 	return toSerialize, nil
 }

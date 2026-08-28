@@ -114,6 +114,7 @@ components:
         updated_at: 2000-01-23T04:56:07.000+00:00
         name: name
         created_at: 2000-01-23T04:56:07.000+00:00
+        last_offline_at: 2000-01-23T04:56:07.000+00:00
         id: id
         slot: 0
         action_queue_capacity: 6
@@ -145,6 +146,9 @@ components:
         updated_at:
           format: date-time
           type: string
+        last_offline_at:
+          format: date-time
+          type: string
       type: object
     CreateCharacter_Req:
       properties:
@@ -157,6 +161,7 @@ components:
           updated_at: 2000-01-23T04:56:07.000+00:00
           name: name
           created_at: 2000-01-23T04:56:07.000+00:00
+          last_offline_at: 2000-01-23T04:56:07.000+00:00
           id: id
           slot: 0
           action_queue_capacity: 6
@@ -193,6 +198,7 @@ components:
         - updated_at: 2000-01-23T04:56:07.000+00:00
           name: name
           created_at: 2000-01-23T04:56:07.000+00:00
+          last_offline_at: 2000-01-23T04:56:07.000+00:00
           id: id
           slot: 0
           action_queue_capacity: 6
@@ -201,6 +207,7 @@ components:
         - updated_at: 2000-01-23T04:56:07.000+00:00
           name: name
           created_at: 2000-01-23T04:56:07.000+00:00
+          last_offline_at: 2000-01-23T04:56:07.000+00:00
           id: id
           slot: 0
           action_queue_capacity: 6

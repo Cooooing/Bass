@@ -115,6 +115,8 @@ pub enum EventType {
     EventTypeGameIdleActionCompleted,
     #[serde(rename = "EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP")]
     EventTypeGameIdleAbilityLeveledUp,
+    #[serde(rename = "EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED")]
+    EventTypeGameIdleActionQueueUpdated,
 }
 
 impl Default for EventType {

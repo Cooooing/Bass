@@ -29,6 +29,8 @@ pub struct Character {
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
+    #[serde(rename = "last_offline_at", skip_serializing_if = "Option::is_none")]
+    pub last_offline_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl Character {
@@ -42,6 +44,7 @@ impl Character {
             max_offline_seconds: None,
             created_at: None,
             updated_at: None,
+            last_offline_at: None,
         }
     }
 }

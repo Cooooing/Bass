@@ -16,17 +16,17 @@ import (
 
 type CharacterService struct {
 	v1.UnimplementedCharacterServiceServer
-	characterUsecase   *usecase.CharacterUsecase
-	actionQueueUsecase *usecase.ActionQueueUsecase
+	characterUsecase       *usecase.CharacterUsecase
+	actionSchedulerUsecase *usecase.ActionSchedulerUsecase
 }
 
 func NewCharacterService(
 	characterUsecase *usecase.CharacterUsecase,
-	actionQueueUsecase *usecase.ActionQueueUsecase,
+	actionSchedulerUsecase *usecase.ActionSchedulerUsecase,
 ) *CharacterService {
 	return &CharacterService{
-		characterUsecase:   characterUsecase,
-		actionQueueUsecase: actionQueueUsecase,
+		characterUsecase:       characterUsecase,
+		actionSchedulerUsecase: actionSchedulerUsecase,
 	}
 }
 
@@ -115,7 +115,7 @@ func (s *CharacterService) Online(ctx context.Context, req *v1.OnlineCharacter_R
 	if err != nil {
 		return nil, err
 	}
-	if err = s.actionQueueUsecase.Resume(ctx, req.GetCharacterId()); err != nil {
+	if err = s.actionSchedulerUsecase.Resume(ctx, req.GetCharacterId()); err != nil {
 		return nil, err
 	}
 	return &v1.OnlineCharacter_Resp{
@@ -135,7 +135,7 @@ func (s *CharacterService) Offline(ctx context.Context, req *v1.OfflineCharacter
 	}); err != nil {
 		return nil, err
 	}
-	if err := s.actionQueueUsecase.ScheduleOfflineCheck(ctx, req.GetCharacterId()); err != nil {
+	if err := s.actionSchedulerUsecase.ScheduleOfflineCheck(ctx, req.GetCharacterId()); err != nil {
 		return nil, err
 	}
 	return &v1.OfflineCharacter_Resp{}, nil

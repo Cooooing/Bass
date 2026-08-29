@@ -8,20 +8,21 @@ import (
 	"time"
 )
 
-// ActionTask 按行动类型构建时间轮任务，具体实现放在 usecase/task 包中。
+// ActionTask 按行动类型构建时间轮任务；任务只负责结算，不直接修改队列。
 type ActionTask interface {
 	BuildTask(ctx context.Context, req *BuildActionTaskReq) (*timewheel.Task, error)
 }
 
+// BuildActionTaskReq 是调度器传给具体行动任务的运行时上下文。
 type BuildActionTaskReq struct {
 	CharacterID  int64
 	QueueItem    *model.ActionQueueItem
 	Action       *model.Action
 	Now          time.Time
 	PendingTasks chan<- *PendingActionTask
-	OfflineTasks chan<- *OfflineActionTask
 }
 
+// PendingActionTask 表示一次时间轮任务执行后的队列推进请求。
 type PendingActionTask struct {
 	CharacterID      int64
 	TaskID           string

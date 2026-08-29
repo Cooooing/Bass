@@ -16,12 +16,11 @@ import (
 
 // RecipeActionTask 构建基于配方结算的行动任务。
 type RecipeActionTask struct {
-	logger          *slog.Logger
-	recipeRepo      repo.RecipeRepo
-	backpackRepo    repo.BackpackRepo
-	settlementRepo  repo.ActionSettlementRepo
-	actionQueueRepo repo.ActionQueueRepo
-	recipeUsecase   *usecase.RecipeUsecase
+	logger         *slog.Logger
+	recipeRepo     repo.RecipeRepo
+	backpackRepo   repo.BackpackRepo
+	settlementRepo repo.ActionSettlementRepo
+	recipeUsecase  *usecase.RecipeUsecase
 }
 
 func NewRecipeActionTask(
@@ -29,16 +28,14 @@ func NewRecipeActionTask(
 	recipeRepo repo.RecipeRepo,
 	backpackRepo repo.BackpackRepo,
 	settlementRepo repo.ActionSettlementRepo,
-	actionQueueRepo repo.ActionQueueRepo,
 	recipeUsecase *usecase.RecipeUsecase,
 ) *RecipeActionTask {
 	return &RecipeActionTask{
-		logger:          logger,
-		recipeRepo:      recipeRepo,
-		backpackRepo:    backpackRepo,
-		settlementRepo:  settlementRepo,
-		actionQueueRepo: actionQueueRepo,
-		recipeUsecase:   recipeUsecase,
+		logger:         logger,
+		recipeRepo:     recipeRepo,
+		backpackRepo:   backpackRepo,
+		settlementRepo: settlementRepo,
+		recipeUsecase:  recipeUsecase,
 	}
 }
 
@@ -74,14 +71,6 @@ func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActi
 		DueAt:   task.DueAt,
 		Payload: task,
 		Job: func(jobCtx context.Context, item *timewheel.Task) error {
-			queue, err := t.actionQueueRepo.Load(jobCtx, req.CharacterID)
-			if err != nil {
-				return err
-			}
-			if len(queue.Items) == 0 || queue.Items[0].ID != task.TaskID {
-				return nil
-			}
-
 			stopReason := enum.ActionStopReasonNone
 			if len(inputQuantities) > 0 {
 				// 结算前再次校验，避免等待期间背包被其他链路消耗。

@@ -20,7 +20,7 @@ var characterNamePattern = regexp.MustCompile("^[A-Za-z0-9_]{4,32}$")
 type CharacterUsecase struct {
 	characterRepo              repo.CharacterRepo
 	characterSessionRepo       repo.CharacterSessionRepo
-	gameIdleEventRepo          repo.GameIdleEventRepo
+	eventUsecase               *GameIdleEventUsecase
 	maxCharacterCountPerUser   int32
 	defaultActionQueueCapacity int32
 	defaultMaxOfflineDuration  time.Duration
@@ -31,7 +31,7 @@ func NewCharacterUsecase(
 	conf *config.Bootstrap,
 	characterRepo repo.CharacterRepo,
 	characterSessionRepo repo.CharacterSessionRepo,
-	gameIdleEventRepo repo.GameIdleEventRepo,
+	eventUsecase *GameIdleEventUsecase,
 ) *CharacterUsecase {
 	maxCharacterCountPerUser := int32(3)
 	if conf.GetGameIdle().GetCharacter().GetMaxCountPerUser() > 0 {
@@ -52,7 +52,7 @@ func NewCharacterUsecase(
 	return &CharacterUsecase{
 		characterRepo:              characterRepo,
 		characterSessionRepo:       characterSessionRepo,
-		gameIdleEventRepo:          gameIdleEventRepo,
+		eventUsecase:               eventUsecase,
 		maxCharacterCountPerUser:   maxCharacterCountPerUser,
 		defaultActionQueueCapacity: defaultActionQueueCapacity,
 		defaultMaxOfflineDuration:  defaultMaxOfflineDuration,
@@ -139,13 +139,11 @@ func (u *CharacterUsecase) Online(ctx context.Context, req *OnlineCharacterReq) 
 		return nil, err
 	}
 	if oldSessionID != "" && oldSessionID != sessionID {
-		err = u.gameIdleEventRepo.Publish(ctx, &model.GameIdleEvent{
-			CloseSession: &model.CharacterCloseSessionEvent{
-				SessionID:       oldSessionID,
-				Reason:          enum.CharacterCloseSessionReasonOccupied,
-				Message:         "Disconnected. The game was opened from another device or window.",
-				ShouldReconnect: false,
-			},
+		err = u.eventUsecase.PublishCloseSession(ctx, &model.CharacterCloseSessionEvent{
+			SessionID:       oldSessionID,
+			Reason:          enum.CharacterCloseSessionReasonOccupied,
+			Message:         "Disconnected. The game was opened from another device or window.",
+			ShouldReconnect: false,
 		})
 		if err != nil {
 			return nil, err
@@ -207,12 +205,10 @@ func (u *CharacterUsecase) Offline(ctx context.Context, req *OfflineCharacterReq
 		}
 	}
 	if req.Timeout {
-		return u.gameIdleEventRepo.Publish(ctx, &model.GameIdleEvent{
-			CloseSession: &model.CharacterCloseSessionEvent{
-				SessionID:       req.SessionID,
-				Reason:          enum.CharacterCloseSessionReasonTimeout,
-				ShouldReconnect: false,
-			},
+		return u.eventUsecase.PublishCloseSession(ctx, &model.CharacterCloseSessionEvent{
+			SessionID:       req.SessionID,
+			Reason:          enum.CharacterCloseSessionReasonTimeout,
+			ShouldReconnect: false,
 		})
 	}
 	return nil

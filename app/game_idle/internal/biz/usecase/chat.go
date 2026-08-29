@@ -13,20 +13,20 @@ import (
 const chatMessageMaxRuneLen = 500
 
 type ChatUsecase struct {
-	characterRepo     repo.CharacterRepo
-	chatMessageRepo   repo.ChatMessageRepo
-	gameIdleEventRepo repo.GameIdleEventRepo
+	characterRepo   repo.CharacterRepo
+	chatMessageRepo repo.ChatMessageRepo
+	eventUsecase    *GameIdleEventUsecase
 }
 
 func NewChatUsecase(
 	characterRepo repo.CharacterRepo,
 	chatMessageRepo repo.ChatMessageRepo,
-	gameIdleEventRepo repo.GameIdleEventRepo,
+	eventUsecase *GameIdleEventUsecase,
 ) *ChatUsecase {
 	return &ChatUsecase{
-		characterRepo:     characterRepo,
-		chatMessageRepo:   chatMessageRepo,
-		gameIdleEventRepo: gameIdleEventRepo,
+		characterRepo:   characterRepo,
+		chatMessageRepo: chatMessageRepo,
+		eventUsecase:    eventUsecase,
 	}
 }
 
@@ -64,9 +64,7 @@ func (u *ChatUsecase) Send(ctx context.Context, req *SendMessageReq) (*model.Cha
 		return nil, err
 	}
 	message.SenderName = senderName
-	return message, u.gameIdleEventRepo.Publish(ctx, &model.GameIdleEvent{
-		ChatMessage: message,
-	})
+	return message, u.eventUsecase.PublishChatMessage(ctx, message)
 }
 
 type ListMessagesReq struct {

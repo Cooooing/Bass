@@ -24,7 +24,7 @@ type CharacterUsecase struct {
 	maxCharacterCountPerUser   int32
 	defaultActionQueueCapacity int32
 	defaultMaxOfflineDuration  time.Duration
-	webSocketOnlineTTL         time.Duration
+	onlineSessionTTL           time.Duration
 }
 
 func NewCharacterUsecase(
@@ -45,9 +45,9 @@ func NewCharacterUsecase(
 	if conf.GetGameIdle().GetCharacter().GetDefaultMaxOfflineDuration() != nil {
 		defaultMaxOfflineDuration = conf.GetGameIdle().GetCharacter().GetDefaultMaxOfflineDuration().AsDuration()
 	}
-	webSocketOnlineTTL := 5 * time.Minute
-	if conf.GetGameIdle().GetWebsocket().GetOnlineTtl() != nil && conf.GetGameIdle().GetWebsocket().GetOnlineTtl().AsDuration() > 0 {
-		webSocketOnlineTTL = conf.GetGameIdle().GetWebsocket().GetOnlineTtl().AsDuration()
+	onlineSessionTTL := 5 * time.Minute
+	if conf.GetGameIdle().GetOnlineSession().GetTtl() != nil && conf.GetGameIdle().GetOnlineSession().GetTtl().AsDuration() > 0 {
+		onlineSessionTTL = conf.GetGameIdle().GetOnlineSession().GetTtl().AsDuration()
 	}
 	return &CharacterUsecase{
 		characterRepo:              characterRepo,
@@ -56,7 +56,7 @@ func NewCharacterUsecase(
 		maxCharacterCountPerUser:   maxCharacterCountPerUser,
 		defaultActionQueueCapacity: defaultActionQueueCapacity,
 		defaultMaxOfflineDuration:  defaultMaxOfflineDuration,
-		webSocketOnlineTTL:         webSocketOnlineTTL,
+		onlineSessionTTL:           onlineSessionTTL,
 	}
 }
 
@@ -121,24 +121,19 @@ func (u *CharacterUsecase) Get(ctx context.Context, req *GetCharacterReq) ([]*mo
 }
 
 type OnlineCharacterReq struct {
-	UserID      int64
 	CharacterID int64
 }
 
 func (u *CharacterUsecase) Online(ctx context.Context, req *OnlineCharacterReq) (*model.CharacterSession, error) {
-	character, err := u.characterRepo.Get(ctx, req.CharacterID)
-	if err != nil {
+	if _, err := u.characterRepo.Get(ctx, req.CharacterID); err != nil {
 		return nil, err
-	}
-	if character.UserID != req.UserID {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
 	}
 	sessionID := uuid.NewString()
 	oldSessionID, err := u.characterSessionRepo.Online(
 		ctx,
 		req.CharacterID,
 		sessionID,
-		int64(u.webSocketOnlineTTL/time.Second),
+		int64(u.onlineSessionTTL/time.Second),
 	)
 	if err != nil {
 		return nil, err
@@ -159,7 +154,7 @@ func (u *CharacterUsecase) Online(ctx context.Context, req *OnlineCharacterReq) 
 	return &model.CharacterSession{
 		CharacterID: req.CharacterID,
 		SessionID:   sessionID,
-		ExpiresIn:   u.webSocketOnlineTTL,
+		ExpiresIn:   u.onlineSessionTTL,
 	}, nil
 }
 
@@ -173,7 +168,7 @@ func (u *CharacterUsecase) Ping(ctx context.Context, req *PingCharacterReq) (*mo
 		ctx,
 		req.CharacterID,
 		req.SessionID,
-		int64(u.webSocketOnlineTTL/time.Second),
+		int64(u.onlineSessionTTL/time.Second),
 	)
 	if err != nil {
 		return nil, err
@@ -184,7 +179,7 @@ func (u *CharacterUsecase) Ping(ctx context.Context, req *PingCharacterReq) (*mo
 	return &model.CharacterSession{
 		CharacterID: req.CharacterID,
 		SessionID:   req.SessionID,
-		ExpiresIn:   u.webSocketOnlineTTL,
+		ExpiresIn:   u.onlineSessionTTL,
 	}, nil
 }
 

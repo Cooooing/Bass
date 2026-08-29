@@ -70,13 +70,14 @@ func (s *WebSocketService) Handle(w stdhttp.ResponseWriter, r *stdhttp.Request) 
 		stdhttp.Error(w, err.Error(), stdhttp.StatusUnauthorized)
 		return
 	}
-	sessionID := r.URL.Query().Get("session_id")
-	if sessionID == "" {
-		stdhttp.Error(w, "websocket session invalid", stdhttp.StatusUnauthorized)
+	ticketValue := r.URL.Query().Get("ticket")
+	if ticketValue == "" {
+		stdhttp.Error(w, "websocket ticket invalid", stdhttp.StatusUnauthorized)
 		return
 	}
-	if _, err = s.webSocketUsecase.Ping(ctx, characterID, sessionID); err != nil {
-		s.logger.Error("game idle bff websocket session check failed", constant.LogFieldErr, err)
+	ticket, err := s.webSocketUsecase.ConsumeTicket(ctx, characterID, ticketValue)
+	if err != nil {
+		s.logger.Error("game idle bff websocket ticket check failed", constant.LogFieldErr, err)
 		stdhttp.Error(w, err.Error(), stdhttp.StatusUnauthorized)
 		return
 	}
@@ -91,16 +92,18 @@ func (s *WebSocketService) Handle(w stdhttp.ResponseWriter, r *stdhttp.Request) 
 	defer cancel()
 
 	var timeout atomic.Bool
-	connection := s.webSocketUsecase.Connect(connCtx, characterID, sessionID)
+	connection := s.webSocketUsecase.Connect(connCtx, characterID, ticket.Ticket)
 	defer s.webSocketUsecase.Disconnect(connCtx, connection, timeout.Load())
 
 	conn.SetReadLimit(webSocketReadLimit)
 	_ = conn.SetReadDeadline(time.Now().Add(s.webSocketUsecase.PingInterval(connCtx) + s.webSocketUsecase.WriteTimeout(connCtx)))
 	conn.SetPongHandler(func(string) error {
-		if _, err := s.webSocketUsecase.Ping(connCtx, characterID, sessionID); err != nil {
-			timeout.Store(true)
-			cancel()
-			return nil
+		if sessionID, online := connection.OnlineSession(); online {
+			if _, err := s.webSocketUsecase.Ping(connCtx, characterID, sessionID); err != nil {
+				timeout.Store(true)
+				cancel()
+				return nil
+			}
 		}
 		_ = conn.SetReadDeadline(time.Now().Add(s.webSocketUsecase.PingInterval(connCtx) + s.webSocketUsecase.WriteTimeout(connCtx)))
 		return nil

@@ -39,7 +39,6 @@ message GetCharacter {
 
 message OnlineCharacter {
   message Request {
-    int64 user_id = 1; // 用户 ID
     int64 character_id = 2; // 角色 ID
   }
 

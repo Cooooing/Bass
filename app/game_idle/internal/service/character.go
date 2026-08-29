@@ -106,11 +106,10 @@ func (s *CharacterService) Get(ctx context.Context, req *v1.GetCharacter_Request
 }
 
 func (s *CharacterService) Online(ctx context.Context, req *v1.OnlineCharacter_Request) (*v1.OnlineCharacter_Resp, error) {
-	if req.GetUserId() <= 0 || req.GetCharacterId() <= 0 {
+	if req.GetCharacterId() <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	session, err := s.characterUsecase.Online(ctx, &usecase.OnlineCharacterReq{
-		UserID:      req.GetUserId(),
 		CharacterID: req.GetCharacterId(),
 	})
 	if err != nil {

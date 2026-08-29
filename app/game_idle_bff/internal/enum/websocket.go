@@ -16,12 +16,14 @@ const (
 	WebSocketMessageTypeConfigCompleted        WebSocketMessageType = "config.completed"         // 配置查询完成
 	WebSocketMessageTypeConfigVersionCompleted WebSocketMessageType = "config.version.completed" // 配置版本查询完成
 	WebSocketMessageTypeActionDetailCompleted  WebSocketMessageType = "action.detail.completed"  // 行动详情查询完成
+	WebSocketMessageTypeCharacterOnlineDone    WebSocketMessageType = "character.online.completed" // 角色上线完成
 
 	// 客户端发送给服务端的命令。
 	WebSocketMessageTypeInitGet         WebSocketMessageType = "init.get"          // 初始化页面数据
 	WebSocketMessageTypeConfigGet       WebSocketMessageType = "config.get"        // 查询静态配置
 	WebSocketMessageTypeConfigVersion   WebSocketMessageType = "config.version"    // 查询静态配置版本
 	WebSocketMessageTypeActionDetailGet WebSocketMessageType = "action.detail.get" // 查询行动详情
+	WebSocketMessageTypeCharacterOnline WebSocketMessageType = "character.online"  // 角色上线
 	WebSocketMessageTypeChatMessageSend WebSocketMessageType = "chat.message.send" // 发送聊天消息
 	WebSocketMessageTypeActionAdd       WebSocketMessageType = "action.add"        // 添加行动
 	WebSocketMessageTypeActionMove      WebSocketMessageType = "action.move"       // 移动行动

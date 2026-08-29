@@ -36,6 +36,7 @@ var ModuleProviderSet = wire.NewSet(
 	NewActionRepo,
 	NewItemRepo,
 	NewWebSocketEventRepo,
+	NewWebSocketTicketRepo,
 	NewConfigVersionRepo,
 )
 

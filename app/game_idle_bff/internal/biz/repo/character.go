@@ -8,8 +8,8 @@ import (
 type CharacterRepo interface {
 	Create(ctx context.Context, req *CreateCharacterReq) (*model.Character, error)
 	List(ctx context.Context, req *ListCharacterReq) ([]*model.Character, error)
-	Online(ctx context.Context, req *OnlineCharacterReq) (*model.WebSocketSession, error)
-	Ping(ctx context.Context, req *PingCharacterReq) (*model.WebSocketSession, error)
+	Online(ctx context.Context, req *OnlineCharacterReq) (*model.CharacterOnlineSession, error)
+	Ping(ctx context.Context, req *PingCharacterReq) (*model.CharacterOnlineSession, error)
 	Offline(ctx context.Context, req *OfflineCharacterReq) error
 }
 
@@ -24,7 +24,6 @@ type ListCharacterReq struct {
 }
 
 type OnlineCharacterReq struct {
-	UserID      int64
 	CharacterID int64
 }
 

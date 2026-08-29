@@ -12,7 +12,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewAuthService,
 	NewCharacterService,
 	NewWebSocketService,
-	NewWebSocketSessionService,
+	NewWebSocketTicketService,
 )
 
 func ProvideServices(
@@ -20,13 +20,13 @@ func ProvideServices(
 	authService *AuthService,
 	characterService *CharacterService,
 	webSocketService *WebSocketService,
-	webSocketSessionService *WebSocketSessionService,
+	webSocketTicketService *WebSocketTicketService,
 ) []server.Service {
 	return []server.Service{
 		commonSystemService,
 		authService,
 		characterService,
 		webSocketService,
-		webSocketSessionService,
+		webSocketTicketService,
 	}
 }

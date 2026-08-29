@@ -33,6 +33,7 @@ var BizProviderSet = wire.NewSet(
 	command.NewConfigGetHandler,
 	command.NewConfigVersionHandler,
 	command.NewActionDetailGetHandler,
+	command.NewCharacterOnlineHandler,
 	event.NewActionCompletedHandler,
 	event.NewActionQueueUpdatedHandler,
 	event.NewAbilityLeveledUpHandler,
@@ -70,6 +71,7 @@ func ProvideWebSocketCommandHandlers(
 	configGetHandler *command.ConfigGetHandler,
 	configVersionHandler *command.ConfigVersionHandler,
 	actionDetailGetHandler *command.ActionDetailGetHandler,
+	characterOnlineHandler *command.CharacterOnlineHandler,
 ) usecase.WebSocketCommandHandlers {
 	return usecase.WebSocketCommandHandlers{
 		chatMessageSendHandler.Type(): chatMessageSendHandler,
@@ -81,5 +83,6 @@ func ProvideWebSocketCommandHandlers(
 		configGetHandler.Type():       configGetHandler,
 		configVersionHandler.Type():   configVersionHandler,
 		actionDetailGetHandler.Type(): actionDetailGetHandler,
+		characterOnlineHandler.Type(): characterOnlineHandler,
 	}
 }

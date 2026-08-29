@@ -5,10 +5,21 @@ import (
 	"time"
 )
 
-type WebSocketSession struct {
+type CharacterOnlineSession struct {
 	CharacterID       int64         `json:"character_id"`
 	SessionID         string        `json:"session_id"`
 	RemainingDuration time.Duration `json:"remaining_duration"`
+}
+
+type WebSocketTicket struct {
+	CharacterID       int64         `json:"character_id"`
+	Ticket            string        `json:"ticket"`
+	RemainingDuration time.Duration `json:"remaining_duration"`
+}
+
+type WebSocketOnline struct {
+	CharacterID      int64 `json:"character_id"`
+	ExpiresInSeconds int64 `json:"expires_in_seconds"`
 }
 
 type WebSocketChatMessage struct {

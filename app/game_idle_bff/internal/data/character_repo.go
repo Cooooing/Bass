@@ -84,22 +84,21 @@ func (r *CharacterRepo) List(ctx context.Context, req *repo.ListCharacterReq) ([
 	return rows, nil
 }
 
-func (r *CharacterRepo) Online(ctx context.Context, req *repo.OnlineCharacterReq) (*model.WebSocketSession, error) {
+func (r *CharacterRepo) Online(ctx context.Context, req *repo.OnlineCharacterReq) (*model.CharacterOnlineSession, error) {
 	reply, err := r.gameIdleClient.Character.Online(ctx, &gameidlev1.OnlineCharacter_Request{
-		UserId:      req.UserID,
 		CharacterId: req.CharacterID,
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &model.WebSocketSession{
+	return &model.CharacterOnlineSession{
 		CharacterID:       req.CharacterID,
 		SessionID:         reply.GetSessionId(),
 		RemainingDuration: time.Duration(reply.GetExpiresInSeconds()) * time.Second,
 	}, nil
 }
 
-func (r *CharacterRepo) Ping(ctx context.Context, req *repo.PingCharacterReq) (*model.WebSocketSession, error) {
+func (r *CharacterRepo) Ping(ctx context.Context, req *repo.PingCharacterReq) (*model.CharacterOnlineSession, error) {
 	reply, err := r.gameIdleClient.Character.Ping(ctx, &gameidlev1.PingCharacter_Request{
 		CharacterId: req.CharacterID,
 		SessionId:   req.SessionID,
@@ -107,7 +106,7 @@ func (r *CharacterRepo) Ping(ctx context.Context, req *repo.PingCharacterReq) (*
 	if err != nil {
 		return nil, err
 	}
-	return &model.WebSocketSession{
+	return &model.CharacterOnlineSession{
 		CharacterID:       req.CharacterID,
 		SessionID:         req.SessionID,
 		RemainingDuration: time.Duration(reply.GetExpiresInSeconds()) * time.Second,

@@ -16,12 +16,14 @@ import (
 	"sync"
 	"time"
 
+	"github.com/google/uuid"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type WebSocketUsecase struct {
 	logger           *slog.Logger
 	eventRepo        repo.WebSocketEventRepo
+	ticketRepo       repo.WebSocketTicketRepo
 	workerPool       *commonclient.WorkerPool
 	characterUsecase *CharacterUsecase
 	eventHandlers    WebSocketEventHandlers
@@ -40,6 +42,7 @@ func NewWebSocketUsecase(
 	logger *slog.Logger,
 	conf *config.Bootstrap,
 	eventRepo repo.WebSocketEventRepo,
+	ticketRepo repo.WebSocketTicketRepo,
 	workerPool *commonclient.WorkerPool,
 	characterUsecase *CharacterUsecase,
 	eventHandlers WebSocketEventHandlers,
@@ -56,6 +59,7 @@ func NewWebSocketUsecase(
 	return &WebSocketUsecase{
 		logger:           logger,
 		eventRepo:        eventRepo,
+		ticketRepo:       ticketRepo,
 		workerPool:       workerPool,
 		characterUsecase: characterUsecase,
 		eventHandlers:    eventHandlers,
@@ -68,14 +72,19 @@ func NewWebSocketUsecase(
 }
 
 const webSocketConnectionSendBufferSize = 4
+const webSocketTicketTTL = 2 * time.Minute
 
 type WebSocketConnection struct {
-	CharacterID int64
-	SessionID   string
-	Messages    chan *WebSocketSendMessage
-	Closed      chan struct{}
-	SendTimeout time.Duration
-	closeOnce   sync.Once
+	CharacterID  int64
+	Ticket       string
+	SessionID    string
+	Online       bool
+	Disconnected bool
+	Messages     chan *WebSocketSendMessage
+	Closed       chan struct{}
+	SendTimeout  time.Duration
+	closeOnce    sync.Once
+	lock         sync.RWMutex
 }
 
 type WebSocketSendMessage struct {
@@ -88,19 +97,49 @@ type WebSocketSendMessage struct {
 	SilentClose       bool
 }
 
-type CreateWebSocketSessionReq struct {
+type CreateWebSocketTicketReq struct {
 	UserID      int64
 	CharacterID int64
 }
 
-func (u *WebSocketUsecase) CreateSession(ctx context.Context, req *CreateWebSocketSessionReq) (*model.WebSocketSession, error) {
-	return u.characterUsecase.Online(ctx, &OnlineCharacterReq{
+func (u *WebSocketUsecase) CreateTicket(ctx context.Context, req *CreateWebSocketTicketReq) (*model.WebSocketTicket, error) {
+	characters, err := u.characterUsecase.List(ctx, &ListCharacterReq{
 		UserID:      req.UserID,
 		CharacterID: req.CharacterID,
 	})
+	if err != nil {
+		return nil, err
+	}
+	if len(characters) == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
+	}
+	ticket := &model.WebSocketTicket{
+		CharacterID:       req.CharacterID,
+		Ticket:            uuid.NewString(),
+		RemainingDuration: webSocketTicketTTL,
+	}
+	if err = u.ticketRepo.Save(ctx, ticket.CharacterID, ticket.Ticket, webSocketTicketTTL); err != nil {
+		return nil, err
+	}
+	return ticket, nil
 }
 
-func (u *WebSocketUsecase) Ping(ctx context.Context, characterID int64, sessionID string) (*model.WebSocketSession, error) {
+func (u *WebSocketUsecase) ConsumeTicket(ctx context.Context, characterID int64, ticket string) (*model.WebSocketTicket, error) {
+	current, ttl, err := u.ticketRepo.Get(ctx, characterID)
+	if err != nil {
+		return nil, err
+	}
+	if current == "" || current != ticket {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_SESSION_INVALID)
+	}
+	return &model.WebSocketTicket{
+		CharacterID:       characterID,
+		Ticket:            current,
+		RemainingDuration: ttl,
+	}, nil
+}
+
+func (u *WebSocketUsecase) Ping(ctx context.Context, characterID int64, sessionID string) (*model.CharacterOnlineSession, error) {
 	return u.characterUsecase.Ping(ctx, &PingCharacterReq{
 		CharacterID: characterID,
 		SessionID:   sessionID,
@@ -171,52 +210,61 @@ func (u *WebSocketUsecase) Stop(ctx context.Context) error {
 		}
 		u.subscription = nil
 	}
+	connections := make([]*WebSocketConnection, 0, len(u.sessions))
+	seen := map[*WebSocketConnection]struct{}{}
 	for _, connection := range u.sessions {
-		connection.Close()
+		seen[connection] = struct{}{}
+		connections = append(connections, connection)
 	}
-	u.characters = map[int64]map[string]*WebSocketConnection{}
-	u.sessions = map[string]*WebSocketConnection{}
+	for _, rows := range u.characters {
+		for _, connection := range rows {
+			if _, ok := seen[connection]; !ok {
+				seen[connection] = struct{}{}
+				connections = append(connections, connection)
+			}
+		}
+	}
 	u.running = false
 	u.lock.Unlock()
+	for _, connection := range connections {
+		u.Disconnect(ctx, connection, false)
+	}
 	return nil
 }
 
-func (u *WebSocketUsecase) Connect(ctx context.Context, characterID int64, sessionID string) *WebSocketConnection {
+func (u *WebSocketUsecase) Connect(ctx context.Context, characterID int64, ticket string) *WebSocketConnection {
 	connection := &WebSocketConnection{
 		CharacterID: characterID,
-		SessionID:   sessionID,
+		Ticket:      ticket,
 		Messages:    make(chan *WebSocketSendMessage, webSocketConnectionSendBufferSize),
 		Closed:      make(chan struct{}),
 		SendTimeout: u.writeTimeout,
 	}
 	u.lock.Lock()
-	if old := u.sessions[sessionID]; old != nil {
-		old.Close()
-		if rows := u.characters[old.CharacterID]; rows != nil {
-			delete(rows, old.SessionID)
-			if len(rows) == 0 {
-				delete(u.characters, old.CharacterID)
-			}
-		}
-	}
-	u.sessions[connection.SessionID] = connection
 	if u.characters[characterID] == nil {
 		u.characters[characterID] = map[string]*WebSocketConnection{}
 	}
-	u.characters[characterID][connection.SessionID] = connection
+	u.characters[characterID][connection.Ticket] = connection
 	u.lock.Unlock()
 	return connection
 }
 
 func (u *WebSocketUsecase) Disconnect(ctx context.Context, connection *WebSocketConnection, timeout bool) {
+	sessionID, online := connection.MarkDisconnected()
+	characterKey := connection.Ticket
+	if online {
+		characterKey = sessionID
+	}
 	u.lock.Lock()
-	if u.sessions[connection.SessionID] != connection {
+	if online && u.sessions[sessionID] != connection {
 		u.lock.Unlock()
 		return
 	}
-	delete(u.sessions, connection.SessionID)
+	if online {
+		delete(u.sessions, sessionID)
+	}
 	if rows := u.characters[connection.CharacterID]; rows != nil {
-		delete(rows, connection.SessionID)
+		delete(rows, characterKey)
 		if len(rows) == 0 {
 			delete(u.characters, connection.CharacterID)
 		}
@@ -224,13 +272,15 @@ func (u *WebSocketUsecase) Disconnect(ctx context.Context, connection *WebSocket
 	connection.Close()
 	u.lock.Unlock()
 
-	cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	_ = u.characterUsecase.Offline(cleanupCtx, &OfflineCharacterReq{
-		CharacterID: connection.CharacterID,
-		SessionID:   connection.SessionID,
-		Timeout:     timeout,
-	})
+	if online {
+		cleanupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+		defer cancel()
+		_ = u.characterUsecase.Offline(cleanupCtx, &OfflineCharacterReq{
+			CharacterID: connection.CharacterID,
+			SessionID:   sessionID,
+			Timeout:     timeout,
+		})
+	}
 }
 
 func (c *WebSocketConnection) Close() {
@@ -255,11 +305,60 @@ func (c *WebSocketConnection) Send(ctx context.Context, message *WebSocketSendMe
 	}
 }
 
+func (c *WebSocketConnection) OnlineSession() (string, bool) {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return c.SessionID, c.Online && c.SessionID != ""
+}
+
+func (c *WebSocketConnection) MarkDisconnected() (string, bool) {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+	if c.Disconnected {
+		return c.SessionID, false
+	}
+	c.Disconnected = true
+	return c.SessionID, c.Online && c.SessionID != ""
+}
+
+func (u *WebSocketUsecase) BindOnline(ctx context.Context, connection *WebSocketConnection, session *model.CharacterOnlineSession) bool {
+	connection.lock.Lock()
+	if connection.Disconnected {
+		connection.lock.Unlock()
+		return false
+	}
+	oldSessionID := connection.SessionID
+	connection.SessionID = session.SessionID
+	connection.Online = true
+	connection.lock.Unlock()
+
+	u.lock.Lock()
+	if oldSessionID != "" {
+		delete(u.sessions, oldSessionID)
+	}
+	if old := u.sessions[session.SessionID]; old != nil && old != connection {
+		old.Close()
+	}
+	u.sessions[session.SessionID] = connection
+	if rows := u.characters[connection.CharacterID]; rows != nil {
+		delete(rows, connection.Ticket)
+		rows[session.SessionID] = connection
+	}
+	u.lock.Unlock()
+	return true
+}
+
 func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSocketConnection, commandType enum.WebSocketMessageType, payloadData json.RawMessage) {
 	handler, ok := u.commandHandlers[commandType]
 	if !ok {
 		u.SendCommandFailed(ctx, connection, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT))
 		return
+	}
+	if commandType != enum.WebSocketMessageTypeCharacterOnline {
+		if _, online := connection.OnlineSession(); !online {
+			u.SendCommandFailed(ctx, connection, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_SESSION_INVALID))
+			return
+		}
 	}
 	payload := handler.Payload()
 	if payload != nil {
@@ -273,11 +372,13 @@ func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSoc
 		}
 	}
 	err := u.workerPool.Submit(func() {
+		sessionID, _ := connection.OnlineSession()
 		if err := handler.Handle(ctx, &WebSocketCommandReq{
 			CharacterID: connection.CharacterID,
-			SessionID:   connection.SessionID,
+			SessionID:   sessionID,
 			Connection:  connection,
 			Payload:     payload,
+			BindOnline:  u.BindOnline,
 		}); err != nil {
 			u.SendCommandFailed(ctx, connection, err)
 		}
@@ -342,7 +443,7 @@ func (u *WebSocketUsecase) sendToConnection(ctx context.Context, connection *Web
 		u.logger.Warn(
 			"game idle bff websocket send failed",
 			slog.Int64("character_id", connection.CharacterID),
-			slog.String("session_id", connection.SessionID),
+			slog.String("session_id", message.TargetSessionID),
 		)
 	}
 }

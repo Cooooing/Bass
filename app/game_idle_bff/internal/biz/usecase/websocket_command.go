@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"game_idle_bff/internal/biz/model"
 	"game_idle_bff/internal/enum"
 
 	"google.golang.org/protobuf/proto"
@@ -13,6 +14,7 @@ type WebSocketCommandReq struct {
 	SessionID   string
 	Connection  *WebSocketConnection
 	Payload     proto.Message
+	BindOnline  func(ctx context.Context, connection *WebSocketConnection, session *model.CharacterOnlineSession) bool
 }
 
 // WebSocketCommandHandler 处理一种客户端上行命令。

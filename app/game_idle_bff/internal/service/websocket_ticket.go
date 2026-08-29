@@ -14,41 +14,42 @@ import (
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
-type WebSocketSessionService struct {
+type WebSocketTicketService struct {
 	v1.UnimplementedWebSocketServiceServer
 	webSocketUsecase *usecase.WebSocketUsecase
 }
 
-func NewWebSocketSessionService(
+func NewWebSocketTicketService(
 	webSocketUsecase *usecase.WebSocketUsecase,
-) *WebSocketSessionService {
-	return &WebSocketSessionService{
+) *WebSocketTicketService {
+	return &WebSocketTicketService{
 		webSocketUsecase: webSocketUsecase,
 	}
 }
 
-func (s *WebSocketSessionService) RegisterGrpc(*grpc.Server) {
+func (s *WebSocketTicketService) RegisterGrpc(*grpc.Server) {
 }
 
-func (s *WebSocketSessionService) RegisterHttp(hs *http.Server) {
+func (s *WebSocketTicketService) RegisterHttp(hs *http.Server) {
 	v1.RegisterWebSocketServiceHTTPServer(hs, s)
 }
 
-func (s *WebSocketSessionService) CreateSession(ctx context.Context, req *v1.CreateWebSocketSession_Req) (*v1.CreateWebSocketSession_Resp, error) {
+func (s *WebSocketTicketService) CreateTicket(ctx context.Context, req *v1.CreateWebSocketTicket_Req) (*v1.CreateWebSocketTicket_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	session, err := s.webSocketUsecase.CreateSession(ctx, &usecase.CreateWebSocketSessionReq{
+	ticket, err := s.webSocketUsecase.CreateTicket(ctx, &usecase.CreateWebSocketTicketReq{
 		UserID:      user.ID,
 		CharacterID: req.GetCharacterId(),
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &v1.CreateWebSocketSession_Resp{
-		SessionId:        session.SessionID,
-		ExpiresInSeconds: int64(session.RemainingDuration.Seconds()),
+	return &v1.CreateWebSocketTicket_Resp{
+		CharacterId:      ticket.CharacterID,
+		Ticket:           ticket.Ticket,
+		ExpiresInSeconds: int64(ticket.RemainingDuration.Seconds()),
 		Path:             webSocketPath,
 	}, nil
 }

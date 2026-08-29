@@ -43,13 +43,11 @@ func (u *CharacterUsecase) Create(ctx context.Context, req *CreateCharacterReq) 
 }
 
 type OnlineCharacterReq struct {
-	UserID      int64
 	CharacterID int64
 }
 
-func (u *CharacterUsecase) Online(ctx context.Context, req *OnlineCharacterReq) (*model.WebSocketSession, error) {
+func (u *CharacterUsecase) Online(ctx context.Context, req *OnlineCharacterReq) (*model.CharacterOnlineSession, error) {
 	return u.characterRepo.Online(ctx, &repo.OnlineCharacterReq{
-		UserID:      req.UserID,
 		CharacterID: req.CharacterID,
 	})
 }
@@ -59,7 +57,7 @@ type PingCharacterReq struct {
 	SessionID   string
 }
 
-func (u *CharacterUsecase) Ping(ctx context.Context, req *PingCharacterReq) (*model.WebSocketSession, error) {
+func (u *CharacterUsecase) Ping(ctx context.Context, req *PingCharacterReq) (*model.CharacterOnlineSession, error) {
 	return u.characterRepo.Ping(ctx, &repo.PingCharacterReq{
 		CharacterID: req.CharacterID,
 		SessionID:   req.SessionID,

@@ -7,24 +7,25 @@ option go_package = "common/proto/gen/game_idle_bff/v1;v1";
 
 // WebSocketService 提供摸鱼放置 WS 辅助入口。
 service WebSocketService {
-  // 创建角色 WS session。
-  rpc CreateSession(CreateWebSocketSession.Req) returns (CreateWebSocketSession.Resp) {
+  // 创建角色 WS 连接凭证。
+  rpc CreateTicket(CreateWebSocketTicket.Req) returns (CreateWebSocketTicket.Resp) {
     option (google.api.http) = {
-      post: "/v1/game-idle/ws/create-session"
+      post: "/v1/game-idle/ws/create-ticket"
       body: "*"
     };
   }
 }
 
-message CreateWebSocketSession {
+message CreateWebSocketTicket {
   message Req {
     int64 character_id = 1; // 角色 ID
   }
 
   message Resp {
-    string session_id = 1; // 角色 WS session
-    int64 expires_in_seconds = 2; // 剩余有效秒数
-    string path = 3; // WS 连接路径
+    int64 character_id = 1; // 角色 ID
+    string ticket = 2; // WS 连接凭证
+    int64 expires_in_seconds = 3; // 剩余有效秒数
+    string path = 4; // WS 连接路径
   }
 }
 

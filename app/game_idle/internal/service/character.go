@@ -135,6 +135,9 @@ func (s *CharacterService) Offline(ctx context.Context, req *v1.OfflineCharacter
 	}); err != nil {
 		return nil, err
 	}
+	if err := s.actionQueueUsecase.ScheduleOfflineCheck(ctx, req.GetCharacterId()); err != nil {
+		return nil, err
+	}
 	return &v1.OfflineCharacter_Resp{}, nil
 }
 

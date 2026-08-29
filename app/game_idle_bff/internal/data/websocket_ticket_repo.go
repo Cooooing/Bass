@@ -28,20 +28,15 @@ func (r *WebSocketTicketRepo) Save(ctx context.Context, characterID int64, ticke
 	return r.redisClient.Client.Set(ctx, r.redisKey(characterID), ticket, ttl).Err()
 }
 
-func (r *WebSocketTicketRepo) Get(ctx context.Context, characterID int64) (string, time.Duration, error) {
-	key := r.redisKey(characterID)
-	value, err := r.redisClient.Client.Get(ctx, key).Result()
-	if err == redis.Nil {
-		return "", 0, nil
-	}
+func (r *WebSocketTicketRepo) Consume(ctx context.Context, characterID int64, ticket string) (bool, error) {
+	value, err := r.redisClient.Client.GetDel(ctx, r.redisKey(characterID)).Result()
 	if err != nil {
-		return "", 0, err
+		if err == redis.Nil {
+			return false, nil
+		}
+		return false, err
 	}
-	ttl, err := r.redisClient.Client.TTL(ctx, key).Result()
-	if err != nil {
-		return "", 0, err
-	}
-	return value, ttl, nil
+	return value == ticket, nil
 }
 
 func (r *WebSocketTicketRepo) redisKey(characterID int64) string {

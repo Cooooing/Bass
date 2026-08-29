@@ -78,6 +78,7 @@ type WebSocketConnection struct {
 	CharacterID  int64
 	Ticket       string
 	SessionID    string
+	ExpiresIn    time.Duration
 	Online       bool
 	Disconnected bool
 	Messages     chan *WebSocketSendMessage
@@ -125,17 +126,17 @@ func (u *WebSocketUsecase) CreateTicket(ctx context.Context, req *CreateWebSocke
 }
 
 func (u *WebSocketUsecase) ConsumeTicket(ctx context.Context, characterID int64, ticket string) (*model.WebSocketTicket, error) {
-	current, ttl, err := u.ticketRepo.Get(ctx, characterID)
+	ok, err := u.ticketRepo.Consume(ctx, characterID, ticket)
 	if err != nil {
 		return nil, err
 	}
-	if current == "" || current != ticket {
+	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_SESSION_INVALID)
 	}
 	return &model.WebSocketTicket{
 		CharacterID:       characterID,
-		Ticket:            current,
-		RemainingDuration: ttl,
+		Ticket:            ticket,
+		RemainingDuration: 0,
 	}, nil
 }
 
@@ -244,6 +245,9 @@ func (u *WebSocketUsecase) Connect(ctx context.Context, characterID int64, ticke
 	if u.characters[characterID] == nil {
 		u.characters[characterID] = map[string]*WebSocketConnection{}
 	}
+	if old := u.characters[characterID][connection.Ticket]; old != nil {
+		old.Close()
+	}
 	u.characters[characterID][connection.Ticket] = connection
 	u.lock.Unlock()
 	return connection
@@ -311,6 +315,12 @@ func (c *WebSocketConnection) OnlineSession() (string, bool) {
 	return c.SessionID, c.Online && c.SessionID != ""
 }
 
+func (c *WebSocketConnection) OnlineSessionInfo() (string, time.Duration, bool) {
+	c.lock.RLock()
+	defer c.lock.RUnlock()
+	return c.SessionID, c.ExpiresIn, c.Online && c.SessionID != ""
+}
+
 func (c *WebSocketConnection) MarkDisconnected() (string, bool) {
 	c.lock.Lock()
 	defer c.lock.Unlock()
@@ -329,6 +339,7 @@ func (u *WebSocketUsecase) BindOnline(ctx context.Context, connection *WebSocket
 	}
 	oldSessionID := connection.SessionID
 	connection.SessionID = session.SessionID
+	connection.ExpiresIn = session.RemainingDuration
 	connection.Online = true
 	connection.lock.Unlock()
 

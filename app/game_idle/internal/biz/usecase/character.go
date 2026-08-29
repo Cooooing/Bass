@@ -194,6 +194,13 @@ func (u *CharacterUsecase) Offline(ctx context.Context, req *OfflineCharacterReq
 	if err != nil {
 		return err
 	}
+	if !offline {
+		online, err := u.characterSessionRepo.IsOnline(ctx, req.CharacterID)
+		if err != nil {
+			return err
+		}
+		offline = !online
+	}
 	if offline {
 		if err = u.characterRepo.UpdateLastOfflineAt(ctx, req.CharacterID, time.Now()); err != nil {
 			return err

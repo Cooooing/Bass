@@ -7,4 +7,5 @@ type CharacterSessionRepo interface {
 	Online(ctx context.Context, characterID int64, sessionID string, ttlSeconds int64) (string, error)
 	Ping(ctx context.Context, characterID int64, sessionID string, ttlSeconds int64) (bool, error)
 	Offline(ctx context.Context, characterID int64, sessionID string) (bool, error)
+	IsOnline(ctx context.Context, characterID int64) (bool, error)
 }

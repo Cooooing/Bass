@@ -28,6 +28,16 @@ func (h *CharacterOnlineHandler) Payload() proto.Message {
 }
 
 func (h *CharacterOnlineHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
+	if _, expiresIn, online := req.Connection.OnlineSessionInfo(); online {
+		req.Connection.Send(ctx, &usecase.WebSocketSendMessage{
+			Type: enum.WebSocketMessageTypeCharacterOnlineDone,
+			Payload: &model.WebSocketOnline{
+				CharacterID:      req.CharacterID,
+				ExpiresInSeconds: int64(expiresIn.Seconds()),
+			},
+		})
+		return nil
+	}
 	session, err := h.characterUsecase.Online(ctx, &usecase.OnlineCharacterReq{
 		CharacterID: req.CharacterID,
 	})

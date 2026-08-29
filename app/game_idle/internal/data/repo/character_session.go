@@ -76,6 +76,11 @@ func (r *CharacterSessionRepo) Offline(ctx context.Context, characterID int64, s
 	return result == 1, err
 }
 
+func (r *CharacterSessionRepo) IsOnline(ctx context.Context, characterID int64) (bool, error) {
+	result, err := r.redisClient.Client.Exists(ctx, r.onlineRedisKey(characterID)).Result()
+	return result > 0, err
+}
+
 func (r *CharacterSessionRepo) onlineRedisKey(characterID int64) string {
 	return fmt.Sprintf(r.onlineRedisKeyFormat, characterID)
 }

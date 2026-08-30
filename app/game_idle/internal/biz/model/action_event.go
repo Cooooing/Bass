@@ -41,6 +41,5 @@ type AbilityLeveledUpEvent struct {
 type ActionQueueUpdatedEvent struct {
 	CharacterID int64
 	Items       []*ActionQueueItem
-	Reason      string
 	UpdatedAt   time.Time
 }

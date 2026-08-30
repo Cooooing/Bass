@@ -19,6 +19,7 @@ type ActionQueueUsecase struct {
 	abilityUsecase  *CharacterAbilityUsecase
 	eventUsecase    *GameIdleEventUsecase
 	scheduler       *ActionSchedulerUsecase
+	stateEngine     *StateEngine
 	locker          *ActionQueueLocker
 	actionTasks     map[enum.ActionKind]ActionTask
 }
@@ -30,6 +31,7 @@ func NewActionQueueUsecase(
 	abilityUsecase *CharacterAbilityUsecase,
 	eventUsecase *GameIdleEventUsecase,
 	scheduler *ActionSchedulerUsecase,
+	stateEngine *StateEngine,
 	locker *ActionQueueLocker,
 	actionTasks map[enum.ActionKind]ActionTask,
 ) *ActionQueueUsecase {
@@ -40,6 +42,7 @@ func NewActionQueueUsecase(
 		abilityUsecase:  abilityUsecase,
 		eventUsecase:    eventUsecase,
 		scheduler:       scheduler,
+		stateEngine:     stateEngine,
 		locker:          locker,
 		actionTasks:     actionTasks,
 	}
@@ -95,31 +98,13 @@ func (u *ActionQueueUsecase) Add(ctx context.Context, req *AddActionReq) error {
 		return err
 	}
 
-	return u.locker.withCharacterLock(req.CharacterID, func() error {
-		return u.editQueue(ctx, req.CharacterID, func(queue *model.ActionQueue) error {
-			if len(queue.Items) >= int(character.ActionQueueCapacity) {
-				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_QUEUE_FULL)
-			}
-			position := len(queue.Items)
-			if req.Position != nil {
-				position = int(*req.Position)
-			}
-			if position < 0 || position > len(queue.Items) {
-				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
-			}
-
-			now := time.Now()
-			queueItem := &model.ActionQueueItem{
-				ID:        fmt.Sprintf("character:%d:action:%s:at:%d", req.CharacterID, req.ActionID, now.UnixNano()),
-				ActionID:  req.ActionID,
-				Times:     req.Times,
-				CreatedAt: now,
-			}
-			queue.Items = append(queue.Items, nil)
-			copy(queue.Items[position+1:], queue.Items[position:])
-			queue.Items[position] = queueItem
-			return nil
-		})
+	return u.applyQueueCommand(ctx, req.CharacterID, &ActionQueueAddCommand{
+		CharacterID: req.CharacterID,
+		ActionID:    req.ActionID,
+		Times:       req.Times,
+		Capacity:    character.ActionQueueCapacity,
+		Position:    req.Position,
+		Now:         time.Now(),
 	})
 }
 
@@ -130,24 +115,10 @@ type MoveActionReq struct {
 }
 
 func (u *ActionQueueUsecase) Move(ctx context.Context, req *MoveActionReq) error {
-	return u.locker.withCharacterLock(req.CharacterID, func() error {
-		return u.editQueue(ctx, req.CharacterID, func(queue *model.ActionQueue) error {
-			currentPosition := int(req.CurrentPosition)
-			targetPosition := int(req.TargetPosition)
-			if currentPosition < 0 || targetPosition < 0 || currentPosition >= len(queue.Items) || targetPosition >= len(queue.Items) {
-				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
-			}
-			queueItem := queue.Items[currentPosition]
-			queue.Items = append(queue.Items[:currentPosition], queue.Items[currentPosition+1:]...)
-			if targetPosition >= len(queue.Items) {
-				queue.Items = append(queue.Items, queueItem)
-				return nil
-			}
-			queue.Items = append(queue.Items, nil)
-			copy(queue.Items[targetPosition+1:], queue.Items[targetPosition:])
-			queue.Items[targetPosition] = queueItem
-			return nil
-		})
+	return u.applyQueueCommand(ctx, req.CharacterID, &ActionQueueMoveCommand{
+		CharacterID:     req.CharacterID,
+		CurrentPosition: req.CurrentPosition,
+		TargetPosition:  req.TargetPosition,
 	})
 }
 
@@ -157,60 +128,36 @@ type RemoveActionReq struct {
 }
 
 func (u *ActionQueueUsecase) Remove(ctx context.Context, req *RemoveActionReq) error {
-	return u.locker.withCharacterLock(req.CharacterID, func() error {
-		return u.editQueue(ctx, req.CharacterID, func(queue *model.ActionQueue) error {
-			if len(queue.Items) == 0 || req.Position < 0 || int(req.Position) >= len(queue.Items) {
-				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_ACTION_INVALID)
-			}
-			position := int(req.Position)
-			queue.Items = append(queue.Items[:position], queue.Items[position+1:]...)
-			return nil
-		})
+	return u.applyQueueCommand(ctx, req.CharacterID, &ActionQueueRemoveCommand{
+		CharacterID: req.CharacterID,
+		Position:    req.Position,
 	})
 }
 
 func (u *ActionQueueUsecase) Clear(ctx context.Context, characterID int64) error {
+	return u.applyQueueCommand(ctx, characterID, &ActionQueueClearCommand{CharacterID: characterID})
+}
+
+func (u *ActionQueueUsecase) applyQueueCommand(ctx context.Context, characterID int64, command StateCommand) error {
 	return u.locker.withCharacterLock(characterID, func() error {
-		return u.editQueue(ctx, characterID, func(queue *model.ActionQueue) error {
-			queue.Items = make([]*model.ActionQueueItem, 0)
-			return nil
-		})
+		changeSet, err := u.stateEngine.Apply(ctx, command)
+		if err != nil {
+			return err
+		}
+		return u.syncQueueChanged(ctx, changeSet.QueueChanged)
 	})
 }
 
-func (u *ActionQueueUsecase) editQueue(
-	ctx context.Context,
-	characterID int64,
-	edit func(queue *model.ActionQueue) error,
-) error {
-	queue, err := u.actionQueueRepo.Load(ctx, characterID)
-	if err != nil {
-		return err
+func (u *ActionQueueUsecase) syncQueueChanged(ctx context.Context, event *ActionQueueChangedStateEvent) error {
+	if event == nil {
+		return nil
 	}
-	oldHeadID := u.headTaskID(queue)
-	if err = edit(queue); err != nil {
-		return err
+	if event.HeadChanged() && event.OldHeadID != "" {
+		u.scheduler.stopTask(event.OldHeadID)
 	}
-	headChanged := oldHeadID != u.headTaskID(queue)
-	if headChanged && oldHeadID != "" {
-		u.scheduler.stopCurrent(ctx, characterID)
-	}
-	if err = u.actionQueueRepo.Save(ctx, queue); err != nil {
-		if headChanged && oldHeadID != "" {
-			_ = u.scheduler.startCurrent(ctx, characterID)
-		}
-		return err
-	}
-	u.eventUsecase.PublishActionQueueUpdated(ctx, queue, ActionQueueUpdateReasonManualChanged)
-	if headChanged && len(queue.Items) > 0 {
-		return u.scheduler.startCurrent(ctx, characterID)
+	u.eventUsecase.PublishActionQueueUpdated(ctx, event.Queue)
+	if event.HeadChanged() && event.NewHeadID != "" {
+		return u.scheduler.startCurrent(ctx, event.CharacterID)
 	}
 	return nil
-}
-
-func (u *ActionQueueUsecase) headTaskID(queue *model.ActionQueue) string {
-	if len(queue.Items) == 0 {
-		return ""
-	}
-	return queue.Items[0].ID
 }

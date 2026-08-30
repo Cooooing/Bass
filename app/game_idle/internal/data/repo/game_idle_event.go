@@ -203,7 +203,6 @@ func (r *GameIdleEventRepo) encodeActionQueueUpdated(
 		GameIdleActionQueueUpdated: &commonenums.GameIdleActionQueueUpdatedPayload{
 			CharacterId: event.CharacterID,
 			Items:       items,
-			Reason:      event.Reason,
 			UpdatedAt:   timestamppb.New(updatedAt),
 		},
 	}

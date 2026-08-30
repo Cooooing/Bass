@@ -11,12 +11,17 @@ import (
 // BizProviderSet 提供业务层依赖集合。
 var BizProviderSet = wire.NewSet(
 	task.NewRecipeActionTask,
+	ProvideStateCommandHandlers,
+	ProvideStateEventHandlers,
 	ProvideActionTasks,
 	usecase.NewCharacterUsecase,
 	usecase.NewBackpackUsecase,
 	usecase.NewCharacterAbilityUsecase,
 	usecase.NewCharacterStateUsecase,
 	usecase.NewGameIdleEventUsecase,
+	usecase.NewActionSettlementHandler,
+	usecase.NewActionQueueCommandHandler,
+	usecase.NewStateEngine,
 	usecase.NewActionQueueLocker,
 	usecase.NewRecipeUsecase,
 	usecase.NewMetadataCacheUsecase,
@@ -27,6 +32,24 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewActionUsecase,
 	usecase.NewItemUsecase,
 )
+
+func ProvideStateCommandHandlers(
+	actionSettlementHandler *usecase.ActionSettlementHandler,
+	actionQueueCommandHandler *usecase.ActionQueueCommandHandler,
+) map[usecase.StateCommandType]usecase.StateCommandHandler {
+	return map[usecase.StateCommandType]usecase.StateCommandHandler{
+		usecase.StateCommandTypeActionSettlement:        actionSettlementHandler,
+		usecase.StateCommandTypeActionQueueAdd:          actionQueueCommandHandler,
+		usecase.StateCommandTypeActionQueueMove:         actionQueueCommandHandler,
+		usecase.StateCommandTypeActionQueueRemove:       actionQueueCommandHandler,
+		usecase.StateCommandTypeActionQueueClear:        actionQueueCommandHandler,
+		usecase.StateCommandTypeActionQueueCompleteHead: actionQueueCommandHandler,
+	}
+}
+
+func ProvideStateEventHandlers() map[usecase.StateEventType][]usecase.StateEventHandler {
+	return map[usecase.StateEventType][]usecase.StateEventHandler{}
+}
 
 func ProvideActionTasks(
 	recipeActionTask *task.RecipeActionTask,

@@ -24,15 +24,13 @@ type BuildActionTaskReq struct {
 
 // PendingActionTask 表示一次时间轮任务执行后的队列推进请求。
 type PendingActionTask struct {
-	CharacterID      int64
-	TaskID           string
-	ActionID         string
-	StopReason       enum.ActionStopReason
-	StartedAt        time.Time
-	CompletedAt      time.Time
-	ItemChanges      []*model.ActionCompletedItemChange
-	AbilityChanges   []*model.ActionCompletedAbilityChange
-	AbilityLeveledUp *model.AbilityLeveledUpEvent
+	CharacterID  int64
+	TaskID       string
+	ActionID     string
+	StopReason   enum.ActionStopReason
+	StartedAt    time.Time
+	CompletedAt  time.Time
+	StateChanges *StateChangeSet
 }
 
 type OfflineActionTask struct {

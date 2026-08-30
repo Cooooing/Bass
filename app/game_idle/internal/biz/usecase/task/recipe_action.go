@@ -3,39 +3,34 @@ package task
 import (
 	"common/pkg/apperror"
 	"common/pkg/client/timewheel"
-	"common/pkg/constant"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/repo"
 	"game_idle/internal/biz/usecase"
 	"game_idle/internal/enum"
-	"log/slog"
 	"time"
 )
 
 // RecipeActionTask 构建基于配方结算的行动任务。
 type RecipeActionTask struct {
-	logger         *slog.Logger
-	recipeRepo     repo.RecipeRepo
-	backpackRepo   repo.BackpackRepo
-	settlementRepo repo.ActionSettlementRepo
-	recipeUsecase  *usecase.RecipeUsecase
+	recipeRepo    repo.RecipeRepo
+	backpackRepo  repo.BackpackRepo
+	recipeUsecase *usecase.RecipeUsecase
+	stateEngine   *usecase.StateEngine
 }
 
 func NewRecipeActionTask(
-	logger *slog.Logger,
 	recipeRepo repo.RecipeRepo,
 	backpackRepo repo.BackpackRepo,
-	settlementRepo repo.ActionSettlementRepo,
 	recipeUsecase *usecase.RecipeUsecase,
+	stateEngine *usecase.StateEngine,
 ) *RecipeActionTask {
 	return &RecipeActionTask{
-		logger:         logger,
-		recipeRepo:     recipeRepo,
-		backpackRepo:   backpackRepo,
-		settlementRepo: settlementRepo,
-		recipeUsecase:  recipeUsecase,
+		recipeRepo:    recipeRepo,
+		backpackRepo:  backpackRepo,
+		recipeUsecase: recipeUsecase,
+		stateEngine:   stateEngine,
 	}
 }
 
@@ -121,10 +116,11 @@ func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActi
 					Quantity: quantity,
 				})
 			}
-			// 原子变更是最终防线，任意物品变更后为负数则整次结算失败。
-			// TODO 后续在这里接入钓鱼速度、产量、稀有率等 Buff 对结算的影响。
-			settlement, err := t.settlementRepo.Apply(jobCtx, &repo.ActionSettlementReq{
+			// 状态机同步完成扣物品、加产物、加经验等核心状态变化。
+			// TODO 后续在命令里接入钓鱼速度、产量、稀有率等 Buff 对结算的影响。
+			changeSet, err := t.stateEngine.Apply(jobCtx, &usecase.ActionSettlementCommand{
 				CharacterID: req.CharacterID,
+				ActionID:    task.ActionID,
 				Items:       items,
 				AbilityID:   enum.Ability(req.Action.AbilityID),
 				ExpReward:   req.Action.ExpReward,
@@ -132,26 +128,22 @@ func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActi
 			if err != nil {
 				if code, ok := apperror.BusinessCode(err); ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT {
 					stopReason = enum.ActionStopReasonInsufficientItems
-					settlement = &model.ActionSettlement{}
-				} else if settlement == nil {
-					return err
+					changeSet = &usecase.StateChangeSet{}
 				} else {
-					t.logger.ErrorContext(jobCtx, "game idle action settlement persist failed", constant.LogFieldErr, err, "character_id", req.CharacterID)
+					return err
 				}
 			}
 			select {
 			case <-jobCtx.Done():
 				return jobCtx.Err()
 			case req.PendingTasks <- &usecase.PendingActionTask{
-				CharacterID:      req.CharacterID,
-				TaskID:           task.TaskID,
-				ActionID:         task.ActionID,
-				StopReason:       stopReason,
-				StartedAt:        req.Now,
-				CompletedAt:      time.Now(),
-				ItemChanges:      settlement.ItemChanges,
-				AbilityChanges:   settlement.AbilityChanges,
-				AbilityLeveledUp: settlement.AbilityLeveledUp,
+				CharacterID:  req.CharacterID,
+				TaskID:       task.TaskID,
+				ActionID:     task.ActionID,
+				StopReason:   stopReason,
+				StartedAt:    req.Now,
+				CompletedAt:  time.Now(),
+				StateChanges: changeSet,
 			}:
 				return nil
 			}

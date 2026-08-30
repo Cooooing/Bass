@@ -27,6 +27,7 @@ type ActionSchedulerUsecase struct {
 	abilityUsecase       *CharacterAbilityUsecase
 	eventUsecase         *GameIdleEventUsecase
 	stateUsecase         *CharacterStateUsecase
+	stateEngine          *StateEngine
 	timeWheel            *timewheel.TimeWheel
 	actionTasks          map[enum.ActionKind]ActionTask
 	locker               *ActionQueueLocker
@@ -45,6 +46,7 @@ func NewActionSchedulerUsecase(
 	abilityUsecase *CharacterAbilityUsecase,
 	eventUsecase *GameIdleEventUsecase,
 	stateUsecase *CharacterStateUsecase,
+	stateEngine *StateEngine,
 	timeWheel *timewheel.TimeWheel,
 	actionTasks map[enum.ActionKind]ActionTask,
 	locker *ActionQueueLocker,
@@ -58,6 +60,7 @@ func NewActionSchedulerUsecase(
 		abilityUsecase:       abilityUsecase,
 		eventUsecase:         eventUsecase,
 		stateUsecase:         stateUsecase,
+		stateEngine:          stateEngine,
 		timeWheel:            timeWheel,
 		actionTasks:          actionTasks,
 		locker:               locker,
@@ -175,46 +178,32 @@ func (u *ActionSchedulerUsecase) consumeOfflineTasks(ctx context.Context) {
 // handlePendingTask 在单角色锁内推进队首，保证扣次数、移除和重新调度是一组连续操作。
 func (u *ActionSchedulerUsecase) handlePendingTask(ctx context.Context, task *PendingActionTask) error {
 	return u.locker.withCharacterLock(task.CharacterID, func() error {
-		queue, err := u.actionQueueRepo.Load(ctx, task.CharacterID)
+		queueChangeSet, err := u.stateEngine.Apply(ctx, &ActionQueueCompleteHeadCommand{
+			CharacterID: task.CharacterID,
+			TaskID:      task.TaskID,
+			ActionID:    task.ActionID,
+			RemoveHead:  task.StopReason != enum.ActionStopReasonNone,
+		})
 		if err != nil {
 			return err
 		}
-		if len(queue.Items) == 0 || queue.Items[0].ID != task.TaskID || queue.Items[0].ActionID != task.ActionID {
+		if !queueChangeSet.QueueCommandApplied {
 			return nil
 		}
-
-		timesRemaining, queueChanged := u.applyPendingTask(queue, task)
-		if err = u.actionQueueRepo.Save(ctx, queue); err != nil {
-			return err
-		}
 		if task.StopReason == enum.ActionStopReasonNone {
-			u.publishActionCompleted(ctx, task, timesRemaining)
+			u.publishActionCompleted(ctx, task, queueChangeSet.ActionTimesRemaining)
 		}
-		if queueChanged {
-			u.eventUsecase.PublishActionQueueUpdated(ctx, queue, u.queueUpdateReason(task))
+		if queueChangeSet.QueueChanged != nil {
+			u.eventUsecase.PublishActionQueueUpdated(ctx, queueChangeSet.QueueChanged.Queue)
 		}
-		if len(queue.Items) > 0 {
+		if queueChangeSet.QueueChanged != nil && queueChangeSet.QueueChanged.NewHeadID != "" {
+			return u.startCurrent(ctx, task.CharacterID)
+		}
+		if task.StopReason == enum.ActionStopReasonNone && queueChangeSet.QueueChanged == nil {
 			return u.startCurrent(ctx, task.CharacterID)
 		}
 		return nil
 	})
-}
-
-func (u *ActionSchedulerUsecase) applyPendingTask(queue *model.ActionQueue, task *PendingActionTask) (int64, bool) {
-	current := queue.Items[0]
-	timesRemaining := current.Times
-	finishCurrent := task.StopReason != enum.ActionStopReasonNone
-	queueChanged := finishCurrent || current.Times != -1
-	if !finishCurrent && current.Times != -1 {
-		current.Times--
-		timesRemaining = current.Times
-		finishCurrent = current.Times <= 0
-	}
-	if finishCurrent {
-		queue.Items = queue.Items[1:]
-		timesRemaining = 0
-	}
-	return timesRemaining, queueChanged
 }
 
 func (u *ActionSchedulerUsecase) publishActionCompleted(ctx context.Context, task *PendingActionTask, timesRemaining int64) {
@@ -225,17 +214,12 @@ func (u *ActionSchedulerUsecase) publishActionCompleted(ctx context.Context, tas
 		TimesRemaining: timesRemaining,
 		StartedAt:      task.StartedAt,
 		CompletedAt:    task.CompletedAt,
-		ItemChanges:    task.ItemChanges,
-		AbilityChanges: task.AbilityChanges,
+		ItemChanges:    task.StateChanges.ItemChanges,
+		AbilityChanges: task.StateChanges.AbilityChanges,
 	})
-	u.eventUsecase.PublishAbilityLeveledUp(ctx, task.AbilityLeveledUp)
-}
-
-func (u *ActionSchedulerUsecase) queueUpdateReason(task *PendingActionTask) string {
-	if task.StopReason == enum.ActionStopReasonInsufficientItems {
-		return ActionQueueUpdateReasonInsufficientItems
+	for _, event := range task.StateChanges.AbilityLeveledUpEvents() {
+		u.eventUsecase.PublishAbilityLeveledUp(ctx, event)
 	}
-	return ActionQueueUpdateReasonActionCompleted
 }
 
 func (u *ActionSchedulerUsecase) handleOfflineTask(ctx context.Context, task *OfflineActionTask) error {
@@ -299,11 +283,18 @@ func (u *ActionSchedulerUsecase) startCurrent(ctx context.Context, characterID i
 			PendingTasks: u.pendingTasks,
 		})
 		if code, ok := apperror.BusinessCode(err); ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT {
-			queue.Items = queue.Items[1:]
-			if err = u.actionQueueRepo.Save(ctx, queue); err != nil {
+			changeSet, err := u.stateEngine.Apply(ctx, &ActionQueueCompleteHeadCommand{
+				CharacterID: characterID,
+				TaskID:      current.ID,
+				ActionID:    current.ActionID,
+				RemoveHead:  true,
+			})
+			if err != nil {
 				return err
 			}
-			u.eventUsecase.PublishActionQueueUpdated(ctx, queue, ActionQueueUpdateReasonInsufficientItems)
+			if changeSet.QueueChanged != nil {
+				u.eventUsecase.PublishActionQueueUpdated(ctx, changeSet.QueueChanged.Queue)
+			}
 			continue
 		}
 		if err != nil {
@@ -343,6 +334,10 @@ func (u *ActionSchedulerUsecase) stopCurrent(ctx context.Context, characterID in
 		u.timeWheel.Remove(queue.Items[0].ID)
 	}
 	u.stopOfflineCheck(characterID)
+}
+
+func (u *ActionSchedulerUsecase) stopTask(taskID string) {
+	u.timeWheel.Remove(taskID)
 }
 
 // scheduleOfflineTimeout 为离线角色设置收益上限检查，到期后刷盘并释放 Redis 热状态。

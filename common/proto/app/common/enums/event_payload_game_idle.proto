@@ -66,9 +66,11 @@ message GameIdleAbilityLeveledUpPayload {
 }
 
 message GameIdleActionQueueUpdatedPayload {
+  reserved 3;
+  reserved "reason";
+
   int64 character_id = 1;
   repeated GameIdleActionQueueItem items = 2;
-  string reason = 3;
   google.protobuf.Timestamp updated_at = 4;
 }
 

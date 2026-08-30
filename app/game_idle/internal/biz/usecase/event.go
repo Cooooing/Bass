@@ -9,12 +9,6 @@ import (
 	"time"
 )
 
-const (
-	ActionQueueUpdateReasonManualChanged     = "manual_changed"
-	ActionQueueUpdateReasonActionCompleted   = "action_completed"
-	ActionQueueUpdateReasonInsufficientItems = "insufficient_items"
-)
-
 // GameIdleEventUsecase 提供类型化事件发布入口，业务用例不直接组装统一事件载体。
 type GameIdleEventUsecase struct {
 	logger            *slog.Logger
@@ -51,12 +45,11 @@ func (u *GameIdleEventUsecase) PublishAbilityLeveledUp(ctx context.Context, even
 	}
 }
 
-func (u *GameIdleEventUsecase) PublishActionQueueUpdated(ctx context.Context, queue *model.ActionQueue, reason string) {
+func (u *GameIdleEventUsecase) PublishActionQueueUpdated(ctx context.Context, queue *model.ActionQueue) {
 	if err := u.gameIdleEventRepo.Publish(ctx, &model.GameIdleEvent{
 		ActionQueueUpdated: &model.ActionQueueUpdatedEvent{
 			CharacterID: queue.CharacterID,
 			Items:       queue.Items,
-			Reason:      reason,
 			UpdatedAt:   time.Now(),
 		},
 	}); err != nil {

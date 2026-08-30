@@ -172,15 +172,6 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		account := strings.ToLower(strings.TrimSpace(cred.GetAccount()))
-		if account == "" {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
-		}
-		if strings.Contains(account, "@") && !s.validateEmail(account) {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID)
-		}
-		if !s.validatePassword(cred.GetPassword()) {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PASSWORD_INVALID)
-		}
 		ucReq.PasswordAccount = account
 		ucReq.Password = cred.GetPassword()
 		ucReq.Code = cred.GetCode()
@@ -190,13 +181,7 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		email := strings.ToLower(strings.TrimSpace(cred.GetEmail()))
-		if !s.validateEmail(email) {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID)
-		}
 		code := strings.TrimSpace(cred.GetCode())
-		if !req.GetSkipOtp() && !s.codeRe.MatchString(code) {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID)
-		}
 		ucReq.Email = email
 		ucReq.Code = code
 	case enum.LoginTypePhone:
@@ -205,13 +190,7 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 		}
 		phone := strings.TrimSpace(cred.GetPhone())
-		if !s.phoneRe.MatchString(phone) {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PHONE_INVALID)
-		}
 		code := strings.TrimSpace(cred.GetCode())
-		if !req.GetSkipOtp() && !s.codeRe.MatchString(code) {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID)
-		}
 		ucReq.Phone = phone
 		ucReq.Code = code
 	}

@@ -14,7 +14,20 @@ import (
 
 var _ bizrepo.NotificationRateLimitCache = (*NotificationRateLimitCache)(nil)
 
-var notificationRateLimitAllowScript = redis.NewScript(`
+type NotificationRateLimitCache struct {
+	redisClient *client.RedisClient
+	keyFormat   string
+	allowScript *redis.Script
+	checkScript *redis.Script
+}
+
+func NewNotificationRateLimitCache(
+	redisClient *client.RedisClient,
+) bizrepo.NotificationRateLimitCache {
+	return &NotificationRateLimitCache{
+		redisClient: redisClient,
+		keyFormat:   "notify:rate_limit:{channel:%s}:{recipient:%s}",
+		allowScript: redis.NewScript(`
 local key = KEYS[1]
 local now = tonumber(ARGV[1])
 local window = tonumber(ARGV[2])
@@ -29,9 +42,8 @@ end
 redis.call("ZADD", key, now, member)
 redis.call("PEXPIRE", key, window)
 return 1
-`)
-
-var notificationRateLimitCheckScript = redis.NewScript(`
+`),
+		checkScript: redis.NewScript(`
 local key = KEYS[1]
 local now = tonumber(ARGV[1])
 local window = tonumber(ARGV[2])
@@ -57,19 +69,7 @@ if first[2] ~= nil then
 	end
 end
 return {1, retry_after, 0}
-`)
-
-type NotificationRateLimitCache struct {
-	redisClient *client.RedisClient
-	keyFormat   string
-}
-
-func NewNotificationRateLimitCache(
-	redisClient *client.RedisClient,
-) bizrepo.NotificationRateLimitCache {
-	return &NotificationRateLimitCache{
-		redisClient: redisClient,
-		keyFormat:   "notify:rate_limit:{channel:%s}:{recipient:%s}",
+`),
 	}
 }
 
@@ -79,7 +79,7 @@ func (c *NotificationRateLimitCache) Allow(ctx context.Context, spec *bizrepo.No
 	if err != nil {
 		return false, err
 	}
-	allowed, err := notificationRateLimitAllowScript.Run(
+	allowed, err := c.allowScript.Run(
 		ctx,
 		c.redisClient.Client,
 		[]string{key},
@@ -99,7 +99,7 @@ func (c *NotificationRateLimitCache) Check(ctx context.Context, spec *bizrepo.No
 	if err != nil {
 		return nil, err
 	}
-	values, err := notificationRateLimitCheckScript.Run(
+	values, err := c.checkScript.Run(
 		ctx,
 		c.redisClient.Client,
 		[]string{key},

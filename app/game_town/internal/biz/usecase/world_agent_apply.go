@@ -299,7 +299,7 @@ func (r *WorldAgentRunner) applyNpcStateChange(ctx context.Context, result *agen
 		Content:          summary,
 		Payload: map[string]any{
 			"npc_id":      npc.ID,
-			"life_status": stringValue(lifeStatus),
+			"life_status": r.stringValue(lifeStatus),
 			"state_tags":  r.stringSliceParam(step.Parameters, "state_tags"),
 		},
 	})
@@ -350,7 +350,7 @@ func (r *WorldAgentRunner) applyLocationChange(ctx context.Context, result *agen
 		Payload: map[string]any{
 			"public":           true,
 			"location_id":      location.ID,
-			"status":           stringValue(status),
+			"status":           r.stringValue(status),
 			"accessible":       r.boolPtrValue(accessible),
 			"environment_tags": r.stringSliceParam(step.Parameters, "environment_tags"),
 		},
@@ -399,7 +399,7 @@ func (r *WorldAgentRunner) applyFactionChange(ctx context.Context, result *agent
 		Payload: map[string]any{
 			"public":     true,
 			"faction_id": faction.ID,
-			"status":     stringValue(status),
+			"status":     r.stringValue(status),
 		},
 	})
 	if err != nil {
@@ -614,11 +614,11 @@ func (r *WorldAgentRunner) floatMapParam(values map[string]any, key string) map[
 	return result
 }
 
-func stringValue[T ~string](value *T) string {
+func (r *WorldAgentRunner) stringValue(value fmt.Stringer) string {
 	if value == nil {
 		return ""
 	}
-	return string(*value)
+	return value.String()
 }
 
 func (r *WorldAgentRunner) boolPtrValue(value *bool) any {

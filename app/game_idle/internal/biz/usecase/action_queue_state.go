@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"game_idle/internal/biz/model"
 	"game_idle/internal/biz/repo"
+	"game_idle/internal/enum"
 	"time"
 )
 
@@ -20,8 +21,8 @@ type ActionQueueAddCommand struct {
 	Now         time.Time
 }
 
-func (c *ActionQueueAddCommand) StateCommandType() StateCommandType {
-	return StateCommandTypeActionQueueAdd
+func (c *ActionQueueAddCommand) StateCommandType() enum.StateCommandType {
+	return enum.StateCommandTypeActionQueueAdd
 }
 
 // ActionQueueMoveCommand 表示调整队列中已有行动的位置。
@@ -31,8 +32,8 @@ type ActionQueueMoveCommand struct {
 	TargetPosition  int32
 }
 
-func (c *ActionQueueMoveCommand) StateCommandType() StateCommandType {
-	return StateCommandTypeActionQueueMove
+func (c *ActionQueueMoveCommand) StateCommandType() enum.StateCommandType {
+	return enum.StateCommandTypeActionQueueMove
 }
 
 // ActionQueueRemoveCommand 表示移除队列指定位置的行动。
@@ -41,8 +42,8 @@ type ActionQueueRemoveCommand struct {
 	Position    int32
 }
 
-func (c *ActionQueueRemoveCommand) StateCommandType() StateCommandType {
-	return StateCommandTypeActionQueueRemove
+func (c *ActionQueueRemoveCommand) StateCommandType() enum.StateCommandType {
+	return enum.StateCommandTypeActionQueueRemove
 }
 
 // ActionQueueClearCommand 表示清空角色行动队列。
@@ -50,8 +51,8 @@ type ActionQueueClearCommand struct {
 	CharacterID int64
 }
 
-func (c *ActionQueueClearCommand) StateCommandType() StateCommandType {
-	return StateCommandTypeActionQueueClear
+func (c *ActionQueueClearCommand) StateCommandType() enum.StateCommandType {
+	return enum.StateCommandTypeActionQueueClear
 }
 
 // ActionQueueCompleteHeadCommand 表示队首行动完成一次结算后推进队列。
@@ -62,8 +63,8 @@ type ActionQueueCompleteHeadCommand struct {
 	RemoveHead  bool
 }
 
-func (c *ActionQueueCompleteHeadCommand) StateCommandType() StateCommandType {
-	return StateCommandTypeActionQueueCompleteHead
+func (c *ActionQueueCompleteHeadCommand) StateCommandType() enum.StateCommandType {
+	return enum.StateCommandTypeActionQueueCompleteHead
 }
 
 // ActionQueueCommandHandler 负责行动队列热状态变更，调用方只根据变更结果调度时间轮。
@@ -224,7 +225,7 @@ func (h *ActionQueueCommandHandler) save(ctx context.Context, queue *model.Actio
 		QueueCommandApplied: true,
 		QueueChanged:        changed,
 		Events: []*StateEvent{{
-			Type:               StateEventTypeActionQueueChanged,
+			Type:               enum.StateEventTypeActionQueueChanged,
 			ActionQueueChanged: changed,
 		}},
 	}, nil

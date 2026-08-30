@@ -10,12 +10,11 @@ import (
 	"strings"
 )
 
-const chatMessageMaxRuneLen = 500
-
 type ChatUsecase struct {
 	characterRepo   repo.CharacterRepo
 	chatMessageRepo repo.ChatMessageRepo
 	eventUsecase    *GameIdleEventUsecase
+	maxRuneLen      int
 }
 
 func NewChatUsecase(
@@ -27,6 +26,7 @@ func NewChatUsecase(
 		characterRepo:   characterRepo,
 		chatMessageRepo: chatMessageRepo,
 		eventUsecase:    eventUsecase,
+		maxRuneLen:      500,
 	}
 }
 
@@ -40,7 +40,7 @@ type SendMessageReq struct {
 
 func (u *ChatUsecase) Send(ctx context.Context, req *SendMessageReq) (*model.ChatMessage, error) {
 	content := strings.TrimSpace(req.Content)
-	if content == "" || len([]rune(content)) > chatMessageMaxRuneLen {
+	if content == "" || len([]rune(content)) > u.maxRuneLen {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHAT_MESSAGE_INVALID)
 	}
 	senderName, err := u.characterRepo.GetName(ctx, req.CharacterID)

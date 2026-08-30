@@ -24,52 +24,50 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-var bbsHTTPPublicOperations = map[string]struct{}{
-	bbsuserv1.OperationAuthServiceRegister:      {},
-	bbsuserv1.OperationAuthServiceLogin:         {},
-	bbsuserv1.OperationAuthServiceRefreshToken:  {},
-	bbsuserv1.OperationAccountServiceAvatar:     {},
-	bbsuserv1.OperationAccountServiceGetProfile: {},
-}
-
-var bbsHTTPOptionalAuthOperations = map[string]struct{}{
-	bbscontentv1.OperationArticleServiceList:         {},
-	bbscontentv1.OperationArticleServiceGet:          {},
-	bbscontentv1.OperationCommentServiceList:         {},
-	bbscontentv1.OperationCommentServiceListThreads:  {},
-	bbscontentv1.OperationCommentServiceListReplies:  {},
-	bbscontentv1.OperationCommentServiceListTimeline: {},
-	bbscontentv1.OperationDomainServiceList:          {},
-	bbscontentv1.OperationTagServiceList:             {},
-	bbscontentv1.OperationTagServiceListArticleTags:  {},
-	bbscontentv1.OperationPostscriptServiceList:      {},
-	bbsuserv1.OperationOtpServiceSendEmailOtp:        {},
-	bbsuserv1.OperationOtpServiceSendPhoneOtp:        {},
-	bbsuserv1.OperationRelationServiceGetStatus:      {},
-}
-
 func NewHTTPAuthMiddlewares(authClient userv1.AuthServiceClient) []middleware.Middleware {
+	publicOperations := map[string]struct{}{
+		bbsuserv1.OperationAuthServiceRegister:      {},
+		bbsuserv1.OperationAuthServiceLogin:         {},
+		bbsuserv1.OperationAuthServiceRefreshToken:  {},
+		bbsuserv1.OperationAccountServiceAvatar:     {},
+		bbsuserv1.OperationAccountServiceGetProfile: {},
+	}
+	optionalAuthOperations := map[string]struct{}{
+		bbscontentv1.OperationArticleServiceList:         {},
+		bbscontentv1.OperationArticleServiceGet:          {},
+		bbscontentv1.OperationCommentServiceList:         {},
+		bbscontentv1.OperationCommentServiceListThreads:  {},
+		bbscontentv1.OperationCommentServiceListReplies:  {},
+		bbscontentv1.OperationCommentServiceListTimeline: {},
+		bbscontentv1.OperationDomainServiceList:          {},
+		bbscontentv1.OperationTagServiceList:             {},
+		bbscontentv1.OperationTagServiceListArticleTags:  {},
+		bbscontentv1.OperationPostscriptServiceList:      {},
+		bbsuserv1.OperationOtpServiceSendEmailOtp:        {},
+		bbsuserv1.OperationOtpServiceSendPhoneOtp:        {},
+		bbsuserv1.OperationRelationServiceGetStatus:      {},
+	}
 	operationAuthGroups := map[string]string{}
-	for operation := range bbsHTTPPublicOperations {
+	for operation := range publicOperations {
 		operationAuthGroups[operation] = "public"
 	}
-	for operation := range bbsHTTPOptionalAuthOperations {
+	for operation := range optionalAuthOperations {
 		if group, ok := operationAuthGroups[operation]; ok {
 			panic(fmt.Sprintf("bbs http operation auth group conflict: %s in %s and optional", operation, group))
 		}
 		operationAuthGroups[operation] = "optional"
 	}
 	authRequiredMatch := func(_ context.Context, operation string) bool {
-		if _, ok := bbsHTTPPublicOperations[operation]; ok {
+		if _, ok := publicOperations[operation]; ok {
 			return false
 		}
-		if _, ok := bbsHTTPOptionalAuthOperations[operation]; ok {
+		if _, ok := optionalAuthOperations[operation]; ok {
 			return false
 		}
 		return true
 	}
 	optionalAuthMatch := func(_ context.Context, operation string) bool {
-		_, ok := bbsHTTPOptionalAuthOperations[operation]
+		_, ok := optionalAuthOperations[operation]
 		return ok
 	}
 
@@ -94,13 +92,14 @@ func NewHTTPServer(
 	middlewares = append(middlewares, NewHTTPAuthMiddlewares(authClient)...)
 	middlewares = append(middlewares, validate.ProtoValidate())
 
+	errorMessages := NewBBSErrorMessages()
 	var opts = []kratoshttp.ServerOption{
 		kratoshttp.Filter(server.HTTPTraceMiddleware(), server.HTTPAccessLogMiddleware(logger)),
 		kratoshttp.Middleware(middlewares...),
 		kratoshttp.RequestDecoder(server.ProtoJSONRequestDecoder),
 		kratoshttp.ResponseEncoder(server.HttpRespEncoder),
 		kratoshttp.ErrorEncoder(server.HttpErrorEncoder(func(r *stdhttp.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string {
-			return bbsErrorMessages.Resolve(r, code, data)
+			return errorMessages.Resolve(r, code, data)
 		})),
 	}
 	if c.Http.Network != "" {

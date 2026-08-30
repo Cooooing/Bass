@@ -3,17 +3,8 @@ package usecase
 import (
 	"context"
 	"game_idle/internal/biz/model"
+	"game_idle/internal/enum"
 	"time"
-)
-
-// StateEventType 表示状态机产生的领域事件类型。
-type StateEventType string
-
-const (
-	StateEventTypeActionQueueChanged StateEventType = "action_queue.changed" // 行动队列变化
-	StateEventTypeItemsChanged       StateEventType = "items.changed"        // 物品变化
-	StateEventTypeAbilityExpGained   StateEventType = "ability.exp_gained"   // 能力经验变化
-	StateEventTypeAbilityLeveledUp   StateEventType = "ability.leveled_up"   // 能力升级
 )
 
 // StateEventHandler 处理领域事件，并可继续产生新的领域事件。
@@ -23,7 +14,7 @@ type StateEventHandler interface {
 
 // StateEvent 是状态机内部事件，不直接等同于 NATS 对外事件。
 type StateEvent struct {
-	Type               StateEventType
+	Type               enum.StateEventType
 	ActionQueueChanged *ActionQueueChangedStateEvent
 	ItemsChanged       *ItemsChangedStateEvent
 	AbilityExpGained   *AbilityExpGainedStateEvent

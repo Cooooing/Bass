@@ -36,19 +36,19 @@ var BizProviderSet = wire.NewSet(
 func ProvideStateCommandHandlers(
 	actionSettlementHandler *usecase.ActionSettlementHandler,
 	actionQueueCommandHandler *usecase.ActionQueueCommandHandler,
-) map[usecase.StateCommandType]usecase.StateCommandHandler {
-	return map[usecase.StateCommandType]usecase.StateCommandHandler{
-		usecase.StateCommandTypeActionSettlement:        actionSettlementHandler,
-		usecase.StateCommandTypeActionQueueAdd:          actionQueueCommandHandler,
-		usecase.StateCommandTypeActionQueueMove:         actionQueueCommandHandler,
-		usecase.StateCommandTypeActionQueueRemove:       actionQueueCommandHandler,
-		usecase.StateCommandTypeActionQueueClear:        actionQueueCommandHandler,
-		usecase.StateCommandTypeActionQueueCompleteHead: actionQueueCommandHandler,
+) map[enum.StateCommandType]usecase.StateCommandHandler {
+	return map[enum.StateCommandType]usecase.StateCommandHandler{
+		enum.StateCommandTypeActionSettlement:        actionSettlementHandler,
+		enum.StateCommandTypeActionQueueAdd:          actionQueueCommandHandler,
+		enum.StateCommandTypeActionQueueMove:         actionQueueCommandHandler,
+		enum.StateCommandTypeActionQueueRemove:       actionQueueCommandHandler,
+		enum.StateCommandTypeActionQueueClear:        actionQueueCommandHandler,
+		enum.StateCommandTypeActionQueueCompleteHead: actionQueueCommandHandler,
 	}
 }
 
-func ProvideStateEventHandlers() map[usecase.StateEventType][]usecase.StateEventHandler {
-	return map[usecase.StateEventType][]usecase.StateEventHandler{}
+func ProvideStateEventHandlers() map[enum.StateEventType][]usecase.StateEventHandler {
+	return map[enum.StateEventType][]usecase.StateEventHandler{}
 }
 
 func ProvideActionTasks(

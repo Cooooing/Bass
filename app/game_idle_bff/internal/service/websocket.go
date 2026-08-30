@@ -20,13 +20,12 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-const webSocketPath = "/ws"
-const webSocketReadLimit = 64 * 1024
-
 type WebSocketService struct {
 	logger           *slog.Logger
 	webSocketUsecase *usecase.WebSocketUsecase
 	upgrader         websocket.Upgrader
+	path             string
+	readLimit        int64
 }
 
 type WebSocketResponse struct {
@@ -46,6 +45,8 @@ func NewWebSocketService(
 	return &WebSocketService{
 		logger:           logger,
 		webSocketUsecase: webSocketUsecase,
+		path:             "/ws",
+		readLimit:        64 * 1024,
 		upgrader: websocket.Upgrader{
 			HandshakeTimeout: 5 * time.Second,
 			CheckOrigin: func(*stdhttp.Request) bool {
@@ -59,8 +60,8 @@ func (s *WebSocketService) RegisterGrpc(*grpc.Server) {
 }
 
 func (s *WebSocketService) RegisterHttp(hs *http.Server) {
-	hs.Handle(webSocketPath, stdhttp.HandlerFunc(s.Handle))
-	s.logger.Info("game idle bff websocket endpoint registered", slog.String(constant.LogFieldPath, webSocketPath))
+	hs.Handle(s.path, stdhttp.HandlerFunc(s.Handle))
+	s.logger.Info("game idle bff websocket endpoint registered", slog.String(constant.LogFieldPath, s.path))
 }
 
 func (s *WebSocketService) Handle(w stdhttp.ResponseWriter, r *stdhttp.Request) {
@@ -95,7 +96,7 @@ func (s *WebSocketService) Handle(w stdhttp.ResponseWriter, r *stdhttp.Request) 
 	connection := s.webSocketUsecase.Connect(connCtx, characterID, ticket.Ticket)
 	defer s.webSocketUsecase.Disconnect(connCtx, connection, timeout.Load())
 
-	conn.SetReadLimit(webSocketReadLimit)
+	conn.SetReadLimit(s.readLimit)
 	_ = conn.SetReadDeadline(time.Now().Add(s.webSocketUsecase.PingInterval(connCtx) + s.webSocketUsecase.WriteTimeout(connCtx)))
 	conn.SetPongHandler(func(string) error {
 		if sessionID, online := connection.OnlineSession(); online {

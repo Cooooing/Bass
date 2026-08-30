@@ -30,6 +30,8 @@ type WebSocketUsecase struct {
 	commandHandlers  WebSocketCommandHandlers
 	pingInterval     time.Duration
 	writeTimeout     time.Duration
+	ticketTTL        time.Duration
+	sendBufferSize   int
 	characters       map[int64]map[string]*WebSocketConnection
 	sessions         map[string]*WebSocketConnection
 	subscription     repo.WebSocketEventSubscription
@@ -66,13 +68,12 @@ func NewWebSocketUsecase(
 		commandHandlers:  commandHandlers,
 		pingInterval:     pingInterval,
 		writeTimeout:     writeTimeout,
+		ticketTTL:        2 * time.Minute,
+		sendBufferSize:   4,
 		characters:       map[int64]map[string]*WebSocketConnection{},
 		sessions:         map[string]*WebSocketConnection{},
 	}
 }
-
-const webSocketConnectionSendBufferSize = 4
-const webSocketTicketTTL = 2 * time.Minute
 
 type WebSocketConnection struct {
 	CharacterID  int64
@@ -117,9 +118,9 @@ func (u *WebSocketUsecase) CreateTicket(ctx context.Context, req *CreateWebSocke
 	ticket := &model.WebSocketTicket{
 		CharacterID:       req.CharacterID,
 		Ticket:            uuid.NewString(),
-		RemainingDuration: webSocketTicketTTL,
+		RemainingDuration: u.ticketTTL,
 	}
-	if err = u.ticketRepo.Save(ctx, ticket.CharacterID, ticket.Ticket, webSocketTicketTTL); err != nil {
+	if err = u.ticketRepo.Save(ctx, ticket.CharacterID, ticket.Ticket, u.ticketTTL); err != nil {
 		return nil, err
 	}
 	return ticket, nil
@@ -237,7 +238,7 @@ func (u *WebSocketUsecase) Connect(ctx context.Context, characterID int64, ticke
 	connection := &WebSocketConnection{
 		CharacterID: characterID,
 		Ticket:      ticket,
-		Messages:    make(chan *WebSocketSendMessage, webSocketConnectionSendBufferSize),
+		Messages:    make(chan *WebSocketSendMessage, u.sendBufferSize),
 		Closed:      make(chan struct{}),
 		SendTimeout: u.writeTimeout,
 	}

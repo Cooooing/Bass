@@ -24,14 +24,13 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-var gameIdleBffHTTPPublicOperations = map[string]struct{}{
-	v1.OperationAuthServiceRegister: {},
-	v1.OperationAuthServiceLogin:    {},
-}
-
 func NewHTTPAuthMiddlewares(authClient *rpc.UserClient) []middleware.Middleware {
+	publicOperations := map[string]struct{}{
+		v1.OperationAuthServiceRegister: {},
+		v1.OperationAuthServiceLogin:    {},
+	}
 	authRequiredMatch := func(_ context.Context, operation string) bool {
-		_, ok := gameIdleBffHTTPPublicOperations[operation]
+		_, ok := publicOperations[operation]
 		return !ok
 	}
 

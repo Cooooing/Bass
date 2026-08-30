@@ -11,17 +11,17 @@ import (
 
 var _ repo.ConfigVersionRepo = (*ConfigVersionRepo)(nil)
 
-const configVersionRedisTTL = time.Hour
-
 type ConfigVersionRepo struct {
 	redisClient *commonclient.RedisClient
 	redisKey    string
+	redisTTL    time.Duration
 }
 
 func NewConfigVersionRepo(redisClient *commonclient.RedisClient) repo.ConfigVersionRepo {
 	return &ConfigVersionRepo{
 		redisClient: redisClient,
 		redisKey:    "game_idle_bff:config:version",
+		redisTTL:    time.Hour,
 	}
 }
 
@@ -34,5 +34,5 @@ func (r *ConfigVersionRepo) Get(ctx context.Context) (string, error) {
 }
 
 func (r *ConfigVersionRepo) Save(ctx context.Context, version string) error {
-	return r.redisClient.Client.Set(ctx, r.redisKey, version, configVersionRedisTTL).Err()
+	return r.redisClient.Client.Set(ctx, r.redisKey, version, r.redisTTL).Err()
 }

@@ -24,7 +24,7 @@ func ProvideServers(grpcServer *grpc.Server, httpServer *http.Server, registry *
 	}
 	internalServers := registry.Servers()
 	if len(internalServers) > 0 {
-		servers = append(servers, newInternalServer(internalServers))
+		servers = append(servers, NewInternalServer(internalServers))
 	}
 	return servers
 }
@@ -34,7 +34,7 @@ type internalServer struct {
 	started []transport.Server
 }
 
-func newInternalServer(servers []transport.Server) *internalServer {
+func NewInternalServer(servers []transport.Server) *internalServer {
 	return &internalServer{servers: servers}
 }
 

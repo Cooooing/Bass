@@ -13,14 +13,13 @@ import (
 	"time"
 )
 
-const configCacheTTL = 60 * time.Minute
-
 type ConfigUsecase struct {
 	logger         *slog.Logger
 	regionRepo     repo.RegionRepo
 	actionRepo     repo.ActionRepo
 	itemRepo       repo.ItemRepo
 	versionRepo    repo.ConfigVersionRepo
+	cacheTTL       time.Duration
 	cache          *model.GameConfig
 	cacheExpiresAt time.Time
 	lock           sync.RWMutex
@@ -39,6 +38,7 @@ func NewConfigUsecase(
 		actionRepo:  actionRepo,
 		itemRepo:    itemRepo,
 		versionRepo: versionRepo,
+		cacheTTL:    60 * time.Minute,
 	}
 }
 
@@ -97,7 +97,7 @@ func (u *ConfigUsecase) current(ctx context.Context) (*model.GameConfig, error) 
 		return nil, err
 	}
 	u.cache = row
-	u.cacheExpiresAt = now.Add(configCacheTTL)
+	u.cacheExpiresAt = now.Add(u.cacheTTL)
 	if err = u.versionRepo.Save(ctx, row.ConfigVersion); err != nil {
 		u.logger.WarnContext(ctx, "game idle bff config version save failed", "err", err)
 	}
@@ -111,7 +111,7 @@ func (u *ConfigUsecase) reload(ctx context.Context) (*model.GameConfig, error) {
 	}
 	u.lock.Lock()
 	u.cache = row
-	u.cacheExpiresAt = time.Now().Add(configCacheTTL)
+	u.cacheExpiresAt = time.Now().Add(u.cacheTTL)
 	u.lock.Unlock()
 	if err = u.versionRepo.Save(ctx, row.ConfigVersion); err != nil {
 		u.logger.WarnContext(ctx, "game idle bff config version save failed", "err", err)

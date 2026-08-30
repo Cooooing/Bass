@@ -15,12 +15,11 @@ import (
 	"github.com/google/uuid"
 )
 
-var characterNamePattern = regexp.MustCompile("^[A-Za-z0-9_]{4,32}$")
-
 type CharacterUsecase struct {
 	characterRepo              repo.CharacterRepo
 	characterSessionRepo       repo.CharacterSessionRepo
 	eventUsecase               *GameIdleEventUsecase
+	namePattern                *regexp.Regexp
 	maxCharacterCountPerUser   int32
 	defaultActionQueueCapacity int32
 	defaultMaxOfflineDuration  time.Duration
@@ -53,6 +52,7 @@ func NewCharacterUsecase(
 		characterRepo:              characterRepo,
 		characterSessionRepo:       characterSessionRepo,
 		eventUsecase:               eventUsecase,
+		namePattern:                regexp.MustCompile("^[A-Za-z0-9_]{4,32}$"),
 		maxCharacterCountPerUser:   maxCharacterCountPerUser,
 		defaultActionQueueCapacity: defaultActionQueueCapacity,
 		defaultMaxOfflineDuration:  defaultMaxOfflineDuration,
@@ -66,7 +66,7 @@ type CreateCharacterReq struct {
 }
 
 func (u *CharacterUsecase) Create(ctx context.Context, req *CreateCharacterReq) (*model.Character, error) {
-	if req.UserID <= 0 || !characterNamePattern.MatchString(req.Name) {
+	if req.UserID <= 0 || !u.namePattern.MatchString(req.Name) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_CHARACTER_INVALID)
 	}
 	rows, err := u.characterRepo.List(ctx, &repo.ListCharacterReq{

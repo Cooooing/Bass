@@ -18,8 +18,8 @@ type ActionSettlementCommand struct {
 	ExpReward   int64
 }
 
-func (c *ActionSettlementCommand) StateCommandType() StateCommandType {
-	return StateCommandTypeActionSettlement
+func (c *ActionSettlementCommand) StateCommandType() enum.StateCommandType {
+	return enum.StateCommandTypeActionSettlement
 }
 
 // ActionSettlementHandler 原子应用行动结算，并把结果转换为状态机领域事件。
@@ -60,7 +60,7 @@ func (r *ActionSettlementHandler) changeSet(characterID int64, settlement *model
 	}
 	if len(settlement.ItemChanges) > 0 {
 		changeSet.Events = append(changeSet.Events, &StateEvent{
-			Type: StateEventTypeItemsChanged,
+			Type: enum.StateEventTypeItemsChanged,
 			ItemsChanged: &ItemsChangedStateEvent{
 				CharacterID: characterID,
 				Changes:     settlement.ItemChanges,
@@ -69,7 +69,7 @@ func (r *ActionSettlementHandler) changeSet(characterID int64, settlement *model
 	}
 	if len(settlement.AbilityChanges) > 0 {
 		changeSet.Events = append(changeSet.Events, &StateEvent{
-			Type: StateEventTypeAbilityExpGained,
+			Type: enum.StateEventTypeAbilityExpGained,
 			AbilityExpGained: &AbilityExpGainedStateEvent{
 				CharacterID: characterID,
 				Changes:     settlement.AbilityChanges,
@@ -78,7 +78,7 @@ func (r *ActionSettlementHandler) changeSet(characterID int64, settlement *model
 	}
 	if settlement.AbilityLeveledUp != nil {
 		changeSet.Events = append(changeSet.Events, &StateEvent{
-			Type:             StateEventTypeAbilityLeveledUp,
+			Type:             enum.StateEventTypeAbilityLeveledUp,
 			AbilityLeveledUp: settlement.AbilityLeveledUp,
 		})
 	}

@@ -9,20 +9,17 @@ import (
 	"time"
 )
 
-const (
-	metadataCacheRefreshInterval = time.Hour
-	metadataCacheRefreshJitter   = 5 * time.Minute
-)
-
 type MetadataCacheUsecase struct {
-	logger     *slog.Logger
-	actionRepo repo.ActionRepo
-	regionRepo repo.RegionRepo
-	itemRepo   repo.ItemRepo
-	recipeRepo repo.RecipeRepo
-	mutex      sync.Mutex
-	stop       context.CancelFunc
-	running    bool
+	logger          *slog.Logger
+	actionRepo      repo.ActionRepo
+	regionRepo      repo.RegionRepo
+	itemRepo        repo.ItemRepo
+	recipeRepo      repo.RecipeRepo
+	refreshInterval time.Duration
+	refreshJitter   time.Duration
+	mutex           sync.Mutex
+	stop            context.CancelFunc
+	running         bool
 }
 
 func NewMetadataCacheUsecase(
@@ -33,11 +30,13 @@ func NewMetadataCacheUsecase(
 	recipeRepo repo.RecipeRepo,
 ) *MetadataCacheUsecase {
 	return &MetadataCacheUsecase{
-		logger:     logger,
-		actionRepo: actionRepo,
-		regionRepo: regionRepo,
-		itemRepo:   itemRepo,
-		recipeRepo: recipeRepo,
+		logger:          logger,
+		actionRepo:      actionRepo,
+		regionRepo:      regionRepo,
+		itemRepo:        itemRepo,
+		recipeRepo:      recipeRepo,
+		refreshInterval: time.Hour,
+		refreshJitter:   5 * time.Minute,
 	}
 }
 
@@ -99,7 +98,7 @@ func (u *MetadataCacheUsecase) refreshLoop(ctx context.Context) {
 			return
 		case <-timer.C:
 			u.refreshLocal(ctx)
-			timer.Reset(metadataCacheRefreshInterval + u.refreshDelay())
+			timer.Reset(u.refreshInterval + u.refreshDelay())
 		}
 	}
 }
@@ -120,5 +119,5 @@ func (u *MetadataCacheUsecase) refreshLocal(ctx context.Context) {
 }
 
 func (u *MetadataCacheUsecase) refreshDelay() time.Duration {
-	return time.Duration(time.Now().UnixNano() % int64(metadataCacheRefreshJitter))
+	return time.Duration(time.Now().UnixNano() % int64(u.refreshJitter))
 }

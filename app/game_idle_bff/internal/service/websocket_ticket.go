@@ -17,6 +17,7 @@ import (
 type WebSocketTicketService struct {
 	v1.UnimplementedWebSocketServiceServer
 	webSocketUsecase *usecase.WebSocketUsecase
+	path             string
 }
 
 func NewWebSocketTicketService(
@@ -24,6 +25,7 @@ func NewWebSocketTicketService(
 ) *WebSocketTicketService {
 	return &WebSocketTicketService{
 		webSocketUsecase: webSocketUsecase,
+		path:             "/ws",
 	}
 }
 
@@ -50,6 +52,6 @@ func (s *WebSocketTicketService) CreateTicket(ctx context.Context, req *v1.Creat
 		CharacterId:      ticket.CharacterID,
 		Ticket:           ticket.Ticket,
 		ExpiresInSeconds: int64(ticket.RemainingDuration.Seconds()),
-		Path:             webSocketPath,
+		Path:             s.path,
 	}, nil
 }

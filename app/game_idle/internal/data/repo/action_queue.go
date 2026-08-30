@@ -16,8 +16,6 @@ import (
 
 var _ bizrepo.ActionQueueRepo = (*ActionQueueRepo)(nil)
 
-const actionQueueLoadedField = "__loaded"
-
 type ActionQueueRepo struct {
 	db          *gen.Client
 	redisClient *commonclient.RedisClient
@@ -29,6 +27,7 @@ type actionQueueRedisKeys struct {
 	queueItemIDsFormat   string
 	queueItemsFormat     string
 	queueItemFieldJoiner string
+	loadedField          string
 }
 
 func NewActionQueueRepo(db *gen.Client, redisClient *commonclient.RedisClient) bizrepo.ActionQueueRepo {
@@ -40,6 +39,7 @@ func NewActionQueueRepo(db *gen.Client, redisClient *commonclient.RedisClient) b
 			queueItemIDsFormat:   "game_idle:character:{character_id:%d}:action_queue:item_ids",
 			queueItemsFormat:     "game_idle:character:{character_id:%d}:action_queue:items",
 			queueItemFieldJoiner: ":",
+			loadedField:          "__loaded",
 		},
 	}
 }
@@ -169,7 +169,7 @@ func (r *ActionQueueRepo) saveRedis(ctx context.Context, queue *model.ActionQueu
 	_, err := r.redisClient.Client.TxPipelined(ctx, func(pipe redis.Pipeliner) error {
 		pipe.Del(ctx, r.queueItemIDsRedisKey(queue.CharacterID), r.queueItemsRedisKey(queue.CharacterID))
 		pipe.SAdd(ctx, r.keys.characters, queue.CharacterID)
-		pipe.HSet(ctx, r.queueItemsRedisKey(queue.CharacterID), actionQueueLoadedField, "1")
+		pipe.HSet(ctx, r.queueItemsRedisKey(queue.CharacterID), r.keys.loadedField, "1")
 		for _, item := range queue.Items {
 			pipe.RPush(ctx, r.queueItemIDsRedisKey(queue.CharacterID), item.ID)
 			pipe.HSet(ctx, r.queueItemsRedisKey(queue.CharacterID), r.queueItemFields(item))
@@ -180,7 +180,7 @@ func (r *ActionQueueRepo) saveRedis(ctx context.Context, queue *model.ActionQueu
 }
 
 func (r *ActionQueueRepo) isRedisLoaded(ctx context.Context, characterID int64) (bool, error) {
-	return r.redisClient.Client.HExists(ctx, r.queueItemsRedisKey(characterID), actionQueueLoadedField).Result()
+	return r.redisClient.Client.HExists(ctx, r.queueItemsRedisKey(characterID), r.keys.loadedField).Result()
 }
 
 func (r *ActionQueueRepo) emptyQueue(characterID int64) *model.ActionQueue {

@@ -29,10 +29,10 @@ func (Action) Annotations() []schema.Annotation {
 
 func (Action) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").Comment("行动编码").MaxLen(64).NotEmpty().Immutable().Unique(),
-		field.String("name").Comment("行动名称").MaxRuneLen(128).NotEmpty(),
-		field.String("description").Comment("行动描述").MaxRuneLen(1024).Default(""),
-		field.String("region_id").Comment("展示区域编码").MaxLen(64).Nillable().Optional(),
+		field.String("id").Comment("行动编码").Immutable().Unique(),
+		field.String("name").Comment("行动名称"),
+		field.String("description").Comment("行动描述").Default(""),
+		field.String("region_id").Comment("展示区域编码").Nillable().Optional(),
 		field.Enum("action_kind").
 			Values(gameenum.ActionKindValues()...).
 			Default(gameenum.ActionKindForaging.String()).
@@ -42,9 +42,9 @@ func (Action) Fields() []ent.Field {
 			Comment("行动等级对应能力编码").
 			Nillable().
 			Optional(),
-		field.Int32("required_ability_level").Comment("要求能力等级").NonNegative().Default(0),
-		field.Int32("duration_seconds").Comment("基础耗时秒数").Positive(),
-		field.Int64("exp_reward").Comment("完成后获得经验").NonNegative().Default(0),
+		field.Int32("required_ability_level").Comment("要求能力等级").Default(0),
+		field.Int32("duration_seconds").Comment("基础耗时秒数"),
+		field.Int64("exp_reward").Comment("完成后获得经验").Default(0),
 		field.Bool("enabled").Comment("是否启用").Default(true),
 		field.Int32("sort").Comment("排序值").Default(0),
 	}

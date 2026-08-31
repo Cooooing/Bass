@@ -7,6 +7,7 @@ option go_package = "common/proto/gen/game_idle/v1;v1";
 service ActionService {
   rpc List(ListActions.Request) returns (ListActions.Resp) {}
   rpc GetDetail(GetActionDetail.Request) returns (GetActionDetail.Resp) {}
+  rpc Refresh(RefreshActions.Request) returns (RefreshActions.Resp) {}
 }
 
 message ListActions {
@@ -25,6 +26,12 @@ message GetActionDetail {
   message Resp {
     ActionDetail row = 1; // 行动详情
   }
+}
+
+message RefreshActions {
+  message Request {}
+
+  message Resp {}
 }
 
 message Action {

@@ -27,7 +27,19 @@ func (r *ActionRepo) List(ctx context.Context) ([]*model.ActionConfig, error) {
 	}
 	rows := make([]*model.ActionConfig, 0, len(reply.GetRows()))
 	for _, row := range reply.GetRows() {
-		rows = append(rows, r.buildActionConfig(row))
+		rows = append(rows, &model.ActionConfig{
+			ActionID:             row.GetActionId(),
+			Name:                 row.GetName(),
+			Description:          row.GetDescription(),
+			RegionID:             row.GetRegionId(),
+			ActionKind:           row.GetActionKind(),
+			AbilityID:            row.GetAbilityId(),
+			RequiredAbilityLevel: row.GetRequiredAbilityLevel(),
+			DurationSeconds:      row.GetDurationSeconds(),
+			ExpReward:            row.GetExpReward(),
+			Enabled:              row.GetEnabled(),
+			Sort:                 row.GetSort(),
+		})
 	}
 	return rows, nil
 }
@@ -41,7 +53,19 @@ func (r *ActionRepo) GetDetail(ctx context.Context, actionID string) (*model.Act
 	}
 	row := reply.GetRow()
 	out := &model.ActionDetailConfig{
-		Action:  r.buildActionConfig(row.GetAction()),
+		Action: &model.ActionConfig{
+			ActionID:             row.GetAction().GetActionId(),
+			Name:                 row.GetAction().GetName(),
+			Description:          row.GetAction().GetDescription(),
+			RegionID:             row.GetAction().GetRegionId(),
+			ActionKind:           row.GetAction().GetActionKind(),
+			AbilityID:            row.GetAction().GetAbilityId(),
+			RequiredAbilityLevel: row.GetAction().GetRequiredAbilityLevel(),
+			DurationSeconds:      row.GetAction().GetDurationSeconds(),
+			ExpReward:            row.GetAction().GetExpReward(),
+			Enabled:              row.GetAction().GetEnabled(),
+			Sort:                 row.GetAction().GetSort(),
+		},
 		Recipes: make([]*model.ActionRecipeConfig, 0, len(row.GetRecipes())),
 	}
 	for _, recipe := range row.GetRecipes() {
@@ -76,20 +100,4 @@ func (r *ActionRepo) GetDetail(ctx context.Context, actionID string) (*model.Act
 		out.Recipes = append(out.Recipes, recipeRow)
 	}
 	return out, nil
-}
-
-func (r *ActionRepo) buildActionConfig(row *gameidlev1.Action) *model.ActionConfig {
-	return &model.ActionConfig{
-		ActionID:             row.GetActionId(),
-		Name:                 row.GetName(),
-		Description:          row.GetDescription(),
-		RegionID:             row.GetRegionId(),
-		ActionKind:           row.GetActionKind(),
-		AbilityID:            row.GetAbilityId(),
-		RequiredAbilityLevel: row.GetRequiredAbilityLevel(),
-		DurationSeconds:      row.GetDurationSeconds(),
-		ExpReward:            row.GetExpReward(),
-		Enabled:              row.GetEnabled(),
-		Sort:                 row.GetSort(),
-	}
 }

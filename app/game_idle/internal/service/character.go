@@ -17,12 +17,12 @@ import (
 type CharacterService struct {
 	v1.UnimplementedCharacterServiceServer
 	characterUsecase       *usecase.CharacterUsecase
-	actionSchedulerUsecase *usecase.ActionSchedulerUsecase
+	actionSchedulerUsecase *usecase.CharacterActionSchedulerUsecase
 }
 
 func NewCharacterService(
 	characterUsecase *usecase.CharacterUsecase,
-	actionSchedulerUsecase *usecase.ActionSchedulerUsecase,
+	actionSchedulerUsecase *usecase.CharacterActionSchedulerUsecase,
 ) *CharacterService {
 	return &CharacterService{
 		characterUsecase:       characterUsecase,

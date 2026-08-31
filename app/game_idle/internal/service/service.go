@@ -11,26 +11,26 @@ var ServiceProviderSet = wire.NewSet(
 	NewCommonSystemService,
 	NewCharacterService,
 	NewCharacterAbilityService,
-	NewBackpackService,
-	NewActionQueueService,
+	NewCharacterBackpackService,
+	NewCharacterActionQueueService,
 	NewChatService,
-	NewRegionService,
-	NewActionService,
-	NewItemService,
-	NewMetadataCacheService,
+	NewMetaRegionService,
+	NewMetaActionService,
+	NewMetaItemService,
+	NewMetaRecipeService,
 )
 
 func ProvideServices(
 	commonSystemService *CommonSystemService,
 	characterService *CharacterService,
 	characterAbilityService *CharacterAbilityService,
-	backpackService *BackpackService,
-	actionQueueService *ActionQueueService,
+	backpackService *CharacterBackpackService,
+	actionQueueService *CharacterActionQueueService,
 	chatService *ChatService,
-	regionService *RegionService,
-	actionService *ActionService,
-	itemService *ItemService,
-	metadataCacheService *MetadataCacheService,
+	regionService *MetaRegionService,
+	actionService *MetaActionService,
+	itemService *MetaItemService,
+	recipeService *MetaRecipeService,
 ) []server.Service {
 	return []server.Service{
 		commonSystemService,
@@ -42,6 +42,6 @@ func ProvideServices(
 		regionService,
 		actionService,
 		itemService,
-		metadataCacheService,
+		recipeService,
 	}
 }

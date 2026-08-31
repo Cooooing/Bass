@@ -7,5 +7,5 @@ import (
 
 // GameIdleEventRepo 发布挂机游戏内部事件。
 type GameIdleEventRepo interface {
-	Publish(ctx context.Context, event *model.GameIdleEvent) error
+	Publish(ctx context.Context, message *model.GameIdleEventMessage) error
 }

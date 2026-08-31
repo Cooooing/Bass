@@ -30,10 +30,10 @@ func (CharacterActionQueue) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("character_id").Comment("角色 ID"),
-		field.String("queue_item_id").Comment("队列项编码").MaxLen(128).NotEmpty(),
-		field.String("action_id").Comment("行动编码").MaxLen(64).NotEmpty(),
+		field.String("queue_item_id").Comment("队列项编码"),
+		field.String("action_id").Comment("行动编码"),
 		field.Int64("times").Comment("剩余执行次数，-1 表示无限执行"),
-		field.Int32("position").Comment("队列位置").NonNegative(),
+		field.Int32("position").Comment("队列位置"),
 		field.Time("queued_at").Comment("队列项创建时间"),
 	}
 }

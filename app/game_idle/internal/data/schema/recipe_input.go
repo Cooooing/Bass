@@ -28,10 +28,10 @@ func (RecipeInput) Annotations() []schema.Annotation {
 
 func (RecipeInput) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").Comment("配方输入编码").MaxLen(96).NotEmpty().Immutable().Unique(),
-		field.String("recipe_id").Comment("配方编码").MaxLen(64),
-		field.String("item_id").Comment("输入物品编码").MaxLen(64),
-		field.Int64("quantity").Comment("输入数量").Positive(),
+		field.String("id").Comment("配方输入编码").Immutable().Unique(),
+		field.String("recipe_id").Comment("配方编码"),
+		field.String("item_id").Comment("输入物品编码"),
+		field.Int64("quantity").Comment("输入数量"),
 		field.Int32("sort").Comment("排序值").Default(0),
 	}
 }

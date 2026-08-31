@@ -33,10 +33,10 @@ func (ChatMessage) Fields() []ent.Field {
 			Values(gameenum.ChatChannelTypeValues()...).
 			Default(gameenum.ChatChannelTypeWorld.String()).
 			Comment("频道类型"),
-		field.String("channel_id").Comment("频道标识").MaxLen(128).NotEmpty(),
-		field.Int64("sender_character_id").Comment("发送角色 ID").Positive(),
-		field.Int64("receiver_character_id").Comment("接收角色 ID").Positive().Optional().Nillable(),
-		field.String("content").Comment("消息内容").MaxRuneLen(500).NotEmpty(),
+		field.String("channel_id").Comment("频道标识"),
+		field.Int64("sender_character_id").Comment("发送角色 ID"),
+		field.Int64("receiver_character_id").Comment("接收角色 ID").Optional().Nillable(),
+		field.String("content").Comment("消息内容"),
 		field.Enum("status").
 			Values(gameenum.ChatMessageStatusValues()...).
 			Default(gameenum.ChatMessageStatusNormal.String()).

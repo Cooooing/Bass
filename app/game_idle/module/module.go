@@ -22,7 +22,7 @@ var ProviderSet = wire.NewSet(
 	biz.BizProviderSet,
 	service.ServiceProviderSet,
 	gameidleserver.NewTimeWheelServer,
-	gameidleserver.NewActionQueueServer,
+	gameidleserver.NewCharacterActionQueueServer,
 	ProvideModuleServers,
 	newModule,
 )
@@ -52,7 +52,7 @@ func provideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
 // ProvideModuleServers 提供模块内部随生命周期启动的后台服务。
 func ProvideModuleServers(
 	timeWheelServer *gameidleserver.TimeWheelServer,
-	actionQueueServer *gameidleserver.ActionQueueServer,
+	actionQueueServer *gameidleserver.CharacterActionQueueServer,
 ) []transport.Server {
 	return []transport.Server{
 		timeWheelServer,

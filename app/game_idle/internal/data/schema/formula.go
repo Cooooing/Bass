@@ -27,10 +27,10 @@ func (Formula) Annotations() []schema.Annotation {
 
 func (Formula) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").Comment("公式编码").MaxLen(64).NotEmpty().Immutable().Unique(),
-		field.String("name").Comment("公式名称").MaxRuneLen(128).NotEmpty(),
+		field.String("id").Comment("公式编码").Immutable().Unique(),
+		field.String("name").Comment("公式名称"),
 		field.Text("expression").Comment("Lua 表达式"),
-		field.String("description").Comment("公式描述").MaxRuneLen(1024).Default(""),
+		field.String("description").Comment("公式描述").Default(""),
 		field.Bool("enabled").Comment("是否启用").Default(true),
 		field.Int32("sort").Comment("排序值").Default(0),
 	}

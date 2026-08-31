@@ -12,10 +12,11 @@ type CharacterRepo interface {
 	Get(ctx context.Context, characterID int64) (*model.Character, error)
 	GetName(ctx context.Context, characterID int64) (string, error)
 	List(ctx context.Context, req *ListCharacterReq) ([]*model.Character, error)
-	UpdateLastOfflineAt(ctx context.Context, characterID int64, at time.Time) error
+	UpdateLastOfflineAt(ctx context.Context, characterID int64, at time.Time) (bool, error)
 }
 
 type ListCharacterReq struct {
 	UserID      *int64
 	CharacterID *int64
+	NameKey     *string
 }

@@ -29,13 +29,13 @@ func (Item) Annotations() []schema.Annotation {
 
 func (Item) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").Comment("物品编码").MaxLen(64).NotEmpty().Immutable().Unique(),
-		field.String("name").Comment("物品名称").MaxRuneLen(128).NotEmpty(),
+		field.String("id").Comment("物品编码").Immutable().Unique(),
+		field.String("name").Comment("物品名称"),
 		field.Enum("type").
 			Values(gameenum.ItemTypeValues()...).
 			Default(gameenum.ItemTypeResource.String()).
 			Comment("物品类型"),
-		field.String("description").Comment("物品描述").MaxRuneLen(1024).Default(""),
+		field.String("description").Comment("物品描述").Default(""),
 		field.Bool("enabled").Comment("是否启用").Default(true),
 		field.Int32("sort").Comment("排序值").Default(0),
 	}

@@ -197,7 +197,12 @@ func (u *WebSocketUsecase) Start(ctx context.Context) error {
 	u.cancel = cancel
 	u.running = true
 	u.lock.Unlock()
-	go u.consumeEvents(runCtx, subscription)
+	go func() {
+		<-runCtx.Done()
+		if err := subscription.Unsubscribe(); err != nil {
+			u.logger.Error("game idle bff websocket unsubscribe failed", constant.LogFieldErr, err)
+		}
+	}()
 	return nil
 }
 
@@ -411,13 +416,6 @@ func (u *WebSocketUsecase) SendCommandFailed(ctx context.Context, connection *We
 	})
 }
 
-func (u *WebSocketUsecase) consumeEvents(ctx context.Context, subscription repo.WebSocketEventSubscription) {
-	<-ctx.Done()
-	if err := subscription.Unsubscribe(); err != nil {
-		u.logger.Error("game idle bff websocket unsubscribe failed", constant.LogFieldErr, err)
-	}
-}
-
 func (u *WebSocketUsecase) HandleEvent(ctx context.Context, event *model.WebSocketEvent) (*WebSocketEventResult, error) {
 	handler, ok := u.eventHandlers[event.Type]
 	if !ok {
@@ -446,16 +444,12 @@ func (u *WebSocketUsecase) Deliver(ctx context.Context, message *WebSocketSendMe
 	}
 	u.lock.RUnlock()
 	for _, connection := range connections {
-		u.sendToConnection(ctx, connection, message)
-	}
-}
-
-func (u *WebSocketUsecase) sendToConnection(ctx context.Context, connection *WebSocketConnection, message *WebSocketSendMessage) {
-	if !connection.Send(ctx, message) {
-		u.logger.Warn(
-			"game idle bff websocket send failed",
-			slog.Int64("character_id", connection.CharacterID),
-			slog.String("session_id", message.TargetSessionID),
-		)
+		if !connection.Send(ctx, message) {
+			u.logger.Warn(
+				"game idle bff websocket send failed",
+				slog.Int64("character_id", connection.CharacterID),
+				slog.String("session_id", message.TargetSessionID),
+			)
+		}
 	}
 }

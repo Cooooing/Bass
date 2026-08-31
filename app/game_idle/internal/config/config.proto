@@ -12,7 +12,6 @@ message Bootstrap {
   common.api.app.common.GRPC grpc = 3;
   common.api.app.common.Consul consul = 4;
   common.api.app.common.Database database = 5;
-  common.api.app.common.Redis redis = 6;
   common.api.app.common.Nats nats = 7;
   common.api.app.common.Trace trace = 8;
   common.api.app.common.Observability observability = 9;

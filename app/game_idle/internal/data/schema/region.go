@@ -29,9 +29,9 @@ func (Region) Annotations() []schema.Annotation {
 
 func (Region) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").Comment("区域编码").MaxLen(64).NotEmpty().Immutable().Unique(),
-		field.String("name").Comment("区域名称").MaxRuneLen(128).NotEmpty(),
-		field.String("description").Comment("区域描述").MaxRuneLen(1024).Default(""),
+		field.String("id").Comment("区域编码").Immutable().Unique(),
+		field.String("name").Comment("区域名称"),
+		field.String("description").Comment("区域描述").Default(""),
 		field.Enum("action_kind").
 			Values(gameenum.ActionKindValues()...).
 			Default(gameenum.ActionKindForaging.String()).

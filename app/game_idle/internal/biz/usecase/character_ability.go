@@ -11,11 +11,16 @@ import (
 
 type CharacterAbilityUsecase struct {
 	characterAbilityRepo repo.CharacterAbilityRepo
+	stateUsecase         *CharacterStateUsecase
 }
 
-func NewCharacterAbilityUsecase(characterAbilityRepo repo.CharacterAbilityRepo) *CharacterAbilityUsecase {
+func NewCharacterAbilityUsecase(
+	characterAbilityRepo repo.CharacterAbilityRepo,
+	stateUsecase *CharacterStateUsecase,
+) *CharacterAbilityUsecase {
 	return &CharacterAbilityUsecase{
 		characterAbilityRepo: characterAbilityRepo,
+		stateUsecase:         stateUsecase,
 	}
 }
 
@@ -23,11 +28,19 @@ func (u *CharacterAbilityUsecase) Map(
 	ctx context.Context,
 	characterID int64,
 ) (map[enum.Ability]*model.CharacterAbility, error) {
-	rows, err := u.characterAbilityRepo.Map(ctx, &repo.CharacterAbilityMapReq{
-		CharacterID: characterID,
+	var rows map[enum.Ability]*model.CharacterAbility
+	err := u.stateUsecase.Execute(ctx, characterID, func(runCtx context.Context) error {
+		var err error
+		rows, err = u.characterAbilityRepo.Map(runCtx, &repo.CharacterAbilityMapReq{
+			CharacterID: characterID,
+		})
+		return err
 	})
 	if err != nil {
 		return nil, err
+	}
+	for _, row := range rows {
+		row.NextLevelExp = int64(row.Level) * int64(row.Level) * 100
 	}
 	for _, abilityID := range enum.AbilityValues() {
 		ability := enum.Ability(abilityID)
@@ -45,7 +58,7 @@ func (u *CharacterAbilityUsecase) Map(
 }
 
 func (u *CharacterAbilityUsecase) Persist(ctx context.Context, characterID int64) error {
-	return u.characterAbilityRepo.Persist(ctx, characterID)
+	return u.stateUsecase.Persist(ctx, characterID)
 }
 
 func (u *CharacterAbilityUsecase) CheckLevel(

@@ -6,6 +6,7 @@ option go_package = "common/proto/gen/game_idle/v1;v1";
 
 service RegionService {
   rpc List(ListRegions.Request) returns (ListRegions.Resp) {}
+  rpc Refresh(RefreshRegions.Request) returns (RefreshRegions.Resp) {}
 }
 
 message ListRegions {
@@ -14,6 +15,12 @@ message ListRegions {
   message Resp {
     repeated Region rows = 1; // 区域列表
   }
+}
+
+message RefreshRegions {
+  message Request {}
+
+  message Resp {}
 }
 
 message Region {

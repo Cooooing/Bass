@@ -14,48 +14,53 @@ import (
 
 // RecipeActionTask 构建基于配方结算的行动任务。
 type RecipeActionTask struct {
-	recipeRepo    repo.RecipeRepo
-	backpackRepo  repo.BackpackRepo
-	recipeUsecase *usecase.RecipeUsecase
-	stateEngine   *usecase.StateEngine
+	recipeRepo    repo.MetaRecipeRepo
+	backpackRepo  repo.CharacterBackpackRepo
+	recipeUsecase *usecase.MetaRecipeUsecase
 }
 
 func NewRecipeActionTask(
-	recipeRepo repo.RecipeRepo,
-	backpackRepo repo.BackpackRepo,
-	recipeUsecase *usecase.RecipeUsecase,
-	stateEngine *usecase.StateEngine,
+	recipeRepo repo.MetaRecipeRepo,
+	backpackRepo repo.CharacterBackpackRepo,
+	recipeUsecase *usecase.MetaRecipeUsecase,
 ) *RecipeActionTask {
 	return &RecipeActionTask{
 		recipeRepo:    recipeRepo,
 		backpackRepo:  backpackRepo,
 		recipeUsecase: recipeUsecase,
-		stateEngine:   stateEngine,
 	}
 }
 
-func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActionTaskReq) (*timewheel.Task, error) {
+func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildCharacterActionTaskReq) (*timewheel.Task, error) {
+	// 构建任务时先汇总所有配方输入，避免每个配方单独查询背包造成重复读。
 	inputQuantities := make(map[string]int64, len(req.Action.Recipes))
 	for _, relation := range req.Action.Recipes {
 		recipe, err := t.recipeRepo.Get(ctx, relation.RecipeID)
 		if err != nil {
 			return nil, err
 		}
+		if recipe == nil {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_RECIPE_INVALID)
+		}
 		for _, input := range recipe.Inputs {
 			inputQuantities[input.ItemID] += input.Quantity
 		}
 	}
 	if len(inputQuantities) > 0 {
-		// 行动每一轮进入时间轮前都校验消耗条件。
-		if err := t.backpackRepo.CheckItems(ctx, &repo.BackpackCheckReq{
+		// 行动每一轮进入时间轮前只校验消耗条件，不冻结也不扣减。
+		sufficient, err := t.backpackRepo.CheckItems(ctx, &repo.BackpackCheckReq{
 			CharacterID: req.CharacterID,
 			Items:       inputQuantities,
-		}); err != nil {
+		})
+		if err != nil {
 			return nil, err
+		}
+		if !sufficient {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT)
 		}
 	}
 
-	task := &model.ActionTask{
+	task := &model.CharacterActionTask{
 		TaskID:      req.QueueItem.ID,
 		CharacterID: req.CharacterID,
 		ActionID:    req.QueueItem.ActionID,
@@ -68,18 +73,19 @@ func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActi
 		Job: func(jobCtx context.Context, item *timewheel.Task) error {
 			stopReason := enum.ActionStopReasonNone
 			if len(inputQuantities) > 0 {
-				// 结算前再次校验，避免等待期间背包被其他链路消耗。
-				if err := t.backpackRepo.CheckItems(jobCtx, &repo.BackpackCheckReq{
+				// 结算前再次校验，真正扣减会在状态结算事务里和产出一起原子提交。
+				sufficient, err := t.backpackRepo.CheckItems(jobCtx, &repo.BackpackCheckReq{
 					CharacterID: req.CharacterID,
 					Items:       inputQuantities,
-				}); err != nil {
-					if code, ok := apperror.BusinessCode(err); !ok || code != cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT {
-						return err
-					}
+				})
+				if err != nil {
+					return err
+				}
+				if !sufficient {
 					select {
 					case <-jobCtx.Done():
 						return jobCtx.Err()
-					case req.PendingTasks <- &usecase.PendingActionTask{
+					case req.PendingTasks <- &usecase.PendingCharacterActionTask{
 						CharacterID: req.CharacterID,
 						TaskID:      task.TaskID,
 						ActionID:    task.ActionID,
@@ -90,6 +96,7 @@ func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActi
 				}
 			}
 
+			// 产出先按配方聚合，最终由结算命令一次性应用到角色状态。
 			outputQuantities := make(map[string]int64, len(req.Action.Recipes))
 			for _, relation := range req.Action.Recipes {
 				itemQuantities, err := t.recipeUsecase.RollNormal(jobCtx, &usecase.RollRecipeReq{
@@ -103,47 +110,32 @@ func (t *RecipeActionTask) BuildTask(ctx context.Context, req *usecase.BuildActi
 				}
 			}
 
-			items := make([]*model.BackpackItemChange, 0, len(inputQuantities)+len(outputQuantities))
+			items := make([]*model.CharacterBackpackItemChange, 0, len(inputQuantities)+len(outputQuantities))
 			for itemID, quantity := range inputQuantities {
-				items = append(items, &model.BackpackItemChange{
+				items = append(items, &model.CharacterBackpackItemChange{
 					ItemID:   itemID,
 					Quantity: -quantity,
 				})
 			}
 			for itemID, quantity := range outputQuantities {
-				items = append(items, &model.BackpackItemChange{
+				items = append(items, &model.CharacterBackpackItemChange{
 					ItemID:   itemID,
 					Quantity: quantity,
 				})
 			}
-			// 状态机同步完成扣物品、加产物、加经验等核心状态变化。
-			// TODO 后续在命令里接入钓鱼速度、产量、稀有率等 Buff 对结算的影响。
-			changeSet, err := t.stateEngine.Apply(jobCtx, &usecase.ActionSettlementCommand{
-				CharacterID: req.CharacterID,
-				ActionID:    task.ActionID,
-				Items:       items,
-				AbilityID:   enum.Ability(req.Action.AbilityID),
-				ExpReward:   req.Action.ExpReward,
-			})
-			if err != nil {
-				if code, ok := apperror.BusinessCode(err); ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_IDLE_BACKPACK_INSUFFICIENT {
-					stopReason = enum.ActionStopReasonInsufficientItems
-					changeSet = &usecase.StateChangeSet{}
-				} else {
-					return err
-				}
-			}
 			select {
 			case <-jobCtx.Done():
 				return jobCtx.Err()
-			case req.PendingTasks <- &usecase.PendingActionTask{
-				CharacterID:  req.CharacterID,
-				TaskID:       task.TaskID,
-				ActionID:     task.ActionID,
-				StopReason:   stopReason,
-				StartedAt:    req.Now,
-				CompletedAt:  time.Now(),
-				StateChanges: changeSet,
+			case req.PendingTasks <- &usecase.PendingCharacterActionTask{
+				CharacterID: req.CharacterID,
+				TaskID:      task.TaskID,
+				ActionID:    task.ActionID,
+				StopReason:  stopReason,
+				Items:       items,
+				AbilityID:   enum.Ability(req.Action.AbilityID),
+				ExpReward:   req.Action.ExpReward,
+				StartedAt:   req.Now,
+				CompletedAt: time.Now(),
 			}:
 				return nil
 			}

@@ -4,6 +4,7 @@ import (
 	commonClient "common/pkg/client"
 	"common/pkg/client/timewheel"
 	"common/proto/gen/common"
+	bizrepo "game_idle/internal/biz/repo"
 	"game_idle/internal/config"
 	"game_idle/internal/data/client"
 	"game_idle/internal/data/repo"
@@ -15,7 +16,6 @@ import (
 var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
 	commonClient.NewNatsClient,
-	commonClient.NewRedisClient,
 	ProvideConsul,
 	commonClient.NewConsulClient,
 )
@@ -24,21 +24,21 @@ var DataProviderSet = wire.NewSet(
 var ModuleProviderSet = wire.NewSet(
 	client.NewDataBaseClient,
 	timewheel.NewTimeWheel,
-	ProvideRedis,
 	ProvideNats,
 	ProvideTimeWheel,
+	repo.NewCharacterStateCache,
+	ProvideCharacterStateRepo,
 	client.ProvideTx,
 	repo.NewCharacterRepo,
 	repo.NewCharacterSessionRepo,
 	repo.NewGameIdleEventRepo,
-	repo.NewBackpackRepo,
+	repo.NewCharacterBackpackRepo,
 	repo.NewCharacterAbilityRepo,
-	repo.NewActionSettlementRepo,
-	repo.NewItemRepo,
-	repo.NewRecipeRepo,
-	repo.NewActionRepo,
-	repo.NewRegionRepo,
-	repo.NewActionQueueRepo,
+	repo.NewMetaItemRepo,
+	repo.NewMetaRecipeRepo,
+	repo.NewMetaActionRepo,
+	repo.NewMetaRegionRepo,
+	repo.NewCharacterActionQueueRepo,
 	repo.NewChatMessageRepo,
 )
 
@@ -46,8 +46,8 @@ func ProvideTimeWheel(c *config.Bootstrap) *common.TimeWheel {
 	return c.GetTimewheel()
 }
 
-func ProvideRedis(c *config.Bootstrap) *common.Redis {
-	return c.Redis
+func ProvideCharacterStateRepo(cache *repo.CharacterStateCache) bizrepo.CharacterStateRepo {
+	return cache
 }
 
 func ProvideNats(c *config.Bootstrap) *common.Nats {

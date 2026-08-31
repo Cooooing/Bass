@@ -30,10 +30,10 @@ func (CharacterItem) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("character_id").Comment("角色 ID"),
-		field.String("item_id").Comment("物品编码").MaxLen(64),
-		field.Int64("quantity").Comment("持有数量").NonNegative().Default(0),
-		field.Int64("total_obtained").Comment("累计获取数量").NonNegative().Default(0),
-		field.Int64("total_consumed").Comment("累计消耗数量").NonNegative().Default(0),
+		field.String("item_id").Comment("物品编码"),
+		field.Int64("quantity").Comment("持有数量").Default(0),
+		field.Int64("total_obtained").Comment("累计获取数量").Default(0),
+		field.Int64("total_consumed").Comment("累计消耗数量").Default(0),
 	}
 }
 

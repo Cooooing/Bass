@@ -34,8 +34,8 @@ func (CharacterAbility) Fields() []ent.Field {
 		field.Enum("ability_id").
 			Values(gameenum.AbilityValues()...).
 			Comment("能力编码"),
-		field.Int32("level").Comment("当前等级").Positive().Default(1),
-		field.Int64("exp").Comment("累计经验").NonNegative().Default(0),
+		field.Int32("level").Comment("当前等级").Default(1),
+		field.Int64("exp").Comment("累计经验").Default(0),
 	}
 }
 

@@ -12,32 +12,28 @@ import (
 var BizProviderSet = wire.NewSet(
 	task.NewRecipeActionTask,
 	ProvideStateCommandHandlers,
-	ProvideStateEventHandlers,
 	ProvideActionTasks,
 	usecase.NewCharacterUsecase,
-	usecase.NewBackpackUsecase,
+	usecase.NewCharacterBackpackUsecase,
 	usecase.NewCharacterAbilityUsecase,
 	usecase.NewCharacterStateUsecase,
 	usecase.NewGameIdleEventUsecase,
-	usecase.NewActionSettlementHandler,
-	usecase.NewActionQueueCommandHandler,
-	usecase.NewStateEngine,
-	usecase.NewActionQueueLocker,
-	usecase.NewRecipeUsecase,
-	usecase.NewMetadataCacheUsecase,
-	usecase.NewActionSchedulerUsecase,
-	usecase.NewActionQueueUsecase,
+	usecase.NewCharacterSettlementHandler,
+	usecase.NewCharacterActionQueueCommandHandler,
+	usecase.NewMetaRecipeUsecase,
+	usecase.NewCharacterActionSchedulerUsecase,
+	usecase.NewCharacterActionQueueUsecase,
 	usecase.NewChatUsecase,
-	usecase.NewRegionUsecase,
-	usecase.NewActionUsecase,
-	usecase.NewItemUsecase,
+	usecase.NewMetaRegionUsecase,
+	usecase.NewMetaActionUsecase,
+	usecase.NewMetaItemUsecase,
 )
 
 func ProvideStateCommandHandlers(
-	actionSettlementHandler *usecase.ActionSettlementHandler,
-	actionQueueCommandHandler *usecase.ActionQueueCommandHandler,
-) map[enum.StateCommandType]usecase.StateCommandHandler {
-	return map[enum.StateCommandType]usecase.StateCommandHandler{
+	actionSettlementHandler *usecase.CharacterSettlementHandler,
+	actionQueueCommandHandler *usecase.CharacterActionQueueCommandHandler,
+) map[enum.StateCommandType]usecase.CharacterStateCommandHandler {
+	return map[enum.StateCommandType]usecase.CharacterStateCommandHandler{
 		enum.StateCommandTypeActionSettlement:        actionSettlementHandler,
 		enum.StateCommandTypeActionQueueAdd:          actionQueueCommandHandler,
 		enum.StateCommandTypeActionQueueMove:         actionQueueCommandHandler,
@@ -47,14 +43,10 @@ func ProvideStateCommandHandlers(
 	}
 }
 
-func ProvideStateEventHandlers() map[enum.StateEventType][]usecase.StateEventHandler {
-	return map[enum.StateEventType][]usecase.StateEventHandler{}
-}
-
 func ProvideActionTasks(
 	recipeActionTask *task.RecipeActionTask,
-) map[enum.ActionKind]usecase.ActionTask {
-	return map[enum.ActionKind]usecase.ActionTask{
+) map[enum.ActionKind]usecase.CharacterActionTaskBuilder {
+	return map[enum.ActionKind]usecase.CharacterActionTaskBuilder{
 		enum.ActionKindWoodcutting: recipeActionTask,
 		enum.ActionKindForaging:    recipeActionTask,
 		enum.ActionKindMining:      recipeActionTask,

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common.api.app.game_idle.v1;
+
+option go_package = "common/proto/gen/game_idle/v1;v1";
+
+service RecipeService {
+  rpc Refresh(RefreshRecipes.Request) returns (RefreshRecipes.Resp) {}
+}
+
+message RefreshRecipes {
+  message Request {}
+
+  message Resp {}
+}

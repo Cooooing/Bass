@@ -6,6 +6,7 @@ option go_package = "common/proto/gen/game_idle/v1;v1";
 
 service ItemService {
   rpc List(ListItems.Request) returns (ListItems.Resp) {}
+  rpc Refresh(RefreshItems.Request) returns (RefreshItems.Resp) {}
 }
 
 message ListItems {
@@ -14,6 +15,12 @@ message ListItems {
   message Resp {
     repeated Item rows = 1; // 物品列表
   }
+}
+
+message RefreshItems {
+  message Request {}
+
+  message Resp {}
 }
 
 message Item {

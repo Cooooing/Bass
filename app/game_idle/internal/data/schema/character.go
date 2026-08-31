@@ -31,11 +31,11 @@ func (Character) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("用户 ID"),
-		field.Int32("slot").Comment("角色槽位，单用户最多三个").Positive().Default(1),
-		field.String("name").Comment("角色名称").MaxRuneLen(32).NotEmpty(),
-		field.String("name_key").Comment("小写角色名称，用于大小写不敏感唯一约束").MaxLen(32).NotEmpty(),
-		field.Int32("action_queue_capacity").Comment("行动队列容量上限").Positive().Default(3),
-		field.Int64("max_offline_seconds").Comment("最大离线收益结算秒数").Positive().Default(28800),
+		field.Int32("slot").Comment("角色槽位").Default(1),
+		field.String("name").Comment("角色名称"),
+		field.String("name_key").Comment("小写角色名称，用于大小写不敏感唯一约束"),
+		field.Int32("action_queue_capacity").Comment("行动队列容量").Default(3),
+		field.Int64("max_offline_seconds").Comment("最大离线收益结算秒数").Default(28800),
 		field.Time("last_offline_at").Comment("最近离线时间").Optional().Nillable(),
 		field.Enum("status").
 			Values(gameenum.CharacterStatusValues()...).

@@ -1,10 +1,8 @@
 package model
 
-// GameIdleEvent 是挂机游戏统一事件载体。
-type GameIdleEvent struct {
-	ChatMessage        *ChatMessage
-	CloseSession       *CharacterCloseSessionEvent
-	ActionCompleted    *ActionCompletedEvent
-	AbilityLeveledUp   *AbilityLeveledUpEvent
-	ActionQueueUpdated *ActionQueueUpdatedEvent
+// GameIdleEventMessage 是已经编码完成、可直接发布到消息队列的事件消息。
+type GameIdleEventMessage struct {
+	Subject string
+	Data    []byte
+	Header  map[string]string
 }

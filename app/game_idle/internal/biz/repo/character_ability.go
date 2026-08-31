@@ -10,7 +10,6 @@ import (
 type CharacterAbilityRepo interface {
 	Map(ctx context.Context, req *CharacterAbilityMapReq) (map[enum.Ability]*model.CharacterAbility, error)
 	Persist(ctx context.Context, characterID int64) error
-	Clear(ctx context.Context, characterID int64) error
 }
 
 // CharacterAbilityMapReq 查询角色能力；AbilityIDs 为空时返回全部已载入能力。

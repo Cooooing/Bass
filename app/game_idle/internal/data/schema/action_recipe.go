@@ -28,9 +28,9 @@ func (ActionRecipe) Annotations() []schema.Annotation {
 
 func (ActionRecipe) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").Comment("行动配方绑定编码").MaxLen(128).NotEmpty().Immutable().Unique(),
-		field.String("action_id").Comment("行动编码").MaxLen(64),
-		field.String("recipe_id").Comment("配方编码").MaxLen(64),
+		field.String("id").Comment("行动配方绑定编码").Immutable().Unique(),
+		field.String("action_id").Comment("行动编码"),
+		field.String("recipe_id").Comment("配方编码"),
 		field.Bool("enabled").Comment("是否启用").Default(true),
 		field.Int32("sort").Comment("排序值").Default(0),
 	}

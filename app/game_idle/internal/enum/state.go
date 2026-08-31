@@ -11,13 +11,3 @@ const (
 	StateCommandTypeActionQueueCompleteHead StateCommandType = "action_queue.complete_head" // 队首完成
 	StateCommandTypeActionSettlement        StateCommandType = "action.settlement"          // 行动结算
 )
-
-// StateEventType 表示状态机产生的领域事件类型。
-type StateEventType string
-
-const (
-	StateEventTypeActionQueueChanged StateEventType = "action_queue.changed" // 行动队列变化
-	StateEventTypeItemsChanged       StateEventType = "items.changed"        // 物品变化
-	StateEventTypeAbilityExpGained   StateEventType = "ability.exp_gained"   // 能力经验变化
-	StateEventTypeAbilityLeveledUp   StateEventType = "ability.leveled_up"   // 能力升级
-)

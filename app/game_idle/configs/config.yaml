@@ -24,18 +24,6 @@ database:
   debug: false
   slow_sql_threshold: 1s
   sample_rate: 1
-redis:
-  addr: ${REDIS_HOST:127.0.0.1}:${REDIS_PORT:6379}
-  password: ${REDIS_PASSWORD:"123456"}
-  dial_timeout: 5s
-  db: 0
-  read_timeout: 5s
-  write_timeout: 5s
-  pool_size: 10
-  min_idle_conns: 1
-  pool_timeout: 2s
-  conn_max_idle_time: 300s
-  conn_max_life_time: 900s
 nats:
   host: ${NATS_HOST:127.0.0.1}
   port: ${NATS_PORT:4222}

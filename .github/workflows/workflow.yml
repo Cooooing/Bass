@@ -85,27 +85,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - language: typescript-axios
-            make-target: sdk-typescript-axios
-            output-dir: common/proto/gen-sdk/typescript-axios
-            branch: sdk/typescript-axios
-          - language: typescript-fetch
-            make-target: sdk-typescript-fetch
-            output-dir: common/proto/gen-sdk/typescript-fetch
-            branch: sdk/typescript-fetch
-          - language: go
-            make-target: sdk-go
-            output-dir: common/proto/gen-sdk/go
-            branch: sdk/go
-          - language: java
-            make-target: sdk-java
-            output-dir: common/proto/gen-sdk/java
-            branch: sdk/java
-          - language: rust
-            make-target: sdk-rust
-            output-dir: common/proto/gen-sdk/rust
-            branch: sdk/rust
+        service: [bbs, user, content, economy, notify, im, platform, scheduler, game_idle, game_idle_bff]
+        language: [typescript-axios, typescript-fetch, go, java, rust]
       fail-fast: false
 
     steps:
@@ -141,16 +122,15 @@ jobs:
 
       - name: Generate SDK
         run: |
-          make -C app/bbs ${{ matrix.make-target }}
-          make -C app/game_idle_bff ${{ matrix.make-target }}
+          make -C app/${{ matrix.service }} sdk-${{ matrix.language }}
 
       - name: Push SDK Branch
         shell: bash
         run: |
           set -euo pipefail
 
-          output_dir="${{ matrix.output-dir }}"
-          branch="${{ matrix.branch }}"
+          output_dir="common/proto/gen-sdk/${{ matrix.language }}/${{ matrix.service }}"
+          branch="sdk/${{ matrix.service }}/${{ matrix.language }}"
           publish_dir="$(mktemp -d)"
 
           if [ ! -d "$output_dir" ]; then
@@ -178,5 +158,5 @@ jobs:
             exit 0
           fi
 
-          git -C "$publish_dir" commit -m "chore: update ${{ matrix.language }} sdk"
+          git -C "$publish_dir" commit -m "chore: update ${{ matrix.service }} ${{ matrix.language }} sdk"
           git -C "$publish_dir" push origin "HEAD:$branch"

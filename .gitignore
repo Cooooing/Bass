@@ -70,6 +70,7 @@ Thumbs.db
 /common/ops/docker/*.env
 /common/ops/tools/
 /deploy/
+/doc/
 temp.md
 
 # AI tools

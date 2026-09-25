@@ -560,7 +560,11 @@ func (u *ScheduledTaskUsecase) HandleScheduledTaskMessage(ctx context.Context, m
 	}
 	// 过期消息按任务策略处理：跳过、只补最新一次或逐条补齐。
 	if task.StaleAfter != nil && time.Since(message.ScheduledAt) > *task.StaleAfter+u.clockSkewGrace {
-		if task.MisfirePolicy == schedulerenum.TaskMisfirePolicySkip || task.MisfirePolicy == schedulerenum.TaskMisfirePolicyExecuteLatest && !message.LatestForSubject {
+		// skip 表示该次触发已不具备业务价值：确认消息即可，避免恢复消费积压时逐条写入 skipped 记录。
+		if task.MisfirePolicy == schedulerenum.TaskMisfirePolicySkip {
+			return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
+		}
+		if task.MisfirePolicy == schedulerenum.TaskMisfirePolicyExecuteLatest && !message.LatestForSubject {
 			finishedAt := time.Now()
 			duration := time.Duration(0)
 			_, _ = u.scheduledTaskExecutionRecordRepo.Create(ctx, &repo.ScheduledTaskExecutionRecordCreateReq{

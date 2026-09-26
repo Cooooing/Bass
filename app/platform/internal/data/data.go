@@ -14,6 +14,7 @@ import (
 // DataProviderSet 提供微服务模式的数据层依赖。
 var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
+	commonClient.NewObservability,
 	ProvideConsul,
 	commonClient.NewConsulClient,
 )

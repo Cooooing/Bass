@@ -11,6 +11,7 @@ import (
 	"economy/internal/data/gen"
 	accountent "economy/internal/data/gen/account"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 )
 
@@ -61,7 +62,12 @@ func (r *AccountRepo) UpdateBalance(ctx context.Context, req *bizrepo.AccountUpd
 		update = update.Where(accountent.FrozenBalanceGTE(*req.FrozenMin))
 	}
 	if req.AvailableMin != nil {
-		update = update.Where(accountent.AvailableBalanceGTE(*req.AvailableMin))
+		update = update.Where(func(selector *sql.Selector) {
+			selector.Where(sql.P(func(builder *sql.Builder) {
+				builder.Ident(selector.C(accountent.FieldBalance)).WriteString(" - ").
+					Ident(selector.C(accountent.FieldFrozenBalance)).WriteString(" >= ").Arg(*req.AvailableMin)
+			}))
+		})
 	}
 	if req.BalanceDelta != 0 {
 		update = update.AddBalance(req.BalanceDelta)

@@ -1,0 +1,76 @@
+package command
+
+import (
+	"bff_game_idle/internal/biz/model"
+	"bff_game_idle/internal/biz/usecase"
+	"bff_game_idle/internal/enum"
+	"context"
+	"time"
+
+	"google.golang.org/protobuf/proto"
+)
+
+type InitGetHandler struct {
+	actionQueueUsecase      *usecase.ActionQueueUsecase
+	characterAbilityUsecase *usecase.CharacterAbilityUsecase
+	backpackUsecase         *usecase.BackpackUsecase
+	chatUsecase             *usecase.ChatUsecase
+}
+
+func NewInitGetHandler(
+	actionQueueUsecase *usecase.ActionQueueUsecase,
+	characterAbilityUsecase *usecase.CharacterAbilityUsecase,
+	backpackUsecase *usecase.BackpackUsecase,
+	chatUsecase *usecase.ChatUsecase,
+) *InitGetHandler {
+	return &InitGetHandler{
+		actionQueueUsecase:      actionQueueUsecase,
+		characterAbilityUsecase: characterAbilityUsecase,
+		backpackUsecase:         backpackUsecase,
+		chatUsecase:             chatUsecase,
+	}
+}
+
+func (h *InitGetHandler) Type() enum.WebSocketMessageType {
+	return enum.WebSocketMessageTypeInitGet
+}
+
+func (h *InitGetHandler) Payload() proto.Message {
+	return nil
+}
+
+func (h *InitGetHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
+	actionQueue, err := h.actionQueueUsecase.List(ctx, req.CharacterID)
+	if err != nil {
+		return err
+	}
+	abilities, err := h.characterAbilityUsecase.Map(ctx, req.CharacterID)
+	if err != nil {
+		return err
+	}
+	backpackItems, err := h.backpackUsecase.Map(ctx, &usecase.BackpackMapReq{
+		CharacterID: req.CharacterID,
+	})
+	if err != nil {
+		return err
+	}
+	chatMessages, err := h.chatUsecase.List(ctx, &usecase.ListChatMessagesReq{
+		ChannelType: "world",
+		ChannelID:   "world",
+		Size:        50,
+	})
+	if err != nil {
+		return err
+	}
+	req.Connection.Send(ctx, &usecase.WebSocketSendMessage{
+		Type: enum.WebSocketMessageTypeInitCompleted,
+		Payload: &model.WebSocketInit{
+			ActionQueue:   actionQueue,
+			Abilities:     abilities,
+			BackpackItems: backpackItems,
+			ChatMessages:  chatMessages,
+			ServerTime:    time.Now().Unix(),
+		},
+	})
+	return nil
+}

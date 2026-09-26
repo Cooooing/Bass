@@ -98,7 +98,7 @@ modules:
         max_attempts: 5
       totp:
         temporary_secret_ttl: 300s
-  bbs: {}
+  bff_bbs: {}
   content:
     article:
       published_edit_window: 600s

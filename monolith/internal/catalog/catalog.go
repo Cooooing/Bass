@@ -1,7 +1,7 @@
 package catalog
 
 import (
-	bbsmodule "bbs/module"
+	bffbbsmodule "bff_bbs/module"
 	commonmodule "common/pkg/module"
 	contentmodule "content/module"
 	economymodule "economy/module"
@@ -17,7 +17,7 @@ import (
 
 // Descriptors 声明单体当前装配的业务模块。
 var Descriptors = []commonmodule.Descriptor{
-	Named("bbs", bbsmodule.Descriptor()),
+	Named("bff_bbs", bffbbsmodule.Descriptor()),
 	Named("content", contentmodule.Descriptor()),
 	Named("economy", economymodule.Descriptor()),
 	Named("game_town", gametownmodule.Descriptor()),

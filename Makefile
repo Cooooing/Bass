@@ -1,11 +1,11 @@
-﻿.DEFAULT_GOAL := help
+.DEFAULT_GOAL := help
 
 ROOT_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 APP_DIR := $(ROOT_DIR)/app
 
 # Auto-discover modules with Makefile under app.
 MODULES ?= $(sort $(patsubst $(APP_DIR)/%/Makefile,%,$(wildcard $(APP_DIR)/*/Makefile)))
-BFF_SERVERS ?= bbs bbs_admin game_idle_bff
+BFF_SERVERS ?= bff_bbs bff_bbs_admin bff_game_idle
 
 IGNORE_ERROR ?= 1
 
@@ -106,7 +106,7 @@ help:
 	@echo "  make -C app/<module> sdk       - generate BFF TypeScript Axios/Fetch, Go, Java and Rust SDKs"
 	@echo ""
 	@echo "Examples:"
-	@echo "    make -C app/bbs gen"
+	@echo "    make -C app/bff_bbs gen"
 	@echo "    make -C app/user build"
-	@echo "    make -C app/bbs ent"
-	@echo "    make -C app/bbs doc"
+	@echo "    make -C app/bff_bbs ent"
+	@echo "    make -C app/bff_bbs doc"

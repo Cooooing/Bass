@@ -31,7 +31,7 @@ spec:
   }
 
   parameters {
-    choice(name: 'SERVICE', choices: ['bbs', 'user', 'content', 'notify', 'im', 'platform', 'scheduler'], description: 'Service to build and deploy')
+    choice(name: 'SERVICE', choices: ['bff_bbs', 'user', 'content', 'notify', 'im', 'platform', 'scheduler'], description: 'Service to build and deploy')
     string(name: 'BRANCH', defaultValue: 'dev', description: 'Git branch')
     booleanParam(name: 'DEPLOY_TO_TEST', defaultValue: true, description: 'Deploy image to remote test cluster after push')
   }

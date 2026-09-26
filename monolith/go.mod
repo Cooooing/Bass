@@ -3,7 +3,7 @@ module monolith
 go 1.26.1
 
 require (
-	bbs v0.0.0
+	bff_bbs v0.0.0
 	common v0.0.0
 	economy v0.0.0-00010101000000-000000000000
 	game_town v0.0.0-00010101000000-000000000000
@@ -122,7 +122,6 @@ require (
 	github.com/nats-io/nats.go v1.52.0 // indirect
 	github.com/nats-io/nkeys v0.4.15 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
-	github.com/panjf2000/ants/v2 v2.11.3 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pquerna/otp v1.5.0 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
@@ -165,7 +164,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace bbs => ../app/bbs
+replace bff_bbs => ../app/bff_bbs
 
 replace common => ../common
 

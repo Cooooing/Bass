@@ -130,7 +130,7 @@ Create a parameterized Pipeline job and paste `pipeline.Jenkinsfile` as the scri
 Parameters:
 
 ```text
-SERVICE=bbs|user|content|notify|im|platform|scheduler
+SERVICE=bff_bbs|user|content|notify|im|platform|scheduler
 BRANCH=dev
 DEPLOY_TO_TEST=true
 ```

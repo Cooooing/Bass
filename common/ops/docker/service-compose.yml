@@ -17,9 +17,9 @@ services:
 #    networks:
 #      - bass
 
-  bbs:
-    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/bbs:latest
-    container_name: bbs
+  bff_bbs:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/bff_bbs:latest
+    container_name: bff_bbs
     restart: on-failure:3
     env_file:
       - .test.env

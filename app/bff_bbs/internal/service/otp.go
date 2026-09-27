@@ -68,7 +68,7 @@ func (s *OtpService) ConfirmEnableTotp(ctx context.Context, req *bbsuserv1.Confi
 	}
 	code := strings.TrimSpace(req.GetCode())
 	if !s.codeRe.MatchString(code) {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
 	}
 	err := s.otpUsecase.ConfirmEnableTotp(ctx, &usecase.ConfirmEnableTotpReq{
 		UserID: user.ID,
@@ -84,7 +84,7 @@ func (s *OtpService) DisableTotp(ctx context.Context, req *bbsuserv1.DisableTotp
 	}
 	code := strings.TrimSpace(req.GetCode())
 	if !s.codeRe.MatchString(code) {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
 	}
 	err := s.otpUsecase.DisableTotp(ctx, &usecase.DisableTotpReq{
 		UserID: user.ID,
@@ -121,7 +121,7 @@ func (s *OtpService) SendEmailOtp(ctx context.Context, req *bbsuserv1.SendEmailO
 	email := strings.ToLower(strings.TrimSpace(req.GetEmail()))
 	parsed, err := mail.ParseAddress(email)
 	if email == "" || utf8.RuneCountInString(email) > 254 || err != nil || parsed.Address != email || !strings.Contains(email, "@") {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID)
 	}
 	var userID *int64
 	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {
@@ -144,7 +144,7 @@ func (s *OtpService) SendEmailOtp(ctx context.Context, req *bbsuserv1.SendEmailO
 func (s *OtpService) SendPhoneOtp(ctx context.Context, req *bbsuserv1.SendPhoneOtp_Req) (*bbsuserv1.SendPhoneOtp_Resp, error) {
 	phone := strings.TrimSpace(req.GetPhone())
 	if !s.phoneRe.MatchString(phone) {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PHONE_INVALID)
 	}
 	var userID *int64
 	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {

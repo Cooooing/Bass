@@ -15,7 +15,6 @@ import (
 	"net/mail"
 	"regexp"
 	"strings"
-	"unicode"
 	"unicode/utf8"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -81,22 +80,6 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 
 	if req.Nickname != nil {
 		value := strings.TrimSpace(*req.Nickname)
-		if value != "" {
-			length := utf8.RuneCountInString(value)
-			if length < 2 || length > 32 {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
-			}
-			hasNonDigit := false
-			for _, r := range value {
-				if !unicode.IsDigit(r) {
-					hasNonDigit = true
-					break
-				}
-			}
-			if !hasNonDigit {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
-			}
-		}
 		req.Nickname = new(value)
 	}
 	if req.Url != nil {
@@ -136,31 +119,27 @@ func (s *AccountService) UpdatePassword(ctx context.Context, req *bbsuserv1.Upda
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PASSWORD_INVALID)
 	}
 	oldPassword := req.GetOldPassword()
 	newPassword := req.GetNewPassword()
 	if len(oldPassword) < 6 || len(oldPassword) > 64 || len(newPassword) < 6 || len(newPassword) > 64 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PASSWORD_INVALID)
 	}
-	var hasUpper, hasLower, hasDigit, hasSpecial bool
+	var hasLetter, hasDigit bool
 	for _, r := range newPassword {
 		if r < '!' || r > '~' {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PASSWORD_INVALID)
 		}
 		switch {
-		case r >= 'A' && r <= 'Z':
-			hasUpper = true
-		case r >= 'a' && r <= 'z':
-			hasLower = true
+		case (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z'):
+			hasLetter = true
 		case r >= '0' && r <= '9':
 			hasDigit = true
-		default:
-			hasSpecial = true
 		}
 	}
-	if !hasUpper || !hasLower || !hasDigit || !hasSpecial {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	if !hasLetter || !hasDigit {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PASSWORD_INVALID)
 	}
 	if err := s.accountUsecase.UpdatePasswordAccount(ctx, &usecase.UpdatePasswordAccountReq{
 		UserID:      user.ID,
@@ -178,12 +157,15 @@ func (s *AccountService) UpdateEmail(ctx context.Context, req *bbsuserv1.UpdateE
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID)
 	}
 	email := strings.ToLower(strings.TrimSpace(req.GetEmail()))
 	parsed, err := mail.ParseAddress(email)
-	if err != nil || parsed.Address != email || !strings.Contains(email, "@") || utf8.RuneCountInString(email) > 254 || !s.codeRe.MatchString(strings.TrimSpace(req.GetCode())) {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	if err != nil || parsed.Address != email || !strings.Contains(email, "@") || utf8.RuneCountInString(email) > 254 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID)
+	}
+	if !s.codeRe.MatchString(strings.TrimSpace(req.GetCode())) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID)
 	}
 	if err := s.accountUsecase.UpdateEmailAccount(ctx, &usecase.UpdateEmailAccountReq{
 		UserID: user.ID,
@@ -201,11 +183,14 @@ func (s *AccountService) UpdatePhone(ctx context.Context, req *bbsuserv1.UpdateP
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PHONE_INVALID)
 	}
 	phone := strings.TrimSpace(req.GetPhone())
-	if !s.phoneRe.MatchString(phone) || !s.codeRe.MatchString(strings.TrimSpace(req.GetCode())) {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	if !s.phoneRe.MatchString(phone) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PHONE_INVALID)
+	}
+	if !s.codeRe.MatchString(strings.TrimSpace(req.GetCode())) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID)
 	}
 	if err := s.accountUsecase.UpdatePhoneAccount(ctx, &usecase.UpdatePhoneAccountReq{
 		UserID: user.ID,
@@ -245,7 +230,7 @@ func (s *AccountService) ListEconomyRecords(ctx context.Context, req *bbsuserv1.
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_QUERY_INVALID)
 	}
 	resp, err := s.accountUsecase.ListEconomyRecords(ctx, &usecase.ListAccountEconomyRecordsReq{UserID: user.ID, Page: &repo.PageReq{Page: req.GetPage().GetPage(), Size: req.GetPage().GetSize()}, Direction: req.Direction, RecordType: req.RecordType})
 	if err != nil {

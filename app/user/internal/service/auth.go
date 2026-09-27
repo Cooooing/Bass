@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"unicode"
 	"unicode/utf8"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
@@ -71,8 +72,13 @@ func (s *AuthService) Register(ctx context.Context, req *v1.Register_Req) (*v1.R
 	if req.Nickname != nil {
 		value := strings.TrimSpace(req.GetNickname())
 		length := utf8.RuneCountInString(value)
-		if length < 2 || length > 32 {
+		if !utf8.ValidString(value) || length < 2 || length > 32 {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_NICKNAME_INVALID)
+		}
+		for _, r := range value {
+			if unicode.IsControl(r) {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_NICKNAME_INVALID)
+			}
 		}
 		nickname = new(value)
 	}

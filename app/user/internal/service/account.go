@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"regexp"
 	"strings"
+	"unicode"
 	"unicode/utf8"
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
@@ -192,6 +193,19 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.
 
 func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfileAccount_Req) (*v1.UpdateProfileAccount_Resp, error) {
 	req = util.OrDefault(req, &v1.UpdateProfileAccount_Req{})
+	if req.Nickname != nil {
+		value := strings.TrimSpace(req.GetNickname())
+		length := utf8.RuneCountInString(value)
+		if !utf8.ValidString(value) || length < 2 || length > 32 {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_NICKNAME_INVALID)
+		}
+		for _, r := range value {
+			if unicode.IsControl(r) {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_NICKNAME_INVALID)
+			}
+		}
+		req.Nickname = new(value)
+	}
 	var mbti *enum.MBTI
 	clearMBTI := false
 	if req.Mbti != nil {

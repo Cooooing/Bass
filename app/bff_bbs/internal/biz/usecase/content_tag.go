@@ -39,7 +39,7 @@ type CreateTagReq struct {
 
 func (u *ContentTagUsecase) CreateTag(ctx context.Context, req *CreateTagReq) (*repo.Tag, error) {
 	if req == nil || req.Tag == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
 	var status *int32
 	if req.Tag.Status != nil {
@@ -71,7 +71,7 @@ type UpdateTagReq struct {
 
 func (u *ContentTagUsecase) UpdateTag(ctx context.Context, req *UpdateTagReq) (*repo.Tag, error) {
 	if req == nil || req.Tag == nil || req.TagID <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
 	var status *int32
 	if req.Tag.Status != nil {
@@ -153,7 +153,7 @@ type BindArticleTagsReq struct {
 
 func (u *ContentTagUsecase) BindArticleTags(ctx context.Context, req *BindArticleTagsReq) error {
 	if req == nil || req.ArticleID <= 0 || len(req.TagIDs) == 0 {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
 	return u.contentTagClient.BindArticleTags(ctx, &repo.BindArticleTagsReq{
 		UserID:    req.UserID,
@@ -170,7 +170,7 @@ type UnbindArticleTagsReq struct {
 
 func (u *ContentTagUsecase) UnbindArticleTags(ctx context.Context, req *UnbindArticleTagsReq) error {
 	if req == nil || req.ArticleID <= 0 || len(req.TagIDs) == 0 {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
 	return u.contentTagClient.UnbindArticleTags(ctx, &repo.UnbindArticleTagsReq{
 		UserID:    req.UserID,
@@ -185,7 +185,7 @@ type ListArticleTagsReq struct {
 
 func (u *ContentTagUsecase) ListArticleTags(ctx context.Context, req *ListArticleTagsReq) ([]*repo.Tag, error) {
 	if req == nil || req.ArticleID <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
 	}
 	resp, err := u.contentTagClient.ListArticleTags(ctx, &repo.ListArticleTagsReq{
 		ArticleID: req.ArticleID,

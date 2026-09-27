@@ -43,7 +43,7 @@ func (s *ContentArticleService) CreateDraft(ctx context.Context, req *bbscontent
 	}
 	article := req.GetArticle()
 	if article == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
 	row, err := s.contentArticleUsecase.CreateDraftArticle(ctx, &usecase.CreateDraftArticleReq{UserID: user.ID, Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable}})
 	if err != nil {
@@ -59,7 +59,7 @@ func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontent
 	}
 	article := req.GetArticle()
 	if article == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
 	row, err := s.contentArticleUsecase.UpdateDraftArticle(ctx, &usecase.UpdateDraftArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable}})
 	if err != nil {
@@ -83,7 +83,7 @@ func (s *ContentArticleService) SchedulePublish(ctx context.Context, req *bbscon
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	if req.GetPublishAt() == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_PUBLISH_AT_REQUIRED)
 	}
 	err := s.contentArticleUsecase.SchedulePublishArticle(ctx, &usecase.SchedulePublishArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), PublishAt: req.GetPublishAt().AsTime()})
 	return &bbscontentv1.SchedulePublishArticle_Resp{}, err

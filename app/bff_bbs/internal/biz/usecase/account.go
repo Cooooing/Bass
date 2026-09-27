@@ -27,12 +27,12 @@ func NewAccountUsecase(
 		economyClient: economyClient,
 	}
 }
-func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentAccount_Resp_Account, error) {
+func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentAccount_Resp_CurrentAccount, error) {
 	reply, err := u.accountClient.GetCurrentAccount(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
-	var account *bbsuserv1.GetCurrentAccount_Resp_Account
+	var account *bbsuserv1.GetCurrentAccount_Resp_CurrentAccount
 	if reply != nil {
 		if reply.Profile != nil {
 			avatarURL := "/v1/user/account/avatar?name=" + reply.Profile.Name
@@ -47,7 +47,7 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*
 			}
 			reply.Profile.AvatarURL = &avatarURL
 		}
-		account = &bbsuserv1.GetCurrentAccount_Resp_Account{}
+		account = &bbsuserv1.GetCurrentAccount_Resp_CurrentAccount{}
 		if profile := reply.Profile; profile != nil {
 			account.Profile = &bbsuserv1.AccountProfile{
 				Id:            profile.ID,

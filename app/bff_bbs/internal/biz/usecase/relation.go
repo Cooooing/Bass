@@ -27,7 +27,7 @@ type FollowReq struct {
 
 func (u *RelationUsecase) Follow(ctx context.Context, req *FollowReq) error {
 	if req == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
 	if req.ActorID == req.TargetID {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
@@ -45,7 +45,7 @@ type UnfollowReq struct {
 
 func (u *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowReq) error {
 	if req == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
 	if req.ActorID == req.TargetID {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
@@ -63,7 +63,7 @@ type BlockReq struct {
 
 func (u *RelationUsecase) Block(ctx context.Context, req *BlockReq) error {
 	if req == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
 	if req.ActorID == req.TargetID {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
@@ -81,7 +81,7 @@ type UnblockReq struct {
 
 func (u *RelationUsecase) Unblock(ctx context.Context, req *UnblockReq) error {
 	if req == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
 	if req.ActorID == req.TargetID {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_SELF_OPERATION_NOT_ALLOWED)
@@ -104,7 +104,7 @@ type ListFollowingResp struct {
 
 func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingReq) (*ListFollowingResp, error) {
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
 	var page *repo.PageReq
 	if req.Page != nil {
@@ -138,7 +138,7 @@ type ListFollowersResp struct {
 
 func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersReq) (*ListFollowersResp, error) {
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
 	var page *repo.PageReq
 	if req.Page != nil {
@@ -172,7 +172,7 @@ type ListBlockedResp struct {
 
 func (u *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedReq) (*ListBlockedResp, error) {
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
 	var page *repo.PageReq
 	if req.Page != nil {
@@ -201,7 +201,7 @@ type GetStatusReq struct {
 
 func (u *RelationUsecase) GetStatus(ctx context.Context, req *GetStatusReq) (*repo.RelationStatus, error) {
 	if req == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
 	resp, err := u.relationClient.GetStatus(ctx, &repo.GetStatusRelationReq{
 		ActorID:  req.ActorID,

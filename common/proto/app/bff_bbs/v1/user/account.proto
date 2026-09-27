@@ -87,11 +87,11 @@ message AccountContact {
 message GetCurrentAccount {
   message Req {}
   message Resp {
-    message Account {
+    message CurrentAccount {
       AccountProfile profile = 1; // 账号展示资料
       AccountContact contact = 2; // 账号联系方式
     }
-    Account account = 1; // 当前账号完整资料
+    CurrentAccount account = 1; // 当前账号完整资料
   }
 }
 

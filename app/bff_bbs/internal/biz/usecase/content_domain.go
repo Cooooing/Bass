@@ -40,7 +40,7 @@ type CreateDomainReq struct {
 
 func (u *ContentDomainUsecase) CreateDomain(ctx context.Context, req *CreateDomainReq) (*repo.Domain, error) {
 	if req == nil || req.Domain == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
 	}
 	domain := req.Domain
 	var status *int32
@@ -74,7 +74,7 @@ type UpdateDomainReq struct {
 
 func (u *ContentDomainUsecase) UpdateDomain(ctx context.Context, req *UpdateDomainReq) (*repo.Domain, error) {
 	if req == nil || req.Domain == nil || req.DomainID <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
 	}
 	domain := req.Domain
 	var status *int32

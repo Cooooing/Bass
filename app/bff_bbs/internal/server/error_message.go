@@ -170,6 +170,41 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "Invalid verification code format",
 			},
 		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_REGISTER_TYPE_INVALID: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "注册方式无效",
+				commonenums.Language_LANGUAGE_ZH_TW: "註冊方式無效",
+				commonenums.Language_LANGUAGE_EN:    "Invalid registration method",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_REGISTER_CREDENTIAL_REQUIRED: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "请填写完整的注册信息",
+				commonenums.Language_LANGUAGE_ZH_TW: "請填寫完整的註冊資訊",
+				commonenums.Language_LANGUAGE_EN:    "Complete registration details are required",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_LOGIN_TYPE_INVALID: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "登录方式无效",
+				commonenums.Language_LANGUAGE_ZH_TW: "登入方式無效",
+				commonenums.Language_LANGUAGE_EN:    "Invalid sign-in method",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_LOGIN_CREDENTIAL_REQUIRED: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "请填写完整的登录信息",
+				commonenums.Language_LANGUAGE_ZH_TW: "請填寫完整的登入資訊",
+				commonenums.Language_LANGUAGE_EN:    "Complete sign-in details are required",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_REFRESH_TOKEN_REQUIRED: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "刷新令牌不能为空",
+				commonenums.Language_LANGUAGE_ZH_TW: "刷新權杖不能為空",
+				commonenums.Language_LANGUAGE_EN:    "Refresh token is required",
+			},
+		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "验证码无效或已过期",
@@ -358,6 +393,69 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_ZH_CN: "评论信息无效",
 				commonenums.Language_LANGUAGE_ZH_TW: "評論資訊無效",
 				commonenums.Language_LANGUAGE_EN:    "Invalid comment information",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "文章信息无效",
+				commonenums.Language_LANGUAGE_ZH_TW: "文章資訊無效",
+				commonenums.Language_LANGUAGE_EN:    "Invalid article information",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_PUBLISH_AT_REQUIRED: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "请选择定时发布时间",
+				commonenums.Language_LANGUAGE_ZH_TW: "請選擇定時發布時間",
+				commonenums.Language_LANGUAGE_EN:    "Scheduled publish time is required",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_AMOUNT_INVALID: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "积分数量无效",
+				commonenums.Language_LANGUAGE_ZH_TW: "積分數量無效",
+				commonenums.Language_LANGUAGE_EN:    "Invalid point amount",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_INSUFFICIENT_BALANCE: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "积分余额不足",
+				commonenums.Language_LANGUAGE_ZH_TW: "積分餘額不足",
+				commonenums.Language_LANGUAGE_EN:    "Insufficient point balance",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_IDEMPOTENCY_CONFLICT: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "请求正在处理中，请勿重复提交",
+				commonenums.Language_LANGUAGE_ZH_TW: "請求正在處理中，請勿重複提交",
+				commonenums.Language_LANGUAGE_EN:    "Request is already being processed",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_TRANSFER_SELF_NOT_ALLOWED: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "不能给自己转积分",
+				commonenums.Language_LANGUAGE_ZH_TW: "不能給自己轉積分",
+				commonenums.Language_LANGUAGE_EN:    "You cannot transfer points to yourself",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_NOT_FOUND: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "积分流水不存在",
+				commonenums.Language_LANGUAGE_ZH_TW: "積分流水不存在",
+				commonenums.Language_LANGUAGE_EN:    "Point record does not exist",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "积分流水类型无效",
+				commonenums.Language_LANGUAGE_ZH_TW: "積分流水類型無效",
+				commonenums.Language_LANGUAGE_EN:    "Invalid point record type",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_QUERY_INVALID: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "积分流水查询条件无效",
+				commonenums.Language_LANGUAGE_ZH_TW: "積分流水查詢條件無效",
+				commonenums.Language_LANGUAGE_EN:    "Invalid point record query",
 			},
 		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_NOTIFY_RATE_LIMIT_Req_INVALID: {

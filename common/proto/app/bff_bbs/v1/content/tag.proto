@@ -73,14 +73,13 @@ message CreateTag {
       string code = 1; // 稳定编码
       string name = 2; // 标签名称
       optional string description = 3; // 描述
-      int64 domain_id = 4; // 领域 ID
+      optional int64 domain_id = 4; // 领域 ID
       optional TagStatus status = 5; // 启停状态
       optional string icon = 6; // 图标
       int32 sort = 7; // 排序值，越小越靠前
       option (gnostic.openapi.v3.schema) = {
         required: "code"
         required: "name"
-        required: "domain_id"
       };
     }
   }
@@ -120,14 +119,13 @@ message UpdateTag {
       string code = 1; // 稳定编码
       string name = 2; // 标签名称
       optional string description = 3; // 描述
-      int64 domain_id = 4; // 领域 ID
+      optional int64 domain_id = 4; // 领域 ID
       optional TagStatus status = 5; // 启停状态
       optional string icon = 6; // 图标
       int32 sort = 7; // 排序值，越小越靠前
       option (gnostic.openapi.v3.schema) = {
         required: "code"
         required: "name"
-        required: "domain_id"
       };
     }
   }

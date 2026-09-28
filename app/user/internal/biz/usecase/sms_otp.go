@@ -14,8 +14,6 @@ import (
 	"user/internal/biz/repo"
 	"user/internal/config"
 	"user/internal/enum"
-
-	"github.com/sony/sonyflake/v2"
 )
 
 type SmsOtpUsecase struct {
@@ -25,7 +23,6 @@ type SmsOtpUsecase struct {
 	outboxRepo                  repo.OutboxEventRepo
 	outboxUsecase               *OutboxUsecase
 	notificationRateLimitClient repo.NotificationRateLimitClient
-	sf                          *sonyflake.Sonyflake
 }
 
 func NewSmsOtpUsecase(
@@ -35,11 +32,7 @@ func NewSmsOtpUsecase(
 	outboxRepo repo.OutboxEventRepo,
 	outboxUsecase *OutboxUsecase,
 	notificationRateLimitClient repo.NotificationRateLimitClient,
-) (*SmsOtpUsecase, error) {
-	sf, err := str.NewSonyflake()
-	if err != nil {
-		return nil, err
-	}
+) *SmsOtpUsecase {
 	return &SmsOtpUsecase{
 		logger:                      logger,
 		conf:                        conf,
@@ -47,8 +40,7 @@ func NewSmsOtpUsecase(
 		outboxRepo:                  outboxRepo,
 		outboxUsecase:               outboxUsecase,
 		notificationRateLimitClient: notificationRateLimitClient,
-		sf:                          sf,
-	}, nil
+	}
 }
 
 type SendPhoneOtpReq struct {
@@ -86,7 +78,10 @@ func (u *SmsOtpUsecase) SendPhoneOtp(ctx context.Context, req *SendPhoneOtpReq) 
 		maxAttempts = 5
 	}
 	now := time.Now()
-	code := str.RandStr(u.sf, 6, true, true, true, false)
+	code, err := str.RandStr(6, true, true, true, false)
+	if err != nil {
+		return nil, err
+	}
 	key := &repo.VerificationCodeKeyReq{
 		Type:    enum.VerificationTypePhone,
 		Account: phone,
@@ -149,7 +144,7 @@ func (u *SmsOtpUsecase) VerifyPhoneOtp(ctx context.Context, req *VerifyPhoneOtpR
 	if err != nil {
 		return err
 	}
-	if row == nil || row.ExpiresAt == nil || !row.ExpiresAt.After(time.Now()) || row.Attempts >= row.MaxAttempts || row.Code != strings.TrimSpace(req.Code) {
+	if row == nil || row.ExpiresAt == nil || !row.ExpiresAt.After(time.Now()) || row.Attempts >= row.MaxAttempts || !strings.EqualFold(row.Code, strings.TrimSpace(req.Code)) {
 		if row != nil && row.Attempts < row.MaxAttempts {
 			_, _ = u.authCacheRepo.IncrCodeAttempts(ctx, key)
 		}

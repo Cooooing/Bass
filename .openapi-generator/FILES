@@ -26,6 +26,7 @@ docs/BlockRelationReq.md
 docs/CancelAccountReq.md
 docs/CancelPublishArticleReq.md
 docs/CheckInResp.md
+docs/CheckRegistrationAvailabilityResp.md
 docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md

@@ -291,6 +291,11 @@ export interface CheckInResp {
     'current_streak'?: number;
     'longest_streak'?: number;
 }
+export interface CheckRegistrationAvailabilityResp {
+    'name_available'?: boolean;
+    'email_can_register'?: boolean;
+    'phone_can_register'?: boolean;
+}
 export interface CollectArticleReq {
     'article_id': string;
     'active': boolean;
@@ -3140,6 +3145,50 @@ export const AuthServiceAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
+         * 检查注册字段是否可用。
+         * @param {string} [name] 
+         * @param {string} [email] 
+         * @param {string} [phone] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkRegistrationAvailability: async (name?: string, email?: string, phone?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1/user/auth/register-availability`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+            if (email !== undefined) {
+                localVarQueryParameter['email'] = email;
+            }
+
+            if (phone !== undefined) {
+                localVarQueryParameter['phone'] = phone;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 登录账号。
          * @param {LoginReq} loginReq 
          * @param {*} [options] Override http request option.
@@ -3297,6 +3346,20 @@ export const AuthServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 检查注册字段是否可用。
+         * @param {string} [name] 
+         * @param {string} [email] 
+         * @param {string} [phone] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async checkRegistrationAvailability(name?: string, email?: string, phone?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CheckRegistrationAvailabilityResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.checkRegistrationAvailability(name, email, phone, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthService.checkRegistrationAvailability']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 登录账号。
          * @param {LoginReq} loginReq 
          * @param {*} [options] Override http request option.
@@ -3363,6 +3426,15 @@ export const AuthServiceFactory = function (configuration?: Configuration, baseP
             return localVarFp.cancelAccount(requestParameters.cancelAccountReq, options).then((request) => request(axios, basePath));
         },
         /**
+         * 检查注册字段是否可用。
+         * @param {AuthServiceCheckRegistrationAvailabilityRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        checkRegistrationAvailability(requestParameters: AuthServiceCheckRegistrationAvailabilityRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<CheckRegistrationAvailabilityResp> {
+            return localVarFp.checkRegistrationAvailability(requestParameters.name, requestParameters.email, requestParameters.phone, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 登录账号。
          * @param {AuthServiceLoginRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -3414,6 +3486,14 @@ export interface AuthServiceInterface {
     cancelAccount(requestParameters: AuthServiceCancelAccountRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
+     * 检查注册字段是否可用。
+     * @param {AuthServiceCheckRegistrationAvailabilityRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    checkRegistrationAvailability(requestParameters?: AuthServiceCheckRegistrationAvailabilityRequest, options?: RawAxiosRequestConfig): AxiosPromise<CheckRegistrationAvailabilityResp>;
+
+    /**
      * 登录账号。
      * @param {AuthServiceLoginRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -3452,6 +3532,17 @@ export interface AuthServiceInterface {
  */
 export interface AuthServiceCancelAccountRequest {
     readonly cancelAccountReq: CancelAccountReq
+}
+
+/**
+ * Request parameters for checkRegistrationAvailability operation in AuthService.
+ */
+export interface AuthServiceCheckRegistrationAvailabilityRequest {
+    readonly name?: string
+
+    readonly email?: string
+
+    readonly phone?: string
 }
 
 /**
@@ -3494,6 +3585,16 @@ export class AuthService extends BaseAPI implements AuthServiceInterface {
      */
     public cancelAccount(requestParameters: AuthServiceCancelAccountRequest, options?: RawAxiosRequestConfig) {
         return AuthServiceFp(this.configuration).cancelAccount(requestParameters.cancelAccountReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 检查注册字段是否可用。
+     * @param {AuthServiceCheckRegistrationAvailabilityRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public checkRegistrationAvailability(requestParameters: AuthServiceCheckRegistrationAvailabilityRequest = {}, options?: RawAxiosRequestConfig) {
+        return AuthServiceFp(this.configuration).checkRegistrationAvailability(requestParameters.name, requestParameters.email, requestParameters.phone, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

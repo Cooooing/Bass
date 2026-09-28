@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**cancelAccount**](#cancelaccount) | **POST** /v1/user/auth/cancel-account | |
+|[**checkRegistrationAvailability**](#checkregistrationavailability) | **GET** /v1/user/auth/register-availability | |
 |[**login**](#login) | **POST** /v1/user/auth/login | |
 |[**logout**](#logout) | **POST** /v1/user/auth/logout | |
 |[**refreshToken**](#refreshtoken) | **POST** /v1/user/auth/refresh-token | |
@@ -52,6 +53,63 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **checkRegistrationAvailability**
+> CheckRegistrationAvailabilityResp checkRegistrationAvailability()
+
+检查注册字段是否可用。
+
+### Example
+
+```typescript
+import {
+    AuthService,
+    Configuration
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AuthService(configuration);
+
+let name: string; // (optional) (default to undefined)
+let email: string; // (optional) (default to undefined)
+let phone: string; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.checkRegistrationAvailability(
+    name,
+    email,
+    phone
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **name** | [**string**] |  | (optional) defaults to undefined|
+| **email** | [**string**] |  | (optional) defaults to undefined|
+| **phone** | [**string**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**CheckRegistrationAvailabilityResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 

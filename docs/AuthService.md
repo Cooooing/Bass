@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
 | [**cancelAccount**](AuthService.md#cancelaccount) | **POST** /v1/user/auth/cancel-account |  |
+| [**checkRegistrationAvailability**](AuthService.md#checkregistrationavailability) | **GET** /v1/user/auth/register-availability |  |
 | [**login**](AuthService.md#login) | **POST** /v1/user/auth/login |  |
 | [**logout**](AuthService.md#logout) | **POST** /v1/user/auth/logout |  |
 | [**refreshToken**](AuthService.md#refreshtoken) | **POST** /v1/user/auth/refresh-token |  |
@@ -68,6 +69,79 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## checkRegistrationAvailability
+
+> CheckRegistrationAvailabilityResp checkRegistrationAvailability(name, email, phone)
+
+
+
+检查注册字段是否可用。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AuthService,
+} from '@bass/bbs-sdk-fetch';
+import type { CheckRegistrationAvailabilityRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AuthService();
+
+  const body = {
+    // string (optional)
+    name: name_example,
+    // string (optional)
+    email: email_example,
+    // string (optional)
+    phone: phone_example,
+  } satisfies CheckRegistrationAvailabilityRequest;
+
+  try {
+    const data = await api.checkRegistrationAvailability(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **name** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **email** | `string` |  | [Optional] [Defaults to `undefined`] |
+| **phone** | `string` |  | [Optional] [Defaults to `undefined`] |
+
+### Return type
+
+[**CheckRegistrationAvailabilityResp**](CheckRegistrationAvailabilityResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: `application/json`
 
 

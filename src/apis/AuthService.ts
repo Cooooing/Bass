@@ -19,6 +19,11 @@ import {
     CancelAccountReqToJSON,
 } from '../models/CancelAccountReq';
 import {
+    type CheckRegistrationAvailabilityResp,
+    CheckRegistrationAvailabilityRespFromJSON,
+    CheckRegistrationAvailabilityRespToJSON,
+} from '../models/CheckRegistrationAvailabilityResp';
+import {
     type LoginReq,
     LoginReqFromJSON,
     LoginReqToJSON,
@@ -46,6 +51,12 @@ import {
 
 export interface CancelAccountRequest {
     cancelAccountReq: CancelAccountReq;
+}
+
+export interface CheckRegistrationAvailabilityRequest {
+    name?: string;
+    email?: string;
+    phone?: string;
 }
 
 export interface LoginRequest {
@@ -92,6 +103,32 @@ export interface AuthServiceInterface {
      * 注销账号。
      */
     cancelAccount(requestParameters: CancelAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
+    /**
+     * Creates request options for checkRegistrationAvailability without sending the request
+     * @param {string} [name] 
+     * @param {string} [email] 
+     * @param {string} [phone] 
+     * @throws {RequiredError}
+     * @memberof AuthServiceInterface
+     */
+    checkRegistrationAvailabilityRequestOpts(requestParameters: CheckRegistrationAvailabilityRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 检查注册字段是否可用。
+     * @param {string} [name] 
+     * @param {string} [email] 
+     * @param {string} [phone] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthServiceInterface
+     */
+    checkRegistrationAvailabilityRaw(requestParameters: CheckRegistrationAvailabilityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CheckRegistrationAvailabilityResp>>;
+
+    /**
+     * 检查注册字段是否可用。
+     */
+    checkRegistrationAvailability(requestParameters: CheckRegistrationAvailabilityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CheckRegistrationAvailabilityResp>;
 
     /**
      * Creates request options for login without sending the request
@@ -232,6 +269,55 @@ export class AuthService extends runtime.BaseAPI implements AuthServiceInterface
      */
     async cancelAccount(requestParameters: CancelAccountRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.cancelAccountRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for checkRegistrationAvailability without sending the request
+     */
+    async checkRegistrationAvailabilityRequestOpts(requestParameters: CheckRegistrationAvailabilityRequest): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        if (requestParameters['name'] != null) {
+            queryParameters['name'] = requestParameters['name'];
+        }
+
+        if (requestParameters['email'] != null) {
+            queryParameters['email'] = requestParameters['email'];
+        }
+
+        if (requestParameters['phone'] != null) {
+            queryParameters['phone'] = requestParameters['phone'];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/v1/user/auth/register-availability`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * 检查注册字段是否可用。
+     */
+    async checkRegistrationAvailabilityRaw(requestParameters: CheckRegistrationAvailabilityRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CheckRegistrationAvailabilityResp>> {
+        const requestOptions = await this.checkRegistrationAvailabilityRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CheckRegistrationAvailabilityRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 检查注册字段是否可用。
+     */
+    async checkRegistrationAvailability(requestParameters: CheckRegistrationAvailabilityRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CheckRegistrationAvailabilityResp> {
+        const response = await this.checkRegistrationAvailabilityRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

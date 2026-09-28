@@ -17,6 +17,7 @@ export * from './BlockRelationReq';
 export * from './CancelAccountReq';
 export * from './CancelPublishArticleReq';
 export * from './CheckInResp';
+export * from './CheckRegistrationAvailabilityResp';
 export * from './CollectArticleReq';
 export * from './CollectArticleResp';
 export * from './ConfirmEnableTotpReq';

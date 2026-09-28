@@ -22,6 +22,7 @@ docs/BlockRelationReq.md
 docs/CancelAccountReq.md
 docs/CancelPublishArticleReq.md
 docs/CheckInResp.md
+docs/CheckRegistrationAvailabilityResp.md
 docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
@@ -196,6 +197,7 @@ src/models/BlockRelationReq.ts
 src/models/CancelAccountReq.ts
 src/models/CancelPublishArticleReq.ts
 src/models/CheckInResp.ts
+src/models/CheckRegistrationAvailabilityResp.ts
 src/models/CollectArticleReq.ts
 src/models/CollectArticleResp.ts
 src/models/ConfirmEnableTotpReq.ts

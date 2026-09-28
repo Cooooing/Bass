@@ -1,0 +1,9 @@
+.gitignore
+.npmignore
+.openapi-generator-ignore
+README.md
+package.json
+src/index.ts
+src/runtime.ts
+tsconfig.esm.json
+tsconfig.json

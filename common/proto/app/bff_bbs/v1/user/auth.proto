@@ -13,6 +13,12 @@ option go_package = "common/proto/gen/bff_bbs/v1/user;user";
 
 // 认证接口。
 service AuthService {
+  // 检查注册字段是否可用。
+  rpc CheckRegistrationAvailability(CheckRegistrationAvailability.Req) returns (CheckRegistrationAvailability.Resp) {
+    option (google.api.http) = {
+      get: "/v1/user/auth/register-availability"
+    };
+  }
   // 注册账号。
   rpc Register(Register.Req) returns (Register.Resp) {
     option (google.api.http) = {
@@ -50,6 +56,20 @@ service AuthService {
       post: "/v1/user/auth/cancel-account"
       body: "*"
     };
+  }
+}
+
+// 注册字段可用性预检。
+message CheckRegistrationAvailability {
+  message Req {
+    optional string name = 1; // 待检查的账号名
+    optional string email = 2; // 待检查的邮箱
+    optional string phone = 3; // 待检查的手机号
+  }
+  message Resp {
+    optional bool name_available = 1; // 账号名是否可用
+    optional bool email_can_register = 2; // 邮箱是否可继续用于注册
+    optional bool phone_can_register = 3; // 手机号是否可继续用于注册
   }
 }
 

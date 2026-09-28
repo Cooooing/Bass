@@ -7,11 +7,24 @@ import (
 )
 
 type AuthRepo interface {
+	CheckRegistrationAvailability(ctx context.Context, req *CheckRegistrationAvailabilityReq) (*CheckRegistrationAvailabilityResp, error)
 	Register(ctx context.Context, req *RegisterReq) error
 	Login(ctx context.Context, req *LoginReq) (*LoginResp, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*TokenResp, error)
 	Logout(ctx context.Context, accessToken string) error
 	CancelAccount(ctx context.Context, req *CancelAccountReq) error
+}
+
+type CheckRegistrationAvailabilityReq struct {
+	Name  *string
+	Email *string
+	Phone *string
+}
+
+type CheckRegistrationAvailabilityResp struct {
+	NameAvailable    *bool
+	EmailCanRegister *bool
+	PhoneCanRegister *bool
 }
 
 type RegisterReq struct {

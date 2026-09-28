@@ -27,6 +27,23 @@ func NewAuthClient(
 		userClient: userClient,
 	}
 }
+
+func (r *AuthRepo) CheckRegistrationAvailability(ctx context.Context, req *repo.CheckRegistrationAvailabilityReq) (*repo.CheckRegistrationAvailabilityResp, error) {
+	resp, err := r.userClient.Auth.CheckRegistrationAvailability(ctx, &userv1.CheckRegistrationAvailability_Req{
+		Name:  req.Name,
+		Email: req.Email,
+		Phone: req.Phone,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &repo.CheckRegistrationAvailabilityResp{
+		NameAvailable:    resp.NameAvailable,
+		EmailCanRegister: resp.EmailCanRegister,
+		PhoneCanRegister: resp.PhoneCanRegister,
+	}, nil
+}
+
 func (r *AuthRepo) Register(ctx context.Context, req *repo.RegisterReq) error {
 	registerReq := &userv1.Register_Req{
 		Type:     req.Type.ToUserProto(),

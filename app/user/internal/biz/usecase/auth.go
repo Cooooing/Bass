@@ -95,6 +95,47 @@ type RegisterReq struct {
 	SkipOtp  bool
 }
 
+type CheckRegistrationAvailabilityReq struct {
+	Name  *string
+	Email *string
+	Phone *string
+}
+
+type CheckRegistrationAvailabilityResp struct {
+	NameAvailable    *bool
+	EmailCanRegister *bool
+	PhoneCanRegister *bool
+}
+
+func (s *AuthUsecase) CheckRegistrationAvailability(ctx context.Context, req *CheckRegistrationAvailabilityReq) (*CheckRegistrationAvailabilityResp, error) {
+	resp := &CheckRegistrationAvailabilityResp{}
+	if req.Name != nil {
+		exists, err := s.accountRepo.ExistsByAccount(ctx, *req.Name)
+		if err != nil {
+			return nil, err
+		}
+		available := !exists
+		resp.NameAvailable = &available
+	}
+	if req.Email != nil {
+		exists, err := s.accountRepo.ExistsByAccount(ctx, *req.Email)
+		if err != nil {
+			return nil, err
+		}
+		canRegister := !exists
+		resp.EmailCanRegister = &canRegister
+	}
+	if req.Phone != nil {
+		exists, err := s.accountRepo.ExistsByAccount(ctx, *req.Phone)
+		if err != nil {
+			return nil, err
+		}
+		canRegister := !exists
+		resp.PhoneCanRegister = &canRegister
+	}
+	return resp, nil
+}
+
 func (s *AuthUsecase) Register(ctx context.Context, req *RegisterReq) error {
 	switch req.Type {
 	case enum.RegisterTypeEmail:

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bff_bbs/internal/biz/repo"
 	"bff_bbs/internal/biz/usecase"
 	"bff_bbs/internal/enum"
 	"common/pkg/apperror"
@@ -46,6 +47,43 @@ func (s *AuthService) RegisterGrpc(gs *grpc.Server) {
 
 func (s *AuthService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterAuthServiceHTTPServer(hs, s)
+}
+
+func (s *AuthService) CheckRegistrationAvailability(ctx context.Context, req *bbsuserv1.CheckRegistrationAvailability_Req) (*bbsuserv1.CheckRegistrationAvailability_Resp, error) {
+	if req == nil || (req.Name == nil && req.Email == nil && req.Phone == nil) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	availabilityReq := &repo.CheckRegistrationAvailabilityReq{}
+	if req.Name != nil {
+		name, err := s.normalizeName(req.GetName())
+		if err != nil {
+			return nil, err
+		}
+		availabilityReq.Name = new(name)
+	}
+	if req.Email != nil {
+		email, err := s.normalizeEmail(req.GetEmail())
+		if err != nil {
+			return nil, err
+		}
+		availabilityReq.Email = new(email)
+	}
+	if req.Phone != nil {
+		phone, err := s.normalizePhone(req.GetPhone())
+		if err != nil {
+			return nil, err
+		}
+		availabilityReq.Phone = new(phone)
+	}
+	availability, err := s.authUsecase.CheckRegistrationAvailability(ctx, availabilityReq)
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.CheckRegistrationAvailability_Resp{
+		NameAvailable:    availability.NameAvailable,
+		EmailCanRegister: availability.EmailCanRegister,
+		PhoneCanRegister: availability.PhoneCanRegister,
+	}, nil
 }
 
 func (s *AuthService) Register(ctx context.Context, req *bbsuserv1.Register_Req) (*bbsuserv1.Register_Resp, error) {

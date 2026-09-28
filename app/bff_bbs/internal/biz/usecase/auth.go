@@ -23,6 +23,10 @@ func NewAuthUsecase(
 	}
 }
 
+func (u *AuthUsecase) CheckRegistrationAvailability(ctx context.Context, req *repo.CheckRegistrationAvailabilityReq) (*repo.CheckRegistrationAvailabilityResp, error) {
+	return u.authRepo.CheckRegistrationAvailability(ctx, req)
+}
+
 type RegisterReq struct {
 	Type     enum.RegisterType
 	Name     string

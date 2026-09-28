@@ -51,6 +51,44 @@ func (s *AuthService) RegisterGrpc(gs *grpc.Server) {
 func (s *AuthService) RegisterHttp(hs *http.Server) {
 }
 
+func (s *AuthService) CheckRegistrationAvailability(ctx context.Context, req *v1.CheckRegistrationAvailability_Req) (*v1.CheckRegistrationAvailability_Resp, error) {
+	if req == nil || (req.Name == nil && req.Email == nil && req.Phone == nil) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	availabilityReq := &usecase.CheckRegistrationAvailabilityReq{}
+	if req.Name != nil {
+		name := strings.ToLower(strings.TrimSpace(req.GetName()))
+		length := utf8.RuneCountInString(name)
+		if length < 4 || length > 32 || !s.nameRe.MatchString(name) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_INVALID)
+		}
+		availabilityReq.Name = new(name)
+	}
+	if req.Email != nil {
+		email := strings.ToLower(strings.TrimSpace(req.GetEmail()))
+		if !s.validateEmail(email) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_EMAIL_INVALID)
+		}
+		availabilityReq.Email = new(email)
+	}
+	if req.Phone != nil {
+		phone := strings.TrimSpace(req.GetPhone())
+		if !s.phoneRe.MatchString(phone) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PHONE_INVALID)
+		}
+		availabilityReq.Phone = new(phone)
+	}
+	resp, err := s.authUsecase.CheckRegistrationAvailability(ctx, availabilityReq)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.CheckRegistrationAvailability_Resp{
+		NameAvailable:    resp.NameAvailable,
+		EmailCanRegister: resp.EmailCanRegister,
+		PhoneCanRegister: resp.PhoneCanRegister,
+	}, nil
+}
+
 func (s *AuthService) Register(ctx context.Context, req *v1.Register_Req) (*v1.Register_Resp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)

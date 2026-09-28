@@ -18,6 +18,8 @@ option go_package = "common/proto/gen/user/v1;v1";
 service AuthService {
   // 注册账号
   rpc Register(Register.Req) returns (Register.Resp) {}
+  // 检查注册字段是否可用
+  rpc CheckRegistrationAvailability(CheckRegistrationAvailability.Req) returns (CheckRegistrationAvailability.Resp) {}
   // 登录账号
   rpc Login(Login.Req) returns (Login.Resp) {}
   // 刷新令牌
@@ -55,6 +57,19 @@ message Register {
     }
   }
   message Resp {}
+}
+
+message CheckRegistrationAvailability {
+  message Req {
+    optional string name = 1; // 待检查的账号名
+    optional string email = 2; // 待检查的邮箱
+    optional string phone = 3; // 待检查的手机号
+  }
+  message Resp {
+    optional bool name_available = 1; // 账号名是否可用
+    optional bool email_can_register = 2; // 邮箱是否可继续用于注册
+    optional bool phone_can_register = 3; // 手机号是否可继续用于注册
+  }
 }
 
 message Login {

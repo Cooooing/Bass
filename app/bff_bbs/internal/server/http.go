@@ -26,11 +26,12 @@ import (
 
 func NewHTTPAuthMiddlewares(authClient userv1.AuthServiceClient) []middleware.Middleware {
 	publicOperations := map[string]struct{}{
-		bbsuserv1.OperationAuthServiceRegister:      {},
-		bbsuserv1.OperationAuthServiceLogin:         {},
-		bbsuserv1.OperationAuthServiceRefreshToken:  {},
-		bbsuserv1.OperationAccountServiceAvatar:     {},
-		bbsuserv1.OperationAccountServiceGetProfile: {},
+		bbsuserv1.OperationAuthServiceRegister:                      {},
+		bbsuserv1.OperationAuthServiceLogin:                         {},
+		bbsuserv1.OperationAuthServiceRefreshToken:                  {},
+		bbsuserv1.OperationAuthServiceCheckRegistrationAvailability: {},
+		bbsuserv1.OperationAccountServiceAvatar:                     {},
+		bbsuserv1.OperationAccountServiceGetProfile:                 {},
 	}
 	optionalAuthOperations := map[string]struct{}{
 		bbscontentv1.OperationArticleServiceList:         {},

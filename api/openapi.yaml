@@ -910,6 +910,41 @@ paths:
           description: OK
       tags:
       - AuthService
+  /v1/user/auth/register-availability:
+    get:
+      description: 检查注册字段是否可用。
+      operationId: AuthService_CheckRegistrationAvailability
+      parameters:
+      - explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: email
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: phone
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckRegistrationAvailability_Resp"
+          description: OK
+      tags:
+      - AuthService
   /v1/user/checkin/check-in:
     post:
       operationId: CheckinService_CheckIn
@@ -2028,6 +2063,19 @@ components:
         longest_streak:
           format: int32
           type: integer
+      type: object
+    CheckRegistrationAvailability_Resp:
+      example:
+        email_can_register: true
+        phone_can_register: true
+        name_available: true
+      properties:
+        name_available:
+          type: boolean
+        email_can_register:
+          type: boolean
+        phone_can_register:
+          type: boolean
       type: object
     CollectArticle_Req:
       properties:

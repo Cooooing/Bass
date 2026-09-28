@@ -36,6 +36,20 @@ type AuthService interface {
 	CancelAccountExecute(r ApiCancelAccountRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
+	CheckRegistrationAvailability Method for CheckRegistrationAvailability
+
+	检查注册字段是否可用。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCheckRegistrationAvailabilityRequest
+	*/
+	CheckRegistrationAvailability(ctx context.Context) ApiCheckRegistrationAvailabilityRequest
+
+	// CheckRegistrationAvailabilityExecute executes the request
+	//  @return CheckRegistrationAvailabilityResp
+	CheckRegistrationAvailabilityExecute(r ApiCheckRegistrationAvailabilityRequest) (*CheckRegistrationAvailabilityResp, *http.Response, error)
+
+	/*
 	Login Method for Login
 
 	登录账号。
@@ -168,6 +182,132 @@ func (a *AuthServiceService) CancelAccountExecute(r ApiCancelAccountRequest) (ma
 	}
 	// body params
 	localVarPostBody = r.cancelAccountReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiCheckRegistrationAvailabilityRequest struct {
+	ctx context.Context
+	ApiService AuthService
+	name *string
+	email *string
+	phone *string
+}
+
+func (r ApiCheckRegistrationAvailabilityRequest) Name(name string) ApiCheckRegistrationAvailabilityRequest {
+	r.name = &name
+	return r
+}
+
+func (r ApiCheckRegistrationAvailabilityRequest) Email(email string) ApiCheckRegistrationAvailabilityRequest {
+	r.email = &email
+	return r
+}
+
+func (r ApiCheckRegistrationAvailabilityRequest) Phone(phone string) ApiCheckRegistrationAvailabilityRequest {
+	r.phone = &phone
+	return r
+}
+
+func (r ApiCheckRegistrationAvailabilityRequest) Execute() (*CheckRegistrationAvailabilityResp, *http.Response, error) {
+	return r.ApiService.CheckRegistrationAvailabilityExecute(r)
+}
+
+/*
+CheckRegistrationAvailability Method for CheckRegistrationAvailability
+
+检查注册字段是否可用。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiCheckRegistrationAvailabilityRequest
+*/
+func (a *AuthServiceService) CheckRegistrationAvailability(ctx context.Context) ApiCheckRegistrationAvailabilityRequest {
+	return ApiCheckRegistrationAvailabilityRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return CheckRegistrationAvailabilityResp
+func (a *AuthServiceService) CheckRegistrationAvailabilityExecute(r ApiCheckRegistrationAvailabilityRequest) (*CheckRegistrationAvailabilityResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodGet
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *CheckRegistrationAvailabilityResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AuthServiceService.CheckRegistrationAvailability")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/auth/register-availability"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+
+	if r.name != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "name", r.name, "form", "")
+	}
+	if r.email != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "email", r.email, "form", "")
+	}
+	if r.phone != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "phone", r.phone, "form", "")
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

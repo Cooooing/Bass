@@ -39,6 +39,7 @@ docs/BlockRelationReq.md
 docs/CancelAccountReq.md
 docs/CancelPublishArticleReq.md
 docs/CheckInResp.md
+docs/CheckRegistrationAvailabilityResp.md
 docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
@@ -199,6 +200,7 @@ model_block_relation_req.go
 model_cancel_account_req.go
 model_cancel_publish_article_req.go
 model_check_in_resp.go
+model_check_registration_availability_resp.go
 model_collect_article_req.go
 model_collect_article_resp.go
 model_confirm_enable_totp_req.go

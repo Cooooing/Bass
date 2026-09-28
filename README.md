@@ -92,6 +92,7 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**Thank**](docs/ArticleService.md#thank) | **Post** /v1/content/article/thank | 
 *ArticleService* | [**UpdateDraft**](docs/ArticleService.md#updatedraft) | **Post** /v1/content/article/draft/update | 
 *AuthService* | [**CancelAccount**](docs/AuthService.md#cancelaccount) | **Post** /v1/user/auth/cancel-account | 
+*AuthService* | [**CheckRegistrationAvailability**](docs/AuthService.md#checkregistrationavailability) | **Get** /v1/user/auth/register-availability | 
 *AuthService* | [**Login**](docs/AuthService.md#login) | **Post** /v1/user/auth/login | 
 *AuthService* | [**Logout**](docs/AuthService.md#logout) | **Post** /v1/user/auth/logout | 
 *AuthService* | [**RefreshToken**](docs/AuthService.md#refreshtoken) | **Post** /v1/user/auth/refresh-token | 
@@ -160,6 +161,7 @@ Class | Method | HTTP request | Description
  - [CancelAccountReq](docs/CancelAccountReq.md)
  - [CancelPublishArticleReq](docs/CancelPublishArticleReq.md)
  - [CheckInResp](docs/CheckInResp.md)
+ - [CheckRegistrationAvailabilityResp](docs/CheckRegistrationAvailabilityResp.md)
  - [CollectArticleReq](docs/CollectArticleReq.md)
  - [CollectArticleResp](docs/CollectArticleResp.md)
  - [ConfirmEnableTotpReq](docs/ConfirmEnableTotpReq.md)

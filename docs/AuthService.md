@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CancelAccount**](AuthService.md#CancelAccount) | **Post** /v1/user/auth/cancel-account | 
+[**CheckRegistrationAvailability**](AuthService.md#CheckRegistrationAvailability) | **Get** /v1/user/auth/register-availability | 
 [**Login**](AuthService.md#Login) | **Post** /v1/user/auth/login | 
 [**Logout**](AuthService.md#Logout) | **Post** /v1/user/auth/logout | 
 [**RefreshToken**](AuthService.md#RefreshToken) | **Post** /v1/user/auth/refresh-token | 
@@ -71,6 +72,76 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CheckRegistrationAvailability
+
+> CheckRegistrationAvailabilityResp CheckRegistrationAvailability(ctx).Name(name).Email(email).Phone(phone).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	name := "name_example" // string |  (optional)
+	email := "email_example" // string |  (optional)
+	phone := "phone_example" // string |  (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AuthService.CheckRegistrationAvailability(context.Background()).Name(name).Email(email).Phone(phone).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AuthService.CheckRegistrationAvailability``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `CheckRegistrationAvailability`: CheckRegistrationAvailabilityResp
+	fmt.Fprintf(os.Stdout, "Response from `AuthService.CheckRegistrationAvailability`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCheckRegistrationAvailabilityRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **name** | **string** |  | 
+ **email** | **string** |  | 
+ **phone** | **string** |  | 
+
+### Return type
+
+[**CheckRegistrationAvailabilityResp**](CheckRegistrationAvailabilityResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

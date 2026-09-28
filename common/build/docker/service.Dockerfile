@@ -1,7 +1,7 @@
-ARG GO_VERSION=1.26
+ARG TOOLCHAIN_IMAGE=ghcr.io/cooooing/bass-build-tools:latest
 
 # ===================== 第一阶段：构建 Go 应用 =====================
-FROM golang:${GO_VERSION} AS builder
+FROM ${TOOLCHAIN_IMAGE} AS builder
 
 ARG APP_NAME
 
@@ -10,26 +10,13 @@ ENV CGO_ENABLED=0 \
     GOARCH=amd64 \
     PATH="/go/bin/linux_amd64:/go/bin:${PATH}"
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    protobuf-compiler \
-    git \
-    curl \
-    unzip \
-    upx-ucl \
-    && update-ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /build
-
-COPY common/build/make/ /build/common/build/make/
-COPY common/go.mod common/go.sum /build/common/
-COPY app/${APP_NAME}/go.mod app/${APP_NAME}/go.sum app/${APP_NAME}/Makefile /build/app/${APP_NAME}/
-RUN cd /build/common && go mod download && cd /build/app/${APP_NAME} && go mod download && make init
 
 COPY common/ /build/common/
 COPY app/${APP_NAME}/ /build/app/${APP_NAME}/
-RUN cd /build/app/${APP_NAME} && make all
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    make -C /build/app/${APP_NAME} api gen build
 RUN upx -9 --lzma /build/app/${APP_NAME}/server -o /build/server
 
 # ===================== 第二阶段：制作轻量运行环境 =====================

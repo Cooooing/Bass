@@ -3,13 +3,13 @@ ENT_MK_INCLUDED := 1
 
 # Requires app.mk for APP_DIR, IGNORE_ERROR, run, and MODULE_GEN_TARGETS.
 
-MODULE_GEN_TARGETS := config ent wire
+MODULE_GEN_TARGETS := cfg ent wire
 
 ENT_SCHEMA_DIR ?= $(if $(wildcard $(APP_DIR)/internal/data/schema),./internal/data/schema,./internal/data/ent/schema)
 ENT_GEN_DIR ?= $(APP_DIR)/internal/data/gen
 
 ENT_FEATURES := sql/upsert sql/modifier intercept
-clean: ent-clean
+gen-clean: ent-clean
 
 # Clean Ent generated artifacts.
 .PHONY: ent-clean

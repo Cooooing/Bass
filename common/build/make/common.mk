@@ -18,46 +18,27 @@ BUF_GEN_CONFIG := $(BUF_DIR)/gen.config.yaml
 BUF_GEN_OPENAPI := $(BUF_DIR)/gen.openapi.yaml
 BUF ?= buf
 
-# --- One-time targets ---
+# --- One-time target ---
 
 .PHONY: init
 init:
-	@echo "[init] installing development tools..."
-	@cd $(COMMON_DIR) && \
-	go mod tidy && go mod download
-	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-	go install github.com/go-kratos/kratos/cmd/kratos/v3@latest
-	go install github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v3@latest
-	go install github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v3@latest
-	go install github.com/envoyproxy/protoc-gen-validate@latest
-	go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
-	go install github.com/google/wire/cmd/wire@latest
-	go install entgo.io/ent/cmd/ent@latest
-	go install github.com/bufbuild/buf/cmd/buf@latest
+	@echo "[init] installing pinned development tools..."
+	@go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11
+	@go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
+	@go install github.com/go-kratos/kratos/cmd/kratos/v3@v3.0.0
+	@go install github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v3@v3.0.0
+	@go install github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v3@v3.0.0
+	@go install github.com/envoyproxy/protoc-gen-validate@v1.3.3
+	@go install github.com/google/gnostic/cmd/protoc-gen-openapi@v0.7.1
+	@go install github.com/google/wire/cmd/wire@v0.7.0
+	@go install entgo.io/ent/cmd/ent@v0.14.5
+	@go install github.com/bufbuild/buf/cmd/buf@v1.50.0
 
 .PHONY: api-clean
 api-clean:
 	@echo "[api-clean] cleaning generated Go files..."
 	@cd $(PROTO_GEN_DIR) 2>/dev/null && find . -name "*.go" -type f -delete 2>/dev/null; true
 	@cd $(PROTO_GEN_DIR) 2>/dev/null && find . -type d -empty -delete 2>/dev/null; true
-
-.PHONY: api-lint
-api-lint:
-	@echo "[api-lint] buf lint..."
-	@cd $(ROOT_DIR) && $(BUF) lint $(BUF_CONFIG_DIR)
-
-.PHONY: api-dep
-api-dep:
-	@echo "[api-dep] buf dep update..."
-	@cd $(ROOT_DIR) && $(BUF) dep update $(BUF_CONFIG_DIR)
-
-.PHONY: api-format
-api-format:
-	@echo "[api-format] format shared API proto..."
-	@cd $(ROOT_DIR) && $(BUF) format -w $(BUF_CONFIG_DIR)
-	@echo "[api-format] gofmt common Go files..."
-	@find $(COMMON_DIR) -type f -name "*.go" -not -path "$(PROTO_GEN_DIR)/*" -exec gofmt -w {} +
 
 .PHONY: api
 api: api-clean

@@ -7,106 +7,111 @@ APP_DIR := $(ROOT_DIR)/app
 MODULES ?= $(sort $(patsubst $(APP_DIR)/%/Makefile,%,$(wildcard $(APP_DIR)/*/Makefile)))
 BFF_SERVERS ?= bff_bbs bff_bbs_admin bff_game_idle
 
-IGNORE_ERROR ?= 1
+IGNORE_ERROR ?= 0
 
 include $(ROOT_DIR)/common/build/make/common.mk
 
-# --- Root-only targets, avoiding module target collisions. ---
+# --- Root-only targets. ---
 
-.PHONY: all
-all: init api
-	@for module in $(MODULES); do \
-		echo "---- [$$module] ----"; \
-		$(MAKE) -C $(APP_DIR)/$$module all IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
-	done
-
-.PHONY: gen-all
-gen-all: api
+.PHONY: gen
+gen: api
 	@for module in $(MODULES); do \
 		echo "---- [$$module] ----"; \
 		$(MAKE) -C $(APP_DIR)/$$module gen IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-.PHONY: clean-all
-clean-all: api-clean
+.PHONY: gen-clean
+gen-clean: api-clean
 	@for module in $(MODULES); do \
 		echo "---- [$$module] ----"; \
-		$(MAKE) -C $(APP_DIR)/$$module clean IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+		$(MAKE) -C $(APP_DIR)/$$module gen-clean IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-.PHONY: tidy-all build-all
-tidy-all build-all:
+.PHONY: build
+build:
 	@for module in $(MODULES); do \
 		echo "---- [$$module] ----"; \
-		$(MAKE) -C $(APP_DIR)/$$module $(patsubst %-all,%,$@) IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+		$(MAKE) -C $(APP_DIR)/$$module build IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-.PHONY: format fmt
-format: api-format
+.PHONY: build-clean
+build-clean:
 	@for module in $(MODULES); do \
 		echo "---- [$$module] ----"; \
-		$(MAKE) -C $(APP_DIR)/$$module format IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+		$(MAKE) -C $(APP_DIR)/$$module build-clean IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-fmt: format
-
-.PHONY: doc-all
-doc-all:
+.PHONY: doc
+doc:
 	@for module in $(BFF_SERVERS); do \
 		echo "---- [$$module] ----"; \
 		$(MAKE) -C $(APP_DIR)/$$module doc IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-.PHONY: sdk-validate-all
-sdk-validate-all:
+.PHONY: doc-clean
+doc-clean:
 	@for module in $(BFF_SERVERS); do \
 		echo "---- [$$module] ----"; \
-		$(MAKE) -C $(APP_DIR)/$$module sdk-validate IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+		$(MAKE) -C $(APP_DIR)/$$module doc-clean IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
-.PHONY: sdk-all
-sdk-all:
+.PHONY: sdk
+sdk:
 	@for module in $(BFF_SERVERS); do \
 		echo "---- [$$module] ----"; \
 		$(MAKE) -C $(APP_DIR)/$$module sdk IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
+.PHONY: sdk-clean
+sdk-clean:
+	@for module in $(BFF_SERVERS); do \
+		echo "---- [$$module] ----"; \
+		$(MAKE) -C $(APP_DIR)/$$module sdk-clean IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
+	done
+
 # --- Help ---
 .PHONY: help
 help:
-	@echo "Available targets:"
+	@echo "Available targets (all direct Make targets):"
 	@echo ""
-	@echo "Root targets:"
-	@echo "  make init         - install development tools"
-	@echo "  make api          - generate shared API proto code"
-	@echo "  make api-dep      - update Buf dependencies"
-	@echo "  make api-lint     - lint shared API proto with Buf"
-	@echo "  make api-clean    - clean shared API generated code"
-	@echo "  make api-format   - format shared API proto and common Go files"
-	@echo "  make format       - format shared API and all app modules"
-	@echo "  make all          - run init, api, gen, and build"
+	@echo "Root:"
+	@echo "  make help         - show this command list"
+	@echo "  make init         - install pinned development tools"
+	@echo "  make api          - generate shared API code"
+	@echo "  make api-clean    - clean shared API code"
+	@echo "  make gen          - generate all module code"
+	@echo "  make gen-clean    - clean all generated module code"
+	@echo "  make build        - build all app modules"
+	@echo "  make build-clean  - clean all app binaries"
+	@echo "  make doc          - generate OpenAPI documents for all BFFs"
+	@echo "  make doc-clean    - clean all BFF OpenAPI documents"
+	@echo "  make sdk          - generate SDKs for all BFFs"
+	@echo "  make sdk-clean    - clean all BFF SDKs"
 	@echo ""
-	@echo "Batch targets:"
-	@echo "  make gen-all      - generate code for all modules"
-	@echo "  make clean-all    - clean generated files for all modules"
-	@echo "  make tidy-all     - run go mod tidy for all modules"
-	@echo "  make build-all    - build all services"
-	@echo "  make doc-all      - generate BFF OpenAPI documents"
-	@echo "  make sdk-validate-all - validate BFF OpenAPI documents"
-	@echo "  make sdk-all      - generate BFF SDKs from OpenAPI"
+	@echo "App module (make -C app/<module> <target>):"
+	@echo "  init                            - install pinned development tools (same global setup)"
+	@echo "  api / api-clean                 - generate / clean shared API code (same root artifact)"
+	@echo "  gen / gen-clean                 - generate / clean this module's code"
+	@echo "  build / build-clean             - build / clean this module's binary"
+	@echo "  cfg / cfg-clean                 - generate / clean configuration protobuf code"
+	@echo "  wire / wire-clean               - generate / clean Wire injection code"
 	@echo ""
-	@echo "Single module targets:"
-	@echo "  make -C app/<module> gen       - generate code for one module"
-	@echo "  make -C app/<module> clean     - clean one module"
-	@echo "  make -C app/<module> build     - build one module"
-	@echo "  make -C app/<module> tidy      - run go mod tidy for one module"
-	@echo "  make -C app/<module> format    - format one module"
-	@echo "  make -C app/<module> ent       - generate Ent code"
-	@echo "  make -C app/<module> doc       - generate OpenAPI document"
-	@echo "  make -C app/<module> sdk       - generate BFF TypeScript Axios/Fetch, Go, Java and Rust SDKs"
+	@echo "Ent module only (content, economy, game_idle, game_town, im, notify, platform, scheduler, user):"
+	@echo "  ent / ent-clean                 - generate / clean Ent data-access code"
+	@echo ""
+	@echo "BFF module only (make -C app/<bff> <target>):"
+	@echo "  doc / doc-clean                 - generate / clean OpenAPI document"
+	@echo "  sdk / sdk-clean                 - generate / clean all SDK languages"
+	@echo ""
+	@echo "Monolith (make -C monolith <target>):"
+	@echo "  init                            - install pinned development tools (same global setup)"
+	@echo "  api / api-clean                 - generate / clean shared API code (same root artifact)"
+	@echo "  gen / gen-clean                 - generate / clean monolith code"
+	@echo "  build / build-clean             - build / clean monolith binary"
+	@echo "  cfg / cfg-clean                 - generate / clean configuration protobuf code"
+	@echo "  wire / wire-clean               - generate / clean Wire injection code"
 	@echo ""
 	@echo "Examples:"
 	@echo "    make -C app/bff_bbs gen"
 	@echo "    make -C app/user build"
-	@echo "    make -C app/bff_bbs ent"
 	@echo "    make -C app/bff_bbs doc"

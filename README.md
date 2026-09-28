@@ -46,18 +46,20 @@ app/<service>/
 ```bash
 make init
 make api
-make all
-make build-all
-make api-lint
+make gen
+make build
 ```
 
 单模块命令示例：
 
 ```bash
 make -C app/user gen
+make -C app/user gen-clean
 make -C app/content build
 make -C app/bff_bbs doc
 make -C app/bff_bbs sdk
+make -C monolith gen
+make -C monolith build
 ```
 
 ## 本地文档

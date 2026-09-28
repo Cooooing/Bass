@@ -9,11 +9,10 @@ include $(MAKE_DIR)/common.mk
 SERVER := $(notdir $(CURDIR))
 APP_DIR := $(ROOT_DIR)/app/$(SERVER)
 INTERNAL_DIR := $(APP_DIR)/internal
-APP_PROTO_FILES := $(shell find $(INTERNAL_DIR) -type f -name "*.proto" | sort)
 BUF_SERVICE_CONFIG := '{"version":"v2","modules":[{"path":"common/proto/app"},{"path":"app"}],"deps":["buf.build/googleapis/googleapis"],"lint":{"use":["MINIMAL"],"except":["PACKAGE_DIRECTORY_MATCH","PACKAGE_SAME_DIRECTORY"]},"breaking":{"use":["FILE"]}}'
 
 IGNORE_ERROR ?= 0
-MODULE_GEN_TARGETS := config wire
+MODULE_GEN_TARGETS := cfg wire
 
 # run 在解析阶段根据 IGNORE_ERROR 选择错误处理方式。
 # 用法：$(call run,command,error-label)
@@ -26,27 +25,16 @@ endif
 
 # --- 模块目标 ---
 
-.PHONY: tidy
-tidy:
-	@echo "[tidy] go mod tidy..."
-	$(call run,cd $(APP_DIR) && go mod tidy,[tidy] go mod tidy)
 
-.PHONY: format
-format:
-	@echo "[format] gofmt module Go files..."
-	$(call run,find $(APP_DIR) -type f -name "*.go" -exec gofmt -w {} +,[format] gofmt)
-	@echo "[format] format module proto..."
-	$(call run,cd $(ROOT_DIR) && $(BUF) format -w app/$(SERVER),[format] buf format)
-
-.PHONY: config-clean
-config-clean:
-	@echo "[config-clean] cleaning proto generated Go files..."
+.PHONY: cfg-clean
+cfg-clean:
+	@echo "[cfg-clean] cleaning proto generated Go files..."
 	@cd $(APP_DIR) && find . -type f \( -name "*.pb.go" -o -name "*.pb.validate.go" -o -name "*.pb.gw.go" \) -delete; true
 
-.PHONY: config
-config: config-clean
-	@echo "[config] buf generate..."
-	$(call run,cd $(ROOT_DIR) && $(BUF) generate --config $(BUF_SERVICE_CONFIG) --template $(BUF_GEN_CONFIG) --path app/$(SERVER)/internal/config/config.proto --output app,[config] buf generate)
+.PHONY: cfg
+cfg: cfg-clean
+	@echo "[cfg] buf generate..."
+	$(call run,cd $(ROOT_DIR) && $(BUF) generate --config $(BUF_SERVICE_CONFIG) --template $(BUF_GEN_CONFIG) --path app/$(SERVER)/internal/config/config.proto --output app,[cfg] buf generate)
 
 .PHONY: wire-clean
 wire-clean:
@@ -63,25 +51,21 @@ wire: wire-clean
 .PHONY: build
 build:
 	@echo "[build] go build..."
-	$(call run,cd $(APP_DIR) && go mod tidy && go mod download && go build -trimpath -ldflags "-s -w" -o $(APP_DIR)/server ./cmd/...,[build] go build)
+	$(call run,cd $(APP_DIR) && go build -trimpath -ldflags "-s -w" -o $(APP_DIR)/server ./cmd/...,[build] go build)
 
 .PHONY: build-clean
 build-clean:
 	@echo "[build-clean] cleaning service binary..."
 	@rm -f $(APP_DIR)/server; true
 
-.PHONY: clean
-clean: config-clean
-clean: wire-clean
-clean: build-clean
+.PHONY: gen-clean
+gen-clean: cfg-clean
+gen-clean: wire-clean
 
 .PHONY: gen
-gen:
+gen: gen-clean
 	@for target in $(MODULE_GEN_TARGETS); do \
 		$(MAKE) $$target IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
-
-.PHONY: all
-all: init api tidy gen build
 
 endif

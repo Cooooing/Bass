@@ -1,31 +1,21 @@
-ARG GO_VERSION=1.26
+ARG TOOLCHAIN_IMAGE=ghcr.io/cooooing/bass-build-tools:latest
 
 # 第一阶段构建单体应用。
-FROM golang:${GO_VERSION} AS builder
+FROM ${TOOLCHAIN_IMAGE} AS builder
 
 ENV CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64 \
     PATH="/go/bin/linux_amd64:/go/bin:${PATH}"
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    protobuf-compiler \
-    git \
-    curl \
-    unzip \
-    upx-ucl \
-    && update-ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /build
 
 COPY . /build
 
-RUN make init
-RUN make gen-all IGNORE_ERROR=0
-RUN make -C monolith gen IGNORE_ERROR=0
-RUN make -C monolith build IGNORE_ERROR=0
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    make gen IGNORE_ERROR=0 \
+    && make -C monolith gen build IGNORE_ERROR=0
 RUN upx -9 --lzma /build/monolith/server -o /build/server
 
 # 第二阶段提供最小运行环境。

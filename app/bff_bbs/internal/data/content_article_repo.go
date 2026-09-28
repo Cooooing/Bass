@@ -10,6 +10,7 @@ import (
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"fmt"
+	"sort"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
@@ -58,7 +59,7 @@ func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo
 		return nil, err
 	}
 	item := reply.GetArticle()
-	lastComments, states, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
+	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +67,7 @@ func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo
 	if err != nil {
 		return nil, err
 	}
-	return r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()]), nil
+	return r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()]), nil
 }
 
 func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo.UpdateDraftArticleReq) (*repo.ArticleDetail, error) {
@@ -93,7 +94,7 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 		return nil, err
 	}
 	item := reply.GetArticle()
-	lastComments, states, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
+	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +102,7 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 	if err != nil {
 		return nil, err
 	}
-	return r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()]), nil
+	return r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()]), nil
 }
 
 func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.PublishArticleReq) error {
@@ -195,10 +196,10 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	}
 	accessScope := contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST
 	if req.UserID > 0 {
-		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR
+		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
 	}
 	if query.AuthorID != nil && *query.AuthorID == req.UserID {
-		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
+		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR
 		if query.PublishStatus != nil {
 			contentQuery.PublishStatus = new(contentv1enum.ArticlePublishStatus(*query.PublishStatus))
 		}
@@ -239,7 +240,7 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	for _, item := range reply.GetRows() {
 		articleIDs = append(articleIDs, item.GetId())
 	}
-	lastComments, states, err := r.loadArticleFacts(ctx, articleIDs, req.UserID)
+	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, articleIDs, req.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -253,7 +254,7 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	}
 	rows := make([]*repo.ArticleListItem, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
-		rows = append(rows, r.articleListItem(item, profiles, lastComments[item.GetId()], states[item.GetId()]))
+		rows = append(rows, r.articleListItem(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()]))
 	}
 	var page *repo.PageResp
 	if reply.GetPage() != nil {
@@ -287,7 +288,7 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 	}
 	item := reply.GetArticle()
 
-	lastComments, states, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
+	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -295,7 +296,7 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 	if err != nil {
 		return nil, err
 	}
-	detail := r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()])
+	detail := r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()])
 	if item.GetHasPostscript() {
 		postscriptResp, err := r.contentClient.Postscript.List(ctx, &contentv1.ListPostscripts_Req{
 			ArticleId: item.GetId(),
@@ -402,15 +403,15 @@ func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.Rewa
 	return nil
 }
 
-func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs []int64, userID int64) (map[int64]*contentv1.MapArticleLastComments_Resp_Comment, map[int64]*repo.ArticleViewerActionState, error) {
+func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs []int64, userID int64) (map[int64]*contentv1.MapArticleLastComments_Resp_Comment, map[int64]*repo.ArticleViewerActionState, map[int64][]*repo.ArticleTag, map[int64][]*repo.ArticleDomain, error) {
 	if len(articleIDs) == 0 {
-		return map[int64]*contentv1.MapArticleLastComments_Resp_Comment{}, map[int64]*repo.ArticleViewerActionState{}, nil
+		return map[int64]*contentv1.MapArticleLastComments_Resp_Comment{}, map[int64]*repo.ArticleViewerActionState{}, map[int64][]*repo.ArticleTag{}, map[int64][]*repo.ArticleDomain{}, nil
 	}
 	commentResp, err := r.contentClient.Comment.MapArticleLastComments(ctx, &contentv1.MapArticleLastComments_Req{
 		ArticleIds: articleIDs,
 	})
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, nil, err
 	}
 	states := map[int64]*repo.ArticleViewerActionState{}
 	if userID > 0 {
@@ -419,11 +420,58 @@ func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs 
 			UserId:     userID,
 		})
 		if err != nil {
-			return nil, nil, err
+			return nil, nil, nil, nil, err
 		}
 		states = r.articleViewerActionStates(stateResp.GetStates())
 	}
-	return commentResp.GetComments(), states, nil
+	tagStatus := contentv1enum.TagStatus_TAG_STATUS_ENABLED
+	tagResp, err := r.contentClient.Tag.MapArticleTags(ctx, &contentv1.MapArticleTags_Req{ArticleIds: articleIDs, Status: &tagStatus})
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+	articleTags := make(map[int64][]*repo.ArticleTag, len(tagResp.GetArticleTags()))
+	domainIDs := make([]int64, 0)
+	for articleID, rows := range tagResp.GetArticleTags() {
+		values := make([]*repo.ArticleTag, 0, len(rows.GetRows()))
+		for _, item := range rows.GetRows() {
+			values = append(values, &repo.ArticleTag{ID: item.GetId(), Code: item.GetCode(), Name: item.GetName(), Icon: item.Icon, DomainID: item.DomainId})
+			if item.DomainId != nil {
+				domainIDs = append(domainIDs, *item.DomainId)
+			}
+		}
+		articleTags[articleID] = values
+	}
+	domainStatus := contentv1enum.DomainStatus_DOMAIN_STATUS_ENABLED
+	domainResp, err := r.contentClient.Domain.Map(ctx, &contentv1.MapDomains_Req{DomainIds: lo.Uniq(domainIDs), Status: &domainStatus})
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+	articleDomains := make(map[int64][]*repo.ArticleDomain, len(articleTags))
+	for articleID, tags := range articleTags {
+		seen := map[int64]struct{}{}
+		for _, tag := range tags {
+			if tag.DomainID == nil {
+				continue
+			}
+			domain, ok := domainResp.GetDomains()[*tag.DomainID]
+			if !ok {
+				tag.DomainID = nil
+				continue
+			}
+			if _, ok := seen[domain.GetId()]; ok {
+				continue
+			}
+			seen[domain.GetId()] = struct{}{}
+			articleDomains[articleID] = append(articleDomains[articleID], &repo.ArticleDomain{ID: domain.GetId(), Code: domain.GetCode(), Name: domain.GetName(), Icon: domain.Icon, URL: domain.Url, Sort: domain.GetSort()})
+		}
+		sort.Slice(articleDomains[articleID], func(i, j int) bool {
+			if articleDomains[articleID][i].Sort == articleDomains[articleID][j].Sort {
+				return articleDomains[articleID][i].ID < articleDomains[articleID][j].ID
+			}
+			return articleDomains[articleID][i].Sort < articleDomains[articleID][j].Sort
+		})
+	}
+	return commentResp.GetComments(), states, articleTags, articleDomains, nil
 }
 
 func (r *ContentArticleClient) articleViewerActionStates(states map[int64]*contentv1.MapArticleViewerActionStates_Resp_ArticleViewerActionState) map[int64]*repo.ArticleViewerActionState {
@@ -454,7 +502,7 @@ func (r *ContentArticleClient) articleProfileIDs(item *contentv1.Article, lastCo
 	return userIDs
 }
 
-func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState) *repo.ArticleListItem {
+func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState, tags []*repo.ArticleTag, domains []*repo.ArticleDomain) *repo.ArticleListItem {
 	if item == nil {
 		return nil
 	}
@@ -483,6 +531,8 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles
 		ReplyCount:        item.GetReplyCount(),
 		CoverImageURL:     r.articleCoverImageURL(item),
 		ViewerActionState: state,
+		Tags:              tags,
+		Domains:           domains,
 		CreatedAt:         new(item.GetCreatedAt().AsTime()),
 		UpdatedAt:         new(item.GetUpdatedAt().AsTime()),
 	}
@@ -508,7 +558,7 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles
 	return out
 }
 
-func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState) *repo.ArticleDetail {
+func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState, tags []*repo.ArticleTag, domains []*repo.ArticleDomain) *repo.ArticleDetail {
 	if item == nil {
 		return nil
 	}
@@ -539,6 +589,8 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 		ReplyCount:          item.GetReplyCount(),
 		CoverImageURL:       r.articleCoverImageURL(item),
 		ViewerActionState:   state,
+		Tags:                tags,
+		Domains:             domains,
 		CreatedAt:           new(item.GetCreatedAt().AsTime()),
 		UpdatedAt:           new(item.GetUpdatedAt().AsTime()),
 	}

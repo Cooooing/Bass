@@ -207,7 +207,15 @@ func (s *ContentArticleService) articleListItem(row *usecase.ContentArticleListI
 	if row == nil {
 		return nil
 	}
-	out := &bbscontentv1.ArticleListItem{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), AuthorUser: s.accountProfile(row.AuthorUser), CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
+	tags := make([]*bbscontentv1.ArticleTag, 0, len(row.Tags))
+	for _, item := range row.Tags {
+		tags = append(tags, &bbscontentv1.ArticleTag{Id: item.ID, Code: item.Code, Name: item.Name, Icon: item.Icon, DomainId: item.DomainID})
+	}
+	domains := make([]*bbscontentv1.ArticleDomain, 0, len(row.Domains))
+	for _, item := range row.Domains {
+		domains = append(domains, &bbscontentv1.ArticleDomain{Id: item.ID, Code: item.Code, Name: item.Name, Icon: item.Icon, Url: item.URL})
+	}
+	out := &bbscontentv1.ArticleListItem{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), AuthorUser: s.accountProfile(row.AuthorUser), Tags: tags, Domains: domains, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
 	if row.LastReplyAt != nil {
 		out.LastReplyAt = timestamppb.New(*row.LastReplyAt)
 	}
@@ -234,7 +242,15 @@ func (s *ContentArticleService) articleDetail(row *usecase.ContentArticleDetail)
 	for _, item := range row.Postscripts {
 		postscripts = append(postscripts, s.articlePostscript(item))
 	}
-	out := &bbscontentv1.ArticleDetail{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, RewardContent: row.RewardContent, RewardContentRender: row.RewardContentRender, RewardPoints: row.RewardPoints, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), Postscripts: postscripts, AuthorUser: s.accountProfile(row.AuthorUser), CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
+	tags := make([]*bbscontentv1.ArticleTag, 0, len(row.Tags))
+	for _, item := range row.Tags {
+		tags = append(tags, &bbscontentv1.ArticleTag{Id: item.ID, Code: item.Code, Name: item.Name, Icon: item.Icon, DomainId: item.DomainID})
+	}
+	domains := make([]*bbscontentv1.ArticleDomain, 0, len(row.Domains))
+	for _, item := range row.Domains {
+		domains = append(domains, &bbscontentv1.ArticleDomain{Id: item.ID, Code: item.Code, Name: item.Name, Icon: item.Icon, Url: item.URL})
+	}
+	out := &bbscontentv1.ArticleDetail{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, RewardContent: row.RewardContent, RewardContentRender: row.RewardContentRender, RewardPoints: row.RewardPoints, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), Postscripts: postscripts, AuthorUser: s.accountProfile(row.AuthorUser), Tags: tags, Domains: domains, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
 	if row.LastReplyAt != nil {
 		out.LastReplyAt = timestamppb.New(*row.LastReplyAt)
 	}

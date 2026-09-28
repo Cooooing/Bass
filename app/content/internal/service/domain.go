@@ -136,6 +136,35 @@ func (s *DomainService) Update(ctx context.Context, req *v1.UpdateDomain_Req) (*
 	return &v1.UpdateDomain_Resp{Domain: reply}, nil
 }
 
+func (s *DomainService) Map(ctx context.Context, req *v1.MapDomains_Req) (*v1.MapDomains_Resp, error) {
+	req = util.OrDefault(req, &v1.MapDomains_Req{})
+	var status *enum.DomainStatus
+	if req.Status != nil {
+		value, ok := enum.DomainStatusMap.ToEnum(*req.Status)
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_DOMAIN_INVALID)
+		}
+		status = &value
+	}
+	rows, err := s.contentUsecase.Map(ctx, req.GetDomainIds(), status)
+	if err != nil {
+		return nil, err
+	}
+	domains := make(map[int64]*v1.MapDomains_Resp_Domain, len(rows))
+	for id, item := range rows {
+		domains[id] = &v1.MapDomains_Resp_Domain{
+			Id:     item.ID,
+			Status: enum.DomainStatusMap.MustToProto(item.Status),
+			Name:   item.Name,
+			Code:   item.Code,
+			Icon:   item.Icon,
+			Url:    item.URL,
+			Sort:   item.Sort,
+		}
+	}
+	return &v1.MapDomains_Resp{Domains: domains}, nil
+}
+
 func (s *DomainService) List(ctx context.Context, req *v1.ListDomains_Req) (*v1.ListDomains_Resp, error) {
 	query := req.GetQuery()
 	if query == nil {

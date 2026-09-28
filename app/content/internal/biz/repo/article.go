@@ -21,6 +21,7 @@ type ArticleRepo interface {
 	BindTags(ctx context.Context, req *ArticleTagBindReq) ([]int64, error)
 	UnbindTags(ctx context.Context, req *ArticleTagBindReq) ([]int64, error)
 	ListTags(ctx context.Context, articleID int64) ([]*model.Tag, error)
+	MapTags(ctx context.Context, req *ArticleMapTagsReq) (map[int64][]*model.Tag, error)
 	Exist(ctx context.Context, req *ArticleGetReq) (bool, error)
 	Get(ctx context.Context, req *ArticleGetReq) (*model.Article, error)
 	List(ctx context.Context, req *ArticleGetReq) ([]*model.Article, error)
@@ -70,6 +71,11 @@ type ArticleReplaceTagsReq struct {
 type ArticleTagBindReq struct {
 	ArticleID int64
 	TagIDs    []int64
+}
+
+type ArticleMapTagsReq struct {
+	ArticleIDs []int64
+	Status     *enum.TagStatus
 }
 
 type ArticleStatUpdate struct {

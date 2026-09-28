@@ -198,6 +198,68 @@ func (s *TagService) ListArticleTags(ctx context.Context, req *v1.ListArticleTag
 	return &v1.ListArticleTags_Resp{Rows: reply}, nil
 }
 
+func (s *TagService) Map(ctx context.Context, req *v1.MapTags_Req) (*v1.MapTags_Resp, error) {
+	req = util.OrDefault(req, &v1.MapTags_Req{})
+	var status *enum.TagStatus
+	if req.Status != nil {
+		value, ok := enum.TagStatusMap.ToEnum(*req.Status)
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
+		}
+		status = &value
+	}
+	rows, err := s.tagUsecase.Map(ctx, req.GetTagIds(), status)
+	if err != nil {
+		return nil, err
+	}
+	tags := make(map[int64]*v1.MapTags_Resp_Tag, len(rows))
+	for id, item := range rows {
+		tags[id] = &v1.MapTags_Resp_Tag{
+			Id:       item.ID,
+			DomainId: item.DomainID,
+			Status:   enum.TagStatusMap.MustToProto(item.Status),
+			Name:     item.Name,
+			Code:     item.Code,
+			Icon:     item.Icon,
+			Sort:     item.Sort,
+		}
+	}
+	return &v1.MapTags_Resp{Tags: tags}, nil
+}
+
+func (s *TagService) MapArticleTags(ctx context.Context, req *v1.MapArticleTags_Req) (*v1.MapArticleTags_Resp, error) {
+	req = util.OrDefault(req, &v1.MapArticleTags_Req{})
+	var status *enum.TagStatus
+	if req.Status != nil {
+		value, ok := enum.TagStatusMap.ToEnum(*req.Status)
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_TAG_INVALID)
+		}
+		status = &value
+	}
+	rows, err := s.tagUsecase.MapArticleTags(ctx, req.GetArticleIds(), status)
+	if err != nil {
+		return nil, err
+	}
+	articleTags := make(map[int64]*v1.MapArticleTags_Resp_Tags, len(rows))
+	for articleID, tags := range rows {
+		values := make([]*v1.MapArticleTags_Resp_Tag, 0, len(tags))
+		for _, item := range tags {
+			values = append(values, &v1.MapArticleTags_Resp_Tag{
+				Id:       item.ID,
+				DomainId: item.DomainID,
+				Status:   enum.TagStatusMap.MustToProto(item.Status),
+				Name:     item.Name,
+				Code:     item.Code,
+				Icon:     item.Icon,
+				Sort:     item.Sort,
+			})
+		}
+		articleTags[articleID] = &v1.MapArticleTags_Resp_Tags{Rows: values}
+	}
+	return &v1.MapArticleTags_Resp{ArticleTags: articleTags}, nil
+}
+
 func (s *TagService) List(ctx context.Context, req *v1.ListTags_Req) (*v1.ListTags_Resp, error) {
 	query := req.GetQuery()
 	if query == nil {

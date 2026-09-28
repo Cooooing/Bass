@@ -12,6 +12,23 @@ type ArticleViewerActionState struct {
 	Rewarded  bool
 }
 
+type ArticleTag struct {
+	ID       int64
+	Code     string
+	Name     string
+	Icon     *string
+	DomainID *int64
+}
+
+type ArticleDomain struct {
+	ID   int64
+	Code string
+	Name string
+	Icon *string
+	URL  *string
+	Sort int32
+}
+
 type ArticlePostscript struct {
 	ID            int64
 	ArticleID     int64
@@ -54,6 +71,8 @@ type ArticleListItem struct {
 	UpdatedAt         *time.Time
 	PublishedAt       *time.Time
 	EditedAt          *time.Time
+	Tags              []*ArticleTag
+	Domains           []*ArticleDomain
 }
 
 type ArticleDetail struct {
@@ -90,6 +109,8 @@ type ArticleDetail struct {
 	UpdatedAt           *time.Time
 	PublishedAt         *time.Time
 	EditedAt            *time.Time
+	Tags                []*ArticleTag
+	Domains             []*ArticleDomain
 }
 
 type ArticleSave struct {

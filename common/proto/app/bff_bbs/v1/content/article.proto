@@ -380,6 +380,8 @@ message ArticleListItem {
   ArticleVisibility visibility = 32; // 可见范围
   ContentRestriction restriction = 33; // 治理限制
   google.protobuf.Timestamp edited_at = 34; // 编辑时间
+  repeated ArticleTag tags = 35; // 文章标签
+  repeated ArticleDomain domains = 36; // 文章所属领域
   optional int64 created_by = 1002; // 创建账号 ID
   optional int64 updated_by = 1003; // 更新账号 ID
   google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -416,8 +418,26 @@ message ArticleDetail {
   ArticleVisibility visibility = 32; // 可见范围
   ContentRestriction restriction = 33; // 治理限制
   google.protobuf.Timestamp edited_at = 34; // 编辑时间
+  repeated ArticleTag tags = 35; // 文章标签
+  repeated ArticleDomain domains = 36; // 文章所属领域
   optional int64 created_by = 1002; // 创建账号 ID
   optional int64 updated_by = 1003; // 更新账号 ID
   google.protobuf.Timestamp created_at = 1000; // 创建时间
   google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}
+
+message ArticleTag {
+  int64 id = 1; // 标签 ID
+  string code = 2; // 稳定编码
+  string name = 3; // 标签名称
+  optional string icon = 4; // 图标
+  optional int64 domain_id = 5; // 所属领域 ID
+}
+
+message ArticleDomain {
+  int64 id = 1; // 领域 ID
+  string code = 2; // 稳定编码
+  string name = 3; // 领域名称
+  optional string icon = 4; // 图标
+  optional string url = 5; // 链接
 }

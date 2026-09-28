@@ -205,3 +205,14 @@ func (t *TagUsecase) ListArticleTags(ctx context.Context, articleID int64) ([]*m
 	}
 	return rows, nil
 }
+
+func (t *TagUsecase) Map(ctx context.Context, tagIDs []int64, status *enum.TagStatus) (map[int64]*model.Tag, error) {
+	if len(tagIDs) == 0 {
+		return map[int64]*model.Tag{}, nil
+	}
+	return t.tagRepo.Map(ctx, &repo.TagGetReq{TagIds: tagIDs, Status: status})
+}
+
+func (t *TagUsecase) MapArticleTags(ctx context.Context, articleIDs []int64, status *enum.TagStatus) (map[int64][]*model.Tag, error) {
+	return t.articleRepo.MapTags(ctx, &repo.ArticleMapTagsReq{ArticleIDs: articleIDs, Status: status})
+}

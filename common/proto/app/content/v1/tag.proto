@@ -15,6 +15,8 @@ service ContentTagService {
   rpc BindArticle(BindArticleTags.Req) returns (BindArticleTags.Resp) {} // 绑定文章标签。
   rpc UnbindArticle(UnbindArticleTags.Req) returns (UnbindArticleTags.Resp) {} // 解绑文章标签。
   rpc ListArticleTags(ListArticleTags.Req) returns (ListArticleTags.Resp) {} // 查询文章标签列表。
+  rpc Map(MapTags.Req) returns (MapTags.Resp) {} // 批量查询标签映射。
+  rpc MapArticleTags(MapArticleTags.Req) returns (MapArticleTags.Resp) {} // 批量查询文章标签映射。
   rpc List(ListTags.Req) returns (ListTags.Resp) {} // 查询标签列表。
   rpc Page(PageTags.Req) returns (PageTags.Resp) {} // 分页查询标签。
 }
@@ -139,6 +141,50 @@ message ListArticleTags {
     }
 
     repeated Tag rows = 1; // 标签列表。
+  }
+}
+
+message MapTags {
+  message Req {
+    repeated int64 tag_ids = 1; // 标签 ID 列表。
+    optional TagStatus status = 2; // 标签状态过滤。
+  }
+  message Resp {
+    map<int64, Tag> tags = 1; // 标签 ID 到标签的映射。
+
+    message Tag {
+      int64 id = 1; // 标签 ID。
+      optional int64 domain_id = 2; // 所属领域 ID。
+      TagStatus status = 3; // 标签状态。
+      string name = 4; // 标签名称。
+      string code = 5; // 稳定编码。
+      optional string icon = 6; // 图标。
+      int32 sort = 7; // 排序值，越小越靠前。
+    }
+  }
+}
+
+message MapArticleTags {
+  message Req {
+    repeated int64 article_ids = 1; // 文章 ID 列表。
+    optional TagStatus status = 2; // 标签状态过滤。
+  }
+  message Resp {
+    map<int64, Tags> article_tags = 1; // 文章 ID 到标签列表的映射。
+
+    message Tags {
+      repeated Tag rows = 1; // 标签列表。
+    }
+
+    message Tag {
+      int64 id = 1; // 标签 ID。
+      optional int64 domain_id = 2; // 所属领域 ID。
+      TagStatus status = 3; // 标签状态。
+      string name = 4; // 标签名称。
+      string code = 5; // 稳定编码。
+      optional string icon = 6; // 图标。
+      int32 sort = 7; // 排序值，越小越靠前。
+    }
   }
 }
 

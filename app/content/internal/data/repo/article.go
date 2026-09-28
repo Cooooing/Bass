@@ -312,6 +312,48 @@ func (r *ArticleRepo) ListTags(ctx context.Context, articleID int64) ([]*model.T
 	}), nil
 }
 
+func (r *ArticleRepo) MapTags(ctx context.Context, req *repo.ArticleMapTagsReq) (map[int64][]*model.Tag, error) {
+	result := map[int64][]*model.Tag{}
+	if req == nil || len(req.ArticleIDs) == 0 {
+		return result, nil
+	}
+	query := r.getClient(ctx).Article.Query().
+		Where(articleent.IDIn(lo.Uniq(req.ArticleIDs)...), articleent.DeletedAtIsNil()).
+		WithTags(func(query *gen.TagQuery) {
+			query.Where(tagent.DeletedAtIsNil())
+			if req.Status != nil {
+				query.Where(tagent.StatusEQ(tagent.Status(*req.Status)))
+			}
+			query.Order(gen.Asc(tagent.FieldSort), gen.Asc(tagent.FieldID))
+		})
+	articles, err := query.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	for _, article := range articles {
+		tags := make([]*model.Tag, 0, len(article.Edges.Tags))
+		for _, item := range article.Edges.Tags {
+			tags = append(tags, &model.Tag{
+				ID:           item.ID,
+				Code:         item.Code,
+				Name:         item.Name,
+				Description:  item.Description,
+				DomainID:     item.DomainID,
+				Icon:         item.Icon,
+				Sort:         item.Sort,
+				ArticleCount: item.ArticleCount,
+				Status:       enum.TagStatus(item.Status),
+				CreatedAt:    item.CreatedAt,
+				UpdatedAt:    item.UpdatedAt,
+				CreatedBy:    item.CreatedBy,
+				UpdatedBy:    item.UpdatedBy,
+			})
+		}
+		result[article.ID] = tags
+	}
+	return result, nil
+}
+
 func (r *ArticleRepo) Exist(ctx context.Context, req *repo.ArticleGetReq) (bool, error) {
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)

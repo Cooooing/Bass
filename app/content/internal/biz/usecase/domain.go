@@ -94,3 +94,10 @@ func (d *ContentUsecase) Page(ctx context.Context, req *DomainPageReq) (*DomainP
 		Page: pageResp.Page,
 	}, nil
 }
+
+func (d *ContentUsecase) Map(ctx context.Context, domainIDs []int64, status *enum.DomainStatus) (map[int64]*model.Domain, error) {
+	if len(domainIDs) == 0 {
+		return map[int64]*model.Domain{}, nil
+	}
+	return d.domainRepo.Map(ctx, &repo.DomainGetReq{DomainIds: domainIDs, Status: status})
+}

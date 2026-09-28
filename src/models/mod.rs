@@ -32,6 +32,8 @@ pub mod cancel_publish_article_req;
 pub use self::cancel_publish_article_req::CancelPublishArticleReq;
 pub mod check_in_resp;
 pub use self::check_in_resp::CheckInResp;
+pub mod check_registration_availability_resp;
+pub use self::check_registration_availability_resp::CheckRegistrationAvailabilityResp;
 pub mod collect_article_req;
 pub use self::collect_article_req::CollectArticleReq;
 pub mod collect_article_resp;

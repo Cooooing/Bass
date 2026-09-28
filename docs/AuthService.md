@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**cancel_account**](AuthService.md#cancel_account) | **POST** /v1/user/auth/cancel-account | 
+[**check_registration_availability**](AuthService.md#check_registration_availability) | **GET** /v1/user/auth/register-availability | 
 [**login**](AuthService.md#login) | **POST** /v1/user/auth/login | 
 [**logout**](AuthService.md#logout) | **POST** /v1/user/auth/logout | 
 [**refresh_token**](AuthService.md#refresh_token) | **POST** /v1/user/auth/refresh-token | 
@@ -37,6 +38,38 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## check_registration_availability
+
+> models::CheckRegistrationAvailabilityResp check_registration_availability(name, email, phone)
+
+
+检查注册字段是否可用。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**name** | Option<**String**> |  |  |
+**email** | Option<**String**> |  |  |
+**phone** | Option<**String**> |  |  |
+
+### Return type
+
+[**models::CheckRegistrationAvailabilityResp**](CheckRegistrationAvailability_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

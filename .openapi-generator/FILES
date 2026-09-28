@@ -23,6 +23,7 @@ docs/BlockRelationReq.md
 docs/CancelAccountReq.md
 docs/CancelPublishArticleReq.md
 docs/CheckInResp.md
+docs/CheckRegistrationAvailabilityResp.md
 docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
@@ -198,6 +199,7 @@ src/models/block_relation_req.rs
 src/models/cancel_account_req.rs
 src/models/cancel_publish_article_req.rs
 src/models/check_in_resp.rs
+src/models/check_registration_availability_resp.rs
 src/models/collect_article_req.rs
 src/models/collect_article_resp.rs
 src/models/confirm_enable_totp_req.rs

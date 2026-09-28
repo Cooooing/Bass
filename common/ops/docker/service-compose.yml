@@ -2,20 +2,20 @@ name: bass-application
 
 networks:
   bass:
-    driver: bridge
+    name: bass
     external: true
 
 services:
-#  treble:
-#    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/treble:latest
-#    container_name: treble
-#    restart: on-failure:3
-#    env_file:
-#      - .test.env
-#    ports:
-#      - "2324:2324"
-#    networks:
-#      - bass
+  treble:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/treble:latest
+    container_name: treble
+    restart: on-failure:3
+    env_file:
+      - .test.env
+    ports:
+      - "2324:2324"
+    networks:
+      - bass
 
   bff_bbs:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/bff_bbs:latest

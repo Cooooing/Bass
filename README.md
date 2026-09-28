@@ -22,7 +22,7 @@ Bass/
 ├─ app/        # 服务模块
 ├─ common/     # 公共 proto、公共 Make 片段、基础封装
 ├─ deploy/     # 部署配置
-├─ doc/        # 架构、编码规范和模板
+├─ doc/        # 本地业务事实、架构规则、模板和 Agent 工作流（Git 忽略）
 └─ Makefile    # 根构建入口
 ```
 
@@ -56,26 +56,10 @@ make api-lint
 ```bash
 make -C app/user gen
 make -C app/content build
-make -C app/bbs doc
-make -C app/bbs sdk
+make -C app/bff_bbs doc
+make -C app/bff_bbs sdk
 ```
 
-## 文档入口
+## 本地文档
 
-| 文档 | 内容 |
-|------|------|
-| [doc/architecture.md](doc/architecture.md) | 架构边界、读写归属、契约、事件、缓存、运行时规则和 `common` 封装约定。 |
-| [doc/coding.md](doc/coding.md) | 项目级编码规范和代码组织结构。 |
-| [doc/templates/](doc/templates/) | 新增 proto、service、usecase、repo、schema 时参考的模板。 |
-
-## 模板索引
-
-| 场景 | 模板 |
-|------|------|
-| HTTP proto | [doc/templates/proto-http.md](doc/templates/proto-http.md) |
-| gRPC proto | [doc/templates/proto-grpc.md](doc/templates/proto-grpc.md) |
-| HTTP service | [doc/templates/service-http.md](doc/templates/service-http.md) |
-| gRPC service | [doc/templates/service-grpc.md](doc/templates/service-grpc.md) |
-| usecase | [doc/templates/usecase.md](doc/templates/usecase.md) |
-| repo | [doc/templates/repo.md](doc/templates/repo.md) |
-| Ent schema | [doc/templates/ent-schema.md](doc/templates/ent-schema.md) |
+本机的 [doc/README.md](doc/README.md) 是业务事实、架构规则、工程模板和 Agent 工作流入口。`doc/` 不进入 Git；开发新功能、修复 bug 或改变业务事实时，必须同步维护对应功能页。

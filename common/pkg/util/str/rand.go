@@ -1,7 +1,9 @@
 package str
 
 import (
+	"crypto/rand"
 	"hash/crc32"
+	"math/big"
 	"os"
 	"strings"
 
@@ -24,7 +26,6 @@ func NewSonyflake() (*sonyflake.Sonyflake, error) {
 }
 
 func RandStr(sf *sonyflake.Sonyflake, length int, useLower, useUpper, useDigit, useUnderscore bool) string {
-	// 构建字符集
 	var charset string
 	if useDigit {
 		charset += "0123456789"
@@ -38,13 +39,11 @@ func RandStr(sf *sonyflake.Sonyflake, length int, useLower, useUpper, useDigit, 
 	if useUnderscore {
 		charset += "_"
 	}
-
 	if charset == "" || length <= 0 {
 		return ""
 	}
 
 	base := int64(len(charset))
-
 	var sb strings.Builder
 	var n int64
 	for sb.Len() < length {
@@ -54,8 +53,39 @@ func RandStr(sf *sonyflake.Sonyflake, length int, useLower, useUpper, useDigit, 
 		sb.WriteByte(charset[n%base])
 		n /= base
 	}
-
 	return sb.String()
+}
+
+// SecureRandStr returns a cryptographically secure random string using the selected ASCII character groups.
+func SecureRandStr(length int, useLower, useUpper, useDigit, useUnderscore bool) (string, error) {
+	var charset string
+	if useDigit {
+		charset += "0123456789"
+	}
+	if useLower {
+		charset += "abcdefghijklmnopqrstuvwxyz"
+	}
+	if useUpper {
+		charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	}
+	if useUnderscore {
+		charset += "_"
+	}
+	if charset == "" || length <= 0 {
+		return "", nil
+	}
+
+	bound := big.NewInt(int64(len(charset)))
+	var sb strings.Builder
+	sb.Grow(length)
+	for range length {
+		index, err := rand.Int(rand.Reader, bound)
+		if err != nil {
+			return "", err
+		}
+		sb.WriteByte(charset[index.Int64()])
+	}
+	return sb.String(), nil
 }
 
 func RandomInRange(min, max int) int {

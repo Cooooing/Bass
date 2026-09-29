@@ -86,6 +86,13 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "Operation failed",
 			},
 		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_SCHEDULED_AT_OUT_OF_RANGE: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "定时发布时间需在 5 分钟后且不超过 3 个月",
+				commonenums.Language_LANGUAGE_ZH_TW: "定時發佈時間需在 5 分鐘後且不超過 3 個月",
+				commonenums.Language_LANGUAGE_EN:    "Scheduled publishing must be at least 5 minutes away and within 3 months",
+			},
+		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "账号不存在或密码错误",

@@ -37,14 +37,6 @@ service ArticleService {
     };
   }
 
-  // 设置定时发布
-  rpc SchedulePublish(SchedulePublishArticle.Req) returns (SchedulePublishArticle.Resp) {
-    option (google.api.http) = {
-      post: "/v1/content/article/publish/schedule"
-      body: "*"
-    };
-  }
-
   // 取消定时发布
   rpc CancelPublish(CancelPublishArticle.Req) returns (CancelPublishArticle.Resp) {
     option (google.api.http) = {
@@ -177,21 +169,9 @@ message UpdateDraftArticle {
 message PublishArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
-    ArticleVisibility visibility = 2; // 可选，可见范围
+    optional google.protobuf.Timestamp scheduled_at = 2; // 可选，定时发布时间
     option (gnostic.openapi.v3.schema) = {
       required: "article_id"
-    };
-  }
-  message Resp {}
-}
-
-message SchedulePublishArticle {
-  message Req {
-    int64 article_id = 1; // 必填，文章 ID
-    google.protobuf.Timestamp publish_at = 2; // 必填，定时发布时间
-    option (gnostic.openapi.v3.schema) = {
-      required: "article_id"
-      required: "publish_at"
     };
   }
   message Resp {}
@@ -246,6 +226,7 @@ message ListArticles {
       repeated ArticleVisibility visibilities = 13; // 可选，可见范围列表
       optional ContentRestriction restriction = 14; // 可选，治理限制
       repeated ContentRestriction restrictions = 15; // 可选，治理限制列表
+      optional bool scheduled = 16; // 可选，仅本人草稿：是否已设置发布时间
     }
   }
   message Resp {

@@ -16,6 +16,7 @@ type DelayedTaskExecutionRecordRepo interface {
 	Claim(ctx context.Context, req *DelayedTaskExecutionRecordClaimReq) (*DelayedTaskExecutionRecordClaimResp, error)
 	MarkFinished(ctx context.Context, req *DelayedTaskExecutionRecordMarkFinishedReq) (*model.DelayedTaskExecutionRecord, error)
 	MarkCanceled(ctx context.Context, req *DelayedTaskExecutionRecordGetReq, finishedAt time.Time) (*model.DelayedTaskExecutionRecord, error)
+	CancelByBusinessKey(ctx context.Context, businessKey string, finishedAt time.Time) ([]*model.DelayedTaskExecutionRecord, error)
 }
 
 type DelayedTaskExecutionRecordGetReq struct {
@@ -23,6 +24,7 @@ type DelayedTaskExecutionRecordGetReq struct {
 	IDs            []int64
 	DelayedTaskID  *int64
 	IdempotencyKey *string
+	BusinessKey    *string
 	Status         *schedulerenum.TaskExecutionStatus
 	TriggerType    *schedulerenum.TaskTriggerType
 }

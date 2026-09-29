@@ -211,6 +211,7 @@ func (s *SchedulerDelayedTaskService) Schedule(ctx context.Context, req *schedul
 		Payload:        req.GetPayload(),
 		ScheduledAt:    req.GetScheduledAt().AsTime(),
 		IdempotencyKey: req.GetIdempotencyKey(),
+		BusinessKey:    req.GetBusinessKey(),
 	})
 	if err != nil {
 		return nil, err
@@ -277,12 +278,15 @@ func (s *SchedulerDelayedTaskService) CancelExecution(
 	ctx context.Context,
 	req *schedulerv1.CancelSchedulerDelayedTaskExecution_Req,
 ) (*schedulerv1.CancelSchedulerDelayedTaskExecution_Resp, error) {
-	if req == nil || req.GetId() == 0 && strings.TrimSpace(req.GetIdempotencyKey()) == "" {
+	if req == nil || req.GetId() == 0 && strings.TrimSpace(req.GetIdempotencyKey()) == "" && strings.TrimSpace(req.GetBusinessKey()) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	row, err := s.usecase.CancelExecution(ctx, req.GetId(), req.GetIdempotencyKey())
+	row, err := s.usecase.CancelExecution(ctx, req.GetId(), req.GetIdempotencyKey(), req.GetBusinessKey())
 	if err != nil {
 		return nil, err
+	}
+	if row == nil {
+		return &schedulerv1.CancelSchedulerDelayedTaskExecution_Resp{}, nil
 	}
 	item := &schedulerv1.DelayedTaskExecutionRecord{
 		Id:                 row.ID,

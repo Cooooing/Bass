@@ -10,6 +10,7 @@ type DelayedTaskExecutionRecord struct {
 	DelayedTaskID      int64
 	DelayedTaskVersion int64
 	IdempotencyKey     string
+	BusinessKey        string
 	TriggerType        schedulerenum.TaskTriggerType
 	ScheduleKey        string
 	ScheduledAt        time.Time

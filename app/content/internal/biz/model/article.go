@@ -95,12 +95,12 @@ func (a *Article) CanPublish(access *ContentAccess, publishAt *time.Time, now ti
 			}
 			return nil
 		}
-		if a.PublishStatus != enum.ArticlePublishStatusDraft && a.PublishStatus != enum.ArticlePublishStatusScheduled {
+		if a.PublishStatus != enum.ArticlePublishStatusDraft {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
 		return nil
 	case enum.ContentAccessScopeInternalTask:
-		if a.PublishStatus != enum.ArticlePublishStatusScheduled {
+		if a.PublishStatus != enum.ArticlePublishStatusDraft {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
 		return nil
@@ -113,7 +113,7 @@ func (a *Article) CanCancelSchedule(operatorID int64) error {
 	if a == nil || !a.IsAuthor(operatorID) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
-	if a.Type != enum.ArticleTypeNormal || a.PublishStatus != enum.ArticlePublishStatusScheduled || a.Restriction != enum.ContentRestrictionNone {
+	if a.Type != enum.ArticleTypeNormal || a.PublishStatus != enum.ArticlePublishStatusDraft || a.PublishedAt == nil || a.Restriction != enum.ContentRestrictionNone {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 	}
 	return nil

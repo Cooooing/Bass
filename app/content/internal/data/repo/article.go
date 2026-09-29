@@ -564,6 +564,14 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 		if filter.PublishedAtEnd != nil {
 			query = query.Where(articleent.PublishedAtLTE(*filter.PublishedAtEnd))
 		}
+		if filter.Scheduled != nil {
+			query = query.Where(articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusDraft)))
+			if *filter.Scheduled {
+				query = query.Where(articleent.PublishedAtNotNil())
+			} else {
+				query = query.Where(articleent.PublishedAtIsNil())
+			}
+		}
 		if filter.Keyword != nil {
 			query = query.Where(
 				articleent.Or(

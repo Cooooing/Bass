@@ -148,29 +148,16 @@ func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *Upd
 }
 
 type PublishArticleReq struct {
-	UserID     int64
-	ArticleID  int64
-	Visibility int32
+	UserID      int64
+	ArticleID   int64
+	ScheduledAt *time.Time
 }
 
 func (u *ContentArticleUsecase) PublishArticle(ctx context.Context, req *PublishArticleReq) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Visibility: req.Visibility})
-}
-
-type SchedulePublishArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	PublishAt time.Time
-}
-
-func (u *ContentArticleUsecase) SchedulePublishArticle(ctx context.Context, req *SchedulePublishArticleReq) error {
-	if req == nil || req.PublishAt.IsZero() {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_PUBLISH_AT_REQUIRED)
-	}
-	return u.contentArticleClient.SchedulePublishArticle(ctx, &repo.SchedulePublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, PublishAt: req.PublishAt})
+	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ScheduledAt: req.ScheduledAt})
 }
 
 type CancelPublishArticleReq struct {
@@ -227,6 +214,7 @@ type ArticleQuery struct {
 	PublishStatuses []int32
 	Visibility      *int32
 	Visibilities    []int32
+	Scheduled       *bool
 }
 
 type ListArticlesResp struct {
@@ -253,7 +241,7 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 	}
 	var query *repo.ArticleQuery
 	if req.Query != nil {
-		query = &repo.ArticleQuery{TagID: req.Query.TagID, DomainID: req.Query.DomainID, Keyword: req.Query.Keyword, AuthorID: req.Query.AuthorID, Type: req.Query.Type, Order: req.Query.Order, PublishStatus: req.Query.PublishStatus, PublishStatuses: req.Query.PublishStatuses, Visibility: req.Query.Visibility, Visibilities: req.Query.Visibilities}
+		query = &repo.ArticleQuery{TagID: req.Query.TagID, DomainID: req.Query.DomainID, Keyword: req.Query.Keyword, AuthorID: req.Query.AuthorID, Type: req.Query.Type, Order: req.Query.Order, PublishStatus: req.Query.PublishStatus, PublishStatuses: req.Query.PublishStatuses, Visibility: req.Query.Visibility, Visibilities: req.Query.Visibilities, Scheduled: req.Query.Scheduled}
 	}
 	resp, err := u.contentArticleClient.ListArticles(ctx, &repo.ListArticlesReq{UserID: req.UserID, Page: page, Query: query})
 	if err != nil {

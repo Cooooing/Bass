@@ -91,6 +91,7 @@ message ScheduleSchedulerDelayedTask {
     string payload = 2; // 本次执行参数，JSON 字符串。
     google.protobuf.Timestamp scheduled_at = 3; // 计划执行时间
     string idempotency_key = 4; // 本次延迟执行幂等键
+    string business_key = 5; // 业务对象关联键，用于替换未完成执行
   }
   message Resp {
     DelayedTaskExecutionRecord row = 1; // 执行记录。
@@ -111,6 +112,7 @@ message CancelSchedulerDelayedTaskExecution {
   message Req {
     int64 id = 1; // 执行记录 ID。
     string idempotency_key = 2; // 本次延迟执行幂等键。
+    string business_key = 3; // 业务对象关联键，取消其未完成执行。
   }
   message Resp {
     DelayedTaskExecutionRecord row = 1; // 执行记录。
@@ -169,6 +171,7 @@ message DelayedTaskExecutionRecord {
   string payload = 16; // 执行参数快照。
   string last_error = 17; // 最近错误摘要。
   string trace_id = 18; // 链路追踪标识。
+  string business_key = 21; // 业务对象关联键。
   SchedulerTaskMisfirePolicy misfire_policy = 19; // 错过计划时间后的处理策略。
   optional int32 stale_after_seconds = 20; // 过期判断秒数；空值表示不过期。
   google.protobuf.Timestamp created_at = 1000; // 创建时间。

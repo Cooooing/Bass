@@ -9,6 +9,8 @@ import (
 	schedulerenum "scheduler/internal/enum"
 	"strings"
 	"time"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ContentPublishScheduledArticles struct {
@@ -58,7 +60,9 @@ func (t *ContentPublishScheduledArticles) DefaultDelayedTasks() []*DefaultDelaye
 }
 
 type contentPublishScheduledArticlesPayload struct {
-	ArticleID int64 `json:"article_id"`
+	ArticleID    int64     `json:"article_id"`
+	AuthorUserID int64     `json:"author_user_id"`
+	ScheduledAt  time.Time `json:"scheduled_at"`
 }
 
 func (t *ContentPublishScheduledArticles) Execute(ctx context.Context, payload string) error {
@@ -66,11 +70,12 @@ func (t *ContentPublishScheduledArticles) Execute(ctx context.Context, payload s
 	if err := json.Unmarshal([]byte(strings.TrimSpace(payload)), &data); err != nil {
 		return err
 	}
-	if data.ArticleID <= 0 {
+	if data.ArticleID <= 0 || data.ScheduledAt.IsZero() {
 		return fmt.Errorf("invalid content publish scheduled article payload")
 	}
 	_, err := t.contentClient.Article.Publish(ctx, &contentv1.PublishArticle_Req{
-		ArticleId: data.ArticleID,
+		ArticleId:   data.ArticleID,
+		ScheduledAt: timestamppb.New(data.ScheduledAt),
 	})
 	return err
 }

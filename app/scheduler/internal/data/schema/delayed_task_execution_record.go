@@ -30,6 +30,7 @@ func (DelayedTaskExecutionRecord) Fields() []ent.Field {
 		field.Int64("delayed_task_id").Comment("延迟任务 ID"),
 		field.Int64("delayed_task_version").Comment("延迟任务配置版本"),
 		field.String("idempotency_key").Comment("本次延迟执行幂等键").MaxLen(256).NotEmpty(),
+		field.String("business_key").Comment("业务对象关联键，用于替换或取消未完成执行").MaxLen(256).Default(""),
 		field.Enum("trigger_type").Values(schedulerenum.TaskTriggerTypeMap.EnumValues()...).Default(string(schedulerenum.TaskTriggerTypeSchedule)).Comment("触发类型"),
 		field.String("schedule_key").Comment("调度消息唯一键").MaxLen(128).Default(""),
 		field.Time("scheduled_at").Comment("计划执行时间"),
@@ -56,6 +57,7 @@ func (DelayedTaskExecutionRecord) Mixin() []ent.Mixin {
 func (DelayedTaskExecutionRecord) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("idempotency_key").Unique().StorageKey("scheduler_delayed_task_execution_records_idempotency_unique"),
+		index.Fields("business_key", "status").StorageKey("scheduler_delayed_task_execution_records_business_status_idx"),
 		index.Fields("delayed_task_id", "trigger_type", "schedule_key").Unique().StorageKey("scheduler_delayed_task_execution_records_task_schedule_key_unique"),
 		index.Fields("delayed_task_id", "status").StorageKey("scheduler_delayed_task_execution_records_task_status_idx"),
 		index.Fields("status", "updated_at").StorageKey("scheduler_delayed_task_execution_records_status_updated_idx"),

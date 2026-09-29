@@ -255,6 +255,7 @@ type DelayedTaskScheduleReq struct {
 	Payload        string
 	ScheduledAt    time.Time
 	IdempotencyKey string
+	BusinessKey    string
 	TriggerType    schedulerenum.TaskTriggerType
 }
 
@@ -292,6 +293,7 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 		DelayedTaskID:      task.ID,
 		DelayedTaskVersion: task.Version,
 		IdempotencyKey:     idempotencyKey,
+		BusinessKey:        strings.TrimSpace(req.BusinessKey),
 		TriggerType:        triggerType,
 		ScheduleKey:        uuid.NewString(),
 		ScheduledAt:        req.ScheduledAt.Truncate(time.Second),
@@ -304,8 +306,15 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 		Payload:            payload,
 	}
 	var created *repo.DelayedTaskExecutionRecordCreateResp
+	var canceled []*model.DelayedTaskExecutionRecord
 	err = u.tx(ctx, func(txCtx context.Context) error {
 		var err error
+		if record.BusinessKey != "" {
+			canceled, err = u.executionRepo.CancelByBusinessKey(txCtx, record.BusinessKey, time.Now())
+			if err != nil {
+				return err
+			}
+		}
 		created, err = u.executionRepo.CreatePending(txCtx, record)
 		return err
 	})
@@ -321,6 +330,9 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 	schedulePrefix := "scheduler.schedule.delayed_task_execution"
 	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
 		schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
+	}
+	for _, row := range canceled {
+		_ = u.scheduleRepo.Cancel(context.WithoutCancel(ctx), fmt.Sprintf("%s.%d", schedulePrefix, row.ID))
 	}
 	executeSubject := "scheduler.execute.delayed_task"
 	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskExecuteSubject() != "" {
@@ -358,7 +370,21 @@ func (u *DelayedTaskUsecase) Trigger(ctx context.Context, taskKey string, payloa
 	})
 }
 
-func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idempotencyKey string) (*model.DelayedTaskExecutionRecord, error) {
+func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idempotencyKey string, businessKey string) (*model.DelayedTaskExecutionRecord, error) {
+	if strings.TrimSpace(businessKey) != "" {
+		rows, err := u.executionRepo.CancelByBusinessKey(ctx, businessKey, time.Now())
+		if err != nil || len(rows) == 0 {
+			return nil, err
+		}
+		schedulePrefix := "scheduler.schedule.delayed_task_execution"
+		if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
+			schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
+		}
+		for _, row := range rows {
+			_ = u.scheduleRepo.Cancel(ctx, fmt.Sprintf("%s.%d", schedulePrefix, row.ID))
+		}
+		return rows[0], nil
+	}
 	var query repo.DelayedTaskExecutionRecordGetReq
 	if id > 0 {
 		query.ID = &id
@@ -592,7 +618,38 @@ func (u *DelayedTaskUsecase) PageExecutionRecords(ctx context.Context, req *Dela
 }
 
 func (u *DelayedTaskUsecase) EnsureSchedule(ctx context.Context) error {
-	return u.scheduleRepo.Ensure(ctx)
+	if err := u.scheduleRepo.Ensure(ctx); err != nil {
+		return err
+	}
+	for _, status := range []schedulerenum.TaskExecutionStatus{schedulerenum.TaskExecutionStatusPending, schedulerenum.TaskExecutionStatusRetryPending} {
+		rows, err := u.executionRepo.List(ctx, &repo.DelayedTaskExecutionRecordGetReq{Status: new(status)})
+		if err != nil {
+			return err
+		}
+		for _, row := range rows {
+			task, err := u.Get(ctx, &DelayedTaskGetReq{ID: row.DelayedTaskID})
+			if err != nil || task == nil {
+				continue
+			}
+			schedulePrefix := "scheduler.schedule.delayed_task_execution"
+			executeSubject := "scheduler.execute.delayed_task"
+			if u.conf.GetScheduler() != nil {
+				if u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
+					schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
+				}
+				if u.conf.GetScheduler().GetDelayedTaskExecuteSubject() != "" {
+					executeSubject = u.conf.GetScheduler().GetDelayedTaskExecuteSubject()
+				}
+			}
+			req := &repo.DelayedTaskScheduleReq{DelayedTask: task, Record: row, Subject: fmt.Sprintf("%s.%d", schedulePrefix, row.ID), Target: executeSubject}
+			if row.ScheduledAt.After(time.Now()) && row.TriggerType == schedulerenum.TaskTriggerTypeSchedule {
+				_ = u.scheduleRepo.Schedule(context.WithoutCancel(ctx), req)
+			} else {
+				_ = u.scheduleRepo.Publish(context.WithoutCancel(ctx), req)
+			}
+		}
+	}
+	return nil
 }
 func (u *DelayedTaskUsecase) StartConsuming(ctx context.Context) error {
 	return u.scheduleRepo.Consume(ctx, u.HandleDelayedTaskMessage)

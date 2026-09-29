@@ -511,9 +511,9 @@ func (d *ArticleUsecase) FlushViews(ctx context.Context, req *ArticleFlushViewsR
 }
 
 type ArticlePublishReq struct {
-	Access     *model.ContentAccess
-	ArticleID  int64
-	Visibility enum.ArticleVisibility
+	Access      *model.ContentAccess
+	ArticleID   int64
+	ScheduledAt *time.Time
 }
 
 func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) error {
@@ -522,32 +522,79 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 	if err != nil {
 		return err
 	}
+	now := time.Now()
+	if req.ScheduledAt != nil && req.ScheduledAt.After(now) {
+		if access.Scope != enum.ContentAccessScopeAuthor {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+		}
+		operatorUserID := access.ActorUserID
+		scheduledAt := req.ScheduledAt.UTC().Truncate(time.Second)
+		// content 与 scheduler 使用不同的数据存储，不能纳入同一数据库事务。
+		// 先提交文章计划，随后登记 Scheduler；登记失败时只回滚仍属于本次计划的草稿。
+		if err = d.tx(ctx, func(ctx context.Context) error {
+			article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleId)}})
+			if err != nil {
+				return err
+			}
+			if err = article.CanPublish(access, new(scheduledAt), now); err != nil {
+				return err
+			}
+			return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
+				ArticleID: articleId, PublishStatus: enum.ArticlePublishStatusDraft, Visibility: enum.ArticleVisibilityPublic,
+				PublishedAt: new(scheduledAt), UpdatedBy: new(operatorUserID),
+			})
+		}); err != nil {
+			return err
+		}
+		if err = d.delayedTaskClient.RegisterPublishScheduledArticle(ctx, articleId, operatorUserID, scheduledAt); err != nil {
+			// 重新读取并比对计划时间，避免并发重设后错误清除新计划。
+			rollbackErr := d.tx(ctx, func(ctx context.Context) error {
+				article, getErr := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleId)}})
+				if getErr != nil || article.PublishedAt == nil || !article.PublishedAt.UTC().Truncate(time.Second).Equal(scheduledAt) {
+					return getErr
+				}
+				return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
+					ArticleID: articleId, PublishStatus: enum.ArticlePublishStatusDraft, Visibility: enum.ArticleVisibilityPublic,
+					ClearPublished: true, UpdatedBy: new(operatorUserID),
+				})
+			})
+			if rollbackErr != nil {
+				d.log.WarnContext(ctx, "rollback scheduled article publish failed", slog.Int64("article_id", articleId), slog.Any("err", rollbackErr))
+			}
+			return err
+		}
+		return nil
+	}
 	var operatorUserId *int64
 	if access.ActorUserID > 0 {
 		operatorUserId = new(access.ActorUserID)
 	}
-	visibility := req.Visibility
 	var outboxEvent *repo.OutboxEvent
 	err = d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
 		if err != nil {
+			if req.ScheduledAt != nil {
+				if code, ok := apperror.BusinessCode(err); ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND {
+					return nil
+				}
+			}
 			return err
 		}
-		if err = article.CanPublish(access, nil, time.Now()); err != nil {
-			return err
+		// 已取消、重设或已发布的旧延迟消息不应把当前草稿再次发布。
+		if req.ScheduledAt != nil && access.Scope == enum.ContentAccessScopeInternalTask &&
+			(article.PublishStatus != enum.ArticlePublishStatusDraft || article.PublishedAt == nil || !article.PublishedAt.UTC().Truncate(time.Second).Equal(req.ScheduledAt.UTC().Truncate(time.Second))) {
+			return nil
 		}
-		switch visibility {
-		case enum.ArticleVisibilityPublic, enum.ArticleVisibilityPrivate:
-		default:
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+		if err = article.CanPublish(access, nil, now); err != nil {
+			return err
 		}
 		if err = d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
 			ArticleID:     articleId,
 			PublishStatus: enum.ArticlePublishStatusPublished,
-			Visibility:    visibility,
-			PublishedAt:   new(time.Now()),
+			Visibility:    enum.ArticleVisibilityPublic,
+			PublishedAt:   new(now),
 			UpdatedBy:     operatorUserId,
 		}); err != nil {
 			return err
@@ -571,45 +618,12 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
 		}
 	}
+	if req.ScheduledAt == nil {
+		if cancelErr := d.delayedTaskClient.CancelPublishScheduledArticle(ctx, articleId); cancelErr != nil {
+			d.log.WarnContext(ctx, "cancel scheduled article publish failed", slog.Int64("article_id", articleId), slog.Any("err", cancelErr))
+		}
+	}
 	return nil
-}
-
-type ArticleSchedulePublishReq struct {
-	Access    *model.ContentAccess
-	ArticleID int64
-	PublishAt time.Time
-}
-
-func (d *ArticleUsecase) SchedulePublish(ctx context.Context, req *ArticleSchedulePublishReq) error {
-	articleId := req.ArticleID
-	access, err := req.Access.Normalize("")
-	if err != nil {
-		return err
-	}
-	operatorUserId := access.ActorUserID
-	publishAt := req.PublishAt
-	err = d.tx(ctx, func(ctx context.Context) error {
-		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
-		})
-		if err != nil {
-			return err
-		}
-		if err = article.CanPublish(access, new(publishAt), time.Now()); err != nil {
-			return err
-		}
-		return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
-			ArticleID:     articleId,
-			PublishStatus: enum.ArticlePublishStatusScheduled,
-			Visibility:    article.Visibility,
-			PublishedAt:   new(publishAt),
-			UpdatedBy:     new(operatorUserId),
-		})
-	})
-	if err != nil {
-		return err
-	}
-	return d.delayedTaskClient.RegisterPublishScheduledArticle(ctx, articleId, publishAt)
 }
 
 type ArticleCancelPublishReq struct {
@@ -1091,6 +1105,7 @@ type ArticleListReq struct {
 	Type            *enum.ArticleType
 	Keyword         *string
 	PublishedAtEnd  *time.Time
+	Scheduled       *bool
 	ArticleIDs      []int64
 }
 
@@ -1113,6 +1128,7 @@ func (d *ArticleUsecase) List(ctx context.Context, req *ArticleListReq) ([]*mode
 		Type:            req.Type,
 		Keyword:         req.Keyword,
 		PublishedAtEnd:  req.PublishedAtEnd,
+		Scheduled:       req.Scheduled,
 	}})
 }
 
@@ -1131,6 +1147,7 @@ type ArticlePageReq struct {
 	Type            *enum.ArticleType
 	Keyword         *string
 	PublishedAtEnd  *time.Time
+	Scheduled       *bool
 	ArticleIDs      []int64
 }
 
@@ -1158,6 +1175,7 @@ func (d *ArticleUsecase) Page(ctx context.Context, req *ArticlePageReq) (*Articl
 		Type:            req.Type,
 		Keyword:         req.Keyword,
 		PublishedAtEnd:  req.PublishedAtEnd,
+		Scheduled:       req.Scheduled,
 	}})
 	if err != nil {
 		return nil, err
@@ -1221,7 +1239,7 @@ type ArticleDiscardDraftReq struct {
 func (d *ArticleUsecase) DiscardDraft(ctx context.Context, req *ArticleDiscardDraftReq) error {
 	articleId := req.ArticleID
 	userId := req.Access.ActorUserID
-	return d.tx(ctx, func(ctx context.Context) error {
+	err := d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
 			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
 		})
@@ -1236,6 +1254,13 @@ func (d *ArticleUsecase) DiscardDraft(ctx context.Context, req *ArticleDiscardDr
 		}
 		return d.articleRepo.DiscardDraft(ctx, articleId)
 	})
+	if err != nil {
+		return err
+	}
+	if err = d.delayedTaskClient.CancelPublishScheduledArticle(ctx, articleId); err != nil {
+		d.log.WarnContext(ctx, "cancel scheduled article publish failed", slog.Int64("article_id", articleId), slog.Any("err", err))
+	}
+	return nil
 }
 
 func (d *ArticleUsecase) isAuthor(article *model.Article, userId int64) bool {

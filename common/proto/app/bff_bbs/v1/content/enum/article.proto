@@ -10,7 +10,6 @@ enum ArticlePublishStatus {
   ARTICLE_PUBLISH_STATUS_DRAFT = 1; // 草稿。
   ARTICLE_PUBLISH_STATUS_PUBLISHED = 2; // 已发布。
   ARTICLE_PUBLISH_STATUS_ARCHIVED = 3; // 已归档。
-  ARTICLE_PUBLISH_STATUS_SCHEDULED = 4; // 已定时发布。
 }
 
 // ArticleVisibility 表示文章可见范围。

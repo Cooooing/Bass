@@ -11,6 +11,7 @@ import (
 	"content/internal/biz/usecase"
 	"content/internal/enum"
 	"context"
+	"time"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -216,45 +217,15 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 	if err != nil {
 		return nil, err
 	}
-	visibility := enum.ArticleVisibilityPublic
-	if req.Visibility != 0 {
-		item, ok := enum.ArticleVisibilityMap.ToEnum(req.Visibility)
-		if !ok {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-		}
-		visibility = item
+	var scheduledAt *time.Time
+	if req.GetScheduledAt() != nil {
+		value := req.GetScheduledAt().AsTime()
+		scheduledAt = &value
 	}
-	if err := s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{Access: access, ArticleID: req.GetArticleId(), Visibility: visibility}); err != nil {
+	if err := s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{Access: access, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt}); err != nil {
 		return nil, err
 	}
 	return &v1.PublishArticle_Resp{}, nil
-}
-
-func (s *ArticleService) SchedulePublish(ctx context.Context, req *v1.SchedulePublishArticle_Req) (*v1.SchedulePublishArticle_Resp, error) {
-	access := &model.ContentAccess{Scope: ""}
-	if req.GetAccess() != nil {
-		if req.GetAccess().GetScope() != 0 {
-			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-			}
-			access.Scope = scope
-		}
-		if req.GetAccess().ActorUserId != nil {
-			access.ActorUserID = req.GetAccess().GetActorUserId()
-		}
-	}
-	access, err := access.Normalize("")
-	if err != nil {
-		return nil, err
-	}
-	if req.GetPublishAt() == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-	}
-	if err := s.articleUsecase.SchedulePublish(ctx, &usecase.ArticleSchedulePublishReq{Access: access, ArticleID: req.GetArticleId(), PublishAt: req.GetPublishAt().AsTime()}); err != nil {
-		return nil, err
-	}
-	return &v1.SchedulePublishArticle_Resp{}, nil
 }
 
 func (s *ArticleService) CancelPublish(ctx context.Context, req *v1.CancelPublishArticle_Req) (*v1.CancelPublishArticle_Resp, error) {
@@ -731,6 +702,7 @@ func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Req) (*v
 			end := req.GetQuery().GetPublishedAtEnd().AsTime()
 			query.PublishedAtEnd = new(end)
 		}
+		query.Scheduled = req.GetQuery().Scheduled
 	}
 	list, err := s.articleUsecase.ListByAccess(ctx, &usecase.ArticleListByAccessReq{Access: access, Filter: query})
 	if err != nil {
@@ -863,6 +835,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v
 			end := req.GetQuery().GetPublishedAtEnd().AsTime()
 			query.PublishedAtEnd = new(end)
 		}
+		query.Scheduled = req.GetQuery().Scheduled
 	}
 	pageReq := req.GetPage()
 	pageResp, err := s.articleUsecase.PageByAccess(ctx, &usecase.ArticlePageByAccessReq{Access: access, Filter: query, Page: &base.PageRequest{Page: int64(pageReq.GetPage()), Size: int64(pageReq.GetSize())}})

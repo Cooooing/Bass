@@ -9,9 +9,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
+	"strconv"
 	"time"
 
+	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -28,15 +29,19 @@ func NewDelayedTaskClient(
 }
 
 type publishScheduledArticlePayload struct {
-	ArticleID int64 `json:"article_id"`
+	ArticleID     int64     `json:"article_id"`
+	AuthorUserID  int64     `json:"author_user_id"`
+	ScheduledAt   time.Time `json:"scheduled_at"`
 }
 
-func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context, articleID int64, publishAt time.Time) error {
+func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context, articleID int64, authorUserID int64, publishAt time.Time) error {
 	if publishAt.IsZero() {
 		return errors.New("delayed task publish_at is required")
 	}
 	payload, err := json.Marshal(&publishScheduledArticlePayload{
 		ArticleID: articleID,
+		AuthorUserID: authorUserID,
+		ScheduledAt: publishAt.UTC().Truncate(time.Second),
 	})
 	if err != nil {
 		return err
@@ -47,14 +52,19 @@ func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context,
 		).String(),
 		Payload:        string(payload),
 		ScheduledAt:    timestamppb.New(publishAt),
-		IdempotencyKey: fmt.Sprintf("content:article:publish:%d", articleID),
+		IdempotencyKey: uuid.NewString(),
+		BusinessKey:    publishScheduledArticleBusinessKey(articleID),
 	})
 	return err
 }
 
 func (c *DelayedTaskClient) CancelPublishScheduledArticle(ctx context.Context, articleID int64) error {
 	_, err := c.schedulerClient.DelayedTask.CancelExecution(ctx, &schedulerv1.CancelSchedulerDelayedTaskExecution_Req{
-		IdempotencyKey: fmt.Sprintf("content:article:publish:%d", articleID),
+		BusinessKey: publishScheduledArticleBusinessKey(articleID),
 	})
 	return err
+}
+
+func publishScheduledArticleBusinessKey(articleID int64) string {
+	return "content.article.publish:" + strconv.FormatInt(articleID, 10)
 }

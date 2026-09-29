@@ -13,6 +13,7 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"time"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -73,20 +74,16 @@ func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.P
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	err := s.contentArticleUsecase.PublishArticle(ctx, &usecase.PublishArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Visibility: int32(req.GetVisibility())})
+	var scheduledAt *time.Time
+	if req.GetScheduledAt() != nil {
+		value := req.GetScheduledAt().AsTime()
+		if !value.After(time.Now().Add(5*time.Minute)) || value.After(time.Now().AddDate(0, 3, 0)) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_SCHEDULED_AT_OUT_OF_RANGE)
+		}
+		scheduledAt = &value
+	}
+	err := s.contentArticleUsecase.PublishArticle(ctx, &usecase.PublishArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt})
 	return &bbscontentv1.PublishArticle_Resp{}, err
-}
-
-func (s *ContentArticleService) SchedulePublish(ctx context.Context, req *bbscontentv1.SchedulePublishArticle_Req) (*bbscontentv1.SchedulePublishArticle_Resp, error) {
-	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
-	}
-	if req.GetPublishAt() == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_PUBLISH_AT_REQUIRED)
-	}
-	err := s.contentArticleUsecase.SchedulePublishArticle(ctx, &usecase.SchedulePublishArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), PublishAt: req.GetPublishAt().AsTime()})
-	return &bbscontentv1.SchedulePublishArticle_Resp{}, err
 }
 
 func (s *ContentArticleService) CancelPublish(ctx context.Context, req *bbscontentv1.CancelPublishArticle_Req) (*bbscontentv1.CancelPublishArticle_Resp, error) {

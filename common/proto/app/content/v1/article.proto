@@ -14,7 +14,6 @@ service ContentArticleService {
   rpc CreateDraft(CreateDraftArticle.Req) returns (CreateDraftArticle.Resp) {} // 创建文章草稿
   rpc UpdateDraft(UpdateDraftArticle.Req) returns (UpdateDraftArticle.Resp) {} // 编辑文章草稿
   rpc Publish(PublishArticle.Req) returns (PublishArticle.Resp) {} // 发布文章
-  rpc SchedulePublish(SchedulePublishArticle.Req) returns (SchedulePublishArticle.Resp) {} // 设置定时发布
   rpc CancelPublish(CancelPublishArticle.Req) returns (CancelPublishArticle.Resp) {} // 取消定时发布
   rpc DiscardDraft(DiscardDraftArticle.Req) returns (DiscardDraftArticle.Resp) {} // 丢弃草稿
   rpc MakePrivate(MakePrivateArticle.Req) returns (MakePrivateArticle.Resp) {} // 设为私有
@@ -82,16 +81,7 @@ message PublishArticle {
   message Req {
     int64 article_id = 1; // 文章 ID
     optional ContentAccess access = 2; // 访问上下文
-    ArticleVisibility visibility = 3; // 可见范围
-  }
-  message Resp {}
-}
-
-message SchedulePublishArticle {
-  message Req {
-    int64 article_id = 1; // 文章 ID
-    ContentAccess access = 2; // 访问上下文
-    google.protobuf.Timestamp publish_at = 3; // 定时发布时间
+    optional google.protobuf.Timestamp scheduled_at = 3; // 定时发布时间；未来时间会注册延迟任务
   }
   message Resp {}
 }
@@ -103,6 +93,7 @@ message CancelPublishArticle {
   }
   message Resp {}
 }
+
 
 message DiscardDraftArticle {
   message Req {
@@ -306,6 +297,7 @@ message ArticleQueryParams {
   repeated ArticleVisibility visibilities = 13; // 可见范围列表
   optional ContentRestriction restriction = 14; // 治理限制
   repeated ContentRestriction restrictions = 15; // 治理限制列表
+  optional bool scheduled = 16; // 仅作者：草稿是否已设置发布时间
   optional google.protobuf.Timestamp created_at_start = 20; // 创建时间起点
   optional google.protobuf.Timestamp created_at_end = 21; // 创建时间终点
   optional google.protobuf.Timestamp published_at_start = 22; // 发布时间起点

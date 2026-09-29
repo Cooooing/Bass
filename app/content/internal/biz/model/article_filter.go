@@ -21,4 +21,5 @@ type ArticleFilter struct {
 	Type            *enum.ArticleType
 	Keyword         *string
 	PublishedAtEnd  *time.Time
+	Scheduled       *bool
 }

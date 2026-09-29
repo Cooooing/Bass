@@ -106,29 +106,17 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 }
 
 func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.PublishArticleReq) error {
-	_, err := r.contentClient.Article.Publish(ctx, &contentv1.PublishArticle_Req{
+	publishReq := &contentv1.PublishArticle_Req{
 		ArticleId: req.ArticleID,
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
 			ActorUserId: new(req.UserID),
 		},
-		Visibility: contentv1enum.ArticleVisibility(req.Visibility),
-	})
-	if err != nil {
-		return err
 	}
-	return nil
-}
-
-func (r *ContentArticleClient) SchedulePublishArticle(ctx context.Context, req *repo.SchedulePublishArticleReq) error {
-	_, err := r.contentClient.Article.SchedulePublish(ctx, &contentv1.SchedulePublishArticle_Req{
-		ArticleId: req.ArticleID,
-		Access: &contentv1.ContentAccess{
-			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR,
-			ActorUserId: new(req.UserID),
-		},
-		PublishAt: timestamppb.New(req.PublishAt),
-	})
+	if req.ScheduledAt != nil {
+		publishReq.ScheduledAt = timestamppb.New(*req.ScheduledAt)
+	}
+	_, err := r.contentClient.Article.Publish(ctx, publishReq)
 	if err != nil {
 		return err
 	}
@@ -183,10 +171,11 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 		query = &repo.ArticleQuery{}
 	}
 	contentQuery := &contentv1.ArticleQueryParams{
-		TagId:    query.TagID,
-		DomainId: query.DomainID,
-		Keyword:  query.Keyword,
-		AuthorId: query.AuthorID,
+		TagId:     query.TagID,
+		DomainId:  query.DomainID,
+		Keyword:   query.Keyword,
+		AuthorId:  query.AuthorID,
+		Scheduled: query.Scheduled,
 	}
 	if query.Type != nil {
 		contentQuery.Type = new(contentv1enum.ArticleType(*query.Type))

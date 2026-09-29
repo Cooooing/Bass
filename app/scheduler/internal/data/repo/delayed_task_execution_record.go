@@ -74,6 +74,7 @@ func (r *DelayedTaskExecutionRecordRepo) CreatePending(ctx context.Context, reco
 		SetDelayedTaskID(record.DelayedTaskID).
 		SetDelayedTaskVersion(record.DelayedTaskVersion).
 		SetIdempotencyKey(record.IdempotencyKey).
+		SetBusinessKey(record.BusinessKey).
 		SetTriggerType(delayedtaskexecutionrecord.TriggerType(record.TriggerType)).
 		SetScheduleKey(record.ScheduleKey).
 		SetScheduledAt(record.ScheduledAt).
@@ -175,6 +176,30 @@ func (r *DelayedTaskExecutionRecordRepo) MarkCanceled(
 	return r.model(updated), nil
 }
 
+func (r *DelayedTaskExecutionRecordRepo) CancelByBusinessKey(ctx context.Context, businessKey string, finishedAt time.Time) ([]*model.DelayedTaskExecutionRecord, error) {
+	if strings.TrimSpace(businessKey) == "" {
+		return nil, nil
+	}
+	rows, err := r.List(ctx, &bizrepo.DelayedTaskExecutionRecordGetReq{BusinessKey: new(businessKey)})
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*model.DelayedTaskExecutionRecord, 0, len(rows))
+	for _, row := range rows {
+		if row.Status != schedulerenum.TaskExecutionStatusPending && row.Status != schedulerenum.TaskExecutionStatusRetryPending && row.Status != schedulerenum.TaskExecutionStatusRunning {
+			continue
+		}
+		canceled, err := r.MarkCanceled(ctx, &bizrepo.DelayedTaskExecutionRecordGetReq{ID: new(row.ID)}, finishedAt)
+		if err != nil {
+			return nil, err
+		}
+		if canceled != nil {
+			result = append(result, canceled)
+		}
+	}
+	return result, nil
+}
+
 func (r *DelayedTaskExecutionRecordRepo) getClient(ctx context.Context) *gen.Client {
 	if c, ok := utilent.ClientFromCtx[*gen.Client](ctx); ok {
 		return c
@@ -197,6 +222,9 @@ func (r *DelayedTaskExecutionRecordRepo) getQuery(query *gen.DelayedTaskExecutio
 	}
 	if req.IdempotencyKey != nil {
 		query = query.Where(delayedtaskexecutionrecord.IdempotencyKey(*req.IdempotencyKey))
+	}
+	if req.BusinessKey != nil {
+		query = query.Where(delayedtaskexecutionrecord.BusinessKey(*req.BusinessKey))
 	}
 	if req.Status != nil {
 		query = query.Where(delayedtaskexecutionrecord.StatusEQ(delayedtaskexecutionrecord.Status(*req.Status)))
@@ -221,6 +249,7 @@ func (r *DelayedTaskExecutionRecordRepo) model(row *gen.DelayedTaskExecutionReco
 		DelayedTaskID:      row.DelayedTaskID,
 		DelayedTaskVersion: row.DelayedTaskVersion,
 		IdempotencyKey:     row.IdempotencyKey,
+		BusinessKey:        row.BusinessKey,
 		TriggerType:        schedulerenum.TaskTriggerType(row.TriggerType),
 		ScheduleKey:        row.ScheduleKey,
 		ScheduledAt:        row.ScheduledAt,

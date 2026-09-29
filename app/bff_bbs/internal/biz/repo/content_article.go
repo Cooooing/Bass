@@ -134,6 +134,7 @@ type ArticleQuery struct {
 	PublishStatuses []int32
 	Visibility      *int32
 	Visibilities    []int32
+	Scheduled       *bool
 }
 
 type CreateDraftArticleReq struct {
@@ -148,15 +149,9 @@ type UpdateDraftArticleReq struct {
 }
 
 type PublishArticleReq struct {
-	UserID     int64
-	ArticleID  int64
-	Visibility int32
-}
-
-type SchedulePublishArticleReq struct {
-	UserID    int64
-	ArticleID int64
-	PublishAt time.Time
+	UserID      int64
+	ArticleID   int64
+	ScheduledAt *time.Time
 }
 
 type CancelPublishArticleReq struct {
@@ -226,7 +221,6 @@ type ContentArticleClient interface {
 	CreateDraftArticle(ctx context.Context, req *CreateDraftArticleReq) (*ArticleDetail, error)
 	UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (*ArticleDetail, error)
 	PublishArticle(ctx context.Context, req *PublishArticleReq) error
-	SchedulePublishArticle(ctx context.Context, req *SchedulePublishArticleReq) error
 	CancelPublishArticle(ctx context.Context, req *CancelPublishArticleReq) error
 	DiscardDraftArticle(ctx context.Context, req *DiscardDraftArticleReq) error
 	ArchiveArticle(ctx context.Context, req *ArchiveArticleReq) error

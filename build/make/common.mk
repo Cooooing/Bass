@@ -3,7 +3,7 @@ COMMON_MK_INCLUDED := 1
 
 # --- Variables ---
 COMMON_MAKE_DIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
-ROOT_DIR := $(abspath $(COMMON_MAKE_DIR)/../../..)
+ROOT_DIR := $(abspath $(COMMON_MAKE_DIR)/../..)
 COMMON_DIR := $(ROOT_DIR)/common
 
 # Proto paths for shared API contracts.
@@ -18,29 +18,7 @@ BUF_GEN_CONFIG := $(BUF_DIR)/gen.config.yaml
 BUF_GEN_OPENAPI := $(BUF_DIR)/gen.openapi.yaml
 BUF ?= buf
 
-# --- One-time target ---
-
-.PHONY: init
-init:
-	@echo "[init] installing pinned development tools..."
-	@set -e; \
-	for tool in \
-		google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11 \
-		google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1 \
-		github.com/go-kratos/kratos/cmd/kratos/v3@v3.0.0-20260626125723-668db92c2c00 \
-		github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v3@v3.0.0-20260626125723-668db92c2c00 \
-		github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v3@v3.0.0-20260626125723-668db92c2c00 \
-		github.com/envoyproxy/protoc-gen-validate@v1.3.3 \
-		github.com/google/gnostic/cmd/protoc-gen-openapi@v0.7.1 \
-		github.com/google/wire/cmd/wire@v0.7.0 \
-		entgo.io/ent/cmd/ent@v0.14.5 \
-		github.com/bufbuild/buf/cmd/buf@v1.50.0; do \
-		for attempt in 1 2 3; do \
-			if go install "$$tool"; then break; fi; \
-			if [ "$$attempt" -eq 3 ]; then exit 1; fi; \
-			sleep "$$attempt"; \
-		done; \
-	done
+include $(COMMON_MAKE_DIR)/toolchain.mk
 
 .PHONY: api-clean
 api-clean:

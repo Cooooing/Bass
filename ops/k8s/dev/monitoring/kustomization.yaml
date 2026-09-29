@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - rbac.yaml
-  - secrets.yaml
+  - secrets.local.yaml
   - prometheus-configmap.yaml
   - prometheus-deployment.yaml
   - tempo.yaml

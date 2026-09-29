@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
   - manifests/namespace.yaml
-  - manifests/secrets.yaml
+  - manifests/secrets.local.yaml
   - manifests/ingress.yaml
   - manifests/ingress-tcp.yaml
   - manifests/dtm.yaml

@@ -1,31 +1,21 @@
-# Go binaries and test artifacts
+# Go binaries, test artifacts, and native build output.
 *.exe
 *.exe~
 *.dll
 *.dylib
 *.test
 *.out
-
-# Dependencies
-vendor/
-
-# Build artifacts
 *.o
 *.a
 *.so
 bin/
+vendor/
 
-# OS files
-Thumbs.db
-.DS_Store
-
-# Project local files
+# Local certificates, logs, and editor state.
 *.cert
 *.key
 *.log
 **/logs/
-
-# IDE files
 .vscode/
 .idea/
 !.idea/
@@ -36,11 +26,13 @@ Thumbs.db
 !.idea/protoeditor.xml
 !.idea/sqldialects.xml
 !.idea/vcs.xml
-!.run/
+.run/*
 !.run/*.run.xml
 *.swp
+Thumbs.db
+.DS_Store
 
-# Proto docs and SDK generated artifacts
+# Generated contracts and module build artifacts.
 /common/proto/gen/
 /common/proto/gen-openapi/
 /common/proto/gen-openapi-codex/
@@ -48,14 +40,11 @@ Thumbs.db
 /common/proto/sdk/node_modules/
 /common/proto/sdk/.openapi-generator/
 /common/proto/sdk/.openapi-generator-cli/
-
-# Module generated artifacts
 /app/**/wire_gen.go
 /app/**/conf.pb.go
 /app/**/config.pb.go
 /app/**/gen/
 /app/**/server
-!/app/**/server/
 /app/**/test/
 /app/**/configs/ip2region/*.xdb
 /app/game_idle/configs/init.sql
@@ -66,22 +55,19 @@ Thumbs.db
 /monolith/server
 /monolith/configs/ip2region/*.xdb
 
-# Local environment and scratch files
-/common/ops/docker/*.env
-/common/ops/tools/
-/deploy/
+# Workstation-only deployment configuration and local documentation.
+/ops/docker/*.env
+/ops/tools/
+/ops/k8s/test/
+/ops/k8s/prod/
+/ops/k8s/dev/manifests/secrets.local.yaml
+/ops/k8s/dev/monitoring/secrets.local.yaml
 /doc/
 temp.md
 
-# AI tools
+# Local AI and code-intelligence state.
 .claude/
 .gitnexus
-.agents
+.agents/
 AGENTS.md
 CLAUDE.md
-
-# Environment-local sensitive Kubernetes configs
-/common/ops/k8s/test/
-/common/ops/k8s/prod/
-
-/common/ops/k8s/dev/cicd/secrets.local.yaml

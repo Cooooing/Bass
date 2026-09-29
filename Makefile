@@ -9,7 +9,15 @@ BFF_SERVERS ?= bff_bbs bff_bbs_admin bff_game_idle
 
 IGNORE_ERROR ?= 0
 
-include $(ROOT_DIR)/common/build/make/common.mk
+include $(ROOT_DIR)/build/make/common.mk
+
+# CI reads these values instead of maintaining a second service inventory.
+.PHONY: ci-services ci-bff-servers
+ci-services:
+	@echo $(MODULES)
+
+ci-bff-servers:
+	@echo $(BFF_SERVERS)
 
 # --- Root-only targets. ---
 

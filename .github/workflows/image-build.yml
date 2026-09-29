@@ -1,0 +1,152 @@
+name: Image Build
+
+permissions:
+  contents: read
+  packages: write
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: image-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Work out the smallest safe image set before allocating Docker runners.
+  plan:
+    name: Resolve Image Targets
+    runs-on: ubuntu-24.04
+    outputs:
+      images: ${{ steps.targets.outputs.images }}
+      services: ${{ steps.targets.outputs.services }}
+      monolith: ${{ steps.targets.outputs.monolith }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # Shared contracts rebuild all consumers; application changes rebuild only
+      # their service and any affected monolith. A manual dispatch builds all.
+      - name: Resolve image targets
+        id: targets
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: node build/ci/resolve-image-targets.mjs
+
+  # The content-addressed toolchain is shared by every service build.
+  build-toolchain:
+    name: Build Toolchain Image
+    needs: plan
+    if: needs.plan.outputs.images == 'true'
+    runs-on: ubuntu-24.04
+    outputs:
+      image: ${{ steps.toolchain.outputs.image }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      - name: Authenticate GHCR
+        run: echo "${{ github.token }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - name: Calculate toolchain tag
+        id: toolchain-tag
+        env:
+          TOOLCHAIN_TAG: ${{ hashFiles('build/docker/toolchain.Dockerfile', 'build/make/toolchain.mk') }}
+        run: echo "tag=${TOOLCHAIN_TAG}" >> "$GITHUB_OUTPUT"
+      - name: Resolve toolchain image
+        id: toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          image="ghcr.io/cooooing/bass-build-tools:${{ steps.toolchain-tag.outputs.tag }}"
+          echo "image=${image}" >> "$GITHUB_OUTPUT"
+          if docker buildx imagetools inspect "$image" >/dev/null 2>&1; then
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Build and publish toolchain image
+        if: steps.toolchain.outputs.build == 'true'
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: build/docker/toolchain.Dockerfile
+          push: true
+          provenance: false
+          sbom: false
+          tags: |
+            ${{ steps.toolchain.outputs.image }}
+            ghcr.io/cooooing/bass-build-tools:latest
+          cache-from: type=gha,scope=bass-toolchain
+          cache-to: type=gha,mode=max,scope=bass-toolchain
+
+  # Each selected service is independent, so the matrix can build in parallel.
+  build-services:
+    name: Build and Push Services
+    needs: [plan, build-toolchain]
+    if: needs.plan.outputs.images == 'true' && needs.plan.outputs.services != '{"include":[]}'
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.services) }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      - name: Authenticate Aliyun registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login registry.cn-hangzhou.aliyuncs.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Authenticate GHCR
+        run: echo "${{ github.token }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - name: Build and publish service image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: build/docker/service.Dockerfile
+          push: true
+          provenance: false
+          sbom: false
+          build-args: |
+            APP_NAME=${{ matrix.name }}
+            TOOLCHAIN_IMAGE=${{ needs.build-toolchain.outputs.image }}
+          tags: |
+            registry.cn-hangzhou.aliyuncs.com/docker-cooooing/${{ matrix.name }}:latest
+            ghcr.io/cooooing/${{ matrix.name }}:latest
+          cache-from: type=gha,scope=service-${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=service-${{ matrix.name }}
+
+  # The monolith has its own Dockerfile but reuses the same toolchain image.
+  build-monolith:
+    name: Build and Push Monolith
+    needs: [plan, build-toolchain]
+    if: needs.plan.outputs.monolith == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      - name: Authenticate Aliyun registry
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login registry.cn-hangzhou.aliyuncs.com -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Authenticate GHCR
+        run: echo "${{ github.token }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - name: Build and publish monolith image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: monolith/Dockerfile
+          push: true
+          provenance: false
+          sbom: false
+          build-args: TOOLCHAIN_IMAGE=${{ needs.build-toolchain.outputs.image }}
+          tags: |
+            registry.cn-hangzhou.aliyuncs.com/docker-cooooing/monolith:latest
+            ghcr.io/cooooing/monolith:latest
+          cache-from: type=gha,scope=monolith
+          cache-to: type=gha,mode=max,scope=monolith

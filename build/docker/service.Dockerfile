@@ -12,7 +12,10 @@ ENV CGO_ENABLED=0 \
 
 WORKDIR /build
 
-COPY common/ /build/common/
+COPY common/go.mod common/go.sum /build/common/
+COPY common/pkg/ /build/common/pkg/
+COPY common/proto/ /build/common/proto/
+COPY build/make/ /build/build/make/
 COPY app/${APP_NAME}/ /build/app/${APP_NAME}/
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \

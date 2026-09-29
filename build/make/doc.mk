@@ -17,6 +17,11 @@ OPENAPI_GENERATOR ?= cd $(ROOT_DIR)/common/proto/sdk && npx --yes @openapitools/
 SDK_SHORT_NAME_OPTS := --remove-operation-id-prefix --additional-properties=apiNameSuffix=
 SDK_LANGUAGES ?= typescript-axios typescript-fetch go java rust
 
+# CI uses the same SDK language list as the local generation target.
+.PHONY: ci-sdk-languages
+ci-sdk-languages:
+	@echo $(SDK_LANGUAGES)
+
 # Append to composite target sequence.
 MODULE_GEN_TARGETS += doc
 gen-clean: doc-clean

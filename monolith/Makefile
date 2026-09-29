@@ -1,6 +1,6 @@
 ROOT_DIR := $(abspath $(CURDIR)/..)
 
-include $(ROOT_DIR)/common/build/make/common.mk
+include $(ROOT_DIR)/build/make/common.mk
 
 MONOLITH_DIR := $(abspath $(CURDIR))
 MONOLITH_CONFIG_PROTO := monolith/internal/config/config.proto

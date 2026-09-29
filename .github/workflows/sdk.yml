@@ -1,0 +1,136 @@
+name: SDK Generate
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: sdk-generate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Generate only contracts whose public API could have changed.
+  plan:
+    name: Resolve SDK Targets
+    runs-on: ubuntu-24.04
+    outputs:
+      sdk: ${{ steps.targets.outputs.sdk }}
+      matrix: ${{ steps.targets.outputs.sdk_matrix }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # BFF contracts generate only that BFF's SDK. Shared contracts and
+      # generator configuration regenerate all BFF SDKs.
+      - name: Resolve SDK targets
+        id: targets
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: node build/ci/resolve-sdk-targets.mjs
+
+  # Keep parallel generation bounded to avoid saturating external registries.
+  generate-sdk:
+    name: Generate SDK
+    needs: plan
+    if: needs.plan.outputs.sdk == 'true'
+    runs-on: ubuntu-24.04
+    strategy:
+      max-parallel: 5
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.26"
+          cache: false
+      - name: Set up Buf
+        uses: bufbuild/buf-setup-action@v1
+        with:
+          version: 1.50.0
+          github_token: ${{ github.token }}
+      - name: Restore SDK generator caches
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.npm
+            ~/.openapi-generator
+            ~/go/bin/protoc-gen-openapi
+          key: sdk-generator-${{ runner.os }}-go1.26-openapi-v0.7.1-openapi-cli-v2.41.0-${{ hashFiles('common/proto/sdk/openapitools.json') }}
+      - name: Install OpenAPI plugin
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -x "$(go env GOPATH)/bin/protoc-gen-openapi" ]; then
+            go install github.com/google/gnostic/cmd/protoc-gen-openapi@v0.7.1
+          fi
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+      - name: Generate SDK (${{ matrix.service }} / ${{ matrix.language }})
+        shell: bash
+        run: make -C app/${{ matrix.service }} sdk SDK_LANGUAGES=${{ matrix.language }}
+
+      - name: Prepare SDK branch
+        id: branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="sdk/${{ matrix.service }}/${{ matrix.language }}"
+          publish_dir="$(mktemp -d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            git fetch origin "$branch"
+            git worktree add "$publish_dir" "origin/$branch"
+          else
+            git worktree add --detach "$publish_dir"
+            git -C "$publish_dir" checkout --orphan "$branch"
+          fi
+          echo "directory=$publish_dir" >> "$GITHUB_OUTPUT"
+
+      - name: Replace generated SDK contents
+        env:
+          PUBLISH_DIRECTORY: ${{ steps.branch.outputs.directory }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          output_dir="common/proto/gen-sdk/${{ matrix.language }}/${{ matrix.service }}"
+          test -d "$output_dir"
+          find "$PUBLISH_DIRECTORY" -mindepth 1 ! -name .git -exec rm -rf {} +
+          cp -R "$output_dir"/. "$PUBLISH_DIRECTORY"/
+          # Generated Java SDKs include their own workflow; SDK branches publish
+          # source only, so GITHUB_TOKEN never needs the workflows permission.
+          rm -rf "$PUBLISH_DIRECTORY/.github"
+
+      - name: Commit and publish SDK branch
+        env:
+          PUBLISH_DIRECTORY: ${{ steps.branch.outputs.directory }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="sdk/${{ matrix.service }}/${{ matrix.language }}"
+          git -C "$PUBLISH_DIRECTORY" add -A
+          if git -C "$PUBLISH_DIRECTORY" diff --cached --quiet; then exit 0; fi
+          git -C "$PUBLISH_DIRECTORY" commit -m "chore: update ${{ matrix.service }} ${{ matrix.language }} sdk"
+          git -C "$PUBLISH_DIRECTORY" push origin "HEAD:$branch"

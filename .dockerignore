@@ -1,51 +1,49 @@
-# Git
-.git
-.gitignore
+# Version control, CI, IDE, and local agent metadata.
+.git/
 .github/
-
-# 开发工具
+.dockerignore
+.gitattributes
+.gitignore
 .idea/
 .vscode/
+.run/
+.claude/
+.agents/
+.gitnexus/
+AGENTS.md
+CLAUDE.md
 
-# 本地构建产物
+# Local configuration and credentials must never enter an image build context.
+**/.env
+**/*.env
+*.cert
+*.key
+ops/
+
+# Local build output, generated contract artifacts, and test-only sources.
 bin/
 dist/
-build/
 *.out
-
-# Proto 文档和 SDK 生成产物
 common/proto/gen-openapi/
 common/proto/gen-openapi-codex/
 common/proto/gen-sdk/
 common/proto/sdk/node_modules/
 common/proto/sdk/.openapi-generator/
 common/proto/sdk/.openapi-generator-cli/
-
-# Go 测试
 **/*_test.go
 **/testdata/
+**/wire_gen.go
+app/*/server
+monolith/server
+app/**/configs/ip2region/*.xdb
+monolith/configs/ip2region/*.xdb
 
-# 文档
+# Documentation, logs, and workstation files are not runtime build inputs.
 README*
-docs/
-deploy/
 *.md
-
-# 日志和临时文件
+doc/
 *.log
 tmp/
 .cache/
-app/**/configs/ip2region/*.xdb
-monolith/server
-monolith/configs/ip2region/*.xdb
-
-# OS
 .DS_Store
 Thumbs.db
-
-# AI
-.claude/
-.gitnexus
-.agents
-AGENTS.md
-CLAUDE.md

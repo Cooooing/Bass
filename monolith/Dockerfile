@@ -14,7 +14,8 @@ COPY . /build
 
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
-    make gen IGNORE_ERROR=0 \
+    make api IGNORE_ERROR=0 \
+    && find app -mindepth 2 -maxdepth 2 -name Makefile -printf '%h\n' | sort | xargs --no-run-if-empty --max-procs=4 --max-args=1 sh -c 'make -C "$1" gen IGNORE_ERROR=0' _ \
     && make -C monolith gen build IGNORE_ERROR=0
 RUN upx -9 --lzma /build/monolith/server -o /build/server
 

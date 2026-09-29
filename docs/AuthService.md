@@ -1,0 +1,930 @@
+# AuthService
+
+All URIs are relative to *http://localhost*
+
+| Method | HTTP request | Description |
+|------------- | ------------- | -------------|
+| [**cancelAccount**](AuthService.md#cancelAccount) | **POST** /v1/user/auth/cancel-account |  |
+| [**cancelAccountWithHttpInfo**](AuthService.md#cancelAccountWithHttpInfo) | **POST** /v1/user/auth/cancel-account |  |
+| [**checkRegistrationAvailability**](AuthService.md#checkRegistrationAvailability) | **GET** /v1/user/auth/register-availability |  |
+| [**checkRegistrationAvailabilityWithHttpInfo**](AuthService.md#checkRegistrationAvailabilityWithHttpInfo) | **GET** /v1/user/auth/register-availability |  |
+| [**login**](AuthService.md#login) | **POST** /v1/user/auth/login |  |
+| [**loginWithHttpInfo**](AuthService.md#loginWithHttpInfo) | **POST** /v1/user/auth/login |  |
+| [**logout**](AuthService.md#logout) | **POST** /v1/user/auth/logout |  |
+| [**logoutWithHttpInfo**](AuthService.md#logoutWithHttpInfo) | **POST** /v1/user/auth/logout |  |
+| [**refreshToken**](AuthService.md#refreshToken) | **POST** /v1/user/auth/refresh-token |  |
+| [**refreshTokenWithHttpInfo**](AuthService.md#refreshTokenWithHttpInfo) | **POST** /v1/user/auth/refresh-token |  |
+| [**register**](AuthService.md#register) | **POST** /v1/user/auth/register |  |
+| [**registerWithHttpInfo**](AuthService.md#registerWithHttpInfo) | **POST** /v1/user/auth/register |  |
+
+
+
+## cancelAccount
+
+> Object cancelAccount(cancelAccountRequest)
+
+
+
+注销账号。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        CancelAccountReq cancelAccountReq = new CancelAccountReq(); // CancelAccountReq | 
+        try {
+            APIcancelAccountRequest request = APIcancelAccountRequest.newBuilder()
+                .cancelAccountReq(cancelAccountReq)
+                .build();
+            Object result = apiInstance.cancelAccount(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#cancelAccount");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| cancelAccountRequest | [**APIcancelAccountRequest**](AuthService.md#APIcancelAccountRequest)|-|-|
+
+### Return type
+
+**Object**
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## cancelAccountWithHttpInfo
+
+> ApiResponse<Object> cancelAccountWithHttpInfo(cancelAccountRequest)
+
+
+
+注销账号。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        CancelAccountReq cancelAccountReq = new CancelAccountReq(); // CancelAccountReq | 
+        try {
+            APIcancelAccountRequest request = APIcancelAccountRequest.newBuilder()
+                .cancelAccountReq(cancelAccountReq)
+                .build();
+            ApiResponse<Object> response = apiInstance.cancelAccountWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#cancelAccount");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| cancelAccountRequest | [**APIcancelAccountRequest**](AuthService.md#APIcancelAccountRequest)|-|-|
+
+### Return type
+
+ApiResponse<**Object**>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIcancelAccountRequest"></a>
+## APIcancelAccountRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **cancelAccountReq** | [**CancelAccountReq**](CancelAccountReq.md) |  | |
+
+
+
+## checkRegistrationAvailability
+
+> CheckRegistrationAvailabilityResp checkRegistrationAvailability(checkRegistrationAvailabilityRequest)
+
+
+
+检查注册字段是否可用。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        String name = "name_example"; // String | 
+        String email = "email_example"; // String | 
+        String phone = "phone_example"; // String | 
+        try {
+            APIcheckRegistrationAvailabilityRequest request = APIcheckRegistrationAvailabilityRequest.newBuilder()
+                .name(name)
+                .email(email)
+                .phone(phone)
+                .build();
+            CheckRegistrationAvailabilityResp result = apiInstance.checkRegistrationAvailability(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#checkRegistrationAvailability");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| checkRegistrationAvailabilityRequest | [**APIcheckRegistrationAvailabilityRequest**](AuthService.md#APIcheckRegistrationAvailabilityRequest)|-|-|
+
+### Return type
+
+[**CheckRegistrationAvailabilityResp**](CheckRegistrationAvailabilityResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## checkRegistrationAvailabilityWithHttpInfo
+
+> ApiResponse<CheckRegistrationAvailabilityResp> checkRegistrationAvailabilityWithHttpInfo(checkRegistrationAvailabilityRequest)
+
+
+
+检查注册字段是否可用。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        String name = "name_example"; // String | 
+        String email = "email_example"; // String | 
+        String phone = "phone_example"; // String | 
+        try {
+            APIcheckRegistrationAvailabilityRequest request = APIcheckRegistrationAvailabilityRequest.newBuilder()
+                .name(name)
+                .email(email)
+                .phone(phone)
+                .build();
+            ApiResponse<CheckRegistrationAvailabilityResp> response = apiInstance.checkRegistrationAvailabilityWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#checkRegistrationAvailability");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| checkRegistrationAvailabilityRequest | [**APIcheckRegistrationAvailabilityRequest**](AuthService.md#APIcheckRegistrationAvailabilityRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**CheckRegistrationAvailabilityResp**](CheckRegistrationAvailabilityResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIcheckRegistrationAvailabilityRequest"></a>
+## APIcheckRegistrationAvailabilityRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **name** | **String** |  | [optional] |
+| **email** | **String** |  | [optional] |
+| **phone** | **String** |  | [optional] |
+
+
+
+## login
+
+> LoginResp login(loginRequest)
+
+
+
+登录账号。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        LoginReq loginReq = new LoginReq(); // LoginReq | 
+        try {
+            APIloginRequest request = APIloginRequest.newBuilder()
+                .loginReq(loginReq)
+                .build();
+            LoginResp result = apiInstance.login(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#login");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| loginRequest | [**APIloginRequest**](AuthService.md#APIloginRequest)|-|-|
+
+### Return type
+
+[**LoginResp**](LoginResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## loginWithHttpInfo
+
+> ApiResponse<LoginResp> loginWithHttpInfo(loginRequest)
+
+
+
+登录账号。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        LoginReq loginReq = new LoginReq(); // LoginReq | 
+        try {
+            APIloginRequest request = APIloginRequest.newBuilder()
+                .loginReq(loginReq)
+                .build();
+            ApiResponse<LoginResp> response = apiInstance.loginWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#login");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| loginRequest | [**APIloginRequest**](AuthService.md#APIloginRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**LoginResp**](LoginResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIloginRequest"></a>
+## APIloginRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **loginReq** | [**LoginReq**](LoginReq.md) |  | |
+
+
+
+## logout
+
+> Object logout(logoutRequest)
+
+
+
+退出登录。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        Object body = null; // Object | 
+        try {
+            APIlogoutRequest request = APIlogoutRequest.newBuilder()
+                .body(body)
+                .build();
+            Object result = apiInstance.logout(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#logout");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| logoutRequest | [**APIlogoutRequest**](AuthService.md#APIlogoutRequest)|-|-|
+
+### Return type
+
+**Object**
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## logoutWithHttpInfo
+
+> ApiResponse<Object> logoutWithHttpInfo(logoutRequest)
+
+
+
+退出登录。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        Object body = null; // Object | 
+        try {
+            APIlogoutRequest request = APIlogoutRequest.newBuilder()
+                .body(body)
+                .build();
+            ApiResponse<Object> response = apiInstance.logoutWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#logout");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| logoutRequest | [**APIlogoutRequest**](AuthService.md#APIlogoutRequest)|-|-|
+
+### Return type
+
+ApiResponse<**Object**>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIlogoutRequest"></a>
+## APIlogoutRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **body** | **Object** |  | |
+
+
+
+## refreshToken
+
+> RefreshTokenResp refreshToken(refreshTokenRequest)
+
+
+
+刷新登录令牌。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        RefreshTokenReq refreshTokenReq = new RefreshTokenReq(); // RefreshTokenReq | 
+        try {
+            APIrefreshTokenRequest request = APIrefreshTokenRequest.newBuilder()
+                .refreshTokenReq(refreshTokenReq)
+                .build();
+            RefreshTokenResp result = apiInstance.refreshToken(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#refreshToken");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| refreshTokenRequest | [**APIrefreshTokenRequest**](AuthService.md#APIrefreshTokenRequest)|-|-|
+
+### Return type
+
+[**RefreshTokenResp**](RefreshTokenResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## refreshTokenWithHttpInfo
+
+> ApiResponse<RefreshTokenResp> refreshTokenWithHttpInfo(refreshTokenRequest)
+
+
+
+刷新登录令牌。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        RefreshTokenReq refreshTokenReq = new RefreshTokenReq(); // RefreshTokenReq | 
+        try {
+            APIrefreshTokenRequest request = APIrefreshTokenRequest.newBuilder()
+                .refreshTokenReq(refreshTokenReq)
+                .build();
+            ApiResponse<RefreshTokenResp> response = apiInstance.refreshTokenWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#refreshToken");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| refreshTokenRequest | [**APIrefreshTokenRequest**](AuthService.md#APIrefreshTokenRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**RefreshTokenResp**](RefreshTokenResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIrefreshTokenRequest"></a>
+## APIrefreshTokenRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **refreshTokenReq** | [**RefreshTokenReq**](RefreshTokenReq.md) |  | |
+
+
+
+## register
+
+> Object register(registerRequest)
+
+
+
+注册账号。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        RegisterReq registerReq = new RegisterReq(); // RegisterReq | 
+        try {
+            APIregisterRequest request = APIregisterRequest.newBuilder()
+                .registerReq(registerReq)
+                .build();
+            Object result = apiInstance.register(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#register");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| registerRequest | [**APIregisterRequest**](AuthService.md#APIregisterRequest)|-|-|
+
+### Return type
+
+**Object**
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## registerWithHttpInfo
+
+> ApiResponse<Object> registerWithHttpInfo(registerRequest)
+
+
+
+注册账号。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AuthService;
+import com.bass.bbs.api.AuthService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AuthService apiInstance = new AuthService(defaultClient);
+        RegisterReq registerReq = new RegisterReq(); // RegisterReq | 
+        try {
+            APIregisterRequest request = APIregisterRequest.newBuilder()
+                .registerReq(registerReq)
+                .build();
+            ApiResponse<Object> response = apiInstance.registerWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AuthService#register");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| registerRequest | [**APIregisterRequest**](AuthService.md#APIregisterRequest)|-|-|
+
+### Return type
+
+ApiResponse<**Object**>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIregisterRequest"></a>
+## APIregisterRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **registerReq** | [**RegisterReq**](RegisterReq.md) |  | |
+
+

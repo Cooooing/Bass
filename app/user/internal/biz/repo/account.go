@@ -37,6 +37,7 @@ type AccountGetReq struct {
 	UserID    *int64
 	UserIds   []int64
 	Name      *string
+	ExactName *string
 	Names     []string
 	Nickname  *string
 	Nicknames []string

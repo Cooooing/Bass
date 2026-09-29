@@ -15,6 +15,7 @@ type RelationClient interface {
 	ListFollowers(ctx context.Context, req *ListFollowersRelationsReq) (*ListFollowersRelationsResp, error)
 	ListBlocked(ctx context.Context, req *ListBlockedRelationsReq) (*ListBlockedRelationsResp, error)
 	GetStatus(ctx context.Context, req *GetStatusRelationReq) (*RelationStatus, error)
+	MapStatus(ctx context.Context, actorID int64, targetIDs []int64) (map[int64]*RelationStatus, error)
 }
 
 type FollowRelationReq struct {

@@ -35,6 +35,7 @@ func (Account) Fields() []ent.Field {
 		field.String("phone").Comment("手机号").Optional().Nillable(),
 		field.String("url").Comment("个人主页 URL").Optional().Nillable(),
 		field.Int64("avatar_asset_id").Comment("头像资源 ID").Optional().Nillable(),
+		field.Int64("background_asset_id").Comment("个人主页背景图资源 ID").Optional().Nillable(),
 		field.String("introduction").Comment("个人简介").Optional().Nillable(),
 		field.Enum("mbti").Values(userenum.MBTIMap.EnumValues()...).Comment("MBTI 类型").Optional().Nillable(),
 		field.Enum("status").Values(userenum.AccountStatusMap.EnumValues()...).Default(userenum.AccountStatusNormal.String()).Comment("账号状态"),

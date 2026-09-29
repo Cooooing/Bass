@@ -12,15 +12,18 @@ import (
 type ContentArticleUsecase struct {
 	contentArticleClient repo.ContentArticleClient
 	assetClient          repo.AssetClient
+	privacyClient        repo.PrivacySettingClient
 }
 
 func NewContentArticleUsecase(
 	contentArticleClient repo.ContentArticleClient,
 	assetClient repo.AssetClient,
+	privacyClient repo.PrivacySettingClient,
 ) *ContentArticleUsecase {
 	return &ContentArticleUsecase{
 		contentArticleClient: contentArticleClient,
 		assetClient:          assetClient,
+		privacyClient:        privacyClient,
 	}
 }
 
@@ -234,6 +237,15 @@ type ListArticlesResp struct {
 func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error) {
 	if req == nil {
 		req = &ListArticlesReq{}
+	}
+	if req.Query != nil && req.Query.AuthorID != nil && req.UserID != *req.Query.AuthorID {
+		privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, *req.Query.AuthorID)
+		if err != nil {
+			return nil, err
+		}
+		if !boolValue(privacy.PublicArticles) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_ARTICLES_PRIVATE)
+		}
 	}
 	var page *repo.PageReq
 	if req.Page != nil {

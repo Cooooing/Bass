@@ -10,9 +10,15 @@ type CommentViewerActionState struct {
 	Thanked bool
 }
 
+type ArticleBrief struct {
+	ID    int64
+	Title string
+}
+
 type CommentListItem struct {
 	ID                int64
 	ArticleID         int64
+	Article           *ArticleBrief
 	Content           string
 	ContentRender     string
 	Level             int32

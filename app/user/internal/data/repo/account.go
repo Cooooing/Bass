@@ -148,21 +148,22 @@ func (r *AccountRepo) create(ctx context.Context, u *model.Account) (*model.Acco
 		return nil, err
 	}
 	return &model.Account{
-		ID:            created.ID,
-		Name:          created.Name,
-		Nickname:      created.Nickname,
-		Password:      created.Password,
-		Email:         created.Email,
-		Phone:         created.Phone,
-		URL:           created.URL,
-		AvatarAssetID: created.AvatarAssetID,
-		Introduction:  created.Introduction,
-		Mbti:          (*enum.MBTI)(created.Mbti),
-		Status:        new(enum.AccountStatus(created.Status)),
-		FollowCount:   new(created.FollowCount),
-		FollowerCount: new(created.FollowerCount),
-		CreatedAt:     created.CreatedAt,
-		UpdatedAt:     created.UpdatedAt,
+		ID:                created.ID,
+		Name:              created.Name,
+		Nickname:          created.Nickname,
+		Password:          created.Password,
+		Email:             created.Email,
+		Phone:             created.Phone,
+		URL:               created.URL,
+		AvatarAssetID:     created.AvatarAssetID,
+		BackgroundAssetID: created.BackgroundAssetID,
+		Introduction:      created.Introduction,
+		Mbti:              (*enum.MBTI)(created.Mbti),
+		Status:            new(enum.AccountStatus(created.Status)),
+		FollowCount:       new(created.FollowCount),
+		FollowerCount:     new(created.FollowerCount),
+		CreatedAt:         created.CreatedAt,
+		UpdatedAt:         created.UpdatedAt,
 	}, nil
 }
 
@@ -176,26 +177,27 @@ func (r *AccountRepo) update(ctx context.Context, u *model.Account) (*model.Acco
 		return nil, err
 	}
 	return &model.Account{
-		ID:            updated.ID,
-		Name:          updated.Name,
-		Nickname:      updated.Nickname,
-		Password:      updated.Password,
-		Email:         updated.Email,
-		Phone:         updated.Phone,
-		URL:           updated.URL,
-		AvatarAssetID: updated.AvatarAssetID,
-		Introduction:  updated.Introduction,
-		Mbti:          (*enum.MBTI)(updated.Mbti),
-		Status:        new(enum.AccountStatus(updated.Status)),
-		FollowCount:   new(updated.FollowCount),
-		FollowerCount: new(updated.FollowerCount),
-		CreatedAt:     updated.CreatedAt,
-		UpdatedAt:     updated.UpdatedAt,
+		ID:                updated.ID,
+		Name:              updated.Name,
+		Nickname:          updated.Nickname,
+		Password:          updated.Password,
+		Email:             updated.Email,
+		Phone:             updated.Phone,
+		URL:               updated.URL,
+		AvatarAssetID:     updated.AvatarAssetID,
+		BackgroundAssetID: updated.BackgroundAssetID,
+		Introduction:      updated.Introduction,
+		Mbti:              (*enum.MBTI)(updated.Mbti),
+		Status:            new(enum.AccountStatus(updated.Status)),
+		FollowCount:       new(updated.FollowCount),
+		FollowerCount:     new(updated.FollowerCount),
+		CreatedAt:         updated.CreatedAt,
+		UpdatedAt:         updated.UpdatedAt,
 	}, nil
 }
 
 func (r *AccountRepo) updateProfile(ctx context.Context, req *model.AccountProfileUpdate) (*model.Account, error) {
-	if req.AvatarAssetID == nil && req.Nickname == nil && req.URL == nil && req.Introduction == nil && req.Mbti == nil && !req.ClearMBTI {
+	if req.AvatarAssetID == nil && req.BackgroundAssetID == nil && req.Nickname == nil && req.URL == nil && req.Introduction == nil && req.Mbti == nil && !req.ClearMBTI {
 		return r.get(ctx, &repo.AccountGetReq{
 			UserID: &req.UserID,
 		})
@@ -208,6 +210,13 @@ func (r *AccountRepo) updateProfile(ctx context.Context, req *model.AccountProfi
 			update.ClearAvatarAssetID()
 		} else {
 			update.SetAvatarAssetID(*req.AvatarAssetID)
+		}
+	}
+	if req.BackgroundAssetID != nil {
+		if *req.BackgroundAssetID == 0 {
+			update.ClearBackgroundAssetID()
+		} else {
+			update.SetBackgroundAssetID(*req.BackgroundAssetID)
 		}
 	}
 	if req.Nickname != nil {
@@ -242,21 +251,22 @@ func (r *AccountRepo) updateProfile(ctx context.Context, req *model.AccountProfi
 		return nil, err
 	}
 	return &model.Account{
-		ID:            updated.ID,
-		Name:          updated.Name,
-		Nickname:      updated.Nickname,
-		Password:      updated.Password,
-		Email:         updated.Email,
-		Phone:         updated.Phone,
-		URL:           updated.URL,
-		AvatarAssetID: updated.AvatarAssetID,
-		Introduction:  updated.Introduction,
-		Mbti:          (*enum.MBTI)(updated.Mbti),
-		Status:        new(enum.AccountStatus(updated.Status)),
-		FollowCount:   new(updated.FollowCount),
-		FollowerCount: new(updated.FollowerCount),
-		CreatedAt:     updated.CreatedAt,
-		UpdatedAt:     updated.UpdatedAt,
+		ID:                updated.ID,
+		Name:              updated.Name,
+		Nickname:          updated.Nickname,
+		Password:          updated.Password,
+		Email:             updated.Email,
+		Phone:             updated.Phone,
+		URL:               updated.URL,
+		AvatarAssetID:     updated.AvatarAssetID,
+		BackgroundAssetID: updated.BackgroundAssetID,
+		Introduction:      updated.Introduction,
+		Mbti:              (*enum.MBTI)(updated.Mbti),
+		Status:            new(enum.AccountStatus(updated.Status)),
+		FollowCount:       new(updated.FollowCount),
+		FollowerCount:     new(updated.FollowerCount),
+		CreatedAt:         updated.CreatedAt,
+		UpdatedAt:         updated.UpdatedAt,
 	}, nil
 }
 
@@ -276,21 +286,22 @@ func (r *AccountRepo) addStat(ctx context.Context, userId int64, statType enum.A
 		return nil, err
 	}
 	return &model.Account{
-		ID:            saved.ID,
-		Name:          saved.Name,
-		Nickname:      saved.Nickname,
-		Password:      saved.Password,
-		Email:         saved.Email,
-		Phone:         saved.Phone,
-		URL:           saved.URL,
-		AvatarAssetID: saved.AvatarAssetID,
-		Introduction:  saved.Introduction,
-		Mbti:          (*enum.MBTI)(saved.Mbti),
-		Status:        new(enum.AccountStatus(saved.Status)),
-		FollowCount:   new(saved.FollowCount),
-		FollowerCount: new(saved.FollowerCount),
-		CreatedAt:     saved.CreatedAt,
-		UpdatedAt:     saved.UpdatedAt,
+		ID:                saved.ID,
+		Name:              saved.Name,
+		Nickname:          saved.Nickname,
+		Password:          saved.Password,
+		Email:             saved.Email,
+		Phone:             saved.Phone,
+		URL:               saved.URL,
+		AvatarAssetID:     saved.AvatarAssetID,
+		BackgroundAssetID: saved.BackgroundAssetID,
+		Introduction:      saved.Introduction,
+		Mbti:              (*enum.MBTI)(saved.Mbti),
+		Status:            new(enum.AccountStatus(saved.Status)),
+		FollowCount:       new(saved.FollowCount),
+		FollowerCount:     new(saved.FollowerCount),
+		CreatedAt:         saved.CreatedAt,
+		UpdatedAt:         saved.UpdatedAt,
 	}, nil
 }
 
@@ -302,21 +313,22 @@ func (r *AccountRepo) updateStatus(ctx context.Context, userID int64, status enu
 		return nil, err
 	}
 	return &model.Account{
-		ID:            saved.ID,
-		Name:          saved.Name,
-		Nickname:      saved.Nickname,
-		Password:      saved.Password,
-		Email:         saved.Email,
-		Phone:         saved.Phone,
-		URL:           saved.URL,
-		AvatarAssetID: saved.AvatarAssetID,
-		Introduction:  saved.Introduction,
-		Mbti:          (*enum.MBTI)(saved.Mbti),
-		Status:        new(enum.AccountStatus(saved.Status)),
-		FollowCount:   new(saved.FollowCount),
-		FollowerCount: new(saved.FollowerCount),
-		CreatedAt:     saved.CreatedAt,
-		UpdatedAt:     saved.UpdatedAt,
+		ID:                saved.ID,
+		Name:              saved.Name,
+		Nickname:          saved.Nickname,
+		Password:          saved.Password,
+		Email:             saved.Email,
+		Phone:             saved.Phone,
+		URL:               saved.URL,
+		AvatarAssetID:     saved.AvatarAssetID,
+		BackgroundAssetID: saved.BackgroundAssetID,
+		Introduction:      saved.Introduction,
+		Mbti:              (*enum.MBTI)(saved.Mbti),
+		Status:            new(enum.AccountStatus(saved.Status)),
+		FollowCount:       new(saved.FollowCount),
+		FollowerCount:     new(saved.FollowerCount),
+		CreatedAt:         saved.CreatedAt,
+		UpdatedAt:         saved.UpdatedAt,
 	}, nil
 }
 
@@ -354,21 +366,22 @@ func (r *AccountRepo) get(ctx context.Context, req *repo.AccountGetReq) (*model.
 		return nil, err
 	}
 	return &model.Account{
-		ID:            u.ID,
-		Name:          u.Name,
-		Nickname:      u.Nickname,
-		Password:      u.Password,
-		Email:         u.Email,
-		Phone:         u.Phone,
-		URL:           u.URL,
-		AvatarAssetID: u.AvatarAssetID,
-		Introduction:  u.Introduction,
-		Mbti:          (*enum.MBTI)(u.Mbti),
-		Status:        new(enum.AccountStatus(u.Status)),
-		FollowCount:   new(u.FollowCount),
-		FollowerCount: new(u.FollowerCount),
-		CreatedAt:     u.CreatedAt,
-		UpdatedAt:     u.UpdatedAt,
+		ID:                u.ID,
+		Name:              u.Name,
+		Nickname:          u.Nickname,
+		Password:          u.Password,
+		Email:             u.Email,
+		Phone:             u.Phone,
+		URL:               u.URL,
+		AvatarAssetID:     u.AvatarAssetID,
+		BackgroundAssetID: u.BackgroundAssetID,
+		Introduction:      u.Introduction,
+		Mbti:              (*enum.MBTI)(u.Mbti),
+		Status:            new(enum.AccountStatus(u.Status)),
+		FollowCount:       new(u.FollowCount),
+		FollowerCount:     new(u.FollowerCount),
+		CreatedAt:         u.CreatedAt,
+		UpdatedAt:         u.UpdatedAt,
 	}, nil
 }
 
@@ -383,21 +396,22 @@ func (r *AccountRepo) list(ctx context.Context, req *repo.AccountGetReq) ([]*mod
 	result := make([]*model.Account, 0, len(list))
 	for _, u := range list {
 		result = append(result, &model.Account{
-			ID:            u.ID,
-			Name:          u.Name,
-			Nickname:      u.Nickname,
-			Password:      u.Password,
-			Email:         u.Email,
-			Phone:         u.Phone,
-			URL:           u.URL,
-			AvatarAssetID: u.AvatarAssetID,
-			Introduction:  u.Introduction,
-			Mbti:          (*enum.MBTI)(u.Mbti),
-			Status:        new(enum.AccountStatus(u.Status)),
-			FollowCount:   new(u.FollowCount),
-			FollowerCount: new(u.FollowerCount),
-			CreatedAt:     u.CreatedAt,
-			UpdatedAt:     u.UpdatedAt,
+			ID:                u.ID,
+			Name:              u.Name,
+			Nickname:          u.Nickname,
+			Password:          u.Password,
+			Email:             u.Email,
+			Phone:             u.Phone,
+			URL:               u.URL,
+			AvatarAssetID:     u.AvatarAssetID,
+			BackgroundAssetID: u.BackgroundAssetID,
+			Introduction:      u.Introduction,
+			Mbti:              (*enum.MBTI)(u.Mbti),
+			Status:            new(enum.AccountStatus(u.Status)),
+			FollowCount:       new(u.FollowCount),
+			FollowerCount:     new(u.FollowerCount),
+			CreatedAt:         u.CreatedAt,
+			UpdatedAt:         u.UpdatedAt,
 		})
 	}
 	return result, nil
@@ -444,21 +458,22 @@ func (r *AccountRepo) page(ctx context.Context, page *common.PageReq, req *repo.
 	result := make([]*model.Account, 0, len(list))
 	for _, u := range list {
 		result = append(result, &model.Account{
-			ID:            u.ID,
-			Name:          u.Name,
-			Nickname:      u.Nickname,
-			Password:      u.Password,
-			Email:         u.Email,
-			Phone:         u.Phone,
-			URL:           u.URL,
-			AvatarAssetID: u.AvatarAssetID,
-			Introduction:  u.Introduction,
-			Mbti:          (*enum.MBTI)(u.Mbti),
-			Status:        new(enum.AccountStatus(u.Status)),
-			FollowCount:   new(u.FollowCount),
-			FollowerCount: new(u.FollowerCount),
-			CreatedAt:     u.CreatedAt,
-			UpdatedAt:     u.UpdatedAt,
+			ID:                u.ID,
+			Name:              u.Name,
+			Nickname:          u.Nickname,
+			Password:          u.Password,
+			Email:             u.Email,
+			Phone:             u.Phone,
+			URL:               u.URL,
+			AvatarAssetID:     u.AvatarAssetID,
+			BackgroundAssetID: u.BackgroundAssetID,
+			Introduction:      u.Introduction,
+			Mbti:              (*enum.MBTI)(u.Mbti),
+			Status:            new(enum.AccountStatus(u.Status)),
+			FollowCount:       new(u.FollowCount),
+			FollowerCount:     new(u.FollowerCount),
+			CreatedAt:         u.CreatedAt,
+			UpdatedAt:         u.UpdatedAt,
 		})
 	}
 	return result, &common.PageResp{
@@ -480,6 +495,9 @@ func (r *AccountRepo) getQuery(query *gen.AccountQuery, req *repo.AccountGetReq)
 	}
 	if req.Name != nil {
 		query = query.Where(account.NameContains(*req.Name))
+	}
+	if req.ExactName != nil {
+		query = query.Where(account.NameEQ(*req.ExactName))
 	}
 	if len(req.Names) > 0 {
 		query = query.Where(account.NameIn(req.Names...))

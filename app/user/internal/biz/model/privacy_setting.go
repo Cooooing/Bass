@@ -9,6 +9,8 @@ type PrivacySetting struct {
 	PublicPoints *bool
 	// PublicFollowers 控制粉丝列表是否公开。
 	PublicFollowers *bool
+	// PublicFollowing 控制关注列表是否公开。
+	PublicFollowing *bool
 	// PublicArticles 控制文章列表是否公开。
 	PublicArticles *bool
 	// PublicComments 控制评论列表是否公开。

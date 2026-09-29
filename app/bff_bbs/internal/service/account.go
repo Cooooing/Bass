@@ -29,9 +29,7 @@ type AccountService struct {
 	codeRe         *regexp.Regexp
 }
 
-func NewAccountService(
-	accountUsecase *usecase.AccountUsecase,
-) *AccountService {
+func NewAccountService(accountUsecase *usecase.AccountUsecase) *AccountService {
 	return &AccountService{
 		accountUsecase: accountUsecase,
 		phoneRe:        regexp.MustCompile("^1[3-9]\\d{9}$"),
@@ -59,14 +57,22 @@ func (s *AccountService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurre
 	}, nil
 }
 
-func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfileAccount_Req) (*bbsuserv1.GetProfileAccount_Resp, error) {
-	profile, err := s.accountUsecase.GetProfileAccount(ctx, req.GetUserId())
+func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfile_Req) (*bbsuserv1.GetProfile_Resp, error) {
+	profile, err := s.accountUsecase.GetProfile(ctx, req.GetName(), accountIDFromContext(ctx))
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.GetProfileAccount_Resp{
+	return &bbsuserv1.GetProfile_Resp{
 		Profile: profile,
 	}, nil
+}
+
+func (s *AccountService) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowing_Req) (*bbsuserv1.ListFollowing_Resp, error) {
+	return s.accountUsecase.ListFollowing(ctx, req.GetName(), accountIDFromContext(ctx), &repo.PageReq{Page: req.GetPage().GetPage(), Size: req.GetPage().GetSize()})
+}
+
+func (s *AccountService) ListFollowers(ctx context.Context, req *bbsuserv1.ListFollowers_Req) (*bbsuserv1.ListFollowers_Resp, error) {
+	return s.accountUsecase.ListFollowers(ctx, req.GetName(), accountIDFromContext(ctx), &repo.PageReq{Page: req.GetPage().GetPage(), Size: req.GetPage().GetSize()})
 }
 
 func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Req) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
@@ -98,12 +104,13 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 		}
 	}
 	profile, err := s.accountUsecase.UpdateProfileAccount(ctx, &usecase.UpdateProfileAccountReq{
-		UserID:        user.ID,
-		AvatarAssetID: req.AvatarAssetId,
-		Nickname:      req.Nickname,
-		URL:           req.Url,
-		Introduction:  req.Introduction,
-		Mbti:          req.Mbti,
+		UserID:            user.ID,
+		AvatarAssetID:     req.AvatarAssetId,
+		BackgroundAssetID: req.BackgroundAssetId,
+		Nickname:          req.Nickname,
+		URL:               req.Url,
+		Introduction:      req.Introduction,
+		Mbti:              req.Mbti,
 	})
 	if err != nil {
 		return nil, err
@@ -249,4 +256,12 @@ func (s *AccountService) ListEconomyRecords(ctx context.Context, req *bbsuserv1.
 		page = &common.PageResp{Page: resp.Page.Page, Size: resp.Page.Size, Total: resp.Page.Total}
 	}
 	return &bbsuserv1.ListAccountEconomyRecords_Resp{Rows: rows, Page: page}, nil
+}
+
+func accountIDFromContext(ctx context.Context) int64 {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return 0
+	}
+	return user.ID
 }

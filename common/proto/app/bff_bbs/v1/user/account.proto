@@ -20,10 +20,24 @@ service AccountService {
       body: "*"
     };
   }
-  // 按账号 ID 获取展示资料
-  rpc GetProfile(GetProfileAccount.Req) returns (GetProfileAccount.Resp) {
+  // 按账号名获取个人主页资料。
+  rpc GetProfile(GetProfile.Req) returns (GetProfile.Resp) {
     option (google.api.http) = {
       post: "/v1/user/account/get-profile"
+      body: "*"
+    };
+  }
+  // 查询账号公开的关注列表。
+  rpc ListFollowing(ListFollowing.Req) returns (ListFollowing.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/list-following"
+      body: "*"
+    };
+  }
+  // 查询账号公开的粉丝列表。
+  rpc ListFollowers(ListFollowers.Req) returns (ListFollowers.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/list-followers"
       body: "*"
     };
   }
@@ -69,13 +83,48 @@ message AccountProfile {
   optional string nickname = 3; // 昵称
   optional string url = 4; // 个人主页 URL
   optional string avatar_url = 5; // 头像 URL
-  optional string introduction = 6; // 个人简介
-  MBTI mbti = 7; // MBTI 类型
-  AccountStatus status = 8; // 账号状态
+  optional int64 background_asset_id = 6; // 个人主页背景图资源 ID
+  optional string introduction = 7; // 个人简介
+  MBTI mbti = 8; // MBTI 类型
+  AccountStatus status = 9; // 账号状态
   optional int32 follow_count = 10; // 关注数量
   optional int32 follower_count = 11; // 粉丝数量
   google.protobuf.Timestamp created_at = 1000; // 创建时间
   google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}
+
+message ProfileVisibility {
+  bool articles = 1;
+  bool comments = 2;
+  bool followers = 3;
+  bool following = 4;
+}
+
+message ProfileRelation {
+  bool following = 1;
+  bool followed_by = 2;
+  bool blocking = 3;
+  bool blocked_by = 4;
+}
+
+message ProfileLocation {
+  optional string country = 1;
+  optional string province = 2;
+  optional string city = 3;
+}
+
+message Profile {
+  AccountProfile account = 1;
+  optional string background_url = 2;
+  ProfileLocation location = 3;
+  google.protobuf.Timestamp last_success_login_at = 4;
+  ProfileVisibility visibility = 5;
+  ProfileRelation viewer_relation = 6;
+}
+
+message AccountProfileListItem {
+  AccountProfile account = 1;
+  ProfileRelation viewer_relation = 2;
 }
 
 message AccountContact {
@@ -95,25 +144,48 @@ message GetCurrentAccount {
   }
 }
 
-message GetProfileAccount {
+message GetProfile {
   message Req {
-    int64 user_id = 1; // 账号 ID，必填
-    option (gnostic.openapi.v3.schema) = {
-      required: "user_id"
-    };
+    string name = 1; // 账号名，必填
+    option (gnostic.openapi.v3.schema) = { required: "name" };
   }
   message Resp {
-    AccountProfile profile = 1; // 账号展示资料
+    Profile profile = 1;
+  }
+}
+
+message ListFollowing {
+  message Req {
+    string name = 1;
+    .common.api.app.common.PageReq page = 2;
+    option (gnostic.openapi.v3.schema) = { required: "name" };
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1;
+    repeated AccountProfileListItem rows = 2;
+  }
+}
+
+message ListFollowers {
+  message Req {
+    string name = 1;
+    .common.api.app.common.PageReq page = 2;
+    option (gnostic.openapi.v3.schema) = { required: "name" };
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1;
+    repeated AccountProfileListItem rows = 2;
   }
 }
 
 message UpdateProfileAccount {
   message Req {
     optional int64 avatar_asset_id = 1; // 头像资源 ID，选填
-    optional string nickname = 2; // 昵称，选填
-    optional string url = 3; // 个人主页 URL，选填
-    optional string introduction = 4; // 个人简介，选填
-    optional MBTI mbti = 5; // MBTI 类型，选填
+    optional int64 background_asset_id = 2; // 个人主页背景图资源 ID，0 表示清除
+    optional string nickname = 3; // 昵称，选填
+    optional string url = 4; // 个人主页 URL，选填
+    optional string introduction = 5; // 个人简介，选填
+    optional MBTI mbti = 6; // MBTI 类型，选填
   }
   message Resp {
     AccountProfile profile = 1; // 更新后的账号资料

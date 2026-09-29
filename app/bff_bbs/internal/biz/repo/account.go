@@ -7,7 +7,8 @@ import (
 
 type AccountClient interface {
 	GetCurrentAccount(ctx context.Context, userID int64) (*Account, error)
-	GetProfileAccount(ctx context.Context, userID int64) (*AccountProfile, error)
+	GetProfile(ctx context.Context, name string) (*AccountProfile, *time.Time, error)
+	MapProfileAccounts(ctx context.Context, userIDs []int64) (map[int64]*AccountProfile, error)
 	UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*AccountProfile, error)
 	UpdatePasswordAccount(ctx context.Context, req *UpdatePasswordAccountReq) error
 	UpdateEmailAccount(ctx context.Context, req *UpdateEmailAccountReq) error
@@ -16,19 +17,20 @@ type AccountClient interface {
 }
 
 type AccountProfile struct {
-	ID            int64
-	Name          string
-	Nickname      *string
-	URL           *string
-	AvatarURL     *string
-	AvatarAssetID *int64
-	Introduction  *string
-	Status        int32
-	MBTI          int32
-	FollowCount   *int32
-	FollowerCount *int32
-	CreatedAt     *time.Time
-	UpdatedAt     *time.Time
+	ID                int64
+	Name              string
+	Nickname          *string
+	URL               *string
+	AvatarURL         *string
+	AvatarAssetID     *int64
+	BackgroundAssetID *int64
+	Introduction      *string
+	Status            int32
+	MBTI              int32
+	FollowCount       *int32
+	FollowerCount     *int32
+	CreatedAt         *time.Time
+	UpdatedAt         *time.Time
 }
 
 type AccountContact struct {
@@ -43,12 +45,13 @@ type Account struct {
 }
 
 type UpdateProfileAccountReq struct {
-	UserID        int64
-	AvatarAssetID *int64
-	Nickname      *string
-	URL           *string
-	Introduction  *string
-	MBTI          *int32
+	UserID            int64
+	AvatarAssetID     *int64
+	BackgroundAssetID *int64
+	Nickname          *string
+	URL               *string
+	Introduction      *string
+	MBTI              *int32
 }
 
 type UpdatePasswordAccountReq struct {

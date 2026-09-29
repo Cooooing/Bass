@@ -34,10 +34,11 @@ message GetCurrentPrivacySetting {
       int64 user_id = 1; // 账号 ID
       optional bool public_points = 2; // 是否公开积分
       optional bool public_followers = 3; // 是否公开粉丝列表
-      optional bool public_articles = 4; // 是否公开文章列表
-      optional bool public_comments = 5; // 是否公开评论列表
-      optional bool public_online_status = 6; // 是否公开在线状态
-      optional bool public_location = 7; // 是否公开地理资料
+      optional bool public_following = 4; // 是否公开关注列表
+      optional bool public_articles = 5; // 是否公开文章列表
+      optional bool public_comments = 6; // 是否公开评论列表
+      optional bool public_online_status = 7; // 是否公开在线状态
+      optional bool public_location = 8; // 是否公开地理资料
     }
     PrivacySetting privacy_setting = 1; // 当前账号隐私设置
   }
@@ -48,20 +49,22 @@ message UpdateCurrentPrivacySetting {
   message Req {
     optional bool public_points = 1; // 是否公开积分
     optional bool public_followers = 2; // 是否公开粉丝列表
-    optional bool public_articles = 3; // 是否公开文章列表
-    optional bool public_comments = 4; // 是否公开评论列表
-    optional bool public_online_status = 5; // 是否公开在线状态
-    optional bool public_location = 6; // 是否公开地理资料
+    optional bool public_following = 3; // 是否公开关注列表
+    optional bool public_articles = 4; // 是否公开文章列表
+    optional bool public_comments = 5; // 是否公开评论列表
+    optional bool public_online_status = 6; // 是否公开在线状态
+    optional bool public_location = 7; // 是否公开地理资料
   }
   message Resp {
     message PrivacySetting {
       int64 user_id = 1; // 账号 ID
       optional bool public_points = 2; // 是否公开积分
       optional bool public_followers = 3; // 是否公开粉丝列表
-      optional bool public_articles = 4; // 是否公开文章列表
-      optional bool public_comments = 5; // 是否公开评论列表
-      optional bool public_online_status = 6; // 是否公开在线状态
-      optional bool public_location = 7; // 是否公开地理资料
+      optional bool public_following = 4; // 是否公开关注列表
+      optional bool public_articles = 5; // 是否公开文章列表
+      optional bool public_comments = 6; // 是否公开评论列表
+      optional bool public_online_status = 7; // 是否公开在线状态
+      optional bool public_location = 8; // 是否公开地理资料
     }
     PrivacySetting privacy_setting = 1; // 更新后的账号隐私设置
   }

@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 )
 
 // Article 定义文章实体。
@@ -58,6 +59,13 @@ func (Article) Mixin() []ent.Mixin {
 	return []ent.Mixin{
 		utilent.TimeAuditMixin{},
 		utilent.SoftDeleteMixin{},
+	}
+}
+
+func (Article) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("created_by", "publish_status", "visibility", "restriction", "published_at", "id").
+			Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 	}
 }
 

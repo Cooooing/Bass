@@ -221,6 +221,21 @@ func (r *RelationClient) GetStatus(ctx context.Context, req *repo.GetStatusRelat
 	return out, nil
 }
 
+func (r *RelationClient) MapStatus(ctx context.Context, actorID int64, targetIDs []int64) (map[int64]*repo.RelationStatus, error) {
+	if actorID == 0 || len(targetIDs) == 0 {
+		return map[int64]*repo.RelationStatus{}, nil
+	}
+	reply, err := r.userClient.Relation.MapStatus(ctx, &userv1.MapRelationStatuses_Req{ActorId: actorID, TargetIds: targetIDs})
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*repo.RelationStatus, len(reply.GetStatuses()))
+	for targetID, status := range reply.GetStatuses() {
+		result[targetID] = &repo.RelationStatus{TargetID: targetID, Following: status.GetFollowing(), FollowedBy: status.GetFollowedBy(), Blocking: status.GetBlocking(), BlockedBy: status.GetBlockedBy()}
+	}
+	return result, nil
+}
+
 func (r *RelationClient) relationTypeFromUser(value userv1enum.RelationType) enum.RelationType {
 	switch value {
 	case userv1enum.RelationType_RELATION_TYPE_BLOCK:

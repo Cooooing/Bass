@@ -71,5 +71,7 @@ func (Comment) Indexes() []ent.Index {
 			Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 		index.Fields("article_id", "restriction", "created_at", "id").
 			Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+		index.Fields("created_by", "restriction", "created_at", "id").
+			Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 	}
 }

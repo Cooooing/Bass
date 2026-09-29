@@ -205,6 +205,34 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "Refresh token is required",
 			},
 		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_ARTICLES_PRIVATE: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "该用户未公开帖子列表",
+				commonenums.Language_LANGUAGE_ZH_TW: "該使用者未公開貼文列表",
+				commonenums.Language_LANGUAGE_EN:    "This user has not made posts public",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_COMMENTS_PRIVATE: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "该用户未公开回帖列表",
+				commonenums.Language_LANGUAGE_ZH_TW: "該使用者未公開回覆列表",
+				commonenums.Language_LANGUAGE_EN:    "This user has not made comments public",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWING_PRIVATE: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "该用户未公开关注列表",
+				commonenums.Language_LANGUAGE_ZH_TW: "該使用者未公開關注列表",
+				commonenums.Language_LANGUAGE_EN:    "This user has not made following public",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWERS_PRIVATE: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "该用户未公开粉丝列表",
+				commonenums.Language_LANGUAGE_ZH_TW: "該使用者未公開粉絲列表",
+				commonenums.Language_LANGUAGE_EN:    "This user has not made followers public",
+			},
+		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "验证码无效或已过期",

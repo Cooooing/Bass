@@ -2,24 +2,29 @@ package usecase
 
 import (
 	"bff_bbs/internal/biz/repo"
+	"common/pkg/apperror"
 	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
 	bbscontentv1enum "common/proto/gen/bff_bbs/v1/content/enum"
 	"common/proto/gen/common"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 )
 
 type ContentCommentUsecase struct {
 	contentCommentClient repo.ContentCommentClient
 	assetClient          repo.AssetClient
+	privacyClient        repo.PrivacySettingClient
 }
 
 func NewContentCommentUsecase(
 	contentCommentClient repo.ContentCommentClient,
 	assetClient repo.AssetClient,
+	privacyClient repo.PrivacySettingClient,
 ) *ContentCommentUsecase {
 	return &ContentCommentUsecase{
 		contentCommentClient: contentCommentClient,
 		assetClient:          assetClient,
+		privacyClient:        privacyClient,
 	}
 }
 
@@ -114,6 +119,15 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 		query.UserID = req.Query.UserId
 		if req.Query.Order != nil {
 			query.Order = new(int32(*req.Query.Order))
+		}
+	}
+	if query.UserID != nil && req.UserID != *query.UserID {
+		privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, *query.UserID)
+		if err != nil {
+			return nil, err
+		}
+		if !boolValue(privacy.PublicComments) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_COMMENTS_PRIVATE)
 		}
 	}
 	resp, err := u.contentCommentClient.ListComments(ctx, &repo.ListCommentsReq{

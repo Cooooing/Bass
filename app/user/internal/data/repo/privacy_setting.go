@@ -123,6 +123,7 @@ func (r *PrivacySettingRepo) get(ctx context.Context, req *repo.PrivacySettingGe
 		PublicComments:     new(p.PublicComments),
 		PublicOnlineStatus: new(p.PublicOnlineStatus),
 		PublicLocation:     new(p.PublicLocation),
+		PublicFollowing:    new(p.PublicFollowing),
 	}, nil
 }
 
@@ -145,6 +146,7 @@ func (r *PrivacySettingRepo) list(ctx context.Context, req *repo.PrivacySettingG
 			PublicComments:     new(p.PublicComments),
 			PublicOnlineStatus: new(p.PublicOnlineStatus),
 			PublicLocation:     new(p.PublicLocation),
+			PublicFollowing:    new(p.PublicFollowing),
 		})
 	}
 	return result, nil
@@ -196,6 +198,7 @@ func (r *PrivacySettingRepo) page(ctx context.Context, page *common.PageReq, req
 			PublicComments:     new(p.PublicComments),
 			PublicOnlineStatus: new(p.PublicOnlineStatus),
 			PublicLocation:     new(p.PublicLocation),
+			PublicFollowing:    new(p.PublicFollowing),
 		})
 	}
 	return result, &common.PageResp{
@@ -234,6 +237,9 @@ func (r *PrivacySettingRepo) upsertByUserID(ctx context.Context, p *model.Privac
 		if p.PublicLocation != nil {
 			create.SetPublicLocation(*p.PublicLocation)
 		}
+		if p.PublicFollowing != nil {
+			create.SetPublicFollowing(*p.PublicFollowing)
+		}
 		saved, err := create.Save(ctx)
 		if err != nil {
 			return nil, err
@@ -247,6 +253,7 @@ func (r *PrivacySettingRepo) upsertByUserID(ctx context.Context, p *model.Privac
 			PublicComments:     new(saved.PublicComments),
 			PublicOnlineStatus: new(saved.PublicOnlineStatus),
 			PublicLocation:     new(saved.PublicLocation),
+			PublicFollowing:    new(saved.PublicFollowing),
 		}, nil
 	}
 	p.ID = existing.ID
@@ -260,7 +267,8 @@ func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting
 		p.PublicArticles == nil &&
 		p.PublicComments == nil &&
 		p.PublicOnlineStatus == nil &&
-		p.PublicLocation == nil {
+		p.PublicLocation == nil &&
+		p.PublicFollowing == nil {
 		saved, err := tx.PrivacySetting.Get(ctx, p.ID)
 		if err != nil {
 			return nil, err
@@ -274,6 +282,7 @@ func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting
 			PublicComments:     new(saved.PublicComments),
 			PublicOnlineStatus: new(saved.PublicOnlineStatus),
 			PublicLocation:     new(saved.PublicLocation),
+			PublicFollowing:    new(saved.PublicFollowing),
 		}, nil
 	}
 	update := tx.PrivacySetting.UpdateOneID(p.ID)
@@ -295,6 +304,9 @@ func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting
 	if p.PublicLocation != nil {
 		update.SetPublicLocation(*p.PublicLocation)
 	}
+	if p.PublicFollowing != nil {
+		update.SetPublicFollowing(*p.PublicFollowing)
+	}
 	saved, err := update.Save(ctx)
 	if err != nil {
 		return nil, err
@@ -308,6 +320,7 @@ func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting
 		PublicComments:     new(saved.PublicComments),
 		PublicOnlineStatus: new(saved.PublicOnlineStatus),
 		PublicLocation:     new(saved.PublicLocation),
+		PublicFollowing:    new(saved.PublicFollowing),
 	}, nil
 }
 

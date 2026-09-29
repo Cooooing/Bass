@@ -42,6 +42,7 @@ func (s *PrivacySettingService) Get(ctx context.Context, req *v1.GetPrivacySetti
 	if res != nil {
 		reply.PublicPoints = res.PublicPoints
 		reply.PublicFollowers = res.PublicFollowers
+		reply.PublicFollowing = res.PublicFollowing
 		reply.PublicArticles = res.PublicArticles
 		reply.PublicComments = res.PublicComments
 		reply.PublicOnlineStatus = res.PublicOnlineStatus
@@ -57,6 +58,7 @@ func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivac
 		UserID:             req.GetUserId(),
 		PublicPoints:       req.PublicPoints,
 		PublicFollowers:    req.PublicFollowers,
+		PublicFollowing:    req.PublicFollowing,
 		PublicArticles:     req.PublicArticles,
 		PublicComments:     req.PublicComments,
 		PublicOnlineStatus: req.PublicOnlineStatus,
@@ -71,6 +73,7 @@ func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivac
 			UserId:             req.GetUserId(),
 			PublicPoints:       privacySetting.PublicPoints,
 			PublicFollowers:    privacySetting.PublicFollowers,
+			PublicFollowing:    privacySetting.PublicFollowing,
 			PublicArticles:     privacySetting.PublicArticles,
 			PublicComments:     privacySetting.PublicComments,
 			PublicOnlineStatus: privacySetting.PublicOnlineStatus,

@@ -35,9 +35,10 @@ message AccountBasic {
   optional string nickname = 3; // 昵称
   optional string url = 4; // 个人主页 URL
   optional int64 avatar_asset_id = 5; // 头像资源 ID
-  optional string introduction = 6; // 个人简介
-  MBTI mbti = 7; // MBTI 类型
-  AccountStatus status = 8; // 账号状态
+  optional int64 background_asset_id = 6; // 个人主页背景图资源 ID
+  optional string introduction = 7; // 个人简介
+  MBTI mbti = 8; // MBTI 类型
+  AccountStatus status = 9; // 账号状态
   optional int32 follow_count = 10; // 关注数量
   optional int32 follower_count = 11; // 粉丝数量
   google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -57,10 +58,12 @@ message AccountInfo {
 
 message GetAccount {
   message Req {
-    int64 user_id = 1; // 账号 ID
+    int64 user_id = 1; // 账号 ID；name 未传时必填
+    optional string name = 2; // 账号名；传入时优先于 user_id
   }
   message Resp {
     AccountInfo account = 1; // 账号完整资料
+    optional google.protobuf.Timestamp last_success_login_at = 2; // 最近一次成功登录时间
   }
 }
 
@@ -92,10 +95,11 @@ message UpdateProfileAccount {
   message Req {
     int64 user_id = 1; // 账号 ID
     optional int64 avatar_asset_id = 2; // 头像资源 ID
-    optional string nickname = 3; // 昵称
-    optional string url = 4; // 个人主页 URL
-    optional string introduction = 5; // 个人简介
-    optional MBTI mbti = 6; // MBTI 类型
+    optional int64 background_asset_id = 3; // 个人主页背景图资源 ID；0 表示清除
+    optional string nickname = 4; // 昵称
+    optional string url = 5; // 个人主页 URL
+    optional string introduction = 6; // 个人简介
+    optional MBTI mbti = 7; // MBTI 类型
   }
   message Resp {
     AccountBasic account = 1; // 更新后的账号资料

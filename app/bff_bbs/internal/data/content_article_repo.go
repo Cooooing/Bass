@@ -550,9 +550,7 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles
 	if lastComment != nil {
 		out.LastReplyAt = new(lastComment.GetCreatedAt().AsTime())
 		if lastComment.CreatedBy != nil {
-			if item.CreatedBy == nil || *lastComment.CreatedBy != *item.CreatedBy {
-				out.LastReplyUser = profiles[*lastComment.CreatedBy]
-			}
+			out.LastReplyUser = profiles[*lastComment.CreatedBy]
 		}
 	}
 	return out
@@ -608,9 +606,7 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 	if lastComment != nil {
 		out.LastReplyAt = new(lastComment.GetCreatedAt().AsTime())
 		if lastComment.CreatedBy != nil {
-			if item.CreatedBy == nil || *lastComment.CreatedBy != *item.CreatedBy {
-				out.LastReplyUser = profiles[*lastComment.CreatedBy]
-			}
+			out.LastReplyUser = profiles[*lastComment.CreatedBy]
 		}
 	}
 	return out

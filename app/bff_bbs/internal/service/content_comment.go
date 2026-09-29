@@ -198,6 +198,12 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 				UpdatedAt:     timestamppb.New(*row.ReplyUser.UpdatedAt),
 			}
 		}
+		if row.Article != nil {
+			item.Article = &bbscontentv1.ListComments_Resp_ArticleBrief{
+				Id:    row.Article.ID,
+				Title: row.Article.Title,
+			}
+		}
 		rows = append(rows, item)
 	}
 	return &bbscontentv1.ListComments_Resp{

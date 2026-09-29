@@ -528,6 +528,12 @@ func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp
 	if item.ReplyUserId != nil {
 		out.ReplyUser = profiles[*item.ReplyUserId]
 	}
+	if article != nil {
+		out.Article = &repo.ArticleBrief{
+			ID:    article.GetId(),
+			Title: article.GetTitle(),
+		}
+	}
 	return out
 }
 

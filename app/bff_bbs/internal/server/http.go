@@ -47,6 +47,8 @@ func NewHTTPAuthMiddlewares(authClient userv1.AuthServiceClient) []middleware.Mi
 		bbsuserv1.OperationOtpServiceSendEmailOtp:        {},
 		bbsuserv1.OperationOtpServiceSendPhoneOtp:        {},
 		bbsuserv1.OperationRelationServiceGetStatus:      {},
+		bbsuserv1.OperationAccountServiceListFollowing:   {},
+		bbsuserv1.OperationAccountServiceListFollowers:   {},
 	}
 	operationAuthGroups := map[string]string{}
 	for operation := range publicOperations {

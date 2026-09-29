@@ -47,20 +47,34 @@ func (s *AccountService) RegisterHttp(hs *http.Server) {
 
 func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.GetAccount_Resp, error) {
 	req = util.OrDefault(req, &v1.GetAccount_Req{})
-	res, err := s.accountUsecase.GetByUserID(ctx, req.GetUserId())
+	var res *model.Account
+	var err error
+	if req.Name != nil {
+		name := strings.ToLower(strings.TrimSpace(req.GetName()))
+		if utf8.RuneCountInString(name) < 4 || utf8.RuneCountInString(name) > 32 || !regexp.MustCompile("^[a-z0-9]+(?:[-_][a-z0-9]+)*$").MatchString(name) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NAME_INVALID)
+		}
+		res, err = s.accountUsecase.GetByName(ctx, name)
+	} else {
+		if req.GetUserId() == 0 {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		res, err = s.accountUsecase.GetByUserID(ctx, req.GetUserId())
+	}
 	if err != nil {
 		return nil, err
 	}
 	account := res
 	basic := &v1.AccountBasic{
-		Id:            account.ID,
-		Name:          account.Name,
-		Nickname:      account.Nickname,
-		Url:           account.URL,
-		AvatarAssetId: account.AvatarAssetID,
-		Introduction:  account.Introduction,
-		FollowCount:   account.FollowCount,
-		FollowerCount: account.FollowerCount,
+		Id:                account.ID,
+		Name:              account.Name,
+		Nickname:          account.Nickname,
+		Url:               account.URL,
+		AvatarAssetId:     account.AvatarAssetID,
+		BackgroundAssetId: account.BackgroundAssetID,
+		Introduction:      account.Introduction,
+		FollowCount:       account.FollowCount,
+		FollowerCount:     account.FollowerCount,
 	}
 	if account.Mbti != nil {
 		basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
@@ -82,9 +96,15 @@ func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.G
 			Phone:  account.Phone,
 		},
 	}
-	return &v1.GetAccount_Resp{
-		Account: replyAccount,
-	}, nil
+	resp := &v1.GetAccount_Resp{Account: replyAccount}
+	last, err := s.accountUsecase.LastSuccessLogin(ctx, account.ID)
+	if err != nil {
+		return nil, err
+	}
+	if last != nil && last.CreatedAt != nil {
+		resp.LastSuccessLoginAt = timestamppb.New(*last.CreatedAt)
+	}
+	return resp, nil
 }
 
 func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v1.ListAccounts_Resp, error) {
@@ -103,14 +123,15 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v
 	rows := make([]*v1.AccountInfo, 0, len(accounts))
 	for _, account := range accounts {
 		basic := &v1.AccountBasic{
-			Id:            account.ID,
-			Name:          account.Name,
-			Nickname:      account.Nickname,
-			Url:           account.URL,
-			AvatarAssetId: account.AvatarAssetID,
-			Introduction:  account.Introduction,
-			FollowCount:   account.FollowCount,
-			FollowerCount: account.FollowerCount,
+			Id:                account.ID,
+			Name:              account.Name,
+			Nickname:          account.Nickname,
+			Url:               account.URL,
+			AvatarAssetId:     account.AvatarAssetID,
+			BackgroundAssetId: account.BackgroundAssetID,
+			Introduction:      account.Introduction,
+			FollowCount:       account.FollowCount,
+			FollowerCount:     account.FollowerCount,
 		}
 		if account.Mbti != nil {
 			basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
@@ -155,14 +176,15 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.
 	rows := make(map[int64]*v1.AccountInfo, len(accounts))
 	for userID, account := range accounts {
 		basic := &v1.AccountBasic{
-			Id:            account.ID,
-			Name:          account.Name,
-			Nickname:      account.Nickname,
-			Url:           account.URL,
-			AvatarAssetId: account.AvatarAssetID,
-			Introduction:  account.Introduction,
-			FollowCount:   account.FollowCount,
-			FollowerCount: account.FollowerCount,
+			Id:                account.ID,
+			Name:              account.Name,
+			Nickname:          account.Nickname,
+			Url:               account.URL,
+			AvatarAssetId:     account.AvatarAssetID,
+			BackgroundAssetId: account.BackgroundAssetID,
+			Introduction:      account.Introduction,
+			FollowCount:       account.FollowCount,
+			FollowerCount:     account.FollowerCount,
 		}
 		if account.Mbti != nil {
 			basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
@@ -220,27 +242,29 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 		}
 	}
 	res, err := s.accountUsecase.UpdateProfile(ctx, &model.AccountProfileUpdate{
-		UserID:        req.GetUserId(),
-		AvatarAssetID: req.AvatarAssetId,
-		Nickname:      req.Nickname,
-		URL:           req.Url,
-		Introduction:  req.Introduction,
-		Mbti:          mbti,
-		ClearMBTI:     clearMBTI,
+		UserID:            req.GetUserId(),
+		AvatarAssetID:     req.AvatarAssetId,
+		BackgroundAssetID: req.BackgroundAssetId,
+		Nickname:          req.Nickname,
+		URL:               req.Url,
+		Introduction:      req.Introduction,
+		Mbti:              mbti,
+		ClearMBTI:         clearMBTI,
 	})
 	if err != nil {
 		return nil, err
 	}
 	account := res
 	basic := &v1.AccountBasic{
-		Id:            account.ID,
-		Name:          account.Name,
-		Nickname:      account.Nickname,
-		Url:           account.URL,
-		AvatarAssetId: account.AvatarAssetID,
-		Introduction:  account.Introduction,
-		FollowCount:   account.FollowCount,
-		FollowerCount: account.FollowerCount,
+		Id:                account.ID,
+		Name:              account.Name,
+		Nickname:          account.Nickname,
+		Url:               account.URL,
+		AvatarAssetId:     account.AvatarAssetID,
+		BackgroundAssetId: account.BackgroundAssetID,
+		Introduction:      account.Introduction,
+		FollowCount:       account.FollowCount,
+		FollowerCount:     account.FollowerCount,
 	}
 	if account.Mbti != nil {
 		basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)

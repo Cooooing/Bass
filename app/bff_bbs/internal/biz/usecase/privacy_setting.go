@@ -29,6 +29,7 @@ func (u *PrivacySettingUsecase) GetCurrentPrivacySetting(ctx context.Context, us
 			UserId:             row.UserID,
 			PublicPoints:       row.PublicPoints,
 			PublicFollowers:    row.PublicFollowers,
+			PublicFollowing:    row.PublicFollowing,
 			PublicArticles:     row.PublicArticles,
 			PublicComments:     row.PublicComments,
 			PublicOnlineStatus: row.PublicOnlineStatus,
@@ -42,6 +43,7 @@ type UpdateCurrentPrivacySettingReq struct {
 	UserID             int64
 	PublicPoints       *bool
 	PublicFollowers    *bool
+	PublicFollowing    *bool
 	PublicArticles     *bool
 	PublicComments     *bool
 	PublicOnlineStatus *bool
@@ -53,6 +55,7 @@ func (u *PrivacySettingUsecase) UpdateCurrentPrivacySetting(ctx context.Context,
 		UserID:             req.UserID,
 		PublicPoints:       req.PublicPoints,
 		PublicFollowers:    req.PublicFollowers,
+		PublicFollowing:    req.PublicFollowing,
 		PublicArticles:     req.PublicArticles,
 		PublicComments:     req.PublicComments,
 		PublicOnlineStatus: req.PublicOnlineStatus,
@@ -67,6 +70,7 @@ func (u *PrivacySettingUsecase) UpdateCurrentPrivacySetting(ctx context.Context,
 			UserId:             row.UserID,
 			PublicPoints:       row.PublicPoints,
 			PublicFollowers:    row.PublicFollowers,
+			PublicFollowing:    row.PublicFollowing,
 			PublicArticles:     row.PublicArticles,
 			PublicComments:     row.PublicComments,
 			PublicOnlineStatus: row.PublicOnlineStatus,
@@ -74,4 +78,8 @@ func (u *PrivacySettingUsecase) UpdateCurrentPrivacySetting(ctx context.Context,
 		}
 	}
 	return setting, nil
+}
+
+func boolValue(value *bool) bool {
+	return value == nil || *value
 }

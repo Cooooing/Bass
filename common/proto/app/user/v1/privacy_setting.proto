@@ -22,10 +22,11 @@ message GetPrivacySetting {
       int64 user_id = 1;
       optional bool public_points = 2;
       optional bool public_followers = 3;
-      optional bool public_articles = 4;
-      optional bool public_comments = 5;
-      optional bool public_online_status = 6;
-      optional bool public_location = 7;
+      optional bool public_following = 4;
+      optional bool public_articles = 5;
+      optional bool public_comments = 6;
+      optional bool public_online_status = 7;
+      optional bool public_location = 8;
     }
     PrivacySetting privacy_setting = 1;
   }
@@ -36,20 +37,22 @@ message UpdatePrivacySetting {
     int64 user_id = 1;
     optional bool public_points = 2;
     optional bool public_followers = 3;
-    optional bool public_articles = 4;
-    optional bool public_comments = 5;
-    optional bool public_online_status = 6;
-    optional bool public_location = 7;
+    optional bool public_following = 4;
+    optional bool public_articles = 5;
+    optional bool public_comments = 6;
+    optional bool public_online_status = 7;
+    optional bool public_location = 8;
   }
   message Resp {
     message PrivacySetting {
       int64 user_id = 1;
       optional bool public_points = 2;
       optional bool public_followers = 3;
-      optional bool public_articles = 4;
-      optional bool public_comments = 5;
-      optional bool public_online_status = 6;
-      optional bool public_location = 7;
+      optional bool public_following = 4;
+      optional bool public_articles = 5;
+      optional bool public_comments = 6;
+      optional bool public_online_status = 7;
+      optional bool public_location = 8;
     }
     PrivacySetting privacy_setting = 1;
   }

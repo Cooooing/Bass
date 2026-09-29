@@ -11,6 +11,7 @@ type PrivacySetting struct {
 	UserID             int64
 	PublicPoints       *bool
 	PublicFollowers    *bool
+	PublicFollowing    *bool
 	PublicArticles     *bool
 	PublicComments     *bool
 	PublicOnlineStatus *bool
@@ -21,6 +22,7 @@ type UpdateCurrentPrivacySettingReq struct {
 	UserID             int64
 	PublicPoints       *bool
 	PublicFollowers    *bool
+	PublicFollowing    *bool
 	PublicArticles     *bool
 	PublicComments     *bool
 	PublicOnlineStatus *bool

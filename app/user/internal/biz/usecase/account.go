@@ -24,6 +24,7 @@ type AccountUsecase struct {
 	accountRepo     repo.AccountRepo
 	preferencesRepo repo.PreferencesRepo
 	authCacheRepo   repo.AuthCacheRepo
+	loginLogRepo    repo.LoginLogRepo
 	emailOtpUsecase *EmailOtpUsecase
 	smsOtpUsecase   *SmsOtpUsecase
 }
@@ -35,6 +36,7 @@ func NewAccountUsecase(
 	accountRepo repo.AccountRepo,
 	preferencesRepo repo.PreferencesRepo,
 	authCacheRepo repo.AuthCacheRepo,
+	loginLogRepo repo.LoginLogRepo,
 	emailOtpUsecase *EmailOtpUsecase,
 	smsOtpUsecase *SmsOtpUsecase,
 ) (*AccountUsecase, error) {
@@ -44,6 +46,7 @@ func NewAccountUsecase(
 		accountRepo:     accountRepo,
 		preferencesRepo: preferencesRepo,
 		authCacheRepo:   authCacheRepo,
+		loginLogRepo:    loginLogRepo,
 		emailOtpUsecase: emailOtpUsecase,
 		smsOtpUsecase:   smsOtpUsecase,
 	}, nil
@@ -53,6 +56,14 @@ func (s *AccountUsecase) GetByUserID(ctx context.Context, userID int64) (*model.
 	return s.accountRepo.Get(ctx, &repo.AccountGetReq{
 		UserID: new(userID),
 	})
+}
+
+func (s *AccountUsecase) GetByName(ctx context.Context, name string) (*model.Account, error) {
+	return s.accountRepo.Get(ctx, &repo.AccountGetReq{ExactName: &name})
+}
+
+func (s *AccountUsecase) LastSuccessLogin(ctx context.Context, userID int64) (*model.LoginLog, error) {
+	return s.loginLogRepo.Get(ctx, &repo.LoginLogGetReq{UserID: &userID, LastSuccess: true})
 }
 
 func (s *AccountUsecase) CheckAvailability(ctx context.Context, availability *model.AccountAvailability) (*model.AccountAvailability, error) {

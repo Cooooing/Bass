@@ -57,6 +57,7 @@ func (s *PrivacySettingService) UpdateCurrent(ctx context.Context, req *bbsuserv
 		UserID:             user.ID,
 		PublicPoints:       req.PublicPoints,
 		PublicFollowers:    req.PublicFollowers,
+		PublicFollowing:    req.PublicFollowing,
 		PublicArticles:     req.PublicArticles,
 		PublicComments:     req.PublicComments,
 		PublicOnlineStatus: req.PublicOnlineStatus,

@@ -30,6 +30,7 @@ func (s *PrivacySettingUsecase) GetByUserID(ctx context.Context, userID int64) (
 		UserID:             userID,
 		PublicPoints:       &public,
 		PublicFollowers:    &public,
+		PublicFollowing:    &public,
 		PublicArticles:     &public,
 		PublicComments:     &public,
 		PublicOnlineStatus: &public,

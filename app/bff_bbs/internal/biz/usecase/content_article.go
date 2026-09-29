@@ -57,40 +57,37 @@ func (u *ContentArticleUsecase) CreateDraftArticle(ctx context.Context, req *Cre
 	if err != nil {
 		return nil, err
 	}
-	if resp != nil {
-		profiles := []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}
-		assetIDs := make([]int64, 0, len(profiles))
-		seen := map[int64]struct{}{}
-		for _, profile := range profiles {
-			if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
-				continue
-			}
-			if _, ok := seen[*profile.AvatarAssetID]; ok {
-				continue
-			}
-			seen[*profile.AvatarAssetID] = struct{}{}
-			assetIDs = append(assetIDs, *profile.AvatarAssetID)
+	profiles := []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}
+	assetIDs := make([]int64, 0, len(profiles))
+	seen := map[int64]struct{}{}
+	for _, profile := range profiles {
+		if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+			continue
 		}
-		assets := map[int64]*repo.Asset{}
-		if len(assetIDs) > 0 && u.assetClient != nil {
-			var err error
-			assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
-			if err != nil {
-				return nil, err
+		if _, ok := seen[*profile.AvatarAssetID]; ok {
+			continue
+		}
+		seen[*profile.AvatarAssetID] = struct{}{}
+		assetIDs = append(assetIDs, *profile.AvatarAssetID)
+	}
+	assets := map[int64]*repo.Asset{}
+	if len(assetIDs) > 0 && u.assetClient != nil {
+		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+		if err != nil {
+			return nil, err
+		}
+	}
+	for _, profile := range profiles {
+		if profile == nil {
+			continue
+		}
+		avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+		if profile.AvatarAssetID != nil {
+			if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
 			}
 		}
-		for _, profile := range profiles {
-			if profile == nil {
-				continue
-			}
-			avatarURL := "/v1/user/account/avatar?name=" + profile.Name
-			if profile.AvatarAssetID != nil {
-				if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
-					avatarURL = asset.URL
-				}
-			}
-			profile.AvatarURL = &avatarURL
-		}
+		profile.AvatarURL = &avatarURL
 	}
 	return resp, nil
 }
@@ -289,8 +286,9 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 }
 
 type GetArticleReq struct {
-	UserID    int64
-	ArticleID int64
+	UserID        int64
+	ArticleID     int64
+	PublishStatus *int32
 }
 
 func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleReq) (*ContentArticleDetail, error) {
@@ -300,6 +298,15 @@ func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleR
 	resp, err := u.contentArticleClient.GetArticle(ctx, &repo.GetArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
 	if err != nil {
 		return nil, err
+	}
+	if resp == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	// A route declares the lifecycle state it serves. Do not let an author's
+	// draft become readable from a public article URL merely because the caller
+	// also owns that draft.
+	if req.PublishStatus != nil && resp.PublishStatus != *req.PublishStatus {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
 	if resp != nil {
 		profiles := []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}

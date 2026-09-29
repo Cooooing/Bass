@@ -238,6 +238,7 @@ message ListArticles {
 message GetArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
+    optional ArticlePublishStatus publish_status = 2; // 可选，预期发布状态；未传按已发布查询
     option (gnostic.openapi.v3.schema) = {
       required: "article_id"
     };

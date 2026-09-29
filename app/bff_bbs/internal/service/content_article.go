@@ -155,7 +155,11 @@ func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetAr
 	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {
 		userID = user.ID
 	}
-	row, err := s.contentArticleUsecase.GetArticle(ctx, &usecase.GetArticleReq{UserID: userID, ArticleID: req.GetArticleId()})
+	publishStatus := bbscontentv1enum.ArticlePublishStatus_ARTICLE_PUBLISH_STATUS_PUBLISHED
+	if req.PublishStatus != nil {
+		publishStatus = req.GetPublishStatus()
+	}
+	row, err := s.contentArticleUsecase.GetArticle(ctx, &usecase.GetArticleReq{UserID: userID, ArticleID: req.GetArticleId(), PublishStatus: new(int32(publishStatus))})
 	if err != nil {
 		return nil, err
 	}

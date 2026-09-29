@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       sdk: ${{ steps.targets.outputs.sdk }}
-      matrix: ${{ steps.targets.outputs.sdk_matrix }}
+      matrix: ${{ steps.targets.outputs.matrix }}
     steps:
       - name: Checkout source
         uses: actions/checkout@v5

@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **user_id** | **string** |  | [optional] [default to undefined]
 **public_points** | **boolean** |  | [optional] [default to undefined]
 **public_followers** | **boolean** |  | [optional] [default to undefined]
+**public_following** | **boolean** |  | [optional] [default to undefined]
 **public_articles** | **boolean** |  | [optional] [default to undefined]
 **public_comments** | **boolean** |  | [optional] [default to undefined]
 **public_online_status** | **boolean** |  | [optional] [default to undefined]
@@ -22,6 +23,7 @@ const instance: RespPrivacySetting = {
     user_id,
     public_points,
     public_followers,
+    public_following,
     public_articles,
     public_comments,
     public_online_status,

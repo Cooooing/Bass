@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **visibilities** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **restriction** | **string** |  | [optional] [default to undefined]
 **restrictions** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**scheduled** | **boolean** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -36,6 +37,7 @@ const instance: ReqArticleQuery = {
     visibilities,
     restriction,
     restrictions,
+    scheduled,
 };
 ```
 

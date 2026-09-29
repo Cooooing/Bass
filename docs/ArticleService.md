@@ -14,7 +14,6 @@ All URIs are relative to *http://localhost*
 |[**list**](#list) | **POST** /v1/content/article/list | |
 |[**publish**](#publish) | **POST** /v1/content/article/publish | |
 |[**reward**](#reward) | **POST** /v1/content/article/reward | |
-|[**schedulePublish**](#schedulepublish) | **POST** /v1/content/article/publish/schedule | |
 |[**thank**](#thank) | **POST** /v1/content/article/thank | |
 |[**updateDraft**](#updatedraft) | **POST** /v1/content/article/draft/update | |
 
@@ -515,58 +514,6 @@ const { status, data } = await apiInstance.reward(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **rewardArticleReq** | **RewardArticleReq**|  | |
-
-
-### Return type
-
-**object**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **schedulePublish**
-> object schedulePublish(schedulePublishArticleReq)
-
-设置定时发布
-
-### Example
-
-```typescript
-import {
-    ArticleService,
-    Configuration,
-    SchedulePublishArticleReq
-} from '@bass/bbs-sdk-axios';
-
-const configuration = new Configuration();
-const apiInstance = new ArticleService(configuration);
-
-let schedulePublishArticleReq: SchedulePublishArticleReq; //
-
-const { status, data } = await apiInstance.schedulePublish(
-    schedulePublishArticleReq
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **schedulePublishArticleReq** | **SchedulePublishArticleReq**|  | |
 
 
 ### Return type

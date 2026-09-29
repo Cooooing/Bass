@@ -54,6 +54,8 @@ Class | Method | HTTP request | Description
 *AccountService* | [**avatar**](docs/AccountService.md#avatar) | **GET** /v1/user/account/avatar | 
 *AccountService* | [**getCurrent**](docs/AccountService.md#getcurrent) | **POST** /v1/user/account/get-current | 
 *AccountService* | [**getProfile**](docs/AccountService.md#getprofile) | **POST** /v1/user/account/get-profile | 
+*AccountService* | [**listFollowers**](docs/AccountService.md#listfollowers) | **POST** /v1/user/account/list-followers | 
+*AccountService* | [**listFollowing**](docs/AccountService.md#listfollowing) | **POST** /v1/user/account/list-following | 
 *AccountService* | [**updateEmail**](docs/AccountService.md#updateemail) | **POST** /v1/user/account/update-email | 
 *AccountService* | [**updatePassword**](docs/AccountService.md#updatepassword) | **POST** /v1/user/account/update-password | 
 *AccountService* | [**updatePhone**](docs/AccountService.md#updatephone) | **POST** /v1/user/account/update-phone | 
@@ -68,7 +70,6 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**list**](docs/ArticleService.md#list) | **POST** /v1/content/article/list | 
 *ArticleService* | [**publish**](docs/ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 *ArticleService* | [**reward**](docs/ArticleService.md#reward) | **POST** /v1/content/article/reward | 
-*ArticleService* | [**schedulePublish**](docs/ArticleService.md#schedulepublish) | **POST** /v1/content/article/publish/schedule | 
 *ArticleService* | [**thank**](docs/ArticleService.md#thank) | **POST** /v1/content/article/thank | 
 *ArticleService* | [**updateDraft**](docs/ArticleService.md#updatedraft) | **POST** /v1/content/article/draft/update | 
 *AuthService* | [**cancelAccount**](docs/AuthService.md#cancelaccount) | **POST** /v1/user/auth/cancel-account | 
@@ -126,6 +127,7 @@ Class | Method | HTTP request | Description
 
  - [AccountContact](docs/AccountContact.md)
  - [AccountProfile](docs/AccountProfile.md)
+ - [AccountProfileListItem](docs/AccountProfileListItem.md)
  - [AddPostscriptReq](docs/AddPostscriptReq.md)
  - [AddPostscriptResp](docs/AddPostscriptResp.md)
  - [ArchiveArticleReq](docs/ArchiveArticleReq.md)
@@ -166,8 +168,8 @@ Class | Method | HTTP request | Description
  - [GetCurrentPreferencesResp](docs/GetCurrentPreferencesResp.md)
  - [GetCurrentPrivacySettingResp](docs/GetCurrentPrivacySettingResp.md)
  - [GetCurrentTotpResp](docs/GetCurrentTotpResp.md)
- - [GetProfileAccountReq](docs/GetProfileAccountReq.md)
- - [GetProfileAccountResp](docs/GetProfileAccountResp.md)
+ - [GetProfileReq](docs/GetProfileReq.md)
+ - [GetProfileResp](docs/GetProfileResp.md)
  - [GetStatusRelationReq](docs/GetStatusRelationReq.md)
  - [GetStatusRelationResp](docs/GetStatusRelationResp.md)
  - [ImageResp](docs/ImageResp.md)
@@ -193,8 +195,12 @@ Class | Method | HTTP request | Description
  - [ListDomainsResp](docs/ListDomainsResp.md)
  - [ListFollowersRelationsReq](docs/ListFollowersRelationsReq.md)
  - [ListFollowersRelationsResp](docs/ListFollowersRelationsResp.md)
+ - [ListFollowersReq](docs/ListFollowersReq.md)
+ - [ListFollowersResp](docs/ListFollowersResp.md)
  - [ListFollowingRelationsReq](docs/ListFollowingRelationsReq.md)
  - [ListFollowingRelationsResp](docs/ListFollowingRelationsResp.md)
+ - [ListFollowingReq](docs/ListFollowingReq.md)
+ - [ListFollowingResp](docs/ListFollowingResp.md)
  - [ListNotificationsReq](docs/ListNotificationsReq.md)
  - [ListNotificationsResp](docs/ListNotificationsResp.md)
  - [ListPostscriptsReq](docs/ListPostscriptsReq.md)
@@ -207,6 +213,10 @@ Class | Method | HTTP request | Description
  - [MarkReadNotificationResp](docs/MarkReadNotificationResp.md)
  - [PageReq](docs/PageReq.md)
  - [PageResp](docs/PageResp.md)
+ - [Profile](docs/Profile.md)
+ - [ProfileLocation](docs/ProfileLocation.md)
+ - [ProfileRelation](docs/ProfileRelation.md)
+ - [ProfileVisibility](docs/ProfileVisibility.md)
  - [PublishArticleReq](docs/PublishArticleReq.md)
  - [RefreshTokenReq](docs/RefreshTokenReq.md)
  - [RefreshTokenResp](docs/RefreshTokenResp.md)
@@ -242,7 +252,6 @@ Class | Method | HTTP request | Description
  - [RespTag](docs/RespTag.md)
  - [RespTotp](docs/RespTotp.md)
  - [RewardArticleReq](docs/RewardArticleReq.md)
- - [SchedulePublishArticleReq](docs/SchedulePublishArticleReq.md)
  - [SendEmailOtpReq](docs/SendEmailOtpReq.md)
  - [SendEmailOtpResp](docs/SendEmailOtpResp.md)
  - [SendPhoneOtpReq](docs/SendPhoneOtpReq.md)

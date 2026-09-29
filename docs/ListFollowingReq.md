@@ -1,21 +1,21 @@
-# SchedulePublishArticleReq
+# ListFollowingReq
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [default to undefined]
-**publish_at** | **string** |  | [default to undefined]
+**name** | **string** |  | [default to undefined]
+**page** | [**PageReq**](PageReq.md) |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { SchedulePublishArticleReq } from '@bass/bbs-sdk-axios';
+import { ListFollowingReq } from '@bass/bbs-sdk-axios';
 
-const instance: SchedulePublishArticleReq = {
-    article_id,
-    publish_at,
+const instance: ListFollowingReq = {
+    name,
+    page,
 };
 ```
 

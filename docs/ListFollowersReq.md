@@ -1,19 +1,21 @@
-# GetProfileAccountResp
+# ListFollowersReq
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**profile** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
+**name** | **string** |  | [default to undefined]
+**page** | [**PageReq**](PageReq.md) |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { GetProfileAccountResp } from '@bass/bbs-sdk-axios';
+import { ListFollowersReq } from '@bass/bbs-sdk-axios';
 
-const instance: GetProfileAccountResp = {
-    profile,
+const instance: ListFollowersReq = {
+    name,
+    page,
 };
 ```
 

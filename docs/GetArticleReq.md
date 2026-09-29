@@ -6,6 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **article_id** | **string** |  | [default to undefined]
+**publish_status** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -14,6 +15,7 @@ import { GetArticleReq } from '@bass/bbs-sdk-axios';
 
 const instance: GetArticleReq = {
     article_id,
+    publish_status,
 };
 ```
 

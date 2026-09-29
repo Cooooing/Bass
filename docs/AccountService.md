@@ -7,6 +7,8 @@ All URIs are relative to *http://localhost*
 |[**avatar**](#avatar) | **GET** /v1/user/account/avatar | |
 |[**getCurrent**](#getcurrent) | **POST** /v1/user/account/get-current | |
 |[**getProfile**](#getprofile) | **POST** /v1/user/account/get-profile | |
+|[**listFollowers**](#listfollowers) | **POST** /v1/user/account/list-followers | |
+|[**listFollowing**](#listfollowing) | **POST** /v1/user/account/list-following | |
 |[**updateEmail**](#updateemail) | **POST** /v1/user/account/update-email | |
 |[**updatePassword**](#updatepassword) | **POST** /v1/user/account/update-password | |
 |[**updatePhone**](#updatephone) | **POST** /v1/user/account/update-phone | |
@@ -115,9 +117,9 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getProfile**
-> GetProfileAccountResp getProfile(getProfileAccountReq)
+> GetProfileResp getProfile(getProfileReq)
 
-按账号 ID 获取展示资料
+按账号名获取个人主页资料。
 
 ### Example
 
@@ -125,16 +127,16 @@ No authorization required
 import {
     AccountService,
     Configuration,
-    GetProfileAccountReq
+    GetProfileReq
 } from '@bass/bbs-sdk-axios';
 
 const configuration = new Configuration();
 const apiInstance = new AccountService(configuration);
 
-let getProfileAccountReq: GetProfileAccountReq; //
+let getProfileReq: GetProfileReq; //
 
 const { status, data } = await apiInstance.getProfile(
-    getProfileAccountReq
+    getProfileReq
 );
 ```
 
@@ -142,12 +144,116 @@ const { status, data } = await apiInstance.getProfile(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **getProfileAccountReq** | **GetProfileAccountReq**|  | |
+| **getProfileReq** | **GetProfileReq**|  | |
 
 
 ### Return type
 
-**GetProfileAccountResp**
+**GetProfileResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **listFollowers**
+> ListFollowersResp listFollowers(listFollowersReq)
+
+查询账号公开的粉丝列表。
+
+### Example
+
+```typescript
+import {
+    AccountService,
+    Configuration,
+    ListFollowersReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AccountService(configuration);
+
+let listFollowersReq: ListFollowersReq; //
+
+const { status, data } = await apiInstance.listFollowers(
+    listFollowersReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **listFollowersReq** | **ListFollowersReq**|  | |
+
+
+### Return type
+
+**ListFollowersResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **listFollowing**
+> ListFollowingResp listFollowing(listFollowingReq)
+
+查询账号公开的关注列表。
+
+### Example
+
+```typescript
+import {
+    AccountService,
+    Configuration,
+    ListFollowingReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AccountService(configuration);
+
+let listFollowingReq: ListFollowingReq; //
+
+const { status, data } = await apiInstance.listFollowing(
+    listFollowingReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **listFollowingReq** | **ListFollowingReq**|  | |
+
+
+### Return type
+
+**ListFollowingResp**
 
 ### Authorization
 

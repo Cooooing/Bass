@@ -34,6 +34,7 @@ export interface AccountProfile {
     'nickname'?: string;
     'url'?: string;
     'avatar_url'?: string;
+    'background_asset_id'?: string;
     'introduction'?: string;
     'mbti'?: AccountProfileMbtiEnum;
     'status'?: AccountProfileStatusEnum;
@@ -73,6 +74,10 @@ export const AccountProfileStatusEnum = {
 
 export type AccountProfileStatusEnum = typeof AccountProfileStatusEnum[keyof typeof AccountProfileStatusEnum];
 
+export interface AccountProfileListItem {
+    'account'?: AccountProfile;
+    'viewer_relation'?: ProfileRelation;
+}
 export interface AddPostscriptReq {
     'article_id': string;
     'content': string;
@@ -137,7 +142,6 @@ export const ArticleDetailPublishStatusEnum = {
     ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
     ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
     ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
-    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED',
 } as const;
 
 export type ArticleDetailPublishStatusEnum = typeof ArticleDetailPublishStatusEnum[keyof typeof ArticleDetailPublishStatusEnum];
@@ -213,7 +217,6 @@ export const ArticleListItemPublishStatusEnum = {
     ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
     ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
     ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
-    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED',
 } as const;
 
 export type ArticleListItemPublishStatusEnum = typeof ArticleListItemPublishStatusEnum[keyof typeof ArticleListItemPublishStatusEnum];
@@ -327,7 +330,7 @@ export interface CreateDraftArticleReq {
     'article': ReqArticle;
 }
 export interface CreateDraftArticleResp {
-    'article'?: ArticleDetail;
+    'article_id'?: string;
 }
 export interface CreateTagReq {
     'tag': ReqTag;
@@ -346,7 +349,18 @@ export interface FollowRelationReq {
 }
 export interface GetArticleReq {
     'article_id': string;
+    'publish_status'?: GetArticleReqPublishStatusEnum;
 }
+
+export const GetArticleReqPublishStatusEnum = {
+    ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
+    ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
+    ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
+    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
+} as const;
+
+export type GetArticleReqPublishStatusEnum = typeof GetArticleReqPublishStatusEnum[keyof typeof GetArticleReqPublishStatusEnum];
+
 export interface GetArticleResp {
     'article'?: ArticleDetail;
 }
@@ -373,11 +387,11 @@ export interface GetCurrentPrivacySettingResp {
 export interface GetCurrentTotpResp {
     'totp'?: RespTotp;
 }
-export interface GetProfileAccountReq {
-    'user_id': string;
+export interface GetProfileReq {
+    'name': string;
 }
-export interface GetProfileAccountResp {
-    'profile'?: AccountProfile;
+export interface GetProfileResp {
+    'profile'?: Profile;
 }
 export interface GetStatusRelationReq {
     'target_id': string;
@@ -512,12 +526,28 @@ export interface ListFollowersRelationsResp {
     'page'?: PageResp;
     'rows'?: Array<RespRelation>;
 }
+export interface ListFollowersReq {
+    'name': string;
+    'page'?: PageReq;
+}
+export interface ListFollowersResp {
+    'page'?: PageResp;
+    'rows'?: Array<AccountProfileListItem>;
+}
 export interface ListFollowingRelationsReq {
     'page'?: PageReq;
 }
 export interface ListFollowingRelationsResp {
     'page'?: PageResp;
     'rows'?: Array<RespRelation>;
+}
+export interface ListFollowingReq {
+    'name': string;
+    'page'?: PageReq;
+}
+export interface ListFollowingResp {
+    'page'?: PageResp;
+    'rows'?: Array<AccountProfileListItem>;
 }
 export interface ListNotificationsReq {
     'page'?: PageReq;
@@ -594,19 +624,35 @@ export interface PageResp {
      */
     'size'?: number;
 }
+export interface Profile {
+    'account'?: AccountProfile;
+    'background_url'?: string;
+    'location'?: ProfileLocation;
+    'last_success_login_at'?: string;
+    'visibility'?: ProfileVisibility;
+    'viewer_relation'?: ProfileRelation;
+}
+export interface ProfileLocation {
+    'country'?: string;
+    'province'?: string;
+    'city'?: string;
+}
+export interface ProfileRelation {
+    'following'?: boolean;
+    'followed_by'?: boolean;
+    'blocking'?: boolean;
+    'blocked_by'?: boolean;
+}
+export interface ProfileVisibility {
+    'articles'?: boolean;
+    'comments'?: boolean;
+    'followers'?: boolean;
+    'following'?: boolean;
+}
 export interface PublishArticleReq {
     'article_id': string;
-    'visibility'?: PublishArticleReqVisibilityEnum;
+    'scheduled_at'?: string;
 }
-
-export const PublishArticleReqVisibilityEnum = {
-    ARTICLE_VISIBILITY_UNSPECIFIED: 'ARTICLE_VISIBILITY_UNSPECIFIED',
-    ARTICLE_VISIBILITY_PUBLIC: 'ARTICLE_VISIBILITY_PUBLIC',
-    ARTICLE_VISIBILITY_PRIVATE: 'ARTICLE_VISIBILITY_PRIVATE',
-} as const;
-
-export type PublishArticleReqVisibilityEnum = typeof PublishArticleReqVisibilityEnum[keyof typeof PublishArticleReqVisibilityEnum];
-
 export interface RefreshTokenReq {
     'refresh_token': string;
 }
@@ -668,6 +714,7 @@ export interface ReqArticleQuery {
     'visibilities'?: Array<ReqArticleQueryVisibilitiesEnum>;
     'restriction'?: ReqArticleQueryRestrictionEnum;
     'restrictions'?: Array<ReqArticleQueryRestrictionsEnum>;
+    'scheduled'?: boolean;
 }
 
 export const ReqArticleQueryTypeEnum = {
@@ -692,7 +739,6 @@ export const ReqArticleQueryPublishStatusEnum = {
     ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
     ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
     ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
-    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED',
 } as const;
 
 export type ReqArticleQueryPublishStatusEnum = typeof ReqArticleQueryPublishStatusEnum[keyof typeof ReqArticleQueryPublishStatusEnum];
@@ -701,7 +747,6 @@ export const ReqArticleQueryPublishStatusesEnum = {
     ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
     ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
     ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
-    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED',
 } as const;
 
 export type ReqArticleQueryPublishStatusesEnum = typeof ReqArticleQueryPublishStatusesEnum[keyof typeof ReqArticleQueryPublishStatusesEnum];
@@ -989,7 +1034,6 @@ export const RespArticleBriefPublishStatusEnum = {
     ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
     ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
     ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
-    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED',
 } as const;
 
 export type RespArticleBriefPublishStatusEnum = typeof RespArticleBriefPublishStatusEnum[keyof typeof RespArticleBriefPublishStatusEnum];
@@ -1188,6 +1232,7 @@ export interface RespPrivacySetting {
     'user_id'?: string;
     'public_points'?: boolean;
     'public_followers'?: boolean;
+    'public_following'?: boolean;
     'public_articles'?: boolean;
     'public_comments'?: boolean;
     'public_online_status'?: boolean;
@@ -1282,10 +1327,6 @@ export interface RewardArticleReq {
     'article_id': string;
     'points': number;
 }
-export interface SchedulePublishArticleReq {
-    'article_id': string;
-    'publish_at': string;
-}
 export interface SendEmailOtpReq {
     'email': string;
 }
@@ -1344,6 +1385,7 @@ export interface UpdateCurrentPreferencesResp {
 export interface UpdateCurrentPrivacySettingReq {
     'public_points'?: boolean;
     'public_followers'?: boolean;
+    'public_following'?: boolean;
     'public_articles'?: boolean;
     'public_comments'?: boolean;
     'public_online_status'?: boolean;
@@ -1364,7 +1406,7 @@ export interface UpdateDraftArticleReq {
     'article': ReqArticle;
 }
 export interface UpdateDraftArticleResp {
-    'article'?: ArticleDetail;
+    'article_id'?: string;
 }
 export interface UpdateEmailAccountReq {
     'email': string;
@@ -1380,6 +1422,7 @@ export interface UpdatePhoneAccountReq {
 }
 export interface UpdateProfileAccountReq {
     'avatar_asset_id'?: string;
+    'background_asset_id'?: string;
     'nickname'?: string;
     'url'?: string;
     'introduction'?: string;
@@ -1501,14 +1544,14 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 按账号 ID 获取展示资料
-         * @param {GetProfileAccountReq} getProfileAccountReq 
+         * 按账号名获取个人主页资料。
+         * @param {GetProfileReq} getProfileReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProfile: async (getProfileAccountReq: GetProfileAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'getProfileAccountReq' is not null or undefined
-            assertParamExists('getProfile', 'getProfileAccountReq', getProfileAccountReq)
+        getProfile: async (getProfileReq: GetProfileReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'getProfileReq' is not null or undefined
+            assertParamExists('getProfile', 'getProfileReq', getProfileReq)
             const localVarPath = `/v1/user/account/get-profile`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -1527,7 +1570,75 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(getProfileAccountReq, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(getProfileReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询账号公开的粉丝列表。
+         * @param {ListFollowersReq} listFollowersReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFollowers: async (listFollowersReq: ListFollowersReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listFollowersReq' is not null or undefined
+            assertParamExists('listFollowers', 'listFollowersReq', listFollowersReq)
+            const localVarPath = `/v1/user/account/list-followers`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(listFollowersReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询账号公开的关注列表。
+         * @param {ListFollowingReq} listFollowingReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFollowing: async (listFollowingReq: ListFollowingReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listFollowingReq' is not null or undefined
+            assertParamExists('listFollowing', 'listFollowingReq', listFollowingReq)
+            const localVarPath = `/v1/user/account/list-following`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(listFollowingReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1704,15 +1815,39 @@ export const AccountServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 按账号 ID 获取展示资料
-         * @param {GetProfileAccountReq} getProfileAccountReq 
+         * 按账号名获取个人主页资料。
+         * @param {GetProfileReq} getProfileReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getProfile(getProfileAccountReq: GetProfileAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProfileAccountResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getProfile(getProfileAccountReq, options);
+        async getProfile(getProfileReq: GetProfileReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetProfileResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getProfile(getProfileReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountService.getProfile']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 查询账号公开的粉丝列表。
+         * @param {ListFollowersReq} listFollowersReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listFollowers(listFollowersReq: ListFollowersReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListFollowersResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listFollowers(listFollowersReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.listFollowers']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 查询账号公开的关注列表。
+         * @param {ListFollowingReq} listFollowingReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listFollowing(listFollowingReq: ListFollowingReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListFollowingResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listFollowing(listFollowingReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.listFollowing']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1791,13 +1926,31 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
         },
         /**
-         * 按账号 ID 获取展示资料
+         * 按账号名获取个人主页资料。
          * @param {AccountServiceGetProfileRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetProfileAccountResp> {
-            return localVarFp.getProfile(requestParameters.getProfileAccountReq, options).then((request) => request(axios, basePath));
+        getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetProfileResp> {
+            return localVarFp.getProfile(requestParameters.getProfileReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询账号公开的粉丝列表。
+         * @param {AccountServiceListFollowersRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFollowers(requestParameters: AccountServiceListFollowersRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowersResp> {
+            return localVarFp.listFollowers(requestParameters.listFollowersReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询账号公开的关注列表。
+         * @param {AccountServiceListFollowingRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFollowing(requestParameters: AccountServiceListFollowingRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowingResp> {
+            return localVarFp.listFollowing(requestParameters.listFollowingReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 更新当前账号邮箱
@@ -1859,12 +2012,28 @@ export interface AccountServiceInterface {
     getCurrent(requestParameters: AccountServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentAccountResp>;
 
     /**
-     * 按账号 ID 获取展示资料
+     * 按账号名获取个人主页资料。
      * @param {AccountServiceGetProfileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetProfileAccountResp>;
+    getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetProfileResp>;
+
+    /**
+     * 查询账号公开的粉丝列表。
+     * @param {AccountServiceListFollowersRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listFollowers(requestParameters: AccountServiceListFollowersRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowersResp>;
+
+    /**
+     * 查询账号公开的关注列表。
+     * @param {AccountServiceListFollowingRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listFollowing(requestParameters: AccountServiceListFollowingRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowingResp>;
 
     /**
      * 更新当前账号邮箱
@@ -1918,7 +2087,21 @@ export interface AccountServiceGetCurrentRequest {
  * Request parameters for getProfile operation in AccountService.
  */
 export interface AccountServiceGetProfileRequest {
-    readonly getProfileAccountReq: GetProfileAccountReq
+    readonly getProfileReq: GetProfileReq
+}
+
+/**
+ * Request parameters for listFollowers operation in AccountService.
+ */
+export interface AccountServiceListFollowersRequest {
+    readonly listFollowersReq: ListFollowersReq
+}
+
+/**
+ * Request parameters for listFollowing operation in AccountService.
+ */
+export interface AccountServiceListFollowingRequest {
+    readonly listFollowingReq: ListFollowingReq
 }
 
 /**
@@ -1974,13 +2157,33 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
     }
 
     /**
-     * 按账号 ID 获取展示资料
+     * 按账号名获取个人主页资料。
      * @param {AccountServiceGetProfileRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     public getProfile(requestParameters: AccountServiceGetProfileRequest, options?: RawAxiosRequestConfig) {
-        return AccountServiceFp(this.configuration).getProfile(requestParameters.getProfileAccountReq, options).then((request) => request(this.axios, this.basePath));
+        return AccountServiceFp(this.configuration).getProfile(requestParameters.getProfileReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询账号公开的粉丝列表。
+     * @param {AccountServiceListFollowersRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listFollowers(requestParameters: AccountServiceListFollowersRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).listFollowers(requestParameters.listFollowersReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询账号公开的关注列表。
+     * @param {AccountServiceListFollowingRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listFollowing(requestParameters: AccountServiceListFollowingRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).listFollowing(requestParameters.listFollowingReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2372,40 +2575,6 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 设置定时发布
-         * @param {SchedulePublishArticleReq} schedulePublishArticleReq 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        schedulePublish: async (schedulePublishArticleReq: SchedulePublishArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'schedulePublishArticleReq' is not null or undefined
-            assertParamExists('schedulePublish', 'schedulePublishArticleReq', schedulePublishArticleReq)
-            const localVarPath = `/v1/content/article/publish/schedule`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(schedulePublishArticleReq, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * 感谢文章
          * @param {ThankArticleReq} thankArticleReq 
          * @param {*} [options] Override http request option.
@@ -2603,18 +2772,6 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 设置定时发布
-         * @param {SchedulePublishArticleReq} schedulePublishArticleReq 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async schedulePublish(schedulePublishArticleReq: SchedulePublishArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schedulePublish(schedulePublishArticleReq, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ArticleService.schedulePublish']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
          * 感谢文章
          * @param {ThankArticleReq} thankArticleReq 
          * @param {*} [options] Override http request option.
@@ -2738,15 +2895,6 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.reward(requestParameters.rewardArticleReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 设置定时发布
-         * @param {ArticleServiceSchedulePublishRequest} requestParameters Request parameters.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        schedulePublish(requestParameters: ArticleServiceSchedulePublishRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
-            return localVarFp.schedulePublish(requestParameters.schedulePublishArticleReq, options).then((request) => request(axios, basePath));
-        },
-        /**
          * 感谢文章
          * @param {ArticleServiceThankRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -2852,14 +3000,6 @@ export interface ArticleServiceInterface {
     reward(requestParameters: ArticleServiceRewardRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
-     * 设置定时发布
-     * @param {ArticleServiceSchedulePublishRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    schedulePublish(requestParameters: ArticleServiceSchedulePublishRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
-
-    /**
      * 感谢文章
      * @param {ArticleServiceThankRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2945,13 +3085,6 @@ export interface ArticleServicePublishRequest {
  */
 export interface ArticleServiceRewardRequest {
     readonly rewardArticleReq: RewardArticleReq
-}
-
-/**
- * Request parameters for schedulePublish operation in ArticleService.
- */
-export interface ArticleServiceSchedulePublishRequest {
-    readonly schedulePublishArticleReq: SchedulePublishArticleReq
 }
 
 /**
@@ -3070,16 +3203,6 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
      */
     public reward(requestParameters: ArticleServiceRewardRequest, options?: RawAxiosRequestConfig) {
         return ArticleServiceFp(this.configuration).reward(requestParameters.rewardArticleReq, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 设置定时发布
-     * @param {ArticleServiceSchedulePublishRequest} requestParameters Request parameters.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public schedulePublish(requestParameters: ArticleServiceSchedulePublishRequest, options?: RawAxiosRequestConfig) {
-        return ArticleServiceFp(this.configuration).schedulePublish(requestParameters.schedulePublishArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

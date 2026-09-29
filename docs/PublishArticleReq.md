@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **article_id** | **string** |  | [default to undefined]
-**visibility** | **string** |  | [optional] [default to undefined]
+**scheduled_at** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -15,7 +15,7 @@ import { PublishArticleReq } from '@bass/bbs-sdk-axios';
 
 const instance: PublishArticleReq = {
     article_id,
-    visibility,
+    scheduled_at,
 };
 ```
 

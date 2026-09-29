@@ -1,19 +1,19 @@
-# CreateDraftArticleResp
+# GetProfileResp
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article_id** | **string** |  | [optional] [default to undefined]
+**profile** | [**Profile**](Profile.md) |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { CreateDraftArticleResp } from '@bass/bbs-sdk-axios';
+import { GetProfileResp } from '@bass/bbs-sdk-axios';
 
-const instance: CreateDraftArticleResp = {
-    article_id,
+const instance: GetProfileResp = {
+    profile,
 };
 ```
 

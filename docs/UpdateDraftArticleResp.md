@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**article** | [**ArticleDetail**](ArticleDetail.md) |  | [optional] [default to undefined]
+**article_id** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 import { UpdateDraftArticleResp } from '@bass/bbs-sdk-axios';
 
 const instance: UpdateDraftArticleResp = {
-    article,
+    article_id,
 };
 ```
 

@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **nickname** | **string** |  | [optional] [default to undefined]
 **url** | **string** |  | [optional] [default to undefined]
 **avatar_url** | **string** |  | [optional] [default to undefined]
+**background_asset_id** | **string** |  | [optional] [default to undefined]
 **introduction** | **string** |  | [optional] [default to undefined]
 **mbti** | **string** |  | [optional] [default to undefined]
 **status** | **string** |  | [optional] [default to undefined]
@@ -29,6 +30,7 @@ const instance: AccountProfile = {
     nickname,
     url,
     avatar_url,
+    background_asset_id,
     introduction,
     mbti,
     status,

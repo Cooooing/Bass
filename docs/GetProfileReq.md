@@ -1,19 +1,19 @@
-# GetProfileAccountReq
+# GetProfileReq
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user_id** | **string** |  | [default to undefined]
+**name** | **string** |  | [default to undefined]
 
 ## Example
 
 ```typescript
-import { GetProfileAccountReq } from '@bass/bbs-sdk-axios';
+import { GetProfileReq } from '@bass/bbs-sdk-axios';
 
-const instance: GetProfileAccountReq = {
-    user_id,
+const instance: GetProfileReq = {
+    name,
 };
 ```
 

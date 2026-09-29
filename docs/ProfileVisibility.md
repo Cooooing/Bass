@@ -1,22 +1,28 @@
 
-# UpdateDraftArticleResp
+# ProfileVisibility
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`articleId` | string
+`articles` | boolean
+`comments` | boolean
+`followers` | boolean
+`following` | boolean
 
 ## Example
 
 ```typescript
-import type { UpdateDraftArticleResp } from '@bass/bbs-sdk-fetch'
+import type { ProfileVisibility } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "articleId": null,
-} satisfies UpdateDraftArticleResp
+  "articles": null,
+  "comments": null,
+  "followers": null,
+  "following": null,
+} satisfies ProfileVisibility
 
 console.log(example)
 
@@ -25,7 +31,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as UpdateDraftArticleResp
+const exampleParsed = JSON.parse(exampleJSON) as ProfileVisibility
 console.log(exampleParsed)
 ```
 

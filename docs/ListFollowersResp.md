@@ -1,22 +1,24 @@
 
-# UpdateDraftArticleResp
+# ListFollowersResp
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`articleId` | string
+`page` | [PageResp](PageResp.md)
+`rows` | [Array&lt;AccountProfileListItem&gt;](AccountProfileListItem.md)
 
 ## Example
 
 ```typescript
-import type { UpdateDraftArticleResp } from '@bass/bbs-sdk-fetch'
+import type { ListFollowersResp } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "articleId": null,
-} satisfies UpdateDraftArticleResp
+  "page": null,
+  "rows": null,
+} satisfies ListFollowersResp
 
 console.log(example)
 
@@ -25,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as UpdateDraftArticleResp
+const exampleParsed = JSON.parse(exampleJSON) as ListFollowersResp
 console.log(exampleParsed)
 ```
 

@@ -11,6 +11,7 @@ Name | Type
 `nickname` | string
 `url` | string
 `avatarUrl` | string
+`backgroundAssetId` | string
 `introduction` | string
 `mbti` | string
 `status` | string
@@ -31,6 +32,7 @@ const example = {
   "nickname": null,
   "url": null,
   "avatarUrl": null,
+  "backgroundAssetId": null,
   "introduction": null,
   "mbti": null,
   "status": null,

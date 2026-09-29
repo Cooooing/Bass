@@ -54,6 +54,12 @@ export interface AccountProfile {
      * @type {string}
      * @memberof AccountProfile
      */
+    backgroundAssetId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AccountProfile
+     */
     introduction?: string;
     /**
      * 
@@ -152,6 +158,7 @@ export function AccountProfileFromJSONTyped(json: any, ignoreDiscriminator: bool
         'nickname': json['nickname'] == null ? undefined : json['nickname'],
         'url': json['url'] == null ? undefined : json['url'],
         'avatarUrl': json['avatar_url'] == null ? undefined : json['avatar_url'],
+        'backgroundAssetId': json['background_asset_id'] == null ? undefined : json['background_asset_id'],
         'introduction': json['introduction'] == null ? undefined : json['introduction'],
         'mbti': json['mbti'] == null ? undefined : json['mbti'],
         'status': json['status'] == null ? undefined : json['status'],
@@ -178,6 +185,7 @@ export function AccountProfileToJSONTyped(value?: AccountProfile | null, ignoreD
         'nickname': value['nickname'],
         'url': value['url'],
         'avatar_url': value['avatarUrl'],
+        'background_asset_id': value['backgroundAssetId'],
         'introduction': value['introduction'],
         'mbti': value['mbti'],
         'status': value['status'],

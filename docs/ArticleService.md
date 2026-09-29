@@ -14,7 +14,6 @@ All URIs are relative to *http://localhost*
 | [**list**](ArticleService.md#list) | **POST** /v1/content/article/list |  |
 | [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish |  |
 | [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
-| [**schedulePublish**](ArticleService.md#schedulepublish) | **POST** /v1/content/article/publish/schedule |  |
 | [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
 | [**updateDraft**](ArticleService.md#updatedraft) | **POST** /v1/content/article/draft/update |  |
 
@@ -667,73 +666,6 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **rewardArticleReq** | [RewardArticleReq](RewardArticleReq.md) |  | |
-
-### Return type
-
-**object**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## schedulePublish
-
-> object schedulePublish(schedulePublishArticleReq)
-
-
-
-设置定时发布
-
-### Example
-
-```ts
-import {
-  Configuration,
-  ArticleService,
-} from '@bass/bbs-sdk-fetch';
-import type { SchedulePublishRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new ArticleService();
-
-  const body = {
-    // SchedulePublishArticleReq
-    schedulePublishArticleReq: ...,
-  } satisfies SchedulePublishRequest;
-
-  try {
-    const data = await api.schedulePublish(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **schedulePublishArticleReq** | [SchedulePublishArticleReq](SchedulePublishArticleReq.md) |  | |
 
 ### Return type
 

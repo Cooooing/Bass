@@ -30,6 +30,12 @@ export interface UpdateProfileAccountReq {
      * @type {string}
      * @memberof UpdateProfileAccountReq
      */
+    backgroundAssetId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateProfileAccountReq
+     */
     nickname?: string;
     /**
      * 
@@ -95,6 +101,7 @@ export function UpdateProfileAccountReqFromJSONTyped(json: any, ignoreDiscrimina
     return {
         
         'avatarAssetId': json['avatar_asset_id'] == null ? undefined : json['avatar_asset_id'],
+        'backgroundAssetId': json['background_asset_id'] == null ? undefined : json['background_asset_id'],
         'nickname': json['nickname'] == null ? undefined : json['nickname'],
         'url': json['url'] == null ? undefined : json['url'],
         'introduction': json['introduction'] == null ? undefined : json['introduction'],
@@ -114,6 +121,7 @@ export function UpdateProfileAccountReqToJSONTyped(value?: UpdateProfileAccountR
     return {
         
         'avatar_asset_id': value['avatarAssetId'],
+        'background_asset_id': value['backgroundAssetId'],
         'nickname': value['nickname'],
         'url': value['url'],
         'introduction': value['introduction'],

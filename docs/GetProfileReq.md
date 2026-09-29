@@ -1,22 +1,22 @@
 
-# GetProfileAccountReq
+# GetProfileReq
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`userId` | string
+`name` | string
 
 ## Example
 
 ```typescript
-import type { GetProfileAccountReq } from '@bass/bbs-sdk-fetch'
+import type { GetProfileReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "userId": null,
-} satisfies GetProfileAccountReq
+  "name": null,
+} satisfies GetProfileReq
 
 console.log(example)
 
@@ -25,7 +25,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as GetProfileAccountReq
+const exampleParsed = JSON.parse(exampleJSON) as GetProfileReq
 console.log(exampleParsed)
 ```
 

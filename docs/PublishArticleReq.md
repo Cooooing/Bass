@@ -7,7 +7,7 @@
 Name | Type
 ------------ | -------------
 `articleId` | string
-`visibility` | string
+`scheduledAt` | Date
 
 ## Example
 
@@ -17,7 +17,7 @@ import type { PublishArticleReq } from '@bass/bbs-sdk-fetch'
 // TODO: Update the object below with actual values
 const example = {
   "articleId": null,
-  "visibility": null,
+  "scheduledAt": null,
 } satisfies PublishArticleReq
 
 console.log(example)

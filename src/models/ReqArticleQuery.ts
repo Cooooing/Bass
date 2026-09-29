@@ -91,6 +91,12 @@ export interface ReqArticleQuery {
      * @memberof ReqArticleQuery
      */
     restrictions?: Array<ReqArticleQueryRestrictionsEnum>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ReqArticleQuery
+     */
+    scheduled?: boolean;
 }
 
 
@@ -124,8 +130,7 @@ export const ReqArticleQueryPublishStatusEnum = {
     ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
     ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
     ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
-    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
-    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED'
+    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED'
 } as const;
 export type ReqArticleQueryPublishStatusEnum = typeof ReqArticleQueryPublishStatusEnum[keyof typeof ReqArticleQueryPublishStatusEnum];
 
@@ -136,8 +141,7 @@ export const ReqArticleQueryPublishStatusesEnum = {
     ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
     ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
     ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
-    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED',
-    ARTICLE_PUBLISH_STATUS_SCHEDULED: 'ARTICLE_PUBLISH_STATUS_SCHEDULED'
+    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED'
 } as const;
 export type ReqArticleQueryPublishStatusesEnum = typeof ReqArticleQueryPublishStatusesEnum[keyof typeof ReqArticleQueryPublishStatusesEnum];
 
@@ -213,6 +217,7 @@ export function ReqArticleQueryFromJSONTyped(json: any, ignoreDiscriminator: boo
         'visibilities': json['visibilities'] == null ? undefined : json['visibilities'],
         'restriction': json['restriction'] == null ? undefined : json['restriction'],
         'restrictions': json['restrictions'] == null ? undefined : json['restrictions'],
+        'scheduled': json['scheduled'] == null ? undefined : json['scheduled'],
     };
 }
 
@@ -239,6 +244,7 @@ export function ReqArticleQueryToJSONTyped(value?: ReqArticleQuery | null, ignor
         'visibilities': value['visibilities'],
         'restriction': value['restriction'],
         'restrictions': value['restrictions'],
+        'scheduled': value['scheduled'],
     };
 }
 

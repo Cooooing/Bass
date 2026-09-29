@@ -25,7 +25,26 @@ export interface GetArticleReq {
      * @memberof GetArticleReq
      */
     articleId: string;
+    /**
+     * 
+     * @type {GetArticleReqPublishStatusEnum}
+     * @memberof GetArticleReq
+     */
+    publishStatus?: GetArticleReqPublishStatusEnum;
 }
+
+
+/**
+ * @export
+ */
+export const GetArticleReqPublishStatusEnum = {
+    ARTICLE_PUBLISH_STATUS_UNSPECIFIED: 'ARTICLE_PUBLISH_STATUS_UNSPECIFIED',
+    ARTICLE_PUBLISH_STATUS_DRAFT: 'ARTICLE_PUBLISH_STATUS_DRAFT',
+    ARTICLE_PUBLISH_STATUS_PUBLISHED: 'ARTICLE_PUBLISH_STATUS_PUBLISHED',
+    ARTICLE_PUBLISH_STATUS_ARCHIVED: 'ARTICLE_PUBLISH_STATUS_ARCHIVED'
+} as const;
+export type GetArticleReqPublishStatusEnum = typeof GetArticleReqPublishStatusEnum[keyof typeof GetArticleReqPublishStatusEnum];
+
 
 /**
  * Check if a given object implements the GetArticleReq interface.
@@ -46,6 +65,7 @@ export function GetArticleReqFromJSONTyped(json: any, ignoreDiscriminator: boole
     return {
         
         'articleId': json['article_id'],
+        'publishStatus': json['publish_status'] == null ? undefined : json['publish_status'],
     };
 }
 
@@ -61,6 +81,7 @@ export function GetArticleReqToJSONTyped(value?: GetArticleReq | null, ignoreDis
     return {
         
         'article_id': value['articleId'],
+        'publish_status': value['publishStatus'],
     };
 }
 

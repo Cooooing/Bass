@@ -19,20 +19,40 @@ import {
     GetCurrentAccountRespToJSON,
 } from '../models/GetCurrentAccountResp';
 import {
-    type GetProfileAccountReq,
-    GetProfileAccountReqFromJSON,
-    GetProfileAccountReqToJSON,
-} from '../models/GetProfileAccountReq';
+    type GetProfileReq,
+    GetProfileReqFromJSON,
+    GetProfileReqToJSON,
+} from '../models/GetProfileReq';
 import {
-    type GetProfileAccountResp,
-    GetProfileAccountRespFromJSON,
-    GetProfileAccountRespToJSON,
-} from '../models/GetProfileAccountResp';
+    type GetProfileResp,
+    GetProfileRespFromJSON,
+    GetProfileRespToJSON,
+} from '../models/GetProfileResp';
 import {
     type ImageResp,
     ImageRespFromJSON,
     ImageRespToJSON,
 } from '../models/ImageResp';
+import {
+    type ListFollowersReq,
+    ListFollowersReqFromJSON,
+    ListFollowersReqToJSON,
+} from '../models/ListFollowersReq';
+import {
+    type ListFollowersResp,
+    ListFollowersRespFromJSON,
+    ListFollowersRespToJSON,
+} from '../models/ListFollowersResp';
+import {
+    type ListFollowingReq,
+    ListFollowingReqFromJSON,
+    ListFollowingReqToJSON,
+} from '../models/ListFollowingReq';
+import {
+    type ListFollowingResp,
+    ListFollowingRespFromJSON,
+    ListFollowingRespToJSON,
+} from '../models/ListFollowingResp';
 import {
     type UpdateEmailAccountReq,
     UpdateEmailAccountReqFromJSON,
@@ -68,7 +88,15 @@ export interface GetCurrentRequest {
 }
 
 export interface GetProfileRequest {
-    getProfileAccountReq: GetProfileAccountReq;
+    getProfileReq: GetProfileReq;
+}
+
+export interface ListFollowersRequest {
+    listFollowersReq: ListFollowersReq;
+}
+
+export interface ListFollowingRequest {
+    listFollowingReq: ListFollowingReq;
 }
 
 export interface UpdateEmailRequest {
@@ -140,25 +168,69 @@ export interface AccountServiceInterface {
 
     /**
      * Creates request options for getProfile without sending the request
-     * @param {GetProfileAccountReq} getProfileAccountReq 
+     * @param {GetProfileReq} getProfileReq 
      * @throws {RequiredError}
      * @memberof AccountServiceInterface
      */
     getProfileRequestOpts(requestParameters: GetProfileRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 按账号 ID 获取展示资料
-     * @param {GetProfileAccountReq} getProfileAccountReq 
+     * 按账号名获取个人主页资料。
+     * @param {GetProfileReq} getProfileReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AccountServiceInterface
      */
-    getProfileRaw(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileAccountResp>>;
+    getProfileRaw(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileResp>>;
 
     /**
-     * 按账号 ID 获取展示资料
+     * 按账号名获取个人主页资料。
      */
-    getProfile(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileAccountResp>;
+    getProfile(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileResp>;
+
+    /**
+     * Creates request options for listFollowers without sending the request
+     * @param {ListFollowersReq} listFollowersReq 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    listFollowersRequestOpts(requestParameters: ListFollowersRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询账号公开的粉丝列表。
+     * @param {ListFollowersReq} listFollowersReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    listFollowersRaw(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowersResp>>;
+
+    /**
+     * 查询账号公开的粉丝列表。
+     */
+    listFollowers(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowersResp>;
+
+    /**
+     * Creates request options for listFollowing without sending the request
+     * @param {ListFollowingReq} listFollowingReq 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    listFollowingRequestOpts(requestParameters: ListFollowingRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询账号公开的关注列表。
+     * @param {ListFollowingReq} listFollowingReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    listFollowingRaw(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowingResp>>;
+
+    /**
+     * 查询账号公开的关注列表。
+     */
+    listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingResp>;
 
     /**
      * Creates request options for updateEmail without sending the request
@@ -347,10 +419,10 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
      * Creates request options for getProfile without sending the request
      */
     async getProfileRequestOpts(requestParameters: GetProfileRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['getProfileAccountReq'] == null) {
+        if (requestParameters['getProfileReq'] == null) {
             throw new runtime.RequiredError(
-                'getProfileAccountReq',
-                'Required parameter "getProfileAccountReq" was null or undefined when calling getProfile().'
+                'getProfileReq',
+                'Required parameter "getProfileReq" was null or undefined when calling getProfile().'
             );
         }
 
@@ -368,25 +440,119 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: GetProfileAccountReqToJSON(requestParameters['getProfileAccountReq']),
+            body: GetProfileReqToJSON(requestParameters['getProfileReq']),
         };
     }
 
     /**
-     * 按账号 ID 获取展示资料
+     * 按账号名获取个人主页资料。
      */
-    async getProfileRaw(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileAccountResp>> {
+    async getProfileRaw(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetProfileResp>> {
         const requestOptions = await this.getProfileRequestOpts(requestParameters);
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => GetProfileAccountRespFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => GetProfileRespFromJSON(jsonValue));
     }
 
     /**
-     * 按账号 ID 获取展示资料
+     * 按账号名获取个人主页资料。
      */
-    async getProfile(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileAccountResp> {
+    async getProfile(requestParameters: GetProfileRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetProfileResp> {
         const response = await this.getProfileRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for listFollowers without sending the request
+     */
+    async listFollowersRequestOpts(requestParameters: ListFollowersRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['listFollowersReq'] == null) {
+            throw new runtime.RequiredError(
+                'listFollowersReq',
+                'Required parameter "listFollowersReq" was null or undefined when calling listFollowers().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/list-followers`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ListFollowersReqToJSON(requestParameters['listFollowersReq']),
+        };
+    }
+
+    /**
+     * 查询账号公开的粉丝列表。
+     */
+    async listFollowersRaw(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowersResp>> {
+        const requestOptions = await this.listFollowersRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListFollowersRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询账号公开的粉丝列表。
+     */
+    async listFollowers(requestParameters: ListFollowersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowersResp> {
+        const response = await this.listFollowersRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for listFollowing without sending the request
+     */
+    async listFollowingRequestOpts(requestParameters: ListFollowingRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['listFollowingReq'] == null) {
+            throw new runtime.RequiredError(
+                'listFollowingReq',
+                'Required parameter "listFollowingReq" was null or undefined when calling listFollowing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/list-following`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ListFollowingReqToJSON(requestParameters['listFollowingReq']),
+        };
+    }
+
+    /**
+     * 查询账号公开的关注列表。
+     */
+    async listFollowingRaw(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowingResp>> {
+        const requestOptions = await this.listFollowingRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListFollowingRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询账号公开的关注列表。
+     */
+    async listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingResp> {
+        const response = await this.listFollowingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

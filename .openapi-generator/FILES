@@ -4,6 +4,7 @@
 README.md
 docs/AccountContact.md
 docs/AccountProfile.md
+docs/AccountProfileListItem.md
 docs/AccountService.md
 docs/AddPostscriptReq.md
 docs/AddPostscriptResp.md
@@ -50,8 +51,8 @@ docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
 docs/GetCurrentPrivacySettingResp.md
 docs/GetCurrentTotpResp.md
-docs/GetProfileAccountReq.md
-docs/GetProfileAccountResp.md
+docs/GetProfileReq.md
+docs/GetProfileResp.md
 docs/GetStatusRelationReq.md
 docs/GetStatusRelationResp.md
 docs/ImageResp.md
@@ -77,8 +78,12 @@ docs/ListDomainsReq.md
 docs/ListDomainsResp.md
 docs/ListFollowersRelationsReq.md
 docs/ListFollowersRelationsResp.md
+docs/ListFollowersReq.md
+docs/ListFollowersResp.md
 docs/ListFollowingRelationsReq.md
 docs/ListFollowingRelationsResp.md
+docs/ListFollowingReq.md
+docs/ListFollowingResp.md
 docs/ListNotificationsReq.md
 docs/ListNotificationsResp.md
 docs/ListPostscriptsReq.md
@@ -97,6 +102,10 @@ docs/PageResp.md
 docs/PostscriptService.md
 docs/PreferencesService.md
 docs/PrivacySettingService.md
+docs/Profile.md
+docs/ProfileLocation.md
+docs/ProfileRelation.md
+docs/ProfileVisibility.md
 docs/PublishArticleReq.md
 docs/RefreshTokenReq.md
 docs/RefreshTokenResp.md
@@ -133,7 +142,6 @@ docs/RespRelationStatus.md
 docs/RespTag.md
 docs/RespTotp.md
 docs/RewardArticleReq.md
-docs/SchedulePublishArticleReq.md
 docs/SendEmailOtpReq.md
 docs/SendEmailOtpResp.md
 docs/SendPhoneOtpReq.md
@@ -182,6 +190,7 @@ src/apis/index.ts
 src/index.ts
 src/models/AccountContact.ts
 src/models/AccountProfile.ts
+src/models/AccountProfileListItem.ts
 src/models/AddPostscriptReq.ts
 src/models/AddPostscriptResp.ts
 src/models/ArchiveArticleReq.ts
@@ -222,8 +231,8 @@ src/models/GetCurrentLocationResp.ts
 src/models/GetCurrentPreferencesResp.ts
 src/models/GetCurrentPrivacySettingResp.ts
 src/models/GetCurrentTotpResp.ts
-src/models/GetProfileAccountReq.ts
-src/models/GetProfileAccountResp.ts
+src/models/GetProfileReq.ts
+src/models/GetProfileResp.ts
 src/models/GetStatusRelationReq.ts
 src/models/GetStatusRelationResp.ts
 src/models/ImageResp.ts
@@ -249,8 +258,12 @@ src/models/ListDomainsReq.ts
 src/models/ListDomainsResp.ts
 src/models/ListFollowersRelationsReq.ts
 src/models/ListFollowersRelationsResp.ts
+src/models/ListFollowersReq.ts
+src/models/ListFollowersResp.ts
 src/models/ListFollowingRelationsReq.ts
 src/models/ListFollowingRelationsResp.ts
+src/models/ListFollowingReq.ts
+src/models/ListFollowingResp.ts
 src/models/ListNotificationsReq.ts
 src/models/ListNotificationsResp.ts
 src/models/ListPostscriptsReq.ts
@@ -263,6 +276,10 @@ src/models/MarkReadNotificationReq.ts
 src/models/MarkReadNotificationResp.ts
 src/models/PageReq.ts
 src/models/PageResp.ts
+src/models/Profile.ts
+src/models/ProfileLocation.ts
+src/models/ProfileRelation.ts
+src/models/ProfileVisibility.ts
 src/models/PublishArticleReq.ts
 src/models/RefreshTokenReq.ts
 src/models/RefreshTokenResp.ts
@@ -298,7 +315,6 @@ src/models/RespRelationStatus.ts
 src/models/RespTag.ts
 src/models/RespTotp.ts
 src/models/RewardArticleReq.ts
-src/models/SchedulePublishArticleReq.ts
 src/models/SendEmailOtpReq.ts
 src/models/SendEmailOtpResp.ts
 src/models/SendPhoneOtpReq.ts

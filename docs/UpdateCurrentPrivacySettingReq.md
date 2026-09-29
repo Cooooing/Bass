@@ -8,6 +8,7 @@ Name | Type
 ------------ | -------------
 `publicPoints` | boolean
 `publicFollowers` | boolean
+`publicFollowing` | boolean
 `publicArticles` | boolean
 `publicComments` | boolean
 `publicOnlineStatus` | boolean
@@ -22,6 +23,7 @@ import type { UpdateCurrentPrivacySettingReq } from '@bass/bbs-sdk-fetch'
 const example = {
   "publicPoints": null,
   "publicFollowers": null,
+  "publicFollowing": null,
   "publicArticles": null,
   "publicComments": null,
   "publicOnlineStatus": null,

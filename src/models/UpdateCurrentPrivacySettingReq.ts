@@ -36,6 +36,12 @@ export interface UpdateCurrentPrivacySettingReq {
      * @type {boolean}
      * @memberof UpdateCurrentPrivacySettingReq
      */
+    publicFollowing?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UpdateCurrentPrivacySettingReq
+     */
     publicArticles?: boolean;
     /**
      * 
@@ -76,6 +82,7 @@ export function UpdateCurrentPrivacySettingReqFromJSONTyped(json: any, ignoreDis
         
         'publicPoints': json['public_points'] == null ? undefined : json['public_points'],
         'publicFollowers': json['public_followers'] == null ? undefined : json['public_followers'],
+        'publicFollowing': json['public_following'] == null ? undefined : json['public_following'],
         'publicArticles': json['public_articles'] == null ? undefined : json['public_articles'],
         'publicComments': json['public_comments'] == null ? undefined : json['public_comments'],
         'publicOnlineStatus': json['public_online_status'] == null ? undefined : json['public_online_status'],
@@ -96,6 +103,7 @@ export function UpdateCurrentPrivacySettingReqToJSONTyped(value?: UpdateCurrentP
         
         'public_points': value['publicPoints'],
         'public_followers': value['publicFollowers'],
+        'public_following': value['publicFollowing'],
         'public_articles': value['publicArticles'],
         'public_comments': value['publicComments'],
         'public_online_status': value['publicOnlineStatus'],

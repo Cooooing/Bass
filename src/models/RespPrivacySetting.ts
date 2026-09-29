@@ -42,6 +42,12 @@ export interface RespPrivacySetting {
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
+    publicFollowing?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RespPrivacySetting
+     */
     publicArticles?: boolean;
     /**
      * 
@@ -83,6 +89,7 @@ export function RespPrivacySettingFromJSONTyped(json: any, ignoreDiscriminator: 
         'userId': json['user_id'] == null ? undefined : json['user_id'],
         'publicPoints': json['public_points'] == null ? undefined : json['public_points'],
         'publicFollowers': json['public_followers'] == null ? undefined : json['public_followers'],
+        'publicFollowing': json['public_following'] == null ? undefined : json['public_following'],
         'publicArticles': json['public_articles'] == null ? undefined : json['public_articles'],
         'publicComments': json['public_comments'] == null ? undefined : json['public_comments'],
         'publicOnlineStatus': json['public_online_status'] == null ? undefined : json['public_online_status'],
@@ -104,6 +111,7 @@ export function RespPrivacySettingToJSONTyped(value?: RespPrivacySetting | null,
         'user_id': value['userId'],
         'public_points': value['publicPoints'],
         'public_followers': value['publicFollowers'],
+        'public_following': value['publicFollowing'],
         'public_articles': value['publicArticles'],
         'public_comments': value['publicComments'],
         'public_online_status': value['publicOnlineStatus'],

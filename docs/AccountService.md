@@ -7,6 +7,8 @@ All URIs are relative to *http://localhost*
 | [**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar |  |
 | [**getCurrent**](AccountService.md#getcurrent) | **POST** /v1/user/account/get-current |  |
 | [**getProfile**](AccountService.md#getprofile) | **POST** /v1/user/account/get-profile |  |
+| [**listFollowers**](AccountService.md#listfollowers) | **POST** /v1/user/account/list-followers |  |
+| [**listFollowing**](AccountService.md#listfollowing) | **POST** /v1/user/account/list-following |  |
 | [**updateEmail**](AccountService.md#updateemail) | **POST** /v1/user/account/update-email |  |
 | [**updatePassword**](AccountService.md#updatepassword) | **POST** /v1/user/account/update-password |  |
 | [**updatePhone**](AccountService.md#updatephone) | **POST** /v1/user/account/update-phone |  |
@@ -150,11 +152,11 @@ No authorization required
 
 ## getProfile
 
-> GetProfileAccountResp getProfile(getProfileAccountReq)
+> GetProfileResp getProfile(getProfileReq)
 
 
 
-按账号 ID 获取展示资料
+按账号名获取个人主页资料。
 
 ### Example
 
@@ -170,8 +172,8 @@ async function example() {
   const api = new AccountService();
 
   const body = {
-    // GetProfileAccountReq
-    getProfileAccountReq: ...,
+    // GetProfileReq
+    getProfileReq: ...,
   } satisfies GetProfileRequest;
 
   try {
@@ -191,11 +193,145 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **getProfileAccountReq** | [GetProfileAccountReq](GetProfileAccountReq.md) |  | |
+| **getProfileReq** | [GetProfileReq](GetProfileReq.md) |  | |
 
 ### Return type
 
-[**GetProfileAccountResp**](GetProfileAccountResp.md)
+[**GetProfileResp**](GetProfileResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## listFollowers
+
+> ListFollowersResp listFollowers(listFollowersReq)
+
+
+
+查询账号公开的粉丝列表。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountService,
+} from '@bass/bbs-sdk-fetch';
+import type { ListFollowersRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AccountService();
+
+  const body = {
+    // ListFollowersReq
+    listFollowersReq: ...,
+  } satisfies ListFollowersRequest;
+
+  try {
+    const data = await api.listFollowers(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **listFollowersReq** | [ListFollowersReq](ListFollowersReq.md) |  | |
+
+### Return type
+
+[**ListFollowersResp**](ListFollowersResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## listFollowing
+
+> ListFollowingResp listFollowing(listFollowingReq)
+
+
+
+查询账号公开的关注列表。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountService,
+} from '@bass/bbs-sdk-fetch';
+import type { ListFollowingRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AccountService();
+
+  const body = {
+    // ListFollowingReq
+    listFollowingReq: ...,
+  } satisfies ListFollowingRequest;
+
+  try {
+    const data = await api.listFollowing(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **listFollowingReq** | [ListFollowingReq](ListFollowingReq.md) |  | |
+
+### Return type
+
+[**ListFollowingResp**](ListFollowingResp.md)
 
 ### Authorization
 

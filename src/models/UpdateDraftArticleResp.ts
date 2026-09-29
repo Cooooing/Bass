@@ -13,14 +13,6 @@
  */
 
 import { mapValues } from '../runtime';
-import type { ArticleDetail } from './ArticleDetail';
-import {
-    ArticleDetailFromJSON,
-    ArticleDetailFromJSONTyped,
-    ArticleDetailToJSON,
-    ArticleDetailToJSONTyped,
-} from './ArticleDetail';
-
 /**
  * 
  * @export
@@ -29,10 +21,10 @@ import {
 export interface UpdateDraftArticleResp {
     /**
      * 
-     * @type {ArticleDetail}
+     * @type {string}
      * @memberof UpdateDraftArticleResp
      */
-    article?: ArticleDetail;
+    articleId?: string;
 }
 
 /**
@@ -52,7 +44,7 @@ export function UpdateDraftArticleRespFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
-        'article': json['article'] == null ? undefined : ArticleDetailFromJSON(json['article']),
+        'articleId': json['article_id'] == null ? undefined : json['article_id'],
     };
 }
 
@@ -67,7 +59,7 @@ export function UpdateDraftArticleRespToJSONTyped(value?: UpdateDraftArticleResp
 
     return {
         
-        'article': ArticleDetailToJSON(value['article']),
+        'article_id': value['articleId'],
     };
 }
 

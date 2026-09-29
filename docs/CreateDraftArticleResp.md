@@ -6,7 +6,7 @@
 
 Name | Type
 ------------ | -------------
-`article` | [ArticleDetail](ArticleDetail.md)
+`articleId` | string
 
 ## Example
 
@@ -15,7 +15,7 @@ import type { CreateDraftArticleResp } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "article": null,
+  "articleId": null,
 } satisfies CreateDraftArticleResp
 
 console.log(example)

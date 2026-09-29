@@ -1,22 +1,26 @@
 
-# UpdateDraftArticleResp
+# ProfileLocation
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`articleId` | string
+`country` | string
+`province` | string
+`city` | string
 
 ## Example
 
 ```typescript
-import type { UpdateDraftArticleResp } from '@bass/bbs-sdk-fetch'
+import type { ProfileLocation } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "articleId": null,
-} satisfies UpdateDraftArticleResp
+  "country": null,
+  "province": null,
+  "city": null,
+} satisfies ProfileLocation
 
 console.log(example)
 
@@ -25,7 +29,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as UpdateDraftArticleResp
+const exampleParsed = JSON.parse(exampleJSON) as ProfileLocation
 console.log(exampleParsed)
 ```
 

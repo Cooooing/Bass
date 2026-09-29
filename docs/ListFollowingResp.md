@@ -1,24 +1,24 @@
 
-# SchedulePublishArticleReq
+# ListFollowingResp
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`articleId` | string
-`publishAt` | Date
+`page` | [PageResp](PageResp.md)
+`rows` | [Array&lt;AccountProfileListItem&gt;](AccountProfileListItem.md)
 
 ## Example
 
 ```typescript
-import type { SchedulePublishArticleReq } from '@bass/bbs-sdk-fetch'
+import type { ListFollowingResp } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "articleId": null,
-  "publishAt": null,
-} satisfies SchedulePublishArticleReq
+  "page": null,
+  "rows": null,
+} satisfies ListFollowingResp
 
 console.log(example)
 
@@ -27,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as SchedulePublishArticleReq
+const exampleParsed = JSON.parse(exampleJSON) as ListFollowingResp
 console.log(exampleParsed)
 ```
 

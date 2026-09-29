@@ -1,22 +1,24 @@
 
-# GetProfileAccountResp
+# AccountProfileListItem
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`profile` | [AccountProfile](AccountProfile.md)
+`account` | [AccountProfile](AccountProfile.md)
+`viewerRelation` | [ProfileRelation](ProfileRelation.md)
 
 ## Example
 
 ```typescript
-import type { GetProfileAccountResp } from '@bass/bbs-sdk-fetch'
+import type { AccountProfileListItem } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "profile": null,
-} satisfies GetProfileAccountResp
+  "account": null,
+  "viewerRelation": null,
+} satisfies AccountProfileListItem
 
 console.log(example)
 
@@ -25,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as GetProfileAccountResp
+const exampleParsed = JSON.parse(exampleJSON) as AccountProfileListItem
 console.log(exampleParsed)
 ```
 

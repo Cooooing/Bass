@@ -18,6 +18,7 @@ Name | Type
 `visibilities` | Array&lt;string&gt;
 `restriction` | string
 `restrictions` | Array&lt;string&gt;
+`scheduled` | boolean
 
 ## Example
 
@@ -38,6 +39,7 @@ const example = {
   "visibilities": null,
   "restriction": null,
   "restrictions": null,
+  "scheduled": null,
 } satisfies ReqArticleQuery
 
 console.log(example)

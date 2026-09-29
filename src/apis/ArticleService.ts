@@ -89,11 +89,6 @@ import {
     RewardArticleReqToJSON,
 } from '../models/RewardArticleReq';
 import {
-    type SchedulePublishArticleReq,
-    SchedulePublishArticleReqFromJSON,
-    SchedulePublishArticleReqToJSON,
-} from '../models/SchedulePublishArticleReq';
-import {
     type ThankArticleReq,
     ThankArticleReqFromJSON,
     ThankArticleReqToJSON,
@@ -152,10 +147,6 @@ export interface PublishRequest {
 
 export interface RewardRequest {
     rewardArticleReq: RewardArticleReq;
-}
-
-export interface SchedulePublishRequest {
-    schedulePublishArticleReq: SchedulePublishArticleReq;
 }
 
 export interface ThankRequest {
@@ -392,28 +383,6 @@ export interface ArticleServiceInterface {
      * 打赏文章
      */
     reward(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
-
-    /**
-     * Creates request options for schedulePublish without sending the request
-     * @param {SchedulePublishArticleReq} schedulePublishArticleReq 
-     * @throws {RequiredError}
-     * @memberof ArticleServiceInterface
-     */
-    schedulePublishRequestOpts(requestParameters: SchedulePublishRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 设置定时发布
-     * @param {SchedulePublishArticleReq} schedulePublishArticleReq 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ArticleServiceInterface
-     */
-    schedulePublishRaw(requestParameters: SchedulePublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
-
-    /**
-     * 设置定时发布
-     */
-    schedulePublish(requestParameters: SchedulePublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
      * Creates request options for thank without sending the request
@@ -933,53 +902,6 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      */
     async reward(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.rewardRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for schedulePublish without sending the request
-     */
-    async schedulePublishRequestOpts(requestParameters: SchedulePublishRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['schedulePublishArticleReq'] == null) {
-            throw new runtime.RequiredError(
-                'schedulePublishArticleReq',
-                'Required parameter "schedulePublishArticleReq" was null or undefined when calling schedulePublish().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/content/article/publish/schedule`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: SchedulePublishArticleReqToJSON(requestParameters['schedulePublishArticleReq']),
-        };
-    }
-
-    /**
-     * 设置定时发布
-     */
-    async schedulePublishRaw(requestParameters: SchedulePublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
-        const requestOptions = await this.schedulePublishRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * 设置定时发布
-     */
-    async schedulePublish(requestParameters: SchedulePublishRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
-        const response = await this.schedulePublishRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

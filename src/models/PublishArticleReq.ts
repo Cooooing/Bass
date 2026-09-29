@@ -27,23 +27,11 @@ export interface PublishArticleReq {
     articleId: string;
     /**
      * 
-     * @type {PublishArticleReqVisibilityEnum}
+     * @type {Date}
      * @memberof PublishArticleReq
      */
-    visibility?: PublishArticleReqVisibilityEnum;
+    scheduledAt?: Date;
 }
-
-
-/**
- * @export
- */
-export const PublishArticleReqVisibilityEnum = {
-    ARTICLE_VISIBILITY_UNSPECIFIED: 'ARTICLE_VISIBILITY_UNSPECIFIED',
-    ARTICLE_VISIBILITY_PUBLIC: 'ARTICLE_VISIBILITY_PUBLIC',
-    ARTICLE_VISIBILITY_PRIVATE: 'ARTICLE_VISIBILITY_PRIVATE'
-} as const;
-export type PublishArticleReqVisibilityEnum = typeof PublishArticleReqVisibilityEnum[keyof typeof PublishArticleReqVisibilityEnum];
-
 
 /**
  * Check if a given object implements the PublishArticleReq interface.
@@ -64,7 +52,7 @@ export function PublishArticleReqFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'articleId': json['article_id'],
-        'visibility': json['visibility'] == null ? undefined : json['visibility'],
+        'scheduledAt': json['scheduled_at'] == null ? undefined : (new Date(json['scheduled_at'])),
     };
 }
 
@@ -80,7 +68,7 @@ export function PublishArticleReqToJSONTyped(value?: PublishArticleReq | null, i
     return {
         
         'article_id': value['articleId'],
-        'visibility': value['visibility'],
+        'scheduled_at': value['scheduledAt'] == null ? value['scheduledAt'] : value['scheduledAt'].toISOString(),
     };
 }
 

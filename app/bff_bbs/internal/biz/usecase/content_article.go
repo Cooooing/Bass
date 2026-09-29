@@ -27,13 +27,6 @@ func NewContentArticleUsecase(
 	}
 }
 
-type ContentArticleViewerActionState = repo.ArticleViewerActionState
-type ContentArticlePostscript = repo.ArticlePostscript
-type ContentArticleListItem = repo.ArticleListItem
-type ContentArticleDetail = repo.ArticleDetail
-type ContentAccountProfile = repo.AccountProfile
-type ContentPageResp = repo.PageResp
-
 type ContentArticleSave struct {
 	Title         string
 	Content       string
@@ -49,47 +42,11 @@ type CreateDraftArticleReq struct {
 	Article *ContentArticleSave
 }
 
-func (u *ContentArticleUsecase) CreateDraftArticle(ctx context.Context, req *CreateDraftArticleReq) (*ContentArticleDetail, error) {
+func (u *ContentArticleUsecase) CreateDraftArticle(ctx context.Context, req *CreateDraftArticleReq) (int64, error) {
 	if req == nil || req.Article == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
+		return 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	resp, err := u.contentArticleClient.CreateDraftArticle(ctx, &repo.CreateDraftArticleReq{UserID: req.UserID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
-	if err != nil {
-		return nil, err
-	}
-	profiles := []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}
-	assetIDs := make([]int64, 0, len(profiles))
-	seen := map[int64]struct{}{}
-	for _, profile := range profiles {
-		if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
-			continue
-		}
-		if _, ok := seen[*profile.AvatarAssetID]; ok {
-			continue
-		}
-		seen[*profile.AvatarAssetID] = struct{}{}
-		assetIDs = append(assetIDs, *profile.AvatarAssetID)
-	}
-	assets := map[int64]*repo.Asset{}
-	if len(assetIDs) > 0 && u.assetClient != nil {
-		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
-		if err != nil {
-			return nil, err
-		}
-	}
-	for _, profile := range profiles {
-		if profile == nil {
-			continue
-		}
-		avatarURL := "/v1/user/account/avatar?name=" + profile.Name
-		if profile.AvatarAssetID != nil {
-			if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
-				avatarURL = asset.URL
-			}
-		}
-		profile.AvatarURL = &avatarURL
-	}
-	return resp, nil
+	return u.contentArticleClient.CreateDraftArticle(ctx, &repo.CreateDraftArticleReq{UserID: req.UserID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
 }
 
 type UpdateDraftArticleReq struct {
@@ -98,50 +55,11 @@ type UpdateDraftArticleReq struct {
 	Article   *ContentArticleSave
 }
 
-func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (*ContentArticleDetail, error) {
+func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (int64, error) {
 	if req == nil || req.Article == nil || req.ArticleID <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
+		return 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	resp, err := u.contentArticleClient.UpdateDraftArticle(ctx, &repo.UpdateDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
-	if err != nil {
-		return nil, err
-	}
-	if resp != nil {
-		profiles := []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}
-		assetIDs := make([]int64, 0, len(profiles))
-		seen := map[int64]struct{}{}
-		for _, profile := range profiles {
-			if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
-				continue
-			}
-			if _, ok := seen[*profile.AvatarAssetID]; ok {
-				continue
-			}
-			seen[*profile.AvatarAssetID] = struct{}{}
-			assetIDs = append(assetIDs, *profile.AvatarAssetID)
-		}
-		assets := map[int64]*repo.Asset{}
-		if len(assetIDs) > 0 && u.assetClient != nil {
-			var err error
-			assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
-			if err != nil {
-				return nil, err
-			}
-		}
-		for _, profile := range profiles {
-			if profile == nil {
-				continue
-			}
-			avatarURL := "/v1/user/account/avatar?name=" + profile.Name
-			if profile.AvatarAssetID != nil {
-				if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
-					avatarURL = asset.URL
-				}
-			}
-			profile.AvatarURL = &avatarURL
-		}
-	}
-	return resp, nil
+	return u.contentArticleClient.UpdateDraftArticle(ctx, &repo.UpdateDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
 }
 
 type PublishArticleReq struct {
@@ -215,8 +133,8 @@ type ArticleQuery struct {
 }
 
 type ListArticlesResp struct {
-	Page *ContentPageResp
-	Rows []*ContentArticleListItem
+	Page *repo.PageResp
+	Rows []*repo.ArticleListItem
 }
 
 func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error) {
@@ -251,36 +169,8 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 		}
 		profiles = append(profiles, row.AuthorUser, row.LastReplyUser)
 	}
-	assetIDs := make([]int64, 0, len(profiles))
-	seen := map[int64]struct{}{}
-	for _, profile := range profiles {
-		if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
-			continue
-		}
-		if _, ok := seen[*profile.AvatarAssetID]; ok {
-			continue
-		}
-		seen[*profile.AvatarAssetID] = struct{}{}
-		assetIDs = append(assetIDs, *profile.AvatarAssetID)
-	}
-	assets := map[int64]*repo.Asset{}
-	if len(assetIDs) > 0 && u.assetClient != nil {
-		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
-		if err != nil {
-			return nil, err
-		}
-	}
-	for _, profile := range profiles {
-		if profile == nil {
-			continue
-		}
-		avatarURL := "/v1/user/account/avatar?name=" + profile.Name
-		if profile.AvatarAssetID != nil {
-			if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
-				avatarURL = asset.URL
-			}
-		}
-		profile.AvatarURL = &avatarURL
+	if err = u.hydrateArticleProfiles(ctx, profiles); err != nil {
+		return nil, err
 	}
 	return &ListArticlesResp{Page: resp.Page, Rows: resp.Rows}, nil
 }
@@ -291,7 +181,7 @@ type GetArticleReq struct {
 	PublishStatus *int32
 }
 
-func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleReq) (*ContentArticleDetail, error) {
+func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleReq) (*repo.ArticleDetail, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
@@ -308,42 +198,48 @@ func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleR
 	if req.PublishStatus != nil && resp.PublishStatus != *req.PublishStatus {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
-	if resp != nil {
-		profiles := []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}
-		assetIDs := make([]int64, 0, len(profiles))
-		seen := map[int64]struct{}{}
-		for _, profile := range profiles {
-			if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
-				continue
-			}
-			if _, ok := seen[*profile.AvatarAssetID]; ok {
-				continue
-			}
-			seen[*profile.AvatarAssetID] = struct{}{}
-			assetIDs = append(assetIDs, *profile.AvatarAssetID)
-		}
-		assets := map[int64]*repo.Asset{}
-		if len(assetIDs) > 0 && u.assetClient != nil {
-			var err error
-			assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
-			if err != nil {
-				return nil, err
-			}
-		}
-		for _, profile := range profiles {
-			if profile == nil {
-				continue
-			}
-			avatarURL := "/v1/user/account/avatar?name=" + profile.Name
-			if profile.AvatarAssetID != nil {
-				if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
-					avatarURL = asset.URL
-				}
-			}
-			profile.AvatarURL = &avatarURL
-		}
+	if err = u.hydrateArticleProfiles(ctx, []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}); err != nil {
+		return nil, err
 	}
 	return resp, nil
+}
+
+// hydrateArticleProfiles resolves display avatars only for article read models.
+// Draft writes intentionally bypass it because their response exposes no profile.
+func (u *ContentArticleUsecase) hydrateArticleProfiles(ctx context.Context, profiles []*repo.AccountProfile) error {
+	assetIDs := make([]int64, 0, len(profiles))
+	seen := map[int64]struct{}{}
+	for _, profile := range profiles {
+		if profile == nil || profile.AvatarAssetID == nil || *profile.AvatarAssetID <= 0 {
+			continue
+		}
+		if _, ok := seen[*profile.AvatarAssetID]; ok {
+			continue
+		}
+		seen[*profile.AvatarAssetID] = struct{}{}
+		assetIDs = append(assetIDs, *profile.AvatarAssetID)
+	}
+	assets := map[int64]*repo.Asset{}
+	if len(assetIDs) > 0 && u.assetClient != nil {
+		var err error
+		assets, err = u.assetClient.Map(ctx, &repo.AssetGetReq{IDs: assetIDs})
+		if err != nil {
+			return err
+		}
+	}
+	for _, profile := range profiles {
+		if profile == nil {
+			continue
+		}
+		avatarURL := "/v1/user/account/avatar?name=" + profile.Name
+		if profile.AvatarAssetID != nil {
+			if asset := assets[*profile.AvatarAssetID]; asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
+			}
+		}
+		profile.AvatarURL = &avatarURL
+	}
+	return nil
 }
 
 type ViewArticleReq struct {

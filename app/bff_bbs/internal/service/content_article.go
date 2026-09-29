@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bff_bbs/internal/biz/repo"
 	"bff_bbs/internal/biz/usecase"
 	"common/pkg/apperror"
 	"common/pkg/constant"
@@ -46,11 +47,11 @@ func (s *ContentArticleService) CreateDraft(ctx context.Context, req *bbscontent
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	row, err := s.contentArticleUsecase.CreateDraftArticle(ctx, &usecase.CreateDraftArticleReq{UserID: user.ID, Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable}})
+	articleID, err := s.contentArticleUsecase.CreateDraftArticle(ctx, &usecase.CreateDraftArticleReq{UserID: user.ID, Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable}})
 	if err != nil {
 		return nil, err
 	}
-	return &bbscontentv1.CreateDraftArticle_Resp{Article: s.articleDetail(row)}, nil
+	return &bbscontentv1.CreateDraftArticle_Resp{ArticleId: articleID}, nil
 }
 
 func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontentv1.UpdateDraftArticle_Req) (*bbscontentv1.UpdateDraftArticle_Resp, error) {
@@ -62,11 +63,11 @@ func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontent
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	row, err := s.contentArticleUsecase.UpdateDraftArticle(ctx, &usecase.UpdateDraftArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable}})
+	articleID, err := s.contentArticleUsecase.UpdateDraftArticle(ctx, &usecase.UpdateDraftArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable}})
 	if err != nil {
 		return nil, err
 	}
-	return &bbscontentv1.UpdateDraftArticle_Resp{Article: s.articleDetail(row)}, nil
+	return &bbscontentv1.UpdateDraftArticle_Resp{ArticleId: articleID}, nil
 }
 
 func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.PublishArticle_Req) (*bbscontentv1.PublishArticle_Resp, error) {
@@ -204,7 +205,7 @@ func (s *ContentArticleService) Reward(ctx context.Context, req *bbscontentv1.Re
 	return &bbscontentv1.RewardArticle_Resp{}, err
 }
 
-func (s *ContentArticleService) articleListItem(row *usecase.ContentArticleListItem) *bbscontentv1.ArticleListItem {
+func (s *ContentArticleService) articleListItem(row *repo.ArticleListItem) *bbscontentv1.ArticleListItem {
 	if row == nil {
 		return nil
 	}
@@ -235,7 +236,7 @@ func (s *ContentArticleService) articleListItem(row *usecase.ContentArticleListI
 	return out
 }
 
-func (s *ContentArticleService) articleDetail(row *usecase.ContentArticleDetail) *bbscontentv1.ArticleDetail {
+func (s *ContentArticleService) articleDetail(row *repo.ArticleDetail) *bbscontentv1.ArticleDetail {
 	if row == nil {
 		return nil
 	}
@@ -270,13 +271,13 @@ func (s *ContentArticleService) articleDetail(row *usecase.ContentArticleDetail)
 	return out
 }
 
-func (s *ContentArticleService) articleViewerActionState(row *usecase.ContentArticleViewerActionState) *bbscontentv1.ArticleViewerActionState {
+func (s *ContentArticleService) articleViewerActionState(row *repo.ArticleViewerActionState) *bbscontentv1.ArticleViewerActionState {
 	if row == nil {
 		return nil
 	}
 	return &bbscontentv1.ArticleViewerActionState{Liked: row.Liked, Thanked: row.Thanked, Collected: row.Collected, Rewarded: row.Rewarded}
 }
-func (s *ContentArticleService) articlePostscript(row *usecase.ContentArticlePostscript) *bbscontentv1.ArticlePostscript {
+func (s *ContentArticleService) articlePostscript(row *repo.ArticlePostscript) *bbscontentv1.ArticlePostscript {
 	if row == nil {
 		return nil
 	}
@@ -289,7 +290,7 @@ func (s *ContentArticleService) articlePostscript(row *usecase.ContentArticlePos
 	}
 	return out
 }
-func (s *ContentArticleService) accountProfile(row *usecase.ContentAccountProfile) *bbscontentv1.AccountProfile {
+func (s *ContentArticleService) accountProfile(row *repo.AccountProfile) *bbscontentv1.AccountProfile {
 	if row == nil {
 		return nil
 	}

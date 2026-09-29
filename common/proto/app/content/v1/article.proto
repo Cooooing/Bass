@@ -52,7 +52,7 @@ message CreateDraftArticle {
     }
   }
   message Resp {
-    Article article = 1; // 文章详情
+    int64 article_id = 1; // 已创建草稿的文章 ID
   }
 }
 
@@ -73,7 +73,7 @@ message UpdateDraftArticle {
     }
   }
   message Resp {
-    Article article = 1; // 文章详情
+    int64 article_id = 1; // 已保存草稿的文章 ID
   }
 }
 

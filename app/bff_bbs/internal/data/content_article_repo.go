@@ -36,7 +36,7 @@ func NewContentArticleClient(
 	}
 }
 
-func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo.CreateDraftArticleReq) (*repo.ArticleDetail, error) {
+func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo.CreateDraftArticleReq) (int64, error) {
 	save := &contentv1.CreateDraftArticle_Req_Article{}
 	if req != nil && req.Article != nil {
 		article := req.Article
@@ -56,21 +56,12 @@ func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo
 		},
 	})
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	item := reply.GetArticle()
-	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
-	if err != nil {
-		return nil, err
-	}
-	profiles, err := r.loadAccountProfiles(ctx, r.articleProfileIDs(item, lastComments[item.GetId()])...)
-	if err != nil {
-		return nil, err
-	}
-	return r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()]), nil
+	return reply.GetArticleId(), nil
 }
 
-func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo.UpdateDraftArticleReq) (*repo.ArticleDetail, error) {
+func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo.UpdateDraftArticleReq) (int64, error) {
 	save := &contentv1.UpdateDraftArticle_Req_Article{}
 	if req != nil && req.Article != nil {
 		article := req.Article
@@ -91,18 +82,9 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 		},
 	})
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
-	item := reply.GetArticle()
-	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
-	if err != nil {
-		return nil, err
-	}
-	profiles, err := r.loadAccountProfiles(ctx, r.articleProfileIDs(item, lastComments[item.GetId()])...)
-	if err != nil {
-		return nil, err
-	}
-	return r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()]), nil
+	return reply.GetArticleId(), nil
 }
 
 func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.PublishArticleReq) error {

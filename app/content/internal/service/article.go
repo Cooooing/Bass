@@ -80,42 +80,7 @@ func (s *ArticleService) CreateDraft(ctx context.Context, req *v1.CreateDraftArt
 	if err != nil {
 		return nil, err
 	}
-	article := &v1.Article{
-		Id:            row.ID,
-		Title:         row.Title,
-		Content:       row.Content,
-		RewardContent: row.RewardContent,
-		RewardPoints:  row.RewardPoints,
-		HasPostscript: row.HasPostscript,
-		HasReward:     row.RewardPoints != nil,
-		Type:          enum.ArticleTypeMap.MustToProto(row.Type),
-		Statement:     row.Statement,
-		Commentable:   row.Commentable,
-		PublishStatus: enum.ArticlePublishStatusMap.MustToProto(row.PublishStatus),
-		Visibility:    enum.ArticleVisibilityMap.MustToProto(row.Visibility),
-		Restriction:   enum.ContentRestrictionMap.MustToProto(row.Restriction),
-		ViewCount:     row.ViewCount,
-		ThankCount:    row.ThankCount,
-		LikeCount:     row.LikeCount,
-		CollectCount:  row.CollectCount,
-		RewardCount:   row.RewardCount,
-		ReplyCount:    row.ReplyCount,
-		CreatedBy:     row.CreatedBy,
-		UpdatedBy:     row.UpdatedBy,
-	}
-	if row.CreatedAt != nil {
-		article.CreatedAt = timestamppb.New(*row.CreatedAt)
-	}
-	if row.UpdatedAt != nil {
-		article.UpdatedAt = timestamppb.New(*row.UpdatedAt)
-	}
-	if row.PublishedAt != nil {
-		article.PublishedAt = timestamppb.New(*row.PublishedAt)
-	}
-	if row.EditedAt != nil {
-		article.EditedAt = timestamppb.New(*row.EditedAt)
-	}
-	return &v1.CreateDraftArticle_Resp{Article: article}, nil
+	return &v1.CreateDraftArticle_Resp{ArticleId: row.ID}, nil
 }
 
 func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArticle_Req) (*v1.UpdateDraftArticle_Resp, error) {
@@ -161,42 +126,7 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArt
 	if err != nil {
 		return nil, err
 	}
-	article := &v1.Article{
-		Id:            row.ID,
-		Title:         row.Title,
-		Content:       row.Content,
-		RewardContent: row.RewardContent,
-		RewardPoints:  row.RewardPoints,
-		HasPostscript: row.HasPostscript,
-		HasReward:     row.RewardPoints != nil,
-		Type:          enum.ArticleTypeMap.MustToProto(row.Type),
-		Statement:     row.Statement,
-		Commentable:   row.Commentable,
-		PublishStatus: enum.ArticlePublishStatusMap.MustToProto(row.PublishStatus),
-		Visibility:    enum.ArticleVisibilityMap.MustToProto(row.Visibility),
-		Restriction:   enum.ContentRestrictionMap.MustToProto(row.Restriction),
-		ViewCount:     row.ViewCount,
-		ThankCount:    row.ThankCount,
-		LikeCount:     row.LikeCount,
-		CollectCount:  row.CollectCount,
-		RewardCount:   row.RewardCount,
-		ReplyCount:    row.ReplyCount,
-		CreatedBy:     row.CreatedBy,
-		UpdatedBy:     row.UpdatedBy,
-	}
-	if row.CreatedAt != nil {
-		article.CreatedAt = timestamppb.New(*row.CreatedAt)
-	}
-	if row.UpdatedAt != nil {
-		article.UpdatedAt = timestamppb.New(*row.UpdatedAt)
-	}
-	if row.PublishedAt != nil {
-		article.PublishedAt = timestamppb.New(*row.PublishedAt)
-	}
-	if row.EditedAt != nil {
-		article.EditedAt = timestamppb.New(*row.EditedAt)
-	}
-	return &v1.UpdateDraftArticle_Resp{Article: article}, nil
+	return &v1.UpdateDraftArticle_Resp{ArticleId: row.ID}, nil
 }
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req) (*v1.PublishArticle_Resp, error) {

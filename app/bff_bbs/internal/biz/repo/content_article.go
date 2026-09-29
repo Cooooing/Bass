@@ -218,8 +218,8 @@ type RewardArticleReq struct {
 }
 
 type ContentArticleClient interface {
-	CreateDraftArticle(ctx context.Context, req *CreateDraftArticleReq) (*ArticleDetail, error)
-	UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (*ArticleDetail, error)
+	CreateDraftArticle(ctx context.Context, req *CreateDraftArticleReq) (int64, error)
+	UpdateDraftArticle(ctx context.Context, req *UpdateDraftArticleReq) (int64, error)
 	PublishArticle(ctx context.Context, req *PublishArticleReq) error
 	CancelPublishArticle(ctx context.Context, req *CancelPublishArticleReq) error
 	DiscardDraftArticle(ctx context.Context, req *DiscardDraftArticleReq) error

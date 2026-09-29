@@ -23,16 +23,24 @@ BUF ?= buf
 .PHONY: init
 init:
 	@echo "[init] installing pinned development tools..."
-	@go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11
-	@go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1
-	@go install github.com/go-kratos/kratos/cmd/kratos/v3@v3.0.0
-	@go install github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v3@v3.0.0
-	@go install github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v3@v3.0.0
-	@go install github.com/envoyproxy/protoc-gen-validate@v1.3.3
-	@go install github.com/google/gnostic/cmd/protoc-gen-openapi@v0.7.1
-	@go install github.com/google/wire/cmd/wire@v0.7.0
-	@go install entgo.io/ent/cmd/ent@v0.14.5
-	@go install github.com/bufbuild/buf/cmd/buf@v1.50.0
+	@set -e; \
+	for tool in \
+		google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.11 \
+		google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1 \
+		github.com/go-kratos/kratos/cmd/kratos/v2@v2.0.0-20260404020628-f149714c1d54 \
+		github.com/go-kratos/kratos/cmd/protoc-gen-go-http/v2@v2.0.0-20260404020628-f149714c1d54 \
+		github.com/go-kratos/kratos/cmd/protoc-gen-go-errors/v2@v2.0.0-20260404020628-f149714c1d54 \
+		github.com/envoyproxy/protoc-gen-validate@v1.3.3 \
+		github.com/google/gnostic/cmd/protoc-gen-openapi@v0.7.1 \
+		github.com/google/wire/cmd/wire@v0.7.0 \
+		entgo.io/ent/cmd/ent@v0.14.5 \
+		github.com/bufbuild/buf/cmd/buf@v1.50.0; do \
+		for attempt in 1 2 3; do \
+			if go install "$$tool"; then break; fi; \
+			if [ "$$attempt" -eq 3 ]; then exit 1; fi; \
+			sleep "$$attempt"; \
+		done; \
+	done
 
 .PHONY: api-clean
 api-clean:

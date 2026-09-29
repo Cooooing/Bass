@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **UserId** | Pointer to **string** |  | [optional] 
 **PublicPoints** | Pointer to **bool** |  | [optional] 
 **PublicFollowers** | Pointer to **bool** |  | [optional] 
+**PublicFollowing** | Pointer to **bool** |  | [optional] 
 **PublicArticles** | Pointer to **bool** |  | [optional] 
 **PublicComments** | Pointer to **bool** |  | [optional] 
 **PublicOnlineStatus** | Pointer to **bool** |  | [optional] 
@@ -105,6 +106,31 @@ SetPublicFollowers sets PublicFollowers field to given value.
 `func (o *RespPrivacySetting) HasPublicFollowers() bool`
 
 HasPublicFollowers returns a boolean if a field has been set.
+
+### GetPublicFollowing
+
+`func (o *RespPrivacySetting) GetPublicFollowing() bool`
+
+GetPublicFollowing returns the PublicFollowing field if non-nil, zero value otherwise.
+
+### GetPublicFollowingOk
+
+`func (o *RespPrivacySetting) GetPublicFollowingOk() (*bool, bool)`
+
+GetPublicFollowingOk returns a tuple with the PublicFollowing field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPublicFollowing
+
+`func (o *RespPrivacySetting) SetPublicFollowing(v bool)`
+
+SetPublicFollowing sets PublicFollowing field to given value.
+
+### HasPublicFollowing
+
+`func (o *RespPrivacySetting) HasPublicFollowing() bool`
+
+HasPublicFollowing returns a boolean if a field has been set.
 
 ### GetPublicArticles
 

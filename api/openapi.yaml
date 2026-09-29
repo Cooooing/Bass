@@ -224,25 +224,6 @@ paths:
           description: OK
       tags:
       - ArticleService
-  /v1/content/article/publish/schedule:
-    post:
-      description: 设置定时发布
-      operationId: ArticleService_SchedulePublish
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/SchedulePublishArticle_Req"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/SchedulePublishArticle_Resp"
-          description: OK
-      tags:
-      - ArticleService
   /v1/content/article/reward:
     post:
       description: 打赏文章
@@ -722,20 +703,58 @@ paths:
       - AccountService
   /v1/user/account/get-profile:
     post:
-      description: 按账号 ID 获取展示资料
+      description: 按账号名获取个人主页资料。
       operationId: AccountService_GetProfile
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetProfileAccount_Req"
+              $ref: "#/components/schemas/GetProfile_Req"
         required: true
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetProfileAccount_Resp"
+                $ref: "#/components/schemas/GetProfile_Resp"
+          description: OK
+      tags:
+      - AccountService
+  /v1/user/account/list-followers:
+    post:
+      description: 查询账号公开的粉丝列表。
+      operationId: AccountService_ListFollowers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListFollowers_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListFollowers_Resp"
+          description: OK
+      tags:
+      - AccountService
+  /v1/user/account/list-following:
+    post:
+      description: 查询账号公开的关注列表。
+      operationId: AccountService_ListFollowing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListFollowing_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListFollowing_Resp"
           description: OK
       tags:
       - AccountService
@@ -1378,16 +1397,17 @@ components:
       type: object
     AccountProfile:
       example:
+        created_at: 2000-01-23T04:56:07.000+00:00
+        background_asset_id: background_asset_id
+        follower_count: 3
+        url: url
         avatar_url: avatar_url
         updated_at: 2000-01-23T04:56:07.000+00:00
         follow_count: 9
         name: name
         nickname: nickname
         mbti: MBTI_UNSPECIFIED
-        created_at: 2000-01-23T04:56:07.000+00:00
         id: id
-        follower_count: 3
-        url: url
         introduction: introduction
         status: ACCOUNT_STATUS_UNSPECIFIED
       properties:
@@ -1400,6 +1420,8 @@ components:
         url:
           type: string
         avatar_url:
+          type: string
+        background_asset_id:
           type: string
         introduction:
           type: string
@@ -1444,6 +1466,33 @@ components:
         updated_at:
           format: date-time
           type: string
+      type: object
+    AccountProfileListItem:
+      example:
+        viewer_relation:
+          followed_by: true
+          blocking: true
+          blocked_by: true
+          following: true
+        account:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
+          avatar_url: avatar_url
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          follow_count: 9
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          id: id
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+      properties:
+        account:
+          $ref: "#/components/schemas/AccountProfile"
+        viewer_relation:
+          $ref: "#/components/schemas/ProfileRelation"
       type: object
     AddPostscript_Req:
       properties:
@@ -1493,16 +1542,17 @@ components:
         content: content
         reward_content: reward_content
         last_reply_user:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
           follow_count: 9
           name: name
           nickname: nickname
           mbti: MBTI_UNSPECIFIED
-          created_at: 2000-01-23T04:56:07.000+00:00
           id: id
-          follower_count: 3
-          url: url
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
         last_reply_at: 2000-01-23T04:56:07.000+00:00
@@ -1573,16 +1623,17 @@ components:
         restriction: CONTENT_RESTRICTION_UNSPECIFIED
         updated_by: updated_by
         author_user:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
           follow_count: 9
           name: name
           nickname: nickname
           mbti: MBTI_UNSPECIFIED
-          created_at: 2000-01-23T04:56:07.000+00:00
           id: id
-          follower_count: 3
-          url: url
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
         view_count: 6
@@ -1662,7 +1713,6 @@ components:
           - ARTICLE_PUBLISH_STATUS_DRAFT
           - ARTICLE_PUBLISH_STATUS_PUBLISHED
           - ARTICLE_PUBLISH_STATUS_ARCHIVED
-          - ARTICLE_PUBLISH_STATUS_SCHEDULED
           format: enum
           type: string
         visibility:
@@ -1729,16 +1779,17 @@ components:
         type: ARTICLE_TYPE_UNSPECIFIED
         content: content
         last_reply_user:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
           follow_count: 9
           name: name
           nickname: nickname
           mbti: MBTI_UNSPECIFIED
-          created_at: 2000-01-23T04:56:07.000+00:00
           id: id
-          follower_count: 3
-          url: url
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
         last_reply_at: 2000-01-23T04:56:07.000+00:00
@@ -1789,16 +1840,17 @@ components:
         restriction: CONTENT_RESTRICTION_UNSPECIFIED
         updated_by: updated_by
         author_user:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
           follow_count: 9
           name: name
           nickname: nickname
           mbti: MBTI_UNSPECIFIED
-          created_at: 2000-01-23T04:56:07.000+00:00
           id: id
-          follower_count: 3
-          url: url
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
         view_count: 5
@@ -1867,7 +1919,6 @@ components:
           - ARTICLE_PUBLISH_STATUS_DRAFT
           - ARTICLE_PUBLISH_STATUS_PUBLISHED
           - ARTICLE_PUBLISH_STATUS_ARCHIVED
-          - ARTICLE_PUBLISH_STATUS_SCHEDULED
           format: enum
           type: string
         visibility:
@@ -2239,111 +2290,10 @@ components:
       type: object
     CreateDraftArticle_Resp:
       example:
-        article:
-          reward_content_render: reward_content_render
-          cover_image_url: cover_image_url
-          created_at: 2000-01-23T04:56:07.000+00:00
-          title: title
-          type: ARTICLE_TYPE_UNSPECIFIED
-          content: content
-          reward_content: reward_content
-          last_reply_user:
-            avatar_url: avatar_url
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            follower_count: 3
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          last_reply_at: 2000-01-23T04:56:07.000+00:00
-          updated_at: 2000-01-23T04:56:07.000+00:00
-          statement: statement
-          edited_at: 2000-01-23T04:56:07.000+00:00
-          id: id
-          published_at: 2000-01-23T04:56:07.000+00:00
-          has_reward: true
-          commentable: true
-          thank_count: 1
-          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
-          reward_count: 2
-          like_count: 5
-          viewer_action_state:
-            rewarded: true
-            collected: true
-            thanked: true
-            liked: true
-          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
-          has_postscript: true
-          postscripts:
-          - article_id: article_id
-            content_render: content_render
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            restriction: CONTENT_RESTRICTION_UNSPECIFIED
-            updated_by: updated_by
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            created_by: created_by
-            content: content
-          - article_id: article_id
-            content_render: content_render
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            restriction: CONTENT_RESTRICTION_UNSPECIFIED
-            updated_by: updated_by
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            created_by: created_by
-            content: content
-          domains:
-          - code: code
-            name: name
-            icon: icon
-            id: id
-            url: url
-          - code: code
-            name: name
-            icon: icon
-            id: id
-            url: url
-          reply_count: 7
-          created_by: created_by
-          reward_points: 0
-          collect_count: 5
-          tags:
-          - domain_id: domain_id
-            code: code
-            name: name
-            icon: icon
-            id: id
-          - domain_id: domain_id
-            code: code
-            name: name
-            icon: icon
-            id: id
-          content_render: content_render
-          restriction: CONTENT_RESTRICTION_UNSPECIFIED
-          updated_by: updated_by
-          author_user:
-            avatar_url: avatar_url
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            follower_count: 3
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          view_count: 6
+        article_id: article_id
       properties:
-        article:
-          $ref: "#/components/schemas/ArticleDetail"
+        article_id:
+          type: string
       type: object
     CreateTag_Req:
       properties:
@@ -2406,6 +2356,14 @@ components:
       properties:
         article_id:
           type: string
+        publish_status:
+          enum:
+          - ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          - ARTICLE_PUBLISH_STATUS_DRAFT
+          - ARTICLE_PUBLISH_STATUS_PUBLISHED
+          - ARTICLE_PUBLISH_STATUS_ARCHIVED
+          format: enum
+          type: string
       required:
       - article_id
       type: object
@@ -2420,16 +2378,17 @@ components:
           content: content
           reward_content: reward_content
           last_reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
             follow_count: 9
             name: name
             nickname: nickname
             mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 3
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           last_reply_at: 2000-01-23T04:56:07.000+00:00
@@ -2500,16 +2459,17 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
             follow_count: 9
             name: name
             nickname: nickname
             mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 3
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           view_count: 6
@@ -2564,16 +2524,17 @@ components:
       example:
         account:
           profile:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
             follow_count: 9
             name: name
             nickname: nickname
             mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 3
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           contact:
@@ -2623,6 +2584,7 @@ components:
           public_points: true
           user_id: user_id
           public_location: true
+          public_following: true
           public_articles: true
           public_comments: true
           public_online_status: true
@@ -2643,31 +2605,49 @@ components:
         totp:
           $ref: "#/components/schemas/Resp_Totp"
       type: object
-    GetProfileAccount_Req:
+    GetProfile_Req:
       properties:
-        user_id:
+        name:
           type: string
       required:
-      - user_id
+      - name
       type: object
-    GetProfileAccount_Resp:
+    GetProfile_Resp:
       example:
         profile:
-          avatar_url: avatar_url
-          updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
-          name: name
-          nickname: nickname
-          mbti: MBTI_UNSPECIFIED
-          created_at: 2000-01-23T04:56:07.000+00:00
-          id: id
-          follower_count: 3
-          url: url
-          introduction: introduction
-          status: ACCOUNT_STATUS_UNSPECIFIED
+          viewer_relation:
+            followed_by: true
+            blocking: true
+            blocked_by: true
+            following: true
+          last_success_login_at: 2000-01-23T04:56:07.000+00:00
+          visibility:
+            comments: true
+            followers: true
+            following: true
+            articles: true
+          background_url: background_url
+          location:
+            country: country
+            province: province
+            city: city
+          account:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 9
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
       properties:
         profile:
-          $ref: "#/components/schemas/AccountProfile"
+          $ref: "#/components/schemas/Profile"
       type: object
     GetStatusRelation_Req:
       properties:
@@ -2797,16 +2777,17 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
             follow_count: 9
             name: name
             nickname: nickname
             mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 3
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           last_reply_at: 2000-01-23T04:56:07.000+00:00
@@ -2857,16 +2838,17 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
             follow_count: 9
             name: name
             nickname: nickname
             mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 3
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           view_count: 5
@@ -2876,16 +2858,17 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
             follow_count: 9
             name: name
             nickname: nickname
             mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 3
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           last_reply_at: 2000-01-23T04:56:07.000+00:00
@@ -2936,16 +2919,17 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
             follow_count: 9
             name: name
             nickname: nickname
             mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 3
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           view_count: 5
@@ -4041,6 +4025,68 @@ components:
             $ref: "#/components/schemas/Resp_Relation"
           type: array
       type: object
+    ListFollowers_Req:
+      properties:
+        name:
+          type: string
+        page:
+          $ref: "#/components/schemas/PageReq"
+      required:
+      - name
+      type: object
+    ListFollowers_Resp:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - viewer_relation:
+            followed_by: true
+            blocking: true
+            blocked_by: true
+            following: true
+          account:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 9
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+        - viewer_relation:
+            followed_by: true
+            blocking: true
+            blocked_by: true
+            following: true
+          account:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 9
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+      properties:
+        page:
+          $ref: "#/components/schemas/PageResp"
+        rows:
+          items:
+            $ref: "#/components/schemas/AccountProfileListItem"
+          type: array
+      type: object
     ListFollowingRelations_Req:
       properties:
         page:
@@ -4071,6 +4117,68 @@ components:
         rows:
           items:
             $ref: "#/components/schemas/Resp_Relation"
+          type: array
+      type: object
+    ListFollowing_Req:
+      properties:
+        name:
+          type: string
+        page:
+          $ref: "#/components/schemas/PageReq"
+      required:
+      - name
+      type: object
+    ListFollowing_Resp:
+      example:
+        page:
+          total: 0
+          size: 1
+          page: 6
+        rows:
+        - viewer_relation:
+            followed_by: true
+            blocking: true
+            blocked_by: true
+            following: true
+          account:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 9
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+        - viewer_relation:
+            followed_by: true
+            blocking: true
+            blocked_by: true
+            following: true
+          account:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 9
+            name: name
+            nickname: nickname
+            mbti: MBTI_UNSPECIFIED
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+      properties:
+        page:
+          $ref: "#/components/schemas/PageResp"
+        rows:
+          items:
+            $ref: "#/components/schemas/AccountProfileListItem"
           type: array
       type: object
     ListNotifications_Req:
@@ -4307,16 +4415,104 @@ components:
           format: uint32
           type: integer
       type: object
+    Profile:
+      example:
+        viewer_relation:
+          followed_by: true
+          blocking: true
+          blocked_by: true
+          following: true
+        last_success_login_at: 2000-01-23T04:56:07.000+00:00
+        visibility:
+          comments: true
+          followers: true
+          following: true
+          articles: true
+        background_url: background_url
+        location:
+          country: country
+          province: province
+          city: city
+        account:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
+          avatar_url: avatar_url
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          follow_count: 9
+          name: name
+          nickname: nickname
+          mbti: MBTI_UNSPECIFIED
+          id: id
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+      properties:
+        account:
+          $ref: "#/components/schemas/AccountProfile"
+        background_url:
+          type: string
+        location:
+          $ref: "#/components/schemas/ProfileLocation"
+        last_success_login_at:
+          format: date-time
+          type: string
+        visibility:
+          $ref: "#/components/schemas/ProfileVisibility"
+        viewer_relation:
+          $ref: "#/components/schemas/ProfileRelation"
+      type: object
+    ProfileLocation:
+      example:
+        country: country
+        province: province
+        city: city
+      properties:
+        country:
+          type: string
+        province:
+          type: string
+        city:
+          type: string
+      type: object
+    ProfileRelation:
+      example:
+        followed_by: true
+        blocking: true
+        blocked_by: true
+        following: true
+      properties:
+        following:
+          type: boolean
+        followed_by:
+          type: boolean
+        blocking:
+          type: boolean
+        blocked_by:
+          type: boolean
+      type: object
+    ProfileVisibility:
+      example:
+        comments: true
+        followers: true
+        following: true
+        articles: true
+      properties:
+        articles:
+          type: boolean
+        comments:
+          type: boolean
+        followers:
+          type: boolean
+        following:
+          type: boolean
+      type: object
     PublishArticle_Req:
       properties:
         article_id:
           type: string
-        visibility:
-          enum:
-          - ARTICLE_VISIBILITY_UNSPECIFIED
-          - ARTICLE_VISIBILITY_PUBLIC
-          - ARTICLE_VISIBILITY_PRIVATE
-          format: enum
+        scheduled_at:
+          format: date-time
           type: string
       required:
       - article_id
@@ -4443,7 +4639,6 @@ components:
           - ARTICLE_PUBLISH_STATUS_DRAFT
           - ARTICLE_PUBLISH_STATUS_PUBLISHED
           - ARTICLE_PUBLISH_STATUS_ARCHIVED
-          - ARTICLE_PUBLISH_STATUS_SCHEDULED
           format: enum
           type: string
         publish_statuses:
@@ -4453,7 +4648,6 @@ components:
             - ARTICLE_PUBLISH_STATUS_DRAFT
             - ARTICLE_PUBLISH_STATUS_PUBLISHED
             - ARTICLE_PUBLISH_STATUS_ARCHIVED
-            - ARTICLE_PUBLISH_STATUS_SCHEDULED
             format: enum
             type: string
           type: array
@@ -4491,6 +4685,8 @@ components:
             format: enum
             type: string
           type: array
+        scheduled:
+          type: boolean
       type: object
     Req_CommentQuery:
       properties:
@@ -4890,7 +5086,6 @@ components:
           - ARTICLE_PUBLISH_STATUS_DRAFT
           - ARTICLE_PUBLISH_STATUS_PUBLISHED
           - ARTICLE_PUBLISH_STATUS_ARCHIVED
-          - ARTICLE_PUBLISH_STATUS_SCHEDULED
           format: enum
           type: string
         visibility:
@@ -5415,16 +5610,17 @@ components:
     Resp_CurrentAccount:
       example:
         profile:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
           follow_count: 9
           name: name
           nickname: nickname
           mbti: MBTI_UNSPECIFIED
-          created_at: 2000-01-23T04:56:07.000+00:00
           id: id
-          follower_count: 3
-          url: url
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
         contact:
@@ -5604,6 +5800,7 @@ components:
         public_points: true
         user_id: user_id
         public_location: true
+        public_following: true
         public_articles: true
         public_comments: true
         public_online_status: true
@@ -5613,6 +5810,8 @@ components:
         public_points:
           type: boolean
         public_followers:
+          type: boolean
+        public_following:
           type: boolean
         public_articles:
           type: boolean
@@ -5798,20 +5997,6 @@ components:
     RewardArticle_Resp:
       properties: {}
       type: object
-    SchedulePublishArticle_Req:
-      properties:
-        article_id:
-          type: string
-        publish_at:
-          format: date-time
-          type: string
-      required:
-      - article_id
-      - publish_at
-      type: object
-    SchedulePublishArticle_Resp:
-      properties: {}
-      type: object
     SendEmailOtp_Req:
       properties:
         email:
@@ -5944,6 +6129,8 @@ components:
           type: boolean
         public_followers:
           type: boolean
+        public_following:
+          type: boolean
         public_articles:
           type: boolean
         public_comments:
@@ -5960,6 +6147,7 @@ components:
           public_points: true
           user_id: user_id
           public_location: true
+          public_following: true
           public_articles: true
           public_comments: true
           public_online_status: true
@@ -6009,111 +6197,10 @@ components:
       type: object
     UpdateDraftArticle_Resp:
       example:
-        article:
-          reward_content_render: reward_content_render
-          cover_image_url: cover_image_url
-          created_at: 2000-01-23T04:56:07.000+00:00
-          title: title
-          type: ARTICLE_TYPE_UNSPECIFIED
-          content: content
-          reward_content: reward_content
-          last_reply_user:
-            avatar_url: avatar_url
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            follower_count: 3
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          last_reply_at: 2000-01-23T04:56:07.000+00:00
-          updated_at: 2000-01-23T04:56:07.000+00:00
-          statement: statement
-          edited_at: 2000-01-23T04:56:07.000+00:00
-          id: id
-          published_at: 2000-01-23T04:56:07.000+00:00
-          has_reward: true
-          commentable: true
-          thank_count: 1
-          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
-          reward_count: 2
-          like_count: 5
-          viewer_action_state:
-            rewarded: true
-            collected: true
-            thanked: true
-            liked: true
-          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
-          has_postscript: true
-          postscripts:
-          - article_id: article_id
-            content_render: content_render
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            restriction: CONTENT_RESTRICTION_UNSPECIFIED
-            updated_by: updated_by
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            created_by: created_by
-            content: content
-          - article_id: article_id
-            content_render: content_render
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            restriction: CONTENT_RESTRICTION_UNSPECIFIED
-            updated_by: updated_by
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            created_by: created_by
-            content: content
-          domains:
-          - code: code
-            name: name
-            icon: icon
-            id: id
-            url: url
-          - code: code
-            name: name
-            icon: icon
-            id: id
-            url: url
-          reply_count: 7
-          created_by: created_by
-          reward_points: 0
-          collect_count: 5
-          tags:
-          - domain_id: domain_id
-            code: code
-            name: name
-            icon: icon
-            id: id
-          - domain_id: domain_id
-            code: code
-            name: name
-            icon: icon
-            id: id
-          content_render: content_render
-          restriction: CONTENT_RESTRICTION_UNSPECIFIED
-          updated_by: updated_by
-          author_user:
-            avatar_url: avatar_url
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
-            name: name
-            nickname: nickname
-            mbti: MBTI_UNSPECIFIED
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            follower_count: 3
-            url: url
-            introduction: introduction
-            status: ACCOUNT_STATUS_UNSPECIFIED
-          view_count: 6
+        article_id: article_id
       properties:
-        article:
-          $ref: "#/components/schemas/ArticleDetail"
+        article_id:
+          type: string
       type: object
     UpdateEmailAccount_Req:
       properties:
@@ -6158,6 +6245,8 @@ components:
       properties:
         avatar_asset_id:
           type: string
+        background_asset_id:
+          type: string
         nickname:
           type: string
         url:
@@ -6189,16 +6278,17 @@ components:
     UpdateProfileAccount_Resp:
       example:
         profile:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
           follow_count: 9
           name: name
           nickname: nickname
           mbti: MBTI_UNSPECIFIED
-          created_at: 2000-01-23T04:56:07.000+00:00
           id: id
-          follower_count: 3
-          url: url
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
       properties:

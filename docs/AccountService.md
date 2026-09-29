@@ -7,6 +7,8 @@ Method | HTTP request | Description
 [**Avatar**](AccountService.md#Avatar) | **Get** /v1/user/account/avatar | 
 [**GetCurrent**](AccountService.md#GetCurrent) | **Post** /v1/user/account/get-current | 
 [**GetProfile**](AccountService.md#GetProfile) | **Post** /v1/user/account/get-profile | 
+[**ListFollowers**](AccountService.md#ListFollowers) | **Post** /v1/user/account/list-followers | 
+[**ListFollowing**](AccountService.md#ListFollowing) | **Post** /v1/user/account/list-following | 
 [**UpdateEmail**](AccountService.md#UpdateEmail) | **Post** /v1/user/account/update-email | 
 [**UpdatePassword**](AccountService.md#UpdatePassword) | **Post** /v1/user/account/update-password | 
 [**UpdatePhone**](AccountService.md#UpdatePhone) | **Post** /v1/user/account/update-phone | 
@@ -148,7 +150,7 @@ No authorization required
 
 ## GetProfile
 
-> GetProfileAccountResp GetProfile(ctx).GetProfileAccountReq(getProfileAccountReq).Execute()
+> GetProfileResp GetProfile(ctx).GetProfileReq(getProfileReq).Execute()
 
 
 
@@ -167,16 +169,16 @@ import (
 )
 
 func main() {
-	getProfileAccountReq := *openapiclient.NewGetProfileAccountReq("UserId_example") // GetProfileAccountReq | 
+	getProfileReq := *openapiclient.NewGetProfileReq("Name_example") // GetProfileReq | 
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AccountService.GetProfile(context.Background()).GetProfileAccountReq(getProfileAccountReq).Execute()
+	resp, r, err := apiClient.AccountService.GetProfile(context.Background()).GetProfileReq(getProfileReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.GetProfile``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetProfile`: GetProfileAccountResp
+	// response from `GetProfile`: GetProfileResp
 	fmt.Fprintf(os.Stdout, "Response from `AccountService.GetProfile`: %v\n", resp)
 }
 ```
@@ -192,11 +194,143 @@ Other parameters are passed through a pointer to a apiGetProfileRequest struct v
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **getProfileAccountReq** | [**GetProfileAccountReq**](GetProfileAccountReq.md) |  | 
+ **getProfileReq** | [**GetProfileReq**](GetProfileReq.md) |  | 
 
 ### Return type
 
-[**GetProfileAccountResp**](GetProfileAccountResp.md)
+[**GetProfileResp**](GetProfileResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListFollowers
+
+> ListFollowersResp ListFollowers(ctx).ListFollowersReq(listFollowersReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	listFollowersReq := *openapiclient.NewListFollowersReq("Name_example") // ListFollowersReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.ListFollowers(context.Background()).ListFollowersReq(listFollowersReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.ListFollowers``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListFollowers`: ListFollowersResp
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.ListFollowers`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListFollowersRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **listFollowersReq** | [**ListFollowersReq**](ListFollowersReq.md) |  | 
+
+### Return type
+
+[**ListFollowersResp**](ListFollowersResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListFollowing
+
+> ListFollowingResp ListFollowing(ctx).ListFollowingReq(listFollowingReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	listFollowingReq := *openapiclient.NewListFollowingReq("Name_example") // ListFollowingReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.ListFollowing(context.Background()).ListFollowingReq(listFollowingReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.ListFollowing``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListFollowing`: ListFollowingResp
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.ListFollowing`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListFollowingRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **listFollowingReq** | [**ListFollowingReq**](ListFollowingReq.md) |  | 
+
+### Return type
+
+[**ListFollowingResp**](ListFollowingResp.md)
 
 ### Authorization
 

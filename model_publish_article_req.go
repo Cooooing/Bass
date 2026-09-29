@@ -12,6 +12,7 @@ package bbs
 
 import (
 	"encoding/json"
+	"time"
 	"bytes"
 	"fmt"
 )
@@ -22,7 +23,7 @@ var _ MappedNullable = &PublishArticleReq{}
 // PublishArticleReq struct for PublishArticleReq
 type PublishArticleReq struct {
 	ArticleId string `json:"article_id"`
-	Visibility *string `json:"visibility,omitempty"`
+	ScheduledAt *time.Time `json:"scheduled_at,omitempty"`
 }
 
 type _PublishArticleReq PublishArticleReq
@@ -69,36 +70,36 @@ func (o *PublishArticleReq) SetArticleId(v string) {
 	o.ArticleId = v
 }
 
-// GetVisibility returns the Visibility field value if set, zero value otherwise.
-func (o *PublishArticleReq) GetVisibility() string {
-	if o == nil || IsNil(o.Visibility) {
-		var ret string
+// GetScheduledAt returns the ScheduledAt field value if set, zero value otherwise.
+func (o *PublishArticleReq) GetScheduledAt() time.Time {
+	if o == nil || IsNil(o.ScheduledAt) {
+		var ret time.Time
 		return ret
 	}
-	return *o.Visibility
+	return *o.ScheduledAt
 }
 
-// GetVisibilityOk returns a tuple with the Visibility field value if set, nil otherwise
+// GetScheduledAtOk returns a tuple with the ScheduledAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PublishArticleReq) GetVisibilityOk() (*string, bool) {
-	if o == nil || IsNil(o.Visibility) {
+func (o *PublishArticleReq) GetScheduledAtOk() (*time.Time, bool) {
+	if o == nil || IsNil(o.ScheduledAt) {
 		return nil, false
 	}
-	return o.Visibility, true
+	return o.ScheduledAt, true
 }
 
-// HasVisibility returns a boolean if a field has been set.
-func (o *PublishArticleReq) HasVisibility() bool {
-	if o != nil && !IsNil(o.Visibility) {
+// HasScheduledAt returns a boolean if a field has been set.
+func (o *PublishArticleReq) HasScheduledAt() bool {
+	if o != nil && !IsNil(o.ScheduledAt) {
 		return true
 	}
 
 	return false
 }
 
-// SetVisibility gets a reference to the given string and assigns it to the Visibility field.
-func (o *PublishArticleReq) SetVisibility(v string) {
-	o.Visibility = &v
+// SetScheduledAt gets a reference to the given time.Time and assigns it to the ScheduledAt field.
+func (o *PublishArticleReq) SetScheduledAt(v time.Time) {
+	o.ScheduledAt = &v
 }
 
 func (o PublishArticleReq) MarshalJSON() ([]byte, error) {
@@ -112,8 +113,8 @@ func (o PublishArticleReq) MarshalJSON() ([]byte, error) {
 func (o PublishArticleReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["article_id"] = o.ArticleId
-	if !IsNil(o.Visibility) {
-		toSerialize["visibility"] = o.Visibility
+	if !IsNil(o.ScheduledAt) {
+		toSerialize["scheduled_at"] = o.ScheduledAt
 	}
 	return toSerialize, nil
 }

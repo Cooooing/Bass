@@ -22,6 +22,7 @@ var _ MappedNullable = &GetArticleReq{}
 // GetArticleReq struct for GetArticleReq
 type GetArticleReq struct {
 	ArticleId string `json:"article_id"`
+	PublishStatus *string `json:"publish_status,omitempty"`
 }
 
 type _GetArticleReq GetArticleReq
@@ -68,6 +69,38 @@ func (o *GetArticleReq) SetArticleId(v string) {
 	o.ArticleId = v
 }
 
+// GetPublishStatus returns the PublishStatus field value if set, zero value otherwise.
+func (o *GetArticleReq) GetPublishStatus() string {
+	if o == nil || IsNil(o.PublishStatus) {
+		var ret string
+		return ret
+	}
+	return *o.PublishStatus
+}
+
+// GetPublishStatusOk returns a tuple with the PublishStatus field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GetArticleReq) GetPublishStatusOk() (*string, bool) {
+	if o == nil || IsNil(o.PublishStatus) {
+		return nil, false
+	}
+	return o.PublishStatus, true
+}
+
+// HasPublishStatus returns a boolean if a field has been set.
+func (o *GetArticleReq) HasPublishStatus() bool {
+	if o != nil && !IsNil(o.PublishStatus) {
+		return true
+	}
+
+	return false
+}
+
+// SetPublishStatus gets a reference to the given string and assigns it to the PublishStatus field.
+func (o *GetArticleReq) SetPublishStatus(v string) {
+	o.PublishStatus = &v
+}
+
 func (o GetArticleReq) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -79,6 +112,9 @@ func (o GetArticleReq) MarshalJSON() ([]byte, error) {
 func (o GetArticleReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["article_id"] = o.ArticleId
+	if !IsNil(o.PublishStatus) {
+		toSerialize["publish_status"] = o.PublishStatus
+	}
 	return toSerialize, nil
 }
 

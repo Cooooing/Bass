@@ -14,7 +14,6 @@ Method | HTTP request | Description
 [**List**](ArticleService.md#List) | **Post** /v1/content/article/list | 
 [**Publish**](ArticleService.md#Publish) | **Post** /v1/content/article/publish | 
 [**Reward**](ArticleService.md#Reward) | **Post** /v1/content/article/reward | 
-[**SchedulePublish**](ArticleService.md#SchedulePublish) | **Post** /v1/content/article/publish/schedule | 
 [**Thank**](ArticleService.md#Thank) | **Post** /v1/content/article/thank | 
 [**UpdateDraft**](ArticleService.md#UpdateDraft) | **Post** /v1/content/article/draft/update | 
 
@@ -661,73 +660,6 @@ Other parameters are passed through a pointer to a apiRewardRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **rewardArticleReq** | [**RewardArticleReq**](RewardArticleReq.md) |  | 
-
-### Return type
-
-**map[string]interface{}**
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## SchedulePublish
-
-> map[string]interface{} SchedulePublish(ctx).SchedulePublishArticleReq(schedulePublishArticleReq).Execute()
-
-
-
-
-
-### Example
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-	"os"
-    "time"
-	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
-)
-
-func main() {
-	schedulePublishArticleReq := *openapiclient.NewSchedulePublishArticleReq("ArticleId_example", time.Now()) // SchedulePublishArticleReq | 
-
-	configuration := openapiclient.NewConfiguration()
-	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArticleService.SchedulePublish(context.Background()).SchedulePublishArticleReq(schedulePublishArticleReq).Execute()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.SchedulePublish``: %v\n", err)
-		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
-	}
-	// response from `SchedulePublish`: map[string]interface{}
-	fmt.Fprintf(os.Stdout, "Response from `ArticleService.SchedulePublish`: %v\n", resp)
-}
-```
-
-### Path Parameters
-
-
-
-### Other Parameters
-
-Other parameters are passed through a pointer to a apiSchedulePublishRequest struct via the builder pattern
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **schedulePublishArticleReq** | [**SchedulePublishArticleReq**](SchedulePublishArticleReq.md) |  | 
 
 ### Return type
 

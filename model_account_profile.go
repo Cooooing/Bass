@@ -25,6 +25,7 @@ type AccountProfile struct {
 	Nickname *string `json:"nickname,omitempty"`
 	Url *string `json:"url,omitempty"`
 	AvatarUrl *string `json:"avatar_url,omitempty"`
+	BackgroundAssetId *string `json:"background_asset_id,omitempty"`
 	Introduction *string `json:"introduction,omitempty"`
 	Mbti *string `json:"mbti,omitempty"`
 	Status *string `json:"status,omitempty"`
@@ -209,6 +210,38 @@ func (o *AccountProfile) HasAvatarUrl() bool {
 // SetAvatarUrl gets a reference to the given string and assigns it to the AvatarUrl field.
 func (o *AccountProfile) SetAvatarUrl(v string) {
 	o.AvatarUrl = &v
+}
+
+// GetBackgroundAssetId returns the BackgroundAssetId field value if set, zero value otherwise.
+func (o *AccountProfile) GetBackgroundAssetId() string {
+	if o == nil || IsNil(o.BackgroundAssetId) {
+		var ret string
+		return ret
+	}
+	return *o.BackgroundAssetId
+}
+
+// GetBackgroundAssetIdOk returns a tuple with the BackgroundAssetId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccountProfile) GetBackgroundAssetIdOk() (*string, bool) {
+	if o == nil || IsNil(o.BackgroundAssetId) {
+		return nil, false
+	}
+	return o.BackgroundAssetId, true
+}
+
+// HasBackgroundAssetId returns a boolean if a field has been set.
+func (o *AccountProfile) HasBackgroundAssetId() bool {
+	if o != nil && !IsNil(o.BackgroundAssetId) {
+		return true
+	}
+
+	return false
+}
+
+// SetBackgroundAssetId gets a reference to the given string and assigns it to the BackgroundAssetId field.
+func (o *AccountProfile) SetBackgroundAssetId(v string) {
+	o.BackgroundAssetId = &v
 }
 
 // GetIntroduction returns the Introduction field value if set, zero value otherwise.
@@ -459,6 +492,9 @@ func (o AccountProfile) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.AvatarUrl) {
 		toSerialize["avatar_url"] = o.AvatarUrl
+	}
+	if !IsNil(o.BackgroundAssetId) {
+		toSerialize["background_asset_id"] = o.BackgroundAssetId
 	}
 	if !IsNil(o.Introduction) {
 		toSerialize["introduction"] = o.Introduction

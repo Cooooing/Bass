@@ -19,7 +19,7 @@ var _ MappedNullable = &UpdateDraftArticleResp{}
 
 // UpdateDraftArticleResp struct for UpdateDraftArticleResp
 type UpdateDraftArticleResp struct {
-	Article *ArticleDetail `json:"article,omitempty"`
+	ArticleId *string `json:"article_id,omitempty"`
 }
 
 // NewUpdateDraftArticleResp instantiates a new UpdateDraftArticleResp object
@@ -39,36 +39,36 @@ func NewUpdateDraftArticleRespWithDefaults() *UpdateDraftArticleResp {
 	return &this
 }
 
-// GetArticle returns the Article field value if set, zero value otherwise.
-func (o *UpdateDraftArticleResp) GetArticle() ArticleDetail {
-	if o == nil || IsNil(o.Article) {
-		var ret ArticleDetail
+// GetArticleId returns the ArticleId field value if set, zero value otherwise.
+func (o *UpdateDraftArticleResp) GetArticleId() string {
+	if o == nil || IsNil(o.ArticleId) {
+		var ret string
 		return ret
 	}
-	return *o.Article
+	return *o.ArticleId
 }
 
-// GetArticleOk returns a tuple with the Article field value if set, nil otherwise
+// GetArticleIdOk returns a tuple with the ArticleId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *UpdateDraftArticleResp) GetArticleOk() (*ArticleDetail, bool) {
-	if o == nil || IsNil(o.Article) {
+func (o *UpdateDraftArticleResp) GetArticleIdOk() (*string, bool) {
+	if o == nil || IsNil(o.ArticleId) {
 		return nil, false
 	}
-	return o.Article, true
+	return o.ArticleId, true
 }
 
-// HasArticle returns a boolean if a field has been set.
-func (o *UpdateDraftArticleResp) HasArticle() bool {
-	if o != nil && !IsNil(o.Article) {
+// HasArticleId returns a boolean if a field has been set.
+func (o *UpdateDraftArticleResp) HasArticleId() bool {
+	if o != nil && !IsNil(o.ArticleId) {
 		return true
 	}
 
 	return false
 }
 
-// SetArticle gets a reference to the given ArticleDetail and assigns it to the Article field.
-func (o *UpdateDraftArticleResp) SetArticle(v ArticleDetail) {
-	o.Article = &v
+// SetArticleId gets a reference to the given string and assigns it to the ArticleId field.
+func (o *UpdateDraftArticleResp) SetArticleId(v string) {
+	o.ArticleId = &v
 }
 
 func (o UpdateDraftArticleResp) MarshalJSON() ([]byte, error) {
@@ -81,8 +81,8 @@ func (o UpdateDraftArticleResp) MarshalJSON() ([]byte, error) {
 
 func (o UpdateDraftArticleResp) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Article) {
-		toSerialize["article"] = o.Article
+	if !IsNil(o.ArticleId) {
+		toSerialize["article_id"] = o.ArticleId
 	}
 	return toSerialize, nil
 }

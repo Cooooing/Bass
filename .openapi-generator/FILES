@@ -21,6 +21,7 @@ client.go
 configuration.go
 docs/AccountContact.md
 docs/AccountProfile.md
+docs/AccountProfileListItem.md
 docs/AccountService.md
 docs/AddPostscriptReq.md
 docs/AddPostscriptResp.md
@@ -67,8 +68,8 @@ docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
 docs/GetCurrentPrivacySettingResp.md
 docs/GetCurrentTotpResp.md
-docs/GetProfileAccountReq.md
-docs/GetProfileAccountResp.md
+docs/GetProfileReq.md
+docs/GetProfileResp.md
 docs/GetStatusRelationReq.md
 docs/GetStatusRelationResp.md
 docs/ImageResp.md
@@ -94,8 +95,12 @@ docs/ListDomainsReq.md
 docs/ListDomainsResp.md
 docs/ListFollowersRelationsReq.md
 docs/ListFollowersRelationsResp.md
+docs/ListFollowersReq.md
+docs/ListFollowersResp.md
 docs/ListFollowingRelationsReq.md
 docs/ListFollowingRelationsResp.md
+docs/ListFollowingReq.md
+docs/ListFollowingResp.md
 docs/ListNotificationsReq.md
 docs/ListNotificationsResp.md
 docs/ListPostscriptsReq.md
@@ -114,6 +119,10 @@ docs/PageResp.md
 docs/PostscriptService.md
 docs/PreferencesService.md
 docs/PrivacySettingService.md
+docs/Profile.md
+docs/ProfileLocation.md
+docs/ProfileRelation.md
+docs/ProfileVisibility.md
 docs/PublishArticleReq.md
 docs/RefreshTokenReq.md
 docs/RefreshTokenResp.md
@@ -150,7 +159,6 @@ docs/RespRelationStatus.md
 docs/RespTag.md
 docs/RespTotp.md
 docs/RewardArticleReq.md
-docs/SchedulePublishArticleReq.md
 docs/SendEmailOtpReq.md
 docs/SendEmailOtpResp.md
 docs/SendPhoneOtpReq.md
@@ -185,6 +193,7 @@ go.mod
 go.sum
 model_account_contact.go
 model_account_profile.go
+model_account_profile_list_item.go
 model_add_postscript_req.go
 model_add_postscript_resp.go
 model_archive_article_req.go
@@ -225,8 +234,8 @@ model_get_current_location_resp.go
 model_get_current_preferences_resp.go
 model_get_current_privacy_setting_resp.go
 model_get_current_totp_resp.go
-model_get_profile_account_req.go
-model_get_profile_account_resp.go
+model_get_profile_req.go
+model_get_profile_resp.go
 model_get_status_relation_req.go
 model_get_status_relation_resp.go
 model_image_resp.go
@@ -252,8 +261,12 @@ model_list_domains_req.go
 model_list_domains_resp.go
 model_list_followers_relations_req.go
 model_list_followers_relations_resp.go
+model_list_followers_req.go
+model_list_followers_resp.go
 model_list_following_relations_req.go
 model_list_following_relations_resp.go
+model_list_following_req.go
+model_list_following_resp.go
 model_list_notifications_req.go
 model_list_notifications_resp.go
 model_list_postscripts_req.go
@@ -266,6 +279,10 @@ model_mark_read_notification_req.go
 model_mark_read_notification_resp.go
 model_page_req.go
 model_page_resp.go
+model_profile.go
+model_profile_location.go
+model_profile_relation.go
+model_profile_visibility.go
 model_publish_article_req.go
 model_refresh_token_req.go
 model_refresh_token_resp.go
@@ -301,7 +318,6 @@ model_resp_relation_status.go
 model_resp_tag.go
 model_resp_totp.go
 model_reward_article_req.go
-model_schedule_publish_article_req.go
 model_send_email_otp_req.go
 model_send_email_otp_resp.go
 model_send_phone_otp_req.go

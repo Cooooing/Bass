@@ -31,6 +31,7 @@ type ReqArticleQuery struct {
 	Visibilities []string `json:"visibilities,omitempty"`
 	Restriction *string `json:"restriction,omitempty"`
 	Restrictions []string `json:"restrictions,omitempty"`
+	Scheduled *bool `json:"scheduled,omitempty"`
 }
 
 // NewReqArticleQuery instantiates a new ReqArticleQuery object
@@ -434,6 +435,38 @@ func (o *ReqArticleQuery) SetRestrictions(v []string) {
 	o.Restrictions = v
 }
 
+// GetScheduled returns the Scheduled field value if set, zero value otherwise.
+func (o *ReqArticleQuery) GetScheduled() bool {
+	if o == nil || IsNil(o.Scheduled) {
+		var ret bool
+		return ret
+	}
+	return *o.Scheduled
+}
+
+// GetScheduledOk returns a tuple with the Scheduled field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ReqArticleQuery) GetScheduledOk() (*bool, bool) {
+	if o == nil || IsNil(o.Scheduled) {
+		return nil, false
+	}
+	return o.Scheduled, true
+}
+
+// HasScheduled returns a boolean if a field has been set.
+func (o *ReqArticleQuery) HasScheduled() bool {
+	if o != nil && !IsNil(o.Scheduled) {
+		return true
+	}
+
+	return false
+}
+
+// SetScheduled gets a reference to the given bool and assigns it to the Scheduled field.
+func (o *ReqArticleQuery) SetScheduled(v bool) {
+	o.Scheduled = &v
+}
+
 func (o ReqArticleQuery) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -479,6 +512,9 @@ func (o ReqArticleQuery) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Restrictions) {
 		toSerialize["restrictions"] = o.Restrictions
+	}
+	if !IsNil(o.Scheduled) {
+		toSerialize["scheduled"] = o.Scheduled
 	}
 	return toSerialize, nil
 }

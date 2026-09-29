@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **Nickname** | Pointer to **string** |  | [optional] 
 **Url** | Pointer to **string** |  | [optional] 
 **AvatarUrl** | Pointer to **string** |  | [optional] 
+**BackgroundAssetId** | Pointer to **string** |  | [optional] 
 **Introduction** | Pointer to **string** |  | [optional] 
 **Mbti** | Pointer to **string** |  | [optional] 
 **Status** | Pointer to **string** |  | [optional] 
@@ -160,6 +161,31 @@ SetAvatarUrl sets AvatarUrl field to given value.
 `func (o *AccountProfile) HasAvatarUrl() bool`
 
 HasAvatarUrl returns a boolean if a field has been set.
+
+### GetBackgroundAssetId
+
+`func (o *AccountProfile) GetBackgroundAssetId() string`
+
+GetBackgroundAssetId returns the BackgroundAssetId field if non-nil, zero value otherwise.
+
+### GetBackgroundAssetIdOk
+
+`func (o *AccountProfile) GetBackgroundAssetIdOk() (*string, bool)`
+
+GetBackgroundAssetIdOk returns a tuple with the BackgroundAssetId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBackgroundAssetId
+
+`func (o *AccountProfile) SetBackgroundAssetId(v string)`
+
+SetBackgroundAssetId sets BackgroundAssetId field to given value.
+
+### HasBackgroundAssetId
+
+`func (o *AccountProfile) HasBackgroundAssetId() bool`
+
+HasBackgroundAssetId returns a boolean if a field has been set.
 
 ### GetIntroduction
 

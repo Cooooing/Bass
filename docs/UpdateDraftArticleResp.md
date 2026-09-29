@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Article** | Pointer to [**ArticleDetail**](ArticleDetail.md) |  | [optional] 
+**ArticleId** | Pointer to **string** |  | [optional] 
 
 ## Methods
 
@@ -25,30 +25,30 @@ NewUpdateDraftArticleRespWithDefaults instantiates a new UpdateDraftArticleResp 
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetArticle
+### GetArticleId
 
-`func (o *UpdateDraftArticleResp) GetArticle() ArticleDetail`
+`func (o *UpdateDraftArticleResp) GetArticleId() string`
 
-GetArticle returns the Article field if non-nil, zero value otherwise.
+GetArticleId returns the ArticleId field if non-nil, zero value otherwise.
 
-### GetArticleOk
+### GetArticleIdOk
 
-`func (o *UpdateDraftArticleResp) GetArticleOk() (*ArticleDetail, bool)`
+`func (o *UpdateDraftArticleResp) GetArticleIdOk() (*string, bool)`
 
-GetArticleOk returns a tuple with the Article field if it's non-nil, zero value otherwise
+GetArticleIdOk returns a tuple with the ArticleId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetArticle
+### SetArticleId
 
-`func (o *UpdateDraftArticleResp) SetArticle(v ArticleDetail)`
+`func (o *UpdateDraftArticleResp) SetArticleId(v string)`
 
-SetArticle sets Article field to given value.
+SetArticleId sets ArticleId field to given value.
 
-### HasArticle
+### HasArticleId
 
-`func (o *UpdateDraftArticleResp) HasArticle() bool`
+`func (o *UpdateDraftArticleResp) HasArticleId() bool`
 
-HasArticle returns a boolean if a field has been set.
+HasArticleId returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

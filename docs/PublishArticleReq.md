@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ArticleId** | **string** |  | 
-**Visibility** | Pointer to **string** |  | [optional] 
+**ScheduledAt** | Pointer to **time.Time** |  | [optional] 
 
 ## Methods
 
@@ -46,30 +46,30 @@ and a boolean to check if the value has been set.
 SetArticleId sets ArticleId field to given value.
 
 
-### GetVisibility
+### GetScheduledAt
 
-`func (o *PublishArticleReq) GetVisibility() string`
+`func (o *PublishArticleReq) GetScheduledAt() time.Time`
 
-GetVisibility returns the Visibility field if non-nil, zero value otherwise.
+GetScheduledAt returns the ScheduledAt field if non-nil, zero value otherwise.
 
-### GetVisibilityOk
+### GetScheduledAtOk
 
-`func (o *PublishArticleReq) GetVisibilityOk() (*string, bool)`
+`func (o *PublishArticleReq) GetScheduledAtOk() (*time.Time, bool)`
 
-GetVisibilityOk returns a tuple with the Visibility field if it's non-nil, zero value otherwise
+GetScheduledAtOk returns a tuple with the ScheduledAt field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetVisibility
+### SetScheduledAt
 
-`func (o *PublishArticleReq) SetVisibility(v string)`
+`func (o *PublishArticleReq) SetScheduledAt(v time.Time)`
 
-SetVisibility sets Visibility field to given value.
+SetScheduledAt sets ScheduledAt field to given value.
 
-### HasVisibility
+### HasScheduledAt
 
-`func (o *PublishArticleReq) HasVisibility() bool`
+`func (o *PublishArticleReq) HasScheduledAt() bool`
 
-HasVisibility returns a boolean if a field has been set.
+HasScheduledAt returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

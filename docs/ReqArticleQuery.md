@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **Visibilities** | Pointer to **[]string** |  | [optional] 
 **Restriction** | Pointer to **string** |  | [optional] 
 **Restrictions** | Pointer to **[]string** |  | [optional] 
+**Scheduled** | Pointer to **bool** |  | [optional] 
 
 ## Methods
 
@@ -335,6 +336,31 @@ SetRestrictions sets Restrictions field to given value.
 `func (o *ReqArticleQuery) HasRestrictions() bool`
 
 HasRestrictions returns a boolean if a field has been set.
+
+### GetScheduled
+
+`func (o *ReqArticleQuery) GetScheduled() bool`
+
+GetScheduled returns the Scheduled field if non-nil, zero value otherwise.
+
+### GetScheduledOk
+
+`func (o *ReqArticleQuery) GetScheduledOk() (*bool, bool)`
+
+GetScheduledOk returns a tuple with the Scheduled field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetScheduled
+
+`func (o *ReqArticleQuery) SetScheduled(v bool)`
+
+SetScheduled sets Scheduled field to given value.
+
+### HasScheduled
+
+`func (o *ReqArticleQuery) HasScheduled() bool`
+
+HasScheduled returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

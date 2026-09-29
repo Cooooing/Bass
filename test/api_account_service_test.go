@@ -58,6 +58,30 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
+	t.Run("Test AccountServiceService ListFollowers", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.AccountService.ListFollowers(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test AccountServiceService ListFollowing", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.AccountService.ListFollowing(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 	t.Run("Test AccountServiceService UpdateEmail", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test

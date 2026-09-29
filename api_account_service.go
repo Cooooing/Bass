@@ -52,7 +52,7 @@ type AccountService interface {
 	/*
 	GetProfile Method for GetProfile
 
-	按账号 ID 获取展示资料
+	按账号名获取个人主页资料。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetProfileRequest
@@ -60,8 +60,36 @@ type AccountService interface {
 	GetProfile(ctx context.Context) ApiGetProfileRequest
 
 	// GetProfileExecute executes the request
-	//  @return GetProfileAccountResp
-	GetProfileExecute(r ApiGetProfileRequest) (*GetProfileAccountResp, *http.Response, error)
+	//  @return GetProfileResp
+	GetProfileExecute(r ApiGetProfileRequest) (*GetProfileResp, *http.Response, error)
+
+	/*
+	ListFollowers Method for ListFollowers
+
+	查询账号公开的粉丝列表。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListFollowersRequest
+	*/
+	ListFollowers(ctx context.Context) ApiListFollowersRequest
+
+	// ListFollowersExecute executes the request
+	//  @return ListFollowersResp
+	ListFollowersExecute(r ApiListFollowersRequest) (*ListFollowersResp, *http.Response, error)
+
+	/*
+	ListFollowing Method for ListFollowing
+
+	查询账号公开的关注列表。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListFollowingRequest
+	*/
+	ListFollowing(ctx context.Context) ApiListFollowingRequest
+
+	// ListFollowingExecute executes the request
+	//  @return ListFollowingResp
+	ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingResp, *http.Response, error)
 
 	/*
 	UpdateEmail Method for UpdateEmail
@@ -344,22 +372,22 @@ func (a *AccountServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*GetC
 type ApiGetProfileRequest struct {
 	ctx context.Context
 	ApiService AccountService
-	getProfileAccountReq *GetProfileAccountReq
+	getProfileReq *GetProfileReq
 }
 
-func (r ApiGetProfileRequest) GetProfileAccountReq(getProfileAccountReq GetProfileAccountReq) ApiGetProfileRequest {
-	r.getProfileAccountReq = &getProfileAccountReq
+func (r ApiGetProfileRequest) GetProfileReq(getProfileReq GetProfileReq) ApiGetProfileRequest {
+	r.getProfileReq = &getProfileReq
 	return r
 }
 
-func (r ApiGetProfileRequest) Execute() (*GetProfileAccountResp, *http.Response, error) {
+func (r ApiGetProfileRequest) Execute() (*GetProfileResp, *http.Response, error) {
 	return r.ApiService.GetProfileExecute(r)
 }
 
 /*
 GetProfile Method for GetProfile
 
-按账号 ID 获取展示资料
+按账号名获取个人主页资料。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetProfileRequest
@@ -372,13 +400,13 @@ func (a *AccountServiceService) GetProfile(ctx context.Context) ApiGetProfileReq
 }
 
 // Execute executes the request
-//  @return GetProfileAccountResp
-func (a *AccountServiceService) GetProfileExecute(r ApiGetProfileRequest) (*GetProfileAccountResp, *http.Response, error) {
+//  @return GetProfileResp
+func (a *AccountServiceService) GetProfileExecute(r ApiGetProfileRequest) (*GetProfileResp, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *GetProfileAccountResp
+		localVarReturnValue  *GetProfileResp
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.GetProfile")
@@ -391,8 +419,8 @@ func (a *AccountServiceService) GetProfileExecute(r ApiGetProfileRequest) (*GetP
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
-	if r.getProfileAccountReq == nil {
-		return localVarReturnValue, nil, reportError("getProfileAccountReq is required and must be specified")
+	if r.getProfileReq == nil {
+		return localVarReturnValue, nil, reportError("getProfileReq is required and must be specified")
 	}
 
 	// to determine the Content-Type header
@@ -413,7 +441,227 @@ func (a *AccountServiceService) GetProfileExecute(r ApiGetProfileRequest) (*GetP
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
 	// body params
-	localVarPostBody = r.getProfileAccountReq
+	localVarPostBody = r.getProfileReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListFollowersRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	listFollowersReq *ListFollowersReq
+}
+
+func (r ApiListFollowersRequest) ListFollowersReq(listFollowersReq ListFollowersReq) ApiListFollowersRequest {
+	r.listFollowersReq = &listFollowersReq
+	return r
+}
+
+func (r ApiListFollowersRequest) Execute() (*ListFollowersResp, *http.Response, error) {
+	return r.ApiService.ListFollowersExecute(r)
+}
+
+/*
+ListFollowers Method for ListFollowers
+
+查询账号公开的粉丝列表。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListFollowersRequest
+*/
+func (a *AccountServiceService) ListFollowers(ctx context.Context) ApiListFollowersRequest {
+	return ApiListFollowersRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListFollowersResp
+func (a *AccountServiceService) ListFollowersExecute(r ApiListFollowersRequest) (*ListFollowersResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListFollowersResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.ListFollowers")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/list-followers"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listFollowersReq == nil {
+		return localVarReturnValue, nil, reportError("listFollowersReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listFollowersReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListFollowingRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	listFollowingReq *ListFollowingReq
+}
+
+func (r ApiListFollowingRequest) ListFollowingReq(listFollowingReq ListFollowingReq) ApiListFollowingRequest {
+	r.listFollowingReq = &listFollowingReq
+	return r
+}
+
+func (r ApiListFollowingRequest) Execute() (*ListFollowingResp, *http.Response, error) {
+	return r.ApiService.ListFollowingExecute(r)
+}
+
+/*
+ListFollowing Method for ListFollowing
+
+查询账号公开的关注列表。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListFollowingRequest
+*/
+func (a *AccountServiceService) ListFollowing(ctx context.Context) ApiListFollowingRequest {
+	return ApiListFollowingRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListFollowingResp
+func (a *AccountServiceService) ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListFollowingResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.ListFollowing")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/list-following"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listFollowingReq == nil {
+		return localVarReturnValue, nil, reportError("listFollowingReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listFollowingReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

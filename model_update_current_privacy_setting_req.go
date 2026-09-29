@@ -21,6 +21,7 @@ var _ MappedNullable = &UpdateCurrentPrivacySettingReq{}
 type UpdateCurrentPrivacySettingReq struct {
 	PublicPoints *bool `json:"public_points,omitempty"`
 	PublicFollowers *bool `json:"public_followers,omitempty"`
+	PublicFollowing *bool `json:"public_following,omitempty"`
 	PublicArticles *bool `json:"public_articles,omitempty"`
 	PublicComments *bool `json:"public_comments,omitempty"`
 	PublicOnlineStatus *bool `json:"public_online_status,omitempty"`
@@ -106,6 +107,38 @@ func (o *UpdateCurrentPrivacySettingReq) HasPublicFollowers() bool {
 // SetPublicFollowers gets a reference to the given bool and assigns it to the PublicFollowers field.
 func (o *UpdateCurrentPrivacySettingReq) SetPublicFollowers(v bool) {
 	o.PublicFollowers = &v
+}
+
+// GetPublicFollowing returns the PublicFollowing field value if set, zero value otherwise.
+func (o *UpdateCurrentPrivacySettingReq) GetPublicFollowing() bool {
+	if o == nil || IsNil(o.PublicFollowing) {
+		var ret bool
+		return ret
+	}
+	return *o.PublicFollowing
+}
+
+// GetPublicFollowingOk returns a tuple with the PublicFollowing field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateCurrentPrivacySettingReq) GetPublicFollowingOk() (*bool, bool) {
+	if o == nil || IsNil(o.PublicFollowing) {
+		return nil, false
+	}
+	return o.PublicFollowing, true
+}
+
+// HasPublicFollowing returns a boolean if a field has been set.
+func (o *UpdateCurrentPrivacySettingReq) HasPublicFollowing() bool {
+	if o != nil && !IsNil(o.PublicFollowing) {
+		return true
+	}
+
+	return false
+}
+
+// SetPublicFollowing gets a reference to the given bool and assigns it to the PublicFollowing field.
+func (o *UpdateCurrentPrivacySettingReq) SetPublicFollowing(v bool) {
+	o.PublicFollowing = &v
 }
 
 // GetPublicArticles returns the PublicArticles field value if set, zero value otherwise.
@@ -251,6 +284,9 @@ func (o UpdateCurrentPrivacySettingReq) ToMap() (map[string]interface{}, error) 
 	}
 	if !IsNil(o.PublicFollowers) {
 		toSerialize["public_followers"] = o.PublicFollowers
+	}
+	if !IsNil(o.PublicFollowing) {
+		toSerialize["public_following"] = o.PublicFollowing
 	}
 	if !IsNil(o.PublicArticles) {
 		toSerialize["public_articles"] = o.PublicArticles

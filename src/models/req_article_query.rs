@@ -37,6 +37,8 @@ pub struct ReqArticleQuery {
     pub restriction: Option<Restriction>,
     #[serde(rename = "restrictions", skip_serializing_if = "Option::is_none")]
     pub restrictions: Option<Vec<Restrictions>>,
+    #[serde(rename = "scheduled", skip_serializing_if = "Option::is_none")]
+    pub scheduled: Option<bool>,
 }
 
 impl ReqArticleQuery {
@@ -54,6 +56,7 @@ impl ReqArticleQuery {
             visibilities: None,
             restriction: None,
             restrictions: None,
+            scheduled: None,
         }
     }
 }
@@ -106,8 +109,6 @@ pub enum PublishStatus {
     ArticlePublishStatusPublished,
     #[serde(rename = "ARTICLE_PUBLISH_STATUS_ARCHIVED")]
     ArticlePublishStatusArchived,
-    #[serde(rename = "ARTICLE_PUBLISH_STATUS_SCHEDULED")]
-    ArticlePublishStatusScheduled,
 }
 
 impl Default for PublishStatus {
@@ -126,8 +127,6 @@ pub enum PublishStatuses {
     ArticlePublishStatusPublished,
     #[serde(rename = "ARTICLE_PUBLISH_STATUS_ARCHIVED")]
     ArticlePublishStatusArchived,
-    #[serde(rename = "ARTICLE_PUBLISH_STATUS_SCHEDULED")]
-    ArticlePublishStatusScheduled,
 }
 
 impl Default for PublishStatuses {

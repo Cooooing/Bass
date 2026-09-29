@@ -12,15 +12,15 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct GetProfileAccountResp {
-    #[serde(rename = "profile", skip_serializing_if = "Option::is_none")]
-    pub profile: Option<models::AccountProfile>,
+pub struct GetProfileReq {
+    #[serde(rename = "name")]
+    pub name: String,
 }
 
-impl GetProfileAccountResp {
-    pub fn new() -> GetProfileAccountResp {
-        GetProfileAccountResp {
-            profile: None,
+impl GetProfileReq {
+    pub fn new(name: String) -> GetProfileReq {
+        GetProfileReq {
+            name,
         }
     }
 }

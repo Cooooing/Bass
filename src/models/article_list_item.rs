@@ -147,8 +147,6 @@ pub enum PublishStatus {
     ArticlePublishStatusPublished,
     #[serde(rename = "ARTICLE_PUBLISH_STATUS_ARCHIVED")]
     ArticlePublishStatusArchived,
-    #[serde(rename = "ARTICLE_PUBLISH_STATUS_SCHEDULED")]
-    ArticlePublishStatusScheduled,
 }
 
 impl Default for PublishStatus {

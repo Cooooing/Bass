@@ -15,32 +15,16 @@ use serde::{Deserialize, Serialize};
 pub struct PublishArticleReq {
     #[serde(rename = "article_id")]
     pub article_id: String,
-    #[serde(rename = "visibility", skip_serializing_if = "Option::is_none")]
-    pub visibility: Option<Visibility>,
+    #[serde(rename = "scheduled_at", skip_serializing_if = "Option::is_none")]
+    pub scheduled_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
 impl PublishArticleReq {
     pub fn new(article_id: String) -> PublishArticleReq {
         PublishArticleReq {
             article_id,
-            visibility: None,
+            scheduled_at: None,
         }
-    }
-}
-/// 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum Visibility {
-    #[serde(rename = "ARTICLE_VISIBILITY_UNSPECIFIED")]
-    ArticleVisibilityUnspecified,
-    #[serde(rename = "ARTICLE_VISIBILITY_PUBLIC")]
-    ArticleVisibilityPublic,
-    #[serde(rename = "ARTICLE_VISIBILITY_PRIVATE")]
-    ArticleVisibilityPrivate,
-}
-
-impl Default for Visibility {
-    fn default() -> Visibility {
-        Self::ArticleVisibilityUnspecified
     }
 }
 

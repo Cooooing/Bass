@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **user_id** | Option<**String**> |  | [optional]
 **public_points** | Option<**bool**> |  | [optional]
 **public_followers** | Option<**bool**> |  | [optional]
+**public_following** | Option<**bool**> |  | [optional]
 **public_articles** | Option<**bool**> |  | [optional]
 **public_comments** | Option<**bool**> |  | [optional]
 **public_online_status** | Option<**bool**> |  | [optional]

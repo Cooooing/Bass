@@ -13,14 +13,14 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateDraftArticleResp {
-    #[serde(rename = "article", skip_serializing_if = "Option::is_none")]
-    pub article: Option<models::ArticleDetail>,
+    #[serde(rename = "article_id", skip_serializing_if = "Option::is_none")]
+    pub article_id: Option<String>,
 }
 
 impl UpdateDraftArticleResp {
     pub fn new() -> UpdateDraftArticleResp {
         UpdateDraftArticleResp {
-            article: None,
+            article_id: None,
         }
     }
 }

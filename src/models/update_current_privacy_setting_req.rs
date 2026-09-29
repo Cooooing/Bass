@@ -17,6 +17,8 @@ pub struct UpdateCurrentPrivacySettingReq {
     pub public_points: Option<bool>,
     #[serde(rename = "public_followers", skip_serializing_if = "Option::is_none")]
     pub public_followers: Option<bool>,
+    #[serde(rename = "public_following", skip_serializing_if = "Option::is_none")]
+    pub public_following: Option<bool>,
     #[serde(rename = "public_articles", skip_serializing_if = "Option::is_none")]
     pub public_articles: Option<bool>,
     #[serde(rename = "public_comments", skip_serializing_if = "Option::is_none")]
@@ -32,6 +34,7 @@ impl UpdateCurrentPrivacySettingReq {
         UpdateCurrentPrivacySettingReq {
             public_points: None,
             public_followers: None,
+            public_following: None,
             public_articles: None,
             public_comments: None,
             public_online_status: None,

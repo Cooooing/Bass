@@ -15,13 +15,34 @@ use serde::{Deserialize, Serialize};
 pub struct GetArticleReq {
     #[serde(rename = "article_id")]
     pub article_id: String,
+    #[serde(rename = "publish_status", skip_serializing_if = "Option::is_none")]
+    pub publish_status: Option<PublishStatus>,
 }
 
 impl GetArticleReq {
     pub fn new(article_id: String) -> GetArticleReq {
         GetArticleReq {
             article_id,
+            publish_status: None,
         }
+    }
+}
+/// 
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
+pub enum PublishStatus {
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_UNSPECIFIED")]
+    ArticlePublishStatusUnspecified,
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_DRAFT")]
+    ArticlePublishStatusDraft,
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_PUBLISHED")]
+    ArticlePublishStatusPublished,
+    #[serde(rename = "ARTICLE_PUBLISH_STATUS_ARCHIVED")]
+    ArticlePublishStatusArchived,
+}
+
+impl Default for PublishStatus {
+    fn default() -> PublishStatus {
+        Self::ArticlePublishStatusUnspecified
     }
 }
 

@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **avatar_asset_id** | Option<**String**> |  | [optional]
+**background_asset_id** | Option<**String**> |  | [optional]
 **nickname** | Option<**String**> |  | [optional]
 **url** | Option<**String**> |  | [optional]
 **introduction** | Option<**String**> |  | [optional]

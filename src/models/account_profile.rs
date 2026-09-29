@@ -23,6 +23,8 @@ pub struct AccountProfile {
     pub url: Option<String>,
     #[serde(rename = "avatar_url", skip_serializing_if = "Option::is_none")]
     pub avatar_url: Option<String>,
+    #[serde(rename = "background_asset_id", skip_serializing_if = "Option::is_none")]
+    pub background_asset_id: Option<String>,
     #[serde(rename = "introduction", skip_serializing_if = "Option::is_none")]
     pub introduction: Option<String>,
     #[serde(rename = "mbti", skip_serializing_if = "Option::is_none")]
@@ -47,6 +49,7 @@ impl AccountProfile {
             nickname: None,
             url: None,
             avatar_url: None,
+            background_asset_id: None,
             introduction: None,
             mbti: None,
             status: None,

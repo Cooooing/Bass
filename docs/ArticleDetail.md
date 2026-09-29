@@ -29,7 +29,7 @@ Name | Type | Description | Notes
 **viewer_action_state** | Option<[**models::ArticleViewerActionState**](ArticleViewerActionState.md)> |  | [optional]
 **published_at** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
 **postscripts** | Option<[**Vec<models::ArticlePostscript>**](ArticlePostscript.md)> |  | [optional]
-**publish_status** | Option<**PublishStatus**> |  (enum: ARTICLE_PUBLISH_STATUS_UNSPECIFIED, ARTICLE_PUBLISH_STATUS_DRAFT, ARTICLE_PUBLISH_STATUS_PUBLISHED, ARTICLE_PUBLISH_STATUS_ARCHIVED, ARTICLE_PUBLISH_STATUS_SCHEDULED) | [optional]
+**publish_status** | Option<**PublishStatus**> |  (enum: ARTICLE_PUBLISH_STATUS_UNSPECIFIED, ARTICLE_PUBLISH_STATUS_DRAFT, ARTICLE_PUBLISH_STATUS_PUBLISHED, ARTICLE_PUBLISH_STATUS_ARCHIVED) | [optional]
 **visibility** | Option<**Visibility**> |  (enum: ARTICLE_VISIBILITY_UNSPECIFIED, ARTICLE_VISIBILITY_PUBLIC, ARTICLE_VISIBILITY_PRIVATE) | [optional]
 **restriction** | Option<**Restriction**> |  (enum: CONTENT_RESTRICTION_UNSPECIFIED, CONTENT_RESTRICTION_NONE, CONTENT_RESTRICTION_HIDDEN, CONTENT_RESTRICTION_LOCKED) | [optional]
 **edited_at** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]

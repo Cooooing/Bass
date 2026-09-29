@@ -5,6 +5,7 @@ Cargo.toml
 README.md
 docs/AccountContact.md
 docs/AccountProfile.md
+docs/AccountProfileListItem.md
 docs/AccountService.md
 docs/AddPostscriptReq.md
 docs/AddPostscriptResp.md
@@ -51,8 +52,8 @@ docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
 docs/GetCurrentPrivacySettingResp.md
 docs/GetCurrentTotpResp.md
-docs/GetProfileAccountReq.md
-docs/GetProfileAccountResp.md
+docs/GetProfileReq.md
+docs/GetProfileResp.md
 docs/GetStatusRelationReq.md
 docs/GetStatusRelationResp.md
 docs/ImageResp.md
@@ -78,8 +79,12 @@ docs/ListDomainsReq.md
 docs/ListDomainsResp.md
 docs/ListFollowersRelationsReq.md
 docs/ListFollowersRelationsResp.md
+docs/ListFollowersReq.md
+docs/ListFollowersResp.md
 docs/ListFollowingRelationsReq.md
 docs/ListFollowingRelationsResp.md
+docs/ListFollowingReq.md
+docs/ListFollowingResp.md
 docs/ListNotificationsReq.md
 docs/ListNotificationsResp.md
 docs/ListPostscriptsReq.md
@@ -98,6 +103,10 @@ docs/PageResp.md
 docs/PostscriptService.md
 docs/PreferencesService.md
 docs/PrivacySettingService.md
+docs/Profile.md
+docs/ProfileLocation.md
+docs/ProfileRelation.md
+docs/ProfileVisibility.md
 docs/PublishArticleReq.md
 docs/RefreshTokenReq.md
 docs/RefreshTokenResp.md
@@ -134,7 +143,6 @@ docs/RespRelationStatus.md
 docs/RespTag.md
 docs/RespTotp.md
 docs/RewardArticleReq.md
-docs/SchedulePublishArticleReq.md
 docs/SendEmailOtpReq.md
 docs/SendEmailOtpResp.md
 docs/SendPhoneOtpReq.md
@@ -184,6 +192,7 @@ src/apis/tag_service.rs
 src/lib.rs
 src/models/account_contact.rs
 src/models/account_profile.rs
+src/models/account_profile_list_item.rs
 src/models/add_postscript_req.rs
 src/models/add_postscript_resp.rs
 src/models/archive_article_req.rs
@@ -224,8 +233,8 @@ src/models/get_current_location_resp.rs
 src/models/get_current_preferences_resp.rs
 src/models/get_current_privacy_setting_resp.rs
 src/models/get_current_totp_resp.rs
-src/models/get_profile_account_req.rs
-src/models/get_profile_account_resp.rs
+src/models/get_profile_req.rs
+src/models/get_profile_resp.rs
 src/models/get_status_relation_req.rs
 src/models/get_status_relation_resp.rs
 src/models/image_resp.rs
@@ -251,8 +260,12 @@ src/models/list_domains_req.rs
 src/models/list_domains_resp.rs
 src/models/list_followers_relations_req.rs
 src/models/list_followers_relations_resp.rs
+src/models/list_followers_req.rs
+src/models/list_followers_resp.rs
 src/models/list_following_relations_req.rs
 src/models/list_following_relations_resp.rs
+src/models/list_following_req.rs
+src/models/list_following_resp.rs
 src/models/list_notifications_req.rs
 src/models/list_notifications_resp.rs
 src/models/list_postscripts_req.rs
@@ -266,6 +279,10 @@ src/models/mark_read_notification_resp.rs
 src/models/mod.rs
 src/models/page_req.rs
 src/models/page_resp.rs
+src/models/profile.rs
+src/models/profile_location.rs
+src/models/profile_relation.rs
+src/models/profile_visibility.rs
 src/models/publish_article_req.rs
 src/models/refresh_token_req.rs
 src/models/refresh_token_resp.rs
@@ -301,7 +318,6 @@ src/models/resp_relation_status.rs
 src/models/resp_tag.rs
 src/models/resp_totp.rs
 src/models/reward_article_req.rs
-src/models/schedule_publish_article_req.rs
 src/models/send_email_otp_req.rs
 src/models/send_email_otp_resp.rs
 src/models/send_phone_otp_req.rs

@@ -7,6 +7,8 @@ Method | HTTP request | Description
 [**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar | 
 [**get_current**](AccountService.md#get_current) | **POST** /v1/user/account/get-current | 
 [**get_profile**](AccountService.md#get_profile) | **POST** /v1/user/account/get-profile | 
+[**list_followers**](AccountService.md#list_followers) | **POST** /v1/user/account/list-followers | 
+[**list_following**](AccountService.md#list_following) | **POST** /v1/user/account/list-following | 
 [**update_email**](AccountService.md#update_email) | **POST** /v1/user/account/update-email | 
 [**update_password**](AccountService.md#update_password) | **POST** /v1/user/account/update-password | 
 [**update_phone**](AccountService.md#update_phone) | **POST** /v1/user/account/update-phone | 
@@ -76,21 +78,81 @@ No authorization required
 
 ## get_profile
 
-> models::GetProfileAccountResp get_profile(get_profile_account_req)
+> models::GetProfileResp get_profile(get_profile_req)
 
 
-按账号 ID 获取展示资料
+按账号名获取个人主页资料。
 
 ### Parameters
 
 
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
-**get_profile_account_req** | [**GetProfileAccountReq**](GetProfileAccountReq.md) |  | [required] |
+**get_profile_req** | [**GetProfileReq**](GetProfileReq.md) |  | [required] |
 
 ### Return type
 
-[**models::GetProfileAccountResp**](GetProfileAccount_Resp.md)
+[**models::GetProfileResp**](GetProfile_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## list_followers
+
+> models::ListFollowersResp list_followers(list_followers_req)
+
+
+查询账号公开的粉丝列表。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**list_followers_req** | [**ListFollowersReq**](ListFollowersReq.md) |  | [required] |
+
+### Return type
+
+[**models::ListFollowersResp**](ListFollowers_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## list_following
+
+> models::ListFollowingResp list_following(list_following_req)
+
+
+查询账号公开的关注列表。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**list_following_req** | [**ListFollowingReq**](ListFollowingReq.md) |  | [required] |
+
+### Return type
+
+[**models::ListFollowingResp**](ListFollowing_Resp.md)
 
 ### Authorization
 

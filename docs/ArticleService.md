@@ -14,7 +14,6 @@ Method | HTTP request | Description
 [**list**](ArticleService.md#list) | **POST** /v1/content/article/list | 
 [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward | 
-[**schedule_publish**](ArticleService.md#schedule_publish) | **POST** /v1/content/article/publish/schedule | 
 [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank | 
 [**update_draft**](ArticleService.md#update_draft) | **POST** /v1/content/article/draft/update | 
 
@@ -303,36 +302,6 @@ No authorization required
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **reward_article_req** | [**RewardArticleReq**](RewardArticleReq.md) |  | [required] |
-
-### Return type
-
-[**serde_json::Value**](serde_json::Value.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## schedule_publish
-
-> serde_json::Value schedule_publish(schedule_publish_article_req)
-
-
-设置定时发布
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**schedule_publish_article_req** | [**SchedulePublishArticleReq**](SchedulePublishArticleReq.md) |  | [required] |
 
 ### Return type
 

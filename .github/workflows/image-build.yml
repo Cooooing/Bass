@@ -118,8 +118,6 @@ jobs:
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/${{ matrix.name }}:latest
             ghcr.io/cooooing/${{ matrix.name }}:latest
-          cache-from: type=gha,scope=service-${{ matrix.name }}
-          cache-to: type=gha,mode=max,scope=service-${{ matrix.name }}
 
   # The monolith has its own Dockerfile but reuses the same toolchain image.
   build-monolith:
@@ -148,5 +146,3 @@ jobs:
           tags: |
             registry.cn-hangzhou.aliyuncs.com/docker-cooooing/monolith:latest
             ghcr.io/cooooing/monolith:latest
-          cache-from: type=gha,scope=monolith
-          cache-to: type=gha,mode=max,scope=monolith

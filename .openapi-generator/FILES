@@ -28,6 +28,8 @@ docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
 docs/CommentService.md
+docs/CompleteProfileImageUploadAccountReq.md
+docs/CompleteProfileImageUploadAccountResp.md
 docs/ConfirmEnableTotpReq.md
 docs/CountUnreadNotificationsResp.md
 docs/CreateCommentReq.md
@@ -38,6 +40,7 @@ docs/CreateDraftArticleReq.md
 docs/CreateDraftArticleResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
+docs/DetectCurrentLocationResp.md
 docs/DisableTotpReq.md
 docs/DiscardDraftArticleReq.md
 docs/DomainService.md
@@ -101,6 +104,8 @@ docs/PageReq.md
 docs/PageResp.md
 docs/PostscriptService.md
 docs/PreferencesService.md
+docs/PrepareProfileImageUploadAccountReq.md
+docs/PrepareProfileImageUploadAccountResp.md
 docs/PrivacySettingService.md
 docs/Profile.md
 docs/ProfileLocation.md
@@ -209,6 +214,8 @@ src/models/CheckInResp.ts
 src/models/CheckRegistrationAvailabilityResp.ts
 src/models/CollectArticleReq.ts
 src/models/CollectArticleResp.ts
+src/models/CompleteProfileImageUploadAccountReq.ts
+src/models/CompleteProfileImageUploadAccountResp.ts
 src/models/ConfirmEnableTotpReq.ts
 src/models/CountUnreadNotificationsResp.ts
 src/models/CreateCommentReq.ts
@@ -219,6 +226,7 @@ src/models/CreateDraftArticleReq.ts
 src/models/CreateDraftArticleResp.ts
 src/models/CreateTagReq.ts
 src/models/CreateTagResp.ts
+src/models/DetectCurrentLocationResp.ts
 src/models/DisableTotpReq.ts
 src/models/DiscardDraftArticleReq.ts
 src/models/FollowRelationReq.ts
@@ -276,6 +284,8 @@ src/models/MarkReadNotificationReq.ts
 src/models/MarkReadNotificationResp.ts
 src/models/PageReq.ts
 src/models/PageResp.ts
+src/models/PrepareProfileImageUploadAccountReq.ts
+src/models/PrepareProfileImageUploadAccountResp.ts
 src/models/Profile.ts
 src/models/ProfileLocation.ts
 src/models/ProfileRelation.ts

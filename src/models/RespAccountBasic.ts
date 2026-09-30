@@ -57,10 +57,10 @@ export interface RespAccountBasic {
     introduction?: string;
     /**
      * 
-     * @type {RespAccountBasicMbtiEnum}
+     * @type {string}
      * @memberof RespAccountBasic
      */
-    mbti?: RespAccountBasicMbtiEnum;
+    mbti?: string;
     /**
      * 
      * @type {RespAccountBasicStatusEnum}
@@ -93,30 +93,6 @@ export interface RespAccountBasic {
     updatedAt?: Date;
 }
 
-
-/**
- * @export
- */
-export const RespAccountBasicMbtiEnum = {
-    MBTI_UNSPECIFIED: 'MBTI_UNSPECIFIED',
-    MBTI_INTJ: 'MBTI_INTJ',
-    MBTI_INTP: 'MBTI_INTP',
-    MBTI_ENTJ: 'MBTI_ENTJ',
-    MBTI_ENTP: 'MBTI_ENTP',
-    MBTI_INFJ: 'MBTI_INFJ',
-    MBTI_INFP: 'MBTI_INFP',
-    MBTI_ENFJ: 'MBTI_ENFJ',
-    MBTI_ENFP: 'MBTI_ENFP',
-    MBTI_ISTJ: 'MBTI_ISTJ',
-    MBTI_ISFJ: 'MBTI_ISFJ',
-    MBTI_ESTJ: 'MBTI_ESTJ',
-    MBTI_ESFJ: 'MBTI_ESFJ',
-    MBTI_ISTP: 'MBTI_ISTP',
-    MBTI_ISFP: 'MBTI_ISFP',
-    MBTI_ESTP: 'MBTI_ESTP',
-    MBTI_ESFP: 'MBTI_ESFP'
-} as const;
-export type RespAccountBasicMbtiEnum = typeof RespAccountBasicMbtiEnum[keyof typeof RespAccountBasicMbtiEnum];
 
 /**
  * @export

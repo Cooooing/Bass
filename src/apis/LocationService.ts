@@ -14,6 +14,11 @@
 
 import * as runtime from '../runtime';
 import {
+    type DetectCurrentLocationResp,
+    DetectCurrentLocationRespFromJSON,
+    DetectCurrentLocationRespToJSON,
+} from '../models/DetectCurrentLocationResp';
+import {
     type GetCurrentLocationResp,
     GetCurrentLocationRespFromJSON,
     GetCurrentLocationRespToJSON,
@@ -28,6 +33,10 @@ import {
     UpsertCurrentLocationRespFromJSON,
     UpsertCurrentLocationRespToJSON,
 } from '../models/UpsertCurrentLocationResp';
+
+export interface DetectCurrentRequest {
+    body: object;
+}
 
 export interface GetCurrentRequest {
     body: object;
@@ -44,6 +53,28 @@ export interface UpsertCurrentRequest {
  * @interface LocationServiceInterface
  */
 export interface LocationServiceInterface {
+    /**
+     * Creates request options for detectCurrent without sending the request
+     * @param {object} body 
+     * @throws {RequiredError}
+     * @memberof LocationServiceInterface
+     */
+    detectCurrentRequestOpts(requestParameters: DetectCurrentRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 按当前请求 IP 解析并更新当前账号的地理资料。
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LocationServiceInterface
+     */
+    detectCurrentRaw(requestParameters: DetectCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DetectCurrentLocationResp>>;
+
+    /**
+     * 按当前请求 IP 解析并更新当前账号的地理资料。
+     */
+    detectCurrent(requestParameters: DetectCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DetectCurrentLocationResp>;
+
     /**
      * Creates request options for getCurrent without sending the request
      * @param {object} body 
@@ -94,6 +125,53 @@ export interface LocationServiceInterface {
  * 
  */
 export class LocationService extends runtime.BaseAPI implements LocationServiceInterface {
+
+    /**
+     * Creates request options for detectCurrent without sending the request
+     */
+    async detectCurrentRequestOpts(requestParameters: DetectCurrentRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['body'] == null) {
+            throw new runtime.RequiredError(
+                'body',
+                'Required parameter "body" was null or undefined when calling detectCurrent().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/location/detect-current`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['body'] as any,
+        };
+    }
+
+    /**
+     * 按当前请求 IP 解析并更新当前账号的地理资料。
+     */
+    async detectCurrentRaw(requestParameters: DetectCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DetectCurrentLocationResp>> {
+        const requestOptions = await this.detectCurrentRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => DetectCurrentLocationRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 按当前请求 IP 解析并更新当前账号的地理资料。
+     */
+    async detectCurrent(requestParameters: DetectCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DetectCurrentLocationResp> {
+        const response = await this.detectCurrentRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates request options for getCurrent without sending the request

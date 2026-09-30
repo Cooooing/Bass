@@ -1,28 +1,24 @@
 
-# UpdateProfileAccountReq
+# CompleteProfileImageUploadAccountReq
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`nickname` | string
-`url` | string
-`introduction` | string
-`mbti` | string
+`purpose` | string
+`hash` | string
 
 ## Example
 
 ```typescript
-import type { UpdateProfileAccountReq } from '@bass/bbs-sdk-fetch'
+import type { CompleteProfileImageUploadAccountReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "nickname": null,
-  "url": null,
-  "introduction": null,
-  "mbti": null,
-} satisfies UpdateProfileAccountReq
+  "purpose": null,
+  "hash": null,
+} satisfies CompleteProfileImageUploadAccountReq
 
 console.log(example)
 
@@ -31,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as UpdateProfileAccountReq
+const exampleParsed = JSON.parse(exampleJSON) as CompleteProfileImageUploadAccountReq
 console.log(exampleParsed)
 ```
 

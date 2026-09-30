@@ -4,9 +4,77 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
+| [**detectCurrent**](LocationService.md#detectcurrent) | **POST** /v1/user/location/detect-current |  |
 | [**getCurrent**](LocationService.md#getcurrent) | **POST** /v1/user/location/get-current |  |
 | [**upsertCurrent**](LocationService.md#upsertcurrent) | **POST** /v1/user/location/upsert-current |  |
 
+
+
+## detectCurrent
+
+> DetectCurrentLocationResp detectCurrent(body)
+
+
+
+按当前请求 IP 解析并更新当前账号的地理资料。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  LocationService,
+} from '@bass/bbs-sdk-fetch';
+import type { DetectCurrentRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new LocationService();
+
+  const body = {
+    // object
+    body: Object,
+  } satisfies DetectCurrentRequest;
+
+  try {
+    const data = await api.detectCurrent(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **body** | `object` |  | |
+
+### Return type
+
+[**DetectCurrentLocationResp**](DetectCurrentLocationResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
 ## getCurrent

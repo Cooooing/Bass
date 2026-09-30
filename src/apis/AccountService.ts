@@ -14,6 +14,16 @@
 
 import * as runtime from '../runtime';
 import {
+    type CompleteProfileImageUploadAccountReq,
+    CompleteProfileImageUploadAccountReqFromJSON,
+    CompleteProfileImageUploadAccountReqToJSON,
+} from '../models/CompleteProfileImageUploadAccountReq';
+import {
+    type CompleteProfileImageUploadAccountResp,
+    CompleteProfileImageUploadAccountRespFromJSON,
+    CompleteProfileImageUploadAccountRespToJSON,
+} from '../models/CompleteProfileImageUploadAccountResp';
+import {
     type GetCurrentAccountResp,
     GetCurrentAccountRespFromJSON,
     GetCurrentAccountRespToJSON,
@@ -54,6 +64,16 @@ import {
     ListFollowingRespToJSON,
 } from '../models/ListFollowingResp';
 import {
+    type PrepareProfileImageUploadAccountReq,
+    PrepareProfileImageUploadAccountReqFromJSON,
+    PrepareProfileImageUploadAccountReqToJSON,
+} from '../models/PrepareProfileImageUploadAccountReq';
+import {
+    type PrepareProfileImageUploadAccountResp,
+    PrepareProfileImageUploadAccountRespFromJSON,
+    PrepareProfileImageUploadAccountRespToJSON,
+} from '../models/PrepareProfileImageUploadAccountResp';
+import {
     type UpdateEmailAccountReq,
     UpdateEmailAccountReqFromJSON,
     UpdateEmailAccountReqToJSON,
@@ -83,6 +103,10 @@ export interface AvatarRequest {
     name?: string;
 }
 
+export interface CompleteProfileImageUploadRequest {
+    completeProfileImageUploadAccountReq: CompleteProfileImageUploadAccountReq;
+}
+
 export interface GetCurrentRequest {
     body: object;
 }
@@ -97,6 +121,10 @@ export interface ListFollowersRequest {
 
 export interface ListFollowingRequest {
     listFollowingReq: ListFollowingReq;
+}
+
+export interface PrepareProfileImageUploadRequest {
+    prepareProfileImageUploadAccountReq: PrepareProfileImageUploadAccountReq;
 }
 
 export interface UpdateEmailRequest {
@@ -143,6 +171,28 @@ export interface AccountServiceInterface {
      * 生成默认账号头像
      */
     avatar(requestParameters: AvatarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageResp>;
+
+    /**
+     * Creates request options for completeProfileImageUpload without sending the request
+     * @param {CompleteProfileImageUploadAccountReq} completeProfileImageUploadAccountReq 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    completeProfileImageUploadRequestOpts(requestParameters: CompleteProfileImageUploadRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+     * @param {CompleteProfileImageUploadAccountReq} completeProfileImageUploadAccountReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    completeProfileImageUploadRaw(requestParameters: CompleteProfileImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CompleteProfileImageUploadAccountResp>>;
+
+    /**
+     * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+     */
+    completeProfileImageUpload(requestParameters: CompleteProfileImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompleteProfileImageUploadAccountResp>;
 
     /**
      * Creates request options for getCurrent without sending the request
@@ -231,6 +281,28 @@ export interface AccountServiceInterface {
      * 查询账号公开的关注列表。
      */
     listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingResp>;
+
+    /**
+     * Creates request options for prepareProfileImageUpload without sending the request
+     * @param {PrepareProfileImageUploadAccountReq} prepareProfileImageUploadAccountReq 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    prepareProfileImageUploadRequestOpts(requestParameters: PrepareProfileImageUploadRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 申请当前账号资料图片的内容寻址直传能力。
+     * @param {PrepareProfileImageUploadAccountReq} prepareProfileImageUploadAccountReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    prepareProfileImageUploadRaw(requestParameters: PrepareProfileImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PrepareProfileImageUploadAccountResp>>;
+
+    /**
+     * 申请当前账号资料图片的内容寻址直传能力。
+     */
+    prepareProfileImageUpload(requestParameters: PrepareProfileImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PrepareProfileImageUploadAccountResp>;
 
     /**
      * Creates request options for updateEmail without sending the request
@@ -365,6 +437,53 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
      */
     async avatar(requestParameters: AvatarRequest = {}, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ImageResp> {
         const response = await this.avatarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for completeProfileImageUpload without sending the request
+     */
+    async completeProfileImageUploadRequestOpts(requestParameters: CompleteProfileImageUploadRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['completeProfileImageUploadAccountReq'] == null) {
+            throw new runtime.RequiredError(
+                'completeProfileImageUploadAccountReq',
+                'Required parameter "completeProfileImageUploadAccountReq" was null or undefined when calling completeProfileImageUpload().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/complete-profile-image-upload`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CompleteProfileImageUploadAccountReqToJSON(requestParameters['completeProfileImageUploadAccountReq']),
+        };
+    }
+
+    /**
+     * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+     */
+    async completeProfileImageUploadRaw(requestParameters: CompleteProfileImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CompleteProfileImageUploadAccountResp>> {
+        const requestOptions = await this.completeProfileImageUploadRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CompleteProfileImageUploadAccountRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+     */
+    async completeProfileImageUpload(requestParameters: CompleteProfileImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CompleteProfileImageUploadAccountResp> {
+        const response = await this.completeProfileImageUploadRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -553,6 +672,53 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
      */
     async listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingResp> {
         const response = await this.listFollowingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for prepareProfileImageUpload without sending the request
+     */
+    async prepareProfileImageUploadRequestOpts(requestParameters: PrepareProfileImageUploadRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['prepareProfileImageUploadAccountReq'] == null) {
+            throw new runtime.RequiredError(
+                'prepareProfileImageUploadAccountReq',
+                'Required parameter "prepareProfileImageUploadAccountReq" was null or undefined when calling prepareProfileImageUpload().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/prepare-profile-image-upload`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PrepareProfileImageUploadAccountReqToJSON(requestParameters['prepareProfileImageUploadAccountReq']),
+        };
+    }
+
+    /**
+     * 申请当前账号资料图片的内容寻址直传能力。
+     */
+    async prepareProfileImageUploadRaw(requestParameters: PrepareProfileImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PrepareProfileImageUploadAccountResp>> {
+        const requestOptions = await this.prepareProfileImageUploadRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PrepareProfileImageUploadAccountRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 申请当前账号资料图片的内容寻址直传能力。
+     */
+    async prepareProfileImageUpload(requestParameters: PrepareProfileImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PrepareProfileImageUploadAccountResp> {
+        const response = await this.prepareProfileImageUploadRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

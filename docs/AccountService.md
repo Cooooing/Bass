@@ -5,10 +5,12 @@ All URIs are relative to *http://localhost*
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
 | [**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar |  |
+| [**completeProfileImageUpload**](AccountService.md#completeprofileimageupload) | **POST** /v1/user/account/complete-profile-image-upload |  |
 | [**getCurrent**](AccountService.md#getcurrent) | **POST** /v1/user/account/get-current |  |
 | [**getProfile**](AccountService.md#getprofile) | **POST** /v1/user/account/get-profile |  |
 | [**listFollowers**](AccountService.md#listfollowers) | **POST** /v1/user/account/list-followers |  |
 | [**listFollowing**](AccountService.md#listfollowing) | **POST** /v1/user/account/list-following |  |
+| [**prepareProfileImageUpload**](AccountService.md#prepareprofileimageupload) | **POST** /v1/user/account/prepare-profile-image-upload |  |
 | [**updateEmail**](AccountService.md#updateemail) | **POST** /v1/user/account/update-email |  |
 | [**updatePassword**](AccountService.md#updatepassword) | **POST** /v1/user/account/update-password |  |
 | [**updatePhone**](AccountService.md#updatephone) | **POST** /v1/user/account/update-phone |  |
@@ -72,6 +74,73 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## completeProfileImageUpload
+
+> CompleteProfileImageUploadAccountResp completeProfileImageUpload(completeProfileImageUploadAccountReq)
+
+
+
+将已由 MinIO 回调确认的资源绑定到当前账号资料。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountService,
+} from '@bass/bbs-sdk-fetch';
+import type { CompleteProfileImageUploadRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AccountService();
+
+  const body = {
+    // CompleteProfileImageUploadAccountReq
+    completeProfileImageUploadAccountReq: ...,
+  } satisfies CompleteProfileImageUploadRequest;
+
+  try {
+    const data = await api.completeProfileImageUpload(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **completeProfileImageUploadAccountReq** | [CompleteProfileImageUploadAccountReq](CompleteProfileImageUploadAccountReq.md) |  | |
+
+### Return type
+
+[**CompleteProfileImageUploadAccountResp**](CompleteProfileImageUploadAccountResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
 - **Accept**: `application/json`
 
 
@@ -332,6 +401,73 @@ example().catch(console.error);
 ### Return type
 
 [**ListFollowingResp**](ListFollowingResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## prepareProfileImageUpload
+
+> PrepareProfileImageUploadAccountResp prepareProfileImageUpload(prepareProfileImageUploadAccountReq)
+
+
+
+申请当前账号资料图片的内容寻址直传能力。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountService,
+} from '@bass/bbs-sdk-fetch';
+import type { PrepareProfileImageUploadRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AccountService();
+
+  const body = {
+    // PrepareProfileImageUploadAccountReq
+    prepareProfileImageUploadAccountReq: ...,
+  } satisfies PrepareProfileImageUploadRequest;
+
+  try {
+    const data = await api.prepareProfileImageUpload(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **prepareProfileImageUploadAccountReq** | [PrepareProfileImageUploadAccountReq](PrepareProfileImageUploadAccountReq.md) |  | |
+
+### Return type
+
+[**PrepareProfileImageUploadAccountResp**](PrepareProfileImageUploadAccountResp.md)
 
 ### Authorization
 

@@ -24,18 +24,6 @@ export interface UpdateProfileAccountReq {
      * @type {string}
      * @memberof UpdateProfileAccountReq
      */
-    avatarAssetId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileAccountReq
-     */
-    backgroundAssetId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateProfileAccountReq
-     */
     nickname?: string;
     /**
      * 
@@ -51,37 +39,11 @@ export interface UpdateProfileAccountReq {
     introduction?: string;
     /**
      * 
-     * @type {UpdateProfileAccountReqMbtiEnum}
+     * @type {string}
      * @memberof UpdateProfileAccountReq
      */
-    mbti?: UpdateProfileAccountReqMbtiEnum;
+    mbti?: string;
 }
-
-
-/**
- * @export
- */
-export const UpdateProfileAccountReqMbtiEnum = {
-    MBTI_UNSPECIFIED: 'MBTI_UNSPECIFIED',
-    MBTI_INTJ: 'MBTI_INTJ',
-    MBTI_INTP: 'MBTI_INTP',
-    MBTI_ENTJ: 'MBTI_ENTJ',
-    MBTI_ENTP: 'MBTI_ENTP',
-    MBTI_INFJ: 'MBTI_INFJ',
-    MBTI_INFP: 'MBTI_INFP',
-    MBTI_ENFJ: 'MBTI_ENFJ',
-    MBTI_ENFP: 'MBTI_ENFP',
-    MBTI_ISTJ: 'MBTI_ISTJ',
-    MBTI_ISFJ: 'MBTI_ISFJ',
-    MBTI_ESTJ: 'MBTI_ESTJ',
-    MBTI_ESFJ: 'MBTI_ESFJ',
-    MBTI_ISTP: 'MBTI_ISTP',
-    MBTI_ISFP: 'MBTI_ISFP',
-    MBTI_ESTP: 'MBTI_ESTP',
-    MBTI_ESFP: 'MBTI_ESFP'
-} as const;
-export type UpdateProfileAccountReqMbtiEnum = typeof UpdateProfileAccountReqMbtiEnum[keyof typeof UpdateProfileAccountReqMbtiEnum];
-
 
 /**
  * Check if a given object implements the UpdateProfileAccountReq interface.
@@ -100,8 +62,6 @@ export function UpdateProfileAccountReqFromJSONTyped(json: any, ignoreDiscrimina
     }
     return {
         
-        'avatarAssetId': json['avatar_asset_id'] == null ? undefined : json['avatar_asset_id'],
-        'backgroundAssetId': json['background_asset_id'] == null ? undefined : json['background_asset_id'],
         'nickname': json['nickname'] == null ? undefined : json['nickname'],
         'url': json['url'] == null ? undefined : json['url'],
         'introduction': json['introduction'] == null ? undefined : json['introduction'],
@@ -120,8 +80,6 @@ export function UpdateProfileAccountReqToJSONTyped(value?: UpdateProfileAccountR
 
     return {
         
-        'avatar_asset_id': value['avatarAssetId'],
-        'background_asset_id': value['backgroundAssetId'],
         'nickname': value['nickname'],
         'url': value['url'],
         'introduction': value['introduction'],

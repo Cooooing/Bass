@@ -4,8 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**AvatarAssetId** | Pointer to **string** |  | [optional] 
-**BackgroundAssetId** | Pointer to **string** |  | [optional] 
 **Nickname** | Pointer to **string** |  | [optional] 
 **Url** | Pointer to **string** |  | [optional] 
 **Introduction** | Pointer to **string** |  | [optional] 
@@ -29,56 +27,6 @@ will change when the set of required properties is changed
 NewUpdateProfileAccountReqWithDefaults instantiates a new UpdateProfileAccountReq object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetAvatarAssetId
-
-`func (o *UpdateProfileAccountReq) GetAvatarAssetId() string`
-
-GetAvatarAssetId returns the AvatarAssetId field if non-nil, zero value otherwise.
-
-### GetAvatarAssetIdOk
-
-`func (o *UpdateProfileAccountReq) GetAvatarAssetIdOk() (*string, bool)`
-
-GetAvatarAssetIdOk returns a tuple with the AvatarAssetId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetAvatarAssetId
-
-`func (o *UpdateProfileAccountReq) SetAvatarAssetId(v string)`
-
-SetAvatarAssetId sets AvatarAssetId field to given value.
-
-### HasAvatarAssetId
-
-`func (o *UpdateProfileAccountReq) HasAvatarAssetId() bool`
-
-HasAvatarAssetId returns a boolean if a field has been set.
-
-### GetBackgroundAssetId
-
-`func (o *UpdateProfileAccountReq) GetBackgroundAssetId() string`
-
-GetBackgroundAssetId returns the BackgroundAssetId field if non-nil, zero value otherwise.
-
-### GetBackgroundAssetIdOk
-
-`func (o *UpdateProfileAccountReq) GetBackgroundAssetIdOk() (*string, bool)`
-
-GetBackgroundAssetIdOk returns a tuple with the BackgroundAssetId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetBackgroundAssetId
-
-`func (o *UpdateProfileAccountReq) SetBackgroundAssetId(v string)`
-
-SetBackgroundAssetId sets BackgroundAssetId field to given value.
-
-### HasBackgroundAssetId
-
-`func (o *UpdateProfileAccountReq) HasBackgroundAssetId() bool`
-
-HasBackgroundAssetId returns a boolean if a field has been set.
 
 ### GetNickname
 

@@ -19,8 +19,6 @@ var _ MappedNullable = &UpdateProfileAccountReq{}
 
 // UpdateProfileAccountReq struct for UpdateProfileAccountReq
 type UpdateProfileAccountReq struct {
-	AvatarAssetId *string `json:"avatar_asset_id,omitempty"`
-	BackgroundAssetId *string `json:"background_asset_id,omitempty"`
 	Nickname *string `json:"nickname,omitempty"`
 	Url *string `json:"url,omitempty"`
 	Introduction *string `json:"introduction,omitempty"`
@@ -42,70 +40,6 @@ func NewUpdateProfileAccountReq() *UpdateProfileAccountReq {
 func NewUpdateProfileAccountReqWithDefaults() *UpdateProfileAccountReq {
 	this := UpdateProfileAccountReq{}
 	return &this
-}
-
-// GetAvatarAssetId returns the AvatarAssetId field value if set, zero value otherwise.
-func (o *UpdateProfileAccountReq) GetAvatarAssetId() string {
-	if o == nil || IsNil(o.AvatarAssetId) {
-		var ret string
-		return ret
-	}
-	return *o.AvatarAssetId
-}
-
-// GetAvatarAssetIdOk returns a tuple with the AvatarAssetId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *UpdateProfileAccountReq) GetAvatarAssetIdOk() (*string, bool) {
-	if o == nil || IsNil(o.AvatarAssetId) {
-		return nil, false
-	}
-	return o.AvatarAssetId, true
-}
-
-// HasAvatarAssetId returns a boolean if a field has been set.
-func (o *UpdateProfileAccountReq) HasAvatarAssetId() bool {
-	if o != nil && !IsNil(o.AvatarAssetId) {
-		return true
-	}
-
-	return false
-}
-
-// SetAvatarAssetId gets a reference to the given string and assigns it to the AvatarAssetId field.
-func (o *UpdateProfileAccountReq) SetAvatarAssetId(v string) {
-	o.AvatarAssetId = &v
-}
-
-// GetBackgroundAssetId returns the BackgroundAssetId field value if set, zero value otherwise.
-func (o *UpdateProfileAccountReq) GetBackgroundAssetId() string {
-	if o == nil || IsNil(o.BackgroundAssetId) {
-		var ret string
-		return ret
-	}
-	return *o.BackgroundAssetId
-}
-
-// GetBackgroundAssetIdOk returns a tuple with the BackgroundAssetId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *UpdateProfileAccountReq) GetBackgroundAssetIdOk() (*string, bool) {
-	if o == nil || IsNil(o.BackgroundAssetId) {
-		return nil, false
-	}
-	return o.BackgroundAssetId, true
-}
-
-// HasBackgroundAssetId returns a boolean if a field has been set.
-func (o *UpdateProfileAccountReq) HasBackgroundAssetId() bool {
-	if o != nil && !IsNil(o.BackgroundAssetId) {
-		return true
-	}
-
-	return false
-}
-
-// SetBackgroundAssetId gets a reference to the given string and assigns it to the BackgroundAssetId field.
-func (o *UpdateProfileAccountReq) SetBackgroundAssetId(v string) {
-	o.BackgroundAssetId = &v
 }
 
 // GetNickname returns the Nickname field value if set, zero value otherwise.
@@ -246,12 +180,6 @@ func (o UpdateProfileAccountReq) MarshalJSON() ([]byte, error) {
 
 func (o UpdateProfileAccountReq) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.AvatarAssetId) {
-		toSerialize["avatar_asset_id"] = o.AvatarAssetId
-	}
-	if !IsNil(o.BackgroundAssetId) {
-		toSerialize["background_asset_id"] = o.BackgroundAssetId
-	}
 	if !IsNil(o.Nickname) {
 		toSerialize["nickname"] = o.Nickname
 	}

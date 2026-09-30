@@ -45,6 +45,8 @@ docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
 docs/CommentService.md
+docs/CompleteProfileImageUploadAccountReq.md
+docs/CompleteProfileImageUploadAccountResp.md
 docs/ConfirmEnableTotpReq.md
 docs/CountUnreadNotificationsResp.md
 docs/CreateCommentReq.md
@@ -55,6 +57,7 @@ docs/CreateDraftArticleReq.md
 docs/CreateDraftArticleResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
+docs/DetectCurrentLocationResp.md
 docs/DisableTotpReq.md
 docs/DiscardDraftArticleReq.md
 docs/DomainService.md
@@ -118,6 +121,8 @@ docs/PageReq.md
 docs/PageResp.md
 docs/PostscriptService.md
 docs/PreferencesService.md
+docs/PrepareProfileImageUploadAccountReq.md
+docs/PrepareProfileImageUploadAccountResp.md
 docs/PrivacySettingService.md
 docs/Profile.md
 docs/ProfileLocation.md
@@ -212,6 +217,8 @@ model_check_in_resp.go
 model_check_registration_availability_resp.go
 model_collect_article_req.go
 model_collect_article_resp.go
+model_complete_profile_image_upload_account_req.go
+model_complete_profile_image_upload_account_resp.go
 model_confirm_enable_totp_req.go
 model_count_unread_notifications_resp.go
 model_create_comment_req.go
@@ -222,6 +229,7 @@ model_create_draft_article_req.go
 model_create_draft_article_resp.go
 model_create_tag_req.go
 model_create_tag_resp.go
+model_detect_current_location_resp.go
 model_disable_totp_req.go
 model_discard_draft_article_req.go
 model_follow_relation_req.go
@@ -279,6 +287,8 @@ model_mark_read_notification_req.go
 model_mark_read_notification_resp.go
 model_page_req.go
 model_page_resp.go
+model_prepare_profile_image_upload_account_req.go
+model_prepare_profile_image_upload_account_resp.go
 model_profile.go
 model_profile_location.go
 model_profile_relation.go

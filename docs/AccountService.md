@@ -5,10 +5,12 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**Avatar**](AccountService.md#Avatar) | **Get** /v1/user/account/avatar | 
+[**CompleteProfileImageUpload**](AccountService.md#CompleteProfileImageUpload) | **Post** /v1/user/account/complete-profile-image-upload | 
 [**GetCurrent**](AccountService.md#GetCurrent) | **Post** /v1/user/account/get-current | 
 [**GetProfile**](AccountService.md#GetProfile) | **Post** /v1/user/account/get-profile | 
 [**ListFollowers**](AccountService.md#ListFollowers) | **Post** /v1/user/account/list-followers | 
 [**ListFollowing**](AccountService.md#ListFollowing) | **Post** /v1/user/account/list-following | 
+[**PrepareProfileImageUpload**](AccountService.md#PrepareProfileImageUpload) | **Post** /v1/user/account/prepare-profile-image-upload | 
 [**UpdateEmail**](AccountService.md#UpdateEmail) | **Post** /v1/user/account/update-email | 
 [**UpdatePassword**](AccountService.md#UpdatePassword) | **Post** /v1/user/account/update-password | 
 [**UpdatePhone**](AccountService.md#UpdatePhone) | **Post** /v1/user/account/update-phone | 
@@ -75,6 +77,72 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CompleteProfileImageUpload
+
+> CompleteProfileImageUploadAccountResp CompleteProfileImageUpload(ctx).CompleteProfileImageUploadAccountReq(completeProfileImageUploadAccountReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	completeProfileImageUploadAccountReq := *openapiclient.NewCompleteProfileImageUploadAccountReq("Purpose_example", "Hash_example") // CompleteProfileImageUploadAccountReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.CompleteProfileImageUpload(context.Background()).CompleteProfileImageUploadAccountReq(completeProfileImageUploadAccountReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.CompleteProfileImageUpload``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `CompleteProfileImageUpload`: CompleteProfileImageUploadAccountResp
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.CompleteProfileImageUpload`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiCompleteProfileImageUploadRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **completeProfileImageUploadAccountReq** | [**CompleteProfileImageUploadAccountReq**](CompleteProfileImageUploadAccountReq.md) |  | 
+
+### Return type
+
+[**CompleteProfileImageUploadAccountResp**](CompleteProfileImageUploadAccountResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -331,6 +399,72 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ListFollowingResp**](ListFollowingResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PrepareProfileImageUpload
+
+> PrepareProfileImageUploadAccountResp PrepareProfileImageUpload(ctx).PrepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	prepareProfileImageUploadAccountReq := *openapiclient.NewPrepareProfileImageUploadAccountReq("Purpose_example", "Hash_example", "MimeType_example", "Size_example") // PrepareProfileImageUploadAccountReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.PrepareProfileImageUpload(context.Background()).PrepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.PrepareProfileImageUpload``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `PrepareProfileImageUpload`: PrepareProfileImageUploadAccountResp
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.PrepareProfileImageUpload`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPrepareProfileImageUploadRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **prepareProfileImageUploadAccountReq** | [**PrepareProfileImageUploadAccountReq**](PrepareProfileImageUploadAccountReq.md) |  | 
+
+### Return type
+
+[**PrepareProfileImageUploadAccountResp**](PrepareProfileImageUploadAccountResp.md)
 
 ### Authorization
 

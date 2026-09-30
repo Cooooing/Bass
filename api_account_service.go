@@ -36,6 +36,20 @@ type AccountService interface {
 	AvatarExecute(r ApiAvatarRequest) (*ImageResp, *http.Response, error)
 
 	/*
+	CompleteProfileImageUpload Method for CompleteProfileImageUpload
+
+	将已由 MinIO 回调确认的资源绑定到当前账号资料。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiCompleteProfileImageUploadRequest
+	*/
+	CompleteProfileImageUpload(ctx context.Context) ApiCompleteProfileImageUploadRequest
+
+	// CompleteProfileImageUploadExecute executes the request
+	//  @return CompleteProfileImageUploadAccountResp
+	CompleteProfileImageUploadExecute(r ApiCompleteProfileImageUploadRequest) (*CompleteProfileImageUploadAccountResp, *http.Response, error)
+
+	/*
 	GetCurrent Method for GetCurrent
 
 	获取当前账号完整资料
@@ -90,6 +104,20 @@ type AccountService interface {
 	// ListFollowingExecute executes the request
 	//  @return ListFollowingResp
 	ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingResp, *http.Response, error)
+
+	/*
+	PrepareProfileImageUpload Method for PrepareProfileImageUpload
+
+	申请当前账号资料图片的内容寻址直传能力。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiPrepareProfileImageUploadRequest
+	*/
+	PrepareProfileImageUpload(ctx context.Context) ApiPrepareProfileImageUploadRequest
+
+	// PrepareProfileImageUploadExecute executes the request
+	//  @return PrepareProfileImageUploadAccountResp
+	PrepareProfileImageUploadExecute(r ApiPrepareProfileImageUploadRequest) (*PrepareProfileImageUploadAccountResp, *http.Response, error)
 
 	/*
 	UpdateEmail Method for UpdateEmail
@@ -222,6 +250,116 @@ func (a *AccountServiceService) AvatarExecute(r ApiAvatarRequest) (*ImageResp, *
 	if localVarHTTPHeaderAccept != "" {
 		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
 	}
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiCompleteProfileImageUploadRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	completeProfileImageUploadAccountReq *CompleteProfileImageUploadAccountReq
+}
+
+func (r ApiCompleteProfileImageUploadRequest) CompleteProfileImageUploadAccountReq(completeProfileImageUploadAccountReq CompleteProfileImageUploadAccountReq) ApiCompleteProfileImageUploadRequest {
+	r.completeProfileImageUploadAccountReq = &completeProfileImageUploadAccountReq
+	return r
+}
+
+func (r ApiCompleteProfileImageUploadRequest) Execute() (*CompleteProfileImageUploadAccountResp, *http.Response, error) {
+	return r.ApiService.CompleteProfileImageUploadExecute(r)
+}
+
+/*
+CompleteProfileImageUpload Method for CompleteProfileImageUpload
+
+将已由 MinIO 回调确认的资源绑定到当前账号资料。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiCompleteProfileImageUploadRequest
+*/
+func (a *AccountServiceService) CompleteProfileImageUpload(ctx context.Context) ApiCompleteProfileImageUploadRequest {
+	return ApiCompleteProfileImageUploadRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return CompleteProfileImageUploadAccountResp
+func (a *AccountServiceService) CompleteProfileImageUploadExecute(r ApiCompleteProfileImageUploadRequest) (*CompleteProfileImageUploadAccountResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *CompleteProfileImageUploadAccountResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.CompleteProfileImageUpload")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/complete-profile-image-upload"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.completeProfileImageUploadAccountReq == nil {
+		return localVarReturnValue, nil, reportError("completeProfileImageUploadAccountReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.completeProfileImageUploadAccountReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -662,6 +800,116 @@ func (a *AccountServiceService) ListFollowingExecute(r ApiListFollowingRequest) 
 	}
 	// body params
 	localVarPostBody = r.listFollowingReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiPrepareProfileImageUploadRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	prepareProfileImageUploadAccountReq *PrepareProfileImageUploadAccountReq
+}
+
+func (r ApiPrepareProfileImageUploadRequest) PrepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq PrepareProfileImageUploadAccountReq) ApiPrepareProfileImageUploadRequest {
+	r.prepareProfileImageUploadAccountReq = &prepareProfileImageUploadAccountReq
+	return r
+}
+
+func (r ApiPrepareProfileImageUploadRequest) Execute() (*PrepareProfileImageUploadAccountResp, *http.Response, error) {
+	return r.ApiService.PrepareProfileImageUploadExecute(r)
+}
+
+/*
+PrepareProfileImageUpload Method for PrepareProfileImageUpload
+
+申请当前账号资料图片的内容寻址直传能力。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiPrepareProfileImageUploadRequest
+*/
+func (a *AccountServiceService) PrepareProfileImageUpload(ctx context.Context) ApiPrepareProfileImageUploadRequest {
+	return ApiPrepareProfileImageUploadRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return PrepareProfileImageUploadAccountResp
+func (a *AccountServiceService) PrepareProfileImageUploadExecute(r ApiPrepareProfileImageUploadRequest) (*PrepareProfileImageUploadAccountResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PrepareProfileImageUploadAccountResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.PrepareProfileImageUpload")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/prepare-profile-image-upload"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.prepareProfileImageUploadAccountReq == nil {
+		return localVarReturnValue, nil, reportError("prepareProfileImageUploadAccountReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.prepareProfileImageUploadAccountReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

@@ -34,6 +34,18 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 
 	})
 
+	t.Run("Test AccountServiceService CompleteProfileImageUpload", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.AccountService.CompleteProfileImageUpload(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 	t.Run("Test AccountServiceService GetCurrent", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
@@ -75,6 +87,18 @@ func Test_bbs_AccountServiceService(t *testing.T) {
 		t.Skip("skip test")  // remove to run test
 
 		resp, httpRes, err := apiClient.AccountService.ListFollowing(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test AccountServiceService PrepareProfileImageUpload", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.AccountService.PrepareProfileImageUpload(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

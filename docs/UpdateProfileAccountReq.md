@@ -5,8 +5,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**avatar_asset_id** | **string** |  | [optional] [default to undefined]
-**background_asset_id** | **string** |  | [optional] [default to undefined]
 **nickname** | **string** |  | [optional] [default to undefined]
 **url** | **string** |  | [optional] [default to undefined]
 **introduction** | **string** |  | [optional] [default to undefined]
@@ -18,8 +16,6 @@ Name | Type | Description | Notes
 import { UpdateProfileAccountReq } from '@bass/bbs-sdk-axios';
 
 const instance: UpdateProfileAccountReq = {
-    avatar_asset_id,
-    background_asset_id,
     nickname,
     url,
     introduction,

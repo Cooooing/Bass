@@ -4,8 +4,60 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**detectCurrent**](#detectcurrent) | **POST** /v1/user/location/detect-current | |
 |[**getCurrent**](#getcurrent) | **POST** /v1/user/location/get-current | |
 |[**upsertCurrent**](#upsertcurrent) | **POST** /v1/user/location/upsert-current | |
+
+# **detectCurrent**
+> DetectCurrentLocationResp detectCurrent(body)
+
+按当前请求 IP 解析并更新当前账号的地理资料。
+
+### Example
+
+```typescript
+import {
+    LocationService,
+    Configuration
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new LocationService(configuration);
+
+let body: object; //
+
+const { status, data } = await apiInstance.detectCurrent(
+    body
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **body** | **object**|  | |
+
+
+### Return type
+
+**DetectCurrentLocationResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **getCurrent**
 > GetCurrentLocationResp getCurrent(body)

@@ -36,7 +36,7 @@ export interface AccountProfile {
     'avatar_url'?: string;
     'background_asset_id'?: string;
     'introduction'?: string;
-    'mbti'?: AccountProfileMbtiEnum;
+    'mbti'?: string;
     'status'?: AccountProfileStatusEnum;
     'follow_count'?: number;
     'follower_count'?: number;
@@ -44,27 +44,6 @@ export interface AccountProfile {
     'updated_at'?: string;
 }
 
-export const AccountProfileMbtiEnum = {
-    MBTI_UNSPECIFIED: 'MBTI_UNSPECIFIED',
-    MBTI_INTJ: 'MBTI_INTJ',
-    MBTI_INTP: 'MBTI_INTP',
-    MBTI_ENTJ: 'MBTI_ENTJ',
-    MBTI_ENTP: 'MBTI_ENTP',
-    MBTI_INFJ: 'MBTI_INFJ',
-    MBTI_INFP: 'MBTI_INFP',
-    MBTI_ENFJ: 'MBTI_ENFJ',
-    MBTI_ENFP: 'MBTI_ENFP',
-    MBTI_ISTJ: 'MBTI_ISTJ',
-    MBTI_ISFJ: 'MBTI_ISFJ',
-    MBTI_ESTJ: 'MBTI_ESTJ',
-    MBTI_ESFJ: 'MBTI_ESFJ',
-    MBTI_ISTP: 'MBTI_ISTP',
-    MBTI_ISFP: 'MBTI_ISFP',
-    MBTI_ESTP: 'MBTI_ESTP',
-    MBTI_ESFP: 'MBTI_ESFP',
-} as const;
-
-export type AccountProfileMbtiEnum = typeof AccountProfileMbtiEnum[keyof typeof AccountProfileMbtiEnum];
 export const AccountProfileStatusEnum = {
     ACCOUNT_STATUS_UNSPECIFIED: 'ACCOUNT_STATUS_UNSPECIFIED',
     ACCOUNT_STATUS_NORMAL: 'ACCOUNT_STATUS_NORMAL',
@@ -306,6 +285,23 @@ export interface CollectArticleReq {
 export interface CollectArticleResp {
     'collected'?: boolean;
 }
+export interface CompleteProfileImageUploadAccountReq {
+    'purpose': CompleteProfileImageUploadAccountReqPurposeEnum;
+    'hash': string;
+}
+
+export const CompleteProfileImageUploadAccountReqPurposeEnum = {
+    PROFILE_IMAGE_PURPOSE_UNSPECIFIED: 'PROFILE_IMAGE_PURPOSE_UNSPECIFIED',
+    PROFILE_IMAGE_PURPOSE_AVATAR: 'PROFILE_IMAGE_PURPOSE_AVATAR',
+    PROFILE_IMAGE_PURPOSE_BACKGROUND: 'PROFILE_IMAGE_PURPOSE_BACKGROUND',
+} as const;
+
+export type CompleteProfileImageUploadAccountReqPurposeEnum = typeof CompleteProfileImageUploadAccountReqPurposeEnum[keyof typeof CompleteProfileImageUploadAccountReqPurposeEnum];
+
+export interface CompleteProfileImageUploadAccountResp {
+    'profile'?: AccountProfile;
+    'image_url'?: string;
+}
 export interface ConfirmEnableTotpReq {
     'code': string;
 }
@@ -337,6 +333,9 @@ export interface CreateTagReq {
 }
 export interface CreateTagResp {
     'tag'?: RespTag;
+}
+export interface DetectCurrentLocationResp {
+    'location'?: RespLocation;
 }
 export interface DisableTotpReq {
     'code': string;
@@ -623,6 +622,26 @@ export interface PageResp {
      * 页大小
      */
     'size'?: number;
+}
+export interface PrepareProfileImageUploadAccountReq {
+    'purpose': PrepareProfileImageUploadAccountReqPurposeEnum;
+    'hash': string;
+    'mime_type': string;
+    'size': string;
+}
+
+export const PrepareProfileImageUploadAccountReqPurposeEnum = {
+    PROFILE_IMAGE_PURPOSE_UNSPECIFIED: 'PROFILE_IMAGE_PURPOSE_UNSPECIFIED',
+    PROFILE_IMAGE_PURPOSE_AVATAR: 'PROFILE_IMAGE_PURPOSE_AVATAR',
+    PROFILE_IMAGE_PURPOSE_BACKGROUND: 'PROFILE_IMAGE_PURPOSE_BACKGROUND',
+} as const;
+
+export type PrepareProfileImageUploadAccountReqPurposeEnum = typeof PrepareProfileImageUploadAccountReqPurposeEnum[keyof typeof PrepareProfileImageUploadAccountReqPurposeEnum];
+
+export interface PrepareProfileImageUploadAccountResp {
+    'asset_id'?: string;
+    'upload_url'?: string;
+    'form_fields'?: { [key: string]: string; };
 }
 export interface Profile {
     'account'?: AccountProfile;
@@ -916,7 +935,7 @@ export interface RespAccountBasic {
     'url'?: string;
     'avatar_url'?: string;
     'introduction'?: string;
-    'mbti'?: RespAccountBasicMbtiEnum;
+    'mbti'?: string;
     'status'?: RespAccountBasicStatusEnum;
     'follow_count'?: number;
     'follower_count'?: number;
@@ -924,27 +943,6 @@ export interface RespAccountBasic {
     'updated_at'?: string;
 }
 
-export const RespAccountBasicMbtiEnum = {
-    MBTI_UNSPECIFIED: 'MBTI_UNSPECIFIED',
-    MBTI_INTJ: 'MBTI_INTJ',
-    MBTI_INTP: 'MBTI_INTP',
-    MBTI_ENTJ: 'MBTI_ENTJ',
-    MBTI_ENTP: 'MBTI_ENTP',
-    MBTI_INFJ: 'MBTI_INFJ',
-    MBTI_INFP: 'MBTI_INFP',
-    MBTI_ENFJ: 'MBTI_ENFJ',
-    MBTI_ENFP: 'MBTI_ENFP',
-    MBTI_ISTJ: 'MBTI_ISTJ',
-    MBTI_ISFJ: 'MBTI_ISFJ',
-    MBTI_ESTJ: 'MBTI_ESTJ',
-    MBTI_ESFJ: 'MBTI_ESFJ',
-    MBTI_ISTP: 'MBTI_ISTP',
-    MBTI_ISFP: 'MBTI_ISFP',
-    MBTI_ESTP: 'MBTI_ESTP',
-    MBTI_ESFP: 'MBTI_ESFP',
-} as const;
-
-export type RespAccountBasicMbtiEnum = typeof RespAccountBasicMbtiEnum[keyof typeof RespAccountBasicMbtiEnum];
 export const RespAccountBasicStatusEnum = {
     ACCOUNT_STATUS_UNSPECIFIED: 'ACCOUNT_STATUS_UNSPECIFIED',
     ACCOUNT_STATUS_NORMAL: 'ACCOUNT_STATUS_NORMAL',
@@ -966,7 +964,7 @@ export interface RespAccountProfile {
     'url'?: string;
     'avatar_url'?: string;
     'introduction'?: string;
-    'mbti'?: RespAccountProfileMbtiEnum;
+    'mbti'?: string;
     'status'?: RespAccountProfileStatusEnum;
     'follow_count'?: number;
     'follower_count'?: number;
@@ -974,27 +972,6 @@ export interface RespAccountProfile {
     'updated_at'?: string;
 }
 
-export const RespAccountProfileMbtiEnum = {
-    MBTI_UNSPECIFIED: 'MBTI_UNSPECIFIED',
-    MBTI_INTJ: 'MBTI_INTJ',
-    MBTI_INTP: 'MBTI_INTP',
-    MBTI_ENTJ: 'MBTI_ENTJ',
-    MBTI_ENTP: 'MBTI_ENTP',
-    MBTI_INFJ: 'MBTI_INFJ',
-    MBTI_INFP: 'MBTI_INFP',
-    MBTI_ENFJ: 'MBTI_ENFJ',
-    MBTI_ENFP: 'MBTI_ENFP',
-    MBTI_ISTJ: 'MBTI_ISTJ',
-    MBTI_ISFJ: 'MBTI_ISFJ',
-    MBTI_ESTJ: 'MBTI_ESTJ',
-    MBTI_ESFJ: 'MBTI_ESFJ',
-    MBTI_ISTP: 'MBTI_ISTP',
-    MBTI_ISFP: 'MBTI_ISFP',
-    MBTI_ESTP: 'MBTI_ESTP',
-    MBTI_ESFP: 'MBTI_ESFP',
-} as const;
-
-export type RespAccountProfileMbtiEnum = typeof RespAccountProfileMbtiEnum[keyof typeof RespAccountProfileMbtiEnum];
 export const RespAccountProfileStatusEnum = {
     ACCOUNT_STATUS_UNSPECIFIED: 'ACCOUNT_STATUS_UNSPECIFIED',
     ACCOUNT_STATUS_NORMAL: 'ACCOUNT_STATUS_NORMAL',
@@ -1421,36 +1398,11 @@ export interface UpdatePhoneAccountReq {
     'code': string;
 }
 export interface UpdateProfileAccountReq {
-    'avatar_asset_id'?: string;
-    'background_asset_id'?: string;
     'nickname'?: string;
     'url'?: string;
     'introduction'?: string;
-    'mbti'?: UpdateProfileAccountReqMbtiEnum;
+    'mbti'?: string;
 }
-
-export const UpdateProfileAccountReqMbtiEnum = {
-    MBTI_UNSPECIFIED: 'MBTI_UNSPECIFIED',
-    MBTI_INTJ: 'MBTI_INTJ',
-    MBTI_INTP: 'MBTI_INTP',
-    MBTI_ENTJ: 'MBTI_ENTJ',
-    MBTI_ENTP: 'MBTI_ENTP',
-    MBTI_INFJ: 'MBTI_INFJ',
-    MBTI_INFP: 'MBTI_INFP',
-    MBTI_ENFJ: 'MBTI_ENFJ',
-    MBTI_ENFP: 'MBTI_ENFP',
-    MBTI_ISTJ: 'MBTI_ISTJ',
-    MBTI_ISFJ: 'MBTI_ISFJ',
-    MBTI_ESTJ: 'MBTI_ESTJ',
-    MBTI_ESFJ: 'MBTI_ESFJ',
-    MBTI_ISTP: 'MBTI_ISTP',
-    MBTI_ISFP: 'MBTI_ISFP',
-    MBTI_ESTP: 'MBTI_ESTP',
-    MBTI_ESFP: 'MBTI_ESFP',
-} as const;
-
-export type UpdateProfileAccountReqMbtiEnum = typeof UpdateProfileAccountReqMbtiEnum[keyof typeof UpdateProfileAccountReqMbtiEnum];
-
 export interface UpdateProfileAccountResp {
     'profile'?: AccountProfile;
 }
@@ -1503,6 +1455,40 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+         * @param {CompleteProfileImageUploadAccountReq} completeProfileImageUploadAccountReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        completeProfileImageUpload: async (completeProfileImageUploadAccountReq: CompleteProfileImageUploadAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'completeProfileImageUploadAccountReq' is not null or undefined
+            assertParamExists('completeProfileImageUpload', 'completeProfileImageUploadAccountReq', completeProfileImageUploadAccountReq)
+            const localVarPath = `/v1/user/account/complete-profile-image-upload`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(completeProfileImageUploadAccountReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1639,6 +1625,40 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(listFollowingReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 申请当前账号资料图片的内容寻址直传能力。
+         * @param {PrepareProfileImageUploadAccountReq} prepareProfileImageUploadAccountReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        prepareProfileImageUpload: async (prepareProfileImageUploadAccountReq: PrepareProfileImageUploadAccountReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'prepareProfileImageUploadAccountReq' is not null or undefined
+            assertParamExists('prepareProfileImageUpload', 'prepareProfileImageUploadAccountReq', prepareProfileImageUploadAccountReq)
+            const localVarPath = `/v1/user/account/prepare-profile-image-upload`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(prepareProfileImageUploadAccountReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -1803,6 +1823,18 @@ export const AccountServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+         * @param {CompleteProfileImageUploadAccountReq} completeProfileImageUploadAccountReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async completeProfileImageUpload(completeProfileImageUploadAccountReq: CompleteProfileImageUploadAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CompleteProfileImageUploadAccountResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.completeProfileImageUpload(completeProfileImageUploadAccountReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.completeProfileImageUpload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 获取当前账号完整资料
          * @param {object} body 
          * @param {*} [options] Override http request option.
@@ -1848,6 +1880,18 @@ export const AccountServiceFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listFollowing(listFollowingReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AccountService.listFollowing']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 申请当前账号资料图片的内容寻址直传能力。
+         * @param {PrepareProfileImageUploadAccountReq} prepareProfileImageUploadAccountReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async prepareProfileImageUpload(prepareProfileImageUploadAccountReq: PrepareProfileImageUploadAccountReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PrepareProfileImageUploadAccountResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.prepareProfileImageUpload(prepareProfileImageUploadAccountReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.prepareProfileImageUpload']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1917,6 +1961,15 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.avatar(requestParameters.name, options).then((request) => request(axios, basePath));
         },
         /**
+         * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+         * @param {AccountServiceCompleteProfileImageUploadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        completeProfileImageUpload(requestParameters: AccountServiceCompleteProfileImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CompleteProfileImageUploadAccountResp> {
+            return localVarFp.completeProfileImageUpload(requestParameters.completeProfileImageUploadAccountReq, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 获取当前账号完整资料
          * @param {AccountServiceGetCurrentRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -1951,6 +2004,15 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
          */
         listFollowing(requestParameters: AccountServiceListFollowingRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowingResp> {
             return localVarFp.listFollowing(requestParameters.listFollowingReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 申请当前账号资料图片的内容寻址直传能力。
+         * @param {AccountServicePrepareProfileImageUploadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        prepareProfileImageUpload(requestParameters: AccountServicePrepareProfileImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<PrepareProfileImageUploadAccountResp> {
+            return localVarFp.prepareProfileImageUpload(requestParameters.prepareProfileImageUploadAccountReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 更新当前账号邮箱
@@ -2004,6 +2066,14 @@ export interface AccountServiceInterface {
     avatar(requestParameters?: AccountServiceAvatarRequest, options?: RawAxiosRequestConfig): AxiosPromise<ImageResp>;
 
     /**
+     * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+     * @param {AccountServiceCompleteProfileImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    completeProfileImageUpload(requestParameters: AccountServiceCompleteProfileImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CompleteProfileImageUploadAccountResp>;
+
+    /**
      * 获取当前账号完整资料
      * @param {AccountServiceGetCurrentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2034,6 +2104,14 @@ export interface AccountServiceInterface {
      * @throws {RequiredError}
      */
     listFollowing(requestParameters: AccountServiceListFollowingRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListFollowingResp>;
+
+    /**
+     * 申请当前账号资料图片的内容寻址直传能力。
+     * @param {AccountServicePrepareProfileImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    prepareProfileImageUpload(requestParameters: AccountServicePrepareProfileImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<PrepareProfileImageUploadAccountResp>;
 
     /**
      * 更新当前账号邮箱
@@ -2077,6 +2155,13 @@ export interface AccountServiceAvatarRequest {
 }
 
 /**
+ * Request parameters for completeProfileImageUpload operation in AccountService.
+ */
+export interface AccountServiceCompleteProfileImageUploadRequest {
+    readonly completeProfileImageUploadAccountReq: CompleteProfileImageUploadAccountReq
+}
+
+/**
  * Request parameters for getCurrent operation in AccountService.
  */
 export interface AccountServiceGetCurrentRequest {
@@ -2102,6 +2187,13 @@ export interface AccountServiceListFollowersRequest {
  */
 export interface AccountServiceListFollowingRequest {
     readonly listFollowingReq: ListFollowingReq
+}
+
+/**
+ * Request parameters for prepareProfileImageUpload operation in AccountService.
+ */
+export interface AccountServicePrepareProfileImageUploadRequest {
+    readonly prepareProfileImageUploadAccountReq: PrepareProfileImageUploadAccountReq
 }
 
 /**
@@ -2147,6 +2239,16 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
     }
 
     /**
+     * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+     * @param {AccountServiceCompleteProfileImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public completeProfileImageUpload(requestParameters: AccountServiceCompleteProfileImageUploadRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).completeProfileImageUpload(requestParameters.completeProfileImageUploadAccountReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 获取当前账号完整资料
      * @param {AccountServiceGetCurrentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2184,6 +2286,16 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
      */
     public listFollowing(requestParameters: AccountServiceListFollowingRequest, options?: RawAxiosRequestConfig) {
         return AccountServiceFp(this.configuration).listFollowing(requestParameters.listFollowingReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 申请当前账号资料图片的内容寻址直传能力。
+     * @param {AccountServicePrepareProfileImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public prepareProfileImageUpload(requestParameters: AccountServicePrepareProfileImageUploadRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).prepareProfileImageUpload(requestParameters.prepareProfileImageUploadAccountReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4846,6 +4958,40 @@ export class DomainService extends BaseAPI implements DomainServiceInterface {
 export const LocationServiceAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * 按当前请求 IP 解析并更新当前账号的地理资料。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        detectCurrent: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('detectCurrent', 'body', body)
+            const localVarPath = `/v1/user/location/detect-current`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 获取当前账号的地理资料。
          * @param {object} body 
          * @param {*} [options] Override http request option.
@@ -4923,6 +5069,18 @@ export const LocationServiceFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = LocationServiceAxiosParamCreator(configuration)
     return {
         /**
+         * 按当前请求 IP 解析并更新当前账号的地理资料。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async detectCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DetectCurrentLocationResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.detectCurrent(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LocationService.detectCurrent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 获取当前账号的地理资料。
          * @param {object} body 
          * @param {*} [options] Override http request option.
@@ -4956,6 +5114,15 @@ export const LocationServiceFactory = function (configuration?: Configuration, b
     const localVarFp = LocationServiceFp(configuration)
     return {
         /**
+         * 按当前请求 IP 解析并更新当前账号的地理资料。
+         * @param {LocationServiceDetectCurrentRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        detectCurrent(requestParameters: LocationServiceDetectCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<DetectCurrentLocationResp> {
+            return localVarFp.detectCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 获取当前账号的地理资料。
          * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -4981,6 +5148,14 @@ export const LocationServiceFactory = function (configuration?: Configuration, b
  */
 export interface LocationServiceInterface {
     /**
+     * 按当前请求 IP 解析并更新当前账号的地理资料。
+     * @param {LocationServiceDetectCurrentRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    detectCurrent(requestParameters: LocationServiceDetectCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<DetectCurrentLocationResp>;
+
+    /**
      * 获取当前账号的地理资料。
      * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -4996,6 +5171,13 @@ export interface LocationServiceInterface {
      */
     upsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpsertCurrentLocationResp>;
 
+}
+
+/**
+ * Request parameters for detectCurrent operation in LocationService.
+ */
+export interface LocationServiceDetectCurrentRequest {
+    readonly body: object
 }
 
 /**
@@ -5016,6 +5198,16 @@ export interface LocationServiceUpsertCurrentRequest {
  * LocationService - object-oriented interface
  */
 export class LocationService extends BaseAPI implements LocationServiceInterface {
+    /**
+     * 按当前请求 IP 解析并更新当前账号的地理资料。
+     * @param {LocationServiceDetectCurrentRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public detectCurrent(requestParameters: LocationServiceDetectCurrentRequest, options?: RawAxiosRequestConfig) {
+        return LocationServiceFp(this.configuration).detectCurrent(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 获取当前账号的地理资料。
      * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.

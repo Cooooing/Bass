@@ -5,10 +5,12 @@ All URIs are relative to *http://localhost*
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**avatar**](#avatar) | **GET** /v1/user/account/avatar | |
+|[**completeProfileImageUpload**](#completeprofileimageupload) | **POST** /v1/user/account/complete-profile-image-upload | |
 |[**getCurrent**](#getcurrent) | **POST** /v1/user/account/get-current | |
 |[**getProfile**](#getprofile) | **POST** /v1/user/account/get-profile | |
 |[**listFollowers**](#listfollowers) | **POST** /v1/user/account/list-followers | |
 |[**listFollowing**](#listfollowing) | **POST** /v1/user/account/list-following | |
+|[**prepareProfileImageUpload**](#prepareprofileimageupload) | **POST** /v1/user/account/prepare-profile-image-upload | |
 |[**updateEmail**](#updateemail) | **POST** /v1/user/account/update-email | |
 |[**updatePassword**](#updatepassword) | **POST** /v1/user/account/update-password | |
 |[**updatePhone**](#updatephone) | **POST** /v1/user/account/update-phone | |
@@ -55,6 +57,58 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **completeProfileImageUpload**
+> CompleteProfileImageUploadAccountResp completeProfileImageUpload(completeProfileImageUploadAccountReq)
+
+将已由 MinIO 回调确认的资源绑定到当前账号资料。
+
+### Example
+
+```typescript
+import {
+    AccountService,
+    Configuration,
+    CompleteProfileImageUploadAccountReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AccountService(configuration);
+
+let completeProfileImageUploadAccountReq: CompleteProfileImageUploadAccountReq; //
+
+const { status, data } = await apiInstance.completeProfileImageUpload(
+    completeProfileImageUploadAccountReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **completeProfileImageUploadAccountReq** | **CompleteProfileImageUploadAccountReq**|  | |
+
+
+### Return type
+
+**CompleteProfileImageUploadAccountResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 
@@ -254,6 +308,58 @@ const { status, data } = await apiInstance.listFollowing(
 ### Return type
 
 **ListFollowingResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **prepareProfileImageUpload**
+> PrepareProfileImageUploadAccountResp prepareProfileImageUpload(prepareProfileImageUploadAccountReq)
+
+申请当前账号资料图片的内容寻址直传能力。
+
+### Example
+
+```typescript
+import {
+    AccountService,
+    Configuration,
+    PrepareProfileImageUploadAccountReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AccountService(configuration);
+
+let prepareProfileImageUploadAccountReq: PrepareProfileImageUploadAccountReq; //
+
+const { status, data } = await apiInstance.prepareProfileImageUpload(
+    prepareProfileImageUploadAccountReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **prepareProfileImageUploadAccountReq** | **PrepareProfileImageUploadAccountReq**|  | |
+
+
+### Return type
+
+**PrepareProfileImageUploadAccountResp**
 
 ### Authorization
 

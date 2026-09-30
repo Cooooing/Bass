@@ -1,13 +1,12 @@
-# UpdateProfileAccountReq
+# PrepareProfileImageUploadAccountResp
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**nickname** | Option<**String**> |  | [optional]
-**url** | Option<**String**> |  | [optional]
-**introduction** | Option<**String**> |  | [optional]
-**mbti** | Option<**String**> |  | [optional]
+**asset_id** | Option<**String**> |  | [optional]
+**upload_url** | Option<**String**> |  | [optional]
+**form_fields** | Option<**std::collections::HashMap<String, String>**> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

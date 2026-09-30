@@ -13,10 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct UpdateProfileAccountReq {
-    #[serde(rename = "avatar_asset_id", skip_serializing_if = "Option::is_none")]
-    pub avatar_asset_id: Option<String>,
-    #[serde(rename = "background_asset_id", skip_serializing_if = "Option::is_none")]
-    pub background_asset_id: Option<String>,
     #[serde(rename = "nickname", skip_serializing_if = "Option::is_none")]
     pub nickname: Option<String>,
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
@@ -24,63 +20,17 @@ pub struct UpdateProfileAccountReq {
     #[serde(rename = "introduction", skip_serializing_if = "Option::is_none")]
     pub introduction: Option<String>,
     #[serde(rename = "mbti", skip_serializing_if = "Option::is_none")]
-    pub mbti: Option<Mbti>,
+    pub mbti: Option<String>,
 }
 
 impl UpdateProfileAccountReq {
     pub fn new() -> UpdateProfileAccountReq {
         UpdateProfileAccountReq {
-            avatar_asset_id: None,
-            background_asset_id: None,
             nickname: None,
             url: None,
             introduction: None,
             mbti: None,
         }
-    }
-}
-/// 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum Mbti {
-    #[serde(rename = "MBTI_UNSPECIFIED")]
-    MbtiUnspecified,
-    #[serde(rename = "MBTI_INTJ")]
-    MbtiIntj,
-    #[serde(rename = "MBTI_INTP")]
-    MbtiIntp,
-    #[serde(rename = "MBTI_ENTJ")]
-    MbtiEntj,
-    #[serde(rename = "MBTI_ENTP")]
-    MbtiEntp,
-    #[serde(rename = "MBTI_INFJ")]
-    MbtiInfj,
-    #[serde(rename = "MBTI_INFP")]
-    MbtiInfp,
-    #[serde(rename = "MBTI_ENFJ")]
-    MbtiEnfj,
-    #[serde(rename = "MBTI_ENFP")]
-    MbtiEnfp,
-    #[serde(rename = "MBTI_ISTJ")]
-    MbtiIstj,
-    #[serde(rename = "MBTI_ISFJ")]
-    MbtiIsfj,
-    #[serde(rename = "MBTI_ESTJ")]
-    MbtiEstj,
-    #[serde(rename = "MBTI_ESFJ")]
-    MbtiEsfj,
-    #[serde(rename = "MBTI_ISTP")]
-    MbtiIstp,
-    #[serde(rename = "MBTI_ISFP")]
-    MbtiIsfp,
-    #[serde(rename = "MBTI_ESTP")]
-    MbtiEstp,
-    #[serde(rename = "MBTI_ESFP")]
-    MbtiEsfp,
-}
-
-impl Default for Mbti {
-    fn default() -> Mbti {
-        Self::MbtiUnspecified
     }
 }
 

@@ -25,6 +25,11 @@ pub trait AccountService: Send + Sync {
     /// 生成默认账号头像
     async fn avatar<'name>(&self, name: Option<&'name str>) -> Result<models::ImageResp, Error<AvatarError>>;
 
+    /// POST /v1/user/account/complete-profile-image-upload
+    ///
+    /// 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+    async fn complete_profile_image_upload<'complete_profile_image_upload_account_req>(&self, complete_profile_image_upload_account_req: models::CompleteProfileImageUploadAccountReq) -> Result<models::CompleteProfileImageUploadAccountResp, Error<CompleteProfileImageUploadError>>;
+
     /// POST /v1/user/account/get-current
     ///
     /// 获取当前账号完整资料
@@ -44,6 +49,11 @@ pub trait AccountService: Send + Sync {
     ///
     /// 查询账号公开的关注列表。
     async fn list_following<'list_following_req>(&self, list_following_req: models::ListFollowingReq) -> Result<models::ListFollowingResp, Error<ListFollowingError>>;
+
+    /// POST /v1/user/account/prepare-profile-image-upload
+    ///
+    /// 申请当前账号资料图片的内容寻址直传能力。
+    async fn prepare_profile_image_upload<'prepare_profile_image_upload_account_req>(&self, prepare_profile_image_upload_account_req: models::PrepareProfileImageUploadAccountReq) -> Result<models::PrepareProfileImageUploadAccountResp, Error<PrepareProfileImageUploadError>>;
 
     /// POST /v1/user/account/update-email
     ///
@@ -116,6 +126,45 @@ impl AccountService for AccountServiceClient {
             }
         } else {
             let local_var_entity: Option<AvatarError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+    async fn complete_profile_image_upload<'complete_profile_image_upload_account_req>(&self, complete_profile_image_upload_account_req: models::CompleteProfileImageUploadAccountReq) -> Result<models::CompleteProfileImageUploadAccountResp, Error<CompleteProfileImageUploadError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/account/complete-profile-image-upload", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&complete_profile_image_upload_account_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::CompleteProfileImageUploadAccountResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::CompleteProfileImageUploadAccountResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<CompleteProfileImageUploadError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -272,6 +321,45 @@ impl AccountService for AccountServiceClient {
             }
         } else {
             let local_var_entity: Option<ListFollowingError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 申请当前账号资料图片的内容寻址直传能力。
+    async fn prepare_profile_image_upload<'prepare_profile_image_upload_account_req>(&self, prepare_profile_image_upload_account_req: models::PrepareProfileImageUploadAccountReq) -> Result<models::PrepareProfileImageUploadAccountResp, Error<PrepareProfileImageUploadError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/account/prepare-profile-image-upload", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&prepare_profile_image_upload_account_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PrepareProfileImageUploadAccountResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PrepareProfileImageUploadAccountResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<PrepareProfileImageUploadError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -442,6 +530,13 @@ pub enum AvatarError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`AccountService::complete_profile_image_upload`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum CompleteProfileImageUploadError {
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`AccountService::get_current`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -467,6 +562,13 @@ pub enum ListFollowersError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ListFollowingError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`AccountService::prepare_profile_image_upload`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PrepareProfileImageUploadError {
     UnknownValue(serde_json::Value),
 }
 

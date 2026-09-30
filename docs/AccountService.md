@@ -5,10 +5,12 @@ All URIs are relative to *http://localhost*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar | 
+[**complete_profile_image_upload**](AccountService.md#complete_profile_image_upload) | **POST** /v1/user/account/complete-profile-image-upload | 
 [**get_current**](AccountService.md#get_current) | **POST** /v1/user/account/get-current | 
 [**get_profile**](AccountService.md#get_profile) | **POST** /v1/user/account/get-profile | 
 [**list_followers**](AccountService.md#list_followers) | **POST** /v1/user/account/list-followers | 
 [**list_following**](AccountService.md#list_following) | **POST** /v1/user/account/list-following | 
+[**prepare_profile_image_upload**](AccountService.md#prepare_profile_image_upload) | **POST** /v1/user/account/prepare-profile-image-upload | 
 [**update_email**](AccountService.md#update_email) | **POST** /v1/user/account/update-email | 
 [**update_password**](AccountService.md#update_password) | **POST** /v1/user/account/update-password | 
 [**update_phone**](AccountService.md#update_phone) | **POST** /v1/user/account/update-phone | 
@@ -41,6 +43,36 @@ No authorization required
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## complete_profile_image_upload
+
+> models::CompleteProfileImageUploadAccountResp complete_profile_image_upload(complete_profile_image_upload_account_req)
+
+
+将已由 MinIO 回调确认的资源绑定到当前账号资料。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**complete_profile_image_upload_account_req** | [**CompleteProfileImageUploadAccountReq**](CompleteProfileImageUploadAccountReq.md) |  | [required] |
+
+### Return type
+
+[**models::CompleteProfileImageUploadAccountResp**](CompleteProfileImageUploadAccount_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -153,6 +185,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::ListFollowingResp**](ListFollowing_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## prepare_profile_image_upload
+
+> models::PrepareProfileImageUploadAccountResp prepare_profile_image_upload(prepare_profile_image_upload_account_req)
+
+
+申请当前账号资料图片的内容寻址直传能力。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**prepare_profile_image_upload_account_req** | [**PrepareProfileImageUploadAccountReq**](PrepareProfileImageUploadAccountReq.md) |  | [required] |
+
+### Return type
+
+[**models::PrepareProfileImageUploadAccountResp**](PrepareProfileImageUploadAccount_Resp.md)
 
 ### Authorization
 

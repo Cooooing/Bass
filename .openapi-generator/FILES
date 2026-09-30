@@ -29,6 +29,8 @@ docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
 docs/CommentService.md
+docs/CompleteProfileImageUploadAccountReq.md
+docs/CompleteProfileImageUploadAccountResp.md
 docs/ConfirmEnableTotpReq.md
 docs/CountUnreadNotificationsResp.md
 docs/CreateCommentReq.md
@@ -39,6 +41,7 @@ docs/CreateDraftArticleReq.md
 docs/CreateDraftArticleResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
+docs/DetectCurrentLocationResp.md
 docs/DisableTotpReq.md
 docs/DiscardDraftArticleReq.md
 docs/DomainService.md
@@ -102,6 +105,8 @@ docs/PageReq.md
 docs/PageResp.md
 docs/PostscriptService.md
 docs/PreferencesService.md
+docs/PrepareProfileImageUploadAccountReq.md
+docs/PrepareProfileImageUploadAccountResp.md
 docs/PrivacySettingService.md
 docs/Profile.md
 docs/ProfileLocation.md
@@ -211,6 +216,8 @@ src/models/check_in_resp.rs
 src/models/check_registration_availability_resp.rs
 src/models/collect_article_req.rs
 src/models/collect_article_resp.rs
+src/models/complete_profile_image_upload_account_req.rs
+src/models/complete_profile_image_upload_account_resp.rs
 src/models/confirm_enable_totp_req.rs
 src/models/count_unread_notifications_resp.rs
 src/models/create_comment_req.rs
@@ -221,6 +228,7 @@ src/models/create_draft_article_req.rs
 src/models/create_draft_article_resp.rs
 src/models/create_tag_req.rs
 src/models/create_tag_resp.rs
+src/models/detect_current_location_resp.rs
 src/models/disable_totp_req.rs
 src/models/discard_draft_article_req.rs
 src/models/follow_relation_req.rs
@@ -279,6 +287,8 @@ src/models/mark_read_notification_resp.rs
 src/models/mod.rs
 src/models/page_req.rs
 src/models/page_resp.rs
+src/models/prepare_profile_image_upload_account_req.rs
+src/models/prepare_profile_image_upload_account_resp.rs
 src/models/profile.rs
 src/models/profile_location.rs
 src/models/profile_relation.rs

@@ -4,9 +4,40 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**detect_current**](LocationService.md#detect_current) | **POST** /v1/user/location/detect-current | 
 [**get_current**](LocationService.md#get_current) | **POST** /v1/user/location/get-current | 
 [**upsert_current**](LocationService.md#upsert_current) | **POST** /v1/user/location/upsert-current | 
 
+
+
+## detect_current
+
+> models::DetectCurrentLocationResp detect_current(body)
+
+
+按当前请求 IP 解析并更新当前账号的地理资料。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**body** | **serde_json::Value** |  | [required] |
+
+### Return type
+
+[**models::DetectCurrentLocationResp**](DetectCurrentLocation_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## get_current

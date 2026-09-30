@@ -27,10 +27,12 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AccountService* | [**avatar**](docs/AccountService.md#avatar) | **GET** /v1/user/account/avatar | 
+*AccountService* | [**complete_profile_image_upload**](docs/AccountService.md#complete_profile_image_upload) | **POST** /v1/user/account/complete-profile-image-upload | 
 *AccountService* | [**get_current**](docs/AccountService.md#get_current) | **POST** /v1/user/account/get-current | 
 *AccountService* | [**get_profile**](docs/AccountService.md#get_profile) | **POST** /v1/user/account/get-profile | 
 *AccountService* | [**list_followers**](docs/AccountService.md#list_followers) | **POST** /v1/user/account/list-followers | 
 *AccountService* | [**list_following**](docs/AccountService.md#list_following) | **POST** /v1/user/account/list-following | 
+*AccountService* | [**prepare_profile_image_upload**](docs/AccountService.md#prepare_profile_image_upload) | **POST** /v1/user/account/prepare-profile-image-upload | 
 *AccountService* | [**update_email**](docs/AccountService.md#update_email) | **POST** /v1/user/account/update-email | 
 *AccountService* | [**update_password**](docs/AccountService.md#update_password) | **POST** /v1/user/account/update-password | 
 *AccountService* | [**update_phone**](docs/AccountService.md#update_phone) | **POST** /v1/user/account/update-phone | 
@@ -65,6 +67,7 @@ Class | Method | HTTP request | Description
 *DomainService* | [**create**](docs/DomainService.md#create) | **POST** /v1/content/domain/create | 
 *DomainService* | [**list**](docs/DomainService.md#list) | **POST** /v1/content/domain/list | 
 *DomainService* | [**update**](docs/DomainService.md#update) | **POST** /v1/content/domain/update | 
+*LocationService* | [**detect_current**](docs/LocationService.md#detect_current) | **POST** /v1/user/location/detect-current | 
 *LocationService* | [**get_current**](docs/LocationService.md#get_current) | **POST** /v1/user/location/get-current | 
 *LocationService* | [**upsert_current**](docs/LocationService.md#upsert_current) | **POST** /v1/user/location/upsert-current | 
 *NotificationService* | [**count_unread**](docs/NotificationService.md#count_unread) | **POST** /v1/notify/notification/count-unread | 
@@ -121,6 +124,8 @@ Class | Method | HTTP request | Description
  - [CheckRegistrationAvailabilityResp](docs/CheckRegistrationAvailabilityResp.md)
  - [CollectArticleReq](docs/CollectArticleReq.md)
  - [CollectArticleResp](docs/CollectArticleResp.md)
+ - [CompleteProfileImageUploadAccountReq](docs/CompleteProfileImageUploadAccountReq.md)
+ - [CompleteProfileImageUploadAccountResp](docs/CompleteProfileImageUploadAccountResp.md)
  - [ConfirmEnableTotpReq](docs/ConfirmEnableTotpReq.md)
  - [CountUnreadNotificationsResp](docs/CountUnreadNotificationsResp.md)
  - [CreateCommentReq](docs/CreateCommentReq.md)
@@ -131,6 +136,7 @@ Class | Method | HTTP request | Description
  - [CreateDraftArticleResp](docs/CreateDraftArticleResp.md)
  - [CreateTagReq](docs/CreateTagReq.md)
  - [CreateTagResp](docs/CreateTagResp.md)
+ - [DetectCurrentLocationResp](docs/DetectCurrentLocationResp.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
  - [DiscardDraftArticleReq](docs/DiscardDraftArticleReq.md)
  - [FollowRelationReq](docs/FollowRelationReq.md)
@@ -188,6 +194,8 @@ Class | Method | HTTP request | Description
  - [MarkReadNotificationResp](docs/MarkReadNotificationResp.md)
  - [PageReq](docs/PageReq.md)
  - [PageResp](docs/PageResp.md)
+ - [PrepareProfileImageUploadAccountReq](docs/PrepareProfileImageUploadAccountReq.md)
+ - [PrepareProfileImageUploadAccountResp](docs/PrepareProfileImageUploadAccountResp.md)
  - [Profile](docs/Profile.md)
  - [ProfileLocation](docs/ProfileLocation.md)
  - [ProfileRelation](docs/ProfileRelation.md)

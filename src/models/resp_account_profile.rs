@@ -26,7 +26,7 @@ pub struct RespAccountProfile {
     #[serde(rename = "introduction", skip_serializing_if = "Option::is_none")]
     pub introduction: Option<String>,
     #[serde(rename = "mbti", skip_serializing_if = "Option::is_none")]
-    pub mbti: Option<Mbti>,
+    pub mbti: Option<String>,
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<Status>,
     #[serde(rename = "follow_count", skip_serializing_if = "Option::is_none")]
@@ -55,50 +55,6 @@ impl RespAccountProfile {
             created_at: None,
             updated_at: None,
         }
-    }
-}
-/// 
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
-pub enum Mbti {
-    #[serde(rename = "MBTI_UNSPECIFIED")]
-    MbtiUnspecified,
-    #[serde(rename = "MBTI_INTJ")]
-    MbtiIntj,
-    #[serde(rename = "MBTI_INTP")]
-    MbtiIntp,
-    #[serde(rename = "MBTI_ENTJ")]
-    MbtiEntj,
-    #[serde(rename = "MBTI_ENTP")]
-    MbtiEntp,
-    #[serde(rename = "MBTI_INFJ")]
-    MbtiInfj,
-    #[serde(rename = "MBTI_INFP")]
-    MbtiInfp,
-    #[serde(rename = "MBTI_ENFJ")]
-    MbtiEnfj,
-    #[serde(rename = "MBTI_ENFP")]
-    MbtiEnfp,
-    #[serde(rename = "MBTI_ISTJ")]
-    MbtiIstj,
-    #[serde(rename = "MBTI_ISFJ")]
-    MbtiIsfj,
-    #[serde(rename = "MBTI_ESTJ")]
-    MbtiEstj,
-    #[serde(rename = "MBTI_ESFJ")]
-    MbtiEsfj,
-    #[serde(rename = "MBTI_ISTP")]
-    MbtiIstp,
-    #[serde(rename = "MBTI_ISFP")]
-    MbtiIsfp,
-    #[serde(rename = "MBTI_ESTP")]
-    MbtiEstp,
-    #[serde(rename = "MBTI_ESFP")]
-    MbtiEsfp,
-}
-
-impl Default for Mbti {
-    fn default() -> Mbti {
-        Self::MbtiUnspecified
     }
 }
 /// 

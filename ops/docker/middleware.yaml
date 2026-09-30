@@ -147,9 +147,10 @@ services:
     depends_on:
       minio:
         condition: service_healthy
+    # The image defaults to the `minio` entrypoint. Override it explicitly so
+    # this one-shot bootstrap container executes the bundled `mc` client.
+    entrypoint: ["/bin/sh", "-ec"]
     command:
-      - /bin/sh
-      - -ec
       - |
         mc alias set bass-minio http://minio:9000 "$${MINIO_ROOT_USER}" "$${MINIO_ROOT_PASSWORD}"
         mc mb --ignore-existing bass-minio/"$${MINIO_BUCKET}"

@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package common.api.app.platform.v1;
+
+import "platform/v1/enum/asset.proto";
+
+option go_package = "common/proto/gen/platform/v1;v1";
+
+// PlatformAssetService manages completed, content-addressed resources. It does
+// not own business references or business visibility rules.
+service PlatformAssetService {
+  rpc PrepareDirectUpload(PrepareDirectAssetUpload.Req) returns (PrepareDirectAssetUpload.Resp) {}
+  rpc GetAvailableByHash(GetAvailableAssetByHash.Req) returns (GetAvailableAssetByHash.Resp) {}
+  rpc ResolvePublic(ResolvePublicAssets.Req) returns (ResolvePublicAssets.Resp) {}
+  rpc ValidateAvailable(ValidateAvailableAsset.Req) returns (ValidateAvailableAsset.Resp) {}
+  rpc Block(BlockAsset.Req) returns (BlockAsset.Resp) {}
+}
+
+message Asset {
+  int64 id = 1;
+  string hash = 2; // SHA-256, lowercase hexadecimal.
+  string url = 3;
+  string mime_type = 4;
+  int64 size = 5;
+  .common.api.app.platform.v1.AssetStatus status = 6;
+}
+
+// When asset_id is present, the hash already exists and no upload is needed.
+// Otherwise clients submit the returned multipart form directly to MinIO.
+message PrepareDirectAssetUpload {
+  message Req {
+    string hash = 1; // SHA-256, lowercase hexadecimal.
+    string mime_type = 2;
+    int64 size = 3;
+    int64 upload_by_user_id = 4; // 认证后的上传者，用于审计和限流。
+  }
+  message Resp {
+    optional int64 asset_id = 1;
+    string upload_url = 2;
+    map<string, string> form_fields = 3;
+  }
+}
+
+message GetAvailableAssetByHash {
+  message Req {
+    string hash = 1;
+  }
+  message Resp {
+    Asset asset = 1;
+  }
+}
+
+message ResolvePublicAssets {
+  message Req {
+    repeated int64 asset_ids = 1;
+  }
+  message Resp {
+    map<int64, string> urls = 1;
+  }
+}
+
+message ValidateAvailableAsset {
+  message Req {
+    int64 asset_id = 1;
+  }
+  message Resp {}
+}
+
+// Block is an internal moderation command. It changes only global resource
+// availability; each business domain retains ownership of its references.
+message BlockAsset {
+  message Req {
+    int64 asset_id = 1;
+    optional string reason = 2;
+    int64 operator_user_id = 3;
+  }
+  message Resp {}
+}

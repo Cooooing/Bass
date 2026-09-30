@@ -61,7 +61,6 @@ enum BusinessErrorCode {
   BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWERS_PRIVATE = 11038 [(errors.code) = 403]; // 用户粉丝列表未公开
   BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID = 11039 [(errors.code) = 400]; // 用户资料图片格式无效
   BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_TOO_LARGE = 11040 [(errors.code) = 400]; // 用户资料图片文件过大
-  BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_DIMENSIONS_INVALID = 11041 [(errors.code) = 400]; // 用户资料图片尺寸无效
   BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND = 12001 [(errors.code) = 404]; // 内容文章不存在
   BUSINESS_ERROR_CODE_CONTENT_TAG_NOT_FOUND = 12002 [(errors.code) = 404]; // 内容标签不存在
   BUSINESS_ERROR_CODE_CONTENT_DOMAIN_NOT_FOUND = 12003 [(errors.code) = 404]; // 内容领域不存在

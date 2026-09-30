@@ -110,6 +110,17 @@ services:
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      # CORS is a MinIO server setting, not a bucket-level S3 API call.
+      - MINIO_API_CORS_ALLOW_ORIGIN=${MINIO_API_CORS_ALLOW_ORIGIN:-http://localhost:2324}
+      # This is an infrastructure-only route: MinIO publishes object-created events to the stable NATS subject.
+      - MINIO_NOTIFY_NATS_ENABLE_ASSET_EVENTS=on
+      - MINIO_NOTIFY_NATS_ADDRESS_ASSET_EVENTS=nats:4222
+      - MINIO_NOTIFY_NATS_SUBJECT_ASSET_EVENTS=${ASSET_EVENT_SUBJECT:-storage.asset.object-created}
+      - MINIO_NOTIFY_NATS_USERNAME_ASSET_EVENTS=${NATS_USER}
+      - MINIO_NOTIFY_NATS_PASSWORD_ASSET_EVENTS=${NATS_PASSWORD}
+      - MINIO_NOTIFY_NATS_JETSTREAM_ASSET_EVENTS=on
+      - MINIO_NOTIFY_NATS_QUEUE_DIR_ASSET_EVENTS=/data/minio-events/asset-events
+      - MINIO_NOTIFY_NATS_QUEUE_LIMIT_ASSET_EVENTS=10000
     command: server /data --console-address ":9001"
     ports:
       - "${MINIO_PORT:-9000}:9000"
@@ -123,6 +134,32 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+
+  minio-asset-event-rule:
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    restart: "no"
+    env_file:
+      - .test.env
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - MINIO_BUCKET=${MINIO_BUCKET:-bass-assets}
+    depends_on:
+      minio:
+        condition: service_healthy
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        mc alias set bass-minio http://minio:9000 "$${MINIO_ROOT_USER}" "$${MINIO_ROOT_PASSWORD}"
+        mc mb --ignore-existing bass-minio/"$${MINIO_BUCKET}"
+        mc anonymous set download bass-minio/"$${MINIO_BUCKET}"/assets/sha256/
+        mc event add bass-minio/"$${MINIO_BUCKET}" arn:minio:sqs::ASSET_EVENTS:nats \
+          --event put \
+          --prefix assets/sha256/ \
+          --ignore-existing
+    networks:
+      - bass
 
 
   dtm-init:

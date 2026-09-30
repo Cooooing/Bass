@@ -109,13 +109,11 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 		req.Mbti = new(value)
 	}
 	profile, err := s.accountUsecase.UpdateProfileAccount(ctx, &usecase.UpdateProfileAccountReq{
-		UserID:            user.ID,
-		AvatarAssetID:     req.AvatarAssetId,
-		BackgroundAssetID: req.BackgroundAssetId,
-		Nickname:          req.Nickname,
-		URL:               req.Url,
-		Introduction:      req.Introduction,
-		Mbti:              req.Mbti,
+		UserID:       user.ID,
+		Nickname:     req.Nickname,
+		URL:          req.Url,
+		Introduction: req.Introduction,
+		Mbti:         req.Mbti,
 	})
 	if err != nil {
 		return nil, err
@@ -125,7 +123,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 	}, nil
 }
 
-func (s *AccountService) UploadProfileImage(ctx context.Context, req *bbsuserv1.UploadProfileImageAccount_Req) (*bbsuserv1.UploadProfileImageAccount_Resp, error) {
+func (s *AccountService) PrepareProfileImageUpload(ctx context.Context, req *bbsuserv1.PrepareProfileImageUploadAccount_Req) (*bbsuserv1.PrepareProfileImageUploadAccount_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -133,11 +131,32 @@ func (s *AccountService) UploadProfileImage(ctx context.Context, req *bbsuserv1.
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
-	resp, err := s.accountUsecase.UploadProfileImageAccount(ctx, &usecase.UploadProfileImageAccountReq{UserID: user.ID, Purpose: req.GetPurpose(), FileName: req.GetFileName(), Content: req.GetContent()})
+	resp, err := s.accountUsecase.PrepareProfileImageUploadAccount(ctx, &usecase.PrepareProfileImageUploadAccountReq{
+		UserID:   user.ID,
+		Purpose:  req.GetPurpose(),
+		Hash:     req.GetHash(),
+		MimeType: req.GetMimeType(),
+		Size:     req.GetSize(),
+	})
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.UploadProfileImageAccount_Resp{Profile: resp.Profile, ImageUrl: resp.ImageURL}, nil
+	return &bbsuserv1.PrepareProfileImageUploadAccount_Resp{AssetId: resp.AssetID, UploadUrl: resp.UploadURL, FormFields: resp.FormFields}, nil
+}
+
+func (s *AccountService) CompleteProfileImageUpload(ctx context.Context, req *bbsuserv1.CompleteProfileImageUploadAccount_Req) (*bbsuserv1.CompleteProfileImageUploadAccount_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	if req == nil || req.GetHash() == "" {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
+	}
+	resp, err := s.accountUsecase.CompleteProfileImageUploadAccount(ctx, &usecase.CompleteProfileImageUploadAccountReq{UserID: user.ID, Hash: req.GetHash(), Purpose: req.GetPurpose()})
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.CompleteProfileImageUploadAccount_Resp{Profile: resp.Profile, ImageUrl: resp.ImageURL}, nil
 }
 
 func (s *AccountService) UpdatePassword(ctx context.Context, req *bbsuserv1.UpdatePasswordAccount_Req) (*bbsuserv1.UpdatePasswordAccount_Resp, error) {

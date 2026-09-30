@@ -15,17 +15,20 @@ import (
 type ChatGroupUsecase struct {
 	chatGroupRepo       repo.ChatGroupRepo
 	chatGroupMemberRepo repo.ChatGroupMemberRepo
+	assetClient         repo.AssetClient
 	log                 *slog.Logger
 }
 
 func NewChatGroupUsecase(
 	chatGroupRepo repo.ChatGroupRepo,
 	chatGroupMemberRepo repo.ChatGroupMemberRepo,
+	assetClient repo.AssetClient,
 	logger *slog.Logger,
 ) (*ChatGroupUsecase, error) {
 	return &ChatGroupUsecase{
 		chatGroupRepo:       chatGroupRepo,
 		chatGroupMemberRepo: chatGroupMemberRepo,
+		assetClient:         assetClient,
 		log:                 logger,
 	}, nil
 }
@@ -38,6 +41,14 @@ type CreateReq struct {
 }
 
 func (u *ChatGroupUsecase) Create(ctx context.Context, req *CreateReq) (int64, error) {
+	if req == nil || req.OwnerID <= 0 {
+		return 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	if req.AvatarAssetID != nil && *req.AvatarAssetID > 0 {
+		if err := u.assetClient.ValidateAvailable(ctx, *req.AvatarAssetID); err != nil {
+			return 0, err
+		}
+	}
 	group, err := u.chatGroupRepo.Save(ctx, &model.ChatGroup{
 		Name:          req.Name,
 		AvatarAssetID: req.AvatarAssetID,

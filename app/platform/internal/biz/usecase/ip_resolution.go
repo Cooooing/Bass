@@ -13,32 +13,33 @@ import (
 
 	commonModel "common/pkg/model"
 	"common/pkg/util"
+	"platform/internal/biz/repo"
 	"platform/internal/config"
 
 	"github.com/lionsoul2014/ip2region/binding/golang/service"
 )
 
 type IpResolutionUsecase struct {
-	conf                 *config.Bootstrap
-	log                  *slog.Logger
-	httpClient           *http.Client
-	objectStorageUsecase *ObjectStorageUsecase
-	mu                   sync.RWMutex
-	ip2region            *service.Ip2Region
+	conf          *config.Bootstrap
+	log           *slog.Logger
+	httpClient    *http.Client
+	storageClient repo.StorageClient
+	mu            sync.RWMutex
+	ip2region     *service.Ip2Region
 }
 
 func NewIpResolutionUsecase(
 	conf *config.Bootstrap,
 	logger *slog.Logger,
 	httpClient *http.Client,
-	objectStorageUsecase *ObjectStorageUsecase,
+	storageClient repo.StorageClient,
 ) (*IpResolutionUsecase, func(), error) {
 	ctx := context.Background()
 	u := &IpResolutionUsecase{
-		conf:                 conf,
-		log:                  logger,
-		httpClient:           httpClient,
-		objectStorageUsecase: objectStorageUsecase,
+		conf:          conf,
+		log:           logger,
+		httpClient:    httpClient,
+		storageClient: storageClient,
 	}
 	cleanup := func() {
 		u.mu.Lock()
@@ -53,8 +54,8 @@ func NewIpResolutionUsecase(
 		return u, cleanup, nil
 	}
 	ipData := u.conf.GetPlatform().GetIpData()
-	ipv4Content, ipv4Err := u.downloadIpDataFromOss(ctx, ipData.GetIpv4XdbPath())
-	ipv6Content, ipv6Err := u.downloadIpDataFromOss(ctx, ipData.GetIpv6XdbPath())
+	ipv4Content, ipv4Err := u.downloadIpDataFromStorage(ctx, ipData.GetIpv4XdbPath())
+	ipv6Content, ipv6Err := u.downloadIpDataFromStorage(ctx, ipData.GetIpv6XdbPath())
 	if ipv4Err == nil && ipv6Err == nil {
 		err := u.uploadIpDataToLocal(ctx, ipv4Content, ipv6Content)
 		if err != nil {
@@ -101,22 +102,22 @@ func (u *IpResolutionUsecase) downloadIpDataFromSource(ctx context.Context, url 
 	return content, nil
 }
 
-func (u *IpResolutionUsecase) downloadIpDataFromOss(ctx context.Context, key string) ([]byte, error) {
+func (u *IpResolutionUsecase) downloadIpDataFromStorage(ctx context.Context, key string) ([]byte, error) {
 	key = strings.TrimSpace(key)
 	if key == "" {
 		return nil, fmt.Errorf("ip data oss object key is empty")
 	}
-	downloadResp, err := u.objectStorageUsecase.Download(ctx, key)
+	downloadResp, err := u.storageClient.Get(ctx, key)
 	if err != nil {
-		return nil, fmt.Errorf("download ip data from oss %s: %w", key, err)
+		return nil, fmt.Errorf("download IP data from object storage %s: %w", key, err)
 	}
 	if len(downloadResp.Content) == 0 {
-		return nil, fmt.Errorf("ip data from oss %s is empty", key)
+		return nil, fmt.Errorf("IP data from object storage %s is empty", key)
 	}
 	return downloadResp.Content, nil
 }
 
-func (u *IpResolutionUsecase) uploadIpDataToOss(ctx context.Context, key string, content []byte) error {
+func (u *IpResolutionUsecase) uploadIpDataToStorage(ctx context.Context, key string, content []byte) error {
 	key = strings.TrimSpace(key)
 	if key == "" {
 		return fmt.Errorf("ip data oss object key is empty")
@@ -124,18 +125,17 @@ func (u *IpResolutionUsecase) uploadIpDataToOss(ctx context.Context, key string,
 	if len(content) == 0 {
 		return fmt.Errorf("ip data content is empty")
 	}
-	current, err := u.downloadIpDataFromOss(ctx, key)
+	current, err := u.downloadIpDataFromStorage(ctx, key)
 	if err == nil && util.Sha256Bytes(current) == util.Sha256Bytes(content) {
 		return nil
 	}
-	_, err = u.objectStorageUsecase.Upload(ctx, &UploadReq{
-		Key:      key,
-		FileName: filepath.Base(key),
-		MimeType: "application/octet-stream",
-		Content:  content,
+	_, err = u.storageClient.Put(ctx, &repo.PutStoredObjectReq{
+		ObjectKey: key,
+		MimeType:  "application/octet-stream",
+		Content:   content,
 	})
 	if err != nil {
-		return fmt.Errorf("upload ip data to oss %s: %w", key, err)
+		return fmt.Errorf("upload IP data to object storage %s: %w", key, err)
 	}
 	return nil
 }
@@ -274,10 +274,10 @@ func (u *IpResolutionUsecase) UpdateIpDataFromSource(ctx context.Context) error 
 	if err != nil {
 		return fmt.Errorf("download IPv6 ip data from source: %w", err)
 	}
-	if err := u.uploadIpDataToOss(ctx, ipData.GetIpv4XdbPath(), ipv4Content); err != nil {
+	if err := u.uploadIpDataToStorage(ctx, ipData.GetIpv4XdbPath(), ipv4Content); err != nil {
 		return fmt.Errorf("upload IPv4 ip data to oss: %w", err)
 	}
-	if err := u.uploadIpDataToOss(ctx, ipData.GetIpv6XdbPath(), ipv6Content); err != nil {
+	if err := u.uploadIpDataToStorage(ctx, ipData.GetIpv6XdbPath(), ipv6Content); err != nil {
 		return fmt.Errorf("upload IPv6 ip data to oss: %w", err)
 	}
 	return u.uploadIpDataToLocal(ctx, ipv4Content, ipv6Content)
@@ -285,11 +285,11 @@ func (u *IpResolutionUsecase) UpdateIpDataFromSource(ctx context.Context) error 
 
 func (u *IpResolutionUsecase) UpdateIpDataFromOss(ctx context.Context) error {
 	ipData := u.conf.GetPlatform().GetIpData()
-	ipv4Content, err := u.downloadIpDataFromOss(ctx, ipData.GetIpv4XdbPath())
+	ipv4Content, err := u.downloadIpDataFromStorage(ctx, ipData.GetIpv4XdbPath())
 	if err != nil {
 		return fmt.Errorf("download IPv4 ip data from oss: %w", err)
 	}
-	ipv6Content, err := u.downloadIpDataFromOss(ctx, ipData.GetIpv6XdbPath())
+	ipv6Content, err := u.downloadIpDataFromStorage(ctx, ipData.GetIpv6XdbPath())
 	if err != nil {
 		return fmt.Errorf("download IPv6 ip data from oss: %w", err)
 	}

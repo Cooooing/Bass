@@ -2,6 +2,7 @@ package data
 
 import (
 	commonClient "common/pkg/client"
+	"common/pkg/client/rpc"
 	"common/proto/gen/common"
 	"im/internal/config"
 	"im/internal/data/client"
@@ -16,6 +17,7 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewObservability,
 	ProvideConsul,
 	commonClient.NewConsulClient,
+	rpc.ProvidePlatformClient,
 )
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
@@ -25,6 +27,7 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewChatGroupMemberRepo,
 	repo.NewChatSessionRepo,
 	repo.NewChatMessageRepo,
+	repo.NewAssetClient,
 )
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {

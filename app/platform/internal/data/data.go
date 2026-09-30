@@ -15,6 +15,10 @@ import (
 var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
 	commonClient.NewObservability,
+	ProvideRedis,
+	commonClient.NewRedisClient,
+	ProvideNats,
+	commonClient.NewNatsClient,
 	ProvideConsul,
 	commonClient.NewConsulClient,
 )
@@ -24,9 +28,19 @@ var ModuleProviderSet = wire.NewSet(
 	client.NewDataBaseClient,
 	commonClient.NewHttpClient,
 	client.ProvideTx,
-	repo.NewObjectStorageRepo,
+	repo.NewAssetRepo,
+	repo.NewAssetUploadRateLimitCache,
+	repo.NewAssetEventNatsRepo,
 	oss.ProviderSet,
 )
+
+func ProvideNats(c *config.Bootstrap) *common.Nats {
+	return c.Nats
+}
+
+func ProvideRedis(c *config.Bootstrap) *common.Redis {
+	return c.Redis
+}
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul

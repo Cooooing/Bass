@@ -4,10 +4,30 @@ image:
   repository: quay.io/minio/minio
   tag: RELEASE.2025-09-07T16-13-09Z
 
+# The server image bundles the matching `mc` binary. Reusing it also prevents
+# chart hooks from depending on the separately published legacy `mc` image.
+mcImage:
+  repository: quay.io/minio/minio
+  tag: RELEASE.2025-09-07T16-13-09Z
+
 existingSecret: bass-minio-secret
+
+# MinIO reads NATS target settings from config.env. Reuse the NATS secret so
+# the credentials remain in one place instead of copying them into MinIO.
+extraSecret: bass-nats-secret
 
 mode: standalone
 replicas: 1
+
+# The development PVC is backed by hostpath on the control-plane node. Keeping
+# MinIO and the chart's configuration hook there also avoids cross-node image
+# pulls from Quay for this local-only installation.
+nodeSelector:
+  kubernetes.io/hostname: master
+
+postJob:
+  nodeSelector:
+    kubernetes.io/hostname: master
 
 persistence:
   enabled: true

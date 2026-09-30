@@ -58,6 +58,16 @@ trace:
 observability:
   enable_metrics: true
 platform:
+  asset_upload_rate_limit:
+    enable: true
+    window: 300s
+    max_count: 5
+  asset_events:
+    stream_name: ${ASSET_EVENT_STREAM:PLATFORM_ASSET_UPLOADS}
+    subject: ${ASSET_EVENT_SUBJECT:storage.asset.object-created}
+    consumer_durable: ${ASSET_EVENT_CONSUMER_DURABLE:platform-asset-upload-recorder}
+    ack_wait: ${ASSET_EVENT_ACK_WAIT:60s}
+    max_ack_pending: ${ASSET_EVENT_MAX_ACK_PENDING:32}
   ip_data:
     enable: true
     ipv4_xdb_path: configs/ip2region/ipv4.xdb
@@ -74,6 +84,10 @@ platform:
       bucket: ${MINIO_BUCKET:bass-assets}
       use_ssl: false
       timeout: ${MINIO_TIMEOUT:30s}
+      # Optional public endpoint for browser uploads and public asset URLs.
+      # When omitted, Platform reuses endpoint so host/port defaults cannot drift.
+      browser_endpoint: ${MINIO_BROWSER_ENDPOINT:}
+      browser_use_ssl: false
     qiniu:
       access_key: ${QINIU_ACCESS_KEY:}
       secret_key: ${QINIU_SECRET_KEY:}

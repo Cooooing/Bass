@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"bff_bbs/internal/biz/repo"
-	"bytes"
 	"common/pkg/apperror"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bff_bbs/v1/user/enum"
@@ -10,12 +9,12 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	economyv1enum "common/proto/gen/economy/v1/enum"
 	"context"
-	"image"
-	_ "image/gif"
-
-	_ "golang.org/x/image/webp"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"regexp"
+	"strings"
 )
+
+var assetHashPattern = regexp.MustCompile(`^[a-f0-9]{64}$`)
 
 type AccountUsecase struct {
 	accountClient  repo.AccountClient
@@ -278,31 +277,20 @@ func profilePage(page *repo.PageResp) *commonv1.PageResp {
 }
 
 type UpdateProfileAccountReq struct {
-	UserID            int64
-	AvatarAssetID     *int64
-	BackgroundAssetID *int64
-	Nickname          *string
-	URL               *string
-	Introduction      *string
-	Mbti              *string
+	UserID       int64
+	Nickname     *string
+	URL          *string
+	Introduction *string
+	Mbti         *string
 }
 
 func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*bbsuserv1.AccountProfile, error) {
-	for _, assetID := range []*int64{req.AvatarAssetID, req.BackgroundAssetID} {
-		if assetID != nil && *assetID > 0 {
-			if err := u.assetClient.Validate(ctx, *assetID, req.UserID); err != nil {
-				return nil, err
-			}
-		}
-	}
 	reply, err := u.accountClient.UpdateProfileAccount(ctx, &repo.UpdateProfileAccountReq{
-		UserID:            req.UserID,
-		AvatarAssetID:     req.AvatarAssetID,
-		BackgroundAssetID: req.BackgroundAssetID,
-		Nickname:          req.Nickname,
-		URL:               req.URL,
-		Introduction:      req.Introduction,
-		MBTI:              req.Mbti,
+		UserID:       req.UserID,
+		Nickname:     req.Nickname,
+		URL:          req.URL,
+		Introduction: req.Introduction,
+		MBTI:         req.Mbti,
 	})
 	if err != nil {
 		return nil, err
@@ -343,58 +331,122 @@ func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdatePr
 	return profile, nil
 }
 
-type UploadProfileImageAccountReq struct {
+type PrepareProfileImageUploadAccountReq struct {
 	UserID   int64
 	Purpose  bbsuserv1.ProfileImagePurpose
-	FileName string
-	Content  []byte
+	Hash     string
+	MimeType string
+	Size     int64
 }
 
-type UploadProfileImageAccountResp struct {
+type PrepareProfileImageUploadAccountResp struct {
+	AssetID    *int64
+	UploadURL  string
+	FormFields map[string]string
+}
+
+// PrepareProfileImageUploadAccount applies profile-specific file limits before
+// asking platform for a content-addressed MinIO upload policy.
+func (u *AccountUsecase) PrepareProfileImageUploadAccount(ctx context.Context, req *PrepareProfileImageUploadAccountReq) (*PrepareProfileImageUploadAccountResp, error) {
+	if req == nil || req.UserID <= 0 || !profileImagePurposeValid(req.Purpose) || !validProfileImageHashAndMime(req.Hash, req.MimeType) || req.Size <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
+	}
+	if req.Size > maxProfileImageSize {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_TOO_LARGE)
+	}
+	hash := normalizeProfileImageHash(req.Hash)
+	result, err := u.assetClient.PrepareDirectUpload(ctx, &repo.PrepareDirectAssetUploadReq{
+		Hash:       hash,
+		MimeType:   strings.ToLower(strings.TrimSpace(req.MimeType)),
+		Size:       req.Size,
+		UploadByID: req.UserID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &PrepareProfileImageUploadAccountResp{AssetID: result.AssetID, UploadURL: result.UploadURL, FormFields: result.FormFields}, nil
+}
+
+type CompleteProfileImageUploadAccountReq struct {
+	UserID  int64
+	Purpose bbsuserv1.ProfileImagePurpose
+	Hash    string
+}
+type CompleteProfileImageUploadAccountResp struct {
 	Profile  *bbsuserv1.AccountProfile
 	ImageURL string
 }
 
-// UploadProfileImageAccount validates a fixed-size client crop before it becomes a profile asset.
-func (u *AccountUsecase) UploadProfileImageAccount(ctx context.Context, req *UploadProfileImageAccountReq) (*UploadProfileImageAccountResp, error) {
-	if len(req.Content) == 0 {
+// CompleteProfileImageUploadAccount is safely repeatable while MinIO's event
+// callback races with the browser. It updates only the user-owned reference.
+func (u *AccountUsecase) CompleteProfileImageUploadAccount(ctx context.Context, req *CompleteProfileImageUploadAccountReq) (*CompleteProfileImageUploadAccountResp, error) {
+	if req == nil || !profileImagePurposeValid(req.Purpose) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
-	if len(req.Content) > 2*1024*1024 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_TOO_LARGE)
-	}
-	config, format, err := image.DecodeConfig(bytes.NewReader(req.Content))
-	if err != nil || (format != "gif" && format != "jpeg" && format != "png" && format != "webp") {
+	hash := normalizeProfileImageHash(req.Hash)
+	if !assetHashPattern.MatchString(hash) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
-	width, height := 512, 512
-	if req.Purpose == bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_BACKGROUND {
-		width, height = 1500, 500
-	}
-	if req.Purpose != bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_AVATAR && req.Purpose != bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_BACKGROUND {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
-	}
-	// GIF follows the direct-upload path so browser Canvas does not discard its
-	// animation frames. Static images are still required to be client-cropped.
-	if format != "gif" && (config.Width != width || config.Height != height) {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_DIMENSIONS_INVALID)
-	}
-	mimeType := map[string]string{"gif": "image/gif", "jpeg": "image/jpeg", "png": "image/png", "webp": "image/webp"}[format]
-	asset, err := u.assetClient.Upload(ctx, &repo.AssetUploadReq{UserID: req.UserID, FileName: req.FileName, MimeType: mimeType, Content: req.Content})
+	asset, err := u.assetClient.GetAvailableByHash(ctx, hash)
 	if err != nil {
 		return nil, err
 	}
-	update := &UpdateProfileAccountReq{UserID: req.UserID}
+	if asset == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	// Complete does not trust the original browser declaration. The completed
+	// Asset metadata is the provider-confirmed fact used for the final bind.
+	if !validProfileImageHashAndMime(hash, asset.MimeType) || asset.Size <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
+	}
+	if asset.Size > maxProfileImageSize {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_TOO_LARGE)
+	}
+	update := &repo.UpdateProfileAccountReq{UserID: req.UserID}
 	if req.Purpose == bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_AVATAR {
 		update.AvatarAssetID = &asset.ID
 	} else {
 		update.BackgroundAssetID = &asset.ID
 	}
-	profile, err := u.UpdateProfileAccount(ctx, update)
+	row, err := u.accountClient.UpdateProfileAccount(ctx, update)
 	if err != nil {
 		return nil, err
 	}
-	return &UploadProfileImageAccountResp{Profile: profile, ImageURL: asset.URL}, nil
+	profile := accountProfile(row)
+	if profile != nil {
+		if req.Purpose == bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_AVATAR {
+			profile.AvatarUrl = &asset.URL
+		} else {
+			profile.AvatarUrl = row.AvatarURL
+		}
+	}
+	return &CompleteProfileImageUploadAccountResp{Profile: profile, ImageURL: asset.URL}, nil
+}
+
+func profileImagePurposeValid(p bbsuserv1.ProfileImagePurpose) bool {
+	switch p {
+	case bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_AVATAR,
+		bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_BACKGROUND:
+		return true
+	}
+	return false
+}
+
+const maxProfileImageSize = 2 * 1024 * 1024
+
+func validProfileImageHashAndMime(hash, mimeType string) bool {
+	if !assetHashPattern.MatchString(normalizeProfileImageHash(hash)) {
+		return false
+	}
+	switch strings.ToLower(strings.TrimSpace(mimeType)) {
+	case "image/gif", "image/jpeg", "image/png", "image/webp":
+		return true
+	}
+	return false
+}
+
+func normalizeProfileImageHash(value string) string {
+	return strings.ToLower(strings.TrimSpace(value))
 }
 
 type UpdatePasswordAccountReq struct {

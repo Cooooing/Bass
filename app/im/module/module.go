@@ -4,6 +4,7 @@ import (
 	"common/pkg/client/rpc"
 	commonmodule "common/pkg/module"
 	"common/pkg/server"
+	"common/proto/gen/common"
 	"im/internal/biz"
 	"im/internal/config"
 	"im/internal/data"
@@ -15,6 +16,9 @@ import (
 // ProviderSet 提供即时通信模块的依赖项。
 var ProviderSet = wire.NewSet(
 	provideBootstrap,
+	provideCommonServer,
+	rpc.LocalProviderSet,
+	commonmodule.InfrastructureProviderSet,
 	data.ModuleProviderSet,
 	biz.BizProviderSet,
 	service.ServiceProviderSet,
@@ -33,6 +37,7 @@ func newModule(config *Config, services []server.Service) *Module {
 }
 
 func provideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
+func provideCommonServer(c *Config) *common.Server { return c.Server() }
 
 // Build 构造即时通信模块并返回单体可收集的模块能力。
 func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, func(), error) {
@@ -44,7 +49,7 @@ func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, fu
 	if err != nil {
 		return commonmodule.Mounted{}, func() {}, err
 	}
-	module, cleanup, err := wireModule(moduleConfig, runtime.Logger)
+	module, cleanup, err := wireModule(moduleConfig, runtime.Logger, runtime.Clients, runtime.Infrastructure)
 	if err != nil {
 		return commonmodule.Mounted{}, cleanup, err
 	}

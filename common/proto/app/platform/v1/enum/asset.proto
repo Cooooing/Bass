@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package common.api.app.platform.v1;
+
+option go_package = "common/proto/gen/platform/v1/enum;enum";
+
+// AssetProvider identifies the storage provider that persists an asset.
+enum AssetProvider {
+  ASSET_PROVIDER_UNSPECIFIED = 0;
+  ASSET_PROVIDER_MINIO = 1;
+  ASSET_PROVIDER_QINIU = 2;
+}
+
+// AssetStatus is global resource governance state. Business visibility belongs
+// to the business reference, not to the asset itself.
+enum AssetStatus {
+  ASSET_STATUS_UNSPECIFIED = 0;
+  ASSET_STATUS_AVAILABLE = 1;
+  ASSET_STATUS_BLOCKED = 2;
+}

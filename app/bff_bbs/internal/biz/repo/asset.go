@@ -1,12 +1,15 @@
 package repo
 
-import "context"
+import (
+	"context"
+)
 
 type AssetClient interface {
 	Get(ctx context.Context, assetID int64) (*Asset, error)
 	Map(ctx context.Context, req *AssetGetReq) (map[int64]*Asset, error)
-	Upload(ctx context.Context, req *AssetUploadReq) (*Asset, error)
-	Validate(ctx context.Context, assetID, userID int64) error
+	PrepareDirectUpload(ctx context.Context, req *PrepareDirectAssetUploadReq) (*PrepareDirectAssetUploadResp, error)
+	GetAvailableByHash(ctx context.Context, hash string) (*Asset, error)
+	ValidateAvailable(ctx context.Context, assetID int64) error
 }
 
 type AssetGetReq struct {
@@ -14,13 +17,21 @@ type AssetGetReq struct {
 }
 
 type Asset struct {
-	ID  int64
-	URL string
+	ID       int64
+	URL      string
+	MimeType string
+	Size     int64
 }
 
-type AssetUploadReq struct {
-	UserID   int64
-	FileName string
-	MimeType string
-	Content  []byte
+type PrepareDirectAssetUploadReq struct {
+	Hash       string
+	MimeType   string
+	Size       int64
+	UploadByID int64
+}
+
+type PrepareDirectAssetUploadResp struct {
+	AssetID    *int64
+	UploadURL  string
+	FormFields map[string]string
 }

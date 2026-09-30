@@ -48,10 +48,17 @@ service AccountService {
       body: "*"
     };
   }
-  // 上传并绑定当前账号的资料图片。
-  rpc UploadProfileImage(UploadProfileImageAccount.Req) returns (UploadProfileImageAccount.Resp) {
+  // 申请当前账号资料图片的内容寻址直传能力。
+  rpc PrepareProfileImageUpload(PrepareProfileImageUploadAccount.Req) returns (PrepareProfileImageUploadAccount.Resp) {
     option (google.api.http) = {
-      post: "/v1/user/account/upload-profile-image"
+      post: "/v1/user/account/prepare-profile-image-upload"
+      body: "*"
+    };
+  }
+  // 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+  rpc CompleteProfileImageUpload(CompleteProfileImageUploadAccount.Req) returns (CompleteProfileImageUploadAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/complete-profile-image-upload"
       body: "*"
     };
   }
@@ -187,12 +194,10 @@ message ListFollowers {
 
 message UpdateProfileAccount {
   message Req {
-    optional int64 avatar_asset_id = 1; // 头像资源 ID，选填
-    optional int64 background_asset_id = 2; // 个人主页背景图资源 ID，0 表示清除
-    optional string nickname = 3; // 昵称，选填
-    optional string url = 4; // 个人主页 URL，选填
-    optional string introduction = 5; // 个人简介，选填
-    optional string mbti = 6; // MBTI 类型，选填；空字符串表示清除
+    optional string nickname = 1; // 昵称，选填
+    optional string url = 2; // 个人主页 URL，选填
+    optional string introduction = 3; // 个人简介，选填
+    optional string mbti = 4; // MBTI 类型，选填；空字符串表示清除
   }
   message Resp {
     AccountProfile profile = 1; // 更新后的账号资料
@@ -205,17 +210,30 @@ enum ProfileImagePurpose {
   PROFILE_IMAGE_PURPOSE_BACKGROUND = 2;
 }
 
-message UploadProfileImageAccount {
+message PrepareProfileImageUploadAccount {
   message Req {
-    ProfileImagePurpose purpose = 1; // 图片用途，必填
-    string file_name = 2; // 原始文件名
-    string mime_type = 3; // 声明 MIME；服务端按实际内容校验
-    bytes content = 4; // 经裁切后的图片内容，最大 2 MiB
-    option (gnostic.openapi.v3.schema) = { required: "purpose" required: "content" };
+    ProfileImagePurpose purpose = 1; // 图片用途，必填；仅用于 BFF 业务校验
+    string hash = 2; // 文件 SHA-256，小写十六进制
+    string mime_type = 3; // 上传 MIME 类型
+    int64 size = 4; // 文件大小，最大 2 MiB
+    option (gnostic.openapi.v3.schema) = { required: "purpose" required: "hash" required: "mime_type" required: "size" };
   }
   message Resp {
-    AccountProfile profile = 1; // 绑定后的账号资料
-    string image_url = 2; // 新图片地址
+    optional int64 asset_id = 1; // 已存在时直接返回
+    string upload_url = 2; // 新资源的 MinIO multipart POST 地址
+    map<string, string> form_fields = 3;
+  }
+}
+
+message CompleteProfileImageUploadAccount {
+  message Req {
+    ProfileImagePurpose purpose = 1;
+    string hash = 2; // 文件 SHA-256；回调尚未入库时返回可重试错误
+    option (gnostic.openapi.v3.schema) = { required: "purpose" required: "hash" };
+  }
+  message Resp {
+    AccountProfile profile = 1;
+    string image_url = 2;
   }
 }
 

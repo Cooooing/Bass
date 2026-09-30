@@ -7,3 +7,4 @@ resources:
   - manifests/ingress.yaml
   - manifests/ingress-tcp.yaml
   - manifests/dtm.yaml
+  - manifests/minio-asset-event-rule.yaml

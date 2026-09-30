@@ -10,13 +10,13 @@ var ServiceProviderSet = wire.NewSet(
 	ProvideServices,
 	NewCommonSystemService,
 	NewIpResolutionService,
-	NewOssService,
+	NewAssetService,
 )
 
-func ProvideServices(commonSystemService *CommonSystemService, ipResolutionService *IpResolutionService, ossService *OssService) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, ipResolutionService *IpResolutionService, assetService *AssetService) []server.Service {
 	return []server.Service{
 		commonSystemService,
 		ipResolutionService,
-		ossService,
+		assetService,
 	}
 }

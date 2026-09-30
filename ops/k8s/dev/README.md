@@ -55,4 +55,5 @@ kubectl get pods,svc,pvc -n monitoring
 ## 注意
 
 - `manifests/secrets.local.yaml` 与 `monitoring/secrets.local.yaml` 是本机文件，均由对应的 `*.example.yaml` 创建，绝不能提交。
+- MinIO 通过 `bass-nats-secret` 的 `config.env` 向 NATS JetStream 发布资源上传事件；其中 subject 必须与 Platform 的 `ASSET_EVENT_SUBJECT` 相同。`minio-asset-event-rule` Job 会为 `assets/sha256/` 创建幂等的 `put` 事件规则。修改规则后删除该 Job 再重新 `kubectl apply -k ./dev`。
 - dev 环境不部署业务服务，业务服务默认在本地运行，通过 dev 中间件联调。

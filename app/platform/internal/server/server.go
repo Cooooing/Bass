@@ -12,11 +12,17 @@ var ServerProviderSet = wire.NewSet(
 	ProvideServers,
 	NewGRPCServer,
 	NewHTTPServer,
+	NewAssetEventConsumerServer,
 )
 
-func ProvideServers(grpcServer *grpc.Server, httpServer *http.Server) []transport.Server {
+func ProvideServers(
+	grpcServer *grpc.Server,
+	httpServer *http.Server,
+	assetEventConsumerServer *AssetEventConsumerServer,
+) []transport.Server {
 	return []transport.Server{
 		grpcServer,
 		httpServer,
+		assetEventConsumerServer,
 	}
 }

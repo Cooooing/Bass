@@ -318,6 +318,20 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "Invalid profile information",
 			},
 		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "图片格式、大小或上传信息无效",
+				commonenums.Language_LANGUAGE_ZH_TW: "圖片格式、大小或上傳資訊無效",
+				commonenums.Language_LANGUAGE_EN:    "Invalid image format, size, or upload information",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_TOO_LARGE: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "图片文件不能超过 2 MiB",
+				commonenums.Language_LANGUAGE_ZH_TW: "圖片檔案不能超過 2 MiB",
+				commonenums.Language_LANGUAGE_EN:    "Image files cannot exceed 2 MiB",
+			},
+		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "文章不存在",

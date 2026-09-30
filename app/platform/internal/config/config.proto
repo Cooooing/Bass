@@ -22,6 +22,26 @@ message Bootstrap {
 message Platform {
   IpData ip_data = 1;
   Oss oss = 2;
+  AssetEvents asset_events = 3;
+  AssetUploadRateLimit asset_upload_rate_limit = 4;
+
+  // NATS JetStream consumer settings for MinIO object-created events. MinIO
+  // publishes to this infrastructure subject; it never calls Platform by URL.
+  message AssetEvents {
+    string stream_name = 1;
+    string subject = 2;
+    string consumer_durable = 3;
+    google.protobuf.Duration ack_wait = 4;
+    uint32 max_ack_pending = 5;
+  }
+
+  // Limits issuance of direct-upload credentials per authenticated uploader.
+  // It does not limit existing content-addressed assets that need no upload.
+  message AssetUploadRateLimit {
+    bool enable = 1;
+    google.protobuf.Duration window = 2;
+    int64 max_count = 3;
+  }
 
   message IpData {
     bool enable = 1;
@@ -56,6 +76,10 @@ message Platform {
       string bucket = 4;
       bool use_ssl = 5;
       google.protobuf.Duration timeout = 6;
+      // Endpoint visible to browsers. It is intentionally separate from the
+      // service-internal endpoint (for example, a Docker service hostname).
+      string browser_endpoint = 7;
+      bool browser_use_ssl = 8;
     }
   }
 }

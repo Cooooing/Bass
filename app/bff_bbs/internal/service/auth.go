@@ -168,7 +168,7 @@ func (s *AuthService) Login(ctx context.Context, req *bbsuserv1.Login_Req) (*bbs
 				AvatarUrl:     profile.AvatarURL,
 				Introduction:  profile.Introduction,
 				Status:        bbsuserv1enum.AccountStatus(profile.Status),
-				Mbti:          bbsuserv1enum.MBTI(profile.MBTI),
+				Mbti:          profile.MBTI,
 				FollowCount:   profile.FollowCount,
 				FollowerCount: profile.FollowerCount,
 			}

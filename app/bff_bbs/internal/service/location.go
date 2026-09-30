@@ -5,6 +5,7 @@ import (
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
+	"common/pkg/server"
 	"common/pkg/util"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	cerrors "common/proto/gen/common/errors"
@@ -46,6 +47,18 @@ func (s *LocationService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurr
 	return &bbsuserv1.GetCurrentLocation_Resp{
 		Location: location,
 	}, nil
+}
+
+func (s *LocationService) DetectCurrent(ctx context.Context, req *bbsuserv1.DetectCurrentLocation_Req) (*bbsuserv1.DetectCurrentLocation_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	location, err := s.locationUsecase.DetectCurrentLocation(ctx, user.ID, server.ClientIP(ctx))
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.DetectCurrentLocation_Resp{Location: location}, nil
 }
 
 func (s *LocationService) UpsertCurrent(ctx context.Context, req *bbsuserv1.UpsertCurrentLocation_Req) (*bbsuserv1.UpsertCurrentLocation_Resp, error) {

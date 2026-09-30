@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"bff_bbs/internal/biz/repo"
+	"bytes"
 	"common/pkg/apperror"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bff_bbs/v1/user/enum"
@@ -9,7 +10,10 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	economyv1enum "common/proto/gen/economy/v1/enum"
 	"context"
+	"image"
+	_ "image/gif"
 
+	_ "golang.org/x/image/webp"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -70,7 +74,7 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*
 				BackgroundAssetId: profile.BackgroundAssetID,
 				Introduction:      profile.Introduction,
 				Status:            bbsuserv1enum.AccountStatus(profile.Status),
-				Mbti:              bbsuserv1enum.MBTI(profile.MBTI),
+				Mbti:              profile.MBTI,
 				FollowCount:       profile.FollowCount,
 				FollowerCount:     profile.FollowerCount,
 			}
@@ -231,7 +235,7 @@ func accountProfile(account *repo.AccountProfile) *bbsuserv1.AccountProfile {
 		AvatarUrl:         account.AvatarURL,
 		BackgroundAssetId: account.BackgroundAssetID,
 		Introduction:      account.Introduction,
-		Mbti:              bbsuserv1enum.MBTI(account.MBTI),
+		Mbti:              account.MBTI,
 		Status:            bbsuserv1enum.AccountStatus(account.Status),
 		FollowCount:       account.FollowCount,
 		FollowerCount:     account.FollowerCount,
@@ -280,13 +284,16 @@ type UpdateProfileAccountReq struct {
 	Nickname          *string
 	URL               *string
 	Introduction      *string
-	Mbti              *bbsuserv1enum.MBTI
+	Mbti              *string
 }
 
 func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*bbsuserv1.AccountProfile, error) {
-	var mbti *int32
-	if req.Mbti != nil {
-		mbti = new(int32(*req.Mbti))
+	for _, assetID := range []*int64{req.AvatarAssetID, req.BackgroundAssetID} {
+		if assetID != nil && *assetID > 0 {
+			if err := u.assetClient.Validate(ctx, *assetID, req.UserID); err != nil {
+				return nil, err
+			}
+		}
 	}
 	reply, err := u.accountClient.UpdateProfileAccount(ctx, &repo.UpdateProfileAccountReq{
 		UserID:            req.UserID,
@@ -295,7 +302,7 @@ func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdatePr
 		Nickname:          req.Nickname,
 		URL:               req.URL,
 		Introduction:      req.Introduction,
-		MBTI:              mbti,
+		MBTI:              req.Mbti,
 	})
 	if err != nil {
 		return nil, err
@@ -322,7 +329,7 @@ func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdatePr
 			BackgroundAssetId: row.BackgroundAssetID,
 			Introduction:      row.Introduction,
 			Status:            bbsuserv1enum.AccountStatus(row.Status),
-			Mbti:              bbsuserv1enum.MBTI(row.MBTI),
+			Mbti:              row.MBTI,
 			FollowCount:       row.FollowCount,
 			FollowerCount:     row.FollowerCount,
 		}
@@ -334,6 +341,60 @@ func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdatePr
 		}
 	}
 	return profile, nil
+}
+
+type UploadProfileImageAccountReq struct {
+	UserID   int64
+	Purpose  bbsuserv1.ProfileImagePurpose
+	FileName string
+	Content  []byte
+}
+
+type UploadProfileImageAccountResp struct {
+	Profile  *bbsuserv1.AccountProfile
+	ImageURL string
+}
+
+// UploadProfileImageAccount validates a fixed-size client crop before it becomes a profile asset.
+func (u *AccountUsecase) UploadProfileImageAccount(ctx context.Context, req *UploadProfileImageAccountReq) (*UploadProfileImageAccountResp, error) {
+	if len(req.Content) == 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
+	}
+	if len(req.Content) > 2*1024*1024 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_TOO_LARGE)
+	}
+	config, format, err := image.DecodeConfig(bytes.NewReader(req.Content))
+	if err != nil || (format != "gif" && format != "jpeg" && format != "png" && format != "webp") {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
+	}
+	width, height := 512, 512
+	if req.Purpose == bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_BACKGROUND {
+		width, height = 1500, 500
+	}
+	if req.Purpose != bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_AVATAR && req.Purpose != bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_BACKGROUND {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
+	}
+	// GIF follows the direct-upload path so browser Canvas does not discard its
+	// animation frames. Static images are still required to be client-cropped.
+	if format != "gif" && (config.Width != width || config.Height != height) {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_DIMENSIONS_INVALID)
+	}
+	mimeType := map[string]string{"gif": "image/gif", "jpeg": "image/jpeg", "png": "image/png", "webp": "image/webp"}[format]
+	asset, err := u.assetClient.Upload(ctx, &repo.AssetUploadReq{UserID: req.UserID, FileName: req.FileName, MimeType: mimeType, Content: req.Content})
+	if err != nil {
+		return nil, err
+	}
+	update := &UpdateProfileAccountReq{UserID: req.UserID}
+	if req.Purpose == bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_AVATAR {
+		update.AvatarAssetID = &asset.ID
+	} else {
+		update.BackgroundAssetID = &asset.ID
+	}
+	profile, err := u.UpdateProfileAccount(ctx, update)
+	if err != nil {
+		return nil, err
+	}
+	return &UploadProfileImageAccountResp{Profile: profile, ImageURL: asset.URL}, nil
 }
 
 type UpdatePasswordAccountReq struct {

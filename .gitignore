@@ -57,6 +57,7 @@ Thumbs.db
 
 # Workstation-only deployment configuration and local documentation.
 /ops/docker/*.env
+/ops/sql/local/
 /ops/tools/
 /ops/k8s/test/
 /ops/k8s/prod/

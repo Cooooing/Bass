@@ -328,7 +328,7 @@ message AccountProfile {
   optional string url = 4; // 个人主页
   optional string avatar_url = 5; // 头像 URL
   optional string introduction = 6; // 个人简介
-  .common.api.app.bff_bbs.v1.user.MBTI mbti = 7; // MBTI 类型
+  optional string mbti = 7; // MBTI 类型，规范化为大写
   .common.api.app.bff_bbs.v1.user.AccountStatus status = 8; // 账号状态
   optional int32 follow_count = 10; // 关注数
   optional int32 follower_count = 11; // 粉丝数

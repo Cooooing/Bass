@@ -606,7 +606,7 @@ func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs 
 			URL:           basic.Url,
 			AvatarAssetID: basic.AvatarAssetId,
 			Introduction:  basic.Introduction,
-			MBTI:          int32(basic.GetMbti()),
+			MBTI:          basic.Mbti,
 			Status:        int32(basic.GetStatus()),
 			FollowCount:   basic.FollowCount,
 			FollowerCount: basic.FollowerCount,

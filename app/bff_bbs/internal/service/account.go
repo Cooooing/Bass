@@ -8,11 +8,11 @@ import (
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
-	bbsuserv1enum "common/proto/gen/bff_bbs/v1/user/enum"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"net/mail"
+	"net/url"
 	"regexp"
 	"strings"
 	"unicode/utf8"
@@ -27,6 +27,7 @@ type AccountService struct {
 	accountUsecase *usecase.AccountUsecase
 	phoneRe        *regexp.Regexp
 	codeRe         *regexp.Regexp
+	mbtiRe         *regexp.Regexp
 }
 
 func NewAccountService(accountUsecase *usecase.AccountUsecase) *AccountService {
@@ -34,6 +35,7 @@ func NewAccountService(accountUsecase *usecase.AccountUsecase) *AccountService {
 		accountUsecase: accountUsecase,
 		phoneRe:        regexp.MustCompile("^1[3-9]\\d{9}$"),
 		codeRe:         regexp.MustCompile("^[A-Za-z0-9]{6}$"),
+		mbtiRe:         regexp.MustCompile("^[EI][NS][TF][JP](?:-[AT])?$"),
 	}
 }
 func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
@@ -90,7 +92,8 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 	}
 	if req.Url != nil {
 		value := strings.TrimSpace(*req.Url)
-		if utf8.RuneCountInString(value) > 2048 {
+		parsed, err := url.ParseRequestURI(value)
+		if (value != "" && (err != nil || (parsed.Scheme != "http" && parsed.Scheme != "https") || parsed.Host == "")) || utf8.RuneCountInString(value) > 2048 {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
 		req.Url = new(value)
@@ -99,9 +102,11 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 	}
 	if req.Mbti != nil {
-		if _, ok := bbsuserv1enum.MBTI_name[int32(*req.Mbti)]; !ok {
+		value := strings.ToUpper(strings.TrimSpace(*req.Mbti))
+		if value != "" && !s.mbtiRe.MatchString(value) {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		}
+		req.Mbti = new(value)
 	}
 	profile, err := s.accountUsecase.UpdateProfileAccount(ctx, &usecase.UpdateProfileAccountReq{
 		UserID:            user.ID,
@@ -118,6 +123,21 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.Updat
 	return &bbsuserv1.UpdateProfileAccount_Resp{
 		Profile: profile,
 	}, nil
+}
+
+func (s *AccountService) UploadProfileImage(ctx context.Context, req *bbsuserv1.UploadProfileImageAccount_Req) (*bbsuserv1.UploadProfileImageAccount_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	if req == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
+	}
+	resp, err := s.accountUsecase.UploadProfileImageAccount(ctx, &usecase.UploadProfileImageAccountReq{UserID: user.ID, Purpose: req.GetPurpose(), FileName: req.GetFileName(), Content: req.GetContent()})
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.UploadProfileImageAccount_Resp{Profile: resp.Profile, ImageUrl: resp.ImageURL}, nil
 }
 
 func (s *AccountService) UpdatePassword(ctx context.Context, req *bbsuserv1.UpdatePasswordAccount_Req) (*bbsuserv1.UpdatePasswordAccount_Resp, error) {

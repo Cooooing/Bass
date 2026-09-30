@@ -48,6 +48,13 @@ service AccountService {
       body: "*"
     };
   }
+  // 上传并绑定当前账号的资料图片。
+  rpc UploadProfileImage(UploadProfileImageAccount.Req) returns (UploadProfileImageAccount.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/upload-profile-image"
+      body: "*"
+    };
+  }
   // 更新当前账号密码
   rpc UpdatePassword(UpdatePasswordAccount.Req) returns (UpdatePasswordAccount.Resp) {
     option (google.api.http) = {
@@ -85,7 +92,7 @@ message AccountProfile {
   optional string avatar_url = 5; // 头像 URL
   optional int64 background_asset_id = 6; // 个人主页背景图资源 ID
   optional string introduction = 7; // 个人简介
-  MBTI mbti = 8; // MBTI 类型
+  optional string mbti = 8; // MBTI 类型，规范化为大写
   AccountStatus status = 9; // 账号状态
   optional int32 follow_count = 10; // 关注数量
   optional int32 follower_count = 11; // 粉丝数量
@@ -185,10 +192,30 @@ message UpdateProfileAccount {
     optional string nickname = 3; // 昵称，选填
     optional string url = 4; // 个人主页 URL，选填
     optional string introduction = 5; // 个人简介，选填
-    optional MBTI mbti = 6; // MBTI 类型，选填
+    optional string mbti = 6; // MBTI 类型，选填；空字符串表示清除
   }
   message Resp {
     AccountProfile profile = 1; // 更新后的账号资料
+  }
+}
+
+enum ProfileImagePurpose {
+  PROFILE_IMAGE_PURPOSE_UNSPECIFIED = 0;
+  PROFILE_IMAGE_PURPOSE_AVATAR = 1;
+  PROFILE_IMAGE_PURPOSE_BACKGROUND = 2;
+}
+
+message UploadProfileImageAccount {
+  message Req {
+    ProfileImagePurpose purpose = 1; // 图片用途，必填
+    string file_name = 2; // 原始文件名
+    string mime_type = 3; // 声明 MIME；服务端按实际内容校验
+    bytes content = 4; // 经裁切后的图片内容，最大 2 MiB
+    option (gnostic.openapi.v3.schema) = { required: "purpose" required: "content" };
+  }
+  message Resp {
+    AccountProfile profile = 1; // 绑定后的账号资料
+    string image_url = 2; // 新图片地址
   }
 }
 

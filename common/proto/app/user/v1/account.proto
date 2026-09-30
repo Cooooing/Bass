@@ -5,7 +5,6 @@ package common.api.app.user.v1;
 import "common/common.proto";
 import "google/protobuf/timestamp.proto";
 import "user/v1/enum/account_status.proto";
-import "user/v1/enum/mbti.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
 
@@ -37,7 +36,7 @@ message AccountBasic {
   optional int64 avatar_asset_id = 5; // 头像资源 ID
   optional int64 background_asset_id = 6; // 个人主页背景图资源 ID
   optional string introduction = 7; // 个人简介
-  MBTI mbti = 8; // MBTI 类型
+  optional string mbti = 8; // MBTI 类型，规范化为大写
   AccountStatus status = 9; // 账号状态
   optional int32 follow_count = 10; // 关注数量
   optional int32 follower_count = 11; // 粉丝数量
@@ -99,7 +98,7 @@ message UpdateProfileAccount {
     optional string nickname = 4; // 昵称
     optional string url = 5; // 个人主页 URL
     optional string introduction = 6; // 个人简介
-    optional MBTI mbti = 7; // MBTI 类型
+    optional string mbti = 7; // MBTI 类型，空字符串表示清除
   }
   message Resp {
     AccountBasic account = 1; // 更新后的账号资料

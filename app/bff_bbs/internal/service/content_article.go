@@ -294,7 +294,7 @@ func (s *ContentArticleService) accountProfile(row *repo.AccountProfile) *bbscon
 	if row == nil {
 		return nil
 	}
-	out := &bbscontentv1.AccountProfile{Id: row.ID, Name: row.Name, Nickname: row.Nickname, Url: row.URL, AvatarUrl: row.AvatarURL, Introduction: row.Introduction, Mbti: bbsuserv1enum.MBTI(row.MBTI), Status: bbsuserv1enum.AccountStatus(row.Status), FollowCount: row.FollowCount, FollowerCount: row.FollowerCount}
+	out := &bbscontentv1.AccountProfile{Id: row.ID, Name: row.Name, Nickname: row.Nickname, Url: row.URL, AvatarUrl: row.AvatarURL, Introduction: row.Introduction, Mbti: row.MBTI, Status: bbsuserv1enum.AccountStatus(row.Status), FollowCount: row.FollowCount, FollowerCount: row.FollowerCount}
 	if row.CreatedAt != nil {
 		out.CreatedAt = timestamppb.New(*row.CreatedAt)
 	}

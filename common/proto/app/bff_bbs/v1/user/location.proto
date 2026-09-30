@@ -17,6 +17,14 @@ service LocationService {
     };
   }
 
+  // 按当前请求 IP 解析并更新当前账号的地理资料。
+  rpc DetectCurrent(DetectCurrentLocation.Req) returns (DetectCurrentLocation.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/location/detect-current"
+      body: "*"
+    };
+  }
+
   // 更新当前账号的地理资料。
   rpc UpsertCurrent(UpsertCurrentLocation.Req) returns (UpsertCurrentLocation.Resp) {
     option (google.api.http) = {
@@ -37,6 +45,20 @@ message GetCurrentLocation {
       optional string city = 4; // 城市
     }
     Location location = 1; // 当前账号地理资料
+  }
+}
+
+// 按当前请求 IP 自动定位当前账号。
+message DetectCurrentLocation {
+  message Req {}
+  message Resp {
+    message Location {
+      int64 user_id = 1; // 账号 ID
+      optional string country = 2; // 国家或地区
+      optional string province = 3; // 省份或州
+      optional string city = 4; // 城市
+    }
+    Location location = 1; // 自动定位后的地理资料
   }
 }
 

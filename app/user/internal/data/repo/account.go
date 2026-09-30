@@ -158,7 +158,7 @@ func (r *AccountRepo) create(ctx context.Context, u *model.Account) (*model.Acco
 		AvatarAssetID:     created.AvatarAssetID,
 		BackgroundAssetID: created.BackgroundAssetID,
 		Introduction:      created.Introduction,
-		Mbti:              (*enum.MBTI)(created.Mbti),
+		Mbti:              created.Mbti,
 		Status:            new(enum.AccountStatus(created.Status)),
 		FollowCount:       new(created.FollowCount),
 		FollowerCount:     new(created.FollowerCount),
@@ -187,7 +187,7 @@ func (r *AccountRepo) update(ctx context.Context, u *model.Account) (*model.Acco
 		AvatarAssetID:     updated.AvatarAssetID,
 		BackgroundAssetID: updated.BackgroundAssetID,
 		Introduction:      updated.Introduction,
-		Mbti:              (*enum.MBTI)(updated.Mbti),
+		Mbti:              updated.Mbti,
 		Status:            new(enum.AccountStatus(updated.Status)),
 		FollowCount:       new(updated.FollowCount),
 		FollowerCount:     new(updated.FollowerCount),
@@ -243,7 +243,7 @@ func (r *AccountRepo) updateProfile(ctx context.Context, req *model.AccountProfi
 	if req.ClearMBTI {
 		update.ClearMbti()
 	} else if req.Mbti != nil {
-		update.SetMbti(account.Mbti(*req.Mbti))
+		update.SetMbti(*req.Mbti)
 	}
 
 	updated, err := update.Save(ctx)
@@ -261,7 +261,7 @@ func (r *AccountRepo) updateProfile(ctx context.Context, req *model.AccountProfi
 		AvatarAssetID:     updated.AvatarAssetID,
 		BackgroundAssetID: updated.BackgroundAssetID,
 		Introduction:      updated.Introduction,
-		Mbti:              (*enum.MBTI)(updated.Mbti),
+		Mbti:              updated.Mbti,
 		Status:            new(enum.AccountStatus(updated.Status)),
 		FollowCount:       new(updated.FollowCount),
 		FollowerCount:     new(updated.FollowerCount),
@@ -296,7 +296,7 @@ func (r *AccountRepo) addStat(ctx context.Context, userId int64, statType enum.A
 		AvatarAssetID:     saved.AvatarAssetID,
 		BackgroundAssetID: saved.BackgroundAssetID,
 		Introduction:      saved.Introduction,
-		Mbti:              (*enum.MBTI)(saved.Mbti),
+		Mbti:              saved.Mbti,
 		Status:            new(enum.AccountStatus(saved.Status)),
 		FollowCount:       new(saved.FollowCount),
 		FollowerCount:     new(saved.FollowerCount),
@@ -323,7 +323,7 @@ func (r *AccountRepo) updateStatus(ctx context.Context, userID int64, status enu
 		AvatarAssetID:     saved.AvatarAssetID,
 		BackgroundAssetID: saved.BackgroundAssetID,
 		Introduction:      saved.Introduction,
-		Mbti:              (*enum.MBTI)(saved.Mbti),
+		Mbti:              saved.Mbti,
 		Status:            new(enum.AccountStatus(saved.Status)),
 		FollowCount:       new(saved.FollowCount),
 		FollowerCount:     new(saved.FollowerCount),
@@ -376,7 +376,7 @@ func (r *AccountRepo) get(ctx context.Context, req *repo.AccountGetReq) (*model.
 		AvatarAssetID:     u.AvatarAssetID,
 		BackgroundAssetID: u.BackgroundAssetID,
 		Introduction:      u.Introduction,
-		Mbti:              (*enum.MBTI)(u.Mbti),
+		Mbti:              u.Mbti,
 		Status:            new(enum.AccountStatus(u.Status)),
 		FollowCount:       new(u.FollowCount),
 		FollowerCount:     new(u.FollowerCount),
@@ -406,7 +406,7 @@ func (r *AccountRepo) list(ctx context.Context, req *repo.AccountGetReq) ([]*mod
 			AvatarAssetID:     u.AvatarAssetID,
 			BackgroundAssetID: u.BackgroundAssetID,
 			Introduction:      u.Introduction,
-			Mbti:              (*enum.MBTI)(u.Mbti),
+			Mbti:              u.Mbti,
 			Status:            new(enum.AccountStatus(u.Status)),
 			FollowCount:       new(u.FollowCount),
 			FollowerCount:     new(u.FollowerCount),
@@ -468,7 +468,7 @@ func (r *AccountRepo) page(ctx context.Context, page *common.PageReq, req *repo.
 			AvatarAssetID:     u.AvatarAssetID,
 			BackgroundAssetID: u.BackgroundAssetID,
 			Introduction:      u.Introduction,
-			Mbti:              (*enum.MBTI)(u.Mbti),
+			Mbti:              u.Mbti,
 			Status:            new(enum.AccountStatus(u.Status)),
 			FollowCount:       new(u.FollowCount),
 			FollowerCount:     new(u.FollowerCount),

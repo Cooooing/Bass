@@ -12,7 +12,7 @@ type AccountProfile struct {
 	BackgroundAssetID *int64
 	Introduction      *string
 	Status            int32
-	MBTI              int32
+	MBTI              *string
 	FollowCount       *int32
 	FollowerCount     *int32
 	CreatedAt         *time.Time

@@ -141,7 +141,7 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 				AvatarAssetID: basic.AvatarAssetId,
 				Introduction:  basic.Introduction,
 				Status:        int32(basic.GetStatus()),
-				MBTI:          int32(basic.GetMbti()),
+				MBTI:          basic.Mbti,
 				FollowCount:   basic.FollowCount,
 				FollowerCount: basic.FollowerCount,
 			}

@@ -9,7 +9,6 @@ import "user/v1/enum/account_status.proto";
 import "user/v1/enum/client_type.proto";
 import "user/v1/enum/device_type.proto";
 import "user/v1/enum/login_type.proto";
-import "user/v1/enum/mbti.proto";
 import "user/v1/enum/register_type.proto";
 
 option go_package = "common/proto/gen/user/v1;v1";
@@ -121,7 +120,7 @@ message Login {
       optional string url = 4; // 个人主页 URL
       optional int64 avatar_asset_id = 5; // 头像资源 ID
       optional string introduction = 6; // 个人简介
-      MBTI mbti = 7; // MBTI 类型
+      optional string mbti = 7; // MBTI 类型，规范化为大写
       AccountStatus status = 8; // 账号状态
       optional int32 follow_count = 10; // 关注数量
       optional int32 follower_count = 11; // 粉丝数量

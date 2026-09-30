@@ -6,9 +6,9 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/user/v1"
-	v1enum "common/proto/gen/user/v1/enum"
 	"context"
 	"net/mail"
+	"net/url"
 	"regexp"
 	"strings"
 	"unicode"
@@ -27,6 +27,7 @@ type AccountService struct {
 	accountUsecase *usecase.AccountUsecase
 	phoneRe        *regexp.Regexp
 	codeRe         *regexp.Regexp
+	mbtiRe         *regexp.Regexp
 }
 
 func NewAccountService(
@@ -36,6 +37,7 @@ func NewAccountService(
 		accountUsecase: accountUsecase,
 		phoneRe:        regexp.MustCompile("^1[3-9]\\d{9}$"),
 		codeRe:         regexp.MustCompile("^[A-Za-z0-9]{6}$"),
+		mbtiRe:         regexp.MustCompile("^[EI][NS][TF][JP](?:-[AT])?$"),
 	}
 }
 func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
@@ -77,7 +79,7 @@ func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.G
 		FollowerCount:     account.FollowerCount,
 	}
 	if account.Mbti != nil {
-		basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
+		basic.Mbti = account.Mbti
 	}
 	if account.Status != nil {
 		basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)
@@ -134,7 +136,7 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v
 			FollowerCount:     account.FollowerCount,
 		}
 		if account.Mbti != nil {
-			basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
+			basic.Mbti = account.Mbti
 		}
 		if account.Status != nil {
 			basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)
@@ -187,7 +189,7 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.
 			FollowerCount:     account.FollowerCount,
 		}
 		if account.Mbti != nil {
-			basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
+			basic.Mbti = account.Mbti
 		}
 		if account.Status != nil {
 			basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)
@@ -228,16 +230,25 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 		}
 		req.Nickname = new(value)
 	}
-	var mbti *enum.MBTI
+	if req.Url != nil {
+		value := strings.TrimSpace(req.GetUrl())
+		if value != "" {
+			parsed, err := url.ParseRequestURI(value)
+			if err != nil || (parsed.Scheme != "http" && parsed.Scheme != "https") || parsed.Host == "" || utf8.RuneCountInString(value) > 2048 {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
+			}
+		}
+		req.Url = new(value)
+	}
+	var mbti *string
 	clearMBTI := false
 	if req.Mbti != nil {
-		if *req.Mbti == v1enum.MBTI_MBTI_UNSPECIFIED {
+		value := strings.ToUpper(strings.TrimSpace(req.GetMbti()))
+		if value == "" {
 			clearMBTI = true
+		} else if !s.mbtiRe.MatchString(value) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
 		} else {
-			value, ok := enum.MBTIMap.ToEnum(*req.Mbti)
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-			}
 			mbti = new(value)
 		}
 	}
@@ -267,7 +278,7 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 		FollowerCount:     account.FollowerCount,
 	}
 	if account.Mbti != nil {
-		basic.Mbti = enum.MBTIMap.MustToProto(*account.Mbti)
+		basic.Mbti = account.Mbti
 	}
 	if account.Status != nil {
 		basic.Status = enum.AccountStatusMap.MustToProto(*account.Status)

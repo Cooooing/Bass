@@ -7,7 +7,6 @@ import "google/protobuf/timestamp.proto";
 import "im/v1/enum/chat_group.proto";
 import "im/v1/enum/message.proto";
 import "user/v1/enum/account_status.proto";
-import "user/v1/enum/mbti.proto";
 
 option go_package = "common/proto/gen/im/v1;v1";
 
@@ -59,7 +58,7 @@ message ListChatGroups {
       optional string url = 4; // 个人主页 URL
       optional string avatar_url = 5; // 头像 URL
       optional string introduction = 6; // 个人简介
-      .common.api.app.user.v1.MBTI mbti = 7; // MBTI 类型
+      optional string mbti = 7; // MBTI 类型，规范化为大写
       .common.api.app.user.v1.AccountStatus status = 8; // 账号状态
       optional int32 follow_count = 10; // 关注数量
       optional int32 follower_count = 11; // 粉丝数量

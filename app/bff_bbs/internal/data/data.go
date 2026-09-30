@@ -32,6 +32,7 @@ var ModuleProviderSet = wire.NewSet(
 	NewEconomyClient,
 	NewPreferencesClient,
 	NewPrivacySettingClient,
+	NewIPResolutionClient,
 	NewLocationClient,
 	NewRelationClient,
 	NewOtpClient,

@@ -16,7 +16,7 @@ type Account struct {
 	AvatarAssetID     *int64
 	BackgroundAssetID *int64
 	Introduction      *string
-	Mbti              *enum.MBTI
+	Mbti              *string
 	Status            *enum.AccountStatus
 	FollowCount       *int32
 	FollowerCount     *int32
@@ -31,7 +31,7 @@ type AccountProfileUpdate struct {
 	Nickname          *string
 	URL               *string
 	Introduction      *string
-	Mbti              *enum.MBTI
+	Mbti              *string
 	ClearMBTI         bool
 }
 

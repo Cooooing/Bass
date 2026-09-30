@@ -4,7 +4,6 @@ import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
 	userv1 "common/proto/gen/user/v1"
-	userv1enum "common/proto/gen/user/v1/enum"
 	"context"
 	"time"
 
@@ -45,7 +44,7 @@ func (r *AccountClient) GetCurrentAccount(ctx context.Context, userID int64) (*r
 				BackgroundAssetID: basic.BackgroundAssetId,
 				Introduction:      basic.Introduction,
 				Status:            int32(basic.GetStatus()),
-				MBTI:              int32(basic.GetMbti()),
+				MBTI:              basic.Mbti,
 				FollowCount:       basic.FollowCount,
 				FollowerCount:     basic.FollowerCount,
 				CreatedAt:         new(basic.GetCreatedAt().AsTime()),
@@ -90,7 +89,7 @@ func accountProfile(account *userv1.AccountBasic) *repo.AccountProfile {
 	if account == nil {
 		return nil
 	}
-	return &repo.AccountProfile{ID: account.GetId(), Name: account.GetName(), Nickname: account.Nickname, URL: account.Url, AvatarAssetID: account.AvatarAssetId, BackgroundAssetID: account.BackgroundAssetId, Introduction: account.Introduction, Status: int32(account.GetStatus()), MBTI: int32(account.GetMbti()), FollowCount: account.FollowCount, FollowerCount: account.FollowerCount, CreatedAt: timestampValue(account.GetCreatedAt()), UpdatedAt: timestampValue(account.GetUpdatedAt())}
+	return &repo.AccountProfile{ID: account.GetId(), Name: account.GetName(), Nickname: account.Nickname, URL: account.Url, AvatarAssetID: account.AvatarAssetId, BackgroundAssetID: account.BackgroundAssetId, Introduction: account.Introduction, Status: int32(account.GetStatus()), MBTI: account.Mbti, FollowCount: account.FollowCount, FollowerCount: account.FollowerCount, CreatedAt: timestampValue(account.GetCreatedAt()), UpdatedAt: timestampValue(account.GetUpdatedAt())}
 }
 
 func timestampValue(value *timestamppb.Timestamp) *time.Time {
@@ -110,9 +109,7 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 		Url:               req.URL,
 		Introduction:      req.Introduction,
 	}
-	if req.MBTI != nil {
-		updateReq.Mbti = new(userv1enum.MBTI(*req.MBTI))
-	}
+	updateReq.Mbti = req.MBTI
 	reply, err := r.userClient.Account.UpdateProfile(ctx, updateReq)
 	if err != nil {
 		return nil, err
@@ -129,7 +126,7 @@ func (r *AccountClient) UpdateProfileAccount(ctx context.Context, req *repo.Upda
 			BackgroundAssetID: account.BackgroundAssetId,
 			Introduction:      account.Introduction,
 			Status:            int32(account.GetStatus()),
-			MBTI:              int32(account.GetMbti()),
+			MBTI:              account.Mbti,
 			FollowCount:       account.FollowCount,
 			FollowerCount:     account.FollowerCount,
 			CreatedAt:         new(account.GetCreatedAt().AsTime()),

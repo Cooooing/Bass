@@ -255,7 +255,7 @@ func (s *AuthService) Login(ctx context.Context, req *v1.Login_Req) (*v1.Login_R
 			FollowerCount: res.Account.FollowerCount,
 		}
 		if res.Account.Mbti != nil {
-			basic.Mbti = enum.MBTIMap.MustToProto(*res.Account.Mbti)
+			basic.Mbti = res.Account.Mbti
 		}
 		if res.Account.Status != nil {
 			basic.Status = enum.AccountStatusMap.MustToProto(*res.Account.Status)

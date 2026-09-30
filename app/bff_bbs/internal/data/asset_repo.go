@@ -49,3 +49,20 @@ func (r *AssetClient) Map(ctx context.Context, req *repo.AssetGetReq) (map[int64
 	}
 	return out, nil
 }
+
+func (r *AssetClient) Upload(ctx context.Context, req *repo.AssetUploadReq) (*repo.Asset, error) {
+	reply, err := r.platformClient.Oss.Upload(ctx, &platformv1.UploadOss_Req{UserId: req.UserID, FileName: req.FileName, MimeType: req.MimeType, Content: req.Content})
+	if err != nil {
+		return nil, err
+	}
+	asset, err := r.Get(ctx, reply.GetAssetId())
+	if err != nil {
+		return nil, err
+	}
+	return asset, nil
+}
+
+func (r *AssetClient) Validate(ctx context.Context, assetID, userID int64) error {
+	_, err := r.platformClient.Oss.ValidateAsset(ctx, &platformv1.ValidateAssetOss_Req{AssetId: assetID, UserId: userID})
+	return err
+}

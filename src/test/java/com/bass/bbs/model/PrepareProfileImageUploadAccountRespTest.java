@@ -19,54 +19,48 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for UpdateProfileAccountReq
+ * Model tests for PrepareProfileImageUploadAccountResp
  */
-class UpdateProfileAccountReqTest {
-    private final UpdateProfileAccountReq model = new UpdateProfileAccountReq();
+class PrepareProfileImageUploadAccountRespTest {
+    private final PrepareProfileImageUploadAccountResp model = new PrepareProfileImageUploadAccountResp();
 
     /**
-     * Model tests for UpdateProfileAccountReq
+     * Model tests for PrepareProfileImageUploadAccountResp
      */
     @Test
-    void testUpdateProfileAccountReq() {
-        // TODO: test UpdateProfileAccountReq
+    void testPrepareProfileImageUploadAccountResp() {
+        // TODO: test PrepareProfileImageUploadAccountResp
     }
 
     /**
-     * Test the property 'nickname'
+     * Test the property 'assetId'
      */
     @Test
-    void nicknameTest() {
-        // TODO: test nickname
+    void assetIdTest() {
+        // TODO: test assetId
     }
 
     /**
-     * Test the property 'url'
+     * Test the property 'uploadUrl'
      */
     @Test
-    void urlTest() {
-        // TODO: test url
+    void uploadUrlTest() {
+        // TODO: test uploadUrl
     }
 
     /**
-     * Test the property 'introduction'
+     * Test the property 'formFields'
      */
     @Test
-    void introductionTest() {
-        // TODO: test introduction
-    }
-
-    /**
-     * Test the property 'mbti'
-     */
-    @Test
-    void mbtiTest() {
-        // TODO: test mbti
+    void formFieldsTest() {
+        // TODO: test formFields
     }
 
 }

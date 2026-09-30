@@ -783,6 +783,28 @@ paths:
       - AccountService
       x-accepts:
       - application/json
+  /v1/user/account/complete-profile-image-upload:
+    post:
+      description: 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+      operationId: AccountService_CompleteProfileImageUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompleteProfileImageUploadAccount_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteProfileImageUploadAccount_Resp"
+          description: OK
+      tags:
+      - AccountService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
   /v1/user/account/get-current:
     post:
       description: 获取当前账号完整资料
@@ -865,6 +887,28 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListFollowing_Resp"
+          description: OK
+      tags:
+      - AccountService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/user/account/prepare-profile-image-upload:
+    post:
+      description: 申请当前账号资料图片的内容寻址直传能力。
+      operationId: AccountService_PrepareProfileImageUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrepareProfileImageUploadAccount_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrepareProfileImageUploadAccount_Resp"
           description: OK
       tags:
       - AccountService
@@ -1145,6 +1189,28 @@ paths:
           description: OK
       tags:
       - CheckinService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/user/location/detect-current:
+    post:
+      description: 按当前请求 IP 解析并更新当前账号的地理资料。
+      operationId: LocationService_DetectCurrent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DetectCurrentLocation_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetectCurrentLocation_Resp"
+          description: OK
+      tags:
+      - LocationService
       x-content-type: application/json
       x-accepts:
       - application/json
@@ -1614,7 +1680,7 @@ components:
         follow_count: 9
         name: name
         nickname: nickname
-        mbti: MBTI_UNSPECIFIED
+        mbti: mbti
         id: id
         introduction: introduction
         status: ACCOUNT_STATUS_UNSPECIFIED
@@ -1634,25 +1700,6 @@ components:
         introduction:
           type: string
         mbti:
-          enum:
-          - MBTI_UNSPECIFIED
-          - MBTI_INTJ
-          - MBTI_INTP
-          - MBTI_ENTJ
-          - MBTI_ENTP
-          - MBTI_INFJ
-          - MBTI_INFP
-          - MBTI_ENFJ
-          - MBTI_ENFP
-          - MBTI_ISTJ
-          - MBTI_ISFJ
-          - MBTI_ESTJ
-          - MBTI_ESFJ
-          - MBTI_ISTP
-          - MBTI_ISFP
-          - MBTI_ESTP
-          - MBTI_ESFP
-          format: enum
           type: string
         status:
           enum:
@@ -1692,7 +1739,7 @@ components:
           follow_count: 9
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           id: id
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
@@ -1759,7 +1806,7 @@ components:
           follow_count: 9
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           id: id
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
@@ -1840,7 +1887,7 @@ components:
           follow_count: 9
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           id: id
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
@@ -1996,7 +2043,7 @@ components:
           follow_count: 9
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           id: id
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
@@ -2057,7 +2104,7 @@ components:
           follow_count: 9
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           id: id
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
@@ -2353,6 +2400,44 @@ components:
         collected:
           type: boolean
       type: object
+    CompleteProfileImageUploadAccount_Req:
+      properties:
+        purpose:
+          enum:
+          - PROFILE_IMAGE_PURPOSE_UNSPECIFIED
+          - PROFILE_IMAGE_PURPOSE_AVATAR
+          - PROFILE_IMAGE_PURPOSE_BACKGROUND
+          format: enum
+          type: string
+        hash:
+          type: string
+      required:
+      - hash
+      - purpose
+      type: object
+    CompleteProfileImageUploadAccount_Resp:
+      example:
+        image_url: image_url
+        profile:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
+          avatar_url: avatar_url
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          follow_count: 9
+          name: name
+          nickname: nickname
+          mbti: mbti
+          id: id
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+      properties:
+        profile:
+          $ref: "#/components/schemas/AccountProfile"
+        image_url:
+          type: string
+      type: object
     ConfirmEnableTotp_Req:
       properties:
         code:
@@ -2398,7 +2483,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -2427,7 +2512,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -2450,7 +2535,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -2530,6 +2615,20 @@ components:
         tag:
           $ref: "#/components/schemas/Resp_Tag"
       type: object
+    DetectCurrentLocation_Req:
+      properties: {}
+      type: object
+    DetectCurrentLocation_Resp:
+      example:
+        location:
+          country: country
+          province: province
+          user_id: user_id
+          city: city
+      properties:
+        location:
+          $ref: "#/components/schemas/Resp_Location"
+      type: object
     DisableTotp_Req:
       properties:
         code:
@@ -2595,7 +2694,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -2676,7 +2775,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -2741,7 +2840,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -2849,7 +2948,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -2994,7 +3093,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -3055,7 +3154,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -3075,7 +3174,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -3136,7 +3235,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -3218,7 +3317,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -3247,7 +3346,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3270,7 +3369,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -3288,7 +3387,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -3317,7 +3416,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3340,7 +3439,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -3395,7 +3494,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3424,7 +3523,7 @@ components:
                 follow_count: 5
                 name: name
                 nickname: nickname
-                mbti: MBTI_UNSPECIFIED
+                mbti: mbti
                 created_at: 2000-01-23T04:56:07.000+00:00
                 id: id
                 follower_count: 2
@@ -3447,7 +3546,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3466,7 +3565,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3495,7 +3594,7 @@ components:
                 follow_count: 5
                 name: name
                 nickname: nickname
-                mbti: MBTI_UNSPECIFIED
+                mbti: mbti
                 created_at: 2000-01-23T04:56:07.000+00:00
                 id: id
                 follower_count: 2
@@ -3518,7 +3617,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3536,7 +3635,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3565,7 +3664,7 @@ components:
                 follow_count: 5
                 name: name
                 nickname: nickname
-                mbti: MBTI_UNSPECIFIED
+                mbti: mbti
                 created_at: 2000-01-23T04:56:07.000+00:00
                 id: id
                 follower_count: 2
@@ -3588,7 +3687,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3609,7 +3708,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3638,7 +3737,7 @@ components:
                 follow_count: 5
                 name: name
                 nickname: nickname
-                mbti: MBTI_UNSPECIFIED
+                mbti: mbti
                 created_at: 2000-01-23T04:56:07.000+00:00
                 id: id
                 follower_count: 2
@@ -3661,7 +3760,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3680,7 +3779,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3709,7 +3808,7 @@ components:
                 follow_count: 5
                 name: name
                 nickname: nickname
-                mbti: MBTI_UNSPECIFIED
+                mbti: mbti
                 created_at: 2000-01-23T04:56:07.000+00:00
                 id: id
                 follower_count: 2
@@ -3732,7 +3831,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3750,7 +3849,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3779,7 +3878,7 @@ components:
                 follow_count: 5
                 name: name
                 nickname: nickname
-                mbti: MBTI_UNSPECIFIED
+                mbti: mbti
                 created_at: 2000-01-23T04:56:07.000+00:00
                 id: id
                 follower_count: 2
@@ -3802,7 +3901,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3853,7 +3952,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -3882,7 +3981,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3905,7 +4004,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -3923,7 +4022,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -3952,7 +4051,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -3975,7 +4074,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -4015,7 +4114,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -4044,7 +4143,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -4067,7 +4166,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -4085,7 +4184,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -4114,7 +4213,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -4137,7 +4236,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -4264,7 +4363,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -4283,7 +4382,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -4358,7 +4457,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -4377,7 +4476,7 @@ components:
             follow_count: 9
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
@@ -4546,7 +4645,7 @@ components:
             follow_count: 0
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 6
@@ -4623,6 +4722,43 @@ components:
           format: uint32
           type: integer
       type: object
+    PrepareProfileImageUploadAccount_Req:
+      properties:
+        purpose:
+          enum:
+          - PROFILE_IMAGE_PURPOSE_UNSPECIFIED
+          - PROFILE_IMAGE_PURPOSE_AVATAR
+          - PROFILE_IMAGE_PURPOSE_BACKGROUND
+          format: enum
+          type: string
+        hash:
+          type: string
+        mime_type:
+          type: string
+        size:
+          type: string
+      required:
+      - hash
+      - mime_type
+      - purpose
+      - size
+      type: object
+    PrepareProfileImageUploadAccount_Resp:
+      example:
+        form_fields:
+          key: form_fields
+        upload_url: upload_url
+        asset_id: asset_id
+      properties:
+        asset_id:
+          type: string
+        upload_url:
+          type: string
+        form_fields:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
     Profile:
       example:
         viewer_relation:
@@ -4651,7 +4787,7 @@ components:
           follow_count: 9
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           id: id
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
@@ -5079,7 +5215,7 @@ components:
           follow_count: 0
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           created_at: 2000-01-23T04:56:07.000+00:00
           id: id
           follower_count: 6
@@ -5099,7 +5235,7 @@ components:
         follow_count: 0
         name: name
         nickname: nickname
-        mbti: MBTI_UNSPECIFIED
+        mbti: mbti
         created_at: 2000-01-23T04:56:07.000+00:00
         id: id
         follower_count: 6
@@ -5120,25 +5256,6 @@ components:
         introduction:
           type: string
         mbti:
-          enum:
-          - MBTI_UNSPECIFIED
-          - MBTI_INTJ
-          - MBTI_INTP
-          - MBTI_ENTJ
-          - MBTI_ENTP
-          - MBTI_INFJ
-          - MBTI_INFP
-          - MBTI_ENFJ
-          - MBTI_ENFP
-          - MBTI_ISTJ
-          - MBTI_ISFJ
-          - MBTI_ESTJ
-          - MBTI_ESFJ
-          - MBTI_ISTP
-          - MBTI_ISFP
-          - MBTI_ESTP
-          - MBTI_ESFP
-          format: enum
           type: string
         status:
           enum:
@@ -5181,7 +5298,7 @@ components:
         follow_count: 5
         name: name
         nickname: nickname
-        mbti: MBTI_UNSPECIFIED
+        mbti: mbti
         created_at: 2000-01-23T04:56:07.000+00:00
         id: id
         follower_count: 2
@@ -5202,25 +5319,6 @@ components:
         introduction:
           type: string
         mbti:
-          enum:
-          - MBTI_UNSPECIFIED
-          - MBTI_INTJ
-          - MBTI_INTP
-          - MBTI_ENTJ
-          - MBTI_ENTP
-          - MBTI_INFJ
-          - MBTI_INFP
-          - MBTI_ENFJ
-          - MBTI_ENFP
-          - MBTI_ISTJ
-          - MBTI_ISFJ
-          - MBTI_ESTJ
-          - MBTI_ESFJ
-          - MBTI_ISTP
-          - MBTI_ISFP
-          - MBTI_ESTP
-          - MBTI_ESFP
-          format: enum
           type: string
         status:
           enum:
@@ -5260,7 +5358,7 @@ components:
           follow_count: 5
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           created_at: 2000-01-23T04:56:07.000+00:00
           id: id
           follower_count: 2
@@ -5334,7 +5432,7 @@ components:
           follow_count: 5
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           created_at: 2000-01-23T04:56:07.000+00:00
           id: id
           follower_count: 2
@@ -5363,7 +5461,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -5386,7 +5484,7 @@ components:
           follow_count: 5
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           created_at: 2000-01-23T04:56:07.000+00:00
           id: id
           follower_count: 2
@@ -5461,7 +5559,7 @@ components:
           follow_count: 5
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           created_at: 2000-01-23T04:56:07.000+00:00
           id: id
           follower_count: 2
@@ -5490,7 +5588,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -5513,7 +5611,7 @@ components:
           follow_count: 5
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           created_at: 2000-01-23T04:56:07.000+00:00
           id: id
           follower_count: 2
@@ -5590,7 +5688,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -5619,7 +5717,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -5642,7 +5740,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -5661,7 +5759,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -5690,7 +5788,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -5713,7 +5811,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -5731,7 +5829,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -5760,7 +5858,7 @@ components:
               follow_count: 5
               name: name
               nickname: nickname
-              mbti: MBTI_UNSPECIFIED
+              mbti: mbti
               created_at: 2000-01-23T04:56:07.000+00:00
               id: id
               follower_count: 2
@@ -5783,7 +5881,7 @@ components:
             follow_count: 5
             name: name
             nickname: nickname
-            mbti: MBTI_UNSPECIFIED
+            mbti: mbti
             created_at: 2000-01-23T04:56:07.000+00:00
             id: id
             follower_count: 2
@@ -5827,7 +5925,7 @@ components:
           follow_count: 9
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           id: id
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
@@ -6451,10 +6549,6 @@ components:
       type: object
     UpdateProfileAccount_Req:
       properties:
-        avatar_asset_id:
-          type: string
-        background_asset_id:
-          type: string
         nickname:
           type: string
         url:
@@ -6462,25 +6556,6 @@ components:
         introduction:
           type: string
         mbti:
-          enum:
-          - MBTI_UNSPECIFIED
-          - MBTI_INTJ
-          - MBTI_INTP
-          - MBTI_ENTJ
-          - MBTI_ENTP
-          - MBTI_INFJ
-          - MBTI_INFP
-          - MBTI_ENFJ
-          - MBTI_ENFP
-          - MBTI_ISTJ
-          - MBTI_ISFJ
-          - MBTI_ESTJ
-          - MBTI_ESFJ
-          - MBTI_ISTP
-          - MBTI_ISFP
-          - MBTI_ESTP
-          - MBTI_ESFP
-          format: enum
           type: string
       type: object
     UpdateProfileAccount_Resp:
@@ -6495,7 +6570,7 @@ components:
           follow_count: 9
           name: name
           nickname: nickname
-          mbti: MBTI_UNSPECIFIED
+          mbti: mbti
           id: id
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED

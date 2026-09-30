@@ -13,6 +13,7 @@
 
 package com.bass.bbs.model;
 
+import com.bass.bbs.model.AccountProfile;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,49 +25,33 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for UpdateProfileAccountReq
+ * Model tests for CompleteProfileImageUploadAccountResp
  */
-class UpdateProfileAccountReqTest {
-    private final UpdateProfileAccountReq model = new UpdateProfileAccountReq();
+class CompleteProfileImageUploadAccountRespTest {
+    private final CompleteProfileImageUploadAccountResp model = new CompleteProfileImageUploadAccountResp();
 
     /**
-     * Model tests for UpdateProfileAccountReq
+     * Model tests for CompleteProfileImageUploadAccountResp
      */
     @Test
-    void testUpdateProfileAccountReq() {
-        // TODO: test UpdateProfileAccountReq
+    void testCompleteProfileImageUploadAccountResp() {
+        // TODO: test CompleteProfileImageUploadAccountResp
     }
 
     /**
-     * Test the property 'nickname'
+     * Test the property 'profile'
      */
     @Test
-    void nicknameTest() {
-        // TODO: test nickname
+    void profileTest() {
+        // TODO: test profile
     }
 
     /**
-     * Test the property 'url'
+     * Test the property 'imageUrl'
      */
     @Test
-    void urlTest() {
-        // TODO: test url
-    }
-
-    /**
-     * Test the property 'introduction'
-     */
-    @Test
-    void introductionTest() {
-        // TODO: test introduction
-    }
-
-    /**
-     * Test the property 'mbti'
-     */
-    @Test
-    void mbtiTest() {
-        // TODO: test mbti
+    void imageUrlTest() {
+        // TODO: test imageUrl
     }
 
 }

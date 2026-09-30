@@ -33,8 +33,6 @@ import com.bass.bbs.ApiClient;
  * UpdateProfileAccountReq
  */
 @JsonPropertyOrder({
-  UpdateProfileAccountReq.JSON_PROPERTY_AVATAR_ASSET_ID,
-  UpdateProfileAccountReq.JSON_PROPERTY_BACKGROUND_ASSET_ID,
   UpdateProfileAccountReq.JSON_PROPERTY_NICKNAME,
   UpdateProfileAccountReq.JSON_PROPERTY_URL,
   UpdateProfileAccountReq.JSON_PROPERTY_INTRODUCTION,
@@ -42,14 +40,6 @@ import com.bass.bbs.ApiClient;
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class UpdateProfileAccountReq {
-  public static final String JSON_PROPERTY_AVATAR_ASSET_ID = "avatar_asset_id";
-  @javax.annotation.Nullable
-  private String avatarAssetId;
-
-  public static final String JSON_PROPERTY_BACKGROUND_ASSET_ID = "background_asset_id";
-  @javax.annotation.Nullable
-  private String backgroundAssetId;
-
   public static final String JSON_PROPERTY_NICKNAME = "nickname";
   @javax.annotation.Nullable
   private String nickname;
@@ -62,125 +52,12 @@ public class UpdateProfileAccountReq {
   @javax.annotation.Nullable
   private String introduction;
 
-  /**
-   * Gets or Sets mbti
-   */
-  public enum MbtiEnum {
-    MBTI_UNSPECIFIED(String.valueOf("MBTI_UNSPECIFIED")),
-    
-    MBTI_INTJ(String.valueOf("MBTI_INTJ")),
-    
-    MBTI_INTP(String.valueOf("MBTI_INTP")),
-    
-    MBTI_ENTJ(String.valueOf("MBTI_ENTJ")),
-    
-    MBTI_ENTP(String.valueOf("MBTI_ENTP")),
-    
-    MBTI_INFJ(String.valueOf("MBTI_INFJ")),
-    
-    MBTI_INFP(String.valueOf("MBTI_INFP")),
-    
-    MBTI_ENFJ(String.valueOf("MBTI_ENFJ")),
-    
-    MBTI_ENFP(String.valueOf("MBTI_ENFP")),
-    
-    MBTI_ISTJ(String.valueOf("MBTI_ISTJ")),
-    
-    MBTI_ISFJ(String.valueOf("MBTI_ISFJ")),
-    
-    MBTI_ESTJ(String.valueOf("MBTI_ESTJ")),
-    
-    MBTI_ESFJ(String.valueOf("MBTI_ESFJ")),
-    
-    MBTI_ISTP(String.valueOf("MBTI_ISTP")),
-    
-    MBTI_ISFP(String.valueOf("MBTI_ISFP")),
-    
-    MBTI_ESTP(String.valueOf("MBTI_ESTP")),
-    
-    MBTI_ESFP(String.valueOf("MBTI_ESFP"));
-
-    private String value;
-
-    MbtiEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static MbtiEnum fromValue(String value) {
-      for (MbtiEnum b : MbtiEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
-  }
-
   public static final String JSON_PROPERTY_MBTI = "mbti";
   @javax.annotation.Nullable
-  private MbtiEnum mbti;
+  private String mbti;
 
   public UpdateProfileAccountReq() { 
   }
-
-  public UpdateProfileAccountReq avatarAssetId(@javax.annotation.Nullable String avatarAssetId) {
-    this.avatarAssetId = avatarAssetId;
-    return this;
-  }
-
-  /**
-   * Get avatarAssetId
-   * @return avatarAssetId
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_AVATAR_ASSET_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getAvatarAssetId() {
-    return avatarAssetId;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_AVATAR_ASSET_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAvatarAssetId(@javax.annotation.Nullable String avatarAssetId) {
-    this.avatarAssetId = avatarAssetId;
-  }
-
-
-  public UpdateProfileAccountReq backgroundAssetId(@javax.annotation.Nullable String backgroundAssetId) {
-    this.backgroundAssetId = backgroundAssetId;
-    return this;
-  }
-
-  /**
-   * Get backgroundAssetId
-   * @return backgroundAssetId
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_BACKGROUND_ASSET_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getBackgroundAssetId() {
-    return backgroundAssetId;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_BACKGROUND_ASSET_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBackgroundAssetId(@javax.annotation.Nullable String backgroundAssetId) {
-    this.backgroundAssetId = backgroundAssetId;
-  }
-
 
   public UpdateProfileAccountReq nickname(@javax.annotation.Nullable String nickname) {
     this.nickname = nickname;
@@ -254,7 +131,7 @@ public class UpdateProfileAccountReq {
   }
 
 
-  public UpdateProfileAccountReq mbti(@javax.annotation.Nullable MbtiEnum mbti) {
+  public UpdateProfileAccountReq mbti(@javax.annotation.Nullable String mbti) {
     this.mbti = mbti;
     return this;
   }
@@ -266,14 +143,14 @@ public class UpdateProfileAccountReq {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_MBTI, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public MbtiEnum getMbti() {
+  public String getMbti() {
     return mbti;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_MBTI, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMbti(@javax.annotation.Nullable MbtiEnum mbti) {
+  public void setMbti(@javax.annotation.Nullable String mbti) {
     this.mbti = mbti;
   }
 
@@ -290,9 +167,7 @@ public class UpdateProfileAccountReq {
       return false;
     }
     UpdateProfileAccountReq updateProfileAccountReq = (UpdateProfileAccountReq) o;
-    return Objects.equals(this.avatarAssetId, updateProfileAccountReq.avatarAssetId) &&
-        Objects.equals(this.backgroundAssetId, updateProfileAccountReq.backgroundAssetId) &&
-        Objects.equals(this.nickname, updateProfileAccountReq.nickname) &&
+    return Objects.equals(this.nickname, updateProfileAccountReq.nickname) &&
         Objects.equals(this.url, updateProfileAccountReq.url) &&
         Objects.equals(this.introduction, updateProfileAccountReq.introduction) &&
         Objects.equals(this.mbti, updateProfileAccountReq.mbti);
@@ -300,15 +175,13 @@ public class UpdateProfileAccountReq {
 
   @Override
   public int hashCode() {
-    return Objects.hash(avatarAssetId, backgroundAssetId, nickname, url, introduction, mbti);
+    return Objects.hash(nickname, url, introduction, mbti);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class UpdateProfileAccountReq {\n");
-    sb.append("    avatarAssetId: ").append(toIndentedString(avatarAssetId)).append("\n");
-    sb.append("    backgroundAssetId: ").append(toIndentedString(backgroundAssetId)).append("\n");
     sb.append("    nickname: ").append(toIndentedString(nickname)).append("\n");
     sb.append("    url: ").append(toIndentedString(url)).append("\n");
     sb.append("    introduction: ").append(toIndentedString(introduction)).append("\n");
@@ -356,16 +229,6 @@ public class UpdateProfileAccountReq {
     }
 
     StringJoiner joiner = new StringJoiner("&");
-
-    // add `avatar_asset_id` to the URL query string
-    if (getAvatarAssetId() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%savatar_asset_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getAvatarAssetId()))));
-    }
-
-    // add `background_asset_id` to the URL query string
-    if (getBackgroundAssetId() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sbackground_asset_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getBackgroundAssetId()))));
-    }
 
     // add `nickname` to the URL query string
     if (getNickname() != null) {

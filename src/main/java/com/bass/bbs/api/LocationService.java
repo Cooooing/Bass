@@ -18,6 +18,7 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
+import com.bass.bbs.model.DetectCurrentLocationResp;
 import com.bass.bbs.model.GetCurrentLocationResp;
 import com.bass.bbs.model.UpsertCurrentLocationReq;
 import com.bass.bbs.model.UpsertCurrentLocationResp;
@@ -162,6 +163,207 @@ public class LocationService {
       file.deleteOnExit(); // best effort cleanup
     }
     return file;
+  }
+
+  /**
+   * 
+   * 按当前请求 IP 解析并更新当前账号的地理资料。
+   * @param apiRequest {@link APIDetectCurrentRequest}
+   * @return DetectCurrentLocationResp
+   * @throws ApiException if fails to make API call
+   */
+  public DetectCurrentLocationResp detectCurrent(APIDetectCurrentRequest apiRequest) throws ApiException {
+    return detectCurrent(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 按当前请求 IP 解析并更新当前账号的地理资料。
+   * @param apiRequest {@link APIDetectCurrentRequest}
+   * @param headers Optional headers to include in the request
+   * @return DetectCurrentLocationResp
+   * @throws ApiException if fails to make API call
+   */
+  public DetectCurrentLocationResp detectCurrent(APIDetectCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    Object body = apiRequest.body();
+    return detectCurrent(body, headers);
+  }
+
+  /**
+   * 
+   * 按当前请求 IP 解析并更新当前账号的地理资料。
+   * @param apiRequest {@link APIDetectCurrentRequest}
+   * @return ApiResponse&lt;DetectCurrentLocationResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DetectCurrentLocationResp> detectCurrentWithHttpInfo(APIDetectCurrentRequest apiRequest) throws ApiException {
+    return detectCurrentWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 按当前请求 IP 解析并更新当前账号的地理资料。
+   * @param apiRequest {@link APIDetectCurrentRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;DetectCurrentLocationResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DetectCurrentLocationResp> detectCurrentWithHttpInfo(APIDetectCurrentRequest apiRequest, Map<String, String> headers) throws ApiException {
+    Object body = apiRequest.body();
+    return detectCurrentWithHttpInfo(body, headers);
+  }
+
+  /**
+   * 
+   * 按当前请求 IP 解析并更新当前账号的地理资料。
+   * @param body  (required)
+   * @return DetectCurrentLocationResp
+   * @throws ApiException if fails to make API call
+   */
+  public DetectCurrentLocationResp detectCurrent(@javax.annotation.Nonnull Object body) throws ApiException {
+    return detectCurrent(body, null);
+  }
+
+  /**
+   * 
+   * 按当前请求 IP 解析并更新当前账号的地理资料。
+   * @param body  (required)
+   * @param headers Optional headers to include in the request
+   * @return DetectCurrentLocationResp
+   * @throws ApiException if fails to make API call
+   */
+  public DetectCurrentLocationResp detectCurrent(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    ApiResponse<DetectCurrentLocationResp> localVarResponse = detectCurrentWithHttpInfo(body, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 按当前请求 IP 解析并更新当前账号的地理资料。
+   * @param body  (required)
+   * @return ApiResponse&lt;DetectCurrentLocationResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DetectCurrentLocationResp> detectCurrentWithHttpInfo(@javax.annotation.Nonnull Object body) throws ApiException {
+    return detectCurrentWithHttpInfo(body, null);
+  }
+
+  /**
+   * 
+   * 按当前请求 IP 解析并更新当前账号的地理资料。
+   * @param body  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;DetectCurrentLocationResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<DetectCurrentLocationResp> detectCurrentWithHttpInfo(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = detectCurrentRequestBuilder(body, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("detectCurrent", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<DetectCurrentLocationResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        DetectCurrentLocationResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<DetectCurrentLocationResp>() {});
+        
+
+        return new ApiResponse<DetectCurrentLocationResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder detectCurrentRequestBuilder(@javax.annotation.Nonnull Object body, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'body' is set
+    if (body == null) {
+      throw new ApiException(400, "Missing the required parameter 'body' when calling detectCurrent");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/user/location/detect-current";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(body);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIDetectCurrentRequest {
+    @javax.annotation.Nonnull
+    private Object body; //  (required)
+
+    private APIDetectCurrentRequest(Builder builder) {
+      this.body = builder.body;
+    }
+    @javax.annotation.Nonnull
+    public Object body() {
+      return body;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private Object body;
+
+      public Builder body(@javax.annotation.Nonnull Object body) {
+        this.body = body;
+        return this;
+      }
+      public APIDetectCurrentRequest build() {
+        return new APIDetectCurrentRequest(this);
+      }
+    }
   }
 
   /**

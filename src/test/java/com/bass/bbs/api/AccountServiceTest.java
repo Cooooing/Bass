@@ -14,6 +14,8 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
+import com.bass.bbs.model.CompleteProfileImageUploadAccountReq;
+import com.bass.bbs.model.CompleteProfileImageUploadAccountResp;
 import com.bass.bbs.model.GetCurrentAccountResp;
 import com.bass.bbs.model.GetProfileReq;
 import com.bass.bbs.model.GetProfileResp;
@@ -22,6 +24,8 @@ import com.bass.bbs.model.ListFollowersReq;
 import com.bass.bbs.model.ListFollowersResp;
 import com.bass.bbs.model.ListFollowingReq;
 import com.bass.bbs.model.ListFollowingResp;
+import com.bass.bbs.model.PrepareProfileImageUploadAccountReq;
+import com.bass.bbs.model.PrepareProfileImageUploadAccountResp;
 import com.bass.bbs.model.UpdateEmailAccountReq;
 import com.bass.bbs.model.UpdatePasswordAccountReq;
 import com.bass.bbs.model.UpdatePhoneAccountReq;
@@ -63,6 +67,27 @@ public class AccountServiceTest {
           .build();
         ImageResp response = 
         api.avatar(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void completeProfileImageUploadTest() throws ApiException {
+        CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq = null;
+        
+        AccountService.APIcompleteProfileImageUploadRequest request = AccountService.APIcompleteProfileImageUploadRequest.newBuilder()
+          .completeProfileImageUploadAccountReq(completeProfileImageUploadAccountReq)
+          .build();
+        CompleteProfileImageUploadAccountResp response = 
+        api.completeProfileImageUpload(request);
 
         // TODO: test validations
     }
@@ -147,6 +172,27 @@ public class AccountServiceTest {
           .build();
         ListFollowingResp response = 
         api.listFollowing(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 申请当前账号资料图片的内容寻址直传能力。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void prepareProfileImageUploadTest() throws ApiException {
+        PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq = null;
+        
+        AccountService.APIprepareProfileImageUploadRequest request = AccountService.APIprepareProfileImageUploadRequest.newBuilder()
+          .prepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq)
+          .build();
+        PrepareProfileImageUploadAccountResp response = 
+        api.prepareProfileImageUpload(request);
 
         // TODO: test validations
     }

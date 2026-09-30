@@ -113,6 +113,8 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *AccountService* | [**avatar**](docs/AccountService.md#avatar) | **GET** /v1/user/account/avatar | 
 *AccountService* | [**avatarWithHttpInfo**](docs/AccountService.md#avatarWithHttpInfo) | **GET** /v1/user/account/avatar | 
+*AccountService* | [**completeProfileImageUpload**](docs/AccountService.md#completeProfileImageUpload) | **POST** /v1/user/account/complete-profile-image-upload | 
+*AccountService* | [**completeProfileImageUploadWithHttpInfo**](docs/AccountService.md#completeProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/complete-profile-image-upload | 
 *AccountService* | [**getCurrent**](docs/AccountService.md#getCurrent) | **POST** /v1/user/account/get-current | 
 *AccountService* | [**getCurrentWithHttpInfo**](docs/AccountService.md#getCurrentWithHttpInfo) | **POST** /v1/user/account/get-current | 
 *AccountService* | [**getProfile**](docs/AccountService.md#getProfile) | **POST** /v1/user/account/get-profile | 
@@ -121,6 +123,8 @@ Class | Method | HTTP request | Description
 *AccountService* | [**listFollowersWithHttpInfo**](docs/AccountService.md#listFollowersWithHttpInfo) | **POST** /v1/user/account/list-followers | 
 *AccountService* | [**listFollowing**](docs/AccountService.md#listFollowing) | **POST** /v1/user/account/list-following | 
 *AccountService* | [**listFollowingWithHttpInfo**](docs/AccountService.md#listFollowingWithHttpInfo) | **POST** /v1/user/account/list-following | 
+*AccountService* | [**prepareProfileImageUpload**](docs/AccountService.md#prepareProfileImageUpload) | **POST** /v1/user/account/prepare-profile-image-upload | 
+*AccountService* | [**prepareProfileImageUploadWithHttpInfo**](docs/AccountService.md#prepareProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/prepare-profile-image-upload | 
 *AccountService* | [**updateEmail**](docs/AccountService.md#updateEmail) | **POST** /v1/user/account/update-email | 
 *AccountService* | [**updateEmailWithHttpInfo**](docs/AccountService.md#updateEmailWithHttpInfo) | **POST** /v1/user/account/update-email | 
 *AccountService* | [**updatePassword**](docs/AccountService.md#updatePassword) | **POST** /v1/user/account/update-password | 
@@ -189,6 +193,8 @@ Class | Method | HTTP request | Description
 *DomainService* | [**createWithHttpInfo**](docs/DomainService.md#createWithHttpInfo) | **POST** /v1/content/domain/create | 
 *DomainService* | [**update**](docs/DomainService.md#update) | **POST** /v1/content/domain/update | 
 *DomainService* | [**updateWithHttpInfo**](docs/DomainService.md#updateWithHttpInfo) | **POST** /v1/content/domain/update | 
+*LocationService* | [**detectCurrent**](docs/LocationService.md#detectCurrent) | **POST** /v1/user/location/detect-current | 
+*LocationService* | [**detectCurrentWithHttpInfo**](docs/LocationService.md#detectCurrentWithHttpInfo) | **POST** /v1/user/location/detect-current | 
 *LocationService* | [**getCurrent**](docs/LocationService.md#getCurrent) | **POST** /v1/user/location/get-current | 
 *LocationService* | [**getCurrentWithHttpInfo**](docs/LocationService.md#getCurrentWithHttpInfo) | **POST** /v1/user/location/get-current | 
 *LocationService* | [**upsertCurrent**](docs/LocationService.md#upsertCurrent) | **POST** /v1/user/location/upsert-current | 
@@ -276,6 +282,8 @@ Class | Method | HTTP request | Description
  - [CheckRegistrationAvailabilityResp](docs/CheckRegistrationAvailabilityResp.md)
  - [CollectArticleReq](docs/CollectArticleReq.md)
  - [CollectArticleResp](docs/CollectArticleResp.md)
+ - [CompleteProfileImageUploadAccountReq](docs/CompleteProfileImageUploadAccountReq.md)
+ - [CompleteProfileImageUploadAccountResp](docs/CompleteProfileImageUploadAccountResp.md)
  - [ConfirmEnableTotpReq](docs/ConfirmEnableTotpReq.md)
  - [CountUnreadNotificationsResp](docs/CountUnreadNotificationsResp.md)
  - [CreateCommentReq](docs/CreateCommentReq.md)
@@ -286,6 +294,7 @@ Class | Method | HTTP request | Description
  - [CreateDraftArticleResp](docs/CreateDraftArticleResp.md)
  - [CreateTagReq](docs/CreateTagReq.md)
  - [CreateTagResp](docs/CreateTagResp.md)
+ - [DetectCurrentLocationResp](docs/DetectCurrentLocationResp.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
  - [DiscardDraftArticleReq](docs/DiscardDraftArticleReq.md)
  - [FollowRelationReq](docs/FollowRelationReq.md)
@@ -343,6 +352,8 @@ Class | Method | HTTP request | Description
  - [MarkReadNotificationResp](docs/MarkReadNotificationResp.md)
  - [PageReq](docs/PageReq.md)
  - [PageResp](docs/PageResp.md)
+ - [PrepareProfileImageUploadAccountReq](docs/PrepareProfileImageUploadAccountReq.md)
+ - [PrepareProfileImageUploadAccountResp](docs/PrepareProfileImageUploadAccountResp.md)
  - [Profile](docs/Profile.md)
  - [ProfileLocation](docs/ProfileLocation.md)
  - [ProfileRelation](docs/ProfileRelation.md)

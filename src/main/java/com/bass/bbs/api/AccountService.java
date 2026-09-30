@@ -18,6 +18,8 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
+import com.bass.bbs.model.CompleteProfileImageUploadAccountReq;
+import com.bass.bbs.model.CompleteProfileImageUploadAccountResp;
 import com.bass.bbs.model.GetCurrentAccountResp;
 import com.bass.bbs.model.GetProfileReq;
 import com.bass.bbs.model.GetProfileResp;
@@ -26,6 +28,8 @@ import com.bass.bbs.model.ListFollowersReq;
 import com.bass.bbs.model.ListFollowersResp;
 import com.bass.bbs.model.ListFollowingReq;
 import com.bass.bbs.model.ListFollowingResp;
+import com.bass.bbs.model.PrepareProfileImageUploadAccountReq;
+import com.bass.bbs.model.PrepareProfileImageUploadAccountResp;
 import com.bass.bbs.model.UpdateEmailAccountReq;
 import com.bass.bbs.model.UpdatePasswordAccountReq;
 import com.bass.bbs.model.UpdatePhoneAccountReq;
@@ -376,6 +380,207 @@ public class AccountService {
       }
       public APIAvatarRequest build() {
         return new APIAvatarRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+   * @param apiRequest {@link APICompleteProfileImageUploadRequest}
+   * @return CompleteProfileImageUploadAccountResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteProfileImageUploadAccountResp completeProfileImageUpload(APICompleteProfileImageUploadRequest apiRequest) throws ApiException {
+    return completeProfileImageUpload(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+   * @param apiRequest {@link APICompleteProfileImageUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return CompleteProfileImageUploadAccountResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteProfileImageUploadAccountResp completeProfileImageUpload(APICompleteProfileImageUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq = apiRequest.completeProfileImageUploadAccountReq();
+    return completeProfileImageUpload(completeProfileImageUploadAccountReq, headers);
+  }
+
+  /**
+   * 
+   * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+   * @param apiRequest {@link APICompleteProfileImageUploadRequest}
+   * @return ApiResponse&lt;CompleteProfileImageUploadAccountResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteProfileImageUploadAccountResp> completeProfileImageUploadWithHttpInfo(APICompleteProfileImageUploadRequest apiRequest) throws ApiException {
+    return completeProfileImageUploadWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+   * @param apiRequest {@link APICompleteProfileImageUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CompleteProfileImageUploadAccountResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteProfileImageUploadAccountResp> completeProfileImageUploadWithHttpInfo(APICompleteProfileImageUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq = apiRequest.completeProfileImageUploadAccountReq();
+    return completeProfileImageUploadWithHttpInfo(completeProfileImageUploadAccountReq, headers);
+  }
+
+  /**
+   * 
+   * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+   * @param completeProfileImageUploadAccountReq  (required)
+   * @return CompleteProfileImageUploadAccountResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteProfileImageUploadAccountResp completeProfileImageUpload(@javax.annotation.Nonnull CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq) throws ApiException {
+    return completeProfileImageUpload(completeProfileImageUploadAccountReq, null);
+  }
+
+  /**
+   * 
+   * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+   * @param completeProfileImageUploadAccountReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return CompleteProfileImageUploadAccountResp
+   * @throws ApiException if fails to make API call
+   */
+  public CompleteProfileImageUploadAccountResp completeProfileImageUpload(@javax.annotation.Nonnull CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<CompleteProfileImageUploadAccountResp> localVarResponse = completeProfileImageUploadWithHttpInfo(completeProfileImageUploadAccountReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+   * @param completeProfileImageUploadAccountReq  (required)
+   * @return ApiResponse&lt;CompleteProfileImageUploadAccountResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteProfileImageUploadAccountResp> completeProfileImageUploadWithHttpInfo(@javax.annotation.Nonnull CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq) throws ApiException {
+    return completeProfileImageUploadWithHttpInfo(completeProfileImageUploadAccountReq, null);
+  }
+
+  /**
+   * 
+   * 将已由 MinIO 回调确认的资源绑定到当前账号资料。
+   * @param completeProfileImageUploadAccountReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;CompleteProfileImageUploadAccountResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<CompleteProfileImageUploadAccountResp> completeProfileImageUploadWithHttpInfo(@javax.annotation.Nonnull CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = completeProfileImageUploadRequestBuilder(completeProfileImageUploadAccountReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("completeProfileImageUpload", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<CompleteProfileImageUploadAccountResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        CompleteProfileImageUploadAccountResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<CompleteProfileImageUploadAccountResp>() {});
+        
+
+        return new ApiResponse<CompleteProfileImageUploadAccountResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder completeProfileImageUploadRequestBuilder(@javax.annotation.Nonnull CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'completeProfileImageUploadAccountReq' is set
+    if (completeProfileImageUploadAccountReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'completeProfileImageUploadAccountReq' when calling completeProfileImageUpload");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/user/account/complete-profile-image-upload";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(completeProfileImageUploadAccountReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APICompleteProfileImageUploadRequest {
+    @javax.annotation.Nonnull
+    private CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq; //  (required)
+
+    private APICompleteProfileImageUploadRequest(Builder builder) {
+      this.completeProfileImageUploadAccountReq = builder.completeProfileImageUploadAccountReq;
+    }
+    @javax.annotation.Nonnull
+    public CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq() {
+      return completeProfileImageUploadAccountReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq;
+
+      public Builder completeProfileImageUploadAccountReq(@javax.annotation.Nonnull CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq) {
+        this.completeProfileImageUploadAccountReq = completeProfileImageUploadAccountReq;
+        return this;
+      }
+      public APICompleteProfileImageUploadRequest build() {
+        return new APICompleteProfileImageUploadRequest(this);
       }
     }
   }
@@ -1180,6 +1385,207 @@ public class AccountService {
       }
       public APIListFollowingRequest build() {
         return new APIListFollowingRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 申请当前账号资料图片的内容寻址直传能力。
+   * @param apiRequest {@link APIPrepareProfileImageUploadRequest}
+   * @return PrepareProfileImageUploadAccountResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareProfileImageUploadAccountResp prepareProfileImageUpload(APIPrepareProfileImageUploadRequest apiRequest) throws ApiException {
+    return prepareProfileImageUpload(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 申请当前账号资料图片的内容寻址直传能力。
+   * @param apiRequest {@link APIPrepareProfileImageUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return PrepareProfileImageUploadAccountResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareProfileImageUploadAccountResp prepareProfileImageUpload(APIPrepareProfileImageUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq = apiRequest.prepareProfileImageUploadAccountReq();
+    return prepareProfileImageUpload(prepareProfileImageUploadAccountReq, headers);
+  }
+
+  /**
+   * 
+   * 申请当前账号资料图片的内容寻址直传能力。
+   * @param apiRequest {@link APIPrepareProfileImageUploadRequest}
+   * @return ApiResponse&lt;PrepareProfileImageUploadAccountResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareProfileImageUploadAccountResp> prepareProfileImageUploadWithHttpInfo(APIPrepareProfileImageUploadRequest apiRequest) throws ApiException {
+    return prepareProfileImageUploadWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 申请当前账号资料图片的内容寻址直传能力。
+   * @param apiRequest {@link APIPrepareProfileImageUploadRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PrepareProfileImageUploadAccountResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareProfileImageUploadAccountResp> prepareProfileImageUploadWithHttpInfo(APIPrepareProfileImageUploadRequest apiRequest, Map<String, String> headers) throws ApiException {
+    PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq = apiRequest.prepareProfileImageUploadAccountReq();
+    return prepareProfileImageUploadWithHttpInfo(prepareProfileImageUploadAccountReq, headers);
+  }
+
+  /**
+   * 
+   * 申请当前账号资料图片的内容寻址直传能力。
+   * @param prepareProfileImageUploadAccountReq  (required)
+   * @return PrepareProfileImageUploadAccountResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareProfileImageUploadAccountResp prepareProfileImageUpload(@javax.annotation.Nonnull PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq) throws ApiException {
+    return prepareProfileImageUpload(prepareProfileImageUploadAccountReq, null);
+  }
+
+  /**
+   * 
+   * 申请当前账号资料图片的内容寻址直传能力。
+   * @param prepareProfileImageUploadAccountReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return PrepareProfileImageUploadAccountResp
+   * @throws ApiException if fails to make API call
+   */
+  public PrepareProfileImageUploadAccountResp prepareProfileImageUpload(@javax.annotation.Nonnull PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PrepareProfileImageUploadAccountResp> localVarResponse = prepareProfileImageUploadWithHttpInfo(prepareProfileImageUploadAccountReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 申请当前账号资料图片的内容寻址直传能力。
+   * @param prepareProfileImageUploadAccountReq  (required)
+   * @return ApiResponse&lt;PrepareProfileImageUploadAccountResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareProfileImageUploadAccountResp> prepareProfileImageUploadWithHttpInfo(@javax.annotation.Nonnull PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq) throws ApiException {
+    return prepareProfileImageUploadWithHttpInfo(prepareProfileImageUploadAccountReq, null);
+  }
+
+  /**
+   * 
+   * 申请当前账号资料图片的内容寻址直传能力。
+   * @param prepareProfileImageUploadAccountReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PrepareProfileImageUploadAccountResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PrepareProfileImageUploadAccountResp> prepareProfileImageUploadWithHttpInfo(@javax.annotation.Nonnull PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = prepareProfileImageUploadRequestBuilder(prepareProfileImageUploadAccountReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("prepareProfileImageUpload", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<PrepareProfileImageUploadAccountResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        PrepareProfileImageUploadAccountResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PrepareProfileImageUploadAccountResp>() {});
+        
+
+        return new ApiResponse<PrepareProfileImageUploadAccountResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder prepareProfileImageUploadRequestBuilder(@javax.annotation.Nonnull PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'prepareProfileImageUploadAccountReq' is set
+    if (prepareProfileImageUploadAccountReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'prepareProfileImageUploadAccountReq' when calling prepareProfileImageUpload");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/user/account/prepare-profile-image-upload";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(prepareProfileImageUploadAccountReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIPrepareProfileImageUploadRequest {
+    @javax.annotation.Nonnull
+    private PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq; //  (required)
+
+    private APIPrepareProfileImageUploadRequest(Builder builder) {
+      this.prepareProfileImageUploadAccountReq = builder.prepareProfileImageUploadAccountReq;
+    }
+    @javax.annotation.Nonnull
+    public PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq() {
+      return prepareProfileImageUploadAccountReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq;
+
+      public Builder prepareProfileImageUploadAccountReq(@javax.annotation.Nonnull PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq) {
+        this.prepareProfileImageUploadAccountReq = prepareProfileImageUploadAccountReq;
+        return this;
+      }
+      public APIPrepareProfileImageUploadRequest build() {
+        return new APIPrepareProfileImageUploadRequest(this);
       }
     }
   }

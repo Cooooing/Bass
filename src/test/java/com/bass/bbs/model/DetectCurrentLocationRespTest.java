@@ -13,6 +13,7 @@
 
 package com.bass.bbs.model;
 
+import com.bass.bbs.model.RespLocation;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,49 +25,25 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for UpdateProfileAccountReq
+ * Model tests for DetectCurrentLocationResp
  */
-class UpdateProfileAccountReqTest {
-    private final UpdateProfileAccountReq model = new UpdateProfileAccountReq();
+class DetectCurrentLocationRespTest {
+    private final DetectCurrentLocationResp model = new DetectCurrentLocationResp();
 
     /**
-     * Model tests for UpdateProfileAccountReq
+     * Model tests for DetectCurrentLocationResp
      */
     @Test
-    void testUpdateProfileAccountReq() {
-        // TODO: test UpdateProfileAccountReq
+    void testDetectCurrentLocationResp() {
+        // TODO: test DetectCurrentLocationResp
     }
 
     /**
-     * Test the property 'nickname'
+     * Test the property 'location'
      */
     @Test
-    void nicknameTest() {
-        // TODO: test nickname
-    }
-
-    /**
-     * Test the property 'url'
-     */
-    @Test
-    void urlTest() {
-        // TODO: test url
-    }
-
-    /**
-     * Test the property 'introduction'
-     */
-    @Test
-    void introductionTest() {
-        // TODO: test introduction
-    }
-
-    /**
-     * Test the property 'mbti'
-     */
-    @Test
-    void mbtiTest() {
-        // TODO: test mbti
+    void locationTest() {
+        // TODO: test location
     }
 
 }

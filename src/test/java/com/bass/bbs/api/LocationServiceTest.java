@@ -14,6 +14,7 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
+import com.bass.bbs.model.DetectCurrentLocationResp;
 import com.bass.bbs.model.GetCurrentLocationResp;
 import com.bass.bbs.model.UpsertCurrentLocationReq;
 import com.bass.bbs.model.UpsertCurrentLocationResp;
@@ -35,6 +36,27 @@ public class LocationServiceTest {
 
     private final LocationService api = new LocationService();
 
+    
+    /**
+     * 
+     *
+     * 按当前请求 IP 解析并更新当前账号的地理资料。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void detectCurrentTest() throws ApiException {
+        Object body = null;
+        
+        LocationService.APIdetectCurrentRequest request = LocationService.APIdetectCurrentRequest.newBuilder()
+          .body(body)
+          .build();
+        DetectCurrentLocationResp response = 
+        api.detectCurrent(request);
+
+        // TODO: test validations
+    }
     
     /**
      * 

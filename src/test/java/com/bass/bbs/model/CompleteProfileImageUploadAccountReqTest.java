@@ -24,49 +24,33 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for UpdateProfileAccountReq
+ * Model tests for CompleteProfileImageUploadAccountReq
  */
-class UpdateProfileAccountReqTest {
-    private final UpdateProfileAccountReq model = new UpdateProfileAccountReq();
+class CompleteProfileImageUploadAccountReqTest {
+    private final CompleteProfileImageUploadAccountReq model = new CompleteProfileImageUploadAccountReq();
 
     /**
-     * Model tests for UpdateProfileAccountReq
+     * Model tests for CompleteProfileImageUploadAccountReq
      */
     @Test
-    void testUpdateProfileAccountReq() {
-        // TODO: test UpdateProfileAccountReq
+    void testCompleteProfileImageUploadAccountReq() {
+        // TODO: test CompleteProfileImageUploadAccountReq
     }
 
     /**
-     * Test the property 'nickname'
+     * Test the property 'purpose'
      */
     @Test
-    void nicknameTest() {
-        // TODO: test nickname
+    void purposeTest() {
+        // TODO: test purpose
     }
 
     /**
-     * Test the property 'url'
+     * Test the property 'hash'
      */
     @Test
-    void urlTest() {
-        // TODO: test url
-    }
-
-    /**
-     * Test the property 'introduction'
-     */
-    @Test
-    void introductionTest() {
-        // TODO: test introduction
-    }
-
-    /**
-     * Test the property 'mbti'
-     */
-    @Test
-    void mbtiTest() {
-        // TODO: test mbti
+    void hashTest() {
+        // TODO: test hash
     }
 
 }

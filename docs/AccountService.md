@@ -6,6 +6,8 @@ All URIs are relative to *http://localhost*
 |------------- | ------------- | -------------|
 | [**avatar**](AccountService.md#avatar) | **GET** /v1/user/account/avatar |  |
 | [**avatarWithHttpInfo**](AccountService.md#avatarWithHttpInfo) | **GET** /v1/user/account/avatar |  |
+| [**completeProfileImageUpload**](AccountService.md#completeProfileImageUpload) | **POST** /v1/user/account/complete-profile-image-upload |  |
+| [**completeProfileImageUploadWithHttpInfo**](AccountService.md#completeProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/complete-profile-image-upload |  |
 | [**getCurrent**](AccountService.md#getCurrent) | **POST** /v1/user/account/get-current |  |
 | [**getCurrentWithHttpInfo**](AccountService.md#getCurrentWithHttpInfo) | **POST** /v1/user/account/get-current |  |
 | [**getProfile**](AccountService.md#getProfile) | **POST** /v1/user/account/get-profile |  |
@@ -14,6 +16,8 @@ All URIs are relative to *http://localhost*
 | [**listFollowersWithHttpInfo**](AccountService.md#listFollowersWithHttpInfo) | **POST** /v1/user/account/list-followers |  |
 | [**listFollowing**](AccountService.md#listFollowing) | **POST** /v1/user/account/list-following |  |
 | [**listFollowingWithHttpInfo**](AccountService.md#listFollowingWithHttpInfo) | **POST** /v1/user/account/list-following |  |
+| [**prepareProfileImageUpload**](AccountService.md#prepareProfileImageUpload) | **POST** /v1/user/account/prepare-profile-image-upload |  |
+| [**prepareProfileImageUploadWithHttpInfo**](AccountService.md#prepareProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/prepare-profile-image-upload |  |
 | [**updateEmail**](AccountService.md#updateEmail) | **POST** /v1/user/account/update-email |  |
 | [**updateEmailWithHttpInfo**](AccountService.md#updateEmailWithHttpInfo) | **POST** /v1/user/account/update-email |  |
 | [**updatePassword**](AccountService.md#updatePassword) | **POST** /v1/user/account/update-password |  |
@@ -172,6 +176,156 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **name** | **String** |  | [optional] |
+
+
+
+## completeProfileImageUpload
+
+> CompleteProfileImageUploadAccountResp completeProfileImageUpload(completeProfileImageUploadRequest)
+
+
+
+将已由 MinIO 回调确认的资源绑定到当前账号资料。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq = new CompleteProfileImageUploadAccountReq(); // CompleteProfileImageUploadAccountReq | 
+        try {
+            APIcompleteProfileImageUploadRequest request = APIcompleteProfileImageUploadRequest.newBuilder()
+                .completeProfileImageUploadAccountReq(completeProfileImageUploadAccountReq)
+                .build();
+            CompleteProfileImageUploadAccountResp result = apiInstance.completeProfileImageUpload(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#completeProfileImageUpload");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| completeProfileImageUploadRequest | [**APIcompleteProfileImageUploadRequest**](AccountService.md#APIcompleteProfileImageUploadRequest)|-|-|
+
+### Return type
+
+[**CompleteProfileImageUploadAccountResp**](CompleteProfileImageUploadAccountResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## completeProfileImageUploadWithHttpInfo
+
+> ApiResponse<CompleteProfileImageUploadAccountResp> completeProfileImageUploadWithHttpInfo(completeProfileImageUploadRequest)
+
+
+
+将已由 MinIO 回调确认的资源绑定到当前账号资料。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        CompleteProfileImageUploadAccountReq completeProfileImageUploadAccountReq = new CompleteProfileImageUploadAccountReq(); // CompleteProfileImageUploadAccountReq | 
+        try {
+            APIcompleteProfileImageUploadRequest request = APIcompleteProfileImageUploadRequest.newBuilder()
+                .completeProfileImageUploadAccountReq(completeProfileImageUploadAccountReq)
+                .build();
+            ApiResponse<CompleteProfileImageUploadAccountResp> response = apiInstance.completeProfileImageUploadWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#completeProfileImageUpload");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| completeProfileImageUploadRequest | [**APIcompleteProfileImageUploadRequest**](AccountService.md#APIcompleteProfileImageUploadRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**CompleteProfileImageUploadAccountResp**](CompleteProfileImageUploadAccountResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIcompleteProfileImageUploadRequest"></a>
+## APIcompleteProfileImageUploadRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **completeProfileImageUploadAccountReq** | [**CompleteProfileImageUploadAccountReq**](CompleteProfileImageUploadAccountReq.md) |  | |
 
 
 
@@ -772,6 +926,156 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **listFollowingReq** | [**ListFollowingReq**](ListFollowingReq.md) |  | |
+
+
+
+## prepareProfileImageUpload
+
+> PrepareProfileImageUploadAccountResp prepareProfileImageUpload(prepareProfileImageUploadRequest)
+
+
+
+申请当前账号资料图片的内容寻址直传能力。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq = new PrepareProfileImageUploadAccountReq(); // PrepareProfileImageUploadAccountReq | 
+        try {
+            APIprepareProfileImageUploadRequest request = APIprepareProfileImageUploadRequest.newBuilder()
+                .prepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq)
+                .build();
+            PrepareProfileImageUploadAccountResp result = apiInstance.prepareProfileImageUpload(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#prepareProfileImageUpload");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| prepareProfileImageUploadRequest | [**APIprepareProfileImageUploadRequest**](AccountService.md#APIprepareProfileImageUploadRequest)|-|-|
+
+### Return type
+
+[**PrepareProfileImageUploadAccountResp**](PrepareProfileImageUploadAccountResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## prepareProfileImageUploadWithHttpInfo
+
+> ApiResponse<PrepareProfileImageUploadAccountResp> prepareProfileImageUploadWithHttpInfo(prepareProfileImageUploadRequest)
+
+
+
+申请当前账号资料图片的内容寻址直传能力。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        PrepareProfileImageUploadAccountReq prepareProfileImageUploadAccountReq = new PrepareProfileImageUploadAccountReq(); // PrepareProfileImageUploadAccountReq | 
+        try {
+            APIprepareProfileImageUploadRequest request = APIprepareProfileImageUploadRequest.newBuilder()
+                .prepareProfileImageUploadAccountReq(prepareProfileImageUploadAccountReq)
+                .build();
+            ApiResponse<PrepareProfileImageUploadAccountResp> response = apiInstance.prepareProfileImageUploadWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#prepareProfileImageUpload");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| prepareProfileImageUploadRequest | [**APIprepareProfileImageUploadRequest**](AccountService.md#APIprepareProfileImageUploadRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**PrepareProfileImageUploadAccountResp**](PrepareProfileImageUploadAccountResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIprepareProfileImageUploadRequest"></a>
+## APIprepareProfileImageUploadRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **prepareProfileImageUploadAccountReq** | [**PrepareProfileImageUploadAccountReq**](PrepareProfileImageUploadAccountReq.md) |  | |
 
 
 

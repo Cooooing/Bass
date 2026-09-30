@@ -32,6 +32,8 @@ docs/CheckinService.md
 docs/CollectArticleReq.md
 docs/CollectArticleResp.md
 docs/CommentService.md
+docs/CompleteProfileImageUploadAccountReq.md
+docs/CompleteProfileImageUploadAccountResp.md
 docs/ConfirmEnableTotpReq.md
 docs/CountUnreadNotificationsResp.md
 docs/CreateCommentReq.md
@@ -42,6 +44,7 @@ docs/CreateDraftArticleReq.md
 docs/CreateDraftArticleResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
+docs/DetectCurrentLocationResp.md
 docs/DisableTotpReq.md
 docs/DiscardDraftArticleReq.md
 docs/DomainService.md
@@ -105,6 +108,8 @@ docs/PageReq.md
 docs/PageResp.md
 docs/PostscriptService.md
 docs/PreferencesService.md
+docs/PrepareProfileImageUploadAccountReq.md
+docs/PrepareProfileImageUploadAccountResp.md
 docs/PrivacySettingService.md
 docs/Profile.md
 docs/ProfileLocation.md
@@ -231,6 +236,8 @@ src/main/java/com/bass/bbs/model/CheckInResp.java
 src/main/java/com/bass/bbs/model/CheckRegistrationAvailabilityResp.java
 src/main/java/com/bass/bbs/model/CollectArticleReq.java
 src/main/java/com/bass/bbs/model/CollectArticleResp.java
+src/main/java/com/bass/bbs/model/CompleteProfileImageUploadAccountReq.java
+src/main/java/com/bass/bbs/model/CompleteProfileImageUploadAccountResp.java
 src/main/java/com/bass/bbs/model/ConfirmEnableTotpReq.java
 src/main/java/com/bass/bbs/model/CountUnreadNotificationsResp.java
 src/main/java/com/bass/bbs/model/CreateCommentReq.java
@@ -241,6 +248,7 @@ src/main/java/com/bass/bbs/model/CreateDraftArticleReq.java
 src/main/java/com/bass/bbs/model/CreateDraftArticleResp.java
 src/main/java/com/bass/bbs/model/CreateTagReq.java
 src/main/java/com/bass/bbs/model/CreateTagResp.java
+src/main/java/com/bass/bbs/model/DetectCurrentLocationResp.java
 src/main/java/com/bass/bbs/model/DisableTotpReq.java
 src/main/java/com/bass/bbs/model/DiscardDraftArticleReq.java
 src/main/java/com/bass/bbs/model/FollowRelationReq.java
@@ -298,6 +306,8 @@ src/main/java/com/bass/bbs/model/MarkReadNotificationReq.java
 src/main/java/com/bass/bbs/model/MarkReadNotificationResp.java
 src/main/java/com/bass/bbs/model/PageReq.java
 src/main/java/com/bass/bbs/model/PageResp.java
+src/main/java/com/bass/bbs/model/PrepareProfileImageUploadAccountReq.java
+src/main/java/com/bass/bbs/model/PrepareProfileImageUploadAccountResp.java
 src/main/java/com/bass/bbs/model/Profile.java
 src/main/java/com/bass/bbs/model/ProfileLocation.java
 src/main/java/com/bass/bbs/model/ProfileRelation.java
@@ -400,6 +410,8 @@ src/test/java/com/bass/bbs/model/CheckInRespTest.java
 src/test/java/com/bass/bbs/model/CheckRegistrationAvailabilityRespTest.java
 src/test/java/com/bass/bbs/model/CollectArticleReqTest.java
 src/test/java/com/bass/bbs/model/CollectArticleRespTest.java
+src/test/java/com/bass/bbs/model/CompleteProfileImageUploadAccountReqTest.java
+src/test/java/com/bass/bbs/model/CompleteProfileImageUploadAccountRespTest.java
 src/test/java/com/bass/bbs/model/ConfirmEnableTotpReqTest.java
 src/test/java/com/bass/bbs/model/CountUnreadNotificationsRespTest.java
 src/test/java/com/bass/bbs/model/CreateCommentReqTest.java
@@ -410,6 +422,7 @@ src/test/java/com/bass/bbs/model/CreateDraftArticleReqTest.java
 src/test/java/com/bass/bbs/model/CreateDraftArticleRespTest.java
 src/test/java/com/bass/bbs/model/CreateTagReqTest.java
 src/test/java/com/bass/bbs/model/CreateTagRespTest.java
+src/test/java/com/bass/bbs/model/DetectCurrentLocationRespTest.java
 src/test/java/com/bass/bbs/model/DisableTotpReqTest.java
 src/test/java/com/bass/bbs/model/DiscardDraftArticleReqTest.java
 src/test/java/com/bass/bbs/model/FollowRelationReqTest.java
@@ -467,6 +480,8 @@ src/test/java/com/bass/bbs/model/MarkReadNotificationReqTest.java
 src/test/java/com/bass/bbs/model/MarkReadNotificationRespTest.java
 src/test/java/com/bass/bbs/model/PageReqTest.java
 src/test/java/com/bass/bbs/model/PageRespTest.java
+src/test/java/com/bass/bbs/model/PrepareProfileImageUploadAccountReqTest.java
+src/test/java/com/bass/bbs/model/PrepareProfileImageUploadAccountRespTest.java
 src/test/java/com/bass/bbs/model/ProfileLocationTest.java
 src/test/java/com/bass/bbs/model/ProfileRelationTest.java
 src/test/java/com/bass/bbs/model/ProfileTest.java

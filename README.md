@@ -69,6 +69,7 @@ All URIs are relative to *http://localhost*
 *ArticleService* | [**get**](docs/ArticleService.md#get) | **POST** /v1/content/article/get | 
 *ArticleService* | [**like**](docs/ArticleService.md#like) | **POST** /v1/content/article/like | 
 *ArticleService* | [**list**](docs/ArticleService.md#list) | **POST** /v1/content/article/list | 
+*ArticleService* | [**pageViewHistory**](docs/ArticleService.md#pageviewhistory) | **POST** /v1/content/article/view-history/page | 
 *ArticleService* | [**publish**](docs/ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 *ArticleService* | [**reward**](docs/ArticleService.md#reward) | **POST** /v1/content/article/reward | 
 *ArticleService* | [**thank**](docs/ArticleService.md#thank) | **POST** /v1/content/article/thank | 
@@ -91,9 +92,11 @@ All URIs are relative to *http://localhost*
 *DomainService* | [**create**](docs/DomainService.md#create) | **POST** /v1/content/domain/create | 
 *DomainService* | [**list**](docs/DomainService.md#list) | **POST** /v1/content/domain/list | 
 *DomainService* | [**update**](docs/DomainService.md#update) | **POST** /v1/content/domain/update | 
-*LocationService* | [**detectCurrent**](docs/LocationService.md#detectcurrent) | **POST** /v1/user/location/detect-current | 
 *LocationService* | [**getCurrent**](docs/LocationService.md#getcurrent) | **POST** /v1/user/location/get-current | 
-*LocationService* | [**upsertCurrent**](docs/LocationService.md#upsertcurrent) | **POST** /v1/user/location/upsert-current | 
+*MoonbreezeService* | [**create**](docs/MoonbreezeService.md#create) | **POST** /v1/content/moonbreeze/create | 
+*MoonbreezeService* | [**pageMember**](docs/MoonbreezeService.md#pagemember) | **POST** /v1/content/moonbreeze/page-member | 
+*MoonbreezeService* | [**pagePublic**](docs/MoonbreezeService.md#pagepublic) | **POST** /v1/content/moonbreeze/page-public | 
+*MoonbreezeService* | [**pageWatching**](docs/MoonbreezeService.md#pagewatching) | **POST** /v1/content/moonbreeze/page-watching | 
 *NotificationService* | [**countUnread**](docs/NotificationService.md#countunread) | **POST** /v1/notify/notification/count-unread | 
 *NotificationService* | [**list**](docs/NotificationService.md#list) | **POST** /v1/notify/notification/list | 
 *NotificationService* | [**markRead**](docs/NotificationService.md#markread) | **POST** /v1/notify/notification/mark-read | 
@@ -138,6 +141,7 @@ All URIs are relative to *http://localhost*
 - [ArticleListItem](docs/ArticleListItem.md)
 - [ArticlePostscript](docs/ArticlePostscript.md)
 - [ArticleTag](docs/ArticleTag.md)
+- [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
 - [ArticleViewerActionState](docs/ArticleViewerActionState.md)
 - [BeginEnableTotpResp](docs/BeginEnableTotpResp.md)
 - [BindArticleTagsReq](docs/BindArticleTagsReq.md)
@@ -158,9 +162,10 @@ All URIs are relative to *http://localhost*
 - [CreateDomainResp](docs/CreateDomainResp.md)
 - [CreateDraftArticleReq](docs/CreateDraftArticleReq.md)
 - [CreateDraftArticleResp](docs/CreateDraftArticleResp.md)
+- [CreateMoonbreezeReq](docs/CreateMoonbreezeReq.md)
+- [CreateMoonbreezeResp](docs/CreateMoonbreezeResp.md)
 - [CreateTagReq](docs/CreateTagReq.md)
 - [CreateTagResp](docs/CreateTagResp.md)
-- [DetectCurrentLocationResp](docs/DetectCurrentLocationResp.md)
 - [DisableTotpReq](docs/DisableTotpReq.md)
 - [DiscardDraftArticleReq](docs/DiscardDraftArticleReq.md)
 - [FollowRelationReq](docs/FollowRelationReq.md)
@@ -216,8 +221,15 @@ All URIs are relative to *http://localhost*
 - [LoginResp](docs/LoginResp.md)
 - [MarkReadNotificationReq](docs/MarkReadNotificationReq.md)
 - [MarkReadNotificationResp](docs/MarkReadNotificationResp.md)
+- [Moonbreeze](docs/Moonbreeze.md)
+- [PageArticleViewHistoryReq](docs/PageArticleViewHistoryReq.md)
+- [PageArticleViewHistoryResp](docs/PageArticleViewHistoryResp.md)
+- [PageMemberMoonbreezesReq](docs/PageMemberMoonbreezesReq.md)
+- [PageMoonbreezesResp](docs/PageMoonbreezesResp.md)
+- [PagePublicMoonbreezesReq](docs/PagePublicMoonbreezesReq.md)
 - [PageReq](docs/PageReq.md)
 - [PageResp](docs/PageResp.md)
+- [PageWatchingMoonbreezesReq](docs/PageWatchingMoonbreezesReq.md)
 - [PrepareProfileImageUploadAccountReq](docs/PrepareProfileImageUploadAccountReq.md)
 - [PrepareProfileImageUploadAccountResp](docs/PrepareProfileImageUploadAccountResp.md)
 - [Profile](docs/Profile.md)
@@ -285,8 +297,6 @@ All URIs are relative to *http://localhost*
 - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
 - [UpdateTagReq](docs/UpdateTagReq.md)
 - [UpdateTagResp](docs/UpdateTagResp.md)
-- [UpsertCurrentLocationReq](docs/UpsertCurrentLocationReq.md)
-- [UpsertCurrentLocationResp](docs/UpsertCurrentLocationResp.md)
 
 ### Authorization
 

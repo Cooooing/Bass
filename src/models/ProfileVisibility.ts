@@ -24,25 +24,31 @@ export interface ProfileVisibility {
      * @type {boolean}
      * @memberof ProfileVisibility
      */
-    articles?: boolean;
+    articleList?: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof ProfileVisibility
      */
-    comments?: boolean;
+    commentList?: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof ProfileVisibility
      */
-    followers?: boolean;
+    followerList?: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof ProfileVisibility
      */
-    following?: boolean;
+    followingList?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ProfileVisibility
+     */
+    moonbreezeList?: boolean;
 }
 
 /**
@@ -62,10 +68,11 @@ export function ProfileVisibilityFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'articles': json['articles'] == null ? undefined : json['articles'],
-        'comments': json['comments'] == null ? undefined : json['comments'],
-        'followers': json['followers'] == null ? undefined : json['followers'],
-        'following': json['following'] == null ? undefined : json['following'],
+        'articleList': json['article_list'] == null ? undefined : json['article_list'],
+        'commentList': json['comment_list'] == null ? undefined : json['comment_list'],
+        'followerList': json['follower_list'] == null ? undefined : json['follower_list'],
+        'followingList': json['following_list'] == null ? undefined : json['following_list'],
+        'moonbreezeList': json['moonbreeze_list'] == null ? undefined : json['moonbreeze_list'],
     };
 }
 
@@ -80,10 +87,11 @@ export function ProfileVisibilityToJSONTyped(value?: ProfileVisibility | null, i
 
     return {
         
-        'articles': value['articles'],
-        'comments': value['comments'],
-        'followers': value['followers'],
-        'following': value['following'],
+        'article_list': value['articleList'],
+        'comment_list': value['commentList'],
+        'follower_list': value['followerList'],
+        'following_list': value['followingList'],
+        'moonbreeze_list': value['moonbreezeList'],
     };
 }
 

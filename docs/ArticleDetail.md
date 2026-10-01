@@ -37,6 +37,7 @@ Name | Type
 `editedAt` | Date
 `tags` | [Array&lt;ArticleTag&gt;](ArticleTag.md)
 `domains` | [Array&lt;ArticleDomain&gt;](ArticleDomain.md)
+`city` | string
 `createdBy` | string
 `updatedBy` | string
 `createdAt` | Date
@@ -80,6 +81,7 @@ const example = {
   "editedAt": null,
   "tags": null,
   "domains": null,
+  "city": null,
   "createdBy": null,
   "updatedBy": null,
   "createdAt": null,

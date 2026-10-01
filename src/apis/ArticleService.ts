@@ -79,6 +79,16 @@ import {
     ListArticlesRespToJSON,
 } from '../models/ListArticlesResp';
 import {
+    type PageArticleViewHistoryReq,
+    PageArticleViewHistoryReqFromJSON,
+    PageArticleViewHistoryReqToJSON,
+} from '../models/PageArticleViewHistoryReq';
+import {
+    type PageArticleViewHistoryResp,
+    PageArticleViewHistoryRespFromJSON,
+    PageArticleViewHistoryRespToJSON,
+} from '../models/PageArticleViewHistoryResp';
+import {
     type PublishArticleReq,
     PublishArticleReqFromJSON,
     PublishArticleReqToJSON,
@@ -139,6 +149,10 @@ export interface LikeRequest {
 
 export interface ListRequest {
     listArticlesReq: ListArticlesReq;
+}
+
+export interface PageViewHistoryRequest {
+    pageArticleViewHistoryReq: PageArticleViewHistoryReq;
 }
 
 export interface PublishRequest {
@@ -339,6 +353,28 @@ export interface ArticleServiceInterface {
      * 查询文章列表
      */
     list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListArticlesResp>;
+
+    /**
+     * Creates request options for pageViewHistory without sending the request
+     * @param {PageArticleViewHistoryReq} pageArticleViewHistoryReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    pageViewHistoryRequestOpts(requestParameters: PageViewHistoryRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询当前账号的浏览历史。
+     * @param {PageArticleViewHistoryReq} pageArticleViewHistoryReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    pageViewHistoryRaw(requestParameters: PageViewHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageArticleViewHistoryResp>>;
+
+    /**
+     * 查询当前账号的浏览历史。
+     */
+    pageViewHistory(requestParameters: PageViewHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageArticleViewHistoryResp>;
 
     /**
      * Creates request options for publish without sending the request
@@ -808,6 +844,53 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      */
     async list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListArticlesResp> {
         const response = await this.listRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for pageViewHistory without sending the request
+     */
+    async pageViewHistoryRequestOpts(requestParameters: PageViewHistoryRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['pageArticleViewHistoryReq'] == null) {
+            throw new runtime.RequiredError(
+                'pageArticleViewHistoryReq',
+                'Required parameter "pageArticleViewHistoryReq" was null or undefined when calling pageViewHistory().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/view-history/page`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: PageArticleViewHistoryReqToJSON(requestParameters['pageArticleViewHistoryReq']),
+        };
+    }
+
+    /**
+     * 查询当前账号的浏览历史。
+     */
+    async pageViewHistoryRaw(requestParameters: PageViewHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PageArticleViewHistoryResp>> {
+        const requestOptions = await this.pageViewHistoryRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PageArticleViewHistoryRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询当前账号的浏览历史。
+     */
+    async pageViewHistory(requestParameters: PageViewHistoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PageArticleViewHistoryResp> {
+        const response = await this.pageViewHistoryRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

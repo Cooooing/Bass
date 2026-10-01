@@ -36,25 +36,25 @@ export interface RespPrivacySetting {
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
-    publicFollowers?: boolean;
+    publicFollowerList?: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
-    publicFollowing?: boolean;
+    publicFollowingList?: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
-    publicArticles?: boolean;
+    publicArticleList?: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof RespPrivacySetting
      */
-    publicComments?: boolean;
+    publicCommentList?: boolean;
     /**
      * 
      * @type {boolean}
@@ -67,6 +67,12 @@ export interface RespPrivacySetting {
      * @memberof RespPrivacySetting
      */
     publicLocation?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RespPrivacySetting
+     */
+    publicMoonbreezeList?: boolean;
 }
 
 /**
@@ -88,12 +94,13 @@ export function RespPrivacySettingFromJSONTyped(json: any, ignoreDiscriminator: 
         
         'userId': json['user_id'] == null ? undefined : json['user_id'],
         'publicPoints': json['public_points'] == null ? undefined : json['public_points'],
-        'publicFollowers': json['public_followers'] == null ? undefined : json['public_followers'],
-        'publicFollowing': json['public_following'] == null ? undefined : json['public_following'],
-        'publicArticles': json['public_articles'] == null ? undefined : json['public_articles'],
-        'publicComments': json['public_comments'] == null ? undefined : json['public_comments'],
+        'publicFollowerList': json['public_follower_list'] == null ? undefined : json['public_follower_list'],
+        'publicFollowingList': json['public_following_list'] == null ? undefined : json['public_following_list'],
+        'publicArticleList': json['public_article_list'] == null ? undefined : json['public_article_list'],
+        'publicCommentList': json['public_comment_list'] == null ? undefined : json['public_comment_list'],
         'publicOnlineStatus': json['public_online_status'] == null ? undefined : json['public_online_status'],
         'publicLocation': json['public_location'] == null ? undefined : json['public_location'],
+        'publicMoonbreezeList': json['public_moonbreeze_list'] == null ? undefined : json['public_moonbreeze_list'],
     };
 }
 
@@ -110,12 +117,13 @@ export function RespPrivacySettingToJSONTyped(value?: RespPrivacySetting | null,
         
         'user_id': value['userId'],
         'public_points': value['publicPoints'],
-        'public_followers': value['publicFollowers'],
-        'public_following': value['publicFollowing'],
-        'public_articles': value['publicArticles'],
-        'public_comments': value['publicComments'],
+        'public_follower_list': value['publicFollowerList'],
+        'public_following_list': value['publicFollowingList'],
+        'public_article_list': value['publicArticleList'],
+        'public_comment_list': value['publicCommentList'],
         'public_online_status': value['publicOnlineStatus'],
         'public_location': value['publicLocation'],
+        'public_moonbreeze_list': value['publicMoonbreezeList'],
     };
 }
 

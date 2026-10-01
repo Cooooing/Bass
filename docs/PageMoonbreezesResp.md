@@ -1,22 +1,24 @@
 
-# DetectCurrentLocationResp
+# PageMoonbreezesResp
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`location` | [RespLocation](RespLocation.md)
+`rows` | [Array&lt;Moonbreeze&gt;](Moonbreeze.md)
+`nextCursor` | string
 
 ## Example
 
 ```typescript
-import type { DetectCurrentLocationResp } from '@bass/bbs-sdk-fetch'
+import type { PageMoonbreezesResp } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "location": null,
-} satisfies DetectCurrentLocationResp
+  "rows": null,
+  "nextCursor": null,
+} satisfies PageMoonbreezesResp
 
 console.log(example)
 
@@ -25,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as DetectCurrentLocationResp
+const exampleParsed = JSON.parse(exampleJSON) as PageMoonbreezesResp
 console.log(exampleParsed)
 ```
 

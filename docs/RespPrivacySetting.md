@@ -8,12 +8,13 @@ Name | Type
 ------------ | -------------
 `userId` | string
 `publicPoints` | boolean
-`publicFollowers` | boolean
-`publicFollowing` | boolean
-`publicArticles` | boolean
-`publicComments` | boolean
+`publicFollowerList` | boolean
+`publicFollowingList` | boolean
+`publicArticleList` | boolean
+`publicCommentList` | boolean
 `publicOnlineStatus` | boolean
 `publicLocation` | boolean
+`publicMoonbreezeList` | boolean
 
 ## Example
 
@@ -24,12 +25,13 @@ import type { RespPrivacySetting } from '@bass/bbs-sdk-fetch'
 const example = {
   "userId": null,
   "publicPoints": null,
-  "publicFollowers": null,
-  "publicFollowing": null,
-  "publicArticles": null,
-  "publicComments": null,
+  "publicFollowerList": null,
+  "publicFollowingList": null,
+  "publicArticleList": null,
+  "publicCommentList": null,
   "publicOnlineStatus": null,
   "publicLocation": null,
+  "publicMoonbreezeList": null,
 } satisfies RespPrivacySetting
 
 console.log(example)

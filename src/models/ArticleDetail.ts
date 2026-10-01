@@ -246,6 +246,12 @@ export interface ArticleDetail {
      * @type {string}
      * @memberof ArticleDetail
      */
+    city?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ArticleDetail
+     */
     createdBy?: string;
     /**
      * 
@@ -362,6 +368,7 @@ export function ArticleDetailFromJSONTyped(json: any, ignoreDiscriminator: boole
         'editedAt': json['edited_at'] == null ? undefined : (new Date(json['edited_at'])),
         'tags': json['tags'] == null ? undefined : ((json['tags'] as Array<any>).map(ArticleTagFromJSON)),
         'domains': json['domains'] == null ? undefined : ((json['domains'] as Array<any>).map(ArticleDomainFromJSON)),
+        'city': json['city'] == null ? undefined : json['city'],
         'createdBy': json['created_by'] == null ? undefined : json['created_by'],
         'updatedBy': json['updated_by'] == null ? undefined : json['updated_by'],
         'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
@@ -411,6 +418,7 @@ export function ArticleDetailToJSONTyped(value?: ArticleDetail | null, ignoreDis
         'edited_at': value['editedAt'] == null ? value['editedAt'] : value['editedAt'].toISOString(),
         'tags': value['tags'] == null ? undefined : ((value['tags'] as Array<any>).map(ArticleTagToJSON)),
         'domains': value['domains'] == null ? undefined : ((value['domains'] as Array<any>).map(ArticleDomainToJSON)),
+        'city': value['city'],
         'created_by': value['createdBy'],
         'updated_by': value['updatedBy'],
         'created_at': value['createdAt'] == null ? value['createdAt'] : value['createdAt'].toISOString(),

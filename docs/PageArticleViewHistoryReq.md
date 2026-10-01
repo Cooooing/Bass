@@ -1,24 +1,22 @@
 
-# PageReq
+# PageArticleViewHistoryReq
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`page` | string
-`size` | string
+`page` | [PageReq](PageReq.md)
 
 ## Example
 
 ```typescript
-import type { PageReq } from '@bass/bbs-sdk-fetch'
+import type { PageArticleViewHistoryReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
   "page": null,
-  "size": null,
-} satisfies PageReq
+} satisfies PageArticleViewHistoryReq
 
 console.log(example)
 
@@ -27,7 +25,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as PageReq
+const exampleParsed = JSON.parse(exampleJSON) as PageArticleViewHistoryReq
 console.log(exampleParsed)
 ```
 

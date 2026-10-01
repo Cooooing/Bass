@@ -1,24 +1,24 @@
 
-# PageReq
+# PagePublicMoonbreezesReq
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`page` | string
-`size` | string
+`cursor` | string
+`size` | number
 
 ## Example
 
 ```typescript
-import type { PageReq } from '@bass/bbs-sdk-fetch'
+import type { PagePublicMoonbreezesReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "page": null,
+  "cursor": null,
   "size": null,
-} satisfies PageReq
+} satisfies PagePublicMoonbreezesReq
 
 console.log(example)
 
@@ -27,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as PageReq
+const exampleParsed = JSON.parse(exampleJSON) as PagePublicMoonbreezesReq
 console.log(exampleParsed)
 ```
 

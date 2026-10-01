@@ -6,10 +6,11 @@
 
 Name | Type
 ------------ | -------------
-`articles` | boolean
-`comments` | boolean
-`followers` | boolean
-`following` | boolean
+`articleList` | boolean
+`commentList` | boolean
+`followerList` | boolean
+`followingList` | boolean
+`moonbreezeList` | boolean
 
 ## Example
 
@@ -18,10 +19,11 @@ import type { ProfileVisibility } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "articles": null,
-  "comments": null,
-  "followers": null,
-  "following": null,
+  "articleList": null,
+  "commentList": null,
+  "followerList": null,
+  "followingList": null,
+  "moonbreezeList": null,
 } satisfies ProfileVisibility
 
 console.log(example)

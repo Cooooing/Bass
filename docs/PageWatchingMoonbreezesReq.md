@@ -1,26 +1,24 @@
 
-# UpsertCurrentLocationReq
+# PageWatchingMoonbreezesReq
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`country` | string
-`province` | string
-`city` | string
+`cursor` | string
+`size` | number
 
 ## Example
 
 ```typescript
-import type { UpsertCurrentLocationReq } from '@bass/bbs-sdk-fetch'
+import type { PageWatchingMoonbreezesReq } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "country": null,
-  "province": null,
-  "city": null,
-} satisfies UpsertCurrentLocationReq
+  "cursor": null,
+  "size": null,
+} satisfies PageWatchingMoonbreezesReq
 
 console.log(example)
 
@@ -29,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as UpsertCurrentLocationReq
+const exampleParsed = JSON.parse(exampleJSON) as PageWatchingMoonbreezesReq
 console.log(exampleParsed)
 ```
 

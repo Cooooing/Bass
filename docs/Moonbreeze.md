@@ -1,22 +1,30 @@
 
-# UpsertCurrentLocationResp
+# Moonbreeze
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`location` | [RespLocation](RespLocation.md)
+`id` | string
+`content` | string
+`author` | [AccountProfile](AccountProfile.md)
+`city` | string
+`createdAt` | Date
 
 ## Example
 
 ```typescript
-import type { UpsertCurrentLocationResp } from '@bass/bbs-sdk-fetch'
+import type { Moonbreeze } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "location": null,
-} satisfies UpsertCurrentLocationResp
+  "id": null,
+  "content": null,
+  "author": null,
+  "city": null,
+  "createdAt": null,
+} satisfies Moonbreeze
 
 console.log(example)
 
@@ -25,7 +33,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as UpsertCurrentLocationResp
+const exampleParsed = JSON.parse(exampleJSON) as Moonbreeze
 console.log(exampleParsed)
 ```
 

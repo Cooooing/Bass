@@ -12,6 +12,7 @@ All URIs are relative to *http://localhost*
 | [**get**](ArticleService.md#get) | **POST** /v1/content/article/get |  |
 | [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
 | [**list**](ArticleService.md#list) | **POST** /v1/content/article/list |  |
+| [**pageViewHistory**](ArticleService.md#pageviewhistory) | **POST** /v1/content/article/view-history/page |  |
 | [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish |  |
 | [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
 | [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
@@ -536,6 +537,73 @@ example().catch(console.error);
 ### Return type
 
 [**ListArticlesResp**](ListArticlesResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## pageViewHistory
+
+> PageArticleViewHistoryResp pageViewHistory(pageArticleViewHistoryReq)
+
+
+
+查询当前账号的浏览历史。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { PageViewHistoryRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // PageArticleViewHistoryReq
+    pageArticleViewHistoryReq: ...,
+  } satisfies PageViewHistoryRequest;
+
+  try {
+    const data = await api.pageViewHistory(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **pageArticleViewHistoryReq** | [PageArticleViewHistoryReq](PageArticleViewHistoryReq.md) |  | |
+
+### Return type
+
+[**PageArticleViewHistoryResp**](PageArticleViewHistoryResp.md)
 
 ### Authorization
 

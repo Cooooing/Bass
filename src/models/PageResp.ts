@@ -21,22 +21,22 @@ import { mapValues } from '../runtime';
 export interface PageResp {
     /**
      * 总数
-     * @type {number}
+     * @type {string}
      * @memberof PageResp
      */
-    total?: number;
+    total?: string;
     /**
      * 页码
-     * @type {number}
+     * @type {string}
      * @memberof PageResp
      */
-    page?: number;
+    page?: string;
     /**
      * 页大小
-     * @type {number}
+     * @type {string}
      * @memberof PageResp
      */
-    size?: number;
+    size?: string;
 }
 
 /**

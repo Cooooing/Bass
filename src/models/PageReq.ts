@@ -21,16 +21,16 @@ import { mapValues } from '../runtime';
 export interface PageReq {
     /**
      * 页码
-     * @type {number}
+     * @type {string}
      * @memberof PageReq
      */
-    page?: number;
+    page?: string;
     /**
      * 页大小
-     * @type {number}
+     * @type {string}
      * @memberof PageReq
      */
-    size?: number;
+    size?: string;
 }
 
 /**

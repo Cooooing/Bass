@@ -6,9 +6,9 @@
 
 Name | Type
 ------------ | -------------
-`total` | number
-`page` | number
-`size` | number
+`total` | string
+`page` | string
+`size` | string
 
 ## Example
 

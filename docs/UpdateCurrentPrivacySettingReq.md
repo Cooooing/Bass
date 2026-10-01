@@ -7,12 +7,13 @@
 Name | Type
 ------------ | -------------
 `publicPoints` | boolean
-`publicFollowers` | boolean
-`publicFollowing` | boolean
-`publicArticles` | boolean
-`publicComments` | boolean
+`publicFollowerList` | boolean
+`publicFollowingList` | boolean
+`publicArticleList` | boolean
+`publicCommentList` | boolean
 `publicOnlineStatus` | boolean
 `publicLocation` | boolean
+`publicMoonbreezeList` | boolean
 
 ## Example
 
@@ -22,12 +23,13 @@ import type { UpdateCurrentPrivacySettingReq } from '@bass/bbs-sdk-fetch'
 // TODO: Update the object below with actual values
 const example = {
   "publicPoints": null,
-  "publicFollowers": null,
-  "publicFollowing": null,
-  "publicArticles": null,
-  "publicComments": null,
+  "publicFollowerList": null,
+  "publicFollowingList": null,
+  "publicArticleList": null,
+  "publicCommentList": null,
   "publicOnlineStatus": null,
   "publicLocation": null,
+  "publicMoonbreezeList": null,
 } satisfies UpdateCurrentPrivacySettingReq
 
 console.log(example)

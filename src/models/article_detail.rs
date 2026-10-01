@@ -75,6 +75,8 @@ pub struct ArticleDetail {
     pub tags: Option<Vec<models::ArticleTag>>,
     #[serde(rename = "domains", skip_serializing_if = "Option::is_none")]
     pub domains: Option<Vec<models::ArticleDomain>>,
+    #[serde(rename = "city", skip_serializing_if = "Option::is_none")]
+    pub city: Option<String>,
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
@@ -119,6 +121,7 @@ impl ArticleDetail {
             edited_at: None,
             tags: None,
             domains: None,
+            city: None,
             created_by: None,
             updated_by: None,
             created_at: None,

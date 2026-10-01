@@ -12,20 +12,18 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct PageReq {
-    /// 页码
+pub struct PageArticleViewHistoryResp {
+    #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
+    pub rows: Option<Vec<models::ArticleViewHistoryItem>>,
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
-    pub page: Option<String>,
-    /// 页大小
-    #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
-    pub size: Option<String>,
+    pub page: Option<models::PageResp>,
 }
 
-impl PageReq {
-    pub fn new() -> PageReq {
-        PageReq {
+impl PageArticleViewHistoryResp {
+    pub fn new() -> PageArticleViewHistoryResp {
+        PageArticleViewHistoryResp {
+            rows: None,
             page: None,
-            size: None,
         }
     }
 }

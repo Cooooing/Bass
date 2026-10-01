@@ -118,6 +118,7 @@ pub mod checkin_service;
 pub mod comment_service;
 pub mod domain_service;
 pub mod location_service;
+pub mod moonbreeze_service;
 pub mod notification_service;
 pub mod otp_service;
 pub mod postscript_service;
@@ -138,6 +139,7 @@ pub trait Api {
     fn comment_service(&self) -> &dyn comment_service::CommentService;
     fn domain_service(&self) -> &dyn domain_service::DomainService;
     fn location_service(&self) -> &dyn location_service::LocationService;
+    fn moonbreeze_service(&self) -> &dyn moonbreeze_service::MoonbreezeService;
     fn notification_service(&self) -> &dyn notification_service::NotificationService;
     fn otp_service(&self) -> &dyn otp_service::OtpService;
     fn postscript_service(&self) -> &dyn postscript_service::PostscriptService;
@@ -155,6 +157,7 @@ pub struct ApiClient {
     comment_service: Box<dyn comment_service::CommentService>,
     domain_service: Box<dyn domain_service::DomainService>,
     location_service: Box<dyn location_service::LocationService>,
+    moonbreeze_service: Box<dyn moonbreeze_service::MoonbreezeService>,
     notification_service: Box<dyn notification_service::NotificationService>,
     otp_service: Box<dyn otp_service::OtpService>,
     postscript_service: Box<dyn postscript_service::PostscriptService>,
@@ -174,6 +177,7 @@ impl ApiClient {
             comment_service: Box::new(comment_service::CommentServiceClient::new(configuration.clone())),
             domain_service: Box::new(domain_service::DomainServiceClient::new(configuration.clone())),
             location_service: Box::new(location_service::LocationServiceClient::new(configuration.clone())),
+            moonbreeze_service: Box::new(moonbreeze_service::MoonbreezeServiceClient::new(configuration.clone())),
             notification_service: Box::new(notification_service::NotificationServiceClient::new(configuration.clone())),
             otp_service: Box::new(otp_service::OtpServiceClient::new(configuration.clone())),
             postscript_service: Box::new(postscript_service::PostscriptServiceClient::new(configuration.clone())),
@@ -206,6 +210,9 @@ impl Api for ApiClient {
     }
     fn location_service(&self) -> &dyn location_service::LocationService {
         self.location_service.as_ref()
+    }
+    fn moonbreeze_service(&self) -> &dyn moonbreeze_service::MoonbreezeService {
+        self.moonbreeze_service.as_ref()
     }
     fn notification_service(&self) -> &dyn notification_service::NotificationService {
         self.notification_service.as_ref()

@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**get**](ArticleService.md#get) | **POST** /v1/content/article/get | 
 [**like**](ArticleService.md#like) | **POST** /v1/content/article/like | 
 [**list**](ArticleService.md#list) | **POST** /v1/content/article/list | 
+[**page_view_history**](ArticleService.md#page_view_history) | **POST** /v1/content/article/view-history/page | 
 [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward | 
 [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank | 
@@ -246,6 +247,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::ListArticlesResp**](ListArticles_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## page_view_history
+
+> models::PageArticleViewHistoryResp page_view_history(page_article_view_history_req)
+
+
+查询当前账号的浏览历史。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**page_article_view_history_req** | [**PageArticleViewHistoryReq**](PageArticleViewHistoryReq.md) |  | [required] |
+
+### Return type
+
+[**models::PageArticleViewHistoryResp**](PageArticleViewHistory_Resp.md)
 
 ### Authorization
 

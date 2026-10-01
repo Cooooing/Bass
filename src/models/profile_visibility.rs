@@ -13,23 +13,26 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ProfileVisibility {
-    #[serde(rename = "articles", skip_serializing_if = "Option::is_none")]
-    pub articles: Option<bool>,
-    #[serde(rename = "comments", skip_serializing_if = "Option::is_none")]
-    pub comments: Option<bool>,
-    #[serde(rename = "followers", skip_serializing_if = "Option::is_none")]
-    pub followers: Option<bool>,
-    #[serde(rename = "following", skip_serializing_if = "Option::is_none")]
-    pub following: Option<bool>,
+    #[serde(rename = "article_list", skip_serializing_if = "Option::is_none")]
+    pub article_list: Option<bool>,
+    #[serde(rename = "comment_list", skip_serializing_if = "Option::is_none")]
+    pub comment_list: Option<bool>,
+    #[serde(rename = "follower_list", skip_serializing_if = "Option::is_none")]
+    pub follower_list: Option<bool>,
+    #[serde(rename = "following_list", skip_serializing_if = "Option::is_none")]
+    pub following_list: Option<bool>,
+    #[serde(rename = "moonbreeze_list", skip_serializing_if = "Option::is_none")]
+    pub moonbreeze_list: Option<bool>,
 }
 
 impl ProfileVisibility {
     pub fn new() -> ProfileVisibility {
         ProfileVisibility {
-            articles: None,
-            comments: None,
-            followers: None,
-            following: None,
+            article_list: None,
+            comment_list: None,
+            follower_list: None,
+            following_list: None,
+            moonbreeze_list: None,
         }
     }
 }

@@ -15,13 +15,13 @@ use serde::{Deserialize, Serialize};
 pub struct PageResp {
     /// 总数
     #[serde(rename = "total", skip_serializing_if = "Option::is_none")]
-    pub total: Option<i32>,
+    pub total: Option<String>,
     /// 页码
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
-    pub page: Option<i32>,
+    pub page: Option<String>,
     /// 页大小
     #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
-    pub size: Option<i32>,
+    pub size: Option<String>,
 }
 
 impl PageResp {

@@ -17,18 +17,20 @@ pub struct RespPrivacySetting {
     pub user_id: Option<String>,
     #[serde(rename = "public_points", skip_serializing_if = "Option::is_none")]
     pub public_points: Option<bool>,
-    #[serde(rename = "public_followers", skip_serializing_if = "Option::is_none")]
-    pub public_followers: Option<bool>,
-    #[serde(rename = "public_following", skip_serializing_if = "Option::is_none")]
-    pub public_following: Option<bool>,
-    #[serde(rename = "public_articles", skip_serializing_if = "Option::is_none")]
-    pub public_articles: Option<bool>,
-    #[serde(rename = "public_comments", skip_serializing_if = "Option::is_none")]
-    pub public_comments: Option<bool>,
+    #[serde(rename = "public_follower_list", skip_serializing_if = "Option::is_none")]
+    pub public_follower_list: Option<bool>,
+    #[serde(rename = "public_following_list", skip_serializing_if = "Option::is_none")]
+    pub public_following_list: Option<bool>,
+    #[serde(rename = "public_article_list", skip_serializing_if = "Option::is_none")]
+    pub public_article_list: Option<bool>,
+    #[serde(rename = "public_comment_list", skip_serializing_if = "Option::is_none")]
+    pub public_comment_list: Option<bool>,
     #[serde(rename = "public_online_status", skip_serializing_if = "Option::is_none")]
     pub public_online_status: Option<bool>,
     #[serde(rename = "public_location", skip_serializing_if = "Option::is_none")]
     pub public_location: Option<bool>,
+    #[serde(rename = "public_moonbreeze_list", skip_serializing_if = "Option::is_none")]
+    pub public_moonbreeze_list: Option<bool>,
 }
 
 impl RespPrivacySetting {
@@ -36,12 +38,13 @@ impl RespPrivacySetting {
         RespPrivacySetting {
             user_id: None,
             public_points: None,
-            public_followers: None,
-            public_following: None,
-            public_articles: None,
-            public_comments: None,
+            public_follower_list: None,
+            public_following_list: None,
+            public_article_list: None,
+            public_comment_list: None,
             public_online_status: None,
             public_location: None,
+            public_moonbreeze_list: None,
         }
     }
 }

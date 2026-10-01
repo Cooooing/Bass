@@ -35,6 +35,7 @@ Name | Type | Description | Notes
 **edited_at** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
 **tags** | Option<[**Vec<models::ArticleTag>**](ArticleTag.md)> |  | [optional]
 **domains** | Option<[**Vec<models::ArticleDomain>**](ArticleDomain.md)> |  | [optional]
+**city** | Option<**String**> |  | [optional]
 **created_by** | Option<**String**> |  | [optional]
 **updated_by** | Option<**String**> |  | [optional]
 **created_at** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]

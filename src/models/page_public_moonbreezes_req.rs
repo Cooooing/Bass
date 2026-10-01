@@ -12,19 +12,17 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct PageReq {
-    /// 页码
-    #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
-    pub page: Option<String>,
-    /// 页大小
+pub struct PagePublicMoonbreezesReq {
+    #[serde(rename = "cursor", skip_serializing_if = "Option::is_none")]
+    pub cursor: Option<String>,
     #[serde(rename = "size", skip_serializing_if = "Option::is_none")]
-    pub size: Option<String>,
+    pub size: Option<i32>,
 }
 
-impl PageReq {
-    pub fn new() -> PageReq {
-        PageReq {
-            page: None,
+impl PagePublicMoonbreezesReq {
+    pub fn new() -> PagePublicMoonbreezesReq {
+        PagePublicMoonbreezesReq {
+            cursor: None,
             size: None,
         }
     }

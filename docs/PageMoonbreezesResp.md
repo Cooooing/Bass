@@ -1,12 +1,11 @@
-# PageResp
+# PageMoonbreezesResp
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**total** | Option<**String**> | 总数 | [optional]
-**page** | Option<**String**> | 页码 | [optional]
-**size** | Option<**String**> | 页大小 | [optional]
+**rows** | Option<[**Vec<models::Moonbreeze>**](Moonbreeze.md)> |  | [optional]
+**next_cursor** | Option<**String**> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

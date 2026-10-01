@@ -60,6 +60,11 @@ pub trait ArticleService: Send + Sync {
     /// 查询文章列表
     async fn list<'list_articles_req>(&self, list_articles_req: models::ListArticlesReq) -> Result<models::ListArticlesResp, Error<ListError>>;
 
+    /// POST /v1/content/article/view-history/page
+    ///
+    /// 查询当前账号的浏览历史。
+    async fn page_view_history<'page_article_view_history_req>(&self, page_article_view_history_req: models::PageArticleViewHistoryReq) -> Result<models::PageArticleViewHistoryResp, Error<PageViewHistoryError>>;
+
     /// POST /v1/content/article/publish
     ///
     /// 发布文章
@@ -407,6 +412,45 @@ impl ArticleService for ArticleServiceClient {
         }
     }
 
+    /// 查询当前账号的浏览历史。
+    async fn page_view_history<'page_article_view_history_req>(&self, page_article_view_history_req: models::PageArticleViewHistoryReq) -> Result<models::PageArticleViewHistoryResp, Error<PageViewHistoryError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/view-history/page", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&page_article_view_history_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::PageArticleViewHistoryResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::PageArticleViewHistoryResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<PageViewHistoryError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 发布文章
     async fn publish<'publish_article_req>(&self, publish_article_req: models::PublishArticleReq) -> Result<serde_json::Value, Error<PublishError>> {
         let local_var_configuration = &self.configuration;
@@ -618,6 +662,13 @@ pub enum LikeError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ListError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`ArticleService::page_view_history`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum PageViewHistoryError {
     UnknownValue(serde_json::Value),
 }
 

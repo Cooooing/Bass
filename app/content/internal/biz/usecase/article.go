@@ -511,9 +511,10 @@ func (d *ArticleUsecase) FlushViews(ctx context.Context, req *ArticleFlushViewsR
 }
 
 type ArticlePublishReq struct {
-	Access      *model.ContentAccess
-	ArticleID   int64
-	ScheduledAt *time.Time
+	Access        *model.ContentAccess
+	ArticleID     int64
+	ScheduledAt   *time.Time
+	PublishedCity *string
 }
 
 func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) error {
@@ -529,6 +530,8 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		}
 		operatorUserID := access.ActorUserID
 		scheduledAt := req.ScheduledAt.UTC().Truncate(time.Second)
+		var originalPublishedAt *time.Time
+		var originalPublishedCity *string
 		// content 与 scheduler 使用不同的数据存储，不能纳入同一数据库事务。
 		// 先提交文章计划，随后登记 Scheduler；登记失败时只回滚仍属于本次计划的草稿。
 		if err = d.tx(ctx, func(ctx context.Context) error {
@@ -539,9 +542,12 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 			if err = article.CanPublish(access, new(scheduledAt), now); err != nil {
 				return err
 			}
+			originalPublishedAt = article.PublishedAt
+			originalPublishedCity = article.PublishedCity
 			return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
 				ArticleID: articleId, PublishStatus: enum.ArticlePublishStatusDraft, Visibility: enum.ArticleVisibilityPublic,
-				PublishedAt: new(scheduledAt), UpdatedBy: new(operatorUserID),
+				PublishedAt: new(scheduledAt), PublishedCity: req.PublishedCity,
+				ClearPublishedCity: req.PublishedCity == nil, UpdatedBy: new(operatorUserID),
 			})
 		}); err != nil {
 			return err
@@ -550,13 +556,19 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 			// 重新读取并比对计划时间，避免并发重设后错误清除新计划。
 			rollbackErr := d.tx(ctx, func(ctx context.Context) error {
 				article, getErr := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleId)}})
-				if getErr != nil || article.PublishedAt == nil || !article.PublishedAt.UTC().Truncate(time.Second).Equal(scheduledAt) {
+				if getErr != nil || article.PublishedAt == nil ||
+					!article.PublishedAt.UTC().Truncate(time.Second).Equal(scheduledAt) ||
+					(article.PublishedCity == nil) != (req.PublishedCity == nil) ||
+					(article.PublishedCity != nil && req.PublishedCity != nil && *article.PublishedCity != *req.PublishedCity) {
 					return getErr
 				}
-				return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
+				restore := &repo.ArticleUpdatePublishStatusReq{
 					ArticleID: articleId, PublishStatus: enum.ArticlePublishStatusDraft, Visibility: enum.ArticleVisibilityPublic,
-					ClearPublished: true, UpdatedBy: new(operatorUserID),
-				})
+					PublishedAt: originalPublishedAt, ClearPublished: originalPublishedAt == nil,
+					PublishedCity: originalPublishedCity, ClearPublishedCity: originalPublishedCity == nil,
+					UpdatedBy: new(operatorUserID),
+				}
+				return d.articleRepo.UpdatePublishStatus(ctx, restore)
 			})
 			if rollbackErr != nil {
 				d.log.WarnContext(ctx, "rollback scheduled article publish failed", slog.Int64("article_id", articleId), slog.Any("err", rollbackErr))
@@ -590,13 +602,18 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		if err = article.CanPublish(access, nil, now); err != nil {
 			return err
 		}
-		if err = d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
+		update := &repo.ArticleUpdatePublishStatusReq{
 			ArticleID:     articleId,
 			PublishStatus: enum.ArticlePublishStatusPublished,
 			Visibility:    enum.ArticleVisibilityPublic,
 			PublishedAt:   new(now),
 			UpdatedBy:     operatorUserId,
-		}); err != nil {
+		}
+		if access.Scope == enum.ContentAccessScopeAuthor {
+			update.PublishedCity = req.PublishedCity
+			update.ClearPublishedCity = req.PublishedCity == nil
+		}
+		if err = d.articleRepo.UpdatePublishStatus(ctx, update); err != nil {
 			return err
 		}
 		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
@@ -649,11 +666,12 @@ func (d *ArticleUsecase) CancelPublish(ctx context.Context, req *ArticleCancelPu
 			return err
 		}
 		return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
-			ArticleID:      articleId,
-			PublishStatus:  enum.ArticlePublishStatusDraft,
-			Visibility:     article.Visibility,
-			ClearPublished: true,
-			UpdatedBy:      new(operatorUserId),
+			ArticleID:          articleId,
+			PublishStatus:      enum.ArticlePublishStatusDraft,
+			Visibility:         article.Visibility,
+			ClearPublished:     true,
+			ClearPublishedCity: true,
+			UpdatedBy:          new(operatorUserId),
 		})
 	})
 	if err != nil {

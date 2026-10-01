@@ -24,6 +24,7 @@ type Article struct {
 	Statement     *string
 	Commentable   bool
 	PublishedAt   *time.Time
+	PublishedCity *string
 	EditedAt      *time.Time
 	ViewCount     int32
 	ThankCount    int32

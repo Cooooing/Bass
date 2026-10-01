@@ -83,7 +83,7 @@ func (s *ContentArticleService) Publish(ctx context.Context, req *bbscontentv1.P
 		}
 		scheduledAt = &value
 	}
-	err := s.contentArticleUsecase.PublishArticle(ctx, &usecase.PublishArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt})
+	err := s.contentArticleUsecase.PublishArticle(ctx, &usecase.PublishArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt, IP: server.ClientIP(ctx)})
 	return &bbscontentv1.PublishArticle_Resp{}, err
 }
 
@@ -252,7 +252,7 @@ func (s *ContentArticleService) articleDetail(row *repo.ArticleDetail) *bbsconte
 	for _, item := range row.Domains {
 		domains = append(domains, &bbscontentv1.ArticleDomain{Id: item.ID, Code: item.Code, Name: item.Name, Icon: item.Icon, Url: item.URL})
 	}
-	out := &bbscontentv1.ArticleDetail{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, RewardContent: row.RewardContent, RewardContentRender: row.RewardContentRender, RewardPoints: row.RewardPoints, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), Postscripts: postscripts, AuthorUser: s.accountProfile(row.AuthorUser), Tags: tags, Domains: domains, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
+	out := &bbscontentv1.ArticleDetail{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, RewardContent: row.RewardContent, RewardContentRender: row.RewardContentRender, RewardPoints: row.RewardPoints, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), Postscripts: postscripts, AuthorUser: s.accountProfile(row.AuthorUser), Tags: tags, Domains: domains, City: row.City, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
 	if row.LastReplyAt != nil {
 		out.LastReplyAt = timestamppb.New(*row.LastReplyAt)
 	}

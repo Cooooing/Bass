@@ -108,6 +108,7 @@ type ArticleDetail struct {
 	CreatedAt           *time.Time
 	UpdatedAt           *time.Time
 	PublishedAt         *time.Time
+	City                *string
 	EditedAt            *time.Time
 	Tags                []*ArticleTag
 	Domains             []*ArticleDomain
@@ -152,6 +153,7 @@ type PublishArticleReq struct {
 	UserID      int64
 	ArticleID   int64
 	ScheduledAt *time.Time
+	City        *string
 }
 
 type CancelPublishArticleReq struct {

@@ -82,6 +82,7 @@ message PublishArticle {
     int64 article_id = 1; // 文章 ID
     optional ContentAccess access = 2; // 访问上下文
     optional google.protobuf.Timestamp scheduled_at = 3; // 定时发布时间；未来时间会注册延迟任务
+    optional string city = 4; // 作者发布或设置定时时的城市快照
   }
   message Resp {}
 }
@@ -326,6 +327,7 @@ message Article {
   int32 reply_count = 25; // 回复数
   google.protobuf.Timestamp published_at = 30; // 发布时间
   google.protobuf.Timestamp edited_at = 31; // 编辑时间
+  optional string published_city = 32; // 发布时城市快照
   optional int64 created_by = 1002; // 创建账号 ID
   optional int64 updated_by = 1003; // 更新账号 ID
   google.protobuf.Timestamp created_at = 1000; // 创建时间

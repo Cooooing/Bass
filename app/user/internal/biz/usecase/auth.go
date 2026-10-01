@@ -31,6 +31,7 @@ type AuthUsecase struct {
 	accountRepo       repo.AccountRepo
 	prefsRepo         repo.PreferencesRepo
 	loginLogRepo      repo.LoginLogRepo
+	locationRepo      repo.LocationRepo
 	outboxRepo        repo.OutboxEventRepo
 	outboxUsecase     *OutboxUsecase
 	authCacheRepo     repo.AuthCacheRepo
@@ -51,6 +52,7 @@ func NewAuthUsecase(
 	accountRepo repo.AccountRepo,
 	prefsRepo repo.PreferencesRepo,
 	loginLogRepo repo.LoginLogRepo,
+	locationRepo repo.LocationRepo,
 	outboxRepo repo.OutboxEventRepo,
 	outboxUsecase *OutboxUsecase,
 	authCacheRepo repo.AuthCacheRepo,
@@ -70,6 +72,7 @@ func NewAuthUsecase(
 		accountRepo:       accountRepo,
 		prefsRepo:         prefsRepo,
 		loginLogRepo:      loginLogRepo,
+		locationRepo:      locationRepo,
 		outboxRepo:        outboxRepo,
 		outboxUsecase:     outboxUsecase,
 		authCacheRepo:     authCacheRepo,
@@ -333,6 +336,19 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 	defer func() {
 		if _, err := s.loginLogRepo.Create(ctx, audit); err != nil {
 			s.logger.WarnContext(ctx, "record login log failed", constant.LogFieldErr, err)
+			return
+		}
+		if audit.Status != enum.LoginStatusSuccess || audit.UserID == nil ||
+			(audit.Country == nil && audit.Province == nil && audit.City == nil) {
+			return
+		}
+		if _, err := s.locationRepo.UpsertByUserID(ctx, &model.Location{
+			UserID:   *audit.UserID,
+			Country:  audit.Country,
+			Province: audit.Province,
+			City:     audit.City,
+		}); err != nil {
+			s.logger.WarnContext(ctx, "update login location failed", constant.LogFieldErr, err)
 		}
 	}()
 

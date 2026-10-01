@@ -43,6 +43,7 @@ func (Article) Fields() []ent.Field {
 		field.String("statement").Comment("创作声明").Nillable().Optional(),
 		field.Bool("commentable").Comment("是否允许评论").Default(true),
 		field.Time("published_at").Comment("发布时间").Nillable().Optional(),
+		field.String("published_city").Comment("发布时城市快照").MaxLen(128).Nillable().Optional(),
 		field.Time("edited_at").Comment("内容编辑时间").Nillable().Optional(),
 		field.Int32("view_count").Comment("浏览数").Default(0),
 		field.Int32("thank_count").Comment("感谢数").Default(0),

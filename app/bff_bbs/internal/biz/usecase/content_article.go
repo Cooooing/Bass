@@ -6,6 +6,7 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"strings"
 	"time"
 )
 
@@ -13,17 +14,20 @@ type ContentArticleUsecase struct {
 	contentArticleClient repo.ContentArticleClient
 	assetClient          repo.AssetClient
 	privacyClient        repo.PrivacySettingClient
+	ipResolutionClient   repo.IPResolutionClient
 }
 
 func NewContentArticleUsecase(
 	contentArticleClient repo.ContentArticleClient,
 	assetClient repo.AssetClient,
 	privacyClient repo.PrivacySettingClient,
+	ipResolutionClient repo.IPResolutionClient,
 ) *ContentArticleUsecase {
 	return &ContentArticleUsecase{
 		contentArticleClient: contentArticleClient,
 		assetClient:          assetClient,
 		privacyClient:        privacyClient,
+		ipResolutionClient:   ipResolutionClient,
 	}
 }
 
@@ -66,13 +70,28 @@ type PublishArticleReq struct {
 	UserID      int64
 	ArticleID   int64
 	ScheduledAt *time.Time
+	IP          string
 }
 
 func (u *ContentArticleUsecase) PublishArticle(ctx context.Context, req *PublishArticleReq) error {
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ScheduledAt: req.ScheduledAt})
+	var city *string
+	if ip := strings.TrimSpace(req.IP); ip != "" && u.ipResolutionClient != nil {
+		resolved, err := u.ipResolutionClient.Resolve(ctx, ip)
+		if err == nil && resolved != nil {
+			value := []rune(strings.TrimSpace(resolved.City))
+			if len(value) > 128 {
+				value = value[:128]
+			}
+			if len(value) > 0 {
+				resolvedCity := string(value)
+				city = &resolvedCity
+			}
+		}
+	}
+	return u.contentArticleClient.PublishArticle(ctx, &repo.PublishArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, ScheduledAt: req.ScheduledAt, City: city})
 }
 
 type CancelPublishArticleReq struct {
@@ -197,6 +216,21 @@ func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleR
 	// also owns that draft.
 	if req.PublishStatus != nil && resp.PublishStatus != *req.PublishStatus {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	if resp.CreatedBy == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	if req.UserID != *resp.CreatedBy {
+		privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, *resp.CreatedBy)
+		if err != nil {
+			return nil, err
+		}
+		if privacy != nil && privacy.PublicArticles != nil && !*privacy.PublicArticles {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_ARTICLES_PRIVATE)
+		}
+		if privacy != nil && privacy.PublicLocation != nil && !*privacy.PublicLocation {
+			resp.City = nil
+		}
 	}
 	if err = u.hydrateArticleProfiles(ctx, []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}); err != nil {
 		return nil, err

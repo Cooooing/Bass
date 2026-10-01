@@ -75,6 +75,7 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article) (*model.
 		Statement:     save.Statement,
 		Commentable:   save.Commentable,
 		PublishedAt:   save.PublishedAt,
+		PublishedCity: save.PublishedCity,
 		EditedAt:      save.EditedAt,
 		ViewCount:     save.ViewCount,
 		ThankCount:    save.ThankCount,
@@ -124,6 +125,7 @@ func (r *ArticleRepo) Update(ctx context.Context, article *model.Article) (*mode
 		Statement:     save.Statement,
 		Commentable:   save.Commentable,
 		PublishedAt:   save.PublishedAt,
+		PublishedCity: save.PublishedCity,
 		EditedAt:      save.EditedAt,
 		ViewCount:     save.ViewCount,
 		ThankCount:    save.ThankCount,
@@ -156,6 +158,12 @@ func (r *ArticleRepo) UpdatePublishStatus(ctx context.Context, req *repo.Article
 	}
 	if req.ClearPublished {
 		update.ClearPublishedAt()
+	}
+	if req.PublishedCity != nil {
+		update.SetPublishedCity(*req.PublishedCity)
+	}
+	if req.ClearPublishedCity {
+		update.ClearPublishedCity()
 	}
 	if req.UpdatedBy != nil {
 		update.SetUpdatedBy(*req.UpdatedBy)
@@ -388,6 +396,7 @@ func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.
 		Statement:     a.Statement,
 		Commentable:   a.Commentable,
 		PublishedAt:   a.PublishedAt,
+		PublishedCity: a.PublishedCity,
 		EditedAt:      a.EditedAt,
 		ViewCount:     a.ViewCount,
 		ThankCount:    a.ThankCount,
@@ -425,6 +434,7 @@ func (r *ArticleRepo) List(ctx context.Context, req *repo.ArticleGetReq) ([]*mod
 			Statement:     item.Statement,
 			Commentable:   item.Commentable,
 			PublishedAt:   item.PublishedAt,
+			PublishedCity: item.PublishedCity,
 			EditedAt:      item.EditedAt,
 			ViewCount:     item.ViewCount,
 			ThankCount:    item.ThankCount,
@@ -488,6 +498,7 @@ func (r *ArticleRepo) Page(ctx context.Context, req *repo.ArticleGetReq) (*repo.
 			Statement:     item.Statement,
 			Commentable:   item.Commentable,
 			PublishedAt:   item.PublishedAt,
+			PublishedCity: item.PublishedCity,
 			EditedAt:      item.EditedAt,
 			ViewCount:     item.ViewCount,
 			ThankCount:    item.ThankCount,

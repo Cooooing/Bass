@@ -402,6 +402,7 @@ message ArticleDetail {
   google.protobuf.Timestamp edited_at = 34; // 编辑时间
   repeated ArticleTag tags = 35; // 文章标签
   repeated ArticleDomain domains = 36; // 文章所属领域
+  optional string city = 37; // 发布时城市快照
   optional int64 created_by = 1002; // 创建账号 ID
   optional int64 updated_by = 1003; // 更新账号 ID
   google.protobuf.Timestamp created_at = 1000; // 创建时间

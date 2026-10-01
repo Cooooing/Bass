@@ -98,6 +98,7 @@ func (r *ContentArticleClient) PublishArticle(ctx context.Context, req *repo.Pub
 	if req.ScheduledAt != nil {
 		publishReq.ScheduledAt = timestamppb.New(*req.ScheduledAt)
 	}
+	publishReq.City = req.City
 	_, err := r.contentClient.Article.Publish(ctx, publishReq)
 	if err != nil {
 		return err
@@ -560,6 +561,7 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 		ViewerActionState:   state,
 		Tags:                tags,
 		Domains:             domains,
+		City:                item.PublishedCity,
 		CreatedAt:           new(item.GetCreatedAt().AsTime()),
 		UpdatedAt:           new(item.GetUpdatedAt().AsTime()),
 	}

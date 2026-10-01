@@ -31,12 +31,14 @@ type ArticleRepo interface {
 }
 
 type ArticleUpdatePublishStatusReq struct {
-	ArticleID      int64
-	PublishStatus  enum.ArticlePublishStatus
-	Visibility     enum.ArticleVisibility
-	PublishedAt    *time.Time
-	ClearPublished bool
-	UpdatedBy      *int64
+	ArticleID          int64
+	PublishStatus      enum.ArticlePublishStatus
+	Visibility         enum.ArticleVisibility
+	PublishedAt        *time.Time
+	ClearPublished     bool
+	PublishedCity      *string
+	ClearPublishedCity bool
+	UpdatedBy          *int64
 }
 
 type ArticleUpdateVisibilityReq struct {

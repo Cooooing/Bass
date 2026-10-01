@@ -151,7 +151,7 @@ func (r *LocationRepo) mapRows(ctx context.Context, req *repo.LocationGetReq) (m
 	}
 	result := make(map[int64]*model.Location, len(list))
 	for _, item := range list {
-		result[item.ID] = item
+		result[item.UserID] = item
 	}
 	return result, nil
 }

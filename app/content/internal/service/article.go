@@ -152,7 +152,7 @@ func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req
 		value := req.GetScheduledAt().AsTime()
 		scheduledAt = &value
 	}
-	if err := s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{Access: access, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt}); err != nil {
+	if err := s.articleUsecase.Publish(ctx, &usecase.ArticlePublishReq{Access: access, ArticleID: req.GetArticleId(), ScheduledAt: scheduledAt, PublishedCity: req.City}); err != nil {
 		return nil, err
 	}
 	return &v1.PublishArticle_Resp{}, nil
@@ -531,6 +531,7 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.G
 		ReplyCount:    row.ReplyCount,
 		CreatedBy:     row.CreatedBy,
 		UpdatedBy:     row.UpdatedBy,
+		PublishedCity: row.PublishedCity,
 	}
 	if row.CreatedAt != nil {
 		article.CreatedAt = timestamppb.New(*row.CreatedAt)

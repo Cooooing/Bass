@@ -112,6 +112,17 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 	if lastLogin != nil {
 		profile.LastSuccessLoginAt = timestamppb.New(*lastLogin)
 	}
+	avatarURL := "/v1/user/account/avatar?name=" + account.Name
+	if account.AvatarAssetID != nil && *account.AvatarAssetID > 0 {
+		asset, err := u.assetClient.Get(ctx, *account.AvatarAssetID)
+		if err != nil {
+			return nil, err
+		}
+		if asset != nil && asset.URL != "" {
+			avatarURL = asset.URL
+		}
+	}
+	profile.Account.AvatarUrl = &avatarURL
 	if account.BackgroundAssetID != nil && *account.BackgroundAssetID > 0 {
 		asset, err := u.assetClient.Get(ctx, *account.BackgroundAssetID)
 		if err != nil {

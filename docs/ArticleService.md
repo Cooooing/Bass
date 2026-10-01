@@ -12,6 +12,7 @@ All URIs are relative to *http://localhost*
 |[**get**](#get) | **POST** /v1/content/article/get | |
 |[**like**](#like) | **POST** /v1/content/article/like | |
 |[**list**](#list) | **POST** /v1/content/article/list | |
+|[**pageViewHistory**](#pageviewhistory) | **POST** /v1/content/article/view-history/page | |
 |[**publish**](#publish) | **POST** /v1/content/article/publish | |
 |[**reward**](#reward) | **POST** /v1/content/article/reward | |
 |[**thank**](#thank) | **POST** /v1/content/article/thank | |
@@ -415,6 +416,58 @@ const { status, data } = await apiInstance.list(
 ### Return type
 
 **ListArticlesResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **pageViewHistory**
+> PageArticleViewHistoryResp pageViewHistory(pageArticleViewHistoryReq)
+
+查询当前账号的浏览历史。
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    PageArticleViewHistoryReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let pageArticleViewHistoryReq: PageArticleViewHistoryReq; //
+
+const { status, data } = await apiInstance.pageViewHistory(
+    pageArticleViewHistoryReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **pageArticleViewHistoryReq** | **PageArticleViewHistoryReq**|  | |
+
+
+### Return type
+
+**PageArticleViewHistoryResp**
 
 ### Authorization
 

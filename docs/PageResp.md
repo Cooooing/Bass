@@ -5,9 +5,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**total** | **number** | 总数 | [optional] [default to undefined]
-**page** | **number** | 页码 | [optional] [default to undefined]
-**size** | **number** | 页大小 | [optional] [default to undefined]
+**total** | **string** | 总数 | [optional] [default to undefined]
+**page** | **string** | 页码 | [optional] [default to undefined]
+**size** | **string** | 页大小 | [optional] [default to undefined]
 
 ## Example
 

@@ -1,21 +1,19 @@
-# PageReq
+# CreateMoonbreezeResp
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**page** | **string** | 页码 | [optional] [default to undefined]
-**size** | **string** | 页大小 | [optional] [default to undefined]
+**moonbreeze** | [**Moonbreeze**](Moonbreeze.md) |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { PageReq } from '@bass/bbs-sdk-axios';
+import { CreateMoonbreezeResp } from '@bass/bbs-sdk-axios';
 
-const instance: PageReq = {
-    page,
-    size,
+const instance: CreateMoonbreezeResp = {
+    moonbreeze,
 };
 ```
 

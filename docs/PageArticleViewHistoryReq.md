@@ -1,19 +1,19 @@
-# UpsertCurrentLocationResp
+# PageArticleViewHistoryReq
 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**location** | [**RespLocation**](RespLocation.md) |  | [optional] [default to undefined]
+**page** | [**PageReq**](PageReq.md) |  | [optional] [default to undefined]
 
 ## Example
 
 ```typescript
-import { UpsertCurrentLocationResp } from '@bass/bbs-sdk-axios';
+import { PageArticleViewHistoryReq } from '@bass/bbs-sdk-axios';
 
-const instance: UpsertCurrentLocationResp = {
-    location,
+const instance: PageArticleViewHistoryReq = {
+    page,
 };
 ```
 

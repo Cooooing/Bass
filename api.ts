@@ -100,6 +100,7 @@ export interface ArticleDetail {
     'edited_at'?: string;
     'tags'?: Array<ArticleTag>;
     'domains'?: Array<ArticleDomain>;
+    'city'?: string;
     'created_by'?: string;
     'updated_by'?: string;
     'created_at'?: string;
@@ -243,6 +244,10 @@ export interface ArticleTag {
     'icon'?: string;
     'domain_id'?: string;
 }
+export interface ArticleViewHistoryItem {
+    'article'?: ArticleListItem;
+    'viewed_at'?: string;
+}
 export interface ArticleViewerActionState {
     'liked'?: boolean;
     'thanked'?: boolean;
@@ -328,14 +333,17 @@ export interface CreateDraftArticleReq {
 export interface CreateDraftArticleResp {
     'article_id'?: string;
 }
+export interface CreateMoonbreezeReq {
+    'content'?: string;
+}
+export interface CreateMoonbreezeResp {
+    'moonbreeze'?: Moonbreeze;
+}
 export interface CreateTagReq {
     'tag': ReqTag;
 }
 export interface CreateTagResp {
     'tag'?: RespTag;
-}
-export interface DetectCurrentLocationResp {
-    'location'?: RespLocation;
 }
 export interface DisableTotpReq {
     'code': string;
@@ -599,28 +607,59 @@ export interface MarkReadNotificationReq {
 export interface MarkReadNotificationResp {
     'count'?: number;
 }
+export interface Moonbreeze {
+    'id'?: string;
+    'content'?: string;
+    'author'?: AccountProfile;
+    'city'?: string;
+    'created_at'?: string;
+}
+export interface PageArticleViewHistoryReq {
+    'page'?: PageReq;
+}
+export interface PageArticleViewHistoryResp {
+    'rows'?: Array<ArticleViewHistoryItem>;
+    'page'?: PageResp;
+}
+export interface PageMemberMoonbreezesReq {
+    'name'?: string;
+    'cursor'?: string;
+    'size'?: number;
+}
+export interface PageMoonbreezesResp {
+    'rows'?: Array<Moonbreeze>;
+    'next_cursor'?: string;
+}
+export interface PagePublicMoonbreezesReq {
+    'cursor'?: string;
+    'size'?: number;
+}
 export interface PageReq {
     /**
      * 页码
      */
-    'page'?: number;
+    'page'?: string;
     /**
      * 页大小
      */
-    'size'?: number;
+    'size'?: string;
 }
 export interface PageResp {
     /**
      * 总数
      */
-    'total'?: number;
+    'total'?: string;
     /**
      * 页码
      */
-    'page'?: number;
+    'page'?: string;
     /**
      * 页大小
      */
+    'size'?: string;
+}
+export interface PageWatchingMoonbreezesReq {
+    'cursor'?: string;
     'size'?: number;
 }
 export interface PrepareProfileImageUploadAccountReq {
@@ -663,10 +702,11 @@ export interface ProfileRelation {
     'blocked_by'?: boolean;
 }
 export interface ProfileVisibility {
-    'articles'?: boolean;
-    'comments'?: boolean;
-    'followers'?: boolean;
-    'following'?: boolean;
+    'article_list'?: boolean;
+    'comment_list'?: boolean;
+    'follower_list'?: boolean;
+    'following_list'?: boolean;
+    'moonbreeze_list'?: boolean;
 }
 export interface PublishArticleReq {
     'article_id': string;
@@ -1208,12 +1248,13 @@ export type RespPreferenceLanguageEnum = typeof RespPreferenceLanguageEnum[keyof
 export interface RespPrivacySetting {
     'user_id'?: string;
     'public_points'?: boolean;
-    'public_followers'?: boolean;
-    'public_following'?: boolean;
-    'public_articles'?: boolean;
-    'public_comments'?: boolean;
+    'public_follower_list'?: boolean;
+    'public_following_list'?: boolean;
+    'public_article_list'?: boolean;
+    'public_comment_list'?: boolean;
     'public_online_status'?: boolean;
     'public_location'?: boolean;
+    'public_moonbreeze_list'?: boolean;
 }
 export interface RespRecord {
     'id'?: string;
@@ -1361,12 +1402,13 @@ export interface UpdateCurrentPreferencesResp {
 }
 export interface UpdateCurrentPrivacySettingReq {
     'public_points'?: boolean;
-    'public_followers'?: boolean;
-    'public_following'?: boolean;
-    'public_articles'?: boolean;
-    'public_comments'?: boolean;
+    'public_follower_list'?: boolean;
+    'public_following_list'?: boolean;
+    'public_article_list'?: boolean;
+    'public_comment_list'?: boolean;
     'public_online_status'?: boolean;
     'public_location'?: boolean;
+    'public_moonbreeze_list'?: boolean;
 }
 export interface UpdateCurrentPrivacySettingResp {
     'privacy_setting'?: RespPrivacySetting;
@@ -1412,14 +1454,6 @@ export interface UpdateTagReq {
 }
 export interface UpdateTagResp {
     'tag'?: RespTag;
-}
-export interface UpsertCurrentLocationReq {
-    'country'?: string;
-    'province'?: string;
-    'city'?: string;
-}
-export interface UpsertCurrentLocationResp {
-    'location'?: RespLocation;
 }
 
 /**
@@ -2619,6 +2653,40 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
+         * 查询当前账号的浏览历史。
+         * @param {PageArticleViewHistoryReq} pageArticleViewHistoryReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageViewHistory: async (pageArticleViewHistoryReq: PageArticleViewHistoryReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pageArticleViewHistoryReq' is not null or undefined
+            assertParamExists('pageViewHistory', 'pageArticleViewHistoryReq', pageArticleViewHistoryReq)
+            const localVarPath = `/v1/content/article/view-history/page`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pageArticleViewHistoryReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 发布文章
          * @param {PublishArticleReq} publishArticleReq 
          * @param {*} [options] Override http request option.
@@ -2860,6 +2928,18 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 查询当前账号的浏览历史。
+         * @param {PageArticleViewHistoryReq} pageArticleViewHistoryReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pageViewHistory(pageArticleViewHistoryReq: PageArticleViewHistoryReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageArticleViewHistoryResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pageViewHistory(pageArticleViewHistoryReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.pageViewHistory']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 发布文章
          * @param {PublishArticleReq} publishArticleReq 
          * @param {*} [options] Override http request option.
@@ -2989,6 +3069,15 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.list(requestParameters.listArticlesReq, options).then((request) => request(axios, basePath));
         },
         /**
+         * 查询当前账号的浏览历史。
+         * @param {ArticleServicePageViewHistoryRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageViewHistory(requestParameters: ArticleServicePageViewHistoryRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageArticleViewHistoryResp> {
+            return localVarFp.pageViewHistory(requestParameters.pageArticleViewHistoryReq, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 发布文章
          * @param {ArticleServicePublishRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -3096,6 +3185,14 @@ export interface ArticleServiceInterface {
     list(requestParameters: ArticleServiceListRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListArticlesResp>;
 
     /**
+     * 查询当前账号的浏览历史。
+     * @param {ArticleServicePageViewHistoryRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    pageViewHistory(requestParameters: ArticleServicePageViewHistoryRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageArticleViewHistoryResp>;
+
+    /**
      * 发布文章
      * @param {ArticleServicePublishRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -3183,6 +3280,13 @@ export interface ArticleServiceLikeRequest {
  */
 export interface ArticleServiceListRequest {
     readonly listArticlesReq: ListArticlesReq
+}
+
+/**
+ * Request parameters for pageViewHistory operation in ArticleService.
+ */
+export interface ArticleServicePageViewHistoryRequest {
+    readonly pageArticleViewHistoryReq: PageArticleViewHistoryReq
 }
 
 /**
@@ -3295,6 +3399,16 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
      */
     public list(requestParameters: ArticleServiceListRequest, options?: RawAxiosRequestConfig) {
         return ArticleServiceFp(this.configuration).list(requestParameters.listArticlesReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询当前账号的浏览历史。
+     * @param {ArticleServicePageViewHistoryRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public pageViewHistory(requestParameters: ArticleServicePageViewHistoryRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).pageViewHistory(requestParameters.pageArticleViewHistoryReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -4958,40 +5072,6 @@ export class DomainService extends BaseAPI implements DomainServiceInterface {
 export const LocationServiceAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 按当前请求 IP 解析并更新当前账号的地理资料。
-         * @param {object} body 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        detectCurrent: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'body' is not null or undefined
-            assertParamExists('detectCurrent', 'body', body)
-            const localVarPath = `/v1/user/location/detect-current`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-            localVarHeaderParameter['Accept'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * 获取当前账号的地理资料。
          * @param {object} body 
          * @param {*} [options] Override http request option.
@@ -5025,16 +5105,101 @@ export const LocationServiceAxiosParamCreator = function (configuration?: Config
                 options: localVarRequestOptions,
             };
         },
+    }
+};
+
+/**
+ * LocationService - functional programming interface
+ */
+export const LocationServiceFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = LocationServiceAxiosParamCreator(configuration)
+    return {
         /**
-         * 更新当前账号的地理资料。
-         * @param {UpsertCurrentLocationReq} upsertCurrentLocationReq 
+         * 获取当前账号的地理资料。
+         * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        upsertCurrent: async (upsertCurrentLocationReq: UpsertCurrentLocationReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'upsertCurrentLocationReq' is not null or undefined
-            assertParamExists('upsertCurrent', 'upsertCurrentLocationReq', upsertCurrentLocationReq)
-            const localVarPath = `/v1/user/location/upsert-current`;
+        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentLocationResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrent(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['LocationService.getCurrent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * LocationService - factory interface
+ */
+export const LocationServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = LocationServiceFp(configuration)
+    return {
+        /**
+         * 获取当前账号的地理资料。
+         * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCurrent(requestParameters: LocationServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentLocationResp> {
+            return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * LocationService - interface
+ */
+export interface LocationServiceInterface {
+    /**
+     * 获取当前账号的地理资料。
+     * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCurrent(requestParameters: LocationServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentLocationResp>;
+
+}
+
+/**
+ * Request parameters for getCurrent operation in LocationService.
+ */
+export interface LocationServiceGetCurrentRequest {
+    readonly body: object
+}
+
+/**
+ * LocationService - object-oriented interface
+ */
+export class LocationService extends BaseAPI implements LocationServiceInterface {
+    /**
+     * 获取当前账号的地理资料。
+     * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getCurrent(requestParameters: LocationServiceGetCurrentRequest, options?: RawAxiosRequestConfig) {
+        return LocationServiceFp(this.configuration).getCurrent(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * MoonbreezeService - axios parameter creator
+ */
+export const MoonbreezeServiceAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {CreateMoonbreezeReq} createMoonbreezeReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create: async (createMoonbreezeReq: CreateMoonbreezeReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createMoonbreezeReq' is not null or undefined
+            assertParamExists('create', 'createMoonbreezeReq', createMoonbreezeReq)
+            const localVarPath = `/v1/content/moonbreeze/create`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5052,7 +5217,109 @@ export const LocationServiceAxiosParamCreator = function (configuration?: Config
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(upsertCurrentLocationReq, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(createMoonbreezeReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PageMemberMoonbreezesReq} pageMemberMoonbreezesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageMember: async (pageMemberMoonbreezesReq: PageMemberMoonbreezesReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pageMemberMoonbreezesReq' is not null or undefined
+            assertParamExists('pageMember', 'pageMemberMoonbreezesReq', pageMemberMoonbreezesReq)
+            const localVarPath = `/v1/content/moonbreeze/page-member`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pageMemberMoonbreezesReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PagePublicMoonbreezesReq} pagePublicMoonbreezesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pagePublic: async (pagePublicMoonbreezesReq: PagePublicMoonbreezesReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pagePublicMoonbreezesReq' is not null or undefined
+            assertParamExists('pagePublic', 'pagePublicMoonbreezesReq', pagePublicMoonbreezesReq)
+            const localVarPath = `/v1/content/moonbreeze/page-public`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pagePublicMoonbreezesReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {PageWatchingMoonbreezesReq} pageWatchingMoonbreezesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageWatching: async (pageWatchingMoonbreezesReq: PageWatchingMoonbreezesReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pageWatchingMoonbreezesReq' is not null or undefined
+            assertParamExists('pageWatching', 'pageWatchingMoonbreezesReq', pageWatchingMoonbreezesReq)
+            const localVarPath = `/v1/content/moonbreeze/page-watching`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pageWatchingMoonbreezesReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -5063,169 +5330,215 @@ export const LocationServiceAxiosParamCreator = function (configuration?: Config
 };
 
 /**
- * LocationService - functional programming interface
+ * MoonbreezeService - functional programming interface
  */
-export const LocationServiceFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = LocationServiceAxiosParamCreator(configuration)
+export const MoonbreezeServiceFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MoonbreezeServiceAxiosParamCreator(configuration)
     return {
         /**
-         * 按当前请求 IP 解析并更新当前账号的地理资料。
-         * @param {object} body 
+         * 
+         * @param {CreateMoonbreezeReq} createMoonbreezeReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async detectCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DetectCurrentLocationResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.detectCurrent(body, options);
+        async create(createMoonbreezeReq: CreateMoonbreezeReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateMoonbreezeResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.create(createMoonbreezeReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['LocationService.detectCurrent']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MoonbreezeService.create']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 获取当前账号的地理资料。
-         * @param {object} body 
+         * 
+         * @param {PageMemberMoonbreezesReq} pageMemberMoonbreezesReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentLocationResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrent(body, options);
+        async pageMember(pageMemberMoonbreezesReq: PageMemberMoonbreezesReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageMoonbreezesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pageMember(pageMemberMoonbreezesReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['LocationService.getCurrent']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MoonbreezeService.pageMember']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 更新当前账号的地理资料。
-         * @param {UpsertCurrentLocationReq} upsertCurrentLocationReq 
+         * 
+         * @param {PagePublicMoonbreezesReq} pagePublicMoonbreezesReq 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async upsertCurrent(upsertCurrentLocationReq: UpsertCurrentLocationReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UpsertCurrentLocationResp>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.upsertCurrent(upsertCurrentLocationReq, options);
+        async pagePublic(pagePublicMoonbreezesReq: PagePublicMoonbreezesReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageMoonbreezesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pagePublic(pagePublicMoonbreezesReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['LocationService.upsertCurrent']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MoonbreezeService.pagePublic']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {PageWatchingMoonbreezesReq} pageWatchingMoonbreezesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async pageWatching(pageWatchingMoonbreezesReq: PageWatchingMoonbreezesReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PageMoonbreezesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.pageWatching(pageWatchingMoonbreezesReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MoonbreezeService.pageWatching']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
 
 /**
- * LocationService - factory interface
+ * MoonbreezeService - factory interface
  */
-export const LocationServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = LocationServiceFp(configuration)
+export const MoonbreezeServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MoonbreezeServiceFp(configuration)
     return {
         /**
-         * 按当前请求 IP 解析并更新当前账号的地理资料。
-         * @param {LocationServiceDetectCurrentRequest} requestParameters Request parameters.
+         * 
+         * @param {MoonbreezeServiceCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        detectCurrent(requestParameters: LocationServiceDetectCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<DetectCurrentLocationResp> {
-            return localVarFp.detectCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
+        create(requestParameters: MoonbreezeServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateMoonbreezeResp> {
+            return localVarFp.create(requestParameters.createMoonbreezeReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 获取当前账号的地理资料。
-         * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
+         * 
+         * @param {MoonbreezeServicePageMemberRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCurrent(requestParameters: LocationServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentLocationResp> {
-            return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
+        pageMember(requestParameters: MoonbreezeServicePageMemberRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageMoonbreezesResp> {
+            return localVarFp.pageMember(requestParameters.pageMemberMoonbreezesReq, options).then((request) => request(axios, basePath));
         },
         /**
-         * 更新当前账号的地理资料。
-         * @param {LocationServiceUpsertCurrentRequest} requestParameters Request parameters.
+         * 
+         * @param {MoonbreezeServicePagePublicRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        upsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpsertCurrentLocationResp> {
-            return localVarFp.upsertCurrent(requestParameters.upsertCurrentLocationReq, options).then((request) => request(axios, basePath));
+        pagePublic(requestParameters: MoonbreezeServicePagePublicRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageMoonbreezesResp> {
+            return localVarFp.pagePublic(requestParameters.pagePublicMoonbreezesReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {MoonbreezeServicePageWatchingRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        pageWatching(requestParameters: MoonbreezeServicePageWatchingRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageMoonbreezesResp> {
+            return localVarFp.pageWatching(requestParameters.pageWatchingMoonbreezesReq, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * LocationService - interface
+ * MoonbreezeService - interface
  */
-export interface LocationServiceInterface {
+export interface MoonbreezeServiceInterface {
     /**
-     * 按当前请求 IP 解析并更新当前账号的地理资料。
-     * @param {LocationServiceDetectCurrentRequest} requestParameters Request parameters.
+     * 
+     * @param {MoonbreezeServiceCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    detectCurrent(requestParameters: LocationServiceDetectCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<DetectCurrentLocationResp>;
+    create(requestParameters: MoonbreezeServiceCreateRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateMoonbreezeResp>;
 
     /**
-     * 获取当前账号的地理资料。
-     * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
+     * 
+     * @param {MoonbreezeServicePageMemberRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getCurrent(requestParameters: LocationServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentLocationResp>;
+    pageMember(requestParameters: MoonbreezeServicePageMemberRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageMoonbreezesResp>;
 
     /**
-     * 更新当前账号的地理资料。
-     * @param {LocationServiceUpsertCurrentRequest} requestParameters Request parameters.
+     * 
+     * @param {MoonbreezeServicePagePublicRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    upsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpsertCurrentLocationResp>;
+    pagePublic(requestParameters: MoonbreezeServicePagePublicRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageMoonbreezesResp>;
+
+    /**
+     * 
+     * @param {MoonbreezeServicePageWatchingRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    pageWatching(requestParameters: MoonbreezeServicePageWatchingRequest, options?: RawAxiosRequestConfig): AxiosPromise<PageMoonbreezesResp>;
 
 }
 
 /**
- * Request parameters for detectCurrent operation in LocationService.
+ * Request parameters for create operation in MoonbreezeService.
  */
-export interface LocationServiceDetectCurrentRequest {
-    readonly body: object
+export interface MoonbreezeServiceCreateRequest {
+    readonly createMoonbreezeReq: CreateMoonbreezeReq
 }
 
 /**
- * Request parameters for getCurrent operation in LocationService.
+ * Request parameters for pageMember operation in MoonbreezeService.
  */
-export interface LocationServiceGetCurrentRequest {
-    readonly body: object
+export interface MoonbreezeServicePageMemberRequest {
+    readonly pageMemberMoonbreezesReq: PageMemberMoonbreezesReq
 }
 
 /**
- * Request parameters for upsertCurrent operation in LocationService.
+ * Request parameters for pagePublic operation in MoonbreezeService.
  */
-export interface LocationServiceUpsertCurrentRequest {
-    readonly upsertCurrentLocationReq: UpsertCurrentLocationReq
+export interface MoonbreezeServicePagePublicRequest {
+    readonly pagePublicMoonbreezesReq: PagePublicMoonbreezesReq
 }
 
 /**
- * LocationService - object-oriented interface
+ * Request parameters for pageWatching operation in MoonbreezeService.
  */
-export class LocationService extends BaseAPI implements LocationServiceInterface {
+export interface MoonbreezeServicePageWatchingRequest {
+    readonly pageWatchingMoonbreezesReq: PageWatchingMoonbreezesReq
+}
+
+/**
+ * MoonbreezeService - object-oriented interface
+ */
+export class MoonbreezeService extends BaseAPI implements MoonbreezeServiceInterface {
     /**
-     * 按当前请求 IP 解析并更新当前账号的地理资料。
-     * @param {LocationServiceDetectCurrentRequest} requestParameters Request parameters.
+     * 
+     * @param {MoonbreezeServiceCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public detectCurrent(requestParameters: LocationServiceDetectCurrentRequest, options?: RawAxiosRequestConfig) {
-        return LocationServiceFp(this.configuration).detectCurrent(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    public create(requestParameters: MoonbreezeServiceCreateRequest, options?: RawAxiosRequestConfig) {
+        return MoonbreezeServiceFp(this.configuration).create(requestParameters.createMoonbreezeReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 获取当前账号的地理资料。
-     * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
+     * 
+     * @param {MoonbreezeServicePageMemberRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public getCurrent(requestParameters: LocationServiceGetCurrentRequest, options?: RawAxiosRequestConfig) {
-        return LocationServiceFp(this.configuration).getCurrent(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    public pageMember(requestParameters: MoonbreezeServicePageMemberRequest, options?: RawAxiosRequestConfig) {
+        return MoonbreezeServiceFp(this.configuration).pageMember(requestParameters.pageMemberMoonbreezesReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 更新当前账号的地理资料。
-     * @param {LocationServiceUpsertCurrentRequest} requestParameters Request parameters.
+     * 
+     * @param {MoonbreezeServicePagePublicRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public upsertCurrent(requestParameters: LocationServiceUpsertCurrentRequest, options?: RawAxiosRequestConfig) {
-        return LocationServiceFp(this.configuration).upsertCurrent(requestParameters.upsertCurrentLocationReq, options).then((request) => request(this.axios, this.basePath));
+    public pagePublic(requestParameters: MoonbreezeServicePagePublicRequest, options?: RawAxiosRequestConfig) {
+        return MoonbreezeServiceFp(this.configuration).pagePublic(requestParameters.pagePublicMoonbreezesReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {MoonbreezeServicePageWatchingRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public pageWatching(requestParameters: MoonbreezeServicePageWatchingRequest, options?: RawAxiosRequestConfig) {
+        return MoonbreezeServiceFp(this.configuration).pageWatching(requestParameters.pageWatchingMoonbreezesReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

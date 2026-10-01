@@ -19,6 +19,7 @@ docs/ArticleListItem.md
 docs/ArticlePostscript.md
 docs/ArticleService.md
 docs/ArticleTag.md
+docs/ArticleViewHistoryItem.md
 docs/ArticleViewerActionState.md
 docs/AuthService.md
 docs/BeginEnableTotpResp.md
@@ -42,9 +43,10 @@ docs/CreateDomainReq.md
 docs/CreateDomainResp.md
 docs/CreateDraftArticleReq.md
 docs/CreateDraftArticleResp.md
+docs/CreateMoonbreezeReq.md
+docs/CreateMoonbreezeResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
-docs/DetectCurrentLocationResp.md
 docs/DisableTotpReq.md
 docs/DiscardDraftArticleReq.md
 docs/DomainService.md
@@ -102,10 +104,18 @@ docs/LoginReq.md
 docs/LoginResp.md
 docs/MarkReadNotificationReq.md
 docs/MarkReadNotificationResp.md
+docs/Moonbreeze.md
+docs/MoonbreezeService.md
 docs/NotificationService.md
 docs/OtpService.md
+docs/PageArticleViewHistoryReq.md
+docs/PageArticleViewHistoryResp.md
+docs/PageMemberMoonbreezesReq.md
+docs/PageMoonbreezesResp.md
+docs/PagePublicMoonbreezesReq.md
 docs/PageReq.md
 docs/PageResp.md
+docs/PageWatchingMoonbreezesReq.md
 docs/PostscriptService.md
 docs/PreferencesService.md
 docs/PrepareProfileImageUploadAccountReq.md
@@ -178,8 +188,6 @@ docs/UpdateProfileAccountReq.md
 docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
-docs/UpsertCurrentLocationReq.md
-docs/UpsertCurrentLocationResp.md
 git_push.sh
 index.ts
 package.json

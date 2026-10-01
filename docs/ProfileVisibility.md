@@ -5,10 +5,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**articles** | **boolean** |  | [optional] [default to undefined]
-**comments** | **boolean** |  | [optional] [default to undefined]
-**followers** | **boolean** |  | [optional] [default to undefined]
-**following** | **boolean** |  | [optional] [default to undefined]
+**article_list** | **boolean** |  | [optional] [default to undefined]
+**comment_list** | **boolean** |  | [optional] [default to undefined]
+**follower_list** | **boolean** |  | [optional] [default to undefined]
+**following_list** | **boolean** |  | [optional] [default to undefined]
+**moonbreeze_list** | **boolean** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -16,10 +17,11 @@ Name | Type | Description | Notes
 import { ProfileVisibility } from '@bass/bbs-sdk-axios';
 
 const instance: ProfileVisibility = {
-    articles,
-    comments,
-    followers,
-    following,
+    article_list,
+    comment_list,
+    follower_list,
+    following_list,
+    moonbreeze_list,
 };
 ```
 

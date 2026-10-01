@@ -242,6 +242,83 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	}, nil
 }
 
+func (r *ContentArticleClient) PageViewHistory(
+	ctx context.Context,
+	userID int64,
+	page *repo.PageReq,
+) (*repo.ArticleViewHistoryPageResp, error) {
+	if userID <= 0 {
+		return nil, fmt.Errorf("view history requires a user")
+	}
+	pageReq := &common.PageReq{}
+	if page != nil {
+		pageReq.Page = page.Page
+		pageReq.Size = page.Size
+	}
+	reply, err := r.contentClient.Article.PageViewHistory(ctx, &contentv1.PageArticleViewHistory_Req{
+		Page: pageReq,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(userID),
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	articleIDs := make([]int64, 0, len(reply.GetRows()))
+	for _, row := range reply.GetRows() {
+		if row.GetArticle() != nil {
+			articleIDs = append(articleIDs, row.GetArticle().GetId())
+		}
+	}
+	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, articleIDs, userID)
+	if err != nil {
+		return nil, err
+	}
+	userIDs := make([]int64, 0, len(reply.GetRows())*2)
+	for _, row := range reply.GetRows() {
+		if row.GetArticle() == nil {
+			continue
+		}
+		userIDs = append(userIDs, r.articleProfileIDs(row.GetArticle(), lastComments[row.GetArticle().GetId()])...)
+	}
+	profiles, err := r.loadAccountProfiles(ctx, userIDs...)
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*repo.ArticleViewHistoryRow, 0, len(reply.GetRows()))
+	for _, row := range reply.GetRows() {
+		article := row.GetArticle()
+		if article == nil {
+			continue
+		}
+		historyRow := &repo.ArticleViewHistoryRow{
+			Article: r.articleListItem(
+				article,
+				profiles,
+				lastComments[article.GetId()],
+				states[article.GetId()],
+				tags[article.GetId()],
+				domains[article.GetId()],
+			),
+		}
+		if row.GetViewedAt() != nil {
+			viewedAt := row.GetViewedAt().AsTime()
+			historyRow.ViewedAt = &viewedAt
+		}
+		rows = append(rows, historyRow)
+	}
+	var pageResp *repo.PageResp
+	if reply.GetPage() != nil {
+		pageResp = &repo.PageResp{
+			Total: reply.GetPage().GetTotal(),
+			Page:  reply.GetPage().GetPage(),
+			Size:  reply.GetPage().GetSize(),
+		}
+	}
+	return &repo.ArticleViewHistoryPageResp{Rows: rows, Page: pageResp}, nil
+}
+
 func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArticleReq) (*repo.ArticleDetail, error) {
 	accessScope := contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST
 	if req.UserID > 0 {
@@ -308,6 +385,8 @@ func (r *ContentArticleClient) ViewArticle(ctx context.Context, req *repo.ViewAr
 			ActorUserId: new(req.UserID),
 		}
 	}
+	viewReq.Ip = req.IP
+	viewReq.UserAgent = req.UserAgent
 	_, err := r.contentClient.Article.View(ctx, viewReq)
 	if err != nil {
 		return err

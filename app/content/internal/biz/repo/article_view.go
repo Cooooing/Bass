@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"context"
 )
@@ -20,4 +21,15 @@ type ArticleViewCacheRecordReq struct {
 
 type ArticleViewRecordRepo interface {
 	Save(ctx context.Context, record *model.ArticleViewRecord) error
+	Page(ctx context.Context, req *ArticleViewRecordPageReq) (*ArticleViewRecordPageResp, error)
+}
+
+type ArticleViewRecordPageReq struct {
+	UserID int64
+	Page   *base.PageRequest
+}
+
+type ArticleViewRecordPageResp struct {
+	Rows []*model.ArticleViewRecord
+	Page *base.PageResp
 }

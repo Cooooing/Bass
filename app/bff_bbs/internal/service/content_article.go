@@ -172,6 +172,36 @@ func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetAr
 	return &bbscontentv1.GetArticle_Resp{Article: s.articleDetail(row)}, nil
 }
 
+func (s *ContentArticleService) PageViewHistory(
+	ctx context.Context,
+	req *bbscontentv1.PageArticleViewHistory_Req,
+) (*bbscontentv1.PageArticleViewHistory_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	result, err := s.contentArticleUsecase.PageViewHistory(ctx, user.ID, req.GetPage())
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*bbscontentv1.ArticleViewHistoryItem, 0, len(result.Rows))
+	for _, row := range result.Rows {
+		if row == nil || row.Article == nil {
+			continue
+		}
+		item := &bbscontentv1.ArticleViewHistoryItem{Article: s.articleListItem(row.Article)}
+		if row.ViewedAt != nil {
+			item.ViewedAt = timestamppb.New(*row.ViewedAt)
+		}
+		rows = append(rows, item)
+	}
+	var page *common.PageResp
+	if result.Page != nil {
+		page = &common.PageResp{Page: result.Page.Page, Size: result.Page.Size, Total: result.Page.Total}
+	}
+	return &bbscontentv1.PageArticleViewHistory_Resp{Rows: rows, Page: page}, nil
+}
+
 func (s *ContentArticleService) Like(ctx context.Context, req *bbscontentv1.LikeArticle_Req) (*bbscontentv1.LikeArticle_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {

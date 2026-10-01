@@ -29,6 +29,7 @@ service ContentArticleService {
   rpc Collect(CollectArticle.Req) returns (CollectArticle.Resp) {} // 收藏文章
   rpc Reward(RewardArticle.Req) returns (RewardArticle.Resp) {} // 打赏文章
   rpc View(ViewArticle.Req) returns (ViewArticle.Resp) {} // 浏览文章
+  rpc PageViewHistory(PageArticleViewHistory.Req) returns (PageArticleViewHistory.Resp) {} // 分页查询当前用户浏览历史
   rpc FlushViews(FlushArticleViews.Req) returns (FlushArticleViews.Resp) {} // 刷新浏览量
   rpc MapViewerActionStates(MapArticleViewerActionStates.Req) returns (MapArticleViewerActionStates.Resp) {} // 查询互动状态
   rpc Get(GetArticle.Req) returns (GetArticle.Resp) {} // 查询文章详情
@@ -225,6 +226,22 @@ message ViewArticle {
     optional string browser_fingerprint = 5; // 浏览器指纹
   }
   message Resp {}
+}
+
+message PageArticleViewHistory {
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数
+    ContentAccess access = 2; // 当前用户访问上下文
+  }
+  message Resp {
+    repeated ArticleViewHistoryItem rows = 1;
+    .common.api.app.common.PageResp page = 2;
+  }
+}
+
+message ArticleViewHistoryItem {
+  Article article = 1; // 当前仍可展示的文章
+  google.protobuf.Timestamp viewed_at = 2; // 最近浏览时间
 }
 
 message FlushArticleViews {

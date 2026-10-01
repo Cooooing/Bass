@@ -183,6 +183,16 @@ type ListArticlesResp struct {
 	Rows []*ArticleListItem
 }
 
+type ArticleViewHistoryRow struct {
+	Article  *ArticleListItem
+	ViewedAt *time.Time
+}
+
+type ArticleViewHistoryPageResp struct {
+	Rows []*ArticleViewHistoryRow
+	Page *PageResp
+}
+
 type GetArticleReq struct {
 	UserID    int64
 	ArticleID int64
@@ -227,6 +237,7 @@ type ContentArticleClient interface {
 	DiscardDraftArticle(ctx context.Context, req *DiscardDraftArticleReq) error
 	ArchiveArticle(ctx context.Context, req *ArchiveArticleReq) error
 	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error)
+	PageViewHistory(ctx context.Context, userID int64, page *PageReq) (*ArticleViewHistoryPageResp, error)
 	GetArticle(ctx context.Context, req *GetArticleReq) (*ArticleDetail, error)
 	ViewArticle(ctx context.Context, req *ViewArticleReq) error
 	LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error)

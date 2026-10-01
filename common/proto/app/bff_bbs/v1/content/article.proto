@@ -77,6 +77,14 @@ service ArticleService {
     };
   }
 
+  // 查询当前账号的浏览历史。
+  rpc PageViewHistory(PageArticleViewHistory.Req) returns (PageArticleViewHistory.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/view-history/page"
+      body: "*"
+    };
+  }
+
   // 点赞文章
   rpc Like(LikeArticle.Req) returns (LikeArticle.Resp) {
     option (google.api.http) = {
@@ -246,6 +254,21 @@ message GetArticle {
   message Resp {
     ArticleDetail article = 1; // 文章详情
   }
+}
+
+message PageArticleViewHistory {
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 可选，分页参数
+  }
+  message Resp {
+    repeated ArticleViewHistoryItem rows = 1;
+    .common.api.app.common.PageResp page = 2;
+  }
+}
+
+message ArticleViewHistoryItem {
+  ArticleListItem article = 1; // 当前仍可展示的文章
+  google.protobuf.Timestamp viewed_at = 2; // 最近浏览时间
 }
 
 message LikeArticle {

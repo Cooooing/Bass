@@ -156,6 +156,30 @@ type ListArticlesResp struct {
 	Rows []*repo.ArticleListItem
 }
 
+type ArticleViewHistoryPageResp struct {
+	Rows []*repo.ArticleViewHistoryRow
+	Page *repo.PageResp
+}
+
+func (u *ContentArticleUsecase) PageViewHistory(
+	ctx context.Context,
+	userID int64,
+	page *common.PageReq,
+) (*ArticleViewHistoryPageResp, error) {
+	if userID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	var requestPage *repo.PageReq
+	if page != nil {
+		requestPage = &repo.PageReq{Page: page.GetPage(), Size: page.GetSize()}
+	}
+	result, err := u.contentArticleClient.PageViewHistory(ctx, userID, requestPage)
+	if err != nil {
+		return nil, err
+	}
+	return &ArticleViewHistoryPageResp{Rows: result.Rows, Page: result.Page}, nil
+}
+
 func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error) {
 	if req == nil {
 		req = &ListArticlesReq{}

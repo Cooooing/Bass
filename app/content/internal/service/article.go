@@ -479,6 +479,96 @@ func (s *ArticleService) View(ctx context.Context, req *v1.ViewArticle_Req) (*v1
 	return &v1.ViewArticle_Resp{}, s.articleUsecase.View(ctx, &usecase.ArticleViewReq{Access: access, ArticleID: req.GetArticleId(), IP: req.Ip, UserAgent: req.UserAgent, BrowserFingerprint: req.BrowserFingerprint})
 }
 
+func (s *ArticleService) PageViewHistory(
+	ctx context.Context,
+	req *v1.PageArticleViewHistory_Req,
+) (*v1.PageArticleViewHistory_Resp, error) {
+	access := &model.ContentAccess{Scope: enum.ContentAccessScopeUser}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	var pageRequest *base.PageRequest
+	if pageReq := req.GetPage(); pageReq != nil {
+		pageRequest = &base.PageRequest{Page: int64(pageReq.GetPage()), Size: int64(pageReq.GetSize())}
+	}
+	result, err := s.articleUsecase.PageViewHistory(ctx, access, pageRequest)
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*v1.ArticleViewHistoryItem, 0, len(result.Rows))
+	for _, row := range result.Rows {
+		if row == nil || row.Article == nil {
+			continue
+		}
+		item := &v1.ArticleViewHistoryItem{Article: s.articleViewHistoryArticle(row.Article)}
+		if row.ViewedAt != nil {
+			item.ViewedAt = timestamppb.New(*row.ViewedAt)
+		}
+		rows = append(rows, item)
+	}
+	var pageResponse *common.PageResp
+	if result.Page != nil {
+		pageResponse = &common.PageResp{
+			Total: uint32(result.Page.Total),
+			Page:  uint32(result.Page.Page),
+			Size:  uint32(result.Page.Size),
+		}
+	}
+	return &v1.PageArticleViewHistory_Resp{Rows: rows, Page: pageResponse}, nil
+}
+
+func (*ArticleService) articleViewHistoryArticle(row *model.Article) *v1.Article {
+	if row == nil {
+		return nil
+	}
+	article := &v1.Article{
+		Id:            row.ID,
+		Title:         row.Title,
+		Content:       row.Content,
+		RewardContent: row.RewardContent,
+		RewardPoints:  row.RewardPoints,
+		HasPostscript: row.HasPostscript,
+		HasReward:     row.RewardPoints != nil,
+		Type:          enum.ArticleTypeMap.MustToProto(row.Type),
+		Statement:     row.Statement,
+		Commentable:   row.Commentable,
+		PublishStatus: enum.ArticlePublishStatusMap.MustToProto(row.PublishStatus),
+		Visibility:    enum.ArticleVisibilityMap.MustToProto(row.Visibility),
+		Restriction:   enum.ContentRestrictionMap.MustToProto(row.Restriction),
+		ViewCount:     row.ViewCount,
+		ThankCount:    row.ThankCount,
+		LikeCount:     row.LikeCount,
+		CollectCount:  row.CollectCount,
+		RewardCount:   row.RewardCount,
+		ReplyCount:    row.ReplyCount,
+		CreatedBy:     row.CreatedBy,
+		UpdatedBy:     row.UpdatedBy,
+		PublishedCity: row.PublishedCity,
+	}
+	if row.CreatedAt != nil {
+		article.CreatedAt = timestamppb.New(*row.CreatedAt)
+	}
+	if row.UpdatedAt != nil {
+		article.UpdatedAt = timestamppb.New(*row.UpdatedAt)
+	}
+	if row.PublishedAt != nil {
+		article.PublishedAt = timestamppb.New(*row.PublishedAt)
+	}
+	if row.EditedAt != nil {
+		article.EditedAt = timestamppb.New(*row.EditedAt)
+	}
+	return article
+}
+
 func (s *ArticleService) FlushViews(ctx context.Context, req *v1.FlushArticleViews_Req) (*v1.FlushArticleViews_Resp, error) {
 	flushed, err := s.articleUsecase.FlushViews(ctx, &usecase.ArticleFlushViewsReq{Limit: req.GetLimit()})
 	if err != nil {

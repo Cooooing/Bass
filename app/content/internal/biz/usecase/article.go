@@ -460,6 +460,18 @@ func (d *ArticleUsecase) View(ctx context.Context, req *ArticleViewReq) error {
 	if err = article.CanView(access); err != nil {
 		return err
 	}
+	if access.ActorUserID > 0 {
+		if err = d.viewRecordRepo.Save(ctx, &model.ArticleViewRecord{
+			ArticleID:          req.ArticleID,
+			UserID:             access.ActorUserID,
+			IP:                 req.IP,
+			UserAgent:          req.UserAgent,
+			BrowserFingerprint: req.BrowserFingerprint,
+			ViewedAt:           new(time.Now()),
+		}); err != nil {
+			return err
+		}
+	}
 	created, err := d.viewCacheRepo.Record(ctx, &repo.ArticleViewCacheRecordReq{
 		ArticleID:          req.ArticleID,
 		ViewerUserID:       new(access.ActorUserID),
@@ -470,17 +482,64 @@ func (d *ArticleUsecase) View(ctx context.Context, req *ArticleViewReq) error {
 	if err != nil || !created {
 		return err
 	}
-	if access.ActorUserID <= 0 {
-		return nil
+	return nil
+}
+
+type ArticleViewHistoryRow struct {
+	Article  *model.Article
+	ViewedAt *time.Time
+}
+
+type ArticleViewHistoryPageResp struct {
+	Rows []*ArticleViewHistoryRow
+	Page *base.PageResp
+}
+
+func (d *ArticleUsecase) PageViewHistory(
+	ctx context.Context,
+	access *model.ContentAccess,
+	page *base.PageRequest,
+) (*ArticleViewHistoryPageResp, error) {
+	access, err := access.Normalize("")
+	if err != nil {
+		return nil, err
 	}
-	return d.viewRecordRepo.Save(ctx, &model.ArticleViewRecord{
-		ArticleID:          req.ArticleID,
-		UserID:             access.ActorUserID,
-		IP:                 req.IP,
-		UserAgent:          req.UserAgent,
-		BrowserFingerprint: req.BrowserFingerprint,
-		ViewedAt:           new(time.Now()),
+	if access.Scope != enum.ContentAccessScopeUser {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+	}
+	history, err := d.viewRecordRepo.Page(ctx, &repo.ArticleViewRecordPageReq{
+		UserID: access.ActorUserID,
+		Page:   page,
 	})
+	if err != nil {
+		return nil, err
+	}
+	articleIDs := make([]int64, 0, len(history.Rows))
+	for _, row := range history.Rows {
+		if row != nil && row.ArticleID > 0 {
+			articleIDs = append(articleIDs, row.ArticleID)
+		}
+	}
+	publishStatus := enum.ArticlePublishStatusPublished
+	visibility := enum.ArticleVisibilityPublic
+	restriction := enum.ContentRestrictionNone
+	articles, err := d.articleRepo.Map(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{
+		ArticleIDs:    articleIDs,
+		PublishStatus: &publishStatus,
+		Visibility:    &visibility,
+		Restriction:   &restriction,
+	}})
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*ArticleViewHistoryRow, 0, len(history.Rows))
+	for _, row := range history.Rows {
+		if row == nil || articles[row.ArticleID] == nil {
+			continue
+		}
+		rows = append(rows, &ArticleViewHistoryRow{Article: articles[row.ArticleID], ViewedAt: row.ViewedAt})
+	}
+	return &ArticleViewHistoryPageResp{Rows: rows, Page: history.Page}, nil
 }
 
 type ArticleFlushViewsReq struct {

@@ -42,7 +42,7 @@ var ModuleProviderSet = wire.NewSet(
 	NewContentCommentClient,
 	NewContentDomainClient,
 	NewContentTagClient,
-	NewContentBreezemoonClient,
+	NewContentMoonbreezeClient,
 	NewNotificationClient,
 )
 

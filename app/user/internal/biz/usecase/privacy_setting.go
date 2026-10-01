@@ -27,15 +27,15 @@ func (s *PrivacySettingUsecase) GetByUserID(ctx context.Context, userID int64) (
 	}
 	public := true
 	return &model.PrivacySetting{
-		UserID:             userID,
-		PublicPoints:       &public,
-		PublicFollowers:    &public,
-		PublicFollowing:    &public,
-		PublicArticles:     &public,
-		PublicComments:     &public,
-		PublicOnlineStatus: &public,
-		PublicLocation:     &public,
-		PublicBreezemoons:  &public,
+		UserID:               userID,
+		PublicPoints:         &public,
+		PublicFollowerList:   &public,
+		PublicFollowingList:  &public,
+		PublicArticleList:    &public,
+		PublicCommentList:    &public,
+		PublicOnlineStatus:   &public,
+		PublicLocation:       &public,
+		PublicMoonbreezeList: &public,
 	}, nil
 }
 
@@ -57,15 +57,15 @@ func (s *PrivacySettingUsecase) MapByUserIDs(ctx context.Context, userIDs []int6
 			continue
 		}
 		result[userID] = &model.PrivacySetting{
-			UserID:             userID,
-			PublicPoints:       &public,
-			PublicFollowers:    &public,
-			PublicFollowing:    &public,
-			PublicArticles:     &public,
-			PublicComments:     &public,
-			PublicOnlineStatus: &public,
-			PublicLocation:     &public,
-			PublicBreezemoons:  &public,
+			UserID:               userID,
+			PublicPoints:         &public,
+			PublicFollowerList:   &public,
+			PublicFollowingList:  &public,
+			PublicArticleList:    &public,
+			PublicCommentList:    &public,
+			PublicOnlineStatus:   &public,
+			PublicLocation:       &public,
+			PublicMoonbreezeList: &public,
 		}
 	}
 	return result, nil

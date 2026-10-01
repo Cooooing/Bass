@@ -148,8 +148,8 @@ func (u *AccountUsecase) ListFollowing(ctx context.Context, name string, viewerI
 	if err != nil {
 		return nil, err
 	}
-	if viewerID != account.ID && privacy.PublicFollowing != nil && !*privacy.PublicFollowing {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWING_PRIVATE)
+	if viewerID != account.ID && privacy.PublicFollowingList != nil && !*privacy.PublicFollowingList {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWING_LIST_PRIVATE)
 	}
 	result, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{ActorID: account.ID, Page: page})
 	if err != nil {
@@ -167,8 +167,8 @@ func (u *AccountUsecase) ListFollowers(ctx context.Context, name string, viewerI
 	if err != nil {
 		return nil, err
 	}
-	if viewerID != account.ID && privacy.PublicFollowers != nil && !*privacy.PublicFollowers {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWERS_PRIVATE)
+	if viewerID != account.ID && privacy.PublicFollowerList != nil && !*privacy.PublicFollowerList {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWER_LIST_PRIVATE)
 	}
 	result, err := u.relationClient.ListFollowers(ctx, &repo.ListFollowersRelationsReq{ActorID: account.ID, Page: page})
 	if err != nil {
@@ -259,10 +259,11 @@ func (*AccountUsecase) accountProfile(account *repo.AccountProfile) *bbsuserv1.A
 
 func (*AccountUsecase) profileVisibility(setting *repo.PrivacySetting) *bbsuserv1.ProfileVisibility {
 	return &bbsuserv1.ProfileVisibility{
-		Articles:  setting.PublicArticles == nil || *setting.PublicArticles,
-		Comments:  setting.PublicComments == nil || *setting.PublicComments,
-		Followers: setting.PublicFollowers == nil || *setting.PublicFollowers,
-		Following: setting.PublicFollowing == nil || *setting.PublicFollowing,
+		ArticleList:    setting.PublicArticleList == nil || *setting.PublicArticleList,
+		CommentList:    setting.PublicCommentList == nil || *setting.PublicCommentList,
+		FollowerList:   setting.PublicFollowerList == nil || *setting.PublicFollowerList,
+		FollowingList:  setting.PublicFollowingList == nil || *setting.PublicFollowingList,
+		MoonbreezeList: setting.PublicMoonbreezeList == nil || *setting.PublicMoonbreezeList,
 	}
 }
 

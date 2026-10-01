@@ -108,10 +108,11 @@ message AccountProfile {
 }
 
 message ProfileVisibility {
-  bool articles = 1;
-  bool comments = 2;
-  bool followers = 3;
-  bool following = 4;
+  bool article_list = 1;
+  bool comment_list = 2;
+  bool follower_list = 3;
+  bool following_list = 4;
+  bool moonbreeze_list = 5;
 }
 
 message ProfileRelation {

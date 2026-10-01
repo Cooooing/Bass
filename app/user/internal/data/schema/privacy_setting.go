@@ -36,13 +36,13 @@ func (PrivacySetting) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("user_id").Comment("账号 ID").Unique(),
 		field.Bool("public_points").Comment("积分是否公开").Default(true),
-		field.Bool("public_followers").Comment("粉丝列表是否公开").Default(true),
-		field.Bool("public_following").Comment("关注列表是否公开").Default(true),
-		field.Bool("public_articles").Comment("文章列表是否公开").Default(true),
-		field.Bool("public_comments").Comment("评论列表是否公开").Default(true),
+		field.Bool("public_follower_list").Comment("粉丝列表是否公开").Default(true),
+		field.Bool("public_following_list").Comment("关注列表是否公开").Default(true),
+		field.Bool("public_article_list").Comment("帖子列表是否公开").Default(true),
+		field.Bool("public_comment_list").Comment("回复列表是否公开").Default(true),
 		field.Bool("public_online_status").Comment("在线状态是否公开").Default(true),
 		field.Bool("public_location").Comment("位置是否公开").Default(true),
-		field.Bool("public_breezemoons").Comment("明月清风是否公开").Default(true),
+		field.Bool("public_moonbreeze_list").Comment("清风明月列表是否公开").Default(true),
 	}
 }
 

@@ -9,25 +9,25 @@ type PrivacySettingClient interface {
 }
 
 type PrivacySetting struct {
-	UserID             int64
-	PublicPoints       *bool
-	PublicFollowers    *bool
-	PublicFollowing    *bool
-	PublicArticles     *bool
-	PublicComments     *bool
-	PublicOnlineStatus *bool
-	PublicLocation     *bool
-	PublicBreezemoons  *bool
+	UserID               int64
+	PublicPoints         *bool
+	PublicFollowerList   *bool
+	PublicFollowingList  *bool
+	PublicArticleList    *bool
+	PublicCommentList    *bool
+	PublicOnlineStatus   *bool
+	PublicLocation       *bool
+	PublicMoonbreezeList *bool
 }
 
 type UpdateCurrentPrivacySettingReq struct {
-	UserID             int64
-	PublicPoints       *bool
-	PublicFollowers    *bool
-	PublicFollowing    *bool
-	PublicArticles     *bool
-	PublicComments     *bool
-	PublicOnlineStatus *bool
-	PublicLocation     *bool
-	PublicBreezemoons  *bool
+	UserID               int64
+	PublicPoints         *bool
+	PublicFollowerList   *bool
+	PublicFollowingList  *bool
+	PublicArticleList    *bool
+	PublicCommentList    *bool
+	PublicOnlineStatus   *bool
+	PublicLocation       *bool
+	PublicMoonbreezeList *bool
 }

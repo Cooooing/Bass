@@ -56,15 +56,15 @@ func (s *PrivacySettingService) Map(ctx context.Context, req *v1.MapPrivacySetti
 
 func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivacySetting_Req) (*v1.UpdatePrivacySetting_Resp, error) {
 	res, err := s.privacySettingUsecase.UpsertByUserID(ctx, &model.PrivacySetting{
-		UserID:             req.GetUserId(),
-		PublicPoints:       req.PublicPoints,
-		PublicFollowers:    req.PublicFollowers,
-		PublicFollowing:    req.PublicFollowing,
-		PublicArticles:     req.PublicArticles,
-		PublicComments:     req.PublicComments,
-		PublicOnlineStatus: req.PublicOnlineStatus,
-		PublicLocation:     req.PublicLocation,
-		PublicBreezemoons:  req.PublicBreezemoons,
+		UserID:               req.GetUserId(),
+		PublicPoints:         req.PublicPoints,
+		PublicFollowerList:   req.PublicFollowerList,
+		PublicFollowingList:  req.PublicFollowingList,
+		PublicArticleList:    req.PublicArticleList,
+		PublicCommentList:    req.PublicCommentList,
+		PublicOnlineStatus:   req.PublicOnlineStatus,
+		PublicLocation:       req.PublicLocation,
+		PublicMoonbreezeList: req.PublicMoonbreezeList,
 	})
 	if err != nil {
 		return nil, err
@@ -77,14 +77,14 @@ func (*PrivacySettingService) privacySettingReply(setting *model.PrivacySetting)
 		return nil
 	}
 	return &v1.PrivacySetting{
-		UserId:             setting.UserID,
-		PublicPoints:       setting.PublicPoints,
-		PublicFollowers:    setting.PublicFollowers,
-		PublicFollowing:    setting.PublicFollowing,
-		PublicArticles:     setting.PublicArticles,
-		PublicComments:     setting.PublicComments,
-		PublicOnlineStatus: setting.PublicOnlineStatus,
-		PublicLocation:     setting.PublicLocation,
-		PublicBreezemoons:  setting.PublicBreezemoons,
+		UserId:               setting.UserID,
+		PublicPoints:         setting.PublicPoints,
+		PublicFollowerList:   setting.PublicFollowerList,
+		PublicFollowingList:  setting.PublicFollowingList,
+		PublicArticleList:    setting.PublicArticleList,
+		PublicCommentList:    setting.PublicCommentList,
+		PublicOnlineStatus:   setting.PublicOnlineStatus,
+		PublicLocation:       setting.PublicLocation,
+		PublicMoonbreezeList: setting.PublicMoonbreezeList,
 	}
 }

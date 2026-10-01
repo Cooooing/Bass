@@ -15,48 +15,48 @@ import (
 )
 
 const (
-	breezemoonMaxCharacters = 512
-	breezemoonRateWindow    = time.Hour
-	breezemoonRateMaximum   = 5
+	moonbreezeMaxCharacters = 512
+	moonbreezeRateWindow    = time.Hour
+	moonbreezeRateMaximum   = 5
 )
 
-type BreezemoonUsecase struct {
-	breezemoonRepo repo.BreezemoonRepo
-	rateLimitCache repo.BreezemoonRateLimitCache
+type MoonbreezeUsecase struct {
+	moonbreezeRepo repo.MoonbreezeRepo
+	rateLimitCache repo.MoonbreezeRateLimitCache
 }
 
-func NewBreezemoonUsecase(
-	breezemoonRepo repo.BreezemoonRepo,
-	rateLimitCache repo.BreezemoonRateLimitCache,
-) *BreezemoonUsecase {
-	return &BreezemoonUsecase{
-		breezemoonRepo: breezemoonRepo,
+func NewMoonbreezeUsecase(
+	moonbreezeRepo repo.MoonbreezeRepo,
+	rateLimitCache repo.MoonbreezeRateLimitCache,
+) *MoonbreezeUsecase {
+	return &MoonbreezeUsecase{
+		moonbreezeRepo: moonbreezeRepo,
 		rateLimitCache: rateLimitCache,
 	}
 }
 
-type CreateBreezemoonReq struct {
+type CreateMoonbreezeReq struct {
 	Content  string
 	AuthorID int64
 	City     *string
 }
 
-func (u *BreezemoonUsecase) Create(ctx context.Context, req *CreateBreezemoonReq) (*model.Breezemoon, error) {
+func (u *MoonbreezeUsecase) Create(ctx context.Context, req *CreateMoonbreezeReq) (*model.Moonbreeze, error) {
 	if req == nil || req.AuthorID <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_BREEZEMOON_INVALID)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}
 	content := strings.TrimSpace(req.Content)
-	if content == "" || strings.ContainsAny(content, "\r\n") || utf8.RuneCountInString(content) > breezemoonMaxCharacters {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_BREEZEMOON_INVALID)
+	if content == "" || strings.ContainsAny(content, "\r\n") || utf8.RuneCountInString(content) > moonbreezeMaxCharacters {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}
-	state, err := u.rateLimitCache.Allow(ctx, req.AuthorID, breezemoonRateWindow, breezemoonRateMaximum)
+	state, err := u.rateLimitCache.Allow(ctx, req.AuthorID, moonbreezeRateWindow, moonbreezeRateMaximum)
 	if err != nil {
 		return nil, err
 	}
 	if !state.Allowed {
 		retryAfterSeconds := int64((state.RetryAfter + time.Second - 1) / time.Second)
 		return nil, apperror.New(
-			cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_BREEZEMOON_RATE_LIMITED,
+			cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_RATE_LIMITED,
 			apperror.WithData(&cerrors.RetryAfterErrorData{
 				RetryAfterSeconds: retryAfterSeconds,
 			}),
@@ -77,31 +77,31 @@ func (u *BreezemoonUsecase) Create(ctx context.Context, req *CreateBreezemoonReq
 			city = &value
 		}
 	}
-	return u.breezemoonRepo.Create(ctx, &model.Breezemoon{
+	return u.moonbreezeRepo.Create(ctx, &model.Moonbreeze{
 		Content:  content,
 		AuthorID: req.AuthorID,
 		City:     city,
 	})
 }
 
-type PageBreezemoonsReq struct {
+type PageMoonbreezesReq struct {
 	AuthorIDs []int64
 	Cursor    *string
 	Size      int
 }
 
-type PageBreezemoonsResp struct {
-	Rows       []*model.Breezemoon
+type PageMoonbreezesResp struct {
+	Rows       []*model.Moonbreeze
 	NextCursor *string
 }
 
-func (u *BreezemoonUsecase) Page(ctx context.Context, req *PageBreezemoonsReq) (*PageBreezemoonsResp, error) {
+func (u *MoonbreezeUsecase) Page(ctx context.Context, req *PageMoonbreezesReq) (*PageMoonbreezesResp, error) {
 	if req == nil {
-		req = &PageBreezemoonsReq{}
+		req = &PageMoonbreezesReq{}
 	}
 	beforeAt, beforeID, err := u.decodeCursor(req.Cursor)
 	if err != nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_BREEZEMOON_INVALID)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}
 	size := req.Size
 	if size <= 0 || size > 50 {
@@ -110,7 +110,7 @@ func (u *BreezemoonUsecase) Page(ctx context.Context, req *PageBreezemoonsReq) (
 	// Reading one additional record tells callers whether a continuation exists.
 	// It also keeps the public cursor positioned exactly after the last returned
 	// row, which is essential when multiple rows share one created_at value.
-	page, err := u.breezemoonRepo.Page(ctx, &repo.BreezemoonPageReq{
+	page, err := u.moonbreezeRepo.Page(ctx, &repo.MoonbreezePageReq{
 		AuthorIDs: req.AuthorIDs,
 		BeforeAt:  beforeAt,
 		BeforeID:  beforeID,
@@ -119,7 +119,7 @@ func (u *BreezemoonUsecase) Page(ctx context.Context, req *PageBreezemoonsReq) (
 	if err != nil {
 		return nil, err
 	}
-	result := &PageBreezemoonsResp{Rows: page.Rows}
+	result := &PageMoonbreezesResp{Rows: page.Rows}
 	if len(page.Rows) > size {
 		result.Rows = page.Rows[:size]
 		result.NextCursor = u.encodeCursor(result.Rows[len(result.Rows)-1])
@@ -127,13 +127,13 @@ func (u *BreezemoonUsecase) Page(ctx context.Context, req *PageBreezemoonsReq) (
 	return result, nil
 }
 
-// BreezemoonCursor is the opaque cursor payload for stable dynamic pagination.
-type BreezemoonCursor struct {
+// MoonbreezeCursor is the opaque cursor payload for stable dynamic pagination.
+type MoonbreezeCursor struct {
 	CreatedAt time.Time `json:"created_at"`
 	ID        int64     `json:"id"`
 }
 
-func (*BreezemoonUsecase) decodeCursor(value *string) (*time.Time, *int64, error) {
+func (*MoonbreezeUsecase) decodeCursor(value *string) (*time.Time, *int64, error) {
 	if value == nil || *value == "" {
 		return nil, nil, nil
 	}
@@ -141,18 +141,18 @@ func (*BreezemoonUsecase) decodeCursor(value *string) (*time.Time, *int64, error
 	if err != nil {
 		return nil, nil, err
 	}
-	var cursor BreezemoonCursor
+	var cursor MoonbreezeCursor
 	if err = json.Unmarshal(decoded, &cursor); err != nil || cursor.ID <= 0 || cursor.CreatedAt.IsZero() {
-		return nil, nil, errors.New("invalid breezemoon cursor")
+		return nil, nil, errors.New("invalid moonbreeze cursor")
 	}
 	return &cursor.CreatedAt, &cursor.ID, nil
 }
 
-func (*BreezemoonUsecase) encodeCursor(row *model.Breezemoon) *string {
+func (*MoonbreezeUsecase) encodeCursor(row *model.Moonbreeze) *string {
 	if row == nil || row.CreatedAt == nil {
 		return nil
 	}
-	encoded, err := json.Marshal(BreezemoonCursor{
+	encoded, err := json.Marshal(MoonbreezeCursor{
 		CreatedAt: row.CreatedAt.UTC(),
 		ID:        row.ID,
 	})

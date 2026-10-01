@@ -2,8 +2,8 @@ package model
 
 import "time"
 
-// Breezemoon 是明月清风短动态的领域事实。
-type Breezemoon struct {
+// Moonbreeze 是清风明月短动态的领域事实。
+type Moonbreeze struct {
 	ID        int64
 	Content   string
 	AuthorID  int64

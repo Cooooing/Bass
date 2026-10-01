@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.v1.content;
+
+import "bff_bbs/v1/content/article.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/bff_bbs/v1/content;content";
+
+// MoonbreezeService 提供社区短动态入口。
+service MoonbreezeService {
+  rpc Create(CreateMoonbreeze.Req) returns (CreateMoonbreeze.Resp) {
+    option (google.api.http) = { post: "/v1/content/moonbreeze/create" body: "*" };
+  }
+  rpc PagePublic(PagePublicMoonbreezes.Req) returns (PageMoonbreezes.Resp) {
+    option (google.api.http) = { post: "/v1/content/moonbreeze/page-public" body: "*" };
+  }
+  rpc PageWatching(PageWatchingMoonbreezes.Req) returns (PageMoonbreezes.Resp) {
+    option (google.api.http) = { post: "/v1/content/moonbreeze/page-watching" body: "*" };
+  }
+  rpc PageMember(PageMemberMoonbreezes.Req) returns (PageMoonbreezes.Resp) {
+    option (google.api.http) = { post: "/v1/content/moonbreeze/page-member" body: "*" };
+  }
+}
+
+message CreateMoonbreeze {
+  message Req {
+    string content = 1;
+  }
+  message Resp {
+    Moonbreeze moonbreeze = 1;
+  }
+}
+
+message PagePublicMoonbreezes {
+  message Req {
+    optional string cursor = 1;
+    uint32 size = 2;
+  }
+}
+
+message PageWatchingMoonbreezes {
+  message Req {
+    optional string cursor = 1;
+    uint32 size = 2;
+  }
+}
+
+message PageMemberMoonbreezes {
+  message Req {
+    string name = 1;
+    optional string cursor = 2;
+    uint32 size = 3;
+  }
+}
+
+message PageMoonbreezes {
+  message Resp {
+    repeated Moonbreeze rows = 1;
+    optional string next_cursor = 2;
+  }
+}
+
+message Moonbreeze {
+  int64 id = 1;
+  string content = 2;
+  AccountProfile author = 3;
+  optional string city = 4;
+  google.protobuf.Timestamp created_at = 1000;
+}

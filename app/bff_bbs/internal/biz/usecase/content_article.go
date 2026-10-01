@@ -165,8 +165,8 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 		if err != nil {
 			return nil, err
 		}
-		if privacy.PublicArticles != nil && !*privacy.PublicArticles {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_ARTICLES_PRIVATE)
+		if privacy.PublicArticleList != nil && !*privacy.PublicArticleList {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_ARTICLE_LIST_PRIVATE)
 		}
 	}
 	var page *repo.PageReq
@@ -224,9 +224,6 @@ func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleR
 		privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, *resp.CreatedBy)
 		if err != nil {
 			return nil, err
-		}
-		if privacy != nil && privacy.PublicArticles != nil && !*privacy.PublicArticles {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_ARTICLES_PRIVATE)
 		}
 		if privacy != nil && privacy.PublicLocation != nil && !*privacy.PublicLocation {
 			resp.City = nil

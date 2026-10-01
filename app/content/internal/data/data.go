@@ -43,8 +43,8 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewUserClient,
 	repo.NewDelayedTaskClient,
 	repo.NewNatsEventClient,
-	repo.NewBreezemoonRepo,
-	repo.NewBreezemoonRateLimitCache,
+	repo.NewMoonbreezeRepo,
+	repo.NewMoonbreezeRateLimitCache,
 )
 
 func ProvideRedis(c *config.Bootstrap) *common.Redis {

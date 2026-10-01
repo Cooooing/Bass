@@ -17,13 +17,13 @@ service PrivacySettingService {
 message PrivacySetting {
   int64 user_id = 1;
   optional bool public_points = 2;
-  optional bool public_followers = 3;
-  optional bool public_following = 4;
-  optional bool public_articles = 5;
-  optional bool public_comments = 6;
+  optional bool public_follower_list = 3;
+  optional bool public_following_list = 4;
+  optional bool public_article_list = 5;
+  optional bool public_comment_list = 6;
   optional bool public_online_status = 7;
   optional bool public_location = 8;
-  optional bool public_breezemoons = 9;
+  optional bool public_moonbreeze_list = 9;
 }
 
 message GetPrivacySetting {
@@ -48,13 +48,13 @@ message UpdatePrivacySetting {
   message Req {
     int64 user_id = 1;
     optional bool public_points = 2;
-    optional bool public_followers = 3;
-    optional bool public_following = 4;
-    optional bool public_articles = 5;
-    optional bool public_comments = 6;
+    optional bool public_follower_list = 3;
+    optional bool public_following_list = 4;
+    optional bool public_article_list = 5;
+    optional bool public_comment_list = 6;
     optional bool public_online_status = 7;
     optional bool public_location = 8;
-    optional bool public_breezemoons = 9;
+    optional bool public_moonbreeze_list = 9;
   }
   message Resp {
     PrivacySetting privacy_setting = 1;

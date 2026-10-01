@@ -6,36 +6,36 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/content/v1;v1";
 
-// ContentBreezemoonService 提供短动态的事实写入与游标读取能力。
-service ContentBreezemoonService {
-  rpc Create(CreateBreezemoon.Req) returns (CreateBreezemoon.Resp) {}
-  rpc Page(PageBreezemoons.Req) returns (PageBreezemoons.Resp) {}
+// ContentMoonbreezeService 提供短动态的事实写入与游标读取能力。
+service ContentMoonbreezeService {
+  rpc Create(CreateMoonbreeze.Req) returns (CreateMoonbreeze.Resp) {}
+  rpc Page(PageMoonbreezes.Req) returns (PageMoonbreezes.Resp) {}
 }
 
-message CreateBreezemoon {
+message CreateMoonbreeze {
   message Req {
     string content = 1; // 动态正文
     int64 author_id = 2; // 作者账号 ID
     optional string city = 3; // 发布时城市快照
   }
   message Resp {
-    Breezemoon breezemoon = 1;
+    Moonbreeze moonbreeze = 1;
   }
 }
 
-message PageBreezemoons {
+message PageMoonbreezes {
   message Req {
     repeated int64 author_ids = 1; // 作者账号 ID；空表示全部作者
     optional string cursor = 2; // 不透明续页游标
     uint32 size = 3; // 页面大小
   }
   message Resp {
-    repeated Breezemoon rows = 1;
+    repeated Moonbreeze rows = 1;
     optional string next_cursor = 2; // 下一页游标
   }
 }
 
-message Breezemoon {
+message Moonbreeze {
   int64 id = 1;
   string content = 2;
   int64 author_id = 3;

@@ -11,16 +11,16 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-var _ repo.BreezemoonRateLimitCache = (*BreezemoonRateLimitCache)(nil)
+var _ repo.MoonbreezeRateLimitCache = (*MoonbreezeRateLimitCache)(nil)
 
-// BreezemoonRateLimitCache atomically trims and consumes each author's window.
-type BreezemoonRateLimitCache struct {
+// MoonbreezeRateLimitCache atomically trims and consumes each author's window.
+type MoonbreezeRateLimitCache struct {
 	redisClient *client.RedisClient
 	allowScript *redis.Script
 }
 
-func NewBreezemoonRateLimitCache(redisClient *client.RedisClient) repo.BreezemoonRateLimitCache {
-	return &BreezemoonRateLimitCache{
+func NewMoonbreezeRateLimitCache(redisClient *client.RedisClient) repo.MoonbreezeRateLimitCache {
+	return &MoonbreezeRateLimitCache{
 		redisClient: redisClient,
 		allowScript: redis.NewScript(`
 local key = KEYS[1]
@@ -40,9 +40,9 @@ return {1, 0}
 	}
 }
 
-func (c *BreezemoonRateLimitCache) Allow(ctx context.Context, authorID int64, window time.Duration, maxCount int64) (*repo.BreezemoonRateLimitState, error) {
+func (c *MoonbreezeRateLimitCache) Allow(ctx context.Context, authorID int64, window time.Duration, maxCount int64) (*repo.MoonbreezeRateLimitState, error) {
 	if c == nil || c.redisClient == nil || c.redisClient.Client == nil || authorID <= 0 || window <= 0 || maxCount <= 0 {
-		return nil, fmt.Errorf("invalid breezemoon rate limit specification")
+		return nil, fmt.Errorf("invalid moonbreeze rate limit specification")
 	}
 	result, err := c.allowScript.Run(
 		ctx,
@@ -56,13 +56,13 @@ func (c *BreezemoonRateLimitCache) Allow(ctx context.Context, authorID int64, wi
 	if err != nil {
 		return nil, err
 	}
-	state := &repo.BreezemoonRateLimitState{Allowed: len(result) > 0 && result[0] == 1}
+	state := &repo.MoonbreezeRateLimitState{Allowed: len(result) > 0 && result[0] == 1}
 	if len(result) > 1 && result[1] > 0 {
 		state.RetryAfter = time.Duration(result[1]) * time.Millisecond
 	}
 	return state, nil
 }
 
-func (*BreezemoonRateLimitCache) publishRateLimitKey(authorID int64) string {
-	return fmt.Sprintf("content:breezemoon:publish_rate_limit:{author_id:%d}", authorID)
+func (*MoonbreezeRateLimitCache) publishRateLimitKey(authorID int64) string {
+	return fmt.Sprintf("content:moonbreeze:publish_rate_limit:{author_id:%d}", authorID)
 }

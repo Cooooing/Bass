@@ -126,8 +126,8 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 		if err != nil {
 			return nil, err
 		}
-		if privacy.PublicComments != nil && !*privacy.PublicComments {
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_COMMENTS_PRIVATE)
+		if privacy.PublicCommentList != nil && !*privacy.PublicCommentList {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_COMMENT_LIST_PRIVATE)
 		}
 	}
 	resp, err := u.contentCommentClient.ListComments(ctx, &repo.ListCommentsReq{

@@ -11,19 +11,19 @@ import (
 	"entgo.io/ent/schema/index"
 )
 
-// Breezemoon 定义明月清风短动态实体。
-type Breezemoon struct {
+// Moonbreeze 定义清风明月短动态实体。
+type Moonbreeze struct {
 	ent.Schema
 }
 
-func (Breezemoon) Annotations() []schema.Annotation {
+func (Moonbreeze) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Table: constant.TablePrefixContent.String() + "breezemoons"},
+		entsql.Annotation{Table: constant.TablePrefixContent.String() + "moonbreezes"},
 		entsql.WithComments(true),
 	}
 }
 
-func (Breezemoon) Fields() []ent.Field {
+func (Moonbreeze) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Text("content").Comment("动态正文").NotEmpty(),
@@ -32,11 +32,11 @@ func (Breezemoon) Fields() []ent.Field {
 	}
 }
 
-func (Breezemoon) Mixin() []ent.Mixin {
+func (Moonbreeze) Mixin() []ent.Mixin {
 	return []ent.Mixin{utilent.TimeAuditMixin{}}
 }
 
-func (Breezemoon) Indexes() []ent.Index {
+func (Moonbreeze) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("created_at", "id"),
 		index.Fields("author_id", "created_at", "id"),

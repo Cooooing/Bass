@@ -115,16 +115,16 @@ func (r *PrivacySettingRepo) get(ctx context.Context, req *repo.PrivacySettingGe
 		return nil, err
 	}
 	return &model.PrivacySetting{
-		ID:                 p.ID,
-		UserID:             p.UserID,
-		PublicPoints:       new(p.PublicPoints),
-		PublicFollowers:    new(p.PublicFollowers),
-		PublicArticles:     new(p.PublicArticles),
-		PublicComments:     new(p.PublicComments),
-		PublicOnlineStatus: new(p.PublicOnlineStatus),
-		PublicLocation:     new(p.PublicLocation),
-		PublicBreezemoons:  new(p.PublicBreezemoons),
-		PublicFollowing:    new(p.PublicFollowing),
+		ID:                   p.ID,
+		UserID:               p.UserID,
+		PublicPoints:         new(p.PublicPoints),
+		PublicFollowerList:   new(p.PublicFollowerList),
+		PublicArticleList:    new(p.PublicArticleList),
+		PublicCommentList:    new(p.PublicCommentList),
+		PublicOnlineStatus:   new(p.PublicOnlineStatus),
+		PublicLocation:       new(p.PublicLocation),
+		PublicMoonbreezeList: new(p.PublicMoonbreezeList),
+		PublicFollowingList:  new(p.PublicFollowingList),
 	}, nil
 }
 
@@ -139,16 +139,16 @@ func (r *PrivacySettingRepo) list(ctx context.Context, req *repo.PrivacySettingG
 	result := make([]*model.PrivacySetting, 0, len(list))
 	for _, p := range list {
 		result = append(result, &model.PrivacySetting{
-			ID:                 p.ID,
-			UserID:             p.UserID,
-			PublicPoints:       new(p.PublicPoints),
-			PublicFollowers:    new(p.PublicFollowers),
-			PublicArticles:     new(p.PublicArticles),
-			PublicComments:     new(p.PublicComments),
-			PublicOnlineStatus: new(p.PublicOnlineStatus),
-			PublicLocation:     new(p.PublicLocation),
-			PublicBreezemoons:  new(p.PublicBreezemoons),
-			PublicFollowing:    new(p.PublicFollowing),
+			ID:                   p.ID,
+			UserID:               p.UserID,
+			PublicPoints:         new(p.PublicPoints),
+			PublicFollowerList:   new(p.PublicFollowerList),
+			PublicArticleList:    new(p.PublicArticleList),
+			PublicCommentList:    new(p.PublicCommentList),
+			PublicOnlineStatus:   new(p.PublicOnlineStatus),
+			PublicLocation:       new(p.PublicLocation),
+			PublicMoonbreezeList: new(p.PublicMoonbreezeList),
+			PublicFollowingList:  new(p.PublicFollowingList),
 		})
 	}
 	return result, nil
@@ -192,16 +192,16 @@ func (r *PrivacySettingRepo) page(ctx context.Context, page *common.PageReq, req
 	result := make([]*model.PrivacySetting, 0, len(list))
 	for _, p := range list {
 		result = append(result, &model.PrivacySetting{
-			ID:                 p.ID,
-			UserID:             p.UserID,
-			PublicPoints:       new(p.PublicPoints),
-			PublicFollowers:    new(p.PublicFollowers),
-			PublicArticles:     new(p.PublicArticles),
-			PublicComments:     new(p.PublicComments),
-			PublicOnlineStatus: new(p.PublicOnlineStatus),
-			PublicLocation:     new(p.PublicLocation),
-			PublicBreezemoons:  new(p.PublicBreezemoons),
-			PublicFollowing:    new(p.PublicFollowing),
+			ID:                   p.ID,
+			UserID:               p.UserID,
+			PublicPoints:         new(p.PublicPoints),
+			PublicFollowerList:   new(p.PublicFollowerList),
+			PublicArticleList:    new(p.PublicArticleList),
+			PublicCommentList:    new(p.PublicCommentList),
+			PublicOnlineStatus:   new(p.PublicOnlineStatus),
+			PublicLocation:       new(p.PublicLocation),
+			PublicMoonbreezeList: new(p.PublicMoonbreezeList),
+			PublicFollowingList:  new(p.PublicFollowingList),
 		})
 	}
 	return result, &common.PageResp{
@@ -225,14 +225,14 @@ func (r *PrivacySettingRepo) upsertByUserID(ctx context.Context, p *model.Privac
 		if p.PublicPoints != nil {
 			create.SetPublicPoints(*p.PublicPoints)
 		}
-		if p.PublicFollowers != nil {
-			create.SetPublicFollowers(*p.PublicFollowers)
+		if p.PublicFollowerList != nil {
+			create.SetPublicFollowerList(*p.PublicFollowerList)
 		}
-		if p.PublicArticles != nil {
-			create.SetPublicArticles(*p.PublicArticles)
+		if p.PublicArticleList != nil {
+			create.SetPublicArticleList(*p.PublicArticleList)
 		}
-		if p.PublicComments != nil {
-			create.SetPublicComments(*p.PublicComments)
+		if p.PublicCommentList != nil {
+			create.SetPublicCommentList(*p.PublicCommentList)
 		}
 		if p.PublicOnlineStatus != nil {
 			create.SetPublicOnlineStatus(*p.PublicOnlineStatus)
@@ -240,27 +240,27 @@ func (r *PrivacySettingRepo) upsertByUserID(ctx context.Context, p *model.Privac
 		if p.PublicLocation != nil {
 			create.SetPublicLocation(*p.PublicLocation)
 		}
-		if p.PublicBreezemoons != nil {
-			create.SetPublicBreezemoons(*p.PublicBreezemoons)
+		if p.PublicMoonbreezeList != nil {
+			create.SetPublicMoonbreezeList(*p.PublicMoonbreezeList)
 		}
-		if p.PublicFollowing != nil {
-			create.SetPublicFollowing(*p.PublicFollowing)
+		if p.PublicFollowingList != nil {
+			create.SetPublicFollowingList(*p.PublicFollowingList)
 		}
 		saved, err := create.Save(ctx)
 		if err != nil {
 			return nil, err
 		}
 		return &model.PrivacySetting{
-			ID:                 saved.ID,
-			UserID:             saved.UserID,
-			PublicPoints:       new(saved.PublicPoints),
-			PublicFollowers:    new(saved.PublicFollowers),
-			PublicArticles:     new(saved.PublicArticles),
-			PublicComments:     new(saved.PublicComments),
-			PublicOnlineStatus: new(saved.PublicOnlineStatus),
-			PublicLocation:     new(saved.PublicLocation),
-			PublicBreezemoons:  new(saved.PublicBreezemoons),
-			PublicFollowing:    new(saved.PublicFollowing),
+			ID:                   saved.ID,
+			UserID:               saved.UserID,
+			PublicPoints:         new(saved.PublicPoints),
+			PublicFollowerList:   new(saved.PublicFollowerList),
+			PublicArticleList:    new(saved.PublicArticleList),
+			PublicCommentList:    new(saved.PublicCommentList),
+			PublicOnlineStatus:   new(saved.PublicOnlineStatus),
+			PublicLocation:       new(saved.PublicLocation),
+			PublicMoonbreezeList: new(saved.PublicMoonbreezeList),
+			PublicFollowingList:  new(saved.PublicFollowingList),
 		}, nil
 	}
 	p.ID = existing.ID
@@ -270,42 +270,42 @@ func (r *PrivacySettingRepo) upsertByUserID(ctx context.Context, p *model.Privac
 func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting) (*model.PrivacySetting, error) {
 	tx := r.getClient(ctx)
 	if p.PublicPoints == nil &&
-		p.PublicFollowers == nil &&
-		p.PublicArticles == nil &&
-		p.PublicComments == nil &&
+		p.PublicFollowerList == nil &&
+		p.PublicArticleList == nil &&
+		p.PublicCommentList == nil &&
 		p.PublicOnlineStatus == nil &&
 		p.PublicLocation == nil &&
-		p.PublicBreezemoons == nil &&
-		p.PublicFollowing == nil {
+		p.PublicMoonbreezeList == nil &&
+		p.PublicFollowingList == nil {
 		saved, err := tx.PrivacySetting.Get(ctx, p.ID)
 		if err != nil {
 			return nil, err
 		}
 		return &model.PrivacySetting{
-			ID:                 saved.ID,
-			UserID:             saved.UserID,
-			PublicPoints:       new(saved.PublicPoints),
-			PublicFollowers:    new(saved.PublicFollowers),
-			PublicArticles:     new(saved.PublicArticles),
-			PublicComments:     new(saved.PublicComments),
-			PublicOnlineStatus: new(saved.PublicOnlineStatus),
-			PublicLocation:     new(saved.PublicLocation),
-			PublicBreezemoons:  new(saved.PublicBreezemoons),
-			PublicFollowing:    new(saved.PublicFollowing),
+			ID:                   saved.ID,
+			UserID:               saved.UserID,
+			PublicPoints:         new(saved.PublicPoints),
+			PublicFollowerList:   new(saved.PublicFollowerList),
+			PublicArticleList:    new(saved.PublicArticleList),
+			PublicCommentList:    new(saved.PublicCommentList),
+			PublicOnlineStatus:   new(saved.PublicOnlineStatus),
+			PublicLocation:       new(saved.PublicLocation),
+			PublicMoonbreezeList: new(saved.PublicMoonbreezeList),
+			PublicFollowingList:  new(saved.PublicFollowingList),
 		}, nil
 	}
 	update := tx.PrivacySetting.UpdateOneID(p.ID)
 	if p.PublicPoints != nil {
 		update.SetPublicPoints(*p.PublicPoints)
 	}
-	if p.PublicFollowers != nil {
-		update.SetPublicFollowers(*p.PublicFollowers)
+	if p.PublicFollowerList != nil {
+		update.SetPublicFollowerList(*p.PublicFollowerList)
 	}
-	if p.PublicArticles != nil {
-		update.SetPublicArticles(*p.PublicArticles)
+	if p.PublicArticleList != nil {
+		update.SetPublicArticleList(*p.PublicArticleList)
 	}
-	if p.PublicComments != nil {
-		update.SetPublicComments(*p.PublicComments)
+	if p.PublicCommentList != nil {
+		update.SetPublicCommentList(*p.PublicCommentList)
 	}
 	if p.PublicOnlineStatus != nil {
 		update.SetPublicOnlineStatus(*p.PublicOnlineStatus)
@@ -313,27 +313,27 @@ func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting
 	if p.PublicLocation != nil {
 		update.SetPublicLocation(*p.PublicLocation)
 	}
-	if p.PublicBreezemoons != nil {
-		update.SetPublicBreezemoons(*p.PublicBreezemoons)
+	if p.PublicMoonbreezeList != nil {
+		update.SetPublicMoonbreezeList(*p.PublicMoonbreezeList)
 	}
-	if p.PublicFollowing != nil {
-		update.SetPublicFollowing(*p.PublicFollowing)
+	if p.PublicFollowingList != nil {
+		update.SetPublicFollowingList(*p.PublicFollowingList)
 	}
 	saved, err := update.Save(ctx)
 	if err != nil {
 		return nil, err
 	}
 	return &model.PrivacySetting{
-		ID:                 saved.ID,
-		UserID:             saved.UserID,
-		PublicPoints:       new(saved.PublicPoints),
-		PublicFollowers:    new(saved.PublicFollowers),
-		PublicArticles:     new(saved.PublicArticles),
-		PublicComments:     new(saved.PublicComments),
-		PublicOnlineStatus: new(saved.PublicOnlineStatus),
-		PublicLocation:     new(saved.PublicLocation),
-		PublicBreezemoons:  new(saved.PublicBreezemoons),
-		PublicFollowing:    new(saved.PublicFollowing),
+		ID:                   saved.ID,
+		UserID:               saved.UserID,
+		PublicPoints:         new(saved.PublicPoints),
+		PublicFollowerList:   new(saved.PublicFollowerList),
+		PublicArticleList:    new(saved.PublicArticleList),
+		PublicCommentList:    new(saved.PublicCommentList),
+		PublicOnlineStatus:   new(saved.PublicOnlineStatus),
+		PublicLocation:       new(saved.PublicLocation),
+		PublicMoonbreezeList: new(saved.PublicMoonbreezeList),
+		PublicFollowingList:  new(saved.PublicFollowingList),
 	}, nil
 }
 

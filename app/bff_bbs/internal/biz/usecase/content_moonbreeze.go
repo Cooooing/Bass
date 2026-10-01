@@ -8,10 +8,10 @@ import (
 	"strings"
 )
 
-const breezemoonMaxPageSize uint32 = 50
+const moonbreezeMaxPageSize uint32 = 50
 
-type ContentBreezemoonUsecase struct {
-	breezemoonClient   repo.ContentBreezemoonClient
+type ContentMoonbreezeUsecase struct {
+	moonbreezeClient   repo.ContentMoonbreezeClient
 	accountClient      repo.AccountClient
 	assetClient        repo.AssetClient
 	privacyClient      repo.PrivacySettingClient
@@ -19,16 +19,16 @@ type ContentBreezemoonUsecase struct {
 	ipResolutionClient repo.IPResolutionClient
 }
 
-func NewContentBreezemoonUsecase(
-	breezemoonClient repo.ContentBreezemoonClient,
+func NewContentMoonbreezeUsecase(
+	moonbreezeClient repo.ContentMoonbreezeClient,
 	accountClient repo.AccountClient,
 	assetClient repo.AssetClient,
 	privacyClient repo.PrivacySettingClient,
 	relationClient repo.RelationClient,
 	ipResolutionClient repo.IPResolutionClient,
-) *ContentBreezemoonUsecase {
-	return &ContentBreezemoonUsecase{
-		breezemoonClient:   breezemoonClient,
+) *ContentMoonbreezeUsecase {
+	return &ContentMoonbreezeUsecase{
+		moonbreezeClient:   moonbreezeClient,
 		accountClient:      accountClient,
 		assetClient:        assetClient,
 		privacyClient:      privacyClient,
@@ -37,15 +37,15 @@ func NewContentBreezemoonUsecase(
 	}
 }
 
-type CreateBreezemoonReq struct {
+type CreateMoonbreezeReq struct {
 	UserID  int64
 	Content string
 	IP      string
 }
 
-func (u *ContentBreezemoonUsecase) Create(ctx context.Context, req *CreateBreezemoonReq) (*repo.Breezemoon, error) {
+func (u *ContentMoonbreezeUsecase) Create(ctx context.Context, req *CreateMoonbreezeReq) (*repo.Moonbreeze, error) {
 	if req == nil || req.UserID <= 0 {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_BREEZEMOON_INVALID)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}
 	var city *string
 	if ip := strings.TrimSpace(req.IP); ip != "" && u.ipResolutionClient != nil {
@@ -56,7 +56,7 @@ func (u *ContentBreezemoonUsecase) Create(ctx context.Context, req *CreateBreeze
 			}
 		}
 	}
-	row, err := u.breezemoonClient.CreateBreezemoon(ctx, &repo.CreateBreezemoonReq{
+	row, err := u.moonbreezeClient.CreateMoonbreeze(ctx, &repo.CreateMoonbreezeReq{
 		Content:  req.Content,
 		AuthorID: req.UserID,
 		City:     city,
@@ -64,44 +64,42 @@ func (u *ContentBreezemoonUsecase) Create(ctx context.Context, req *CreateBreeze
 	if err != nil {
 		return nil, err
 	}
-	if err = u.hydrateRows(ctx, []*repo.Breezemoon{row}, req.UserID); err != nil {
+	if err = u.hydrateRows(ctx, []*repo.Moonbreeze{row}, req.UserID); err != nil {
 		return nil, err
 	}
 	return row, nil
 }
 
-type PageBreezemoonsReq struct {
+type PageMoonbreezesReq struct {
 	ViewerID  int64
 	AuthorIDs []int64
 	Cursor    *string
 	Size      uint32
 }
 
-func (u *ContentBreezemoonUsecase) Page(
+func (u *ContentMoonbreezeUsecase) Page(
 	ctx context.Context,
-	req *PageBreezemoonsReq,
-) (*repo.PageBreezemoonsResp, error) {
+	req *PageMoonbreezesReq,
+) (*repo.PageMoonbreezesResp, error) {
 	if req == nil {
-		req = &PageBreezemoonsReq{}
+		req = &PageMoonbreezesReq{}
 	}
 	pageSize := req.Size
 	if pageSize == 0 {
 		pageSize = 20
 	}
-	if pageSize > breezemoonMaxPageSize {
-		pageSize = breezemoonMaxPageSize
+	if pageSize > moonbreezeMaxPageSize {
+		pageSize = moonbreezeMaxPageSize
 	}
-	// Content deliberately returns candidates. This layer filters current privacy
-	// after reading them, so a privacy change takes effect without data rewrites.
-	// Each content request asks for only the number of rows still needed. Therefore
-	// once this page is full, its continuation is exactly the candidate cursor
-	// after the last returned row: no visible candidate is skipped between pages.
+	// Content owns the stream's ordering and filtering inputs. Personal-list
+	// visibility is enforced only by PageMember, so global and following feeds
+	// remain independent from a member's profile-list preference.
 	cursor := req.Cursor
-	visible := make([]*repo.Breezemoon, 0, pageSize)
+	visible := make([]*repo.Moonbreeze, 0, pageSize)
 	var next *string
 	for len(visible) < int(pageSize) {
 		remaining := pageSize - uint32(len(visible))
-		batch, err := u.breezemoonClient.PageBreezemoons(ctx, &repo.PageBreezemoonsReq{
+		batch, err := u.moonbreezeClient.PageMoonbreezes(ctx, &repo.PageMoonbreezesReq{
 			AuthorIDs: req.AuthorIDs,
 			Cursor:    cursor,
 			Size:      remaining,
@@ -113,22 +111,8 @@ func (u *ContentBreezemoonUsecase) Page(
 			next = nil
 			break
 		}
-		authorIDs := make([]int64, 0, len(batch.Rows))
-		for _, row := range batch.Rows {
-			if row != nil {
-				authorIDs = append(authorIDs, row.AuthorID)
-			}
-		}
-		privacy, err := u.privacyClient.MapPrivacySettings(ctx, authorIDs)
-		if err != nil {
-			return nil, err
-		}
 		for _, row := range batch.Rows {
 			if row == nil {
-				continue
-			}
-			setting := privacy[row.AuthorID]
-			if row.AuthorID != req.ViewerID && setting != nil && setting.PublicBreezemoons != nil && !*setting.PublicBreezemoons {
 				continue
 			}
 			visible = append(visible, row)
@@ -145,15 +129,15 @@ func (u *ContentBreezemoonUsecase) Page(
 	if err := u.hydrateRows(ctx, visible, req.ViewerID); err != nil {
 		return nil, err
 	}
-	return &repo.PageBreezemoonsResp{Rows: visible, NextCursor: next}, nil
+	return &repo.PageMoonbreezesResp{Rows: visible, NextCursor: next}, nil
 }
 
-func (u *ContentBreezemoonUsecase) PageWatching(
+func (u *ContentMoonbreezeUsecase) PageWatching(
 	ctx context.Context,
 	viewerID int64,
 	cursor *string,
 	size uint32,
-) (*repo.PageBreezemoonsResp, error) {
+) (*repo.PageMoonbreezesResp, error) {
 	if viewerID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
@@ -162,9 +146,9 @@ func (u *ContentBreezemoonUsecase) PageWatching(
 		return nil, err
 	}
 	if len(following) == 0 {
-		return &repo.PageBreezemoonsResp{}, nil
+		return &repo.PageMoonbreezesResp{}, nil
 	}
-	return u.Page(ctx, &PageBreezemoonsReq{
+	return u.Page(ctx, &PageMoonbreezesReq{
 		ViewerID:  viewerID,
 		AuthorIDs: following,
 		Cursor:    cursor,
@@ -172,13 +156,13 @@ func (u *ContentBreezemoonUsecase) PageWatching(
 	})
 }
 
-func (u *ContentBreezemoonUsecase) PageMember(
+func (u *ContentMoonbreezeUsecase) PageMember(
 	ctx context.Context,
 	viewerID int64,
 	name string,
 	cursor *string,
 	size uint32,
-) (*repo.PageBreezemoonsResp, error) {
+) (*repo.PageMoonbreezesResp, error) {
 	account, _, err := u.accountClient.GetProfile(ctx, name)
 	if err != nil {
 		return nil, err
@@ -186,7 +170,16 @@ func (u *ContentBreezemoonUsecase) PageMember(
 	if account == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND)
 	}
-	return u.Page(ctx, &PageBreezemoonsReq{
+	if viewerID != account.ID {
+		privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, account.ID)
+		if err != nil {
+			return nil, err
+		}
+		if privacy.PublicMoonbreezeList != nil && !*privacy.PublicMoonbreezeList {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_MOONBREEZE_LIST_PRIVATE)
+		}
+	}
+	return u.Page(ctx, &PageMoonbreezesReq{
 		ViewerID:  viewerID,
 		AuthorIDs: []int64{account.ID},
 		Cursor:    cursor,
@@ -197,7 +190,7 @@ func (u *ContentBreezemoonUsecase) PageMember(
 // followingIDs loads the caller's complete following set before querying the
 // content service. The relation API is page based, so this remains correct
 // until a dedicated ID-only query is needed for significantly larger sets.
-func (u *ContentBreezemoonUsecase) followingIDs(ctx context.Context, userID int64) ([]int64, error) {
+func (u *ContentMoonbreezeUsecase) followingIDs(ctx context.Context, userID int64) ([]int64, error) {
 	var ids []int64
 	for page := uint32(1); ; page++ {
 		result, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{
@@ -227,7 +220,7 @@ func (u *ContentBreezemoonUsecase) followingIDs(ctx context.Context, userID int6
 
 // hydrateRows loads presentation-only author, avatar and privacy data in
 // batches. It never changes the content records returned by the content domain.
-func (u *ContentBreezemoonUsecase) hydrateRows(ctx context.Context, rows []*repo.Breezemoon, viewerID int64) error {
+func (u *ContentMoonbreezeUsecase) hydrateRows(ctx context.Context, rows []*repo.Moonbreeze, viewerID int64) error {
 	ids := make([]int64, 0, len(rows))
 	for _, row := range rows {
 		if row != nil {

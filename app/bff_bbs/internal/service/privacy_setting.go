@@ -60,15 +60,15 @@ func (s *PrivacySettingService) UpdateCurrent(
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
 	setting, err := s.privacySettingUsecase.UpdateCurrentPrivacySetting(ctx, &usecase.UpdateCurrentPrivacySettingReq{
-		UserID:             user.ID,
-		PublicPoints:       req.PublicPoints,
-		PublicFollowers:    req.PublicFollowers,
-		PublicFollowing:    req.PublicFollowing,
-		PublicArticles:     req.PublicArticles,
-		PublicComments:     req.PublicComments,
-		PublicOnlineStatus: req.PublicOnlineStatus,
-		PublicLocation:     req.PublicLocation,
-		PublicBreezemoons:  req.PublicBreezemoons,
+		UserID:               user.ID,
+		PublicPoints:         req.PublicPoints,
+		PublicFollowerList:   req.PublicFollowerList,
+		PublicFollowingList:  req.PublicFollowingList,
+		PublicArticleList:    req.PublicArticleList,
+		PublicCommentList:    req.PublicCommentList,
+		PublicOnlineStatus:   req.PublicOnlineStatus,
+		PublicLocation:       req.PublicLocation,
+		PublicMoonbreezeList: req.PublicMoonbreezeList,
 	})
 	if err != nil {
 		return nil, err

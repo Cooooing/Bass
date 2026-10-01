@@ -57,15 +57,15 @@ func (r *PrivacySettingClient) UpdateCurrentPrivacySetting(
 	req *repo.UpdateCurrentPrivacySettingReq,
 ) (*repo.PrivacySetting, error) {
 	reply, err := r.userClient.PrivacySetting.Update(ctx, &userv1.UpdatePrivacySetting_Req{
-		UserId:             req.UserID,
-		PublicPoints:       req.PublicPoints,
-		PublicFollowers:    req.PublicFollowers,
-		PublicFollowing:    req.PublicFollowing,
-		PublicArticles:     req.PublicArticles,
-		PublicComments:     req.PublicComments,
-		PublicOnlineStatus: req.PublicOnlineStatus,
-		PublicLocation:     req.PublicLocation,
-		PublicBreezemoons:  req.PublicBreezemoons,
+		UserId:               req.UserID,
+		PublicPoints:         req.PublicPoints,
+		PublicFollowerList:   req.PublicFollowerList,
+		PublicFollowingList:  req.PublicFollowingList,
+		PublicArticleList:    req.PublicArticleList,
+		PublicCommentList:    req.PublicCommentList,
+		PublicOnlineStatus:   req.PublicOnlineStatus,
+		PublicLocation:       req.PublicLocation,
+		PublicMoonbreezeList: req.PublicMoonbreezeList,
 	})
 	if err != nil {
 		return nil, err
@@ -78,14 +78,14 @@ func (*PrivacySettingClient) privacySettingRepoModel(setting *userv1.PrivacySett
 		return nil
 	}
 	return &repo.PrivacySetting{
-		UserID:             setting.GetUserId(),
-		PublicPoints:       setting.PublicPoints,
-		PublicFollowers:    setting.PublicFollowers,
-		PublicFollowing:    setting.PublicFollowing,
-		PublicArticles:     setting.PublicArticles,
-		PublicComments:     setting.PublicComments,
-		PublicOnlineStatus: setting.PublicOnlineStatus,
-		PublicLocation:     setting.PublicLocation,
-		PublicBreezemoons:  setting.PublicBreezemoons,
+		UserID:               setting.GetUserId(),
+		PublicPoints:         setting.PublicPoints,
+		PublicFollowerList:   setting.PublicFollowerList,
+		PublicFollowingList:  setting.PublicFollowingList,
+		PublicArticleList:    setting.PublicArticleList,
+		PublicCommentList:    setting.PublicCommentList,
+		PublicOnlineStatus:   setting.PublicOnlineStatus,
+		PublicLocation:       setting.PublicLocation,
+		PublicMoonbreezeList: setting.PublicMoonbreezeList,
 	}
 }

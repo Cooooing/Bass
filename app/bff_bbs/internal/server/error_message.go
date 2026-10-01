@@ -212,32 +212,39 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "Refresh token is required",
 			},
 		},
-		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_ARTICLES_PRIVATE: {
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_ARTICLE_LIST_PRIVATE: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "该用户未公开帖子列表",
 				commonenums.Language_LANGUAGE_ZH_TW: "該使用者未公開貼文列表",
 				commonenums.Language_LANGUAGE_EN:    "This user has not made posts public",
 			},
 		},
-		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_COMMENTS_PRIVATE: {
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_COMMENT_LIST_PRIVATE: {
 			Text: map[commonenums.Language]string{
-				commonenums.Language_LANGUAGE_ZH_CN: "该用户未公开回帖列表",
+				commonenums.Language_LANGUAGE_ZH_CN: "该用户未公开回复列表",
 				commonenums.Language_LANGUAGE_ZH_TW: "該使用者未公開回覆列表",
 				commonenums.Language_LANGUAGE_EN:    "This user has not made comments public",
 			},
 		},
-		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWING_PRIVATE: {
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWING_LIST_PRIVATE: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "该用户未公开关注列表",
 				commonenums.Language_LANGUAGE_ZH_TW: "該使用者未公開關注列表",
 				commonenums.Language_LANGUAGE_EN:    "This user has not made following public",
 			},
 		},
-		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWERS_PRIVATE: {
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWER_LIST_PRIVATE: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "该用户未公开粉丝列表",
 				commonenums.Language_LANGUAGE_ZH_TW: "該使用者未公開粉絲列表",
 				commonenums.Language_LANGUAGE_EN:    "This user has not made followers public",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_MOONBREEZE_LIST_PRIVATE: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "该用户未公开清风明月列表",
+				commonenums.Language_LANGUAGE_ZH_TW: "該使用者未公開清風明月列表",
+				commonenums.Language_LANGUAGE_EN:    "This user has not made their moonbreezes list public",
 			},
 		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_VERIFICATION_CODE_INVALID_OR_EXPIRED: {
@@ -451,14 +458,14 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "Invalid article information",
 			},
 		},
-		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_BREEZEMOON_INVALID: {
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "动态内容必须是最多 512 个字符的单行文本",
 				commonenums.Language_LANGUAGE_ZH_TW: "動態內容必須是最多 512 個字元的單行文字",
-				commonenums.Language_LANGUAGE_EN:    "A breezemoon must be one line with at most 512 characters",
+				commonenums.Language_LANGUAGE_EN:    "A moonbreeze must be one line with at most 512 characters",
 			},
 		},
-		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_BREEZEMOON_RATE_LIMITED: {
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_RATE_LIMITED: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "发布过于频繁，请 %d 秒后再试",
 				commonenums.Language_LANGUAGE_ZH_TW: "發布過於頻繁，請 %d 秒後再試",

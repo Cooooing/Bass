@@ -21,12 +21,13 @@ var _ MappedNullable = &RespPrivacySetting{}
 type RespPrivacySetting struct {
 	UserId *string `json:"user_id,omitempty"`
 	PublicPoints *bool `json:"public_points,omitempty"`
-	PublicFollowers *bool `json:"public_followers,omitempty"`
-	PublicFollowing *bool `json:"public_following,omitempty"`
-	PublicArticles *bool `json:"public_articles,omitempty"`
-	PublicComments *bool `json:"public_comments,omitempty"`
+	PublicFollowerList *bool `json:"public_follower_list,omitempty"`
+	PublicFollowingList *bool `json:"public_following_list,omitempty"`
+	PublicArticleList *bool `json:"public_article_list,omitempty"`
+	PublicCommentList *bool `json:"public_comment_list,omitempty"`
 	PublicOnlineStatus *bool `json:"public_online_status,omitempty"`
 	PublicLocation *bool `json:"public_location,omitempty"`
+	PublicMoonbreezeList *bool `json:"public_moonbreeze_list,omitempty"`
 }
 
 // NewRespPrivacySetting instantiates a new RespPrivacySetting object
@@ -110,132 +111,132 @@ func (o *RespPrivacySetting) SetPublicPoints(v bool) {
 	o.PublicPoints = &v
 }
 
-// GetPublicFollowers returns the PublicFollowers field value if set, zero value otherwise.
-func (o *RespPrivacySetting) GetPublicFollowers() bool {
-	if o == nil || IsNil(o.PublicFollowers) {
+// GetPublicFollowerList returns the PublicFollowerList field value if set, zero value otherwise.
+func (o *RespPrivacySetting) GetPublicFollowerList() bool {
+	if o == nil || IsNil(o.PublicFollowerList) {
 		var ret bool
 		return ret
 	}
-	return *o.PublicFollowers
+	return *o.PublicFollowerList
 }
 
-// GetPublicFollowersOk returns a tuple with the PublicFollowers field value if set, nil otherwise
+// GetPublicFollowerListOk returns a tuple with the PublicFollowerList field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespPrivacySetting) GetPublicFollowersOk() (*bool, bool) {
-	if o == nil || IsNil(o.PublicFollowers) {
+func (o *RespPrivacySetting) GetPublicFollowerListOk() (*bool, bool) {
+	if o == nil || IsNil(o.PublicFollowerList) {
 		return nil, false
 	}
-	return o.PublicFollowers, true
+	return o.PublicFollowerList, true
 }
 
-// HasPublicFollowers returns a boolean if a field has been set.
-func (o *RespPrivacySetting) HasPublicFollowers() bool {
-	if o != nil && !IsNil(o.PublicFollowers) {
+// HasPublicFollowerList returns a boolean if a field has been set.
+func (o *RespPrivacySetting) HasPublicFollowerList() bool {
+	if o != nil && !IsNil(o.PublicFollowerList) {
 		return true
 	}
 
 	return false
 }
 
-// SetPublicFollowers gets a reference to the given bool and assigns it to the PublicFollowers field.
-func (o *RespPrivacySetting) SetPublicFollowers(v bool) {
-	o.PublicFollowers = &v
+// SetPublicFollowerList gets a reference to the given bool and assigns it to the PublicFollowerList field.
+func (o *RespPrivacySetting) SetPublicFollowerList(v bool) {
+	o.PublicFollowerList = &v
 }
 
-// GetPublicFollowing returns the PublicFollowing field value if set, zero value otherwise.
-func (o *RespPrivacySetting) GetPublicFollowing() bool {
-	if o == nil || IsNil(o.PublicFollowing) {
+// GetPublicFollowingList returns the PublicFollowingList field value if set, zero value otherwise.
+func (o *RespPrivacySetting) GetPublicFollowingList() bool {
+	if o == nil || IsNil(o.PublicFollowingList) {
 		var ret bool
 		return ret
 	}
-	return *o.PublicFollowing
+	return *o.PublicFollowingList
 }
 
-// GetPublicFollowingOk returns a tuple with the PublicFollowing field value if set, nil otherwise
+// GetPublicFollowingListOk returns a tuple with the PublicFollowingList field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespPrivacySetting) GetPublicFollowingOk() (*bool, bool) {
-	if o == nil || IsNil(o.PublicFollowing) {
+func (o *RespPrivacySetting) GetPublicFollowingListOk() (*bool, bool) {
+	if o == nil || IsNil(o.PublicFollowingList) {
 		return nil, false
 	}
-	return o.PublicFollowing, true
+	return o.PublicFollowingList, true
 }
 
-// HasPublicFollowing returns a boolean if a field has been set.
-func (o *RespPrivacySetting) HasPublicFollowing() bool {
-	if o != nil && !IsNil(o.PublicFollowing) {
+// HasPublicFollowingList returns a boolean if a field has been set.
+func (o *RespPrivacySetting) HasPublicFollowingList() bool {
+	if o != nil && !IsNil(o.PublicFollowingList) {
 		return true
 	}
 
 	return false
 }
 
-// SetPublicFollowing gets a reference to the given bool and assigns it to the PublicFollowing field.
-func (o *RespPrivacySetting) SetPublicFollowing(v bool) {
-	o.PublicFollowing = &v
+// SetPublicFollowingList gets a reference to the given bool and assigns it to the PublicFollowingList field.
+func (o *RespPrivacySetting) SetPublicFollowingList(v bool) {
+	o.PublicFollowingList = &v
 }
 
-// GetPublicArticles returns the PublicArticles field value if set, zero value otherwise.
-func (o *RespPrivacySetting) GetPublicArticles() bool {
-	if o == nil || IsNil(o.PublicArticles) {
+// GetPublicArticleList returns the PublicArticleList field value if set, zero value otherwise.
+func (o *RespPrivacySetting) GetPublicArticleList() bool {
+	if o == nil || IsNil(o.PublicArticleList) {
 		var ret bool
 		return ret
 	}
-	return *o.PublicArticles
+	return *o.PublicArticleList
 }
 
-// GetPublicArticlesOk returns a tuple with the PublicArticles field value if set, nil otherwise
+// GetPublicArticleListOk returns a tuple with the PublicArticleList field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespPrivacySetting) GetPublicArticlesOk() (*bool, bool) {
-	if o == nil || IsNil(o.PublicArticles) {
+func (o *RespPrivacySetting) GetPublicArticleListOk() (*bool, bool) {
+	if o == nil || IsNil(o.PublicArticleList) {
 		return nil, false
 	}
-	return o.PublicArticles, true
+	return o.PublicArticleList, true
 }
 
-// HasPublicArticles returns a boolean if a field has been set.
-func (o *RespPrivacySetting) HasPublicArticles() bool {
-	if o != nil && !IsNil(o.PublicArticles) {
+// HasPublicArticleList returns a boolean if a field has been set.
+func (o *RespPrivacySetting) HasPublicArticleList() bool {
+	if o != nil && !IsNil(o.PublicArticleList) {
 		return true
 	}
 
 	return false
 }
 
-// SetPublicArticles gets a reference to the given bool and assigns it to the PublicArticles field.
-func (o *RespPrivacySetting) SetPublicArticles(v bool) {
-	o.PublicArticles = &v
+// SetPublicArticleList gets a reference to the given bool and assigns it to the PublicArticleList field.
+func (o *RespPrivacySetting) SetPublicArticleList(v bool) {
+	o.PublicArticleList = &v
 }
 
-// GetPublicComments returns the PublicComments field value if set, zero value otherwise.
-func (o *RespPrivacySetting) GetPublicComments() bool {
-	if o == nil || IsNil(o.PublicComments) {
+// GetPublicCommentList returns the PublicCommentList field value if set, zero value otherwise.
+func (o *RespPrivacySetting) GetPublicCommentList() bool {
+	if o == nil || IsNil(o.PublicCommentList) {
 		var ret bool
 		return ret
 	}
-	return *o.PublicComments
+	return *o.PublicCommentList
 }
 
-// GetPublicCommentsOk returns a tuple with the PublicComments field value if set, nil otherwise
+// GetPublicCommentListOk returns a tuple with the PublicCommentList field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespPrivacySetting) GetPublicCommentsOk() (*bool, bool) {
-	if o == nil || IsNil(o.PublicComments) {
+func (o *RespPrivacySetting) GetPublicCommentListOk() (*bool, bool) {
+	if o == nil || IsNil(o.PublicCommentList) {
 		return nil, false
 	}
-	return o.PublicComments, true
+	return o.PublicCommentList, true
 }
 
-// HasPublicComments returns a boolean if a field has been set.
-func (o *RespPrivacySetting) HasPublicComments() bool {
-	if o != nil && !IsNil(o.PublicComments) {
+// HasPublicCommentList returns a boolean if a field has been set.
+func (o *RespPrivacySetting) HasPublicCommentList() bool {
+	if o != nil && !IsNil(o.PublicCommentList) {
 		return true
 	}
 
 	return false
 }
 
-// SetPublicComments gets a reference to the given bool and assigns it to the PublicComments field.
-func (o *RespPrivacySetting) SetPublicComments(v bool) {
-	o.PublicComments = &v
+// SetPublicCommentList gets a reference to the given bool and assigns it to the PublicCommentList field.
+func (o *RespPrivacySetting) SetPublicCommentList(v bool) {
+	o.PublicCommentList = &v
 }
 
 // GetPublicOnlineStatus returns the PublicOnlineStatus field value if set, zero value otherwise.
@@ -302,6 +303,38 @@ func (o *RespPrivacySetting) SetPublicLocation(v bool) {
 	o.PublicLocation = &v
 }
 
+// GetPublicMoonbreezeList returns the PublicMoonbreezeList field value if set, zero value otherwise.
+func (o *RespPrivacySetting) GetPublicMoonbreezeList() bool {
+	if o == nil || IsNil(o.PublicMoonbreezeList) {
+		var ret bool
+		return ret
+	}
+	return *o.PublicMoonbreezeList
+}
+
+// GetPublicMoonbreezeListOk returns a tuple with the PublicMoonbreezeList field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RespPrivacySetting) GetPublicMoonbreezeListOk() (*bool, bool) {
+	if o == nil || IsNil(o.PublicMoonbreezeList) {
+		return nil, false
+	}
+	return o.PublicMoonbreezeList, true
+}
+
+// HasPublicMoonbreezeList returns a boolean if a field has been set.
+func (o *RespPrivacySetting) HasPublicMoonbreezeList() bool {
+	if o != nil && !IsNil(o.PublicMoonbreezeList) {
+		return true
+	}
+
+	return false
+}
+
+// SetPublicMoonbreezeList gets a reference to the given bool and assigns it to the PublicMoonbreezeList field.
+func (o *RespPrivacySetting) SetPublicMoonbreezeList(v bool) {
+	o.PublicMoonbreezeList = &v
+}
+
 func (o RespPrivacySetting) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -318,23 +351,26 @@ func (o RespPrivacySetting) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PublicPoints) {
 		toSerialize["public_points"] = o.PublicPoints
 	}
-	if !IsNil(o.PublicFollowers) {
-		toSerialize["public_followers"] = o.PublicFollowers
+	if !IsNil(o.PublicFollowerList) {
+		toSerialize["public_follower_list"] = o.PublicFollowerList
 	}
-	if !IsNil(o.PublicFollowing) {
-		toSerialize["public_following"] = o.PublicFollowing
+	if !IsNil(o.PublicFollowingList) {
+		toSerialize["public_following_list"] = o.PublicFollowingList
 	}
-	if !IsNil(o.PublicArticles) {
-		toSerialize["public_articles"] = o.PublicArticles
+	if !IsNil(o.PublicArticleList) {
+		toSerialize["public_article_list"] = o.PublicArticleList
 	}
-	if !IsNil(o.PublicComments) {
-		toSerialize["public_comments"] = o.PublicComments
+	if !IsNil(o.PublicCommentList) {
+		toSerialize["public_comment_list"] = o.PublicCommentList
 	}
 	if !IsNil(o.PublicOnlineStatus) {
 		toSerialize["public_online_status"] = o.PublicOnlineStatus
 	}
 	if !IsNil(o.PublicLocation) {
 		toSerialize["public_location"] = o.PublicLocation
+	}
+	if !IsNil(o.PublicMoonbreezeList) {
+		toSerialize["public_moonbreeze_list"] = o.PublicMoonbreezeList
 	}
 	return toSerialize, nil
 }

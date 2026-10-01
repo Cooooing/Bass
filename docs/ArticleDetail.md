@@ -35,6 +35,7 @@ Name | Type | Description | Notes
 **EditedAt** | Pointer to **time.Time** |  | [optional] 
 **Tags** | Pointer to [**[]ArticleTag**](ArticleTag.md) |  | [optional] 
 **Domains** | Pointer to [**[]ArticleDomain**](ArticleDomain.md) |  | [optional] 
+**City** | Pointer to **string** |  | [optional] 
 **CreatedBy** | Pointer to **string** |  | [optional] 
 **UpdatedBy** | Pointer to **string** |  | [optional] 
 **CreatedAt** | Pointer to **time.Time** |  | [optional] 
@@ -833,6 +834,31 @@ SetDomains sets Domains field to given value.
 `func (o *ArticleDetail) HasDomains() bool`
 
 HasDomains returns a boolean if a field has been set.
+
+### GetCity
+
+`func (o *ArticleDetail) GetCity() string`
+
+GetCity returns the City field if non-nil, zero value otherwise.
+
+### GetCityOk
+
+`func (o *ArticleDetail) GetCityOk() (*string, bool)`
+
+GetCityOk returns a tuple with the City field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCity
+
+`func (o *ArticleDetail) SetCity(v string)`
+
+SetCity sets City field to given value.
+
+### HasCity
+
+`func (o *ArticleDetail) HasCity() bool`
+
+HasCity returns a boolean if a field has been set.
 
 ### GetCreatedBy
 

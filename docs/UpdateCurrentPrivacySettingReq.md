@@ -5,12 +5,13 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **PublicPoints** | Pointer to **bool** |  | [optional] 
-**PublicFollowers** | Pointer to **bool** |  | [optional] 
-**PublicFollowing** | Pointer to **bool** |  | [optional] 
-**PublicArticles** | Pointer to **bool** |  | [optional] 
-**PublicComments** | Pointer to **bool** |  | [optional] 
+**PublicFollowerList** | Pointer to **bool** |  | [optional] 
+**PublicFollowingList** | Pointer to **bool** |  | [optional] 
+**PublicArticleList** | Pointer to **bool** |  | [optional] 
+**PublicCommentList** | Pointer to **bool** |  | [optional] 
 **PublicOnlineStatus** | Pointer to **bool** |  | [optional] 
 **PublicLocation** | Pointer to **bool** |  | [optional] 
+**PublicMoonbreezeList** | Pointer to **bool** |  | [optional] 
 
 ## Methods
 
@@ -56,105 +57,105 @@ SetPublicPoints sets PublicPoints field to given value.
 
 HasPublicPoints returns a boolean if a field has been set.
 
-### GetPublicFollowers
+### GetPublicFollowerList
 
-`func (o *UpdateCurrentPrivacySettingReq) GetPublicFollowers() bool`
+`func (o *UpdateCurrentPrivacySettingReq) GetPublicFollowerList() bool`
 
-GetPublicFollowers returns the PublicFollowers field if non-nil, zero value otherwise.
+GetPublicFollowerList returns the PublicFollowerList field if non-nil, zero value otherwise.
 
-### GetPublicFollowersOk
+### GetPublicFollowerListOk
 
-`func (o *UpdateCurrentPrivacySettingReq) GetPublicFollowersOk() (*bool, bool)`
+`func (o *UpdateCurrentPrivacySettingReq) GetPublicFollowerListOk() (*bool, bool)`
 
-GetPublicFollowersOk returns a tuple with the PublicFollowers field if it's non-nil, zero value otherwise
+GetPublicFollowerListOk returns a tuple with the PublicFollowerList field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetPublicFollowers
+### SetPublicFollowerList
 
-`func (o *UpdateCurrentPrivacySettingReq) SetPublicFollowers(v bool)`
+`func (o *UpdateCurrentPrivacySettingReq) SetPublicFollowerList(v bool)`
 
-SetPublicFollowers sets PublicFollowers field to given value.
+SetPublicFollowerList sets PublicFollowerList field to given value.
 
-### HasPublicFollowers
+### HasPublicFollowerList
 
-`func (o *UpdateCurrentPrivacySettingReq) HasPublicFollowers() bool`
+`func (o *UpdateCurrentPrivacySettingReq) HasPublicFollowerList() bool`
 
-HasPublicFollowers returns a boolean if a field has been set.
+HasPublicFollowerList returns a boolean if a field has been set.
 
-### GetPublicFollowing
+### GetPublicFollowingList
 
-`func (o *UpdateCurrentPrivacySettingReq) GetPublicFollowing() bool`
+`func (o *UpdateCurrentPrivacySettingReq) GetPublicFollowingList() bool`
 
-GetPublicFollowing returns the PublicFollowing field if non-nil, zero value otherwise.
+GetPublicFollowingList returns the PublicFollowingList field if non-nil, zero value otherwise.
 
-### GetPublicFollowingOk
+### GetPublicFollowingListOk
 
-`func (o *UpdateCurrentPrivacySettingReq) GetPublicFollowingOk() (*bool, bool)`
+`func (o *UpdateCurrentPrivacySettingReq) GetPublicFollowingListOk() (*bool, bool)`
 
-GetPublicFollowingOk returns a tuple with the PublicFollowing field if it's non-nil, zero value otherwise
+GetPublicFollowingListOk returns a tuple with the PublicFollowingList field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetPublicFollowing
+### SetPublicFollowingList
 
-`func (o *UpdateCurrentPrivacySettingReq) SetPublicFollowing(v bool)`
+`func (o *UpdateCurrentPrivacySettingReq) SetPublicFollowingList(v bool)`
 
-SetPublicFollowing sets PublicFollowing field to given value.
+SetPublicFollowingList sets PublicFollowingList field to given value.
 
-### HasPublicFollowing
+### HasPublicFollowingList
 
-`func (o *UpdateCurrentPrivacySettingReq) HasPublicFollowing() bool`
+`func (o *UpdateCurrentPrivacySettingReq) HasPublicFollowingList() bool`
 
-HasPublicFollowing returns a boolean if a field has been set.
+HasPublicFollowingList returns a boolean if a field has been set.
 
-### GetPublicArticles
+### GetPublicArticleList
 
-`func (o *UpdateCurrentPrivacySettingReq) GetPublicArticles() bool`
+`func (o *UpdateCurrentPrivacySettingReq) GetPublicArticleList() bool`
 
-GetPublicArticles returns the PublicArticles field if non-nil, zero value otherwise.
+GetPublicArticleList returns the PublicArticleList field if non-nil, zero value otherwise.
 
-### GetPublicArticlesOk
+### GetPublicArticleListOk
 
-`func (o *UpdateCurrentPrivacySettingReq) GetPublicArticlesOk() (*bool, bool)`
+`func (o *UpdateCurrentPrivacySettingReq) GetPublicArticleListOk() (*bool, bool)`
 
-GetPublicArticlesOk returns a tuple with the PublicArticles field if it's non-nil, zero value otherwise
+GetPublicArticleListOk returns a tuple with the PublicArticleList field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetPublicArticles
+### SetPublicArticleList
 
-`func (o *UpdateCurrentPrivacySettingReq) SetPublicArticles(v bool)`
+`func (o *UpdateCurrentPrivacySettingReq) SetPublicArticleList(v bool)`
 
-SetPublicArticles sets PublicArticles field to given value.
+SetPublicArticleList sets PublicArticleList field to given value.
 
-### HasPublicArticles
+### HasPublicArticleList
 
-`func (o *UpdateCurrentPrivacySettingReq) HasPublicArticles() bool`
+`func (o *UpdateCurrentPrivacySettingReq) HasPublicArticleList() bool`
 
-HasPublicArticles returns a boolean if a field has been set.
+HasPublicArticleList returns a boolean if a field has been set.
 
-### GetPublicComments
+### GetPublicCommentList
 
-`func (o *UpdateCurrentPrivacySettingReq) GetPublicComments() bool`
+`func (o *UpdateCurrentPrivacySettingReq) GetPublicCommentList() bool`
 
-GetPublicComments returns the PublicComments field if non-nil, zero value otherwise.
+GetPublicCommentList returns the PublicCommentList field if non-nil, zero value otherwise.
 
-### GetPublicCommentsOk
+### GetPublicCommentListOk
 
-`func (o *UpdateCurrentPrivacySettingReq) GetPublicCommentsOk() (*bool, bool)`
+`func (o *UpdateCurrentPrivacySettingReq) GetPublicCommentListOk() (*bool, bool)`
 
-GetPublicCommentsOk returns a tuple with the PublicComments field if it's non-nil, zero value otherwise
+GetPublicCommentListOk returns a tuple with the PublicCommentList field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetPublicComments
+### SetPublicCommentList
 
-`func (o *UpdateCurrentPrivacySettingReq) SetPublicComments(v bool)`
+`func (o *UpdateCurrentPrivacySettingReq) SetPublicCommentList(v bool)`
 
-SetPublicComments sets PublicComments field to given value.
+SetPublicCommentList sets PublicCommentList field to given value.
 
-### HasPublicComments
+### HasPublicCommentList
 
-`func (o *UpdateCurrentPrivacySettingReq) HasPublicComments() bool`
+`func (o *UpdateCurrentPrivacySettingReq) HasPublicCommentList() bool`
 
-HasPublicComments returns a boolean if a field has been set.
+HasPublicCommentList returns a boolean if a field has been set.
 
 ### GetPublicOnlineStatus
 
@@ -205,6 +206,31 @@ SetPublicLocation sets PublicLocation field to given value.
 `func (o *UpdateCurrentPrivacySettingReq) HasPublicLocation() bool`
 
 HasPublicLocation returns a boolean if a field has been set.
+
+### GetPublicMoonbreezeList
+
+`func (o *UpdateCurrentPrivacySettingReq) GetPublicMoonbreezeList() bool`
+
+GetPublicMoonbreezeList returns the PublicMoonbreezeList field if non-nil, zero value otherwise.
+
+### GetPublicMoonbreezeListOk
+
+`func (o *UpdateCurrentPrivacySettingReq) GetPublicMoonbreezeListOk() (*bool, bool)`
+
+GetPublicMoonbreezeListOk returns a tuple with the PublicMoonbreezeList field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPublicMoonbreezeList
+
+`func (o *UpdateCurrentPrivacySettingReq) SetPublicMoonbreezeList(v bool)`
+
+SetPublicMoonbreezeList sets PublicMoonbreezeList field to given value.
+
+### HasPublicMoonbreezeList
+
+`func (o *UpdateCurrentPrivacySettingReq) HasPublicMoonbreezeList() bool`
+
+HasPublicMoonbreezeList returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

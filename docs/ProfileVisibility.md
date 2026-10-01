@@ -4,10 +4,11 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Articles** | Pointer to **bool** |  | [optional] 
-**Comments** | Pointer to **bool** |  | [optional] 
-**Followers** | Pointer to **bool** |  | [optional] 
-**Following** | Pointer to **bool** |  | [optional] 
+**ArticleList** | Pointer to **bool** |  | [optional] 
+**CommentList** | Pointer to **bool** |  | [optional] 
+**FollowerList** | Pointer to **bool** |  | [optional] 
+**FollowingList** | Pointer to **bool** |  | [optional] 
+**MoonbreezeList** | Pointer to **bool** |  | [optional] 
 
 ## Methods
 
@@ -28,105 +29,130 @@ NewProfileVisibilityWithDefaults instantiates a new ProfileVisibility object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetArticles
+### GetArticleList
 
-`func (o *ProfileVisibility) GetArticles() bool`
+`func (o *ProfileVisibility) GetArticleList() bool`
 
-GetArticles returns the Articles field if non-nil, zero value otherwise.
+GetArticleList returns the ArticleList field if non-nil, zero value otherwise.
 
-### GetArticlesOk
+### GetArticleListOk
 
-`func (o *ProfileVisibility) GetArticlesOk() (*bool, bool)`
+`func (o *ProfileVisibility) GetArticleListOk() (*bool, bool)`
 
-GetArticlesOk returns a tuple with the Articles field if it's non-nil, zero value otherwise
+GetArticleListOk returns a tuple with the ArticleList field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetArticles
+### SetArticleList
 
-`func (o *ProfileVisibility) SetArticles(v bool)`
+`func (o *ProfileVisibility) SetArticleList(v bool)`
 
-SetArticles sets Articles field to given value.
+SetArticleList sets ArticleList field to given value.
 
-### HasArticles
+### HasArticleList
 
-`func (o *ProfileVisibility) HasArticles() bool`
+`func (o *ProfileVisibility) HasArticleList() bool`
 
-HasArticles returns a boolean if a field has been set.
+HasArticleList returns a boolean if a field has been set.
 
-### GetComments
+### GetCommentList
 
-`func (o *ProfileVisibility) GetComments() bool`
+`func (o *ProfileVisibility) GetCommentList() bool`
 
-GetComments returns the Comments field if non-nil, zero value otherwise.
+GetCommentList returns the CommentList field if non-nil, zero value otherwise.
 
-### GetCommentsOk
+### GetCommentListOk
 
-`func (o *ProfileVisibility) GetCommentsOk() (*bool, bool)`
+`func (o *ProfileVisibility) GetCommentListOk() (*bool, bool)`
 
-GetCommentsOk returns a tuple with the Comments field if it's non-nil, zero value otherwise
+GetCommentListOk returns a tuple with the CommentList field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetComments
+### SetCommentList
 
-`func (o *ProfileVisibility) SetComments(v bool)`
+`func (o *ProfileVisibility) SetCommentList(v bool)`
 
-SetComments sets Comments field to given value.
+SetCommentList sets CommentList field to given value.
 
-### HasComments
+### HasCommentList
 
-`func (o *ProfileVisibility) HasComments() bool`
+`func (o *ProfileVisibility) HasCommentList() bool`
 
-HasComments returns a boolean if a field has been set.
+HasCommentList returns a boolean if a field has been set.
 
-### GetFollowers
+### GetFollowerList
 
-`func (o *ProfileVisibility) GetFollowers() bool`
+`func (o *ProfileVisibility) GetFollowerList() bool`
 
-GetFollowers returns the Followers field if non-nil, zero value otherwise.
+GetFollowerList returns the FollowerList field if non-nil, zero value otherwise.
 
-### GetFollowersOk
+### GetFollowerListOk
 
-`func (o *ProfileVisibility) GetFollowersOk() (*bool, bool)`
+`func (o *ProfileVisibility) GetFollowerListOk() (*bool, bool)`
 
-GetFollowersOk returns a tuple with the Followers field if it's non-nil, zero value otherwise
+GetFollowerListOk returns a tuple with the FollowerList field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetFollowers
+### SetFollowerList
 
-`func (o *ProfileVisibility) SetFollowers(v bool)`
+`func (o *ProfileVisibility) SetFollowerList(v bool)`
 
-SetFollowers sets Followers field to given value.
+SetFollowerList sets FollowerList field to given value.
 
-### HasFollowers
+### HasFollowerList
 
-`func (o *ProfileVisibility) HasFollowers() bool`
+`func (o *ProfileVisibility) HasFollowerList() bool`
 
-HasFollowers returns a boolean if a field has been set.
+HasFollowerList returns a boolean if a field has been set.
 
-### GetFollowing
+### GetFollowingList
 
-`func (o *ProfileVisibility) GetFollowing() bool`
+`func (o *ProfileVisibility) GetFollowingList() bool`
 
-GetFollowing returns the Following field if non-nil, zero value otherwise.
+GetFollowingList returns the FollowingList field if non-nil, zero value otherwise.
 
-### GetFollowingOk
+### GetFollowingListOk
 
-`func (o *ProfileVisibility) GetFollowingOk() (*bool, bool)`
+`func (o *ProfileVisibility) GetFollowingListOk() (*bool, bool)`
 
-GetFollowingOk returns a tuple with the Following field if it's non-nil, zero value otherwise
+GetFollowingListOk returns a tuple with the FollowingList field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetFollowing
+### SetFollowingList
 
-`func (o *ProfileVisibility) SetFollowing(v bool)`
+`func (o *ProfileVisibility) SetFollowingList(v bool)`
 
-SetFollowing sets Following field to given value.
+SetFollowingList sets FollowingList field to given value.
 
-### HasFollowing
+### HasFollowingList
 
-`func (o *ProfileVisibility) HasFollowing() bool`
+`func (o *ProfileVisibility) HasFollowingList() bool`
 
-HasFollowing returns a boolean if a field has been set.
+HasFollowingList returns a boolean if a field has been set.
+
+### GetMoonbreezeList
+
+`func (o *ProfileVisibility) GetMoonbreezeList() bool`
+
+GetMoonbreezeList returns the MoonbreezeList field if non-nil, zero value otherwise.
+
+### GetMoonbreezeListOk
+
+`func (o *ProfileVisibility) GetMoonbreezeListOk() (*bool, bool)`
+
+GetMoonbreezeListOk returns a tuple with the MoonbreezeList field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMoonbreezeList
+
+`func (o *ProfileVisibility) SetMoonbreezeList(v bool)`
+
+SetMoonbreezeList sets MoonbreezeList field to given value.
+
+### HasMoonbreezeList
+
+`func (o *ProfileVisibility) HasMoonbreezeList() bool`
+
+HasMoonbreezeList returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

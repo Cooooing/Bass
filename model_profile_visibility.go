@@ -19,10 +19,11 @@ var _ MappedNullable = &ProfileVisibility{}
 
 // ProfileVisibility struct for ProfileVisibility
 type ProfileVisibility struct {
-	Articles *bool `json:"articles,omitempty"`
-	Comments *bool `json:"comments,omitempty"`
-	Followers *bool `json:"followers,omitempty"`
-	Following *bool `json:"following,omitempty"`
+	ArticleList *bool `json:"article_list,omitempty"`
+	CommentList *bool `json:"comment_list,omitempty"`
+	FollowerList *bool `json:"follower_list,omitempty"`
+	FollowingList *bool `json:"following_list,omitempty"`
+	MoonbreezeList *bool `json:"moonbreeze_list,omitempty"`
 }
 
 // NewProfileVisibility instantiates a new ProfileVisibility object
@@ -42,132 +43,164 @@ func NewProfileVisibilityWithDefaults() *ProfileVisibility {
 	return &this
 }
 
-// GetArticles returns the Articles field value if set, zero value otherwise.
-func (o *ProfileVisibility) GetArticles() bool {
-	if o == nil || IsNil(o.Articles) {
+// GetArticleList returns the ArticleList field value if set, zero value otherwise.
+func (o *ProfileVisibility) GetArticleList() bool {
+	if o == nil || IsNil(o.ArticleList) {
 		var ret bool
 		return ret
 	}
-	return *o.Articles
+	return *o.ArticleList
 }
 
-// GetArticlesOk returns a tuple with the Articles field value if set, nil otherwise
+// GetArticleListOk returns a tuple with the ArticleList field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProfileVisibility) GetArticlesOk() (*bool, bool) {
-	if o == nil || IsNil(o.Articles) {
+func (o *ProfileVisibility) GetArticleListOk() (*bool, bool) {
+	if o == nil || IsNil(o.ArticleList) {
 		return nil, false
 	}
-	return o.Articles, true
+	return o.ArticleList, true
 }
 
-// HasArticles returns a boolean if a field has been set.
-func (o *ProfileVisibility) HasArticles() bool {
-	if o != nil && !IsNil(o.Articles) {
+// HasArticleList returns a boolean if a field has been set.
+func (o *ProfileVisibility) HasArticleList() bool {
+	if o != nil && !IsNil(o.ArticleList) {
 		return true
 	}
 
 	return false
 }
 
-// SetArticles gets a reference to the given bool and assigns it to the Articles field.
-func (o *ProfileVisibility) SetArticles(v bool) {
-	o.Articles = &v
+// SetArticleList gets a reference to the given bool and assigns it to the ArticleList field.
+func (o *ProfileVisibility) SetArticleList(v bool) {
+	o.ArticleList = &v
 }
 
-// GetComments returns the Comments field value if set, zero value otherwise.
-func (o *ProfileVisibility) GetComments() bool {
-	if o == nil || IsNil(o.Comments) {
+// GetCommentList returns the CommentList field value if set, zero value otherwise.
+func (o *ProfileVisibility) GetCommentList() bool {
+	if o == nil || IsNil(o.CommentList) {
 		var ret bool
 		return ret
 	}
-	return *o.Comments
+	return *o.CommentList
 }
 
-// GetCommentsOk returns a tuple with the Comments field value if set, nil otherwise
+// GetCommentListOk returns a tuple with the CommentList field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProfileVisibility) GetCommentsOk() (*bool, bool) {
-	if o == nil || IsNil(o.Comments) {
+func (o *ProfileVisibility) GetCommentListOk() (*bool, bool) {
+	if o == nil || IsNil(o.CommentList) {
 		return nil, false
 	}
-	return o.Comments, true
+	return o.CommentList, true
 }
 
-// HasComments returns a boolean if a field has been set.
-func (o *ProfileVisibility) HasComments() bool {
-	if o != nil && !IsNil(o.Comments) {
+// HasCommentList returns a boolean if a field has been set.
+func (o *ProfileVisibility) HasCommentList() bool {
+	if o != nil && !IsNil(o.CommentList) {
 		return true
 	}
 
 	return false
 }
 
-// SetComments gets a reference to the given bool and assigns it to the Comments field.
-func (o *ProfileVisibility) SetComments(v bool) {
-	o.Comments = &v
+// SetCommentList gets a reference to the given bool and assigns it to the CommentList field.
+func (o *ProfileVisibility) SetCommentList(v bool) {
+	o.CommentList = &v
 }
 
-// GetFollowers returns the Followers field value if set, zero value otherwise.
-func (o *ProfileVisibility) GetFollowers() bool {
-	if o == nil || IsNil(o.Followers) {
+// GetFollowerList returns the FollowerList field value if set, zero value otherwise.
+func (o *ProfileVisibility) GetFollowerList() bool {
+	if o == nil || IsNil(o.FollowerList) {
 		var ret bool
 		return ret
 	}
-	return *o.Followers
+	return *o.FollowerList
 }
 
-// GetFollowersOk returns a tuple with the Followers field value if set, nil otherwise
+// GetFollowerListOk returns a tuple with the FollowerList field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProfileVisibility) GetFollowersOk() (*bool, bool) {
-	if o == nil || IsNil(o.Followers) {
+func (o *ProfileVisibility) GetFollowerListOk() (*bool, bool) {
+	if o == nil || IsNil(o.FollowerList) {
 		return nil, false
 	}
-	return o.Followers, true
+	return o.FollowerList, true
 }
 
-// HasFollowers returns a boolean if a field has been set.
-func (o *ProfileVisibility) HasFollowers() bool {
-	if o != nil && !IsNil(o.Followers) {
+// HasFollowerList returns a boolean if a field has been set.
+func (o *ProfileVisibility) HasFollowerList() bool {
+	if o != nil && !IsNil(o.FollowerList) {
 		return true
 	}
 
 	return false
 }
 
-// SetFollowers gets a reference to the given bool and assigns it to the Followers field.
-func (o *ProfileVisibility) SetFollowers(v bool) {
-	o.Followers = &v
+// SetFollowerList gets a reference to the given bool and assigns it to the FollowerList field.
+func (o *ProfileVisibility) SetFollowerList(v bool) {
+	o.FollowerList = &v
 }
 
-// GetFollowing returns the Following field value if set, zero value otherwise.
-func (o *ProfileVisibility) GetFollowing() bool {
-	if o == nil || IsNil(o.Following) {
+// GetFollowingList returns the FollowingList field value if set, zero value otherwise.
+func (o *ProfileVisibility) GetFollowingList() bool {
+	if o == nil || IsNil(o.FollowingList) {
 		var ret bool
 		return ret
 	}
-	return *o.Following
+	return *o.FollowingList
 }
 
-// GetFollowingOk returns a tuple with the Following field value if set, nil otherwise
+// GetFollowingListOk returns a tuple with the FollowingList field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ProfileVisibility) GetFollowingOk() (*bool, bool) {
-	if o == nil || IsNil(o.Following) {
+func (o *ProfileVisibility) GetFollowingListOk() (*bool, bool) {
+	if o == nil || IsNil(o.FollowingList) {
 		return nil, false
 	}
-	return o.Following, true
+	return o.FollowingList, true
 }
 
-// HasFollowing returns a boolean if a field has been set.
-func (o *ProfileVisibility) HasFollowing() bool {
-	if o != nil && !IsNil(o.Following) {
+// HasFollowingList returns a boolean if a field has been set.
+func (o *ProfileVisibility) HasFollowingList() bool {
+	if o != nil && !IsNil(o.FollowingList) {
 		return true
 	}
 
 	return false
 }
 
-// SetFollowing gets a reference to the given bool and assigns it to the Following field.
-func (o *ProfileVisibility) SetFollowing(v bool) {
-	o.Following = &v
+// SetFollowingList gets a reference to the given bool and assigns it to the FollowingList field.
+func (o *ProfileVisibility) SetFollowingList(v bool) {
+	o.FollowingList = &v
+}
+
+// GetMoonbreezeList returns the MoonbreezeList field value if set, zero value otherwise.
+func (o *ProfileVisibility) GetMoonbreezeList() bool {
+	if o == nil || IsNil(o.MoonbreezeList) {
+		var ret bool
+		return ret
+	}
+	return *o.MoonbreezeList
+}
+
+// GetMoonbreezeListOk returns a tuple with the MoonbreezeList field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ProfileVisibility) GetMoonbreezeListOk() (*bool, bool) {
+	if o == nil || IsNil(o.MoonbreezeList) {
+		return nil, false
+	}
+	return o.MoonbreezeList, true
+}
+
+// HasMoonbreezeList returns a boolean if a field has been set.
+func (o *ProfileVisibility) HasMoonbreezeList() bool {
+	if o != nil && !IsNil(o.MoonbreezeList) {
+		return true
+	}
+
+	return false
+}
+
+// SetMoonbreezeList gets a reference to the given bool and assigns it to the MoonbreezeList field.
+func (o *ProfileVisibility) SetMoonbreezeList(v bool) {
+	o.MoonbreezeList = &v
 }
 
 func (o ProfileVisibility) MarshalJSON() ([]byte, error) {
@@ -180,17 +213,20 @@ func (o ProfileVisibility) MarshalJSON() ([]byte, error) {
 
 func (o ProfileVisibility) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Articles) {
-		toSerialize["articles"] = o.Articles
+	if !IsNil(o.ArticleList) {
+		toSerialize["article_list"] = o.ArticleList
 	}
-	if !IsNil(o.Comments) {
-		toSerialize["comments"] = o.Comments
+	if !IsNil(o.CommentList) {
+		toSerialize["comment_list"] = o.CommentList
 	}
-	if !IsNil(o.Followers) {
-		toSerialize["followers"] = o.Followers
+	if !IsNil(o.FollowerList) {
+		toSerialize["follower_list"] = o.FollowerList
 	}
-	if !IsNil(o.Following) {
-		toSerialize["following"] = o.Following
+	if !IsNil(o.FollowingList) {
+		toSerialize["following_list"] = o.FollowingList
+	}
+	if !IsNil(o.MoonbreezeList) {
+		toSerialize["moonbreeze_list"] = o.MoonbreezeList
 	}
 	return toSerialize, nil
 }

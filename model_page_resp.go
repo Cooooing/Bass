@@ -20,11 +20,11 @@ var _ MappedNullable = &PageResp{}
 // PageResp struct for PageResp
 type PageResp struct {
 	// 总数
-	Total *int32 `json:"total,omitempty"`
+	Total *string `json:"total,omitempty"`
 	// 页码
-	Page *int32 `json:"page,omitempty"`
+	Page *string `json:"page,omitempty"`
 	// 页大小
-	Size *int32 `json:"size,omitempty"`
+	Size *string `json:"size,omitempty"`
 }
 
 // NewPageResp instantiates a new PageResp object
@@ -45,9 +45,9 @@ func NewPageRespWithDefaults() *PageResp {
 }
 
 // GetTotal returns the Total field value if set, zero value otherwise.
-func (o *PageResp) GetTotal() int32 {
+func (o *PageResp) GetTotal() string {
 	if o == nil || IsNil(o.Total) {
-		var ret int32
+		var ret string
 		return ret
 	}
 	return *o.Total
@@ -55,7 +55,7 @@ func (o *PageResp) GetTotal() int32 {
 
 // GetTotalOk returns a tuple with the Total field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PageResp) GetTotalOk() (*int32, bool) {
+func (o *PageResp) GetTotalOk() (*string, bool) {
 	if o == nil || IsNil(o.Total) {
 		return nil, false
 	}
@@ -71,15 +71,15 @@ func (o *PageResp) HasTotal() bool {
 	return false
 }
 
-// SetTotal gets a reference to the given int32 and assigns it to the Total field.
-func (o *PageResp) SetTotal(v int32) {
+// SetTotal gets a reference to the given string and assigns it to the Total field.
+func (o *PageResp) SetTotal(v string) {
 	o.Total = &v
 }
 
 // GetPage returns the Page field value if set, zero value otherwise.
-func (o *PageResp) GetPage() int32 {
+func (o *PageResp) GetPage() string {
 	if o == nil || IsNil(o.Page) {
-		var ret int32
+		var ret string
 		return ret
 	}
 	return *o.Page
@@ -87,7 +87,7 @@ func (o *PageResp) GetPage() int32 {
 
 // GetPageOk returns a tuple with the Page field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PageResp) GetPageOk() (*int32, bool) {
+func (o *PageResp) GetPageOk() (*string, bool) {
 	if o == nil || IsNil(o.Page) {
 		return nil, false
 	}
@@ -103,15 +103,15 @@ func (o *PageResp) HasPage() bool {
 	return false
 }
 
-// SetPage gets a reference to the given int32 and assigns it to the Page field.
-func (o *PageResp) SetPage(v int32) {
+// SetPage gets a reference to the given string and assigns it to the Page field.
+func (o *PageResp) SetPage(v string) {
 	o.Page = &v
 }
 
 // GetSize returns the Size field value if set, zero value otherwise.
-func (o *PageResp) GetSize() int32 {
+func (o *PageResp) GetSize() string {
 	if o == nil || IsNil(o.Size) {
-		var ret int32
+		var ret string
 		return ret
 	}
 	return *o.Size
@@ -119,7 +119,7 @@ func (o *PageResp) GetSize() int32 {
 
 // GetSizeOk returns a tuple with the Size field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PageResp) GetSizeOk() (*int32, bool) {
+func (o *PageResp) GetSizeOk() (*string, bool) {
 	if o == nil || IsNil(o.Size) {
 		return nil, false
 	}
@@ -135,8 +135,8 @@ func (o *PageResp) HasSize() bool {
 	return false
 }
 
-// SetSize gets a reference to the given int32 and assigns it to the Size field.
-func (o *PageResp) SetSize(v int32) {
+// SetSize gets a reference to the given string and assigns it to the Size field.
+func (o *PageResp) SetSize(v string) {
 	o.Size = &v
 }
 

@@ -19,6 +19,8 @@ tags:
   name: DomainService
 - description: 账号地理资料接口。
   name: LocationService
+- description: MoonbreezeService 提供社区短动态入口。
+  name: MoonbreezeService
 - description: 通知接口。
   name: NotificationService
 - description: OTP 接口。
@@ -262,6 +264,25 @@ paths:
           description: OK
       tags:
       - ArticleService
+  /v1/content/article/view-history/page:
+    post:
+      description: 查询当前账号的浏览历史。
+      operationId: ArticleService_PageViewHistory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PageArticleViewHistory_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageArticleViewHistory_Resp"
+          description: OK
+      tags:
+      - ArticleService
   /v1/content/comment/create:
     post:
       description: 创建评论。
@@ -452,6 +473,78 @@ paths:
           description: OK
       tags:
       - DomainService
+  /v1/content/moonbreeze/create:
+    post:
+      operationId: MoonbreezeService_Create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMoonbreeze_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateMoonbreeze_Resp"
+          description: OK
+      tags:
+      - MoonbreezeService
+  /v1/content/moonbreeze/page-member:
+    post:
+      operationId: MoonbreezeService_PageMember
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PageMemberMoonbreezes_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageMoonbreezes_Resp"
+          description: OK
+      tags:
+      - MoonbreezeService
+  /v1/content/moonbreeze/page-public:
+    post:
+      operationId: MoonbreezeService_PagePublic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PagePublicMoonbreezes_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageMoonbreezes_Resp"
+          description: OK
+      tags:
+      - MoonbreezeService
+  /v1/content/moonbreeze/page-watching:
+    post:
+      operationId: MoonbreezeService_PageWatching
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PageWatchingMoonbreezes_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PageMoonbreezes_Resp"
+          description: OK
+      tags:
+      - MoonbreezeService
   /v1/content/postscript/add:
     post:
       description: 添加文章附言。
@@ -1038,25 +1131,6 @@ paths:
           description: OK
       tags:
       - CheckinService
-  /v1/user/location/detect-current:
-    post:
-      description: 按当前请求 IP 解析并更新当前账号的地理资料。
-      operationId: LocationService_DetectCurrent
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/DetectCurrentLocation_Req"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/DetectCurrentLocation_Resp"
-          description: OK
-      tags:
-      - LocationService
   /v1/user/location/get-current:
     post:
       description: 获取当前账号的地理资料。
@@ -1073,25 +1147,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GetCurrentLocation_Resp"
-          description: OK
-      tags:
-      - LocationService
-  /v1/user/location/upsert-current:
-    post:
-      description: 更新当前账号的地理资料。
-      operationId: LocationService_UpsertCurrent
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpsertCurrentLocation_Req"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/UpsertCurrentLocation_Resp"
           description: OK
       tags:
       - LocationService
@@ -1573,6 +1628,7 @@ components:
     ArticleDetail:
       example:
         reward_content_render: reward_content_render
+        city: city
         cover_image_url: cover_image_url
         created_at: 2000-01-23T04:56:07.000+00:00
         title: title
@@ -1779,6 +1835,8 @@ components:
           items:
             $ref: "#/components/schemas/ArticleDomain"
           type: array
+        city:
+          type: string
         created_by:
           type: string
         updated_by:
@@ -1838,10 +1896,10 @@ components:
         published_at: 2000-01-23T04:56:07.000+00:00
         has_reward: true
         commentable: true
-        thank_count: 5
+        thank_count: 6
         publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
-        reward_count: 9
-        like_count: 2
+        reward_count: 5
+        like_count: 1
         viewer_action_state:
           rewarded: true
           collected: true
@@ -1860,9 +1918,9 @@ components:
           icon: icon
           id: id
           url: url
-        reply_count: 3
+        reply_count: 2
         created_by: created_by
-        collect_count: 7
+        collect_count: 5
         tags:
         - domain_id: domain_id
           code: code
@@ -1891,7 +1949,7 @@ components:
           id: id
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
-        view_count: 5
+        view_count: 0
       properties:
         id:
           type: string
@@ -2052,6 +2110,98 @@ components:
         icon:
           type: string
         domain_id:
+          type: string
+      type: object
+    ArticleViewHistoryItem:
+      example:
+        viewed_at: 2000-01-23T04:56:07.000+00:00
+        article:
+          cover_image_url: cover_image_url
+          created_at: 2000-01-23T04:56:07.000+00:00
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          last_reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 9
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          last_reply_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          statement: statement
+          edited_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          published_at: 2000-01-23T04:56:07.000+00:00
+          has_reward: true
+          commentable: true
+          thank_count: 6
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          reward_count: 5
+          like_count: 1
+          viewer_action_state:
+            rewarded: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          has_postscript: true
+          domains:
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          reply_count: 2
+          created_by: created_by
+          collect_count: 5
+          tags:
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          author_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 9
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 0
+      properties:
+        article:
+          $ref: "#/components/schemas/ArticleListItem"
+        viewed_at:
+          format: date-time
           type: string
       type: object
     ArticleViewerActionState:
@@ -2371,6 +2521,36 @@ components:
         article_id:
           type: string
       type: object
+    CreateMoonbreeze_Req:
+      properties:
+        content:
+          type: string
+      type: object
+    CreateMoonbreeze_Resp:
+      example:
+        moonbreeze:
+          city: city
+          author:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 9
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          content: content
+      properties:
+        moonbreeze:
+          $ref: "#/components/schemas/Moonbreeze"
+      type: object
     CreateTag_Req:
       properties:
         tag:
@@ -2397,20 +2577,6 @@ components:
       properties:
         tag:
           $ref: "#/components/schemas/Resp_Tag"
-      type: object
-    DetectCurrentLocation_Req:
-      properties: {}
-      type: object
-    DetectCurrentLocation_Resp:
-      example:
-        location:
-          country: country
-          province: province
-          user_id: user_id
-          city: city
-      properties:
-        location:
-          $ref: "#/components/schemas/Resp_Location"
       type: object
     DisableTotp_Req:
       properties:
@@ -2461,6 +2627,7 @@ components:
       example:
         article:
           reward_content_render: reward_content_render
+          city: city
           cover_image_url: cover_image_url
           created_at: 2000-01-23T04:56:07.000+00:00
           title: title
@@ -2670,13 +2837,14 @@ components:
     GetCurrentPrivacySetting_Resp:
       example:
         privacy_setting:
-          public_followers: true
+          public_moonbreeze_list: true
           public_points: true
           user_id: user_id
           public_location: true
-          public_following: true
-          public_articles: true
-          public_comments: true
+          public_following_list: true
+          public_comment_list: true
+          public_follower_list: true
+          public_article_list: true
           public_online_status: true
       properties:
         privacy_setting:
@@ -2712,10 +2880,11 @@ components:
             following: true
           last_success_login_at: 2000-01-23T04:56:07.000+00:00
           visibility:
-            comments: true
-            followers: true
-            following: true
-            articles: true
+            following_list: true
+            moonbreeze_list: true
+            comment_list: true
+            follower_list: true
+            article_list: true
           background_url: background_url
           location:
             country: country
@@ -2857,9 +3026,9 @@ components:
     ListArticles_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - cover_image_url: cover_image_url
           created_at: 2000-01-23T04:56:07.000+00:00
@@ -2888,10 +3057,10 @@ components:
           published_at: 2000-01-23T04:56:07.000+00:00
           has_reward: true
           commentable: true
-          thank_count: 5
+          thank_count: 6
           publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
-          reward_count: 9
-          like_count: 2
+          reward_count: 5
+          like_count: 1
           viewer_action_state:
             rewarded: true
             collected: true
@@ -2910,9 +3079,9 @@ components:
             icon: icon
             id: id
             url: url
-          reply_count: 3
+          reply_count: 2
           created_by: created_by
-          collect_count: 7
+          collect_count: 5
           tags:
           - domain_id: domain_id
             code: code
@@ -2941,7 +3110,7 @@ components:
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
-          view_count: 5
+          view_count: 0
         - cover_image_url: cover_image_url
           created_at: 2000-01-23T04:56:07.000+00:00
           title: title
@@ -2969,10 +3138,10 @@ components:
           published_at: 2000-01-23T04:56:07.000+00:00
           has_reward: true
           commentable: true
-          thank_count: 5
+          thank_count: 6
           publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
-          reward_count: 9
-          like_count: 2
+          reward_count: 5
+          like_count: 1
           viewer_action_state:
             rewarded: true
             collected: true
@@ -2991,9 +3160,9 @@ components:
             icon: icon
             id: id
             url: url
-          reply_count: 3
+          reply_count: 2
           created_by: created_by
-          collect_count: 7
+          collect_count: 5
           tags:
           - domain_id: domain_id
             code: code
@@ -3022,7 +3191,7 @@ components:
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
-          view_count: 5
+          view_count: 0
       properties:
         page:
           $ref: "#/components/schemas/PageResp"
@@ -3039,9 +3208,9 @@ components:
     ListBlockedRelations_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - updated_at: 2000-01-23T04:56:07.000+00:00
           created_at: 2000-01-23T04:56:07.000+00:00
@@ -3086,9 +3255,9 @@ components:
     ListCommentReplies_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - like_count: 1
           viewer_action_state:
@@ -3261,9 +3430,9 @@ components:
     ListCommentThreads_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - has_more_replies: true
           root:
@@ -3721,9 +3890,9 @@ components:
     ListCommentTimeline_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - like_count: 1
           viewer_action_state:
@@ -3883,9 +4052,9 @@ components:
     ListComments_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - like_count: 1
           viewer_action_state:
@@ -4045,9 +4214,9 @@ components:
     ListDomains_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - is_nav: true
           code: code
@@ -4091,9 +4260,9 @@ components:
     ListFollowersRelations_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - updated_at: 2000-01-23T04:56:07.000+00:00
           created_at: 2000-01-23T04:56:07.000+00:00
@@ -4127,9 +4296,9 @@ components:
     ListFollowers_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - viewer_relation:
             followed_by: true
@@ -4185,9 +4354,9 @@ components:
     ListFollowingRelations_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - updated_at: 2000-01-23T04:56:07.000+00:00
           created_at: 2000-01-23T04:56:07.000+00:00
@@ -4221,9 +4390,9 @@ components:
     ListFollowing_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - viewer_relation:
             followed_by: true
@@ -4279,9 +4448,9 @@ components:
     ListNotifications_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - event_id: event_id
           event_type: EVENT_TYPE_UNSPECIFIED
@@ -4353,9 +4522,9 @@ components:
     ListTags_Resp:
       example:
         page:
-          total: 0
-          size: 1
-          page: 6
+          total: total
+          size: size
+          page: page
         rows:
         - code: code
           icon: icon
@@ -4475,33 +4644,321 @@ components:
           format: int32
           type: integer
       type: object
+    Moonbreeze:
+      example:
+        city: city
+        author:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
+          avatar_url: avatar_url
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          follow_count: 9
+          name: name
+          nickname: nickname
+          mbti: mbti
+          id: id
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: id
+        content: content
+      properties:
+        id:
+          type: string
+        content:
+          type: string
+        author:
+          $ref: "#/components/schemas/AccountProfile"
+        city:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+      type: object
+    PageArticleViewHistory_Req:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReq"
+      type: object
+    PageArticleViewHistory_Resp:
+      example:
+        page:
+          total: total
+          size: size
+          page: page
+        rows:
+        - viewed_at: 2000-01-23T04:56:07.000+00:00
+          article:
+            cover_image_url: cover_image_url
+            created_at: 2000-01-23T04:56:07.000+00:00
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            content: content
+            last_reply_user:
+              created_at: 2000-01-23T04:56:07.000+00:00
+              background_asset_id: background_asset_id
+              follower_count: 3
+              url: url
+              avatar_url: avatar_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              follow_count: 9
+              name: name
+              nickname: nickname
+              mbti: mbti
+              id: id
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            last_reply_at: 2000-01-23T04:56:07.000+00:00
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            statement: statement
+            edited_at: 2000-01-23T04:56:07.000+00:00
+            id: id
+            published_at: 2000-01-23T04:56:07.000+00:00
+            has_reward: true
+            commentable: true
+            thank_count: 6
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            reward_count: 5
+            like_count: 1
+            viewer_action_state:
+              rewarded: true
+              collected: true
+              thanked: true
+              liked: true
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            has_postscript: true
+            domains:
+            - code: code
+              name: name
+              icon: icon
+              id: id
+              url: url
+            - code: code
+              name: name
+              icon: icon
+              id: id
+              url: url
+            reply_count: 2
+            created_by: created_by
+            collect_count: 5
+            tags:
+            - domain_id: domain_id
+              code: code
+              name: name
+              icon: icon
+              id: id
+            - domain_id: domain_id
+              code: code
+              name: name
+              icon: icon
+              id: id
+            content_render: content_render
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            author_user:
+              created_at: 2000-01-23T04:56:07.000+00:00
+              background_asset_id: background_asset_id
+              follower_count: 3
+              url: url
+              avatar_url: avatar_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              follow_count: 9
+              name: name
+              nickname: nickname
+              mbti: mbti
+              id: id
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            view_count: 0
+        - viewed_at: 2000-01-23T04:56:07.000+00:00
+          article:
+            cover_image_url: cover_image_url
+            created_at: 2000-01-23T04:56:07.000+00:00
+            title: title
+            type: ARTICLE_TYPE_UNSPECIFIED
+            content: content
+            last_reply_user:
+              created_at: 2000-01-23T04:56:07.000+00:00
+              background_asset_id: background_asset_id
+              follower_count: 3
+              url: url
+              avatar_url: avatar_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              follow_count: 9
+              name: name
+              nickname: nickname
+              mbti: mbti
+              id: id
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            last_reply_at: 2000-01-23T04:56:07.000+00:00
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            statement: statement
+            edited_at: 2000-01-23T04:56:07.000+00:00
+            id: id
+            published_at: 2000-01-23T04:56:07.000+00:00
+            has_reward: true
+            commentable: true
+            thank_count: 6
+            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            reward_count: 5
+            like_count: 1
+            viewer_action_state:
+              rewarded: true
+              collected: true
+              thanked: true
+              liked: true
+            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+            has_postscript: true
+            domains:
+            - code: code
+              name: name
+              icon: icon
+              id: id
+              url: url
+            - code: code
+              name: name
+              icon: icon
+              id: id
+              url: url
+            reply_count: 2
+            created_by: created_by
+            collect_count: 5
+            tags:
+            - domain_id: domain_id
+              code: code
+              name: name
+              icon: icon
+              id: id
+            - domain_id: domain_id
+              code: code
+              name: name
+              icon: icon
+              id: id
+            content_render: content_render
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            author_user:
+              created_at: 2000-01-23T04:56:07.000+00:00
+              background_asset_id: background_asset_id
+              follower_count: 3
+              url: url
+              avatar_url: avatar_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              follow_count: 9
+              name: name
+              nickname: nickname
+              mbti: mbti
+              id: id
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            view_count: 0
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/ArticleViewHistoryItem"
+          type: array
+        page:
+          $ref: "#/components/schemas/PageResp"
+      type: object
+    PageMemberMoonbreezes_Req:
+      properties:
+        name:
+          type: string
+        cursor:
+          type: string
+        size:
+          format: uint32
+          type: integer
+      type: object
+    PageMoonbreezes_Resp:
+      example:
+        next_cursor: next_cursor
+        rows:
+        - city: city
+          author:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 9
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          content: content
+        - city: city
+          author:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 3
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 9
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          content: content
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/Moonbreeze"
+          type: array
+        next_cursor:
+          type: string
+      type: object
+    PagePublicMoonbreezes_Req:
+      properties:
+        cursor:
+          type: string
+        size:
+          format: uint32
+          type: integer
+      type: object
     PageReq:
       properties:
         page:
           description: 页码
-          format: uint32
-          type: integer
+          type: string
         size:
           description: 页大小
-          format: uint32
-          type: integer
+          type: string
       type: object
     PageResp:
       example:
-        total: 0
-        size: 1
-        page: 6
+        total: total
+        size: size
+        page: page
       properties:
         total:
           description: 总数
-          format: uint32
-          type: integer
+          type: string
         page:
           description: 页码
-          format: uint32
-          type: integer
+          type: string
         size:
           description: 页大小
+          type: string
+      type: object
+    PageWatchingMoonbreezes_Req:
+      properties:
+        cursor:
+          type: string
+        size:
           format: uint32
           type: integer
       type: object
@@ -4551,10 +5008,11 @@ components:
           following: true
         last_success_login_at: 2000-01-23T04:56:07.000+00:00
         visibility:
-          comments: true
-          followers: true
-          following: true
-          articles: true
+          following_list: true
+          moonbreeze_list: true
+          comment_list: true
+          follower_list: true
+          article_list: true
         background_url: background_url
         location:
           country: country
@@ -4620,18 +5078,21 @@ components:
       type: object
     ProfileVisibility:
       example:
-        comments: true
-        followers: true
-        following: true
-        articles: true
+        following_list: true
+        moonbreeze_list: true
+        comment_list: true
+        follower_list: true
+        article_list: true
       properties:
-        articles:
+        article_list:
           type: boolean
-        comments:
+        comment_list:
           type: boolean
-        followers:
+        follower_list:
           type: boolean
-        following:
+        following_list:
+          type: boolean
+        moonbreeze_list:
           type: boolean
       type: object
     PublishArticle_Req:
@@ -5885,30 +6346,33 @@ components:
       type: object
     Resp_PrivacySetting:
       example:
-        public_followers: true
+        public_moonbreeze_list: true
         public_points: true
         user_id: user_id
         public_location: true
-        public_following: true
-        public_articles: true
-        public_comments: true
+        public_following_list: true
+        public_comment_list: true
+        public_follower_list: true
+        public_article_list: true
         public_online_status: true
       properties:
         user_id:
           type: string
         public_points:
           type: boolean
-        public_followers:
+        public_follower_list:
           type: boolean
-        public_following:
+        public_following_list:
           type: boolean
-        public_articles:
+        public_article_list:
           type: boolean
-        public_comments:
+        public_comment_list:
           type: boolean
         public_online_status:
           type: boolean
         public_location:
+          type: boolean
+        public_moonbreeze_list:
           type: boolean
       type: object
     Resp_Record:
@@ -6216,29 +6680,32 @@ components:
       properties:
         public_points:
           type: boolean
-        public_followers:
+        public_follower_list:
           type: boolean
-        public_following:
+        public_following_list:
           type: boolean
-        public_articles:
+        public_article_list:
           type: boolean
-        public_comments:
+        public_comment_list:
           type: boolean
         public_online_status:
           type: boolean
         public_location:
           type: boolean
+        public_moonbreeze_list:
+          type: boolean
       type: object
     UpdateCurrentPrivacySetting_Resp:
       example:
         privacy_setting:
-          public_followers: true
+          public_moonbreeze_list: true
           public_points: true
           user_id: user_id
           public_location: true
-          public_following: true
-          public_articles: true
-          public_comments: true
+          public_following_list: true
+          public_comment_list: true
+          public_follower_list: true
+          public_article_list: true
           public_online_status: true
       properties:
         privacy_setting:
@@ -6390,24 +6857,4 @@ components:
       properties:
         tag:
           $ref: "#/components/schemas/Resp_Tag"
-      type: object
-    UpsertCurrentLocation_Req:
-      properties:
-        country:
-          type: string
-        province:
-          type: string
-        city:
-          type: string
-      type: object
-    UpsertCurrentLocation_Resp:
-      example:
-        location:
-          country: country
-          province: province
-          user_id: user_id
-          city: city
-      properties:
-        location:
-          $ref: "#/components/schemas/Resp_Location"
       type: object

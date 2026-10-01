@@ -90,6 +90,7 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**Get**](docs/ArticleService.md#get) | **Post** /v1/content/article/get | 
 *ArticleService* | [**Like**](docs/ArticleService.md#like) | **Post** /v1/content/article/like | 
 *ArticleService* | [**List**](docs/ArticleService.md#list) | **Post** /v1/content/article/list | 
+*ArticleService* | [**PageViewHistory**](docs/ArticleService.md#pageviewhistory) | **Post** /v1/content/article/view-history/page | 
 *ArticleService* | [**Publish**](docs/ArticleService.md#publish) | **Post** /v1/content/article/publish | 
 *ArticleService* | [**Reward**](docs/ArticleService.md#reward) | **Post** /v1/content/article/reward | 
 *ArticleService* | [**Thank**](docs/ArticleService.md#thank) | **Post** /v1/content/article/thank | 
@@ -112,9 +113,11 @@ Class | Method | HTTP request | Description
 *DomainService* | [**Create**](docs/DomainService.md#create) | **Post** /v1/content/domain/create | 
 *DomainService* | [**List**](docs/DomainService.md#list) | **Post** /v1/content/domain/list | 
 *DomainService* | [**Update**](docs/DomainService.md#update) | **Post** /v1/content/domain/update | 
-*LocationService* | [**DetectCurrent**](docs/LocationService.md#detectcurrent) | **Post** /v1/user/location/detect-current | 
 *LocationService* | [**GetCurrent**](docs/LocationService.md#getcurrent) | **Post** /v1/user/location/get-current | 
-*LocationService* | [**UpsertCurrent**](docs/LocationService.md#upsertcurrent) | **Post** /v1/user/location/upsert-current | 
+*MoonbreezeService* | [**Create**](docs/MoonbreezeService.md#create) | **Post** /v1/content/moonbreeze/create | 
+*MoonbreezeService* | [**PageMember**](docs/MoonbreezeService.md#pagemember) | **Post** /v1/content/moonbreeze/page-member | 
+*MoonbreezeService* | [**PagePublic**](docs/MoonbreezeService.md#pagepublic) | **Post** /v1/content/moonbreeze/page-public | 
+*MoonbreezeService* | [**PageWatching**](docs/MoonbreezeService.md#pagewatching) | **Post** /v1/content/moonbreeze/page-watching | 
 *NotificationService* | [**CountUnread**](docs/NotificationService.md#countunread) | **Post** /v1/notify/notification/count-unread | 
 *NotificationService* | [**List**](docs/NotificationService.md#list) | **Post** /v1/notify/notification/list | 
 *NotificationService* | [**MarkRead**](docs/NotificationService.md#markread) | **Post** /v1/notify/notification/mark-read | 
@@ -159,6 +162,7 @@ Class | Method | HTTP request | Description
  - [ArticleListItem](docs/ArticleListItem.md)
  - [ArticlePostscript](docs/ArticlePostscript.md)
  - [ArticleTag](docs/ArticleTag.md)
+ - [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
  - [ArticleViewerActionState](docs/ArticleViewerActionState.md)
  - [BeginEnableTotpResp](docs/BeginEnableTotpResp.md)
  - [BindArticleTagsReq](docs/BindArticleTagsReq.md)
@@ -179,9 +183,10 @@ Class | Method | HTTP request | Description
  - [CreateDomainResp](docs/CreateDomainResp.md)
  - [CreateDraftArticleReq](docs/CreateDraftArticleReq.md)
  - [CreateDraftArticleResp](docs/CreateDraftArticleResp.md)
+ - [CreateMoonbreezeReq](docs/CreateMoonbreezeReq.md)
+ - [CreateMoonbreezeResp](docs/CreateMoonbreezeResp.md)
  - [CreateTagReq](docs/CreateTagReq.md)
  - [CreateTagResp](docs/CreateTagResp.md)
- - [DetectCurrentLocationResp](docs/DetectCurrentLocationResp.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
  - [DiscardDraftArticleReq](docs/DiscardDraftArticleReq.md)
  - [FollowRelationReq](docs/FollowRelationReq.md)
@@ -237,8 +242,15 @@ Class | Method | HTTP request | Description
  - [LoginResp](docs/LoginResp.md)
  - [MarkReadNotificationReq](docs/MarkReadNotificationReq.md)
  - [MarkReadNotificationResp](docs/MarkReadNotificationResp.md)
+ - [Moonbreeze](docs/Moonbreeze.md)
+ - [PageArticleViewHistoryReq](docs/PageArticleViewHistoryReq.md)
+ - [PageArticleViewHistoryResp](docs/PageArticleViewHistoryResp.md)
+ - [PageMemberMoonbreezesReq](docs/PageMemberMoonbreezesReq.md)
+ - [PageMoonbreezesResp](docs/PageMoonbreezesResp.md)
+ - [PagePublicMoonbreezesReq](docs/PagePublicMoonbreezesReq.md)
  - [PageReq](docs/PageReq.md)
  - [PageResp](docs/PageResp.md)
+ - [PageWatchingMoonbreezesReq](docs/PageWatchingMoonbreezesReq.md)
  - [PrepareProfileImageUploadAccountReq](docs/PrepareProfileImageUploadAccountReq.md)
  - [PrepareProfileImageUploadAccountResp](docs/PrepareProfileImageUploadAccountResp.md)
  - [Profile](docs/Profile.md)
@@ -306,8 +318,6 @@ Class | Method | HTTP request | Description
  - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
- - [UpsertCurrentLocationReq](docs/UpsertCurrentLocationReq.md)
- - [UpsertCurrentLocationResp](docs/UpsertCurrentLocationResp.md)
 
 
 ## Documentation For Authorization

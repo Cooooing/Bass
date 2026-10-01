@@ -12,6 +12,7 @@ Method | HTTP request | Description
 [**Get**](ArticleService.md#Get) | **Post** /v1/content/article/get | 
 [**Like**](ArticleService.md#Like) | **Post** /v1/content/article/like | 
 [**List**](ArticleService.md#List) | **Post** /v1/content/article/list | 
+[**PageViewHistory**](ArticleService.md#PageViewHistory) | **Post** /v1/content/article/view-history/page | 
 [**Publish**](ArticleService.md#Publish) | **Post** /v1/content/article/publish | 
 [**Reward**](ArticleService.md#Reward) | **Post** /v1/content/article/reward | 
 [**Thank**](ArticleService.md#Thank) | **Post** /v1/content/article/thank | 
@@ -532,6 +533,72 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**ListArticlesResp**](ListArticlesResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PageViewHistory
+
+> PageArticleViewHistoryResp PageViewHistory(ctx).PageArticleViewHistoryReq(pageArticleViewHistoryReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	pageArticleViewHistoryReq := *openapiclient.NewPageArticleViewHistoryReq() // PageArticleViewHistoryReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.PageViewHistory(context.Background()).PageArticleViewHistoryReq(pageArticleViewHistoryReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.PageViewHistory``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `PageViewHistory`: PageArticleViewHistoryResp
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.PageViewHistory`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPageViewHistoryRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **pageArticleViewHistoryReq** | [**PageArticleViewHistoryReq**](PageArticleViewHistoryReq.md) |  | 
+
+### Return type
+
+[**PageArticleViewHistoryResp**](PageArticleViewHistoryResp.md)
 
 ### Authorization
 

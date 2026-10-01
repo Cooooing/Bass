@@ -51,6 +51,7 @@ type ArticleDetail struct {
 	EditedAt *time.Time `json:"edited_at,omitempty"`
 	Tags []ArticleTag `json:"tags,omitempty"`
 	Domains []ArticleDomain `json:"domains,omitempty"`
+	City *string `json:"city,omitempty"`
 	CreatedBy *string `json:"created_by,omitempty"`
 	UpdatedBy *string `json:"updated_by,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
@@ -1066,6 +1067,38 @@ func (o *ArticleDetail) SetDomains(v []ArticleDomain) {
 	o.Domains = v
 }
 
+// GetCity returns the City field value if set, zero value otherwise.
+func (o *ArticleDetail) GetCity() string {
+	if o == nil || IsNil(o.City) {
+		var ret string
+		return ret
+	}
+	return *o.City
+}
+
+// GetCityOk returns a tuple with the City field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleDetail) GetCityOk() (*string, bool) {
+	if o == nil || IsNil(o.City) {
+		return nil, false
+	}
+	return o.City, true
+}
+
+// HasCity returns a boolean if a field has been set.
+func (o *ArticleDetail) HasCity() bool {
+	if o != nil && !IsNil(o.City) {
+		return true
+	}
+
+	return false
+}
+
+// SetCity gets a reference to the given string and assigns it to the City field.
+func (o *ArticleDetail) SetCity(v string) {
+	o.City = &v
+}
+
 // GetCreatedBy returns the CreatedBy field value if set, zero value otherwise.
 func (o *ArticleDetail) GetCreatedBy() string {
 	if o == nil || IsNil(o.CreatedBy) {
@@ -1296,6 +1329,9 @@ func (o ArticleDetail) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Domains) {
 		toSerialize["domains"] = o.Domains
+	}
+	if !IsNil(o.City) {
+		toSerialize["city"] = o.City
 	}
 	if !IsNil(o.CreatedBy) {
 		toSerialize["created_by"] = o.CreatedBy

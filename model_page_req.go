@@ -20,9 +20,9 @@ var _ MappedNullable = &PageReq{}
 // PageReq struct for PageReq
 type PageReq struct {
 	// 页码
-	Page *int32 `json:"page,omitempty"`
+	Page *string `json:"page,omitempty"`
 	// 页大小
-	Size *int32 `json:"size,omitempty"`
+	Size *string `json:"size,omitempty"`
 }
 
 // NewPageReq instantiates a new PageReq object
@@ -43,9 +43,9 @@ func NewPageReqWithDefaults() *PageReq {
 }
 
 // GetPage returns the Page field value if set, zero value otherwise.
-func (o *PageReq) GetPage() int32 {
+func (o *PageReq) GetPage() string {
 	if o == nil || IsNil(o.Page) {
-		var ret int32
+		var ret string
 		return ret
 	}
 	return *o.Page
@@ -53,7 +53,7 @@ func (o *PageReq) GetPage() int32 {
 
 // GetPageOk returns a tuple with the Page field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PageReq) GetPageOk() (*int32, bool) {
+func (o *PageReq) GetPageOk() (*string, bool) {
 	if o == nil || IsNil(o.Page) {
 		return nil, false
 	}
@@ -69,15 +69,15 @@ func (o *PageReq) HasPage() bool {
 	return false
 }
 
-// SetPage gets a reference to the given int32 and assigns it to the Page field.
-func (o *PageReq) SetPage(v int32) {
+// SetPage gets a reference to the given string and assigns it to the Page field.
+func (o *PageReq) SetPage(v string) {
 	o.Page = &v
 }
 
 // GetSize returns the Size field value if set, zero value otherwise.
-func (o *PageReq) GetSize() int32 {
+func (o *PageReq) GetSize() string {
 	if o == nil || IsNil(o.Size) {
-		var ret int32
+		var ret string
 		return ret
 	}
 	return *o.Size
@@ -85,7 +85,7 @@ func (o *PageReq) GetSize() int32 {
 
 // GetSizeOk returns a tuple with the Size field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *PageReq) GetSizeOk() (*int32, bool) {
+func (o *PageReq) GetSizeOk() (*string, bool) {
 	if o == nil || IsNil(o.Size) {
 		return nil, false
 	}
@@ -101,8 +101,8 @@ func (o *PageReq) HasSize() bool {
 	return false
 }
 
-// SetSize gets a reference to the given int32 and assigns it to the Size field.
-func (o *PageReq) SetSize(v int32) {
+// SetSize gets a reference to the given string and assigns it to the Size field.
+func (o *PageReq) SetSize(v string) {
 	o.Size = &v
 }
 

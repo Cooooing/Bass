@@ -134,6 +134,20 @@ type ArticleService interface {
 	ListExecute(r ApiListRequest) (*ListArticlesResp, *http.Response, error)
 
 	/*
+	PageViewHistory Method for PageViewHistory
+
+	查询当前账号的浏览历史。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiPageViewHistoryRequest
+	*/
+	PageViewHistory(ctx context.Context) ApiPageViewHistoryRequest
+
+	// PageViewHistoryExecute executes the request
+	//  @return PageArticleViewHistoryResp
+	PageViewHistoryExecute(r ApiPageViewHistoryRequest) (*PageArticleViewHistoryResp, *http.Response, error)
+
+	/*
 	Publish Method for Publish
 
 	发布文章
@@ -1036,6 +1050,116 @@ func (a *ArticleServiceService) ListExecute(r ApiListRequest) (*ListArticlesResp
 	}
 	// body params
 	localVarPostBody = r.listArticlesReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiPageViewHistoryRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	pageArticleViewHistoryReq *PageArticleViewHistoryReq
+}
+
+func (r ApiPageViewHistoryRequest) PageArticleViewHistoryReq(pageArticleViewHistoryReq PageArticleViewHistoryReq) ApiPageViewHistoryRequest {
+	r.pageArticleViewHistoryReq = &pageArticleViewHistoryReq
+	return r
+}
+
+func (r ApiPageViewHistoryRequest) Execute() (*PageArticleViewHistoryResp, *http.Response, error) {
+	return r.ApiService.PageViewHistoryExecute(r)
+}
+
+/*
+PageViewHistory Method for PageViewHistory
+
+查询当前账号的浏览历史。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiPageViewHistoryRequest
+*/
+func (a *ArticleServiceService) PageViewHistory(ctx context.Context) ApiPageViewHistoryRequest {
+	return ApiPageViewHistoryRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return PageArticleViewHistoryResp
+func (a *ArticleServiceService) PageViewHistoryExecute(r ApiPageViewHistoryRequest) (*PageArticleViewHistoryResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *PageArticleViewHistoryResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.PageViewHistory")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/view-history/page"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.pageArticleViewHistoryReq == nil {
+		return localVarReturnValue, nil, reportError("pageArticleViewHistoryReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.pageArticleViewHistoryReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

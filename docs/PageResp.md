@@ -4,9 +4,9 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Total** | Pointer to **int32** | 总数 | [optional] 
-**Page** | Pointer to **int32** | 页码 | [optional] 
-**Size** | Pointer to **int32** | 页大小 | [optional] 
+**Total** | Pointer to **string** | 总数 | [optional] 
+**Page** | Pointer to **string** | 页码 | [optional] 
+**Size** | Pointer to **string** | 页大小 | [optional] 
 
 ## Methods
 
@@ -29,20 +29,20 @@ but it doesn't guarantee that properties required by API are set
 
 ### GetTotal
 
-`func (o *PageResp) GetTotal() int32`
+`func (o *PageResp) GetTotal() string`
 
 GetTotal returns the Total field if non-nil, zero value otherwise.
 
 ### GetTotalOk
 
-`func (o *PageResp) GetTotalOk() (*int32, bool)`
+`func (o *PageResp) GetTotalOk() (*string, bool)`
 
 GetTotalOk returns a tuple with the Total field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTotal
 
-`func (o *PageResp) SetTotal(v int32)`
+`func (o *PageResp) SetTotal(v string)`
 
 SetTotal sets Total field to given value.
 
@@ -54,20 +54,20 @@ HasTotal returns a boolean if a field has been set.
 
 ### GetPage
 
-`func (o *PageResp) GetPage() int32`
+`func (o *PageResp) GetPage() string`
 
 GetPage returns the Page field if non-nil, zero value otherwise.
 
 ### GetPageOk
 
-`func (o *PageResp) GetPageOk() (*int32, bool)`
+`func (o *PageResp) GetPageOk() (*string, bool)`
 
 GetPageOk returns a tuple with the Page field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetPage
 
-`func (o *PageResp) SetPage(v int32)`
+`func (o *PageResp) SetPage(v string)`
 
 SetPage sets Page field to given value.
 
@@ -79,20 +79,20 @@ HasPage returns a boolean if a field has been set.
 
 ### GetSize
 
-`func (o *PageResp) GetSize() int32`
+`func (o *PageResp) GetSize() string`
 
 GetSize returns the Size field if non-nil, zero value otherwise.
 
 ### GetSizeOk
 
-`func (o *PageResp) GetSizeOk() (*int32, bool)`
+`func (o *PageResp) GetSizeOk() (*string, bool)`
 
 GetSizeOk returns a tuple with the Size field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetSize
 
-`func (o *PageResp) SetSize(v int32)`
+`func (o *PageResp) SetSize(v string)`
 
 SetSize sets Size field to given value.
 

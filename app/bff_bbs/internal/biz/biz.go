@@ -21,4 +21,5 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewContentDomainUsecase,
 	usecase.NewContentTagUsecase,
 	usecase.NewNotificationUsecase,
+	usecase.NewContentBreezemoonUsecase,
 )

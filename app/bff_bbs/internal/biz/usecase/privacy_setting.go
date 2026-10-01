@@ -18,7 +18,10 @@ func NewPrivacySettingUsecase(
 	}
 }
 
-func (u *PrivacySettingUsecase) GetCurrentPrivacySetting(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentPrivacySetting_Resp_PrivacySetting, error) {
+func (u *PrivacySettingUsecase) GetCurrentPrivacySetting(
+	ctx context.Context,
+	userID int64,
+) (*bbsuserv1.GetCurrentPrivacySetting_Resp_PrivacySetting, error) {
 	reply, err := u.privacySettingClient.GetCurrentPrivacySetting(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -34,6 +37,7 @@ func (u *PrivacySettingUsecase) GetCurrentPrivacySetting(ctx context.Context, us
 			PublicComments:     row.PublicComments,
 			PublicOnlineStatus: row.PublicOnlineStatus,
 			PublicLocation:     row.PublicLocation,
+			PublicBreezemoons:  row.PublicBreezemoons,
 		}
 	}
 	return setting, nil
@@ -48,9 +52,13 @@ type UpdateCurrentPrivacySettingReq struct {
 	PublicComments     *bool
 	PublicOnlineStatus *bool
 	PublicLocation     *bool
+	PublicBreezemoons  *bool
 }
 
-func (u *PrivacySettingUsecase) UpdateCurrentPrivacySetting(ctx context.Context, req *UpdateCurrentPrivacySettingReq) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp_PrivacySetting, error) {
+func (u *PrivacySettingUsecase) UpdateCurrentPrivacySetting(
+	ctx context.Context,
+	req *UpdateCurrentPrivacySettingReq,
+) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp_PrivacySetting, error) {
 	reply, err := u.privacySettingClient.UpdateCurrentPrivacySetting(ctx, &repo.UpdateCurrentPrivacySettingReq{
 		UserID:             req.UserID,
 		PublicPoints:       req.PublicPoints,
@@ -60,6 +68,7 @@ func (u *PrivacySettingUsecase) UpdateCurrentPrivacySetting(ctx context.Context,
 		PublicComments:     req.PublicComments,
 		PublicOnlineStatus: req.PublicOnlineStatus,
 		PublicLocation:     req.PublicLocation,
+		PublicBreezemoons:  req.PublicBreezemoons,
 	})
 	if err != nil {
 		return nil, err
@@ -75,11 +84,8 @@ func (u *PrivacySettingUsecase) UpdateCurrentPrivacySetting(ctx context.Context,
 			PublicComments:     row.PublicComments,
 			PublicOnlineStatus: row.PublicOnlineStatus,
 			PublicLocation:     row.PublicLocation,
+			PublicBreezemoons:  row.PublicBreezemoons,
 		}
 	}
 	return setting, nil
-}
-
-func boolValue(value *bool) bool {
-	return value == nil || *value
 }

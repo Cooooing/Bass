@@ -36,21 +36,22 @@ func (s *PrivacySettingService) Get(ctx context.Context, req *v1.GetPrivacySetti
 	if err != nil {
 		return nil, err
 	}
-	reply := &v1.GetPrivacySetting_Resp_PrivacySetting{
-		UserId: req.GetUserId(),
+	if res == nil {
+		res = &model.PrivacySetting{UserID: req.GetUserId()}
 	}
-	if res != nil {
-		reply.PublicPoints = res.PublicPoints
-		reply.PublicFollowers = res.PublicFollowers
-		reply.PublicFollowing = res.PublicFollowing
-		reply.PublicArticles = res.PublicArticles
-		reply.PublicComments = res.PublicComments
-		reply.PublicOnlineStatus = res.PublicOnlineStatus
-		reply.PublicLocation = res.PublicLocation
+	return &v1.GetPrivacySetting_Resp{PrivacySetting: s.privacySettingReply(res)}, nil
+}
+
+func (s *PrivacySettingService) Map(ctx context.Context, req *v1.MapPrivacySettings_Req) (*v1.MapPrivacySettings_Resp, error) {
+	settings, err := s.privacySettingUsecase.MapByUserIDs(ctx, req.GetUserIds())
+	if err != nil {
+		return nil, err
 	}
-	return &v1.GetPrivacySetting_Resp{
-		PrivacySetting: reply,
-	}, nil
+	reply := make(map[int64]*v1.PrivacySetting, len(settings))
+	for userID, setting := range settings {
+		reply[userID] = s.privacySettingReply(setting)
+	}
+	return &v1.MapPrivacySettings_Resp{PrivacySettings: reply}, nil
 }
 
 func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivacySetting_Req) (*v1.UpdatePrivacySetting_Resp, error) {
@@ -63,21 +64,27 @@ func (s *PrivacySettingService) Update(ctx context.Context, req *v1.UpdatePrivac
 		PublicComments:     req.PublicComments,
 		PublicOnlineStatus: req.PublicOnlineStatus,
 		PublicLocation:     req.PublicLocation,
+		PublicBreezemoons:  req.PublicBreezemoons,
 	})
 	if err != nil {
 		return nil, err
 	}
-	privacySetting := res
-	return &v1.UpdatePrivacySetting_Resp{
-		PrivacySetting: &v1.UpdatePrivacySetting_Resp_PrivacySetting{
-			UserId:             req.GetUserId(),
-			PublicPoints:       privacySetting.PublicPoints,
-			PublicFollowers:    privacySetting.PublicFollowers,
-			PublicFollowing:    privacySetting.PublicFollowing,
-			PublicArticles:     privacySetting.PublicArticles,
-			PublicComments:     privacySetting.PublicComments,
-			PublicOnlineStatus: privacySetting.PublicOnlineStatus,
-			PublicLocation:     privacySetting.PublicLocation,
-		},
-	}, nil
+	return &v1.UpdatePrivacySetting_Resp{PrivacySetting: s.privacySettingReply(res)}, nil
+}
+
+func (*PrivacySettingService) privacySettingReply(setting *model.PrivacySetting) *v1.PrivacySetting {
+	if setting == nil {
+		return nil
+	}
+	return &v1.PrivacySetting{
+		UserId:             setting.UserID,
+		PublicPoints:       setting.PublicPoints,
+		PublicFollowers:    setting.PublicFollowers,
+		PublicFollowing:    setting.PublicFollowing,
+		PublicArticles:     setting.PublicArticles,
+		PublicComments:     setting.PublicComments,
+		PublicOnlineStatus: setting.PublicOnlineStatus,
+		PublicLocation:     setting.PublicLocation,
+		PublicBreezemoons:  setting.PublicBreezemoons,
+	}
 }

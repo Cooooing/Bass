@@ -451,6 +451,21 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "Invalid article information",
 			},
 		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_BREEZEMOON_INVALID: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "动态内容必须是最多 512 个字符的单行文本",
+				commonenums.Language_LANGUAGE_ZH_TW: "動態內容必須是最多 512 個字元的單行文字",
+				commonenums.Language_LANGUAGE_EN:    "A breezemoon must be one line with at most 512 characters",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_BREEZEMOON_RATE_LIMITED: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "发布过于频繁，请 %d 秒后再试",
+				commonenums.Language_LANGUAGE_ZH_TW: "發布過於頻繁，請 %d 秒後再試",
+				commonenums.Language_LANGUAGE_EN:    "You are posting too frequently. Please try again in %d seconds",
+			},
+			Data: new(cerrors.RetryAfterErrorData),
+		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_PUBLISH_AT_REQUIRED: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "请选择定时发布时间",

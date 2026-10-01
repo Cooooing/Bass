@@ -42,6 +42,7 @@ func (PrivacySetting) Fields() []ent.Field {
 		field.Bool("public_comments").Comment("评论列表是否公开").Default(true),
 		field.Bool("public_online_status").Comment("在线状态是否公开").Default(true),
 		field.Bool("public_location").Comment("位置是否公开").Default(true),
+		field.Bool("public_breezemoons").Comment("明月清风是否公开").Default(true),
 	}
 }
 

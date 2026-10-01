@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/content/v1;v1";
+
+// ContentBreezemoonService 提供短动态的事实写入与游标读取能力。
+service ContentBreezemoonService {
+  rpc Create(CreateBreezemoon.Req) returns (CreateBreezemoon.Resp) {}
+  rpc Page(PageBreezemoons.Req) returns (PageBreezemoons.Resp) {}
+}
+
+message CreateBreezemoon {
+  message Req {
+    string content = 1; // 动态正文
+    int64 author_id = 2; // 作者账号 ID
+    optional string city = 3; // 发布时城市快照
+  }
+  message Resp {
+    Breezemoon breezemoon = 1;
+  }
+}
+
+message PageBreezemoons {
+  message Req {
+    repeated int64 author_ids = 1; // 作者账号 ID；空表示全部作者
+    optional string cursor = 2; // 不透明续页游标
+    uint32 size = 3; // 页面大小
+  }
+  message Resp {
+    repeated Breezemoon rows = 1;
+    optional string next_cursor = 2; // 下一页游标
+  }
+}
+
+message Breezemoon {
+  int64 id = 1;
+  string content = 2;
+  int64 author_id = 3;
+  optional string city = 4;
+  google.protobuf.Timestamp created_at = 1000;
+  google.protobuf.Timestamp updated_at = 1001;
+}

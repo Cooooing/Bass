@@ -123,6 +123,7 @@ func (r *PrivacySettingRepo) get(ctx context.Context, req *repo.PrivacySettingGe
 		PublicComments:     new(p.PublicComments),
 		PublicOnlineStatus: new(p.PublicOnlineStatus),
 		PublicLocation:     new(p.PublicLocation),
+		PublicBreezemoons:  new(p.PublicBreezemoons),
 		PublicFollowing:    new(p.PublicFollowing),
 	}, nil
 }
@@ -146,6 +147,7 @@ func (r *PrivacySettingRepo) list(ctx context.Context, req *repo.PrivacySettingG
 			PublicComments:     new(p.PublicComments),
 			PublicOnlineStatus: new(p.PublicOnlineStatus),
 			PublicLocation:     new(p.PublicLocation),
+			PublicBreezemoons:  new(p.PublicBreezemoons),
 			PublicFollowing:    new(p.PublicFollowing),
 		})
 	}
@@ -159,7 +161,7 @@ func (r *PrivacySettingRepo) mapRows(ctx context.Context, req *repo.PrivacySetti
 	}
 	result := make(map[int64]*model.PrivacySetting, len(list))
 	for _, item := range list {
-		result[item.ID] = item
+		result[item.UserID] = item
 	}
 	return result, nil
 }
@@ -198,6 +200,7 @@ func (r *PrivacySettingRepo) page(ctx context.Context, page *common.PageReq, req
 			PublicComments:     new(p.PublicComments),
 			PublicOnlineStatus: new(p.PublicOnlineStatus),
 			PublicLocation:     new(p.PublicLocation),
+			PublicBreezemoons:  new(p.PublicBreezemoons),
 			PublicFollowing:    new(p.PublicFollowing),
 		})
 	}
@@ -237,6 +240,9 @@ func (r *PrivacySettingRepo) upsertByUserID(ctx context.Context, p *model.Privac
 		if p.PublicLocation != nil {
 			create.SetPublicLocation(*p.PublicLocation)
 		}
+		if p.PublicBreezemoons != nil {
+			create.SetPublicBreezemoons(*p.PublicBreezemoons)
+		}
 		if p.PublicFollowing != nil {
 			create.SetPublicFollowing(*p.PublicFollowing)
 		}
@@ -253,6 +259,7 @@ func (r *PrivacySettingRepo) upsertByUserID(ctx context.Context, p *model.Privac
 			PublicComments:     new(saved.PublicComments),
 			PublicOnlineStatus: new(saved.PublicOnlineStatus),
 			PublicLocation:     new(saved.PublicLocation),
+			PublicBreezemoons:  new(saved.PublicBreezemoons),
 			PublicFollowing:    new(saved.PublicFollowing),
 		}, nil
 	}
@@ -268,6 +275,7 @@ func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting
 		p.PublicComments == nil &&
 		p.PublicOnlineStatus == nil &&
 		p.PublicLocation == nil &&
+		p.PublicBreezemoons == nil &&
 		p.PublicFollowing == nil {
 		saved, err := tx.PrivacySetting.Get(ctx, p.ID)
 		if err != nil {
@@ -282,6 +290,7 @@ func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting
 			PublicComments:     new(saved.PublicComments),
 			PublicOnlineStatus: new(saved.PublicOnlineStatus),
 			PublicLocation:     new(saved.PublicLocation),
+			PublicBreezemoons:  new(saved.PublicBreezemoons),
 			PublicFollowing:    new(saved.PublicFollowing),
 		}, nil
 	}
@@ -304,6 +313,9 @@ func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting
 	if p.PublicLocation != nil {
 		update.SetPublicLocation(*p.PublicLocation)
 	}
+	if p.PublicBreezemoons != nil {
+		update.SetPublicBreezemoons(*p.PublicBreezemoons)
+	}
 	if p.PublicFollowing != nil {
 		update.SetPublicFollowing(*p.PublicFollowing)
 	}
@@ -320,6 +332,7 @@ func (r *PrivacySettingRepo) update(ctx context.Context, p *model.PrivacySetting
 		PublicComments:     new(saved.PublicComments),
 		PublicOnlineStatus: new(saved.PublicOnlineStatus),
 		PublicLocation:     new(saved.PublicLocation),
+		PublicBreezemoons:  new(saved.PublicBreezemoons),
 		PublicFollowing:    new(saved.PublicFollowing),
 	}, nil
 }

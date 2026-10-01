@@ -39,6 +39,7 @@ message GetCurrentPrivacySetting {
       optional bool public_comments = 6; // 是否公开评论列表
       optional bool public_online_status = 7; // 是否公开在线状态
       optional bool public_location = 8; // 是否公开地理资料
+      optional bool public_breezemoons = 9; // 是否公开明月清风
     }
     PrivacySetting privacy_setting = 1; // 当前账号隐私设置
   }
@@ -54,6 +55,7 @@ message UpdateCurrentPrivacySetting {
     optional bool public_comments = 5; // 是否公开评论列表
     optional bool public_online_status = 6; // 是否公开在线状态
     optional bool public_location = 7; // 是否公开地理资料
+    optional bool public_breezemoons = 8; // 是否公开明月清风
   }
   message Resp {
     message PrivacySetting {
@@ -65,6 +67,7 @@ message UpdateCurrentPrivacySetting {
       optional bool public_comments = 6; // 是否公开评论列表
       optional bool public_online_status = 7; // 是否公开在线状态
       optional bool public_location = 8; // 是否公开地理资料
+      optional bool public_breezemoons = 9; // 是否公开明月清风
     }
     PrivacySetting privacy_setting = 1; // 更新后的账号隐私设置
   }

@@ -104,7 +104,10 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 	if err != nil {
 		return nil, err
 	}
-	profile := &bbsuserv1.Profile{Account: accountProfile(account), Visibility: profileVisibility(privacy)}
+	profile := &bbsuserv1.Profile{
+		Account:    u.accountProfile(account),
+		Visibility: u.profileVisibility(privacy),
+	}
 	if lastLogin != nil {
 		profile.LastSuccessLoginAt = timestamppb.New(*lastLogin)
 	}
@@ -117,7 +120,7 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 			profile.BackgroundUrl = &asset.URL
 		}
 	}
-	if viewerID == account.ID || boolValue(privacy.PublicLocation) {
+	if viewerID == account.ID || privacy.PublicLocation == nil || *privacy.PublicLocation {
 		location, err := u.locationClient.GetCurrentLocation(ctx, account.ID)
 		if err != nil {
 			return nil, err
@@ -131,7 +134,7 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 		if err != nil {
 			return nil, err
 		}
-		profile.ViewerRelation = profileRelation(status)
+		profile.ViewerRelation = u.profileRelation(status)
 	}
 	return profile, nil
 }
@@ -145,7 +148,7 @@ func (u *AccountUsecase) ListFollowing(ctx context.Context, name string, viewerI
 	if err != nil {
 		return nil, err
 	}
-	if viewerID != account.ID && !boolValue(privacy.PublicFollowing) {
+	if viewerID != account.ID && privacy.PublicFollowing != nil && !*privacy.PublicFollowing {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWING_PRIVATE)
 	}
 	result, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{ActorID: account.ID, Page: page})
@@ -164,7 +167,7 @@ func (u *AccountUsecase) ListFollowers(ctx context.Context, name string, viewerI
 	if err != nil {
 		return nil, err
 	}
-	if viewerID != account.ID && !boolValue(privacy.PublicFollowers) {
+	if viewerID != account.ID && privacy.PublicFollowers != nil && !*privacy.PublicFollowers {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWERS_PRIVATE)
 	}
 	result, err := u.relationClient.ListFollowers(ctx, &repo.ListFollowersRelationsReq{ActorID: account.ID, Page: page})
@@ -183,7 +186,10 @@ func (u *AccountUsecase) listFollowingProfileAccounts(ctx context.Context, viewe
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.ListFollowing_Resp{Page: profilePage(result.Page), Rows: rows}, nil
+	return &bbsuserv1.ListFollowing_Resp{
+		Page: u.profilePage(result.Page),
+		Rows: rows,
+	}, nil
 }
 
 func (u *AccountUsecase) listFollowerProfileAccounts(ctx context.Context, viewerID int64, result *repo.ListFollowersRelationsResp) (*bbsuserv1.ListFollowers_Resp, error) {
@@ -195,7 +201,10 @@ func (u *AccountUsecase) listFollowerProfileAccounts(ctx context.Context, viewer
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.ListFollowers_Resp{Page: profilePage(result.Page), Rows: rows}, nil
+	return &bbsuserv1.ListFollowers_Resp{
+		Page: u.profilePage(result.Page),
+		Rows: rows,
+	}, nil
 }
 
 func (u *AccountUsecase) profileListItems(ctx context.Context, viewerID int64, userIDs []int64) ([]*bbsuserv1.AccountProfileListItem, error) {
@@ -214,15 +223,15 @@ func (u *AccountUsecase) profileListItems(ctx context.Context, viewerID int64, u
 	for _, userID := range userIDs {
 		if account := accounts[userID]; account != nil {
 			rows = append(rows, &bbsuserv1.AccountProfileListItem{
-				Account:        accountProfile(account),
-				ViewerRelation: profileRelation(statuses[userID]),
+				Account:        u.accountProfile(account),
+				ViewerRelation: u.profileRelation(statuses[userID]),
 			})
 		}
 	}
 	return rows, nil
 }
 
-func accountProfile(account *repo.AccountProfile) *bbsuserv1.AccountProfile {
+func (*AccountUsecase) accountProfile(account *repo.AccountProfile) *bbsuserv1.AccountProfile {
 	if account == nil {
 		return nil
 	}
@@ -248,16 +257,16 @@ func accountProfile(account *repo.AccountProfile) *bbsuserv1.AccountProfile {
 	return profile
 }
 
-func profileVisibility(setting *repo.PrivacySetting) *bbsuserv1.ProfileVisibility {
+func (*AccountUsecase) profileVisibility(setting *repo.PrivacySetting) *bbsuserv1.ProfileVisibility {
 	return &bbsuserv1.ProfileVisibility{
-		Articles:  boolValue(setting.PublicArticles),
-		Comments:  boolValue(setting.PublicComments),
-		Followers: boolValue(setting.PublicFollowers),
-		Following: boolValue(setting.PublicFollowing),
+		Articles:  setting.PublicArticles == nil || *setting.PublicArticles,
+		Comments:  setting.PublicComments == nil || *setting.PublicComments,
+		Followers: setting.PublicFollowers == nil || *setting.PublicFollowers,
+		Following: setting.PublicFollowing == nil || *setting.PublicFollowing,
 	}
 }
 
-func profileRelation(status *repo.RelationStatus) *bbsuserv1.ProfileRelation {
+func (*AccountUsecase) profileRelation(status *repo.RelationStatus) *bbsuserv1.ProfileRelation {
 	if status == nil {
 		return &bbsuserv1.ProfileRelation{}
 	}
@@ -269,7 +278,7 @@ func profileRelation(status *repo.RelationStatus) *bbsuserv1.ProfileRelation {
 	}
 }
 
-func profilePage(page *repo.PageResp) *commonv1.PageResp {
+func (*AccountUsecase) profilePage(page *repo.PageResp) *commonv1.PageResp {
 	if page == nil {
 		return nil
 	}
@@ -348,13 +357,13 @@ type PrepareProfileImageUploadAccountResp struct {
 // PrepareProfileImageUploadAccount applies profile-specific file limits before
 // asking platform for a content-addressed MinIO upload policy.
 func (u *AccountUsecase) PrepareProfileImageUploadAccount(ctx context.Context, req *PrepareProfileImageUploadAccountReq) (*PrepareProfileImageUploadAccountResp, error) {
-	if req == nil || req.UserID <= 0 || !profileImagePurposeValid(req.Purpose) || !validProfileImageHashAndMime(req.Hash, req.MimeType) || req.Size <= 0 {
+	if req == nil || req.UserID <= 0 || !u.profileImagePurposeValid(req.Purpose) || !u.validProfileImageHashAndMime(req.Hash, req.MimeType) || req.Size <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
 	if req.Size > maxProfileImageSize {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_TOO_LARGE)
 	}
-	hash := normalizeProfileImageHash(req.Hash)
+	hash := u.normalizeProfileImageHash(req.Hash)
 	result, err := u.assetClient.PrepareDirectUpload(ctx, &repo.PrepareDirectAssetUploadReq{
 		Hash:       hash,
 		MimeType:   strings.ToLower(strings.TrimSpace(req.MimeType)),
@@ -380,10 +389,10 @@ type CompleteProfileImageUploadAccountResp struct {
 // CompleteProfileImageUploadAccount is safely repeatable while MinIO's event
 // callback races with the browser. It updates only the user-owned reference.
 func (u *AccountUsecase) CompleteProfileImageUploadAccount(ctx context.Context, req *CompleteProfileImageUploadAccountReq) (*CompleteProfileImageUploadAccountResp, error) {
-	if req == nil || !profileImagePurposeValid(req.Purpose) {
+	if req == nil || !u.profileImagePurposeValid(req.Purpose) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
-	hash := normalizeProfileImageHash(req.Hash)
+	hash := u.normalizeProfileImageHash(req.Hash)
 	if !assetHashPattern.MatchString(hash) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
@@ -396,7 +405,7 @@ func (u *AccountUsecase) CompleteProfileImageUploadAccount(ctx context.Context, 
 	}
 	// Complete does not trust the original browser declaration. The completed
 	// Asset metadata is the provider-confirmed fact used for the final bind.
-	if !validProfileImageHashAndMime(hash, asset.MimeType) || asset.Size <= 0 {
+	if !u.validProfileImageHashAndMime(hash, asset.MimeType) || asset.Size <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
 	if asset.Size > maxProfileImageSize {
@@ -412,7 +421,7 @@ func (u *AccountUsecase) CompleteProfileImageUploadAccount(ctx context.Context, 
 	if err != nil {
 		return nil, err
 	}
-	profile := accountProfile(row)
+	profile := u.accountProfile(row)
 	if profile != nil {
 		if req.Purpose == bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_AVATAR {
 			profile.AvatarUrl = &asset.URL
@@ -423,7 +432,7 @@ func (u *AccountUsecase) CompleteProfileImageUploadAccount(ctx context.Context, 
 	return &CompleteProfileImageUploadAccountResp{Profile: profile, ImageURL: asset.URL}, nil
 }
 
-func profileImagePurposeValid(p bbsuserv1.ProfileImagePurpose) bool {
+func (*AccountUsecase) profileImagePurposeValid(p bbsuserv1.ProfileImagePurpose) bool {
 	switch p {
 	case bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_AVATAR,
 		bbsuserv1.ProfileImagePurpose_PROFILE_IMAGE_PURPOSE_BACKGROUND:
@@ -434,8 +443,8 @@ func profileImagePurposeValid(p bbsuserv1.ProfileImagePurpose) bool {
 
 const maxProfileImageSize = 2 * 1024 * 1024
 
-func validProfileImageHashAndMime(hash, mimeType string) bool {
-	if !assetHashPattern.MatchString(normalizeProfileImageHash(hash)) {
+func (u *AccountUsecase) validProfileImageHashAndMime(hash, mimeType string) bool {
+	if !assetHashPattern.MatchString(u.normalizeProfileImageHash(hash)) {
 		return false
 	}
 	switch strings.ToLower(strings.TrimSpace(mimeType)) {
@@ -445,7 +454,7 @@ func validProfileImageHashAndMime(hash, mimeType string) bool {
 	return false
 }
 
-func normalizeProfileImageHash(value string) string {
+func (*AccountUsecase) normalizeProfileImageHash(value string) string {
 	return strings.ToLower(strings.TrimSpace(value))
 }
 

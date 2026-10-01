@@ -21,31 +21,41 @@ func NewPrivacySettingClient(
 	}
 }
 
-func (r *PrivacySettingClient) GetCurrentPrivacySetting(ctx context.Context, userID int64) (*repo.PrivacySetting, error) {
+func (r *PrivacySettingClient) GetCurrentPrivacySetting(
+	ctx context.Context,
+	userID int64,
+) (*repo.PrivacySetting, error) {
 	reply, err := r.userClient.PrivacySetting.Get(ctx, &userv1.GetPrivacySetting_Req{
 		UserId: userID,
 	})
 	if err != nil {
 		return nil, err
 	}
-	setting := reply.GetPrivacySetting()
-	var out *repo.PrivacySetting
-	if setting != nil {
-		out = &repo.PrivacySetting{
-			UserID:             setting.GetUserId(),
-			PublicPoints:       setting.PublicPoints,
-			PublicFollowers:    setting.PublicFollowers,
-			PublicFollowing:    setting.PublicFollowing,
-			PublicArticles:     setting.PublicArticles,
-			PublicComments:     setting.PublicComments,
-			PublicOnlineStatus: setting.PublicOnlineStatus,
-			PublicLocation:     setting.PublicLocation,
-		}
-	}
-	return out, nil
+	return r.privacySettingRepoModel(reply.GetPrivacySetting()), nil
 }
 
-func (r *PrivacySettingClient) UpdateCurrentPrivacySetting(ctx context.Context, req *repo.UpdateCurrentPrivacySettingReq) (*repo.PrivacySetting, error) {
+func (r *PrivacySettingClient) MapPrivacySettings(
+	ctx context.Context,
+	userIDs []int64,
+) (map[int64]*repo.PrivacySetting, error) {
+	if len(userIDs) == 0 {
+		return map[int64]*repo.PrivacySetting{}, nil
+	}
+	reply, err := r.userClient.PrivacySetting.Map(ctx, &userv1.MapPrivacySettings_Req{UserIds: userIDs})
+	if err != nil {
+		return nil, err
+	}
+	settings := make(map[int64]*repo.PrivacySetting, len(reply.GetPrivacySettings()))
+	for userID, setting := range reply.GetPrivacySettings() {
+		settings[userID] = r.privacySettingRepoModel(setting)
+	}
+	return settings, nil
+}
+
+func (r *PrivacySettingClient) UpdateCurrentPrivacySetting(
+	ctx context.Context,
+	req *repo.UpdateCurrentPrivacySettingReq,
+) (*repo.PrivacySetting, error) {
 	reply, err := r.userClient.PrivacySetting.Update(ctx, &userv1.UpdatePrivacySetting_Req{
 		UserId:             req.UserID,
 		PublicPoints:       req.PublicPoints,
@@ -55,23 +65,27 @@ func (r *PrivacySettingClient) UpdateCurrentPrivacySetting(ctx context.Context, 
 		PublicComments:     req.PublicComments,
 		PublicOnlineStatus: req.PublicOnlineStatus,
 		PublicLocation:     req.PublicLocation,
+		PublicBreezemoons:  req.PublicBreezemoons,
 	})
 	if err != nil {
 		return nil, err
 	}
-	setting := reply.GetPrivacySetting()
-	var out *repo.PrivacySetting
-	if setting != nil {
-		out = &repo.PrivacySetting{
-			UserID:             setting.GetUserId(),
-			PublicPoints:       setting.PublicPoints,
-			PublicFollowers:    setting.PublicFollowers,
-			PublicFollowing:    setting.PublicFollowing,
-			PublicArticles:     setting.PublicArticles,
-			PublicComments:     setting.PublicComments,
-			PublicOnlineStatus: setting.PublicOnlineStatus,
-			PublicLocation:     setting.PublicLocation,
-		}
+	return r.privacySettingRepoModel(reply.GetPrivacySetting()), nil
+}
+
+func (*PrivacySettingClient) privacySettingRepoModel(setting *userv1.PrivacySetting) *repo.PrivacySetting {
+	if setting == nil {
+		return nil
 	}
-	return out, nil
+	return &repo.PrivacySetting{
+		UserID:             setting.GetUserId(),
+		PublicPoints:       setting.PublicPoints,
+		PublicFollowers:    setting.PublicFollowers,
+		PublicFollowing:    setting.PublicFollowing,
+		PublicArticles:     setting.PublicArticles,
+		PublicComments:     setting.PublicComments,
+		PublicOnlineStatus: setting.PublicOnlineStatus,
+		PublicLocation:     setting.PublicLocation,
+		PublicBreezemoons:  setting.PublicBreezemoons,
+	}
 }

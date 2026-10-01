@@ -126,7 +126,7 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 		if err != nil {
 			return nil, err
 		}
-		if !boolValue(privacy.PublicComments) {
+		if privacy.PublicComments != nil && !*privacy.PublicComments {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_COMMENTS_PRIVATE)
 		}
 	}

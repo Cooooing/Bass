@@ -19,4 +19,6 @@ type PrivacySetting struct {
 	PublicOnlineStatus *bool
 	// PublicLocation 控制位置是否公开。
 	PublicLocation *bool
+	// PublicBreezemoons 控制明月清风是否公开。
+	PublicBreezemoons *bool
 }

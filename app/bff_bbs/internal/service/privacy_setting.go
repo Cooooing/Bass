@@ -34,7 +34,10 @@ func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {
 	bbsuserv1.RegisterPrivacySettingServiceHTTPServer(hs, s)
 }
 
-func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentPrivacySetting_Req) (*bbsuserv1.GetCurrentPrivacySetting_Resp, error) {
+func (s *PrivacySettingService) GetCurrent(
+	ctx context.Context,
+	req *bbsuserv1.GetCurrentPrivacySetting_Req,
+) (*bbsuserv1.GetCurrentPrivacySetting_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -48,7 +51,10 @@ func (s *PrivacySettingService) GetCurrent(ctx context.Context, req *bbsuserv1.G
 	}, nil
 }
 
-func (s *PrivacySettingService) UpdateCurrent(ctx context.Context, req *bbsuserv1.UpdateCurrentPrivacySetting_Req) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp, error) {
+func (s *PrivacySettingService) UpdateCurrent(
+	ctx context.Context,
+	req *bbsuserv1.UpdateCurrentPrivacySetting_Req,
+) (*bbsuserv1.UpdateCurrentPrivacySetting_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
@@ -62,6 +68,7 @@ func (s *PrivacySettingService) UpdateCurrent(ctx context.Context, req *bbsuserv
 		PublicComments:     req.PublicComments,
 		PublicOnlineStatus: req.PublicOnlineStatus,
 		PublicLocation:     req.PublicLocation,
+		PublicBreezemoons:  req.PublicBreezemoons,
 	})
 	if err != nil {
 		return nil, err

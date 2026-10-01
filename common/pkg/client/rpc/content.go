@@ -14,6 +14,7 @@ type ContentClient struct {
 	Outbox     contentv1.OutboxServiceClient
 	Postscript contentv1.ContentPostscriptServiceClient
 	Tag        contentv1.ContentTagServiceClient
+	Breezemoon contentv1.ContentBreezemoonServiceClient
 }
 
 func NewContentClient(
@@ -26,6 +27,7 @@ func NewContentClient(
 		Outbox:     contentv1.NewOutboxServiceClient(conn),
 		Postscript: contentv1.NewContentPostscriptServiceClient(conn),
 		Tag:        contentv1.NewContentTagServiceClient(conn),
+		Breezemoon: contentv1.NewContentBreezemoonServiceClient(conn),
 	}
 }
 
@@ -37,5 +39,6 @@ func MountContentServices[T any](conn *localrpc.Conn, services []T) {
 		conn.RegisterMatching(&contentv1.OutboxService_ServiceDesc, service)
 		conn.RegisterMatching(&contentv1.ContentPostscriptService_ServiceDesc, service)
 		conn.RegisterMatching(&contentv1.ContentTagService_ServiceDesc, service)
+		conn.RegisterMatching(&contentv1.ContentBreezemoonService_ServiceDesc, service)
 	}
 }

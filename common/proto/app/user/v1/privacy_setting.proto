@@ -10,7 +10,20 @@ option go_package = "common/proto/gen/user/v1;v1";
 
 service PrivacySettingService {
   rpc Get(GetPrivacySetting.Req) returns (GetPrivacySetting.Resp) {} // 获取账号隐私设置，缺省时返回默认设置。
+  rpc Map(MapPrivacySettings.Req) returns (MapPrivacySettings.Resp) {} // 批量获取账号隐私设置，缺省账号返回默认设置。
   rpc Update(UpdatePrivacySetting.Req) returns (UpdatePrivacySetting.Resp) {} // 更新账号隐私设置；缺省扩展表使用 upsert 创建。
+}
+
+message PrivacySetting {
+  int64 user_id = 1;
+  optional bool public_points = 2;
+  optional bool public_followers = 3;
+  optional bool public_following = 4;
+  optional bool public_articles = 5;
+  optional bool public_comments = 6;
+  optional bool public_online_status = 7;
+  optional bool public_location = 8;
+  optional bool public_breezemoons = 9;
 }
 
 message GetPrivacySetting {
@@ -18,17 +31,16 @@ message GetPrivacySetting {
     int64 user_id = 1;
   }
   message Resp {
-    message PrivacySetting {
-      int64 user_id = 1;
-      optional bool public_points = 2;
-      optional bool public_followers = 3;
-      optional bool public_following = 4;
-      optional bool public_articles = 5;
-      optional bool public_comments = 6;
-      optional bool public_online_status = 7;
-      optional bool public_location = 8;
-    }
     PrivacySetting privacy_setting = 1;
+  }
+}
+
+message MapPrivacySettings {
+  message Req {
+    repeated int64 user_ids = 1;
+  }
+  message Resp {
+    map<int64, PrivacySetting> privacy_settings = 1;
   }
 }
 
@@ -42,18 +54,9 @@ message UpdatePrivacySetting {
     optional bool public_comments = 6;
     optional bool public_online_status = 7;
     optional bool public_location = 8;
+    optional bool public_breezemoons = 9;
   }
   message Resp {
-    message PrivacySetting {
-      int64 user_id = 1;
-      optional bool public_points = 2;
-      optional bool public_followers = 3;
-      optional bool public_following = 4;
-      optional bool public_articles = 5;
-      optional bool public_comments = 6;
-      optional bool public_online_status = 7;
-      optional bool public_location = 8;
-    }
     PrivacySetting privacy_setting = 1;
   }
 }

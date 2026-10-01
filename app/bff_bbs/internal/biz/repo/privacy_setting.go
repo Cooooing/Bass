@@ -4,6 +4,7 @@ import "context"
 
 type PrivacySettingClient interface {
 	GetCurrentPrivacySetting(ctx context.Context, userID int64) (*PrivacySetting, error)
+	MapPrivacySettings(ctx context.Context, userIDs []int64) (map[int64]*PrivacySetting, error)
 	UpdateCurrentPrivacySetting(ctx context.Context, req *UpdateCurrentPrivacySettingReq) (*PrivacySetting, error)
 }
 
@@ -16,6 +17,7 @@ type PrivacySetting struct {
 	PublicComments     *bool
 	PublicOnlineStatus *bool
 	PublicLocation     *bool
+	PublicBreezemoons  *bool
 }
 
 type UpdateCurrentPrivacySettingReq struct {
@@ -27,4 +29,5 @@ type UpdateCurrentPrivacySettingReq struct {
 	PublicComments     *bool
 	PublicOnlineStatus *bool
 	PublicLocation     *bool
+	PublicBreezemoons  *bool
 }

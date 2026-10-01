@@ -146,7 +146,7 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 		if err != nil {
 			return nil, err
 		}
-		if !boolValue(privacy.PublicArticles) {
+		if privacy.PublicArticles != nil && !*privacy.PublicArticles {
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_ARTICLES_PRIVATE)
 		}
 	}

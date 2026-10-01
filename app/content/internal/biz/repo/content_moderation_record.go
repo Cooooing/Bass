@@ -1,11 +1,10 @@
 package repo
 
 import (
-	"context"
-
-	"content/internal/biz/base"
+	commonmodel "common/pkg/model"
 	"content/internal/biz/model"
 	"content/internal/enum"
+	"context"
 )
 
 type ContentModerationRecordRepo interface {
@@ -19,11 +18,11 @@ type ContentModerationRecordRepo interface {
 
 type ContentModerationRecordPageResp struct {
 	Rows []*model.ContentModerationRecord
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type ContentModerationRecordGetReq struct {
-	Page       *base.PageRequest
+	Page       *commonmodel.PageReq
 	ID         *int64
 	IDs        []int64
 	Target     *enum.ContentModerationTarget

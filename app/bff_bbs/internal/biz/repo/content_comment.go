@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"time"
 )
@@ -88,50 +89,50 @@ type CreateCommentReq struct {
 
 type ListCommentsReq struct {
 	UserID int64
-	Page   *PageReq
+	Page   *commonmodel.PageReq
 	Query  *CommentQuery
 }
 
 type ListCommentsResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*CommentListItem
 }
 
 type ListCommentThreadsReq struct {
 	UserID            int64
-	Page              *PageReq
+	Page              *commonmodel.PageReq
 	ArticleID         int64
 	Order             *int32
 	ReplyPreviewLimit *int32
 }
 
 type ListCommentThreadsResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*CommentThread
 }
 
 type ListCommentRepliesReq struct {
 	UserID    int64
-	Page      *PageReq
+	Page      *commonmodel.PageReq
 	ArticleID int64
 	ParentID  int64
 	Order     *int32
 }
 
 type ListCommentRepliesResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*CommentListItem
 }
 
 type ListCommentTimelineReq struct {
 	UserID    int64
-	Page      *PageReq
+	Page      *commonmodel.PageReq
 	ArticleID int64
 	Order     *int32
 }
 
 type ListCommentTimelineResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*CommentListItem
 }
 

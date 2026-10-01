@@ -123,7 +123,7 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 	}
 	resp, err := s.contentCommentUsecase.ListComments(ctx, &usecase.ListCommentsReq{
 		UserID: userID,
-		Page:   req.GetPage(),
+		Page:   commonmodel.PageReqFromProto(req.GetPage()),
 		Query:  req.GetQuery(),
 	})
 	if err != nil {
@@ -131,11 +131,7 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{
-			Page:  resp.Page.Page,
-			Size:  resp.Page.Size,
-			Total: resp.Page.Total,
-		}
+		page = resp.Page.ToProto()
 	}
 	rows := make([]*bbscontentv1.ListComments_Resp_CommentListItem, 0, len(resp.Rows))
 	for _, row := range resp.Rows {
@@ -220,7 +216,7 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 	}
 	resp, err := s.contentCommentUsecase.ListCommentThreads(ctx, &usecase.ListCommentThreadsReq{
 		UserID:            userID,
-		Page:              req.GetPage(),
+		Page:              commonmodel.PageReqFromProto(req.GetPage()),
 		ArticleID:         req.GetArticleId(),
 		Order:             req.Order,
 		ReplyPreviewLimit: req.ReplyPreviewLimit,
@@ -230,11 +226,7 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{
-			Page:  resp.Page.Page,
-			Size:  resp.Page.Size,
-			Total: resp.Page.Total,
-		}
+		page = resp.Page.ToProto()
 	}
 	rows := make([]*bbscontentv1.ListCommentThreads_Resp_CommentThread, 0, len(resp.Rows))
 	for _, row := range resp.Rows {
@@ -382,7 +374,7 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 	}
 	resp, err := s.contentCommentUsecase.ListCommentReplies(ctx, &usecase.ListCommentRepliesReq{
 		UserID:    userID,
-		Page:      req.GetPage(),
+		Page:      commonmodel.PageReqFromProto(req.GetPage()),
 		ArticleID: req.GetArticleId(),
 		ParentID:  req.GetParentId(),
 		Order:     req.Order,
@@ -392,11 +384,7 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{
-			Page:  resp.Page.Page,
-			Size:  resp.Page.Size,
-			Total: resp.Page.Total,
-		}
+		page = resp.Page.ToProto()
 	}
 	rows := make([]*bbscontentv1.ListCommentReplies_Resp_CommentListItem, 0, len(resp.Rows))
 	for _, row := range resp.Rows {
@@ -475,7 +463,7 @@ func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbsconten
 	}
 	resp, err := s.contentCommentUsecase.ListCommentTimeline(ctx, &usecase.ListCommentTimelineReq{
 		UserID:    userID,
-		Page:      req.GetPage(),
+		Page:      commonmodel.PageReqFromProto(req.GetPage()),
 		ArticleID: req.GetArticleId(),
 		Order:     req.Order,
 	})
@@ -484,11 +472,7 @@ func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbsconten
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{
-			Page:  resp.Page.Page,
-			Size:  resp.Page.Size,
-			Total: resp.Page.Total,
-		}
+		page = resp.Page.ToProto()
 	}
 	rows := make([]*bbscontentv1.ListCommentTimeline_Resp_CommentListItem, 0, len(resp.Rows))
 	for _, row := range resp.Rows {

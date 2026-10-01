@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"content/internal/biz/base"
+	commonmodel "common/pkg/model"
 	"content/internal/biz/model"
 	"content/internal/enum"
 	"context"
@@ -91,11 +91,11 @@ type ArticleStatUpdate struct {
 
 type ArticlePageResp struct {
 	Rows []*model.Article
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type ArticleGetReq struct {
-	Page   *base.PageRequest
+	Page   *commonmodel.PageReq
 	Filter *model.ArticleFilter
 	Scope  *model.ArticleScopeFilter
 }
@@ -118,11 +118,11 @@ type ArticleActionRecordDeleteReq struct {
 
 type ArticleActionRecordPageResp struct {
 	Rows []*model.ArticleActionRecord
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type ArticleActionRecordReq struct {
-	Page       *base.PageRequest
+	Page       *commonmodel.PageReq
 	ID         *int64
 	IDs        []int64
 	ArticleId  *int64

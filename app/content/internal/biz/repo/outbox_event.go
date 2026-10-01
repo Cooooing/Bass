@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	commonenums "common/proto/gen/common/enums"
-	"content/internal/biz/base"
 	"context"
 	"time"
 )
@@ -36,11 +36,11 @@ type OutboxEventRepo interface {
 
 type OutboxEventPageResp struct {
 	Rows []*OutboxEvent
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type OutboxEventGetReq struct {
-	Page     *base.PageRequest
+	Page     *commonmodel.PageReq
 	ID       *int64
 	IDs      []int64
 	EventID  *string

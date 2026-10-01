@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"economy/internal/biz/base"
 	"economy/internal/biz/model"
 	"economy/internal/enum"
 )
@@ -17,7 +17,7 @@ type RecordRepo interface {
 }
 
 type RecordGetReq struct {
-	Page          *base.PageRequest
+	Page          *commonmodel.PageReq
 	ID            *int64
 	IDs           []int64
 	TransactionNo *string
@@ -29,5 +29,5 @@ type RecordGetReq struct {
 
 type RecordPageResp struct {
 	Rows []*model.Record
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }

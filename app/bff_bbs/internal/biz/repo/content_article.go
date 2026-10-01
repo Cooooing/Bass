@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"time"
 )
@@ -174,12 +175,12 @@ type ArchiveArticleReq struct {
 
 type ListArticlesReq struct {
 	UserID int64
-	Page   *PageReq
+	Page   *commonmodel.PageReq
 	Query  *ArticleQuery
 }
 
 type ListArticlesResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*ArticleListItem
 }
 
@@ -190,7 +191,7 @@ type ArticleViewHistoryRow struct {
 
 type ArticleViewHistoryPageResp struct {
 	Rows []*ArticleViewHistoryRow
-	Page *PageResp
+	Page *commonmodel.PageResp
 }
 
 type GetArticleReq struct {
@@ -237,7 +238,7 @@ type ContentArticleClient interface {
 	DiscardDraftArticle(ctx context.Context, req *DiscardDraftArticleReq) error
 	ArchiveArticle(ctx context.Context, req *ArchiveArticleReq) error
 	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error)
-	PageViewHistory(ctx context.Context, userID int64, page *PageReq) (*ArticleViewHistoryPageResp, error)
+	PageViewHistory(ctx context.Context, userID int64, page *commonmodel.PageReq) (*ArticleViewHistoryPageResp, error)
 	GetArticle(ctx context.Context, req *GetArticleReq) (*ArticleDetail, error)
 	ViewArticle(ctx context.Context, req *ViewArticleReq) error
 	LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error)

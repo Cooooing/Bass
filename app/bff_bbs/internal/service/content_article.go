@@ -136,7 +136,7 @@ func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.List
 			query.Visibility = new(int32(*q.Visibility))
 		}
 	}
-	resp, err := s.contentArticleUsecase.ListArticles(ctx, &usecase.ListArticlesReq{UserID: userID, Page: req.GetPage(), Query: query})
+	resp, err := s.contentArticleUsecase.ListArticles(ctx, &usecase.ListArticlesReq{UserID: userID, Page: commonmodel.PageReqFromProto(req.GetPage()), Query: query})
 	if err != nil {
 		return nil, err
 	}
@@ -146,7 +146,7 @@ func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.List
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{Page: resp.Page.Page, Size: resp.Page.Size, Total: resp.Page.Total}
+		page = resp.Page.ToProto()
 	}
 	return &bbscontentv1.ListArticles_Resp{Page: page, Rows: rows}, nil
 }
@@ -180,7 +180,7 @@ func (s *ContentArticleService) PageViewHistory(
 	if !ok || user == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	result, err := s.contentArticleUsecase.PageViewHistory(ctx, user.ID, req.GetPage())
+	result, err := s.contentArticleUsecase.PageViewHistory(ctx, user.ID, commonmodel.PageReqFromProto(req.GetPage()))
 	if err != nil {
 		return nil, err
 	}
@@ -197,7 +197,7 @@ func (s *ContentArticleService) PageViewHistory(
 	}
 	var page *common.PageResp
 	if result.Page != nil {
-		page = &common.PageResp{Page: result.Page.Page, Size: result.Page.Size, Total: result.Page.Total}
+		page = result.Page.ToProto()
 	}
 	return &bbscontentv1.PageArticleViewHistory_Resp{Rows: rows, Page: page}, nil
 }

@@ -2,9 +2,9 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
 	"fmt"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
 	"notify/internal/data/gen"
@@ -18,7 +18,6 @@ import (
 var _ bizrepo.NotificationStationMessageRepo = (*NotificationStationMessageRepo)(nil)
 
 type NotificationStationMessageRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -122,11 +121,11 @@ func (r *NotificationStationMessageRepo) Count(ctx context.Context, req *bizrepo
 
 func (r *NotificationStationMessageRepo) Page(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) (*bizrepo.NotificationStationMessagePageResp, error) {
 	queryReq := req
-	var pageReq *base.PageRequest
+	var pageReq *commonmodel.PageReq
 	if queryReq != nil {
 		pageReq = queryReq.Page
 	}
-	page := r.normalizePage(pageReq)
+	page := commonmodel.NormalizePage(pageReq)
 	query := r.getClient(ctx).NotificationStationMessage.Query()
 	query = r.getQuery(query, queryReq)
 
@@ -136,8 +135,8 @@ func (r *NotificationStationMessageRepo) Page(ctx context.Context, req *bizrepo.
 	}
 	list, err := query.
 		Order(gen.Desc(notificationstationmessage.FieldCreatedAt), gen.Desc(notificationstationmessage.FieldID)).
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -149,7 +148,7 @@ func (r *NotificationStationMessageRepo) Page(ctx context.Context, req *bizrepo.
 	}
 	return &bizrepo.NotificationStationMessagePageResp{
 		Rows: items,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(count),
 			Size:  page.Size,
 			Page:  page.Page,

@@ -1,12 +1,11 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"time"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
+	"time"
 )
 
 type ObservationRepo interface {
@@ -27,11 +26,11 @@ type ObservationQuery struct {
 	EventType                             *enum.EventType
 }
 type ObservationPageReq struct {
-	Page      base.PageRequest
+	Page      commonmodel.PageReq
 	Query     ObservationQuery
 	SkipTotal bool
 }
 type ObservationPageResp struct {
 	Rows []*model.Observation
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

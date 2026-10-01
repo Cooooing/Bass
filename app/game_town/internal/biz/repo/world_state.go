@@ -1,11 +1,10 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"time"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
+	"time"
 )
 
 type WorldStateRepo interface {
@@ -43,10 +42,10 @@ type WorldStateQuery struct {
 }
 
 type WorldStatePageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query WorldStateQuery
 }
 type WorldStatePageResp struct {
 	Rows []*model.WorldState
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

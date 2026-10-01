@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"user/internal/biz/model"
 )
@@ -23,11 +24,11 @@ type PreferencesGetReq struct {
 }
 
 type PreferencesPageReq struct {
-	Page  PageReq
+	Page  commonmodel.PageReq
 	Query PreferencesGetReq
 }
 
 type PreferencesPageResp struct {
 	Rows []*model.Preferences
-	Page PageResp
+	Page commonmodel.PageResp
 }

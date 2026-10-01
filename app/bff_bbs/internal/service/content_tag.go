@@ -213,7 +213,7 @@ func (s *ContentTagService) ListArticleTags(ctx context.Context, req *bbscontent
 
 func (s *ContentTagService) List(ctx context.Context, req *bbscontentv1.ListTags_Req) (*bbscontentv1.ListTags_Resp, error) {
 	resp, err := s.contentTagUsecase.ListTags(ctx, &usecase.ListTagsReq{
-		Page:  req.GetPage(),
+		Page:  commonmodel.PageReqFromProto(req.GetPage()),
 		Query: req.GetQuery(),
 	})
 	if err != nil {
@@ -221,11 +221,7 @@ func (s *ContentTagService) List(ctx context.Context, req *bbscontentv1.ListTags
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{
-			Page:  resp.Page.Page,
-			Size:  resp.Page.Size,
-			Total: resp.Page.Total,
-		}
+		page = resp.Page.ToProto()
 	}
 	rows := make([]*bbscontentv1.ListTags_Resp_Tag, 0, len(resp.Rows))
 	for _, row := range resp.Rows {

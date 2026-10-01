@@ -2,8 +2,8 @@ package usecase
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"time"
@@ -22,7 +22,7 @@ func NewStationMessageUsecase(
 }
 
 type StationMessagePageReq struct {
-	Page       *base.PageRequest
+	Page       *commonmodel.PageReq
 	IDs        []int64
 	ReceiverID *int64
 	EventType  *commonenum.EventType
@@ -31,7 +31,7 @@ type StationMessagePageReq struct {
 
 type StationMessagePageResp struct {
 	Rows []*model.NotificationStationMessage
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *StationMessageUsecase) Page(ctx context.Context, req *StationMessagePageReq) (*StationMessagePageResp, error) {

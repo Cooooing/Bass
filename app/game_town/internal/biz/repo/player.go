@@ -1,9 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
 )
@@ -25,11 +24,11 @@ type PlayerQuery struct {
 }
 
 type PlayerPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query PlayerQuery
 }
 
 type PlayerPageResp struct {
 	Rows []*model.Player
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

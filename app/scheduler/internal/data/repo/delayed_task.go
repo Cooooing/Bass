@@ -2,9 +2,8 @@ package repo
 
 import (
 	"common/pkg/apperror"
-	"common/pkg/server"
+	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
-	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"scheduler/internal/biz/model"
@@ -53,14 +52,14 @@ func (r *DelayedTaskRepo) List(ctx context.Context, req *bizrepo.DelayedTaskGetR
 }
 
 func (r *DelayedTaskRepo) Page(ctx context.Context, req *bizrepo.DelayedTaskPageReq) (*bizrepo.DelayedTaskPageResp, error) {
-	page := server.PageValid(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).DelayedTask.Query().Where(delayedtask.DeletedAtIsNil())
 	query = r.getQuery(query, &req.DelayedTaskGetReq)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := query.Order(delayedtask.ByID()).Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	rows, err := query.Order(delayedtask.ByID()).Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +67,7 @@ func (r *DelayedTaskRepo) Page(ctx context.Context, req *bizrepo.DelayedTaskPage
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return &bizrepo.DelayedTaskPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
+	return &bizrepo.DelayedTaskPageResp{Rows: result, Page: &commonmodel.PageResp{Total: int64(total), Page: page.Page, Size: page.Size}}, nil
 }
 
 func (r *DelayedTaskRepo) MapByTaskKey(ctx context.Context, taskKeys []string) (map[string]*model.DelayedTask, error) {

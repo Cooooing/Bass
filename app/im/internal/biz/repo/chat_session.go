@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"im/internal/biz/base"
 	"im/internal/biz/model"
 )
 
@@ -40,7 +40,7 @@ type ChatSessionUpdatePinnedReq struct {
 }
 
 type ChatSessionQuery struct {
-	Page       *base.PageRequest
+	Page       *commonmodel.PageReq
 	IDs        []int64
 	CreatedBy  *int64
 	GroupID    *int64
@@ -49,5 +49,5 @@ type ChatSessionQuery struct {
 
 type ChatSessionPageResp struct {
 	Rows []*model.ChatSession
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }

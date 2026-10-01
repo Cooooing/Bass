@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 
 	"common/pkg/apperror"
@@ -17,7 +18,6 @@ import (
 var _ bizrepo.RelationshipRepo = (*RelationshipRepo)(nil)
 
 type RelationshipRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -118,15 +118,15 @@ func (r *RelationshipRepo) Count(ctx context.Context, req *bizrepo.RelationshipQ
 }
 
 func (r *RelationshipRepo) Page(ctx context.Context, req *bizrepo.RelationshipPageReq) (*bizrepo.RelationshipPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.relationshipQuery(r.getClient(ctx).LivingRelationship.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rows, err := q.Order(livingrelationship.ByID()).
-		Offset(r.pageOffset(p)).
-		Limit(r.pageLimit(p)).
+		Offset(p.Offset()).
+		Limit(p.Limit()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -135,7 +135,7 @@ func (r *RelationshipRepo) Page(ctx context.Context, req *bizrepo.RelationshipPa
 		Rows: lo.Map(rows, func(row *gen.LivingRelationship, _ int) *model.Relationship {
 			return r.relationship(row)
 		}),
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }
 

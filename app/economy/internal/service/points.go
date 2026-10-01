@@ -2,11 +2,11 @@ package service
 
 import (
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/economy/v1"
 	"context"
-	"economy/internal/biz/base"
 	"economy/internal/biz/usecase"
 	"economy/internal/enum"
 
@@ -297,7 +297,7 @@ func (s *PointsService) ListRecords(ctx context.Context, req *v1.ListEconomyReco
 		}
 		recordType = new(value)
 	}
-	page := &base.PageRequest{}
+	page := &commonmodel.PageReq{}
 	if req.GetPage() != nil {
 		page.Page = int64(req.GetPage().GetPage())
 		page.Size = int64(req.GetPage().GetSize())
@@ -328,5 +328,5 @@ func (s *PointsService) ListRecords(ctx context.Context, req *v1.ListEconomyReco
 		}
 		rows = append(rows, item)
 	}
-	return &v1.ListEconomyRecords_Resp{Rows: rows, Page: &common.PageResp{Page: uint32(resp.Page.Page), Size: uint32(resp.Page.Size), Total: uint32(resp.Page.Total)}}, nil
+	return &v1.ListEconomyRecords_Resp{Rows: rows, Page: &common.PageResp{Page: int64(resp.Page.Page), Size: int64(resp.Page.Size), Total: int64(resp.Page.Total)}}, nil
 }

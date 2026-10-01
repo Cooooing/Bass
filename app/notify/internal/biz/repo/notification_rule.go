@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	notifyenum "notify/internal/enum"
 )
@@ -20,11 +20,11 @@ type NotificationRuleRepo interface {
 
 type NotificationRulePageResp struct {
 	Rows []*model.NotificationRule
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type NotificationRuleQuery struct {
-	Page       *base.PageRequest
+	Page       *commonmodel.PageReq
 	ID         *int64
 	IDs        []int64
 	EventType  *commonenum.EventType

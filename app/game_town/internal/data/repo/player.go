@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 
 	"common/pkg/apperror"
@@ -18,7 +19,6 @@ import (
 var _ bizrepo.PlayerRepo = (*PlayerRepo)(nil)
 
 type PlayerRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -129,13 +129,13 @@ func (r *PlayerRepo) Count(ctx context.Context, req *bizrepo.PlayerQuery) (int, 
 }
 
 func (r *PlayerRepo) Page(ctx context.Context, req *bizrepo.PlayerPageReq) (*bizrepo.PlayerPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.playerQuery(r.getClient(ctx).Player.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(player.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
+	rows, err := q.Order(player.ByID()).Offset(p.Offset()).Limit(p.Limit()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -151,6 +151,6 @@ func (r *PlayerRepo) Page(ctx context.Context, req *bizrepo.PlayerPageReq) (*biz
 	})
 	return &bizrepo.PlayerPageResp{
 		Rows: out,
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }

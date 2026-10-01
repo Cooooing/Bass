@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"time"
 	"user/internal/biz/model"
@@ -33,13 +34,13 @@ type CheckinRecordGetReq struct {
 }
 
 type CheckinRecordPageReq struct {
-	Page  PageReq
+	Page  commonmodel.PageReq
 	Query CheckinRecordGetReq
 }
 
 type CheckinRecordPageResp struct {
 	Rows []*model.CheckinRecord
-	Page PageResp
+	Page commonmodel.PageResp
 }
 
 type CheckinStatGetReq struct {
@@ -50,11 +51,11 @@ type CheckinStatGetReq struct {
 }
 
 type CheckinStatPageReq struct {
-	Page  PageReq
+	Page  commonmodel.PageReq
 	Query CheckinStatGetReq
 }
 
 type CheckinStatPageResp struct {
 	Rows []*model.CheckinStat
-	Page PageResp
+	Page commonmodel.PageResp
 }

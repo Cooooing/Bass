@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"content/internal/biz/base"
+	commonmodel "common/pkg/model"
 	"context"
 
 	utilent "common/pkg/util/ent"
@@ -17,7 +17,6 @@ import (
 var _ repo.CommentActionRecordRepo = (*CommentActionRecordRepo)(nil)
 
 type CommentActionRecordRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -134,7 +133,7 @@ func (r *CommentActionRecordRepo) Count(ctx context.Context, req *repo.CommentAc
 }
 
 func (r *CommentActionRecordRepo) Page(ctx context.Context, req *repo.CommentActionRecordReq) (*repo.CommentActionRecordPageResp, error) {
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).CommentActionRecord.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)
@@ -142,8 +141,8 @@ func (r *CommentActionRecordRepo) Page(ctx context.Context, req *repo.CommentAct
 		return nil, err
 	}
 	list, err := query.
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -159,7 +158,7 @@ func (r *CommentActionRecordRepo) Page(ctx context.Context, req *repo.CommentAct
 	}
 	return &repo.CommentActionRecordPageResp{
 		Rows: rows,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

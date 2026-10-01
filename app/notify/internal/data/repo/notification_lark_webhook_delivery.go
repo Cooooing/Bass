@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
 	"notify/internal/data/gen"
@@ -17,7 +17,6 @@ import (
 var _ bizrepo.NotificationLarkWebhookDeliveryRepo = (*NotificationLarkWebhookDeliveryRepo)(nil)
 
 type NotificationLarkWebhookDeliveryRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -110,18 +109,18 @@ func (r *NotificationLarkWebhookDeliveryRepo) Count(ctx context.Context, req *bi
 
 func (r *NotificationLarkWebhookDeliveryRepo) Page(ctx context.Context, req *bizrepo.NotificationLarkWebhookDeliveryQuery) (*bizrepo.NotificationLarkWebhookDeliveryPageResp, error) {
 	queryReq := req
-	var pageReq *base.PageRequest
+	var pageReq *commonmodel.PageReq
 	if queryReq != nil {
 		pageReq = queryReq.Page
 	}
-	page := r.normalizePage(pageReq)
+	page := commonmodel.NormalizePage(pageReq)
 	query := r.getClient(ctx).NotificationLarkWebhookDelivery.Query()
 	query = r.getLarkWebhookQuery(query, queryReq)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	list, err := query.Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -131,7 +130,7 @@ func (r *NotificationLarkWebhookDeliveryRepo) Page(ctx context.Context, req *biz
 	}
 	return &bizrepo.NotificationLarkWebhookDeliveryPageResp{
 		Rows: result,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

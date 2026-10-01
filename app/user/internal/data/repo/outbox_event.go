@@ -2,9 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
-	"common/pkg/server"
+	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
-	"common/proto/gen/common"
 	"context"
 	"errors"
 	"fmt"
@@ -173,7 +172,7 @@ func (r *OutboxEventRepo) Count(ctx context.Context, req *repo.OutboxEventGetReq
 }
 
 func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventPageReq) (*repo.OutboxEventPageResp, error) {
-	page := server.PageValid(&common.PageReq{
+	page := commonmodel.NormalizePage(&commonmodel.PageReq{
 		Page: req.Page.Page,
 		Size: req.Page.Size,
 	})
@@ -183,8 +182,8 @@ func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventPageReq
 		return nil, err
 	}
 	events, err := query.
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -206,10 +205,10 @@ func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventPageReq
 	}
 	return &repo.OutboxEventPageResp{
 		Rows: rows,
-		Page: repo.PageResp{
-			Total: uint32(total),
-			Page:  page.GetPage(),
-			Size:  page.GetSize(),
+		Page: commonmodel.PageResp{
+			Total: int64(total),
+			Page:  page.Page,
+			Size:  page.Size,
 		},
 	}, nil
 }

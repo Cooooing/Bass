@@ -1,12 +1,12 @@
 package usecase
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"log/slog"
 
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
-	"im/internal/biz/base"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 	"im/internal/enum"
@@ -98,14 +98,14 @@ func (u *ChatGroupUsecase) Dismiss(ctx context.Context, req *DismissReq) error {
 }
 
 type ChatGroupListReq struct {
-	Page   *base.PageRequest
+	Page   *commonmodel.PageReq
 	IDs    []int64
 	Status *enum.ChatGroupStatus
 }
 
 type ChatGroupListResp struct {
 	List []*model.ChatGroup
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *ChatGroupUsecase) List(ctx context.Context, req *ChatGroupListReq) (*ChatGroupListResp, error) {

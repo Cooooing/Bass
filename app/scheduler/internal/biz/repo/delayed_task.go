@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
 	"context"
 	"scheduler/internal/biz/model"
 	schedulerenum "scheduler/internal/enum"
@@ -27,11 +27,11 @@ type DelayedTaskGetReq struct {
 }
 
 type DelayedTaskPageReq struct {
-	Page *common.PageReq
+	Page *commonmodel.PageReq
 	DelayedTaskGetReq
 }
 
 type DelayedTaskPageResp struct {
 	Rows []*model.DelayedTask
-	Page *common.PageResp
+	Page *commonmodel.PageResp
 }

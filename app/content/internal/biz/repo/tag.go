@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"content/internal/biz/base"
+	commonmodel "common/pkg/model"
 	"content/internal/biz/model"
 	"content/internal/enum"
 	"context"
@@ -21,11 +21,11 @@ type TagRepo interface {
 
 type TagPageResp struct {
 	Rows []*model.Tag
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type TagGetReq struct {
-	Page        *base.PageRequest
+	Page        *commonmodel.PageReq
 	TagId       *int64
 	TagIds      []int64
 	UserId      *int64

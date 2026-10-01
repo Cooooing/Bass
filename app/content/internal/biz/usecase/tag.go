@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
@@ -62,7 +63,7 @@ func (t *TagUsecase) Update(ctx context.Context, tag *model.Tag) (*model.Tag, er
 }
 
 type TagPageReq struct {
-	Page        *base.PageRequest
+	Page        *commonmodel.PageReq
 	TagIDs      []int64
 	Code        *string
 	Name        *string
@@ -74,7 +75,7 @@ type TagPageReq struct {
 
 type TagPageResp struct {
 	Rows []*model.Tag
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (t *TagUsecase) Page(ctx context.Context, req *TagPageReq) (*TagPageResp, error) {

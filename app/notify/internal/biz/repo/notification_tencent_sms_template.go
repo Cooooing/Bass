@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 )
 
@@ -18,11 +18,11 @@ type NotificationTencentSMSTemplateRepo interface {
 
 type NotificationTencentSMSTemplatePageResp struct {
 	Rows []*model.NotificationTencentSMSTemplate
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type NotificationTencentSMSTemplateQuery struct {
-	Page    *base.PageRequest
+	Page    *commonmodel.PageReq
 	ID      *int64
 	IDs     []int64
 	RuleID  *int64

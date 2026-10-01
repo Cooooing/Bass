@@ -1,13 +1,13 @@
 package service
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 
 	"common/pkg/apperror"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/game_town/v1"
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/biz/usecase"
 	gameenum "game_town/internal/enum"
@@ -97,7 +97,7 @@ func (s *WorldService) Get(ctx context.Context, req *v1.GetGameTownWorld_Request
 }
 
 func (s *WorldService) Page(ctx context.Context, req *v1.PageGameTownWorlds_Request) (*v1.PageGameTownWorlds_Resp, error) {
-	page := base.PageRequest{}
+	page := commonmodel.PageReq{}
 	if req.GetPage() != nil {
 		page.Page = int64(req.GetPage().GetPage())
 		page.Size = int64(req.GetPage().GetSize())
@@ -120,9 +120,9 @@ func (s *WorldService) Page(ctx context.Context, req *v1.PageGameTownWorlds_Requ
 	}
 	reply := &v1.PageGameTownWorlds_Resp{
 		Page: &common.PageResp{
-			Page:  uint32(resp.Page.Page),
-			Size:  uint32(resp.Page.Size),
-			Total: uint32(resp.Page.Total),
+			Page:  int64(resp.Page.Page),
+			Size:  int64(resp.Page.Size),
+			Total: int64(resp.Page.Total),
 		},
 		Rows: lo.Map(resp.Rows, func(row *model.World, _ int) *v1.PageGameTownWorlds_Resp_Row {
 			return &v1.PageGameTownWorlds_Resp_Row{

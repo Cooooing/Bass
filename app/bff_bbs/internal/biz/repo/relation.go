@@ -2,6 +2,7 @@ package repo
 
 import (
 	"bff_bbs/internal/enum"
+	commonmodel "common/pkg/model"
 	"context"
 	"time"
 )
@@ -40,31 +41,31 @@ type UnblockRelationReq struct {
 
 type ListFollowingRelationsReq struct {
 	ActorID int64
-	Page    *PageReq
+	Page    *commonmodel.PageReq
 }
 
 type ListFollowingRelationsResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*Relation
 }
 
 type ListFollowersRelationsReq struct {
 	ActorID int64
-	Page    *PageReq
+	Page    *commonmodel.PageReq
 }
 
 type ListFollowersRelationsResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*Relation
 }
 
 type ListBlockedRelationsReq struct {
 	ActorID int64
-	Page    *PageReq
+	Page    *commonmodel.PageReq
 }
 
 type ListBlockedRelationsResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*Relation
 }
 

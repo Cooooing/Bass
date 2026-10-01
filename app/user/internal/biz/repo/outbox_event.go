@@ -2,6 +2,7 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	commonenums "common/proto/gen/common/enums"
 	"context"
 	"time"
@@ -36,13 +37,13 @@ type OutboxEventGetReq struct {
 }
 
 type OutboxEventPageReq struct {
-	Page  PageReq
+	Page  commonmodel.PageReq
 	Query OutboxEventGetReq
 }
 
 type OutboxEventPageResp struct {
 	Rows []*model.OutboxEvent
-	Page PageResp
+	Page commonmodel.PageResp
 }
 
 type OutboxEventClaimOneForPublishReq struct {

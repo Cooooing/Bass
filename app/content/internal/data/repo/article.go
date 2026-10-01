@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
-	"content/internal/biz/base"
 	"context"
 	"time"
 
@@ -22,7 +22,6 @@ import (
 var _ repo.ArticleRepo = (*ArticleRepo)(nil)
 
 type ArticleRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -472,14 +471,14 @@ func (r *ArticleRepo) Count(ctx context.Context, req *repo.ArticleGetReq) (int, 
 }
 
 func (r *ArticleRepo) Page(ctx context.Context, req *repo.ArticleGetReq) (*repo.ArticlePageResp, error) {
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).Article.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	list, err := query.Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -515,7 +514,7 @@ func (r *ArticleRepo) Page(ctx context.Context, req *repo.ArticleGetReq) (*repo.
 	})
 	return &repo.ArticlePageResp{
 		Rows: articles,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

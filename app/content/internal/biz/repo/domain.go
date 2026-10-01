@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"content/internal/biz/base"
+	commonmodel "common/pkg/model"
 	"content/internal/biz/model"
 	"content/internal/enum"
 	"context"
@@ -20,11 +20,11 @@ type DomainRepo interface {
 
 type DomainPageResp struct {
 	Rows []*model.Domain
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type DomainGetReq struct {
-	Page        *base.PageRequest
+	Page        *commonmodel.PageReq
 	DomainId    *int64
 	DomainIds   []int64
 	Code        *string

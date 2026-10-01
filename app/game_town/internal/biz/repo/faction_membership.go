@@ -1,9 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
 )
@@ -23,10 +22,10 @@ type FactionMembershipQuery struct {
 	ActiveOnly                       bool
 }
 type FactionMembershipPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query FactionMembershipQuery
 }
 type FactionMembershipPageResp struct {
 	Rows []*model.FactionMembership
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

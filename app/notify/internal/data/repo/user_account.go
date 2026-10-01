@@ -2,7 +2,7 @@ package repo
 
 import (
 	"common/pkg/client/rpc"
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"notify/internal/biz/model"
@@ -60,16 +60,16 @@ func (r *UserAccountRepo) ListFollowerIDs(ctx context.Context, userID int64) ([]
 	if userID == 0 {
 		return []int64{}, nil
 	}
-	page := uint32(1)
-	size := uint32(500)
+	page := commonmodel.DefaultPage
+	size := int64(500)
 	userIDs := make([]int64, 0)
 	for {
 		reply, err := r.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Req{
 			UserId: userID,
-			Page: &common.PageReq{
+			Page: (&commonmodel.PageReq{
 				Page: page,
 				Size: size,
-			},
+			}).ToProto(),
 		})
 		if err != nil {
 			return nil, err

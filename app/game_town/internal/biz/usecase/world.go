@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"strconv"
 	"strings"
@@ -143,14 +144,14 @@ func (u *WorldUsecase) Get(ctx context.Context, worldID int64) (*model.World, er
 }
 
 type PageWorldsReq struct {
-	Page            base.PageRequest
+	Page            commonmodel.PageReq
 	CreatorPlayerID *int64
 	Status          *enum.WorldStatus
 }
 
 type PageWorldsResp struct {
 	Rows []*model.World
-	Page base.PageResp
+	Page commonmodel.PageResp
 }
 
 func (u *WorldUsecase) Page(ctx context.Context, req *PageWorldsReq) (*PageWorldsResp, error) {

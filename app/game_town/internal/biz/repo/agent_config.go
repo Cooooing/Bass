@@ -1,9 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
 )
@@ -24,11 +23,11 @@ type AgentConfigQuery struct {
 }
 
 type AgentConfigPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query AgentConfigQuery
 }
 
 type AgentConfigPageResp struct {
 	Rows []*model.AgentConfig
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

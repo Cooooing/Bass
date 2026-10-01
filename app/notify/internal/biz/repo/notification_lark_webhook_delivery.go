@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	notifyenum "notify/internal/enum"
 	"time"
@@ -22,7 +22,7 @@ type NotificationLarkWebhookDeliveryRepo interface {
 
 type NotificationLarkWebhookDeliveryPageResp struct {
 	Rows []*model.NotificationLarkWebhookDelivery
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type NotificationLarkWebhookDeliveryClaimReq struct {
@@ -41,7 +41,7 @@ type NotificationLarkWebhookDeliveryUpdateStatusReq struct {
 }
 
 type NotificationLarkWebhookDeliveryQuery struct {
-	Page      *base.PageRequest
+	Page      *commonmodel.PageReq
 	ID        *int64
 	IDs       []int64
 	EventID   *string

@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
 	"notify/internal/data/gen"
@@ -17,7 +17,6 @@ import (
 var _ bizrepo.NotificationEmailDeliveryRepo = (*NotificationEmailDeliveryRepo)(nil)
 
 type NotificationEmailDeliveryRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -116,11 +115,11 @@ func (r *NotificationEmailDeliveryRepo) Count(ctx context.Context, req *bizrepo.
 
 func (r *NotificationEmailDeliveryRepo) Page(ctx context.Context, req *bizrepo.NotificationEmailDeliveryQuery) (*bizrepo.NotificationEmailDeliveryPageResp, error) {
 	queryReq := req
-	var pageReq *base.PageRequest
+	var pageReq *commonmodel.PageReq
 	if queryReq != nil {
 		pageReq = queryReq.Page
 	}
-	page := r.normalizePage(pageReq)
+	page := commonmodel.NormalizePage(pageReq)
 	query := r.getClient(ctx).NotificationEmailDelivery.Query()
 	query = r.getEmailQuery(query, queryReq)
 	total, err := query.Clone().Count(ctx)
@@ -128,8 +127,8 @@ func (r *NotificationEmailDeliveryRepo) Page(ctx context.Context, req *bizrepo.N
 		return nil, err
 	}
 	list, err := query.
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -140,7 +139,7 @@ func (r *NotificationEmailDeliveryRepo) Page(ctx context.Context, req *bizrepo.N
 	}
 	return &bizrepo.NotificationEmailDeliveryPageResp{
 		Rows: result,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

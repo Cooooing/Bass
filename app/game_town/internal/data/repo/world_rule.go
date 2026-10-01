@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 
 	"common/pkg/apperror"
@@ -17,7 +18,6 @@ import (
 var _ bizrepo.WorldRuleRepo = (*WorldRuleRepo)(nil)
 
 type WorldRuleRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -121,13 +121,13 @@ func (r *WorldRuleRepo) Count(ctx context.Context, req *bizrepo.WorldRuleQuery) 
 }
 
 func (r *WorldRuleRepo) Page(ctx context.Context, req *bizrepo.WorldRulePageReq) (*bizrepo.WorldRulePageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.worldRuleQuery(r.getClient(ctx).WorldRule.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(worldrule.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
+	rows, err := q.Order(worldrule.ByID()).Offset(p.Offset()).Limit(p.Limit()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -143,6 +143,6 @@ func (r *WorldRuleRepo) Page(ctx context.Context, req *bizrepo.WorldRulePageReq)
 	})
 	return &bizrepo.WorldRulePageResp{
 		Rows: out,
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }

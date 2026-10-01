@@ -3,7 +3,7 @@ package usecase
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/apperror"
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"strings"
@@ -133,7 +133,7 @@ func (u *ContentArticleUsecase) ArchiveArticle(ctx context.Context, req *Archive
 
 type ListArticlesReq struct {
 	UserID int64
-	Page   *common.PageReq
+	Page   *commonmodel.PageReq
 	Query  *ArticleQuery
 }
 
@@ -152,26 +152,26 @@ type ArticleQuery struct {
 }
 
 type ListArticlesResp struct {
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 	Rows []*repo.ArticleListItem
 }
 
 type ArticleViewHistoryPageResp struct {
 	Rows []*repo.ArticleViewHistoryRow
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *ContentArticleUsecase) PageViewHistory(
 	ctx context.Context,
 	userID int64,
-	page *common.PageReq,
+	page *commonmodel.PageReq,
 ) (*ArticleViewHistoryPageResp, error) {
 	if userID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	var requestPage *repo.PageReq
+	var requestPage *commonmodel.PageReq
 	if page != nil {
-		requestPage = &repo.PageReq{Page: page.GetPage(), Size: page.GetSize()}
+		requestPage = &commonmodel.PageReq{Page: page.Page, Size: page.Size}
 	}
 	result, err := u.contentArticleClient.PageViewHistory(ctx, userID, requestPage)
 	if err != nil {
@@ -193,9 +193,9 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_ARTICLE_LIST_PRIVATE)
 		}
 	}
-	var page *repo.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{Page: req.Page.GetPage(), Size: req.Page.GetSize()}
+		page = &commonmodel.PageReq{Page: req.Page.Page, Size: req.Page.Size}
 	}
 	var query *repo.ArticleQuery
 	if req.Query != nil {

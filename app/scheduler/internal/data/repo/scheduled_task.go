@@ -2,9 +2,8 @@ package repo
 
 import (
 	"common/pkg/apperror"
-	"common/pkg/server"
+	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
-	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"scheduler/internal/biz/model"
@@ -53,14 +52,14 @@ func (r *ScheduledTaskRepo) List(ctx context.Context, req *bizrepo.ScheduledTask
 }
 
 func (r *ScheduledTaskRepo) Page(ctx context.Context, req *bizrepo.ScheduledTaskPageReq) (*bizrepo.ScheduledTaskPageResp, error) {
-	page := server.PageValid(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).ScheduledTask.Query().Where(scheduledtask.DeletedAtIsNil())
 	query = r.getQuery(query, &req.ScheduledTaskGetReq)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := query.Order(scheduledtask.ByID()).Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	rows, err := query.Order(scheduledtask.ByID()).Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +67,7 @@ func (r *ScheduledTaskRepo) Page(ctx context.Context, req *bizrepo.ScheduledTask
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return &bizrepo.ScheduledTaskPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
+	return &bizrepo.ScheduledTaskPageResp{Rows: result, Page: &commonmodel.PageResp{Total: int64(total), Page: page.Page, Size: page.Size}}, nil
 }
 
 func (r *ScheduledTaskRepo) MapByTaskKey(ctx context.Context, taskKeys []string) (map[string]*model.ScheduledTask, error) {

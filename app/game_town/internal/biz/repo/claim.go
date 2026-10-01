@@ -1,9 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
 )
@@ -23,10 +22,10 @@ type ClaimQuery struct {
 	Predicate                             *string
 }
 type ClaimPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query ClaimQuery
 }
 type ClaimPageResp struct {
 	Rows []*model.Claim
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

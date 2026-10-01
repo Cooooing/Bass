@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"log/slog"
@@ -492,13 +493,13 @@ type ArticleViewHistoryRow struct {
 
 type ArticleViewHistoryPageResp struct {
 	Rows []*ArticleViewHistoryRow
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (d *ArticleUsecase) PageViewHistory(
 	ctx context.Context,
 	access *model.ContentAccess,
-	page *base.PageRequest,
+	page *commonmodel.PageReq,
 ) (*ArticleViewHistoryPageResp, error) {
 	access, err := access.Normalize("")
 	if err != nil {
@@ -1150,7 +1151,7 @@ func (d *ArticleUsecase) ListByAccess(ctx context.Context, req *ArticleListByAcc
 type ArticlePageByAccessReq struct {
 	Access *model.ContentAccess
 	Filter *model.ArticleFilter
-	Page   *base.PageRequest
+	Page   *commonmodel.PageReq
 }
 
 func (d *ArticleUsecase) PageByAccess(ctx context.Context, req *ArticlePageByAccessReq) (*ArticlePageResp, error) {
@@ -1210,7 +1211,7 @@ func (d *ArticleUsecase) List(ctx context.Context, req *ArticleListReq) ([]*mode
 }
 
 type ArticlePageReq struct {
-	Page            *base.PageRequest
+	Page            *commonmodel.PageReq
 	TagID           *int64
 	DomainID        *int64
 	PublishStatus   *enum.ArticlePublishStatus
@@ -1230,7 +1231,7 @@ type ArticlePageReq struct {
 
 type ArticlePageResp struct {
 	Rows []*model.Article
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (d *ArticleUsecase) Page(ctx context.Context, req *ArticlePageReq) (*ArticlePageResp, error) {

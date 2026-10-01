@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"fmt"
 
@@ -19,7 +20,6 @@ import (
 var _ bizrepo.LocationRepo = (*LocationRepo)(nil)
 
 type LocationRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -162,13 +162,13 @@ func (r *LocationRepo) Count(ctx context.Context, req *bizrepo.LocationQuery) (i
 }
 
 func (r *LocationRepo) Page(ctx context.Context, req *bizrepo.LocationPageReq) (*bizrepo.LocationPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.locationQuery(r.getClient(ctx).Location.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(location.BySort(), location.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
+	rows, err := q.Order(location.BySort(), location.ByID()).Offset(p.Offset()).Limit(p.Limit()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -192,7 +192,7 @@ func (r *LocationRepo) Page(ctx context.Context, req *bizrepo.LocationPageReq) (
 	})
 	return &bizrepo.LocationPageResp{
 		Rows: out,
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }
 

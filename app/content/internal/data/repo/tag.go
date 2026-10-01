@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
-	"content/internal/biz/base"
 	"context"
 
 	"common/pkg/apperror"
@@ -19,7 +19,6 @@ import (
 var _ repo.TagRepo = (*TagRepo)(nil)
 
 type TagRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -233,7 +232,7 @@ func (r *TagRepo) AddArticleCount(ctx context.Context, req *repo.TagAddArticleCo
 }
 
 func (r *TagRepo) Page(ctx context.Context, req *repo.TagGetReq) (*repo.TagPageResp, error) {
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).Tag.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
@@ -241,7 +240,7 @@ func (r *TagRepo) Page(ctx context.Context, req *repo.TagGetReq) (*repo.TagPageR
 	if err != nil {
 		return nil, err
 	}
-	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	list, err := query.Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -266,7 +265,7 @@ func (r *TagRepo) Page(ctx context.Context, req *repo.TagGetReq) (*repo.TagPageR
 	}
 	return &repo.TagPageResp{
 		Rows: tags,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(count),
 			Size:  page.Size,
 			Page:  page.Page,

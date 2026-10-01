@@ -1,12 +1,11 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"time"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
+	"time"
 )
 
 type AgentJobRepo interface {
@@ -50,11 +49,11 @@ type AgentJobQuery struct {
 }
 
 type AgentJobPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query AgentJobQuery
 }
 
 type AgentJobPageResp struct {
 	Rows []*model.AgentJob
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

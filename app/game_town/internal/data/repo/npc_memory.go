@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"math"
 	"slices"
@@ -22,7 +23,6 @@ import (
 var _ bizrepo.NpcMemoryRepo = (*NpcMemoryRepo)(nil)
 
 type NpcMemoryRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -224,15 +224,15 @@ func (r *NpcMemoryRepo) Count(ctx context.Context, req *bizrepo.NpcMemoryQuery) 
 }
 
 func (r *NpcMemoryRepo) Page(ctx context.Context, req *bizrepo.NpcMemoryPageReq) (*bizrepo.NpcMemoryPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.npcMemoryQuery(r.getClient(ctx).NpcMemory.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rows, err := q.Order(npcmemory.ByOccurredWorldTime(sql.OrderDesc())).
-		Offset(r.pageOffset(p)).
-		Limit(r.pageLimit(p)).
+		Offset(p.Offset()).
+		Limit(p.Limit()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -241,7 +241,7 @@ func (r *NpcMemoryRepo) Page(ctx context.Context, req *bizrepo.NpcMemoryPageReq)
 		Rows: lo.Map(rows, func(row *gen.NpcMemory, _ int) *model.NpcMemory {
 			return r.npcMemory(row)
 		}),
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }
 

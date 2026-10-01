@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"time"
 
@@ -19,7 +20,6 @@ import (
 var _ bizrepo.AgentJobRepo = (*AgentJobRepo)(nil)
 
 type AgentJobRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -191,13 +191,13 @@ func (r *AgentJobRepo) Count(ctx context.Context, req *bizrepo.AgentJobQuery) (i
 }
 
 func (r *AgentJobRepo) Page(ctx context.Context, req *bizrepo.AgentJobPageReq) (*bizrepo.AgentJobPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.agentJobQuery(r.getClient(ctx).AgentJob.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(agentjob.ByPriority(), agentjob.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
+	rows, err := q.Order(agentjob.ByPriority(), agentjob.ByID()).Offset(p.Offset()).Limit(p.Limit()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -223,7 +223,7 @@ func (r *AgentJobRepo) Page(ctx context.Context, req *bizrepo.AgentJobPageReq) (
 	})
 	return &bizrepo.AgentJobPageResp{
 		Rows: out,
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }
 

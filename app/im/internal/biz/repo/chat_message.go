@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"im/internal/biz/base"
 	"im/internal/biz/model"
 	"im/internal/enum"
 )
@@ -25,7 +25,7 @@ type ChatMessageUpdateStatusReq struct {
 }
 
 type ChatMessageQuery struct {
-	Page      *base.PageRequest
+	Page      *commonmodel.PageReq
 	IDs       []int64
 	SessionID *int64
 	SenderID  *int64
@@ -33,5 +33,5 @@ type ChatMessageQuery struct {
 
 type ChatMessagePageResp struct {
 	Rows []*model.ChatMessage
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }

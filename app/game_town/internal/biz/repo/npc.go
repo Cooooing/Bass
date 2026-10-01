@@ -1,12 +1,11 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"time"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
+	"time"
 )
 
 type NpcRepo interface {
@@ -50,11 +49,11 @@ type NpcQuery struct {
 }
 
 type NpcPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query NpcQuery
 }
 
 type NpcPageResp struct {
 	Rows []*model.Npc
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

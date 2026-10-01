@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"time"
 )
@@ -53,12 +54,12 @@ type UpdateTagReq struct {
 }
 
 type ListTagsReq struct {
-	Page  *PageReq
+	Page  *commonmodel.PageReq
 	Query *TagQuery
 }
 
 type ListTagsResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*Tag
 }
 

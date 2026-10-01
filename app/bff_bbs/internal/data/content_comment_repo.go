@@ -3,8 +3,8 @@ package data
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
+	commonmodel "common/pkg/model"
 	"common/pkg/util"
-	"common/proto/gen/common"
 	contentv1 "common/proto/gen/content/v1"
 	contentv1enum "common/proto/gen/content/v1/enum"
 	userv1 "common/proto/gen/user/v1"
@@ -79,9 +79,9 @@ func (r *ContentCommentClient) CreateComment(ctx context.Context, req *repo.Crea
 }
 
 func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListCommentsReq) (*repo.ListCommentsResp, error) {
-	var pageReq *common.PageReq
+	var pageReq *commonmodel.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageReq{
+		pageReq = &commonmodel.PageReq{
 			Page: req.Page.Page,
 			Size: req.Page.Size,
 		}
@@ -116,7 +116,7 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListC
 		contentAccess = &contentv1.ContentAccess{Scope: accessScope, ActorUserId: new(req.UserID)}
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
-		Page:   pageReq,
+		Page:   pageReq.ToProto(),
 		Query:  contentQuery,
 		Access: contentAccess,
 	})
@@ -145,13 +145,9 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListC
 	for _, item := range reply.GetRows() {
 		rows = append(rows, r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()]))
 	}
-	var page *repo.PageResp
+	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-			Total: reply.GetPage().GetTotal(),
-		}
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	return &repo.ListCommentsResp{
 		Page: page,
@@ -160,9 +156,9 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListC
 }
 
 func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo.ListCommentThreadsReq) (*repo.ListCommentThreadsResp, error) {
-	var pageReq *common.PageReq
+	var pageReq *commonmodel.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageReq{
+		pageReq = &commonmodel.PageReq{
 			Page: req.Page.Page,
 			Size: req.Page.Size,
 		}
@@ -172,7 +168,7 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 		order = contentv1enum.CommentOrder(*req.Order)
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
-		Page: pageReq,
+		Page: pageReq.ToProto(),
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
 			ArticleId: new(req.ArticleID),
 			Level:     new(int32(1)),
@@ -274,13 +270,9 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 			HasMoreReplies: item.GetReplyCount() > int32(len(previewRows)),
 		})
 	}
-	var page *repo.PageResp
+	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-			Total: reply.GetPage().GetTotal(),
-		}
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	return &repo.ListCommentThreadsResp{
 		Page: page,
@@ -289,9 +281,9 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 }
 
 func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo.ListCommentRepliesReq) (*repo.ListCommentRepliesResp, error) {
-	var pageReq *common.PageReq
+	var pageReq *commonmodel.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageReq{
+		pageReq = &commonmodel.PageReq{
 			Page: req.Page.Page,
 			Size: req.Page.Size,
 		}
@@ -301,7 +293,7 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo
 		order = contentv1enum.CommentOrder(*req.Order)
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
-		Page: pageReq,
+		Page: pageReq.ToProto(),
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
 			ArticleId: new(req.ArticleID),
 			ParentId:  new(req.ParentID),
@@ -332,13 +324,9 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo
 	rows := lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Resp_Comment, _ int) *repo.CommentListItem {
 		return r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()])
 	})
-	var page *repo.PageResp
+	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-			Total: reply.GetPage().GetTotal(),
-		}
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	return &repo.ListCommentRepliesResp{
 		Page: page,
@@ -347,9 +335,9 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo
 }
 
 func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *repo.ListCommentTimelineReq) (*repo.ListCommentTimelineResp, error) {
-	var pageReq *common.PageReq
+	var pageReq *commonmodel.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageReq{
+		pageReq = &commonmodel.PageReq{
 			Page: req.Page.Page,
 			Size: req.Page.Size,
 		}
@@ -359,7 +347,7 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 		order = contentv1enum.CommentOrder(*req.Order)
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
-		Page: pageReq,
+		Page: pageReq.ToProto(),
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
 			ArticleId: new(req.ArticleID),
 			Order:     new(order),
@@ -389,13 +377,9 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 	rows := lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Resp_Comment, _ int) *repo.CommentListItem {
 		return r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()])
 	})
-	var page *repo.PageResp
+	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-			Total: reply.GetPage().GetTotal(),
-		}
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	return &repo.ListCommentTimelineResp{
 		Page: page,

@@ -3,6 +3,7 @@ package usecase
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bff_bbs/v1/user/enum"
 	commonv1 "common/proto/gen/common"
@@ -139,7 +140,7 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 	return profile, nil
 }
 
-func (u *AccountUsecase) ListFollowing(ctx context.Context, name string, viewerID int64, page *repo.PageReq) (*bbsuserv1.ListFollowing_Resp, error) {
+func (u *AccountUsecase) ListFollowing(ctx context.Context, name string, viewerID int64, page *commonmodel.PageReq) (*bbsuserv1.ListFollowing_Resp, error) {
 	account, _, err := u.accountClient.GetProfile(ctx, name)
 	if err != nil {
 		return nil, err
@@ -158,7 +159,7 @@ func (u *AccountUsecase) ListFollowing(ctx context.Context, name string, viewerI
 	return u.listFollowingProfileAccounts(ctx, viewerID, result)
 }
 
-func (u *AccountUsecase) ListFollowers(ctx context.Context, name string, viewerID int64, page *repo.PageReq) (*bbsuserv1.ListFollowers_Resp, error) {
+func (u *AccountUsecase) ListFollowers(ctx context.Context, name string, viewerID int64, page *commonmodel.PageReq) (*bbsuserv1.ListFollowers_Resp, error) {
 	account, _, err := u.accountClient.GetProfile(ctx, name)
 	if err != nil {
 		return nil, err
@@ -279,7 +280,7 @@ func (*AccountUsecase) profileRelation(status *repo.RelationStatus) *bbsuserv1.P
 	}
 }
 
-func (*AccountUsecase) profilePage(page *repo.PageResp) *commonv1.PageResp {
+func (*AccountUsecase) profilePage(page *commonmodel.PageResp) *commonv1.PageResp {
 	if page == nil {
 		return nil
 	}
@@ -533,14 +534,14 @@ func (u *AccountUsecase) GetEconomyAccount(ctx context.Context, userID int64) (*
 
 type ListAccountEconomyRecordsReq struct {
 	UserID     int64
-	Page       *repo.PageReq
+	Page       *commonmodel.PageReq
 	Direction  *economyv1enum.EconomyRecordDirection
 	RecordType *economyv1enum.EconomyRecordType
 }
 
 type ListAccountEconomyRecordsResp struct {
 	Rows []*repo.EconomyRecord
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *AccountUsecase) ListEconomyRecords(ctx context.Context, req *ListAccountEconomyRecordsReq) (*ListAccountEconomyRecordsResp, error) {

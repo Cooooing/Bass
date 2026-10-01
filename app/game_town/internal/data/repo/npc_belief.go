@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 
 	"common/pkg/apperror"
@@ -17,7 +18,6 @@ import (
 var _ bizrepo.NpcBeliefRepo = (*NpcBeliefRepo)(nil)
 
 type NpcBeliefRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -117,15 +117,15 @@ func (r *NpcBeliefRepo) Count(ctx context.Context, req *bizrepo.NpcBeliefQuery) 
 }
 
 func (r *NpcBeliefRepo) Page(ctx context.Context, req *bizrepo.NpcBeliefPageReq) (*bizrepo.NpcBeliefPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.npcBeliefQuery(r.getClient(ctx).NpcBelief.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rows, err := q.Order(npcbelief.ByConfidence()).
-		Offset(r.pageOffset(p)).
-		Limit(r.pageLimit(p)).
+		Offset(p.Offset()).
+		Limit(p.Limit()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -134,7 +134,7 @@ func (r *NpcBeliefRepo) Page(ctx context.Context, req *bizrepo.NpcBeliefPageReq)
 		Rows: lo.Map(rows, func(row *gen.NpcBelief, _ int) *model.NpcBelief {
 			return r.npcBelief(row)
 		}),
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }
 

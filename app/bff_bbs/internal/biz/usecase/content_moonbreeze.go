@@ -3,6 +3,7 @@ package usecase
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"strings"
@@ -192,10 +193,10 @@ func (u *ContentMoonbreezeUsecase) PageMember(
 // until a dedicated ID-only query is needed for significantly larger sets.
 func (u *ContentMoonbreezeUsecase) followingIDs(ctx context.Context, userID int64) ([]int64, error) {
 	var ids []int64
-	for page := uint32(1); ; page++ {
+	for page := commonmodel.DefaultPage; ; page++ {
 		result, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{
 			ActorID: userID,
-			Page: &repo.PageReq{
+			Page: &commonmodel.PageReq{
 				Page: page,
 				Size: 100,
 			},

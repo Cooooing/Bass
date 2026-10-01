@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
 	"notify/internal/data/gen"
@@ -17,7 +17,6 @@ import (
 var _ bizrepo.NotificationRuleRepo = (*NotificationRuleRepo)(nil)
 
 type NotificationRuleRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -142,11 +141,11 @@ func (r *NotificationRuleRepo) Count(ctx context.Context, req *bizrepo.Notificat
 
 func (r *NotificationRuleRepo) Page(ctx context.Context, req *bizrepo.NotificationRuleQuery) (*bizrepo.NotificationRulePageResp, error) {
 	queryReq := req
-	var pageReq *base.PageRequest
+	var pageReq *commonmodel.PageReq
 	if queryReq != nil {
 		pageReq = queryReq.Page
 	}
-	page := r.normalizePage(pageReq)
+	page := commonmodel.NormalizePage(pageReq)
 	query := r.getClient(ctx).NotificationRule.Query()
 	query = r.getQuery(query, queryReq)
 	total, err := query.Clone().Count(ctx)
@@ -154,8 +153,8 @@ func (r *NotificationRuleRepo) Page(ctx context.Context, req *bizrepo.Notificati
 		return nil, err
 	}
 	list, err := query.
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -175,7 +174,7 @@ func (r *NotificationRuleRepo) Page(ctx context.Context, req *bizrepo.Notificati
 	}
 	return &bizrepo.NotificationRulePageResp{
 		Rows: rules,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

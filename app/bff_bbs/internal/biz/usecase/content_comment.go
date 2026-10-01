@@ -3,9 +3,9 @@ package usecase
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
 	bbscontentv1enum "common/proto/gen/bff_bbs/v1/content/enum"
-	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 )
@@ -84,12 +84,12 @@ func (u *ContentCommentUsecase) CreateComment(ctx context.Context, req *CreateCo
 
 type ListCommentsReq struct {
 	UserID int64
-	Page   *common.PageReq
+	Page   *commonmodel.PageReq
 	Query  *bbscontentv1.ListComments_Req_CommentQuery
 }
 
 type ListCommentsResp struct {
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 	Rows []*repo.CommentListItem
 }
 
@@ -97,11 +97,11 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 	if req == nil {
 		req = &ListCommentsReq{}
 	}
-	var page *repo.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
+		page = &commonmodel.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
 		}
 	}
 	query := &repo.CommentQuery{
@@ -184,23 +184,23 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 
 type ListCommentThreadsReq struct {
 	UserID            int64
-	Page              *common.PageReq
+	Page              *commonmodel.PageReq
 	ArticleID         int64
 	Order             *bbscontentv1enum.CommentOrder
 	ReplyPreviewLimit *int32
 }
 
 type ListCommentThreadsResp struct {
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 	Rows []*repo.CommentThread
 }
 
 func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *ListCommentThreadsReq) (*ListCommentThreadsResp, error) {
-	var page *repo.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
+		page = &commonmodel.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
 		}
 	}
 	var order *int32
@@ -271,23 +271,23 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 
 type ListCommentRepliesReq struct {
 	UserID    int64
-	Page      *common.PageReq
+	Page      *commonmodel.PageReq
 	ArticleID int64
 	ParentID  int64
 	Order     *bbscontentv1enum.CommentOrder
 }
 
 type ListCommentRepliesResp struct {
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 	Rows []*repo.CommentListItem
 }
 
 func (u *ContentCommentUsecase) ListCommentReplies(ctx context.Context, req *ListCommentRepliesReq) (*ListCommentRepliesResp, error) {
-	var page *repo.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
+		page = &commonmodel.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
 		}
 	}
 	var order *int32
@@ -350,22 +350,22 @@ func (u *ContentCommentUsecase) ListCommentReplies(ctx context.Context, req *Lis
 
 type ListCommentTimelineReq struct {
 	UserID    int64
-	Page      *common.PageReq
+	Page      *commonmodel.PageReq
 	ArticleID int64
 	Order     *bbscontentv1enum.CommentOrder
 }
 
 type ListCommentTimelineResp struct {
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 	Rows []*repo.CommentListItem
 }
 
 func (u *ContentCommentUsecase) ListCommentTimeline(ctx context.Context, req *ListCommentTimelineReq) (*ListCommentTimelineResp, error) {
-	var page *repo.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
+		page = &commonmodel.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
 		}
 	}
 	var order *int32

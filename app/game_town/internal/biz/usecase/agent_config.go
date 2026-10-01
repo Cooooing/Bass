@@ -1,12 +1,12 @@
 package usecase
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"strings"
 	"time"
 
 	"common/pkg/apperror"
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/biz/repo"
 	"game_town/internal/enum"
@@ -65,10 +65,10 @@ func (u *AgentConfigUsecase) Get(ctx context.Context, agentConfigID int64) (*mod
 
 type PageAgentConfigsResp struct {
 	Rows []*model.AgentConfig
-	Page base.PageResp
+	Page commonmodel.PageResp
 }
 
-func (u *AgentConfigUsecase) Page(ctx context.Context, page base.PageRequest) (*PageAgentConfigsResp, error) {
+func (u *AgentConfigUsecase) Page(ctx context.Context, page commonmodel.PageReq) (*PageAgentConfigsResp, error) {
 	resp, err := u.agentConfigRepo.Page(ctx, &repo.AgentConfigPageReq{
 		Page: page,
 	})

@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"im/internal/biz/base"
 	"im/internal/biz/model"
 	"time"
 )
@@ -27,7 +27,7 @@ type ChatGroupMemberUpdateMuteEndAtReq struct {
 }
 
 type ChatGroupMemberQuery struct {
-	Page    *base.PageRequest
+	Page    *commonmodel.PageReq
 	IDs     []int64
 	GroupID *int64
 	UserID  *int64
@@ -35,5 +35,5 @@ type ChatGroupMemberQuery struct {
 
 type ChatGroupMemberPageResp struct {
 	Rows []*model.ChatGroupMember
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }

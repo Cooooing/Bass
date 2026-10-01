@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	notifyenum "notify/internal/enum"
 	"time"
@@ -22,7 +22,7 @@ type NotificationEmailDeliveryRepo interface {
 
 type NotificationEmailDeliveryPageResp struct {
 	Rows []*model.NotificationEmailDelivery
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type NotificationEmailDeliveryClaimReq struct {
@@ -41,7 +41,7 @@ type NotificationEmailDeliveryUpdateStatusReq struct {
 }
 
 type NotificationEmailDeliveryQuery struct {
-	Page       *base.PageRequest
+	Page       *commonmodel.PageReq
 	ID         *int64
 	IDs        []int64
 	EventID    *string

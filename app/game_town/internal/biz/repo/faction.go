@@ -1,9 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
 )
@@ -35,11 +34,11 @@ type FactionQuery struct {
 }
 
 type FactionPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query FactionQuery
 }
 
 type FactionPageResp struct {
 	Rows []*model.Faction
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"time"
 )
@@ -55,12 +56,12 @@ type UpdateDomainReq struct {
 }
 
 type ListDomainsReq struct {
-	Page  *PageReq
+	Page  *commonmodel.PageReq
 	Query *DomainQuery
 }
 
 type ListDomainsResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*Domain
 }
 

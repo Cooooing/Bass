@@ -41,13 +41,13 @@ func (s *NotificationService) List(ctx context.Context, req *bbsnotifyv1.ListNot
 	}
 	resp, err := s.notificationUsecase.ListNotifications(ctx, &usecase.ListNotificationsReq{
 		UserID: user.ID,
-		Page:   req.GetPage(),
+		Page:   commonmodel.PageReqFromProto(req.GetPage()),
 	})
 	if err != nil {
 		return nil, err
 	}
 	return &bbsnotifyv1.ListNotifications_Resp{
-		Page: resp.Page,
+		Page: resp.Page.ToProto(),
 		Rows: resp.Rows,
 	}, nil
 }

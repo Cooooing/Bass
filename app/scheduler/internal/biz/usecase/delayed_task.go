@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"common/pkg/apperror"
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"encoding/json"
@@ -196,7 +196,7 @@ func (u *DelayedTaskUsecase) Get(ctx context.Context, req *DelayedTaskGetReq) (*
 }
 
 type DelayedTaskPageReq struct {
-	Page        *common.PageReq
+	Page        *commonmodel.PageReq
 	IDs         []int64
 	TaskKey     *string
 	HandlerName *schedulerenum.TaskHandlerName
@@ -206,7 +206,7 @@ type DelayedTaskPageReq struct {
 
 type DelayedTaskPageResp struct {
 	Rows []*model.DelayedTask
-	Page *common.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *DelayedTaskUsecase) Page(ctx context.Context, req *DelayedTaskPageReq) (*DelayedTaskPageResp, error) {
@@ -586,7 +586,7 @@ func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *m
 }
 
 type DelayedTaskExecutionRecordPageReq struct {
-	Page           *common.PageReq
+	Page           *commonmodel.PageReq
 	DelayedTaskID  *int64
 	IdempotencyKey *string
 	Status         *schedulerenum.TaskExecutionStatus
@@ -595,7 +595,7 @@ type DelayedTaskExecutionRecordPageReq struct {
 
 type DelayedTaskExecutionRecordPageResp struct {
 	Rows []*model.DelayedTaskExecutionRecord
-	Page *common.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *DelayedTaskUsecase) PageExecutionRecords(ctx context.Context, req *DelayedTaskExecutionRecordPageReq) (*DelayedTaskExecutionRecordPageResp, error) {

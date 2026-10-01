@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
@@ -160,12 +161,12 @@ func (d *CommentUsecase) Add(ctx context.Context, req *CommentAddReq) (*model.Co
 
 type CommentPageReq struct {
 	Access *model.ContentAccess
-	Page   *base.PageRequest
+	Page   *commonmodel.PageReq
 	Filter *model.CommentFilter
 }
 
 type CommentPageResp struct {
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 	Rows []*model.Comment
 }
 

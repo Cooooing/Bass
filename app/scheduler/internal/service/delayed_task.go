@@ -2,6 +2,7 @@ package service
 
 import (
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	schedulerv1enum "common/proto/gen/scheduler/v1/enum"
@@ -127,7 +128,7 @@ func (s *SchedulerDelayedTaskService) Get(ctx context.Context, req *schedulerv1.
 func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1.PageSchedulerDelayedTasks_Req) (*schedulerv1.PageSchedulerDelayedTasks_Resp, error) {
 	query := &usecase.DelayedTaskPageReq{}
 	if req != nil {
-		query.Page = req.GetPage()
+		query.Page = commonmodel.PageReqFromProto(req.GetPage())
 		if req.GetQuery() != nil {
 			query.IDs = req.GetQuery().GetIds()
 			query.TaskKey = req.GetQuery().TaskKey
@@ -169,7 +170,7 @@ func (s *SchedulerDelayedTaskService) Page(ctx context.Context, req *schedulerv1
 		rows = append(rows, item)
 	}
 	return &schedulerv1.PageSchedulerDelayedTasks_Resp{
-		Page: resp.Page,
+		Page: resp.Page.ToProto(),
 		Rows: rows,
 	}, nil
 }
@@ -316,7 +317,7 @@ func (s *SchedulerDelayedTaskService) PageExecutionRecords(
 ) (*schedulerv1.PageSchedulerDelayedTaskExecutionRecords_Resp, error) {
 	query := &usecase.DelayedTaskExecutionRecordPageReq{}
 	if req != nil {
-		query.Page = req.GetPage()
+		query.Page = commonmodel.PageReqFromProto(req.GetPage())
 		if req.GetQuery() != nil {
 			query.DelayedTaskID = req.GetQuery().DelayedTaskId
 			query.IdempotencyKey = req.GetQuery().IdempotencyKey
@@ -377,7 +378,7 @@ func (s *SchedulerDelayedTaskService) PageExecutionRecords(
 		rows = append(rows, item)
 	}
 	return &schedulerv1.PageSchedulerDelayedTaskExecutionRecords_Resp{
-		Page: resp.Page,
+		Page: resp.Page.ToProto(),
 		Rows: rows,
 	}, nil
 }

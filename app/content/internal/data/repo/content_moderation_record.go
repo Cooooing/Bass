@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"content/internal/biz/base"
+	commonmodel "common/pkg/model"
 	"context"
 
 	utilent "common/pkg/util/ent"
@@ -17,7 +17,6 @@ import (
 var _ repo.ContentModerationRecordRepo = (*ContentModerationRecordRepo)(nil)
 
 type ContentModerationRecordRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -124,14 +123,14 @@ func (r *ContentModerationRecordRepo) Count(ctx context.Context, req *repo.Conte
 }
 
 func (r *ContentModerationRecordRepo) Page(ctx context.Context, req *repo.ContentModerationRecordGetReq) (*repo.ContentModerationRecordPageResp, error) {
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).ContentModerationRecord.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	records, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	records, err := query.Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -150,7 +149,7 @@ func (r *ContentModerationRecordRepo) Page(ctx context.Context, req *repo.Conten
 	})
 	return &repo.ContentModerationRecordPageResp{
 		Rows: rows,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

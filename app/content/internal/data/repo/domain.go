@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
-	"content/internal/biz/base"
 	"context"
 
 	"common/pkg/apperror"
@@ -19,7 +19,6 @@ import (
 var _ repo.DomainRepo = (*DomainRepo)(nil)
 
 type DomainRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -224,7 +223,7 @@ func (r *DomainRepo) Count(ctx context.Context, req *repo.DomainGetReq) (int, er
 }
 
 func (r *DomainRepo) Page(ctx context.Context, req *repo.DomainGetReq) (*repo.DomainPageResp, error) {
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).Domain.Query()
 	query = r.getQuery(query, req)
 	countQuery := query.Clone()
@@ -232,7 +231,7 @@ func (r *DomainRepo) Page(ctx context.Context, req *repo.DomainGetReq) (*repo.Do
 	if err != nil {
 		return nil, err
 	}
-	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	list, err := query.Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -257,7 +256,7 @@ func (r *DomainRepo) Page(ctx context.Context, req *repo.DomainGetReq) (*repo.Do
 	}
 	return &repo.DomainPageResp{
 		Rows: domains,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

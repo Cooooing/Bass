@@ -3,9 +3,9 @@ package usecase
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
 	bbscontentv1enum "common/proto/gen/bff_bbs/v1/content/enum"
-	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 )
@@ -102,12 +102,12 @@ func (u *ContentDomainUsecase) UpdateDomain(ctx context.Context, req *UpdateDoma
 }
 
 type ListDomainsReq struct {
-	Page  *common.PageReq
+	Page  *commonmodel.PageReq
 	Query *bbscontentv1.ListDomains_Req_DomainQuery
 }
 
 type ListDomainsResp struct {
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 	Rows []*repo.Domain
 }
 
@@ -115,11 +115,11 @@ func (u *ContentDomainUsecase) ListDomains(ctx context.Context, req *ListDomains
 	if req == nil {
 		req = &ListDomainsReq{}
 	}
-	var page *repo.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
+		page = &commonmodel.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
 		}
 	}
 	query := &repo.DomainQuery{}

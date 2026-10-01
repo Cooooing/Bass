@@ -92,18 +92,14 @@ func (s *RelationService) ListFollowing(ctx context.Context, req *bbsuserv1.List
 	}
 	resp, err := s.relationUsecase.ListFollowing(ctx, &usecase.ListFollowingReq{
 		ActorID: user.ID,
-		Page:    req.GetPage(),
+		Page:    commonmodel.PageReqFromProto(req.GetPage()),
 	})
 	if err != nil {
 		return nil, err
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{
-			Page:  resp.Page.Page,
-			Size:  resp.Page.Size,
-			Total: resp.Page.Total,
-		}
+		page = resp.Page.ToProto()
 	}
 	rows := make([]*bbsuserv1.ListFollowingRelations_Resp_Relation, 0, len(resp.Rows))
 	for _, row := range resp.Rows {
@@ -133,18 +129,14 @@ func (s *RelationService) ListFollowers(ctx context.Context, req *bbsuserv1.List
 	}
 	resp, err := s.relationUsecase.ListFollowers(ctx, &usecase.ListFollowersReq{
 		ActorID: user.ID,
-		Page:    req.GetPage(),
+		Page:    commonmodel.PageReqFromProto(req.GetPage()),
 	})
 	if err != nil {
 		return nil, err
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{
-			Page:  resp.Page.Page,
-			Size:  resp.Page.Size,
-			Total: resp.Page.Total,
-		}
+		page = resp.Page.ToProto()
 	}
 	rows := make([]*bbsuserv1.ListFollowersRelations_Resp_Relation, 0, len(resp.Rows))
 	for _, row := range resp.Rows {
@@ -174,18 +166,14 @@ func (s *RelationService) ListBlocked(ctx context.Context, req *bbsuserv1.ListBl
 	}
 	resp, err := s.relationUsecase.ListBlocked(ctx, &usecase.ListBlockedReq{
 		ActorID: user.ID,
-		Page:    req.GetPage(),
+		Page:    commonmodel.PageReqFromProto(req.GetPage()),
 	})
 	if err != nil {
 		return nil, err
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{
-			Page:  resp.Page.Page,
-			Size:  resp.Page.Size,
-			Total: resp.Page.Total,
-		}
+		page = resp.Page.ToProto()
 	}
 	rows := make([]*bbsuserv1.ListBlockedRelations_Resp_Relation, 0, len(resp.Rows))
 	for _, row := range resp.Rows {

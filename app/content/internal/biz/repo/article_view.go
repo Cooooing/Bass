@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"content/internal/biz/base"
+	commonmodel "common/pkg/model"
 	"content/internal/biz/model"
 	"context"
 )
@@ -26,10 +26,10 @@ type ArticleViewRecordRepo interface {
 
 type ArticleViewRecordPageReq struct {
 	UserID int64
-	Page   *base.PageRequest
+	Page   *commonmodel.PageReq
 }
 
 type ArticleViewRecordPageResp struct {
 	Rows []*model.ArticleViewRecord
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }

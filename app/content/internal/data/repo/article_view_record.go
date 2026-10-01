@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"common/pkg/util/ent"
-	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
@@ -16,7 +16,6 @@ import (
 var _ repo.ArticleViewRecordRepo = (*ArticleViewRecordRepo)(nil)
 
 type ArticleViewRecordRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -57,7 +56,7 @@ func (r *ArticleViewRecordRepo) Page(
 	if req == nil {
 		req = &repo.ArticleViewRecordPageReq{}
 	}
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).ArticleViewRecord.Query().
 		Where(articleviewrecord.UserIDEQ(req.UserID)).
 		Where(articleviewrecord.HasArticleWith(
@@ -72,8 +71,8 @@ func (r *ArticleViewRecordRepo) Page(
 	}
 	records, err := query.
 		Order(gen.Desc(articleviewrecord.FieldViewedAt), gen.Desc(articleviewrecord.FieldID)).
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -89,7 +88,7 @@ func (r *ArticleViewRecordRepo) Page(
 	}
 	return &repo.ArticleViewRecordPageResp{
 		Rows: rows,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

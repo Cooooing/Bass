@@ -1,9 +1,9 @@
 package service
 
 import (
+	commonmodel "common/pkg/model"
 	"common/proto/gen/common"
 	"context"
-	"im/internal/biz/base"
 
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
@@ -82,10 +82,7 @@ func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Req)
 		}
 	}
 	resp, err := s.chatGroupUsecase.List(ctx, &usecase.ChatGroupListReq{
-		Page: &base.PageRequest{
-			Page: int64(req.GetPage().GetPage()),
-			Size: int64(req.GetPage().GetSize()),
-		},
+		Page:   commonmodel.PageReqFromProto(req.GetPage()),
 		IDs:    ids,
 		Status: status,
 	})
@@ -106,9 +103,9 @@ func (s *ChatGroupService) List(ctx context.Context, req *v1.ListChatGroups_Req)
 	}
 	return &v1.ListChatGroups_Resp{
 		Page: &common.PageResp{
-			Page:  uint32(resp.Page.Page),
-			Size:  uint32(resp.Page.Size),
-			Total: uint32(resp.Page.Total),
+			Page:  int64(resp.Page.Page),
+			Size:  int64(resp.Page.Size),
+			Total: int64(resp.Page.Total),
 		},
 		Rows: rows,
 	}, nil

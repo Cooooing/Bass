@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"economy/internal/biz/base"
 	"economy/internal/biz/model"
 )
 
@@ -17,7 +17,7 @@ type AccountRepo interface {
 }
 
 type AccountGetReq struct {
-	Page    *base.PageRequest
+	Page    *commonmodel.PageReq
 	ID      *int64
 	IDs     []int64
 	UserID  *int64
@@ -37,5 +37,5 @@ type AccountUpdateBalanceReq struct {
 
 type AccountPageResp struct {
 	Rows []*model.Account
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }

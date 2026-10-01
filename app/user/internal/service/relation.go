@@ -1,8 +1,8 @@
 package service
 
 import (
+	commonmodel "common/pkg/model"
 	"common/pkg/util"
-	"common/proto/gen/common"
 	v1 "common/proto/gen/user/v1"
 	"context"
 	"user/internal/biz/usecase"
@@ -67,12 +67,8 @@ func (s *RelationService) Unblock(ctx context.Context, req *v1.UnblockRelation_R
 
 func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowingRelations_Req) (*v1.ListFollowingRelations_Resp, error) {
 	req = util.OrDefault(req, &v1.ListFollowingRelations_Req{})
-	req.Page = util.OrDefault(req.Page, &common.PageReq{})
 	res, err := s.relationUsecase.ListFollowing(ctx, &usecase.ListFollowingRelationsReq{
-		Page: usecase.RelationPageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
-		},
+		Page:    commonmodel.PageReqFromProto(req.GetPage()),
 		ActorID: req.GetUserId(),
 	})
 	if err != nil {
@@ -95,11 +91,7 @@ func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowi
 		replyRows = append(replyRows, reply)
 	}
 	return &v1.ListFollowingRelations_Resp{
-		Page: &common.PageResp{
-			Total: res.Page.Total,
-			Page:  res.Page.Page,
-			Size:  res.Page.Size,
-		},
+		Page: res.Page.ToProto(),
 		Rows: replyRows,
 	}, nil
 }
@@ -107,12 +99,8 @@ func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowi
 func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowersRelations_Req) (*v1.ListFollowersRelations_Resp, error) {
 	req = util.OrDefault(req, &v1.ListFollowersRelations_Req{})
 	targetID := req.GetUserId()
-	req.Page = util.OrDefault(req.Page, &common.PageReq{})
 	res, err := s.relationUsecase.ListFollowers(ctx, &usecase.ListFollowersRelationsReq{
-		Page: usecase.RelationPageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
-		},
+		Page:     commonmodel.PageReqFromProto(req.GetPage()),
 		TargetID: targetID,
 	})
 	if err != nil {
@@ -135,23 +123,15 @@ func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowe
 		replyRows = append(replyRows, reply)
 	}
 	return &v1.ListFollowersRelations_Resp{
-		Page: &common.PageResp{
-			Total: res.Page.Total,
-			Page:  res.Page.Page,
-			Size:  res.Page.Size,
-		},
+		Page: res.Page.ToProto(),
 		Rows: replyRows,
 	}, nil
 }
 
 func (s *RelationService) ListBlocked(ctx context.Context, req *v1.ListBlockedRelations_Req) (*v1.ListBlockedRelations_Resp, error) {
 	req = util.OrDefault(req, &v1.ListBlockedRelations_Req{})
-	req.Page = util.OrDefault(req.Page, &common.PageReq{})
 	res, err := s.relationUsecase.ListBlocked(ctx, &usecase.ListBlockedRelationsReq{
-		Page: usecase.RelationPageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
-		},
+		Page:    commonmodel.PageReqFromProto(req.GetPage()),
 		ActorID: req.GetUserId(),
 	})
 	if err != nil {
@@ -174,11 +154,7 @@ func (s *RelationService) ListBlocked(ctx context.Context, req *v1.ListBlockedRe
 		replyRows = append(replyRows, reply)
 	}
 	return &v1.ListBlockedRelations_Resp{
-		Page: &common.PageResp{
-			Total: res.Page.Total,
-			Page:  res.Page.Page,
-			Size:  res.Page.Size,
-		},
+		Page: res.Page.ToProto(),
 		Rows: replyRows,
 	}, nil
 }

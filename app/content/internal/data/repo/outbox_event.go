@@ -2,9 +2,9 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
 	commonenums "common/proto/gen/common/enums"
-	"content/internal/biz/base"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
 	"content/internal/data/gen/outboxevent"
@@ -23,7 +23,6 @@ import (
 var _ repo.OutboxEventRepo = (*OutboxEventRepo)(nil)
 
 type OutboxEventRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -168,7 +167,7 @@ func (r *OutboxEventRepo) Count(ctx context.Context, req *repo.OutboxEventGetReq
 }
 
 func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventGetReq) (*repo.OutboxEventPageResp, error) {
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).OutboxEvent.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)
@@ -176,8 +175,8 @@ func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventGetReq)
 		return nil, err
 	}
 	events, err := query.
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -199,7 +198,7 @@ func (r *OutboxEventRepo) Page(ctx context.Context, req *repo.OutboxEventGetReq)
 	}
 	return &repo.OutboxEventPageResp{
 		Rows: result,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

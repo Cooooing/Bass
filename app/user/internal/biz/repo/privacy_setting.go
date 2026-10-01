@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"user/internal/biz/model"
 )
@@ -23,11 +24,11 @@ type PrivacySettingGetReq struct {
 }
 
 type PrivacySettingPageReq struct {
-	Page  PageReq
+	Page  commonmodel.PageReq
 	Query PrivacySettingGetReq
 }
 
 type PrivacySettingPageResp struct {
 	Rows []*model.PrivacySetting
-	Page PageResp
+	Page commonmodel.PageResp
 }

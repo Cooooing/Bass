@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"time"
 )
@@ -35,7 +35,7 @@ type InboxEventSaveProcessingResp struct {
 
 type InboxEventPageResp struct {
 	Rows []*model.InboxEvent
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type InboxEventClaimRetryReq struct {
@@ -57,7 +57,7 @@ type InboxEventMarkFailedReq struct {
 }
 
 type InboxEventQuery struct {
-	Page      *base.PageRequest
+	Page      *commonmodel.PageReq
 	ID        *int64
 	IDs       []int64
 	EventID   *string

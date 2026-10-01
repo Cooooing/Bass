@@ -4,7 +4,7 @@ import (
 	"bff_bbs/internal/biz/repo"
 	"bff_bbs/internal/enum"
 	"common/pkg/client/rpc"
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
 	userv1 "common/proto/gen/user/v1"
 	userv1enum "common/proto/gen/user/v1/enum"
 	"context"
@@ -69,27 +69,23 @@ func (r *RelationClient) Unblock(ctx context.Context, req *repo.UnblockRelationR
 }
 
 func (r *RelationClient) ListFollowing(ctx context.Context, req *repo.ListFollowingRelationsReq) (*repo.ListFollowingRelationsResp, error) {
-	var pageReq *common.PageReq
+	var pageReq *commonmodel.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageReq{
+		pageReq = &commonmodel.PageReq{
 			Page: req.Page.Page,
 			Size: req.Page.Size,
 		}
 	}
 	reply, err := r.userClient.Relation.ListFollowing(ctx, &userv1.ListFollowingRelations_Req{
-		Page:   pageReq,
+		Page:   pageReq.ToProto(),
 		UserId: req.ActorID,
 	})
 	if err != nil {
 		return nil, err
 	}
-	var page *repo.PageResp
+	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-			Total: reply.GetPage().GetTotal(),
-		}
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	rows := make([]*repo.Relation, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
@@ -113,27 +109,23 @@ func (r *RelationClient) ListFollowing(ctx context.Context, req *repo.ListFollow
 }
 
 func (r *RelationClient) ListFollowers(ctx context.Context, req *repo.ListFollowersRelationsReq) (*repo.ListFollowersRelationsResp, error) {
-	var pageReq *common.PageReq
+	var pageReq *commonmodel.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageReq{
+		pageReq = &commonmodel.PageReq{
 			Page: req.Page.Page,
 			Size: req.Page.Size,
 		}
 	}
 	reply, err := r.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Req{
-		Page:   pageReq,
+		Page:   pageReq.ToProto(),
 		UserId: req.ActorID,
 	})
 	if err != nil {
 		return nil, err
 	}
-	var page *repo.PageResp
+	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-			Total: reply.GetPage().GetTotal(),
-		}
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	rows := make([]*repo.Relation, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
@@ -157,27 +149,23 @@ func (r *RelationClient) ListFollowers(ctx context.Context, req *repo.ListFollow
 }
 
 func (r *RelationClient) ListBlocked(ctx context.Context, req *repo.ListBlockedRelationsReq) (*repo.ListBlockedRelationsResp, error) {
-	var pageReq *common.PageReq
+	var pageReq *commonmodel.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageReq{
+		pageReq = &commonmodel.PageReq{
 			Page: req.Page.Page,
 			Size: req.Page.Size,
 		}
 	}
 	reply, err := r.userClient.Relation.ListBlocked(ctx, &userv1.ListBlockedRelations_Req{
-		Page:   pageReq,
+		Page:   pageReq.ToProto(),
 		UserId: req.ActorID,
 	})
 	if err != nil {
 		return nil, err
 	}
-	var page *repo.PageResp
+	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-			Total: reply.GetPage().GetTotal(),
-		}
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	rows := make([]*repo.Relation, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {

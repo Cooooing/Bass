@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 
 	"common/pkg/apperror"
@@ -20,7 +21,6 @@ import (
 var _ bizrepo.ObservationRepo = (*ObservationRepo)(nil)
 
 type ObservationRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -142,7 +142,7 @@ func (r *ObservationRepo) Count(ctx context.Context, req *bizrepo.ObservationQue
 }
 
 func (r *ObservationRepo) Page(ctx context.Context, req *bizrepo.ObservationPageReq) (*bizrepo.ObservationPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.observationQuery(r.getClient(ctx).Observation.Query(), &req.Query)
 	total := 0
 	if !req.SkipTotal {
@@ -154,8 +154,8 @@ func (r *ObservationRepo) Page(ctx context.Context, req *bizrepo.ObservationPage
 	}
 	q = r.orderObservations(q, &req.Query)
 	rows, err := q.
-		Offset(r.pageOffset(p)).
-		Limit(r.pageLimit(p)).
+		Offset(p.Offset()).
+		Limit(p.Limit()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -164,7 +164,7 @@ func (r *ObservationRepo) Page(ctx context.Context, req *bizrepo.ObservationPage
 		Rows: lo.Map(rows, func(row *gen.Observation, _ int) *model.Observation {
 			return r.observation(row)
 		}),
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }
 

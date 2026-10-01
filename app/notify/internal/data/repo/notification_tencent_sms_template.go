@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
 	"notify/internal/data/gen"
@@ -15,7 +15,6 @@ import (
 var _ bizrepo.NotificationTencentSMSTemplateRepo = (*NotificationTencentSMSTemplateRepo)(nil)
 
 type NotificationTencentSMSTemplateRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -135,11 +134,11 @@ func (r *NotificationTencentSMSTemplateRepo) Count(ctx context.Context, req *biz
 }
 
 func (r *NotificationTencentSMSTemplateRepo) Page(ctx context.Context, req *bizrepo.NotificationTencentSMSTemplateQuery) (*bizrepo.NotificationTencentSMSTemplatePageResp, error) {
-	var pageReq *base.PageRequest
+	var pageReq *commonmodel.PageReq
 	if req != nil {
 		pageReq = req.Page
 	}
-	page := r.normalizePage(pageReq)
+	page := commonmodel.NormalizePage(pageReq)
 	query := r.getClient(ctx).NotificationTencentSMSTemplate.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)
@@ -147,8 +146,8 @@ func (r *NotificationTencentSMSTemplateRepo) Page(ctx context.Context, req *bizr
 		return nil, err
 	}
 	list, err := query.
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -168,7 +167,7 @@ func (r *NotificationTencentSMSTemplateRepo) Page(ctx context.Context, req *bizr
 	}
 	return &bizrepo.NotificationTencentSMSTemplatePageResp{
 		Rows: result,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

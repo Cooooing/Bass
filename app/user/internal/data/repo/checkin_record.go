@@ -1,15 +1,13 @@
 package repo
 
 import (
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/gen"
 	"user/internal/data/gen/checkinrecord"
-
-	"common/pkg/server"
-	utilent "common/pkg/util/ent"
 )
 
 var _ repo.CheckinRecordRepo = (*CheckinRecordRepo)(nil)
@@ -66,19 +64,19 @@ func (r *CheckinRecordRepo) Count(ctx context.Context, req *repo.CheckinRecordGe
 }
 
 func (r *CheckinRecordRepo) Page(ctx context.Context, req *repo.CheckinRecordPageReq) (*repo.CheckinRecordPageResp, error) {
-	rows, page, err := r.page(ctx, &common.PageReq{
+	rows, page, err := r.page(ctx, &commonmodel.PageReq{
 		Page: req.Page.Page,
 		Size: req.Page.Size,
 	}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
-	resp := repo.PageResp{}
+	resp := commonmodel.PageResp{}
 	if page != nil {
-		resp = repo.PageResp{
-			Total: page.GetTotal(),
-			Page:  page.GetPage(),
-			Size:  page.GetSize(),
+		resp = commonmodel.PageResp{
+			Total: page.Total,
+			Page:  page.Page,
+			Size:  page.Size,
 		}
 	}
 	return &repo.CheckinRecordPageResp{
@@ -157,9 +155,9 @@ func (r *CheckinRecordRepo) count(ctx context.Context, req *repo.CheckinRecordGe
 	return query.Count(ctx)
 }
 
-func (r *CheckinRecordRepo) page(ctx context.Context, page *common.PageReq, req *repo.CheckinRecordGetReq) ([]*model.CheckinRecord, *common.PageResp, error) {
+func (r *CheckinRecordRepo) page(ctx context.Context, page *commonmodel.PageReq, req *repo.CheckinRecordGetReq) ([]*model.CheckinRecord, *commonmodel.PageResp, error) {
 	tx := r.getClient(ctx)
-	page = server.PageValid(page)
+	page = commonmodel.NormalizePage(page)
 	query := tx.CheckinRecord.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)
@@ -167,8 +165,8 @@ func (r *CheckinRecordRepo) page(ctx context.Context, page *common.PageReq, req 
 		return nil, nil, err
 	}
 	list, err := query.
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, nil, err
@@ -184,8 +182,8 @@ func (r *CheckinRecordRepo) page(ctx context.Context, page *common.PageReq, req 
 			Checked:       row.Checked,
 		})
 	}
-	return result, &common.PageResp{
-		Total: uint32(total),
+	return result, &commonmodel.PageResp{
+		Total: int64(total),
 		Page:  page.Page,
 		Size:  page.Size,
 	}, nil

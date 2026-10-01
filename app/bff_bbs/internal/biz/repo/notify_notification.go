@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"time"
 )
@@ -25,11 +26,11 @@ type Notification struct {
 
 type ListNotificationsReq struct {
 	UserID int64
-	Page   *PageReq
+	Page   *commonmodel.PageReq
 }
 
 type ListNotificationsResp struct {
-	Page *PageResp
+	Page *commonmodel.PageResp
 	Rows []*Notification
 }
 

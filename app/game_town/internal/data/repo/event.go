@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"slices"
 
@@ -20,7 +21,6 @@ import (
 var _ bizrepo.EventRepo = (*EventRepo)(nil)
 
 type EventRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -186,13 +186,13 @@ func (r *EventRepo) Count(ctx context.Context, req *bizrepo.EventQuery) (int, er
 }
 
 func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizrepo.EventPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.eventQuery(r.getClient(ctx).Event.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(event.BySequence()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
+	rows, err := q.Order(event.BySequence()).Offset(p.Offset()).Limit(p.Limit()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -216,6 +216,6 @@ func (r *EventRepo) Page(ctx context.Context, req *bizrepo.EventPageReq) (*bizre
 	})
 	return &bizrepo.EventPageResp{
 		Rows: out,
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }

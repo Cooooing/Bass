@@ -1,13 +1,12 @@
 package usecase
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"log/slog"
-
-	"im/internal/biz/base"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 	"im/internal/enum"
+	"log/slog"
 )
 
 type ChatMessageUsecase struct {
@@ -198,7 +197,7 @@ func (u *ChatMessageUsecase) Revoke(ctx context.Context, req *RevokeReq) error {
 }
 
 type ChatMessageListReq struct {
-	Page      *base.PageRequest
+	Page      *commonmodel.PageReq
 	IDs       []int64
 	SessionID *int64
 	SenderID  *int64
@@ -206,7 +205,7 @@ type ChatMessageListReq struct {
 
 type ChatMessageListResp struct {
 	List []*model.ChatMessage
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *ChatMessageUsecase) List(ctx context.Context, req *ChatMessageListReq) (*ChatMessageListResp, error) {

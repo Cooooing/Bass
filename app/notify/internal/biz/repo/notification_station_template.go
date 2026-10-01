@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 )
 
@@ -18,11 +18,11 @@ type NotificationStationTemplateRepo interface {
 
 type NotificationStationTemplatePageResp struct {
 	Rows []*model.NotificationStationTemplate
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type NotificationStationTemplateQuery struct {
-	Page    *base.PageRequest
+	Page    *commonmodel.PageReq
 	ID      *int64
 	IDs     []int64
 	RuleID  *int64

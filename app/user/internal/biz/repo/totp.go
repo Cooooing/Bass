@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"user/internal/biz/model"
 )
@@ -24,13 +25,13 @@ type TotpGetReq struct {
 }
 
 type TotpPageReq struct {
-	Page  PageReq
+	Page  commonmodel.PageReq
 	Query TotpGetReq
 }
 
 type TotpPageResp struct {
 	Rows []*model.Totp
-	Page PageResp
+	Page commonmodel.PageResp
 }
 
 type TotpUpsertEnabledByUserIDReq struct {

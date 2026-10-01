@@ -3,7 +3,7 @@ package data
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
 	economyv1 "common/proto/gen/economy/v1"
 	"context"
 )
@@ -28,11 +28,11 @@ func (r *EconomyClient) GetAccount(ctx context.Context, userID int64) (*repo.Eco
 }
 
 func (r *EconomyClient) ListRecords(ctx context.Context, req *repo.ListEconomyRecordsReq) (*repo.ListEconomyRecordsResp, error) {
-	var page *common.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &common.PageReq{Page: req.Page.Page, Size: req.Page.Size}
+		page = &commonmodel.PageReq{Page: req.Page.Page, Size: req.Page.Size}
 	}
-	rpcReq := &economyv1.ListEconomyRecords_Req{UserId: req.UserID, Page: page, Direction: req.Direction, RecordType: req.RecordType}
+	rpcReq := &economyv1.ListEconomyRecords_Req{UserId: req.UserID, Page: page.ToProto(), Direction: req.Direction, RecordType: req.RecordType}
 	reply, err := r.economyClient.Economy.ListRecords(ctx, rpcReq)
 	if err != nil {
 		return nil, err
@@ -45,9 +45,9 @@ func (r *EconomyClient) ListRecords(ctx context.Context, req *repo.ListEconomyRe
 		}
 		rows = append(rows, item)
 	}
-	var pageResp *repo.PageResp
+	var pageResp *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		pageResp = &repo.PageResp{Page: reply.GetPage().GetPage(), Size: reply.GetPage().GetSize(), Total: reply.GetPage().GetTotal()}
+		pageResp = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	return &repo.ListEconomyRecordsResp{Rows: rows, Page: pageResp}, nil
 }

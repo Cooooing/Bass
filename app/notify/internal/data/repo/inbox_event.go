@@ -2,9 +2,9 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
 	"fmt"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
 	"notify/internal/data/gen"
@@ -16,7 +16,6 @@ import (
 var _ bizrepo.InboxEventRepo = (*InboxEventRepo)(nil)
 
 type InboxEventRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -131,11 +130,11 @@ func (r *InboxEventRepo) Count(ctx context.Context, req *bizrepo.InboxEventQuery
 
 func (r *InboxEventRepo) Page(ctx context.Context, req *bizrepo.InboxEventQuery) (*bizrepo.InboxEventPageResp, error) {
 	queryReq := req
-	var pageReq *base.PageRequest
+	var pageReq *commonmodel.PageReq
 	if queryReq != nil {
 		pageReq = queryReq.Page
 	}
-	page := r.normalizePage(pageReq)
+	page := commonmodel.NormalizePage(pageReq)
 	query := r.getClient(ctx).InboxEvent.Query()
 	query = r.getQuery(query, queryReq)
 	total, err := query.Clone().Count(ctx)
@@ -143,8 +142,8 @@ func (r *InboxEventRepo) Page(ctx context.Context, req *bizrepo.InboxEventQuery)
 		return nil, err
 	}
 	list, err := query.
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -155,7 +154,7 @@ func (r *InboxEventRepo) Page(ctx context.Context, req *bizrepo.InboxEventQuery)
 	}
 	return &bizrepo.InboxEventPageResp{
 		Rows: result,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

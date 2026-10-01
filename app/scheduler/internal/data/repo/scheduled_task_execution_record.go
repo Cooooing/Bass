@@ -2,9 +2,8 @@ package repo
 
 import (
 	"common/pkg/apperror"
-	"common/pkg/server"
+	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
-	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"scheduler/internal/biz/model"
@@ -52,13 +51,13 @@ func (r *ScheduledTaskExecutionRecordRepo) List(ctx context.Context, req *bizrep
 }
 
 func (r *ScheduledTaskExecutionRecordRepo) Page(ctx context.Context, req *bizrepo.ScheduledTaskExecutionRecordPageReq) (*bizrepo.ScheduledTaskExecutionRecordPageResp, error) {
-	page := server.PageValid(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getQuery(r.getClient(ctx).ScheduledTaskExecutionRecord.Query(), &req.ScheduledTaskExecutionRecordGetReq)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := query.Order(scheduledtaskexecutionrecord.ByScheduledAt(entsql.OrderDesc())).Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	rows, err := query.Order(scheduledtaskexecutionrecord.ByScheduledAt(entsql.OrderDesc())).Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +65,7 @@ func (r *ScheduledTaskExecutionRecordRepo) Page(ctx context.Context, req *bizrep
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return &bizrepo.ScheduledTaskExecutionRecordPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
+	return &bizrepo.ScheduledTaskExecutionRecordPageResp{Rows: result, Page: &commonmodel.PageResp{Total: int64(total), Page: page.Page, Size: page.Size}}, nil
 }
 
 func (r *ScheduledTaskExecutionRecordRepo) HasRunning(ctx context.Context, req *bizrepo.ScheduledTaskExecutionRecordHasRunningReq) (bool, error) {

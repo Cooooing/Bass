@@ -1,9 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
 )
@@ -37,11 +36,11 @@ type LocationQuery struct {
 }
 
 type LocationPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query LocationQuery
 }
 
 type LocationPageResp struct {
 	Rows []*model.Location
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

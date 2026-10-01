@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/enum"
@@ -26,11 +27,11 @@ type LoginLogGetReq struct {
 }
 
 type LoginLogPageReq struct {
-	Page  PageReq
+	Page  commonmodel.PageReq
 	Query LoginLogGetReq
 }
 
 type LoginLogPageResp struct {
 	Rows []*model.LoginLog
-	Page PageResp
+	Page commonmodel.PageResp
 }

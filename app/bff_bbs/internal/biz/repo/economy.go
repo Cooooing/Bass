@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	economyv1enum "common/proto/gen/economy/v1/enum"
 	"context"
 	"time"
@@ -26,14 +27,14 @@ type EconomyRecord struct {
 
 type ListEconomyRecordsReq struct {
 	UserID     int64
-	Page       *PageReq
+	Page       *commonmodel.PageReq
 	Direction  *economyv1enum.EconomyRecordDirection
 	RecordType *economyv1enum.EconomyRecordType
 }
 
 type ListEconomyRecordsResp struct {
 	Rows []*EconomyRecord
-	Page *PageResp
+	Page *commonmodel.PageResp
 }
 
 type EconomyClient interface {

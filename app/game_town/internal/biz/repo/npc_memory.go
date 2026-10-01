@@ -1,12 +1,11 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"time"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
+	"time"
 )
 
 type NpcMemoryRepo interface {
@@ -39,10 +38,10 @@ type NpcMemoryQuery struct {
 	RecentLimit                       int
 }
 type NpcMemoryPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query NpcMemoryQuery
 }
 type NpcMemoryPageResp struct {
 	Rows []*model.NpcMemory
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

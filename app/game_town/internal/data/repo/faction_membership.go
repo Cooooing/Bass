@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 
 	"common/pkg/apperror"
@@ -17,7 +18,6 @@ import (
 var _ bizrepo.FactionMembershipRepo = (*FactionMembershipRepo)(nil)
 
 type FactionMembershipRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -119,15 +119,15 @@ func (r *FactionMembershipRepo) Count(ctx context.Context, req *bizrepo.FactionM
 }
 
 func (r *FactionMembershipRepo) Page(ctx context.Context, req *bizrepo.FactionMembershipPageReq) (*bizrepo.FactionMembershipPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.factionMembershipQuery(r.getClient(ctx).FactionMembership.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rows, err := q.Order(factionmembership.ByID()).
-		Offset(r.pageOffset(p)).
-		Limit(r.pageLimit(p)).
+		Offset(p.Offset()).
+		Limit(p.Limit()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -136,7 +136,7 @@ func (r *FactionMembershipRepo) Page(ctx context.Context, req *bizrepo.FactionMe
 		Rows: lo.Map(rows, func(row *gen.FactionMembership, _ int) *model.FactionMembership {
 			return r.factionMembership(row)
 		}),
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }
 

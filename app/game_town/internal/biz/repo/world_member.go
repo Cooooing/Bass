@@ -1,9 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 )
 
@@ -36,11 +35,11 @@ type WorldMemberQuery struct {
 }
 
 type WorldMemberPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query WorldMemberQuery
 }
 
 type WorldMemberPageResp struct {
 	Rows []*model.WorldMember
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

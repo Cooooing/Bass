@@ -1,9 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
 )
@@ -38,11 +37,11 @@ type RelationshipQuery struct {
 }
 
 type RelationshipPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query RelationshipQuery
 }
 
 type RelationshipPageResp struct {
 	Rows []*model.Relationship
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

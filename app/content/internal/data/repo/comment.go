@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
-	"content/internal/biz/base"
 	"context"
 	"database/sql/driver"
 
@@ -22,7 +22,6 @@ import (
 var _ repo.CommentRepo = (*CommentRepo)(nil)
 
 type CommentRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -194,7 +193,7 @@ func (r *CommentRepo) Count(ctx context.Context, req *repo.CommentGetReq) (int, 
 }
 
 func (r *CommentRepo) Page(ctx context.Context, req *repo.CommentGetReq) (*repo.CommentPageResp, error) {
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).Comment.Query().WithReply(func(q *gen.CommentQuery) {
 		q.Where(commentent.DeletedAtIsNil())
 	})
@@ -203,7 +202,7 @@ func (r *CommentRepo) Page(ctx context.Context, req *repo.CommentGetReq) (*repo.
 	if err != nil {
 		return nil, err
 	}
-	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	list, err := query.Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -232,7 +231,7 @@ func (r *CommentRepo) Page(ctx context.Context, req *repo.CommentGetReq) (*repo.
 	})
 	return &repo.CommentPageResp{
 		Rows: comments,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

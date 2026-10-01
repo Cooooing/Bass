@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"content/internal/biz/base"
+	commonmodel "common/pkg/model"
 	"content/internal/biz/model"
 	"content/internal/enum"
 	"context"
@@ -18,11 +18,11 @@ type PostscriptRepo interface {
 
 type PostscriptPageResp struct {
 	Rows []*model.Postscript
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type PostscriptGetReq struct {
-	Page         *base.PageRequest
+	Page         *commonmodel.PageReq
 	ID           *int64
 	IDs          []int64
 	ArticleID    *int64

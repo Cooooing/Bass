@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 
 	"content/internal/biz/base"
@@ -55,7 +56,7 @@ func (d *ContentUsecase) Update(ctx context.Context, domain *model.Domain) (*mod
 }
 
 type DomainPageReq struct {
-	Page        *base.PageRequest
+	Page        *commonmodel.PageReq
 	DomainIDs   []int64
 	Code        *string
 	Name        *string
@@ -68,7 +69,7 @@ type DomainPageReq struct {
 
 type DomainPageResp struct {
 	Rows []*model.Domain
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (d *ContentUsecase) Page(ctx context.Context, req *DomainPageReq) (*DomainPageResp, error) {

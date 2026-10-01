@@ -2,11 +2,11 @@ package service
 
 import (
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/content/v1"
-	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/usecase"
 	"content/internal/enum"
@@ -242,7 +242,7 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Req) (*v
 	}
 	pageResp, err := s.commentUsecase.Page(ctx, &usecase.CommentPageReq{
 		Access: access,
-		Page: &base.PageRequest{
+		Page: &commonmodel.PageReq{
 			Page: 1,
 			Size: 1000,
 		},
@@ -336,10 +336,7 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v
 	}
 	pageResp, err := s.commentUsecase.Page(ctx, &usecase.CommentPageReq{
 		Access: access,
-		Page: &base.PageRequest{
-			Page: int64(req.GetPage().GetPage()),
-			Size: int64(req.GetPage().GetSize()),
-		},
+		Page:   commonmodel.PageReqFromProto(req.GetPage()),
 		Filter: &model.CommentFilter{
 			CommentID:    req.Query.CommentId,
 			ParentID:     req.Query.ParentId,
@@ -382,9 +379,9 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v
 	}
 	return &v1.PageComments_Resp{
 		Page: &common.PageResp{
-			Page:  uint32(pageResp.Page.Page),
-			Size:  uint32(pageResp.Page.Size),
-			Total: uint32(pageResp.Page.Total),
+			Page:  int64(pageResp.Page.Page),
+			Size:  int64(pageResp.Page.Size),
+			Total: int64(pageResp.Page.Total),
 		},
 		Rows: rows,
 	}, err

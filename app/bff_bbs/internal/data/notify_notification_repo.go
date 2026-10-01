@@ -3,7 +3,7 @@ package data
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
 	notifyv1 "common/proto/gen/notify/v1"
 	"context"
 )
@@ -27,10 +27,10 @@ func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.Li
 		UserId: req.UserID,
 	}
 	if req.Page != nil {
-		listReq.Page = &common.PageReq{
+		listReq.Page = (&commonmodel.PageReq{
 			Page: req.Page.Page,
 			Size: req.Page.Size,
-		}
+		}).ToProto()
 	}
 	reply, err := r.notifyClient.StationMessage.List(ctx, listReq)
 	if err != nil {
@@ -53,13 +53,9 @@ func (r *NotificationClient) ListNotifications(ctx context.Context, req *repo.Li
 		}
 		rows = append(rows, row)
 	}
-	var page *repo.PageResp
+	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-			Total: reply.GetPage().GetTotal(),
-		}
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	return &repo.ListNotificationsResp{
 		Page: page,

@@ -2,8 +2,8 @@ package usecase
 
 import (
 	"bff_bbs/internal/biz/repo"
+	commonmodel "common/pkg/model"
 	bbsnotifyv1 "common/proto/gen/bff_bbs/v1/notify"
-	"common/proto/gen/common"
 	commonenums "common/proto/gen/common/enums"
 	"context"
 
@@ -24,11 +24,11 @@ func NewNotificationUsecase(
 
 type ListNotificationsReq struct {
 	UserID int64
-	Page   *common.PageReq
+	Page   *commonmodel.PageReq
 }
 
 type ListNotificationsResp struct {
-	Page *common.PageResp
+	Page *commonmodel.PageResp
 	Rows []*bbsnotifyv1.ListNotifications_Resp_Notification
 }
 
@@ -36,11 +36,11 @@ func (u *NotificationUsecase) ListNotifications(ctx context.Context, req *ListNo
 	if req == nil {
 		req = &ListNotificationsReq{}
 	}
-	var pageReq *repo.PageReq
+	var pageReq *commonmodel.PageReq
 	if req.Page != nil {
-		pageReq = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
+		pageReq = &commonmodel.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
 		}
 	}
 	reply, err := u.notificationClient.ListNotifications(ctx, &repo.ListNotificationsReq{
@@ -50,9 +50,9 @@ func (u *NotificationUsecase) ListNotifications(ctx context.Context, req *ListNo
 	if err != nil {
 		return nil, err
 	}
-	var page *common.PageResp
+	var page *commonmodel.PageResp
 	if reply.Page != nil {
-		page = &common.PageResp{
+		page = &commonmodel.PageResp{
 			Page:  reply.Page.Page,
 			Size:  reply.Page.Size,
 			Total: reply.Page.Total,

@@ -1,9 +1,9 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
-	"economy/internal/biz/base"
 	"economy/internal/biz/model"
 	bizrepo "economy/internal/biz/repo"
 	"economy/internal/data/gen"
@@ -18,7 +18,6 @@ import (
 var _ bizrepo.RecordRepo = (*RecordRepo)(nil)
 
 type RecordRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -123,14 +122,14 @@ func (r *RecordRepo) Count(ctx context.Context, req *bizrepo.RecordGetReq) (int,
 }
 
 func (r *RecordRepo) Page(ctx context.Context, req *bizrepo.RecordGetReq) (*bizrepo.RecordPageResp, error) {
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).Record.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	rows, err := query.Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +148,7 @@ func (r *RecordRepo) Page(ctx context.Context, req *bizrepo.RecordGetReq) (*bizr
 				CreatedAt:     row.CreatedAt,
 			}
 		}),
-		Page: &base.PageResp{Total: int64(total), Page: page.Page, Size: page.Size},
+		Page: &commonmodel.PageResp{Total: int64(total), Page: page.Page, Size: page.Size},
 	}, nil
 }
 

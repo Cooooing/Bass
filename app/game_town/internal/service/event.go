@@ -1,6 +1,7 @@
 package service
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -12,7 +13,6 @@ import (
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/game_town/v1"
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/biz/usecase"
 	"game_town/internal/enum"
@@ -49,7 +49,7 @@ func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Requ
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 
-	page := base.PageRequest{}
+	page := commonmodel.PageReq{}
 	if req.GetPage() != nil {
 		page.Page = int64(req.GetPage().GetPage())
 		page.Size = int64(req.GetPage().GetSize())
@@ -78,9 +78,9 @@ func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Requ
 
 	reply := &v1.PageGameTownEvents_Resp{
 		Page: &common.PageResp{
-			Page:  uint32(resp.Page.Page),
-			Size:  uint32(resp.Page.Size),
-			Total: uint32(resp.Page.Total),
+			Page:  int64(resp.Page.Page),
+			Size:  int64(resp.Page.Size),
+			Total: int64(resp.Page.Total),
 		},
 		Rows: make([]*v1.PageGameTownEvents_Resp_Row, 0, len(resp.Rows)),
 	}

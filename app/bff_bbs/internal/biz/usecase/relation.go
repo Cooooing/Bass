@@ -3,7 +3,7 @@ package usecase
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/apperror"
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 )
@@ -94,11 +94,11 @@ func (u *RelationUsecase) Unblock(ctx context.Context, req *UnblockReq) error {
 
 type ListFollowingReq struct {
 	ActorID int64
-	Page    *common.PageReq
+	Page    *commonmodel.PageReq
 }
 
 type ListFollowingResp struct {
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 	Rows []*repo.Relation
 }
 
@@ -106,11 +106,11 @@ func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingR
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
-	var page *repo.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
+		page = &commonmodel.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
 		}
 	}
 	resp, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{
@@ -128,11 +128,11 @@ func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingR
 
 type ListFollowersReq struct {
 	ActorID int64
-	Page    *common.PageReq
+	Page    *commonmodel.PageReq
 }
 
 type ListFollowersResp struct {
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 	Rows []*repo.Relation
 }
 
@@ -140,11 +140,11 @@ func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersR
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
-	var page *repo.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
+		page = &commonmodel.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
 		}
 	}
 	resp, err := u.relationClient.ListFollowers(ctx, &repo.ListFollowersRelationsReq{
@@ -162,11 +162,11 @@ func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersR
 
 type ListBlockedReq struct {
 	ActorID int64
-	Page    *common.PageReq
+	Page    *commonmodel.PageReq
 }
 
 type ListBlockedResp struct {
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 	Rows []*repo.Relation
 }
 
@@ -174,11 +174,11 @@ func (u *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedReq) 
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
-	var page *repo.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
+		page = &commonmodel.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
 		}
 	}
 	resp, err := u.relationClient.ListBlocked(ctx, &repo.ListBlockedRelationsReq{

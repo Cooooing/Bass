@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"common/pkg/constant"
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"log/slog"
@@ -39,17 +40,6 @@ func NewRelationUsecase(
 		outboxRepo:    outboxRepo,
 		outboxUsecase: outboxUsecase,
 	}, nil
-}
-
-type RelationPageReq struct {
-	Page uint32
-	Size uint32
-}
-
-type RelationPageResp struct {
-	Total uint32
-	Page  uint32
-	Size  uint32
 }
 
 type FollowRelationReq struct {
@@ -353,21 +343,18 @@ func (d *RelationUsecase) Unblock(ctx context.Context, req *UnblockRelationReq) 
 }
 
 type ListFollowingRelationsReq struct {
-	Page    RelationPageReq
+	Page    *commonmodel.PageReq
 	ActorID int64
 }
 
 type ListFollowingRelationsResp struct {
 	Rows []*model.Relation
-	Page RelationPageResp
+	Page *commonmodel.PageResp
 }
 
 func (d *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingRelationsReq) (*ListFollowingRelationsResp, error) {
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
-		Page: repo.PageReq{
-			Page: req.Page.Page,
-			Size: req.Page.Size,
-		},
+		Page: *commonmodel.NormalizePage(req.Page),
 		Query: repo.RelationGetReq{
 			ActorId: &req.ActorID,
 			Type:    new(enum.RelationTypeFollow),
@@ -376,33 +363,25 @@ func (d *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingR
 	if err != nil {
 		return nil, err
 	}
-	res := RelationPageResp{
-		Total: pageResp.Page.Total,
-		Page:  pageResp.Page.Page,
-		Size:  pageResp.Page.Size,
-	}
 	return &ListFollowingRelationsResp{
 		Rows: pageResp.Rows,
-		Page: res,
+		Page: &pageResp.Page,
 	}, nil
 }
 
 type ListFollowersRelationsReq struct {
-	Page     RelationPageReq
+	Page     *commonmodel.PageReq
 	TargetID int64
 }
 
 type ListFollowersRelationsResp struct {
 	Rows []*model.Relation
-	Page RelationPageResp
+	Page *commonmodel.PageResp
 }
 
 func (d *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersRelationsReq) (*ListFollowersRelationsResp, error) {
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
-		Page: repo.PageReq{
-			Page: req.Page.Page,
-			Size: req.Page.Size,
-		},
+		Page: *commonmodel.NormalizePage(req.Page),
 		Query: repo.RelationGetReq{
 			TargetId: &req.TargetID,
 			Type:     new(enum.RelationTypeFollow),
@@ -411,33 +390,25 @@ func (d *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersR
 	if err != nil {
 		return nil, err
 	}
-	res := RelationPageResp{
-		Total: pageResp.Page.Total,
-		Page:  pageResp.Page.Page,
-		Size:  pageResp.Page.Size,
-	}
 	return &ListFollowersRelationsResp{
 		Rows: pageResp.Rows,
-		Page: res,
+		Page: &pageResp.Page,
 	}, nil
 }
 
 type ListBlockedRelationsReq struct {
-	Page    RelationPageReq
+	Page    *commonmodel.PageReq
 	ActorID int64
 }
 
 type ListBlockedRelationsResp struct {
 	Rows []*model.Relation
-	Page RelationPageResp
+	Page *commonmodel.PageResp
 }
 
 func (d *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedRelationsReq) (*ListBlockedRelationsResp, error) {
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
-		Page: repo.PageReq{
-			Page: req.Page.Page,
-			Size: req.Page.Size,
-		},
+		Page: *commonmodel.NormalizePage(req.Page),
 		Query: repo.RelationGetReq{
 			ActorId: &req.ActorID,
 			Type:    new(enum.RelationTypeBlock),
@@ -446,14 +417,9 @@ func (d *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedRelat
 	if err != nil {
 		return nil, err
 	}
-	res := RelationPageResp{
-		Total: pageResp.Page.Total,
-		Page:  pageResp.Page.Page,
-		Size:  pageResp.Page.Size,
-	}
 	return &ListBlockedRelationsResp{
 		Rows: pageResp.Rows,
-		Page: res,
+		Page: &pageResp.Page,
 	}, nil
 }
 

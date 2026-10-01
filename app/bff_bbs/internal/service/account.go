@@ -1,7 +1,6 @@
 package service
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"bff_bbs/internal/biz/usecase"
 	"common/pkg/apperror"
 	"common/pkg/constant"
@@ -70,11 +69,11 @@ func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfi
 }
 
 func (s *AccountService) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowing_Req) (*bbsuserv1.ListFollowing_Resp, error) {
-	return s.accountUsecase.ListFollowing(ctx, req.GetName(), accountIDFromContext(ctx), &repo.PageReq{Page: req.GetPage().GetPage(), Size: req.GetPage().GetSize()})
+	return s.accountUsecase.ListFollowing(ctx, req.GetName(), accountIDFromContext(ctx), commonmodel.PageReqFromProto(req.GetPage()))
 }
 
 func (s *AccountService) ListFollowers(ctx context.Context, req *bbsuserv1.ListFollowers_Req) (*bbsuserv1.ListFollowers_Resp, error) {
-	return s.accountUsecase.ListFollowers(ctx, req.GetName(), accountIDFromContext(ctx), &repo.PageReq{Page: req.GetPage().GetPage(), Size: req.GetPage().GetSize()})
+	return s.accountUsecase.ListFollowers(ctx, req.GetName(), accountIDFromContext(ctx), commonmodel.PageReqFromProto(req.GetPage()))
 }
 
 func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Req) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
@@ -278,7 +277,7 @@ func (s *AccountService) ListEconomyRecords(ctx context.Context, req *bbsuserv1.
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_QUERY_INVALID)
 	}
-	resp, err := s.accountUsecase.ListEconomyRecords(ctx, &usecase.ListAccountEconomyRecordsReq{UserID: user.ID, Page: &repo.PageReq{Page: req.GetPage().GetPage(), Size: req.GetPage().GetSize()}, Direction: req.Direction, RecordType: req.RecordType})
+	resp, err := s.accountUsecase.ListEconomyRecords(ctx, &usecase.ListAccountEconomyRecordsReq{UserID: user.ID, Page: commonmodel.PageReqFromProto(req.GetPage()), Direction: req.Direction, RecordType: req.RecordType})
 	if err != nil {
 		return nil, err
 	}
@@ -292,7 +291,7 @@ func (s *AccountService) ListEconomyRecords(ctx context.Context, req *bbsuserv1.
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{Page: resp.Page.Page, Size: resp.Page.Size, Total: resp.Page.Total}
+		page = resp.Page.ToProto()
 	}
 	return &bbsuserv1.ListAccountEconomyRecords_Resp{Rows: rows, Page: page}, nil
 }

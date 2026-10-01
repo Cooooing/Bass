@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"time"
 
@@ -19,7 +20,6 @@ import (
 var _ bizrepo.WorldMemberRepo = (*WorldMemberRepo)(nil)
 
 type WorldMemberRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -119,13 +119,13 @@ func (r *WorldMemberRepo) Count(ctx context.Context, req *bizrepo.WorldMemberQue
 }
 
 func (r *WorldMemberRepo) Page(ctx context.Context, req *bizrepo.WorldMemberPageReq) (*bizrepo.WorldMemberPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.memberQuery(r.getClient(ctx).WorldMember.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(worldmember.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
+	rows, err := q.Order(worldmember.ByID()).Offset(p.Offset()).Limit(p.Limit()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +133,7 @@ func (r *WorldMemberRepo) Page(ctx context.Context, req *bizrepo.WorldMemberPage
 		Rows: lo.Map(rows, func(row *gen.WorldMember, _ int) *model.WorldMember {
 			return r.member(row)
 		}),
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }
 

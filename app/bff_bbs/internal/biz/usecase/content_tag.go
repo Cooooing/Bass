@@ -3,9 +3,9 @@ package usecase
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
 	bbscontentv1enum "common/proto/gen/bff_bbs/v1/content/enum"
-	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 )
@@ -97,12 +97,12 @@ func (u *ContentTagUsecase) UpdateTag(ctx context.Context, req *UpdateTagReq) (*
 }
 
 type ListTagsReq struct {
-	Page  *common.PageReq
+	Page  *commonmodel.PageReq
 	Query *bbscontentv1.ListTags_Req_TagQuery
 }
 
 type ListTagsResp struct {
-	Page *repo.PageResp
+	Page *commonmodel.PageResp
 	Rows []*repo.Tag
 }
 
@@ -110,11 +110,11 @@ func (u *ContentTagUsecase) ListTags(ctx context.Context, req *ListTagsReq) (*Li
 	if req == nil {
 		req = &ListTagsReq{}
 	}
-	var page *repo.PageReq
+	var page *commonmodel.PageReq
 	if req.Page != nil {
-		page = &repo.PageReq{
-			Page: req.Page.GetPage(),
-			Size: req.Page.GetSize(),
+		page = &commonmodel.PageReq{
+			Page: req.Page.Page,
+			Size: req.Page.Size,
 		}
 	}
 	query := &repo.TagQuery{}

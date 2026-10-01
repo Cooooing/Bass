@@ -2,6 +2,7 @@ package service
 
 import (
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	schedulerv1enum "common/proto/gen/scheduler/v1/enum"
@@ -143,7 +144,7 @@ func (s *SchedulerScheduledTaskService) Page(ctx context.Context, req *scheduler
 		query.Title = req.GetQuery().Title
 		query.Enabled = req.GetQuery().Enabled
 	}
-	query.Page = req.GetPage()
+	query.Page = commonmodel.PageReqFromProto(req.GetPage())
 	pageResp, err := s.scheduledTaskUsecase.Page(ctx, query)
 	if err != nil {
 		return nil, err
@@ -174,7 +175,7 @@ func (s *SchedulerScheduledTaskService) Page(ctx context.Context, req *scheduler
 		rows = append(rows, item)
 	}
 	return &schedulerv1.PageSchedulerScheduledTasks_Resp{
-		Page: pageResp.Page,
+		Page: pageResp.Page.ToProto(),
 		Rows: rows,
 	}, nil
 }
@@ -227,7 +228,7 @@ func (s *SchedulerScheduledTaskService) PageExecutionRecords(
 			query.TriggerType = &triggerType
 		}
 	}
-	query.Page = req.GetPage()
+	query.Page = commonmodel.PageReqFromProto(req.GetPage())
 	pageResp, err := s.scheduledTaskUsecase.PageExecutionRecords(ctx, query)
 	if err != nil {
 		return nil, err
@@ -268,7 +269,7 @@ func (s *SchedulerScheduledTaskService) PageExecutionRecords(
 		rows = append(rows, item)
 	}
 	return &schedulerv1.PageSchedulerScheduledTaskExecutionRecords_Resp{
-		Page: pageResp.Page,
+		Page: pageResp.Page.ToProto(),
 		Rows: rows,
 	}, nil
 }

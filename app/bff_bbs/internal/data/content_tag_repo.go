@@ -3,7 +3,7 @@ package data
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
 	contentv1 "common/proto/gen/content/v1"
 	contentv1enum "common/proto/gen/content/v1/enum"
 	"context"
@@ -124,15 +124,15 @@ func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) 
 	if query.Status != nil {
 		contentQuery.Status = new(contentv1enum.TagStatus(*query.Status))
 	}
-	var pageReq *common.PageReq
+	var pageReq *commonmodel.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageReq{
+		pageReq = &commonmodel.PageReq{
 			Page: req.Page.Page,
 			Size: req.Page.Size,
 		}
 	}
 	reply, err := r.contentClient.Tag.Page(ctx, &contentv1.PageTags_Req{
-		Page:  pageReq,
+		Page:  pageReq.ToProto(),
 		Query: contentQuery,
 	})
 	if err != nil {
@@ -156,13 +156,9 @@ func (r *ContentTagClient) ListTags(ctx context.Context, req *repo.ListTagsReq) 
 			UpdatedAt:    new(item.GetUpdatedAt().AsTime()),
 		})
 	}
-	var page *repo.PageResp
+	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-			Total: reply.GetPage().GetTotal(),
-		}
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	return &repo.ListTagsResp{
 		Page: page,

@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"economy/internal/biz/base"
@@ -48,13 +49,13 @@ type EconomyTransferPointsResp struct {
 }
 type EconomyListRecordsReq struct {
 	UserID     int64
-	Page       *base.PageRequest
+	Page       *commonmodel.PageReq
 	Direction  *enum.EconomyRecordDirection
 	RecordType *enum.EconomyRecordType
 }
 type EconomyListRecordsResp struct {
 	Rows []*model.Record
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *PointsUsecase) GetAccount(ctx context.Context, userID int64) (*model.Account, error) {

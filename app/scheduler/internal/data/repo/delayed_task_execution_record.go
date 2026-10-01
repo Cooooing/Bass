@@ -1,9 +1,8 @@
 package repo
 
 import (
-	"common/pkg/server"
+	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
-	"common/proto/gen/common"
 	"context"
 	"scheduler/internal/biz/model"
 	bizrepo "scheduler/internal/biz/repo"
@@ -48,13 +47,13 @@ func (r *DelayedTaskExecutionRecordRepo) List(ctx context.Context, req *bizrepo.
 }
 
 func (r *DelayedTaskExecutionRecordRepo) Page(ctx context.Context, req *bizrepo.DelayedTaskExecutionRecordPageReq) (*bizrepo.DelayedTaskExecutionRecordPageResp, error) {
-	page := server.PageValid(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getQuery(r.getClient(ctx).DelayedTaskExecutionRecord.Query(), &req.DelayedTaskExecutionRecordGetReq)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := query.Order(gen.Desc(delayedtaskexecutionrecord.FieldCreatedAt)).Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	rows, err := query.Order(gen.Desc(delayedtaskexecutionrecord.FieldCreatedAt)).Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +61,7 @@ func (r *DelayedTaskExecutionRecordRepo) Page(ctx context.Context, req *bizrepo.
 	for _, row := range rows {
 		result = append(result, r.model(row))
 	}
-	return &bizrepo.DelayedTaskExecutionRecordPageResp{Rows: result, Page: &common.PageResp{Total: uint32(total), Page: page.Page, Size: page.Size}}, nil
+	return &bizrepo.DelayedTaskExecutionRecordPageResp{Rows: result, Page: &commonmodel.PageResp{Total: int64(total), Page: page.Page, Size: page.Size}}, nil
 }
 
 func (r *DelayedTaskExecutionRecordRepo) CreatePending(ctx context.Context, record *model.DelayedTaskExecutionRecord) (*bizrepo.DelayedTaskExecutionRecordCreateResp, error) {

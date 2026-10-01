@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"content/internal/biz/base"
+	commonmodel "common/pkg/model"
 	"content/internal/biz/model"
 	"content/internal/enum"
 	"context"
@@ -42,11 +42,11 @@ type CommentStatUpdate struct {
 
 type CommentPageResp struct {
 	Rows []*model.Comment
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type CommentGetReq struct {
-	Page   *base.PageRequest
+	Page   *commonmodel.PageReq
 	Filter *model.CommentFilter
 	Scope  *model.CommentScopeFilter
 }
@@ -82,11 +82,11 @@ type CommentActionRecordDeleteReq struct {
 
 type CommentActionRecordPageResp struct {
 	Rows []*model.CommentActionRecord
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type CommentActionRecordReq struct {
-	Page       *base.PageRequest
+	Page       *commonmodel.PageReq
 	ID         *int64
 	IDs        []int64
 	CommentId  *int64

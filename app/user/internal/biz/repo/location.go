@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"user/internal/biz/model"
 )
@@ -23,11 +24,11 @@ type LocationGetReq struct {
 }
 
 type LocationPageReq struct {
-	Page  PageReq
+	Page  commonmodel.PageReq
 	Query LocationGetReq
 }
 
 type LocationPageResp struct {
 	Rows []*model.Location
-	Page PageResp
+	Page commonmodel.PageResp
 }

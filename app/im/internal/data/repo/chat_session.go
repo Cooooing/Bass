@@ -1,9 +1,9 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
-	"im/internal/biz/base"
 
 	"common/pkg/apperror"
 	utilent "common/pkg/util/ent"
@@ -17,7 +17,6 @@ import (
 var _ repo.ChatSessionRepo = (*ChatSessionRepo)(nil)
 
 type ChatSessionRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -136,9 +135,9 @@ func (r *ChatSessionRepo) Count(ctx context.Context, req *repo.ChatSessionQuery)
 }
 
 func (r *ChatSessionRepo) Page(ctx context.Context, req *repo.ChatSessionQuery) (*repo.ChatSessionPageResp, error) {
-	page := r.normalizePage(nil)
+	page := commonmodel.NormalizePage(nil)
 	if req != nil {
-		page = r.normalizePage(req.Page)
+		page = commonmodel.NormalizePage(req.Page)
 	}
 	query := r.getClient(ctx).ChatSession.Query()
 	query = r.getQuery(query, req)
@@ -147,7 +146,7 @@ func (r *ChatSessionRepo) Page(ctx context.Context, req *repo.ChatSessionQuery) 
 	if err != nil {
 		return nil, err
 	}
-	list, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	list, err := query.Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +156,7 @@ func (r *ChatSessionRepo) Page(ctx context.Context, req *repo.ChatSessionQuery) 
 	}
 	return &repo.ChatSessionPageResp{
 		Rows: chatSessions,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(count),
 			Size:  page.Size,
 			Page:  page.Page,

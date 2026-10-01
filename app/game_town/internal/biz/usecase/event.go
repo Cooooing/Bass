@@ -1,13 +1,12 @@
 package usecase
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"time"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 	"game_town/internal/biz/repo"
 	"game_town/internal/enum"
+	"time"
 )
 
 type EventUsecase struct {
@@ -211,7 +210,7 @@ func (u *EventUsecase) Publish(event *model.Event) {
 }
 
 type PageEventsReq struct {
-	Page          base.PageRequest
+	Page          commonmodel.PageReq
 	WorldID       int64
 	PlayerID      int64
 	AfterSequence uint64
@@ -221,7 +220,7 @@ type PageEventsReq struct {
 
 type PageEventsResp struct {
 	Rows []*model.PerceivedEvent
-	Page base.PageResp
+	Page commonmodel.PageResp
 }
 
 func (u *EventUsecase) Page(ctx context.Context, req *PageEventsReq) (*PageEventsResp, error) {
@@ -283,7 +282,7 @@ type ListEventsAfterReq struct {
 
 func (u *EventUsecase) ListAfter(ctx context.Context, req *ListEventsAfterReq) ([]*model.PerceivedEvent, error) {
 	resp, err := u.Page(ctx, &PageEventsReq{
-		Page: base.PageRequest{
+		Page: commonmodel.PageReq{
 			Page: 1,
 			Size: 100,
 		},

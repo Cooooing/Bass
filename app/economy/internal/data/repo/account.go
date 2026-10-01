@@ -2,10 +2,10 @@ package repo
 
 import (
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
 	"context"
-	"economy/internal/biz/base"
 	"economy/internal/biz/model"
 	bizrepo "economy/internal/biz/repo"
 	"economy/internal/data/gen"
@@ -18,7 +18,6 @@ import (
 var _ bizrepo.AccountRepo = (*AccountRepo)(nil)
 
 type AccountRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -151,14 +150,14 @@ func (r *AccountRepo) Count(ctx context.Context, req *bizrepo.AccountGetReq) (in
 }
 
 func (r *AccountRepo) Page(ctx context.Context, req *bizrepo.AccountGetReq) (*bizrepo.AccountPageResp, error) {
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).Account.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := query.Limit(int(page.Size)).Offset(int((page.Page - 1) * page.Size)).All(ctx)
+	rows, err := query.Limit(page.Limit()).Offset(page.Offset()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -176,7 +175,7 @@ func (r *AccountRepo) Page(ctx context.Context, req *bizrepo.AccountGetReq) (*bi
 				DeletedAt:     row.DeletedAt,
 			}
 		}),
-		Page: &base.PageResp{Total: int64(total), Page: page.Page, Size: page.Size},
+		Page: &commonmodel.PageResp{Total: int64(total), Page: page.Page, Size: page.Size},
 	}, nil
 }
 

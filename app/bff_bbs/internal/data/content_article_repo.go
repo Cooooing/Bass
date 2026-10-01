@@ -3,8 +3,8 @@ package data
 import (
 	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
+	commonmodel "common/pkg/model"
 	"common/pkg/util"
-	"common/proto/gen/common"
 	contentv1 "common/proto/gen/content/v1"
 	contentv1enum "common/proto/gen/content/v1/enum"
 	userv1 "common/proto/gen/user/v1"
@@ -193,15 +193,15 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	if req.UserID > 0 {
 		contentAccess.ActorUserId = new(req.UserID)
 	}
-	var pageReq *common.PageReq
+	var pageReq *commonmodel.PageReq
 	if req.Page != nil {
-		pageReq = &common.PageReq{
+		pageReq = &commonmodel.PageReq{
 			Page: req.Page.Page,
 			Size: req.Page.Size,
 		}
 	}
 	reply, err := r.contentClient.Article.Page(ctx, &contentv1.PageArticles_Req{
-		Page:   pageReq,
+		Page:   pageReq.ToProto(),
 		Query:  contentQuery,
 		Access: contentAccess,
 	})
@@ -228,13 +228,9 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	for _, item := range reply.GetRows() {
 		rows = append(rows, r.articleListItem(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()]))
 	}
-	var page *repo.PageResp
+	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		page = &repo.PageResp{
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-			Total: reply.GetPage().GetTotal(),
-		}
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	return &repo.ListArticlesResp{
 		Page: page,
@@ -245,18 +241,18 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 func (r *ContentArticleClient) PageViewHistory(
 	ctx context.Context,
 	userID int64,
-	page *repo.PageReq,
+	page *commonmodel.PageReq,
 ) (*repo.ArticleViewHistoryPageResp, error) {
 	if userID <= 0 {
 		return nil, fmt.Errorf("view history requires a user")
 	}
-	pageReq := &common.PageReq{}
+	pageReq := &commonmodel.PageReq{}
 	if page != nil {
 		pageReq.Page = page.Page
 		pageReq.Size = page.Size
 	}
 	reply, err := r.contentClient.Article.PageViewHistory(ctx, &contentv1.PageArticleViewHistory_Req{
-		Page: pageReq,
+		Page: pageReq.ToProto(),
 		Access: &contentv1.ContentAccess{
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
 			ActorUserId: new(userID),
@@ -308,13 +304,9 @@ func (r *ContentArticleClient) PageViewHistory(
 		}
 		rows = append(rows, historyRow)
 	}
-	var pageResp *repo.PageResp
+	var pageResp *commonmodel.PageResp
 	if reply.GetPage() != nil {
-		pageResp = &repo.PageResp{
-			Total: reply.GetPage().GetTotal(),
-			Page:  reply.GetPage().GetPage(),
-			Size:  reply.GetPage().GetSize(),
-		}
+		pageResp = commonmodel.PageRespFromProto(reply.GetPage())
 	}
 	return &repo.ArticleViewHistoryPageResp{Rows: rows, Page: pageResp}, nil
 }

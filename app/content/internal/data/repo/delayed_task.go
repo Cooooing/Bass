@@ -29,9 +29,9 @@ func NewDelayedTaskClient(
 }
 
 type publishScheduledArticlePayload struct {
-	ArticleID     int64     `json:"article_id"`
-	AuthorUserID  int64     `json:"author_user_id"`
-	ScheduledAt   time.Time `json:"scheduled_at"`
+	ArticleID    int64     `json:"article_id"`
+	AuthorUserID int64     `json:"author_user_id"`
+	ScheduledAt  time.Time `json:"scheduled_at"`
 }
 
 func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context, articleID int64, authorUserID int64, publishAt time.Time) error {
@@ -39,9 +39,9 @@ func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context,
 		return errors.New("delayed task publish_at is required")
 	}
 	payload, err := json.Marshal(&publishScheduledArticlePayload{
-		ArticleID: articleID,
+		ArticleID:    articleID,
 		AuthorUserID: authorUserID,
-		ScheduledAt: publishAt.UTC().Truncate(time.Second),
+		ScheduledAt:  publishAt.UTC().Truncate(time.Second),
 	})
 	if err != nil {
 		return err

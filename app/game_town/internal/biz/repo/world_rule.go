@@ -1,9 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 )
 
@@ -18,10 +17,10 @@ type WorldRuleRepo interface {
 
 type WorldRuleQuery struct{ ID, WorldID *int64 }
 type WorldRulePageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query WorldRuleQuery
 }
 type WorldRulePageResp struct {
 	Rows []*model.WorldRule
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

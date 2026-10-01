@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 
 	"common/pkg/apperror"
@@ -17,7 +18,6 @@ import (
 var _ bizrepo.ClaimRepo = (*ClaimRepo)(nil)
 
 type ClaimRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -117,15 +117,15 @@ func (r *ClaimRepo) Count(ctx context.Context, req *bizrepo.ClaimQuery) (int, er
 }
 
 func (r *ClaimRepo) Page(ctx context.Context, req *bizrepo.ClaimPageReq) (*bizrepo.ClaimPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.claimQuery(r.getClient(ctx).Claim.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rows, err := q.Order(claim.ByID()).
-		Offset(r.pageOffset(p)).
-		Limit(r.pageLimit(p)).
+		Offset(p.Offset()).
+		Limit(p.Limit()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -134,7 +134,7 @@ func (r *ClaimRepo) Page(ctx context.Context, req *bizrepo.ClaimPageReq) (*bizre
 		Rows: lo.Map(rows, func(row *gen.Claim, _ int) *model.Claim {
 			return r.claim(row)
 		}),
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }
 

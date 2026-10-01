@@ -1,9 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-
-	"game_town/internal/biz/base"
 	"game_town/internal/biz/model"
 )
 
@@ -21,10 +20,10 @@ type NpcBeliefQuery struct {
 	MinConfidence               *float64
 }
 type NpcBeliefPageReq struct {
-	Page  base.PageRequest
+	Page  commonmodel.PageReq
 	Query NpcBeliefQuery
 }
 type NpcBeliefPageResp struct {
 	Rows []*model.NpcBelief
-	Page base.PageResp
+	Page commonmodel.PageResp
 }

@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/enum"
@@ -38,11 +39,11 @@ type RelationGetReq struct {
 }
 
 type RelationPageReq struct {
-	Page  PageReq
+	Page  commonmodel.PageReq
 	Query RelationGetReq
 }
 
 type RelationPageResp struct {
 	Rows []*model.Relation
-	Page PageResp
+	Page commonmodel.PageResp
 }

@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/enum"
@@ -49,11 +50,11 @@ type AccountGetReq struct {
 }
 
 type AccountPageReq struct {
-	Page  PageReq
+	Page  commonmodel.PageReq
 	Query AccountGetReq
 }
 
 type AccountPageResp struct {
 	Rows []*model.Account
-	Page PageResp
+	Page commonmodel.PageResp
 }

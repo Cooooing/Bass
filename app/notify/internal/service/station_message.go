@@ -2,10 +2,10 @@ package service
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"common/proto/gen/common"
 	v1 "common/proto/gen/notify/v1"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/usecase"
 	notifyenum "notify/internal/enum"
 	"time"
@@ -51,12 +51,9 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 		}
 		query.Unread = req.Query.Unread
 	}
-	var pageReq *base.PageRequest
+	var pageReq *commonmodel.PageReq
 	if req != nil {
-		pageReq = &base.PageRequest{
-			Page: int64(req.GetPage().GetPage()),
-			Size: int64(req.GetPage().GetSize()),
-		}
+		pageReq = commonmodel.PageReqFromProto(req.GetPage())
 	}
 	query.Page = pageReq
 	pageResp, err := s.stationMessageUsecase.Page(ctx, query)
@@ -91,9 +88,9 @@ func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMes
 	}
 	return &v1.ListStationMessages_Resp{
 		Page: &common.PageResp{
-			Page:  uint32(pageResp.Page.Page),
-			Size:  uint32(pageResp.Page.Size),
-			Total: uint32(pageResp.Page.Total),
+			Page:  int64(pageResp.Page.Page),
+			Size:  int64(pageResp.Page.Size),
+			Total: int64(pageResp.Page.Total),
 		},
 		Rows: replyRows,
 	}, nil

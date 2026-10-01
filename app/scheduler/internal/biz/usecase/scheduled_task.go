@@ -3,7 +3,7 @@ package usecase
 import (
 	"common/pkg/apperror"
 	"common/pkg/constant"
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"encoding/json"
@@ -252,7 +252,7 @@ func (u *ScheduledTaskUsecase) Get(ctx context.Context, req *ScheduledTaskGetReq
 }
 
 type ScheduledTaskPageReq struct {
-	Page        *common.PageReq
+	Page        *commonmodel.PageReq
 	IDs         []int64
 	TaskKey     *string
 	HandlerName *schedulerenum.TaskHandlerName
@@ -262,7 +262,7 @@ type ScheduledTaskPageReq struct {
 
 type ScheduledTaskPageResp struct {
 	Rows []*model.ScheduledTask
-	Page *common.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *ScheduledTaskUsecase) Page(ctx context.Context, req *ScheduledTaskPageReq) (*ScheduledTaskPageResp, error) {
@@ -307,7 +307,7 @@ func (u *ScheduledTaskUsecase) ListAvailableTasks(ctx context.Context, keyword s
 }
 
 type ScheduledTaskExecutionRecordPageReq struct {
-	Page            *common.PageReq
+	Page            *commonmodel.PageReq
 	IDs             []int64
 	ScheduledTaskID *int64
 	Status          *schedulerenum.TaskExecutionStatus
@@ -316,7 +316,7 @@ type ScheduledTaskExecutionRecordPageReq struct {
 
 type ScheduledTaskExecutionRecordPageResp struct {
 	Rows []*model.ScheduledTaskExecutionRecord
-	Page *common.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *ScheduledTaskUsecase) PageExecutionRecords(ctx context.Context, req *ScheduledTaskExecutionRecordPageReq) (*ScheduledTaskExecutionRecordPageResp, error) {

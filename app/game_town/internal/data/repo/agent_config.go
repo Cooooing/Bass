@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"strings"
 	"time"
@@ -20,7 +21,6 @@ import (
 var _ bizrepo.AgentConfigRepo = (*AgentConfigRepo)(nil)
 
 type AgentConfigRepo struct {
-	pageHelper
 	db *gen.Client
 }
 
@@ -117,13 +117,13 @@ func (r *AgentConfigRepo) Count(ctx context.Context, req *bizrepo.AgentConfigQue
 }
 
 func (r *AgentConfigRepo) Page(ctx context.Context, req *bizrepo.AgentConfigPageReq) (*bizrepo.AgentConfigPageResp, error) {
-	p := r.page(req.Page)
+	p := commonmodel.NormalizePage(&req.Page)
 	q := r.agentConfigQuery(r.getClient(ctx).AgentConfig.Query(), &req.Query)
 	total, err := q.Clone().Count(ctx)
 	if err != nil {
 		return nil, err
 	}
-	rows, err := q.Order(agentconfig.ByID()).Offset(r.pageOffset(p)).Limit(r.pageLimit(p)).All(ctx)
+	rows, err := q.Order(agentconfig.ByID()).Offset(p.Offset()).Limit(p.Limit()).All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +132,7 @@ func (r *AgentConfigRepo) Page(ctx context.Context, req *bizrepo.AgentConfigPage
 	})
 	return &bizrepo.AgentConfigPageResp{
 		Rows: out,
-		Page: r.basePage(total, p),
+		Page: commonmodel.PageResp{Page: p.Page, Size: p.Size, Total: int64(total)},
 	}, nil
 }
 

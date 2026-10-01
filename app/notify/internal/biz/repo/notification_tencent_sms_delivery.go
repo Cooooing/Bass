@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	notifyenum "notify/internal/enum"
 	"time"
@@ -22,7 +22,7 @@ type NotificationTencentSMSDeliveryRepo interface {
 
 type NotificationTencentSMSDeliveryPageResp struct {
 	Rows []*model.NotificationTencentSMSDelivery
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type NotificationTencentSMSDeliveryClaimReq struct {
@@ -42,7 +42,7 @@ type NotificationTencentSMSDeliveryUpdateStatusReq struct {
 }
 
 type NotificationTencentSMSDeliveryQuery struct {
-	Page       *base.PageRequest
+	Page       *commonmodel.PageReq
 	ID         *int64
 	IDs        []int64
 	EventID    *string

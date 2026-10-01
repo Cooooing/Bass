@@ -1,8 +1,8 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 )
 
@@ -18,11 +18,11 @@ type NotificationLarkWebhookTemplateRepo interface {
 
 type NotificationLarkWebhookTemplatePageResp struct {
 	Rows []*model.NotificationLarkWebhookTemplate
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type NotificationLarkWebhookTemplateQuery struct {
-	Page    *base.PageRequest
+	Page    *commonmodel.PageReq
 	ID      *int64
 	IDs     []int64
 	RuleID  *int64

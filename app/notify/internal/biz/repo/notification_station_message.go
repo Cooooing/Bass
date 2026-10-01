@@ -2,8 +2,8 @@ package repo
 
 import (
 	commonenum "common/pkg/enum"
+	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"time"
 )
@@ -21,7 +21,7 @@ type NotificationStationMessageRepo interface {
 
 type NotificationStationMessagePageResp struct {
 	Rows []*model.NotificationStationMessage
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 type NotificationStationMessageMarkReadReq struct {
@@ -32,7 +32,7 @@ type NotificationStationMessageMarkReadReq struct {
 }
 
 type NotificationStationMessageQuery struct {
-	Page       *base.PageRequest
+	Page       *commonmodel.PageReq
 	ID         *int64
 	IDs        []int64
 	EventIDs   []string

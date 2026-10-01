@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"content/internal/biz/base"
+	commonmodel "common/pkg/model"
 	"context"
 
 	utilent "common/pkg/util/ent"
@@ -17,7 +17,6 @@ import (
 var _ repo.PostscriptRepo = (*PostscriptRepo)(nil)
 
 type PostscriptRepo struct {
-	pageNormalizer
 	db *gen.Client
 }
 
@@ -127,7 +126,7 @@ func (r *PostscriptRepo) Count(ctx context.Context, req *repo.PostscriptGetReq) 
 }
 
 func (r *PostscriptRepo) Page(ctx context.Context, req *repo.PostscriptGetReq) (*repo.PostscriptPageResp, error) {
-	page := r.normalizePage(req.Page)
+	page := commonmodel.NormalizePage(req.Page)
 	query := r.getClient(ctx).ArticlePostscript.Query()
 	query = r.getQuery(query, req)
 	total, err := query.Clone().Count(ctx)
@@ -135,8 +134,8 @@ func (r *PostscriptRepo) Page(ctx context.Context, req *repo.PostscriptGetReq) (
 		return nil, err
 	}
 	list, err := query.
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -156,7 +155,7 @@ func (r *PostscriptRepo) Page(ctx context.Context, req *repo.PostscriptGetReq) (
 	}
 	return &repo.PostscriptPageResp{
 		Rows: result,
-		Page: &base.PageResp{
+		Page: &commonmodel.PageResp{
 			Total: int64(total),
 			Page:  page.Page,
 			Size:  page.Size,

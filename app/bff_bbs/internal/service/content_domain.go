@@ -144,7 +144,7 @@ func (s *ContentDomainService) Update(ctx context.Context, req *bbscontentv1.Upd
 
 func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListDomains_Req) (*bbscontentv1.ListDomains_Resp, error) {
 	resp, err := s.contentDomainUsecase.ListDomains(ctx, &usecase.ListDomainsReq{
-		Page:  req.GetPage(),
+		Page:  commonmodel.PageReqFromProto(req.GetPage()),
 		Query: req.GetQuery(),
 	})
 	if err != nil {
@@ -152,11 +152,7 @@ func (s *ContentDomainService) List(ctx context.Context, req *bbscontentv1.ListD
 	}
 	var page *common.PageResp
 	if resp.Page != nil {
-		page = &common.PageResp{
-			Page:  resp.Page.Page,
-			Size:  resp.Page.Size,
-			Total: resp.Page.Total,
-		}
+		page = resp.Page.ToProto()
 	}
 	rows := make([]*bbscontentv1.ListDomains_Resp_Domain, 0, len(resp.Rows))
 	for _, row := range resp.Rows {

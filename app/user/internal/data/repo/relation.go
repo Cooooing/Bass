@@ -1,16 +1,14 @@
 package repo
 
 import (
-	"common/proto/gen/common"
+	commonmodel "common/pkg/model"
+	utilent "common/pkg/util/ent"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/gen"
 	"user/internal/data/gen/relation"
 	"user/internal/enum"
-
-	"common/pkg/server"
-	utilent "common/pkg/util/ent"
 )
 
 var _ repo.RelationRepo = (*RelationRepo)(nil)
@@ -91,19 +89,19 @@ func (r *RelationRepo) Count(ctx context.Context, req *repo.RelationGetReq) (int
 }
 
 func (r *RelationRepo) Page(ctx context.Context, req *repo.RelationPageReq) (*repo.RelationPageResp, error) {
-	rows, page, err := r.page(ctx, &common.PageReq{
+	rows, page, err := r.page(ctx, &commonmodel.PageReq{
 		Page: req.Page.Page,
 		Size: req.Page.Size,
 	}, &req.Query)
 	if err != nil {
 		return nil, err
 	}
-	resp := repo.PageResp{}
+	resp := commonmodel.PageResp{}
 	if page != nil {
-		resp = repo.PageResp{
-			Total: page.GetTotal(),
-			Page:  page.GetPage(),
-			Size:  page.GetSize(),
+		resp = commonmodel.PageResp{
+			Total: page.Total,
+			Page:  page.Page,
+			Size:  page.Size,
 		}
 	}
 	return &repo.RelationPageResp{
@@ -210,9 +208,9 @@ func (r *RelationRepo) count(ctx context.Context, req *repo.RelationGetReq) (int
 	return query.Count(ctx)
 }
 
-func (r *RelationRepo) page(ctx context.Context, page *common.PageReq, req *repo.RelationGetReq) ([]*model.Relation, *common.PageResp, error) {
+func (r *RelationRepo) page(ctx context.Context, page *commonmodel.PageReq, req *repo.RelationGetReq) ([]*model.Relation, *commonmodel.PageResp, error) {
 	tx := r.getClient(ctx)
-	page = server.PageValid(page)
+	page = commonmodel.NormalizePage(page)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
 
@@ -222,8 +220,8 @@ func (r *RelationRepo) page(ctx context.Context, page *common.PageReq, req *repo
 	}
 
 	list, err := query.
-		Limit(int(page.Size)).
-		Offset(int((page.Page - 1) * page.Size)).
+		Limit(page.Limit()).
+		Offset(page.Offset()).
 		All(ctx)
 	if err != nil {
 		return nil, nil, err
@@ -240,8 +238,8 @@ func (r *RelationRepo) page(ctx context.Context, page *common.PageReq, req *repo
 			UpdatedAt: rel.UpdatedAt,
 		})
 	}
-	return result, &common.PageResp{
-		Total: uint32(total),
+	return result, &commonmodel.PageResp{
+		Total: int64(total),
 		Page:  page.Page,
 		Size:  page.Size,
 	}, nil

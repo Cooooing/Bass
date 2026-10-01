@@ -2,11 +2,11 @@ package service
 
 import (
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/content/v1"
-	"content/internal/biz/base"
 	"content/internal/biz/model"
 	"content/internal/biz/usecase"
 	"content/internal/enum"
@@ -496,10 +496,7 @@ func (s *ArticleService) PageViewHistory(
 			access.ActorUserID = req.GetAccess().GetActorUserId()
 		}
 	}
-	var pageRequest *base.PageRequest
-	if pageReq := req.GetPage(); pageReq != nil {
-		pageRequest = &base.PageRequest{Page: int64(pageReq.GetPage()), Size: int64(pageReq.GetSize())}
-	}
+	pageRequest := commonmodel.PageReqFromProto(req.GetPage())
 	result, err := s.articleUsecase.PageViewHistory(ctx, access, pageRequest)
 	if err != nil {
 		return nil, err
@@ -517,11 +514,7 @@ func (s *ArticleService) PageViewHistory(
 	}
 	var pageResponse *common.PageResp
 	if result.Page != nil {
-		pageResponse = &common.PageResp{
-			Total: uint32(result.Page.Total),
-			Page:  uint32(result.Page.Page),
-			Size:  uint32(result.Page.Size),
-		}
+		pageResponse = result.Page.ToProto()
 	}
 	return &v1.PageArticleViewHistory_Resp{Rows: rows, Page: pageResponse}, nil
 }
@@ -858,8 +851,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v
 		}
 		query.Scheduled = req.GetQuery().Scheduled
 	}
-	pageReq := req.GetPage()
-	pageResp, err := s.articleUsecase.PageByAccess(ctx, &usecase.ArticlePageByAccessReq{Access: access, Filter: query, Page: &base.PageRequest{Page: int64(pageReq.GetPage()), Size: int64(pageReq.GetSize())}})
+	pageResp, err := s.articleUsecase.PageByAccess(ctx, &usecase.ArticlePageByAccessReq{Access: access, Filter: query, Page: commonmodel.PageReqFromProto(req.GetPage())})
 	if err != nil {
 		return nil, err
 	}
@@ -902,7 +894,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v
 		}
 		rows = append(rows, article)
 	}
-	return &v1.PageArticles_Resp{Rows: rows, Page: &common.PageResp{Page: uint32(pageResp.Page.Page), Size: uint32(pageResp.Page.Size), Total: uint32(pageResp.Page.Total)}}, nil
+	return &v1.PageArticles_Resp{Rows: rows, Page: pageResp.Page.ToProto()}, nil
 }
 
 func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapArticleViewerActionStates_Req) (*v1.MapArticleViewerActionStates_Resp, error) {

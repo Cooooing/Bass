@@ -1,8 +1,8 @@
 package usecase
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
-	"im/internal/biz/base"
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 )
@@ -104,14 +104,14 @@ func (u *ChatSessionUsecase) MarkRead(ctx context.Context, req *MarkReadReq) err
 }
 
 type ChatSessionPageReq struct {
-	Page     *base.PageRequest
+	Page     *commonmodel.PageReq
 	QueryIDs []int64
 	UserID   int64
 }
 
 type ChatSessionPageResp struct {
 	List []*model.ChatSession
-	Page *base.PageResp
+	Page *commonmodel.PageResp
 }
 
 func (u *ChatSessionUsecase) Page(ctx context.Context, req *ChatSessionPageReq) (*ChatSessionPageResp, error) {

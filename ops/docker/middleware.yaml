@@ -28,7 +28,16 @@ services:
     restart: on-failure:3
     env_file:
       - .test.env
-    command: redis-server --requirepass ${REDIS_PASSWORD}
+    command:
+      - redis-server
+      - --requirepass
+      - ${REDIS_PASSWORD}
+      - --save
+      - ""
+      - --appendonly
+      - "yes"
+      - --appendfsync
+      - everysec
     ports:
       - "${REDIS_PORT:-6379}:6379"
     volumes:

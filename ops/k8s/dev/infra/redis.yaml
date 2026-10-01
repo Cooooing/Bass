@@ -8,6 +8,14 @@ image:
 
 architecture: standalone
 
+# Redis is shared by sessions, authentication state, counters, limits and
+# transient registries. AOF-only avoids redundant RDB forks; one fsync per
+# second balances global write latency against a bounded loss window.
+commonConfiguration: |-
+  save ""
+  appendonly yes
+  appendfsync everysec
+
 auth:
   enabled: true
   existingSecret: bass-redis-secret

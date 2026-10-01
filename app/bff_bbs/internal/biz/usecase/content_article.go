@@ -177,6 +177,16 @@ func (u *ContentArticleUsecase) PageViewHistory(
 	if err != nil {
 		return nil, err
 	}
+	profiles := make([]*repo.AccountProfile, 0, len(result.Rows)*2)
+	for _, row := range result.Rows {
+		if row == nil || row.Article == nil {
+			continue
+		}
+		profiles = append(profiles, row.Article.AuthorUser, row.Article.LastReplyUser)
+	}
+	if err = u.hydrateArticleProfiles(ctx, profiles); err != nil {
+		return nil, err
+	}
 	return &ArticleViewHistoryPageResp{Rows: result.Rows, Page: result.Page}, nil
 }
 

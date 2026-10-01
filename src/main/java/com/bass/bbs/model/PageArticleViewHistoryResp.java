@@ -19,86 +19,98 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
+import com.bass.bbs.model.ArticleViewHistoryItem;
+import com.bass.bbs.model.PageResp;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 import com.bass.bbs.ApiClient;
 /**
- * PageReq
+ * PageArticleViewHistoryResp
  */
 @JsonPropertyOrder({
-  PageReq.JSON_PROPERTY_PAGE,
-  PageReq.JSON_PROPERTY_SIZE
+  PageArticleViewHistoryResp.JSON_PROPERTY_ROWS,
+  PageArticleViewHistoryResp.JSON_PROPERTY_PAGE
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class PageReq {
+public class PageArticleViewHistoryResp {
+  public static final String JSON_PROPERTY_ROWS = "rows";
+  @javax.annotation.Nullable
+  private List<ArticleViewHistoryItem> rows = new ArrayList<>();
+
   public static final String JSON_PROPERTY_PAGE = "page";
   @javax.annotation.Nullable
-  private String page;
+  private PageResp page;
 
-  public static final String JSON_PROPERTY_SIZE = "size";
-  @javax.annotation.Nullable
-  private String size;
-
-  public PageReq() { 
+  public PageArticleViewHistoryResp() { 
   }
 
-  public PageReq page(@javax.annotation.Nullable String page) {
+  public PageArticleViewHistoryResp rows(@javax.annotation.Nullable List<ArticleViewHistoryItem> rows) {
+    this.rows = rows;
+    return this;
+  }
+
+  public PageArticleViewHistoryResp addRowsItem(ArticleViewHistoryItem rowsItem) {
+    if (this.rows == null) {
+      this.rows = new ArrayList<>();
+    }
+    this.rows.add(rowsItem);
+    return this;
+  }
+
+  /**
+   * Get rows
+   * @return rows
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<ArticleViewHistoryItem> getRows() {
+    return rows;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRows(@javax.annotation.Nullable List<ArticleViewHistoryItem> rows) {
+    this.rows = rows;
+  }
+
+
+  public PageArticleViewHistoryResp page(@javax.annotation.Nullable PageResp page) {
     this.page = page;
     return this;
   }
 
   /**
-   * 页码
+   * Get page
    * @return page
    */
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getPage() {
+  public PageResp getPage() {
     return page;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPage(@javax.annotation.Nullable String page) {
+  public void setPage(@javax.annotation.Nullable PageResp page) {
     this.page = page;
   }
 
 
-  public PageReq size(@javax.annotation.Nullable String size) {
-    this.size = size;
-    return this;
-  }
-
   /**
-   * 页大小
-   * @return size
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_SIZE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getSize() {
-    return size;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_SIZE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSize(@javax.annotation.Nullable String size) {
-    this.size = size;
-  }
-
-
-  /**
-   * Return true if this PageReq object is equal to o.
+   * Return true if this PageArticleViewHistory_Resp object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -108,22 +120,22 @@ public class PageReq {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PageReq pageReq = (PageReq) o;
-    return Objects.equals(this.page, pageReq.page) &&
-        Objects.equals(this.size, pageReq.size);
+    PageArticleViewHistoryResp pageArticleViewHistoryResp = (PageArticleViewHistoryResp) o;
+    return Objects.equals(this.rows, pageArticleViewHistoryResp.rows) &&
+        Objects.equals(this.page, pageArticleViewHistoryResp.page);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(page, size);
+    return Objects.hash(rows, page);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PageReq {\n");
+    sb.append("class PageArticleViewHistoryResp {\n");
+    sb.append("    rows: ").append(toIndentedString(rows)).append("\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -168,14 +180,19 @@ public class PageReq {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `page` to the URL query string
-    if (getPage() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%spage%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPage()))));
+    // add `rows` to the URL query string
+    if (getRows() != null) {
+      for (int i = 0; i < getRows().size(); i++) {
+        if (getRows().get(i) != null) {
+          joiner.add(getRows().get(i).toUrlQueryString(String.format(java.util.Locale.ROOT, "%srows%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format(java.util.Locale.ROOT, "%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
     }
 
-    // add `size` to the URL query string
-    if (getSize() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%ssize%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getSize()))));
+    // add `page` to the URL query string
+    if (getPage() != null) {
+      joiner.add(getPage().toUrlQueryString(prefix + "page" + suffix));
     }
 
     return joiner.toString();

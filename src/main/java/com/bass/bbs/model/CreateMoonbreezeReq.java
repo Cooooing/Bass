@@ -19,7 +19,6 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
-import com.bass.bbs.model.RespLocation;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,46 +30,46 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * UpsertCurrentLocationResp
+ * CreateMoonbreezeReq
  */
 @JsonPropertyOrder({
-  UpsertCurrentLocationResp.JSON_PROPERTY_LOCATION
+  CreateMoonbreezeReq.JSON_PROPERTY_CONTENT
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class UpsertCurrentLocationResp {
-  public static final String JSON_PROPERTY_LOCATION = "location";
+public class CreateMoonbreezeReq {
+  public static final String JSON_PROPERTY_CONTENT = "content";
   @javax.annotation.Nullable
-  private RespLocation location;
+  private String content;
 
-  public UpsertCurrentLocationResp() { 
+  public CreateMoonbreezeReq() { 
   }
 
-  public UpsertCurrentLocationResp location(@javax.annotation.Nullable RespLocation location) {
-    this.location = location;
+  public CreateMoonbreezeReq content(@javax.annotation.Nullable String content) {
+    this.content = content;
     return this;
   }
 
   /**
-   * Get location
-   * @return location
+   * Get content
+   * @return content
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LOCATION, required = false)
+  @JsonProperty(value = JSON_PROPERTY_CONTENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public RespLocation getLocation() {
-    return location;
+  public String getContent() {
+    return content;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_LOCATION, required = false)
+  @JsonProperty(value = JSON_PROPERTY_CONTENT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setLocation(@javax.annotation.Nullable RespLocation location) {
-    this.location = location;
+  public void setContent(@javax.annotation.Nullable String content) {
+    this.content = content;
   }
 
 
   /**
-   * Return true if this UpsertCurrentLocation_Resp object is equal to o.
+   * Return true if this CreateMoonbreeze_Req object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -80,20 +79,20 @@ public class UpsertCurrentLocationResp {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UpsertCurrentLocationResp upsertCurrentLocationResp = (UpsertCurrentLocationResp) o;
-    return Objects.equals(this.location, upsertCurrentLocationResp.location);
+    CreateMoonbreezeReq createMoonbreezeReq = (CreateMoonbreezeReq) o;
+    return Objects.equals(this.content, createMoonbreezeReq.content);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location);
+    return Objects.hash(content);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UpsertCurrentLocationResp {\n");
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
+    sb.append("class CreateMoonbreezeReq {\n");
+    sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -138,9 +137,9 @@ public class UpsertCurrentLocationResp {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `location` to the URL query string
-    if (getLocation() != null) {
-      joiner.add(getLocation().toUrlQueryString(prefix + "location" + suffix));
+    // add `content` to the URL query string
+    if (getContent() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%scontent%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getContent()))));
     }
 
     return joiner.toString();

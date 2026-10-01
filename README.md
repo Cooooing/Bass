@@ -149,6 +149,8 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**getWithHttpInfo**](docs/ArticleService.md#getWithHttpInfo) | **POST** /v1/content/article/get | 
 *ArticleService* | [**like**](docs/ArticleService.md#like) | **POST** /v1/content/article/like | 
 *ArticleService* | [**likeWithHttpInfo**](docs/ArticleService.md#likeWithHttpInfo) | **POST** /v1/content/article/like | 
+*ArticleService* | [**pageViewHistory**](docs/ArticleService.md#pageViewHistory) | **POST** /v1/content/article/view-history/page | 
+*ArticleService* | [**pageViewHistoryWithHttpInfo**](docs/ArticleService.md#pageViewHistoryWithHttpInfo) | **POST** /v1/content/article/view-history/page | 
 *ArticleService* | [**publish**](docs/ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 *ArticleService* | [**publishWithHttpInfo**](docs/ArticleService.md#publishWithHttpInfo) | **POST** /v1/content/article/publish | 
 *ArticleService* | [**reward**](docs/ArticleService.md#reward) | **POST** /v1/content/article/reward | 
@@ -193,12 +195,16 @@ Class | Method | HTTP request | Description
 *DomainService* | [**createWithHttpInfo**](docs/DomainService.md#createWithHttpInfo) | **POST** /v1/content/domain/create | 
 *DomainService* | [**update**](docs/DomainService.md#update) | **POST** /v1/content/domain/update | 
 *DomainService* | [**updateWithHttpInfo**](docs/DomainService.md#updateWithHttpInfo) | **POST** /v1/content/domain/update | 
-*LocationService* | [**detectCurrent**](docs/LocationService.md#detectCurrent) | **POST** /v1/user/location/detect-current | 
-*LocationService* | [**detectCurrentWithHttpInfo**](docs/LocationService.md#detectCurrentWithHttpInfo) | **POST** /v1/user/location/detect-current | 
 *LocationService* | [**getCurrent**](docs/LocationService.md#getCurrent) | **POST** /v1/user/location/get-current | 
 *LocationService* | [**getCurrentWithHttpInfo**](docs/LocationService.md#getCurrentWithHttpInfo) | **POST** /v1/user/location/get-current | 
-*LocationService* | [**upsertCurrent**](docs/LocationService.md#upsertCurrent) | **POST** /v1/user/location/upsert-current | 
-*LocationService* | [**upsertCurrentWithHttpInfo**](docs/LocationService.md#upsertCurrentWithHttpInfo) | **POST** /v1/user/location/upsert-current | 
+*MoonbreezeService* | [**create**](docs/MoonbreezeService.md#create) | **POST** /v1/content/moonbreeze/create | 
+*MoonbreezeService* | [**createWithHttpInfo**](docs/MoonbreezeService.md#createWithHttpInfo) | **POST** /v1/content/moonbreeze/create | 
+*MoonbreezeService* | [**pageMember**](docs/MoonbreezeService.md#pageMember) | **POST** /v1/content/moonbreeze/page-member | 
+*MoonbreezeService* | [**pageMemberWithHttpInfo**](docs/MoonbreezeService.md#pageMemberWithHttpInfo) | **POST** /v1/content/moonbreeze/page-member | 
+*MoonbreezeService* | [**pagePublic**](docs/MoonbreezeService.md#pagePublic) | **POST** /v1/content/moonbreeze/page-public | 
+*MoonbreezeService* | [**pagePublicWithHttpInfo**](docs/MoonbreezeService.md#pagePublicWithHttpInfo) | **POST** /v1/content/moonbreeze/page-public | 
+*MoonbreezeService* | [**pageWatching**](docs/MoonbreezeService.md#pageWatching) | **POST** /v1/content/moonbreeze/page-watching | 
+*MoonbreezeService* | [**pageWatchingWithHttpInfo**](docs/MoonbreezeService.md#pageWatchingWithHttpInfo) | **POST** /v1/content/moonbreeze/page-watching | 
 *NotificationService* | [**callList**](docs/NotificationService.md#callList) | **POST** /v1/notify/notification/list | 
 *NotificationService* | [**callListWithHttpInfo**](docs/NotificationService.md#callListWithHttpInfo) | **POST** /v1/notify/notification/list | 
 *NotificationService* | [**countUnread**](docs/NotificationService.md#countUnread) | **POST** /v1/notify/notification/count-unread | 
@@ -272,6 +278,7 @@ Class | Method | HTTP request | Description
  - [ArticleListItem](docs/ArticleListItem.md)
  - [ArticlePostscript](docs/ArticlePostscript.md)
  - [ArticleTag](docs/ArticleTag.md)
+ - [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
  - [ArticleViewerActionState](docs/ArticleViewerActionState.md)
  - [BeginEnableTotpResp](docs/BeginEnableTotpResp.md)
  - [BindArticleTagsReq](docs/BindArticleTagsReq.md)
@@ -292,9 +299,10 @@ Class | Method | HTTP request | Description
  - [CreateDomainResp](docs/CreateDomainResp.md)
  - [CreateDraftArticleReq](docs/CreateDraftArticleReq.md)
  - [CreateDraftArticleResp](docs/CreateDraftArticleResp.md)
+ - [CreateMoonbreezeReq](docs/CreateMoonbreezeReq.md)
+ - [CreateMoonbreezeResp](docs/CreateMoonbreezeResp.md)
  - [CreateTagReq](docs/CreateTagReq.md)
  - [CreateTagResp](docs/CreateTagResp.md)
- - [DetectCurrentLocationResp](docs/DetectCurrentLocationResp.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
  - [DiscardDraftArticleReq](docs/DiscardDraftArticleReq.md)
  - [FollowRelationReq](docs/FollowRelationReq.md)
@@ -350,8 +358,15 @@ Class | Method | HTTP request | Description
  - [LoginResp](docs/LoginResp.md)
  - [MarkReadNotificationReq](docs/MarkReadNotificationReq.md)
  - [MarkReadNotificationResp](docs/MarkReadNotificationResp.md)
+ - [Moonbreeze](docs/Moonbreeze.md)
+ - [PageArticleViewHistoryReq](docs/PageArticleViewHistoryReq.md)
+ - [PageArticleViewHistoryResp](docs/PageArticleViewHistoryResp.md)
+ - [PageMemberMoonbreezesReq](docs/PageMemberMoonbreezesReq.md)
+ - [PageMoonbreezesResp](docs/PageMoonbreezesResp.md)
+ - [PagePublicMoonbreezesReq](docs/PagePublicMoonbreezesReq.md)
  - [PageReq](docs/PageReq.md)
  - [PageResp](docs/PageResp.md)
+ - [PageWatchingMoonbreezesReq](docs/PageWatchingMoonbreezesReq.md)
  - [PrepareProfileImageUploadAccountReq](docs/PrepareProfileImageUploadAccountReq.md)
  - [PrepareProfileImageUploadAccountResp](docs/PrepareProfileImageUploadAccountResp.md)
  - [Profile](docs/Profile.md)
@@ -419,8 +434,6 @@ Class | Method | HTTP request | Description
  - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
- - [UpsertCurrentLocationReq](docs/UpsertCurrentLocationReq.md)
- - [UpsertCurrentLocationResp](docs/UpsertCurrentLocationResp.md)
 
 
 <a id="documentation-for-authorization"></a>

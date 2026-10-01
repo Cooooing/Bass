@@ -54,35 +54,35 @@ class RespPrivacySettingTest {
     }
 
     /**
-     * Test the property 'publicFollowers'
+     * Test the property 'publicFollowerList'
      */
     @Test
-    void publicFollowersTest() {
-        // TODO: test publicFollowers
+    void publicFollowerListTest() {
+        // TODO: test publicFollowerList
     }
 
     /**
-     * Test the property 'publicFollowing'
+     * Test the property 'publicFollowingList'
      */
     @Test
-    void publicFollowingTest() {
-        // TODO: test publicFollowing
+    void publicFollowingListTest() {
+        // TODO: test publicFollowingList
     }
 
     /**
-     * Test the property 'publicArticles'
+     * Test the property 'publicArticleList'
      */
     @Test
-    void publicArticlesTest() {
-        // TODO: test publicArticles
+    void publicArticleListTest() {
+        // TODO: test publicArticleList
     }
 
     /**
-     * Test the property 'publicComments'
+     * Test the property 'publicCommentList'
      */
     @Test
-    void publicCommentsTest() {
-        // TODO: test publicComments
+    void publicCommentListTest() {
+        // TODO: test publicCommentList
     }
 
     /**
@@ -99,6 +99,14 @@ class RespPrivacySettingTest {
     @Test
     void publicLocationTest() {
         // TODO: test publicLocation
+    }
+
+    /**
+     * Test the property 'publicMoonbreezeList'
+     */
+    @Test
+    void publicMoonbreezeListTest() {
+        // TODO: test publicMoonbreezeList
     }
 
 }

@@ -33,125 +33,154 @@ import com.bass.bbs.ApiClient;
  * ProfileVisibility
  */
 @JsonPropertyOrder({
-  ProfileVisibility.JSON_PROPERTY_ARTICLES,
-  ProfileVisibility.JSON_PROPERTY_COMMENTS,
-  ProfileVisibility.JSON_PROPERTY_FOLLOWERS,
-  ProfileVisibility.JSON_PROPERTY_FOLLOWING
+  ProfileVisibility.JSON_PROPERTY_ARTICLE_LIST,
+  ProfileVisibility.JSON_PROPERTY_COMMENT_LIST,
+  ProfileVisibility.JSON_PROPERTY_FOLLOWER_LIST,
+  ProfileVisibility.JSON_PROPERTY_FOLLOWING_LIST,
+  ProfileVisibility.JSON_PROPERTY_MOONBREEZE_LIST
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ProfileVisibility {
-  public static final String JSON_PROPERTY_ARTICLES = "articles";
+  public static final String JSON_PROPERTY_ARTICLE_LIST = "article_list";
   @javax.annotation.Nullable
-  private Boolean articles;
+  private Boolean articleList;
 
-  public static final String JSON_PROPERTY_COMMENTS = "comments";
+  public static final String JSON_PROPERTY_COMMENT_LIST = "comment_list";
   @javax.annotation.Nullable
-  private Boolean comments;
+  private Boolean commentList;
 
-  public static final String JSON_PROPERTY_FOLLOWERS = "followers";
+  public static final String JSON_PROPERTY_FOLLOWER_LIST = "follower_list";
   @javax.annotation.Nullable
-  private Boolean followers;
+  private Boolean followerList;
 
-  public static final String JSON_PROPERTY_FOLLOWING = "following";
+  public static final String JSON_PROPERTY_FOLLOWING_LIST = "following_list";
   @javax.annotation.Nullable
-  private Boolean following;
+  private Boolean followingList;
+
+  public static final String JSON_PROPERTY_MOONBREEZE_LIST = "moonbreeze_list";
+  @javax.annotation.Nullable
+  private Boolean moonbreezeList;
 
   public ProfileVisibility() { 
   }
 
-  public ProfileVisibility articles(@javax.annotation.Nullable Boolean articles) {
-    this.articles = articles;
+  public ProfileVisibility articleList(@javax.annotation.Nullable Boolean articleList) {
+    this.articleList = articleList;
     return this;
   }
 
   /**
-   * Get articles
-   * @return articles
+   * Get articleList
+   * @return articleList
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_ARTICLES, required = false)
+  @JsonProperty(value = JSON_PROPERTY_ARTICLE_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getArticles() {
-    return articles;
+  public Boolean getArticleList() {
+    return articleList;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_ARTICLES, required = false)
+  @JsonProperty(value = JSON_PROPERTY_ARTICLE_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setArticles(@javax.annotation.Nullable Boolean articles) {
-    this.articles = articles;
+  public void setArticleList(@javax.annotation.Nullable Boolean articleList) {
+    this.articleList = articleList;
   }
 
 
-  public ProfileVisibility comments(@javax.annotation.Nullable Boolean comments) {
-    this.comments = comments;
+  public ProfileVisibility commentList(@javax.annotation.Nullable Boolean commentList) {
+    this.commentList = commentList;
     return this;
   }
 
   /**
-   * Get comments
-   * @return comments
+   * Get commentList
+   * @return commentList
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_COMMENTS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getComments() {
-    return comments;
+  public Boolean getCommentList() {
+    return commentList;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_COMMENTS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_COMMENT_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setComments(@javax.annotation.Nullable Boolean comments) {
-    this.comments = comments;
+  public void setCommentList(@javax.annotation.Nullable Boolean commentList) {
+    this.commentList = commentList;
   }
 
 
-  public ProfileVisibility followers(@javax.annotation.Nullable Boolean followers) {
-    this.followers = followers;
+  public ProfileVisibility followerList(@javax.annotation.Nullable Boolean followerList) {
+    this.followerList = followerList;
     return this;
   }
 
   /**
-   * Get followers
-   * @return followers
+   * Get followerList
+   * @return followerList
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_FOLLOWERS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_FOLLOWER_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getFollowers() {
-    return followers;
+  public Boolean getFollowerList() {
+    return followerList;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_FOLLOWERS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_FOLLOWER_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFollowers(@javax.annotation.Nullable Boolean followers) {
-    this.followers = followers;
+  public void setFollowerList(@javax.annotation.Nullable Boolean followerList) {
+    this.followerList = followerList;
   }
 
 
-  public ProfileVisibility following(@javax.annotation.Nullable Boolean following) {
-    this.following = following;
+  public ProfileVisibility followingList(@javax.annotation.Nullable Boolean followingList) {
+    this.followingList = followingList;
     return this;
   }
 
   /**
-   * Get following
-   * @return following
+   * Get followingList
+   * @return followingList
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_FOLLOWING, required = false)
+  @JsonProperty(value = JSON_PROPERTY_FOLLOWING_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getFollowing() {
-    return following;
+  public Boolean getFollowingList() {
+    return followingList;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_FOLLOWING, required = false)
+  @JsonProperty(value = JSON_PROPERTY_FOLLOWING_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFollowing(@javax.annotation.Nullable Boolean following) {
-    this.following = following;
+  public void setFollowingList(@javax.annotation.Nullable Boolean followingList) {
+    this.followingList = followingList;
+  }
+
+
+  public ProfileVisibility moonbreezeList(@javax.annotation.Nullable Boolean moonbreezeList) {
+    this.moonbreezeList = moonbreezeList;
+    return this;
+  }
+
+  /**
+   * Get moonbreezeList
+   * @return moonbreezeList
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_MOONBREEZE_LIST, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Boolean getMoonbreezeList() {
+    return moonbreezeList;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_MOONBREEZE_LIST, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMoonbreezeList(@javax.annotation.Nullable Boolean moonbreezeList) {
+    this.moonbreezeList = moonbreezeList;
   }
 
 
@@ -167,25 +196,27 @@ public class ProfileVisibility {
       return false;
     }
     ProfileVisibility profileVisibility = (ProfileVisibility) o;
-    return Objects.equals(this.articles, profileVisibility.articles) &&
-        Objects.equals(this.comments, profileVisibility.comments) &&
-        Objects.equals(this.followers, profileVisibility.followers) &&
-        Objects.equals(this.following, profileVisibility.following);
+    return Objects.equals(this.articleList, profileVisibility.articleList) &&
+        Objects.equals(this.commentList, profileVisibility.commentList) &&
+        Objects.equals(this.followerList, profileVisibility.followerList) &&
+        Objects.equals(this.followingList, profileVisibility.followingList) &&
+        Objects.equals(this.moonbreezeList, profileVisibility.moonbreezeList);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(articles, comments, followers, following);
+    return Objects.hash(articleList, commentList, followerList, followingList, moonbreezeList);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ProfileVisibility {\n");
-    sb.append("    articles: ").append(toIndentedString(articles)).append("\n");
-    sb.append("    comments: ").append(toIndentedString(comments)).append("\n");
-    sb.append("    followers: ").append(toIndentedString(followers)).append("\n");
-    sb.append("    following: ").append(toIndentedString(following)).append("\n");
+    sb.append("    articleList: ").append(toIndentedString(articleList)).append("\n");
+    sb.append("    commentList: ").append(toIndentedString(commentList)).append("\n");
+    sb.append("    followerList: ").append(toIndentedString(followerList)).append("\n");
+    sb.append("    followingList: ").append(toIndentedString(followingList)).append("\n");
+    sb.append("    moonbreezeList: ").append(toIndentedString(moonbreezeList)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -230,24 +261,29 @@ public class ProfileVisibility {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `articles` to the URL query string
-    if (getArticles() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sarticles%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getArticles()))));
+    // add `article_list` to the URL query string
+    if (getArticleList() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sarticle_list%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getArticleList()))));
     }
 
-    // add `comments` to the URL query string
-    if (getComments() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%scomments%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getComments()))));
+    // add `comment_list` to the URL query string
+    if (getCommentList() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%scomment_list%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCommentList()))));
     }
 
-    // add `followers` to the URL query string
-    if (getFollowers() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sfollowers%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getFollowers()))));
+    // add `follower_list` to the URL query string
+    if (getFollowerList() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sfollower_list%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getFollowerList()))));
     }
 
-    // add `following` to the URL query string
-    if (getFollowing() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%sfollowing%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getFollowing()))));
+    // add `following_list` to the URL query string
+    if (getFollowingList() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sfollowing_list%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getFollowingList()))));
+    }
+
+    // add `moonbreeze_list` to the URL query string
+    if (getMoonbreezeList() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%smoonbreeze_list%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getMoonbreezeList()))));
     }
 
     return joiner.toString();

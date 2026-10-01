@@ -294,6 +294,14 @@ class ArticleDetailTest {
     }
 
     /**
+     * Test the property 'city'
+     */
+    @Test
+    void cityTest() {
+        // TODO: test city
+    }
+
+    /**
      * Test the property 'createdBy'
      */
     @Test

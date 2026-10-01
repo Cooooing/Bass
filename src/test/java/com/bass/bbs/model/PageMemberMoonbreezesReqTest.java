@@ -24,57 +24,41 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for ProfileVisibility
+ * Model tests for PageMemberMoonbreezesReq
  */
-class ProfileVisibilityTest {
-    private final ProfileVisibility model = new ProfileVisibility();
+class PageMemberMoonbreezesReqTest {
+    private final PageMemberMoonbreezesReq model = new PageMemberMoonbreezesReq();
 
     /**
-     * Model tests for ProfileVisibility
+     * Model tests for PageMemberMoonbreezesReq
      */
     @Test
-    void testProfileVisibility() {
-        // TODO: test ProfileVisibility
+    void testPageMemberMoonbreezesReq() {
+        // TODO: test PageMemberMoonbreezesReq
     }
 
     /**
-     * Test the property 'articleList'
+     * Test the property 'name'
      */
     @Test
-    void articleListTest() {
-        // TODO: test articleList
+    void nameTest() {
+        // TODO: test name
     }
 
     /**
-     * Test the property 'commentList'
+     * Test the property 'cursor'
      */
     @Test
-    void commentListTest() {
-        // TODO: test commentList
+    void cursorTest() {
+        // TODO: test cursor
     }
 
     /**
-     * Test the property 'followerList'
+     * Test the property 'size'
      */
     @Test
-    void followerListTest() {
-        // TODO: test followerList
-    }
-
-    /**
-     * Test the property 'followingList'
-     */
-    @Test
-    void followingListTest() {
-        // TODO: test followingList
-    }
-
-    /**
-     * Test the property 'moonbreezeList'
-     */
-    @Test
-    void moonbreezeListTest() {
-        // TODO: test moonbreezeList
+    void sizeTest() {
+        // TODO: test size
     }
 
 }

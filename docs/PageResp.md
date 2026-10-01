@@ -7,9 +7,9 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**total** | **Integer** | 总数 |  [optional] |
-|**page** | **Integer** | 页码 |  [optional] |
-|**size** | **Integer** | 页大小 |  [optional] |
+|**total** | **String** | 总数 |  [optional] |
+|**page** | **String** | 页码 |  [optional] |
+|**size** | **String** | 页大小 |  [optional] |
 
 
 

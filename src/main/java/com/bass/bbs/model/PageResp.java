@@ -41,20 +41,20 @@ import com.bass.bbs.ApiClient;
 public class PageResp {
   public static final String JSON_PROPERTY_TOTAL = "total";
   @javax.annotation.Nullable
-  private Integer total;
+  private String total;
 
   public static final String JSON_PROPERTY_PAGE = "page";
   @javax.annotation.Nullable
-  private Integer page;
+  private String page;
 
   public static final String JSON_PROPERTY_SIZE = "size";
   @javax.annotation.Nullable
-  private Integer size;
+  private String size;
 
   public PageResp() { 
   }
 
-  public PageResp total(@javax.annotation.Nullable Integer total) {
+  public PageResp total(@javax.annotation.Nullable String total) {
     this.total = total;
     return this;
   }
@@ -66,19 +66,19 @@ public class PageResp {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_TOTAL, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Integer getTotal() {
+  public String getTotal() {
     return total;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_TOTAL, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTotal(@javax.annotation.Nullable Integer total) {
+  public void setTotal(@javax.annotation.Nullable String total) {
     this.total = total;
   }
 
 
-  public PageResp page(@javax.annotation.Nullable Integer page) {
+  public PageResp page(@javax.annotation.Nullable String page) {
     this.page = page;
     return this;
   }
@@ -90,19 +90,19 @@ public class PageResp {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Integer getPage() {
+  public String getPage() {
     return page;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPage(@javax.annotation.Nullable Integer page) {
+  public void setPage(@javax.annotation.Nullable String page) {
     this.page = page;
   }
 
 
-  public PageResp size(@javax.annotation.Nullable Integer size) {
+  public PageResp size(@javax.annotation.Nullable String size) {
     this.size = size;
     return this;
   }
@@ -114,14 +114,14 @@ public class PageResp {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_SIZE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Integer getSize() {
+  public String getSize() {
     return size;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_SIZE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSize(@javax.annotation.Nullable Integer size) {
+  public void setSize(@javax.annotation.Nullable String size) {
     this.size = size;
   }
 

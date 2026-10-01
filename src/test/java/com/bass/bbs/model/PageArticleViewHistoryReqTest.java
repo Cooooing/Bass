@@ -13,7 +13,7 @@
 
 package com.bass.bbs.model;
 
-import com.bass.bbs.model.RespLocation;
+import com.bass.bbs.model.PageReq;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -25,25 +25,25 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for UpsertCurrentLocationResp
+ * Model tests for PageArticleViewHistoryReq
  */
-class UpsertCurrentLocationRespTest {
-    private final UpsertCurrentLocationResp model = new UpsertCurrentLocationResp();
+class PageArticleViewHistoryReqTest {
+    private final PageArticleViewHistoryReq model = new PageArticleViewHistoryReq();
 
     /**
-     * Model tests for UpsertCurrentLocationResp
+     * Model tests for PageArticleViewHistoryReq
      */
     @Test
-    void testUpsertCurrentLocationResp() {
-        // TODO: test UpsertCurrentLocationResp
+    void testPageArticleViewHistoryReq() {
+        // TODO: test PageArticleViewHistoryReq
     }
 
     /**
-     * Test the property 'location'
+     * Test the property 'page'
      */
     @Test
-    void locationTest() {
-        // TODO: test location
+    void pageTest() {
+        // TODO: test page
     }
 
 }

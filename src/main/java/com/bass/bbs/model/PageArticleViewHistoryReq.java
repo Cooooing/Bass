@@ -19,7 +19,7 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
-import com.bass.bbs.model.RespLocation;
+import com.bass.bbs.model.PageReq;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,46 +31,46 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * DetectCurrentLocationResp
+ * PageArticleViewHistoryReq
  */
 @JsonPropertyOrder({
-  DetectCurrentLocationResp.JSON_PROPERTY_LOCATION
+  PageArticleViewHistoryReq.JSON_PROPERTY_PAGE
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class DetectCurrentLocationResp {
-  public static final String JSON_PROPERTY_LOCATION = "location";
+public class PageArticleViewHistoryReq {
+  public static final String JSON_PROPERTY_PAGE = "page";
   @javax.annotation.Nullable
-  private RespLocation location;
+  private PageReq page;
 
-  public DetectCurrentLocationResp() { 
+  public PageArticleViewHistoryReq() { 
   }
 
-  public DetectCurrentLocationResp location(@javax.annotation.Nullable RespLocation location) {
-    this.location = location;
+  public PageArticleViewHistoryReq page(@javax.annotation.Nullable PageReq page) {
+    this.page = page;
     return this;
   }
 
   /**
-   * Get location
-   * @return location
+   * Get page
+   * @return page
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_LOCATION, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public RespLocation getLocation() {
-    return location;
+  public PageReq getPage() {
+    return page;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_LOCATION, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setLocation(@javax.annotation.Nullable RespLocation location) {
-    this.location = location;
+  public void setPage(@javax.annotation.Nullable PageReq page) {
+    this.page = page;
   }
 
 
   /**
-   * Return true if this DetectCurrentLocation_Resp object is equal to o.
+   * Return true if this PageArticleViewHistory_Req object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -80,20 +80,20 @@ public class DetectCurrentLocationResp {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DetectCurrentLocationResp detectCurrentLocationResp = (DetectCurrentLocationResp) o;
-    return Objects.equals(this.location, detectCurrentLocationResp.location);
+    PageArticleViewHistoryReq pageArticleViewHistoryReq = (PageArticleViewHistoryReq) o;
+    return Objects.equals(this.page, pageArticleViewHistoryReq.page);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location);
+    return Objects.hash(page);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DetectCurrentLocationResp {\n");
-    sb.append("    location: ").append(toIndentedString(location)).append("\n");
+    sb.append("class PageArticleViewHistoryReq {\n");
+    sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -138,9 +138,9 @@ public class DetectCurrentLocationResp {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `location` to the URL query string
-    if (getLocation() != null) {
-      joiner.add(getLocation().toUrlQueryString(prefix + "location" + suffix));
+    // add `page` to the URL query string
+    if (getPage() != null) {
+      joiner.add(getPage().toUrlQueryString(prefix + "page" + suffix));
     }
 
     return joiner.toString();

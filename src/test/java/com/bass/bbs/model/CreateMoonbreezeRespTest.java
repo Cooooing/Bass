@@ -13,7 +13,7 @@
 
 package com.bass.bbs.model;
 
-import com.bass.bbs.model.RespLocation;
+import com.bass.bbs.model.Moonbreeze;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -25,25 +25,25 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for DetectCurrentLocationResp
+ * Model tests for CreateMoonbreezeResp
  */
-class DetectCurrentLocationRespTest {
-    private final DetectCurrentLocationResp model = new DetectCurrentLocationResp();
+class CreateMoonbreezeRespTest {
+    private final CreateMoonbreezeResp model = new CreateMoonbreezeResp();
 
     /**
-     * Model tests for DetectCurrentLocationResp
+     * Model tests for CreateMoonbreezeResp
      */
     @Test
-    void testDetectCurrentLocationResp() {
-        // TODO: test DetectCurrentLocationResp
+    void testCreateMoonbreezeResp() {
+        // TODO: test CreateMoonbreezeResp
     }
 
     /**
-     * Test the property 'location'
+     * Test the property 'moonbreeze'
      */
     @Test
-    void locationTest() {
-        // TODO: test location
+    void moonbreezeTest() {
+        // TODO: test moonbreeze
     }
 
 }

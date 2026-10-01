@@ -9,12 +9,13 @@
 |------------ | ------------- | ------------- | -------------|
 |**userId** | **String** |  |  [optional] |
 |**publicPoints** | **Boolean** |  |  [optional] |
-|**publicFollowers** | **Boolean** |  |  [optional] |
-|**publicFollowing** | **Boolean** |  |  [optional] |
-|**publicArticles** | **Boolean** |  |  [optional] |
-|**publicComments** | **Boolean** |  |  [optional] |
+|**publicFollowerList** | **Boolean** |  |  [optional] |
+|**publicFollowingList** | **Boolean** |  |  [optional] |
+|**publicArticleList** | **Boolean** |  |  [optional] |
+|**publicCommentList** | **Boolean** |  |  [optional] |
 |**publicOnlineStatus** | **Boolean** |  |  [optional] |
 |**publicLocation** | **Boolean** |  |  [optional] |
+|**publicMoonbreezeList** | **Boolean** |  |  [optional] |
 
 
 

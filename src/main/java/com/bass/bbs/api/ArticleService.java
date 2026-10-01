@@ -31,6 +31,8 @@ import com.bass.bbs.model.LikeArticleReq;
 import com.bass.bbs.model.LikeArticleResp;
 import com.bass.bbs.model.ListArticlesReq;
 import com.bass.bbs.model.ListArticlesResp;
+import com.bass.bbs.model.PageArticleViewHistoryReq;
+import com.bass.bbs.model.PageArticleViewHistoryResp;
 import com.bass.bbs.model.PublishArticleReq;
 import com.bass.bbs.model.RewardArticleReq;
 import com.bass.bbs.model.ThankArticleReq;
@@ -1784,6 +1786,207 @@ public class ArticleService {
       }
       public APILikeRequest build() {
         return new APILikeRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 查询当前账号的浏览历史。
+   * @param apiRequest {@link APIPageViewHistoryRequest}
+   * @return PageArticleViewHistoryResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageArticleViewHistoryResp pageViewHistory(APIPageViewHistoryRequest apiRequest) throws ApiException {
+    return pageViewHistory(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号的浏览历史。
+   * @param apiRequest {@link APIPageViewHistoryRequest}
+   * @param headers Optional headers to include in the request
+   * @return PageArticleViewHistoryResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageArticleViewHistoryResp pageViewHistory(APIPageViewHistoryRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    PageArticleViewHistoryReq pageArticleViewHistoryReq = apiRequest.pageArticleViewHistoryReq();
+    return pageViewHistory(pageArticleViewHistoryReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号的浏览历史。
+   * @param apiRequest {@link APIPageViewHistoryRequest}
+   * @return ApiResponse&lt;PageArticleViewHistoryResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageArticleViewHistoryResp> pageViewHistoryWithHttpInfo(APIPageViewHistoryRequest apiRequest) throws ApiException {
+    return pageViewHistoryWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号的浏览历史。
+   * @param apiRequest {@link APIPageViewHistoryRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PageArticleViewHistoryResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageArticleViewHistoryResp> pageViewHistoryWithHttpInfo(APIPageViewHistoryRequest apiRequest, Map<String, String> headers) throws ApiException {
+    PageArticleViewHistoryReq pageArticleViewHistoryReq = apiRequest.pageArticleViewHistoryReq();
+    return pageViewHistoryWithHttpInfo(pageArticleViewHistoryReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号的浏览历史。
+   * @param pageArticleViewHistoryReq  (required)
+   * @return PageArticleViewHistoryResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageArticleViewHistoryResp pageViewHistory(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq) throws ApiException {
+    return pageViewHistory(pageArticleViewHistoryReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号的浏览历史。
+   * @param pageArticleViewHistoryReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return PageArticleViewHistoryResp
+   * @throws ApiException if fails to make API call
+   */
+  public PageArticleViewHistoryResp pageViewHistory(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<PageArticleViewHistoryResp> localVarResponse = pageViewHistoryWithHttpInfo(pageArticleViewHistoryReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询当前账号的浏览历史。
+   * @param pageArticleViewHistoryReq  (required)
+   * @return ApiResponse&lt;PageArticleViewHistoryResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageArticleViewHistoryResp> pageViewHistoryWithHttpInfo(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq) throws ApiException {
+    return pageViewHistoryWithHttpInfo(pageArticleViewHistoryReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号的浏览历史。
+   * @param pageArticleViewHistoryReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;PageArticleViewHistoryResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<PageArticleViewHistoryResp> pageViewHistoryWithHttpInfo(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = pageViewHistoryRequestBuilder(pageArticleViewHistoryReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("pageViewHistory", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<PageArticleViewHistoryResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        PageArticleViewHistoryResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<PageArticleViewHistoryResp>() {});
+        
+
+        return new ApiResponse<PageArticleViewHistoryResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder pageViewHistoryRequestBuilder(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'pageArticleViewHistoryReq' is set
+    if (pageArticleViewHistoryReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'pageArticleViewHistoryReq' when calling pageViewHistory");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/view-history/page";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(pageArticleViewHistoryReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIPageViewHistoryRequest {
+    @javax.annotation.Nonnull
+    private PageArticleViewHistoryReq pageArticleViewHistoryReq; //  (required)
+
+    private APIPageViewHistoryRequest(Builder builder) {
+      this.pageArticleViewHistoryReq = builder.pageArticleViewHistoryReq;
+    }
+    @javax.annotation.Nonnull
+    public PageArticleViewHistoryReq pageArticleViewHistoryReq() {
+      return pageArticleViewHistoryReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private PageArticleViewHistoryReq pageArticleViewHistoryReq;
+
+      public Builder pageArticleViewHistoryReq(@javax.annotation.Nonnull PageArticleViewHistoryReq pageArticleViewHistoryReq) {
+        this.pageArticleViewHistoryReq = pageArticleViewHistoryReq;
+        return this;
+      }
+      public APIPageViewHistoryRequest build() {
+        return new APIPageViewHistoryRequest(this);
       }
     }
   }

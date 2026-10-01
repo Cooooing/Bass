@@ -13,44 +13,54 @@
 
 package com.bass.bbs.model;
 
+import com.bass.bbs.model.AccountProfile;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for UpsertCurrentLocationReq
+ * Model tests for Moonbreeze
  */
-class UpsertCurrentLocationReqTest {
-    private final UpsertCurrentLocationReq model = new UpsertCurrentLocationReq();
+class MoonbreezeTest {
+    private final Moonbreeze model = new Moonbreeze();
 
     /**
-     * Model tests for UpsertCurrentLocationReq
+     * Model tests for Moonbreeze
      */
     @Test
-    void testUpsertCurrentLocationReq() {
-        // TODO: test UpsertCurrentLocationReq
+    void testMoonbreeze() {
+        // TODO: test Moonbreeze
     }
 
     /**
-     * Test the property 'country'
+     * Test the property 'id'
      */
     @Test
-    void countryTest() {
-        // TODO: test country
+    void idTest() {
+        // TODO: test id
     }
 
     /**
-     * Test the property 'province'
+     * Test the property 'content'
      */
     @Test
-    void provinceTest() {
-        // TODO: test province
+    void contentTest() {
+        // TODO: test content
+    }
+
+    /**
+     * Test the property 'author'
+     */
+    @Test
+    void authorTest() {
+        // TODO: test author
     }
 
     /**
@@ -59,6 +69,14 @@ class UpsertCurrentLocationReqTest {
     @Test
     void cityTest() {
         // TODO: test city
+    }
+
+    /**
+     * Test the property 'createdAt'
+     */
+    @Test
+    void createdAtTest() {
+        // TODO: test createdAt
     }
 
 }

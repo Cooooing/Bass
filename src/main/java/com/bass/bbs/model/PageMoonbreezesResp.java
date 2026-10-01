@@ -19,86 +19,97 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
+import com.bass.bbs.model.Moonbreeze;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 import com.bass.bbs.ApiClient;
 /**
- * PageReq
+ * PageMoonbreezesResp
  */
 @JsonPropertyOrder({
-  PageReq.JSON_PROPERTY_PAGE,
-  PageReq.JSON_PROPERTY_SIZE
+  PageMoonbreezesResp.JSON_PROPERTY_ROWS,
+  PageMoonbreezesResp.JSON_PROPERTY_NEXT_CURSOR
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class PageReq {
-  public static final String JSON_PROPERTY_PAGE = "page";
+public class PageMoonbreezesResp {
+  public static final String JSON_PROPERTY_ROWS = "rows";
   @javax.annotation.Nullable
-  private String page;
+  private List<Moonbreeze> rows = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_SIZE = "size";
+  public static final String JSON_PROPERTY_NEXT_CURSOR = "next_cursor";
   @javax.annotation.Nullable
-  private String size;
+  private String nextCursor;
 
-  public PageReq() { 
+  public PageMoonbreezesResp() { 
   }
 
-  public PageReq page(@javax.annotation.Nullable String page) {
-    this.page = page;
+  public PageMoonbreezesResp rows(@javax.annotation.Nullable List<Moonbreeze> rows) {
+    this.rows = rows;
+    return this;
+  }
+
+  public PageMoonbreezesResp addRowsItem(Moonbreeze rowsItem) {
+    if (this.rows == null) {
+      this.rows = new ArrayList<>();
+    }
+    this.rows.add(rowsItem);
     return this;
   }
 
   /**
-   * 页码
-   * @return page
+   * Get rows
+   * @return rows
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getPage() {
-    return page;
+  public List<Moonbreeze> getRows() {
+    return rows;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPage(@javax.annotation.Nullable String page) {
-    this.page = page;
+  public void setRows(@javax.annotation.Nullable List<Moonbreeze> rows) {
+    this.rows = rows;
   }
 
 
-  public PageReq size(@javax.annotation.Nullable String size) {
-    this.size = size;
+  public PageMoonbreezesResp nextCursor(@javax.annotation.Nullable String nextCursor) {
+    this.nextCursor = nextCursor;
     return this;
   }
 
   /**
-   * 页大小
-   * @return size
+   * Get nextCursor
+   * @return nextCursor
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_SIZE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_NEXT_CURSOR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getSize() {
-    return size;
+  public String getNextCursor() {
+    return nextCursor;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_SIZE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_NEXT_CURSOR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSize(@javax.annotation.Nullable String size) {
-    this.size = size;
+  public void setNextCursor(@javax.annotation.Nullable String nextCursor) {
+    this.nextCursor = nextCursor;
   }
 
 
   /**
-   * Return true if this PageReq object is equal to o.
+   * Return true if this PageMoonbreezes_Resp object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -108,22 +119,22 @@ public class PageReq {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PageReq pageReq = (PageReq) o;
-    return Objects.equals(this.page, pageReq.page) &&
-        Objects.equals(this.size, pageReq.size);
+    PageMoonbreezesResp pageMoonbreezesResp = (PageMoonbreezesResp) o;
+    return Objects.equals(this.rows, pageMoonbreezesResp.rows) &&
+        Objects.equals(this.nextCursor, pageMoonbreezesResp.nextCursor);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(page, size);
+    return Objects.hash(rows, nextCursor);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PageReq {\n");
-    sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    size: ").append(toIndentedString(size)).append("\n");
+    sb.append("class PageMoonbreezesResp {\n");
+    sb.append("    rows: ").append(toIndentedString(rows)).append("\n");
+    sb.append("    nextCursor: ").append(toIndentedString(nextCursor)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -168,14 +179,19 @@ public class PageReq {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `page` to the URL query string
-    if (getPage() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%spage%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPage()))));
+    // add `rows` to the URL query string
+    if (getRows() != null) {
+      for (int i = 0; i < getRows().size(); i++) {
+        if (getRows().get(i) != null) {
+          joiner.add(getRows().get(i).toUrlQueryString(String.format(java.util.Locale.ROOT, "%srows%s%s", prefix, suffix,
+          "".equals(suffix) ? "" : String.format(java.util.Locale.ROOT, "%s%d%s", containerPrefix, i, containerSuffix))));
+        }
+      }
     }
 
-    // add `size` to the URL query string
-    if (getSize() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%ssize%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getSize()))));
+    // add `next_cursor` to the URL query string
+    if (getNextCursor() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%snext_cursor%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getNextCursor()))));
     }
 
     return joiner.toString();

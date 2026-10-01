@@ -1,13 +1,13 @@
 
 
-# DetectCurrentLocationResp
+# PageArticleViewHistoryReq
 
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**location** | [**RespLocation**](RespLocation.md) |  |  [optional] |
+|**page** | [**PageReq**](PageReq.md) |  |  [optional] |
 
 
 

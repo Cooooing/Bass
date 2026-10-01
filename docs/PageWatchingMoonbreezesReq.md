@@ -1,13 +1,14 @@
 
 
-# UpsertCurrentLocationResp
+# PageWatchingMoonbreezesReq
 
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**location** | [**RespLocation**](RespLocation.md) |  |  [optional] |
+|**cursor** | **String** |  |  [optional] |
+|**size** | **Integer** |  |  [optional] |
 
 
 

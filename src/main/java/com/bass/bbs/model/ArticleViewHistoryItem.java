@@ -19,86 +19,88 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
+import com.bass.bbs.model.ArticleListItem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 
 import com.bass.bbs.ApiClient;
 /**
- * PageReq
+ * ArticleViewHistoryItem
  */
 @JsonPropertyOrder({
-  PageReq.JSON_PROPERTY_PAGE,
-  PageReq.JSON_PROPERTY_SIZE
+  ArticleViewHistoryItem.JSON_PROPERTY_ARTICLE,
+  ArticleViewHistoryItem.JSON_PROPERTY_VIEWED_AT
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class PageReq {
-  public static final String JSON_PROPERTY_PAGE = "page";
+public class ArticleViewHistoryItem {
+  public static final String JSON_PROPERTY_ARTICLE = "article";
   @javax.annotation.Nullable
-  private String page;
+  private ArticleListItem article;
 
-  public static final String JSON_PROPERTY_SIZE = "size";
+  public static final String JSON_PROPERTY_VIEWED_AT = "viewed_at";
   @javax.annotation.Nullable
-  private String size;
+  private OffsetDateTime viewedAt;
 
-  public PageReq() { 
+  public ArticleViewHistoryItem() { 
   }
 
-  public PageReq page(@javax.annotation.Nullable String page) {
-    this.page = page;
+  public ArticleViewHistoryItem article(@javax.annotation.Nullable ArticleListItem article) {
+    this.article = article;
     return this;
   }
 
   /**
-   * 页码
-   * @return page
+   * Get article
+   * @return article
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_ARTICLE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getPage() {
-    return page;
+  public ArticleListItem getArticle() {
+    return article;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_ARTICLE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPage(@javax.annotation.Nullable String page) {
-    this.page = page;
+  public void setArticle(@javax.annotation.Nullable ArticleListItem article) {
+    this.article = article;
   }
 
 
-  public PageReq size(@javax.annotation.Nullable String size) {
-    this.size = size;
+  public ArticleViewHistoryItem viewedAt(@javax.annotation.Nullable OffsetDateTime viewedAt) {
+    this.viewedAt = viewedAt;
     return this;
   }
 
   /**
-   * 页大小
-   * @return size
+   * Get viewedAt
+   * @return viewedAt
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_SIZE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_VIEWED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getSize() {
-    return size;
+  public OffsetDateTime getViewedAt() {
+    return viewedAt;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_SIZE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_VIEWED_AT, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSize(@javax.annotation.Nullable String size) {
-    this.size = size;
+  public void setViewedAt(@javax.annotation.Nullable OffsetDateTime viewedAt) {
+    this.viewedAt = viewedAt;
   }
 
 
   /**
-   * Return true if this PageReq object is equal to o.
+   * Return true if this ArticleViewHistoryItem object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -108,22 +110,22 @@ public class PageReq {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PageReq pageReq = (PageReq) o;
-    return Objects.equals(this.page, pageReq.page) &&
-        Objects.equals(this.size, pageReq.size);
+    ArticleViewHistoryItem articleViewHistoryItem = (ArticleViewHistoryItem) o;
+    return Objects.equals(this.article, articleViewHistoryItem.article) &&
+        Objects.equals(this.viewedAt, articleViewHistoryItem.viewedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(page, size);
+    return Objects.hash(article, viewedAt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PageReq {\n");
-    sb.append("    page: ").append(toIndentedString(page)).append("\n");
-    sb.append("    size: ").append(toIndentedString(size)).append("\n");
+    sb.append("class ArticleViewHistoryItem {\n");
+    sb.append("    article: ").append(toIndentedString(article)).append("\n");
+    sb.append("    viewedAt: ").append(toIndentedString(viewedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -168,14 +170,14 @@ public class PageReq {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `page` to the URL query string
-    if (getPage() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%spage%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPage()))));
+    // add `article` to the URL query string
+    if (getArticle() != null) {
+      joiner.add(getArticle().toUrlQueryString(prefix + "article" + suffix));
     }
 
-    // add `size` to the URL query string
-    if (getSize() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%ssize%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getSize()))));
+    // add `viewed_at` to the URL query string
+    if (getViewedAt() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sviewed_at%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getViewedAt()))));
     }
 
     return joiner.toString();

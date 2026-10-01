@@ -27,6 +27,8 @@ import com.bass.bbs.model.LikeArticleReq;
 import com.bass.bbs.model.LikeArticleResp;
 import com.bass.bbs.model.ListArticlesReq;
 import com.bass.bbs.model.ListArticlesResp;
+import com.bass.bbs.model.PageArticleViewHistoryReq;
+import com.bass.bbs.model.PageArticleViewHistoryResp;
 import com.bass.bbs.model.PublishArticleReq;
 import com.bass.bbs.model.RewardArticleReq;
 import com.bass.bbs.model.ThankArticleReq;
@@ -216,6 +218,27 @@ public class ArticleServiceTest {
           .build();
         LikeArticleResp response = 
         api.like(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 查询当前账号的浏览历史。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void pageViewHistoryTest() throws ApiException {
+        PageArticleViewHistoryReq pageArticleViewHistoryReq = null;
+        
+        ArticleService.APIpageViewHistoryRequest request = ArticleService.APIpageViewHistoryRequest.newBuilder()
+          .pageArticleViewHistoryReq(pageArticleViewHistoryReq)
+          .build();
+        PageArticleViewHistoryResp response = 
+        api.pageViewHistory(request);
 
         // TODO: test validations
     }

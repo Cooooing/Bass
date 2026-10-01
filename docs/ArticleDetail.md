@@ -38,6 +38,7 @@
 |**editedAt** | **OffsetDateTime** |  |  [optional] |
 |**tags** | [**List&lt;ArticleTag&gt;**](ArticleTag.md) |  |  [optional] |
 |**domains** | [**List&lt;ArticleDomain&gt;**](ArticleDomain.md) |  |  [optional] |
+|**city** | **String** |  |  [optional] |
 |**createdBy** | **String** |  |  [optional] |
 |**updatedBy** | **String** |  |  [optional] |
 |**createdAt** | **OffsetDateTime** |  |  [optional] |

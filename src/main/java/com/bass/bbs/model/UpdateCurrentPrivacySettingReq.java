@@ -34,12 +34,13 @@ import com.bass.bbs.ApiClient;
  */
 @JsonPropertyOrder({
   UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_POINTS,
-  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_FOLLOWERS,
-  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_FOLLOWING,
-  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_ARTICLES,
-  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_COMMENTS,
+  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_FOLLOWER_LIST,
+  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_FOLLOWING_LIST,
+  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_ARTICLE_LIST,
+  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_COMMENT_LIST,
   UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_ONLINE_STATUS,
-  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_LOCATION
+  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_LOCATION,
+  UpdateCurrentPrivacySettingReq.JSON_PROPERTY_PUBLIC_MOONBREEZE_LIST
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class UpdateCurrentPrivacySettingReq {
@@ -47,21 +48,21 @@ public class UpdateCurrentPrivacySettingReq {
   @javax.annotation.Nullable
   private Boolean publicPoints;
 
-  public static final String JSON_PROPERTY_PUBLIC_FOLLOWERS = "public_followers";
+  public static final String JSON_PROPERTY_PUBLIC_FOLLOWER_LIST = "public_follower_list";
   @javax.annotation.Nullable
-  private Boolean publicFollowers;
+  private Boolean publicFollowerList;
 
-  public static final String JSON_PROPERTY_PUBLIC_FOLLOWING = "public_following";
+  public static final String JSON_PROPERTY_PUBLIC_FOLLOWING_LIST = "public_following_list";
   @javax.annotation.Nullable
-  private Boolean publicFollowing;
+  private Boolean publicFollowingList;
 
-  public static final String JSON_PROPERTY_PUBLIC_ARTICLES = "public_articles";
+  public static final String JSON_PROPERTY_PUBLIC_ARTICLE_LIST = "public_article_list";
   @javax.annotation.Nullable
-  private Boolean publicArticles;
+  private Boolean publicArticleList;
 
-  public static final String JSON_PROPERTY_PUBLIC_COMMENTS = "public_comments";
+  public static final String JSON_PROPERTY_PUBLIC_COMMENT_LIST = "public_comment_list";
   @javax.annotation.Nullable
-  private Boolean publicComments;
+  private Boolean publicCommentList;
 
   public static final String JSON_PROPERTY_PUBLIC_ONLINE_STATUS = "public_online_status";
   @javax.annotation.Nullable
@@ -70,6 +71,10 @@ public class UpdateCurrentPrivacySettingReq {
   public static final String JSON_PROPERTY_PUBLIC_LOCATION = "public_location";
   @javax.annotation.Nullable
   private Boolean publicLocation;
+
+  public static final String JSON_PROPERTY_PUBLIC_MOONBREEZE_LIST = "public_moonbreeze_list";
+  @javax.annotation.Nullable
+  private Boolean publicMoonbreezeList;
 
   public UpdateCurrentPrivacySettingReq() { 
   }
@@ -98,99 +103,99 @@ public class UpdateCurrentPrivacySettingReq {
   }
 
 
-  public UpdateCurrentPrivacySettingReq publicFollowers(@javax.annotation.Nullable Boolean publicFollowers) {
-    this.publicFollowers = publicFollowers;
+  public UpdateCurrentPrivacySettingReq publicFollowerList(@javax.annotation.Nullable Boolean publicFollowerList) {
+    this.publicFollowerList = publicFollowerList;
     return this;
   }
 
   /**
-   * Get publicFollowers
-   * @return publicFollowers
+   * Get publicFollowerList
+   * @return publicFollowerList
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PUBLIC_FOLLOWERS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC_FOLLOWER_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getPublicFollowers() {
-    return publicFollowers;
+  public Boolean getPublicFollowerList() {
+    return publicFollowerList;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_PUBLIC_FOLLOWERS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC_FOLLOWER_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPublicFollowers(@javax.annotation.Nullable Boolean publicFollowers) {
-    this.publicFollowers = publicFollowers;
+  public void setPublicFollowerList(@javax.annotation.Nullable Boolean publicFollowerList) {
+    this.publicFollowerList = publicFollowerList;
   }
 
 
-  public UpdateCurrentPrivacySettingReq publicFollowing(@javax.annotation.Nullable Boolean publicFollowing) {
-    this.publicFollowing = publicFollowing;
+  public UpdateCurrentPrivacySettingReq publicFollowingList(@javax.annotation.Nullable Boolean publicFollowingList) {
+    this.publicFollowingList = publicFollowingList;
     return this;
   }
 
   /**
-   * Get publicFollowing
-   * @return publicFollowing
+   * Get publicFollowingList
+   * @return publicFollowingList
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PUBLIC_FOLLOWING, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC_FOLLOWING_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getPublicFollowing() {
-    return publicFollowing;
+  public Boolean getPublicFollowingList() {
+    return publicFollowingList;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_PUBLIC_FOLLOWING, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC_FOLLOWING_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPublicFollowing(@javax.annotation.Nullable Boolean publicFollowing) {
-    this.publicFollowing = publicFollowing;
+  public void setPublicFollowingList(@javax.annotation.Nullable Boolean publicFollowingList) {
+    this.publicFollowingList = publicFollowingList;
   }
 
 
-  public UpdateCurrentPrivacySettingReq publicArticles(@javax.annotation.Nullable Boolean publicArticles) {
-    this.publicArticles = publicArticles;
+  public UpdateCurrentPrivacySettingReq publicArticleList(@javax.annotation.Nullable Boolean publicArticleList) {
+    this.publicArticleList = publicArticleList;
     return this;
   }
 
   /**
-   * Get publicArticles
-   * @return publicArticles
+   * Get publicArticleList
+   * @return publicArticleList
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PUBLIC_ARTICLES, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC_ARTICLE_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getPublicArticles() {
-    return publicArticles;
+  public Boolean getPublicArticleList() {
+    return publicArticleList;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_PUBLIC_ARTICLES, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC_ARTICLE_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPublicArticles(@javax.annotation.Nullable Boolean publicArticles) {
-    this.publicArticles = publicArticles;
+  public void setPublicArticleList(@javax.annotation.Nullable Boolean publicArticleList) {
+    this.publicArticleList = publicArticleList;
   }
 
 
-  public UpdateCurrentPrivacySettingReq publicComments(@javax.annotation.Nullable Boolean publicComments) {
-    this.publicComments = publicComments;
+  public UpdateCurrentPrivacySettingReq publicCommentList(@javax.annotation.Nullable Boolean publicCommentList) {
+    this.publicCommentList = publicCommentList;
     return this;
   }
 
   /**
-   * Get publicComments
-   * @return publicComments
+   * Get publicCommentList
+   * @return publicCommentList
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PUBLIC_COMMENTS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC_COMMENT_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public Boolean getPublicComments() {
-    return publicComments;
+  public Boolean getPublicCommentList() {
+    return publicCommentList;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_PUBLIC_COMMENTS, required = false)
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC_COMMENT_LIST, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPublicComments(@javax.annotation.Nullable Boolean publicComments) {
-    this.publicComments = publicComments;
+  public void setPublicCommentList(@javax.annotation.Nullable Boolean publicCommentList) {
+    this.publicCommentList = publicCommentList;
   }
 
 
@@ -242,6 +247,30 @@ public class UpdateCurrentPrivacySettingReq {
   }
 
 
+  public UpdateCurrentPrivacySettingReq publicMoonbreezeList(@javax.annotation.Nullable Boolean publicMoonbreezeList) {
+    this.publicMoonbreezeList = publicMoonbreezeList;
+    return this;
+  }
+
+  /**
+   * Get publicMoonbreezeList
+   * @return publicMoonbreezeList
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC_MOONBREEZE_LIST, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Boolean getPublicMoonbreezeList() {
+    return publicMoonbreezeList;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC_MOONBREEZE_LIST, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPublicMoonbreezeList(@javax.annotation.Nullable Boolean publicMoonbreezeList) {
+    this.publicMoonbreezeList = publicMoonbreezeList;
+  }
+
+
   /**
    * Return true if this UpdateCurrentPrivacySetting_Req object is equal to o.
    */
@@ -255,17 +284,18 @@ public class UpdateCurrentPrivacySettingReq {
     }
     UpdateCurrentPrivacySettingReq updateCurrentPrivacySettingReq = (UpdateCurrentPrivacySettingReq) o;
     return Objects.equals(this.publicPoints, updateCurrentPrivacySettingReq.publicPoints) &&
-        Objects.equals(this.publicFollowers, updateCurrentPrivacySettingReq.publicFollowers) &&
-        Objects.equals(this.publicFollowing, updateCurrentPrivacySettingReq.publicFollowing) &&
-        Objects.equals(this.publicArticles, updateCurrentPrivacySettingReq.publicArticles) &&
-        Objects.equals(this.publicComments, updateCurrentPrivacySettingReq.publicComments) &&
+        Objects.equals(this.publicFollowerList, updateCurrentPrivacySettingReq.publicFollowerList) &&
+        Objects.equals(this.publicFollowingList, updateCurrentPrivacySettingReq.publicFollowingList) &&
+        Objects.equals(this.publicArticleList, updateCurrentPrivacySettingReq.publicArticleList) &&
+        Objects.equals(this.publicCommentList, updateCurrentPrivacySettingReq.publicCommentList) &&
         Objects.equals(this.publicOnlineStatus, updateCurrentPrivacySettingReq.publicOnlineStatus) &&
-        Objects.equals(this.publicLocation, updateCurrentPrivacySettingReq.publicLocation);
+        Objects.equals(this.publicLocation, updateCurrentPrivacySettingReq.publicLocation) &&
+        Objects.equals(this.publicMoonbreezeList, updateCurrentPrivacySettingReq.publicMoonbreezeList);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(publicPoints, publicFollowers, publicFollowing, publicArticles, publicComments, publicOnlineStatus, publicLocation);
+    return Objects.hash(publicPoints, publicFollowerList, publicFollowingList, publicArticleList, publicCommentList, publicOnlineStatus, publicLocation, publicMoonbreezeList);
   }
 
   @Override
@@ -273,12 +303,13 @@ public class UpdateCurrentPrivacySettingReq {
     StringBuilder sb = new StringBuilder();
     sb.append("class UpdateCurrentPrivacySettingReq {\n");
     sb.append("    publicPoints: ").append(toIndentedString(publicPoints)).append("\n");
-    sb.append("    publicFollowers: ").append(toIndentedString(publicFollowers)).append("\n");
-    sb.append("    publicFollowing: ").append(toIndentedString(publicFollowing)).append("\n");
-    sb.append("    publicArticles: ").append(toIndentedString(publicArticles)).append("\n");
-    sb.append("    publicComments: ").append(toIndentedString(publicComments)).append("\n");
+    sb.append("    publicFollowerList: ").append(toIndentedString(publicFollowerList)).append("\n");
+    sb.append("    publicFollowingList: ").append(toIndentedString(publicFollowingList)).append("\n");
+    sb.append("    publicArticleList: ").append(toIndentedString(publicArticleList)).append("\n");
+    sb.append("    publicCommentList: ").append(toIndentedString(publicCommentList)).append("\n");
     sb.append("    publicOnlineStatus: ").append(toIndentedString(publicOnlineStatus)).append("\n");
     sb.append("    publicLocation: ").append(toIndentedString(publicLocation)).append("\n");
+    sb.append("    publicMoonbreezeList: ").append(toIndentedString(publicMoonbreezeList)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -328,24 +359,24 @@ public class UpdateCurrentPrivacySettingReq {
       joiner.add(String.format(java.util.Locale.ROOT, "%spublic_points%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicPoints()))));
     }
 
-    // add `public_followers` to the URL query string
-    if (getPublicFollowers() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%spublic_followers%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicFollowers()))));
+    // add `public_follower_list` to the URL query string
+    if (getPublicFollowerList() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%spublic_follower_list%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicFollowerList()))));
     }
 
-    // add `public_following` to the URL query string
-    if (getPublicFollowing() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%spublic_following%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicFollowing()))));
+    // add `public_following_list` to the URL query string
+    if (getPublicFollowingList() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%spublic_following_list%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicFollowingList()))));
     }
 
-    // add `public_articles` to the URL query string
-    if (getPublicArticles() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%spublic_articles%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicArticles()))));
+    // add `public_article_list` to the URL query string
+    if (getPublicArticleList() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%spublic_article_list%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicArticleList()))));
     }
 
-    // add `public_comments` to the URL query string
-    if (getPublicComments() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%spublic_comments%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicComments()))));
+    // add `public_comment_list` to the URL query string
+    if (getPublicCommentList() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%spublic_comment_list%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicCommentList()))));
     }
 
     // add `public_online_status` to the URL query string
@@ -356,6 +387,11 @@ public class UpdateCurrentPrivacySettingReq {
     // add `public_location` to the URL query string
     if (getPublicLocation() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%spublic_location%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicLocation()))));
+    }
+
+    // add `public_moonbreeze_list` to the URL query string
+    if (getPublicMoonbreezeList() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%spublic_moonbreeze_list%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPublicMoonbreezeList()))));
     }
 
     return joiner.toString();

@@ -7,10 +7,11 @@
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**articles** | **Boolean** |  |  [optional] |
-|**comments** | **Boolean** |  |  [optional] |
-|**followers** | **Boolean** |  |  [optional] |
-|**following** | **Boolean** |  |  [optional] |
+|**articleList** | **Boolean** |  |  [optional] |
+|**commentList** | **Boolean** |  |  [optional] |
+|**followerList** | **Boolean** |  |  [optional] |
+|**followingList** | **Boolean** |  |  [optional] |
+|**moonbreezeList** | **Boolean** |  |  [optional] |
 
 
 

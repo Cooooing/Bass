@@ -14,10 +14,7 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
-import com.bass.bbs.model.DetectCurrentLocationResp;
 import com.bass.bbs.model.GetCurrentLocationResp;
-import com.bass.bbs.model.UpsertCurrentLocationReq;
-import com.bass.bbs.model.UpsertCurrentLocationResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -40,27 +37,6 @@ public class LocationServiceTest {
     /**
      * 
      *
-     * 按当前请求 IP 解析并更新当前账号的地理资料。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void detectCurrentTest() throws ApiException {
-        Object body = null;
-        
-        LocationService.APIdetectCurrentRequest request = LocationService.APIdetectCurrentRequest.newBuilder()
-          .body(body)
-          .build();
-        DetectCurrentLocationResp response = 
-        api.detectCurrent(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
      * 获取当前账号的地理资料。
      *
      * @throws ApiException
@@ -75,27 +51,6 @@ public class LocationServiceTest {
           .build();
         GetCurrentLocationResp response = 
         api.getCurrent(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 更新当前账号的地理资料。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void upsertCurrentTest() throws ApiException {
-        UpsertCurrentLocationReq upsertCurrentLocationReq = null;
-        
-        LocationService.APIupsertCurrentRequest request = LocationService.APIupsertCurrentRequest.newBuilder()
-          .upsertCurrentLocationReq(upsertCurrentLocationReq)
-          .build();
-        UpsertCurrentLocationResp response = 
-        api.upsertCurrent(request);
 
         // TODO: test validations
     }

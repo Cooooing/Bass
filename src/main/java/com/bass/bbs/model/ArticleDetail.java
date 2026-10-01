@@ -72,6 +72,7 @@ import com.bass.bbs.ApiClient;
   ArticleDetail.JSON_PROPERTY_EDITED_AT,
   ArticleDetail.JSON_PROPERTY_TAGS,
   ArticleDetail.JSON_PROPERTY_DOMAINS,
+  ArticleDetail.JSON_PROPERTY_CITY,
   ArticleDetail.JSON_PROPERTY_CREATED_BY,
   ArticleDetail.JSON_PROPERTY_UPDATED_BY,
   ArticleDetail.JSON_PROPERTY_CREATED_AT,
@@ -360,6 +361,10 @@ public class ArticleDetail {
   public static final String JSON_PROPERTY_DOMAINS = "domains";
   @javax.annotation.Nullable
   private List<ArticleDomain> domains = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_CITY = "city";
+  @javax.annotation.Nullable
+  private String city;
 
   public static final String JSON_PROPERTY_CREATED_BY = "created_by";
   @javax.annotation.Nullable
@@ -1148,6 +1153,30 @@ public class ArticleDetail {
   }
 
 
+  public ArticleDetail city(@javax.annotation.Nullable String city) {
+    this.city = city;
+    return this;
+  }
+
+  /**
+   * Get city
+   * @return city
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_CITY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getCity() {
+    return city;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_CITY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCity(@javax.annotation.Nullable String city) {
+    this.city = city;
+  }
+
+
   public ArticleDetail createdBy(@javax.annotation.Nullable String createdBy) {
     this.createdBy = createdBy;
     return this;
@@ -1287,6 +1316,7 @@ public class ArticleDetail {
         Objects.equals(this.editedAt, articleDetail.editedAt) &&
         Objects.equals(this.tags, articleDetail.tags) &&
         Objects.equals(this.domains, articleDetail.domains) &&
+        Objects.equals(this.city, articleDetail.city) &&
         Objects.equals(this.createdBy, articleDetail.createdBy) &&
         Objects.equals(this.updatedBy, articleDetail.updatedBy) &&
         Objects.equals(this.createdAt, articleDetail.createdAt) &&
@@ -1295,7 +1325,7 @@ public class ArticleDetail {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, content, contentRender, hasPostscript, hasReward, rewardContent, rewardContentRender, rewardPoints, type, statement, commentable, viewCount, thankCount, likeCount, collectCount, rewardCount, replyCount, authorUser, lastReplyUser, lastReplyAt, coverImageUrl, viewerActionState, publishedAt, postscripts, publishStatus, visibility, restriction, editedAt, tags, domains, createdBy, updatedBy, createdAt, updatedAt);
+    return Objects.hash(id, title, content, contentRender, hasPostscript, hasReward, rewardContent, rewardContentRender, rewardPoints, type, statement, commentable, viewCount, thankCount, likeCount, collectCount, rewardCount, replyCount, authorUser, lastReplyUser, lastReplyAt, coverImageUrl, viewerActionState, publishedAt, postscripts, publishStatus, visibility, restriction, editedAt, tags, domains, city, createdBy, updatedBy, createdAt, updatedAt);
   }
 
   @Override
@@ -1333,6 +1363,7 @@ public class ArticleDetail {
     sb.append("    editedAt: ").append(toIndentedString(editedAt)).append("\n");
     sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
     sb.append("    domains: ").append(toIndentedString(domains)).append("\n");
+    sb.append("    city: ").append(toIndentedString(city)).append("\n");
     sb.append("    createdBy: ").append(toIndentedString(createdBy)).append("\n");
     sb.append("    updatedBy: ").append(toIndentedString(updatedBy)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
@@ -1549,6 +1580,11 @@ public class ArticleDetail {
           "".equals(suffix) ? "" : String.format(java.util.Locale.ROOT, "%s%d%s", containerPrefix, i, containerSuffix))));
         }
       }
+    }
+
+    // add `city` to the URL query string
+    if (getCity() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%scity%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCity()))));
     }
 
     // add `created_by` to the URL query string

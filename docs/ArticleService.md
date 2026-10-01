@@ -20,6 +20,8 @@ All URIs are relative to *http://localhost*
 | [**getWithHttpInfo**](ArticleService.md#getWithHttpInfo) | **POST** /v1/content/article/get |  |
 | [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
 | [**likeWithHttpInfo**](ArticleService.md#likeWithHttpInfo) | **POST** /v1/content/article/like |  |
+| [**pageViewHistory**](ArticleService.md#pageViewHistory) | **POST** /v1/content/article/view-history/page |  |
+| [**pageViewHistoryWithHttpInfo**](ArticleService.md#pageViewHistoryWithHttpInfo) | **POST** /v1/content/article/view-history/page |  |
 | [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish |  |
 | [**publishWithHttpInfo**](ArticleService.md#publishWithHttpInfo) | **POST** /v1/content/article/publish |  |
 | [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
@@ -1228,6 +1230,156 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **likeArticleReq** | [**LikeArticleReq**](LikeArticleReq.md) |  | |
+
+
+
+## pageViewHistory
+
+> PageArticleViewHistoryResp pageViewHistory(pageViewHistoryRequest)
+
+
+
+查询当前账号的浏览历史。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        PageArticleViewHistoryReq pageArticleViewHistoryReq = new PageArticleViewHistoryReq(); // PageArticleViewHistoryReq | 
+        try {
+            APIpageViewHistoryRequest request = APIpageViewHistoryRequest.newBuilder()
+                .pageArticleViewHistoryReq(pageArticleViewHistoryReq)
+                .build();
+            PageArticleViewHistoryResp result = apiInstance.pageViewHistory(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#pageViewHistory");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| pageViewHistoryRequest | [**APIpageViewHistoryRequest**](ArticleService.md#APIpageViewHistoryRequest)|-|-|
+
+### Return type
+
+[**PageArticleViewHistoryResp**](PageArticleViewHistoryResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## pageViewHistoryWithHttpInfo
+
+> ApiResponse<PageArticleViewHistoryResp> pageViewHistoryWithHttpInfo(pageViewHistoryRequest)
+
+
+
+查询当前账号的浏览历史。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        PageArticleViewHistoryReq pageArticleViewHistoryReq = new PageArticleViewHistoryReq(); // PageArticleViewHistoryReq | 
+        try {
+            APIpageViewHistoryRequest request = APIpageViewHistoryRequest.newBuilder()
+                .pageArticleViewHistoryReq(pageArticleViewHistoryReq)
+                .build();
+            ApiResponse<PageArticleViewHistoryResp> response = apiInstance.pageViewHistoryWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#pageViewHistory");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| pageViewHistoryRequest | [**APIpageViewHistoryRequest**](ArticleService.md#APIpageViewHistoryRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**PageArticleViewHistoryResp**](PageArticleViewHistoryResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIpageViewHistoryRequest"></a>
+## APIpageViewHistoryRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **pageArticleViewHistoryReq** | [**PageArticleViewHistoryReq**](PageArticleViewHistoryReq.md) |  | |
 
 
 

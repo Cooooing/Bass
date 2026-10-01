@@ -30,75 +30,75 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * PageReq
+ * PagePublicMoonbreezesReq
  */
 @JsonPropertyOrder({
-  PageReq.JSON_PROPERTY_PAGE,
-  PageReq.JSON_PROPERTY_SIZE
+  PagePublicMoonbreezesReq.JSON_PROPERTY_CURSOR,
+  PagePublicMoonbreezesReq.JSON_PROPERTY_SIZE
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class PageReq {
-  public static final String JSON_PROPERTY_PAGE = "page";
+public class PagePublicMoonbreezesReq {
+  public static final String JSON_PROPERTY_CURSOR = "cursor";
   @javax.annotation.Nullable
-  private String page;
+  private String cursor;
 
   public static final String JSON_PROPERTY_SIZE = "size";
   @javax.annotation.Nullable
-  private String size;
+  private Integer size;
 
-  public PageReq() { 
+  public PagePublicMoonbreezesReq() { 
   }
 
-  public PageReq page(@javax.annotation.Nullable String page) {
-    this.page = page;
+  public PagePublicMoonbreezesReq cursor(@javax.annotation.Nullable String cursor) {
+    this.cursor = cursor;
     return this;
   }
 
   /**
-   * 页码
-   * @return page
+   * Get cursor
+   * @return cursor
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_CURSOR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getPage() {
-    return page;
+  public String getCursor() {
+    return cursor;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_PAGE, required = false)
+  @JsonProperty(value = JSON_PROPERTY_CURSOR, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPage(@javax.annotation.Nullable String page) {
-    this.page = page;
+  public void setCursor(@javax.annotation.Nullable String cursor) {
+    this.cursor = cursor;
   }
 
 
-  public PageReq size(@javax.annotation.Nullable String size) {
+  public PagePublicMoonbreezesReq size(@javax.annotation.Nullable Integer size) {
     this.size = size;
     return this;
   }
 
   /**
-   * 页大小
+   * Get size
    * @return size
    */
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_SIZE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getSize() {
+  public Integer getSize() {
     return size;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_SIZE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSize(@javax.annotation.Nullable String size) {
+  public void setSize(@javax.annotation.Nullable Integer size) {
     this.size = size;
   }
 
 
   /**
-   * Return true if this PageReq object is equal to o.
+   * Return true if this PagePublicMoonbreezes_Req object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -108,21 +108,21 @@ public class PageReq {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    PageReq pageReq = (PageReq) o;
-    return Objects.equals(this.page, pageReq.page) &&
-        Objects.equals(this.size, pageReq.size);
+    PagePublicMoonbreezesReq pagePublicMoonbreezesReq = (PagePublicMoonbreezesReq) o;
+    return Objects.equals(this.cursor, pagePublicMoonbreezesReq.cursor) &&
+        Objects.equals(this.size, pagePublicMoonbreezesReq.size);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(page, size);
+    return Objects.hash(cursor, size);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class PageReq {\n");
-    sb.append("    page: ").append(toIndentedString(page)).append("\n");
+    sb.append("class PagePublicMoonbreezesReq {\n");
+    sb.append("    cursor: ").append(toIndentedString(cursor)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -168,9 +168,9 @@ public class PageReq {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `page` to the URL query string
-    if (getPage() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%spage%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getPage()))));
+    // add `cursor` to the URL query string
+    if (getCursor() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%scursor%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCursor()))));
     }
 
     // add `size` to the URL query string

@@ -226,7 +226,6 @@ message ListArticles {
       optional int64 domain_id = 2; // 可选，领域 ID
       optional ArticleType type = 4; // 可选，文章类型
       optional ArticleOrder order = 5; // 可选，排序方式
-      optional string keyword = 6; // 可选，关键词
       optional int64 author_id = 7; // 可选，作者账号 ID
       optional ArticlePublishStatus publish_status = 10; // 可选，发布状态
       repeated ArticlePublishStatus publish_statuses = 11; // 可选，发布状态列表

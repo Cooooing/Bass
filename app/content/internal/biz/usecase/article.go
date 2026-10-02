@@ -1181,7 +1181,6 @@ type ArticleListReq struct {
 	AuthorID        *int64
 	Order           *enum.ArticleOrder
 	Type            *enum.ArticleType
-	Keyword         *string
 	PublishedAtEnd  *time.Time
 	Scheduled       *bool
 	ArticleIDs      []int64
@@ -1204,7 +1203,6 @@ func (d *ArticleUsecase) List(ctx context.Context, req *ArticleListReq) ([]*mode
 		AuthorID:        req.AuthorID,
 		Order:           req.Order,
 		Type:            req.Type,
-		Keyword:         req.Keyword,
 		PublishedAtEnd:  req.PublishedAtEnd,
 		Scheduled:       req.Scheduled,
 	}})
@@ -1223,7 +1221,6 @@ type ArticlePageReq struct {
 	AuthorID        *int64
 	Order           *enum.ArticleOrder
 	Type            *enum.ArticleType
-	Keyword         *string
 	PublishedAtEnd  *time.Time
 	Scheduled       *bool
 	ArticleIDs      []int64
@@ -1251,7 +1248,6 @@ func (d *ArticleUsecase) Page(ctx context.Context, req *ArticlePageReq) (*Articl
 		AuthorID:        req.AuthorID,
 		Order:           req.Order,
 		Type:            req.Type,
-		Keyword:         req.Keyword,
 		PublishedAtEnd:  req.PublishedAtEnd,
 		Scheduled:       req.Scheduled,
 	}})

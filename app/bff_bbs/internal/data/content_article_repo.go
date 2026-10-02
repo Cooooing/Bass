@@ -156,7 +156,6 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	contentQuery := &contentv1.ArticleQueryParams{
 		TagId:     query.TagID,
 		DomainId:  query.DomainID,
-		Keyword:   query.Keyword,
 		AuthorId:  query.AuthorID,
 		Scheduled: query.Scheduled,
 	}
@@ -208,25 +207,9 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	if err != nil {
 		return nil, err
 	}
-	articleIDs := make([]int64, 0, len(reply.GetRows()))
-	for _, item := range reply.GetRows() {
-		articleIDs = append(articleIDs, item.GetId())
-	}
-	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, articleIDs, req.UserID)
+	rows, err := r.articleListItems(ctx, reply.GetRows(), req.UserID)
 	if err != nil {
 		return nil, err
-	}
-	userIDs := make([]int64, 0, len(reply.GetRows())*2)
-	for _, item := range reply.GetRows() {
-		userIDs = append(userIDs, r.articleProfileIDs(item, lastComments[item.GetId()])...)
-	}
-	profiles, err := r.loadAccountProfiles(ctx, userIDs...)
-	if err != nil {
-		return nil, err
-	}
-	rows := make([]*repo.ArticleListItem, 0, len(reply.GetRows()))
-	for _, item := range reply.GetRows() {
-		rows = append(rows, r.articleListItem(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()]))
 	}
 	var page *commonmodel.PageResp
 	if reply.GetPage() != nil {
@@ -236,6 +219,56 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 		Page: page,
 		Rows: rows,
 	}, nil
+}
+
+func (r *ContentArticleClient) articleListItems(
+	ctx context.Context,
+	articles []*contentv1.Article,
+	userID int64,
+) ([]*repo.ArticleListItem, error) {
+	articleIDs := make([]int64, 0, len(articles))
+	for _, item := range articles {
+		if item != nil {
+			articleIDs = append(articleIDs, item.GetId())
+		}
+	}
+	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, articleIDs, userID)
+	if err != nil {
+		return nil, err
+	}
+	userIDs := make([]int64, 0, len(articles)*2)
+	for _, item := range articles {
+		if item != nil {
+			userIDs = append(userIDs, r.articleProfileIDs(item, lastComments[item.GetId()])...)
+		}
+	}
+	profiles, err := r.loadAccountProfiles(ctx, userIDs...)
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*repo.ArticleListItem, 0, len(articles))
+	for _, item := range articles {
+		if item != nil {
+			rows = append(rows, r.articleListItem(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()]))
+		}
+	}
+	return rows, nil
+}
+
+func (r *ContentArticleClient) SearchArticles(ctx context.Context, req *repo.SearchArticlesReq) (*repo.SearchArticlesResp, error) {
+	reply, err := r.contentClient.ArticleSearch.SearchPublic(ctx, &contentv1.SearchPublicArticles_Req{
+		Query:  req.Query,
+		Cursor: req.Cursor,
+		Size:   req.Size,
+	})
+	if err != nil {
+		return nil, err
+	}
+	rows, err := r.articleListItems(ctx, reply.GetRows(), req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	return &repo.SearchArticlesResp{Rows: rows, NextCursor: reply.NextCursor}, nil
 }
 
 func (r *ContentArticleClient) PageViewHistory(

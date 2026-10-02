@@ -307,7 +307,6 @@ message ArticleQueryParams {
   repeated int64 article_ids = 3; // 文章 ID 列表
   optional ArticleType type = 4; // 文章类型
   optional ArticleOrder order = 5; // 排序方式
-  optional string keyword = 6; // 关键词
   optional int64 author_id = 7; // 作者账号 ID
   optional ArticlePublishStatus publish_status = 10; // 发布状态
   repeated ArticlePublishStatus publish_statuses = 11; // 发布状态列表

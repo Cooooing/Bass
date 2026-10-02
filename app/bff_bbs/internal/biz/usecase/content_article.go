@@ -6,15 +6,22 @@ import (
 	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"fmt"
 	"strings"
 	"time"
 )
 
+const (
+	ArticleSearchShortQueryLimit = 10
+	ArticleSearchLimit           = 30
+)
+
 type ContentArticleUsecase struct {
-	contentArticleClient repo.ContentArticleClient
-	assetClient          repo.AssetClient
-	privacyClient        repo.PrivacySettingClient
-	ipResolutionClient   repo.IPResolutionClient
+	contentArticleClient        repo.ContentArticleClient
+	assetClient                 repo.AssetClient
+	privacyClient               repo.PrivacySettingClient
+	ipResolutionClient          repo.IPResolutionClient
+	articleSearchRateLimitCache repo.ArticleSearchRateLimitCache
 }
 
 func NewContentArticleUsecase(
@@ -22,12 +29,14 @@ func NewContentArticleUsecase(
 	assetClient repo.AssetClient,
 	privacyClient repo.PrivacySettingClient,
 	ipResolutionClient repo.IPResolutionClient,
+	articleSearchRateLimitCache repo.ArticleSearchRateLimitCache,
 ) *ContentArticleUsecase {
 	return &ContentArticleUsecase{
-		contentArticleClient: contentArticleClient,
-		assetClient:          assetClient,
-		privacyClient:        privacyClient,
-		ipResolutionClient:   ipResolutionClient,
+		contentArticleClient:        contentArticleClient,
+		assetClient:                 assetClient,
+		privacyClient:               privacyClient,
+		ipResolutionClient:          ipResolutionClient,
+		articleSearchRateLimitCache: articleSearchRateLimitCache,
 	}
 }
 
@@ -140,7 +149,6 @@ type ListArticlesReq struct {
 type ArticleQuery struct {
 	TagID           *int64
 	DomainID        *int64
-	Keyword         *string
 	AuthorID        *int64
 	Type            *int32
 	Order           *int32
@@ -154,6 +162,19 @@ type ArticleQuery struct {
 type ListArticlesResp struct {
 	Page *commonmodel.PageResp
 	Rows []*repo.ArticleListItem
+}
+
+type SearchArticlesReq struct {
+	UserID   int64
+	ClientIP string
+	Query    string
+	Cursor   *string
+	Size     uint32
+}
+
+type SearchArticlesResp struct {
+	Rows       []*repo.ArticleListItem
+	NextCursor *string
 }
 
 type ArticleViewHistoryPageResp struct {
@@ -209,7 +230,7 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 	}
 	var query *repo.ArticleQuery
 	if req.Query != nil {
-		query = &repo.ArticleQuery{TagID: req.Query.TagID, DomainID: req.Query.DomainID, Keyword: req.Query.Keyword, AuthorID: req.Query.AuthorID, Type: req.Query.Type, Order: req.Query.Order, PublishStatus: req.Query.PublishStatus, PublishStatuses: req.Query.PublishStatuses, Visibility: req.Query.Visibility, Visibilities: req.Query.Visibilities, Scheduled: req.Query.Scheduled}
+		query = &repo.ArticleQuery{TagID: req.Query.TagID, DomainID: req.Query.DomainID, AuthorID: req.Query.AuthorID, Type: req.Query.Type, Order: req.Query.Order, PublishStatus: req.Query.PublishStatus, PublishStatuses: req.Query.PublishStatuses, Visibility: req.Query.Visibility, Visibilities: req.Query.Visibilities, Scheduled: req.Query.Scheduled}
 	}
 	resp, err := u.contentArticleClient.ListArticles(ctx, &repo.ListArticlesReq{UserID: req.UserID, Page: page, Query: query})
 	if err != nil {
@@ -226,6 +247,63 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 		return nil, err
 	}
 	return &ListArticlesResp{Page: resp.Page, Rows: resp.Rows}, nil
+}
+
+func (u *ContentArticleUsecase) SearchArticles(ctx context.Context, req *SearchArticlesReq) (*SearchArticlesResp, error) {
+	if req == nil {
+		req = &SearchArticlesReq{}
+	}
+	if err := u.allowArticleSearch(ctx, req); err != nil {
+		return nil, err
+	}
+	result, err := u.contentArticleClient.SearchArticles(ctx, &repo.SearchArticlesReq{
+		UserID:   req.UserID,
+		ClientIP: req.ClientIP,
+		Query:    req.Query,
+		Cursor:   req.Cursor,
+		Size:     req.Size,
+	})
+	if err != nil {
+		return nil, err
+	}
+	profiles := make([]*repo.AccountProfile, 0, len(result.Rows)*2)
+	for _, row := range result.Rows {
+		if row != nil {
+			profiles = append(profiles, row.AuthorUser, row.LastReplyUser)
+		}
+	}
+	if err = u.hydrateArticleProfiles(ctx, profiles); err != nil {
+		return nil, err
+	}
+	return &SearchArticlesResp{Rows: result.Rows, NextCursor: result.NextCursor}, nil
+}
+
+func (u *ContentArticleUsecase) allowArticleSearch(ctx context.Context, req *SearchArticlesReq) error {
+	if u.articleSearchRateLimitCache == nil {
+		return nil
+	}
+	principal := "anonymous"
+	if req.UserID > 0 {
+		principal = fmt.Sprintf("user:%d", req.UserID)
+	} else if ip := strings.TrimSpace(req.ClientIP); ip != "" {
+		principal = "ip:" + ip
+	}
+	limit := int64(ArticleSearchLimit)
+	if len([]rune(strings.TrimSpace(req.Query))) == 2 {
+		limit = ArticleSearchShortQueryLimit
+	}
+	allowed, err := u.articleSearchRateLimitCache.Allow(ctx, &repo.ArticleSearchRateLimitReq{
+		Key:    principal,
+		Window: time.Minute,
+		Limit:  limit,
+	})
+	if err != nil {
+		return err
+	}
+	if !allowed {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_TOO_MANY_ReqS)
+	}
+	return nil
 }
 
 type GetArticleReq struct {

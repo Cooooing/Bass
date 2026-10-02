@@ -122,7 +122,7 @@ func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.List
 	var query *usecase.ArticleQuery
 	if req.GetQuery() != nil {
 		q := req.GetQuery()
-		query = &usecase.ArticleQuery{TagID: q.TagId, DomainID: q.DomainId, Keyword: q.Keyword, AuthorID: q.AuthorId}
+		query = &usecase.ArticleQuery{TagID: q.TagId, DomainID: q.DomainId, AuthorID: q.AuthorId}
 		if q.Type != nil {
 			query.Type = new(int32(*q.Type))
 		}

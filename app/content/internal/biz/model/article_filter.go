@@ -19,7 +19,6 @@ type ArticleFilter struct {
 	AuthorID        *int64
 	Order           *enum.ArticleOrder
 	Type            *enum.ArticleType
-	Keyword         *string
 	PublishedAtEnd  *time.Time
 	Scheduled       *bool
 }

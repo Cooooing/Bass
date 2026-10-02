@@ -128,7 +128,6 @@ type ArticleSave struct {
 type ArticleQuery struct {
 	TagID           *int64
 	DomainID        *int64
-	Keyword         *string
 	AuthorID        *int64
 	Type            *int32
 	Order           *int32
@@ -182,6 +181,29 @@ type ListArticlesReq struct {
 type ListArticlesResp struct {
 	Page *commonmodel.PageResp
 	Rows []*ArticleListItem
+}
+
+type SearchArticlesReq struct {
+	UserID   int64
+	ClientIP string
+	Query    string
+	Cursor   *string
+	Size     uint32
+}
+
+type SearchArticlesResp struct {
+	Rows       []*ArticleListItem
+	NextCursor *string
+}
+
+type ArticleSearchRateLimitCache interface {
+	Allow(context.Context, *ArticleSearchRateLimitReq) (bool, error)
+}
+
+type ArticleSearchRateLimitReq struct {
+	Key    string
+	Window time.Duration
+	Limit  int64
 }
 
 type ArticleViewHistoryRow struct {
@@ -238,6 +260,7 @@ type ContentArticleClient interface {
 	DiscardDraftArticle(ctx context.Context, req *DiscardDraftArticleReq) error
 	ArchiveArticle(ctx context.Context, req *ArchiveArticleReq) error
 	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error)
+	SearchArticles(ctx context.Context, req *SearchArticlesReq) (*SearchArticlesResp, error)
 	PageViewHistory(ctx context.Context, userID int64, page *commonmodel.PageReq) (*ArticleViewHistoryPageResp, error)
 	GetArticle(ctx context.Context, req *GetArticleReq) (*ArticleDetail, error)
 	ViewArticle(ctx context.Context, req *ViewArticleReq) error

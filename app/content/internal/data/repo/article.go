@@ -582,14 +582,6 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 				query = query.Where(articleent.PublishedAtIsNil())
 			}
 		}
-		if filter.Keyword != nil {
-			query = query.Where(
-				articleent.Or(
-					articleent.TitleContains(*filter.Keyword),
-					articleent.ContentContains(*filter.Keyword),
-				),
-			)
-		}
 		if filter.Order != nil {
 			switch *filter.Order {
 			case enum.ArticleOrderNewest:

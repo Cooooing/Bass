@@ -9,6 +9,7 @@ import (
 // BizProviderSet 提供 biz 层依赖集合
 var BizProviderSet = wire.NewSet(
 	usecase.NewArticleAccessUsecase,
+	usecase.NewArticleSearchUsecase,
 	usecase.NewCommentAccessUsecase,
 	usecase.NewArticleUsecase,
 	usecase.NewCommentUsecase,

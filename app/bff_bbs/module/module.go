@@ -9,6 +9,7 @@ import (
 	"common/pkg/client/rpc"
 	commonmodule "common/pkg/module"
 	"common/pkg/server"
+	"common/proto/gen/common"
 	userv1 "common/proto/gen/user/v1"
 
 	"github.com/go-kratos/kratos/v3/middleware"
@@ -17,7 +18,10 @@ import (
 
 // ProviderSet 提供 BBS 模块的依赖项。
 var ProviderSet = wire.NewSet(
+	ProvideBootstrap,
+	ProvideCommonServer,
 	rpc.LocalProviderSet,
+	commonmodule.InfrastructureProviderSet,
 	data.ModuleProviderSet,
 	biz.BizProviderSet,
 	service.ServiceProviderSet,
@@ -36,6 +40,9 @@ func newModule(config *Config, services []server.Service, userAuthClient userv1.
 	return &Module{Name: config.Server().GetName(), Services: services, UserAuthClient: userAuthClient}
 }
 
+func ProvideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
+func ProvideCommonServer(c *Config) *common.Server { return c.Server() }
+
 func (m *Module) HTTPMiddlewares() []middleware.Middleware {
 	return bbsserver.NewHTTPAuthMiddlewares(m.UserAuthClient)
 }
@@ -50,7 +57,7 @@ func Build(runtime *commonmodule.Runtime, name string) (commonmodule.Mounted, fu
 	if err != nil {
 		return commonmodule.Mounted{}, func() {}, err
 	}
-	module, err := wireModule(moduleConfig, runtime.Clients)
+	module, err := wireModule(moduleConfig, runtime.Logger, runtime.Clients, runtime.Infrastructure)
 	if err != nil {
 		return commonmodule.Mounted{}, func() {}, err
 	}

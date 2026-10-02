@@ -14,7 +14,9 @@ import (
 var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
 	commonClient.NewObservability,
+	commonClient.NewRedisClient,
 	ProvideConsul,
+	ProvideRedis,
 	commonClient.NewConsulClient,
 	rpc.ProvideUserClient,
 	rpc.ProvideContentClient,
@@ -38,6 +40,7 @@ var ModuleProviderSet = wire.NewSet(
 	NewOtpClient,
 	NewCheckinClient,
 	NewContentArticleClient,
+	NewArticleSearchRateLimitCache,
 	NewContentPostscriptClient,
 	NewContentCommentClient,
 	NewContentDomainClient,
@@ -48,6 +51,10 @@ var ModuleProviderSet = wire.NewSet(
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul
+}
+
+func ProvideRedis(c *config.Bootstrap) *common.Redis {
+	return c.Redis
 }
 
 func ProvideUserAuthClient(userClient *rpc.UserClient) userv1.AuthServiceClient {

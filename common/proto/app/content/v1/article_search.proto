@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package common.api.app.content.v1;
+
+import "content/v1/article.proto";
+
+option go_package = "common/proto/gen/content/v1;v1";
+
+// ContentArticleSearchService provides public article keyword search.
+service ContentArticleSearchService {
+  rpc SearchPublic(SearchPublicArticles.Req) returns (SearchPublicArticles.Resp) {}
+}
+
+message SearchPublicArticles {
+  message Req {
+    string query = 1; // 搜索词
+    optional string cursor = 2; // 不透明续页游标
+    uint32 size = 3; // 返回条数
+  }
+  message Resp {
+    repeated Article rows = 1; // 公开文章
+    optional string next_cursor = 2; // 下一页游标
+  }
+}

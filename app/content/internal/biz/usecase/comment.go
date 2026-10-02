@@ -193,13 +193,14 @@ func (d *CommentUsecase) Page(ctx context.Context, req *CommentPageReq) (*Commen
 }
 
 type CommentListReplyPreviewsReq struct {
-	Access         *model.ContentAccess
-	ArticleID      int64
-	ParentIDs      []int64
-	LimitPerParent int32
-	Restriction    *enum.ContentRestriction
-	Restrictions   []enum.ContentRestriction
-	Order          *enum.CommentOrder
+	Access          *model.ContentAccess
+	ArticleID       int64
+	ParentIDs       []int64
+	LimitPerParent  int32
+	Restriction     *enum.ContentRestriction
+	Restrictions    []enum.ContentRestriction
+	Order           *enum.CommentOrder
+	ExcludedUserIDs []int64
 }
 
 type CommentChildPreview struct {
@@ -215,10 +216,11 @@ func (d *CommentUsecase) ListReplyPreviews(ctx context.Context, req *CommentList
 	}
 	previews, err := d.commentRepo.ListReplyPreviews(ctx, &repo.CommentReplyPreviewReq{
 		Filter: &model.CommentFilter{
-			ArticleID:    new(articleID),
-			Restriction:  req.Restriction,
-			Restrictions: req.Restrictions,
-			Order:        req.Order,
+			ArticleID:       new(articleID),
+			Restriction:     req.Restriction,
+			Restrictions:    req.Restrictions,
+			Order:           req.Order,
+			ExcludedUserIDs: req.ExcludedUserIDs,
 		},
 		Scope:          scope,
 		ParentIDs:      req.ParentIDs,
@@ -236,7 +238,7 @@ func (d *CommentUsecase) ListReplyPreviews(ctx context.Context, req *CommentList
 	return rows, nil
 }
 
-func (d *CommentUsecase) MapArticleLastComments(ctx context.Context, articleIDs []int64) (map[int64]*model.
+func (d *CommentUsecase) MapArticleLastComments(ctx context.Context, articleIDs []int64, excludedUserIDs []int64) (map[int64]*model.
 	Comment, error) {
 	articleIds := articleIDs
 	if len(articleIds) == 0 {
@@ -249,6 +251,7 @@ func (d *CommentUsecase) MapArticleLastComments(ctx context.Context, articleIDs 
 				enum.ContentRestrictionNone,
 				enum.ContentRestrictionLocked,
 			},
+			ExcludedUserIDs: excludedUserIDs,
 		},
 	})
 	if err != nil {

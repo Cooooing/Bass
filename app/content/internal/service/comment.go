@@ -247,15 +247,16 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Req) (*v
 			Size: 1000,
 		},
 		Filter: &model.CommentFilter{
-			CommentID:    req.Query.CommentId,
-			ParentID:     req.Query.ParentId,
-			ReplyID:      req.Query.ReplyId,
-			ArticleID:    req.Query.ArticleId,
-			CreatedBy:    req.Query.UserId,
-			Restriction:  restriction,
-			Restrictions: restrictions,
-			Level:        req.Query.Level,
-			Order:        dbOrder,
+			CommentID:       req.Query.CommentId,
+			ParentID:        req.Query.ParentId,
+			ReplyID:         req.Query.ReplyId,
+			ArticleID:       req.Query.ArticleId,
+			CreatedBy:       req.Query.UserId,
+			Restriction:     restriction,
+			Restrictions:    restrictions,
+			Level:           req.Query.Level,
+			Order:           dbOrder,
+			ExcludedUserIDs: req.Query.GetExcludedUserIds(),
 		},
 	})
 	if err != nil {
@@ -338,15 +339,16 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v
 		Access: access,
 		Page:   commonmodel.PageReqFromProto(req.GetPage()),
 		Filter: &model.CommentFilter{
-			CommentID:    req.Query.CommentId,
-			ParentID:     req.Query.ParentId,
-			ReplyID:      req.Query.ReplyId,
-			ArticleID:    req.Query.ArticleId,
-			CreatedBy:    req.Query.UserId,
-			Restriction:  restriction,
-			Restrictions: restrictions,
-			Level:        req.Query.Level,
-			Order:        dbOrder,
+			CommentID:       req.Query.CommentId,
+			ParentID:        req.Query.ParentId,
+			ReplyID:         req.Query.ReplyId,
+			ArticleID:       req.Query.ArticleId,
+			CreatedBy:       req.Query.UserId,
+			Restriction:     restriction,
+			Restrictions:    restrictions,
+			Level:           req.Query.Level,
+			Order:           dbOrder,
+			ExcludedUserIDs: req.Query.GetExcludedUserIds(),
 		},
 	})
 	if err != nil {
@@ -430,13 +432,14 @@ func (s *CommentService) ListReplyPreviews(ctx context.Context, req *v1.ListComm
 		dbOrder = new(order)
 	}
 	previewsResp, err := s.commentUsecase.ListReplyPreviews(ctx, &usecase.CommentListReplyPreviewsReq{
-		Access:         access,
-		ArticleID:      req.ArticleId,
-		ParentIDs:      req.ParentIds,
-		LimitPerParent: req.LimitPerParent,
-		Restriction:    restriction,
-		Restrictions:   restrictions,
-		Order:          dbOrder,
+		Access:          access,
+		ArticleID:       req.ArticleId,
+		ParentIDs:       req.ParentIds,
+		LimitPerParent:  req.LimitPerParent,
+		Restriction:     restriction,
+		Restrictions:    restrictions,
+		Order:           dbOrder,
+		ExcludedUserIDs: req.GetExcludedUserIds(),
 	})
 	if err != nil {
 		return nil, err
@@ -502,7 +505,7 @@ func (s *CommentService) MapViewerActionStates(ctx context.Context, req *v1.MapC
 }
 
 func (s *CommentService) MapArticleLastComments(ctx context.Context, req *v1.MapArticleLastComments_Req) (*v1.MapArticleLastComments_Resp, error) {
-	commentsResp, err := s.commentUsecase.MapArticleLastComments(ctx, req.ArticleIds)
+	commentsResp, err := s.commentUsecase.MapArticleLastComments(ctx, req.ArticleIds, req.GetExcludedUserIds())
 	if err != nil {
 		return nil, err
 	}

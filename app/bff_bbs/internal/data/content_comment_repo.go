@@ -91,12 +91,13 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListC
 		query = &repo.CommentQuery{}
 	}
 	contentQuery := &contentv1.PageComments_Req_CommentQueryParams{
-		CommentId: query.CommentID,
-		ArticleId: query.ArticleID,
-		ParentId:  query.ParentID,
-		ReplyId:   query.ReplyID,
-		Level:     query.Level,
-		UserId:    query.UserID,
+		CommentId:       query.CommentID,
+		ArticleId:       query.ArticleID,
+		ParentId:        query.ParentID,
+		ReplyId:         query.ReplyID,
+		Level:           query.Level,
+		UserId:          query.UserID,
+		ExcludedUserIds: query.ExcludedUserIDs,
 	}
 	if query.Restriction != nil {
 		contentQuery.Restriction = new(contentv1enum.ContentRestriction(*query.Restriction))
@@ -170,9 +171,10 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page: pageReq.ToProto(),
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
-			ArticleId: new(req.ArticleID),
-			Level:     new(int32(1)),
-			Order:     new(order),
+			ArticleId:       new(req.ArticleID),
+			Level:           new(int32(1)),
+			Order:           new(order),
+			ExcludedUserIds: req.ExcludedUserIDs,
 		},
 		Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
 	})
@@ -195,11 +197,12 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 			previewLimit = 5
 		}
 		previews, err := r.contentClient.Comment.ListReplyPreviews(ctx, &contentv1.ListCommentReplyPreviews_Req{
-			ArticleId:      req.ArticleID,
-			ParentIds:      rootIDs,
-			LimitPerParent: previewLimit,
-			Order:          new(contentv1enum.CommentOrder_COMMENT_ORDER_OLDEST),
-			Access:         &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
+			ArticleId:       req.ArticleID,
+			ParentIds:       rootIDs,
+			LimitPerParent:  previewLimit,
+			Order:           new(contentv1enum.CommentOrder_COMMENT_ORDER_OLDEST),
+			Access:          &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
+			ExcludedUserIds: req.ExcludedUserIDs,
 		})
 		if err != nil {
 			return nil, err
@@ -295,9 +298,10 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page: pageReq.ToProto(),
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
-			ArticleId: new(req.ArticleID),
-			ParentId:  new(req.ParentID),
-			Order:     new(order),
+			ArticleId:       new(req.ArticleID),
+			ParentId:        new(req.ParentID),
+			Order:           new(order),
+			ExcludedUserIds: req.ExcludedUserIDs,
 		},
 		Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
 	})
@@ -349,8 +353,9 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page: pageReq.ToProto(),
 		Query: &contentv1.PageComments_Req_CommentQueryParams{
-			ArticleId: new(req.ArticleID),
-			Order:     new(order),
+			ArticleId:       new(req.ArticleID),
+			Order:           new(order),
+			ExcludedUserIds: req.ExcludedUserIDs,
 		},
 		Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
 	})

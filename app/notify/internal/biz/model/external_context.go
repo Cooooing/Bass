@@ -8,6 +8,11 @@ type UserAccount struct {
 	Email    string
 }
 
+type RelationStatus struct {
+	Blocking  bool
+	BlockedBy bool
+}
+
 type ContentArticle struct {
 	ID             int64
 	Title          string

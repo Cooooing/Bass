@@ -6,9 +6,11 @@ import (
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"context"
+	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -85,9 +87,10 @@ func (u *MoonbreezeUsecase) Create(ctx context.Context, req *CreateMoonbreezeReq
 }
 
 type PageMoonbreezesReq struct {
-	AuthorIDs []int64
-	Cursor    *string
-	Size      int
+	AuthorIDs         []int64
+	ExcludedAuthorIDs []int64
+	Cursor            *string
+	Size              int
 }
 
 type PageMoonbreezesResp struct {
@@ -99,7 +102,7 @@ func (u *MoonbreezeUsecase) Page(ctx context.Context, req *PageMoonbreezesReq) (
 	if req == nil {
 		req = &PageMoonbreezesReq{}
 	}
-	beforeAt, beforeID, err := u.decodeCursor(req.Cursor)
+	beforeAt, beforeID, err := u.decodeCursor(req.Cursor, req.ExcludedAuthorIDs)
 	if err != nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}
@@ -111,10 +114,11 @@ func (u *MoonbreezeUsecase) Page(ctx context.Context, req *PageMoonbreezesReq) (
 	// It also keeps the public cursor positioned exactly after the last returned
 	// row, which is essential when multiple rows share one created_at value.
 	page, err := u.moonbreezeRepo.Page(ctx, &repo.MoonbreezePageReq{
-		AuthorIDs: req.AuthorIDs,
-		BeforeAt:  beforeAt,
-		BeforeID:  beforeID,
-		Size:      size + 1,
+		AuthorIDs:         req.AuthorIDs,
+		ExcludedAuthorIDs: req.ExcludedAuthorIDs,
+		BeforeAt:          beforeAt,
+		BeforeID:          beforeID,
+		Size:              size + 1,
 	})
 	if err != nil {
 		return nil, err
@@ -122,18 +126,19 @@ func (u *MoonbreezeUsecase) Page(ctx context.Context, req *PageMoonbreezesReq) (
 	result := &PageMoonbreezesResp{Rows: page.Rows}
 	if len(page.Rows) > size {
 		result.Rows = page.Rows[:size]
-		result.NextCursor = u.encodeCursor(result.Rows[len(result.Rows)-1])
+		result.NextCursor = u.encodeCursor(result.Rows[len(result.Rows)-1], req.ExcludedAuthorIDs)
 	}
 	return result, nil
 }
 
 // MoonbreezeCursor is the opaque cursor payload for stable dynamic pagination.
 type MoonbreezeCursor struct {
-	CreatedAt time.Time `json:"created_at"`
-	ID        int64     `json:"id"`
+	CreatedAt          time.Time `json:"created_at"`
+	ID                 int64     `json:"id"`
+	ExcludedAuthorHash string    `json:"excluded_author_hash"`
 }
 
-func (*MoonbreezeUsecase) decodeCursor(value *string) (*time.Time, *int64, error) {
+func (u *MoonbreezeUsecase) decodeCursor(value *string, excludedAuthorIDs []int64) (*time.Time, *int64, error) {
 	if value == nil || *value == "" {
 		return nil, nil, nil
 	}
@@ -142,23 +147,32 @@ func (*MoonbreezeUsecase) decodeCursor(value *string) (*time.Time, *int64, error
 		return nil, nil, err
 	}
 	var cursor MoonbreezeCursor
-	if err = json.Unmarshal(decoded, &cursor); err != nil || cursor.ID <= 0 || cursor.CreatedAt.IsZero() {
+	if err = json.Unmarshal(decoded, &cursor); err != nil || cursor.ID <= 0 || cursor.CreatedAt.IsZero() || cursor.ExcludedAuthorHash != u.excludedAuthorHash(excludedAuthorIDs) {
 		return nil, nil, errors.New("invalid moonbreeze cursor")
 	}
 	return &cursor.CreatedAt, &cursor.ID, nil
 }
 
-func (*MoonbreezeUsecase) encodeCursor(row *model.Moonbreeze) *string {
+func (u *MoonbreezeUsecase) encodeCursor(row *model.Moonbreeze, excludedAuthorIDs []int64) *string {
 	if row == nil || row.CreatedAt == nil {
 		return nil
 	}
 	encoded, err := json.Marshal(MoonbreezeCursor{
-		CreatedAt: row.CreatedAt.UTC(),
-		ID:        row.ID,
+		CreatedAt:          row.CreatedAt.UTC(),
+		ID:                 row.ID,
+		ExcludedAuthorHash: u.excludedAuthorHash(excludedAuthorIDs),
 	})
 	if err != nil {
 		return nil
 	}
 	value := base64.RawURLEncoding.EncodeToString(encoded)
 	return &value
+}
+
+func (*MoonbreezeUsecase) excludedAuthorHash(userIDs []int64) string {
+	values := append([]int64(nil), userIDs...)
+	sort.Slice(values, func(i int, j int) bool { return values[i] < values[j] })
+	encoded, _ := json.Marshal(values)
+	sum := sha256.Sum256(encoded)
+	return base64.RawURLEncoding.EncodeToString(sum[:])
 }

@@ -101,6 +101,9 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 	if err != nil {
 		return nil, err
 	}
+	if err = u.ensureUnblocked(ctx, viewerID, account.ID); err != nil {
+		return nil, err
+	}
 	privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, account.ID)
 	if err != nil {
 		return nil, err
@@ -156,6 +159,9 @@ func (u *AccountUsecase) ListFollowing(ctx context.Context, name string, viewerI
 	if err != nil {
 		return nil, err
 	}
+	if err = u.ensureUnblocked(ctx, viewerID, account.ID); err != nil {
+		return nil, err
+	}
 	privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, account.ID)
 	if err != nil {
 		return nil, err
@@ -163,7 +169,11 @@ func (u *AccountUsecase) ListFollowing(ctx context.Context, name string, viewerI
 	if viewerID != account.ID && privacy.PublicFollowingList != nil && !*privacy.PublicFollowingList {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWING_LIST_PRIVATE)
 	}
-	result, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{ActorID: account.ID, Page: page})
+	excludedUserIDs, err := u.blockedCounterparts(ctx, viewerID)
+	if err != nil {
+		return nil, err
+	}
+	result, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{ActorID: account.ID, Page: page, ExcludedUserIDs: excludedUserIDs})
 	if err != nil {
 		return nil, err
 	}
@@ -175,6 +185,9 @@ func (u *AccountUsecase) ListFollowers(ctx context.Context, name string, viewerI
 	if err != nil {
 		return nil, err
 	}
+	if err = u.ensureUnblocked(ctx, viewerID, account.ID); err != nil {
+		return nil, err
+	}
 	privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, account.ID)
 	if err != nil {
 		return nil, err
@@ -182,7 +195,11 @@ func (u *AccountUsecase) ListFollowers(ctx context.Context, name string, viewerI
 	if viewerID != account.ID && privacy.PublicFollowerList != nil && !*privacy.PublicFollowerList {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWER_LIST_PRIVATE)
 	}
-	result, err := u.relationClient.ListFollowers(ctx, &repo.ListFollowersRelationsReq{ActorID: account.ID, Page: page})
+	excludedUserIDs, err := u.blockedCounterparts(ctx, viewerID)
+	if err != nil {
+		return nil, err
+	}
+	result, err := u.relationClient.ListFollowers(ctx, &repo.ListFollowersRelationsReq{ActorID: account.ID, Page: page, ExcludedUserIDs: excludedUserIDs})
 	if err != nil {
 		return nil, err
 	}
@@ -289,6 +306,30 @@ func (*AccountUsecase) profileRelation(status *repo.RelationStatus) *bbsuserv1.P
 		Blocking:   status.Blocking,
 		BlockedBy:  status.BlockedBy,
 	}
+}
+
+func (u *AccountUsecase) blockedCounterparts(ctx context.Context, userID int64) ([]int64, error) {
+	if userID <= 0 || u.relationClient == nil {
+		return []int64{}, nil
+	}
+	return u.relationClient.ListBlockedCounterparts(ctx, userID)
+}
+
+func (u *AccountUsecase) ensureUnblocked(ctx context.Context, viewerID int64, targetID int64) error {
+	if viewerID <= 0 || targetID <= 0 || viewerID == targetID || u.relationClient == nil {
+		return nil
+	}
+	statuses, err := u.relationClient.MapStatus(ctx, viewerID, []int64{targetID})
+	if err != nil {
+		return err
+	}
+	// A blocker must retain the target's profile as the only ordinary BFF
+	// surface from which they can undo their own block. Being blocked by the
+	// target remains indistinguishable from an absent profile.
+	if status := statuses[targetID]; status != nil && status.BlockedBy {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND)
+	}
+	return nil
 }
 
 func (*AccountUsecase) profilePage(page *commonmodel.PageResp) *commonv1.PageResp {

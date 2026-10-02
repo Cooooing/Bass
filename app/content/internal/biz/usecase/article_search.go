@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
+	"sort"
 	"strings"
 	"time"
 
@@ -38,9 +39,10 @@ func NewArticleSearchUsecase(
 }
 
 type SearchPublicArticlesReq struct {
-	Query  string
-	Cursor *string
-	Size   int
+	Query             string
+	Cursor            *string
+	Size              int
+	ExcludedAuthorIDs []int64
 }
 
 type SearchPublicArticlesResp struct {
@@ -62,7 +64,7 @@ func (u *ArticleSearchUsecase) SearchPublic(
 	if !u.validQuery(query) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	cursor, err := u.decodeCursor(req.Cursor, query)
+	cursor, err := u.decodeCursor(req.Cursor, query, req.ExcludedAuthorIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -83,9 +85,10 @@ func (u *ArticleSearchUsecase) SearchPublic(
 	published := enum.ArticlePublishStatusPublished
 	public := enum.ArticleVisibilityPublic
 	articles, err := u.articleRepo.Map(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{
-		ArticleIDs:    articleIDs,
-		PublishStatus: &published,
-		Visibility:    &public,
+		ArticleIDs:        articleIDs,
+		ExcludedAuthorIDs: req.ExcludedAuthorIDs,
+		PublishStatus:     &published,
+		Visibility:        &public,
 		Restrictions: []enum.ContentRestriction{
 			enum.ContentRestrictionNone,
 			enum.ContentRestrictionLocked,
@@ -106,7 +109,7 @@ func (u *ArticleSearchUsecase) SearchPublic(
 		}
 	}
 	if search.HasMore && last != nil {
-		result.NextCursor = u.encodeCursor(query, &repo.ArticleSearchCursor{
+		result.NextCursor = u.encodeCursor(query, req.ExcludedAuthorIDs, &repo.ArticleSearchCursor{
 			Rank:        last.Rank,
 			PublishedAt: last.PublishedAt,
 			ArticleID:   last.ArticleID,
@@ -116,10 +119,11 @@ func (u *ArticleSearchUsecase) SearchPublic(
 }
 
 type ArticleSearchCursorPayload struct {
-	QueryHash   string    `json:"query_hash"`
-	Rank        int       `json:"rank"`
-	PublishedAt time.Time `json:"published_at"`
-	ArticleID   int64     `json:"article_id"`
+	QueryHash          string    `json:"query_hash"`
+	ExcludedAuthorHash string    `json:"excluded_author_hash"`
+	Rank               int       `json:"rank"`
+	PublishedAt        time.Time `json:"published_at"`
+	ArticleID          int64     `json:"article_id"`
 }
 
 func (u *ArticleSearchUsecase) validQuery(query string) bool {
@@ -137,7 +141,7 @@ func (u *ArticleSearchUsecase) pageSize(size int) int {
 	return size
 }
 
-func (u *ArticleSearchUsecase) decodeCursor(value *string, query string) (*repo.ArticleSearchCursor, error) {
+func (u *ArticleSearchUsecase) decodeCursor(value *string, query string, excludedAuthorIDs []int64) (*repo.ArticleSearchCursor, error) {
 	if value == nil || strings.TrimSpace(*value) == "" {
 		return nil, nil
 	}
@@ -148,6 +152,7 @@ func (u *ArticleSearchUsecase) decodeCursor(value *string, query string) (*repo.
 	var cursor ArticleSearchCursorPayload
 	if err = json.Unmarshal(encoded, &cursor); err != nil ||
 		cursor.QueryHash != u.queryHash(query) ||
+		cursor.ExcludedAuthorHash != u.excludedAuthorHash(excludedAuthorIDs) ||
 		cursor.Rank < 0 || cursor.Rank > 2 || cursor.ArticleID <= 0 || cursor.PublishedAt.IsZero() {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -158,21 +163,30 @@ func (u *ArticleSearchUsecase) decodeCursor(value *string, query string) (*repo.
 	}, nil
 }
 
-func (u *ArticleSearchUsecase) encodeCursor(query string, cursor *repo.ArticleSearchCursor) *string {
+func (u *ArticleSearchUsecase) encodeCursor(query string, excludedAuthorIDs []int64, cursor *repo.ArticleSearchCursor) *string {
 	if cursor == nil || cursor.ArticleID <= 0 || cursor.PublishedAt.IsZero() {
 		return nil
 	}
 	encoded, err := json.Marshal(ArticleSearchCursorPayload{
-		QueryHash:   u.queryHash(query),
-		Rank:        cursor.Rank,
-		PublishedAt: cursor.PublishedAt.UTC(),
-		ArticleID:   cursor.ArticleID,
+		QueryHash:          u.queryHash(query),
+		ExcludedAuthorHash: u.excludedAuthorHash(excludedAuthorIDs),
+		Rank:               cursor.Rank,
+		PublishedAt:        cursor.PublishedAt.UTC(),
+		ArticleID:          cursor.ArticleID,
 	})
 	if err != nil {
 		return nil
 	}
 	value := base64.RawURLEncoding.EncodeToString(encoded)
 	return &value
+}
+
+func (*ArticleSearchUsecase) excludedAuthorHash(userIDs []int64) string {
+	values := append([]int64(nil), userIDs...)
+	sort.Slice(values, func(i int, j int) bool { return values[i] < values[j] })
+	encoded, _ := json.Marshal(values)
+	sum := sha256.Sum256(encoded)
+	return base64.RawURLEncoding.EncodeToString(sum[:])
 }
 
 func (*ArticleSearchUsecase) queryHash(query string) string {

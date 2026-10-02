@@ -68,8 +68,9 @@ func (s *RelationService) Unblock(ctx context.Context, req *v1.UnblockRelation_R
 func (s *RelationService) ListFollowing(ctx context.Context, req *v1.ListFollowingRelations_Req) (*v1.ListFollowingRelations_Resp, error) {
 	req = util.OrDefault(req, &v1.ListFollowingRelations_Req{})
 	res, err := s.relationUsecase.ListFollowing(ctx, &usecase.ListFollowingRelationsReq{
-		Page:    commonmodel.PageReqFromProto(req.GetPage()),
-		ActorID: req.GetUserId(),
+		Page:            commonmodel.PageReqFromProto(req.GetPage()),
+		ActorID:         req.GetUserId(),
+		ExcludedUserIDs: req.GetExcludedUserIds(),
 	})
 	if err != nil {
 		return nil, err
@@ -100,8 +101,9 @@ func (s *RelationService) ListFollowers(ctx context.Context, req *v1.ListFollowe
 	req = util.OrDefault(req, &v1.ListFollowersRelations_Req{})
 	targetID := req.GetUserId()
 	res, err := s.relationUsecase.ListFollowers(ctx, &usecase.ListFollowersRelationsReq{
-		Page:     commonmodel.PageReqFromProto(req.GetPage()),
-		TargetID: targetID,
+		Page:            commonmodel.PageReqFromProto(req.GetPage()),
+		TargetID:        targetID,
+		ExcludedUserIDs: req.GetExcludedUserIds(),
 	})
 	if err != nil {
 		return nil, err
@@ -184,4 +186,12 @@ func (s *RelationService) MapStatus(ctx context.Context, req *v1.MapRelationStat
 	return &v1.MapRelationStatuses_Resp{
 		Statuses: statuses,
 	}, nil
+}
+
+func (s *RelationService) ListBlockedCounterparts(ctx context.Context, req *v1.ListBlockedCounterparts_Req) (*v1.ListBlockedCounterparts_Resp, error) {
+	rows, err := s.relationUsecase.ListBlockedCounterparts(ctx, req.GetUserId())
+	if err != nil {
+		return nil, err
+	}
+	return &v1.ListBlockedCounterparts_Resp{UserIds: rows}, nil
 }

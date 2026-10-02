@@ -568,6 +568,9 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 		if filter.AuthorID != nil {
 			query = query.Where(articleent.CreatedByEQ(*filter.AuthorID))
 		}
+		if len(filter.ExcludedAuthorIDs) > 0 {
+			query = query.Where(articleent.CreatedByNotIn(filter.ExcludedAuthorIDs...))
+		}
 		if filter.Type != nil {
 			query = query.Where(articleent.TypeEQ(articleent.Type(*filter.Type)))
 		}

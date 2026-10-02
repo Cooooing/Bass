@@ -17,6 +17,7 @@ type RelationClient interface {
 	ListBlocked(ctx context.Context, req *ListBlockedRelationsReq) (*ListBlockedRelationsResp, error)
 	GetStatus(ctx context.Context, req *GetStatusRelationReq) (*RelationStatus, error)
 	MapStatus(ctx context.Context, actorID int64, targetIDs []int64) (map[int64]*RelationStatus, error)
+	ListBlockedCounterparts(ctx context.Context, userID int64) ([]int64, error)
 }
 
 type FollowRelationReq struct {
@@ -40,8 +41,9 @@ type UnblockRelationReq struct {
 }
 
 type ListFollowingRelationsReq struct {
-	ActorID int64
-	Page    *commonmodel.PageReq
+	ActorID         int64
+	Page            *commonmodel.PageReq
+	ExcludedUserIDs []int64
 }
 
 type ListFollowingRelationsResp struct {
@@ -50,8 +52,9 @@ type ListFollowingRelationsResp struct {
 }
 
 type ListFollowersRelationsReq struct {
-	ActorID int64
-	Page    *commonmodel.PageReq
+	ActorID         int64
+	Page            *commonmodel.PageReq
+	ExcludedUserIDs []int64
 }
 
 type ListFollowersRelationsResp struct {

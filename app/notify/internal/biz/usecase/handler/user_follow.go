@@ -1,12 +1,16 @@
 package handler
 
 import (
+	"fmt"
+
+	commonenum "common/pkg/enum"
 	"context"
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
 	notifyenum "notify/internal/enum"
+	notifytemplate "notify/template"
 )
 
 type UserFollowHandler struct {
@@ -27,7 +31,18 @@ func NewUserFollowHandler(
 }
 
 func (h *UserFollowHandler) Templates() []*model.NotificationTemplateDefinition {
-	return nil
+	return []*model.NotificationTemplateDefinition{
+		{
+			EventType: commonenum.EventTypeUserFollow,
+			Channel:   notifyenum.NotificationChannelStation,
+			Language:  notifyenum.LanguageZhCN,
+			Enabled:   true,
+			StationTemplate: &model.NotificationStationTemplateDefinition{
+				TitleTemplate:   notifytemplate.MustReadTemplate("station/user_follow.zh_CN.title.txt"),
+				ContentTemplate: notifytemplate.MustReadTemplate("station/user_follow.zh_CN.content.txt"),
+			},
+		},
+	}
 }
 
 func (h *UserFollowHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -50,6 +65,8 @@ func (h *UserFollowHandler) Handle(ctx context.Context, req *usecase.EventHandle
 	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
 		EventID:      event.GetEventId(),
 		EventType:    req.EventType,
+		ActorUserID:  new(payload.GetSenderId()),
+		BusinessKey:  new(fmt.Sprintf("user-follow:v1:%d:%d", payload.GetSenderId(), payload.GetFollowedId())),
 		Language:     req.Language,
 		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 		TemplateData: templateData,

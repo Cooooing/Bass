@@ -88,6 +88,7 @@ func (h *CommentPublishedHandler) Handle(ctx context.Context, req *usecase.Event
 	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
 		EventID:      event.GetEventId(),
 		EventType:    req.EventType,
+		ActorUserID:  new(comment.UserID),
 		Language:     req.Language,
 		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 		TemplateData: templateData,

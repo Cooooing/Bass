@@ -20,6 +20,7 @@ type ContentArticleUsecase struct {
 	contentArticleClient        repo.ContentArticleClient
 	assetClient                 repo.AssetClient
 	privacyClient               repo.PrivacySettingClient
+	relationClient              repo.RelationClient
 	ipResolutionClient          repo.IPResolutionClient
 	articleSearchRateLimitCache repo.ArticleSearchRateLimitCache
 }
@@ -28,6 +29,7 @@ func NewContentArticleUsecase(
 	contentArticleClient repo.ContentArticleClient,
 	assetClient repo.AssetClient,
 	privacyClient repo.PrivacySettingClient,
+	relationClient repo.RelationClient,
 	ipResolutionClient repo.IPResolutionClient,
 	articleSearchRateLimitCache repo.ArticleSearchRateLimitCache,
 ) *ContentArticleUsecase {
@@ -35,6 +37,7 @@ func NewContentArticleUsecase(
 		contentArticleClient:        contentArticleClient,
 		assetClient:                 assetClient,
 		privacyClient:               privacyClient,
+		relationClient:              relationClient,
 		ipResolutionClient:          ipResolutionClient,
 		articleSearchRateLimitCache: articleSearchRateLimitCache,
 	}
@@ -194,7 +197,11 @@ func (u *ContentArticleUsecase) PageViewHistory(
 	if page != nil {
 		requestPage = &commonmodel.PageReq{Page: page.Page, Size: page.Size}
 	}
-	result, err := u.contentArticleClient.PageViewHistory(ctx, userID, requestPage)
+	excludedAuthorIDs, err := u.blockedCounterparts(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	result, err := u.contentArticleClient.PageViewHistory(ctx, userID, requestPage, excludedAuthorIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -232,6 +239,13 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 	if req.Query != nil {
 		query = &repo.ArticleQuery{TagID: req.Query.TagID, DomainID: req.Query.DomainID, AuthorID: req.Query.AuthorID, Type: req.Query.Type, Order: req.Query.Order, PublishStatus: req.Query.PublishStatus, PublishStatuses: req.Query.PublishStatuses, Visibility: req.Query.Visibility, Visibilities: req.Query.Visibilities, Scheduled: req.Query.Scheduled}
 	}
+	if query != nil {
+		excludedAuthorIDs, err := u.blockedCounterparts(ctx, req.UserID)
+		if err != nil {
+			return nil, err
+		}
+		query.ExcludedAuthorIDs = excludedAuthorIDs
+	}
 	resp, err := u.contentArticleClient.ListArticles(ctx, &repo.ListArticlesReq{UserID: req.UserID, Page: page, Query: query})
 	if err != nil {
 		return nil, err
@@ -256,12 +270,17 @@ func (u *ContentArticleUsecase) SearchArticles(ctx context.Context, req *SearchA
 	if err := u.allowArticleSearch(ctx, req); err != nil {
 		return nil, err
 	}
+	excludedAuthorIDs, err := u.blockedCounterparts(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
 	result, err := u.contentArticleClient.SearchArticles(ctx, &repo.SearchArticlesReq{
-		UserID:   req.UserID,
-		ClientIP: req.ClientIP,
-		Query:    req.Query,
-		Cursor:   req.Cursor,
-		Size:     req.Size,
+		UserID:            req.UserID,
+		ClientIP:          req.ClientIP,
+		Query:             req.Query,
+		Cursor:            req.Cursor,
+		Size:              req.Size,
+		ExcludedAuthorIDs: excludedAuthorIDs,
 	})
 	if err != nil {
 		return nil, err
@@ -276,6 +295,27 @@ func (u *ContentArticleUsecase) SearchArticles(ctx context.Context, req *SearchA
 		return nil, err
 	}
 	return &SearchArticlesResp{Rows: result.Rows, NextCursor: result.NextCursor}, nil
+}
+
+func (u *ContentArticleUsecase) blockedCounterparts(ctx context.Context, userID int64) ([]int64, error) {
+	if userID <= 0 || u.relationClient == nil {
+		return []int64{}, nil
+	}
+	return u.relationClient.ListBlockedCounterparts(ctx, userID)
+}
+
+func (u *ContentArticleUsecase) ensureUnblocked(ctx context.Context, userID int64, targetID int64) error {
+	if userID <= 0 || targetID <= 0 || userID == targetID || u.relationClient == nil {
+		return nil
+	}
+	statuses, err := u.relationClient.MapStatus(ctx, userID, []int64{targetID})
+	if err != nil {
+		return err
+	}
+	if status := statuses[targetID]; status != nil && (status.Blocking || status.BlockedBy) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	return nil
 }
 
 func (u *ContentArticleUsecase) allowArticleSearch(ctx context.Context, req *SearchArticlesReq) error {
@@ -331,6 +371,9 @@ func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleR
 	}
 	if resp.CreatedBy == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	if err = u.ensureUnblocked(ctx, req.UserID, *resp.CreatedBy); err != nil {
+		return nil, err
 	}
 	if req.UserID != *resp.CreatedBy {
 		privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, *resp.CreatedBy)
@@ -396,6 +439,9 @@ func (u *ContentArticleUsecase) ViewArticle(ctx context.Context, req *ViewArticl
 	if req == nil {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
+	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
+		return err
+	}
 	return u.contentArticleClient.ViewArticle(ctx, &repo.ViewArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, IP: req.IP, UserAgent: req.UserAgent})
 }
 
@@ -421,17 +467,43 @@ type RewardArticleReq struct {
 }
 
 func (u *ContentArticleUsecase) LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error) {
+	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
+		return false, err
+	}
 	return u.contentArticleClient.LikeArticle(ctx, &repo.LikeArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
 }
 
 func (u *ContentArticleUsecase) ThankArticle(ctx context.Context, req *ThankArticleReq) (bool, error) {
+	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
+		return false, err
+	}
 	return u.contentArticleClient.ThankArticle(ctx, &repo.ThankArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
 }
 
 func (u *ContentArticleUsecase) CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error) {
+	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
+		return false, err
+	}
 	return u.contentArticleClient.CollectArticle(ctx, &repo.CollectArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
 }
 
 func (u *ContentArticleUsecase) RewardArticle(ctx context.Context, req *RewardArticleReq) error {
+	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
+		return err
+	}
 	return u.contentArticleClient.RewardArticle(ctx, &repo.RewardArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Points: req.Points})
+}
+
+func (u *ContentArticleUsecase) ensureArticleUnblocked(ctx context.Context, userID int64, articleID int64) error {
+	if userID <= 0 || articleID <= 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	article, err := u.contentArticleClient.GetArticle(ctx, &repo.GetArticleReq{UserID: userID, ArticleID: articleID})
+	if err != nil {
+		return err
+	}
+	if article == nil || article.CreatedBy == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	return u.ensureUnblocked(ctx, userID, *article.CreatedBy)
 }

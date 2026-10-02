@@ -500,6 +500,7 @@ func (d *ArticleUsecase) PageViewHistory(
 	ctx context.Context,
 	access *model.ContentAccess,
 	page *commonmodel.PageReq,
+	excludedAuthorIDs []int64,
 ) (*ArticleViewHistoryPageResp, error) {
 	access, err := access.Normalize("")
 	if err != nil {
@@ -525,10 +526,11 @@ func (d *ArticleUsecase) PageViewHistory(
 	visibility := enum.ArticleVisibilityPublic
 	restriction := enum.ContentRestrictionNone
 	articles, err := d.articleRepo.Map(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{
-		ArticleIDs:    articleIDs,
-		PublishStatus: &publishStatus,
-		Visibility:    &visibility,
-		Restriction:   &restriction,
+		ArticleIDs:        articleIDs,
+		PublishStatus:     &publishStatus,
+		Visibility:        &visibility,
+		Restriction:       &restriction,
+		ExcludedAuthorIDs: excludedAuthorIDs,
 	}})
 	if err != nil {
 		return nil, err

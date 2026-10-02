@@ -27,9 +27,10 @@ type CreateMoonbreezeReq struct {
 }
 
 type PageMoonbreezesReq struct {
-	AuthorIDs []int64
-	Cursor    *string
-	Size      uint32
+	AuthorIDs         []int64
+	ExcludedAuthorIDs []int64
+	Cursor            *string
+	Size              uint32
 }
 
 type PageMoonbreezesResp struct {

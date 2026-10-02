@@ -51,6 +51,9 @@ func (r *MoonbreezeRepo) Page(ctx context.Context, req *repo.MoonbreezePageReq) 
 	if len(req.AuthorIDs) > 0 {
 		query = query.Where(moonbreeze.AuthorIDIn(req.AuthorIDs...))
 	}
+	if len(req.ExcludedAuthorIDs) > 0 {
+		query = query.Where(moonbreeze.AuthorIDNotIn(req.ExcludedAuthorIDs...))
+	}
 	if req.BeforeAt != nil && req.BeforeID != nil {
 		query = query.Where(moonbreeze.Or(
 			moonbreeze.CreatedAtLT(*req.BeforeAt),

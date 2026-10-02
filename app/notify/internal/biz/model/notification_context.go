@@ -9,6 +9,8 @@ import (
 type NotificationContext struct {
 	EventID      string
 	EventType    commonenum.EventType
+	ActorUserID  *int64
+	BusinessKey  *string
 	Language     notifyenum.Language
 	TemplateData templatedata.NotificationTemplateData
 	Recipients   []*NotificationRecipient

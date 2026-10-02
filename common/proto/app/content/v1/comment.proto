@@ -128,6 +128,7 @@ message ListComments {
       optional int64 user_id = 9; // 评论用户 ID
       optional ContentRestriction restriction = 10; // 管理限制
       repeated ContentRestriction restrictions = 11; // 管理限制列表
+      repeated int64 excluded_user_ids = 12; // 读取侧排除的作者账号 ID
     }
     CommentQueryParams query = 1; // 查询参数
     ContentAccess access = 2; // 访问上下文
@@ -168,6 +169,7 @@ message PageComments {
       optional int64 user_id = 9; // 评论用户 ID
       optional ContentRestriction restriction = 10; // 管理限制
       repeated ContentRestriction restrictions = 11; // 管理限制列表
+      repeated int64 excluded_user_ids = 12; // 读取侧排除的作者账号 ID
     }
     CommentQueryParams query = 1; // 查询参数
     optional .common.api.app.common.PageReq page = 2; // 分页参数
@@ -221,6 +223,7 @@ message ListCommentReplyPreviews {
     optional ContentRestriction restriction = 7; // 管理限制
     repeated ContentRestriction restrictions = 8; // 管理限制列表
     ContentAccess access = 9; // 访问上下文
+    repeated int64 excluded_user_ids = 10; // 读取侧排除的作者账号 ID
   }
   message Resp {
     message CommentReplyPreview {
@@ -254,6 +257,7 @@ message ListCommentReplyPreviews {
 message MapArticleLastComments {
   message Req {
     repeated int64 article_ids = 1; // 文章 ID
+    repeated int64 excluded_user_ids = 2; // 读取侧排除的作者账号 ID
   }
   message Resp {
     message Comment {

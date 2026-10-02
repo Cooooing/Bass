@@ -1,8 +1,10 @@
 package repo
 
 import (
+	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	utilent "common/pkg/util/ent"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -118,6 +120,9 @@ func (r *RelationRepo) create(ctx context.Context, u *model.Relation) (*model.Re
 		SetType(relation.Type(u.Type)).
 		Save(ctx)
 	if err != nil {
+		if gen.IsConstraintError(err) {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_ALREADY_EXISTS)
+		}
 		return nil, err
 	}
 	return &model.Relation{
@@ -171,7 +176,9 @@ func (r *RelationRepo) list(ctx context.Context, req *repo.RelationGetReq) ([]*m
 	tx := r.getClient(ctx)
 	query := tx.Relation.Query()
 	query = r.getQuery(query, req)
-	list, err := query.All(ctx)
+	list, err := query.
+		Order(gen.Desc(relation.FieldCreatedAt), gen.Desc(relation.FieldID)).
+		All(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -220,6 +227,7 @@ func (r *RelationRepo) page(ctx context.Context, page *commonmodel.PageReq, req 
 	}
 
 	list, err := query.
+		Order(gen.Desc(relation.FieldCreatedAt), gen.Desc(relation.FieldID)).
 		Limit(page.Limit()).
 		Offset(page.Offset()).
 		All(ctx)
@@ -258,8 +266,14 @@ func (r *RelationRepo) getQuery(query *gen.RelationQuery, req *repo.RelationGetR
 	if req.ActorId != nil {
 		query = query.Where(relation.ActorIDEQ(*req.ActorId))
 	}
+	if len(req.ActorIDs) > 0 {
+		query = query.Where(relation.ActorIDIn(req.ActorIDs...))
+	}
 	if req.TargetId != nil {
 		query = query.Where(relation.TargetIDEQ(*req.TargetId))
+	}
+	if len(req.TargetIDs) > 0 {
+		query = query.Where(relation.TargetIDIn(req.TargetIDs...))
 	}
 	if req.ActorOrTargetId != nil {
 		query = query.Where(relation.Or(
@@ -269,6 +283,12 @@ func (r *RelationRepo) getQuery(query *gen.RelationQuery, req *repo.RelationGetR
 	}
 	if req.Type != nil {
 		query = query.Where(relation.TypeEQ(relation.Type(*req.Type)))
+	}
+	if len(req.ExcludedActorIDs) > 0 {
+		query = query.Where(relation.ActorIDNotIn(req.ExcludedActorIDs...))
+	}
+	if len(req.ExcludedTargetIDs) > 0 {
+		query = query.Where(relation.TargetIDNotIn(req.ExcludedTargetIDs...))
 	}
 	if req.WithActor {
 		query = query.WithActor()

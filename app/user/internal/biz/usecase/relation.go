@@ -56,20 +56,25 @@ func (d *RelationUsecase) Follow(ctx context.Context, req *FollowRelationReq) er
 	}
 	var outboxEvent *model.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
+		if err := d.ensureNormalAccounts(ctx, req.ActorID, req.TargetID); err != nil {
+			return err
+		}
+		statuses, err := d.MapStatus(ctx, &MapRelationStatusReq{
+			ActorID:   req.ActorID,
+			TargetIDs: []int64{req.TargetID},
+		})
+		if err != nil {
+			return err
+		}
+		if status := statuses[req.TargetID]; status != nil && (status.Blocking || status.BlockedBy) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND)
+		}
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
 			TargetId: &req.TargetID,
 			Type:     new(enum.RelationTypeFollow),
 		})
 		if err != nil {
-			return err
-		}
-		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{
-			UserID: &req.ActorID,
-		}); err != nil {
-			return err
-		}
-		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.TargetID}); err != nil {
 			return err
 		}
 		if exists {
@@ -220,20 +225,15 @@ func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) erro
 	}
 	var outboxEvent *model.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
+		if err := d.ensureNormalAccounts(ctx, req.ActorID, req.TargetID); err != nil {
+			return err
+		}
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
 			ActorId:  &req.ActorID,
 			TargetId: &req.TargetID,
 			Type:     new(enum.RelationTypeBlock),
 		})
 		if err != nil {
-			return err
-		}
-		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{
-			UserID: &req.ActorID,
-		}); err != nil {
-			return err
-		}
-		if _, err = d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &req.TargetID}); err != nil {
 			return err
 		}
 		if exists {
@@ -244,6 +244,9 @@ func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) erro
 			TargetID: req.TargetID,
 			Type:     enum.RelationTypeBlock,
 		}); err != nil {
+			return err
+		}
+		if err = d.removeFollowForBlock(ctx, req.ActorID, req.TargetID); err != nil {
 			return err
 		}
 		outboxEvent, err = d.outboxRepo.Save(ctx, &repo.OutboxEventSave{
@@ -268,6 +271,46 @@ func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) erro
 			ID: outboxEvent.ID,
 		}); err != nil {
 			d.logger.WarnContext(ctx, "publish outbox event best effort failed", constant.LogFieldEventID, outboxEvent.EventID, constant.LogFieldErr, err)
+		}
+	}
+	return nil
+}
+
+func (d *RelationUsecase) ensureNormalAccounts(ctx context.Context, actorID int64, targetID int64) error {
+	actor, err := d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &actorID})
+	if err != nil {
+		return err
+	}
+	target, err := d.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: &targetID})
+	if err != nil {
+		return err
+	}
+	if actor == nil || target == nil || actor.Status == nil || target.Status == nil ||
+		*actor.Status != enum.AccountStatusNormal || *target.Status != enum.AccountStatusNormal {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND)
+	}
+	return nil
+}
+
+func (d *RelationUsecase) removeFollowForBlock(ctx context.Context, actorID int64, targetID int64) error {
+	follow := enum.RelationTypeFollow
+	for _, pair := range [][2]int64{{actorID, targetID}, {targetID, actorID}} {
+		deleted, err := d.relationRepo.Delete(ctx, &repo.RelationDeleteReq{
+			ActorID:  pair[0],
+			TargetID: pair[1],
+			Type:     follow,
+		})
+		if err != nil {
+			return err
+		}
+		if deleted == 0 {
+			continue
+		}
+		if _, err = d.accountRepo.AddStat(ctx, &repo.AccountAddStatReq{UserID: pair[0], StatType: enum.AccountStatTypeFollow, Num: -1}); err != nil {
+			return err
+		}
+		if _, err = d.accountRepo.AddStat(ctx, &repo.AccountAddStatReq{UserID: pair[1], StatType: enum.AccountStatTypeFollower, Num: -1}); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -343,8 +386,9 @@ func (d *RelationUsecase) Unblock(ctx context.Context, req *UnblockRelationReq) 
 }
 
 type ListFollowingRelationsReq struct {
-	Page    *commonmodel.PageReq
-	ActorID int64
+	Page            *commonmodel.PageReq
+	ActorID         int64
+	ExcludedUserIDs []int64
 }
 
 type ListFollowingRelationsResp struct {
@@ -356,8 +400,9 @@ func (d *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingR
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
 		Page: *commonmodel.NormalizePage(req.Page),
 		Query: repo.RelationGetReq{
-			ActorId: &req.ActorID,
-			Type:    new(enum.RelationTypeFollow),
+			ActorId:           &req.ActorID,
+			Type:              new(enum.RelationTypeFollow),
+			ExcludedTargetIDs: req.ExcludedUserIDs,
 		},
 	})
 	if err != nil {
@@ -370,8 +415,9 @@ func (d *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingR
 }
 
 type ListFollowersRelationsReq struct {
-	Page     *commonmodel.PageReq
-	TargetID int64
+	Page            *commonmodel.PageReq
+	TargetID        int64
+	ExcludedUserIDs []int64
 }
 
 type ListFollowersRelationsResp struct {
@@ -383,8 +429,9 @@ func (d *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersR
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
 		Page: *commonmodel.NormalizePage(req.Page),
 		Query: repo.RelationGetReq{
-			TargetId: &req.TargetID,
-			Type:     new(enum.RelationTypeFollow),
+			TargetId:         &req.TargetID,
+			Type:             new(enum.RelationTypeFollow),
+			ExcludedActorIDs: req.ExcludedUserIDs,
 		},
 	})
 	if err != nil {
@@ -435,9 +482,10 @@ func (d *RelationUsecase) MapStatus(ctx context.Context, req *MapRelationStatusR
 			TargetID: targetID,
 		}
 	}
-	listResp, err := d.relationRepo.List(ctx, &repo.RelationGetReq{
-		ActorId: &req.ActorID,
-	})
+	if req.ActorID <= 0 || len(req.TargetIDs) == 0 {
+		return statuses, nil
+	}
+	listResp, err := d.relationRepo.List(ctx, &repo.RelationGetReq{ActorId: &req.ActorID, TargetIDs: req.TargetIDs})
 	if err != nil {
 		return nil, err
 	}
@@ -451,9 +499,7 @@ func (d *RelationUsecase) MapStatus(ctx context.Context, req *MapRelationStatusR
 			}
 		}
 	}
-	listResp, err = d.relationRepo.List(ctx, &repo.RelationGetReq{
-		TargetId: &req.ActorID,
-	})
+	listResp, err = d.relationRepo.List(ctx, &repo.RelationGetReq{TargetId: &req.ActorID, ActorIDs: req.TargetIDs})
 	if err != nil {
 		return nil, err
 	}
@@ -468,4 +514,33 @@ func (d *RelationUsecase) MapStatus(ctx context.Context, req *MapRelationStatusR
 		}
 	}
 	return statuses, nil
+}
+
+func (d *RelationUsecase) ListBlockedCounterparts(ctx context.Context, userID int64) ([]int64, error) {
+	if userID <= 0 {
+		return []int64{}, nil
+	}
+	block := enum.RelationTypeBlock
+	rows, err := d.relationRepo.List(ctx, &repo.RelationGetReq{ActorOrTargetId: &userID, Type: &block})
+	if err != nil {
+		return nil, err
+	}
+	result := make([]int64, 0, len(rows))
+	seen := make(map[int64]struct{}, len(rows))
+	for _, row := range rows {
+		if row == nil {
+			continue
+		}
+		counterpart := row.TargetID
+		if row.TargetID == userID {
+			counterpart = row.ActorID
+		}
+		if counterpart > 0 {
+			if _, ok := seen[counterpart]; !ok {
+				seen[counterpart] = struct{}{}
+				result = append(result, counterpart)
+			}
+		}
+	}
+	return result, nil
 }

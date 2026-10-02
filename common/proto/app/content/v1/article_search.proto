@@ -16,6 +16,7 @@ message SearchPublicArticles {
     string query = 1; // 搜索词
     optional string cursor = 2; // 不透明续页游标
     uint32 size = 3; // 返回条数
+    repeated int64 excluded_author_ids = 4; // 读取侧排除的作者账号 ID
   }
   message Resp {
     repeated Article rows = 1; // 公开文章

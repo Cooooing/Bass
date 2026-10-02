@@ -69,15 +69,16 @@ type CommentThread struct {
 }
 
 type CommentQuery struct {
-	CommentID    *int64
-	ArticleID    *int64
-	ParentID     *int64
-	ReplyID      *int64
-	Level        *int32
-	UserID       *int64
-	Restriction  *int32
-	Restrictions []int32
-	Order        *int32
+	CommentID       *int64
+	ArticleID       *int64
+	ParentID        *int64
+	ReplyID         *int64
+	Level           *int32
+	UserID          *int64
+	Restriction     *int32
+	Restrictions    []int32
+	Order           *int32
+	ExcludedUserIDs []int64
 }
 
 type CreateCommentReq struct {
@@ -104,6 +105,7 @@ type ListCommentThreadsReq struct {
 	ArticleID         int64
 	Order             *int32
 	ReplyPreviewLimit *int32
+	ExcludedUserIDs   []int64
 }
 
 type ListCommentThreadsResp struct {
@@ -112,11 +114,12 @@ type ListCommentThreadsResp struct {
 }
 
 type ListCommentRepliesReq struct {
-	UserID    int64
-	Page      *commonmodel.PageReq
-	ArticleID int64
-	ParentID  int64
-	Order     *int32
+	UserID          int64
+	Page            *commonmodel.PageReq
+	ArticleID       int64
+	ParentID        int64
+	Order           *int32
+	ExcludedUserIDs []int64
 }
 
 type ListCommentRepliesResp struct {
@@ -125,10 +128,11 @@ type ListCommentRepliesResp struct {
 }
 
 type ListCommentTimelineReq struct {
-	UserID    int64
-	Page      *commonmodel.PageReq
-	ArticleID int64
-	Order     *int32
+	UserID          int64
+	Page            *commonmodel.PageReq
+	ArticleID       int64
+	Order           *int32
+	ExcludedUserIDs []int64
 }
 
 type ListCommentTimelineResp struct {

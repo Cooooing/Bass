@@ -1,0 +1,1 @@
+{{ if .Follower.Nickname }}{{ .Follower.Nickname }}{{ else }}{{ .Follower.Name }}{{ end }} 关注了你

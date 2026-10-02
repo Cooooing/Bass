@@ -88,6 +88,7 @@ func (h *CommentLikedHandler) Handle(ctx context.Context, req *usecase.EventHand
 	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
 		EventID:      event.GetEventId(),
 		EventType:    req.EventType,
+		ActorUserID:  new(payload.GetSenderId()),
 		Language:     req.Language,
 		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 		TemplateData: templateData,

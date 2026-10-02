@@ -48,6 +48,8 @@ func NewNotifyUsecase(
 type NotifySendReq struct {
 	EventID      string
 	EventType    commonenum.EventType
+	ActorUserID  *int64
+	BusinessKey  *string
 	Language     notifyenum.Language
 	Channels     []notifyenum.NotificationChannel
 	TemplateData templatedata.NotificationTemplateData
@@ -61,9 +63,33 @@ func (u *NotifyUsecase) Send(ctx context.Context, req *NotifySendReq) error {
 	notificationContext := &model.NotificationContext{
 		EventID:      req.EventID,
 		EventType:    req.EventType,
+		ActorUserID:  req.ActorUserID,
+		BusinessKey:  req.BusinessKey,
 		Language:     req.Language,
 		TemplateData: req.TemplateData,
 		Recipients:   req.Recipients,
+	}
+	if notificationContext.ActorUserID != nil && u.userAccountRepo != nil {
+		targets := make([]int64, 0, len(notificationContext.Recipients))
+		for _, recipient := range notificationContext.Recipients {
+			if recipient != nil && recipient.UserID > 0 {
+				targets = append(targets, recipient.UserID)
+			}
+		}
+		statuses, filterErr := u.userAccountRepo.MapRelationStatuses(ctx, *notificationContext.ActorUserID, targets)
+		if filterErr != nil {
+			return filterErr
+		}
+		filtered := make([]*model.NotificationRecipient, 0, len(notificationContext.Recipients))
+		for _, recipient := range notificationContext.Recipients {
+			if recipient != nil && recipient.UserID > 0 {
+				if status := statuses[recipient.UserID]; status != nil && (status.Blocking || status.BlockedBy) {
+					continue
+				}
+			}
+			filtered = append(filtered, recipient)
+		}
+		notificationContext.Recipients = filtered
 	}
 	rules, err := u.templateUsecase.ListEnabledRulesWithTemplates(ctx, &ListEnabledRulesWithTemplatesReq{
 		EventType: req.EventType,

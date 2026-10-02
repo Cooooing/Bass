@@ -47,6 +47,8 @@ func (Relation) Indexes() []ent.Index {
 		index.Fields("actor_id", "target_id", "type").Unique(),
 		index.Fields("actor_id", "type"),
 		index.Fields("target_id", "type"),
+		index.Fields("actor_id", "type", "created_at", "id"),
+		index.Fields("target_id", "type", "created_at", "id"),
 	}
 }
 

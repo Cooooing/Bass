@@ -7,14 +7,15 @@ import (
 )
 
 type NotificationStationMessage struct {
-	ID         int64
-	EventID    string
-	EventType  commonenum.EventType
-	ReceiverID int64
-	Title      string
-	Content    string
-	Status     notifyenum.NotificationChannelStatus
-	ReadAt     *time.Time
-	CreatedAt  *time.Time
-	UpdatedAt  *time.Time
+	ID          int64
+	EventID     string
+	EventType   commonenum.EventType
+	ReceiverID  int64
+	BusinessKey *string
+	Title       string
+	Content     string
+	Status      notifyenum.NotificationChannelStatus
+	ReadAt      *time.Time
+	CreatedAt   *time.Time
+	UpdatedAt   *time.Time
 }

@@ -48,9 +48,10 @@ func (s *MoonbreezeService) Page(ctx context.Context, req *v1.PageMoonbreezes_Re
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}
 	page, err := s.moonbreezeUsecase.Page(ctx, &usecase.PageMoonbreezesReq{
-		AuthorIDs: req.GetAuthorIds(),
-		Cursor:    req.Cursor,
-		Size:      int(req.GetSize()),
+		AuthorIDs:         req.GetAuthorIds(),
+		ExcludedAuthorIDs: req.GetExcludedAuthorIds(),
+		Cursor:            req.Cursor,
+		Size:              int(req.GetSize()),
 	})
 	if err != nil {
 		return nil, err

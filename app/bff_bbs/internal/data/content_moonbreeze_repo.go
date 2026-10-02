@@ -31,9 +31,10 @@ func (r *ContentMoonbreezeClient) CreateMoonbreeze(ctx context.Context, req *rep
 
 func (r *ContentMoonbreezeClient) PageMoonbreezes(ctx context.Context, req *repo.PageMoonbreezesReq) (*repo.PageMoonbreezesResp, error) {
 	reply, err := r.contentClient.Moonbreeze.Page(ctx, &contentv1.PageMoonbreezes_Req{
-		AuthorIds: req.AuthorIDs,
-		Cursor:    req.Cursor,
-		Size:      req.Size,
+		AuthorIds:         req.AuthorIDs,
+		ExcludedAuthorIds: req.ExcludedAuthorIDs,
+		Cursor:            req.Cursor,
+		Size:              req.Size,
 	})
 	if err != nil {
 		return nil, err

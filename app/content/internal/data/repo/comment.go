@@ -331,6 +331,9 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 		if filter.CreatedBy != nil {
 			query = query.Where(commentent.CreatedByEQ(*filter.CreatedBy))
 		}
+		if len(filter.ExcludedUserIDs) > 0 {
+			query = query.Where(commentent.CreatedByNotIn(filter.ExcludedUserIDs...))
+		}
 		if filter.Restriction != nil {
 			query = query.Where(commentent.RestrictionEQ(commentent.Restriction(*filter.Restriction)))
 		}
@@ -457,6 +460,9 @@ func (r *CommentRepo) MapArticleLastComments(ctx context.Context, req *repo.Comm
 		Where(commentent.ArticleIDIn(req.Filter.ArticleIDs...), commentent.DeletedAtIsNil())
 	if req.Filter.Restriction != nil {
 		query = query.Where(commentent.RestrictionEQ(commentent.Restriction(*req.Filter.Restriction)))
+	}
+	if len(req.Filter.ExcludedUserIDs) > 0 {
+		query = query.Where(commentent.CreatedByNotIn(req.Filter.ExcludedUserIDs...))
 	}
 	if len(req.Filter.Restrictions) > 0 {
 		query = query.Where(commentent.RestrictionIn(lo.Map(req.Filter.Restrictions, func(item enum.ContentRestriction, _ int) commentent.Restriction {

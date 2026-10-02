@@ -33,9 +33,10 @@ func (s *ArticleSearchService) SearchPublic(
 	req *v1.SearchPublicArticles_Req,
 ) (*v1.SearchPublicArticles_Resp, error) {
 	result, err := s.articleSearchUsecase.SearchPublic(ctx, &usecase.SearchPublicArticlesReq{
-		Query:  req.GetQuery(),
-		Cursor: req.Cursor,
-		Size:   int(req.GetSize()),
+		Query:             req.GetQuery(),
+		Cursor:            req.Cursor,
+		Size:              int(req.GetSize()),
+		ExcludedAuthorIDs: req.GetExcludedAuthorIds(),
 	})
 	if err != nil {
 		return nil, err

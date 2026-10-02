@@ -66,6 +66,7 @@ func (h *ArticlePublishedHandler) Handle(ctx context.Context, req *usecase.Event
 		return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
 			EventID:      event.GetEventId(),
 			EventType:    req.EventType,
+			ActorUserID:  new(article.AuthorID),
 			Language:     req.Language,
 			Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 			TemplateData: templateData,
@@ -87,6 +88,7 @@ func (h *ArticlePublishedHandler) Handle(ctx context.Context, req *usecase.Event
 	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
 		EventID:      event.GetEventId(),
 		EventType:    req.EventType,
+		ActorUserID:  new(article.AuthorID),
 		Language:     req.Language,
 		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 		TemplateData: templateData,

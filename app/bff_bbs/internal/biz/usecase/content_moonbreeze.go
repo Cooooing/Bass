@@ -72,10 +72,11 @@ func (u *ContentMoonbreezeUsecase) Create(ctx context.Context, req *CreateMoonbr
 }
 
 type PageMoonbreezesReq struct {
-	ViewerID  int64
-	AuthorIDs []int64
-	Cursor    *string
-	Size      uint32
+	ViewerID          int64
+	AuthorIDs         []int64
+	ExcludedAuthorIDs []int64
+	Cursor            *string
+	Size              uint32
 }
 
 func (u *ContentMoonbreezeUsecase) Page(
@@ -84,6 +85,13 @@ func (u *ContentMoonbreezeUsecase) Page(
 ) (*repo.PageMoonbreezesResp, error) {
 	if req == nil {
 		req = &PageMoonbreezesReq{}
+	}
+	if req.ExcludedAuthorIDs == nil && req.ViewerID > 0 {
+		excluded, err := u.relationClient.ListBlockedCounterparts(ctx, req.ViewerID)
+		if err != nil {
+			return nil, err
+		}
+		req.ExcludedAuthorIDs = excluded
 	}
 	pageSize := req.Size
 	if pageSize == 0 {
@@ -101,9 +109,10 @@ func (u *ContentMoonbreezeUsecase) Page(
 	for len(visible) < int(pageSize) {
 		remaining := pageSize - uint32(len(visible))
 		batch, err := u.moonbreezeClient.PageMoonbreezes(ctx, &repo.PageMoonbreezesReq{
-			AuthorIDs: req.AuthorIDs,
-			Cursor:    cursor,
-			Size:      remaining,
+			AuthorIDs:         req.AuthorIDs,
+			ExcludedAuthorIDs: req.ExcludedAuthorIDs,
+			Cursor:            cursor,
+			Size:              remaining,
 		})
 		if err != nil {
 			return nil, err

@@ -12,18 +12,24 @@ import (
 
 type ContentCommentUsecase struct {
 	contentCommentClient repo.ContentCommentClient
+	contentArticleClient repo.ContentArticleClient
 	assetClient          repo.AssetClient
+	relationClient       repo.RelationClient
 	privacyClient        repo.PrivacySettingClient
 }
 
 func NewContentCommentUsecase(
 	contentCommentClient repo.ContentCommentClient,
+	contentArticleClient repo.ContentArticleClient,
 	assetClient repo.AssetClient,
+	relationClient repo.RelationClient,
 	privacyClient repo.PrivacySettingClient,
 ) *ContentCommentUsecase {
 	return &ContentCommentUsecase{
 		contentCommentClient: contentCommentClient,
+		contentArticleClient: contentArticleClient,
 		assetClient:          assetClient,
+		relationClient:       relationClient,
 		privacyClient:        privacyClient,
 	}
 }
@@ -36,6 +42,12 @@ type CreateCommentReq struct {
 }
 
 func (u *ContentCommentUsecase) CreateComment(ctx context.Context, req *CreateCommentReq) (*repo.CommentDetail, error) {
+	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
+		return nil, err
+	}
+	if err := u.ensureCommentTargetUnblocked(ctx, req.UserID, req.ReplyID); err != nil {
+		return nil, err
+	}
 	resp, err := u.contentCommentClient.CreateComment(ctx, &repo.CreateCommentReq{
 		UserID:    req.UserID,
 		ArticleID: req.ArticleID,
@@ -80,6 +92,30 @@ func (u *ContentCommentUsecase) CreateComment(ctx context.Context, req *CreateCo
 		}
 	}
 	return resp, nil
+}
+
+func (u *ContentCommentUsecase) ensureArticleUnblocked(ctx context.Context, userID int64, articleID int64) error {
+	if userID <= 0 || articleID <= 0 || u.relationClient == nil || u.contentArticleClient == nil {
+		return nil
+	}
+	article, err := u.contentArticleClient.GetArticle(ctx, &repo.GetArticleReq{UserID: userID, ArticleID: articleID})
+	if err != nil {
+		return err
+	}
+	if article == nil || article.CreatedBy == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	if *article.CreatedBy == userID {
+		return nil
+	}
+	statuses, err := u.relationClient.MapStatus(ctx, userID, []int64{*article.CreatedBy})
+	if err != nil {
+		return err
+	}
+	if status := statuses[*article.CreatedBy]; status != nil && (status.Blocking || status.BlockedBy) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
+	}
+	return nil
 }
 
 type ListCommentsReq struct {
@@ -130,6 +166,11 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_COMMENT_LIST_PRIVATE)
 		}
 	}
+	excludedUserIDs, err := u.blockedCounterparts(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	query.ExcludedUserIDs = excludedUserIDs
 	resp, err := u.contentCommentClient.ListComments(ctx, &repo.ListCommentsReq{
 		UserID: req.UserID,
 		Page:   page,
@@ -196,6 +237,10 @@ type ListCommentThreadsResp struct {
 }
 
 func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *ListCommentThreadsReq) (*ListCommentThreadsResp, error) {
+	excludedUserIDs, err := u.blockedCounterparts(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
 	var page *commonmodel.PageReq
 	if req.Page != nil {
 		page = &commonmodel.PageReq{
@@ -213,6 +258,7 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 		ArticleID:         req.ArticleID,
 		Order:             order,
 		ReplyPreviewLimit: req.ReplyPreviewLimit,
+		ExcludedUserIDs:   excludedUserIDs,
 	})
 	if err != nil {
 		return nil, err
@@ -283,6 +329,10 @@ type ListCommentRepliesResp struct {
 }
 
 func (u *ContentCommentUsecase) ListCommentReplies(ctx context.Context, req *ListCommentRepliesReq) (*ListCommentRepliesResp, error) {
+	excludedUserIDs, err := u.blockedCounterparts(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
 	var page *commonmodel.PageReq
 	if req.Page != nil {
 		page = &commonmodel.PageReq{
@@ -295,11 +345,12 @@ func (u *ContentCommentUsecase) ListCommentReplies(ctx context.Context, req *Lis
 		order = new(int32(*req.Order))
 	}
 	resp, err := u.contentCommentClient.ListCommentReplies(ctx, &repo.ListCommentRepliesReq{
-		UserID:    req.UserID,
-		Page:      page,
-		ArticleID: req.ArticleID,
-		ParentID:  req.ParentID,
-		Order:     order,
+		UserID:          req.UserID,
+		Page:            page,
+		ArticleID:       req.ArticleID,
+		ParentID:        req.ParentID,
+		Order:           order,
+		ExcludedUserIDs: excludedUserIDs,
 	})
 	if err != nil {
 		return nil, err
@@ -361,6 +412,10 @@ type ListCommentTimelineResp struct {
 }
 
 func (u *ContentCommentUsecase) ListCommentTimeline(ctx context.Context, req *ListCommentTimelineReq) (*ListCommentTimelineResp, error) {
+	excludedUserIDs, err := u.blockedCounterparts(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
 	var page *commonmodel.PageReq
 	if req.Page != nil {
 		page = &commonmodel.PageReq{
@@ -373,10 +428,11 @@ func (u *ContentCommentUsecase) ListCommentTimeline(ctx context.Context, req *Li
 		order = new(int32(*req.Order))
 	}
 	resp, err := u.contentCommentClient.ListCommentTimeline(ctx, &repo.ListCommentTimelineReq{
-		UserID:    req.UserID,
-		Page:      page,
-		ArticleID: req.ArticleID,
-		Order:     order,
+		UserID:          req.UserID,
+		Page:            page,
+		ArticleID:       req.ArticleID,
+		Order:           order,
+		ExcludedUserIDs: excludedUserIDs,
 	})
 	if err != nil {
 		return nil, err
@@ -425,6 +481,13 @@ func (u *ContentCommentUsecase) ListCommentTimeline(ctx context.Context, req *Li
 	}, nil
 }
 
+func (u *ContentCommentUsecase) blockedCounterparts(ctx context.Context, userID int64) ([]int64, error) {
+	if userID <= 0 || u.relationClient == nil {
+		return []int64{}, nil
+	}
+	return u.relationClient.ListBlockedCounterparts(ctx, userID)
+}
+
 type LikeCommentReq struct {
 	UserID int64
 	ID     int64
@@ -432,6 +495,9 @@ type LikeCommentReq struct {
 }
 
 func (u *ContentCommentUsecase) LikeComment(ctx context.Context, req *LikeCommentReq) (bool, error) {
+	if err := u.ensureCommentTargetUnblocked(ctx, req.UserID, req.ID); err != nil {
+		return false, err
+	}
 	resp, err := u.contentCommentClient.LikeComment(ctx, &repo.LikeCommentReq{
 		UserID: req.UserID,
 		ID:     req.ID,
@@ -450,6 +516,9 @@ type ThankCommentReq struct {
 }
 
 func (u *ContentCommentUsecase) ThankComment(ctx context.Context, req *ThankCommentReq) (bool, error) {
+	if err := u.ensureCommentTargetUnblocked(ctx, req.UserID, req.ID); err != nil {
+		return false, err
+	}
 	resp, err := u.contentCommentClient.ThankComment(ctx, &repo.ThankCommentReq{
 		UserID: req.UserID,
 		ID:     req.ID,
@@ -459,4 +528,34 @@ func (u *ContentCommentUsecase) ThankComment(ctx context.Context, req *ThankComm
 		return false, err
 	}
 	return resp, nil
+}
+
+func (u *ContentCommentUsecase) ensureCommentTargetUnblocked(ctx context.Context, userID int64, commentID int64) error {
+	if userID <= 0 || commentID <= 0 || u.relationClient == nil {
+		return nil
+	}
+	commentIDValue := commentID
+	result, err := u.contentCommentClient.ListComments(ctx, &repo.ListCommentsReq{
+		UserID: userID,
+		Page:   &commonmodel.PageReq{Page: 1, Size: 1},
+		Query:  &repo.CommentQuery{CommentID: &commentIDValue},
+	})
+	if err != nil {
+		return err
+	}
+	if result == nil || len(result.Rows) == 0 || result.Rows[0] == nil || result.Rows[0].User == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
+	}
+	if result.Rows[0].User.ID == userID {
+		return nil
+	}
+	targetID := result.Rows[0].User.ID
+	statuses, err := u.relationClient.MapStatus(ctx, userID, []int64{targetID})
+	if err != nil {
+		return err
+	}
+	if status := statuses[targetID]; status != nil && (status.Blocking || status.BlockedBy) {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_NOT_FOUND)
+	}
+	return nil
 }

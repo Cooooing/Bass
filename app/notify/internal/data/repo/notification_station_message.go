@@ -44,6 +44,7 @@ func (r *NotificationStationMessageRepo) Save(ctx context.Context, message *mode
 		SetEventID(message.EventID).
 		SetEventType(notificationstationmessage.EventType(message.EventType)).
 		SetReceiverID(message.ReceiverID).
+		SetNillableBusinessKey(message.BusinessKey).
 		SetTitle(message.Title).
 		SetContent(message.Content).
 		SetStatus(notificationstationmessage.Status(notifyenum.NotificationChannelStatusSucceeded)).
@@ -55,12 +56,13 @@ func (r *NotificationStationMessageRepo) Save(ctx context.Context, message *mode
 	if !gen.IsConstraintError(err) {
 		return nil, err
 	}
-	exist, getErr := r.getClient(ctx).NotificationStationMessage.Query().
-		Where(
-			notificationstationmessage.EventIDEQ(message.EventID),
-			notificationstationmessage.ReceiverIDEQ(message.ReceiverID),
-		).
-		Only(ctx)
+	query := r.getClient(ctx).NotificationStationMessage.Query().Where(notificationstationmessage.ReceiverIDEQ(message.ReceiverID))
+	if message.BusinessKey != nil {
+		query = query.Where(notificationstationmessage.BusinessKeyEQ(*message.BusinessKey))
+	} else {
+		query = query.Where(notificationstationmessage.EventIDEQ(message.EventID))
+	}
+	exist, getErr := query.Only(ctx)
 	if getErr != nil {
 		return nil, getErr
 	}
@@ -229,15 +231,16 @@ func (r *NotificationStationMessageRepo) stationMessage(item *gen.NotificationSt
 		return nil
 	}
 	return &model.NotificationStationMessage{
-		ID:         item.ID,
-		EventID:    item.EventID,
-		EventType:  commonenum.EventType(item.EventType),
-		ReceiverID: item.ReceiverID,
-		Title:      item.Title,
-		Content:    item.Content,
-		Status:     notifyenum.NotificationChannelStatus(item.Status),
-		ReadAt:     item.ReadAt,
-		CreatedAt:  item.CreatedAt,
-		UpdatedAt:  item.UpdatedAt,
+		ID:          item.ID,
+		EventID:     item.EventID,
+		EventType:   commonenum.EventType(item.EventType),
+		ReceiverID:  item.ReceiverID,
+		BusinessKey: item.BusinessKey,
+		Title:       item.Title,
+		Content:     item.Content,
+		Status:      notifyenum.NotificationChannelStatus(item.Status),
+		ReadAt:      item.ReadAt,
+		CreatedAt:   item.CreatedAt,
+		UpdatedAt:   item.UpdatedAt,
 	}
 }

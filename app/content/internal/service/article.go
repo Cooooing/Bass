@@ -497,7 +497,7 @@ func (s *ArticleService) PageViewHistory(
 		}
 	}
 	pageRequest := commonmodel.PageReqFromProto(req.GetPage())
-	result, err := s.articleUsecase.PageViewHistory(ctx, access, pageRequest)
+	result, err := s.articleUsecase.PageViewHistory(ctx, access, pageRequest, req.GetExcludedAuthorIds())
 	if err != nil {
 		return nil, err
 	}
@@ -655,6 +655,7 @@ func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Req) (*v
 		query.DomainID = req.GetQuery().DomainId
 		query.ArticleIDs = req.GetQuery().GetArticleIds()
 		query.AuthorID = req.GetQuery().AuthorId
+		query.ExcludedAuthorIDs = req.GetQuery().GetExcludedAuthorIds()
 		if req.GetQuery().Type != nil {
 			v, ok := enum.ArticleTypeMap.ToEnum(req.GetQuery().GetType())
 			if !ok {
@@ -787,6 +788,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v
 		query.DomainID = req.GetQuery().DomainId
 		query.ArticleIDs = req.GetQuery().GetArticleIds()
 		query.AuthorID = req.GetQuery().AuthorId
+		query.ExcludedAuthorIDs = req.GetQuery().GetExcludedAuthorIds()
 		if req.GetQuery().Type != nil {
 			v, ok := enum.ArticleTypeMap.ToEnum(req.GetQuery().GetType())
 			if !ok {

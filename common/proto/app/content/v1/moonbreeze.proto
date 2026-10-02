@@ -28,6 +28,7 @@ message PageMoonbreezes {
     repeated int64 author_ids = 1; // 作者账号 ID；空表示全部作者
     optional string cursor = 2; // 不透明续页游标
     uint32 size = 3; // 页面大小
+    repeated int64 excluded_author_ids = 4; // 读取侧排除的作者账号 ID
   }
   message Resp {
     repeated Moonbreeze rows = 1;

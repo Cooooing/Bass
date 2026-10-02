@@ -33,6 +33,7 @@ func (NotificationStationMessage) Fields() []ent.Field {
 		field.String("event_id").Comment("来源事件 ID").NotEmpty(),
 		field.Enum("event_type").Values(commonenum.EventTypeMap.EnumValues()...).Comment("来源事件类型"),
 		field.Int64("receiver_id").Comment("接收者用户 ID"),
+		field.String("business_key").Comment("收件人范围内的永久业务去重键").Optional().Nillable().MaxLen(160),
 		field.String("title").Comment("标题"),
 		field.String("content").Comment("内容"),
 		field.Enum("status").Values(notifyenum.NotificationChannelStatusMap.EnumValues()...).Default(notifyenum.NotificationChannelStatusSucceeded.String()).Comment("通道状态"),
@@ -49,6 +50,7 @@ func (NotificationStationMessage) Mixin() []ent.Mixin {
 func (NotificationStationMessage) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("event_id", "receiver_id").Unique(),
+		index.Fields("receiver_id", "business_key").Unique().Annotations(entsql.IndexWhere("business_key IS NOT NULL")),
 		index.Fields("receiver_id", "created_at"),
 		index.Fields("receiver_id", "read_at"),
 	}

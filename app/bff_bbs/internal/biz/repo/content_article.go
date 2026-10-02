@@ -126,16 +126,17 @@ type ArticleSave struct {
 }
 
 type ArticleQuery struct {
-	TagID           *int64
-	DomainID        *int64
-	AuthorID        *int64
-	Type            *int32
-	Order           *int32
-	PublishStatus   *int32
-	PublishStatuses []int32
-	Visibility      *int32
-	Visibilities    []int32
-	Scheduled       *bool
+	TagID             *int64
+	DomainID          *int64
+	AuthorID          *int64
+	Type              *int32
+	Order             *int32
+	PublishStatus     *int32
+	PublishStatuses   []int32
+	Visibility        *int32
+	Visibilities      []int32
+	Scheduled         *bool
+	ExcludedAuthorIDs []int64
 }
 
 type CreateDraftArticleReq struct {
@@ -184,11 +185,12 @@ type ListArticlesResp struct {
 }
 
 type SearchArticlesReq struct {
-	UserID   int64
-	ClientIP string
-	Query    string
-	Cursor   *string
-	Size     uint32
+	UserID            int64
+	ClientIP          string
+	Query             string
+	Cursor            *string
+	Size              uint32
+	ExcludedAuthorIDs []int64
 }
 
 type SearchArticlesResp struct {
@@ -261,7 +263,7 @@ type ContentArticleClient interface {
 	ArchiveArticle(ctx context.Context, req *ArchiveArticleReq) error
 	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error)
 	SearchArticles(ctx context.Context, req *SearchArticlesReq) (*SearchArticlesResp, error)
-	PageViewHistory(ctx context.Context, userID int64, page *commonmodel.PageReq) (*ArticleViewHistoryPageResp, error)
+	PageViewHistory(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*ArticleViewHistoryPageResp, error)
 	GetArticle(ctx context.Context, req *GetArticleReq) (*ArticleDetail, error)
 	ViewArticle(ctx context.Context, req *ViewArticleReq) error
 	LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error)

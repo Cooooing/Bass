@@ -12,10 +12,11 @@ type MoonbreezeRepo interface {
 }
 
 type MoonbreezePageReq struct {
-	AuthorIDs []int64
-	BeforeAt  *time.Time
-	BeforeID  *int64
-	Size      int
+	AuthorIDs         []int64
+	ExcludedAuthorIDs []int64
+	BeforeAt          *time.Time
+	BeforeID          *int64
+	Size              int
 }
 
 type MoonbreezePageResp struct {

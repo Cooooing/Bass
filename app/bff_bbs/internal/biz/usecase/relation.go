@@ -113,9 +113,14 @@ func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingR
 			Size: req.Page.Size,
 		}
 	}
+	excludedUserIDs, err := u.relationClient.ListBlockedCounterparts(ctx, req.ActorID)
+	if err != nil {
+		return nil, err
+	}
 	resp, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{
-		ActorID: req.ActorID,
-		Page:    page,
+		ActorID:         req.ActorID,
+		Page:            page,
+		ExcludedUserIDs: excludedUserIDs,
 	})
 	if err != nil {
 		return nil, err
@@ -147,9 +152,14 @@ func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersR
 			Size: req.Page.Size,
 		}
 	}
+	excludedUserIDs, err := u.relationClient.ListBlockedCounterparts(ctx, req.ActorID)
+	if err != nil {
+		return nil, err
+	}
 	resp, err := u.relationClient.ListFollowers(ctx, &repo.ListFollowersRelationsReq{
-		ActorID: req.ActorID,
-		Page:    page,
+		ActorID:         req.ActorID,
+		Page:            page,
+		ExcludedUserIDs: excludedUserIDs,
 	})
 	if err != nil {
 		return nil, err

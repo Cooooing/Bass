@@ -18,6 +18,7 @@ service RelationService {
   rpc ListFollowers(ListFollowersRelations.Req) returns (ListFollowersRelations.Resp) {} // 查询账号的粉丝关系列表。
   rpc ListBlocked(ListBlockedRelations.Req) returns (ListBlockedRelations.Resp) {} // 查询账号拉黑的账号列表。
   rpc MapStatus(MapRelationStatuses.Req) returns (MapRelationStatuses.Resp) {} // 查询账号与多个目标账号之间的关系状态映射。
+  rpc ListBlockedCounterparts(ListBlockedCounterparts.Req) returns (ListBlockedCounterparts.Resp) {} // 查询与账号存在任一方向拉黑关系的账号。
 }
 
 message FollowRelation {
@@ -56,6 +57,7 @@ message ListFollowingRelations {
   message Req {
     .common.api.app.common.PageReq page = 1;
     int64 user_id = 2;
+    repeated int64 excluded_user_ids = 3;
   }
   message Resp {
     message Relation {
@@ -75,6 +77,7 @@ message ListFollowersRelations {
   message Req {
     .common.api.app.common.PageReq page = 1;
     int64 user_id = 2;
+    repeated int64 excluded_user_ids = 3;
   }
   message Resp {
     message Relation {
@@ -123,5 +126,14 @@ message MapRelationStatuses {
       bool blocked_by = 5;
     }
     map<int64, RelationStatus> statuses = 1;
+  }
+}
+
+message ListBlockedCounterparts {
+  message Req {
+    int64 user_id = 1;
+  }
+  message Resp {
+    repeated int64 user_ids = 1;
   }
 }

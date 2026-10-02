@@ -149,6 +149,7 @@ func (h *articleActorHandler) build(ctx context.Context, req *articleActorBuildR
 	}
 	return &model.NotificationContext{
 		EventID:      req.EventID,
+		ActorUserID:  new(req.SenderID),
 		TemplateData: templateData,
 		Recipients:   recipients,
 	}, nil

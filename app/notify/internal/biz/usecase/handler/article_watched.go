@@ -54,6 +54,7 @@ func (h *ArticleWatchedHandler) Handle(ctx context.Context, req *usecase.EventHa
 	return h.notifyUsecase.Send(ctx, &usecase.NotifySendReq{
 		EventID:      event.GetEventId(),
 		EventType:    req.EventType,
+		ActorUserID:  notificationContext.ActorUserID,
 		Language:     req.Language,
 		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 		TemplateData: notificationContext.TemplateData,

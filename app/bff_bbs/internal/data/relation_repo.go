@@ -77,8 +77,9 @@ func (r *RelationClient) ListFollowing(ctx context.Context, req *repo.ListFollow
 		}
 	}
 	reply, err := r.userClient.Relation.ListFollowing(ctx, &userv1.ListFollowingRelations_Req{
-		Page:   pageReq.ToProto(),
-		UserId: req.ActorID,
+		Page:            pageReq.ToProto(),
+		UserId:          req.ActorID,
+		ExcludedUserIds: req.ExcludedUserIDs,
 	})
 	if err != nil {
 		return nil, err
@@ -117,8 +118,9 @@ func (r *RelationClient) ListFollowers(ctx context.Context, req *repo.ListFollow
 		}
 	}
 	reply, err := r.userClient.Relation.ListFollowers(ctx, &userv1.ListFollowersRelations_Req{
-		Page:   pageReq.ToProto(),
-		UserId: req.ActorID,
+		Page:            pageReq.ToProto(),
+		UserId:          req.ActorID,
+		ExcludedUserIds: req.ExcludedUserIDs,
 	})
 	if err != nil {
 		return nil, err
@@ -222,6 +224,17 @@ func (r *RelationClient) MapStatus(ctx context.Context, actorID int64, targetIDs
 		result[targetID] = &repo.RelationStatus{TargetID: targetID, Following: status.GetFollowing(), FollowedBy: status.GetFollowedBy(), Blocking: status.GetBlocking(), BlockedBy: status.GetBlockedBy()}
 	}
 	return result, nil
+}
+
+func (r *RelationClient) ListBlockedCounterparts(ctx context.Context, userID int64) ([]int64, error) {
+	if userID <= 0 {
+		return []int64{}, nil
+	}
+	reply, err := r.userClient.Relation.ListBlockedCounterparts(ctx, &userv1.ListBlockedCounterparts_Req{UserId: userID})
+	if err != nil {
+		return nil, err
+	}
+	return reply.GetUserIds(), nil
 }
 
 func (r *RelationClient) relationTypeFromUser(value userv1enum.RelationType) enum.RelationType {

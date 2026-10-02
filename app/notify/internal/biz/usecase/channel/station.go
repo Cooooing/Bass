@@ -50,12 +50,13 @@ func (u *StationUsecase) Process(ctx context.Context, req *StationProcessReq) (n
 			continue
 		}
 		_, err = u.stationMessageRepo.Save(ctx, &model.NotificationStationMessage{
-			EventID:    notificationContext.EventID,
-			EventType:  notificationContext.EventType,
-			ReceiverID: recipient.UserID,
-			Title:      rendered.Title,
-			Content:    rendered.Content,
-			Status:     notifyenum.NotificationChannelStatusSucceeded,
+			EventID:     notificationContext.EventID,
+			EventType:   notificationContext.EventType,
+			ReceiverID:  recipient.UserID,
+			BusinessKey: notificationContext.BusinessKey,
+			Title:       rendered.Title,
+			Content:     rendered.Content,
+			Status:      notifyenum.NotificationChannelStatusSucceeded,
 		})
 		if err != nil {
 			return notifyenum.NotificationChannelStatusInternalError, err

@@ -86,3 +86,18 @@ func (r *UserAccountRepo) ListFollowerIDs(ctx context.Context, userID int64) ([]
 	}
 	return userIDs, nil
 }
+
+func (r *UserAccountRepo) MapRelationStatuses(ctx context.Context, userID int64, targetIDs []int64) (map[int64]*model.RelationStatus, error) {
+	if userID <= 0 || len(targetIDs) == 0 {
+		return map[int64]*model.RelationStatus{}, nil
+	}
+	reply, err := r.userClient.Relation.MapStatus(ctx, &userv1.MapRelationStatuses_Req{ActorId: userID, TargetIds: targetIDs})
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.RelationStatus, len(reply.GetStatuses()))
+	for targetID, status := range reply.GetStatuses() {
+		result[targetID] = &model.RelationStatus{Blocking: status.GetBlocking(), BlockedBy: status.GetBlockedBy()}
+	}
+	return result, nil
+}

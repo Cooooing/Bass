@@ -154,10 +154,11 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 		query = &repo.ArticleQuery{}
 	}
 	contentQuery := &contentv1.ArticleQueryParams{
-		TagId:     query.TagID,
-		DomainId:  query.DomainID,
-		AuthorId:  query.AuthorID,
-		Scheduled: query.Scheduled,
+		TagId:             query.TagID,
+		DomainId:          query.DomainID,
+		AuthorId:          query.AuthorID,
+		Scheduled:         query.Scheduled,
+		ExcludedAuthorIds: query.ExcludedAuthorIDs,
 	}
 	if query.Type != nil {
 		contentQuery.Type = new(contentv1enum.ArticleType(*query.Type))
@@ -207,7 +208,7 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 	if err != nil {
 		return nil, err
 	}
-	rows, err := r.articleListItems(ctx, reply.GetRows(), req.UserID)
+	rows, err := r.articleListItems(ctx, reply.GetRows(), req.UserID, query.ExcludedAuthorIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -225,6 +226,7 @@ func (r *ContentArticleClient) articleListItems(
 	ctx context.Context,
 	articles []*contentv1.Article,
 	userID int64,
+	excludedUserIDs []int64,
 ) ([]*repo.ArticleListItem, error) {
 	articleIDs := make([]int64, 0, len(articles))
 	for _, item := range articles {
@@ -232,7 +234,7 @@ func (r *ContentArticleClient) articleListItems(
 			articleIDs = append(articleIDs, item.GetId())
 		}
 	}
-	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, articleIDs, userID)
+	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, articleIDs, userID, excludedUserIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -257,14 +259,15 @@ func (r *ContentArticleClient) articleListItems(
 
 func (r *ContentArticleClient) SearchArticles(ctx context.Context, req *repo.SearchArticlesReq) (*repo.SearchArticlesResp, error) {
 	reply, err := r.contentClient.ArticleSearch.SearchPublic(ctx, &contentv1.SearchPublicArticles_Req{
-		Query:  req.Query,
-		Cursor: req.Cursor,
-		Size:   req.Size,
+		Query:             req.Query,
+		Cursor:            req.Cursor,
+		Size:              req.Size,
+		ExcludedAuthorIds: req.ExcludedAuthorIDs,
 	})
 	if err != nil {
 		return nil, err
 	}
-	rows, err := r.articleListItems(ctx, reply.GetRows(), req.UserID)
+	rows, err := r.articleListItems(ctx, reply.GetRows(), req.UserID, req.ExcludedAuthorIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -275,6 +278,7 @@ func (r *ContentArticleClient) PageViewHistory(
 	ctx context.Context,
 	userID int64,
 	page *commonmodel.PageReq,
+	excludedAuthorIDs []int64,
 ) (*repo.ArticleViewHistoryPageResp, error) {
 	if userID <= 0 {
 		return nil, fmt.Errorf("view history requires a user")
@@ -290,6 +294,7 @@ func (r *ContentArticleClient) PageViewHistory(
 			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
 			ActorUserId: new(userID),
 		},
+		ExcludedAuthorIds: excludedAuthorIDs,
 	})
 	if err != nil {
 		return nil, err
@@ -300,7 +305,7 @@ func (r *ContentArticleClient) PageViewHistory(
 			articleIDs = append(articleIDs, row.GetArticle().GetId())
 		}
 	}
-	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, articleIDs, userID)
+	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, articleIDs, userID, excludedAuthorIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -362,7 +367,7 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 	}
 	item := reply.GetArticle()
 
-	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID)
+	lastComments, states, tags, domains, err := r.loadArticleFacts(ctx, []int64{item.GetId()}, req.UserID, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -479,12 +484,13 @@ func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.Rewa
 	return nil
 }
 
-func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs []int64, userID int64) (map[int64]*contentv1.MapArticleLastComments_Resp_Comment, map[int64]*repo.ArticleViewerActionState, map[int64][]*repo.ArticleTag, map[int64][]*repo.ArticleDomain, error) {
+func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs []int64, userID int64, excludedUserIDs []int64) (map[int64]*contentv1.MapArticleLastComments_Resp_Comment, map[int64]*repo.ArticleViewerActionState, map[int64][]*repo.ArticleTag, map[int64][]*repo.ArticleDomain, error) {
 	if len(articleIDs) == 0 {
 		return map[int64]*contentv1.MapArticleLastComments_Resp_Comment{}, map[int64]*repo.ArticleViewerActionState{}, map[int64][]*repo.ArticleTag{}, map[int64][]*repo.ArticleDomain{}, nil
 	}
 	commentResp, err := r.contentClient.Comment.MapArticleLastComments(ctx, &contentv1.MapArticleLastComments_Req{
-		ArticleIds: articleIDs,
+		ArticleIds:      articleIDs,
+		ExcludedUserIds: excludedUserIDs,
 	})
 	if err != nil {
 		return nil, nil, nil, nil, err

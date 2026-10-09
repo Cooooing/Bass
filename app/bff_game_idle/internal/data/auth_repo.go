@@ -50,11 +50,12 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*model.LoginT
 	uaRaw := server.GetHeader(ctx, "User-Agent")
 	ua := useragent.Parse(uaRaw)
 	deviceType := userenum.DeviceType_DEVICE_TYPE_DESKTOP
-	if ua.Bot {
+	switch {
+	case ua.Bot:
 		deviceType = userenum.DeviceType_DEVICE_TYPE_BOT
-	} else if ua.Tablet {
+	case ua.Tablet:
 		deviceType = userenum.DeviceType_DEVICE_TYPE_TABLET
-	} else if ua.Mobile {
+	case ua.Mobile:
 		deviceType = userenum.DeviceType_DEVICE_TYPE_MOBILE
 	}
 	reply, err := r.userClient.Auth.Login(ctx, &userv1.Login_Req{

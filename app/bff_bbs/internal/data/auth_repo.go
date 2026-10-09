@@ -76,11 +76,12 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 	uaRaw := server.GetHeader(ctx, constant.HeaderUserAgent)
 	ua := useragent.Parse(uaRaw)
 	deviceType := userenum.DeviceType_DEVICE_TYPE_DESKTOP
-	if ua.Bot {
+	switch {
+	case ua.Bot:
 		deviceType = userenum.DeviceType_DEVICE_TYPE_BOT
-	} else if ua.Tablet {
+	case ua.Tablet:
 		deviceType = userenum.DeviceType_DEVICE_TYPE_TABLET
-	} else if ua.Mobile {
+	case ua.Mobile:
 		deviceType = userenum.DeviceType_DEVICE_TYPE_MOBILE
 	}
 

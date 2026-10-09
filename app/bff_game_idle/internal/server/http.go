@@ -7,15 +7,12 @@ import (
 	commonenum "common/pkg/enum"
 	"common/pkg/server"
 	v1 "common/proto/gen/bff_game_idle/v1"
-	cerrors "common/proto/gen/common/errors"
 	"context"
-	"encoding/json"
 	"fmt"
 	"log/slog"
-	stdhttp "net/http"
 
 	"bff_game_idle/internal/config"
-	"bff_game_idle/internal/errormessage"
+	"bff_game_idle/internal/config/errormessage"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware"
@@ -57,14 +54,13 @@ func NewHTTPServer(
 	middlewares = append(middlewares, NewHTTPAuthMiddlewares(userClient)...)
 	middlewares = append(middlewares, validate.ProtoValidate())
 
+	resolver := errormessage.NewResolver()
 	opts := []kratoshttp.ServerOption{
 		kratoshttp.Filter(server.HTTPCORSFilter(), server.HTTPTraceMiddleware(), server.HTTPAccessLogMiddleware(logger)),
 		kratoshttp.Middleware(middlewares...),
 		kratoshttp.RequestDecoder(server.ProtoJSONRequestDecoder),
 		kratoshttp.ResponseEncoder(server.HttpRespEncoder),
-		kratoshttp.ErrorEncoder(server.HttpErrorEncoder(func(r *stdhttp.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string {
-			return errormessage.ResolveHTTP(r, code, data)
-		})),
+		kratoshttp.ErrorEncoder(server.HttpErrorEncoder(resolver.ResolveHTTP)),
 	}
 	if c.GetHttp().GetNetwork() != "" {
 		opts = append(opts, kratoshttp.Network(c.GetHttp().GetNetwork()))

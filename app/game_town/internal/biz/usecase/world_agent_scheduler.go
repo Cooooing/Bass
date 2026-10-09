@@ -250,7 +250,7 @@ func (r *WorldAgentRunner) fairAgentJobs(jobs []*model.AgentJob, cursor *int) []
 	baseCursor := 0
 	if cursor != nil {
 		baseCursor = *cursor
-		*cursor = *cursor + 1
+		(*cursor)++
 	}
 	for _, priority := range priorities {
 		worldOrder := make([]int64, 0)

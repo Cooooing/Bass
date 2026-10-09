@@ -504,16 +504,17 @@ func (u *ScheduledTaskUsecase) executeScheduledRecord(
 	}
 	statusValue := schedulerenum.TaskExecutionStatusSuccess
 	lastError := ""
-	if errors.Is(execCtx.Err(), context.Canceled) {
+	switch {
+	case errors.Is(execCtx.Err(), context.Canceled):
 		statusValue = schedulerenum.TaskExecutionStatusCanceled
 		lastError = execCtx.Err().Error()
-	} else if errors.Is(execCtx.Err(), context.DeadlineExceeded) {
+	case errors.Is(execCtx.Err(), context.DeadlineExceeded):
 		statusValue = schedulerenum.TaskExecutionStatusTimeout
 		lastError = execCtx.Err().Error()
 		if record.Attempt < record.MaxAttempts {
 			statusValue = schedulerenum.TaskExecutionStatusRetryPending
 		}
-	} else if err != nil {
+	case err != nil:
 		statusValue = schedulerenum.TaskExecutionStatusFailed
 		lastError = err.Error()
 		if record.Attempt < record.MaxAttempts {

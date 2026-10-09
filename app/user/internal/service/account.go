@@ -245,11 +245,12 @@ func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfil
 	clearMBTI := false
 	if req.Mbti != nil {
 		value := strings.ToUpper(strings.TrimSpace(req.GetMbti()))
-		if value == "" {
+		switch {
+		case value == "":
 			clearMBTI = true
-		} else if !s.mbtiRe.MatchString(value) {
+		case !s.mbtiRe.MatchString(value):
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_INVALID)
-		} else {
+		default:
 			mbti = new(value)
 		}
 	}

@@ -315,11 +315,17 @@ var messages = serverutil.ErrorMessages{
 	},
 }
 
-func ResolveHTTP(r *http.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string {
+type Resolver struct{}
+
+func NewResolver() *Resolver {
+	return new(Resolver)
+}
+
+func (*Resolver) ResolveHTTP(r *http.Request, code cerrors.BusinessErrorCode, data json.RawMessage) string {
 	return messages.Resolve(r, code, data)
 }
 
-func ResolveError(err error) (cerrors.BusinessErrorCode, string) {
+func (*Resolver) ResolveError(err error) (cerrors.BusinessErrorCode, string) {
 	code, ok := apperror.BusinessCode(err)
 	if !ok || code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_SUCCESS {
 		code = cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_UNKNOWN

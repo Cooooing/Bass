@@ -138,12 +138,13 @@ func (r *EventRepo) List(ctx context.Context, req *bizrepo.EventQuery) ([]*model
 	query := r.eventQuery(r.getClient(ctx).Event.Query(), req)
 	var rows []*gen.Event
 	var err error
-	if req != nil && req.RecentLimit > 0 {
+	switch {
+	case req != nil && req.RecentLimit > 0:
 		rows, err = query.Order(event.BySequence(sql.OrderDesc())).Limit(req.RecentLimit).All(ctx)
 		slices.Reverse(rows)
-	} else if req != nil && req.Limit > 0 {
+	case req != nil && req.Limit > 0:
 		rows, err = query.Order(event.BySequence()).Limit(req.Limit).All(ctx)
-	} else {
+	default:
 		rows, err = query.Order(event.BySequence()).All(ctx)
 	}
 	if err != nil {

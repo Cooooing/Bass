@@ -14,8 +14,8 @@ import (
 	"bff_game_idle/internal/biz/model"
 	"bff_game_idle/internal/biz/repo"
 	"bff_game_idle/internal/config"
+	"bff_game_idle/internal/config/errormessage"
 	"bff_game_idle/internal/enum"
-	"bff_game_idle/internal/errormessage"
 
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -407,7 +407,7 @@ func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSoc
 }
 
 func (u *WebSocketUsecase) SendCommandFailed(ctx context.Context, connection *WebSocketConnection, err error) {
-	code, message := errormessage.ResolveError(err)
+	code, message := errormessage.NewResolver().ResolveError(err)
 	connection.Send(ctx, &WebSocketSendMessage{
 		Type: enum.WebSocketMessageTypeCommandFailed,
 		Payload: &WebSocketCommandError{
@@ -430,15 +430,16 @@ func (u *WebSocketUsecase) HandleEvent(ctx context.Context, event *model.WebSock
 func (u *WebSocketUsecase) Deliver(ctx context.Context, message *WebSocketSendMessage) {
 	connections := make([]*WebSocketConnection, 0)
 	u.lock.RLock()
-	if message.Broadcast {
+	switch {
+	case message.Broadcast:
 		for _, connection := range u.sessions {
 			connections = append(connections, connection)
 		}
-	} else if message.TargetSessionID != "" {
+	case message.TargetSessionID != "":
 		if connection := u.sessions[message.TargetSessionID]; connection != nil {
 			connections = append(connections, connection)
 		}
-	} else if message.TargetCharacterID > 0 {
+	case message.TargetCharacterID > 0:
 		for _, connection := range u.characters[message.TargetCharacterID] {
 			connections = append(connections, connection)
 		}

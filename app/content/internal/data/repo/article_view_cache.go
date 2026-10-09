@@ -34,11 +34,12 @@ func NewArticleViewCacheRepo(
 
 func (r *ArticleViewCacheRepo) Record(ctx context.Context, req *repo.ArticleViewCacheRecordReq) (bool, error) {
 	var viewerKey string
-	if req.ViewerUserID != nil && *req.ViewerUserID > 0 {
+	switch {
+	case req.ViewerUserID != nil && *req.ViewerUserID > 0:
 		viewerKey = fmt.Sprintf("viewer:{user_id:%d}", *req.ViewerUserID)
-	} else if req.BrowserFingerprint != nil && *req.BrowserFingerprint != "" {
+	case req.BrowserFingerprint != nil && *req.BrowserFingerprint != "":
 		viewerKey = fmt.Sprintf("viewer:{fingerprint:%s}", *req.BrowserFingerprint)
-	} else {
+	default:
 		ip := ""
 		if req.IP != nil {
 			ip = *req.IP

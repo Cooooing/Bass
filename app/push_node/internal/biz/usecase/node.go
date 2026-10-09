@@ -36,7 +36,7 @@ func NewNodeUsecase(
 }
 
 func (uc *NodeUsecase) ConnectHub(ctx context.Context) error {
-	nodeID, err := RegisterWithHub(ctx, uc.hubClient, uc.conf)
+	nodeID, err := uc.registerWithHub(ctx)
 	if err != nil {
 		return err
 	}
@@ -93,12 +93,12 @@ func (uc *NodeUsecase) sendHeartbeat(ctx context.Context) {
 	uc.log.Debug(fmt.Sprintf("heartbeat sent: node_id=%s connections=%d", uc.nodeID, connectionCount))
 }
 
-func RegisterWithHub(ctx context.Context, client pushhubv1.PushHubNodeServiceClient, conf *config.Bootstrap) (string, error) {
+func (uc *NodeUsecase) registerWithHub(ctx context.Context) (string, error) {
 	var nodeID string
 	var lastErr error
 	for range 3 {
-		resp, err := client.RegisterNode(ctx, &pushhubv1.RegisterNode_Req{
-			Address: fmt.Sprintf("%s:%d", conf.Http.Host, conf.Http.Port),
+		resp, err := uc.hubClient.RegisterNode(ctx, &pushhubv1.RegisterNode_Req{
+			Address: fmt.Sprintf("%s:%d", uc.conf.Http.Host, uc.conf.Http.Port),
 		})
 		if err != nil {
 			lastErr = err

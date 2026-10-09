@@ -54,18 +54,18 @@ func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context,
 		Payload:        string(payload),
 		ScheduledAt:    timestamppb.New(publishAt),
 		IdempotencyKey: uuid.NewString(),
-		BusinessKey:    publishScheduledArticleBusinessKey(articleID),
+		BusinessKey:    c.publishScheduledArticleBusinessKey(articleID),
 	})
 	return err
 }
 
 func (c *DelayedTaskClient) CancelPublishScheduledArticle(ctx context.Context, articleID int64) error {
 	_, err := c.schedulerClient.DelayedTask.CancelExecution(ctx, &schedulerv1.CancelSchedulerDelayedTaskExecution_Req{
-		BusinessKey: publishScheduledArticleBusinessKey(articleID),
+		BusinessKey: c.publishScheduledArticleBusinessKey(articleID),
 	})
 	return err
 }
 
-func publishScheduledArticleBusinessKey(articleID int64) string {
+func (*DelayedTaskClient) publishScheduledArticleBusinessKey(articleID int64) string {
 	return "content.article.publish:" + strconv.FormatInt(articleID, 10)
 }

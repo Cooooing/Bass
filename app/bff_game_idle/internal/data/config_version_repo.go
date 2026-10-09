@@ -1,10 +1,12 @@
 package data
 
 import (
-	"bff_game_idle/internal/biz/repo"
 	commonclient "common/pkg/client"
 	"context"
+	"errors"
 	"time"
+
+	"bff_game_idle/internal/biz/repo"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -27,7 +29,7 @@ func NewConfigVersionRepo(redisClient *commonclient.RedisClient) repo.ConfigVers
 
 func (r *ConfigVersionRepo) Get(ctx context.Context) (string, error) {
 	value, err := r.redisClient.Client.Get(ctx, r.redisKey).Result()
-	if err == redis.Nil {
+	if errors.Is(err, redis.Nil) {
 		return "", nil
 	}
 	return value, err

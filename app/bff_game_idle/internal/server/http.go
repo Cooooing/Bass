@@ -1,8 +1,6 @@
 package server
 
 import (
-	"bff_game_idle/internal/config"
-	"bff_game_idle/internal/errormessage"
 	commonClient "common/pkg/client"
 	"common/pkg/client/rpc"
 	"common/pkg/constant"
@@ -15,6 +13,9 @@ import (
 	"fmt"
 	"log/slog"
 	stdhttp "net/http"
+
+	"bff_game_idle/internal/config"
+	"bff_game_idle/internal/errormessage"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware"

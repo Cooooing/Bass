@@ -1,10 +1,11 @@
 package usecase
 
 import (
-	"bff_game_idle/internal/biz/model"
-	"bff_game_idle/internal/enum"
 	commonenum "common/pkg/enum"
 	"context"
+
+	"bff_game_idle/internal/biz/model"
+	"bff_game_idle/internal/enum"
 )
 
 // WebSocketEventReq 是服务事件推送处理上下文。

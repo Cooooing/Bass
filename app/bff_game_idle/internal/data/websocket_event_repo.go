@@ -1,13 +1,14 @@
 package data
 
 import (
-	"bff_game_idle/internal/biz/model"
-	"bff_game_idle/internal/biz/repo"
 	"common/pkg/client"
 	commonenum "common/pkg/enum"
 	commonenums "common/proto/gen/common/enums"
 	"context"
 	"time"
+
+	"bff_game_idle/internal/biz/model"
+	"bff_game_idle/internal/biz/repo"
 
 	"google.golang.org/protobuf/proto"
 )

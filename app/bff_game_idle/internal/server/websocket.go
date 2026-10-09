@@ -1,8 +1,9 @@
 package server
 
 import (
-	"bff_game_idle/internal/biz/usecase"
 	"context"
+
+	"bff_game_idle/internal/biz/usecase"
 )
 
 type WebSocketManagerServer struct {

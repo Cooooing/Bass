@@ -1,10 +1,11 @@
 package service
 
 import (
-	"bff_game_idle/internal/biz/usecase"
 	v1 "common/proto/gen/bff_game_idle/v1"
 	"context"
 	"strings"
+
+	"bff_game_idle/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"

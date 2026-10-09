@@ -1,8 +1,6 @@
 package data
 
 import (
-	"bff_game_idle/internal/biz/model"
-	"bff_game_idle/internal/biz/repo"
 	"common/pkg/apperror"
 	"common/pkg/client/rpc"
 	cerrors "common/proto/gen/common/errors"
@@ -10,6 +8,9 @@ import (
 	gameidleenum "common/proto/gen/game_idle/v1/enum"
 	"context"
 	"time"
+
+	"bff_game_idle/internal/biz/model"
+	"bff_game_idle/internal/biz/repo"
 )
 
 var _ repo.ChatRepo = (*ChatRepo)(nil)

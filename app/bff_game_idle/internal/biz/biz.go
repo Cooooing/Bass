@@ -1,12 +1,13 @@
 package biz
 
 import (
+	commonclient "common/pkg/client"
+	"common/proto/gen/common"
+
 	"bff_game_idle/internal/biz/usecase"
 	"bff_game_idle/internal/biz/usecase/command"
 	"bff_game_idle/internal/biz/usecase/event"
 	"bff_game_idle/internal/config"
-	commonclient "common/pkg/client"
-	"common/proto/gen/common"
 
 	"github.com/google/wire"
 )

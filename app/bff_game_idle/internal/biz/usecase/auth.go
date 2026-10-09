@@ -1,9 +1,10 @@
 package usecase
 
 import (
+	"context"
+
 	"bff_game_idle/internal/biz/model"
 	"bff_game_idle/internal/biz/repo"
-	"context"
 )
 
 type AuthUsecase struct {

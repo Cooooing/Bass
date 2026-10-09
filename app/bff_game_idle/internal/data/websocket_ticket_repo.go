@@ -1,11 +1,13 @@
 package data
 
 import (
-	"bff_game_idle/internal/biz/repo"
 	commonclient "common/pkg/client"
 	"context"
+	"errors"
 	"fmt"
 	"time"
+
+	"bff_game_idle/internal/biz/repo"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -31,7 +33,7 @@ func (r *WebSocketTicketRepo) Save(ctx context.Context, characterID int64, ticke
 func (r *WebSocketTicketRepo) Consume(ctx context.Context, characterID int64, ticket string) (bool, error) {
 	value, err := r.redisClient.Client.GetDel(ctx, r.redisKey(characterID)).Result()
 	if err != nil {
-		if err == redis.Nil {
+		if errors.Is(err, redis.Nil) {
 			return false, nil
 		}
 		return false, err

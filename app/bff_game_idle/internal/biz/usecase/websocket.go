@@ -1,11 +1,6 @@
 package usecase
 
 import (
-	"bff_game_idle/internal/biz/model"
-	"bff_game_idle/internal/biz/repo"
-	"bff_game_idle/internal/config"
-	"bff_game_idle/internal/enum"
-	"bff_game_idle/internal/errormessage"
 	"common/pkg/apperror"
 	commonclient "common/pkg/client"
 	"common/pkg/constant"
@@ -15,6 +10,12 @@ import (
 	"log/slog"
 	"sync"
 	"time"
+
+	"bff_game_idle/internal/biz/model"
+	"bff_game_idle/internal/biz/repo"
+	"bff_game_idle/internal/config"
+	"bff_game_idle/internal/enum"
+	"bff_game_idle/internal/errormessage"
 
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/encoding/protojson"

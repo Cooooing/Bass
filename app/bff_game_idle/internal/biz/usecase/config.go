@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"bff_game_idle/internal/biz/model"
-	"bff_game_idle/internal/biz/repo"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -11,6 +9,9 @@ import (
 	"sort"
 	"sync"
 	"time"
+
+	"bff_game_idle/internal/biz/model"
+	"bff_game_idle/internal/biz/repo"
 )
 
 type ConfigUsecase struct {

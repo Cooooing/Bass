@@ -1,8 +1,6 @@
 package data
 
 import (
-	"bff_game_idle/internal/biz/model"
-	"bff_game_idle/internal/biz/repo"
 	"common/pkg/client/rpc"
 	commonenum "common/pkg/enum"
 	"common/pkg/server"
@@ -11,6 +9,9 @@ import (
 	"context"
 	"crypto/sha1"
 	"encoding/hex"
+
+	"bff_game_idle/internal/biz/model"
+	"bff_game_idle/internal/biz/repo"
 
 	"github.com/mileusna/useragent"
 )

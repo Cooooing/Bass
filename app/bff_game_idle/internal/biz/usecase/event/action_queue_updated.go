@@ -1,10 +1,11 @@
 package event
 
 import (
-	"bff_game_idle/internal/biz/usecase"
-	"bff_game_idle/internal/enum"
 	commonenum "common/pkg/enum"
 	"context"
+
+	"bff_game_idle/internal/biz/usecase"
+	"bff_game_idle/internal/enum"
 )
 
 type ActionQueueUpdatedHandler struct {

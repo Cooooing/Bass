@@ -1,8 +1,9 @@
 package repo
 
 import (
-	"bff_game_idle/internal/biz/model"
 	"context"
+
+	"bff_game_idle/internal/biz/model"
 )
 
 type AuthRepo interface {

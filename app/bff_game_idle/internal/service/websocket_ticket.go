@@ -1,7 +1,6 @@
 package service
 
 import (
-	"bff_game_idle/internal/biz/usecase"
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
@@ -9,6 +8,8 @@ import (
 	v1 "common/proto/gen/bff_game_idle/v1"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+
+	"bff_game_idle/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"

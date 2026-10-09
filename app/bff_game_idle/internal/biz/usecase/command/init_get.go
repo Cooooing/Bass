@@ -1,11 +1,12 @@
 package command
 
 import (
+	"context"
+	"time"
+
 	"bff_game_idle/internal/biz/model"
 	"bff_game_idle/internal/biz/usecase"
 	"bff_game_idle/internal/enum"
-	"context"
-	"time"
 
 	"google.golang.org/protobuf/proto"
 )

@@ -1,19 +1,21 @@
 package service
 
 import (
-	"bff_game_idle/internal/biz/usecase"
-	"bff_game_idle/internal/enum"
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"encoding/json"
+	"errors"
 	"log/slog"
 	"net"
 	stdhttp "net/http"
 	"strconv"
 	"sync/atomic"
 	"time"
+
+	"bff_game_idle/internal/biz/usecase"
+	"bff_game_idle/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -128,7 +130,8 @@ func (s *WebSocketService) readPump(
 	for {
 		_, data, err := conn.ReadMessage()
 		if err != nil {
-			if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
+			var netErr net.Error
+			if errors.As(err, &netErr) {
 				timeout.Store(true)
 			}
 			return

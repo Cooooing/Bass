@@ -1,5 +1,10 @@
 package enum
 
+import (
+	commonenum "common/pkg/enum"
+	v1 "common/proto/gen/bff_game_idle/v1"
+)
+
 // WebSocketMessageType 表示摸鱼放置 BFF websocket 消息类型。
 // 消息类型使用小写点分层命名：客户端发送命令使用“领域.对象.动作”，服务端发送事件使用“领域.对象.结果”。
 type WebSocketMessageType string
@@ -30,3 +35,7 @@ const (
 	WebSocketMessageTypeActionRemove    WebSocketMessageType = "action.remove"     // 移除行动
 	WebSocketMessageTypeActionClear     WebSocketMessageType = "action.clear"      // 清空行动
 )
+
+var WebSocketMessageTypeMap = commonenum.NewMapping[WebSocketMessageType, v1.WebSocketMessageType](map[WebSocketMessageType]commonenum.Entry[WebSocketMessageType, v1.WebSocketMessageType]{
+	WebSocketMessageTypeSessionClose: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_SESSION_CLOSE}, WebSocketMessageTypeCommandFailed: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_COMMAND_FAILED}, WebSocketMessageTypeChatMessageReceived: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_CHAT_MESSAGE_RECEIVED}, WebSocketMessageTypeActionCompleted: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_ACTION_COMPLETED}, WebSocketMessageTypeActionQueueUpdated: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_ACTION_QUEUE_UPDATED}, WebSocketMessageTypeAbilityLeveledUp: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_ABILITY_LEVELED_UP}, WebSocketMessageTypeInitCompleted: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_INIT_COMPLETED}, WebSocketMessageTypeConfigCompleted: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_CONFIG_COMPLETED}, WebSocketMessageTypeConfigVersionCompleted: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_CONFIG_VERSION_COMPLETED}, WebSocketMessageTypeActionDetailCompleted: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_ACTION_DETAIL_COMPLETED}, WebSocketMessageTypeCharacterOnlineDone: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_CHARACTER_ONLINE_COMPLETED}, WebSocketMessageTypeInitGet: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_INIT_GET}, WebSocketMessageTypeConfigGet: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_CONFIG_GET}, WebSocketMessageTypeConfigVersion: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_CONFIG_VERSION}, WebSocketMessageTypeActionDetailGet: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_ACTION_DETAIL_GET}, WebSocketMessageTypeCharacterOnline: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_CHARACTER_ONLINE}, WebSocketMessageTypeChatMessageSend: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_CHAT_MESSAGE_SEND}, WebSocketMessageTypeActionAdd: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_ACTION_ADD}, WebSocketMessageTypeActionMove: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_ACTION_MOVE}, WebSocketMessageTypeActionRemove: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_ACTION_REMOVE}, WebSocketMessageTypeActionClear: {Proto: v1.WebSocketMessageType_WEB_SOCKET_MESSAGE_TYPE_ACTION_CLEAR},
+})

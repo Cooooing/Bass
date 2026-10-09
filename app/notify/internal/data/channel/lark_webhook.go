@@ -44,7 +44,7 @@ func NewLarkWebhookClient(
 	}
 }
 
-func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizrepo.LarkWebhookRequest) (*bizrepo.LarkWebhookSendResult, error) {
+func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizrepo.LarkWebhookRequest) (result *bizrepo.LarkWebhookSendResult, err error) {
 	if req == nil || req.Token == "" || req.RequestBody == "" {
 		return &bizrepo.LarkWebhookSendResult{
 			Status: notifyenum.NotificationChannelStatusFailed,
@@ -77,7 +77,11 @@ func (c *LarkWebhookClient) SendLarkWebhook(ctx context.Context, req *bizrepo.La
 			RespBody: new(fmt.Sprintf("send lark webhook: %v", err)),
 		}, nil
 	}
-	defer reply.Body.Close()
+	defer func() {
+		if closeErr := reply.Body.Close(); err == nil && closeErr != nil {
+			err = fmt.Errorf("close lark webhook response body: %w", closeErr)
+		}
+	}()
 	body, _ := io.ReadAll(reply.Body)
 	status := notifyenum.NotificationChannelStatusSucceeded
 	if reply.StatusCode < http.StatusOK || reply.StatusCode >= http.StatusMultipleChoices {

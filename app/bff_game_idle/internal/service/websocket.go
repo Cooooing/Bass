@@ -89,7 +89,7 @@ func (s *WebSocketService) Handle(w stdhttp.ResponseWriter, r *stdhttp.Request) 
 		s.logger.Error("game idle bff websocket upgrade failed", constant.LogFieldErr, err)
 		return
 	}
-	defer conn.Close()
+	defer s.closeConnection(conn)
 
 	connCtx, cancel := context.WithCancel(context.WithoutCancel(ctx))
 	defer cancel()
@@ -153,7 +153,7 @@ func (s *WebSocketService) writePump(
 ) {
 	ticker := time.NewTicker(s.webSocketUsecase.PingInterval(ctx))
 	defer ticker.Stop()
-	defer conn.Close()
+	defer s.closeConnection(conn)
 	defer cancel()
 	for {
 		select {
@@ -190,5 +190,11 @@ func (s *WebSocketService) writePump(
 				return
 			}
 		}
+	}
+}
+
+func (s *WebSocketService) closeConnection(conn *websocket.Conn) {
+	if err := conn.Close(); err != nil {
+		s.logger.Warn("game idle bff websocket close failed", constant.LogFieldErr, err)
 	}
 }

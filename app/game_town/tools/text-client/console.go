@@ -14,12 +14,21 @@ import (
 type consolePrinter struct {
 	mu     sync.Mutex
 	writer io.Writer
+	errors chan<- error
 }
 
-func (p *consolePrinter) Println(value string) {
+func (p *consolePrinter) Println(value string) error {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	fmt.Fprintln(p.writer, value)
+	_, err := fmt.Fprintln(p.writer, value)
+	return err
+}
+
+func (p *consolePrinter) reportError(err error) {
+	select {
+	case p.errors <- err:
+	default:
+	}
 }
 
 type consoleSession struct {
@@ -70,15 +79,26 @@ func (s *consoleSession) SetDialogSuggestions(npcID int64, values []suggestedCho
 }
 
 func runConsole(ctx context.Context, client *rpc.GameTownClient, target string, input io.Reader, output io.Writer) error {
+	consoleCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	printErrors := make(chan error, 1)
 	printer := &consolePrinter{
 		writer: output,
+		errors: printErrors,
 	}
 	session := &consoleSession{}
-	printer.Println("Game Town Console connected: " + target)
-	printer.Println("Console line mode enabled. Type /help for commands. Non-command text is sent as free action after joining a world.")
+	if err := printer.Println("Game Town Console connected: " + target); err != nil {
+		return err
+	}
+	if err := printer.Println("Console line mode enabled. Type /help for commands. Non-command text is sent as free action after joining a world."); err != nil {
+		return err
+	}
 
 	scanner := bufio.NewScanner(input)
 	scanner.Buffer(make([]byte, 4096), 1024*1024)
+	lines := make(chan string)
+	scanErrors := make(chan error, 1)
+	go scanConsoleLines(consoleCtx, scanner, lines, scanErrors)
 	var playerID int64
 	var worldID int64
 	var watchCancel context.CancelFunc
@@ -88,50 +108,77 @@ func runConsole(ctx context.Context, client *rpc.GameTownClient, target string, 
 		}
 	}()
 
-	for scanner.Scan() {
-		raw := strings.TrimSpace(scanner.Text())
-		if raw == "" {
-			continue
-		}
-		if raw == "/quit" || raw == "/exit" {
-			return nil
-		}
-		dialogNpcID, suggestions := session.Dialog()
-		result := executeCommand(ctx, client, playerID, worldID, dialogNpcID, suggestions, raw)
-		printCommandResult(printer, result)
-		if result.playerID > 0 {
-			playerID = result.playerID
-		}
-		if result.dialogNpcID > 0 {
-			session.SetDialog(result.dialogNpcID)
-		}
-		if result.clearDialog {
-			session.ClearDialog()
-		}
-		if result.clearSuggestions {
-			session.ClearSuggestions()
-		}
-		if result.worldID > 0 && result.worldID != worldID {
-			worldID = result.worldID
-			if watchCancel != nil {
-				watchCancel()
+	for {
+		select {
+		case err := <-printErrors:
+			return err
+		case err := <-scanErrors:
+			return err
+		case raw, ok := <-lines:
+			if !ok {
+				return nil
 			}
-			var events <-chan eventResult
-			watchCancel, events = startWatcher(ctx, client, playerID, worldID, 0)
-			go printConsoleEvents(ctx, printer, session, events)
+			raw = strings.TrimSpace(raw)
+			if raw == "" {
+				continue
+			}
+			if raw == "/quit" || raw == "/exit" {
+				return nil
+			}
+			dialogNpcID, suggestions := session.Dialog()
+			result := executeCommand(ctx, client, playerID, worldID, dialogNpcID, suggestions, raw)
+			if err := printCommandResult(printer, result); err != nil {
+				return err
+			}
+			if result.playerID > 0 {
+				playerID = result.playerID
+			}
+			if result.dialogNpcID > 0 {
+				session.SetDialog(result.dialogNpcID)
+			}
+			if result.clearDialog {
+				session.ClearDialog()
+			}
+			if result.clearSuggestions {
+				session.ClearSuggestions()
+			}
+			if result.worldID > 0 && result.worldID != worldID {
+				worldID = result.worldID
+				if watchCancel != nil {
+					watchCancel()
+				}
+				var events <-chan eventResult
+				watchCancel, events = startWatcher(consoleCtx, client, playerID, worldID, 0)
+				go printConsoleEvents(consoleCtx, printer, session, events)
+			}
 		}
 	}
-	return scanner.Err()
 }
 
-func printCommandResult(printer *consolePrinter, result commandResult) {
+func scanConsoleLines(ctx context.Context, scanner *bufio.Scanner, lines chan<- string, scanErrors chan<- error) {
+	defer close(lines)
+	for scanner.Scan() {
+		select {
+		case lines <- scanner.Text():
+		case <-ctx.Done():
+			return
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		scanErrors <- err
+	}
+}
+
+func printCommandResult(printer *consolePrinter, result commandResult) error {
 	if result.err != nil {
-		printer.Println("error: " + result.err.Error())
-		return
+		return printer.Println("error: " + result.err.Error())
 	}
 	for _, line := range result.lines {
-		printer.Println(line)
+		if err := printer.Println(line); err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 func printConsoleEvents(ctx context.Context, printer *consolePrinter, session *consoleSession, events <-chan eventResult) {
@@ -144,7 +191,10 @@ func printConsoleEvents(ctx context.Context, printer *consolePrinter, session *c
 				return
 			}
 			if result.err != nil {
-				printer.Println("event stream: " + result.err.Error())
+				if err := printer.Println("event stream: " + result.err.Error()); err != nil {
+					printer.reportError(err)
+					return
+				}
 				continue
 			}
 			if result.event == nil {
@@ -154,7 +204,10 @@ func printConsoleEvents(ctx context.Context, printer *consolePrinter, session *c
 			if len(choices) > 0 {
 				session.SetDialogSuggestions(result.event.GetNpcId(), choices)
 			}
-			printer.Println(formatEventLine(result.event))
+			if err := printer.Println(formatEventLine(result.event)); err != nil {
+				printer.reportError(err)
+				return
+			}
 		}
 	}
 }

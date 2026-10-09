@@ -162,12 +162,16 @@ func (m *Minio) PublicURL(objectKey string) string {
 	return (&url.URL{Scheme: m.browserScheme, Host: m.browserHost, Path: "/" + m.bucket + "/" + objectKey}).String()
 }
 
-func (m *Minio) Get(ctx context.Context, objectKey string) (*repo.StoredObject, error) {
+func (m *Minio) Get(ctx context.Context, objectKey string) (stored *repo.StoredObject, err error) {
 	object, err := m.client.GetObject(ctx, m.bucket, objectKey, miniosdk.GetObjectOptions{})
 	if err != nil {
 		return nil, fmt.Errorf("get MinIO object: %w", err)
 	}
-	defer object.Close()
+	defer func() {
+		if closeErr := object.Close(); err == nil && closeErr != nil {
+			err = fmt.Errorf("close MinIO object: %w", closeErr)
+		}
+	}()
 	info, err := object.Stat()
 	if err != nil {
 		return nil, fmt.Errorf("stat MinIO object: %w", err)

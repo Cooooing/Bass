@@ -72,7 +72,7 @@ func NewIpResolutionUsecase(
 	return u, cleanup, nil
 }
 
-func (u *IpResolutionUsecase) downloadIpDataFromSource(ctx context.Context, url string) ([]byte, error) {
+func (u *IpResolutionUsecase) downloadIpDataFromSource(ctx context.Context, url string) (content []byte, err error) {
 	url = strings.TrimSpace(url)
 	if url == "" {
 		return nil, fmt.Errorf("ip data source url is empty")
@@ -89,11 +89,15 @@ func (u *IpResolutionUsecase) downloadIpDataFromSource(ctx context.Context, url 
 	if err != nil {
 		return nil, fmt.Errorf("download ip data source %s: %w", url, err)
 	}
-	defer httpResp.Body.Close()
+	defer func() {
+		if closeErr := httpResp.Body.Close(); err == nil && closeErr != nil {
+			err = fmt.Errorf("close ip data source response body: %w", closeErr)
+		}
+	}()
 	if httpResp.StatusCode < 200 || httpResp.StatusCode >= 300 {
 		return nil, fmt.Errorf("download ip data source %s: status %d", url, httpResp.StatusCode)
 	}
-	content, err := io.ReadAll(httpResp.Body)
+	content, err = io.ReadAll(httpResp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("read ip data source %s: %w", url, err)
 	}

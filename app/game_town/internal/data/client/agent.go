@@ -470,7 +470,7 @@ func (c *AgentClient) callOpenAICompatible(ctx context.Context, config *model.Ag
 	return response.Choices[0].Message.Content, nil
 }
 
-func (c *AgentClient) post(ctx context.Context, url string, config *model.AgentConfig, body any, output any) error {
+func (c *AgentClient) post(ctx context.Context, url string, config *model.AgentConfig, body any, output any) (err error) {
 	data, err := json.Marshal(body)
 	if err != nil {
 		return err
@@ -494,7 +494,11 @@ func (c *AgentClient) post(ctx context.Context, url string, config *model.AgentC
 	if err != nil {
 		return err
 	}
-	defer response.Body.Close()
+	defer func() {
+		if closeErr := response.Body.Close(); err == nil && closeErr != nil {
+			err = fmt.Errorf("close agent response body: %w", closeErr)
+		}
+	}()
 
 	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
 		data, _ := io.ReadAll(io.LimitReader(response.Body, 4096))

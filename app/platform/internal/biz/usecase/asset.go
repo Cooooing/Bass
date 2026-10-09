@@ -79,7 +79,7 @@ func (u *AssetUsecase) PrepareDirectUpload(ctx context.Context, req *PrepareDire
 	if req == nil || strings.TrimSpace(req.MimeType) == "" || req.Size <= 0 || req.UploadByID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	hash, ok := normalizeSHA256(req.Hash)
+	hash, ok := u.normalizeSHA256(req.Hash)
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -112,7 +112,7 @@ func (u *AssetUsecase) PrepareDirectUpload(ctx context.Context, req *PrepareDire
 // event delivered through NATS. It performs StatObject only: application
 // services never download the uploaded bytes during this flow.
 func (u *AssetUsecase) RecordMinioUpload(ctx context.Context, objectKey string) (*model.Asset, error) {
-	hash, ok := hashFromObjectKey(objectKey)
+	hash, ok := u.hashFromObjectKey(objectKey)
 	if !ok {
 		return nil, fmt.Errorf("%w: malformed object key", repo.ErrInvalidAssetUploadEvent)
 	}
@@ -120,7 +120,7 @@ func (u *AssetUsecase) RecordMinioUpload(ctx context.Context, objectKey string) 
 	if err != nil {
 		return nil, err
 	}
-	expectedChecksum, err := sha256Base64(hash)
+	expectedChecksum, err := u.sha256Base64(hash)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +136,7 @@ func (u *AssetUsecase) RecordMinioUpload(ctx context.Context, objectKey string) 
 		ObjectKey:    object.ObjectKey,
 		Hash:         new(hash),
 		UploadByID:   new(object.UploadByID),
-		ProviderETag: stringPointer(object.ProviderETag),
+		ProviderETag: u.stringPointer(object.ProviderETag),
 		MimeType:     strings.ToLower(strings.TrimSpace(object.MimeType)),
 		Size:         object.Size,
 		Status:       enum.AssetStatusAvailable,
@@ -150,7 +150,7 @@ func (u *AssetUsecase) RecordAssetUploadEvent(
 	ctx context.Context,
 	event *repo.AssetUploadEvent,
 ) error {
-	if event == nil || event.Bucket != u.StorageBucket() || !isAssetObjectKey(event.ObjectKey) {
+	if event == nil || event.Bucket != u.StorageBucket() || !u.isAssetObjectKey(event.ObjectKey) {
 		return repo.ErrInvalidAssetUploadEvent
 	}
 	_, err := u.RecordMinioUpload(ctx, event.ObjectKey)
@@ -158,7 +158,7 @@ func (u *AssetUsecase) RecordAssetUploadEvent(
 }
 
 func (u *AssetUsecase) GetAvailableByHash(ctx context.Context, hash string) (*model.Asset, error) {
-	canonicalHash, ok := normalizeSHA256(hash)
+	canonicalHash, ok := u.normalizeSHA256(hash)
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
@@ -250,23 +250,23 @@ func (u *AssetUsecase) consumeUploadAllowance(ctx context.Context, uploadByID in
 	return nil
 }
 
-func normalizeSHA256(value string) (string, bool) {
+func (*AssetUsecase) normalizeSHA256(value string) (string, bool) {
 	hash := strings.ToLower(strings.TrimSpace(value))
 	return hash, sha256Pattern.MatchString(hash)
 }
 
-func hashFromObjectKey(objectKey string) (string, bool) {
+func (*AssetUsecase) hashFromObjectKey(objectKey string) (string, bool) {
 	const prefix = "assets/sha256/"
 	hash, ok := strings.CutPrefix(objectKey, prefix)
 	return hash, ok && sha256Pattern.MatchString(hash)
 }
 
-func isAssetObjectKey(objectKey string) bool {
-	_, ok := hashFromObjectKey(objectKey)
+func (u *AssetUsecase) isAssetObjectKey(objectKey string) bool {
+	_, ok := u.hashFromObjectKey(objectKey)
 	return ok
 }
 
-func sha256Base64(hash string) (string, error) {
+func (*AssetUsecase) sha256Base64(hash string) (string, error) {
 	decoded, err := hex.DecodeString(hash)
 	if err != nil || len(decoded) != 32 {
 		return "", fmt.Errorf("invalid SHA-256")
@@ -274,7 +274,7 @@ func sha256Base64(hash string) (string, error) {
 	return base64.StdEncoding.EncodeToString(decoded), nil
 }
 
-func stringPointer(value string) *string {
+func (*AssetUsecase) stringPointer(value string) *string {
 	if value == "" {
 		return nil
 	}

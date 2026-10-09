@@ -232,7 +232,7 @@ func (m model) View() string {
 		"\n" + m.input.View()
 }
 
-func (m *model) previousHistory() {
+func (m model) previousHistory() {
 	if len(m.history) == 0 {
 		return
 	}
@@ -245,7 +245,7 @@ func (m *model) previousHistory() {
 	m.input.CursorEnd()
 }
 
-func (m *model) nextHistory() {
+func (m model) nextHistory() {
 	if m.historyIndex >= 0 &&
 		m.historyIndex < len(m.history)-1 {
 		m.historyIndex++
@@ -257,12 +257,12 @@ func (m *model) nextHistory() {
 	m.input.SetValue("")
 }
 
-func (m *model) refresh() {
+func (m model) refresh() {
 	m.viewport.SetContent(strings.Join(m.lines, "\n"))
 	m.viewport.GotoBottom()
 }
 
-func (m *model) stopWatch() {
+func (m model) stopWatch() {
 	if m.watchCancel == nil {
 		return
 	}

@@ -6,10 +6,11 @@ import (
 	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+
 	"economy/internal/biz/model"
 	bizrepo "economy/internal/biz/repo"
 	"economy/internal/data/gen"
-	accountent "economy/internal/data/gen/account"
+	accountant "economy/internal/data/gen/account"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
@@ -53,18 +54,18 @@ func (r *AccountRepo) Save(ctx context.Context, account *model.Account) (*model.
 }
 
 func (r *AccountRepo) UpdateBalance(ctx context.Context, req *bizrepo.AccountUpdateBalanceReq) (*model.Account, error) {
-	update := r.getClient(ctx).Account.Update().Where(accountent.UserIDEQ(req.UserID), accountent.DeletedAtIsNil())
+	update := r.getClient(ctx).Account.Update().Where(accountant.UserIDEQ(req.UserID), accountant.DeletedAtIsNil())
 	if req.BalanceMin != nil {
-		update = update.Where(accountent.BalanceGTE(*req.BalanceMin))
+		update = update.Where(accountant.BalanceGTE(*req.BalanceMin))
 	}
 	if req.FrozenMin != nil {
-		update = update.Where(accountent.FrozenBalanceGTE(*req.FrozenMin))
+		update = update.Where(accountant.FrozenBalanceGTE(*req.FrozenMin))
 	}
 	if req.AvailableMin != nil {
 		update = update.Where(func(selector *sql.Selector) {
 			selector.Where(sql.P(func(builder *sql.Builder) {
-				builder.Ident(selector.C(accountent.FieldBalance)).WriteString(" - ").
-					Ident(selector.C(accountent.FieldFrozenBalance)).WriteString(" >= ").Arg(*req.AvailableMin)
+				builder.Ident(selector.C(accountant.FieldBalance)).WriteString(" - ").
+					Ident(selector.C(accountant.FieldFrozenBalance)).WriteString(" >= ").Arg(*req.AvailableMin)
 			}))
 		})
 	}
@@ -180,21 +181,21 @@ func (r *AccountRepo) Page(ctx context.Context, req *bizrepo.AccountGetReq) (*bi
 }
 
 func (r *AccountRepo) getQuery(query *gen.AccountQuery, req *bizrepo.AccountGetReq) *gen.AccountQuery {
-	query = query.Where(accountent.DeletedAtIsNil())
+	query = query.Where(accountant.DeletedAtIsNil())
 	if req == nil {
 		return query
 	}
 	if req.ID != nil {
-		query = query.Where(accountent.IDEQ(*req.ID))
+		query = query.Where(accountant.IDEQ(*req.ID))
 	}
 	if len(req.IDs) > 0 {
-		query = query.Where(accountent.IDIn(req.IDs...))
+		query = query.Where(accountant.IDIn(req.IDs...))
 	}
 	if req.UserID != nil {
-		query = query.Where(accountent.UserIDEQ(*req.UserID))
+		query = query.Where(accountant.UserIDEQ(*req.UserID))
 	}
 	if len(req.UserIDs) > 0 {
-		query = query.Where(accountent.UserIDIn(req.UserIDs...))
+		query = query.Where(accountant.UserIDIn(req.UserIDs...))
 	}
 	return query
 }

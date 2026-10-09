@@ -3,6 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	"common/proto/gen/common"
+
 	"economy/internal/config"
 	"economy/internal/data/client"
 	"economy/internal/data/repo"

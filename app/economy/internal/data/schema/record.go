@@ -3,6 +3,7 @@ package schema
 import (
 	"common/pkg/constant"
 	utilent "common/pkg/util/ent"
+
 	economyenum "economy/internal/enum"
 
 	"entgo.io/ent"

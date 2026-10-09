@@ -4,11 +4,12 @@ import (
 	commonClient "common/pkg/client"
 	commonserver "common/pkg/server"
 	"context"
-	"economy/internal/config"
 	"flag"
 	"fmt"
 	"log/slog"
 	"os"
+
+	"economy/internal/config"
 
 	"github.com/go-kratos/kratos/v3"
 	"github.com/go-kratos/kratos/v3/transport"

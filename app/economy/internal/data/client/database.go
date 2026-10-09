@@ -4,11 +4,12 @@ import (
 	"common/pkg/client/driver"
 	"common/pkg/constant"
 	"context"
+	"fmt"
+	"log/slog"
+
 	"economy/internal/config"
 	"economy/internal/data/gen"
 	"economy/internal/data/gen/migrate"
-	"fmt"
-	"log/slog"
 
 	_ "economy/internal/data/gen/runtime"
 

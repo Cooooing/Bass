@@ -1,8 +1,9 @@
 package model
 
 import (
-	"economy/internal/enum"
 	"time"
+
+	"economy/internal/enum"
 )
 
 type Record struct {

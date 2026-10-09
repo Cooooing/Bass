@@ -1,10 +1,11 @@
 package client
 
 import (
-	"economy/internal/biz/base"
 	"fmt"
 	"hash/crc32"
 	"os"
+
+	"economy/internal/biz/base"
 
 	"github.com/sony/sonyflake/v2"
 )

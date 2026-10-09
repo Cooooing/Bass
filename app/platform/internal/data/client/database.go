@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+
 	"platform/internal/config"
 	"platform/internal/data/gen"
 	"platform/internal/data/gen/migrate"

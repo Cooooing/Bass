@@ -1,8 +1,9 @@
 package model
 
 import (
-	"platform/internal/enum"
 	"time"
+
+	"platform/internal/enum"
 )
 
 // Asset records one completed physical object. Hash is the canonical SHA-256

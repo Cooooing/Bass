@@ -6,6 +6,7 @@ import (
 	"common/pkg/server"
 	"fmt"
 	"log/slog"
+
 	"platform/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"

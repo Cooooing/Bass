@@ -7,13 +7,14 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"regexp"
+	"strings"
+	"time"
+
 	"platform/internal/biz/model"
 	"platform/internal/biz/repo"
 	"platform/internal/config"
 	"platform/internal/enum"
-	"regexp"
-	"strings"
-	"time"
 )
 
 var sha256Pattern = regexp.MustCompile(`^[a-f0-9]{64}$`)

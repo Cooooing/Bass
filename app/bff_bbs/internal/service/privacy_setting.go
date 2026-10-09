@@ -31,7 +31,7 @@ func NewPrivacySettingService(
 func (s *PrivacySettingService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *PrivacySettingService) RegisterHttp(hs *http.Server) {
+func (s *PrivacySettingService) RegisterHTTP(hs *http.Server) {
 	bbsuserv1.RegisterPrivacySettingServiceHTTPServer(hs, s)
 }
 

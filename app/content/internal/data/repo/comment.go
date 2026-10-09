@@ -75,10 +75,10 @@ func (r *CommentRepo) Save(ctx context.Context, comment *model.Comment) (*model.
 }
 
 func (r *CommentRepo) UpdateRestriction(ctx context.Context, req *repo.CommentUpdateRestrictionReq) error {
-	commentId := req.CommentID
+	commentID := req.CommentID
 	restriction := req.Restriction
 	updatedBy := req.UpdatedBy
-	if err := r.getClient(ctx).Comment.UpdateOneID(commentId).
+	if err := r.getClient(ctx).Comment.UpdateOneID(commentID).
 		SetRestriction(commentent.Restriction(restriction)).
 		SetUpdatedBy(updatedBy).
 		Exec(ctx); err != nil {
@@ -88,9 +88,9 @@ func (r *CommentRepo) UpdateRestriction(ctx context.Context, req *repo.CommentUp
 }
 
 func (r *CommentRepo) AddStats(ctx context.Context, req *repo.CommentAddStatsReq) error {
-	commentId := req.CommentID
+	commentID := req.CommentID
 	stats := req.Stats
-	updateOne := r.getClient(ctx).Comment.UpdateOneID(commentId)
+	updateOne := r.getClient(ctx).Comment.UpdateOneID(commentID)
 	if stats.ThankCount != 0 {
 		updateOne.AddThankCount(stats.ThankCount)
 	}
@@ -241,8 +241,8 @@ func (r *CommentRepo) Page(ctx context.Context, req *repo.CommentGetReq) (*repo.
 }
 
 func (r *CommentRepo) ListReplyPreviews(ctx context.Context, req *repo.CommentReplyPreviewReq) ([]*repo.CommentReplyPreview, error) {
-	parentIds := lo.Uniq(req.ParentIDs)
-	if len(parentIds) == 0 {
+	parentIDs := lo.Uniq(req.ParentIDs)
+	if len(parentIDs) == 0 {
 		return nil, nil
 	}
 	limit := int(req.LimitPerParent)
@@ -252,12 +252,12 @@ func (r *CommentRepo) ListReplyPreviews(ctx context.Context, req *repo.CommentRe
 	if limit > 5 {
 		limit = 5
 	}
-	replyMap := make(map[int64][]*model.Comment, len(parentIds))
-	for _, parentId := range parentIds {
+	replyMap := make(map[int64][]*model.Comment, len(parentIDs))
+	for _, parentID := range parentIDs {
 		query := r.getClient(ctx).Comment.Query().WithReply(func(q *gen.CommentQuery) {
 			q.Where(commentent.DeletedAtIsNil())
 		}).Limit(limit)
-		filter := &model.CommentFilter{ParentID: new(parentId)}
+		filter := &model.CommentFilter{ParentID: new(parentID)}
 		if req.Filter != nil {
 			filter.ArticleID = req.Filter.ArticleID
 			filter.Restriction = req.Filter.Restriction
@@ -272,7 +272,7 @@ func (r *CommentRepo) ListReplyPreviews(ctx context.Context, req *repo.CommentRe
 		if err != nil {
 			return nil, err
 		}
-		replyMap[parentId] = lo.Map(list, func(item *gen.Comment, _ int) *model.Comment {
+		replyMap[parentID] = lo.Map(list, func(item *gen.Comment, _ int) *model.Comment {
 			out := &model.Comment{
 				ID:          item.ID,
 				ArticleID:   item.ArticleID,
@@ -296,10 +296,10 @@ func (r *CommentRepo) ListReplyPreviews(ctx context.Context, req *repo.CommentRe
 			return out
 		})
 	}
-	return lo.Map(parentIds, func(parentId int64, _ int) *repo.CommentReplyPreview {
+	return lo.Map(parentIDs, func(parentID int64, _ int) *repo.CommentReplyPreview {
 		return &repo.CommentReplyPreview{
-			ParentId: parentId,
-			Rows:     replyMap[parentId],
+			ParentID: parentID,
+			Rows:     replyMap[parentID],
 		}
 	}), nil
 }

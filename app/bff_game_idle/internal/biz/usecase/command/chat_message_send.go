@@ -1,7 +1,9 @@
 package command
 
 import (
+	"common/pkg/apperror"
 	v1 "common/proto/gen/bff_game_idle/v1"
+	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"bff_game_idle/internal/biz/usecase"
@@ -29,7 +31,10 @@ func (h *ChatMessageSendHandler) Payload() proto.Message {
 }
 
 func (h *ChatMessageSendHandler) Handle(ctx context.Context, req *usecase.WebSocketCommandReq) error {
-	payload := req.Payload.(*v1.ChatMessageSendWebSocketPayload)
+	payload, ok := req.Payload.(*v1.ChatMessageSendWebSocketPayload)
+	if !ok {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 	_, err := h.chatUsecase.Send(ctx, &usecase.SendChatMessageReq{
 		CharacterID:         req.CharacterID,
 		ChannelType:         payload.GetChannelType(),

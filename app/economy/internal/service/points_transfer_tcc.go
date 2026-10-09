@@ -28,7 +28,7 @@ func (s *PointsTransferTccService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterPointsTransferTccServiceServer(gs, s)
 }
 
-func (s *PointsTransferTccService) RegisterHttp(hs *http.Server) {
+func (s *PointsTransferTccService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *PointsTransferTccService) Try(ctx context.Context, req *v1.PointsTransferTccReq) (*v1.PointsTransferTccResp, error) {

@@ -32,7 +32,7 @@ func NewContentArticleSearchService(
 
 func (s *ContentArticleSearchService) RegisterGrpc(gs *grpc.Server) {}
 
-func (s *ContentArticleSearchService) RegisterHttp(hs *http.Server) {
+func (s *ContentArticleSearchService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterArticleSearchServiceHTTPServer(hs, s)
 }
 

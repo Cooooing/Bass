@@ -37,7 +37,7 @@ func (s *ArticleService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentArticleServiceServer(gs, s)
 }
 
-func (s *ArticleService) RegisterHttp(hs *http.Server) {
+func (s *ArticleService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *ArticleService) CreateDraft(ctx context.Context, req *v1.CreateDraftArticle_Req) (*v1.CreateDraftArticle_Resp, error) {

@@ -28,7 +28,7 @@ func (s *CharacterBackpackService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterBackpackServiceServer(server, s)
 }
 
-func (s *CharacterBackpackService) RegisterHttp(*http.Server) {
+func (s *CharacterBackpackService) RegisterHTTP(*http.Server) {
 }
 
 func (s *CharacterBackpackService) Get(ctx context.Context, req *v1.GetBackpack_Request) (*v1.GetBackpack_Resp, error) {

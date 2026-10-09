@@ -27,7 +27,7 @@ func (s *TemplateService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterNotifyTemplateServiceServer(gs, s)
 }
 
-func (s *TemplateService) RegisterHttp(hs *http.Server) {
+func (s *TemplateService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *TemplateService) Preview(ctx context.Context, req *v1.PreviewNotificationTemplate_Req) (*v1.PreviewNotificationTemplate_Resp, error) {

@@ -35,7 +35,7 @@ func (s *SchedulerScheduledTaskService) RegisterGrpc(gs *grpc.Server) {
 	schedulerv1.RegisterSchedulerScheduledTaskServiceServer(gs, s)
 }
 
-func (s *SchedulerScheduledTaskService) RegisterHttp(hs *http.Server) {
+func (s *SchedulerScheduledTaskService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *SchedulerScheduledTaskService) Upsert(ctx context.Context, req *schedulerv1.UpsertSchedulerScheduledTask_Req) (*schedulerv1.UpsertSchedulerScheduledTask_Resp, error) {

@@ -33,7 +33,7 @@ func (s *StationMessageService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterNotifyStationMessageServiceServer(gs, s)
 }
 
-func (s *StationMessageService) RegisterHttp(hs *http.Server) {
+func (s *StationMessageService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *StationMessageService) List(ctx context.Context, req *v1.ListStationMessages_Req) (*v1.ListStationMessages_Resp, error) {

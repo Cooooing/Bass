@@ -28,7 +28,7 @@ func (s *DomainService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentDomainServiceServer(gs, s)
 }
 
-func (s *DomainService) RegisterHttp(hs *http.Server) {
+func (s *DomainService) RegisterHTTP(hs *http.Server) {
 }
 
 func NewDomainService(

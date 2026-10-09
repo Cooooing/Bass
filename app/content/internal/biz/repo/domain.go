@@ -26,13 +26,13 @@ type DomainPageResp struct {
 
 type DomainGetReq struct {
 	Page        *commonmodel.PageReq
-	DomainId    *int64
-	DomainIds   []int64
+	DomainID    *int64
+	DomainIDs   []int64
 	Code        *string
 	Name        *string
 	Description *string
 	Status      *enum.DomainStatus
-	Url         *string
+	URL         *string
 	Icon        *string
 	IsNav       *bool
 }

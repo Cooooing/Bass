@@ -71,8 +71,8 @@ func (d *RelationUsecase) Follow(ctx context.Context, req *FollowRelationReq) er
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND)
 		}
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
-			ActorId:  &req.ActorID,
-			TargetId: &req.TargetID,
+			ActorID:  &req.ActorID,
+			TargetID: &req.TargetID,
 			Type:     new(enum.RelationTypeFollow),
 		})
 		if err != nil {
@@ -150,8 +150,8 @@ func (d *RelationUsecase) Unfollow(ctx context.Context, req *UnfollowRelationReq
 			return err
 		}
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
-			ActorId:  &req.ActorID,
-			TargetId: &req.TargetID,
+			ActorID:  &req.ActorID,
+			TargetID: &req.TargetID,
 			Type:     new(enum.RelationTypeFollow),
 		})
 		if err != nil {
@@ -230,8 +230,8 @@ func (d *RelationUsecase) Block(ctx context.Context, req *BlockRelationReq) erro
 			return err
 		}
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
-			ActorId:  &req.ActorID,
-			TargetId: &req.TargetID,
+			ActorID:  &req.ActorID,
+			TargetID: &req.TargetID,
 			Type:     new(enum.RelationTypeBlock),
 		})
 		if err != nil {
@@ -338,8 +338,8 @@ func (d *RelationUsecase) Unblock(ctx context.Context, req *UnblockRelationReq) 
 			return err
 		}
 		exists, err := d.relationRepo.Exists(ctx, &repo.RelationGetReq{
-			ActorId:  &req.ActorID,
-			TargetId: &req.TargetID,
+			ActorID:  &req.ActorID,
+			TargetID: &req.TargetID,
 			Type:     new(enum.RelationTypeBlock),
 		})
 		if err != nil {
@@ -401,7 +401,7 @@ func (d *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingR
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
 		Page: *commonmodel.NormalizePage(req.Page),
 		Query: repo.RelationGetReq{
-			ActorId:           &req.ActorID,
+			ActorID:           &req.ActorID,
 			Type:              new(enum.RelationTypeFollow),
 			ExcludedTargetIDs: req.ExcludedUserIDs,
 		},
@@ -430,7 +430,7 @@ func (d *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersR
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
 		Page: *commonmodel.NormalizePage(req.Page),
 		Query: repo.RelationGetReq{
-			TargetId:         &req.TargetID,
+			TargetID:         &req.TargetID,
 			Type:             new(enum.RelationTypeFollow),
 			ExcludedActorIDs: req.ExcludedUserIDs,
 		},
@@ -458,7 +458,7 @@ func (d *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedRelat
 	pageResp, err := d.relationRepo.Page(ctx, &repo.RelationPageReq{
 		Page: *commonmodel.NormalizePage(req.Page),
 		Query: repo.RelationGetReq{
-			ActorId: &req.ActorID,
+			ActorID: &req.ActorID,
 			Type:    new(enum.RelationTypeBlock),
 		},
 	})
@@ -486,7 +486,7 @@ func (d *RelationUsecase) MapStatus(ctx context.Context, req *MapRelationStatusR
 	if req.ActorID <= 0 || len(req.TargetIDs) == 0 {
 		return statuses, nil
 	}
-	listResp, err := d.relationRepo.List(ctx, &repo.RelationGetReq{ActorId: &req.ActorID, TargetIDs: req.TargetIDs})
+	listResp, err := d.relationRepo.List(ctx, &repo.RelationGetReq{ActorID: &req.ActorID, TargetIDs: req.TargetIDs})
 	if err != nil {
 		return nil, err
 	}
@@ -500,7 +500,7 @@ func (d *RelationUsecase) MapStatus(ctx context.Context, req *MapRelationStatusR
 			}
 		}
 	}
-	listResp, err = d.relationRepo.List(ctx, &repo.RelationGetReq{TargetId: &req.ActorID, ActorIDs: req.TargetIDs})
+	listResp, err = d.relationRepo.List(ctx, &repo.RelationGetReq{TargetID: &req.ActorID, ActorIDs: req.TargetIDs})
 	if err != nil {
 		return nil, err
 	}
@@ -522,7 +522,7 @@ func (d *RelationUsecase) ListBlockedCounterparts(ctx context.Context, userID in
 		return []int64{}, nil
 	}
 	block := enum.RelationTypeBlock
-	rows, err := d.relationRepo.List(ctx, &repo.RelationGetReq{ActorOrTargetId: &userID, Type: &block})
+	rows, err := d.relationRepo.List(ctx, &repo.RelationGetReq{ActorOrTargetID: &userID, Type: &block})
 	if err != nil {
 		return nil, err
 	}

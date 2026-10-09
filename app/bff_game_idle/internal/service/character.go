@@ -32,7 +32,7 @@ func NewCharacterService(
 func (s *CharacterService) RegisterGrpc(*grpc.Server) {
 }
 
-func (s *CharacterService) RegisterHttp(hs *http.Server) {
+func (s *CharacterService) RegisterHTTP(hs *http.Server) {
 	v1.RegisterCharacterServiceHTTPServer(hs, s)
 }
 

@@ -28,7 +28,7 @@ func (s *TagService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentTagServiceServer(gs, s)
 }
 
-func (s *TagService) RegisterHttp(hs *http.Server) {
+func (s *TagService) RegisterHTTP(hs *http.Server) {
 }
 
 func NewTagService(

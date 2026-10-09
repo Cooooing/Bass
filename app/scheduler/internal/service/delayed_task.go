@@ -37,7 +37,7 @@ func (s *SchedulerDelayedTaskService) RegisterGrpc(gs *grpc.Server) {
 	schedulerv1.RegisterSchedulerDelayedTaskServiceServer(gs, s)
 }
 
-func (s *SchedulerDelayedTaskService) RegisterHttp(hs *http.Server) {
+func (s *SchedulerDelayedTaskService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *SchedulerDelayedTaskService) Upsert(ctx context.Context, req *schedulerv1.UpsertSchedulerDelayedTask_Req) (*schedulerv1.UpsertSchedulerDelayedTask_Resp, error) {

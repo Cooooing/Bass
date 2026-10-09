@@ -49,7 +49,7 @@ type PostscriptAddReq struct {
 }
 
 func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*model.Postscript, error) {
-	articleId := req.ArticleID
+	articleID := req.ArticleID
 	access, err := req.Access.Normalize("")
 	if err != nil {
 		return nil, err
@@ -57,13 +57,13 @@ func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*mo
 	if access.Scope != enum.ContentAccessScopeAuthor {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
-	userId := access.ActorUserID
+	userID := access.ActorUserID
 	postscript := &model.Postscript{
-		ArticleID:   articleId,
+		ArticleID:   articleID,
 		Content:     req.Content,
 		Restriction: enum.ContentRestrictionNone,
-		CreatedBy:   new(userId),
-		UpdatedBy:   new(userId),
+		CreatedBy:   new(userID),
+		UpdatedBy:   new(userID),
 	}
 	postscript.FormatContent()
 
@@ -73,12 +73,12 @@ func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*mo
 	)
 	err = d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			Filter: &model.ArticleFilter{ArticleID: new(articleId)},
+			Filter: &model.ArticleFilter{ArticleID: new(articleID)},
 		})
 		if err != nil {
 			return err
 		}
-		if err = article.CanAddPostscript(userId); err != nil {
+		if err = article.CanAddPostscript(userID); err != nil {
 			return err
 		}
 		save, err = d.postscriptRepo.Save(ctx, postscript)
@@ -86,9 +86,9 @@ func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*mo
 			return err
 		}
 		if err = d.articleRepo.UpdateHasPostscript(ctx, &repo.ArticleUpdateHasPostscriptReq{
-			ArticleID:     articleId,
+			ArticleID:     articleID,
 			HasPostscript: true,
-			UpdatedBy:     userId,
+			UpdatedBy:     userID,
 		}); err != nil {
 			return err
 		}
@@ -97,8 +97,8 @@ func (d *PostscriptUsecase) Add(ctx context.Context, req *PostscriptAddReq) (*mo
 			Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_POSTSCRIPT_ADDED,
 			Payload: &commonenums.Event_ArticlePostscriptAdded{
 				ArticlePostscriptAdded: &commonenums.ArticlePostscriptAddedPayload{
-					SenderId:     userId,
-					ArticleId:    articleId,
+					SenderId:     userID,
+					ArticleId:    articleID,
 					PostscriptId: save.ID,
 				},
 			},
@@ -126,15 +126,15 @@ func (d *PostscriptUsecase) List(ctx context.Context, req *PostscriptListReq) ([
 	if err != nil {
 		return nil, err
 	}
-	articleId := req.ArticleID
-	article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleId)}})
+	articleID := req.ArticleID
+	article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(articleID)}})
 	if err != nil {
 		return nil, err
 	}
 	if err = article.CanView(access); err != nil {
 		return nil, err
 	}
-	postscriptReq := &repo.PostscriptGetReq{ArticleID: new(articleId)}
+	postscriptReq := &repo.PostscriptGetReq{ArticleID: new(articleID)}
 	if access.Scope != enum.ContentAccessScopeAdmin && access.Scope != enum.ContentAccessScopeInternalTask {
 		postscriptReq.Restrictions = []enum.ContentRestriction{enum.ContentRestrictionNone, enum.ContentRestrictionLocked}
 	}

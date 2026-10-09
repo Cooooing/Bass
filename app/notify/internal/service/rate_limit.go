@@ -32,7 +32,7 @@ func (s *RateLimitService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterNotifyRateLimitServiceServer(gs, s)
 }
 
-func (s *RateLimitService) RegisterHttp(hs *http.Server) {
+func (s *RateLimitService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *RateLimitService) Check(ctx context.Context, req *v1.CheckNotificationRateLimit_Req) (*v1.CheckNotificationRateLimit_Resp, error) {

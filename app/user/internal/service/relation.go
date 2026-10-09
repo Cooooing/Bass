@@ -31,7 +31,7 @@ func (s *RelationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterRelationServiceServer(gs, s)
 }
 
-func (s *RelationService) RegisterHttp(hs *http.Server) {
+func (s *RelationService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *RelationService) Follow(ctx context.Context, req *v1.FollowRelation_Req) (*v1.FollowRelation_Resp, error) {

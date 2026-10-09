@@ -29,7 +29,7 @@ func (s *ChatService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterChatServiceServer(server, s)
 }
 
-func (s *ChatService) RegisterHttp(*http.Server) {
+func (s *ChatService) RegisterHTTP(*http.Server) {
 }
 
 func (s *ChatService) Send(ctx context.Context, req *v1.SendChatMessage_Request) (*v1.SendChatMessage_Resp, error) {

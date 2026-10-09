@@ -28,7 +28,7 @@ func (s *CommentService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentCommentServiceServer(gs, s)
 }
 
-func (s *CommentService) RegisterHttp(hs *http.Server) {
+func (s *CommentService) RegisterHTTP(hs *http.Server) {
 }
 
 func NewCommentService(

@@ -28,7 +28,7 @@ func (s *MetaActionService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterActionServiceServer(server, s)
 }
 
-func (s *MetaActionService) RegisterHttp(*http.Server) {
+func (s *MetaActionService) RegisterHTTP(*http.Server) {
 }
 
 func (s *MetaActionService) List(ctx context.Context, req *v1.ListActions_Request) (*v1.ListActions_Resp, error) {

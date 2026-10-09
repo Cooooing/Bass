@@ -34,7 +34,7 @@ func (s *RbacService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterRbacServiceServer(gs, s)
 }
 
-func (s *RbacService) RegisterHttp(hs *http.Server) {
+func (s *RbacService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *RbacService) UpsertRole(ctx context.Context, req *v1.UpsertRbacRole_Req) (*v1.UpsertRbacRole_Resp, error) {

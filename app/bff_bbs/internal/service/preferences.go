@@ -31,7 +31,7 @@ func NewPreferencesService(
 func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *PreferencesService) RegisterHttp(hs *http.Server) {
+func (s *PreferencesService) RegisterHTTP(hs *http.Server) {
 	bbsuserv1.RegisterPreferencesServiceHTTPServer(hs, s)
 }
 

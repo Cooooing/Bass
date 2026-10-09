@@ -270,11 +270,11 @@ func (r *DomainRepo) getQuery(query *gen.DomainQuery, req *repo.DomainGetReq) *g
 	if req == nil {
 		return query
 	}
-	if req.DomainId != nil {
-		query = query.Where(domain.IDEQ(*req.DomainId))
+	if req.DomainID != nil {
+		query = query.Where(domain.IDEQ(*req.DomainID))
 	}
-	if len(req.DomainIds) > 0 {
-		query = query.Where(domain.IDIn(req.DomainIds...))
+	if len(req.DomainIDs) > 0 {
+		query = query.Where(domain.IDIn(req.DomainIDs...))
 	}
 	if req.Code != nil {
 		query = query.Where(domain.CodeContains(*req.Code))
@@ -288,8 +288,8 @@ func (r *DomainRepo) getQuery(query *gen.DomainQuery, req *repo.DomainGetReq) *g
 	if req.Status != nil {
 		query = query.Where(domain.StatusEQ(domain.Status(*req.Status)))
 	}
-	if req.Url != nil {
-		query = query.Where(domain.URLContains(*req.Url))
+	if req.URL != nil {
+		query = query.Where(domain.URLContains(*req.URL))
 	}
 	if req.Icon != nil {
 		query = query.Where(domain.IconContains(*req.Icon))

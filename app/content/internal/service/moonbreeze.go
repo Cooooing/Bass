@@ -27,7 +27,7 @@ func (s *MoonbreezeService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentMoonbreezeServiceServer(gs, s)
 }
 
-func (s *MoonbreezeService) RegisterHttp(hs *http.Server) {}
+func (s *MoonbreezeService) RegisterHTTP(hs *http.Server) {}
 
 func (s *MoonbreezeService) Create(ctx context.Context, req *v1.CreateMoonbreeze_Req) (*v1.CreateMoonbreeze_Resp, error) {
 	if req.GetAuthorId() <= 0 {

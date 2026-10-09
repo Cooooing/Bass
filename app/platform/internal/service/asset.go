@@ -29,7 +29,7 @@ func (s *AssetService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterPlatformAssetServiceServer(server, s)
 }
 
-func (s *AssetService) RegisterHttp(*transporthttp.Server) {}
+func (s *AssetService) RegisterHTTP(*transporthttp.Server) {}
 
 func (s *AssetService) PrepareDirectUpload(ctx context.Context, req *v1.PrepareDirectAssetUpload_Req) (*v1.PrepareDirectAssetUpload_Resp, error) {
 	result, err := s.assetUsecase.PrepareDirectUpload(ctx, &usecase.PrepareDirectAssetUploadReq{

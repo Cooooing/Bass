@@ -85,13 +85,13 @@ func (t *TagUsecase) Page(ctx context.Context, req *TagPageReq) (*TagPageResp, e
 	}
 	pageResp, err := t.tagRepo.Page(ctx, &repo.TagGetReq{
 		Page:        req.Page,
-		TagIds:      req.TagIDs,
+		TagIDs:      req.TagIDs,
 		Code:        req.Code,
 		Name:        req.Name,
 		Names:       req.Names,
 		Description: req.Description,
 		Status:      req.Status,
-		DomainId:    req.DomainID,
+		DomainID:    req.DomainID,
 	})
 	if err != nil {
 		return nil, err
@@ -127,7 +127,7 @@ func (t *TagUsecase) BindArticle(ctx context.Context, req *ArticleTagReq) error 
 			}
 		}
 		count, err := t.tagRepo.Count(ctx, &repo.TagGetReq{
-			TagIds: tagIDs,
+			TagIDs: tagIDs,
 			Status: new(enum.TagStatusEnabled),
 		})
 		if err != nil {
@@ -212,7 +212,7 @@ func (t *TagUsecase) Map(ctx context.Context, tagIDs []int64, status *enum.TagSt
 	if len(tagIDs) == 0 {
 		return map[int64]*model.Tag{}, nil
 	}
-	return t.tagRepo.Map(ctx, &repo.TagGetReq{TagIds: tagIDs, Status: status})
+	return t.tagRepo.Map(ctx, &repo.TagGetReq{TagIDs: tagIDs, Status: status})
 }
 
 func (t *TagUsecase) MapArticleTags(ctx context.Context, articleIDs []int64, status *enum.TagStatus) (map[int64][]*model.Tag, error) {

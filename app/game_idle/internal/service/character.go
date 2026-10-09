@@ -35,7 +35,7 @@ func (s *CharacterService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterCharacterServiceServer(server, s)
 }
 
-func (s *CharacterService) RegisterHttp(*http.Server) {
+func (s *CharacterService) RegisterHTTP(*http.Server) {
 }
 
 func (s *CharacterService) Create(ctx context.Context, req *v1.CreateCharacter_Request) (*v1.CreateCharacter_Resp, error) {

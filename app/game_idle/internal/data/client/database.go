@@ -10,10 +10,10 @@ import (
 	"game_idle/internal/config"
 	"game_idle/internal/data/gen"
 
-	_ "game_idle/internal/data/gen/runtime"
+	_ "game_idle/internal/data/gen/runtime" // register Ent runtime hooks
 
 	"entgo.io/ent/dialect/sql"
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // register PostgreSQL driver
 )
 
 func NewDataBaseClient(logger *slog.Logger, conf *config.Bootstrap) (*gen.Client, func(), error) {

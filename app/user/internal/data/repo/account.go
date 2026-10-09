@@ -269,11 +269,11 @@ func (r *AccountRepo) updateProfile(ctx context.Context, req *model.AccountProfi
 	}, nil
 }
 
-func (r *AccountRepo) addStat(ctx context.Context, userId int64, statType enum.AccountStatType, num int32) (*model.Account, error) {
+func (r *AccountRepo) addStat(ctx context.Context, userID int64, statType enum.AccountStatType, num int32) (*model.Account, error) {
 	_ = enum.AccountStatTypeMap.MustToProto(statType)
 
 	tx := r.getClient(ctx)
-	updateOne := tx.Account.UpdateOneID(userId)
+	updateOne := tx.Account.UpdateOneID(userID)
 	switch statType {
 	case enum.AccountStatTypeFollow:
 		updateOne.AddFollowCount(num)
@@ -489,8 +489,8 @@ func (r *AccountRepo) getQuery(query *gen.AccountQuery, req *repo.AccountGetReq)
 	if req.UserID != nil {
 		query = query.Where(account.ID(*req.UserID))
 	}
-	if len(req.UserIds) > 0 {
-		query = query.Where(account.IDIn(req.UserIds...))
+	if len(req.UserIDs) > 0 {
+		query = query.Where(account.IDIn(req.UserIDs...))
 	}
 	if req.Name != nil {
 		query = query.Where(account.NameContains(*req.Name))

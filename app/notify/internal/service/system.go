@@ -20,7 +20,7 @@ func (s *CommonSystemService) RegisterGrpc(gs *grpc.Server) {
 	commonv1.RegisterCommonSystemServiceServer(gs, s)
 }
 
-func (s *CommonSystemService) RegisterHttp(hs *http.Server) {
+func (s *CommonSystemService) RegisterHTTP(hs *http.Server) {
 	commonv1.RegisterCommonSystemServiceHTTPServer(hs, s)
 }
 

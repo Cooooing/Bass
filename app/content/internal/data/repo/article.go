@@ -142,15 +142,15 @@ func (r *ArticleRepo) Update(ctx context.Context, article *model.Article) (*mode
 }
 
 func (r *ArticleRepo) UpdatePublishStatus(ctx context.Context, req *repo.ArticleUpdatePublishStatusReq) error {
-	articleId := req.ArticleID
-	_, err := r.getClient(ctx).Article.Get(ctx, articleId)
+	articleID := req.ArticleID
+	_, err := r.getClient(ctx).Article.Get(ctx, articleID)
 	if gen.IsNotFound(err) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_NOT_FOUND)
 	}
 	if err != nil {
 		return err
 	}
-	update := r.getClient(ctx).Article.UpdateOneID(articleId).
+	update := r.getClient(ctx).Article.UpdateOneID(articleID).
 		SetPublishStatus(articleent.PublishStatus(req.PublishStatus)).
 		SetVisibility(articleent.Visibility(req.Visibility))
 	if req.PublishedAt != nil {
@@ -202,9 +202,9 @@ func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, req *repo.Article
 		Exec(ctx)
 }
 func (r *ArticleRepo) AddStats(ctx context.Context, req *repo.ArticleAddStatsReq) error {
-	articleId := req.ArticleID
+	articleID := req.ArticleID
 	stats := req.Stats
-	updateOne := r.getClient(ctx).Article.UpdateOneID(articleId)
+	updateOne := r.getClient(ctx).Article.UpdateOneID(articleID)
 	if stats.ViewCount != 0 {
 		updateOne.AddViewCount(stats.ViewCount)
 	}
@@ -230,11 +230,11 @@ func (r *ArticleRepo) AddStats(ctx context.Context, req *repo.ArticleAddStatsReq
 }
 
 func (r *ArticleRepo) ReplaceTags(ctx context.Context, req *repo.ArticleReplaceTagsReq) error {
-	articleId := req.ArticleID
-	tagIds := req.TagIDs
-	update := r.getClient(ctx).Article.UpdateOneID(articleId).ClearTags()
-	if len(tagIds) > 0 {
-		update.AddTagIDs(tagIds...)
+	articleID := req.ArticleID
+	tagIDs := req.TagIDs
+	update := r.getClient(ctx).Article.UpdateOneID(articleID).ClearTags()
+	if len(tagIDs) > 0 {
+		update.AddTagIDs(tagIDs...)
 	}
 	if err := update.Exec(ctx); err != nil {
 		return err

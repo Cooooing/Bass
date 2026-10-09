@@ -33,7 +33,7 @@ func (s *ChatGroupService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterIMChatGroupServiceServer(gs, s)
 }
 
-func (s *ChatGroupService) RegisterHttp(hs *http.Server) {
+func (s *ChatGroupService) RegisterHTTP(hs *http.Server) {
 }
 
 // Create 创建群组

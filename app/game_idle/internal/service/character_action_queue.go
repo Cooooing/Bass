@@ -28,7 +28,7 @@ func (s *CharacterActionQueueService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterActionQueueServiceServer(server, s)
 }
 
-func (s *CharacterActionQueueService) RegisterHttp(*http.Server) {
+func (s *CharacterActionQueueService) RegisterHTTP(*http.Server) {
 }
 
 func (s *CharacterActionQueueService) List(ctx context.Context, req *v1.ListActionQueue_Request) (*v1.ListActionQueue_Resp, error) {

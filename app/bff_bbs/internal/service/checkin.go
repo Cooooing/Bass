@@ -27,7 +27,7 @@ func NewCheckinService(checkinUsecase *usecase.CheckinUsecase) *CheckinService {
 func (s *CheckinService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *CheckinService) RegisterHttp(hs *http.Server) {
+func (s *CheckinService) RegisterHTTP(hs *http.Server) {
 	bbsuserv1.RegisterCheckinServiceHTTPServer(hs, s)
 }
 

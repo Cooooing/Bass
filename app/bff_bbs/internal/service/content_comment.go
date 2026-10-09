@@ -35,7 +35,7 @@ func NewContentCommentService(
 func (s *ContentCommentService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *ContentCommentService) RegisterHttp(hs *http.Server) {
+func (s *ContentCommentService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterCommentServiceHTTPServer(hs, s)
 }
 

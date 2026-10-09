@@ -27,15 +27,15 @@ type TagPageResp struct {
 
 type TagGetReq struct {
 	Page        *commonmodel.PageReq
-	TagId       *int64
-	TagIds      []int64
-	UserId      *int64
+	TagID       *int64
+	TagIDs      []int64
+	UserID      *int64
 	Code        *string
 	Name        *string
 	Names       []string
 	Description *string
 	Status      *enum.TagStatus
-	DomainId    *int64
+	DomainID    *int64
 }
 
 type TagAddArticleCountReq struct {

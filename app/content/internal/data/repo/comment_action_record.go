@@ -52,12 +52,12 @@ func (r *CommentActionRecordRepo) Save(ctx context.Context, record *model.Commen
 }
 
 func (r *CommentActionRecordRepo) Delete(ctx context.Context, req *repo.CommentActionRecordDeleteReq) (int, error) {
-	commentId := req.CommentID
-	userId := req.UserID
+	commentID := req.CommentID
+	userID := req.UserID
 	action := req.Action
 	deleted, err := r.getClient(ctx).CommentActionRecord.Delete().
-		Where(commentactionrecord.CommentIDEQ(commentId)).
-		Where(commentactionrecord.UserIDEQ(userId)).
+		Where(commentactionrecord.CommentIDEQ(commentID)).
+		Where(commentactionrecord.UserIDEQ(userID)).
 		Where(commentactionrecord.TypeEQ(commentactionrecord.Type(action))).
 		Exec(ctx)
 	if err != nil {
@@ -177,17 +177,17 @@ func (r *CommentActionRecordRepo) getQuery(query *gen.CommentActionRecordQuery, 
 	if len(req.IDs) > 0 {
 		query = query.Where(commentactionrecord.IDIn(req.IDs...))
 	}
-	if req.CommentId != nil {
-		query = query.Where(commentactionrecord.CommentIDEQ(*req.CommentId))
+	if req.CommentID != nil {
+		query = query.Where(commentactionrecord.CommentIDEQ(*req.CommentID))
 	}
-	if len(req.CommentIds) > 0 {
-		query = query.Where(commentactionrecord.CommentIDIn(req.CommentIds...))
+	if len(req.CommentIDs) > 0 {
+		query = query.Where(commentactionrecord.CommentIDIn(req.CommentIDs...))
 	}
-	if req.UserId != nil {
-		query = query.Where(commentactionrecord.UserIDEQ(*req.UserId))
+	if req.UserID != nil {
+		query = query.Where(commentactionrecord.UserIDEQ(*req.UserID))
 	}
-	if len(req.UserIds) > 0 {
-		query = query.Where(commentactionrecord.UserIDIn(req.UserIds...))
+	if len(req.UserIDs) > 0 {
+		query = query.Where(commentactionrecord.UserIDIn(req.UserIDs...))
 	}
 	if req.Type != nil {
 		query = query.Where(commentactionrecord.TypeEQ(commentactionrecord.Type(*req.Type)))

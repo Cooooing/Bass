@@ -8,6 +8,6 @@ import (
 
 // BizProviderSet 是 biz 层依赖集合。
 var BizProviderSet = wire.NewSet(
-	usecase.NewIpResolutionUsecase,
+	usecase.NewIPResolutionUsecase,
 	usecase.NewAssetUsecase,
 )

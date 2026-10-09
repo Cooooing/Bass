@@ -54,12 +54,12 @@ func (r *ArticleActionRecordRepo) Save(ctx context.Context, record *model.Articl
 }
 
 func (r *ArticleActionRecordRepo) Delete(ctx context.Context, req *repo.ArticleActionRecordDeleteReq) (int, error) {
-	articleId := req.ArticleID
-	userId := req.UserID
+	articleID := req.ArticleID
+	userID := req.UserID
 	action := req.Action
 	deleted, err := r.getClient(ctx).ArticleActionRecord.Delete().
-		Where(articleactionrecord.ArticleIDEQ(articleId)).
-		Where(articleactionrecord.UserIDEQ(userId)).
+		Where(articleactionrecord.ArticleIDEQ(articleID)).
+		Where(articleactionrecord.UserIDEQ(userID)).
 		Where(articleactionrecord.TypeEQ(articleactionrecord.Type(action))).
 		Exec(ctx)
 	if err != nil {
@@ -175,17 +175,17 @@ func (r *ArticleActionRecordRepo) getQuery(query *gen.ArticleActionRecordQuery, 
 	if len(req.IDs) > 0 {
 		query = query.Where(articleactionrecord.IDIn(req.IDs...))
 	}
-	if req.ArticleId != nil {
-		query = query.Where(articleactionrecord.ArticleIDEQ(*req.ArticleId))
+	if req.ArticleID != nil {
+		query = query.Where(articleactionrecord.ArticleIDEQ(*req.ArticleID))
 	}
-	if len(req.ArticleIds) > 0 {
-		query = query.Where(articleactionrecord.ArticleIDIn(req.ArticleIds...))
+	if len(req.ArticleIDs) > 0 {
+		query = query.Where(articleactionrecord.ArticleIDIn(req.ArticleIDs...))
 	}
-	if req.UserId != nil {
-		query = query.Where(articleactionrecord.UserIDEQ(*req.UserId))
+	if req.UserID != nil {
+		query = query.Where(articleactionrecord.UserIDEQ(*req.UserID))
 	}
-	if len(req.UserIds) > 0 {
-		query = query.Where(articleactionrecord.UserIDIn(req.UserIds...))
+	if len(req.UserIDs) > 0 {
+		query = query.Where(articleactionrecord.UserIDIn(req.UserIDs...))
 	}
 	if req.Type != nil {
 		query = query.Where(articleactionrecord.TypeEQ(articleactionrecord.Type(*req.Type)))

@@ -30,7 +30,7 @@ func (s *OutboxService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterOutboxServiceServer(gs, s)
 }
 
-func (s *OutboxService) RegisterHttp(hs *http.Server) {
+func (s *OutboxService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *OutboxService) Publish(ctx context.Context, req *v1.PublishOutboxEvent_Req) (*v1.PublishOutboxEvent_Resp, error) {

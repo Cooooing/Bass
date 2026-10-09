@@ -30,7 +30,7 @@ func (s *PointsService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterEconomyServiceServer(gs, s)
 }
 
-func (s *PointsService) RegisterHttp(hs *http.Server) {
+func (s *PointsService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *PointsService) GetAccount(ctx context.Context, req *v1.GetEconomyAccount_Req) (*v1.GetEconomyAccount_Resp, error) {

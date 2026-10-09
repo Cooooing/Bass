@@ -22,7 +22,7 @@ func NewIPClient(
 }
 
 func (r *IPClient) Resolve(ctx context.Context, ip string) (*commonModel.IpInfo, error) {
-	reply, err := r.platformClient.IpResolution.ResolveIp(ctx, &platformv1.ResolveIp_Req{
+	reply, err := r.platformClient.IPResolution.ResolveIP(ctx, &platformv1.ResolveIP_Req{
 		Ip: ip,
 	})
 	if err != nil {

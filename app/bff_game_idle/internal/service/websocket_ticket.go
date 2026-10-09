@@ -33,7 +33,7 @@ func NewWebSocketTicketService(
 func (s *WebSocketTicketService) RegisterGrpc(*grpc.Server) {
 }
 
-func (s *WebSocketTicketService) RegisterHttp(hs *http.Server) {
+func (s *WebSocketTicketService) RegisterHTTP(hs *http.Server) {
 	v1.RegisterWebSocketServiceHTTPServer(hs, s)
 }
 

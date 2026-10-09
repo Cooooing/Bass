@@ -34,7 +34,7 @@ func NewContentDomainService(
 func (s *ContentDomainService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *ContentDomainService) RegisterHttp(hs *http.Server) {
+func (s *ContentDomainService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterDomainServiceHTTPServer(hs, s)
 }
 

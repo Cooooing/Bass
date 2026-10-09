@@ -31,7 +31,7 @@ func NewLocationService(
 func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *LocationService) RegisterHttp(hs *http.Server) {
+func (s *LocationService) RegisterHTTP(hs *http.Server) {
 	bbsuserv1.RegisterLocationServiceHTTPServer(hs, s)
 }
 

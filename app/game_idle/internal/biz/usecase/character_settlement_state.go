@@ -74,7 +74,10 @@ func NewCharacterSettlementHandler(
 }
 
 func (h *CharacterSettlementHandler) Apply(ctx context.Context, command CharacterStateCommand) (*CharacterStateChangeSet, error) {
-	req := command.(*CharacterSettlementCommand)
+	req, ok := command.(*CharacterSettlementCommand)
+	if !ok {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
 
 	// 事务开始前加载需要修改的状态，避免 Begin 拿到不完整草稿。
 	if err := h.backpackRepo.LoadItems(ctx, req.CharacterID); err != nil {

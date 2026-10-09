@@ -27,7 +27,7 @@ func (s *ArticleSearchService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentArticleSearchServiceServer(gs, s)
 }
 
-func (s *ArticleSearchService) RegisterHttp(hs *http.Server) {}
+func (s *ArticleSearchService) RegisterHTTP(hs *http.Server) {}
 
 func (s *ArticleSearchService) SearchPublic(
 	ctx context.Context,

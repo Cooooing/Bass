@@ -21,7 +21,7 @@ import (
 )
 
 type sseToken struct {
-	Id int64 `json:"id"`
+	ID int64 `json:"id"`
 }
 
 type SSEUsecase struct {
@@ -97,7 +97,7 @@ func (uc *SSEUsecase) Connect(ctx context.Context, req *ConnectReq) error {
 		uc.log.Warn("SSE token validation failed")
 		return nil
 	}
-	userID := tokenData.Id
+	userID := tokenData.ID
 	if userID == 0 {
 		uc.log.Warn("SSE token user id is empty")
 		return nil

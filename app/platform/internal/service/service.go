@@ -9,11 +9,11 @@ import (
 var ServiceProviderSet = wire.NewSet(
 	ProvideServices,
 	NewCommonSystemService,
-	NewIpResolutionService,
+	NewIPResolutionService,
 	NewAssetService,
 )
 
-func ProvideServices(commonSystemService *CommonSystemService, ipResolutionService *IpResolutionService, assetService *AssetService) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, ipResolutionService *IPResolutionService, assetService *AssetService) []server.Service {
 	return []server.Service{
 		commonSystemService,
 		ipResolutionService,

@@ -26,7 +26,7 @@ func (s *CheckinService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterCheckinServiceServer(gs, s)
 }
 
-func (s *CheckinService) RegisterHttp(hs *http.Server) {
+func (s *CheckinService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *CheckinService) CheckIn(ctx context.Context, req *v1.CheckIn_Req) (*v1.CheckIn_Resp, error) {

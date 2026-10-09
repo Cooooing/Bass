@@ -46,7 +46,7 @@ func NewAuthService(
 func (s *AuthService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *AuthService) RegisterHttp(hs *http.Server) {
+func (s *AuthService) RegisterHTTP(hs *http.Server) {
 	bbsuserv1.RegisterAuthServiceHTTPServer(hs, s)
 }
 

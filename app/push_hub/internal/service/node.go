@@ -31,7 +31,7 @@ func (s *NodeService) RegisterGrpc(gs *grpc.Server) {
 	pushhubv1.RegisterPushHubNodeServiceServer(gs, s)
 }
 
-func (s *NodeService) RegisterHttp(hs *http.Server) {
+func (s *NodeService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *NodeService) RegisterNode(ctx context.Context, req *pushhubv1.RegisterNode_Req) (*pushhubv1.RegisterNode_Resp, error) {

@@ -45,7 +45,7 @@ func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterAccountServiceServer(gs, s)
 }
 
-func (s *AccountService) RegisterHttp(hs *http.Server) {
+func (s *AccountService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.GetAccount_Resp, error) {

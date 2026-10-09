@@ -46,7 +46,7 @@ func NewHTTPServer(
 		logger.Info("metrics endpoint registered", slog.String(constant.LogFieldPath, "/metrics"))
 	}
 	for _, s := range services {
-		s.RegisterHttp(srv)
+		s.RegisterHTTP(srv)
 	}
 	return srv
 }

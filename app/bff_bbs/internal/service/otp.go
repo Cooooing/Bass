@@ -37,7 +37,7 @@ func NewOtpService(
 	}
 }
 
-func (s *OtpService) RegisterHttp(hs *http.Server) {
+func (s *OtpService) RegisterHTTP(hs *http.Server) {
 	bbsuserv1.RegisterOtpServiceHTTPServer(hs, s)
 }
 

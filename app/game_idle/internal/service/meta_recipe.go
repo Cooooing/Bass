@@ -25,7 +25,7 @@ func (s *MetaRecipeService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterRecipeServiceServer(server, s)
 }
 
-func (s *MetaRecipeService) RegisterHttp(*http.Server) {
+func (s *MetaRecipeService) RegisterHTTP(*http.Server) {
 }
 
 func (s *MetaRecipeService) Refresh(ctx context.Context, req *v1.RefreshRecipes_Request) (*v1.RefreshRecipes_Resp, error) {

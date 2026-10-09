@@ -33,7 +33,7 @@ func (s *PostscriptService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterContentPostscriptServiceServer(gs, s)
 }
 
-func (s *PostscriptService) RegisterHttp(hs *http.Server) {
+func (s *PostscriptService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *PostscriptService) Add(ctx context.Context, req *v1.AddPostscript_Req) (*v1.AddPostscript_Resp, error) {

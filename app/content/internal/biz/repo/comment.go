@@ -60,7 +60,7 @@ type CommentReplyPreviewReq struct {
 }
 
 type CommentReplyPreview struct {
-	ParentId int64
+	ParentID int64
 	Rows     []*model.Comment
 }
 
@@ -90,10 +90,10 @@ type CommentActionRecordReq struct {
 	Page       *commonmodel.PageReq
 	ID         *int64
 	IDs        []int64
-	CommentId  *int64
-	CommentIds []int64
-	UserId     *int64
-	UserIds    []int64
+	CommentID  *int64
+	CommentIDs []int64
+	UserID     *int64
+	UserIDs    []int64
 	Type       *enum.CommentAction
 	Types      []enum.CommentAction
 }

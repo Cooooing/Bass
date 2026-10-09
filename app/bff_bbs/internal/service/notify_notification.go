@@ -31,7 +31,7 @@ func NewNotificationService(
 func (s *NotificationService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *NotificationService) RegisterHttp(hs *http.Server) {
+func (s *NotificationService) RegisterHTTP(hs *http.Server) {
 	bbsnotifyv1.RegisterNotificationServiceHTTPServer(hs, s)
 }
 

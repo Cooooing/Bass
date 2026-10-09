@@ -49,7 +49,7 @@ func NewHTTPServer(
 	}
 	srv := kratoshttp.NewServer(opts...)
 	for _, s := range services {
-		s.RegisterHttp(srv)
+		s.RegisterHTTP(srv)
 	}
 	return srv
 }

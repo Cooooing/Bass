@@ -33,7 +33,7 @@ func (s *ChatMessageService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterIMChatMessageServiceServer(gs, s)
 }
 
-func (s *ChatMessageService) RegisterHttp(hs *http.Server) {
+func (s *ChatMessageService) RegisterHTTP(hs *http.Server) {
 }
 
 // Send 发送消息。

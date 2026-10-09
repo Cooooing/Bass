@@ -30,11 +30,11 @@ type RelationDeleteReq struct {
 type RelationGetReq struct {
 	ID                *int64
 	IDs               []int64
-	ActorId           *int64
-	TargetId          *int64
+	ActorID           *int64
+	TargetID          *int64
 	ActorIDs          []int64
 	TargetIDs         []int64
-	ActorOrTargetId   *int64
+	ActorOrTargetID   *int64
 	Type              *enum.RelationType
 	ExcludedActorIDs  []int64
 	ExcludedTargetIDs []int64

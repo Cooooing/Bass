@@ -350,7 +350,10 @@ func (u *CharacterActionSchedulerUsecase) startCurrent(ctx context.Context, char
 func (u *CharacterActionSchedulerUsecase) wrapActionTask(task *timewheel.Task) {
 	job := task.Job
 	task.Job = func(jobCtx context.Context, item *timewheel.Task) error {
-		payload := item.Payload.(*model.CharacterActionTask)
+		payload, ok := item.Payload.(*model.CharacterActionTask)
+		if !ok {
+			return fmt.Errorf("character action task payload is invalid")
+		}
 		u.unmarkCurrentTask(payload.CharacterID, payload.TaskID)
 		return u.stateUsecase.Execute(jobCtx, payload.CharacterID, func(runCtx context.Context) error {
 			queue, err := u.actionQueueRepo.Load(runCtx, payload.CharacterID)

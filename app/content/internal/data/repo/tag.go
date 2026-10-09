@@ -279,14 +279,14 @@ func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQue
 	if req == nil {
 		return query
 	}
-	if req.TagId != nil {
-		query = query.Where(tagent.IDEQ(*req.TagId))
+	if req.TagID != nil {
+		query = query.Where(tagent.IDEQ(*req.TagID))
 	}
-	if len(req.TagIds) > 0 {
-		query = query.Where(tagent.IDIn(req.TagIds...))
+	if len(req.TagIDs) > 0 {
+		query = query.Where(tagent.IDIn(req.TagIDs...))
 	}
-	if req.UserId != nil {
-		query = query.Where(tagent.CreatedBy(*req.UserId))
+	if req.UserID != nil {
+		query = query.Where(tagent.CreatedBy(*req.UserID))
 	}
 	if req.Code != nil {
 		query = query.Where(tagent.CodeContains(*req.Code))
@@ -303,8 +303,8 @@ func (r *TagRepo) getQuery(query *gen.TagQuery, req *repo.TagGetReq) *gen.TagQue
 	if req.Status != nil {
 		query = query.Where(tagent.StatusEQ(tagent.Status(*req.Status)))
 	}
-	if req.DomainId != nil {
-		query = query.Where(tagent.DomainIDEQ(*req.DomainId))
+	if req.DomainID != nil {
+		query = query.Where(tagent.DomainIDEQ(*req.DomainID))
 	}
 	query = query.Order(gen.Asc(tagent.FieldSort), gen.Asc(tagent.FieldID))
 	return query

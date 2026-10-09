@@ -29,7 +29,7 @@ func (s *CharacterAbilityService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterCharacterAbilityServiceServer(server, s)
 }
 
-func (s *CharacterAbilityService) RegisterHttp(*http.Server) {
+func (s *CharacterAbilityService) RegisterHTTP(*http.Server) {
 }
 
 func (s *CharacterAbilityService) Get(

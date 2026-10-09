@@ -35,7 +35,7 @@ func NewContentArticleService(
 
 func (s *ContentArticleService) RegisterGrpc(gs *grpc.Server) {}
 
-func (s *ContentArticleService) RegisterHttp(hs *http.Server) {
+func (s *ContentArticleService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterArticleServiceHTTPServer(hs, s)
 }
 

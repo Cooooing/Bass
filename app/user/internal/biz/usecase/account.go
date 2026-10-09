@@ -104,13 +104,13 @@ func (s *AccountUsecase) CheckAvailability(ctx context.Context, availability *mo
 
 func (s *AccountUsecase) ListByUserIDs(ctx context.Context, userIDs []int64) ([]*model.Account, error) {
 	return s.accountRepo.List(ctx, &repo.AccountGetReq{
-		UserIds: userIDs,
+		UserIDs: userIDs,
 	})
 }
 
 func (s *AccountUsecase) MapByUserIDs(ctx context.Context, userIDs []int64) (map[int64]*model.Account, error) {
 	return s.accountRepo.Map(ctx, &repo.AccountGetReq{
-		UserIds: userIDs,
+		UserIDs: userIDs,
 	})
 }
 

@@ -32,7 +32,7 @@ func (s *ChatSessionService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterIMChatSessionServiceServer(gs, s)
 }
 
-func (s *ChatSessionService) RegisterHttp(hs *http.Server) {
+func (s *ChatSessionService) RegisterHTTP(hs *http.Server) {
 }
 
 // MarkMuted 设置免打扰状态。

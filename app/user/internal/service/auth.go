@@ -49,7 +49,7 @@ func (s *AuthService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterAuthServiceServer(gs, s)
 }
 
-func (s *AuthService) RegisterHttp(hs *http.Server) {
+func (s *AuthService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *AuthService) CheckRegistrationAvailability(ctx context.Context, req *v1.CheckRegistrationAvailability_Req) (*v1.CheckRegistrationAvailability_Resp, error) {

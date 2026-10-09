@@ -26,7 +26,7 @@ func (s *MetaItemService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterItemServiceServer(server, s)
 }
 
-func (s *MetaItemService) RegisterHttp(*http.Server) {
+func (s *MetaItemService) RegisterHTTP(*http.Server) {
 }
 
 func (s *MetaItemService) List(ctx context.Context, req *v1.ListItems_Request) (*v1.ListItems_Resp, error) {

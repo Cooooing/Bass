@@ -78,12 +78,12 @@ func (d *ContentUsecase) Page(ctx context.Context, req *DomainPageReq) (*DomainP
 	}
 	pageResp, err := d.domainRepo.Page(ctx, &repo.DomainGetReq{
 		Page:        req.Page,
-		DomainIds:   req.DomainIDs,
+		DomainIDs:   req.DomainIDs,
 		Code:        req.Code,
 		Name:        req.Name,
 		Description: req.Description,
 		Status:      req.Status,
-		Url:         req.URL,
+		URL:         req.URL,
 		Icon:        req.Icon,
 		IsNav:       req.IsNav,
 	})
@@ -100,5 +100,5 @@ func (d *ContentUsecase) Map(ctx context.Context, domainIDs []int64, status *enu
 	if len(domainIDs) == 0 {
 		return map[int64]*model.Domain{}, nil
 	}
-	return d.domainRepo.Map(ctx, &repo.DomainGetReq{DomainIds: domainIDs, Status: status})
+	return d.domainRepo.Map(ctx, &repo.DomainGetReq{DomainIDs: domainIDs, Status: status})
 }

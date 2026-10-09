@@ -61,7 +61,7 @@ func NewWebSocketService(
 func (s *WebSocketService) RegisterGrpc(*grpc.Server) {
 }
 
-func (s *WebSocketService) RegisterHttp(hs *http.Server) {
+func (s *WebSocketService) RegisterHTTP(hs *http.Server) {
 	hs.Handle(s.path, stdhttp.HandlerFunc(s.Handle))
 	s.logger.Info("game idle bff websocket endpoint registered", slog.String(constant.LogFieldPath, s.path))
 }

@@ -33,7 +33,7 @@ func NewContentPostscriptService(
 func (s *ContentPostscriptService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *ContentPostscriptService) RegisterHttp(hs *http.Server) {
+func (s *ContentPostscriptService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterPostscriptServiceHTTPServer(hs, s)
 }
 

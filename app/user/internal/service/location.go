@@ -27,7 +27,7 @@ func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterLocationServiceServer(gs, s)
 }
 
-func (s *LocationService) RegisterHttp(hs *http.Server) {
+func (s *LocationService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *LocationService) Get(ctx context.Context, req *v1.GetLocation_Req) (*v1.GetLocation_Resp, error) {

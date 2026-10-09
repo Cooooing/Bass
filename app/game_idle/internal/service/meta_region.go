@@ -25,7 +25,7 @@ func (s *MetaRegionService) RegisterGrpc(server *grpc.Server) {
 	v1.RegisterRegionServiceServer(server, s)
 }
 
-func (s *MetaRegionService) RegisterHttp(*http.Server) {
+func (s *MetaRegionService) RegisterHTTP(*http.Server) {
 }
 
 func (s *MetaRegionService) List(ctx context.Context, req *v1.ListRegions_Request) (*v1.ListRegions_Resp, error) {

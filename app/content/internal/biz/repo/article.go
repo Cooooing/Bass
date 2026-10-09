@@ -126,10 +126,10 @@ type ArticleActionRecordReq struct {
 	Page       *commonmodel.PageReq
 	ID         *int64
 	IDs        []int64
-	ArticleId  *int64
-	ArticleIds []int64
-	UserId     *int64
-	UserIds    []int64
+	ArticleID  *int64
+	ArticleIDs []int64
+	UserID     *int64
+	UserIDs    []int64
 	Type       *enum.ArticleAction
 	Types      []enum.ArticleAction
 }

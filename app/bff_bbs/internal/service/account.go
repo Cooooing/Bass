@@ -41,7 +41,7 @@ func NewAccountService(accountUsecase *usecase.AccountUsecase) *AccountService {
 func (s *AccountService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *AccountService) RegisterHttp(hs *http.Server) {
+func (s *AccountService) RegisterHTTP(hs *http.Server) {
 	bbsuserv1.RegisterAccountServiceHTTPServer(hs, s)
 }
 

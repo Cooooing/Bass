@@ -34,7 +34,7 @@ func NewRelationService(
 func (s *RelationService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *RelationService) RegisterHttp(hs *http.Server) {
+func (s *RelationService) RegisterHTTP(hs *http.Server) {
 	bbsuserv1.RegisterRelationServiceHTTPServer(hs, s)
 }
 

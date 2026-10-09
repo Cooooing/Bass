@@ -32,7 +32,7 @@ func NewContentMoonbreezeService(moonbreezeUsecase *usecase.ContentMoonbreezeUse
 
 func (s *ContentMoonbreezeService) RegisterGrpc(gs *grpc.Server) {}
 
-func (s *ContentMoonbreezeService) RegisterHttp(hs *http.Server) {
+func (s *ContentMoonbreezeService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterMoonbreezeServiceHTTPServer(hs, s)
 }
 

@@ -11,10 +11,10 @@ import (
 	"content/internal/data/gen"
 	"content/internal/data/gen/migrate"
 
-	_ "content/internal/data/gen/runtime"
+	_ "content/internal/data/gen/runtime" // register Ent runtime hooks
 
 	"entgo.io/ent/dialect/sql"
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // register PostgreSQL driver
 )
 
 func NewDataBaseClient(

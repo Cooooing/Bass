@@ -20,7 +20,7 @@ func NewIPResolutionClient(platformClient *rpc.PlatformClient) repo.IPResolution
 }
 
 func (r *IPResolutionClient) Resolve(ctx context.Context, ip string) (*commonmodel.IpInfo, error) {
-	resp, err := r.platformClient.IpResolution.ResolveIp(ctx, &platformv1.ResolveIp_Req{Ip: ip})
+	resp, err := r.platformClient.IPResolution.ResolveIP(ctx, &platformv1.ResolveIP_Req{Ip: ip})
 	if err != nil {
 		return nil, err
 	}

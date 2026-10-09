@@ -47,7 +47,7 @@ func (s *OtpService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterOtpServiceServer(gs, s)
 }
 
-func (s *OtpService) RegisterHttp(hs *http.Server) {
+func (s *OtpService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *OtpService) ValidateTotp(ctx context.Context, req *v1.ValidateTotp_Req) (*v1.ValidateTotp_Resp, error) {

@@ -32,7 +32,7 @@ func (s *PreferencesService) RegisterGrpc(gs *grpc.Server) {
 	v1.RegisterPreferencesServiceServer(gs, s)
 }
 
-func (s *PreferencesService) RegisterHttp(hs *http.Server) {
+func (s *PreferencesService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *PreferencesService) Get(ctx context.Context, req *v1.GetPreferences_Req) (*v1.GetPreferences_Resp, error) {

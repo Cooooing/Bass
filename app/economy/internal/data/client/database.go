@@ -11,10 +11,10 @@ import (
 	"economy/internal/data/gen"
 	"economy/internal/data/gen/migrate"
 
-	_ "economy/internal/data/gen/runtime"
+	_ "economy/internal/data/gen/runtime" // register Ent runtime hooks
 
 	"entgo.io/ent/dialect/sql"
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // register PostgreSQL driver
 )
 
 func NewDataBaseClient(logger *slog.Logger, conf *config.Bootstrap) (*gen.Client, func(), error) {

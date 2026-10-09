@@ -264,22 +264,22 @@ func (r *RelationRepo) getQuery(query *gen.RelationQuery, req *repo.RelationGetR
 	if len(req.IDs) > 0 {
 		query = query.Where(relation.IDIn(req.IDs...))
 	}
-	if req.ActorId != nil {
-		query = query.Where(relation.ActorIDEQ(*req.ActorId))
+	if req.ActorID != nil {
+		query = query.Where(relation.ActorIDEQ(*req.ActorID))
 	}
 	if len(req.ActorIDs) > 0 {
 		query = query.Where(relation.ActorIDIn(req.ActorIDs...))
 	}
-	if req.TargetId != nil {
-		query = query.Where(relation.TargetIDEQ(*req.TargetId))
+	if req.TargetID != nil {
+		query = query.Where(relation.TargetIDEQ(*req.TargetID))
 	}
 	if len(req.TargetIDs) > 0 {
 		query = query.Where(relation.TargetIDIn(req.TargetIDs...))
 	}
-	if req.ActorOrTargetId != nil {
+	if req.ActorOrTargetID != nil {
 		query = query.Where(relation.Or(
-			relation.ActorIDEQ(*req.ActorOrTargetId),
-			relation.TargetIDEQ(*req.ActorOrTargetId),
+			relation.ActorIDEQ(*req.ActorOrTargetID),
+			relation.TargetIDEQ(*req.ActorOrTargetID),
 		))
 	}
 	if req.Type != nil {

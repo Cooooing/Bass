@@ -11,10 +11,10 @@ import (
 	"scheduler/internal/data/gen"
 	"scheduler/internal/data/gen/migrate"
 
-	_ "scheduler/internal/data/gen/runtime"
+	_ "scheduler/internal/data/gen/runtime" // register Ent runtime hooks
 
 	"entgo.io/ent/dialect/sql"
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // register PostgreSQL driver
 )
 
 func NewDataBaseClient(

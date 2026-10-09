@@ -10,33 +10,33 @@ import (
 	"github.com/go-kratos/kratos/v3/transport/http"
 )
 
-// IpResolutionService 实现 platform IP 解析 gRPC 服务。
-type IpResolutionService struct {
-	v1.UnimplementedPlatformIpResolutionServiceServer
-	ipUsecase *usecase.IpResolutionUsecase
+// IPResolutionService 实现 platform IP 解析 gRPC 服务。
+type IPResolutionService struct {
+	v1.UnimplementedPlatformIPResolutionServiceServer
+	ipUsecase *usecase.IPResolutionUsecase
 }
 
-func NewIpResolutionService(
-	ipUsecase *usecase.IpResolutionUsecase,
-) *IpResolutionService {
-	return &IpResolutionService{
+func NewIPResolutionService(
+	ipUsecase *usecase.IPResolutionUsecase,
+) *IPResolutionService {
+	return &IPResolutionService{
 		ipUsecase: ipUsecase,
 	}
 }
 
-func (s *IpResolutionService) RegisterGrpc(gs *grpc.Server) {
-	v1.RegisterPlatformIpResolutionServiceServer(gs, s)
+func (s *IPResolutionService) RegisterGrpc(gs *grpc.Server) {
+	v1.RegisterPlatformIPResolutionServiceServer(gs, s)
 }
 
-func (s *IpResolutionService) RegisterHttp(hs *http.Server) {
+func (s *IPResolutionService) RegisterHTTP(hs *http.Server) {
 }
 
-func (s *IpResolutionService) ResolveIp(ctx context.Context, req *v1.ResolveIp_Req) (*v1.ResolveIp_Resp, error) {
+func (s *IPResolutionService) ResolveIP(ctx context.Context, req *v1.ResolveIP_Req) (*v1.ResolveIP_Resp, error) {
 	info, err := s.ipUsecase.Get(ctx, req.GetIp())
 	if err != nil {
 		return nil, err
 	}
-	return &v1.ResolveIp_Resp{
+	return &v1.ResolveIP_Resp{
 		Country:     info.Country,
 		Province:    info.Province,
 		City:        info.City,
@@ -45,16 +45,16 @@ func (s *IpResolutionService) ResolveIp(ctx context.Context, req *v1.ResolveIp_R
 	}, nil
 }
 
-func (s *IpResolutionService) UpdateIpDataFromSource(ctx context.Context, req *v1.UpdateIpDataFromSource_Req) (*v1.UpdateIpDataFromSource_Resp, error) {
-	if err := s.ipUsecase.UpdateIpDataFromSource(ctx); err != nil {
+func (s *IPResolutionService) UpdateIPDataFromSource(ctx context.Context, req *v1.UpdateIPDataFromSource_Req) (*v1.UpdateIPDataFromSource_Resp, error) {
+	if err := s.ipUsecase.UpdateIPDataFromSource(ctx); err != nil {
 		return nil, err
 	}
-	return &v1.UpdateIpDataFromSource_Resp{}, nil
+	return &v1.UpdateIPDataFromSource_Resp{}, nil
 }
 
-func (s *IpResolutionService) UpdateIpDataFromOss(ctx context.Context, req *v1.UpdateIpDataFromOss_Req) (*v1.UpdateIpDataFromOss_Resp, error) {
-	if err := s.ipUsecase.UpdateIpDataFromOss(ctx); err != nil {
+func (s *IPResolutionService) UpdateIPDataFromOSS(ctx context.Context, req *v1.UpdateIPDataFromOSS_Req) (*v1.UpdateIPDataFromOSS_Resp, error) {
+	if err := s.ipUsecase.UpdateIPDataFromOss(ctx); err != nil {
 		return nil, err
 	}
-	return &v1.UpdateIpDataFromOss_Resp{}, nil
+	return &v1.UpdateIPDataFromOSS_Resp{}, nil
 }

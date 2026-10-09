@@ -29,7 +29,7 @@ func (s *PushEventService) RegisterGrpc(gs *grpc.Server) {
 	pushhubv1.RegisterPushHubEventServiceServer(gs, s)
 }
 
-func (s *PushEventService) RegisterHttp(hs *http.Server) {
+func (s *PushEventService) RegisterHTTP(hs *http.Server) {
 }
 
 func (s *PushEventService) PublishEvent(ctx context.Context, req *pushhubv1.PublishEvent_Req) (*pushhubv1.PublishEvent_Resp, error) {

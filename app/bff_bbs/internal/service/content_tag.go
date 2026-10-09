@@ -34,7 +34,7 @@ func NewContentTagService(
 func (s *ContentTagService) RegisterGrpc(gs *grpc.Server) {
 }
 
-func (s *ContentTagService) RegisterHttp(hs *http.Server) {
+func (s *ContentTagService) RegisterHTTP(hs *http.Server) {
 	bbscontentv1.RegisterTagServiceHTTPServer(hs, s)
 }
 

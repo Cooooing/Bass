@@ -3,10 +3,11 @@ package server
 import (
 	commonClient "common/pkg/client"
 	"common/pkg/server"
-	"content/internal/config"
 	"fmt"
 	"log/slog"
 	"time"
+
+	"content/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"

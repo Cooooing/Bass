@@ -5,12 +5,13 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
-	"sort"
+	"slices"
 	"strings"
 	"time"
 
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
+
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/enum"
@@ -183,7 +184,7 @@ func (u *ArticleSearchUsecase) encodeCursor(query string, excludedAuthorIDs []in
 
 func (*ArticleSearchUsecase) excludedAuthorHash(userIDs []int64) string {
 	values := append([]int64(nil), userIDs...)
-	sort.Slice(values, func(i int, j int) bool { return values[i] < values[j] })
+	slices.Sort(values)
 	encoded, _ := json.Marshal(values)
 	sum := sha256.Sum256(encoded)
 	return base64.RawURLEncoding.EncodeToString(sum[:])

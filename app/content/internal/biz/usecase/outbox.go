@@ -2,11 +2,12 @@ package usecase
 
 import (
 	"common/pkg/constant"
-	"content/internal/biz/base"
-	"content/internal/biz/repo"
 	"context"
 	"log/slog"
 	"time"
+
+	"content/internal/biz/base"
+	"content/internal/biz/repo"
 )
 
 type OutboxUsecase struct {

@@ -2,9 +2,10 @@ package repo
 
 import (
 	commonmodel "common/pkg/model"
+	"context"
+
 	"content/internal/biz/model"
 	"content/internal/enum"
-	"context"
 )
 
 type PostscriptRepo interface {

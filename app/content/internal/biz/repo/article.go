@@ -2,10 +2,11 @@ package repo
 
 import (
 	commonmodel "common/pkg/model"
-	"content/internal/biz/model"
-	"content/internal/enum"
 	"context"
 	"time"
+
+	"content/internal/biz/model"
+	"content/internal/enum"
 )
 
 type ArticleRepo interface {

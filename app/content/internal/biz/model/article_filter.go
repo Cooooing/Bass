@@ -1,8 +1,9 @@
 package model
 
 import (
-	"content/internal/enum"
 	"time"
+
+	"content/internal/enum"
 )
 
 type ArticleFilter struct {

@@ -3,12 +3,13 @@ package client
 import (
 	"common/pkg/client/driver"
 	"common/pkg/constant"
-	"content/internal/config"
-	"content/internal/data/gen"
-	"content/internal/data/gen/migrate"
 	"context"
 	"fmt"
 	"log/slog"
+
+	"content/internal/config"
+	"content/internal/data/gen"
+	"content/internal/data/gen/migrate"
 
 	_ "content/internal/data/gen/runtime"
 

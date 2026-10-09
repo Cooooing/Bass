@@ -3,9 +3,10 @@ package usecase
 import (
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
+	"time"
+
 	"content/internal/biz/model"
 	"content/internal/enum"
-	"time"
 )
 
 type ArticleAccessUsecase struct{}

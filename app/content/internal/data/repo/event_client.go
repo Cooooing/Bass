@@ -2,9 +2,10 @@ package repo
 
 import (
 	"common/pkg/client"
-	"content/internal/biz/repo"
 	"context"
 	"fmt"
+
+	"content/internal/biz/repo"
 )
 
 var _ repo.EventClient = (*NatsEventClient)(nil)

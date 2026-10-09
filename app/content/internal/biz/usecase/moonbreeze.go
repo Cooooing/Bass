@@ -3,17 +3,18 @@ package usecase
 import (
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
-	"content/internal/biz/model"
-	"content/internal/biz/repo"
 	"context"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"sort"
+	"slices"
 	"strings"
 	"time"
 	"unicode/utf8"
+
+	"content/internal/biz/model"
+	"content/internal/biz/repo"
 )
 
 const (
@@ -171,7 +172,7 @@ func (u *MoonbreezeUsecase) encodeCursor(row *model.Moonbreeze, excludedAuthorID
 
 func (*MoonbreezeUsecase) excludedAuthorHash(userIDs []int64) string {
 	values := append([]int64(nil), userIDs...)
-	sort.Slice(values, func(i int, j int) bool { return values[i] < values[j] })
+	slices.Sort(values)
 	encoded, _ := json.Marshal(values)
 	sum := sha256.Sum256(encoded)
 	return base64.RawURLEncoding.EncodeToString(sum[:])

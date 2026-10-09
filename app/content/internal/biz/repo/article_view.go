@@ -2,8 +2,9 @@ package repo
 
 import (
 	commonmodel "common/pkg/model"
-	"content/internal/biz/model"
 	"context"
+
+	"content/internal/biz/model"
 )
 
 type ArticleViewCacheRepo interface {

@@ -3,12 +3,13 @@ package repo
 import (
 	commonmodel "common/pkg/model"
 	"common/pkg/util/ent"
+	"context"
+
 	"content/internal/biz/model"
 	"content/internal/biz/repo"
 	"content/internal/data/gen"
 	"content/internal/data/gen/article"
 	"content/internal/data/gen/articleviewrecord"
-	"context"
 
 	"entgo.io/ent/dialect/sql"
 )

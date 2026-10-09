@@ -27,7 +27,3 @@ var CharacterStatusMap = commonenum.NewMapping[CharacterStatus, v1.CharacterStat
 func (e CharacterStatus) String() string {
 	return string(e)
 }
-
-func CharacterStatusValues() []string {
-	return CharacterStatusMap.EnumValues()
-}

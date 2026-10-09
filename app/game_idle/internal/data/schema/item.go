@@ -33,7 +33,7 @@ func (Item) Fields() []ent.Field {
 		field.String("id").Comment("物品编码").Immutable().Unique(),
 		field.String("name").Comment("物品名称"),
 		field.Enum("type").
-			Values(gameenum.ItemTypeValues()...).
+			Values(gameenum.ItemTypeMap.EnumValues()...).
 			Default(gameenum.ItemTypeResource.String()).
 			Comment("物品类型"),
 		field.String("description").Comment("物品描述").Default(""),

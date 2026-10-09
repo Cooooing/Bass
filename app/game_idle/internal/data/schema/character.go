@@ -39,7 +39,7 @@ func (Character) Fields() []ent.Field {
 		field.Int64("max_offline_seconds").Comment("最大离线收益结算秒数").Default(28800),
 		field.Time("last_offline_at").Comment("最近离线时间").Optional().Nillable(),
 		field.Enum("status").
-			Values(gameenum.CharacterStatusValues()...).
+			Values(gameenum.CharacterStatusMap.EnumValues()...).
 			Default(gameenum.CharacterStatusActive.String()).
 			Comment("角色状态"),
 	}

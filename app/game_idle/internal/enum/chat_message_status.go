@@ -27,7 +27,3 @@ var ChatMessageStatusMap = commonenum.NewMapping[ChatMessageStatus, v1.ChatMessa
 func (e ChatMessageStatus) String() string {
 	return string(e)
 }
-
-func ChatMessageStatusValues() []string {
-	return ChatMessageStatusMap.EnumValues()
-}

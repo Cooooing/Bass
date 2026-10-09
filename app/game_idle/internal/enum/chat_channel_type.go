@@ -23,7 +23,3 @@ var ChatChannelTypeMap = commonenum.NewMapping[ChatChannelType, v1.ChatChannelTy
 func (e ChatChannelType) String() string {
 	return string(e)
 }
-
-func ChatChannelTypeValues() []string {
-	return ChatChannelTypeMap.EnumValues()
-}

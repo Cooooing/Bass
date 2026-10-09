@@ -31,7 +31,7 @@ func (ChatMessage) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
 		field.Enum("channel_type").
-			Values(gameenum.ChatChannelTypeValues()...).
+			Values(gameenum.ChatChannelTypeMap.EnumValues()...).
 			Default(gameenum.ChatChannelTypeWorld.String()).
 			Comment("频道类型"),
 		field.String("channel_id").Comment("频道标识"),
@@ -39,7 +39,7 @@ func (ChatMessage) Fields() []ent.Field {
 		field.Int64("receiver_character_id").Comment("接收角色 ID").Optional().Nillable(),
 		field.String("content").Comment("消息内容"),
 		field.Enum("status").
-			Values(gameenum.ChatMessageStatusValues()...).
+			Values(gameenum.ChatMessageStatusMap.EnumValues()...).
 			Default(gameenum.ChatMessageStatusNormal.String()).
 			Comment("消息状态"),
 	}

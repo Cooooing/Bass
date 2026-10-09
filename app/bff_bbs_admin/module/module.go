@@ -1,12 +1,13 @@
 package module
 
 import (
+	commonmodule "common/pkg/module"
+	commonserver "common/pkg/server"
+
 	"bff_bbs_admin/internal/biz"
 	"bff_bbs_admin/internal/config"
 	"bff_bbs_admin/internal/data"
 	"bff_bbs_admin/internal/service"
-	commonmodule "common/pkg/module"
-	commonserver "common/pkg/server"
 
 	"github.com/google/wire"
 )

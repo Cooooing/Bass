@@ -1,9 +1,10 @@
 package data
 
 import (
-	"bff_bbs_admin/internal/config"
 	commonClient "common/pkg/client"
 	"common/proto/gen/common"
+
+	"bff_bbs_admin/internal/config"
 
 	"github.com/google/wire"
 )

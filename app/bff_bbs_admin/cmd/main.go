@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bff_bbs_admin/internal/config"
 	commonClient "common/pkg/client"
 	commonserver "common/pkg/server"
 	"context"
@@ -9,6 +8,8 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+
+	"bff_bbs_admin/internal/config"
 
 	"github.com/go-kratos/kratos/v3"
 	"github.com/go-kratos/kratos/v3/transport"

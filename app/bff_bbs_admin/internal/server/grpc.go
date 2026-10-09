@@ -1,12 +1,13 @@
 package server
 
 import (
-	"bff_bbs_admin/internal/config"
 	commonClient "common/pkg/client"
 	commonserver "common/pkg/server"
 	"fmt"
 	"log/slog"
 	"time"
+
+	"bff_bbs_admin/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"

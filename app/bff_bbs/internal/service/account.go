@@ -1,7 +1,6 @@
 package service
 
 import (
-	"bff_bbs/internal/biz/usecase"
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
@@ -15,6 +14,8 @@ import (
 	"regexp"
 	"strings"
 	"unicode/utf8"
+
+	"bff_bbs/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"

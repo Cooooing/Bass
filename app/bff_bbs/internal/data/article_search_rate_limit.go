@@ -1,10 +1,11 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/client"
 	"context"
 	"fmt"
+
+	"bff_bbs/internal/biz/repo"
 
 	"github.com/redis/go-redis/v9"
 )

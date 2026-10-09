@@ -1,10 +1,11 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
 	platformv1 "common/proto/gen/platform/v1"
 	"context"
+
+	"bff_bbs/internal/biz/repo"
 )
 
 var _ repo.AssetClient = (*AssetClient)(nil)

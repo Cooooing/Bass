@@ -1,7 +1,6 @@
 package server
 
 import (
-	"bff_bbs/internal/config"
 	commonClient "common/pkg/client"
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
@@ -15,6 +14,8 @@ import (
 	"fmt"
 	"log/slog"
 	stdhttp "net/http"
+
+	"bff_bbs/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware"

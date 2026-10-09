@@ -1,16 +1,17 @@
 package module
 
 import (
-	"bff_bbs/internal/biz"
-	"bff_bbs/internal/config"
-	"bff_bbs/internal/data"
-	bbsserver "bff_bbs/internal/server"
-	"bff_bbs/internal/service"
 	"common/pkg/client/rpc"
 	commonmodule "common/pkg/module"
 	"common/pkg/server"
 	"common/proto/gen/common"
 	userv1 "common/proto/gen/user/v1"
+
+	"bff_bbs/internal/biz"
+	"bff_bbs/internal/config"
+	"bff_bbs/internal/data"
+	bbsserver "bff_bbs/internal/server"
+	"bff_bbs/internal/service"
 
 	"github.com/go-kratos/kratos/v3/middleware"
 	"github.com/google/wire"

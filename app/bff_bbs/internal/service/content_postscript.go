@@ -1,7 +1,6 @@
 package service
 
 import (
-	"bff_bbs/internal/biz/usecase"
 	"common/pkg/apperror"
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
@@ -10,6 +9,8 @@ import (
 	bbscontentv1enum "common/proto/gen/bff_bbs/v1/content/enum"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+
+	"bff_bbs/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"

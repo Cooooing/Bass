@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
@@ -9,6 +8,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"bff_bbs/internal/biz/repo"
 )
 
 const (

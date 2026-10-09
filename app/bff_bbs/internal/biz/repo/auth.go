@@ -1,9 +1,10 @@
 package repo
 
 import (
-	"bff_bbs/internal/enum"
 	"context"
 	"time"
+
+	"bff_bbs/internal/enum"
 )
 
 type AuthRepo interface {

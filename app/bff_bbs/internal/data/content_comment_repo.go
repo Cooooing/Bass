@@ -1,7 +1,6 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
@@ -10,6 +9,8 @@ import (
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"fmt"
+
+	"bff_bbs/internal/biz/repo"
 
 	"github.com/samber/lo"
 )

@@ -1,9 +1,10 @@
 package usecase
 
 import (
+	"context"
+
 	"bff_bbs/internal/biz/model"
 	"bff_bbs/internal/biz/repo"
-	"context"
 )
 
 type OtpUsecase struct {

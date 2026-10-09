@@ -1,13 +1,14 @@
 package usecase
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
 	bbscontentv1enum "common/proto/gen/bff_bbs/v1/content/enum"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+
+	"bff_bbs/internal/biz/repo"
 )
 
 type ContentDomainUsecase struct {

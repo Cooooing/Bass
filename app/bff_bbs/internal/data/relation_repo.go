@@ -1,13 +1,14 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/repo"
-	"bff_bbs/internal/enum"
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
 	userv1 "common/proto/gen/user/v1"
 	userv1enum "common/proto/gen/user/v1/enum"
 	"context"
+
+	"bff_bbs/internal/biz/repo"
+	"bff_bbs/internal/enum"
 )
 
 var _ repo.RelationClient = (*RelationClient)(nil)

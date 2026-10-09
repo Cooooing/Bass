@@ -1,8 +1,9 @@
 package usecase
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"context"
+
+	"bff_bbs/internal/biz/repo"
 )
 
 type ContentPostscriptUsecase struct {

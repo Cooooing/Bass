@@ -1,10 +1,11 @@
 package repo
 
 import (
-	"bff_bbs/internal/enum"
 	commonmodel "common/pkg/model"
 	"context"
 	"time"
+
+	"bff_bbs/internal/enum"
 )
 
 type RelationClient interface {

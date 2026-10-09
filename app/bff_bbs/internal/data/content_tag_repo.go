@@ -1,12 +1,13 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
 	contentv1 "common/proto/gen/content/v1"
 	contentv1enum "common/proto/gen/content/v1/enum"
 	"context"
+
+	"bff_bbs/internal/biz/repo"
 )
 
 var _ repo.ContentTagClient = (*ContentTagClient)(nil)

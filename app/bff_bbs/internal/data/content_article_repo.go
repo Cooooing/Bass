@@ -1,7 +1,6 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
@@ -11,6 +10,8 @@ import (
 	"context"
 	"fmt"
 	"sort"
+
+	"bff_bbs/internal/biz/repo"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 

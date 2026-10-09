@@ -1,11 +1,12 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"time"
+
+	"bff_bbs/internal/biz/repo"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

@@ -1,10 +1,11 @@
 package usecase
 
 import (
-	"bff_bbs/internal/biz/repo"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	commonenums "common/proto/gen/common/enums"
 	"context"
+
+	"bff_bbs/internal/biz/repo"
 )
 
 type PreferencesUsecase struct {

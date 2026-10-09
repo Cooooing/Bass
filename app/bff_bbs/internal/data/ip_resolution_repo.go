@@ -1,11 +1,12 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
 	platformv1 "common/proto/gen/platform/v1"
 	"context"
+
+	"bff_bbs/internal/biz/repo"
 )
 
 var _ repo.IPResolutionClient = (*IPResolutionClient)(nil)

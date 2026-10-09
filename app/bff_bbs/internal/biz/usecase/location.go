@@ -1,9 +1,10 @@
 package usecase
 
 import (
-	"bff_bbs/internal/biz/repo"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	"context"
+
+	"bff_bbs/internal/biz/repo"
 )
 
 type LocationUsecase struct {

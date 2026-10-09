@@ -1,11 +1,12 @@
 package usecase
 
 import (
-	"bff_bbs/internal/biz/repo"
 	commonmodel "common/pkg/model"
 	bbsnotifyv1 "common/proto/gen/bff_bbs/v1/notify"
 	commonenums "common/proto/gen/common/enums"
 	"context"
+
+	"bff_bbs/internal/biz/repo"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

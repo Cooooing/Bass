@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"bff_bbs/internal/biz/repo"
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
@@ -10,9 +9,12 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	economyv1enum "common/proto/gen/economy/v1/enum"
 	"context"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"regexp"
 	"strings"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
+
+	"bff_bbs/internal/biz/repo"
 )
 
 var assetHashPattern = regexp.MustCompile(`^[a-f0-9]{64}$`)

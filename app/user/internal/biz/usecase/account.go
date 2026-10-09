@@ -6,9 +6,10 @@ import (
 	"common/pkg/util/str"
 	commonerrors "common/proto/gen/common/errors"
 	"context"
-	"image/png"
 	"log/slog"
 	"strings"
+
+	"image/png"
 	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"

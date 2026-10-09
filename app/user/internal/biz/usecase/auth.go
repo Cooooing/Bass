@@ -11,6 +11,7 @@ import (
 	"context"
 	"strings"
 	"time"
+
 	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
@@ -368,7 +369,7 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		if err != nil || user == nil {
 			if err != nil {
 				code, ok := apperror.BusinessCode(err)
-				if !(ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND) {
+				if !ok || code != cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND {
 					s.logger.WarnContext(ctx, "password login account lookup failed", constant.LogFieldErr, err)
 				}
 			}
@@ -424,7 +425,7 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		if err != nil || user == nil {
 			if err != nil {
 				code, ok := apperror.BusinessCode(err)
-				if !(ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND) {
+				if !ok || code != cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND {
 					return nil, err
 				}
 			}
@@ -461,7 +462,7 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		if err != nil || user == nil {
 			if err != nil {
 				code, ok := apperror.BusinessCode(err)
-				if !(ok && code == cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND) {
+				if !ok || code != cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND {
 					return nil, err
 				}
 			}

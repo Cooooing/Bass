@@ -7,9 +7,10 @@ import (
 	commonenums "common/proto/gen/common/enums"
 	cerrors "common/proto/gen/common/errors"
 	"context"
-	"image/png"
 	"log/slog"
 	"time"
+
+	"image/png"
 	"user/internal/biz/base"
 	"user/internal/biz/model"
 	"user/internal/biz/repo"

@@ -5,6 +5,7 @@ import (
 	commonmodule "common/pkg/module"
 	"common/pkg/server"
 	"common/proto/gen/common"
+
 	"user/internal/biz"
 	"user/internal/config"
 	"user/internal/data"

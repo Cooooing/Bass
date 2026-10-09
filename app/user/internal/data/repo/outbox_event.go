@@ -7,6 +7,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/gen"

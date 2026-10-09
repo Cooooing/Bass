@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/enum"
@@ -352,8 +353,8 @@ func (r *AuthCacheRepo) DeleteUserSessions(ctx context.Context, userID int64) er
 				return err
 			}
 			realm := ""
-			if strings.HasPrefix(indexKey, "user:auth:sessions:{realm:") {
-				value := strings.TrimPrefix(indexKey, "user:auth:sessions:{realm:")
+			if after, ok := strings.CutPrefix(indexKey, "user:auth:sessions:{realm:"); ok {
+				value := after
 				end := strings.Index(value, "}")
 				if end > 0 {
 					realm = value[:end]

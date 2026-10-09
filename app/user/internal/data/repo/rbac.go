@@ -3,7 +3,9 @@ package repo
 import (
 	commonenum "common/pkg/enum"
 	"context"
+	"slices"
 	"time"
+
 	"user/internal/biz/model"
 	bizrepo "user/internal/biz/repo"
 	"user/internal/data/gen"
@@ -159,10 +161,8 @@ func (r *RbacRepo) HasPermission(ctx context.Context, userID int64, realm common
 	if err != nil {
 		return false, err
 	}
-	for _, code := range codes {
-		if code == permissionCode {
-			return true, nil
-		}
+	if slices.Contains(codes, permissionCode) {
+		return true, nil
 	}
 	return false, nil
 }

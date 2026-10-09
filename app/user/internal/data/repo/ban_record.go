@@ -6,6 +6,7 @@ import (
 
 	commonenum "common/pkg/enum"
 	utilent "common/pkg/util/ent"
+
 	"user/internal/biz/model"
 	"user/internal/biz/repo"
 	"user/internal/data/gen"

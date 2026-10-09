@@ -3,6 +3,7 @@ package model
 import (
 	commonenum "common/pkg/enum"
 	"time"
+
 	"user/internal/enum"
 )
 

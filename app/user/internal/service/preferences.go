@@ -6,6 +6,7 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/user/v1"
 	"context"
+
 	"user/internal/biz/model"
 	"user/internal/biz/usecase"
 	"user/internal/enum"

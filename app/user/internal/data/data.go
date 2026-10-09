@@ -4,6 +4,7 @@ import (
 	commonClient "common/pkg/client"
 	"common/pkg/client/rpc"
 	"common/proto/gen/common"
+
 	"user/internal/config"
 	"user/internal/data/client"
 	"user/internal/data/repo"

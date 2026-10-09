@@ -33,7 +33,7 @@ func (CharacterAbility) Fields() []ent.Field {
 		field.Int64("id").Immutable().Unique(),
 		field.Int64("character_id").Comment("角色 ID"),
 		field.Enum("ability_id").
-			Values(gameenum.AbilityValues()...).
+			Values(gameenum.AbilityMap.EnumValues()...).
 			Comment("能力编码"),
 		field.Int32("level").Comment("当前等级").Default(1),
 		field.Int64("exp").Comment("累计经验").Default(0),

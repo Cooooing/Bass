@@ -34,7 +34,7 @@ func (Region) Fields() []ent.Field {
 		field.String("name").Comment("区域名称"),
 		field.String("description").Comment("区域描述").Default(""),
 		field.Enum("action_kind").
-			Values(gameenum.ActionKindValues()...).
+			Values(gameenum.ActionKindMap.EnumValues()...).
 			Default(gameenum.ActionKindForaging.String()).
 			Comment("归属行动类型"),
 		field.Bool("enabled").Comment("是否启用").Default(true),

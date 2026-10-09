@@ -35,11 +35,11 @@ func (Action) Fields() []ent.Field {
 		field.String("description").Comment("行动描述").Default(""),
 		field.String("region_id").Comment("展示区域编码").Nillable().Optional(),
 		field.Enum("action_kind").
-			Values(gameenum.ActionKindValues()...).
+			Values(gameenum.ActionKindMap.EnumValues()...).
 			Default(gameenum.ActionKindForaging.String()).
 			Comment("行动类型"),
 		field.Enum("ability_id").
-			Values(gameenum.AbilityValues()...).
+			Values(gameenum.AbilityMap.EnumValues()...).
 			Comment("行动等级对应能力编码").
 			Nillable().
 			Optional(),

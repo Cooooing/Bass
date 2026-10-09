@@ -34,7 +34,7 @@ func (Recipe) Fields() []ent.Field {
 		field.String("name").Comment("配方名称"),
 		field.String("description").Comment("配方描述").Default(""),
 		field.Enum("type").
-			Values(gameenum.RecipeTypeValues()...).
+			Values(gameenum.RecipeTypeMap.EnumValues()...).
 			Default(gameenum.RecipeTypeNormal.String()).
 			Comment("配方类型"),
 		field.Int32("generation_times").Comment("产出生成次数").Default(1),

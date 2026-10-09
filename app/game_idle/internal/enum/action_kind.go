@@ -1,5 +1,10 @@
 package enum
 
+import (
+	commonenum "common/pkg/enum"
+	v1 "common/proto/gen/game_idle/v1/enum"
+)
+
 // ActionKind 表示区域活动关联的行动能力类型。
 type ActionKind string
 
@@ -16,21 +21,10 @@ const (
 	ActionKindAlchemy     ActionKind = "alchemy"     // 炼金
 )
 
+var ActionKindMap = commonenum.NewMapping[ActionKind, v1.ActionKind](map[ActionKind]commonenum.Entry[ActionKind, v1.ActionKind]{
+	ActionKindWoodcutting: {Proto: v1.ActionKind_ACTION_KIND_WOODCUTTING}, ActionKindForaging: {Proto: v1.ActionKind_ACTION_KIND_FORAGING}, ActionKindMining: {Proto: v1.ActionKind_ACTION_KIND_MINING}, ActionKindFishing: {Proto: v1.ActionKind_ACTION_KIND_FISHING}, ActionKindCrafting: {Proto: v1.ActionKind_ACTION_KIND_CRAFTING}, ActionKindSewing: {Proto: v1.ActionKind_ACTION_KIND_SEWING}, ActionKindSmithing: {Proto: v1.ActionKind_ACTION_KIND_SMITHING}, ActionKindCooking: {Proto: v1.ActionKind_ACTION_KIND_COOKING}, ActionKindEnhancing: {Proto: v1.ActionKind_ACTION_KIND_ENHANCING}, ActionKindAlchemy: {Proto: v1.ActionKind_ACTION_KIND_ALCHEMY},
+})
+
 func (e ActionKind) String() string {
 	return string(e)
-}
-
-func ActionKindValues() []string {
-	return []string{
-		ActionKindWoodcutting.String(),
-		ActionKindForaging.String(),
-		ActionKindMining.String(),
-		ActionKindFishing.String(),
-		ActionKindCrafting.String(),
-		ActionKindSewing.String(),
-		ActionKindSmithing.String(),
-		ActionKindCooking.String(),
-		ActionKindEnhancing.String(),
-		ActionKindAlchemy.String(),
-	}
 }

@@ -1,5 +1,10 @@
 package enum
 
+import (
+	commonenum "common/pkg/enum"
+	v1 "common/proto/gen/game_idle/v1/enum"
+)
+
 // Ability 表示角色可成长能力。
 type Ability string
 
@@ -16,21 +21,10 @@ const (
 	AbilityAlchemy     Ability = "alchemy"     // 炼金
 )
 
+var AbilityMap = commonenum.NewMapping[Ability, v1.Ability](map[Ability]commonenum.Entry[Ability, v1.Ability]{
+	AbilityWoodcutting: {Proto: v1.Ability_ABILITY_WOODCUTTING}, AbilityForaging: {Proto: v1.Ability_ABILITY_FORAGING}, AbilityMining: {Proto: v1.Ability_ABILITY_MINING}, AbilityFishing: {Proto: v1.Ability_ABILITY_FISHING}, AbilityCrafting: {Proto: v1.Ability_ABILITY_CRAFTING}, AbilitySewing: {Proto: v1.Ability_ABILITY_SEWING}, AbilitySmithing: {Proto: v1.Ability_ABILITY_SMITHING}, AbilityCooking: {Proto: v1.Ability_ABILITY_COOKING}, AbilityEnhancing: {Proto: v1.Ability_ABILITY_ENHANCING}, AbilityAlchemy: {Proto: v1.Ability_ABILITY_ALCHEMY},
+})
+
 func (e Ability) String() string {
 	return string(e)
-}
-
-func AbilityValues() []string {
-	return []string{
-		AbilityWoodcutting.String(),
-		AbilityForaging.String(),
-		AbilityMining.String(),
-		AbilityFishing.String(),
-		AbilityCrafting.String(),
-		AbilitySewing.String(),
-		AbilitySmithing.String(),
-		AbilityCooking.String(),
-		AbilityEnhancing.String(),
-		AbilityAlchemy.String(),
-	}
 }

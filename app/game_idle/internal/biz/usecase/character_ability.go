@@ -43,7 +43,7 @@ func (u *CharacterAbilityUsecase) Map(
 	for _, row := range rows {
 		row.NextLevelExp = int64(row.Level) * int64(row.Level) * 100
 	}
-	for _, abilityID := range enum.AbilityValues() {
+	for _, abilityID := range enum.AbilityMap.EnumValues() {
 		ability := enum.Ability(abilityID)
 		if rows[ability] == nil {
 			rows[ability] = &model.CharacterAbility{

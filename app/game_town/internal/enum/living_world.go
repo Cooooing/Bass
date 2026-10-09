@@ -3,100 +3,100 @@ package enum
 type EntityType string
 
 const (
-	EntityTypePlayer   EntityType = "player"
-	EntityTypeNpc      EntityType = "npc"
-	EntityTypeLocation EntityType = "location"
-	EntityTypeFaction  EntityType = "faction"
+	EntityTypePlayer   EntityType = "player"   // player
+	EntityTypeNpc      EntityType = "npc"      // npc
+	EntityTypeLocation EntityType = "location" // location
+	EntityTypeFaction  EntityType = "faction"  // faction
 )
 
 type KnowledgeCertainty string
 
 const (
-	KnowledgeCertaintyConfirmed KnowledgeCertainty = "confirmed"
-	KnowledgeCertaintyLikely    KnowledgeCertainty = "likely"
-	KnowledgeCertaintyRumor     KnowledgeCertainty = "rumor"
-	KnowledgeCertaintyUnknown   KnowledgeCertainty = "unknown"
+	KnowledgeCertaintyConfirmed KnowledgeCertainty = "confirmed" // confirmed
+	KnowledgeCertaintyLikely    KnowledgeCertainty = "likely"    // likely
+	KnowledgeCertaintyRumor     KnowledgeCertainty = "rumor"     // rumor
+	KnowledgeCertaintyUnknown   KnowledgeCertainty = "unknown"   // unknown
 )
 
 type ObservationSource string
 
 const (
-	ObservationSourceExperienced ObservationSource = "experienced"
-	ObservationSourceWitnessed   ObservationSource = "witnessed"
-	ObservationSourceTold        ObservationSource = "told"
-	ObservationSourceFaction     ObservationSource = "faction"
-	ObservationSourcePublic      ObservationSource = "public"
+	ObservationSourceExperienced ObservationSource = "experienced" // experienced
+	ObservationSourceWitnessed   ObservationSource = "witnessed"   // witnessed
+	ObservationSourceTold        ObservationSource = "told"        // told
+	ObservationSourceFaction     ObservationSource = "faction"     // faction
+	ObservationSourcePublic      ObservationSource = "public"      // public
 )
 
 type RelationshipAttitude string
 
 const (
-	RelationshipAttitudeFriendly RelationshipAttitude = "friendly"
-	RelationshipAttitudeTrusting RelationshipAttitude = "trusting"
-	RelationshipAttitudeNeutral  RelationshipAttitude = "neutral"
-	RelationshipAttitudeWary     RelationshipAttitude = "wary"
-	RelationshipAttitudeAfraid   RelationshipAttitude = "afraid"
-	RelationshipAttitudeHostile  RelationshipAttitude = "hostile"
+	RelationshipAttitudeFriendly RelationshipAttitude = "friendly" // friendly
+	RelationshipAttitudeTrusting RelationshipAttitude = "trusting" // trusting
+	RelationshipAttitudeNeutral  RelationshipAttitude = "neutral"  // neutral
+	RelationshipAttitudeWary     RelationshipAttitude = "wary"     // wary
+	RelationshipAttitudeAfraid   RelationshipAttitude = "afraid"   // afraid
+	RelationshipAttitudeHostile  RelationshipAttitude = "hostile"  // hostile
 )
 
 type NpcLifeStatus string
 
 const (
-	NpcLifeStatusAlive   NpcLifeStatus = "alive"
-	NpcLifeStatusMissing NpcLifeStatus = "missing"
-	NpcLifeStatusDead    NpcLifeStatus = "dead"
+	NpcLifeStatusAlive   NpcLifeStatus = "alive"   // alive
+	NpcLifeStatusMissing NpcLifeStatus = "missing" // missing
+	NpcLifeStatusDead    NpcLifeStatus = "dead"    // dead
 )
 
 type LocationStatus string
 
 const (
-	LocationStatusActive    LocationStatus = "active"
-	LocationStatusDamaged   LocationStatus = "damaged"
-	LocationStatusBlocked   LocationStatus = "blocked"
-	LocationStatusDestroyed LocationStatus = "destroyed"
-	LocationStatusRuins     LocationStatus = "ruins"
+	LocationStatusActive    LocationStatus = "active"    // active
+	LocationStatusDamaged   LocationStatus = "damaged"   // damaged
+	LocationStatusBlocked   LocationStatus = "blocked"   // blocked
+	LocationStatusDestroyed LocationStatus = "destroyed" // destroyed
+	LocationStatusRuins     LocationStatus = "ruins"     // ruins
 )
 
 type FactionStatus string
 
 const (
-	FactionStatusActive    FactionStatus = "active"
-	FactionStatusDeclining FactionStatus = "declining"
-	FactionStatusCollapsed FactionStatus = "collapsed"
+	FactionStatusActive    FactionStatus = "active"    // active
+	FactionStatusDeclining FactionStatus = "declining" // declining
+	FactionStatusCollapsed FactionStatus = "collapsed" // collapsed
 )
 
 type ClaimTruth string
 
 const (
-	ClaimTruthTrue    ClaimTruth = "true"
-	ClaimTruthFalse   ClaimTruth = "false"
-	ClaimTruthUnknown ClaimTruth = "unknown"
+	ClaimTruthTrue    ClaimTruth = "true"    // true
+	ClaimTruthFalse   ClaimTruth = "false"   // false
+	ClaimTruthUnknown ClaimTruth = "unknown" // unknown
 )
 
 type BeliefStance string
 
 const (
-	BeliefStanceBelieves BeliefStance = "believes"
-	BeliefStanceDoubts   BeliefStance = "doubts"
-	BeliefStanceRejects  BeliefStance = "rejects"
+	BeliefStanceBelieves BeliefStance = "believes" // believes
+	BeliefStanceDoubts   BeliefStance = "doubts"   // doubts
+	BeliefStanceRejects  BeliefStance = "rejects"  // rejects
 )
 
 type MemoryKind string
 
 const (
-	MemoryKindExperience   MemoryKind = "experience"
-	MemoryKindConversation MemoryKind = "conversation"
-	MemoryKindRelationship MemoryKind = "relationship"
-	MemoryKindReflection   MemoryKind = "reflection"
-	MemoryKindRumor        MemoryKind = "rumor"
+	MemoryKindExperience   MemoryKind = "experience"   // experience
+	MemoryKindConversation MemoryKind = "conversation" // conversation
+	MemoryKindRelationship MemoryKind = "relationship" // relationship
+	MemoryKindReflection   MemoryKind = "reflection"   // reflection
+	MemoryKindRumor        MemoryKind = "rumor"        // rumor
 )
 
 type EmbeddingStatus string
 
 const (
-	EmbeddingStatusPending EmbeddingStatus = "pending"
-	EmbeddingStatusReady   EmbeddingStatus = "ready"
-	EmbeddingStatusFailed  EmbeddingStatus = "failed"
+	EmbeddingStatusPending EmbeddingStatus = "pending" // pending
+	EmbeddingStatusReady   EmbeddingStatus = "ready"   // ready
+	EmbeddingStatusFailed  EmbeddingStatus = "failed"  // failed
 )
 
 func (e EntityType) String() string {

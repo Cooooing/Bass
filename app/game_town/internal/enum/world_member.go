@@ -8,8 +8,8 @@ import (
 type WorldMemberRole string
 
 const (
-	WorldMemberRoleOwner  WorldMemberRole = "owner"
-	WorldMemberRoleMember WorldMemberRole = "member"
+	WorldMemberRoleOwner  WorldMemberRole = "owner"  // owner
+	WorldMemberRoleMember WorldMemberRole = "member" // member
 )
 
 var WorldMemberRoleMap = commonenum.NewMapping[WorldMemberRole, v1.GameTownWorldMemberRole](

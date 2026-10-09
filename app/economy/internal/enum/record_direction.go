@@ -9,10 +9,8 @@ import (
 type EconomyRecordDirection string
 
 const (
-	// EconomyRecordDirectionIncome 表示收入
-	EconomyRecordDirectionIncome EconomyRecordDirection = "income"
-	// EconomyRecordDirectionExpense 表示支出
-	EconomyRecordDirectionExpense EconomyRecordDirection = "expense"
+	EconomyRecordDirectionIncome  EconomyRecordDirection = "income"  // EconomyRecordDirectionIncome 表示收入
+	EconomyRecordDirectionExpense EconomyRecordDirection = "expense" // EconomyRecordDirectionExpense 表示支出
 )
 
 // EconomyRecordDirectionMap 维护流水方向映射

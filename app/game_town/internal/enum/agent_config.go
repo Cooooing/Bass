@@ -8,8 +8,8 @@ import (
 type AgentProvider string
 
 const (
-	AgentProviderOllama           AgentProvider = "ollama"
-	AgentProviderOpenAICompatible AgentProvider = "openai_compatible"
+	AgentProviderOllama           AgentProvider = "ollama"            // ollama
+	AgentProviderOpenAICompatible AgentProvider = "openai_compatible" // openai_compatible
 )
 
 var AgentProviderMap = commonenum.NewMapping[AgentProvider, v1.GameTownAgentProvider](

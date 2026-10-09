@@ -8,8 +8,8 @@ import (
 type PlayerStatus string
 
 const (
-	PlayerStatusActive   PlayerStatus = "active"
-	PlayerStatusDisabled PlayerStatus = "disabled"
+	PlayerStatusActive   PlayerStatus = "active"   // active
+	PlayerStatusDisabled PlayerStatus = "disabled" // disabled
 )
 
 var PlayerStatusMap = commonenum.NewMapping[PlayerStatus, v1.GameTownPlayerStatus](

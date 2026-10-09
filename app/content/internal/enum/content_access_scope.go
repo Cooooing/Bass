@@ -9,16 +9,11 @@ import (
 type ContentAccessScope string
 
 const (
-	// ContentAccessScopeGuest 表示游客视角
-	ContentAccessScopeGuest ContentAccessScope = "guest"
-	// ContentAccessScopeUser 表示普通用户视角
-	ContentAccessScopeUser ContentAccessScope = "user"
-	// ContentAccessScopeAuthor 表示作者视角
-	ContentAccessScopeAuthor ContentAccessScope = "author"
-	// ContentAccessScopeAdmin 表示后台管理视角
-	ContentAccessScopeAdmin ContentAccessScope = "admin"
-	// ContentAccessScopeInternalTask 表示内部任务视角
-	ContentAccessScopeInternalTask ContentAccessScope = "internal_task"
+	ContentAccessScopeGuest        ContentAccessScope = "guest"         // ContentAccessScopeGuest 表示游客视角
+	ContentAccessScopeUser         ContentAccessScope = "user"          // ContentAccessScopeUser 表示普通用户视角
+	ContentAccessScopeAuthor       ContentAccessScope = "author"        // ContentAccessScopeAuthor 表示作者视角
+	ContentAccessScopeAdmin        ContentAccessScope = "admin"         // ContentAccessScopeAdmin 表示后台管理视角
+	ContentAccessScopeInternalTask ContentAccessScope = "internal_task" // ContentAccessScopeInternalTask 表示内部任务视角
 )
 
 // ContentAccessScopeMap 维护访问视角内部枚举与 proto 枚举的映射

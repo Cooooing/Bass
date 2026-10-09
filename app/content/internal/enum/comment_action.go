@@ -9,12 +9,9 @@ import (
 type CommentAction string
 
 const (
-	// CommentActionLike 表示点赞评论。
-	CommentActionLike CommentAction = "like"
-	// CommentActionReply 表示回复评论。
-	CommentActionReply CommentAction = "reply"
-	// CommentActionThank 表示感谢评论。
-	CommentActionThank CommentAction = "thank"
+	CommentActionLike  CommentAction = "like"  // CommentActionLike 表示点赞评论。
+	CommentActionReply CommentAction = "reply" // CommentActionReply 表示回复评论。
+	CommentActionThank CommentAction = "thank" // CommentActionThank 表示感谢评论。
 )
 
 // CommentActionMap 维护评论行为内部枚举与 proto 枚举的映射。

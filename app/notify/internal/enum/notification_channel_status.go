@@ -8,13 +8,13 @@ import (
 type NotificationChannelStatus string
 
 const (
-	NotificationChannelStatusProcessing    NotificationChannelStatus = "processing"
-	NotificationChannelStatusSucceeded     NotificationChannelStatus = "succeeded"
-	NotificationChannelStatusSkipped       NotificationChannelStatus = "skipped"
-	NotificationChannelStatusFailed        NotificationChannelStatus = "failed"
-	NotificationChannelStatusUnknown       NotificationChannelStatus = "unknown"
-	NotificationChannelStatusInternalError NotificationChannelStatus = "internal_error"
-	NotificationChannelStatusRateLimited   NotificationChannelStatus = "rate_limited"
+	NotificationChannelStatusProcessing    NotificationChannelStatus = "processing"     // processing
+	NotificationChannelStatusSucceeded     NotificationChannelStatus = "succeeded"      // succeeded
+	NotificationChannelStatusSkipped       NotificationChannelStatus = "skipped"        // skipped
+	NotificationChannelStatusFailed        NotificationChannelStatus = "failed"         // failed
+	NotificationChannelStatusUnknown       NotificationChannelStatus = "unknown"        // unknown
+	NotificationChannelStatusInternalError NotificationChannelStatus = "internal_error" // internal_error
+	NotificationChannelStatusRateLimited   NotificationChannelStatus = "rate_limited"   // rate_limited
 )
 
 var NotificationChannelStatusMap = enum.NewMapping[NotificationChannelStatus, v1.NotificationChannelStatus](map[NotificationChannelStatus]enum.Entry[NotificationChannelStatus, v1.NotificationChannelStatus]{

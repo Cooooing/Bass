@@ -9,10 +9,8 @@ import (
 type TagStatus string
 
 const (
-	// TagStatusEnabled 表示标签启用。
-	TagStatusEnabled TagStatus = "enabled"
-	// TagStatusDisabled 表示标签禁用。
-	TagStatusDisabled TagStatus = "disabled"
+	TagStatusEnabled  TagStatus = "enabled"  // TagStatusEnabled 表示标签启用。
+	TagStatusDisabled TagStatus = "disabled" // TagStatusDisabled 表示标签禁用。
 )
 
 // TagStatusMap 维护标签状态内部枚举与 proto 枚举的映射。

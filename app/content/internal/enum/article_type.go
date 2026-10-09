@@ -9,16 +9,11 @@ import (
 type ArticleType string
 
 const (
-	// ArticleTypeNormal 表示普通文章。
-	ArticleTypeNormal ArticleType = "normal"
-	// ArticleTypeQA 表示问答文章。
-	ArticleTypeQA ArticleType = "qa"
-	// ArticleTypeLottery 表示抽奖文章。
-	ArticleTypeLottery ArticleType = "lottery"
-	// ArticleTypePoll 表示投票文章。
-	ArticleTypePoll ArticleType = "poll"
-	// ArticleTypeColumn 表示专栏文章。
-	ArticleTypeColumn ArticleType = "column"
+	ArticleTypeNormal  ArticleType = "normal"  // ArticleTypeNormal 表示普通文章。
+	ArticleTypeQA      ArticleType = "qa"      // ArticleTypeQA 表示问答文章。
+	ArticleTypeLottery ArticleType = "lottery" // ArticleTypeLottery 表示抽奖文章。
+	ArticleTypePoll    ArticleType = "poll"    // ArticleTypePoll 表示投票文章。
+	ArticleTypeColumn  ArticleType = "column"  // ArticleTypeColumn 表示专栏文章。
 )
 
 // ArticleTypeMap 维护文章类型内部枚举与 proto 枚举的映射。

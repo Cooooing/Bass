@@ -8,14 +8,14 @@ import (
 type AgentJobType string
 
 const (
-	AgentJobTypeWorldGenerate           AgentJobType = "world_generate"
-	AgentJobTypeNpcTalk                 AgentJobType = "npc_talk"
-	AgentJobTypePlayerAct               AgentJobType = "player_act"
-	AgentJobTypeWorldTick               AgentJobType = "world_tick"
-	AgentJobTypePlayerActionInterpret   AgentJobType = "player_action_interpret"
-	AgentJobTypeNpcPlan                 AgentJobType = "npc_plan"
-	AgentJobTypeMemoryEmbed             AgentJobType = "memory_embed"
-	AgentJobTypePlayerCharacterGenerate AgentJobType = "player_character_generate"
+	AgentJobTypeWorldGenerate           AgentJobType = "world_generate"            // world_generate
+	AgentJobTypeNpcTalk                 AgentJobType = "npc_talk"                  // npc_talk
+	AgentJobTypePlayerAct               AgentJobType = "player_act"                // player_act
+	AgentJobTypeWorldTick               AgentJobType = "world_tick"                // world_tick
+	AgentJobTypePlayerActionInterpret   AgentJobType = "player_action_interpret"   // player_action_interpret
+	AgentJobTypeNpcPlan                 AgentJobType = "npc_plan"                  // npc_plan
+	AgentJobTypeMemoryEmbed             AgentJobType = "memory_embed"              // memory_embed
+	AgentJobTypePlayerCharacterGenerate AgentJobType = "player_character_generate" // player_character_generate
 )
 
 var AgentJobTypeMap = commonenum.NewMapping[AgentJobType, v1.GameTownAgentJobType](
@@ -34,8 +34,8 @@ var AgentJobTypeMap = commonenum.NewMapping[AgentJobType, v1.GameTownAgentJobTyp
 type AgentJobPriority string
 
 const (
-	AgentJobPriorityLow  AgentJobPriority = "low"
-	AgentJobPriorityHigh AgentJobPriority = "high"
+	AgentJobPriorityLow  AgentJobPriority = "low"  // low
+	AgentJobPriorityHigh AgentJobPriority = "high" // high
 )
 
 var AgentJobPriorityMap = commonenum.NewMapping[AgentJobPriority, v1.GameTownAgentJobPriority](
@@ -48,10 +48,10 @@ var AgentJobPriorityMap = commonenum.NewMapping[AgentJobPriority, v1.GameTownAge
 type AgentJobStatus string
 
 const (
-	AgentJobStatusQueued    AgentJobStatus = "queued"
-	AgentJobStatusRunning   AgentJobStatus = "running"
-	AgentJobStatusSucceeded AgentJobStatus = "succeeded"
-	AgentJobStatusFailed    AgentJobStatus = "failed"
+	AgentJobStatusQueued    AgentJobStatus = "queued"    // queued
+	AgentJobStatusRunning   AgentJobStatus = "running"   // running
+	AgentJobStatusSucceeded AgentJobStatus = "succeeded" // succeeded
+	AgentJobStatusFailed    AgentJobStatus = "failed"    // failed
 )
 
 var AgentJobStatusMap = commonenum.NewMapping[AgentJobStatus, v1.GameTownAgentJobStatus](

@@ -8,8 +8,8 @@ import (
 type AccountStatType string
 
 const (
-	AccountStatTypeFollow   AccountStatType = "follow"
-	AccountStatTypeFollower AccountStatType = "follower"
+	AccountStatTypeFollow   AccountStatType = "follow"   // follow
+	AccountStatTypeFollower AccountStatType = "follower" // follower
 )
 
 var AccountStatTypeMap = commonenum.NewMapping[AccountStatType, v1.AccountStatType](map[AccountStatType]commonenum.Entry[AccountStatType, v1.AccountStatType]{

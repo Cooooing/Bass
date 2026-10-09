@@ -8,10 +8,10 @@ import (
 type NotificationChannel string
 
 const (
-	NotificationChannelStation     NotificationChannel = "station"
-	NotificationChannelEmail       NotificationChannel = "email"
-	NotificationChannelTencentSMS  NotificationChannel = "tencent_sms"
-	NotificationChannelLarkWebhook NotificationChannel = "lark_webhook"
+	NotificationChannelStation     NotificationChannel = "station"      // station
+	NotificationChannelEmail       NotificationChannel = "email"        // email
+	NotificationChannelTencentSMS  NotificationChannel = "tencent_sms"  // tencent_sms
+	NotificationChannelLarkWebhook NotificationChannel = "lark_webhook" // lark_webhook
 )
 
 var NotificationChannelMap = enum.NewMapping[NotificationChannel, v1.NotificationChannel](map[NotificationChannel]enum.Entry[NotificationChannel, v1.NotificationChannel]{

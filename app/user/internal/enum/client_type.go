@@ -8,10 +8,10 @@ import (
 type ClientType string
 
 const (
-	ClientTypeUnknown  ClientType = "unknown"
-	ClientTypeWeb      ClientType = "web"
-	ClientTypeAdminWeb ClientType = "admin_web"
-	ClientTypeMobile   ClientType = "mobile"
+	ClientTypeUnknown  ClientType = "unknown"   // unknown
+	ClientTypeWeb      ClientType = "web"       // web
+	ClientTypeAdminWeb ClientType = "admin_web" // admin_web
+	ClientTypeMobile   ClientType = "mobile"    // mobile
 )
 
 var ClientTypeMap = commonenum.NewMapping[ClientType, v1.ClientType](map[ClientType]commonenum.Entry[ClientType, v1.ClientType]{

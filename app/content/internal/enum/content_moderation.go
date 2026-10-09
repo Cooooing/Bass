@@ -9,12 +9,9 @@ import (
 type ContentModerationTarget string
 
 const (
-	// ContentModerationTargetArticle 表示处置目标为文章。
-	ContentModerationTargetArticle ContentModerationTarget = "article"
-	// ContentModerationTargetComment 表示处置目标为评论。
-	ContentModerationTargetComment ContentModerationTarget = "comment"
-	// ContentModerationTargetPostscript 表示处置目标为附言。
-	ContentModerationTargetPostscript ContentModerationTarget = "postscript"
+	ContentModerationTargetArticle    ContentModerationTarget = "article"    // ContentModerationTargetArticle 表示处置目标为文章。
+	ContentModerationTargetComment    ContentModerationTarget = "comment"    // ContentModerationTargetComment 表示处置目标为评论。
+	ContentModerationTargetPostscript ContentModerationTarget = "postscript" // ContentModerationTargetPostscript 表示处置目标为附言。
 )
 
 // ContentModerationTargetMap 维护内容管理目标内部枚举与 proto 枚举的映射。
@@ -28,18 +25,12 @@ var ContentModerationTargetMap = enum.NewMapping[ContentModerationTarget, v1.Con
 type ContentModerationAction string
 
 const (
-	// ContentModerationActionHide 表示管理隐藏内容。
-	ContentModerationActionHide ContentModerationAction = "hide"
-	// ContentModerationActionUnhide 表示取消管理隐藏。
-	ContentModerationActionUnhide ContentModerationAction = "unhide"
-	// ContentModerationActionLock 表示管理锁定内容。
-	ContentModerationActionLock ContentModerationAction = "lock"
-	// ContentModerationActionUnlock 表示取消管理锁定。
-	ContentModerationActionUnlock ContentModerationAction = "unlock"
-	// ContentModerationActionDelete 表示管理删除内容。
-	ContentModerationActionDelete ContentModerationAction = "delete"
-	// ContentModerationActionRestore 表示恢复已删除内容。
-	ContentModerationActionRestore ContentModerationAction = "restore"
+	ContentModerationActionHide    ContentModerationAction = "hide"    // ContentModerationActionHide 表示管理隐藏内容。
+	ContentModerationActionUnhide  ContentModerationAction = "unhide"  // ContentModerationActionUnhide 表示取消管理隐藏。
+	ContentModerationActionLock    ContentModerationAction = "lock"    // ContentModerationActionLock 表示管理锁定内容。
+	ContentModerationActionUnlock  ContentModerationAction = "unlock"  // ContentModerationActionUnlock 表示取消管理锁定。
+	ContentModerationActionDelete  ContentModerationAction = "delete"  // ContentModerationActionDelete 表示管理删除内容。
+	ContentModerationActionRestore ContentModerationAction = "restore" // ContentModerationActionRestore 表示恢复已删除内容。
 )
 
 // ContentModerationActionMap 维护内容管理动作内部枚举与 proto 枚举的映射。

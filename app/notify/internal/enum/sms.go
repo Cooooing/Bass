@@ -3,7 +3,7 @@ package enum
 type SMSType string
 
 const (
-	SMSTypeTencent SMSType = "tencent"
+	SMSTypeTencent SMSType = "tencent" // tencent
 )
 
 func (e SMSType) String() string {

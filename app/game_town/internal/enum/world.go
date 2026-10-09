@@ -8,10 +8,10 @@ import (
 type WorldStatus string
 
 const (
-	WorldStatusGenerating WorldStatus = "generating"
-	WorldStatusActive     WorldStatus = "active"
-	WorldStatusFailed     WorldStatus = "failed"
-	WorldStatusArchived   WorldStatus = "archived"
+	WorldStatusGenerating WorldStatus = "generating" // generating
+	WorldStatusActive     WorldStatus = "active"     // active
+	WorldStatusFailed     WorldStatus = "failed"     // failed
+	WorldStatusArchived   WorldStatus = "archived"   // archived
 )
 
 var WorldStatusMap = commonenum.NewMapping[WorldStatus, v1.GameTownWorldStatus](

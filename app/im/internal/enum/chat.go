@@ -8,8 +8,8 @@ import (
 type ChatGroupStatus string
 
 const (
-	ChatGroupStatusNormal   ChatGroupStatus = "normal"
-	ChatGroupStatusDissolve ChatGroupStatus = "dissolve"
+	ChatGroupStatusNormal   ChatGroupStatus = "normal"   // normal
+	ChatGroupStatusDissolve ChatGroupStatus = "dissolve" // dissolve
 )
 
 var ChatGroupStatusMap = enum.NewMapping[ChatGroupStatus, v1.ChatGroupStatus](map[ChatGroupStatus]enum.Entry[ChatGroupStatus, v1.ChatGroupStatus]{
@@ -20,9 +20,9 @@ var ChatGroupStatusMap = enum.NewMapping[ChatGroupStatus, v1.ChatGroupStatus](ma
 type ChatGroupMemberRole string
 
 const (
-	ChatGroupMemberRoleMember ChatGroupMemberRole = "member"
-	ChatGroupMemberRoleAdmin  ChatGroupMemberRole = "admin"
-	ChatGroupMemberRoleOwner  ChatGroupMemberRole = "owner"
+	ChatGroupMemberRoleMember ChatGroupMemberRole = "member" // member
+	ChatGroupMemberRoleAdmin  ChatGroupMemberRole = "admin"  // admin
+	ChatGroupMemberRoleOwner  ChatGroupMemberRole = "owner"  // owner
 )
 
 var ChatGroupMemberRoleMap = enum.NewMapping[ChatGroupMemberRole, v1.ChatGroupMemberRole](map[ChatGroupMemberRole]enum.Entry[ChatGroupMemberRole, v1.ChatGroupMemberRole]{
@@ -34,7 +34,7 @@ var ChatGroupMemberRoleMap = enum.NewMapping[ChatGroupMemberRole, v1.ChatGroupMe
 type MessageType string
 
 const (
-	MessageTypeNormal MessageType = "normal"
+	MessageTypeNormal MessageType = "normal" // normal
 )
 
 var MessageTypeMap = enum.NewMapping[MessageType, v1.MessageType](map[MessageType]enum.Entry[MessageType, v1.MessageType]{
@@ -44,8 +44,8 @@ var MessageTypeMap = enum.NewMapping[MessageType, v1.MessageType](map[MessageTyp
 type MessageStatus string
 
 const (
-	MessageStatusNormal MessageStatus = "normal"
-	MessageStatusRevoke MessageStatus = "revoke"
+	MessageStatusNormal MessageStatus = "normal" // normal
+	MessageStatusRevoke MessageStatus = "revoke" // revoke
 )
 
 var MessageStatusMap = enum.NewMapping[MessageStatus, v1.MessageStatus](map[MessageStatus]enum.Entry[MessageStatus, v1.MessageStatus]{
@@ -56,8 +56,8 @@ var MessageStatusMap = enum.NewMapping[MessageStatus, v1.MessageStatus](map[Mess
 type ReceiverType string
 
 const (
-	ReceiverTypeUser  ReceiverType = "user"
-	ReceiverTypeGroup ReceiverType = "group"
+	ReceiverTypeUser  ReceiverType = "user"  // user
+	ReceiverTypeGroup ReceiverType = "group" // group
 )
 
 var ReceiverTypeMap = enum.NewMapping[ReceiverType, v1.ReceiverType](map[ReceiverType]enum.Entry[ReceiverType, v1.ReceiverType]{

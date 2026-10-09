@@ -9,10 +9,8 @@ import (
 type DomainStatus string
 
 const (
-	// DomainStatusEnabled 表示领域启用。
-	DomainStatusEnabled DomainStatus = "enabled"
-	// DomainStatusDisabled 表示领域禁用。
-	DomainStatusDisabled DomainStatus = "disabled"
+	DomainStatusEnabled  DomainStatus = "enabled"  // DomainStatusEnabled 表示领域启用。
+	DomainStatusDisabled DomainStatus = "disabled" // DomainStatusDisabled 表示领域禁用。
 )
 
 // DomainStatusMap 维护领域状态内部枚举与 proto 枚举的映射。

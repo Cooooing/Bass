@@ -9,16 +9,11 @@ import (
 type ArticleAction string
 
 const (
-	// ArticleActionLike 表示点赞文章。
-	ArticleActionLike ArticleAction = "like"
-	// ArticleActionThank 表示感谢文章。
-	ArticleActionThank ArticleAction = "thank"
-	// ArticleActionCollect 表示收藏文章。
-	ArticleActionCollect ArticleAction = "collect"
-	// ArticleActionReward 表示打赏文章。
-	ArticleActionReward ArticleAction = "reward"
-	// ArticleActionReply 表示回复文章。
-	ArticleActionReply ArticleAction = "reply"
+	ArticleActionLike    ArticleAction = "like"    // ArticleActionLike 表示点赞文章。
+	ArticleActionThank   ArticleAction = "thank"   // ArticleActionThank 表示感谢文章。
+	ArticleActionCollect ArticleAction = "collect" // ArticleActionCollect 表示收藏文章。
+	ArticleActionReward  ArticleAction = "reward"  // ArticleActionReward 表示打赏文章。
+	ArticleActionReply   ArticleAction = "reply"   // ArticleActionReply 表示回复文章。
 )
 
 // ArticleActionMap 维护文章行为内部枚举与 proto 枚举的映射。

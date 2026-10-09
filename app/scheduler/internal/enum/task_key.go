@@ -9,15 +9,15 @@ import (
 type TaskKey string
 
 const (
-	TaskKeyNoopScheduledDefault                    TaskKey = "noop.scheduled.default"
-	TaskKeyNoopDelayedDefault                      TaskKey = "noop.delayed.default"
-	TaskKeyUserOutboxPublishBatchDefault           TaskKey = "user.outbox_publish_batch.default"
-	TaskKeyUserOutboxPublishBatchDelayedDefault    TaskKey = "user.outbox_publish_batch.delayed.default"
-	TaskKeyUserUnbanAccountsDefault                TaskKey = "user.unban_accounts.default"
-	TaskKeyContentOutboxPublishBatchDefault        TaskKey = "content.outbox_publish_batch.default"
-	TaskKeyContentOutboxPublishBatchDelayedDefault TaskKey = "content.outbox_publish_batch.delayed.default"
-	TaskKeyContentPublishScheduledArticlesDefault  TaskKey = "content.publish_scheduled_articles.default"
-	TaskKeyContentFlushArticleViewsDefault         TaskKey = "content.flush_article_views.default"
+	TaskKeyNoopScheduledDefault                    TaskKey = "noop.scheduled.default"                       // noop.scheduled.default
+	TaskKeyNoopDelayedDefault                      TaskKey = "noop.delayed.default"                         // noop.delayed.default
+	TaskKeyUserOutboxPublishBatchDefault           TaskKey = "user.outbox_publish_batch.default"            // user.outbox_publish_batch.default
+	TaskKeyUserOutboxPublishBatchDelayedDefault    TaskKey = "user.outbox_publish_batch.delayed.default"    // user.outbox_publish_batch.delayed.default
+	TaskKeyUserUnbanAccountsDefault                TaskKey = "user.unban_accounts.default"                  // user.unban_accounts.default
+	TaskKeyContentOutboxPublishBatchDefault        TaskKey = "content.outbox_publish_batch.default"         // content.outbox_publish_batch.default
+	TaskKeyContentOutboxPublishBatchDelayedDefault TaskKey = "content.outbox_publish_batch.delayed.default" // content.outbox_publish_batch.delayed.default
+	TaskKeyContentPublishScheduledArticlesDefault  TaskKey = "content.publish_scheduled_articles.default"   // content.publish_scheduled_articles.default
+	TaskKeyContentFlushArticleViewsDefault         TaskKey = "content.flush_article_views.default"          // content.flush_article_views.default
 )
 
 // TaskKeyMap 将内部默认任务配置键映射到 proto 枚举。

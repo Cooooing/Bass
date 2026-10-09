@@ -11,20 +11,13 @@ import (
 type EconomyRecordType string
 
 const (
-	// EconomyRecordTypeSignInReward 表示签到奖励
-	EconomyRecordTypeSignInReward EconomyRecordType = "sign_in_reward"
-	// EconomyRecordTypeArticleThankReward 表示文章感谢奖励
-	EconomyRecordTypeArticleThankReward EconomyRecordType = "article_thank_reward"
-	// EconomyRecordTypeCommentThankReward 表示评论感谢奖励
-	EconomyRecordTypeCommentThankReward EconomyRecordType = "comment_thank_reward"
-	// EconomyRecordTypeArticleRewardOut 表示文章打赏支出
-	EconomyRecordTypeArticleRewardOut EconomyRecordType = "article_reward_out"
-	// EconomyRecordTypeArticleRewardIn 表示文章打赏收入
-	EconomyRecordTypeArticleRewardIn EconomyRecordType = "article_reward_in"
-	// EconomyRecordTypeAdminAdd 表示后台增加
-	EconomyRecordTypeAdminAdd EconomyRecordType = "admin_add"
-	// EconomyRecordTypeAdminDeduct 表示后台扣减
-	EconomyRecordTypeAdminDeduct EconomyRecordType = "admin_deduct"
+	EconomyRecordTypeSignInReward       EconomyRecordType = "sign_in_reward"       // EconomyRecordTypeSignInReward 表示签到奖励
+	EconomyRecordTypeArticleThankReward EconomyRecordType = "article_thank_reward" // EconomyRecordTypeArticleThankReward 表示文章感谢奖励
+	EconomyRecordTypeCommentThankReward EconomyRecordType = "comment_thank_reward" // EconomyRecordTypeCommentThankReward 表示评论感谢奖励
+	EconomyRecordTypeArticleRewardOut   EconomyRecordType = "article_reward_out"   // EconomyRecordTypeArticleRewardOut 表示文章打赏支出
+	EconomyRecordTypeArticleRewardIn    EconomyRecordType = "article_reward_in"    // EconomyRecordTypeArticleRewardIn 表示文章打赏收入
+	EconomyRecordTypeAdminAdd           EconomyRecordType = "admin_add"            // EconomyRecordTypeAdminAdd 表示后台增加
+	EconomyRecordTypeAdminDeduct        EconomyRecordType = "admin_deduct"         // EconomyRecordTypeAdminDeduct 表示后台扣减
 )
 
 // EconomyRecordTypeMap 维护流水类型映射

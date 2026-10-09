@@ -8,12 +8,12 @@ import (
 type LoginFailureReason string
 
 const (
-	LoginFailureReasonInvalidCredentials   LoginFailureReason = "invalid_credentials"
-	LoginFailureReasonTotpInvalid          LoginFailureReason = "totp_invalid"
-	LoginFailureReasonCodeInvalidOrExpired LoginFailureReason = "code_invalid_or_expired"
-	LoginFailureReasonAccountNotNormal     LoginFailureReason = "account_not_normal"
-	LoginFailureReasonNotImplemented       LoginFailureReason = "not_implemented"
-	LoginFailureReasonInternal             LoginFailureReason = "internal"
+	LoginFailureReasonInvalidCredentials   LoginFailureReason = "invalid_credentials"     // invalid_credentials
+	LoginFailureReasonTotpInvalid          LoginFailureReason = "totp_invalid"            // totp_invalid
+	LoginFailureReasonCodeInvalidOrExpired LoginFailureReason = "code_invalid_or_expired" // code_invalid_or_expired
+	LoginFailureReasonAccountNotNormal     LoginFailureReason = "account_not_normal"      // account_not_normal
+	LoginFailureReasonNotImplemented       LoginFailureReason = "not_implemented"         // not_implemented
+	LoginFailureReasonInternal             LoginFailureReason = "internal"                // internal
 )
 
 var LoginFailureReasonMap = commonenum.NewMapping[LoginFailureReason, v1.LoginFailureReason](map[LoginFailureReason]commonenum.Entry[LoginFailureReason, v1.LoginFailureReason]{

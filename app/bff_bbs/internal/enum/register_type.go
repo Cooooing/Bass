@@ -9,8 +9,8 @@ import (
 type RegisterType string
 
 const (
-	RegisterTypeEmail RegisterType = "email"
-	RegisterTypePhone RegisterType = "phone"
+	RegisterTypeEmail RegisterType = "email" // email
+	RegisterTypePhone RegisterType = "phone" // phone
 )
 
 var RegisterTypeMap = commonenum.NewMapping[RegisterType, v1.RegisterType](map[RegisterType]commonenum.Entry[RegisterType, v1.RegisterType]{

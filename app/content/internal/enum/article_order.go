@@ -9,10 +9,8 @@ import (
 type ArticleOrder string
 
 const (
-	// ArticleOrderNewest 表示按最新发布时间排序。
-	ArticleOrderNewest ArticleOrder = "newest"
-	// ArticleOrderHottest 表示按热度排序。
-	ArticleOrderHottest ArticleOrder = "hottest"
+	ArticleOrderNewest  ArticleOrder = "newest"  // ArticleOrderNewest 表示按最新发布时间排序。
+	ArticleOrderHottest ArticleOrder = "hottest" // ArticleOrderHottest 表示按热度排序。
 )
 
 // ArticleOrderMap 维护文章排序内部枚举与 proto 枚举的映射。

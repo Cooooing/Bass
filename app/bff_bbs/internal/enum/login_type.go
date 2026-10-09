@@ -9,9 +9,9 @@ import (
 type LoginType string
 
 const (
-	LoginTypePassword LoginType = "password"
-	LoginTypeEmail    LoginType = "email"
-	LoginTypePhone    LoginType = "phone"
+	LoginTypePassword LoginType = "password" // password
+	LoginTypeEmail    LoginType = "email"    // email
+	LoginTypePhone    LoginType = "phone"    // phone
 )
 
 var LoginTypeMap = commonenum.NewMapping[LoginType, v1.LoginType](map[LoginType]commonenum.Entry[LoginType, v1.LoginType]{

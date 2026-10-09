@@ -9,12 +9,9 @@ import (
 type ContentRestriction string
 
 const (
-	// ContentRestrictionNone 表示没有管理限制。
-	ContentRestrictionNone ContentRestriction = "none"
-	// ContentRestrictionHidden 表示被管理端隐藏。
-	ContentRestrictionHidden ContentRestriction = "hidden"
-	// ContentRestrictionLocked 表示被管理端锁定。
-	ContentRestrictionLocked ContentRestriction = "locked"
+	ContentRestrictionNone   ContentRestriction = "none"   // ContentRestrictionNone 表示没有管理限制。
+	ContentRestrictionHidden ContentRestriction = "hidden" // ContentRestrictionHidden 表示被管理端隐藏。
+	ContentRestrictionLocked ContentRestriction = "locked" // ContentRestrictionLocked 表示被管理端锁定。
 )
 
 // ContentRestrictionMap 维护内容管理限制内部枚举与 proto 枚举的映射。

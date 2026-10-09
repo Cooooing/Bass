@@ -8,32 +8,32 @@ import (
 type EventType string
 
 const (
-	EventTypeWorldGenerationRequested    EventType = "world_generation_requested"
-	EventTypeWorldReady                  EventType = "world_ready"
-	EventTypeWorldGenerationFailed       EventType = "world_generation_failed"
-	EventTypePlayerJoined                EventType = "player_joined"
-	EventTypePlayerMoved                 EventType = "player_moved"
-	EventTypePlayerTalked                EventType = "player_talked"
-	EventTypeNpcThinking                 EventType = "npc_thinking"
-	EventTypeNpcReplied                  EventType = "npc_replied"
-	EventTypePlayerActed                 EventType = "player_acted"
-	EventTypeActionResolved              EventType = "action_resolved"
-	EventTypeWorldTickRequested          EventType = "world_tick_requested"
-	EventTypeWorldEvolved                EventType = "world_evolved"
-	EventTypeAgentJobFailed              EventType = "agent_job_failed"
-	EventTypePlayerActionSubmitted       EventType = "player_action_submitted"
-	EventTypeActionRejected              EventType = "action_rejected"
-	EventTypeActionClarificationRequired EventType = "action_clarification_required"
-	EventTypeNpcPlanned                  EventType = "npc_planned"
-	EventTypeNpcMoved                    EventType = "npc_moved"
-	EventTypeNpcStateChanged             EventType = "npc_state_changed"
-	EventTypeNpcDied                     EventType = "npc_died"
-	EventTypeLocationChanged             EventType = "location_changed"
-	EventTypeFactionChanged              EventType = "faction_changed"
-	EventTypeClaimShared                 EventType = "claim_shared"
-	EventTypeNpcPlanRequested            EventType = "npc_plan_requested"
-	EventTypePlayerCharacterReady        EventType = "player_character_ready"
-	EventTypePlayerCharacterFailed       EventType = "player_character_failed"
+	EventTypeWorldGenerationRequested    EventType = "world_generation_requested"    // world_generation_requested
+	EventTypeWorldReady                  EventType = "world_ready"                   // world_ready
+	EventTypeWorldGenerationFailed       EventType = "world_generation_failed"       // world_generation_failed
+	EventTypePlayerJoined                EventType = "player_joined"                 // player_joined
+	EventTypePlayerMoved                 EventType = "player_moved"                  // player_moved
+	EventTypePlayerTalked                EventType = "player_talked"                 // player_talked
+	EventTypeNpcThinking                 EventType = "npc_thinking"                  // npc_thinking
+	EventTypeNpcReplied                  EventType = "npc_replied"                   // npc_replied
+	EventTypePlayerActed                 EventType = "player_acted"                  // player_acted
+	EventTypeActionResolved              EventType = "action_resolved"               // action_resolved
+	EventTypeWorldTickRequested          EventType = "world_tick_requested"          // world_tick_requested
+	EventTypeWorldEvolved                EventType = "world_evolved"                 // world_evolved
+	EventTypeAgentJobFailed              EventType = "agent_job_failed"              // agent_job_failed
+	EventTypePlayerActionSubmitted       EventType = "player_action_submitted"       // player_action_submitted
+	EventTypeActionRejected              EventType = "action_rejected"               // action_rejected
+	EventTypeActionClarificationRequired EventType = "action_clarification_required" // action_clarification_required
+	EventTypeNpcPlanned                  EventType = "npc_planned"                   // npc_planned
+	EventTypeNpcMoved                    EventType = "npc_moved"                     // npc_moved
+	EventTypeNpcStateChanged             EventType = "npc_state_changed"             // npc_state_changed
+	EventTypeNpcDied                     EventType = "npc_died"                      // npc_died
+	EventTypeLocationChanged             EventType = "location_changed"              // location_changed
+	EventTypeFactionChanged              EventType = "faction_changed"               // faction_changed
+	EventTypeClaimShared                 EventType = "claim_shared"                  // claim_shared
+	EventTypeNpcPlanRequested            EventType = "npc_plan_requested"            // npc_plan_requested
+	EventTypePlayerCharacterReady        EventType = "player_character_ready"        // player_character_ready
+	EventTypePlayerCharacterFailed       EventType = "player_character_failed"       // player_character_failed
 )
 
 var EventTypeMap = commonenum.NewMapping[EventType, v1.GameTownEventType](

@@ -8,9 +8,9 @@ import (
 type Language string
 
 const (
-	LanguageZhCN Language = "zh-CN"
-	LanguageZhTW Language = "zh-TW"
-	LanguageEn   Language = "en"
+	LanguageZhCN Language = "zh-CN" // zh-CN
+	LanguageZhTW Language = "zh-TW" // zh-TW
+	LanguageEn   Language = "en"    // en
 )
 
 var LanguageMap = commonenum.NewMapping[Language, commonenums.Language](map[Language]commonenum.Entry[Language, commonenums.Language]{

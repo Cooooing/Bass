@@ -8,8 +8,8 @@ import (
 type RelationType string
 
 const (
-	RelationTypeFollow RelationType = "follow"
-	RelationTypeBlock  RelationType = "block"
+	RelationTypeFollow RelationType = "follow" // follow
+	RelationTypeBlock  RelationType = "block"  // block
 )
 
 var RelationTypeMap = commonenum.NewMapping[RelationType, v1.RelationType](map[RelationType]commonenum.Entry[RelationType, v1.RelationType]{

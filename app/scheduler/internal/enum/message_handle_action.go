@@ -4,9 +4,9 @@ package enum
 type MessageHandleAction string
 
 const (
-	MessageHandleActionComplete MessageHandleAction = "complete"
-	MessageHandleActionRetry    MessageHandleAction = "retry"
-	MessageHandleActionDiscard  MessageHandleAction = "discard"
+	MessageHandleActionComplete MessageHandleAction = "complete" // complete
+	MessageHandleActionRetry    MessageHandleAction = "retry"    // retry
+	MessageHandleActionDiscard  MessageHandleAction = "discard"  // discard
 )
 
 func (MessageHandleAction) Values() []string {

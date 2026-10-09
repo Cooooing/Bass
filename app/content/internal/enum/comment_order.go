@@ -9,12 +9,9 @@ import (
 type CommentOrder string
 
 const (
-	// CommentOrderNewest 表示按最新发布时间排序。
-	CommentOrderNewest CommentOrder = "newest"
-	// CommentOrderHottest 表示按热度排序。
-	CommentOrderHottest CommentOrder = "hottest"
-	// CommentOrderOldest 表示按最早发布时间排序。
-	CommentOrderOldest CommentOrder = "oldest"
+	CommentOrderNewest  CommentOrder = "newest"  // CommentOrderNewest 表示按最新发布时间排序。
+	CommentOrderHottest CommentOrder = "hottest" // CommentOrderHottest 表示按热度排序。
+	CommentOrderOldest  CommentOrder = "oldest"  // CommentOrderOldest 表示按最早发布时间排序。
 )
 
 // CommentOrderMap 维护评论排序内部枚举与 proto 枚举的映射。

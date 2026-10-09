@@ -9,12 +9,9 @@ import (
 type ArticlePublishStatus string
 
 const (
-	// ArticlePublishStatusDraft 表示草稿。
-	ArticlePublishStatusDraft ArticlePublishStatus = "draft"
-	// ArticlePublishStatusPublished 表示已发布。
-	ArticlePublishStatusPublished ArticlePublishStatus = "published"
-	// ArticlePublishStatusArchived 表示已归档。
-	ArticlePublishStatusArchived ArticlePublishStatus = "archived"
+	ArticlePublishStatusDraft     ArticlePublishStatus = "draft"     // ArticlePublishStatusDraft 表示草稿。
+	ArticlePublishStatusPublished ArticlePublishStatus = "published" // ArticlePublishStatusPublished 表示已发布。
+	ArticlePublishStatusArchived  ArticlePublishStatus = "archived"  // ArticlePublishStatusArchived 表示已归档。
 )
 
 // ArticlePublishStatusMap 维护文章发布状态内部枚举与 proto 枚举的映射。
@@ -28,10 +25,8 @@ var ArticlePublishStatusMap = enum.NewMapping[ArticlePublishStatus, v1.ArticlePu
 type ArticleVisibility string
 
 const (
-	// ArticleVisibilityPublic 表示公开可见。
-	ArticleVisibilityPublic ArticleVisibility = "public"
-	// ArticleVisibilityPrivate 表示私有可见。
-	ArticleVisibilityPrivate ArticleVisibility = "private"
+	ArticleVisibilityPublic  ArticleVisibility = "public"  // ArticleVisibilityPublic 表示公开可见。
+	ArticleVisibilityPrivate ArticleVisibility = "private" // ArticleVisibilityPrivate 表示私有可见。
 )
 
 // ArticleVisibilityMap 维护文章可见范围内部枚举与 proto 枚举的映射。

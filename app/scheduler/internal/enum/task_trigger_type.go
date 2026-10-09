@@ -9,8 +9,8 @@ import (
 type TaskTriggerType string
 
 const (
-	TaskTriggerTypeSchedule TaskTriggerType = "schedule"
-	TaskTriggerTypeManual   TaskTriggerType = "manual"
+	TaskTriggerTypeSchedule TaskTriggerType = "schedule" // schedule
+	TaskTriggerTypeManual   TaskTriggerType = "manual"   // manual
 )
 
 // TaskTriggerTypeMap 将内部任务触发类型映射到 proto 枚举。

@@ -83,7 +83,7 @@ func newApp(
 func main() {
 	flag.Parse()
 
-	c, bc, confCleanup, err := config.LoadConfig(flagBootstrap, flagConf)
+	c, bc, confCleanup, err := config.NewConfig(flagBootstrap, flagConf)
 	if err != nil {
 		panic(err)
 	}

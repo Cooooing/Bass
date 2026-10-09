@@ -6,7 +6,7 @@ import (
 )
 
 // LoadConfig 加载 game_idle 配置，并注册可热更新配置。
-func LoadConfig(bootstrapPath string, path string) (*Bootstrap, *common.Bootstrap, func(), error) {
+func NewConfig(bootstrapPath string, path string) (*Bootstrap, *common.Bootstrap, func(), error) {
 	c, bc, hot, cleanup, err := commonserver.LoadConfig[*Bootstrap](bootstrapPath, path)
 	if err != nil {
 		return nil, nil, cleanup, err

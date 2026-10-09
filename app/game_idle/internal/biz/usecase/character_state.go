@@ -4,9 +4,10 @@ import (
 	"common/pkg/constant"
 	"context"
 	"fmt"
+	"log/slog"
+
 	"game_idle/internal/biz/repo"
 	"game_idle/internal/enum"
-	"log/slog"
 )
 
 // CharacterStateUsecase 负责角色本地热状态与数据库快照之间的刷盘和清理。

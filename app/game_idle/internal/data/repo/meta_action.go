@@ -3,14 +3,16 @@ package repo
 import (
 	"context"
 	"fmt"
+	"maps"
+	"sync"
+	"time"
+
 	"game_idle/internal/biz/model"
 	bizrepo "game_idle/internal/biz/repo"
 	"game_idle/internal/data/gen"
 	actionent "game_idle/internal/data/gen/action"
 	actionrecipeent "game_idle/internal/data/gen/actionrecipe"
 	"game_idle/internal/enum"
-	"sync"
-	"time"
 )
 
 var _ bizrepo.MetaActionRepo = (*MetaActionRepo)(nil)
@@ -104,9 +106,7 @@ func (r *MetaActionRepo) Map(ctx context.Context, actionIDs []string) (map[strin
 	defer r.mutex.RUnlock()
 	if len(actionIDs) == 0 {
 		actions := make(map[string]*model.MetaAction, len(r.actions))
-		for actionID, action := range r.actions {
-			actions[actionID] = action
-		}
+		maps.Copy(actions, r.actions)
 		return actions, nil
 	}
 	actions := make(map[string]*model.MetaAction, len(actionIDs))

@@ -5,12 +5,13 @@ import (
 	commonenum "common/pkg/enum"
 	commonenums "common/proto/gen/common/enums"
 	"context"
-	"game_idle/internal/biz/model"
-	"game_idle/internal/biz/repo"
-	"game_idle/internal/enum"
 	"log/slog"
 	"strconv"
 	"time"
+
+	"game_idle/internal/biz/model"
+	"game_idle/internal/biz/repo"
+	"game_idle/internal/enum"
 
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/proto"

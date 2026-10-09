@@ -1,8 +1,9 @@
 package usecase
 
 import (
-	"game_idle/internal/biz/model"
 	"time"
+
+	"game_idle/internal/biz/model"
 )
 
 // CharacterActionQueueChangedStateEvent 表示角色行动队列发生变化。

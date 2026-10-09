@@ -2,8 +2,9 @@ package server
 
 import (
 	"context"
-	"game_idle/internal/biz/usecase"
 	"log/slog"
+
+	"game_idle/internal/biz/usecase"
 )
 
 // CharacterActionQueueServer 适配 Kratos 生命周期，启动行动队列调度循环。

@@ -3,6 +3,9 @@ package repo
 import (
 	"context"
 	"fmt"
+	"maps"
+	"sync"
+
 	"game_idle/internal/biz/model"
 	bizrepo "game_idle/internal/biz/repo"
 	"game_idle/internal/data/gen"
@@ -10,7 +13,6 @@ import (
 	recipeinputent "game_idle/internal/data/gen/recipeinput"
 	recipeoutputent "game_idle/internal/data/gen/recipeoutput"
 	"game_idle/internal/enum"
-	"sync"
 )
 
 var _ bizrepo.MetaRecipeRepo = (*MetaRecipeRepo)(nil)
@@ -113,9 +115,7 @@ func (r *MetaRecipeRepo) Map(ctx context.Context, recipeIDs []string) (map[strin
 	defer r.mutex.RUnlock()
 	if len(recipeIDs) == 0 {
 		recipes := make(map[string]*model.MetaRecipe, len(r.recipes))
-		for recipeID, recipe := range r.recipes {
-			recipes[recipeID] = recipe
-		}
+		maps.Copy(recipes, r.recipes)
 		return recipes, nil
 	}
 	recipes := make(map[string]*model.MetaRecipe, len(recipeIDs))

@@ -3,9 +3,10 @@ package usecase
 import (
 	"common/pkg/client/timewheel"
 	"context"
+	"time"
+
 	"game_idle/internal/biz/model"
 	"game_idle/internal/enum"
-	"time"
 )
 
 // CharacterActionTaskBuilder 按行动类型构建时间轮任务；任务只负责结算，不直接修改队列。

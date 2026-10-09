@@ -1,8 +1,9 @@
 package model
 
 import (
-	"game_idle/internal/enum"
 	"time"
+
+	"game_idle/internal/enum"
 )
 
 // ChatMessage 是挂机游戏内部聊天消息。

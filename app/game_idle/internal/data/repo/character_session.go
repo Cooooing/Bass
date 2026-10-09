@@ -2,8 +2,9 @@ package repo
 
 import (
 	"context"
-	bizrepo "game_idle/internal/biz/repo"
 	"time"
+
+	bizrepo "game_idle/internal/biz/repo"
 )
 
 var _ bizrepo.CharacterSessionRepo = (*CharacterSessionRepo)(nil)

@@ -6,9 +6,10 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"game_idle/internal/config"
 	"log/slog"
 	"os"
+
+	"game_idle/internal/config"
 
 	"github.com/go-kratos/kratos/v3"
 	"github.com/go-kratos/kratos/v3/transport"

@@ -2,13 +2,14 @@ package repo
 
 import (
 	"context"
+	"sync"
+	"time"
+
 	"game_idle/internal/biz/model"
 	bizrepo "game_idle/internal/biz/repo"
 	"game_idle/internal/data/gen"
 	characterent "game_idle/internal/data/gen/character"
 	"game_idle/internal/enum"
-	"sync"
-	"time"
 )
 
 var _ bizrepo.CharacterRepo = (*CharacterRepo)(nil)

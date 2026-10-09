@@ -4,9 +4,10 @@ import (
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"math/rand"
+
 	"game_idle/internal/biz/repo"
 	"game_idle/internal/enum"
-	"math/rand"
 )
 
 type MetaRecipeUsecase struct {
@@ -37,7 +38,7 @@ func (u *MetaRecipeUsecase) RollNormal(ctx context.Context, req *RollRecipeReq) 
 
 	outputs := recipe.Outputs
 	itemQuantities := make(map[string]int64, len(outputs))
-	for generationIndex := int32(0); generationIndex < recipe.GenerationTimes; generationIndex++ {
+	for range int32(recipe.GenerationTimes) {
 		cursor := rand.Int63n(recipe.TotalWeight) + 1
 		left := 0
 		right := len(outputs) - 1

@@ -3,6 +3,7 @@ package service
 import (
 	v1 "common/proto/gen/game_idle/v1"
 	"context"
+
 	"game_idle/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"

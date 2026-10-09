@@ -2,12 +2,14 @@ package repo
 
 import (
 	"context"
+	"maps"
+	"sync"
+
 	"game_idle/internal/biz/model"
 	bizrepo "game_idle/internal/biz/repo"
 	"game_idle/internal/data/gen"
 	regionent "game_idle/internal/data/gen/region"
 	"game_idle/internal/enum"
-	"sync"
 )
 
 var _ bizrepo.MetaRegionRepo = (*MetaRegionRepo)(nil)
@@ -59,9 +61,7 @@ func (r *MetaRegionRepo) Map(ctx context.Context, regionIDs []string) (map[strin
 	defer r.mutex.RUnlock()
 	if len(regionIDs) == 0 {
 		regions := make(map[string]*model.MetaRegion, len(r.regions))
-		for regionID, region := range r.regions {
-			regions[regionID] = region
-		}
+		maps.Copy(regions, r.regions)
 		return regions, nil
 	}
 	regions := make(map[string]*model.MetaRegion, len(regionIDs))

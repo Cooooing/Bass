@@ -2,8 +2,9 @@ package repo
 
 import (
 	"context"
-	"game_idle/internal/biz/model"
 	"time"
+
+	"game_idle/internal/biz/model"
 )
 
 // CharacterRepo 管理玩家角色的持久化。

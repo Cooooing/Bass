@@ -3,12 +3,14 @@ package repo
 import (
 	"context"
 	"fmt"
-	"game_idle/internal/biz/model"
-	bizrepo "game_idle/internal/biz/repo"
-	"game_idle/internal/enum"
+	"maps"
 	"runtime"
 	"sync"
 	"time"
+
+	"game_idle/internal/biz/model"
+	bizrepo "game_idle/internal/biz/repo"
+	"game_idle/internal/enum"
 )
 
 var _ bizrepo.CharacterStateRepo = (*CharacterStateCache)(nil)
@@ -89,10 +91,7 @@ type characterStateTx struct {
 }
 
 func NewCharacterStateCache() *CharacterStateCache {
-	maxWorkerCount := runtime.GOMAXPROCS(0) * 32
-	if maxWorkerCount < 4 {
-		maxWorkerCount = 4
-	}
+	maxWorkerCount := max(runtime.GOMAXPROCS(0)*32, 4)
 	return &CharacterStateCache{
 		characters:        make(map[int64]*cachedCharacterState),
 		mailboxes:         make(map[int64]*characterStateMailbox),
@@ -369,9 +368,7 @@ func (c *CharacterStateCache) characterIfExists(characterID int64) *cachedCharac
 func (c *CharacterStateCache) charactersSnapshot() map[int64]*cachedCharacterState {
 	c.mutex.RLock()
 	characters := make(map[int64]*cachedCharacterState, len(c.characters))
-	for characterID, character := range c.characters {
-		characters[characterID] = character
-	}
+	maps.Copy(characters, c.characters)
 	c.mutex.RUnlock()
 	return characters
 }

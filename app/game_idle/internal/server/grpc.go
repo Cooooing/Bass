@@ -4,9 +4,10 @@ import (
 	commonClient "common/pkg/client"
 	"common/pkg/server"
 	"fmt"
-	"game_idle/internal/config"
 	"log/slog"
 	"time"
+
+	"game_idle/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"

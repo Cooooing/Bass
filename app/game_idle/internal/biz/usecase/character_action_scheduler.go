@@ -8,12 +8,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"game_idle/internal/biz/model"
-	"game_idle/internal/biz/repo"
-	"game_idle/internal/enum"
 	"log/slog"
 	"sync"
 	"time"
+
+	"game_idle/internal/biz/model"
+	"game_idle/internal/biz/repo"
+	"game_idle/internal/enum"
 )
 
 // CharacterActionSchedulerUsecase 负责行动队列首位任务的调度、完成推进和离线到期处理。

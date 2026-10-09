@@ -2,12 +2,14 @@ package repo
 
 import (
 	"context"
+	"maps"
+	"sync"
+
 	"game_idle/internal/biz/model"
 	bizrepo "game_idle/internal/biz/repo"
 	"game_idle/internal/data/gen"
 	itement "game_idle/internal/data/gen/item"
 	"game_idle/internal/enum"
-	"sync"
 )
 
 var _ bizrepo.MetaItemRepo = (*MetaItemRepo)(nil)
@@ -66,9 +68,7 @@ func (r *MetaItemRepo) Map(ctx context.Context, itemIDs []string) (map[string]*m
 	defer r.mutex.RUnlock()
 	if len(itemIDs) == 0 {
 		items := make(map[string]*model.MetaItem, len(r.items))
-		for itemID, item := range r.items {
-			items[itemID] = item
-		}
+		maps.Copy(items, r.items)
 		return items, nil
 	}
 	items := make(map[string]*model.MetaItem, len(itemIDs))

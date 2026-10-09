@@ -1,8 +1,9 @@
 package model
 
 import (
-	"game_idle/internal/enum"
 	"time"
+
+	"game_idle/internal/enum"
 )
 
 // MetaItem 是游戏里所有资产的统一配置，包括货币、资源、装备和消耗品。

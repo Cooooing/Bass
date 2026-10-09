@@ -1,8 +1,9 @@
 package model
 
 import (
-	"game_idle/internal/enum"
 	"time"
+
+	"game_idle/internal/enum"
 )
 
 // Character 是玩家在挂机游戏里的角色。

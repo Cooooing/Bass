@@ -5,9 +5,10 @@ import (
 	"common/pkg/constant"
 	"context"
 	"fmt"
+	"log/slog"
+
 	"game_idle/internal/config"
 	"game_idle/internal/data/gen"
-	"log/slog"
 
 	_ "game_idle/internal/data/gen/runtime"
 

@@ -5,8 +5,9 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	v1 "common/proto/gen/game_idle/v1"
 	"context"
-	"game_idle/internal/biz/usecase"
 	"sort"
+
+	"game_idle/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"

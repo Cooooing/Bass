@@ -3,6 +3,7 @@ package repo
 import (
 	"common/pkg/client"
 	"context"
+
 	"game_idle/internal/biz/model"
 	bizrepo "game_idle/internal/biz/repo"
 )

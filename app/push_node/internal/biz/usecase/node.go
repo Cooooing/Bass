@@ -7,6 +7,7 @@ import (
 	"time"
 
 	pushhubv1 "common/proto/gen/push_hub/v1"
+
 	"push_node/internal/biz/repo"
 	"push_node/internal/config"
 )
@@ -40,7 +41,7 @@ func (uc *NodeUsecase) ConnectHub(ctx context.Context) error {
 		return err
 	}
 	uc.nodeID = nodeID
-	uc.log.Info(fmt.Sprintf("start heartbeat loop: node_id=%s", uc.nodeID))
+	uc.log.Info("start heartbeat loop: node_id=" + uc.nodeID)
 	loopCtx, cancel := context.WithCancel(ctx)
 	uc.cancelLoop = cancel
 	go uc.heartbeatLoop(loopCtx)
@@ -57,7 +58,7 @@ func (uc *NodeUsecase) Stop(ctx context.Context) error {
 	if uc.cancelLoop != nil {
 		uc.cancelLoop()
 	}
-	uc.log.Info(fmt.Sprintf("node stopped: node_id=%s", uc.nodeID))
+	uc.log.Info("node stopped: node_id=" + uc.nodeID)
 	return nil
 }
 
@@ -95,7 +96,7 @@ func (uc *NodeUsecase) sendHeartbeat(ctx context.Context) {
 func RegisterWithHub(ctx context.Context, client pushhubv1.PushHubNodeServiceClient, conf *config.Bootstrap) (string, error) {
 	var nodeID string
 	var lastErr error
-	for i := 0; i < 3; i++ {
+	for range 3 {
 		resp, err := client.RegisterNode(ctx, &pushhubv1.RegisterNode_Req{
 			Address: fmt.Sprintf("%s:%d", conf.Http.Host, conf.Http.Port),
 		})

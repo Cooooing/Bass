@@ -5,8 +5,9 @@ import (
 	"common/pkg/server"
 	"fmt"
 	"log/slog"
-	"push_node/internal/config"
 	"time"
+
+	"push_node/internal/config"
 
 	"github.com/go-kratos/kratos/v3/middleware/recovery"
 	"github.com/go-kratos/kratos/v3/transport/grpc"

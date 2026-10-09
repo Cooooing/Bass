@@ -3,6 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	"common/proto/gen/common"
+
 	bizrepo "push_node/internal/biz/repo"
 	"push_node/internal/config"
 	"push_node/internal/data/repo"

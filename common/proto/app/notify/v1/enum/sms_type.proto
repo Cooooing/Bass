@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package common.api.app.notify.v1;
+
+option go_package = "common/proto/gen/notify/v1/enum;enum";
+
+enum SMSType {
+  SMS_TYPE_UNSPECIFIED = 0;
+  SMS_TYPE_TENCENT = 1;
+}

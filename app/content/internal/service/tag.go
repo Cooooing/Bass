@@ -367,9 +367,9 @@ func (s *TagService) Page(ctx context.Context, req *v1.PageTags_Req) (*v1.PageTa
 	}
 	return &v1.PageTags_Resp{
 		Page: &common.PageResp{
-			Page:  int64(pageResp.Page.Page),
-			Size:  int64(pageResp.Page.Size),
-			Total: int64(pageResp.Page.Total),
+			Page:  pageResp.Page.Page,
+			Size:  pageResp.Page.Size,
+			Total: pageResp.Page.Total,
 		},
 		Rows: reply,
 	}, nil

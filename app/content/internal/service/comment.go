@@ -382,9 +382,9 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v
 	}
 	return &v1.PageComments_Resp{
 		Page: &common.PageResp{
-			Page:  int64(pageResp.Page.Page),
-			Size:  int64(pageResp.Page.Size),
-			Total: int64(pageResp.Page.Total),
+			Page:  pageResp.Page.Page,
+			Size:  pageResp.Page.Size,
+			Total: pageResp.Page.Total,
 		},
 		Rows: rows,
 	}, err

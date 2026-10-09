@@ -90,11 +90,12 @@ func NewHTTPServer(
 	services []server.Service,
 	authClient userv1.AuthServiceClient,
 ) *kratoshttp.Server {
-	middlewares := []middleware.Middleware{
+	middlewares := make([]middleware.Middleware, 0, 5)
+	middlewares = append(middlewares,
 		server.RequestLogContextMiddleware(),
 		obs.ServerMiddleware(),
 		recovery.Recovery(),
-	}
+	)
 	middlewares = append(middlewares, NewHTTPAuthMiddlewares(authClient)...)
 	middlewares = append(middlewares, validate.ProtoValidate())
 

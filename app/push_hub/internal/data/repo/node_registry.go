@@ -205,7 +205,7 @@ func (r *NodeRegistryRepo) mapUserToNode(ctx context.Context, userID int64, node
 		return fmt.Errorf("获取用户节点映射: %w", err)
 	}
 
-	var nodeIDs []string
+	nodeIDs := make([]string, 0, 1)
 	if err == nil {
 		_ = json.Unmarshal(data, &nodeIDs)
 	}

@@ -48,11 +48,12 @@ func NewHTTPServer(
 	userClient *rpc.UserClient,
 ) *kratoshttp.Server {
 	_ = userClient
-	middlewares := []middleware.Middleware{
+	middlewares := make([]middleware.Middleware, 0, 5)
+	middlewares = append(middlewares,
 		server.RequestLogContextMiddleware(),
 		obs.ServerMiddleware(),
 		recovery.Recovery(),
-	}
+	)
 	middlewares = append(middlewares, NewHTTPAuthMiddlewares(userClient)...)
 	middlewares = append(middlewares, validate.ProtoValidate())
 

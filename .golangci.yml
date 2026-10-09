@@ -1,0 +1,161 @@
+# Shared Go quality rules. Use bass-golangci-lint: it contains bassarch.
+version: "2"
+
+run:
+  timeout: 5m
+  go: "1.26"
+  tests: false
+
+# goimports applies Go formatting and the project import groups in one pass.
+formatters:
+  enable: [goimports]
+  settings:
+    goimports:
+      local-prefixes:
+        - bff_bbs
+        - bff_bbs_admin
+        - bff_game_idle
+        - content
+        - economy
+        - game_idle
+        - game_town
+        - im
+        - notify
+        - platform
+        - push_hub
+        - push_node
+        - scheduler
+        - user
+  exclusions:
+    generated: lax
+    paths: ['(^|/)gen-sdk(/|$)']
+
+linters:
+  default: standard
+  enable:
+    - revive
+    - misspell
+    - asciicheck
+    - bidichk
+    - errorlint
+    - errchkjson
+    - bodyclose
+    - noctx
+    - modernize
+    - copyloopvar
+    - intrange
+    - usestdlibvars
+    - perfsprint
+    - gocyclo
+    - funlen
+    - nestif
+    - dupl
+    - depguard
+    - forbidigo
+    - bassarch
+    - gosec
+    - unconvert
+    - wastedassign
+    - nilerr
+    - nolintlint
+    - goconst
+    - gocritic
+    - prealloc
+    - predeclared
+    - reassign
+    - recvcheck
+    - nilnesserr
+    - fatcontext
+    - exptostd
+    - canonicalheader
+    - durationcheck
+    - gocheckcompilerdirectives
+    - gochecksumtype
+    - loggercheck
+    - makezero
+    - mirror
+    - nosprintfhostport
+    - rowserrcheck
+    - sloglint
+    - sqlclosecheck
+    - unqueryvet
+
+  settings:
+    errchkjson:
+      check-error-free-encoding: false
+    gocyclo:
+      min-complexity: 15
+    # Its Errorf autofix does not update imports safely.
+    perfsprint:
+      errorf: false
+    funlen:
+      lines: 100
+      statements: 50
+    nestif:
+      min-complexity: 4
+    dupl:
+      threshold: 150
+    goconst:
+      min-len: 3
+      min-occurrences: 3
+    revive:
+      rules:
+        - name: var-naming
+        - name: receiver-naming
+        - name: error-naming
+        - name: unexported-naming
+        - name: context-as-argument
+        - name: context-keys-type
+        - name: increment-decrement
+        - name: dot-imports
+        - name: blank-imports
+        - name: error-strings
+        - name: use-any
+        - name: early-return
+        - name: unchecked-type-assertion
+    depguard:
+      rules:
+        biz-layer:
+          list-mode: lax
+          files: ["**/internal/biz/**/*.go"]
+          deny:
+            - { pkg: "github.com/go-kratos/kratos/v3/transport", desc: "biz 不得依赖传输层框架" }
+        shared-stack:
+          list-mode: lax
+          files: ["**/internal/**/*.go", "**/server/**/*.go"]
+          deny:
+            - { pkg: "github.com/pkg/errors", desc: "统一使用标准库 errors" }
+            - { pkg: "github.com/cockroachdb/errors", desc: "统一使用标准库 errors" }
+            - { pkg: "github.com/hashicorp/go-multierror", desc: "统一使用 errors.Join" }
+            - { pkg: "github.com/sirupsen/logrus", desc: "禁止第二套日志库" }
+            - { pkg: "go.uber.org/zap", desc: "禁止第二套日志库" }
+            - { pkg: "github.com/golang/glog", desc: "禁止第二套日志库" }
+            - { pkg: "github.com/gofrs/uuid", desc: "统一使用 github.com/google/uuid" }
+            - { pkg: "github.com/dgrijalva/jwt-go", desc: "统一使用 github.com/golang-jwt/jwt/v5" }
+            - { pkg: "github.com/golang/protobuf", desc: "统一使用 google.golang.org/protobuf" }
+    custom:
+      bassarch:
+        type: module
+        description: 包级函数与分层依赖约束
+    forbidigo:
+      forbid:
+        - { pattern: '^(fmt\.Println|fmt\.Printf)$', msg: "库代码禁止直接打印" }
+        - { pattern: '^log\.Fatal(f|ln)?$', msg: "库代码禁止 Fatal 终止进程" }
+    gosec:
+      excludes: [G104]
+
+  exclusions:
+    generated: lax
+    paths: ['(^|/)gen-sdk(/|$)']
+    rules:
+      - path: '(wire_gen\.go$|\.pb\.go$)'
+        linters: [gosec, funlen, dupl, revive, forbidigo, noctx]
+      - path: '(^|/)cmd/.*\.go$'
+        linters: [forbidigo]
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+severity:
+  default: error

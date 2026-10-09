@@ -68,4 +68,21 @@ gen: gen-clean
 		$(MAKE) $$target IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
 	done
 
+.PHONY: lint-toolchain
+ifeq ($(wildcard $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE)),)
+lint-toolchain:
+	@echo "[lint] building bass-golangci-lint v2.14.0..."
+	@go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.14.0
+	@cd $(ROOT_DIR) && $(subst \,/,$(shell go env GOPATH))/bin/golangci-lint$(shell go env GOEXE) custom
+else
+lint-toolchain:
+	@echo "[lint] using $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE)"
+endif
+
+.PHONY: lint
+lint: lint-toolchain
+	@echo "[lint] $(SERVER)..."
+	@cd $(APP_DIR) && $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE) run --allow-parallel-runners --fix --issues-exit-code=0 ./... || echo "[lint] fix pass did not complete; continuing strict verification"
+	@cd $(APP_DIR) && $(ROOT_DIR)/.golangci-plugin/bin/bass-golangci-lint$(shell go env GOEXE) run --allow-parallel-runners ./...
+
 endif

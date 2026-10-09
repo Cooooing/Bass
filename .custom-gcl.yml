@@ -1,0 +1,6 @@
+version: v2.14.0
+name: bass-golangci-lint
+destination: ./.golangci-plugin/bin
+plugins:
+  - module: github.com/cooooing/bass-lint-plugin
+    path: ./.golangci-plugin

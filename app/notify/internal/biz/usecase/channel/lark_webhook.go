@@ -51,7 +51,7 @@ func (u *LarkWebhookUsecase) Process(ctx context.Context, req *LarkWebhookProces
 	}
 	rendered, err := rule.LarkWebhookTemplate.Render(ctx, notificationContext.TemplateData)
 	if err != nil {
-		return notifyenum.NotificationChannelStatusSkipped, nil
+		return notifyenum.NotificationChannelStatusInternalError, err
 	}
 	content := json.RawMessage(bytes.TrimSpace([]byte(rendered.Content)))
 	if len(content) == 0 || content[0] != '{' {

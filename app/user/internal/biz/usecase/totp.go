@@ -132,7 +132,7 @@ type CheckEnableTotpCodeReq struct {
 func (u *TotpUsecase) CheckEnableCode(ctx context.Context, req *CheckEnableTotpCodeReq) (bool, error) {
 	secret, err := u.totpSecretCache.Get(ctx, req.UserID)
 	if err != nil {
-		return false, nil
+		return false, err
 	}
 	return totp.Validate(req.Code, secret), nil
 }

@@ -105,7 +105,7 @@ func (s *WebSocketService) Handle(w stdhttp.ResponseWriter, r *stdhttp.Request) 
 			if _, err := s.webSocketUsecase.Ping(connCtx, characterID, sessionID); err != nil {
 				timeout.Store(true)
 				cancel()
-				return nil
+				return err
 			}
 		}
 		_ = conn.SetReadDeadline(time.Now().Add(s.webSocketUsecase.PingInterval(connCtx) + s.webSocketUsecase.WriteTimeout(connCtx)))

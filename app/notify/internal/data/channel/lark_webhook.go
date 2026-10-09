@@ -11,11 +11,13 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
+	"strings"
+	"time"
+
 	bizrepo "notify/internal/biz/repo"
 	"notify/internal/config"
 	notifyenum "notify/internal/enum"
-	"strings"
-	"time"
 )
 
 var _ bizrepo.LarkWebhookClient = (*LarkWebhookClient)(nil)
@@ -100,7 +102,7 @@ func (c *LarkWebhookClient) signLarkWebhookRequestBody(requestBody string, secre
 	if err != nil {
 		return "", err
 	}
-	payload.Timestamp = fmt.Sprintf("%d", timestamp)
+	payload.Timestamp = strconv.FormatInt(timestamp, 10)
 	payload.Sign = sign
 	signedBody, err := json.Marshal(payload)
 	if err != nil {
@@ -110,7 +112,7 @@ func (c *LarkWebhookClient) signLarkWebhookRequestBody(requestBody string, secre
 }
 
 func (c *LarkWebhookClient) genLarkWebhookSign(secret string, timestamp int64) (string, error) {
-	stringToSign := fmt.Sprintf("%d", timestamp) + "\n" + secret
+	stringToSign := strconv.FormatInt(timestamp, 10) + "\n" + secret
 	h := hmac.New(sha256.New, []byte(stringToSign))
 	if _, err := h.Write(nil); err != nil {
 		return "", err

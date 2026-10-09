@@ -5,8 +5,9 @@ import (
 	"common/pkg/server"
 	"fmt"
 	"log/slog"
-	"notify/internal/config"
 	"time"
+
+	"notify/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"

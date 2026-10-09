@@ -2,6 +2,7 @@ package model
 
 import (
 	commonenum "common/pkg/enum"
+
 	templatedata "notify/internal/biz/model/template_data"
 	notifyenum "notify/internal/enum"
 )

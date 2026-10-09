@@ -3,6 +3,7 @@ package channel
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -145,7 +146,7 @@ func (u *EmailUsecase) Process(ctx context.Context, req *EmailProcessReq) (notif
 				}
 				if itemStatus != notifyenum.NotificationChannelStatusRateLimited {
 					result, err := u.emailClient.SendEmail(ctx, &repo.EmailRequest{
-						IdempotencyKey: fmt.Sprintf("%d", delivery.ID),
+						IdempotencyKey: strconv.FormatInt(delivery.ID, 10),
 						ToEmail:        delivery.ToEmail,
 						Subject:        delivery.Subject,
 						Body:           delivery.Body,

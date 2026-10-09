@@ -3,6 +3,7 @@ package channel
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -151,7 +152,7 @@ func (u *TencentSMSUsecase) Process(ctx context.Context, req *TencentSMSProcessR
 				}
 				if itemStatus != notifyenum.NotificationChannelStatusRateLimited {
 					result, err := u.tencentSMSClient.SendTencentSMS(ctx, &repo.TencentSMSRequest{
-						IdempotencyKey:     fmt.Sprintf("%d", delivery.ID),
+						IdempotencyKey:     strconv.FormatInt(delivery.ID, 10),
 						Phone:              delivery.Phone,
 						SMSSDKAppID:        delivery.SMSSDKAppID,
 						SignName:           delivery.SignName,

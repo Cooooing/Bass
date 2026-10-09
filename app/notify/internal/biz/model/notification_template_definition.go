@@ -4,8 +4,9 @@ import (
 	"bytes"
 	commonenum "common/pkg/enum"
 	"context"
-	notifyenum "notify/internal/enum"
 	"text/template"
+
+	notifyenum "notify/internal/enum"
 )
 
 type NotificationTemplateDefinition struct {

@@ -9,11 +9,12 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"sort"
+
 	"notify/internal/biz/base"
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	notifyenum "notify/internal/enum"
-	"sort"
 )
 
 type TemplateUsecase struct {
@@ -78,7 +79,7 @@ func (u *TemplateUsecase) Preview(ctx context.Context, req *TemplatePreviewReq) 
 		return nil, errors.New("template_data_json must be a json object")
 	}
 	var extra any
-	if err := decoder.Decode(&extra); err != io.EOF {
+	if err := decoder.Decode(&extra); !errors.Is(err, io.EOF) {
 		if err == nil {
 			err = errors.New("unexpected trailing json value")
 		}

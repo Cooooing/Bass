@@ -66,7 +66,7 @@ func (c *EmailClient) SendEmail(ctx context.Context, req *bizrepo.EmailRequest) 
 			ProviderResp: new(fmt.Sprintf("send email: %v", err)),
 		}, nil
 	}
-	c.log.Info(fmt.Sprintf("send email succeeded: to=%s", req.ToEmail))
+	c.log.Info("send email succeeded: to=" + req.ToEmail)
 	return &bizrepo.EmailSendResult{
 		Status: notifyenum.NotificationChannelStatusSucceeded,
 	}, nil

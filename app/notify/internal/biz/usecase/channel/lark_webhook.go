@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -102,7 +103,7 @@ func (u *LarkWebhookUsecase) Process(ctx context.Context, req *LarkWebhookProces
 		return delivery.Status, nil
 	}
 	result, err := u.larkWebhookClient.SendLarkWebhook(ctx, &repo.LarkWebhookRequest{
-		IdempotencyKey: fmt.Sprintf("%d", delivery.ID),
+		IdempotencyKey: strconv.FormatInt(delivery.ID, 10),
 		Token:          rendered.Token,
 		Secret:         rendered.Secret,
 		RequestBody:    delivery.RequestBody,

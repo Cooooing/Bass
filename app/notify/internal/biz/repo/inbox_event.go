@@ -4,8 +4,9 @@ import (
 	commonenum "common/pkg/enum"
 	commonmodel "common/pkg/model"
 	"context"
-	"notify/internal/biz/model"
 	"time"
+
+	"notify/internal/biz/model"
 )
 
 type InboxEventRepo interface {

@@ -2,10 +2,11 @@ package usecase
 
 import (
 	"context"
+	"time"
+
 	"notify/internal/biz/repo"
 	"notify/internal/config"
 	notifyenum "notify/internal/enum"
-	"time"
 )
 
 type RateLimitUsecase struct {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+
 	"notify/internal/config"
 	"notify/internal/data/gen"
 	"notify/internal/data/gen/migrate"

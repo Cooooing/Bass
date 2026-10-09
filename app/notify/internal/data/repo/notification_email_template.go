@@ -3,12 +3,14 @@ package repo
 import (
 	commonmodel "common/pkg/model"
 	"context"
+
 	"notify/internal/biz/model"
 	bizrepo "notify/internal/biz/repo"
 	"notify/internal/data/gen"
 	"notify/internal/data/gen/notificationemailtemplate"
 
 	utilent "common/pkg/util/ent"
+
 	entsql "entgo.io/ent/dialect/sql"
 )
 

@@ -6,6 +6,7 @@ import (
 
 	commonenum "common/pkg/enum"
 	"common/proto/gen/common/enums"
+
 	"notify/internal/biz/model"
 	notifyenum "notify/internal/enum"
 )

@@ -2,8 +2,9 @@ package model
 
 import (
 	commonenum "common/pkg/enum"
-	notifyenum "notify/internal/enum"
 	"time"
+
+	notifyenum "notify/internal/enum"
 )
 
 type NotificationTencentSMSDelivery struct {

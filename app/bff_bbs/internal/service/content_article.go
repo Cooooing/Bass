@@ -14,7 +14,7 @@ import (
 	"context"
 	"time"
 
-	"bff_bbs/internal/biz/repo"
+	"bff_bbs/internal/biz/model"
 	"bff_bbs/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -236,7 +236,7 @@ func (s *ContentArticleService) Reward(ctx context.Context, req *bbscontentv1.Re
 	return &bbscontentv1.RewardArticle_Resp{}, err
 }
 
-func (s *ContentArticleService) articleListItem(row *repo.ArticleListItem) *bbscontentv1.ArticleListItem {
+func (s *ContentArticleService) articleListItem(row *model.ArticleListItem) *bbscontentv1.ArticleListItem {
 	if row == nil {
 		return nil
 	}
@@ -267,7 +267,7 @@ func (s *ContentArticleService) articleListItem(row *repo.ArticleListItem) *bbsc
 	return out
 }
 
-func (s *ContentArticleService) articleDetail(row *repo.ArticleDetail) *bbscontentv1.ArticleDetail {
+func (s *ContentArticleService) articleDetail(row *model.ArticleDetail) *bbscontentv1.ArticleDetail {
 	if row == nil {
 		return nil
 	}
@@ -302,13 +302,13 @@ func (s *ContentArticleService) articleDetail(row *repo.ArticleDetail) *bbsconte
 	return out
 }
 
-func (s *ContentArticleService) articleViewerActionState(row *repo.ArticleViewerActionState) *bbscontentv1.ArticleViewerActionState {
+func (s *ContentArticleService) articleViewerActionState(row *model.ArticleViewerActionState) *bbscontentv1.ArticleViewerActionState {
 	if row == nil {
 		return nil
 	}
 	return &bbscontentv1.ArticleViewerActionState{Liked: row.Liked, Thanked: row.Thanked, Collected: row.Collected, Rewarded: row.Rewarded}
 }
-func (s *ContentArticleService) articlePostscript(row *repo.ArticlePostscript) *bbscontentv1.ArticlePostscript {
+func (s *ContentArticleService) articlePostscript(row *model.ArticlePostscript) *bbscontentv1.ArticlePostscript {
 	if row == nil {
 		return nil
 	}
@@ -321,7 +321,7 @@ func (s *ContentArticleService) articlePostscript(row *repo.ArticlePostscript) *
 	}
 	return out
 }
-func (s *ContentArticleService) accountProfile(row *repo.AccountProfile) *bbscontentv1.AccountProfile {
+func (s *ContentArticleService) accountProfile(row *model.AccountProfile) *bbscontentv1.AccountProfile {
 	if row == nil {
 		return nil
 	}

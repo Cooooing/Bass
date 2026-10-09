@@ -1,6 +1,7 @@
 package data
 
 import (
+	"bff_bbs/internal/biz/model"
 	"common/pkg/client/rpc"
 	"common/pkg/util"
 	contentv1 "common/proto/gen/content/v1"
@@ -25,7 +26,7 @@ func NewContentPostscriptClient(
 	}
 }
 
-func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *repo.AddPostscriptReq) (*repo.ArticlePostscript, error) {
+func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *repo.AddPostscriptReq) (*model.ArticlePostscript, error) {
 	reply, err := r.contentClient.Postscript.Add(ctx, &contentv1.AddPostscript_Req{
 		ArticleId: req.ArticleID,
 		Content:   req.Content,
@@ -38,7 +39,7 @@ func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *repo.A
 		return nil, err
 	}
 	item := reply.GetPostscript()
-	return &repo.ArticlePostscript{
+	return &model.ArticlePostscript{
 		ID:            item.GetId(),
 		ArticleID:     item.GetArticleId(),
 		Content:       item.GetContent(),
@@ -51,7 +52,7 @@ func (r *ContentPostscriptClient) AddPostscript(ctx context.Context, req *repo.A
 	}, nil
 }
 
-func (r *ContentPostscriptClient) ListPostscripts(ctx context.Context, req *repo.ListPostscriptsReq) ([]*repo.ArticlePostscript, error) {
+func (r *ContentPostscriptClient) ListPostscripts(ctx context.Context, req *repo.ListPostscriptsReq) ([]*model.ArticlePostscript, error) {
 	access := &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST}
 	if req.UserID > 0 {
 		access.Scope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
@@ -61,9 +62,9 @@ func (r *ContentPostscriptClient) ListPostscripts(ctx context.Context, req *repo
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*repo.ArticlePostscript, 0, len(reply.GetRows()))
+	rows := make([]*model.ArticlePostscript, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
-		rows = append(rows, &repo.ArticlePostscript{
+		rows = append(rows, &model.ArticlePostscript{
 			ID:            item.GetId(),
 			ArticleID:     item.GetArticleId(),
 			Content:       item.GetContent(),

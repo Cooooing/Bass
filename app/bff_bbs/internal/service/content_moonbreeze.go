@@ -11,7 +11,7 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
-	"bff_bbs/internal/biz/repo"
+	"bff_bbs/internal/biz/model"
 	"bff_bbs/internal/biz/usecase"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
@@ -94,7 +94,7 @@ func (s *ContentMoonbreezeService) PageMember(
 	return s.pageReply(page), nil
 }
 
-func (s *ContentMoonbreezeService) pageReply(page *repo.PageMoonbreezesResp) *bbscontentv1.PageMoonbreezes_Resp {
+func (s *ContentMoonbreezeService) pageReply(page *model.PageMoonbreezesResp) *bbscontentv1.PageMoonbreezes_Resp {
 	rows := make([]*bbscontentv1.Moonbreeze, 0, len(page.Rows))
 	for _, row := range page.Rows {
 		rows = append(rows, s.moonbreezeView(row))
@@ -102,7 +102,7 @@ func (s *ContentMoonbreezeService) pageReply(page *repo.PageMoonbreezesResp) *bb
 	return &bbscontentv1.PageMoonbreezes_Resp{Rows: rows, NextCursor: page.NextCursor}
 }
 
-func (*ContentMoonbreezeService) moonbreezeView(row *repo.Moonbreeze) *bbscontentv1.Moonbreeze {
+func (*ContentMoonbreezeService) moonbreezeView(row *model.Moonbreeze) *bbscontentv1.Moonbreeze {
 	if row == nil {
 		return nil
 	}

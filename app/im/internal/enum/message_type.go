@@ -8,11 +8,13 @@ import (
 type MessageType string
 
 const (
-	MessageTypeNormal MessageType = "normal" // normal
+	MessageTypeUnknown MessageType = "unknown" // unknown
+	MessageTypeNormal  MessageType = "normal"  // normal
 )
 
 var MessageTypeMap = enum.NewMapping[MessageType, v1.MessageType](map[MessageType]enum.Entry[MessageType, v1.MessageType]{
-	MessageTypeNormal: {Proto: v1.MessageType_MESSAGE_TYPE_NORMAL},
+	MessageTypeUnknown: {Proto: v1.MessageType_MESSAGE_TYPE_UNKNOWN},
+	MessageTypeNormal:  {Proto: v1.MessageType_MESSAGE_TYPE_NORMAL},
 })
 
 func (e MessageType) String() string { return string(e) }

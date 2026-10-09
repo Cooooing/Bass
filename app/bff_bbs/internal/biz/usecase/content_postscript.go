@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"bff_bbs/internal/biz/model"
 	"context"
 
 	"bff_bbs/internal/biz/repo"
@@ -29,7 +30,7 @@ type ListPostscriptsReq struct {
 	UserID    int64
 }
 
-func (u *ContentPostscriptUsecase) AddPostscript(ctx context.Context, req *AddPostscriptReq) (*repo.ArticlePostscript, error) {
+func (u *ContentPostscriptUsecase) AddPostscript(ctx context.Context, req *AddPostscriptReq) (*model.ArticlePostscript, error) {
 	resp, err := u.contentPostscriptClient.AddPostscript(ctx, &repo.AddPostscriptReq{
 		UserID:    req.UserID,
 		ArticleID: req.ArticleID,
@@ -41,7 +42,7 @@ func (u *ContentPostscriptUsecase) AddPostscript(ctx context.Context, req *AddPo
 	return resp, nil
 }
 
-func (u *ContentPostscriptUsecase) ListPostscripts(ctx context.Context, req *ListPostscriptsReq) ([]*repo.ArticlePostscript, error) {
+func (u *ContentPostscriptUsecase) ListPostscripts(ctx context.Context, req *ListPostscriptsReq) ([]*model.ArticlePostscript, error) {
 	resp, err := u.contentPostscriptClient.ListPostscripts(ctx, &repo.ListPostscriptsReq{
 		ArticleID: req.ArticleID,
 		UserID:    req.UserID,

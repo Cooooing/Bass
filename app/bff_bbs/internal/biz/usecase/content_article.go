@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"bff_bbs/internal/biz/model"
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
@@ -165,7 +166,7 @@ type ArticleQuery struct {
 
 type ListArticlesResp struct {
 	Page *commonmodel.PageResp
-	Rows []*repo.ArticleListItem
+	Rows []*model.ArticleListItem
 }
 
 type SearchArticlesReq struct {
@@ -177,7 +178,7 @@ type SearchArticlesReq struct {
 }
 
 type SearchArticlesResp struct {
-	Rows       []*repo.ArticleListItem
+	Rows       []*model.ArticleListItem
 	NextCursor *string
 }
 
@@ -206,7 +207,7 @@ func (u *ContentArticleUsecase) PageViewHistory(
 	if err != nil {
 		return nil, err
 	}
-	profiles := make([]*repo.AccountProfile, 0, len(result.Rows)*2)
+	profiles := make([]*model.AccountProfile, 0, len(result.Rows)*2)
 	for _, row := range result.Rows {
 		if row == nil || row.Article == nil {
 			continue
@@ -251,7 +252,7 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 	if err != nil {
 		return nil, err
 	}
-	profiles := make([]*repo.AccountProfile, 0, len(resp.Rows)*2)
+	profiles := make([]*model.AccountProfile, 0, len(resp.Rows)*2)
 	for _, row := range resp.Rows {
 		if row == nil {
 			continue
@@ -286,7 +287,7 @@ func (u *ContentArticleUsecase) SearchArticles(ctx context.Context, req *SearchA
 	if err != nil {
 		return nil, err
 	}
-	profiles := make([]*repo.AccountProfile, 0, len(result.Rows)*2)
+	profiles := make([]*model.AccountProfile, 0, len(result.Rows)*2)
 	for _, row := range result.Rows {
 		if row != nil {
 			profiles = append(profiles, row.AuthorUser, row.LastReplyUser)
@@ -353,7 +354,7 @@ type GetArticleReq struct {
 	PublishStatus *int32
 }
 
-func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleReq) (*repo.ArticleDetail, error) {
+func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleReq) (*model.ArticleDetail, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
@@ -385,7 +386,7 @@ func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleR
 			resp.City = nil
 		}
 	}
-	if err = u.hydrateArticleProfiles(ctx, []*repo.AccountProfile{resp.AuthorUser, resp.LastReplyUser}); err != nil {
+	if err = u.hydrateArticleProfiles(ctx, []*model.AccountProfile{resp.AuthorUser, resp.LastReplyUser}); err != nil {
 		return nil, err
 	}
 	return resp, nil
@@ -393,7 +394,7 @@ func (u *ContentArticleUsecase) GetArticle(ctx context.Context, req *GetArticleR
 
 // hydrateArticleProfiles resolves display avatars only for article read models.
 // Draft writes intentionally bypass it because their response exposes no profile.
-func (u *ContentArticleUsecase) hydrateArticleProfiles(ctx context.Context, profiles []*repo.AccountProfile) error {
+func (u *ContentArticleUsecase) hydrateArticleProfiles(ctx context.Context, profiles []*model.AccountProfile) error {
 	assetIDs := make([]int64, 0, len(profiles))
 	seen := map[int64]struct{}{}
 	for _, profile := range profiles {

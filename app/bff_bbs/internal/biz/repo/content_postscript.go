@@ -1,6 +1,10 @@
 package repo
 
-import "context"
+import (
+	"context"
+
+	"bff_bbs/internal/biz/model"
+)
 
 type AddPostscriptReq struct {
 	UserID    int64
@@ -14,6 +18,6 @@ type ListPostscriptsReq struct {
 }
 
 type ContentPostscriptClient interface {
-	AddPostscript(ctx context.Context, req *AddPostscriptReq) (*ArticlePostscript, error)
-	ListPostscripts(ctx context.Context, req *ListPostscriptsReq) ([]*ArticlePostscript, error)
+	AddPostscript(ctx context.Context, req *AddPostscriptReq) (*model.ArticlePostscript, error)
+	ListPostscripts(ctx context.Context, req *ListPostscriptsReq) ([]*model.ArticlePostscript, error)
 }

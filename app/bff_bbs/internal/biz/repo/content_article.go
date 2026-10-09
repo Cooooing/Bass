@@ -1,119 +1,11 @@
 package repo
 
 import (
+	"bff_bbs/internal/biz/model"
 	commonmodel "common/pkg/model"
 	"context"
 	"time"
 )
-
-type ArticleViewerActionState struct {
-	Liked     bool
-	Thanked   bool
-	Collected bool
-	Rewarded  bool
-}
-
-type ArticleTag struct {
-	ID       int64
-	Code     string
-	Name     string
-	Icon     *string
-	DomainID *int64
-}
-
-type ArticleDomain struct {
-	ID   int64
-	Code string
-	Name string
-	Icon *string
-	URL  *string
-	Sort int32
-}
-
-type ArticlePostscript struct {
-	ID            int64
-	ArticleID     int64
-	Content       string
-	ContentRender string
-	Restriction   int32
-	CreatedBy     *int64
-	UpdatedBy     *int64
-	CreatedAt     *time.Time
-	UpdatedAt     *time.Time
-}
-
-type ArticleListItem struct {
-	ID                int64
-	Title             string
-	Content           string
-	ContentRender     string
-	HasPostscript     bool
-	HasReward         bool
-	PublishStatus     int32
-	Visibility        int32
-	Restriction       int32
-	Type              int32
-	Statement         *string
-	Commentable       bool
-	ViewCount         int32
-	ThankCount        int32
-	LikeCount         int32
-	CollectCount      int32
-	RewardCount       int32
-	ReplyCount        int32
-	CoverImageURL     *string
-	ViewerActionState *ArticleViewerActionState
-	LastReplyAt       *time.Time
-	LastReplyUser     *AccountProfile
-	AuthorUser        *AccountProfile
-	CreatedBy         *int64
-	UpdatedBy         *int64
-	CreatedAt         *time.Time
-	UpdatedAt         *time.Time
-	PublishedAt       *time.Time
-	EditedAt          *time.Time
-	Tags              []*ArticleTag
-	Domains           []*ArticleDomain
-}
-
-type ArticleDetail struct {
-	ID                  int64
-	Title               string
-	Content             string
-	ContentRender       string
-	HasPostscript       bool
-	HasReward           bool
-	RewardContent       *string
-	RewardContentRender *string
-	RewardPoints        *int32
-	PublishStatus       int32
-	Visibility          int32
-	Restriction         int32
-	Type                int32
-	Statement           *string
-	Commentable         bool
-	ViewCount           int32
-	ThankCount          int32
-	LikeCount           int32
-	CollectCount        int32
-	RewardCount         int32
-	ReplyCount          int32
-	CoverImageURL       *string
-	ViewerActionState   *ArticleViewerActionState
-	LastReplyAt         *time.Time
-	LastReplyUser       *AccountProfile
-	Postscripts         []*ArticlePostscript
-	AuthorUser          *AccountProfile
-	CreatedBy           *int64
-	UpdatedBy           *int64
-	CreatedAt           *time.Time
-	UpdatedAt           *time.Time
-	PublishedAt         *time.Time
-	City                *string
-	EditedAt            *time.Time
-	Tags                []*ArticleTag
-	Domains             []*ArticleDomain
-}
 
 type ArticleSave struct {
 	Title         string
@@ -181,7 +73,7 @@ type ListArticlesReq struct {
 
 type ListArticlesResp struct {
 	Page *commonmodel.PageResp
-	Rows []*ArticleListItem
+	Rows []*model.ArticleListItem
 }
 
 type SearchArticlesReq struct {
@@ -194,7 +86,7 @@ type SearchArticlesReq struct {
 }
 
 type SearchArticlesResp struct {
-	Rows       []*ArticleListItem
+	Rows       []*model.ArticleListItem
 	NextCursor *string
 }
 
@@ -209,7 +101,7 @@ type ArticleSearchRateLimitReq struct {
 }
 
 type ArticleViewHistoryRow struct {
-	Article  *ArticleListItem
+	Article  *model.ArticleListItem
 	ViewedAt *time.Time
 }
 
@@ -264,7 +156,7 @@ type ContentArticleClient interface {
 	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error)
 	SearchArticles(ctx context.Context, req *SearchArticlesReq) (*SearchArticlesResp, error)
 	PageViewHistory(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*ArticleViewHistoryPageResp, error)
-	GetArticle(ctx context.Context, req *GetArticleReq) (*ArticleDetail, error)
+	GetArticle(ctx context.Context, req *GetArticleReq) (*model.ArticleDetail, error)
 	ViewArticle(ctx context.Context, req *ViewArticleReq) error
 	LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error)
 	ThankArticle(ctx context.Context, req *ThankArticleReq) (bool, error)

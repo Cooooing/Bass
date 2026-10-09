@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"bff_bbs/internal/biz/model"
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
@@ -45,7 +46,7 @@ type CreateMoonbreezeReq struct {
 	IP      string
 }
 
-func (u *ContentMoonbreezeUsecase) Create(ctx context.Context, req *CreateMoonbreezeReq) (*repo.Moonbreeze, error) {
+func (u *ContentMoonbreezeUsecase) Create(ctx context.Context, req *CreateMoonbreezeReq) (*model.Moonbreeze, error) {
 	if req == nil || req.UserID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}
@@ -66,7 +67,7 @@ func (u *ContentMoonbreezeUsecase) Create(ctx context.Context, req *CreateMoonbr
 	if err != nil {
 		return nil, err
 	}
-	if err = u.hydrateRows(ctx, []*repo.Moonbreeze{row}, req.UserID); err != nil {
+	if err = u.hydrateRows(ctx, []*model.Moonbreeze{row}, req.UserID); err != nil {
 		return nil, err
 	}
 	return row, nil
@@ -83,7 +84,7 @@ type PageMoonbreezesReq struct {
 func (u *ContentMoonbreezeUsecase) Page(
 	ctx context.Context,
 	req *PageMoonbreezesReq,
-) (*repo.PageMoonbreezesResp, error) {
+) (*model.PageMoonbreezesResp, error) {
 	if req == nil {
 		req = &PageMoonbreezesReq{}
 	}
@@ -105,7 +106,7 @@ func (u *ContentMoonbreezeUsecase) Page(
 	// visibility is enforced only by PageMember, so global and following feeds
 	// remain independent from a member's profile-list preference.
 	cursor := req.Cursor
-	visible := make([]*repo.Moonbreeze, 0, pageSize)
+	visible := make([]*model.Moonbreeze, 0, pageSize)
 	var next *string
 	for len(visible) < int(pageSize) {
 		remaining := pageSize - uint32(len(visible))
@@ -140,7 +141,7 @@ func (u *ContentMoonbreezeUsecase) Page(
 	if err := u.hydrateRows(ctx, visible, req.ViewerID); err != nil {
 		return nil, err
 	}
-	return &repo.PageMoonbreezesResp{Rows: visible, NextCursor: next}, nil
+	return &model.PageMoonbreezesResp{Rows: visible, NextCursor: next}, nil
 }
 
 func (u *ContentMoonbreezeUsecase) PageWatching(
@@ -148,7 +149,7 @@ func (u *ContentMoonbreezeUsecase) PageWatching(
 	viewerID int64,
 	cursor *string,
 	size uint32,
-) (*repo.PageMoonbreezesResp, error) {
+) (*model.PageMoonbreezesResp, error) {
 	if viewerID <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
@@ -157,7 +158,7 @@ func (u *ContentMoonbreezeUsecase) PageWatching(
 		return nil, err
 	}
 	if len(following) == 0 {
-		return &repo.PageMoonbreezesResp{}, nil
+		return &model.PageMoonbreezesResp{}, nil
 	}
 	return u.Page(ctx, &PageMoonbreezesReq{
 		ViewerID:  viewerID,
@@ -173,7 +174,7 @@ func (u *ContentMoonbreezeUsecase) PageMember(
 	name string,
 	cursor *string,
 	size uint32,
-) (*repo.PageMoonbreezesResp, error) {
+) (*model.PageMoonbreezesResp, error) {
 	account, _, err := u.accountClient.GetProfile(ctx, name)
 	if err != nil {
 		return nil, err
@@ -231,7 +232,7 @@ func (u *ContentMoonbreezeUsecase) followingIDs(ctx context.Context, userID int6
 
 // hydrateRows loads presentation-only author, avatar and privacy data in
 // batches. It never changes the content records returned by the content domain.
-func (u *ContentMoonbreezeUsecase) hydrateRows(ctx context.Context, rows []*repo.Moonbreeze, viewerID int64) error {
+func (u *ContentMoonbreezeUsecase) hydrateRows(ctx context.Context, rows []*model.Moonbreeze, viewerID int64) error {
 	ids := make([]int64, 0, len(rows))
 	for _, row := range rows {
 		if row != nil {

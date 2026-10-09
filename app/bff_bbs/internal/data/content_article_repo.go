@@ -1,6 +1,7 @@
 package data
 
 import (
+	"bff_bbs/internal/biz/model"
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
@@ -228,7 +229,7 @@ func (r *ContentArticleClient) articleListItems(
 	articles []*contentv1.Article,
 	userID int64,
 	excludedUserIDs []int64,
-) ([]*repo.ArticleListItem, error) {
+) ([]*model.ArticleListItem, error) {
 	articleIDs := make([]int64, 0, len(articles))
 	for _, item := range articles {
 		if item != nil {
@@ -249,7 +250,7 @@ func (r *ContentArticleClient) articleListItems(
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*repo.ArticleListItem, 0, len(articles))
+	rows := make([]*model.ArticleListItem, 0, len(articles))
 	for _, item := range articles {
 		if item != nil {
 			rows = append(rows, r.articleListItem(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()]))
@@ -350,7 +351,7 @@ func (r *ContentArticleClient) PageViewHistory(
 	return &repo.ArticleViewHistoryPageResp{Rows: rows, Page: pageResp}, nil
 }
 
-func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArticleReq) (*repo.ArticleDetail, error) {
+func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArticleReq) (*model.ArticleDetail, error) {
 	accessScope := contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST
 	if req.UserID > 0 {
 		accessScope = contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER
@@ -385,9 +386,9 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 		if err != nil {
 			return nil, err
 		}
-		detail.Postscripts = make([]*repo.ArticlePostscript, 0, len(postscriptResp.GetRows()))
+		detail.Postscripts = make([]*model.ArticlePostscript, 0, len(postscriptResp.GetRows()))
 		for _, postscript := range postscriptResp.GetRows() {
-			detail.Postscripts = append(detail.Postscripts, &repo.ArticlePostscript{
+			detail.Postscripts = append(detail.Postscripts, &model.ArticlePostscript{
 				ID:            postscript.GetId(),
 				ArticleID:     postscript.GetArticleId(),
 				Content:       postscript.GetContent(),
@@ -485,9 +486,9 @@ func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.Rewa
 	return nil
 }
 
-func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs []int64, userID int64, excludedUserIDs []int64) (map[int64]*contentv1.MapArticleLastComments_Resp_Comment, map[int64]*repo.ArticleViewerActionState, map[int64][]*repo.ArticleTag, map[int64][]*repo.ArticleDomain, error) {
+func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs []int64, userID int64, excludedUserIDs []int64) (map[int64]*contentv1.MapArticleLastComments_Resp_Comment, map[int64]*model.ArticleViewerActionState, map[int64][]*model.ArticleTag, map[int64][]*model.ArticleDomain, error) {
 	if len(articleIDs) == 0 {
-		return map[int64]*contentv1.MapArticleLastComments_Resp_Comment{}, map[int64]*repo.ArticleViewerActionState{}, map[int64][]*repo.ArticleTag{}, map[int64][]*repo.ArticleDomain{}, nil
+		return map[int64]*contentv1.MapArticleLastComments_Resp_Comment{}, map[int64]*model.ArticleViewerActionState{}, map[int64][]*model.ArticleTag{}, map[int64][]*model.ArticleDomain{}, nil
 	}
 	commentResp, err := r.contentClient.Comment.MapArticleLastComments(ctx, &contentv1.MapArticleLastComments_Req{
 		ArticleIds:      articleIDs,
@@ -496,7 +497,7 @@ func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs 
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
-	states := map[int64]*repo.ArticleViewerActionState{}
+	states := map[int64]*model.ArticleViewerActionState{}
 	if userID > 0 {
 		stateResp, err := r.contentClient.Article.MapViewerActionStates(ctx, &contentv1.MapArticleViewerActionStates_Req{
 			ArticleIds: articleIDs,
@@ -512,12 +513,12 @@ func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs 
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
-	articleTags := make(map[int64][]*repo.ArticleTag, len(tagResp.GetArticleTags()))
+	articleTags := make(map[int64][]*model.ArticleTag, len(tagResp.GetArticleTags()))
 	domainIDs := make([]int64, 0)
 	for articleID, rows := range tagResp.GetArticleTags() {
-		values := make([]*repo.ArticleTag, 0, len(rows.GetRows()))
+		values := make([]*model.ArticleTag, 0, len(rows.GetRows()))
 		for _, item := range rows.GetRows() {
-			values = append(values, &repo.ArticleTag{ID: item.GetId(), Code: item.GetCode(), Name: item.GetName(), Icon: item.Icon, DomainID: item.DomainId})
+			values = append(values, &model.ArticleTag{ID: item.GetId(), Code: item.GetCode(), Name: item.GetName(), Icon: item.Icon, DomainID: item.DomainId})
 			if item.DomainId != nil {
 				domainIDs = append(domainIDs, *item.DomainId)
 			}
@@ -529,7 +530,7 @@ func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs 
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
-	articleDomains := make(map[int64][]*repo.ArticleDomain, len(articleTags))
+	articleDomains := make(map[int64][]*model.ArticleDomain, len(articleTags))
 	for articleID, tags := range articleTags {
 		seen := map[int64]struct{}{}
 		for _, tag := range tags {
@@ -545,7 +546,7 @@ func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs 
 				continue
 			}
 			seen[domain.GetId()] = struct{}{}
-			articleDomains[articleID] = append(articleDomains[articleID], &repo.ArticleDomain{ID: domain.GetId(), Code: domain.GetCode(), Name: domain.GetName(), Icon: domain.Icon, URL: domain.Url, Sort: domain.GetSort()})
+			articleDomains[articleID] = append(articleDomains[articleID], &model.ArticleDomain{ID: domain.GetId(), Code: domain.GetCode(), Name: domain.GetName(), Icon: domain.Icon, URL: domain.Url, Sort: domain.GetSort()})
 		}
 		sort.Slice(articleDomains[articleID], func(i, j int) bool {
 			if articleDomains[articleID][i].Sort == articleDomains[articleID][j].Sort {
@@ -557,10 +558,10 @@ func (r *ContentArticleClient) loadArticleFacts(ctx context.Context, articleIDs 
 	return commentResp.GetComments(), states, articleTags, articleDomains, nil
 }
 
-func (r *ContentArticleClient) articleViewerActionStates(states map[int64]*contentv1.MapArticleViewerActionStates_Resp_ArticleViewerActionState) map[int64]*repo.ArticleViewerActionState {
-	reply := make(map[int64]*repo.ArticleViewerActionState, len(states))
+func (r *ContentArticleClient) articleViewerActionStates(states map[int64]*contentv1.MapArticleViewerActionStates_Resp_ArticleViewerActionState) map[int64]*model.ArticleViewerActionState {
+	reply := make(map[int64]*model.ArticleViewerActionState, len(states))
 	for articleID, state := range states {
-		reply[articleID] = &repo.ArticleViewerActionState{
+		reply[articleID] = &model.ArticleViewerActionState{
 			Liked:     state.GetLiked(),
 			Thanked:   state.GetThanked(),
 			Collected: state.GetCollected(),
@@ -585,15 +586,15 @@ func (r *ContentArticleClient) articleProfileIDs(item *contentv1.Article, lastCo
 	return userIDs
 }
 
-func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState, tags []*repo.ArticleTag, domains []*repo.ArticleDomain) *repo.ArticleListItem {
+func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles map[int64]*model.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *model.ArticleViewerActionState, tags []*model.ArticleTag, domains []*model.ArticleDomain) *model.ArticleListItem {
 	if item == nil {
 		return nil
 	}
 	if state == nil {
-		state = &repo.ArticleViewerActionState{}
+		state = &model.ArticleViewerActionState{}
 	}
 	content := r.articleSummaryContent(item.GetContent())
-	out := &repo.ArticleListItem{
+	out := &model.ArticleListItem{
 		ID:                item.GetId(),
 		Title:             item.GetTitle(),
 		Content:           content,
@@ -639,14 +640,14 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles
 	return out
 }
 
-func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles map[int64]*repo.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *repo.ArticleViewerActionState, tags []*repo.ArticleTag, domains []*repo.ArticleDomain) *repo.ArticleDetail {
+func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles map[int64]*model.AccountProfile, lastComment *contentv1.MapArticleLastComments_Resp_Comment, state *model.ArticleViewerActionState, tags []*model.ArticleTag, domains []*model.ArticleDomain) *model.ArticleDetail {
 	if item == nil {
 		return nil
 	}
 	if state == nil {
-		state = &repo.ArticleViewerActionState{}
+		state = &model.ArticleViewerActionState{}
 	}
-	out := &repo.ArticleDetail{
+	out := &model.ArticleDetail{
 		ID:                  item.GetId(),
 		Title:               item.GetTitle(),
 		Content:             item.GetContent(),
@@ -734,15 +735,15 @@ func (r *ContentArticleClient) articleCoverImageURL(item *contentv1.Article) *st
 	return coverImageURL
 }
 
-func (r *ContentArticleClient) loadAccountProfiles(ctx context.Context, userIDs ...int64) (map[int64]*repo.AccountProfile, error) {
+func (r *ContentArticleClient) loadAccountProfiles(ctx context.Context, userIDs ...int64) (map[int64]*model.AccountProfile, error) {
 	if r.userClient == nil {
-		return map[int64]*repo.AccountProfile{}, nil
+		return map[int64]*model.AccountProfile{}, nil
 	}
 	ids := lo.Filter(lo.Uniq(userIDs), func(userID int64, _ int) bool {
 		return userID != 0
 	})
 	if len(ids) == 0 {
-		return map[int64]*repo.AccountProfile{}, nil
+		return map[int64]*model.AccountProfile{}, nil
 	}
 	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
 		Query: &userv1.MapAccounts_Req_AccountQuery{
@@ -752,13 +753,13 @@ func (r *ContentArticleClient) loadAccountProfiles(ctx context.Context, userIDs 
 	if err != nil {
 		return nil, err
 	}
-	out := make(map[int64]*repo.AccountProfile, len(reply.GetAccounts()))
+	out := make(map[int64]*model.AccountProfile, len(reply.GetAccounts()))
 	for userID, account := range reply.GetAccounts() {
 		basic := account.GetBasic()
 		if basic == nil {
 			continue
 		}
-		out[userID] = &repo.AccountProfile{
+		out[userID] = &model.AccountProfile{
 			ID:            basic.GetId(),
 			Name:          basic.GetName(),
 			Nickname:      basic.Nickname,

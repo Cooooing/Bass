@@ -3,45 +3,19 @@ package repo
 import (
 	"context"
 	"time"
+
+	"bff_bbs/internal/biz/model"
 )
 
 type AccountClient interface {
-	GetCurrentAccount(ctx context.Context, userID int64) (*Account, error)
-	GetProfile(ctx context.Context, name string) (*AccountProfile, *time.Time, error)
-	MapProfileAccounts(ctx context.Context, userIDs []int64) (map[int64]*AccountProfile, error)
-	UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*AccountProfile, error)
+	GetCurrentAccount(ctx context.Context, userID int64) (*model.Account, error)
+	GetProfile(ctx context.Context, name string) (*model.AccountProfile, *time.Time, error)
+	MapProfileAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.AccountProfile, error)
+	UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*model.AccountProfile, error)
 	UpdatePasswordAccount(ctx context.Context, req *UpdatePasswordAccountReq) error
 	UpdateEmailAccount(ctx context.Context, req *UpdateEmailAccountReq) error
 	UpdatePhoneAccount(ctx context.Context, req *UpdatePhoneAccountReq) error
 	AvatarAccount(ctx context.Context, name string) (*AvatarAccountResp, error)
-}
-
-type AccountProfile struct {
-	ID                int64
-	Name              string
-	Nickname          *string
-	URL               *string
-	AvatarURL         *string
-	AvatarAssetID     *int64
-	BackgroundAssetID *int64
-	Introduction      *string
-	Status            int32
-	MBTI              *string
-	FollowCount       *int32
-	FollowerCount     *int32
-	CreatedAt         *time.Time
-	UpdatedAt         *time.Time
-}
-
-type AccountContact struct {
-	UserID int64
-	Email  *string
-	Phone  *string
-}
-
-type Account struct {
-	Profile *AccountProfile
-	Contact *AccountContact
 }
 
 type UpdateProfileAccountReq struct {

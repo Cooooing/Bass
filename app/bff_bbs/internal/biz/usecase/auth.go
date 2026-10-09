@@ -24,7 +24,7 @@ func NewAuthUsecase(
 	}
 }
 
-func (u *AuthUsecase) CheckRegistrationAvailability(ctx context.Context, req *repo.CheckRegistrationAvailabilityReq) (*repo.CheckRegistrationAvailabilityResp, error) {
+func (u *AuthUsecase) CheckRegistrationAvailability(ctx context.Context, req *model.CheckRegistrationAvailabilityReq) (*model.CheckRegistrationAvailabilityResp, error) {
 	return u.authRepo.CheckRegistrationAvailability(ctx, req)
 }
 

@@ -4,28 +4,17 @@ import (
 	"context"
 	"time"
 
+	"bff_bbs/internal/biz/model"
 	"bff_bbs/internal/enum"
 )
 
 type AuthRepo interface {
-	CheckRegistrationAvailability(ctx context.Context, req *CheckRegistrationAvailabilityReq) (*CheckRegistrationAvailabilityResp, error)
+	CheckRegistrationAvailability(ctx context.Context, req *model.CheckRegistrationAvailabilityReq) (*model.CheckRegistrationAvailabilityResp, error)
 	Register(ctx context.Context, req *RegisterReq) error
 	Login(ctx context.Context, req *LoginReq) (*LoginResp, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*TokenResp, error)
 	Logout(ctx context.Context, accessToken string) error
 	CancelAccount(ctx context.Context, req *CancelAccountReq) error
-}
-
-type CheckRegistrationAvailabilityReq struct {
-	Name  *string
-	Email *string
-	Phone *string
-}
-
-type CheckRegistrationAvailabilityResp struct {
-	NameAvailable    *bool
-	EmailCanRegister *bool
-	PhoneCanRegister *bool
 }
 
 type RegisterReq struct {
@@ -56,7 +45,7 @@ type TokenResp struct {
 
 type LoginResp struct {
 	Token   TokenResp
-	Account *Account
+	Account *model.Account
 }
 type CancelAccountReq struct {
 	UserID   int64

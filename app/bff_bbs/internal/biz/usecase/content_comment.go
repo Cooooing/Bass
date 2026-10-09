@@ -8,6 +8,7 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
+	"bff_bbs/internal/biz/model"
 	"bff_bbs/internal/biz/repo"
 )
 
@@ -59,7 +60,7 @@ func (u *ContentCommentUsecase) CreateComment(ctx context.Context, req *CreateCo
 		return nil, err
 	}
 	if resp != nil {
-		profiles := []*repo.AccountProfile{resp.User, resp.ReplyUser}
+		profiles := []*model.AccountProfile{resp.User, resp.ReplyUser}
 		assetIDs := make([]int64, 0, len(profiles))
 		seen := map[int64]struct{}{}
 		for _, profile := range profiles {
@@ -180,7 +181,7 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 	if err != nil {
 		return nil, err
 	}
-	profiles := make([]*repo.AccountProfile, 0, len(resp.Rows)*2)
+	profiles := make([]*model.AccountProfile, 0, len(resp.Rows)*2)
 	for _, row := range resp.Rows {
 		if row == nil {
 			continue
@@ -264,7 +265,7 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 	if err != nil {
 		return nil, err
 	}
-	profiles := make([]*repo.AccountProfile, 0, len(resp.Rows)*4)
+	profiles := make([]*model.AccountProfile, 0, len(resp.Rows)*4)
 	for _, row := range resp.Rows {
 		if row == nil {
 			continue
@@ -356,7 +357,7 @@ func (u *ContentCommentUsecase) ListCommentReplies(ctx context.Context, req *Lis
 	if err != nil {
 		return nil, err
 	}
-	profiles := make([]*repo.AccountProfile, 0, len(resp.Rows)*2)
+	profiles := make([]*model.AccountProfile, 0, len(resp.Rows)*2)
 	for _, row := range resp.Rows {
 		if row == nil {
 			continue
@@ -438,7 +439,7 @@ func (u *ContentCommentUsecase) ListCommentTimeline(ctx context.Context, req *Li
 	if err != nil {
 		return nil, err
 	}
-	profiles := make([]*repo.AccountProfile, 0, len(resp.Rows)*2)
+	profiles := make([]*model.AccountProfile, 0, len(resp.Rows)*2)
 	for _, row := range resp.Rows {
 		if row == nil {
 			continue

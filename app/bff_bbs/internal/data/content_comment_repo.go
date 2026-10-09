@@ -1,6 +1,7 @@
 package data
 
 import (
+	"bff_bbs/internal/biz/model"
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
@@ -484,7 +485,7 @@ func (r *ContentCommentClient) commentProfileIDs(item *contentv1.PageComments_Re
 	return userIDs
 }
 
-func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp_Comment, article *contentv1.Article, profiles map[int64]*repo.AccountProfile, state *repo.CommentViewerActionState) *repo.CommentListItem {
+func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp_Comment, article *contentv1.Article, profiles map[int64]*model.AccountProfile, state *repo.CommentViewerActionState) *repo.CommentListItem {
 	if item == nil {
 		return nil
 	}
@@ -527,7 +528,7 @@ func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp
 	return out
 }
 
-func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_Comment, article *contentv1.Article, profiles map[int64]*repo.AccountProfile) *repo.CommentDetail {
+func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_Comment, article *contentv1.Article, profiles map[int64]*model.AccountProfile) *repo.CommentDetail {
 	if item == nil {
 		return nil
 	}
@@ -565,15 +566,15 @@ func (r *ContentCommentClient) commentContentRender(commentID int64, content str
 	return util.LuteEngine.MarkdownStr(fmt.Sprintf("comment_%d", commentID), content)
 }
 
-func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs ...int64) (map[int64]*repo.AccountProfile, error) {
+func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs ...int64) (map[int64]*model.AccountProfile, error) {
 	if r.userClient == nil {
-		return map[int64]*repo.AccountProfile{}, nil
+		return map[int64]*model.AccountProfile{}, nil
 	}
 	ids := lo.Filter(lo.Uniq(userIDs), func(userID int64, _ int) bool {
 		return userID != 0
 	})
 	if len(ids) == 0 {
-		return map[int64]*repo.AccountProfile{}, nil
+		return map[int64]*model.AccountProfile{}, nil
 	}
 	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
 		Query: &userv1.MapAccounts_Req_AccountQuery{
@@ -583,13 +584,13 @@ func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs 
 	if err != nil {
 		return nil, err
 	}
-	out := make(map[int64]*repo.AccountProfile, len(reply.GetAccounts()))
+	out := make(map[int64]*model.AccountProfile, len(reply.GetAccounts()))
 	for userID, account := range reply.GetAccounts() {
 		basic := account.GetBasic()
 		if basic == nil {
 			continue
 		}
-		out[userID] = &repo.AccountProfile{
+		out[userID] = &model.AccountProfile{
 			ID:            basic.GetId(),
 			Name:          basic.GetName(),
 			Nickname:      basic.Nickname,

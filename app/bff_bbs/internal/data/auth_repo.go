@@ -1,6 +1,7 @@
 package data
 
 import (
+	"bff_bbs/internal/biz/model"
 	"common/pkg/client/rpc"
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
@@ -29,7 +30,7 @@ func NewAuthClient(
 	}
 }
 
-func (r *AuthRepo) CheckRegistrationAvailability(ctx context.Context, req *repo.CheckRegistrationAvailabilityReq) (*repo.CheckRegistrationAvailabilityResp, error) {
+func (r *AuthRepo) CheckRegistrationAvailability(ctx context.Context, req *model.CheckRegistrationAvailabilityReq) (*model.CheckRegistrationAvailabilityResp, error) {
 	resp, err := r.userClient.Auth.CheckRegistrationAvailability(ctx, &userv1.CheckRegistrationAvailability_Req{
 		Name:  req.Name,
 		Email: req.Email,
@@ -38,7 +39,7 @@ func (r *AuthRepo) CheckRegistrationAvailability(ctx context.Context, req *repo.
 	if err != nil {
 		return nil, err
 	}
-	return &repo.CheckRegistrationAvailabilityResp{
+	return &model.CheckRegistrationAvailabilityResp{
 		NameAvailable:    resp.NameAvailable,
 		EmailCanRegister: resp.EmailCanRegister,
 		PhoneCanRegister: resp.PhoneCanRegister,
@@ -131,11 +132,11 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 		return nil, err
 	}
 
-	var account *repo.Account
+	var account *model.Account
 	if reply.GetAccount() != nil {
-		account = &repo.Account{}
+		account = &model.Account{}
 		if basic := reply.GetAccount().GetBasic(); basic != nil {
-			account.Profile = &repo.AccountProfile{
+			account.Profile = &model.AccountProfile{
 				ID:            basic.GetId(),
 				Name:          basic.GetName(),
 				Nickname:      basic.Nickname,
@@ -155,7 +156,7 @@ func (r *AuthRepo) Login(ctx context.Context, req *repo.LoginReq) (*repo.LoginRe
 			}
 		}
 		if contact := reply.GetAccount().GetContact(); contact != nil {
-			account.Contact = &repo.AccountContact{
+			account.Contact = &model.AccountContact{
 				UserID: contact.GetUserId(),
 				Email:  contact.Email,
 				Phone:  contact.Phone,

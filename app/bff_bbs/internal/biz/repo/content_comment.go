@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"bff_bbs/internal/biz/model"
 	commonmodel "common/pkg/model"
 	"context"
 	"time"
@@ -31,8 +32,8 @@ type CommentListItem struct {
 	LikeCount         int32
 	ReplyCount        int32
 	ViewerActionState *CommentViewerActionState
-	User              *AccountProfile
-	ReplyUser         *AccountProfile
+	User              *model.AccountProfile
+	ReplyUser         *model.AccountProfile
 	CreatedBy         *int64
 	UpdatedBy         *int64
 	CreatedAt         *time.Time
@@ -53,8 +54,8 @@ type CommentDetail struct {
 	LikeCount         int32
 	ReplyCount        int32
 	ViewerActionState *CommentViewerActionState
-	User              *AccountProfile
-	ReplyUser         *AccountProfile
+	User              *model.AccountProfile
+	ReplyUser         *model.AccountProfile
 	CreatedBy         *int64
 	UpdatedBy         *int64
 	CreatedAt         *time.Time

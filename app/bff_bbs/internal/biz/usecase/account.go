@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"bff_bbs/internal/biz/model"
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
@@ -262,7 +263,7 @@ func (u *AccountUsecase) profileListItems(ctx context.Context, viewerID int64, u
 	return rows, nil
 }
 
-func (*AccountUsecase) accountProfile(account *repo.AccountProfile) *bbsuserv1.AccountProfile {
+func (*AccountUsecase) accountProfile(account *model.AccountProfile) *bbsuserv1.AccountProfile {
 	if account == nil {
 		return nil
 	}

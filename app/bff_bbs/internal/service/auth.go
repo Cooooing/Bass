@@ -15,7 +15,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"bff_bbs/internal/biz/repo"
+	"bff_bbs/internal/biz/model"
 	"bff_bbs/internal/biz/usecase"
 	"bff_bbs/internal/enum"
 
@@ -54,7 +54,7 @@ func (s *AuthService) CheckRegistrationAvailability(ctx context.Context, req *bb
 	if req == nil || (req.Name == nil && req.Email == nil && req.Phone == nil) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	availabilityReq := &repo.CheckRegistrationAvailabilityReq{}
+	availabilityReq := &model.CheckRegistrationAvailabilityReq{}
 	if req.Name != nil {
 		name, err := s.normalizeName(req.GetName())
 		if err != nil {

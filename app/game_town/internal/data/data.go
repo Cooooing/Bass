@@ -3,6 +3,7 @@ package data
 import (
 	commonClient "common/pkg/client"
 	"common/proto/gen/common"
+
 	"game_town/internal/config"
 	"game_town/internal/data/client"
 	"game_town/internal/data/repo"

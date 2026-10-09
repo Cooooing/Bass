@@ -15,14 +15,16 @@ func formatEventLine(event *v1.WatchGameTownEvents_Resp) string {
 	}
 	if len(event.GetSuggestedActions()) > 0 {
 		line += "\n  可选回答："
+		var lineSb18 strings.Builder
 		for index, action := range event.GetSuggestedActions() {
 			label := strings.TrimSpace(action.GetLabel())
 			content := strings.TrimSpace(action.GetContent())
 			if label == "" {
 				label = content
 			}
-			line += fmt.Sprintf("\n  %d. %s", index+1, label)
+			lineSb18.WriteString(fmt.Sprintf("\n  %d. %s", index+1, label))
 		}
+		line += lineSb18.String()
 		line += "\n  也可以直接输入任何内容。"
 	}
 	return line

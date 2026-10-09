@@ -8,12 +8,14 @@ import (
 	"common/pkg/apperror"
 	utilent "common/pkg/util/ent"
 	cerrors "common/proto/gen/common/errors"
+
+	"github.com/samber/lo"
+
 	"game_town/internal/biz/model"
 	bizrepo "game_town/internal/biz/repo"
 	"game_town/internal/data/gen"
 	"game_town/internal/data/gen/faction"
 	"game_town/internal/enum"
-	"github.com/samber/lo"
 )
 
 var _ bizrepo.FactionRepo = (*FactionRepo)(nil)

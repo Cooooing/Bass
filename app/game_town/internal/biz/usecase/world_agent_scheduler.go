@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"common/pkg/constant"
+
 	"game_town/internal/biz/model"
 	"game_town/internal/biz/repo"
 	"game_town/internal/enum"
@@ -270,7 +271,7 @@ func (r *WorldAgentRunner) fairAgentJobs(jobs []*model.AgentJob, cursor *int) []
 		remaining := true
 		for remaining {
 			remaining = false
-			for offset := 0; offset < len(worldOrder); offset++ {
+			for offset := range len(worldOrder) {
 				worldID := worldOrder[(start+offset)%len(worldOrder)]
 				bucket := buckets[worldID]
 				if len(bucket) == 0 {
@@ -308,10 +309,7 @@ func (r *WorldAgentRunner) promoteOverdueTickJobs(jobs []*model.AgentJob, now ti
 }
 
 func (r *WorldAgentRunner) splitOverdueTickJobs(jobs []*model.AgentJob, now time.Time) ([]*model.AgentJob, []*model.AgentJob) {
-	threshold := r.tickInterval() / 2
-	if threshold < 30*time.Second {
-		threshold = 30 * time.Second
-	}
+	threshold := max(r.tickInterval()/2, 30*time.Second)
 
 	promoted := make([]*model.AgentJob, 0)
 	remaining := make([]*model.AgentJob, 0, len(jobs))

@@ -325,11 +325,9 @@ func joinPlayers(ctx context.Context, client *rpc.GameTownClient, state *runStat
 func startWatchers(ctx context.Context, wg *sync.WaitGroup, client *rpc.GameTownClient, state *runState, retryDelay time.Duration) {
 	for _, player := range state.players {
 		playerID := player.id
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			watchPlayer(ctx, client, state, playerID, retryDelay)
-		}()
+		})
 	}
 }
 
@@ -555,7 +553,7 @@ func npcTalkAction(ctx context.Context, client *rpc.GameTownClient, state *runSt
 
 func waitAsyncSettled(ctx context.Context, client *rpc.GameTownClient, state *runState, conf config) error {
 	if !conf.strict {
-		for i := 0; i < 3; i++ {
+		for range 3 {
 			if err := collectEvents(ctx, client, state); err != nil {
 				return err
 			}

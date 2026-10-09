@@ -98,7 +98,7 @@ func showPlayerCharacter(ctx context.Context, client *rpc.GameTownClient, player
 			lines: lines,
 		}
 	}
-	lines = append(lines, fmt.Sprintf("character=%s", member.GetCharacterName()))
+	lines = append(lines, "character="+member.GetCharacterName())
 	if member.GetCharacterGoal() != "" {
 		lines = append(lines, "goal: "+member.GetCharacterGoal())
 	}
@@ -253,7 +253,7 @@ func movePlayer(ctx context.Context, client *rpc.GameTownClient, playerID, world
 			lines: lines,
 		}
 	}
-	content := fmt.Sprintf("移动到 %s", location.GetName())
+	content := "移动到 " + location.GetName()
 	targets := []*v1.SubmitGameTownAction_Request_EntityRef{{Type: v1enum.GameTownEntityType_GAME_TOWN_ENTITY_TYPE_LOCATION, Id: location.GetId()}}
 	return submitAction(ctx, client, playerID, worldID, content, targets)
 }

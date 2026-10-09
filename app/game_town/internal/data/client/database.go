@@ -10,6 +10,7 @@ import (
 
 	"common/pkg/client/driver"
 	"common/pkg/constant"
+
 	"game_town/internal/config"
 	"game_town/internal/data/gen"
 	"game_town/internal/data/gen/migrate"

@@ -3,9 +3,10 @@ package repo
 import (
 	commonmodel "common/pkg/model"
 	"context"
+	"time"
+
 	"game_town/internal/biz/model"
 	"game_town/internal/enum"
-	"time"
 )
 
 type AgentJobRepo interface {

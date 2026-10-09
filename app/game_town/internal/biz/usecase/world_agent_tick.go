@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"common/pkg/constant"
+
 	"game_town/internal/biz/model"
 	"game_town/internal/biz/repo"
 	"game_town/internal/enum"
@@ -64,10 +65,7 @@ func (r *WorldAgentRunner) armWorldTimer(ctx context.Context, worldID int64, due
 	if dueAt == nil {
 		return
 	}
-	delay := time.Until(*dueAt)
-	if delay < time.Second {
-		delay = time.Second
-	}
+	delay := max(time.Until(*dueAt), time.Second)
 
 	r.tickMu.Lock()
 	if timer := r.tickTimers[worldID]; timer != nil {

@@ -3,10 +3,11 @@ package usecase
 import (
 	commonmodel "common/pkg/model"
 	"context"
+	"time"
+
 	"game_town/internal/biz/model"
 	"game_town/internal/biz/repo"
 	"game_town/internal/enum"
-	"time"
 )
 
 type EventUsecase struct {

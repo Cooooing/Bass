@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"common/pkg/constant"
+
 	"game_town/internal/biz/model"
 	"game_town/internal/biz/repo"
 	"game_town/internal/enum"
@@ -637,10 +638,7 @@ func (r *WorldAgentRunner) scheduleRetryPersistence(result *agentResult, delay t
 	if result == nil || result.job == nil || attempt > 6 {
 		return
 	}
-	wait := time.Duration(attempt) * r.retryDelay()
-	if wait > 30*time.Second {
-		wait = 30 * time.Second
-	}
+	wait := min(time.Duration(attempt)*r.retryDelay(), 30*time.Second)
 	time.AfterFunc(wait, func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()

@@ -3,8 +3,9 @@ package repo
 import (
 	commonmodel "common/pkg/model"
 	"context"
-	"game_town/internal/biz/model"
 	"time"
+
+	"game_town/internal/biz/model"
 )
 
 type WorldStateRepo interface {

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common.api.app.scheduler.v1;
+
+option go_package = "common/proto/gen/scheduler/v1/enum;enum";
+
+enum SchedulerMessageHandleAction {
+  SCHEDULER_MESSAGE_HANDLE_ACTION_UNSPECIFIED = 0;
+  SCHEDULER_MESSAGE_HANDLE_ACTION_COMPLETE = 1;
+  SCHEDULER_MESSAGE_HANDLE_ACTION_RETRY = 2;
+  SCHEDULER_MESSAGE_HANDLE_ACTION_DISCARD = 3;
+}

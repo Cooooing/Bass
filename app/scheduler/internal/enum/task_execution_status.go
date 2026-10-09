@@ -11,12 +11,12 @@ type TaskExecutionStatus string
 const (
 	TaskExecutionStatusPending      TaskExecutionStatus = "pending"       // pending
 	TaskExecutionStatusRunning      TaskExecutionStatus = "running"       // running
-	TaskExecutionStatusRetryPending TaskExecutionStatus = "retry_pending" // retry_pending
 	TaskExecutionStatusSuccess      TaskExecutionStatus = "success"       // success
 	TaskExecutionStatusFailed       TaskExecutionStatus = "failed"        // failed
 	TaskExecutionStatusTimeout      TaskExecutionStatus = "timeout"       // timeout
 	TaskExecutionStatusCanceled     TaskExecutionStatus = "canceled"      // canceled
 	TaskExecutionStatusSkipped      TaskExecutionStatus = "skipped"       // skipped
+	TaskExecutionStatusRetryPending TaskExecutionStatus = "retry_pending" // retry_pending
 )
 
 // TaskExecutionStatusMap 将内部任务执行状态映射到 proto 枚举。
@@ -24,12 +24,12 @@ var TaskExecutionStatusMap = commonenum.NewMapping[TaskExecutionStatus, schedule
 	map[TaskExecutionStatus]commonenum.Entry[TaskExecutionStatus, schedulerv1.SchedulerTaskExecutionStatus]{
 		TaskExecutionStatusPending:      {Proto: schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_PENDING},
 		TaskExecutionStatusRunning:      {Proto: schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_RUNNING},
-		TaskExecutionStatusRetryPending: {Proto: schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_RETRY_PENDING},
 		TaskExecutionStatusSuccess:      {Proto: schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_SUCCESS},
 		TaskExecutionStatusFailed:       {Proto: schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_FAILED},
 		TaskExecutionStatusTimeout:      {Proto: schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_TIMEOUT},
 		TaskExecutionStatusCanceled:     {Proto: schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_CANCELED},
 		TaskExecutionStatusSkipped:      {Proto: schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_SKIPPED},
+		TaskExecutionStatusRetryPending: {Proto: schedulerv1.SchedulerTaskExecutionStatus_SCHEDULER_TASK_EXECUTION_STATUS_RETRY_PENDING},
 	},
 )
 

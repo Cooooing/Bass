@@ -36,7 +36,7 @@ func NewAccountService(
 ) *AccountService {
 	return &AccountService{
 		accountUsecase: accountUsecase,
-		phoneRe:        regexp.MustCompile("^1[3-9]\\d{9}$"),
+		phoneRe:        regexp.MustCompile(`^1[3-9]\d{9}$`),
 		codeRe:         regexp.MustCompile("^[A-Za-z0-9]{6}$"),
 		mbtiRe:         regexp.MustCompile("^[EI][NS][TF][JP](?:-[AT])?$"),
 	}

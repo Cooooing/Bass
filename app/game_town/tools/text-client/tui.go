@@ -47,7 +47,7 @@ var eventStyle = lipgloss.NewStyle().
 var errorStyle = lipgloss.NewStyle().
 	Foreground(lipgloss.Color("196"))
 
-func newModel(ctx context.Context, client *rpc.GameTownClient, target string) model {
+func newModel(ctx context.Context, client *rpc.GameTownClient, target string) *model {
 	input := textinput.New()
 	input.Placeholder = "输入 /help 查看命令"
 	input.Focus()
@@ -57,7 +57,7 @@ func newModel(ctx context.Context, client *rpc.GameTownClient, target string) mo
 
 	spin := spinner.New()
 	spin.Spinner = spinner.Dot
-	result := model{
+	result := &model{
 		ctx:          ctx,
 		client:       client,
 		target:       target,
@@ -74,11 +74,11 @@ func newModel(ctx context.Context, client *rpc.GameTownClient, target string) mo
 	return result
 }
 
-func (m model) Init() tea.Cmd {
+func (m *model) Init() tea.Cmd {
 	return tea.Batch(textinput.Blink, m.spinner.Tick)
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.viewport.Width = max(1, msg.Width-2)
@@ -102,7 +102,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m model) updateKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
+func (m *model) updateKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	switch msg.String() {
 	case "ctrl+c":
 		m.stopWatch()
@@ -147,7 +147,7 @@ func (m model) updateKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 	}
 }
 
-func (m model) updateCommandResult(result commandResult) (tea.Model, tea.Cmd) {
+func (m *model) updateCommandResult(result commandResult) (tea.Model, tea.Cmd) {
 	m.busy = false
 	if result.err != nil {
 		m.lines = append(
@@ -189,7 +189,7 @@ func (m model) updateCommandResult(result commandResult) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m model) updateEventResult(result eventResult) (tea.Model, tea.Cmd) {
+func (m *model) updateEventResult(result eventResult) (tea.Model, tea.Cmd) {
 	if result.err != nil {
 		m.lines = append(
 			m.lines,
@@ -214,7 +214,7 @@ func (m model) updateEventResult(result eventResult) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 
-func (m model) View() string {
+func (m *model) View() string {
 	status := fmt.Sprintf(
 		"player=%d world=%d seq=%d dialog_npc=%d suggestions=%d",
 		m.playerID,
@@ -232,7 +232,7 @@ func (m model) View() string {
 		"\n" + m.input.View()
 }
 
-func (m model) previousHistory() {
+func (m *model) previousHistory() {
 	if len(m.history) == 0 {
 		return
 	}
@@ -245,7 +245,7 @@ func (m model) previousHistory() {
 	m.input.CursorEnd()
 }
 
-func (m model) nextHistory() {
+func (m *model) nextHistory() {
 	if m.historyIndex >= 0 &&
 		m.historyIndex < len(m.history)-1 {
 		m.historyIndex++
@@ -257,12 +257,12 @@ func (m model) nextHistory() {
 	m.input.SetValue("")
 }
 
-func (m model) refresh() {
+func (m *model) refresh() {
 	m.viewport.SetContent(strings.Join(m.lines, "\n"))
 	m.viewport.GotoBottom()
 }
 
-func (m model) stopWatch() {
+func (m *model) stopWatch() {
 	if m.watchCancel == nil {
 		return
 	}

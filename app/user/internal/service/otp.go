@@ -39,7 +39,7 @@ func NewOtpService(
 		totpUsecase:     totpUsecase,
 		emailOtpUsecase: emailOtpUsecase,
 		smsOtpUsecase:   smsOtpUsecase,
-		phoneRe:         regexp.MustCompile("^1[3-9]\\d{9}$"),
+		phoneRe:         regexp.MustCompile(`^1[3-9]\d{9}$`),
 	}
 }
 

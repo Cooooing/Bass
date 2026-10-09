@@ -22,7 +22,7 @@ func formatEventLine(event *v1.WatchGameTownEvents_Resp) string {
 			if label == "" {
 				label = content
 			}
-			lineSb18.WriteString(fmt.Sprintf("\n  %d. %s", index+1, label))
+			_, _ = fmt.Fprintf(&lineSb18, "\n  %d. %s", index+1, label)
 		}
 		line += lineSb18.String()
 		line += "\n  也可以直接输入任何内容。"

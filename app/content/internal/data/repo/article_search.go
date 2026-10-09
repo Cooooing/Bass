@@ -91,7 +91,7 @@ func (*PostgresArticleSearchRepo) escapeLike(value string) string {
 func (*PostgresArticleSearchRepo) matchesLiteral(pattern string) func(*sql.Selector) {
 	return func(selector *sql.Selector) {
 		selector.Where(sql.P(func(builder *sql.Builder) {
-			builder.Nested(func(builder *sql.Builder) {
+			builder.Wrap(func(builder *sql.Builder) {
 				builder.Ident(articleent.FieldTitle).
 					WriteString(" ILIKE ").
 					Arg(pattern).

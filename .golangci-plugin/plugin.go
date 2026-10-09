@@ -459,13 +459,17 @@ func protoConsts(file *ast.File, typeName string) []string {
 				continue
 			}
 			for _, name := range value.Names {
-				if !strings.HasSuffix(name.Name, "_UNSPECIFIED") {
+				if !isProtoZeroValue(name.Name) {
 					values = append(values, name.Name)
 				}
 			}
 		}
 	}
 	return values
+}
+
+func isProtoZeroValue(name string) bool {
+	return strings.HasSuffix(name, "_UNSPECIFIED") || strings.HasSuffix(name, "_UNKNOWN")
 }
 
 func isGeneratedFile(filename string) bool {

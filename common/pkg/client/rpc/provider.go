@@ -19,7 +19,6 @@ var LocalProviderSet = wire.NewSet(
 	ProvideLocalPlatformClient,
 	ProvideLocalPushHubClient,
 	ProvideLocalSchedulerClient,
-	ProvideLocalGameTownClient,
 	ProvideLocalGameIdleClient,
 )
 
@@ -53,10 +52,6 @@ func ProvidePushHubClient(consul *client.ConsulClient) (*PushHubClient, error) {
 
 func ProvideSchedulerClient(consul *client.ConsulClient) (*SchedulerClient, error) {
 	return newServiceClient(consul, constant.SchedulerServiceName.String(), NewSchedulerClient)
-}
-
-func ProvideGameTownClient(consul *client.ConsulClient) (*GameTownClient, error) {
-	return newServiceClient(consul, constant.GameTownServiceName.String(), NewGameTownClient)
 }
 
 func ProvideGameIdleClient(consul *client.ConsulClient) (*GameIdleClient, error) {
@@ -102,10 +97,6 @@ func ProvideLocalPushHubClient(clients *commonmodule.Clients) (*PushHubClient, e
 
 func ProvideLocalSchedulerClient(clients *commonmodule.Clients) (*SchedulerClient, error) {
 	return commonmodule.Client[*SchedulerClient](clients)
-}
-
-func ProvideLocalGameTownClient(clients *commonmodule.Clients) (*GameTownClient, error) {
-	return commonmodule.Client[*GameTownClient](clients)
 }
 
 func ProvideLocalGameIdleClient(clients *commonmodule.Clients) (*GameIdleClient, error) {

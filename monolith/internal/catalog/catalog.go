@@ -5,7 +5,6 @@ import (
 	commonmodule "common/pkg/module"
 	contentmodule "content/module"
 	economymodule "economy/module"
-	gametownmodule "game_town/module"
 	immodule "im/module"
 	notifymodule "notify/module"
 	platformmodule "platform/module"
@@ -20,7 +19,6 @@ var Descriptors = []commonmodule.Descriptor{
 	Named("bff_bbs", bffbbsmodule.Descriptor()),
 	Named("content", contentmodule.Descriptor()),
 	Named("economy", economymodule.Descriptor()),
-	Named("game_town", gametownmodule.Descriptor()),
 	Named("im", immodule.Descriptor()),
 	Named("notify", notifymodule.Descriptor()),
 	Named("platform", platformmodule.Descriptor()),

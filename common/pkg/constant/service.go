@@ -12,7 +12,6 @@ const (
 	PushNodeServiceName  ServiceName = "push_node"
 	PlatformServiceName  ServiceName = "platform"
 	SchedulerServiceName ServiceName = "scheduler"
-	GameTownServiceName  ServiceName = "game_town"
 	GameIdleServiceName  ServiceName = "game_idle"
 )
 
@@ -36,7 +35,6 @@ const (
 	TablePrefixPushNode  TablePrefix = TablePrefix(PushNodeServiceName + "_")
 	TablePrefixPlatform  TablePrefix = TablePrefix(PlatformServiceName + "_")
 	TablePrefixScheduler TablePrefix = TablePrefix(SchedulerServiceName + "_")
-	TablePrefixGameTown  TablePrefix = TablePrefix(GameTownServiceName + "_")
 	TablePrefixGameIdle  TablePrefix = TablePrefix(GameIdleServiceName + "_")
 )
 

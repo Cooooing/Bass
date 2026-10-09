@@ -6,7 +6,6 @@ require (
 	bff_bbs v0.0.0
 	common v0.0.0
 	economy v0.0.0-00010101000000-000000000000
-	game_town v0.0.0-00010101000000-000000000000
 	github.com/go-kratos/kratos/contrib/middleware/validate/v3 v3.0.0-20260626125723-668db92c2c00
 	github.com/go-kratos/kratos/v3 v3.0.0
 	github.com/google/wire v0.7.0
@@ -22,21 +21,15 @@ require (
 )
 
 require (
-	github.com/BurntSushi/toml v1.6.0 // indirect
-	github.com/alex-ant/gomath v0.0.0-20160516115720-89013a210a82 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
-	github.com/gammazero/toposort v0.1.1 // indirect
-	github.com/gofrs/flock v0.13.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.11 // indirect
 	github.com/klauspost/crc32 v1.3.0 // indirect
 	github.com/lionsoul2014/ip2region/binding/golang v0.0.0-20260228072606-e373f9231295 // indirect
 	github.com/minio/crc64nvme v1.1.1 // indirect
 	github.com/minio/md5-simd v1.1.2 // indirect
 	github.com/minio/minio-go/v7 v7.2.1 // indirect
-	github.com/pgvector/pgvector-go v0.3.0 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/prometheus/client_golang v1.23.2 // indirect
-	github.com/qiniu/go-sdk/v7 v7.26.10 // indirect
 	github.com/rs/xid v1.6.0 // indirect
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.3.102 // indirect
 	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.3.93 // indirect
@@ -46,7 +39,6 @@ require (
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df // indirect
 	gopkg.in/ini.v1 v1.67.2 // indirect
-	modernc.org/fileutil v1.0.0 // indirect
 )
 
 require (
@@ -173,8 +165,6 @@ replace user => ../app/user
 replace content => ../app/content
 
 replace economy => ../app/economy
-
-replace game_town => ../app/game_town
 
 replace im => ../app/im
 

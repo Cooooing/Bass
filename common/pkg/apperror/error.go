@@ -68,14 +68,6 @@ func CommonInvalidArgument() *kratoserrors.Error {
 	return New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 }
 
-func GameTownWorldInvalid() *kratoserrors.Error {
-	return New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_INVALID)
-}
-
-func GameTownWorldInvalidMessage(message string) *kratoserrors.Error {
-	return NewMessage(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_GAME_TOWN_WORLD_INVALID, message)
-}
-
 func BusinessCode(err error) (cerrors.BusinessErrorCode, bool) {
 	se := kratoserrors.FromError(err)
 	if se == nil {

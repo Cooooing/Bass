@@ -18,7 +18,6 @@ formatters:
         - content
         - economy
         - game_idle
-        - game_town
         - im
         - notify
         - platform

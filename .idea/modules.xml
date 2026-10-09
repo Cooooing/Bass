@@ -10,7 +10,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/economy/economy.iml" filepath="$PROJECT_DIR$/app/economy/economy.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/game_idle/game_idle.iml" filepath="$PROJECT_DIR$/app/game_idle/game_idle.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/bff_game_idle/bff_game_idle.iml" filepath="$PROJECT_DIR$/app/bff_game_idle/bff_game_idle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/game_town/game_town.iml" filepath="$PROJECT_DIR$/app/game_town/game_town.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/im/im.iml" filepath="$PROJECT_DIR$/app/im/im.iml" />
       <module fileurl="file://$PROJECT_DIR$/monolith/monolith.iml" filepath="$PROJECT_DIR$/monolith/monolith.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/notify/notify.iml" filepath="$PROJECT_DIR$/app/notify/notify.iml" />

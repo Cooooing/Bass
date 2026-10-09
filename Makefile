@@ -79,10 +79,7 @@ sdk-clean:
 
 .PHONY: lint
 lint:
-	@for module in $(BFF_SERVERS); do \
-		echo "---- [$$module] ----"; \
-		$(MAKE) -C $(APP_DIR)/$$module lint IGNORE_ERROR=$(IGNORE_ERROR) || exit 1; \
-	done
+	@$(foreach module,$(MODULES),echo "---- [$(module)] ----" && $(MAKE) -C $(APP_DIR)/$(module) lint IGNORE_ERROR=$(IGNORE_ERROR) && ) echo "[lint] all app modules passed"
 
 # --- Help ---
 .PHONY: help
@@ -108,7 +105,7 @@ help:
 	@echo "  wire / wire-clean     - generate / clean Wire injection code"
 	@echo "  lint                  - auto-fix then report unresolved issues"
 	@echo ""
-	@echo "Ent module only (content, economy, game_idle, game_town, im, notify, platform, scheduler, user):"
+	@echo "Ent module only (content, economy, game_idle, im, notify, platform, scheduler, user):"
 	@echo "  ent / ent-clean       - generate / clean Ent data-access code"
 	@echo ""
 	@echo "BFF module only (make -C app/<bff> <target>):"

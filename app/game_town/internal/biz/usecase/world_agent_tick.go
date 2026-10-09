@@ -354,17 +354,6 @@ func (r *WorldAgentRunner) tickInterval() time.Duration {
 	return 5 * time.Minute
 }
 
-func (r *WorldAgentRunner) tickScanInterval() time.Duration {
-	interval := r.tickInterval() / 4
-	if interval < time.Second {
-		return time.Second
-	}
-	if interval > 15*time.Second {
-		return 15 * time.Second
-	}
-	return interval
-}
-
 func (r *WorldAgentRunner) uint32Value(values map[string]any, key string) uint32 {
 	value, ok := values[key].(float64)
 	if !ok {

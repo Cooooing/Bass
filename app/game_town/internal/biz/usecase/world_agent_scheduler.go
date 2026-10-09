@@ -300,14 +300,6 @@ func (r *WorldAgentRunner) orderDispatchJobs(jobs []*model.AgentJob, now time.Ti
 	return ordered
 }
 
-func (r *WorldAgentRunner) promoteOverdueTickJobs(jobs []*model.AgentJob, now time.Time) []*model.AgentJob {
-	promoted, remaining := r.splitOverdueTickJobs(jobs, now)
-	if len(promoted) == 0 {
-		return jobs
-	}
-	return append(promoted, remaining...)
-}
-
 func (r *WorldAgentRunner) splitOverdueTickJobs(jobs []*model.AgentJob, now time.Time) ([]*model.AgentJob, []*model.AgentJob) {
 	threshold := max(r.tickInterval()/2, 30*time.Second)
 

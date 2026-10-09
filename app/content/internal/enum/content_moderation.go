@@ -21,32 +21,6 @@ var ContentModerationTargetMap = enum.NewMapping[ContentModerationTarget, v1.Con
 	ContentModerationTargetPostscript: {Proto: v1.ContentModerationTarget_CONTENT_MODERATION_TARGET_POSTSCRIPT},
 })
 
-// ContentModerationAction 表示内容管理处置动作。
-type ContentModerationAction string
-
-const (
-	ContentModerationActionHide    ContentModerationAction = "hide"    // ContentModerationActionHide 表示管理隐藏内容。
-	ContentModerationActionUnhide  ContentModerationAction = "unhide"  // ContentModerationActionUnhide 表示取消管理隐藏。
-	ContentModerationActionLock    ContentModerationAction = "lock"    // ContentModerationActionLock 表示管理锁定内容。
-	ContentModerationActionUnlock  ContentModerationAction = "unlock"  // ContentModerationActionUnlock 表示取消管理锁定。
-	ContentModerationActionDelete  ContentModerationAction = "delete"  // ContentModerationActionDelete 表示管理删除内容。
-	ContentModerationActionRestore ContentModerationAction = "restore" // ContentModerationActionRestore 表示恢复已删除内容。
-)
-
-// ContentModerationActionMap 维护内容管理动作内部枚举与 proto 枚举的映射。
-var ContentModerationActionMap = enum.NewMapping[ContentModerationAction, v1.ContentModerationAction](map[ContentModerationAction]enum.Entry[ContentModerationAction, v1.ContentModerationAction]{
-	ContentModerationActionHide:    {Proto: v1.ContentModerationAction_CONTENT_MODERATION_ACTION_HIDE},
-	ContentModerationActionUnhide:  {Proto: v1.ContentModerationAction_CONTENT_MODERATION_ACTION_UNHIDE},
-	ContentModerationActionLock:    {Proto: v1.ContentModerationAction_CONTENT_MODERATION_ACTION_LOCK},
-	ContentModerationActionUnlock:  {Proto: v1.ContentModerationAction_CONTENT_MODERATION_ACTION_UNLOCK},
-	ContentModerationActionDelete:  {Proto: v1.ContentModerationAction_CONTENT_MODERATION_ACTION_DELETE},
-	ContentModerationActionRestore: {Proto: v1.ContentModerationAction_CONTENT_MODERATION_ACTION_RESTORE},
-})
-
-func (e ContentModerationAction) String() string {
-	return string(e)
-}
-
 func (e ContentModerationTarget) String() string {
 	return string(e)
 }

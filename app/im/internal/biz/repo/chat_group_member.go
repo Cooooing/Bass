@@ -3,8 +3,9 @@ package repo
 import (
 	commonmodel "common/pkg/model"
 	"context"
-	"im/internal/biz/model"
 	"time"
+
+	"im/internal/biz/model"
 )
 
 type ChatGroupMemberRepo interface {

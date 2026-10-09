@@ -5,10 +5,11 @@ import (
 	"common/pkg/constant"
 	"context"
 	"fmt"
+	"log/slog"
+
 	"im/internal/config"
 	"im/internal/data/gen"
 	"im/internal/data/gen/migrate"
-	"log/slog"
 
 	_ "im/internal/data/gen/runtime"
 

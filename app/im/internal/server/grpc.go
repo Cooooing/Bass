@@ -4,9 +4,10 @@ import (
 	commonClient "common/pkg/client"
 	"common/pkg/server"
 	"fmt"
-	"im/internal/config"
 	"log/slog"
 	"time"
+
+	"im/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 

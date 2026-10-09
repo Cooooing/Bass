@@ -7,6 +7,7 @@ import (
 
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
+
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 	"im/internal/enum"

@@ -1,8 +1,9 @@
 package model
 
 import (
-	"im/internal/enum"
 	"time"
+
+	"im/internal/enum"
 )
 
 type ChatGroupMember struct {

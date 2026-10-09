@@ -5,8 +5,9 @@ import (
 	"common/pkg/constant"
 	"common/pkg/server"
 	"fmt"
-	"im/internal/config"
 	"log/slog"
+
+	"im/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"

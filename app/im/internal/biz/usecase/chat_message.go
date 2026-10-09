@@ -3,10 +3,11 @@ package usecase
 import (
 	commonmodel "common/pkg/model"
 	"context"
+	"log/slog"
+
 	"im/internal/biz/model"
 	"im/internal/biz/repo"
 	"im/internal/enum"
-	"log/slog"
 )
 
 type ChatMessageUsecase struct {

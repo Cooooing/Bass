@@ -177,7 +177,6 @@ func (u *IpResolutionUsecase) uploadIpDataToLocal(ctx context.Context, ipv4Conte
 		return nil
 	}
 
-	cachePolicy := service.VIndexCache
 	cachePolicy, err := service.CachePolicyFromName(strings.ToLower(strings.TrimSpace(ipData.GetCachePolicy())))
 	if err != nil {
 		return fmt.Errorf("invalid ip data cache policy: %s", ipData.GetCachePolicy())

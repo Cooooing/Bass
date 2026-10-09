@@ -26,7 +26,7 @@ func NewChatRepo(gameIdleClient *rpc.GameIdleClient) repo.ChatRepo {
 }
 
 func (r *ChatRepo) Send(ctx context.Context, req *repo.SendChatMessageReq) (*model.WebSocketChatMessage, error) {
-	channelType := gameidleenum.ChatChannelType_CHAT_CHANNEL_TYPE_UNSPECIFIED
+	var channelType gameidleenum.ChatChannelType
 	switch req.ChannelType {
 	case "world":
 		channelType = gameidleenum.ChatChannelType_CHAT_CHANNEL_TYPE_WORLD
@@ -61,7 +61,7 @@ func (r *ChatRepo) Send(ctx context.Context, req *repo.SendChatMessageReq) (*mod
 }
 
 func (r *ChatRepo) List(ctx context.Context, req *repo.ListChatMessagesReq) ([]*model.WebSocketChatMessage, error) {
-	channelType := gameidleenum.ChatChannelType_CHAT_CHANNEL_TYPE_UNSPECIFIED
+	var channelType gameidleenum.ChatChannelType
 	switch req.ChannelType {
 	case "world":
 		channelType = gameidleenum.ChatChannelType_CHAT_CHANNEL_TYPE_WORLD

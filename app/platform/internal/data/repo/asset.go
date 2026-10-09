@@ -67,7 +67,7 @@ func (r *AssetRepo) Get(ctx context.Context, id int64) (*model.Asset, error) {
 	if err != nil {
 		return nil, err
 	}
-	return assetModel(entity), nil
+	return r.assetModel(entity), nil
 }
 
 func (r *AssetRepo) GetByHash(ctx context.Context, hash string) (*model.Asset, error) {
@@ -78,7 +78,7 @@ func (r *AssetRepo) GetByHash(ctx context.Context, hash string) (*model.Asset, e
 	if err != nil {
 		return nil, err
 	}
-	return assetModel(entity), nil
+	return r.assetModel(entity), nil
 }
 
 func (r *AssetRepo) Map(ctx context.Context, ids []int64) (map[int64]*model.Asset, error) {
@@ -91,7 +91,7 @@ func (r *AssetRepo) Map(ctx context.Context, ids []int64) (map[int64]*model.Asse
 		return nil, err
 	}
 	for _, entity := range entities {
-		result[entity.ID] = assetModel(entity)
+		result[entity.ID] = r.assetModel(entity)
 	}
 	return result, nil
 }
@@ -107,7 +107,7 @@ func (r *AssetRepo) Block(ctx context.Context, id int64, reason string, operator
 	return err
 }
 
-func assetModel(entity *gen.Asset) *model.Asset {
+func (*AssetRepo) assetModel(entity *gen.Asset) *model.Asset {
 	if entity == nil {
 		return nil
 	}

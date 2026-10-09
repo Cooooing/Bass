@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 
-	"platform/internal/biz/repo"
 	"platform/internal/biz/usecase"
 )
 
@@ -11,24 +10,21 @@ import (
 // lifecycle. It has no HTTP or gRPC endpoint and is intentionally invisible
 // to external callers.
 type AssetEventConsumerServer struct {
-	assetEventConsumer repo.AssetUploadEventConsumer
-	assetUsecase       *usecase.AssetUsecase
+	assetUsecase *usecase.AssetUsecase
 }
 
 func NewAssetEventConsumerServer(
-	assetEventConsumer repo.AssetUploadEventConsumer,
 	assetUsecase *usecase.AssetUsecase,
 ) *AssetEventConsumerServer {
 	return &AssetEventConsumerServer{
-		assetEventConsumer: assetEventConsumer,
-		assetUsecase:       assetUsecase,
+		assetUsecase: assetUsecase,
 	}
 }
 
 func (s *AssetEventConsumerServer) Start(ctx context.Context) error {
-	return s.assetEventConsumer.Consume(ctx, s.assetUsecase.RecordAssetUploadEvent)
+	return s.assetUsecase.StartConsumer(ctx)
 }
 
 func (s *AssetEventConsumerServer) Stop(ctx context.Context) error {
-	return s.assetEventConsumer.Stop(ctx)
+	return s.assetUsecase.StopConsumer(ctx)
 }

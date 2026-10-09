@@ -22,6 +22,7 @@ var sha256Pattern = regexp.MustCompile(`^[a-f0-9]{64}$`)
 type AssetUsecase struct {
 	assetRepo            repo.AssetRepo
 	storageClient        repo.StorageClient
+	assetEventConsumer   repo.AssetUploadEventConsumer
 	assetUploadRateLimit repo.AssetUploadRateLimitCache
 	rateLimitEnabled     bool
 	rateLimitWindow      time.Duration
@@ -31,6 +32,7 @@ type AssetUsecase struct {
 func NewAssetUsecase(
 	assetRepo repo.AssetRepo,
 	storageClient repo.StorageClient,
+	assetEventConsumer repo.AssetUploadEventConsumer,
 	assetUploadRateLimit repo.AssetUploadRateLimitCache,
 	conf *config.Bootstrap,
 ) *AssetUsecase {
@@ -52,11 +54,20 @@ func NewAssetUsecase(
 	return &AssetUsecase{
 		assetRepo:            assetRepo,
 		storageClient:        storageClient,
+		assetEventConsumer:   assetEventConsumer,
 		assetUploadRateLimit: assetUploadRateLimit,
 		rateLimitEnabled:     rateLimitEnabled,
 		rateLimitWindow:      rateLimitWindow,
 		rateLimitMaxCount:    rateLimitMaxCount,
 	}
+}
+
+func (u *AssetUsecase) StartConsumer(ctx context.Context) error {
+	return u.assetEventConsumer.Consume(ctx, u.RecordAssetUploadEvent)
+}
+
+func (u *AssetUsecase) StopConsumer(ctx context.Context) error {
+	return u.assetEventConsumer.Stop(ctx)
 }
 
 type PrepareDirectAssetUploadReq struct {

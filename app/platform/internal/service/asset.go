@@ -95,11 +95,11 @@ func (s *AssetService) asset(asset *model.Asset) *v1.Asset {
 		Url:      s.assetUsecase.PublicURL(asset),
 		MimeType: asset.MimeType,
 		Size:     asset.Size,
-		Status:   assetStatus(asset.Status),
+		Status:   s.assetStatus(asset.Status),
 	}
 }
 
-func assetStatus(status enum.AssetStatus) platformenum.AssetStatus {
+func (*AssetService) assetStatus(status enum.AssetStatus) platformenum.AssetStatus {
 	switch status {
 	case enum.AssetStatusBlocked:
 		return platformenum.AssetStatus_ASSET_STATUS_BLOCKED

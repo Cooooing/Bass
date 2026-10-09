@@ -95,7 +95,7 @@ func (m *Minio) PrepareDirectUpload(ctx context.Context, req *repo.DirectAssetUp
 	if err := policy.SetBucket(m.bucket); err != nil {
 		return nil, fmt.Errorf("set upload policy bucket: %w", err)
 	}
-	objectKey := AssetObjectKey(req.Hash)
+	objectKey := m.assetObjectKey(req.Hash)
 	if err := policy.SetKey(objectKey); err != nil {
 		return nil, fmt.Errorf("set upload policy object key: %w", err)
 	}
@@ -111,7 +111,7 @@ func (m *Minio) PrepareDirectUpload(ctx context.Context, req *repo.DirectAssetUp
 	if err := policy.SetUserMetadata("upload-by", strconv.FormatInt(req.UploadByID, 10)); err != nil {
 		return nil, fmt.Errorf("set upload policy uploader metadata: %w", err)
 	}
-	digest, err := hexSHA256ToBase64(req.Hash)
+	digest, err := m.hexSHA256ToBase64(req.Hash)
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +133,7 @@ func (m *Minio) Stat(ctx context.Context, objectKey string) (*repo.AssetObject, 
 	// MinIO's HEAD response preserves the provider's canonical header casing
 	// (for example Upload-By). Treat metadata names as HTTP headers instead of
 	// relying on the lowercase key that was used in the POST policy.
-	uploadByID, _ := strconv.ParseInt(userMetadataValue(info.UserMetadata, "upload-by"), 10, 64)
+	uploadByID, _ := strconv.ParseInt(m.userMetadataValue(info.UserMetadata, "upload-by"), 10, 64)
 	return &repo.AssetObject{
 		Provider:       enum.AssetProviderMinio,
 		Bucket:         m.bucket,
@@ -146,7 +146,7 @@ func (m *Minio) Stat(ctx context.Context, objectKey string) (*repo.AssetObject, 
 	}, nil
 }
 
-func userMetadataValue(metadata map[string]string, name string) string {
+func (*Minio) userMetadataValue(metadata map[string]string, name string) string {
 	for key, value := range metadata {
 		if strings.EqualFold(key, name) {
 			return value
@@ -190,11 +190,11 @@ func (m *Minio) Put(ctx context.Context, req *repo.PutStoredObjectReq) (*repo.St
 	return &repo.StoredObject{ObjectKey: req.ObjectKey, MimeType: req.MimeType, Size: info.Size}, nil
 }
 
-func AssetObjectKey(hash string) string {
+func (*Minio) assetObjectKey(hash string) string {
 	return "assets/sha256/" + hash
 }
 
-func hexSHA256ToBase64(hash string) (string, error) {
+func (*Minio) hexSHA256ToBase64(hash string) (string, error) {
 	bytes, err := hex.DecodeString(hash)
 	if err != nil || len(bytes) != 32 {
 		return "", fmt.Errorf("invalid SHA-256")

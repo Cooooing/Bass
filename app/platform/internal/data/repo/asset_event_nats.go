@@ -147,7 +147,7 @@ func (r *AssetEventNatsRepo) consumeMessage(
 	msg jetstream.Msg,
 	handler platformbizrepo.AssetUploadEventHandler,
 ) {
-	events, err := decodeMinioAssetUploadEvents(msg.Data())
+	events, err := r.decodeMinioAssetUploadEvents(msg.Data())
 	if err != nil {
 		r.logger.WarnContext(ctx, "discard invalid MinIO asset event", slog.Any("err", err))
 		_ = msg.Term()
@@ -168,7 +168,7 @@ func (r *AssetEventNatsRepo) consumeMessage(
 	_ = msg.Ack()
 }
 
-func decodeMinioAssetUploadEvents(payload []byte) ([]*platformbizrepo.AssetUploadEvent, error) {
+func (*AssetEventNatsRepo) decodeMinioAssetUploadEvents(payload []byte) ([]*platformbizrepo.AssetUploadEvent, error) {
 	var notification minioEventNotification
 	if err := json.Unmarshal(payload, &notification); err != nil {
 		return nil, fmt.Errorf("decode minio notification: %w", err)

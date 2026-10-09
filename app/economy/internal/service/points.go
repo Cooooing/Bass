@@ -300,8 +300,8 @@ func (s *PointsService) ListRecords(ctx context.Context, req *v1.ListEconomyReco
 	}
 	page := &commonmodel.PageReq{}
 	if req.GetPage() != nil {
-		page.Page = int64(req.GetPage().GetPage())
-		page.Size = int64(req.GetPage().GetSize())
+		page.Page = req.GetPage().GetPage()
+		page.Size = req.GetPage().GetSize()
 	}
 	resp, err := s.pointsUsecase.ListRecords(ctx, &usecase.EconomyListRecordsReq{UserID: req.GetUserId(), Page: page, Direction: direction, RecordType: recordType})
 	if err != nil {
@@ -329,5 +329,5 @@ func (s *PointsService) ListRecords(ctx context.Context, req *v1.ListEconomyReco
 		}
 		rows = append(rows, item)
 	}
-	return &v1.ListEconomyRecords_Resp{Rows: rows, Page: &common.PageResp{Page: int64(resp.Page.Page), Size: int64(resp.Page.Size), Total: int64(resp.Page.Total)}}, nil
+	return &v1.ListEconomyRecords_Resp{Rows: rows, Page: &common.PageResp{Page: resp.Page.Page, Size: resp.Page.Size, Total: resp.Page.Total}}, nil
 }

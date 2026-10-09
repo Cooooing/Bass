@@ -123,9 +123,9 @@ func (s *ChatMessageService) List(ctx context.Context, req *v1.ListChatMessages_
 	}
 	return &v1.ListChatMessages_Resp{
 		Page: &common.PageResp{
-			Page:  int64(resp.Page.Page),
-			Size:  int64(resp.Page.Size),
-			Total: int64(resp.Page.Total),
+			Page:  resp.Page.Page,
+			Size:  resp.Page.Size,
+			Total: resp.Page.Total,
 		},
 		Rows: rows,
 	}, nil

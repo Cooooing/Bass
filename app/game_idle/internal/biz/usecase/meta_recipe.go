@@ -38,7 +38,7 @@ func (u *MetaRecipeUsecase) RollNormal(ctx context.Context, req *RollRecipeReq) 
 
 	outputs := recipe.Outputs
 	itemQuantities := make(map[string]int64, len(outputs))
-	for range int32(recipe.GenerationTimes) {
+	for range recipe.GenerationTimes {
 		cursor := rand.Int63n(recipe.TotalWeight) + 1
 		left := 0
 		right := len(outputs) - 1

@@ -130,8 +130,7 @@ func (s *WebSocketService) readPump(
 	for {
 		_, data, err := conn.ReadMessage()
 		if err != nil {
-			var netErr net.Error
-			if errors.As(err, &netErr) {
+			if _, ok := errors.AsType[net.Error](err); ok {
 				timeout.Store(true)
 			}
 			return

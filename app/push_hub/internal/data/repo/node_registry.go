@@ -3,11 +3,14 @@ package repo
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"slices"
 	"strconv"
 	"time"
 
 	"common/pkg/client"
+
 	"push_hub/internal/biz/model"
 	bizrepo "push_hub/internal/biz/repo"
 
@@ -150,7 +153,7 @@ func (r *NodeRegistryRepo) updateHeartbeat(ctx context.Context, nodeID string, c
 func (r *NodeRegistryRepo) getNode(ctx context.Context, nodeID string) (*model.NodeInfo, error) {
 	data, err := r.rdb.Client.HGet(ctx, r.keyNodeHash, nodeID).Bytes()
 	if err != nil {
-		if err == redis.Nil {
+		if errors.Is(err, redis.Nil) {
 			return nil, nil
 		}
 		return nil, fmt.Errorf("获取节点: %w", err)
@@ -198,7 +201,7 @@ func (r *NodeRegistryRepo) removeNode(ctx context.Context, nodeID string) error 
 func (r *NodeRegistryRepo) mapUserToNode(ctx context.Context, userID int64, nodeID string) error {
 	key := strconv.FormatInt(userID, 10)
 	data, err := r.rdb.Client.HGet(ctx, r.keyUserNodes, key).Bytes()
-	if err != nil && err != redis.Nil {
+	if err != nil && !errors.Is(err, redis.Nil) {
 		return fmt.Errorf("获取用户节点映射: %w", err)
 	}
 
@@ -208,10 +211,8 @@ func (r *NodeRegistryRepo) mapUserToNode(ctx context.Context, userID int64, node
 	}
 
 	// 去重
-	for _, id := range nodeIDs {
-		if id == nodeID {
-			return nil
-		}
+	if slices.Contains(nodeIDs, nodeID) {
+		return nil
 	}
 	nodeIDs = append(nodeIDs, nodeID)
 
@@ -227,7 +228,7 @@ func (r *NodeRegistryRepo) unmapUserFromNode(ctx context.Context, userID int64, 
 	key := strconv.FormatInt(userID, 10)
 	data, err := r.rdb.Client.HGet(ctx, r.keyUserNodes, key).Bytes()
 	if err != nil {
-		if err == redis.Nil {
+		if errors.Is(err, redis.Nil) {
 			return nil
 		}
 		return fmt.Errorf("获取用户节点映射: %w", err)
@@ -255,7 +256,7 @@ func (r *NodeRegistryRepo) getUserNodes(ctx context.Context, userID int64) ([]st
 	key := strconv.FormatInt(userID, 10)
 	data, err := r.rdb.Client.HGet(ctx, r.keyUserNodes, key).Bytes()
 	if err != nil {
-		if err == redis.Nil {
+		if errors.Is(err, redis.Nil) {
 			return nil, nil
 		}
 		return nil, fmt.Errorf("获取用户节点映射: %w", err)

@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"unicode"
 
 	"github.com/golangci/plugin-module-register/register"
 	"golang.org/x/tools/go/analysis"
@@ -181,6 +182,9 @@ func validateEnumFile(pass *analysis.Pass, file *ast.File) {
 	}
 
 	typeName := enumTypes[0].Name.Name
+	if got, want := strings.TrimSuffix(filepath.Base(pass.Fset.Position(enumTypes[0].Pos()).Filename), ".go"), snakeCase(typeName); got != want {
+		pass.Reportf(enumTypes[0].Pos(), "枚举规范: %s 必须位于 %s.go，当前文件为 %s.go", typeName, want, got)
+	}
 	values := enumConstValues(pass, file, typeName)
 	validateEnumMapping(pass, file, typeName, values)
 }
@@ -188,6 +192,24 @@ func validateEnumFile(pass *analysis.Pass, file *ast.File) {
 func isStringEnum(spec *ast.TypeSpec) bool {
 	ident, ok := spec.Type.(*ast.Ident)
 	return ok && ident.Name == "string"
+}
+
+func snakeCase(value string) string {
+	runes := []rune(value)
+	var out strings.Builder
+	for i, r := range runes {
+		if unicode.IsUpper(r) {
+			previousLower := i > 0 && unicode.IsLower(runes[i-1])
+			nextLower := i+1 < len(runes) && unicode.IsLower(runes[i+1])
+			if i > 0 && (previousLower || nextLower) {
+				out.WriteByte('_')
+			}
+			out.WriteRune(unicode.ToLower(r))
+			continue
+		}
+		out.WriteRune(r)
+	}
+	return out.String()
 }
 
 func enumConstValues(pass *analysis.Pass, file *ast.File, typeName string) []string {
@@ -453,8 +475,7 @@ func isGeneratedFile(filename string) bool {
 func isAllowedPackageFunc(name string) bool {
 	return name == "main" || name == "newApp" ||
 		strings.HasPrefix(name, "New") || strings.HasPrefix(name, "Provide") || strings.HasPrefix(name, "Provider") ||
-		strings.HasPrefix(name, "wire") || strings.HasPrefix(name, "Wire") ||
-		strings.HasPrefix(name, "LoadConfig")
+		strings.HasPrefix(name, "wire") || strings.HasPrefix(name, "Wire")
 }
 
 var (

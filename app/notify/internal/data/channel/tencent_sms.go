@@ -102,7 +102,10 @@ func (c *TencentSMSClient) SendTencentSMS(ctx context.Context, req *bizrepo.Tenc
 			ProviderMessage: new(fmt.Sprintf("send tencent sms: %v", err)),
 		}, nil
 	}
-	reply, _ := json.Marshal(resp.Response)
+	reply, err := json.Marshal(resp.Response)
+	if err != nil {
+		return nil, fmt.Errorf("marshal tencent sms response: %w", err)
+	}
 	requestID := ""
 	if resp.Response != nil && resp.Response.RequestId != nil {
 		requestID = *resp.Response.RequestId

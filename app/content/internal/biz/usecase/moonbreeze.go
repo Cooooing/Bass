@@ -173,7 +173,10 @@ func (u *MoonbreezeUsecase) encodeCursor(row *model.Moonbreeze, excludedAuthorID
 func (*MoonbreezeUsecase) excludedAuthorHash(userIDs []int64) string {
 	values := append([]int64(nil), userIDs...)
 	slices.Sort(values)
-	encoded, _ := json.Marshal(values)
+	encoded, err := json.Marshal(values)
+	if err != nil {
+		return ""
+	}
 	sum := sha256.Sum256(encoded)
 	return base64.RawURLEncoding.EncodeToString(sum[:])
 }

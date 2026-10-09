@@ -5,9 +5,10 @@ import (
 	contentv1 "common/proto/gen/content/v1"
 	"context"
 	"encoding/json"
-	schedulerenum "scheduler/internal/enum"
 	"strings"
 	"time"
+
+	schedulerenum "scheduler/internal/enum"
 )
 
 type ContentFlushArticleViews struct {

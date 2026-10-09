@@ -6,9 +6,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	schedulerenum "scheduler/internal/enum"
 	"strings"
 	"time"
+
+	schedulerenum "scheduler/internal/enum"
 )
 
 type UserUnbanAccounts struct {

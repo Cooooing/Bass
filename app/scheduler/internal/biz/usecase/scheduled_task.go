@@ -12,16 +12,17 @@ import (
 	"log/slog"
 	"math/rand/v2"
 	"os"
+	"sort"
+	"strings"
+	"sync"
+	"time"
+
 	"scheduler/internal/biz/base"
 	"scheduler/internal/biz/model"
 	"scheduler/internal/biz/repo"
 	taskimpl "scheduler/internal/biz/usecase/task"
 	"scheduler/internal/config"
 	schedulerenum "scheduler/internal/enum"
-	"sort"
-	"strings"
-	"sync"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/robfig/cron/v3"
@@ -655,10 +656,7 @@ func (u *ScheduledTaskUsecase) HandleScheduledTaskMessage(ctx context.Context, m
 		base := 5 * time.Second
 		capValue := 5 * time.Minute
 		factor := 1 << max(0, int(updated.Attempt)-1)
-		delay := time.Duration(factor) * base
-		if delay > capValue {
-			delay = capValue
-		}
+		delay := min(time.Duration(factor)*base, capValue)
 		return &repo.MessageHandleResult{
 			Action:     schedulerenum.MessageHandleActionRetry,
 			RetryAfter: delay + time.Duration(rand.Int64N(int64(delay/2)+1)),

@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+
 	"scheduler/internal/config"
 	"scheduler/internal/data/gen"
 	"scheduler/internal/data/gen/migrate"

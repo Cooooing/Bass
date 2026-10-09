@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+
 	"scheduler/internal/config"
 	schedulerserver "scheduler/internal/server"
 

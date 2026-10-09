@@ -4,8 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"log/slog"
-	schedulerenum "scheduler/internal/enum"
 	"time"
+
+	schedulerenum "scheduler/internal/enum"
 )
 
 type Noop struct {

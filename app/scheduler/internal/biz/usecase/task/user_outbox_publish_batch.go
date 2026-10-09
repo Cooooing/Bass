@@ -5,9 +5,10 @@ import (
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"encoding/json"
-	schedulerenum "scheduler/internal/enum"
 	"strings"
 	"time"
+
+	schedulerenum "scheduler/internal/enum"
 
 	"google.golang.org/protobuf/types/known/durationpb"
 )

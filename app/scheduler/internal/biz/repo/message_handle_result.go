@@ -1,8 +1,9 @@
 package repo
 
 import (
-	schedulerenum "scheduler/internal/enum"
 	"time"
+
+	schedulerenum "scheduler/internal/enum"
 )
 
 type MessageHandleResult struct {

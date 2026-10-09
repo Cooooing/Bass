@@ -2,8 +2,9 @@ package task
 
 import (
 	"context"
-	schedulerenum "scheduler/internal/enum"
 	"time"
+
+	schedulerenum "scheduler/internal/enum"
 )
 
 type Task interface {

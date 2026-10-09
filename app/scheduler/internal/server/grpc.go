@@ -5,8 +5,9 @@ import (
 	"common/pkg/server"
 	"fmt"
 	"log/slog"
-	"scheduler/internal/config"
 	"time"
+
+	"scheduler/internal/config"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware/recovery"

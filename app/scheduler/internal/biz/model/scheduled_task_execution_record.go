@@ -1,8 +1,9 @@
 package model
 
 import (
-	schedulerenum "scheduler/internal/enum"
 	"time"
+
+	schedulerenum "scheduler/internal/enum"
 )
 
 type ScheduledTaskExecutionRecord struct {

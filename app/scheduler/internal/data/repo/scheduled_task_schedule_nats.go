@@ -7,10 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"time"
+
 	"scheduler/internal/biz/repo"
 	"scheduler/internal/config"
 	schedulerenum "scheduler/internal/enum"
-	"time"
 
 	"github.com/google/uuid"
 

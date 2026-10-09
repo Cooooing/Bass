@@ -97,8 +97,8 @@ func (s *AgentConfigService) Get(ctx context.Context, req *v1.GetGameTownAgentCo
 func (s *AgentConfigService) List(ctx context.Context, req *v1.ListGameTownAgentConfigs_Request) (*v1.ListGameTownAgentConfigs_Resp, error) {
 	page := commonmodel.PageReq{}
 	if req.GetPage() != nil {
-		page.Page = int64(req.GetPage().GetPage())
-		page.Size = int64(req.GetPage().GetSize())
+		page.Page = req.GetPage().GetPage()
+		page.Size = req.GetPage().GetSize()
 	}
 	resp, err := s.usecase.Page(ctx, page)
 	if err != nil {
@@ -106,9 +106,9 @@ func (s *AgentConfigService) List(ctx context.Context, req *v1.ListGameTownAgent
 	}
 	reply := &v1.ListGameTownAgentConfigs_Resp{
 		Page: &common.PageResp{
-			Page:  int64(resp.Page.Page),
-			Size:  int64(resp.Page.Size),
-			Total: int64(resp.Page.Total),
+			Page:  resp.Page.Page,
+			Size:  resp.Page.Size,
+			Total: resp.Page.Total,
 		},
 		Rows: lo.Map(resp.Rows, func(row *model.AgentConfig, _ int) *v1.ListGameTownAgentConfigs_Resp_Row {
 			return &v1.ListGameTownAgentConfigs_Resp_Row{

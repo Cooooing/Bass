@@ -247,7 +247,8 @@ func movePlayer(ctx context.Context, client *rpc.GameTownClient, playerID, world
 		}
 	}
 	if location == nil {
-		lines := []string{fmt.Sprintf("未找到地点 %q，可用地点：", locationQuery)}
+		lines := make([]string, 1, 1+len(alternatives))
+		lines[0] = fmt.Sprintf("未找到地点 %q，可用地点：", locationQuery)
 		lines = append(lines, alternatives...)
 		return commandResult{
 			lines: lines,

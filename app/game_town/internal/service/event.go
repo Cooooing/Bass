@@ -52,8 +52,8 @@ func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Requ
 
 	page := commonmodel.PageReq{}
 	if req.GetPage() != nil {
-		page.Page = int64(req.GetPage().GetPage())
-		page.Size = int64(req.GetPage().GetSize())
+		page.Page = req.GetPage().GetPage()
+		page.Size = req.GetPage().GetSize()
 	}
 
 	var eventType *enum.EventType
@@ -79,9 +79,9 @@ func (s *EventService) Page(ctx context.Context, req *v1.PageGameTownEvents_Requ
 
 	reply := &v1.PageGameTownEvents_Resp{
 		Page: &common.PageResp{
-			Page:  int64(resp.Page.Page),
-			Size:  int64(resp.Page.Size),
-			Total: int64(resp.Page.Total),
+			Page:  resp.Page.Page,
+			Size:  resp.Page.Size,
+			Total: resp.Page.Total,
 		},
 		Rows: make([]*v1.PageGameTownEvents_Resp_Row, 0, len(resp.Rows)),
 	}
@@ -370,7 +370,7 @@ func (s *EventService) normalizeReflectValue(value any) any {
 	}
 	if reflected.Kind() == reflect.Slice || reflected.Kind() == reflect.Array {
 		result := make([]any, 0, reflected.Len())
-		for index := 0; index < reflected.Len(); index++ {
+		for index := range reflected.Len() {
 			result = append(result, s.normalizeProtoValue(reflected.Index(index).Interface()))
 		}
 		return result
@@ -417,7 +417,7 @@ func (s *EventService) int64Value(value any) int64 {
 	case uint32:
 		return int64(typed)
 	case uint64:
-		if typed > uint64(^uint64(0)>>1) {
+		if typed > uint64(^uint(0)>>1) {
 			return 0
 		}
 		return int64(typed)

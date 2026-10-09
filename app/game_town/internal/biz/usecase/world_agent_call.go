@@ -40,7 +40,7 @@ func (r *WorldAgentRunner) callAgent(ctx context.Context, result *agentResult) e
 			return err
 		}
 		preference, _ := result.source.Payload["character_preference"].(string)
-		result.character, err = r.agentClient.GenerateCharacter(ctx, &repo.GenerateCharacterReq{
+		result.character, _ = r.agentClient.GenerateCharacter(ctx, &repo.GenerateCharacterReq{
 			Config:       result.config,
 			World:        result.world,
 			State:        result.state,
@@ -70,7 +70,6 @@ func (r *WorldAgentRunner) callAgent(ctx context.Context, result *agentResult) e
 		if err != nil {
 			r.log.WarnContext(ctx, "npc talk agent failed; use fallback reply", "world_id", result.world.ID, constant.LogFieldErr, err)
 			result.reply = r.fallbackNpcReply(result, err)
-			err = nil
 		}
 	case enum.AgentJobTypePlayerAct, enum.AgentJobTypePlayerActionInterpret:
 		err = r.loadActionContext(ctx, result)
@@ -155,7 +154,6 @@ func (r *WorldAgentRunner) callAgent(ctx context.Context, result *agentResult) e
 		if err != nil {
 			r.log.WarnContext(ctx, "npc plan agent failed; use fallback plan", "world_id", result.world.ID, "npc_id", result.npc.ID, constant.LogFieldErr, err)
 			result.plan = r.fallbackNpcPlan(result, err)
-			err = nil
 		}
 	case enum.AgentJobTypeWorldTick:
 		recentEvents, loadErr := r.recentEvents(ctx, result.world.ID)
@@ -415,7 +413,7 @@ func (r *WorldAgentRunner) entityIDValue(value any) int64 {
 	case uint32:
 		return int64(typedValue)
 	case uint64:
-		if typedValue > uint64(^uint64(0)>>1) {
+		if typedValue > uint64(^uint(0)>>1) {
 			return 0
 		}
 		return int64(typedValue)

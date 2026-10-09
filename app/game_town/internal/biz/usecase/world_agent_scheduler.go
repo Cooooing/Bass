@@ -26,15 +26,15 @@ func (r *WorldAgentRunner) schedule(ctx context.Context) {
 	r.recoverAgentJobs(ctx)
 	r.wakeScheduler()
 	for {
-		recover := false
+		shouldRecover := false
 		select {
 		case <-ctx.Done():
 			return
 		case <-r.schedulerWake:
 		case <-recoveryTicker.C:
-			recover = true
+			shouldRecover = true
 		}
-		if recover {
+		if shouldRecover {
 			r.recoverAgentJobs(ctx)
 		}
 		r.dispatch(ctx)
@@ -271,7 +271,7 @@ func (r *WorldAgentRunner) fairAgentJobs(jobs []*model.AgentJob, cursor *int) []
 		remaining := true
 		for remaining {
 			remaining = false
-			for offset := range len(worldOrder) {
+			for offset := range worldOrder {
 				worldID := worldOrder[(start+offset)%len(worldOrder)]
 				bucket := buckets[worldID]
 				if len(bucket) == 0 {

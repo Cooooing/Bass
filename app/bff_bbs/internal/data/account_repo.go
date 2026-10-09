@@ -68,7 +68,7 @@ func (r *AccountClient) GetProfile(ctx context.Context, name string) (*repo.Acco
 	if err != nil {
 		return nil, nil, err
 	}
-	return accountProfile(reply.GetAccount().GetBasic()), timestampValue(reply.LastSuccessLoginAt), nil
+	return r.accountProfile(reply.GetAccount().GetBasic()), r.timestampValue(reply.LastSuccessLoginAt), nil
 }
 
 func (r *AccountClient) MapProfileAccounts(ctx context.Context, userIDs []int64) (map[int64]*repo.AccountProfile, error) {
@@ -81,19 +81,19 @@ func (r *AccountClient) MapProfileAccounts(ctx context.Context, userIDs []int64)
 	}
 	profiles := make(map[int64]*repo.AccountProfile, len(reply.GetAccounts()))
 	for id, account := range reply.GetAccounts() {
-		profiles[id] = accountProfile(account.GetBasic())
+		profiles[id] = r.accountProfile(account.GetBasic())
 	}
 	return profiles, nil
 }
 
-func accountProfile(account *userv1.AccountBasic) *repo.AccountProfile {
+func (r *AccountClient) accountProfile(account *userv1.AccountBasic) *repo.AccountProfile {
 	if account == nil {
 		return nil
 	}
-	return &repo.AccountProfile{ID: account.GetId(), Name: account.GetName(), Nickname: account.Nickname, URL: account.Url, AvatarAssetID: account.AvatarAssetId, BackgroundAssetID: account.BackgroundAssetId, Introduction: account.Introduction, Status: int32(account.GetStatus()), MBTI: account.Mbti, FollowCount: account.FollowCount, FollowerCount: account.FollowerCount, CreatedAt: timestampValue(account.GetCreatedAt()), UpdatedAt: timestampValue(account.GetUpdatedAt())}
+	return &repo.AccountProfile{ID: account.GetId(), Name: account.GetName(), Nickname: account.Nickname, URL: account.Url, AvatarAssetID: account.AvatarAssetId, BackgroundAssetID: account.BackgroundAssetId, Introduction: account.Introduction, Status: int32(account.GetStatus()), MBTI: account.Mbti, FollowCount: account.FollowCount, FollowerCount: account.FollowerCount, CreatedAt: r.timestampValue(account.GetCreatedAt()), UpdatedAt: r.timestampValue(account.GetUpdatedAt())}
 }
 
-func timestampValue(value *timestamppb.Timestamp) *time.Time {
+func (*AccountClient) timestampValue(value *timestamppb.Timestamp) *time.Time {
 	if value == nil {
 		return nil
 	}

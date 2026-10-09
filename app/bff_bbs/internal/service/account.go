@@ -60,7 +60,7 @@ func (s *AccountService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurre
 }
 
 func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfile_Req) (*bbsuserv1.GetProfile_Resp, error) {
-	profile, err := s.accountUsecase.GetProfile(ctx, req.GetName(), accountIDFromContext(ctx))
+	profile, err := s.accountUsecase.GetProfile(ctx, req.GetName(), s.accountIDFromContext(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -70,11 +70,11 @@ func (s *AccountService) GetProfile(ctx context.Context, req *bbsuserv1.GetProfi
 }
 
 func (s *AccountService) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowing_Req) (*bbsuserv1.ListFollowing_Resp, error) {
-	return s.accountUsecase.ListFollowing(ctx, req.GetName(), accountIDFromContext(ctx), commonmodel.PageReqFromProto(req.GetPage()))
+	return s.accountUsecase.ListFollowing(ctx, req.GetName(), s.accountIDFromContext(ctx), commonmodel.PageReqFromProto(req.GetPage()))
 }
 
 func (s *AccountService) ListFollowers(ctx context.Context, req *bbsuserv1.ListFollowers_Req) (*bbsuserv1.ListFollowers_Resp, error) {
-	return s.accountUsecase.ListFollowers(ctx, req.GetName(), accountIDFromContext(ctx), commonmodel.PageReqFromProto(req.GetPage()))
+	return s.accountUsecase.ListFollowers(ctx, req.GetName(), s.accountIDFromContext(ctx), commonmodel.PageReqFromProto(req.GetPage()))
 }
 
 func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Req) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
@@ -297,7 +297,7 @@ func (s *AccountService) ListEconomyRecords(ctx context.Context, req *bbsuserv1.
 	return &bbsuserv1.ListAccountEconomyRecords_Resp{Rows: rows, Page: page}, nil
 }
 
-func accountIDFromContext(ctx context.Context) int64 {
+func (*AccountService) accountIDFromContext(ctx context.Context) int64 {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {
 		return 0

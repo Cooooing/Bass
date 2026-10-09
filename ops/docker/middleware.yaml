@@ -120,7 +120,7 @@ services:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       # CORS is a MinIO server setting, not a bucket-level S3 API call.
-      - MINIO_API_CORS_ALLOW_ORIGIN=${MINIO_API_CORS_ALLOW_ORIGIN:-http://localhost:2324}
+      - MINIO_API_CORS_ALLOW_ORIGIN=${MINIO_API_CORS_ALLOW_ORIGIN:-*}
       # This is an infrastructure-only route: MinIO publishes object-created events to the stable NATS subject.
       - MINIO_NOTIFY_NATS_ENABLE_ASSET_EVENTS=on
       - MINIO_NOTIFY_NATS_ADDRESS_ASSET_EVENTS=nats:4222

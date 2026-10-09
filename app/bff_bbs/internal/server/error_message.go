@@ -6,13 +6,19 @@ import (
 	cerrors "common/proto/gen/common/errors"
 )
 
+const (
+	serviceUnavailableZH = "服务暂时不可用"
+	serviceUnavailableTW = "服務暫時不可用"
+	serviceUnavailableEN = "Service is temporarily unavailable"
+)
+
 func NewBBSErrorMessages() serverutil.ErrorMessages {
 	return serverutil.ErrorMessages{
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_UNKNOWN: {
 			Text: map[commonenums.Language]string{
-				commonenums.Language_LANGUAGE_ZH_CN: "服务暂时不可用",
-				commonenums.Language_LANGUAGE_ZH_TW: "服務暫時不可用",
-				commonenums.Language_LANGUAGE_EN:    "Service is temporarily unavailable",
+				commonenums.Language_LANGUAGE_ZH_CN: serviceUnavailableZH,
+				commonenums.Language_LANGUAGE_ZH_TW: serviceUnavailableTW,
+				commonenums.Language_LANGUAGE_EN:    serviceUnavailableEN,
 			},
 		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT: {
@@ -60,9 +66,9 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INTERNAL: {
 			Text: map[commonenums.Language]string{
-				commonenums.Language_LANGUAGE_ZH_CN: "服务暂时不可用",
-				commonenums.Language_LANGUAGE_ZH_TW: "服務暫時不可用",
-				commonenums.Language_LANGUAGE_EN:    "Service is temporarily unavailable",
+				commonenums.Language_LANGUAGE_ZH_CN: serviceUnavailableZH,
+				commonenums.Language_LANGUAGE_ZH_TW: serviceUnavailableTW,
+				commonenums.Language_LANGUAGE_EN:    serviceUnavailableEN,
 			},
 		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_NOT_IMPLEMENTED: {
@@ -74,9 +80,9 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_UPSTREAM_UNAVAILABLE: {
 			Text: map[commonenums.Language]string{
-				commonenums.Language_LANGUAGE_ZH_CN: "服务暂时不可用",
-				commonenums.Language_LANGUAGE_ZH_TW: "服務暫時不可用",
-				commonenums.Language_LANGUAGE_EN:    "Service is temporarily unavailable",
+				commonenums.Language_LANGUAGE_ZH_CN: serviceUnavailableZH,
+				commonenums.Language_LANGUAGE_ZH_TW: serviceUnavailableTW,
+				commonenums.Language_LANGUAGE_EN:    serviceUnavailableEN,
 			},
 		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_OPERATION_FAILED: {

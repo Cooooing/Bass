@@ -42,6 +42,8 @@ type DelayedTaskUsecase struct {
 	clockSkewGrace       time.Duration
 }
 
+const delayedTaskScheduleSubjectPrefix = "scheduler.schedule.delayed_task_execution"
+
 func NewDelayedTaskUsecase(
 	logger *slog.Logger,
 	conf *config.Bootstrap,
@@ -328,7 +330,7 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 	if created.Conflict {
 		return created.Row, nil
 	}
-	schedulePrefix := "scheduler.schedule.delayed_task_execution"
+	schedulePrefix := delayedTaskScheduleSubjectPrefix
 	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
 		schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
 	}
@@ -377,7 +379,7 @@ func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idem
 		if err != nil || len(rows) == 0 {
 			return nil, err
 		}
-		schedulePrefix := "scheduler.schedule.delayed_task_execution"
+		schedulePrefix := delayedTaskScheduleSubjectPrefix
 		if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
 			schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
 		}
@@ -397,7 +399,7 @@ func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idem
 		return row, err
 	}
 	if row.Status == schedulerenum.TaskExecutionStatusCanceled {
-		schedulePrefix := "scheduler.schedule.delayed_task_execution"
+		schedulePrefix := delayedTaskScheduleSubjectPrefix
 		if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
 			schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
 		}
@@ -630,7 +632,7 @@ func (u *DelayedTaskUsecase) EnsureSchedule(ctx context.Context) error {
 			if err != nil || task == nil {
 				continue
 			}
-			schedulePrefix := "scheduler.schedule.delayed_task_execution"
+			schedulePrefix := delayedTaskScheduleSubjectPrefix
 			executeSubject := "scheduler.execute.delayed_task"
 			if u.conf.GetScheduler() != nil {
 				if u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {

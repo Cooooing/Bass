@@ -24,6 +24,8 @@ type GameIdleEventUsecase struct {
 	gameIdleEventRepo repo.GameIdleEventRepo
 }
 
+const characterIDField = "character_id"
+
 func NewGameIdleEventUsecase(logger *slog.Logger, gameIdleEventRepo repo.GameIdleEventRepo) *GameIdleEventUsecase {
 	return &GameIdleEventUsecase{
 		logger:            logger,
@@ -118,10 +120,10 @@ func (u *GameIdleEventUsecase) PublishActionCompleted(ctx context.Context, event
 			},
 		},
 	}, map[string]string{
-		"character_id": strconv.FormatInt(event.CharacterID, 10),
+		characterIDField: strconv.FormatInt(event.CharacterID, 10),
 	})
 	if err != nil {
-		u.logger.ErrorContext(ctx, "game idle action completed event publish failed", constant.LogFieldErr, err, "character_id", event.CharacterID)
+		u.logger.ErrorContext(ctx, "game idle action completed event publish failed", constant.LogFieldErr, err, characterIDField, event.CharacterID)
 	}
 }
 
@@ -141,10 +143,10 @@ func (u *GameIdleEventUsecase) PublishAbilityLeveledUp(ctx context.Context, even
 			},
 		},
 	}, map[string]string{
-		"character_id": strconv.FormatInt(event.CharacterID, 10),
+		characterIDField: strconv.FormatInt(event.CharacterID, 10),
 	})
 	if err != nil {
-		u.logger.ErrorContext(ctx, "game idle ability leveled up event publish failed", constant.LogFieldErr, err, "character_id", event.CharacterID)
+		u.logger.ErrorContext(ctx, "game idle ability leveled up event publish failed", constant.LogFieldErr, err, characterIDField, event.CharacterID)
 	}
 }
 
@@ -169,10 +171,10 @@ func (u *GameIdleEventUsecase) PublishActionQueueUpdated(ctx context.Context, qu
 			},
 		},
 	}, map[string]string{
-		"character_id": strconv.FormatInt(queue.CharacterID, 10),
+		characterIDField: strconv.FormatInt(queue.CharacterID, 10),
 	})
 	if err != nil {
-		u.logger.ErrorContext(ctx, "game idle action queue updated event publish failed", constant.LogFieldErr, err, "character_id", queue.CharacterID)
+		u.logger.ErrorContext(ctx, "game idle action queue updated event publish failed", constant.LogFieldErr, err, characterIDField, queue.CharacterID)
 	}
 }
 

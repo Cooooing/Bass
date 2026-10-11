@@ -1,10 +1,11 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/model"
 	"common/pkg/client/rpc"
 	contentv1 "common/proto/gen/content/v1"
 	"context"
+
+	"bff_bbs/internal/biz/model"
 
 	"bff_bbs/internal/biz/repo"
 )

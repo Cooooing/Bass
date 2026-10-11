@@ -17,15 +17,12 @@ import (
 	"content/internal/biz/repo"
 )
 
-const (
-	moonbreezeMaxCharacters = 512
-	moonbreezeRateWindow    = time.Hour
-	moonbreezeRateMaximum   = 5
-)
-
 type MoonbreezeUsecase struct {
 	moonbreezeRepo repo.MoonbreezeRepo
 	rateLimitCache repo.MoonbreezeRateLimitCache
+	maxCharacters  int
+	rateWindow     time.Duration
+	rateMaximum    int64
 }
 
 func NewMoonbreezeUsecase(
@@ -35,6 +32,9 @@ func NewMoonbreezeUsecase(
 	return &MoonbreezeUsecase{
 		moonbreezeRepo: moonbreezeRepo,
 		rateLimitCache: rateLimitCache,
+		maxCharacters:  512,
+		rateWindow:     time.Hour,
+		rateMaximum:    5,
 	}
 }
 
@@ -49,10 +49,10 @@ func (u *MoonbreezeUsecase) Create(ctx context.Context, req *CreateMoonbreezeReq
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}
 	content := strings.TrimSpace(req.Content)
-	if content == "" || strings.ContainsAny(content, "\r\n") || utf8.RuneCountInString(content) > moonbreezeMaxCharacters {
+	if content == "" || strings.ContainsAny(content, "\r\n") || utf8.RuneCountInString(content) > u.maxCharacters {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_MOONBREEZE_INVALID)
 	}
-	state, err := u.rateLimitCache.Allow(ctx, req.AuthorID, moonbreezeRateWindow, moonbreezeRateMaximum)
+	state, err := u.rateLimitCache.Allow(ctx, req.AuthorID, u.rateWindow, u.rateMaximum)
 	if err != nil {
 		return nil, err
 	}

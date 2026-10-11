@@ -3,9 +3,8 @@ package repo
 import (
 	commonmodel "common/pkg/model"
 	"context"
-	"time"
 
-	"bff_bbs/internal/enum"
+	"bff_bbs/internal/biz/model"
 )
 
 type RelationClient interface {
@@ -49,7 +48,7 @@ type ListFollowingRelationsReq struct {
 
 type ListFollowingRelationsResp struct {
 	Page *commonmodel.PageResp
-	Rows []*Relation
+	Rows []*model.Relation
 }
 
 type ListFollowersRelationsReq struct {
@@ -60,7 +59,7 @@ type ListFollowersRelationsReq struct {
 
 type ListFollowersRelationsResp struct {
 	Page *commonmodel.PageResp
-	Rows []*Relation
+	Rows []*model.Relation
 }
 
 type ListBlockedRelationsReq struct {
@@ -70,21 +69,12 @@ type ListBlockedRelationsReq struct {
 
 type ListBlockedRelationsResp struct {
 	Page *commonmodel.PageResp
-	Rows []*Relation
+	Rows []*model.Relation
 }
 
 type GetStatusRelationReq struct {
 	ActorID  int64
 	TargetID int64
-}
-
-type Relation struct {
-	ID        int64
-	Type      enum.RelationType
-	ActorID   int64
-	TargetID  int64
-	CreatedAt *time.Time
-	UpdatedAt *time.Time
 }
 
 type RelationStatus struct {

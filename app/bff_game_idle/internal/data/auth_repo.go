@@ -7,7 +7,7 @@ import (
 	userv1 "common/proto/gen/user/v1"
 	userenum "common/proto/gen/user/v1/enum"
 	"context"
-	"crypto/sha1"
+	"crypto/sha256"
 	"encoding/hex"
 
 	"bff_game_idle/internal/biz/model"
@@ -31,7 +31,7 @@ func NewAuthRepo(
 }
 
 func (r *AuthRepo) Register(ctx context.Context, req *repo.RegisterReq) error {
-	sum := sha1.Sum([]byte(req.Email))
+	sum := sha256.Sum256([]byte(req.Email))
 	_, err := r.userClient.Auth.Register(ctx, &userv1.Register_Req{
 		Type:     userenum.RegisterType_REGISTER_TYPE_EMAIL,
 		Name:     "idle_" + hex.EncodeToString(sum[:])[:20],

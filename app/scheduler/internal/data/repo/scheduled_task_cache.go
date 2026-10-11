@@ -3,62 +3,28 @@ package repo
 import (
 	commonclient "common/pkg/client"
 	"context"
-	"encoding/json"
-	"errors"
 	"time"
 
 	"scheduler/internal/biz/model"
 	bizrepo "scheduler/internal/biz/repo"
-
-	"github.com/redis/go-redis/v9"
 )
 
 type ScheduledTaskCacheRepo struct {
-	redis *commonclient.RedisClient
-	key   string
-	ttl   time.Duration
+	cache *taskCache[*model.ScheduledTask]
 }
 
-func NewScheduledTaskCacheRepo(
-	redisClient *commonclient.RedisClient,
-) bizrepo.ScheduledTaskCacheRepo {
-	return &ScheduledTaskCacheRepo{
-		redis: redisClient,
-		key:   "scheduler:scheduled_task:definitions",
-		ttl:   24 * time.Hour,
-	}
+func NewScheduledTaskCacheRepo(redisClient *commonclient.RedisClient) bizrepo.ScheduledTaskCacheRepo {
+	return &ScheduledTaskCacheRepo{cache: &taskCache[*model.ScheduledTask]{redis: redisClient, key: "scheduler:scheduled_task:definitions", ttl: 24 * time.Hour, new: func() *model.ScheduledTask { return &model.ScheduledTask{} }, keyOf: func(row *model.ScheduledTask) string { return row.TaskKey }, valid: func(row *model.ScheduledTask) bool { return row.Timeout > 0 }}}
 }
 
 func (r *ScheduledTaskCacheRepo) GetScheduledTask(ctx context.Context, taskKey string) (*model.ScheduledTask, error) {
-	value, err := r.redis.Client.HGet(ctx, r.key, taskKey).Result()
-	if errors.Is(err, redis.Nil) {
-		return nil, nil
-	}
-	if err != nil {
-		return nil, err
-	}
-	row := &model.ScheduledTask{}
-	if err = json.Unmarshal([]byte(value), row); err != nil {
-		return nil, err
-	}
-	if row.Timeout <= 0 {
-		_ = r.redis.Client.HDel(ctx, r.key, taskKey).Err()
-		return nil, nil
-	}
-	return row, nil
+	return r.cache.get(ctx, taskKey)
 }
 
 func (r *ScheduledTaskCacheRepo) SetScheduledTask(ctx context.Context, row *model.ScheduledTask) error {
-	data, err := json.Marshal(row)
-	if err != nil {
-		return err
-	}
-	if err = r.redis.Client.HSet(ctx, r.key, row.TaskKey, data).Err(); err != nil {
-		return err
-	}
-	return r.redis.Client.Expire(ctx, r.key, r.ttl).Err()
+	return r.cache.set(ctx, row)
 }
 
 func (r *ScheduledTaskCacheRepo) DeleteScheduledTask(ctx context.Context, taskKey string) error {
-	return r.redis.Client.HDel(ctx, r.key, taskKey).Err()
+	return r.cache.redis.Client.HDel(ctx, r.cache.key, taskKey).Err()
 }

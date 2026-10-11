@@ -14,68 +14,27 @@ import (
 )
 
 type UserOutboxPublishBatch struct {
-	userClient     *rpc.UserClient
-	title          string
-	description    string
-	defaultLimit   int32
-	defaultTimeout time.Duration
-	defaultRetry   int32
+	userClient         *rpc.UserClient
+	title, description string
+	defaultLimit       int32
+	defaultTimeout     time.Duration
+	defaultRetry       int32
 }
 
-func NewUserOutboxPublishBatch(
-	userClient *rpc.UserClient,
-) *UserOutboxPublishBatch {
-	return &UserOutboxPublishBatch{
-		userClient:     userClient,
-		title:          "用户 Outbox 批量投递",
-		description:    "调用 user.OutboxService.PublishBatch 投递待发送 outbox 事件。",
-		defaultLimit:   1000,
-		defaultTimeout: 1 * time.Minute,
-		defaultRetry:   3,
-	}
+func NewUserOutboxPublishBatch(userClient *rpc.UserClient) *UserOutboxPublishBatch {
+	return &UserOutboxPublishBatch{userClient: userClient, title: "用户 Outbox 批量投递", description: "调用 user.OutboxService.PublishBatch 投递待发送 outbox 事件。", defaultLimit: 1000, defaultTimeout: time.Minute, defaultRetry: 3}
 }
 
-func (t *UserOutboxPublishBatch) HandlerName() schedulerenum.TaskHandlerName {
+func (*UserOutboxPublishBatch) HandlerName() schedulerenum.TaskHandlerName {
 	return schedulerenum.TaskHandlerNameUserOutboxPublishBatch
 }
-
-func (t *UserOutboxPublishBatch) Title() string {
-	return t.title
-}
-
-func (t *UserOutboxPublishBatch) Description() string {
-	return t.description
-}
-
+func (t *UserOutboxPublishBatch) Title() string       { return t.title }
+func (t *UserOutboxPublishBatch) Description() string { return t.description }
 func (t *UserOutboxPublishBatch) DefaultScheduledTasks() []*DefaultScheduledTask {
-	return []*DefaultScheduledTask{
-		{
-			TaskKey:       schedulerenum.TaskKeyUserOutboxPublishBatchDefault,
-			Title:         t.Title(),
-			Description:   t.Description(),
-			Enabled:       true,
-			CronSpec:      "0 0/1 * * * ?",
-			Payload:       `{"limit":1000,"max_retry":1}`,
-			Timeout:       30 * time.Second,
-			MaxAttempts:   1,
-			MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteLatest,
-			AllowOverlap:  false,
-		},
-	}
+	return []*DefaultScheduledTask{{TaskKey: schedulerenum.TaskKeyUserOutboxPublishBatchDefault, Title: t.title, Description: t.description, Enabled: true, CronSpec: "0 0/1 * * * ?", Payload: `{"limit":1000,"max_retry":1}`, Timeout: 30 * time.Second, MaxAttempts: 1, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteLatest}}
 }
-
 func (t *UserOutboxPublishBatch) DefaultDelayedTasks() []*DefaultDelayedTask {
-	return []*DefaultDelayedTask{
-		{
-			TaskKey:       schedulerenum.TaskKeyUserOutboxPublishBatchDelayedDefault,
-			Title:         t.Title(),
-			Description:   t.Description(),
-			Enabled:       true,
-			Timeout:       1 * time.Minute,
-			MaxAttempts:   3,
-			MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll,
-		},
-	}
+	return []*DefaultDelayedTask{{TaskKey: schedulerenum.TaskKeyUserOutboxPublishBatchDelayedDefault, Title: t.title, Description: t.description, Enabled: true, Timeout: time.Minute, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
 }
 
 type userOutboxPublishBatchPayload struct {
@@ -85,29 +44,22 @@ type userOutboxPublishBatchPayload struct {
 }
 
 func (t *UserOutboxPublishBatch) Execute(ctx context.Context, payload string) error {
-	limit := t.defaultLimit
-	publishTimeout := t.defaultTimeout
-	maxRetry := t.defaultRetry
-	payload = strings.TrimSpace(payload)
-	if payload != "" && payload != "{}" {
-		data := &userOutboxPublishBatchPayload{}
-		if err := json.Unmarshal([]byte(payload), data); err != nil {
+	data := userOutboxPublishBatchPayload{Limit: t.defaultLimit, PublishTimeout: t.defaultTimeout, MaxRetry: t.defaultRetry}
+	if payload = strings.TrimSpace(payload); payload != "" && payload != "{}" {
+		var override userOutboxPublishBatchPayload
+		if err := json.Unmarshal([]byte(payload), &override); err != nil {
 			return err
 		}
-		if data.Limit > 0 {
-			limit = data.Limit
+		if override.Limit > 0 {
+			data.Limit = override.Limit
 		}
-		if data.PublishTimeout > 0 {
-			publishTimeout = data.PublishTimeout
+		if override.PublishTimeout > 0 {
+			data.PublishTimeout = override.PublishTimeout
 		}
-		if data.MaxRetry > 0 {
-			maxRetry = data.MaxRetry
+		if override.MaxRetry > 0 {
+			data.MaxRetry = override.MaxRetry
 		}
 	}
-	_, err := t.userClient.Outbox.PublishBatch(ctx, &userv1.PublishOutboxEvents_Req{
-		Limit:          limit,
-		PublishTimeout: durationpb.New(publishTimeout),
-		MaxRetry:       maxRetry,
-	})
+	_, err := t.userClient.Outbox.PublishBatch(ctx, &userv1.PublishOutboxEvents_Req{Limit: data.Limit, PublishTimeout: durationpb.New(data.PublishTimeout), MaxRetry: data.MaxRetry})
 	return err
 }

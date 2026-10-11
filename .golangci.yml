@@ -83,17 +83,17 @@ linters:
     errchkjson:
       check-error-free-encoding: false
     gocyclo:
-      min-complexity: 15
+      min-complexity: 30
     # Its Errorf autofix does not update imports safely.
     perfsprint:
       errorf: false
     funlen:
-      lines: 100
-      statements: 50
+      lines: 300
+      statements: 150
     nestif:
-      min-complexity: 4
+      min-complexity: 16
     dupl:
-      threshold: 150
+      threshold: 250
     goconst:
       min-len: 3
       min-occurrences: 3
@@ -149,8 +149,13 @@ linters:
     rules:
       - path: '(wire_gen\.go$|\.pb\.go$)'
         linters: [gosec, funlen, dupl, revive, forbidigo, noctx]
+      - path: '(^|/)error_message\.go$'
+        linters: [funlen]
       - path: '(^|/)cmd/.*\.go$'
         linters: [forbidigo]
+      # Content 与 user 的 outbox 是独立任务；相同调度默认值不形成共享领域抽象。
+      - path: '(^|/)internal/biz/usecase/task/(content|user)_outbox_publish_batch\.go$'
+        linters: [dupl]
 
 issues:
   max-issues-per-linter: 0

@@ -39,15 +39,11 @@ func NewDelayedTaskScheduleNatsRepo(
 	conf *config.Bootstrap,
 	natsClient *commonclient.NatsClient,
 ) (repo.DelayedTaskScheduleRepo, error) {
-	js, err := jetstream.New(natsClient.Conn())
+	bootstrap, err := (&natsScheduleBootstrap{}).initialize(conf, natsClient)
 	if err != nil {
 		return nil, err
 	}
 	s := conf.GetScheduler()
-	streamName := s.GetStreamName()
-	if streamName == "" {
-		streamName = "SCHEDULER"
-	}
 	schedulePrefix := s.GetDelayedTaskScheduleSubjectPrefix()
 	if schedulePrefix == "" {
 		schedulePrefix = "scheduler.schedule.delayed_task_execution"
@@ -60,18 +56,6 @@ func NewDelayedTaskScheduleNatsRepo(
 	if consumerDurable == "" {
 		consumerDurable = "scheduler_delayed_task_execution"
 	}
-	ackWait := time.Minute
-	if s.GetAckWait() != nil && s.GetAckWait().AsDuration() > 0 {
-		ackWait = s.GetAckWait().AsDuration()
-	}
-	fetchBatch := int(s.GetFetchBatch())
-	if fetchBatch <= 0 {
-		fetchBatch = 16
-	}
-	fetchWait := 2 * time.Second
-	if s.GetFetchWait() != nil && s.GetFetchWait().AsDuration() > 0 {
-		fetchWait = s.GetFetchWait().AsDuration()
-	}
 	scheduledSchedulePrefix := s.GetScheduledTaskScheduleSubjectPrefix()
 	if scheduledSchedulePrefix == "" {
 		scheduledSchedulePrefix = "scheduler.schedule.scheduled_task"
@@ -82,14 +66,14 @@ func NewDelayedTaskScheduleNatsRepo(
 	}
 	return &DelayedTaskScheduleNatsRepo{
 		logger:          logger,
-		js:              js,
-		streamName:      streamName,
+		js:              bootstrap.js,
+		streamName:      bootstrap.streamName,
 		schedulePrefix:  schedulePrefix,
 		executeSubject:  executeSubject,
 		consumerDurable: consumerDurable,
-		ackWait:         ackWait,
-		fetchBatch:      fetchBatch,
-		fetchWait:       fetchWait,
+		ackWait:         bootstrap.ackWait,
+		fetchBatch:      bootstrap.fetchBatch,
+		fetchWait:       bootstrap.fetchWait,
 		scheduleTTL:     10 * 365 * 24 * time.Hour,
 		allSubjects: []string{
 			scheduledSchedulePrefix + ".>",

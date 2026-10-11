@@ -1,10 +1,11 @@
 package repo
 
 import (
-	"bff_bbs/internal/biz/model"
 	commonmodel "common/pkg/model"
 	"context"
 	"time"
+
+	"bff_bbs/internal/biz/model"
 )
 
 type ArticleSave struct {

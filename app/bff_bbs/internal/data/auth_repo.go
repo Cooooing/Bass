@@ -1,7 +1,6 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/model"
 	"common/pkg/client/rpc"
 	"common/pkg/constant"
 	commonenum "common/pkg/enum"
@@ -9,6 +8,8 @@ import (
 	userv1 "common/proto/gen/user/v1"
 	userenum "common/proto/gen/user/v1/enum"
 	"context"
+
+	"bff_bbs/internal/biz/model"
 
 	"bff_bbs/internal/biz/repo"
 	"bff_bbs/internal/enum"

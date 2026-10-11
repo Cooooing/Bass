@@ -48,7 +48,7 @@ func (c *MoonbreezeRateLimitCache) Allow(ctx context.Context, authorID int64, wi
 	result, err := c.allowScript.Run(
 		ctx,
 		c.redisClient.Client,
-		[]string{c.publishRateLimitKey(authorID)},
+		[]string{fmt.Sprintf("content:moonbreeze:publish_rate_limit:{author_id:%d}", authorID)},
 		time.Now().UnixMilli(),
 		window.Milliseconds(),
 		maxCount,
@@ -62,8 +62,4 @@ func (c *MoonbreezeRateLimitCache) Allow(ctx context.Context, authorID int64, wi
 		state.RetryAfter = time.Duration(result[1]) * time.Millisecond
 	}
 	return state, nil
-}
-
-func (*MoonbreezeRateLimitCache) publishRateLimitKey(authorID int64) string {
-	return fmt.Sprintf("content:moonbreeze:publish_rate_limit:{author_id:%d}", authorID)
 }

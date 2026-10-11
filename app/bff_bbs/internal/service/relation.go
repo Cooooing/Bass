@@ -6,6 +6,7 @@ import (
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
+	relationmodel "common/proto/gen/bff_bbs/v1/user/model"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
@@ -87,114 +88,67 @@ func (s *RelationService) Unblock(ctx context.Context, req *bbsuserv1.UnblockRel
 }
 
 func (s *RelationService) ListFollowing(ctx context.Context, req *bbsuserv1.ListFollowingRelations_Req) (*bbsuserv1.ListFollowingRelations_Resp, error) {
-	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
-	}
-	resp, err := s.relationUsecase.ListFollowing(ctx, &usecase.ListFollowingReq{
-		ActorID: user.ID,
-		Page:    commonmodel.PageReqFromProto(req.GetPage()),
+	result, err := s.listRelations(ctx, req.GetPage(), func(ctx context.Context, userID int64, page *commonmodel.PageReq) (*usecase.RelationListResp, error) {
+		return s.relationUsecase.ListFollowing(ctx, &usecase.ListFollowingReq{ActorID: userID, Page: page})
 	})
 	if err != nil {
 		return nil, err
 	}
-	var page *common.PageResp
-	if resp.Page != nil {
-		page = resp.Page.ToProto()
-	}
-	rows := make([]*bbsuserv1.ListFollowingRelations_Resp_Relation, 0, len(resp.Rows))
-	for _, row := range resp.Rows {
-		if row == nil {
-			rows = append(rows, nil)
-			continue
-		}
-		rows = append(rows, &bbsuserv1.ListFollowingRelations_Resp_Relation{
-			Id:        row.ID,
-			Type:      enum.RelationTypeMap.MustToProto(row.Type),
-			ActorId:   row.ActorID,
-			TargetId:  row.TargetID,
-			CreatedAt: timestamppb.New(*row.CreatedAt),
-			UpdatedAt: timestamppb.New(*row.UpdatedAt),
-		})
-	}
 	return &bbsuserv1.ListFollowingRelations_Resp{
-		Page: page,
-		Rows: rows,
+		Page: result.Page.ToProto(),
+		Rows: result.Rows,
 	}, nil
 }
 
 func (s *RelationService) ListFollowers(ctx context.Context, req *bbsuserv1.ListFollowersRelations_Req) (*bbsuserv1.ListFollowersRelations_Resp, error) {
-	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
-	}
-	resp, err := s.relationUsecase.ListFollowers(ctx, &usecase.ListFollowersReq{
-		ActorID: user.ID,
-		Page:    commonmodel.PageReqFromProto(req.GetPage()),
+	result, err := s.listRelations(ctx, req.GetPage(), func(ctx context.Context, userID int64, page *commonmodel.PageReq) (*usecase.RelationListResp, error) {
+		return s.relationUsecase.ListFollowers(ctx, &usecase.ListFollowersReq{ActorID: userID, Page: page})
 	})
 	if err != nil {
 		return nil, err
 	}
-	var page *common.PageResp
-	if resp.Page != nil {
-		page = resp.Page.ToProto()
-	}
-	rows := make([]*bbsuserv1.ListFollowersRelations_Resp_Relation, 0, len(resp.Rows))
-	for _, row := range resp.Rows {
-		if row == nil {
-			rows = append(rows, nil)
-			continue
-		}
-		rows = append(rows, &bbsuserv1.ListFollowersRelations_Resp_Relation{
-			Id:        row.ID,
-			Type:      enum.RelationTypeMap.MustToProto(row.Type),
-			ActorId:   row.ActorID,
-			TargetId:  row.TargetID,
-			CreatedAt: timestamppb.New(*row.CreatedAt),
-			UpdatedAt: timestamppb.New(*row.UpdatedAt),
-		})
-	}
 	return &bbsuserv1.ListFollowersRelations_Resp{
-		Page: page,
-		Rows: rows,
+		Page: result.Page.ToProto(),
+		Rows: result.Rows,
 	}, nil
 }
 
 func (s *RelationService) ListBlocked(ctx context.Context, req *bbsuserv1.ListBlockedRelations_Req) (*bbsuserv1.ListBlockedRelations_Resp, error) {
-	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
-	}
-	resp, err := s.relationUsecase.ListBlocked(ctx, &usecase.ListBlockedReq{
-		ActorID: user.ID,
-		Page:    commonmodel.PageReqFromProto(req.GetPage()),
+	result, err := s.listRelations(ctx, req.GetPage(), func(ctx context.Context, userID int64, page *commonmodel.PageReq) (*usecase.RelationListResp, error) {
+		return s.relationUsecase.ListBlocked(ctx, &usecase.ListBlockedReq{ActorID: userID, Page: page})
 	})
 	if err != nil {
 		return nil, err
 	}
-	var page *common.PageResp
-	if resp.Page != nil {
-		page = resp.Page.ToProto()
+	return &bbsuserv1.ListBlockedRelations_Resp{
+		Page: result.Page.ToProto(),
+		Rows: result.Rows,
+	}, nil
+}
+
+type relationListResult struct {
+	Page *commonmodel.PageResp
+	Rows []*relationmodel.Relation
+}
+
+func (s *RelationService) listRelations(ctx context.Context, page *common.PageReq, list func(context.Context, int64, *commonmodel.PageReq) (*usecase.RelationListResp, error)) (*relationListResult, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
 	}
-	rows := make([]*bbsuserv1.ListBlockedRelations_Resp_Relation, 0, len(resp.Rows))
-	for _, row := range resp.Rows {
+	result, err := list(ctx, user.ID, commonmodel.PageReqFromProto(page))
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*relationmodel.Relation, 0, len(result.Rows))
+	for _, row := range result.Rows {
 		if row == nil {
 			rows = append(rows, nil)
 			continue
 		}
-		rows = append(rows, &bbsuserv1.ListBlockedRelations_Resp_Relation{
-			Id:        row.ID,
-			Type:      enum.RelationTypeMap.MustToProto(row.Type),
-			ActorId:   row.ActorID,
-			TargetId:  row.TargetID,
-			CreatedAt: timestamppb.New(*row.CreatedAt),
-			UpdatedAt: timestamppb.New(*row.UpdatedAt),
-		})
+		rows = append(rows, &relationmodel.Relation{Id: row.ID, Type: relationmodel.RelationType(enum.RelationTypeMap.MustToProto(row.Type)), ActorId: row.ActorID, TargetId: row.TargetID, CreatedAt: timestamppb.New(*row.CreatedAt), UpdatedAt: timestamppb.New(*row.UpdatedAt)})
 	}
-	return &bbsuserv1.ListBlockedRelations_Resp{
-		Page: page,
-		Rows: rows,
-	}, nil
+	return &relationListResult{Page: result.Page, Rows: rows}, nil
 }
 
 func (s *RelationService) GetStatus(ctx context.Context, req *bbsuserv1.GetStatusRelation_Req) (*bbsuserv1.GetStatusRelation_Resp, error) {

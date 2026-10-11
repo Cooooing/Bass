@@ -5,11 +5,17 @@ import (
 	commonmodel "common/pkg/model"
 	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
 	bbscontentv1enum "common/proto/gen/bff_bbs/v1/content/enum"
+	contentmodel "common/proto/gen/bff_bbs/v1/content/model"
+	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
+	bbsuserv1enum "common/proto/gen/bff_bbs/v1/user/enum"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"bff_bbs/internal/biz/model"
 	"bff_bbs/internal/biz/repo"
+	"bff_bbs/internal/enum"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type ContentCommentUsecase struct {
@@ -128,7 +134,7 @@ type ListCommentsReq struct {
 
 type ListCommentsResp struct {
 	Page *commonmodel.PageResp
-	Rows []*repo.CommentListItem
+	Rows []*model.CommentListItem
 }
 
 func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListCommentsReq) (*ListCommentsResp, error) {
@@ -168,9 +174,13 @@ func (u *ContentCommentUsecase) ListComments(ctx context.Context, req *ListComme
 			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_COMMENT_LIST_PRIVATE)
 		}
 	}
-	excludedUserIDs, err := u.blockedCounterparts(ctx, req.UserID)
-	if err != nil {
-		return nil, err
+	excludedUserIDs := []int64{}
+	if req.UserID > 0 && u.relationClient != nil {
+		var err error
+		excludedUserIDs, err = u.relationClient.ListBlockedCounterparts(ctx, req.UserID)
+		if err != nil {
+			return nil, err
+		}
 	}
 	query.ExcludedUserIDs = excludedUserIDs
 	resp, err := u.contentCommentClient.ListComments(ctx, &repo.ListCommentsReq{
@@ -239,9 +249,13 @@ type ListCommentThreadsResp struct {
 }
 
 func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *ListCommentThreadsReq) (*ListCommentThreadsResp, error) {
-	excludedUserIDs, err := u.blockedCounterparts(ctx, req.UserID)
-	if err != nil {
-		return nil, err
+	excludedUserIDs := []int64{}
+	if req.UserID > 0 && u.relationClient != nil {
+		var err error
+		excludedUserIDs, err = u.relationClient.ListBlockedCounterparts(ctx, req.UserID)
+		if err != nil {
+			return nil, err
+		}
 	}
 	var page *commonmodel.PageReq
 	if req.Page != nil {
@@ -327,13 +341,17 @@ type ListCommentRepliesReq struct {
 
 type ListCommentRepliesResp struct {
 	Page *commonmodel.PageResp
-	Rows []*repo.CommentListItem
+	Rows []*model.CommentListItem
 }
 
 func (u *ContentCommentUsecase) ListCommentReplies(ctx context.Context, req *ListCommentRepliesReq) (*ListCommentRepliesResp, error) {
-	excludedUserIDs, err := u.blockedCounterparts(ctx, req.UserID)
-	if err != nil {
-		return nil, err
+	excludedUserIDs := []int64{}
+	if req.UserID > 0 && u.relationClient != nil {
+		var err error
+		excludedUserIDs, err = u.relationClient.ListBlockedCounterparts(ctx, req.UserID)
+		if err != nil {
+			return nil, err
+		}
 	}
 	var page *commonmodel.PageReq
 	if req.Page != nil {
@@ -410,13 +428,17 @@ type ListCommentTimelineReq struct {
 
 type ListCommentTimelineResp struct {
 	Page *commonmodel.PageResp
-	Rows []*repo.CommentListItem
+	Rows []*model.CommentListItem
 }
 
 func (u *ContentCommentUsecase) ListCommentTimeline(ctx context.Context, req *ListCommentTimelineReq) (*ListCommentTimelineResp, error) {
-	excludedUserIDs, err := u.blockedCounterparts(ctx, req.UserID)
-	if err != nil {
-		return nil, err
+	excludedUserIDs := []int64{}
+	if req.UserID > 0 && u.relationClient != nil {
+		var err error
+		excludedUserIDs, err = u.relationClient.ListBlockedCounterparts(ctx, req.UserID)
+		if err != nil {
+			return nil, err
+		}
 	}
 	var page *commonmodel.PageReq
 	if req.Page != nil {
@@ -483,11 +505,43 @@ func (u *ContentCommentUsecase) ListCommentTimeline(ctx context.Context, req *Li
 	}, nil
 }
 
-func (u *ContentCommentUsecase) blockedCounterparts(ctx context.Context, userID int64) ([]int64, error) {
-	if userID <= 0 || u.relationClient == nil {
-		return []int64{}, nil
+func (u *ContentCommentUsecase) ListCommentRepliesProto(resp *ListCommentRepliesResp) *bbscontentv1.ListCommentReplies_Resp {
+	if resp == nil {
+		return &bbscontentv1.ListCommentReplies_Resp{}
 	}
-	return u.relationClient.ListBlockedCounterparts(ctx, userID)
+	rows := make([]*contentmodel.CommentListItem, 0, len(resp.Rows))
+	for _, row := range resp.Rows {
+		rows = append(rows, u.commentListItemProto(row))
+	}
+	return &bbscontentv1.ListCommentReplies_Resp{Page: resp.Page.ToProto(), Rows: rows}
+}
+
+func (u *ContentCommentUsecase) ListCommentTimelineProto(resp *ListCommentTimelineResp) *bbscontentv1.ListCommentTimeline_Resp {
+	if resp == nil {
+		return &bbscontentv1.ListCommentTimeline_Resp{}
+	}
+	rows := make([]*contentmodel.CommentListItem, 0, len(resp.Rows))
+	for _, row := range resp.Rows {
+		rows = append(rows, u.commentListItemProto(row))
+	}
+	return &bbscontentv1.ListCommentTimeline_Resp{Page: resp.Page.ToProto(), Rows: rows}
+}
+
+func (u *ContentCommentUsecase) commentListItemProto(row *model.CommentListItem) *contentmodel.CommentListItem {
+	if row == nil {
+		return nil
+	}
+	item := &contentmodel.CommentListItem{Id: row.ID, ArticleId: row.ArticleID, Content: row.Content, ContentRender: row.ContentRender, Level: row.Level, ParentId: row.ParentID, ReplyId: row.ReplyID, ReplyCount: row.ReplyCount, LikeCount: row.LikeCount, ThankCount: row.ThankCount, Restriction: contentmodel.ContentRestriction(enum.ContentRestrictionMap.MustToProto(row.Restriction)), CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy, CreatedAt: timestamppb.New(*row.CreatedAt), UpdatedAt: timestamppb.New(*row.UpdatedAt)}
+	if row.ViewerActionState != nil {
+		item.ViewerActionState = &contentmodel.CommentViewerActionState{Liked: row.ViewerActionState.Liked, Thanked: row.ViewerActionState.Thanked}
+	}
+	if account := row.User; account != nil {
+		item.User = &bbsuserv1.AccountProfile{Id: account.ID, Name: account.Name, Nickname: account.Nickname, Url: account.URL, AvatarUrl: account.AvatarURL, Introduction: account.Introduction, Status: bbsuserv1enum.AccountStatus(account.Status), Mbti: account.MBTI, FollowCount: account.FollowCount, FollowerCount: account.FollowerCount, CreatedAt: timestamppb.New(*account.CreatedAt), UpdatedAt: timestamppb.New(*account.UpdatedAt)}
+	}
+	if account := row.ReplyUser; account != nil {
+		item.ReplyUser = &bbsuserv1.AccountProfile{Id: account.ID, Name: account.Name, Nickname: account.Nickname, Url: account.URL, AvatarUrl: account.AvatarURL, Introduction: account.Introduction, Status: bbsuserv1enum.AccountStatus(account.Status), Mbti: account.MBTI, FollowCount: account.FollowCount, FollowerCount: account.FollowerCount, CreatedAt: timestamppb.New(*account.CreatedAt), UpdatedAt: timestamppb.New(*account.UpdatedAt)}
+	}
+	return item
 }
 
 type LikeCommentReq struct {

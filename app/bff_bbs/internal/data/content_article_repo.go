@@ -1,16 +1,16 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/model"
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	contentv1 "common/proto/gen/content/v1"
 	contentv1enum "common/proto/gen/content/v1/enum"
-	userv1 "common/proto/gen/user/v1"
 	"context"
 	"fmt"
 	"sort"
+
+	"bff_bbs/internal/biz/model"
 
 	"bff_bbs/internal/biz/repo"
 
@@ -24,8 +24,8 @@ import (
 var _ repo.ContentArticleClient = (*ContentArticleClient)(nil)
 
 type ContentArticleClient struct {
+	accountProfileLoader
 	contentClient *rpc.ContentClient
-	userClient    *rpc.UserClient
 }
 
 func NewContentArticleClient(
@@ -33,8 +33,8 @@ func NewContentArticleClient(
 	userClient *rpc.UserClient,
 ) repo.ContentArticleClient {
 	return &ContentArticleClient{
-		contentClient: contentClient,
-		userClient:    userClient,
+		accountProfileLoader: accountProfileLoader{userClient: userClient},
+		contentClient:        contentClient,
 	}
 }
 
@@ -392,7 +392,7 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 				ID:            postscript.GetId(),
 				ArticleID:     postscript.GetArticleId(),
 				Content:       postscript.GetContent(),
-				ContentRender: r.articlePostscriptContentRender(postscript.GetId(), postscript.GetContent()),
+				ContentRender: util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_postscript", postscript.GetId()), postscript.GetContent()),
 				Restriction:   int32(postscript.GetRestriction()),
 				CreatedBy:     postscript.CreatedBy,
 				UpdatedBy:     postscript.UpdatedBy,
@@ -598,7 +598,7 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles
 		ID:                item.GetId(),
 		Title:             item.GetTitle(),
 		Content:           content,
-		ContentRender:     r.articleContentRender(item.GetId(), content),
+		ContentRender:     util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_content", item.GetId()), content),
 		HasPostscript:     item.GetHasPostscript(),
 		HasReward:         item.GetHasReward(),
 		PublishStatus:     int32(item.GetPublishStatus()),
@@ -647,15 +647,19 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 	if state == nil {
 		state = &model.ArticleViewerActionState{}
 	}
+	var rewardContentRender *string
+	if item.RewardContent != nil {
+		rewardContentRender = new(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", item.GetId()), *item.RewardContent))
+	}
 	out := &model.ArticleDetail{
 		ID:                  item.GetId(),
 		Title:               item.GetTitle(),
 		Content:             item.GetContent(),
-		ContentRender:       r.articleContentRender(item.GetId(), item.GetContent()),
+		ContentRender:       util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_content", item.GetId()), item.GetContent()),
 		HasPostscript:       item.GetHasPostscript(),
 		HasReward:           item.GetHasReward(),
 		RewardContent:       item.RewardContent,
-		RewardContentRender: r.articleRewardContentRender(item.GetId(), item.RewardContent),
+		RewardContentRender: rewardContentRender,
 		RewardPoints:        item.RewardPoints,
 		PublishStatus:       int32(item.GetPublishStatus()),
 		Visibility:          int32(item.GetVisibility()),
@@ -705,21 +709,6 @@ func (r *ContentArticleClient) articleSummaryContent(content string) string {
 	return content
 }
 
-func (r *ContentArticleClient) articleContentRender(articleID int64, content string) string {
-	return util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_content", articleID), content)
-}
-
-func (r *ContentArticleClient) articleRewardContentRender(articleID int64, content *string) *string {
-	if content == nil {
-		return nil
-	}
-	return new(util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_reward_content", articleID), *content))
-}
-
-func (r *ContentArticleClient) articlePostscriptContentRender(postscriptID int64, content string) string {
-	return util.LuteEngine.MarkdownStr(fmt.Sprintf("%s_%d", "article_postscript", postscriptID), content)
-}
-
 func (r *ContentArticleClient) articleCoverImageURL(item *contentv1.Article) *string {
 	if item == nil || item.GetContent() == "" {
 		return nil
@@ -733,46 +722,4 @@ func (r *ContentArticleClient) articleCoverImageURL(item *contentv1.Article) *st
 		return nil
 	}
 	return coverImageURL
-}
-
-func (r *ContentArticleClient) loadAccountProfiles(ctx context.Context, userIDs ...int64) (map[int64]*model.AccountProfile, error) {
-	if r.userClient == nil {
-		return map[int64]*model.AccountProfile{}, nil
-	}
-	ids := lo.Filter(lo.Uniq(userIDs), func(userID int64, _ int) bool {
-		return userID != 0
-	})
-	if len(ids) == 0 {
-		return map[int64]*model.AccountProfile{}, nil
-	}
-	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
-		Query: &userv1.MapAccounts_Req_AccountQuery{
-			UserIds: ids,
-		},
-	})
-	if err != nil {
-		return nil, err
-	}
-	out := make(map[int64]*model.AccountProfile, len(reply.GetAccounts()))
-	for userID, account := range reply.GetAccounts() {
-		basic := account.GetBasic()
-		if basic == nil {
-			continue
-		}
-		out[userID] = &model.AccountProfile{
-			ID:            basic.GetId(),
-			Name:          basic.GetName(),
-			Nickname:      basic.Nickname,
-			URL:           basic.Url,
-			AvatarAssetID: basic.AvatarAssetId,
-			Introduction:  basic.Introduction,
-			MBTI:          basic.Mbti,
-			Status:        int32(basic.GetStatus()),
-			FollowCount:   basic.FollowCount,
-			FollowerCount: basic.FollowerCount,
-			CreatedAt:     new(basic.GetCreatedAt().AsTime()),
-			UpdatedAt:     new(basic.GetUpdatedAt().AsTime()),
-		}
-	}
-	return out, nil
 }

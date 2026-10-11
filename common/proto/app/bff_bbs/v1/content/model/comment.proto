@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.v1.content.model;
+
+import "bff_bbs/v1/user/account.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/bff_bbs/v1/content/model;model";
+
+enum ContentRestriction {
+  CONTENT_RESTRICTION_UNSPECIFIED = 0; // 未指定
+  CONTENT_RESTRICTION_NONE = 1; // 无限制
+  CONTENT_RESTRICTION_HIDDEN = 2; // 已隐藏
+  CONTENT_RESTRICTION_LOCKED = 3; // 已锁定
+}
+
+message CommentViewerActionState {
+  bool liked = 1; // 是否已点赞
+  bool thanked = 2; // 是否已感谢
+}
+
+message CommentListItem {
+  int64 id = 1; // 评论 ID
+  int64 article_id = 2; // 文章 ID
+  string content = 3; // 原始内容
+  string content_render = 4; // 渲染后的内容
+  int32 level = 5; // 评论层级
+  optional int64 parent_id = 6; // 父评论 ID
+  optional int64 reply_id = 7; // 回复的评论 ID
+  int32 reply_count = 9; // 回复数量
+  int32 like_count = 10; // 点赞数量
+  int32 thank_count = 11; // 感谢数量
+  .common.api.app.bff_bbs.v1.user.AccountProfile user = 12; // 评论账号展示资料
+  .common.api.app.bff_bbs.v1.user.AccountProfile reply_user = 13; // 被回复账号展示资料
+  CommentViewerActionState viewer_action_state = 15; // 当前查看账号的评论行为状态
+  ContentRestriction restriction = 16; // 管理限制
+  optional int64 created_by = 1002; // 创建账号 ID
+  optional int64 updated_by = 1003; // 更新账号 ID
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}

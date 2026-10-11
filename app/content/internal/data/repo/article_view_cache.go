@@ -53,7 +53,7 @@ func (r *ArticleViewCacheRepo) Record(ctx context.Context, req *repo.ArticleView
 	if viewerKey == "viewer:{ip:}:ua:{user_agent:}" {
 		return false, nil
 	}
-	recordKey := r.recordKey(req.ArticleID)
+	recordKey := fmt.Sprintf(r.recordKeyFormat, req.ArticleID)
 	ok, err := r.redisClient.Client.HSetNX(ctx, recordKey, viewerKey, time.Now().Format(time.RFC3339Nano)).Result()
 	if err != nil || !ok {
 		return ok, err
@@ -67,10 +67,6 @@ func (r *ArticleViewCacheRepo) Record(ctx context.Context, req *repo.ArticleView
 	return true, nil
 }
 
-func (r *ArticleViewCacheRepo) recordKey(articleID int64) string {
-	return fmt.Sprintf(r.recordKeyFormat, articleID)
-}
-
 func (r *ArticleViewCacheRepo) PopCounts(ctx context.Context, limit int32) (map[int64]int32, error) {
 	values, err := r.redisClient.Client.HGetAll(ctx, r.countKey).Result()
 	if err != nil {
@@ -82,7 +78,7 @@ func (r *ArticleViewCacheRepo) PopCounts(ctx context.Context, limit int32) (map[
 	rows := make(map[int64]int32, len(values))
 	fields := make([]string, 0, len(values))
 	for articleIDValue, countValue := range values {
-		if int32(len(rows)) >= limit {
+		if len(rows) >= int(limit) {
 			break
 		}
 		articleID, err := strconv.ParseInt(articleIDValue, 10, 64)

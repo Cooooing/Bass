@@ -1,17 +1,18 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/model"
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	contentv1 "common/proto/gen/content/v1"
 	contentv1enum "common/proto/gen/content/v1/enum"
-	userv1 "common/proto/gen/user/v1"
 	"context"
 	"fmt"
 
+	"bff_bbs/internal/biz/model"
+
 	"bff_bbs/internal/biz/repo"
+	"bff_bbs/internal/enum"
 
 	"github.com/samber/lo"
 )
@@ -19,8 +20,9 @@ import (
 var _ repo.ContentCommentClient = (*ContentCommentClient)(nil)
 
 type ContentCommentClient struct {
-	contentClient *rpc.ContentClient
-	userClient    *rpc.UserClient
+	accountProfileLoader
+	contentClient        *rpc.ContentClient
+	restrictionConverter *enum.ContentRestrictionConverter
 }
 
 func NewContentCommentClient(
@@ -28,8 +30,9 @@ func NewContentCommentClient(
 	userClient *rpc.UserClient,
 ) repo.ContentCommentClient {
 	return &ContentCommentClient{
-		contentClient: contentClient,
-		userClient:    userClient,
+		accountProfileLoader: accountProfileLoader{userClient: userClient},
+		contentClient:        contentClient,
+		restrictionConverter: enum.NewContentRestrictionConverter(),
 	}
 }
 func (r *ContentCommentClient) CreateComment(ctx context.Context, req *repo.CreateCommentReq) (*repo.CommentDetail, error) {
@@ -144,7 +147,7 @@ func (r *ContentCommentClient) ListComments(ctx context.Context, req *repo.ListC
 	if err != nil {
 		return nil, err
 	}
-	rows := make([]*repo.CommentListItem, 0, len(reply.GetRows()))
+	rows := make([]*model.CommentListItem, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
 		rows = append(rows, r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()]))
 	}
@@ -265,14 +268,14 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	}
 	rows := make([]*repo.CommentThread, 0, len(reply.GetRows()))
 	for _, item := range reply.GetRows() {
-		previewRows := lo.Map(previewMap[item.GetId()], func(preview *contentv1.PageComments_Resp_Comment, _ int) *repo.CommentListItem {
+		previewRows := lo.Map(previewMap[item.GetId()], func(preview *contentv1.PageComments_Resp_Comment, _ int) *model.CommentListItem {
 			return r.commentListItem(preview, articles[preview.GetArticleId()], profiles, states[preview.GetId()])
 		})
 		rows = append(rows, &repo.CommentThread{
 			Root:           r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()]),
 			PreviewReplies: previewRows,
 			ReplyCount:     item.GetReplyCount(),
-			HasMoreReplies: item.GetReplyCount() > int32(len(previewRows)),
+			HasMoreReplies: int64(item.GetReplyCount()) > int64(len(previewRows)),
 		})
 	}
 	var page *commonmodel.PageResp
@@ -327,7 +330,7 @@ func (r *ContentCommentClient) ListCommentReplies(ctx context.Context, req *repo
 	if err != nil {
 		return nil, err
 	}
-	rows := lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Resp_Comment, _ int) *repo.CommentListItem {
+	rows := lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Resp_Comment, _ int) *model.CommentListItem {
 		return r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()])
 	})
 	var page *commonmodel.PageResp
@@ -381,7 +384,7 @@ func (r *ContentCommentClient) ListCommentTimeline(ctx context.Context, req *rep
 	if err != nil {
 		return nil, err
 	}
-	rows := lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Resp_Comment, _ int) *repo.CommentListItem {
+	rows := lo.Map(reply.GetRows(), func(item *contentv1.PageComments_Resp_Comment, _ int) *model.CommentListItem {
 		return r.commentListItem(item, articles[item.GetArticleId()], profiles, states[item.GetId()])
 	})
 	var page *commonmodel.PageResp
@@ -424,10 +427,10 @@ func (r *ContentCommentClient) ThankComment(ctx context.Context, req *repo.Thank
 	return reply.GetThanked(), nil
 }
 
-func (r *ContentCommentClient) loadCommentViewerActionStates(ctx context.Context, userID int64, commentIDs []int64) (map[int64]*repo.CommentViewerActionState, error) {
+func (r *ContentCommentClient) loadCommentViewerActionStates(ctx context.Context, userID int64, commentIDs []int64) (map[int64]*model.CommentViewerActionState, error) {
 	commentIDs = lo.Uniq(commentIDs)
 	if userID <= 0 || len(commentIDs) == 0 {
-		return map[int64]*repo.CommentViewerActionState{}, nil
+		return map[int64]*model.CommentViewerActionState{}, nil
 	}
 	reply, err := r.contentClient.Comment.MapViewerActionStates(ctx, &contentv1.MapCommentViewerActionStates_Req{
 		CommentIds: commentIDs,
@@ -436,12 +439,12 @@ func (r *ContentCommentClient) loadCommentViewerActionStates(ctx context.Context
 	if err != nil {
 		return nil, err
 	}
-	states := make(map[int64]*repo.CommentViewerActionState, len(reply.GetStates()))
+	states := make(map[int64]*model.CommentViewerActionState, len(reply.GetStates()))
 	for commentID, state := range reply.GetStates() {
 		if state == nil {
 			continue
 		}
-		states[commentID] = &repo.CommentViewerActionState{
+		states[commentID] = &model.CommentViewerActionState{
 			Liked:   state.GetLiked(),
 			Thanked: state.GetThanked(),
 		}
@@ -485,22 +488,22 @@ func (r *ContentCommentClient) commentProfileIDs(item *contentv1.PageComments_Re
 	return userIDs
 }
 
-func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp_Comment, article *contentv1.Article, profiles map[int64]*model.AccountProfile, state *repo.CommentViewerActionState) *repo.CommentListItem {
+func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp_Comment, article *contentv1.Article, profiles map[int64]*model.AccountProfile, state *model.CommentViewerActionState) *model.CommentListItem {
 	if item == nil {
 		return nil
 	}
 	if state == nil {
-		state = &repo.CommentViewerActionState{}
+		state = &model.CommentViewerActionState{}
 	}
-	out := &repo.CommentListItem{
+	out := &model.CommentListItem{
 		ID:                item.GetId(),
 		ArticleID:         item.GetArticleId(),
 		Content:           item.GetContent(),
-		ContentRender:     r.commentContentRender(item.GetId(), item.GetContent()),
+		ContentRender:     util.LuteEngine.MarkdownStr(fmt.Sprintf("comment_%d", item.GetId()), item.GetContent()),
 		Level:             item.GetLevel(),
 		ParentID:          item.ParentId,
 		ReplyID:           item.ReplyId,
-		Restriction:       int32(item.GetRestriction()),
+		Restriction:       r.restrictionConverter.FromContentProto(item.GetRestriction()),
 		ThankCount:        item.GetThankCount(),
 		LikeCount:         item.GetLikeCount(),
 		ReplyCount:        item.GetReplyCount(),
@@ -520,7 +523,7 @@ func (r *ContentCommentClient) commentListItem(item *contentv1.PageComments_Resp
 		out.ReplyUser = profiles[*item.ReplyUserId]
 	}
 	if article != nil {
-		out.Article = &repo.ArticleBrief{
+		out.Article = &model.ArticleBrief{
 			ID:    article.GetId(),
 			Title: article.GetTitle(),
 		}
@@ -536,15 +539,15 @@ func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_C
 		ID:                item.GetId(),
 		ArticleID:         item.GetArticleId(),
 		Content:           item.GetContent(),
-		ContentRender:     r.commentContentRender(item.GetId(), item.GetContent()),
+		ContentRender:     util.LuteEngine.MarkdownStr(fmt.Sprintf("comment_%d", item.GetId()), item.GetContent()),
 		Level:             item.GetLevel(),
 		ParentID:          item.ParentId,
 		ReplyID:           item.ReplyId,
-		Restriction:       int32(item.GetRestriction()),
+		Restriction:       r.restrictionConverter.FromContentProto(item.GetRestriction()),
 		ThankCount:        item.GetThankCount(),
 		LikeCount:         item.GetLikeCount(),
 		ReplyCount:        item.GetReplyCount(),
-		ViewerActionState: &repo.CommentViewerActionState{},
+		ViewerActionState: &model.CommentViewerActionState{},
 		CreatedAt:         new(item.GetCreatedAt().AsTime()),
 		UpdatedAt:         new(item.GetUpdatedAt().AsTime()),
 	}
@@ -560,50 +563,4 @@ func (r *ContentCommentClient) commentDetail(item *contentv1.PageComments_Resp_C
 		out.ReplyUser = profiles[*item.ReplyUserId]
 	}
 	return out
-}
-
-func (r *ContentCommentClient) commentContentRender(commentID int64, content string) string {
-	return util.LuteEngine.MarkdownStr(fmt.Sprintf("comment_%d", commentID), content)
-}
-
-func (r *ContentCommentClient) loadAccountProfiles(ctx context.Context, userIDs ...int64) (map[int64]*model.AccountProfile, error) {
-	if r.userClient == nil {
-		return map[int64]*model.AccountProfile{}, nil
-	}
-	ids := lo.Filter(lo.Uniq(userIDs), func(userID int64, _ int) bool {
-		return userID != 0
-	})
-	if len(ids) == 0 {
-		return map[int64]*model.AccountProfile{}, nil
-	}
-	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
-		Query: &userv1.MapAccounts_Req_AccountQuery{
-			UserIds: ids,
-		},
-	})
-	if err != nil {
-		return nil, err
-	}
-	out := make(map[int64]*model.AccountProfile, len(reply.GetAccounts()))
-	for userID, account := range reply.GetAccounts() {
-		basic := account.GetBasic()
-		if basic == nil {
-			continue
-		}
-		out[userID] = &model.AccountProfile{
-			ID:            basic.GetId(),
-			Name:          basic.GetName(),
-			Nickname:      basic.Nickname,
-			URL:           basic.Url,
-			AvatarAssetID: basic.AvatarAssetId,
-			Introduction:  basic.Introduction,
-			MBTI:          basic.Mbti,
-			Status:        int32(basic.GetStatus()),
-			FollowCount:   basic.FollowCount,
-			FollowerCount: basic.FollowerCount,
-			CreatedAt:     new(basic.GetCreatedAt().AsTime()),
-			UpdatedAt:     new(basic.GetUpdatedAt().AsTime()),
-		}
-	}
-	return out, nil
 }

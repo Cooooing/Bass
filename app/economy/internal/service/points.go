@@ -102,41 +102,8 @@ func (s *PointsService) AddPoints(ctx context.Context, req *v1.AddEconomyPoints_
 	if err != nil {
 		return nil, err
 	}
-	var account *v1.EconomyAccount
-	if resp.Account != nil {
-		account = &v1.EconomyAccount{
-			Id:            resp.Account.ID,
-			UserId:        resp.Account.UserID,
-			Balance:       resp.Account.Balance,
-			FrozenBalance: resp.Account.FrozenBalance,
-			TotalIncome:   resp.Account.TotalIncome,
-			TotalExpense:  resp.Account.TotalExpense,
-		}
-		if resp.Account.CreatedAt != nil {
-			account.CreatedAt = timestamppb.New(*resp.Account.CreatedAt)
-		}
-		if resp.Account.UpdatedAt != nil {
-			account.UpdatedAt = timestamppb.New(*resp.Account.UpdatedAt)
-		}
-	}
-	var record *v1.EconomyRecord
-	if resp.Record != nil {
-		record = &v1.EconomyRecord{
-			Id:            resp.Record.ID,
-			TransactionNo: resp.Record.TransactionNo,
-			UserId:        resp.Record.UserID,
-			RecordType:    enum.EconomyRecordTypeMap.MustToProto(resp.Record.RecordType),
-			Direction:     enum.EconomyRecordDirectionMap.MustToProto(resp.Record.Direction),
-			Amount:        resp.Record.Amount,
-			BalanceBefore: resp.Record.BalanceBefore,
-			BalanceAfter:  resp.Record.BalanceAfter,
-			Remark:        resp.Record.Remark,
-		}
-		if resp.Record.CreatedAt != nil {
-			record.CreatedAt = timestamppb.New(*resp.Record.CreatedAt)
-		}
-	}
-	return &v1.AddEconomyPoints_Resp{Account: account, Record: record}, nil
+	mapper := economyProtoMapper{}
+	return &v1.AddEconomyPoints_Resp{Account: mapper.account(resp.Account), Record: mapper.record(resp.Record)}, nil
 }
 
 func (s *PointsService) DeductPoints(ctx context.Context, req *v1.DeductEconomyPoints_Req) (*v1.DeductEconomyPoints_Resp, error) {
@@ -153,41 +120,8 @@ func (s *PointsService) DeductPoints(ctx context.Context, req *v1.DeductEconomyP
 	if err != nil {
 		return nil, err
 	}
-	var account *v1.EconomyAccount
-	if resp.Account != nil {
-		account = &v1.EconomyAccount{
-			Id:            resp.Account.ID,
-			UserId:        resp.Account.UserID,
-			Balance:       resp.Account.Balance,
-			FrozenBalance: resp.Account.FrozenBalance,
-			TotalIncome:   resp.Account.TotalIncome,
-			TotalExpense:  resp.Account.TotalExpense,
-		}
-		if resp.Account.CreatedAt != nil {
-			account.CreatedAt = timestamppb.New(*resp.Account.CreatedAt)
-		}
-		if resp.Account.UpdatedAt != nil {
-			account.UpdatedAt = timestamppb.New(*resp.Account.UpdatedAt)
-		}
-	}
-	var record *v1.EconomyRecord
-	if resp.Record != nil {
-		record = &v1.EconomyRecord{
-			Id:            resp.Record.ID,
-			TransactionNo: resp.Record.TransactionNo,
-			UserId:        resp.Record.UserID,
-			RecordType:    enum.EconomyRecordTypeMap.MustToProto(resp.Record.RecordType),
-			Direction:     enum.EconomyRecordDirectionMap.MustToProto(resp.Record.Direction),
-			Amount:        resp.Record.Amount,
-			BalanceBefore: resp.Record.BalanceBefore,
-			BalanceAfter:  resp.Record.BalanceAfter,
-			Remark:        resp.Record.Remark,
-		}
-		if resp.Record.CreatedAt != nil {
-			record.CreatedAt = timestamppb.New(*resp.Record.CreatedAt)
-		}
-	}
-	return &v1.DeductEconomyPoints_Resp{Account: account, Record: record}, nil
+	mapper := economyProtoMapper{}
+	return &v1.DeductEconomyPoints_Resp{Account: mapper.account(resp.Account), Record: mapper.record(resp.Record)}, nil
 }
 
 func (s *PointsService) TransferPoints(ctx context.Context, req *v1.TransferEconomyPoints_Req) (*v1.TransferEconomyPoints_Resp, error) {

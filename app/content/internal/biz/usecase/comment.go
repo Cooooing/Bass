@@ -437,92 +437,8 @@ type CommentLikeReq struct {
 }
 
 func (d *CommentUsecase) Like(ctx context.Context, req *CommentLikeReq) (bool, error) {
-	commentID := req.CommentID
-	access, err := req.Access.Normalize("")
-	if err != nil {
-		return false, err
-	}
-	userID := access.ActorUserID
-	active := req.Active
-	var outboxEvent *repo.OutboxEvent
-	err = d.tx(ctx, func(ctx context.Context) error {
-		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
-			Filter: &model.CommentFilter{CommentID: new(commentID)},
-		})
-		comment := commentResp
-		if err != nil {
-			return err
-		}
-		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			Filter: &model.ArticleFilter{ArticleID: new(comment.ArticleID)},
-		})
-		if err != nil {
-			return err
-		}
-		if err := d.commentAccessUsecase.CanInteract(access, comment, article); err != nil {
-			return err
-		}
-		if active {
-			createdResp, err := d.commentActionRecordRepo.Save(ctx, &model.CommentActionRecord{
-				CommentID: commentID,
-				UserID:    userID,
-				Type:      enum.CommentActionLike,
-			})
-			if err != nil {
-				return err
-			}
-			if !createdResp {
-				return nil
-			}
-			if err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{
-				CommentID: commentID,
-				Stats: repo.CommentStatUpdate{
-					LikeCount: 1,
-				},
-			}); err != nil {
-				return err
-			}
-			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_COMMENT_LIKED,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_LIKED,
-				Payload: &commonenums.Event_CommentLiked{
-					CommentLiked: &commonenums.CommentLikedPayload{
-						SenderId:  userID,
-						CommentId: commentID,
-					},
-				},
-			})
-			return err
-		}
-
-		deletedResp, err := d.commentActionRecordRepo.Delete(ctx, &repo.CommentActionRecordDeleteReq{
-			CommentID: commentID,
-			UserID:    userID,
-			Action:    enum.CommentActionLike,
-		})
-		if err != nil {
-			return err
-		}
-		if deletedResp == 0 {
-			return nil
-		}
-		err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{
-			CommentID: commentID,
-			Stats: repo.CommentStatUpdate{
-				LikeCount: -1,
-			},
-		})
-		return err
-	})
-	if err != nil {
-		return false, err
-	}
-	if outboxEvent != nil {
-		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
-			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
-		}
-	}
-	return active, nil
+	interaction := commentInteraction{commentID: req.CommentID, access: req.Access, active: req.Active, action: enum.CommentActionLike, stats: repo.CommentStatUpdate{LikeCount: 1}, event: d.commentLikedEvent}
+	return d.changeInteraction(ctx, interaction)
 }
 
 type CommentThankReq struct {
@@ -532,82 +448,53 @@ type CommentThankReq struct {
 }
 
 func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool, error) {
-	commentID := req.CommentID
-	access, err := req.Access.Normalize("")
+	interaction := commentInteraction{commentID: req.CommentID, access: req.Access, active: req.Active, action: enum.CommentActionThank, stats: repo.CommentStatUpdate{ThankCount: 1}, event: d.commentThankedEvent}
+	return d.changeInteraction(ctx, interaction)
+}
+
+type commentInteraction struct {
+	commentID int64
+	access    *model.ContentAccess
+	active    bool
+	action    enum.CommentAction
+	stats     repo.CommentStatUpdate
+	event     func(int64, int64) *commonenums.Event
+}
+
+func (d *CommentUsecase) changeInteraction(ctx context.Context, interaction commentInteraction) (bool, error) {
+	access, err := interaction.access.Normalize("")
 	if err != nil {
 		return false, err
 	}
-	userID := access.ActorUserID
-	active := req.Active
 	var outboxEvent *repo.OutboxEvent
 	err = d.tx(ctx, func(ctx context.Context) error {
-		commentResp, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{
-			Filter: &model.CommentFilter{CommentID: new(commentID)},
-		})
-		comment := commentResp
+		comment, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{Filter: &model.CommentFilter{CommentID: new(interaction.commentID)}})
 		if err != nil {
 			return err
 		}
-		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			Filter: &model.ArticleFilter{ArticleID: new(comment.ArticleID)},
-		})
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(comment.ArticleID)}})
 		if err != nil {
 			return err
 		}
-		if err := d.commentAccessUsecase.CanInteract(access, comment, article); err != nil {
+		if err = d.commentAccessUsecase.CanInteract(access, comment, article); err != nil {
 			return err
 		}
-		if active {
-			createdResp, err := d.commentActionRecordRepo.Save(ctx, &model.CommentActionRecord{
-				CommentID: commentID,
-				UserID:    userID,
-				Type:      enum.CommentActionThank,
-			})
-			if err != nil {
+		if interaction.active {
+			created, err := d.commentActionRecordRepo.Save(ctx, &model.CommentActionRecord{CommentID: interaction.commentID, UserID: access.ActorUserID, Type: interaction.action})
+			if err != nil || !created {
 				return err
 			}
-			if !createdResp {
-				return nil
-			}
-			if err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{
-				CommentID: commentID,
-				Stats: repo.CommentStatUpdate{
-					ThankCount: 1,
-				},
-			}); err != nil {
+			if err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{CommentID: interaction.commentID, Stats: interaction.stats}); err != nil {
 				return err
 			}
-			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_COMMENT_THANKED,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_THANKED,
-				Payload: &commonenums.Event_CommentThanked{
-					CommentThanked: &commonenums.CommentThankedPayload{
-						SenderId:  userID,
-						CommentId: commentID,
-					},
-				},
-			})
+			outboxEvent, err = d.outboxRepo.Save(ctx, interaction.event(access.ActorUserID, interaction.commentID))
 			return err
 		}
-
-		deletedResp, err := d.commentActionRecordRepo.Delete(ctx, &repo.CommentActionRecordDeleteReq{
-			CommentID: commentID,
-			UserID:    userID,
-			Action:    enum.CommentActionThank,
-		})
-		if err != nil {
+		deleted, err := d.commentActionRecordRepo.Delete(ctx, &repo.CommentActionRecordDeleteReq{CommentID: interaction.commentID, UserID: access.ActorUserID, Action: interaction.action})
+		if err != nil || deleted == 0 {
 			return err
 		}
-		if deletedResp == 0 {
-			return nil
-		}
-		err = d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{
-			CommentID: commentID,
-			Stats: repo.CommentStatUpdate{
-				ThankCount: -1,
-			},
-		})
-		return err
+		return d.commentRepo.AddStats(ctx, &repo.CommentAddStatsReq{CommentID: interaction.commentID, Stats: d.negateCommentStats(interaction.stats)})
 	})
 	if err != nil {
 		return false, err
@@ -617,7 +504,22 @@ func (d *CommentUsecase) Thank(ctx context.Context, req *CommentThankReq) (bool,
 			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
 		}
 	}
-	return active, nil
+	return interaction.active, nil
+}
+
+func (*CommentUsecase) negateCommentStats(stats repo.CommentStatUpdate) repo.CommentStatUpdate {
+	stats.ThankCount = -stats.ThankCount
+	stats.LikeCount = -stats.LikeCount
+	stats.ReplyCount = -stats.ReplyCount
+	return stats
+}
+
+func (*CommentUsecase) commentLikedEvent(userID, commentID int64) *commonenums.Event {
+	return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_COMMENT_LIKED, Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_LIKED, Payload: &commonenums.Event_CommentLiked{CommentLiked: &commonenums.CommentLikedPayload{SenderId: userID, CommentId: commentID}}}
+}
+
+func (*CommentUsecase) commentThankedEvent(userID, commentID int64) *commonenums.Event {
+	return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_COMMENT_THANKED, Subject: commonenums.EventSubject_EVENT_SUBJECT_COMMENT_THANKED, Payload: &commonenums.Event_CommentThanked{CommentThanked: &commonenums.CommentThankedPayload{SenderId: userID, CommentId: commentID}}}
 }
 
 type CommentMapViewerActionStatesReq struct {

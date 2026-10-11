@@ -27,11 +27,11 @@ func NewWebSocketTicketRepo(redisClient *commonclient.RedisClient) repo.WebSocke
 }
 
 func (r *WebSocketTicketRepo) Save(ctx context.Context, characterID int64, ticket string, ttl time.Duration) error {
-	return r.redisClient.Client.Set(ctx, r.redisKey(characterID), ticket, ttl).Err()
+	return r.redisClient.Client.Set(ctx, fmt.Sprintf(r.redisKeyFormat, characterID), ticket, ttl).Err()
 }
 
 func (r *WebSocketTicketRepo) Consume(ctx context.Context, characterID int64, ticket string) (bool, error) {
-	value, err := r.redisClient.Client.GetDel(ctx, r.redisKey(characterID)).Result()
+	value, err := r.redisClient.Client.GetDel(ctx, fmt.Sprintf(r.redisKeyFormat, characterID)).Result()
 	if err != nil {
 		if errors.Is(err, redis.Nil) {
 			return false, nil
@@ -39,8 +39,4 @@ func (r *WebSocketTicketRepo) Consume(ctx context.Context, characterID int64, ti
 		return false, err
 	}
 	return value == ticket, nil
-}
-
-func (r *WebSocketTicketRepo) redisKey(characterID int64) string {
-	return fmt.Sprintf(r.redisKeyFormat, characterID)
 }

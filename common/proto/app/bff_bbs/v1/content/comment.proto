@@ -4,6 +4,7 @@ package common.api.app.bff_bbs.v1.content;
 
 import "bff_bbs/v1/content/enum/article.proto";
 import "bff_bbs/v1/content/enum/comment.proto";
+import "bff_bbs/v1/content/model/comment.proto";
 import "bff_bbs/v1/user/enum/account.proto";
 import "common/common.proto";
 import "common/enums/language.proto";
@@ -224,7 +225,7 @@ message ListCommentReplies {
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
     .common.api.app.common.PageResp page = 1; // 分页结果
-    repeated CommentListItem rows = 2; // 回复列表
+    repeated .common.api.app.bff_bbs.v1.content.model.CommentListItem rows = 2; // 回复列表
   }
 }
 
@@ -297,7 +298,7 @@ message ListCommentTimeline {
       google.protobuf.Timestamp updated_at = 1001; // 更新时间
     }
     .common.api.app.common.PageResp page = 1; // 分页结果
-    repeated CommentListItem rows = 2; // 评论列表
+    repeated .common.api.app.bff_bbs.v1.content.model.CommentListItem rows = 2; // 评论列表
   }
 }
 

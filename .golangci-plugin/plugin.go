@@ -7,6 +7,7 @@ import (
 	"go/token"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"sync"
@@ -37,6 +38,9 @@ var bassAnalyzer = &analysis.Analyzer{
 }
 
 func runBassArch(pass *analysis.Pass) (any, error) {
+	if violations := protoContractViolations(); len(violations) > 0 {
+		pass.Reportf(pass.Files[0].Package, "Proto 契约规范: %s", violations[0])
+	}
 	for _, f := range pass.Files {
 		filename := filepath.ToSlash(pass.Fset.Position(f.Pos()).Filename)
 		if strings.HasSuffix(filename, "_test.go") {
@@ -58,20 +62,137 @@ func runBassArch(pass *analysis.Pass) (any, error) {
 		if mod != "" && internalLayer(filename, mod) == "enum" && !isGeneratedFile(filename) {
 			validateEnumFile(pass, f)
 		}
+		if mod != "" && strings.Contains(filename, "/internal/") && internalLayer(filename, mod) != "enum" && !isGeneratedFile(filename) {
+			validatePackageState(pass, f)
+		}
 
 		if mod != "" && strings.Contains(filename, "/internal/") && !isGeneratedFile(filename) {
 			for _, decl := range f.Decls {
 				fd, ok := decl.(*ast.FuncDecl)
-				if !ok || fd.Recv != nil || isAllowedPackageFunc(fd.Name.Name) {
+				if !ok {
 					continue
 				}
-				pass.Reportf(fd.Pos(),
-					"结构规范: internal 禁止无 receiver 的包级函数: %s；请挂到对应 struct 方法上",
-					fd.Name.Name)
+				if fd.Recv == nil && !isAllowedPackageFunc(fd.Name.Name) {
+					pass.Reportf(fd.Pos(),
+						"结构规范: internal 禁止无 receiver 的包级函数: %s；请挂到对应 struct 方法上",
+						fd.Name.Name)
+				}
+				if fd.Recv != nil && !ast.IsExported(fd.Name.Name) && isTransparentMethod(fd) {
+					pass.Reportf(fd.Pos(), "结构规范: 禁止无语义的薄方法: %s；请直接调用目标方法或在此承载转换、校验、编排等业务语义", fd.Name.Name)
+				}
 			}
 		}
 	}
 	return nil, nil
+}
+
+func validatePackageState(pass *analysis.Pass, file *ast.File) {
+	for _, decl := range file.Decls {
+		gen, ok := decl.(*ast.GenDecl)
+		if !ok || (gen.Tok != token.CONST && gen.Tok != token.VAR) {
+			continue
+		}
+		for _, spec := range gen.Specs {
+			value, ok := spec.(*ast.ValueSpec)
+			if !ok {
+				continue
+			}
+			for _, name := range value.Names {
+				if name.Name == "_" || strings.HasSuffix(name.Name, "ProviderSet") {
+					continue
+				}
+				pass.Reportf(name.Pos(), "结构规范: internal 非 enum 包禁止包级 %s: %s；请作为 struct 字段在 New* 构造函数中初始化", gen.Tok, name.Name)
+			}
+		}
+	}
+}
+
+func isTransparentMethod(fd *ast.FuncDecl) bool {
+	if fd.Body == nil || len(fd.Body.List) == 0 || len(fd.Body.List) > 2 {
+		return false
+	}
+	if len(fd.Body.List) == 2 && !isNilGuard(fd.Body.List[0]) {
+		return false
+	}
+	returnStmt, ok := fd.Body.List[len(fd.Body.List)-1].(*ast.ReturnStmt)
+	if !ok || len(returnStmt.Results) != 1 {
+		return false
+	}
+	_, ok = returnStmt.Results[0].(*ast.CallExpr)
+	return ok
+}
+
+func isNilGuard(stmt ast.Stmt) bool {
+	ifStmt, ok := stmt.(*ast.IfStmt)
+	if !ok || ifStmt.Else != nil || len(ifStmt.Body.List) != 1 {
+		return false
+	}
+	returnStmt, ok := ifStmt.Body.List[0].(*ast.ReturnStmt)
+	return ok && len(returnStmt.Results) > 0
+}
+
+var (
+	protoRulesOnce sync.Once
+	protoRules     []string
+)
+
+var (
+	protoMessagePattern = regexp.MustCompile(`\bmessage\s+(\w+)\s*\{`)
+	protoFieldPattern   = regexp.MustCompile(`^\s*(?:repeated\s+|optional\s+)?([.\w]+)\s+\w+\s*=\s*\d+`)
+)
+
+func protoContractViolations() []string {
+	protoRulesOnce.Do(func() {
+		root := repoRoot()
+		if root == "" {
+			return
+		}
+		_ = filepath.WalkDir(filepath.Join(root, "common", "proto", "app"), func(path string, entry os.DirEntry, err error) error {
+			if err != nil || entry.IsDir() || filepath.Ext(path) != ".proto" {
+				return nil
+			}
+			protoRules = append(protoRules, findProtoContractViolations(path)...)
+			return nil
+		})
+	})
+	return protoRules
+}
+
+func findProtoContractViolations(path string) []string {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil
+	}
+	var violations []string
+	depth := 0
+	var scopes []string
+	for lineNumber, rawLine := range strings.Split(string(data), "\n") {
+		line := strings.TrimSpace(strings.Split(rawLine, "//")[0])
+		if match := protoMessagePattern.FindStringSubmatch(line); len(match) == 2 {
+			scopes = append(scopes, match[1])
+			depth++
+			continue
+		}
+		if protoInsideContract(scopes) {
+			if match := protoFieldPattern.FindStringSubmatch(line); len(match) == 2 && (strings.Contains(match[1], ".Req.") || strings.Contains(match[1], ".Resp.")) {
+				violations = append(violations, filepath.ToSlash(path)+":"+strconv.Itoa(lineNumber+1)+" Req/Resp 不得引用其他 Req/Resp 的内嵌消息；请提取到同级 model 包")
+			}
+		}
+		depth += strings.Count(line, "{") - strings.Count(line, "}")
+		for len(scopes) > depth {
+			scopes = scopes[:len(scopes)-1]
+		}
+	}
+	return violations
+}
+
+func protoInsideContract(scopes []string) bool {
+	for _, scope := range scopes {
+		if scope == "Req" || scope == "Resp" {
+			return true
+		}
+	}
+	return false
 }
 
 func classifyFile(filename string) (mod, layer string) {

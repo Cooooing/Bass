@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.v1.user.model;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/bff_bbs/v1/user/model;model";
+
+enum RelationType {
+  RELATION_TYPE_UNSPECIFIED = 0; // 未指定
+  RELATION_TYPE_FOLLOW = 1; // 关注
+  RELATION_TYPE_BLOCK = 2; // 拉黑
+}
+
+message Relation {
+  int64 id = 1; // 关系 ID
+  RelationType type = 2; // 关系类型
+  int64 actor_id = 3; // 发起账号 ID
+  int64 target_id = 4; // 目标账号 ID
+  google.protobuf.Timestamp created_at = 1000; // 创建时间
+  google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}

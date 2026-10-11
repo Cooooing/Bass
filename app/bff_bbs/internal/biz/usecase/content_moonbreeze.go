@@ -1,17 +1,16 @@
 package usecase
 
 import (
-	"bff_bbs/internal/biz/model"
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"strings"
 
+	"bff_bbs/internal/biz/model"
+
 	"bff_bbs/internal/biz/repo"
 )
-
-const moonbreezeMaxPageSize uint32 = 50
 
 type ContentMoonbreezeUsecase struct {
 	moonbreezeClient   repo.ContentMoonbreezeClient
@@ -20,6 +19,7 @@ type ContentMoonbreezeUsecase struct {
 	privacyClient      repo.PrivacySettingClient
 	relationClient     repo.RelationClient
 	ipResolutionClient repo.IPResolutionClient
+	maxPageSize        uint32
 }
 
 func NewContentMoonbreezeUsecase(
@@ -37,6 +37,7 @@ func NewContentMoonbreezeUsecase(
 		privacyClient:      privacyClient,
 		relationClient:     relationClient,
 		ipResolutionClient: ipResolutionClient,
+		maxPageSize:        50,
 	}
 }
 
@@ -99,17 +100,18 @@ func (u *ContentMoonbreezeUsecase) Page(
 	if pageSize == 0 {
 		pageSize = 20
 	}
-	if pageSize > moonbreezeMaxPageSize {
-		pageSize = moonbreezeMaxPageSize
+	if pageSize > u.maxPageSize {
+		pageSize = u.maxPageSize
 	}
 	// Content owns the stream's ordering and filtering inputs. Personal-list
 	// visibility is enforced only by PageMember, so global and following feeds
 	// remain independent from a member's profile-list preference.
 	cursor := req.Cursor
-	visible := make([]*model.Moonbreeze, 0, pageSize)
+	visible := make([]*model.Moonbreeze, 0, int(pageSize))
+	visibleCount := uint32(0)
 	var next *string
-	for len(visible) < int(pageSize) {
-		remaining := pageSize - uint32(len(visible))
+	for visibleCount < pageSize {
+		remaining := pageSize - visibleCount
 		batch, err := u.moonbreezeClient.PageMoonbreezes(ctx, &repo.PageMoonbreezesReq{
 			AuthorIDs:         req.AuthorIDs,
 			ExcludedAuthorIDs: req.ExcludedAuthorIDs,
@@ -128,8 +130,12 @@ func (u *ContentMoonbreezeUsecase) Page(
 				continue
 			}
 			visible = append(visible, row)
+			visibleCount++
+			if visibleCount == pageSize {
+				break
+			}
 		}
-		if len(visible) == int(pageSize) {
+		if visibleCount == pageSize {
 			next = batch.NextCursor
 			break
 		}

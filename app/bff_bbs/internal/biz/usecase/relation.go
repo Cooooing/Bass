@@ -6,6 +6,7 @@ import (
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
+	"bff_bbs/internal/biz/model"
 	"bff_bbs/internal/biz/repo"
 )
 
@@ -98,12 +99,12 @@ type ListFollowingReq struct {
 	Page    *commonmodel.PageReq
 }
 
-type ListFollowingResp struct {
+type RelationListResp struct {
 	Page *commonmodel.PageResp
-	Rows []*repo.Relation
+	Rows []*model.Relation
 }
 
-func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingReq) (*ListFollowingResp, error) {
+func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingReq) (*RelationListResp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
@@ -126,7 +127,7 @@ func (u *RelationUsecase) ListFollowing(ctx context.Context, req *ListFollowingR
 	if err != nil {
 		return nil, err
 	}
-	return &ListFollowingResp{
+	return &RelationListResp{
 		Page: resp.Page,
 		Rows: resp.Rows,
 	}, nil
@@ -137,12 +138,7 @@ type ListFollowersReq struct {
 	Page    *commonmodel.PageReq
 }
 
-type ListFollowersResp struct {
-	Page *commonmodel.PageResp
-	Rows []*repo.Relation
-}
-
-func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersReq) (*ListFollowersResp, error) {
+func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersReq) (*RelationListResp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
@@ -165,7 +161,7 @@ func (u *RelationUsecase) ListFollowers(ctx context.Context, req *ListFollowersR
 	if err != nil {
 		return nil, err
 	}
-	return &ListFollowersResp{
+	return &RelationListResp{
 		Page: resp.Page,
 		Rows: resp.Rows,
 	}, nil
@@ -176,12 +172,7 @@ type ListBlockedReq struct {
 	Page    *commonmodel.PageReq
 }
 
-type ListBlockedResp struct {
-	Page *commonmodel.PageResp
-	Rows []*repo.Relation
-}
-
-func (u *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedReq) (*ListBlockedResp, error) {
+func (u *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedReq) (*RelationListResp, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_RELATION_INVALID)
 	}
@@ -199,7 +190,7 @@ func (u *RelationUsecase) ListBlocked(ctx context.Context, req *ListBlockedReq) 
 	if err != nil {
 		return nil, err
 	}
-	return &ListBlockedResp{
+	return &RelationListResp{
 		Page: resp.Page,
 		Rows: resp.Rows,
 	}, nil

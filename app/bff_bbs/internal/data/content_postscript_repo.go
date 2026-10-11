@@ -1,13 +1,14 @@
 package data
 
 import (
-	"bff_bbs/internal/biz/model"
 	"common/pkg/client/rpc"
 	"common/pkg/util"
 	contentv1 "common/proto/gen/content/v1"
 	contentv1enum "common/proto/gen/content/v1/enum"
 	"context"
 	"fmt"
+
+	"bff_bbs/internal/biz/model"
 
 	"bff_bbs/internal/biz/repo"
 )

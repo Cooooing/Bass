@@ -17,16 +17,13 @@ import (
 	"content/internal/enum"
 )
 
-const (
-	ArticleSearchDefaultPageSize = 20
-	ArticleSearchMaxPageSize     = 50
-	ArticleSearchMinQueryRunes   = 2
-	ArticleSearchMaxQueryRunes   = 128
-)
-
 type ArticleSearchUsecase struct {
 	articleRepo       repo.ArticleRepo
 	articleSearchRepo repo.ArticleSearchRepo
+	defaultPageSize   int
+	maxPageSize       int
+	minQueryRunes     int
+	maxQueryRunes     int
 }
 
 func NewArticleSearchUsecase(
@@ -36,6 +33,10 @@ func NewArticleSearchUsecase(
 	return &ArticleSearchUsecase{
 		articleRepo:       articleRepo,
 		articleSearchRepo: articleSearchRepo,
+		defaultPageSize:   20,
+		maxPageSize:       50,
+		minQueryRunes:     2,
+		maxQueryRunes:     128,
 	}
 }
 
@@ -129,15 +130,15 @@ type ArticleSearchCursorPayload struct {
 
 func (u *ArticleSearchUsecase) validQuery(query string) bool {
 	length := len([]rune(query))
-	return length >= ArticleSearchMinQueryRunes && length <= ArticleSearchMaxQueryRunes
+	return length >= u.minQueryRunes && length <= u.maxQueryRunes
 }
 
 func (u *ArticleSearchUsecase) pageSize(size int) int {
 	if size <= 0 {
-		return ArticleSearchDefaultPageSize
+		return u.defaultPageSize
 	}
-	if size > ArticleSearchMaxPageSize {
-		return ArticleSearchMaxPageSize
+	if size > u.maxPageSize {
+		return u.maxPageSize
 	}
 	return size
 }

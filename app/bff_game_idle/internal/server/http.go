@@ -12,7 +12,7 @@ import (
 	"log/slog"
 
 	"bff_game_idle/internal/config"
-	"bff_game_idle/internal/config/errormessage"
+	"bff_game_idle/internal/server/errormessage"
 
 	"github.com/go-kratos/kratos/contrib/middleware/validate/v3"
 	"github.com/go-kratos/kratos/v3/middleware"
@@ -43,6 +43,7 @@ func NewHTTPServer(
 	obs *commonClient.Observer,
 	services []server.Service,
 	userClient *rpc.UserClient,
+	errorResolver *errormessage.Resolver,
 ) *kratoshttp.Server {
 	_ = userClient
 	middlewares := make([]middleware.Middleware, 0, 5)
@@ -54,13 +55,12 @@ func NewHTTPServer(
 	middlewares = append(middlewares, NewHTTPAuthMiddlewares(userClient)...)
 	middlewares = append(middlewares, validate.ProtoValidate())
 
-	resolver := errormessage.NewResolver()
 	opts := []kratoshttp.ServerOption{
 		kratoshttp.Filter(server.HTTPCORSFilter(), server.HTTPTraceMiddleware(), server.HTTPAccessLogMiddleware(logger)),
 		kratoshttp.Middleware(middlewares...),
 		kratoshttp.RequestDecoder(server.ProtoJSONRequestDecoder),
 		kratoshttp.ResponseEncoder(server.HttpRespEncoder),
-		kratoshttp.ErrorEncoder(server.HttpErrorEncoder(resolver.ResolveHTTP)),
+		kratoshttp.ErrorEncoder(server.HttpErrorEncoder(errorResolver.ResolveHTTP)),
 	}
 	if c.GetHttp().GetNetwork() != "" {
 		opts = append(opts, kratoshttp.Network(c.GetHttp().GetNetwork()))

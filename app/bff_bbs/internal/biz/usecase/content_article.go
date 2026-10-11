@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"bff_bbs/internal/biz/model"
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
@@ -10,21 +9,20 @@ import (
 	"strings"
 	"time"
 
+	"bff_bbs/internal/biz/model"
+
 	"bff_bbs/internal/biz/repo"
 )
 
-const (
-	ArticleSearchShortQueryLimit = 10
-	ArticleSearchLimit           = 30
-)
-
 type ContentArticleUsecase struct {
-	contentArticleClient        repo.ContentArticleClient
-	assetClient                 repo.AssetClient
-	privacyClient               repo.PrivacySettingClient
-	relationClient              repo.RelationClient
-	ipResolutionClient          repo.IPResolutionClient
-	articleSearchRateLimitCache repo.ArticleSearchRateLimitCache
+	contentArticleClient         repo.ContentArticleClient
+	assetClient                  repo.AssetClient
+	privacyClient                repo.PrivacySettingClient
+	relationClient               repo.RelationClient
+	ipResolutionClient           repo.IPResolutionClient
+	articleSearchRateLimitCache  repo.ArticleSearchRateLimitCache
+	articleSearchShortQueryLimit int64
+	articleSearchLimit           int64
 }
 
 func NewContentArticleUsecase(
@@ -36,12 +34,14 @@ func NewContentArticleUsecase(
 	articleSearchRateLimitCache repo.ArticleSearchRateLimitCache,
 ) *ContentArticleUsecase {
 	return &ContentArticleUsecase{
-		contentArticleClient:        contentArticleClient,
-		assetClient:                 assetClient,
-		privacyClient:               privacyClient,
-		relationClient:              relationClient,
-		ipResolutionClient:          ipResolutionClient,
-		articleSearchRateLimitCache: articleSearchRateLimitCache,
+		contentArticleClient:         contentArticleClient,
+		assetClient:                  assetClient,
+		privacyClient:                privacyClient,
+		relationClient:               relationClient,
+		ipResolutionClient:           ipResolutionClient,
+		articleSearchRateLimitCache:  articleSearchRateLimitCache,
+		articleSearchShortQueryLimit: 10,
+		articleSearchLimit:           30,
 	}
 }
 
@@ -199,9 +199,13 @@ func (u *ContentArticleUsecase) PageViewHistory(
 	if page != nil {
 		requestPage = &commonmodel.PageReq{Page: page.Page, Size: page.Size}
 	}
-	excludedAuthorIDs, err := u.blockedCounterparts(ctx, userID)
-	if err != nil {
-		return nil, err
+	excludedAuthorIDs := []int64{}
+	if userID > 0 && u.relationClient != nil {
+		var err error
+		excludedAuthorIDs, err = u.relationClient.ListBlockedCounterparts(ctx, userID)
+		if err != nil {
+			return nil, err
+		}
 	}
 	result, err := u.contentArticleClient.PageViewHistory(ctx, userID, requestPage, excludedAuthorIDs)
 	if err != nil {
@@ -242,9 +246,13 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 		query = &repo.ArticleQuery{TagID: req.Query.TagID, DomainID: req.Query.DomainID, AuthorID: req.Query.AuthorID, Type: req.Query.Type, Order: req.Query.Order, PublishStatus: req.Query.PublishStatus, PublishStatuses: req.Query.PublishStatuses, Visibility: req.Query.Visibility, Visibilities: req.Query.Visibilities, Scheduled: req.Query.Scheduled}
 	}
 	if query != nil {
-		excludedAuthorIDs, err := u.blockedCounterparts(ctx, req.UserID)
-		if err != nil {
-			return nil, err
+		excludedAuthorIDs := []int64{}
+		if req.UserID > 0 && u.relationClient != nil {
+			var err error
+			excludedAuthorIDs, err = u.relationClient.ListBlockedCounterparts(ctx, req.UserID)
+			if err != nil {
+				return nil, err
+			}
 		}
 		query.ExcludedAuthorIDs = excludedAuthorIDs
 	}
@@ -272,9 +280,13 @@ func (u *ContentArticleUsecase) SearchArticles(ctx context.Context, req *SearchA
 	if err := u.allowArticleSearch(ctx, req); err != nil {
 		return nil, err
 	}
-	excludedAuthorIDs, err := u.blockedCounterparts(ctx, req.UserID)
-	if err != nil {
-		return nil, err
+	excludedAuthorIDs := []int64{}
+	if req.UserID > 0 && u.relationClient != nil {
+		var err error
+		excludedAuthorIDs, err = u.relationClient.ListBlockedCounterparts(ctx, req.UserID)
+		if err != nil {
+			return nil, err
+		}
 	}
 	result, err := u.contentArticleClient.SearchArticles(ctx, &repo.SearchArticlesReq{
 		UserID:            req.UserID,
@@ -297,13 +309,6 @@ func (u *ContentArticleUsecase) SearchArticles(ctx context.Context, req *SearchA
 		return nil, err
 	}
 	return &SearchArticlesResp{Rows: result.Rows, NextCursor: result.NextCursor}, nil
-}
-
-func (u *ContentArticleUsecase) blockedCounterparts(ctx context.Context, userID int64) ([]int64, error) {
-	if userID <= 0 || u.relationClient == nil {
-		return []int64{}, nil
-	}
-	return u.relationClient.ListBlockedCounterparts(ctx, userID)
 }
 
 func (u *ContentArticleUsecase) ensureUnblocked(ctx context.Context, userID int64, targetID int64) error {
@@ -330,9 +335,9 @@ func (u *ContentArticleUsecase) allowArticleSearch(ctx context.Context, req *Sea
 	} else if ip := strings.TrimSpace(req.ClientIP); ip != "" {
 		principal = "ip:" + ip
 	}
-	limit := int64(ArticleSearchLimit)
+	limit := u.articleSearchLimit
 	if len([]rune(strings.TrimSpace(req.Query))) == 2 {
-		limit = ArticleSearchShortQueryLimit
+		limit = u.articleSearchShortQueryLimit
 	}
 	allowed, err := u.articleSearchRateLimitCache.Allow(ctx, &repo.ArticleSearchRateLimitReq{
 		Key:    principal,

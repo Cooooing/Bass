@@ -8,6 +8,7 @@ import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "bff_bbs/v1/user/enum/relation_type.proto";
+import "bff_bbs/v1/user/model/relation.proto";
 
 option go_package = "common/proto/gen/bff_bbs/v1/user;user";
 
@@ -128,16 +129,8 @@ message ListFollowingRelations {
     .common.api.app.common.PageReq page = 1; // 分页参数
   }
   message Resp {
-    message Relation {
-      int64 id = 1;
-      RelationType type = 2;
-      int64 actor_id = 3;
-      int64 target_id = 4;
-      google.protobuf.Timestamp created_at = 1000;
-      google.protobuf.Timestamp updated_at = 1001;
-    }
     .common.api.app.common.PageResp page = 1; // 分页结果
-    repeated Relation rows = 2; // 账号关系列表
+    repeated .common.api.app.bff_bbs.v1.user.model.Relation rows = 2; // 账号关系列表
   }
 }
 
@@ -147,16 +140,8 @@ message ListFollowersRelations {
     .common.api.app.common.PageReq page = 1; // 分页参数
   }
   message Resp {
-    message Relation {
-      int64 id = 1;
-      RelationType type = 2;
-      int64 actor_id = 3;
-      int64 target_id = 4;
-      google.protobuf.Timestamp created_at = 1000;
-      google.protobuf.Timestamp updated_at = 1001;
-    }
     .common.api.app.common.PageResp page = 1; // 分页结果
-    repeated Relation rows = 2; // 账号关系列表
+    repeated .common.api.app.bff_bbs.v1.user.model.Relation rows = 2; // 账号关系列表
   }
 }
 
@@ -166,16 +151,8 @@ message ListBlockedRelations {
     .common.api.app.common.PageReq page = 1; // 分页参数
   }
   message Resp {
-    message Relation {
-      int64 id = 1;
-      RelationType type = 2;
-      int64 actor_id = 3;
-      int64 target_id = 4;
-      google.protobuf.Timestamp created_at = 1000;
-      google.protobuf.Timestamp updated_at = 1001;
-    }
     .common.api.app.common.PageResp page = 1; // 分页结果
-    repeated Relation rows = 2; // 账号关系列表
+    repeated .common.api.app.bff_bbs.v1.user.model.Relation rows = 2; // 账号关系列表
   }
 }
 

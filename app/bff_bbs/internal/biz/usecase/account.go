@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"bff_bbs/internal/biz/model"
 	"common/pkg/apperror"
 	commonmodel "common/pkg/model"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
@@ -13,20 +12,22 @@ import (
 	"regexp"
 	"strings"
 
+	"bff_bbs/internal/biz/model"
+
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"bff_bbs/internal/biz/repo"
 )
 
-var assetHashPattern = regexp.MustCompile(`^[a-f0-9]{64}$`)
-
 type AccountUsecase struct {
-	accountClient  repo.AccountClient
-	assetClient    repo.AssetClient
-	economyClient  repo.EconomyClient
-	privacyClient  repo.PrivacySettingClient
-	locationClient repo.LocationClient
-	relationClient repo.RelationClient
+	accountClient       repo.AccountClient
+	assetClient         repo.AssetClient
+	economyClient       repo.EconomyClient
+	privacyClient       repo.PrivacySettingClient
+	locationClient      repo.LocationClient
+	relationClient      repo.RelationClient
+	assetHashPattern    *regexp.Regexp
+	maxProfileImageSize int64
 }
 
 func NewAccountUsecase(
@@ -38,12 +39,14 @@ func NewAccountUsecase(
 	relationClient repo.RelationClient,
 ) *AccountUsecase {
 	return &AccountUsecase{
-		accountClient:  accountClient,
-		assetClient:    assetClient,
-		economyClient:  economyClient,
-		privacyClient:  privacyClient,
-		locationClient: locationClient,
-		relationClient: relationClient,
+		accountClient:       accountClient,
+		assetClient:         assetClient,
+		economyClient:       economyClient,
+		privacyClient:       privacyClient,
+		locationClient:      locationClient,
+		relationClient:      relationClient,
+		assetHashPattern:    regexp.MustCompile(`^[a-f0-9]{64}$`),
+		maxProfileImageSize: 2 * 1024 * 1024,
 	}
 }
 func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentAccount_Resp_CurrentAccount, error) {
@@ -158,21 +161,7 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 }
 
 func (u *AccountUsecase) ListFollowing(ctx context.Context, name string, viewerID int64, page *commonmodel.PageReq) (*bbsuserv1.ListFollowing_Resp, error) {
-	account, _, err := u.accountClient.GetProfile(ctx, name)
-	if err != nil {
-		return nil, err
-	}
-	if err = u.ensureUnblocked(ctx, viewerID, account.ID); err != nil {
-		return nil, err
-	}
-	privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, account.ID)
-	if err != nil {
-		return nil, err
-	}
-	if viewerID != account.ID && privacy.PublicFollowingList != nil && !*privacy.PublicFollowingList {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWING_LIST_PRIVATE)
-	}
-	excludedUserIDs, err := u.blockedCounterparts(ctx, viewerID)
+	account, excludedUserIDs, err := u.relationListContext(ctx, name, viewerID, true)
 	if err != nil {
 		return nil, err
 	}
@@ -184,21 +173,7 @@ func (u *AccountUsecase) ListFollowing(ctx context.Context, name string, viewerI
 }
 
 func (u *AccountUsecase) ListFollowers(ctx context.Context, name string, viewerID int64, page *commonmodel.PageReq) (*bbsuserv1.ListFollowers_Resp, error) {
-	account, _, err := u.accountClient.GetProfile(ctx, name)
-	if err != nil {
-		return nil, err
-	}
-	if err = u.ensureUnblocked(ctx, viewerID, account.ID); err != nil {
-		return nil, err
-	}
-	privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, account.ID)
-	if err != nil {
-		return nil, err
-	}
-	if viewerID != account.ID && privacy.PublicFollowerList != nil && !*privacy.PublicFollowerList {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWER_LIST_PRIVATE)
-	}
-	excludedUserIDs, err := u.blockedCounterparts(ctx, viewerID)
+	account, excludedUserIDs, err := u.relationListContext(ctx, name, viewerID, false)
 	if err != nil {
 		return nil, err
 	}
@@ -207,6 +182,38 @@ func (u *AccountUsecase) ListFollowers(ctx context.Context, name string, viewerI
 		return nil, err
 	}
 	return u.listFollowerProfileAccounts(ctx, viewerID, result)
+}
+
+func (u *AccountUsecase) relationListContext(ctx context.Context, name string, viewerID int64, following bool) (*model.AccountProfile, []int64, error) {
+	account, _, err := u.accountClient.GetProfile(ctx, name)
+	if err != nil {
+		return nil, nil, err
+	}
+	if err = u.ensureUnblocked(ctx, viewerID, account.ID); err != nil {
+		return nil, nil, err
+	}
+	privacy, err := u.privacyClient.GetCurrentPrivacySetting(ctx, account.ID)
+	if err != nil {
+		return nil, nil, err
+	}
+	public := privacy.PublicFollowerList
+	privateCode := cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWER_LIST_PRIVATE
+	if following {
+		public = privacy.PublicFollowingList
+		privateCode = cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_FOLLOWING_LIST_PRIVATE
+	}
+	if viewerID != account.ID && public != nil && !*public {
+		return nil, nil, apperror.New(privateCode)
+	}
+	excludedUserIDs := []int64{}
+	if viewerID > 0 && u.relationClient != nil {
+		var err error
+		excludedUserIDs, err = u.relationClient.ListBlockedCounterparts(ctx, viewerID)
+		if err != nil {
+			return nil, nil, err
+		}
+	}
+	return account, excludedUserIDs, nil
 }
 
 func (u *AccountUsecase) listFollowingProfileAccounts(ctx context.Context, viewerID int64, result *repo.ListFollowingRelationsResp) (*bbsuserv1.ListFollowing_Resp, error) {
@@ -311,13 +318,6 @@ func (*AccountUsecase) profileRelation(status *repo.RelationStatus) *bbsuserv1.P
 	}
 }
 
-func (u *AccountUsecase) blockedCounterparts(ctx context.Context, userID int64) ([]int64, error) {
-	if userID <= 0 || u.relationClient == nil {
-		return []int64{}, nil
-	}
-	return u.relationClient.ListBlockedCounterparts(ctx, userID)
-}
-
 func (u *AccountUsecase) ensureUnblocked(ctx context.Context, viewerID int64, targetID int64) error {
 	if viewerID <= 0 || targetID <= 0 || viewerID == targetID || u.relationClient == nil {
 		return nil
@@ -417,10 +417,10 @@ func (u *AccountUsecase) PrepareProfileImageUploadAccount(ctx context.Context, r
 	if req == nil || req.UserID <= 0 || !u.profileImagePurposeValid(req.Purpose) || !u.validProfileImageHashAndMime(req.Hash, req.MimeType) || req.Size <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
-	if req.Size > maxProfileImageSize {
+	if req.Size > u.maxProfileImageSize {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_TOO_LARGE)
 	}
-	hash := u.normalizeProfileImageHash(req.Hash)
+	hash := strings.ToLower(strings.TrimSpace(req.Hash))
 	result, err := u.assetClient.PrepareDirectUpload(ctx, &repo.PrepareDirectAssetUploadReq{
 		Hash:       hash,
 		MimeType:   strings.ToLower(strings.TrimSpace(req.MimeType)),
@@ -449,8 +449,8 @@ func (u *AccountUsecase) CompleteProfileImageUploadAccount(ctx context.Context, 
 	if req == nil || !u.profileImagePurposeValid(req.Purpose) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
-	hash := u.normalizeProfileImageHash(req.Hash)
-	if !assetHashPattern.MatchString(hash) {
+	hash := strings.ToLower(strings.TrimSpace(req.Hash))
+	if !u.assetHashPattern.MatchString(hash) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
 	asset, err := u.assetClient.GetAvailableByHash(ctx, hash)
@@ -465,7 +465,7 @@ func (u *AccountUsecase) CompleteProfileImageUploadAccount(ctx context.Context, 
 	if !u.validProfileImageHashAndMime(hash, asset.MimeType) || asset.Size <= 0 {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_INVALID)
 	}
-	if asset.Size > maxProfileImageSize {
+	if asset.Size > u.maxProfileImageSize {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_PROFILE_IMAGE_TOO_LARGE)
 	}
 	update := &repo.UpdateProfileAccountReq{UserID: req.UserID}
@@ -498,10 +498,8 @@ func (*AccountUsecase) profileImagePurposeValid(p bbsuserv1.ProfileImagePurpose)
 	return false
 }
 
-const maxProfileImageSize = 2 * 1024 * 1024
-
 func (u *AccountUsecase) validProfileImageHashAndMime(hash, mimeType string) bool {
-	if !assetHashPattern.MatchString(u.normalizeProfileImageHash(hash)) {
+	if !u.assetHashPattern.MatchString(strings.ToLower(strings.TrimSpace(hash))) {
 		return false
 	}
 	switch strings.ToLower(strings.TrimSpace(mimeType)) {
@@ -509,10 +507,6 @@ func (u *AccountUsecase) validProfileImageHashAndMime(hash, mimeType string) boo
 		return true
 	}
 	return false
-}
-
-func (*AccountUsecase) normalizeProfileImageHash(value string) string {
-	return strings.ToLower(strings.TrimSpace(value))
 }
 
 type UpdatePasswordAccountReq struct {

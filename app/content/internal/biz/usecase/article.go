@@ -153,82 +153,8 @@ type ArticleLikeReq struct {
 }
 
 func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, error) {
-	articleID := req.ArticleID
-	userID := req.Access.ActorUserID
-	active := req.Active
-	var outboxEvent *repo.OutboxEvent
-	err := d.tx(ctx, func(ctx context.Context) error {
-		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			Filter: &model.ArticleFilter{ArticleID: new(articleID)},
-		})
-		if err != nil {
-			return err
-		}
-		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Visibility != enum.ArticleVisibilityPublic || article.Restriction != enum.ContentRestrictionNone {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-		}
-
-		if active {
-			createdResp, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
-				ArticleID: articleID,
-				UserID:    userID,
-				Type:      enum.ArticleActionLike,
-			})
-			if err != nil {
-				return err
-			}
-			if !createdResp {
-				return nil
-			}
-			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
-				ArticleID: articleID,
-				Stats: repo.ArticleStatUpdate{
-					LikeCount: 1,
-				},
-			}); err != nil {
-				return err
-			}
-			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_LIKED,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED,
-				Payload: &commonenums.Event_ArticleLiked{
-					ArticleLiked: &commonenums.ArticleLikedPayload{
-						SenderId:  userID,
-						ArticleId: articleID,
-					},
-				},
-			})
-			return err
-		}
-
-		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
-			ArticleID: articleID,
-			UserID:    userID,
-			Action:    enum.ArticleActionLike,
-		})
-		if err != nil {
-			return err
-		}
-		if deletedResp == 0 {
-			return nil
-		}
-		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
-			ArticleID: articleID,
-			Stats: repo.ArticleStatUpdate{
-				LikeCount: -1,
-			},
-		})
-		return err
-	})
-	if err != nil {
-		return false, err
-	}
-	if outboxEvent != nil {
-		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
-			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
-		}
-	}
-	return active, nil
+	interaction := articleInteraction{articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionLike, stats: repo.ArticleStatUpdate{LikeCount: 1}, event: d.articleLikedEvent}
+	return d.changeInteraction(ctx, interaction)
 }
 
 type ArticleThankReq struct {
@@ -239,82 +165,8 @@ type ArticleThankReq struct {
 }
 
 func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool, error) {
-	articleID := req.ArticleID
-	userID := req.Access.ActorUserID
-	active := req.Active
-	var outboxEvent *repo.OutboxEvent
-	err := d.tx(ctx, func(ctx context.Context) error {
-		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			Filter: &model.ArticleFilter{ArticleID: new(articleID)},
-		})
-		if err != nil {
-			return err
-		}
-		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Visibility != enum.ArticleVisibilityPublic || article.Restriction != enum.ContentRestrictionNone {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-		}
-
-		if active {
-			createdResp, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
-				ArticleID: articleID,
-				UserID:    userID,
-				Type:      enum.ArticleActionThank,
-			})
-			if err != nil {
-				return err
-			}
-			if !createdResp {
-				return nil
-			}
-			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
-				ArticleID: articleID,
-				Stats: repo.ArticleStatUpdate{
-					ThankCount: 1,
-				},
-			}); err != nil {
-				return err
-			}
-			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_THANKED,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED,
-				Payload: &commonenums.Event_ArticleThanked{
-					ArticleThanked: &commonenums.ArticleThankedPayload{
-						SenderId:  userID,
-						ArticleId: articleID,
-					},
-				},
-			})
-			return err
-		}
-
-		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
-			ArticleID: articleID,
-			UserID:    userID,
-			Action:    enum.ArticleActionThank,
-		})
-		if err != nil {
-			return err
-		}
-		if deletedResp == 0 {
-			return nil
-		}
-		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
-			ArticleID: articleID,
-			Stats: repo.ArticleStatUpdate{
-				ThankCount: -1,
-			},
-		})
-		return err
-	})
-	if err != nil {
-		return false, err
-	}
-	if outboxEvent != nil {
-		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
-			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
-		}
-	}
-	return active, nil
+	interaction := articleInteraction{articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionThank, stats: repo.ArticleStatUpdate{ThankCount: 1}, event: d.articleThankedEvent}
+	return d.changeInteraction(ctx, interaction)
 }
 
 type ArticleCollectReq struct {
@@ -325,72 +177,45 @@ type ArticleCollectReq struct {
 }
 
 func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (bool, error) {
-	articleID := req.ArticleID
-	userID := req.Access.ActorUserID
-	active := req.Active
+	interaction := articleInteraction{articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionCollect, stats: repo.ArticleStatUpdate{CollectCount: 1}, event: d.articleCollectedEvent}
+	return d.changeInteraction(ctx, interaction)
+}
+
+type articleInteraction struct {
+	articleID int64
+	userID    int64
+	active    bool
+	action    enum.ArticleAction
+	stats     repo.ArticleStatUpdate
+	event     func(int64, int64) *commonenums.Event
+}
+
+func (d *ArticleUsecase) changeInteraction(ctx context.Context, interaction articleInteraction) (bool, error) {
 	var outboxEvent *repo.OutboxEvent
 	err := d.tx(ctx, func(ctx context.Context) error {
-		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{
-			Filter: &model.ArticleFilter{ArticleID: new(articleID)},
-		})
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(interaction.articleID)}})
 		if err != nil {
 			return err
 		}
 		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Visibility != enum.ArticleVisibilityPublic || article.Restriction != enum.ContentRestrictionNone {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 		}
-
-		if active {
-			createdResp, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{
-				ArticleID: articleID,
-				UserID:    userID,
-				Type:      enum.ArticleActionCollect,
-			})
-			if err != nil {
+		if interaction.active {
+			created, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{ArticleID: interaction.articleID, UserID: interaction.userID, Type: interaction.action})
+			if err != nil || !created {
 				return err
 			}
-			if !createdResp {
-				return nil
-			}
-			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
-				ArticleID: articleID,
-				Stats: repo.ArticleStatUpdate{
-					CollectCount: 1,
-				},
-			}); err != nil {
+			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: interaction.articleID, Stats: interaction.stats}); err != nil {
 				return err
 			}
-			outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{
-				Type:    commonenums.EventType_EVENT_TYPE_ARTICLE_COLLECTED,
-				Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED,
-				Payload: &commonenums.Event_ArticleCollected{
-					ArticleCollected: &commonenums.ArticleCollectedPayload{
-						SenderId:  userID,
-						ArticleId: articleID,
-					},
-				},
-			})
+			outboxEvent, err = d.outboxRepo.Save(ctx, interaction.event(interaction.userID, interaction.articleID))
 			return err
 		}
-
-		deletedResp, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{
-			ArticleID: articleID,
-			UserID:    userID,
-			Action:    enum.ArticleActionCollect,
-		})
-		if err != nil {
+		deleted, err := d.actionRecordRepo.Delete(ctx, &repo.ArticleActionRecordDeleteReq{ArticleID: interaction.articleID, UserID: interaction.userID, Action: interaction.action})
+		if err != nil || deleted == 0 {
 			return err
 		}
-		if deletedResp == 0 {
-			return nil
-		}
-		err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{
-			ArticleID: articleID,
-			Stats: repo.ArticleStatUpdate{
-				CollectCount: -1,
-			},
-		})
-		return err
+		return d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: interaction.articleID, Stats: d.negateArticleStats(interaction.stats)})
 	})
 	if err != nil {
 		return false, err
@@ -400,7 +225,29 @@ func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (b
 			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
 		}
 	}
-	return active, nil
+	return interaction.active, nil
+}
+
+func (*ArticleUsecase) negateArticleStats(stats repo.ArticleStatUpdate) repo.ArticleStatUpdate {
+	stats.ViewCount = -stats.ViewCount
+	stats.ThankCount = -stats.ThankCount
+	stats.LikeCount = -stats.LikeCount
+	stats.CollectCount = -stats.CollectCount
+	stats.RewardCount = -stats.RewardCount
+	stats.ReplyCount = -stats.ReplyCount
+	return stats
+}
+
+func (*ArticleUsecase) articleLikedEvent(userID, articleID int64) *commonenums.Event {
+	return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_LIKED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LIKED, Payload: &commonenums.Event_ArticleLiked{ArticleLiked: &commonenums.ArticleLikedPayload{SenderId: userID, ArticleId: articleID}}}
+}
+
+func (*ArticleUsecase) articleThankedEvent(userID, articleID int64) *commonenums.Event {
+	return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_THANKED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_THANKED, Payload: &commonenums.Event_ArticleThanked{ArticleThanked: &commonenums.ArticleThankedPayload{SenderId: userID, ArticleId: articleID}}}
+}
+
+func (*ArticleUsecase) articleCollectedEvent(userID, articleID int64) *commonenums.Event {
+	return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_COLLECTED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_COLLECTED, Payload: &commonenums.Event_ArticleCollected{ArticleCollected: &commonenums.ArticleCollectedPayload{SenderId: userID, ArticleId: articleID}}}
 }
 
 type ArticleRewardReq struct {

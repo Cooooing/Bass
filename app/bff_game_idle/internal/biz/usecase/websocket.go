@@ -14,7 +14,6 @@ import (
 	"bff_game_idle/internal/biz/model"
 	"bff_game_idle/internal/biz/repo"
 	"bff_game_idle/internal/config"
-	"bff_game_idle/internal/config/errormessage"
 	"bff_game_idle/internal/enum"
 
 	"github.com/google/uuid"
@@ -29,6 +28,7 @@ type WebSocketUsecase struct {
 	characterUsecase *CharacterUsecase
 	eventHandlers    WebSocketEventHandlers
 	commandHandlers  WebSocketCommandHandlers
+	errorResolver    ErrorResolver
 	pingInterval     time.Duration
 	writeTimeout     time.Duration
 	ticketTTL        time.Duration
@@ -41,6 +41,10 @@ type WebSocketUsecase struct {
 	running          bool
 }
 
+type ErrorResolver interface {
+	ResolveError(error) (cerrors.BusinessErrorCode, string)
+}
+
 func NewWebSocketUsecase(
 	logger *slog.Logger,
 	conf *config.Bootstrap,
@@ -50,6 +54,7 @@ func NewWebSocketUsecase(
 	characterUsecase *CharacterUsecase,
 	eventHandlers WebSocketEventHandlers,
 	commandHandlers WebSocketCommandHandlers,
+	errorResolver ErrorResolver,
 ) *WebSocketUsecase {
 	pingInterval := 30 * time.Second
 	if conf.GetWebsocket().GetPingInterval() != nil && conf.GetWebsocket().GetPingInterval().AsDuration() > 0 {
@@ -67,6 +72,7 @@ func NewWebSocketUsecase(
 		characterUsecase: characterUsecase,
 		eventHandlers:    eventHandlers,
 		commandHandlers:  commandHandlers,
+		errorResolver:    errorResolver,
 		pingInterval:     pingInterval,
 		writeTimeout:     writeTimeout,
 		ticketTTL:        2 * time.Minute,
@@ -407,7 +413,7 @@ func (u *WebSocketUsecase) HandleCommand(ctx context.Context, connection *WebSoc
 }
 
 func (u *WebSocketUsecase) SendCommandFailed(ctx context.Context, connection *WebSocketConnection, err error) {
-	code, message := errormessage.NewResolver().ResolveError(err)
+	code, message := u.errorResolver.ResolveError(err)
 	connection.Send(ctx, &WebSocketSendMessage{
 		Type: enum.WebSocketMessageTypeCommandFailed,
 		Payload: &WebSocketCommandError{

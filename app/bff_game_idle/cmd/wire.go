@@ -5,9 +5,11 @@ package main
 
 import (
 	"bff_game_idle/internal/biz"
+	"bff_game_idle/internal/biz/usecase"
 	"bff_game_idle/internal/config"
 	"bff_game_idle/internal/data"
 	"bff_game_idle/internal/server"
+	"bff_game_idle/internal/server/errormessage"
 	"bff_game_idle/internal/service"
 	commonClient "common/pkg/client"
 	"common/proto/gen/common"
@@ -20,6 +22,8 @@ import (
 func wireApp(*config.Bootstrap, *common.Server, *slog.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(
 		commonClient.NewObservability,
+		errormessage.NewResolver,
+		wire.Bind(new(usecase.ErrorResolver), new(*errormessage.Resolver)),
 		server.ServerProviderSet,
 		service.ServiceProviderSet,
 		biz.BizProviderSet,

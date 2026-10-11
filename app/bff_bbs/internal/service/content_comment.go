@@ -6,13 +6,13 @@ import (
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
-	bbscontentv1enum "common/proto/gen/bff_bbs/v1/content/enum"
 	bbsuserv1enum "common/proto/gen/bff_bbs/v1/user/enum"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 
 	"bff_bbs/internal/biz/usecase"
+	"bff_bbs/internal/enum"
 
 	"github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
@@ -66,7 +66,7 @@ func (s *ContentCommentService) Create(ctx context.Context, req *bbscontentv1.Cr
 			ReplyCount:    resp.ReplyCount,
 			LikeCount:     resp.LikeCount,
 			ThankCount:    resp.ThankCount,
-			Restriction:   bbscontentv1enum.ContentRestriction(resp.Restriction),
+			Restriction:   enum.ContentRestrictionMap.MustToProto(resp.Restriction),
 			CreatedBy:     resp.CreatedBy,
 			UpdatedBy:     resp.UpdatedBy,
 			CreatedAt:     timestamppb.New(*resp.CreatedAt),
@@ -151,7 +151,7 @@ func (s *ContentCommentService) List(ctx context.Context, req *bbscontentv1.List
 			ReplyCount:    row.ReplyCount,
 			LikeCount:     row.LikeCount,
 			ThankCount:    row.ThankCount,
-			Restriction:   bbscontentv1enum.ContentRestriction(row.Restriction),
+			Restriction:   enum.ContentRestrictionMap.MustToProto(row.Restriction),
 			CreatedBy:     row.CreatedBy,
 			UpdatedBy:     row.UpdatedBy,
 			CreatedAt:     timestamppb.New(*row.CreatedAt),
@@ -251,7 +251,7 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 				ReplyCount:    row.Root.ReplyCount,
 				LikeCount:     row.Root.LikeCount,
 				ThankCount:    row.Root.ThankCount,
-				Restriction:   bbscontentv1enum.ContentRestriction(row.Root.Restriction),
+				Restriction:   enum.ContentRestrictionMap.MustToProto(row.Root.Restriction),
 				CreatedBy:     row.Root.CreatedBy,
 				UpdatedBy:     row.Root.UpdatedBy,
 				CreatedAt:     timestamppb.New(*row.Root.CreatedAt),
@@ -313,7 +313,7 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 				ReplyCount:    preview.ReplyCount,
 				LikeCount:     preview.LikeCount,
 				ThankCount:    preview.ThankCount,
-				Restriction:   bbscontentv1enum.ContentRestriction(preview.Restriction),
+				Restriction:   enum.ContentRestrictionMap.MustToProto(preview.Restriction),
 				CreatedBy:     preview.CreatedBy,
 				UpdatedBy:     preview.UpdatedBy,
 				CreatedAt:     timestamppb.New(*preview.CreatedAt),
@@ -383,77 +383,7 @@ func (s *ContentCommentService) ListReplies(ctx context.Context, req *bbscontent
 	if err != nil {
 		return nil, err
 	}
-	var page *common.PageResp
-	if resp.Page != nil {
-		page = resp.Page.ToProto()
-	}
-	rows := make([]*bbscontentv1.ListCommentReplies_Resp_CommentListItem, 0, len(resp.Rows))
-	for _, row := range resp.Rows {
-		if row == nil {
-			rows = append(rows, nil)
-			continue
-		}
-		item := &bbscontentv1.ListCommentReplies_Resp_CommentListItem{
-			Id:            row.ID,
-			ArticleId:     row.ArticleID,
-			Content:       row.Content,
-			ContentRender: row.ContentRender,
-			Level:         row.Level,
-			ParentId:      row.ParentID,
-			ReplyId:       row.ReplyID,
-			ReplyCount:    row.ReplyCount,
-			LikeCount:     row.LikeCount,
-			ThankCount:    row.ThankCount,
-			Restriction:   bbscontentv1enum.ContentRestriction(row.Restriction),
-			CreatedBy:     row.CreatedBy,
-			UpdatedBy:     row.UpdatedBy,
-			CreatedAt:     timestamppb.New(*row.CreatedAt),
-			UpdatedAt:     timestamppb.New(*row.UpdatedAt),
-		}
-		if row.ViewerActionState != nil {
-			item.ViewerActionState = &bbscontentv1.ListCommentReplies_Resp_CommentViewerActionState{
-				Liked:   row.ViewerActionState.Liked,
-				Thanked: row.ViewerActionState.Thanked,
-			}
-		}
-		if row.User != nil {
-			item.User = &bbscontentv1.ListCommentReplies_Resp_AccountProfile{
-				Id:            row.User.ID,
-				Name:          row.User.Name,
-				Nickname:      row.User.Nickname,
-				Url:           row.User.URL,
-				AvatarUrl:     row.User.AvatarURL,
-				Introduction:  row.User.Introduction,
-				Status:        bbsuserv1enum.AccountStatus(row.User.Status),
-				Mbti:          row.User.MBTI,
-				FollowCount:   row.User.FollowCount,
-				FollowerCount: row.User.FollowerCount,
-				CreatedAt:     timestamppb.New(*row.User.CreatedAt),
-				UpdatedAt:     timestamppb.New(*row.User.UpdatedAt),
-			}
-		}
-		if row.ReplyUser != nil {
-			item.ReplyUser = &bbscontentv1.ListCommentReplies_Resp_AccountProfile{
-				Id:            row.ReplyUser.ID,
-				Name:          row.ReplyUser.Name,
-				Nickname:      row.ReplyUser.Nickname,
-				Url:           row.ReplyUser.URL,
-				AvatarUrl:     row.ReplyUser.AvatarURL,
-				Introduction:  row.ReplyUser.Introduction,
-				Status:        bbsuserv1enum.AccountStatus(row.ReplyUser.Status),
-				Mbti:          row.ReplyUser.MBTI,
-				FollowCount:   row.ReplyUser.FollowCount,
-				FollowerCount: row.ReplyUser.FollowerCount,
-				CreatedAt:     timestamppb.New(*row.ReplyUser.CreatedAt),
-				UpdatedAt:     timestamppb.New(*row.ReplyUser.UpdatedAt),
-			}
-		}
-		rows = append(rows, item)
-	}
-	return &bbscontentv1.ListCommentReplies_Resp{
-		Page: page,
-		Rows: rows,
-	}, nil
+	return s.contentCommentUsecase.ListCommentRepliesProto(resp), nil
 }
 
 func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbscontentv1.ListCommentTimeline_Req) (*bbscontentv1.ListCommentTimeline_Resp, error) {
@@ -471,77 +401,7 @@ func (s *ContentCommentService) ListTimeline(ctx context.Context, req *bbsconten
 	if err != nil {
 		return nil, err
 	}
-	var page *common.PageResp
-	if resp.Page != nil {
-		page = resp.Page.ToProto()
-	}
-	rows := make([]*bbscontentv1.ListCommentTimeline_Resp_CommentListItem, 0, len(resp.Rows))
-	for _, row := range resp.Rows {
-		if row == nil {
-			rows = append(rows, nil)
-			continue
-		}
-		item := &bbscontentv1.ListCommentTimeline_Resp_CommentListItem{
-			Id:            row.ID,
-			ArticleId:     row.ArticleID,
-			Content:       row.Content,
-			ContentRender: row.ContentRender,
-			Level:         row.Level,
-			ParentId:      row.ParentID,
-			ReplyId:       row.ReplyID,
-			ReplyCount:    row.ReplyCount,
-			LikeCount:     row.LikeCount,
-			ThankCount:    row.ThankCount,
-			Restriction:   bbscontentv1enum.ContentRestriction(row.Restriction),
-			CreatedBy:     row.CreatedBy,
-			UpdatedBy:     row.UpdatedBy,
-			CreatedAt:     timestamppb.New(*row.CreatedAt),
-			UpdatedAt:     timestamppb.New(*row.UpdatedAt),
-		}
-		if row.ViewerActionState != nil {
-			item.ViewerActionState = &bbscontentv1.ListCommentTimeline_Resp_CommentViewerActionState{
-				Liked:   row.ViewerActionState.Liked,
-				Thanked: row.ViewerActionState.Thanked,
-			}
-		}
-		if row.User != nil {
-			item.User = &bbscontentv1.ListCommentTimeline_Resp_AccountProfile{
-				Id:            row.User.ID,
-				Name:          row.User.Name,
-				Nickname:      row.User.Nickname,
-				Url:           row.User.URL,
-				AvatarUrl:     row.User.AvatarURL,
-				Introduction:  row.User.Introduction,
-				Status:        bbsuserv1enum.AccountStatus(row.User.Status),
-				Mbti:          row.User.MBTI,
-				FollowCount:   row.User.FollowCount,
-				FollowerCount: row.User.FollowerCount,
-				CreatedAt:     timestamppb.New(*row.User.CreatedAt),
-				UpdatedAt:     timestamppb.New(*row.User.UpdatedAt),
-			}
-		}
-		if row.ReplyUser != nil {
-			item.ReplyUser = &bbscontentv1.ListCommentTimeline_Resp_AccountProfile{
-				Id:            row.ReplyUser.ID,
-				Name:          row.ReplyUser.Name,
-				Nickname:      row.ReplyUser.Nickname,
-				Url:           row.ReplyUser.URL,
-				AvatarUrl:     row.ReplyUser.AvatarURL,
-				Introduction:  row.ReplyUser.Introduction,
-				Status:        bbsuserv1enum.AccountStatus(row.ReplyUser.Status),
-				Mbti:          row.ReplyUser.MBTI,
-				FollowCount:   row.ReplyUser.FollowCount,
-				FollowerCount: row.ReplyUser.FollowerCount,
-				CreatedAt:     timestamppb.New(*row.ReplyUser.CreatedAt),
-				UpdatedAt:     timestamppb.New(*row.ReplyUser.UpdatedAt),
-			}
-		}
-		rows = append(rows, item)
-	}
-	return &bbscontentv1.ListCommentTimeline_Resp{
-		Page: page,
-		Rows: rows,
-	}, nil
+	return s.contentCommentUsecase.ListCommentTimelineProto(resp), nil
 }
 
 func (s *ContentCommentService) Like(ctx context.Context, req *bbscontentv1.LikeComment_Req) (*bbscontentv1.LikeComment_Resp, error) {

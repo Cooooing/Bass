@@ -1,44 +1,13 @@
 package repo
 
 import (
-	"bff_bbs/internal/biz/model"
 	commonmodel "common/pkg/model"
 	"context"
 	"time"
+
+	"bff_bbs/internal/biz/model"
+	"bff_bbs/internal/enum"
 )
-
-type CommentViewerActionState struct {
-	Liked   bool
-	Thanked bool
-}
-
-type ArticleBrief struct {
-	ID    int64
-	Title string
-}
-
-type CommentListItem struct {
-	ID                int64
-	ArticleID         int64
-	Article           *ArticleBrief
-	Content           string
-	ContentRender     string
-	Level             int32
-	ParentID          *int64
-	ReplyID           *int64
-	Restriction       int32
-	DeletedAt         *time.Time
-	ThankCount        int32
-	LikeCount         int32
-	ReplyCount        int32
-	ViewerActionState *CommentViewerActionState
-	User              *model.AccountProfile
-	ReplyUser         *model.AccountProfile
-	CreatedBy         *int64
-	UpdatedBy         *int64
-	CreatedAt         *time.Time
-	UpdatedAt         *time.Time
-}
 
 type CommentDetail struct {
 	ID                int64
@@ -48,12 +17,12 @@ type CommentDetail struct {
 	Level             int32
 	ParentID          *int64
 	ReplyID           *int64
-	Restriction       int32
+	Restriction       enum.ContentRestriction
 	DeletedAt         *time.Time
 	ThankCount        int32
 	LikeCount         int32
 	ReplyCount        int32
-	ViewerActionState *CommentViewerActionState
+	ViewerActionState *model.CommentViewerActionState
 	User              *model.AccountProfile
 	ReplyUser         *model.AccountProfile
 	CreatedBy         *int64
@@ -63,8 +32,8 @@ type CommentDetail struct {
 }
 
 type CommentThread struct {
-	Root           *CommentListItem
-	PreviewReplies []*CommentListItem
+	Root           *model.CommentListItem
+	PreviewReplies []*model.CommentListItem
 	ReplyCount     int32
 	HasMoreReplies bool
 }
@@ -97,7 +66,7 @@ type ListCommentsReq struct {
 
 type ListCommentsResp struct {
 	Page *commonmodel.PageResp
-	Rows []*CommentListItem
+	Rows []*model.CommentListItem
 }
 
 type ListCommentThreadsReq struct {
@@ -125,7 +94,7 @@ type ListCommentRepliesReq struct {
 
 type ListCommentRepliesResp struct {
 	Page *commonmodel.PageResp
-	Rows []*CommentListItem
+	Rows []*model.CommentListItem
 }
 
 type ListCommentTimelineReq struct {
@@ -138,7 +107,7 @@ type ListCommentTimelineReq struct {
 
 type ListCommentTimelineResp struct {
 	Page *commonmodel.PageResp
-	Rows []*CommentListItem
+	Rows []*model.CommentListItem
 }
 
 type LikeCommentReq struct {

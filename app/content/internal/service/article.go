@@ -650,74 +650,9 @@ func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Req) (*v
 	if err != nil {
 		return nil, err
 	}
-	query := &model.ArticleFilter{}
-	if req.GetQuery() != nil {
-		query.TagID = req.GetQuery().TagId
-		query.DomainID = req.GetQuery().DomainId
-		query.ArticleIDs = req.GetQuery().GetArticleIds()
-		query.AuthorID = req.GetQuery().AuthorId
-		query.ExcludedAuthorIDs = req.GetQuery().GetExcludedAuthorIds()
-		if req.GetQuery().Type != nil {
-			v, ok := enum.ArticleTypeMap.ToEnum(req.GetQuery().GetType())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
-			}
-			query.Type = new(v)
-		}
-		if req.GetQuery().Order != nil {
-			v, ok := enum.ArticleOrderMap.ToEnum(req.GetQuery().GetOrder())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-			}
-			query.Order = new(v)
-		}
-		if req.GetQuery().PublishStatus != nil {
-			v, ok := enum.ArticlePublishStatusMap.ToEnum(req.GetQuery().GetPublishStatus())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-			}
-			query.PublishStatus = new(v)
-		}
-		for _, item := range req.GetQuery().GetPublishStatuses() {
-			v, ok := enum.ArticlePublishStatusMap.ToEnum(item)
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-			}
-			query.PublishStatuses = append(query.PublishStatuses, v)
-		}
-		if req.GetQuery().Visibility != nil {
-			v, ok := enum.ArticleVisibilityMap.ToEnum(req.GetQuery().GetVisibility())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-			}
-			query.Visibility = new(v)
-		}
-		for _, item := range req.GetQuery().GetVisibilities() {
-			v, ok := enum.ArticleVisibilityMap.ToEnum(item)
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-			}
-			query.Visibilities = append(query.Visibilities, v)
-		}
-		if req.GetQuery().Restriction != nil {
-			v, ok := enum.ContentRestrictionMap.ToEnum(req.GetQuery().GetRestriction())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-			}
-			query.Restriction = new(v)
-		}
-		for _, item := range req.GetQuery().GetRestrictions() {
-			v, ok := enum.ContentRestrictionMap.ToEnum(item)
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-			}
-			query.Restrictions = append(query.Restrictions, v)
-		}
-		if req.GetQuery().GetPublishedAtEnd() != nil {
-			end := req.GetQuery().GetPublishedAtEnd().AsTime()
-			query.PublishedAtEnd = new(end)
-		}
-		query.Scheduled = req.GetQuery().Scheduled
+	query, err := s.articleQueryFilter(req.GetQuery())
+	if err != nil {
+		return nil, err
 	}
 	list, err := s.articleUsecase.ListByAccess(ctx, &usecase.ArticleListByAccessReq{Access: access, Filter: query})
 	if err != nil {
@@ -783,74 +718,9 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v
 	if err != nil {
 		return nil, err
 	}
-	query := &model.ArticleFilter{}
-	if req.GetQuery() != nil {
-		query.TagID = req.GetQuery().TagId
-		query.DomainID = req.GetQuery().DomainId
-		query.ArticleIDs = req.GetQuery().GetArticleIds()
-		query.AuthorID = req.GetQuery().AuthorId
-		query.ExcludedAuthorIDs = req.GetQuery().GetExcludedAuthorIds()
-		if req.GetQuery().Type != nil {
-			v, ok := enum.ArticleTypeMap.ToEnum(req.GetQuery().GetType())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
-			}
-			query.Type = new(v)
-		}
-		if req.GetQuery().Order != nil {
-			v, ok := enum.ArticleOrderMap.ToEnum(req.GetQuery().GetOrder())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-			}
-			query.Order = new(v)
-		}
-		if req.GetQuery().PublishStatus != nil {
-			v, ok := enum.ArticlePublishStatusMap.ToEnum(req.GetQuery().GetPublishStatus())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-			}
-			query.PublishStatus = new(v)
-		}
-		for _, item := range req.GetQuery().GetPublishStatuses() {
-			v, ok := enum.ArticlePublishStatusMap.ToEnum(item)
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-			}
-			query.PublishStatuses = append(query.PublishStatuses, v)
-		}
-		if req.GetQuery().Visibility != nil {
-			v, ok := enum.ArticleVisibilityMap.ToEnum(req.GetQuery().GetVisibility())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-			}
-			query.Visibility = new(v)
-		}
-		for _, item := range req.GetQuery().GetVisibilities() {
-			v, ok := enum.ArticleVisibilityMap.ToEnum(item)
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
-			}
-			query.Visibilities = append(query.Visibilities, v)
-		}
-		if req.GetQuery().Restriction != nil {
-			v, ok := enum.ContentRestrictionMap.ToEnum(req.GetQuery().GetRestriction())
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-			}
-			query.Restriction = new(v)
-		}
-		for _, item := range req.GetQuery().GetRestrictions() {
-			v, ok := enum.ContentRestrictionMap.ToEnum(item)
-			if !ok {
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
-			}
-			query.Restrictions = append(query.Restrictions, v)
-		}
-		if req.GetQuery().GetPublishedAtEnd() != nil {
-			end := req.GetQuery().GetPublishedAtEnd().AsTime()
-			query.PublishedAtEnd = new(end)
-		}
-		query.Scheduled = req.GetQuery().Scheduled
+	query, err := s.articleQueryFilter(req.GetQuery())
+	if err != nil {
+		return nil, err
 	}
 	pageResp, err := s.articleUsecase.PageByAccess(ctx, &usecase.ArticlePageByAccessReq{Access: access, Filter: query, Page: commonmodel.PageReqFromProto(req.GetPage())})
 	if err != nil {
@@ -908,4 +778,78 @@ func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapA
 		reply[articleID] = &v1.MapArticleViewerActionStates_Resp_ArticleViewerActionState{Liked: state.Liked, Thanked: state.Thanked, Collected: state.Collected, Rewarded: state.Rewarded}
 	}
 	return &v1.MapArticleViewerActionStates_Resp{States: reply}, nil
+}
+
+func (*ArticleService) articleQueryFilter(queryParams *v1.ArticleQueryParams) (*model.ArticleFilter, error) {
+	query := &model.ArticleFilter{}
+	if queryParams == nil {
+		return query, nil
+	}
+	query.TagID = queryParams.TagId
+	query.DomainID = queryParams.DomainId
+	query.ArticleIDs = queryParams.GetArticleIds()
+	query.AuthorID = queryParams.AuthorId
+	query.ExcludedAuthorIDs = queryParams.GetExcludedAuthorIds()
+	if queryParams.Type != nil {
+		value, ok := enum.ArticleTypeMap.ToEnum(queryParams.GetType())
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
+		}
+		query.Type = new(value)
+	}
+	if queryParams.Order != nil {
+		value, ok := enum.ArticleOrderMap.ToEnum(queryParams.GetOrder())
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		query.Order = new(value)
+	}
+	if queryParams.PublishStatus != nil {
+		value, ok := enum.ArticlePublishStatusMap.ToEnum(queryParams.GetPublishStatus())
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+		}
+		query.PublishStatus = new(value)
+	}
+	for _, item := range queryParams.GetPublishStatuses() {
+		value, ok := enum.ArticlePublishStatusMap.ToEnum(item)
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+		}
+		query.PublishStatuses = append(query.PublishStatuses, value)
+	}
+	if queryParams.Visibility != nil {
+		value, ok := enum.ArticleVisibilityMap.ToEnum(queryParams.GetVisibility())
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+		}
+		query.Visibility = new(value)
+	}
+	for _, item := range queryParams.GetVisibilities() {
+		value, ok := enum.ArticleVisibilityMap.ToEnum(item)
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_STATUS)
+		}
+		query.Visibilities = append(query.Visibilities, value)
+	}
+	if queryParams.Restriction != nil {
+		value, ok := enum.ContentRestrictionMap.ToEnum(queryParams.GetRestriction())
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		query.Restriction = new(value)
+	}
+	for _, item := range queryParams.GetRestrictions() {
+		value, ok := enum.ContentRestrictionMap.ToEnum(item)
+		if !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		query.Restrictions = append(query.Restrictions, value)
+	}
+	if queryParams.GetPublishedAtEnd() != nil {
+		publishedAtEnd := queryParams.GetPublishedAtEnd().AsTime()
+		query.PublishedAtEnd = new(publishedAtEnd)
+	}
+	query.Scheduled = queryParams.Scheduled
+	return query, nil
 }

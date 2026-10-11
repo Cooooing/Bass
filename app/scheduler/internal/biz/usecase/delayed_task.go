@@ -27,22 +27,21 @@ import (
 )
 
 type DelayedTaskUsecase struct {
-	logger               *slog.Logger
-	conf                 *config.Bootstrap
-	tx                   base.Tx
-	repo                 repo.DelayedTaskRepo
-	delayedTaskCacheRepo repo.DelayedTaskCacheRepo
-	versionRepo          repo.DelayedTaskVersionRepo
-	executionRepo        repo.DelayedTaskExecutionRecordRepo
-	scheduleRepo         repo.DelayedTaskScheduleRepo
-	tasks                map[string]taskimpl.Task
-	workerID             string
-	runningMu            sync.Mutex
-	runningCancel        map[int64]context.CancelFunc
-	clockSkewGrace       time.Duration
+	logger                           *slog.Logger
+	conf                             *config.Bootstrap
+	tx                               base.Tx
+	repo                             repo.DelayedTaskRepo
+	delayedTaskCacheRepo             repo.DelayedTaskCacheRepo
+	versionRepo                      repo.DelayedTaskVersionRepo
+	executionRepo                    repo.DelayedTaskExecutionRecordRepo
+	scheduleRepo                     repo.DelayedTaskScheduleRepo
+	tasks                            map[string]taskimpl.Task
+	workerID                         string
+	runningMu                        sync.Mutex
+	runningCancel                    map[int64]context.CancelFunc
+	clockSkewGrace                   time.Duration
+	delayedTaskScheduleSubjectPrefix string
 }
-
-const delayedTaskScheduleSubjectPrefix = "scheduler.schedule.delayed_task_execution"
 
 func NewDelayedTaskUsecase(
 	logger *slog.Logger,
@@ -60,18 +59,19 @@ func NewDelayedTaskUsecase(
 		workerID = host
 	}
 	return &DelayedTaskUsecase{
-		logger:               logger,
-		conf:                 conf,
-		tx:                   tx,
-		repo:                 delayedTaskRepo,
-		delayedTaskCacheRepo: delayedTaskCacheRepo,
-		versionRepo:          versionRepo,
-		executionRepo:        executionRepo,
-		scheduleRepo:         scheduleRepo,
-		tasks:                tasks,
-		workerID:             workerID,
-		runningCancel:        make(map[int64]context.CancelFunc),
-		clockSkewGrace:       10 * time.Second,
+		logger:                           logger,
+		conf:                             conf,
+		tx:                               tx,
+		repo:                             delayedTaskRepo,
+		delayedTaskCacheRepo:             delayedTaskCacheRepo,
+		versionRepo:                      versionRepo,
+		executionRepo:                    executionRepo,
+		scheduleRepo:                     scheduleRepo,
+		tasks:                            tasks,
+		workerID:                         workerID,
+		runningCancel:                    make(map[int64]context.CancelFunc),
+		clockSkewGrace:                   10 * time.Second,
+		delayedTaskScheduleSubjectPrefix: "scheduler.schedule.delayed_task_execution",
 	}
 }
 
@@ -330,7 +330,7 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 	if created.Conflict {
 		return created.Row, nil
 	}
-	schedulePrefix := delayedTaskScheduleSubjectPrefix
+	schedulePrefix := u.delayedTaskScheduleSubjectPrefix
 	if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
 		schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
 	}
@@ -379,7 +379,7 @@ func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idem
 		if err != nil || len(rows) == 0 {
 			return nil, err
 		}
-		schedulePrefix := delayedTaskScheduleSubjectPrefix
+		schedulePrefix := u.delayedTaskScheduleSubjectPrefix
 		if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
 			schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
 		}
@@ -399,7 +399,7 @@ func (u *DelayedTaskUsecase) CancelExecution(ctx context.Context, id int64, idem
 		return row, err
 	}
 	if row.Status == schedulerenum.TaskExecutionStatusCanceled {
-		schedulePrefix := delayedTaskScheduleSubjectPrefix
+		schedulePrefix := u.delayedTaskScheduleSubjectPrefix
 		if u.conf.GetScheduler() != nil && u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {
 			schedulePrefix = u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix()
 		}
@@ -632,7 +632,7 @@ func (u *DelayedTaskUsecase) EnsureSchedule(ctx context.Context) error {
 			if err != nil || task == nil {
 				continue
 			}
-			schedulePrefix := delayedTaskScheduleSubjectPrefix
+			schedulePrefix := u.delayedTaskScheduleSubjectPrefix
 			executeSubject := "scheduler.execute.delayed_task"
 			if u.conf.GetScheduler() != nil {
 				if u.conf.GetScheduler().GetDelayedTaskScheduleSubjectPrefix() != "" {

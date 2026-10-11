@@ -309,7 +309,7 @@ func (r *NodeRegistryRepo) getAllOnlineNodes(ctx context.Context) ([]*model.Node
 }
 
 func (r *NodeRegistryRepo) saveOfflineEvent(ctx context.Context, userID int64, event *model.PushEvent) error {
-	key := r.offlineEventKey(userID)
+	key := fmt.Sprintf(r.keyOfflineEvent, userID)
 	data, err := json.Marshal(event)
 	if err != nil {
 		return fmt.Errorf("序列化离线事件: %w", err)
@@ -323,7 +323,7 @@ func (r *NodeRegistryRepo) saveOfflineEvent(ctx context.Context, userID int64, e
 }
 
 func (r *NodeRegistryRepo) getOfflineEvents(ctx context.Context, userID int64) ([]*model.PushEvent, error) {
-	key := r.offlineEventKey(userID)
+	key := fmt.Sprintf(r.keyOfflineEvent, userID)
 	results, err := r.rdb.Client.LRange(ctx, key, 0, -1).Result()
 	if err != nil {
 		return nil, fmt.Errorf("获取离线事件: %w", err)
@@ -341,12 +341,8 @@ func (r *NodeRegistryRepo) getOfflineEvents(ctx context.Context, userID int64) (
 }
 
 func (r *NodeRegistryRepo) clearOfflineEvents(ctx context.Context, userID int64) error {
-	key := r.offlineEventKey(userID)
+	key := fmt.Sprintf(r.keyOfflineEvent, userID)
 	return r.rdb.Client.Del(ctx, key).Err()
-}
-
-func (r *NodeRegistryRepo) offlineEventKey(userID int64) string {
-	return fmt.Sprintf(r.keyOfflineEvent, userID)
 }
 
 func (r *NodeRegistryRepo) toModel(record *nodeRecord) *model.NodeInfo {

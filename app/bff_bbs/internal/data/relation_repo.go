@@ -3,7 +3,6 @@ package data
 import (
 	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
-	"common/proto/gen/common"
 	userv1 "common/proto/gen/user/v1"
 	userv1enum "common/proto/gen/user/v1/enum"
 	"context"
@@ -12,23 +11,12 @@ import (
 
 	"bff_bbs/internal/biz/repo"
 	"bff_bbs/internal/enum"
-
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 var _ repo.RelationClient = (*RelationClient)(nil)
 
 type RelationClient struct {
 	userClient *rpc.UserClient
-}
-
-type relationItem interface {
-	GetId() int64
-	GetType() userv1enum.RelationType
-	GetActorId() int64
-	GetTargetId() int64
-	GetCreatedAt() *timestamppb.Timestamp
-	GetUpdatedAt() *timestamppb.Timestamp
 }
 
 func NewRelationClient(
@@ -88,11 +76,18 @@ func (r *RelationClient) ListFollowing(ctx context.Context, req *repo.ListFollow
 	if err != nil {
 		return nil, err
 	}
-	items := make([]relationItem, len(reply.GetRows()))
-	for i, item := range reply.GetRows() {
-		items[i] = item
+	var page *commonmodel.PageResp
+	if reply.GetPage() != nil {
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
-	page, rows := r.relationResult(reply.GetPage(), items)
+	rows := make([]*model.Relation, 0, len(reply.GetRows()))
+	for _, item := range reply.GetRows() {
+		if item == nil {
+			rows = append(rows, nil)
+			continue
+		}
+		rows = append(rows, &model.Relation{ID: item.GetId(), Type: r.relationTypeFromUser(item.GetType()), ActorID: item.GetActorId(), TargetID: item.GetTargetId(), CreatedAt: new(item.GetCreatedAt().AsTime()), UpdatedAt: new(item.GetUpdatedAt().AsTime())})
+	}
 	return &repo.ListFollowingRelationsResp{
 		Page: page,
 		Rows: rows,
@@ -104,31 +99,22 @@ func (r *RelationClient) ListFollowers(ctx context.Context, req *repo.ListFollow
 	if err != nil {
 		return nil, err
 	}
-	items := make([]relationItem, len(reply.GetRows()))
-	for i, item := range reply.GetRows() {
-		items[i] = item
+	var page *commonmodel.PageResp
+	if reply.GetPage() != nil {
+		page = commonmodel.PageRespFromProto(reply.GetPage())
 	}
-	page, rows := r.relationResult(reply.GetPage(), items)
-	return &repo.ListFollowersRelationsResp{
-		Page: page,
-		Rows: rows,
-	}, nil
-}
-
-func (r *RelationClient) relationResult(page *common.PageResp, items []relationItem) (*commonmodel.PageResp, []*model.Relation) {
-	var resultPage *commonmodel.PageResp
-	if page != nil {
-		resultPage = commonmodel.PageRespFromProto(page)
-	}
-	rows := make([]*model.Relation, 0, len(items))
-	for _, item := range items {
+	rows := make([]*model.Relation, 0, len(reply.GetRows()))
+	for _, item := range reply.GetRows() {
 		if item == nil {
 			rows = append(rows, nil)
 			continue
 		}
 		rows = append(rows, &model.Relation{ID: item.GetId(), Type: r.relationTypeFromUser(item.GetType()), ActorID: item.GetActorId(), TargetID: item.GetTargetId(), CreatedAt: new(item.GetCreatedAt().AsTime()), UpdatedAt: new(item.GetUpdatedAt().AsTime())})
 	}
-	return resultPage, rows
+	return &repo.ListFollowersRelationsResp{
+		Page: page,
+		Rows: rows,
+	}, nil
 }
 
 func (r *RelationClient) ListBlocked(ctx context.Context, req *repo.ListBlockedRelationsReq) (*repo.ListBlockedRelationsResp, error) {

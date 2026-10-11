@@ -29,21 +29,42 @@ func (s *PointsTransferTccService) RegisterGrpc(gs *grpc.Server) {
 func (s *PointsTransferTccService) RegisterHTTP(hs *http.Server) {}
 
 func (s *PointsTransferTccService) Try(ctx context.Context, req *v1.PointsTransferTccReq) (*v1.PointsTransferTccResp, error) {
-	operation := s.pointsUsecase.TransferTry
-	return s.execute(ctx, req, operation)
+	usecaseRequest, err := s.requestFromProto(req)
+	if err != nil {
+		return nil, err
+	}
+	response, err := s.pointsUsecase.TransferTry(ctx, usecaseRequest)
+	if err != nil {
+		return nil, err
+	}
+	return s.responseToProto(response), nil
 }
 
 func (s *PointsTransferTccService) Comfirm(ctx context.Context, req *v1.PointsTransferTccReq) (*v1.PointsTransferTccResp, error) {
-	operation := s.pointsUsecase.TransferComfirm
-	return s.execute(ctx, req, operation)
+	usecaseRequest, err := s.requestFromProto(req)
+	if err != nil {
+		return nil, err
+	}
+	response, err := s.pointsUsecase.TransferComfirm(ctx, usecaseRequest)
+	if err != nil {
+		return nil, err
+	}
+	return s.responseToProto(response), nil
 }
 
 func (s *PointsTransferTccService) Cancel(ctx context.Context, req *v1.PointsTransferTccReq) (*v1.PointsTransferTccResp, error) {
-	operation := s.pointsUsecase.TransferCancel
-	return s.execute(ctx, req, operation)
+	usecaseRequest, err := s.requestFromProto(req)
+	if err != nil {
+		return nil, err
+	}
+	response, err := s.pointsUsecase.TransferCancel(ctx, usecaseRequest)
+	if err != nil {
+		return nil, err
+	}
+	return s.responseToProto(response), nil
 }
 
-func (s *PointsTransferTccService) execute(ctx context.Context, request *v1.PointsTransferTccReq, operation func(context.Context, *usecase.PointsTransferTccReq) (*usecase.PointsTransferTccResp, error)) (*v1.PointsTransferTccResp, error) {
+func (*PointsTransferTccService) requestFromProto(request *v1.PointsTransferTccReq) (*usecase.PointsTransferTccReq, error) {
 	outRecordType, ok := enum.EconomyRecordTypeMap.ToEnum(request.GetOutRecordType())
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
@@ -52,10 +73,10 @@ func (s *PointsTransferTccService) execute(ctx context.Context, request *v1.Poin
 	if !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
 	}
-	response, err := operation(ctx, &usecase.PointsTransferTccReq{FromUserID: request.GetFromUserId(), ToUserID: request.GetToUserId(), Amount: request.GetAmount(), OutRecordType: outRecordType, InRecordType: inRecordType, Remark: request.Remark})
-	if err != nil {
-		return nil, err
-	}
+	return &usecase.PointsTransferTccReq{FromUserID: request.GetFromUserId(), ToUserID: request.GetToUserId(), Amount: request.GetAmount(), OutRecordType: outRecordType, InRecordType: inRecordType, Remark: request.Remark}, nil
+}
+
+func (*PointsTransferTccService) responseToProto(response *usecase.PointsTransferTccResp) *v1.PointsTransferTccResp {
 	mapper := economyProtoMapper{}
-	return &v1.PointsTransferTccResp{FromAccount: mapper.account(response.FromAccount), ToAccount: mapper.account(response.ToAccount), OutRecord: mapper.record(response.OutRecord), InRecord: mapper.record(response.InRecord)}, nil
+	return &v1.PointsTransferTccResp{FromAccount: mapper.account(response.FromAccount), ToAccount: mapper.account(response.ToAccount), OutRecord: mapper.record(response.OutRecord), InRecord: mapper.record(response.InRecord)}
 }

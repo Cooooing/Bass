@@ -31,10 +31,15 @@ import com.bass.bbs.model.LikeArticleReq;
 import com.bass.bbs.model.LikeArticleResp;
 import com.bass.bbs.model.ListArticlesReq;
 import com.bass.bbs.model.ListArticlesResp;
+import com.bass.bbs.model.ListFollowingArticlesReq;
+import com.bass.bbs.model.ListFollowingArticlesResp;
+import com.bass.bbs.model.ListNearbyArticlesReq;
+import com.bass.bbs.model.ListNearbyArticlesResp;
 import com.bass.bbs.model.PageArticleViewHistoryReq;
 import com.bass.bbs.model.PageArticleViewHistoryResp;
 import com.bass.bbs.model.PublishArticleReq;
 import com.bass.bbs.model.RewardArticleReq;
+import com.bass.bbs.model.SetPinnedArticleCommentReq;
 import com.bass.bbs.model.ThankArticleReq;
 import com.bass.bbs.model.ThankArticleResp;
 import com.bass.bbs.model.UpdateDraftArticleReq;
@@ -1792,6 +1797,408 @@ public class ArticleService {
 
   /**
    * 
+   * 查询当前账号关注作者发布的文章。
+   * @param apiRequest {@link APIListFollowingRequest}
+   * @return ListFollowingArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListFollowingArticlesResp listFollowing(APIListFollowingRequest apiRequest) throws ApiException {
+    return listFollowing(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param apiRequest {@link APIListFollowingRequest}
+   * @param headers Optional headers to include in the request
+   * @return ListFollowingArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListFollowingArticlesResp listFollowing(APIListFollowingRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    ListFollowingArticlesReq listFollowingArticlesReq = apiRequest.listFollowingArticlesReq();
+    return listFollowing(listFollowingArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param apiRequest {@link APIListFollowingRequest}
+   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListFollowingArticlesResp> listFollowingWithHttpInfo(APIListFollowingRequest apiRequest) throws ApiException {
+    return listFollowingWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param apiRequest {@link APIListFollowingRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListFollowingArticlesResp> listFollowingWithHttpInfo(APIListFollowingRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListFollowingArticlesReq listFollowingArticlesReq = apiRequest.listFollowingArticlesReq();
+    return listFollowingWithHttpInfo(listFollowingArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param listFollowingArticlesReq  (required)
+   * @return ListFollowingArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListFollowingArticlesResp listFollowing(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq) throws ApiException {
+    return listFollowing(listFollowingArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param listFollowingArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ListFollowingArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListFollowingArticlesResp listFollowing(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListFollowingArticlesResp> localVarResponse = listFollowingWithHttpInfo(listFollowingArticlesReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param listFollowingArticlesReq  (required)
+   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListFollowingArticlesResp> listFollowingWithHttpInfo(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq) throws ApiException {
+    return listFollowingWithHttpInfo(listFollowingArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号关注作者发布的文章。
+   * @param listFollowingArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListFollowingArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListFollowingArticlesResp> listFollowingWithHttpInfo(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listFollowingRequestBuilder(listFollowingArticlesReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("listFollowing", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<ListFollowingArticlesResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        ListFollowingArticlesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListFollowingArticlesResp>() {});
+        
+
+        return new ApiResponse<ListFollowingArticlesResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder listFollowingRequestBuilder(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listFollowingArticlesReq' is set
+    if (listFollowingArticlesReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listFollowingArticlesReq' when calling listFollowing");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/following/list";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listFollowingArticlesReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIListFollowingRequest {
+    @javax.annotation.Nonnull
+    private ListFollowingArticlesReq listFollowingArticlesReq; //  (required)
+
+    private APIListFollowingRequest(Builder builder) {
+      this.listFollowingArticlesReq = builder.listFollowingArticlesReq;
+    }
+    @javax.annotation.Nonnull
+    public ListFollowingArticlesReq listFollowingArticlesReq() {
+      return listFollowingArticlesReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private ListFollowingArticlesReq listFollowingArticlesReq;
+
+      public Builder listFollowingArticlesReq(@javax.annotation.Nonnull ListFollowingArticlesReq listFollowingArticlesReq) {
+        this.listFollowingArticlesReq = listFollowingArticlesReq;
+        return this;
+      }
+      public APIListFollowingRequest build() {
+        return new APIListFollowingRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 查询当前账号所在城市发布的文章。
+   * @param apiRequest {@link APIListNearbyRequest}
+   * @return ListNearbyArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListNearbyArticlesResp listNearby(APIListNearbyRequest apiRequest) throws ApiException {
+    return listNearby(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号所在城市发布的文章。
+   * @param apiRequest {@link APIListNearbyRequest}
+   * @param headers Optional headers to include in the request
+   * @return ListNearbyArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListNearbyArticlesResp listNearby(APIListNearbyRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    ListNearbyArticlesReq listNearbyArticlesReq = apiRequest.listNearbyArticlesReq();
+    return listNearby(listNearbyArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号所在城市发布的文章。
+   * @param apiRequest {@link APIListNearbyRequest}
+   * @return ApiResponse&lt;ListNearbyArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListNearbyArticlesResp> listNearbyWithHttpInfo(APIListNearbyRequest apiRequest) throws ApiException {
+    return listNearbyWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号所在城市发布的文章。
+   * @param apiRequest {@link APIListNearbyRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListNearbyArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListNearbyArticlesResp> listNearbyWithHttpInfo(APIListNearbyRequest apiRequest, Map<String, String> headers) throws ApiException {
+    ListNearbyArticlesReq listNearbyArticlesReq = apiRequest.listNearbyArticlesReq();
+    return listNearbyWithHttpInfo(listNearbyArticlesReq, headers);
+  }
+
+  /**
+   * 
+   * 查询当前账号所在城市发布的文章。
+   * @param listNearbyArticlesReq  (required)
+   * @return ListNearbyArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListNearbyArticlesResp listNearby(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq) throws ApiException {
+    return listNearby(listNearbyArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号所在城市发布的文章。
+   * @param listNearbyArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ListNearbyArticlesResp
+   * @throws ApiException if fails to make API call
+   */
+  public ListNearbyArticlesResp listNearby(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<ListNearbyArticlesResp> localVarResponse = listNearbyWithHttpInfo(listNearbyArticlesReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 查询当前账号所在城市发布的文章。
+   * @param listNearbyArticlesReq  (required)
+   * @return ApiResponse&lt;ListNearbyArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListNearbyArticlesResp> listNearbyWithHttpInfo(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq) throws ApiException {
+    return listNearbyWithHttpInfo(listNearbyArticlesReq, null);
+  }
+
+  /**
+   * 
+   * 查询当前账号所在城市发布的文章。
+   * @param listNearbyArticlesReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;ListNearbyArticlesResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<ListNearbyArticlesResp> listNearbyWithHttpInfo(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = listNearbyRequestBuilder(listNearbyArticlesReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("listNearby", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<ListNearbyArticlesResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        ListNearbyArticlesResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<ListNearbyArticlesResp>() {});
+        
+
+        return new ApiResponse<ListNearbyArticlesResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder listNearbyRequestBuilder(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'listNearbyArticlesReq' is set
+    if (listNearbyArticlesReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'listNearbyArticlesReq' when calling listNearby");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/nearby/list";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(listNearbyArticlesReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIListNearbyRequest {
+    @javax.annotation.Nonnull
+    private ListNearbyArticlesReq listNearbyArticlesReq; //  (required)
+
+    private APIListNearbyRequest(Builder builder) {
+      this.listNearbyArticlesReq = builder.listNearbyArticlesReq;
+    }
+    @javax.annotation.Nonnull
+    public ListNearbyArticlesReq listNearbyArticlesReq() {
+      return listNearbyArticlesReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private ListNearbyArticlesReq listNearbyArticlesReq;
+
+      public Builder listNearbyArticlesReq(@javax.annotation.Nonnull ListNearbyArticlesReq listNearbyArticlesReq) {
+        this.listNearbyArticlesReq = listNearbyArticlesReq;
+        return this;
+      }
+      public APIListNearbyRequest build() {
+        return new APIListNearbyRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
    * 查询当前账号的浏览历史。
    * @param apiRequest {@link APIPageViewHistoryRequest}
    * @return PageArticleViewHistoryResp
@@ -2389,6 +2796,207 @@ public class ArticleService {
       }
       public APIRewardRequest build() {
         return new APIRewardRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 设置或取消当前账号文章的置顶评论。
+   * @param apiRequest {@link APISetPinnedCommentRequest}
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object setPinnedComment(APISetPinnedCommentRequest apiRequest) throws ApiException {
+    return setPinnedComment(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 设置或取消当前账号文章的置顶评论。
+   * @param apiRequest {@link APISetPinnedCommentRequest}
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object setPinnedComment(APISetPinnedCommentRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    SetPinnedArticleCommentReq setPinnedArticleCommentReq = apiRequest.setPinnedArticleCommentReq();
+    return setPinnedComment(setPinnedArticleCommentReq, headers);
+  }
+
+  /**
+   * 
+   * 设置或取消当前账号文章的置顶评论。
+   * @param apiRequest {@link APISetPinnedCommentRequest}
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> setPinnedCommentWithHttpInfo(APISetPinnedCommentRequest apiRequest) throws ApiException {
+    return setPinnedCommentWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 设置或取消当前账号文章的置顶评论。
+   * @param apiRequest {@link APISetPinnedCommentRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> setPinnedCommentWithHttpInfo(APISetPinnedCommentRequest apiRequest, Map<String, String> headers) throws ApiException {
+    SetPinnedArticleCommentReq setPinnedArticleCommentReq = apiRequest.setPinnedArticleCommentReq();
+    return setPinnedCommentWithHttpInfo(setPinnedArticleCommentReq, headers);
+  }
+
+  /**
+   * 
+   * 设置或取消当前账号文章的置顶评论。
+   * @param setPinnedArticleCommentReq  (required)
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object setPinnedComment(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq) throws ApiException {
+    return setPinnedComment(setPinnedArticleCommentReq, null);
+  }
+
+  /**
+   * 
+   * 设置或取消当前账号文章的置顶评论。
+   * @param setPinnedArticleCommentReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object setPinnedComment(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = setPinnedCommentWithHttpInfo(setPinnedArticleCommentReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 设置或取消当前账号文章的置顶评论。
+   * @param setPinnedArticleCommentReq  (required)
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> setPinnedCommentWithHttpInfo(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq) throws ApiException {
+    return setPinnedCommentWithHttpInfo(setPinnedArticleCommentReq, null);
+  }
+
+  /**
+   * 
+   * 设置或取消当前账号文章的置顶评论。
+   * @param setPinnedArticleCommentReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> setPinnedCommentWithHttpInfo(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = setPinnedCommentRequestBuilder(setPinnedArticleCommentReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("setPinnedComment", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<Object>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        Object responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<Object>() {});
+        
+
+        return new ApiResponse<Object>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder setPinnedCommentRequestBuilder(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'setPinnedArticleCommentReq' is set
+    if (setPinnedArticleCommentReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'setPinnedArticleCommentReq' when calling setPinnedComment");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/comment/pin";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(setPinnedArticleCommentReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APISetPinnedCommentRequest {
+    @javax.annotation.Nonnull
+    private SetPinnedArticleCommentReq setPinnedArticleCommentReq; //  (required)
+
+    private APISetPinnedCommentRequest(Builder builder) {
+      this.setPinnedArticleCommentReq = builder.setPinnedArticleCommentReq;
+    }
+    @javax.annotation.Nonnull
+    public SetPinnedArticleCommentReq setPinnedArticleCommentReq() {
+      return setPinnedArticleCommentReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private SetPinnedArticleCommentReq setPinnedArticleCommentReq;
+
+      public Builder setPinnedArticleCommentReq(@javax.annotation.Nonnull SetPinnedArticleCommentReq setPinnedArticleCommentReq) {
+        this.setPinnedArticleCommentReq = setPinnedArticleCommentReq;
+        return this;
+      }
+      public APISetPinnedCommentRequest build() {
+        return new APISetPinnedCommentRequest(this);
       }
     }
   }

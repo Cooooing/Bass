@@ -72,14 +72,6 @@ class ReqArticleQueryTest {
     }
 
     /**
-     * Test the property 'keyword'
-     */
-    @Test
-    void keywordTest() {
-        // TODO: test keyword
-    }
-
-    /**
      * Test the property 'authorId'
      */
     @Test

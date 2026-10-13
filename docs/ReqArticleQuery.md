@@ -11,7 +11,6 @@
 |**domainId** | **String** |  |  [optional] |
 |**type** | [**TypeEnum**](#TypeEnum) |  |  [optional] |
 |**order** | [**OrderEnum**](#OrderEnum) |  |  [optional] |
-|**keyword** | **String** |  |  [optional] |
 |**authorId** | **String** |  |  [optional] |
 |**publishStatus** | [**PublishStatusEnum**](#PublishStatusEnum) |  |  [optional] |
 |**publishStatuses** | [**List&lt;PublishStatusesEnum&gt;**](#List&lt;PublishStatusesEnum&gt;) |  |  [optional] |

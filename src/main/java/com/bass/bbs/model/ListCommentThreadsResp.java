@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 import com.bass.bbs.model.PageResp;
 import com.bass.bbs.model.RespCommentThread;
+import com.bass.bbs.model.RespTopComment;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -38,7 +39,8 @@ import com.bass.bbs.ApiClient;
  */
 @JsonPropertyOrder({
   ListCommentThreadsResp.JSON_PROPERTY_PAGE,
-  ListCommentThreadsResp.JSON_PROPERTY_ROWS
+  ListCommentThreadsResp.JSON_PROPERTY_ROWS,
+  ListCommentThreadsResp.JSON_PROPERTY_TOP_COMMENT
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ListCommentThreadsResp {
@@ -49,6 +51,10 @@ public class ListCommentThreadsResp {
   public static final String JSON_PROPERTY_ROWS = "rows";
   @javax.annotation.Nullable
   private List<RespCommentThread> rows = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_TOP_COMMENT = "top_comment";
+  @javax.annotation.Nullable
+  private RespTopComment topComment;
 
   public ListCommentThreadsResp() { 
   }
@@ -109,6 +115,30 @@ public class ListCommentThreadsResp {
   }
 
 
+  public ListCommentThreadsResp topComment(@javax.annotation.Nullable RespTopComment topComment) {
+    this.topComment = topComment;
+    return this;
+  }
+
+  /**
+   * Get topComment
+   * @return topComment
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_TOP_COMMENT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public RespTopComment getTopComment() {
+    return topComment;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_TOP_COMMENT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTopComment(@javax.annotation.Nullable RespTopComment topComment) {
+    this.topComment = topComment;
+  }
+
+
   /**
    * Return true if this ListCommentThreads_Resp object is equal to o.
    */
@@ -122,12 +152,13 @@ public class ListCommentThreadsResp {
     }
     ListCommentThreadsResp listCommentThreadsResp = (ListCommentThreadsResp) o;
     return Objects.equals(this.page, listCommentThreadsResp.page) &&
-        Objects.equals(this.rows, listCommentThreadsResp.rows);
+        Objects.equals(this.rows, listCommentThreadsResp.rows) &&
+        Objects.equals(this.topComment, listCommentThreadsResp.topComment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(page, rows);
+    return Objects.hash(page, rows, topComment);
   }
 
   @Override
@@ -136,6 +167,7 @@ public class ListCommentThreadsResp {
     sb.append("class ListCommentThreadsResp {\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    rows: ").append(toIndentedString(rows)).append("\n");
+    sb.append("    topComment: ").append(toIndentedString(topComment)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -193,6 +225,11 @@ public class ListCommentThreadsResp {
           "".equals(suffix) ? "" : String.format(java.util.Locale.ROOT, "%s%d%s", containerPrefix, i, containerSuffix))));
         }
       }
+    }
+
+    // add `top_comment` to the URL query string
+    if (getTopComment() != null) {
+      joiner.add(getTopComment().toUrlQueryString(prefix + "top_comment" + suffix));
     }
 
     return joiner.toString();

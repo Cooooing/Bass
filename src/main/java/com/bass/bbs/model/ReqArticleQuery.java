@@ -39,7 +39,6 @@ import com.bass.bbs.ApiClient;
   ReqArticleQuery.JSON_PROPERTY_DOMAIN_ID,
   ReqArticleQuery.JSON_PROPERTY_TYPE,
   ReqArticleQuery.JSON_PROPERTY_ORDER,
-  ReqArticleQuery.JSON_PROPERTY_KEYWORD,
   ReqArticleQuery.JSON_PROPERTY_AUTHOR_ID,
   ReqArticleQuery.JSON_PROPERTY_PUBLISH_STATUS,
   ReqArticleQuery.JSON_PROPERTY_PUBLISH_STATUSES,
@@ -146,10 +145,6 @@ public class ReqArticleQuery {
   public static final String JSON_PROPERTY_ORDER = "order";
   @javax.annotation.Nullable
   private OrderEnum order;
-
-  public static final String JSON_PROPERTY_KEYWORD = "keyword";
-  @javax.annotation.Nullable
-  private String keyword;
 
   public static final String JSON_PROPERTY_AUTHOR_ID = "author_id";
   @javax.annotation.Nullable
@@ -512,30 +507,6 @@ public class ReqArticleQuery {
   }
 
 
-  public ReqArticleQuery keyword(@javax.annotation.Nullable String keyword) {
-    this.keyword = keyword;
-    return this;
-  }
-
-  /**
-   * Get keyword
-   * @return keyword
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_KEYWORD, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getKeyword() {
-    return keyword;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_KEYWORD, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setKeyword(@javax.annotation.Nullable String keyword) {
-    this.keyword = keyword;
-  }
-
-
   public ReqArticleQuery authorId(@javax.annotation.Nullable String authorId) {
     this.authorId = authorId;
     return this;
@@ -768,7 +739,6 @@ public class ReqArticleQuery {
         Objects.equals(this.domainId, reqArticleQuery.domainId) &&
         Objects.equals(this.type, reqArticleQuery.type) &&
         Objects.equals(this.order, reqArticleQuery.order) &&
-        Objects.equals(this.keyword, reqArticleQuery.keyword) &&
         Objects.equals(this.authorId, reqArticleQuery.authorId) &&
         Objects.equals(this.publishStatus, reqArticleQuery.publishStatus) &&
         Objects.equals(this.publishStatuses, reqArticleQuery.publishStatuses) &&
@@ -781,7 +751,7 @@ public class ReqArticleQuery {
 
   @Override
   public int hashCode() {
-    return Objects.hash(tagId, domainId, type, order, keyword, authorId, publishStatus, publishStatuses, visibility, visibilities, restriction, restrictions, scheduled);
+    return Objects.hash(tagId, domainId, type, order, authorId, publishStatus, publishStatuses, visibility, visibilities, restriction, restrictions, scheduled);
   }
 
   @Override
@@ -792,7 +762,6 @@ public class ReqArticleQuery {
     sb.append("    domainId: ").append(toIndentedString(domainId)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    order: ").append(toIndentedString(order)).append("\n");
-    sb.append("    keyword: ").append(toIndentedString(keyword)).append("\n");
     sb.append("    authorId: ").append(toIndentedString(authorId)).append("\n");
     sb.append("    publishStatus: ").append(toIndentedString(publishStatus)).append("\n");
     sb.append("    publishStatuses: ").append(toIndentedString(publishStatuses)).append("\n");
@@ -863,11 +832,6 @@ public class ReqArticleQuery {
     // add `order` to the URL query string
     if (getOrder() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sorder%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getOrder()))));
-    }
-
-    // add `keyword` to the URL query string
-    if (getKeyword() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%skeyword%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getKeyword()))));
     }
 
     // add `author_id` to the URL query string

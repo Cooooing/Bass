@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
 import com.bass.bbs.model.PageResp;
-import com.bass.bbs.model.RespRelation;
+import com.bass.bbs.model.Relation;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -48,7 +48,7 @@ public class ListFollowingRelationsResp {
 
   public static final String JSON_PROPERTY_ROWS = "rows";
   @javax.annotation.Nullable
-  private List<RespRelation> rows = new ArrayList<>();
+  private List<Relation> rows = new ArrayList<>();
 
   public ListFollowingRelationsResp() { 
   }
@@ -77,12 +77,12 @@ public class ListFollowingRelationsResp {
   }
 
 
-  public ListFollowingRelationsResp rows(@javax.annotation.Nullable List<RespRelation> rows) {
+  public ListFollowingRelationsResp rows(@javax.annotation.Nullable List<Relation> rows) {
     this.rows = rows;
     return this;
   }
 
-  public ListFollowingRelationsResp addRowsItem(RespRelation rowsItem) {
+  public ListFollowingRelationsResp addRowsItem(Relation rowsItem) {
     if (this.rows == null) {
       this.rows = new ArrayList<>();
     }
@@ -97,14 +97,14 @@ public class ListFollowingRelationsResp {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public List<RespRelation> getRows() {
+  public List<Relation> getRows() {
     return rows;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setRows(@javax.annotation.Nullable List<RespRelation> rows) {
+  public void setRows(@javax.annotation.Nullable List<Relation> rows) {
     this.rows = rows;
   }
 

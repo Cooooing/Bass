@@ -13,8 +13,8 @@
 
 package com.bass.bbs.model;
 
+import com.bass.bbs.model.CommentListItem;
 import com.bass.bbs.model.PageResp;
-import com.bass.bbs.model.RespCommentListItem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;

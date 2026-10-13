@@ -15,6 +15,7 @@ package com.bass.bbs.model;
 
 import com.bass.bbs.model.PageResp;
 import com.bass.bbs.model.RespCommentThread;
+import com.bass.bbs.model.RespTopComment;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -55,6 +56,14 @@ class ListCommentThreadsRespTest {
     @Test
     void rowsTest() {
         // TODO: test rows
+    }
+
+    /**
+     * Test the property 'topComment'
+     */
+    @Test
+    void topCommentTest() {
+        // TODO: test topComment
     }
 
 }

@@ -8,7 +8,7 @@
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
 |**page** | [**PageResp**](PageResp.md) |  |  [optional] |
-|**rows** | [**List&lt;RespRelation&gt;**](RespRelation.md) |  |  [optional] |
+|**rows** | [**List&lt;Relation&gt;**](Relation.md) |  |  [optional] |
 
 
 

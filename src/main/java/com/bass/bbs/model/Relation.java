@@ -31,18 +31,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespRelation
+ * Relation
  */
 @JsonPropertyOrder({
-  RespRelation.JSON_PROPERTY_ID,
-  RespRelation.JSON_PROPERTY_TYPE,
-  RespRelation.JSON_PROPERTY_ACTOR_ID,
-  RespRelation.JSON_PROPERTY_TARGET_ID,
-  RespRelation.JSON_PROPERTY_CREATED_AT,
-  RespRelation.JSON_PROPERTY_UPDATED_AT
+  Relation.JSON_PROPERTY_ID,
+  Relation.JSON_PROPERTY_TYPE,
+  Relation.JSON_PROPERTY_ACTOR_ID,
+  Relation.JSON_PROPERTY_TARGET_ID,
+  Relation.JSON_PROPERTY_CREATED_AT,
+  Relation.JSON_PROPERTY_UPDATED_AT
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class RespRelation {
+public class Relation {
   public static final String JSON_PROPERTY_ID = "id";
   @javax.annotation.Nullable
   private String id;
@@ -104,10 +104,10 @@ public class RespRelation {
   @javax.annotation.Nullable
   private OffsetDateTime updatedAt;
 
-  public RespRelation() { 
+  public Relation() { 
   }
 
-  public RespRelation id(@javax.annotation.Nullable String id) {
+  public Relation id(@javax.annotation.Nullable String id) {
     this.id = id;
     return this;
   }
@@ -131,7 +131,7 @@ public class RespRelation {
   }
 
 
-  public RespRelation type(@javax.annotation.Nullable TypeEnum type) {
+  public Relation type(@javax.annotation.Nullable TypeEnum type) {
     this.type = type;
     return this;
   }
@@ -155,7 +155,7 @@ public class RespRelation {
   }
 
 
-  public RespRelation actorId(@javax.annotation.Nullable String actorId) {
+  public Relation actorId(@javax.annotation.Nullable String actorId) {
     this.actorId = actorId;
     return this;
   }
@@ -179,7 +179,7 @@ public class RespRelation {
   }
 
 
-  public RespRelation targetId(@javax.annotation.Nullable String targetId) {
+  public Relation targetId(@javax.annotation.Nullable String targetId) {
     this.targetId = targetId;
     return this;
   }
@@ -203,7 +203,7 @@ public class RespRelation {
   }
 
 
-  public RespRelation createdAt(@javax.annotation.Nullable OffsetDateTime createdAt) {
+  public Relation createdAt(@javax.annotation.Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -227,7 +227,7 @@ public class RespRelation {
   }
 
 
-  public RespRelation updatedAt(@javax.annotation.Nullable OffsetDateTime updatedAt) {
+  public Relation updatedAt(@javax.annotation.Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -252,7 +252,7 @@ public class RespRelation {
 
 
   /**
-   * Return true if this Resp_Relation object is equal to o.
+   * Return true if this Relation object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -262,13 +262,13 @@ public class RespRelation {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RespRelation respRelation = (RespRelation) o;
-    return Objects.equals(this.id, respRelation.id) &&
-        Objects.equals(this.type, respRelation.type) &&
-        Objects.equals(this.actorId, respRelation.actorId) &&
-        Objects.equals(this.targetId, respRelation.targetId) &&
-        Objects.equals(this.createdAt, respRelation.createdAt) &&
-        Objects.equals(this.updatedAt, respRelation.updatedAt);
+    Relation relation = (Relation) o;
+    return Objects.equals(this.id, relation.id) &&
+        Objects.equals(this.type, relation.type) &&
+        Objects.equals(this.actorId, relation.actorId) &&
+        Objects.equals(this.targetId, relation.targetId) &&
+        Objects.equals(this.createdAt, relation.createdAt) &&
+        Objects.equals(this.updatedAt, relation.updatedAt);
   }
 
   @Override
@@ -279,7 +279,7 @@ public class RespRelation {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class RespRelation {\n");
+    sb.append("class Relation {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    actorId: ").append(toIndentedString(actorId)).append("\n");

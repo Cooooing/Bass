@@ -1,6 +1,6 @@
 
 
-# RespRelation
+# Relation
 
 
 ## Properties

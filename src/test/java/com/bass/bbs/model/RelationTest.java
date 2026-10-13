@@ -25,17 +25,17 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for RespRelation
+ * Model tests for Relation
  */
-class RespRelationTest {
-    private final RespRelation model = new RespRelation();
+class RelationTest {
+    private final Relation model = new Relation();
 
     /**
-     * Model tests for RespRelation
+     * Model tests for Relation
      */
     @Test
-    void testRespRelation() {
-        // TODO: test RespRelation
+    void testRelation() {
+        // TODO: test Relation
     }
 
     /**

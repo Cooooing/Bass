@@ -19,8 +19,8 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
+import com.bass.bbs.model.CommentListItem;
 import com.bass.bbs.model.PageResp;
-import com.bass.bbs.model.RespCommentListItem;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -48,7 +48,7 @@ public class ListCommentRepliesResp {
 
   public static final String JSON_PROPERTY_ROWS = "rows";
   @javax.annotation.Nullable
-  private List<RespCommentListItem> rows = new ArrayList<>();
+  private List<CommentListItem> rows = new ArrayList<>();
 
   public ListCommentRepliesResp() { 
   }
@@ -77,12 +77,12 @@ public class ListCommentRepliesResp {
   }
 
 
-  public ListCommentRepliesResp rows(@javax.annotation.Nullable List<RespCommentListItem> rows) {
+  public ListCommentRepliesResp rows(@javax.annotation.Nullable List<CommentListItem> rows) {
     this.rows = rows;
     return this;
   }
 
-  public ListCommentRepliesResp addRowsItem(RespCommentListItem rowsItem) {
+  public ListCommentRepliesResp addRowsItem(CommentListItem rowsItem) {
     if (this.rows == null) {
       this.rows = new ArrayList<>();
     }
@@ -97,14 +97,14 @@ public class ListCommentRepliesResp {
   @javax.annotation.Nullable
   @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public List<RespCommentListItem> getRows() {
+  public List<CommentListItem> getRows() {
     return rows;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_ROWS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setRows(@javax.annotation.Nullable List<RespCommentListItem> rows) {
+  public void setRows(@javax.annotation.Nullable List<CommentListItem> rows) {
     this.rows = rows;
   }
 

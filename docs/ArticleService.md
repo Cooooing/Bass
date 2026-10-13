@@ -20,12 +20,18 @@ All URIs are relative to *http://localhost*
 | [**getWithHttpInfo**](ArticleService.md#getWithHttpInfo) | **POST** /v1/content/article/get |  |
 | [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
 | [**likeWithHttpInfo**](ArticleService.md#likeWithHttpInfo) | **POST** /v1/content/article/like |  |
+| [**listFollowing**](ArticleService.md#listFollowing) | **POST** /v1/content/article/following/list |  |
+| [**listFollowingWithHttpInfo**](ArticleService.md#listFollowingWithHttpInfo) | **POST** /v1/content/article/following/list |  |
+| [**listNearby**](ArticleService.md#listNearby) | **POST** /v1/content/article/nearby/list |  |
+| [**listNearbyWithHttpInfo**](ArticleService.md#listNearbyWithHttpInfo) | **POST** /v1/content/article/nearby/list |  |
 | [**pageViewHistory**](ArticleService.md#pageViewHistory) | **POST** /v1/content/article/view-history/page |  |
 | [**pageViewHistoryWithHttpInfo**](ArticleService.md#pageViewHistoryWithHttpInfo) | **POST** /v1/content/article/view-history/page |  |
 | [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish |  |
 | [**publishWithHttpInfo**](ArticleService.md#publishWithHttpInfo) | **POST** /v1/content/article/publish |  |
 | [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
 | [**rewardWithHttpInfo**](ArticleService.md#rewardWithHttpInfo) | **POST** /v1/content/article/reward |  |
+| [**setPinnedComment**](ArticleService.md#setPinnedComment) | **POST** /v1/content/article/comment/pin |  |
+| [**setPinnedCommentWithHttpInfo**](ArticleService.md#setPinnedCommentWithHttpInfo) | **POST** /v1/content/article/comment/pin |  |
 | [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
 | [**thankWithHttpInfo**](ArticleService.md#thankWithHttpInfo) | **POST** /v1/content/article/thank |  |
 | [**updateDraft**](ArticleService.md#updateDraft) | **POST** /v1/content/article/draft/update |  |
@@ -1233,6 +1239,306 @@ No authorization required
 
 
 
+## listFollowing
+
+> ListFollowingArticlesResp listFollowing(listFollowingRequest)
+
+
+
+查询当前账号关注作者发布的文章。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        ListFollowingArticlesReq listFollowingArticlesReq = new ListFollowingArticlesReq(); // ListFollowingArticlesReq | 
+        try {
+            APIlistFollowingRequest request = APIlistFollowingRequest.newBuilder()
+                .listFollowingArticlesReq(listFollowingArticlesReq)
+                .build();
+            ListFollowingArticlesResp result = apiInstance.listFollowing(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#listFollowing");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listFollowingRequest | [**APIlistFollowingRequest**](ArticleService.md#APIlistFollowingRequest)|-|-|
+
+### Return type
+
+[**ListFollowingArticlesResp**](ListFollowingArticlesResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## listFollowingWithHttpInfo
+
+> ApiResponse<ListFollowingArticlesResp> listFollowingWithHttpInfo(listFollowingRequest)
+
+
+
+查询当前账号关注作者发布的文章。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        ListFollowingArticlesReq listFollowingArticlesReq = new ListFollowingArticlesReq(); // ListFollowingArticlesReq | 
+        try {
+            APIlistFollowingRequest request = APIlistFollowingRequest.newBuilder()
+                .listFollowingArticlesReq(listFollowingArticlesReq)
+                .build();
+            ApiResponse<ListFollowingArticlesResp> response = apiInstance.listFollowingWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#listFollowing");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listFollowingRequest | [**APIlistFollowingRequest**](ArticleService.md#APIlistFollowingRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**ListFollowingArticlesResp**](ListFollowingArticlesResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIlistFollowingRequest"></a>
+## APIlistFollowingRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **listFollowingArticlesReq** | [**ListFollowingArticlesReq**](ListFollowingArticlesReq.md) |  | |
+
+
+
+## listNearby
+
+> ListNearbyArticlesResp listNearby(listNearbyRequest)
+
+
+
+查询当前账号所在城市发布的文章。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        ListNearbyArticlesReq listNearbyArticlesReq = new ListNearbyArticlesReq(); // ListNearbyArticlesReq | 
+        try {
+            APIlistNearbyRequest request = APIlistNearbyRequest.newBuilder()
+                .listNearbyArticlesReq(listNearbyArticlesReq)
+                .build();
+            ListNearbyArticlesResp result = apiInstance.listNearby(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#listNearby");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listNearbyRequest | [**APIlistNearbyRequest**](ArticleService.md#APIlistNearbyRequest)|-|-|
+
+### Return type
+
+[**ListNearbyArticlesResp**](ListNearbyArticlesResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## listNearbyWithHttpInfo
+
+> ApiResponse<ListNearbyArticlesResp> listNearbyWithHttpInfo(listNearbyRequest)
+
+
+
+查询当前账号所在城市发布的文章。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        ListNearbyArticlesReq listNearbyArticlesReq = new ListNearbyArticlesReq(); // ListNearbyArticlesReq | 
+        try {
+            APIlistNearbyRequest request = APIlistNearbyRequest.newBuilder()
+                .listNearbyArticlesReq(listNearbyArticlesReq)
+                .build();
+            ApiResponse<ListNearbyArticlesResp> response = apiInstance.listNearbyWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#listNearby");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| listNearbyRequest | [**APIlistNearbyRequest**](ArticleService.md#APIlistNearbyRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**ListNearbyArticlesResp**](ListNearbyArticlesResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIlistNearbyRequest"></a>
+## APIlistNearbyRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **listNearbyArticlesReq** | [**ListNearbyArticlesReq**](ListNearbyArticlesReq.md) |  | |
+
+
+
 ## pageViewHistory
 
 > PageArticleViewHistoryResp pageViewHistory(pageViewHistoryRequest)
@@ -1680,6 +1986,156 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **rewardArticleReq** | [**RewardArticleReq**](RewardArticleReq.md) |  | |
+
+
+
+## setPinnedComment
+
+> Object setPinnedComment(setPinnedCommentRequest)
+
+
+
+设置或取消当前账号文章的置顶评论。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        SetPinnedArticleCommentReq setPinnedArticleCommentReq = new SetPinnedArticleCommentReq(); // SetPinnedArticleCommentReq | 
+        try {
+            APIsetPinnedCommentRequest request = APIsetPinnedCommentRequest.newBuilder()
+                .setPinnedArticleCommentReq(setPinnedArticleCommentReq)
+                .build();
+            Object result = apiInstance.setPinnedComment(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#setPinnedComment");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| setPinnedCommentRequest | [**APIsetPinnedCommentRequest**](ArticleService.md#APIsetPinnedCommentRequest)|-|-|
+
+### Return type
+
+**Object**
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## setPinnedCommentWithHttpInfo
+
+> ApiResponse<Object> setPinnedCommentWithHttpInfo(setPinnedCommentRequest)
+
+
+
+设置或取消当前账号文章的置顶评论。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        SetPinnedArticleCommentReq setPinnedArticleCommentReq = new SetPinnedArticleCommentReq(); // SetPinnedArticleCommentReq | 
+        try {
+            APIsetPinnedCommentRequest request = APIsetPinnedCommentRequest.newBuilder()
+                .setPinnedArticleCommentReq(setPinnedArticleCommentReq)
+                .build();
+            ApiResponse<Object> response = apiInstance.setPinnedCommentWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#setPinnedComment");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| setPinnedCommentRequest | [**APIsetPinnedCommentRequest**](ArticleService.md#APIsetPinnedCommentRequest)|-|-|
+
+### Return type
+
+ApiResponse<**Object**>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIsetPinnedCommentRequest"></a>
+## APIsetPinnedCommentRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **setPinnedArticleCommentReq** | [**SetPinnedArticleCommentReq**](SetPinnedArticleCommentReq.md) |  | |
 
 
 

@@ -8,7 +8,7 @@
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
 |**page** | [**PageResp**](PageResp.md) |  |  [optional] |
-|**rows** | [**List&lt;RespCommentListItem&gt;**](RespCommentListItem.md) |  |  [optional] |
+|**rows** | [**List&lt;CommentListItem&gt;**](CommentListItem.md) |  |  [optional] |
 
 
 

@@ -27,10 +27,15 @@ import com.bass.bbs.model.LikeArticleReq;
 import com.bass.bbs.model.LikeArticleResp;
 import com.bass.bbs.model.ListArticlesReq;
 import com.bass.bbs.model.ListArticlesResp;
+import com.bass.bbs.model.ListFollowingArticlesReq;
+import com.bass.bbs.model.ListFollowingArticlesResp;
+import com.bass.bbs.model.ListNearbyArticlesReq;
+import com.bass.bbs.model.ListNearbyArticlesResp;
 import com.bass.bbs.model.PageArticleViewHistoryReq;
 import com.bass.bbs.model.PageArticleViewHistoryResp;
 import com.bass.bbs.model.PublishArticleReq;
 import com.bass.bbs.model.RewardArticleReq;
+import com.bass.bbs.model.SetPinnedArticleCommentReq;
 import com.bass.bbs.model.ThankArticleReq;
 import com.bass.bbs.model.ThankArticleResp;
 import com.bass.bbs.model.UpdateDraftArticleReq;
@@ -225,6 +230,48 @@ public class ArticleServiceTest {
     /**
      * 
      *
+     * 查询当前账号关注作者发布的文章。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listFollowingTest() throws ApiException {
+        ListFollowingArticlesReq listFollowingArticlesReq = null;
+        
+        ArticleService.APIlistFollowingRequest request = ArticleService.APIlistFollowingRequest.newBuilder()
+          .listFollowingArticlesReq(listFollowingArticlesReq)
+          .build();
+        ListFollowingArticlesResp response = 
+        api.listFollowing(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 查询当前账号所在城市发布的文章。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void listNearbyTest() throws ApiException {
+        ListNearbyArticlesReq listNearbyArticlesReq = null;
+        
+        ArticleService.APIlistNearbyRequest request = ArticleService.APIlistNearbyRequest.newBuilder()
+          .listNearbyArticlesReq(listNearbyArticlesReq)
+          .build();
+        ListNearbyArticlesResp response = 
+        api.listNearby(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
      * 查询当前账号的浏览历史。
      *
      * @throws ApiException
@@ -281,6 +328,27 @@ public class ArticleServiceTest {
           .build();
         Object response = 
         api.reward(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 设置或取消当前账号文章的置顶评论。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void setPinnedCommentTest() throws ApiException {
+        SetPinnedArticleCommentReq setPinnedArticleCommentReq = null;
+        
+        ArticleService.APIsetPinnedCommentRequest request = ArticleService.APIsetPinnedCommentRequest.newBuilder()
+          .setPinnedArticleCommentReq(setPinnedArticleCommentReq)
+          .build();
+        Object response = 
+        api.setPinnedComment(request);
 
         // TODO: test validations
     }

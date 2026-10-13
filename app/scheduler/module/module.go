@@ -25,9 +25,7 @@ var ProviderSet = wire.NewSet(
 	data.ModuleProviderSet,
 	biz.BizProviderSet,
 	service.ServiceProviderSet,
-	schedulerserver.NewSchedulerBootstrapServer,
-	schedulerserver.NewScheduledTaskConsumerServer,
-	schedulerserver.NewDelayedTaskConsumerServer,
+	schedulerserver.NewSchedulerTaskServer,
 	provideServers,
 	newModule,
 )
@@ -48,14 +46,10 @@ func provideBootstrap(c *Config) *config.Bootstrap { return c.Bootstrap() }
 func provideCommonServer(c *Config) *common.Server { return c.Server() }
 
 func provideServers(
-	bootstrapServer *schedulerserver.SchedulerBootstrapServer,
-	scheduledTaskConsumerServer *schedulerserver.ScheduledTaskConsumerServer,
-	delayedTaskConsumerServer *schedulerserver.DelayedTaskConsumerServer,
+	schedulerTaskServer *schedulerserver.SchedulerTaskServer,
 ) []transport.Server {
 	return []transport.Server{
-		bootstrapServer,
-		scheduledTaskConsumerServer,
-		delayedTaskConsumerServer,
+		schedulerTaskServer,
 	}
 }
 

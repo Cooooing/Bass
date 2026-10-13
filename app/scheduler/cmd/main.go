@@ -10,7 +10,6 @@ import (
 	"os"
 
 	"scheduler/internal/config"
-	schedulerserver "scheduler/internal/server"
 
 	"github.com/go-kratos/kratos/v3"
 	"github.com/go-kratos/kratos/v3/transport"
@@ -33,9 +32,6 @@ func newApp(
 	logger *slog.Logger,
 	servers []transport.Server,
 	cc *commonClient.ConsulClient,
-	bootstrapServer *schedulerserver.SchedulerBootstrapServer,
-	scheduledTaskConsumerServer *schedulerserver.ScheduledTaskConsumerServer,
-	delayedTaskConsumerServer *schedulerserver.DelayedTaskConsumerServer,
 ) *kratos.App {
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
@@ -49,34 +45,6 @@ func newApp(
 		kratos.Logger(logger),
 		kratos.Server(servers...),
 		kratos.Registrar(cc.Registrar()),
-		kratos.BeforeStart(func(ctx context.Context) error {
-			if err := bootstrapServer.Start(ctx); err != nil {
-				return err
-			}
-			if err := scheduledTaskConsumerServer.Start(ctx); err != nil {
-				_ = bootstrapServer.Stop(ctx)
-				return err
-			}
-			if err := delayedTaskConsumerServer.Start(ctx); err != nil {
-				_ = scheduledTaskConsumerServer.Stop(ctx)
-				_ = bootstrapServer.Stop(ctx)
-				return err
-			}
-			return nil
-		}),
-		kratos.BeforeStop(func(ctx context.Context) error {
-			var err error
-			if stopErr := delayedTaskConsumerServer.Stop(ctx); stopErr != nil {
-				err = stopErr
-			}
-			if stopErr := scheduledTaskConsumerServer.Stop(ctx); stopErr != nil && err == nil {
-				err = stopErr
-			}
-			if stopErr := bootstrapServer.Stop(ctx); stopErr != nil && err == nil {
-				err = stopErr
-			}
-			return err
-		}),
 	)
 }
 

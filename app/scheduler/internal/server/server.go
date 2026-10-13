@@ -11,17 +11,17 @@ var ServerProviderSet = wire.NewSet(
 	ProvideServers,
 	NewGRPCServer,
 	NewHTTPServer,
-	NewSchedulerBootstrapServer,
-	NewScheduledTaskConsumerServer,
-	NewDelayedTaskConsumerServer,
+	NewSchedulerTaskServer,
 )
 
 func ProvideServers(
 	grpcServer *grpc.Server,
 	httpServer *http.Server,
+	schedulerTaskServer *SchedulerTaskServer,
 ) []transport.Server {
 	return []transport.Server{
 		grpcServer,
 		httpServer,
+		schedulerTaskServer,
 	}
 }

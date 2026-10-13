@@ -23,7 +23,6 @@ type ReqArticleQuery struct {
 	DomainId *string `json:"domain_id,omitempty"`
 	Type *string `json:"type,omitempty"`
 	Order *string `json:"order,omitempty"`
-	Keyword *string `json:"keyword,omitempty"`
 	AuthorId *string `json:"author_id,omitempty"`
 	PublishStatus *string `json:"publish_status,omitempty"`
 	PublishStatuses []string `json:"publish_statuses,omitempty"`
@@ -177,38 +176,6 @@ func (o *ReqArticleQuery) HasOrder() bool {
 // SetOrder gets a reference to the given string and assigns it to the Order field.
 func (o *ReqArticleQuery) SetOrder(v string) {
 	o.Order = &v
-}
-
-// GetKeyword returns the Keyword field value if set, zero value otherwise.
-func (o *ReqArticleQuery) GetKeyword() string {
-	if o == nil || IsNil(o.Keyword) {
-		var ret string
-		return ret
-	}
-	return *o.Keyword
-}
-
-// GetKeywordOk returns a tuple with the Keyword field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *ReqArticleQuery) GetKeywordOk() (*string, bool) {
-	if o == nil || IsNil(o.Keyword) {
-		return nil, false
-	}
-	return o.Keyword, true
-}
-
-// HasKeyword returns a boolean if a field has been set.
-func (o *ReqArticleQuery) HasKeyword() bool {
-	if o != nil && !IsNil(o.Keyword) {
-		return true
-	}
-
-	return false
-}
-
-// SetKeyword gets a reference to the given string and assigns it to the Keyword field.
-func (o *ReqArticleQuery) SetKeyword(v string) {
-	o.Keyword = &v
 }
 
 // GetAuthorId returns the AuthorId field value if set, zero value otherwise.
@@ -488,9 +455,6 @@ func (o ReqArticleQuery) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Order) {
 		toSerialize["order"] = o.Order
-	}
-	if !IsNil(o.Keyword) {
-		toSerialize["keyword"] = o.Keyword
 	}
 	if !IsNil(o.AuthorId) {
 		toSerialize["author_id"] = o.AuthorId

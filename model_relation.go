@@ -15,11 +15,11 @@ import (
 	"time"
 )
 
-// checks if the RespRelation type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &RespRelation{}
+// checks if the Relation type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &Relation{}
 
-// RespRelation struct for RespRelation
-type RespRelation struct {
+// Relation struct for Relation
+type Relation struct {
 	Id *string `json:"id,omitempty"`
 	Type *string `json:"type,omitempty"`
 	ActorId *string `json:"actor_id,omitempty"`
@@ -28,25 +28,25 @@ type RespRelation struct {
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
 
-// NewRespRelation instantiates a new RespRelation object
+// NewRelation instantiates a new Relation object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRespRelation() *RespRelation {
-	this := RespRelation{}
+func NewRelation() *Relation {
+	this := Relation{}
 	return &this
 }
 
-// NewRespRelationWithDefaults instantiates a new RespRelation object
+// NewRelationWithDefaults instantiates a new Relation object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRespRelationWithDefaults() *RespRelation {
-	this := RespRelation{}
+func NewRelationWithDefaults() *Relation {
+	this := Relation{}
 	return &this
 }
 
 // GetId returns the Id field value if set, zero value otherwise.
-func (o *RespRelation) GetId() string {
+func (o *Relation) GetId() string {
 	if o == nil || IsNil(o.Id) {
 		var ret string
 		return ret
@@ -56,7 +56,7 @@ func (o *RespRelation) GetId() string {
 
 // GetIdOk returns a tuple with the Id field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespRelation) GetIdOk() (*string, bool) {
+func (o *Relation) GetIdOk() (*string, bool) {
 	if o == nil || IsNil(o.Id) {
 		return nil, false
 	}
@@ -64,7 +64,7 @@ func (o *RespRelation) GetIdOk() (*string, bool) {
 }
 
 // HasId returns a boolean if a field has been set.
-func (o *RespRelation) HasId() bool {
+func (o *Relation) HasId() bool {
 	if o != nil && !IsNil(o.Id) {
 		return true
 	}
@@ -73,12 +73,12 @@ func (o *RespRelation) HasId() bool {
 }
 
 // SetId gets a reference to the given string and assigns it to the Id field.
-func (o *RespRelation) SetId(v string) {
+func (o *Relation) SetId(v string) {
 	o.Id = &v
 }
 
 // GetType returns the Type field value if set, zero value otherwise.
-func (o *RespRelation) GetType() string {
+func (o *Relation) GetType() string {
 	if o == nil || IsNil(o.Type) {
 		var ret string
 		return ret
@@ -88,7 +88,7 @@ func (o *RespRelation) GetType() string {
 
 // GetTypeOk returns a tuple with the Type field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespRelation) GetTypeOk() (*string, bool) {
+func (o *Relation) GetTypeOk() (*string, bool) {
 	if o == nil || IsNil(o.Type) {
 		return nil, false
 	}
@@ -96,7 +96,7 @@ func (o *RespRelation) GetTypeOk() (*string, bool) {
 }
 
 // HasType returns a boolean if a field has been set.
-func (o *RespRelation) HasType() bool {
+func (o *Relation) HasType() bool {
 	if o != nil && !IsNil(o.Type) {
 		return true
 	}
@@ -105,12 +105,12 @@ func (o *RespRelation) HasType() bool {
 }
 
 // SetType gets a reference to the given string and assigns it to the Type field.
-func (o *RespRelation) SetType(v string) {
+func (o *Relation) SetType(v string) {
 	o.Type = &v
 }
 
 // GetActorId returns the ActorId field value if set, zero value otherwise.
-func (o *RespRelation) GetActorId() string {
+func (o *Relation) GetActorId() string {
 	if o == nil || IsNil(o.ActorId) {
 		var ret string
 		return ret
@@ -120,7 +120,7 @@ func (o *RespRelation) GetActorId() string {
 
 // GetActorIdOk returns a tuple with the ActorId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespRelation) GetActorIdOk() (*string, bool) {
+func (o *Relation) GetActorIdOk() (*string, bool) {
 	if o == nil || IsNil(o.ActorId) {
 		return nil, false
 	}
@@ -128,7 +128,7 @@ func (o *RespRelation) GetActorIdOk() (*string, bool) {
 }
 
 // HasActorId returns a boolean if a field has been set.
-func (o *RespRelation) HasActorId() bool {
+func (o *Relation) HasActorId() bool {
 	if o != nil && !IsNil(o.ActorId) {
 		return true
 	}
@@ -137,12 +137,12 @@ func (o *RespRelation) HasActorId() bool {
 }
 
 // SetActorId gets a reference to the given string and assigns it to the ActorId field.
-func (o *RespRelation) SetActorId(v string) {
+func (o *Relation) SetActorId(v string) {
 	o.ActorId = &v
 }
 
 // GetTargetId returns the TargetId field value if set, zero value otherwise.
-func (o *RespRelation) GetTargetId() string {
+func (o *Relation) GetTargetId() string {
 	if o == nil || IsNil(o.TargetId) {
 		var ret string
 		return ret
@@ -152,7 +152,7 @@ func (o *RespRelation) GetTargetId() string {
 
 // GetTargetIdOk returns a tuple with the TargetId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespRelation) GetTargetIdOk() (*string, bool) {
+func (o *Relation) GetTargetIdOk() (*string, bool) {
 	if o == nil || IsNil(o.TargetId) {
 		return nil, false
 	}
@@ -160,7 +160,7 @@ func (o *RespRelation) GetTargetIdOk() (*string, bool) {
 }
 
 // HasTargetId returns a boolean if a field has been set.
-func (o *RespRelation) HasTargetId() bool {
+func (o *Relation) HasTargetId() bool {
 	if o != nil && !IsNil(o.TargetId) {
 		return true
 	}
@@ -169,12 +169,12 @@ func (o *RespRelation) HasTargetId() bool {
 }
 
 // SetTargetId gets a reference to the given string and assigns it to the TargetId field.
-func (o *RespRelation) SetTargetId(v string) {
+func (o *Relation) SetTargetId(v string) {
 	o.TargetId = &v
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
-func (o *RespRelation) GetCreatedAt() time.Time {
+func (o *Relation) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
 		var ret time.Time
 		return ret
@@ -184,7 +184,7 @@ func (o *RespRelation) GetCreatedAt() time.Time {
 
 // GetCreatedAtOk returns a tuple with the CreatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespRelation) GetCreatedAtOk() (*time.Time, bool) {
+func (o *Relation) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.CreatedAt) {
 		return nil, false
 	}
@@ -192,7 +192,7 @@ func (o *RespRelation) GetCreatedAtOk() (*time.Time, bool) {
 }
 
 // HasCreatedAt returns a boolean if a field has been set.
-func (o *RespRelation) HasCreatedAt() bool {
+func (o *Relation) HasCreatedAt() bool {
 	if o != nil && !IsNil(o.CreatedAt) {
 		return true
 	}
@@ -201,12 +201,12 @@ func (o *RespRelation) HasCreatedAt() bool {
 }
 
 // SetCreatedAt gets a reference to the given time.Time and assigns it to the CreatedAt field.
-func (o *RespRelation) SetCreatedAt(v time.Time) {
+func (o *Relation) SetCreatedAt(v time.Time) {
 	o.CreatedAt = &v
 }
 
 // GetUpdatedAt returns the UpdatedAt field value if set, zero value otherwise.
-func (o *RespRelation) GetUpdatedAt() time.Time {
+func (o *Relation) GetUpdatedAt() time.Time {
 	if o == nil || IsNil(o.UpdatedAt) {
 		var ret time.Time
 		return ret
@@ -216,7 +216,7 @@ func (o *RespRelation) GetUpdatedAt() time.Time {
 
 // GetUpdatedAtOk returns a tuple with the UpdatedAt field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespRelation) GetUpdatedAtOk() (*time.Time, bool) {
+func (o *Relation) GetUpdatedAtOk() (*time.Time, bool) {
 	if o == nil || IsNil(o.UpdatedAt) {
 		return nil, false
 	}
@@ -224,7 +224,7 @@ func (o *RespRelation) GetUpdatedAtOk() (*time.Time, bool) {
 }
 
 // HasUpdatedAt returns a boolean if a field has been set.
-func (o *RespRelation) HasUpdatedAt() bool {
+func (o *Relation) HasUpdatedAt() bool {
 	if o != nil && !IsNil(o.UpdatedAt) {
 		return true
 	}
@@ -233,11 +233,11 @@ func (o *RespRelation) HasUpdatedAt() bool {
 }
 
 // SetUpdatedAt gets a reference to the given time.Time and assigns it to the UpdatedAt field.
-func (o *RespRelation) SetUpdatedAt(v time.Time) {
+func (o *Relation) SetUpdatedAt(v time.Time) {
 	o.UpdatedAt = &v
 }
 
-func (o RespRelation) MarshalJSON() ([]byte, error) {
+func (o Relation) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -245,7 +245,7 @@ func (o RespRelation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o RespRelation) ToMap() (map[string]interface{}, error) {
+func (o Relation) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
@@ -268,38 +268,38 @@ func (o RespRelation) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-type NullableRespRelation struct {
-	value *RespRelation
+type NullableRelation struct {
+	value *Relation
 	isSet bool
 }
 
-func (v NullableRespRelation) Get() *RespRelation {
+func (v NullableRelation) Get() *Relation {
 	return v.value
 }
 
-func (v *NullableRespRelation) Set(val *RespRelation) {
+func (v *NullableRelation) Set(val *Relation) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRespRelation) IsSet() bool {
+func (v NullableRelation) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRespRelation) Unset() {
+func (v *NullableRelation) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRespRelation(val *RespRelation) *NullableRespRelation {
-	return &NullableRespRelation{value: val, isSet: true}
+func NewNullableRelation(val *Relation) *NullableRelation {
+	return &NullableRelation{value: val, isSet: true}
 }
 
-func (v NullableRespRelation) MarshalJSON() ([]byte, error) {
+func (v NullableRelation) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRespRelation) UnmarshalJSON(src []byte) error {
+func (v *NullableRelation) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

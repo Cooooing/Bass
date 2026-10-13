@@ -118,6 +118,30 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 
 	})
 
+	t.Run("Test ArticleServiceService ListFollowing", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.ArticleService.ListFollowing(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test ArticleServiceService ListNearby", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.ArticleService.ListNearby(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 	t.Run("Test ArticleServiceService PageViewHistory", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test
@@ -147,6 +171,18 @@ func Test_bbs_ArticleServiceService(t *testing.T) {
 		t.Skip("skip test")  // remove to run test
 
 		resp, httpRes, err := apiClient.ArticleService.Reward(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test ArticleServiceService SetPinnedComment", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		resp, httpRes, err := apiClient.ArticleService.SetPinnedComment(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

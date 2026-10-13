@@ -21,6 +21,7 @@ var _ MappedNullable = &ListCommentThreadsResp{}
 type ListCommentThreadsResp struct {
 	Page *PageResp `json:"page,omitempty"`
 	Rows []RespCommentThread `json:"rows,omitempty"`
+	TopComment *RespTopComment `json:"top_comment,omitempty"`
 }
 
 // NewListCommentThreadsResp instantiates a new ListCommentThreadsResp object
@@ -104,6 +105,38 @@ func (o *ListCommentThreadsResp) SetRows(v []RespCommentThread) {
 	o.Rows = v
 }
 
+// GetTopComment returns the TopComment field value if set, zero value otherwise.
+func (o *ListCommentThreadsResp) GetTopComment() RespTopComment {
+	if o == nil || IsNil(o.TopComment) {
+		var ret RespTopComment
+		return ret
+	}
+	return *o.TopComment
+}
+
+// GetTopCommentOk returns a tuple with the TopComment field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ListCommentThreadsResp) GetTopCommentOk() (*RespTopComment, bool) {
+	if o == nil || IsNil(o.TopComment) {
+		return nil, false
+	}
+	return o.TopComment, true
+}
+
+// HasTopComment returns a boolean if a field has been set.
+func (o *ListCommentThreadsResp) HasTopComment() bool {
+	if o != nil && !IsNil(o.TopComment) {
+		return true
+	}
+
+	return false
+}
+
+// SetTopComment gets a reference to the given RespTopComment and assigns it to the TopComment field.
+func (o *ListCommentThreadsResp) SetTopComment(v RespTopComment) {
+	o.TopComment = &v
+}
+
 func (o ListCommentThreadsResp) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -119,6 +152,9 @@ func (o ListCommentThreadsResp) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Rows) {
 		toSerialize["rows"] = o.Rows
+	}
+	if !IsNil(o.TopComment) {
+		toSerialize["top_comment"] = o.TopComment
 	}
 	return toSerialize, nil
 }

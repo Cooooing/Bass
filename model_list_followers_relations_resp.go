@@ -20,7 +20,7 @@ var _ MappedNullable = &ListFollowersRelationsResp{}
 // ListFollowersRelationsResp struct for ListFollowersRelationsResp
 type ListFollowersRelationsResp struct {
 	Page *PageResp `json:"page,omitempty"`
-	Rows []RespRelation `json:"rows,omitempty"`
+	Rows []Relation `json:"rows,omitempty"`
 }
 
 // NewListFollowersRelationsResp instantiates a new ListFollowersRelationsResp object
@@ -73,9 +73,9 @@ func (o *ListFollowersRelationsResp) SetPage(v PageResp) {
 }
 
 // GetRows returns the Rows field value if set, zero value otherwise.
-func (o *ListFollowersRelationsResp) GetRows() []RespRelation {
+func (o *ListFollowersRelationsResp) GetRows() []Relation {
 	if o == nil || IsNil(o.Rows) {
-		var ret []RespRelation
+		var ret []Relation
 		return ret
 	}
 	return o.Rows
@@ -83,7 +83,7 @@ func (o *ListFollowersRelationsResp) GetRows() []RespRelation {
 
 // GetRowsOk returns a tuple with the Rows field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ListFollowersRelationsResp) GetRowsOk() ([]RespRelation, bool) {
+func (o *ListFollowersRelationsResp) GetRowsOk() ([]Relation, bool) {
 	if o == nil || IsNil(o.Rows) {
 		return nil, false
 	}
@@ -99,8 +99,8 @@ func (o *ListFollowersRelationsResp) HasRows() bool {
 	return false
 }
 
-// SetRows gets a reference to the given []RespRelation and assigns it to the Rows field.
-func (o *ListFollowersRelationsResp) SetRows(v []RespRelation) {
+// SetRows gets a reference to the given []Relation and assigns it to the Rows field.
+func (o *ListFollowersRelationsResp) SetRows(v []Relation) {
 	o.Rows = v
 }
 

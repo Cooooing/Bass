@@ -12,9 +12,12 @@ Method | HTTP request | Description
 [**Get**](ArticleService.md#Get) | **Post** /v1/content/article/get | 
 [**Like**](ArticleService.md#Like) | **Post** /v1/content/article/like | 
 [**List**](ArticleService.md#List) | **Post** /v1/content/article/list | 
+[**ListFollowing**](ArticleService.md#ListFollowing) | **Post** /v1/content/article/following/list | 
+[**ListNearby**](ArticleService.md#ListNearby) | **Post** /v1/content/article/nearby/list | 
 [**PageViewHistory**](ArticleService.md#PageViewHistory) | **Post** /v1/content/article/view-history/page | 
 [**Publish**](ArticleService.md#Publish) | **Post** /v1/content/article/publish | 
 [**Reward**](ArticleService.md#Reward) | **Post** /v1/content/article/reward | 
+[**SetPinnedComment**](ArticleService.md#SetPinnedComment) | **Post** /v1/content/article/comment/pin | 
 [**Thank**](ArticleService.md#Thank) | **Post** /v1/content/article/thank | 
 [**UpdateDraft**](ArticleService.md#UpdateDraft) | **Post** /v1/content/article/draft/update | 
 
@@ -548,6 +551,138 @@ No authorization required
 [[Back to README]](../README.md)
 
 
+## ListFollowing
+
+> ListFollowingArticlesResp ListFollowing(ctx).ListFollowingArticlesReq(listFollowingArticlesReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	listFollowingArticlesReq := *openapiclient.NewListFollowingArticlesReq() // ListFollowingArticlesReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.ListFollowing(context.Background()).ListFollowingArticlesReq(listFollowingArticlesReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.ListFollowing``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListFollowing`: ListFollowingArticlesResp
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.ListFollowing`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListFollowingRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **listFollowingArticlesReq** | [**ListFollowingArticlesReq**](ListFollowingArticlesReq.md) |  | 
+
+### Return type
+
+[**ListFollowingArticlesResp**](ListFollowingArticlesResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ListNearby
+
+> ListNearbyArticlesResp ListNearby(ctx).ListNearbyArticlesReq(listNearbyArticlesReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	listNearbyArticlesReq := *openapiclient.NewListNearbyArticlesReq() // ListNearbyArticlesReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.ListNearby(context.Background()).ListNearbyArticlesReq(listNearbyArticlesReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.ListNearby``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ListNearby`: ListNearbyArticlesResp
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.ListNearby`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiListNearbyRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **listNearbyArticlesReq** | [**ListNearbyArticlesReq**](ListNearbyArticlesReq.md) |  | 
+
+### Return type
+
+[**ListNearbyArticlesResp**](ListNearbyArticlesResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## PageViewHistory
 
 > PageArticleViewHistoryResp PageViewHistory(ctx).PageArticleViewHistoryReq(pageArticleViewHistoryReq).Execute()
@@ -727,6 +862,72 @@ Other parameters are passed through a pointer to a apiRewardRequest struct via t
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **rewardArticleReq** | [**RewardArticleReq**](RewardArticleReq.md) |  | 
+
+### Return type
+
+**map[string]interface{}**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## SetPinnedComment
+
+> map[string]interface{} SetPinnedComment(ctx).SetPinnedArticleCommentReq(setPinnedArticleCommentReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	setPinnedArticleCommentReq := *openapiclient.NewSetPinnedArticleCommentReq("ArticleId_example") // SetPinnedArticleCommentReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.SetPinnedComment(context.Background()).SetPinnedArticleCommentReq(setPinnedArticleCommentReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.SetPinnedComment``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `SetPinnedComment`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.SetPinnedComment`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSetPinnedCommentRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **setPinnedArticleCommentReq** | [**SetPinnedArticleCommentReq**](SetPinnedArticleCommentReq.md) |  | 
 
 ### Return type
 

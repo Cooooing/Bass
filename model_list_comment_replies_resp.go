@@ -20,7 +20,7 @@ var _ MappedNullable = &ListCommentRepliesResp{}
 // ListCommentRepliesResp struct for ListCommentRepliesResp
 type ListCommentRepliesResp struct {
 	Page *PageResp `json:"page,omitempty"`
-	Rows []RespCommentListItem `json:"rows,omitempty"`
+	Rows []CommentListItem `json:"rows,omitempty"`
 }
 
 // NewListCommentRepliesResp instantiates a new ListCommentRepliesResp object
@@ -73,9 +73,9 @@ func (o *ListCommentRepliesResp) SetPage(v PageResp) {
 }
 
 // GetRows returns the Rows field value if set, zero value otherwise.
-func (o *ListCommentRepliesResp) GetRows() []RespCommentListItem {
+func (o *ListCommentRepliesResp) GetRows() []CommentListItem {
 	if o == nil || IsNil(o.Rows) {
-		var ret []RespCommentListItem
+		var ret []CommentListItem
 		return ret
 	}
 	return o.Rows
@@ -83,7 +83,7 @@ func (o *ListCommentRepliesResp) GetRows() []RespCommentListItem {
 
 // GetRowsOk returns a tuple with the Rows field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ListCommentRepliesResp) GetRowsOk() ([]RespCommentListItem, bool) {
+func (o *ListCommentRepliesResp) GetRowsOk() ([]CommentListItem, bool) {
 	if o == nil || IsNil(o.Rows) {
 		return nil, false
 	}
@@ -99,8 +99,8 @@ func (o *ListCommentRepliesResp) HasRows() bool {
 	return false
 }
 
-// SetRows gets a reference to the given []RespCommentListItem and assigns it to the Rows field.
-func (o *ListCommentRepliesResp) SetRows(v []RespCommentListItem) {
+// SetRows gets a reference to the given []CommentListItem and assigns it to the Rows field.
+func (o *ListCommentRepliesResp) SetRows(v []CommentListItem) {
 	o.Rows = v
 }
 

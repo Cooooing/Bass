@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
 **Rows** | Pointer to [**[]RespCommentThread**](RespCommentThread.md) |  | [optional] 
+**TopComment** | Pointer to [**RespTopComment**](RespTopComment.md) |  | [optional] 
 
 ## Methods
 
@@ -75,6 +76,31 @@ SetRows sets Rows field to given value.
 `func (o *ListCommentThreadsResp) HasRows() bool`
 
 HasRows returns a boolean if a field has been set.
+
+### GetTopComment
+
+`func (o *ListCommentThreadsResp) GetTopComment() RespTopComment`
+
+GetTopComment returns the TopComment field if non-nil, zero value otherwise.
+
+### GetTopCommentOk
+
+`func (o *ListCommentThreadsResp) GetTopCommentOk() (*RespTopComment, bool)`
+
+GetTopCommentOk returns a tuple with the TopComment field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTopComment
+
+`func (o *ListCommentThreadsResp) SetTopComment(v RespTopComment)`
+
+SetTopComment sets TopComment field to given value.
+
+### HasTopComment
+
+`func (o *ListCommentThreadsResp) HasTopComment() bool`
+
+HasTopComment returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

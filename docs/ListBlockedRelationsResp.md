@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
-**Rows** | Pointer to [**[]RespRelation**](RespRelation.md) |  | [optional] 
+**Rows** | Pointer to [**[]Relation**](Relation.md) |  | [optional] 
 
 ## Methods
 
@@ -53,20 +53,20 @@ HasPage returns a boolean if a field has been set.
 
 ### GetRows
 
-`func (o *ListBlockedRelationsResp) GetRows() []RespRelation`
+`func (o *ListBlockedRelationsResp) GetRows() []Relation`
 
 GetRows returns the Rows field if non-nil, zero value otherwise.
 
 ### GetRowsOk
 
-`func (o *ListBlockedRelationsResp) GetRowsOk() (*[]RespRelation, bool)`
+`func (o *ListBlockedRelationsResp) GetRowsOk() (*[]Relation, bool)`
 
 GetRowsOk returns a tuple with the Rows field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetRows
 
-`func (o *ListBlockedRelationsResp) SetRows(v []RespRelation)`
+`func (o *ListBlockedRelationsResp) SetRows(v []Relation)`
 
 SetRows sets Rows field to given value.
 

@@ -8,7 +8,6 @@ Name | Type | Description | Notes
 **DomainId** | Pointer to **string** |  | [optional] 
 **Type** | Pointer to **string** |  | [optional] 
 **Order** | Pointer to **string** |  | [optional] 
-**Keyword** | Pointer to **string** |  | [optional] 
 **AuthorId** | Pointer to **string** |  | [optional] 
 **PublishStatus** | Pointer to **string** |  | [optional] 
 **PublishStatuses** | Pointer to **[]string** |  | [optional] 
@@ -136,31 +135,6 @@ SetOrder sets Order field to given value.
 `func (o *ReqArticleQuery) HasOrder() bool`
 
 HasOrder returns a boolean if a field has been set.
-
-### GetKeyword
-
-`func (o *ReqArticleQuery) GetKeyword() string`
-
-GetKeyword returns the Keyword field if non-nil, zero value otherwise.
-
-### GetKeywordOk
-
-`func (o *ReqArticleQuery) GetKeywordOk() (*string, bool)`
-
-GetKeywordOk returns a tuple with the Keyword field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetKeyword
-
-`func (o *ReqArticleQuery) SetKeyword(v string)`
-
-SetKeyword sets Keyword field to given value.
-
-### HasKeyword
-
-`func (o *ReqArticleQuery) HasKeyword() bool`
-
-HasKeyword returns a boolean if a field has been set.
 
 ### GetAuthorId
 

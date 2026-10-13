@@ -20,7 +20,7 @@ var _ MappedNullable = &ListBlockedRelationsResp{}
 // ListBlockedRelationsResp struct for ListBlockedRelationsResp
 type ListBlockedRelationsResp struct {
 	Page *PageResp `json:"page,omitempty"`
-	Rows []RespRelation `json:"rows,omitempty"`
+	Rows []Relation `json:"rows,omitempty"`
 }
 
 // NewListBlockedRelationsResp instantiates a new ListBlockedRelationsResp object
@@ -73,9 +73,9 @@ func (o *ListBlockedRelationsResp) SetPage(v PageResp) {
 }
 
 // GetRows returns the Rows field value if set, zero value otherwise.
-func (o *ListBlockedRelationsResp) GetRows() []RespRelation {
+func (o *ListBlockedRelationsResp) GetRows() []Relation {
 	if o == nil || IsNil(o.Rows) {
-		var ret []RespRelation
+		var ret []Relation
 		return ret
 	}
 	return o.Rows
@@ -83,7 +83,7 @@ func (o *ListBlockedRelationsResp) GetRows() []RespRelation {
 
 // GetRowsOk returns a tuple with the Rows field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ListBlockedRelationsResp) GetRowsOk() ([]RespRelation, bool) {
+func (o *ListBlockedRelationsResp) GetRowsOk() ([]Relation, bool) {
 	if o == nil || IsNil(o.Rows) {
 		return nil, false
 	}
@@ -99,8 +99,8 @@ func (o *ListBlockedRelationsResp) HasRows() bool {
 	return false
 }
 
-// SetRows gets a reference to the given []RespRelation and assigns it to the Rows field.
-func (o *ListBlockedRelationsResp) SetRows(v []RespRelation) {
+// SetRows gets a reference to the given []Relation and assigns it to the Rows field.
+func (o *ListBlockedRelationsResp) SetRows(v []Relation) {
 	o.Rows = v
 }
 

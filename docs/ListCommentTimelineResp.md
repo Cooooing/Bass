@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
-**Rows** | Pointer to [**[]RespCommentListItem**](RespCommentListItem.md) |  | [optional] 
+**Rows** | Pointer to [**[]CommentListItem**](CommentListItem.md) |  | [optional] 
 
 ## Methods
 
@@ -53,20 +53,20 @@ HasPage returns a boolean if a field has been set.
 
 ### GetRows
 
-`func (o *ListCommentTimelineResp) GetRows() []RespCommentListItem`
+`func (o *ListCommentTimelineResp) GetRows() []CommentListItem`
 
 GetRows returns the Rows field if non-nil, zero value otherwise.
 
 ### GetRowsOk
 
-`func (o *ListCommentTimelineResp) GetRowsOk() (*[]RespCommentListItem, bool)`
+`func (o *ListCommentTimelineResp) GetRowsOk() (*[]CommentListItem, bool)`
 
 GetRowsOk returns a tuple with the Rows field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetRows
 
-`func (o *ListCommentTimelineResp) SetRows(v []RespCommentListItem)`
+`func (o *ListCommentTimelineResp) SetRows(v []CommentListItem)`
 
 SetRows sets Rows field to given value.
 

@@ -8,6 +8,9 @@ servers:
 tags:
 - description: AccountService 提供 BBS 账号接口
   name: AccountService
+- description: ArticleSearchService provides public article keyword search for BBS
+    clients.
+  name: ArticleSearchService
 - description: ArticleService 提供 BBS 文章接口
   name: ArticleService
 - description: 认证接口。
@@ -74,6 +77,25 @@ paths:
           description: OK
       tags:
       - ArticleService
+  /v1/content/article/comment/pin:
+    post:
+      description: 设置或取消当前账号文章的置顶评论。
+      operationId: ArticleService_SetPinnedComment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetPinnedArticleComment_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SetPinnedArticleComment_Resp"
+          description: OK
+      tags:
+      - ArticleService
   /v1/content/article/draft/create:
     post:
       description: 创建文章草稿
@@ -128,6 +150,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UpdateDraftArticle_Resp"
+          description: OK
+      tags:
+      - ArticleService
+  /v1/content/article/following/list:
+    post:
+      description: 查询当前账号关注作者发布的文章。
+      operationId: ArticleService_ListFollowing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListFollowingArticles_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListFollowingArticles_Resp"
           description: OK
       tags:
       - ArticleService
@@ -188,6 +229,25 @@ paths:
           description: OK
       tags:
       - ArticleService
+  /v1/content/article/nearby/list:
+    post:
+      description: 查询当前账号所在城市发布的文章。
+      operationId: ArticleService_ListNearby
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListNearbyArticles_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListNearbyArticles_Resp"
+          description: OK
+      tags:
+      - ArticleService
   /v1/content/article/publish:
     post:
       description: 发布文章
@@ -245,6 +305,24 @@ paths:
           description: OK
       tags:
       - ArticleService
+  /v1/content/article/search:
+    post:
+      operationId: ArticleSearchService_Search
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchArticles_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchArticles_Resp"
+          description: OK
+      tags:
+      - ArticleSearchService
   /v1/content/article/thank:
     post:
       description: 感谢文章
@@ -1511,11 +1589,11 @@ components:
       example:
         created_at: 2000-01-23T04:56:07.000+00:00
         background_asset_id: background_asset_id
-        follower_count: 3
+        follower_count: 9
         url: url
         avatar_url: avatar_url
         updated_at: 2000-01-23T04:56:07.000+00:00
-        follow_count: 9
+        follow_count: 7
         name: name
         nickname: nickname
         mbti: mbti
@@ -1570,11 +1648,11 @@ components:
         account:
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
-          follower_count: 3
+          follower_count: 9
           url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
+          follow_count: 7
           name: name
           nickname: nickname
           mbti: mbti
@@ -1638,11 +1716,11 @@ components:
         last_reply_user:
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
-          follower_count: 3
+          follower_count: 9
           url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
+          follow_count: 7
           name: name
           nickname: nickname
           mbti: mbti
@@ -1719,11 +1797,11 @@ components:
         author_user:
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
-          follower_count: 3
+          follower_count: 9
           url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
+          follow_count: 7
           name: name
           nickname: nickname
           mbti: mbti
@@ -1877,11 +1955,11 @@ components:
         last_reply_user:
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
-          follower_count: 3
+          follower_count: 9
           url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
+          follow_count: 7
           name: name
           nickname: nickname
           mbti: mbti
@@ -1938,11 +2016,11 @@ components:
         author_user:
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
-          follower_count: 3
+          follower_count: 9
           url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
+          follow_count: 7
           name: name
           nickname: nickname
           mbti: mbti
@@ -2124,11 +2202,11 @@ components:
           last_reply_user:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -2185,11 +2263,11 @@ components:
           author_user:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -2333,6 +2411,114 @@ components:
         collected:
           type: boolean
       type: object
+    CommentListItem:
+      example:
+        like_count: 1
+        viewer_action_state:
+          thanked: true
+          liked: true
+        reply_user:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 9
+          url: url
+          avatar_url: avatar_url
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          follow_count: 7
+          name: name
+          nickname: nickname
+          mbti: mbti
+          id: id
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        level: 0
+        created_at: 2000-01-23T04:56:07.000+00:00
+        reply_count: 6
+        created_by: created_by
+        content: content
+        article_id: article_id
+        content_render: content_render
+        reply_id: reply_id
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        parent_id: parent_id
+        restriction: CONTENT_RESTRICTION_UNSPECIFIED
+        updated_by: updated_by
+        id: id
+        user:
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 9
+          url: url
+          avatar_url: avatar_url
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          follow_count: 7
+          name: name
+          nickname: nickname
+          mbti: mbti
+          id: id
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        thank_count: 5
+      properties:
+        id:
+          type: string
+        article_id:
+          type: string
+        content:
+          type: string
+        content_render:
+          type: string
+        level:
+          format: int32
+          type: integer
+        parent_id:
+          type: string
+        reply_id:
+          type: string
+        reply_count:
+          format: int32
+          type: integer
+        like_count:
+          format: int32
+          type: integer
+        thank_count:
+          format: int32
+          type: integer
+        user:
+          $ref: "#/components/schemas/AccountProfile"
+        reply_user:
+          $ref: "#/components/schemas/AccountProfile"
+        viewer_action_state:
+          $ref: "#/components/schemas/CommentViewerActionState"
+        restriction:
+          enum:
+          - CONTENT_RESTRICTION_UNSPECIFIED
+          - CONTENT_RESTRICTION_NONE
+          - CONTENT_RESTRICTION_HIDDEN
+          - CONTENT_RESTRICTION_LOCKED
+          format: enum
+          type: string
+        created_by:
+          type: string
+        updated_by:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      type: object
+    CommentViewerActionState:
+      example:
+        thanked: true
+        liked: true
+      properties:
+        liked:
+          type: boolean
+        thanked:
+          type: boolean
+      type: object
     CompleteProfileImageUploadAccount_Req:
       properties:
         purpose:
@@ -2354,11 +2540,11 @@ components:
         profile:
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
-          follower_count: 3
+          follower_count: 9
           url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
+          follow_count: 7
           name: name
           nickname: nickname
           mbti: mbti
@@ -2533,11 +2719,11 @@ components:
           author:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -2637,11 +2823,11 @@ components:
           last_reply_user:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -2718,11 +2904,11 @@ components:
           author_user:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -2783,11 +2969,11 @@ components:
           profile:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -2893,11 +3079,11 @@ components:
           account:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -3038,11 +3224,11 @@ components:
           last_reply_user:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -3099,11 +3285,11 @@ components:
           author_user:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -3119,11 +3305,11 @@ components:
           last_reply_user:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -3180,11 +3366,11 @@ components:
           author_user:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -3229,7 +3415,7 @@ components:
           $ref: "#/components/schemas/PageResp"
         rows:
           items:
-            $ref: "#/components/schemas/Resp_Relation"
+            $ref: "#/components/schemas/Relation"
           type: array
       type: object
     ListCommentReplies_Req:
@@ -3264,49 +3450,24 @@ components:
             thanked: true
             liked: true
           reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 5
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 2
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           level: 0
           created_at: 2000-01-23T04:56:07.000+00:00
           reply_count: 6
-          deleted_at: 2000-01-23T04:56:07.000+00:00
           created_by: created_by
           content: content
-          article:
-            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            cover_image_url: cover_image_url
-            restriction: CONTENT_RESTRICTION_UNSPECIFIED
-            updated_by: updated_by
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            title: title
-            type: ARTICLE_TYPE_UNSPECIFIED
-            author_user:
-              avatar_url: avatar_url
-              updated_at: 2000-01-23T04:56:07.000+00:00
-              follow_count: 5
-              name: name
-              nickname: nickname
-              mbti: mbti
-              created_at: 2000-01-23T04:56:07.000+00:00
-              id: id
-              follower_count: 2
-              url: url
-              introduction: introduction
-              status: ACCOUNT_STATUS_UNSPECIFIED
-            created_by: created_by
-            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
           article_id: article_id
           content_render: content_render
           reply_id: reply_id
@@ -3316,16 +3477,17 @@ components:
           updated_by: updated_by
           id: id
           user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 5
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 2
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           thank_count: 5
@@ -3334,49 +3496,24 @@ components:
             thanked: true
             liked: true
           reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 5
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 2
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           level: 0
           created_at: 2000-01-23T04:56:07.000+00:00
           reply_count: 6
-          deleted_at: 2000-01-23T04:56:07.000+00:00
           created_by: created_by
           content: content
-          article:
-            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            cover_image_url: cover_image_url
-            restriction: CONTENT_RESTRICTION_UNSPECIFIED
-            updated_by: updated_by
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            title: title
-            type: ARTICLE_TYPE_UNSPECIFIED
-            author_user:
-              avatar_url: avatar_url
-              updated_at: 2000-01-23T04:56:07.000+00:00
-              follow_count: 5
-              name: name
-              nickname: nickname
-              mbti: mbti
-              created_at: 2000-01-23T04:56:07.000+00:00
-              id: id
-              follower_count: 2
-              url: url
-              introduction: introduction
-              status: ACCOUNT_STATUS_UNSPECIFIED
-            created_by: created_by
-            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
           article_id: article_id
           content_render: content_render
           reply_id: reply_id
@@ -3386,16 +3523,17 @@ components:
           updated_by: updated_by
           id: id
           user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 5
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 2
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           thank_count: 5
@@ -3404,7 +3542,7 @@ components:
           $ref: "#/components/schemas/PageResp"
         rows:
           items:
-            $ref: "#/components/schemas/Resp_CommentListItem"
+            $ref: "#/components/schemas/CommentListItem"
           type: array
       type: object
     ListCommentThreads_Req:
@@ -3429,6 +3567,222 @@ components:
       type: object
     ListCommentThreads_Resp:
       example:
+        top_comment:
+          thread:
+            has_more_replies: true
+            root:
+              like_count: 1
+              viewer_action_state:
+                thanked: true
+                liked: true
+              reply_user:
+                avatar_url: avatar_url
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                follow_count: 5
+                name: name
+                nickname: nickname
+                mbti: mbti
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              level: 0
+              created_at: 2000-01-23T04:56:07.000+00:00
+              reply_count: 6
+              deleted_at: 2000-01-23T04:56:07.000+00:00
+              created_by: created_by
+              content: content
+              article:
+                visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                cover_image_url: cover_image_url
+                restriction: CONTENT_RESTRICTION_UNSPECIFIED
+                updated_by: updated_by
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                title: title
+                type: ARTICLE_TYPE_UNSPECIFIED
+                author_user:
+                  avatar_url: avatar_url
+                  updated_at: 2000-01-23T04:56:07.000+00:00
+                  follow_count: 5
+                  name: name
+                  nickname: nickname
+                  mbti: mbti
+                  created_at: 2000-01-23T04:56:07.000+00:00
+                  id: id
+                  follower_count: 2
+                  url: url
+                  introduction: introduction
+                  status: ACCOUNT_STATUS_UNSPECIFIED
+                created_by: created_by
+                publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+              article_id: article_id
+              content_render: content_render
+              reply_id: reply_id
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              parent_id: parent_id
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              id: id
+              user:
+                avatar_url: avatar_url
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                follow_count: 5
+                name: name
+                nickname: nickname
+                mbti: mbti
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              thank_count: 5
+            preview_replies:
+            - like_count: 1
+              viewer_action_state:
+                thanked: true
+                liked: true
+              reply_user:
+                avatar_url: avatar_url
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                follow_count: 5
+                name: name
+                nickname: nickname
+                mbti: mbti
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              level: 0
+              created_at: 2000-01-23T04:56:07.000+00:00
+              reply_count: 6
+              deleted_at: 2000-01-23T04:56:07.000+00:00
+              created_by: created_by
+              content: content
+              article:
+                visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                cover_image_url: cover_image_url
+                restriction: CONTENT_RESTRICTION_UNSPECIFIED
+                updated_by: updated_by
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                title: title
+                type: ARTICLE_TYPE_UNSPECIFIED
+                author_user:
+                  avatar_url: avatar_url
+                  updated_at: 2000-01-23T04:56:07.000+00:00
+                  follow_count: 5
+                  name: name
+                  nickname: nickname
+                  mbti: mbti
+                  created_at: 2000-01-23T04:56:07.000+00:00
+                  id: id
+                  follower_count: 2
+                  url: url
+                  introduction: introduction
+                  status: ACCOUNT_STATUS_UNSPECIFIED
+                created_by: created_by
+                publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+              article_id: article_id
+              content_render: content_render
+              reply_id: reply_id
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              parent_id: parent_id
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              id: id
+              user:
+                avatar_url: avatar_url
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                follow_count: 5
+                name: name
+                nickname: nickname
+                mbti: mbti
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              thank_count: 5
+            - like_count: 1
+              viewer_action_state:
+                thanked: true
+                liked: true
+              reply_user:
+                avatar_url: avatar_url
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                follow_count: 5
+                name: name
+                nickname: nickname
+                mbti: mbti
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              level: 0
+              created_at: 2000-01-23T04:56:07.000+00:00
+              reply_count: 6
+              deleted_at: 2000-01-23T04:56:07.000+00:00
+              created_by: created_by
+              content: content
+              article:
+                visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                cover_image_url: cover_image_url
+                restriction: CONTENT_RESTRICTION_UNSPECIFIED
+                updated_by: updated_by
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                title: title
+                type: ARTICLE_TYPE_UNSPECIFIED
+                author_user:
+                  avatar_url: avatar_url
+                  updated_at: 2000-01-23T04:56:07.000+00:00
+                  follow_count: 5
+                  name: name
+                  nickname: nickname
+                  mbti: mbti
+                  created_at: 2000-01-23T04:56:07.000+00:00
+                  id: id
+                  follower_count: 2
+                  url: url
+                  introduction: introduction
+                  status: ACCOUNT_STATUS_UNSPECIFIED
+                created_by: created_by
+                publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+              article_id: article_id
+              content_render: content_render
+              reply_id: reply_id
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              parent_id: parent_id
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              id: id
+              user:
+                avatar_url: avatar_url
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                follow_count: 5
+                name: name
+                nickname: nickname
+                mbti: mbti
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              thank_count: 5
+            reply_count: 0
         page:
           total: total
           size: size
@@ -3869,6 +4223,8 @@ components:
           items:
             $ref: "#/components/schemas/Resp_CommentThread"
           type: array
+        top_comment:
+          $ref: "#/components/schemas/Resp_TopComment"
       type: object
     ListCommentTimeline_Req:
       properties:
@@ -3899,49 +4255,24 @@ components:
             thanked: true
             liked: true
           reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 5
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 2
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           level: 0
           created_at: 2000-01-23T04:56:07.000+00:00
           reply_count: 6
-          deleted_at: 2000-01-23T04:56:07.000+00:00
           created_by: created_by
           content: content
-          article:
-            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            cover_image_url: cover_image_url
-            restriction: CONTENT_RESTRICTION_UNSPECIFIED
-            updated_by: updated_by
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            title: title
-            type: ARTICLE_TYPE_UNSPECIFIED
-            author_user:
-              avatar_url: avatar_url
-              updated_at: 2000-01-23T04:56:07.000+00:00
-              follow_count: 5
-              name: name
-              nickname: nickname
-              mbti: mbti
-              created_at: 2000-01-23T04:56:07.000+00:00
-              id: id
-              follower_count: 2
-              url: url
-              introduction: introduction
-              status: ACCOUNT_STATUS_UNSPECIFIED
-            created_by: created_by
-            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
           article_id: article_id
           content_render: content_render
           reply_id: reply_id
@@ -3951,16 +4282,17 @@ components:
           updated_by: updated_by
           id: id
           user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 5
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 2
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           thank_count: 5
@@ -3969,49 +4301,24 @@ components:
             thanked: true
             liked: true
           reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 5
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 2
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           level: 0
           created_at: 2000-01-23T04:56:07.000+00:00
           reply_count: 6
-          deleted_at: 2000-01-23T04:56:07.000+00:00
           created_by: created_by
           content: content
-          article:
-            visibility: ARTICLE_VISIBILITY_UNSPECIFIED
-            updated_at: 2000-01-23T04:56:07.000+00:00
-            cover_image_url: cover_image_url
-            restriction: CONTENT_RESTRICTION_UNSPECIFIED
-            updated_by: updated_by
-            created_at: 2000-01-23T04:56:07.000+00:00
-            id: id
-            title: title
-            type: ARTICLE_TYPE_UNSPECIFIED
-            author_user:
-              avatar_url: avatar_url
-              updated_at: 2000-01-23T04:56:07.000+00:00
-              follow_count: 5
-              name: name
-              nickname: nickname
-              mbti: mbti
-              created_at: 2000-01-23T04:56:07.000+00:00
-              id: id
-              follower_count: 2
-              url: url
-              introduction: introduction
-              status: ACCOUNT_STATUS_UNSPECIFIED
-            created_by: created_by
-            publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
           article_id: article_id
           content_render: content_render
           reply_id: reply_id
@@ -4021,16 +4328,17 @@ components:
           updated_by: updated_by
           id: id
           user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 5
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
-            created_at: 2000-01-23T04:56:07.000+00:00
             id: id
-            follower_count: 2
-            url: url
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
           thank_count: 5
@@ -4039,7 +4347,7 @@ components:
           $ref: "#/components/schemas/PageResp"
         rows:
           items:
-            $ref: "#/components/schemas/Resp_CommentListItem"
+            $ref: "#/components/schemas/CommentListItem"
           type: array
       type: object
     ListComments_Req:
@@ -4281,7 +4589,7 @@ components:
           $ref: "#/components/schemas/PageResp"
         rows:
           items:
-            $ref: "#/components/schemas/Resp_Relation"
+            $ref: "#/components/schemas/Relation"
           type: array
       type: object
     ListFollowers_Req:
@@ -4308,11 +4616,11 @@ components:
           account:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -4327,11 +4635,11 @@ components:
           account:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -4344,6 +4652,188 @@ components:
         rows:
           items:
             $ref: "#/components/schemas/AccountProfileListItem"
+          type: array
+      type: object
+    ListFollowingArticles_Req:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReq"
+      type: object
+    ListFollowingArticles_Resp:
+      example:
+        page:
+          total: total
+          size: size
+          page: page
+        rows:
+        - cover_image_url: cover_image_url
+          created_at: 2000-01-23T04:56:07.000+00:00
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          last_reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          last_reply_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          statement: statement
+          edited_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          published_at: 2000-01-23T04:56:07.000+00:00
+          has_reward: true
+          commentable: true
+          thank_count: 6
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          reward_count: 5
+          like_count: 1
+          viewer_action_state:
+            rewarded: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          has_postscript: true
+          domains:
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          reply_count: 2
+          created_by: created_by
+          collect_count: 5
+          tags:
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          author_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 0
+        - cover_image_url: cover_image_url
+          created_at: 2000-01-23T04:56:07.000+00:00
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          last_reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          last_reply_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          statement: statement
+          edited_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          published_at: 2000-01-23T04:56:07.000+00:00
+          has_reward: true
+          commentable: true
+          thank_count: 6
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          reward_count: 5
+          like_count: 1
+          viewer_action_state:
+            rewarded: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          has_postscript: true
+          domains:
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          reply_count: 2
+          created_by: created_by
+          collect_count: 5
+          tags:
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          author_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 0
+      properties:
+        page:
+          $ref: "#/components/schemas/PageResp"
+        rows:
+          items:
+            $ref: "#/components/schemas/ArticleListItem"
           type: array
       type: object
     ListFollowingRelations_Req:
@@ -4375,7 +4865,7 @@ components:
           $ref: "#/components/schemas/PageResp"
         rows:
           items:
-            $ref: "#/components/schemas/Resp_Relation"
+            $ref: "#/components/schemas/Relation"
           type: array
       type: object
     ListFollowing_Req:
@@ -4402,11 +4892,11 @@ components:
           account:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -4421,11 +4911,11 @@ components:
           account:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -4438,6 +4928,188 @@ components:
         rows:
           items:
             $ref: "#/components/schemas/AccountProfileListItem"
+          type: array
+      type: object
+    ListNearbyArticles_Req:
+      properties:
+        page:
+          $ref: "#/components/schemas/PageReq"
+      type: object
+    ListNearbyArticles_Resp:
+      example:
+        page:
+          total: total
+          size: size
+          page: page
+        rows:
+        - cover_image_url: cover_image_url
+          created_at: 2000-01-23T04:56:07.000+00:00
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          last_reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          last_reply_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          statement: statement
+          edited_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          published_at: 2000-01-23T04:56:07.000+00:00
+          has_reward: true
+          commentable: true
+          thank_count: 6
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          reward_count: 5
+          like_count: 1
+          viewer_action_state:
+            rewarded: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          has_postscript: true
+          domains:
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          reply_count: 2
+          created_by: created_by
+          collect_count: 5
+          tags:
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          author_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 0
+        - cover_image_url: cover_image_url
+          created_at: 2000-01-23T04:56:07.000+00:00
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          last_reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          last_reply_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          statement: statement
+          edited_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          published_at: 2000-01-23T04:56:07.000+00:00
+          has_reward: true
+          commentable: true
+          thank_count: 6
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          reward_count: 5
+          like_count: 1
+          viewer_action_state:
+            rewarded: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          has_postscript: true
+          domains:
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          reply_count: 2
+          created_by: created_by
+          collect_count: 5
+          tags:
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          author_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 0
+      properties:
+        page:
+          $ref: "#/components/schemas/PageResp"
+        rows:
+          items:
+            $ref: "#/components/schemas/ArticleListItem"
           type: array
       type: object
     ListNotifications_Req:
@@ -4650,11 +5322,11 @@ components:
         author:
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
-          follower_count: 3
+          follower_count: 9
           url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
+          follow_count: 7
           name: name
           nickname: nickname
           mbti: mbti
@@ -4699,11 +5371,11 @@ components:
             last_reply_user:
               created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
-              follower_count: 3
+              follower_count: 9
               url: url
               avatar_url: avatar_url
               updated_at: 2000-01-23T04:56:07.000+00:00
-              follow_count: 9
+              follow_count: 7
               name: name
               nickname: nickname
               mbti: mbti
@@ -4760,11 +5432,11 @@ components:
             author_user:
               created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
-              follower_count: 3
+              follower_count: 9
               url: url
               avatar_url: avatar_url
               updated_at: 2000-01-23T04:56:07.000+00:00
-              follow_count: 9
+              follow_count: 7
               name: name
               nickname: nickname
               mbti: mbti
@@ -4782,11 +5454,11 @@ components:
             last_reply_user:
               created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
-              follower_count: 3
+              follower_count: 9
               url: url
               avatar_url: avatar_url
               updated_at: 2000-01-23T04:56:07.000+00:00
-              follow_count: 9
+              follow_count: 7
               name: name
               nickname: nickname
               mbti: mbti
@@ -4843,11 +5515,11 @@ components:
             author_user:
               created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
-              follower_count: 3
+              follower_count: 9
               url: url
               avatar_url: avatar_url
               updated_at: 2000-01-23T04:56:07.000+00:00
-              follow_count: 9
+              follow_count: 7
               name: name
               nickname: nickname
               mbti: mbti
@@ -4881,11 +5553,11 @@ components:
           author:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -4899,11 +5571,11 @@ components:
           author:
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
-            follower_count: 3
+            follower_count: 9
             url: url
             avatar_url: avatar_url
             updated_at: 2000-01-23T04:56:07.000+00:00
-            follow_count: 9
+            follow_count: 7
             name: name
             nickname: nickname
             mbti: mbti
@@ -5021,11 +5693,11 @@ components:
         account:
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
-          follower_count: 3
+          follower_count: 9
           url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
+          follow_count: 7
           name: name
           nickname: nickname
           mbti: mbti
@@ -5164,6 +5836,35 @@ components:
     Register_Resp:
       properties: {}
       type: object
+    Relation:
+      example:
+        updated_at: 2000-01-23T04:56:07.000+00:00
+        created_at: 2000-01-23T04:56:07.000+00:00
+        target_id: target_id
+        id: id
+        actor_id: actor_id
+        type: RELATION_TYPE_UNSPECIFIED
+      properties:
+        id:
+          type: string
+        type:
+          enum:
+          - RELATION_TYPE_UNSPECIFIED
+          - RELATION_TYPE_FOLLOW
+          - RELATION_TYPE_BLOCK
+          format: enum
+          type: string
+        actor_id:
+          type: string
+        target_id:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      type: object
     Req_Article:
       properties:
         title:
@@ -5216,8 +5917,6 @@ components:
           - ARTICLE_ORDER_NEWEST
           - ARTICLE_ORDER_HOTTEST
           format: enum
-          type: string
-        keyword:
           type: string
         author_id:
           type: string
@@ -6162,11 +6861,11 @@ components:
         profile:
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
-          follower_count: 3
+          follower_count: 9
           url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
+          follow_count: 7
           name: name
           nickname: nickname
           mbti: mbti
@@ -6422,35 +7121,6 @@ components:
           format: date-time
           type: string
       type: object
-    Resp_Relation:
-      example:
-        updated_at: 2000-01-23T04:56:07.000+00:00
-        created_at: 2000-01-23T04:56:07.000+00:00
-        target_id: target_id
-        id: id
-        actor_id: actor_id
-        type: RELATION_TYPE_UNSPECIFIED
-      properties:
-        id:
-          type: string
-        type:
-          enum:
-          - RELATION_TYPE_UNSPECIFIED
-          - RELATION_TYPE_FOLLOW
-          - RELATION_TYPE_BLOCK
-          format: enum
-          type: string
-        actor_id:
-          type: string
-        target_id:
-          type: string
-        created_at:
-          format: date-time
-          type: string
-        updated_at:
-          format: date-time
-          type: string
-      type: object
     Resp_RelationStatus:
       example:
         followed_by: true
@@ -6522,6 +7192,227 @@ components:
           format: date-time
           type: string
       type: object
+    Resp_TopComment:
+      example:
+        thread:
+          has_more_replies: true
+          root:
+            like_count: 1
+            viewer_action_state:
+              thanked: true
+              liked: true
+            reply_user:
+              avatar_url: avatar_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              follow_count: 5
+              name: name
+              nickname: nickname
+              mbti: mbti
+              created_at: 2000-01-23T04:56:07.000+00:00
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            level: 0
+            created_at: 2000-01-23T04:56:07.000+00:00
+            reply_count: 6
+            deleted_at: 2000-01-23T04:56:07.000+00:00
+            created_by: created_by
+            content: content
+            article:
+              visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              cover_image_url: cover_image_url
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              created_at: 2000-01-23T04:56:07.000+00:00
+              id: id
+              title: title
+              type: ARTICLE_TYPE_UNSPECIFIED
+              author_user:
+                avatar_url: avatar_url
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                follow_count: 5
+                name: name
+                nickname: nickname
+                mbti: mbti
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              created_by: created_by
+              publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            article_id: article_id
+            content_render: content_render
+            reply_id: reply_id
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            parent_id: parent_id
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            id: id
+            user:
+              avatar_url: avatar_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              follow_count: 5
+              name: name
+              nickname: nickname
+              mbti: mbti
+              created_at: 2000-01-23T04:56:07.000+00:00
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            thank_count: 5
+          preview_replies:
+          - like_count: 1
+            viewer_action_state:
+              thanked: true
+              liked: true
+            reply_user:
+              avatar_url: avatar_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              follow_count: 5
+              name: name
+              nickname: nickname
+              mbti: mbti
+              created_at: 2000-01-23T04:56:07.000+00:00
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            level: 0
+            created_at: 2000-01-23T04:56:07.000+00:00
+            reply_count: 6
+            deleted_at: 2000-01-23T04:56:07.000+00:00
+            created_by: created_by
+            content: content
+            article:
+              visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              cover_image_url: cover_image_url
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              created_at: 2000-01-23T04:56:07.000+00:00
+              id: id
+              title: title
+              type: ARTICLE_TYPE_UNSPECIFIED
+              author_user:
+                avatar_url: avatar_url
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                follow_count: 5
+                name: name
+                nickname: nickname
+                mbti: mbti
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              created_by: created_by
+              publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            article_id: article_id
+            content_render: content_render
+            reply_id: reply_id
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            parent_id: parent_id
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            id: id
+            user:
+              avatar_url: avatar_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              follow_count: 5
+              name: name
+              nickname: nickname
+              mbti: mbti
+              created_at: 2000-01-23T04:56:07.000+00:00
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            thank_count: 5
+          - like_count: 1
+            viewer_action_state:
+              thanked: true
+              liked: true
+            reply_user:
+              avatar_url: avatar_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              follow_count: 5
+              name: name
+              nickname: nickname
+              mbti: mbti
+              created_at: 2000-01-23T04:56:07.000+00:00
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            level: 0
+            created_at: 2000-01-23T04:56:07.000+00:00
+            reply_count: 6
+            deleted_at: 2000-01-23T04:56:07.000+00:00
+            created_by: created_by
+            content: content
+            article:
+              visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              cover_image_url: cover_image_url
+              restriction: CONTENT_RESTRICTION_UNSPECIFIED
+              updated_by: updated_by
+              created_at: 2000-01-23T04:56:07.000+00:00
+              id: id
+              title: title
+              type: ARTICLE_TYPE_UNSPECIFIED
+              author_user:
+                avatar_url: avatar_url
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                follow_count: 5
+                name: name
+                nickname: nickname
+                mbti: mbti
+                created_at: 2000-01-23T04:56:07.000+00:00
+                id: id
+                follower_count: 2
+                url: url
+                introduction: introduction
+                status: ACCOUNT_STATUS_UNSPECIFIED
+              created_by: created_by
+              publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+            article_id: article_id
+            content_render: content_render
+            reply_id: reply_id
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            parent_id: parent_id
+            restriction: CONTENT_RESTRICTION_UNSPECIFIED
+            updated_by: updated_by
+            id: id
+            user:
+              avatar_url: avatar_url
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              follow_count: 5
+              name: name
+              nickname: nickname
+              mbti: mbti
+              created_at: 2000-01-23T04:56:07.000+00:00
+              id: id
+              follower_count: 2
+              url: url
+              introduction: introduction
+              status: ACCOUNT_STATUS_UNSPECIFIED
+            thank_count: 5
+          reply_count: 0
+      properties:
+        thread:
+          $ref: "#/components/schemas/Resp_CommentThread"
+      type: object
     Resp_Totp:
       example:
         user_id: user_id
@@ -6550,6 +7441,192 @@ components:
     RewardArticle_Resp:
       properties: {}
       type: object
+    SearchArticles_Req:
+      properties:
+        query:
+          type: string
+        cursor:
+          type: string
+        size:
+          format: uint32
+          type: integer
+      required:
+      - query
+      type: object
+    SearchArticles_Resp:
+      example:
+        next_cursor: next_cursor
+        rows:
+        - cover_image_url: cover_image_url
+          created_at: 2000-01-23T04:56:07.000+00:00
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          last_reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          last_reply_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          statement: statement
+          edited_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          published_at: 2000-01-23T04:56:07.000+00:00
+          has_reward: true
+          commentable: true
+          thank_count: 6
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          reward_count: 5
+          like_count: 1
+          viewer_action_state:
+            rewarded: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          has_postscript: true
+          domains:
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          reply_count: 2
+          created_by: created_by
+          collect_count: 5
+          tags:
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          author_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 0
+        - cover_image_url: cover_image_url
+          created_at: 2000-01-23T04:56:07.000+00:00
+          title: title
+          type: ARTICLE_TYPE_UNSPECIFIED
+          content: content
+          last_reply_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          last_reply_at: 2000-01-23T04:56:07.000+00:00
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          statement: statement
+          edited_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          published_at: 2000-01-23T04:56:07.000+00:00
+          has_reward: true
+          commentable: true
+          thank_count: 6
+          publish_status: ARTICLE_PUBLISH_STATUS_UNSPECIFIED
+          reward_count: 5
+          like_count: 1
+          viewer_action_state:
+            rewarded: true
+            collected: true
+            thanked: true
+            liked: true
+          visibility: ARTICLE_VISIBILITY_UNSPECIFIED
+          has_postscript: true
+          domains:
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          - code: code
+            name: name
+            icon: icon
+            id: id
+            url: url
+          reply_count: 2
+          created_by: created_by
+          collect_count: 5
+          tags:
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          - domain_id: domain_id
+            code: code
+            name: name
+            icon: icon
+            id: id
+          content_render: content_render
+          restriction: CONTENT_RESTRICTION_UNSPECIFIED
+          updated_by: updated_by
+          author_user:
+            created_at: 2000-01-23T04:56:07.000+00:00
+            background_asset_id: background_asset_id
+            follower_count: 9
+            url: url
+            avatar_url: avatar_url
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            follow_count: 7
+            name: name
+            nickname: nickname
+            mbti: mbti
+            id: id
+            introduction: introduction
+            status: ACCOUNT_STATUS_UNSPECIFIED
+          view_count: 0
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/ArticleListItem"
+          type: array
+        next_cursor:
+          type: string
+      type: object
     SendEmailOtp_Req:
       properties:
         email:
@@ -6577,6 +7654,18 @@ components:
       properties:
         code:
           type: string
+      type: object
+    SetPinnedArticleComment_Req:
+      properties:
+        article_id:
+          type: string
+        comment_id:
+          type: string
+      required:
+      - article_id
+      type: object
+    SetPinnedArticleComment_Resp:
+      properties: {}
       type: object
     ThankArticle_Req:
       properties:
@@ -6813,11 +7902,11 @@ components:
         profile:
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
-          follower_count: 3
+          follower_count: 9
           url: url
           avatar_url: avatar_url
           updated_at: 2000-01-23T04:56:07.000+00:00
-          follow_count: 9
+          follow_count: 7
           name: name
           nickname: nickname
           mbti: mbti

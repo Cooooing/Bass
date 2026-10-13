@@ -134,6 +134,34 @@ type ArticleService interface {
 	ListExecute(r ApiListRequest) (*ListArticlesResp, *http.Response, error)
 
 	/*
+	ListFollowing Method for ListFollowing
+
+	查询当前账号关注作者发布的文章。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListFollowingRequest
+	*/
+	ListFollowing(ctx context.Context) ApiListFollowingRequest
+
+	// ListFollowingExecute executes the request
+	//  @return ListFollowingArticlesResp
+	ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingArticlesResp, *http.Response, error)
+
+	/*
+	ListNearby Method for ListNearby
+
+	查询当前账号所在城市发布的文章。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiListNearbyRequest
+	*/
+	ListNearby(ctx context.Context) ApiListNearbyRequest
+
+	// ListNearbyExecute executes the request
+	//  @return ListNearbyArticlesResp
+	ListNearbyExecute(r ApiListNearbyRequest) (*ListNearbyArticlesResp, *http.Response, error)
+
+	/*
 	PageViewHistory Method for PageViewHistory
 
 	查询当前账号的浏览历史。
@@ -174,6 +202,20 @@ type ArticleService interface {
 	// RewardExecute executes the request
 	//  @return map[string]interface{}
 	RewardExecute(r ApiRewardRequest) (map[string]interface{}, *http.Response, error)
+
+	/*
+	SetPinnedComment Method for SetPinnedComment
+
+	设置或取消当前账号文章的置顶评论。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiSetPinnedCommentRequest
+	*/
+	SetPinnedComment(ctx context.Context) ApiSetPinnedCommentRequest
+
+	// SetPinnedCommentExecute executes the request
+	//  @return map[string]interface{}
+	SetPinnedCommentExecute(r ApiSetPinnedCommentRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
 	Thank Method for Thank
@@ -1087,6 +1129,226 @@ func (a *ArticleServiceService) ListExecute(r ApiListRequest) (*ListArticlesResp
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
+type ApiListFollowingRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	listFollowingArticlesReq *ListFollowingArticlesReq
+}
+
+func (r ApiListFollowingRequest) ListFollowingArticlesReq(listFollowingArticlesReq ListFollowingArticlesReq) ApiListFollowingRequest {
+	r.listFollowingArticlesReq = &listFollowingArticlesReq
+	return r
+}
+
+func (r ApiListFollowingRequest) Execute() (*ListFollowingArticlesResp, *http.Response, error) {
+	return r.ApiService.ListFollowingExecute(r)
+}
+
+/*
+ListFollowing Method for ListFollowing
+
+查询当前账号关注作者发布的文章。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListFollowingRequest
+*/
+func (a *ArticleServiceService) ListFollowing(ctx context.Context) ApiListFollowingRequest {
+	return ApiListFollowingRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListFollowingArticlesResp
+func (a *ArticleServiceService) ListFollowingExecute(r ApiListFollowingRequest) (*ListFollowingArticlesResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListFollowingArticlesResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.ListFollowing")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/following/list"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listFollowingArticlesReq == nil {
+		return localVarReturnValue, nil, reportError("listFollowingArticlesReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listFollowingArticlesReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiListNearbyRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	listNearbyArticlesReq *ListNearbyArticlesReq
+}
+
+func (r ApiListNearbyRequest) ListNearbyArticlesReq(listNearbyArticlesReq ListNearbyArticlesReq) ApiListNearbyRequest {
+	r.listNearbyArticlesReq = &listNearbyArticlesReq
+	return r
+}
+
+func (r ApiListNearbyRequest) Execute() (*ListNearbyArticlesResp, *http.Response, error) {
+	return r.ApiService.ListNearbyExecute(r)
+}
+
+/*
+ListNearby Method for ListNearby
+
+查询当前账号所在城市发布的文章。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiListNearbyRequest
+*/
+func (a *ArticleServiceService) ListNearby(ctx context.Context) ApiListNearbyRequest {
+	return ApiListNearbyRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return ListNearbyArticlesResp
+func (a *ArticleServiceService) ListNearbyExecute(r ApiListNearbyRequest) (*ListNearbyArticlesResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *ListNearbyArticlesResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.ListNearby")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/nearby/list"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.listNearbyArticlesReq == nil {
+		return localVarReturnValue, nil, reportError("listNearbyArticlesReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.listNearbyArticlesReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
 type ApiPageViewHistoryRequest struct {
 	ctx context.Context
 	ApiService ArticleService
@@ -1380,6 +1642,116 @@ func (a *ArticleServiceService) RewardExecute(r ApiRewardRequest) (map[string]in
 	}
 	// body params
 	localVarPostBody = r.rewardArticleReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiSetPinnedCommentRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	setPinnedArticleCommentReq *SetPinnedArticleCommentReq
+}
+
+func (r ApiSetPinnedCommentRequest) SetPinnedArticleCommentReq(setPinnedArticleCommentReq SetPinnedArticleCommentReq) ApiSetPinnedCommentRequest {
+	r.setPinnedArticleCommentReq = &setPinnedArticleCommentReq
+	return r
+}
+
+func (r ApiSetPinnedCommentRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.SetPinnedCommentExecute(r)
+}
+
+/*
+SetPinnedComment Method for SetPinnedComment
+
+设置或取消当前账号文章的置顶评论。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiSetPinnedCommentRequest
+*/
+func (a *ArticleServiceService) SetPinnedComment(ctx context.Context) ApiSetPinnedCommentRequest {
+	return ApiSetPinnedCommentRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return map[string]interface{}
+func (a *ArticleServiceService) SetPinnedCommentExecute(r ApiSetPinnedCommentRequest) (map[string]interface{}, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.SetPinnedComment")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/comment/pin"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.setPinnedArticleCommentReq == nil {
+		return localVarReturnValue, nil, reportError("setPinnedArticleCommentReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.setPinnedArticleCommentReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

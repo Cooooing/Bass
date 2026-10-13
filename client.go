@@ -51,6 +51,8 @@ type APIClient struct {
 
 	AccountService AccountService
 
+	ArticleSearchService ArticleSearchService
+
 	ArticleService ArticleService
 
 	AuthService AuthService
@@ -97,6 +99,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 
 	// API Services
 	c.AccountService = (*AccountServiceService)(&c.common)
+	c.ArticleSearchService = (*ArticleSearchServiceService)(&c.common)
 	c.ArticleService = (*ArticleServiceService)(&c.common)
 	c.AuthService = (*AuthServiceService)(&c.common)
 	c.CheckinService = (*CheckinServiceService)(&c.common)

@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { RespTopComment } from './RespTopComment';
+import {
+    RespTopCommentFromJSON,
+    RespTopCommentFromJSONTyped,
+    RespTopCommentToJSON,
+    RespTopCommentToJSONTyped,
+} from './RespTopComment';
 import type { RespCommentThread } from './RespCommentThread';
 import {
     RespCommentThreadFromJSON,
@@ -46,6 +53,12 @@ export interface ListCommentThreadsResp {
      * @memberof ListCommentThreadsResp
      */
     rows?: Array<RespCommentThread>;
+    /**
+     * 
+     * @type {RespTopComment}
+     * @memberof ListCommentThreadsResp
+     */
+    topComment?: RespTopComment;
 }
 
 /**
@@ -67,6 +80,7 @@ export function ListCommentThreadsRespFromJSONTyped(json: any, ignoreDiscriminat
         
         'page': json['page'] == null ? undefined : PageRespFromJSON(json['page']),
         'rows': json['rows'] == null ? undefined : ((json['rows'] as Array<any>).map(RespCommentThreadFromJSON)),
+        'topComment': json['top_comment'] == null ? undefined : RespTopCommentFromJSON(json['top_comment']),
     };
 }
 
@@ -83,6 +97,7 @@ export function ListCommentThreadsRespToJSONTyped(value?: ListCommentThreadsResp
         
         'page': PageRespToJSON(value['page']),
         'rows': value['rows'] == null ? undefined : ((value['rows'] as Array<any>).map(RespCommentThreadToJSON)),
+        'top_comment': RespTopCommentToJSON(value['topComment']),
     };
 }
 

@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { RespCommentListItem } from './RespCommentListItem';
+import type { CommentListItem } from './CommentListItem';
 import {
-    RespCommentListItemFromJSON,
-    RespCommentListItemFromJSONTyped,
-    RespCommentListItemToJSON,
-    RespCommentListItemToJSONTyped,
-} from './RespCommentListItem';
+    CommentListItemFromJSON,
+    CommentListItemFromJSONTyped,
+    CommentListItemToJSON,
+    CommentListItemToJSONTyped,
+} from './CommentListItem';
 import type { PageResp } from './PageResp';
 import {
     PageRespFromJSON,
@@ -42,10 +42,10 @@ export interface ListCommentTimelineResp {
     page?: PageResp;
     /**
      * 
-     * @type {Array<RespCommentListItem>}
+     * @type {Array<CommentListItem>}
      * @memberof ListCommentTimelineResp
      */
-    rows?: Array<RespCommentListItem>;
+    rows?: Array<CommentListItem>;
 }
 
 /**
@@ -66,7 +66,7 @@ export function ListCommentTimelineRespFromJSONTyped(json: any, ignoreDiscrimina
     return {
         
         'page': json['page'] == null ? undefined : PageRespFromJSON(json['page']),
-        'rows': json['rows'] == null ? undefined : ((json['rows'] as Array<any>).map(RespCommentListItemFromJSON)),
+        'rows': json['rows'] == null ? undefined : ((json['rows'] as Array<any>).map(CommentListItemFromJSON)),
     };
 }
 
@@ -82,7 +82,7 @@ export function ListCommentTimelineRespToJSONTyped(value?: ListCommentTimelineRe
     return {
         
         'page': PageRespToJSON(value['page']),
-        'rows': value['rows'] == null ? undefined : ((value['rows'] as Array<any>).map(RespCommentListItemToJSON)),
+        'rows': value['rows'] == null ? undefined : ((value['rows'] as Array<any>).map(CommentListItemToJSON)),
     };
 }
 

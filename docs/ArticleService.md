@@ -12,9 +12,12 @@ All URIs are relative to *http://localhost*
 | [**get**](ArticleService.md#get) | **POST** /v1/content/article/get |  |
 | [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
 | [**list**](ArticleService.md#list) | **POST** /v1/content/article/list |  |
+| [**listFollowing**](ArticleService.md#listfollowing) | **POST** /v1/content/article/following/list |  |
+| [**listNearby**](ArticleService.md#listnearby) | **POST** /v1/content/article/nearby/list |  |
 | [**pageViewHistory**](ArticleService.md#pageviewhistory) | **POST** /v1/content/article/view-history/page |  |
 | [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish |  |
 | [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward |  |
+| [**setPinnedComment**](ArticleService.md#setpinnedcomment) | **POST** /v1/content/article/comment/pin |  |
 | [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
 | [**updateDraft**](ArticleService.md#updatedraft) | **POST** /v1/content/article/draft/update |  |
 
@@ -556,6 +559,140 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
+## listFollowing
+
+> ListFollowingArticlesResp listFollowing(listFollowingArticlesReq)
+
+
+
+查询当前账号关注作者发布的文章。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { ListFollowingRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // ListFollowingArticlesReq
+    listFollowingArticlesReq: ...,
+  } satisfies ListFollowingRequest;
+
+  try {
+    const data = await api.listFollowing(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **listFollowingArticlesReq** | [ListFollowingArticlesReq](ListFollowingArticlesReq.md) |  | |
+
+### Return type
+
+[**ListFollowingArticlesResp**](ListFollowingArticlesResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## listNearby
+
+> ListNearbyArticlesResp listNearby(listNearbyArticlesReq)
+
+
+
+查询当前账号所在城市发布的文章。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { ListNearbyRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // ListNearbyArticlesReq
+    listNearbyArticlesReq: ...,
+  } satisfies ListNearbyRequest;
+
+  try {
+    const data = await api.listNearby(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **listNearbyArticlesReq** | [ListNearbyArticlesReq](ListNearbyArticlesReq.md) |  | |
+
+### Return type
+
+[**ListNearbyArticlesResp**](ListNearbyArticlesResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
 ## pageViewHistory
 
 > PageArticleViewHistoryResp pageViewHistory(pageArticleViewHistoryReq)
@@ -734,6 +871,73 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **rewardArticleReq** | [RewardArticleReq](RewardArticleReq.md) |  | |
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## setPinnedComment
+
+> object setPinnedComment(setPinnedArticleCommentReq)
+
+
+
+设置或取消当前账号文章的置顶评论。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { SetPinnedCommentRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // SetPinnedArticleCommentReq
+    setPinnedArticleCommentReq: ...,
+  } satisfies SetPinnedCommentRequest;
+
+  try {
+    const data = await api.setPinnedComment(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **setPinnedArticleCommentReq** | [SetPinnedArticleCommentReq](SetPinnedArticleCommentReq.md) |  | |
 
 ### Return type
 

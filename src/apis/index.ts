@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './AccountService';
+export * from './ArticleSearchService';
 export * from './ArticleService';
 export * from './AuthService';
 export * from './CheckinService';

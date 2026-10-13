@@ -79,6 +79,26 @@ import {
     ListArticlesRespToJSON,
 } from '../models/ListArticlesResp';
 import {
+    type ListFollowingArticlesReq,
+    ListFollowingArticlesReqFromJSON,
+    ListFollowingArticlesReqToJSON,
+} from '../models/ListFollowingArticlesReq';
+import {
+    type ListFollowingArticlesResp,
+    ListFollowingArticlesRespFromJSON,
+    ListFollowingArticlesRespToJSON,
+} from '../models/ListFollowingArticlesResp';
+import {
+    type ListNearbyArticlesReq,
+    ListNearbyArticlesReqFromJSON,
+    ListNearbyArticlesReqToJSON,
+} from '../models/ListNearbyArticlesReq';
+import {
+    type ListNearbyArticlesResp,
+    ListNearbyArticlesRespFromJSON,
+    ListNearbyArticlesRespToJSON,
+} from '../models/ListNearbyArticlesResp';
+import {
     type PageArticleViewHistoryReq,
     PageArticleViewHistoryReqFromJSON,
     PageArticleViewHistoryReqToJSON,
@@ -98,6 +118,11 @@ import {
     RewardArticleReqFromJSON,
     RewardArticleReqToJSON,
 } from '../models/RewardArticleReq';
+import {
+    type SetPinnedArticleCommentReq,
+    SetPinnedArticleCommentReqFromJSON,
+    SetPinnedArticleCommentReqToJSON,
+} from '../models/SetPinnedArticleCommentReq';
 import {
     type ThankArticleReq,
     ThankArticleReqFromJSON,
@@ -151,6 +176,14 @@ export interface ListRequest {
     listArticlesReq: ListArticlesReq;
 }
 
+export interface ListFollowingRequest {
+    listFollowingArticlesReq: ListFollowingArticlesReq;
+}
+
+export interface ListNearbyRequest {
+    listNearbyArticlesReq: ListNearbyArticlesReq;
+}
+
 export interface PageViewHistoryRequest {
     pageArticleViewHistoryReq: PageArticleViewHistoryReq;
 }
@@ -161,6 +194,10 @@ export interface PublishRequest {
 
 export interface RewardRequest {
     rewardArticleReq: RewardArticleReq;
+}
+
+export interface SetPinnedCommentRequest {
+    setPinnedArticleCommentReq: SetPinnedArticleCommentReq;
 }
 
 export interface ThankRequest {
@@ -355,6 +392,50 @@ export interface ArticleServiceInterface {
     list(requestParameters: ListRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListArticlesResp>;
 
     /**
+     * Creates request options for listFollowing without sending the request
+     * @param {ListFollowingArticlesReq} listFollowingArticlesReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    listFollowingRequestOpts(requestParameters: ListFollowingRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询当前账号关注作者发布的文章。
+     * @param {ListFollowingArticlesReq} listFollowingArticlesReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    listFollowingRaw(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowingArticlesResp>>;
+
+    /**
+     * 查询当前账号关注作者发布的文章。
+     */
+    listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingArticlesResp>;
+
+    /**
+     * Creates request options for listNearby without sending the request
+     * @param {ListNearbyArticlesReq} listNearbyArticlesReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    listNearbyRequestOpts(requestParameters: ListNearbyRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 查询当前账号所在城市发布的文章。
+     * @param {ListNearbyArticlesReq} listNearbyArticlesReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    listNearbyRaw(requestParameters: ListNearbyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListNearbyArticlesResp>>;
+
+    /**
+     * 查询当前账号所在城市发布的文章。
+     */
+    listNearby(requestParameters: ListNearbyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListNearbyArticlesResp>;
+
+    /**
      * Creates request options for pageViewHistory without sending the request
      * @param {PageArticleViewHistoryReq} pageArticleViewHistoryReq 
      * @throws {RequiredError}
@@ -419,6 +500,28 @@ export interface ArticleServiceInterface {
      * 打赏文章
      */
     reward(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
+    /**
+     * Creates request options for setPinnedComment without sending the request
+     * @param {SetPinnedArticleCommentReq} setPinnedArticleCommentReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    setPinnedCommentRequestOpts(requestParameters: SetPinnedCommentRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 设置或取消当前账号文章的置顶评论。
+     * @param {SetPinnedArticleCommentReq} setPinnedArticleCommentReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    setPinnedCommentRaw(requestParameters: SetPinnedCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 设置或取消当前账号文章的置顶评论。
+     */
+    setPinnedComment(requestParameters: SetPinnedCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
      * Creates request options for thank without sending the request
@@ -848,6 +951,100 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
     }
 
     /**
+     * Creates request options for listFollowing without sending the request
+     */
+    async listFollowingRequestOpts(requestParameters: ListFollowingRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['listFollowingArticlesReq'] == null) {
+            throw new runtime.RequiredError(
+                'listFollowingArticlesReq',
+                'Required parameter "listFollowingArticlesReq" was null or undefined when calling listFollowing().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/following/list`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ListFollowingArticlesReqToJSON(requestParameters['listFollowingArticlesReq']),
+        };
+    }
+
+    /**
+     * 查询当前账号关注作者发布的文章。
+     */
+    async listFollowingRaw(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListFollowingArticlesResp>> {
+        const requestOptions = await this.listFollowingRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListFollowingArticlesRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询当前账号关注作者发布的文章。
+     */
+    async listFollowing(requestParameters: ListFollowingRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListFollowingArticlesResp> {
+        const response = await this.listFollowingRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for listNearby without sending the request
+     */
+    async listNearbyRequestOpts(requestParameters: ListNearbyRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['listNearbyArticlesReq'] == null) {
+            throw new runtime.RequiredError(
+                'listNearbyArticlesReq',
+                'Required parameter "listNearbyArticlesReq" was null or undefined when calling listNearby().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/nearby/list`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: ListNearbyArticlesReqToJSON(requestParameters['listNearbyArticlesReq']),
+        };
+    }
+
+    /**
+     * 查询当前账号所在城市发布的文章。
+     */
+    async listNearbyRaw(requestParameters: ListNearbyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListNearbyArticlesResp>> {
+        const requestOptions = await this.listNearbyRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ListNearbyArticlesRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 查询当前账号所在城市发布的文章。
+     */
+    async listNearby(requestParameters: ListNearbyRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListNearbyArticlesResp> {
+        const response = await this.listNearbyRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Creates request options for pageViewHistory without sending the request
      */
     async pageViewHistoryRequestOpts(requestParameters: PageViewHistoryRequest): Promise<runtime.RequestOpts> {
@@ -985,6 +1182,53 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      */
     async reward(requestParameters: RewardRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.rewardRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for setPinnedComment without sending the request
+     */
+    async setPinnedCommentRequestOpts(requestParameters: SetPinnedCommentRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['setPinnedArticleCommentReq'] == null) {
+            throw new runtime.RequiredError(
+                'setPinnedArticleCommentReq',
+                'Required parameter "setPinnedArticleCommentReq" was null or undefined when calling setPinnedComment().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/comment/pin`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: SetPinnedArticleCommentReqToJSON(requestParameters['setPinnedArticleCommentReq']),
+        };
+    }
+
+    /**
+     * 设置或取消当前账号文章的置顶评论。
+     */
+    async setPinnedCommentRaw(requestParameters: SetPinnedCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.setPinnedCommentRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 设置或取消当前账号文章的置顶评论。
+     */
+    async setPinnedComment(requestParameters: SetPinnedCommentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.setPinnedCommentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -1,32 +1,24 @@
 
-# RespRelation
+# ListFollowingArticlesResp
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`id` | string
-`type` | string
-`actorId` | string
-`targetId` | string
-`createdAt` | Date
-`updatedAt` | Date
+`page` | [PageResp](PageResp.md)
+`rows` | [Array&lt;ArticleListItem&gt;](ArticleListItem.md)
 
 ## Example
 
 ```typescript
-import type { RespRelation } from '@bass/bbs-sdk-fetch'
+import type { ListFollowingArticlesResp } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "id": null,
-  "type": null,
-  "actorId": null,
-  "targetId": null,
-  "createdAt": null,
-  "updatedAt": null,
-} satisfies RespRelation
+  "page": null,
+  "rows": null,
+} satisfies ListFollowingArticlesResp
 
 console.log(example)
 
@@ -35,7 +27,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as RespRelation
+const exampleParsed = JSON.parse(exampleJSON) as ListFollowingArticlesResp
 console.log(exampleParsed)
 ```
 

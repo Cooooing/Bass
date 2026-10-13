@@ -48,12 +48,6 @@ export interface ReqArticleQuery {
      * @type {string}
      * @memberof ReqArticleQuery
      */
-    keyword?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ReqArticleQuery
-     */
     authorId?: string;
     /**
      * 
@@ -209,7 +203,6 @@ export function ReqArticleQueryFromJSONTyped(json: any, ignoreDiscriminator: boo
         'domainId': json['domain_id'] == null ? undefined : json['domain_id'],
         'type': json['type'] == null ? undefined : json['type'],
         'order': json['order'] == null ? undefined : json['order'],
-        'keyword': json['keyword'] == null ? undefined : json['keyword'],
         'authorId': json['author_id'] == null ? undefined : json['author_id'],
         'publishStatus': json['publish_status'] == null ? undefined : json['publish_status'],
         'publishStatuses': json['publish_statuses'] == null ? undefined : json['publish_statuses'],
@@ -236,7 +229,6 @@ export function ReqArticleQueryToJSONTyped(value?: ReqArticleQuery | null, ignor
         'domain_id': value['domainId'],
         'type': value['type'],
         'order': value['order'],
-        'keyword': value['keyword'],
         'author_id': value['authorId'],
         'publish_status': value['publishStatus'],
         'publish_statuses': value['publishStatuses'],

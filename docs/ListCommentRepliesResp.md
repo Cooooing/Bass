@@ -7,7 +7,7 @@
 Name | Type
 ------------ | -------------
 `page` | [PageResp](PageResp.md)
-`rows` | [Array&lt;RespCommentListItem&gt;](RespCommentListItem.md)
+`rows` | [Array&lt;CommentListItem&gt;](CommentListItem.md)
 
 ## Example
 

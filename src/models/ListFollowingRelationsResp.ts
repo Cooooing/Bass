@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { RespRelation } from './RespRelation';
+import type { Relation } from './Relation';
 import {
-    RespRelationFromJSON,
-    RespRelationFromJSONTyped,
-    RespRelationToJSON,
-    RespRelationToJSONTyped,
-} from './RespRelation';
+    RelationFromJSON,
+    RelationFromJSONTyped,
+    RelationToJSON,
+    RelationToJSONTyped,
+} from './Relation';
 import type { PageResp } from './PageResp';
 import {
     PageRespFromJSON,
@@ -42,10 +42,10 @@ export interface ListFollowingRelationsResp {
     page?: PageResp;
     /**
      * 
-     * @type {Array<RespRelation>}
+     * @type {Array<Relation>}
      * @memberof ListFollowingRelationsResp
      */
-    rows?: Array<RespRelation>;
+    rows?: Array<Relation>;
 }
 
 /**
@@ -66,7 +66,7 @@ export function ListFollowingRelationsRespFromJSONTyped(json: any, ignoreDiscrim
     return {
         
         'page': json['page'] == null ? undefined : PageRespFromJSON(json['page']),
-        'rows': json['rows'] == null ? undefined : ((json['rows'] as Array<any>).map(RespRelationFromJSON)),
+        'rows': json['rows'] == null ? undefined : ((json['rows'] as Array<any>).map(RelationFromJSON)),
     };
 }
 
@@ -82,7 +82,7 @@ export function ListFollowingRelationsRespToJSONTyped(value?: ListFollowingRelat
     return {
         
         'page': PageRespToJSON(value['page']),
-        'rows': value['rows'] == null ? undefined : ((value['rows'] as Array<any>).map(RespRelationToJSON)),
+        'rows': value['rows'] == null ? undefined : ((value['rows'] as Array<any>).map(RelationToJSON)),
     };
 }
 

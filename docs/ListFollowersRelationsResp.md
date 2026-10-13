@@ -7,7 +7,7 @@
 Name | Type
 ------------ | -------------
 `page` | [PageResp](PageResp.md)
-`rows` | [Array&lt;RespRelation&gt;](RespRelation.md)
+`rows` | [Array&lt;Relation&gt;](Relation.md)
 
 ## Example
 

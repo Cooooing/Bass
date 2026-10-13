@@ -10,7 +10,6 @@ Name | Type
 `domainId` | string
 `type` | string
 `order` | string
-`keyword` | string
 `authorId` | string
 `publishStatus` | string
 `publishStatuses` | Array&lt;string&gt;
@@ -31,7 +30,6 @@ const example = {
   "domainId": null,
   "type": null,
   "order": null,
-  "keyword": null,
   "authorId": null,
   "publishStatus": null,
   "publishStatuses": null,

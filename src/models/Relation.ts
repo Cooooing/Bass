@@ -16,43 +16,43 @@ import { mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface RespRelation
+ * @interface Relation
  */
-export interface RespRelation {
+export interface Relation {
     /**
      * 
      * @type {string}
-     * @memberof RespRelation
+     * @memberof Relation
      */
     id?: string;
     /**
      * 
-     * @type {RespRelationTypeEnum}
-     * @memberof RespRelation
+     * @type {RelationTypeEnum}
+     * @memberof Relation
      */
-    type?: RespRelationTypeEnum;
+    type?: RelationTypeEnum;
     /**
      * 
      * @type {string}
-     * @memberof RespRelation
+     * @memberof Relation
      */
     actorId?: string;
     /**
      * 
      * @type {string}
-     * @memberof RespRelation
+     * @memberof Relation
      */
     targetId?: string;
     /**
      * 
      * @type {Date}
-     * @memberof RespRelation
+     * @memberof Relation
      */
     createdAt?: Date;
     /**
      * 
      * @type {Date}
-     * @memberof RespRelation
+     * @memberof Relation
      */
     updatedAt?: Date;
 }
@@ -61,26 +61,26 @@ export interface RespRelation {
 /**
  * @export
  */
-export const RespRelationTypeEnum = {
+export const RelationTypeEnum = {
     RELATION_TYPE_UNSPECIFIED: 'RELATION_TYPE_UNSPECIFIED',
     RELATION_TYPE_FOLLOW: 'RELATION_TYPE_FOLLOW',
     RELATION_TYPE_BLOCK: 'RELATION_TYPE_BLOCK'
 } as const;
-export type RespRelationTypeEnum = typeof RespRelationTypeEnum[keyof typeof RespRelationTypeEnum];
+export type RelationTypeEnum = typeof RelationTypeEnum[keyof typeof RelationTypeEnum];
 
 
 /**
- * Check if a given object implements the RespRelation interface.
+ * Check if a given object implements the Relation interface.
  */
-export function instanceOfRespRelation(value: object): value is RespRelation {
+export function instanceOfRelation(value: object): value is Relation {
     return true;
 }
 
-export function RespRelationFromJSON(json: any): RespRelation {
-    return RespRelationFromJSONTyped(json, false);
+export function RelationFromJSON(json: any): Relation {
+    return RelationFromJSONTyped(json, false);
 }
 
-export function RespRelationFromJSONTyped(json: any, ignoreDiscriminator: boolean): RespRelation {
+export function RelationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Relation {
     if (json == null) {
         return json;
     }
@@ -95,11 +95,11 @@ export function RespRelationFromJSONTyped(json: any, ignoreDiscriminator: boolea
     };
 }
 
-export function RespRelationToJSON(json: any): RespRelation {
-    return RespRelationToJSONTyped(json, false);
+export function RelationToJSON(json: any): Relation {
+    return RelationToJSONTyped(json, false);
 }
 
-export function RespRelationToJSONTyped(value?: RespRelation | null, ignoreDiscriminator: boolean = false): any {
+export function RelationToJSONTyped(value?: Relation | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

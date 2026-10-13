@@ -8,7 +8,7 @@ import (
 type LoginFailureReason string
 
 const (
-	LoginFailureReasonInvalidCredentials   LoginFailureReason = "invalid_credentials"     // invalid_credentials
+	LoginFailureReasonInvalidCredentials   LoginFailureReason = "invalid_credentials"     // #nosec G101 -- login failure enum, not a credential.
 	LoginFailureReasonTotpInvalid          LoginFailureReason = "totp_invalid"            // totp_invalid
 	LoginFailureReasonCodeInvalidOrExpired LoginFailureReason = "code_invalid_or_expired" // code_invalid_or_expired
 	LoginFailureReasonAccountNotNormal     LoginFailureReason = "account_not_normal"      // account_not_normal

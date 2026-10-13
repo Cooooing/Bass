@@ -4,7 +4,8 @@ import (
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 	"context"
-	"math/rand"
+	cryptorand "crypto/rand"
+	"math/big"
 
 	"game_idle/internal/biz/repo"
 	"game_idle/internal/enum"
@@ -39,7 +40,11 @@ func (u *MetaRecipeUsecase) RollNormal(ctx context.Context, req *RollRecipeReq) 
 	outputs := recipe.Outputs
 	itemQuantities := make(map[string]int64, len(outputs))
 	for range recipe.GenerationTimes {
-		cursor := rand.Int63n(recipe.TotalWeight) + 1
+		cursorValue, err := cryptorand.Int(cryptorand.Reader, big.NewInt(recipe.TotalWeight))
+		if err != nil {
+			return nil, err
+		}
+		cursor := cursorValue.Int64() + 1
 		left := 0
 		right := len(outputs) - 1
 		for left < right {
@@ -54,7 +59,12 @@ func (u *MetaRecipeUsecase) RollNormal(ctx context.Context, req *RollRecipeReq) 
 		if selected.ItemID == enum.ItemIDEmpty.String() {
 			continue
 		}
-		itemQuantities[selected.ItemID] += selected.MinQuantity + rand.Int63n(selected.MaxQuantity-selected.MinQuantity+1)
+		quantityRange := selected.MaxQuantity - selected.MinQuantity + 1
+		quantityOffset, err := cryptorand.Int(cryptorand.Reader, big.NewInt(quantityRange))
+		if err != nil {
+			return nil, err
+		}
+		itemQuantities[selected.ItemID] += selected.MinQuantity + quantityOffset.Int64()
 	}
 	return itemQuantities, nil
 }

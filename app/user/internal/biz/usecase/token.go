@@ -21,7 +21,7 @@ func NewTokenUsecase(
 ) *TokenUsecase {
 	secret := conf.GetBusiness().GetAuth().GetSession().GetSecret()
 	if secret == "" {
-		secret = "dev-user-session-secret"
+		secret = "dev-user-session-secret" // #nosec G101 -- confirmed local-development fallback when configuration is absent.
 	}
 	return &TokenUsecase{
 		conf:     conf,

@@ -5,11 +5,12 @@ import (
 	commonmodel "common/pkg/model"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	cryptorand "crypto/rand"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"log/slog"
-	"math/rand/v2"
+	"math/big"
 	"os"
 	"sort"
 	"strings"
@@ -494,9 +495,13 @@ func (u *DelayedTaskUsecase) HandleDelayedTaskMessage(ctx context.Context, messa
 		capValue := 5 * time.Minute
 		factor := 1 << max(0, int(updated.Attempt)-1)
 		delay := min(time.Duration(factor)*base, capValue)
+		jitter, randomErr := cryptorand.Int(cryptorand.Reader, big.NewInt(int64(delay/2)+1))
+		if randomErr != nil {
+			return nil, randomErr
+		}
 		return &repo.MessageHandleResult{
 			Action:     schedulerenum.MessageHandleActionRetry,
-			RetryAfter: delay + time.Duration(rand.Int64N(int64(delay/2)+1)),
+			RetryAfter: delay + time.Duration(jitter.Int64()),
 		}, nil
 	}
 	return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil

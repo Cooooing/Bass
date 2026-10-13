@@ -23,7 +23,7 @@ func NewTotpSecretCache(
 ) repo.TotpSecretCache {
 	return &TotpSecretCache{
 		redisClient:       redisClient,
-		authTotpSecretKey: "user:auth:totp_secret:{user_id:%d}",
+		authTotpSecretKey: "user:auth:totp_secret:{user_id:%d}", // #nosec G101 -- Redis key template, not credential material.
 	}
 }
 

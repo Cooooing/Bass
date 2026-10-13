@@ -17,8 +17,6 @@ import (
 	"platform/internal/enum"
 )
 
-var sha256Pattern = regexp.MustCompile(`^[a-f0-9]{64}$`)
-
 type AssetUsecase struct {
 	assetRepo            repo.AssetRepo
 	storageClient        repo.StorageClient
@@ -27,6 +25,7 @@ type AssetUsecase struct {
 	rateLimitEnabled     bool
 	rateLimitWindow      time.Duration
 	rateLimitMaxCount    int64
+	sha256Pattern        *regexp.Regexp
 }
 
 func NewAssetUsecase(
@@ -59,6 +58,7 @@ func NewAssetUsecase(
 		rateLimitEnabled:     rateLimitEnabled,
 		rateLimitWindow:      rateLimitWindow,
 		rateLimitMaxCount:    rateLimitMaxCount,
+		sha256Pattern:        regexp.MustCompile(`^[a-f0-9]{64}$`),
 	}
 }
 
@@ -125,7 +125,7 @@ func (u *AssetUsecase) PrepareDirectUpload(ctx context.Context, req *PrepareDire
 func (u *AssetUsecase) RecordMinioUpload(ctx context.Context, objectKey string) (*model.Asset, error) {
 	hash, ok := u.hashFromObjectKey(objectKey)
 	if !ok {
-		return nil, fmt.Errorf("%w: malformed object key", repo.ErrInvalidAssetUploadEvent)
+		return nil, fmt.Errorf("%w: malformed object key", &repo.InvalidAssetUploadEventError{})
 	}
 	object, err := u.storageClient.Stat(ctx, objectKey)
 	if err != nil {
@@ -136,10 +136,10 @@ func (u *AssetUsecase) RecordMinioUpload(ctx context.Context, objectKey string) 
 		return nil, err
 	}
 	if object.ChecksumSHA256 != expectedChecksum {
-		return nil, fmt.Errorf("%w: object checksum does not match object key", repo.ErrInvalidAssetUploadEvent)
+		return nil, fmt.Errorf("%w: object checksum does not match object key", &repo.InvalidAssetUploadEventError{})
 	}
 	if object.UploadByID <= 0 {
-		return nil, fmt.Errorf("%w: object uploader metadata is missing", repo.ErrInvalidAssetUploadEvent)
+		return nil, fmt.Errorf("%w: object uploader metadata is missing", &repo.InvalidAssetUploadEventError{})
 	}
 	return u.assetRepo.CreateOrGet(ctx, &model.Asset{
 		Provider:     object.Provider,
@@ -162,7 +162,7 @@ func (u *AssetUsecase) RecordAssetUploadEvent(
 	event *repo.AssetUploadEvent,
 ) error {
 	if event == nil || event.Bucket != u.StorageBucket() || !u.isAssetObjectKey(event.ObjectKey) {
-		return repo.ErrInvalidAssetUploadEvent
+		return &repo.InvalidAssetUploadEventError{}
 	}
 	_, err := u.RecordMinioUpload(ctx, event.ObjectKey)
 	return err
@@ -261,15 +261,15 @@ func (u *AssetUsecase) consumeUploadAllowance(ctx context.Context, uploadByID in
 	return nil
 }
 
-func (*AssetUsecase) normalizeSHA256(value string) (string, bool) {
+func (u *AssetUsecase) normalizeSHA256(value string) (string, bool) {
 	hash := strings.ToLower(strings.TrimSpace(value))
-	return hash, sha256Pattern.MatchString(hash)
+	return hash, u.sha256Pattern.MatchString(hash)
 }
 
-func (*AssetUsecase) hashFromObjectKey(objectKey string) (string, bool) {
+func (u *AssetUsecase) hashFromObjectKey(objectKey string) (string, bool) {
 	const prefix = "assets/sha256/"
 	hash, ok := strings.CutPrefix(objectKey, prefix)
-	return hash, ok && sha256Pattern.MatchString(hash)
+	return hash, ok && u.sha256Pattern.MatchString(hash)
 }
 
 func (u *AssetUsecase) isAssetObjectKey(objectKey string) bool {

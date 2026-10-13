@@ -216,11 +216,11 @@ func (u *IPResolutionUsecase) writeIPDataFile(ctx context.Context, path string, 
 	} else if err != nil && !os.IsNotExist(err) {
 		return false, fmt.Errorf("hash local ip data file %s: %w", path, err)
 	}
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(path), 0o750); err != nil {
 		return false, fmt.Errorf("create ip data dir %s: %w", filepath.Dir(path), err)
 	}
 	tmpPath := path + ".tmp"
-	if err := os.WriteFile(tmpPath, content, 0o644); err != nil {
+	if err := os.WriteFile(tmpPath, content, 0o600); err != nil {
 		return false, fmt.Errorf("write ip data temp file %s: %w", tmpPath, err)
 	}
 	if err := os.Rename(tmpPath, path); err != nil {

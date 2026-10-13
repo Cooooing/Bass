@@ -2,12 +2,13 @@ package repo
 
 import (
 	"context"
-	"errors"
 )
 
-// ErrInvalidAssetUploadEvent marks an event that can never produce an asset
+// InvalidAssetUploadEventError marks an event that can never produce an asset
 // record. The consumer terminates these messages instead of retrying them.
-var ErrInvalidAssetUploadEvent = errors.New("invalid asset upload event")
+type InvalidAssetUploadEventError struct{}
+
+func (*InvalidAssetUploadEventError) Error() string { return "invalid asset upload event" }
 
 // AssetUploadEvent is the provider notification normalized at the data
 // boundary. It intentionally contains only the object identity needed by the

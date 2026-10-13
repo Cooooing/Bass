@@ -22,14 +22,14 @@ import (
 type GameIdleEventUsecase struct {
 	logger            *slog.Logger
 	gameIdleEventRepo repo.GameIdleEventRepo
+	characterIDField  string
 }
-
-const characterIDField = "character_id"
 
 func NewGameIdleEventUsecase(logger *slog.Logger, gameIdleEventRepo repo.GameIdleEventRepo) *GameIdleEventUsecase {
 	return &GameIdleEventUsecase{
 		logger:            logger,
 		gameIdleEventRepo: gameIdleEventRepo,
+		characterIDField:  "character_id",
 	}
 }
 
@@ -120,10 +120,10 @@ func (u *GameIdleEventUsecase) PublishActionCompleted(ctx context.Context, event
 			},
 		},
 	}, map[string]string{
-		characterIDField: strconv.FormatInt(event.CharacterID, 10),
+		u.characterIDField: strconv.FormatInt(event.CharacterID, 10),
 	})
 	if err != nil {
-		u.logger.ErrorContext(ctx, "game idle action completed event publish failed", constant.LogFieldErr, err, characterIDField, event.CharacterID)
+		u.logger.ErrorContext(ctx, "game idle action completed event publish failed", constant.LogFieldErr, err, u.characterIDField, event.CharacterID)
 	}
 }
 
@@ -143,10 +143,10 @@ func (u *GameIdleEventUsecase) PublishAbilityLeveledUp(ctx context.Context, even
 			},
 		},
 	}, map[string]string{
-		characterIDField: strconv.FormatInt(event.CharacterID, 10),
+		u.characterIDField: strconv.FormatInt(event.CharacterID, 10),
 	})
 	if err != nil {
-		u.logger.ErrorContext(ctx, "game idle ability leveled up event publish failed", constant.LogFieldErr, err, characterIDField, event.CharacterID)
+		u.logger.ErrorContext(ctx, "game idle ability leveled up event publish failed", constant.LogFieldErr, err, u.characterIDField, event.CharacterID)
 	}
 }
 
@@ -171,10 +171,10 @@ func (u *GameIdleEventUsecase) PublishActionQueueUpdated(ctx context.Context, qu
 			},
 		},
 	}, map[string]string{
-		characterIDField: strconv.FormatInt(queue.CharacterID, 10),
+		u.characterIDField: strconv.FormatInt(queue.CharacterID, 10),
 	})
 	if err != nil {
-		u.logger.ErrorContext(ctx, "game idle action queue updated event publish failed", constant.LogFieldErr, err, characterIDField, queue.CharacterID)
+		u.logger.ErrorContext(ctx, "game idle action queue updated event publish failed", constant.LogFieldErr, err, u.characterIDField, queue.CharacterID)
 	}
 }
 

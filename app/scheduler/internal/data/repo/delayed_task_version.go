@@ -50,10 +50,7 @@ func (r *DelayedTaskVersionRepo) List(ctx context.Context, req *bizrepo.DelayedT
 }
 
 func (r *DelayedTaskVersionRepo) Create(ctx context.Context, task *model.DelayedTask) (*model.DelayedTaskVersion, error) {
-	var staleAfterSeconds *int32
-	if task.StaleAfter != nil {
-		staleAfterSeconds = new(int32(*task.StaleAfter / time.Second))
-	}
+	staleAfterSeconds := task.StaleAfterSeconds()
 	created, err := r.getClient(ctx).DelayedTaskVersion.Create().
 		SetDelayedTaskID(task.ID).
 		SetVersion(task.Version).
@@ -62,7 +59,7 @@ func (r *DelayedTaskVersionRepo) Create(ctx context.Context, task *model.Delayed
 		SetTitle(task.Title).
 		SetDescription(task.Description).
 		SetEnabled(task.Enabled).
-		SetTimeoutSeconds(int32(task.Timeout / time.Second)).
+		SetTimeoutSeconds(task.TimeoutSeconds()).
 		SetNillableStaleAfterSeconds(staleAfterSeconds).
 		SetMaxAttempts(task.MaxAttempts).
 		SetMisfirePolicy(delayedtaskversion.MisfirePolicy(task.MisfirePolicy)).

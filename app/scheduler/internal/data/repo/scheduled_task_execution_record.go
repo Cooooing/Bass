@@ -104,10 +104,7 @@ func (r *ScheduledTaskExecutionRecordRepo) Create(
 	if record.Duration != nil {
 		durationMs = new(record.Duration.Milliseconds())
 	}
-	var staleAfterSeconds *int32
-	if record.StaleAfter != nil {
-		staleAfterSeconds = new(int32(*record.StaleAfter / time.Second))
-	}
+	staleAfterSeconds := record.StaleAfterSeconds()
 	created, err := r.getClient(ctx).ScheduledTaskExecutionRecord.Create().
 		SetScheduledTaskID(record.ScheduledTaskID).
 		SetScheduledTaskVersion(record.ScheduledTaskVersion).
@@ -120,7 +117,7 @@ func (r *ScheduledTaskExecutionRecordRepo) Create(
 		SetStatus(scheduledtaskexecutionrecord.Status(req.Status)).
 		SetAttempt(record.Attempt).
 		SetMaxAttempts(record.MaxAttempts).
-		SetTimeoutSeconds(int32(record.Timeout / time.Second)).
+		SetTimeoutSeconds(record.TimeoutSeconds()).
 		SetNillableStaleAfterSeconds(staleAfterSeconds).
 		SetMisfirePolicy(scheduledtaskexecutionrecord.MisfirePolicy(record.MisfirePolicy)).
 		SetWorkerID(record.WorkerID).

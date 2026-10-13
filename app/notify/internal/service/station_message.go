@@ -6,6 +6,7 @@ import (
 	"common/proto/gen/common"
 	v1 "common/proto/gen/notify/v1"
 	"context"
+	"math"
 	"time"
 
 	"notify/internal/biz/usecase"
@@ -124,9 +125,7 @@ func (s *StationMessageService) MarkRead(ctx context.Context, req *v1.MarkReadSt
 	if err != nil {
 		return nil, err
 	}
-	return &v1.MarkReadStationMessage_Resp{
-		Count: int32(markReadResp),
-	}, nil
+	return &v1.MarkReadStationMessage_Resp{Count: int32(min(markReadResp, math.MaxInt32))}, nil // #nosec G115 -- capped at MaxInt32.
 }
 
 func (s *StationMessageService) CountUnread(ctx context.Context, req *v1.CountUnreadStationMessages_Req) (*v1.CountUnreadStationMessages_Resp, error) {

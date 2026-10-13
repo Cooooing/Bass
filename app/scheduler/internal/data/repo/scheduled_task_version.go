@@ -55,10 +55,7 @@ func (r *ScheduledTaskVersionRepo) List(ctx context.Context, req *bizrepo.Schedu
 }
 
 func (r *ScheduledTaskVersionRepo) Create(ctx context.Context, task *model.ScheduledTask) (*model.ScheduledTaskVersion, error) {
-	var staleAfterSeconds *int32
-	if task.StaleAfter != nil {
-		staleAfterSeconds = new(int32(*task.StaleAfter / time.Second))
-	}
+	staleAfterSeconds := task.StaleAfterSeconds()
 	created, err := r.getClient(ctx).ScheduledTaskVersion.Create().
 		SetScheduledTaskID(task.ID).
 		SetVersion(task.Version).
@@ -69,7 +66,7 @@ func (r *ScheduledTaskVersionRepo) Create(ctx context.Context, task *model.Sched
 		SetEnabled(task.Enabled).
 		SetCronSpec(task.CronSpec).
 		SetPayload(task.Payload).
-		SetTimeoutSeconds(int32(task.Timeout / time.Second)).
+		SetTimeoutSeconds(task.TimeoutSeconds()).
 		SetNillableStaleAfterSeconds(staleAfterSeconds).
 		SetMaxAttempts(task.MaxAttempts).
 		SetMisfirePolicy(scheduledtaskversion.MisfirePolicy(task.MisfirePolicy)).

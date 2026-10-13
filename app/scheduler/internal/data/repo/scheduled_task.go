@@ -87,10 +87,7 @@ func (r *ScheduledTaskRepo) MapByTaskKey(ctx context.Context, taskKeys []string)
 }
 
 func (r *ScheduledTaskRepo) Upsert(ctx context.Context, row *model.ScheduledTask) (*model.ScheduledTask, error) {
-	var staleAfterSeconds *int32
-	if row.StaleAfter != nil {
-		staleAfterSeconds = new(int32(*row.StaleAfter / time.Second))
-	}
+	staleAfterSeconds := row.StaleAfterSeconds()
 	if row.ID > 0 {
 		current, err := r.getClient(ctx).ScheduledTask.Query().Where(scheduledtask.ID(row.ID), scheduledtask.DeletedAtIsNil()).Only(ctx)
 		if gen.IsNotFound(err) {
@@ -107,7 +104,7 @@ func (r *ScheduledTaskRepo) Upsert(ctx context.Context, row *model.ScheduledTask
 			SetEnabled(row.Enabled).
 			SetCronSpec(row.CronSpec).
 			SetPayload(row.Payload).
-			SetTimeoutSeconds(int32(row.Timeout / time.Second)).
+			SetTimeoutSeconds(row.TimeoutSeconds()).
 			SetNillableStaleAfterSeconds(staleAfterSeconds).
 			SetMaxAttempts(row.MaxAttempts).
 			SetMisfirePolicy(scheduledtask.MisfirePolicy(row.MisfirePolicy)).
@@ -127,7 +124,7 @@ func (r *ScheduledTaskRepo) Upsert(ctx context.Context, row *model.ScheduledTask
 		SetEnabled(row.Enabled).
 		SetCronSpec(row.CronSpec).
 		SetPayload(row.Payload).
-		SetTimeoutSeconds(int32(row.Timeout / time.Second)).
+		SetTimeoutSeconds(row.TimeoutSeconds()).
 		SetNillableStaleAfterSeconds(staleAfterSeconds).
 		SetMaxAttempts(row.MaxAttempts).
 		SetMisfirePolicy(scheduledtask.MisfirePolicy(row.MisfirePolicy)).

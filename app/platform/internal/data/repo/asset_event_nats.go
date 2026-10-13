@@ -17,12 +17,6 @@ import (
 	"github.com/nats-io/nats.go/jetstream"
 )
 
-const (
-	defaultAssetEventStream          = "PLATFORM_ASSET_UPLOADS"
-	defaultAssetEventSubject         = "storage.asset.object-created"
-	defaultAssetEventConsumerDurable = "platform-asset-upload-recorder"
-)
-
 var _ platformbizrepo.AssetUploadEventConsumer = (*AssetEventNatsRepo)(nil)
 
 // AssetEventNatsRepo owns the durable infrastructure boundary between MinIO
@@ -53,17 +47,20 @@ func NewAssetEventNatsRepo(
 		return nil, err
 	}
 	settings := conf.GetPlatform().GetAssetEvents()
+	defaultStream := "PLATFORM_ASSET_UPLOADS"
+	defaultSubject := "storage.asset.object-created"
+	defaultConsumer := "platform-asset-upload-recorder"
 	streamName := settings.GetStreamName()
 	if streamName == "" {
-		streamName = defaultAssetEventStream
+		streamName = defaultStream
 	}
 	subject := settings.GetSubject()
 	if subject == "" {
-		subject = defaultAssetEventSubject
+		subject = defaultSubject
 	}
 	consumerDurable := settings.GetConsumerDurable()
 	if consumerDurable == "" {
-		consumerDurable = defaultAssetEventConsumerDurable
+		consumerDurable = defaultConsumer
 	}
 	ackWait := time.Minute
 	if settings.GetAckWait() != nil && settings.GetAckWait().AsDuration() > 0 {
@@ -155,7 +152,7 @@ func (r *AssetEventNatsRepo) consumeMessage(
 	}
 	for _, event := range events {
 		if err := handler(ctx, event); err != nil {
-			if errors.Is(err, platformbizrepo.ErrInvalidAssetUploadEvent) {
+			if _, invalid := errors.AsType[*platformbizrepo.InvalidAssetUploadEventError](err); invalid {
 				r.logger.WarnContext(ctx, "discard invalid asset upload event", slog.Any("err", err))
 				_ = msg.Term()
 				return

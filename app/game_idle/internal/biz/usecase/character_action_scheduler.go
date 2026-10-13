@@ -138,7 +138,7 @@ func (u *CharacterActionSchedulerUsecase) Stop(ctx context.Context) error {
 
 func (u *CharacterActionSchedulerUsecase) Resume(ctx context.Context, characterID int64) error {
 	return u.stateUsecase.Execute(ctx, characterID, func(jobCtx context.Context) error {
-		u.timeWheel.Remove(u.offlineTaskID(characterID))
+		u.timeWheel.Remove(fmt.Sprintf("character:%d:offline-timeout", characterID))
 		return u.startCurrent(jobCtx, characterID)
 	})
 }
@@ -379,7 +379,7 @@ func (u *CharacterActionSchedulerUsecase) stopCurrent(ctx context.Context, chara
 		u.timeWheel.Remove(queue.Items[0].ID)
 		u.unmarkCurrentTask(characterID, queue.Items[0].ID)
 	}
-	u.timeWheel.Remove(u.offlineTaskID(characterID))
+	u.timeWheel.Remove(fmt.Sprintf("character:%d:offline-timeout", characterID))
 }
 
 // scheduleOfflineTimeout 为离线角色设置收益上限检查，到期后刷盘并释放本地热状态。
@@ -389,7 +389,7 @@ func (u *CharacterActionSchedulerUsecase) scheduleOfflineTimeout(ctx context.Con
 		return false, err
 	}
 	if online {
-		u.timeWheel.Remove(u.offlineTaskID(characterID))
+		u.timeWheel.Remove(fmt.Sprintf("character:%d:offline-timeout", characterID))
 		return false, nil
 	}
 	character, err := u.characterRepo.Get(ctx, characterID)
@@ -404,13 +404,13 @@ func (u *CharacterActionSchedulerUsecase) scheduleOfflineTimeout(ctx context.Con
 	}
 	dueAt := character.LastOfflineAt.Add(character.MaxOfflineDuration)
 	if !time.Now().Before(dueAt) {
-		u.timeWheel.Remove(u.offlineTaskID(characterID))
+		u.timeWheel.Remove(fmt.Sprintf("character:%d:offline-timeout", characterID))
 		u.stateUsecase.flushAndClear(ctx, characterID)
 		return true, nil
 	}
 	offlineAt := *character.LastOfflineAt
 	return false, u.timeWheel.Add(&timewheel.Task{
-		ID:    u.offlineTaskID(characterID),
+		ID:    fmt.Sprintf("character:%d:offline-timeout", characterID),
 		DueAt: dueAt,
 		Job: func(jobCtx context.Context, task *timewheel.Task) error {
 			select {
@@ -425,10 +425,6 @@ func (u *CharacterActionSchedulerUsecase) scheduleOfflineTimeout(ctx context.Con
 			}
 		},
 	})
-}
-
-func (u *CharacterActionSchedulerUsecase) offlineTaskID(characterID int64) string {
-	return fmt.Sprintf("character:%d:offline-timeout", characterID)
 }
 
 func (u *CharacterActionSchedulerUsecase) unmarkCurrentTask(characterID int64, taskID string) {

@@ -118,8 +118,36 @@ func isTransparentMethod(fd *ast.FuncDecl) bool {
 	if !ok || len(returnStmt.Results) != 1 {
 		return false
 	}
-	_, ok = returnStmt.Results[0].(*ast.CallExpr)
-	return ok
+	call, ok := returnStmt.Results[0].(*ast.CallExpr)
+	if !ok {
+		return false
+	}
+	if isValueConstructionCall(call) {
+		return false
+	}
+	for _, arg := range call.Args {
+		if _, ok := arg.(*ast.FuncLit); ok {
+			return false
+		}
+	}
+	return true
+}
+
+func isValueConstructionCall(call *ast.CallExpr) bool {
+	selector, ok := call.Fun.(*ast.SelectorExpr)
+	if !ok {
+		return false
+	}
+	pkg, ok := selector.X.(*ast.Ident)
+	if !ok {
+		return false
+	}
+	switch pkg.Name {
+	case "fmt", "strconv", "strings", "path", "filepath":
+		return true
+	default:
+		return false
+	}
 }
 
 func isNilGuard(stmt ast.Stmt) bool {

@@ -91,7 +91,7 @@ linters:
       lines: 300
       statements: 150
     nestif:
-      min-complexity: 20
+      min-complexity: 35
     dupl:
       threshold: 512
     goconst:

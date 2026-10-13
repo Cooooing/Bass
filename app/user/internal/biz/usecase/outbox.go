@@ -4,6 +4,7 @@ import (
 	"common/pkg/constant"
 	"context"
 	"log/slog"
+	"math"
 	"time"
 
 	"user/internal/biz/base"
@@ -123,7 +124,7 @@ func (u *OutboxUsecase) PublishBatch(ctx context.Context, req *PublishOutboxEven
 		return nil, err
 	}
 	resp := &PublishOutboxEventsResp{
-		Claimed: int32(len(events)),
+		Claimed: int32(min(len(events), math.MaxInt32)), // #nosec G115 -- capped at MaxInt32.
 	}
 	for _, event := range events {
 		if event == nil {

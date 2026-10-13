@@ -4,6 +4,7 @@ import (
 	"common/pkg/apperror"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"math"
 	"regexp"
 	"strings"
 	"time"
@@ -36,12 +37,12 @@ func NewCharacterUsecase(
 	eventUsecase *GameIdleEventUsecase,
 ) *CharacterUsecase {
 	maxCharacterCountPerUser := int32(3)
-	if conf.GetGameIdle().GetCharacter().GetMaxCountPerUser() > 0 {
-		maxCharacterCountPerUser = int32(conf.GetGameIdle().GetCharacter().GetMaxCountPerUser())
+	if value := conf.GetGameIdle().GetCharacter().GetMaxCountPerUser(); value > 0 && value <= math.MaxInt32 {
+		maxCharacterCountPerUser = int32(value)
 	}
 	defaultActionQueueCapacity := int32(3)
-	if conf.GetGameIdle().GetCharacter().GetDefaultActionQueueCapacity() > 0 {
-		defaultActionQueueCapacity = int32(conf.GetGameIdle().GetCharacter().GetDefaultActionQueueCapacity())
+	if value := conf.GetGameIdle().GetCharacter().GetDefaultActionQueueCapacity(); value > 0 && value <= math.MaxInt32 {
+		defaultActionQueueCapacity = int32(value)
 	}
 	defaultMaxOfflineDuration := 8 * time.Hour
 	if conf.GetGameIdle().GetCharacter().GetDefaultMaxOfflineDuration() != nil {

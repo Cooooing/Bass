@@ -82,12 +82,7 @@ func (u *ChatSessionUsecase) MarkRead(ctx context.Context, req *MarkReadReq) err
 		if err != nil {
 			continue
 		}
-		var readDelta int32
-		if session.LastReadMessageID != nil {
-			readDelta = int32(latestMsg.ID - *session.LastReadMessageID)
-		} else {
-			readDelta = int32(latestMsg.ID)
-		}
+		readDelta := session.ReadDelta(latestMsg.ID)
 		if readDelta <= 0 {
 			continue
 		}

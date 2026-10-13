@@ -87,10 +87,7 @@ func (r *DelayedTaskRepo) MapByTaskKey(ctx context.Context, taskKeys []string) (
 }
 
 func (r *DelayedTaskRepo) Upsert(ctx context.Context, row *model.DelayedTask) (*model.DelayedTask, error) {
-	var staleAfterSeconds *int32
-	if row.StaleAfter != nil {
-		staleAfterSeconds = new(int32(*row.StaleAfter / time.Second))
-	}
+	staleAfterSeconds := row.StaleAfterSeconds()
 	if row.ID > 0 {
 		current, err := r.getClient(ctx).DelayedTask.Query().Where(delayedtask.ID(row.ID), delayedtask.DeletedAtIsNil()).Only(ctx)
 		if gen.IsNotFound(err) {
@@ -105,7 +102,7 @@ func (r *DelayedTaskRepo) Upsert(ctx context.Context, row *model.DelayedTask) (*
 			SetTitle(row.Title).
 			SetDescription(row.Description).
 			SetEnabled(row.Enabled).
-			SetTimeoutSeconds(int32(row.Timeout / time.Second)).
+			SetTimeoutSeconds(row.TimeoutSeconds()).
 			SetNillableStaleAfterSeconds(staleAfterSeconds).
 			SetMaxAttempts(row.MaxAttempts).
 			SetMisfirePolicy(delayedtask.MisfirePolicy(row.MisfirePolicy)).
@@ -122,7 +119,7 @@ func (r *DelayedTaskRepo) Upsert(ctx context.Context, row *model.DelayedTask) (*
 		SetTitle(row.Title).
 		SetDescription(row.Description).
 		SetEnabled(row.Enabled).
-		SetTimeoutSeconds(int32(row.Timeout / time.Second)).
+		SetTimeoutSeconds(row.TimeoutSeconds()).
 		SetNillableStaleAfterSeconds(staleAfterSeconds).
 		SetMaxAttempts(row.MaxAttempts).
 		SetMisfirePolicy(delayedtask.MisfirePolicy(row.MisfirePolicy)).

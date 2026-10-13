@@ -279,213 +279,13 @@ type LoginResp struct {
 }
 
 func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, error) {
-	client := req.Client
-	if client == nil {
-		client = &model.LoginContext{}
-	}
-	if client.ClientType == "" {
-		client.ClientType = enum.ClientTypeUnknown
-	}
-	if client.DeviceType == "" {
-		client.DeviceType = enum.DeviceTypeUnknown
-	}
-	if client.IP != "" && s.ipClient != nil {
-		if info, err := s.ipClient.Resolve(ctx, client.IP); err != nil {
-			s.logger.WarnContext(ctx, "resolve login ip failed", constant.LogFieldErr, err)
-		} else if info != nil {
-			client.Country = info.Country
-			client.CountryCode = info.CountryCode
-			client.Province = info.Province
-			client.City = info.City
-			client.ISP = info.ISP
-		}
-	}
-	audit := &model.LoginLog{
-		LoginType:      req.Type,
-		Realm:          req.Realm,
-		Status:         enum.LoginStatusFailed,
-		ClientType:     new(client.ClientType),
-		DeviceType:     new(client.DeviceType),
-		OSName:         client.OSName,
-		OSVersion:      client.OSVersion,
-		BrowserName:    client.BrowserName,
-		BrowserVersion: client.BrowserVersion,
-		AppName:        client.AppName,
-		AppVersion:     client.AppVersion,
-	}
-	if client.IP != "" {
-		audit.IP = new(client.IP)
-	}
-	if client.Country != "" {
-		audit.Country = new(client.Country)
-	}
-	if client.CountryCode != "" {
-		audit.CountryCode = new(client.CountryCode)
-	}
-	if client.Province != "" {
-		audit.Province = new(client.Province)
-	}
-	if client.City != "" {
-		audit.City = new(client.City)
-	}
-	if client.ISP != "" {
-		audit.ISP = new(client.ISP)
-	}
-	if client.UserAgent != "" {
-		audit.UserAgent = new(client.UserAgent)
-	}
-	defer func() {
-		if _, err := s.loginLogRepo.Create(ctx, audit); err != nil {
-			s.logger.WarnContext(ctx, "record login log failed", constant.LogFieldErr, err)
-			return
-		}
-		if audit.Status != enum.LoginStatusSuccess || audit.UserID == nil ||
-			(audit.Country == nil && audit.Province == nil && audit.City == nil) {
-			return
-		}
-		if _, err := s.locationRepo.UpsertByUserID(ctx, &model.Location{
-			UserID:   *audit.UserID,
-			Country:  audit.Country,
-			Province: audit.Province,
-			City:     audit.City,
-		}); err != nil {
-			s.logger.WarnContext(ctx, "update login location failed", constant.LogFieldErr, err)
-		}
-	}()
+	client := s.prepareLoginClient(ctx, req.Client)
+	audit := s.newLoginAudit(req, client)
+	defer s.recordLoginAudit(ctx, audit)
 
-	var account *model.Account
-	var err error
-	switch req.Type {
-	case enum.LoginTypePassword:
-		accountInput := strings.TrimSpace(req.PasswordAccount)
-		audit.AccountInput = accountInput
-		if accountInput == "" || strings.TrimSpace(req.Password) == "" {
-			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
-		}
-		user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
-			Account: new(accountInput),
-		})
-		if err != nil || user == nil {
-			if err != nil {
-				code, ok := apperror.BusinessCode(err)
-				if !ok || code != cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND {
-					s.logger.WarnContext(ctx, "password login account lookup failed", constant.LogFieldErr, err)
-				}
-			}
-			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
-		}
-		if user.Status == nil || *user.Status != enum.AccountStatusNormal {
-			audit.UserID = new(user.ID)
-			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
-			switch {
-			case user.Status != nil && *user.Status == enum.AccountStatusBanned:
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_BANNED)
-			case user.Status != nil && *user.Status == enum.AccountStatusCancelled:
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_CANCELLED)
-			default:
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
-			}
-		}
-		if !str.VerifyPassword(user.Password, req.Password) {
-			audit.UserID = new(user.ID)
-			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
-		}
-		audit.UserID = new(user.ID)
-		totpRow, err := s.totpRepo.Get(ctx, &repo.TotpGetReq{
-			UserID: new(user.ID),
-		})
-		if err != nil {
-			return nil, err
-		}
-		if !req.SkipOtp && totpRow != nil && totpRow.Enable {
-			if strings.TrimSpace(req.Code) == "" || !totp.Validate(req.Code, totpRow.Secret) {
-				audit.FailureReason = new(enum.LoginFailureReasonTotpInvalid)
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
-			}
-		}
-		account = user
-	case enum.LoginTypeEmail:
-		email := strings.ToLower(strings.TrimSpace(req.Email))
-		audit.AccountInput = email
-		if !req.SkipOtp {
-			if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{
-				Email: email,
-				Code:  req.Code,
-			}); err != nil {
-				audit.FailureReason = new(enum.LoginFailureReasonCodeInvalidOrExpired)
-				return nil, err
-			}
-		}
-		user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{
-			Account: new(email),
-		})
-		if err != nil || user == nil {
-			if err != nil {
-				code, ok := apperror.BusinessCode(err)
-				if !ok || code != cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND {
-					return nil, err
-				}
-			}
-			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
-		}
-		if user.Status == nil || *user.Status != enum.AccountStatusNormal {
-			audit.UserID = new(user.ID)
-			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
-			switch {
-			case user.Status != nil && *user.Status == enum.AccountStatusBanned:
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_BANNED)
-			case user.Status != nil && *user.Status == enum.AccountStatusCancelled:
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_CANCELLED)
-			default:
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
-			}
-		}
-		audit.UserID = new(user.ID)
-		account = user
-	case enum.LoginTypePhone:
-		phone := strings.TrimSpace(req.Phone)
-		audit.AccountInput = phone
-		if !req.SkipOtp {
-			if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{
-				Phone: phone,
-				Code:  req.Code,
-			}); err != nil {
-				audit.FailureReason = new(enum.LoginFailureReasonCodeInvalidOrExpired)
-				return nil, err
-			}
-		}
-		user, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{Account: new(phone)})
-		if err != nil || user == nil {
-			if err != nil {
-				code, ok := apperror.BusinessCode(err)
-				if !ok || code != cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND {
-					return nil, err
-				}
-			}
-			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
-			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
-		}
-		if user.Status == nil || *user.Status != enum.AccountStatusNormal {
-			audit.UserID = new(user.ID)
-			audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
-			switch {
-			case user.Status != nil && *user.Status == enum.AccountStatusBanned:
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_BANNED)
-			case user.Status != nil && *user.Status == enum.AccountStatusCancelled:
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_CANCELLED)
-			default:
-				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
-			}
-		}
-		audit.UserID = new(user.ID)
-		account = user
-	default:
-		audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	account, err := s.authenticateLogin(ctx, req, audit)
+	if err != nil {
+		return nil, err
 	}
 
 	allowed, err := s.rbacUsecase.CheckRealmAccess(ctx, account.ID, req.Realm)
@@ -622,6 +422,178 @@ func (s *AuthUsecase) Login(ctx context.Context, req *LoginReq) (*LoginResp, err
 		Account:   account,
 	}, nil
 }
+
+func (s *AuthUsecase) authenticateLogin(ctx context.Context, req *LoginReq, audit *model.LoginLog) (*model.Account, error) {
+	switch req.Type {
+	case enum.LoginTypePassword:
+		return s.authenticatePasswordLogin(ctx, req, audit)
+	case enum.LoginTypeEmail:
+		return s.authenticateEmailLogin(ctx, req, audit)
+	case enum.LoginTypePhone:
+		return s.authenticatePhoneLogin(ctx, req, audit)
+	default:
+		audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+}
+
+func (s *AuthUsecase) prepareLoginClient(ctx context.Context, client *model.LoginContext) *model.LoginContext {
+	if client == nil {
+		client = &model.LoginContext{}
+	}
+	if client.ClientType == "" {
+		client.ClientType = enum.ClientTypeUnknown
+	}
+	if client.DeviceType == "" {
+		client.DeviceType = enum.DeviceTypeUnknown
+	}
+	if client.IP != "" && s.ipClient != nil {
+		info, err := s.ipClient.Resolve(ctx, client.IP)
+		if err != nil {
+			s.logger.WarnContext(ctx, "resolve login ip failed", constant.LogFieldErr, err)
+		} else if info != nil {
+			client.Country = info.Country
+			client.CountryCode = info.CountryCode
+			client.Province = info.Province
+			client.City = info.City
+			client.ISP = info.ISP
+		}
+	}
+	return client
+}
+
+func (*AuthUsecase) newLoginAudit(req *LoginReq, client *model.LoginContext) *model.LoginLog {
+	audit := &model.LoginLog{LoginType: req.Type, Realm: req.Realm, Status: enum.LoginStatusFailed, ClientType: new(client.ClientType), DeviceType: new(client.DeviceType), OSName: client.OSName, OSVersion: client.OSVersion, BrowserName: client.BrowserName, BrowserVersion: client.BrowserVersion, AppName: client.AppName, AppVersion: client.AppVersion}
+	if client.IP != "" {
+		audit.IP = new(client.IP)
+	}
+	if client.Country != "" {
+		audit.Country = new(client.Country)
+	}
+	if client.CountryCode != "" {
+		audit.CountryCode = new(client.CountryCode)
+	}
+	if client.Province != "" {
+		audit.Province = new(client.Province)
+	}
+	if client.City != "" {
+		audit.City = new(client.City)
+	}
+	if client.ISP != "" {
+		audit.ISP = new(client.ISP)
+	}
+	if client.UserAgent != "" {
+		audit.UserAgent = new(client.UserAgent)
+	}
+	return audit
+}
+
+func (s *AuthUsecase) recordLoginAudit(ctx context.Context, audit *model.LoginLog) {
+	if _, err := s.loginLogRepo.Create(ctx, audit); err != nil {
+		s.logger.WarnContext(ctx, "record login log failed", constant.LogFieldErr, err)
+		return
+	}
+	if audit.Status != enum.LoginStatusSuccess || audit.UserID == nil || (audit.Country == nil && audit.Province == nil && audit.City == nil) {
+		return
+	}
+	if _, err := s.locationRepo.UpsertByUserID(ctx, &model.Location{UserID: *audit.UserID, Country: audit.Country, Province: audit.Province, City: audit.City}); err != nil {
+		s.logger.WarnContext(ctx, "update login location failed", constant.LogFieldErr, err)
+	}
+}
+
+func (s *AuthUsecase) authenticatePasswordLogin(ctx context.Context, req *LoginReq, audit *model.LoginLog) (*model.Account, error) {
+	accountInput := strings.TrimSpace(req.PasswordAccount)
+	audit.AccountInput = accountInput
+	if accountInput == "" || strings.TrimSpace(req.Password) == "" {
+		audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+	}
+	account, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{Account: new(accountInput)})
+	if err != nil || account == nil {
+		if err != nil {
+			code, ok := apperror.BusinessCode(err)
+			if !ok || code != cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND {
+				s.logger.WarnContext(ctx, "password login account lookup failed", constant.LogFieldErr, err)
+			}
+		}
+		audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+	}
+	if err := s.requireLoginableAccount(account, audit); err != nil {
+		return nil, err
+	}
+	if !str.VerifyPassword(account.Password, req.Password) {
+		audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+	}
+	totpRow, err := s.totpRepo.Get(ctx, &repo.TotpGetReq{UserID: new(account.ID)})
+	if err != nil {
+		return nil, err
+	}
+	if !req.SkipOtp && totpRow != nil && totpRow.Enable && (strings.TrimSpace(req.Code) == "" || !totp.Validate(req.Code, totpRow.Secret)) {
+		audit.FailureReason = new(enum.LoginFailureReasonTotpInvalid)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOTP_CODE_INVALID)
+	}
+	return account, nil
+}
+
+func (s *AuthUsecase) authenticateEmailLogin(ctx context.Context, req *LoginReq, audit *model.LoginLog) (*model.Account, error) {
+	email := strings.ToLower(strings.TrimSpace(req.Email))
+	audit.AccountInput = email
+	if !req.SkipOtp {
+		if err := s.emailOtpUsecase.VerifyEmailOtp(ctx, &VerifyEmailOtpReq{Email: email, Code: req.Code}); err != nil {
+			audit.FailureReason = new(enum.LoginFailureReasonCodeInvalidOrExpired)
+			return nil, err
+		}
+	}
+	return s.authenticateVerifiedIdentifier(ctx, email, audit)
+}
+
+func (s *AuthUsecase) authenticatePhoneLogin(ctx context.Context, req *LoginReq, audit *model.LoginLog) (*model.Account, error) {
+	phone := strings.TrimSpace(req.Phone)
+	audit.AccountInput = phone
+	if !req.SkipOtp {
+		if err := s.smsOtpUsecase.VerifyPhoneOtp(ctx, &VerifyPhoneOtpReq{Phone: phone, Code: req.Code}); err != nil {
+			audit.FailureReason = new(enum.LoginFailureReasonCodeInvalidOrExpired)
+			return nil, err
+		}
+	}
+	return s.authenticateVerifiedIdentifier(ctx, phone, audit)
+}
+
+func (s *AuthUsecase) authenticateVerifiedIdentifier(ctx context.Context, identifier string, audit *model.LoginLog) (*model.Account, error) {
+	account, err := s.accountRepo.Get(ctx, &repo.AccountGetReq{Account: new(identifier)})
+	if err != nil || account == nil {
+		if err != nil {
+			code, ok := apperror.BusinessCode(err)
+			if !ok || code != cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_NOT_FOUND {
+				return nil, err
+			}
+		}
+		audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+	}
+	if err := s.requireLoginableAccount(account, audit); err != nil {
+		return nil, err
+	}
+	return account, nil
+}
+
+func (*AuthUsecase) requireLoginableAccount(account *model.Account, audit *model.LoginLog) error {
+	audit.UserID = new(account.ID)
+	if account.Status != nil && *account.Status == enum.AccountStatusNormal {
+		return nil
+	}
+	audit.FailureReason = new(enum.LoginFailureReasonInvalidCredentials)
+	if account.Status != nil && *account.Status == enum.AccountStatusBanned {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_BANNED)
+	}
+	if account.Status != nil && *account.Status == enum.AccountStatusCancelled {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_ACCOUNT_CANCELLED)
+	}
+	return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_INVALID_CREDENTIALS)
+}
+
 func (s *AuthUsecase) RefreshToken(ctx context.Context, refreshToken string, realm commonenum.LoginRealm) (*model.TokenPair, error) {
 	claims, err := s.tokenUsecase.Parse(refreshToken)
 	if err != nil || claims.Type != enum.TokenTypeRefresh || claims.Realm != realm || claims.SessionID == "" || claims.JTI == "" {

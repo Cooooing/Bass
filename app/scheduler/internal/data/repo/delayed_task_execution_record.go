@@ -66,10 +66,7 @@ func (r *DelayedTaskExecutionRecordRepo) Page(ctx context.Context, req *bizrepo.
 }
 
 func (r *DelayedTaskExecutionRecordRepo) CreatePending(ctx context.Context, record *model.DelayedTaskExecutionRecord) (*bizrepo.DelayedTaskExecutionRecordCreateResp, error) {
-	var staleAfterSeconds *int32
-	if record.StaleAfter != nil {
-		staleAfterSeconds = new(int32(*record.StaleAfter / time.Second))
-	}
+	staleAfterSeconds := record.StaleAfterSeconds()
 	created, err := r.getClient(ctx).DelayedTaskExecutionRecord.Create().
 		SetDelayedTaskID(record.DelayedTaskID).
 		SetDelayedTaskVersion(record.DelayedTaskVersion).
@@ -81,7 +78,7 @@ func (r *DelayedTaskExecutionRecordRepo) CreatePending(ctx context.Context, reco
 		SetStatus(delayedtaskexecutionrecord.Status(record.Status)).
 		SetAttempt(record.Attempt).
 		SetMaxAttempts(record.MaxAttempts).
-		SetTimeoutSeconds(int32(record.Timeout / time.Second)).
+		SetTimeoutSeconds(record.TimeoutSeconds()).
 		SetNillableStaleAfterSeconds(staleAfterSeconds).
 		SetMisfirePolicy(delayedtaskexecutionrecord.MisfirePolicy(record.MisfirePolicy)).
 		SetWorkerID(record.WorkerID).

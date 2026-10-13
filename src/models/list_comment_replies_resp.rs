@@ -16,7 +16,7 @@ pub struct ListCommentRepliesResp {
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageResp>,
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
-    pub rows: Option<Vec<models::RespCommentListItem>>,
+    pub rows: Option<Vec<models::CommentListItem>>,
 }
 
 impl ListCommentRepliesResp {

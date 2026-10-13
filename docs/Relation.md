@@ -1,4 +1,4 @@
-# RespRelation
+# Relation
 
 ## Properties
 

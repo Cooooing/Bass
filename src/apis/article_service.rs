@@ -60,6 +60,16 @@ pub trait ArticleService: Send + Sync {
     /// 查询文章列表
     async fn list<'list_articles_req>(&self, list_articles_req: models::ListArticlesReq) -> Result<models::ListArticlesResp, Error<ListError>>;
 
+    /// POST /v1/content/article/following/list
+    ///
+    /// 查询当前账号关注作者发布的文章。
+    async fn list_following<'list_following_articles_req>(&self, list_following_articles_req: models::ListFollowingArticlesReq) -> Result<models::ListFollowingArticlesResp, Error<ListFollowingError>>;
+
+    /// POST /v1/content/article/nearby/list
+    ///
+    /// 查询当前账号所在城市发布的文章。
+    async fn list_nearby<'list_nearby_articles_req>(&self, list_nearby_articles_req: models::ListNearbyArticlesReq) -> Result<models::ListNearbyArticlesResp, Error<ListNearbyError>>;
+
     /// POST /v1/content/article/view-history/page
     ///
     /// 查询当前账号的浏览历史。
@@ -74,6 +84,11 @@ pub trait ArticleService: Send + Sync {
     ///
     /// 打赏文章
     async fn reward<'reward_article_req>(&self, reward_article_req: models::RewardArticleReq) -> Result<serde_json::Value, Error<RewardError>>;
+
+    /// POST /v1/content/article/comment/pin
+    ///
+    /// 设置或取消当前账号文章的置顶评论。
+    async fn set_pinned_comment<'set_pinned_article_comment_req>(&self, set_pinned_article_comment_req: models::SetPinnedArticleCommentReq) -> Result<serde_json::Value, Error<SetPinnedCommentError>>;
 
     /// POST /v1/content/article/thank
     ///
@@ -412,6 +427,84 @@ impl ArticleService for ArticleServiceClient {
         }
     }
 
+    /// 查询当前账号关注作者发布的文章。
+    async fn list_following<'list_following_articles_req>(&self, list_following_articles_req: models::ListFollowingArticlesReq) -> Result<models::ListFollowingArticlesResp, Error<ListFollowingError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/following/list", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_following_articles_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListFollowingArticlesResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListFollowingArticlesResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<ListFollowingError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 查询当前账号所在城市发布的文章。
+    async fn list_nearby<'list_nearby_articles_req>(&self, list_nearby_articles_req: models::ListNearbyArticlesReq) -> Result<models::ListNearbyArticlesResp, Error<ListNearbyError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/nearby/list", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&list_nearby_articles_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListNearbyArticlesResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListNearbyArticlesResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<ListNearbyError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 查询当前账号的浏览历史。
     async fn page_view_history<'page_article_view_history_req>(&self, page_article_view_history_req: models::PageArticleViewHistoryReq) -> Result<models::PageArticleViewHistoryResp, Error<PageViewHistoryError>> {
         let local_var_configuration = &self.configuration;
@@ -524,6 +617,45 @@ impl ArticleService for ArticleServiceClient {
             }
         } else {
             let local_var_entity: Option<RewardError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 设置或取消当前账号文章的置顶评论。
+    async fn set_pinned_comment<'set_pinned_article_comment_req>(&self, set_pinned_article_comment_req: models::SetPinnedArticleCommentReq) -> Result<serde_json::Value, Error<SetPinnedCommentError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/comment/pin", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&set_pinned_article_comment_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<SetPinnedCommentError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -665,6 +797,20 @@ pub enum ListError {
     UnknownValue(serde_json::Value),
 }
 
+/// struct for typed errors of method [`ArticleService::list_following`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ListFollowingError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`ArticleService::list_nearby`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ListNearbyError {
+    UnknownValue(serde_json::Value),
+}
+
 /// struct for typed errors of method [`ArticleService::page_view_history`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -683,6 +829,13 @@ pub enum PublishError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RewardError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`ArticleService::set_pinned_comment`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum SetPinnedCommentError {
     UnknownValue(serde_json::Value),
 }
 

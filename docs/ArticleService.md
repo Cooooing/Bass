@@ -12,9 +12,12 @@ Method | HTTP request | Description
 [**get**](ArticleService.md#get) | **POST** /v1/content/article/get | 
 [**like**](ArticleService.md#like) | **POST** /v1/content/article/like | 
 [**list**](ArticleService.md#list) | **POST** /v1/content/article/list | 
+[**list_following**](ArticleService.md#list_following) | **POST** /v1/content/article/following/list | 
+[**list_nearby**](ArticleService.md#list_nearby) | **POST** /v1/content/article/nearby/list | 
 [**page_view_history**](ArticleService.md#page_view_history) | **POST** /v1/content/article/view-history/page | 
 [**publish**](ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 [**reward**](ArticleService.md#reward) | **POST** /v1/content/article/reward | 
+[**set_pinned_comment**](ArticleService.md#set_pinned_comment) | **POST** /v1/content/article/comment/pin | 
 [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank | 
 [**update_draft**](ArticleService.md#update_draft) | **POST** /v1/content/article/draft/update | 
 
@@ -260,6 +263,66 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
+## list_following
+
+> models::ListFollowingArticlesResp list_following(list_following_articles_req)
+
+
+查询当前账号关注作者发布的文章。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**list_following_articles_req** | [**ListFollowingArticlesReq**](ListFollowingArticlesReq.md) |  | [required] |
+
+### Return type
+
+[**models::ListFollowingArticlesResp**](ListFollowingArticles_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## list_nearby
+
+> models::ListNearbyArticlesResp list_nearby(list_nearby_articles_req)
+
+
+查询当前账号所在城市发布的文章。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**list_nearby_articles_req** | [**ListNearbyArticlesReq**](ListNearbyArticlesReq.md) |  | [required] |
+
+### Return type
+
+[**models::ListNearbyArticlesResp**](ListNearbyArticles_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
 ## page_view_history
 
 > models::PageArticleViewHistoryResp page_view_history(page_article_view_history_req)
@@ -333,6 +396,36 @@ No authorization required
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **reward_article_req** | [**RewardArticleReq**](RewardArticleReq.md) |  | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## set_pinned_comment
+
+> serde_json::Value set_pinned_comment(set_pinned_article_comment_req)
+
+
+设置或取消当前账号文章的置顶评论。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**set_pinned_article_comment_req** | [**SetPinnedArticleCommentReq**](SetPinnedArticleCommentReq.md) |  | [required] |
 
 ### Return type
 

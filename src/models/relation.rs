@@ -12,7 +12,7 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct RespRelation {
+pub struct Relation {
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
@@ -27,9 +27,9 @@ pub struct RespRelation {
     pub updated_at: Option<chrono::DateTime<chrono::FixedOffset>>,
 }
 
-impl RespRelation {
-    pub fn new() -> RespRelation {
-        RespRelation {
+impl Relation {
+    pub fn new() -> Relation {
+        Relation {
             id: None,
             r#type: None,
             actor_id: None,

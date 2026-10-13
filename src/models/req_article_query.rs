@@ -21,8 +21,6 @@ pub struct ReqArticleQuery {
     pub r#type: Option<Type>,
     #[serde(rename = "order", skip_serializing_if = "Option::is_none")]
     pub order: Option<Order>,
-    #[serde(rename = "keyword", skip_serializing_if = "Option::is_none")]
-    pub keyword: Option<String>,
     #[serde(rename = "author_id", skip_serializing_if = "Option::is_none")]
     pub author_id: Option<String>,
     #[serde(rename = "publish_status", skip_serializing_if = "Option::is_none")]
@@ -48,7 +46,6 @@ impl ReqArticleQuery {
             domain_id: None,
             r#type: None,
             order: None,
-            keyword: None,
             author_id: None,
             publish_status: None,
             publish_statuses: None,

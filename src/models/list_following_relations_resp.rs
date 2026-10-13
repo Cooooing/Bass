@@ -16,7 +16,7 @@ pub struct ListFollowingRelationsResp {
     #[serde(rename = "page", skip_serializing_if = "Option::is_none")]
     pub page: Option<models::PageResp>,
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
-    pub rows: Option<Vec<models::RespRelation>>,
+    pub rows: Option<Vec<models::Relation>>,
 }
 
 impl ListFollowingRelationsResp {

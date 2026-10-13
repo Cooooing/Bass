@@ -37,6 +37,7 @@ Class | Method | HTTP request | Description
 *AccountService* | [**update_password**](docs/AccountService.md#update_password) | **POST** /v1/user/account/update-password | 
 *AccountService* | [**update_phone**](docs/AccountService.md#update_phone) | **POST** /v1/user/account/update-phone | 
 *AccountService* | [**update_profile**](docs/AccountService.md#update_profile) | **POST** /v1/user/account/update-profile | 
+*ArticleSearchService* | [**search**](docs/ArticleSearchService.md#search) | **POST** /v1/content/article/search | 
 *ArticleService* | [**archive**](docs/ArticleService.md#archive) | **POST** /v1/content/article/archive | 
 *ArticleService* | [**cancel_publish**](docs/ArticleService.md#cancel_publish) | **POST** /v1/content/article/publish/cancel | 
 *ArticleService* | [**collect**](docs/ArticleService.md#collect) | **POST** /v1/content/article/collect | 
@@ -45,9 +46,12 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**get**](docs/ArticleService.md#get) | **POST** /v1/content/article/get | 
 *ArticleService* | [**like**](docs/ArticleService.md#like) | **POST** /v1/content/article/like | 
 *ArticleService* | [**list**](docs/ArticleService.md#list) | **POST** /v1/content/article/list | 
+*ArticleService* | [**list_following**](docs/ArticleService.md#list_following) | **POST** /v1/content/article/following/list | 
+*ArticleService* | [**list_nearby**](docs/ArticleService.md#list_nearby) | **POST** /v1/content/article/nearby/list | 
 *ArticleService* | [**page_view_history**](docs/ArticleService.md#page_view_history) | **POST** /v1/content/article/view-history/page | 
 *ArticleService* | [**publish**](docs/ArticleService.md#publish) | **POST** /v1/content/article/publish | 
 *ArticleService* | [**reward**](docs/ArticleService.md#reward) | **POST** /v1/content/article/reward | 
+*ArticleService* | [**set_pinned_comment**](docs/ArticleService.md#set_pinned_comment) | **POST** /v1/content/article/comment/pin | 
 *ArticleService* | [**thank**](docs/ArticleService.md#thank) | **POST** /v1/content/article/thank | 
 *ArticleService* | [**update_draft**](docs/ArticleService.md#update_draft) | **POST** /v1/content/article/draft/update | 
 *AuthService* | [**cancel_account**](docs/AuthService.md#cancel_account) | **POST** /v1/user/auth/cancel-account | 
@@ -128,6 +132,8 @@ Class | Method | HTTP request | Description
  - [CheckRegistrationAvailabilityResp](docs/CheckRegistrationAvailabilityResp.md)
  - [CollectArticleReq](docs/CollectArticleReq.md)
  - [CollectArticleResp](docs/CollectArticleResp.md)
+ - [CommentListItem](docs/CommentListItem.md)
+ - [CommentViewerActionState](docs/CommentViewerActionState.md)
  - [CompleteProfileImageUploadAccountReq](docs/CompleteProfileImageUploadAccountReq.md)
  - [CompleteProfileImageUploadAccountResp](docs/CompleteProfileImageUploadAccountResp.md)
  - [ConfirmEnableTotpReq](docs/ConfirmEnableTotpReq.md)
@@ -183,10 +189,14 @@ Class | Method | HTTP request | Description
  - [ListFollowersRelationsResp](docs/ListFollowersRelationsResp.md)
  - [ListFollowersReq](docs/ListFollowersReq.md)
  - [ListFollowersResp](docs/ListFollowersResp.md)
+ - [ListFollowingArticlesReq](docs/ListFollowingArticlesReq.md)
+ - [ListFollowingArticlesResp](docs/ListFollowingArticlesResp.md)
  - [ListFollowingRelationsReq](docs/ListFollowingRelationsReq.md)
  - [ListFollowingRelationsResp](docs/ListFollowingRelationsResp.md)
  - [ListFollowingReq](docs/ListFollowingReq.md)
  - [ListFollowingResp](docs/ListFollowingResp.md)
+ - [ListNearbyArticlesReq](docs/ListNearbyArticlesReq.md)
+ - [ListNearbyArticlesResp](docs/ListNearbyArticlesResp.md)
  - [ListNotificationsReq](docs/ListNotificationsReq.md)
  - [ListNotificationsResp](docs/ListNotificationsResp.md)
  - [ListPostscriptsReq](docs/ListPostscriptsReq.md)
@@ -216,6 +226,7 @@ Class | Method | HTTP request | Description
  - [RefreshTokenReq](docs/RefreshTokenReq.md)
  - [RefreshTokenResp](docs/RefreshTokenResp.md)
  - [RegisterReq](docs/RegisterReq.md)
+ - [Relation](docs/Relation.md)
  - [ReqArticle](docs/ReqArticle.md)
  - [ReqArticleQuery](docs/ReqArticleQuery.md)
  - [ReqCommentQuery](docs/ReqCommentQuery.md)
@@ -242,15 +253,18 @@ Class | Method | HTTP request | Description
  - [RespPreference](docs/RespPreference.md)
  - [RespPrivacySetting](docs/RespPrivacySetting.md)
  - [RespRecord](docs/RespRecord.md)
- - [RespRelation](docs/RespRelation.md)
  - [RespRelationStatus](docs/RespRelationStatus.md)
  - [RespTag](docs/RespTag.md)
+ - [RespTopComment](docs/RespTopComment.md)
  - [RespTotp](docs/RespTotp.md)
  - [RewardArticleReq](docs/RewardArticleReq.md)
+ - [SearchArticlesReq](docs/SearchArticlesReq.md)
+ - [SearchArticlesResp](docs/SearchArticlesResp.md)
  - [SendEmailOtpReq](docs/SendEmailOtpReq.md)
  - [SendEmailOtpResp](docs/SendEmailOtpResp.md)
  - [SendPhoneOtpReq](docs/SendPhoneOtpReq.md)
  - [SendPhoneOtpResp](docs/SendPhoneOtpResp.md)
+ - [SetPinnedArticleCommentReq](docs/SetPinnedArticleCommentReq.md)
  - [ThankArticleReq](docs/ThankArticleReq.md)
  - [ThankArticleResp](docs/ThankArticleResp.md)
  - [ThankCommentReq](docs/ThankCommentReq.md)

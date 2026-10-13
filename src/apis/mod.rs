@@ -112,6 +112,7 @@ impl From<&str> for ContentType {
 }
 
 pub mod account_service;
+pub mod article_search_service;
 pub mod article_service;
 pub mod auth_service;
 pub mod checkin_service;
@@ -133,6 +134,7 @@ use std::sync::Arc;
 
 pub trait Api {
     fn account_service(&self) -> &dyn account_service::AccountService;
+    fn article_search_service(&self) -> &dyn article_search_service::ArticleSearchService;
     fn article_service(&self) -> &dyn article_service::ArticleService;
     fn auth_service(&self) -> &dyn auth_service::AuthService;
     fn checkin_service(&self) -> &dyn checkin_service::CheckinService;
@@ -151,6 +153,7 @@ pub trait Api {
 
 pub struct ApiClient {
     account_service: Box<dyn account_service::AccountService>,
+    article_search_service: Box<dyn article_search_service::ArticleSearchService>,
     article_service: Box<dyn article_service::ArticleService>,
     auth_service: Box<dyn auth_service::AuthService>,
     checkin_service: Box<dyn checkin_service::CheckinService>,
@@ -171,6 +174,7 @@ impl ApiClient {
     pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
         Self {
             account_service: Box::new(account_service::AccountServiceClient::new(configuration.clone())),
+            article_search_service: Box::new(article_search_service::ArticleSearchServiceClient::new(configuration.clone())),
             article_service: Box::new(article_service::ArticleServiceClient::new(configuration.clone())),
             auth_service: Box::new(auth_service::AuthServiceClient::new(configuration.clone())),
             checkin_service: Box::new(checkin_service::CheckinServiceClient::new(configuration.clone())),
@@ -192,6 +196,9 @@ impl ApiClient {
 impl Api for ApiClient {
     fn account_service(&self) -> &dyn account_service::AccountService {
         self.account_service.as_ref()
+    }
+    fn article_search_service(&self) -> &dyn article_search_service::ArticleSearchService {
+        self.article_search_service.as_ref()
     }
     fn article_service(&self) -> &dyn article_service::ArticleService {
         self.article_service.as_ref()

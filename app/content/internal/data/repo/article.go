@@ -586,6 +586,9 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 		if filter.AuthorID != nil {
 			query = query.Where(articleent.CreatedByEQ(*filter.AuthorID))
 		}
+		if len(filter.AuthorIDs) > 0 {
+			query = query.Where(articleent.CreatedByIn(filter.AuthorIDs...))
+		}
 		if len(filter.ExcludedAuthorIDs) > 0 {
 			query = query.Where(articleent.CreatedByNotIn(filter.ExcludedAuthorIDs...))
 		}
@@ -594,6 +597,9 @@ func (r *ArticleRepo) getQuery(query *gen.ArticleQuery, req *repo.ArticleGetReq)
 		}
 		if filter.PublishedAtEnd != nil {
 			query = query.Where(articleent.PublishedAtLTE(*filter.PublishedAtEnd))
+		}
+		if filter.PublishedCity != nil {
+			query = query.Where(articleent.PublishedCityEQ(*filter.PublishedCity))
 		}
 		if filter.Scheduled != nil {
 			query = query.Where(articleent.PublishStatusEQ(articleent.PublishStatus(enum.ArticlePublishStatusDraft)))

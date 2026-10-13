@@ -161,6 +161,46 @@ func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.List
 	return &bbscontentv1.ListArticles_Resp{Page: page, Rows: rows}, nil
 }
 
+func (s *ContentArticleService) ListNearby(ctx context.Context, req *bbscontentv1.ListNearbyArticles_Req) (*bbscontentv1.ListNearbyArticles_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	result, err := s.contentArticleUsecase.ListNearbyArticles(ctx, user.ID, commonmodel.PageReqFromProto(req.GetPage()))
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*bbscontentv1.ArticleListItem, 0, len(result.Rows))
+	for _, row := range result.Rows {
+		rows = append(rows, s.articleListItem(row))
+	}
+	var page *common.PageResp
+	if result.Page != nil {
+		page = result.Page.ToProto()
+	}
+	return &bbscontentv1.ListNearbyArticles_Resp{Page: page, Rows: rows}, nil
+}
+
+func (s *ContentArticleService) ListFollowing(ctx context.Context, req *bbscontentv1.ListFollowingArticles_Req) (*bbscontentv1.ListFollowingArticles_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	result, err := s.contentArticleUsecase.ListFollowingArticles(ctx, user.ID, commonmodel.PageReqFromProto(req.GetPage()))
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*bbscontentv1.ArticleListItem, 0, len(result.Rows))
+	for _, row := range result.Rows {
+		rows = append(rows, s.articleListItem(row))
+	}
+	var page *common.PageResp
+	if result.Page != nil {
+		page = result.Page.ToProto()
+	}
+	return &bbscontentv1.ListFollowingArticles_Resp{Page: page, Rows: rows}, nil
+}
+
 func (s *ContentArticleService) Get(ctx context.Context, req *bbscontentv1.GetArticle_Req) (*bbscontentv1.GetArticle_Resp, error) {
 	var userID int64
 	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {

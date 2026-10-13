@@ -18,7 +18,9 @@ type ArticleFilter struct {
 	Restriction       *enum.ContentRestriction
 	Restrictions      []enum.ContentRestriction
 	AuthorID          *int64
+	AuthorIDs         []int64
 	ExcludedAuthorIDs []int64
+	PublishedCity     *string
 	Order             *enum.ArticleOrder
 	Type              *enum.ArticleType
 	PublishedAtEnd    *time.Time

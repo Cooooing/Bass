@@ -19,6 +19,7 @@ type ContentArticleUsecase struct {
 	assetClient                  repo.AssetClient
 	privacyClient                repo.PrivacySettingClient
 	relationClient               repo.RelationClient
+	locationClient               repo.LocationClient
 	ipResolutionClient           repo.IPResolutionClient
 	articleSearchRateLimitCache  repo.ArticleSearchRateLimitCache
 	articleSearchShortQueryLimit int64
@@ -30,6 +31,7 @@ func NewContentArticleUsecase(
 	assetClient repo.AssetClient,
 	privacyClient repo.PrivacySettingClient,
 	relationClient repo.RelationClient,
+	locationClient repo.LocationClient,
 	ipResolutionClient repo.IPResolutionClient,
 	articleSearchRateLimitCache repo.ArticleSearchRateLimitCache,
 ) *ContentArticleUsecase {
@@ -38,11 +40,53 @@ func NewContentArticleUsecase(
 		assetClient:                  assetClient,
 		privacyClient:                privacyClient,
 		relationClient:               relationClient,
+		locationClient:               locationClient,
 		ipResolutionClient:           ipResolutionClient,
 		articleSearchRateLimitCache:  articleSearchRateLimitCache,
 		articleSearchShortQueryLimit: 10,
 		articleSearchLimit:           30,
 	}
+}
+
+func (u *ContentArticleUsecase) ListNearbyArticles(ctx context.Context, userID int64, page *commonmodel.PageReq) (*ListArticlesResp, error) {
+	if userID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	location, err := u.locationClient.GetCurrentLocation(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	if location == nil || location.City == nil || strings.TrimSpace(*location.City) == "" {
+		return &ListArticlesResp{Page: &commonmodel.PageResp{Page: commonmodel.NormalizePage(page).Page, Size: commonmodel.NormalizePage(page).Size}}, nil
+	}
+	city := strings.TrimSpace(*location.City)
+	return u.ListArticles(ctx, &ListArticlesReq{UserID: userID, Page: page, Query: &ArticleQuery{PublishedCity: &city}})
+}
+
+func (u *ContentArticleUsecase) ListFollowingArticles(ctx context.Context, userID int64, page *commonmodel.PageReq) (*ListArticlesResp, error) {
+	if userID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	var authorIDs []int64
+	for currentPage := commonmodel.DefaultPage; ; currentPage++ {
+		result, err := u.relationClient.ListFollowing(ctx, &repo.ListFollowingRelationsReq{ActorID: userID, Page: &commonmodel.PageReq{Page: currentPage, Size: 100}})
+		if err != nil {
+			return nil, err
+		}
+		for _, row := range result.Rows {
+			if row != nil && row.TargetID > 0 {
+				authorIDs = append(authorIDs, row.TargetID)
+			}
+		}
+		if result.Page == nil || result.Page.Size == 0 || len(result.Rows) == 0 || currentPage >= (result.Page.Total+result.Page.Size-1)/result.Page.Size {
+			break
+		}
+	}
+	if len(authorIDs) == 0 {
+		normalizedPage := commonmodel.NormalizePage(page)
+		return &ListArticlesResp{Page: &commonmodel.PageResp{Page: normalizedPage.Page, Size: normalizedPage.Size}}, nil
+	}
+	return u.ListArticles(ctx, &ListArticlesReq{UserID: userID, Page: page, Query: &ArticleQuery{AuthorIDs: authorIDs}})
 }
 
 type ContentArticleSave struct {
@@ -168,6 +212,8 @@ type ArticleQuery struct {
 	TagID           *int64
 	DomainID        *int64
 	AuthorID        *int64
+	AuthorIDs       []int64
+	PublishedCity   *string
 	Type            *int32
 	Order           *int32
 	PublishStatus   *int32
@@ -256,7 +302,7 @@ func (u *ContentArticleUsecase) ListArticles(ctx context.Context, req *ListArtic
 	}
 	var query *repo.ArticleQuery
 	if req.Query != nil {
-		query = &repo.ArticleQuery{TagID: req.Query.TagID, DomainID: req.Query.DomainID, AuthorID: req.Query.AuthorID, Type: req.Query.Type, Order: req.Query.Order, PublishStatus: req.Query.PublishStatus, PublishStatuses: req.Query.PublishStatuses, Visibility: req.Query.Visibility, Visibilities: req.Query.Visibilities, Scheduled: req.Query.Scheduled}
+		query = &repo.ArticleQuery{TagID: req.Query.TagID, DomainID: req.Query.DomainID, AuthorID: req.Query.AuthorID, AuthorIDs: req.Query.AuthorIDs, PublishedCity: req.Query.PublishedCity, Type: req.Query.Type, Order: req.Query.Order, PublishStatus: req.Query.PublishStatus, PublishStatuses: req.Query.PublishStatuses, Visibility: req.Query.Visibility, Visibilities: req.Query.Visibilities, Scheduled: req.Query.Scheduled}
 	}
 	if query != nil {
 		excludedAuthorIDs := []int64{}

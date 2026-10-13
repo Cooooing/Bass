@@ -22,6 +22,7 @@ type ArticleQuery struct {
 	TagID             *int64
 	DomainID          *int64
 	AuthorID          *int64
+	AuthorIDs         []int64
 	Type              *int32
 	Order             *int32
 	PublishStatus     *int32
@@ -30,6 +31,7 @@ type ArticleQuery struct {
 	Visibilities      []int32
 	Scheduled         *bool
 	ExcludedAuthorIDs []int64
+	PublishedCity     *string
 }
 
 type CreateDraftArticleReq struct {

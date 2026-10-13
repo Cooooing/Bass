@@ -164,6 +164,8 @@ func (r *ContentArticleClient) ListArticles(ctx context.Context, req *repo.ListA
 		TagId:             query.TagID,
 		DomainId:          query.DomainID,
 		AuthorId:          query.AuthorID,
+		AuthorIds:         query.AuthorIDs,
+		PublishedCity:     query.PublishedCity,
 		Scheduled:         query.Scheduled,
 		ExcludedAuthorIds: query.ExcludedAuthorIDs,
 	}

@@ -115,6 +115,15 @@ func (s *ContentArticleService) Archive(ctx context.Context, req *bbscontentv1.A
 	return &bbscontentv1.ArchiveArticle_Resp{}, err
 }
 
+func (s *ContentArticleService) SetPinnedComment(ctx context.Context, req *bbscontentv1.SetPinnedArticleComment_Req) (*bbscontentv1.SetPinnedArticleComment_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	err := s.contentArticleUsecase.SetPinnedArticleComment(ctx, &usecase.SetPinnedArticleCommentReq{UserID: user.ID, ArticleID: req.GetArticleId(), CommentID: req.CommentId})
+	return &bbscontentv1.SetPinnedArticleComment_Resp{}, err
+}
+
 func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Req) (*bbscontentv1.ListArticles_Resp, error) {
 	var userID int64
 	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {

@@ -11,6 +11,7 @@ type CommentFilter struct {
 	ReplyID         *int64
 	CreatedBy       *int64
 	ExcludedUserIDs []int64
+	ExcludedIDs     []int64
 	Restriction     *enum.ContentRestriction
 	Restrictions    []enum.ContentRestriction
 	Level           *int32

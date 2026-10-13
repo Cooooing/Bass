@@ -19,6 +19,7 @@ service ContentArticleService {
   rpc MakePrivate(MakePrivateArticle.Req) returns (MakePrivateArticle.Resp) {} // 设为私有
   rpc MakePublic(MakePublicArticle.Req) returns (MakePublicArticle.Resp) {} // 设为公开
   rpc Archive(ArchiveArticle.Req) returns (ArchiveArticle.Resp) {} // 归档文章
+  rpc SetPinnedComment(SetPinnedArticleComment.Req) returns (SetPinnedArticleComment.Resp) {} // 设置文章置顶评论
   rpc Unarchive(UnarchiveArticle.Req) returns (UnarchiveArticle.Resp) {} // 取消归档
   rpc Hide(HideArticle.Req) returns (HideArticle.Resp) {} // 隐藏文章
   rpc Unhide(UnhideArticle.Req) returns (UnhideArticle.Resp) {} // 取消隐藏
@@ -126,6 +127,16 @@ message ArchiveArticle {
     int64 article_id = 1; // 文章 ID
     ContentAccess access = 2; // 访问上下文
     optional string reason = 3; // 操作原因
+  }
+  message Resp {}
+}
+
+// SetPinnedArticleComment 定义作者设置或取消文章置顶评论的命令。
+message SetPinnedArticleComment {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+    optional int64 comment_id = 2; // 置顶的一级评论，未传表示取消
+    ContentAccess access = 3; // 访问上下文
   }
   message Resp {}
 }
@@ -346,6 +357,7 @@ message Article {
   google.protobuf.Timestamp published_at = 30; // 发布时间
   google.protobuf.Timestamp edited_at = 31; // 编辑时间
   optional string published_city = 32; // 发布时城市快照
+  optional int64 pinned_comment_id = 36; // 作者手动置顶的评论 ID
   optional int64 created_by = 1002; // 创建账号 ID
   optional int64 updated_by = 1003; // 更新账号 ID
   google.protobuf.Timestamp created_at = 1000; // 创建时间

@@ -698,6 +698,33 @@ func (d *ArticleUsecase) Archive(ctx context.Context, req *ArticleArchiveReq) er
 	})
 }
 
+// SetPinnedComment 设置或取消作者文章的一条置顶一级评论。
+func (d *ArticleUsecase) SetPinnedComment(ctx context.Context, access *model.ContentAccess, articleID int64, commentID *int64) error {
+	access, err := access.Normalize(enum.ContentAccessScopeAuthor)
+	if err != nil {
+		return err
+	}
+	return d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: &articleID}})
+		if err != nil {
+			return err
+		}
+		if !article.IsAuthor(access.ActorUserID) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+		}
+		if commentID != nil {
+			comment, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{Filter: &model.CommentFilter{CommentID: commentID, ArticleID: &articleID, Restriction: new(enum.ContentRestrictionNone)}})
+			if err != nil {
+				return err
+			}
+			if comment.ParentID != nil {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_INVALID)
+			}
+		}
+		return d.articleRepo.UpdatePinnedComment(ctx, &repo.ArticleUpdatePinnedCommentReq{ArticleID: articleID, PinnedID: commentID, UpdatedBy: access.ActorUserID})
+	})
+}
+
 type ArticleUnarchiveReq struct {
 	Access    *model.ContentAccess
 	ArticleID int64

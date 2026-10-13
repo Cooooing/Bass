@@ -109,4 +109,5 @@ type ArticleDetail struct {
 	EditedAt            *time.Time
 	Tags                []*ArticleTag
 	Domains             []*ArticleDomain
+	PinnedID            *int64
 }

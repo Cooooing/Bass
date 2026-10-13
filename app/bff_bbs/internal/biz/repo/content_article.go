@@ -66,6 +66,12 @@ type ArchiveArticleReq struct {
 	Reason    *string
 }
 
+type SetPinnedArticleCommentReq struct {
+	UserID    int64
+	ArticleID int64
+	CommentID *int64
+}
+
 type ListArticlesReq struct {
 	UserID int64
 	Page   *commonmodel.PageReq
@@ -154,6 +160,7 @@ type ContentArticleClient interface {
 	CancelPublishArticle(ctx context.Context, req *CancelPublishArticleReq) error
 	DiscardDraftArticle(ctx context.Context, req *DiscardDraftArticleReq) error
 	ArchiveArticle(ctx context.Context, req *ArchiveArticleReq) error
+	SetPinnedArticleComment(ctx context.Context, req *SetPinnedArticleCommentReq) error
 	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error)
 	SearchArticles(ctx context.Context, req *SearchArticlesReq) (*SearchArticlesResp, error)
 	PageViewHistory(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*ArticleViewHistoryPageResp, error)

@@ -258,6 +258,7 @@ func (s *CommentService) List(ctx context.Context, req *v1.ListComments_Req) (*v
 			Level:           req.Query.Level,
 			Order:           dbOrder,
 			ExcludedUserIDs: req.Query.GetExcludedUserIds(),
+			ExcludedIDs:     req.Query.GetExcludedCommentIds(),
 		},
 	})
 	if err != nil {
@@ -350,6 +351,7 @@ func (s *CommentService) Page(ctx context.Context, req *v1.PageComments_Req) (*v
 			Level:           req.Query.Level,
 			Order:           dbOrder,
 			ExcludedUserIDs: req.Query.GetExcludedUserIds(),
+			ExcludedIDs:     req.Query.GetExcludedCommentIds(),
 		},
 	})
 	if err != nil {

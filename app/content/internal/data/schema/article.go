@@ -43,6 +43,7 @@ func (Article) Fields() []ent.Field {
 		field.Enum("type").Values(contentenum.ArticleTypeMap.EnumValues()...).Default(contentenum.ArticleTypeNormal.String()).Comment("文章类型"),
 		field.String("statement").Comment("创作声明").Nillable().Optional(),
 		field.Bool("commentable").Comment("是否允许评论").Default(true),
+		field.Int64("pinned_comment_id").Comment("作者手动置顶的评论 ID").Nillable().Optional(),
 		field.Time("published_at").Comment("发布时间").Nillable().Optional(),
 		field.String("published_city").Comment("发布时城市快照").MaxLen(128).Nillable().Optional(),
 		field.Time("edited_at").Comment("内容编辑时间").Nillable().Optional(),

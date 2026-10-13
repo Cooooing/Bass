@@ -244,14 +244,18 @@ type ListCommentThreadsReq struct {
 }
 
 type ListCommentThreadsResp struct {
-	Page *commonmodel.PageResp
-	Rows []*repo.CommentThread
+	Page       *commonmodel.PageResp
+	Rows       []*repo.CommentThread
+	TopComment *repo.CommentThread
 }
 
 func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *ListCommentThreadsReq) (*ListCommentThreadsResp, error) {
+	article, err := u.contentArticleClient.GetArticle(ctx, &repo.GetArticleReq{UserID: req.UserID, ArticleID: req.ArticleID})
+	if err != nil {
+		return nil, err
+	}
 	excludedUserIDs := []int64{}
 	if req.UserID > 0 && u.relationClient != nil {
-		var err error
 		excludedUserIDs, err = u.relationClient.ListBlockedCounterparts(ctx, req.UserID)
 		if err != nil {
 			return nil, err
@@ -275,11 +279,22 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 		Order:             order,
 		ReplyPreviewLimit: req.ReplyPreviewLimit,
 		ExcludedUserIDs:   excludedUserIDs,
+		TopCommentID:      article.PinnedID,
 	})
 	if err != nil {
 		return nil, err
 	}
 	profiles := make([]*model.AccountProfile, 0, len(resp.Rows)*4)
+	if resp.TopComment != nil {
+		if resp.TopComment.Root != nil {
+			profiles = append(profiles, resp.TopComment.Root.User, resp.TopComment.Root.ReplyUser)
+		}
+		for _, reply := range resp.TopComment.PreviewReplies {
+			if reply != nil {
+				profiles = append(profiles, reply.User, reply.ReplyUser)
+			}
+		}
+	}
 	for _, row := range resp.Rows {
 		if row == nil {
 			continue
@@ -326,8 +341,9 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 		profile.AvatarURL = &avatarURL
 	}
 	return &ListCommentThreadsResp{
-		Page: resp.Page,
-		Rows: resp.Rows,
+		Page:       resp.Page,
+		Rows:       resp.Rows,
+		TopComment: resp.TopComment,
 	}, nil
 }
 

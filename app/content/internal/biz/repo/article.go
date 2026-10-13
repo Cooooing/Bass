@@ -17,6 +17,7 @@ type ArticleRepo interface {
 	UpdateRestriction(ctx context.Context, req *ArticleUpdateRestrictionReq) error
 	DiscardDraft(ctx context.Context, articleID int64) error
 	UpdateHasPostscript(ctx context.Context, req *ArticleUpdateHasPostscriptReq) error
+	UpdatePinnedComment(ctx context.Context, req *ArticleUpdatePinnedCommentReq) error
 	AddStats(ctx context.Context, req *ArticleAddStatsReq) error
 	ReplaceTags(ctx context.Context, req *ArticleReplaceTagsReq) error
 	BindTags(ctx context.Context, req *ArticleTagBindReq) ([]int64, error)
@@ -58,6 +59,12 @@ type ArticleUpdateHasPostscriptReq struct {
 	ArticleID     int64
 	HasPostscript bool
 	UpdatedBy     int64
+}
+
+type ArticleUpdatePinnedCommentReq struct {
+	ArticleID int64
+	PinnedID  *int64
+	UpdatedBy int64
 }
 
 type ArticleAddStatsReq struct {

@@ -24,6 +24,7 @@ type Article struct {
 	Type          enum.ArticleType
 	Statement     *string
 	Commentable   bool
+	PinnedID      *int64
 	PublishedAt   *time.Time
 	PublishedCity *string
 	EditedAt      *time.Time

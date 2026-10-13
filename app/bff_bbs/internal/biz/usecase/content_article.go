@@ -145,6 +145,19 @@ func (u *ContentArticleUsecase) ArchiveArticle(ctx context.Context, req *Archive
 	return u.contentArticleClient.ArchiveArticle(ctx, &repo.ArchiveArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Reason: req.Reason})
 }
 
+type SetPinnedArticleCommentReq struct {
+	UserID    int64
+	ArticleID int64
+	CommentID *int64
+}
+
+func (u *ContentArticleUsecase) SetPinnedArticleComment(ctx context.Context, req *SetPinnedArticleCommentReq) error {
+	if req == nil || req.ArticleID <= 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
+	}
+	return u.contentArticleClient.SetPinnedArticleComment(ctx, &repo.SetPinnedArticleCommentReq{UserID: req.UserID, ArticleID: req.ArticleID, CommentID: req.CommentID})
+}
+
 type ListArticlesReq struct {
 	UserID int64
 	Page   *commonmodel.PageReq

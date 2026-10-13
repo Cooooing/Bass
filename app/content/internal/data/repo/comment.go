@@ -335,6 +335,9 @@ func (r *CommentRepo) getQuery(query *gen.CommentQuery, req *repo.CommentGetReq)
 		if len(filter.ExcludedUserIDs) > 0 {
 			query = query.Where(commentent.CreatedByNotIn(filter.ExcludedUserIDs...))
 		}
+		if len(filter.ExcludedIDs) > 0 {
+			query = query.Where(commentent.IDNotIn(filter.ExcludedIDs...))
+		}
 		if filter.Restriction != nil {
 			query = query.Where(commentent.RestrictionEQ(commentent.Restriction(*filter.Restriction)))
 		}

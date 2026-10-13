@@ -129,6 +129,7 @@ message ListComments {
       optional ContentRestriction restriction = 10; // 管理限制
       repeated ContentRestriction restrictions = 11; // 管理限制列表
       repeated int64 excluded_user_ids = 12; // 读取侧排除的作者账号 ID
+      repeated int64 excluded_comment_ids = 13; // 当前查询中排除的评论 ID
     }
     CommentQueryParams query = 1; // 查询参数
     ContentAccess access = 2; // 访问上下文
@@ -170,6 +171,7 @@ message PageComments {
       optional ContentRestriction restriction = 10; // 管理限制
       repeated ContentRestriction restrictions = 11; // 管理限制列表
       repeated int64 excluded_user_ids = 12; // 读取侧排除的作者账号 ID
+      repeated int64 excluded_comment_ids = 13; // 当前查询中排除的评论 ID
     }
     CommentQueryParams query = 1; // 查询参数
     optional .common.api.app.common.PageReq page = 2; // 分页参数

@@ -61,6 +61,14 @@ service ArticleService {
     };
   }
 
+  // 设置或取消当前账号文章的置顶评论。
+  rpc SetPinnedComment(SetPinnedArticleComment.Req) returns (SetPinnedArticleComment.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/comment/pin"
+      body: "*"
+    };
+  }
+
   // 查询文章列表
   rpc List(ListArticles.Req) returns (ListArticles.Resp) {
     option (google.api.http) = {
@@ -212,6 +220,16 @@ message ArchiveArticle {
     option (gnostic.openapi.v3.schema) = {
       required: "article_id"
     };
+  }
+  message Resp {}
+}
+
+// SetPinnedArticleComment 定义设置或取消文章置顶评论的请求。
+message SetPinnedArticleComment {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+    optional int64 comment_id = 2; // 置顶的一级评论，未传表示取消
+    option (gnostic.openapi.v3.schema) = { required: "article_id" };
   }
   message Resp {}
 }

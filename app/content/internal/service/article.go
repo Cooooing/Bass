@@ -267,6 +267,24 @@ func (s *ArticleService) Archive(ctx context.Context, req *v1.ArchiveArticle_Req
 	return &v1.ArchiveArticle_Resp{}, s.articleUsecase.Archive(ctx, &usecase.ArticleArchiveReq{Access: access, ArticleID: req.GetArticleId(), Reason: req.Reason})
 }
 
+func (s *ArticleService) SetPinnedComment(ctx context.Context, req *v1.SetPinnedArticleComment_Req) (*v1.SetPinnedArticleComment_Resp, error) {
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	err := s.articleUsecase.SetPinnedComment(ctx, access, req.GetArticleId(), req.CommentId)
+	return &v1.SetPinnedArticleComment_Resp{}, err
+}
+
 func (s *ArticleService) Unarchive(ctx context.Context, req *v1.UnarchiveArticle_Req) (*v1.UnarchiveArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
@@ -525,28 +543,29 @@ func (*ArticleService) articleViewHistoryArticle(row *model.Article) *v1.Article
 		return nil
 	}
 	article := &v1.Article{
-		Id:            row.ID,
-		Title:         row.Title,
-		Content:       row.Content,
-		RewardContent: row.RewardContent,
-		RewardPoints:  row.RewardPoints,
-		HasPostscript: row.HasPostscript,
-		HasReward:     row.RewardPoints != nil,
-		Type:          enum.ArticleTypeMap.MustToProto(row.Type),
-		Statement:     row.Statement,
-		Commentable:   row.Commentable,
-		PublishStatus: enum.ArticlePublishStatusMap.MustToProto(row.PublishStatus),
-		Visibility:    enum.ArticleVisibilityMap.MustToProto(row.Visibility),
-		Restriction:   enum.ContentRestrictionMap.MustToProto(row.Restriction),
-		ViewCount:     row.ViewCount,
-		ThankCount:    row.ThankCount,
-		LikeCount:     row.LikeCount,
-		CollectCount:  row.CollectCount,
-		RewardCount:   row.RewardCount,
-		ReplyCount:    row.ReplyCount,
-		CreatedBy:     row.CreatedBy,
-		UpdatedBy:     row.UpdatedBy,
-		PublishedCity: row.PublishedCity,
+		Id:              row.ID,
+		Title:           row.Title,
+		Content:         row.Content,
+		RewardContent:   row.RewardContent,
+		RewardPoints:    row.RewardPoints,
+		HasPostscript:   row.HasPostscript,
+		HasReward:       row.RewardPoints != nil,
+		Type:            enum.ArticleTypeMap.MustToProto(row.Type),
+		Statement:       row.Statement,
+		Commentable:     row.Commentable,
+		PublishStatus:   enum.ArticlePublishStatusMap.MustToProto(row.PublishStatus),
+		Visibility:      enum.ArticleVisibilityMap.MustToProto(row.Visibility),
+		Restriction:     enum.ContentRestrictionMap.MustToProto(row.Restriction),
+		ViewCount:       row.ViewCount,
+		ThankCount:      row.ThankCount,
+		LikeCount:       row.LikeCount,
+		CollectCount:    row.CollectCount,
+		RewardCount:     row.RewardCount,
+		ReplyCount:      row.ReplyCount,
+		CreatedBy:       row.CreatedBy,
+		UpdatedBy:       row.UpdatedBy,
+		PublishedCity:   row.PublishedCity,
+		PinnedCommentId: row.PinnedID,
 	}
 	if row.CreatedAt != nil {
 		article.CreatedAt = timestamppb.New(*row.CreatedAt)
@@ -594,28 +613,29 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.G
 		return nil, err
 	}
 	article := &v1.Article{
-		Id:            row.ID,
-		Title:         row.Title,
-		Content:       row.Content,
-		RewardContent: row.RewardContent,
-		RewardPoints:  row.RewardPoints,
-		HasPostscript: row.HasPostscript,
-		HasReward:     row.RewardPoints != nil,
-		Type:          enum.ArticleTypeMap.MustToProto(row.Type),
-		Statement:     row.Statement,
-		Commentable:   row.Commentable,
-		PublishStatus: enum.ArticlePublishStatusMap.MustToProto(row.PublishStatus),
-		Visibility:    enum.ArticleVisibilityMap.MustToProto(row.Visibility),
-		Restriction:   enum.ContentRestrictionMap.MustToProto(row.Restriction),
-		ViewCount:     row.ViewCount,
-		ThankCount:    row.ThankCount,
-		LikeCount:     row.LikeCount,
-		CollectCount:  row.CollectCount,
-		RewardCount:   row.RewardCount,
-		ReplyCount:    row.ReplyCount,
-		CreatedBy:     row.CreatedBy,
-		UpdatedBy:     row.UpdatedBy,
-		PublishedCity: row.PublishedCity,
+		Id:              row.ID,
+		Title:           row.Title,
+		Content:         row.Content,
+		RewardContent:   row.RewardContent,
+		RewardPoints:    row.RewardPoints,
+		HasPostscript:   row.HasPostscript,
+		HasReward:       row.RewardPoints != nil,
+		Type:            enum.ArticleTypeMap.MustToProto(row.Type),
+		Statement:       row.Statement,
+		Commentable:     row.Commentable,
+		PublishStatus:   enum.ArticlePublishStatusMap.MustToProto(row.PublishStatus),
+		Visibility:      enum.ArticleVisibilityMap.MustToProto(row.Visibility),
+		Restriction:     enum.ContentRestrictionMap.MustToProto(row.Restriction),
+		ViewCount:       row.ViewCount,
+		ThankCount:      row.ThankCount,
+		LikeCount:       row.LikeCount,
+		CollectCount:    row.CollectCount,
+		RewardCount:     row.RewardCount,
+		ReplyCount:      row.ReplyCount,
+		CreatedBy:       row.CreatedBy,
+		UpdatedBy:       row.UpdatedBy,
+		PublishedCity:   row.PublishedCity,
+		PinnedCommentId: row.PinnedID,
 	}
 	if row.CreatedAt != nil {
 		article.CreatedAt = timestamppb.New(*row.CreatedAt)

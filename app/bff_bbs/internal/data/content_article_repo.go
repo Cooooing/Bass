@@ -136,6 +136,11 @@ func (r *ContentArticleClient) ArchiveArticle(ctx context.Context, req *repo.Arc
 	}
 	return nil
 }
+
+func (r *ContentArticleClient) SetPinnedArticleComment(ctx context.Context, req *repo.SetPinnedArticleCommentReq) error {
+	_, err := r.contentClient.Article.SetPinnedComment(ctx, &contentv1.SetPinnedArticleComment_Req{ArticleId: req.ArticleID, CommentId: req.CommentID, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
+	return err
+}
 func (r *ContentArticleClient) DiscardDraftArticle(ctx context.Context, req *repo.DiscardDraftArticleReq) error {
 	_, err := r.contentClient.Article.DiscardDraft(ctx, &contentv1.DiscardDraftArticle_Req{
 		ArticleId: req.ArticleID,
@@ -678,6 +683,7 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 		Tags:                tags,
 		Domains:             domains,
 		City:                item.PublishedCity,
+		PinnedID:            item.PinnedCommentId,
 		CreatedAt:           new(item.GetCreatedAt().AsTime()),
 		UpdatedAt:           new(item.GetUpdatedAt().AsTime()),
 	}

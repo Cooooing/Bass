@@ -53,6 +53,7 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article) (*model.
 		SetType(articleent.Type(article.Type)).
 		SetNillableStatement(article.Statement).
 		SetCommentable(article.Commentable).
+		SetNillablePinnedCommentID(article.PinnedID).
 		SetNillablePublishedAt(article.PublishedAt).
 		SetNillableEditedAt(article.EditedAt).
 		SetNillableCreatedBy(article.CreatedBy).
@@ -74,6 +75,7 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article) (*model.
 		Type:          enum.ArticleType(save.Type),
 		Statement:     save.Statement,
 		Commentable:   save.Commentable,
+		PinnedID:      save.PinnedCommentID,
 		PublishedAt:   save.PublishedAt,
 		PublishedCity: save.PublishedCity,
 		EditedAt:      save.EditedAt,
@@ -104,6 +106,7 @@ func (r *ArticleRepo) Update(ctx context.Context, article *model.Article) (*mode
 		SetType(articleent.Type(updateArticle.Type)).
 		SetNillableStatement(updateArticle.Statement).
 		SetCommentable(updateArticle.Commentable).
+		SetNillablePinnedCommentID(updateArticle.PinnedID).
 		SetNillablePublishedAt(updateArticle.PublishedAt).
 		SetNillableEditedAt(updateArticle.EditedAt).
 		SetNillableUpdatedBy(updateArticle.UpdatedBy).
@@ -124,6 +127,7 @@ func (r *ArticleRepo) Update(ctx context.Context, article *model.Article) (*mode
 		Type:          enum.ArticleType(save.Type),
 		Statement:     save.Statement,
 		Commentable:   save.Commentable,
+		PinnedID:      save.PinnedCommentID,
 		PublishedAt:   save.PublishedAt,
 		PublishedCity: save.PublishedCity,
 		EditedAt:      save.EditedAt,
@@ -200,6 +204,16 @@ func (r *ArticleRepo) UpdateHasPostscript(ctx context.Context, req *repo.Article
 		SetHasPostscript(req.HasPostscript).
 		SetUpdatedBy(req.UpdatedBy).
 		Exec(ctx)
+}
+
+func (r *ArticleRepo) UpdatePinnedComment(ctx context.Context, req *repo.ArticleUpdatePinnedCommentReq) error {
+	update := r.getClient(ctx).Article.UpdateOneID(req.ArticleID).SetUpdatedBy(req.UpdatedBy)
+	if req.PinnedID == nil {
+		update.ClearPinnedCommentID()
+	} else {
+		update.SetPinnedCommentID(*req.PinnedID)
+	}
+	return update.Exec(ctx)
 }
 func (r *ArticleRepo) AddStats(ctx context.Context, req *repo.ArticleAddStatsReq) error {
 	articleID := req.ArticleID
@@ -395,6 +409,7 @@ func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.
 		Type:          enum.ArticleType(a.Type),
 		Statement:     a.Statement,
 		Commentable:   a.Commentable,
+		PinnedID:      a.PinnedCommentID,
 		PublishedAt:   a.PublishedAt,
 		PublishedCity: a.PublishedCity,
 		EditedAt:      a.EditedAt,
@@ -433,6 +448,7 @@ func (r *ArticleRepo) List(ctx context.Context, req *repo.ArticleGetReq) ([]*mod
 			Type:          enum.ArticleType(item.Type),
 			Statement:     item.Statement,
 			Commentable:   item.Commentable,
+			PinnedID:      item.PinnedCommentID,
 			PublishedAt:   item.PublishedAt,
 			PublishedCity: item.PublishedCity,
 			EditedAt:      item.EditedAt,
@@ -497,6 +513,7 @@ func (r *ArticleRepo) Page(ctx context.Context, req *repo.ArticleGetReq) (*repo.
 			Type:          enum.ArticleType(item.Type),
 			Statement:     item.Statement,
 			Commentable:   item.Commentable,
+			PinnedID:      item.PinnedCommentID,
 			PublishedAt:   item.PublishedAt,
 			PublishedCity: item.PublishedCity,
 			EditedAt:      item.EditedAt,

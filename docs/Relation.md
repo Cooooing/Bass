@@ -1,4 +1,4 @@
-# RespRelation
+# Relation
 
 
 ## Properties
@@ -15,9 +15,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { RespRelation } from '@bass/bbs-sdk-axios';
+import { Relation } from '@bass/bbs-sdk-axios';
 
-const instance: RespRelation = {
+const instance: Relation = {
     id,
     type,
     actor_id,

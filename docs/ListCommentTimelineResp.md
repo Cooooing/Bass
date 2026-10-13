@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **page** | [**PageResp**](PageResp.md) |  | [optional] [default to undefined]
-**rows** | [**Array&lt;RespCommentListItem&gt;**](RespCommentListItem.md) |  | [optional] [default to undefined]
+**rows** | [**Array&lt;CommentListItem&gt;**](CommentListItem.md) |  | [optional] [default to undefined]
 
 ## Example
 

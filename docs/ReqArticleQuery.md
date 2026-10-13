@@ -9,7 +9,6 @@ Name | Type | Description | Notes
 **domain_id** | **string** |  | [optional] [default to undefined]
 **type** | **string** |  | [optional] [default to undefined]
 **order** | **string** |  | [optional] [default to undefined]
-**keyword** | **string** |  | [optional] [default to undefined]
 **author_id** | **string** |  | [optional] [default to undefined]
 **publish_status** | **string** |  | [optional] [default to undefined]
 **publish_statuses** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
@@ -29,7 +28,6 @@ const instance: ReqArticleQuery = {
     domain_id,
     type,
     order,
-    keyword,
     author_id,
     publish_status,
     publish_statuses,

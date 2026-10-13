@@ -12,9 +12,12 @@ All URIs are relative to *http://localhost*
 |[**get**](#get) | **POST** /v1/content/article/get | |
 |[**like**](#like) | **POST** /v1/content/article/like | |
 |[**list**](#list) | **POST** /v1/content/article/list | |
+|[**listFollowing**](#listfollowing) | **POST** /v1/content/article/following/list | |
+|[**listNearby**](#listnearby) | **POST** /v1/content/article/nearby/list | |
 |[**pageViewHistory**](#pageviewhistory) | **POST** /v1/content/article/view-history/page | |
 |[**publish**](#publish) | **POST** /v1/content/article/publish | |
 |[**reward**](#reward) | **POST** /v1/content/article/reward | |
+|[**setPinnedComment**](#setpinnedcomment) | **POST** /v1/content/article/comment/pin | |
 |[**thank**](#thank) | **POST** /v1/content/article/thank | |
 |[**updateDraft**](#updatedraft) | **POST** /v1/content/article/draft/update | |
 
@@ -434,6 +437,110 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **listFollowing**
+> ListFollowingArticlesResp listFollowing(listFollowingArticlesReq)
+
+查询当前账号关注作者发布的文章。
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    ListFollowingArticlesReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let listFollowingArticlesReq: ListFollowingArticlesReq; //
+
+const { status, data } = await apiInstance.listFollowing(
+    listFollowingArticlesReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **listFollowingArticlesReq** | **ListFollowingArticlesReq**|  | |
+
+
+### Return type
+
+**ListFollowingArticlesResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **listNearby**
+> ListNearbyArticlesResp listNearby(listNearbyArticlesReq)
+
+查询当前账号所在城市发布的文章。
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    ListNearbyArticlesReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let listNearbyArticlesReq: ListNearbyArticlesReq; //
+
+const { status, data } = await apiInstance.listNearby(
+    listNearbyArticlesReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **listNearbyArticlesReq** | **ListNearbyArticlesReq**|  | |
+
+
+### Return type
+
+**ListNearbyArticlesResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **pageViewHistory**
 > PageArticleViewHistoryResp pageViewHistory(pageArticleViewHistoryReq)
 
@@ -567,6 +674,58 @@ const { status, data } = await apiInstance.reward(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **rewardArticleReq** | **RewardArticleReq**|  | |
+
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **setPinnedComment**
+> object setPinnedComment(setPinnedArticleCommentReq)
+
+设置或取消当前账号文章的置顶评论。
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    SetPinnedArticleCommentReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let setPinnedArticleCommentReq: SetPinnedArticleCommentReq; //
+
+const { status, data } = await apiInstance.setPinnedComment(
+    setPinnedArticleCommentReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **setPinnedArticleCommentReq** | **SetPinnedArticleCommentReq**|  | |
 
 
 ### Return type

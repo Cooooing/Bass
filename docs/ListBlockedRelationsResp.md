@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **page** | [**PageResp**](PageResp.md) |  | [optional] [default to undefined]
-**rows** | [**Array&lt;RespRelation&gt;**](RespRelation.md) |  | [optional] [default to undefined]
+**rows** | [**Array&lt;Relation&gt;**](Relation.md) |  | [optional] [default to undefined]
 
 ## Example
 

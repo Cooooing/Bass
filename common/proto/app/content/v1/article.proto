@@ -21,6 +21,7 @@ service ContentArticleService {
   rpc Archive(ArchiveArticle.Req) returns (ArchiveArticle.Resp) {} // 归档文章
   rpc SetPinnedComment(SetPinnedArticleComment.Req) returns (SetPinnedArticleComment.Resp) {} // 设置文章置顶评论
   rpc AcceptAnswer(AcceptArticleAnswer.Req) returns (AcceptArticleAnswer.Resp) {} // 采纳问答回答
+  rpc VotePoll(VoteArticlePoll.Req) returns (VoteArticlePoll.Resp) {} // 投票
   rpc Unarchive(UnarchiveArticle.Req) returns (UnarchiveArticle.Resp) {} // 取消归档
   rpc Hide(HideArticle.Req) returns (HideArticle.Resp) {} // 隐藏文章
   rpc Unhide(UnhideArticle.Req) returns (UnhideArticle.Resp) {} // 取消隐藏
@@ -52,6 +53,7 @@ message CreateDraftArticle {
       ArticleType type = 5; // 文章类型
       optional string statement = 6; // 创作声明
       optional bool commentable = 7; // 是否允许评论
+      ArticlePollDraft poll = 8; // 投票文章的草稿配置
     }
   }
   message Resp {
@@ -73,6 +75,7 @@ message UpdateDraftArticle {
       ArticleType type = 5; // 文章类型
       optional string statement = 6; // 创作声明
       optional bool commentable = 7; // 是否允许评论
+      ArticlePollDraft poll = 8; // 投票文章的草稿配置
     }
   }
   message Resp {
@@ -367,8 +370,40 @@ message Article {
   optional string published_city = 32; // 发布时城市快照
   optional int64 pinned_comment_id = 36; // 作者手动置顶的评论 ID
   optional int64 accepted_comment_id = 37; // 问答已采纳评论 ID
+  ArticlePoll poll = 38; // 投票详情
   optional int64 created_by = 1002; // 创建账号 ID
   optional int64 updated_by = 1003; // 更新账号 ID
   google.protobuf.Timestamp created_at = 1000; // 创建时间
   google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}
+
+message ArticlePollDraft {
+  repeated string options = 1; // 投票选项
+  google.protobuf.Timestamp ends_at = 2; // 截止时间
+  int32 max_choices = 3; // 每人最多选择数
+}
+
+message ArticlePoll {
+  google.protobuf.Timestamp ends_at = 1; // 截止时间
+  int32 max_choices = 2; // 每人最多选择数
+  repeated ArticlePollOption options = 3; // 投票选项
+  repeated int64 selected_option_ids = 4; // 当前账号已选选项 ID
+  bool result_visible = 5; // 当前账号是否可查看实时结果
+  int64 participant_count = 6; // 已投票账号数
+  int64 total_vote_count = 7; // 所有选项累计票数
+}
+
+message ArticlePollOption {
+  int64 id = 1; // 选项 ID
+  string content = 2; // 选项内容
+  int32 vote_count = 3; // 可见时的票数
+}
+
+message VoteArticlePoll {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+    repeated int64 option_ids = 2; // 所选选项 ID
+    ContentAccess access = 3; // 访问上下文
+  }
+  message Resp {}
 }

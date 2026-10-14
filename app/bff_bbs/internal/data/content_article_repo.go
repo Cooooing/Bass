@@ -49,6 +49,7 @@ func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo
 		save.Type = contentv1enum.ArticleType(article.Type)
 		save.Statement = article.Statement
 		save.Commentable = article.Commentable
+		save.Poll = r.articlePollDraft(article.Poll)
 	}
 	reply, err := r.contentClient.Article.CreateDraft(ctx, &contentv1.CreateDraftArticle_Req{
 		Article: save,
@@ -74,6 +75,7 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 		save.Type = contentv1enum.ArticleType(article.Type)
 		save.Statement = article.Statement
 		save.Commentable = article.Commentable
+		save.Poll = r.articlePollDraft(article.Poll)
 	}
 	reply, err := r.contentClient.Article.UpdateDraft(ctx, &contentv1.UpdateDraftArticle_Req{
 		ArticleId: req.ArticleID,
@@ -145,6 +147,18 @@ func (r *ContentArticleClient) SetPinnedArticleComment(ctx context.Context, req 
 func (r *ContentArticleClient) AcceptArticleAnswer(ctx context.Context, req *repo.AcceptArticleAnswerReq) error {
 	_, err := r.contentClient.Article.AcceptAnswer(ctx, &contentv1.AcceptArticleAnswer_Req{ArticleId: req.ArticleID, CommentId: req.CommentID, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
 	return err
+}
+
+func (r *ContentArticleClient) VoteArticlePoll(ctx context.Context, req *repo.VoteArticlePollReq) error {
+	_, err := r.contentClient.Article.VotePoll(ctx, &contentv1.VoteArticlePoll_Req{ArticleId: req.ArticleID, OptionIds: req.OptionIDs, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
+	return err
+}
+
+func (*ContentArticleClient) articlePollDraft(row *model.ArticlePollDraft) *contentv1.ArticlePollDraft {
+	if row == nil {
+		return nil
+	}
+	return &contentv1.ArticlePollDraft{Options: row.Options, EndsAt: timestamppb.New(row.EndsAt), MaxChoices: row.MaxChoices}
 }
 func (r *ContentArticleClient) DiscardDraftArticle(ctx context.Context, req *repo.DiscardDraftArticleReq) error {
 	_, err := r.contentClient.Article.DiscardDraft(ctx, &contentv1.DiscardDraftArticle_Req{
@@ -692,6 +706,7 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 		City:                item.PublishedCity,
 		PinnedID:            item.PinnedCommentId,
 		AcceptedCommentID:   item.AcceptedCommentId,
+		Poll:                r.articlePoll(item.GetPoll()),
 		CreatedAt:           new(item.GetCreatedAt().AsTime()),
 		UpdatedAt:           new(item.GetUpdatedAt().AsTime()),
 	}
@@ -713,6 +728,22 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 		}
 	}
 	return out
+}
+
+func (*ContentArticleClient) articlePoll(row *contentv1.ArticlePoll) *model.ArticlePoll {
+	if row == nil {
+		return nil
+	}
+	poll := &model.ArticlePoll{MaxChoices: row.GetMaxChoices(), ParticipantCount: row.GetParticipantCount(), TotalVoteCount: row.GetTotalVoteCount(), SelectedOptionIDs: row.GetSelectedOptionIds(), ResultVisible: row.GetResultVisible(), Options: make([]*model.ArticlePollOption, 0, len(row.GetOptions()))}
+	if row.GetEndsAt() != nil {
+		poll.EndsAt = row.GetEndsAt().AsTime()
+	}
+	for _, option := range row.GetOptions() {
+		if option != nil {
+			poll.Options = append(poll.Options, &model.ArticlePollOption{ID: option.GetId(), Content: option.GetContent(), VoteCount: option.GetVoteCount()})
+		}
+	}
+	return poll
 }
 
 func (r *ContentArticleClient) articleSummaryContent(content string) string {

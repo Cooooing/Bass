@@ -77,6 +77,7 @@ func (s *ArticleService) CreateDraft(ctx context.Context, req *v1.CreateDraftArt
 			Statement:     articleReq.Statement,
 			Commentable:   util.DerefOrDefault(articleReq.Commentable, true),
 		},
+		Poll: s.articlePollDraft(articleReq.GetPoll()),
 	})
 	if err != nil {
 		return nil, err
@@ -123,11 +124,44 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArt
 			Commentable:   util.DerefOrDefault(articleReq.Commentable, true),
 			UpdatedBy:     new(access.ActorUserID),
 		},
+		Poll: s.articlePollDraft(articleReq.GetPoll()),
 	})
 	if err != nil {
 		return nil, err
 	}
 	return &v1.UpdateDraftArticle_Resp{ArticleId: row.ID}, nil
+}
+
+func (s *ArticleService) VotePoll(ctx context.Context, req *v1.VoteArticlePoll_Req) (*v1.VoteArticlePoll_Resp, error) {
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	access, err := access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	if req.GetArticleId() <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	err = s.articleUsecase.VotePoll(ctx, &usecase.ArticleVotePollReq{Access: access, ArticleID: req.GetArticleId(), OptionIDs: req.GetOptionIds()})
+	return &v1.VoteArticlePoll_Resp{}, err
+}
+
+func (*ArticleService) articlePollDraft(req *v1.ArticlePollDraft) *model.ArticlePollDraft {
+	if req == nil || req.GetEndsAt() == nil {
+		return nil
+	}
+	return &model.ArticlePollDraft{Options: req.GetOptions(), EndsAt: req.GetEndsAt().AsTime(), MaxChoices: req.GetMaxChoices()}
 }
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req) (*v1.PublishArticle_Resp, error) {
@@ -556,7 +590,7 @@ func (s *ArticleService) PageViewHistory(
 	return &v1.PageArticleViewHistory_Resp{Rows: rows, Page: pageResponse}, nil
 }
 
-func (*ArticleService) articleViewHistoryArticle(row *model.Article) *v1.Article {
+func (s *ArticleService) articleViewHistoryArticle(row *model.Article) *v1.Article {
 	if row == nil {
 		return nil
 	}
@@ -585,6 +619,7 @@ func (*ArticleService) articleViewHistoryArticle(row *model.Article) *v1.Article
 		PublishedCity:     row.PublishedCity,
 		PinnedCommentId:   row.PinnedID,
 		AcceptedCommentId: row.AcceptedCommentID,
+		Poll:              s.articlePoll(row.Poll),
 	}
 	if row.CreatedAt != nil {
 		article.CreatedAt = timestamppb.New(*row.CreatedAt)
@@ -599,6 +634,23 @@ func (*ArticleService) articleViewHistoryArticle(row *model.Article) *v1.Article
 		article.EditedAt = timestamppb.New(*row.EditedAt)
 	}
 	return article
+}
+
+func (*ArticleService) articlePoll(row *model.ArticlePoll) *v1.ArticlePoll {
+	if row == nil {
+		return nil
+	}
+	poll := &v1.ArticlePoll{MaxChoices: row.MaxChoices, ParticipantCount: row.ParticipantCount, TotalVoteCount: row.TotalVoteCount, SelectedOptionIds: row.SelectedOptionIDs, ResultVisible: row.ResultVisible, Options: make([]*v1.ArticlePollOption, 0, len(row.Options))}
+	if !row.EndsAt.IsZero() {
+		poll.EndsAt = timestamppb.New(row.EndsAt)
+	}
+	for _, option := range row.Options {
+		if option == nil {
+			continue
+		}
+		poll.Options = append(poll.Options, &v1.ArticlePollOption{Id: option.ID, Content: option.Content, VoteCount: option.VoteCount})
+	}
+	return poll
 }
 
 func (s *ArticleService) FlushViews(ctx context.Context, req *v1.FlushArticleViews_Req) (*v1.FlushArticleViews_Resp, error) {
@@ -656,6 +708,7 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.G
 		PublishedCity:     row.PublishedCity,
 		PinnedCommentId:   row.PinnedID,
 		AcceptedCommentId: row.AcceptedCommentID,
+		Poll:              s.articlePoll(row.Poll),
 	}
 	if row.CreatedAt != nil {
 		article.CreatedAt = timestamppb.New(*row.CreatedAt)

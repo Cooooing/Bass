@@ -86,7 +86,7 @@ func (r *ArticlePollRepo) Get(ctx context.Context, articleID, viewerID int64) (*
 	if err != nil {
 		return nil, err
 	}
-	row := &model.ArticlePoll{ID: poll.ID, EndsAt: poll.EndsAt, MaxChoices: poll.MaxChoices, Options: make([]*model.ArticlePollOption, 0, len(options))}
+	row := &model.ArticlePoll{ID: poll.ID, EndsAt: poll.EndsAt, MaxChoices: poll.MaxChoices, ParticipantCount: poll.ParticipantCount, TotalVoteCount: poll.TotalVoteCount, Options: make([]*model.ArticlePollOption, 0, len(options))}
 	for _, option := range options {
 		row.Options = append(row.Options, &model.ArticlePollOption{ID: option.ID, Content: option.Content, VoteCount: option.VoteCount})
 	}
@@ -110,6 +110,9 @@ func (r *ArticlePollRepo) Vote(ctx context.Context, pollID, userID int64, option
 		if gen.IsConstraintError(err) {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_CONFLICT)
 		}
+		return err
+	}
+	if _, err := client.ArticlePoll.UpdateOneID(pollID).AddParticipantCount(1).AddTotalVoteCount(int64(len(optionIDs))).Save(ctx); err != nil {
 		return err
 	}
 	for _, optionID := range optionIDs {

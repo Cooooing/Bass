@@ -20,6 +20,8 @@ type ArticlePoll struct {
 	ID                int64
 	EndsAt            time.Time
 	MaxChoices        int32
+	ParticipantCount  int64
+	TotalVoteCount    int64
 	Options           []*ArticlePollOption
 	SelectedOptionIDs []int64
 	ResultVisible     bool

@@ -9,6 +9,28 @@ type ArticleViewerActionState struct {
 	Rewarded  bool
 }
 
+type ArticlePollDraft struct {
+	Options    []string
+	EndsAt     time.Time
+	MaxChoices int32
+}
+
+type ArticlePoll struct {
+	EndsAt            time.Time
+	MaxChoices        int32
+	ParticipantCount  int64
+	TotalVoteCount    int64
+	Options           []*ArticlePollOption
+	SelectedOptionIDs []int64
+	ResultVisible     bool
+}
+
+type ArticlePollOption struct {
+	ID        int64
+	Content   string
+	VoteCount int32
+}
+
 type ArticleTag struct {
 	ID       int64
 	Code     string
@@ -111,4 +133,5 @@ type ArticleDetail struct {
 	Domains             []*ArticleDomain
 	PinnedID            *int64
 	AcceptedCommentID   *int64
+	Poll                *ArticlePoll
 }

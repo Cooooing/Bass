@@ -97,6 +97,7 @@ type ContentArticleSave struct {
 	Type          int32
 	Statement     *string
 	Commentable   *bool
+	Poll          *model.ArticlePollDraft
 }
 
 type CreateDraftArticleReq struct {
@@ -108,7 +109,7 @@ func (u *ContentArticleUsecase) CreateDraftArticle(ctx context.Context, req *Cre
 	if req == nil || req.Article == nil {
 		return 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	return u.contentArticleClient.CreateDraftArticle(ctx, &repo.CreateDraftArticleReq{UserID: req.UserID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
+	return u.contentArticleClient.CreateDraftArticle(ctx, &repo.CreateDraftArticleReq{UserID: req.UserID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable, Poll: req.Article.Poll}})
 }
 
 type UpdateDraftArticleReq struct {
@@ -121,7 +122,20 @@ func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *Upd
 	if req == nil || req.Article == nil || req.ArticleID <= 0 {
 		return 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	return u.contentArticleClient.UpdateDraftArticle(ctx, &repo.UpdateDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable}})
+	return u.contentArticleClient.UpdateDraftArticle(ctx, &repo.UpdateDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable, Poll: req.Article.Poll}})
+}
+
+type VoteArticlePollReq struct {
+	UserID    int64
+	ArticleID int64
+	OptionIDs []int64
+}
+
+func (u *ContentArticleUsecase) VoteArticlePoll(ctx context.Context, req *VoteArticlePollReq) error {
+	if req == nil || req.ArticleID <= 0 || len(req.OptionIDs) == 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
+	}
+	return u.contentArticleClient.VoteArticlePoll(ctx, &repo.VoteArticlePollReq{UserID: req.UserID, ArticleID: req.ArticleID, OptionIDs: req.OptionIDs})
 }
 
 type PublishArticleReq struct {

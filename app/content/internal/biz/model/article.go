@@ -26,6 +26,7 @@ type Article struct {
 	Commentable       bool
 	PinnedID          *int64
 	AcceptedCommentID *int64
+	Poll              *ArticlePoll
 	PublishedAt       *time.Time
 	PublishedCity     *string
 	EditedAt          *time.Time
@@ -61,7 +62,7 @@ func (a *Article) IsPublicVisible() bool {
 }
 
 func (a *Article) CanCreateDraft() error {
-	if a == nil || (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA) {
+	if a == nil || (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA && a.Type != enum.ArticleTypePoll) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
 	}
 	return nil
@@ -71,7 +72,7 @@ func (a *Article) CanEditDraft(operatorID int64) error {
 	if a == nil || !a.IsAuthor(operatorID) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
-	if (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA) || a.PublishStatus != enum.ArticlePublishStatusDraft || a.Restriction != enum.ContentRestrictionNone {
+	if (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA && a.Type != enum.ArticleTypePoll) || a.PublishStatus != enum.ArticlePublishStatusDraft || a.Restriction != enum.ContentRestrictionNone {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 	}
 	return nil
@@ -82,7 +83,7 @@ func (a *Article) CanPublish(access *ContentAccess, publishAt *time.Time, now ti
 	if err != nil {
 		return err
 	}
-	if a == nil || (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA) || a.Restriction != enum.ContentRestrictionNone {
+	if a == nil || (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA && a.Type != enum.ArticleTypePoll) || a.Restriction != enum.ContentRestrictionNone {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 	}
 	switch access.Scope {
@@ -117,7 +118,7 @@ func (a *Article) CanCancelSchedule(operatorID int64) error {
 	if a == nil || !a.IsAuthor(operatorID) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
-	if (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA) || a.PublishStatus != enum.ArticlePublishStatusDraft || a.PublishedAt == nil || a.Restriction != enum.ContentRestrictionNone {
+	if (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA && a.Type != enum.ArticleTypePoll) || a.PublishStatus != enum.ArticlePublishStatusDraft || a.PublishedAt == nil || a.Restriction != enum.ContentRestrictionNone {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 	}
 	return nil

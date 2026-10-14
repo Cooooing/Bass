@@ -2,6 +2,7 @@ package usecase
 
 import (
 	commonmodel "common/pkg/model"
+	"common/pkg/util"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 	"log/slog"
@@ -28,6 +29,7 @@ type ArticleUsecase struct {
 	actionRecordRepo     repo.ArticleActionRecordRepo
 	commentRepo          repo.CommentRepo
 	articleQARepo        repo.ArticleQARepo
+	articlePollRepo      repo.ArticlePollRepo
 	outboxRepo           repo.OutboxEventRepo
 	outboxUsecase        *OutboxUsecase
 	moderationRecordRepo repo.ContentModerationRecordRepo
@@ -45,6 +47,7 @@ func NewArticleUsecase(
 	actionRecordRepo repo.ArticleActionRecordRepo,
 	commentRepo repo.CommentRepo,
 	articleQARepo repo.ArticleQARepo,
+	articlePollRepo repo.ArticlePollRepo,
 	outboxRepo repo.OutboxEventRepo,
 	outboxUsecase *OutboxUsecase,
 	moderationRecordRepo repo.ContentModerationRecordRepo,
@@ -61,6 +64,7 @@ func NewArticleUsecase(
 		actionRecordRepo:     actionRecordRepo,
 		commentRepo:          commentRepo,
 		articleQARepo:        articleQARepo,
+		articlePollRepo:      articlePollRepo,
 		outboxRepo:           outboxRepo,
 		outboxUsecase:        outboxUsecase,
 		moderationRecordRepo: moderationRecordRepo,
@@ -74,6 +78,7 @@ func NewArticleUsecase(
 type ArticleAddReq struct {
 	Access  *model.ContentAccess
 	Article *model.Article
+	Poll    *model.ArticlePollDraft
 }
 
 func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Article, error) {
@@ -88,6 +93,11 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 	if err := article.CanCreateDraft(); err != nil {
 		return nil, err
 	}
+	if article.Type == enum.ArticleTypePoll {
+		if err := req.Poll.Normalize(time.Now()); err != nil {
+			return nil, err
+		}
+	}
 	article.PublishStatus = enum.ArticlePublishStatusDraft
 	if article.Visibility == "" {
 		article.Visibility = enum.ArticleVisibilityPublic
@@ -101,7 +111,13 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 	var save *model.Article
 	err = d.tx(ctx, func(ctx context.Context) error {
 		save, err = d.articleRepo.Save(ctx, article)
-		return err
+		if err != nil {
+			return err
+		}
+		if article.Type == enum.ArticleTypePoll {
+			return d.articlePollRepo.SaveDraft(ctx, save.ID, req.Poll)
+		}
+		return nil
 	})
 	if err != nil {
 		return nil, err
@@ -112,6 +128,7 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 type ArticleUpdateDraftReq struct {
 	Access  *model.ContentAccess
 	Article *model.Article
+	Poll    *model.ArticlePollDraft
 }
 
 func (d *ArticleUsecase) Update(ctx context.Context, req *ArticleUpdateDraftReq) (*model.Article, error) {
@@ -122,6 +139,11 @@ func (d *ArticleUsecase) Update(ctx context.Context, req *ArticleUpdateDraftReq)
 	}
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	if article.Type == enum.ArticleTypePoll {
+		if err := req.Poll.Normalize(time.Now()); err != nil {
+			return nil, err
+		}
 	}
 	var save *model.Article
 	err = d.tx(ctx, func(ctx context.Context) error {
@@ -140,7 +162,13 @@ func (d *ArticleUsecase) Update(ctx context.Context, req *ArticleUpdateDraftReq)
 		article.UpdatedBy = new(access.ActorUserID)
 		article.FormatContent()
 		save, err = d.articleRepo.Update(ctx, article)
-		return err
+		if err != nil {
+			return err
+		}
+		if article.Type == enum.ArticleTypePoll {
+			return d.articlePollRepo.SaveDraft(ctx, article.ID, req.Poll)
+		}
+		return d.articlePollRepo.DeleteDraft(ctx, article.ID)
 	})
 	if err != nil {
 		return nil, err
@@ -456,6 +484,9 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 			if err = article.CanPublish(access, new(scheduledAt), now); err != nil {
 				return err
 			}
+			if err = d.validatePublishPoll(ctx, article); err != nil {
+				return err
+			}
 			originalPublishedAt = article.PublishedAt
 			originalPublishedCity = article.PublishedCity
 			return d.articleRepo.UpdatePublishStatus(ctx, &repo.ArticleUpdatePublishStatusReq{
@@ -516,6 +547,9 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		if err = article.CanPublish(access, nil, now); err != nil {
 			return err
 		}
+		if err = d.validatePublishPoll(ctx, article); err != nil {
+			return err
+		}
 		update := &repo.ArticleUpdatePublishStatusReq{
 			ArticleID:     articleID,
 			PublishStatus: enum.ArticlePublishStatusPublished,
@@ -553,6 +587,20 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		if cancelErr := d.delayedTaskClient.CancelPublishScheduledArticle(ctx, articleID); cancelErr != nil {
 			d.log.WarnContext(ctx, "cancel scheduled article publish failed", slog.Int64("article_id", articleID), slog.Any("err", cancelErr))
 		}
+	}
+	return nil
+}
+
+func (d *ArticleUsecase) validatePublishPoll(ctx context.Context, article *model.Article) error {
+	if article.Type != enum.ArticleTypePoll {
+		return nil
+	}
+	poll, err := d.articlePollRepo.Get(ctx, article.ID, 0)
+	if err != nil {
+		return err
+	}
+	if poll == nil {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 	}
 	return nil
 }
@@ -1039,6 +1087,39 @@ func (d *ArticleUsecase) Get(ctx context.Context, articleID int64) (*model.Artic
 	return article, nil
 }
 
+type ArticleVotePollReq struct {
+	Access    *model.ContentAccess
+	ArticleID int64
+	OptionIDs []int64
+}
+
+func (d *ArticleUsecase) VotePoll(ctx context.Context, req *ArticleVotePollReq) error {
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return err
+	}
+	return d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(req.ArticleID)}})
+		if err != nil {
+			return err
+		}
+		if article.Type != enum.ArticleTypePoll {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		if err = d.articleAccessUsecase.CanInteract(access, article); err != nil {
+			return err
+		}
+		poll, err := d.articlePollRepo.Get(ctx, article.ID, 0)
+		if err != nil {
+			return err
+		}
+		if err = poll.ValidateVote(req.OptionIDs, time.Now()); err != nil {
+			return err
+		}
+		return d.articlePollRepo.Vote(ctx, poll.ID, access.ActorUserID, req.OptionIDs)
+	})
+}
+
 type ArticleGetByAccessReq struct {
 	ArticleID int64
 	Access    *model.ContentAccess
@@ -1056,6 +1137,20 @@ func (d *ArticleUsecase) GetByAccess(ctx context.Context, req *ArticleGetByAcces
 		article.AcceptedCommentID, err = d.articleQARepo.GetAcceptedCommentID(ctx, article.ID)
 		if err != nil {
 			return nil, err
+		}
+	}
+	if article.Type == enum.ArticleTypePoll {
+		article.Poll, err = d.articlePollRepo.Get(ctx, article.ID, req.Access.ActorUserID)
+		if err != nil {
+			return nil, err
+		}
+		if article.Poll != nil {
+			article.Poll.ResultVisible = article.Poll.CanRevealResults(util.DerefOrDefault(article.CreatedBy, 0), req.Access.ActorUserID, time.Now())
+			if !article.Poll.ResultVisible {
+				for _, option := range article.Poll.Options {
+					option.VoteCount = 0
+				}
+			}
 		}
 	}
 	return article, nil

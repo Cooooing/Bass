@@ -48,7 +48,7 @@ func (s *ContentArticleService) CreateDraft(ctx context.Context, req *bbscontent
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	articleID, err := s.contentArticleUsecase.CreateDraftArticle(ctx, &usecase.CreateDraftArticleReq{UserID: user.ID, Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable}})
+	articleID, err := s.contentArticleUsecase.CreateDraftArticle(ctx, &usecase.CreateDraftArticleReq{UserID: user.ID, Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable, Poll: s.articlePollDraft(article.GetPoll())}})
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontent
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	articleID, err := s.contentArticleUsecase.UpdateDraftArticle(ctx, &usecase.UpdateDraftArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable}})
+	articleID, err := s.contentArticleUsecase.UpdateDraftArticle(ctx, &usecase.UpdateDraftArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable, Poll: s.articlePollDraft(article.GetPoll())}})
 	if err != nil {
 		return nil, err
 	}
@@ -131,6 +131,15 @@ func (s *ContentArticleService) AcceptAnswer(ctx context.Context, req *bbsconten
 	}
 	err := s.contentArticleUsecase.AcceptArticleAnswer(ctx, user.ID, req.GetArticleId(), req.GetCommentId())
 	return &bbscontentv1.AcceptArticleAnswer_Resp{}, err
+}
+
+func (s *ContentArticleService) VotePoll(ctx context.Context, req *bbscontentv1.VoteArticlePoll_Req) (*bbscontentv1.VoteArticlePoll_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	err := s.contentArticleUsecase.VoteArticlePoll(ctx, &usecase.VoteArticlePollReq{UserID: user.ID, ArticleID: req.GetArticleId(), OptionIDs: req.GetOptionIds()})
+	return &bbscontentv1.VoteArticlePoll_Resp{}, err
 }
 
 func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Req) (*bbscontentv1.ListArticles_Resp, error) {
@@ -341,7 +350,7 @@ func (s *ContentArticleService) articleDetail(row *model.ArticleDetail) *bbscont
 	for _, item := range row.Domains {
 		domains = append(domains, &bbscontentv1.ArticleDomain{Id: item.ID, Code: item.Code, Name: item.Name, Icon: item.Icon, Url: item.URL})
 	}
-	out := &bbscontentv1.ArticleDetail{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, RewardContent: row.RewardContent, RewardContentRender: row.RewardContentRender, RewardPoints: row.RewardPoints, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), Postscripts: postscripts, AuthorUser: s.accountProfile(row.AuthorUser), Tags: tags, Domains: domains, City: row.City, AcceptedCommentId: row.AcceptedCommentID, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
+	out := &bbscontentv1.ArticleDetail{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, RewardContent: row.RewardContent, RewardContentRender: row.RewardContentRender, RewardPoints: row.RewardPoints, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), Postscripts: postscripts, AuthorUser: s.accountProfile(row.AuthorUser), Tags: tags, Domains: domains, City: row.City, AcceptedCommentId: row.AcceptedCommentID, Poll: s.articlePoll(row.Poll), CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
 	if row.LastReplyAt != nil {
 		out.LastReplyAt = timestamppb.New(*row.LastReplyAt)
 	}
@@ -358,6 +367,29 @@ func (s *ContentArticleService) articleDetail(row *model.ArticleDetail) *bbscont
 		out.EditedAt = timestamppb.New(*row.EditedAt)
 	}
 	return out
+}
+
+func (*ContentArticleService) articlePollDraft(row *bbscontentv1.ArticlePollDraft) *model.ArticlePollDraft {
+	if row == nil || row.GetEndsAt() == nil {
+		return nil
+	}
+	return &model.ArticlePollDraft{Options: row.GetOptions(), EndsAt: row.GetEndsAt().AsTime(), MaxChoices: row.GetMaxChoices()}
+}
+
+func (*ContentArticleService) articlePoll(row *model.ArticlePoll) *bbscontentv1.ArticlePoll {
+	if row == nil {
+		return nil
+	}
+	poll := &bbscontentv1.ArticlePoll{MaxChoices: row.MaxChoices, ParticipantCount: row.ParticipantCount, TotalVoteCount: row.TotalVoteCount, SelectedOptionIds: row.SelectedOptionIDs, ResultVisible: row.ResultVisible, Options: make([]*bbscontentv1.ArticlePollOption, 0, len(row.Options))}
+	if !row.EndsAt.IsZero() {
+		poll.EndsAt = timestamppb.New(row.EndsAt)
+	}
+	for _, option := range row.Options {
+		if option != nil {
+			poll.Options = append(poll.Options, &bbscontentv1.ArticlePollOption{Id: option.ID, Content: option.Content, VoteCount: option.VoteCount})
+		}
+	}
+	return poll
 }
 
 func (s *ContentArticleService) articleViewerActionState(row *model.ArticleViewerActionState) *bbscontentv1.ArticleViewerActionState {

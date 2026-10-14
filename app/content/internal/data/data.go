@@ -32,6 +32,7 @@ var ModuleProviderSet = wire.NewSet(
 	client.ProvideTx,
 	repo.NewArticleRepo,
 	repo.NewArticleQARepo,
+	repo.NewArticlePollRepo,
 	repo.NewPostgresArticleSearchRepo,
 	repo.NewCommentRepo,
 	repo.NewCommentActionRecordRepo,

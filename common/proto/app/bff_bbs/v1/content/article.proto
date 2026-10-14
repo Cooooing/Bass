@@ -77,6 +77,14 @@ service ArticleService {
     };
   }
 
+  // 提交一次不可修改的文章投票。
+  rpc VotePoll(VoteArticlePoll.Req) returns (VoteArticlePoll.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/poll/vote"
+      body: "*"
+    };
+  }
+
   // 查询文章列表
   rpc List(ListArticles.Req) returns (ListArticles.Resp) {
     option (google.api.http) = {
@@ -165,6 +173,7 @@ message CreateDraftArticle {
       ArticleType type = 5; // 必填，文章类型
       optional string statement = 6; // 可选，创作声明
       optional bool commentable = 7; // 可选，是否允许评论
+      ArticlePollDraft poll = 8; // 可选，投票文章的草稿配置
       option (gnostic.openapi.v3.schema) = {
         required: "title"
         required: "content"
@@ -194,6 +203,7 @@ message UpdateDraftArticle {
       ArticleType type = 5; // 必填，文章类型
       optional string statement = 6; // 可选，创作声明
       optional bool commentable = 7; // 可选，是否允许评论
+      ArticlePollDraft poll = 8; // 可选，投票文章的草稿配置
       option (gnostic.openapi.v3.schema) = {
         required: "title"
         required: "content"
@@ -497,10 +507,45 @@ message ArticleDetail {
   repeated ArticleDomain domains = 36; // 文章所属领域
   optional string city = 37; // 发布时城市快照
   optional int64 accepted_comment_id = 38; // 问答已采纳评论 ID
+  ArticlePoll poll = 39; // 投票详情
   optional int64 created_by = 1002; // 创建账号 ID
   optional int64 updated_by = 1003; // 更新账号 ID
   google.protobuf.Timestamp created_at = 1000; // 创建时间
   google.protobuf.Timestamp updated_at = 1001; // 更新时间
+}
+
+message ArticlePollDraft {
+  repeated string options = 1; // 投票选项
+  google.protobuf.Timestamp ends_at = 2; // 截止时间
+  int32 max_choices = 3; // 每人最多选择数
+}
+
+message ArticlePoll {
+  google.protobuf.Timestamp ends_at = 1; // 截止时间
+  int32 max_choices = 2; // 每人最多选择数
+  repeated ArticlePollOption options = 3; // 投票选项
+  repeated int64 selected_option_ids = 4; // 当前账号已选选项 ID
+  bool result_visible = 5; // 当前账号是否可查看实时结果
+  int64 participant_count = 6; // 已投票账号数
+  int64 total_vote_count = 7; // 所有选项累计票数
+}
+
+message ArticlePollOption {
+  int64 id = 1; // 选项 ID
+  string content = 2; // 选项内容
+  int32 vote_count = 3; // 可见时的票数
+}
+
+message VoteArticlePoll {
+  message Req {
+    int64 article_id = 1; // 必填，文章 ID
+    repeated int64 option_ids = 2; // 必填，所选选项 ID
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "option_ids"
+    };
+  }
+  message Resp {}
 }
 
 message ArticleTag {

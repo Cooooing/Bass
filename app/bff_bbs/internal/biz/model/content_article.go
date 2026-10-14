@@ -110,4 +110,5 @@ type ArticleDetail struct {
 	Tags                []*ArticleTag
 	Domains             []*ArticleDomain
 	PinnedID            *int64
+	AcceptedCommentID   *int64
 }

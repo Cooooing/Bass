@@ -76,13 +76,15 @@ type ListCommentThreadsReq struct {
 	Order             *int32
 	ReplyPreviewLimit *int32
 	ExcludedUserIDs   []int64
-	TopCommentID      *int64
+	AcceptedAnswerID  *int64
+	PinnedCommentID   *int64
 }
 
 type ListCommentThreadsResp struct {
-	Page       *commonmodel.PageResp
-	Rows       []*CommentThread
-	TopComment *CommentThread
+	Page           *commonmodel.PageResp
+	Rows           []*CommentThread
+	AcceptedAnswer *CommentThread
+	PinnedComment  *CommentThread
 }
 
 type ListCommentRepliesReq struct {

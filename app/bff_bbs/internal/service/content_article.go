@@ -124,6 +124,15 @@ func (s *ContentArticleService) SetPinnedComment(ctx context.Context, req *bbsco
 	return &bbscontentv1.SetPinnedArticleComment_Resp{}, err
 }
 
+func (s *ContentArticleService) AcceptAnswer(ctx context.Context, req *bbscontentv1.AcceptArticleAnswer_Req) (*bbscontentv1.AcceptArticleAnswer_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	err := s.contentArticleUsecase.AcceptArticleAnswer(ctx, user.ID, req.GetArticleId(), req.GetCommentId())
+	return &bbscontentv1.AcceptArticleAnswer_Resp{}, err
+}
+
 func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Req) (*bbscontentv1.ListArticles_Resp, error) {
 	var userID int64
 	if user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo); ok && user != nil {
@@ -332,7 +341,7 @@ func (s *ContentArticleService) articleDetail(row *model.ArticleDetail) *bbscont
 	for _, item := range row.Domains {
 		domains = append(domains, &bbscontentv1.ArticleDomain{Id: item.ID, Code: item.Code, Name: item.Name, Icon: item.Icon, Url: item.URL})
 	}
-	out := &bbscontentv1.ArticleDetail{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, RewardContent: row.RewardContent, RewardContentRender: row.RewardContentRender, RewardPoints: row.RewardPoints, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), Postscripts: postscripts, AuthorUser: s.accountProfile(row.AuthorUser), Tags: tags, Domains: domains, City: row.City, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
+	out := &bbscontentv1.ArticleDetail{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, RewardContent: row.RewardContent, RewardContentRender: row.RewardContentRender, RewardPoints: row.RewardPoints, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), Postscripts: postscripts, AuthorUser: s.accountProfile(row.AuthorUser), Tags: tags, Domains: domains, City: row.City, AcceptedCommentId: row.AcceptedCommentID, CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
 	if row.LastReplyAt != nil {
 		out.LastReplyAt = timestamppb.New(*row.LastReplyAt)
 	}

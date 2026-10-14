@@ -12,33 +12,34 @@ import (
 )
 
 type Article struct {
-	ID            int64
-	Title         string
-	Content       string
-	HasPostscript bool
-	RewardContent *string
-	RewardPoints  *int32
-	PublishStatus enum.ArticlePublishStatus
-	Visibility    enum.ArticleVisibility
-	Restriction   enum.ContentRestriction
-	Type          enum.ArticleType
-	Statement     *string
-	Commentable   bool
-	PinnedID      *int64
-	PublishedAt   *time.Time
-	PublishedCity *string
-	EditedAt      *time.Time
-	ViewCount     int32
-	ThankCount    int32
-	LikeCount     int32
-	CollectCount  int32
-	RewardCount   int32
-	ReplyCount    int32
-	CreatedAt     *time.Time
-	UpdatedAt     *time.Time
-	CreatedBy     *int64
-	UpdatedBy     *int64
-	DeletedAt     *time.Time
+	ID                int64
+	Title             string
+	Content           string
+	HasPostscript     bool
+	RewardContent     *string
+	RewardPoints      *int32
+	PublishStatus     enum.ArticlePublishStatus
+	Visibility        enum.ArticleVisibility
+	Restriction       enum.ContentRestriction
+	Type              enum.ArticleType
+	Statement         *string
+	Commentable       bool
+	PinnedID          *int64
+	AcceptedCommentID *int64
+	PublishedAt       *time.Time
+	PublishedCity     *string
+	EditedAt          *time.Time
+	ViewCount         int32
+	ThankCount        int32
+	LikeCount         int32
+	CollectCount      int32
+	RewardCount       int32
+	ReplyCount        int32
+	CreatedAt         *time.Time
+	UpdatedAt         *time.Time
+	CreatedBy         *int64
+	UpdatedBy         *int64
+	DeletedAt         *time.Time
 }
 
 func (a *Article) FormatContent() {
@@ -60,7 +61,7 @@ func (a *Article) IsPublicVisible() bool {
 }
 
 func (a *Article) CanCreateDraft() error {
-	if a == nil || a.Type != enum.ArticleTypeNormal {
+	if a == nil || (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_INVALID_ARTICLE_TYPE)
 	}
 	return nil
@@ -70,7 +71,7 @@ func (a *Article) CanEditDraft(operatorID int64) error {
 	if a == nil || !a.IsAuthor(operatorID) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
-	if a.Type != enum.ArticleTypeNormal || a.PublishStatus != enum.ArticlePublishStatusDraft || a.Restriction != enum.ContentRestrictionNone {
+	if (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA) || a.PublishStatus != enum.ArticlePublishStatusDraft || a.Restriction != enum.ContentRestrictionNone {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 	}
 	return nil
@@ -81,7 +82,7 @@ func (a *Article) CanPublish(access *ContentAccess, publishAt *time.Time, now ti
 	if err != nil {
 		return err
 	}
-	if a == nil || a.Type != enum.ArticleTypeNormal || a.Restriction != enum.ContentRestrictionNone {
+	if a == nil || (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA) || a.Restriction != enum.ContentRestrictionNone {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 	}
 	switch access.Scope {
@@ -116,7 +117,7 @@ func (a *Article) CanCancelSchedule(operatorID int64) error {
 	if a == nil || !a.IsAuthor(operatorID) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
-	if a.Type != enum.ArticleTypeNormal || a.PublishStatus != enum.ArticlePublishStatusDraft || a.PublishedAt == nil || a.Restriction != enum.ContentRestrictionNone {
+	if (a.Type != enum.ArticleTypeNormal && a.Type != enum.ArticleTypeQA) || a.PublishStatus != enum.ArticlePublishStatusDraft || a.PublishedAt == nil || a.Restriction != enum.ContentRestrictionNone {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
 	}
 	return nil

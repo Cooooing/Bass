@@ -365,9 +365,9 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 		Page: page,
 		Rows: rows,
 	}
-	if top := resp.TopComment; top != nil && top.Root != nil {
-		root := top.Root
-		thread := &bbscontentv1.ListCommentThreads_Resp_CommentThread{ReplyCount: top.ReplyCount, HasMoreReplies: top.HasMoreReplies}
+	if accepted := resp.AcceptedAnswer; accepted != nil && accepted.Root != nil {
+		root := accepted.Root
+		thread := &bbscontentv1.ListCommentThreads_Resp_CommentThread{ReplyCount: accepted.ReplyCount, HasMoreReplies: accepted.HasMoreReplies}
 		thread.Root = &bbscontentv1.ListCommentThreads_Resp_CommentListItem{Id: root.ID, ArticleId: root.ArticleID, Content: root.Content, ContentRender: root.ContentRender, Level: root.Level, ParentId: root.ParentID, ReplyId: root.ReplyID, ReplyCount: root.ReplyCount, LikeCount: root.LikeCount, ThankCount: root.ThankCount, Restriction: enum.ContentRestrictionMap.MustToProto(root.Restriction), CreatedBy: root.CreatedBy, UpdatedBy: root.UpdatedBy, CreatedAt: timestamppb.New(*root.CreatedAt), UpdatedAt: timestamppb.New(*root.UpdatedAt)}
 		if root.ViewerActionState != nil {
 			thread.Root.ViewerActionState = &bbscontentv1.ListCommentThreads_Resp_CommentViewerActionState{Liked: root.ViewerActionState.Liked, Thanked: root.ViewerActionState.Thanked}
@@ -375,7 +375,19 @@ func (s *ContentCommentService) ListThreads(ctx context.Context, req *bbscontent
 		if root.User != nil {
 			thread.Root.User = &bbscontentv1.ListCommentThreads_Resp_AccountProfile{Id: root.User.ID, Name: root.User.Name, Nickname: root.User.Nickname, Url: root.User.URL, AvatarUrl: root.User.AvatarURL, Introduction: root.User.Introduction, Status: bbsuserv1enum.AccountStatus(root.User.Status), Mbti: root.User.MBTI, FollowCount: root.User.FollowCount, FollowerCount: root.User.FollowerCount, CreatedAt: timestamppb.New(*root.User.CreatedAt), UpdatedAt: timestamppb.New(*root.User.UpdatedAt)}
 		}
-		result.TopComment = &bbscontentv1.ListCommentThreads_Resp_TopComment{Thread: thread}
+		result.AcceptedAnswer = &bbscontentv1.ListCommentThreads_Resp_PinnedComment{Thread: thread}
+	}
+	if pinned := resp.PinnedComment; pinned != nil && pinned.Root != nil {
+		root := pinned.Root
+		thread := &bbscontentv1.ListCommentThreads_Resp_CommentThread{ReplyCount: pinned.ReplyCount, HasMoreReplies: pinned.HasMoreReplies}
+		thread.Root = &bbscontentv1.ListCommentThreads_Resp_CommentListItem{Id: root.ID, ArticleId: root.ArticleID, Content: root.Content, ContentRender: root.ContentRender, Level: root.Level, ParentId: root.ParentID, ReplyId: root.ReplyID, ReplyCount: root.ReplyCount, LikeCount: root.LikeCount, ThankCount: root.ThankCount, Restriction: enum.ContentRestrictionMap.MustToProto(root.Restriction), CreatedBy: root.CreatedBy, UpdatedBy: root.UpdatedBy, CreatedAt: timestamppb.New(*root.CreatedAt), UpdatedAt: timestamppb.New(*root.UpdatedAt)}
+		if root.ViewerActionState != nil {
+			thread.Root.ViewerActionState = &bbscontentv1.ListCommentThreads_Resp_CommentViewerActionState{Liked: root.ViewerActionState.Liked, Thanked: root.ViewerActionState.Thanked}
+		}
+		if root.User != nil {
+			thread.Root.User = &bbscontentv1.ListCommentThreads_Resp_AccountProfile{Id: root.User.ID, Name: root.User.Name, Nickname: root.User.Nickname, Url: root.User.URL, AvatarUrl: root.User.AvatarURL, Introduction: root.User.Introduction, Status: bbsuserv1enum.AccountStatus(root.User.Status), Mbti: root.User.MBTI, FollowCount: root.User.FollowCount, FollowerCount: root.User.FollowerCount, CreatedAt: timestamppb.New(*root.User.CreatedAt), UpdatedAt: timestamppb.New(*root.User.UpdatedAt)}
+		}
+		result.PinnedComment = &bbscontentv1.ListCommentThreads_Resp_PinnedComment{Thread: thread}
 	}
 	return result, nil
 }

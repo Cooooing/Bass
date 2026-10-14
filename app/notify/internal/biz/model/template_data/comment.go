@@ -12,3 +12,10 @@ type CommentLiked struct {
 }
 
 func (CommentLiked) notificationTemplateData() {}
+
+type ArticleAnswerAccepted struct {
+	Comment Comment
+	Author  User
+}
+
+func (ArticleAnswerAccepted) notificationTemplateData() {}

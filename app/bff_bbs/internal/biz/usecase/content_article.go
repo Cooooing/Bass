@@ -202,6 +202,13 @@ func (u *ContentArticleUsecase) SetPinnedArticleComment(ctx context.Context, req
 	return u.contentArticleClient.SetPinnedArticleComment(ctx, &repo.SetPinnedArticleCommentReq{UserID: req.UserID, ArticleID: req.ArticleID, CommentID: req.CommentID})
 }
 
+func (u *ContentArticleUsecase) AcceptArticleAnswer(ctx context.Context, userID, articleID, commentID int64) error {
+	if articleID <= 0 || commentID <= 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
+	}
+	return u.contentArticleClient.AcceptArticleAnswer(ctx, &repo.AcceptArticleAnswerReq{UserID: userID, ArticleID: articleID, CommentID: commentID})
+}
+
 type ListArticlesReq struct {
 	UserID int64
 	Page   *commonmodel.PageReq

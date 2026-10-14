@@ -244,9 +244,10 @@ type ListCommentThreadsReq struct {
 }
 
 type ListCommentThreadsResp struct {
-	Page       *commonmodel.PageResp
-	Rows       []*repo.CommentThread
-	TopComment *repo.CommentThread
+	Page           *commonmodel.PageResp
+	Rows           []*repo.CommentThread
+	AcceptedAnswer *repo.CommentThread
+	PinnedComment  *repo.CommentThread
 }
 
 func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *ListCommentThreadsReq) (*ListCommentThreadsResp, error) {
@@ -272,6 +273,10 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 	if req.Order != nil {
 		order = new(int32(*req.Order))
 	}
+	pinnedCommentID := article.PinnedID
+	if article.AcceptedCommentID != nil && pinnedCommentID != nil && *article.AcceptedCommentID == *pinnedCommentID {
+		pinnedCommentID = nil
+	}
 	resp, err := u.contentCommentClient.ListCommentThreads(ctx, &repo.ListCommentThreadsReq{
 		UserID:            req.UserID,
 		Page:              page,
@@ -279,17 +284,28 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 		Order:             order,
 		ReplyPreviewLimit: req.ReplyPreviewLimit,
 		ExcludedUserIDs:   excludedUserIDs,
-		TopCommentID:      article.PinnedID,
+		AcceptedAnswerID:  article.AcceptedCommentID,
+		PinnedCommentID:   pinnedCommentID,
 	})
 	if err != nil {
 		return nil, err
 	}
 	profiles := make([]*model.AccountProfile, 0, len(resp.Rows)*4)
-	if resp.TopComment != nil {
-		if resp.TopComment.Root != nil {
-			profiles = append(profiles, resp.TopComment.Root.User, resp.TopComment.Root.ReplyUser)
+	if resp.AcceptedAnswer != nil {
+		if resp.AcceptedAnswer.Root != nil {
+			profiles = append(profiles, resp.AcceptedAnswer.Root.User, resp.AcceptedAnswer.Root.ReplyUser)
 		}
-		for _, reply := range resp.TopComment.PreviewReplies {
+		for _, reply := range resp.AcceptedAnswer.PreviewReplies {
+			if reply != nil {
+				profiles = append(profiles, reply.User, reply.ReplyUser)
+			}
+		}
+	}
+	if resp.PinnedComment != nil {
+		if resp.PinnedComment.Root != nil {
+			profiles = append(profiles, resp.PinnedComment.Root.User, resp.PinnedComment.Root.ReplyUser)
+		}
+		for _, reply := range resp.PinnedComment.PreviewReplies {
 			if reply != nil {
 				profiles = append(profiles, reply.User, reply.ReplyUser)
 			}
@@ -341,9 +357,10 @@ func (u *ContentCommentUsecase) ListCommentThreads(ctx context.Context, req *Lis
 		profile.AvatarURL = &avatarURL
 	}
 	return &ListCommentThreadsResp{
-		Page:       resp.Page,
-		Rows:       resp.Rows,
-		TopComment: resp.TopComment,
+		Page:           resp.Page,
+		Rows:           resp.Rows,
+		AcceptedAnswer: resp.AcceptedAnswer,
+		PinnedComment:  resp.PinnedComment,
 	}, nil
 }
 

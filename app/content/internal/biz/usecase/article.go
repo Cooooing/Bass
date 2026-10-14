@@ -27,6 +27,7 @@ type ArticleUsecase struct {
 	articleRepo          repo.ArticleRepo
 	actionRecordRepo     repo.ArticleActionRecordRepo
 	commentRepo          repo.CommentRepo
+	articleQARepo        repo.ArticleQARepo
 	outboxRepo           repo.OutboxEventRepo
 	outboxUsecase        *OutboxUsecase
 	moderationRecordRepo repo.ContentModerationRecordRepo
@@ -43,6 +44,7 @@ func NewArticleUsecase(
 	articleRepo repo.ArticleRepo,
 	actionRecordRepo repo.ArticleActionRecordRepo,
 	commentRepo repo.CommentRepo,
+	articleQARepo repo.ArticleQARepo,
 	outboxRepo repo.OutboxEventRepo,
 	outboxUsecase *OutboxUsecase,
 	moderationRecordRepo repo.ContentModerationRecordRepo,
@@ -58,6 +60,7 @@ func NewArticleUsecase(
 		articleRepo:          articleRepo,
 		actionRecordRepo:     actionRecordRepo,
 		commentRepo:          commentRepo,
+		articleQARepo:        articleQARepo,
 		outboxRepo:           outboxRepo,
 		outboxUsecase:        outboxUsecase,
 		moderationRecordRepo: moderationRecordRepo,
@@ -285,6 +288,7 @@ func (d *ArticleUsecase) Reward(ctx context.Context, req *ArticleRewardReq) erro
 			},
 		})
 	})
+
 }
 
 type ArticleViewReq struct {
@@ -725,6 +729,49 @@ func (d *ArticleUsecase) SetPinnedComment(ctx context.Context, access *model.Con
 	})
 }
 
+func (d *ArticleUsecase) AcceptAnswer(ctx context.Context, access *model.ContentAccess, articleID, commentID int64) error {
+	access, err := access.Normalize(enum.ContentAccessScopeAuthor)
+	if err != nil {
+		return err
+	}
+	var outboxEvent *repo.OutboxEvent
+	err = d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: &articleID}})
+		if err != nil {
+			return err
+		}
+		if article.Type != enum.ArticleTypeQA || !article.IsAuthor(access.ActorUserID) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+		}
+		if accepted, err := d.articleQARepo.GetAcceptedCommentID(ctx, articleID); err != nil {
+			return err
+		} else if accepted != nil {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		comment, err := d.commentRepo.Get(ctx, &repo.CommentGetReq{Filter: &model.CommentFilter{CommentID: &commentID, ArticleID: &articleID, Restriction: new(enum.ContentRestrictionNone)}})
+		if err != nil {
+			return err
+		}
+		if comment.ParentID != nil || comment.CreatedBy == nil || *comment.CreatedBy == access.ActorUserID {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_COMMENT_INVALID)
+		}
+		if err = d.articleQARepo.Accept(ctx, articleID, commentID, time.Now().UTC()); err != nil {
+			return err
+		}
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER, Payload: &commonenums.Event_ArticleAcceptedAnswer{ArticleAcceptedAnswer: &commonenums.ArticleAcceptedAnswerPayload{SenderId: access.ActorUserID, ArticleId: articleID, CommentId: commentID}}})
+		return err
+	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish accepted answer outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
+	return nil
+}
+
 type ArticleUnarchiveReq struct {
 	Access    *model.ContentAccess
 	ArticleID int64
@@ -1004,6 +1051,12 @@ func (d *ArticleUsecase) GetByAccess(ctx context.Context, req *ArticleGetByAcces
 	}
 	if err = d.articleAccessUsecase.CanGet(req.Access, article); err != nil {
 		return nil, err
+	}
+	if article.Type == enum.ArticleTypeQA {
+		article.AcceptedCommentID, err = d.articleQARepo.GetAcceptedCommentID(ctx, article.ID)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return article, nil
 }

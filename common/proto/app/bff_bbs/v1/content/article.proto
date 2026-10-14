@@ -69,6 +69,14 @@ service ArticleService {
     };
   }
 
+  // 采纳文章回答
+  rpc AcceptAnswer(AcceptArticleAnswer.Req) returns (AcceptArticleAnswer.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/answer/accept"
+      body: "*"
+    };
+  }
+
   // 查询文章列表
   rpc List(ListArticles.Req) returns (ListArticles.Resp) {
     option (google.api.http) = {
@@ -245,7 +253,16 @@ message SetPinnedArticleComment {
   message Req {
     int64 article_id = 1; // 文章 ID
     optional int64 comment_id = 2; // 置顶的一级评论，未传表示取消
-    option (gnostic.openapi.v3.schema) = { required: "article_id" };
+    option (gnostic.openapi.v3.schema) = {required: "article_id"};
+  }
+  message Resp {}
+}
+
+message AcceptArticleAnswer {
+  message Req {
+    int64 article_id = 1; // 问答文章 ID
+    int64 comment_id = 2; // 采纳的一级回答 ID
+    option (gnostic.openapi.v3.schema) = {required: "article_id" required: "comment_id"};
   }
   message Resp {}
 }
@@ -479,6 +496,7 @@ message ArticleDetail {
   repeated ArticleTag tags = 35; // 文章标签
   repeated ArticleDomain domains = 36; // 文章所属领域
   optional string city = 37; // 发布时城市快照
+  optional int64 accepted_comment_id = 38; // 问答已采纳评论 ID
   optional int64 created_by = 1002; // 创建账号 ID
   optional int64 updated_by = 1003; // 更新账号 ID
   google.protobuf.Timestamp created_at = 1000; // 创建时间

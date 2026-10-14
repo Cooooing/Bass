@@ -85,7 +85,7 @@ message ListCommentThreads {
     };
   }
   message Resp {
-    message TopComment {
+    message PinnedComment {
       CommentThread thread = 1; // 独立置顶评论线程
     }
     message CommentThread {
@@ -154,7 +154,8 @@ message ListCommentThreads {
     }
     .common.api.app.common.PageResp page = 1; // 分页结果
     repeated CommentThread rows = 2; // 评论楼层列表
-    optional TopComment top_comment = 3; // 独立置顶评论；不可见时不返回
+    optional PinnedComment accepted_answer = 3; // 问答已采纳回答；不可见时不返回
+    optional PinnedComment pinned_comment = 4; // 作者手动置顶评论；不可见时不返回
   }
 }
 

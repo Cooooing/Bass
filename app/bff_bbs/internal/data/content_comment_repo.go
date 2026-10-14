@@ -173,23 +173,40 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	if req.Order != nil && *req.Order != int32(contentv1enum.CommentOrder_COMMENT_ORDER_UNSPECIFIED) {
 		order = contentv1enum.CommentOrder(*req.Order)
 	}
-	var topRoot *contentv1.PageComments_Resp_Comment
-	if req.TopCommentID != nil {
-		topReply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
+	var acceptedRoot *contentv1.PageComments_Resp_Comment
+	if req.AcceptedAnswerID != nil {
+		acceptedReply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 			Page:   (&commonmodel.PageReq{Page: 1, Size: 1}).ToProto(),
-			Query:  &contentv1.PageComments_Req_CommentQueryParams{CommentId: req.TopCommentID, ArticleId: new(req.ArticleID), Level: new(int32(1)), ExcludedUserIds: req.ExcludedUserIDs},
+			Query:  &contentv1.PageComments_Req_CommentQueryParams{CommentId: req.AcceptedAnswerID, ArticleId: new(req.ArticleID), Level: new(int32(1)), ExcludedUserIds: req.ExcludedUserIDs},
 			Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
 		})
 		if err != nil {
 			return nil, err
 		}
-		if len(topReply.GetRows()) == 1 {
-			topRoot = topReply.GetRows()[0]
+		if len(acceptedReply.GetRows()) == 1 {
+			acceptedRoot = acceptedReply.GetRows()[0]
+		}
+	}
+	var pinnedRoot *contentv1.PageComments_Resp_Comment
+	if req.PinnedCommentID != nil {
+		pinnedReply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
+			Page:   (&commonmodel.PageReq{Page: 1, Size: 1}).ToProto(),
+			Query:  &contentv1.PageComments_Req_CommentQueryParams{CommentId: req.PinnedCommentID, ArticleId: new(req.ArticleID), Level: new(int32(1)), ExcludedUserIds: req.ExcludedUserIDs},
+			Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_GUEST},
+		})
+		if err != nil {
+			return nil, err
+		}
+		if len(pinnedReply.GetRows()) == 1 {
+			pinnedRoot = pinnedReply.GetRows()[0]
 		}
 	}
 	excludedCommentIDs := []int64(nil)
-	if topRoot != nil {
-		excludedCommentIDs = []int64{topRoot.GetId()}
+	if acceptedRoot != nil {
+		excludedCommentIDs = append(excludedCommentIDs, acceptedRoot.GetId())
+	}
+	if pinnedRoot != nil {
+		excludedCommentIDs = append(excludedCommentIDs, pinnedRoot.GetId())
 	}
 	reply, err := r.contentClient.Comment.Page(ctx, &contentv1.PageComments_Req{
 		Page: pageReq.ToProto(),
@@ -256,8 +273,11 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 		})
 	}
 	allComments := append([]*contentv1.PageComments_Resp_Comment{}, reply.GetRows()...)
-	if topRoot != nil {
-		allComments = append(allComments, topRoot)
+	if acceptedRoot != nil {
+		allComments = append(allComments, acceptedRoot)
+	}
+	if pinnedRoot != nil {
+		allComments = append(allComments, pinnedRoot)
 	}
 	for _, rows := range previewMap {
 		allComments = append(allComments, rows...)
@@ -269,8 +289,11 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 	userIDs := lo.FlatMap(reply.GetRows(), func(item *contentv1.PageComments_Resp_Comment, _ int) []int64 {
 		return r.commentProfileIDs(item, articles[item.GetArticleId()])
 	})
-	if topRoot != nil {
-		userIDs = append(userIDs, r.commentProfileIDs(topRoot, articles[topRoot.GetArticleId()])...)
+	if acceptedRoot != nil {
+		userIDs = append(userIDs, r.commentProfileIDs(acceptedRoot, articles[acceptedRoot.GetArticleId()])...)
+	}
+	if pinnedRoot != nil {
+		userIDs = append(userIDs, r.commentProfileIDs(pinnedRoot, articles[pinnedRoot.GetArticleId()])...)
 	}
 	for _, rows := range previewMap {
 		for _, item := range rows {
@@ -282,8 +305,11 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 		return nil, err
 	}
 	commentIDs := append([]int64{}, rootIDs...)
-	if topRoot != nil {
-		commentIDs = append(commentIDs, topRoot.GetId())
+	if acceptedRoot != nil {
+		commentIDs = append(commentIDs, acceptedRoot.GetId())
+	}
+	if pinnedRoot != nil {
+		commentIDs = append(commentIDs, pinnedRoot.GetId())
 	}
 	for _, rows := range previewMap {
 		for _, item := range rows {
@@ -314,8 +340,11 @@ func (r *ContentCommentClient) ListCommentThreads(ctx context.Context, req *repo
 		Page: page,
 		Rows: rows,
 	}
-	if topRoot != nil {
-		result.TopComment = &repo.CommentThread{Root: r.commentListItem(topRoot, articles[topRoot.GetArticleId()], profiles, states[topRoot.GetId()]), ReplyCount: topRoot.GetReplyCount(), HasMoreReplies: topRoot.GetReplyCount() > 0}
+	if pinnedRoot != nil {
+		result.PinnedComment = &repo.CommentThread{Root: r.commentListItem(pinnedRoot, articles[pinnedRoot.GetArticleId()], profiles, states[pinnedRoot.GetId()]), ReplyCount: pinnedRoot.GetReplyCount(), HasMoreReplies: pinnedRoot.GetReplyCount() > 0}
+	}
+	if acceptedRoot != nil {
+		result.AcceptedAnswer = &repo.CommentThread{Root: r.commentListItem(acceptedRoot, articles[acceptedRoot.GetArticleId()], profiles, states[acceptedRoot.GetId()]), ReplyCount: acceptedRoot.GetReplyCount(), HasMoreReplies: acceptedRoot.GetReplyCount() > 0}
 	}
 	return result, nil
 }

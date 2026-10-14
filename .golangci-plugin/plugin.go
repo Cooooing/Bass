@@ -65,6 +65,9 @@ func runBassArch(pass *analysis.Pass) (any, error) {
 		if mod != "" && strings.Contains(filename, "/internal/") && internalLayer(filename, mod) != "enum" && !isGeneratedFile(filename) {
 			validatePackageState(pass, f)
 		}
+		if mod != "" && strings.Contains(filename, "/internal/data/schema/") && !isGeneratedFile(filename) {
+			validateEntSchemaFile(pass, f)
+		}
 
 		if mod != "" && strings.Contains(filename, "/internal/") && !isGeneratedFile(filename) {
 			for _, decl := range f.Decls {
@@ -84,6 +87,45 @@ func runBassArch(pass *analysis.Pass) (any, error) {
 		}
 	}
 	return nil, nil
+}
+
+func validateEntSchemaFile(pass *analysis.Pass, file *ast.File) {
+	var tables []*ast.TypeSpec
+	for _, decl := range file.Decls {
+		gen, ok := decl.(*ast.GenDecl)
+		if !ok || gen.Tok != token.TYPE {
+			continue
+		}
+		for _, spec := range gen.Specs {
+			typeSpec, ok := spec.(*ast.TypeSpec)
+			if ok && isEntSchema(typeSpec) {
+				tables = append(tables, typeSpec)
+			}
+		}
+	}
+	if len(tables) <= 1 {
+		return
+	}
+	for _, table := range tables[1:] {
+		pass.Reportf(table.Pos(), "Schema 规范: 每个 internal/data/schema 文件只能声明一张 Ent 表；请将 %s 拆分到独立文件", table.Name.Name)
+	}
+}
+
+func isEntSchema(spec *ast.TypeSpec) bool {
+	structType, ok := spec.Type.(*ast.StructType)
+	if !ok {
+		return false
+	}
+	for _, field := range structType.Fields.List {
+		selector, ok := field.Type.(*ast.SelectorExpr)
+		if !ok || selector.Sel.Name != "Schema" {
+			continue
+		}
+		if pkg, ok := selector.X.(*ast.Ident); ok && pkg.Name == "ent" {
+			return true
+		}
+	}
+	return false
 }
 
 func validatePackageState(pass *analysis.Pass, file *ast.File) {

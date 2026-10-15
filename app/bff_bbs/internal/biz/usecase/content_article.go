@@ -98,6 +98,7 @@ type ContentArticleSave struct {
 	Statement     *string
 	Commentable   *bool
 	Poll          *model.ArticlePollDraft
+	Lottery       *model.ArticleLotteryDraft
 }
 
 type CreateDraftArticleReq struct {
@@ -109,7 +110,7 @@ func (u *ContentArticleUsecase) CreateDraftArticle(ctx context.Context, req *Cre
 	if req == nil || req.Article == nil {
 		return 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	return u.contentArticleClient.CreateDraftArticle(ctx, &repo.CreateDraftArticleReq{UserID: req.UserID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable, Poll: req.Article.Poll}})
+	return u.contentArticleClient.CreateDraftArticle(ctx, &repo.CreateDraftArticleReq{UserID: req.UserID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable, Poll: req.Article.Poll, Lottery: req.Article.Lottery}})
 }
 
 type UpdateDraftArticleReq struct {
@@ -122,7 +123,7 @@ func (u *ContentArticleUsecase) UpdateDraftArticle(ctx context.Context, req *Upd
 	if req == nil || req.Article == nil || req.ArticleID <= 0 {
 		return 0, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	return u.contentArticleClient.UpdateDraftArticle(ctx, &repo.UpdateDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable, Poll: req.Article.Poll}})
+	return u.contentArticleClient.UpdateDraftArticle(ctx, &repo.UpdateDraftArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Article: &repo.ArticleSave{Title: req.Article.Title, Content: req.Article.Content, RewardContent: req.Article.RewardContent, RewardPoints: req.Article.RewardPoints, Type: req.Article.Type, Statement: req.Article.Statement, Commentable: req.Article.Commentable, Poll: req.Article.Poll, Lottery: req.Article.Lottery}})
 }
 
 type VoteArticlePollReq struct {
@@ -136,6 +137,19 @@ func (u *ContentArticleUsecase) VoteArticlePoll(ctx context.Context, req *VoteAr
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
 	return u.contentArticleClient.VoteArticlePoll(ctx, &repo.VoteArticlePollReq{UserID: req.UserID, ArticleID: req.ArticleID, OptionIDs: req.OptionIDs})
+}
+
+type EnterArticleLotteryReq struct {
+	UserID    int64
+	ArticleID int64
+	Entered   bool
+}
+
+func (u *ContentArticleUsecase) EnterArticleLottery(ctx context.Context, req *EnterArticleLotteryReq) error {
+	if req == nil || req.ArticleID <= 0 {
+		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
+	}
+	return u.contentArticleClient.EnterArticleLottery(ctx, &repo.EnterArticleLotteryReq{UserID: req.UserID, ArticleID: req.ArticleID, Entered: req.Entered})
 }
 
 type PublishArticleReq struct {

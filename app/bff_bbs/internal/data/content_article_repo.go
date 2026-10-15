@@ -50,6 +50,7 @@ func (r *ContentArticleClient) CreateDraftArticle(ctx context.Context, req *repo
 		save.Statement = article.Statement
 		save.Commentable = article.Commentable
 		save.Poll = r.articlePollDraft(article.Poll)
+		save.Lottery = r.articleLotteryDraft(article.Lottery)
 	}
 	reply, err := r.contentClient.Article.CreateDraft(ctx, &contentv1.CreateDraftArticle_Req{
 		Article: save,
@@ -76,6 +77,7 @@ func (r *ContentArticleClient) UpdateDraftArticle(ctx context.Context, req *repo
 		save.Statement = article.Statement
 		save.Commentable = article.Commentable
 		save.Poll = r.articlePollDraft(article.Poll)
+		save.Lottery = r.articleLotteryDraft(article.Lottery)
 	}
 	reply, err := r.contentClient.Article.UpdateDraft(ctx, &contentv1.UpdateDraftArticle_Req{
 		ArticleId: req.ArticleID,
@@ -154,11 +156,29 @@ func (r *ContentArticleClient) VoteArticlePoll(ctx context.Context, req *repo.Vo
 	return err
 }
 
+func (r *ContentArticleClient) EnterArticleLottery(ctx context.Context, req *repo.EnterArticleLotteryReq) error {
+	_, err := r.contentClient.Article.EnterLottery(ctx, &contentv1.EnterArticleLottery_Req{ArticleId: req.ArticleID, Entered: req.Entered, Access: &contentv1.ContentAccess{Scope: contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_AUTHOR, ActorUserId: new(req.UserID)}})
+	return err
+}
+
 func (*ContentArticleClient) articlePollDraft(row *model.ArticlePollDraft) *contentv1.ArticlePollDraft {
 	if row == nil {
 		return nil
 	}
 	return &contentv1.ArticlePollDraft{Options: row.Options, EndsAt: timestamppb.New(row.EndsAt), MaxChoices: row.MaxChoices}
+}
+
+func (*ContentArticleClient) articleLotteryDraft(row *model.ArticleLotteryDraft) *contentv1.ArticleLotteryDraft {
+	if row == nil {
+		return nil
+	}
+	prizes := make([]*contentv1.ArticleLotteryPrizeDraft, 0, len(row.Prizes))
+	for _, prize := range row.Prizes {
+		if prize != nil {
+			prizes = append(prizes, &contentv1.ArticleLotteryPrizeDraft{Name: prize.Name, Description: prize.Description, WinnerLimit: prize.WinnerLimit})
+		}
+	}
+	return &contentv1.ArticleLotteryDraft{Prizes: prizes, DrawAt: timestamppb.New(row.DrawAt)}
 }
 func (r *ContentArticleClient) DiscardDraftArticle(ctx context.Context, req *repo.DiscardDraftArticleReq) error {
 	_, err := r.contentClient.Article.DiscardDraft(ctx, &contentv1.DiscardDraftArticle_Req{
@@ -404,6 +424,28 @@ func (r *ContentArticleClient) GetArticle(ctx context.Context, req *repo.GetArti
 		return nil, err
 	}
 	detail := r.articleDetail(item, profiles, lastComments[item.GetId()], states[item.GetId()], tags[item.GetId()], domains[item.GetId()])
+	if detail.Lottery != nil {
+		winnerIDs := make([]int64, 0)
+		for _, prize := range detail.Lottery.Prizes {
+			if prize != nil {
+				winnerIDs = append(winnerIDs, prize.WinnerUserIDs...)
+			}
+		}
+		winnerProfiles, loadErr := r.loadAccountProfiles(ctx, winnerIDs...)
+		if loadErr != nil {
+			return nil, loadErr
+		}
+		for _, prize := range detail.Lottery.Prizes {
+			if prize == nil {
+				continue
+			}
+			for _, userID := range prize.WinnerUserIDs {
+				if profile := winnerProfiles[userID]; profile != nil {
+					prize.WinnerUsers = append(prize.WinnerUsers, profile)
+				}
+			}
+		}
+	}
 	if item.GetHasPostscript() {
 		postscriptResp, err := r.contentClient.Postscript.List(ctx, &contentv1.ListPostscripts_Req{
 			ArticleId: item.GetId(),
@@ -707,6 +749,7 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 		PinnedID:            item.PinnedCommentId,
 		AcceptedCommentID:   item.AcceptedCommentId,
 		Poll:                r.articlePoll(item.GetPoll()),
+		Lottery:             r.articleLottery(item.GetLottery()),
 		CreatedAt:           new(item.GetCreatedAt().AsTime()),
 		UpdatedAt:           new(item.GetUpdatedAt().AsTime()),
 	}
@@ -744,6 +787,26 @@ func (*ContentArticleClient) articlePoll(row *contentv1.ArticlePoll) *model.Arti
 		}
 	}
 	return poll
+}
+
+func (*ContentArticleClient) articleLottery(row *contentv1.ArticleLottery) *model.ArticleLottery {
+	if row == nil {
+		return nil
+	}
+	lottery := &model.ArticleLottery{EntryCount: row.GetEntryCount(), Entered: row.GetEntered(), Prizes: make([]*model.ArticleLotteryPrize, 0, len(row.GetPrizes()))}
+	if row.GetDrawAt() != nil {
+		lottery.DrawAt = row.GetDrawAt().AsTime()
+	}
+	if row.GetDrawnAt() != nil {
+		lottery.DrawnAt = new(row.GetDrawnAt().AsTime())
+	}
+	for _, prize := range row.GetPrizes() {
+		if prize == nil {
+			continue
+		}
+		lottery.Prizes = append(lottery.Prizes, &model.ArticleLotteryPrize{ID: prize.GetId(), Name: prize.GetName(), Description: prize.Description, WinnerLimit: prize.GetWinnerLimit(), WinnerUserIDs: prize.GetWinnerUserIds()})
+	}
+	return lottery
 }
 
 func (r *ContentArticleClient) articleSummaryContent(content string) string {

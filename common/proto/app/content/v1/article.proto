@@ -22,6 +22,8 @@ service ContentArticleService {
   rpc SetPinnedComment(SetPinnedArticleComment.Req) returns (SetPinnedArticleComment.Resp) {} // 设置文章置顶评论
   rpc AcceptAnswer(AcceptArticleAnswer.Req) returns (AcceptArticleAnswer.Resp) {} // 采纳问答回答
   rpc VotePoll(VoteArticlePoll.Req) returns (VoteArticlePoll.Resp) {} // 投票
+  rpc EnterLottery(EnterArticleLottery.Req) returns (EnterArticleLottery.Resp) {} // 报名或撤销抽奖报名
+  rpc DrawLottery(DrawArticleLottery.Req) returns (DrawArticleLottery.Resp) {} // 执行抽奖开奖
   rpc Unarchive(UnarchiveArticle.Req) returns (UnarchiveArticle.Resp) {} // 取消归档
   rpc Hide(HideArticle.Req) returns (HideArticle.Resp) {} // 隐藏文章
   rpc Unhide(UnhideArticle.Req) returns (UnhideArticle.Resp) {} // 取消隐藏
@@ -54,6 +56,7 @@ message CreateDraftArticle {
       optional string statement = 6; // 创作声明
       optional bool commentable = 7; // 是否允许评论
       ArticlePollDraft poll = 8; // 投票文章的草稿配置
+      ArticleLotteryDraft lottery = 9; // 抽奖文章的草稿配置
     }
   }
   message Resp {
@@ -76,6 +79,7 @@ message UpdateDraftArticle {
       optional string statement = 6; // 创作声明
       optional bool commentable = 7; // 是否允许评论
       ArticlePollDraft poll = 8; // 投票文章的草稿配置
+      ArticleLotteryDraft lottery = 9; // 抽奖文章的草稿配置
     }
   }
   message Resp {
@@ -371,6 +375,7 @@ message Article {
   optional int64 pinned_comment_id = 36; // 作者手动置顶的评论 ID
   optional int64 accepted_comment_id = 37; // 问答已采纳评论 ID
   ArticlePoll poll = 38; // 投票详情
+  ArticleLottery lottery = 39; // 抽奖详情
   optional int64 created_by = 1002; // 创建账号 ID
   optional int64 updated_by = 1003; // 更新账号 ID
   google.protobuf.Timestamp created_at = 1000; // 创建时间
@@ -404,6 +409,50 @@ message VoteArticlePoll {
     int64 article_id = 1; // 文章 ID
     repeated int64 option_ids = 2; // 所选选项 ID
     ContentAccess access = 3; // 访问上下文
+  }
+  message Resp {}
+}
+
+message ArticleLotteryDraft {
+  repeated ArticleLotteryPrizeDraft prizes = 1; // 奖项配置
+  google.protobuf.Timestamp draw_at = 2; // 开奖时间
+}
+
+message ArticleLotteryPrizeDraft {
+  string name = 1; // 奖项名称
+  optional string description = 2; // 奖项说明
+  int32 winner_limit = 3; // 中奖名额
+}
+
+message ArticleLottery {
+  google.protobuf.Timestamp draw_at = 1; // 开奖时间
+  google.protobuf.Timestamp drawn_at = 2; // 实际开奖时间
+  int64 entry_count = 3; // 有效报名人数
+  bool entered = 4; // 当前账号是否已报名
+  repeated ArticleLotteryPrize prizes = 5; // 奖项和中奖结果
+}
+
+message ArticleLotteryPrize {
+  int64 id = 1; // 奖项 ID
+  string name = 2; // 奖项名称
+  optional string description = 3; // 奖项说明
+  int32 winner_limit = 4; // 中奖名额
+  repeated int64 winner_user_ids = 5; // 按抽取顺序的中奖账号 ID
+}
+
+message EnterArticleLottery {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+    bool entered = 2; // true 报名，false 撤销报名
+    ContentAccess access = 3; // 访问上下文
+  }
+  message Resp {}
+}
+
+message DrawArticleLottery {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+    google.protobuf.Timestamp draw_at = 2; // 原计划开奖时间
   }
   message Resp {}
 }

@@ -14,6 +14,7 @@ var BizProviderSet = wire.NewSet(
 	task.NewContentOutboxPublishBatch,
 	task.NewContentPublishScheduledArticles,
 	task.NewContentFlushArticleViews,
+	task.NewContentDrawArticleLotteries,
 	ProvideTasks,
 	usecase.NewScheduledTaskUsecase,
 	usecase.NewDelayedTaskUsecase,
@@ -26,6 +27,7 @@ func ProvideTasks(
 	contentOutboxPublishBatch *task.ContentOutboxPublishBatch,
 	contentPublishScheduledArticles *task.ContentPublishScheduledArticles,
 	contentFlushArticleViews *task.ContentFlushArticleViews,
+	contentDrawArticleLotteries *task.ContentDrawArticleLotteries,
 ) map[string]task.Task {
 	return map[string]task.Task{
 		noop.HandlerName().String():                            noop,
@@ -34,5 +36,6 @@ func ProvideTasks(
 		contentOutboxPublishBatch.HandlerName().String():       contentOutboxPublishBatch,
 		contentPublishScheduledArticles.HandlerName().String(): contentPublishScheduledArticles,
 		contentFlushArticleViews.HandlerName().String():        contentFlushArticleViews,
+		contentDrawArticleLotteries.HandlerName().String():     contentDrawArticleLotteries,
 	}
 }

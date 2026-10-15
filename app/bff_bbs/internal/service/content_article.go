@@ -48,7 +48,7 @@ func (s *ContentArticleService) CreateDraft(ctx context.Context, req *bbscontent
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	articleID, err := s.contentArticleUsecase.CreateDraftArticle(ctx, &usecase.CreateDraftArticleReq{UserID: user.ID, Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable, Poll: s.articlePollDraft(article.GetPoll())}})
+	articleID, err := s.contentArticleUsecase.CreateDraftArticle(ctx, &usecase.CreateDraftArticleReq{UserID: user.ID, Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable, Poll: s.articlePollDraft(article.GetPoll()), Lottery: s.articleLotteryDraft(article.GetLottery())}})
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (s *ContentArticleService) UpdateDraft(ctx context.Context, req *bbscontent
 	if article == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_INVALID)
 	}
-	articleID, err := s.contentArticleUsecase.UpdateDraftArticle(ctx, &usecase.UpdateDraftArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable, Poll: s.articlePollDraft(article.GetPoll())}})
+	articleID, err := s.contentArticleUsecase.UpdateDraftArticle(ctx, &usecase.UpdateDraftArticleReq{UserID: user.ID, ArticleID: req.GetArticleId(), Article: &usecase.ContentArticleSave{Title: article.GetTitle(), Content: article.GetContent(), RewardContent: article.RewardContent, RewardPoints: article.RewardPoints, Type: int32(article.GetType()), Statement: article.Statement, Commentable: article.Commentable, Poll: s.articlePollDraft(article.GetPoll()), Lottery: s.articleLotteryDraft(article.GetLottery())}})
 	if err != nil {
 		return nil, err
 	}
@@ -140,6 +140,15 @@ func (s *ContentArticleService) VotePoll(ctx context.Context, req *bbscontentv1.
 	}
 	err := s.contentArticleUsecase.VoteArticlePoll(ctx, &usecase.VoteArticlePollReq{UserID: user.ID, ArticleID: req.GetArticleId(), OptionIDs: req.GetOptionIds()})
 	return &bbscontentv1.VoteArticlePoll_Resp{}, err
+}
+
+func (s *ContentArticleService) EnterLottery(ctx context.Context, req *bbscontentv1.EnterArticleLottery_Req) (*bbscontentv1.EnterArticleLottery_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	err := s.contentArticleUsecase.EnterArticleLottery(ctx, &usecase.EnterArticleLotteryReq{UserID: user.ID, ArticleID: req.GetArticleId(), Entered: req.GetEntered()})
+	return &bbscontentv1.EnterArticleLottery_Resp{}, err
 }
 
 func (s *ContentArticleService) List(ctx context.Context, req *bbscontentv1.ListArticles_Req) (*bbscontentv1.ListArticles_Resp, error) {
@@ -351,6 +360,7 @@ func (s *ContentArticleService) articleDetail(row *model.ArticleDetail) *bbscont
 		domains = append(domains, &bbscontentv1.ArticleDomain{Id: item.ID, Code: item.Code, Name: item.Name, Icon: item.Icon, Url: item.URL})
 	}
 	out := &bbscontentv1.ArticleDetail{Id: row.ID, Title: row.Title, Content: row.Content, ContentRender: row.ContentRender, HasPostscript: row.HasPostscript, HasReward: row.HasReward, RewardContent: row.RewardContent, RewardContentRender: row.RewardContentRender, RewardPoints: row.RewardPoints, PublishStatus: bbscontentv1enum.ArticlePublishStatus(row.PublishStatus), Visibility: bbscontentv1enum.ArticleVisibility(row.Visibility), Restriction: bbscontentv1enum.ContentRestriction(row.Restriction), Type: bbscontentv1enum.ArticleType(row.Type), Statement: row.Statement, Commentable: row.Commentable, ViewCount: row.ViewCount, ThankCount: row.ThankCount, LikeCount: row.LikeCount, CollectCount: row.CollectCount, RewardCount: row.RewardCount, ReplyCount: row.ReplyCount, CoverImageUrl: row.CoverImageURL, ViewerActionState: s.articleViewerActionState(row.ViewerActionState), LastReplyUser: s.accountProfile(row.LastReplyUser), Postscripts: postscripts, AuthorUser: s.accountProfile(row.AuthorUser), Tags: tags, Domains: domains, City: row.City, AcceptedCommentId: row.AcceptedCommentID, Poll: s.articlePoll(row.Poll), CreatedBy: row.CreatedBy, UpdatedBy: row.UpdatedBy}
+	out.Lottery = s.articleLottery(row.Lottery)
 	if row.LastReplyAt != nil {
 		out.LastReplyAt = timestamppb.New(*row.LastReplyAt)
 	}
@@ -374,6 +384,42 @@ func (*ContentArticleService) articlePollDraft(row *bbscontentv1.ArticlePollDraf
 		return nil
 	}
 	return &model.ArticlePollDraft{Options: row.GetOptions(), EndsAt: row.GetEndsAt().AsTime(), MaxChoices: row.GetMaxChoices()}
+}
+
+func (*ContentArticleService) articleLotteryDraft(row *bbscontentv1.ArticleLotteryDraft) *model.ArticleLotteryDraft {
+	if row == nil || row.GetDrawAt() == nil {
+		return nil
+	}
+	prizes := make([]*model.ArticleLotteryPrizeDraft, 0, len(row.GetPrizes()))
+	for _, prize := range row.GetPrizes() {
+		if prize != nil {
+			prizes = append(prizes, &model.ArticleLotteryPrizeDraft{Name: prize.GetName(), Description: prize.Description, WinnerLimit: prize.GetWinnerLimit()})
+		}
+	}
+	return &model.ArticleLotteryDraft{Prizes: prizes, DrawAt: row.GetDrawAt().AsTime()}
+}
+
+func (s *ContentArticleService) articleLottery(row *model.ArticleLottery) *bbscontentv1.ArticleLottery {
+	if row == nil {
+		return nil
+	}
+	lottery := &bbscontentv1.ArticleLottery{EntryCount: row.EntryCount, Entered: row.Entered, Prizes: make([]*bbscontentv1.ArticleLotteryPrize, 0, len(row.Prizes))}
+	if !row.DrawAt.IsZero() {
+		lottery.DrawAt = timestamppb.New(row.DrawAt)
+	}
+	if row.DrawnAt != nil {
+		lottery.DrawnAt = timestamppb.New(*row.DrawnAt)
+	}
+	for _, prize := range row.Prizes {
+		if prize != nil {
+			users := make([]*bbscontentv1.AccountProfile, 0, len(prize.WinnerUsers))
+			for _, user := range prize.WinnerUsers {
+				users = append(users, s.accountProfile(user))
+			}
+			lottery.Prizes = append(lottery.Prizes, &bbscontentv1.ArticleLotteryPrize{Id: prize.ID, Name: prize.Name, Description: prize.Description, WinnerLimit: prize.WinnerLimit, WinnerUsers: users})
+		}
+	}
+	return lottery
 }
 
 func (*ContentArticleService) articlePoll(row *model.ArticlePoll) *bbscontentv1.ArticlePoll {

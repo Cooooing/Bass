@@ -31,6 +31,34 @@ type ArticlePollOption struct {
 	VoteCount int32
 }
 
+type ArticleLotteryDraft struct {
+	Prizes []*ArticleLotteryPrizeDraft
+	DrawAt time.Time
+}
+
+type ArticleLotteryPrizeDraft struct {
+	Name        string
+	Description *string
+	WinnerLimit int32
+}
+
+type ArticleLottery struct {
+	DrawAt     time.Time
+	DrawnAt    *time.Time
+	EntryCount int64
+	Entered    bool
+	Prizes     []*ArticleLotteryPrize
+}
+
+type ArticleLotteryPrize struct {
+	ID            int64
+	Name          string
+	Description   *string
+	WinnerLimit   int32
+	WinnerUserIDs []int64
+	WinnerUsers   []*AccountProfile
+}
+
 type ArticleTag struct {
 	ID       int64
 	Code     string
@@ -134,4 +162,5 @@ type ArticleDetail struct {
 	PinnedID            *int64
 	AcceptedCommentID   *int64
 	Poll                *ArticlePoll
+	Lottery             *ArticleLottery
 }

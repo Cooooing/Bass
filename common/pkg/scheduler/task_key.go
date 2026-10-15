@@ -18,6 +18,7 @@ const (
 	TaskKeyContentOutboxPublishBatchDelayedDefault TaskKey = "content.outbox_publish_batch.delayed.default"
 	TaskKeyContentPublishScheduledArticlesDefault  TaskKey = "content.publish_scheduled_articles.default"
 	TaskKeyContentFlushArticleViewsDefault         TaskKey = "content.flush_article_views.default"
+	TaskKeyContentDrawArticleLotteriesDefault      TaskKey = "content.draw_article_lotteries.default"
 )
 
 // TaskKeyMap 将公共 proto 枚举转换为 scheduler 对外使用的字符串 key。
@@ -49,6 +50,9 @@ var TaskKeyMap = commonenum.NewMapping[TaskKey, schedulerv1.SchedulerTaskKey](
 		},
 		TaskKeyContentFlushArticleViewsDefault: {
 			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_FLUSH_ARTICLE_VIEWS_DEFAULT,
+		},
+		TaskKeyContentDrawArticleLotteriesDefault: {
+			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_DRAW_ARTICLE_LOTTERIES_DEFAULT,
 		},
 	},
 )

@@ -35,7 +35,7 @@ type ArticlePollOption struct {
 }
 
 func (d *ArticlePollDraft) Normalize(now time.Time) error {
-	if d == nil || len(d.Options) < 2 || d.MaxChoices < 1 || int(d.MaxChoices) > len(d.Options) {
+	if d == nil || len(d.Options) < 2 || len(d.Options) > 20 || d.MaxChoices < 1 || int(d.MaxChoices) > len(d.Options) {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	if !d.EndsAt.After(now.Add(5*time.Minute)) || d.EndsAt.After(now.AddDate(0, 3, 0)) {

@@ -5,6 +5,7 @@ import (
 	"common/pkg/util"
 	cerrors "common/proto/gen/common/errors"
 	"context"
+	"errors"
 	"log/slog"
 	"time"
 
@@ -30,6 +31,7 @@ type ArticleUsecase struct {
 	commentRepo          repo.CommentRepo
 	articleQARepo        repo.ArticleQARepo
 	articlePollRepo      repo.ArticlePollRepo
+	articleLotteryRepo   repo.ArticleLotteryRepo
 	outboxRepo           repo.OutboxEventRepo
 	outboxUsecase        *OutboxUsecase
 	moderationRecordRepo repo.ContentModerationRecordRepo
@@ -48,6 +50,7 @@ func NewArticleUsecase(
 	commentRepo repo.CommentRepo,
 	articleQARepo repo.ArticleQARepo,
 	articlePollRepo repo.ArticlePollRepo,
+	articleLotteryRepo repo.ArticleLotteryRepo,
 	outboxRepo repo.OutboxEventRepo,
 	outboxUsecase *OutboxUsecase,
 	moderationRecordRepo repo.ContentModerationRecordRepo,
@@ -65,6 +68,7 @@ func NewArticleUsecase(
 		commentRepo:          commentRepo,
 		articleQARepo:        articleQARepo,
 		articlePollRepo:      articlePollRepo,
+		articleLotteryRepo:   articleLotteryRepo,
 		outboxRepo:           outboxRepo,
 		outboxUsecase:        outboxUsecase,
 		moderationRecordRepo: moderationRecordRepo,
@@ -79,6 +83,7 @@ type ArticleAddReq struct {
 	Access  *model.ContentAccess
 	Article *model.Article
 	Poll    *model.ArticlePollDraft
+	Lottery *model.ArticleLotteryDraft
 }
 
 func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Article, error) {
@@ -95,6 +100,11 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 	}
 	if article.Type == enum.ArticleTypePoll {
 		if err := req.Poll.Normalize(time.Now()); err != nil {
+			return nil, err
+		}
+	}
+	if article.Type == enum.ArticleTypeLottery {
+		if err := req.Lottery.Normalize(time.Now()); err != nil {
 			return nil, err
 		}
 	}
@@ -117,6 +127,9 @@ func (d *ArticleUsecase) Add(ctx context.Context, req *ArticleAddReq) (*model.Ar
 		if article.Type == enum.ArticleTypePoll {
 			return d.articlePollRepo.SaveDraft(ctx, save.ID, req.Poll)
 		}
+		if article.Type == enum.ArticleTypeLottery {
+			return d.articleLotteryRepo.SaveDraft(ctx, save.ID, req.Lottery)
+		}
 		return nil
 	})
 	if err != nil {
@@ -129,6 +142,7 @@ type ArticleUpdateDraftReq struct {
 	Access  *model.ContentAccess
 	Article *model.Article
 	Poll    *model.ArticlePollDraft
+	Lottery *model.ArticleLotteryDraft
 }
 
 func (d *ArticleUsecase) Update(ctx context.Context, req *ArticleUpdateDraftReq) (*model.Article, error) {
@@ -142,6 +156,11 @@ func (d *ArticleUsecase) Update(ctx context.Context, req *ArticleUpdateDraftReq)
 	}
 	if article.Type == enum.ArticleTypePoll {
 		if err := req.Poll.Normalize(time.Now()); err != nil {
+			return nil, err
+		}
+	}
+	if article.Type == enum.ArticleTypeLottery {
+		if err := req.Lottery.Normalize(time.Now()); err != nil {
 			return nil, err
 		}
 	}
@@ -168,7 +187,13 @@ func (d *ArticleUsecase) Update(ctx context.Context, req *ArticleUpdateDraftReq)
 		if article.Type == enum.ArticleTypePoll {
 			return d.articlePollRepo.SaveDraft(ctx, article.ID, req.Poll)
 		}
-		return d.articlePollRepo.DeleteDraft(ctx, article.ID)
+		if article.Type == enum.ArticleTypeLottery {
+			return d.articleLotteryRepo.SaveDraft(ctx, article.ID, req.Lottery)
+		}
+		if err = d.articlePollRepo.DeleteDraft(ctx, article.ID); err != nil {
+			return err
+		}
+		return d.articleLotteryRepo.DeleteDraft(ctx, article.ID)
 	})
 	if err != nil {
 		return nil, err
@@ -484,7 +509,7 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 			if err = article.CanPublish(access, new(scheduledAt), now); err != nil {
 				return err
 			}
-			if err = d.validatePublishPoll(ctx, article); err != nil {
+			if err = d.validatePublishActivity(ctx, article, scheduledAt); err != nil {
 				return err
 			}
 			originalPublishedAt = article.PublishedAt
@@ -523,6 +548,7 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		return nil
 	}
 	var operatorUserID *int64
+	var lotteryDrawAt *time.Time
 	if access.ActorUserID > 0 {
 		operatorUserID = new(access.ActorUserID)
 	}
@@ -547,7 +573,11 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		if err = article.CanPublish(access, nil, now); err != nil {
 			return err
 		}
-		if err = d.validatePublishPoll(ctx, article); err != nil {
+		if err = d.validatePublishActivity(ctx, article, now); err != nil {
+			return err
+		}
+		lotteryDrawAt, err = d.articleLotteryDrawAt(ctx, article)
+		if err != nil {
 			return err
 		}
 		update := &repo.ArticleUpdatePublishStatusReq{
@@ -583,6 +613,11 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 			d.log.WarnContext(ctx, "publish content outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
 		}
 	}
+	if lotteryDrawAt != nil {
+		if registerErr := d.delayedTaskClient.RegisterLotteryDraw(ctx, articleID, *lotteryDrawAt); registerErr != nil {
+			return registerErr
+		}
+	}
 	if req.ScheduledAt == nil {
 		if cancelErr := d.delayedTaskClient.CancelPublishScheduledArticle(ctx, articleID); cancelErr != nil {
 			d.log.WarnContext(ctx, "cancel scheduled article publish failed", slog.Int64("article_id", articleID), slog.Any("err", cancelErr))
@@ -591,16 +626,38 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 	return nil
 }
 
-func (d *ArticleUsecase) validatePublishPoll(ctx context.Context, article *model.Article) error {
-	if article.Type != enum.ArticleTypePoll {
-		return nil
+func (d *ArticleUsecase) articleLotteryDrawAt(ctx context.Context, article *model.Article) (*time.Time, error) {
+	if article.Type != enum.ArticleTypeLottery {
+		return nil, nil
 	}
-	poll, err := d.articlePollRepo.Get(ctx, article.ID, 0)
+	lottery, err := d.articleLotteryRepo.Get(ctx, article.ID, 0)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	if poll == nil {
-		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+	if lottery == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+	}
+	return new(lottery.DrawAt), nil
+}
+
+func (d *ArticleUsecase) validatePublishActivity(ctx context.Context, article *model.Article, publishedAt time.Time) error {
+	if article.Type == enum.ArticleTypePoll {
+		poll, err := d.articlePollRepo.Get(ctx, article.ID, 0)
+		if err != nil {
+			return err
+		}
+		if poll == nil || !poll.EndsAt.After(publishedAt) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+	}
+	if article.Type == enum.ArticleTypeLottery {
+		lottery, err := d.articleLotteryRepo.Get(ctx, article.ID, 0)
+		if err != nil {
+			return err
+		}
+		if lottery == nil || !lottery.DrawAt.After(publishedAt) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
 	}
 	return nil
 }
@@ -1093,6 +1150,69 @@ type ArticleVotePollReq struct {
 	OptionIDs []int64
 }
 
+type ArticleEnterLotteryReq struct {
+	Access    *model.ContentAccess
+	ArticleID int64
+	Entered   bool
+}
+
+func (d *ArticleUsecase) EnterLottery(ctx context.Context, req *ArticleEnterLotteryReq) error {
+	access, err := req.Access.Normalize("")
+	if err != nil {
+		return err
+	}
+	return d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(req.ArticleID)}})
+		if err != nil {
+			return err
+		}
+		if article.Type != enum.ArticleTypeLottery || article.IsAuthor(access.ActorUserID) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
+		}
+		if err = d.articleAccessUsecase.CanInteract(access, article); err != nil {
+			return err
+		}
+		lottery, err := d.articleLotteryRepo.Get(ctx, article.ID, 0)
+		if err != nil {
+			return err
+		}
+		if lottery == nil {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		err = d.articleLotteryRepo.SetEntry(ctx, lottery.ID, access.ActorUserID, req.Entered, time.Now())
+		if _, ok := errors.AsType[*repo.ArticleLotteryClosedError](err); ok {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		return err
+	})
+}
+
+type ArticleDrawLotteryReq struct {
+	ArticleID int64
+	DrawAt    time.Time
+}
+
+func (d *ArticleUsecase) DrawLottery(ctx context.Context, req *ArticleDrawLotteryReq) error {
+	return d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(req.ArticleID)}})
+		if err != nil {
+			return err
+		}
+		if article.Type != enum.ArticleTypeLottery || article.PublishStatus != enum.ArticlePublishStatusPublished {
+			return nil
+		}
+		lottery, err := d.articleLotteryRepo.Get(ctx, article.ID, 0)
+		if err != nil {
+			return err
+		}
+		if lottery == nil || lottery.DrawnAt != nil || !lottery.DrawAt.UTC().Equal(req.DrawAt.UTC()) {
+			return nil
+		}
+		_, err = d.articleLotteryRepo.Draw(ctx, lottery.ID, time.Now().UTC())
+		return err
+	})
+}
+
 func (d *ArticleUsecase) VotePoll(ctx context.Context, req *ArticleVotePollReq) error {
 	access, err := req.Access.Normalize("")
 	if err != nil {
@@ -1105,6 +1225,9 @@ func (d *ArticleUsecase) VotePoll(ctx context.Context, req *ArticleVotePollReq) 
 		}
 		if article.Type != enum.ArticleTypePoll {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		}
+		if article.IsAuthor(access.ActorUserID) {
+			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 		}
 		if err = d.articleAccessUsecase.CanInteract(access, article); err != nil {
 			return err
@@ -1151,6 +1274,12 @@ func (d *ArticleUsecase) GetByAccess(ctx context.Context, req *ArticleGetByAcces
 					option.VoteCount = 0
 				}
 			}
+		}
+	}
+	if article.Type == enum.ArticleTypeLottery {
+		article.Lottery, err = d.articleLotteryRepo.Get(ctx, article.ID, req.Access.ActorUserID)
+		if err != nil {
+			return nil, err
 		}
 	}
 	return article, nil

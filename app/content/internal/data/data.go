@@ -33,6 +33,7 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewArticleRepo,
 	repo.NewArticleQARepo,
 	repo.NewArticlePollRepo,
+	repo.NewArticleLotteryRepo,
 	repo.NewPostgresArticleSearchRepo,
 	repo.NewCommentRepo,
 	repo.NewCommentActionRecordRepo,

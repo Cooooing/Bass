@@ -17,6 +17,7 @@ type ArticleSave struct {
 	Statement     *string
 	Commentable   *bool
 	Poll          *model.ArticlePollDraft
+	Lottery       *model.ArticleLotteryDraft
 }
 
 type ArticleQuery struct {
@@ -85,6 +86,12 @@ type VoteArticlePollReq struct {
 	UserID    int64
 	ArticleID int64
 	OptionIDs []int64
+}
+
+type EnterArticleLotteryReq struct {
+	UserID    int64
+	ArticleID int64
+	Entered   bool
 }
 
 type ListArticlesReq struct {
@@ -178,6 +185,7 @@ type ContentArticleClient interface {
 	SetPinnedArticleComment(ctx context.Context, req *SetPinnedArticleCommentReq) error
 	AcceptArticleAnswer(ctx context.Context, req *AcceptArticleAnswerReq) error
 	VoteArticlePoll(ctx context.Context, req *VoteArticlePollReq) error
+	EnterArticleLottery(ctx context.Context, req *EnterArticleLotteryReq) error
 	ListArticles(ctx context.Context, req *ListArticlesReq) (*ListArticlesResp, error)
 	SearchArticles(ctx context.Context, req *SearchArticlesReq) (*SearchArticlesResp, error)
 	PageViewHistory(ctx context.Context, userID int64, page *commonmodel.PageReq, excludedAuthorIDs []int64) (*ArticleViewHistoryPageResp, error)

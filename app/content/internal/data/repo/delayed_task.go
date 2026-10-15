@@ -35,6 +35,11 @@ type publishScheduledArticlePayload struct {
 	ScheduledAt  time.Time `json:"scheduled_at"`
 }
 
+type lotteryDrawPayload struct {
+	ArticleID int64     `json:"article_id"`
+	DrawAt    time.Time `json:"draw_at"`
+}
+
 func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context, articleID int64, authorUserID int64, publishAt time.Time) error {
 	if publishAt.IsZero() {
 		return errors.New("delayed task publish_at is required")
@@ -63,6 +68,15 @@ func (c *DelayedTaskClient) CancelPublishScheduledArticle(ctx context.Context, a
 	_, err := c.schedulerClient.DelayedTask.CancelExecution(ctx, &schedulerv1.CancelSchedulerDelayedTaskExecution_Req{
 		BusinessKey: c.publishScheduledArticleBusinessKey(articleID),
 	})
+	return err
+}
+
+func (c *DelayedTaskClient) RegisterLotteryDraw(ctx context.Context, articleID int64, drawAt time.Time) error {
+	payload, err := json.Marshal(&lotteryDrawPayload{ArticleID: articleID, DrawAt: drawAt.UTC().Truncate(time.Second)})
+	if err != nil {
+		return err
+	}
+	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{TaskKey: commonscheduler.TaskKeyMap.MustToEnum(schedulerv1enum.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_DRAW_ARTICLE_LOTTERIES_DEFAULT).String(), Payload: string(payload), ScheduledAt: timestamppb.New(drawAt), IdempotencyKey: uuid.NewString(), BusinessKey: "content.article.lottery.draw:" + strconv.FormatInt(articleID, 10)})
 	return err
 }
 

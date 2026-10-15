@@ -15,6 +15,7 @@ const (
 	TaskHandlerNameContentOutboxPublishBatch       TaskHandlerName = "content.outbox_publish_batch"       // content.outbox_publish_batch
 	TaskHandlerNameContentPublishScheduledArticles TaskHandlerName = "content.publish_scheduled_articles" // content.publish_scheduled_articles
 	TaskHandlerNameContentFlushArticleViews        TaskHandlerName = "content.flush_article_views"        // content.flush_article_views
+	TaskHandlerNameContentDrawArticleLotteries     TaskHandlerName = "content.draw_article_lotteries"     // content.draw_article_lotteries
 )
 
 // TaskHandlerNameMap 将内部任务处理器名称映射到 proto 枚举。
@@ -26,6 +27,7 @@ var TaskHandlerNameMap = commonenum.NewMapping[TaskHandlerName, schedulerv1.Sche
 		TaskHandlerNameContentOutboxPublishBatch:       {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_OUTBOX_PUBLISH_BATCH},
 		TaskHandlerNameContentPublishScheduledArticles: {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_PUBLISH_SCHEDULED_ARTICLES},
 		TaskHandlerNameContentFlushArticleViews:        {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_FLUSH_ARTICLE_VIEWS},
+		TaskHandlerNameContentDrawArticleLotteries:     {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_DRAW_ARTICLE_LOTTERIES},
 	},
 )
 

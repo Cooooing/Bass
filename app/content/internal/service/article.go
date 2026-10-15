@@ -77,7 +77,8 @@ func (s *ArticleService) CreateDraft(ctx context.Context, req *v1.CreateDraftArt
 			Statement:     articleReq.Statement,
 			Commentable:   util.DerefOrDefault(articleReq.Commentable, true),
 		},
-		Poll: s.articlePollDraft(articleReq.GetPoll()),
+		Poll:    s.articlePollDraft(articleReq.GetPoll()),
+		Lottery: s.articleLotteryDraft(articleReq.GetLottery()),
 	})
 	if err != nil {
 		return nil, err
@@ -124,7 +125,8 @@ func (s *ArticleService) UpdateDraft(ctx context.Context, req *v1.UpdateDraftArt
 			Commentable:   util.DerefOrDefault(articleReq.Commentable, true),
 			UpdatedBy:     new(access.ActorUserID),
 		},
-		Poll: s.articlePollDraft(articleReq.GetPoll()),
+		Poll:    s.articlePollDraft(articleReq.GetPoll()),
+		Lottery: s.articleLotteryDraft(articleReq.GetLottery()),
 	})
 	if err != nil {
 		return nil, err
@@ -162,6 +164,52 @@ func (*ArticleService) articlePollDraft(req *v1.ArticlePollDraft) *model.Article
 		return nil
 	}
 	return &model.ArticlePollDraft{Options: req.GetOptions(), EndsAt: req.GetEndsAt().AsTime(), MaxChoices: req.GetMaxChoices()}
+}
+
+func (*ArticleService) articleLotteryDraft(req *v1.ArticleLotteryDraft) *model.ArticleLotteryDraft {
+	if req == nil || req.GetDrawAt() == nil {
+		return nil
+	}
+	prizes := make([]*model.ArticleLotteryPrizeDraft, 0, len(req.GetPrizes()))
+	for _, prize := range req.GetPrizes() {
+		if prize != nil {
+			prizes = append(prizes, &model.ArticleLotteryPrizeDraft{Name: prize.GetName(), Description: prize.Description, WinnerLimit: prize.GetWinnerLimit()})
+		}
+	}
+	return &model.ArticleLotteryDraft{Prizes: prizes, DrawAt: req.GetDrawAt().AsTime()}
+}
+
+func (s *ArticleService) EnterLottery(ctx context.Context, req *v1.EnterArticleLottery_Req) (*v1.EnterArticleLottery_Resp, error) {
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	access, err := access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	if req.GetArticleId() <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	err = s.articleUsecase.EnterLottery(ctx, &usecase.ArticleEnterLotteryReq{Access: access, ArticleID: req.GetArticleId(), Entered: req.GetEntered()})
+	return &v1.EnterArticleLottery_Resp{}, err
+}
+
+func (s *ArticleService) DrawLottery(ctx context.Context, req *v1.DrawArticleLottery_Req) (*v1.DrawArticleLottery_Resp, error) {
+	if req.GetArticleId() <= 0 || req.GetDrawAt() == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	err := s.articleUsecase.DrawLottery(ctx, &usecase.ArticleDrawLotteryReq{ArticleID: req.GetArticleId(), DrawAt: req.GetDrawAt().AsTime()})
+	return &v1.DrawArticleLottery_Resp{}, err
 }
 
 func (s *ArticleService) Publish(ctx context.Context, req *v1.PublishArticle_Req) (*v1.PublishArticle_Resp, error) {
@@ -620,6 +668,7 @@ func (s *ArticleService) articleViewHistoryArticle(row *model.Article) *v1.Artic
 		PinnedCommentId:   row.PinnedID,
 		AcceptedCommentId: row.AcceptedCommentID,
 		Poll:              s.articlePoll(row.Poll),
+		Lottery:           s.articleLottery(row.Lottery),
 	}
 	if row.CreatedAt != nil {
 		article.CreatedAt = timestamppb.New(*row.CreatedAt)
@@ -651,6 +700,25 @@ func (*ArticleService) articlePoll(row *model.ArticlePoll) *v1.ArticlePoll {
 		poll.Options = append(poll.Options, &v1.ArticlePollOption{Id: option.ID, Content: option.Content, VoteCount: option.VoteCount})
 	}
 	return poll
+}
+
+func (*ArticleService) articleLottery(row *model.ArticleLottery) *v1.ArticleLottery {
+	if row == nil {
+		return nil
+	}
+	lottery := &v1.ArticleLottery{EntryCount: row.EntryCount, Entered: row.Entered, Prizes: make([]*v1.ArticleLotteryPrize, 0, len(row.Prizes))}
+	if !row.DrawAt.IsZero() {
+		lottery.DrawAt = timestamppb.New(row.DrawAt)
+	}
+	if row.DrawnAt != nil {
+		lottery.DrawnAt = timestamppb.New(*row.DrawnAt)
+	}
+	for _, prize := range row.Prizes {
+		if prize != nil {
+			lottery.Prizes = append(lottery.Prizes, &v1.ArticleLotteryPrize{Id: prize.ID, Name: prize.Name, Description: prize.Description, WinnerLimit: prize.WinnerLimit, WinnerUserIds: prize.WinnerUserIDs})
+		}
+	}
+	return lottery
 }
 
 func (s *ArticleService) FlushViews(ctx context.Context, req *v1.FlushArticleViews_Req) (*v1.FlushArticleViews_Resp, error) {
@@ -709,6 +777,7 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.G
 		PinnedCommentId:   row.PinnedID,
 		AcceptedCommentId: row.AcceptedCommentID,
 		Poll:              s.articlePoll(row.Poll),
+		Lottery:           s.articleLottery(row.Lottery),
 	}
 	if row.CreatedAt != nil {
 		article.CreatedAt = timestamppb.New(*row.CreatedAt)

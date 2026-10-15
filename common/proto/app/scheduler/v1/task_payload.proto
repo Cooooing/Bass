@@ -44,5 +44,6 @@ message DrawArticleLotteryTaskPayload {
 
 // RefreshHolidayTaskPayload 是节假日缓存刷新任务参数。
 message RefreshHolidayTaskPayload {
-  google.protobuf.Timestamp date = 1; // 需要刷新的日期；为空时使用当天
+  google.protobuf.Timestamp start = 1; // 刷新起始日期；为空时使用当天
+  google.protobuf.Timestamp end = 2; // 刷新结束日期；为空时等于起始日期
 }

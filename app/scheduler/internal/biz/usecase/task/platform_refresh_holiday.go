@@ -9,6 +9,8 @@ import (
 	"time"
 
 	schedulerenum "scheduler/internal/enum"
+
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type PlatformRefreshHoliday struct {
@@ -45,7 +47,7 @@ func (t *PlatformRefreshHoliday) DefaultScheduledTasks() []*DefaultScheduledTask
 			Title:         t.Title(),
 			Description:   t.Description(),
 			Enabled:       true,
-			CronSpec:      "0 0 * * * ?",
+			CronSpec:      "0 1 * * * ?",
 			Payload:       commonscheduler.MustMarshalPayload(&schedulerv1.RefreshHolidayTaskPayload{}),
 			Timeout:       30 * time.Second,
 			MaxAttempts:   1,
@@ -64,6 +66,15 @@ func (t *PlatformRefreshHoliday) Execute(ctx context.Context, payload string) er
 	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
 		return err
 	}
-	_, err := t.platformClient.Holiday.RefreshHoliday(ctx, &platformv1.RefreshHoliday_Req{Date: data.GetDate()})
+	start := data.GetStart()
+	end := data.GetEnd()
+	if start == nil && end == nil {
+		// 默认预写当天起连续三天，调用方可以通过 payload 指定其它范围。
+		location := time.FixedZone("Asia/Shanghai", 8*60*60)
+		begin := time.Now().In(location)
+		start = timestamppb.New(begin)
+		end = timestamppb.New(begin.AddDate(0, 0, 2))
+	}
+	_, err := t.platformClient.Holiday.RefreshHoliday(ctx, &platformv1.RefreshHoliday_Req{Start: start, End: end})
 	return err
 }

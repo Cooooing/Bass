@@ -9,7 +9,6 @@ import (
 
 	"platform/internal/biz/model"
 	bizrepo "platform/internal/biz/repo"
-	"platform/internal/enum"
 )
 
 var _ bizrepo.HolidayClient = (*HolidayClient)(nil)
@@ -18,80 +17,52 @@ type HolidayClient struct {
 	client    *http.Client
 	baseURL   string
 	userAgent string
+	location  *time.Location
 }
 
 func NewHolidayClient(client *http.Client) bizrepo.HolidayClient {
 	return &HolidayClient{
-		client:    client,
-		baseURL:   "https://timor.tech",
+		client:  client,
+		baseURL: "https://timor.tech",
+		// timor.tech 拒绝默认的 Go-http-client User-Agent，必须显式携带一个普通 UA。
 		userAgent: "Bass/1.0 (+https://fishpi.cn)",
+		location:  time.FixedZone("Asia/Shanghai", 8*60*60),
 	}
 }
 
-func (c *HolidayClient) Fetch(ctx context.Context, date time.Time) (*model.HolidayInfo, error) {
-	day := date.Format("2006-01-02")
-	info, err := c.fetchInfo(ctx, day)
-	if err != nil {
+// FetchYear 一次性读取整年的节日与调休配置，后续按自然日展开都在本地完成。
+func (c *HolidayClient) FetchYear(ctx context.Context, year int) (map[string]*model.HolidayEntry, error) {
+	var resp timorYearResp
+	if err := c.getJSON(ctx, fmt.Sprintf("/api/holiday/year/%d/", year), &resp); err != nil {
 		return nil, err
 	}
-
-	switch info.Type {
-	case enum.HolidayTypeWeekend, enum.HolidayTypeFestival:
-		rest, err := c.fetchWorkdayRest(ctx, day)
+	if resp.Code != 0 {
+		return nil, fmt.Errorf("holiday year error code %d", resp.Code)
+	}
+	entries := make(map[string]*model.HolidayEntry, len(resp.Holiday))
+	for _, raw := range resp.Holiday {
+		if raw == nil || raw.Date == "" {
+			continue
+		}
+		date, err := c.parseDate(raw.Date)
 		if err != nil {
 			return nil, err
 		}
-		info.DaysRemaining = rest
-	case enum.HolidayTypeWorkday, enum.HolidayTypeMakeupWorkday:
-		name, rest, err := c.fetchNextHoliday(ctx, day)
-		if err != nil {
-			return nil, err
+		entries[raw.Date] = &model.HolidayEntry{
+			Date:    date,
+			Name:    raw.Name,
+			Holiday: raw.Holiday,
 		}
-		info.HolidayName = name
-		info.DaysToHoliday = rest
 	}
-	return info, nil
+	return entries, nil
 }
 
-func (c *HolidayClient) fetchInfo(ctx context.Context, day string) (*model.HolidayInfo, error) {
-	var resp timorInfoResp
-	if err := c.getJSON(ctx, "/api/holiday/info/"+day, &resp); err != nil {
-		return nil, err
-	}
-	if resp.Code != 0 {
-		return nil, fmt.Errorf("holiday info error code %d", resp.Code)
-	}
-	holidayType, err := c.holidayTypeFromCode(resp.Type.Type)
+func (c *HolidayClient) parseDate(value string) (time.Time, error) {
+	date, err := time.ParseInLocation("2006-01-02", value, c.location)
 	if err != nil {
-		return nil, err
+		return time.Time{}, fmt.Errorf("parse holiday date %s: %w", value, err)
 	}
-	return &model.HolidayInfo{
-		Date:    c.parseHolidayDate(day),
-		Type:    holidayType,
-		DayName: resp.Type.Name,
-	}, nil
-}
-
-func (c *HolidayClient) fetchWorkdayRest(ctx context.Context, day string) (int32, error) {
-	var resp timorWorkdayResp
-	if err := c.getJSON(ctx, "/api/holiday/workday/next/"+day, &resp); err != nil {
-		return 0, err
-	}
-	if resp.Code != 0 {
-		return 0, fmt.Errorf("holiday workday error code %d", resp.Code)
-	}
-	return resp.Workday.Rest, nil
-}
-
-func (c *HolidayClient) fetchNextHoliday(ctx context.Context, day string) (string, int32, error) {
-	var resp timorNextResp
-	if err := c.getJSON(ctx, "/api/holiday/next/"+day+"?type=Y&week=Y", &resp); err != nil {
-		return "", 0, err
-	}
-	if resp.Code != 0 {
-		return "", 0, fmt.Errorf("holiday next error code %d", resp.Code)
-	}
-	return resp.Holiday.Name, resp.Holiday.Rest, nil
+	return date, nil
 }
 
 func (c *HolidayClient) getJSON(ctx context.Context, path string, target any) (err error) {
@@ -121,48 +92,13 @@ func (c *HolidayClient) getJSON(ctx context.Context, path string, target any) (e
 	return nil
 }
 
-func (c *HolidayClient) holidayTypeFromCode(code int) (enum.HolidayType, error) {
-	switch code {
-	case 0:
-		return enum.HolidayTypeWorkday, nil
-	case 1:
-		return enum.HolidayTypeWeekend, nil
-	case 2:
-		return enum.HolidayTypeFestival, nil
-	case 3:
-		return enum.HolidayTypeMakeupWorkday, nil
-	default:
-		return "", fmt.Errorf("unknown holiday type %d", code)
-	}
+type timorYearResp struct {
+	Code    int                        `json:"code"`
+	Holiday map[string]*timorYearEntry `json:"holiday"`
 }
 
-func (c *HolidayClient) parseHolidayDate(day string) time.Time {
-	parsed, err := time.ParseInLocation("2006-01-02", day, time.FixedZone("Asia/Shanghai", 8*60*60))
-	if err != nil {
-		return time.Time{}
-	}
-	return parsed
-}
-
-type timorInfoResp struct {
-	Code int `json:"code"`
-	Type struct {
-		Type int    `json:"type"`
-		Name string `json:"name"`
-	} `json:"type"`
-}
-
-type timorWorkdayResp struct {
-	Code    int `json:"code"`
-	Workday struct {
-		Rest int32 `json:"rest"`
-	} `json:"workday"`
-}
-
-type timorNextResp struct {
-	Code    int `json:"code"`
-	Holiday struct {
-		Name string `json:"name"`
-		Rest int32  `json:"rest"`
-	} `json:"holiday"`
+type timorYearEntry struct {
+	Holiday bool   `json:"holiday"`
+	Name    string `json:"name"`
+	Date    string `json:"date"`
 }

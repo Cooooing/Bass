@@ -50,11 +50,14 @@ func (s *HolidayService) GetCurrent(ctx context.Context, req *v1.GetCurrentHolid
 }
 
 func (s *HolidayService) RefreshHoliday(ctx context.Context, req *v1.RefreshHoliday_Req) (*v1.RefreshHoliday_Resp, error) {
-	var date time.Time
-	if req.GetDate() != nil {
-		date = req.GetDate().AsTime()
+	var start, end time.Time
+	if req.GetStart() != nil {
+		start = req.GetStart().AsTime()
 	}
-	if err := s.holidayUsecase.Refresh(ctx, date); err != nil {
+	if req.GetEnd() != nil {
+		end = req.GetEnd().AsTime()
+	}
+	if err := s.holidayUsecase.Refresh(ctx, start, end); err != nil {
 		return nil, err
 	}
 	return &v1.RefreshHoliday_Resp{}, nil

@@ -33,6 +33,7 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewAssetUploadRateLimitCache,
 	repo.NewAssetEventNatsRepo,
 	repo.NewHolidayClient,
+	repo.NewHolidayConfigCacheRepo,
 	repo.NewHolidayRepo,
 	oss.ProviderSet,
 )

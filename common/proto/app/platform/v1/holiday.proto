@@ -11,7 +11,7 @@ option go_package = "common/proto/gen/platform/v1;v1";
 service PlatformHolidayService {
   // 获取当前节假日状态。
   rpc GetCurrent(GetCurrentHoliday.Req) returns (GetCurrentHoliday.Resp) {}
-  // 从外部数据源刷新指定日期的节假日状态。
+  // 从外部数据源按范围刷新节假日状态。
   rpc RefreshHoliday(RefreshHoliday.Req) returns (RefreshHoliday.Resp) {}
 }
 
@@ -35,8 +35,10 @@ message GetCurrentHoliday {
 
 message RefreshHoliday {
   message Req {
-    // 需要刷新的日期；为空时使用当天。
-    google.protobuf.Timestamp date = 1;
+    // 刷新起始日期；两个日期都为空时使用当天。
+    google.protobuf.Timestamp start = 1;
+    // 刷新结束日期；为空时等于起始日期。
+    google.protobuf.Timestamp end = 2;
   }
   message Resp {}
 }

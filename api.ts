@@ -23,6 +23,10 @@ import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
+export interface AcceptArticleAnswerReq {
+    'article_id': string;
+    'comment_id': string;
+}
 export interface AccountContact {
     'user_id'?: string;
     'email'?: string;
@@ -101,6 +105,9 @@ export interface ArticleDetail {
     'tags'?: Array<ArticleTag>;
     'domains'?: Array<ArticleDomain>;
     'city'?: string;
+    'accepted_comment_id'?: string;
+    'poll'?: ArticlePoll;
+    'lottery'?: ArticleLottery;
     'created_by'?: string;
     'updated_by'?: string;
     'created_at'?: string;
@@ -216,6 +223,48 @@ export const ArticleListItemRestrictionEnum = {
 
 export type ArticleListItemRestrictionEnum = typeof ArticleListItemRestrictionEnum[keyof typeof ArticleListItemRestrictionEnum];
 
+export interface ArticleLottery {
+    'draw_at'?: string;
+    'drawn_at'?: string;
+    'entry_count'?: string;
+    'entered'?: boolean;
+    'prizes'?: Array<ArticleLotteryPrize>;
+}
+export interface ArticleLotteryDraft {
+    'prizes'?: Array<ArticleLotteryPrizeDraft>;
+    'draw_at'?: string;
+}
+export interface ArticleLotteryPrize {
+    'id'?: string;
+    'name'?: string;
+    'description'?: string;
+    'winner_limit'?: number;
+    'winner_users'?: Array<AccountProfile>;
+}
+export interface ArticleLotteryPrizeDraft {
+    'name'?: string;
+    'description'?: string;
+    'winner_limit'?: number;
+}
+export interface ArticlePoll {
+    'ends_at'?: string;
+    'max_choices'?: number;
+    'options'?: Array<ArticlePollOption>;
+    'selected_option_ids'?: Array<string>;
+    'result_visible'?: boolean;
+    'participant_count'?: string;
+    'total_vote_count'?: string;
+}
+export interface ArticlePollDraft {
+    'options'?: Array<string>;
+    'ends_at'?: string;
+    'max_choices'?: number;
+}
+export interface ArticlePollOption {
+    'id'?: string;
+    'content'?: string;
+    'vote_count'?: number;
+}
 export interface ArticlePostscript {
     'id'?: string;
     'article_id'?: string;
@@ -385,6 +434,10 @@ export interface DisableTotpReq {
 export interface DiscardDraftArticleReq {
     'article_id': string;
 }
+export interface EnterArticleLotteryReq {
+    'article_id': string;
+    'entered'?: boolean;
+}
 export interface FollowRelationReq {
     'target_id': string;
 }
@@ -524,7 +577,8 @@ export type ListCommentThreadsReqOrderEnum = typeof ListCommentThreadsReqOrderEn
 export interface ListCommentThreadsResp {
     'page'?: PageResp;
     'rows'?: Array<RespCommentThread>;
-    'top_comment'?: RespTopComment;
+    'accepted_answer'?: RespPinnedComment;
+    'pinned_comment'?: RespPinnedComment;
 }
 export interface ListCommentTimelineReq {
     'page'?: PageReq;
@@ -813,6 +867,8 @@ export interface ReqArticle {
     'type': ReqArticleTypeEnum;
     'statement'?: string;
     'commentable'?: boolean;
+    'poll'?: ArticlePollDraft;
+    'lottery'?: ArticleLotteryDraft;
 }
 
 export const ReqArticleTypeEnum = {
@@ -1280,6 +1336,7 @@ export const RespNotificationEventTypeEnum = {
     EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER: 'EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER',
     EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED: 'EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED',
     EVENT_TYPE_ARTICLE_STATUS_UPDATED: 'EVENT_TYPE_ARTICLE_STATUS_UPDATED',
+    EVENT_TYPE_ARTICLE_LOTTERY_WON: 'EVENT_TYPE_ARTICLE_LOTTERY_WON',
     EVENT_TYPE_COMMENT_PUBLISHED: 'EVENT_TYPE_COMMENT_PUBLISHED',
     EVENT_TYPE_COMMENT_LIKED: 'EVENT_TYPE_COMMENT_LIKED',
     EVENT_TYPE_COMMENT_THANKED: 'EVENT_TYPE_COMMENT_THANKED',
@@ -1293,6 +1350,9 @@ export const RespNotificationEventTypeEnum = {
 
 export type RespNotificationEventTypeEnum = typeof RespNotificationEventTypeEnum[keyof typeof RespNotificationEventTypeEnum];
 
+export interface RespPinnedComment {
+    'thread'?: RespCommentThread;
+}
 export interface RespPreference {
     'user_id'?: string;
     'timezone'?: string;
@@ -1384,9 +1444,6 @@ export const RespTagStatusEnum = {
 
 export type RespTagStatusEnum = typeof RespTagStatusEnum[keyof typeof RespTagStatusEnum];
 
-export interface RespTopComment {
-    'thread'?: RespCommentThread;
-}
 export interface RespTotp {
     'user_id'?: string;
     'enable'?: boolean;
@@ -1518,6 +1575,10 @@ export interface UpdateTagReq {
 }
 export interface UpdateTagResp {
     'tag'?: RespTag;
+}
+export interface VoteArticlePollReq {
+    'article_id': string;
+    'option_ids': Array<string>;
 }
 
 /**
@@ -2564,6 +2625,40 @@ export class ArticleSearchService extends BaseAPI implements ArticleSearchServic
 export const ArticleServiceAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * 采纳文章回答
+         * @param {AcceptArticleAnswerReq} acceptArticleAnswerReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        acceptAnswer: async (acceptArticleAnswerReq: AcceptArticleAnswerReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'acceptArticleAnswerReq' is not null or undefined
+            assertParamExists('acceptAnswer', 'acceptArticleAnswerReq', acceptArticleAnswerReq)
+            const localVarPath = `/v1/content/article/answer/accept`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(acceptArticleAnswerReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 归档文章
          * @param {ArchiveArticleReq} archiveArticleReq 
          * @param {*} [options] Override http request option.
@@ -2727,6 +2822,40 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(discardDraftArticleReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 报名或撤销抽奖报名。
+         * @param {EnterArticleLotteryReq} enterArticleLotteryReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        enterLottery: async (enterArticleLotteryReq: EnterArticleLotteryReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'enterArticleLotteryReq' is not null or undefined
+            assertParamExists('enterLottery', 'enterArticleLotteryReq', enterArticleLotteryReq)
+            const localVarPath = `/v1/content/article/lottery/entry`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(enterArticleLotteryReq, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -3107,6 +3236,40 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 提交一次不可修改的文章投票。
+         * @param {VoteArticlePollReq} voteArticlePollReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        votePoll: async (voteArticlePollReq: VoteArticlePollReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'voteArticlePollReq' is not null or undefined
+            assertParamExists('votePoll', 'voteArticlePollReq', voteArticlePollReq)
+            const localVarPath = `/v1/content/article/poll/vote`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(voteArticlePollReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -3116,6 +3279,18 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
 export const ArticleServiceFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ArticleServiceAxiosParamCreator(configuration)
     return {
+        /**
+         * 采纳文章回答
+         * @param {AcceptArticleAnswerReq} acceptArticleAnswerReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async acceptAnswer(acceptArticleAnswerReq: AcceptArticleAnswerReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.acceptAnswer(acceptArticleAnswerReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.acceptAnswer']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * 归档文章
          * @param {ArchiveArticleReq} archiveArticleReq 
@@ -3174,6 +3349,18 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.discardDraft(discardDraftArticleReq, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ArticleService.discardDraft']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 报名或撤销抽奖报名。
+         * @param {EnterArticleLotteryReq} enterArticleLotteryReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async enterLottery(enterArticleLotteryReq: EnterArticleLotteryReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.enterLottery(enterArticleLotteryReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.enterLottery']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -3308,6 +3495,18 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['ArticleService.updateDraft']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 提交一次不可修改的文章投票。
+         * @param {VoteArticlePollReq} voteArticlePollReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async votePoll(voteArticlePollReq: VoteArticlePollReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.votePoll(voteArticlePollReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.votePoll']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -3317,6 +3516,15 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
 export const ArticleServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = ArticleServiceFp(configuration)
     return {
+        /**
+         * 采纳文章回答
+         * @param {ArticleServiceAcceptAnswerRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        acceptAnswer(requestParameters: ArticleServiceAcceptAnswerRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.acceptAnswer(requestParameters.acceptArticleAnswerReq, options).then((request) => request(axios, basePath));
+        },
         /**
          * 归档文章
          * @param {ArticleServiceArchiveRequest} requestParameters Request parameters.
@@ -3361,6 +3569,15 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
          */
         discardDraft(requestParameters: ArticleServiceDiscardDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.discardDraft(requestParameters.discardDraftArticleReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 报名或撤销抽奖报名。
+         * @param {ArticleServiceEnterLotteryRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        enterLottery(requestParameters: ArticleServiceEnterLotteryRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.enterLottery(requestParameters.enterArticleLotteryReq, options).then((request) => request(axios, basePath));
         },
         /**
          * 查询文章详情
@@ -3461,6 +3678,15 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
         updateDraft(requestParameters: ArticleServiceUpdateDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateDraftArticleResp> {
             return localVarFp.updateDraft(requestParameters.updateDraftArticleReq, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 提交一次不可修改的文章投票。
+         * @param {ArticleServiceVotePollRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        votePoll(requestParameters: ArticleServiceVotePollRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.votePoll(requestParameters.voteArticlePollReq, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -3468,6 +3694,14 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
  * ArticleService - interface
  */
 export interface ArticleServiceInterface {
+    /**
+     * 采纳文章回答
+     * @param {ArticleServiceAcceptAnswerRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    acceptAnswer(requestParameters: ArticleServiceAcceptAnswerRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
     /**
      * 归档文章
      * @param {ArticleServiceArchiveRequest} requestParameters Request parameters.
@@ -3507,6 +3741,14 @@ export interface ArticleServiceInterface {
      * @throws {RequiredError}
      */
     discardDraft(requestParameters: ArticleServiceDiscardDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * 报名或撤销抽奖报名。
+     * @param {ArticleServiceEnterLotteryRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    enterLottery(requestParameters: ArticleServiceEnterLotteryRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
     /**
      * 查询文章详情
@@ -3596,6 +3838,21 @@ export interface ArticleServiceInterface {
      */
     updateDraft(requestParameters: ArticleServiceUpdateDraftRequest, options?: RawAxiosRequestConfig): AxiosPromise<UpdateDraftArticleResp>;
 
+    /**
+     * 提交一次不可修改的文章投票。
+     * @param {ArticleServiceVotePollRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    votePoll(requestParameters: ArticleServiceVotePollRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+}
+
+/**
+ * Request parameters for acceptAnswer operation in ArticleService.
+ */
+export interface ArticleServiceAcceptAnswerRequest {
+    readonly acceptArticleAnswerReq: AcceptArticleAnswerReq
 }
 
 /**
@@ -3631,6 +3888,13 @@ export interface ArticleServiceCreateDraftRequest {
  */
 export interface ArticleServiceDiscardDraftRequest {
     readonly discardDraftArticleReq: DiscardDraftArticleReq
+}
+
+/**
+ * Request parameters for enterLottery operation in ArticleService.
+ */
+export interface ArticleServiceEnterLotteryRequest {
+    readonly enterArticleLotteryReq: EnterArticleLotteryReq
 }
 
 /**
@@ -3711,9 +3975,26 @@ export interface ArticleServiceUpdateDraftRequest {
 }
 
 /**
+ * Request parameters for votePoll operation in ArticleService.
+ */
+export interface ArticleServiceVotePollRequest {
+    readonly voteArticlePollReq: VoteArticlePollReq
+}
+
+/**
  * ArticleService - object-oriented interface
  */
 export class ArticleService extends BaseAPI implements ArticleServiceInterface {
+    /**
+     * 采纳文章回答
+     * @param {ArticleServiceAcceptAnswerRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public acceptAnswer(requestParameters: ArticleServiceAcceptAnswerRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).acceptAnswer(requestParameters.acceptArticleAnswerReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 归档文章
      * @param {ArticleServiceArchiveRequest} requestParameters Request parameters.
@@ -3762,6 +4043,16 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
      */
     public discardDraft(requestParameters: ArticleServiceDiscardDraftRequest, options?: RawAxiosRequestConfig) {
         return ArticleServiceFp(this.configuration).discardDraft(requestParameters.discardDraftArticleReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 报名或撤销抽奖报名。
+     * @param {ArticleServiceEnterLotteryRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public enterLottery(requestParameters: ArticleServiceEnterLotteryRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).enterLottery(requestParameters.enterArticleLotteryReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -3872,6 +4163,16 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
      */
     public updateDraft(requestParameters: ArticleServiceUpdateDraftRequest, options?: RawAxiosRequestConfig) {
         return ArticleServiceFp(this.configuration).updateDraft(requestParameters.updateDraftArticleReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 提交一次不可修改的文章投票。
+     * @param {ArticleServiceVotePollRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public votePoll(requestParameters: ArticleServiceVotePollRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).votePoll(requestParameters.voteArticlePollReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

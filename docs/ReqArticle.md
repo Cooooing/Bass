@@ -12,6 +12,8 @@ Name | Type | Description | Notes
 **type** | **string** |  | [default to undefined]
 **statement** | **string** |  | [optional] [default to undefined]
 **commentable** | **boolean** |  | [optional] [default to undefined]
+**poll** | [**ArticlePollDraft**](ArticlePollDraft.md) |  | [optional] [default to undefined]
+**lottery** | [**ArticleLotteryDraft**](ArticleLotteryDraft.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -26,6 +28,8 @@ const instance: ReqArticle = {
     type,
     statement,
     commentable,
+    poll,
+    lottery,
 };
 ```
 

@@ -37,6 +37,9 @@ Name | Type | Description | Notes
 **tags** | [**Array&lt;ArticleTag&gt;**](ArticleTag.md) |  | [optional] [default to undefined]
 **domains** | [**Array&lt;ArticleDomain&gt;**](ArticleDomain.md) |  | [optional] [default to undefined]
 **city** | **string** |  | [optional] [default to undefined]
+**accepted_comment_id** | **string** |  | [optional] [default to undefined]
+**poll** | [**ArticlePoll**](ArticlePoll.md) |  | [optional] [default to undefined]
+**lottery** | [**ArticleLottery**](ArticleLottery.md) |  | [optional] [default to undefined]
 **created_by** | **string** |  | [optional] [default to undefined]
 **updated_by** | **string** |  | [optional] [default to undefined]
 **created_at** | **string** |  | [optional] [default to undefined]
@@ -80,6 +83,9 @@ const instance: ArticleDetail = {
     tags,
     domains,
     city,
+    accepted_comment_id,
+    poll,
+    lottery,
     created_by,
     updated_by,
     created_at,

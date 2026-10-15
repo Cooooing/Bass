@@ -4,11 +4,13 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**acceptAnswer**](#acceptanswer) | **POST** /v1/content/article/answer/accept | |
 |[**archive**](#archive) | **POST** /v1/content/article/archive | |
 |[**cancelPublish**](#cancelpublish) | **POST** /v1/content/article/publish/cancel | |
 |[**collect**](#collect) | **POST** /v1/content/article/collect | |
 |[**createDraft**](#createdraft) | **POST** /v1/content/article/draft/create | |
 |[**discardDraft**](#discarddraft) | **POST** /v1/content/article/draft/discard | |
+|[**enterLottery**](#enterlottery) | **POST** /v1/content/article/lottery/entry | |
 |[**get**](#get) | **POST** /v1/content/article/get | |
 |[**like**](#like) | **POST** /v1/content/article/like | |
 |[**list**](#list) | **POST** /v1/content/article/list | |
@@ -20,6 +22,59 @@ All URIs are relative to *http://localhost*
 |[**setPinnedComment**](#setpinnedcomment) | **POST** /v1/content/article/comment/pin | |
 |[**thank**](#thank) | **POST** /v1/content/article/thank | |
 |[**updateDraft**](#updatedraft) | **POST** /v1/content/article/draft/update | |
+|[**votePoll**](#votepoll) | **POST** /v1/content/article/poll/vote | |
+
+# **acceptAnswer**
+> object acceptAnswer(acceptArticleAnswerReq)
+
+采纳文章回答
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    AcceptArticleAnswerReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let acceptArticleAnswerReq: AcceptArticleAnswerReq; //
+
+const { status, data } = await apiInstance.acceptAnswer(
+    acceptArticleAnswerReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **acceptArticleAnswerReq** | **AcceptArticleAnswerReq**|  | |
+
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **archive**
 > object archive(archiveArticleReq)
@@ -258,6 +313,58 @@ const { status, data } = await apiInstance.discardDraft(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **discardDraftArticleReq** | **DiscardDraftArticleReq**|  | |
+
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **enterLottery**
+> object enterLottery(enterArticleLotteryReq)
+
+报名或撤销抽奖报名。
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    EnterArticleLotteryReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let enterArticleLotteryReq: EnterArticleLotteryReq; //
+
+const { status, data } = await apiInstance.enterLottery(
+    enterArticleLotteryReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **enterArticleLotteryReq** | **EnterArticleLotteryReq**|  | |
 
 
 ### Return type
@@ -835,6 +942,58 @@ const { status, data } = await apiInstance.updateDraft(
 ### Return type
 
 **UpdateDraftArticleResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **votePoll**
+> object votePoll(voteArticlePollReq)
+
+提交一次不可修改的文章投票。
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    VoteArticlePollReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let voteArticlePollReq: VoteArticlePollReq; //
+
+const { status, data } = await apiInstance.votePoll(
+    voteArticlePollReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **voteArticlePollReq** | **VoteArticlePollReq**|  | |
+
+
+### Return type
+
+**object**
 
 ### Authorization
 

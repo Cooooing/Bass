@@ -1,4 +1,4 @@
-# RespTopComment
+# RespPinnedComment
 
 
 ## Properties
@@ -10,9 +10,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { RespTopComment } from '@bass/bbs-sdk-axios';
+import { RespPinnedComment } from '@bass/bbs-sdk-axios';
 
-const instance: RespTopComment = {
+const instance: RespPinnedComment = {
     thread,
 };
 ```

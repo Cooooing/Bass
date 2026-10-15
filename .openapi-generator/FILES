@@ -6,6 +6,7 @@ api.ts
 base.ts
 common.ts
 configuration.ts
+docs/AcceptArticleAnswerReq.md
 docs/AccountContact.md
 docs/AccountProfile.md
 docs/AccountProfileListItem.md
@@ -16,6 +17,13 @@ docs/ArchiveArticleReq.md
 docs/ArticleDetail.md
 docs/ArticleDomain.md
 docs/ArticleListItem.md
+docs/ArticleLottery.md
+docs/ArticleLotteryDraft.md
+docs/ArticleLotteryPrize.md
+docs/ArticleLotteryPrizeDraft.md
+docs/ArticlePoll.md
+docs/ArticlePollDraft.md
+docs/ArticlePollOption.md
 docs/ArticlePostscript.md
 docs/ArticleSearchService.md
 docs/ArticleService.md
@@ -53,6 +61,7 @@ docs/CreateTagResp.md
 docs/DisableTotpReq.md
 docs/DiscardDraftArticleReq.md
 docs/DomainService.md
+docs/EnterArticleLotteryReq.md
 docs/FollowRelationReq.md
 docs/GetArticleReq.md
 docs/GetArticleResp.md
@@ -161,12 +170,12 @@ docs/RespCurrentAccount.md
 docs/RespDomain.md
 docs/RespLocation.md
 docs/RespNotification.md
+docs/RespPinnedComment.md
 docs/RespPreference.md
 docs/RespPrivacySetting.md
 docs/RespRecord.md
 docs/RespRelationStatus.md
 docs/RespTag.md
-docs/RespTopComment.md
 docs/RespTotp.md
 docs/RewardArticleReq.md
 docs/SearchArticlesReq.md
@@ -199,6 +208,7 @@ docs/UpdateProfileAccountReq.md
 docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
+docs/VoteArticlePollReq.md
 git_push.sh
 index.ts
 package.json

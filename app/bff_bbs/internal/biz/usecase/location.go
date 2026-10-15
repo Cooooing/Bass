@@ -1,37 +1,41 @@
 package usecase
 
 import (
-	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	"context"
+	"strings"
+
+	platformv1 "common/proto/gen/bff_bbs/v1/platform"
 
 	"bff_bbs/internal/biz/repo"
 )
 
 type LocationUsecase struct {
-	locationClient repo.LocationClient
+	ipResolutionClient repo.IPResolutionClient
 }
 
 func NewLocationUsecase(
-	locationClient repo.LocationClient,
+	ipResolutionClient repo.IPResolutionClient,
 ) *LocationUsecase {
 	return &LocationUsecase{
-		locationClient: locationClient,
+		ipResolutionClient: ipResolutionClient,
 	}
 }
 
-func (u *LocationUsecase) GetCurrentLocation(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentLocation_Resp_Location, error) {
-	reply, err := u.locationClient.GetCurrentLocation(ctx, userID)
+func (u *LocationUsecase) GetCurrent(ctx context.Context, ip string) (*platformv1.GetCurrentLocation_Resp_Location, error) {
+	if u.ipResolutionClient == nil || strings.TrimSpace(ip) == "" {
+		return nil, nil
+	}
+	resolved, err := u.ipResolutionClient.Resolve(ctx, strings.TrimSpace(ip))
 	if err != nil {
 		return nil, err
 	}
-	var location *bbsuserv1.GetCurrentLocation_Resp_Location
-	if row := reply; row != nil {
-		location = &bbsuserv1.GetCurrentLocation_Resp_Location{
-			UserId:   row.UserID,
-			Country:  row.Country,
-			Province: row.Province,
-			City:     row.City,
-		}
+	if resolved == nil {
+		return nil, nil
 	}
-	return location, nil
+
+	return &platformv1.GetCurrentLocation_Resp_Location{
+		Country:  new(strings.TrimSpace(resolved.Country)),
+		Province: new(strings.TrimSpace(resolved.Province)),
+		City:     new(strings.TrimSpace(resolved.City)),
+	}, nil
 }

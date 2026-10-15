@@ -6,6 +6,7 @@ import (
 	commonenum "common/pkg/enum"
 	"common/pkg/server"
 	bbscontentv1 "common/proto/gen/bff_bbs/v1/content"
+	platformv1 "common/proto/gen/bff_bbs/v1/platform"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	cerrors "common/proto/gen/common/errors"
 	userv1 "common/proto/gen/user/v1"
@@ -32,6 +33,8 @@ func NewHTTPAuthMiddlewares(authClient userv1.AuthServiceClient) []middleware.Mi
 		bbsuserv1.OperationAuthServiceRefreshToken:                  {},
 		bbsuserv1.OperationAuthServiceCheckRegistrationAvailability: {},
 		bbsuserv1.OperationAccountServiceAvatar:                     {},
+		platformv1.OperationLocationServiceGetCurrent:               {},
+		platformv1.OperationHolidayServiceGetCurrent:                {},
 	}
 	optionalAuthOperations := map[string]struct{}{
 		bbscontentv1.OperationArticleServiceList:          {},

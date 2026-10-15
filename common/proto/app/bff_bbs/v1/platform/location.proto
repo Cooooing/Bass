@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.v1.platform;
+
+import "google/api/annotations.proto";
+
+option go_package = "common/proto/gen/bff_bbs/v1/platform;platform";
+
+// 平台地理数据接口。
+service LocationService {
+  // 按当前请求来源 IP 获取地理数据。
+  rpc GetCurrent(GetCurrentLocation.Req) returns (GetCurrentLocation.Resp) {
+    option (google.api.http) = {
+      post: "/v1/platform/location/get-current"
+      body: "*"
+    };
+  }
+
+}
+
+// 按当前请求来源 IP 获取地理数据。
+message GetCurrentLocation {
+  message Req {}
+  message Resp {
+    message Location {
+      optional string country = 1; // 国家或地区
+      optional string province = 2; // 省份或州
+      optional string city = 3; // 城市
+    }
+    Location location = 1; // 当前请求来源地理数据
+  }
+}

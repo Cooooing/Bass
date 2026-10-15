@@ -1,12 +1,8 @@
 package service
 
 import (
-	"common/pkg/apperror"
-	"common/pkg/constant"
-	commonmodel "common/pkg/model"
-	"common/pkg/util"
-	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
-	cerrors "common/proto/gen/common/errors"
+	"common/pkg/server"
+	platformv1 "common/proto/gen/bff_bbs/v1/platform"
 	"context"
 
 	"bff_bbs/internal/biz/usecase"
@@ -16,7 +12,7 @@ import (
 )
 
 type LocationService struct {
-	bbsuserv1.UnimplementedLocationServiceServer
+	platformv1.UnimplementedLocationServiceServer
 	locationUsecase *usecase.LocationUsecase
 }
 
@@ -32,19 +28,15 @@ func (s *LocationService) RegisterGrpc(gs *grpc.Server) {
 }
 
 func (s *LocationService) RegisterHTTP(hs *http.Server) {
-	bbsuserv1.RegisterLocationServiceHTTPServer(hs, s)
+	platformv1.RegisterLocationServiceHTTPServer(hs, s)
 }
 
-func (s *LocationService) GetCurrent(ctx context.Context, req *bbsuserv1.GetCurrentLocation_Req) (*bbsuserv1.GetCurrentLocation_Resp, error) {
-	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
-	if !ok || user == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
-	}
-	location, err := s.locationUsecase.GetCurrentLocation(ctx, user.ID)
+func (s *LocationService) GetCurrent(ctx context.Context, req *platformv1.GetCurrentLocation_Req) (*platformv1.GetCurrentLocation_Resp, error) {
+	location, err := s.locationUsecase.GetCurrent(ctx, server.ClientIP(ctx))
 	if err != nil {
 		return nil, err
 	}
-	return &bbsuserv1.GetCurrentLocation_Resp{
+	return &platformv1.GetCurrentLocation_Resp{
 		Location: location,
 	}, nil
 }

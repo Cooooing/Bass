@@ -98,6 +98,16 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*
 				Phone:  contact.Phone,
 			}
 		}
+		if u.locationClient != nil {
+			location, err := u.locationClient.GetCurrentLocation(ctx, userID)
+			if err == nil && location != nil {
+				account.Location = &bbsuserv1.ProfileLocation{
+					Country:  location.Country,
+					Province: location.Province,
+					City:     location.City,
+				}
+			}
+		}
 	}
 	return account, nil
 }

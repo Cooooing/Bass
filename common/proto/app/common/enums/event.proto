@@ -39,6 +39,7 @@ enum EventType {
   EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER = 2006; // 采纳答案
   EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED = 2007; // 添加文章附言
   EVENT_TYPE_ARTICLE_STATUS_UPDATED = 2008; // 更新文章状态
+  EVENT_TYPE_ARTICLE_LOTTERY_WON = 2009; // 抽奖中奖
 
   // 内容评论事件（2100-2199）
   EVENT_TYPE_COMMENT_PUBLISHED = 2101; // 发布评论
@@ -88,6 +89,7 @@ enum EventSubject {
   EVENT_SUBJECT_ARTICLE_ACCEPTED_ANSWER = 2006; // content.article.accepted_answer
   EVENT_SUBJECT_ARTICLE_POSTSCRIPT_ADDED = 2007; // content.article.postscript_added
   EVENT_SUBJECT_ARTICLE_STATUS_UPDATED = 2008; // content.article.status_updated
+  EVENT_SUBJECT_ARTICLE_LOTTERY_WON = 2009; // content.article.lottery_won
 
   // 内容评论事件（2100-2199）
   EVENT_SUBJECT_COMMENT_PUBLISHED = 2101; // content.comment.published
@@ -164,6 +166,7 @@ message Event {
     ArticleAcceptedAnswerPayload article_accepted_answer = 2006;
     ArticlePostscriptAddedPayload article_postscript_added = 2007;
     ArticleStatusUpdatedPayload article_status_updated = 2008;
+    ArticleLotteryWonPayload article_lottery_won = 2009;
     CommentPublishedPayload comment_published = 2101;
     CommentLikedPayload comment_liked = 2102;
     CommentThankedPayload comment_thanked = 2103;

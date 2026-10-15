@@ -12,3 +12,11 @@ type ArticleActor struct {
 }
 
 func (ArticleActor) notificationTemplateData() {}
+
+type ArticleLotteryWon struct {
+	Article Article
+	Author  User
+	Prize   string
+}
+
+func (ArticleLotteryWon) notificationTemplateData() {}

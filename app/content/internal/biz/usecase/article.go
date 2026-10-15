@@ -1193,7 +1193,8 @@ type ArticleDrawLotteryReq struct {
 }
 
 func (d *ArticleUsecase) DrawLottery(ctx context.Context, req *ArticleDrawLotteryReq) error {
-	return d.tx(ctx, func(ctx context.Context) error {
+	outboxEvents := make([]*repo.OutboxEvent, 0)
+	err := d.tx(ctx, func(ctx context.Context) error {
 		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(req.ArticleID)}})
 		if err != nil {
 			return err
@@ -1208,9 +1209,36 @@ func (d *ArticleUsecase) DrawLottery(ctx context.Context, req *ArticleDrawLotter
 		if lottery == nil || lottery.DrawnAt != nil || !lottery.DrawAt.UTC().Equal(req.DrawAt.UTC()) {
 			return nil
 		}
-		_, err = d.articleLotteryRepo.Draw(ctx, lottery.ID, time.Now().UTC())
-		return err
+		winners, drawErr := d.articleLotteryRepo.Draw(ctx, lottery.ID, time.Now().UTC())
+		if drawErr != nil {
+			return drawErr
+		}
+		if article.CreatedBy == nil {
+			return nil
+		}
+		for _, winner := range winners {
+			if winner == nil || winner.UserID <= 0 {
+				continue
+			}
+			event, saveErr := d.outboxRepo.Save(ctx, &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_LOTTERY_WON, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_WON, Payload: &commonenums.Event_ArticleLotteryWon{ArticleLotteryWon: &commonenums.ArticleLotteryWonPayload{SenderId: *article.CreatedBy, ArticleId: article.ID, PrizeId: winner.PrizeID, WinnerId: winner.UserID}}})
+			if saveErr != nil {
+				return saveErr
+			}
+			outboxEvents = append(outboxEvents, event)
+		}
+		return nil
 	})
+	if err != nil {
+		return err
+	}
+	for _, event := range outboxEvents {
+		if event != nil {
+			if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: event.ID}); publishErr != nil {
+				d.log.WarnContext(ctx, "publish lottery winner outbox event failed", slog.Int64("outbox_id", event.ID), slog.Any("err", publishErr))
+			}
+		}
+	}
+	return nil
 }
 
 func (d *ArticleUsecase) VotePoll(ctx context.Context, req *ArticleVotePollReq) error {

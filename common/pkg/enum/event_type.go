@@ -27,6 +27,7 @@ const (
 	EventTypeContentArticleAcceptAnswer  EventType = "content_article_accept_answer"
 	EventTypeContentArticlePostscriptAdd EventType = "content_article_postscript_add"
 	EventTypeContentArticleStatusUpdate  EventType = "content_article_status_update"
+	EventTypeContentArticleLotteryWon    EventType = "content_article_lottery_won"
 	EventTypeContentCommentPublish       EventType = "content_comment_publish"
 	EventTypeContentCommentLike          EventType = "content_comment_like"
 	EventTypeContentCommentThank         EventType = "content_comment_thank"
@@ -61,6 +62,7 @@ var EventTypeMap = NewMapping[EventType, enums.EventType](map[EventType]Entry[Ev
 	EventTypeContentArticleAcceptAnswer:  {Proto: enums.EventType_EVENT_TYPE_ARTICLE_ACCEPTED_ANSWER},
 	EventTypeContentArticlePostscriptAdd: {Proto: enums.EventType_EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED},
 	EventTypeContentArticleStatusUpdate:  {Proto: enums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED},
+	EventTypeContentArticleLotteryWon:    {Proto: enums.EventType_EVENT_TYPE_ARTICLE_LOTTERY_WON},
 	EventTypeContentCommentPublish:       {Proto: enums.EventType_EVENT_TYPE_COMMENT_PUBLISHED},
 	EventTypeContentCommentLike:          {Proto: enums.EventType_EVENT_TYPE_COMMENT_LIKED},
 	EventTypeContentCommentThank:         {Proto: enums.EventType_EVENT_TYPE_COMMENT_THANKED},

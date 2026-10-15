@@ -2,11 +2,11 @@ package task
 
 import (
 	"common/pkg/client/rpc"
+	commonscheduler "common/pkg/scheduler"
+	schedulerv1 "common/proto/gen/scheduler/v1"
 	userv1 "common/proto/gen/user/v1"
 	"context"
-	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 
 	schedulerenum "scheduler/internal/enum"
@@ -58,20 +58,16 @@ func (t *UserUnbanAccounts) DefaultDelayedTasks() []*DefaultDelayedTask {
 	}
 }
 
-type userUnbanAccountsPayload struct {
-	UserIDs []int64 `json:"user_ids"`
-}
-
 func (t *UserUnbanAccounts) Execute(ctx context.Context, payload string) error {
-	var data userUnbanAccountsPayload
-	if err := json.Unmarshal([]byte(strings.TrimSpace(payload)), &data); err != nil {
+	data := &schedulerv1.UnbanAccountsTaskPayload{}
+	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
 		return err
 	}
-	if len(data.UserIDs) == 0 {
+	if len(data.GetUserIds()) == 0 {
 		return fmt.Errorf("invalid user unban payload")
 	}
 	_, err := t.userClient.Auth.UnbanAccounts(ctx, &userv1.UnbanAccounts_Req{
-		UserIds: data.UserIDs,
+		UserIds: data.GetUserIds(),
 	})
 	return err
 }

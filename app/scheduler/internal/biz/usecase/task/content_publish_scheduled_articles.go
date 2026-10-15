@@ -2,11 +2,11 @@ package task
 
 import (
 	"common/pkg/client/rpc"
+	commonscheduler "common/pkg/scheduler"
 	contentv1 "common/proto/gen/content/v1"
+	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
-	"encoding/json"
 	"fmt"
-	"strings"
 	"time"
 
 	schedulerenum "scheduler/internal/enum"
@@ -60,23 +60,17 @@ func (t *ContentPublishScheduledArticles) DefaultDelayedTasks() []*DefaultDelaye
 	}
 }
 
-type contentPublishScheduledArticlesPayload struct {
-	ArticleID    int64     `json:"article_id"`
-	AuthorUserID int64     `json:"author_user_id"`
-	ScheduledAt  time.Time `json:"scheduled_at"`
-}
-
 func (t *ContentPublishScheduledArticles) Execute(ctx context.Context, payload string) error {
-	var data contentPublishScheduledArticlesPayload
-	if err := json.Unmarshal([]byte(strings.TrimSpace(payload)), &data); err != nil {
+	data := &schedulerv1.PublishScheduledArticleTaskPayload{}
+	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
 		return err
 	}
-	if data.ArticleID <= 0 || data.ScheduledAt.IsZero() {
+	if data.GetArticleId() <= 0 || data.GetScheduledAt() == nil || !data.GetScheduledAt().IsValid() {
 		return fmt.Errorf("invalid content publish scheduled article payload")
 	}
 	_, err := t.contentClient.Article.Publish(ctx, &contentv1.PublishArticle_Req{
-		ArticleId:   data.ArticleID,
-		ScheduledAt: timestamppb.New(data.ScheduledAt),
+		ArticleId:   data.GetArticleId(),
+		ScheduledAt: timestamppb.New(data.GetScheduledAt().AsTime()),
 	})
 	return err
 }

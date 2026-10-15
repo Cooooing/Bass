@@ -2,10 +2,10 @@ package task
 
 import (
 	"common/pkg/client/rpc"
+	commonscheduler "common/pkg/scheduler"
 	contentv1 "common/proto/gen/content/v1"
+	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
-	"encoding/json"
-	"strings"
 	"time"
 
 	schedulerenum "scheduler/internal/enum"
@@ -49,7 +49,7 @@ func (t *ContentFlushArticleViews) DefaultScheduledTasks() []*DefaultScheduledTa
 			Description:   t.Description(),
 			Enabled:       true,
 			CronSpec:      "0/30 * * * * ?",
-			Payload:       `{"limit":1000}`,
+			Payload:       commonscheduler.MustMarshalPayload(&schedulerv1.FlushArticleViewsTaskPayload{Limit: t.defaultLimit}),
 			Timeout:       30 * time.Second,
 			MaxAttempts:   1,
 			MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteLatest,
@@ -62,21 +62,14 @@ func (t *ContentFlushArticleViews) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return nil
 }
 
-type contentFlushArticleViewsPayload struct {
-	Limit int32 `json:"limit"`
-}
-
 func (t *ContentFlushArticleViews) Execute(ctx context.Context, payload string) error {
 	limit := t.defaultLimit
-	payload = strings.TrimSpace(payload)
-	if payload != "" && payload != "{}" {
-		data := &contentFlushArticleViewsPayload{}
-		if err := json.Unmarshal([]byte(payload), data); err != nil {
-			return err
-		}
-		if data.Limit > 0 {
-			limit = data.Limit
-		}
+	data := &schedulerv1.FlushArticleViewsTaskPayload{}
+	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+		return err
+	}
+	if data.GetLimit() > 0 {
+		limit = data.GetLimit()
 	}
 	_, err := t.contentClient.Article.FlushViews(ctx, &contentv1.FlushArticleViews_Req{Limit: limit})
 	return err

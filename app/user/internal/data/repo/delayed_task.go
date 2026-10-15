@@ -6,7 +6,6 @@ import (
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	schedulerv1enum "common/proto/gen/scheduler/v1/enum"
 	"context"
-	"encoding/json"
 	"errors"
 	"time"
 
@@ -25,17 +24,11 @@ func NewDelayedTaskClient(
 	}
 }
 
-type unbanAccountsPayload struct {
-	UserIDs []int64 `json:"user_ids"`
-}
-
 func (c *DelayedTaskClient) RegisterUnbanAccounts(ctx context.Context, userID int64, executeAt *time.Time) error {
 	if executeAt == nil {
 		return errors.New("delayed task execute_at is required")
 	}
-	payload, err := json.Marshal(&unbanAccountsPayload{
-		UserIDs: []int64{userID},
-	})
+	payload, err := commonscheduler.MarshalPayload(&schedulerv1.UnbanAccountsTaskPayload{UserIds: []int64{userID}})
 	if err != nil {
 		return err
 	}
@@ -43,7 +36,7 @@ func (c *DelayedTaskClient) RegisterUnbanAccounts(ctx context.Context, userID in
 		TaskKey: commonscheduler.TaskKeyMap.MustToEnum(
 			schedulerv1enum.SchedulerTaskKey_SCHEDULER_TASK_KEY_USER_UNBAN_ACCOUNTS_DEFAULT,
 		).String(),
-		Payload:     string(payload),
+		Payload:     payload,
 		ScheduledAt: timestamppb.New(*executeAt),
 	})
 	return err

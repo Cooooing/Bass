@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package common.api.app.scheduler.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/scheduler/v1;v1";
+
+// NoopTaskPayload 是空任务的可选执行参数。
+message NoopTaskPayload {
+  string name = 1; // 任务显示名称
+  int32 sleep_seconds = 2; // 模拟执行等待秒数
+}
+
+// OutboxPublishBatchTaskPayload 是 Outbox 批量投递任务的可选参数。
+message OutboxPublishBatchTaskPayload {
+  int32 limit = 1; // 单批最大事件数
+  int64 publish_timeout = 2; // 单事件投递超时纳秒数
+  int32 max_retry = 3; // 单事件最大重试次数
+}
+
+// FlushArticleViewsTaskPayload 是文章浏览量刷盘任务的可选参数。
+message FlushArticleViewsTaskPayload {
+  int32 limit = 1; // 单批最大文章数
+}
+
+// UnbanAccountsTaskPayload 是账号解封延迟任务参数。
+message UnbanAccountsTaskPayload {
+  repeated int64 user_ids = 1; // 待解封账号 ID
+}
+
+// PublishScheduledArticleTaskPayload 是文章定时发布任务参数。
+message PublishScheduledArticleTaskPayload {
+  int64 article_id = 1; // 文章 ID
+  int64 author_user_id = 2; // 设置计划的作者账号 ID
+  google.protobuf.Timestamp scheduled_at = 3; // 原计划发布时间
+}
+
+// DrawArticleLotteryTaskPayload 是文章抽奖开奖任务参数。
+message DrawArticleLotteryTaskPayload {
+  int64 article_id = 1; // 文章 ID
+  google.protobuf.Timestamp draw_at = 2; // 原计划开奖时间
+}

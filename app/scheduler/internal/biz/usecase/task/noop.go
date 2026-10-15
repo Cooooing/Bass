@@ -1,8 +1,9 @@
 package task
 
 import (
+	commonscheduler "common/pkg/scheduler"
+	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
-	"encoding/json"
 	"log/slog"
 	"time"
 
@@ -43,7 +44,7 @@ func (n *Noop) DefaultScheduledTasks() []*DefaultScheduledTask {
 			Description:   n.Description(),
 			Enabled:       false,
 			CronSpec:      "0/30 * * * * ?",
-			Payload:       `{"name":"scheduled-noop","sleep_seconds":10}`,
+			Payload:       commonscheduler.MustMarshalPayload(&schedulerv1.NoopTaskPayload{Name: "scheduled-noop", SleepSeconds: 10}),
 			Timeout:       30 * time.Second,
 			StaleAfter:    staleAfter,
 			MaxAttempts:   1,
@@ -68,22 +69,17 @@ func (n *Noop) DefaultDelayedTasks() []*DefaultDelayedTask {
 }
 
 func (n *Noop) Execute(ctx context.Context, payload string) error {
-	data := struct {
-		Name         string `json:"name"`
-		SleepSeconds int32  `json:"sleep_seconds"`
-	}{}
-	if payload != "" && payload != "{}" {
-		if err := json.Unmarshal([]byte(payload), &data); err != nil {
-			return err
-		}
+	data := &schedulerv1.NoopTaskPayload{}
+	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+		return err
 	}
-	if data.SleepSeconds > 0 {
+	if data.GetSleepSeconds() > 0 {
 		select {
-		case <-time.After(time.Duration(data.SleepSeconds) * time.Second):
+		case <-time.After(time.Duration(data.GetSleepSeconds()) * time.Second):
 		case <-ctx.Done():
 			return ctx.Err()
 		}
 	}
-	n.logger.InfoContext(ctx, "noop task executed", "name", data.Name, "sleep_seconds", data.SleepSeconds)
+	n.logger.InfoContext(ctx, "noop task executed", "name", data.GetName(), "sleep_seconds", data.GetSleepSeconds())
 	return nil
 }

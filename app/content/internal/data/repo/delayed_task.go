@@ -6,7 +6,6 @@ import (
 	schedulerv1 "common/proto/gen/scheduler/v1"
 	schedulerv1enum "common/proto/gen/scheduler/v1/enum"
 	"context"
-	"encoding/json"
 	"errors"
 	"strconv"
 	"time"
@@ -29,26 +28,11 @@ func NewDelayedTaskClient(
 	}
 }
 
-type publishScheduledArticlePayload struct {
-	ArticleID    int64     `json:"article_id"`
-	AuthorUserID int64     `json:"author_user_id"`
-	ScheduledAt  time.Time `json:"scheduled_at"`
-}
-
-type lotteryDrawPayload struct {
-	ArticleID int64     `json:"article_id"`
-	DrawAt    time.Time `json:"draw_at"`
-}
-
 func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context, articleID int64, authorUserID int64, publishAt time.Time) error {
 	if publishAt.IsZero() {
 		return errors.New("delayed task publish_at is required")
 	}
-	payload, err := json.Marshal(&publishScheduledArticlePayload{
-		ArticleID:    articleID,
-		AuthorUserID: authorUserID,
-		ScheduledAt:  publishAt.UTC().Truncate(time.Second),
-	})
+	payload, err := commonscheduler.MarshalPayload(&schedulerv1.PublishScheduledArticleTaskPayload{ArticleId: articleID, AuthorUserId: authorUserID, ScheduledAt: timestamppb.New(publishAt.UTC().Truncate(time.Second))})
 	if err != nil {
 		return err
 	}
@@ -56,7 +40,7 @@ func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context,
 		TaskKey: commonscheduler.TaskKeyMap.MustToEnum(
 			schedulerv1enum.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_PUBLISH_SCHEDULED_ARTICLES_DEFAULT,
 		).String(),
-		Payload:        string(payload),
+		Payload:        payload,
 		ScheduledAt:    timestamppb.New(publishAt),
 		IdempotencyKey: uuid.NewString(),
 		BusinessKey:    c.publishScheduledArticleBusinessKey(articleID),
@@ -72,11 +56,11 @@ func (c *DelayedTaskClient) CancelPublishScheduledArticle(ctx context.Context, a
 }
 
 func (c *DelayedTaskClient) RegisterLotteryDraw(ctx context.Context, articleID int64, drawAt time.Time) error {
-	payload, err := json.Marshal(&lotteryDrawPayload{ArticleID: articleID, DrawAt: drawAt.UTC().Truncate(time.Second)})
+	payload, err := commonscheduler.MarshalPayload(&schedulerv1.DrawArticleLotteryTaskPayload{ArticleId: articleID, DrawAt: timestamppb.New(drawAt.UTC().Truncate(time.Second))})
 	if err != nil {
 		return err
 	}
-	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{TaskKey: commonscheduler.TaskKeyMap.MustToEnum(schedulerv1enum.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_DRAW_ARTICLE_LOTTERIES_DEFAULT).String(), Payload: string(payload), ScheduledAt: timestamppb.New(drawAt), IdempotencyKey: uuid.NewString(), BusinessKey: "content.article.lottery.draw:" + strconv.FormatInt(articleID, 10)})
+	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{TaskKey: commonscheduler.TaskKeyMap.MustToEnum(schedulerv1enum.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_DRAW_ARTICLE_LOTTERIES_DEFAULT).String(), Payload: payload, ScheduledAt: timestamppb.New(drawAt), IdempotencyKey: uuid.NewString(), BusinessKey: "content.article.lottery.draw:" + strconv.FormatInt(articleID, 10)})
 	return err
 }
 

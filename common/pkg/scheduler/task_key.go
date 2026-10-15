@@ -24,36 +24,16 @@ const (
 // TaskKeyMap 将公共 proto 枚举转换为 scheduler 对外使用的字符串 key。
 var TaskKeyMap = commonenum.NewMapping[TaskKey, schedulerv1.SchedulerTaskKey](
 	map[TaskKey]commonenum.Entry[TaskKey, schedulerv1.SchedulerTaskKey]{
-		TaskKeyNoopScheduledDefault: {
-			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_NOOP_SCHEDULED_DEFAULT,
-		},
-		TaskKeyNoopDelayedDefault: {
-			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_NOOP_DELAYED_DEFAULT,
-		},
-		TaskKeyUserOutboxPublishBatchDefault: {
-			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_USER_OUTBOX_PUBLISH_BATCH_DEFAULT,
-		},
-		TaskKeyUserOutboxPublishBatchDelayedDefault: {
-			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_USER_OUTBOX_PUBLISH_BATCH_DELAYED_DEFAULT,
-		},
-		TaskKeyUserUnbanAccountsDefault: {
-			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_USER_UNBAN_ACCOUNTS_DEFAULT,
-		},
-		TaskKeyContentOutboxPublishBatchDefault: {
-			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_OUTBOX_PUBLISH_BATCH_DEFAULT,
-		},
-		TaskKeyContentOutboxPublishBatchDelayedDefault: {
-			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_OUTBOX_PUBLISH_BATCH_DELAYED_DEFAULT,
-		},
-		TaskKeyContentPublishScheduledArticlesDefault: {
-			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_PUBLISH_SCHEDULED_ARTICLES_DEFAULT,
-		},
-		TaskKeyContentFlushArticleViewsDefault: {
-			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_FLUSH_ARTICLE_VIEWS_DEFAULT,
-		},
-		TaskKeyContentDrawArticleLotteriesDefault: {
-			Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_DRAW_ARTICLE_LOTTERIES_DEFAULT,
-		},
+		TaskKeyNoopScheduledDefault:                    {Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_NOOP_SCHEDULED_DEFAULT},
+		TaskKeyNoopDelayedDefault:                      {Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_NOOP_DELAYED_DEFAULT},
+		TaskKeyUserOutboxPublishBatchDefault:           {Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_USER_OUTBOX_PUBLISH_BATCH_DEFAULT},
+		TaskKeyUserOutboxPublishBatchDelayedDefault:    {Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_USER_OUTBOX_PUBLISH_BATCH_DELAYED_DEFAULT},
+		TaskKeyUserUnbanAccountsDefault:                {Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_USER_UNBAN_ACCOUNTS_DEFAULT},
+		TaskKeyContentOutboxPublishBatchDefault:        {Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_OUTBOX_PUBLISH_BATCH_DEFAULT},
+		TaskKeyContentOutboxPublishBatchDelayedDefault: {Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_OUTBOX_PUBLISH_BATCH_DELAYED_DEFAULT},
+		TaskKeyContentPublishScheduledArticlesDefault:  {Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_PUBLISH_SCHEDULED_ARTICLES_DEFAULT},
+		TaskKeyContentFlushArticleViewsDefault:         {Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_FLUSH_ARTICLE_VIEWS_DEFAULT},
+		TaskKeyContentDrawArticleLotteriesDefault:      {Proto: schedulerv1.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_DRAW_ARTICLE_LOTTERIES_DEFAULT},
 	},
 )
 

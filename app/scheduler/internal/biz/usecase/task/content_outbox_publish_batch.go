@@ -2,10 +2,10 @@ package task
 
 import (
 	"common/pkg/client/rpc"
+	commonscheduler "common/pkg/scheduler"
 	contentv1 "common/proto/gen/content/v1"
+	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
-	"encoding/json"
-	"strings"
 	"time"
 
 	schedulerenum "scheduler/internal/enum"
@@ -31,35 +31,27 @@ func (*ContentOutboxPublishBatch) HandlerName() schedulerenum.TaskHandlerName {
 func (t *ContentOutboxPublishBatch) Title() string       { return t.title }
 func (t *ContentOutboxPublishBatch) Description() string { return t.description }
 func (t *ContentOutboxPublishBatch) DefaultScheduledTasks() []*DefaultScheduledTask {
-	return []*DefaultScheduledTask{{TaskKey: schedulerenum.TaskKeyContentOutboxPublishBatchDefault, Title: t.title, Description: t.description, Enabled: true, CronSpec: "0 0/1 * * * ?", Payload: `{"limit":1000,"max_retry":1}`, Timeout: 30 * time.Second, MaxAttempts: 1, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteLatest}}
+	return []*DefaultScheduledTask{{TaskKey: schedulerenum.TaskKeyContentOutboxPublishBatchDefault, Title: t.title, Description: t.description, Enabled: true, CronSpec: "0 0/1 * * * ?", Payload: commonscheduler.MustMarshalPayload(&schedulerv1.OutboxPublishBatchTaskPayload{Limit: t.defaultLimit, MaxRetry: 1}), Timeout: 30 * time.Second, MaxAttempts: 1, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteLatest}}
 }
 func (t *ContentOutboxPublishBatch) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return []*DefaultDelayedTask{{TaskKey: schedulerenum.TaskKeyContentOutboxPublishBatchDelayedDefault, Title: t.title, Description: t.description, Enabled: true, Timeout: time.Minute, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
 }
 
-type contentOutboxPublishBatchPayload struct {
-	Limit          int32         `json:"limit"`
-	PublishTimeout time.Duration `json:"publish_timeout"`
-	MaxRetry       int32         `json:"max_retry"`
-}
-
 func (t *ContentOutboxPublishBatch) Execute(ctx context.Context, payload string) error {
-	data := contentOutboxPublishBatchPayload{Limit: t.defaultLimit, PublishTimeout: t.defaultTimeout, MaxRetry: t.defaultRetry}
-	if payload = strings.TrimSpace(payload); payload != "" && payload != "{}" {
-		var override contentOutboxPublishBatchPayload
-		if err := json.Unmarshal([]byte(payload), &override); err != nil {
-			return err
-		}
-		if override.Limit > 0 {
-			data.Limit = override.Limit
-		}
-		if override.PublishTimeout > 0 {
-			data.PublishTimeout = override.PublishTimeout
-		}
-		if override.MaxRetry > 0 {
-			data.MaxRetry = override.MaxRetry
-		}
+	data := &schedulerv1.OutboxPublishBatchTaskPayload{}
+	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
+		return err
 	}
-	_, err := t.contentClient.Outbox.PublishBatch(ctx, &contentv1.PublishOutboxEvents_Req{Limit: data.Limit, PublishTimeout: durationpb.New(data.PublishTimeout), MaxRetry: data.MaxRetry})
+	limit, timeout, maxRetry := t.defaultLimit, t.defaultTimeout, t.defaultRetry
+	if data.GetLimit() > 0 {
+		limit = data.GetLimit()
+	}
+	if data.GetPublishTimeout() > 0 {
+		timeout = time.Duration(data.GetPublishTimeout())
+	}
+	if data.GetMaxRetry() > 0 {
+		maxRetry = data.GetMaxRetry()
+	}
+	_, err := t.contentClient.Outbox.PublishBatch(ctx, &contentv1.PublishOutboxEvents_Req{Limit: limit, PublishTimeout: durationpb.New(timeout), MaxRetry: maxRetry})
 	return err
 }

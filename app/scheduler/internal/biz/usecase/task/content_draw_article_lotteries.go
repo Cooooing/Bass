@@ -2,9 +2,10 @@ package task
 
 import (
 	"common/pkg/client/rpc"
+	commonscheduler "common/pkg/scheduler"
 	contentv1 "common/proto/gen/content/v1"
+	schedulerv1 "common/proto/gen/scheduler/v1"
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
@@ -38,16 +39,13 @@ func (t *ContentDrawArticleLotteries) DefaultDelayedTasks() []*DefaultDelayedTas
 }
 
 func (t *ContentDrawArticleLotteries) Execute(ctx context.Context, payload string) error {
-	var data struct {
-		ArticleID int64     `json:"article_id"`
-		DrawAt    time.Time `json:"draw_at"`
-	}
-	if err := json.Unmarshal([]byte(payload), &data); err != nil {
+	data := &schedulerv1.DrawArticleLotteryTaskPayload{}
+	if err := commonscheduler.UnmarshalPayload(payload, data); err != nil {
 		return err
 	}
-	if data.ArticleID <= 0 || data.DrawAt.IsZero() {
+	if data.GetArticleId() <= 0 || data.GetDrawAt() == nil || !data.GetDrawAt().IsValid() {
 		return fmt.Errorf("invalid content article lottery draw payload")
 	}
-	_, err := t.contentClient.Article.DrawLottery(ctx, &contentv1.DrawArticleLottery_Req{ArticleId: data.ArticleID, DrawAt: timestamppb.New(data.DrawAt)})
+	_, err := t.contentClient.Article.DrawLottery(ctx, &contentv1.DrawArticleLottery_Req{ArticleId: data.GetArticleId(), DrawAt: timestamppb.New(data.GetDrawAt().AsTime())})
 	return err
 }

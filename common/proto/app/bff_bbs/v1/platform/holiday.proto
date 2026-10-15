@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.v1.platform;
+
+import "bff_bbs/v1/platform/enum/holiday.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/bff_bbs/v1/platform;platform";
+
+// 节假日服务。
+service HolidayService {
+  // 获取当前节假日状态。
+  rpc GetCurrent(GetCurrentHoliday.Req) returns (GetCurrentHoliday.Resp) {
+    option (google.api.http) = {
+      post: "/v1/platform/holiday/get-current"
+      body: "*"
+    };
+  }
+}
+
+message GetCurrentHoliday {
+  message Req {}
+  message Resp {
+    // 当前日期。
+    google.protobuf.Timestamp date = 1;
+    // 当天类型。
+    common.api.app.bff_bbs.v1.platform.enum.HolidayType type = 2;
+    // 当天名称。
+    string day_name = 3;
+    // 下一个假期名称。
+    string holiday_name = 4;
+    // 距离下一个假期的天数。
+    int32 days_to_holiday = 5;
+    // 当前假期剩余天数。
+    int32 days_remaining = 6;
+  }
+}

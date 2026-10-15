@@ -10,4 +10,5 @@ import (
 var BizProviderSet = wire.NewSet(
 	usecase.NewIPResolutionUsecase,
 	usecase.NewAssetUsecase,
+	usecase.NewHolidayUsecase,
 )

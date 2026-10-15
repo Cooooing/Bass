@@ -16,6 +16,7 @@ const (
 	TaskHandlerNameContentPublishScheduledArticles TaskHandlerName = "content.publish_scheduled_articles" // content.publish_scheduled_articles
 	TaskHandlerNameContentFlushArticleViews        TaskHandlerName = "content.flush_article_views"        // content.flush_article_views
 	TaskHandlerNameContentDrawArticleLotteries     TaskHandlerName = "content.draw_article_lotteries"     // content.draw_article_lotteries
+	TaskHandlerNamePlatformRefreshHoliday          TaskHandlerName = "platform.refresh_holiday"           // platform.refresh_holiday
 )
 
 // TaskHandlerNameMap 将内部任务处理器名称映射到 proto 枚举。
@@ -28,6 +29,7 @@ var TaskHandlerNameMap = commonenum.NewMapping[TaskHandlerName, schedulerv1.Sche
 		TaskHandlerNameContentPublishScheduledArticles: {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_PUBLISH_SCHEDULED_ARTICLES},
 		TaskHandlerNameContentFlushArticleViews:        {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_FLUSH_ARTICLE_VIEWS},
 		TaskHandlerNameContentDrawArticleLotteries:     {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_DRAW_ARTICLE_LOTTERIES},
+		TaskHandlerNamePlatformRefreshHoliday:          {Proto: schedulerv1.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_PLATFORM_REFRESH_HOLIDAY},
 	},
 )
 

@@ -48,6 +48,7 @@ var ModuleProviderSet = wire.NewSet(
 	NewContentTagClient,
 	NewContentMoonbreezeClient,
 	NewNotificationClient,
+	NewHolidayRepo,
 )
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {

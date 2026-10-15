@@ -22,6 +22,7 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewConsulClient,
 	rpc.ProvideContentClient,
 	rpc.ProvideUserClient,
+	rpc.ProvidePlatformClient,
 )
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。

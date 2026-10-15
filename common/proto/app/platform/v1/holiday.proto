@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package common.api.app.platform.v1;
+
+import "platform/v1/enum/holiday.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/platform/v1;v1";
+
+// 节假日服务。
+service PlatformHolidayService {
+  // 获取当前节假日状态。
+  rpc GetCurrent(GetCurrentHoliday.Req) returns (GetCurrentHoliday.Resp) {}
+  // 从外部数据源刷新指定日期的节假日状态。
+  rpc RefreshHoliday(RefreshHoliday.Req) returns (RefreshHoliday.Resp) {}
+}
+
+message GetCurrentHoliday {
+  message Req {}
+  message Resp {
+    // 当前日期。
+    google.protobuf.Timestamp date = 1;
+    // 当天类型。
+    common.api.app.platform.v1.enum.HolidayType type = 2;
+    // 当天名称，例如周四、国庆节。
+    string day_name = 3;
+    // 下一个假期名称，未放假时非空。
+    string holiday_name = 4;
+    // 距离下一个假期的天数，未放假时有效。
+    int32 days_to_holiday = 5;
+    // 当前假期剩余天数，假期中时有效。
+    int32 days_remaining = 6;
+  }
+}
+
+message RefreshHoliday {
+  message Req {
+    // 需要刷新的日期；为空时使用当天。
+    google.protobuf.Timestamp date = 1;
+  }
+  message Resp {}
+}

@@ -47,7 +47,6 @@ func (t *UserUnbanAccounts) DefaultScheduledTasks() []*DefaultScheduledTask {
 func (t *UserUnbanAccounts) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return []*DefaultDelayedTask{
 		{
-			TaskKey:       schedulerenum.TaskKeyUserUnbanAccountsDefault,
 			Title:         t.Title(),
 			Description:   t.Description(),
 			Enabled:       true,

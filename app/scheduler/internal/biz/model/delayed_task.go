@@ -9,7 +9,6 @@ import (
 
 type DelayedTask struct {
 	ID            int64
-	TaskKey       string
 	HandlerName   schedulerenum.TaskHandlerName
 	Title         string
 	Description   string

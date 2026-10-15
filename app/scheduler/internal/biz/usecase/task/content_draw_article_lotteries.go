@@ -35,7 +35,7 @@ func (*ContentDrawArticleLotteries) Description() string {
 func (*ContentDrawArticleLotteries) DefaultScheduledTasks() []*DefaultScheduledTask { return nil }
 
 func (t *ContentDrawArticleLotteries) DefaultDelayedTasks() []*DefaultDelayedTask {
-	return []*DefaultDelayedTask{{TaskKey: schedulerenum.TaskKeyContentDrawArticleLotteriesDefault, Title: t.Title(), Description: t.Description(), Enabled: true, Timeout: 30 * time.Second, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
+	return []*DefaultDelayedTask{{Title: t.Title(), Description: t.Description(), Enabled: true, Timeout: 30 * time.Second, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
 }
 
 func (t *ContentDrawArticleLotteries) Execute(ctx context.Context, payload string) error {

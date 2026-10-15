@@ -71,17 +71,17 @@ func (r *ScheduledTaskRepo) Page(ctx context.Context, req *bizrepo.ScheduledTask
 	return &bizrepo.ScheduledTaskPageResp{Rows: result, Page: &commonmodel.PageResp{Total: int64(total), Page: page.Page, Size: page.Size}}, nil
 }
 
-func (r *ScheduledTaskRepo) MapByTaskKey(ctx context.Context, taskKeys []string) (map[string]*model.ScheduledTask, error) {
-	if len(taskKeys) == 0 {
-		return map[string]*model.ScheduledTask{}, nil
+func (r *ScheduledTaskRepo) MapByHandlerName(ctx context.Context, handlerNames []schedulerenum.TaskHandlerName) (map[schedulerenum.TaskHandlerName]*model.ScheduledTask, error) {
+	if len(handlerNames) == 0 {
+		return map[schedulerenum.TaskHandlerName]*model.ScheduledTask{}, nil
 	}
-	rows, err := r.List(ctx, &bizrepo.ScheduledTaskGetReq{TaskKeys: taskKeys})
+	rows, err := r.List(ctx, &bizrepo.ScheduledTaskGetReq{HandlerNames: handlerNames})
 	if err != nil {
 		return nil, err
 	}
-	result := make(map[string]*model.ScheduledTask, len(rows))
+	result := make(map[schedulerenum.TaskHandlerName]*model.ScheduledTask, len(rows))
 	for _, row := range rows {
-		result[row.TaskKey] = row
+		result[row.HandlerName] = row
 	}
 	return result, nil
 }
@@ -97,7 +97,6 @@ func (r *ScheduledTaskRepo) Upsert(ctx context.Context, row *model.ScheduledTask
 			return nil, err
 		}
 		updated, err := r.getClient(ctx).ScheduledTask.UpdateOneID(row.ID).
-			SetTaskKey(row.TaskKey).
 			SetHandlerName(row.HandlerName.String()).
 			SetTitle(row.Title).
 			SetDescription(row.Description).
@@ -117,7 +116,6 @@ func (r *ScheduledTaskRepo) Upsert(ctx context.Context, row *model.ScheduledTask
 		return r.model(updated), nil
 	}
 	created, err := r.getClient(ctx).ScheduledTask.Create().
-		SetTaskKey(row.TaskKey).
 		SetHandlerName(row.HandlerName.String()).
 		SetTitle(row.Title).
 		SetDescription(row.Description).
@@ -158,14 +156,15 @@ func (r *ScheduledTaskRepo) getQuery(query *gen.ScheduledTaskQuery, req *bizrepo
 	if len(req.IDs) > 0 {
 		query = query.Where(scheduledtask.IDIn(req.IDs...))
 	}
-	if req.TaskKey != nil {
-		query = query.Where(scheduledtask.TaskKeyEQ(*req.TaskKey))
-	}
-	if len(req.TaskKeys) > 0 {
-		query = query.Where(scheduledtask.TaskKeyIn(req.TaskKeys...))
-	}
 	if req.HandlerName != nil {
 		query = query.Where(scheduledtask.HandlerNameEQ(req.HandlerName.String()))
+	}
+	if len(req.HandlerNames) > 0 {
+		values := make([]string, 0, len(req.HandlerNames))
+		for _, handlerName := range req.HandlerNames {
+			values = append(values, handlerName.String())
+		}
+		query = query.Where(scheduledtask.HandlerNameIn(values...))
 	}
 	if req.Title != nil {
 		query = query.Where(scheduledtask.TitleContains(*req.Title))
@@ -183,7 +182,6 @@ func (r *ScheduledTaskRepo) model(row *gen.ScheduledTask) *model.ScheduledTask {
 	}
 	return &model.ScheduledTask{
 		ID:            row.ID,
-		TaskKey:       row.TaskKey,
 		HandlerName:   schedulerenum.TaskHandlerName(row.HandlerName),
 		Title:         row.Title,
 		Description:   row.Description,

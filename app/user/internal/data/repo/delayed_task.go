@@ -33,9 +33,7 @@ func (c *DelayedTaskClient) RegisterUnbanAccounts(ctx context.Context, userID in
 		return err
 	}
 	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{
-		TaskKey: commonscheduler.TaskKeyMap.MustToEnum(
-			schedulerv1enum.SchedulerTaskKey_SCHEDULER_TASK_KEY_USER_UNBAN_ACCOUNTS_DEFAULT,
-		).String(),
+		HandlerName: schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_USER_UNBAN_ACCOUNTS,
 		Payload:     payload,
 		ScheduledAt: timestamppb.New(*executeAt),
 	})

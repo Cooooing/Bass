@@ -44,7 +44,6 @@ func (t *ContentFlushArticleViews) Description() string {
 func (t *ContentFlushArticleViews) DefaultScheduledTasks() []*DefaultScheduledTask {
 	return []*DefaultScheduledTask{
 		{
-			TaskKey:       schedulerenum.TaskKeyContentFlushArticleViewsDefault,
 			Title:         t.Title(),
 			Description:   t.Description(),
 			Enabled:       true,

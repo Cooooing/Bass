@@ -49,7 +49,6 @@ func (t *ContentPublishScheduledArticles) DefaultScheduledTasks() []*DefaultSche
 func (t *ContentPublishScheduledArticles) DefaultDelayedTasks() []*DefaultDelayedTask {
 	return []*DefaultDelayedTask{
 		{
-			TaskKey:       schedulerenum.TaskKeyContentPublishScheduledArticlesDefault,
 			Title:         t.Title(),
 			Description:   t.Description(),
 			Enabled:       true,

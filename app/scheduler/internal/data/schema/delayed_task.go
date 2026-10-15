@@ -28,7 +28,6 @@ func (DelayedTask) Annotations() []schema.Annotation {
 func (DelayedTask) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id").Immutable().Unique(),
-		field.String("task_key").Comment("任务配置唯一键").MaxLen(128).NotEmpty(),
 		field.String("handler_name").Comment("代码内任务处理器").MaxLen(128).NotEmpty(),
 		field.String("title").Comment("展示标题").MaxLen(128).NotEmpty(),
 		field.String("description").Comment("任务说明").MaxLen(512).Default(""),
@@ -50,8 +49,7 @@ func (DelayedTask) Mixin() []ent.Mixin {
 
 func (DelayedTask) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("task_key").Unique().StorageKey("scheduler_delayed_tasks_task_key_active_unique").Annotations(entsql.IndexWhere("deleted_at IS NULL")),
-		index.Fields("handler_name").StorageKey("scheduler_delayed_tasks_handler_name_idx").Annotations(entsql.IndexWhere("deleted_at IS NULL")),
+		index.Fields("handler_name").Unique().StorageKey("scheduler_delayed_tasks_handler_name_active_unique").Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 		index.Fields("enabled", "id").StorageKey("scheduler_delayed_tasks_enabled_idx").Annotations(entsql.IndexWhere("deleted_at IS NULL")),
 	}
 }

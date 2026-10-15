@@ -11,7 +11,6 @@ type DelayedTaskVersion struct {
 	ID            int64
 	DelayedTaskID int64
 	Version       int64
-	TaskKey       string
 	HandlerName   schedulerenum.TaskHandlerName
 	Title         string
 	Description   string

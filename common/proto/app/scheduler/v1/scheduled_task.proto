@@ -24,18 +24,17 @@ service SchedulerScheduledTaskService {
 message UpsertSchedulerScheduledTask {
   message Req {
     int64 id = 1; // 定时任务 ID，创建时为空。
-    string task_key = 2; // 任务配置唯一键；为空时由服务生成 UUID。
-    SchedulerTaskHandlerName handler_name = 3; // 代码内任务处理器。
-    string title = 4; // 展示标题。
-    string description = 5; // 任务说明。
-    bool enabled = 6; // 是否启用调度。
-    string cron_spec = 7; // cron 表达式。
-    string payload = 8; // 默认执行参数，JSON 字符串。
-    int32 timeout_seconds = 9; // 单次执行超时秒数。
-    bool allow_overlap = 10; // 是否允许重叠执行。
-    int32 max_attempts = 11; // 最大尝试次数，默认 1。
-    SchedulerTaskMisfirePolicy misfire_policy = 12; // 错过计划时间后的处理策略。
-    optional int32 stale_after_seconds = 13; // 过期判断秒数；空值表示不过期。
+    SchedulerTaskHandlerName handler_name = 2; // 代码内任务处理器。
+    string title = 3; // 展示标题。
+    string description = 4; // 任务说明。
+    bool enabled = 5; // 是否启用调度。
+    string cron_spec = 6; // cron 表达式。
+    string payload = 7; // 默认执行参数，JSON 字符串。
+    int32 timeout_seconds = 8; // 单次执行超时秒数。
+    bool allow_overlap = 9; // 是否允许重叠执行。
+    int32 max_attempts = 10; // 最大尝试次数，默认 1。
+    SchedulerTaskMisfirePolicy misfire_policy = 11; // 错过计划时间后的处理策略。
+    optional int32 stale_after_seconds = 12; // 过期判断秒数；空值表示不过期。
   }
   message Resp {
     ScheduledTask row = 1; // 定时任务配置。
@@ -45,7 +44,7 @@ message UpsertSchedulerScheduledTask {
 message GetSchedulerScheduledTask {
   message Req {
     int64 id = 1; // 定时任务 ID。
-    string task_key = 2; // 任务配置唯一键，未传 ID 时使用。
+    SchedulerTaskHandlerName handler_name = 2; // 代码内任务处理器，未传 ID 时使用。
   }
   message Resp {
     ScheduledTask row = 1; // 定时任务配置。
@@ -56,10 +55,9 @@ message PageSchedulerScheduledTasks {
   message Req {
     message Query {
       repeated int64 ids = 1; // 定时任务 ID 列表。
-      optional string task_key = 2; // 任务配置唯一键。
-      optional SchedulerTaskHandlerName handler_name = 3; // 代码内任务处理器。
-      optional string title = 4; // 展示标题。
-      optional bool enabled = 5; // 是否启用调度。
+      optional SchedulerTaskHandlerName handler_name = 2; // 代码内任务处理器。
+      optional string title = 3; // 展示标题。
+      optional bool enabled = 4; // 是否启用调度。
     }
     .common.api.app.common.PageReq page = 1; // 分页参数。
     Query query = 2; // 查询条件。
@@ -106,7 +104,7 @@ message PageSchedulerScheduledTaskExecutionRecords {
 
 message TriggerSchedulerScheduledTask {
   message Req {
-    string task_key = 1; // 任务配置唯一键。
+    SchedulerTaskHandlerName handler_name = 1; // 代码内任务处理器。
     string payload = 2; // 手动触发参数，空值使用默认参数。
   }
   message Resp {
@@ -125,19 +123,18 @@ message CancelSchedulerScheduledTaskExecution {
 
 message ScheduledTask {
   int64 id = 1; // 定时任务 ID。
-  string task_key = 2; // 任务配置唯一键。
-  SchedulerTaskHandlerName handler_name = 3; // 代码内任务处理器。
-  string title = 4; // 展示标题。
-  string description = 5; // 任务说明。
-  bool enabled = 6; // 是否启用调度。
-  string cron_spec = 7; // cron 表达式。
-  string payload = 8; // 默认执行参数，JSON 字符串。
-  int32 timeout_seconds = 9; // 单次执行超时秒数。
-  bool allow_overlap = 10; // 是否允许重叠执行。
-  int32 max_attempts = 11; // 最大尝试次数。
-  int64 version = 12; // 配置版本。
-  SchedulerTaskMisfirePolicy misfire_policy = 13; // 错过计划时间后的处理策略。
-  optional int32 stale_after_seconds = 14; // 过期判断秒数；空值表示不过期。
+  SchedulerTaskHandlerName handler_name = 2; // 代码内任务处理器。
+  string title = 3; // 展示标题。
+  string description = 4; // 任务说明。
+  bool enabled = 5; // 是否启用调度。
+  string cron_spec = 6; // cron 表达式。
+  string payload = 7; // 默认执行参数，JSON 字符串。
+  int32 timeout_seconds = 8; // 单次执行超时秒数。
+  bool allow_overlap = 9; // 是否允许重叠执行。
+  int32 max_attempts = 10; // 最大尝试次数。
+  int64 version = 11; // 配置版本。
+  SchedulerTaskMisfirePolicy misfire_policy = 12; // 错过计划时间后的处理策略。
+  optional int32 stale_after_seconds = 13; // 过期判断秒数；空值表示不过期。
   google.protobuf.Timestamp created_at = 1000; // 创建时间。
   google.protobuf.Timestamp updated_at = 1001; // 更新时间。
 }

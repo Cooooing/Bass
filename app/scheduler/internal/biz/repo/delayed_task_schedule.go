@@ -18,15 +18,13 @@ type DelayedTaskScheduleRepo interface {
 }
 
 type DelayedTaskScheduleReq struct {
-	DelayedTask *model.DelayedTask
-	Record      *model.DelayedTaskExecutionRecord
-	Subject     string
-	Target      string
+	Record  *model.DelayedTaskExecutionRecord
+	Subject string
+	Target  string
 }
 
 type DelayedTaskScheduleMessage struct {
 	ExecutionRecordID int64
-	DelayedTaskKey    string
 	ScheduleKey       string
 	ScheduledAt       time.Time
 	TriggerType       schedulerenum.TaskTriggerType

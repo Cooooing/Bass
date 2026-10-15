@@ -54,7 +54,6 @@ func (r *DelayedTaskVersionRepo) Create(ctx context.Context, task *model.Delayed
 	created, err := r.getClient(ctx).DelayedTaskVersion.Create().
 		SetDelayedTaskID(task.ID).
 		SetVersion(task.Version).
-		SetTaskKey(task.TaskKey).
 		SetHandlerName(task.HandlerName.String()).
 		SetTitle(task.Title).
 		SetDescription(task.Description).
@@ -111,7 +110,6 @@ func (r *DelayedTaskVersionRepo) model(row *gen.DelayedTaskVersion) *model.Delay
 		ID:            row.ID,
 		DelayedTaskID: row.DelayedTaskID,
 		Version:       row.Version,
-		TaskKey:       row.TaskKey,
 		HandlerName:   schedulerenum.TaskHandlerName(row.HandlerName),
 		Title:         row.Title,
 		Description:   row.Description,

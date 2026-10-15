@@ -31,10 +31,10 @@ func (*UserOutboxPublishBatch) HandlerName() schedulerenum.TaskHandlerName {
 func (t *UserOutboxPublishBatch) Title() string       { return t.title }
 func (t *UserOutboxPublishBatch) Description() string { return t.description }
 func (t *UserOutboxPublishBatch) DefaultScheduledTasks() []*DefaultScheduledTask {
-	return []*DefaultScheduledTask{{TaskKey: schedulerenum.TaskKeyUserOutboxPublishBatchDefault, Title: t.title, Description: t.description, Enabled: true, CronSpec: "0 0/1 * * * ?", Payload: commonscheduler.MustMarshalPayload(&schedulerv1.OutboxPublishBatchTaskPayload{Limit: t.defaultLimit, MaxRetry: 1}), Timeout: 30 * time.Second, MaxAttempts: 1, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteLatest}}
+	return []*DefaultScheduledTask{{Title: t.title, Description: t.description, Enabled: true, CronSpec: "0 0/1 * * * ?", Payload: commonscheduler.MustMarshalPayload(&schedulerv1.OutboxPublishBatchTaskPayload{Limit: t.defaultLimit, MaxRetry: 1}), Timeout: 30 * time.Second, MaxAttempts: 1, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteLatest}}
 }
 func (t *UserOutboxPublishBatch) DefaultDelayedTasks() []*DefaultDelayedTask {
-	return []*DefaultDelayedTask{{TaskKey: schedulerenum.TaskKeyUserOutboxPublishBatchDelayedDefault, Title: t.title, Description: t.description, Enabled: true, Timeout: time.Minute, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
+	return []*DefaultDelayedTask{{Title: t.title, Description: t.description, Enabled: true, Timeout: time.Minute, MaxAttempts: 3, MisfirePolicy: schedulerenum.TaskMisfirePolicyExecuteAll}}
 }
 
 func (t *UserOutboxPublishBatch) Execute(ctx context.Context, payload string) error {

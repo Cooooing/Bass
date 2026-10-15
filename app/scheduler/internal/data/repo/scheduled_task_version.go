@@ -59,7 +59,6 @@ func (r *ScheduledTaskVersionRepo) Create(ctx context.Context, task *model.Sched
 	created, err := r.getClient(ctx).ScheduledTaskVersion.Create().
 		SetScheduledTaskID(task.ID).
 		SetVersion(task.Version).
-		SetTaskKey(task.TaskKey).
 		SetHandlerName(task.HandlerName.String()).
 		SetTitle(task.Title).
 		SetDescription(task.Description).
@@ -119,7 +118,6 @@ func (r *ScheduledTaskVersionRepo) model(row *gen.ScheduledTaskVersion) *model.S
 		ID:              row.ID,
 		ScheduledTaskID: row.ScheduledTaskID,
 		Version:         row.Version,
-		TaskKey:         row.TaskKey,
 		HandlerName:     schedulerenum.TaskHandlerName(row.HandlerName),
 		Title:           row.Title,
 		Description:     row.Description,

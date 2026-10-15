@@ -82,10 +82,6 @@ func (u *DelayedTaskUsecase) Upsert(ctx context.Context, row *model.DelayedTask)
 		strings.TrimSpace(row.Title) == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	row.TaskKey = strings.TrimSpace(row.TaskKey)
-	if row.TaskKey == "" {
-		row.TaskKey = uuid.NewString()
-	}
 	if row.Timeout <= 0 {
 		row.Timeout = 30 * time.Second
 	}
@@ -108,18 +104,18 @@ func (u *DelayedTaskUsecase) Upsert(ctx context.Context, row *model.DelayedTask)
 	if err != nil {
 		return nil, err
 	}
-	_ = u.delayedTaskCacheRepo.DeleteDelayedTask(ctx, saved.TaskKey)
+	_ = u.delayedTaskCacheRepo.DeleteDelayedTask(ctx, saved.HandlerName.String())
 	return saved, nil
 }
 
 func (u *DelayedTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
-	handlerNames := make([]string, 0, len(u.tasks))
+	handlerNameStrings := make([]string, 0, len(u.tasks))
 	for handlerName := range u.tasks {
-		handlerNames = append(handlerNames, handlerName)
+		handlerNameStrings = append(handlerNameStrings, handlerName)
 	}
-	sort.Strings(handlerNames)
+	sort.Strings(handlerNameStrings)
 	defaultTasks := make([]*model.DelayedTask, 0)
-	for _, handlerName := range handlerNames {
+	for _, handlerName := range handlerNameStrings {
 		item := u.tasks[handlerName]
 		for _, task := range item.DefaultDelayedTasks() {
 			if task == nil {
@@ -134,7 +130,6 @@ func (u *DelayedTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
 				description = item.Description()
 			}
 			defaultTasks = append(defaultTasks, &model.DelayedTask{
-				TaskKey:       task.TaskKey.String(),
 				HandlerName:   item.HandlerName(),
 				Title:         title,
 				Description:   description,
@@ -149,16 +144,16 @@ func (u *DelayedTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
 	if len(defaultTasks) == 0 {
 		return nil
 	}
-	taskKeys := make([]string, 0, len(defaultTasks))
+	handlerNames := make([]schedulerenum.TaskHandlerName, 0, len(defaultTasks))
 	for _, row := range defaultTasks {
-		taskKeys = append(taskKeys, row.TaskKey)
+		handlerNames = append(handlerNames, row.HandlerName)
 	}
-	existingTasks, err := u.repo.MapByTaskKey(ctx, taskKeys)
+	existingTasks, err := u.repo.MapByHandlerName(ctx, handlerNames)
 	if err != nil {
 		return err
 	}
 	for _, row := range defaultTasks {
-		if existingTasks[row.TaskKey] != nil {
+		if existingTasks[row.HandlerName] != nil {
 			continue
 		}
 		if _, err = u.Upsert(ctx, row); err != nil {
@@ -169,21 +164,20 @@ func (u *DelayedTaskUsecase) SeedDefaultTasks(ctx context.Context) error {
 }
 
 type DelayedTaskGetReq struct {
-	ID      int64
-	TaskKey string
+	ID          int64
+	HandlerName schedulerenum.TaskHandlerName
 }
 
 func (u *DelayedTaskUsecase) Get(ctx context.Context, req *DelayedTaskGetReq) (*model.DelayedTask, error) {
 	if req == nil {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	taskKey := strings.TrimSpace(req.TaskKey)
-	if taskKey != "" {
-		row, err := u.delayedTaskCacheRepo.GetDelayedTask(ctx, taskKey)
+	if req.HandlerName != "" {
+		row, err := u.delayedTaskCacheRepo.GetDelayedTask(ctx, req.HandlerName.String())
 		if err != nil || row != nil {
 			return row, err
 		}
-		row, err = u.repo.Get(ctx, &repo.DelayedTaskGetReq{TaskKey: &taskKey})
+		row, err = u.repo.Get(ctx, &repo.DelayedTaskGetReq{HandlerName: &req.HandlerName})
 		if err == nil && row != nil {
 			_ = u.delayedTaskCacheRepo.SetDelayedTask(ctx, row)
 		}
@@ -202,7 +196,6 @@ func (u *DelayedTaskUsecase) Get(ctx context.Context, req *DelayedTaskGetReq) (*
 type DelayedTaskPageReq struct {
 	Page        *commonmodel.PageReq
 	IDs         []int64
-	TaskKey     *string
 	HandlerName *schedulerenum.TaskHandlerName
 	Title       *string
 	Enabled     *bool
@@ -221,7 +214,6 @@ func (u *DelayedTaskUsecase) Page(ctx context.Context, req *DelayedTaskPageReq) 
 		Page: req.Page,
 		DelayedTaskGetReq: repo.DelayedTaskGetReq{
 			IDs:         req.IDs,
-			TaskKey:     req.TaskKey,
 			HandlerName: req.HandlerName,
 			Title:       req.Title,
 			Enabled:     req.Enabled,
@@ -255,7 +247,7 @@ func (u *DelayedTaskUsecase) ListAvailableTasks(ctx context.Context, keyword str
 }
 
 type DelayedTaskScheduleReq struct {
-	TaskKey        string
+	HandlerName    schedulerenum.TaskHandlerName
 	Payload        string
 	ScheduledAt    time.Time
 	IdempotencyKey string
@@ -267,7 +259,7 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 	if req == nil || req.ScheduledAt.IsZero() {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	if strings.TrimSpace(req.TaskKey) == "" {
+	if req.HandlerName == "" {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	payload := strings.TrimSpace(req.Payload)
@@ -277,7 +269,7 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 	if !json.Valid([]byte(payload)) {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
-	task, err := u.Get(ctx, &DelayedTaskGetReq{TaskKey: req.TaskKey})
+	task, err := u.Get(ctx, &DelayedTaskGetReq{HandlerName: req.HandlerName})
 	if err != nil {
 		return nil, err
 	}
@@ -343,10 +335,9 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 		executeSubject = u.conf.GetScheduler().GetDelayedTaskExecuteSubject()
 	}
 	scheduleReq := &repo.DelayedTaskScheduleReq{
-		DelayedTask: task,
-		Record:      created.Row,
-		Subject:     fmt.Sprintf("%s.%d", schedulePrefix, created.Row.ID),
-		Target:      executeSubject,
+		Record:  created.Row,
+		Subject: fmt.Sprintf("%s.%d", schedulePrefix, created.Row.ID),
+		Target:  executeSubject,
 	}
 	if created.Row.ScheduledAt.After(time.Now()) && created.Row.TriggerType == schedulerenum.TaskTriggerTypeSchedule {
 		err = u.scheduleRepo.Schedule(context.WithoutCancel(ctx), scheduleReq)
@@ -365,9 +356,9 @@ func (u *DelayedTaskUsecase) Schedule(ctx context.Context, req *DelayedTaskSched
 	}
 	return created.Row, nil
 }
-func (u *DelayedTaskUsecase) Trigger(ctx context.Context, taskKey string, payload string) (*model.DelayedTaskExecutionRecord, error) {
+func (u *DelayedTaskUsecase) Trigger(ctx context.Context, handlerName schedulerenum.TaskHandlerName, payload string) (*model.DelayedTaskExecutionRecord, error) {
 	return u.Schedule(ctx, &DelayedTaskScheduleReq{
-		TaskKey:     taskKey,
+		HandlerName: handlerName,
 		Payload:     payload,
 		ScheduledAt: time.Now().Truncate(time.Second),
 		TriggerType: schedulerenum.TaskTriggerTypeManual,
@@ -482,7 +473,7 @@ func (u *DelayedTaskUsecase) HandleDelayedTaskMessage(ctx context.Context, messa
 	if claim == nil || !claim.Claimed || claim.Row == nil {
 		return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionRetry, RetryAfter: 5 * time.Second}, nil
 	}
-	updated, err := u.executeDelayedRecord(ctx, claim.Row, message.DelayedTaskKey)
+	updated, err := u.executeDelayedRecord(ctx, claim.Row)
 	if err != nil {
 		return nil, err
 	}
@@ -507,14 +498,8 @@ func (u *DelayedTaskUsecase) HandleDelayedTaskMessage(ctx context.Context, messa
 	return &repo.MessageHandleResult{Action: schedulerenum.MessageHandleActionComplete}, nil
 }
 
-func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *model.DelayedTaskExecutionRecord, taskKey string) (*model.DelayedTaskExecutionRecord, error) {
-	var taskConfig *model.DelayedTask
-	var err error
-	if taskKey != "" {
-		taskConfig, err = u.Get(ctx, &DelayedTaskGetReq{TaskKey: taskKey})
-	} else {
-		taskConfig, err = u.Get(ctx, &DelayedTaskGetReq{ID: record.DelayedTaskID})
-	}
+func (u *DelayedTaskUsecase) executeDelayedRecord(ctx context.Context, record *model.DelayedTaskExecutionRecord) (*model.DelayedTaskExecutionRecord, error) {
+	taskConfig, err := u.Get(ctx, &DelayedTaskGetReq{ID: record.DelayedTaskID})
 	if err != nil || taskConfig == nil || !taskConfig.Enabled || taskConfig.Version != record.DelayedTaskVersion {
 		finishedAt := time.Now()
 		return u.executionRepo.MarkFinished(context.WithoutCancel(ctx), &repo.DelayedTaskExecutionRecordMarkFinishedReq{
@@ -647,7 +632,7 @@ func (u *DelayedTaskUsecase) EnsureSchedule(ctx context.Context) error {
 					executeSubject = u.conf.GetScheduler().GetDelayedTaskExecuteSubject()
 				}
 			}
-			req := &repo.DelayedTaskScheduleReq{DelayedTask: task, Record: row, Subject: fmt.Sprintf("%s.%d", schedulePrefix, row.ID), Target: executeSubject}
+			req := &repo.DelayedTaskScheduleReq{Record: row, Subject: fmt.Sprintf("%s.%d", schedulePrefix, row.ID), Target: executeSubject}
 			if row.ScheduledAt.After(time.Now()) && row.TriggerType == schedulerenum.TaskTriggerTypeSchedule {
 				_ = u.scheduleRepo.Schedule(context.WithoutCancel(ctx), req)
 			} else {

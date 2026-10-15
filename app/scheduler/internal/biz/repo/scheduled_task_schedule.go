@@ -23,7 +23,6 @@ type ScheduledTaskScheduleReq struct {
 }
 type ScheduledTaskScheduleMessage struct {
 	ScheduledTaskID      int64
-	ScheduledTaskKey     string
 	ScheduledTaskVersion int64
 	ScheduleKey          string
 	ScheduledAt          time.Time

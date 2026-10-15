@@ -130,7 +130,7 @@ func (r *DelayedTaskScheduleNatsRepo) Ensure(ctx context.Context) error {
 }
 
 func (r *DelayedTaskScheduleNatsRepo) Schedule(ctx context.Context, req *repo.DelayedTaskScheduleReq) error {
-	if req == nil || req.DelayedTask == nil || req.Record == nil || req.Subject == "" || req.Target == "" {
+	if req == nil || req.Record == nil || req.Subject == "" || req.Target == "" {
 		return fmt.Errorf("delayed task schedule request is invalid")
 	}
 	stream, err := r.js.Stream(ctx, r.streamName)
@@ -143,7 +143,6 @@ func (r *DelayedTaskScheduleNatsRepo) Schedule(ctx context.Context, req *repo.De
 	}
 	body, err := json.Marshal(repo.DelayedTaskScheduleMessage{
 		ExecutionRecordID: req.Record.ID,
-		DelayedTaskKey:    req.DelayedTask.TaskKey,
 		TriggerType:       req.Record.TriggerType,
 	})
 	if err != nil {
@@ -159,12 +158,11 @@ func (r *DelayedTaskScheduleNatsRepo) Schedule(ctx context.Context, req *repo.De
 }
 
 func (r *DelayedTaskScheduleNatsRepo) Publish(ctx context.Context, req *repo.DelayedTaskScheduleReq) error {
-	if req == nil || req.DelayedTask == nil || req.Record == nil || req.Target == "" {
+	if req == nil || req.Record == nil || req.Target == "" {
 		return fmt.Errorf("delayed task publish request is invalid")
 	}
 	body, err := json.Marshal(repo.DelayedTaskScheduleMessage{
 		ExecutionRecordID: req.Record.ID,
-		DelayedTaskKey:    req.DelayedTask.TaskKey,
 		TriggerType:       req.Record.TriggerType,
 	})
 	if err != nil {
@@ -236,7 +234,6 @@ func (r *DelayedTaskScheduleNatsRepo) Consume(ctx context.Context, handler func(
 				"延迟任务消息处理失败",
 				"error", handleErr,
 				"execution_record_id", payload.ExecutionRecordID,
-				"delayed_task_key", payload.DelayedTaskKey,
 				"schedule_key", payload.ScheduleKey,
 			)
 			delay := r.ackWait / 2

@@ -57,7 +57,6 @@ func (s *SchedulerScheduledTaskService) Upsert(ctx context.Context, req *schedul
 	}
 	row, err := s.scheduledTaskUsecase.Upsert(ctx, &model.ScheduledTask{
 		ID:            req.GetId(),
-		TaskKey:       req.GetTaskKey(),
 		HandlerName:   handlerName,
 		Title:         req.GetTitle(),
 		Description:   req.GetDescription(),
@@ -76,7 +75,6 @@ func (s *SchedulerScheduledTaskService) Upsert(ctx context.Context, req *schedul
 	resp := &schedulerv1.UpsertSchedulerScheduledTask_Resp{
 		Row: &schedulerv1.ScheduledTask{
 			Id:             row.ID,
-			TaskKey:        row.TaskKey,
 			HandlerName:    schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 			Title:          row.Title,
 			Description:    row.Description,
@@ -100,14 +98,24 @@ func (s *SchedulerScheduledTaskService) Upsert(ctx context.Context, req *schedul
 }
 
 func (s *SchedulerScheduledTaskService) Get(ctx context.Context, req *schedulerv1.GetSchedulerScheduledTask_Req) (*schedulerv1.GetSchedulerScheduledTask_Resp, error) {
-	row, err := s.scheduledTaskUsecase.Get(ctx, &usecase.ScheduledTaskGetReq{ID: req.GetId(), TaskKey: req.GetTaskKey()})
+	if req == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	getReq := &usecase.ScheduledTaskGetReq{ID: req.GetId()}
+	if req.GetId() == 0 {
+		handlerName, ok := schedulerenum.TaskHandlerNameMap.ToEnum(req.GetHandlerName())
+		if req.GetHandlerName() == schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_UNSPECIFIED || !ok {
+			return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+		}
+		getReq.HandlerName = handlerName
+	}
+	row, err := s.scheduledTaskUsecase.Get(ctx, getReq)
 	if err != nil {
 		return nil, err
 	}
 	resp := &schedulerv1.GetSchedulerScheduledTask_Resp{
 		Row: &schedulerv1.ScheduledTask{
 			Id:             row.ID,
-			TaskKey:        row.TaskKey,
 			HandlerName:    schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 			Title:          row.Title,
 			Description:    row.Description,
@@ -134,7 +142,6 @@ func (s *SchedulerScheduledTaskService) Page(ctx context.Context, req *scheduler
 	query := &usecase.ScheduledTaskPageReq{}
 	if req.GetQuery() != nil {
 		query.IDs = req.GetQuery().GetIds()
-		query.TaskKey = req.GetQuery().TaskKey
 		if req.GetQuery().HandlerName != nil && req.GetQuery().GetHandlerName() != schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_UNSPECIFIED {
 			handlerName, ok := schedulerenum.TaskHandlerNameMap.ToEnum(req.GetQuery().GetHandlerName())
 			if !ok {
@@ -154,7 +161,6 @@ func (s *SchedulerScheduledTaskService) Page(ctx context.Context, req *scheduler
 	for _, row := range pageResp.Rows {
 		item := &schedulerv1.ScheduledTask{
 			Id:             row.ID,
-			TaskKey:        row.TaskKey,
 			HandlerName:    schedulerenum.TaskHandlerNameMap.MustToProto(row.HandlerName),
 			Title:          row.Title,
 			Description:    row.Description,
@@ -276,12 +282,16 @@ func (s *SchedulerScheduledTaskService) PageExecutionRecords(
 }
 
 func (s *SchedulerScheduledTaskService) Trigger(ctx context.Context, req *schedulerv1.TriggerSchedulerScheduledTask_Req) (*schedulerv1.TriggerSchedulerScheduledTask_Resp, error) {
-	if req == nil || req.GetTaskKey() == "" {
+	if req == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	handlerName, ok := schedulerenum.TaskHandlerNameMap.ToEnum(req.GetHandlerName())
+	if req.GetHandlerName() == schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_UNSPECIFIED || !ok {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	row, err := s.scheduledTaskUsecase.Trigger(ctx, &usecase.TaskTriggerReq{
-		TaskKey: req.GetTaskKey(),
-		Payload: req.GetPayload(),
+		HandlerName: handlerName,
+		Payload:     req.GetPayload(),
 	})
 	if err != nil {
 		return nil, err

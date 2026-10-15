@@ -37,9 +37,7 @@ func (c *DelayedTaskClient) RegisterPublishScheduledArticle(ctx context.Context,
 		return err
 	}
 	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{
-		TaskKey: commonscheduler.TaskKeyMap.MustToEnum(
-			schedulerv1enum.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_PUBLISH_SCHEDULED_ARTICLES_DEFAULT,
-		).String(),
+		HandlerName:    schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_PUBLISH_SCHEDULED_ARTICLES,
 		Payload:        payload,
 		ScheduledAt:    timestamppb.New(publishAt),
 		IdempotencyKey: uuid.NewString(),
@@ -60,7 +58,7 @@ func (c *DelayedTaskClient) RegisterLotteryDraw(ctx context.Context, articleID i
 	if err != nil {
 		return err
 	}
-	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{TaskKey: commonscheduler.TaskKeyMap.MustToEnum(schedulerv1enum.SchedulerTaskKey_SCHEDULER_TASK_KEY_CONTENT_DRAW_ARTICLE_LOTTERIES_DEFAULT).String(), Payload: payload, ScheduledAt: timestamppb.New(drawAt), IdempotencyKey: uuid.NewString(), BusinessKey: "content.article.lottery.draw:" + strconv.FormatInt(articleID, 10)})
+	_, err = c.schedulerClient.DelayedTask.Schedule(ctx, &schedulerv1.ScheduleSchedulerDelayedTask_Req{HandlerName: schedulerv1enum.SchedulerTaskHandlerName_SCHEDULER_TASK_HANDLER_NAME_CONTENT_DRAW_ARTICLE_LOTTERIES, Payload: payload, ScheduledAt: timestamppb.New(drawAt), IdempotencyKey: uuid.NewString(), BusinessKey: "content.article.lottery.draw:" + strconv.FormatInt(articleID, 10)})
 	return err
 }
 

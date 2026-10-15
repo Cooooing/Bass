@@ -25,15 +25,14 @@ service SchedulerDelayedTaskService {
 message UpsertSchedulerDelayedTask {
   message Req {
     int64 id = 1; // 延迟任务 ID，创建时为空。
-    string task_key = 2; // 任务配置唯一键；为空时由服务生成 UUID。
-    SchedulerTaskHandlerName handler_name = 3; // 代码内任务处理器。
-    string title = 4; // 展示标题。
-    string description = 5; // 任务说明。
-    bool enabled = 6; // 是否启用。
-    int32 timeout_seconds = 7; // 单次执行超时秒数。
-    int32 max_attempts = 8; // 最大尝试次数，默认 3。
-    SchedulerTaskMisfirePolicy misfire_policy = 9; // 错过计划时间后的处理策略。
-    optional int32 stale_after_seconds = 10; // 过期判断秒数；空值表示不过期。
+    SchedulerTaskHandlerName handler_name = 2; // 代码内任务处理器。
+    string title = 3; // 展示标题。
+    string description = 4; // 任务说明。
+    bool enabled = 5; // 是否启用。
+    int32 timeout_seconds = 6; // 单次执行超时秒数。
+    int32 max_attempts = 7; // 最大尝试次数，默认 3。
+    SchedulerTaskMisfirePolicy misfire_policy = 8; // 错过计划时间后的处理策略。
+    optional int32 stale_after_seconds = 9; // 过期判断秒数；空值表示不过期。
   }
   message Resp {
     DelayedTask row = 1; // 延迟任务配置。
@@ -43,7 +42,7 @@ message UpsertSchedulerDelayedTask {
 message GetSchedulerDelayedTask {
   message Req {
     int64 id = 1; // 延迟任务 ID。
-    string task_key = 2; // 任务配置唯一键，未传 ID 时使用。
+    SchedulerTaskHandlerName handler_name = 2; // 代码内任务处理器，未传 ID 时使用。
   }
   message Resp {
     DelayedTask row = 1; // 延迟任务配置。
@@ -54,10 +53,9 @@ message PageSchedulerDelayedTasks {
   message Req {
     message Query {
       repeated int64 ids = 1; // 延迟任务 ID 列表。
-      optional string task_key = 2; // 任务配置唯一键。
-      optional SchedulerTaskHandlerName handler_name = 3; // 代码内任务处理器。
-      optional string title = 4; // 展示标题。
-      optional bool enabled = 5; // 是否启用。
+      optional SchedulerTaskHandlerName handler_name = 2; // 代码内任务处理器。
+      optional string title = 3; // 展示标题。
+      optional bool enabled = 4; // 是否启用。
     }
     .common.api.app.common.PageReq page = 1; // 分页参数。
     Query query = 2; // 查询条件。
@@ -87,7 +85,7 @@ message ListSchedulerAvailableDelayedTasks {
 
 message ScheduleSchedulerDelayedTask {
   message Req {
-    string task_key = 1; // 任务配置唯一键。
+    SchedulerTaskHandlerName handler_name = 1; // 代码内任务处理器。
     string payload = 2; // 本次执行参数，JSON 字符串。
     google.protobuf.Timestamp scheduled_at = 3; // 计划执行时间
     string idempotency_key = 4; // 本次延迟执行幂等键
@@ -100,7 +98,7 @@ message ScheduleSchedulerDelayedTask {
 
 message TriggerSchedulerDelayedTask {
   message Req {
-    string task_key = 1; // 任务配置唯一键。
+    SchedulerTaskHandlerName handler_name = 1; // 代码内任务处理器。
     string payload = 2; // 手动触发参数，空值使用空对象。
   }
   message Resp {
@@ -138,16 +136,15 @@ message PageSchedulerDelayedTaskExecutionRecords {
 
 message DelayedTask {
   int64 id = 1; // 延迟任务 ID。
-  string task_key = 2; // 任务配置唯一键。
-  SchedulerTaskHandlerName handler_name = 3; // 代码内任务处理器。
-  string title = 4; // 展示标题。
-  string description = 5; // 任务说明。
-  bool enabled = 6; // 是否启用。
-  int32 timeout_seconds = 7; // 单次执行超时秒数。
-  int32 max_attempts = 8; // 最大尝试次数。
-  int64 version = 9; // 配置版本。
-  SchedulerTaskMisfirePolicy misfire_policy = 10; // 错过计划时间后的处理策略。
-  optional int32 stale_after_seconds = 11; // 过期判断秒数；空值表示不过期。
+  SchedulerTaskHandlerName handler_name = 2; // 代码内任务处理器。
+  string title = 3; // 展示标题。
+  string description = 4; // 任务说明。
+  bool enabled = 5; // 是否启用。
+  int32 timeout_seconds = 6; // 单次执行超时秒数。
+  int32 max_attempts = 7; // 最大尝试次数。
+  int64 version = 8; // 配置版本。
+  SchedulerTaskMisfirePolicy misfire_policy = 9; // 错过计划时间后的处理策略。
+  optional int32 stale_after_seconds = 10; // 过期判断秒数；空值表示不过期。
   google.protobuf.Timestamp created_at = 1000; // 创建时间。
   google.protobuf.Timestamp updated_at = 1001; // 更新时间。
 }

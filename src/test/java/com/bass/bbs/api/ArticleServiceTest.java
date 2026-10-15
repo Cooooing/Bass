@@ -14,6 +14,7 @@
 package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
+import com.bass.bbs.model.AcceptArticleAnswerReq;
 import com.bass.bbs.model.ArchiveArticleReq;
 import com.bass.bbs.model.CancelPublishArticleReq;
 import com.bass.bbs.model.CollectArticleReq;
@@ -21,6 +22,7 @@ import com.bass.bbs.model.CollectArticleResp;
 import com.bass.bbs.model.CreateDraftArticleReq;
 import com.bass.bbs.model.CreateDraftArticleResp;
 import com.bass.bbs.model.DiscardDraftArticleReq;
+import com.bass.bbs.model.EnterArticleLotteryReq;
 import com.bass.bbs.model.GetArticleReq;
 import com.bass.bbs.model.GetArticleResp;
 import com.bass.bbs.model.LikeArticleReq;
@@ -40,6 +42,7 @@ import com.bass.bbs.model.ThankArticleReq;
 import com.bass.bbs.model.ThankArticleResp;
 import com.bass.bbs.model.UpdateDraftArticleReq;
 import com.bass.bbs.model.UpdateDraftArticleResp;
+import com.bass.bbs.model.VoteArticlePollReq;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -58,6 +61,27 @@ public class ArticleServiceTest {
 
     private final ArticleService api = new ArticleService();
 
+    
+    /**
+     * 
+     *
+     * 采纳文章回答
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void acceptAnswerTest() throws ApiException {
+        AcceptArticleAnswerReq acceptArticleAnswerReq = null;
+        
+        ArticleService.APIacceptAnswerRequest request = ArticleService.APIacceptAnswerRequest.newBuilder()
+          .acceptArticleAnswerReq(acceptArticleAnswerReq)
+          .build();
+        Object response = 
+        api.acceptAnswer(request);
+
+        // TODO: test validations
+    }
     
     /**
      * 
@@ -181,6 +205,27 @@ public class ArticleServiceTest {
           .build();
         Object response = 
         api.discardDraft(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 报名或撤销抽奖报名。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void enterLotteryTest() throws ApiException {
+        EnterArticleLotteryReq enterArticleLotteryReq = null;
+        
+        ArticleService.APIenterLotteryRequest request = ArticleService.APIenterLotteryRequest.newBuilder()
+          .enterArticleLotteryReq(enterArticleLotteryReq)
+          .build();
+        Object response = 
+        api.enterLottery(request);
 
         // TODO: test validations
     }
@@ -391,6 +436,27 @@ public class ArticleServiceTest {
           .build();
         UpdateDraftArticleResp response = 
         api.updateDraft(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 提交一次不可修改的文章投票。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void votePollTest() throws ApiException {
+        VoteArticlePollReq voteArticlePollReq = null;
+        
+        ArticleService.APIvotePollRequest request = ArticleService.APIvotePollRequest.newBuilder()
+          .voteArticlePollReq(voteArticlePollReq)
+          .build();
+        Object response = 
+        api.votePoll(request);
 
         // TODO: test validations
     }

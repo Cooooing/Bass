@@ -135,6 +135,8 @@ Class | Method | HTTP request | Description
 *AccountService* | [**updateProfileWithHttpInfo**](docs/AccountService.md#updateProfileWithHttpInfo) | **POST** /v1/user/account/update-profile | 
 *ArticleSearchService* | [**search**](docs/ArticleSearchService.md#search) | **POST** /v1/content/article/search | 
 *ArticleSearchService* | [**searchWithHttpInfo**](docs/ArticleSearchService.md#searchWithHttpInfo) | **POST** /v1/content/article/search | 
+*ArticleService* | [**acceptAnswer**](docs/ArticleService.md#acceptAnswer) | **POST** /v1/content/article/answer/accept | 
+*ArticleService* | [**acceptAnswerWithHttpInfo**](docs/ArticleService.md#acceptAnswerWithHttpInfo) | **POST** /v1/content/article/answer/accept | 
 *ArticleService* | [**archive**](docs/ArticleService.md#archive) | **POST** /v1/content/article/archive | 
 *ArticleService* | [**archiveWithHttpInfo**](docs/ArticleService.md#archiveWithHttpInfo) | **POST** /v1/content/article/archive | 
 *ArticleService* | [**callList**](docs/ArticleService.md#callList) | **POST** /v1/content/article/list | 
@@ -147,6 +149,8 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**createDraftWithHttpInfo**](docs/ArticleService.md#createDraftWithHttpInfo) | **POST** /v1/content/article/draft/create | 
 *ArticleService* | [**discardDraft**](docs/ArticleService.md#discardDraft) | **POST** /v1/content/article/draft/discard | 
 *ArticleService* | [**discardDraftWithHttpInfo**](docs/ArticleService.md#discardDraftWithHttpInfo) | **POST** /v1/content/article/draft/discard | 
+*ArticleService* | [**enterLottery**](docs/ArticleService.md#enterLottery) | **POST** /v1/content/article/lottery/entry | 
+*ArticleService* | [**enterLotteryWithHttpInfo**](docs/ArticleService.md#enterLotteryWithHttpInfo) | **POST** /v1/content/article/lottery/entry | 
 *ArticleService* | [**get**](docs/ArticleService.md#get) | **POST** /v1/content/article/get | 
 *ArticleService* | [**getWithHttpInfo**](docs/ArticleService.md#getWithHttpInfo) | **POST** /v1/content/article/get | 
 *ArticleService* | [**like**](docs/ArticleService.md#like) | **POST** /v1/content/article/like | 
@@ -167,6 +171,8 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**thankWithHttpInfo**](docs/ArticleService.md#thankWithHttpInfo) | **POST** /v1/content/article/thank | 
 *ArticleService* | [**updateDraft**](docs/ArticleService.md#updateDraft) | **POST** /v1/content/article/draft/update | 
 *ArticleService* | [**updateDraftWithHttpInfo**](docs/ArticleService.md#updateDraftWithHttpInfo) | **POST** /v1/content/article/draft/update | 
+*ArticleService* | [**votePoll**](docs/ArticleService.md#votePoll) | **POST** /v1/content/article/poll/vote | 
+*ArticleService* | [**votePollWithHttpInfo**](docs/ArticleService.md#votePollWithHttpInfo) | **POST** /v1/content/article/poll/vote | 
 *AuthService* | [**cancelAccount**](docs/AuthService.md#cancelAccount) | **POST** /v1/user/auth/cancel-account | 
 *AuthService* | [**cancelAccountWithHttpInfo**](docs/AuthService.md#cancelAccountWithHttpInfo) | **POST** /v1/user/auth/cancel-account | 
 *AuthService* | [**checkRegistrationAvailability**](docs/AuthService.md#checkRegistrationAvailability) | **GET** /v1/user/auth/register-availability | 
@@ -275,6 +281,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation for Models
 
+ - [AcceptArticleAnswerReq](docs/AcceptArticleAnswerReq.md)
  - [AccountContact](docs/AccountContact.md)
  - [AccountProfile](docs/AccountProfile.md)
  - [AccountProfileListItem](docs/AccountProfileListItem.md)
@@ -284,6 +291,13 @@ Class | Method | HTTP request | Description
  - [ArticleDetail](docs/ArticleDetail.md)
  - [ArticleDomain](docs/ArticleDomain.md)
  - [ArticleListItem](docs/ArticleListItem.md)
+ - [ArticleLottery](docs/ArticleLottery.md)
+ - [ArticleLotteryDraft](docs/ArticleLotteryDraft.md)
+ - [ArticleLotteryPrize](docs/ArticleLotteryPrize.md)
+ - [ArticleLotteryPrizeDraft](docs/ArticleLotteryPrizeDraft.md)
+ - [ArticlePoll](docs/ArticlePoll.md)
+ - [ArticlePollDraft](docs/ArticlePollDraft.md)
+ - [ArticlePollOption](docs/ArticlePollOption.md)
  - [ArticlePostscript](docs/ArticlePostscript.md)
  - [ArticleTag](docs/ArticleTag.md)
  - [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
@@ -315,6 +329,7 @@ Class | Method | HTTP request | Description
  - [CreateTagResp](docs/CreateTagResp.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
  - [DiscardDraftArticleReq](docs/DiscardDraftArticleReq.md)
+ - [EnterArticleLotteryReq](docs/EnterArticleLotteryReq.md)
  - [FollowRelationReq](docs/FollowRelationReq.md)
  - [GetArticleReq](docs/GetArticleReq.md)
  - [GetArticleResp](docs/GetArticleResp.md)
@@ -415,12 +430,12 @@ Class | Method | HTTP request | Description
  - [RespDomain](docs/RespDomain.md)
  - [RespLocation](docs/RespLocation.md)
  - [RespNotification](docs/RespNotification.md)
+ - [RespPinnedComment](docs/RespPinnedComment.md)
  - [RespPreference](docs/RespPreference.md)
  - [RespPrivacySetting](docs/RespPrivacySetting.md)
  - [RespRecord](docs/RespRecord.md)
  - [RespRelationStatus](docs/RespRelationStatus.md)
  - [RespTag](docs/RespTag.md)
- - [RespTopComment](docs/RespTopComment.md)
  - [RespTotp](docs/RespTotp.md)
  - [RewardArticleReq](docs/RewardArticleReq.md)
  - [SearchArticlesReq](docs/SearchArticlesReq.md)
@@ -452,6 +467,7 @@ Class | Method | HTTP request | Description
  - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
+ - [VoteArticlePollReq](docs/VoteArticlePollReq.md)
 
 
 <a id="documentation-for-authorization"></a>

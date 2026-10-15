@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.HashMap;
 import com.bass.bbs.model.AccountProfile;
 import com.bass.bbs.model.ArticleDomain;
+import com.bass.bbs.model.ArticleLottery;
+import com.bass.bbs.model.ArticlePoll;
 import com.bass.bbs.model.ArticlePostscript;
 import com.bass.bbs.model.ArticleTag;
 import com.bass.bbs.model.ArticleViewerActionState;
@@ -73,6 +75,9 @@ import com.bass.bbs.ApiClient;
   ArticleDetail.JSON_PROPERTY_TAGS,
   ArticleDetail.JSON_PROPERTY_DOMAINS,
   ArticleDetail.JSON_PROPERTY_CITY,
+  ArticleDetail.JSON_PROPERTY_ACCEPTED_COMMENT_ID,
+  ArticleDetail.JSON_PROPERTY_POLL,
+  ArticleDetail.JSON_PROPERTY_LOTTERY,
   ArticleDetail.JSON_PROPERTY_CREATED_BY,
   ArticleDetail.JSON_PROPERTY_UPDATED_BY,
   ArticleDetail.JSON_PROPERTY_CREATED_AT,
@@ -365,6 +370,18 @@ public class ArticleDetail {
   public static final String JSON_PROPERTY_CITY = "city";
   @javax.annotation.Nullable
   private String city;
+
+  public static final String JSON_PROPERTY_ACCEPTED_COMMENT_ID = "accepted_comment_id";
+  @javax.annotation.Nullable
+  private String acceptedCommentId;
+
+  public static final String JSON_PROPERTY_POLL = "poll";
+  @javax.annotation.Nullable
+  private ArticlePoll poll;
+
+  public static final String JSON_PROPERTY_LOTTERY = "lottery";
+  @javax.annotation.Nullable
+  private ArticleLottery lottery;
 
   public static final String JSON_PROPERTY_CREATED_BY = "created_by";
   @javax.annotation.Nullable
@@ -1177,6 +1194,78 @@ public class ArticleDetail {
   }
 
 
+  public ArticleDetail acceptedCommentId(@javax.annotation.Nullable String acceptedCommentId) {
+    this.acceptedCommentId = acceptedCommentId;
+    return this;
+  }
+
+  /**
+   * Get acceptedCommentId
+   * @return acceptedCommentId
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ACCEPTED_COMMENT_ID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getAcceptedCommentId() {
+    return acceptedCommentId;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ACCEPTED_COMMENT_ID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAcceptedCommentId(@javax.annotation.Nullable String acceptedCommentId) {
+    this.acceptedCommentId = acceptedCommentId;
+  }
+
+
+  public ArticleDetail poll(@javax.annotation.Nullable ArticlePoll poll) {
+    this.poll = poll;
+    return this;
+  }
+
+  /**
+   * Get poll
+   * @return poll
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_POLL, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public ArticlePoll getPoll() {
+    return poll;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_POLL, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPoll(@javax.annotation.Nullable ArticlePoll poll) {
+    this.poll = poll;
+  }
+
+
+  public ArticleDetail lottery(@javax.annotation.Nullable ArticleLottery lottery) {
+    this.lottery = lottery;
+    return this;
+  }
+
+  /**
+   * Get lottery
+   * @return lottery
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_LOTTERY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public ArticleLottery getLottery() {
+    return lottery;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_LOTTERY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLottery(@javax.annotation.Nullable ArticleLottery lottery) {
+    this.lottery = lottery;
+  }
+
+
   public ArticleDetail createdBy(@javax.annotation.Nullable String createdBy) {
     this.createdBy = createdBy;
     return this;
@@ -1317,6 +1406,9 @@ public class ArticleDetail {
         Objects.equals(this.tags, articleDetail.tags) &&
         Objects.equals(this.domains, articleDetail.domains) &&
         Objects.equals(this.city, articleDetail.city) &&
+        Objects.equals(this.acceptedCommentId, articleDetail.acceptedCommentId) &&
+        Objects.equals(this.poll, articleDetail.poll) &&
+        Objects.equals(this.lottery, articleDetail.lottery) &&
         Objects.equals(this.createdBy, articleDetail.createdBy) &&
         Objects.equals(this.updatedBy, articleDetail.updatedBy) &&
         Objects.equals(this.createdAt, articleDetail.createdAt) &&
@@ -1325,7 +1417,7 @@ public class ArticleDetail {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, content, contentRender, hasPostscript, hasReward, rewardContent, rewardContentRender, rewardPoints, type, statement, commentable, viewCount, thankCount, likeCount, collectCount, rewardCount, replyCount, authorUser, lastReplyUser, lastReplyAt, coverImageUrl, viewerActionState, publishedAt, postscripts, publishStatus, visibility, restriction, editedAt, tags, domains, city, createdBy, updatedBy, createdAt, updatedAt);
+    return Objects.hash(id, title, content, contentRender, hasPostscript, hasReward, rewardContent, rewardContentRender, rewardPoints, type, statement, commentable, viewCount, thankCount, likeCount, collectCount, rewardCount, replyCount, authorUser, lastReplyUser, lastReplyAt, coverImageUrl, viewerActionState, publishedAt, postscripts, publishStatus, visibility, restriction, editedAt, tags, domains, city, acceptedCommentId, poll, lottery, createdBy, updatedBy, createdAt, updatedAt);
   }
 
   @Override
@@ -1364,6 +1456,9 @@ public class ArticleDetail {
     sb.append("    tags: ").append(toIndentedString(tags)).append("\n");
     sb.append("    domains: ").append(toIndentedString(domains)).append("\n");
     sb.append("    city: ").append(toIndentedString(city)).append("\n");
+    sb.append("    acceptedCommentId: ").append(toIndentedString(acceptedCommentId)).append("\n");
+    sb.append("    poll: ").append(toIndentedString(poll)).append("\n");
+    sb.append("    lottery: ").append(toIndentedString(lottery)).append("\n");
     sb.append("    createdBy: ").append(toIndentedString(createdBy)).append("\n");
     sb.append("    updatedBy: ").append(toIndentedString(updatedBy)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
@@ -1585,6 +1680,21 @@ public class ArticleDetail {
     // add `city` to the URL query string
     if (getCity() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%scity%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCity()))));
+    }
+
+    // add `accepted_comment_id` to the URL query string
+    if (getAcceptedCommentId() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%saccepted_comment_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getAcceptedCommentId()))));
+    }
+
+    // add `poll` to the URL query string
+    if (getPoll() != null) {
+      joiner.add(getPoll().toUrlQueryString(prefix + "poll" + suffix));
+    }
+
+    // add `lottery` to the URL query string
+    if (getLottery() != null) {
+      joiner.add(getLottery().toUrlQueryString(prefix + "lottery" + suffix));
     }
 
     // add `created_by` to the URL query string

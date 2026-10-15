@@ -15,6 +15,8 @@ package com.bass.bbs.model;
 
 import com.bass.bbs.model.AccountProfile;
 import com.bass.bbs.model.ArticleDomain;
+import com.bass.bbs.model.ArticleLottery;
+import com.bass.bbs.model.ArticlePoll;
 import com.bass.bbs.model.ArticlePostscript;
 import com.bass.bbs.model.ArticleTag;
 import com.bass.bbs.model.ArticleViewerActionState;
@@ -299,6 +301,30 @@ class ArticleDetailTest {
     @Test
     void cityTest() {
         // TODO: test city
+    }
+
+    /**
+     * Test the property 'acceptedCommentId'
+     */
+    @Test
+    void acceptedCommentIdTest() {
+        // TODO: test acceptedCommentId
+    }
+
+    /**
+     * Test the property 'poll'
+     */
+    @Test
+    void pollTest() {
+        // TODO: test poll
+    }
+
+    /**
+     * Test the property 'lottery'
+     */
+    @Test
+    void lotteryTest() {
+        // TODO: test lottery
     }
 
     /**

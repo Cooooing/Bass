@@ -18,6 +18,7 @@ import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.Pair;
 
+import com.bass.bbs.model.AcceptArticleAnswerReq;
 import com.bass.bbs.model.ArchiveArticleReq;
 import com.bass.bbs.model.CancelPublishArticleReq;
 import com.bass.bbs.model.CollectArticleReq;
@@ -25,6 +26,7 @@ import com.bass.bbs.model.CollectArticleResp;
 import com.bass.bbs.model.CreateDraftArticleReq;
 import com.bass.bbs.model.CreateDraftArticleResp;
 import com.bass.bbs.model.DiscardDraftArticleReq;
+import com.bass.bbs.model.EnterArticleLotteryReq;
 import com.bass.bbs.model.GetArticleReq;
 import com.bass.bbs.model.GetArticleResp;
 import com.bass.bbs.model.LikeArticleReq;
@@ -44,6 +46,7 @@ import com.bass.bbs.model.ThankArticleReq;
 import com.bass.bbs.model.ThankArticleResp;
 import com.bass.bbs.model.UpdateDraftArticleReq;
 import com.bass.bbs.model.UpdateDraftArticleResp;
+import com.bass.bbs.model.VoteArticlePollReq;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -185,6 +188,207 @@ public class ArticleService {
       file.deleteOnExit(); // best effort cleanup
     }
     return file;
+  }
+
+  /**
+   * 
+   * 采纳文章回答
+   * @param apiRequest {@link APIAcceptAnswerRequest}
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object acceptAnswer(APIAcceptAnswerRequest apiRequest) throws ApiException {
+    return acceptAnswer(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 采纳文章回答
+   * @param apiRequest {@link APIAcceptAnswerRequest}
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object acceptAnswer(APIAcceptAnswerRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    AcceptArticleAnswerReq acceptArticleAnswerReq = apiRequest.acceptArticleAnswerReq();
+    return acceptAnswer(acceptArticleAnswerReq, headers);
+  }
+
+  /**
+   * 
+   * 采纳文章回答
+   * @param apiRequest {@link APIAcceptAnswerRequest}
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> acceptAnswerWithHttpInfo(APIAcceptAnswerRequest apiRequest) throws ApiException {
+    return acceptAnswerWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 采纳文章回答
+   * @param apiRequest {@link APIAcceptAnswerRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> acceptAnswerWithHttpInfo(APIAcceptAnswerRequest apiRequest, Map<String, String> headers) throws ApiException {
+    AcceptArticleAnswerReq acceptArticleAnswerReq = apiRequest.acceptArticleAnswerReq();
+    return acceptAnswerWithHttpInfo(acceptArticleAnswerReq, headers);
+  }
+
+  /**
+   * 
+   * 采纳文章回答
+   * @param acceptArticleAnswerReq  (required)
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object acceptAnswer(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq) throws ApiException {
+    return acceptAnswer(acceptArticleAnswerReq, null);
+  }
+
+  /**
+   * 
+   * 采纳文章回答
+   * @param acceptArticleAnswerReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object acceptAnswer(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = acceptAnswerWithHttpInfo(acceptArticleAnswerReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 采纳文章回答
+   * @param acceptArticleAnswerReq  (required)
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> acceptAnswerWithHttpInfo(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq) throws ApiException {
+    return acceptAnswerWithHttpInfo(acceptArticleAnswerReq, null);
+  }
+
+  /**
+   * 
+   * 采纳文章回答
+   * @param acceptArticleAnswerReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> acceptAnswerWithHttpInfo(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = acceptAnswerRequestBuilder(acceptArticleAnswerReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("acceptAnswer", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<Object>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        Object responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<Object>() {});
+        
+
+        return new ApiResponse<Object>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder acceptAnswerRequestBuilder(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'acceptArticleAnswerReq' is set
+    if (acceptArticleAnswerReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'acceptArticleAnswerReq' when calling acceptAnswer");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/answer/accept";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(acceptArticleAnswerReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIAcceptAnswerRequest {
+    @javax.annotation.Nonnull
+    private AcceptArticleAnswerReq acceptArticleAnswerReq; //  (required)
+
+    private APIAcceptAnswerRequest(Builder builder) {
+      this.acceptArticleAnswerReq = builder.acceptArticleAnswerReq;
+    }
+    @javax.annotation.Nonnull
+    public AcceptArticleAnswerReq acceptArticleAnswerReq() {
+      return acceptArticleAnswerReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private AcceptArticleAnswerReq acceptArticleAnswerReq;
+
+      public Builder acceptArticleAnswerReq(@javax.annotation.Nonnull AcceptArticleAnswerReq acceptArticleAnswerReq) {
+        this.acceptArticleAnswerReq = acceptArticleAnswerReq;
+        return this;
+      }
+      public APIAcceptAnswerRequest build() {
+        return new APIAcceptAnswerRequest(this);
+      }
+    }
   }
 
   /**
@@ -1389,6 +1593,207 @@ public class ArticleService {
       }
       public APIDiscardDraftRequest build() {
         return new APIDiscardDraftRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 报名或撤销抽奖报名。
+   * @param apiRequest {@link APIEnterLotteryRequest}
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object enterLottery(APIEnterLotteryRequest apiRequest) throws ApiException {
+    return enterLottery(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 报名或撤销抽奖报名。
+   * @param apiRequest {@link APIEnterLotteryRequest}
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object enterLottery(APIEnterLotteryRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    EnterArticleLotteryReq enterArticleLotteryReq = apiRequest.enterArticleLotteryReq();
+    return enterLottery(enterArticleLotteryReq, headers);
+  }
+
+  /**
+   * 
+   * 报名或撤销抽奖报名。
+   * @param apiRequest {@link APIEnterLotteryRequest}
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> enterLotteryWithHttpInfo(APIEnterLotteryRequest apiRequest) throws ApiException {
+    return enterLotteryWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 报名或撤销抽奖报名。
+   * @param apiRequest {@link APIEnterLotteryRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> enterLotteryWithHttpInfo(APIEnterLotteryRequest apiRequest, Map<String, String> headers) throws ApiException {
+    EnterArticleLotteryReq enterArticleLotteryReq = apiRequest.enterArticleLotteryReq();
+    return enterLotteryWithHttpInfo(enterArticleLotteryReq, headers);
+  }
+
+  /**
+   * 
+   * 报名或撤销抽奖报名。
+   * @param enterArticleLotteryReq  (required)
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object enterLottery(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq) throws ApiException {
+    return enterLottery(enterArticleLotteryReq, null);
+  }
+
+  /**
+   * 
+   * 报名或撤销抽奖报名。
+   * @param enterArticleLotteryReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object enterLottery(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = enterLotteryWithHttpInfo(enterArticleLotteryReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 报名或撤销抽奖报名。
+   * @param enterArticleLotteryReq  (required)
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> enterLotteryWithHttpInfo(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq) throws ApiException {
+    return enterLotteryWithHttpInfo(enterArticleLotteryReq, null);
+  }
+
+  /**
+   * 
+   * 报名或撤销抽奖报名。
+   * @param enterArticleLotteryReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> enterLotteryWithHttpInfo(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = enterLotteryRequestBuilder(enterArticleLotteryReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("enterLottery", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<Object>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        Object responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<Object>() {});
+        
+
+        return new ApiResponse<Object>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder enterLotteryRequestBuilder(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'enterArticleLotteryReq' is set
+    if (enterArticleLotteryReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'enterArticleLotteryReq' when calling enterLottery");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/lottery/entry";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(enterArticleLotteryReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIEnterLotteryRequest {
+    @javax.annotation.Nonnull
+    private EnterArticleLotteryReq enterArticleLotteryReq; //  (required)
+
+    private APIEnterLotteryRequest(Builder builder) {
+      this.enterArticleLotteryReq = builder.enterArticleLotteryReq;
+    }
+    @javax.annotation.Nonnull
+    public EnterArticleLotteryReq enterArticleLotteryReq() {
+      return enterArticleLotteryReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private EnterArticleLotteryReq enterArticleLotteryReq;
+
+      public Builder enterArticleLotteryReq(@javax.annotation.Nonnull EnterArticleLotteryReq enterArticleLotteryReq) {
+        this.enterArticleLotteryReq = enterArticleLotteryReq;
+        return this;
+      }
+      public APIEnterLotteryRequest build() {
+        return new APIEnterLotteryRequest(this);
       }
     }
   }
@@ -3399,6 +3804,207 @@ public class ArticleService {
       }
       public APIUpdateDraftRequest build() {
         return new APIUpdateDraftRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 提交一次不可修改的文章投票。
+   * @param apiRequest {@link APIVotePollRequest}
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object votePoll(APIVotePollRequest apiRequest) throws ApiException {
+    return votePoll(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 提交一次不可修改的文章投票。
+   * @param apiRequest {@link APIVotePollRequest}
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object votePoll(APIVotePollRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    VoteArticlePollReq voteArticlePollReq = apiRequest.voteArticlePollReq();
+    return votePoll(voteArticlePollReq, headers);
+  }
+
+  /**
+   * 
+   * 提交一次不可修改的文章投票。
+   * @param apiRequest {@link APIVotePollRequest}
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> votePollWithHttpInfo(APIVotePollRequest apiRequest) throws ApiException {
+    return votePollWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 提交一次不可修改的文章投票。
+   * @param apiRequest {@link APIVotePollRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> votePollWithHttpInfo(APIVotePollRequest apiRequest, Map<String, String> headers) throws ApiException {
+    VoteArticlePollReq voteArticlePollReq = apiRequest.voteArticlePollReq();
+    return votePollWithHttpInfo(voteArticlePollReq, headers);
+  }
+
+  /**
+   * 
+   * 提交一次不可修改的文章投票。
+   * @param voteArticlePollReq  (required)
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object votePoll(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq) throws ApiException {
+    return votePoll(voteArticlePollReq, null);
+  }
+
+  /**
+   * 
+   * 提交一次不可修改的文章投票。
+   * @param voteArticlePollReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return Object
+   * @throws ApiException if fails to make API call
+   */
+  public Object votePoll(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<Object> localVarResponse = votePollWithHttpInfo(voteArticlePollReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 提交一次不可修改的文章投票。
+   * @param voteArticlePollReq  (required)
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> votePollWithHttpInfo(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq) throws ApiException {
+    return votePollWithHttpInfo(voteArticlePollReq, null);
+  }
+
+  /**
+   * 
+   * 提交一次不可修改的文章投票。
+   * @param voteArticlePollReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;Object&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<Object> votePollWithHttpInfo(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = votePollRequestBuilder(voteArticlePollReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("votePoll", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<Object>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        Object responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<Object>() {});
+        
+
+        return new ApiResponse<Object>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder votePollRequestBuilder(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'voteArticlePollReq' is set
+    if (voteArticlePollReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'voteArticlePollReq' when calling votePoll");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/poll/vote";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(voteArticlePollReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIVotePollRequest {
+    @javax.annotation.Nonnull
+    private VoteArticlePollReq voteArticlePollReq; //  (required)
+
+    private APIVotePollRequest(Builder builder) {
+      this.voteArticlePollReq = builder.voteArticlePollReq;
+    }
+    @javax.annotation.Nonnull
+    public VoteArticlePollReq voteArticlePollReq() {
+      return voteArticlePollReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private VoteArticlePollReq voteArticlePollReq;
+
+      public Builder voteArticlePollReq(@javax.annotation.Nonnull VoteArticlePollReq voteArticlePollReq) {
+        this.voteArticlePollReq = voteArticlePollReq;
+        return this;
+      }
+      public APIVotePollRequest build() {
+        return new APIVotePollRequest(this);
       }
     }
   }

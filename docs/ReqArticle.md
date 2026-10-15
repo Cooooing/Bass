@@ -14,6 +14,8 @@
 |**type** | [**TypeEnum**](#TypeEnum) |  |  |
 |**statement** | **String** |  |  [optional] |
 |**commentable** | **Boolean** |  |  [optional] |
+|**poll** | [**ArticlePollDraft**](ArticlePollDraft.md) |  |  [optional] |
+|**lottery** | [**ArticleLotteryDraft**](ArticleLotteryDraft.md) |  |  [optional] |
 
 
 

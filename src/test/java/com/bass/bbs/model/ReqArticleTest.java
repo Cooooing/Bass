@@ -13,6 +13,8 @@
 
 package com.bass.bbs.model;
 
+import com.bass.bbs.model.ArticleLotteryDraft;
+import com.bass.bbs.model.ArticlePollDraft;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -91,6 +93,22 @@ class ReqArticleTest {
     @Test
     void commentableTest() {
         // TODO: test commentable
+    }
+
+    /**
+     * Test the property 'poll'
+     */
+    @Test
+    void pollTest() {
+        // TODO: test poll
+    }
+
+    /**
+     * Test the property 'lottery'
+     */
+    @Test
+    void lotteryTest() {
+        // TODO: test lottery
     }
 
 }

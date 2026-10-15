@@ -13,7 +13,6 @@
 
 package com.bass.bbs.model;
 
-import com.bass.bbs.model.RespCommentThread;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -25,25 +24,41 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for RespTopComment
+ * Model tests for ArticleLotteryPrizeDraft
  */
-class RespTopCommentTest {
-    private final RespTopComment model = new RespTopComment();
+class ArticleLotteryPrizeDraftTest {
+    private final ArticleLotteryPrizeDraft model = new ArticleLotteryPrizeDraft();
 
     /**
-     * Model tests for RespTopComment
+     * Model tests for ArticleLotteryPrizeDraft
      */
     @Test
-    void testRespTopComment() {
-        // TODO: test RespTopComment
+    void testArticleLotteryPrizeDraft() {
+        // TODO: test ArticleLotteryPrizeDraft
     }
 
     /**
-     * Test the property 'thread'
+     * Test the property 'name'
      */
     @Test
-    void threadTest() {
-        // TODO: test thread
+    void nameTest() {
+        // TODO: test name
+    }
+
+    /**
+     * Test the property 'description'
+     */
+    @Test
+    void descriptionTest() {
+        // TODO: test description
+    }
+
+    /**
+     * Test the property 'winnerLimit'
+     */
+    @Test
+    void winnerLimitTest() {
+        // TODO: test winnerLimit
     }
 
 }

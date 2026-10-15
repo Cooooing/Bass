@@ -19,6 +19,8 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
+import com.bass.bbs.model.ArticleLotteryDraft;
+import com.bass.bbs.model.ArticlePollDraft;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -39,7 +41,9 @@ import com.bass.bbs.ApiClient;
   ReqArticle.JSON_PROPERTY_REWARD_POINTS,
   ReqArticle.JSON_PROPERTY_TYPE,
   ReqArticle.JSON_PROPERTY_STATEMENT,
-  ReqArticle.JSON_PROPERTY_COMMENTABLE
+  ReqArticle.JSON_PROPERTY_COMMENTABLE,
+  ReqArticle.JSON_PROPERTY_POLL,
+  ReqArticle.JSON_PROPERTY_LOTTERY
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ReqArticle {
@@ -113,6 +117,14 @@ public class ReqArticle {
   public static final String JSON_PROPERTY_COMMENTABLE = "commentable";
   @javax.annotation.Nullable
   private Boolean commentable;
+
+  public static final String JSON_PROPERTY_POLL = "poll";
+  @javax.annotation.Nullable
+  private ArticlePollDraft poll;
+
+  public static final String JSON_PROPERTY_LOTTERY = "lottery";
+  @javax.annotation.Nullable
+  private ArticleLotteryDraft lottery;
 
   public ReqArticle() { 
   }
@@ -285,6 +297,54 @@ public class ReqArticle {
   }
 
 
+  public ReqArticle poll(@javax.annotation.Nullable ArticlePollDraft poll) {
+    this.poll = poll;
+    return this;
+  }
+
+  /**
+   * Get poll
+   * @return poll
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_POLL, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public ArticlePollDraft getPoll() {
+    return poll;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_POLL, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPoll(@javax.annotation.Nullable ArticlePollDraft poll) {
+    this.poll = poll;
+  }
+
+
+  public ReqArticle lottery(@javax.annotation.Nullable ArticleLotteryDraft lottery) {
+    this.lottery = lottery;
+    return this;
+  }
+
+  /**
+   * Get lottery
+   * @return lottery
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_LOTTERY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public ArticleLotteryDraft getLottery() {
+    return lottery;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_LOTTERY, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLottery(@javax.annotation.Nullable ArticleLotteryDraft lottery) {
+    this.lottery = lottery;
+  }
+
+
   /**
    * Return true if this Req_Article object is equal to o.
    */
@@ -303,12 +363,14 @@ public class ReqArticle {
         Objects.equals(this.rewardPoints, reqArticle.rewardPoints) &&
         Objects.equals(this.type, reqArticle.type) &&
         Objects.equals(this.statement, reqArticle.statement) &&
-        Objects.equals(this.commentable, reqArticle.commentable);
+        Objects.equals(this.commentable, reqArticle.commentable) &&
+        Objects.equals(this.poll, reqArticle.poll) &&
+        Objects.equals(this.lottery, reqArticle.lottery);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, content, rewardContent, rewardPoints, type, statement, commentable);
+    return Objects.hash(title, content, rewardContent, rewardPoints, type, statement, commentable, poll, lottery);
   }
 
   @Override
@@ -322,6 +384,8 @@ public class ReqArticle {
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("    statement: ").append(toIndentedString(statement)).append("\n");
     sb.append("    commentable: ").append(toIndentedString(commentable)).append("\n");
+    sb.append("    poll: ").append(toIndentedString(poll)).append("\n");
+    sb.append("    lottery: ").append(toIndentedString(lottery)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -399,6 +463,16 @@ public class ReqArticle {
     // add `commentable` to the URL query string
     if (getCommentable() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%scommentable%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCommentable()))));
+    }
+
+    // add `poll` to the URL query string
+    if (getPoll() != null) {
+      joiner.add(getPoll().toUrlQueryString(prefix + "poll" + suffix));
+    }
+
+    // add `lottery` to the URL query string
+    if (getLottery() != null) {
+      joiner.add(getLottery().toUrlQueryString(prefix + "lottery" + suffix));
     }
 
     return joiner.toString();

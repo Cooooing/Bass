@@ -39,6 +39,9 @@
 |**tags** | [**List&lt;ArticleTag&gt;**](ArticleTag.md) |  |  [optional] |
 |**domains** | [**List&lt;ArticleDomain&gt;**](ArticleDomain.md) |  |  [optional] |
 |**city** | **String** |  |  [optional] |
+|**acceptedCommentId** | **String** |  |  [optional] |
+|**poll** | [**ArticlePoll**](ArticlePoll.md) |  |  [optional] |
+|**lottery** | [**ArticleLottery**](ArticleLottery.md) |  |  [optional] |
 |**createdBy** | **String** |  |  [optional] |
 |**updatedBy** | **String** |  |  [optional] |
 |**createdAt** | **OffsetDateTime** |  |  [optional] |

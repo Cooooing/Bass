@@ -4,6 +4,8 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
+| [**acceptAnswer**](ArticleService.md#acceptAnswer) | **POST** /v1/content/article/answer/accept |  |
+| [**acceptAnswerWithHttpInfo**](ArticleService.md#acceptAnswerWithHttpInfo) | **POST** /v1/content/article/answer/accept |  |
 | [**archive**](ArticleService.md#archive) | **POST** /v1/content/article/archive |  |
 | [**archiveWithHttpInfo**](ArticleService.md#archiveWithHttpInfo) | **POST** /v1/content/article/archive |  |
 | [**callList**](ArticleService.md#callList) | **POST** /v1/content/article/list |  |
@@ -16,6 +18,8 @@ All URIs are relative to *http://localhost*
 | [**createDraftWithHttpInfo**](ArticleService.md#createDraftWithHttpInfo) | **POST** /v1/content/article/draft/create |  |
 | [**discardDraft**](ArticleService.md#discardDraft) | **POST** /v1/content/article/draft/discard |  |
 | [**discardDraftWithHttpInfo**](ArticleService.md#discardDraftWithHttpInfo) | **POST** /v1/content/article/draft/discard |  |
+| [**enterLottery**](ArticleService.md#enterLottery) | **POST** /v1/content/article/lottery/entry |  |
+| [**enterLotteryWithHttpInfo**](ArticleService.md#enterLotteryWithHttpInfo) | **POST** /v1/content/article/lottery/entry |  |
 | [**get**](ArticleService.md#get) | **POST** /v1/content/article/get |  |
 | [**getWithHttpInfo**](ArticleService.md#getWithHttpInfo) | **POST** /v1/content/article/get |  |
 | [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
@@ -36,6 +40,158 @@ All URIs are relative to *http://localhost*
 | [**thankWithHttpInfo**](ArticleService.md#thankWithHttpInfo) | **POST** /v1/content/article/thank |  |
 | [**updateDraft**](ArticleService.md#updateDraft) | **POST** /v1/content/article/draft/update |  |
 | [**updateDraftWithHttpInfo**](ArticleService.md#updateDraftWithHttpInfo) | **POST** /v1/content/article/draft/update |  |
+| [**votePoll**](ArticleService.md#votePoll) | **POST** /v1/content/article/poll/vote |  |
+| [**votePollWithHttpInfo**](ArticleService.md#votePollWithHttpInfo) | **POST** /v1/content/article/poll/vote |  |
+
+
+
+## acceptAnswer
+
+> Object acceptAnswer(acceptAnswerRequest)
+
+
+
+采纳文章回答
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        AcceptArticleAnswerReq acceptArticleAnswerReq = new AcceptArticleAnswerReq(); // AcceptArticleAnswerReq | 
+        try {
+            APIacceptAnswerRequest request = APIacceptAnswerRequest.newBuilder()
+                .acceptArticleAnswerReq(acceptArticleAnswerReq)
+                .build();
+            Object result = apiInstance.acceptAnswer(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#acceptAnswer");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| acceptAnswerRequest | [**APIacceptAnswerRequest**](ArticleService.md#APIacceptAnswerRequest)|-|-|
+
+### Return type
+
+**Object**
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## acceptAnswerWithHttpInfo
+
+> ApiResponse<Object> acceptAnswerWithHttpInfo(acceptAnswerRequest)
+
+
+
+采纳文章回答
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        AcceptArticleAnswerReq acceptArticleAnswerReq = new AcceptArticleAnswerReq(); // AcceptArticleAnswerReq | 
+        try {
+            APIacceptAnswerRequest request = APIacceptAnswerRequest.newBuilder()
+                .acceptArticleAnswerReq(acceptArticleAnswerReq)
+                .build();
+            ApiResponse<Object> response = apiInstance.acceptAnswerWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#acceptAnswer");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| acceptAnswerRequest | [**APIacceptAnswerRequest**](ArticleService.md#APIacceptAnswerRequest)|-|-|
+
+### Return type
+
+ApiResponse<**Object**>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIacceptAnswerRequest"></a>
+## APIacceptAnswerRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **acceptArticleAnswerReq** | [**AcceptArticleAnswerReq**](AcceptArticleAnswerReq.md) |  | |
 
 
 
@@ -936,6 +1092,156 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **discardDraftArticleReq** | [**DiscardDraftArticleReq**](DiscardDraftArticleReq.md) |  | |
+
+
+
+## enterLottery
+
+> Object enterLottery(enterLotteryRequest)
+
+
+
+报名或撤销抽奖报名。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        EnterArticleLotteryReq enterArticleLotteryReq = new EnterArticleLotteryReq(); // EnterArticleLotteryReq | 
+        try {
+            APIenterLotteryRequest request = APIenterLotteryRequest.newBuilder()
+                .enterArticleLotteryReq(enterArticleLotteryReq)
+                .build();
+            Object result = apiInstance.enterLottery(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#enterLottery");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| enterLotteryRequest | [**APIenterLotteryRequest**](ArticleService.md#APIenterLotteryRequest)|-|-|
+
+### Return type
+
+**Object**
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## enterLotteryWithHttpInfo
+
+> ApiResponse<Object> enterLotteryWithHttpInfo(enterLotteryRequest)
+
+
+
+报名或撤销抽奖报名。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        EnterArticleLotteryReq enterArticleLotteryReq = new EnterArticleLotteryReq(); // EnterArticleLotteryReq | 
+        try {
+            APIenterLotteryRequest request = APIenterLotteryRequest.newBuilder()
+                .enterArticleLotteryReq(enterArticleLotteryReq)
+                .build();
+            ApiResponse<Object> response = apiInstance.enterLotteryWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#enterLottery");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| enterLotteryRequest | [**APIenterLotteryRequest**](ArticleService.md#APIenterLotteryRequest)|-|-|
+
+### Return type
+
+ApiResponse<**Object**>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIenterLotteryRequest"></a>
+## APIenterLotteryRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **enterArticleLotteryReq** | [**EnterArticleLotteryReq**](EnterArticleLotteryReq.md) |  | |
 
 
 
@@ -2436,5 +2742,155 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **updateDraftArticleReq** | [**UpdateDraftArticleReq**](UpdateDraftArticleReq.md) |  | |
+
+
+
+## votePoll
+
+> Object votePoll(votePollRequest)
+
+
+
+提交一次不可修改的文章投票。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        VoteArticlePollReq voteArticlePollReq = new VoteArticlePollReq(); // VoteArticlePollReq | 
+        try {
+            APIvotePollRequest request = APIvotePollRequest.newBuilder()
+                .voteArticlePollReq(voteArticlePollReq)
+                .build();
+            Object result = apiInstance.votePoll(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#votePoll");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| votePollRequest | [**APIvotePollRequest**](ArticleService.md#APIvotePollRequest)|-|-|
+
+### Return type
+
+**Object**
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## votePollWithHttpInfo
+
+> ApiResponse<Object> votePollWithHttpInfo(votePollRequest)
+
+
+
+提交一次不可修改的文章投票。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        VoteArticlePollReq voteArticlePollReq = new VoteArticlePollReq(); // VoteArticlePollReq | 
+        try {
+            APIvotePollRequest request = APIvotePollRequest.newBuilder()
+                .voteArticlePollReq(voteArticlePollReq)
+                .build();
+            ApiResponse<Object> response = apiInstance.votePollWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#votePoll");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| votePollRequest | [**APIvotePollRequest**](ArticleService.md#APIvotePollRequest)|-|-|
+
+### Return type
+
+ApiResponse<**Object**>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIvotePollRequest"></a>
+## APIvotePollRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **voteArticlePollReq** | [**VoteArticlePollReq**](VoteArticlePollReq.md) |  | |
 
 

@@ -19,7 +19,6 @@ import java.util.StringJoiner;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
-import com.bass.bbs.model.RespCommentThread;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,46 +30,75 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import com.bass.bbs.ApiClient;
 /**
- * RespTopComment
+ * EnterArticleLotteryReq
  */
 @JsonPropertyOrder({
-  RespTopComment.JSON_PROPERTY_THREAD
+  EnterArticleLotteryReq.JSON_PROPERTY_ARTICLE_ID,
+  EnterArticleLotteryReq.JSON_PROPERTY_ENTERED
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
-public class RespTopComment {
-  public static final String JSON_PROPERTY_THREAD = "thread";
-  @javax.annotation.Nullable
-  private RespCommentThread thread;
+public class EnterArticleLotteryReq {
+  public static final String JSON_PROPERTY_ARTICLE_ID = "article_id";
+  @javax.annotation.Nonnull
+  private String articleId;
 
-  public RespTopComment() { 
+  public static final String JSON_PROPERTY_ENTERED = "entered";
+  @javax.annotation.Nullable
+  private Boolean entered;
+
+  public EnterArticleLotteryReq() { 
   }
 
-  public RespTopComment thread(@javax.annotation.Nullable RespCommentThread thread) {
-    this.thread = thread;
+  public EnterArticleLotteryReq articleId(@javax.annotation.Nonnull String articleId) {
+    this.articleId = articleId;
     return this;
   }
 
   /**
-   * Get thread
-   * @return thread
+   * Get articleId
+   * @return articleId
    */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_THREAD, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public RespCommentThread getThread() {
-    return thread;
+  @javax.annotation.Nonnull
+  @JsonProperty(value = JSON_PROPERTY_ARTICLE_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public String getArticleId() {
+    return articleId;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_THREAD, required = false)
+  @JsonProperty(value = JSON_PROPERTY_ARTICLE_ID, required = true)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setArticleId(@javax.annotation.Nonnull String articleId) {
+    this.articleId = articleId;
+  }
+
+
+  public EnterArticleLotteryReq entered(@javax.annotation.Nullable Boolean entered) {
+    this.entered = entered;
+    return this;
+  }
+
+  /**
+   * Get entered
+   * @return entered
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ENTERED, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setThread(@javax.annotation.Nullable RespCommentThread thread) {
-    this.thread = thread;
+  public Boolean getEntered() {
+    return entered;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ENTERED, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEntered(@javax.annotation.Nullable Boolean entered) {
+    this.entered = entered;
   }
 
 
   /**
-   * Return true if this Resp_TopComment object is equal to o.
+   * Return true if this EnterArticleLottery_Req object is equal to o.
    */
   @Override
   public boolean equals(Object o) {
@@ -80,20 +108,22 @@ public class RespTopComment {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RespTopComment respTopComment = (RespTopComment) o;
-    return Objects.equals(this.thread, respTopComment.thread);
+    EnterArticleLotteryReq enterArticleLotteryReq = (EnterArticleLotteryReq) o;
+    return Objects.equals(this.articleId, enterArticleLotteryReq.articleId) &&
+        Objects.equals(this.entered, enterArticleLotteryReq.entered);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(thread);
+    return Objects.hash(articleId, entered);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class RespTopComment {\n");
-    sb.append("    thread: ").append(toIndentedString(thread)).append("\n");
+    sb.append("class EnterArticleLotteryReq {\n");
+    sb.append("    articleId: ").append(toIndentedString(articleId)).append("\n");
+    sb.append("    entered: ").append(toIndentedString(entered)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -138,9 +168,14 @@ public class RespTopComment {
 
     StringJoiner joiner = new StringJoiner("&");
 
-    // add `thread` to the URL query string
-    if (getThread() != null) {
-      joiner.add(getThread().toUrlQueryString(prefix + "thread" + suffix));
+    // add `article_id` to the URL query string
+    if (getArticleId() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sarticle_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getArticleId()))));
+    }
+
+    // add `entered` to the URL query string
+    if (getEntered() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sentered%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getEntered()))));
     }
 
     return joiner.toString();

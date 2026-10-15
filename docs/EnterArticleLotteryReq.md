@@ -1,13 +1,14 @@
 
 
-# RespTopComment
+# EnterArticleLotteryReq
 
 
 ## Properties
 
 | Name | Type | Description | Notes |
 |------------ | ------------- | ------------- | -------------|
-|**thread** | [**RespCommentThread**](RespCommentThread.md) |  |  [optional] |
+|**articleId** | **String** |  |  |
+|**entered** | **Boolean** |  |  [optional] |
 
 
 

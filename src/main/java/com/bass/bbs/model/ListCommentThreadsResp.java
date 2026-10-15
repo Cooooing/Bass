@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 import com.bass.bbs.model.PageResp;
 import com.bass.bbs.model.RespCommentThread;
-import com.bass.bbs.model.RespTopComment;
+import com.bass.bbs.model.RespPinnedComment;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -40,7 +40,8 @@ import com.bass.bbs.ApiClient;
 @JsonPropertyOrder({
   ListCommentThreadsResp.JSON_PROPERTY_PAGE,
   ListCommentThreadsResp.JSON_PROPERTY_ROWS,
-  ListCommentThreadsResp.JSON_PROPERTY_TOP_COMMENT
+  ListCommentThreadsResp.JSON_PROPERTY_ACCEPTED_ANSWER,
+  ListCommentThreadsResp.JSON_PROPERTY_PINNED_COMMENT
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ListCommentThreadsResp {
@@ -52,9 +53,13 @@ public class ListCommentThreadsResp {
   @javax.annotation.Nullable
   private List<RespCommentThread> rows = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_TOP_COMMENT = "top_comment";
+  public static final String JSON_PROPERTY_ACCEPTED_ANSWER = "accepted_answer";
   @javax.annotation.Nullable
-  private RespTopComment topComment;
+  private RespPinnedComment acceptedAnswer;
+
+  public static final String JSON_PROPERTY_PINNED_COMMENT = "pinned_comment";
+  @javax.annotation.Nullable
+  private RespPinnedComment pinnedComment;
 
   public ListCommentThreadsResp() { 
   }
@@ -115,27 +120,51 @@ public class ListCommentThreadsResp {
   }
 
 
-  public ListCommentThreadsResp topComment(@javax.annotation.Nullable RespTopComment topComment) {
-    this.topComment = topComment;
+  public ListCommentThreadsResp acceptedAnswer(@javax.annotation.Nullable RespPinnedComment acceptedAnswer) {
+    this.acceptedAnswer = acceptedAnswer;
     return this;
   }
 
   /**
-   * Get topComment
-   * @return topComment
+   * Get acceptedAnswer
+   * @return acceptedAnswer
    */
   @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_TOP_COMMENT, required = false)
+  @JsonProperty(value = JSON_PROPERTY_ACCEPTED_ANSWER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public RespTopComment getTopComment() {
-    return topComment;
+  public RespPinnedComment getAcceptedAnswer() {
+    return acceptedAnswer;
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_TOP_COMMENT, required = false)
+  @JsonProperty(value = JSON_PROPERTY_ACCEPTED_ANSWER, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTopComment(@javax.annotation.Nullable RespTopComment topComment) {
-    this.topComment = topComment;
+  public void setAcceptedAnswer(@javax.annotation.Nullable RespPinnedComment acceptedAnswer) {
+    this.acceptedAnswer = acceptedAnswer;
+  }
+
+
+  public ListCommentThreadsResp pinnedComment(@javax.annotation.Nullable RespPinnedComment pinnedComment) {
+    this.pinnedComment = pinnedComment;
+    return this;
+  }
+
+  /**
+   * Get pinnedComment
+   * @return pinnedComment
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PINNED_COMMENT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public RespPinnedComment getPinnedComment() {
+    return pinnedComment;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PINNED_COMMENT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPinnedComment(@javax.annotation.Nullable RespPinnedComment pinnedComment) {
+    this.pinnedComment = pinnedComment;
   }
 
 
@@ -153,12 +182,13 @@ public class ListCommentThreadsResp {
     ListCommentThreadsResp listCommentThreadsResp = (ListCommentThreadsResp) o;
     return Objects.equals(this.page, listCommentThreadsResp.page) &&
         Objects.equals(this.rows, listCommentThreadsResp.rows) &&
-        Objects.equals(this.topComment, listCommentThreadsResp.topComment);
+        Objects.equals(this.acceptedAnswer, listCommentThreadsResp.acceptedAnswer) &&
+        Objects.equals(this.pinnedComment, listCommentThreadsResp.pinnedComment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(page, rows, topComment);
+    return Objects.hash(page, rows, acceptedAnswer, pinnedComment);
   }
 
   @Override
@@ -167,7 +197,8 @@ public class ListCommentThreadsResp {
     sb.append("class ListCommentThreadsResp {\n");
     sb.append("    page: ").append(toIndentedString(page)).append("\n");
     sb.append("    rows: ").append(toIndentedString(rows)).append("\n");
-    sb.append("    topComment: ").append(toIndentedString(topComment)).append("\n");
+    sb.append("    acceptedAnswer: ").append(toIndentedString(acceptedAnswer)).append("\n");
+    sb.append("    pinnedComment: ").append(toIndentedString(pinnedComment)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -227,9 +258,14 @@ public class ListCommentThreadsResp {
       }
     }
 
-    // add `top_comment` to the URL query string
-    if (getTopComment() != null) {
-      joiner.add(getTopComment().toUrlQueryString(prefix + "top_comment" + suffix));
+    // add `accepted_answer` to the URL query string
+    if (getAcceptedAnswer() != null) {
+      joiner.add(getAcceptedAnswer().toUrlQueryString(prefix + "accepted_answer" + suffix));
+    }
+
+    // add `pinned_comment` to the URL query string
+    if (getPinnedComment() != null) {
+      joiner.add(getPinnedComment().toUrlQueryString(prefix + "pinned_comment" + suffix));
     }
 
     return joiner.toString();

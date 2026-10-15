@@ -14,6 +14,11 @@
 
 import * as runtime from '../runtime';
 import {
+    type AcceptArticleAnswerReq,
+    AcceptArticleAnswerReqFromJSON,
+    AcceptArticleAnswerReqToJSON,
+} from '../models/AcceptArticleAnswerReq';
+import {
     type ArchiveArticleReq,
     ArchiveArticleReqFromJSON,
     ArchiveArticleReqToJSON,
@@ -48,6 +53,11 @@ import {
     DiscardDraftArticleReqFromJSON,
     DiscardDraftArticleReqToJSON,
 } from '../models/DiscardDraftArticleReq';
+import {
+    type EnterArticleLotteryReq,
+    EnterArticleLotteryReqFromJSON,
+    EnterArticleLotteryReqToJSON,
+} from '../models/EnterArticleLotteryReq';
 import {
     type GetArticleReq,
     GetArticleReqFromJSON,
@@ -143,6 +153,15 @@ import {
     UpdateDraftArticleRespFromJSON,
     UpdateDraftArticleRespToJSON,
 } from '../models/UpdateDraftArticleResp';
+import {
+    type VoteArticlePollReq,
+    VoteArticlePollReqFromJSON,
+    VoteArticlePollReqToJSON,
+} from '../models/VoteArticlePollReq';
+
+export interface AcceptAnswerRequest {
+    acceptArticleAnswerReq: AcceptArticleAnswerReq;
+}
 
 export interface ArchiveRequest {
     archiveArticleReq: ArchiveArticleReq;
@@ -162,6 +181,10 @@ export interface CreateDraftRequest {
 
 export interface DiscardDraftRequest {
     discardDraftArticleReq: DiscardDraftArticleReq;
+}
+
+export interface EnterLotteryRequest {
+    enterArticleLotteryReq: EnterArticleLotteryReq;
 }
 
 export interface GetRequest {
@@ -208,6 +231,10 @@ export interface UpdateDraftRequest {
     updateDraftArticleReq: UpdateDraftArticleReq;
 }
 
+export interface VotePollRequest {
+    voteArticlePollReq: VoteArticlePollReq;
+}
+
 /**
  * ArticleService - interface
  * 
@@ -215,6 +242,28 @@ export interface UpdateDraftRequest {
  * @interface ArticleServiceInterface
  */
 export interface ArticleServiceInterface {
+    /**
+     * Creates request options for acceptAnswer without sending the request
+     * @param {AcceptArticleAnswerReq} acceptArticleAnswerReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    acceptAnswerRequestOpts(requestParameters: AcceptAnswerRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 采纳文章回答
+     * @param {AcceptArticleAnswerReq} acceptArticleAnswerReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    acceptAnswerRaw(requestParameters: AcceptAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 采纳文章回答
+     */
+    acceptAnswer(requestParameters: AcceptAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
     /**
      * Creates request options for archive without sending the request
      * @param {ArchiveArticleReq} archiveArticleReq 
@@ -324,6 +373,28 @@ export interface ArticleServiceInterface {
      * 丢弃文章草稿
      */
     discardDraft(requestParameters: DiscardDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
+    /**
+     * Creates request options for enterLottery without sending the request
+     * @param {EnterArticleLotteryReq} enterArticleLotteryReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    enterLotteryRequestOpts(requestParameters: EnterLotteryRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 报名或撤销抽奖报名。
+     * @param {EnterArticleLotteryReq} enterArticleLotteryReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    enterLotteryRaw(requestParameters: EnterLotteryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 报名或撤销抽奖报名。
+     */
+    enterLottery(requestParameters: EnterLotteryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
      * Creates request options for get without sending the request
@@ -567,12 +638,81 @@ export interface ArticleServiceInterface {
      */
     updateDraft(requestParameters: UpdateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDraftArticleResp>;
 
+    /**
+     * Creates request options for votePoll without sending the request
+     * @param {VoteArticlePollReq} voteArticlePollReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    votePollRequestOpts(requestParameters: VotePollRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 提交一次不可修改的文章投票。
+     * @param {VoteArticlePollReq} voteArticlePollReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    votePollRaw(requestParameters: VotePollRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
+
+    /**
+     * 提交一次不可修改的文章投票。
+     */
+    votePoll(requestParameters: VotePollRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
 }
 
 /**
  * 
  */
 export class ArticleService extends runtime.BaseAPI implements ArticleServiceInterface {
+
+    /**
+     * Creates request options for acceptAnswer without sending the request
+     */
+    async acceptAnswerRequestOpts(requestParameters: AcceptAnswerRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['acceptArticleAnswerReq'] == null) {
+            throw new runtime.RequiredError(
+                'acceptArticleAnswerReq',
+                'Required parameter "acceptArticleAnswerReq" was null or undefined when calling acceptAnswer().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/answer/accept`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: AcceptArticleAnswerReqToJSON(requestParameters['acceptArticleAnswerReq']),
+        };
+    }
+
+    /**
+     * 采纳文章回答
+     */
+    async acceptAnswerRaw(requestParameters: AcceptAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.acceptAnswerRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 采纳文章回答
+     */
+    async acceptAnswer(requestParameters: AcceptAnswerRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.acceptAnswerRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates request options for archive without sending the request
@@ -806,6 +946,53 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      */
     async discardDraft(requestParameters: DiscardDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.discardDraftRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for enterLottery without sending the request
+     */
+    async enterLotteryRequestOpts(requestParameters: EnterLotteryRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['enterArticleLotteryReq'] == null) {
+            throw new runtime.RequiredError(
+                'enterArticleLotteryReq',
+                'Required parameter "enterArticleLotteryReq" was null or undefined when calling enterLottery().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/lottery/entry`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: EnterArticleLotteryReqToJSON(requestParameters['enterArticleLotteryReq']),
+        };
+    }
+
+    /**
+     * 报名或撤销抽奖报名。
+     */
+    async enterLotteryRaw(requestParameters: EnterLotteryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.enterLotteryRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 报名或撤销抽奖报名。
+     */
+    async enterLottery(requestParameters: EnterLotteryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.enterLotteryRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1323,6 +1510,53 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      */
     async updateDraft(requestParameters: UpdateDraftRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateDraftArticleResp> {
         const response = await this.updateDraftRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for votePoll without sending the request
+     */
+    async votePollRequestOpts(requestParameters: VotePollRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['voteArticlePollReq'] == null) {
+            throw new runtime.RequiredError(
+                'voteArticlePollReq',
+                'Required parameter "voteArticlePollReq" was null or undefined when calling votePoll().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/poll/vote`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: VoteArticlePollReqToJSON(requestParameters['voteArticlePollReq']),
+        };
+    }
+
+    /**
+     * 提交一次不可修改的文章投票。
+     */
+    async votePollRaw(requestParameters: VotePollRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        const requestOptions = await this.votePollRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * 提交一次不可修改的文章投票。
+     */
+    async votePoll(requestParameters: VotePollRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.votePollRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { RespTopComment } from './RespTopComment';
+import type { RespPinnedComment } from './RespPinnedComment';
 import {
-    RespTopCommentFromJSON,
-    RespTopCommentFromJSONTyped,
-    RespTopCommentToJSON,
-    RespTopCommentToJSONTyped,
-} from './RespTopComment';
+    RespPinnedCommentFromJSON,
+    RespPinnedCommentFromJSONTyped,
+    RespPinnedCommentToJSON,
+    RespPinnedCommentToJSONTyped,
+} from './RespPinnedComment';
 import type { RespCommentThread } from './RespCommentThread';
 import {
     RespCommentThreadFromJSON,
@@ -55,10 +55,16 @@ export interface ListCommentThreadsResp {
     rows?: Array<RespCommentThread>;
     /**
      * 
-     * @type {RespTopComment}
+     * @type {RespPinnedComment}
      * @memberof ListCommentThreadsResp
      */
-    topComment?: RespTopComment;
+    acceptedAnswer?: RespPinnedComment;
+    /**
+     * 
+     * @type {RespPinnedComment}
+     * @memberof ListCommentThreadsResp
+     */
+    pinnedComment?: RespPinnedComment;
 }
 
 /**
@@ -80,7 +86,8 @@ export function ListCommentThreadsRespFromJSONTyped(json: any, ignoreDiscriminat
         
         'page': json['page'] == null ? undefined : PageRespFromJSON(json['page']),
         'rows': json['rows'] == null ? undefined : ((json['rows'] as Array<any>).map(RespCommentThreadFromJSON)),
-        'topComment': json['top_comment'] == null ? undefined : RespTopCommentFromJSON(json['top_comment']),
+        'acceptedAnswer': json['accepted_answer'] == null ? undefined : RespPinnedCommentFromJSON(json['accepted_answer']),
+        'pinnedComment': json['pinned_comment'] == null ? undefined : RespPinnedCommentFromJSON(json['pinned_comment']),
     };
 }
 
@@ -97,7 +104,8 @@ export function ListCommentThreadsRespToJSONTyped(value?: ListCommentThreadsResp
         
         'page': PageRespToJSON(value['page']),
         'rows': value['rows'] == null ? undefined : ((value['rows'] as Array<any>).map(RespCommentThreadToJSON)),
-        'top_comment': RespTopCommentToJSON(value['topComment']),
+        'accepted_answer': RespPinnedCommentToJSON(value['acceptedAnswer']),
+        'pinned_comment': RespPinnedCommentToJSON(value['pinnedComment']),
     };
 }
 

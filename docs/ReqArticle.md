@@ -13,6 +13,8 @@ Name | Type
 `type` | string
 `statement` | string
 `commentable` | boolean
+`poll` | [ArticlePollDraft](ArticlePollDraft.md)
+`lottery` | [ArticleLotteryDraft](ArticleLotteryDraft.md)
 
 ## Example
 
@@ -28,6 +30,8 @@ const example = {
   "type": null,
   "statement": null,
   "commentable": null,
+  "poll": null,
+  "lottery": null,
 } satisfies ReqArticle
 
 console.log(example)

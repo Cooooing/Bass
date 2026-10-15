@@ -62,11 +62,13 @@ All URIs are relative to *http://localhost*
 *AccountService* | [**updatePhone**](docs/AccountService.md#updatephone) | **POST** /v1/user/account/update-phone | 
 *AccountService* | [**updateProfile**](docs/AccountService.md#updateprofile) | **POST** /v1/user/account/update-profile | 
 *ArticleSearchService* | [**search**](docs/ArticleSearchService.md#search) | **POST** /v1/content/article/search | 
+*ArticleService* | [**acceptAnswer**](docs/ArticleService.md#acceptanswer) | **POST** /v1/content/article/answer/accept | 
 *ArticleService* | [**archive**](docs/ArticleService.md#archive) | **POST** /v1/content/article/archive | 
 *ArticleService* | [**cancelPublish**](docs/ArticleService.md#cancelpublish) | **POST** /v1/content/article/publish/cancel | 
 *ArticleService* | [**collect**](docs/ArticleService.md#collect) | **POST** /v1/content/article/collect | 
 *ArticleService* | [**createDraft**](docs/ArticleService.md#createdraft) | **POST** /v1/content/article/draft/create | 
 *ArticleService* | [**discardDraft**](docs/ArticleService.md#discarddraft) | **POST** /v1/content/article/draft/discard | 
+*ArticleService* | [**enterLottery**](docs/ArticleService.md#enterlottery) | **POST** /v1/content/article/lottery/entry | 
 *ArticleService* | [**get**](docs/ArticleService.md#get) | **POST** /v1/content/article/get | 
 *ArticleService* | [**like**](docs/ArticleService.md#like) | **POST** /v1/content/article/like | 
 *ArticleService* | [**list**](docs/ArticleService.md#list) | **POST** /v1/content/article/list | 
@@ -78,6 +80,7 @@ All URIs are relative to *http://localhost*
 *ArticleService* | [**setPinnedComment**](docs/ArticleService.md#setpinnedcomment) | **POST** /v1/content/article/comment/pin | 
 *ArticleService* | [**thank**](docs/ArticleService.md#thank) | **POST** /v1/content/article/thank | 
 *ArticleService* | [**updateDraft**](docs/ArticleService.md#updatedraft) | **POST** /v1/content/article/draft/update | 
+*ArticleService* | [**votePoll**](docs/ArticleService.md#votepoll) | **POST** /v1/content/article/poll/vote | 
 *AuthService* | [**cancelAccount**](docs/AuthService.md#cancelaccount) | **POST** /v1/user/auth/cancel-account | 
 *AuthService* | [**checkRegistrationAvailability**](docs/AuthService.md#checkregistrationavailability) | **GET** /v1/user/auth/register-availability | 
 *AuthService* | [**login**](docs/AuthService.md#login) | **POST** /v1/user/auth/login | 
@@ -134,6 +137,7 @@ All URIs are relative to *http://localhost*
 
 ### Models
 
+- [AcceptArticleAnswerReq](docs/AcceptArticleAnswerReq.md)
 - [AccountContact](docs/AccountContact.md)
 - [AccountProfile](docs/AccountProfile.md)
 - [AccountProfileListItem](docs/AccountProfileListItem.md)
@@ -143,6 +147,13 @@ All URIs are relative to *http://localhost*
 - [ArticleDetail](docs/ArticleDetail.md)
 - [ArticleDomain](docs/ArticleDomain.md)
 - [ArticleListItem](docs/ArticleListItem.md)
+- [ArticleLottery](docs/ArticleLottery.md)
+- [ArticleLotteryDraft](docs/ArticleLotteryDraft.md)
+- [ArticleLotteryPrize](docs/ArticleLotteryPrize.md)
+- [ArticleLotteryPrizeDraft](docs/ArticleLotteryPrizeDraft.md)
+- [ArticlePoll](docs/ArticlePoll.md)
+- [ArticlePollDraft](docs/ArticlePollDraft.md)
+- [ArticlePollOption](docs/ArticlePollOption.md)
 - [ArticlePostscript](docs/ArticlePostscript.md)
 - [ArticleTag](docs/ArticleTag.md)
 - [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
@@ -174,6 +185,7 @@ All URIs are relative to *http://localhost*
 - [CreateTagResp](docs/CreateTagResp.md)
 - [DisableTotpReq](docs/DisableTotpReq.md)
 - [DiscardDraftArticleReq](docs/DiscardDraftArticleReq.md)
+- [EnterArticleLotteryReq](docs/EnterArticleLotteryReq.md)
 - [FollowRelationReq](docs/FollowRelationReq.md)
 - [GetArticleReq](docs/GetArticleReq.md)
 - [GetArticleResp](docs/GetArticleResp.md)
@@ -274,12 +286,12 @@ All URIs are relative to *http://localhost*
 - [RespDomain](docs/RespDomain.md)
 - [RespLocation](docs/RespLocation.md)
 - [RespNotification](docs/RespNotification.md)
+- [RespPinnedComment](docs/RespPinnedComment.md)
 - [RespPreference](docs/RespPreference.md)
 - [RespPrivacySetting](docs/RespPrivacySetting.md)
 - [RespRecord](docs/RespRecord.md)
 - [RespRelationStatus](docs/RespRelationStatus.md)
 - [RespTag](docs/RespTag.md)
-- [RespTopComment](docs/RespTopComment.md)
 - [RespTotp](docs/RespTotp.md)
 - [RewardArticleReq](docs/RewardArticleReq.md)
 - [SearchArticlesReq](docs/SearchArticlesReq.md)
@@ -311,6 +323,7 @@ All URIs are relative to *http://localhost*
 - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
 - [UpdateTagReq](docs/UpdateTagReq.md)
 - [UpdateTagResp](docs/UpdateTagResp.md)
+- [VoteArticlePollReq](docs/VoteArticlePollReq.md)
 
 ### Authorization
 

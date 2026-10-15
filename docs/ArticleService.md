@@ -4,11 +4,13 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
+| [**acceptAnswer**](ArticleService.md#acceptanswer) | **POST** /v1/content/article/answer/accept |  |
 | [**archive**](ArticleService.md#archive) | **POST** /v1/content/article/archive |  |
 | [**cancelPublish**](ArticleService.md#cancelpublish) | **POST** /v1/content/article/publish/cancel |  |
 | [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect |  |
 | [**createDraft**](ArticleService.md#createdraft) | **POST** /v1/content/article/draft/create |  |
 | [**discardDraft**](ArticleService.md#discarddraft) | **POST** /v1/content/article/draft/discard |  |
+| [**enterLottery**](ArticleService.md#enterlottery) | **POST** /v1/content/article/lottery/entry |  |
 | [**get**](ArticleService.md#get) | **POST** /v1/content/article/get |  |
 | [**like**](ArticleService.md#like) | **POST** /v1/content/article/like |  |
 | [**list**](ArticleService.md#list) | **POST** /v1/content/article/list |  |
@@ -20,7 +22,75 @@ All URIs are relative to *http://localhost*
 | [**setPinnedComment**](ArticleService.md#setpinnedcomment) | **POST** /v1/content/article/comment/pin |  |
 | [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
 | [**updateDraft**](ArticleService.md#updatedraft) | **POST** /v1/content/article/draft/update |  |
+| [**votePoll**](ArticleService.md#votepoll) | **POST** /v1/content/article/poll/vote |  |
 
+
+
+## acceptAnswer
+
+> object acceptAnswer(acceptArticleAnswerReq)
+
+
+
+采纳文章回答
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { AcceptAnswerRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // AcceptArticleAnswerReq
+    acceptArticleAnswerReq: ...,
+  } satisfies AcceptAnswerRequest;
+
+  try {
+    const data = await api.acceptAnswer(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **acceptArticleAnswerReq** | [AcceptArticleAnswerReq](AcceptArticleAnswerReq.md) |  | |
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
 ## archive
@@ -335,6 +405,73 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **discardDraftArticleReq** | [DiscardDraftArticleReq](DiscardDraftArticleReq.md) |  | |
+
+### Return type
+
+**object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## enterLottery
+
+> object enterLottery(enterArticleLotteryReq)
+
+
+
+报名或撤销抽奖报名。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { EnterLotteryRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // EnterArticleLotteryReq
+    enterArticleLotteryReq: ...,
+  } satisfies EnterLotteryRequest;
+
+  try {
+    const data = await api.enterLottery(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **enterArticleLotteryReq** | [EnterArticleLotteryReq](EnterArticleLotteryReq.md) |  | |
 
 ### Return type
 
@@ -1076,6 +1213,73 @@ example().catch(console.error);
 ### Return type
 
 [**UpdateDraftArticleResp**](UpdateDraftArticleResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## votePoll
+
+> object votePoll(voteArticlePollReq)
+
+
+
+提交一次不可修改的文章投票。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { VotePollRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // VoteArticlePollReq
+    voteArticlePollReq: ...,
+  } satisfies VotePollRequest;
+
+  try {
+    const data = await api.votePoll(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **voteArticlePollReq** | [VoteArticlePollReq](VoteArticlePollReq.md) |  | |
+
+### Return type
+
+**object**
 
 ### Authorization
 

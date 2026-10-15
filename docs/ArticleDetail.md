@@ -38,6 +38,9 @@ Name | Type
 `tags` | [Array&lt;ArticleTag&gt;](ArticleTag.md)
 `domains` | [Array&lt;ArticleDomain&gt;](ArticleDomain.md)
 `city` | string
+`acceptedCommentId` | string
+`poll` | [ArticlePoll](ArticlePoll.md)
+`lottery` | [ArticleLottery](ArticleLottery.md)
 `createdBy` | string
 `updatedBy` | string
 `createdAt` | Date
@@ -82,6 +85,9 @@ const example = {
   "tags": null,
   "domains": null,
   "city": null,
+  "acceptedCommentId": null,
+  "poll": null,
+  "lottery": null,
   "createdBy": null,
   "updatedBy": null,
   "createdAt": null,

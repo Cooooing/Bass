@@ -24,29 +24,29 @@ import {
 /**
  * 
  * @export
- * @interface RespTopComment
+ * @interface RespPinnedComment
  */
-export interface RespTopComment {
+export interface RespPinnedComment {
     /**
      * 
      * @type {RespCommentThread}
-     * @memberof RespTopComment
+     * @memberof RespPinnedComment
      */
     thread?: RespCommentThread;
 }
 
 /**
- * Check if a given object implements the RespTopComment interface.
+ * Check if a given object implements the RespPinnedComment interface.
  */
-export function instanceOfRespTopComment(value: object): value is RespTopComment {
+export function instanceOfRespPinnedComment(value: object): value is RespPinnedComment {
     return true;
 }
 
-export function RespTopCommentFromJSON(json: any): RespTopComment {
-    return RespTopCommentFromJSONTyped(json, false);
+export function RespPinnedCommentFromJSON(json: any): RespPinnedComment {
+    return RespPinnedCommentFromJSONTyped(json, false);
 }
 
-export function RespTopCommentFromJSONTyped(json: any, ignoreDiscriminator: boolean): RespTopComment {
+export function RespPinnedCommentFromJSONTyped(json: any, ignoreDiscriminator: boolean): RespPinnedComment {
     if (json == null) {
         return json;
     }
@@ -56,11 +56,11 @@ export function RespTopCommentFromJSONTyped(json: any, ignoreDiscriminator: bool
     };
 }
 
-export function RespTopCommentToJSON(json: any): RespTopComment {
-    return RespTopCommentToJSONTyped(json, false);
+export function RespPinnedCommentToJSON(json: any): RespPinnedComment {
+    return RespPinnedCommentToJSONTyped(json, false);
 }
 
-export function RespTopCommentToJSONTyped(value?: RespTopComment | null, ignoreDiscriminator: boolean = false): any {
+export function RespPinnedCommentToJSONTyped(value?: RespPinnedComment | null, ignoreDiscriminator: boolean = false): any {
     if (value == null) {
         return value;
     }

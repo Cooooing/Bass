@@ -8,7 +8,8 @@ Name | Type
 ------------ | -------------
 `page` | [PageResp](PageResp.md)
 `rows` | [Array&lt;RespCommentThread&gt;](RespCommentThread.md)
-`topComment` | [RespTopComment](RespTopComment.md)
+`acceptedAnswer` | [RespPinnedComment](RespPinnedComment.md)
+`pinnedComment` | [RespPinnedComment](RespPinnedComment.md)
 
 ## Example
 
@@ -19,7 +20,8 @@ import type { ListCommentThreadsResp } from '@bass/bbs-sdk-fetch'
 const example = {
   "page": null,
   "rows": null,
-  "topComment": null,
+  "acceptedAnswer": null,
+  "pinnedComment": null,
 } satisfies ListCommentThreadsResp
 
 console.log(example)

@@ -13,6 +13,21 @@
  */
 
 import { mapValues } from '../runtime';
+import type { ArticleLotteryDraft } from './ArticleLotteryDraft';
+import {
+    ArticleLotteryDraftFromJSON,
+    ArticleLotteryDraftFromJSONTyped,
+    ArticleLotteryDraftToJSON,
+    ArticleLotteryDraftToJSONTyped,
+} from './ArticleLotteryDraft';
+import type { ArticlePollDraft } from './ArticlePollDraft';
+import {
+    ArticlePollDraftFromJSON,
+    ArticlePollDraftFromJSONTyped,
+    ArticlePollDraftToJSON,
+    ArticlePollDraftToJSONTyped,
+} from './ArticlePollDraft';
+
 /**
  * 
  * @export
@@ -61,6 +76,18 @@ export interface ReqArticle {
      * @memberof ReqArticle
      */
     commentable?: boolean;
+    /**
+     * 
+     * @type {ArticlePollDraft}
+     * @memberof ReqArticle
+     */
+    poll?: ArticlePollDraft;
+    /**
+     * 
+     * @type {ArticleLotteryDraft}
+     * @memberof ReqArticle
+     */
+    lottery?: ArticleLotteryDraft;
 }
 
 
@@ -105,6 +132,8 @@ export function ReqArticleFromJSONTyped(json: any, ignoreDiscriminator: boolean)
         'type': json['type'],
         'statement': json['statement'] == null ? undefined : json['statement'],
         'commentable': json['commentable'] == null ? undefined : json['commentable'],
+        'poll': json['poll'] == null ? undefined : ArticlePollDraftFromJSON(json['poll']),
+        'lottery': json['lottery'] == null ? undefined : ArticleLotteryDraftFromJSON(json['lottery']),
     };
 }
 
@@ -126,6 +155,8 @@ export function ReqArticleToJSONTyped(value?: ReqArticle | null, ignoreDiscrimin
         'type': value['type'],
         'statement': value['statement'],
         'commentable': value['commentable'],
+        'poll': ArticlePollDraftToJSON(value['poll']),
+        'lottery': ArticleLotteryDraftToJSON(value['lottery']),
     };
 }
 

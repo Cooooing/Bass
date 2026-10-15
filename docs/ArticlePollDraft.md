@@ -1,22 +1,26 @@
 
-# RespTopComment
+# ArticlePollDraft
 
 
 ## Properties
 
 Name | Type
 ------------ | -------------
-`thread` | [RespCommentThread](RespCommentThread.md)
+`options` | Array&lt;string&gt;
+`endsAt` | Date
+`maxChoices` | number
 
 ## Example
 
 ```typescript
-import type { RespTopComment } from '@bass/bbs-sdk-fetch'
+import type { ArticlePollDraft } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "thread": null,
-} satisfies RespTopComment
+  "options": null,
+  "endsAt": null,
+  "maxChoices": null,
+} satisfies ArticlePollDraft
 
 console.log(example)
 
@@ -25,7 +29,7 @@ const exampleJSON: string = JSON.stringify(example)
 console.log(exampleJSON)
 
 // Parse the JSON string back to an object
-const exampleParsed = JSON.parse(exampleJSON) as RespTopComment
+const exampleParsed = JSON.parse(exampleJSON) as ArticlePollDraft
 console.log(exampleParsed)
 ```
 

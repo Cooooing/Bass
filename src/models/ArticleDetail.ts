@@ -27,6 +27,13 @@ import {
     ArticleTagToJSON,
     ArticleTagToJSONTyped,
 } from './ArticleTag';
+import type { ArticlePoll } from './ArticlePoll';
+import {
+    ArticlePollFromJSON,
+    ArticlePollFromJSONTyped,
+    ArticlePollToJSON,
+    ArticlePollToJSONTyped,
+} from './ArticlePoll';
 import type { ArticleViewerActionState } from './ArticleViewerActionState';
 import {
     ArticleViewerActionStateFromJSON,
@@ -41,6 +48,13 @@ import {
     AccountProfileToJSON,
     AccountProfileToJSONTyped,
 } from './AccountProfile';
+import type { ArticleLottery } from './ArticleLottery';
+import {
+    ArticleLotteryFromJSON,
+    ArticleLotteryFromJSONTyped,
+    ArticleLotteryToJSON,
+    ArticleLotteryToJSONTyped,
+} from './ArticleLottery';
 import type { ArticleDomain } from './ArticleDomain';
 import {
     ArticleDomainFromJSON,
@@ -252,6 +266,24 @@ export interface ArticleDetail {
      * @type {string}
      * @memberof ArticleDetail
      */
+    acceptedCommentId?: string;
+    /**
+     * 
+     * @type {ArticlePoll}
+     * @memberof ArticleDetail
+     */
+    poll?: ArticlePoll;
+    /**
+     * 
+     * @type {ArticleLottery}
+     * @memberof ArticleDetail
+     */
+    lottery?: ArticleLottery;
+    /**
+     * 
+     * @type {string}
+     * @memberof ArticleDetail
+     */
     createdBy?: string;
     /**
      * 
@@ -369,6 +401,9 @@ export function ArticleDetailFromJSONTyped(json: any, ignoreDiscriminator: boole
         'tags': json['tags'] == null ? undefined : ((json['tags'] as Array<any>).map(ArticleTagFromJSON)),
         'domains': json['domains'] == null ? undefined : ((json['domains'] as Array<any>).map(ArticleDomainFromJSON)),
         'city': json['city'] == null ? undefined : json['city'],
+        'acceptedCommentId': json['accepted_comment_id'] == null ? undefined : json['accepted_comment_id'],
+        'poll': json['poll'] == null ? undefined : ArticlePollFromJSON(json['poll']),
+        'lottery': json['lottery'] == null ? undefined : ArticleLotteryFromJSON(json['lottery']),
         'createdBy': json['created_by'] == null ? undefined : json['created_by'],
         'updatedBy': json['updated_by'] == null ? undefined : json['updated_by'],
         'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
@@ -419,6 +454,9 @@ export function ArticleDetailToJSONTyped(value?: ArticleDetail | null, ignoreDis
         'tags': value['tags'] == null ? undefined : ((value['tags'] as Array<any>).map(ArticleTagToJSON)),
         'domains': value['domains'] == null ? undefined : ((value['domains'] as Array<any>).map(ArticleDomainToJSON)),
         'city': value['city'],
+        'accepted_comment_id': value['acceptedCommentId'],
+        'poll': ArticlePollToJSON(value['poll']),
+        'lottery': ArticleLotteryToJSON(value['lottery']),
         'created_by': value['createdBy'],
         'updated_by': value['updatedBy'],
         'created_at': value['createdAt'] == null ? value['createdAt'] : value['createdAt'].toISOString(),

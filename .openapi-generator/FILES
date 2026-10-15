@@ -2,6 +2,7 @@
 .npmignore
 .openapi-generator-ignore
 README.md
+docs/AcceptArticleAnswerReq.md
 docs/AccountContact.md
 docs/AccountProfile.md
 docs/AccountProfileListItem.md
@@ -12,6 +13,13 @@ docs/ArchiveArticleReq.md
 docs/ArticleDetail.md
 docs/ArticleDomain.md
 docs/ArticleListItem.md
+docs/ArticleLottery.md
+docs/ArticleLotteryDraft.md
+docs/ArticleLotteryPrize.md
+docs/ArticleLotteryPrizeDraft.md
+docs/ArticlePoll.md
+docs/ArticlePollDraft.md
+docs/ArticlePollOption.md
 docs/ArticlePostscript.md
 docs/ArticleSearchService.md
 docs/ArticleService.md
@@ -49,6 +57,7 @@ docs/CreateTagResp.md
 docs/DisableTotpReq.md
 docs/DiscardDraftArticleReq.md
 docs/DomainService.md
+docs/EnterArticleLotteryReq.md
 docs/FollowRelationReq.md
 docs/GetArticleReq.md
 docs/GetArticleResp.md
@@ -157,12 +166,12 @@ docs/RespCurrentAccount.md
 docs/RespDomain.md
 docs/RespLocation.md
 docs/RespNotification.md
+docs/RespPinnedComment.md
 docs/RespPreference.md
 docs/RespPrivacySetting.md
 docs/RespRecord.md
 docs/RespRelationStatus.md
 docs/RespTag.md
-docs/RespTopComment.md
 docs/RespTotp.md
 docs/RewardArticleReq.md
 docs/SearchArticlesReq.md
@@ -195,6 +204,7 @@ docs/UpdateProfileAccountReq.md
 docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
+docs/VoteArticlePollReq.md
 package.json
 src/apis/AccountService.ts
 src/apis/ArticleSearchService.ts
@@ -214,6 +224,7 @@ src/apis/RelationService.ts
 src/apis/TagService.ts
 src/apis/index.ts
 src/index.ts
+src/models/AcceptArticleAnswerReq.ts
 src/models/AccountContact.ts
 src/models/AccountProfile.ts
 src/models/AccountProfileListItem.ts
@@ -223,6 +234,13 @@ src/models/ArchiveArticleReq.ts
 src/models/ArticleDetail.ts
 src/models/ArticleDomain.ts
 src/models/ArticleListItem.ts
+src/models/ArticleLottery.ts
+src/models/ArticleLotteryDraft.ts
+src/models/ArticleLotteryPrize.ts
+src/models/ArticleLotteryPrizeDraft.ts
+src/models/ArticlePoll.ts
+src/models/ArticlePollDraft.ts
+src/models/ArticlePollOption.ts
 src/models/ArticlePostscript.ts
 src/models/ArticleTag.ts
 src/models/ArticleViewHistoryItem.ts
@@ -254,6 +272,7 @@ src/models/CreateTagReq.ts
 src/models/CreateTagResp.ts
 src/models/DisableTotpReq.ts
 src/models/DiscardDraftArticleReq.ts
+src/models/EnterArticleLotteryReq.ts
 src/models/FollowRelationReq.ts
 src/models/GetArticleReq.ts
 src/models/GetArticleResp.ts
@@ -354,12 +373,12 @@ src/models/RespCurrentAccount.ts
 src/models/RespDomain.ts
 src/models/RespLocation.ts
 src/models/RespNotification.ts
+src/models/RespPinnedComment.ts
 src/models/RespPreference.ts
 src/models/RespPrivacySetting.ts
 src/models/RespRecord.ts
 src/models/RespRelationStatus.ts
 src/models/RespTag.ts
-src/models/RespTopComment.ts
 src/models/RespTotp.ts
 src/models/RewardArticleReq.ts
 src/models/SearchArticlesReq.ts
@@ -391,6 +410,7 @@ src/models/UpdateProfileAccountReq.ts
 src/models/UpdateProfileAccountResp.ts
 src/models/UpdateTagReq.ts
 src/models/UpdateTagResp.ts
+src/models/VoteArticlePollReq.ts
 src/models/index.ts
 src/runtime.ts
 tsconfig.esm.json

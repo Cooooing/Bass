@@ -11,6 +11,8 @@ Name | Type | Description | Notes
 **Type** | **string** |  | 
 **Statement** | Pointer to **string** |  | [optional] 
 **Commentable** | Pointer to **bool** |  | [optional] 
+**Poll** | Pointer to [**ArticlePollDraft**](ArticlePollDraft.md) |  | [optional] 
+**Lottery** | Pointer to [**ArticleLotteryDraft**](ArticleLotteryDraft.md) |  | [optional] 
 
 ## Methods
 
@@ -190,6 +192,56 @@ SetCommentable sets Commentable field to given value.
 `func (o *ReqArticle) HasCommentable() bool`
 
 HasCommentable returns a boolean if a field has been set.
+
+### GetPoll
+
+`func (o *ReqArticle) GetPoll() ArticlePollDraft`
+
+GetPoll returns the Poll field if non-nil, zero value otherwise.
+
+### GetPollOk
+
+`func (o *ReqArticle) GetPollOk() (*ArticlePollDraft, bool)`
+
+GetPollOk returns a tuple with the Poll field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPoll
+
+`func (o *ReqArticle) SetPoll(v ArticlePollDraft)`
+
+SetPoll sets Poll field to given value.
+
+### HasPoll
+
+`func (o *ReqArticle) HasPoll() bool`
+
+HasPoll returns a boolean if a field has been set.
+
+### GetLottery
+
+`func (o *ReqArticle) GetLottery() ArticleLotteryDraft`
+
+GetLottery returns the Lottery field if non-nil, zero value otherwise.
+
+### GetLotteryOk
+
+`func (o *ReqArticle) GetLotteryOk() (*ArticleLotteryDraft, bool)`
+
+GetLotteryOk returns a tuple with the Lottery field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLottery
+
+`func (o *ReqArticle) SetLottery(v ArticleLotteryDraft)`
+
+SetLottery sets Lottery field to given value.
+
+### HasLottery
+
+`func (o *ReqArticle) HasLottery() bool`
+
+HasLottery returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

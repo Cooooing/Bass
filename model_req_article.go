@@ -28,6 +28,8 @@ type ReqArticle struct {
 	Type string `json:"type"`
 	Statement *string `json:"statement,omitempty"`
 	Commentable *bool `json:"commentable,omitempty"`
+	Poll *ArticlePollDraft `json:"poll,omitempty"`
+	Lottery *ArticleLotteryDraft `json:"lottery,omitempty"`
 }
 
 type _ReqArticle ReqArticle
@@ -252,6 +254,70 @@ func (o *ReqArticle) SetCommentable(v bool) {
 	o.Commentable = &v
 }
 
+// GetPoll returns the Poll field value if set, zero value otherwise.
+func (o *ReqArticle) GetPoll() ArticlePollDraft {
+	if o == nil || IsNil(o.Poll) {
+		var ret ArticlePollDraft
+		return ret
+	}
+	return *o.Poll
+}
+
+// GetPollOk returns a tuple with the Poll field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ReqArticle) GetPollOk() (*ArticlePollDraft, bool) {
+	if o == nil || IsNil(o.Poll) {
+		return nil, false
+	}
+	return o.Poll, true
+}
+
+// HasPoll returns a boolean if a field has been set.
+func (o *ReqArticle) HasPoll() bool {
+	if o != nil && !IsNil(o.Poll) {
+		return true
+	}
+
+	return false
+}
+
+// SetPoll gets a reference to the given ArticlePollDraft and assigns it to the Poll field.
+func (o *ReqArticle) SetPoll(v ArticlePollDraft) {
+	o.Poll = &v
+}
+
+// GetLottery returns the Lottery field value if set, zero value otherwise.
+func (o *ReqArticle) GetLottery() ArticleLotteryDraft {
+	if o == nil || IsNil(o.Lottery) {
+		var ret ArticleLotteryDraft
+		return ret
+	}
+	return *o.Lottery
+}
+
+// GetLotteryOk returns a tuple with the Lottery field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ReqArticle) GetLotteryOk() (*ArticleLotteryDraft, bool) {
+	if o == nil || IsNil(o.Lottery) {
+		return nil, false
+	}
+	return o.Lottery, true
+}
+
+// HasLottery returns a boolean if a field has been set.
+func (o *ReqArticle) HasLottery() bool {
+	if o != nil && !IsNil(o.Lottery) {
+		return true
+	}
+
+	return false
+}
+
+// SetLottery gets a reference to the given ArticleLotteryDraft and assigns it to the Lottery field.
+func (o *ReqArticle) SetLottery(v ArticleLotteryDraft) {
+	o.Lottery = &v
+}
+
 func (o ReqArticle) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -276,6 +342,12 @@ func (o ReqArticle) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Commentable) {
 		toSerialize["commentable"] = o.Commentable
+	}
+	if !IsNil(o.Poll) {
+		toSerialize["poll"] = o.Poll
+	}
+	if !IsNil(o.Lottery) {
+		toSerialize["lottery"] = o.Lottery
 	}
 	return toSerialize, nil
 }

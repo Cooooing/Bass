@@ -36,6 +36,9 @@ Name | Type | Description | Notes
 **Tags** | Pointer to [**[]ArticleTag**](ArticleTag.md) |  | [optional] 
 **Domains** | Pointer to [**[]ArticleDomain**](ArticleDomain.md) |  | [optional] 
 **City** | Pointer to **string** |  | [optional] 
+**AcceptedCommentId** | Pointer to **string** |  | [optional] 
+**Poll** | Pointer to [**ArticlePoll**](ArticlePoll.md) |  | [optional] 
+**Lottery** | Pointer to [**ArticleLottery**](ArticleLottery.md) |  | [optional] 
 **CreatedBy** | Pointer to **string** |  | [optional] 
 **UpdatedBy** | Pointer to **string** |  | [optional] 
 **CreatedAt** | Pointer to **time.Time** |  | [optional] 
@@ -859,6 +862,81 @@ SetCity sets City field to given value.
 `func (o *ArticleDetail) HasCity() bool`
 
 HasCity returns a boolean if a field has been set.
+
+### GetAcceptedCommentId
+
+`func (o *ArticleDetail) GetAcceptedCommentId() string`
+
+GetAcceptedCommentId returns the AcceptedCommentId field if non-nil, zero value otherwise.
+
+### GetAcceptedCommentIdOk
+
+`func (o *ArticleDetail) GetAcceptedCommentIdOk() (*string, bool)`
+
+GetAcceptedCommentIdOk returns a tuple with the AcceptedCommentId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAcceptedCommentId
+
+`func (o *ArticleDetail) SetAcceptedCommentId(v string)`
+
+SetAcceptedCommentId sets AcceptedCommentId field to given value.
+
+### HasAcceptedCommentId
+
+`func (o *ArticleDetail) HasAcceptedCommentId() bool`
+
+HasAcceptedCommentId returns a boolean if a field has been set.
+
+### GetPoll
+
+`func (o *ArticleDetail) GetPoll() ArticlePoll`
+
+GetPoll returns the Poll field if non-nil, zero value otherwise.
+
+### GetPollOk
+
+`func (o *ArticleDetail) GetPollOk() (*ArticlePoll, bool)`
+
+GetPollOk returns a tuple with the Poll field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPoll
+
+`func (o *ArticleDetail) SetPoll(v ArticlePoll)`
+
+SetPoll sets Poll field to given value.
+
+### HasPoll
+
+`func (o *ArticleDetail) HasPoll() bool`
+
+HasPoll returns a boolean if a field has been set.
+
+### GetLottery
+
+`func (o *ArticleDetail) GetLottery() ArticleLottery`
+
+GetLottery returns the Lottery field if non-nil, zero value otherwise.
+
+### GetLotteryOk
+
+`func (o *ArticleDetail) GetLotteryOk() (*ArticleLottery, bool)`
+
+GetLotteryOk returns a tuple with the Lottery field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLottery
+
+`func (o *ArticleDetail) SetLottery(v ArticleLottery)`
+
+SetLottery sets Lottery field to given value.
+
+### HasLottery
+
+`func (o *ArticleDetail) HasLottery() bool`
+
+HasLottery returns a boolean if a field has been set.
 
 ### GetCreatedBy
 

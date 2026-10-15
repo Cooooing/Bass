@@ -21,7 +21,8 @@ var _ MappedNullable = &ListCommentThreadsResp{}
 type ListCommentThreadsResp struct {
 	Page *PageResp `json:"page,omitempty"`
 	Rows []RespCommentThread `json:"rows,omitempty"`
-	TopComment *RespTopComment `json:"top_comment,omitempty"`
+	AcceptedAnswer *RespPinnedComment `json:"accepted_answer,omitempty"`
+	PinnedComment *RespPinnedComment `json:"pinned_comment,omitempty"`
 }
 
 // NewListCommentThreadsResp instantiates a new ListCommentThreadsResp object
@@ -105,36 +106,68 @@ func (o *ListCommentThreadsResp) SetRows(v []RespCommentThread) {
 	o.Rows = v
 }
 
-// GetTopComment returns the TopComment field value if set, zero value otherwise.
-func (o *ListCommentThreadsResp) GetTopComment() RespTopComment {
-	if o == nil || IsNil(o.TopComment) {
-		var ret RespTopComment
+// GetAcceptedAnswer returns the AcceptedAnswer field value if set, zero value otherwise.
+func (o *ListCommentThreadsResp) GetAcceptedAnswer() RespPinnedComment {
+	if o == nil || IsNil(o.AcceptedAnswer) {
+		var ret RespPinnedComment
 		return ret
 	}
-	return *o.TopComment
+	return *o.AcceptedAnswer
 }
 
-// GetTopCommentOk returns a tuple with the TopComment field value if set, nil otherwise
+// GetAcceptedAnswerOk returns a tuple with the AcceptedAnswer field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *ListCommentThreadsResp) GetTopCommentOk() (*RespTopComment, bool) {
-	if o == nil || IsNil(o.TopComment) {
+func (o *ListCommentThreadsResp) GetAcceptedAnswerOk() (*RespPinnedComment, bool) {
+	if o == nil || IsNil(o.AcceptedAnswer) {
 		return nil, false
 	}
-	return o.TopComment, true
+	return o.AcceptedAnswer, true
 }
 
-// HasTopComment returns a boolean if a field has been set.
-func (o *ListCommentThreadsResp) HasTopComment() bool {
-	if o != nil && !IsNil(o.TopComment) {
+// HasAcceptedAnswer returns a boolean if a field has been set.
+func (o *ListCommentThreadsResp) HasAcceptedAnswer() bool {
+	if o != nil && !IsNil(o.AcceptedAnswer) {
 		return true
 	}
 
 	return false
 }
 
-// SetTopComment gets a reference to the given RespTopComment and assigns it to the TopComment field.
-func (o *ListCommentThreadsResp) SetTopComment(v RespTopComment) {
-	o.TopComment = &v
+// SetAcceptedAnswer gets a reference to the given RespPinnedComment and assigns it to the AcceptedAnswer field.
+func (o *ListCommentThreadsResp) SetAcceptedAnswer(v RespPinnedComment) {
+	o.AcceptedAnswer = &v
+}
+
+// GetPinnedComment returns the PinnedComment field value if set, zero value otherwise.
+func (o *ListCommentThreadsResp) GetPinnedComment() RespPinnedComment {
+	if o == nil || IsNil(o.PinnedComment) {
+		var ret RespPinnedComment
+		return ret
+	}
+	return *o.PinnedComment
+}
+
+// GetPinnedCommentOk returns a tuple with the PinnedComment field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ListCommentThreadsResp) GetPinnedCommentOk() (*RespPinnedComment, bool) {
+	if o == nil || IsNil(o.PinnedComment) {
+		return nil, false
+	}
+	return o.PinnedComment, true
+}
+
+// HasPinnedComment returns a boolean if a field has been set.
+func (o *ListCommentThreadsResp) HasPinnedComment() bool {
+	if o != nil && !IsNil(o.PinnedComment) {
+		return true
+	}
+
+	return false
+}
+
+// SetPinnedComment gets a reference to the given RespPinnedComment and assigns it to the PinnedComment field.
+func (o *ListCommentThreadsResp) SetPinnedComment(v RespPinnedComment) {
+	o.PinnedComment = &v
 }
 
 func (o ListCommentThreadsResp) MarshalJSON() ([]byte, error) {
@@ -153,8 +186,11 @@ func (o ListCommentThreadsResp) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Rows) {
 		toSerialize["rows"] = o.Rows
 	}
-	if !IsNil(o.TopComment) {
-		toSerialize["top_comment"] = o.TopComment
+	if !IsNil(o.AcceptedAnswer) {
+		toSerialize["accepted_answer"] = o.AcceptedAnswer
+	}
+	if !IsNil(o.PinnedComment) {
+		toSerialize["pinned_comment"] = o.PinnedComment
 	}
 	return toSerialize, nil
 }

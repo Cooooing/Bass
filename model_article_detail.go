@@ -52,6 +52,9 @@ type ArticleDetail struct {
 	Tags []ArticleTag `json:"tags,omitempty"`
 	Domains []ArticleDomain `json:"domains,omitempty"`
 	City *string `json:"city,omitempty"`
+	AcceptedCommentId *string `json:"accepted_comment_id,omitempty"`
+	Poll *ArticlePoll `json:"poll,omitempty"`
+	Lottery *ArticleLottery `json:"lottery,omitempty"`
 	CreatedBy *string `json:"created_by,omitempty"`
 	UpdatedBy *string `json:"updated_by,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
@@ -1099,6 +1102,102 @@ func (o *ArticleDetail) SetCity(v string) {
 	o.City = &v
 }
 
+// GetAcceptedCommentId returns the AcceptedCommentId field value if set, zero value otherwise.
+func (o *ArticleDetail) GetAcceptedCommentId() string {
+	if o == nil || IsNil(o.AcceptedCommentId) {
+		var ret string
+		return ret
+	}
+	return *o.AcceptedCommentId
+}
+
+// GetAcceptedCommentIdOk returns a tuple with the AcceptedCommentId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleDetail) GetAcceptedCommentIdOk() (*string, bool) {
+	if o == nil || IsNil(o.AcceptedCommentId) {
+		return nil, false
+	}
+	return o.AcceptedCommentId, true
+}
+
+// HasAcceptedCommentId returns a boolean if a field has been set.
+func (o *ArticleDetail) HasAcceptedCommentId() bool {
+	if o != nil && !IsNil(o.AcceptedCommentId) {
+		return true
+	}
+
+	return false
+}
+
+// SetAcceptedCommentId gets a reference to the given string and assigns it to the AcceptedCommentId field.
+func (o *ArticleDetail) SetAcceptedCommentId(v string) {
+	o.AcceptedCommentId = &v
+}
+
+// GetPoll returns the Poll field value if set, zero value otherwise.
+func (o *ArticleDetail) GetPoll() ArticlePoll {
+	if o == nil || IsNil(o.Poll) {
+		var ret ArticlePoll
+		return ret
+	}
+	return *o.Poll
+}
+
+// GetPollOk returns a tuple with the Poll field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleDetail) GetPollOk() (*ArticlePoll, bool) {
+	if o == nil || IsNil(o.Poll) {
+		return nil, false
+	}
+	return o.Poll, true
+}
+
+// HasPoll returns a boolean if a field has been set.
+func (o *ArticleDetail) HasPoll() bool {
+	if o != nil && !IsNil(o.Poll) {
+		return true
+	}
+
+	return false
+}
+
+// SetPoll gets a reference to the given ArticlePoll and assigns it to the Poll field.
+func (o *ArticleDetail) SetPoll(v ArticlePoll) {
+	o.Poll = &v
+}
+
+// GetLottery returns the Lottery field value if set, zero value otherwise.
+func (o *ArticleDetail) GetLottery() ArticleLottery {
+	if o == nil || IsNil(o.Lottery) {
+		var ret ArticleLottery
+		return ret
+	}
+	return *o.Lottery
+}
+
+// GetLotteryOk returns a tuple with the Lottery field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleDetail) GetLotteryOk() (*ArticleLottery, bool) {
+	if o == nil || IsNil(o.Lottery) {
+		return nil, false
+	}
+	return o.Lottery, true
+}
+
+// HasLottery returns a boolean if a field has been set.
+func (o *ArticleDetail) HasLottery() bool {
+	if o != nil && !IsNil(o.Lottery) {
+		return true
+	}
+
+	return false
+}
+
+// SetLottery gets a reference to the given ArticleLottery and assigns it to the Lottery field.
+func (o *ArticleDetail) SetLottery(v ArticleLottery) {
+	o.Lottery = &v
+}
+
 // GetCreatedBy returns the CreatedBy field value if set, zero value otherwise.
 func (o *ArticleDetail) GetCreatedBy() string {
 	if o == nil || IsNil(o.CreatedBy) {
@@ -1332,6 +1431,15 @@ func (o ArticleDetail) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.City) {
 		toSerialize["city"] = o.City
+	}
+	if !IsNil(o.AcceptedCommentId) {
+		toSerialize["accepted_comment_id"] = o.AcceptedCommentId
+	}
+	if !IsNil(o.Poll) {
+		toSerialize["poll"] = o.Poll
+	}
+	if !IsNil(o.Lottery) {
+		toSerialize["lottery"] = o.Lottery
 	}
 	if !IsNil(o.CreatedBy) {
 		toSerialize["created_by"] = o.CreatedBy

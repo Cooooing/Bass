@@ -83,11 +83,13 @@ Class | Method | HTTP request | Description
 *AccountService* | [**UpdatePhone**](docs/AccountService.md#updatephone) | **Post** /v1/user/account/update-phone | 
 *AccountService* | [**UpdateProfile**](docs/AccountService.md#updateprofile) | **Post** /v1/user/account/update-profile | 
 *ArticleSearchService* | [**Search**](docs/ArticleSearchService.md#search) | **Post** /v1/content/article/search | 
+*ArticleService* | [**AcceptAnswer**](docs/ArticleService.md#acceptanswer) | **Post** /v1/content/article/answer/accept | 
 *ArticleService* | [**Archive**](docs/ArticleService.md#archive) | **Post** /v1/content/article/archive | 
 *ArticleService* | [**CancelPublish**](docs/ArticleService.md#cancelpublish) | **Post** /v1/content/article/publish/cancel | 
 *ArticleService* | [**Collect**](docs/ArticleService.md#collect) | **Post** /v1/content/article/collect | 
 *ArticleService* | [**CreateDraft**](docs/ArticleService.md#createdraft) | **Post** /v1/content/article/draft/create | 
 *ArticleService* | [**DiscardDraft**](docs/ArticleService.md#discarddraft) | **Post** /v1/content/article/draft/discard | 
+*ArticleService* | [**EnterLottery**](docs/ArticleService.md#enterlottery) | **Post** /v1/content/article/lottery/entry | 
 *ArticleService* | [**Get**](docs/ArticleService.md#get) | **Post** /v1/content/article/get | 
 *ArticleService* | [**Like**](docs/ArticleService.md#like) | **Post** /v1/content/article/like | 
 *ArticleService* | [**List**](docs/ArticleService.md#list) | **Post** /v1/content/article/list | 
@@ -99,6 +101,7 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**SetPinnedComment**](docs/ArticleService.md#setpinnedcomment) | **Post** /v1/content/article/comment/pin | 
 *ArticleService* | [**Thank**](docs/ArticleService.md#thank) | **Post** /v1/content/article/thank | 
 *ArticleService* | [**UpdateDraft**](docs/ArticleService.md#updatedraft) | **Post** /v1/content/article/draft/update | 
+*ArticleService* | [**VotePoll**](docs/ArticleService.md#votepoll) | **Post** /v1/content/article/poll/vote | 
 *AuthService* | [**CancelAccount**](docs/AuthService.md#cancelaccount) | **Post** /v1/user/auth/cancel-account | 
 *AuthService* | [**CheckRegistrationAvailability**](docs/AuthService.md#checkregistrationavailability) | **Get** /v1/user/auth/register-availability | 
 *AuthService* | [**Login**](docs/AuthService.md#login) | **Post** /v1/user/auth/login | 
@@ -155,6 +158,7 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [AcceptArticleAnswerReq](docs/AcceptArticleAnswerReq.md)
  - [AccountContact](docs/AccountContact.md)
  - [AccountProfile](docs/AccountProfile.md)
  - [AccountProfileListItem](docs/AccountProfileListItem.md)
@@ -164,6 +168,13 @@ Class | Method | HTTP request | Description
  - [ArticleDetail](docs/ArticleDetail.md)
  - [ArticleDomain](docs/ArticleDomain.md)
  - [ArticleListItem](docs/ArticleListItem.md)
+ - [ArticleLottery](docs/ArticleLottery.md)
+ - [ArticleLotteryDraft](docs/ArticleLotteryDraft.md)
+ - [ArticleLotteryPrize](docs/ArticleLotteryPrize.md)
+ - [ArticleLotteryPrizeDraft](docs/ArticleLotteryPrizeDraft.md)
+ - [ArticlePoll](docs/ArticlePoll.md)
+ - [ArticlePollDraft](docs/ArticlePollDraft.md)
+ - [ArticlePollOption](docs/ArticlePollOption.md)
  - [ArticlePostscript](docs/ArticlePostscript.md)
  - [ArticleTag](docs/ArticleTag.md)
  - [ArticleViewHistoryItem](docs/ArticleViewHistoryItem.md)
@@ -195,6 +206,7 @@ Class | Method | HTTP request | Description
  - [CreateTagResp](docs/CreateTagResp.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
  - [DiscardDraftArticleReq](docs/DiscardDraftArticleReq.md)
+ - [EnterArticleLotteryReq](docs/EnterArticleLotteryReq.md)
  - [FollowRelationReq](docs/FollowRelationReq.md)
  - [GetArticleReq](docs/GetArticleReq.md)
  - [GetArticleResp](docs/GetArticleResp.md)
@@ -295,12 +307,12 @@ Class | Method | HTTP request | Description
  - [RespDomain](docs/RespDomain.md)
  - [RespLocation](docs/RespLocation.md)
  - [RespNotification](docs/RespNotification.md)
+ - [RespPinnedComment](docs/RespPinnedComment.md)
  - [RespPreference](docs/RespPreference.md)
  - [RespPrivacySetting](docs/RespPrivacySetting.md)
  - [RespRecord](docs/RespRecord.md)
  - [RespRelationStatus](docs/RespRelationStatus.md)
  - [RespTag](docs/RespTag.md)
- - [RespTopComment](docs/RespTopComment.md)
  - [RespTotp](docs/RespTotp.md)
  - [RewardArticleReq](docs/RewardArticleReq.md)
  - [SearchArticlesReq](docs/SearchArticlesReq.md)
@@ -332,6 +344,7 @@ Class | Method | HTTP request | Description
  - [UpdateProfileAccountResp](docs/UpdateProfileAccountResp.md)
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
+ - [VoteArticlePollReq](docs/VoteArticlePollReq.md)
 
 
 ## Documentation For Authorization

@@ -22,6 +22,20 @@ import (
 type ArticleService interface {
 
 	/*
+	AcceptAnswer Method for AcceptAnswer
+
+	采纳文章回答
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiAcceptAnswerRequest
+	*/
+	AcceptAnswer(ctx context.Context) ApiAcceptAnswerRequest
+
+	// AcceptAnswerExecute executes the request
+	//  @return map[string]interface{}
+	AcceptAnswerExecute(r ApiAcceptAnswerRequest) (map[string]interface{}, *http.Response, error)
+
+	/*
 	Archive Method for Archive
 
 	归档文章
@@ -90,6 +104,20 @@ type ArticleService interface {
 	// DiscardDraftExecute executes the request
 	//  @return map[string]interface{}
 	DiscardDraftExecute(r ApiDiscardDraftRequest) (map[string]interface{}, *http.Response, error)
+
+	/*
+	EnterLottery Method for EnterLottery
+
+	报名或撤销抽奖报名。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiEnterLotteryRequest
+	*/
+	EnterLottery(ctx context.Context) ApiEnterLotteryRequest
+
+	// EnterLotteryExecute executes the request
+	//  @return map[string]interface{}
+	EnterLotteryExecute(r ApiEnterLotteryRequest) (map[string]interface{}, *http.Response, error)
 
 	/*
 	Get Method for Get
@@ -244,10 +272,134 @@ type ArticleService interface {
 	// UpdateDraftExecute executes the request
 	//  @return UpdateDraftArticleResp
 	UpdateDraftExecute(r ApiUpdateDraftRequest) (*UpdateDraftArticleResp, *http.Response, error)
+
+	/*
+	VotePoll Method for VotePoll
+
+	提交一次不可修改的文章投票。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiVotePollRequest
+	*/
+	VotePoll(ctx context.Context) ApiVotePollRequest
+
+	// VotePollExecute executes the request
+	//  @return map[string]interface{}
+	VotePollExecute(r ApiVotePollRequest) (map[string]interface{}, *http.Response, error)
 }
 
 // ArticleServiceService ArticleService service
 type ArticleServiceService service
+
+type ApiAcceptAnswerRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	acceptArticleAnswerReq *AcceptArticleAnswerReq
+}
+
+func (r ApiAcceptAnswerRequest) AcceptArticleAnswerReq(acceptArticleAnswerReq AcceptArticleAnswerReq) ApiAcceptAnswerRequest {
+	r.acceptArticleAnswerReq = &acceptArticleAnswerReq
+	return r
+}
+
+func (r ApiAcceptAnswerRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.AcceptAnswerExecute(r)
+}
+
+/*
+AcceptAnswer Method for AcceptAnswer
+
+采纳文章回答
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiAcceptAnswerRequest
+*/
+func (a *ArticleServiceService) AcceptAnswer(ctx context.Context) ApiAcceptAnswerRequest {
+	return ApiAcceptAnswerRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return map[string]interface{}
+func (a *ArticleServiceService) AcceptAnswerExecute(r ApiAcceptAnswerRequest) (map[string]interface{}, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.AcceptAnswer")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/answer/accept"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.acceptArticleAnswerReq == nil {
+		return localVarReturnValue, nil, reportError("acceptArticleAnswerReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.acceptArticleAnswerReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
 
 type ApiArchiveRequest struct {
 	ctx context.Context
@@ -762,6 +914,116 @@ func (a *ArticleServiceService) DiscardDraftExecute(r ApiDiscardDraftRequest) (m
 	}
 	// body params
 	localVarPostBody = r.discardDraftArticleReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiEnterLotteryRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	enterArticleLotteryReq *EnterArticleLotteryReq
+}
+
+func (r ApiEnterLotteryRequest) EnterArticleLotteryReq(enterArticleLotteryReq EnterArticleLotteryReq) ApiEnterLotteryRequest {
+	r.enterArticleLotteryReq = &enterArticleLotteryReq
+	return r
+}
+
+func (r ApiEnterLotteryRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.EnterLotteryExecute(r)
+}
+
+/*
+EnterLottery Method for EnterLottery
+
+报名或撤销抽奖报名。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiEnterLotteryRequest
+*/
+func (a *ArticleServiceService) EnterLottery(ctx context.Context) ApiEnterLotteryRequest {
+	return ApiEnterLotteryRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return map[string]interface{}
+func (a *ArticleServiceService) EnterLotteryExecute(r ApiEnterLotteryRequest) (map[string]interface{}, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.EnterLottery")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/lottery/entry"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.enterArticleLotteryReq == nil {
+		return localVarReturnValue, nil, reportError("enterArticleLotteryReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.enterArticleLotteryReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err
@@ -1972,6 +2234,116 @@ func (a *ArticleServiceService) UpdateDraftExecute(r ApiUpdateDraftRequest) (*Up
 	}
 	// body params
 	localVarPostBody = r.updateDraftArticleReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiVotePollRequest struct {
+	ctx context.Context
+	ApiService ArticleService
+	voteArticlePollReq *VoteArticlePollReq
+}
+
+func (r ApiVotePollRequest) VoteArticlePollReq(voteArticlePollReq VoteArticlePollReq) ApiVotePollRequest {
+	r.voteArticlePollReq = &voteArticlePollReq
+	return r
+}
+
+func (r ApiVotePollRequest) Execute() (map[string]interface{}, *http.Response, error) {
+	return r.ApiService.VotePollExecute(r)
+}
+
+/*
+VotePoll Method for VotePoll
+
+提交一次不可修改的文章投票。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiVotePollRequest
+*/
+func (a *ArticleServiceService) VotePoll(ctx context.Context) ApiVotePollRequest {
+	return ApiVotePollRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return map[string]interface{}
+func (a *ArticleServiceService) VotePollExecute(r ApiVotePollRequest) (map[string]interface{}, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  map[string]interface{}
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "ArticleServiceService.VotePoll")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/content/article/poll/vote"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.voteArticlePollReq == nil {
+		return localVarReturnValue, nil, reportError("voteArticlePollReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.voteArticlePollReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

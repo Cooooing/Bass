@@ -14,33 +14,33 @@ import (
 	"encoding/json"
 )
 
-// checks if the RespTopComment type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &RespTopComment{}
+// checks if the RespPinnedComment type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &RespPinnedComment{}
 
-// RespTopComment struct for RespTopComment
-type RespTopComment struct {
+// RespPinnedComment struct for RespPinnedComment
+type RespPinnedComment struct {
 	Thread *RespCommentThread `json:"thread,omitempty"`
 }
 
-// NewRespTopComment instantiates a new RespTopComment object
+// NewRespPinnedComment instantiates a new RespPinnedComment object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewRespTopComment() *RespTopComment {
-	this := RespTopComment{}
+func NewRespPinnedComment() *RespPinnedComment {
+	this := RespPinnedComment{}
 	return &this
 }
 
-// NewRespTopCommentWithDefaults instantiates a new RespTopComment object
+// NewRespPinnedCommentWithDefaults instantiates a new RespPinnedComment object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewRespTopCommentWithDefaults() *RespTopComment {
-	this := RespTopComment{}
+func NewRespPinnedCommentWithDefaults() *RespPinnedComment {
+	this := RespPinnedComment{}
 	return &this
 }
 
 // GetThread returns the Thread field value if set, zero value otherwise.
-func (o *RespTopComment) GetThread() RespCommentThread {
+func (o *RespPinnedComment) GetThread() RespCommentThread {
 	if o == nil || IsNil(o.Thread) {
 		var ret RespCommentThread
 		return ret
@@ -50,7 +50,7 @@ func (o *RespTopComment) GetThread() RespCommentThread {
 
 // GetThreadOk returns a tuple with the Thread field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RespTopComment) GetThreadOk() (*RespCommentThread, bool) {
+func (o *RespPinnedComment) GetThreadOk() (*RespCommentThread, bool) {
 	if o == nil || IsNil(o.Thread) {
 		return nil, false
 	}
@@ -58,7 +58,7 @@ func (o *RespTopComment) GetThreadOk() (*RespCommentThread, bool) {
 }
 
 // HasThread returns a boolean if a field has been set.
-func (o *RespTopComment) HasThread() bool {
+func (o *RespPinnedComment) HasThread() bool {
 	if o != nil && !IsNil(o.Thread) {
 		return true
 	}
@@ -67,11 +67,11 @@ func (o *RespTopComment) HasThread() bool {
 }
 
 // SetThread gets a reference to the given RespCommentThread and assigns it to the Thread field.
-func (o *RespTopComment) SetThread(v RespCommentThread) {
+func (o *RespPinnedComment) SetThread(v RespCommentThread) {
 	o.Thread = &v
 }
 
-func (o RespTopComment) MarshalJSON() ([]byte, error) {
+func (o RespPinnedComment) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -79,7 +79,7 @@ func (o RespTopComment) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o RespTopComment) ToMap() (map[string]interface{}, error) {
+func (o RespPinnedComment) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Thread) {
 		toSerialize["thread"] = o.Thread
@@ -87,38 +87,38 @@ func (o RespTopComment) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-type NullableRespTopComment struct {
-	value *RespTopComment
+type NullableRespPinnedComment struct {
+	value *RespPinnedComment
 	isSet bool
 }
 
-func (v NullableRespTopComment) Get() *RespTopComment {
+func (v NullableRespPinnedComment) Get() *RespPinnedComment {
 	return v.value
 }
 
-func (v *NullableRespTopComment) Set(val *RespTopComment) {
+func (v *NullableRespPinnedComment) Set(val *RespPinnedComment) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableRespTopComment) IsSet() bool {
+func (v NullableRespPinnedComment) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableRespTopComment) Unset() {
+func (v *NullableRespPinnedComment) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableRespTopComment(val *RespTopComment) *NullableRespTopComment {
-	return &NullableRespTopComment{value: val, isSet: true}
+func NewNullableRespPinnedComment(val *RespPinnedComment) *NullableRespPinnedComment {
+	return &NullableRespPinnedComment{value: val, isSet: true}
 }
 
-func (v NullableRespTopComment) MarshalJSON() ([]byte, error) {
+func (v NullableRespPinnedComment) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableRespTopComment) UnmarshalJSON(src []byte) error {
+func (v *NullableRespPinnedComment) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

@@ -6,7 +6,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Page** | Pointer to [**PageResp**](PageResp.md) |  | [optional] 
 **Rows** | Pointer to [**[]RespCommentThread**](RespCommentThread.md) |  | [optional] 
-**TopComment** | Pointer to [**RespTopComment**](RespTopComment.md) |  | [optional] 
+**AcceptedAnswer** | Pointer to [**RespPinnedComment**](RespPinnedComment.md) |  | [optional] 
+**PinnedComment** | Pointer to [**RespPinnedComment**](RespPinnedComment.md) |  | [optional] 
 
 ## Methods
 
@@ -77,30 +78,55 @@ SetRows sets Rows field to given value.
 
 HasRows returns a boolean if a field has been set.
 
-### GetTopComment
+### GetAcceptedAnswer
 
-`func (o *ListCommentThreadsResp) GetTopComment() RespTopComment`
+`func (o *ListCommentThreadsResp) GetAcceptedAnswer() RespPinnedComment`
 
-GetTopComment returns the TopComment field if non-nil, zero value otherwise.
+GetAcceptedAnswer returns the AcceptedAnswer field if non-nil, zero value otherwise.
 
-### GetTopCommentOk
+### GetAcceptedAnswerOk
 
-`func (o *ListCommentThreadsResp) GetTopCommentOk() (*RespTopComment, bool)`
+`func (o *ListCommentThreadsResp) GetAcceptedAnswerOk() (*RespPinnedComment, bool)`
 
-GetTopCommentOk returns a tuple with the TopComment field if it's non-nil, zero value otherwise
+GetAcceptedAnswerOk returns a tuple with the AcceptedAnswer field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetTopComment
+### SetAcceptedAnswer
 
-`func (o *ListCommentThreadsResp) SetTopComment(v RespTopComment)`
+`func (o *ListCommentThreadsResp) SetAcceptedAnswer(v RespPinnedComment)`
 
-SetTopComment sets TopComment field to given value.
+SetAcceptedAnswer sets AcceptedAnswer field to given value.
 
-### HasTopComment
+### HasAcceptedAnswer
 
-`func (o *ListCommentThreadsResp) HasTopComment() bool`
+`func (o *ListCommentThreadsResp) HasAcceptedAnswer() bool`
 
-HasTopComment returns a boolean if a field has been set.
+HasAcceptedAnswer returns a boolean if a field has been set.
+
+### GetPinnedComment
+
+`func (o *ListCommentThreadsResp) GetPinnedComment() RespPinnedComment`
+
+GetPinnedComment returns the PinnedComment field if non-nil, zero value otherwise.
+
+### GetPinnedCommentOk
+
+`func (o *ListCommentThreadsResp) GetPinnedCommentOk() (*RespPinnedComment, bool)`
+
+GetPinnedCommentOk returns a tuple with the PinnedComment field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPinnedComment
+
+`func (o *ListCommentThreadsResp) SetPinnedComment(v RespPinnedComment)`
+
+SetPinnedComment sets PinnedComment field to given value.
+
+### HasPinnedComment
+
+`func (o *ListCommentThreadsResp) HasPinnedComment() bool`
+
+HasPinnedComment returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

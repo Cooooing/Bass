@@ -4,11 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**AcceptAnswer**](ArticleService.md#AcceptAnswer) | **Post** /v1/content/article/answer/accept | 
 [**Archive**](ArticleService.md#Archive) | **Post** /v1/content/article/archive | 
 [**CancelPublish**](ArticleService.md#CancelPublish) | **Post** /v1/content/article/publish/cancel | 
 [**Collect**](ArticleService.md#Collect) | **Post** /v1/content/article/collect | 
 [**CreateDraft**](ArticleService.md#CreateDraft) | **Post** /v1/content/article/draft/create | 
 [**DiscardDraft**](ArticleService.md#DiscardDraft) | **Post** /v1/content/article/draft/discard | 
+[**EnterLottery**](ArticleService.md#EnterLottery) | **Post** /v1/content/article/lottery/entry | 
 [**Get**](ArticleService.md#Get) | **Post** /v1/content/article/get | 
 [**Like**](ArticleService.md#Like) | **Post** /v1/content/article/like | 
 [**List**](ArticleService.md#List) | **Post** /v1/content/article/list | 
@@ -20,7 +22,74 @@ Method | HTTP request | Description
 [**SetPinnedComment**](ArticleService.md#SetPinnedComment) | **Post** /v1/content/article/comment/pin | 
 [**Thank**](ArticleService.md#Thank) | **Post** /v1/content/article/thank | 
 [**UpdateDraft**](ArticleService.md#UpdateDraft) | **Post** /v1/content/article/draft/update | 
+[**VotePoll**](ArticleService.md#VotePoll) | **Post** /v1/content/article/poll/vote | 
 
+
+
+## AcceptAnswer
+
+> map[string]interface{} AcceptAnswer(ctx).AcceptArticleAnswerReq(acceptArticleAnswerReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	acceptArticleAnswerReq := *openapiclient.NewAcceptArticleAnswerReq("ArticleId_example", "CommentId_example") // AcceptArticleAnswerReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.AcceptAnswer(context.Background()).AcceptArticleAnswerReq(acceptArticleAnswerReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.AcceptAnswer``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `AcceptAnswer`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.AcceptAnswer`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiAcceptAnswerRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **acceptArticleAnswerReq** | [**AcceptArticleAnswerReq**](AcceptArticleAnswerReq.md) |  | 
+
+### Return type
+
+**map[string]interface{}**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
 
 
 ## Archive
@@ -334,6 +403,72 @@ Other parameters are passed through a pointer to a apiDiscardDraftRequest struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **discardDraftArticleReq** | [**DiscardDraftArticleReq**](DiscardDraftArticleReq.md) |  | 
+
+### Return type
+
+**map[string]interface{}**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## EnterLottery
+
+> map[string]interface{} EnterLottery(ctx).EnterArticleLotteryReq(enterArticleLotteryReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	enterArticleLotteryReq := *openapiclient.NewEnterArticleLotteryReq("ArticleId_example") // EnterArticleLotteryReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.EnterLottery(context.Background()).EnterArticleLotteryReq(enterArticleLotteryReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.EnterLottery``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `EnterLottery`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.EnterLottery`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiEnterLotteryRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **enterArticleLotteryReq** | [**EnterArticleLotteryReq**](EnterArticleLotteryReq.md) |  | 
 
 ### Return type
 
@@ -1064,6 +1199,72 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**UpdateDraftArticleResp**](UpdateDraftArticleResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## VotePoll
+
+> map[string]interface{} VotePoll(ctx).VoteArticlePollReq(voteArticlePollReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	voteArticlePollReq := *openapiclient.NewVoteArticlePollReq("ArticleId_example", []string{"OptionIds_example"}) // VoteArticlePollReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ArticleService.VotePoll(context.Background()).VoteArticlePollReq(voteArticlePollReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ArticleService.VotePoll``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `VotePoll`: map[string]interface{}
+	fmt.Fprintf(os.Stdout, "Response from `ArticleService.VotePoll`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiVotePollRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **voteArticlePollReq** | [**VoteArticlePollReq**](VoteArticlePollReq.md) |  | 
+
+### Return type
+
+**map[string]interface{}**
 
 ### Authorization
 

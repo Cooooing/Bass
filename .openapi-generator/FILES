@@ -3,6 +3,7 @@
 .travis.yml
 Cargo.toml
 README.md
+docs/AcceptArticleAnswerReq.md
 docs/AccountContact.md
 docs/AccountProfile.md
 docs/AccountProfileListItem.md
@@ -13,6 +14,13 @@ docs/ArchiveArticleReq.md
 docs/ArticleDetail.md
 docs/ArticleDomain.md
 docs/ArticleListItem.md
+docs/ArticleLottery.md
+docs/ArticleLotteryDraft.md
+docs/ArticleLotteryPrize.md
+docs/ArticleLotteryPrizeDraft.md
+docs/ArticlePoll.md
+docs/ArticlePollDraft.md
+docs/ArticlePollOption.md
 docs/ArticlePostscript.md
 docs/ArticleSearchService.md
 docs/ArticleService.md
@@ -50,6 +58,7 @@ docs/CreateTagResp.md
 docs/DisableTotpReq.md
 docs/DiscardDraftArticleReq.md
 docs/DomainService.md
+docs/EnterArticleLotteryReq.md
 docs/FollowRelationReq.md
 docs/GetArticleReq.md
 docs/GetArticleResp.md
@@ -158,12 +167,12 @@ docs/RespCurrentAccount.md
 docs/RespDomain.md
 docs/RespLocation.md
 docs/RespNotification.md
+docs/RespPinnedComment.md
 docs/RespPreference.md
 docs/RespPrivacySetting.md
 docs/RespRecord.md
 docs/RespRelationStatus.md
 docs/RespTag.md
-docs/RespTopComment.md
 docs/RespTotp.md
 docs/RewardArticleReq.md
 docs/SearchArticlesReq.md
@@ -196,6 +205,7 @@ docs/UpdateProfileAccountReq.md
 docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
+docs/VoteArticlePollReq.md
 git_push.sh
 src/apis/account_service.rs
 src/apis/article_search_service.rs
@@ -216,6 +226,7 @@ src/apis/privacy_setting_service.rs
 src/apis/relation_service.rs
 src/apis/tag_service.rs
 src/lib.rs
+src/models/accept_article_answer_req.rs
 src/models/account_contact.rs
 src/models/account_profile.rs
 src/models/account_profile_list_item.rs
@@ -225,6 +236,13 @@ src/models/archive_article_req.rs
 src/models/article_detail.rs
 src/models/article_domain.rs
 src/models/article_list_item.rs
+src/models/article_lottery.rs
+src/models/article_lottery_draft.rs
+src/models/article_lottery_prize.rs
+src/models/article_lottery_prize_draft.rs
+src/models/article_poll.rs
+src/models/article_poll_draft.rs
+src/models/article_poll_option.rs
 src/models/article_postscript.rs
 src/models/article_tag.rs
 src/models/article_view_history_item.rs
@@ -256,6 +274,7 @@ src/models/create_tag_req.rs
 src/models/create_tag_resp.rs
 src/models/disable_totp_req.rs
 src/models/discard_draft_article_req.rs
+src/models/enter_article_lottery_req.rs
 src/models/follow_relation_req.rs
 src/models/get_article_req.rs
 src/models/get_article_resp.rs
@@ -357,12 +376,12 @@ src/models/resp_current_account.rs
 src/models/resp_domain.rs
 src/models/resp_location.rs
 src/models/resp_notification.rs
+src/models/resp_pinned_comment.rs
 src/models/resp_preference.rs
 src/models/resp_privacy_setting.rs
 src/models/resp_record.rs
 src/models/resp_relation_status.rs
 src/models/resp_tag.rs
-src/models/resp_top_comment.rs
 src/models/resp_totp.rs
 src/models/reward_article_req.rs
 src/models/search_articles_req.rs
@@ -394,3 +413,4 @@ src/models/update_profile_account_req.rs
 src/models/update_profile_account_resp.rs
 src/models/update_tag_req.rs
 src/models/update_tag_resp.rs
+src/models/vote_article_poll_req.rs

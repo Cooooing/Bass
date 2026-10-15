@@ -11,6 +11,8 @@ Name | Type | Description | Notes
 **r#type** | **Type** |  (enum: ARTICLE_TYPE_UNSPECIFIED, ARTICLE_TYPE_NORMAL, ARTICLE_TYPE_QA, ARTICLE_TYPE_LOTTERY, ARTICLE_TYPE_POLL, ARTICLE_TYPE_COLUMN) | 
 **statement** | Option<**String**> |  | [optional]
 **commentable** | Option<**bool**> |  | [optional]
+**poll** | Option<[**models::ArticlePollDraft**](ArticlePollDraft.md)> |  | [optional]
+**lottery** | Option<[**models::ArticleLotteryDraft**](ArticleLotteryDraft.md)> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

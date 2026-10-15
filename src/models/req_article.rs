@@ -27,6 +27,10 @@ pub struct ReqArticle {
     pub statement: Option<String>,
     #[serde(rename = "commentable", skip_serializing_if = "Option::is_none")]
     pub commentable: Option<bool>,
+    #[serde(rename = "poll", skip_serializing_if = "Option::is_none")]
+    pub poll: Option<models::ArticlePollDraft>,
+    #[serde(rename = "lottery", skip_serializing_if = "Option::is_none")]
+    pub lottery: Option<models::ArticleLotteryDraft>,
 }
 
 impl ReqArticle {
@@ -39,6 +43,8 @@ impl ReqArticle {
             r#type,
             statement: None,
             commentable: None,
+            poll: None,
+            lottery: None,
         }
     }
 }

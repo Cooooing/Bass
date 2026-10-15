@@ -4,11 +4,13 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**accept_answer**](ArticleService.md#accept_answer) | **POST** /v1/content/article/answer/accept | 
 [**archive**](ArticleService.md#archive) | **POST** /v1/content/article/archive | 
 [**cancel_publish**](ArticleService.md#cancel_publish) | **POST** /v1/content/article/publish/cancel | 
 [**collect**](ArticleService.md#collect) | **POST** /v1/content/article/collect | 
 [**create_draft**](ArticleService.md#create_draft) | **POST** /v1/content/article/draft/create | 
 [**discard_draft**](ArticleService.md#discard_draft) | **POST** /v1/content/article/draft/discard | 
+[**enter_lottery**](ArticleService.md#enter_lottery) | **POST** /v1/content/article/lottery/entry | 
 [**get**](ArticleService.md#get) | **POST** /v1/content/article/get | 
 [**like**](ArticleService.md#like) | **POST** /v1/content/article/like | 
 [**list**](ArticleService.md#list) | **POST** /v1/content/article/list | 
@@ -20,7 +22,38 @@ Method | HTTP request | Description
 [**set_pinned_comment**](ArticleService.md#set_pinned_comment) | **POST** /v1/content/article/comment/pin | 
 [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank | 
 [**update_draft**](ArticleService.md#update_draft) | **POST** /v1/content/article/draft/update | 
+[**vote_poll**](ArticleService.md#vote_poll) | **POST** /v1/content/article/poll/vote | 
 
+
+
+## accept_answer
+
+> serde_json::Value accept_answer(accept_article_answer_req)
+
+
+采纳文章回答
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**accept_article_answer_req** | [**AcceptArticleAnswerReq**](AcceptArticleAnswerReq.md) |  | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
 ## archive
@@ -156,6 +189,36 @@ No authorization required
 Name | Type | Description  | Required | Notes
 ------------- | ------------- | ------------- | ------------- | -------------
 **discard_draft_article_req** | [**DiscardDraftArticleReq**](DiscardDraftArticleReq.md) |  | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## enter_lottery
+
+> serde_json::Value enter_lottery(enter_article_lottery_req)
+
+
+报名或撤销抽奖报名。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**enter_article_lottery_req** | [**EnterArticleLotteryReq**](EnterArticleLotteryReq.md) |  | [required] |
 
 ### Return type
 
@@ -490,6 +553,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::UpdateDraftArticleResp**](UpdateDraftArticle_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## vote_poll
+
+> serde_json::Value vote_poll(vote_article_poll_req)
+
+
+提交一次不可修改的文章投票。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**vote_article_poll_req** | [**VoteArticlePollReq**](VoteArticlePollReq.md) |  | [required] |
+
+### Return type
+
+[**serde_json::Value**](serde_json::Value.md)
 
 ### Authorization
 

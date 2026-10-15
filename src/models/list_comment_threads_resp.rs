@@ -17,8 +17,10 @@ pub struct ListCommentThreadsResp {
     pub page: Option<models::PageResp>,
     #[serde(rename = "rows", skip_serializing_if = "Option::is_none")]
     pub rows: Option<Vec<models::RespCommentThread>>,
-    #[serde(rename = "top_comment", skip_serializing_if = "Option::is_none")]
-    pub top_comment: Option<models::RespTopComment>,
+    #[serde(rename = "accepted_answer", skip_serializing_if = "Option::is_none")]
+    pub accepted_answer: Option<models::RespPinnedComment>,
+    #[serde(rename = "pinned_comment", skip_serializing_if = "Option::is_none")]
+    pub pinned_comment: Option<models::RespPinnedComment>,
 }
 
 impl ListCommentThreadsResp {
@@ -26,7 +28,8 @@ impl ListCommentThreadsResp {
         ListCommentThreadsResp {
             page: None,
             rows: None,
-            top_comment: None,
+            accepted_answer: None,
+            pinned_comment: None,
         }
     }
 }

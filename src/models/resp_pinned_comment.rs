@@ -12,14 +12,14 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct RespTopComment {
+pub struct RespPinnedComment {
     #[serde(rename = "thread", skip_serializing_if = "Option::is_none")]
     pub thread: Option<models::RespCommentThread>,
 }
 
-impl RespTopComment {
-    pub fn new() -> RespTopComment {
-        RespTopComment {
+impl RespPinnedComment {
+    pub fn new() -> RespPinnedComment {
+        RespPinnedComment {
             thread: None,
         }
     }

@@ -99,6 +99,8 @@ pub enum EventType {
     EventTypeArticlePostscriptAdded,
     #[serde(rename = "EVENT_TYPE_ARTICLE_STATUS_UPDATED")]
     EventTypeArticleStatusUpdated,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_LOTTERY_WON")]
+    EventTypeArticleLotteryWon,
     #[serde(rename = "EVENT_TYPE_COMMENT_PUBLISHED")]
     EventTypeCommentPublished,
     #[serde(rename = "EVENT_TYPE_COMMENT_LIKED")]

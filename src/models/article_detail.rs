@@ -77,6 +77,12 @@ pub struct ArticleDetail {
     pub domains: Option<Vec<models::ArticleDomain>>,
     #[serde(rename = "city", skip_serializing_if = "Option::is_none")]
     pub city: Option<String>,
+    #[serde(rename = "accepted_comment_id", skip_serializing_if = "Option::is_none")]
+    pub accepted_comment_id: Option<String>,
+    #[serde(rename = "poll", skip_serializing_if = "Option::is_none")]
+    pub poll: Option<models::ArticlePoll>,
+    #[serde(rename = "lottery", skip_serializing_if = "Option::is_none")]
+    pub lottery: Option<models::ArticleLottery>,
     #[serde(rename = "created_by", skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
     #[serde(rename = "updated_by", skip_serializing_if = "Option::is_none")]
@@ -122,6 +128,9 @@ impl ArticleDetail {
             tags: None,
             domains: None,
             city: None,
+            accepted_comment_id: None,
+            poll: None,
+            lottery: None,
             created_by: None,
             updated_by: None,
             created_at: None,

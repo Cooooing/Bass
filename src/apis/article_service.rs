@@ -20,6 +20,11 @@ use crate::apis::ContentType;
 #[async_trait]
 pub trait ArticleService: Send + Sync {
 
+    /// POST /v1/content/article/answer/accept
+    ///
+    /// 采纳文章回答
+    async fn accept_answer<'accept_article_answer_req>(&self, accept_article_answer_req: models::AcceptArticleAnswerReq) -> Result<serde_json::Value, Error<AcceptAnswerError>>;
+
     /// POST /v1/content/article/archive
     ///
     /// 归档文章
@@ -44,6 +49,11 @@ pub trait ArticleService: Send + Sync {
     ///
     /// 丢弃文章草稿
     async fn discard_draft<'discard_draft_article_req>(&self, discard_draft_article_req: models::DiscardDraftArticleReq) -> Result<serde_json::Value, Error<DiscardDraftError>>;
+
+    /// POST /v1/content/article/lottery/entry
+    ///
+    /// 报名或撤销抽奖报名。
+    async fn enter_lottery<'enter_article_lottery_req>(&self, enter_article_lottery_req: models::EnterArticleLotteryReq) -> Result<serde_json::Value, Error<EnterLotteryError>>;
 
     /// POST /v1/content/article/get
     ///
@@ -99,6 +109,11 @@ pub trait ArticleService: Send + Sync {
     ///
     /// 编辑文章草稿
     async fn update_draft<'update_draft_article_req>(&self, update_draft_article_req: models::UpdateDraftArticleReq) -> Result<models::UpdateDraftArticleResp, Error<UpdateDraftError>>;
+
+    /// POST /v1/content/article/poll/vote
+    ///
+    /// 提交一次不可修改的文章投票。
+    async fn vote_poll<'vote_article_poll_req>(&self, vote_article_poll_req: models::VoteArticlePollReq) -> Result<serde_json::Value, Error<VotePollError>>;
 }
 
 pub struct ArticleServiceClient {
@@ -115,6 +130,45 @@ impl ArticleServiceClient {
 
 #[async_trait]
 impl ArticleService for ArticleServiceClient {
+    /// 采纳文章回答
+    async fn accept_answer<'accept_article_answer_req>(&self, accept_article_answer_req: models::AcceptArticleAnswerReq) -> Result<serde_json::Value, Error<AcceptAnswerError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/answer/accept", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&accept_article_answer_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<AcceptAnswerError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 归档文章
     async fn archive<'archive_article_req>(&self, archive_article_req: models::ArchiveArticleReq) -> Result<serde_json::Value, Error<ArchiveError>> {
         let local_var_configuration = &self.configuration;
@@ -305,6 +359,45 @@ impl ArticleService for ArticleServiceClient {
             }
         } else {
             let local_var_entity: Option<DiscardDraftError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+    /// 报名或撤销抽奖报名。
+    async fn enter_lottery<'enter_article_lottery_req>(&self, enter_article_lottery_req: models::EnterArticleLotteryReq) -> Result<serde_json::Value, Error<EnterLotteryError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/lottery/entry", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&enter_article_lottery_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<EnterLotteryError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -739,6 +832,52 @@ impl ArticleService for ArticleServiceClient {
         }
     }
 
+    /// 提交一次不可修改的文章投票。
+    async fn vote_poll<'vote_article_poll_req>(&self, vote_article_poll_req: models::VoteArticlePollReq) -> Result<serde_json::Value, Error<VotePollError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/content/article/poll/vote", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&vote_article_poll_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `serde_json::Value`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `serde_json::Value`")))),
+            }
+        } else {
+            let local_var_entity: Option<VotePollError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
+}
+
+/// struct for typed errors of method [`ArticleService::accept_answer`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum AcceptAnswerError {
+    UnknownValue(serde_json::Value),
 }
 
 /// struct for typed errors of method [`ArticleService::archive`]
@@ -773,6 +912,13 @@ pub enum CreateDraftError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum DiscardDraftError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`ArticleService::enter_lottery`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum EnterLotteryError {
     UnknownValue(serde_json::Value),
 }
 
@@ -850,6 +996,13 @@ pub enum ThankError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum UpdateDraftError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`ArticleService::vote_poll`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum VotePollError {
     UnknownValue(serde_json::Value),
 }
 

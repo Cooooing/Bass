@@ -9,4 +9,6 @@ import (
 // BizProviderSet 鎻愪緵涓氬姟渚濊禆
 var BizProviderSet = wire.NewSet(
 	usecase.NewPointsUsecase,
+	usecase.NewTCCPointsUsecase,
+	usecase.NewTCCPointsTransferUsecase,
 )

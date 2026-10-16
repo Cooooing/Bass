@@ -8,6 +8,7 @@ import (
 )
 
 type AccountRepo interface {
+	Ensure(ctx context.Context, userID int64) (*model.Account, error)
 	Save(ctx context.Context, account *model.Account) (*model.Account, error)
 	UpdateBalance(ctx context.Context, req *AccountUpdateBalanceReq) (*model.Account, error)
 	Get(ctx context.Context, req *AccountGetReq) (*model.Account, error)

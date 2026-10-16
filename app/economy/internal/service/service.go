@@ -10,15 +10,15 @@ var ServiceProviderSet = wire.NewSet(
 	ProvideServices,
 	NewCommonSystemService,
 	NewPointsService,
-	NewPointsTccService,
-	NewPointsTransferTccService,
+	NewTCCPointsService,
+	NewTCCPointsTransferService,
 )
 
-func ProvideServices(commonSystemService *CommonSystemService, pointsService *PointsService, pointsTccService *PointsTccService, pointsTransferTccService *PointsTransferTccService) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, pointsService *PointsService, tccPointsService *TCCPointsService, tccPointsTransferService *TCCPointsTransferService) []server.Service {
 	return []server.Service{
 		commonSystemService,
 		pointsService,
-		pointsTccService,
-		pointsTransferTccService,
+		tccPointsService,
+		tccPointsTransferService,
 	}
 }

@@ -75,6 +75,17 @@ func ClientFromCtx[C any](ctx context.Context) (C, bool) {
 	return tx.Client(), true
 }
 
+type boundTx[C any] struct{ client C }
+
+func (b boundTx[C]) Commit() error   { return nil }
+func (b boundTx[C]) Rollback() error { return nil }
+func (b boundTx[C]) Client() C       { return b.client }
+
+// WithClient 将外部事务管理的客户端绑定到上下文。
+func WithClient[C any](ctx context.Context, client C) context.Context {
+	return context.WithValue(ctx, txKey{}, boundTx[C]{client: client})
+}
+
 func doWithTx[C any](ctx context.Context, starter TxStarter[C], fn func(ctx context.Context) error, cfg *TxOptionConfig) error {
 	currentTx, hasTx := ctx.Value(txKey{}).(Tx[C])
 

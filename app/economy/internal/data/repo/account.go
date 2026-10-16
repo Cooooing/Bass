@@ -33,6 +33,17 @@ func (r *AccountRepo) getClient(ctx context.Context) *gen.Client {
 	return r.db
 }
 
+func (r *AccountRepo) Ensure(ctx context.Context, userID int64) (*model.Account, error) {
+	if err := r.getClient(ctx).Account.Create().
+		SetUserID(userID).
+		OnConflict().
+		DoNothing().
+		Exec(ctx); err != nil {
+		return nil, err
+	}
+	return r.Get(ctx, &bizrepo.AccountGetReq{UserID: new(userID)})
+}
+
 func (r *AccountRepo) Save(ctx context.Context, account *model.Account) (*model.Account, error) {
 	save, err := r.getClient(ctx).Account.Create().
 		SetUserID(account.UserID).

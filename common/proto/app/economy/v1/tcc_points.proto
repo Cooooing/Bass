@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package common.api.app.economy.v1;
+
+import "economy/v1/economy.proto";
+import "economy/v1/enum/economy.proto";
+
+option go_package = "common/proto/gen/economy/v1;v1";
+
+// TCCPointsService 提供积分变动的 TCC 分支操作。
+service TCCPointsService {
+  rpc Try(TCCPoints.Req) returns (TCCPoints.Resp) {} // 预留积分变动所需资源
+  rpc Comfirm(TCCPoints.Req) returns (TCCPoints.Resp) {} // 确认积分变动
+  rpc Cancel(TCCPoints.Req) returns (TCCPoints.Resp) {} // 取消积分变动并释放资源
+}
+
+// TCCPoints 表示积分变动的 TCC 分支请求与响应。
+message TCCPoints {
+  message Req {
+    int64 user_id = 1; // 用户 ID
+    int64 amount = 2; // 积分数量
+    .common.api.app.economy.v1.enum.EconomyRecordType record_type = 3; // 积分流水类型
+    optional string remark = 4; // 流水备注
+  }
+
+  message Resp {
+    EconomyAccount account = 1; // 当前积分账户
+    EconomyRecord record = 2; // 确认阶段产生的积分流水
+  }
+}

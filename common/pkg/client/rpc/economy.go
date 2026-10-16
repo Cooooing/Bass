@@ -9,22 +9,22 @@ import (
 
 type EconomyClient struct {
 	Economy           economyv1.EconomyServiceClient
-	PointsTcc         economyv1.PointsTccServiceClient
-	PointsTransferTcc economyv1.PointsTransferTccServiceClient
+	TCCPoints         economyv1.TCCPointsServiceClient
+	TCCPointsTransfer economyv1.TCCPointsTransferServiceClient
 }
 
 func NewEconomyClient(conn grpc.ClientConnInterface) *EconomyClient {
 	return &EconomyClient{
 		Economy:           economyv1.NewEconomyServiceClient(conn),
-		PointsTcc:         economyv1.NewPointsTccServiceClient(conn),
-		PointsTransferTcc: economyv1.NewPointsTransferTccServiceClient(conn),
+		TCCPoints:         economyv1.NewTCCPointsServiceClient(conn),
+		TCCPointsTransfer: economyv1.NewTCCPointsTransferServiceClient(conn),
 	}
 }
 
 func MountEconomyServices[T any](conn *localrpc.Conn, services []T) {
 	for _, service := range services {
 		conn.RegisterMatching(&economyv1.EconomyService_ServiceDesc, service)
-		conn.RegisterMatching(&economyv1.PointsTccService_ServiceDesc, service)
-		conn.RegisterMatching(&economyv1.PointsTransferTccService_ServiceDesc, service)
+		conn.RegisterMatching(&economyv1.TCCPointsService_ServiceDesc, service)
+		conn.RegisterMatching(&economyv1.TCCPointsTransferService_ServiceDesc, service)
 	}
 }

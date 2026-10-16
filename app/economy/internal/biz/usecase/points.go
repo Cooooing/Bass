@@ -35,6 +35,14 @@ type EconomyDeductPointsReq struct {
 	RecordType     enum.EconomyRecordType
 	Remark         *string
 }
+type EconomyFreezePointsReq struct {
+	UserID, Amount int64
+}
+type EconomyCommitFrozenPointsReq struct {
+	UserID, Amount int64
+	RecordType     enum.EconomyRecordType
+	Remark         *string
+}
 type EconomyRecordResp struct {
 	Account *model.Account
 	Record  *model.Record
@@ -47,6 +55,11 @@ type EconomyTransferPointsReq struct {
 type EconomyTransferPointsResp struct {
 	FromAccount, ToAccount *model.Account
 	OutRecord, InRecord    *model.Record
+}
+type EconomyCommitFrozenTransferReq struct {
+	FromUserID, ToUserID, Amount int64
+	OutRecordType, InRecordType  enum.EconomyRecordType
+	Remark                       *string
 }
 type EconomyListRecordsReq struct {
 	UserID     int64
@@ -64,6 +77,22 @@ func (u *PointsUsecase) GetAccount(ctx context.Context, userID int64) (*model.Ac
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
 	}
 	account, err := u.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: new(userID)})
+	if err != nil {
+		return nil, err
+	}
+	return account, nil
+}
+
+func (u *PointsUsecase) EnsureAccount(ctx context.Context, userID int64) (*model.Account, error) {
+	if userID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	var account *model.Account
+	err := u.tx(ctx, func(ctx context.Context) error {
+		var err error
+		account, err = u.accountRepo.Ensure(ctx, userID)
+		return err
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -94,12 +123,9 @@ func (u *PointsUsecase) AddPoints(ctx context.Context, req *EconomyAddPointsReq)
 	var account *model.Account
 	var record *model.Record
 	err := u.tx(ctx, func(ctx context.Context) error {
-		before, err := u.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: new(req.UserID)})
+		before, err := u.accountRepo.Ensure(ctx, req.UserID)
 		if err != nil {
-			before, err = u.accountRepo.Save(ctx, &model.Account{UserID: req.UserID})
-			if err != nil {
-				return err
-			}
+			return err
 		}
 		account, err = u.accountRepo.UpdateBalance(ctx, &repo.AccountUpdateBalanceReq{UserID: req.UserID, BalanceDelta: req.Amount, IncomeDelta: req.Amount})
 		if err != nil {
@@ -146,6 +172,72 @@ func (u *PointsUsecase) DeductPoints(ctx context.Context, req *EconomyDeductPoin
 	return &EconomyRecordResp{Account: account, Record: record}, nil
 }
 
+func (u *PointsUsecase) FreezePoints(ctx context.Context, req *EconomyFreezePointsReq) (*model.Account, error) {
+	if req == nil || req.UserID <= 0 || req.Amount <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return u.accountRepo.UpdateBalance(ctx, &repo.AccountUpdateBalanceReq{
+		UserID:       req.UserID,
+		FrozenDelta:  req.Amount,
+		AvailableMin: new(req.Amount),
+	})
+}
+
+func (u *PointsUsecase) UnfreezePoints(ctx context.Context, req *EconomyFreezePointsReq) (*model.Account, error) {
+	if req == nil || req.UserID <= 0 || req.Amount <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return u.accountRepo.UpdateBalance(ctx, &repo.AccountUpdateBalanceReq{
+		UserID:      req.UserID,
+		FrozenDelta: -req.Amount,
+		FrozenMin:   new(req.Amount),
+	})
+}
+
+func (u *PointsUsecase) CommitFrozenPoints(ctx context.Context, req *EconomyCommitFrozenPointsReq) (*EconomyRecordResp, error) {
+	if req == nil || req.UserID <= 0 || req.Amount <= 0 || !req.RecordType.IsExpense() {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
+	}
+	var account *model.Account
+	var record *model.Record
+	err := u.tx(ctx, func(ctx context.Context) error {
+		before, err := u.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: new(req.UserID)})
+		if err != nil {
+			return err
+		}
+		account, err = u.accountRepo.UpdateBalance(ctx, &repo.AccountUpdateBalanceReq{
+			UserID:       req.UserID,
+			BalanceDelta: -req.Amount,
+			FrozenDelta:  -req.Amount,
+			ExpenseDelta: req.Amount,
+			BalanceMin:   new(req.Amount),
+			FrozenMin:    new(req.Amount),
+		})
+		if err != nil {
+			return err
+		}
+		transactionNo, err := u.transactionNoGenerator.NewTransactionNo()
+		if err != nil {
+			return err
+		}
+		record, err = u.recordRepo.Save(ctx, &model.Record{
+			TransactionNo: transactionNo,
+			UserID:        req.UserID,
+			RecordType:    req.RecordType,
+			Direction:     enum.EconomyRecordDirectionExpense,
+			Amount:        req.Amount,
+			BalanceBefore: before.Balance,
+			BalanceAfter:  account.Balance,
+			Remark:        req.Remark,
+		})
+		return err
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &EconomyRecordResp{Account: account, Record: record}, nil
+}
+
 func (u *PointsUsecase) TransferPoints(ctx context.Context, req *EconomyTransferPointsReq) (*EconomyTransferPointsResp, error) {
 	if req.FromUserID <= 0 || req.ToUserID <= 0 || req.Amount <= 0 || !req.OutRecordType.IsExpense() || !req.InRecordType.IsIncome() {
 		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
@@ -160,12 +252,9 @@ func (u *PointsUsecase) TransferPoints(ctx context.Context, req *EconomyTransfer
 		if err != nil {
 			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_INSUFFICIENT_BALANCE)
 		}
-		toBefore, err := u.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: new(req.ToUserID)})
+		toBefore, err := u.accountRepo.Ensure(ctx, req.ToUserID)
 		if err != nil {
-			toBefore, err = u.accountRepo.Save(ctx, &model.Account{UserID: req.ToUserID})
-			if err != nil {
-				return err
-			}
+			return err
 		}
 		fromAccount, err = u.accountRepo.UpdateBalance(ctx, &repo.AccountUpdateBalanceReq{UserID: req.FromUserID, BalanceDelta: -req.Amount, ExpenseDelta: req.Amount, BalanceMin: new(req.Amount)})
 		if err != nil {
@@ -184,6 +273,78 @@ func (u *PointsUsecase) TransferPoints(ctx context.Context, req *EconomyTransfer
 			return err
 		}
 		inRecord, err = u.recordRepo.Save(ctx, &model.Record{TransactionNo: transactionNo, UserID: req.ToUserID, RecordType: req.InRecordType, Direction: enum.EconomyRecordDirectionIncome, Amount: req.Amount, BalanceBefore: toBefore.Balance, BalanceAfter: toAccount.Balance, Remark: req.Remark})
+		return err
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &EconomyTransferPointsResp{FromAccount: fromAccount, ToAccount: toAccount, OutRecord: outRecord, InRecord: inRecord}, nil
+}
+
+func (u *PointsUsecase) CommitFrozenTransfer(ctx context.Context, req *EconomyCommitFrozenTransferReq) (*EconomyTransferPointsResp, error) {
+	if req == nil || req.FromUserID <= 0 || req.ToUserID <= 0 || req.Amount <= 0 || !req.OutRecordType.IsExpense() || !req.InRecordType.IsIncome() {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_RECORD_TYPE_INVALID)
+	}
+	if req.FromUserID == req.ToUserID {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_ECONOMY_TRANSFER_SELF_NOT_ALLOWED)
+	}
+	var fromAccount, toAccount *model.Account
+	var outRecord, inRecord *model.Record
+	err := u.tx(ctx, func(ctx context.Context) error {
+		fromBefore, err := u.accountRepo.Get(ctx, &repo.AccountGetReq{UserID: new(req.FromUserID)})
+		if err != nil {
+			return err
+		}
+		toBefore, err := u.accountRepo.Ensure(ctx, req.ToUserID)
+		if err != nil {
+			return err
+		}
+		fromAccount, err = u.accountRepo.UpdateBalance(ctx, &repo.AccountUpdateBalanceReq{
+			UserID:       req.FromUserID,
+			BalanceDelta: -req.Amount,
+			FrozenDelta:  -req.Amount,
+			ExpenseDelta: req.Amount,
+			BalanceMin:   new(req.Amount),
+			FrozenMin:    new(req.Amount),
+		})
+		if err != nil {
+			return err
+		}
+		toAccount, err = u.accountRepo.UpdateBalance(ctx, &repo.AccountUpdateBalanceReq{
+			UserID:       req.ToUserID,
+			BalanceDelta: req.Amount,
+			IncomeDelta:  req.Amount,
+		})
+		if err != nil {
+			return err
+		}
+		transactionNo, err := u.transactionNoGenerator.NewTransactionNo()
+		if err != nil {
+			return err
+		}
+		outRecord, err = u.recordRepo.Save(ctx, &model.Record{
+			TransactionNo: transactionNo,
+			UserID:        req.FromUserID,
+			RecordType:    req.OutRecordType,
+			Direction:     enum.EconomyRecordDirectionExpense,
+			Amount:        req.Amount,
+			BalanceBefore: fromBefore.Balance,
+			BalanceAfter:  fromAccount.Balance,
+			Remark:        req.Remark,
+		})
+		if err != nil {
+			return err
+		}
+		inRecord, err = u.recordRepo.Save(ctx, &model.Record{
+			TransactionNo: transactionNo,
+			UserID:        req.ToUserID,
+			RecordType:    req.InRecordType,
+			Direction:     enum.EconomyRecordDirectionIncome,
+			Amount:        req.Amount,
+			BalanceBefore: toBefore.Balance,
+			BalanceAfter:  toAccount.Balance,
+			Remark:        req.Remark,
+		})
 		return err
 	})
 	if err != nil {

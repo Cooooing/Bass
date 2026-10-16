@@ -108,6 +108,8 @@ pub mod get_checkin_overview_resp;
 pub use self::get_checkin_overview_resp::GetCheckinOverviewResp;
 pub mod get_current_account_resp;
 pub use self::get_current_account_resp::GetCurrentAccountResp;
+pub mod get_current_holiday_resp;
+pub use self::get_current_holiday_resp::GetCurrentHolidayResp;
 pub mod get_current_location_resp;
 pub use self::get_current_location_resp::GetCurrentLocationResp;
 pub mod get_current_preferences_resp;

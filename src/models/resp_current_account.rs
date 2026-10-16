@@ -17,6 +17,8 @@ pub struct RespCurrentAccount {
     pub profile: Option<models::AccountProfile>,
     #[serde(rename = "contact", skip_serializing_if = "Option::is_none")]
     pub contact: Option<models::AccountContact>,
+    #[serde(rename = "location", skip_serializing_if = "Option::is_none")]
+    pub location: Option<models::ProfileLocation>,
 }
 
 impl RespCurrentAccount {
@@ -24,6 +26,7 @@ impl RespCurrentAccount {
         RespCurrentAccount {
             profile: None,
             contact: None,
+            location: None,
         }
     }
 }

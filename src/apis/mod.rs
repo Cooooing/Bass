@@ -118,6 +118,7 @@ pub mod auth_service;
 pub mod checkin_service;
 pub mod comment_service;
 pub mod domain_service;
+pub mod holiday_service;
 pub mod location_service;
 pub mod moonbreeze_service;
 pub mod notification_service;
@@ -140,6 +141,7 @@ pub trait Api {
     fn checkin_service(&self) -> &dyn checkin_service::CheckinService;
     fn comment_service(&self) -> &dyn comment_service::CommentService;
     fn domain_service(&self) -> &dyn domain_service::DomainService;
+    fn holiday_service(&self) -> &dyn holiday_service::HolidayService;
     fn location_service(&self) -> &dyn location_service::LocationService;
     fn moonbreeze_service(&self) -> &dyn moonbreeze_service::MoonbreezeService;
     fn notification_service(&self) -> &dyn notification_service::NotificationService;
@@ -159,6 +161,7 @@ pub struct ApiClient {
     checkin_service: Box<dyn checkin_service::CheckinService>,
     comment_service: Box<dyn comment_service::CommentService>,
     domain_service: Box<dyn domain_service::DomainService>,
+    holiday_service: Box<dyn holiday_service::HolidayService>,
     location_service: Box<dyn location_service::LocationService>,
     moonbreeze_service: Box<dyn moonbreeze_service::MoonbreezeService>,
     notification_service: Box<dyn notification_service::NotificationService>,
@@ -180,6 +183,7 @@ impl ApiClient {
             checkin_service: Box::new(checkin_service::CheckinServiceClient::new(configuration.clone())),
             comment_service: Box::new(comment_service::CommentServiceClient::new(configuration.clone())),
             domain_service: Box::new(domain_service::DomainServiceClient::new(configuration.clone())),
+            holiday_service: Box::new(holiday_service::HolidayServiceClient::new(configuration.clone())),
             location_service: Box::new(location_service::LocationServiceClient::new(configuration.clone())),
             moonbreeze_service: Box::new(moonbreeze_service::MoonbreezeServiceClient::new(configuration.clone())),
             notification_service: Box::new(notification_service::NotificationServiceClient::new(configuration.clone())),
@@ -214,6 +218,9 @@ impl Api for ApiClient {
     }
     fn domain_service(&self) -> &dyn domain_service::DomainService {
         self.domain_service.as_ref()
+    }
+    fn holiday_service(&self) -> &dyn holiday_service::HolidayService {
+        self.holiday_service.as_ref()
     }
     fn location_service(&self) -> &dyn location_service::LocationService {
         self.location_service.as_ref()

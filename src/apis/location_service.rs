@@ -20,9 +20,9 @@ use crate::apis::ContentType;
 #[async_trait]
 pub trait LocationService: Send + Sync {
 
-    /// POST /v1/user/location/get-current
+    /// POST /v1/platform/location/get-current
     ///
-    /// 获取当前账号的地理资料。
+    /// 按当前请求来源 IP 获取地理数据。
     async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentLocationResp, Error<GetCurrentError>>;
 }
 
@@ -40,13 +40,13 @@ impl LocationServiceClient {
 
 #[async_trait]
 impl LocationService for LocationServiceClient {
-    /// 获取当前账号的地理资料。
+    /// 按当前请求来源 IP 获取地理数据。
     async fn get_current<'body>(&self, body: serde_json::Value) -> Result<models::GetCurrentLocationResp, Error<GetCurrentError>> {
         let local_var_configuration = &self.configuration;
 
         let local_var_client = &local_var_configuration.client;
 
-        let local_var_uri_str = format!("{}/v1/user/location/get-current", local_var_configuration.base_path);
+        let local_var_uri_str = format!("{}/v1/platform/location/get-current", local_var_configuration.base_path);
         let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
 
         if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {

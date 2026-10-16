@@ -4,7 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**get_current**](LocationService.md#get_current) | **POST** /v1/user/location/get-current | 
+[**get_current**](LocationService.md#get_current) | **POST** /v1/platform/location/get-current | 
 
 
 
@@ -13,7 +13,7 @@ Method | HTTP request | Description
 > models::GetCurrentLocationResp get_current(body)
 
 
-获取当前账号的地理资料。
+按当前请求来源 IP 获取地理数据。
 
 ### Parameters
 

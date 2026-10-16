@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user_id** | Option<**String**> |  | [optional]
 **country** | Option<**String**> |  | [optional]
 **province** | Option<**String**> |  | [optional]
 **city** | Option<**String**> |  | [optional]

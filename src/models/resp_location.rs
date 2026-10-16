@@ -13,8 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct RespLocation {
-    #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
-    pub user_id: Option<String>,
     #[serde(rename = "country", skip_serializing_if = "Option::is_none")]
     pub country: Option<String>,
     #[serde(rename = "province", skip_serializing_if = "Option::is_none")]
@@ -26,7 +24,6 @@ pub struct RespLocation {
 impl RespLocation {
     pub fn new() -> RespLocation {
         RespLocation {
-            user_id: None,
             country: None,
             province: None,
             city: None,

@@ -7,6 +7,7 @@ import (
 
 	"scheduler/internal/config"
 	"scheduler/internal/data/client"
+	"scheduler/internal/data/gen"
 	"scheduler/internal/data/repo"
 
 	"github.com/google/wire"
@@ -27,7 +28,10 @@ var DataProviderSet = wire.NewSet(
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
 var ModuleProviderSet = wire.NewSet(
-	client.NewDataBaseClient,
+	commonClient.NewSQLClient,
+	ProvideDatabase,
+	client.NewEntClient,
+	ProvideGenClient,
 	client.ProvideTx,
 	ProvideRedis,
 	ProvideNats,
@@ -47,6 +51,14 @@ func ProvideRedis(
 	c *config.Bootstrap,
 ) *common.Redis {
 	return c.Redis
+}
+
+func ProvideDatabase(c *config.Bootstrap) *common.Database {
+	return c.Database
+}
+
+func ProvideGenClient(c *client.EntClient) *gen.Client {
+	return c.Client
 }
 
 func ProvideNats(

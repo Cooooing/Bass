@@ -6,6 +6,7 @@ import (
 
 	"platform/internal/config"
 	"platform/internal/data/client"
+	"platform/internal/data/gen"
 	"platform/internal/data/oss"
 	"platform/internal/data/repo"
 
@@ -26,7 +27,10 @@ var DataProviderSet = wire.NewSet(
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
 var ModuleProviderSet = wire.NewSet(
-	client.NewDataBaseClient,
+	commonClient.NewSQLClient,
+	ProvideDatabase,
+	client.NewEntClient,
+	ProvideGenClient,
 	commonClient.NewHttpClient,
 	client.ProvideTx,
 	repo.NewAssetRepo,
@@ -40,6 +44,14 @@ var ModuleProviderSet = wire.NewSet(
 
 func ProvideNats(c *config.Bootstrap) *common.Nats {
 	return c.Nats
+}
+
+func ProvideDatabase(c *config.Bootstrap) *common.Database {
+	return c.Database
+}
+
+func ProvideGenClient(c *client.EntClient) *gen.Client {
+	return c.Client
 }
 
 func ProvideRedis(c *config.Bootstrap) *common.Redis {

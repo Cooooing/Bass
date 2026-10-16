@@ -8,6 +8,7 @@ import (
 	bizrepo "game_idle/internal/biz/repo"
 	"game_idle/internal/config"
 	"game_idle/internal/data/client"
+	"game_idle/internal/data/gen"
 	"game_idle/internal/data/repo"
 
 	"github.com/google/wire"
@@ -24,7 +25,10 @@ var DataProviderSet = wire.NewSet(
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
 var ModuleProviderSet = wire.NewSet(
-	client.NewDataBaseClient,
+	commonClient.NewSQLClient,
+	ProvideDatabase,
+	client.NewEntClient,
+	ProvideGenClient,
 	timewheel.NewTimeWheel,
 	ProvideNats,
 	ProvideTimeWheel,
@@ -46,6 +50,14 @@ var ModuleProviderSet = wire.NewSet(
 
 func ProvideTimeWheel(c *config.Bootstrap) *common.TimeWheel {
 	return c.GetTimewheel()
+}
+
+func ProvideDatabase(c *config.Bootstrap) *common.Database {
+	return c.Database
+}
+
+func ProvideGenClient(c *client.EntClient) *gen.Client {
+	return c.Client
 }
 
 func ProvideCharacterStateRepo(cache *repo.CharacterStateCache) bizrepo.CharacterStateRepo {

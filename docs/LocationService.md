@@ -4,8 +4,8 @@ All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**getCurrent**](LocationService.md#getCurrent) | **POST** /v1/user/location/get-current |  |
-| [**getCurrentWithHttpInfo**](LocationService.md#getCurrentWithHttpInfo) | **POST** /v1/user/location/get-current |  |
+| [**getCurrent**](LocationService.md#getCurrent) | **POST** /v1/platform/location/get-current |  |
+| [**getCurrentWithHttpInfo**](LocationService.md#getCurrentWithHttpInfo) | **POST** /v1/platform/location/get-current |  |
 
 
 
@@ -15,7 +15,7 @@ All URIs are relative to *http://localhost*
 
 
 
-获取当前账号的地理资料。
+按当前请求来源 IP 获取地理数据。
 
 ### Example
 
@@ -83,7 +83,7 @@ No authorization required
 
 
 
-获取当前账号的地理资料。
+按当前请求来源 IP 获取地理数据。
 
 ### Example
 

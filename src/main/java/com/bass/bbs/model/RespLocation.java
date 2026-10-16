@@ -33,17 +33,12 @@ import com.bass.bbs.ApiClient;
  * RespLocation
  */
 @JsonPropertyOrder({
-  RespLocation.JSON_PROPERTY_USER_ID,
   RespLocation.JSON_PROPERTY_COUNTRY,
   RespLocation.JSON_PROPERTY_PROVINCE,
   RespLocation.JSON_PROPERTY_CITY
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class RespLocation {
-  public static final String JSON_PROPERTY_USER_ID = "user_id";
-  @javax.annotation.Nullable
-  private String userId;
-
   public static final String JSON_PROPERTY_COUNTRY = "country";
   @javax.annotation.Nullable
   private String country;
@@ -58,30 +53,6 @@ public class RespLocation {
 
   public RespLocation() { 
   }
-
-  public RespLocation userId(@javax.annotation.Nullable String userId) {
-    this.userId = userId;
-    return this;
-  }
-
-  /**
-   * Get userId
-   * @return userId
-   */
-  @javax.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_USER_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public String getUserId() {
-    return userId;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_USER_ID, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setUserId(@javax.annotation.Nullable String userId) {
-    this.userId = userId;
-  }
-
 
   public RespLocation country(@javax.annotation.Nullable String country) {
     this.country = country;
@@ -167,22 +138,20 @@ public class RespLocation {
       return false;
     }
     RespLocation respLocation = (RespLocation) o;
-    return Objects.equals(this.userId, respLocation.userId) &&
-        Objects.equals(this.country, respLocation.country) &&
+    return Objects.equals(this.country, respLocation.country) &&
         Objects.equals(this.province, respLocation.province) &&
         Objects.equals(this.city, respLocation.city);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(userId, country, province, city);
+    return Objects.hash(country, province, city);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class RespLocation {\n");
-    sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    country: ").append(toIndentedString(country)).append("\n");
     sb.append("    province: ").append(toIndentedString(province)).append("\n");
     sb.append("    city: ").append(toIndentedString(city)).append("\n");
@@ -229,11 +198,6 @@ public class RespLocation {
     }
 
     StringJoiner joiner = new StringJoiner("&");
-
-    // add `user_id` to the URL query string
-    if (getUserId() != null) {
-      joiner.add(String.format(java.util.Locale.ROOT, "%suser_id%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getUserId()))));
-    }
 
     // add `country` to the URL query string
     if (getCountry() != null) {

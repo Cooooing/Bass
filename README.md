@@ -209,8 +209,10 @@ Class | Method | HTTP request | Description
 *DomainService* | [**createWithHttpInfo**](docs/DomainService.md#createWithHttpInfo) | **POST** /v1/content/domain/create | 
 *DomainService* | [**update**](docs/DomainService.md#update) | **POST** /v1/content/domain/update | 
 *DomainService* | [**updateWithHttpInfo**](docs/DomainService.md#updateWithHttpInfo) | **POST** /v1/content/domain/update | 
-*LocationService* | [**getCurrent**](docs/LocationService.md#getCurrent) | **POST** /v1/user/location/get-current | 
-*LocationService* | [**getCurrentWithHttpInfo**](docs/LocationService.md#getCurrentWithHttpInfo) | **POST** /v1/user/location/get-current | 
+*HolidayService* | [**getCurrent**](docs/HolidayService.md#getCurrent) | **POST** /v1/platform/holiday/get-current | 
+*HolidayService* | [**getCurrentWithHttpInfo**](docs/HolidayService.md#getCurrentWithHttpInfo) | **POST** /v1/platform/holiday/get-current | 
+*LocationService* | [**getCurrent**](docs/LocationService.md#getCurrent) | **POST** /v1/platform/location/get-current | 
+*LocationService* | [**getCurrentWithHttpInfo**](docs/LocationService.md#getCurrentWithHttpInfo) | **POST** /v1/platform/location/get-current | 
 *MoonbreezeService* | [**create**](docs/MoonbreezeService.md#create) | **POST** /v1/content/moonbreeze/create | 
 *MoonbreezeService* | [**createWithHttpInfo**](docs/MoonbreezeService.md#createWithHttpInfo) | **POST** /v1/content/moonbreeze/create | 
 *MoonbreezeService* | [**pageMember**](docs/MoonbreezeService.md#pageMember) | **POST** /v1/content/moonbreeze/page-member | 
@@ -336,6 +338,7 @@ Class | Method | HTTP request | Description
  - [GetCheckinOverviewReq](docs/GetCheckinOverviewReq.md)
  - [GetCheckinOverviewResp](docs/GetCheckinOverviewResp.md)
  - [GetCurrentAccountResp](docs/GetCurrentAccountResp.md)
+ - [GetCurrentHolidayResp](docs/GetCurrentHolidayResp.md)
  - [GetCurrentLocationResp](docs/GetCurrentLocationResp.md)
  - [GetCurrentPreferencesResp](docs/GetCurrentPreferencesResp.md)
  - [GetCurrentPrivacySettingResp](docs/GetCurrentPrivacySettingResp.md)

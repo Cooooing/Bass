@@ -9,6 +9,7 @@
 |------------ | ------------- | ------------- | -------------|
 |**profile** | [**AccountProfile**](AccountProfile.md) |  |  [optional] |
 |**contact** | [**AccountContact**](AccountContact.md) |  |  [optional] |
+|**location** | [**ProfileLocation**](ProfileLocation.md) |  |  [optional] |
 
 
 

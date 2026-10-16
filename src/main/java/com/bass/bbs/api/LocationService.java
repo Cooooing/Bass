@@ -164,7 +164,7 @@ public class LocationService {
 
   /**
    * 
-   * 获取当前账号的地理资料。
+   * 按当前请求来源 IP 获取地理数据。
    * @param apiRequest {@link APIGetCurrentRequest}
    * @return GetCurrentLocationResp
    * @throws ApiException if fails to make API call
@@ -175,7 +175,7 @@ public class LocationService {
 
   /**
    * 
-   * 获取当前账号的地理资料。
+   * 按当前请求来源 IP 获取地理数据。
    * @param apiRequest {@link APIGetCurrentRequest}
    * @param headers Optional headers to include in the request
    * @return GetCurrentLocationResp
@@ -189,7 +189,7 @@ public class LocationService {
 
   /**
    * 
-   * 获取当前账号的地理资料。
+   * 按当前请求来源 IP 获取地理数据。
    * @param apiRequest {@link APIGetCurrentRequest}
    * @return ApiResponse&lt;GetCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
@@ -200,7 +200,7 @@ public class LocationService {
 
   /**
    * 
-   * 获取当前账号的地理资料。
+   * 按当前请求来源 IP 获取地理数据。
    * @param apiRequest {@link APIGetCurrentRequest}
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetCurrentLocationResp&gt;
@@ -213,7 +213,7 @@ public class LocationService {
 
   /**
    * 
-   * 获取当前账号的地理资料。
+   * 按当前请求来源 IP 获取地理数据。
    * @param body  (required)
    * @return GetCurrentLocationResp
    * @throws ApiException if fails to make API call
@@ -224,7 +224,7 @@ public class LocationService {
 
   /**
    * 
-   * 获取当前账号的地理资料。
+   * 按当前请求来源 IP 获取地理数据。
    * @param body  (required)
    * @param headers Optional headers to include in the request
    * @return GetCurrentLocationResp
@@ -237,7 +237,7 @@ public class LocationService {
 
   /**
    * 
-   * 获取当前账号的地理资料。
+   * 按当前请求来源 IP 获取地理数据。
    * @param body  (required)
    * @return ApiResponse&lt;GetCurrentLocationResp&gt;
    * @throws ApiException if fails to make API call
@@ -248,7 +248,7 @@ public class LocationService {
 
   /**
    * 
-   * 获取当前账号的地理资料。
+   * 按当前请求来源 IP 获取地理数据。
    * @param body  (required)
    * @param headers Optional headers to include in the request
    * @return ApiResponse&lt;GetCurrentLocationResp&gt;
@@ -310,7 +310,7 @@ public class LocationService {
 
     HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
 
-    String localVarPath = "/v1/user/location/get-current";
+    String localVarPath = "/v1/platform/location/get-current";
 
     localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
 

@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 import com.bass.bbs.model.AccountContact;
 import com.bass.bbs.model.AccountProfile;
+import com.bass.bbs.model.ProfileLocation;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -36,7 +37,8 @@ import com.bass.bbs.ApiClient;
  */
 @JsonPropertyOrder({
   RespCurrentAccount.JSON_PROPERTY_PROFILE,
-  RespCurrentAccount.JSON_PROPERTY_CONTACT
+  RespCurrentAccount.JSON_PROPERTY_CONTACT,
+  RespCurrentAccount.JSON_PROPERTY_LOCATION
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class RespCurrentAccount {
@@ -47,6 +49,10 @@ public class RespCurrentAccount {
   public static final String JSON_PROPERTY_CONTACT = "contact";
   @javax.annotation.Nullable
   private AccountContact contact;
+
+  public static final String JSON_PROPERTY_LOCATION = "location";
+  @javax.annotation.Nullable
+  private ProfileLocation location;
 
   public RespCurrentAccount() { 
   }
@@ -99,6 +105,30 @@ public class RespCurrentAccount {
   }
 
 
+  public RespCurrentAccount location(@javax.annotation.Nullable ProfileLocation location) {
+    this.location = location;
+    return this;
+  }
+
+  /**
+   * Get location
+   * @return location
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_LOCATION, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public ProfileLocation getLocation() {
+    return location;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_LOCATION, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLocation(@javax.annotation.Nullable ProfileLocation location) {
+    this.location = location;
+  }
+
+
   /**
    * Return true if this Resp_CurrentAccount object is equal to o.
    */
@@ -112,12 +142,13 @@ public class RespCurrentAccount {
     }
     RespCurrentAccount respCurrentAccount = (RespCurrentAccount) o;
     return Objects.equals(this.profile, respCurrentAccount.profile) &&
-        Objects.equals(this.contact, respCurrentAccount.contact);
+        Objects.equals(this.contact, respCurrentAccount.contact) &&
+        Objects.equals(this.location, respCurrentAccount.location);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(profile, contact);
+    return Objects.hash(profile, contact, location);
   }
 
   @Override
@@ -126,6 +157,7 @@ public class RespCurrentAccount {
     sb.append("class RespCurrentAccount {\n");
     sb.append("    profile: ").append(toIndentedString(profile)).append("\n");
     sb.append("    contact: ").append(toIndentedString(contact)).append("\n");
+    sb.append("    location: ").append(toIndentedString(location)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -178,6 +210,11 @@ public class RespCurrentAccount {
     // add `contact` to the URL query string
     if (getContact() != null) {
       joiner.add(getContact().toUrlQueryString(prefix + "contact" + suffix));
+    }
+
+    // add `location` to the URL query string
+    if (getLocation() != null) {
+      joiner.add(getLocation().toUrlQueryString(prefix + "location" + suffix));
     }
 
     return joiner.toString();

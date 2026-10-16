@@ -68,6 +68,7 @@ docs/GetArticleResp.md
 docs/GetCheckinOverviewReq.md
 docs/GetCheckinOverviewResp.md
 docs/GetCurrentAccountResp.md
+docs/GetCurrentHolidayResp.md
 docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
 docs/GetCurrentPrivacySettingResp.md
@@ -76,6 +77,7 @@ docs/GetProfileReq.md
 docs/GetProfileResp.md
 docs/GetStatusRelationReq.md
 docs/GetStatusRelationResp.md
+docs/HolidayService.md
 docs/ImageResp.md
 docs/LikeArticleReq.md
 docs/LikeArticleResp.md
@@ -236,6 +238,7 @@ src/main/java/com/bass/bbs/api/AuthService.java
 src/main/java/com/bass/bbs/api/CheckinService.java
 src/main/java/com/bass/bbs/api/CommentService.java
 src/main/java/com/bass/bbs/api/DomainService.java
+src/main/java/com/bass/bbs/api/HolidayService.java
 src/main/java/com/bass/bbs/api/LocationService.java
 src/main/java/com/bass/bbs/api/MoonbreezeService.java
 src/main/java/com/bass/bbs/api/NotificationService.java
@@ -301,6 +304,7 @@ src/main/java/com/bass/bbs/model/GetArticleResp.java
 src/main/java/com/bass/bbs/model/GetCheckinOverviewReq.java
 src/main/java/com/bass/bbs/model/GetCheckinOverviewResp.java
 src/main/java/com/bass/bbs/model/GetCurrentAccountResp.java
+src/main/java/com/bass/bbs/model/GetCurrentHolidayResp.java
 src/main/java/com/bass/bbs/model/GetCurrentLocationResp.java
 src/main/java/com/bass/bbs/model/GetCurrentPreferencesResp.java
 src/main/java/com/bass/bbs/model/GetCurrentPrivacySettingResp.java
@@ -440,6 +444,7 @@ src/test/java/com/bass/bbs/api/AuthServiceTest.java
 src/test/java/com/bass/bbs/api/CheckinServiceTest.java
 src/test/java/com/bass/bbs/api/CommentServiceTest.java
 src/test/java/com/bass/bbs/api/DomainServiceTest.java
+src/test/java/com/bass/bbs/api/HolidayServiceTest.java
 src/test/java/com/bass/bbs/api/LocationServiceTest.java
 src/test/java/com/bass/bbs/api/MoonbreezeServiceTest.java
 src/test/java/com/bass/bbs/api/NotificationServiceTest.java
@@ -504,6 +509,7 @@ src/test/java/com/bass/bbs/model/GetArticleRespTest.java
 src/test/java/com/bass/bbs/model/GetCheckinOverviewReqTest.java
 src/test/java/com/bass/bbs/model/GetCheckinOverviewRespTest.java
 src/test/java/com/bass/bbs/model/GetCurrentAccountRespTest.java
+src/test/java/com/bass/bbs/model/GetCurrentHolidayRespTest.java
 src/test/java/com/bass/bbs/model/GetCurrentLocationRespTest.java
 src/test/java/com/bass/bbs/model/GetCurrentPreferencesRespTest.java
 src/test/java/com/bass/bbs/model/GetCurrentPrivacySettingRespTest.java

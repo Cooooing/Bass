@@ -37,7 +37,7 @@ public class LocationServiceTest {
     /**
      * 
      *
-     * 获取当前账号的地理资料。
+     * 按当前请求来源 IP 获取地理数据。
      *
      * @throws ApiException
      *          if the Api call fails

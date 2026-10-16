@@ -38,14 +38,6 @@ class RespLocationTest {
     }
 
     /**
-     * Test the property 'userId'
-     */
-    @Test
-    void userIdTest() {
-        // TODO: test userId
-    }
-
-    /**
      * Test the property 'country'
      */
     @Test

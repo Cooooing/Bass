@@ -15,6 +15,7 @@ package com.bass.bbs.model;
 
 import com.bass.bbs.model.AccountContact;
 import com.bass.bbs.model.AccountProfile;
+import com.bass.bbs.model.ProfileLocation;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -53,6 +54,14 @@ class RespCurrentAccountTest {
     @Test
     void contactTest() {
         // TODO: test contact
+    }
+
+    /**
+     * Test the property 'location'
+     */
+    @Test
+    void locationTest() {
+        // TODO: test location
     }
 
 }

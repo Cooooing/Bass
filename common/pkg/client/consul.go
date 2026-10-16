@@ -63,10 +63,10 @@ func NewConsulClient(
 		cfg.Datacenter = conf.Datacenter
 	}
 	cfg.HttpClient = &http.Client{
-		Timeout: conf.DialTimeout.AsDuration(),
 		Transport: &http.Transport{
 			DialContext: (&net.Dialer{
-				Timeout: conf.DialTimeout.AsDuration(),
+				Timeout:   conf.DialTimeout.AsDuration(),
+				KeepAlive: 30 * time.Second,
 			}).DialContext,
 		},
 	}

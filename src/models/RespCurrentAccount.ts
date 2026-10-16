@@ -13,6 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
+import type { ProfileLocation } from './ProfileLocation';
+import {
+    ProfileLocationFromJSON,
+    ProfileLocationFromJSONTyped,
+    ProfileLocationToJSON,
+    ProfileLocationToJSONTyped,
+} from './ProfileLocation';
 import type { AccountContact } from './AccountContact';
 import {
     AccountContactFromJSON,
@@ -46,6 +53,12 @@ export interface RespCurrentAccount {
      * @memberof RespCurrentAccount
      */
     contact?: AccountContact;
+    /**
+     * 
+     * @type {ProfileLocation}
+     * @memberof RespCurrentAccount
+     */
+    location?: ProfileLocation;
 }
 
 /**
@@ -67,6 +80,7 @@ export function RespCurrentAccountFromJSONTyped(json: any, ignoreDiscriminator: 
         
         'profile': json['profile'] == null ? undefined : AccountProfileFromJSON(json['profile']),
         'contact': json['contact'] == null ? undefined : AccountContactFromJSON(json['contact']),
+        'location': json['location'] == null ? undefined : ProfileLocationFromJSON(json['location']),
     };
 }
 
@@ -83,6 +97,7 @@ export function RespCurrentAccountToJSONTyped(value?: RespCurrentAccount | null,
         
         'profile': AccountProfileToJSON(value['profile']),
         'contact': AccountContactToJSON(value['contact']),
+        'location': ProfileLocationToJSON(value['location']),
     };
 }
 

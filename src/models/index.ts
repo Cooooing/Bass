@@ -55,6 +55,7 @@ export * from './GetArticleResp';
 export * from './GetCheckinOverviewReq';
 export * from './GetCheckinOverviewResp';
 export * from './GetCurrentAccountResp';
+export * from './GetCurrentHolidayResp';
 export * from './GetCurrentLocationResp';
 export * from './GetCurrentPreferencesResp';
 export * from './GetCurrentPrivacySettingResp';

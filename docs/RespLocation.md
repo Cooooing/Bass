@@ -6,7 +6,6 @@
 
 Name | Type
 ------------ | -------------
-`userId` | string
 `country` | string
 `province` | string
 `city` | string
@@ -18,7 +17,6 @@ import type { RespLocation } from '@bass/bbs-sdk-fetch'
 
 // TODO: Update the object below with actual values
 const example = {
-  "userId": null,
   "country": null,
   "province": null,
   "city": null,

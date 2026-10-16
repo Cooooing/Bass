@@ -64,6 +64,7 @@ docs/GetArticleResp.md
 docs/GetCheckinOverviewReq.md
 docs/GetCheckinOverviewResp.md
 docs/GetCurrentAccountResp.md
+docs/GetCurrentHolidayResp.md
 docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
 docs/GetCurrentPrivacySettingResp.md
@@ -72,6 +73,7 @@ docs/GetProfileReq.md
 docs/GetProfileResp.md
 docs/GetStatusRelationReq.md
 docs/GetStatusRelationResp.md
+docs/HolidayService.md
 docs/ImageResp.md
 docs/LikeArticleReq.md
 docs/LikeArticleResp.md
@@ -213,6 +215,7 @@ src/apis/AuthService.ts
 src/apis/CheckinService.ts
 src/apis/CommentService.ts
 src/apis/DomainService.ts
+src/apis/HolidayService.ts
 src/apis/LocationService.ts
 src/apis/MoonbreezeService.ts
 src/apis/NotificationService.ts
@@ -279,6 +282,7 @@ src/models/GetArticleResp.ts
 src/models/GetCheckinOverviewReq.ts
 src/models/GetCheckinOverviewResp.ts
 src/models/GetCurrentAccountResp.ts
+src/models/GetCurrentHolidayResp.ts
 src/models/GetCurrentLocationResp.ts
 src/models/GetCurrentPreferencesResp.ts
 src/models/GetCurrentPrivacySettingResp.ts

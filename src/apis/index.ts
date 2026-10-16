@@ -7,6 +7,7 @@ export * from './AuthService';
 export * from './CheckinService';
 export * from './CommentService';
 export * from './DomainService';
+export * from './HolidayService';
 export * from './LocationService';
 export * from './MoonbreezeService';
 export * from './NotificationService';

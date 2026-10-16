@@ -39,7 +39,7 @@ export interface LocationServiceInterface {
     getCurrentRequestOpts(requestParameters: GetCurrentRequest): Promise<runtime.RequestOpts>;
 
     /**
-     * 获取当前账号的地理资料。
+     * 按当前请求来源 IP 获取地理数据。
      * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -48,7 +48,7 @@ export interface LocationServiceInterface {
     getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentLocationResp>>;
 
     /**
-     * 获取当前账号的地理资料。
+     * 按当前请求来源 IP 获取地理数据。
      */
     getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentLocationResp>;
 
@@ -77,7 +77,7 @@ export class LocationService extends runtime.BaseAPI implements LocationServiceI
         headerParameters['Content-Type'] = 'application/json';
 
 
-        let urlPath = `/v1/user/location/get-current`;
+        let urlPath = `/v1/platform/location/get-current`;
 
         return {
             path: urlPath,
@@ -89,7 +89,7 @@ export class LocationService extends runtime.BaseAPI implements LocationServiceI
     }
 
     /**
-     * 获取当前账号的地理资料。
+     * 按当前请求来源 IP 获取地理数据。
      */
     async getCurrentRaw(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<GetCurrentLocationResp>> {
         const requestOptions = await this.getCurrentRequestOpts(requestParameters);
@@ -99,7 +99,7 @@ export class LocationService extends runtime.BaseAPI implements LocationServiceI
     }
 
     /**
-     * 获取当前账号的地理资料。
+     * 按当前请求来源 IP 获取地理数据。
      */
     async getCurrent(requestParameters: GetCurrentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<GetCurrentLocationResp> {
         const response = await this.getCurrentRaw(requestParameters, initOverrides);

@@ -8,6 +8,7 @@ Name | Type
 ------------ | -------------
 `profile` | [AccountProfile](AccountProfile.md)
 `contact` | [AccountContact](AccountContact.md)
+`location` | [ProfileLocation](ProfileLocation.md)
 
 ## Example
 
@@ -18,6 +19,7 @@ import type { RespCurrentAccount } from '@bass/bbs-sdk-fetch'
 const example = {
   "profile": null,
   "contact": null,
+  "location": null,
 } satisfies RespCurrentAccount
 
 console.log(example)

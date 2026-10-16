@@ -24,12 +24,6 @@ export interface RespLocation {
      * @type {string}
      * @memberof RespLocation
      */
-    userId?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RespLocation
-     */
     country?: string;
     /**
      * 
@@ -62,7 +56,6 @@ export function RespLocationFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'userId': json['user_id'] == null ? undefined : json['user_id'],
         'country': json['country'] == null ? undefined : json['country'],
         'province': json['province'] == null ? undefined : json['province'],
         'city': json['city'] == null ? undefined : json['city'],
@@ -80,7 +73,6 @@ export function RespLocationToJSONTyped(value?: RespLocation | null, ignoreDiscr
 
     return {
         
-        'user_id': value['userId'],
         'country': value['country'],
         'province': value['province'],
         'city': value['city'],

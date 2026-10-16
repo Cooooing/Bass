@@ -4,12 +4,12 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**getCurrent**](#getcurrent) | **POST** /v1/user/location/get-current | |
+|[**getCurrent**](#getcurrent) | **POST** /v1/platform/location/get-current | |
 
 # **getCurrent**
 > GetCurrentLocationResp getCurrent(body)
 
-获取当前账号的地理资料。
+按当前请求来源 IP 获取地理数据。
 
 ### Example
 

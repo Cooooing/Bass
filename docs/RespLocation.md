@@ -5,7 +5,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**user_id** | **string** |  | [optional] [default to undefined]
 **country** | **string** |  | [optional] [default to undefined]
 **province** | **string** |  | [optional] [default to undefined]
 **city** | **string** |  | [optional] [default to undefined]
@@ -16,7 +15,6 @@ Name | Type | Description | Notes
 import { RespLocation } from '@bass/bbs-sdk-axios';
 
 const instance: RespLocation = {
-    user_id,
     country,
     province,
     city,

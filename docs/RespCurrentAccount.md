@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **profile** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
 **contact** | [**AccountContact**](AccountContact.md) |  | [optional] [default to undefined]
+**location** | [**ProfileLocation**](ProfileLocation.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -16,6 +17,7 @@ import { RespCurrentAccount } from '@bass/bbs-sdk-axios';
 const instance: RespCurrentAccount = {
     profile,
     contact,
+    location,
 };
 ```
 

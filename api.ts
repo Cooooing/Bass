@@ -469,6 +469,43 @@ export interface GetCheckinOverviewResp {
 export interface GetCurrentAccountResp {
     'account'?: RespCurrentAccount;
 }
+export interface GetCurrentHolidayResp {
+    /**
+     * 当前日期。
+     */
+    'date'?: string;
+    /**
+     * 当天类型。
+     */
+    'type'?: GetCurrentHolidayRespTypeEnum;
+    /**
+     * 当天名称。
+     */
+    'day_name'?: string;
+    /**
+     * 下一个假期名称。
+     */
+    'holiday_name'?: string;
+    /**
+     * 距离下一个假期的天数。
+     */
+    'days_to_holiday'?: number;
+    /**
+     * 当前假期剩余天数。
+     */
+    'days_remaining'?: number;
+}
+
+export const GetCurrentHolidayRespTypeEnum = {
+    HOLIDAY_TYPE_UNSPECIFIED: 'HOLIDAY_TYPE_UNSPECIFIED',
+    HOLIDAY_TYPE_WORKDAY: 'HOLIDAY_TYPE_WORKDAY',
+    HOLIDAY_TYPE_WEEKEND: 'HOLIDAY_TYPE_WEEKEND',
+    HOLIDAY_TYPE_FESTIVAL: 'HOLIDAY_TYPE_FESTIVAL',
+    HOLIDAY_TYPE_MAKEUP_WORKDAY: 'HOLIDAY_TYPE_MAKEUP_WORKDAY',
+} as const;
+
+export type GetCurrentHolidayRespTypeEnum = typeof GetCurrentHolidayRespTypeEnum[keyof typeof GetCurrentHolidayRespTypeEnum];
+
 export interface GetCurrentLocationResp {
     'location'?: RespLocation;
 }
@@ -1268,6 +1305,7 @@ export interface RespCommentViewerActionState {
 export interface RespCurrentAccount {
     'profile'?: AccountProfile;
     'contact'?: AccountContact;
+    'location'?: ProfileLocation;
 }
 export interface RespDomain {
     'id'?: string;
@@ -1294,7 +1332,6 @@ export const RespDomainStatusEnum = {
 export type RespDomainStatusEnum = typeof RespDomainStatusEnum[keyof typeof RespDomainStatusEnum];
 
 export interface RespLocation {
-    'user_id'?: string;
     'country'?: string;
     'province'?: string;
     'city'?: string;
@@ -5791,12 +5828,12 @@ export class DomainService extends BaseAPI implements DomainServiceInterface {
 
 
 /**
- * LocationService - axios parameter creator
+ * HolidayService - axios parameter creator
  */
-export const LocationServiceAxiosParamCreator = function (configuration?: Configuration) {
+export const HolidayServiceAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 获取当前账号的地理资料。
+         * 获取当前节假日状态。
          * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5804,7 +5841,126 @@ export const LocationServiceAxiosParamCreator = function (configuration?: Config
         getCurrent: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             assertParamExists('getCurrent', 'body', body)
-            const localVarPath = `/v1/user/location/get-current`;
+            const localVarPath = `/v1/platform/holiday/get-current`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * HolidayService - functional programming interface
+ */
+export const HolidayServiceFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = HolidayServiceAxiosParamCreator(configuration)
+    return {
+        /**
+         * 获取当前节假日状态。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getCurrent(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetCurrentHolidayResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCurrent(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['HolidayService.getCurrent']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * HolidayService - factory interface
+ */
+export const HolidayServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = HolidayServiceFp(configuration)
+    return {
+        /**
+         * 获取当前节假日状态。
+         * @param {HolidayServiceGetCurrentRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCurrent(requestParameters: HolidayServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentHolidayResp> {
+            return localVarFp.getCurrent(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * HolidayService - interface
+ */
+export interface HolidayServiceInterface {
+    /**
+     * 获取当前节假日状态。
+     * @param {HolidayServiceGetCurrentRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCurrent(requestParameters: HolidayServiceGetCurrentRequest, options?: RawAxiosRequestConfig): AxiosPromise<GetCurrentHolidayResp>;
+
+}
+
+/**
+ * Request parameters for getCurrent operation in HolidayService.
+ */
+export interface HolidayServiceGetCurrentRequest {
+    readonly body: object
+}
+
+/**
+ * HolidayService - object-oriented interface
+ */
+export class HolidayService extends BaseAPI implements HolidayServiceInterface {
+    /**
+     * 获取当前节假日状态。
+     * @param {HolidayServiceGetCurrentRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getCurrent(requestParameters: HolidayServiceGetCurrentRequest, options?: RawAxiosRequestConfig) {
+        return HolidayServiceFp(this.configuration).getCurrent(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * LocationService - axios parameter creator
+ */
+export const LocationServiceAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 按当前请求来源 IP 获取地理数据。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getCurrent: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('getCurrent', 'body', body)
+            const localVarPath = `/v1/platform/location/get-current`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -5839,7 +5995,7 @@ export const LocationServiceFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = LocationServiceAxiosParamCreator(configuration)
     return {
         /**
-         * 获取当前账号的地理资料。
+         * 按当前请求来源 IP 获取地理数据。
          * @param {object} body 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5860,7 +6016,7 @@ export const LocationServiceFactory = function (configuration?: Configuration, b
     const localVarFp = LocationServiceFp(configuration)
     return {
         /**
-         * 获取当前账号的地理资料。
+         * 按当前请求来源 IP 获取地理数据。
          * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -5876,7 +6032,7 @@ export const LocationServiceFactory = function (configuration?: Configuration, b
  */
 export interface LocationServiceInterface {
     /**
-     * 获取当前账号的地理资料。
+     * 按当前请求来源 IP 获取地理数据。
      * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -5897,7 +6053,7 @@ export interface LocationServiceGetCurrentRequest {
  */
 export class LocationService extends BaseAPI implements LocationServiceInterface {
     /**
-     * 获取当前账号的地理资料。
+     * 按当前请求来源 IP 获取地理数据。
      * @param {LocationServiceGetCurrentRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

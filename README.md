@@ -120,7 +120,8 @@ Class | Method | HTTP request | Description
 *DomainService* | [**Create**](docs/DomainService.md#create) | **Post** /v1/content/domain/create | 
 *DomainService* | [**List**](docs/DomainService.md#list) | **Post** /v1/content/domain/list | 
 *DomainService* | [**Update**](docs/DomainService.md#update) | **Post** /v1/content/domain/update | 
-*LocationService* | [**GetCurrent**](docs/LocationService.md#getcurrent) | **Post** /v1/user/location/get-current | 
+*HolidayService* | [**GetCurrent**](docs/HolidayService.md#getcurrent) | **Post** /v1/platform/holiday/get-current | 
+*LocationService* | [**GetCurrent**](docs/LocationService.md#getcurrent) | **Post** /v1/platform/location/get-current | 
 *MoonbreezeService* | [**Create**](docs/MoonbreezeService.md#create) | **Post** /v1/content/moonbreeze/create | 
 *MoonbreezeService* | [**PageMember**](docs/MoonbreezeService.md#pagemember) | **Post** /v1/content/moonbreeze/page-member | 
 *MoonbreezeService* | [**PagePublic**](docs/MoonbreezeService.md#pagepublic) | **Post** /v1/content/moonbreeze/page-public | 
@@ -213,6 +214,7 @@ Class | Method | HTTP request | Description
  - [GetCheckinOverviewReq](docs/GetCheckinOverviewReq.md)
  - [GetCheckinOverviewResp](docs/GetCheckinOverviewResp.md)
  - [GetCurrentAccountResp](docs/GetCurrentAccountResp.md)
+ - [GetCurrentHolidayResp](docs/GetCurrentHolidayResp.md)
  - [GetCurrentLocationResp](docs/GetCurrentLocationResp.md)
  - [GetCurrentPreferencesResp](docs/GetCurrentPreferencesResp.md)
  - [GetCurrentPrivacySettingResp](docs/GetCurrentPrivacySettingResp.md)

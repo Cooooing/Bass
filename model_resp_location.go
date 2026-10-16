@@ -19,7 +19,6 @@ var _ MappedNullable = &RespLocation{}
 
 // RespLocation struct for RespLocation
 type RespLocation struct {
-	UserId *string `json:"user_id,omitempty"`
 	Country *string `json:"country,omitempty"`
 	Province *string `json:"province,omitempty"`
 	City *string `json:"city,omitempty"`
@@ -40,38 +39,6 @@ func NewRespLocation() *RespLocation {
 func NewRespLocationWithDefaults() *RespLocation {
 	this := RespLocation{}
 	return &this
-}
-
-// GetUserId returns the UserId field value if set, zero value otherwise.
-func (o *RespLocation) GetUserId() string {
-	if o == nil || IsNil(o.UserId) {
-		var ret string
-		return ret
-	}
-	return *o.UserId
-}
-
-// GetUserIdOk returns a tuple with the UserId field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *RespLocation) GetUserIdOk() (*string, bool) {
-	if o == nil || IsNil(o.UserId) {
-		return nil, false
-	}
-	return o.UserId, true
-}
-
-// HasUserId returns a boolean if a field has been set.
-func (o *RespLocation) HasUserId() bool {
-	if o != nil && !IsNil(o.UserId) {
-		return true
-	}
-
-	return false
-}
-
-// SetUserId gets a reference to the given string and assigns it to the UserId field.
-func (o *RespLocation) SetUserId(v string) {
-	o.UserId = &v
 }
 
 // GetCountry returns the Country field value if set, zero value otherwise.
@@ -180,9 +147,6 @@ func (o RespLocation) MarshalJSON() ([]byte, error) {
 
 func (o RespLocation) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.UserId) {
-		toSerialize["user_id"] = o.UserId
-	}
 	if !IsNil(o.Country) {
 		toSerialize["country"] = o.Country
 	}

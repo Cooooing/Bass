@@ -4,7 +4,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**GetCurrent**](LocationService.md#GetCurrent) | **Post** /v1/user/location/get-current | 
+[**GetCurrent**](LocationService.md#GetCurrent) | **Post** /v1/platform/location/get-current | 
 
 
 

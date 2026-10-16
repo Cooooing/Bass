@@ -21,6 +21,7 @@ var _ MappedNullable = &RespCurrentAccount{}
 type RespCurrentAccount struct {
 	Profile *AccountProfile `json:"profile,omitempty"`
 	Contact *AccountContact `json:"contact,omitempty"`
+	Location *ProfileLocation `json:"location,omitempty"`
 }
 
 // NewRespCurrentAccount instantiates a new RespCurrentAccount object
@@ -104,6 +105,38 @@ func (o *RespCurrentAccount) SetContact(v AccountContact) {
 	o.Contact = &v
 }
 
+// GetLocation returns the Location field value if set, zero value otherwise.
+func (o *RespCurrentAccount) GetLocation() ProfileLocation {
+	if o == nil || IsNil(o.Location) {
+		var ret ProfileLocation
+		return ret
+	}
+	return *o.Location
+}
+
+// GetLocationOk returns a tuple with the Location field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RespCurrentAccount) GetLocationOk() (*ProfileLocation, bool) {
+	if o == nil || IsNil(o.Location) {
+		return nil, false
+	}
+	return o.Location, true
+}
+
+// HasLocation returns a boolean if a field has been set.
+func (o *RespCurrentAccount) HasLocation() bool {
+	if o != nil && !IsNil(o.Location) {
+		return true
+	}
+
+	return false
+}
+
+// SetLocation gets a reference to the given ProfileLocation and assigns it to the Location field.
+func (o *RespCurrentAccount) SetLocation(v ProfileLocation) {
+	o.Location = &v
+}
+
 func (o RespCurrentAccount) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -119,6 +152,9 @@ func (o RespCurrentAccount) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Contact) {
 		toSerialize["contact"] = o.Contact
+	}
+	if !IsNil(o.Location) {
+		toSerialize["location"] = o.Location
 	}
 	return toSerialize, nil
 }

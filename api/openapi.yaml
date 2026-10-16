@@ -20,7 +20,9 @@ tags:
   name: CommentService
 - description: 领域 HTTP 接口。
   name: DomainService
-- description: 账号地理资料接口。
+- description: 节假日服务。
+  name: HolidayService
+- description: 平台地理数据接口。
   name: LocationService
 - description: MoonbreezeService 提供社区短动态入口。
   name: MoonbreezeService
@@ -889,6 +891,44 @@ paths:
           description: OK
       tags:
       - NotificationService
+  /v1/platform/holiday/get-current:
+    post:
+      description: 获取当前节假日状态。
+      operationId: HolidayService_GetCurrent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetCurrentHoliday_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCurrentHoliday_Resp"
+          description: OK
+      tags:
+      - HolidayService
+  /v1/platform/location/get-current:
+    post:
+      description: 按当前请求来源 IP 获取地理数据。
+      operationId: LocationService_GetCurrent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetCurrentLocation_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetCurrentLocation_Resp"
+          description: OK
+      tags:
+      - LocationService
   /v1/user/account/avatar:
     get:
       description: 生成默认账号头像
@@ -1266,25 +1306,6 @@ paths:
           description: OK
       tags:
       - CheckinService
-  /v1/user/location/get-current:
-    post:
-      description: 获取当前账号的地理资料。
-      operationId: LocationService_GetCurrent
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GetCurrentLocation_Req"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/GetCurrentLocation_Resp"
-          description: OK
-      tags:
-      - LocationService
   /v1/user/otp/email/send:
     post:
       description: 发送邮箱 OTP。
@@ -3461,9 +3482,54 @@ components:
             user_id: user_id
             phone: phone
             email: email
+          location:
+            country: country
+            province: province
+            city: city
       properties:
         account:
           $ref: "#/components/schemas/Resp_CurrentAccount"
+      type: object
+    GetCurrentHoliday_Req:
+      properties: {}
+      type: object
+    GetCurrentHoliday_Resp:
+      example:
+        date: 2000-01-23T04:56:07.000+00:00
+        day_name: day_name
+        days_remaining: 6
+        type: HOLIDAY_TYPE_UNSPECIFIED
+        days_to_holiday: 0
+        holiday_name: holiday_name
+      properties:
+        date:
+          description: 当前日期。
+          format: date-time
+          type: string
+        type:
+          description: 当天类型。
+          enum:
+          - HOLIDAY_TYPE_UNSPECIFIED
+          - HOLIDAY_TYPE_WORKDAY
+          - HOLIDAY_TYPE_WEEKEND
+          - HOLIDAY_TYPE_FESTIVAL
+          - HOLIDAY_TYPE_MAKEUP_WORKDAY
+          format: enum
+          type: string
+        day_name:
+          description: 当天名称。
+          type: string
+        holiday_name:
+          description: 下一个假期名称。
+          type: string
+        days_to_holiday:
+          description: 距离下一个假期的天数。
+          format: int32
+          type: integer
+        days_remaining:
+          description: 当前假期剩余天数。
+          format: int32
+          type: integer
       type: object
     GetCurrentLocation_Req:
       properties: {}
@@ -3473,7 +3539,6 @@ components:
         location:
           country: country
           province: province
-          user_id: user_id
           city: city
       properties:
         location:
@@ -7575,11 +7640,17 @@ components:
           user_id: user_id
           phone: phone
           email: email
+        location:
+          country: country
+          province: province
+          city: city
       properties:
         profile:
           $ref: "#/components/schemas/AccountProfile"
         contact:
           $ref: "#/components/schemas/AccountContact"
+        location:
+          $ref: "#/components/schemas/ProfileLocation"
       type: object
     Resp_Domain:
       example:
@@ -7636,11 +7707,8 @@ components:
       example:
         country: country
         province: province
-        user_id: user_id
         city: city
       properties:
-        user_id:
-          type: string
         country:
           type: string
         province:

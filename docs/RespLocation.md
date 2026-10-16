@@ -4,7 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**UserId** | Pointer to **string** |  | [optional] 
 **Country** | Pointer to **string** |  | [optional] 
 **Province** | Pointer to **string** |  | [optional] 
 **City** | Pointer to **string** |  | [optional] 
@@ -27,31 +26,6 @@ will change when the set of required properties is changed
 NewRespLocationWithDefaults instantiates a new RespLocation object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
-
-### GetUserId
-
-`func (o *RespLocation) GetUserId() string`
-
-GetUserId returns the UserId field if non-nil, zero value otherwise.
-
-### GetUserIdOk
-
-`func (o *RespLocation) GetUserIdOk() (*string, bool)`
-
-GetUserIdOk returns a tuple with the UserId field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetUserId
-
-`func (o *RespLocation) SetUserId(v string)`
-
-SetUserId sets UserId field to given value.
-
-### HasUserId
-
-`func (o *RespLocation) HasUserId() bool`
-
-HasUserId returns a boolean if a field has been set.
 
 ### GetCountry
 

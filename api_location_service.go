@@ -24,7 +24,7 @@ type LocationService interface {
 	/*
 	GetCurrent Method for GetCurrent
 
-	获取当前账号的地理资料。
+	按当前请求来源 IP 获取地理数据。
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiGetCurrentRequest
@@ -57,7 +57,7 @@ func (r ApiGetCurrentRequest) Execute() (*GetCurrentLocationResp, *http.Response
 /*
 GetCurrent Method for GetCurrent
 
-获取当前账号的地理资料。
+按当前请求来源 IP 获取地理数据。
 
  @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  @return ApiGetCurrentRequest
@@ -84,7 +84,7 @@ func (a *LocationServiceService) GetCurrentExecute(r ApiGetCurrentRequest) (*Get
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/v1/user/location/get-current"
+	localVarPath := localBasePath + "/v1/platform/location/get-current"
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := url.Values{}

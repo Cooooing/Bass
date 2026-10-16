@@ -10,6 +10,7 @@ api_auth_service.go
 api_checkin_service.go
 api_comment_service.go
 api_domain_service.go
+api_holiday_service.go
 api_location_service.go
 api_moonbreeze_service.go
 api_notification_service.go
@@ -83,6 +84,7 @@ docs/GetArticleResp.md
 docs/GetCheckinOverviewReq.md
 docs/GetCheckinOverviewResp.md
 docs/GetCurrentAccountResp.md
+docs/GetCurrentHolidayResp.md
 docs/GetCurrentLocationResp.md
 docs/GetCurrentPreferencesResp.md
 docs/GetCurrentPrivacySettingResp.md
@@ -91,6 +93,7 @@ docs/GetProfileReq.md
 docs/GetProfileResp.md
 docs/GetStatusRelationReq.md
 docs/GetStatusRelationResp.md
+docs/HolidayService.md
 docs/ImageResp.md
 docs/LikeArticleReq.md
 docs/LikeArticleResp.md
@@ -282,6 +285,7 @@ model_get_article_resp.go
 model_get_checkin_overview_req.go
 model_get_checkin_overview_resp.go
 model_get_current_account_resp.go
+model_get_current_holiday_resp.go
 model_get_current_location_resp.go
 model_get_current_preferences_resp.go
 model_get_current_privacy_setting_resp.go
@@ -422,6 +426,7 @@ test/api_auth_service_test.go
 test/api_checkin_service_test.go
 test/api_comment_service_test.go
 test/api_domain_service_test.go
+test/api_holiday_service_test.go
 test/api_location_service_test.go
 test/api_moonbreeze_service_test.go
 test/api_notification_service_test.go

@@ -15,7 +15,6 @@ require (
 	notify v0.0.0-00010101000000-000000000000
 	platform v0.0.0-00010101000000-000000000000
 	push_hub v0.0.0-00010101000000-000000000000
-	push_node v0.0.0-00010101000000-000000000000
 	scheduler v0.0.0-00010101000000-000000000000
 	user v0.0.0
 )
@@ -173,7 +172,5 @@ replace notify => ../app/notify
 replace platform => ../app/platform
 
 replace push_hub => ../app/push_hub
-
-replace push_node => ../app/push_node
 
 replace scheduler => ../app/scheduler

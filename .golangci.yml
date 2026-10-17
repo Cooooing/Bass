@@ -22,7 +22,6 @@ formatters:
         - notify
         - platform
         - push_hub
-        - push_node
         - scheduler
         - user
   exclusions:

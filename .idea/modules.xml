@@ -15,7 +15,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/notify/notify.iml" filepath="$PROJECT_DIR$/app/notify/notify.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/platform/platform.iml" filepath="$PROJECT_DIR$/app/platform/platform.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/push_hub/push_hub.iml" filepath="$PROJECT_DIR$/app/push_hub/push_hub.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/push_node/push_node.iml" filepath="$PROJECT_DIR$/app/push_node/push_node.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/scheduler/scheduler.iml" filepath="$PROJECT_DIR$/app/scheduler/scheduler.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/user/user.iml" filepath="$PROJECT_DIR$/app/user/user.iml" />
     </modules>

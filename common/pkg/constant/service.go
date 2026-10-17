@@ -9,7 +9,6 @@ const (
 	NotifyServiceName    ServiceName = "notify"
 	IMServiceName        ServiceName = "im"
 	PushHubServiceName   ServiceName = "push_hub"
-	PushNodeServiceName  ServiceName = "push_node"
 	PlatformServiceName  ServiceName = "platform"
 	SchedulerServiceName ServiceName = "scheduler"
 	GameIdleServiceName  ServiceName = "game_idle"
@@ -32,16 +31,15 @@ const (
 	TablePrefixNotify    TablePrefix = TablePrefix(NotifyServiceName + "_")
 	TablePrefixIM        TablePrefix = TablePrefix(IMServiceName + "_")
 	TablePrefixPushHub   TablePrefix = TablePrefix(PushHubServiceName + "_")
-	TablePrefixPushNode  TablePrefix = TablePrefix(PushNodeServiceName + "_")
 	TablePrefixPlatform  TablePrefix = TablePrefix(PlatformServiceName + "_")
 	TablePrefixScheduler TablePrefix = TablePrefix(SchedulerServiceName + "_")
 	TablePrefixGameIdle  TablePrefix = TablePrefix(GameIdleServiceName + "_")
 )
 
 const (
-	PushNodeSubjectPrefix = "push.node."
+	RealtimeNodeSubjectPrefix = "realtime.node."
 )
 
-func GetPushNodeSubject(nodeID string) string {
-	return PushNodeSubjectPrefix + nodeID
+func GetRealtimeNodeSubject(realm, nodeID string) string {
+	return RealtimeNodeSubjectPrefix + realm + "." + nodeID
 }

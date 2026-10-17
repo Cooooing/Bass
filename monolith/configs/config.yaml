@@ -151,8 +151,6 @@ modules:
         use_ssl: false
         timeout: ${MINIO_TIMEOUT:30s}
   push_hub: {}
-  push_node:
-    jwt_secret: ${JWT_SECRET:your-jwt-secret-here}
   scheduler:
     default_execution_timeout: 30s
     stream_name: SCHEDULER

@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="bff_bbs_admin" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="bff">
-    <module name="bff_bbs_admin" />
-    <working_directory value="$PROJECT_DIR$/app/bff_bbs_admin" />
+  <configuration default="false" name="realtime_node" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="service">
+    <module name="realtime_node" />
+    <working_directory value="$PROJECT_DIR$/app/realtime_node" />
     <EXTENSION ID="net.ashald.envfile">
       <option name="IS_ENABLED" value="true" />
       <option name="IS_SUBST" value="false" />
@@ -14,9 +14,9 @@
       </ENTRIES>
     </EXTENSION>
     <kind value="DIRECTORY" />
-    <package value="bff_bbs_admin" />
-    <directory value="$PROJECT_DIR$/app/bff_bbs_admin/cmd" />
-    <filePath value="$PROJECT_DIR$/app/bff_bbs_admin/cmd/main.go" />
+    <package value="realtime_node" />
+    <directory value="$PROJECT_DIR$/app/realtime_node/cmd" />
+    <filePath value="$PROJECT_DIR$/app/realtime_node/cmd/main.go" />
     <method v="2" />
   </configuration>
 </component>

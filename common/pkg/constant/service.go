@@ -8,7 +8,6 @@ const (
 	EconomyServiceName   ServiceName = "economy"
 	NotifyServiceName    ServiceName = "notify"
 	IMServiceName        ServiceName = "im"
-	PushHubServiceName   ServiceName = "push_hub"
 	PlatformServiceName  ServiceName = "platform"
 	SchedulerServiceName ServiceName = "scheduler"
 	GameIdleServiceName  ServiceName = "game_idle"
@@ -30,7 +29,6 @@ const (
 	TablePrefixEconomy   TablePrefix = TablePrefix(EconomyServiceName + "_")
 	TablePrefixNotify    TablePrefix = TablePrefix(NotifyServiceName + "_")
 	TablePrefixIM        TablePrefix = TablePrefix(IMServiceName + "_")
-	TablePrefixPushHub   TablePrefix = TablePrefix(PushHubServiceName + "_")
 	TablePrefixPlatform  TablePrefix = TablePrefix(PlatformServiceName + "_")
 	TablePrefixScheduler TablePrefix = TablePrefix(SchedulerServiceName + "_")
 	TablePrefixGameIdle  TablePrefix = TablePrefix(GameIdleServiceName + "_")

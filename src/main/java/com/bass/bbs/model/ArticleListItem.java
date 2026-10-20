@@ -53,6 +53,7 @@ import com.bass.bbs.ApiClient;
   ArticleListItem.JSON_PROPERTY_THANK_COUNT,
   ArticleListItem.JSON_PROPERTY_LIKE_COUNT,
   ArticleListItem.JSON_PROPERTY_COLLECT_COUNT,
+  ArticleListItem.JSON_PROPERTY_WATCH_COUNT,
   ArticleListItem.JSON_PROPERTY_REWARD_COUNT,
   ArticleListItem.JSON_PROPERTY_REPLY_COUNT,
   ArticleListItem.JSON_PROPERTY_AUTHOR_USER,
@@ -168,6 +169,10 @@ public class ArticleListItem {
   public static final String JSON_PROPERTY_COLLECT_COUNT = "collect_count";
   @javax.annotation.Nullable
   private Integer collectCount;
+
+  public static final String JSON_PROPERTY_WATCH_COUNT = "watch_count";
+  @javax.annotation.Nullable
+  private Integer watchCount;
 
   public static final String JSON_PROPERTY_REWARD_COUNT = "reward_count";
   @javax.annotation.Nullable
@@ -671,6 +676,30 @@ public class ArticleListItem {
   }
 
 
+  public ArticleListItem watchCount(@javax.annotation.Nullable Integer watchCount) {
+    this.watchCount = watchCount;
+    return this;
+  }
+
+  /**
+   * Get watchCount
+   * @return watchCount
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_WATCH_COUNT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Integer getWatchCount() {
+    return watchCount;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_WATCH_COUNT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWatchCount(@javax.annotation.Nullable Integer watchCount) {
+    this.watchCount = watchCount;
+  }
+
+
   public ArticleListItem rewardCount(@javax.annotation.Nullable Integer rewardCount) {
     this.rewardCount = rewardCount;
     return this;
@@ -1144,6 +1173,7 @@ public class ArticleListItem {
         Objects.equals(this.thankCount, articleListItem.thankCount) &&
         Objects.equals(this.likeCount, articleListItem.likeCount) &&
         Objects.equals(this.collectCount, articleListItem.collectCount) &&
+        Objects.equals(this.watchCount, articleListItem.watchCount) &&
         Objects.equals(this.rewardCount, articleListItem.rewardCount) &&
         Objects.equals(this.replyCount, articleListItem.replyCount) &&
         Objects.equals(this.authorUser, articleListItem.authorUser) &&
@@ -1166,7 +1196,7 @@ public class ArticleListItem {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, title, content, contentRender, hasPostscript, hasReward, type, statement, commentable, viewCount, thankCount, likeCount, collectCount, rewardCount, replyCount, authorUser, lastReplyUser, lastReplyAt, coverImageUrl, viewerActionState, publishedAt, publishStatus, visibility, restriction, editedAt, tags, domains, createdBy, updatedBy, createdAt, updatedAt);
+    return Objects.hash(id, title, content, contentRender, hasPostscript, hasReward, type, statement, commentable, viewCount, thankCount, likeCount, collectCount, watchCount, rewardCount, replyCount, authorUser, lastReplyUser, lastReplyAt, coverImageUrl, viewerActionState, publishedAt, publishStatus, visibility, restriction, editedAt, tags, domains, createdBy, updatedBy, createdAt, updatedAt);
   }
 
   @Override
@@ -1186,6 +1216,7 @@ public class ArticleListItem {
     sb.append("    thankCount: ").append(toIndentedString(thankCount)).append("\n");
     sb.append("    likeCount: ").append(toIndentedString(likeCount)).append("\n");
     sb.append("    collectCount: ").append(toIndentedString(collectCount)).append("\n");
+    sb.append("    watchCount: ").append(toIndentedString(watchCount)).append("\n");
     sb.append("    rewardCount: ").append(toIndentedString(rewardCount)).append("\n");
     sb.append("    replyCount: ").append(toIndentedString(replyCount)).append("\n");
     sb.append("    authorUser: ").append(toIndentedString(authorUser)).append("\n");
@@ -1311,6 +1342,11 @@ public class ArticleListItem {
     // add `collect_count` to the URL query string
     if (getCollectCount() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%scollect_count%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getCollectCount()))));
+    }
+
+    // add `watch_count` to the URL query string
+    if (getWatchCount() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%swatch_count%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getWatchCount()))));
     }
 
     // add `reward_count` to the URL query string

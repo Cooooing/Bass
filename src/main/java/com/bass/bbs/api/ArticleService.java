@@ -47,6 +47,8 @@ import com.bass.bbs.model.ThankArticleResp;
 import com.bass.bbs.model.UpdateDraftArticleReq;
 import com.bass.bbs.model.UpdateDraftArticleResp;
 import com.bass.bbs.model.VoteArticlePollReq;
+import com.bass.bbs.model.WatchArticleReq;
+import com.bass.bbs.model.WatchArticleResp;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -4005,6 +4007,207 @@ public class ArticleService {
       }
       public APIVotePollRequest build() {
         return new APIVotePollRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 关注文章
+   * @param apiRequest {@link APIWatchRequest}
+   * @return WatchArticleResp
+   * @throws ApiException if fails to make API call
+   */
+  public WatchArticleResp watch(APIWatchRequest apiRequest) throws ApiException {
+    return watch(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 关注文章
+   * @param apiRequest {@link APIWatchRequest}
+   * @param headers Optional headers to include in the request
+   * @return WatchArticleResp
+   * @throws ApiException if fails to make API call
+   */
+  public WatchArticleResp watch(APIWatchRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    WatchArticleReq watchArticleReq = apiRequest.watchArticleReq();
+    return watch(watchArticleReq, headers);
+  }
+
+  /**
+   * 
+   * 关注文章
+   * @param apiRequest {@link APIWatchRequest}
+   * @return ApiResponse&lt;WatchArticleResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<WatchArticleResp> watchWithHttpInfo(APIWatchRequest apiRequest) throws ApiException {
+    return watchWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 关注文章
+   * @param apiRequest {@link APIWatchRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;WatchArticleResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<WatchArticleResp> watchWithHttpInfo(APIWatchRequest apiRequest, Map<String, String> headers) throws ApiException {
+    WatchArticleReq watchArticleReq = apiRequest.watchArticleReq();
+    return watchWithHttpInfo(watchArticleReq, headers);
+  }
+
+  /**
+   * 
+   * 关注文章
+   * @param watchArticleReq  (required)
+   * @return WatchArticleResp
+   * @throws ApiException if fails to make API call
+   */
+  public WatchArticleResp watch(@javax.annotation.Nonnull WatchArticleReq watchArticleReq) throws ApiException {
+    return watch(watchArticleReq, null);
+  }
+
+  /**
+   * 
+   * 关注文章
+   * @param watchArticleReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return WatchArticleResp
+   * @throws ApiException if fails to make API call
+   */
+  public WatchArticleResp watch(@javax.annotation.Nonnull WatchArticleReq watchArticleReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<WatchArticleResp> localVarResponse = watchWithHttpInfo(watchArticleReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 关注文章
+   * @param watchArticleReq  (required)
+   * @return ApiResponse&lt;WatchArticleResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<WatchArticleResp> watchWithHttpInfo(@javax.annotation.Nonnull WatchArticleReq watchArticleReq) throws ApiException {
+    return watchWithHttpInfo(watchArticleReq, null);
+  }
+
+  /**
+   * 
+   * 关注文章
+   * @param watchArticleReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;WatchArticleResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<WatchArticleResp> watchWithHttpInfo(@javax.annotation.Nonnull WatchArticleReq watchArticleReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = watchRequestBuilder(watchArticleReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("watch", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<WatchArticleResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        WatchArticleResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<WatchArticleResp>() {});
+        
+
+        return new ApiResponse<WatchArticleResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder watchRequestBuilder(@javax.annotation.Nonnull WatchArticleReq watchArticleReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'watchArticleReq' is set
+    if (watchArticleReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'watchArticleReq' when calling watch");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/content/article/watch";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(watchArticleReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APIWatchRequest {
+    @javax.annotation.Nonnull
+    private WatchArticleReq watchArticleReq; //  (required)
+
+    private APIWatchRequest(Builder builder) {
+      this.watchArticleReq = builder.watchArticleReq;
+    }
+    @javax.annotation.Nonnull
+    public WatchArticleReq watchArticleReq() {
+      return watchArticleReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private WatchArticleReq watchArticleReq;
+
+      public Builder watchArticleReq(@javax.annotation.Nonnull WatchArticleReq watchArticleReq) {
+        this.watchArticleReq = watchArticleReq;
+        return this;
+      }
+      public APIWatchRequest build() {
+        return new APIWatchRequest(this);
       }
     }
   }

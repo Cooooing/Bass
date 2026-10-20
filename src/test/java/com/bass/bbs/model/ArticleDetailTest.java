@@ -176,6 +176,14 @@ class ArticleDetailTest {
     }
 
     /**
+     * Test the property 'watchCount'
+     */
+    @Test
+    void watchCountTest() {
+        // TODO: test watchCount
+    }
+
+    /**
      * Test the property 'rewardCount'
      */
     @Test

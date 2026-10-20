@@ -11,6 +11,7 @@
 |**thanked** | **Boolean** |  |  [optional] |
 |**collected** | **Boolean** |  |  [optional] |
 |**rewarded** | **Boolean** |  |  [optional] |
+|**watched** | **Boolean** |  |  [optional] |
 
 
 

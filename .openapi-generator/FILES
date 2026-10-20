@@ -56,6 +56,7 @@ docs/CreateDraftArticleReq.md
 docs/CreateDraftArticleResp.md
 docs/CreateMoonbreezeReq.md
 docs/CreateMoonbreezeResp.md
+docs/CreateRealtimeTicketResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
 docs/DisableTotpReq.md
@@ -144,6 +145,7 @@ docs/ProfileLocation.md
 docs/ProfileRelation.md
 docs/ProfileVisibility.md
 docs/PublishArticleReq.md
+docs/RealtimeService.md
 docs/RefreshTokenReq.md
 docs/RefreshTokenResp.md
 docs/RegisterReq.md
@@ -211,6 +213,8 @@ docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
 docs/VoteArticlePollReq.md
+docs/WatchArticleReq.md
+docs/WatchArticleResp.md
 git_push.sh
 gradle.properties
 gradle/wrapper/gradle-wrapper.jar
@@ -246,6 +250,7 @@ src/main/java/com/bass/bbs/api/OtpService.java
 src/main/java/com/bass/bbs/api/PostscriptService.java
 src/main/java/com/bass/bbs/api/PreferencesService.java
 src/main/java/com/bass/bbs/api/PrivacySettingService.java
+src/main/java/com/bass/bbs/api/RealtimeService.java
 src/main/java/com/bass/bbs/api/RelationService.java
 src/main/java/com/bass/bbs/api/TagService.java
 src/main/java/com/bass/bbs/model/AbstractOpenApiSchema.java
@@ -293,6 +298,7 @@ src/main/java/com/bass/bbs/model/CreateDraftArticleReq.java
 src/main/java/com/bass/bbs/model/CreateDraftArticleResp.java
 src/main/java/com/bass/bbs/model/CreateMoonbreezeReq.java
 src/main/java/com/bass/bbs/model/CreateMoonbreezeResp.java
+src/main/java/com/bass/bbs/model/CreateRealtimeTicketResp.java
 src/main/java/com/bass/bbs/model/CreateTagReq.java
 src/main/java/com/bass/bbs/model/CreateTagResp.java
 src/main/java/com/bass/bbs/model/DisableTotpReq.java
@@ -437,6 +443,8 @@ src/main/java/com/bass/bbs/model/UpdateProfileAccountResp.java
 src/main/java/com/bass/bbs/model/UpdateTagReq.java
 src/main/java/com/bass/bbs/model/UpdateTagResp.java
 src/main/java/com/bass/bbs/model/VoteArticlePollReq.java
+src/main/java/com/bass/bbs/model/WatchArticleReq.java
+src/main/java/com/bass/bbs/model/WatchArticleResp.java
 src/test/java/com/bass/bbs/api/AccountServiceTest.java
 src/test/java/com/bass/bbs/api/ArticleSearchServiceTest.java
 src/test/java/com/bass/bbs/api/ArticleServiceTest.java
@@ -452,6 +460,7 @@ src/test/java/com/bass/bbs/api/OtpServiceTest.java
 src/test/java/com/bass/bbs/api/PostscriptServiceTest.java
 src/test/java/com/bass/bbs/api/PreferencesServiceTest.java
 src/test/java/com/bass/bbs/api/PrivacySettingServiceTest.java
+src/test/java/com/bass/bbs/api/RealtimeServiceTest.java
 src/test/java/com/bass/bbs/api/RelationServiceTest.java
 src/test/java/com/bass/bbs/api/TagServiceTest.java
 src/test/java/com/bass/bbs/model/AcceptArticleAnswerReqTest.java
@@ -498,6 +507,7 @@ src/test/java/com/bass/bbs/model/CreateDraftArticleReqTest.java
 src/test/java/com/bass/bbs/model/CreateDraftArticleRespTest.java
 src/test/java/com/bass/bbs/model/CreateMoonbreezeReqTest.java
 src/test/java/com/bass/bbs/model/CreateMoonbreezeRespTest.java
+src/test/java/com/bass/bbs/model/CreateRealtimeTicketRespTest.java
 src/test/java/com/bass/bbs/model/CreateTagReqTest.java
 src/test/java/com/bass/bbs/model/CreateTagRespTest.java
 src/test/java/com/bass/bbs/model/DisableTotpReqTest.java
@@ -642,3 +652,5 @@ src/test/java/com/bass/bbs/model/UpdateProfileAccountRespTest.java
 src/test/java/com/bass/bbs/model/UpdateTagReqTest.java
 src/test/java/com/bass/bbs/model/UpdateTagRespTest.java
 src/test/java/com/bass/bbs/model/VoteArticlePollReqTest.java
+src/test/java/com/bass/bbs/model/WatchArticleReqTest.java
+src/test/java/com/bass/bbs/model/WatchArticleRespTest.java

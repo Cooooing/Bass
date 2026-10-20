@@ -42,6 +42,8 @@ All URIs are relative to *http://localhost*
 | [**updateDraftWithHttpInfo**](ArticleService.md#updateDraftWithHttpInfo) | **POST** /v1/content/article/draft/update |  |
 | [**votePoll**](ArticleService.md#votePoll) | **POST** /v1/content/article/poll/vote |  |
 | [**votePollWithHttpInfo**](ArticleService.md#votePollWithHttpInfo) | **POST** /v1/content/article/poll/vote |  |
+| [**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch |  |
+| [**watchWithHttpInfo**](ArticleService.md#watchWithHttpInfo) | **POST** /v1/content/article/watch |  |
 
 
 
@@ -2892,5 +2894,155 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **voteArticlePollReq** | [**VoteArticlePollReq**](VoteArticlePollReq.md) |  | |
+
+
+
+## watch
+
+> WatchArticleResp watch(watchRequest)
+
+
+
+关注文章
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        WatchArticleReq watchArticleReq = new WatchArticleReq(); // WatchArticleReq | 
+        try {
+            APIwatchRequest request = APIwatchRequest.newBuilder()
+                .watchArticleReq(watchArticleReq)
+                .build();
+            WatchArticleResp result = apiInstance.watch(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#watch");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| watchRequest | [**APIwatchRequest**](ArticleService.md#APIwatchRequest)|-|-|
+
+### Return type
+
+[**WatchArticleResp**](WatchArticleResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## watchWithHttpInfo
+
+> ApiResponse<WatchArticleResp> watchWithHttpInfo(watchRequest)
+
+
+
+关注文章
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.ArticleService;
+import com.bass.bbs.api.ArticleService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        ArticleService apiInstance = new ArticleService(defaultClient);
+        WatchArticleReq watchArticleReq = new WatchArticleReq(); // WatchArticleReq | 
+        try {
+            APIwatchRequest request = APIwatchRequest.newBuilder()
+                .watchArticleReq(watchArticleReq)
+                .build();
+            ApiResponse<WatchArticleResp> response = apiInstance.watchWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ArticleService#watch");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| watchRequest | [**APIwatchRequest**](ArticleService.md#APIwatchRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**WatchArticleResp**](WatchArticleResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIwatchRequest"></a>
+## APIwatchRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **watchArticleReq** | [**WatchArticleReq**](WatchArticleReq.md) |  | |
 
 

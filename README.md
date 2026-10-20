@@ -173,6 +173,8 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**updateDraftWithHttpInfo**](docs/ArticleService.md#updateDraftWithHttpInfo) | **POST** /v1/content/article/draft/update | 
 *ArticleService* | [**votePoll**](docs/ArticleService.md#votePoll) | **POST** /v1/content/article/poll/vote | 
 *ArticleService* | [**votePollWithHttpInfo**](docs/ArticleService.md#votePollWithHttpInfo) | **POST** /v1/content/article/poll/vote | 
+*ArticleService* | [**watch**](docs/ArticleService.md#watch) | **POST** /v1/content/article/watch | 
+*ArticleService* | [**watchWithHttpInfo**](docs/ArticleService.md#watchWithHttpInfo) | **POST** /v1/content/article/watch | 
 *AuthService* | [**cancelAccount**](docs/AuthService.md#cancelAccount) | **POST** /v1/user/auth/cancel-account | 
 *AuthService* | [**cancelAccountWithHttpInfo**](docs/AuthService.md#cancelAccountWithHttpInfo) | **POST** /v1/user/auth/cancel-account | 
 *AuthService* | [**checkRegistrationAvailability**](docs/AuthService.md#checkRegistrationAvailability) | **GET** /v1/user/auth/register-availability | 
@@ -251,6 +253,8 @@ Class | Method | HTTP request | Description
 *PrivacySettingService* | [**getCurrentWithHttpInfo**](docs/PrivacySettingService.md#getCurrentWithHttpInfo) | **POST** /v1/user/privacy-setting/get-current | 
 *PrivacySettingService* | [**updateCurrent**](docs/PrivacySettingService.md#updateCurrent) | **POST** /v1/user/privacy-setting/update-current | 
 *PrivacySettingService* | [**updateCurrentWithHttpInfo**](docs/PrivacySettingService.md#updateCurrentWithHttpInfo) | **POST** /v1/user/privacy-setting/update-current | 
+*RealtimeService* | [**createTicket**](docs/RealtimeService.md#createTicket) | **POST** /v1/realtime/ticket | 
+*RealtimeService* | [**createTicketWithHttpInfo**](docs/RealtimeService.md#createTicketWithHttpInfo) | **POST** /v1/realtime/ticket | 
 *RelationService* | [**block**](docs/RelationService.md#block) | **POST** /v1/user/relation/block | 
 *RelationService* | [**blockWithHttpInfo**](docs/RelationService.md#blockWithHttpInfo) | **POST** /v1/user/relation/block | 
 *RelationService* | [**follow**](docs/RelationService.md#follow) | **POST** /v1/user/relation/follow | 
@@ -327,6 +331,7 @@ Class | Method | HTTP request | Description
  - [CreateDraftArticleResp](docs/CreateDraftArticleResp.md)
  - [CreateMoonbreezeReq](docs/CreateMoonbreezeReq.md)
  - [CreateMoonbreezeResp](docs/CreateMoonbreezeResp.md)
+ - [CreateRealtimeTicketResp](docs/CreateRealtimeTicketResp.md)
  - [CreateTagReq](docs/CreateTagReq.md)
  - [CreateTagResp](docs/CreateTagResp.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
@@ -471,6 +476,8 @@ Class | Method | HTTP request | Description
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
  - [VoteArticlePollReq](docs/VoteArticlePollReq.md)
+ - [WatchArticleReq](docs/WatchArticleReq.md)
+ - [WatchArticleResp](docs/WatchArticleResp.md)
 
 
 <a id="documentation-for-authorization"></a>

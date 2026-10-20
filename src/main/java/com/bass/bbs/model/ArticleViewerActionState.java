@@ -36,7 +36,8 @@ import com.bass.bbs.ApiClient;
   ArticleViewerActionState.JSON_PROPERTY_LIKED,
   ArticleViewerActionState.JSON_PROPERTY_THANKED,
   ArticleViewerActionState.JSON_PROPERTY_COLLECTED,
-  ArticleViewerActionState.JSON_PROPERTY_REWARDED
+  ArticleViewerActionState.JSON_PROPERTY_REWARDED,
+  ArticleViewerActionState.JSON_PROPERTY_WATCHED
 })
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.22.0")
 public class ArticleViewerActionState {
@@ -55,6 +56,10 @@ public class ArticleViewerActionState {
   public static final String JSON_PROPERTY_REWARDED = "rewarded";
   @javax.annotation.Nullable
   private Boolean rewarded;
+
+  public static final String JSON_PROPERTY_WATCHED = "watched";
+  @javax.annotation.Nullable
+  private Boolean watched;
 
   public ArticleViewerActionState() { 
   }
@@ -155,6 +160,30 @@ public class ArticleViewerActionState {
   }
 
 
+  public ArticleViewerActionState watched(@javax.annotation.Nullable Boolean watched) {
+    this.watched = watched;
+    return this;
+  }
+
+  /**
+   * Get watched
+   * @return watched
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_WATCHED, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Boolean getWatched() {
+    return watched;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_WATCHED, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWatched(@javax.annotation.Nullable Boolean watched) {
+    this.watched = watched;
+  }
+
+
   /**
    * Return true if this ArticleViewerActionState object is equal to o.
    */
@@ -170,12 +199,13 @@ public class ArticleViewerActionState {
     return Objects.equals(this.liked, articleViewerActionState.liked) &&
         Objects.equals(this.thanked, articleViewerActionState.thanked) &&
         Objects.equals(this.collected, articleViewerActionState.collected) &&
-        Objects.equals(this.rewarded, articleViewerActionState.rewarded);
+        Objects.equals(this.rewarded, articleViewerActionState.rewarded) &&
+        Objects.equals(this.watched, articleViewerActionState.watched);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(liked, thanked, collected, rewarded);
+    return Objects.hash(liked, thanked, collected, rewarded, watched);
   }
 
   @Override
@@ -186,6 +216,7 @@ public class ArticleViewerActionState {
     sb.append("    thanked: ").append(toIndentedString(thanked)).append("\n");
     sb.append("    collected: ").append(toIndentedString(collected)).append("\n");
     sb.append("    rewarded: ").append(toIndentedString(rewarded)).append("\n");
+    sb.append("    watched: ").append(toIndentedString(watched)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -248,6 +279,11 @@ public class ArticleViewerActionState {
     // add `rewarded` to the URL query string
     if (getRewarded() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%srewarded%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getRewarded()))));
+    }
+
+    // add `watched` to the URL query string
+    if (getWatched() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%swatched%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getWatched()))));
     }
 
     return joiner.toString();

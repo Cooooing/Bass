@@ -43,6 +43,8 @@ import com.bass.bbs.model.ThankArticleResp;
 import com.bass.bbs.model.UpdateDraftArticleReq;
 import com.bass.bbs.model.UpdateDraftArticleResp;
 import com.bass.bbs.model.VoteArticlePollReq;
+import com.bass.bbs.model.WatchArticleReq;
+import com.bass.bbs.model.WatchArticleResp;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -457,6 +459,27 @@ public class ArticleServiceTest {
           .build();
         Object response = 
         api.votePoll(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 关注文章
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void watchTest() throws ApiException {
+        WatchArticleReq watchArticleReq = null;
+        
+        ArticleService.APIwatchRequest request = ArticleService.APIwatchRequest.newBuilder()
+          .watchArticleReq(watchArticleReq)
+          .build();
+        WatchArticleResp response = 
+        api.watch(request);
 
         // TODO: test validations
     }

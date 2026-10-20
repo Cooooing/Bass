@@ -69,4 +69,12 @@ class ArticleViewerActionStateTest {
         // TODO: test rewarded
     }
 
+    /**
+     * Test the property 'watched'
+     */
+    @Test
+    void watchedTest() {
+        // TODO: test watched
+    }
+
 }

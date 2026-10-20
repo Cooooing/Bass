@@ -23,6 +23,7 @@
 |**thankCount** | **Integer** |  |  [optional] |
 |**likeCount** | **Integer** |  |  [optional] |
 |**collectCount** | **Integer** |  |  [optional] |
+|**watchCount** | **Integer** |  |  [optional] |
 |**rewardCount** | **Integer** |  |  [optional] |
 |**replyCount** | **Integer** |  |  [optional] |
 |**authorUser** | [**AccountProfile**](AccountProfile.md) |  |  [optional] |

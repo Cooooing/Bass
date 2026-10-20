@@ -14,6 +14,7 @@ require (
 	im v0.0.0-00010101000000-000000000000
 	notify v0.0.0-00010101000000-000000000000
 	platform v0.0.0-00010101000000-000000000000
+	realtime_hub v0.0.0-00010101000000-000000000000
 	scheduler v0.0.0-00010101000000-000000000000
 	user v0.0.0
 )
@@ -169,5 +170,7 @@ replace im => ../app/im
 replace notify => ../app/notify
 
 replace platform => ../app/platform
+
+replace realtime_hub => ../app/realtime_hub
 
 replace scheduler => ../app/scheduler

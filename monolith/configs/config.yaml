@@ -150,6 +150,7 @@ modules:
         bucket: ${MINIO_BUCKET:bass-assets}
         use_ssl: false
         timeout: ${MINIO_TIMEOUT:30s}
+  realtime_hub: {}
   scheduler:
     default_execution_timeout: 30s
     stream_name: SCHEDULER

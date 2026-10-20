@@ -4,6 +4,7 @@ package common.api.app.common.enums;
 
 import "common/enums/event_payload_content.proto";
 import "common/enums/event_payload_game_idle.proto";
+import "common/enums/event_payload_notify.proto";
 import "common/enums/event_payload_user.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -57,6 +58,9 @@ enum EventType {
   EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED = 5005; // 挂机游戏行动队列更新
 
   // 平台事件（4000-4999）
+
+  // 通知事件（6000-6999）
+  EVENT_TYPE_NOTIFY_STATION_MESSAGES_CREATED = 6001; // 创建站内信
 }
 
 // 事件主题 — 内部映射为实际 MQ subject。
@@ -103,6 +107,9 @@ enum EventSubject {
   EVENT_SUBJECT_GAME_IDLE = 5000; // game_idle
 
   // 平台事件（4000-4999）
+
+  // 通知事件（6000-6999）
+  EVENT_SUBJECT_NOTIFY_STATION_MESSAGES_CREATED = 6001; // notify.station_messages.created
 }
 
 // 事件消费队列组 — 映射为 NATS queue group。
@@ -176,5 +183,6 @@ message Event {
     GameIdleActionCompletedPayload game_idle_action_completed = 5003;
     GameIdleAbilityLeveledUpPayload game_idle_ability_leveled_up = 5004;
     GameIdleActionQueueUpdatedPayload game_idle_action_queue_updated = 5005;
+    NotifyStationMessagesCreatedPayload notify_station_messages_created = 6001;
   }
 }

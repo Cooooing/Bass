@@ -11,6 +11,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/protobuf/types/known/durationpb"
+	"runtime/debug"
 )
 
 type RedisClient struct {
@@ -60,7 +61,7 @@ func NewRedisClient(
 		MinRetryBackoff: 100 * time.Millisecond,
 		MaxRetryBackoff: 500 * time.Millisecond,
 		OnConnect: func(ctx context.Context, conn *redis.Conn) error {
-			logger.DebugContext(ctx, "redis connection created", constant.LogFieldKind, constant.LogKindRedis, constant.LogFieldAddress, conn.String())
+			logger.DebugContext(ctx, "redis connection created", constant.LogFieldKind, constant.LogKindRedis, constant.LogFieldAddress, conn.String(), "stack", string(debug.Stack()))
 			return nil
 		},
 	})

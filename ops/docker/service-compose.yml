@@ -29,6 +29,30 @@ services:
     networks:
       - bass
 
+  realtime_hub:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/realtime_hub:latest
+    container_name: realtime_hub
+    restart: on-failure:3
+    env_file:
+      - .test.env
+    ports:
+      - "8010:8010"
+      - "9010:9010"
+    networks:
+      - bass
+
+  realtime_node:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/realtime_node:latest
+    container_name: realtime_node
+    restart: on-failure:3
+    env_file:
+      - .test.env
+    ports:
+      - "8020:8020"
+      - "9020:9020"
+    networks:
+      - bass
+
   user:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/user:latest
     container_name: user

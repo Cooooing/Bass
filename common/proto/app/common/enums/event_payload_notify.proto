@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package common.api.app.common.enums;
+
+option go_package = "common/proto/gen/common/enums;enums";
+
+message NotifyStationMessagesCreatedPayload {
+  int64 notification_id = 1;
+  repeated int64 receiver_ids = 2;
+}

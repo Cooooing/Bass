@@ -13,6 +13,8 @@
       <module fileurl="file://$PROJECT_DIR$/monolith/monolith.iml" filepath="$PROJECT_DIR$/monolith/monolith.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/notify/notify.iml" filepath="$PROJECT_DIR$/app/notify/notify.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/platform/platform.iml" filepath="$PROJECT_DIR$/app/platform/platform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/realtime_hub/realtime_hub.iml" filepath="$PROJECT_DIR$/app/realtime_hub/realtime_hub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/realtime_node/realtime_node.iml" filepath="$PROJECT_DIR$/app/realtime_node/realtime_node.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/scheduler/scheduler.iml" filepath="$PROJECT_DIR$/app/scheduler/scheduler.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/user/user.iml" filepath="$PROJECT_DIR$/app/user/user.iml" />
     </modules>

@@ -8,6 +8,7 @@ import (
 	immodule "im/module"
 	notifymodule "notify/module"
 	platformmodule "platform/module"
+	realtimehubmodule "realtime_hub/module"
 	schedulermodule "scheduler/module"
 	usermodule "user/module"
 )
@@ -20,6 +21,7 @@ var Descriptors = []commonmodule.Descriptor{
 	Named("im", immodule.Descriptor()),
 	Named("notify", notifymodule.Descriptor()),
 	Named("platform", platformmodule.Descriptor()),
+	Named("realtime_hub", realtimehubmodule.Descriptor()),
 	Named("scheduler", schedulermodule.Descriptor()),
 	Named("user", usermodule.Descriptor()),
 }

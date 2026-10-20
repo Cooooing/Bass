@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package common.api.app.realtime_hub.v1;
+
+import "realtime_hub/v1/enum/delivery_kind.proto";
+import "realtime_hub/v1/enum/node_group.proto";
+
+option go_package = "common/proto/gen/realtime_hub/v1;v1";
+
+service RealtimeHubService {
+  rpc Connect(stream NodeToHub) returns (stream HubToNode) {} // 建立 node 与 Hub 的双向控制及下行流。
+  rpc IssueTicket(IssueRealtimeTicket.Req) returns (IssueRealtimeTicket.Resp) {} // 签发一次性客户端建连凭证。
+  rpc ConsumeTicket(ConsumeRealtimeTicket.Req) returns (ConsumeRealtimeTicket.Resp) {} // 消费一次性客户端建连凭证。
+}
+
+message NodeToHub {
+  oneof payload {
+    RegisterNode register_node = 1; // 注册本次 node 流会话。
+    BindConnection bind_connection = 2; // 绑定客户端连接。
+    UnbindConnection unbind_connection = 3; // 解绑客户端连接。
+    Heartbeat heartbeat = 4; // 续期 node 在线租约。
+  }
+}
+
+message RegisterNode {
+  string node_id = 1; // node 运行实例标识。
+  repeated string realms = 2; // 支持的实时域。
+  NodeGroup group = 3; // node 所属集群。
+}
+
+message BindConnection {
+  string realm = 1; // 实时域。
+  int64 user_id = 2; // 账号 ID。
+  string connection_id = 3; // node 内客户端连接标识。
+}
+
+message UnbindConnection {
+  string realm = 1; // 实时域。
+  int64 user_id = 2; // 账号 ID。
+  string connection_id = 3; // node 内客户端连接标识。
+}
+
+message Heartbeat {}
+
+message HubToNode {
+  oneof payload {
+    Delivery delivery = 1; // 面向客户端的实时下行。
+    Control control = 2; // Hub 对 node 的连接控制。
+  }
+}
+
+message Delivery {
+  int64 user_id = 1; // 接收账号 ID。
+  DeliveryKind kind = 2; // 实时消息类别。
+  oneof payload {
+    NotificationDelivery notification = 3; // 站内信变更。
+  }
+}
+
+message NotificationDelivery {
+  int64 notification_id = 1; // 站内信 ID。
+}
+
+message Control {
+  oneof payload {
+    CloseConnection close_connection = 1; // 关闭指定客户端连接。
+    ConnectionBound connection_bound = 2; // 确认客户端连接已绑定到 Hub 路由。
+  }
+}
+
+message CloseConnection {
+  string connection_id = 1; // 要关闭的 node 内连接标识。
+  string reason = 2; // 关闭原因。
+}
+
+message ConnectionBound {
+  string connection_id = 1; // 已绑定的 node 内客户端连接标识。
+}
+
+message HubControl {
+  string realm = 1; // 实时域。
+  string node_id = 2; // 控制目标 node。
+  Control control = 3; // 下发控制内容。
+}
+
+message IssueRealtimeTicket {
+  message Req {
+    int64 user_id = 1; // 账号 ID。
+    string realm = 2; // 实时域。
+  }
+  message Resp {
+    string ticket = 1; // 一次性建连凭证。
+    int64 expires_in_seconds = 2; // 有效期秒数。
+  }
+}
+
+message ConsumeRealtimeTicket {
+  message Req {
+    string realm = 1; // 实时域。
+    string ticket = 2; // 一次性建连凭证。
+  }
+  message Resp {
+    int64 user_id = 1; // 已认证账号 ID。
+  }
+}

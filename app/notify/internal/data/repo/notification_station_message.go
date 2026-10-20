@@ -63,11 +63,11 @@ func (r *NotificationStationMessageRepo) Save(ctx context.Context, message *mode
 	} else {
 		query = query.Where(notificationstationmessage.EventIDEQ(message.EventID))
 	}
-	exist, getErr := query.Only(ctx)
+	_, getErr := query.Only(ctx)
 	if getErr != nil {
 		return nil, getErr
 	}
-	return r.stationMessage(exist), nil
+	return nil, nil
 }
 
 func (r *NotificationStationMessageRepo) Get(ctx context.Context, req *bizrepo.NotificationStationMessageQuery) (*model.NotificationStationMessage, error) {

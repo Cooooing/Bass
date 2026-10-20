@@ -37,6 +37,7 @@ var ModuleProviderSet = wire.NewSet(
 	ProvideGenClient,
 	ProvideRedis,
 	ProvideNats,
+	ProvidePublisher,
 	commonClient.NewLarkWebhookClient,
 	wire.Value(http.DefaultClient),
 	client.ProvideTx,
@@ -86,3 +87,5 @@ func ProvideNats(
 ) *common.Nats {
 	return c.Nats
 }
+
+func ProvidePublisher(natsClient *commonClient.NatsClient) commonClient.Publisher { return natsClient }

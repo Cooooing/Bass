@@ -12,6 +12,8 @@ services:
     restart: on-failure:3
     env_file:
       - .test.env
+    environment:
+      REALTIME_NODE_URL: ${REALTIME_NODE_URL:-http://localhost:8020}
     ports:
       - "2324:2324"
     networks:

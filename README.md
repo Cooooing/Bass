@@ -57,6 +57,7 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**thank**](docs/ArticleService.md#thank) | **POST** /v1/content/article/thank | 
 *ArticleService* | [**update_draft**](docs/ArticleService.md#update_draft) | **POST** /v1/content/article/draft/update | 
 *ArticleService* | [**vote_poll**](docs/ArticleService.md#vote_poll) | **POST** /v1/content/article/poll/vote | 
+*ArticleService* | [**watch**](docs/ArticleService.md#watch) | **POST** /v1/content/article/watch | 
 *AuthService* | [**cancel_account**](docs/AuthService.md#cancel_account) | **POST** /v1/user/auth/cancel-account | 
 *AuthService* | [**check_registration_availability**](docs/AuthService.md#check_registration_availability) | **GET** /v1/user/auth/register-availability | 
 *AuthService* | [**login**](docs/AuthService.md#login) | **POST** /v1/user/auth/login | 
@@ -96,6 +97,7 @@ Class | Method | HTTP request | Description
 *PreferencesService* | [**update_current**](docs/PreferencesService.md#update_current) | **POST** /v1/user/preference/update-current | 
 *PrivacySettingService* | [**get_current**](docs/PrivacySettingService.md#get_current) | **POST** /v1/user/privacy-setting/get-current | 
 *PrivacySettingService* | [**update_current**](docs/PrivacySettingService.md#update_current) | **POST** /v1/user/privacy-setting/update-current | 
+*RealtimeService* | [**create_ticket**](docs/RealtimeService.md#create_ticket) | **POST** /v1/realtime/ticket | 
 *RelationService* | [**block**](docs/RelationService.md#block) | **POST** /v1/user/relation/block | 
 *RelationService* | [**follow**](docs/RelationService.md#follow) | **POST** /v1/user/relation/follow | 
 *RelationService* | [**get_status**](docs/RelationService.md#get_status) | **POST** /v1/user/relation/get-status | 
@@ -158,6 +160,7 @@ Class | Method | HTTP request | Description
  - [CreateDraftArticleResp](docs/CreateDraftArticleResp.md)
  - [CreateMoonbreezeReq](docs/CreateMoonbreezeReq.md)
  - [CreateMoonbreezeResp](docs/CreateMoonbreezeResp.md)
+ - [CreateRealtimeTicketResp](docs/CreateRealtimeTicketResp.md)
  - [CreateTagReq](docs/CreateTagReq.md)
  - [CreateTagResp](docs/CreateTagResp.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
@@ -302,6 +305,8 @@ Class | Method | HTTP request | Description
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
  - [VoteArticlePollReq](docs/VoteArticlePollReq.md)
+ - [WatchArticleReq](docs/WatchArticleReq.md)
+ - [WatchArticleResp](docs/WatchArticleResp.md)
 
 
 To get access to the crate's generated documentation, use:

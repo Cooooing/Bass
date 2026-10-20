@@ -45,6 +45,8 @@ pub struct ArticleDetail {
     pub like_count: Option<i32>,
     #[serde(rename = "collect_count", skip_serializing_if = "Option::is_none")]
     pub collect_count: Option<i32>,
+    #[serde(rename = "watch_count", skip_serializing_if = "Option::is_none")]
+    pub watch_count: Option<i32>,
     #[serde(rename = "reward_count", skip_serializing_if = "Option::is_none")]
     pub reward_count: Option<i32>,
     #[serde(rename = "reply_count", skip_serializing_if = "Option::is_none")]
@@ -112,6 +114,7 @@ impl ArticleDetail {
             thank_count: None,
             like_count: None,
             collect_count: None,
+            watch_count: None,
             reward_count: None,
             reply_count: None,
             author_user: None,

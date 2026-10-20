@@ -126,6 +126,7 @@ pub mod otp_service;
 pub mod postscript_service;
 pub mod preferences_service;
 pub mod privacy_setting_service;
+pub mod realtime_service;
 pub mod relation_service;
 pub mod tag_service;
 
@@ -149,6 +150,7 @@ pub trait Api {
     fn postscript_service(&self) -> &dyn postscript_service::PostscriptService;
     fn preferences_service(&self) -> &dyn preferences_service::PreferencesService;
     fn privacy_setting_service(&self) -> &dyn privacy_setting_service::PrivacySettingService;
+    fn realtime_service(&self) -> &dyn realtime_service::RealtimeService;
     fn relation_service(&self) -> &dyn relation_service::RelationService;
     fn tag_service(&self) -> &dyn tag_service::TagService;
 }
@@ -169,6 +171,7 @@ pub struct ApiClient {
     postscript_service: Box<dyn postscript_service::PostscriptService>,
     preferences_service: Box<dyn preferences_service::PreferencesService>,
     privacy_setting_service: Box<dyn privacy_setting_service::PrivacySettingService>,
+    realtime_service: Box<dyn realtime_service::RealtimeService>,
     relation_service: Box<dyn relation_service::RelationService>,
     tag_service: Box<dyn tag_service::TagService>,
 }
@@ -191,6 +194,7 @@ impl ApiClient {
             postscript_service: Box::new(postscript_service::PostscriptServiceClient::new(configuration.clone())),
             preferences_service: Box::new(preferences_service::PreferencesServiceClient::new(configuration.clone())),
             privacy_setting_service: Box::new(privacy_setting_service::PrivacySettingServiceClient::new(configuration.clone())),
+            realtime_service: Box::new(realtime_service::RealtimeServiceClient::new(configuration.clone())),
             relation_service: Box::new(relation_service::RelationServiceClient::new(configuration.clone())),
             tag_service: Box::new(tag_service::TagServiceClient::new(configuration.clone())),
         }
@@ -242,6 +246,9 @@ impl Api for ApiClient {
     }
     fn privacy_setting_service(&self) -> &dyn privacy_setting_service::PrivacySettingService {
         self.privacy_setting_service.as_ref()
+    }
+    fn realtime_service(&self) -> &dyn realtime_service::RealtimeService {
+        self.realtime_service.as_ref()
     }
     fn relation_service(&self) -> &dyn relation_service::RelationService {
         self.relation_service.as_ref()

@@ -53,6 +53,7 @@ docs/CreateDraftArticleReq.md
 docs/CreateDraftArticleResp.md
 docs/CreateMoonbreezeReq.md
 docs/CreateMoonbreezeResp.md
+docs/CreateRealtimeTicketResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
 docs/DisableTotpReq.md
@@ -141,6 +142,7 @@ docs/ProfileLocation.md
 docs/ProfileRelation.md
 docs/ProfileVisibility.md
 docs/PublishArticleReq.md
+docs/RealtimeService.md
 docs/RefreshTokenReq.md
 docs/RefreshTokenResp.md
 docs/RegisterReq.md
@@ -208,6 +210,8 @@ docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
 docs/VoteArticlePollReq.md
+docs/WatchArticleReq.md
+docs/WatchArticleResp.md
 git_push.sh
 src/apis/account_service.rs
 src/apis/article_search_service.rs
@@ -226,6 +230,7 @@ src/apis/otp_service.rs
 src/apis/postscript_service.rs
 src/apis/preferences_service.rs
 src/apis/privacy_setting_service.rs
+src/apis/realtime_service.rs
 src/apis/relation_service.rs
 src/apis/tag_service.rs
 src/lib.rs
@@ -273,6 +278,7 @@ src/models/create_draft_article_req.rs
 src/models/create_draft_article_resp.rs
 src/models/create_moonbreeze_req.rs
 src/models/create_moonbreeze_resp.rs
+src/models/create_realtime_ticket_resp.rs
 src/models/create_tag_req.rs
 src/models/create_tag_resp.rs
 src/models/disable_totp_req.rs
@@ -418,3 +424,5 @@ src/models/update_profile_account_resp.rs
 src/models/update_tag_req.rs
 src/models/update_tag_resp.rs
 src/models/vote_article_poll_req.rs
+src/models/watch_article_req.rs
+src/models/watch_article_resp.rs

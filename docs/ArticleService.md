@@ -23,6 +23,7 @@ Method | HTTP request | Description
 [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank | 
 [**update_draft**](ArticleService.md#update_draft) | **POST** /v1/content/article/draft/update | 
 [**vote_poll**](ArticleService.md#vote_poll) | **POST** /v1/content/article/poll/vote | 
+[**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch | 
 
 
 
@@ -583,6 +584,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**serde_json::Value**](serde_json::Value.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## watch
+
+> models::WatchArticleResp watch(watch_article_req)
+
+
+关注文章
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**watch_article_req** | [**WatchArticleReq**](WatchArticleReq.md) |  | [required] |
+
+### Return type
+
+[**models::WatchArticleResp**](WatchArticle_Resp.md)
 
 ### Authorization
 

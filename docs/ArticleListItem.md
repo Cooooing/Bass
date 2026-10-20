@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **thank_count** | Option<**i32**> |  | [optional]
 **like_count** | Option<**i32**> |  | [optional]
 **collect_count** | Option<**i32**> |  | [optional]
+**watch_count** | Option<**i32**> |  | [optional]
 **reward_count** | Option<**i32**> |  | [optional]
 **reply_count** | Option<**i32**> |  | [optional]
 **author_user** | Option<[**models::AccountProfile**](AccountProfile.md)> |  | [optional]

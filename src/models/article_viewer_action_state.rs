@@ -21,6 +21,8 @@ pub struct ArticleViewerActionState {
     pub collected: Option<bool>,
     #[serde(rename = "rewarded", skip_serializing_if = "Option::is_none")]
     pub rewarded: Option<bool>,
+    #[serde(rename = "watched", skip_serializing_if = "Option::is_none")]
+    pub watched: Option<bool>,
 }
 
 impl ArticleViewerActionState {
@@ -30,6 +32,7 @@ impl ArticleViewerActionState {
             thanked: None,
             collected: None,
             rewarded: None,
+            watched: None,
         }
     }
 }

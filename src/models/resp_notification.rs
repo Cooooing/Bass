@@ -101,6 +101,20 @@ pub enum EventType {
     EventTypeArticleStatusUpdated,
     #[serde(rename = "EVENT_TYPE_ARTICLE_LOTTERY_WON")]
     EventTypeArticleLotteryWon,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_POLL_ENDED")]
+    EventTypeArticlePollEnded,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_LOTTERY_DRAWN")]
+    EventTypeArticleLotteryDrawn,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED")]
+    EventTypeArticleWatchedCommentPublished,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED")]
+    EventTypeArticleWatchedPostscriptAdded,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED")]
+    EventTypeArticleWatchedAnswerAccepted,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_POLL_ENDED")]
+    EventTypeArticleWatchedPollEnded,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN")]
+    EventTypeArticleWatchedLotteryDrawn,
     #[serde(rename = "EVENT_TYPE_COMMENT_PUBLISHED")]
     EventTypeCommentPublished,
     #[serde(rename = "EVENT_TYPE_COMMENT_LIKED")]
@@ -119,6 +133,8 @@ pub enum EventType {
     EventTypeGameIdleAbilityLeveledUp,
     #[serde(rename = "EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED")]
     EventTypeGameIdleActionQueueUpdated,
+    #[serde(rename = "EVENT_TYPE_NOTIFY_STATION_MESSAGES_CREATED")]
+    EventTypeNotifyStationMessagesCreated,
 }
 
 impl Default for EventType {

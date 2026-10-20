@@ -2,12 +2,16 @@ package handler
 
 import (
 	"context"
+	"fmt"
+
+	commonenum "common/pkg/enum"
 
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
 	notifyenum "notify/internal/enum"
+	notifytemplate "notify/template"
 )
 
 type CommentLikedHandler struct {
@@ -33,7 +37,7 @@ func NewCommentLikedHandler(
 }
 
 func (h *CommentLikedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return nil
+	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentCommentLike, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/comment_liked.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/comment_liked.zh_CN.content.txt")}}}
 }
 
 func (h *CommentLikedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -90,6 +94,7 @@ func (h *CommentLikedHandler) Handle(ctx context.Context, req *usecase.EventHand
 		EventID:      event.GetEventId(),
 		EventType:    req.EventType,
 		ActorUserID:  new(payload.GetSenderId()),
+		BusinessKey:  new(fmt.Sprintf("content:comment-liked:%d:%d", payload.GetCommentId(), payload.GetSenderId())),
 		Language:     req.Language,
 		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 		TemplateData: templateData,

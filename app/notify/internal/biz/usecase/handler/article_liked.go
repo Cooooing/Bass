@@ -2,11 +2,15 @@ package handler
 
 import (
 	"context"
+	"fmt"
+
+	commonenum "common/pkg/enum"
 
 	"notify/internal/biz/model"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
 	notifyenum "notify/internal/enum"
+	notifytemplate "notify/template"
 )
 
 type ArticleLikedHandler struct {
@@ -32,7 +36,7 @@ func NewArticleLikedHandler(
 }
 
 func (h *ArticleLikedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return nil
+	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentArticleLike, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_liked.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_liked.zh_CN.content.txt")}}}
 }
 
 func (h *ArticleLikedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -56,6 +60,7 @@ func (h *ArticleLikedHandler) Handle(ctx context.Context, req *usecase.EventHand
 		EventID:      event.GetEventId(),
 		EventType:    req.EventType,
 		ActorUserID:  notificationContext.ActorUserID,
+		BusinessKey:  new(fmt.Sprintf("content:article-liked:%d:%d", payload.GetArticleId(), payload.GetSenderId())),
 		Language:     req.Language,
 		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 		TemplateData: notificationContext.TemplateData,

@@ -2,12 +2,16 @@ package handler
 
 import (
 	"context"
+	"fmt"
+
+	commonenum "common/pkg/enum"
 
 	"notify/internal/biz/model"
 	templatedata "notify/internal/biz/model/template_data"
 	"notify/internal/biz/repo"
 	"notify/internal/biz/usecase"
 	notifyenum "notify/internal/enum"
+	notifytemplate "notify/template"
 )
 
 type ArticlePublishedHandler struct {
@@ -33,7 +37,7 @@ func NewArticlePublishedHandler(
 }
 
 func (h *ArticlePublishedHandler) Templates() []*model.NotificationTemplateDefinition {
-	return nil
+	return []*model.NotificationTemplateDefinition{{EventType: commonenum.EventTypeContentArticlePublish, Channel: notifyenum.NotificationChannelStation, Language: notifyenum.LanguageZhCN, Enabled: true, StationTemplate: &model.NotificationStationTemplateDefinition{TitleTemplate: notifytemplate.MustReadTemplate("station/article_published.zh_CN.title.txt"), ContentTemplate: notifytemplate.MustReadTemplate("station/article_published.zh_CN.content.txt")}}}
 }
 
 func (h *ArticlePublishedHandler) Handle(ctx context.Context, req *usecase.EventHandleReq) error {
@@ -90,6 +94,7 @@ func (h *ArticlePublishedHandler) Handle(ctx context.Context, req *usecase.Event
 		EventID:      event.GetEventId(),
 		EventType:    req.EventType,
 		ActorUserID:  new(article.AuthorID),
+		BusinessKey:  new(fmt.Sprintf("content:article-published:%d", article.ID)),
 		Language:     req.Language,
 		Channels:     []notifyenum.NotificationChannel{notifyenum.NotificationChannelStation},
 		TemplateData: templateData,

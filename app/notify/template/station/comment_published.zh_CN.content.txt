@@ -1,0 +1,1 @@
+{{ if .Comment.User.Nickname }}{{ .Comment.User.Nickname }}{{ else }}{{ .Comment.User.Name }}{{ end }} 评论了《{{ .Comment.Article.Title }}》

@@ -1,0 +1,1 @@
+{{ if .Article.Author.Nickname }}{{ .Article.Author.Nickname }}{{ else }}{{ .Article.Author.Name }}{{ end }} 发布了文章《{{ .Article.Title }}》

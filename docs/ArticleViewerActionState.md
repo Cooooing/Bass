@@ -10,6 +10,7 @@ Name | Type
 `thanked` | boolean
 `collected` | boolean
 `rewarded` | boolean
+`watched` | boolean
 
 ## Example
 
@@ -22,6 +23,7 @@ const example = {
   "thanked": null,
   "collected": null,
   "rewarded": null,
+  "watched": null,
 } satisfies ArticleViewerActionState
 
 console.log(example)

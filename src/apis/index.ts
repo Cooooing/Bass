@@ -15,5 +15,6 @@ export * from './OtpService';
 export * from './PostscriptService';
 export * from './PreferencesService';
 export * from './PrivacySettingService';
+export * from './RealtimeService';
 export * from './RelationService';
 export * from './TagService';

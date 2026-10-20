@@ -158,6 +158,16 @@ import {
     VoteArticlePollReqFromJSON,
     VoteArticlePollReqToJSON,
 } from '../models/VoteArticlePollReq';
+import {
+    type WatchArticleReq,
+    WatchArticleReqFromJSON,
+    WatchArticleReqToJSON,
+} from '../models/WatchArticleReq';
+import {
+    type WatchArticleResp,
+    WatchArticleRespFromJSON,
+    WatchArticleRespToJSON,
+} from '../models/WatchArticleResp';
 
 export interface AcceptAnswerRequest {
     acceptArticleAnswerReq: AcceptArticleAnswerReq;
@@ -233,6 +243,10 @@ export interface UpdateDraftRequest {
 
 export interface VotePollRequest {
     voteArticlePollReq: VoteArticlePollReq;
+}
+
+export interface WatchRequest {
+    watchArticleReq: WatchArticleReq;
 }
 
 /**
@@ -659,6 +673,28 @@ export interface ArticleServiceInterface {
      * 提交一次不可修改的文章投票。
      */
     votePoll(requestParameters: VotePollRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
+
+    /**
+     * Creates request options for watch without sending the request
+     * @param {WatchArticleReq} watchArticleReq 
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    watchRequestOpts(requestParameters: WatchRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 关注文章
+     * @param {WatchArticleReq} watchArticleReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ArticleServiceInterface
+     */
+    watchRaw(requestParameters: WatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WatchArticleResp>>;
+
+    /**
+     * 关注文章
+     */
+    watch(requestParameters: WatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WatchArticleResp>;
 
 }
 
@@ -1557,6 +1593,53 @@ export class ArticleService extends runtime.BaseAPI implements ArticleServiceInt
      */
     async votePoll(requestParameters: VotePollRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
         const response = await this.votePollRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for watch without sending the request
+     */
+    async watchRequestOpts(requestParameters: WatchRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['watchArticleReq'] == null) {
+            throw new runtime.RequiredError(
+                'watchArticleReq',
+                'Required parameter "watchArticleReq" was null or undefined when calling watch().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/content/article/watch`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: WatchArticleReqToJSON(requestParameters['watchArticleReq']),
+        };
+    }
+
+    /**
+     * 关注文章
+     */
+    async watchRaw(requestParameters: WatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<WatchArticleResp>> {
+        const requestOptions = await this.watchRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => WatchArticleRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 关注文章
+     */
+    async watch(requestParameters: WatchRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<WatchArticleResp> {
+        const response = await this.watchRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

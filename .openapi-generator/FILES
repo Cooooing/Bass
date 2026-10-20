@@ -52,6 +52,7 @@ docs/CreateDraftArticleReq.md
 docs/CreateDraftArticleResp.md
 docs/CreateMoonbreezeReq.md
 docs/CreateMoonbreezeResp.md
+docs/CreateRealtimeTicketResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
 docs/DisableTotpReq.md
@@ -140,6 +141,7 @@ docs/ProfileLocation.md
 docs/ProfileRelation.md
 docs/ProfileVisibility.md
 docs/PublishArticleReq.md
+docs/RealtimeService.md
 docs/RefreshTokenReq.md
 docs/RefreshTokenResp.md
 docs/RegisterReq.md
@@ -207,6 +209,8 @@ docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
 docs/VoteArticlePollReq.md
+docs/WatchArticleReq.md
+docs/WatchArticleResp.md
 package.json
 src/apis/AccountService.ts
 src/apis/ArticleSearchService.ts
@@ -223,6 +227,7 @@ src/apis/OtpService.ts
 src/apis/PostscriptService.ts
 src/apis/PreferencesService.ts
 src/apis/PrivacySettingService.ts
+src/apis/RealtimeService.ts
 src/apis/RelationService.ts
 src/apis/TagService.ts
 src/apis/index.ts
@@ -271,6 +276,7 @@ src/models/CreateDraftArticleReq.ts
 src/models/CreateDraftArticleResp.ts
 src/models/CreateMoonbreezeReq.ts
 src/models/CreateMoonbreezeResp.ts
+src/models/CreateRealtimeTicketResp.ts
 src/models/CreateTagReq.ts
 src/models/CreateTagResp.ts
 src/models/DisableTotpReq.ts
@@ -415,6 +421,8 @@ src/models/UpdateProfileAccountResp.ts
 src/models/UpdateTagReq.ts
 src/models/UpdateTagResp.ts
 src/models/VoteArticlePollReq.ts
+src/models/WatchArticleReq.ts
+src/models/WatchArticleResp.ts
 src/models/index.ts
 src/runtime.ts
 tsconfig.esm.json

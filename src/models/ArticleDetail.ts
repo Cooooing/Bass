@@ -170,6 +170,12 @@ export interface ArticleDetail {
      * @type {number}
      * @memberof ArticleDetail
      */
+    watchCount?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ArticleDetail
+     */
     rewardCount?: number;
     /**
      * 
@@ -385,6 +391,7 @@ export function ArticleDetailFromJSONTyped(json: any, ignoreDiscriminator: boole
         'thankCount': json['thank_count'] == null ? undefined : json['thank_count'],
         'likeCount': json['like_count'] == null ? undefined : json['like_count'],
         'collectCount': json['collect_count'] == null ? undefined : json['collect_count'],
+        'watchCount': json['watch_count'] == null ? undefined : json['watch_count'],
         'rewardCount': json['reward_count'] == null ? undefined : json['reward_count'],
         'replyCount': json['reply_count'] == null ? undefined : json['reply_count'],
         'authorUser': json['author_user'] == null ? undefined : AccountProfileFromJSON(json['author_user']),
@@ -438,6 +445,7 @@ export function ArticleDetailToJSONTyped(value?: ArticleDetail | null, ignoreDis
         'thank_count': value['thankCount'],
         'like_count': value['likeCount'],
         'collect_count': value['collectCount'],
+        'watch_count': value['watchCount'],
         'reward_count': value['rewardCount'],
         'reply_count': value['replyCount'],
         'author_user': AccountProfileToJSON(value['authorUser']),

@@ -23,6 +23,7 @@ All URIs are relative to *http://localhost*
 | [**thank**](ArticleService.md#thank) | **POST** /v1/content/article/thank |  |
 | [**updateDraft**](ArticleService.md#updatedraft) | **POST** /v1/content/article/draft/update |  |
 | [**votePoll**](ArticleService.md#votepoll) | **POST** /v1/content/article/poll/vote |  |
+| [**watch**](ArticleService.md#watch) | **POST** /v1/content/article/watch |  |
 
 
 
@@ -1280,6 +1281,73 @@ example().catch(console.error);
 ### Return type
 
 **object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## watch
+
+> WatchArticleResp watch(watchArticleReq)
+
+
+
+关注文章
+
+### Example
+
+```ts
+import {
+  Configuration,
+  ArticleService,
+} from '@bass/bbs-sdk-fetch';
+import type { WatchRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new ArticleService();
+
+  const body = {
+    // WatchArticleReq
+    watchArticleReq: ...,
+  } satisfies WatchRequest;
+
+  try {
+    const data = await api.watch(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **watchArticleReq** | [WatchArticleReq](WatchArticleReq.md) |  | |
+
+### Return type
+
+[**WatchArticleResp**](WatchArticleResp.md)
 
 ### Authorization
 

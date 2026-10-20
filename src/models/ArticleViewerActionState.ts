@@ -43,6 +43,12 @@ export interface ArticleViewerActionState {
      * @memberof ArticleViewerActionState
      */
     rewarded?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ArticleViewerActionState
+     */
+    watched?: boolean;
 }
 
 /**
@@ -66,6 +72,7 @@ export function ArticleViewerActionStateFromJSONTyped(json: any, ignoreDiscrimin
         'thanked': json['thanked'] == null ? undefined : json['thanked'],
         'collected': json['collected'] == null ? undefined : json['collected'],
         'rewarded': json['rewarded'] == null ? undefined : json['rewarded'],
+        'watched': json['watched'] == null ? undefined : json['watched'],
     };
 }
 
@@ -84,6 +91,7 @@ export function ArticleViewerActionStateToJSONTyped(value?: ArticleViewerActionS
         'thanked': value['thanked'],
         'collected': value['collected'],
         'rewarded': value['rewarded'],
+        'watched': value['watched'],
     };
 }
 

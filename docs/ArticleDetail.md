@@ -22,6 +22,7 @@ Name | Type
 `thankCount` | number
 `likeCount` | number
 `collectCount` | number
+`watchCount` | number
 `rewardCount` | number
 `replyCount` | number
 `authorUser` | [AccountProfile](AccountProfile.md)
@@ -69,6 +70,7 @@ const example = {
   "thankCount": null,
   "likeCount": null,
   "collectCount": null,
+  "watchCount": null,
   "rewardCount": null,
   "replyCount": null,
   "authorUser": null,

@@ -23,6 +23,7 @@ All URIs are relative to *http://localhost*
 |[**thank**](#thank) | **POST** /v1/content/article/thank | |
 |[**updateDraft**](#updatedraft) | **POST** /v1/content/article/draft/update | |
 |[**votePoll**](#votepoll) | **POST** /v1/content/article/poll/vote | |
+|[**watch**](#watch) | **POST** /v1/content/article/watch | |
 
 # **acceptAnswer**
 > object acceptAnswer(acceptArticleAnswerReq)
@@ -994,6 +995,58 @@ const { status, data } = await apiInstance.votePoll(
 ### Return type
 
 **object**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **watch**
+> WatchArticleResp watch(watchArticleReq)
+
+关注文章
+
+### Example
+
+```typescript
+import {
+    ArticleService,
+    Configuration,
+    WatchArticleReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new ArticleService(configuration);
+
+let watchArticleReq: WatchArticleReq; //
+
+const { status, data } = await apiInstance.watch(
+    watchArticleReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **watchArticleReq** | **WatchArticleReq**|  | |
+
+
+### Return type
+
+**WatchArticleResp**
 
 ### Authorization
 

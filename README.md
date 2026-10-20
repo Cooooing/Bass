@@ -82,6 +82,7 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**thank**](docs/ArticleService.md#thank) | **POST** /v1/content/article/thank | 
 *ArticleService* | [**updateDraft**](docs/ArticleService.md#updatedraft) | **POST** /v1/content/article/draft/update | 
 *ArticleService* | [**votePoll**](docs/ArticleService.md#votepoll) | **POST** /v1/content/article/poll/vote | 
+*ArticleService* | [**watch**](docs/ArticleService.md#watch) | **POST** /v1/content/article/watch | 
 *AuthService* | [**cancelAccount**](docs/AuthService.md#cancelaccount) | **POST** /v1/user/auth/cancel-account | 
 *AuthService* | [**checkRegistrationAvailability**](docs/AuthService.md#checkregistrationavailability) | **GET** /v1/user/auth/register-availability | 
 *AuthService* | [**login**](docs/AuthService.md#login) | **POST** /v1/user/auth/login | 
@@ -121,6 +122,7 @@ Class | Method | HTTP request | Description
 *PreferencesService* | [**updateCurrent**](docs/PreferencesService.md#updatecurrent) | **POST** /v1/user/preference/update-current | 
 *PrivacySettingService* | [**getCurrent**](docs/PrivacySettingService.md#getcurrent) | **POST** /v1/user/privacy-setting/get-current | 
 *PrivacySettingService* | [**updateCurrent**](docs/PrivacySettingService.md#updatecurrent) | **POST** /v1/user/privacy-setting/update-current | 
+*RealtimeService* | [**createTicket**](docs/RealtimeService.md#createticket) | **POST** /v1/realtime/ticket | 
 *RelationService* | [**block**](docs/RelationService.md#block) | **POST** /v1/user/relation/block | 
 *RelationService* | [**follow**](docs/RelationService.md#follow) | **POST** /v1/user/relation/follow | 
 *RelationService* | [**getStatus**](docs/RelationService.md#getstatus) | **POST** /v1/user/relation/get-status | 
@@ -183,6 +185,7 @@ Class | Method | HTTP request | Description
  - [CreateDraftArticleResp](docs/CreateDraftArticleResp.md)
  - [CreateMoonbreezeReq](docs/CreateMoonbreezeReq.md)
  - [CreateMoonbreezeResp](docs/CreateMoonbreezeResp.md)
+ - [CreateRealtimeTicketResp](docs/CreateRealtimeTicketResp.md)
  - [CreateTagReq](docs/CreateTagReq.md)
  - [CreateTagResp](docs/CreateTagResp.md)
  - [DisableTotpReq](docs/DisableTotpReq.md)
@@ -327,6 +330,8 @@ Class | Method | HTTP request | Description
  - [UpdateTagReq](docs/UpdateTagReq.md)
  - [UpdateTagResp](docs/UpdateTagResp.md)
  - [VoteArticlePollReq](docs/VoteArticlePollReq.md)
+ - [WatchArticleReq](docs/WatchArticleReq.md)
+ - [WatchArticleResp](docs/WatchArticleResp.md)
 
 
 <a id="documentation-for-authorization"></a>

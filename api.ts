@@ -89,6 +89,7 @@ export interface ArticleDetail {
     'thank_count'?: number;
     'like_count'?: number;
     'collect_count'?: number;
+    'watch_count'?: number;
     'reward_count'?: number;
     'reply_count'?: number;
     'author_user'?: AccountProfile;
@@ -169,6 +170,7 @@ export interface ArticleListItem {
     'thank_count'?: number;
     'like_count'?: number;
     'collect_count'?: number;
+    'watch_count'?: number;
     'reward_count'?: number;
     'reply_count'?: number;
     'author_user'?: AccountProfile;
@@ -302,6 +304,7 @@ export interface ArticleViewerActionState {
     'thanked'?: boolean;
     'collected'?: boolean;
     'rewarded'?: boolean;
+    'watched'?: boolean;
 }
 export interface BeginEnableTotpResp {
     'url'?: string;
@@ -421,6 +424,11 @@ export interface CreateMoonbreezeReq {
 }
 export interface CreateMoonbreezeResp {
     'moonbreeze'?: Moonbreeze;
+}
+export interface CreateRealtimeTicketResp {
+    'ticket'?: string;
+    'expires_in_seconds'?: string;
+    'path'?: string;
 }
 export interface CreateTagReq {
     'tag': ReqTag;
@@ -1374,6 +1382,13 @@ export const RespNotificationEventTypeEnum = {
     EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED: 'EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED',
     EVENT_TYPE_ARTICLE_STATUS_UPDATED: 'EVENT_TYPE_ARTICLE_STATUS_UPDATED',
     EVENT_TYPE_ARTICLE_LOTTERY_WON: 'EVENT_TYPE_ARTICLE_LOTTERY_WON',
+    EVENT_TYPE_ARTICLE_POLL_ENDED: 'EVENT_TYPE_ARTICLE_POLL_ENDED',
+    EVENT_TYPE_ARTICLE_LOTTERY_DRAWN: 'EVENT_TYPE_ARTICLE_LOTTERY_DRAWN',
+    EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED: 'EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED',
+    EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED: 'EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED',
+    EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED: 'EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED',
+    EVENT_TYPE_ARTICLE_WATCHED_POLL_ENDED: 'EVENT_TYPE_ARTICLE_WATCHED_POLL_ENDED',
+    EVENT_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN: 'EVENT_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN',
     EVENT_TYPE_COMMENT_PUBLISHED: 'EVENT_TYPE_COMMENT_PUBLISHED',
     EVENT_TYPE_COMMENT_LIKED: 'EVENT_TYPE_COMMENT_LIKED',
     EVENT_TYPE_COMMENT_THANKED: 'EVENT_TYPE_COMMENT_THANKED',
@@ -1383,6 +1398,7 @@ export const RespNotificationEventTypeEnum = {
     EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED: 'EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED',
     EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP: 'EVENT_TYPE_GAME_IDLE_ABILITY_LEVELED_UP',
     EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED: 'EVENT_TYPE_GAME_IDLE_ACTION_QUEUE_UPDATED',
+    EVENT_TYPE_NOTIFY_STATION_MESSAGES_CREATED: 'EVENT_TYPE_NOTIFY_STATION_MESSAGES_CREATED',
 } as const;
 
 export type RespNotificationEventTypeEnum = typeof RespNotificationEventTypeEnum[keyof typeof RespNotificationEventTypeEnum];
@@ -1616,6 +1632,13 @@ export interface UpdateTagResp {
 export interface VoteArticlePollReq {
     'article_id': string;
     'option_ids': Array<string>;
+}
+export interface WatchArticleReq {
+    'article_id': string;
+    'active': boolean;
+}
+export interface WatchArticleResp {
+    'watched'?: boolean;
 }
 
 /**
@@ -3307,6 +3330,40 @@ export const ArticleServiceAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 关注文章
+         * @param {WatchArticleReq} watchArticleReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        watch: async (watchArticleReq: WatchArticleReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'watchArticleReq' is not null or undefined
+            assertParamExists('watch', 'watchArticleReq', watchArticleReq)
+            const localVarPath = `/v1/content/article/watch`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(watchArticleReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -3544,6 +3601,18 @@ export const ArticleServiceFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['ArticleService.votePoll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * 关注文章
+         * @param {WatchArticleReq} watchArticleReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async watch(watchArticleReq: WatchArticleReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WatchArticleResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.watch(watchArticleReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ArticleService.watch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -3724,6 +3793,15 @@ export const ArticleServiceFactory = function (configuration?: Configuration, ba
         votePoll(requestParameters: ArticleServiceVotePollRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
             return localVarFp.votePoll(requestParameters.voteArticlePollReq, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 关注文章
+         * @param {ArticleServiceWatchRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        watch(requestParameters: ArticleServiceWatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<WatchArticleResp> {
+            return localVarFp.watch(requestParameters.watchArticleReq, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -3883,6 +3961,14 @@ export interface ArticleServiceInterface {
      */
     votePoll(requestParameters: ArticleServiceVotePollRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
 
+    /**
+     * 关注文章
+     * @param {ArticleServiceWatchRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    watch(requestParameters: ArticleServiceWatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<WatchArticleResp>;
+
 }
 
 /**
@@ -4016,6 +4102,13 @@ export interface ArticleServiceUpdateDraftRequest {
  */
 export interface ArticleServiceVotePollRequest {
     readonly voteArticlePollReq: VoteArticlePollReq
+}
+
+/**
+ * Request parameters for watch operation in ArticleService.
+ */
+export interface ArticleServiceWatchRequest {
+    readonly watchArticleReq: WatchArticleReq
 }
 
 /**
@@ -4210,6 +4303,16 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
      */
     public votePoll(requestParameters: ArticleServiceVotePollRequest, options?: RawAxiosRequestConfig) {
         return ArticleServiceFp(this.configuration).votePoll(requestParameters.voteArticlePollReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 关注文章
+     * @param {ArticleServiceWatchRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public watch(requestParameters: ArticleServiceWatchRequest, options?: RawAxiosRequestConfig) {
+        return ArticleServiceFp(this.configuration).watch(requestParameters.watchArticleReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -7814,6 +7917,125 @@ export class PrivacySettingService extends BaseAPI implements PrivacySettingServ
      */
     public updateCurrent(requestParameters: PrivacySettingServiceUpdateCurrentRequest, options?: RawAxiosRequestConfig) {
         return PrivacySettingServiceFp(this.configuration).updateCurrent(requestParameters.updateCurrentPrivacySettingReq, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * RealtimeService - axios parameter creator
+ */
+export const RealtimeServiceAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTicket: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('createTicket', 'body', body)
+            const localVarPath = `/v1/realtime/ticket`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RealtimeService - functional programming interface
+ */
+export const RealtimeServiceFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RealtimeServiceAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTicket(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateRealtimeTicketResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTicket(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['RealtimeService.createTicket']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * RealtimeService - factory interface
+ */
+export const RealtimeServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RealtimeServiceFp(configuration)
+    return {
+        /**
+         * 
+         * @param {RealtimeServiceCreateTicketRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTicket(requestParameters: RealtimeServiceCreateTicketRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateRealtimeTicketResp> {
+            return localVarFp.createTicket(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * RealtimeService - interface
+ */
+export interface RealtimeServiceInterface {
+    /**
+     * 
+     * @param {RealtimeServiceCreateTicketRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createTicket(requestParameters: RealtimeServiceCreateTicketRequest, options?: RawAxiosRequestConfig): AxiosPromise<CreateRealtimeTicketResp>;
+
+}
+
+/**
+ * Request parameters for createTicket operation in RealtimeService.
+ */
+export interface RealtimeServiceCreateTicketRequest {
+    readonly body: object
+}
+
+/**
+ * RealtimeService - object-oriented interface
+ */
+export class RealtimeService extends BaseAPI implements RealtimeServiceInterface {
+    /**
+     * 
+     * @param {RealtimeServiceCreateTicketRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public createTicket(requestParameters: RealtimeServiceCreateTicketRequest, options?: RawAxiosRequestConfig) {
+        return RealtimeServiceFp(this.configuration).createTicket(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

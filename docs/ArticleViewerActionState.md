@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **thanked** | **boolean** |  | [optional] [default to undefined]
 **collected** | **boolean** |  | [optional] [default to undefined]
 **rewarded** | **boolean** |  | [optional] [default to undefined]
+**watched** | **boolean** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -20,6 +21,7 @@ const instance: ArticleViewerActionState = {
     thanked,
     collected,
     rewarded,
+    watched,
 };
 ```
 

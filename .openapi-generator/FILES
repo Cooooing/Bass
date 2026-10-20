@@ -56,6 +56,7 @@ docs/CreateDraftArticleReq.md
 docs/CreateDraftArticleResp.md
 docs/CreateMoonbreezeReq.md
 docs/CreateMoonbreezeResp.md
+docs/CreateRealtimeTicketResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
 docs/DisableTotpReq.md
@@ -144,6 +145,7 @@ docs/ProfileLocation.md
 docs/ProfileRelation.md
 docs/ProfileVisibility.md
 docs/PublishArticleReq.md
+docs/RealtimeService.md
 docs/RefreshTokenReq.md
 docs/RefreshTokenResp.md
 docs/RegisterReq.md
@@ -211,6 +213,8 @@ docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
 docs/VoteArticlePollReq.md
+docs/WatchArticleReq.md
+docs/WatchArticleResp.md
 git_push.sh
 index.ts
 package.json

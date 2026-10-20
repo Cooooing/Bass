@@ -18,6 +18,7 @@ Name | Type | Description | Notes
 **thank_count** | **number** |  | [optional] [default to undefined]
 **like_count** | **number** |  | [optional] [default to undefined]
 **collect_count** | **number** |  | [optional] [default to undefined]
+**watch_count** | **number** |  | [optional] [default to undefined]
 **reward_count** | **number** |  | [optional] [default to undefined]
 **reply_count** | **number** |  | [optional] [default to undefined]
 **author_user** | [**AccountProfile**](AccountProfile.md) |  | [optional] [default to undefined]
@@ -56,6 +57,7 @@ const instance: ArticleListItem = {
     thank_count,
     like_count,
     collect_count,
+    watch_count,
     reward_count,
     reply_count,
     author_user,

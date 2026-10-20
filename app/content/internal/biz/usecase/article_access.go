@@ -139,7 +139,7 @@ func (u *ArticleAccessUsecase) CanInteract(access *model.ContentAccess, article 
 	if err != nil {
 		return err
 	}
-	if access.Scope != enum.ContentAccessScopeAuthor {
+	if access.Scope != enum.ContentAccessScopeUser {
 		return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_FORBIDDEN)
 	}
 	if article.IsAuthor(access.ActorUserID) {

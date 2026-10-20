@@ -12,4 +12,5 @@ type ArticlePollRepo interface {
 	DeleteDraft(context.Context, int64) error
 	Get(context.Context, int64, int64) (*model.ArticlePoll, error)
 	Vote(context.Context, int64, int64, []int64) error
+	ListParticipantUserIDs(context.Context, int64) ([]int64, error)
 }

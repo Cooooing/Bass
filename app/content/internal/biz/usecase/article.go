@@ -209,7 +209,7 @@ type ArticleLikeReq struct {
 }
 
 func (d *ArticleUsecase) Like(ctx context.Context, req *ArticleLikeReq) (bool, error) {
-	interaction := articleInteraction{articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionLike, stats: repo.ArticleStatUpdate{LikeCount: 1}, event: d.articleLikedEvent}
+	interaction := articleInteraction{access: req.Access, articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionLike, stats: &repo.ArticleStatUpdate{LikeCount: 1}, event: d.articleLikedEvent}
 	return d.changeInteraction(ctx, interaction)
 }
 
@@ -221,7 +221,7 @@ type ArticleThankReq struct {
 }
 
 func (d *ArticleUsecase) Thank(ctx context.Context, req *ArticleThankReq) (bool, error) {
-	interaction := articleInteraction{articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionThank, stats: repo.ArticleStatUpdate{ThankCount: 1}, event: d.articleThankedEvent}
+	interaction := articleInteraction{access: req.Access, articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionThank, stats: &repo.ArticleStatUpdate{ThankCount: 1}, event: d.articleThankedEvent}
 	return d.changeInteraction(ctx, interaction)
 }
 
@@ -233,16 +233,39 @@ type ArticleCollectReq struct {
 }
 
 func (d *ArticleUsecase) Collect(ctx context.Context, req *ArticleCollectReq) (bool, error) {
-	interaction := articleInteraction{articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionCollect, stats: repo.ArticleStatUpdate{CollectCount: 1}, event: d.articleCollectedEvent}
+	interaction := articleInteraction{access: req.Access, articleID: req.ArticleID, userID: req.Access.ActorUserID, active: req.Active, action: enum.ArticleActionCollect, stats: &repo.ArticleStatUpdate{CollectCount: 1}, event: d.articleCollectedEvent}
+	return d.changeInteraction(ctx, interaction)
+}
+
+type ArticleWatchReq struct {
+	Access    *model.ContentAccess
+	ArticleID int64
+	UserID    int64
+	Active    bool
+}
+
+func (d *ArticleUsecase) Watch(ctx context.Context, req *ArticleWatchReq) (bool, error) {
+	interaction := articleInteraction{
+		access:    req.Access,
+		articleID: req.ArticleID,
+		userID:    req.Access.ActorUserID,
+		active:    req.Active,
+		action:    enum.ArticleActionWatch,
+		stats:     &repo.ArticleStatUpdate{WatchCount: 1},
+		event: func(userID, articleID int64) *commonenums.Event {
+			return &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_WATCHED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_WATCHED, Payload: &commonenums.Event_ArticleWatched{ArticleWatched: &commonenums.ArticleWatchedPayload{SenderId: userID, ArticleId: articleID}}}
+		},
+	}
 	return d.changeInteraction(ctx, interaction)
 }
 
 type articleInteraction struct {
+	access    *model.ContentAccess
 	articleID int64
 	userID    int64
 	active    bool
 	action    enum.ArticleAction
-	stats     repo.ArticleStatUpdate
+	stats     *repo.ArticleStatUpdate
 	event     func(int64, int64) *commonenums.Event
 }
 
@@ -253,16 +276,21 @@ func (d *ArticleUsecase) changeInteraction(ctx context.Context, interaction arti
 		if err != nil {
 			return err
 		}
-		if article.PublishStatus != enum.ArticlePublishStatusPublished || article.Visibility != enum.ArticleVisibilityPublic || article.Restriction != enum.ContentRestrictionNone {
-			return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+		if err = d.articleAccessUsecase.CanInteract(interaction.access, article); err != nil {
+			return err
 		}
 		if interaction.active {
 			created, err := d.actionRecordRepo.Save(ctx, &model.ArticleActionRecord{ArticleID: interaction.articleID, UserID: interaction.userID, Type: interaction.action})
 			if err != nil || !created {
 				return err
 			}
-			if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: interaction.articleID, Stats: interaction.stats}); err != nil {
-				return err
+			if interaction.stats != nil {
+				if err = d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: interaction.articleID, Stats: *interaction.stats}); err != nil {
+					return err
+				}
+			}
+			if interaction.event == nil {
+				return nil
 			}
 			outboxEvent, err = d.outboxRepo.Save(ctx, interaction.event(interaction.userID, interaction.articleID))
 			return err
@@ -271,7 +299,10 @@ func (d *ArticleUsecase) changeInteraction(ctx context.Context, interaction arti
 		if err != nil || deleted == 0 {
 			return err
 		}
-		return d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: interaction.articleID, Stats: d.negateArticleStats(interaction.stats)})
+		if interaction.stats == nil {
+			return nil
+		}
+		return d.articleRepo.AddStats(ctx, &repo.ArticleAddStatsReq{ArticleID: interaction.articleID, Stats: d.negateArticleStats(*interaction.stats)})
 	})
 	if err != nil {
 		return false, err
@@ -549,6 +580,7 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 	}
 	var operatorUserID *int64
 	var lotteryDrawAt *time.Time
+	var pollEndsAt *time.Time
 	if access.ActorUserID > 0 {
 		operatorUserID = new(access.ActorUserID)
 	}
@@ -576,9 +608,25 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 		if err = d.validatePublishActivity(ctx, article, now); err != nil {
 			return err
 		}
-		lotteryDrawAt, err = d.articleLotteryDrawAt(ctx, article)
-		if err != nil {
-			return err
+		if article.Type == enum.ArticleTypeLottery {
+			lottery, lotteryErr := d.articleLotteryRepo.Get(ctx, article.ID, 0)
+			if lotteryErr != nil {
+				return lotteryErr
+			}
+			if lottery == nil {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+			}
+			lotteryDrawAt = new(lottery.DrawAt)
+		}
+		if article.Type == enum.ArticleTypePoll {
+			poll, pollErr := d.articlePollRepo.Get(ctx, article.ID, 0)
+			if pollErr != nil {
+				return pollErr
+			}
+			if poll == nil {
+				return apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
+			}
+			pollEndsAt = new(poll.EndsAt)
 		}
 		update := &repo.ArticleUpdatePublishStatusReq{
 			ArticleID:     articleID,
@@ -618,26 +666,17 @@ func (d *ArticleUsecase) Publish(ctx context.Context, req *ArticlePublishReq) er
 			return registerErr
 		}
 	}
+	if pollEndsAt != nil {
+		if registerErr := d.delayedTaskClient.RegisterPollFinish(ctx, articleID, *pollEndsAt); registerErr != nil {
+			return registerErr
+		}
+	}
 	if req.ScheduledAt == nil {
 		if cancelErr := d.delayedTaskClient.CancelPublishScheduledArticle(ctx, articleID); cancelErr != nil {
 			d.log.WarnContext(ctx, "cancel scheduled article publish failed", slog.Int64("article_id", articleID), slog.Any("err", cancelErr))
 		}
 	}
 	return nil
-}
-
-func (d *ArticleUsecase) articleLotteryDrawAt(ctx context.Context, article *model.Article) (*time.Time, error) {
-	if article.Type != enum.ArticleTypeLottery {
-		return nil, nil
-	}
-	lottery, err := d.articleLotteryRepo.Get(ctx, article.ID, 0)
-	if err != nil {
-		return nil, err
-	}
-	if lottery == nil {
-		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_STATUS_CONFLICT)
-	}
-	return new(lottery.DrawAt), nil
 }
 
 func (d *ArticleUsecase) validatePublishActivity(ctx context.Context, article *model.Article, publishedAt time.Time) error {
@@ -1150,6 +1189,42 @@ type ArticleVotePollReq struct {
 	OptionIDs []int64
 }
 
+type ArticleFinishPollReq struct {
+	ArticleID int64
+	EndsAt    time.Time
+}
+
+func (d *ArticleUsecase) FinishPoll(ctx context.Context, req *ArticleFinishPollReq) error {
+	var outboxEvent *repo.OutboxEvent
+	err := d.tx(ctx, func(ctx context.Context) error {
+		article, err := d.articleRepo.Get(ctx, &repo.ArticleGetReq{Filter: &model.ArticleFilter{ArticleID: new(req.ArticleID)}})
+		if err != nil {
+			return err
+		}
+		if article.Type != enum.ArticleTypePoll || article.PublishStatus != enum.ArticlePublishStatusPublished || article.CreatedBy == nil {
+			return nil
+		}
+		poll, err := d.articlePollRepo.Get(ctx, article.ID, 0)
+		if err != nil {
+			return err
+		}
+		if poll == nil || !poll.EndsAt.UTC().Equal(req.EndsAt.UTC()) || time.Now().UTC().Before(poll.EndsAt) {
+			return nil
+		}
+		outboxEvent, err = d.outboxRepo.Save(ctx, &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_POLL_ENDED, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_POLL_ENDED, Payload: &commonenums.Event_ArticlePollEnded{ArticlePollEnded: &commonenums.ArticlePollEndedPayload{SenderId: *article.CreatedBy, ArticleId: article.ID}}})
+		return err
+	})
+	if err != nil {
+		return err
+	}
+	if outboxEvent != nil {
+		if _, publishErr := d.outboxUsecase.Publish(ctx, &PublishOutboxEventReq{ID: outboxEvent.ID}); publishErr != nil {
+			d.log.WarnContext(ctx, "publish poll ended outbox event failed", slog.Int64("outbox_id", outboxEvent.ID), slog.Any("err", publishErr))
+		}
+	}
+	return nil
+}
+
 type ArticleEnterLotteryReq struct {
 	Access    *model.ContentAccess
 	ArticleID int64
@@ -1226,6 +1301,11 @@ func (d *ArticleUsecase) DrawLottery(ctx context.Context, req *ArticleDrawLotter
 			}
 			outboxEvents = append(outboxEvents, event)
 		}
+		event, saveErr := d.outboxRepo.Save(ctx, &commonenums.Event{Type: commonenums.EventType_EVENT_TYPE_ARTICLE_LOTTERY_DRAWN, Subject: commonenums.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_DRAWN, Payload: &commonenums.Event_ArticleLotteryDrawn{ArticleLotteryDrawn: &commonenums.ArticleLotteryDrawnPayload{SenderId: *article.CreatedBy, ArticleId: article.ID}}})
+		if saveErr != nil {
+			return saveErr
+		}
+		outboxEvents = append(outboxEvents, event)
 		return nil
 	})
 	if err != nil {
@@ -1443,6 +1523,38 @@ type ArticleMapViewerActionStatesReq struct {
 	UserID     int64
 }
 
+func (d *ArticleUsecase) ListWatchers(ctx context.Context, articleID int64) ([]int64, error) {
+	if articleID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	action := enum.ArticleActionWatch
+	records, err := d.actionRecordRepo.List(ctx, &repo.ArticleActionRecordReq{ArticleIDs: []int64{articleID}, Type: &action})
+	if err != nil {
+		return nil, err
+	}
+	userIDs := make([]int64, 0, len(records))
+	for _, record := range records {
+		if record != nil && record.UserID > 0 {
+			userIDs = append(userIDs, record.UserID)
+		}
+	}
+	return lo.Uniq(userIDs), nil
+}
+
+func (d *ArticleUsecase) ListPollParticipants(ctx context.Context, articleID int64) ([]int64, error) {
+	if articleID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return d.articlePollRepo.ListParticipantUserIDs(ctx, articleID)
+}
+
+func (d *ArticleUsecase) ListLotteryParticipants(ctx context.Context, articleID int64) ([]int64, error) {
+	if articleID <= 0 {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	return d.articleLotteryRepo.ListParticipantUserIDs(ctx, articleID)
+}
+
 func (d *ArticleUsecase) MapViewerActionStates(ctx context.Context, req *ArticleMapViewerActionStatesReq) (map[int64]*model.
 	ArticleViewerActionState, error) {
 	articleIDs := req.ArticleIDs
@@ -1462,6 +1574,7 @@ func (d *ArticleUsecase) MapViewerActionStates(ctx context.Context, req *Article
 			enum.ArticleActionThank,
 			enum.ArticleActionCollect,
 			enum.ArticleActionReward,
+			enum.ArticleActionWatch,
 		},
 	})
 	if err != nil {
@@ -1481,6 +1594,8 @@ func (d *ArticleUsecase) MapViewerActionStates(ctx context.Context, req *Article
 			state.Collected = true
 		case enum.ArticleActionReward:
 			state.Rewarded = true
+		case enum.ArticleActionWatch:
+			state.Watched = true
 		}
 	}
 	return states, nil

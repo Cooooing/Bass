@@ -20,3 +20,11 @@ type ArticleLotteryWon struct {
 }
 
 func (ArticleLotteryWon) notificationTemplateData() {}
+
+type ArticleWatchActivity struct {
+	Article  Article
+	Actor    User
+	Activity string
+}
+
+func (ArticleWatchActivity) notificationTemplateData() {}

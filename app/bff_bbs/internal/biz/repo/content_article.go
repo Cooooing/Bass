@@ -169,6 +169,12 @@ type CollectArticleReq struct {
 	Active    bool
 }
 
+type WatchArticleReq struct {
+	UserID    int64
+	ArticleID int64
+	Active    bool
+}
+
 type RewardArticleReq struct {
 	UserID    int64
 	ArticleID int64
@@ -194,5 +200,6 @@ type ContentArticleClient interface {
 	LikeArticle(ctx context.Context, req *LikeArticleReq) (bool, error)
 	ThankArticle(ctx context.Context, req *ThankArticleReq) (bool, error)
 	CollectArticle(ctx context.Context, req *CollectArticleReq) (bool, error)
+	WatchArticle(ctx context.Context, req *WatchArticleReq) (bool, error)
 	RewardArticle(ctx context.Context, req *RewardArticleReq) error
 }

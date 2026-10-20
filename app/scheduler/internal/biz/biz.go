@@ -15,6 +15,7 @@ var BizProviderSet = wire.NewSet(
 	task.NewContentPublishScheduledArticles,
 	task.NewContentFlushArticleViews,
 	task.NewContentDrawArticleLotteries,
+	task.NewContentFinishArticlePolls,
 	task.NewPlatformRefreshHoliday,
 	ProvideTasks,
 	usecase.NewScheduledTaskUsecase,
@@ -29,6 +30,7 @@ func ProvideTasks(
 	contentPublishScheduledArticles *task.ContentPublishScheduledArticles,
 	contentFlushArticleViews *task.ContentFlushArticleViews,
 	contentDrawArticleLotteries *task.ContentDrawArticleLotteries,
+	contentFinishArticlePolls *task.ContentFinishArticlePolls,
 	platformRefreshHoliday *task.PlatformRefreshHoliday,
 ) map[string]task.Task {
 	return map[string]task.Task{
@@ -39,6 +41,7 @@ func ProvideTasks(
 		contentPublishScheduledArticles.HandlerName().String(): contentPublishScheduledArticles,
 		contentFlushArticleViews.HandlerName().String():        contentFlushArticleViews,
 		contentDrawArticleLotteries.HandlerName().String():     contentDrawArticleLotteries,
+		contentFinishArticlePolls.HandlerName().String():       contentFinishArticlePolls,
 		platformRefreshHoliday.HandlerName().String():          platformRefreshHoliday,
 	}
 }

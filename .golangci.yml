@@ -82,7 +82,7 @@ linters:
     errchkjson:
       check-error-free-encoding: false
     gocyclo:
-      min-complexity: 40
+      min-complexity: 50
     # Its Errorf autofix does not update imports safely.
     perfsprint:
       errorf: false

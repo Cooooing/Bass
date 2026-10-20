@@ -82,3 +82,36 @@ func (c *ContentClient) GetComment(ctx context.Context, commentID int64) (*model
 	}
 	return result, nil
 }
+
+func (c *ContentClient) ListArticleWatchers(ctx context.Context, articleID int64) ([]int64, error) {
+	if articleID <= 0 {
+		return nil, nil
+	}
+	reply, err := c.contentClient.Article.ListWatchers(ctx, &contentv1.ListArticleWatchers_Req{ArticleId: articleID})
+	if err != nil {
+		return nil, err
+	}
+	return reply.GetUserIds(), nil
+}
+
+func (c *ContentClient) ListPollParticipants(ctx context.Context, articleID int64) ([]int64, error) {
+	if articleID <= 0 {
+		return nil, nil
+	}
+	reply, err := c.contentClient.Article.ListPollParticipants(ctx, &contentv1.ListArticlePollParticipants_Req{ArticleId: articleID})
+	if err != nil {
+		return nil, err
+	}
+	return reply.GetUserIds(), nil
+}
+
+func (c *ContentClient) ListLotteryParticipants(ctx context.Context, articleID int64) ([]int64, error) {
+	if articleID <= 0 {
+		return nil, nil
+	}
+	reply, err := c.contentClient.Article.ListLotteryParticipants(ctx, &contentv1.ListArticleLotteryParticipants_Req{ArticleId: articleID})
+	if err != nil {
+		return nil, err
+	}
+	return reply.GetUserIds(), nil
+}

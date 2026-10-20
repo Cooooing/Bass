@@ -22,6 +22,7 @@ service ContentArticleService {
   rpc SetPinnedComment(SetPinnedArticleComment.Req) returns (SetPinnedArticleComment.Resp) {} // 设置文章置顶评论
   rpc AcceptAnswer(AcceptArticleAnswer.Req) returns (AcceptArticleAnswer.Resp) {} // 采纳问答回答
   rpc VotePoll(VoteArticlePoll.Req) returns (VoteArticlePoll.Resp) {} // 投票
+  rpc FinishPoll(FinishArticlePoll.Req) returns (FinishArticlePoll.Resp) {} // 完成投票
   rpc EnterLottery(EnterArticleLottery.Req) returns (EnterArticleLottery.Resp) {} // 报名或撤销抽奖报名
   rpc DrawLottery(DrawArticleLottery.Req) returns (DrawArticleLottery.Resp) {} // 执行抽奖开奖
   rpc Unarchive(UnarchiveArticle.Req) returns (UnarchiveArticle.Resp) {} // 取消归档
@@ -32,11 +33,15 @@ service ContentArticleService {
   rpc Like(LikeArticle.Req) returns (LikeArticle.Resp) {} // 点赞文章
   rpc Thank(ThankArticle.Req) returns (ThankArticle.Resp) {} // 感谢文章
   rpc Collect(CollectArticle.Req) returns (CollectArticle.Resp) {} // 收藏文章
+  rpc Watch(WatchArticle.Req) returns (WatchArticle.Resp) {} // 关注文章
   rpc Reward(RewardArticle.Req) returns (RewardArticle.Resp) {} // 打赏文章
   rpc View(ViewArticle.Req) returns (ViewArticle.Resp) {} // 浏览文章
   rpc PageViewHistory(PageArticleViewHistory.Req) returns (PageArticleViewHistory.Resp) {} // 分页查询当前用户浏览历史
   rpc FlushViews(FlushArticleViews.Req) returns (FlushArticleViews.Resp) {} // 刷新浏览量
   rpc MapViewerActionStates(MapArticleViewerActionStates.Req) returns (MapArticleViewerActionStates.Resp) {} // 查询互动状态
+  rpc ListWatchers(ListArticleWatchers.Req) returns (ListArticleWatchers.Resp) {} // 查询文章关注账号
+  rpc ListPollParticipants(ListArticlePollParticipants.Req) returns (ListArticlePollParticipants.Resp) {} // 查询投票参与账号
+  rpc ListLotteryParticipants(ListArticleLotteryParticipants.Req) returns (ListArticleLotteryParticipants.Resp) {} // 查询抽奖参与账号
   rpc Get(GetArticle.Req) returns (GetArticle.Resp) {} // 查询文章详情
   rpc List(ListArticles.Req) returns (ListArticles.Resp) {} // 查询文章列表
   rpc Page(PageArticles.Req) returns (PageArticles.Resp) {} // 分页查询文章
@@ -232,6 +237,17 @@ message CollectArticle {
   }
 }
 
+message WatchArticle {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+    bool watched = 2; // 是否关注
+    ContentAccess access = 3; // 访问上下文
+  }
+  message Resp {
+    bool watched = 1; // 是否已关注
+  }
+}
+
 message RewardArticle {
   message Req {
     int64 article_id = 1; // 文章 ID
@@ -290,7 +306,35 @@ message MapArticleViewerActionStates {
       bool thanked = 2; // 是否已感谢
       bool collected = 3; // 是否已收藏
       bool rewarded = 4; // 是否已打赏
+      bool watched = 5; // 是否已关注
     }
+  }
+}
+
+message ListArticleWatchers {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+  }
+  message Resp {
+    repeated int64 user_ids = 1; // 当前关注文章的账号 ID
+  }
+}
+
+message ListArticlePollParticipants {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+  }
+  message Resp {
+    repeated int64 user_ids = 1; // 投票参与账号 ID
+  }
+}
+
+message ListArticleLotteryParticipants {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+  }
+  message Resp {
+    repeated int64 user_ids = 1; // 抽奖参与账号 ID
   }
 }
 
@@ -367,6 +411,7 @@ message Article {
   int32 thank_count = 21; // 感谢数
   int32 like_count = 22; // 点赞数
   int32 collect_count = 23; // 收藏数
+  int32 watch_count = 26; // 关注数
   int32 reward_count = 24; // 打赏数
   int32 reply_count = 25; // 回复数
   google.protobuf.Timestamp published_at = 30; // 发布时间
@@ -409,6 +454,14 @@ message VoteArticlePoll {
     int64 article_id = 1; // 文章 ID
     repeated int64 option_ids = 2; // 所选选项 ID
     ContentAccess access = 3; // 访问上下文
+  }
+  message Resp {}
+}
+
+message FinishArticlePoll {
+  message Req {
+    int64 article_id = 1; // 文章 ID
+    google.protobuf.Timestamp ends_at = 2; // 原计划截止时间
   }
   message Resp {}
 }

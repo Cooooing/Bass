@@ -159,6 +159,14 @@ func (s *ArticleService) VotePoll(ctx context.Context, req *v1.VoteArticlePoll_R
 	return &v1.VoteArticlePoll_Resp{}, err
 }
 
+func (s *ArticleService) FinishPoll(ctx context.Context, req *v1.FinishArticlePoll_Req) (*v1.FinishArticlePoll_Resp, error) {
+	if req.GetArticleId() <= 0 || req.GetEndsAt() == nil || !req.GetEndsAt().IsValid() {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+	}
+	err := s.articleUsecase.FinishPoll(ctx, &usecase.ArticleFinishPollReq{ArticleID: req.GetArticleId(), EndsAt: req.GetEndsAt().AsTime()})
+	return &v1.FinishArticlePoll_Resp{}, err
+}
+
 func (*ArticleService) articlePollDraft(req *v1.ArticlePollDraft) *model.ArticlePollDraft {
 	if req == nil || req.GetEndsAt() == nil {
 		return nil
@@ -556,6 +564,28 @@ func (s *ArticleService) Collect(ctx context.Context, req *v1.CollectArticle_Req
 	return &v1.CollectArticle_Resp{Collected: collected}, err
 }
 
+func (s *ArticleService) Watch(ctx context.Context, req *v1.WatchArticle_Req) (*v1.WatchArticle_Resp, error) {
+	access := &model.ContentAccess{Scope: ""}
+	if req.GetAccess() != nil {
+		if req.GetAccess().GetScope() != 0 {
+			scope, ok := enum.ContentAccessScopeMap.ToEnum(req.GetAccess().GetScope())
+			if !ok {
+				return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_COMMON_INVALID_ARGUMENT)
+			}
+			access.Scope = scope
+		}
+		if req.GetAccess().ActorUserId != nil {
+			access.ActorUserID = req.GetAccess().GetActorUserId()
+		}
+	}
+	access, err := access.Normalize("")
+	if err != nil {
+		return nil, err
+	}
+	watched, err := s.articleUsecase.Watch(ctx, &usecase.ArticleWatchReq{Access: access, ArticleID: req.GetArticleId(), UserID: access.ActorUserID, Active: req.GetWatched()})
+	return &v1.WatchArticle_Resp{Watched: watched}, err
+}
+
 func (s *ArticleService) Reward(ctx context.Context, req *v1.RewardArticle_Req) (*v1.RewardArticle_Resp, error) {
 	access := &model.ContentAccess{Scope: ""}
 	if req.GetAccess() != nil {
@@ -660,6 +690,7 @@ func (s *ArticleService) articleViewHistoryArticle(row *model.Article) *v1.Artic
 		ThankCount:        row.ThankCount,
 		LikeCount:         row.LikeCount,
 		CollectCount:      row.CollectCount,
+		WatchCount:        row.WatchCount,
 		RewardCount:       row.RewardCount,
 		ReplyCount:        row.ReplyCount,
 		CreatedBy:         row.CreatedBy,
@@ -769,6 +800,7 @@ func (s *ArticleService) Get(ctx context.Context, req *v1.GetArticle_Req) (*v1.G
 		ThankCount:        row.ThankCount,
 		LikeCount:         row.LikeCount,
 		CollectCount:      row.CollectCount,
+		WatchCount:        row.WatchCount,
 		RewardCount:       row.RewardCount,
 		ReplyCount:        row.ReplyCount,
 		CreatedBy:         row.CreatedBy,
@@ -840,6 +872,7 @@ func (s *ArticleService) List(ctx context.Context, req *v1.ListArticles_Req) (*v
 			ThankCount:    row.ThankCount,
 			LikeCount:     row.LikeCount,
 			CollectCount:  row.CollectCount,
+			WatchCount:    row.WatchCount,
 			RewardCount:   row.RewardCount,
 			ReplyCount:    row.ReplyCount,
 			CreatedBy:     row.CreatedBy,
@@ -908,6 +941,7 @@ func (s *ArticleService) Page(ctx context.Context, req *v1.PageArticles_Req) (*v
 			ThankCount:    row.ThankCount,
 			LikeCount:     row.LikeCount,
 			CollectCount:  row.CollectCount,
+			WatchCount:    row.WatchCount,
 			RewardCount:   row.RewardCount,
 			ReplyCount:    row.ReplyCount,
 			CreatedBy:     row.CreatedBy,
@@ -937,9 +971,33 @@ func (s *ArticleService) MapViewerActionStates(ctx context.Context, req *v1.MapA
 	}
 	reply := make(map[int64]*v1.MapArticleViewerActionStates_Resp_ArticleViewerActionState, len(states))
 	for articleID, state := range states {
-		reply[articleID] = &v1.MapArticleViewerActionStates_Resp_ArticleViewerActionState{Liked: state.Liked, Thanked: state.Thanked, Collected: state.Collected, Rewarded: state.Rewarded}
+		reply[articleID] = &v1.MapArticleViewerActionStates_Resp_ArticleViewerActionState{Liked: state.Liked, Thanked: state.Thanked, Collected: state.Collected, Rewarded: state.Rewarded, Watched: state.Watched}
 	}
 	return &v1.MapArticleViewerActionStates_Resp{States: reply}, nil
+}
+
+func (s *ArticleService) ListWatchers(ctx context.Context, req *v1.ListArticleWatchers_Req) (*v1.ListArticleWatchers_Resp, error) {
+	userIDs, err := s.articleUsecase.ListWatchers(ctx, req.GetArticleId())
+	if err != nil {
+		return nil, err
+	}
+	return &v1.ListArticleWatchers_Resp{UserIds: userIDs}, nil
+}
+
+func (s *ArticleService) ListPollParticipants(ctx context.Context, req *v1.ListArticlePollParticipants_Req) (*v1.ListArticlePollParticipants_Resp, error) {
+	userIDs, err := s.articleUsecase.ListPollParticipants(ctx, req.GetArticleId())
+	if err != nil {
+		return nil, err
+	}
+	return &v1.ListArticlePollParticipants_Resp{UserIds: userIDs}, nil
+}
+
+func (s *ArticleService) ListLotteryParticipants(ctx context.Context, req *v1.ListArticleLotteryParticipants_Req) (*v1.ListArticleLotteryParticipants_Resp, error) {
+	userIDs, err := s.articleUsecase.ListLotteryParticipants(ctx, req.GetArticleId())
+	if err != nil {
+		return nil, err
+	}
+	return &v1.ListArticleLotteryParticipants_Resp{UserIds: userIDs}, nil
 }
 
 func (*ArticleService) articleQueryFilter(queryParams *v1.ArticleQueryParams) (*model.ArticleFilter, error) {

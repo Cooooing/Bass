@@ -21,6 +21,7 @@ type ArticleLotteryRepo interface {
 	Get(context.Context, int64, int64) (*model.ArticleLottery, error)
 	SetEntry(context.Context, int64, int64, bool, time.Time) error
 	Draw(context.Context, int64, time.Time) ([]*ArticleLotteryWinner, error)
+	ListParticipantUserIDs(context.Context, int64) ([]int64, error)
 }
 
 // ArticleLotteryWinner 是一次开奖产生的中奖记录。

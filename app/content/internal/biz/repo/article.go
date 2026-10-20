@@ -93,6 +93,7 @@ type ArticleStatUpdate struct {
 	ThankCount   int32
 	LikeCount    int32
 	CollectCount int32
+	WatchCount   int32
 	RewardCount  int32
 	ReplyCount   int32
 }

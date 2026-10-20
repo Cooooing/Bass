@@ -12,6 +12,7 @@ const (
 	ArticleActionLike    ArticleAction = "like"    // ArticleActionLike 表示点赞文章。
 	ArticleActionThank   ArticleAction = "thank"   // ArticleActionThank 表示感谢文章。
 	ArticleActionCollect ArticleAction = "collect" // ArticleActionCollect 表示收藏文章。
+	ArticleActionWatch   ArticleAction = "watch"   // ArticleActionWatch 表示关注文章。
 	ArticleActionReward  ArticleAction = "reward"  // ArticleActionReward 表示打赏文章。
 	ArticleActionReply   ArticleAction = "reply"   // ArticleActionReply 表示回复文章。
 )
@@ -21,6 +22,7 @@ var ArticleActionMap = enum.NewMapping[ArticleAction, v1.ArticleAction](map[Arti
 	ArticleActionLike:    {Proto: v1.ArticleAction_ARTICLE_ACTION_LIKE},
 	ArticleActionThank:   {Proto: v1.ArticleAction_ARTICLE_ACTION_THANK},
 	ArticleActionCollect: {Proto: v1.ArticleAction_ARTICLE_ACTION_COLLECT},
+	ArticleActionWatch:   {Proto: v1.ArticleAction_ARTICLE_ACTION_WATCH},
 	ArticleActionReward:  {Proto: v1.ArticleAction_ARTICLE_ACTION_REWARD},
 	ArticleActionReply:   {Proto: v1.ArticleAction_ARTICLE_ACTION_REPLY},
 })

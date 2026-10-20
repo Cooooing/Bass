@@ -83,6 +83,7 @@ func (r *ArticleRepo) Save(ctx context.Context, article *model.Article) (*model.
 		ThankCount:    save.ThankCount,
 		LikeCount:     save.LikeCount,
 		CollectCount:  save.CollectCount,
+		WatchCount:    save.WatchCount,
 		RewardCount:   save.RewardCount,
 		ReplyCount:    save.ReplyCount,
 		CreatedAt:     save.CreatedAt,
@@ -230,6 +231,9 @@ func (r *ArticleRepo) AddStats(ctx context.Context, req *repo.ArticleAddStatsReq
 	}
 	if stats.CollectCount != 0 {
 		updateOne.AddCollectCount(stats.CollectCount)
+	}
+	if stats.WatchCount != 0 {
+		updateOne.AddWatchCount(stats.WatchCount)
 	}
 	if stats.RewardCount != 0 {
 		updateOne.AddRewardCount(stats.RewardCount)
@@ -417,6 +421,7 @@ func (r *ArticleRepo) Get(ctx context.Context, req *repo.ArticleGetReq) (*model.
 		ThankCount:    a.ThankCount,
 		LikeCount:     a.LikeCount,
 		CollectCount:  a.CollectCount,
+		WatchCount:    a.WatchCount,
 		RewardCount:   a.RewardCount,
 		ReplyCount:    a.ReplyCount,
 		CreatedAt:     a.CreatedAt,
@@ -456,6 +461,7 @@ func (r *ArticleRepo) List(ctx context.Context, req *repo.ArticleGetReq) ([]*mod
 			ThankCount:    item.ThankCount,
 			LikeCount:     item.LikeCount,
 			CollectCount:  item.CollectCount,
+			WatchCount:    item.WatchCount,
 			RewardCount:   item.RewardCount,
 			ReplyCount:    item.ReplyCount,
 			CreatedAt:     item.CreatedAt,
@@ -521,6 +527,7 @@ func (r *ArticleRepo) Page(ctx context.Context, req *repo.ArticleGetReq) (*repo.
 			ThankCount:    item.ThankCount,
 			LikeCount:     item.LikeCount,
 			CollectCount:  item.CollectCount,
+			WatchCount:    item.WatchCount,
 			RewardCount:   item.RewardCount,
 			ReplyCount:    item.ReplyCount,
 			CreatedAt:     item.CreatedAt,

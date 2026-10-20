@@ -9,12 +9,12 @@ import (
 
 type TemplateInitializationServer struct {
 	templateUsecase *usecase.TemplateUsecase
-	eventHandlers   map[commonenum.EventType]usecase.EventHandler
+	eventHandlers   map[commonenum.EventType][]usecase.EventHandler
 }
 
 func NewTemplateInitializationServer(
 	templateUsecase *usecase.TemplateUsecase,
-	eventHandlers map[commonenum.EventType]usecase.EventHandler,
+	eventHandlers map[commonenum.EventType][]usecase.EventHandler,
 ) *TemplateInitializationServer {
 	return &TemplateInitializationServer{
 		templateUsecase: templateUsecase,

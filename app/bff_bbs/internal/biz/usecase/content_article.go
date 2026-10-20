@@ -561,6 +561,12 @@ type CollectArticleReq struct {
 	ArticleID int64
 	Active    bool
 }
+
+type WatchArticleReq struct {
+	UserID    int64
+	ArticleID int64
+	Active    bool
+}
 type RewardArticleReq struct {
 	UserID    int64
 	ArticleID int64
@@ -586,6 +592,13 @@ func (u *ContentArticleUsecase) CollectArticle(ctx context.Context, req *Collect
 		return false, err
 	}
 	return u.contentArticleClient.CollectArticle(ctx, &repo.CollectArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
+}
+
+func (u *ContentArticleUsecase) WatchArticle(ctx context.Context, req *WatchArticleReq) (bool, error) {
+	if err := u.ensureArticleUnblocked(ctx, req.UserID, req.ArticleID); err != nil {
+		return false, err
+	}
+	return u.contentArticleClient.WatchArticle(ctx, &repo.WatchArticleReq{UserID: req.UserID, ArticleID: req.ArticleID, Active: req.Active})
 }
 
 func (u *ContentArticleUsecase) RewardArticle(ctx context.Context, req *RewardArticleReq) error {

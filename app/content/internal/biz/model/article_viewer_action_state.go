@@ -5,4 +5,5 @@ type ArticleViewerActionState struct {
 	Thanked   bool
 	Collected bool
 	Rewarded  bool
+	Watched   bool
 }

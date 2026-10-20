@@ -168,3 +168,22 @@ func (r *ArticleLotteryRepo) Draw(ctx context.Context, lotteryID int64, drawnAt 
 	_, err = client.ArticleLottery.UpdateOneID(lotteryID).SetDrawnAt(drawnAt).Save(ctx)
 	return result, err
 }
+
+func (r *ArticleLotteryRepo) ListParticipantUserIDs(ctx context.Context, articleID int64) ([]int64, error) {
+	lottery, err := r.client(ctx).ArticleLottery.Query().Where(articlelotteryent.ArticleIDEQ(articleID)).Only(ctx)
+	if gen.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	entries, err := r.client(ctx).ArticleLotteryEntry.Query().Where(articlelotteryentryent.LotteryIDEQ(lottery.ID)).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	userIDs := make([]int64, 0, len(entries))
+	for _, entry := range entries {
+		userIDs = append(userIDs, entry.UserID)
+	}
+	return userIDs, nil
+}

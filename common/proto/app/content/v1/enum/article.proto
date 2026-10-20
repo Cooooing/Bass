@@ -43,6 +43,7 @@ enum ArticleAction {
   ARTICLE_ACTION_LIKE = 1; // 点赞。
   ARTICLE_ACTION_THANK = 2; // 感谢。
   ARTICLE_ACTION_COLLECT = 3; // 收藏。
+  ARTICLE_ACTION_WATCH = 4; // 关注。
   ARTICLE_ACTION_REWARD = 5; // 打赏。
   ARTICLE_ACTION_REPLY = 6; // 回复。
 }

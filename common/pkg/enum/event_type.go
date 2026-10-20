@@ -28,6 +28,13 @@ const (
 	EventTypeContentArticlePostscriptAdd  EventType = "content_article_postscript_add"
 	EventTypeContentArticleStatusUpdate   EventType = "content_article_status_update"
 	EventTypeContentArticleLotteryWon     EventType = "content_article_lottery_won"
+	EventTypeContentArticlePollEnded      EventType = "content_article_poll_ended"
+	EventTypeContentArticleLotteryDrawn   EventType = "content_article_lottery_drawn"
+	EventTypeContentArticleWatchedCommentPublished EventType = "content_article_watched_comment_published"
+	EventTypeContentArticleWatchedPostscriptAdded  EventType = "content_article_watched_postscript_added"
+	EventTypeContentArticleWatchedAnswerAccepted   EventType = "content_article_watched_answer_accepted"
+	EventTypeContentArticleWatchedPollEnded        EventType = "content_article_watched_poll_ended"
+	EventTypeContentArticleWatchedLotteryDrawn     EventType = "content_article_watched_lottery_drawn"
 	EventTypeContentCommentPublish        EventType = "content_comment_publish"
 	EventTypeContentCommentLike           EventType = "content_comment_like"
 	EventTypeContentCommentThank          EventType = "content_comment_thank"
@@ -64,6 +71,13 @@ var EventTypeMap = NewMapping[EventType, enums.EventType](map[EventType]Entry[Ev
 	EventTypeContentArticlePostscriptAdd:  {Proto: enums.EventType_EVENT_TYPE_ARTICLE_POSTSCRIPT_ADDED},
 	EventTypeContentArticleStatusUpdate:   {Proto: enums.EventType_EVENT_TYPE_ARTICLE_STATUS_UPDATED},
 	EventTypeContentArticleLotteryWon:     {Proto: enums.EventType_EVENT_TYPE_ARTICLE_LOTTERY_WON},
+	EventTypeContentArticlePollEnded:      {Proto: enums.EventType_EVENT_TYPE_ARTICLE_POLL_ENDED},
+	EventTypeContentArticleLotteryDrawn:   {Proto: enums.EventType_EVENT_TYPE_ARTICLE_LOTTERY_DRAWN},
+	EventTypeContentArticleWatchedCommentPublished: {Proto: enums.EventType_EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED},
+	EventTypeContentArticleWatchedPostscriptAdded:  {Proto: enums.EventType_EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED},
+	EventTypeContentArticleWatchedAnswerAccepted:   {Proto: enums.EventType_EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED},
+	EventTypeContentArticleWatchedPollEnded:        {Proto: enums.EventType_EVENT_TYPE_ARTICLE_WATCHED_POLL_ENDED},
+	EventTypeContentArticleWatchedLotteryDrawn:     {Proto: enums.EventType_EVENT_TYPE_ARTICLE_WATCHED_LOTTERY_DRAWN},
 	EventTypeContentCommentPublish:        {Proto: enums.EventType_EVENT_TYPE_COMMENT_PUBLISHED},
 	EventTypeContentCommentLike:           {Proto: enums.EventType_EVENT_TYPE_COMMENT_LIKED},
 	EventTypeContentCommentThank:          {Proto: enums.EventType_EVENT_TYPE_COMMENT_THANKED},

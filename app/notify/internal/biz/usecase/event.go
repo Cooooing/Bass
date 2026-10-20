@@ -24,12 +24,12 @@ type EventHandleReq struct {
 
 type EventUsecase struct {
 	log           *slog.Logger
-	eventHandlers map[commonenum.EventType]EventHandler
+	eventHandlers map[commonenum.EventType][]EventHandler
 }
 
 func NewEventUsecase(
 	logger *slog.Logger,
-	eventHandlers map[commonenum.EventType]EventHandler,
+	eventHandlers map[commonenum.EventType][]EventHandler,
 ) *EventUsecase {
 	return &EventUsecase{
 		log:           logger,
@@ -41,9 +41,13 @@ func (u *EventUsecase) Dispatch(ctx context.Context, req *EventHandleReq) error 
 	if req == nil || req.Event == nil || req.Event.GetEventId() == "" {
 		return nil
 	}
-	eventHandler := u.eventHandlers[req.EventType]
-	if eventHandler == nil {
-		return nil
+	for _, handler := range u.eventHandlers[req.EventType] {
+		if handler == nil {
+			continue
+		}
+		if err := handler.Handle(ctx, req); err != nil {
+			return err
+		}
 	}
-	return eventHandler.Handle(ctx, req)
+	return nil
 }

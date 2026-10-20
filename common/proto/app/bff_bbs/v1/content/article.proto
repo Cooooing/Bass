@@ -157,6 +157,14 @@ service ArticleService {
     };
   }
 
+  // 关注文章
+  rpc Watch(WatchArticle.Req) returns (WatchArticle.Resp) {
+    option (google.api.http) = {
+      post: "/v1/content/article/watch"
+      body: "*"
+    };
+  }
+
   // 打赏文章
   rpc Reward(RewardArticle.Req) returns (RewardArticle.Resp) {
     option (google.api.http) = {
@@ -403,6 +411,20 @@ message CollectArticle {
   }
 }
 
+message WatchArticle {
+  message Req {
+    int64 article_id = 1; // 必填，文章 ID
+    bool active = 2; // 必填，是否关注
+    option (gnostic.openapi.v3.schema) = {
+      required: "article_id"
+      required: "active"
+    };
+  }
+  message Resp {
+    bool watched = 1; // 是否已关注
+  }
+}
+
 message RewardArticle {
   message Req {
     int64 article_id = 1; // 必填，文章 ID
@@ -420,6 +442,7 @@ message ArticleViewerActionState {
   bool thanked = 2; // 是否已感谢
   bool collected = 3; // 是否已收藏
   bool rewarded = 4; // 是否已打赏
+  bool watched = 5; // 是否已关注
 }
 
 message ArticlePostscript {
@@ -463,6 +486,7 @@ message ArticleListItem {
   int32 thank_count = 17; // 感谢数
   int32 like_count = 18; // 点赞数
   int32 collect_count = 19; // 收藏数
+  int32 watch_count = 22; // 关注数
   int32 reward_count = 20; // 打赏数
   int32 reply_count = 21; // 回复数
   AccountProfile author_user = 24; // 作者资料
@@ -500,6 +524,7 @@ message ArticleDetail {
   int32 thank_count = 17; // 感谢数
   int32 like_count = 18; // 点赞数
   int32 collect_count = 19; // 收藏数
+  int32 watch_count = 22; // 关注数
   int32 reward_count = 20; // 打赏数
   int32 reply_count = 21; // 回复数
   AccountProfile author_user = 24; // 作者资料

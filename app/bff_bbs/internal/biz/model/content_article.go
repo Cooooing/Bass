@@ -7,6 +7,7 @@ type ArticleViewerActionState struct {
 	Thanked   bool
 	Collected bool
 	Rewarded  bool
+	Watched   bool
 }
 
 type ArticlePollDraft struct {
@@ -105,6 +106,7 @@ type ArticleListItem struct {
 	ThankCount        int32
 	LikeCount         int32
 	CollectCount      int32
+	WatchCount        int32
 	RewardCount       int32
 	ReplyCount        int32
 	CoverImageURL     *string
@@ -142,6 +144,7 @@ type ArticleDetail struct {
 	ThankCount          int32
 	LikeCount           int32
 	CollectCount        int32
+	WatchCount          int32
 	RewardCount         int32
 	ReplyCount          int32
 	CoverImageURL       *string

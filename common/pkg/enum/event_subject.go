@@ -28,6 +28,8 @@ const (
 	EventSubjectContentArticlePostscriptAdd  EventSubject = "content.article.postscript_added"
 	EventSubjectContentArticleStatusUpdate   EventSubject = "content.article.status_updated"
 	EventSubjectContentArticleLotteryWon     EventSubject = "content.article.lottery_won"
+	EventSubjectContentArticlePollEnded      EventSubject = "content.article.poll_ended"
+	EventSubjectContentArticleLotteryDrawn   EventSubject = "content.article.lottery_drawn"
 	EventSubjectContentCommentPublish        EventSubject = "content.comment.published"
 	EventSubjectContentCommentLike           EventSubject = "content.comment.liked"
 	EventSubjectContentCommentThank          EventSubject = "content.comment.thanked"
@@ -60,6 +62,8 @@ var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubj
 	EventSubjectContentArticlePostscriptAdd:  {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_POSTSCRIPT_ADDED},
 	EventSubjectContentArticleStatusUpdate:   {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_STATUS_UPDATED},
 	EventSubjectContentArticleLotteryWon:     {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_WON},
+	EventSubjectContentArticlePollEnded:      {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_POLL_ENDED},
+	EventSubjectContentArticleLotteryDrawn:   {Proto: enums.EventSubject_EVENT_SUBJECT_ARTICLE_LOTTERY_DRAWN},
 	EventSubjectContentCommentPublish:        {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_PUBLISHED},
 	EventSubjectContentCommentLike:           {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_LIKED},
 	EventSubjectContentCommentThank:          {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_THANKED},

@@ -539,6 +539,21 @@ func (r *ContentArticleClient) CollectArticle(ctx context.Context, req *repo.Col
 	return reply.GetCollected(), nil
 }
 
+func (r *ContentArticleClient) WatchArticle(ctx context.Context, req *repo.WatchArticleReq) (bool, error) {
+	reply, err := r.contentClient.Article.Watch(ctx, &contentv1.WatchArticle_Req{
+		ArticleId: req.ArticleID,
+		Watched:   req.Active,
+		Access: &contentv1.ContentAccess{
+			Scope:       contentv1enum.ContentAccessScope_CONTENT_ACCESS_SCOPE_USER,
+			ActorUserId: new(req.UserID),
+		},
+	})
+	if err != nil {
+		return false, err
+	}
+	return reply.GetWatched(), nil
+}
+
 func (r *ContentArticleClient) RewardArticle(ctx context.Context, req *repo.RewardArticleReq) error {
 	_, err := r.contentClient.Article.Reward(ctx, &contentv1.RewardArticle_Req{
 		ArticleId: req.ArticleID,
@@ -634,6 +649,7 @@ func (r *ContentArticleClient) articleViewerActionStates(states map[int64]*conte
 			Thanked:   state.GetThanked(),
 			Collected: state.GetCollected(),
 			Rewarded:  state.GetRewarded(),
+			Watched:   state.GetWatched(),
 		}
 	}
 	return reply
@@ -679,6 +695,7 @@ func (r *ContentArticleClient) articleListItem(item *contentv1.Article, profiles
 		ThankCount:        item.GetThankCount(),
 		LikeCount:         item.GetLikeCount(),
 		CollectCount:      item.GetCollectCount(),
+		WatchCount:        item.GetWatchCount(),
 		RewardCount:       item.GetRewardCount(),
 		ReplyCount:        item.GetReplyCount(),
 		CoverImageURL:     r.articleCoverImageURL(item),
@@ -739,6 +756,7 @@ func (r *ContentArticleClient) articleDetail(item *contentv1.Article, profiles m
 		ThankCount:          item.GetThankCount(),
 		LikeCount:           item.GetLikeCount(),
 		CollectCount:        item.GetCollectCount(),
+		WatchCount:          item.GetWatchCount(),
 		RewardCount:         item.GetRewardCount(),
 		ReplyCount:          item.GetReplyCount(),
 		CoverImageURL:       r.articleCoverImageURL(item),

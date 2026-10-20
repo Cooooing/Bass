@@ -173,7 +173,7 @@ func (u *TemplateUsecase) ListEnabledRulesWithTemplates(ctx context.Context, req
 	return rules, nil
 }
 
-func (u *TemplateUsecase) InitDefaultTemplates(ctx context.Context, eventHandlers map[enum.EventType]EventHandler) error {
+func (u *TemplateUsecase) InitDefaultTemplates(ctx context.Context, eventHandlers map[enum.EventType][]EventHandler) error {
 	if u == nil || u.notificationRuleRepo == nil {
 		return nil
 	}
@@ -183,29 +183,31 @@ func (u *TemplateUsecase) InitDefaultTemplates(ctx context.Context, eventHandler
 	eventTypes := make([]enum.EventType, 0)
 	channels := make([]notifyenum.NotificationChannel, 0)
 	languages := make([]notifyenum.Language, 0)
-	for eventType, handler := range eventHandlers {
-		if handler == nil {
-			continue
-		}
-		for _, tpl := range handler.Templates() {
-			if tpl == nil || tpl.EventType != eventType {
+	for _, handlers := range eventHandlers {
+		for _, handler := range handlers {
+			if handler == nil {
 				continue
 			}
-			key := fmt.Sprintf("%s:%s:%s", tpl.EventType, tpl.Channel, tpl.Language)
-			if _, ok := defaultTemplates[key]; ok {
-				return fmt.Errorf("duplicate notification template definition: %s", key)
+			for _, tpl := range handler.Templates() {
+				if tpl == nil {
+					continue
+				}
+				key := fmt.Sprintf("%s:%s:%s", tpl.EventType, tpl.Channel, tpl.Language)
+				if _, ok := defaultTemplates[key]; ok {
+					continue
+				}
+				defaultTemplates[key] = tpl
+				defaultTemplateKeys = append(defaultTemplateKeys, key)
+				defaultRules = append(defaultRules, &model.NotificationRule{
+					EventType: tpl.EventType,
+					Channel:   tpl.Channel,
+					Language:  tpl.Language,
+					Enabled:   tpl.Enabled,
+				})
+				eventTypes = append(eventTypes, tpl.EventType)
+				channels = append(channels, tpl.Channel)
+				languages = append(languages, tpl.Language)
 			}
-			defaultTemplates[key] = tpl
-			defaultTemplateKeys = append(defaultTemplateKeys, key)
-			defaultRules = append(defaultRules, &model.NotificationRule{
-				EventType: tpl.EventType,
-				Channel:   tpl.Channel,
-				Language:  tpl.Language,
-				Enabled:   tpl.Enabled,
-			})
-			eventTypes = append(eventTypes, tpl.EventType)
-			channels = append(channels, tpl.Channel)
-			languages = append(languages, tpl.Language)
 		}
 	}
 	if len(defaultTemplates) == 0 {

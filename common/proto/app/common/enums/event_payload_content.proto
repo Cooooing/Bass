@@ -41,6 +41,16 @@ message ArticleLotteryWonPayload {
   int64 winner_id = 5;
 }
 
+message ArticlePollEndedPayload {
+  int64 sender_id = 1;
+  int64 article_id = 3;
+}
+
+message ArticleLotteryDrawnPayload {
+  int64 sender_id = 1;
+  int64 article_id = 3;
+}
+
 message ArticlePostscriptAddedPayload {
   int64 sender_id = 1;
   int64 article_id = 3;

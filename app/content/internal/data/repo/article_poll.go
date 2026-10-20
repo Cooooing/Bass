@@ -122,3 +122,22 @@ func (r *ArticlePollRepo) Vote(ctx context.Context, pollID, userID int64, option
 	}
 	return nil
 }
+
+func (r *ArticlePollRepo) ListParticipantUserIDs(ctx context.Context, articleID int64) ([]int64, error) {
+	poll, err := r.client(ctx).ArticlePoll.Query().Where(articlepollent.ArticleIDEQ(articleID)).Only(ctx)
+	if gen.IsNotFound(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	votes, err := r.client(ctx).ArticlePollVote.Query().Where(articlepollvoteent.PollIDEQ(poll.ID)).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	userIDs := make([]int64, 0, len(votes))
+	for _, vote := range votes {
+		userIDs = append(userIDs, vote.UserID)
+	}
+	return userIDs, nil
+}

@@ -1,0 +1,1 @@
+{{ if .Actor.Nickname }}{{ .Actor.Nickname }}{{ else }}{{ .Actor.Name }}{{ end }} 评论了你关注的文章《{{ .Article.Title }}》

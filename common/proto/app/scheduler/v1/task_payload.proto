@@ -42,6 +42,11 @@ message DrawArticleLotteryTaskPayload {
   google.protobuf.Timestamp draw_at = 2; // 原计划开奖时间
 }
 
+message FinishArticlePollTaskPayload {
+  int64 article_id = 1; // 文章 ID
+  google.protobuf.Timestamp ends_at = 2; // 原计划截止时间
+}
+
 // RefreshHolidayTaskPayload 是节假日缓存刷新任务参数。
 message RefreshHolidayTaskPayload {
   google.protobuf.Timestamp start = 1; // 刷新起始日期；为空时使用当天

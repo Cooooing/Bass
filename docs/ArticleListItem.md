@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **ThankCount** | Pointer to **int32** |  | [optional] 
 **LikeCount** | Pointer to **int32** |  | [optional] 
 **CollectCount** | Pointer to **int32** |  | [optional] 
+**WatchCount** | Pointer to **int32** |  | [optional] 
 **RewardCount** | Pointer to **int32** |  | [optional] 
 **ReplyCount** | Pointer to **int32** |  | [optional] 
 **AuthorUser** | Pointer to [**AccountProfile**](AccountProfile.md) |  | [optional] 
@@ -379,6 +380,31 @@ SetCollectCount sets CollectCount field to given value.
 `func (o *ArticleListItem) HasCollectCount() bool`
 
 HasCollectCount returns a boolean if a field has been set.
+
+### GetWatchCount
+
+`func (o *ArticleListItem) GetWatchCount() int32`
+
+GetWatchCount returns the WatchCount field if non-nil, zero value otherwise.
+
+### GetWatchCountOk
+
+`func (o *ArticleListItem) GetWatchCountOk() (*int32, bool)`
+
+GetWatchCountOk returns a tuple with the WatchCount field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWatchCount
+
+`func (o *ArticleListItem) SetWatchCount(v int32)`
+
+SetWatchCount sets WatchCount field to given value.
+
+### HasWatchCount
+
+`func (o *ArticleListItem) HasWatchCount() bool`
+
+HasWatchCount returns a boolean if a field has been set.
 
 ### GetRewardCount
 

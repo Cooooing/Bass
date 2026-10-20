@@ -18,6 +18,7 @@ api_otp_service.go
 api_postscript_service.go
 api_preferences_service.go
 api_privacy_setting_service.go
+api_realtime_service.go
 api_relation_service.go
 api_tag_service.go
 client.go
@@ -72,6 +73,7 @@ docs/CreateDraftArticleReq.md
 docs/CreateDraftArticleResp.md
 docs/CreateMoonbreezeReq.md
 docs/CreateMoonbreezeResp.md
+docs/CreateRealtimeTicketResp.md
 docs/CreateTagReq.md
 docs/CreateTagResp.md
 docs/DisableTotpReq.md
@@ -160,6 +162,7 @@ docs/ProfileLocation.md
 docs/ProfileRelation.md
 docs/ProfileVisibility.md
 docs/PublishArticleReq.md
+docs/RealtimeService.md
 docs/RefreshTokenReq.md
 docs/RefreshTokenResp.md
 docs/RegisterReq.md
@@ -227,6 +230,8 @@ docs/UpdateProfileAccountResp.md
 docs/UpdateTagReq.md
 docs/UpdateTagResp.md
 docs/VoteArticlePollReq.md
+docs/WatchArticleReq.md
+docs/WatchArticleResp.md
 git_push.sh
 go.mod
 go.sum
@@ -274,6 +279,7 @@ model_create_draft_article_req.go
 model_create_draft_article_resp.go
 model_create_moonbreeze_req.go
 model_create_moonbreeze_resp.go
+model_create_realtime_ticket_resp.go
 model_create_tag_req.go
 model_create_tag_resp.go
 model_disable_totp_req.go
@@ -418,6 +424,8 @@ model_update_profile_account_resp.go
 model_update_tag_req.go
 model_update_tag_resp.go
 model_vote_article_poll_req.go
+model_watch_article_req.go
+model_watch_article_resp.go
 response.go
 test/api_account_service_test.go
 test/api_article_search_service_test.go
@@ -434,6 +442,7 @@ test/api_otp_service_test.go
 test/api_postscript_service_test.go
 test/api_preferences_service_test.go
 test/api_privacy_setting_service_test.go
+test/api_realtime_service_test.go
 test/api_relation_service_test.go
 test/api_tag_service_test.go
 utils.go

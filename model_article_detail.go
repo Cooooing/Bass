@@ -36,6 +36,7 @@ type ArticleDetail struct {
 	ThankCount *int32 `json:"thank_count,omitempty"`
 	LikeCount *int32 `json:"like_count,omitempty"`
 	CollectCount *int32 `json:"collect_count,omitempty"`
+	WatchCount *int32 `json:"watch_count,omitempty"`
 	RewardCount *int32 `json:"reward_count,omitempty"`
 	ReplyCount *int32 `json:"reply_count,omitempty"`
 	AuthorUser *AccountProfile `json:"author_user,omitempty"`
@@ -588,6 +589,38 @@ func (o *ArticleDetail) HasCollectCount() bool {
 // SetCollectCount gets a reference to the given int32 and assigns it to the CollectCount field.
 func (o *ArticleDetail) SetCollectCount(v int32) {
 	o.CollectCount = &v
+}
+
+// GetWatchCount returns the WatchCount field value if set, zero value otherwise.
+func (o *ArticleDetail) GetWatchCount() int32 {
+	if o == nil || IsNil(o.WatchCount) {
+		var ret int32
+		return ret
+	}
+	return *o.WatchCount
+}
+
+// GetWatchCountOk returns a tuple with the WatchCount field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleDetail) GetWatchCountOk() (*int32, bool) {
+	if o == nil || IsNil(o.WatchCount) {
+		return nil, false
+	}
+	return o.WatchCount, true
+}
+
+// HasWatchCount returns a boolean if a field has been set.
+func (o *ArticleDetail) HasWatchCount() bool {
+	if o != nil && !IsNil(o.WatchCount) {
+		return true
+	}
+
+	return false
+}
+
+// SetWatchCount gets a reference to the given int32 and assigns it to the WatchCount field.
+func (o *ArticleDetail) SetWatchCount(v int32) {
+	o.WatchCount = &v
 }
 
 // GetRewardCount returns the RewardCount field value if set, zero value otherwise.
@@ -1383,6 +1416,9 @@ func (o ArticleDetail) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.CollectCount) {
 		toSerialize["collect_count"] = o.CollectCount
+	}
+	if !IsNil(o.WatchCount) {
+		toSerialize["watch_count"] = o.WatchCount
 	}
 	if !IsNil(o.RewardCount) {
 		toSerialize["reward_count"] = o.RewardCount

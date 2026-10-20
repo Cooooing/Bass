@@ -23,6 +23,7 @@ type ArticleViewerActionState struct {
 	Thanked *bool `json:"thanked,omitempty"`
 	Collected *bool `json:"collected,omitempty"`
 	Rewarded *bool `json:"rewarded,omitempty"`
+	Watched *bool `json:"watched,omitempty"`
 }
 
 // NewArticleViewerActionState instantiates a new ArticleViewerActionState object
@@ -170,6 +171,38 @@ func (o *ArticleViewerActionState) SetRewarded(v bool) {
 	o.Rewarded = &v
 }
 
+// GetWatched returns the Watched field value if set, zero value otherwise.
+func (o *ArticleViewerActionState) GetWatched() bool {
+	if o == nil || IsNil(o.Watched) {
+		var ret bool
+		return ret
+	}
+	return *o.Watched
+}
+
+// GetWatchedOk returns a tuple with the Watched field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ArticleViewerActionState) GetWatchedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Watched) {
+		return nil, false
+	}
+	return o.Watched, true
+}
+
+// HasWatched returns a boolean if a field has been set.
+func (o *ArticleViewerActionState) HasWatched() bool {
+	if o != nil && !IsNil(o.Watched) {
+		return true
+	}
+
+	return false
+}
+
+// SetWatched gets a reference to the given bool and assigns it to the Watched field.
+func (o *ArticleViewerActionState) SetWatched(v bool) {
+	o.Watched = &v
+}
+
 func (o ArticleViewerActionState) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -191,6 +224,9 @@ func (o ArticleViewerActionState) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Rewarded) {
 		toSerialize["rewarded"] = o.Rewarded
+	}
+	if !IsNil(o.Watched) {
+		toSerialize["watched"] = o.Watched
 	}
 	return toSerialize, nil
 }

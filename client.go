@@ -79,6 +79,8 @@ type APIClient struct {
 
 	PrivacySettingService PrivacySettingService
 
+	RealtimeService RealtimeService
+
 	RelationService RelationService
 
 	TagService TagService
@@ -115,6 +117,7 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.PostscriptService = (*PostscriptServiceService)(&c.common)
 	c.PreferencesService = (*PreferencesServiceService)(&c.common)
 	c.PrivacySettingService = (*PrivacySettingServiceService)(&c.common)
+	c.RealtimeService = (*RealtimeServiceService)(&c.common)
 	c.RelationService = (*RelationServiceService)(&c.common)
 	c.TagService = (*TagServiceService)(&c.common)
 

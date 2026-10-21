@@ -135,6 +135,7 @@ message Profile {
   google.protobuf.Timestamp last_success_login_at = 4;
   ProfileVisibility visibility = 5;
   ProfileRelation viewer_relation = 6;
+  optional bool online = 7; // 仅本人或允许公开在线状态的账号返回。
 }
 
 message AccountProfileListItem {

@@ -14,6 +14,7 @@ type Registry interface {
 	BindConnection(ctx context.Context, nodeID, realm string, userID int64, connectionID string) ([]model.EvictedConnection, error)
 	UnbindConnection(ctx context.Context, nodeID, realm string, userID int64, connectionID string) error
 	UserNodes(ctx context.Context, realm string, userID int64) ([]string, error)
+	QueryOnline(ctx context.Context, realm string, userIDs []int64) (map[int64]bool, error)
 	IssueTicket(ctx context.Context, realm, ticket string, userID int64) error
 	ConsumeTicket(ctx context.Context, realm, ticket string) (int64, error)
 }

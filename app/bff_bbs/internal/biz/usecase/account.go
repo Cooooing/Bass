@@ -2,13 +2,16 @@ package usecase
 
 import (
 	"common/pkg/apperror"
+	"common/pkg/client/rpc"
 	commonmodel "common/pkg/model"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bff_bbs/v1/user/enum"
 	commonv1 "common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
 	economyv1enum "common/proto/gen/economy/v1/enum"
+	realtimehubv1 "common/proto/gen/realtime_hub/v1"
 	"context"
+	"log/slog"
 	"regexp"
 	"strings"
 
@@ -20,31 +23,37 @@ import (
 )
 
 type AccountUsecase struct {
+	log                 *slog.Logger
 	accountClient       repo.AccountClient
 	assetClient         repo.AssetClient
 	economyClient       repo.EconomyClient
 	privacyClient       repo.PrivacySettingClient
 	locationClient      repo.LocationClient
 	relationClient      repo.RelationClient
+	realtimeHub         *rpc.RealtimeHubClient
 	assetHashPattern    *regexp.Regexp
 	maxProfileImageSize int64
 }
 
 func NewAccountUsecase(
+	log *slog.Logger,
 	accountClient repo.AccountClient,
 	assetClient repo.AssetClient,
 	economyClient repo.EconomyClient,
 	privacyClient repo.PrivacySettingClient,
 	locationClient repo.LocationClient,
 	relationClient repo.RelationClient,
+	realtimeHub *rpc.RealtimeHubClient,
 ) *AccountUsecase {
 	return &AccountUsecase{
+		log:                 log,
 		accountClient:       accountClient,
 		assetClient:         assetClient,
 		economyClient:       economyClient,
 		privacyClient:       privacyClient,
 		locationClient:      locationClient,
 		relationClient:      relationClient,
+		realtimeHub:         realtimeHub,
 		assetHashPattern:    regexp.MustCompile(`^[a-f0-9]{64}$`),
 		maxProfileImageSize: 2 * 1024 * 1024,
 	}
@@ -127,6 +136,15 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 	profile := &bbsuserv1.Profile{
 		Account:    u.accountProfile(account),
 		Visibility: u.profileVisibility(privacy),
+	}
+	if viewerID == account.ID || privacy.PublicOnlineStatus == nil || *privacy.PublicOnlineStatus {
+		onlineStatuses, queryErr := u.realtimeHub.Hub.QueryOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: "bbs", UserIds: []int64{account.ID}})
+		if queryErr != nil {
+			u.log.WarnContext(ctx, "query profile online status failed", "user_id", account.ID, "error", queryErr)
+		} else {
+			online := onlineStatuses.GetOnlineStatuses()[account.ID]
+			profile.Online = &online
+		}
 	}
 	if lastLogin != nil {
 		profile.LastSuccessLoginAt = timestamppb.New(*lastLogin)

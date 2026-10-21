@@ -9,6 +9,7 @@ option go_package = "common/proto/gen/realtime_hub/v1;v1";
 
 service RealtimeHubService {
   rpc Connect(stream NodeToHub) returns (stream HubToNode) {} // 建立 node 与 Hub 的双向控制及下行流。
+  rpc QueryOnline(QueryRealtimeOnline.Req) returns (QueryRealtimeOnline.Resp) {} // 批量查询账号在实时域内是否存在有效连接。
   rpc IssueTicket(IssueRealtimeTicket.Req) returns (IssueRealtimeTicket.Resp) {} // 签发一次性客户端建连凭证。
   rpc ConsumeTicket(ConsumeRealtimeTicket.Req) returns (ConsumeRealtimeTicket.Resp) {} // 消费一次性客户端建连凭证。
 }
@@ -81,6 +82,16 @@ message HubControl {
   string realm = 1; // 实时域。
   string node_id = 2; // 控制目标 node。
   Control control = 3; // 下发控制内容。
+}
+
+message QueryRealtimeOnline {
+  message Req {
+    string realm = 1; // 实时域。
+    repeated int64 user_ids = 2; // 待查询的账号 ID 列表。
+  }
+  message Resp {
+    map<int64, bool> online_statuses = 1; // 账号 ID 到是否至少存在一条有效实时连接的映射。
+  }
 }
 
 message IssueRealtimeTicket {

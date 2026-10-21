@@ -184,6 +184,29 @@ return nodes`, []string{r.userConnectionsKey(realm, userID), r.userConnectionNod
 	return result, nil
 }
 
+func (r *Registry) QueryOnline(ctx context.Context, realm string, userIDs []int64) (map[int64]bool, error) {
+	if len(userIDs) == 0 {
+		return map[int64]bool{}, nil
+	}
+	pipe := r.redis.Client.Pipeline()
+	commands := make([]*redis.IntCmd, 0, len(userIDs))
+	for _, userID := range userIDs {
+		commands = append(commands, pipe.ZCard(ctx, r.userConnectionsKey(realm, userID)))
+	}
+	if _, err := pipe.Exec(ctx); err != nil {
+		return nil, err
+	}
+	statusesByUserID := make(map[int64]bool, len(userIDs))
+	for index, userID := range userIDs {
+		connections, err := commands[index].Result()
+		if err != nil {
+			return nil, err
+		}
+		statusesByUserID[userID] = connections > 0
+	}
+	return statusesByUserID, nil
+}
+
 func (r *Registry) IssueTicket(ctx context.Context, realm, ticket string, userID int64) error {
 	return r.redis.Client.Set(ctx, r.ticketKey(realm, ticket), strconv.FormatInt(userID, 10), time.Minute).Err()
 }

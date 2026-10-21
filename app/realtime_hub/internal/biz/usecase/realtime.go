@@ -86,6 +86,13 @@ func (u *RealtimeUsecase) UnbindConnection(ctx context.Context, nodeID, realm st
 	return u.registry.UnbindConnection(ctx, nodeID, realm, userID, connectionID)
 }
 
+func (u *RealtimeUsecase) QueryOnline(ctx context.Context, realm string, userIDs []int64) (map[int64]bool, error) {
+	if realm == "" {
+		return nil, fmt.Errorf("realtime realm is required")
+	}
+	return u.registry.QueryOnline(ctx, realm, userIDs)
+}
+
 func (u *RealtimeUsecase) IssueTicket(ctx context.Context, realm string, userID int64) (string, error) {
 	ticket := uuid.NewString()
 	return ticket, u.registry.IssueTicket(ctx, realm, ticket, userID)

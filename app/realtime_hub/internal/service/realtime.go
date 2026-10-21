@@ -31,6 +31,14 @@ func (s *RealtimeService) RegisterGrpc(server *kratosgrpc.Server) {
 
 func (*RealtimeService) RegisterHTTP(*http.Server) {}
 
+func (s *RealtimeService) QueryOnline(ctx context.Context, req *realtimehubv1.QueryRealtimeOnline_Req) (*realtimehubv1.QueryRealtimeOnline_Resp, error) {
+	onlineStatuses, err := s.realtime.QueryOnline(ctx, req.GetRealm(), req.GetUserIds())
+	if err != nil {
+		return nil, err
+	}
+	return &realtimehubv1.QueryRealtimeOnline_Resp{OnlineStatuses: onlineStatuses}, nil
+}
+
 func (s *RealtimeService) Connect(stream grpc.BidiStreamingServer[realtimehubv1.NodeToHub, realtimehubv1.HubToNode]) error {
 	first, err := stream.Recv()
 	if err != nil {

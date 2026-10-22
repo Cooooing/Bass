@@ -8,3 +8,20 @@ type ClientEvent struct {
 type NotificationEventPayload struct {
 	NotificationID int64 `json:"notification_id"`
 }
+
+type PrivateChatMessageEventPayload struct {
+	MessageID   int64  `json:"message_id"`
+	SenderID    int64  `json:"sender_id"`
+	ReceiverID  int64  `json:"receiver_id"`
+	MessageType string `json:"message_type"`
+	Content     string `json:"content"`
+	CreatedAt   string `json:"created_at"`
+}
+
+type GlobalChatMessageEventPayload struct {
+	MessageID   int64  `json:"message_id"`
+	SenderID    int64  `json:"sender_id"`
+	MessageType string `json:"message_type"`
+	Content     string `json:"content"`
+	CreatedAt   string `json:"created_at"`
+}

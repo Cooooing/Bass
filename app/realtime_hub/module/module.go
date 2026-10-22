@@ -15,7 +15,7 @@ import (
 	"github.com/google/wire"
 )
 
-var ProviderSet = wire.NewSet(ProvideBootstrap, ProvideCommonServer, commonmodule.InfrastructureProviderSet, data.ModuleProviderSet, biz.BizProviderSet, service.ServiceProviderSet, realtimeserver.NewNotificationDeliveryConsumer, realtimeserver.NewControlConsumer, provideServers, newModule)
+var ProviderSet = wire.NewSet(ProvideBootstrap, ProvideCommonServer, commonmodule.InfrastructureProviderSet, data.ModuleProviderSet, biz.BizProviderSet, service.ServiceProviderSet, realtimeserver.NewNotificationDeliveryConsumer, realtimeserver.NewPrivateChatDeliveryConsumer, realtimeserver.NewGlobalChatDeliveryConsumer, realtimeserver.NewControlConsumer, provideServers, newModule)
 
 type Config = commonmodule.Config[*config.Bootstrap]
 
@@ -29,8 +29,8 @@ func newModule(config *Config, services []server.Service, servers []transport.Se
 	return &Module{Name: config.Server().GetName(), Services: services, Servers: servers}
 }
 
-func provideServers(notificationConsumer *realtimeserver.NotificationDeliveryConsumer, controlConsumer *realtimeserver.ControlConsumer) []transport.Server {
-	return []transport.Server{notificationConsumer, controlConsumer}
+func provideServers(notificationConsumer *realtimeserver.NotificationDeliveryConsumer, privateChatConsumer *realtimeserver.PrivateChatDeliveryConsumer, globalChatConsumer *realtimeserver.GlobalChatDeliveryConsumer, controlConsumer *realtimeserver.ControlConsumer) []transport.Server {
+	return []transport.Server{notificationConsumer, privateChatConsumer, globalChatConsumer, controlConsumer}
 }
 
 func ProvideBootstrap(config *Config) *config.Bootstrap {

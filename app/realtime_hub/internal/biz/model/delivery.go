@@ -1,6 +1,10 @@
 package model
 
-import "realtime_hub/internal/enum"
+import (
+	"time"
+
+	"realtime_hub/internal/enum"
+)
 
 type Delivery struct {
 	UserID  int64
@@ -39,3 +43,26 @@ type NotificationDelivery struct {
 }
 
 func (NotificationDelivery) deliveryPayload() {}
+
+// PrivateChatMessageDelivery 是私聊消息变化的下行内容。
+type PrivateChatMessageDelivery struct {
+	MessageID   int64
+	SenderID    int64
+	ReceiverID  int64
+	MessageType int32
+	Content     string
+	CreatedAt   time.Time
+}
+
+func (PrivateChatMessageDelivery) deliveryPayload() {}
+
+// GlobalChatMessageDelivery 是全局聊天室消息变化的下行内容。
+type GlobalChatMessageDelivery struct {
+	MessageID   int64
+	SenderID    int64
+	MessageType int32
+	Content     string
+	CreatedAt   time.Time
+}
+
+func (GlobalChatMessageDelivery) deliveryPayload() {}

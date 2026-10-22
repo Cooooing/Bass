@@ -70,10 +70,14 @@ for index = 1, #connections, 2 do
   if redis.call('HGET', nodesKey, connectionID) == ARGV[2] then
     redis.call('ZREM', connectionsKey, connectionID)
     redis.call('HDEL', nodesKey, connectionID)
+    if redis.call('ZCARD', connectionsKey) == 0 then
+      redis.call('ZREM', KEYS[3], userID)
+    end
   end
 end
+
 redis.call('DEL', KEYS[1], KEYS[2])
-		return #connections / 2`, []string{r.nodeKey(realm, nodeID), r.nodeConnectionsKey(realm, nodeID)}, r.nodePrefix(realm), nodeID).Result(); err != nil {
+		return #connections / 2`, []string{r.nodeKey(realm, nodeID), r.nodeConnectionsKey(realm, nodeID), r.onlineUsersKey(realm)}, r.nodePrefix(realm), nodeID).Result(); err != nil {
 			return fmt.Errorf("remove node: %w", err)
 		}
 	}
@@ -93,11 +97,15 @@ for index = 1, #existing, 2 do
     redis.call('ZREM', KEYS[2], existingConnectionID)
     redis.call('HDEL', KEYS[3], existingConnectionID)
     redis.call('HDEL', ARGV[5] .. '{' .. existingNodeID .. '}:connections', existingConnectionID)
+    if redis.call('ZCARD', KEYS[2]) == 0 then
+      redis.call('ZREM', KEYS[5], ARGV[4])
+    end
   end
 end
 redis.call('ZADD', KEYS[2], 'NX', ARGV[1], ARGV[2])
 redis.call('HSET', KEYS[3], ARGV[2], ARGV[3])
 redis.call('HSET', KEYS[4], ARGV[2], ARGV[4])
+redis.call('ZADD', KEYS[5], ARGV[1], ARGV[4])
 redis.call('HSET', KEYS[1], 'has_connections', '1')
 redis.call('PEXPIRE', KEYS[4], 30000)
 local evicted = {}
@@ -106,13 +114,16 @@ while redis.call('ZCARD', KEYS[2]) > 5 do
   local oldNodeID = redis.call('HGET', KEYS[3], oldest)
   redis.call('ZREM', KEYS[2], oldest)
   redis.call('HDEL', KEYS[3], oldest)
+  if redis.call('ZCARD', KEYS[2]) == 0 then
+    redis.call('ZREM', KEYS[5], ARGV[4])
+  end
   if oldNodeID then
     redis.call('HDEL', ARGV[5] .. '{' .. oldNodeID .. '}:connections', oldest)
     table.insert(evicted, oldNodeID)
     table.insert(evicted, oldest)
   end
 end
-return evicted`, []string{r.nodeKey(realm, nodeID), r.userConnectionsKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.nodeConnectionsKey(realm, nodeID)}, strconv.FormatInt(time.Now().UnixMilli(), 10), connectionID, nodeID, strconv.FormatInt(userID, 10), r.nodePrefix(realm), r.nodePrefix(realm)).Result()
+return evicted`, []string{r.nodeKey(realm, nodeID), r.userConnectionsKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.nodeConnectionsKey(realm, nodeID), r.onlineUsersKey(realm)}, strconv.FormatInt(time.Now().UnixMilli(), 10), connectionID, nodeID, strconv.FormatInt(userID, 10), r.nodePrefix(realm), r.nodePrefix(realm)).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -140,10 +151,13 @@ end
 if redis.call('HGET', KEYS[4], ARGV[1]) == ARGV[3] then
   redis.call('HDEL', KEYS[4], ARGV[1])
 end
+if redis.call('ZCARD', KEYS[1]) == 0 then
+  redis.call('ZREM', KEYS[6], ARGV[4])
+end
 if redis.call('HLEN', KEYS[4]) == 0 then
   redis.call('HDEL', KEYS[5], 'has_connections')
 end
-return 1`, []string{r.userConnectionsKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.nodeConnectionsKey(realm, nodeID), r.nodeKey(realm, nodeID)}, connectionID, nodeID, strconv.FormatInt(userID, 10)).Result()
+return 1`, []string{r.userConnectionsKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.userConnectionNodesKey(realm, userID), r.nodeConnectionsKey(realm, nodeID), r.nodeKey(realm, nodeID), r.onlineUsersKey(realm)}, connectionID, nodeID, strconv.FormatInt(userID, 10)).Result()
 	return err
 }
 
@@ -207,6 +221,22 @@ func (r *Registry) QueryOnline(ctx context.Context, realm string, userIDs []int6
 	return statusesByUserID, nil
 }
 
+func (r *Registry) ListOnlineUsers(ctx context.Context, realm string) ([]int64, error) {
+	values, err := r.redis.Client.ZRevRange(ctx, r.onlineUsersKey(realm), 0, -1).Result()
+	if err != nil {
+		return nil, err
+	}
+	result := make([]int64, 0, len(values))
+	for _, value := range values {
+		userID, parseErr := strconv.ParseInt(value, 10, 64)
+		if parseErr != nil || userID <= 0 {
+			continue
+		}
+		result = append(result, userID)
+	}
+	return result, nil
+}
+
 func (r *Registry) IssueTicket(ctx context.Context, realm, ticket string, userID int64) error {
 	return r.redis.Client.Set(ctx, r.ticketKey(realm, ticket), strconv.FormatInt(userID, 10), time.Minute).Err()
 }
@@ -244,6 +274,10 @@ func (r *Registry) userConnectionsKey(realm string, userID int64) string {
 
 func (r *Registry) userConnectionNodesKey(realm string, userID int64) string {
 	return r.nodePrefix(realm) + "{" + strconv.FormatInt(userID, 10) + "}:connection_nodes"
+}
+
+func (r *Registry) onlineUsersKey(realm string) string {
+	return r.nodePrefix(realm) + "online_users"
 }
 
 func (*Registry) ticketKey(realm, ticket string) string {

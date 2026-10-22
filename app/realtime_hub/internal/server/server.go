@@ -10,15 +10,25 @@ import (
 	"github.com/google/wire"
 )
 
-var ServerProviderSet = wire.NewSet(ProvideServers, NewGRPCServer, NewHTTPServer, NewNotificationDeliveryConsumer, NewControlConsumer)
+var ServerProviderSet = wire.NewSet(ProvideServers, NewGRPCServer, NewHTTPServer, NewNotificationDeliveryConsumer, NewPrivateChatDeliveryConsumer, NewGlobalChatDeliveryConsumer, NewControlConsumer)
 
 func ProvideServers(
 	notificationConsumer *NotificationDeliveryConsumer,
+	privateChatConsumer *PrivateChatDeliveryConsumer,
+	globalChatConsumer *GlobalChatDeliveryConsumer,
 	controlConsumer *ControlConsumer,
 	grpcServer *grpc.Server,
 	httpServer *http.Server,
 ) []transport.Server {
-	return []transport.Server{notificationConsumer, controlConsumer, grpcServer, httpServer}
+	return []transport.Server{notificationConsumer, privateChatConsumer, globalChatConsumer, controlConsumer, grpcServer, httpServer}
+}
+
+func NewPrivateChatDeliveryConsumer(nats client.Subscriber, realtime *usecase.RealtimeUsecase) *PrivateChatDeliveryConsumer {
+	return &PrivateChatDeliveryConsumer{nats: nats, realtime: realtime}
+}
+
+func NewGlobalChatDeliveryConsumer(nats client.Subscriber, realtime *usecase.RealtimeUsecase) *GlobalChatDeliveryConsumer {
+	return &GlobalChatDeliveryConsumer{nats: nats, realtime: realtime}
 }
 
 func NewNotificationDeliveryConsumer(

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 
+	commonenums "common/proto/gen/common/enums"
 	realtimehubv1 "common/proto/gen/realtime_hub/v1"
 	"realtime_hub/internal/biz/model"
 	"realtime_hub/internal/biz/usecase"
@@ -14,6 +15,7 @@ import (
 	kratosgrpc "github.com/go-kratos/kratos/v3/transport/grpc"
 	"github.com/go-kratos/kratos/v3/transport/http"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type RealtimeService struct {
@@ -37,6 +39,14 @@ func (s *RealtimeService) QueryOnline(ctx context.Context, req *realtimehubv1.Qu
 		return nil, err
 	}
 	return &realtimehubv1.QueryRealtimeOnline_Resp{OnlineStatuses: onlineStatuses}, nil
+}
+
+func (s *RealtimeService) ListOnlineUsers(ctx context.Context, req *realtimehubv1.ListRealtimeOnlineUsers_Req) (*realtimehubv1.ListRealtimeOnlineUsers_Resp, error) {
+	userIDs, err := s.realtime.ListOnlineUsers(ctx, req.GetRealm())
+	if err != nil {
+		return nil, err
+	}
+	return &realtimehubv1.ListRealtimeOnlineUsers_Resp{UserIds: userIDs}, nil
 }
 
 func (s *RealtimeService) Connect(stream grpc.BidiStreamingServer[realtimehubv1.NodeToHub, realtimehubv1.HubToNode]) error {
@@ -139,6 +149,10 @@ func (*RealtimeService) deliveryProto(delivery *model.Delivery) (*realtimehubv1.
 	switch payload := delivery.Payload.(type) {
 	case model.NotificationDelivery:
 		response.Payload = &realtimehubv1.Delivery_Notification{Notification: &realtimehubv1.NotificationDelivery{NotificationId: payload.NotificationID}}
+	case model.PrivateChatMessageDelivery:
+		response.Payload = &realtimehubv1.Delivery_PrivateChatMessage{PrivateChatMessage: &realtimehubv1.PrivateChatMessageDelivery{MessageId: payload.MessageID, SenderId: payload.SenderID, ReceiverId: payload.ReceiverID, MessageType: commonenums.IMMessageType(payload.MessageType), Content: payload.Content, CreatedAt: timestamppb.New(payload.CreatedAt)}}
+	case model.GlobalChatMessageDelivery:
+		response.Payload = &realtimehubv1.Delivery_GlobalChatMessage{GlobalChatMessage: &realtimehubv1.GlobalChatMessageDelivery{MessageId: payload.MessageID, SenderId: payload.SenderID, MessageType: commonenums.IMMessageType(payload.MessageType), Content: payload.Content, CreatedAt: timestamppb.New(payload.CreatedAt)}}
 	default:
 		return nil, fmt.Errorf("delivery payload does not match kind")
 	}

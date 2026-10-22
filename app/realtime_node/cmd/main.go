@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"time"
 
 	"realtime_node/internal/config"
 
@@ -30,7 +31,7 @@ func newApp(c *config.Bootstrap, logger *slog.Logger, servers []transport.Server
 	hostname, _ := os.Hostname()
 	id := fmt.Sprintf("%s.%s.%s", hostname, Name, Version)
 	slog.Info("start server", "id", id)
-	return kratos.New(kratos.ID(id), kratos.Name(Name), kratos.Version(Version), kratos.Metadata(map[string]string{}), kratos.Logger(logger), kratos.Server(servers...), kratos.Registrar(cc.Registrar()))
+	return kratos.New(kratos.ID(id), kratos.Name(Name), kratos.Version(Version), kratos.Metadata(map[string]string{}), kratos.Logger(logger), kratos.StopTimeout(time.Second), kratos.Server(servers...), kratos.Registrar(cc.Registrar()))
 }
 func main() {
 	flag.Parse()

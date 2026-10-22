@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"sync"
+	"time"
 
 	"realtime_hub/internal/biz/model"
 	"realtime_hub/internal/biz/repo"
@@ -93,6 +94,13 @@ func (u *RealtimeUsecase) QueryOnline(ctx context.Context, realm string, userIDs
 	return u.registry.QueryOnline(ctx, realm, userIDs)
 }
 
+func (u *RealtimeUsecase) ListOnlineUsers(ctx context.Context, realm string) ([]int64, error) {
+	if realm == "" {
+		return nil, fmt.Errorf("realtime realm is required")
+	}
+	return u.registry.ListOnlineUsers(ctx, realm)
+}
+
 func (u *RealtimeUsecase) IssueTicket(ctx context.Context, realm string, userID int64) (string, error) {
 	ticket := uuid.NewString()
 	return ticket, u.registry.IssueTicket(ctx, realm, ticket, userID)
@@ -105,6 +113,31 @@ func (u *RealtimeUsecase) ConsumeTicket(ctx context.Context, realm, ticket strin
 // DeliverNotification 将站内信变化路由到指定用户的本机 node stream。
 func (u *RealtimeUsecase) DeliverNotification(ctx context.Context, realm string, userID, notificationID int64) error {
 	return u.Deliver(ctx, realm, userID, enum.DeliveryKindNotification, model.NotificationDelivery{NotificationID: notificationID})
+}
+
+// DeliverPrivateChatMessage 将私聊变化路由到双方当前的所有本机连接。
+func (u *RealtimeUsecase) DeliverPrivateChatMessage(ctx context.Context, realm string, senderID, receiverID, messageID int64, messageType int32, content string, createdAt time.Time) error {
+	payload := model.PrivateChatMessageDelivery{MessageID: messageID, SenderID: senderID, ReceiverID: receiverID, MessageType: messageType, Content: content, CreatedAt: createdAt}
+	if err := u.Deliver(ctx, realm, senderID, enum.DeliveryKindPrivateChatMessage, payload); err != nil {
+		return err
+	}
+	if receiverID == senderID {
+		return nil
+	}
+	return u.Deliver(ctx, realm, receiverID, enum.DeliveryKindPrivateChatMessage, payload)
+}
+
+// DeliverGlobalChatMessage 将全局聊天室变化广播给实时域中的每个本机 node。
+func (u *RealtimeUsecase) DeliverGlobalChatMessage(realm string, messageID, senderID int64, messageType int32, content string, createdAt time.Time) {
+	message := &model.NodeMessage{Delivery: &model.Delivery{Kind: enum.DeliveryKindGlobalChatMessage, Payload: model.GlobalChatMessageDelivery{MessageID: messageID, SenderID: senderID, MessageType: messageType, Content: content, CreatedAt: createdAt}}}
+	u.mu.RLock()
+	defer u.mu.RUnlock()
+	for _, node := range u.nodes[realm] {
+		select {
+		case node.messages <- message:
+		default:
+		}
+	}
 }
 
 func (u *RealtimeUsecase) Deliver(ctx context.Context, realm string, userID int64, kind enum.DeliveryKind, payload model.DeliveryPayload) error {

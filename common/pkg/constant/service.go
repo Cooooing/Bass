@@ -36,6 +36,7 @@ const (
 
 const (
 	RealtimeNodeSubjectPrefix = "realtime.node."
+	RealtimeRealmBBS          = "bbs"
 )
 
 func GetRealtimeNodeSubject(realm, nodeID string) string {

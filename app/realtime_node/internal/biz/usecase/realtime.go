@@ -7,7 +7,9 @@ import (
 	"sync"
 	"time"
 
+	commonenums "common/proto/gen/common/enums"
 	realtimehubv1 "common/proto/gen/realtime_hub/v1"
+	realtimehubv1enum "common/proto/gen/realtime_hub/v1/enum"
 	"realtime_node/internal/biz/model"
 	"realtime_node/internal/biz/repo"
 	"realtime_node/internal/enum"
@@ -242,9 +244,18 @@ func (u *RealtimeUsecase) handleHubMessage(message *realtimehubv1.HubToNode) {
 
 func (u *RealtimeUsecase) dispatch(delivery *realtimehubv1.Delivery) {
 	u.mu.RLock()
-	connections := make([]chan *realtimehubv1.Delivery, 0, len(u.users[delivery.GetUserId()]))
-	for _, connection := range u.users[delivery.GetUserId()] {
-		connections = append(connections, connection.deliveries)
+	connections := make([]chan *realtimehubv1.Delivery, 0)
+	if delivery.GetKind() == realtimehubv1enum.DeliveryKind_DELIVERY_KIND_GLOBAL_CHAT_MESSAGE {
+		for _, userConnections := range u.users {
+			for _, connection := range userConnections {
+				connections = append(connections, connection.deliveries)
+			}
+		}
+	} else {
+		connections = make([]chan *realtimehubv1.Delivery, 0, len(u.users[delivery.GetUserId()]))
+		for _, connection := range u.users[delivery.GetUserId()] {
+			connections = append(connections, connection.deliveries)
+		}
 	}
 	u.mu.RUnlock()
 	for _, deliveries := range connections {
@@ -270,6 +281,32 @@ func (*RealtimeUsecase) ClientEvent(delivery *realtimehubv1.Delivery) (*model.Cl
 			return nil, false
 		}
 		return &model.ClientEvent{Name: string(kind), Payload: model.NotificationEventPayload{NotificationID: notification.GetNotificationId()}}, true
+	case enum.DeliveryKindPrivateChatMessage:
+		message := delivery.GetPrivateChatMessage()
+		if message == nil || message.GetMessageId() <= 0 || message.GetSenderId() <= 0 || message.GetReceiverId() <= 0 {
+			return nil, false
+		}
+		if message.GetMessageType() == commonenums.IMMessageType_IM_MESSAGE_TYPE_UNSPECIFIED {
+			return nil, false
+		}
+		createdAt := ""
+		if message.GetCreatedAt() != nil {
+			createdAt = message.GetCreatedAt().AsTime().Format(time.RFC3339Nano)
+		}
+		return &model.ClientEvent{Name: string(kind), Payload: model.PrivateChatMessageEventPayload{MessageID: message.GetMessageId(), SenderID: message.GetSenderId(), ReceiverID: message.GetReceiverId(), MessageType: message.GetMessageType().String(), Content: message.GetContent(), CreatedAt: createdAt}}, true
+	case enum.DeliveryKindGlobalChatMessage:
+		message := delivery.GetGlobalChatMessage()
+		if message == nil || message.GetMessageId() <= 0 {
+			return nil, false
+		}
+		if message.GetMessageType() == commonenums.IMMessageType_IM_MESSAGE_TYPE_UNSPECIFIED || message.GetSenderId() <= 0 {
+			return nil, false
+		}
+		createdAt := ""
+		if message.GetCreatedAt() != nil {
+			createdAt = message.GetCreatedAt().AsTime().Format(time.RFC3339Nano)
+		}
+		return &model.ClientEvent{Name: string(kind), Payload: model.GlobalChatMessageEventPayload{MessageID: message.GetMessageId(), SenderID: message.GetSenderId(), MessageType: message.GetMessageType().String(), Content: message.GetContent(), CreatedAt: createdAt}}, true
 	default:
 		return nil, false
 	}

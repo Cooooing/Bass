@@ -25,6 +25,7 @@ var DataProviderSet = wire.NewSet(
 	rpc.ProvideNotifyClient,
 	rpc.ProvidePlatformClient,
 	rpc.ProvideRealtimeHubClient,
+	rpc.ProvideIMClient,
 )
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。

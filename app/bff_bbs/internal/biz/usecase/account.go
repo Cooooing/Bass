@@ -3,6 +3,7 @@ package usecase
 import (
 	"common/pkg/apperror"
 	"common/pkg/client/rpc"
+	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	bbsuserv1 "common/proto/gen/bff_bbs/v1/user"
 	bbsuserv1enum "common/proto/gen/bff_bbs/v1/user/enum"
@@ -66,17 +67,11 @@ func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*
 	var account *bbsuserv1.GetCurrentAccount_Resp_CurrentAccount
 	if reply != nil {
 		if reply.Profile != nil {
-			avatarURL := "/v1/user/account/avatar?name=" + reply.Profile.Name
-			if reply.Profile.AvatarAssetID != nil && *reply.Profile.AvatarAssetID > 0 && u.assetClient != nil {
-				asset, err := u.assetClient.Get(ctx, *reply.Profile.AvatarAssetID)
-				if err != nil {
-					return nil, err
-				}
-				if asset != nil && asset.URL != "" {
-					avatarURL = asset.URL
-				}
+			profile, profileErr := u.GetProfile(ctx, reply.Profile.Name, userID)
+			if profileErr != nil {
+				return nil, profileErr
 			}
-			reply.Profile.AvatarURL = &avatarURL
+			reply.Profile.AvatarURL = profile.Account.AvatarUrl
 		}
 		account = &bbsuserv1.GetCurrentAccount_Resp_CurrentAccount{}
 		if profile := reply.Profile; profile != nil {
@@ -138,7 +133,7 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 		Visibility: u.profileVisibility(privacy),
 	}
 	if viewerID == account.ID || privacy.PublicOnlineStatus == nil || *privacy.PublicOnlineStatus {
-		onlineStatuses, queryErr := u.realtimeHub.Hub.QueryOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: "bbs", UserIds: []int64{account.ID}})
+		onlineStatuses, queryErr := u.realtimeHub.Hub.QueryOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: constant.RealtimeRealmBBS, UserIds: []int64{account.ID}})
 		if queryErr != nil {
 			u.log.WarnContext(ctx, "query profile online status failed", "user_id", account.ID, "error", queryErr)
 		} else {

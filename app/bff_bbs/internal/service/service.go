@@ -27,6 +27,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewContentMoonbreezeService,
 	NewHolidayService,
 	NewRealtimeService,
+	NewIMService,
 )
 
 func ProvideServices(
@@ -49,6 +50,7 @@ func ProvideServices(
 	contentMoonbreezeService *ContentMoonbreezeService,
 	holidayService *HolidayService,
 	realtimeService *RealtimeService,
+	imService *IMService,
 ) []server.Service {
 	return []server.Service{
 		commonSystemService,
@@ -70,5 +72,6 @@ func ProvideServices(
 		contentMoonbreezeService,
 		holidayService,
 		realtimeService,
+		imService,
 	}
 }

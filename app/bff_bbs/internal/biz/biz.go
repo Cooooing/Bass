@@ -24,4 +24,5 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewContentMoonbreezeUsecase,
 	usecase.NewHolidayUsecase,
 	usecase.NewRealtimeUsecase,
+	usecase.NewIMUsecase,
 )

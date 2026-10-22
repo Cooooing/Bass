@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package common.api.app.common.enums;
+
+option go_package = "common/proto/gen/common/enums;enums";
+
+enum IMMessageType {
+  IM_MESSAGE_TYPE_UNSPECIFIED = 0; // 未指定消息类型。
+  IM_MESSAGE_TYPE_TEXT = 1; // 普通 Markdown 文本消息。
+  IM_MESSAGE_TYPE_RED_PACKET = 2; // 红包消息。
+}

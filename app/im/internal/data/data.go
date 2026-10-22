@@ -18,8 +18,10 @@ var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
 	commonClient.NewObservability,
 	ProvideConsul,
+	ProvideNats,
 	commonClient.NewConsulClient,
-	rpc.ProvidePlatformClient,
+	commonClient.NewNatsClient,
+	rpc.ProvideUserClient,
 )
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
@@ -28,15 +30,21 @@ var ModuleProviderSet = wire.NewSet(
 	ProvideDatabase,
 	client.NewEntClient,
 	ProvideGenClient,
-	repo.NewChatGroupRepo,
-	repo.NewChatGroupMemberRepo,
-	repo.NewChatSessionRepo,
-	repo.NewChatMessageRepo,
-	repo.NewAssetClient,
+	client.ProvideTx,
+	repo.NewPrivateChatSessionRepo,
+	repo.NewPrivateChatMessageRepo,
+	repo.NewGlobalChatMessageRepo,
+	repo.NewGlobalChatMuteRepo,
+	repo.NewRelationClient,
+	repo.NewRealtimeEventPublisher,
 )
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
 	return c.Consul
+}
+
+func ProvideNats(c *config.Bootstrap) *common.Nats {
+	return c.Nats
 }
 
 func ProvideDatabase(c *config.Bootstrap) *common.Database {

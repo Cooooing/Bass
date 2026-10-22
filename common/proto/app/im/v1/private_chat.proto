@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+import "common/common.proto";
+import "common/enums/im_message_type.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/im/v1;v1";
+
+service IMPrivateChatService {
+	rpc Send(SendPrivateChatMessage.Req) returns (SendPrivateChatMessage.Resp) {} // 发送私聊消息。
+	rpc Revoke(RevokePrivateChatMessage.Req) returns (RevokePrivateChatMessage.Resp) {} // 撤回自己的私聊消息。
+	rpc ListSessions(ListPrivateChatSessions.Req) returns (ListPrivateChatSessions.Resp) {} // 查询当前账号的私聊会话。
+	rpc ListMessages(ListPrivateChatMessages.Req) returns (ListPrivateChatMessages.Resp) {} // 查询私聊历史。
+  rpc CountUnread(CountUnreadPrivateChatMessages.Req) returns (CountUnreadPrivateChatMessages.Resp) {} // 统计当前账号的私聊未读数。
+	rpc MarkRead(MarkPrivateChatSessionRead.Req) returns (MarkPrivateChatSessionRead.Resp) {} // 标记私聊会话已读。
+	rpc SetMuted(SetPrivateChatSessionMuted.Req) returns (SetPrivateChatSessionMuted.Resp) {} // 设置私聊会话免打扰。
+	rpc SetPinned(SetPrivateChatSessionPinned.Req) returns (SetPrivateChatSessionPinned.Resp) {} // 设置私聊会话置顶。
+}
+
+message PrivateChatMessage {
+  int64 id = 1; // 消息 ID。
+  int64 sender_id = 2; // 发送账号 ID。
+  int64 receiver_id = 3; // 接收账号 ID。
+  string content = 4; // 原始 Markdown 内容。
+  .common.api.app.common.enums.IMMessageType message_type = 5; // 消息类型。
+  bool revoked = 6; // 是否已撤回。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+  google.protobuf.Timestamp revoked_at = 1001; // 撤回时间。
+}
+
+message PrivateChatSession {
+  int64 id = 1; // 会话 ID。
+  int64 peer_user_id = 2; // 对端账号 ID。
+  int64 last_read_message_id = 3; // 最后已读消息 ID。
+  uint32 unread_count = 4; // 未读消息数。
+  bool muted = 5; // 是否免打扰。
+  bool pinned = 6; // 是否置顶。
+	PrivateChatMessage last_message = 7; // 最后一条消息。
+  google.protobuf.Timestamp last_message_at = 8; // 最后消息时间。
+}
+
+message SendPrivateChatMessage {
+  message Req {
+    int64 sender_id = 1; // 发送账号 ID。
+    int64 receiver_id = 2; // 接收账号 ID。
+    string client_message_id = 3; // 客户端幂等消息 ID。
+    string content = 4; // 原始 Markdown 内容。
+  }
+  message Resp {
+		PrivateChatMessage message = 1; // 已创建或幂等返回的消息。
+  }
+}
+
+message RevokePrivateChatMessage {
+  message Req {
+    int64 user_id = 1; // 操作账号 ID。
+    int64 message_id = 2; // 消息 ID。
+  }
+  message Resp {
+		PrivateChatMessage message = 1; // 已撤回消息。
+  }
+}
+
+message ListPrivateChatSessions {
+  message Req {
+    int64 user_id = 1; // 当前账号 ID。
+    .common.api.app.common.PageReq page = 2; // 分页参数。
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页信息。
+		repeated PrivateChatSession rows = 2; // 私聊会话。
+  }
+}
+
+message ListPrivateChatMessages {
+  message Req {
+    int64 user_id = 1; // 当前账号 ID。
+    int64 peer_user_id = 2; // 对端账号 ID。
+    int64 before_id = 3; // 向前分页游标消息 ID，0 表示最新。
+    .common.api.app.common.PageReq page = 4; // 分页参数。
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页信息。
+		repeated PrivateChatMessage rows = 2; // 私聊消息。
+  }
+}
+
+message CountUnreadPrivateChatMessages {
+  message Req {
+    int64 user_id = 1; // 当前账号 ID。
+  }
+  message Resp {
+    uint32 count = 1; // 未读消息总数。
+  }
+}
+
+message MarkPrivateChatSessionRead {
+  message Req {
+    int64 user_id = 1; // 当前账号 ID。
+    int64 peer_user_id = 2; // 对端账号 ID。
+    int64 message_id = 3; // 最后已读消息 ID。
+  }
+  message Resp {}
+}
+
+message SetPrivateChatSessionMuted {
+  message Req {
+    int64 user_id = 1; // 当前账号 ID。
+    int64 peer_user_id = 2; // 对端账号 ID。
+    bool muted = 3; // 是否免打扰。
+  }
+  message Resp {}
+}
+
+message SetPrivateChatSessionPinned {
+  message Req {
+    int64 user_id = 1; // 当前账号 ID。
+    int64 peer_user_id = 2; // 对端账号 ID。
+    bool pinned = 3; // 是否置顶。
+  }
+  message Resp {}
+}

@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+import "common/common.proto";
+import "common/enums/im_message_type.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/im/v1;v1";
+
+service IMGlobalChatService {
+  rpc Send(SendGlobalChatMessage.Req) returns (SendGlobalChatMessage.Resp) {} // 发送全局聊天室消息。
+  rpc Revoke(RevokeGlobalChatMessage.Req) returns (RevokeGlobalChatMessage.Resp) {} // 撤回全局聊天室消息。
+  rpc List(ListGlobalChatMessages.Req) returns (ListGlobalChatMessages.Resp) {} // 查询全局聊天室历史。
+  rpc Mute(MuteGlobalChatUser.Req) returns (MuteGlobalChatUser.Resp) {} // 管理员定时禁言账号。
+  rpc Unmute(UnmuteGlobalChatUser.Req) returns (UnmuteGlobalChatUser.Resp) {} // 管理员解除账号禁言。
+}
+
+message GlobalChatMessage {
+  int64 id = 1; // 消息 ID。
+  int64 sender_id = 2; // 发送账号 ID。
+  string content = 3; // 原始 Markdown 内容。
+  .common.api.app.common.enums.IMMessageType message_type = 4; // 消息类型。
+  bool revoked = 5; // 是否已撤回。
+  int64 revoked_by = 6; // 撤回操作账号 ID。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+  google.protobuf.Timestamp revoked_at = 1001; // 撤回时间。
+}
+
+message SendGlobalChatMessage {
+  message Req {
+    int64 sender_id = 1; // 发送账号 ID。
+    string client_message_id = 2; // 客户端幂等消息 ID。
+    string content = 3; // 原始 Markdown 内容。
+  }
+  message Resp {
+    GlobalChatMessage message = 1; // 已创建或幂等返回的消息。
+  }
+}
+
+message RevokeGlobalChatMessage {
+  message Req {
+    int64 user_id = 1; // 操作账号 ID。
+    int64 message_id = 2; // 消息 ID。
+    bool administrator = 3; // 是否以管理员权限操作。
+  }
+  message Resp {
+    GlobalChatMessage message = 1; // 已撤回消息。
+  }
+}
+
+message ListGlobalChatMessages {
+  message Req {
+    int64 before_id = 1; // 向前分页游标消息 ID，0 表示最新。
+    .common.api.app.common.PageReq page = 2; // 分页参数。
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页信息。
+    repeated GlobalChatMessage rows = 2; // 全局聊天室消息。
+  }
+}
+
+message MuteGlobalChatUser {
+  message Req {
+    int64 operator_user_id = 1; // 操作管理员账号 ID。
+    int64 user_id = 2; // 被禁言账号 ID。
+    int64 muted_seconds = 3; // 禁言持续秒数。
+    optional string reason = 4; // 禁言原因。
+  }
+  message Resp {}
+}
+
+message UnmuteGlobalChatUser {
+  message Req {
+    int64 operator_user_id = 1; // 操作管理员账号 ID。
+    int64 user_id = 2; // 解除禁言账号 ID。
+  }
+  message Resp {}
+}

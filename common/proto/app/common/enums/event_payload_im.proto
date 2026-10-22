@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package common.api.app.common.enums;
+
+import "common/enums/im_message_type.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/common/enums;enums";
+
+message IMPrivateChatMessageCreatedPayload {
+  int64 message_id = 1; // 私聊消息 ID。
+  int64 sender_id = 2; // 发送账号 ID。
+  int64 receiver_id = 3; // 接收账号 ID。
+  IMMessageType message_type = 4; // 消息类型。
+  string content = 5; // 原始 Markdown 内容。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+}
+
+message IMGlobalChatMessageCreatedPayload {
+  int64 message_id = 1; // 全局聊天室消息 ID。
+  int64 sender_id = 2; // 发送账号 ID。
+  IMMessageType message_type = 3; // 消息类型。
+  string content = 4; // 原始 Markdown 内容。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+}

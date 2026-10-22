@@ -4,6 +4,7 @@ package common.api.app.common.enums;
 
 import "common/enums/event_payload_content.proto";
 import "common/enums/event_payload_game_idle.proto";
+import "common/enums/event_payload_im.proto";
 import "common/enums/event_payload_notify.proto";
 import "common/enums/event_payload_user.proto";
 import "google/protobuf/timestamp.proto";
@@ -56,6 +57,8 @@ enum EventType {
   EVENT_TYPE_COMMENT_STATUS_UPDATED = 2104; // 更新评论状态
 
   // 即时通讯事件（3000-3999）
+  EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED = 3001; // 创建私聊消息
+  EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED = 3002; // 创建全局聊天室消息
 
   // 挂机游戏事件（5000-5999）
   EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE = 5001; // 挂机游戏聊天消息
@@ -111,6 +114,8 @@ enum EventSubject {
   EVENT_SUBJECT_COMMENT_STATUS_UPDATED = 2104; // content.comment.status_updated
 
   // 即时通讯事件（3000-3999）
+  EVENT_SUBJECT_IM_PRIVATE_CHAT_MESSAGE_CREATED = 3001; // im.private_chat.message_created
+  EVENT_SUBJECT_IM_GLOBAL_CHAT_MESSAGE_CREATED = 3002; // im.global_chat.message_created
 
   // 挂机游戏事件（5000-5999）
   EVENT_SUBJECT_GAME_IDLE = 5000; // game_idle
@@ -189,6 +194,8 @@ message Event {
     CommentLikedPayload comment_liked = 2102;
     CommentThankedPayload comment_thanked = 2103;
     CommentStatusUpdatedPayload comment_status_updated = 2104;
+    IMPrivateChatMessageCreatedPayload im_private_chat_message_created = 3001;
+    IMGlobalChatMessageCreatedPayload im_global_chat_message_created = 3002;
     GameIdleChatMessagePayload game_idle_chat_message = 5001;
     GameIdleCloseSessionPayload game_idle_close_session = 5002;
     GameIdleActionCompletedPayload game_idle_action_completed = 5003;

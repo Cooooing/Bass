@@ -9,16 +9,14 @@ import (
 var ServiceProviderSet = wire.NewSet(
 	ProvideServices,
 	NewCommonSystemService,
-	NewChatGroupService,
-	NewChatSessionService,
-	NewChatMessageService,
+	NewPrivateChatService,
+	NewGlobalChatService,
 )
 
-func ProvideServices(commonSystemService *CommonSystemService, chatGroupService *ChatGroupService, chatSessionService *ChatSessionService, chatMessageService *ChatMessageService) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, privateChatService *PrivateChatService, globalChatService *GlobalChatService) []server.Service {
 	return []server.Service{
 		commonSystemService,
-		chatGroupService,
-		chatSessionService,
-		chatMessageService,
+		privateChatService,
+		globalChatService,
 	}
 }

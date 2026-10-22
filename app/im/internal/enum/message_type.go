@@ -1,20 +1,19 @@
 package enum
 
 import (
-	"common/pkg/enum"
-	v1 "common/proto/gen/im/v1/enum"
+	commonenum "common/pkg/enum"
+	commonenums "common/proto/gen/common/enums"
 )
 
+// MessageType 表示 IM 消息的渲染语义。
 type MessageType string
 
 const (
-	MessageTypeUnknown MessageType = "unknown" // unknown
-	MessageTypeNormal  MessageType = "normal"  // normal
+	MessageTypeText      MessageType = "text"       // 普通 Markdown 文本消息。
+	MessageTypeRedPacket MessageType = "red_packet" // 红包消息。
 )
 
-var MessageTypeMap = enum.NewMapping[MessageType, v1.MessageType](map[MessageType]enum.Entry[MessageType, v1.MessageType]{
-	MessageTypeUnknown: {Proto: v1.MessageType_MESSAGE_TYPE_UNKNOWN},
-	MessageTypeNormal:  {Proto: v1.MessageType_MESSAGE_TYPE_NORMAL},
+var MessageTypeMap = commonenum.NewMapping[MessageType, commonenums.IMMessageType](map[MessageType]commonenum.Entry[MessageType, commonenums.IMMessageType]{
+	MessageTypeText:      {Proto: commonenums.IMMessageType_IM_MESSAGE_TYPE_TEXT},
+	MessageTypeRedPacket: {Proto: commonenums.IMMessageType_IM_MESSAGE_TYPE_RED_PACKET},
 })
-
-func (e MessageType) String() string { return string(e) }

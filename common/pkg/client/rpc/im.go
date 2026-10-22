@@ -8,25 +8,22 @@ import (
 )
 
 type IMClient struct {
-	Group   imv1.IMChatGroupServiceClient
-	Message imv1.IMChatMessageServiceClient
-	Session imv1.IMChatSessionServiceClient
+	PrivateChat imv1.IMPrivateChatServiceClient
+	GlobalChat imv1.IMGlobalChatServiceClient
 }
 
 func NewIMClient(
 	conn grpc.ClientConnInterface,
 ) *IMClient {
 	return &IMClient{
-		Group:   imv1.NewIMChatGroupServiceClient(conn),
-		Message: imv1.NewIMChatMessageServiceClient(conn),
-		Session: imv1.NewIMChatSessionServiceClient(conn),
+		PrivateChat: imv1.NewIMPrivateChatServiceClient(conn),
+		GlobalChat: imv1.NewIMGlobalChatServiceClient(conn),
 	}
 }
 
 func MountIMServices[T any](conn *localrpc.Conn, services []T) {
 	for _, service := range services {
-		conn.RegisterMatching(&imv1.IMChatGroupService_ServiceDesc, service)
-		conn.RegisterMatching(&imv1.IMChatMessageService_ServiceDesc, service)
-		conn.RegisterMatching(&imv1.IMChatSessionService_ServiceDesc, service)
+		conn.RegisterMatching(&imv1.IMPrivateChatService_ServiceDesc, service)
+		conn.RegisterMatching(&imv1.IMGlobalChatService_ServiceDesc, service)
 	}
 }

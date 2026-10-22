@@ -87,6 +87,7 @@ message PrivateChatMember {
   string name = 2; // 用户名。
   optional string nickname = 3; // 昵称。
   optional string avatar_url = 4; // 头像地址。
+  bool online = 5; // 是否存在有效实时连接。
 }
 
 message GlobalChatMessage {

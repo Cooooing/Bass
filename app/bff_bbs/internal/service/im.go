@@ -53,8 +53,12 @@ func (s *IMService) ListPrivateChatSessions(ctx context.Context, req *bffbbsv1.L
 	if err != nil {
 		return nil, err
 	}
+	onlineStatuses, err := s.im.QueryChatOnline(ctx, userIDs)
+	if err != nil {
+		onlineStatuses = map[int64]bool{}
+	}
 	for _, row := range resp.GetRows() {
-		rows = append(rows, s.privateChatSession(row, profiles[row.GetPeerUserId()]))
+		rows = append(rows, s.privateChatSession(row, profiles[row.GetPeerUserId()], onlineStatuses[row.GetPeerUserId()]))
 	}
 	return &bffbbsv1.ListPrivateChatSessions_Resp{Page: resp.GetPage(), Rows: rows}, nil
 }
@@ -222,13 +226,13 @@ func (*IMService) privateChatMessage(row *imv1.PrivateChatMessage) *bffbbsv1.Pri
 	return &bffbbsv1.PrivateChatMessage{Id: row.GetId(), SenderId: row.GetSenderId(), ReceiverId: row.GetReceiverId(), Content: row.GetContent(), MessageType: row.GetMessageType(), Revoked: row.GetRevoked(), CreatedAt: row.GetCreatedAt(), RevokedAt: row.GetRevokedAt()}
 }
 
-func (s *IMService) privateChatSession(row *imv1.PrivateChatSession, profile *model.AccountProfile) *bffbbsv1.PrivateChatSession {
+func (s *IMService) privateChatSession(row *imv1.PrivateChatSession, profile *model.AccountProfile, online bool) *bffbbsv1.PrivateChatSession {
 	if row == nil {
 		return nil
 	}
 	session := &bffbbsv1.PrivateChatSession{PeerUserId: row.GetPeerUserId(), LastReadMessageId: row.GetLastReadMessageId(), UnreadCount: row.GetUnreadCount(), Muted: row.GetMuted(), Pinned: row.GetPinned(), LastMessage: s.privateChatMessage(row.GetLastMessage()), LastMessageAt: row.GetLastMessageAt()}
 	if profile != nil {
-		session.Peer = &bffbbsv1.PrivateChatMember{UserId: profile.ID, Name: profile.Name, Nickname: profile.Nickname, AvatarUrl: profile.AvatarURL}
+		session.Peer = &bffbbsv1.PrivateChatMember{UserId: profile.ID, Name: profile.Name, Nickname: profile.Nickname, AvatarUrl: profile.AvatarURL, Online: online}
 	}
 	return session
 }

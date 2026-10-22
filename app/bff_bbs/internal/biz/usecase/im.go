@@ -66,6 +66,14 @@ func (u *IMUsecase) ListGlobalChatOnlineMembers(ctx context.Context) ([]*model.A
 	return rows, nil
 }
 
+func (u *IMUsecase) QueryChatOnline(ctx context.Context, userIDs []int64) (map[int64]bool, error) {
+	response, err := u.hub.QueryOnline(ctx, &realtimehubv1.QueryRealtimeOnline_Req{Realm: constant.RealtimeRealmBBS, UserIds: userIDs})
+	if err != nil {
+		return nil, err
+	}
+	return response.GetOnlineStatuses(), nil
+}
+
 func (u *IMUsecase) ListPrivateChatSessions(ctx context.Context, req *imv1.ListPrivateChatSessions_Req) (*imv1.ListPrivateChatSessions_Resp, error) {
 	return u.privateChat.ListSessions(ctx, req)
 }

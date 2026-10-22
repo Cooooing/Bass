@@ -1,0 +1,226 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.v1;
+
+import "common/common.proto";
+import "common/enums/im_message_type.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/bff_bbs/v1;v1";
+
+service IMService {
+  // 查询当前账号的私聊会话。
+  rpc ListPrivateChatSessions(ListPrivateChatSessions.Req) returns (ListPrivateChatSessions.Resp) {
+    option (google.api.http) = { get: "/v1/im/private-chat/sessions" };
+  }
+  // 查询私聊消息。
+  rpc ListPrivateChatMessages(ListPrivateChatMessages.Req) returns (ListPrivateChatMessages.Resp) {
+    option (google.api.http) = { post: "/v1/im/private-chat/messages/list" body: "*" };
+  }
+  // 统计当前账号的私聊未读数。
+  rpc CountPrivateChatUnread(CountPrivateChatUnread.Req) returns (CountPrivateChatUnread.Resp) {
+    option (google.api.http) = { post: "/v1/im/private-chat/unread-count" body: "*" };
+  }
+  // 发送私聊消息。
+  rpc SendPrivateChatMessage(SendPrivateChatMessage.Req) returns (SendPrivateChatMessage.Resp) {
+    option (google.api.http) = { post: "/v1/im/private-chat/messages" body: "*" };
+  }
+  // 撤回私聊消息。
+  rpc RevokePrivateChatMessage(RevokePrivateChatMessage.Req) returns (RevokePrivateChatMessage.Resp) {
+    option (google.api.http) = { post: "/v1/im/private-chat/messages/revoke" body: "*" };
+  }
+  // 标记私聊会话已读。
+  rpc MarkPrivateChatSessionRead(MarkPrivateChatSessionRead.Req) returns (MarkPrivateChatSessionRead.Resp) {
+    option (google.api.http) = { post: "/v1/im/private-chat/read" body: "*" };
+  }
+  // 设置私聊会话免打扰。
+  rpc SetPrivateChatSessionMuted(SetPrivateChatSessionMuted.Req) returns (SetPrivateChatSessionMuted.Resp) {
+    option (google.api.http) = { post: "/v1/im/private-chat/muted" body: "*" };
+  }
+  // 设置私聊会话置顶。
+  rpc SetPrivateChatSessionPinned(SetPrivateChatSessionPinned.Req) returns (SetPrivateChatSessionPinned.Resp) {
+    option (google.api.http) = { post: "/v1/im/private-chat/pinned" body: "*" };
+  }
+  // 查询全局聊天室消息。
+  rpc ListGlobalChatMessages(ListGlobalChatMessages.Req) returns (ListGlobalChatMessages.Resp) {
+    option (google.api.http) = { post: "/v1/im/global-chat/messages/list" body: "*" };
+  }
+  // 发送全局聊天室消息。
+  rpc SendGlobalChatMessage(SendGlobalChatMessage.Req) returns (SendGlobalChatMessage.Resp) {
+    option (google.api.http) = { post: "/v1/im/global-chat/messages" body: "*" };
+  }
+  // 撤回自己的全局聊天室消息。
+  rpc RevokeGlobalChatMessage(RevokeGlobalChatMessage.Req) returns (RevokeGlobalChatMessage.Resp) {
+    option (google.api.http) = { post: "/v1/im/global-chat/messages/revoke" body: "*" };
+  }
+  // 查询全部在线的聊天室成员。
+  rpc ListGlobalChatOnlineMembers(ListGlobalChatOnlineMembers.Req) returns (ListGlobalChatOnlineMembers.Resp) {
+    option (google.api.http) = { post: "/v1/im/global-chat/online-members/list" body: "*" };
+  }
+}
+
+message PrivateChatMessage {
+  int64 id = 1; // 消息 ID。
+  int64 sender_id = 2; // 发送账号 ID。
+  int64 receiver_id = 3; // 接收账号 ID。
+  string content = 4; // 原始 Markdown 内容。
+  .common.api.app.common.enums.IMMessageType message_type = 5; // 消息类型。
+  bool revoked = 6; // 是否已撤回。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+  google.protobuf.Timestamp revoked_at = 1001; // 撤回时间。
+}
+
+message PrivateChatSession {
+  int64 peer_user_id = 1; // 对端账号 ID。
+  int64 last_read_message_id = 2; // 最后已读消息 ID。
+  uint32 unread_count = 3; // 未读消息数。
+  bool muted = 4; // 是否免打扰。
+  bool pinned = 5; // 是否置顶。
+  PrivateChatMessage last_message = 6; // 最后一条消息。
+  google.protobuf.Timestamp last_message_at = 7; // 最后消息时间。
+  PrivateChatMember peer = 8; // 对端展示资料。
+}
+
+message PrivateChatMember {
+  int64 user_id = 1; // 账号 ID。
+  string name = 2; // 用户名。
+  optional string nickname = 3; // 昵称。
+  optional string avatar_url = 4; // 头像地址。
+}
+
+message GlobalChatMessage {
+  int64 id = 1; // 消息 ID。
+  int64 sender_id = 2; // 发送账号 ID。
+  string content = 3; // 原始 Markdown 内容。
+  .common.api.app.common.enums.IMMessageType message_type = 4; // 消息类型。
+  bool revoked = 5; // 是否已撤回。
+  GlobalChatMember sender = 6; // 发送者展示资料。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+  google.protobuf.Timestamp revoked_at = 1001; // 撤回时间。
+}
+
+message GlobalChatOnlineMember {
+  int64 user_id = 1; // 在线账号 ID。
+  string name = 2; // 用户名。
+  optional string nickname = 3; // 昵称。
+  optional string avatar_url = 4; // 头像地址。
+}
+
+message GlobalChatMember {
+  int64 user_id = 1; // 账号 ID。
+  string name = 2; // 用户名。
+  optional string nickname = 3; // 昵称。
+  optional string avatar_url = 4; // 头像地址。
+}
+
+message ListPrivateChatSessions {
+  message Req {
+    .common.api.app.common.PageReq page = 1; // 分页参数。
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页信息。
+    repeated PrivateChatSession rows = 2; // 会话列表。
+  }
+}
+
+message ListPrivateChatMessages {
+  message Req {
+    int64 peer_user_id = 1; // 对端账号 ID。
+    int64 before_id = 2; // 向前分页游标。
+    .common.api.app.common.PageReq page = 3; // 分页参数。
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页信息。
+    repeated PrivateChatMessage rows = 2; // 消息列表。
+  }
+}
+
+message CountPrivateChatUnread {
+  message Req {}
+  message Resp {
+    uint32 count = 1; // 未读消息总数。
+  }
+}
+
+message SendPrivateChatMessage {
+  message Req {
+    int64 receiver_id = 1; // 接收账号 ID。
+    string client_message_id = 2; // 客户端幂等消息 ID。
+    string content = 3; // 原始 Markdown 内容。
+  }
+  message Resp {
+    PrivateChatMessage message = 1; // 消息。
+  }
+}
+
+message RevokePrivateChatMessage {
+  message Req {
+    int64 message_id = 1; // 消息 ID。
+  }
+  message Resp {
+    PrivateChatMessage message = 1; // 已撤回消息。
+  }
+}
+
+message MarkPrivateChatSessionRead {
+  message Req {
+    int64 peer_user_id = 1; // 对端账号 ID。
+    int64 message_id = 2; // 最后已读消息 ID。
+  }
+  message Resp {}
+}
+
+message SetPrivateChatSessionMuted {
+  message Req {
+    int64 peer_user_id = 1; // 对端账号 ID。
+    bool muted = 2; // 是否免打扰。
+  }
+  message Resp {}
+}
+
+message SetPrivateChatSessionPinned {
+  message Req {
+    int64 peer_user_id = 1; // 对端账号 ID。
+    bool pinned = 2; // 是否置顶。
+  }
+  message Resp {}
+}
+
+message ListGlobalChatMessages {
+  message Req {
+    int64 before_id = 1; // 向前分页游标。
+    .common.api.app.common.PageReq page = 2; // 分页参数。
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页信息。
+    repeated GlobalChatMessage rows = 2; // 消息列表。
+  }
+}
+
+message SendGlobalChatMessage {
+  message Req {
+    string client_message_id = 1; // 客户端幂等消息 ID。
+    string content = 2; // 原始 Markdown 内容。
+  }
+  message Resp {
+    GlobalChatMessage message = 1; // 消息。
+  }
+}
+
+message RevokeGlobalChatMessage {
+  message Req {
+    int64 message_id = 1; // 消息 ID。
+  }
+  message Resp {
+    GlobalChatMessage message = 1; // 已撤回消息。
+  }
+}
+
+message ListGlobalChatOnlineMembers {
+  message Req {
+  }
+  message Resp {
+    repeated GlobalChatOnlineMember rows = 1; // 在线成员列表。
+  }
+}

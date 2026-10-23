@@ -12,6 +12,7 @@ Name | Type
 `lastSuccessLoginAt` | Date
 `visibility` | [ProfileVisibility](ProfileVisibility.md)
 `viewerRelation` | [ProfileRelation](ProfileRelation.md)
+`online` | boolean
 
 ## Example
 
@@ -26,6 +27,7 @@ const example = {
   "lastSuccessLoginAt": null,
   "visibility": null,
   "viewerRelation": null,
+  "online": null,
 } satisfies Profile
 
 console.log(example)

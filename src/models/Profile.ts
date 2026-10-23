@@ -84,6 +84,12 @@ export interface Profile {
      * @memberof Profile
      */
     viewerRelation?: ProfileRelation;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Profile
+     */
+    online?: boolean;
 }
 
 /**
@@ -109,6 +115,7 @@ export function ProfileFromJSONTyped(json: any, ignoreDiscriminator: boolean): P
         'lastSuccessLoginAt': json['last_success_login_at'] == null ? undefined : (new Date(json['last_success_login_at'])),
         'visibility': json['visibility'] == null ? undefined : ProfileVisibilityFromJSON(json['visibility']),
         'viewerRelation': json['viewer_relation'] == null ? undefined : ProfileRelationFromJSON(json['viewer_relation']),
+        'online': json['online'] == null ? undefined : json['online'],
     };
 }
 
@@ -129,6 +136,7 @@ export function ProfileToJSONTyped(value?: Profile | null, ignoreDiscriminator: 
         'last_success_login_at': value['lastSuccessLoginAt'] == null ? value['lastSuccessLoginAt'] : value['lastSuccessLoginAt'].toISOString(),
         'visibility': ProfileVisibilityToJSON(value['visibility']),
         'viewer_relation': ProfileRelationToJSON(value['viewerRelation']),
+        'online': value['online'],
     };
 }
 

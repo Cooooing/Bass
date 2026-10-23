@@ -208,6 +208,8 @@ docs/RevokePrivateChatMessageResp.md
 docs/RewardArticleReq.md
 docs/SearchArticlesReq.md
 docs/SearchArticlesResp.md
+docs/SearchMentionAccountsReq.md
+docs/SearchMentionAccountsResp.md
 docs/SendEmailOtpReq.md
 docs/SendEmailOtpResp.md
 docs/SendGlobalChatMessageReq.md

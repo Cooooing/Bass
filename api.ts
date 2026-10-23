@@ -44,6 +44,7 @@ export interface AccountProfile {
     'status'?: AccountProfileStatusEnum;
     'follow_count'?: number;
     'follower_count'?: number;
+    'profile_url'?: string;
     'created_at'?: string;
     'updated_at'?: string;
 }
@@ -1500,6 +1501,8 @@ export const RespNotificationEventTypeEnum = {
     EVENT_TYPE_ARTICLE_LOTTERY_WON: 'EVENT_TYPE_ARTICLE_LOTTERY_WON',
     EVENT_TYPE_ARTICLE_POLL_ENDED: 'EVENT_TYPE_ARTICLE_POLL_ENDED',
     EVENT_TYPE_ARTICLE_LOTTERY_DRAWN: 'EVENT_TYPE_ARTICLE_LOTTERY_DRAWN',
+    EVENT_TYPE_ARTICLE_MENTIONED: 'EVENT_TYPE_ARTICLE_MENTIONED',
+    EVENT_TYPE_POSTSCRIPT_MENTIONED: 'EVENT_TYPE_POSTSCRIPT_MENTIONED',
     EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED: 'EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED',
     EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED: 'EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED',
     EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED: 'EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED',
@@ -1509,8 +1512,10 @@ export const RespNotificationEventTypeEnum = {
     EVENT_TYPE_COMMENT_LIKED: 'EVENT_TYPE_COMMENT_LIKED',
     EVENT_TYPE_COMMENT_THANKED: 'EVENT_TYPE_COMMENT_THANKED',
     EVENT_TYPE_COMMENT_STATUS_UPDATED: 'EVENT_TYPE_COMMENT_STATUS_UPDATED',
+    EVENT_TYPE_COMMENT_MENTIONED: 'EVENT_TYPE_COMMENT_MENTIONED',
     EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED: 'EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED',
     EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED: 'EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED',
+    EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED: 'EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED',
     EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE: 'EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE',
     EVENT_TYPE_GAME_IDLE_CLOSE_SESSION: 'EVENT_TYPE_GAME_IDLE_CLOSE_SESSION',
     EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED: 'EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED',
@@ -1644,6 +1649,14 @@ export interface SearchArticlesReq {
 export interface SearchArticlesResp {
     'rows'?: Array<ArticleListItem>;
     'next_cursor'?: string;
+}
+export interface SearchMentionAccountsReq {
+    'query'?: string;
+    'page'?: PageReq;
+}
+export interface SearchMentionAccountsResp {
+    'rows'?: Array<AccountProfile>;
+    'page'?: PageResp;
 }
 export interface SendEmailOtpReq {
     'email': string;
@@ -2038,6 +2051,40 @@ export const AccountServiceAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
+         * 检索可提及账号的候选项。
+         * @param {SearchMentionAccountsReq} searchMentionAccountsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchMention: async (searchMentionAccountsReq: SearchMentionAccountsReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'searchMentionAccountsReq' is not null or undefined
+            assertParamExists('searchMention', 'searchMentionAccountsReq', searchMentionAccountsReq)
+            const localVarPath = `/v1/user/account/search-mention`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(searchMentionAccountsReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 更新当前账号邮箱
          * @param {UpdateEmailAccountReq} updateEmailAccountReq 
          * @param {*} [options] Override http request option.
@@ -2267,6 +2314,18 @@ export const AccountServiceFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 检索可提及账号的候选项。
+         * @param {SearchMentionAccountsReq} searchMentionAccountsReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async searchMention(searchMentionAccountsReq: SearchMentionAccountsReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SearchMentionAccountsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.searchMention(searchMentionAccountsReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AccountService.searchMention']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 更新当前账号邮箱
          * @param {UpdateEmailAccountReq} updateEmailAccountReq 
          * @param {*} [options] Override http request option.
@@ -2387,6 +2446,15 @@ export const AccountServiceFactory = function (configuration?: Configuration, ba
             return localVarFp.prepareProfileImageUpload(requestParameters.prepareProfileImageUploadAccountReq, options).then((request) => request(axios, basePath));
         },
         /**
+         * 检索可提及账号的候选项。
+         * @param {AccountServiceSearchMentionRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        searchMention(requestParameters: AccountServiceSearchMentionRequest, options?: RawAxiosRequestConfig): AxiosPromise<SearchMentionAccountsResp> {
+            return localVarFp.searchMention(requestParameters.searchMentionAccountsReq, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 更新当前账号邮箱
          * @param {AccountServiceUpdateEmailRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -2486,6 +2554,14 @@ export interface AccountServiceInterface {
     prepareProfileImageUpload(requestParameters: AccountServicePrepareProfileImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<PrepareProfileImageUploadAccountResp>;
 
     /**
+     * 检索可提及账号的候选项。
+     * @param {AccountServiceSearchMentionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    searchMention(requestParameters: AccountServiceSearchMentionRequest, options?: RawAxiosRequestConfig): AxiosPromise<SearchMentionAccountsResp>;
+
+    /**
      * 更新当前账号邮箱
      * @param {AccountServiceUpdateEmailRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -2566,6 +2642,13 @@ export interface AccountServiceListFollowingRequest {
  */
 export interface AccountServicePrepareProfileImageUploadRequest {
     readonly prepareProfileImageUploadAccountReq: PrepareProfileImageUploadAccountReq
+}
+
+/**
+ * Request parameters for searchMention operation in AccountService.
+ */
+export interface AccountServiceSearchMentionRequest {
+    readonly searchMentionAccountsReq: SearchMentionAccountsReq
 }
 
 /**
@@ -2668,6 +2751,16 @@ export class AccountService extends BaseAPI implements AccountServiceInterface {
      */
     public prepareProfileImageUpload(requestParameters: AccountServicePrepareProfileImageUploadRequest, options?: RawAxiosRequestConfig) {
         return AccountServiceFp(this.configuration).prepareProfileImageUpload(requestParameters.prepareProfileImageUploadAccountReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 检索可提及账号的候选项。
+     * @param {AccountServiceSearchMentionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public searchMention(requestParameters: AccountServiceSearchMentionRequest, options?: RawAxiosRequestConfig) {
+        return AccountServiceFp(this.configuration).searchMention(requestParameters.searchMentionAccountsReq, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

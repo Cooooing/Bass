@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **status** | **string** |  | [optional] [default to undefined]
 **follow_count** | **number** |  | [optional] [default to undefined]
 **follower_count** | **number** |  | [optional] [default to undefined]
+**profile_url** | **string** |  | [optional] [default to undefined]
 **created_at** | **string** |  | [optional] [default to undefined]
 **updated_at** | **string** |  | [optional] [default to undefined]
 
@@ -36,6 +37,7 @@ const instance: AccountProfile = {
     status,
     follow_count,
     follower_count,
+    profile_url,
     created_at,
     updated_at,
 };

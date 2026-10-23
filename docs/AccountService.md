@@ -11,6 +11,7 @@ All URIs are relative to *http://localhost*
 |[**listFollowers**](#listfollowers) | **POST** /v1/user/account/list-followers | |
 |[**listFollowing**](#listfollowing) | **POST** /v1/user/account/list-following | |
 |[**prepareProfileImageUpload**](#prepareprofileimageupload) | **POST** /v1/user/account/prepare-profile-image-upload | |
+|[**searchMention**](#searchmention) | **POST** /v1/user/account/search-mention | |
 |[**updateEmail**](#updateemail) | **POST** /v1/user/account/update-email | |
 |[**updatePassword**](#updatepassword) | **POST** /v1/user/account/update-password | |
 |[**updatePhone**](#updatephone) | **POST** /v1/user/account/update-phone | |
@@ -360,6 +361,58 @@ const { status, data } = await apiInstance.prepareProfileImageUpload(
 ### Return type
 
 **PrepareProfileImageUploadAccountResp**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **searchMention**
+> SearchMentionAccountsResp searchMention(searchMentionAccountsReq)
+
+检索可提及账号的候选项。
+
+### Example
+
+```typescript
+import {
+    AccountService,
+    Configuration,
+    SearchMentionAccountsReq
+} from '@bass/bbs-sdk-axios';
+
+const configuration = new Configuration();
+const apiInstance = new AccountService(configuration);
+
+let searchMentionAccountsReq: SearchMentionAccountsReq; //
+
+const { status, data } = await apiInstance.searchMention(
+    searchMentionAccountsReq
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **searchMentionAccountsReq** | **SearchMentionAccountsReq**|  | |
+
+
+### Return type
+
+**SearchMentionAccountsResp**
 
 ### Authorization
 

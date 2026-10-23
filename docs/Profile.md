@@ -13,6 +13,7 @@
 |**lastSuccessLoginAt** | **OffsetDateTime** |  |  [optional] |
 |**visibility** | [**ProfileVisibility**](ProfileVisibility.md) |  |  [optional] |
 |**viewerRelation** | [**ProfileRelation**](ProfileRelation.md) |  |  [optional] |
+|**online** | **Boolean** |  |  [optional] |
 
 
 

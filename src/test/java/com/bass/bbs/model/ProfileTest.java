@@ -90,4 +90,12 @@ class ProfileTest {
         // TODO: test viewerRelation
     }
 
+    /**
+     * Test the property 'online'
+     */
+    @Test
+    void onlineTest() {
+        // TODO: test online
+    }
+
 }

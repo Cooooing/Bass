@@ -13,6 +13,7 @@ tags:
   name: ArticleSearchService
 - description: ArticleService 提供 BBS 文章接口
   name: ArticleService
+- name: AssetService
 - description: 认证接口。
   name: AuthService
 - name: CheckinService
@@ -22,6 +23,7 @@ tags:
   name: DomainService
 - description: 节假日服务。
   name: HolidayService
+- name: IMService
 - description: 平台地理数据接口。
   name: LocationService
 - description: MoonbreezeService 提供社区短动态入口。
@@ -42,6 +44,50 @@ tags:
 - description: 标签 HTTP 接口。
   name: TagService
 paths:
+  /v1/asset/markdown-image/complete:
+    post:
+      description: 查询已由对象存储回调确认的 Markdown 图片。
+      operationId: AssetService_CompleteMarkdownImageUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompleteMarkdownImageUpload_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteMarkdownImageUpload_Resp"
+          description: OK
+      tags:
+      - AssetService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/asset/markdown-image/prepare:
+    post:
+      description: 申请 Markdown 图片的内容寻址直传凭证。
+      operationId: AssetService_PrepareMarkdownImageUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrepareMarkdownImageUpload_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrepareMarkdownImageUpload_Resp"
+          description: OK
+      tags:
+      - AssetService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
   /v1/content/article/answer/accept:
     post:
       description: 采纳文章回答
@@ -980,6 +1026,280 @@ paths:
           description: OK
       tags:
       - TagService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/global-chat/messages:
+    post:
+      description: 发送全局聊天室消息。
+      operationId: IMService_SendGlobalChatMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendGlobalChatMessage_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SendGlobalChatMessage_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/global-chat/messages/list:
+    post:
+      description: 查询全局聊天室消息。
+      operationId: IMService_ListGlobalChatMessages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListGlobalChatMessages_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListGlobalChatMessages_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/global-chat/messages/revoke:
+    post:
+      description: 撤回自己的全局聊天室消息。
+      operationId: IMService_RevokeGlobalChatMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RevokeGlobalChatMessage_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RevokeGlobalChatMessage_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/global-chat/online-members/list:
+    post:
+      description: 查询全部在线的聊天室成员。
+      operationId: IMService_ListGlobalChatOnlineMembers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListGlobalChatOnlineMembers_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListGlobalChatOnlineMembers_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/private-chat/messages:
+    post:
+      description: 发送私聊消息。
+      operationId: IMService_SendPrivateChatMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendPrivateChatMessage_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SendPrivateChatMessage_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/private-chat/messages/list:
+    post:
+      description: 查询私聊消息。
+      operationId: IMService_ListPrivateChatMessages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListPrivateChatMessages_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListPrivateChatMessages_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/private-chat/messages/revoke:
+    post:
+      description: 撤回私聊消息。
+      operationId: IMService_RevokePrivateChatMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RevokePrivateChatMessage_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RevokePrivateChatMessage_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/private-chat/muted:
+    post:
+      description: 设置私聊会话免打扰。
+      operationId: IMService_SetPrivateChatSessionMuted
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetPrivateChatSessionMuted_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SetPrivateChatSessionMuted_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/private-chat/pinned:
+    post:
+      description: 设置私聊会话置顶。
+      operationId: IMService_SetPrivateChatSessionPinned
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetPrivateChatSessionPinned_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SetPrivateChatSessionPinned_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/private-chat/read:
+    post:
+      description: 标记私聊会话已读。
+      operationId: IMService_MarkPrivateChatSessionRead
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarkPrivateChatSessionRead_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarkPrivateChatSessionRead_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/private-chat/sessions:
+    get:
+      description: 查询当前账号的私聊会话。
+      operationId: IMService_ListPrivateChatSessions
+      parameters:
+      - description: 页码
+        explode: true
+        in: query
+        name: page.page
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: 页大小
+        explode: true
+        in: query
+        name: page.size
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListPrivateChatSessions_Resp"
+          description: OK
+      tags:
+      - IMService
+      x-accepts:
+      - application/json
+  /v1/im/private-chat/unread-count:
+    post:
+      description: 统计当前账号的私聊未读数。
+      operationId: IMService_CountPrivateChatUnread
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CountPrivateChatUnread_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CountPrivateChatUnread_Resp"
+          description: OK
+      tags:
+      - IMService
       x-content-type: application/json
       x-accepts:
       - application/json
@@ -3229,6 +3549,23 @@ components:
         thanked:
           type: boolean
       type: object
+    CompleteMarkdownImageUpload_Req:
+      properties:
+        hash:
+          type: string
+      required:
+      - hash
+      type: object
+    CompleteMarkdownImageUpload_Resp:
+      example:
+        image_url: image_url
+        asset_id: asset_id
+      properties:
+        asset_id:
+          type: string
+        image_url:
+          type: string
+      type: object
     CompleteProfileImageUploadAccount_Req:
       properties:
         purpose:
@@ -3276,6 +3613,17 @@ components:
       type: object
     ConfirmEnableTotp_Resp:
       properties: {}
+      type: object
+    CountPrivateChatUnread_Req:
+      properties: {}
+      type: object
+    CountPrivateChatUnread_Resp:
+      example:
+        count: 0
+      properties:
+        count:
+          format: uint32
+          type: integer
       type: object
     CountUnreadNotifications_Req:
       properties: {}
@@ -3941,6 +4289,7 @@ components:
             follower_list: true
             article_list: true
           background_url: background_url
+          online: true
           location:
             country: country
             province: province
@@ -3981,6 +4330,77 @@ components:
       properties:
         status:
           $ref: "#/components/schemas/Resp_RelationStatus"
+      type: object
+    GlobalChatMember:
+      example:
+        avatar_url: avatar_url
+        user_id: user_id
+        name: name
+        nickname: nickname
+      properties:
+        user_id:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+        avatar_url:
+          type: string
+      type: object
+    GlobalChatMessage:
+      example:
+        revoked_at: 2000-01-23T04:56:07.000+00:00
+        sender:
+          avatar_url: avatar_url
+          user_id: user_id
+          name: name
+          nickname: nickname
+        created_at: 2000-01-23T04:56:07.000+00:00
+        message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+        id: id
+        revoked: true
+        sender_id: sender_id
+        content: content
+      properties:
+        id:
+          type: string
+        sender_id:
+          type: string
+        content:
+          type: string
+        message_type:
+          enum:
+          - IM_MESSAGE_TYPE_UNSPECIFIED
+          - IM_MESSAGE_TYPE_TEXT
+          - IM_MESSAGE_TYPE_RED_PACKET
+          format: enum
+          type: string
+        revoked:
+          type: boolean
+        sender:
+          $ref: "#/components/schemas/GlobalChatMember"
+        created_at:
+          format: date-time
+          type: string
+        revoked_at:
+          format: date-time
+          type: string
+      type: object
+    GlobalChatOnlineMember:
+      example:
+        avatar_url: avatar_url
+        user_id: user_id
+        name: name
+        nickname: nickname
+      properties:
+        user_id:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+        avatar_url:
+          type: string
       type: object
     ImageResp:
       example:
@@ -6025,6 +6445,72 @@ components:
             $ref: "#/components/schemas/AccountProfileListItem"
           type: array
       type: object
+    ListGlobalChatMessages_Req:
+      properties:
+        before_id:
+          type: string
+        page:
+          $ref: "#/components/schemas/PageReq"
+      type: object
+    ListGlobalChatMessages_Resp:
+      example:
+        page:
+          total: total
+          size: size
+          page: page
+        rows:
+        - revoked_at: 2000-01-23T04:56:07.000+00:00
+          sender:
+            avatar_url: avatar_url
+            user_id: user_id
+            name: name
+            nickname: nickname
+          created_at: 2000-01-23T04:56:07.000+00:00
+          message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+          id: id
+          revoked: true
+          sender_id: sender_id
+          content: content
+        - revoked_at: 2000-01-23T04:56:07.000+00:00
+          sender:
+            avatar_url: avatar_url
+            user_id: user_id
+            name: name
+            nickname: nickname
+          created_at: 2000-01-23T04:56:07.000+00:00
+          message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+          id: id
+          revoked: true
+          sender_id: sender_id
+          content: content
+      properties:
+        page:
+          $ref: "#/components/schemas/PageResp"
+        rows:
+          items:
+            $ref: "#/components/schemas/GlobalChatMessage"
+          type: array
+      type: object
+    ListGlobalChatOnlineMembers_Req:
+      properties: {}
+      type: object
+    ListGlobalChatOnlineMembers_Resp:
+      example:
+        rows:
+        - avatar_url: avatar_url
+          user_id: user_id
+          name: name
+          nickname: nickname
+        - avatar_url: avatar_url
+          user_id: user_id
+          name: name
+          nickname: nickname
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/GlobalChatOnlineMember"
+          type: array
+      type: object
     ListNearbyArticles_Req:
       properties:
         page:
@@ -6283,6 +6769,103 @@ components:
             $ref: "#/components/schemas/ArticlePostscript"
           type: array
       type: object
+    ListPrivateChatMessages_Req:
+      properties:
+        peer_user_id:
+          type: string
+        before_id:
+          type: string
+        page:
+          $ref: "#/components/schemas/PageReq"
+      type: object
+    ListPrivateChatMessages_Resp:
+      example:
+        page:
+          total: total
+          size: size
+          page: page
+        rows:
+        - revoked_at: 2000-01-23T04:56:07.000+00:00
+          receiver_id: receiver_id
+          created_at: 2000-01-23T04:56:07.000+00:00
+          message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+          id: id
+          revoked: true
+          sender_id: sender_id
+          content: content
+        - revoked_at: 2000-01-23T04:56:07.000+00:00
+          receiver_id: receiver_id
+          created_at: 2000-01-23T04:56:07.000+00:00
+          message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+          id: id
+          revoked: true
+          sender_id: sender_id
+          content: content
+      properties:
+        page:
+          $ref: "#/components/schemas/PageResp"
+        rows:
+          items:
+            $ref: "#/components/schemas/PrivateChatMessage"
+          type: array
+      type: object
+    ListPrivateChatSessions_Resp:
+      example:
+        page:
+          total: total
+          size: size
+          page: page
+        rows:
+        - unread_count: 0
+          peer_user_id: peer_user_id
+          pinned: true
+          peer:
+            avatar_url: avatar_url
+            user_id: user_id
+            name: name
+            nickname: nickname
+            online: true
+          last_message_at: 2000-01-23T04:56:07.000+00:00
+          last_message:
+            revoked_at: 2000-01-23T04:56:07.000+00:00
+            receiver_id: receiver_id
+            created_at: 2000-01-23T04:56:07.000+00:00
+            message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+            id: id
+            revoked: true
+            sender_id: sender_id
+            content: content
+          last_read_message_id: last_read_message_id
+          muted: true
+        - unread_count: 0
+          peer_user_id: peer_user_id
+          pinned: true
+          peer:
+            avatar_url: avatar_url
+            user_id: user_id
+            name: name
+            nickname: nickname
+            online: true
+          last_message_at: 2000-01-23T04:56:07.000+00:00
+          last_message:
+            revoked_at: 2000-01-23T04:56:07.000+00:00
+            receiver_id: receiver_id
+            created_at: 2000-01-23T04:56:07.000+00:00
+            message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+            id: id
+            revoked: true
+            sender_id: sender_id
+            content: content
+          last_read_message_id: last_read_message_id
+          muted: true
+      properties:
+        page:
+          $ref: "#/components/schemas/PageResp"
+        rows:
+          items:
+            $ref: "#/components/schemas/PrivateChatSession"
+          type: array
+      type: object
     ListTags_Req:
       properties:
         page:
@@ -6396,6 +6979,16 @@ components:
       properties: {}
       type: object
     Logout_Resp:
+      properties: {}
+      type: object
+    MarkPrivateChatSessionRead_Req:
+      properties:
+        peer_user_id:
+          type: string
+        message_id:
+          type: string
+      type: object
+    MarkPrivateChatSessionRead_Resp:
       properties: {}
       type: object
     MarkReadNotification_Req:
@@ -6737,6 +7330,35 @@ components:
           format: uint32
           type: integer
       type: object
+    PrepareMarkdownImageUpload_Req:
+      properties:
+        hash:
+          type: string
+        mime_type:
+          type: string
+        size:
+          type: string
+      required:
+      - hash
+      - mime_type
+      - size
+      type: object
+    PrepareMarkdownImageUpload_Resp:
+      example:
+        form_fields:
+          key: form_fields
+        upload_url: upload_url
+        asset_id: asset_id
+      properties:
+        asset_id:
+          type: string
+        upload_url:
+          type: string
+        form_fields:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
     PrepareProfileImageUploadAccount_Req:
       properties:
         purpose:
@@ -6774,6 +7396,103 @@ components:
             type: string
           type: object
       type: object
+    PrivateChatMember:
+      example:
+        avatar_url: avatar_url
+        user_id: user_id
+        name: name
+        nickname: nickname
+        online: true
+      properties:
+        user_id:
+          type: string
+        name:
+          type: string
+        nickname:
+          type: string
+        avatar_url:
+          type: string
+        online:
+          type: boolean
+      type: object
+    PrivateChatMessage:
+      example:
+        revoked_at: 2000-01-23T04:56:07.000+00:00
+        receiver_id: receiver_id
+        created_at: 2000-01-23T04:56:07.000+00:00
+        message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+        id: id
+        revoked: true
+        sender_id: sender_id
+        content: content
+      properties:
+        id:
+          type: string
+        sender_id:
+          type: string
+        receiver_id:
+          type: string
+        content:
+          type: string
+        message_type:
+          enum:
+          - IM_MESSAGE_TYPE_UNSPECIFIED
+          - IM_MESSAGE_TYPE_TEXT
+          - IM_MESSAGE_TYPE_RED_PACKET
+          format: enum
+          type: string
+        revoked:
+          type: boolean
+        created_at:
+          format: date-time
+          type: string
+        revoked_at:
+          format: date-time
+          type: string
+      type: object
+    PrivateChatSession:
+      example:
+        unread_count: 0
+        peer_user_id: peer_user_id
+        pinned: true
+        peer:
+          avatar_url: avatar_url
+          user_id: user_id
+          name: name
+          nickname: nickname
+          online: true
+        last_message_at: 2000-01-23T04:56:07.000+00:00
+        last_message:
+          revoked_at: 2000-01-23T04:56:07.000+00:00
+          receiver_id: receiver_id
+          created_at: 2000-01-23T04:56:07.000+00:00
+          message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+          id: id
+          revoked: true
+          sender_id: sender_id
+          content: content
+        last_read_message_id: last_read_message_id
+        muted: true
+      properties:
+        peer_user_id:
+          type: string
+        last_read_message_id:
+          type: string
+        unread_count:
+          format: uint32
+          type: integer
+        muted:
+          type: boolean
+        pinned:
+          type: boolean
+        last_message:
+          $ref: "#/components/schemas/PrivateChatMessage"
+        last_message_at:
+          format: date-time
+          type: string
+        peer:
+          $ref: "#/components/schemas/PrivateChatMember"
+      type: object
     Profile:
       example:
         viewer_relation:
@@ -6789,6 +7508,7 @@ components:
           follower_list: true
           article_list: true
         background_url: background_url
+        online: true
         location:
           country: country
           province: province
@@ -6821,6 +7541,8 @@ components:
           $ref: "#/components/schemas/ProfileVisibility"
         viewer_relation:
           $ref: "#/components/schemas/ProfileRelation"
+        online:
+          type: boolean
       type: object
     ProfileLocation:
       example:
@@ -8115,6 +8837,8 @@ components:
           - EVENT_TYPE_COMMENT_LIKED
           - EVENT_TYPE_COMMENT_THANKED
           - EVENT_TYPE_COMMENT_STATUS_UPDATED
+          - EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED
+          - EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED
           - EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE
           - EVENT_TYPE_GAME_IDLE_CLOSE_SESSION
           - EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED
@@ -8546,6 +9270,50 @@ components:
           format: date-time
           type: string
       type: object
+    RevokeGlobalChatMessage_Req:
+      properties:
+        message_id:
+          type: string
+      type: object
+    RevokeGlobalChatMessage_Resp:
+      example:
+        message:
+          revoked_at: 2000-01-23T04:56:07.000+00:00
+          sender:
+            avatar_url: avatar_url
+            user_id: user_id
+            name: name
+            nickname: nickname
+          created_at: 2000-01-23T04:56:07.000+00:00
+          message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+          id: id
+          revoked: true
+          sender_id: sender_id
+          content: content
+      properties:
+        message:
+          $ref: "#/components/schemas/GlobalChatMessage"
+      type: object
+    RevokePrivateChatMessage_Req:
+      properties:
+        message_id:
+          type: string
+      type: object
+    RevokePrivateChatMessage_Resp:
+      example:
+        message:
+          revoked_at: 2000-01-23T04:56:07.000+00:00
+          receiver_id: receiver_id
+          created_at: 2000-01-23T04:56:07.000+00:00
+          message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+          id: id
+          revoked: true
+          sender_id: sender_id
+          content: content
+      properties:
+        message:
+          $ref: "#/components/schemas/PrivateChatMessage"
+      type: object
     RewardArticle_Req:
       properties:
         article_id:
@@ -8764,6 +9532,32 @@ components:
         code:
           type: string
       type: object
+    SendGlobalChatMessage_Req:
+      properties:
+        client_message_id:
+          type: string
+        content:
+          type: string
+      type: object
+    SendGlobalChatMessage_Resp:
+      example:
+        message:
+          revoked_at: 2000-01-23T04:56:07.000+00:00
+          sender:
+            avatar_url: avatar_url
+            user_id: user_id
+            name: name
+            nickname: nickname
+          created_at: 2000-01-23T04:56:07.000+00:00
+          message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+          id: id
+          revoked: true
+          sender_id: sender_id
+          content: content
+      properties:
+        message:
+          $ref: "#/components/schemas/GlobalChatMessage"
+      type: object
     SendPhoneOtp_Req:
       properties:
         phone:
@@ -8778,6 +9572,30 @@ components:
         code:
           type: string
       type: object
+    SendPrivateChatMessage_Req:
+      properties:
+        receiver_id:
+          type: string
+        client_message_id:
+          type: string
+        content:
+          type: string
+      type: object
+    SendPrivateChatMessage_Resp:
+      example:
+        message:
+          revoked_at: 2000-01-23T04:56:07.000+00:00
+          receiver_id: receiver_id
+          created_at: 2000-01-23T04:56:07.000+00:00
+          message_type: IM_MESSAGE_TYPE_UNSPECIFIED
+          id: id
+          revoked: true
+          sender_id: sender_id
+          content: content
+      properties:
+        message:
+          $ref: "#/components/schemas/PrivateChatMessage"
+      type: object
     SetPinnedArticleComment_Req:
       properties:
         article_id:
@@ -8788,6 +9606,26 @@ components:
       - article_id
       type: object
     SetPinnedArticleComment_Resp:
+      properties: {}
+      type: object
+    SetPrivateChatSessionMuted_Req:
+      properties:
+        peer_user_id:
+          type: string
+        muted:
+          type: boolean
+      type: object
+    SetPrivateChatSessionMuted_Resp:
+      properties: {}
+      type: object
+    SetPrivateChatSessionPinned_Req:
+      properties:
+        peer_user_id:
+          type: string
+        pinned:
+          type: boolean
+      type: object
+    SetPrivateChatSessionPinned_Resp:
       properties: {}
       type: object
     ThankArticle_Req:

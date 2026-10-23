@@ -526,5 +526,17 @@ func (r *AccountRepo) getQuery(query *gen.AccountQuery, req *repo.AccountGetReq)
 			account.And(account.PhoneEQ(*req.Account), account.StatusNEQ(account.Status(enum.AccountStatusCancelled))),
 		))
 	}
+	if req.MentionQuery != nil {
+		query = query.Where(account.Or(
+			account.NameContains(*req.MentionQuery),
+			account.NicknameContains(*req.MentionQuery),
+		))
+	}
+	if req.Status != nil {
+		query = query.Where(account.StatusEQ(account.Status(*req.Status)))
+	}
+	if len(req.ExcludedUserIDs) > 0 {
+		query = query.Where(account.IDNotIn(req.ExcludedUserIDs...))
+	}
 	return query
 }

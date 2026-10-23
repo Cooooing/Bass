@@ -36,18 +36,21 @@ type AccountAddStatReq struct {
 }
 
 type AccountGetReq struct {
-	UserID    *int64
-	UserIDs   []int64
-	Name      *string
-	ExactName *string
-	Names     []string
-	Nickname  *string
-	Nicknames []string
-	Email     *string
-	Emails    []string
-	Phone     *string
-	Phones    []string
-	Account   *string
+	UserID          *int64
+	UserIDs         []int64
+	Name            *string
+	ExactName       *string
+	Names           []string
+	Nickname        *string
+	Nicknames       []string
+	Email           *string
+	Emails          []string
+	Phone           *string
+	Phones          []string
+	Account         *string
+	MentionQuery    *string
+	Status          *enum.AccountStatus
+	ExcludedUserIDs []int64
 }
 
 type AccountPageReq struct {

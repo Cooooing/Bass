@@ -3,6 +3,7 @@ package usecase
 import (
 	"bytes"
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	"common/pkg/util/str"
 	commonerrors "common/proto/gen/common/errors"
 	"context"
@@ -102,15 +103,20 @@ func (s *AccountUsecase) CheckAvailability(ctx context.Context, availability *mo
 	return result, nil
 }
 
-func (s *AccountUsecase) ListByUserIDs(ctx context.Context, userIDs []int64) ([]*model.Account, error) {
-	return s.accountRepo.List(ctx, &repo.AccountGetReq{
-		UserIDs: userIDs,
-	})
+func (s *AccountUsecase) List(ctx context.Context, query *repo.AccountGetReq) ([]*model.Account, error) {
+	return s.accountRepo.List(ctx, query)
 }
 
-func (s *AccountUsecase) MapByUserIDs(ctx context.Context, userIDs []int64) (map[int64]*model.Account, error) {
-	return s.accountRepo.Map(ctx, &repo.AccountGetReq{
-		UserIDs: userIDs,
+func (s *AccountUsecase) Map(ctx context.Context, query *repo.AccountGetReq) (map[int64]*model.Account, error) {
+	return s.accountRepo.Map(ctx, query)
+}
+
+func (s *AccountUsecase) SearchMention(ctx context.Context, query string, page *commonmodel.PageReq, excludedUserIDs []int64) (*repo.AccountPageResp, error) {
+	query = strings.TrimSpace(query)
+	status := enum.AccountStatusNormal
+	return s.accountRepo.Page(ctx, &repo.AccountPageReq{
+		Page:  *commonmodel.NormalizePage(page),
+		Query: repo.AccountGetReq{MentionQuery: &query, Status: &status, ExcludedUserIDs: excludedUserIDs},
 	})
 }
 

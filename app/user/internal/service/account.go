@@ -2,6 +2,7 @@ package service
 
 import (
 	"common/pkg/apperror"
+	commonmodel "common/pkg/model"
 	"common/pkg/util"
 	"common/proto/gen/common"
 	cerrors "common/proto/gen/common/errors"
@@ -15,6 +16,7 @@ import (
 	"unicode/utf8"
 
 	"user/internal/biz/model"
+	"user/internal/biz/repo"
 	"user/internal/biz/usecase"
 	"user/internal/enum"
 
@@ -113,12 +115,12 @@ func (s *AccountService) Get(ctx context.Context, req *v1.GetAccount_Req) (*v1.G
 func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v1.ListAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.ListAccounts_Req{})
 	query := util.OrDefault(req.Query, &v1.ListAccounts_Req_AccountQuery{})
-	if len(query.UserIds) == 0 {
+	if len(query.UserIds) == 0 && len(query.Names) == 0 {
 		return &v1.ListAccounts_Resp{
 			Rows: []*v1.AccountInfo{},
 		}, nil
 	}
-	res, err := s.accountUsecase.ListByUserIDs(ctx, query.UserIds)
+	res, err := s.accountUsecase.List(ctx, &repo.AccountGetReq{UserIDs: query.UserIds, Names: query.Names, ExcludedUserIDs: query.ExcludedUserIds})
 	if err != nil {
 		return nil, err
 	}
@@ -166,12 +168,12 @@ func (s *AccountService) List(ctx context.Context, req *v1.ListAccounts_Req) (*v
 func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.MapAccounts_Resp, error) {
 	req = util.OrDefault(req, &v1.MapAccounts_Req{})
 	query := util.OrDefault(req.Query, &v1.MapAccounts_Req_AccountQuery{})
-	if len(query.UserIds) == 0 {
+	if len(query.UserIds) == 0 && len(query.Names) == 0 {
 		return &v1.MapAccounts_Resp{
 			Accounts: map[int64]*v1.AccountInfo{},
 		}, nil
 	}
-	res, err := s.accountUsecase.MapByUserIDs(ctx, query.UserIds)
+	res, err := s.accountUsecase.Map(ctx, &repo.AccountGetReq{UserIDs: query.UserIds, Names: query.Names, ExcludedUserIDs: query.ExcludedUserIds})
 	if err != nil {
 		return nil, err
 	}
@@ -214,6 +216,42 @@ func (s *AccountService) Map(ctx context.Context, req *v1.MapAccounts_Req) (*v1.
 	return &v1.MapAccounts_Resp{
 		Accounts: rows,
 	}, nil
+}
+
+func (s *AccountService) SearchMention(ctx context.Context, req *v1.SearchMentionAccounts_Req) (*v1.SearchMentionAccounts_Resp, error) {
+	req = util.OrDefault(req, &v1.SearchMentionAccounts_Req{})
+	result, err := s.accountUsecase.SearchMention(ctx, req.GetQuery(), commonmodel.PageReqFromProto(req.GetPage()), req.GetExcludedUserIds())
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*v1.AccountBasic, 0, len(result.Rows))
+	for _, account := range result.Rows {
+		if account == nil {
+			continue
+		}
+		row := &v1.AccountBasic{
+			Id:                account.ID,
+			Name:              account.Name,
+			Nickname:          account.Nickname,
+			Url:               account.URL,
+			AvatarAssetId:     account.AvatarAssetID,
+			BackgroundAssetId: account.BackgroundAssetID,
+			Introduction:      account.Introduction,
+			FollowCount:       account.FollowCount,
+			FollowerCount:     account.FollowerCount,
+		}
+		if account.Status != nil {
+			row.Status = enum.AccountStatusMap.MustToProto(*account.Status)
+		}
+		if account.CreatedAt != nil {
+			row.CreatedAt = timestamppb.New(*account.CreatedAt)
+		}
+		if account.UpdatedAt != nil {
+			row.UpdatedAt = timestamppb.New(*account.UpdatedAt)
+		}
+		rows = append(rows, row)
+	}
+	return &v1.SearchMentionAccounts_Resp{Rows: rows, Page: result.Page.ToProto()}, nil
 }
 
 func (s *AccountService) UpdateProfile(ctx context.Context, req *v1.UpdateProfileAccount_Req) (*v1.UpdateProfileAccount_Resp, error) {

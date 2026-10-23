@@ -16,6 +16,8 @@ service AccountService {
   rpc List(ListAccounts.Req) returns (ListAccounts.Resp) {}
   // 查询账号映射
   rpc Map(MapAccounts.Req) returns (MapAccounts.Resp) {}
+  // 检索可在内容中提及的账号
+  rpc SearchMention(SearchMentionAccounts.Req) returns (SearchMentionAccounts.Resp) {}
   // 更新账号展示资料
   rpc UpdateProfile(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {}
   // 更新账号密码
@@ -70,6 +72,8 @@ message ListAccounts {
   message Req {
     message AccountQuery {
       repeated int64 user_ids = 1; // 账号 ID 列表
+      repeated string names = 2; // 账号名列表。
+      repeated int64 excluded_user_ids = 3; // 不返回的账号 ID。
     }
     AccountQuery query = 1; // 查询条件
   }
@@ -82,11 +86,25 @@ message MapAccounts {
   message Req {
     message AccountQuery {
       repeated int64 user_ids = 1; // 账号 ID 列表
+      repeated string names = 2; // 账号名列表。
+      repeated int64 excluded_user_ids = 3; // 不返回的账号 ID。
     }
     AccountQuery query = 1; // 查询条件
   }
   message Resp {
     map<int64, AccountInfo> accounts = 1; // 账号映射
+  }
+}
+
+message SearchMentionAccounts {
+  message Req {
+    string query = 1; // 用户名或昵称搜索词，可为空。
+    .common.api.app.common.PageReq page = 2; // 分页参数。
+    repeated int64 excluded_user_ids = 3; // 不返回的账号 ID。
+  }
+  message Resp {
+    repeated AccountBasic rows = 1; // 可提及账号。
+    .common.api.app.common.PageResp page = 2; // 分页结果。
   }
 }
 

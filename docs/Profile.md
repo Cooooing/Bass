@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **last_success_login_at** | **string** |  | [optional] [default to undefined]
 **visibility** | [**ProfileVisibility**](ProfileVisibility.md) |  | [optional] [default to undefined]
 **viewer_relation** | [**ProfileRelation**](ProfileRelation.md) |  | [optional] [default to undefined]
+**online** | **boolean** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -24,6 +25,7 @@ const instance: Profile = {
     last_success_login_at,
     visibility,
     viewer_relation,
+    online,
 };
 ```
 

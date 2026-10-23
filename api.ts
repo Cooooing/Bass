@@ -376,6 +376,13 @@ export interface CommentViewerActionState {
     'liked'?: boolean;
     'thanked'?: boolean;
 }
+export interface CompleteMarkdownImageUploadReq {
+    'hash': string;
+}
+export interface CompleteMarkdownImageUploadResp {
+    'asset_id'?: string;
+    'image_url'?: string;
+}
 export interface CompleteProfileImageUploadAccountReq {
     'purpose': CompleteProfileImageUploadAccountReqPurposeEnum;
     'hash': string;
@@ -395,6 +402,9 @@ export interface CompleteProfileImageUploadAccountResp {
 }
 export interface ConfirmEnableTotpReq {
     'code': string;
+}
+export interface CountPrivateChatUnreadResp {
+    'count'?: number;
 }
 export interface CountUnreadNotificationsResp {
     'count'?: string;
@@ -537,6 +547,37 @@ export interface GetStatusRelationReq {
 }
 export interface GetStatusRelationResp {
     'status'?: RespRelationStatus;
+}
+export interface GlobalChatMember {
+    'user_id'?: string;
+    'name'?: string;
+    'nickname'?: string;
+    'avatar_url'?: string;
+}
+export interface GlobalChatMessage {
+    'id'?: string;
+    'sender_id'?: string;
+    'content'?: string;
+    'message_type'?: GlobalChatMessageMessageTypeEnum;
+    'revoked'?: boolean;
+    'sender'?: GlobalChatMember;
+    'created_at'?: string;
+    'revoked_at'?: string;
+}
+
+export const GlobalChatMessageMessageTypeEnum = {
+    IM_MESSAGE_TYPE_UNSPECIFIED: 'IM_MESSAGE_TYPE_UNSPECIFIED',
+    IM_MESSAGE_TYPE_TEXT: 'IM_MESSAGE_TYPE_TEXT',
+    IM_MESSAGE_TYPE_RED_PACKET: 'IM_MESSAGE_TYPE_RED_PACKET',
+} as const;
+
+export type GlobalChatMessageMessageTypeEnum = typeof GlobalChatMessageMessageTypeEnum[keyof typeof GlobalChatMessageMessageTypeEnum];
+
+export interface GlobalChatOnlineMember {
+    'user_id'?: string;
+    'name'?: string;
+    'nickname'?: string;
+    'avatar_url'?: string;
 }
 export interface ImageResp {
     /**
@@ -697,6 +738,17 @@ export interface ListFollowingResp {
     'page'?: PageResp;
     'rows'?: Array<AccountProfileListItem>;
 }
+export interface ListGlobalChatMessagesReq {
+    'before_id'?: string;
+    'page'?: PageReq;
+}
+export interface ListGlobalChatMessagesResp {
+    'page'?: PageResp;
+    'rows'?: Array<GlobalChatMessage>;
+}
+export interface ListGlobalChatOnlineMembersResp {
+    'rows'?: Array<GlobalChatOnlineMember>;
+}
 export interface ListNearbyArticlesReq {
     'page'?: PageReq;
 }
@@ -716,6 +768,19 @@ export interface ListPostscriptsReq {
 }
 export interface ListPostscriptsResp {
     'rows'?: Array<ArticlePostscript>;
+}
+export interface ListPrivateChatMessagesReq {
+    'peer_user_id'?: string;
+    'before_id'?: string;
+    'page'?: PageReq;
+}
+export interface ListPrivateChatMessagesResp {
+    'page'?: PageResp;
+    'rows'?: Array<PrivateChatMessage>;
+}
+export interface ListPrivateChatSessionsResp {
+    'page'?: PageResp;
+    'rows'?: Array<PrivateChatSession>;
 }
 export interface ListTagsReq {
     'page'?: PageReq;
@@ -748,6 +813,10 @@ export interface LoginResp {
     'refresh_token_expires_at'?: string;
     'session_expires_at'?: string;
     'account'?: RespAccount;
+}
+export interface MarkPrivateChatSessionReadReq {
+    'peer_user_id'?: string;
+    'message_id'?: string;
 }
 export interface MarkReadNotificationReq {
     'ids': Array<string>;
@@ -810,6 +879,16 @@ export interface PageWatchingMoonbreezesReq {
     'cursor'?: string;
     'size'?: number;
 }
+export interface PrepareMarkdownImageUploadReq {
+    'hash': string;
+    'mime_type': string;
+    'size': string;
+}
+export interface PrepareMarkdownImageUploadResp {
+    'asset_id'?: string;
+    'upload_url'?: string;
+    'form_fields'?: { [key: string]: string; };
+}
 export interface PrepareProfileImageUploadAccountReq {
     'purpose': PrepareProfileImageUploadAccountReqPurposeEnum;
     'hash': string;
@@ -830,6 +909,42 @@ export interface PrepareProfileImageUploadAccountResp {
     'upload_url'?: string;
     'form_fields'?: { [key: string]: string; };
 }
+export interface PrivateChatMember {
+    'user_id'?: string;
+    'name'?: string;
+    'nickname'?: string;
+    'avatar_url'?: string;
+    'online'?: boolean;
+}
+export interface PrivateChatMessage {
+    'id'?: string;
+    'sender_id'?: string;
+    'receiver_id'?: string;
+    'content'?: string;
+    'message_type'?: PrivateChatMessageMessageTypeEnum;
+    'revoked'?: boolean;
+    'created_at'?: string;
+    'revoked_at'?: string;
+}
+
+export const PrivateChatMessageMessageTypeEnum = {
+    IM_MESSAGE_TYPE_UNSPECIFIED: 'IM_MESSAGE_TYPE_UNSPECIFIED',
+    IM_MESSAGE_TYPE_TEXT: 'IM_MESSAGE_TYPE_TEXT',
+    IM_MESSAGE_TYPE_RED_PACKET: 'IM_MESSAGE_TYPE_RED_PACKET',
+} as const;
+
+export type PrivateChatMessageMessageTypeEnum = typeof PrivateChatMessageMessageTypeEnum[keyof typeof PrivateChatMessageMessageTypeEnum];
+
+export interface PrivateChatSession {
+    'peer_user_id'?: string;
+    'last_read_message_id'?: string;
+    'unread_count'?: number;
+    'muted'?: boolean;
+    'pinned'?: boolean;
+    'last_message'?: PrivateChatMessage;
+    'last_message_at'?: string;
+    'peer'?: PrivateChatMember;
+}
 export interface Profile {
     'account'?: AccountProfile;
     'background_url'?: string;
@@ -837,6 +952,7 @@ export interface Profile {
     'last_success_login_at'?: string;
     'visibility'?: ProfileVisibility;
     'viewer_relation'?: ProfileRelation;
+    'online'?: boolean;
 }
 export interface ProfileLocation {
     'country'?: string;
@@ -1393,6 +1509,8 @@ export const RespNotificationEventTypeEnum = {
     EVENT_TYPE_COMMENT_LIKED: 'EVENT_TYPE_COMMENT_LIKED',
     EVENT_TYPE_COMMENT_THANKED: 'EVENT_TYPE_COMMENT_THANKED',
     EVENT_TYPE_COMMENT_STATUS_UPDATED: 'EVENT_TYPE_COMMENT_STATUS_UPDATED',
+    EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED: 'EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED',
+    EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED: 'EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED',
     EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE: 'EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE',
     EVENT_TYPE_GAME_IDLE_CLOSE_SESSION: 'EVENT_TYPE_GAME_IDLE_CLOSE_SESSION',
     EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED: 'EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED',
@@ -1502,6 +1620,18 @@ export interface RespTotp {
     'enable'?: boolean;
     'enable_time'?: string;
 }
+export interface RevokeGlobalChatMessageReq {
+    'message_id'?: string;
+}
+export interface RevokeGlobalChatMessageResp {
+    'message'?: GlobalChatMessage;
+}
+export interface RevokePrivateChatMessageReq {
+    'message_id'?: string;
+}
+export interface RevokePrivateChatMessageResp {
+    'message'?: PrivateChatMessage;
+}
 export interface RewardArticleReq {
     'article_id': string;
     'points': number;
@@ -1521,15 +1651,38 @@ export interface SendEmailOtpReq {
 export interface SendEmailOtpResp {
     'code'?: string;
 }
+export interface SendGlobalChatMessageReq {
+    'client_message_id'?: string;
+    'content'?: string;
+}
+export interface SendGlobalChatMessageResp {
+    'message'?: GlobalChatMessage;
+}
 export interface SendPhoneOtpReq {
     'phone': string;
 }
 export interface SendPhoneOtpResp {
     'code'?: string;
 }
+export interface SendPrivateChatMessageReq {
+    'receiver_id'?: string;
+    'client_message_id'?: string;
+    'content'?: string;
+}
+export interface SendPrivateChatMessageResp {
+    'message'?: PrivateChatMessage;
+}
 export interface SetPinnedArticleCommentReq {
     'article_id': string;
     'comment_id'?: string;
+}
+export interface SetPrivateChatSessionMutedReq {
+    'peer_user_id'?: string;
+    'muted'?: boolean;
+}
+export interface SetPrivateChatSessionPinnedReq {
+    'peer_user_id'?: string;
+    'pinned'?: boolean;
 }
 export interface ThankArticleReq {
     'article_id': string;
@@ -4319,6 +4472,205 @@ export class ArticleService extends BaseAPI implements ArticleServiceInterface {
 
 
 /**
+ * AssetService - axios parameter creator
+ */
+export const AssetServiceAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 查询已由对象存储回调确认的 Markdown 图片。
+         * @param {CompleteMarkdownImageUploadReq} completeMarkdownImageUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        completeMarkdownImageUpload: async (completeMarkdownImageUploadReq: CompleteMarkdownImageUploadReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'completeMarkdownImageUploadReq' is not null or undefined
+            assertParamExists('completeMarkdownImageUpload', 'completeMarkdownImageUploadReq', completeMarkdownImageUploadReq)
+            const localVarPath = `/v1/asset/markdown-image/complete`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(completeMarkdownImageUploadReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 申请 Markdown 图片的内容寻址直传凭证。
+         * @param {PrepareMarkdownImageUploadReq} prepareMarkdownImageUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        prepareMarkdownImageUpload: async (prepareMarkdownImageUploadReq: PrepareMarkdownImageUploadReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'prepareMarkdownImageUploadReq' is not null or undefined
+            assertParamExists('prepareMarkdownImageUpload', 'prepareMarkdownImageUploadReq', prepareMarkdownImageUploadReq)
+            const localVarPath = `/v1/asset/markdown-image/prepare`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(prepareMarkdownImageUploadReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AssetService - functional programming interface
+ */
+export const AssetServiceFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AssetServiceAxiosParamCreator(configuration)
+    return {
+        /**
+         * 查询已由对象存储回调确认的 Markdown 图片。
+         * @param {CompleteMarkdownImageUploadReq} completeMarkdownImageUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async completeMarkdownImageUpload(completeMarkdownImageUploadReq: CompleteMarkdownImageUploadReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CompleteMarkdownImageUploadResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.completeMarkdownImageUpload(completeMarkdownImageUploadReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AssetService.completeMarkdownImageUpload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 申请 Markdown 图片的内容寻址直传凭证。
+         * @param {PrepareMarkdownImageUploadReq} prepareMarkdownImageUploadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async prepareMarkdownImageUpload(prepareMarkdownImageUploadReq: PrepareMarkdownImageUploadReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PrepareMarkdownImageUploadResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.prepareMarkdownImageUpload(prepareMarkdownImageUploadReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AssetService.prepareMarkdownImageUpload']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * AssetService - factory interface
+ */
+export const AssetServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AssetServiceFp(configuration)
+    return {
+        /**
+         * 查询已由对象存储回调确认的 Markdown 图片。
+         * @param {AssetServiceCompleteMarkdownImageUploadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        completeMarkdownImageUpload(requestParameters: AssetServiceCompleteMarkdownImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CompleteMarkdownImageUploadResp> {
+            return localVarFp.completeMarkdownImageUpload(requestParameters.completeMarkdownImageUploadReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 申请 Markdown 图片的内容寻址直传凭证。
+         * @param {AssetServicePrepareMarkdownImageUploadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        prepareMarkdownImageUpload(requestParameters: AssetServicePrepareMarkdownImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<PrepareMarkdownImageUploadResp> {
+            return localVarFp.prepareMarkdownImageUpload(requestParameters.prepareMarkdownImageUploadReq, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AssetService - interface
+ */
+export interface AssetServiceInterface {
+    /**
+     * 查询已由对象存储回调确认的 Markdown 图片。
+     * @param {AssetServiceCompleteMarkdownImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    completeMarkdownImageUpload(requestParameters: AssetServiceCompleteMarkdownImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CompleteMarkdownImageUploadResp>;
+
+    /**
+     * 申请 Markdown 图片的内容寻址直传凭证。
+     * @param {AssetServicePrepareMarkdownImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    prepareMarkdownImageUpload(requestParameters: AssetServicePrepareMarkdownImageUploadRequest, options?: RawAxiosRequestConfig): AxiosPromise<PrepareMarkdownImageUploadResp>;
+
+}
+
+/**
+ * Request parameters for completeMarkdownImageUpload operation in AssetService.
+ */
+export interface AssetServiceCompleteMarkdownImageUploadRequest {
+    readonly completeMarkdownImageUploadReq: CompleteMarkdownImageUploadReq
+}
+
+/**
+ * Request parameters for prepareMarkdownImageUpload operation in AssetService.
+ */
+export interface AssetServicePrepareMarkdownImageUploadRequest {
+    readonly prepareMarkdownImageUploadReq: PrepareMarkdownImageUploadReq
+}
+
+/**
+ * AssetService - object-oriented interface
+ */
+export class AssetService extends BaseAPI implements AssetServiceInterface {
+    /**
+     * 查询已由对象存储回调确认的 Markdown 图片。
+     * @param {AssetServiceCompleteMarkdownImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public completeMarkdownImageUpload(requestParameters: AssetServiceCompleteMarkdownImageUploadRequest, options?: RawAxiosRequestConfig) {
+        return AssetServiceFp(this.configuration).completeMarkdownImageUpload(requestParameters.completeMarkdownImageUploadReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 申请 Markdown 图片的内容寻址直传凭证。
+     * @param {AssetServicePrepareMarkdownImageUploadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public prepareMarkdownImageUpload(requestParameters: AssetServicePrepareMarkdownImageUploadRequest, options?: RawAxiosRequestConfig) {
+        return AssetServiceFp(this.configuration).prepareMarkdownImageUpload(requestParameters.prepareMarkdownImageUploadReq, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
  * AuthService - axios parameter creator
  */
 export const AuthServiceAxiosParamCreator = function (configuration?: Configuration) {
@@ -6044,6 +6396,1019 @@ export class HolidayService extends BaseAPI implements HolidayServiceInterface {
      */
     public getCurrent(requestParameters: HolidayServiceGetCurrentRequest, options?: RawAxiosRequestConfig) {
         return HolidayServiceFp(this.configuration).getCurrent(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+
+/**
+ * IMService - axios parameter creator
+ */
+export const IMServiceAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 统计当前账号的私聊未读数。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        countPrivateChatUnread: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('countPrivateChatUnread', 'body', body)
+            const localVarPath = `/v1/im/private-chat/unread-count`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询全局聊天室消息。
+         * @param {ListGlobalChatMessagesReq} listGlobalChatMessagesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listGlobalChatMessages: async (listGlobalChatMessagesReq: ListGlobalChatMessagesReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listGlobalChatMessagesReq' is not null or undefined
+            assertParamExists('listGlobalChatMessages', 'listGlobalChatMessagesReq', listGlobalChatMessagesReq)
+            const localVarPath = `/v1/im/global-chat/messages/list`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(listGlobalChatMessagesReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询全部在线的聊天室成员。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listGlobalChatOnlineMembers: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('listGlobalChatOnlineMembers', 'body', body)
+            const localVarPath = `/v1/im/global-chat/online-members/list`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询私聊消息。
+         * @param {ListPrivateChatMessagesReq} listPrivateChatMessagesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPrivateChatMessages: async (listPrivateChatMessagesReq: ListPrivateChatMessagesReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'listPrivateChatMessagesReq' is not null or undefined
+            assertParamExists('listPrivateChatMessages', 'listPrivateChatMessagesReq', listPrivateChatMessagesReq)
+            const localVarPath = `/v1/im/private-chat/messages/list`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(listPrivateChatMessagesReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 查询当前账号的私聊会话。
+         * @param {string} [pagePage] 页码
+         * @param {string} [pageSize] 页大小
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPrivateChatSessions: async (pagePage?: string, pageSize?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/v1/im/private-chat/sessions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (pagePage !== undefined) {
+                localVarQueryParameter['page.page'] = pagePage;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page.size'] = pageSize;
+            }
+
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 标记私聊会话已读。
+         * @param {MarkPrivateChatSessionReadReq} markPrivateChatSessionReadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        markPrivateChatSessionRead: async (markPrivateChatSessionReadReq: MarkPrivateChatSessionReadReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'markPrivateChatSessionReadReq' is not null or undefined
+            assertParamExists('markPrivateChatSessionRead', 'markPrivateChatSessionReadReq', markPrivateChatSessionReadReq)
+            const localVarPath = `/v1/im/private-chat/read`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(markPrivateChatSessionReadReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 撤回自己的全局聊天室消息。
+         * @param {RevokeGlobalChatMessageReq} revokeGlobalChatMessageReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revokeGlobalChatMessage: async (revokeGlobalChatMessageReq: RevokeGlobalChatMessageReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'revokeGlobalChatMessageReq' is not null or undefined
+            assertParamExists('revokeGlobalChatMessage', 'revokeGlobalChatMessageReq', revokeGlobalChatMessageReq)
+            const localVarPath = `/v1/im/global-chat/messages/revoke`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(revokeGlobalChatMessageReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 撤回私聊消息。
+         * @param {RevokePrivateChatMessageReq} revokePrivateChatMessageReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revokePrivateChatMessage: async (revokePrivateChatMessageReq: RevokePrivateChatMessageReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'revokePrivateChatMessageReq' is not null or undefined
+            assertParamExists('revokePrivateChatMessage', 'revokePrivateChatMessageReq', revokePrivateChatMessageReq)
+            const localVarPath = `/v1/im/private-chat/messages/revoke`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(revokePrivateChatMessageReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 发送全局聊天室消息。
+         * @param {SendGlobalChatMessageReq} sendGlobalChatMessageReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendGlobalChatMessage: async (sendGlobalChatMessageReq: SendGlobalChatMessageReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sendGlobalChatMessageReq' is not null or undefined
+            assertParamExists('sendGlobalChatMessage', 'sendGlobalChatMessageReq', sendGlobalChatMessageReq)
+            const localVarPath = `/v1/im/global-chat/messages`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(sendGlobalChatMessageReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 发送私聊消息。
+         * @param {SendPrivateChatMessageReq} sendPrivateChatMessageReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendPrivateChatMessage: async (sendPrivateChatMessageReq: SendPrivateChatMessageReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sendPrivateChatMessageReq' is not null or undefined
+            assertParamExists('sendPrivateChatMessage', 'sendPrivateChatMessageReq', sendPrivateChatMessageReq)
+            const localVarPath = `/v1/im/private-chat/messages`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(sendPrivateChatMessageReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 设置私聊会话免打扰。
+         * @param {SetPrivateChatSessionMutedReq} setPrivateChatSessionMutedReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setPrivateChatSessionMuted: async (setPrivateChatSessionMutedReq: SetPrivateChatSessionMutedReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'setPrivateChatSessionMutedReq' is not null or undefined
+            assertParamExists('setPrivateChatSessionMuted', 'setPrivateChatSessionMutedReq', setPrivateChatSessionMutedReq)
+            const localVarPath = `/v1/im/private-chat/muted`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(setPrivateChatSessionMutedReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 设置私聊会话置顶。
+         * @param {SetPrivateChatSessionPinnedReq} setPrivateChatSessionPinnedReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setPrivateChatSessionPinned: async (setPrivateChatSessionPinnedReq: SetPrivateChatSessionPinnedReq, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'setPrivateChatSessionPinnedReq' is not null or undefined
+            assertParamExists('setPrivateChatSessionPinned', 'setPrivateChatSessionPinnedReq', setPrivateChatSessionPinnedReq)
+            const localVarPath = `/v1/im/private-chat/pinned`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarHeaderParameter['Accept'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(setPrivateChatSessionPinnedReq, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * IMService - functional programming interface
+ */
+export const IMServiceFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = IMServiceAxiosParamCreator(configuration)
+    return {
+        /**
+         * 统计当前账号的私聊未读数。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async countPrivateChatUnread(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CountPrivateChatUnreadResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.countPrivateChatUnread(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.countPrivateChatUnread']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 查询全局聊天室消息。
+         * @param {ListGlobalChatMessagesReq} listGlobalChatMessagesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listGlobalChatMessages(listGlobalChatMessagesReq: ListGlobalChatMessagesReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListGlobalChatMessagesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listGlobalChatMessages(listGlobalChatMessagesReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.listGlobalChatMessages']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 查询全部在线的聊天室成员。
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listGlobalChatOnlineMembers(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListGlobalChatOnlineMembersResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listGlobalChatOnlineMembers(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.listGlobalChatOnlineMembers']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 查询私聊消息。
+         * @param {ListPrivateChatMessagesReq} listPrivateChatMessagesReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listPrivateChatMessages(listPrivateChatMessagesReq: ListPrivateChatMessagesReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListPrivateChatMessagesResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listPrivateChatMessages(listPrivateChatMessagesReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.listPrivateChatMessages']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 查询当前账号的私聊会话。
+         * @param {string} [pagePage] 页码
+         * @param {string} [pageSize] 页大小
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listPrivateChatSessions(pagePage?: string, pageSize?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ListPrivateChatSessionsResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listPrivateChatSessions(pagePage, pageSize, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.listPrivateChatSessions']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 标记私聊会话已读。
+         * @param {MarkPrivateChatSessionReadReq} markPrivateChatSessionReadReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async markPrivateChatSessionRead(markPrivateChatSessionReadReq: MarkPrivateChatSessionReadReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.markPrivateChatSessionRead(markPrivateChatSessionReadReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.markPrivateChatSessionRead']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 撤回自己的全局聊天室消息。
+         * @param {RevokeGlobalChatMessageReq} revokeGlobalChatMessageReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async revokeGlobalChatMessage(revokeGlobalChatMessageReq: RevokeGlobalChatMessageReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RevokeGlobalChatMessageResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.revokeGlobalChatMessage(revokeGlobalChatMessageReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.revokeGlobalChatMessage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 撤回私聊消息。
+         * @param {RevokePrivateChatMessageReq} revokePrivateChatMessageReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async revokePrivateChatMessage(revokePrivateChatMessageReq: RevokePrivateChatMessageReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RevokePrivateChatMessageResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.revokePrivateChatMessage(revokePrivateChatMessageReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.revokePrivateChatMessage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 发送全局聊天室消息。
+         * @param {SendGlobalChatMessageReq} sendGlobalChatMessageReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sendGlobalChatMessage(sendGlobalChatMessageReq: SendGlobalChatMessageReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SendGlobalChatMessageResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sendGlobalChatMessage(sendGlobalChatMessageReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.sendGlobalChatMessage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 发送私聊消息。
+         * @param {SendPrivateChatMessageReq} sendPrivateChatMessageReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async sendPrivateChatMessage(sendPrivateChatMessageReq: SendPrivateChatMessageReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SendPrivateChatMessageResp>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.sendPrivateChatMessage(sendPrivateChatMessageReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.sendPrivateChatMessage']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 设置私聊会话免打扰。
+         * @param {SetPrivateChatSessionMutedReq} setPrivateChatSessionMutedReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async setPrivateChatSessionMuted(setPrivateChatSessionMutedReq: SetPrivateChatSessionMutedReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.setPrivateChatSessionMuted(setPrivateChatSessionMutedReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.setPrivateChatSessionMuted']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 设置私聊会话置顶。
+         * @param {SetPrivateChatSessionPinnedReq} setPrivateChatSessionPinnedReq 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async setPrivateChatSessionPinned(setPrivateChatSessionPinnedReq: SetPrivateChatSessionPinnedReq, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.setPrivateChatSessionPinned(setPrivateChatSessionPinnedReq, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['IMService.setPrivateChatSessionPinned']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+    }
+};
+
+/**
+ * IMService - factory interface
+ */
+export const IMServiceFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = IMServiceFp(configuration)
+    return {
+        /**
+         * 统计当前账号的私聊未读数。
+         * @param {IMServiceCountPrivateChatUnreadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        countPrivateChatUnread(requestParameters: IMServiceCountPrivateChatUnreadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CountPrivateChatUnreadResp> {
+            return localVarFp.countPrivateChatUnread(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询全局聊天室消息。
+         * @param {IMServiceListGlobalChatMessagesRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listGlobalChatMessages(requestParameters: IMServiceListGlobalChatMessagesRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListGlobalChatMessagesResp> {
+            return localVarFp.listGlobalChatMessages(requestParameters.listGlobalChatMessagesReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询全部在线的聊天室成员。
+         * @param {IMServiceListGlobalChatOnlineMembersRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listGlobalChatOnlineMembers(requestParameters: IMServiceListGlobalChatOnlineMembersRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListGlobalChatOnlineMembersResp> {
+            return localVarFp.listGlobalChatOnlineMembers(requestParameters.body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询私聊消息。
+         * @param {IMServiceListPrivateChatMessagesRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPrivateChatMessages(requestParameters: IMServiceListPrivateChatMessagesRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListPrivateChatMessagesResp> {
+            return localVarFp.listPrivateChatMessages(requestParameters.listPrivateChatMessagesReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 查询当前账号的私聊会话。
+         * @param {IMServiceListPrivateChatSessionsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listPrivateChatSessions(requestParameters: IMServiceListPrivateChatSessionsRequest = {}, options?: RawAxiosRequestConfig): AxiosPromise<ListPrivateChatSessionsResp> {
+            return localVarFp.listPrivateChatSessions(requestParameters.pagePage, requestParameters.pageSize, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 标记私聊会话已读。
+         * @param {IMServiceMarkPrivateChatSessionReadRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        markPrivateChatSessionRead(requestParameters: IMServiceMarkPrivateChatSessionReadRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.markPrivateChatSessionRead(requestParameters.markPrivateChatSessionReadReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 撤回自己的全局聊天室消息。
+         * @param {IMServiceRevokeGlobalChatMessageRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revokeGlobalChatMessage(requestParameters: IMServiceRevokeGlobalChatMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<RevokeGlobalChatMessageResp> {
+            return localVarFp.revokeGlobalChatMessage(requestParameters.revokeGlobalChatMessageReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 撤回私聊消息。
+         * @param {IMServiceRevokePrivateChatMessageRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revokePrivateChatMessage(requestParameters: IMServiceRevokePrivateChatMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<RevokePrivateChatMessageResp> {
+            return localVarFp.revokePrivateChatMessage(requestParameters.revokePrivateChatMessageReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 发送全局聊天室消息。
+         * @param {IMServiceSendGlobalChatMessageRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendGlobalChatMessage(requestParameters: IMServiceSendGlobalChatMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<SendGlobalChatMessageResp> {
+            return localVarFp.sendGlobalChatMessage(requestParameters.sendGlobalChatMessageReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 发送私聊消息。
+         * @param {IMServiceSendPrivateChatMessageRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendPrivateChatMessage(requestParameters: IMServiceSendPrivateChatMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<SendPrivateChatMessageResp> {
+            return localVarFp.sendPrivateChatMessage(requestParameters.sendPrivateChatMessageReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 设置私聊会话免打扰。
+         * @param {IMServiceSetPrivateChatSessionMutedRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setPrivateChatSessionMuted(requestParameters: IMServiceSetPrivateChatSessionMutedRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.setPrivateChatSessionMuted(requestParameters.setPrivateChatSessionMutedReq, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 设置私聊会话置顶。
+         * @param {IMServiceSetPrivateChatSessionPinnedRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        setPrivateChatSessionPinned(requestParameters: IMServiceSetPrivateChatSessionPinnedRequest, options?: RawAxiosRequestConfig): AxiosPromise<object> {
+            return localVarFp.setPrivateChatSessionPinned(requestParameters.setPrivateChatSessionPinnedReq, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * IMService - interface
+ */
+export interface IMServiceInterface {
+    /**
+     * 统计当前账号的私聊未读数。
+     * @param {IMServiceCountPrivateChatUnreadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    countPrivateChatUnread(requestParameters: IMServiceCountPrivateChatUnreadRequest, options?: RawAxiosRequestConfig): AxiosPromise<CountPrivateChatUnreadResp>;
+
+    /**
+     * 查询全局聊天室消息。
+     * @param {IMServiceListGlobalChatMessagesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listGlobalChatMessages(requestParameters: IMServiceListGlobalChatMessagesRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListGlobalChatMessagesResp>;
+
+    /**
+     * 查询全部在线的聊天室成员。
+     * @param {IMServiceListGlobalChatOnlineMembersRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listGlobalChatOnlineMembers(requestParameters: IMServiceListGlobalChatOnlineMembersRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListGlobalChatOnlineMembersResp>;
+
+    /**
+     * 查询私聊消息。
+     * @param {IMServiceListPrivateChatMessagesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listPrivateChatMessages(requestParameters: IMServiceListPrivateChatMessagesRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListPrivateChatMessagesResp>;
+
+    /**
+     * 查询当前账号的私聊会话。
+     * @param {IMServiceListPrivateChatSessionsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listPrivateChatSessions(requestParameters?: IMServiceListPrivateChatSessionsRequest, options?: RawAxiosRequestConfig): AxiosPromise<ListPrivateChatSessionsResp>;
+
+    /**
+     * 标记私聊会话已读。
+     * @param {IMServiceMarkPrivateChatSessionReadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    markPrivateChatSessionRead(requestParameters: IMServiceMarkPrivateChatSessionReadRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * 撤回自己的全局聊天室消息。
+     * @param {IMServiceRevokeGlobalChatMessageRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    revokeGlobalChatMessage(requestParameters: IMServiceRevokeGlobalChatMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<RevokeGlobalChatMessageResp>;
+
+    /**
+     * 撤回私聊消息。
+     * @param {IMServiceRevokePrivateChatMessageRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    revokePrivateChatMessage(requestParameters: IMServiceRevokePrivateChatMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<RevokePrivateChatMessageResp>;
+
+    /**
+     * 发送全局聊天室消息。
+     * @param {IMServiceSendGlobalChatMessageRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sendGlobalChatMessage(requestParameters: IMServiceSendGlobalChatMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<SendGlobalChatMessageResp>;
+
+    /**
+     * 发送私聊消息。
+     * @param {IMServiceSendPrivateChatMessageRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    sendPrivateChatMessage(requestParameters: IMServiceSendPrivateChatMessageRequest, options?: RawAxiosRequestConfig): AxiosPromise<SendPrivateChatMessageResp>;
+
+    /**
+     * 设置私聊会话免打扰。
+     * @param {IMServiceSetPrivateChatSessionMutedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    setPrivateChatSessionMuted(requestParameters: IMServiceSetPrivateChatSessionMutedRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+    /**
+     * 设置私聊会话置顶。
+     * @param {IMServiceSetPrivateChatSessionPinnedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    setPrivateChatSessionPinned(requestParameters: IMServiceSetPrivateChatSessionPinnedRequest, options?: RawAxiosRequestConfig): AxiosPromise<object>;
+
+}
+
+/**
+ * Request parameters for countPrivateChatUnread operation in IMService.
+ */
+export interface IMServiceCountPrivateChatUnreadRequest {
+    readonly body: object
+}
+
+/**
+ * Request parameters for listGlobalChatMessages operation in IMService.
+ */
+export interface IMServiceListGlobalChatMessagesRequest {
+    readonly listGlobalChatMessagesReq: ListGlobalChatMessagesReq
+}
+
+/**
+ * Request parameters for listGlobalChatOnlineMembers operation in IMService.
+ */
+export interface IMServiceListGlobalChatOnlineMembersRequest {
+    readonly body: object
+}
+
+/**
+ * Request parameters for listPrivateChatMessages operation in IMService.
+ */
+export interface IMServiceListPrivateChatMessagesRequest {
+    readonly listPrivateChatMessagesReq: ListPrivateChatMessagesReq
+}
+
+/**
+ * Request parameters for listPrivateChatSessions operation in IMService.
+ */
+export interface IMServiceListPrivateChatSessionsRequest {
+    /**
+     * 页码
+     */
+    readonly pagePage?: string
+
+    /**
+     * 页大小
+     */
+    readonly pageSize?: string
+}
+
+/**
+ * Request parameters for markPrivateChatSessionRead operation in IMService.
+ */
+export interface IMServiceMarkPrivateChatSessionReadRequest {
+    readonly markPrivateChatSessionReadReq: MarkPrivateChatSessionReadReq
+}
+
+/**
+ * Request parameters for revokeGlobalChatMessage operation in IMService.
+ */
+export interface IMServiceRevokeGlobalChatMessageRequest {
+    readonly revokeGlobalChatMessageReq: RevokeGlobalChatMessageReq
+}
+
+/**
+ * Request parameters for revokePrivateChatMessage operation in IMService.
+ */
+export interface IMServiceRevokePrivateChatMessageRequest {
+    readonly revokePrivateChatMessageReq: RevokePrivateChatMessageReq
+}
+
+/**
+ * Request parameters for sendGlobalChatMessage operation in IMService.
+ */
+export interface IMServiceSendGlobalChatMessageRequest {
+    readonly sendGlobalChatMessageReq: SendGlobalChatMessageReq
+}
+
+/**
+ * Request parameters for sendPrivateChatMessage operation in IMService.
+ */
+export interface IMServiceSendPrivateChatMessageRequest {
+    readonly sendPrivateChatMessageReq: SendPrivateChatMessageReq
+}
+
+/**
+ * Request parameters for setPrivateChatSessionMuted operation in IMService.
+ */
+export interface IMServiceSetPrivateChatSessionMutedRequest {
+    readonly setPrivateChatSessionMutedReq: SetPrivateChatSessionMutedReq
+}
+
+/**
+ * Request parameters for setPrivateChatSessionPinned operation in IMService.
+ */
+export interface IMServiceSetPrivateChatSessionPinnedRequest {
+    readonly setPrivateChatSessionPinnedReq: SetPrivateChatSessionPinnedReq
+}
+
+/**
+ * IMService - object-oriented interface
+ */
+export class IMService extends BaseAPI implements IMServiceInterface {
+    /**
+     * 统计当前账号的私聊未读数。
+     * @param {IMServiceCountPrivateChatUnreadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public countPrivateChatUnread(requestParameters: IMServiceCountPrivateChatUnreadRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).countPrivateChatUnread(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询全局聊天室消息。
+     * @param {IMServiceListGlobalChatMessagesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listGlobalChatMessages(requestParameters: IMServiceListGlobalChatMessagesRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).listGlobalChatMessages(requestParameters.listGlobalChatMessagesReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询全部在线的聊天室成员。
+     * @param {IMServiceListGlobalChatOnlineMembersRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listGlobalChatOnlineMembers(requestParameters: IMServiceListGlobalChatOnlineMembersRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).listGlobalChatOnlineMembers(requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询私聊消息。
+     * @param {IMServiceListPrivateChatMessagesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listPrivateChatMessages(requestParameters: IMServiceListPrivateChatMessagesRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).listPrivateChatMessages(requestParameters.listPrivateChatMessagesReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 查询当前账号的私聊会话。
+     * @param {IMServiceListPrivateChatSessionsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public listPrivateChatSessions(requestParameters: IMServiceListPrivateChatSessionsRequest = {}, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).listPrivateChatSessions(requestParameters.pagePage, requestParameters.pageSize, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 标记私聊会话已读。
+     * @param {IMServiceMarkPrivateChatSessionReadRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public markPrivateChatSessionRead(requestParameters: IMServiceMarkPrivateChatSessionReadRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).markPrivateChatSessionRead(requestParameters.markPrivateChatSessionReadReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 撤回自己的全局聊天室消息。
+     * @param {IMServiceRevokeGlobalChatMessageRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public revokeGlobalChatMessage(requestParameters: IMServiceRevokeGlobalChatMessageRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).revokeGlobalChatMessage(requestParameters.revokeGlobalChatMessageReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 撤回私聊消息。
+     * @param {IMServiceRevokePrivateChatMessageRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public revokePrivateChatMessage(requestParameters: IMServiceRevokePrivateChatMessageRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).revokePrivateChatMessage(requestParameters.revokePrivateChatMessageReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 发送全局聊天室消息。
+     * @param {IMServiceSendGlobalChatMessageRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sendGlobalChatMessage(requestParameters: IMServiceSendGlobalChatMessageRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).sendGlobalChatMessage(requestParameters.sendGlobalChatMessageReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 发送私聊消息。
+     * @param {IMServiceSendPrivateChatMessageRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public sendPrivateChatMessage(requestParameters: IMServiceSendPrivateChatMessageRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).sendPrivateChatMessage(requestParameters.sendPrivateChatMessageReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 设置私聊会话免打扰。
+     * @param {IMServiceSetPrivateChatSessionMutedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public setPrivateChatSessionMuted(requestParameters: IMServiceSetPrivateChatSessionMutedRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).setPrivateChatSessionMuted(requestParameters.setPrivateChatSessionMutedReq, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 设置私聊会话置顶。
+     * @param {IMServiceSetPrivateChatSessionPinnedRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public setPrivateChatSessionPinned(requestParameters: IMServiceSetPrivateChatSessionPinnedRequest, options?: RawAxiosRequestConfig) {
+        return IMServiceFp(this.configuration).setPrivateChatSessionPinned(requestParameters.setPrivateChatSessionPinnedReq, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -114,11 +114,13 @@ impl From<&str> for ContentType {
 pub mod account_service;
 pub mod article_search_service;
 pub mod article_service;
+pub mod asset_service;
 pub mod auth_service;
 pub mod checkin_service;
 pub mod comment_service;
 pub mod domain_service;
 pub mod holiday_service;
+pub mod im_service;
 pub mod location_service;
 pub mod moonbreeze_service;
 pub mod notification_service;
@@ -138,11 +140,13 @@ pub trait Api {
     fn account_service(&self) -> &dyn account_service::AccountService;
     fn article_search_service(&self) -> &dyn article_search_service::ArticleSearchService;
     fn article_service(&self) -> &dyn article_service::ArticleService;
+    fn asset_service(&self) -> &dyn asset_service::AssetService;
     fn auth_service(&self) -> &dyn auth_service::AuthService;
     fn checkin_service(&self) -> &dyn checkin_service::CheckinService;
     fn comment_service(&self) -> &dyn comment_service::CommentService;
     fn domain_service(&self) -> &dyn domain_service::DomainService;
     fn holiday_service(&self) -> &dyn holiday_service::HolidayService;
+    fn im_service(&self) -> &dyn im_service::ImService;
     fn location_service(&self) -> &dyn location_service::LocationService;
     fn moonbreeze_service(&self) -> &dyn moonbreeze_service::MoonbreezeService;
     fn notification_service(&self) -> &dyn notification_service::NotificationService;
@@ -159,11 +163,13 @@ pub struct ApiClient {
     account_service: Box<dyn account_service::AccountService>,
     article_search_service: Box<dyn article_search_service::ArticleSearchService>,
     article_service: Box<dyn article_service::ArticleService>,
+    asset_service: Box<dyn asset_service::AssetService>,
     auth_service: Box<dyn auth_service::AuthService>,
     checkin_service: Box<dyn checkin_service::CheckinService>,
     comment_service: Box<dyn comment_service::CommentService>,
     domain_service: Box<dyn domain_service::DomainService>,
     holiday_service: Box<dyn holiday_service::HolidayService>,
+    im_service: Box<dyn im_service::ImService>,
     location_service: Box<dyn location_service::LocationService>,
     moonbreeze_service: Box<dyn moonbreeze_service::MoonbreezeService>,
     notification_service: Box<dyn notification_service::NotificationService>,
@@ -182,11 +188,13 @@ impl ApiClient {
             account_service: Box::new(account_service::AccountServiceClient::new(configuration.clone())),
             article_search_service: Box::new(article_search_service::ArticleSearchServiceClient::new(configuration.clone())),
             article_service: Box::new(article_service::ArticleServiceClient::new(configuration.clone())),
+            asset_service: Box::new(asset_service::AssetServiceClient::new(configuration.clone())),
             auth_service: Box::new(auth_service::AuthServiceClient::new(configuration.clone())),
             checkin_service: Box::new(checkin_service::CheckinServiceClient::new(configuration.clone())),
             comment_service: Box::new(comment_service::CommentServiceClient::new(configuration.clone())),
             domain_service: Box::new(domain_service::DomainServiceClient::new(configuration.clone())),
             holiday_service: Box::new(holiday_service::HolidayServiceClient::new(configuration.clone())),
+            im_service: Box::new(im_service::ImServiceClient::new(configuration.clone())),
             location_service: Box::new(location_service::LocationServiceClient::new(configuration.clone())),
             moonbreeze_service: Box::new(moonbreeze_service::MoonbreezeServiceClient::new(configuration.clone())),
             notification_service: Box::new(notification_service::NotificationServiceClient::new(configuration.clone())),
@@ -211,6 +219,9 @@ impl Api for ApiClient {
     fn article_service(&self) -> &dyn article_service::ArticleService {
         self.article_service.as_ref()
     }
+    fn asset_service(&self) -> &dyn asset_service::AssetService {
+        self.asset_service.as_ref()
+    }
     fn auth_service(&self) -> &dyn auth_service::AuthService {
         self.auth_service.as_ref()
     }
@@ -225,6 +236,9 @@ impl Api for ApiClient {
     }
     fn holiday_service(&self) -> &dyn holiday_service::HolidayService {
         self.holiday_service.as_ref()
+    }
+    fn im_service(&self) -> &dyn im_service::ImService {
+        self.im_service.as_ref()
     }
     fn location_service(&self) -> &dyn location_service::LocationService {
         self.location_service.as_ref()

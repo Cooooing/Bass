@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **last_success_login_at** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
 **visibility** | Option<[**models::ProfileVisibility**](ProfileVisibility.md)> |  | [optional]
 **viewer_relation** | Option<[**models::ProfileRelation**](ProfileRelation.md)> |  | [optional]
+**online** | Option<**bool**> |  | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -58,6 +58,8 @@ Class | Method | HTTP request | Description
 *ArticleService* | [**update_draft**](docs/ArticleService.md#update_draft) | **POST** /v1/content/article/draft/update | 
 *ArticleService* | [**vote_poll**](docs/ArticleService.md#vote_poll) | **POST** /v1/content/article/poll/vote | 
 *ArticleService* | [**watch**](docs/ArticleService.md#watch) | **POST** /v1/content/article/watch | 
+*AssetService* | [**complete_markdown_image_upload**](docs/AssetService.md#complete_markdown_image_upload) | **POST** /v1/asset/markdown-image/complete | 
+*AssetService* | [**prepare_markdown_image_upload**](docs/AssetService.md#prepare_markdown_image_upload) | **POST** /v1/asset/markdown-image/prepare | 
 *AuthService* | [**cancel_account**](docs/AuthService.md#cancel_account) | **POST** /v1/user/auth/cancel-account | 
 *AuthService* | [**check_registration_availability**](docs/AuthService.md#check_registration_availability) | **GET** /v1/user/auth/register-availability | 
 *AuthService* | [**login**](docs/AuthService.md#login) | **POST** /v1/user/auth/login | 
@@ -77,6 +79,18 @@ Class | Method | HTTP request | Description
 *DomainService* | [**list**](docs/DomainService.md#list) | **POST** /v1/content/domain/list | 
 *DomainService* | [**update**](docs/DomainService.md#update) | **POST** /v1/content/domain/update | 
 *HolidayService* | [**get_current**](docs/HolidayService.md#get_current) | **POST** /v1/platform/holiday/get-current | 
+*ImService* | [**count_private_chat_unread**](docs/ImService.md#count_private_chat_unread) | **POST** /v1/im/private-chat/unread-count | 
+*ImService* | [**list_global_chat_messages**](docs/ImService.md#list_global_chat_messages) | **POST** /v1/im/global-chat/messages/list | 
+*ImService* | [**list_global_chat_online_members**](docs/ImService.md#list_global_chat_online_members) | **POST** /v1/im/global-chat/online-members/list | 
+*ImService* | [**list_private_chat_messages**](docs/ImService.md#list_private_chat_messages) | **POST** /v1/im/private-chat/messages/list | 
+*ImService* | [**list_private_chat_sessions**](docs/ImService.md#list_private_chat_sessions) | **GET** /v1/im/private-chat/sessions | 
+*ImService* | [**mark_private_chat_session_read**](docs/ImService.md#mark_private_chat_session_read) | **POST** /v1/im/private-chat/read | 
+*ImService* | [**revoke_global_chat_message**](docs/ImService.md#revoke_global_chat_message) | **POST** /v1/im/global-chat/messages/revoke | 
+*ImService* | [**revoke_private_chat_message**](docs/ImService.md#revoke_private_chat_message) | **POST** /v1/im/private-chat/messages/revoke | 
+*ImService* | [**send_global_chat_message**](docs/ImService.md#send_global_chat_message) | **POST** /v1/im/global-chat/messages | 
+*ImService* | [**send_private_chat_message**](docs/ImService.md#send_private_chat_message) | **POST** /v1/im/private-chat/messages | 
+*ImService* | [**set_private_chat_session_muted**](docs/ImService.md#set_private_chat_session_muted) | **POST** /v1/im/private-chat/muted | 
+*ImService* | [**set_private_chat_session_pinned**](docs/ImService.md#set_private_chat_session_pinned) | **POST** /v1/im/private-chat/pinned | 
 *LocationService* | [**get_current**](docs/LocationService.md#get_current) | **POST** /v1/platform/location/get-current | 
 *MoonbreezeService* | [**create**](docs/MoonbreezeService.md#create) | **POST** /v1/content/moonbreeze/create | 
 *MoonbreezeService* | [**page_member**](docs/MoonbreezeService.md#page_member) | **POST** /v1/content/moonbreeze/page-member | 
@@ -148,9 +162,12 @@ Class | Method | HTTP request | Description
  - [CollectArticleResp](docs/CollectArticleResp.md)
  - [CommentListItem](docs/CommentListItem.md)
  - [CommentViewerActionState](docs/CommentViewerActionState.md)
+ - [CompleteMarkdownImageUploadReq](docs/CompleteMarkdownImageUploadReq.md)
+ - [CompleteMarkdownImageUploadResp](docs/CompleteMarkdownImageUploadResp.md)
  - [CompleteProfileImageUploadAccountReq](docs/CompleteProfileImageUploadAccountReq.md)
  - [CompleteProfileImageUploadAccountResp](docs/CompleteProfileImageUploadAccountResp.md)
  - [ConfirmEnableTotpReq](docs/ConfirmEnableTotpReq.md)
+ - [CountPrivateChatUnreadResp](docs/CountPrivateChatUnreadResp.md)
  - [CountUnreadNotificationsResp](docs/CountUnreadNotificationsResp.md)
  - [CreateCommentReq](docs/CreateCommentReq.md)
  - [CreateCommentResp](docs/CreateCommentResp.md)
@@ -181,6 +198,9 @@ Class | Method | HTTP request | Description
  - [GetProfileResp](docs/GetProfileResp.md)
  - [GetStatusRelationReq](docs/GetStatusRelationReq.md)
  - [GetStatusRelationResp](docs/GetStatusRelationResp.md)
+ - [GlobalChatMember](docs/GlobalChatMember.md)
+ - [GlobalChatMessage](docs/GlobalChatMessage.md)
+ - [GlobalChatOnlineMember](docs/GlobalChatOnlineMember.md)
  - [ImageResp](docs/ImageResp.md)
  - [LikeArticleReq](docs/LikeArticleReq.md)
  - [LikeArticleResp](docs/LikeArticleResp.md)
@@ -212,16 +232,23 @@ Class | Method | HTTP request | Description
  - [ListFollowingRelationsResp](docs/ListFollowingRelationsResp.md)
  - [ListFollowingReq](docs/ListFollowingReq.md)
  - [ListFollowingResp](docs/ListFollowingResp.md)
+ - [ListGlobalChatMessagesReq](docs/ListGlobalChatMessagesReq.md)
+ - [ListGlobalChatMessagesResp](docs/ListGlobalChatMessagesResp.md)
+ - [ListGlobalChatOnlineMembersResp](docs/ListGlobalChatOnlineMembersResp.md)
  - [ListNearbyArticlesReq](docs/ListNearbyArticlesReq.md)
  - [ListNearbyArticlesResp](docs/ListNearbyArticlesResp.md)
  - [ListNotificationsReq](docs/ListNotificationsReq.md)
  - [ListNotificationsResp](docs/ListNotificationsResp.md)
  - [ListPostscriptsReq](docs/ListPostscriptsReq.md)
  - [ListPostscriptsResp](docs/ListPostscriptsResp.md)
+ - [ListPrivateChatMessagesReq](docs/ListPrivateChatMessagesReq.md)
+ - [ListPrivateChatMessagesResp](docs/ListPrivateChatMessagesResp.md)
+ - [ListPrivateChatSessionsResp](docs/ListPrivateChatSessionsResp.md)
  - [ListTagsReq](docs/ListTagsReq.md)
  - [ListTagsResp](docs/ListTagsResp.md)
  - [LoginReq](docs/LoginReq.md)
  - [LoginResp](docs/LoginResp.md)
+ - [MarkPrivateChatSessionReadReq](docs/MarkPrivateChatSessionReadReq.md)
  - [MarkReadNotificationReq](docs/MarkReadNotificationReq.md)
  - [MarkReadNotificationResp](docs/MarkReadNotificationResp.md)
  - [Moonbreeze](docs/Moonbreeze.md)
@@ -233,8 +260,13 @@ Class | Method | HTTP request | Description
  - [PageReq](docs/PageReq.md)
  - [PageResp](docs/PageResp.md)
  - [PageWatchingMoonbreezesReq](docs/PageWatchingMoonbreezesReq.md)
+ - [PrepareMarkdownImageUploadReq](docs/PrepareMarkdownImageUploadReq.md)
+ - [PrepareMarkdownImageUploadResp](docs/PrepareMarkdownImageUploadResp.md)
  - [PrepareProfileImageUploadAccountReq](docs/PrepareProfileImageUploadAccountReq.md)
  - [PrepareProfileImageUploadAccountResp](docs/PrepareProfileImageUploadAccountResp.md)
+ - [PrivateChatMember](docs/PrivateChatMember.md)
+ - [PrivateChatMessage](docs/PrivateChatMessage.md)
+ - [PrivateChatSession](docs/PrivateChatSession.md)
  - [Profile](docs/Profile.md)
  - [ProfileLocation](docs/ProfileLocation.md)
  - [ProfileRelation](docs/ProfileRelation.md)
@@ -274,14 +306,24 @@ Class | Method | HTTP request | Description
  - [RespRelationStatus](docs/RespRelationStatus.md)
  - [RespTag](docs/RespTag.md)
  - [RespTotp](docs/RespTotp.md)
+ - [RevokeGlobalChatMessageReq](docs/RevokeGlobalChatMessageReq.md)
+ - [RevokeGlobalChatMessageResp](docs/RevokeGlobalChatMessageResp.md)
+ - [RevokePrivateChatMessageReq](docs/RevokePrivateChatMessageReq.md)
+ - [RevokePrivateChatMessageResp](docs/RevokePrivateChatMessageResp.md)
  - [RewardArticleReq](docs/RewardArticleReq.md)
  - [SearchArticlesReq](docs/SearchArticlesReq.md)
  - [SearchArticlesResp](docs/SearchArticlesResp.md)
  - [SendEmailOtpReq](docs/SendEmailOtpReq.md)
  - [SendEmailOtpResp](docs/SendEmailOtpResp.md)
+ - [SendGlobalChatMessageReq](docs/SendGlobalChatMessageReq.md)
+ - [SendGlobalChatMessageResp](docs/SendGlobalChatMessageResp.md)
  - [SendPhoneOtpReq](docs/SendPhoneOtpReq.md)
  - [SendPhoneOtpResp](docs/SendPhoneOtpResp.md)
+ - [SendPrivateChatMessageReq](docs/SendPrivateChatMessageReq.md)
+ - [SendPrivateChatMessageResp](docs/SendPrivateChatMessageResp.md)
  - [SetPinnedArticleCommentReq](docs/SetPinnedArticleCommentReq.md)
+ - [SetPrivateChatSessionMutedReq](docs/SetPrivateChatSessionMutedReq.md)
+ - [SetPrivateChatSessionPinnedReq](docs/SetPrivateChatSessionPinnedReq.md)
  - [ThankArticleReq](docs/ThankArticleReq.md)
  - [ThankArticleResp](docs/ThankArticleResp.md)
  - [ThankCommentReq](docs/ThankCommentReq.md)

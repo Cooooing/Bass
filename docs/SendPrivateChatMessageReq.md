@@ -1,0 +1,13 @@
+# SendPrivateChatMessageReq
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**receiver_id** | Option<**String**> |  | [optional]
+**client_message_id** | Option<**String**> |  | [optional]
+**content** | Option<**String**> |  | [optional]
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

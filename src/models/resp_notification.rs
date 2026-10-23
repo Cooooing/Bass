@@ -123,6 +123,10 @@ pub enum EventType {
     EventTypeCommentThanked,
     #[serde(rename = "EVENT_TYPE_COMMENT_STATUS_UPDATED")]
     EventTypeCommentStatusUpdated,
+    #[serde(rename = "EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED")]
+    EventTypeImPrivateChatMessageCreated,
+    #[serde(rename = "EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED")]
+    EventTypeImGlobalChatMessageCreated,
     #[serde(rename = "EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE")]
     EventTypeGameIdleChatMessage,
     #[serde(rename = "EVENT_TYPE_GAME_IDLE_CLOSE_SESSION")]

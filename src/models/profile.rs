@@ -25,6 +25,8 @@ pub struct Profile {
     pub visibility: Option<models::ProfileVisibility>,
     #[serde(rename = "viewer_relation", skip_serializing_if = "Option::is_none")]
     pub viewer_relation: Option<models::ProfileRelation>,
+    #[serde(rename = "online", skip_serializing_if = "Option::is_none")]
+    pub online: Option<bool>,
 }
 
 impl Profile {
@@ -36,6 +38,7 @@ impl Profile {
             last_success_login_at: None,
             visibility: None,
             viewer_relation: None,
+            online: None,
         }
     }
 }

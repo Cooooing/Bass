@@ -26,6 +26,7 @@ type Profile struct {
 	LastSuccessLoginAt *time.Time `json:"last_success_login_at,omitempty"`
 	Visibility *ProfileVisibility `json:"visibility,omitempty"`
 	ViewerRelation *ProfileRelation `json:"viewer_relation,omitempty"`
+	Online *bool `json:"online,omitempty"`
 }
 
 // NewProfile instantiates a new Profile object
@@ -237,6 +238,38 @@ func (o *Profile) SetViewerRelation(v ProfileRelation) {
 	o.ViewerRelation = &v
 }
 
+// GetOnline returns the Online field value if set, zero value otherwise.
+func (o *Profile) GetOnline() bool {
+	if o == nil || IsNil(o.Online) {
+		var ret bool
+		return ret
+	}
+	return *o.Online
+}
+
+// GetOnlineOk returns a tuple with the Online field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Profile) GetOnlineOk() (*bool, bool) {
+	if o == nil || IsNil(o.Online) {
+		return nil, false
+	}
+	return o.Online, true
+}
+
+// HasOnline returns a boolean if a field has been set.
+func (o *Profile) HasOnline() bool {
+	if o != nil && !IsNil(o.Online) {
+		return true
+	}
+
+	return false
+}
+
+// SetOnline gets a reference to the given bool and assigns it to the Online field.
+func (o *Profile) SetOnline(v bool) {
+	o.Online = &v
+}
+
 func (o Profile) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -264,6 +297,9 @@ func (o Profile) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.ViewerRelation) {
 		toSerialize["viewer_relation"] = o.ViewerRelation
+	}
+	if !IsNil(o.Online) {
+		toSerialize["online"] = o.Online
 	}
 	return toSerialize, nil
 }

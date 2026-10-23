@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **LastSuccessLoginAt** | Pointer to **time.Time** |  | [optional] 
 **Visibility** | Pointer to [**ProfileVisibility**](ProfileVisibility.md) |  | [optional] 
 **ViewerRelation** | Pointer to [**ProfileRelation**](ProfileRelation.md) |  | [optional] 
+**Online** | Pointer to **bool** |  | [optional] 
 
 ## Methods
 
@@ -179,6 +180,31 @@ SetViewerRelation sets ViewerRelation field to given value.
 `func (o *Profile) HasViewerRelation() bool`
 
 HasViewerRelation returns a boolean if a field has been set.
+
+### GetOnline
+
+`func (o *Profile) GetOnline() bool`
+
+GetOnline returns the Online field if non-nil, zero value otherwise.
+
+### GetOnlineOk
+
+`func (o *Profile) GetOnlineOk() (*bool, bool)`
+
+GetOnlineOk returns a tuple with the Online field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetOnline
+
+`func (o *Profile) SetOnline(v bool)`
+
+SetOnline sets Online field to given value.
+
+### HasOnline
+
+`func (o *Profile) HasOnline() bool`
+
+HasOnline returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

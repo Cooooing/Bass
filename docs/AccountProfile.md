@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **Status** | Pointer to **string** |  | [optional] 
 **FollowCount** | Pointer to **int32** |  | [optional] 
 **FollowerCount** | Pointer to **int32** |  | [optional] 
+**ProfileUrl** | Pointer to **string** |  | [optional] 
 **CreatedAt** | Pointer to **time.Time** |  | [optional] 
 **UpdatedAt** | Pointer to **time.Time** |  | [optional] 
 
@@ -311,6 +312,31 @@ SetFollowerCount sets FollowerCount field to given value.
 `func (o *AccountProfile) HasFollowerCount() bool`
 
 HasFollowerCount returns a boolean if a field has been set.
+
+### GetProfileUrl
+
+`func (o *AccountProfile) GetProfileUrl() string`
+
+GetProfileUrl returns the ProfileUrl field if non-nil, zero value otherwise.
+
+### GetProfileUrlOk
+
+`func (o *AccountProfile) GetProfileUrlOk() (*string, bool)`
+
+GetProfileUrlOk returns a tuple with the ProfileUrl field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetProfileUrl
+
+`func (o *AccountProfile) SetProfileUrl(v string)`
+
+SetProfileUrl sets ProfileUrl field to given value.
+
+### HasProfileUrl
+
+`func (o *AccountProfile) HasProfileUrl() bool`
+
+HasProfileUrl returns a boolean if a field has been set.
 
 ### GetCreatedAt
 

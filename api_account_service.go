@@ -120,6 +120,20 @@ type AccountService interface {
 	PrepareProfileImageUploadExecute(r ApiPrepareProfileImageUploadRequest) (*PrepareProfileImageUploadAccountResp, *http.Response, error)
 
 	/*
+	SearchMention Method for SearchMention
+
+	检索可提及账号的候选项。
+
+	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+	@return ApiSearchMentionRequest
+	*/
+	SearchMention(ctx context.Context) ApiSearchMentionRequest
+
+	// SearchMentionExecute executes the request
+	//  @return SearchMentionAccountsResp
+	SearchMentionExecute(r ApiSearchMentionRequest) (*SearchMentionAccountsResp, *http.Response, error)
+
+	/*
 	UpdateEmail Method for UpdateEmail
 
 	更新当前账号邮箱
@@ -910,6 +924,116 @@ func (a *AccountServiceService) PrepareProfileImageUploadExecute(r ApiPreparePro
 	}
 	// body params
 	localVarPostBody = r.prepareProfileImageUploadAccountReq
+	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(req)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := io.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	localVarHTTPResponse.Body = io.NopCloser(bytes.NewBuffer(localVarBody))
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := &GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+type ApiSearchMentionRequest struct {
+	ctx context.Context
+	ApiService AccountService
+	searchMentionAccountsReq *SearchMentionAccountsReq
+}
+
+func (r ApiSearchMentionRequest) SearchMentionAccountsReq(searchMentionAccountsReq SearchMentionAccountsReq) ApiSearchMentionRequest {
+	r.searchMentionAccountsReq = &searchMentionAccountsReq
+	return r
+}
+
+func (r ApiSearchMentionRequest) Execute() (*SearchMentionAccountsResp, *http.Response, error) {
+	return r.ApiService.SearchMentionExecute(r)
+}
+
+/*
+SearchMention Method for SearchMention
+
+检索可提及账号的候选项。
+
+ @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ @return ApiSearchMentionRequest
+*/
+func (a *AccountServiceService) SearchMention(ctx context.Context) ApiSearchMentionRequest {
+	return ApiSearchMentionRequest{
+		ApiService: a,
+		ctx: ctx,
+	}
+}
+
+// Execute executes the request
+//  @return SearchMentionAccountsResp
+func (a *AccountServiceService) SearchMentionExecute(r ApiSearchMentionRequest) (*SearchMentionAccountsResp, *http.Response, error) {
+	var (
+		localVarHTTPMethod   = http.MethodPost
+		localVarPostBody     interface{}
+		formFiles            []formFile
+		localVarReturnValue  *SearchMentionAccountsResp
+	)
+
+	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "AccountServiceService.SearchMention")
+	if err != nil {
+		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
+	}
+
+	localVarPath := localBasePath + "/v1/user/account/search-mention"
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := url.Values{}
+	localVarFormParams := url.Values{}
+	if r.searchMentionAccountsReq == nil {
+		return localVarReturnValue, nil, reportError("searchMentionAccountsReq is required and must be specified")
+	}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = r.searchMentionAccountsReq
 	req, err := a.client.prepareRequest(r.ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, formFiles)
 	if err != nil {
 		return localVarReturnValue, nil, err

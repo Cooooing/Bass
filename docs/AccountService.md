@@ -11,6 +11,7 @@ Method | HTTP request | Description
 [**ListFollowers**](AccountService.md#ListFollowers) | **Post** /v1/user/account/list-followers | 
 [**ListFollowing**](AccountService.md#ListFollowing) | **Post** /v1/user/account/list-following | 
 [**PrepareProfileImageUpload**](AccountService.md#PrepareProfileImageUpload) | **Post** /v1/user/account/prepare-profile-image-upload | 
+[**SearchMention**](AccountService.md#SearchMention) | **Post** /v1/user/account/search-mention | 
 [**UpdateEmail**](AccountService.md#UpdateEmail) | **Post** /v1/user/account/update-email | 
 [**UpdatePassword**](AccountService.md#UpdatePassword) | **Post** /v1/user/account/update-password | 
 [**UpdatePhone**](AccountService.md#UpdatePhone) | **Post** /v1/user/account/update-phone | 
@@ -465,6 +466,72 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**PrepareProfileImageUploadAccountResp**](PrepareProfileImageUploadAccountResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## SearchMention
+
+> SearchMentionAccountsResp SearchMention(ctx).SearchMentionAccountsReq(searchMentionAccountsReq).Execute()
+
+
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/GIT_USER_ID/GIT_REPO_ID"
+)
+
+func main() {
+	searchMentionAccountsReq := *openapiclient.NewSearchMentionAccountsReq() // SearchMentionAccountsReq | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.AccountService.SearchMention(context.Background()).SearchMentionAccountsReq(searchMentionAccountsReq).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `AccountService.SearchMention``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `SearchMention`: SearchMentionAccountsResp
+	fmt.Fprintf(os.Stdout, "Response from `AccountService.SearchMention`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiSearchMentionRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **searchMentionAccountsReq** | [**SearchMentionAccountsReq**](SearchMentionAccountsReq.md) |  | 
+
+### Return type
+
+[**SearchMentionAccountsResp**](SearchMentionAccountsResp.md)
 
 ### Authorization
 

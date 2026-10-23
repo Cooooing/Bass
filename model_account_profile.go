@@ -31,6 +31,7 @@ type AccountProfile struct {
 	Status *string `json:"status,omitempty"`
 	FollowCount *int32 `json:"follow_count,omitempty"`
 	FollowerCount *int32 `json:"follower_count,omitempty"`
+	ProfileUrl *string `json:"profile_url,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 }
@@ -404,6 +405,38 @@ func (o *AccountProfile) SetFollowerCount(v int32) {
 	o.FollowerCount = &v
 }
 
+// GetProfileUrl returns the ProfileUrl field value if set, zero value otherwise.
+func (o *AccountProfile) GetProfileUrl() string {
+	if o == nil || IsNil(o.ProfileUrl) {
+		var ret string
+		return ret
+	}
+	return *o.ProfileUrl
+}
+
+// GetProfileUrlOk returns a tuple with the ProfileUrl field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *AccountProfile) GetProfileUrlOk() (*string, bool) {
+	if o == nil || IsNil(o.ProfileUrl) {
+		return nil, false
+	}
+	return o.ProfileUrl, true
+}
+
+// HasProfileUrl returns a boolean if a field has been set.
+func (o *AccountProfile) HasProfileUrl() bool {
+	if o != nil && !IsNil(o.ProfileUrl) {
+		return true
+	}
+
+	return false
+}
+
+// SetProfileUrl gets a reference to the given string and assigns it to the ProfileUrl field.
+func (o *AccountProfile) SetProfileUrl(v string) {
+	o.ProfileUrl = &v
+}
+
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
 func (o *AccountProfile) GetCreatedAt() time.Time {
 	if o == nil || IsNil(o.CreatedAt) {
@@ -510,6 +543,9 @@ func (o AccountProfile) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.FollowerCount) {
 		toSerialize["follower_count"] = o.FollowerCount
+	}
+	if !IsNil(o.ProfileUrl) {
+		toSerialize["profile_url"] = o.ProfileUrl
 	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt

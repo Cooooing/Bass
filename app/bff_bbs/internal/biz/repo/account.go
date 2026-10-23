@@ -1,6 +1,7 @@
 package repo
 
 import (
+	commonmodel "common/pkg/model"
 	"context"
 	"time"
 
@@ -11,6 +12,7 @@ type AccountClient interface {
 	GetCurrentAccount(ctx context.Context, userID int64) (*model.Account, error)
 	GetProfile(ctx context.Context, name string) (*model.AccountProfile, *time.Time, error)
 	MapProfileAccounts(ctx context.Context, userIDs []int64) (map[int64]*model.AccountProfile, error)
+	SearchMentionAccounts(ctx context.Context, query string, page *commonmodel.PageReq, excludedUserIDs []int64) ([]*model.AccountProfile, *commonmodel.PageResp, error)
 	UpdateProfileAccount(ctx context.Context, req *UpdateProfileAccountReq) (*model.AccountProfile, error)
 	UpdatePasswordAccount(ctx context.Context, req *UpdatePasswordAccountReq) error
 	UpdateEmailAccount(ctx context.Context, req *UpdateEmailAccountReq) error

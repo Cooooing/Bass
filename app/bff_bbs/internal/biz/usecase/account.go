@@ -13,10 +13,12 @@ import (
 	realtimehubv1 "common/proto/gen/realtime_hub/v1"
 	"context"
 	"log/slog"
+	"net/url"
 	"regexp"
 	"strings"
 
 	"bff_bbs/internal/biz/model"
+	"bff_bbs/internal/config"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
@@ -34,10 +36,13 @@ type AccountUsecase struct {
 	realtimeHub         *rpc.RealtimeHubClient
 	assetHashPattern    *regexp.Regexp
 	maxProfileImageSize int64
+	publicAPIURL        string
+	publicSiteURL       string
 }
 
 func NewAccountUsecase(
 	log *slog.Logger,
+	conf *config.Bootstrap,
 	accountClient repo.AccountClient,
 	assetClient repo.AssetClient,
 	economyClient repo.EconomyClient,
@@ -57,6 +62,8 @@ func NewAccountUsecase(
 		realtimeHub:         realtimeHub,
 		assetHashPattern:    regexp.MustCompile(`^[a-f0-9]{64}$`),
 		maxProfileImageSize: 2 * 1024 * 1024,
+		publicAPIURL:        strings.TrimRight(conf.GetPublicEndpoint().GetApiUrl(), "/"),
+		publicSiteURL:       strings.TrimRight(conf.GetPublicEndpoint().GetSiteUrl(), "/"),
 	}
 }
 func (u *AccountUsecase) GetCurrentAccount(ctx context.Context, userID int64) (*bbsuserv1.GetCurrentAccount_Resp_CurrentAccount, error) {
@@ -144,7 +151,7 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 	if lastLogin != nil {
 		profile.LastSuccessLoginAt = timestamppb.New(*lastLogin)
 	}
-	avatarURL := "/v1/user/account/avatar?name=" + account.Name
+	avatarURL := u.defaultAvatarURL(account.Name)
 	if account.AvatarAssetID != nil && *account.AvatarAssetID > 0 {
 		asset, err := u.assetClient.Get(ctx, *account.AvatarAssetID)
 		if err != nil {
@@ -181,6 +188,36 @@ func (u *AccountUsecase) GetProfile(ctx context.Context, name string, viewerID i
 		profile.ViewerRelation = u.profileRelation(status)
 	}
 	return profile, nil
+}
+
+func (u *AccountUsecase) SearchMentionAccounts(ctx context.Context, userID int64, query string, page *commonmodel.PageReq) ([]*bbsuserv1.AccountProfile, *commonmodel.PageResp, error) {
+	excludedUserIDs, err := u.relationClient.ListBlockedCounterparts(ctx, userID)
+	if err != nil {
+		return nil, nil, err
+	}
+	accounts, pageResp, err := u.accountClient.SearchMentionAccounts(ctx, query, page, excludedUserIDs)
+	if err != nil {
+		return nil, nil, err
+	}
+	rows := make([]*bbsuserv1.AccountProfile, 0, len(accounts))
+	for _, account := range accounts {
+		if account == nil {
+			continue
+		}
+		avatarURL := u.defaultAvatarURL(account.Name)
+		if account.AvatarAssetID != nil && *account.AvatarAssetID > 0 {
+			asset, assetErr := u.assetClient.Get(ctx, *account.AvatarAssetID)
+			if assetErr != nil {
+				return nil, nil, assetErr
+			}
+			if asset != nil && asset.URL != "" {
+				avatarURL = asset.URL
+			}
+		}
+		account.AvatarURL = &avatarURL
+		rows = append(rows, u.accountProfile(account))
+	}
+	return rows, pageResp, nil
 }
 
 func (u *AccountUsecase) ListFollowing(ctx context.Context, name string, viewerID int64, page *commonmodel.PageReq) (*bbsuserv1.ListFollowing_Resp, error) {
@@ -293,7 +330,7 @@ func (u *AccountUsecase) profileListItems(ctx context.Context, viewerID int64, u
 	return rows, nil
 }
 
-func (*AccountUsecase) accountProfile(account *model.AccountProfile) *bbsuserv1.AccountProfile {
+func (u *AccountUsecase) accountProfile(account *model.AccountProfile) *bbsuserv1.AccountProfile {
 	if account == nil {
 		return nil
 	}
@@ -309,6 +346,7 @@ func (*AccountUsecase) accountProfile(account *model.AccountProfile) *bbsuserv1.
 		Status:            bbsuserv1enum.AccountStatus(account.Status),
 		FollowCount:       account.FollowCount,
 		FollowerCount:     account.FollowerCount,
+		ProfileUrl:        u.memberProfileURL(account.Name),
 	}
 	if account.CreatedAt != nil {
 		profile.CreatedAt = timestamppb.New(*account.CreatedAt)
@@ -386,7 +424,7 @@ func (u *AccountUsecase) UpdateProfileAccount(ctx context.Context, req *UpdatePr
 	}
 	var profile *bbsuserv1.AccountProfile
 	if row := reply; row != nil {
-		avatarURL := "/v1/user/account/avatar?name=" + row.Name
+		avatarURL := u.defaultAvatarURL(row.Name)
 		if row.AvatarAssetID != nil && *row.AvatarAssetID > 0 && u.assetClient != nil {
 			asset, err := u.assetClient.Get(ctx, *row.AvatarAssetID)
 			if err != nil {
@@ -530,6 +568,14 @@ func (u *AccountUsecase) validProfileImageHashAndMime(hash, mimeType string) boo
 		return true
 	}
 	return false
+}
+
+func (u *AccountUsecase) defaultAvatarURL(name string) string {
+	return u.publicAPIURL + "/v1/user/account/avatar?name=" + url.QueryEscape(name)
+}
+
+func (u *AccountUsecase) memberProfileURL(name string) string {
+	return u.publicSiteURL + "/member/" + url.PathEscape(name)
 }
 
 type UpdatePasswordAccountReq struct {

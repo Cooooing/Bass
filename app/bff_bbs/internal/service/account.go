@@ -77,6 +77,18 @@ func (s *AccountService) ListFollowers(ctx context.Context, req *bbsuserv1.ListF
 	return s.accountUsecase.ListFollowers(ctx, req.GetName(), s.accountIDFromContext(ctx), commonmodel.PageReqFromProto(req.GetPage()))
 }
 
+func (s *AccountService) SearchMention(ctx context.Context, req *bbsuserv1.SearchMentionAccounts_Req) (*bbsuserv1.SearchMentionAccounts_Resp, error) {
+	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
+	if !ok || user == nil {
+		return nil, apperror.New(cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_USER_TOKEN_REQUIRED)
+	}
+	rows, page, err := s.accountUsecase.SearchMentionAccounts(ctx, user.ID, req.GetQuery(), commonmodel.PageReqFromProto(req.GetPage()))
+	if err != nil {
+		return nil, err
+	}
+	return &bbsuserv1.SearchMentionAccounts_Resp{Rows: rows, Page: page.ToProto()}, nil
+}
+
 func (s *AccountService) UpdateProfile(ctx context.Context, req *bbsuserv1.UpdateProfileAccount_Req) (*bbsuserv1.UpdateProfileAccount_Resp, error) {
 	user, ok := util.GetContextValue[*commonmodel.User](ctx, constant.CtxUserInfo)
 	if !ok || user == nil {

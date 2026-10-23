@@ -2,6 +2,7 @@ package data
 
 import (
 	"common/pkg/client/rpc"
+	commonmodel "common/pkg/model"
 	userv1 "common/proto/gen/user/v1"
 	"context"
 	"time"
@@ -86,6 +87,20 @@ func (r *AccountClient) MapProfileAccounts(ctx context.Context, userIDs []int64)
 		profiles[id] = r.accountProfile(account.GetBasic())
 	}
 	return profiles, nil
+}
+
+func (r *AccountClient) SearchMentionAccounts(ctx context.Context, query string, page *commonmodel.PageReq, excludedUserIDs []int64) ([]*model.AccountProfile, *commonmodel.PageResp, error) {
+	reply, err := r.userClient.Account.SearchMention(ctx, &userv1.SearchMentionAccounts_Req{Query: query, Page: page.ToProto(), ExcludedUserIds: excludedUserIDs})
+	if err != nil {
+		return nil, nil, err
+	}
+	rows := make([]*model.AccountProfile, 0, len(reply.GetRows()))
+	for _, account := range reply.GetRows() {
+		if profile := r.accountProfile(account); profile != nil {
+			rows = append(rows, profile)
+		}
+	}
+	return rows, commonmodel.PageRespFromProto(reply.GetPage()), nil
 }
 
 func (r *AccountClient) accountProfile(account *userv1.AccountBasic) *model.AccountProfile {

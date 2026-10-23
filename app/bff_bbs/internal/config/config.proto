@@ -13,4 +13,10 @@ message Bootstrap {
   common.api.app.common.Redis redis = 6;
   common.api.app.common.Trace trace = 8;
   common.api.app.common.Observability observability = 9;
+  PublicEndpoint public_endpoint = 10;
+
+  message PublicEndpoint {
+    string api_url = 1;
+    string site_url = 2;
+  }
 }

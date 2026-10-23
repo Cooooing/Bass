@@ -41,6 +41,13 @@ service AccountService {
       body: "*"
     };
   }
+  // 检索可提及账号的候选项。
+  rpc SearchMention(SearchMentionAccounts.Req) returns (SearchMentionAccounts.Resp) {
+    option (google.api.http) = {
+      post: "/v1/user/account/search-mention"
+      body: "*"
+    };
+  }
   // 更新当前账号展示资料
   rpc UpdateProfile(UpdateProfileAccount.Req) returns (UpdateProfileAccount.Resp) {
     option (google.api.http) = {
@@ -103,6 +110,7 @@ message AccountProfile {
   AccountStatus status = 9; // 账号状态
   optional int32 follow_count = 10; // 关注数量
   optional int32 follower_count = 11; // 粉丝数量
+  string profile_url = 12; // 社区个人主页 URL。
   google.protobuf.Timestamp created_at = 1000; // 创建时间
   google.protobuf.Timestamp updated_at = 1001; // 更新时间
 }
@@ -192,6 +200,17 @@ message ListFollowers {
   message Resp {
     .common.api.app.common.PageResp page = 1;
     repeated AccountProfileListItem rows = 2;
+  }
+}
+
+message SearchMentionAccounts {
+  message Req {
+    string query = 1; // 用户名或昵称搜索词，可为空。
+    .common.api.app.common.PageReq page = 2; // 分页参数。
+  }
+  message Resp {
+    repeated AccountProfile rows = 1; // 最多五个可提及账号候选。
+    .common.api.app.common.PageResp page = 2; // 分页结果。
   }
 }
 

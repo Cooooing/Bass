@@ -74,6 +74,16 @@ import {
     PrepareProfileImageUploadAccountRespToJSON,
 } from '../models/PrepareProfileImageUploadAccountResp';
 import {
+    type SearchMentionAccountsReq,
+    SearchMentionAccountsReqFromJSON,
+    SearchMentionAccountsReqToJSON,
+} from '../models/SearchMentionAccountsReq';
+import {
+    type SearchMentionAccountsResp,
+    SearchMentionAccountsRespFromJSON,
+    SearchMentionAccountsRespToJSON,
+} from '../models/SearchMentionAccountsResp';
+import {
     type UpdateEmailAccountReq,
     UpdateEmailAccountReqFromJSON,
     UpdateEmailAccountReqToJSON,
@@ -125,6 +135,10 @@ export interface ListFollowingRequest {
 
 export interface PrepareProfileImageUploadRequest {
     prepareProfileImageUploadAccountReq: PrepareProfileImageUploadAccountReq;
+}
+
+export interface SearchMentionRequest {
+    searchMentionAccountsReq: SearchMentionAccountsReq;
 }
 
 export interface UpdateEmailRequest {
@@ -303,6 +317,28 @@ export interface AccountServiceInterface {
      * 申请当前账号资料图片的内容寻址直传能力。
      */
     prepareProfileImageUpload(requestParameters: PrepareProfileImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PrepareProfileImageUploadAccountResp>;
+
+    /**
+     * Creates request options for searchMention without sending the request
+     * @param {SearchMentionAccountsReq} searchMentionAccountsReq 
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    searchMentionRequestOpts(requestParameters: SearchMentionRequest): Promise<runtime.RequestOpts>;
+
+    /**
+     * 检索可提及账号的候选项。
+     * @param {SearchMentionAccountsReq} searchMentionAccountsReq 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountServiceInterface
+     */
+    searchMentionRaw(requestParameters: SearchMentionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SearchMentionAccountsResp>>;
+
+    /**
+     * 检索可提及账号的候选项。
+     */
+    searchMention(requestParameters: SearchMentionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SearchMentionAccountsResp>;
 
     /**
      * Creates request options for updateEmail without sending the request
@@ -719,6 +755,53 @@ export class AccountService extends runtime.BaseAPI implements AccountServiceInt
      */
     async prepareProfileImageUpload(requestParameters: PrepareProfileImageUploadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PrepareProfileImageUploadAccountResp> {
         const response = await this.prepareProfileImageUploadRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for searchMention without sending the request
+     */
+    async searchMentionRequestOpts(requestParameters: SearchMentionRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['searchMentionAccountsReq'] == null) {
+            throw new runtime.RequiredError(
+                'searchMentionAccountsReq',
+                'Required parameter "searchMentionAccountsReq" was null or undefined when calling searchMention().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/v1/user/account/search-mention`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: SearchMentionAccountsReqToJSON(requestParameters['searchMentionAccountsReq']),
+        };
+    }
+
+    /**
+     * 检索可提及账号的候选项。
+     */
+    async searchMentionRaw(requestParameters: SearchMentionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SearchMentionAccountsResp>> {
+        const requestOptions = await this.searchMentionRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SearchMentionAccountsRespFromJSON(jsonValue));
+    }
+
+    /**
+     * 检索可提及账号的候选项。
+     */
+    async searchMention(requestParameters: SearchMentionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SearchMentionAccountsResp> {
+        const response = await this.searchMentionRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

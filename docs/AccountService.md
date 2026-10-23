@@ -11,6 +11,7 @@ All URIs are relative to *http://localhost*
 | [**listFollowers**](AccountService.md#listfollowers) | **POST** /v1/user/account/list-followers |  |
 | [**listFollowing**](AccountService.md#listfollowing) | **POST** /v1/user/account/list-following |  |
 | [**prepareProfileImageUpload**](AccountService.md#prepareprofileimageupload) | **POST** /v1/user/account/prepare-profile-image-upload |  |
+| [**searchMention**](AccountService.md#searchmention) | **POST** /v1/user/account/search-mention |  |
 | [**updateEmail**](AccountService.md#updateemail) | **POST** /v1/user/account/update-email |  |
 | [**updatePassword**](AccountService.md#updatepassword) | **POST** /v1/user/account/update-password |  |
 | [**updatePhone**](AccountService.md#updatephone) | **POST** /v1/user/account/update-phone |  |
@@ -468,6 +469,73 @@ example().catch(console.error);
 ### Return type
 
 [**PrepareProfileImageUploadAccountResp**](PrepareProfileImageUploadAccountResp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: `application/json`
+- **Accept**: `application/json`
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
+
+
+## searchMention
+
+> SearchMentionAccountsResp searchMention(searchMentionAccountsReq)
+
+
+
+检索可提及账号的候选项。
+
+### Example
+
+```ts
+import {
+  Configuration,
+  AccountService,
+} from '@bass/bbs-sdk-fetch';
+import type { SearchMentionRequest } from '@bass/bbs-sdk-fetch';
+
+async function example() {
+  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
+  const api = new AccountService();
+
+  const body = {
+    // SearchMentionAccountsReq
+    searchMentionAccountsReq: ...,
+  } satisfies SearchMentionRequest;
+
+  try {
+    const data = await api.searchMention(body);
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// Run the test
+example().catch(console.error);
+```
+
+### Parameters
+
+
+| Name | Type | Description  | Notes |
+|------------- | ------------- | ------------- | -------------|
+| **searchMentionAccountsReq** | [SearchMentionAccountsReq](SearchMentionAccountsReq.md) |  | |
+
+### Return type
+
+[**SearchMentionAccountsResp**](SearchMentionAccountsResp.md)
 
 ### Authorization
 

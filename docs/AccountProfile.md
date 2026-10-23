@@ -17,6 +17,7 @@ Name | Type
 `status` | string
 `followCount` | number
 `followerCount` | number
+`profileUrl` | string
 `createdAt` | Date
 `updatedAt` | Date
 
@@ -38,6 +39,7 @@ const example = {
   "status": null,
   "followCount": null,
   "followerCount": null,
+  "profileUrl": null,
   "createdAt": null,
   "updatedAt": null,
 } satisfies AccountProfile

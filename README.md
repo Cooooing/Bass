@@ -57,6 +57,7 @@ All URIs are relative to *http://localhost*
 *AccountService* | [**listFollowers**](docs/AccountService.md#listfollowers) | **POST** /v1/user/account/list-followers | 
 *AccountService* | [**listFollowing**](docs/AccountService.md#listfollowing) | **POST** /v1/user/account/list-following | 
 *AccountService* | [**prepareProfileImageUpload**](docs/AccountService.md#prepareprofileimageupload) | **POST** /v1/user/account/prepare-profile-image-upload | 
+*AccountService* | [**searchMention**](docs/AccountService.md#searchmention) | **POST** /v1/user/account/search-mention | 
 *AccountService* | [**updateEmail**](docs/AccountService.md#updateemail) | **POST** /v1/user/account/update-email | 
 *AccountService* | [**updatePassword**](docs/AccountService.md#updatepassword) | **POST** /v1/user/account/update-password | 
 *AccountService* | [**updatePhone**](docs/AccountService.md#updatephone) | **POST** /v1/user/account/update-phone | 
@@ -337,6 +338,8 @@ All URIs are relative to *http://localhost*
 - [RewardArticleReq](docs/RewardArticleReq.md)
 - [SearchArticlesReq](docs/SearchArticlesReq.md)
 - [SearchArticlesResp](docs/SearchArticlesResp.md)
+- [SearchMentionAccountsReq](docs/SearchMentionAccountsReq.md)
+- [SearchMentionAccountsResp](docs/SearchMentionAccountsResp.md)
 - [SendEmailOtpReq](docs/SendEmailOtpReq.md)
 - [SendEmailOtpResp](docs/SendEmailOtpResp.md)
 - [SendGlobalChatMessageReq](docs/SendGlobalChatMessageReq.md)

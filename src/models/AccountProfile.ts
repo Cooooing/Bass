@@ -87,6 +87,12 @@ export interface AccountProfile {
     followerCount?: number;
     /**
      * 
+     * @type {string}
+     * @memberof AccountProfile
+     */
+    profileUrl?: string;
+    /**
+     * 
      * @type {Date}
      * @memberof AccountProfile
      */
@@ -140,6 +146,7 @@ export function AccountProfileFromJSONTyped(json: any, ignoreDiscriminator: bool
         'status': json['status'] == null ? undefined : json['status'],
         'followCount': json['follow_count'] == null ? undefined : json['follow_count'],
         'followerCount': json['follower_count'] == null ? undefined : json['follower_count'],
+        'profileUrl': json['profile_url'] == null ? undefined : json['profile_url'],
         'createdAt': json['created_at'] == null ? undefined : (new Date(json['created_at'])),
         'updatedAt': json['updated_at'] == null ? undefined : (new Date(json['updated_at'])),
     };
@@ -167,6 +174,7 @@ export function AccountProfileToJSONTyped(value?: AccountProfile | null, ignoreD
         'status': value['status'],
         'follow_count': value['followCount'],
         'follower_count': value['followerCount'],
+        'profile_url': value['profileUrl'],
         'created_at': value['createdAt'] == null ? value['createdAt'] : value['createdAt'].toISOString(),
         'updated_at': value['updatedAt'] == null ? value['updatedAt'] : value['updatedAt'].toISOString(),
     };

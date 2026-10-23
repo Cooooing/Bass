@@ -183,6 +183,8 @@ export * from './RevokePrivateChatMessageResp';
 export * from './RewardArticleReq';
 export * from './SearchArticlesReq';
 export * from './SearchArticlesResp';
+export * from './SearchMentionAccountsReq';
+export * from './SearchMentionAccountsResp';
 export * from './SendEmailOtpReq';
 export * from './SendEmailOtpResp';
 export * from './SendGlobalChatMessageReq';

@@ -11,6 +11,7 @@ Method | HTTP request | Description
 [**list_followers**](AccountService.md#list_followers) | **POST** /v1/user/account/list-followers | 
 [**list_following**](AccountService.md#list_following) | **POST** /v1/user/account/list-following | 
 [**prepare_profile_image_upload**](AccountService.md#prepare_profile_image_upload) | **POST** /v1/user/account/prepare-profile-image-upload | 
+[**search_mention**](AccountService.md#search_mention) | **POST** /v1/user/account/search-mention | 
 [**update_email**](AccountService.md#update_email) | **POST** /v1/user/account/update-email | 
 [**update_password**](AccountService.md#update_password) | **POST** /v1/user/account/update-password | 
 [**update_phone**](AccountService.md#update_phone) | **POST** /v1/user/account/update-phone | 
@@ -215,6 +216,36 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::PrepareProfileImageUploadAccountResp**](PrepareProfileImageUploadAccount_Resp.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+
+## search_mention
+
+> models::SearchMentionAccountsResp search_mention(search_mention_accounts_req)
+
+
+检索可提及账号的候选项。
+
+### Parameters
+
+
+Name | Type | Description  | Required | Notes
+------------- | ------------- | ------------- | ------------- | -------------
+**search_mention_accounts_req** | [**SearchMentionAccountsReq**](SearchMentionAccountsReq.md) |  | [required] |
+
+### Return type
+
+[**models::SearchMentionAccountsResp**](SearchMentionAccounts_Resp.md)
 
 ### Authorization
 

@@ -35,6 +35,8 @@ pub struct AccountProfile {
     pub follow_count: Option<i32>,
     #[serde(rename = "follower_count", skip_serializing_if = "Option::is_none")]
     pub follower_count: Option<i32>,
+    #[serde(rename = "profile_url", skip_serializing_if = "Option::is_none")]
+    pub profile_url: Option<String>,
     #[serde(rename = "created_at", skip_serializing_if = "Option::is_none")]
     pub created_at: Option<chrono::DateTime<chrono::FixedOffset>>,
     #[serde(rename = "updated_at", skip_serializing_if = "Option::is_none")]
@@ -55,6 +57,7 @@ impl AccountProfile {
             status: None,
             follow_count: None,
             follower_count: None,
+            profile_url: None,
             created_at: None,
             updated_at: None,
         }

@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **status** | Option<**Status**> |  (enum: ACCOUNT_STATUS_UNSPECIFIED, ACCOUNT_STATUS_NORMAL, ACCOUNT_STATUS_BANNED, ACCOUNT_STATUS_CANCELLED) | [optional]
 **follow_count** | Option<**i32**> |  | [optional]
 **follower_count** | Option<**i32**> |  | [optional]
+**profile_url** | Option<**String**> |  | [optional]
 **created_at** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
 **updated_at** | Option<**chrono::DateTime<chrono::FixedOffset>**> |  | [optional]
 

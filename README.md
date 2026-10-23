@@ -33,6 +33,7 @@ Class | Method | HTTP request | Description
 *AccountService* | [**list_followers**](docs/AccountService.md#list_followers) | **POST** /v1/user/account/list-followers | 
 *AccountService* | [**list_following**](docs/AccountService.md#list_following) | **POST** /v1/user/account/list-following | 
 *AccountService* | [**prepare_profile_image_upload**](docs/AccountService.md#prepare_profile_image_upload) | **POST** /v1/user/account/prepare-profile-image-upload | 
+*AccountService* | [**search_mention**](docs/AccountService.md#search_mention) | **POST** /v1/user/account/search-mention | 
 *AccountService* | [**update_email**](docs/AccountService.md#update_email) | **POST** /v1/user/account/update-email | 
 *AccountService* | [**update_password**](docs/AccountService.md#update_password) | **POST** /v1/user/account/update-password | 
 *AccountService* | [**update_phone**](docs/AccountService.md#update_phone) | **POST** /v1/user/account/update-phone | 
@@ -313,6 +314,8 @@ Class | Method | HTTP request | Description
  - [RewardArticleReq](docs/RewardArticleReq.md)
  - [SearchArticlesReq](docs/SearchArticlesReq.md)
  - [SearchArticlesResp](docs/SearchArticlesResp.md)
+ - [SearchMentionAccountsReq](docs/SearchMentionAccountsReq.md)
+ - [SearchMentionAccountsResp](docs/SearchMentionAccountsResp.md)
  - [SendEmailOtpReq](docs/SendEmailOtpReq.md)
  - [SendEmailOtpResp](docs/SendEmailOtpResp.md)
  - [SendGlobalChatMessageReq](docs/SendGlobalChatMessageReq.md)

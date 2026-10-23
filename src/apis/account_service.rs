@@ -55,6 +55,11 @@ pub trait AccountService: Send + Sync {
     /// 申请当前账号资料图片的内容寻址直传能力。
     async fn prepare_profile_image_upload<'prepare_profile_image_upload_account_req>(&self, prepare_profile_image_upload_account_req: models::PrepareProfileImageUploadAccountReq) -> Result<models::PrepareProfileImageUploadAccountResp, Error<PrepareProfileImageUploadError>>;
 
+    /// POST /v1/user/account/search-mention
+    ///
+    /// 检索可提及账号的候选项。
+    async fn search_mention<'search_mention_accounts_req>(&self, search_mention_accounts_req: models::SearchMentionAccountsReq) -> Result<models::SearchMentionAccountsResp, Error<SearchMentionError>>;
+
     /// POST /v1/user/account/update-email
     ///
     /// 更新当前账号邮箱
@@ -365,6 +370,45 @@ impl AccountService for AccountServiceClient {
         }
     }
 
+    /// 检索可提及账号的候选项。
+    async fn search_mention<'search_mention_accounts_req>(&self, search_mention_accounts_req: models::SearchMentionAccountsReq) -> Result<models::SearchMentionAccountsResp, Error<SearchMentionError>> {
+        let local_var_configuration = &self.configuration;
+
+        let local_var_client = &local_var_configuration.client;
+
+        let local_var_uri_str = format!("{}/v1/user/account/search-mention", local_var_configuration.base_path);
+        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
+
+        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
+            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
+        }
+        local_var_req_builder = local_var_req_builder.json(&search_mention_accounts_req);
+
+        let local_var_req = local_var_req_builder.build()?;
+        let local_var_resp = local_var_client.execute(local_var_req).await?;
+
+        let local_var_status = local_var_resp.status();
+        let local_var_content_type = local_var_resp
+            .headers()
+            .get("content-type")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("application/octet-stream");
+        let local_var_content_type = super::ContentType::from(local_var_content_type);
+        let local_var_content = local_var_resp.text().await?;
+
+        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
+            match local_var_content_type {
+                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
+                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::SearchMentionAccountsResp`"))),
+                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::SearchMentionAccountsResp`")))),
+            }
+        } else {
+            let local_var_entity: Option<SearchMentionError> = serde_json::from_str(&local_var_content).ok();
+            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
+            Err(Error::ResponseError(local_var_error))
+        }
+    }
+
     /// 更新当前账号邮箱
     async fn update_email<'update_email_account_req>(&self, update_email_account_req: models::UpdateEmailAccountReq) -> Result<serde_json::Value, Error<UpdateEmailError>> {
         let local_var_configuration = &self.configuration;
@@ -569,6 +613,13 @@ pub enum ListFollowingError {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum PrepareProfileImageUploadError {
+    UnknownValue(serde_json::Value),
+}
+
+/// struct for typed errors of method [`AccountService::search_mention`]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum SearchMentionError {
     UnknownValue(serde_json::Value),
 }
 

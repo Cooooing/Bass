@@ -205,6 +205,8 @@ docs/RevokePrivateChatMessageResp.md
 docs/RewardArticleReq.md
 docs/SearchArticlesReq.md
 docs/SearchArticlesResp.md
+docs/SearchMentionAccountsReq.md
+docs/SearchMentionAccountsResp.md
 docs/SendEmailOtpReq.md
 docs/SendEmailOtpResp.md
 docs/SendGlobalChatMessageReq.md
@@ -450,6 +452,8 @@ src/models/revoke_private_chat_message_resp.rs
 src/models/reward_article_req.rs
 src/models/search_articles_req.rs
 src/models/search_articles_resp.rs
+src/models/search_mention_accounts_req.rs
+src/models/search_mention_accounts_resp.rs
 src/models/send_email_otp_req.rs
 src/models/send_email_otp_resp.rs
 src/models/send_global_chat_message_req.rs

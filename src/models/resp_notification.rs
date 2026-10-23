@@ -105,6 +105,10 @@ pub enum EventType {
     EventTypeArticlePollEnded,
     #[serde(rename = "EVENT_TYPE_ARTICLE_LOTTERY_DRAWN")]
     EventTypeArticleLotteryDrawn,
+    #[serde(rename = "EVENT_TYPE_ARTICLE_MENTIONED")]
+    EventTypeArticleMentioned,
+    #[serde(rename = "EVENT_TYPE_POSTSCRIPT_MENTIONED")]
+    EventTypePostscriptMentioned,
     #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED")]
     EventTypeArticleWatchedCommentPublished,
     #[serde(rename = "EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED")]
@@ -123,10 +127,14 @@ pub enum EventType {
     EventTypeCommentThanked,
     #[serde(rename = "EVENT_TYPE_COMMENT_STATUS_UPDATED")]
     EventTypeCommentStatusUpdated,
+    #[serde(rename = "EVENT_TYPE_COMMENT_MENTIONED")]
+    EventTypeCommentMentioned,
     #[serde(rename = "EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED")]
     EventTypeImPrivateChatMessageCreated,
     #[serde(rename = "EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED")]
     EventTypeImGlobalChatMessageCreated,
+    #[serde(rename = "EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED")]
+    EventTypeImGlobalChatMentioned,
     #[serde(rename = "EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE")]
     EventTypeGameIdleChatMessage,
     #[serde(rename = "EVENT_TYPE_GAME_IDLE_CLOSE_SESSION")]

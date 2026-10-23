@@ -18,6 +18,7 @@
 |**status** | [**StatusEnum**](#StatusEnum) |  |  [optional] |
 |**followCount** | **Integer** |  |  [optional] |
 |**followerCount** | **Integer** |  |  [optional] |
+|**profileUrl** | **String** |  |  [optional] |
 |**createdAt** | **OffsetDateTime** |  |  [optional] |
 |**updatedAt** | **OffsetDateTime** |  |  [optional] |
 

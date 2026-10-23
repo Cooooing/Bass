@@ -1589,6 +1589,28 @@ paths:
       x-content-type: application/json
       x-accepts:
       - application/json
+  /v1/user/account/search-mention:
+    post:
+      description: 检索可提及账号的候选项。
+      operationId: AccountService_SearchMention
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchMentionAccounts_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchMentionAccounts_Resp"
+          description: OK
+      tags:
+      - AccountService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
   /v1/user/account/update-email:
     post:
       description: 更新当前账号邮箱
@@ -2292,6 +2314,7 @@ components:
       type: object
     AccountProfile:
       example:
+        profile_url: profile_url
         created_at: 2000-01-23T04:56:07.000+00:00
         background_asset_id: background_asset_id
         follower_count: 3
@@ -2336,6 +2359,8 @@ components:
         follower_count:
           format: int32
           type: integer
+        profile_url:
+          type: string
         created_at:
           format: date-time
           type: string
@@ -2351,6 +2376,7 @@ components:
           blocked_by: true
           following: true
         account:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -2435,6 +2461,7 @@ components:
         content: content
         reward_content: reward_content
         last_reply_user:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -2508,7 +2535,8 @@ components:
             id: id
             winner_limit: 4
             winner_users:
-            - created_at: 2000-01-23T04:56:07.000+00:00
+            - profile_url: profile_url
+              created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
               follower_count: 3
               url: url
@@ -2521,7 +2549,8 @@ components:
               id: id
               introduction: introduction
               status: ACCOUNT_STATUS_UNSPECIFIED
-            - created_at: 2000-01-23T04:56:07.000+00:00
+            - profile_url: profile_url
+              created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
               follower_count: 3
               url: url
@@ -2539,7 +2568,8 @@ components:
             id: id
             winner_limit: 4
             winner_users:
-            - created_at: 2000-01-23T04:56:07.000+00:00
+            - profile_url: profile_url
+              created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
               follower_count: 3
               url: url
@@ -2552,7 +2582,8 @@ components:
               id: id
               introduction: introduction
               status: ACCOUNT_STATUS_UNSPECIFIED
-            - created_at: 2000-01-23T04:56:07.000+00:00
+            - profile_url: profile_url
+              created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
               follower_count: 3
               url: url
@@ -2587,6 +2618,7 @@ components:
         restriction: CONTENT_RESTRICTION_UNSPECIFIED
         updated_by: updated_by
         author_user:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -2754,6 +2786,7 @@ components:
         type: ARTICLE_TYPE_UNSPECIFIED
         content: content
         last_reply_user:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -2817,6 +2850,7 @@ components:
         restriction: CONTENT_RESTRICTION_UNSPECIFIED
         updated_by: updated_by
         author_user:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -2947,7 +2981,8 @@ components:
           id: id
           winner_limit: 4
           winner_users:
-          - created_at: 2000-01-23T04:56:07.000+00:00
+          - profile_url: profile_url
+            created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
             url: url
@@ -2960,7 +2995,8 @@ components:
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
-          - created_at: 2000-01-23T04:56:07.000+00:00
+          - profile_url: profile_url
+            created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
             url: url
@@ -2978,7 +3014,8 @@ components:
           id: id
           winner_limit: 4
           winner_users:
-          - created_at: 2000-01-23T04:56:07.000+00:00
+          - profile_url: profile_url
+            created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
             url: url
@@ -2991,7 +3028,8 @@ components:
             id: id
             introduction: introduction
             status: ACCOUNT_STATUS_UNSPECIFIED
-          - created_at: 2000-01-23T04:56:07.000+00:00
+          - profile_url: profile_url
+            created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
             url: url
@@ -3040,7 +3078,8 @@ components:
         id: id
         winner_limit: 4
         winner_users:
-        - created_at: 2000-01-23T04:56:07.000+00:00
+        - profile_url: profile_url
+          created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
           url: url
@@ -3053,7 +3092,8 @@ components:
           id: id
           introduction: introduction
           status: ACCOUNT_STATUS_UNSPECIFIED
-        - created_at: 2000-01-23T04:56:07.000+00:00
+        - profile_url: profile_url
+          created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
           url: url
@@ -3225,6 +3265,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -3288,6 +3329,7 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -3448,6 +3490,7 @@ components:
           thanked: true
           liked: true
         reply_user:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -3475,6 +3518,7 @@ components:
         updated_by: updated_by
         id: id
         user:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -3585,6 +3629,7 @@ components:
       example:
         image_url: image_url
         profile:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -3775,6 +3820,7 @@ components:
         moonbreeze:
           city: city
           author:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -3923,6 +3969,7 @@ components:
           content: content
           reward_content: reward_content
           last_reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -3996,7 +4043,8 @@ components:
               id: id
               winner_limit: 4
               winner_users:
-              - created_at: 2000-01-23T04:56:07.000+00:00
+              - profile_url: profile_url
+                created_at: 2000-01-23T04:56:07.000+00:00
                 background_asset_id: background_asset_id
                 follower_count: 3
                 url: url
@@ -4009,7 +4057,8 @@ components:
                 id: id
                 introduction: introduction
                 status: ACCOUNT_STATUS_UNSPECIFIED
-              - created_at: 2000-01-23T04:56:07.000+00:00
+              - profile_url: profile_url
+                created_at: 2000-01-23T04:56:07.000+00:00
                 background_asset_id: background_asset_id
                 follower_count: 3
                 url: url
@@ -4027,7 +4076,8 @@ components:
               id: id
               winner_limit: 4
               winner_users:
-              - created_at: 2000-01-23T04:56:07.000+00:00
+              - profile_url: profile_url
+                created_at: 2000-01-23T04:56:07.000+00:00
                 background_asset_id: background_asset_id
                 follower_count: 3
                 url: url
@@ -4040,7 +4090,8 @@ components:
                 id: id
                 introduction: introduction
                 status: ACCOUNT_STATUS_UNSPECIFIED
-              - created_at: 2000-01-23T04:56:07.000+00:00
+              - profile_url: profile_url
+                created_at: 2000-01-23T04:56:07.000+00:00
                 background_asset_id: background_asset_id
                 follower_count: 3
                 url: url
@@ -4075,6 +4126,7 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -4140,6 +4192,7 @@ components:
       example:
         account:
           profile:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -4295,6 +4348,7 @@ components:
             province: province
             city: city
           account:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -4511,6 +4565,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -4574,6 +4629,7 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -4594,6 +4650,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -4657,6 +4714,7 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -4743,6 +4801,7 @@ components:
             thanked: true
             liked: true
           reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -4770,6 +4829,7 @@ components:
           updated_by: updated_by
           id: id
           user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -4789,6 +4849,7 @@ components:
             thanked: true
             liked: true
           reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -4816,6 +4877,7 @@ components:
           updated_by: updated_by
           id: id
           user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -5766,6 +5828,7 @@ components:
             thanked: true
             liked: true
           reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -5793,6 +5856,7 @@ components:
           updated_by: updated_by
           id: id
           user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -5812,6 +5876,7 @@ components:
             thanked: true
             liked: true
           reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -5839,6 +5904,7 @@ components:
           updated_by: updated_by
           id: id
           user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6125,6 +6191,7 @@ components:
             blocked_by: true
             following: true
           account:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6144,6 +6211,7 @@ components:
             blocked_by: true
             following: true
           account:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6183,6 +6251,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6246,6 +6315,7 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6266,6 +6336,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6329,6 +6400,7 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6405,6 +6477,7 @@ components:
             blocked_by: true
             following: true
           account:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6424,6 +6497,7 @@ components:
             blocked_by: true
             following: true
           account:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6529,6 +6603,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6592,6 +6667,7 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6612,6 +6688,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -6675,6 +6752,7 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -7012,6 +7090,7 @@ components:
       example:
         city: city
         author:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -7061,6 +7140,7 @@ components:
             type: ARTICLE_TYPE_UNSPECIFIED
             content: content
             last_reply_user:
+              profile_url: profile_url
               created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
               follower_count: 3
@@ -7124,6 +7204,7 @@ components:
             restriction: CONTENT_RESTRICTION_UNSPECIFIED
             updated_by: updated_by
             author_user:
+              profile_url: profile_url
               created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
               follower_count: 3
@@ -7146,6 +7227,7 @@ components:
             type: ARTICLE_TYPE_UNSPECIFIED
             content: content
             last_reply_user:
+              profile_url: profile_url
               created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
               follower_count: 3
@@ -7209,6 +7291,7 @@ components:
             restriction: CONTENT_RESTRICTION_UNSPECIFIED
             updated_by: updated_by
             author_user:
+              profile_url: profile_url
               created_at: 2000-01-23T04:56:07.000+00:00
               background_asset_id: background_asset_id
               follower_count: 3
@@ -7247,6 +7330,7 @@ components:
         rows:
         - city: city
           author:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -7265,6 +7349,7 @@ components:
           content: content
         - city: city
           author:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -7514,6 +7599,7 @@ components:
           province: province
           city: city
         account:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -8688,6 +8774,7 @@ components:
     Resp_CurrentAccount:
       example:
         profile:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3
@@ -8828,6 +8915,8 @@ components:
           - EVENT_TYPE_ARTICLE_LOTTERY_WON
           - EVENT_TYPE_ARTICLE_POLL_ENDED
           - EVENT_TYPE_ARTICLE_LOTTERY_DRAWN
+          - EVENT_TYPE_ARTICLE_MENTIONED
+          - EVENT_TYPE_POSTSCRIPT_MENTIONED
           - EVENT_TYPE_ARTICLE_WATCHED_COMMENT_PUBLISHED
           - EVENT_TYPE_ARTICLE_WATCHED_POSTSCRIPT_ADDED
           - EVENT_TYPE_ARTICLE_WATCHED_ANSWER_ACCEPTED
@@ -8837,8 +8926,10 @@ components:
           - EVENT_TYPE_COMMENT_LIKED
           - EVENT_TYPE_COMMENT_THANKED
           - EVENT_TYPE_COMMENT_STATUS_UPDATED
+          - EVENT_TYPE_COMMENT_MENTIONED
           - EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED
           - EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED
+          - EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED
           - EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE
           - EVENT_TYPE_GAME_IDLE_CLOSE_SESSION
           - EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED
@@ -9350,6 +9441,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -9413,6 +9505,7 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -9433,6 +9526,7 @@ components:
           type: ARTICLE_TYPE_UNSPECIFIED
           content: content
           last_reply_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -9496,6 +9590,7 @@ components:
           restriction: CONTENT_RESTRICTION_UNSPECIFIED
           updated_by: updated_by
           author_user:
+            profile_url: profile_url
             created_at: 2000-01-23T04:56:07.000+00:00
             background_asset_id: background_asset_id
             follower_count: 3
@@ -9517,6 +9612,56 @@ components:
           type: array
         next_cursor:
           type: string
+      type: object
+    SearchMentionAccounts_Req:
+      properties:
+        query:
+          type: string
+        page:
+          $ref: "#/components/schemas/PageReq"
+      type: object
+    SearchMentionAccounts_Resp:
+      example:
+        page:
+          total: total
+          size: size
+          page: page
+        rows:
+        - profile_url: profile_url
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
+          avatar_url: avatar_url
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          follow_count: 9
+          name: name
+          nickname: nickname
+          mbti: mbti
+          id: id
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+        - profile_url: profile_url
+          created_at: 2000-01-23T04:56:07.000+00:00
+          background_asset_id: background_asset_id
+          follower_count: 3
+          url: url
+          avatar_url: avatar_url
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          follow_count: 9
+          name: name
+          nickname: nickname
+          mbti: mbti
+          id: id
+          introduction: introduction
+          status: ACCOUNT_STATUS_UNSPECIFIED
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/AccountProfile"
+          type: array
+        page:
+          $ref: "#/components/schemas/PageResp"
       type: object
     SendEmailOtp_Req:
       properties:
@@ -9861,6 +10006,7 @@ components:
     UpdateProfileAccount_Resp:
       example:
         profile:
+          profile_url: profile_url
           created_at: 2000-01-23T04:56:07.000+00:00
           background_asset_id: background_asset_id
           follower_count: 3

@@ -127,6 +127,14 @@ class AccountProfileTest {
     }
 
     /**
+     * Test the property 'profileUrl'
+     */
+    @Test
+    void profileUrlTest() {
+        // TODO: test profileUrl
+    }
+
+    /**
      * Test the property 'createdAt'
      */
     @Test

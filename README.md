@@ -125,6 +125,8 @@ Class | Method | HTTP request | Description
 *AccountService* | [**listFollowingWithHttpInfo**](docs/AccountService.md#listFollowingWithHttpInfo) | **POST** /v1/user/account/list-following | 
 *AccountService* | [**prepareProfileImageUpload**](docs/AccountService.md#prepareProfileImageUpload) | **POST** /v1/user/account/prepare-profile-image-upload | 
 *AccountService* | [**prepareProfileImageUploadWithHttpInfo**](docs/AccountService.md#prepareProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/prepare-profile-image-upload | 
+*AccountService* | [**searchMention**](docs/AccountService.md#searchMention) | **POST** /v1/user/account/search-mention | 
+*AccountService* | [**searchMentionWithHttpInfo**](docs/AccountService.md#searchMentionWithHttpInfo) | **POST** /v1/user/account/search-mention | 
 *AccountService* | [**updateEmail**](docs/AccountService.md#updateEmail) | **POST** /v1/user/account/update-email | 
 *AccountService* | [**updateEmailWithHttpInfo**](docs/AccountService.md#updateEmailWithHttpInfo) | **POST** /v1/user/account/update-email | 
 *AccountService* | [**updatePassword**](docs/AccountService.md#updatePassword) | **POST** /v1/user/account/update-password | 
@@ -498,6 +500,8 @@ Class | Method | HTTP request | Description
  - [RewardArticleReq](docs/RewardArticleReq.md)
  - [SearchArticlesReq](docs/SearchArticlesReq.md)
  - [SearchArticlesResp](docs/SearchArticlesResp.md)
+ - [SearchMentionAccountsReq](docs/SearchMentionAccountsReq.md)
+ - [SearchMentionAccountsResp](docs/SearchMentionAccountsResp.md)
  - [SendEmailOtpReq](docs/SendEmailOtpReq.md)
  - [SendEmailOtpResp](docs/SendEmailOtpResp.md)
  - [SendGlobalChatMessageReq](docs/SendGlobalChatMessageReq.md)

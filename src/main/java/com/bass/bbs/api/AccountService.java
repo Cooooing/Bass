@@ -30,6 +30,8 @@ import com.bass.bbs.model.ListFollowingReq;
 import com.bass.bbs.model.ListFollowingResp;
 import com.bass.bbs.model.PrepareProfileImageUploadAccountReq;
 import com.bass.bbs.model.PrepareProfileImageUploadAccountResp;
+import com.bass.bbs.model.SearchMentionAccountsReq;
+import com.bass.bbs.model.SearchMentionAccountsResp;
 import com.bass.bbs.model.UpdateEmailAccountReq;
 import com.bass.bbs.model.UpdatePasswordAccountReq;
 import com.bass.bbs.model.UpdatePhoneAccountReq;
@@ -1586,6 +1588,207 @@ public class AccountService {
       }
       public APIPrepareProfileImageUploadRequest build() {
         return new APIPrepareProfileImageUploadRequest(this);
+      }
+    }
+  }
+
+  /**
+   * 
+   * 检索可提及账号的候选项。
+   * @param apiRequest {@link APISearchMentionRequest}
+   * @return SearchMentionAccountsResp
+   * @throws ApiException if fails to make API call
+   */
+  public SearchMentionAccountsResp searchMention(APISearchMentionRequest apiRequest) throws ApiException {
+    return searchMention(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 检索可提及账号的候选项。
+   * @param apiRequest {@link APISearchMentionRequest}
+   * @param headers Optional headers to include in the request
+   * @return SearchMentionAccountsResp
+   * @throws ApiException if fails to make API call
+   */
+  public SearchMentionAccountsResp searchMention(APISearchMentionRequest apiRequest, Map<String, String> headers) throws ApiException {
+    @javax.annotation.Nonnull
+    SearchMentionAccountsReq searchMentionAccountsReq = apiRequest.searchMentionAccountsReq();
+    return searchMention(searchMentionAccountsReq, headers);
+  }
+
+  /**
+   * 
+   * 检索可提及账号的候选项。
+   * @param apiRequest {@link APISearchMentionRequest}
+   * @return ApiResponse&lt;SearchMentionAccountsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<SearchMentionAccountsResp> searchMentionWithHttpInfo(APISearchMentionRequest apiRequest) throws ApiException {
+    return searchMentionWithHttpInfo(apiRequest, null);
+  }
+
+  /**
+   * 
+   * 检索可提及账号的候选项。
+   * @param apiRequest {@link APISearchMentionRequest}
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;SearchMentionAccountsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<SearchMentionAccountsResp> searchMentionWithHttpInfo(APISearchMentionRequest apiRequest, Map<String, String> headers) throws ApiException {
+    SearchMentionAccountsReq searchMentionAccountsReq = apiRequest.searchMentionAccountsReq();
+    return searchMentionWithHttpInfo(searchMentionAccountsReq, headers);
+  }
+
+  /**
+   * 
+   * 检索可提及账号的候选项。
+   * @param searchMentionAccountsReq  (required)
+   * @return SearchMentionAccountsResp
+   * @throws ApiException if fails to make API call
+   */
+  public SearchMentionAccountsResp searchMention(@javax.annotation.Nonnull SearchMentionAccountsReq searchMentionAccountsReq) throws ApiException {
+    return searchMention(searchMentionAccountsReq, null);
+  }
+
+  /**
+   * 
+   * 检索可提及账号的候选项。
+   * @param searchMentionAccountsReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return SearchMentionAccountsResp
+   * @throws ApiException if fails to make API call
+   */
+  public SearchMentionAccountsResp searchMention(@javax.annotation.Nonnull SearchMentionAccountsReq searchMentionAccountsReq, Map<String, String> headers) throws ApiException {
+    ApiResponse<SearchMentionAccountsResp> localVarResponse = searchMentionWithHttpInfo(searchMentionAccountsReq, headers);
+    return localVarResponse.getData();
+  }
+
+  /**
+   * 
+   * 检索可提及账号的候选项。
+   * @param searchMentionAccountsReq  (required)
+   * @return ApiResponse&lt;SearchMentionAccountsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<SearchMentionAccountsResp> searchMentionWithHttpInfo(@javax.annotation.Nonnull SearchMentionAccountsReq searchMentionAccountsReq) throws ApiException {
+    return searchMentionWithHttpInfo(searchMentionAccountsReq, null);
+  }
+
+  /**
+   * 
+   * 检索可提及账号的候选项。
+   * @param searchMentionAccountsReq  (required)
+   * @param headers Optional headers to include in the request
+   * @return ApiResponse&lt;SearchMentionAccountsResp&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public ApiResponse<SearchMentionAccountsResp> searchMentionWithHttpInfo(@javax.annotation.Nonnull SearchMentionAccountsReq searchMentionAccountsReq, Map<String, String> headers) throws ApiException {
+    HttpRequest.Builder localVarRequestBuilder = searchMentionRequestBuilder(searchMentionAccountsReq, headers);
+    try {
+      HttpResponse<InputStream> localVarResponse = memberVarHttpClient.send(
+          localVarRequestBuilder.build(),
+          HttpResponse.BodyHandlers.ofInputStream());
+      if (memberVarResponseInterceptor != null) {
+        memberVarResponseInterceptor.accept(localVarResponse);
+      }
+      InputStream localVarResponseBody = null;
+      try {
+        if (localVarResponse.statusCode()/ 100 != 2) {
+          throw getApiException("searchMention", localVarResponse);
+        }
+        localVarResponseBody = ApiClient.getResponseBody(localVarResponse);
+        if (localVarResponseBody == null) {
+          return new ApiResponse<SearchMentionAccountsResp>(
+              localVarResponse.statusCode(),
+              localVarResponse.headers().map(),
+              null
+          );
+        }
+
+        
+        
+        String responseBody = new String(localVarResponseBody.readAllBytes());
+        SearchMentionAccountsResp responseValue = responseBody.isBlank()? null: memberVarObjectMapper.readValue(responseBody, new TypeReference<SearchMentionAccountsResp>() {});
+        
+
+        return new ApiResponse<SearchMentionAccountsResp>(
+            localVarResponse.statusCode(),
+            localVarResponse.headers().map(),
+            responseValue
+        );
+      } finally {
+        if (localVarResponseBody != null) {
+          localVarResponseBody.close();
+        }
+      }
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new ApiException(e);
+    }
+  }
+
+  private HttpRequest.Builder searchMentionRequestBuilder(@javax.annotation.Nonnull SearchMentionAccountsReq searchMentionAccountsReq, Map<String, String> headers) throws ApiException {
+    // verify the required parameter 'searchMentionAccountsReq' is set
+    if (searchMentionAccountsReq == null) {
+      throw new ApiException(400, "Missing the required parameter 'searchMentionAccountsReq' when calling searchMention");
+    }
+
+    HttpRequest.Builder localVarRequestBuilder = HttpRequest.newBuilder();
+
+    String localVarPath = "/v1/user/account/search-mention";
+
+    localVarRequestBuilder.uri(URI.create(memberVarBaseUri + localVarPath));
+
+    localVarRequestBuilder.header("Content-Type", "application/json");
+    localVarRequestBuilder.header("Accept", "application/json");
+
+    try {
+      byte[] localVarPostBody = memberVarObjectMapper.writeValueAsBytes(searchMentionAccountsReq);
+      localVarRequestBuilder.method("POST", HttpRequest.BodyPublishers.ofByteArray(localVarPostBody));
+    } catch (IOException e) {
+      throw new ApiException(e);
+    }
+    if (memberVarReadTimeout != null) {
+      localVarRequestBuilder.timeout(memberVarReadTimeout);
+    }
+    // Add custom headers if provided
+    localVarRequestBuilder = HttpRequestBuilderExtensions.withAdditionalHeaders(localVarRequestBuilder, headers);
+    if (memberVarInterceptor != null) {
+      memberVarInterceptor.accept(localVarRequestBuilder);
+    }
+    return localVarRequestBuilder;
+  }
+
+
+  public static final class APISearchMentionRequest {
+    @javax.annotation.Nonnull
+    private SearchMentionAccountsReq searchMentionAccountsReq; //  (required)
+
+    private APISearchMentionRequest(Builder builder) {
+      this.searchMentionAccountsReq = builder.searchMentionAccountsReq;
+    }
+    @javax.annotation.Nonnull
+    public SearchMentionAccountsReq searchMentionAccountsReq() {
+      return searchMentionAccountsReq;
+    }
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public static class Builder {
+      private SearchMentionAccountsReq searchMentionAccountsReq;
+
+      public Builder searchMentionAccountsReq(@javax.annotation.Nonnull SearchMentionAccountsReq searchMentionAccountsReq) {
+        this.searchMentionAccountsReq = searchMentionAccountsReq;
+        return this;
+      }
+      public APISearchMentionRequest build() {
+        return new APISearchMentionRequest(this);
       }
     }
   }

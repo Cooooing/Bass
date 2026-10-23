@@ -45,6 +45,7 @@ import com.bass.bbs.ApiClient;
   AccountProfile.JSON_PROPERTY_STATUS,
   AccountProfile.JSON_PROPERTY_FOLLOW_COUNT,
   AccountProfile.JSON_PROPERTY_FOLLOWER_COUNT,
+  AccountProfile.JSON_PROPERTY_PROFILE_URL,
   AccountProfile.JSON_PROPERTY_CREATED_AT,
   AccountProfile.JSON_PROPERTY_UPDATED_AT
 })
@@ -132,6 +133,10 @@ public class AccountProfile {
   public static final String JSON_PROPERTY_FOLLOWER_COUNT = "follower_count";
   @javax.annotation.Nullable
   private Integer followerCount;
+
+  public static final String JSON_PROPERTY_PROFILE_URL = "profile_url";
+  @javax.annotation.Nullable
+  private String profileUrl;
 
   public static final String JSON_PROPERTY_CREATED_AT = "created_at";
   @javax.annotation.Nullable
@@ -408,6 +413,30 @@ public class AccountProfile {
   }
 
 
+  public AccountProfile profileUrl(@javax.annotation.Nullable String profileUrl) {
+    this.profileUrl = profileUrl;
+    return this;
+  }
+
+  /**
+   * Get profileUrl
+   * @return profileUrl
+   */
+  @javax.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PROFILE_URL, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public String getProfileUrl() {
+    return profileUrl;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PROFILE_URL, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setProfileUrl(@javax.annotation.Nullable String profileUrl) {
+    this.profileUrl = profileUrl;
+  }
+
+
   public AccountProfile createdAt(@javax.annotation.Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -479,13 +508,14 @@ public class AccountProfile {
         Objects.equals(this.status, accountProfile.status) &&
         Objects.equals(this.followCount, accountProfile.followCount) &&
         Objects.equals(this.followerCount, accountProfile.followerCount) &&
+        Objects.equals(this.profileUrl, accountProfile.profileUrl) &&
         Objects.equals(this.createdAt, accountProfile.createdAt) &&
         Objects.equals(this.updatedAt, accountProfile.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, nickname, url, avatarUrl, backgroundAssetId, introduction, mbti, status, followCount, followerCount, createdAt, updatedAt);
+    return Objects.hash(id, name, nickname, url, avatarUrl, backgroundAssetId, introduction, mbti, status, followCount, followerCount, profileUrl, createdAt, updatedAt);
   }
 
   @Override
@@ -503,6 +533,7 @@ public class AccountProfile {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    followCount: ").append(toIndentedString(followCount)).append("\n");
     sb.append("    followerCount: ").append(toIndentedString(followerCount)).append("\n");
+    sb.append("    profileUrl: ").append(toIndentedString(profileUrl)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
@@ -602,6 +633,11 @@ public class AccountProfile {
     // add `follower_count` to the URL query string
     if (getFollowerCount() != null) {
       joiner.add(String.format(java.util.Locale.ROOT, "%sfollower_count%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getFollowerCount()))));
+    }
+
+    // add `profile_url` to the URL query string
+    if (getProfileUrl() != null) {
+      joiner.add(String.format(java.util.Locale.ROOT, "%sprofile_url%s=%s", prefix, suffix, ApiClient.urlEncode(ApiClient.valueToString(getProfileUrl()))));
     }
 
     // add `created_at` to the URL query string

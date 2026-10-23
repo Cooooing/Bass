@@ -26,6 +26,8 @@ import com.bass.bbs.model.ListFollowingReq;
 import com.bass.bbs.model.ListFollowingResp;
 import com.bass.bbs.model.PrepareProfileImageUploadAccountReq;
 import com.bass.bbs.model.PrepareProfileImageUploadAccountResp;
+import com.bass.bbs.model.SearchMentionAccountsReq;
+import com.bass.bbs.model.SearchMentionAccountsResp;
 import com.bass.bbs.model.UpdateEmailAccountReq;
 import com.bass.bbs.model.UpdatePasswordAccountReq;
 import com.bass.bbs.model.UpdatePhoneAccountReq;
@@ -193,6 +195,27 @@ public class AccountServiceTest {
           .build();
         PrepareProfileImageUploadAccountResp response = 
         api.prepareProfileImageUpload(request);
+
+        // TODO: test validations
+    }
+    
+    /**
+     * 
+     *
+     * 检索可提及账号的候选项。
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void searchMentionTest() throws ApiException {
+        SearchMentionAccountsReq searchMentionAccountsReq = null;
+        
+        AccountService.APIsearchMentionRequest request = AccountService.APIsearchMentionRequest.newBuilder()
+          .searchMentionAccountsReq(searchMentionAccountsReq)
+          .build();
+        SearchMentionAccountsResp response = 
+        api.searchMention(request);
 
         // TODO: test validations
     }

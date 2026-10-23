@@ -18,6 +18,8 @@ All URIs are relative to *http://localhost*
 | [**listFollowingWithHttpInfo**](AccountService.md#listFollowingWithHttpInfo) | **POST** /v1/user/account/list-following |  |
 | [**prepareProfileImageUpload**](AccountService.md#prepareProfileImageUpload) | **POST** /v1/user/account/prepare-profile-image-upload |  |
 | [**prepareProfileImageUploadWithHttpInfo**](AccountService.md#prepareProfileImageUploadWithHttpInfo) | **POST** /v1/user/account/prepare-profile-image-upload |  |
+| [**searchMention**](AccountService.md#searchMention) | **POST** /v1/user/account/search-mention |  |
+| [**searchMentionWithHttpInfo**](AccountService.md#searchMentionWithHttpInfo) | **POST** /v1/user/account/search-mention |  |
 | [**updateEmail**](AccountService.md#updateEmail) | **POST** /v1/user/account/update-email |  |
 | [**updateEmailWithHttpInfo**](AccountService.md#updateEmailWithHttpInfo) | **POST** /v1/user/account/update-email |  |
 | [**updatePassword**](AccountService.md#updatePassword) | **POST** /v1/user/account/update-password |  |
@@ -1076,6 +1078,156 @@ No authorization required
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
 | **prepareProfileImageUploadAccountReq** | [**PrepareProfileImageUploadAccountReq**](PrepareProfileImageUploadAccountReq.md) |  | |
+
+
+
+## searchMention
+
+> SearchMentionAccountsResp searchMention(searchMentionRequest)
+
+
+
+检索可提及账号的候选项。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        SearchMentionAccountsReq searchMentionAccountsReq = new SearchMentionAccountsReq(); // SearchMentionAccountsReq | 
+        try {
+            APIsearchMentionRequest request = APIsearchMentionRequest.newBuilder()
+                .searchMentionAccountsReq(searchMentionAccountsReq)
+                .build();
+            SearchMentionAccountsResp result = apiInstance.searchMention(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#searchMention");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| searchMentionRequest | [**APIsearchMentionRequest**](AccountService.md#APIsearchMentionRequest)|-|-|
+
+### Return type
+
+[**SearchMentionAccountsResp**](SearchMentionAccountsResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## searchMentionWithHttpInfo
+
+> ApiResponse<SearchMentionAccountsResp> searchMentionWithHttpInfo(searchMentionRequest)
+
+
+
+检索可提及账号的候选项。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.AccountService;
+import com.bass.bbs.api.AccountService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        AccountService apiInstance = new AccountService(defaultClient);
+        SearchMentionAccountsReq searchMentionAccountsReq = new SearchMentionAccountsReq(); // SearchMentionAccountsReq | 
+        try {
+            APIsearchMentionRequest request = APIsearchMentionRequest.newBuilder()
+                .searchMentionAccountsReq(searchMentionAccountsReq)
+                .build();
+            ApiResponse<SearchMentionAccountsResp> response = apiInstance.searchMentionWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling AccountService#searchMention");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| searchMentionRequest | [**APIsearchMentionRequest**](AccountService.md#APIsearchMentionRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**SearchMentionAccountsResp**](SearchMentionAccountsResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIsearchMentionRequest"></a>
+## APIsearchMentionRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **searchMentionAccountsReq** | [**SearchMentionAccountsReq**](SearchMentionAccountsReq.md) |  | |
 
 
 

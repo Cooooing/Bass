@@ -43,6 +43,13 @@ func (h *userClientHandler) loadAccounts(ctx context.Context, userIDs ...int64) 
 	return resp, nil
 }
 
+func (h *userClientHandler) loadAccountsByNames(ctx context.Context, names []string) (map[int64]*model.UserAccount, error) {
+	if h.userClient == nil || len(names) == 0 {
+		return map[int64]*model.UserAccount{}, nil
+	}
+	return h.userClient.MapAccountsByNames(ctx, lo.Uniq(names))
+}
+
 func (h *userClientHandler) templateUser(userID int64, user *model.UserAccount) templatedata.User {
 	data := templatedata.User{
 		ID: userID,

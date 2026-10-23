@@ -5,31 +5,33 @@ import (
 
 	"github.com/88250/lute"
 	"github.com/88250/lute/ast"
+	"github.com/88250/lute/parse"
 )
 
 var LuteEngine = lute.New()
 
-func ParseNodeLinkAtUsernames(n *ast.Node, entering bool, atUsernames map[string]struct{}) ast.WalkStatus {
-	if !entering || n.Type != ast.NodeLink {
-		return ast.WalkContinue
+func ParseAtUsernames(markdown string) []string {
+	if markdown == "" {
+		return nil
 	}
-
-	text := n.Text()
-	if len(text) == 0 {
-		return ast.WalkContinue
-	}
-
-	// 匹配用户链接：@username 或 [@username](用户主页链接)。
-	if strings.HasPrefix(text, "@") {
-		atUsernames[text[1:]] = struct{}{}
-	} else if strings.HasPrefix(text, "&") {
-		parts := strings.SplitN(text[1:], ":", 2)
-		if len(parts) == 2 {
-			// 预留文章链接解析：&username:title。
+	usernames := make(map[string]struct{})
+	tree := parse.Parse("at_usernames", []byte(markdown), parse.NewOptions())
+	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+		if !entering || n.Type != ast.NodeLink || usernames == nil {
+			return ast.WalkContinue
 		}
+		text := n.Text()
+		if !strings.HasPrefix(text, "@") || len(text) == 1 {
+			return ast.WalkContinue
+		}
+		usernames[text[1:]] = struct{}{}
+		return ast.WalkContinue
+	})
+	result := make([]string, 0, len(usernames))
+	for username := range usernames {
+		result = append(result, username)
 	}
-
-	return ast.WalkContinue
+	return result
 }
 
 func ParseNodeImageCoverImageUrl(n *ast.Node, entering bool, coverImageUrl *string) ast.WalkStatus {

@@ -4,6 +4,19 @@ type CommentPublished struct {
 	Comment Comment
 }
 
+type CommentMention struct {
+	Comment Comment
+	Actor   User
+}
+
+func (CommentMention) notificationTemplateData() {}
+
+type GlobalChatMention struct {
+	Actor User
+}
+
+func (GlobalChatMention) notificationTemplateData() {}
+
 func (CommentPublished) notificationTemplateData() {}
 
 type CommentLiked struct {

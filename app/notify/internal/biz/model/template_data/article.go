@@ -11,6 +11,20 @@ type ArticleActor struct {
 	Actor   User
 }
 
+type ArticleMention struct {
+	Article Article
+	Actor   User
+}
+
+func (ArticleMention) notificationTemplateData() {}
+
+type PostscriptMention struct {
+	Article Article
+	Actor   User
+}
+
+func (PostscriptMention) notificationTemplateData() {}
+
 func (ArticleActor) notificationTemplateData() {}
 
 type ArticleLotteryWon struct {

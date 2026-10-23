@@ -1,0 +1,1 @@
+{{ if .Actor.Nickname }}{{ .Actor.Nickname }}{{ else }}{{ .Actor.Name }}{{ end }} 在《{{ .Comment.Article.Title }}》的评论中提及了你

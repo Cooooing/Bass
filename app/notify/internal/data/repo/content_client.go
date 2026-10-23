@@ -41,9 +41,26 @@ func (c *ContentClient) GetArticle(ctx context.Context, articleID int64) (*model
 	result := &model.ContentArticle{
 		ID:       article.GetId(),
 		Title:    article.GetTitle(),
+		Content:  article.GetContent(),
 		AuthorID: article.GetCreatedBy(),
 	}
 	return result, nil
+}
+
+func (c *ContentClient) GetPostscript(ctx context.Context, articleID, postscriptID int64) (*model.ContentPostscript, error) {
+	if articleID <= 0 || postscriptID <= 0 {
+		return nil, nil
+	}
+	reply, err := c.contentClient.Postscript.List(ctx, &contentv1.ListPostscripts_Req{ArticleId: articleID})
+	if err != nil {
+		return nil, err
+	}
+	for _, postscript := range reply.GetRows() {
+		if postscript.GetId() == postscriptID {
+			return &model.ContentPostscript{ID: postscriptID, ArticleID: articleID, Content: postscript.GetContent(), UserID: postscript.GetCreatedBy()}, nil
+		}
+	}
+	return nil, nil
 }
 
 func (c *ContentClient) GetComment(ctx context.Context, commentID int64) (*model.ContentComment, error) {

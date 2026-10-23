@@ -57,6 +57,27 @@ func (r *UserAccountRepo) MapAccounts(ctx context.Context, userIDs []int64) (map
 	return result, nil
 }
 
+func (r *UserAccountRepo) MapAccountsByNames(ctx context.Context, names []string) (map[int64]*model.UserAccount, error) {
+	if len(names) == 0 {
+		return map[int64]*model.UserAccount{}, nil
+	}
+	reply, err := r.userClient.Account.Map(ctx, &userv1.MapAccounts_Req{
+		Query: &userv1.MapAccounts_Req_AccountQuery{Names: names},
+	})
+	if err != nil {
+		return nil, err
+	}
+	result := make(map[int64]*model.UserAccount, len(reply.GetAccounts()))
+	for userID, account := range reply.GetAccounts() {
+		basic := account.GetBasic()
+		if basic == nil {
+			continue
+		}
+		result[userID] = &model.UserAccount{ID: userID, Name: basic.GetName(), Nickname: basic.GetNickname()}
+	}
+	return result, nil
+}
+
 func (r *UserAccountRepo) ListFollowerIDs(ctx context.Context, userID int64) ([]int64, error) {
 	if userID == 0 {
 		return []int64{}, nil

@@ -16,9 +16,17 @@ type RelationStatus struct {
 type ContentArticle struct {
 	ID             int64
 	Title          string
+	Content        string
 	AuthorID       int64
 	AuthorName     string
 	AuthorNickname string
+}
+
+type ContentPostscript struct {
+	ID        int64
+	ArticleID int64
+	Content   string
+	UserID    int64
 }
 
 type ContentComment struct {

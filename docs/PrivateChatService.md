@@ -1,21 +1,17 @@
-# IMService
+# PrivateChatService
 
 All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**countPrivateChatUnread**](IMService.md#countprivatechatunread) | **POST** /v1/im/private-chat/unread-count |  |
-| [**listGlobalChatMessages**](IMService.md#listglobalchatmessages) | **POST** /v1/im/global-chat/messages/list |  |
-| [**listGlobalChatOnlineMembers**](IMService.md#listglobalchatonlinemembers) | **POST** /v1/im/global-chat/online-members/list |  |
-| [**listPrivateChatMessages**](IMService.md#listprivatechatmessages) | **POST** /v1/im/private-chat/messages/list |  |
-| [**listPrivateChatSessions**](IMService.md#listprivatechatsessions) | **GET** /v1/im/private-chat/sessions |  |
-| [**markPrivateChatSessionRead**](IMService.md#markprivatechatsessionread) | **POST** /v1/im/private-chat/read |  |
-| [**revokeGlobalChatMessage**](IMService.md#revokeglobalchatmessage) | **POST** /v1/im/global-chat/messages/revoke |  |
-| [**revokePrivateChatMessage**](IMService.md#revokeprivatechatmessage) | **POST** /v1/im/private-chat/messages/revoke |  |
-| [**sendGlobalChatMessage**](IMService.md#sendglobalchatmessage) | **POST** /v1/im/global-chat/messages |  |
-| [**sendPrivateChatMessage**](IMService.md#sendprivatechatmessage) | **POST** /v1/im/private-chat/messages |  |
-| [**setPrivateChatSessionMuted**](IMService.md#setprivatechatsessionmuted) | **POST** /v1/im/private-chat/muted |  |
-| [**setPrivateChatSessionPinned**](IMService.md#setprivatechatsessionpinned) | **POST** /v1/im/private-chat/pinned |  |
+| [**countPrivateChatUnread**](PrivateChatService.md#countprivatechatunread) | **POST** /v1/im/private-chat/unread-count |  |
+| [**listPrivateChatMessages**](PrivateChatService.md#listprivatechatmessages) | **POST** /v1/im/private-chat/messages/list |  |
+| [**listPrivateChatSessions**](PrivateChatService.md#listprivatechatsessions) | **GET** /v1/im/private-chat/sessions |  |
+| [**markPrivateChatSessionRead**](PrivateChatService.md#markprivatechatsessionread) | **POST** /v1/im/private-chat/read |  |
+| [**revokePrivateChatMessage**](PrivateChatService.md#revokeprivatechatmessage) | **POST** /v1/im/private-chat/messages/revoke |  |
+| [**sendPrivateChatMessage**](PrivateChatService.md#sendprivatechatmessage) | **POST** /v1/im/private-chat/messages |  |
+| [**setPrivateChatSessionMuted**](PrivateChatService.md#setprivatechatsessionmuted) | **POST** /v1/im/private-chat/muted |  |
+| [**setPrivateChatSessionPinned**](PrivateChatService.md#setprivatechatsessionpinned) | **POST** /v1/im/private-chat/pinned |  |
 
 
 
@@ -32,13 +28,13 @@ All URIs are relative to *http://localhost*
 ```ts
 import {
   Configuration,
-  IMService,
+  PrivateChatService,
 } from '@bass/bbs-sdk-fetch';
 import type { CountPrivateChatUnreadRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
+  const api = new PrivateChatService();
 
   const body = {
     // object
@@ -86,140 +82,6 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## listGlobalChatMessages
-
-> ListGlobalChatMessagesResp listGlobalChatMessages(listGlobalChatMessagesReq)
-
-
-
-查询全局聊天室消息。
-
-### Example
-
-```ts
-import {
-  Configuration,
-  IMService,
-} from '@bass/bbs-sdk-fetch';
-import type { ListGlobalChatMessagesRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
-
-  const body = {
-    // ListGlobalChatMessagesReq
-    listGlobalChatMessagesReq: ...,
-  } satisfies ListGlobalChatMessagesRequest;
-
-  try {
-    const data = await api.listGlobalChatMessages(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **listGlobalChatMessagesReq** | [ListGlobalChatMessagesReq](ListGlobalChatMessagesReq.md) |  | |
-
-### Return type
-
-[**ListGlobalChatMessagesResp**](ListGlobalChatMessagesResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
-## listGlobalChatOnlineMembers
-
-> ListGlobalChatOnlineMembersResp listGlobalChatOnlineMembers(body)
-
-
-
-查询全部在线的聊天室成员。
-
-### Example
-
-```ts
-import {
-  Configuration,
-  IMService,
-} from '@bass/bbs-sdk-fetch';
-import type { ListGlobalChatOnlineMembersRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
-
-  const body = {
-    // object
-    body: Object,
-  } satisfies ListGlobalChatOnlineMembersRequest;
-
-  try {
-    const data = await api.listGlobalChatOnlineMembers(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **body** | `object` |  | |
-
-### Return type
-
-[**ListGlobalChatOnlineMembersResp**](ListGlobalChatOnlineMembersResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
 ## listPrivateChatMessages
 
 > ListPrivateChatMessagesResp listPrivateChatMessages(listPrivateChatMessagesReq)
@@ -233,13 +95,13 @@ No authorization required
 ```ts
 import {
   Configuration,
-  IMService,
+  PrivateChatService,
 } from '@bass/bbs-sdk-fetch';
 import type { ListPrivateChatMessagesRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
+  const api = new PrivateChatService();
 
   const body = {
     // ListPrivateChatMessagesReq
@@ -300,13 +162,13 @@ No authorization required
 ```ts
 import {
   Configuration,
-  IMService,
+  PrivateChatService,
 } from '@bass/bbs-sdk-fetch';
 import type { ListPrivateChatSessionsRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
+  const api = new PrivateChatService();
 
   const body = {
     // string | 页码 (optional)
@@ -370,13 +232,13 @@ No authorization required
 ```ts
 import {
   Configuration,
-  IMService,
+  PrivateChatService,
 } from '@bass/bbs-sdk-fetch';
 import type { MarkPrivateChatSessionReadRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
+  const api = new PrivateChatService();
 
   const body = {
     // MarkPrivateChatSessionReadReq
@@ -424,73 +286,6 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## revokeGlobalChatMessage
-
-> RevokeGlobalChatMessageResp revokeGlobalChatMessage(revokeGlobalChatMessageReq)
-
-
-
-撤回自己的全局聊天室消息。
-
-### Example
-
-```ts
-import {
-  Configuration,
-  IMService,
-} from '@bass/bbs-sdk-fetch';
-import type { RevokeGlobalChatMessageRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
-
-  const body = {
-    // RevokeGlobalChatMessageReq
-    revokeGlobalChatMessageReq: ...,
-  } satisfies RevokeGlobalChatMessageRequest;
-
-  try {
-    const data = await api.revokeGlobalChatMessage(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **revokeGlobalChatMessageReq** | [RevokeGlobalChatMessageReq](RevokeGlobalChatMessageReq.md) |  | |
-
-### Return type
-
-[**RevokeGlobalChatMessageResp**](RevokeGlobalChatMessageResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
 ## revokePrivateChatMessage
 
 > RevokePrivateChatMessageResp revokePrivateChatMessage(revokePrivateChatMessageReq)
@@ -504,13 +299,13 @@ No authorization required
 ```ts
 import {
   Configuration,
-  IMService,
+  PrivateChatService,
 } from '@bass/bbs-sdk-fetch';
 import type { RevokePrivateChatMessageRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
+  const api = new PrivateChatService();
 
   const body = {
     // RevokePrivateChatMessageReq
@@ -558,73 +353,6 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
 
 
-## sendGlobalChatMessage
-
-> SendGlobalChatMessageResp sendGlobalChatMessage(sendGlobalChatMessageReq)
-
-
-
-发送全局聊天室消息。
-
-### Example
-
-```ts
-import {
-  Configuration,
-  IMService,
-} from '@bass/bbs-sdk-fetch';
-import type { SendGlobalChatMessageRequest } from '@bass/bbs-sdk-fetch';
-
-async function example() {
-  console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
-
-  const body = {
-    // SendGlobalChatMessageReq
-    sendGlobalChatMessageReq: ...,
-  } satisfies SendGlobalChatMessageRequest;
-
-  try {
-    const data = await api.sendGlobalChatMessage(body);
-    console.log(data);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Run the test
-example().catch(console.error);
-```
-
-### Parameters
-
-
-| Name | Type | Description  | Notes |
-|------------- | ------------- | ------------- | -------------|
-| **sendGlobalChatMessageReq** | [SendGlobalChatMessageReq](SendGlobalChatMessageReq.md) |  | |
-
-### Return type
-
-[**SendGlobalChatMessageResp**](SendGlobalChatMessageResp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: `application/json`
-- **Accept**: `application/json`
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#api-endpoints) [[Back to Model list]](../README.md#models) [[Back to README]](../README.md)
-
-
 ## sendPrivateChatMessage
 
 > SendPrivateChatMessageResp sendPrivateChatMessage(sendPrivateChatMessageReq)
@@ -638,13 +366,13 @@ No authorization required
 ```ts
 import {
   Configuration,
-  IMService,
+  PrivateChatService,
 } from '@bass/bbs-sdk-fetch';
 import type { SendPrivateChatMessageRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
+  const api = new PrivateChatService();
 
   const body = {
     // SendPrivateChatMessageReq
@@ -705,13 +433,13 @@ No authorization required
 ```ts
 import {
   Configuration,
-  IMService,
+  PrivateChatService,
 } from '@bass/bbs-sdk-fetch';
 import type { SetPrivateChatSessionMutedRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
+  const api = new PrivateChatService();
 
   const body = {
     // SetPrivateChatSessionMutedReq
@@ -772,13 +500,13 @@ No authorization required
 ```ts
 import {
   Configuration,
-  IMService,
+  PrivateChatService,
 } from '@bass/bbs-sdk-fetch';
 import type { SetPrivateChatSessionPinnedRequest } from '@bass/bbs-sdk-fetch';
 
 async function example() {
   console.log("🚀 Testing @bass/bbs-sdk-fetch SDK...");
-  const api = new IMService();
+  const api = new PrivateChatService();
 
   const body = {
     // SetPrivateChatSessionPinnedReq

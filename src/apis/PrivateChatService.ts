@@ -19,21 +19,6 @@ import {
     CountPrivateChatUnreadRespToJSON,
 } from '../models/CountPrivateChatUnreadResp';
 import {
-    type ListGlobalChatMessagesReq,
-    ListGlobalChatMessagesReqFromJSON,
-    ListGlobalChatMessagesReqToJSON,
-} from '../models/ListGlobalChatMessagesReq';
-import {
-    type ListGlobalChatMessagesResp,
-    ListGlobalChatMessagesRespFromJSON,
-    ListGlobalChatMessagesRespToJSON,
-} from '../models/ListGlobalChatMessagesResp';
-import {
-    type ListGlobalChatOnlineMembersResp,
-    ListGlobalChatOnlineMembersRespFromJSON,
-    ListGlobalChatOnlineMembersRespToJSON,
-} from '../models/ListGlobalChatOnlineMembersResp';
-import {
     type ListPrivateChatMessagesReq,
     ListPrivateChatMessagesReqFromJSON,
     ListPrivateChatMessagesReqToJSON,
@@ -54,16 +39,6 @@ import {
     MarkPrivateChatSessionReadReqToJSON,
 } from '../models/MarkPrivateChatSessionReadReq';
 import {
-    type RevokeGlobalChatMessageReq,
-    RevokeGlobalChatMessageReqFromJSON,
-    RevokeGlobalChatMessageReqToJSON,
-} from '../models/RevokeGlobalChatMessageReq';
-import {
-    type RevokeGlobalChatMessageResp,
-    RevokeGlobalChatMessageRespFromJSON,
-    RevokeGlobalChatMessageRespToJSON,
-} from '../models/RevokeGlobalChatMessageResp';
-import {
     type RevokePrivateChatMessageReq,
     RevokePrivateChatMessageReqFromJSON,
     RevokePrivateChatMessageReqToJSON,
@@ -73,16 +48,6 @@ import {
     RevokePrivateChatMessageRespFromJSON,
     RevokePrivateChatMessageRespToJSON,
 } from '../models/RevokePrivateChatMessageResp';
-import {
-    type SendGlobalChatMessageReq,
-    SendGlobalChatMessageReqFromJSON,
-    SendGlobalChatMessageReqToJSON,
-} from '../models/SendGlobalChatMessageReq';
-import {
-    type SendGlobalChatMessageResp,
-    SendGlobalChatMessageRespFromJSON,
-    SendGlobalChatMessageRespToJSON,
-} from '../models/SendGlobalChatMessageResp';
 import {
     type SendPrivateChatMessageReq,
     SendPrivateChatMessageReqFromJSON,
@@ -108,14 +73,6 @@ export interface CountPrivateChatUnreadRequest {
     body: object;
 }
 
-export interface ListGlobalChatMessagesRequest {
-    listGlobalChatMessagesReq: ListGlobalChatMessagesReq;
-}
-
-export interface ListGlobalChatOnlineMembersRequest {
-    body: object;
-}
-
 export interface ListPrivateChatMessagesRequest {
     listPrivateChatMessagesReq: ListPrivateChatMessagesReq;
 }
@@ -129,16 +86,8 @@ export interface MarkPrivateChatSessionReadRequest {
     markPrivateChatSessionReadReq: MarkPrivateChatSessionReadReq;
 }
 
-export interface RevokeGlobalChatMessageRequest {
-    revokeGlobalChatMessageReq: RevokeGlobalChatMessageReq;
-}
-
 export interface RevokePrivateChatMessageRequest {
     revokePrivateChatMessageReq: RevokePrivateChatMessageReq;
-}
-
-export interface SendGlobalChatMessageRequest {
-    sendGlobalChatMessageReq: SendGlobalChatMessageReq;
 }
 
 export interface SendPrivateChatMessageRequest {
@@ -154,17 +103,17 @@ export interface SetPrivateChatSessionPinnedRequest {
 }
 
 /**
- * IMService - interface
+ * PrivateChatService - interface
  * 
  * @export
- * @interface IMServiceInterface
+ * @interface PrivateChatServiceInterface
  */
-export interface IMServiceInterface {
+export interface PrivateChatServiceInterface {
     /**
      * Creates request options for countPrivateChatUnread without sending the request
      * @param {object} body 
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     countPrivateChatUnreadRequestOpts(requestParameters: CountPrivateChatUnreadRequest): Promise<runtime.RequestOpts>;
 
@@ -173,7 +122,7 @@ export interface IMServiceInterface {
      * @param {object} body 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     countPrivateChatUnreadRaw(requestParameters: CountPrivateChatUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CountPrivateChatUnreadResp>>;
 
@@ -183,54 +132,10 @@ export interface IMServiceInterface {
     countPrivateChatUnread(requestParameters: CountPrivateChatUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CountPrivateChatUnreadResp>;
 
     /**
-     * Creates request options for listGlobalChatMessages without sending the request
-     * @param {ListGlobalChatMessagesReq} listGlobalChatMessagesReq 
-     * @throws {RequiredError}
-     * @memberof IMServiceInterface
-     */
-    listGlobalChatMessagesRequestOpts(requestParameters: ListGlobalChatMessagesRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 查询全局聊天室消息。
-     * @param {ListGlobalChatMessagesReq} listGlobalChatMessagesReq 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IMServiceInterface
-     */
-    listGlobalChatMessagesRaw(requestParameters: ListGlobalChatMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListGlobalChatMessagesResp>>;
-
-    /**
-     * 查询全局聊天室消息。
-     */
-    listGlobalChatMessages(requestParameters: ListGlobalChatMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListGlobalChatMessagesResp>;
-
-    /**
-     * Creates request options for listGlobalChatOnlineMembers without sending the request
-     * @param {object} body 
-     * @throws {RequiredError}
-     * @memberof IMServiceInterface
-     */
-    listGlobalChatOnlineMembersRequestOpts(requestParameters: ListGlobalChatOnlineMembersRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 查询全部在线的聊天室成员。
-     * @param {object} body 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IMServiceInterface
-     */
-    listGlobalChatOnlineMembersRaw(requestParameters: ListGlobalChatOnlineMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListGlobalChatOnlineMembersResp>>;
-
-    /**
-     * 查询全部在线的聊天室成员。
-     */
-    listGlobalChatOnlineMembers(requestParameters: ListGlobalChatOnlineMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListGlobalChatOnlineMembersResp>;
-
-    /**
      * Creates request options for listPrivateChatMessages without sending the request
      * @param {ListPrivateChatMessagesReq} listPrivateChatMessagesReq 
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     listPrivateChatMessagesRequestOpts(requestParameters: ListPrivateChatMessagesRequest): Promise<runtime.RequestOpts>;
 
@@ -239,7 +144,7 @@ export interface IMServiceInterface {
      * @param {ListPrivateChatMessagesReq} listPrivateChatMessagesReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     listPrivateChatMessagesRaw(requestParameters: ListPrivateChatMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListPrivateChatMessagesResp>>;
 
@@ -253,7 +158,7 @@ export interface IMServiceInterface {
      * @param {string} [pagePage] 页码
      * @param {string} [pageSize] 页大小
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     listPrivateChatSessionsRequestOpts(requestParameters: ListPrivateChatSessionsRequest): Promise<runtime.RequestOpts>;
 
@@ -263,7 +168,7 @@ export interface IMServiceInterface {
      * @param {string} [pageSize] 页大小
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     listPrivateChatSessionsRaw(requestParameters: ListPrivateChatSessionsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListPrivateChatSessionsResp>>;
 
@@ -276,7 +181,7 @@ export interface IMServiceInterface {
      * Creates request options for markPrivateChatSessionRead without sending the request
      * @param {MarkPrivateChatSessionReadReq} markPrivateChatSessionReadReq 
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     markPrivateChatSessionReadRequestOpts(requestParameters: MarkPrivateChatSessionReadRequest): Promise<runtime.RequestOpts>;
 
@@ -285,7 +190,7 @@ export interface IMServiceInterface {
      * @param {MarkPrivateChatSessionReadReq} markPrivateChatSessionReadReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     markPrivateChatSessionReadRaw(requestParameters: MarkPrivateChatSessionReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
@@ -295,32 +200,10 @@ export interface IMServiceInterface {
     markPrivateChatSessionRead(requestParameters: MarkPrivateChatSessionReadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object>;
 
     /**
-     * Creates request options for revokeGlobalChatMessage without sending the request
-     * @param {RevokeGlobalChatMessageReq} revokeGlobalChatMessageReq 
-     * @throws {RequiredError}
-     * @memberof IMServiceInterface
-     */
-    revokeGlobalChatMessageRequestOpts(requestParameters: RevokeGlobalChatMessageRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 撤回自己的全局聊天室消息。
-     * @param {RevokeGlobalChatMessageReq} revokeGlobalChatMessageReq 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IMServiceInterface
-     */
-    revokeGlobalChatMessageRaw(requestParameters: RevokeGlobalChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RevokeGlobalChatMessageResp>>;
-
-    /**
-     * 撤回自己的全局聊天室消息。
-     */
-    revokeGlobalChatMessage(requestParameters: RevokeGlobalChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RevokeGlobalChatMessageResp>;
-
-    /**
      * Creates request options for revokePrivateChatMessage without sending the request
      * @param {RevokePrivateChatMessageReq} revokePrivateChatMessageReq 
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     revokePrivateChatMessageRequestOpts(requestParameters: RevokePrivateChatMessageRequest): Promise<runtime.RequestOpts>;
 
@@ -329,7 +212,7 @@ export interface IMServiceInterface {
      * @param {RevokePrivateChatMessageReq} revokePrivateChatMessageReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     revokePrivateChatMessageRaw(requestParameters: RevokePrivateChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RevokePrivateChatMessageResp>>;
 
@@ -339,32 +222,10 @@ export interface IMServiceInterface {
     revokePrivateChatMessage(requestParameters: RevokePrivateChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RevokePrivateChatMessageResp>;
 
     /**
-     * Creates request options for sendGlobalChatMessage without sending the request
-     * @param {SendGlobalChatMessageReq} sendGlobalChatMessageReq 
-     * @throws {RequiredError}
-     * @memberof IMServiceInterface
-     */
-    sendGlobalChatMessageRequestOpts(requestParameters: SendGlobalChatMessageRequest): Promise<runtime.RequestOpts>;
-
-    /**
-     * 发送全局聊天室消息。
-     * @param {SendGlobalChatMessageReq} sendGlobalChatMessageReq 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof IMServiceInterface
-     */
-    sendGlobalChatMessageRaw(requestParameters: SendGlobalChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SendGlobalChatMessageResp>>;
-
-    /**
-     * 发送全局聊天室消息。
-     */
-    sendGlobalChatMessage(requestParameters: SendGlobalChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SendGlobalChatMessageResp>;
-
-    /**
      * Creates request options for sendPrivateChatMessage without sending the request
      * @param {SendPrivateChatMessageReq} sendPrivateChatMessageReq 
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     sendPrivateChatMessageRequestOpts(requestParameters: SendPrivateChatMessageRequest): Promise<runtime.RequestOpts>;
 
@@ -373,7 +234,7 @@ export interface IMServiceInterface {
      * @param {SendPrivateChatMessageReq} sendPrivateChatMessageReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     sendPrivateChatMessageRaw(requestParameters: SendPrivateChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SendPrivateChatMessageResp>>;
 
@@ -386,7 +247,7 @@ export interface IMServiceInterface {
      * Creates request options for setPrivateChatSessionMuted without sending the request
      * @param {SetPrivateChatSessionMutedReq} setPrivateChatSessionMutedReq 
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     setPrivateChatSessionMutedRequestOpts(requestParameters: SetPrivateChatSessionMutedRequest): Promise<runtime.RequestOpts>;
 
@@ -395,7 +256,7 @@ export interface IMServiceInterface {
      * @param {SetPrivateChatSessionMutedReq} setPrivateChatSessionMutedReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     setPrivateChatSessionMutedRaw(requestParameters: SetPrivateChatSessionMutedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
@@ -408,7 +269,7 @@ export interface IMServiceInterface {
      * Creates request options for setPrivateChatSessionPinned without sending the request
      * @param {SetPrivateChatSessionPinnedReq} setPrivateChatSessionPinnedReq 
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     setPrivateChatSessionPinnedRequestOpts(requestParameters: SetPrivateChatSessionPinnedRequest): Promise<runtime.RequestOpts>;
 
@@ -417,7 +278,7 @@ export interface IMServiceInterface {
      * @param {SetPrivateChatSessionPinnedReq} setPrivateChatSessionPinnedReq 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof IMServiceInterface
+     * @memberof PrivateChatServiceInterface
      */
     setPrivateChatSessionPinnedRaw(requestParameters: SetPrivateChatSessionPinnedRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>>;
 
@@ -431,7 +292,7 @@ export interface IMServiceInterface {
 /**
  * 
  */
-export class IMService extends runtime.BaseAPI implements IMServiceInterface {
+export class PrivateChatService extends runtime.BaseAPI implements PrivateChatServiceInterface {
 
     /**
      * Creates request options for countPrivateChatUnread without sending the request
@@ -477,100 +338,6 @@ export class IMService extends runtime.BaseAPI implements IMServiceInterface {
      */
     async countPrivateChatUnread(requestParameters: CountPrivateChatUnreadRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CountPrivateChatUnreadResp> {
         const response = await this.countPrivateChatUnreadRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for listGlobalChatMessages without sending the request
-     */
-    async listGlobalChatMessagesRequestOpts(requestParameters: ListGlobalChatMessagesRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['listGlobalChatMessagesReq'] == null) {
-            throw new runtime.RequiredError(
-                'listGlobalChatMessagesReq',
-                'Required parameter "listGlobalChatMessagesReq" was null or undefined when calling listGlobalChatMessages().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/im/global-chat/messages/list`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: ListGlobalChatMessagesReqToJSON(requestParameters['listGlobalChatMessagesReq']),
-        };
-    }
-
-    /**
-     * 查询全局聊天室消息。
-     */
-    async listGlobalChatMessagesRaw(requestParameters: ListGlobalChatMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListGlobalChatMessagesResp>> {
-        const requestOptions = await this.listGlobalChatMessagesRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListGlobalChatMessagesRespFromJSON(jsonValue));
-    }
-
-    /**
-     * 查询全局聊天室消息。
-     */
-    async listGlobalChatMessages(requestParameters: ListGlobalChatMessagesRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListGlobalChatMessagesResp> {
-        const response = await this.listGlobalChatMessagesRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for listGlobalChatOnlineMembers without sending the request
-     */
-    async listGlobalChatOnlineMembersRequestOpts(requestParameters: ListGlobalChatOnlineMembersRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['body'] == null) {
-            throw new runtime.RequiredError(
-                'body',
-                'Required parameter "body" was null or undefined when calling listGlobalChatOnlineMembers().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/im/global-chat/online-members/list`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: requestParameters['body'] as any,
-        };
-    }
-
-    /**
-     * 查询全部在线的聊天室成员。
-     */
-    async listGlobalChatOnlineMembersRaw(requestParameters: ListGlobalChatOnlineMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ListGlobalChatOnlineMembersResp>> {
-        const requestOptions = await this.listGlobalChatOnlineMembersRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => ListGlobalChatOnlineMembersRespFromJSON(jsonValue));
-    }
-
-    /**
-     * 查询全部在线的聊天室成员。
-     */
-    async listGlobalChatOnlineMembers(requestParameters: ListGlobalChatOnlineMembersRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ListGlobalChatOnlineMembersResp> {
-        const response = await this.listGlobalChatOnlineMembersRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -714,53 +481,6 @@ export class IMService extends runtime.BaseAPI implements IMServiceInterface {
     }
 
     /**
-     * Creates request options for revokeGlobalChatMessage without sending the request
-     */
-    async revokeGlobalChatMessageRequestOpts(requestParameters: RevokeGlobalChatMessageRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['revokeGlobalChatMessageReq'] == null) {
-            throw new runtime.RequiredError(
-                'revokeGlobalChatMessageReq',
-                'Required parameter "revokeGlobalChatMessageReq" was null or undefined when calling revokeGlobalChatMessage().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/im/global-chat/messages/revoke`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: RevokeGlobalChatMessageReqToJSON(requestParameters['revokeGlobalChatMessageReq']),
-        };
-    }
-
-    /**
-     * 撤回自己的全局聊天室消息。
-     */
-    async revokeGlobalChatMessageRaw(requestParameters: RevokeGlobalChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<RevokeGlobalChatMessageResp>> {
-        const requestOptions = await this.revokeGlobalChatMessageRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => RevokeGlobalChatMessageRespFromJSON(jsonValue));
-    }
-
-    /**
-     * 撤回自己的全局聊天室消息。
-     */
-    async revokeGlobalChatMessage(requestParameters: RevokeGlobalChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RevokeGlobalChatMessageResp> {
-        const response = await this.revokeGlobalChatMessageRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Creates request options for revokePrivateChatMessage without sending the request
      */
     async revokePrivateChatMessageRequestOpts(requestParameters: RevokePrivateChatMessageRequest): Promise<runtime.RequestOpts> {
@@ -804,53 +524,6 @@ export class IMService extends runtime.BaseAPI implements IMServiceInterface {
      */
     async revokePrivateChatMessage(requestParameters: RevokePrivateChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<RevokePrivateChatMessageResp> {
         const response = await this.revokePrivateChatMessageRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Creates request options for sendGlobalChatMessage without sending the request
-     */
-    async sendGlobalChatMessageRequestOpts(requestParameters: SendGlobalChatMessageRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['sendGlobalChatMessageReq'] == null) {
-            throw new runtime.RequiredError(
-                'sendGlobalChatMessageReq',
-                'Required parameter "sendGlobalChatMessageReq" was null or undefined when calling sendGlobalChatMessage().'
-            );
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        headerParameters['Content-Type'] = 'application/json';
-
-
-        let urlPath = `/v1/im/global-chat/messages`;
-
-        return {
-            path: urlPath,
-            method: 'POST',
-            headers: headerParameters,
-            query: queryParameters,
-            body: SendGlobalChatMessageReqToJSON(requestParameters['sendGlobalChatMessageReq']),
-        };
-    }
-
-    /**
-     * 发送全局聊天室消息。
-     */
-    async sendGlobalChatMessageRaw(requestParameters: SendGlobalChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SendGlobalChatMessageResp>> {
-        const requestOptions = await this.sendGlobalChatMessageRequestOpts(requestParameters);
-        const response = await this.request(requestOptions, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => SendGlobalChatMessageRespFromJSON(jsonValue));
-    }
-
-    /**
-     * 发送全局聊天室消息。
-     */
-    async sendGlobalChatMessage(requestParameters: SendGlobalChatMessageRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SendGlobalChatMessageResp> {
-        const response = await this.sendGlobalChatMessageRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -3,7 +3,7 @@ syntax = "proto3";
 package common.api.app.im.v1;
 
 import "common/common.proto";
-import "common/enums/im_message_type.proto";
+import "im/v1/enum/im_message_type.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/im/v1;v1";
@@ -24,7 +24,7 @@ message PrivateChatMessage {
   int64 sender_id = 2; // 发送账号 ID。
   int64 receiver_id = 3; // 接收账号 ID。
   string content = 4; // 原始 Markdown 内容。
-  .common.api.app.common.enums.IMMessageType message_type = 5; // 消息类型。
+  .common.api.app.im.v1.enum.IMMessageType message_type = 5; // 消息类型。
   bool revoked = 6; // 是否已撤回。
   google.protobuf.Timestamp created_at = 1000; // 创建时间。
   google.protobuf.Timestamp revoked_at = 1001; // 撤回时间。

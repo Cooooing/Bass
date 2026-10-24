@@ -10,7 +10,7 @@ option go_package = "common/proto/gen/economy/v1;v1";
 // TCCPointsTransferService 提供积分转移的 TCC 分支操作。
 service TCCPointsTransferService {
   rpc Try(TCCPointsTransfer.Req) returns (TCCPointsTransfer.Resp) {} // 预留转出积分
-  rpc Comfirm(TCCPointsTransfer.Req) returns (TCCPointsTransfer.Resp) {} // 确认积分转移
+  rpc Confirm(TCCPointsTransfer.Req) returns (TCCPointsTransfer.Resp) {} // 确认积分转移
   rpc Cancel(TCCPointsTransfer.Req) returns (TCCPointsTransfer.Resp) {} // 取消积分转移并释放资源
 }
 

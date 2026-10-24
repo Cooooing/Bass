@@ -16,10 +16,14 @@ message Bootstrap {
   common.api.app.common.Nats nats = 7;
   common.api.app.common.Trace trace = 8;
   common.api.app.common.Observability observability = 9;
+  common.api.app.common.DTM dtm = 10;
   Business business = 21;
 }
 
 // Business 是即时消息领域的业务运行参数。
 message Business {
   google.protobuf.Duration emoji_share_ttl = 1; // 表情分组分享码的有效期，例如 604800s 表示 7d。
+  int64 global_chat_topic_points = 2; // 设置全局聊天室话题消耗的积分。
+  google.protobuf.Duration global_chat_topic_user_interval = 3; // 同一账号设置全局聊天室话题的限流间隔。
+  google.protobuf.Duration global_chat_topic_global_interval = 4; // 全局聊天室话题设置的限流间隔。
 }

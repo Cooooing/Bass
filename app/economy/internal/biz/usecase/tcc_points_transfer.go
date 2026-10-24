@@ -54,7 +54,7 @@ func (u *TCCPointsTransferUsecase) Try(ctx context.Context, req *TCCPointsTransf
 	return response, nil
 }
 
-func (u *TCCPointsTransferUsecase) Comfirm(ctx context.Context, req *TCCPointsTransferReq) (*TCCPointsTransferResp, error) {
+func (u *TCCPointsTransferUsecase) Confirm(ctx context.Context, req *TCCPointsTransferReq) (*TCCPointsTransferResp, error) {
 	if err := u.validate(req); err != nil {
 		return nil, err
 	}

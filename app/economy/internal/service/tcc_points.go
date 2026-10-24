@@ -41,12 +41,12 @@ func (s *TCCPointsService) Try(ctx context.Context, req *v1.TCCPoints_Req) (*v1.
 	return s.responseToProto(response), nil
 }
 
-func (s *TCCPointsService) Comfirm(ctx context.Context, req *v1.TCCPoints_Req) (*v1.TCCPoints_Resp, error) {
+func (s *TCCPointsService) Confirm(ctx context.Context, req *v1.TCCPoints_Req) (*v1.TCCPoints_Resp, error) {
 	request, err := s.requestFromProto(req)
 	if err != nil {
 		return nil, err
 	}
-	response, err := s.usecase.Comfirm(ctx, request)
+	response, err := s.usecase.Confirm(ctx, request)
 	if err != nil {
 		return nil, err
 	}

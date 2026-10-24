@@ -19,10 +19,11 @@ import (
 type GlobalChatService struct {
 	imv1.UnimplementedIMGlobalChatServiceServer
 	globalChat *usecase.GlobalChatUsecase
+	topic      *usecase.GlobalChatTopicUsecase
 }
 
-func NewGlobalChatService(globalChat *usecase.GlobalChatUsecase) *GlobalChatService {
-	return &GlobalChatService{globalChat: globalChat}
+func NewGlobalChatService(globalChat *usecase.GlobalChatUsecase, topic *usecase.GlobalChatTopicUsecase) *GlobalChatService {
+	return &GlobalChatService{globalChat: globalChat, topic: topic}
 }
 
 func (s *GlobalChatService) RegisterGrpc(server *grpc.Server) {
@@ -57,6 +58,36 @@ func (s *GlobalChatService) List(ctx context.Context, req *imv1.ListGlobalChatMe
 		response = append(response, s.globalChatMessageProto(row))
 	}
 	return &imv1.ListGlobalChatMessages_Resp{Page: page.ToProto(), Rows: response}, nil
+}
+
+func (s *GlobalChatService) GetTopic(ctx context.Context, _ *imv1.GetGlobalChatTopic_Req) (*imv1.GetGlobalChatTopic_Resp, error) {
+	topic, err := s.topic.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if topic == nil {
+		return &imv1.GetGlobalChatTopic_Resp{}, nil
+	}
+	response := &imv1.GlobalChatTopic{Id: topic.ID, UserId: topic.UserID, Content: topic.Content, PointsCost: topic.PointsCost}
+	if topic.CreatedAt != nil {
+		response.CreatedAt = timestamppb.New(*topic.CreatedAt)
+	}
+	return &imv1.GetGlobalChatTopic_Resp{Topic: response}, nil
+}
+
+func (s *GlobalChatService) SetTopic(ctx context.Context, req *imv1.SetGlobalChatTopic_Req) (*imv1.SetGlobalChatTopic_Resp, error) {
+	topic, err := s.topic.Set(ctx, req.GetUserId(), req.GetClientRequestId(), req.GetContent())
+	if err != nil {
+		return nil, err
+	}
+	if topic == nil {
+		return &imv1.SetGlobalChatTopic_Resp{}, nil
+	}
+	response := &imv1.GlobalChatTopic{Id: topic.ID, UserId: topic.UserID, Content: topic.Content, PointsCost: topic.PointsCost}
+	if topic.CreatedAt != nil {
+		response.CreatedAt = timestamppb.New(*topic.CreatedAt)
+	}
+	return &imv1.SetGlobalChatTopic_Resp{Topic: response}, nil
 }
 
 func (s *GlobalChatService) Mute(ctx context.Context, req *imv1.MuteGlobalChatUser_Req) (*imv1.MuteGlobalChatUser_Resp, error) {

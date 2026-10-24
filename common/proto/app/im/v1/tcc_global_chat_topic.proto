@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+option go_package = "common/proto/gen/im/v1;v1";
+
+// TCCGlobalChatTopicService 提供全局聊天室话题设置的 TCC 分支操作。
+service TCCGlobalChatTopicService {
+  rpc Try(TCCSetGlobalChatTopic.Req) returns (TCCSetGlobalChatTopic.Resp) {} // 预留全局聊天室话题设置。
+  rpc Confirm(TCCSetGlobalChatTopic.Req) returns (TCCSetGlobalChatTopic.Resp) {} // 确认发布全局聊天室话题。
+  rpc Cancel(TCCSetGlobalChatTopic.Req) returns (TCCSetGlobalChatTopic.Resp) {} // 取消全局聊天室话题设置。
+}
+
+// TCCSetGlobalChatTopic 表示话题设置 TCC 分支的完整业务参数。
+message TCCSetGlobalChatTopic {
+  message Req {
+    int64 user_id = 1; // 设置账号 ID。
+    string client_request_id = 2; // 客户端幂等请求 ID。
+    string content = 3; // 话题内容。
+    int64 points_cost = 4; // 本次设置消耗的积分。
+  }
+  message Resp {}
+}

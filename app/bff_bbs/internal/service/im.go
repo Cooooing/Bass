@@ -164,6 +164,34 @@ func (s *IMService) ListGlobalChatMessages(ctx context.Context, req *bffbbsv1.Li
 	return &bffbbsv1.ListGlobalChatMessages_Resp{Page: resp.GetPage(), Rows: rows}, nil
 }
 
+func (s *IMService) GetGlobalChatTopic(ctx context.Context, _ *bffbbsv1.GetGlobalChatTopic_Req) (*bffbbsv1.GetGlobalChatTopic_Resp, error) {
+	resp, err := s.im.GetGlobalChatTopic(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if resp.GetTopic() == nil {
+		return &bffbbsv1.GetGlobalChatTopic_Resp{}, nil
+	}
+	topic := resp.GetTopic()
+	return &bffbbsv1.GetGlobalChatTopic_Resp{Topic: &bffbbsv1.GlobalChatTopic{Id: topic.GetId(), UserId: topic.GetUserId(), Content: topic.GetContent(), PointsCost: topic.GetPointsCost(), CreatedAt: topic.GetCreatedAt()}}, nil
+}
+
+func (s *IMService) SetGlobalChatTopic(ctx context.Context, req *bffbbsv1.SetGlobalChatTopic_Req) (*bffbbsv1.SetGlobalChatTopic_Resp, error) {
+	user, err := s.currentUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := s.im.SetGlobalChatTopic(ctx, &imv1.SetGlobalChatTopic_Req{UserId: user.ID, ClientRequestId: req.GetClientRequestId(), Content: req.GetContent()})
+	if err != nil {
+		return nil, err
+	}
+	if resp.GetTopic() == nil {
+		return &bffbbsv1.SetGlobalChatTopic_Resp{}, nil
+	}
+	topic := resp.GetTopic()
+	return &bffbbsv1.SetGlobalChatTopic_Resp{Topic: &bffbbsv1.GlobalChatTopic{Id: topic.GetId(), UserId: topic.GetUserId(), Content: topic.GetContent(), PointsCost: topic.GetPointsCost(), CreatedAt: topic.GetCreatedAt()}}, nil
+}
+
 func (s *IMService) SendGlobalChatMessage(ctx context.Context, req *bffbbsv1.SendGlobalChatMessage_Req) (*bffbbsv1.SendGlobalChatMessage_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {

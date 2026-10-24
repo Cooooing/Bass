@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common.api.app.im.v1.enum;
+
+option go_package = "common/proto/gen/im/v1/enum;enum";
+
+// GlobalChatTopicStatus 表示全局聊天室话题设置的业务状态。
+enum GlobalChatTopicStatus {
+  GLOBAL_CHAT_TOPIC_STATUS_UNSPECIFIED = 0; // 未指定状态。
+  GLOBAL_CHAT_TOPIC_STATUS_PENDING = 1; // 已通过预留校验，等待分布式事务确认。
+  GLOBAL_CHAT_TOPIC_STATUS_PUBLISHED = 2; // 已确认积分扣除并对聊天室公开。
+  GLOBAL_CHAT_TOPIC_STATUS_CANCELED = 3; // 分布式事务已取消，不对聊天室公开。
+}

@@ -8,6 +8,9 @@ import (
 	"log/slog"
 	"net"
 	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -157,6 +160,39 @@ func (c *ConsulClient) GetGrpcConn(service string) (*grpc.ClientConn, error) {
 
 	c.logger.Info("grpc connection created", constant.LogFieldKind, constant.LogKindClient, constant.LogFieldTarget, service)
 	return conn, nil
+}
+
+// GetHealthyGRPCEndpoint 查询一个健康实例的可直连 gRPC 地址，供外部协调器回调 TCC 分支。
+func (c *ConsulClient) GetHealthyGRPCEndpoint(service string) (string, error) {
+	if c == nil || c.Client == nil || service == "" {
+		return "", fmt.Errorf("consul gRPC endpoint request is invalid")
+	}
+	entries, _, err := c.Client.Health().Service(service, "", true, nil)
+	if err != nil {
+		return "", fmt.Errorf("query healthy %s service: %w", service, err)
+	}
+	if len(entries) == 0 {
+		return "", fmt.Errorf("healthy %s service not found", service)
+	}
+	grpcAddress := entries[0].Service.TaggedAddresses["grpc"]
+	if grpcAddress.Address != "" {
+		parsed, parseErr := url.Parse(grpcAddress.Address)
+		if parseErr == nil && parsed.Host != "" {
+			return parsed.Host, nil
+		}
+		if grpcAddress.Port > 0 {
+			return net.JoinHostPort(strings.TrimPrefix(grpcAddress.Address, "grpc://"), fmt.Sprint(grpcAddress.Port)), nil
+		}
+		return strings.TrimPrefix(grpcAddress.Address, "grpc://"), nil
+	}
+	address := entries[0].Service.Address
+	if address == "" {
+		address = entries[0].Node.Address
+	}
+	if address == "" || entries[0].Service.Port <= 0 {
+		return "", fmt.Errorf("healthy %s service has no gRPC address", service)
+	}
+	return net.JoinHostPort(address, strconv.Itoa(entries[0].Service.Port)), nil
 }
 
 func (c *ConsulClient) GetHTTPClient(service string) (*khttp.Client, error) {

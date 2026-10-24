@@ -10,7 +10,7 @@ option go_package = "common/proto/gen/economy/v1;v1";
 // TCCPointsService 提供积分变动的 TCC 分支操作。
 service TCCPointsService {
   rpc Try(TCCPoints.Req) returns (TCCPoints.Resp) {} // 预留积分变动所需资源
-  rpc Comfirm(TCCPoints.Req) returns (TCCPoints.Resp) {} // 确认积分变动
+  rpc Confirm(TCCPoints.Req) returns (TCCPoints.Resp) {} // 确认积分变动
   rpc Cancel(TCCPoints.Req) returns (TCCPoints.Resp) {} // 取消积分变动并释放资源
 }
 

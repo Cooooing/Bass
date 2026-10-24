@@ -25,6 +25,7 @@ var DataProviderSet = wire.NewSet(
 	commonClient.NewNatsClient,
 	rpc.ProvideUserClient,
 	rpc.ProvidePlatformClient,
+	rpc.ProvideEconomyClient,
 )
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
@@ -33,11 +34,18 @@ var ModuleProviderSet = wire.NewSet(
 	ProvideDatabase,
 	client.NewEntClient,
 	ProvideGenClient,
+	ProvideDTMConfig,
+	ProvideBusinessConfig,
+	commonClient.NewDTMClient,
+	commonClient.NewTCCBranchCaller,
+	ProvideTCCBranchExecutor,
 	client.ProvideTx,
 	repo.NewPrivateChatSessionRepo,
 	repo.NewPrivateChatMessageRepo,
 	repo.NewGlobalChatMessageRepo,
 	repo.NewGlobalChatMuteRepo,
+	repo.NewGlobalChatTopicRepo,
+	repo.NewGlobalChatTopicRateLimiter,
 	repo.NewRelationClient,
 	repo.NewRealtimeEventPublisher,
 	repo.NewEmojiGroupRepo,
@@ -57,8 +65,14 @@ func ProvideDatabase(c *config.Bootstrap) *common.Database {
 	return c.Database
 }
 
-func ProvideRedis(c *config.Bootstrap) *common.Redis { return c.Redis }
+func ProvideRedis(c *config.Bootstrap) *common.Redis             { return c.Redis }
+func ProvideDTMConfig(c *config.Bootstrap) *common.DTM           { return c.Dtm }
+func ProvideBusinessConfig(c *config.Bootstrap) *config.Business { return c.Business }
 
 func ProvideGenClient(c *client.EntClient) *gen.Client {
 	return c.Client
+}
+
+func ProvideTCCBranchExecutor(sqlClient *commonClient.SQLClient, entClient *client.EntClient, dtm *commonClient.DTMClient) (commonClient.TCCBranchExecutor, error) {
+	return commonClient.NewTCCBranchExecutor(dtm, sqlClient.DB, sqlClient.Driver, entClient.ClientFromTx)
 }

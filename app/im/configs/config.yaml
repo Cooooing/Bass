@@ -57,5 +57,13 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
+dtm:
+  grpc_endpoint: ${DTM_GRPC_ENDPOINT:127.0.0.1:36790}
+  timeout: 5s
+  tcc_timeout_to_fail: 30s
+  retry_interval: 1s
 business:
   emoji_share_ttl: 604800s # 7d
+  global_chat_topic_points: 16
+  global_chat_topic_user_interval: 600s
+  global_chat_topic_global_interval: 30s

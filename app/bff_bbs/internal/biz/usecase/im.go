@@ -117,6 +117,14 @@ func (u *IMUsecase) ListGlobalChatMessages(ctx context.Context, req *imv1.ListGl
 	return u.globalChat.List(ctx, req)
 }
 
+func (u *IMUsecase) GetGlobalChatTopic(ctx context.Context) (*imv1.GetGlobalChatTopic_Resp, error) {
+	return u.globalChat.GetTopic(ctx, &imv1.GetGlobalChatTopic_Req{})
+}
+
+func (u *IMUsecase) SetGlobalChatTopic(ctx context.Context, req *imv1.SetGlobalChatTopic_Req) (*imv1.SetGlobalChatTopic_Resp, error) {
+	return u.globalChat.SetTopic(ctx, req)
+}
+
 func (u *IMUsecase) SendGlobalChatMessage(ctx context.Context, req *imv1.SendGlobalChatMessage_Req) (*imv1.SendGlobalChatMessage_Resp, error) {
 	return u.globalChat.Send(ctx, req)
 }

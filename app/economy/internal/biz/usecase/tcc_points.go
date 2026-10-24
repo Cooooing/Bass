@@ -52,7 +52,7 @@ func (u *TCCPointsUsecase) Try(ctx context.Context, req *TCCPointsReq) (*TCCPoin
 	return response, nil
 }
 
-func (u *TCCPointsUsecase) Comfirm(ctx context.Context, req *TCCPointsReq) (*TCCPointsResp, error) {
+func (u *TCCPointsUsecase) Confirm(ctx context.Context, req *TCCPointsReq) (*TCCPointsResp, error) {
 	if err := u.validate(req); err != nil {
 		return nil, err
 	}

@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	commonenums "common/proto/gen/common/enums"
+	imv1enum "common/proto/gen/im/v1/enum"
 	realtimehubv1 "common/proto/gen/realtime_hub/v1"
 	realtimehubv1enum "common/proto/gen/realtime_hub/v1/enum"
 	"realtime_node/internal/biz/model"
@@ -286,7 +286,7 @@ func (*RealtimeUsecase) ClientEvent(delivery *realtimehubv1.Delivery) (*model.Cl
 		if message == nil || message.GetMessageId() <= 0 || message.GetSenderId() <= 0 || message.GetReceiverId() <= 0 {
 			return nil, false
 		}
-		if message.GetMessageType() == commonenums.IMMessageType_IM_MESSAGE_TYPE_UNSPECIFIED {
+		if message.GetMessageType() == imv1enum.IMMessageType_IM_MESSAGE_TYPE_UNSPECIFIED {
 			return nil, false
 		}
 		createdAt := ""
@@ -299,7 +299,7 @@ func (*RealtimeUsecase) ClientEvent(delivery *realtimehubv1.Delivery) (*model.Cl
 		if message == nil || message.GetMessageId() <= 0 {
 			return nil, false
 		}
-		if message.GetMessageType() == commonenums.IMMessageType_IM_MESSAGE_TYPE_UNSPECIFIED || message.GetSenderId() <= 0 {
+		if message.GetMessageType() == imv1enum.IMMessageType_IM_MESSAGE_TYPE_UNSPECIFIED || message.GetSenderId() <= 0 {
 			return nil, false
 		}
 		createdAt := ""

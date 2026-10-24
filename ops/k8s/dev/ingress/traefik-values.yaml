@@ -129,14 +129,14 @@ ports:
     hostPort: 31789
     protocol: TCP
     expose:
-      default: false
+      default: true
   dtm-grpc:
     port: 31790
     exposedPort: 31790
     hostPort: 31790
     protocol: TCP
     expose:
-      default: false
+      default: true
   nats-monitor:
     port: 31822
     exposedPort: 31822

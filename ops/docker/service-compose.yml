@@ -101,6 +101,18 @@ services:
     networks:
       - bass
 
+  economy:
+    image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/economy:latest
+    container_name: economy
+    restart: on-failure:3
+    env_file:
+      - .test.env
+    ports:
+      - "8108:8108"
+      - "9108:9108"
+    networks:
+      - bass
+
   platform:
     image: registry.cn-hangzhou.aliyuncs.com/docker-cooooing/platform:latest
     container_name: platform

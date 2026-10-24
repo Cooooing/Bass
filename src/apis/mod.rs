@@ -119,8 +119,9 @@ pub mod auth_service;
 pub mod checkin_service;
 pub mod comment_service;
 pub mod domain_service;
+pub mod emoji_service;
+pub mod global_chat_service;
 pub mod holiday_service;
-pub mod im_service;
 pub mod location_service;
 pub mod moonbreeze_service;
 pub mod notification_service;
@@ -128,6 +129,7 @@ pub mod otp_service;
 pub mod postscript_service;
 pub mod preferences_service;
 pub mod privacy_setting_service;
+pub mod private_chat_service;
 pub mod realtime_service;
 pub mod relation_service;
 pub mod tag_service;
@@ -145,8 +147,9 @@ pub trait Api {
     fn checkin_service(&self) -> &dyn checkin_service::CheckinService;
     fn comment_service(&self) -> &dyn comment_service::CommentService;
     fn domain_service(&self) -> &dyn domain_service::DomainService;
+    fn emoji_service(&self) -> &dyn emoji_service::EmojiService;
+    fn global_chat_service(&self) -> &dyn global_chat_service::GlobalChatService;
     fn holiday_service(&self) -> &dyn holiday_service::HolidayService;
-    fn im_service(&self) -> &dyn im_service::ImService;
     fn location_service(&self) -> &dyn location_service::LocationService;
     fn moonbreeze_service(&self) -> &dyn moonbreeze_service::MoonbreezeService;
     fn notification_service(&self) -> &dyn notification_service::NotificationService;
@@ -154,6 +157,7 @@ pub trait Api {
     fn postscript_service(&self) -> &dyn postscript_service::PostscriptService;
     fn preferences_service(&self) -> &dyn preferences_service::PreferencesService;
     fn privacy_setting_service(&self) -> &dyn privacy_setting_service::PrivacySettingService;
+    fn private_chat_service(&self) -> &dyn private_chat_service::PrivateChatService;
     fn realtime_service(&self) -> &dyn realtime_service::RealtimeService;
     fn relation_service(&self) -> &dyn relation_service::RelationService;
     fn tag_service(&self) -> &dyn tag_service::TagService;
@@ -168,8 +172,9 @@ pub struct ApiClient {
     checkin_service: Box<dyn checkin_service::CheckinService>,
     comment_service: Box<dyn comment_service::CommentService>,
     domain_service: Box<dyn domain_service::DomainService>,
+    emoji_service: Box<dyn emoji_service::EmojiService>,
+    global_chat_service: Box<dyn global_chat_service::GlobalChatService>,
     holiday_service: Box<dyn holiday_service::HolidayService>,
-    im_service: Box<dyn im_service::ImService>,
     location_service: Box<dyn location_service::LocationService>,
     moonbreeze_service: Box<dyn moonbreeze_service::MoonbreezeService>,
     notification_service: Box<dyn notification_service::NotificationService>,
@@ -177,6 +182,7 @@ pub struct ApiClient {
     postscript_service: Box<dyn postscript_service::PostscriptService>,
     preferences_service: Box<dyn preferences_service::PreferencesService>,
     privacy_setting_service: Box<dyn privacy_setting_service::PrivacySettingService>,
+    private_chat_service: Box<dyn private_chat_service::PrivateChatService>,
     realtime_service: Box<dyn realtime_service::RealtimeService>,
     relation_service: Box<dyn relation_service::RelationService>,
     tag_service: Box<dyn tag_service::TagService>,
@@ -193,8 +199,9 @@ impl ApiClient {
             checkin_service: Box::new(checkin_service::CheckinServiceClient::new(configuration.clone())),
             comment_service: Box::new(comment_service::CommentServiceClient::new(configuration.clone())),
             domain_service: Box::new(domain_service::DomainServiceClient::new(configuration.clone())),
+            emoji_service: Box::new(emoji_service::EmojiServiceClient::new(configuration.clone())),
+            global_chat_service: Box::new(global_chat_service::GlobalChatServiceClient::new(configuration.clone())),
             holiday_service: Box::new(holiday_service::HolidayServiceClient::new(configuration.clone())),
-            im_service: Box::new(im_service::ImServiceClient::new(configuration.clone())),
             location_service: Box::new(location_service::LocationServiceClient::new(configuration.clone())),
             moonbreeze_service: Box::new(moonbreeze_service::MoonbreezeServiceClient::new(configuration.clone())),
             notification_service: Box::new(notification_service::NotificationServiceClient::new(configuration.clone())),
@@ -202,6 +209,7 @@ impl ApiClient {
             postscript_service: Box::new(postscript_service::PostscriptServiceClient::new(configuration.clone())),
             preferences_service: Box::new(preferences_service::PreferencesServiceClient::new(configuration.clone())),
             privacy_setting_service: Box::new(privacy_setting_service::PrivacySettingServiceClient::new(configuration.clone())),
+            private_chat_service: Box::new(private_chat_service::PrivateChatServiceClient::new(configuration.clone())),
             realtime_service: Box::new(realtime_service::RealtimeServiceClient::new(configuration.clone())),
             relation_service: Box::new(relation_service::RelationServiceClient::new(configuration.clone())),
             tag_service: Box::new(tag_service::TagServiceClient::new(configuration.clone())),
@@ -234,11 +242,14 @@ impl Api for ApiClient {
     fn domain_service(&self) -> &dyn domain_service::DomainService {
         self.domain_service.as_ref()
     }
+    fn emoji_service(&self) -> &dyn emoji_service::EmojiService {
+        self.emoji_service.as_ref()
+    }
+    fn global_chat_service(&self) -> &dyn global_chat_service::GlobalChatService {
+        self.global_chat_service.as_ref()
+    }
     fn holiday_service(&self) -> &dyn holiday_service::HolidayService {
         self.holiday_service.as_ref()
-    }
-    fn im_service(&self) -> &dyn im_service::ImService {
-        self.im_service.as_ref()
     }
     fn location_service(&self) -> &dyn location_service::LocationService {
         self.location_service.as_ref()
@@ -260,6 +271,9 @@ impl Api for ApiClient {
     }
     fn privacy_setting_service(&self) -> &dyn privacy_setting_service::PrivacySettingService {
         self.privacy_setting_service.as_ref()
+    }
+    fn private_chat_service(&self) -> &dyn private_chat_service::PrivateChatService {
+        self.private_chat_service.as_ref()
     }
     fn realtime_service(&self) -> &dyn realtime_service::RealtimeService {
         self.realtime_service.as_ref()

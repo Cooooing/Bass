@@ -135,6 +135,8 @@ pub enum EventType {
     EventTypeImGlobalChatMessageCreated,
     #[serde(rename = "EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED")]
     EventTypeImGlobalChatMentioned,
+    #[serde(rename = "EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED")]
+    EventTypeImGlobalChatBarrageCreated,
     #[serde(rename = "EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE")]
     EventTypeGameIdleChatMessage,
     #[serde(rename = "EVENT_TYPE_GAME_IDLE_CLOSE_SESSION")]

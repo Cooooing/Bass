@@ -1,21 +1,17 @@
-# \ImService
+# \PrivateChatService
 
 All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**count_private_chat_unread**](ImService.md#count_private_chat_unread) | **POST** /v1/im/private-chat/unread-count | 
-[**list_global_chat_messages**](ImService.md#list_global_chat_messages) | **POST** /v1/im/global-chat/messages/list | 
-[**list_global_chat_online_members**](ImService.md#list_global_chat_online_members) | **POST** /v1/im/global-chat/online-members/list | 
-[**list_private_chat_messages**](ImService.md#list_private_chat_messages) | **POST** /v1/im/private-chat/messages/list | 
-[**list_private_chat_sessions**](ImService.md#list_private_chat_sessions) | **GET** /v1/im/private-chat/sessions | 
-[**mark_private_chat_session_read**](ImService.md#mark_private_chat_session_read) | **POST** /v1/im/private-chat/read | 
-[**revoke_global_chat_message**](ImService.md#revoke_global_chat_message) | **POST** /v1/im/global-chat/messages/revoke | 
-[**revoke_private_chat_message**](ImService.md#revoke_private_chat_message) | **POST** /v1/im/private-chat/messages/revoke | 
-[**send_global_chat_message**](ImService.md#send_global_chat_message) | **POST** /v1/im/global-chat/messages | 
-[**send_private_chat_message**](ImService.md#send_private_chat_message) | **POST** /v1/im/private-chat/messages | 
-[**set_private_chat_session_muted**](ImService.md#set_private_chat_session_muted) | **POST** /v1/im/private-chat/muted | 
-[**set_private_chat_session_pinned**](ImService.md#set_private_chat_session_pinned) | **POST** /v1/im/private-chat/pinned | 
+[**count_private_chat_unread**](PrivateChatService.md#count_private_chat_unread) | **POST** /v1/im/private-chat/unread-count | 
+[**list_private_chat_messages**](PrivateChatService.md#list_private_chat_messages) | **POST** /v1/im/private-chat/messages/list | 
+[**list_private_chat_sessions**](PrivateChatService.md#list_private_chat_sessions) | **GET** /v1/im/private-chat/sessions | 
+[**mark_private_chat_session_read**](PrivateChatService.md#mark_private_chat_session_read) | **POST** /v1/im/private-chat/read | 
+[**revoke_private_chat_message**](PrivateChatService.md#revoke_private_chat_message) | **POST** /v1/im/private-chat/messages/revoke | 
+[**send_private_chat_message**](PrivateChatService.md#send_private_chat_message) | **POST** /v1/im/private-chat/messages | 
+[**set_private_chat_session_muted**](PrivateChatService.md#set_private_chat_session_muted) | **POST** /v1/im/private-chat/muted | 
+[**set_private_chat_session_pinned**](PrivateChatService.md#set_private_chat_session_pinned) | **POST** /v1/im/private-chat/pinned | 
 
 
 
@@ -36,66 +32,6 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::CountPrivateChatUnreadResp**](CountPrivateChatUnread_Resp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## list_global_chat_messages
-
-> models::ListGlobalChatMessagesResp list_global_chat_messages(list_global_chat_messages_req)
-
-
-查询全局聊天室消息。
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**list_global_chat_messages_req** | [**ListGlobalChatMessagesReq**](ListGlobalChatMessagesReq.md) |  | [required] |
-
-### Return type
-
-[**models::ListGlobalChatMessagesResp**](ListGlobalChatMessages_Resp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## list_global_chat_online_members
-
-> models::ListGlobalChatOnlineMembersResp list_global_chat_online_members(body)
-
-
-查询全部在线的聊天室成员。
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**body** | **serde_json::Value** |  | [required] |
-
-### Return type
-
-[**models::ListGlobalChatOnlineMembersResp**](ListGlobalChatOnlineMembers_Resp.md)
 
 ### Authorization
 
@@ -200,36 +136,6 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 
-## revoke_global_chat_message
-
-> models::RevokeGlobalChatMessageResp revoke_global_chat_message(revoke_global_chat_message_req)
-
-
-撤回自己的全局聊天室消息。
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**revoke_global_chat_message_req** | [**RevokeGlobalChatMessageReq**](RevokeGlobalChatMessageReq.md) |  | [required] |
-
-### Return type
-
-[**models::RevokeGlobalChatMessageResp**](RevokeGlobalChatMessage_Resp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
 ## revoke_private_chat_message
 
 > models::RevokePrivateChatMessageResp revoke_private_chat_message(revoke_private_chat_message_req)
@@ -247,36 +153,6 @@ Name | Type | Description  | Required | Notes
 ### Return type
 
 [**models::RevokePrivateChatMessageResp**](RevokePrivateChatMessage_Resp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-
-## send_global_chat_message
-
-> models::SendGlobalChatMessageResp send_global_chat_message(send_global_chat_message_req)
-
-
-发送全局聊天室消息。
-
-### Parameters
-
-
-Name | Type | Description  | Required | Notes
-------------- | ------------- | ------------- | ------------- | -------------
-**send_global_chat_message_req** | [**SendGlobalChatMessageReq**](SendGlobalChatMessageReq.md) |  | [required] |
-
-### Return type
-
-[**models::SendGlobalChatMessageResp**](SendGlobalChatMessage_Resp.md)
 
 ### Authorization
 

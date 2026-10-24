@@ -18,22 +18,12 @@ use super::{Error, configuration};
 use crate::apis::ContentType;
 
 #[async_trait]
-pub trait ImService: Send + Sync {
+pub trait PrivateChatService: Send + Sync {
 
     /// POST /v1/im/private-chat/unread-count
     ///
     /// 统计当前账号的私聊未读数。
     async fn count_private_chat_unread<'body>(&self, body: serde_json::Value) -> Result<models::CountPrivateChatUnreadResp, Error<CountPrivateChatUnreadError>>;
-
-    /// POST /v1/im/global-chat/messages/list
-    ///
-    /// 查询全局聊天室消息。
-    async fn list_global_chat_messages<'list_global_chat_messages_req>(&self, list_global_chat_messages_req: models::ListGlobalChatMessagesReq) -> Result<models::ListGlobalChatMessagesResp, Error<ListGlobalChatMessagesError>>;
-
-    /// POST /v1/im/global-chat/online-members/list
-    ///
-    /// 查询全部在线的聊天室成员。
-    async fn list_global_chat_online_members<'body>(&self, body: serde_json::Value) -> Result<models::ListGlobalChatOnlineMembersResp, Error<ListGlobalChatOnlineMembersError>>;
 
     /// POST /v1/im/private-chat/messages/list
     ///
@@ -50,20 +40,10 @@ pub trait ImService: Send + Sync {
     /// 标记私聊会话已读。
     async fn mark_private_chat_session_read<'mark_private_chat_session_read_req>(&self, mark_private_chat_session_read_req: models::MarkPrivateChatSessionReadReq) -> Result<serde_json::Value, Error<MarkPrivateChatSessionReadError>>;
 
-    /// POST /v1/im/global-chat/messages/revoke
-    ///
-    /// 撤回自己的全局聊天室消息。
-    async fn revoke_global_chat_message<'revoke_global_chat_message_req>(&self, revoke_global_chat_message_req: models::RevokeGlobalChatMessageReq) -> Result<models::RevokeGlobalChatMessageResp, Error<RevokeGlobalChatMessageError>>;
-
     /// POST /v1/im/private-chat/messages/revoke
     ///
     /// 撤回私聊消息。
     async fn revoke_private_chat_message<'revoke_private_chat_message_req>(&self, revoke_private_chat_message_req: models::RevokePrivateChatMessageReq) -> Result<models::RevokePrivateChatMessageResp, Error<RevokePrivateChatMessageError>>;
-
-    /// POST /v1/im/global-chat/messages
-    ///
-    /// 发送全局聊天室消息。
-    async fn send_global_chat_message<'send_global_chat_message_req>(&self, send_global_chat_message_req: models::SendGlobalChatMessageReq) -> Result<models::SendGlobalChatMessageResp, Error<SendGlobalChatMessageError>>;
 
     /// POST /v1/im/private-chat/messages
     ///
@@ -81,11 +61,11 @@ pub trait ImService: Send + Sync {
     async fn set_private_chat_session_pinned<'set_private_chat_session_pinned_req>(&self, set_private_chat_session_pinned_req: models::SetPrivateChatSessionPinnedReq) -> Result<serde_json::Value, Error<SetPrivateChatSessionPinnedError>>;
 }
 
-pub struct ImServiceClient {
+pub struct PrivateChatServiceClient {
     configuration: Arc<configuration::Configuration>
 }
 
-impl ImServiceClient {
+impl PrivateChatServiceClient {
     pub fn new(configuration: Arc<configuration::Configuration>) -> Self {
         Self { configuration }
     }
@@ -94,7 +74,7 @@ impl ImServiceClient {
 
 
 #[async_trait]
-impl ImService for ImServiceClient {
+impl PrivateChatService for PrivateChatServiceClient {
     /// 统计当前账号的私聊未读数。
     async fn count_private_chat_unread<'body>(&self, body: serde_json::Value) -> Result<models::CountPrivateChatUnreadResp, Error<CountPrivateChatUnreadError>> {
         let local_var_configuration = &self.configuration;
@@ -129,84 +109,6 @@ impl ImService for ImServiceClient {
             }
         } else {
             let local_var_entity: Option<CountPrivateChatUnreadError> = serde_json::from_str(&local_var_content).ok();
-            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
-            Err(Error::ResponseError(local_var_error))
-        }
-    }
-
-    /// 查询全局聊天室消息。
-    async fn list_global_chat_messages<'list_global_chat_messages_req>(&self, list_global_chat_messages_req: models::ListGlobalChatMessagesReq) -> Result<models::ListGlobalChatMessagesResp, Error<ListGlobalChatMessagesError>> {
-        let local_var_configuration = &self.configuration;
-
-        let local_var_client = &local_var_configuration.client;
-
-        let local_var_uri_str = format!("{}/v1/im/global-chat/messages/list", local_var_configuration.base_path);
-        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
-
-        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-        }
-        local_var_req_builder = local_var_req_builder.json(&list_global_chat_messages_req);
-
-        let local_var_req = local_var_req_builder.build()?;
-        let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-        let local_var_status = local_var_resp.status();
-        let local_var_content_type = local_var_resp
-            .headers()
-            .get("content-type")
-            .and_then(|v| v.to_str().ok())
-            .unwrap_or("application/octet-stream");
-        let local_var_content_type = super::ContentType::from(local_var_content_type);
-        let local_var_content = local_var_resp.text().await?;
-
-        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-            match local_var_content_type {
-                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListGlobalChatMessagesResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListGlobalChatMessagesResp`")))),
-            }
-        } else {
-            let local_var_entity: Option<ListGlobalChatMessagesError> = serde_json::from_str(&local_var_content).ok();
-            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
-            Err(Error::ResponseError(local_var_error))
-        }
-    }
-
-    /// 查询全部在线的聊天室成员。
-    async fn list_global_chat_online_members<'body>(&self, body: serde_json::Value) -> Result<models::ListGlobalChatOnlineMembersResp, Error<ListGlobalChatOnlineMembersError>> {
-        let local_var_configuration = &self.configuration;
-
-        let local_var_client = &local_var_configuration.client;
-
-        let local_var_uri_str = format!("{}/v1/im/global-chat/online-members/list", local_var_configuration.base_path);
-        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
-
-        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-        }
-        local_var_req_builder = local_var_req_builder.json(&body);
-
-        let local_var_req = local_var_req_builder.build()?;
-        let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-        let local_var_status = local_var_resp.status();
-        let local_var_content_type = local_var_resp
-            .headers()
-            .get("content-type")
-            .and_then(|v| v.to_str().ok())
-            .unwrap_or("application/octet-stream");
-        let local_var_content_type = super::ContentType::from(local_var_content_type);
-        let local_var_content = local_var_resp.text().await?;
-
-        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-            match local_var_content_type {
-                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::ListGlobalChatOnlineMembersResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::ListGlobalChatOnlineMembersResp`")))),
-            }
-        } else {
-            let local_var_entity: Option<ListGlobalChatOnlineMembersError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -334,45 +236,6 @@ impl ImService for ImServiceClient {
         }
     }
 
-    /// 撤回自己的全局聊天室消息。
-    async fn revoke_global_chat_message<'revoke_global_chat_message_req>(&self, revoke_global_chat_message_req: models::RevokeGlobalChatMessageReq) -> Result<models::RevokeGlobalChatMessageResp, Error<RevokeGlobalChatMessageError>> {
-        let local_var_configuration = &self.configuration;
-
-        let local_var_client = &local_var_configuration.client;
-
-        let local_var_uri_str = format!("{}/v1/im/global-chat/messages/revoke", local_var_configuration.base_path);
-        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
-
-        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-        }
-        local_var_req_builder = local_var_req_builder.json(&revoke_global_chat_message_req);
-
-        let local_var_req = local_var_req_builder.build()?;
-        let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-        let local_var_status = local_var_resp.status();
-        let local_var_content_type = local_var_resp
-            .headers()
-            .get("content-type")
-            .and_then(|v| v.to_str().ok())
-            .unwrap_or("application/octet-stream");
-        let local_var_content_type = super::ContentType::from(local_var_content_type);
-        let local_var_content = local_var_resp.text().await?;
-
-        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-            match local_var_content_type {
-                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::RevokeGlobalChatMessageResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::RevokeGlobalChatMessageResp`")))),
-            }
-        } else {
-            let local_var_entity: Option<RevokeGlobalChatMessageError> = serde_json::from_str(&local_var_content).ok();
-            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
-            Err(Error::ResponseError(local_var_error))
-        }
-    }
-
     /// 撤回私聊消息。
     async fn revoke_private_chat_message<'revoke_private_chat_message_req>(&self, revoke_private_chat_message_req: models::RevokePrivateChatMessageReq) -> Result<models::RevokePrivateChatMessageResp, Error<RevokePrivateChatMessageError>> {
         let local_var_configuration = &self.configuration;
@@ -407,45 +270,6 @@ impl ImService for ImServiceClient {
             }
         } else {
             let local_var_entity: Option<RevokePrivateChatMessageError> = serde_json::from_str(&local_var_content).ok();
-            let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
-            Err(Error::ResponseError(local_var_error))
-        }
-    }
-
-    /// 发送全局聊天室消息。
-    async fn send_global_chat_message<'send_global_chat_message_req>(&self, send_global_chat_message_req: models::SendGlobalChatMessageReq) -> Result<models::SendGlobalChatMessageResp, Error<SendGlobalChatMessageError>> {
-        let local_var_configuration = &self.configuration;
-
-        let local_var_client = &local_var_configuration.client;
-
-        let local_var_uri_str = format!("{}/v1/im/global-chat/messages", local_var_configuration.base_path);
-        let mut local_var_req_builder = local_var_client.request(reqwest::Method::POST, local_var_uri_str.as_str());
-
-        if let Some(ref local_var_user_agent) = local_var_configuration.user_agent {
-            local_var_req_builder = local_var_req_builder.header(reqwest::header::USER_AGENT, local_var_user_agent.clone());
-        }
-        local_var_req_builder = local_var_req_builder.json(&send_global_chat_message_req);
-
-        let local_var_req = local_var_req_builder.build()?;
-        let local_var_resp = local_var_client.execute(local_var_req).await?;
-
-        let local_var_status = local_var_resp.status();
-        let local_var_content_type = local_var_resp
-            .headers()
-            .get("content-type")
-            .and_then(|v| v.to_str().ok())
-            .unwrap_or("application/octet-stream");
-        let local_var_content_type = super::ContentType::from(local_var_content_type);
-        let local_var_content = local_var_resp.text().await?;
-
-        if !local_var_status.is_client_error() && !local_var_status.is_server_error() {
-            match local_var_content_type {
-                ContentType::Json => serde_json::from_str(&local_var_content).map_err(Error::from),
-                ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::SendGlobalChatMessageResp`"))),
-                ContentType::Unsupported(local_var_unknown_type) => return Err(Error::from(serde_json::Error::custom(format!("Received `{local_var_unknown_type}` content type response that cannot be converted to `models::SendGlobalChatMessageResp`")))),
-            }
-        } else {
-            let local_var_entity: Option<SendGlobalChatMessageError> = serde_json::from_str(&local_var_content).ok();
             let local_var_error = ResponseContent { status: local_var_status, content: local_var_content, entity: local_var_entity };
             Err(Error::ResponseError(local_var_error))
         }
@@ -570,84 +394,56 @@ impl ImService for ImServiceClient {
 
 }
 
-/// struct for typed errors of method [`ImService::count_private_chat_unread`]
+/// struct for typed errors of method [`PrivateChatService::count_private_chat_unread`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum CountPrivateChatUnreadError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ImService::list_global_chat_messages`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum ListGlobalChatMessagesError {
-    UnknownValue(serde_json::Value),
-}
-
-/// struct for typed errors of method [`ImService::list_global_chat_online_members`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum ListGlobalChatOnlineMembersError {
-    UnknownValue(serde_json::Value),
-}
-
-/// struct for typed errors of method [`ImService::list_private_chat_messages`]
+/// struct for typed errors of method [`PrivateChatService::list_private_chat_messages`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ListPrivateChatMessagesError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ImService::list_private_chat_sessions`]
+/// struct for typed errors of method [`PrivateChatService::list_private_chat_sessions`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ListPrivateChatSessionsError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ImService::mark_private_chat_session_read`]
+/// struct for typed errors of method [`PrivateChatService::mark_private_chat_session_read`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum MarkPrivateChatSessionReadError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ImService::revoke_global_chat_message`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum RevokeGlobalChatMessageError {
-    UnknownValue(serde_json::Value),
-}
-
-/// struct for typed errors of method [`ImService::revoke_private_chat_message`]
+/// struct for typed errors of method [`PrivateChatService::revoke_private_chat_message`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RevokePrivateChatMessageError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ImService::send_global_chat_message`]
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum SendGlobalChatMessageError {
-    UnknownValue(serde_json::Value),
-}
-
-/// struct for typed errors of method [`ImService::send_private_chat_message`]
+/// struct for typed errors of method [`PrivateChatService::send_private_chat_message`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum SendPrivateChatMessageError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ImService::set_private_chat_session_muted`]
+/// struct for typed errors of method [`PrivateChatService::set_private_chat_session_muted`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum SetPrivateChatSessionMutedError {
     UnknownValue(serde_json::Value),
 }
 
-/// struct for typed errors of method [`ImService::set_private_chat_session_pinned`]
+/// struct for typed errors of method [`PrivateChatService::set_private_chat_session_pinned`]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum SetPrivateChatSessionPinnedError {

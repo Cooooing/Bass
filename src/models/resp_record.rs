@@ -67,6 +67,10 @@ pub enum RecordType {
     EconomyRecordTypeAdminAdd,
     #[serde(rename = "ECONOMY_RECORD_TYPE_ADMIN_DEDUCT")]
     EconomyRecordTypeAdminDeduct,
+    #[serde(rename = "ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE")]
+    EconomyRecordTypeGlobalChatTopicExpense,
+    #[serde(rename = "ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE")]
+    EconomyRecordTypeGlobalChatBarrageExpense,
 }
 
 impl Default for RecordType {

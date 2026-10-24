@@ -11,12 +11,14 @@ var ServiceProviderSet = wire.NewSet(
 	NewCommonSystemService,
 	NewPrivateChatService,
 	NewGlobalChatService,
+	NewEmojiService,
 )
 
-func ProvideServices(commonSystemService *CommonSystemService, privateChatService *PrivateChatService, globalChatService *GlobalChatService) []server.Service {
+func ProvideServices(commonSystemService *CommonSystemService, privateChatService *PrivateChatService, globalChatService *GlobalChatService, emojiService *EmojiService) []server.Service {
 	return []server.Service{
 		commonSystemService,
 		privateChatService,
 		globalChatService,
+		emojiService,
 	}
 }

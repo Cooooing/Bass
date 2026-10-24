@@ -28,6 +28,7 @@ var ServiceProviderSet = wire.NewSet(
 	NewHolidayService,
 	NewRealtimeService,
 	NewIMService,
+	NewEmojiService,
 	NewAssetService,
 )
 
@@ -52,6 +53,7 @@ func ProvideServices(
 	holidayService *HolidayService,
 	realtimeService *RealtimeService,
 	imService *IMService,
+	emojiService *EmojiService,
 	assetService *AssetService,
 ) []server.Service {
 	return []server.Service{
@@ -75,6 +77,7 @@ func ProvideServices(
 		holidayService,
 		realtimeService,
 		imService,
+		emojiService,
 		assetService,
 	}
 }

@@ -581,6 +581,20 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "Invalid chat session information",
 			},
 		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_EMOJI_GROUP_EMPTY: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "分组没有可分享的表情",
+				commonenums.Language_LANGUAGE_ZH_TW: "分組沒有可分享的表情",
+				commonenums.Language_LANGUAGE_EN:    "The emoji group has no items to share",
+			},
+		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_EMOJI_SHARE_INVALID_OR_EXPIRED: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "分享码过期或无效",
+				commonenums.Language_LANGUAGE_ZH_TW: "分享碼已過期或無效",
+				commonenums.Language_LANGUAGE_EN:    "The share code is invalid or expired",
+			},
+		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_BBS_CALLBACK_SIGNATURE_INVALID: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "回调签名无效",

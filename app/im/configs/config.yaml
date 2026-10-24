@@ -57,3 +57,5 @@ trace:
   sampler: 1
 observability:
   enable_metrics: true
+business:
+  emoji_share_ttl: 604800s # 7d

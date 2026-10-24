@@ -2,6 +2,7 @@ syntax = "proto3";
 package kratos.api.im.config;
 
 import "common/config.proto";
+import "google/protobuf/duration.proto";
 
 option go_package = "im/internal/config;config";
 
@@ -15,4 +16,10 @@ message Bootstrap {
   common.api.app.common.Nats nats = 7;
   common.api.app.common.Trace trace = 8;
   common.api.app.common.Observability observability = 9;
+  Business business = 21;
+}
+
+// Business 是即时消息领域的业务运行参数。
+message Business {
+  google.protobuf.Duration emoji_share_ttl = 1; // 表情分组分享码的有效期，例如 604800s 表示 7d。
 }

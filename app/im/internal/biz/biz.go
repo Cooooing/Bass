@@ -10,4 +10,5 @@ import (
 var BizProviderSet = wire.NewSet(
 	usecase.NewPrivateChatUsecase,
 	usecase.NewGlobalChatUsecase,
+	usecase.NewEmojiUsecase,
 )

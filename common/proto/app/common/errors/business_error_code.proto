@@ -90,6 +90,8 @@ enum BusinessErrorCode {
   BUSINESS_ERROR_CODE_IM_CHAT_GROUP_NOT_FOUND = 14002 [(errors.code) = 404]; // 即时通信群组不存在
   BUSINESS_ERROR_CODE_IM_CHAT_GROUP_STATUS_INVALID = 14003 [(errors.code) = 400]; // 即时通信群组状态无效
   BUSINESS_ERROR_CODE_IM_CHAT_SESSION_INVALID = 14004 [(errors.code) = 400]; // 即时通信会话信息无效
+  BUSINESS_ERROR_CODE_IM_EMOJI_GROUP_EMPTY = 14005 [(errors.code) = 400]; // 表情分组为空，不能分享
+  BUSINESS_ERROR_CODE_IM_EMOJI_SHARE_INVALID_OR_EXPIRED = 14006 [(errors.code) = 400]; // 表情分享码无效或已过期
   BUSINESS_ERROR_CODE_BBS_CALLBACK_SIGNATURE_INVALID = 15001 [(errors.code) = 403]; // BBS 回调签名无效
   BUSINESS_ERROR_CODE_PLATFORM_MARKDOWN_IMAGE_INVALID = 16001 [(errors.code) = 400]; // Markdown 图片格式或上传信息无效
   BUSINESS_ERROR_CODE_PLATFORM_MARKDOWN_IMAGE_TOO_LARGE = 16002 [(errors.code) = 400]; // Markdown 图片文件过大

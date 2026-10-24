@@ -17,11 +17,14 @@ import (
 var DataProviderSet = wire.NewSet(
 	ModuleProviderSet,
 	commonClient.NewObservability,
+	commonClient.NewRedisClient,
 	ProvideConsul,
+	ProvideRedis,
 	ProvideNats,
 	commonClient.NewConsulClient,
 	commonClient.NewNatsClient,
 	rpc.ProvideUserClient,
+	rpc.ProvidePlatformClient,
 )
 
 // ModuleProviderSet 提供不依赖服务发现的模块数据层依赖。
@@ -37,6 +40,9 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewGlobalChatMuteRepo,
 	repo.NewRelationClient,
 	repo.NewRealtimeEventPublisher,
+	repo.NewEmojiGroupRepo,
+	repo.NewEmojiShareCache,
+	repo.NewEmojiAssetClient,
 )
 
 func ProvideConsul(c *config.Bootstrap) *common.Consul {
@@ -50,6 +56,8 @@ func ProvideNats(c *config.Bootstrap) *common.Nats {
 func ProvideDatabase(c *config.Bootstrap) *common.Database {
 	return c.Database
 }
+
+func ProvideRedis(c *config.Bootstrap) *common.Redis { return c.Redis }
 
 func ProvideGenClient(c *client.EntClient) *gen.Client {
 	return c.Client

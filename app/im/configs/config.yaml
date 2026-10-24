@@ -67,3 +67,5 @@ business:
   global_chat_topic_points: 16
   global_chat_topic_user_interval: 600s
   global_chat_topic_global_interval: 30s
+  global_chat_barrage_points: 5
+  global_chat_barrage_user_interval: 12s

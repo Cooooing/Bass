@@ -36,6 +36,7 @@ const (
 	EventSubjectContentCommentStatusUpdate   EventSubject = "content.comment.status_updated"
 	EventSubjectIMPrivateChatMessageCreated  EventSubject = "im.private_chat.message_created"
 	EventSubjectIMGlobalChatMessageCreated   EventSubject = "im.global_chat.message_created"
+	EventSubjectIMGlobalChatBarrageCreated   EventSubject = "im.global_chat.barrage_created"
 	EventSubjectGameIdle                     EventSubject = "game_idle"
 	EventSubjectNotifyStationMessagesCreated EventSubject = "notify.station_messages.created"
 )
@@ -72,6 +73,7 @@ var EventSubjectMap = NewMapping[EventSubject, enums.EventSubject](map[EventSubj
 	EventSubjectContentCommentStatusUpdate:   {Proto: enums.EventSubject_EVENT_SUBJECT_COMMENT_STATUS_UPDATED},
 	EventSubjectIMPrivateChatMessageCreated:  {Proto: enums.EventSubject_EVENT_SUBJECT_IM_PRIVATE_CHAT_MESSAGE_CREATED},
 	EventSubjectIMGlobalChatMessageCreated:   {Proto: enums.EventSubject_EVENT_SUBJECT_IM_GLOBAL_CHAT_MESSAGE_CREATED},
+	EventSubjectIMGlobalChatBarrageCreated:   {Proto: enums.EventSubject_EVENT_SUBJECT_IM_GLOBAL_CHAT_BARRAGE_CREATED},
 	EventSubjectGameIdle:                     {Proto: enums.EventSubject_EVENT_SUBJECT_GAME_IDLE},
 	EventSubjectNotifyStationMessagesCreated: {Proto: enums.EventSubject_EVENT_SUBJECT_NOTIFY_STATION_MESSAGES_CREATED},
 })

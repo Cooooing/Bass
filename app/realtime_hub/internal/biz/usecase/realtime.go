@@ -140,6 +140,27 @@ func (u *RealtimeUsecase) DeliverGlobalChatMessage(realm string, messageID, send
 	}
 }
 
+// DeliverGlobalChatBarrage 将全局聊天室弹幕广播给实时域中的每个本机 node。
+func (u *RealtimeUsecase) DeliverGlobalChatBarrage(realm string, barrageID, userID int64, content string, createdAt time.Time) {
+	message := &model.NodeMessage{Delivery: &model.Delivery{
+		Kind: enum.DeliveryKindGlobalChatBarrage,
+		Payload: model.GlobalChatBarrageDelivery{
+			BarrageID: barrageID,
+			UserID:    userID,
+			Content:   content,
+			CreatedAt: createdAt,
+		},
+	}}
+	u.mu.RLock()
+	defer u.mu.RUnlock()
+	for _, node := range u.nodes[realm] {
+		select {
+		case node.messages <- message:
+		default:
+		}
+	}
+}
+
 func (u *RealtimeUsecase) Deliver(ctx context.Context, realm string, userID int64, kind enum.DeliveryKind, payload model.DeliveryPayload) error {
 	if payload == nil {
 		return fmt.Errorf("delivery payload is required")

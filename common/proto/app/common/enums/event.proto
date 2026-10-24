@@ -63,6 +63,7 @@ enum EventType {
   EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED = 3001; // 创建私聊消息
   EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED = 3002; // 创建全局聊天室消息
   EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED = 3003; // 在全局聊天室中提及账号
+  EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED = 3004; // 创建全局聊天室弹幕
 
   // 挂机游戏事件（5000-5999）
   EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE = 5001; // 挂机游戏聊天消息
@@ -120,6 +121,7 @@ enum EventSubject {
   // 即时通讯事件（3000-3999）
   EVENT_SUBJECT_IM_PRIVATE_CHAT_MESSAGE_CREATED = 3001; // im.private_chat.message_created
   EVENT_SUBJECT_IM_GLOBAL_CHAT_MESSAGE_CREATED = 3002; // im.global_chat.message_created
+  EVENT_SUBJECT_IM_GLOBAL_CHAT_BARRAGE_CREATED = 3004; // im.global_chat.barrage_created
 
   // 挂机游戏事件（5000-5999）
   EVENT_SUBJECT_GAME_IDLE = 5000; // game_idle
@@ -200,6 +202,7 @@ message Event {
     CommentStatusUpdatedPayload comment_status_updated = 2104;
     IMPrivateChatMessageCreatedPayload im_private_chat_message_created = 3001;
     IMGlobalChatMessageCreatedPayload im_global_chat_message_created = 3002;
+    IMGlobalChatBarrageCreatedPayload im_global_chat_barrage_created = 3004;
     GameIdleChatMessagePayload game_idle_chat_message = 5001;
     GameIdleCloseSessionPayload game_idle_close_session = 5002;
     GameIdleActionCompletedPayload game_idle_action_completed = 5003;

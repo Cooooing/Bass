@@ -245,7 +245,7 @@ func (u *RealtimeUsecase) handleHubMessage(message *realtimehubv1.HubToNode) {
 func (u *RealtimeUsecase) dispatch(delivery *realtimehubv1.Delivery) {
 	u.mu.RLock()
 	connections := make([]chan *realtimehubv1.Delivery, 0)
-	if delivery.GetKind() == realtimehubv1enum.DeliveryKind_DELIVERY_KIND_GLOBAL_CHAT_MESSAGE {
+	if delivery.GetKind() == realtimehubv1enum.DeliveryKind_DELIVERY_KIND_GLOBAL_CHAT_MESSAGE || delivery.GetKind() == realtimehubv1enum.DeliveryKind_DELIVERY_KIND_GLOBAL_CHAT_BARRAGE {
 		for _, userConnections := range u.users {
 			for _, connection := range userConnections {
 				connections = append(connections, connection.deliveries)
@@ -307,6 +307,16 @@ func (*RealtimeUsecase) ClientEvent(delivery *realtimehubv1.Delivery) (*model.Cl
 			createdAt = message.GetCreatedAt().AsTime().Format(time.RFC3339Nano)
 		}
 		return &model.ClientEvent{Name: string(kind), Payload: model.GlobalChatMessageEventPayload{MessageID: message.GetMessageId(), SenderID: message.GetSenderId(), MessageType: message.GetMessageType().String(), Content: message.GetContent(), CreatedAt: createdAt}}, true
+	case enum.DeliveryKindGlobalChatBarrage:
+		barrage := delivery.GetGlobalChatBarrage()
+		if barrage == nil || barrage.GetBarrageId() <= 0 || barrage.GetUserId() <= 0 || barrage.GetContent() == "" {
+			return nil, false
+		}
+		createdAt := ""
+		if barrage.GetCreatedAt() != nil {
+			createdAt = barrage.GetCreatedAt().AsTime().Format(time.RFC3339Nano)
+		}
+		return &model.ClientEvent{Name: string(kind), Payload: model.GlobalChatBarrageEventPayload{BarrageID: barrage.GetBarrageId(), UserID: barrage.GetUserId(), Content: barrage.GetContent(), CreatedAt: createdAt}}, true
 	default:
 		return nil, false
 	}

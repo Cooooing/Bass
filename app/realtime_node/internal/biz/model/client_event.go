@@ -25,3 +25,10 @@ type GlobalChatMessageEventPayload struct {
 	Content     string `json:"content"`
 	CreatedAt   string `json:"created_at"`
 }
+
+type GlobalChatBarrageEventPayload struct {
+	BarrageID int64  `json:"barrage_id"`
+	UserID    int64  `json:"user_id"`
+	Content   string `json:"content"`
+	CreatedAt string `json:"created_at"`
+}

@@ -96,6 +96,13 @@ func NewBBSErrorMessages() serverutil.ErrorMessages {
 				commonenums.Language_LANGUAGE_EN:    "Chat topic updates are too frequent, please try again later",
 			},
 		},
+		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_IM_GLOBAL_CHAT_BARRAGE_RATE_LIMITED: {
+			Text: map[commonenums.Language]string{
+				commonenums.Language_LANGUAGE_ZH_CN: "弹幕发送过于频繁，请稍后再试",
+				commonenums.Language_LANGUAGE_ZH_TW: "彈幕發送過於頻繁，請稍後再試",
+				commonenums.Language_LANGUAGE_EN:    "Barrages are being sent too frequently, please try again later",
+			},
+		},
 		cerrors.BusinessErrorCode_BUSINESS_ERROR_CODE_CONTENT_ARTICLE_SCHEDULED_AT_OUT_OF_RANGE: {
 			Text: map[commonenums.Language]string{
 				commonenums.Language_LANGUAGE_ZH_CN: "定时发布时间需在 5 分钟后且不超过 3 个月",

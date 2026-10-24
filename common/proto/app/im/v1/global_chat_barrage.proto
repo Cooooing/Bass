@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+import "common/common.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "common/proto/gen/im/v1;v1";
+
+service IMGlobalChatBarrageService {
+  rpc Send(SendGlobalChatBarrage.Req) returns (SendGlobalChatBarrage.Resp) {} // 发送全局聊天室弹幕。
+  rpc List(ListGlobalChatBarrages.Req) returns (ListGlobalChatBarrages.Resp) {} // 分页查询全局聊天室弹幕。
+}
+
+message GlobalChatBarrage {
+  int64 id = 1; // 弹幕 ID。
+  int64 user_id = 2; // 发送账号 ID。
+  string content = 3; // 纯文本弹幕内容。
+  int64 points_cost = 4; // 本次实际消耗的积分。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+}
+
+message SendGlobalChatBarrage {
+  message Req {
+    int64 user_id = 1; // 发送账号 ID。
+    string client_request_id = 2; // 客户端幂等请求 ID。
+    string content = 3; // 原始弹幕内容。
+  }
+  message Resp {
+    GlobalChatBarrage barrage = 1; // 已发布的弹幕。
+  }
+}
+
+message ListGlobalChatBarrages {
+  message Req {
+    optional int64 user_id = 1; // 按发送账号筛选。
+    .common.api.app.common.PageReq page = 2; // 分页参数。
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页信息。
+    repeated GlobalChatBarrage rows = 2; // 已发布弹幕。
+  }
+}

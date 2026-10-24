@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package common.api.app.bff_bbs.v1;
+package common.api.app.bff_bbs.v1.platform;
 
 import "gnostic/openapi/v3/annotations.proto";
 import "google/api/annotations.proto";
 
-option go_package = "common/proto/gen/bff_bbs/v1;v1";
+option go_package = "common/proto/gen/bff_bbs/v1/platform;platform";
 
 service AssetService {
   // 申请 Markdown 图片的内容寻址直传凭证。
@@ -29,7 +29,11 @@ message PrepareMarkdownImageUpload {
     string hash = 1; // 文件 SHA-256，小写十六进制。
     string mime_type = 2; // 上传 MIME 类型。
     int64 size = 3; // 文件大小，最大 5 MiB。
-    option (gnostic.openapi.v3.schema) = { required: "hash" required: "mime_type" required: "size" };
+    option (gnostic.openapi.v3.schema) = {
+      required: "hash"
+      required: "mime_type"
+      required: "size"
+    };
   }
   message Resp {
     optional int64 asset_id = 1; // 已存在资源的 ID。
@@ -41,7 +45,7 @@ message PrepareMarkdownImageUpload {
 message CompleteMarkdownImageUpload {
   message Req {
     string hash = 1; // 文件 SHA-256；回调尚未入库时返回可重试的未找到错误。
-    option (gnostic.openapi.v3.schema) = { required: "hash" };
+    option (gnostic.openapi.v3.schema) = {required: "hash"};
   }
   message Resp {
     int64 asset_id = 1; // 已确认资源的 ID。

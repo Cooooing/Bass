@@ -46,6 +46,8 @@ var ModuleProviderSet = wire.NewSet(
 	repo.NewGlobalChatMuteRepo,
 	repo.NewGlobalChatTopicRepo,
 	repo.NewGlobalChatTopicRateLimiter,
+	repo.NewGlobalChatBarrageRepo,
+	repo.NewGlobalChatBarrageRateLimiter,
 	repo.NewRelationClient,
 	repo.NewRealtimeEventPublisher,
 	repo.NewEmojiGroupRepo,

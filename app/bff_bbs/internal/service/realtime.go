@@ -5,7 +5,7 @@ import (
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
-	bffbbsv1 "common/proto/gen/bff_bbs/v1"
+	bffbbsv1 "common/proto/gen/bff_bbs/v1/realtime"
 	cerrors "common/proto/gen/common/errors"
 	"context"
 

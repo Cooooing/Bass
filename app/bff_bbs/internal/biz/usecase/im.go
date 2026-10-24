@@ -13,15 +13,23 @@ import (
 )
 
 type IMUsecase struct {
-	privateChat imv1.IMPrivateChatServiceClient
-	globalChat  imv1.IMGlobalChatServiceClient
-	accounts    repo.AccountClient
-	assets      repo.AssetClient
-	hub         realtimehubv1.RealtimeHubServiceClient
+	privateChat       imv1.IMPrivateChatServiceClient
+	globalChat        imv1.IMGlobalChatServiceClient
+	globalChatBarrage imv1.IMGlobalChatBarrageServiceClient
+	accounts          repo.AccountClient
+	assets            repo.AssetClient
+	hub               realtimehubv1.RealtimeHubServiceClient
 }
 
 func NewIMUsecase(client *rpc.IMClient, accounts repo.AccountClient, assets repo.AssetClient, hub *rpc.RealtimeHubClient) *IMUsecase {
-	return &IMUsecase{privateChat: client.PrivateChat, globalChat: client.GlobalChat, accounts: accounts, assets: assets, hub: hub.Hub}
+	return &IMUsecase{
+		privateChat:       client.PrivateChat,
+		globalChat:        client.GlobalChat,
+		globalChatBarrage: client.GlobalChatBarrage,
+		accounts:          accounts,
+		assets:            assets,
+		hub:               hub.Hub,
+	}
 }
 
 func (u *IMUsecase) MapChatProfiles(ctx context.Context, userIDs []int64) (map[int64]*model.AccountProfile, error) {
@@ -127,6 +135,14 @@ func (u *IMUsecase) SetGlobalChatTopic(ctx context.Context, req *imv1.SetGlobalC
 
 func (u *IMUsecase) SendGlobalChatMessage(ctx context.Context, req *imv1.SendGlobalChatMessage_Req) (*imv1.SendGlobalChatMessage_Resp, error) {
 	return u.globalChat.Send(ctx, req)
+}
+
+func (u *IMUsecase) SendGlobalChatBarrage(ctx context.Context, req *imv1.SendGlobalChatBarrage_Req) (*imv1.SendGlobalChatBarrage_Resp, error) {
+	return u.globalChatBarrage.Send(ctx, req)
+}
+
+func (u *IMUsecase) ListGlobalChatBarrages(ctx context.Context, req *imv1.ListGlobalChatBarrages_Req) (*imv1.ListGlobalChatBarrages_Resp, error) {
+	return u.globalChatBarrage.List(ctx, req)
 }
 
 func (u *IMUsecase) RevokeGlobalChatMessage(ctx context.Context, req *imv1.RevokeGlobalChatMessage_Req) (*imv1.RevokeGlobalChatMessage_Resp, error) {

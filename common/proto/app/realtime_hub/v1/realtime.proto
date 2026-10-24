@@ -2,10 +2,10 @@ syntax = "proto3";
 
 package common.api.app.realtime_hub.v1;
 
+import "google/protobuf/timestamp.proto";
+import "im/v1/enum/im_message_type.proto";
 import "realtime_hub/v1/enum/delivery_kind.proto";
 import "realtime_hub/v1/enum/node_group.proto";
-import "im/v1/enum/im_message_type.proto";
-import "google/protobuf/timestamp.proto";
 
 option go_package = "common/proto/gen/realtime_hub/v1;v1";
 
@@ -60,6 +60,7 @@ message Delivery {
     NotificationDelivery notification = 3; // 站内信变更。
     PrivateChatMessageDelivery private_chat_message = 4; // 私聊消息变更。
     GlobalChatMessageDelivery global_chat_message = 5; // 全局聊天室消息变更。
+    GlobalChatBarrageDelivery global_chat_barrage = 6; // 全局聊天室弹幕变更。
   }
 }
 
@@ -81,6 +82,13 @@ message GlobalChatMessageDelivery {
   int64 sender_id = 2; // 发送账号 ID。
   .common.api.app.im.v1.enum.IMMessageType message_type = 3; // 消息类型。
   string content = 4; // 原始 Markdown 内容。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+}
+
+message GlobalChatBarrageDelivery {
+  int64 barrage_id = 1; // 全局聊天室弹幕 ID。
+  int64 user_id = 2; // 发送账号 ID。
+  string content = 3; // 纯文本弹幕内容。
   google.protobuf.Timestamp created_at = 1000; // 创建时间。
 }
 

@@ -12,5 +12,7 @@ var BizProviderSet = wire.NewSet(
 	usecase.NewGlobalChatUsecase,
 	usecase.NewGlobalChatTopicUsecase,
 	usecase.NewTCCGlobalChatTopicUsecase,
+	usecase.NewGlobalChatBarrageUsecase,
+	usecase.NewTCCGlobalChatBarrageUsecase,
 	usecase.NewEmojiUsecase,
 )

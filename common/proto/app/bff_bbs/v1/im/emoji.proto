@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package common.api.app.bff_bbs.v1;
+package common.api.app.bff_bbs.v1.im;
 
 import "google/api/annotations.proto";
 
-option go_package = "common/proto/gen/bff_bbs/v1;v1";
+option go_package = "common/proto/gen/bff_bbs/v1/im;im";
 
 // EmojiService 提供当前登录账号的 IM 表情分组 HTTP 接口。
 service EmojiService {

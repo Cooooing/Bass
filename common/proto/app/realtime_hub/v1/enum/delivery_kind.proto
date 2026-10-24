@@ -9,4 +9,5 @@ enum DeliveryKind {
   DELIVERY_KIND_NOTIFICATION = 1; // 站内信变更
   DELIVERY_KIND_PRIVATE_CHAT_MESSAGE = 2; // 私聊消息变更
   DELIVERY_KIND_GLOBAL_CHAT_MESSAGE = 3; // 全局聊天室消息变更
+  DELIVERY_KIND_GLOBAL_CHAT_BARRAGE = 4; // 全局聊天室弹幕变更
 }

@@ -7,7 +7,7 @@ import (
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
-	bffbbsv1 "common/proto/gen/bff_bbs/v1"
+	bffbbsv1 "common/proto/gen/bff_bbs/v1/im"
 	cerrors "common/proto/gen/common/errors"
 	imv1 "common/proto/gen/im/v1"
 
@@ -19,7 +19,8 @@ import (
 )
 
 type IMService struct {
-	bffbbsv1.UnimplementedIMServiceServer
+	bffbbsv1.UnimplementedPrivateChatServiceServer
+	bffbbsv1.UnimplementedGlobalChatServiceServer
 	im *usecase.IMUsecase
 }
 
@@ -30,7 +31,8 @@ func NewIMService(im *usecase.IMUsecase) *IMService {
 func (*IMService) RegisterGrpc(*grpc.Server) {}
 
 func (s *IMService) RegisterHTTP(server *http.Server) {
-	bffbbsv1.RegisterIMServiceHTTPServer(server, s)
+	bffbbsv1.RegisterPrivateChatServiceHTTPServer(server, s)
+	bffbbsv1.RegisterGlobalChatServiceHTTPServer(server, s)
 }
 
 func (s *IMService) ListPrivateChatSessions(ctx context.Context, req *bffbbsv1.ListPrivateChatSessions_Req) (*bffbbsv1.ListPrivateChatSessions_Resp, error) {
@@ -208,6 +210,53 @@ func (s *IMService) SendGlobalChatMessage(ctx context.Context, req *bffbbsv1.Sen
 	return &bffbbsv1.SendGlobalChatMessage_Resp{Message: s.globalChatMessage(resp.GetMessage(), profiles[resp.GetMessage().GetSenderId()])}, nil
 }
 
+func (s *IMService) SendGlobalChatBarrage(ctx context.Context, req *bffbbsv1.SendGlobalChatBarrage_Req) (*bffbbsv1.SendGlobalChatBarrage_Resp, error) {
+	user, err := s.currentUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+	response, err := s.im.SendGlobalChatBarrage(ctx, &imv1.SendGlobalChatBarrage_Req{
+		UserId:          user.ID,
+		ClientRequestId: req.GetClientRequestId(),
+		Content:         req.GetContent(),
+	})
+	if err != nil {
+		return nil, err
+	}
+	profiles, err := s.im.MapChatProfiles(ctx, []int64{response.GetBarrage().GetUserId()})
+	if err != nil {
+		return nil, err
+	}
+	return &bffbbsv1.SendGlobalChatBarrage_Resp{
+		Barrage: s.globalChatBarrage(response.GetBarrage(), profiles[response.GetBarrage().GetUserId()]),
+	}, nil
+}
+
+func (s *IMService) ListGlobalChatBarrages(ctx context.Context, req *bffbbsv1.ListGlobalChatBarrages_Req) (*bffbbsv1.ListGlobalChatBarrages_Resp, error) {
+	response, err := s.im.ListGlobalChatBarrages(ctx, &imv1.ListGlobalChatBarrages_Req{
+		UserId: req.UserId,
+		Page:   req.GetPage(),
+	})
+	if err != nil {
+		return nil, err
+	}
+	userIDs := make([]int64, 0, len(response.GetRows()))
+	for _, row := range response.GetRows() {
+		if row.GetUserId() > 0 {
+			userIDs = append(userIDs, row.GetUserId())
+		}
+	}
+	profiles, err := s.im.MapChatProfiles(ctx, userIDs)
+	if err != nil {
+		return nil, err
+	}
+	rows := make([]*bffbbsv1.GlobalChatBarrage, 0, len(response.GetRows()))
+	for _, row := range response.GetRows() {
+		rows = append(rows, s.globalChatBarrage(row, profiles[row.GetUserId()]))
+	}
+	return &bffbbsv1.ListGlobalChatBarrages_Resp{Page: response.GetPage(), Rows: rows}, nil
+}
+
 func (s *IMService) RevokeGlobalChatMessage(ctx context.Context, req *bffbbsv1.RevokeGlobalChatMessage_Req) (*bffbbsv1.RevokeGlobalChatMessage_Resp, error) {
 	user, err := s.currentUser(ctx)
 	if err != nil {
@@ -274,4 +323,26 @@ func (*IMService) globalChatMessage(row *imv1.GlobalChatMessage, profile *model.
 		message.Sender = &bffbbsv1.GlobalChatMember{UserId: profile.ID, Name: profile.Name, Nickname: profile.Nickname, AvatarUrl: profile.AvatarURL}
 	}
 	return message
+}
+
+func (*IMService) globalChatBarrage(row *imv1.GlobalChatBarrage, profile *model.AccountProfile) *bffbbsv1.GlobalChatBarrage {
+	if row == nil {
+		return nil
+	}
+	barrage := &bffbbsv1.GlobalChatBarrage{
+		Id:         row.GetId(),
+		UserId:     row.GetUserId(),
+		Content:    row.GetContent(),
+		PointsCost: row.GetPointsCost(),
+		CreatedAt:  row.GetCreatedAt(),
+	}
+	if profile != nil {
+		barrage.Sender = &bffbbsv1.GlobalChatMember{
+			UserId:    profile.ID,
+			Name:      profile.Name,
+			Nickname:  profile.Nickname,
+			AvatarUrl: profile.AvatarURL,
+		}
+	}
+	return barrage
 }

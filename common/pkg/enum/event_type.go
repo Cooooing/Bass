@@ -43,6 +43,7 @@ const (
 	EventTypeContentCommentStatusUpdate            EventType = "content_comment_status_update"
 	EventTypeContentCommentMention                 EventType = "content_comment_mention"
 	EventTypeIMGlobalChatMessageCreated            EventType = "im_global_chat_message_created"
+	EventTypeIMGlobalChatBarrageCreated            EventType = "im_global_chat_barrage_created"
 	EventTypeIMGlobalChatMention                   EventType = "im_global_chat_mention"
 	EventTypeGameIdleChatMessage                   EventType = "game_idle_chat_message"
 	EventTypeGameIdleCloseSession                  EventType = "game_idle_close_session"
@@ -91,6 +92,7 @@ var EventTypeMap = NewMapping[EventType, enums.EventType](map[EventType]Entry[Ev
 	EventTypeContentCommentStatusUpdate:            {Proto: enums.EventType_EVENT_TYPE_COMMENT_STATUS_UPDATED},
 	EventTypeContentCommentMention:                 {Proto: enums.EventType_EVENT_TYPE_COMMENT_MENTIONED},
 	EventTypeIMGlobalChatMessageCreated:            {Proto: enums.EventType_EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED},
+	EventTypeIMGlobalChatBarrageCreated:            {Proto: enums.EventType_EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED},
 	EventTypeIMGlobalChatMention:                   {Proto: enums.EventType_EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED},
 	EventTypeGameIdleChatMessage:                   {Proto: enums.EventType_EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE},
 	EventTypeGameIdleCloseSession:                  {Proto: enums.EventType_EVENT_TYPE_GAME_IDLE_CLOSE_SESSION},

@@ -7,7 +7,7 @@ import (
 	"common/pkg/constant"
 	commonmodel "common/pkg/model"
 	"common/pkg/util"
-	bffbbsv1 "common/proto/gen/bff_bbs/v1"
+	bffbbsv1 "common/proto/gen/bff_bbs/v1/im"
 	cerrors "common/proto/gen/common/errors"
 	imv1 "common/proto/gen/im/v1"
 

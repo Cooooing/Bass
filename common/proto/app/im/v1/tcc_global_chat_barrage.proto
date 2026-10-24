@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package common.api.app.im.v1;
+
+option go_package = "common/proto/gen/im/v1;v1";
+
+service TCCGlobalChatBarrageService {
+  rpc Try(TCCSendGlobalChatBarrage.Req) returns (TCCSendGlobalChatBarrage.Resp) {} // 创建待确认弹幕。
+  rpc Confirm(TCCSendGlobalChatBarrage.Req) returns (TCCSendGlobalChatBarrage.Resp) {} // 发布待确认弹幕。
+  rpc Cancel(TCCSendGlobalChatBarrage.Req) returns (TCCSendGlobalChatBarrage.Resp) {} // 取消待确认弹幕。
+}
+
+message TCCSendGlobalChatBarrage {
+  message Req {
+    int64 user_id = 1; // 发送账号 ID。
+    string client_request_id = 2; // 客户端幂等请求 ID。
+    string content = 3; // 纯文本弹幕内容。
+    int64 points_cost = 4; // 本次消耗积分。
+  }
+  message Resp {}
+}

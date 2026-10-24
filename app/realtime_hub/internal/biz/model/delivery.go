@@ -66,3 +66,12 @@ type GlobalChatMessageDelivery struct {
 }
 
 func (GlobalChatMessageDelivery) deliveryPayload() {}
+
+type GlobalChatBarrageDelivery struct {
+	BarrageID int64
+	UserID    int64
+	Content   string
+	CreatedAt time.Time
+}
+
+func (GlobalChatBarrageDelivery) deliveryPayload() {}

@@ -1,0 +1,174 @@
+syntax = "proto3";
+
+package common.api.app.bff_bbs.v1.im;
+
+import "common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "im/v1/enum/im_message_type.proto";
+
+option go_package = "common/proto/gen/bff_bbs/v1/im;im";
+
+service GlobalChatService {
+  // 查询全局聊天室消息。
+  rpc ListGlobalChatMessages(ListGlobalChatMessages.Req) returns (ListGlobalChatMessages.Resp) {
+    option (google.api.http) = {
+      post: "/v1/im/global-chat/messages/list"
+      body: "*"
+    };
+  }
+  // 查询当前全局聊天室话题。
+  rpc GetGlobalChatTopic(GetGlobalChatTopic.Req) returns (GetGlobalChatTopic.Resp) {
+    option (google.api.http) = {
+      post: "/v1/im/global-chat/topic/get"
+      body: "*"
+    };
+  }
+  // 设置全局聊天室话题。
+  rpc SetGlobalChatTopic(SetGlobalChatTopic.Req) returns (SetGlobalChatTopic.Resp) {
+    option (google.api.http) = {
+      post: "/v1/im/global-chat/topic/set"
+      body: "*"
+    };
+  }
+  // 发送全局聊天室消息。
+  rpc SendGlobalChatMessage(SendGlobalChatMessage.Req) returns (SendGlobalChatMessage.Resp) {
+    option (google.api.http) = {
+      post: "/v1/im/global-chat/messages"
+      body: "*"
+    };
+  }
+  // 撤回自己的全局聊天室消息。
+  rpc RevokeGlobalChatMessage(RevokeGlobalChatMessage.Req) returns (RevokeGlobalChatMessage.Resp) {
+    option (google.api.http) = {
+      post: "/v1/im/global-chat/messages/revoke"
+      body: "*"
+    };
+  }
+  // 查询全部在线的聊天室成员。
+  rpc ListGlobalChatOnlineMembers(ListGlobalChatOnlineMembers.Req) returns (ListGlobalChatOnlineMembers.Resp) {
+    option (google.api.http) = {
+      post: "/v1/im/global-chat/online-members/list"
+      body: "*"
+    };
+  }
+  // 发送全局聊天室弹幕。
+  rpc SendGlobalChatBarrage(SendGlobalChatBarrage.Req) returns (SendGlobalChatBarrage.Resp) {
+    option (google.api.http) = {
+      post: "/v1/im/global-chat/barrages"
+      body: "*"
+    };
+  }
+  // 分页查询已发布的全局聊天室弹幕。
+  rpc ListGlobalChatBarrages(ListGlobalChatBarrages.Req) returns (ListGlobalChatBarrages.Resp) {
+    option (google.api.http) = {
+      post: "/v1/im/global-chat/barrages/list"
+      body: "*"
+    };
+  }
+}
+
+message GlobalChatMember {
+  int64 user_id = 1; // 账号 ID。
+  string name = 2; // 用户名。
+  optional string nickname = 3; // 昵称。
+  optional string avatar_url = 4; // 头像地址。
+}
+message GlobalChatOnlineMember {
+  int64 user_id = 1; // 在线账号 ID。
+  string name = 2; // 用户名。
+  optional string nickname = 3; // 昵称。
+  optional string avatar_url = 4; // 头像地址。
+}
+message GlobalChatMessage {
+  int64 id = 1; // 消息 ID。
+  int64 sender_id = 2; // 发送账号 ID。
+  string content = 3; // 原始 Markdown 内容。
+  .common.api.app.im.v1.enum.IMMessageType message_type = 4; // 消息类型。
+  bool revoked = 5; // 是否已撤回。
+  GlobalChatMember sender = 6; // 发送者展示资料。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+  google.protobuf.Timestamp revoked_at = 1001; // 撤回时间。
+}
+message GlobalChatTopic {
+  int64 id = 1; // 话题记录 ID。
+  int64 user_id = 2; // 设置话题的账号 ID。
+  string content = 3; // 话题内容。
+  int64 points_cost = 4; // 本次设置实际消耗的积分。
+  google.protobuf.Timestamp created_at = 1000; // 话题设置时间。
+}
+message GlobalChatBarrage {
+  int64 id = 1; // 弹幕 ID。
+  int64 user_id = 2; // 发送账号 ID。
+  string content = 3; // 纯文本弹幕内容。
+  int64 points_cost = 4; // 本次实际消耗的积分。
+  GlobalChatMember sender = 5; // 发送者展示资料。
+  google.protobuf.Timestamp created_at = 1000; // 创建时间。
+}
+message ListGlobalChatMessages {
+  message Req {
+    int64 before_id = 1; // 向前分页游标。
+    .common.api.app.common.PageReq page = 2; // 分页参数。
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页信息。
+    repeated GlobalChatMessage rows = 2; // 消息列表。
+  }
+}
+message GetGlobalChatTopic {
+  message Req {}
+  message Resp {
+    GlobalChatTopic topic = 1; // 当前话题；未设置时为空。
+  }
+}
+message SetGlobalChatTopic {
+  message Req {
+    string client_request_id = 1; // 客户端幂等请求 ID。
+    string content = 2; // 话题内容。
+  }
+  message Resp {
+    GlobalChatTopic topic = 1; // 话题记录。
+  }
+}
+message SendGlobalChatMessage {
+  message Req {
+    string client_message_id = 1; // 客户端幂等消息 ID。
+    string content = 2; // 原始 Markdown 内容。
+  }
+  message Resp {
+    GlobalChatMessage message = 1; // 消息。
+  }
+}
+message RevokeGlobalChatMessage {
+  message Req {
+    int64 message_id = 1; // 消息 ID。
+  }
+  message Resp {
+    GlobalChatMessage message = 1; // 已撤回消息。
+  }
+}
+message ListGlobalChatOnlineMembers {
+  message Req {}
+  message Resp {
+    repeated GlobalChatOnlineMember rows = 1; // 在线成员列表。
+  }
+}
+message SendGlobalChatBarrage {
+  message Req {
+    string client_request_id = 1; // 客户端幂等请求 ID。
+    string content = 2; // 原始弹幕内容。
+  }
+  message Resp {
+    GlobalChatBarrage barrage = 1; // 已发布的弹幕。
+  }
+}
+message ListGlobalChatBarrages {
+  message Req {
+    optional int64 user_id = 1; // 按发送账号筛选；仅管理端可用。
+    .common.api.app.common.PageReq page = 2; // 分页参数。
+  }
+  message Resp {
+    .common.api.app.common.PageResp page = 1; // 分页信息。
+    repeated GlobalChatBarrage rows = 2; // 已发布弹幕。
+  }
+}

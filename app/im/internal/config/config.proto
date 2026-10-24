@@ -26,4 +26,6 @@ message Business {
   int64 global_chat_topic_points = 2; // 设置全局聊天室话题消耗的积分。
   google.protobuf.Duration global_chat_topic_user_interval = 3; // 同一账号设置全局聊天室话题的限流间隔。
   google.protobuf.Duration global_chat_topic_global_interval = 4; // 全局聊天室话题设置的限流间隔。
+  int64 global_chat_barrage_points = 5; // 发送全局聊天室弹幕消耗的积分。
+  google.protobuf.Duration global_chat_barrage_user_interval = 6; // 同一账号发送全局聊天室弹幕的限流间隔。
 }

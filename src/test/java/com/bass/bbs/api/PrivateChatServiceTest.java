@@ -15,19 +15,12 @@ package com.bass.bbs.api;
 
 import com.bass.bbs.ApiException;
 import com.bass.bbs.model.CountPrivateChatUnreadResp;
-import com.bass.bbs.model.ListGlobalChatMessagesReq;
-import com.bass.bbs.model.ListGlobalChatMessagesResp;
-import com.bass.bbs.model.ListGlobalChatOnlineMembersResp;
 import com.bass.bbs.model.ListPrivateChatMessagesReq;
 import com.bass.bbs.model.ListPrivateChatMessagesResp;
 import com.bass.bbs.model.ListPrivateChatSessionsResp;
 import com.bass.bbs.model.MarkPrivateChatSessionReadReq;
-import com.bass.bbs.model.RevokeGlobalChatMessageReq;
-import com.bass.bbs.model.RevokeGlobalChatMessageResp;
 import com.bass.bbs.model.RevokePrivateChatMessageReq;
 import com.bass.bbs.model.RevokePrivateChatMessageResp;
-import com.bass.bbs.model.SendGlobalChatMessageReq;
-import com.bass.bbs.model.SendGlobalChatMessageResp;
 import com.bass.bbs.model.SendPrivateChatMessageReq;
 import com.bass.bbs.model.SendPrivateChatMessageResp;
 import com.bass.bbs.model.SetPrivateChatSessionMutedReq;
@@ -43,12 +36,12 @@ import java.util.Set;
 
 
 /**
- * API tests for ImService
+ * API tests for PrivateChatService
  */
 @Disabled
-public class ImServiceTest {
+public class PrivateChatServiceTest {
 
-    private final ImService api = new ImService();
+    private final PrivateChatService api = new PrivateChatService();
 
     
     /**
@@ -63,53 +56,11 @@ public class ImServiceTest {
     public void countPrivateChatUnreadTest() throws ApiException {
         Object body = null;
         
-        ImService.APIcountPrivateChatUnreadRequest request = ImService.APIcountPrivateChatUnreadRequest.newBuilder()
+        PrivateChatService.APIcountPrivateChatUnreadRequest request = PrivateChatService.APIcountPrivateChatUnreadRequest.newBuilder()
           .body(body)
           .build();
         CountPrivateChatUnreadResp response = 
         api.countPrivateChatUnread(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 查询全局聊天室消息。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void listGlobalChatMessagesTest() throws ApiException {
-        ListGlobalChatMessagesReq listGlobalChatMessagesReq = null;
-        
-        ImService.APIlistGlobalChatMessagesRequest request = ImService.APIlistGlobalChatMessagesRequest.newBuilder()
-          .listGlobalChatMessagesReq(listGlobalChatMessagesReq)
-          .build();
-        ListGlobalChatMessagesResp response = 
-        api.listGlobalChatMessages(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 查询全部在线的聊天室成员。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void listGlobalChatOnlineMembersTest() throws ApiException {
-        Object body = null;
-        
-        ImService.APIlistGlobalChatOnlineMembersRequest request = ImService.APIlistGlobalChatOnlineMembersRequest.newBuilder()
-          .body(body)
-          .build();
-        ListGlobalChatOnlineMembersResp response = 
-        api.listGlobalChatOnlineMembers(request);
 
         // TODO: test validations
     }
@@ -126,7 +77,7 @@ public class ImServiceTest {
     public void listPrivateChatMessagesTest() throws ApiException {
         ListPrivateChatMessagesReq listPrivateChatMessagesReq = null;
         
-        ImService.APIlistPrivateChatMessagesRequest request = ImService.APIlistPrivateChatMessagesRequest.newBuilder()
+        PrivateChatService.APIlistPrivateChatMessagesRequest request = PrivateChatService.APIlistPrivateChatMessagesRequest.newBuilder()
           .listPrivateChatMessagesReq(listPrivateChatMessagesReq)
           .build();
         ListPrivateChatMessagesResp response = 
@@ -148,7 +99,7 @@ public class ImServiceTest {
         String pagePage = null;
         String pageSize = null;
         
-        ImService.APIlistPrivateChatSessionsRequest request = ImService.APIlistPrivateChatSessionsRequest.newBuilder()
+        PrivateChatService.APIlistPrivateChatSessionsRequest request = PrivateChatService.APIlistPrivateChatSessionsRequest.newBuilder()
           .pagePage(pagePage)
           .pageSize(pageSize)
           .build();
@@ -170,32 +121,11 @@ public class ImServiceTest {
     public void markPrivateChatSessionReadTest() throws ApiException {
         MarkPrivateChatSessionReadReq markPrivateChatSessionReadReq = null;
         
-        ImService.APImarkPrivateChatSessionReadRequest request = ImService.APImarkPrivateChatSessionReadRequest.newBuilder()
+        PrivateChatService.APImarkPrivateChatSessionReadRequest request = PrivateChatService.APImarkPrivateChatSessionReadRequest.newBuilder()
           .markPrivateChatSessionReadReq(markPrivateChatSessionReadReq)
           .build();
         Object response = 
         api.markPrivateChatSessionRead(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 撤回自己的全局聊天室消息。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void revokeGlobalChatMessageTest() throws ApiException {
-        RevokeGlobalChatMessageReq revokeGlobalChatMessageReq = null;
-        
-        ImService.APIrevokeGlobalChatMessageRequest request = ImService.APIrevokeGlobalChatMessageRequest.newBuilder()
-          .revokeGlobalChatMessageReq(revokeGlobalChatMessageReq)
-          .build();
-        RevokeGlobalChatMessageResp response = 
-        api.revokeGlobalChatMessage(request);
 
         // TODO: test validations
     }
@@ -212,32 +142,11 @@ public class ImServiceTest {
     public void revokePrivateChatMessageTest() throws ApiException {
         RevokePrivateChatMessageReq revokePrivateChatMessageReq = null;
         
-        ImService.APIrevokePrivateChatMessageRequest request = ImService.APIrevokePrivateChatMessageRequest.newBuilder()
+        PrivateChatService.APIrevokePrivateChatMessageRequest request = PrivateChatService.APIrevokePrivateChatMessageRequest.newBuilder()
           .revokePrivateChatMessageReq(revokePrivateChatMessageReq)
           .build();
         RevokePrivateChatMessageResp response = 
         api.revokePrivateChatMessage(request);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * 发送全局聊天室消息。
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void sendGlobalChatMessageTest() throws ApiException {
-        SendGlobalChatMessageReq sendGlobalChatMessageReq = null;
-        
-        ImService.APIsendGlobalChatMessageRequest request = ImService.APIsendGlobalChatMessageRequest.newBuilder()
-          .sendGlobalChatMessageReq(sendGlobalChatMessageReq)
-          .build();
-        SendGlobalChatMessageResp response = 
-        api.sendGlobalChatMessage(request);
 
         // TODO: test validations
     }
@@ -254,7 +163,7 @@ public class ImServiceTest {
     public void sendPrivateChatMessageTest() throws ApiException {
         SendPrivateChatMessageReq sendPrivateChatMessageReq = null;
         
-        ImService.APIsendPrivateChatMessageRequest request = ImService.APIsendPrivateChatMessageRequest.newBuilder()
+        PrivateChatService.APIsendPrivateChatMessageRequest request = PrivateChatService.APIsendPrivateChatMessageRequest.newBuilder()
           .sendPrivateChatMessageReq(sendPrivateChatMessageReq)
           .build();
         SendPrivateChatMessageResp response = 
@@ -275,7 +184,7 @@ public class ImServiceTest {
     public void setPrivateChatSessionMutedTest() throws ApiException {
         SetPrivateChatSessionMutedReq setPrivateChatSessionMutedReq = null;
         
-        ImService.APIsetPrivateChatSessionMutedRequest request = ImService.APIsetPrivateChatSessionMutedRequest.newBuilder()
+        PrivateChatService.APIsetPrivateChatSessionMutedRequest request = PrivateChatService.APIsetPrivateChatSessionMutedRequest.newBuilder()
           .setPrivateChatSessionMutedReq(setPrivateChatSessionMutedReq)
           .build();
         Object response = 
@@ -296,7 +205,7 @@ public class ImServiceTest {
     public void setPrivateChatSessionPinnedTest() throws ApiException {
         SetPrivateChatSessionPinnedReq setPrivateChatSessionPinnedReq = null;
         
-        ImService.APIsetPrivateChatSessionPinnedRequest request = ImService.APIsetPrivateChatSessionPinnedRequest.newBuilder()
+        PrivateChatService.APIsetPrivateChatSessionPinnedRequest request = PrivateChatService.APIsetPrivateChatSessionPinnedRequest.newBuilder()
           .setPrivateChatSessionPinnedReq(setPrivateChatSessionPinnedReq)
           .build();
         Object response = 

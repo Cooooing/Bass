@@ -1,43 +1,43 @@
-# ImService
+# EmojiService
 
 All URIs are relative to *http://localhost*
 
 | Method | HTTP request | Description |
 |------------- | ------------- | -------------|
-| [**countPrivateChatUnread**](ImService.md#countPrivateChatUnread) | **POST** /v1/im/private-chat/unread-count |  |
-| [**countPrivateChatUnreadWithHttpInfo**](ImService.md#countPrivateChatUnreadWithHttpInfo) | **POST** /v1/im/private-chat/unread-count |  |
-| [**listGlobalChatMessages**](ImService.md#listGlobalChatMessages) | **POST** /v1/im/global-chat/messages/list |  |
-| [**listGlobalChatMessagesWithHttpInfo**](ImService.md#listGlobalChatMessagesWithHttpInfo) | **POST** /v1/im/global-chat/messages/list |  |
-| [**listGlobalChatOnlineMembers**](ImService.md#listGlobalChatOnlineMembers) | **POST** /v1/im/global-chat/online-members/list |  |
-| [**listGlobalChatOnlineMembersWithHttpInfo**](ImService.md#listGlobalChatOnlineMembersWithHttpInfo) | **POST** /v1/im/global-chat/online-members/list |  |
-| [**listPrivateChatMessages**](ImService.md#listPrivateChatMessages) | **POST** /v1/im/private-chat/messages/list |  |
-| [**listPrivateChatMessagesWithHttpInfo**](ImService.md#listPrivateChatMessagesWithHttpInfo) | **POST** /v1/im/private-chat/messages/list |  |
-| [**listPrivateChatSessions**](ImService.md#listPrivateChatSessions) | **GET** /v1/im/private-chat/sessions |  |
-| [**listPrivateChatSessionsWithHttpInfo**](ImService.md#listPrivateChatSessionsWithHttpInfo) | **GET** /v1/im/private-chat/sessions |  |
-| [**markPrivateChatSessionRead**](ImService.md#markPrivateChatSessionRead) | **POST** /v1/im/private-chat/read |  |
-| [**markPrivateChatSessionReadWithHttpInfo**](ImService.md#markPrivateChatSessionReadWithHttpInfo) | **POST** /v1/im/private-chat/read |  |
-| [**revokeGlobalChatMessage**](ImService.md#revokeGlobalChatMessage) | **POST** /v1/im/global-chat/messages/revoke |  |
-| [**revokeGlobalChatMessageWithHttpInfo**](ImService.md#revokeGlobalChatMessageWithHttpInfo) | **POST** /v1/im/global-chat/messages/revoke |  |
-| [**revokePrivateChatMessage**](ImService.md#revokePrivateChatMessage) | **POST** /v1/im/private-chat/messages/revoke |  |
-| [**revokePrivateChatMessageWithHttpInfo**](ImService.md#revokePrivateChatMessageWithHttpInfo) | **POST** /v1/im/private-chat/messages/revoke |  |
-| [**sendGlobalChatMessage**](ImService.md#sendGlobalChatMessage) | **POST** /v1/im/global-chat/messages |  |
-| [**sendGlobalChatMessageWithHttpInfo**](ImService.md#sendGlobalChatMessageWithHttpInfo) | **POST** /v1/im/global-chat/messages |  |
-| [**sendPrivateChatMessage**](ImService.md#sendPrivateChatMessage) | **POST** /v1/im/private-chat/messages |  |
-| [**sendPrivateChatMessageWithHttpInfo**](ImService.md#sendPrivateChatMessageWithHttpInfo) | **POST** /v1/im/private-chat/messages |  |
-| [**setPrivateChatSessionMuted**](ImService.md#setPrivateChatSessionMuted) | **POST** /v1/im/private-chat/muted |  |
-| [**setPrivateChatSessionMutedWithHttpInfo**](ImService.md#setPrivateChatSessionMutedWithHttpInfo) | **POST** /v1/im/private-chat/muted |  |
-| [**setPrivateChatSessionPinned**](ImService.md#setPrivateChatSessionPinned) | **POST** /v1/im/private-chat/pinned |  |
-| [**setPrivateChatSessionPinnedWithHttpInfo**](ImService.md#setPrivateChatSessionPinnedWithHttpInfo) | **POST** /v1/im/private-chat/pinned |  |
+| [**addItem**](EmojiService.md#addItem) | **POST** /v1/im/emoji/items |  |
+| [**addItemWithHttpInfo**](EmojiService.md#addItemWithHttpInfo) | **POST** /v1/im/emoji/items |  |
+| [**callList**](EmojiService.md#callList) | **POST** /v1/im/emoji/groups/list |  |
+| [**callListWithHttpInfo**](EmojiService.md#callListWithHttpInfo) | **POST** /v1/im/emoji/groups/list |  |
+| [**createGroup**](EmojiService.md#createGroup) | **POST** /v1/im/emoji/groups |  |
+| [**createGroupWithHttpInfo**](EmojiService.md#createGroupWithHttpInfo) | **POST** /v1/im/emoji/groups |  |
+| [**createShare**](EmojiService.md#createShare) | **POST** /v1/im/emoji/shares |  |
+| [**createShareWithHttpInfo**](EmojiService.md#createShareWithHttpInfo) | **POST** /v1/im/emoji/shares |  |
+| [**deleteGroup**](EmojiService.md#deleteGroup) | **POST** /v1/im/emoji/groups/delete |  |
+| [**deleteGroupWithHttpInfo**](EmojiService.md#deleteGroupWithHttpInfo) | **POST** /v1/im/emoji/groups/delete |  |
+| [**deleteItem**](EmojiService.md#deleteItem) | **POST** /v1/im/emoji/items/delete |  |
+| [**deleteItemWithHttpInfo**](EmojiService.md#deleteItemWithHttpInfo) | **POST** /v1/im/emoji/items/delete |  |
+| [**importShare**](EmojiService.md#importShare) | **POST** /v1/im/emoji/shares/import |  |
+| [**importShareWithHttpInfo**](EmojiService.md#importShareWithHttpInfo) | **POST** /v1/im/emoji/shares/import |  |
+| [**moveItem**](EmojiService.md#moveItem) | **POST** /v1/im/emoji/items/move |  |
+| [**moveItemWithHttpInfo**](EmojiService.md#moveItemWithHttpInfo) | **POST** /v1/im/emoji/items/move |  |
+| [**renameGroup**](EmojiService.md#renameGroup) | **POST** /v1/im/emoji/groups/rename |  |
+| [**renameGroupWithHttpInfo**](EmojiService.md#renameGroupWithHttpInfo) | **POST** /v1/im/emoji/groups/rename |  |
+| [**renameItem**](EmojiService.md#renameItem) | **POST** /v1/im/emoji/items/rename |  |
+| [**renameItemWithHttpInfo**](EmojiService.md#renameItemWithHttpInfo) | **POST** /v1/im/emoji/items/rename |  |
+| [**reorderGroups**](EmojiService.md#reorderGroups) | **POST** /v1/im/emoji/groups/reorder |  |
+| [**reorderGroupsWithHttpInfo**](EmojiService.md#reorderGroupsWithHttpInfo) | **POST** /v1/im/emoji/groups/reorder |  |
+| [**reorderItems**](EmojiService.md#reorderItems) | **POST** /v1/im/emoji/items/reorder |  |
+| [**reorderItemsWithHttpInfo**](EmojiService.md#reorderItemsWithHttpInfo) | **POST** /v1/im/emoji/items/reorder |  |
 
 
 
-## countPrivateChatUnread
+## addItem
 
-> CountPrivateChatUnreadResp countPrivateChatUnread(countPrivateChatUnreadRequest)
+> AddEmojiItemResp addItem(addItemRequest)
 
 
 
-统计当前账号的私聊未读数。
+向分组加入已上传图片。
 
 ### Example
 
@@ -47,24 +47,24 @@ import com.bass.bbs.ApiClient;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        Object body = null; // Object | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        AddEmojiItemReq addEmojiItemReq = new AddEmojiItemReq(); // AddEmojiItemReq | 
         try {
-            APIcountPrivateChatUnreadRequest request = APIcountPrivateChatUnreadRequest.newBuilder()
-                .body(body)
+            APIaddItemRequest request = APIaddItemRequest.newBuilder()
+                .addEmojiItemReq(addEmojiItemReq)
                 .build();
-            CountPrivateChatUnreadResp result = apiInstance.countPrivateChatUnread(request);
+            AddEmojiItemResp result = apiInstance.addItem(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#countPrivateChatUnread");
+            System.err.println("Exception when calling EmojiService#addItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -78,11 +78,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| countPrivateChatUnreadRequest | [**APIcountPrivateChatUnreadRequest**](ImService.md#APIcountPrivateChatUnreadRequest)|-|-|
+| addItemRequest | [**APIaddItemRequest**](EmojiService.md#APIaddItemRequest)|-|-|
 
 ### Return type
 
-[**CountPrivateChatUnreadResp**](CountPrivateChatUnreadResp.md)
+[**AddEmojiItemResp**](AddEmojiItemResp.md)
 
 
 ### Authorization
@@ -99,13 +99,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## countPrivateChatUnreadWithHttpInfo
+## addItemWithHttpInfo
 
-> ApiResponse<CountPrivateChatUnreadResp> countPrivateChatUnreadWithHttpInfo(countPrivateChatUnreadRequest)
+> ApiResponse<AddEmojiItemResp> addItemWithHttpInfo(addItemRequest)
 
 
 
-统计当前账号的私聊未读数。
+向分组加入已上传图片。
 
 ### Example
 
@@ -116,26 +116,26 @@ import com.bass.bbs.ApiException;
 import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        Object body = null; // Object | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        AddEmojiItemReq addEmojiItemReq = new AddEmojiItemReq(); // AddEmojiItemReq | 
         try {
-            APIcountPrivateChatUnreadRequest request = APIcountPrivateChatUnreadRequest.newBuilder()
-                .body(body)
+            APIaddItemRequest request = APIaddItemRequest.newBuilder()
+                .addEmojiItemReq(addEmojiItemReq)
                 .build();
-            ApiResponse<CountPrivateChatUnreadResp> response = apiInstance.countPrivateChatUnreadWithHttpInfo(request);
+            ApiResponse<AddEmojiItemResp> response = apiInstance.addItemWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#countPrivateChatUnread");
+            System.err.println("Exception when calling EmojiService#addItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -149,11 +149,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| countPrivateChatUnreadRequest | [**APIcountPrivateChatUnreadRequest**](ImService.md#APIcountPrivateChatUnreadRequest)|-|-|
+| addItemRequest | [**APIaddItemRequest**](EmojiService.md#APIaddItemRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**CountPrivateChatUnreadResp**](CountPrivateChatUnreadResp.md)>
+ApiResponse<[**AddEmojiItemResp**](AddEmojiItemResp.md)>
 
 
 ### Authorization
@@ -171,23 +171,23 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIcountPrivateChatUnreadRequest"></a>
-## APIcountPrivateChatUnreadRequest
+<a id="APIaddItemRequest"></a>
+## APIaddItemRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **body** | **Object** |  | |
+| **addEmojiItemReq** | [**AddEmojiItemReq**](AddEmojiItemReq.md) |  | |
 
 
 
-## listGlobalChatMessages
+## callList
 
-> ListGlobalChatMessagesResp listGlobalChatMessages(listGlobalChatMessagesRequest)
+> ListEmojiGroupsResp callList(callListRequest)
 
 
 
-查询全局聊天室消息。
+查询当前账号的表情分组。
 
 ### Example
 
@@ -197,24 +197,24 @@ import com.bass.bbs.ApiClient;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        ListGlobalChatMessagesReq listGlobalChatMessagesReq = new ListGlobalChatMessagesReq(); // ListGlobalChatMessagesReq | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        ListEmojiGroupsReq listEmojiGroupsReq = new ListEmojiGroupsReq(); // ListEmojiGroupsReq | 
         try {
-            APIlistGlobalChatMessagesRequest request = APIlistGlobalChatMessagesRequest.newBuilder()
-                .listGlobalChatMessagesReq(listGlobalChatMessagesReq)
+            APIcallListRequest request = APIcallListRequest.newBuilder()
+                .listEmojiGroupsReq(listEmojiGroupsReq)
                 .build();
-            ListGlobalChatMessagesResp result = apiInstance.listGlobalChatMessages(request);
+            ListEmojiGroupsResp result = apiInstance.callList(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#listGlobalChatMessages");
+            System.err.println("Exception when calling EmojiService#callList");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -228,11 +228,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listGlobalChatMessagesRequest | [**APIlistGlobalChatMessagesRequest**](ImService.md#APIlistGlobalChatMessagesRequest)|-|-|
+| callListRequest | [**APIcallListRequest**](EmojiService.md#APIcallListRequest)|-|-|
 
 ### Return type
 
-[**ListGlobalChatMessagesResp**](ListGlobalChatMessagesResp.md)
+[**ListEmojiGroupsResp**](ListEmojiGroupsResp.md)
 
 
 ### Authorization
@@ -249,13 +249,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listGlobalChatMessagesWithHttpInfo
+## callListWithHttpInfo
 
-> ApiResponse<ListGlobalChatMessagesResp> listGlobalChatMessagesWithHttpInfo(listGlobalChatMessagesRequest)
+> ApiResponse<ListEmojiGroupsResp> callListWithHttpInfo(callListRequest)
 
 
 
-查询全局聊天室消息。
+查询当前账号的表情分组。
 
 ### Example
 
@@ -266,26 +266,26 @@ import com.bass.bbs.ApiException;
 import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        ListGlobalChatMessagesReq listGlobalChatMessagesReq = new ListGlobalChatMessagesReq(); // ListGlobalChatMessagesReq | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        ListEmojiGroupsReq listEmojiGroupsReq = new ListEmojiGroupsReq(); // ListEmojiGroupsReq | 
         try {
-            APIlistGlobalChatMessagesRequest request = APIlistGlobalChatMessagesRequest.newBuilder()
-                .listGlobalChatMessagesReq(listGlobalChatMessagesReq)
+            APIcallListRequest request = APIcallListRequest.newBuilder()
+                .listEmojiGroupsReq(listEmojiGroupsReq)
                 .build();
-            ApiResponse<ListGlobalChatMessagesResp> response = apiInstance.listGlobalChatMessagesWithHttpInfo(request);
+            ApiResponse<ListEmojiGroupsResp> response = apiInstance.callListWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#listGlobalChatMessages");
+            System.err.println("Exception when calling EmojiService#callList");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -299,11 +299,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listGlobalChatMessagesRequest | [**APIlistGlobalChatMessagesRequest**](ImService.md#APIlistGlobalChatMessagesRequest)|-|-|
+| callListRequest | [**APIcallListRequest**](EmojiService.md#APIcallListRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**ListGlobalChatMessagesResp**](ListGlobalChatMessagesResp.md)>
+ApiResponse<[**ListEmojiGroupsResp**](ListEmojiGroupsResp.md)>
 
 
 ### Authorization
@@ -321,23 +321,23 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistGlobalChatMessagesRequest"></a>
-## APIlistGlobalChatMessagesRequest
+<a id="APIcallListRequest"></a>
+## APIcallListRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **listGlobalChatMessagesReq** | [**ListGlobalChatMessagesReq**](ListGlobalChatMessagesReq.md) |  | |
+| **listEmojiGroupsReq** | [**ListEmojiGroupsReq**](ListEmojiGroupsReq.md) |  | |
 
 
 
-## listGlobalChatOnlineMembers
+## createGroup
 
-> ListGlobalChatOnlineMembersResp listGlobalChatOnlineMembers(listGlobalChatOnlineMembersRequest)
+> CreateEmojiGroupResp createGroup(createGroupRequest)
 
 
 
-查询全部在线的聊天室成员。
+创建一个表情分组。
 
 ### Example
 
@@ -347,24 +347,24 @@ import com.bass.bbs.ApiClient;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        Object body = null; // Object | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        CreateEmojiGroupReq createEmojiGroupReq = new CreateEmojiGroupReq(); // CreateEmojiGroupReq | 
         try {
-            APIlistGlobalChatOnlineMembersRequest request = APIlistGlobalChatOnlineMembersRequest.newBuilder()
-                .body(body)
+            APIcreateGroupRequest request = APIcreateGroupRequest.newBuilder()
+                .createEmojiGroupReq(createEmojiGroupReq)
                 .build();
-            ListGlobalChatOnlineMembersResp result = apiInstance.listGlobalChatOnlineMembers(request);
+            CreateEmojiGroupResp result = apiInstance.createGroup(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#listGlobalChatOnlineMembers");
+            System.err.println("Exception when calling EmojiService#createGroup");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -378,11 +378,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listGlobalChatOnlineMembersRequest | [**APIlistGlobalChatOnlineMembersRequest**](ImService.md#APIlistGlobalChatOnlineMembersRequest)|-|-|
+| createGroupRequest | [**APIcreateGroupRequest**](EmojiService.md#APIcreateGroupRequest)|-|-|
 
 ### Return type
 
-[**ListGlobalChatOnlineMembersResp**](ListGlobalChatOnlineMembersResp.md)
+[**CreateEmojiGroupResp**](CreateEmojiGroupResp.md)
 
 
 ### Authorization
@@ -399,13 +399,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listGlobalChatOnlineMembersWithHttpInfo
+## createGroupWithHttpInfo
 
-> ApiResponse<ListGlobalChatOnlineMembersResp> listGlobalChatOnlineMembersWithHttpInfo(listGlobalChatOnlineMembersRequest)
+> ApiResponse<CreateEmojiGroupResp> createGroupWithHttpInfo(createGroupRequest)
 
 
 
-查询全部在线的聊天室成员。
+创建一个表情分组。
 
 ### Example
 
@@ -416,26 +416,26 @@ import com.bass.bbs.ApiException;
 import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        Object body = null; // Object | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        CreateEmojiGroupReq createEmojiGroupReq = new CreateEmojiGroupReq(); // CreateEmojiGroupReq | 
         try {
-            APIlistGlobalChatOnlineMembersRequest request = APIlistGlobalChatOnlineMembersRequest.newBuilder()
-                .body(body)
+            APIcreateGroupRequest request = APIcreateGroupRequest.newBuilder()
+                .createEmojiGroupReq(createEmojiGroupReq)
                 .build();
-            ApiResponse<ListGlobalChatOnlineMembersResp> response = apiInstance.listGlobalChatOnlineMembersWithHttpInfo(request);
+            ApiResponse<CreateEmojiGroupResp> response = apiInstance.createGroupWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#listGlobalChatOnlineMembers");
+            System.err.println("Exception when calling EmojiService#createGroup");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -449,11 +449,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listGlobalChatOnlineMembersRequest | [**APIlistGlobalChatOnlineMembersRequest**](ImService.md#APIlistGlobalChatOnlineMembersRequest)|-|-|
+| createGroupRequest | [**APIcreateGroupRequest**](EmojiService.md#APIcreateGroupRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**ListGlobalChatOnlineMembersResp**](ListGlobalChatOnlineMembersResp.md)>
+ApiResponse<[**CreateEmojiGroupResp**](CreateEmojiGroupResp.md)>
 
 
 ### Authorization
@@ -471,23 +471,23 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistGlobalChatOnlineMembersRequest"></a>
-## APIlistGlobalChatOnlineMembersRequest
+<a id="APIcreateGroupRequest"></a>
+## APIcreateGroupRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **body** | **Object** |  | |
+| **createEmojiGroupReq** | [**CreateEmojiGroupReq**](CreateEmojiGroupReq.md) |  | |
 
 
 
-## listPrivateChatMessages
+## createShare
 
-> ListPrivateChatMessagesResp listPrivateChatMessages(listPrivateChatMessagesRequest)
+> CreateEmojiShareResp createShare(createShareRequest)
 
 
 
-查询私聊消息。
+生成七天有效的分组分享码。
 
 ### Example
 
@@ -497,24 +497,24 @@ import com.bass.bbs.ApiClient;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        ListPrivateChatMessagesReq listPrivateChatMessagesReq = new ListPrivateChatMessagesReq(); // ListPrivateChatMessagesReq | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        CreateEmojiShareReq createEmojiShareReq = new CreateEmojiShareReq(); // CreateEmojiShareReq | 
         try {
-            APIlistPrivateChatMessagesRequest request = APIlistPrivateChatMessagesRequest.newBuilder()
-                .listPrivateChatMessagesReq(listPrivateChatMessagesReq)
+            APIcreateShareRequest request = APIcreateShareRequest.newBuilder()
+                .createEmojiShareReq(createEmojiShareReq)
                 .build();
-            ListPrivateChatMessagesResp result = apiInstance.listPrivateChatMessages(request);
+            CreateEmojiShareResp result = apiInstance.createShare(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#listPrivateChatMessages");
+            System.err.println("Exception when calling EmojiService#createShare");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -528,11 +528,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listPrivateChatMessagesRequest | [**APIlistPrivateChatMessagesRequest**](ImService.md#APIlistPrivateChatMessagesRequest)|-|-|
+| createShareRequest | [**APIcreateShareRequest**](EmojiService.md#APIcreateShareRequest)|-|-|
 
 ### Return type
 
-[**ListPrivateChatMessagesResp**](ListPrivateChatMessagesResp.md)
+[**CreateEmojiShareResp**](CreateEmojiShareResp.md)
 
 
 ### Authorization
@@ -549,13 +549,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## listPrivateChatMessagesWithHttpInfo
+## createShareWithHttpInfo
 
-> ApiResponse<ListPrivateChatMessagesResp> listPrivateChatMessagesWithHttpInfo(listPrivateChatMessagesRequest)
+> ApiResponse<CreateEmojiShareResp> createShareWithHttpInfo(createShareRequest)
 
 
 
-查询私聊消息。
+生成七天有效的分组分享码。
 
 ### Example
 
@@ -566,26 +566,26 @@ import com.bass.bbs.ApiException;
 import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        ListPrivateChatMessagesReq listPrivateChatMessagesReq = new ListPrivateChatMessagesReq(); // ListPrivateChatMessagesReq | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        CreateEmojiShareReq createEmojiShareReq = new CreateEmojiShareReq(); // CreateEmojiShareReq | 
         try {
-            APIlistPrivateChatMessagesRequest request = APIlistPrivateChatMessagesRequest.newBuilder()
-                .listPrivateChatMessagesReq(listPrivateChatMessagesReq)
+            APIcreateShareRequest request = APIcreateShareRequest.newBuilder()
+                .createEmojiShareReq(createEmojiShareReq)
                 .build();
-            ApiResponse<ListPrivateChatMessagesResp> response = apiInstance.listPrivateChatMessagesWithHttpInfo(request);
+            ApiResponse<CreateEmojiShareResp> response = apiInstance.createShareWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#listPrivateChatMessages");
+            System.err.println("Exception when calling EmojiService#createShare");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -599,11 +599,11 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listPrivateChatMessagesRequest | [**APIlistPrivateChatMessagesRequest**](ImService.md#APIlistPrivateChatMessagesRequest)|-|-|
+| createShareRequest | [**APIcreateShareRequest**](EmojiService.md#APIcreateShareRequest)|-|-|
 
 ### Return type
 
-ApiResponse<[**ListPrivateChatMessagesResp**](ListPrivateChatMessagesResp.md)>
+ApiResponse<[**CreateEmojiShareResp**](CreateEmojiShareResp.md)>
 
 
 ### Authorization
@@ -621,23 +621,23 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIlistPrivateChatMessagesRequest"></a>
-## APIlistPrivateChatMessagesRequest
+<a id="APIcreateShareRequest"></a>
+## APIcreateShareRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **listPrivateChatMessagesReq** | [**ListPrivateChatMessagesReq**](ListPrivateChatMessagesReq.md) |  | |
+| **createEmojiShareReq** | [**CreateEmojiShareReq**](CreateEmojiShareReq.md) |  | |
 
 
 
-## listPrivateChatSessions
+## deleteGroup
 
-> ListPrivateChatSessionsResp listPrivateChatSessions(listPrivateChatSessionsRequest)
+> Object deleteGroup(deleteGroupRequest)
 
 
 
-查询当前账号的私聊会话。
+删除一个表情分组。
 
 ### Example
 
@@ -647,26 +647,24 @@ import com.bass.bbs.ApiClient;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        String pagePage = "pagePage_example"; // String | 页码
-        String pageSize = "pageSize_example"; // String | 页大小
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        DeleteEmojiGroupReq deleteEmojiGroupReq = new DeleteEmojiGroupReq(); // DeleteEmojiGroupReq | 
         try {
-            APIlistPrivateChatSessionsRequest request = APIlistPrivateChatSessionsRequest.newBuilder()
-                .pagePage(pagePage)
-                .pageSize(pageSize)
+            APIdeleteGroupRequest request = APIdeleteGroupRequest.newBuilder()
+                .deleteEmojiGroupReq(deleteEmojiGroupReq)
                 .build();
-            ListPrivateChatSessionsResp result = apiInstance.listPrivateChatSessions(request);
+            Object result = apiInstance.deleteGroup(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#listPrivateChatSessions");
+            System.err.println("Exception when calling EmojiService#deleteGroup");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -680,160 +678,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| listPrivateChatSessionsRequest | [**APIlistPrivateChatSessionsRequest**](ImService.md#APIlistPrivateChatSessionsRequest)|-|-|
-
-### Return type
-
-[**ListPrivateChatSessionsResp**](ListPrivateChatSessionsResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## listPrivateChatSessionsWithHttpInfo
-
-> ApiResponse<ListPrivateChatSessionsResp> listPrivateChatSessionsWithHttpInfo(listPrivateChatSessionsRequest)
-
-
-
-查询当前账号的私聊会话。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ImService apiInstance = new ImService(defaultClient);
-        String pagePage = "pagePage_example"; // String | 页码
-        String pageSize = "pageSize_example"; // String | 页大小
-        try {
-            APIlistPrivateChatSessionsRequest request = APIlistPrivateChatSessionsRequest.newBuilder()
-                .pagePage(pagePage)
-                .pageSize(pageSize)
-                .build();
-            ApiResponse<ListPrivateChatSessionsResp> response = apiInstance.listPrivateChatSessionsWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#listPrivateChatSessions");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| listPrivateChatSessionsRequest | [**APIlistPrivateChatSessionsRequest**](ImService.md#APIlistPrivateChatSessionsRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**ListPrivateChatSessionsResp**](ListPrivateChatSessionsResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIlistPrivateChatSessionsRequest"></a>
-## APIlistPrivateChatSessionsRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **pagePage** | **String** | 页码 | [optional] |
-| **pageSize** | **String** | 页大小 | [optional] |
-
-
-
-## markPrivateChatSessionRead
-
-> Object markPrivateChatSessionRead(markPrivateChatSessionReadRequest)
-
-
-
-标记私聊会话已读。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ImService apiInstance = new ImService(defaultClient);
-        MarkPrivateChatSessionReadReq markPrivateChatSessionReadReq = new MarkPrivateChatSessionReadReq(); // MarkPrivateChatSessionReadReq | 
-        try {
-            APImarkPrivateChatSessionReadRequest request = APImarkPrivateChatSessionReadRequest.newBuilder()
-                .markPrivateChatSessionReadReq(markPrivateChatSessionReadReq)
-                .build();
-            Object result = apiInstance.markPrivateChatSessionRead(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#markPrivateChatSessionRead");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| markPrivateChatSessionReadRequest | [**APImarkPrivateChatSessionReadRequest**](ImService.md#APImarkPrivateChatSessionReadRequest)|-|-|
+| deleteGroupRequest | [**APIdeleteGroupRequest**](EmojiService.md#APIdeleteGroupRequest)|-|-|
 
 ### Return type
 
@@ -854,13 +699,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## markPrivateChatSessionReadWithHttpInfo
+## deleteGroupWithHttpInfo
 
-> ApiResponse<Object> markPrivateChatSessionReadWithHttpInfo(markPrivateChatSessionReadRequest)
+> ApiResponse<Object> deleteGroupWithHttpInfo(deleteGroupRequest)
 
 
 
-标记私聊会话已读。
+删除一个表情分组。
 
 ### Example
 
@@ -871,26 +716,26 @@ import com.bass.bbs.ApiException;
 import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        MarkPrivateChatSessionReadReq markPrivateChatSessionReadReq = new MarkPrivateChatSessionReadReq(); // MarkPrivateChatSessionReadReq | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        DeleteEmojiGroupReq deleteEmojiGroupReq = new DeleteEmojiGroupReq(); // DeleteEmojiGroupReq | 
         try {
-            APImarkPrivateChatSessionReadRequest request = APImarkPrivateChatSessionReadRequest.newBuilder()
-                .markPrivateChatSessionReadReq(markPrivateChatSessionReadReq)
+            APIdeleteGroupRequest request = APIdeleteGroupRequest.newBuilder()
+                .deleteEmojiGroupReq(deleteEmojiGroupReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.markPrivateChatSessionReadWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.deleteGroupWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#markPrivateChatSessionRead");
+            System.err.println("Exception when calling EmojiService#deleteGroup");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -904,7 +749,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| markPrivateChatSessionReadRequest | [**APImarkPrivateChatSessionReadRequest**](ImService.md#APImarkPrivateChatSessionReadRequest)|-|-|
+| deleteGroupRequest | [**APIdeleteGroupRequest**](EmojiService.md#APIdeleteGroupRequest)|-|-|
 
 ### Return type
 
@@ -926,23 +771,23 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APImarkPrivateChatSessionReadRequest"></a>
-## APImarkPrivateChatSessionReadRequest
+<a id="APIdeleteGroupRequest"></a>
+## APIdeleteGroupRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **markPrivateChatSessionReadReq** | [**MarkPrivateChatSessionReadReq**](MarkPrivateChatSessionReadReq.md) |  | |
+| **deleteEmojiGroupReq** | [**DeleteEmojiGroupReq**](DeleteEmojiGroupReq.md) |  | |
 
 
 
-## revokeGlobalChatMessage
+## deleteItem
 
-> RevokeGlobalChatMessageResp revokeGlobalChatMessage(revokeGlobalChatMessageRequest)
+> Object deleteItem(deleteItemRequest)
 
 
 
-撤回自己的全局聊天室消息。
+从分组移除表情。
 
 ### Example
 
@@ -952,24 +797,24 @@ import com.bass.bbs.ApiClient;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        RevokeGlobalChatMessageReq revokeGlobalChatMessageReq = new RevokeGlobalChatMessageReq(); // RevokeGlobalChatMessageReq | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        DeleteEmojiItemReq deleteEmojiItemReq = new DeleteEmojiItemReq(); // DeleteEmojiItemReq | 
         try {
-            APIrevokeGlobalChatMessageRequest request = APIrevokeGlobalChatMessageRequest.newBuilder()
-                .revokeGlobalChatMessageReq(revokeGlobalChatMessageReq)
+            APIdeleteItemRequest request = APIdeleteItemRequest.newBuilder()
+                .deleteEmojiItemReq(deleteEmojiItemReq)
                 .build();
-            RevokeGlobalChatMessageResp result = apiInstance.revokeGlobalChatMessage(request);
+            Object result = apiInstance.deleteItem(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#revokeGlobalChatMessage");
+            System.err.println("Exception when calling EmojiService#deleteItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -983,607 +828,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| revokeGlobalChatMessageRequest | [**APIrevokeGlobalChatMessageRequest**](ImService.md#APIrevokeGlobalChatMessageRequest)|-|-|
-
-### Return type
-
-[**RevokeGlobalChatMessageResp**](RevokeGlobalChatMessageResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## revokeGlobalChatMessageWithHttpInfo
-
-> ApiResponse<RevokeGlobalChatMessageResp> revokeGlobalChatMessageWithHttpInfo(revokeGlobalChatMessageRequest)
-
-
-
-撤回自己的全局聊天室消息。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ImService apiInstance = new ImService(defaultClient);
-        RevokeGlobalChatMessageReq revokeGlobalChatMessageReq = new RevokeGlobalChatMessageReq(); // RevokeGlobalChatMessageReq | 
-        try {
-            APIrevokeGlobalChatMessageRequest request = APIrevokeGlobalChatMessageRequest.newBuilder()
-                .revokeGlobalChatMessageReq(revokeGlobalChatMessageReq)
-                .build();
-            ApiResponse<RevokeGlobalChatMessageResp> response = apiInstance.revokeGlobalChatMessageWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#revokeGlobalChatMessage");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| revokeGlobalChatMessageRequest | [**APIrevokeGlobalChatMessageRequest**](ImService.md#APIrevokeGlobalChatMessageRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**RevokeGlobalChatMessageResp**](RevokeGlobalChatMessageResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIrevokeGlobalChatMessageRequest"></a>
-## APIrevokeGlobalChatMessageRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **revokeGlobalChatMessageReq** | [**RevokeGlobalChatMessageReq**](RevokeGlobalChatMessageReq.md) |  | |
-
-
-
-## revokePrivateChatMessage
-
-> RevokePrivateChatMessageResp revokePrivateChatMessage(revokePrivateChatMessageRequest)
-
-
-
-撤回私聊消息。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ImService apiInstance = new ImService(defaultClient);
-        RevokePrivateChatMessageReq revokePrivateChatMessageReq = new RevokePrivateChatMessageReq(); // RevokePrivateChatMessageReq | 
-        try {
-            APIrevokePrivateChatMessageRequest request = APIrevokePrivateChatMessageRequest.newBuilder()
-                .revokePrivateChatMessageReq(revokePrivateChatMessageReq)
-                .build();
-            RevokePrivateChatMessageResp result = apiInstance.revokePrivateChatMessage(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#revokePrivateChatMessage");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| revokePrivateChatMessageRequest | [**APIrevokePrivateChatMessageRequest**](ImService.md#APIrevokePrivateChatMessageRequest)|-|-|
-
-### Return type
-
-[**RevokePrivateChatMessageResp**](RevokePrivateChatMessageResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## revokePrivateChatMessageWithHttpInfo
-
-> ApiResponse<RevokePrivateChatMessageResp> revokePrivateChatMessageWithHttpInfo(revokePrivateChatMessageRequest)
-
-
-
-撤回私聊消息。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ImService apiInstance = new ImService(defaultClient);
-        RevokePrivateChatMessageReq revokePrivateChatMessageReq = new RevokePrivateChatMessageReq(); // RevokePrivateChatMessageReq | 
-        try {
-            APIrevokePrivateChatMessageRequest request = APIrevokePrivateChatMessageRequest.newBuilder()
-                .revokePrivateChatMessageReq(revokePrivateChatMessageReq)
-                .build();
-            ApiResponse<RevokePrivateChatMessageResp> response = apiInstance.revokePrivateChatMessageWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#revokePrivateChatMessage");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| revokePrivateChatMessageRequest | [**APIrevokePrivateChatMessageRequest**](ImService.md#APIrevokePrivateChatMessageRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**RevokePrivateChatMessageResp**](RevokePrivateChatMessageResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIrevokePrivateChatMessageRequest"></a>
-## APIrevokePrivateChatMessageRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **revokePrivateChatMessageReq** | [**RevokePrivateChatMessageReq**](RevokePrivateChatMessageReq.md) |  | |
-
-
-
-## sendGlobalChatMessage
-
-> SendGlobalChatMessageResp sendGlobalChatMessage(sendGlobalChatMessageRequest)
-
-
-
-发送全局聊天室消息。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ImService apiInstance = new ImService(defaultClient);
-        SendGlobalChatMessageReq sendGlobalChatMessageReq = new SendGlobalChatMessageReq(); // SendGlobalChatMessageReq | 
-        try {
-            APIsendGlobalChatMessageRequest request = APIsendGlobalChatMessageRequest.newBuilder()
-                .sendGlobalChatMessageReq(sendGlobalChatMessageReq)
-                .build();
-            SendGlobalChatMessageResp result = apiInstance.sendGlobalChatMessage(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#sendGlobalChatMessage");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| sendGlobalChatMessageRequest | [**APIsendGlobalChatMessageRequest**](ImService.md#APIsendGlobalChatMessageRequest)|-|-|
-
-### Return type
-
-[**SendGlobalChatMessageResp**](SendGlobalChatMessageResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## sendGlobalChatMessageWithHttpInfo
-
-> ApiResponse<SendGlobalChatMessageResp> sendGlobalChatMessageWithHttpInfo(sendGlobalChatMessageRequest)
-
-
-
-发送全局聊天室消息。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ImService apiInstance = new ImService(defaultClient);
-        SendGlobalChatMessageReq sendGlobalChatMessageReq = new SendGlobalChatMessageReq(); // SendGlobalChatMessageReq | 
-        try {
-            APIsendGlobalChatMessageRequest request = APIsendGlobalChatMessageRequest.newBuilder()
-                .sendGlobalChatMessageReq(sendGlobalChatMessageReq)
-                .build();
-            ApiResponse<SendGlobalChatMessageResp> response = apiInstance.sendGlobalChatMessageWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#sendGlobalChatMessage");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| sendGlobalChatMessageRequest | [**APIsendGlobalChatMessageRequest**](ImService.md#APIsendGlobalChatMessageRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**SendGlobalChatMessageResp**](SendGlobalChatMessageResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIsendGlobalChatMessageRequest"></a>
-## APIsendGlobalChatMessageRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **sendGlobalChatMessageReq** | [**SendGlobalChatMessageReq**](SendGlobalChatMessageReq.md) |  | |
-
-
-
-## sendPrivateChatMessage
-
-> SendPrivateChatMessageResp sendPrivateChatMessage(sendPrivateChatMessageRequest)
-
-
-
-发送私聊消息。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ImService apiInstance = new ImService(defaultClient);
-        SendPrivateChatMessageReq sendPrivateChatMessageReq = new SendPrivateChatMessageReq(); // SendPrivateChatMessageReq | 
-        try {
-            APIsendPrivateChatMessageRequest request = APIsendPrivateChatMessageRequest.newBuilder()
-                .sendPrivateChatMessageReq(sendPrivateChatMessageReq)
-                .build();
-            SendPrivateChatMessageResp result = apiInstance.sendPrivateChatMessage(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#sendPrivateChatMessage");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| sendPrivateChatMessageRequest | [**APIsendPrivateChatMessageRequest**](ImService.md#APIsendPrivateChatMessageRequest)|-|-|
-
-### Return type
-
-[**SendPrivateChatMessageResp**](SendPrivateChatMessageResp.md)
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-## sendPrivateChatMessageWithHttpInfo
-
-> ApiResponse<SendPrivateChatMessageResp> sendPrivateChatMessageWithHttpInfo(sendPrivateChatMessageRequest)
-
-
-
-发送私聊消息。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.ApiResponse;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ImService apiInstance = new ImService(defaultClient);
-        SendPrivateChatMessageReq sendPrivateChatMessageReq = new SendPrivateChatMessageReq(); // SendPrivateChatMessageReq | 
-        try {
-            APIsendPrivateChatMessageRequest request = APIsendPrivateChatMessageRequest.newBuilder()
-                .sendPrivateChatMessageReq(sendPrivateChatMessageReq)
-                .build();
-            ApiResponse<SendPrivateChatMessageResp> response = apiInstance.sendPrivateChatMessageWithHttpInfo(request);
-            System.out.println("Status code: " + response.getStatusCode());
-            System.out.println("Response headers: " + response.getHeaders());
-            System.out.println("Response body: " + response.getData());
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#sendPrivateChatMessage");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            System.err.println("Reason: " + e.getResponseBody());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| sendPrivateChatMessageRequest | [**APIsendPrivateChatMessageRequest**](ImService.md#APIsendPrivateChatMessageRequest)|-|-|
-
-### Return type
-
-ApiResponse<[**SendPrivateChatMessageResp**](SendPrivateChatMessageResp.md)>
-
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | OK |  -  |
-
-
-<a id="APIsendPrivateChatMessageRequest"></a>
-## APIsendPrivateChatMessageRequest
-### Properties
-
-|     Name      |    Type       | Description   |     Notes    |
-| ------------- | ------------- | ------------- | -------------|
-| **sendPrivateChatMessageReq** | [**SendPrivateChatMessageReq**](SendPrivateChatMessageReq.md) |  | |
-
-
-
-## setPrivateChatSessionMuted
-
-> Object setPrivateChatSessionMuted(setPrivateChatSessionMutedRequest)
-
-
-
-设置私聊会话免打扰。
-
-### Example
-
-```java
-// Import classes:
-import com.bass.bbs.ApiClient;
-import com.bass.bbs.ApiException;
-import com.bass.bbs.Configuration;
-import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
-
-public class Example {
-    public static void main(String[] args) {
-        ApiClient defaultClient = Configuration.getDefaultApiClient();
-        defaultClient.setBasePath("http://localhost");
-
-        ImService apiInstance = new ImService(defaultClient);
-        SetPrivateChatSessionMutedReq setPrivateChatSessionMutedReq = new SetPrivateChatSessionMutedReq(); // SetPrivateChatSessionMutedReq | 
-        try {
-            APIsetPrivateChatSessionMutedRequest request = APIsetPrivateChatSessionMutedRequest.newBuilder()
-                .setPrivateChatSessionMutedReq(setPrivateChatSessionMutedReq)
-                .build();
-            Object result = apiInstance.setPrivateChatSessionMuted(request);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#setPrivateChatSessionMuted");
-            System.err.println("Status code: " + e.getCode());
-            System.err.println("Reason: " + e.getResponseBody());
-            System.err.println("Response headers: " + e.getResponseHeaders());
-            e.printStackTrace();
-        }
-    }
-}
-```
-
-### Parameters
-
-|    Name      |    Type       | Description   |     Notes    |
-|------------- | ------------- | ------------- | -------------|
-| setPrivateChatSessionMutedRequest | [**APIsetPrivateChatSessionMutedRequest**](ImService.md#APIsetPrivateChatSessionMutedRequest)|-|-|
+| deleteItemRequest | [**APIdeleteItemRequest**](EmojiService.md#APIdeleteItemRequest)|-|-|
 
 ### Return type
 
@@ -1604,13 +849,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## setPrivateChatSessionMutedWithHttpInfo
+## deleteItemWithHttpInfo
 
-> ApiResponse<Object> setPrivateChatSessionMutedWithHttpInfo(setPrivateChatSessionMutedRequest)
+> ApiResponse<Object> deleteItemWithHttpInfo(deleteItemRequest)
 
 
 
-设置私聊会话免打扰。
+从分组移除表情。
 
 ### Example
 
@@ -1621,26 +866,26 @@ import com.bass.bbs.ApiException;
 import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        SetPrivateChatSessionMutedReq setPrivateChatSessionMutedReq = new SetPrivateChatSessionMutedReq(); // SetPrivateChatSessionMutedReq | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        DeleteEmojiItemReq deleteEmojiItemReq = new DeleteEmojiItemReq(); // DeleteEmojiItemReq | 
         try {
-            APIsetPrivateChatSessionMutedRequest request = APIsetPrivateChatSessionMutedRequest.newBuilder()
-                .setPrivateChatSessionMutedReq(setPrivateChatSessionMutedReq)
+            APIdeleteItemRequest request = APIdeleteItemRequest.newBuilder()
+                .deleteEmojiItemReq(deleteEmojiItemReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.setPrivateChatSessionMutedWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.deleteItemWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#setPrivateChatSessionMuted");
+            System.err.println("Exception when calling EmojiService#deleteItem");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1654,7 +899,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| setPrivateChatSessionMutedRequest | [**APIsetPrivateChatSessionMutedRequest**](ImService.md#APIsetPrivateChatSessionMutedRequest)|-|-|
+| deleteItemRequest | [**APIdeleteItemRequest**](EmojiService.md#APIdeleteItemRequest)|-|-|
 
 ### Return type
 
@@ -1676,23 +921,23 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIsetPrivateChatSessionMutedRequest"></a>
-## APIsetPrivateChatSessionMutedRequest
+<a id="APIdeleteItemRequest"></a>
+## APIdeleteItemRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **setPrivateChatSessionMutedReq** | [**SetPrivateChatSessionMutedReq**](SetPrivateChatSessionMutedReq.md) |  | |
+| **deleteEmojiItemReq** | [**DeleteEmojiItemReq**](DeleteEmojiItemReq.md) |  | |
 
 
 
-## setPrivateChatSessionPinned
+## importShare
 
-> Object setPrivateChatSessionPinned(setPrivateChatSessionPinnedRequest)
+> ImportEmojiShareResp importShare(importShareRequest)
 
 
 
-设置私聊会话置顶。
+把分享码导入为一个新分组。
 
 ### Example
 
@@ -1702,24 +947,24 @@ import com.bass.bbs.ApiClient;
 import com.bass.bbs.ApiException;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        SetPrivateChatSessionPinnedReq setPrivateChatSessionPinnedReq = new SetPrivateChatSessionPinnedReq(); // SetPrivateChatSessionPinnedReq | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        ImportEmojiShareReq importEmojiShareReq = new ImportEmojiShareReq(); // ImportEmojiShareReq | 
         try {
-            APIsetPrivateChatSessionPinnedRequest request = APIsetPrivateChatSessionPinnedRequest.newBuilder()
-                .setPrivateChatSessionPinnedReq(setPrivateChatSessionPinnedReq)
+            APIimportShareRequest request = APIimportShareRequest.newBuilder()
+                .importEmojiShareReq(importEmojiShareReq)
                 .build();
-            Object result = apiInstance.setPrivateChatSessionPinned(request);
+            ImportEmojiShareResp result = apiInstance.importShare(request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#setPrivateChatSessionPinned");
+            System.err.println("Exception when calling EmojiService#importShare");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Reason: " + e.getResponseBody());
             System.err.println("Response headers: " + e.getResponseHeaders());
@@ -1733,7 +978,607 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| setPrivateChatSessionPinnedRequest | [**APIsetPrivateChatSessionPinnedRequest**](ImService.md#APIsetPrivateChatSessionPinnedRequest)|-|-|
+| importShareRequest | [**APIimportShareRequest**](EmojiService.md#APIimportShareRequest)|-|-|
+
+### Return type
+
+[**ImportEmojiShareResp**](ImportEmojiShareResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## importShareWithHttpInfo
+
+> ApiResponse<ImportEmojiShareResp> importShareWithHttpInfo(importShareRequest)
+
+
+
+把分享码导入为一个新分组。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        ImportEmojiShareReq importEmojiShareReq = new ImportEmojiShareReq(); // ImportEmojiShareReq | 
+        try {
+            APIimportShareRequest request = APIimportShareRequest.newBuilder()
+                .importEmojiShareReq(importEmojiShareReq)
+                .build();
+            ApiResponse<ImportEmojiShareResp> response = apiInstance.importShareWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#importShare");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| importShareRequest | [**APIimportShareRequest**](EmojiService.md#APIimportShareRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**ImportEmojiShareResp**](ImportEmojiShareResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIimportShareRequest"></a>
+## APIimportShareRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **importEmojiShareReq** | [**ImportEmojiShareReq**](ImportEmojiShareReq.md) |  | |
+
+
+
+## moveItem
+
+> MoveEmojiItemResp moveItem(moveItemRequest)
+
+
+
+将表情移动到另一个当前账号分组。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        MoveEmojiItemReq moveEmojiItemReq = new MoveEmojiItemReq(); // MoveEmojiItemReq | 
+        try {
+            APImoveItemRequest request = APImoveItemRequest.newBuilder()
+                .moveEmojiItemReq(moveEmojiItemReq)
+                .build();
+            MoveEmojiItemResp result = apiInstance.moveItem(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#moveItem");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| moveItemRequest | [**APImoveItemRequest**](EmojiService.md#APImoveItemRequest)|-|-|
+
+### Return type
+
+[**MoveEmojiItemResp**](MoveEmojiItemResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## moveItemWithHttpInfo
+
+> ApiResponse<MoveEmojiItemResp> moveItemWithHttpInfo(moveItemRequest)
+
+
+
+将表情移动到另一个当前账号分组。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        MoveEmojiItemReq moveEmojiItemReq = new MoveEmojiItemReq(); // MoveEmojiItemReq | 
+        try {
+            APImoveItemRequest request = APImoveItemRequest.newBuilder()
+                .moveEmojiItemReq(moveEmojiItemReq)
+                .build();
+            ApiResponse<MoveEmojiItemResp> response = apiInstance.moveItemWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#moveItem");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| moveItemRequest | [**APImoveItemRequest**](EmojiService.md#APImoveItemRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**MoveEmojiItemResp**](MoveEmojiItemResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APImoveItemRequest"></a>
+## APImoveItemRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **moveEmojiItemReq** | [**MoveEmojiItemReq**](MoveEmojiItemReq.md) |  | |
+
+
+
+## renameGroup
+
+> RenameEmojiGroupResp renameGroup(renameGroupRequest)
+
+
+
+重命名一个表情分组。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        RenameEmojiGroupReq renameEmojiGroupReq = new RenameEmojiGroupReq(); // RenameEmojiGroupReq | 
+        try {
+            APIrenameGroupRequest request = APIrenameGroupRequest.newBuilder()
+                .renameEmojiGroupReq(renameEmojiGroupReq)
+                .build();
+            RenameEmojiGroupResp result = apiInstance.renameGroup(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#renameGroup");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| renameGroupRequest | [**APIrenameGroupRequest**](EmojiService.md#APIrenameGroupRequest)|-|-|
+
+### Return type
+
+[**RenameEmojiGroupResp**](RenameEmojiGroupResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## renameGroupWithHttpInfo
+
+> ApiResponse<RenameEmojiGroupResp> renameGroupWithHttpInfo(renameGroupRequest)
+
+
+
+重命名一个表情分组。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        RenameEmojiGroupReq renameEmojiGroupReq = new RenameEmojiGroupReq(); // RenameEmojiGroupReq | 
+        try {
+            APIrenameGroupRequest request = APIrenameGroupRequest.newBuilder()
+                .renameEmojiGroupReq(renameEmojiGroupReq)
+                .build();
+            ApiResponse<RenameEmojiGroupResp> response = apiInstance.renameGroupWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#renameGroup");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| renameGroupRequest | [**APIrenameGroupRequest**](EmojiService.md#APIrenameGroupRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**RenameEmojiGroupResp**](RenameEmojiGroupResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIrenameGroupRequest"></a>
+## APIrenameGroupRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **renameEmojiGroupReq** | [**RenameEmojiGroupReq**](RenameEmojiGroupReq.md) |  | |
+
+
+
+## renameItem
+
+> RenameEmojiItemResp renameItem(renameItemRequest)
+
+
+
+重命名一个表情别名。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        RenameEmojiItemReq renameEmojiItemReq = new RenameEmojiItemReq(); // RenameEmojiItemReq | 
+        try {
+            APIrenameItemRequest request = APIrenameItemRequest.newBuilder()
+                .renameEmojiItemReq(renameEmojiItemReq)
+                .build();
+            RenameEmojiItemResp result = apiInstance.renameItem(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#renameItem");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| renameItemRequest | [**APIrenameItemRequest**](EmojiService.md#APIrenameItemRequest)|-|-|
+
+### Return type
+
+[**RenameEmojiItemResp**](RenameEmojiItemResp.md)
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## renameItemWithHttpInfo
+
+> ApiResponse<RenameEmojiItemResp> renameItemWithHttpInfo(renameItemRequest)
+
+
+
+重命名一个表情别名。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        RenameEmojiItemReq renameEmojiItemReq = new RenameEmojiItemReq(); // RenameEmojiItemReq | 
+        try {
+            APIrenameItemRequest request = APIrenameItemRequest.newBuilder()
+                .renameEmojiItemReq(renameEmojiItemReq)
+                .build();
+            ApiResponse<RenameEmojiItemResp> response = apiInstance.renameItemWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#renameItem");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| renameItemRequest | [**APIrenameItemRequest**](EmojiService.md#APIrenameItemRequest)|-|-|
+
+### Return type
+
+ApiResponse<[**RenameEmojiItemResp**](RenameEmojiItemResp.md)>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIrenameItemRequest"></a>
+## APIrenameItemRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **renameEmojiItemReq** | [**RenameEmojiItemReq**](RenameEmojiItemReq.md) |  | |
+
+
+
+## reorderGroups
+
+> Object reorderGroups(reorderGroupsRequest)
+
+
+
+重排表情分组。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        ReorderEmojiGroupsReq reorderEmojiGroupsReq = new ReorderEmojiGroupsReq(); // ReorderEmojiGroupsReq | 
+        try {
+            APIreorderGroupsRequest request = APIreorderGroupsRequest.newBuilder()
+                .reorderEmojiGroupsReq(reorderEmojiGroupsReq)
+                .build();
+            Object result = apiInstance.reorderGroups(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#reorderGroups");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| reorderGroupsRequest | [**APIreorderGroupsRequest**](EmojiService.md#APIreorderGroupsRequest)|-|-|
 
 ### Return type
 
@@ -1754,13 +1599,13 @@ No authorization required
 |-------------|-------------|------------------|
 | **200** | OK |  -  |
 
-## setPrivateChatSessionPinnedWithHttpInfo
+## reorderGroupsWithHttpInfo
 
-> ApiResponse<Object> setPrivateChatSessionPinnedWithHttpInfo(setPrivateChatSessionPinnedRequest)
+> ApiResponse<Object> reorderGroupsWithHttpInfo(reorderGroupsRequest)
 
 
 
-设置私聊会话置顶。
+重排表情分组。
 
 ### Example
 
@@ -1771,26 +1616,26 @@ import com.bass.bbs.ApiException;
 import com.bass.bbs.ApiResponse;
 import com.bass.bbs.Configuration;
 import com.bass.bbs.models.*;
-import com.bass.bbs.api.ImService;
-import com.bass.bbs.api.ImService.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
 
 public class Example {
     public static void main(String[] args) {
         ApiClient defaultClient = Configuration.getDefaultApiClient();
         defaultClient.setBasePath("http://localhost");
 
-        ImService apiInstance = new ImService(defaultClient);
-        SetPrivateChatSessionPinnedReq setPrivateChatSessionPinnedReq = new SetPrivateChatSessionPinnedReq(); // SetPrivateChatSessionPinnedReq | 
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        ReorderEmojiGroupsReq reorderEmojiGroupsReq = new ReorderEmojiGroupsReq(); // ReorderEmojiGroupsReq | 
         try {
-            APIsetPrivateChatSessionPinnedRequest request = APIsetPrivateChatSessionPinnedRequest.newBuilder()
-                .setPrivateChatSessionPinnedReq(setPrivateChatSessionPinnedReq)
+            APIreorderGroupsRequest request = APIreorderGroupsRequest.newBuilder()
+                .reorderEmojiGroupsReq(reorderEmojiGroupsReq)
                 .build();
-            ApiResponse<Object> response = apiInstance.setPrivateChatSessionPinnedWithHttpInfo(request);
+            ApiResponse<Object> response = apiInstance.reorderGroupsWithHttpInfo(request);
             System.out.println("Status code: " + response.getStatusCode());
             System.out.println("Response headers: " + response.getHeaders());
             System.out.println("Response body: " + response.getData());
         } catch (ApiException e) {
-            System.err.println("Exception when calling ImService#setPrivateChatSessionPinned");
+            System.err.println("Exception when calling EmojiService#reorderGroups");
             System.err.println("Status code: " + e.getCode());
             System.err.println("Response headers: " + e.getResponseHeaders());
             System.err.println("Reason: " + e.getResponseBody());
@@ -1804,7 +1649,7 @@ public class Example {
 
 |    Name      |    Type       | Description   |     Notes    |
 |------------- | ------------- | ------------- | -------------|
-| setPrivateChatSessionPinnedRequest | [**APIsetPrivateChatSessionPinnedRequest**](ImService.md#APIsetPrivateChatSessionPinnedRequest)|-|-|
+| reorderGroupsRequest | [**APIreorderGroupsRequest**](EmojiService.md#APIreorderGroupsRequest)|-|-|
 
 ### Return type
 
@@ -1826,12 +1671,162 @@ No authorization required
 | **200** | OK |  -  |
 
 
-<a id="APIsetPrivateChatSessionPinnedRequest"></a>
-## APIsetPrivateChatSessionPinnedRequest
+<a id="APIreorderGroupsRequest"></a>
+## APIreorderGroupsRequest
 ### Properties
 
 |     Name      |    Type       | Description   |     Notes    |
 | ------------- | ------------- | ------------- | -------------|
-| **setPrivateChatSessionPinnedReq** | [**SetPrivateChatSessionPinnedReq**](SetPrivateChatSessionPinnedReq.md) |  | |
+| **reorderEmojiGroupsReq** | [**ReorderEmojiGroupsReq**](ReorderEmojiGroupsReq.md) |  | |
+
+
+
+## reorderItems
+
+> Object reorderItems(reorderItemsRequest)
+
+
+
+重排同一分组内的表情。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        ReorderEmojiItemsReq reorderEmojiItemsReq = new ReorderEmojiItemsReq(); // ReorderEmojiItemsReq | 
+        try {
+            APIreorderItemsRequest request = APIreorderItemsRequest.newBuilder()
+                .reorderEmojiItemsReq(reorderEmojiItemsReq)
+                .build();
+            Object result = apiInstance.reorderItems(request);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#reorderItems");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Reason: " + e.getResponseBody());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| reorderItemsRequest | [**APIreorderItemsRequest**](EmojiService.md#APIreorderItemsRequest)|-|-|
+
+### Return type
+
+**Object**
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+## reorderItemsWithHttpInfo
+
+> ApiResponse<Object> reorderItemsWithHttpInfo(reorderItemsRequest)
+
+
+
+重排同一分组内的表情。
+
+### Example
+
+```java
+// Import classes:
+import com.bass.bbs.ApiClient;
+import com.bass.bbs.ApiException;
+import com.bass.bbs.ApiResponse;
+import com.bass.bbs.Configuration;
+import com.bass.bbs.models.*;
+import com.bass.bbs.api.EmojiService;
+import com.bass.bbs.api.EmojiService.*;
+
+public class Example {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        defaultClient.setBasePath("http://localhost");
+
+        EmojiService apiInstance = new EmojiService(defaultClient);
+        ReorderEmojiItemsReq reorderEmojiItemsReq = new ReorderEmojiItemsReq(); // ReorderEmojiItemsReq | 
+        try {
+            APIreorderItemsRequest request = APIreorderItemsRequest.newBuilder()
+                .reorderEmojiItemsReq(reorderEmojiItemsReq)
+                .build();
+            ApiResponse<Object> response = apiInstance.reorderItemsWithHttpInfo(request);
+            System.out.println("Status code: " + response.getStatusCode());
+            System.out.println("Response headers: " + response.getHeaders());
+            System.out.println("Response body: " + response.getData());
+        } catch (ApiException e) {
+            System.err.println("Exception when calling EmojiService#reorderItems");
+            System.err.println("Status code: " + e.getCode());
+            System.err.println("Response headers: " + e.getResponseHeaders());
+            System.err.println("Reason: " + e.getResponseBody());
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Parameters
+
+|    Name      |    Type       | Description   |     Notes    |
+|------------- | ------------- | ------------- | -------------|
+| reorderItemsRequest | [**APIreorderItemsRequest**](EmojiService.md#APIreorderItemsRequest)|-|-|
+
+### Return type
+
+ApiResponse<**Object**>
+
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+| **200** | OK |  -  |
+
+
+<a id="APIreorderItemsRequest"></a>
+## APIreorderItemsRequest
+### Properties
+
+|     Name      |    Type       | Description   |     Notes    |
+| ------------- | ------------- | ------------- | -------------|
+| **reorderEmojiItemsReq** | [**ReorderEmojiItemsReq**](ReorderEmojiItemsReq.md) |  | |
 
 

@@ -21,9 +21,11 @@ tags:
   name: CommentService
 - description: 领域 HTTP 接口。
   name: DomainService
+- description: EmojiService 提供当前登录账号的 IM 表情分组 HTTP 接口。
+  name: EmojiService
+- name: GlobalChatService
 - description: 节假日服务。
   name: HolidayService
-- name: IMService
 - description: 平台地理数据接口。
   name: LocationService
 - description: MoonbreezeService 提供社区短动态入口。
@@ -38,6 +40,7 @@ tags:
   name: PreferencesService
 - description: 账号隐私设置接口。
   name: PrivacySettingService
+- name: PrivateChatService
 - name: RealtimeService
 - description: 账号关系接口。
   name: RelationService
@@ -1029,10 +1032,318 @@ paths:
       x-content-type: application/json
       x-accepts:
       - application/json
+  /v1/im/emoji/groups:
+    post:
+      description: 创建一个表情分组。
+      operationId: EmojiService_CreateGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEmojiGroup_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateEmojiGroup_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/groups/delete:
+    post:
+      description: 删除一个表情分组。
+      operationId: EmojiService_DeleteGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteEmojiGroup_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteEmojiGroup_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/groups/list:
+    post:
+      description: 查询当前账号的表情分组。
+      operationId: EmojiService_List
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListEmojiGroups_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListEmojiGroups_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/groups/rename:
+    post:
+      description: 重命名一个表情分组。
+      operationId: EmojiService_RenameGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RenameEmojiGroup_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RenameEmojiGroup_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/groups/reorder:
+    post:
+      description: 重排表情分组。
+      operationId: EmojiService_ReorderGroups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReorderEmojiGroups_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReorderEmojiGroups_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/items:
+    post:
+      description: 向分组加入已上传图片。
+      operationId: EmojiService_AddItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddEmojiItem_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddEmojiItem_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/items/delete:
+    post:
+      description: 从分组移除表情。
+      operationId: EmojiService_DeleteItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteEmojiItem_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteEmojiItem_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/items/move:
+    post:
+      description: 将表情移动到另一个当前账号分组。
+      operationId: EmojiService_MoveItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MoveEmojiItem_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MoveEmojiItem_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/items/rename:
+    post:
+      description: 重命名一个表情别名。
+      operationId: EmojiService_RenameItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RenameEmojiItem_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RenameEmojiItem_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/items/reorder:
+    post:
+      description: 重排同一分组内的表情。
+      operationId: EmojiService_ReorderItems
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReorderEmojiItems_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReorderEmojiItems_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/shares:
+    post:
+      description: 生成七天有效的分组分享码。
+      operationId: EmojiService_CreateShare
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEmojiShare_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateEmojiShare_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/emoji/shares/import:
+    post:
+      description: 把分享码导入为一个新分组。
+      operationId: EmojiService_ImportShare
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImportEmojiShare_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImportEmojiShare_Resp"
+          description: OK
+      tags:
+      - EmojiService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/global-chat/barrages:
+    post:
+      description: 发送全局聊天室弹幕。
+      operationId: GlobalChatService_SendGlobalChatBarrage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendGlobalChatBarrage_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SendGlobalChatBarrage_Resp"
+          description: OK
+      tags:
+      - GlobalChatService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/global-chat/barrages/list:
+    post:
+      description: 分页查询已发布的全局聊天室弹幕。
+      operationId: GlobalChatService_ListGlobalChatBarrages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListGlobalChatBarrages_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListGlobalChatBarrages_Resp"
+          description: OK
+      tags:
+      - GlobalChatService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
   /v1/im/global-chat/messages:
     post:
       description: 发送全局聊天室消息。
-      operationId: IMService_SendGlobalChatMessage
+      operationId: GlobalChatService_SendGlobalChatMessage
       requestBody:
         content:
           application/json:
@@ -1047,14 +1358,14 @@ paths:
                 $ref: "#/components/schemas/SendGlobalChatMessage_Resp"
           description: OK
       tags:
-      - IMService
+      - GlobalChatService
       x-content-type: application/json
       x-accepts:
       - application/json
   /v1/im/global-chat/messages/list:
     post:
       description: 查询全局聊天室消息。
-      operationId: IMService_ListGlobalChatMessages
+      operationId: GlobalChatService_ListGlobalChatMessages
       requestBody:
         content:
           application/json:
@@ -1069,14 +1380,14 @@ paths:
                 $ref: "#/components/schemas/ListGlobalChatMessages_Resp"
           description: OK
       tags:
-      - IMService
+      - GlobalChatService
       x-content-type: application/json
       x-accepts:
       - application/json
   /v1/im/global-chat/messages/revoke:
     post:
       description: 撤回自己的全局聊天室消息。
-      operationId: IMService_RevokeGlobalChatMessage
+      operationId: GlobalChatService_RevokeGlobalChatMessage
       requestBody:
         content:
           application/json:
@@ -1091,14 +1402,14 @@ paths:
                 $ref: "#/components/schemas/RevokeGlobalChatMessage_Resp"
           description: OK
       tags:
-      - IMService
+      - GlobalChatService
       x-content-type: application/json
       x-accepts:
       - application/json
   /v1/im/global-chat/online-members/list:
     post:
       description: 查询全部在线的聊天室成员。
-      operationId: IMService_ListGlobalChatOnlineMembers
+      operationId: GlobalChatService_ListGlobalChatOnlineMembers
       requestBody:
         content:
           application/json:
@@ -1113,14 +1424,58 @@ paths:
                 $ref: "#/components/schemas/ListGlobalChatOnlineMembers_Resp"
           description: OK
       tags:
-      - IMService
+      - GlobalChatService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/global-chat/topic/get:
+    post:
+      description: 查询当前全局聊天室话题。
+      operationId: GlobalChatService_GetGlobalChatTopic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetGlobalChatTopic_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetGlobalChatTopic_Resp"
+          description: OK
+      tags:
+      - GlobalChatService
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+  /v1/im/global-chat/topic/set:
+    post:
+      description: 设置全局聊天室话题。
+      operationId: GlobalChatService_SetGlobalChatTopic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetGlobalChatTopic_Req"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SetGlobalChatTopic_Resp"
+          description: OK
+      tags:
+      - GlobalChatService
       x-content-type: application/json
       x-accepts:
       - application/json
   /v1/im/private-chat/messages:
     post:
       description: 发送私聊消息。
-      operationId: IMService_SendPrivateChatMessage
+      operationId: PrivateChatService_SendPrivateChatMessage
       requestBody:
         content:
           application/json:
@@ -1135,14 +1490,14 @@ paths:
                 $ref: "#/components/schemas/SendPrivateChatMessage_Resp"
           description: OK
       tags:
-      - IMService
+      - PrivateChatService
       x-content-type: application/json
       x-accepts:
       - application/json
   /v1/im/private-chat/messages/list:
     post:
       description: 查询私聊消息。
-      operationId: IMService_ListPrivateChatMessages
+      operationId: PrivateChatService_ListPrivateChatMessages
       requestBody:
         content:
           application/json:
@@ -1157,14 +1512,14 @@ paths:
                 $ref: "#/components/schemas/ListPrivateChatMessages_Resp"
           description: OK
       tags:
-      - IMService
+      - PrivateChatService
       x-content-type: application/json
       x-accepts:
       - application/json
   /v1/im/private-chat/messages/revoke:
     post:
       description: 撤回私聊消息。
-      operationId: IMService_RevokePrivateChatMessage
+      operationId: PrivateChatService_RevokePrivateChatMessage
       requestBody:
         content:
           application/json:
@@ -1179,14 +1534,14 @@ paths:
                 $ref: "#/components/schemas/RevokePrivateChatMessage_Resp"
           description: OK
       tags:
-      - IMService
+      - PrivateChatService
       x-content-type: application/json
       x-accepts:
       - application/json
   /v1/im/private-chat/muted:
     post:
       description: 设置私聊会话免打扰。
-      operationId: IMService_SetPrivateChatSessionMuted
+      operationId: PrivateChatService_SetPrivateChatSessionMuted
       requestBody:
         content:
           application/json:
@@ -1201,14 +1556,14 @@ paths:
                 $ref: "#/components/schemas/SetPrivateChatSessionMuted_Resp"
           description: OK
       tags:
-      - IMService
+      - PrivateChatService
       x-content-type: application/json
       x-accepts:
       - application/json
   /v1/im/private-chat/pinned:
     post:
       description: 设置私聊会话置顶。
-      operationId: IMService_SetPrivateChatSessionPinned
+      operationId: PrivateChatService_SetPrivateChatSessionPinned
       requestBody:
         content:
           application/json:
@@ -1223,14 +1578,14 @@ paths:
                 $ref: "#/components/schemas/SetPrivateChatSessionPinned_Resp"
           description: OK
       tags:
-      - IMService
+      - PrivateChatService
       x-content-type: application/json
       x-accepts:
       - application/json
   /v1/im/private-chat/read:
     post:
       description: 标记私聊会话已读。
-      operationId: IMService_MarkPrivateChatSessionRead
+      operationId: PrivateChatService_MarkPrivateChatSessionRead
       requestBody:
         content:
           application/json:
@@ -1245,14 +1600,14 @@ paths:
                 $ref: "#/components/schemas/MarkPrivateChatSessionRead_Resp"
           description: OK
       tags:
-      - IMService
+      - PrivateChatService
       x-content-type: application/json
       x-accepts:
       - application/json
   /v1/im/private-chat/sessions:
     get:
       description: 查询当前账号的私聊会话。
-      operationId: IMService_ListPrivateChatSessions
+      operationId: PrivateChatService_ListPrivateChatSessions
       parameters:
       - description: 页码
         explode: true
@@ -1278,13 +1633,13 @@ paths:
                 $ref: "#/components/schemas/ListPrivateChatSessions_Resp"
           description: OK
       tags:
-      - IMService
+      - PrivateChatService
       x-accepts:
       - application/json
   /v1/im/private-chat/unread-count:
     post:
       description: 统计当前账号的私聊未读数。
-      operationId: IMService_CountPrivateChatUnread
+      operationId: PrivateChatService_CountPrivateChatUnread
       requestBody:
         content:
           application/json:
@@ -1299,7 +1654,7 @@ paths:
                 $ref: "#/components/schemas/CountPrivateChatUnread_Resp"
           description: OK
       tags:
-      - IMService
+      - PrivateChatService
       x-content-type: application/json
       x-accepts:
       - application/json
@@ -2395,6 +2750,26 @@ components:
           $ref: "#/components/schemas/AccountProfile"
         viewer_relation:
           $ref: "#/components/schemas/ProfileRelation"
+      type: object
+    AddEmojiItem_Req:
+      properties:
+        group_id:
+          type: string
+        asset_id:
+          type: string
+        name:
+          type: string
+      type: object
+    AddEmojiItem_Resp:
+      example:
+        item:
+          image_url: image_url
+          name: name
+          id: id
+          asset_id: asset_id
+      properties:
+        item:
+          $ref: "#/components/schemas/EmojiItem"
       type: object
     AddPostscript_Req:
       properties:
@@ -3810,6 +4185,44 @@ components:
         article_id:
           type: string
       type: object
+    CreateEmojiGroup_Req:
+      properties:
+        name:
+          type: string
+      type: object
+    CreateEmojiGroup_Resp:
+      example:
+        group:
+          name: name
+          id: id
+          items:
+          - image_url: image_url
+            name: name
+            id: id
+            asset_id: asset_id
+          - image_url: image_url
+            name: name
+            id: id
+            asset_id: asset_id
+      properties:
+        group:
+          $ref: "#/components/schemas/EmojiGroup"
+      type: object
+    CreateEmojiShare_Req:
+      properties:
+        group_id:
+          type: string
+      type: object
+    CreateEmojiShare_Resp:
+      example:
+        expires_in_seconds: expires_in_seconds
+        code: code
+      properties:
+        code:
+          type: string
+        expires_in_seconds:
+          type: string
+      type: object
     CreateMoonbreeze_Req:
       properties:
         content:
@@ -3884,6 +4297,22 @@ components:
         tag:
           $ref: "#/components/schemas/Resp_Tag"
       type: object
+    DeleteEmojiGroup_Req:
+      properties:
+        group_id:
+          type: string
+      type: object
+    DeleteEmojiGroup_Resp:
+      properties: {}
+      type: object
+    DeleteEmojiItem_Req:
+      properties:
+        item_id:
+          type: string
+      type: object
+    DeleteEmojiItem_Resp:
+      properties: {}
+      type: object
     DisableTotp_Req:
       properties:
         code:
@@ -3903,6 +4332,47 @@ components:
       type: object
     DiscardDraftArticle_Resp:
       properties: {}
+      type: object
+    EmojiGroup:
+      description: EmojiGroup 是当前账号可操作的表情分组。
+      example:
+        name: name
+        id: id
+        items:
+        - image_url: image_url
+          name: name
+          id: id
+          asset_id: asset_id
+        - image_url: image_url
+          name: name
+          id: id
+          asset_id: asset_id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        items:
+          items:
+            $ref: "#/components/schemas/EmojiItem"
+          type: array
+      type: object
+    EmojiItem:
+      description: EmojiItem 是可直接插入编辑器的表情图片。
+      example:
+        image_url: image_url
+        name: name
+        id: id
+        asset_id: asset_id
+      properties:
+        id:
+          type: string
+        asset_id:
+          type: string
+        name:
+          type: string
+        image_url:
+          type: string
       type: object
     EnterArticleLottery_Req:
       properties:
@@ -4319,6 +4789,21 @@ components:
         totp:
           $ref: "#/components/schemas/Resp_Totp"
       type: object
+    GetGlobalChatTopic_Req:
+      properties: {}
+      type: object
+    GetGlobalChatTopic_Resp:
+      example:
+        topic:
+          user_id: user_id
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          points_cost: points_cost
+          content: content
+      properties:
+        topic:
+          $ref: "#/components/schemas/GlobalChatTopic"
+      type: object
     GetProfile_Req:
       properties:
         name:
@@ -4384,6 +4869,33 @@ components:
       properties:
         status:
           $ref: "#/components/schemas/Resp_RelationStatus"
+      type: object
+    GlobalChatBarrage:
+      example:
+        user_id: user_id
+        sender:
+          avatar_url: avatar_url
+          user_id: user_id
+          name: name
+          nickname: nickname
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: id
+        points_cost: points_cost
+        content: content
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        content:
+          type: string
+        points_cost:
+          type: string
+        sender:
+          $ref: "#/components/schemas/GlobalChatMember"
+        created_at:
+          format: date-time
+          type: string
       type: object
     GlobalChatMember:
       example:
@@ -4456,6 +4968,26 @@ components:
         avatar_url:
           type: string
       type: object
+    GlobalChatTopic:
+      example:
+        user_id: user_id
+        created_at: 2000-01-23T04:56:07.000+00:00
+        id: id
+        points_cost: points_cost
+        content: content
+      properties:
+        id:
+          type: string
+        user_id:
+          type: string
+        content:
+          type: string
+        points_cost:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+      type: object
     ImageResp:
       example:
         data: data
@@ -4468,6 +5000,33 @@ components:
         content_type:
           description: 图片类型
           type: string
+      type: object
+    ImportEmojiShare_Req:
+      properties:
+        code:
+          type: string
+      type: object
+    ImportEmojiShare_Resp:
+      example:
+        skipped_count: 0
+        group:
+          name: name
+          id: id
+          items:
+          - image_url: image_url
+            name: name
+            id: id
+            asset_id: asset_id
+          - image_url: image_url
+            name: name
+            id: id
+            asset_id: asset_id
+      properties:
+        group:
+          $ref: "#/components/schemas/EmojiGroup"
+        skipped_count:
+          format: uint32
+          type: integer
       type: object
     LikeArticle_Req:
       properties:
@@ -6137,6 +6696,42 @@ components:
             $ref: "#/components/schemas/Resp_Domain"
           type: array
       type: object
+    ListEmojiGroups_Req:
+      properties:
+        query:
+          type: string
+      type: object
+    ListEmojiGroups_Resp:
+      example:
+        rows:
+        - name: name
+          id: id
+          items:
+          - image_url: image_url
+            name: name
+            id: id
+            asset_id: asset_id
+          - image_url: image_url
+            name: name
+            id: id
+            asset_id: asset_id
+        - name: name
+          id: id
+          items:
+          - image_url: image_url
+            name: name
+            id: id
+            asset_id: asset_id
+          - image_url: image_url
+            name: name
+            id: id
+            asset_id: asset_id
+      properties:
+        rows:
+          items:
+            $ref: "#/components/schemas/EmojiGroup"
+          type: array
+      type: object
     ListFollowersRelations_Req:
       properties:
         page:
@@ -6517,6 +7112,48 @@ components:
         rows:
           items:
             $ref: "#/components/schemas/AccountProfileListItem"
+          type: array
+      type: object
+    ListGlobalChatBarrages_Req:
+      properties:
+        user_id:
+          type: string
+        page:
+          $ref: "#/components/schemas/PageReq"
+      type: object
+    ListGlobalChatBarrages_Resp:
+      example:
+        page:
+          total: total
+          size: size
+          page: page
+        rows:
+        - user_id: user_id
+          sender:
+            avatar_url: avatar_url
+            user_id: user_id
+            name: name
+            nickname: nickname
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          points_cost: points_cost
+          content: content
+        - user_id: user_id
+          sender:
+            avatar_url: avatar_url
+            user_id: user_id
+            name: name
+            nickname: nickname
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          points_cost: points_cost
+          content: content
+      properties:
+        page:
+          $ref: "#/components/schemas/PageResp"
+        rows:
+          items:
+            $ref: "#/components/schemas/GlobalChatBarrage"
           type: array
       type: object
     ListGlobalChatMessages_Req:
@@ -7119,6 +7756,24 @@ components:
         created_at:
           format: date-time
           type: string
+      type: object
+    MoveEmojiItem_Req:
+      properties:
+        item_id:
+          type: string
+        group_id:
+          type: string
+      type: object
+    MoveEmojiItem_Resp:
+      example:
+        item:
+          image_url: image_url
+          name: name
+          id: id
+          asset_id: asset_id
+      properties:
+        item:
+          $ref: "#/components/schemas/EmojiItem"
       type: object
     PageArticleViewHistory_Req:
       properties:
@@ -7775,6 +8430,71 @@ components:
         updated_at:
           format: date-time
           type: string
+      type: object
+    RenameEmojiGroup_Req:
+      properties:
+        group_id:
+          type: string
+        name:
+          type: string
+      type: object
+    RenameEmojiGroup_Resp:
+      example:
+        group:
+          name: name
+          id: id
+          items:
+          - image_url: image_url
+            name: name
+            id: id
+            asset_id: asset_id
+          - image_url: image_url
+            name: name
+            id: id
+            asset_id: asset_id
+      properties:
+        group:
+          $ref: "#/components/schemas/EmojiGroup"
+      type: object
+    RenameEmojiItem_Req:
+      properties:
+        item_id:
+          type: string
+        name:
+          type: string
+      type: object
+    RenameEmojiItem_Resp:
+      example:
+        item:
+          image_url: image_url
+          name: name
+          id: id
+          asset_id: asset_id
+      properties:
+        item:
+          $ref: "#/components/schemas/EmojiItem"
+      type: object
+    ReorderEmojiGroups_Req:
+      properties:
+        group_ids:
+          items:
+            type: string
+          type: array
+      type: object
+    ReorderEmojiGroups_Resp:
+      properties: {}
+      type: object
+    ReorderEmojiItems_Req:
+      properties:
+        group_id:
+          type: string
+        item_ids:
+          items:
+            type: string
+          type: array
+      type: object
+    ReorderEmojiItems_Resp:
+      properties: {}
       type: object
     Req_Article:
       properties:
@@ -8930,6 +9650,7 @@ components:
           - EVENT_TYPE_IM_PRIVATE_CHAT_MESSAGE_CREATED
           - EVENT_TYPE_IM_GLOBAL_CHAT_MESSAGE_CREATED
           - EVENT_TYPE_IM_GLOBAL_CHAT_MENTIONED
+          - EVENT_TYPE_IM_GLOBAL_CHAT_BARRAGE_CREATED
           - EVENT_TYPE_GAME_IDLE_CHAT_MESSAGE
           - EVENT_TYPE_GAME_IDLE_CLOSE_SESSION
           - EVENT_TYPE_GAME_IDLE_ACTION_COMPLETED
@@ -9255,6 +9976,8 @@ components:
           - ECONOMY_RECORD_TYPE_ARTICLE_REWARD_IN
           - ECONOMY_RECORD_TYPE_ADMIN_ADD
           - ECONOMY_RECORD_TYPE_ADMIN_DEDUCT
+          - ECONOMY_RECORD_TYPE_GLOBAL_CHAT_TOPIC_EXPENSE
+          - ECONOMY_RECORD_TYPE_GLOBAL_CHAT_BARRAGE_EXPENSE
           format: enum
           type: string
         direction:
@@ -9677,6 +10400,30 @@ components:
         code:
           type: string
       type: object
+    SendGlobalChatBarrage_Req:
+      properties:
+        client_request_id:
+          type: string
+        content:
+          type: string
+      type: object
+    SendGlobalChatBarrage_Resp:
+      example:
+        barrage:
+          user_id: user_id
+          sender:
+            avatar_url: avatar_url
+            user_id: user_id
+            name: name
+            nickname: nickname
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          points_cost: points_cost
+          content: content
+      properties:
+        barrage:
+          $ref: "#/components/schemas/GlobalChatBarrage"
+      type: object
     SendGlobalChatMessage_Req:
       properties:
         client_message_id:
@@ -9740,6 +10487,25 @@ components:
       properties:
         message:
           $ref: "#/components/schemas/PrivateChatMessage"
+      type: object
+    SetGlobalChatTopic_Req:
+      properties:
+        client_request_id:
+          type: string
+        content:
+          type: string
+      type: object
+    SetGlobalChatTopic_Resp:
+      example:
+        topic:
+          user_id: user_id
+          created_at: 2000-01-23T04:56:07.000+00:00
+          id: id
+          points_cost: points_cost
+          content: content
+      properties:
+        topic:
+          $ref: "#/components/schemas/GlobalChatTopic"
       type: object
     SetPinnedArticleComment_Req:
       properties:
